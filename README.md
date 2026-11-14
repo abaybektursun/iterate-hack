@@ -9,7 +9,6 @@ subagents, work on one research direction, described in [`DIRECTION.md`](DIRECTI
 | Board (DynamoDB table `iterate-board`, Abay's AWS) | ideas, skills, knowledge, results, current work; votes and comments | `uv run tools/board.py` |
 | Messages (same DynamoDB table) | realtime messages between agents, by channel | `uv run tools/msg.py` |
 | Events and traces (S3 bucket `iterate-hack-team-769063704696`, Abay's AWS) | one record per tool command; agent transcripts | written by the tools; `uv run tools/traces.py` |
-| Shared keys (private repository `abaybektursun/iterate-hack-team`) | the team AWS key, the past.dev key | `uv run tools/shared.py` |
 | Memory (past.dev project) | specific findings from papers and posts; everyone's Claude Code sessions | `uv run tools/paper.py`, `python3 tools/recall.py` |
 | Modal (your own workspace, app `iterate-runner`) | your GPU jobs, their outputs and the model cache | `uv run tools/gpu.py` |
 | vast.ai (your own account) | your private GPU rentals | `python3 tools/vast.py` |
@@ -22,8 +21,8 @@ or a text editor, never into an agent chat, and never commit one.
 
 | # | Provider | Shared or yours | Needed for |
 |---|---|---|---|
-| 1 | GitHub | shared repositories | the code and the shared keys |
-| 2 | Shared keys (`tools/shared.py`) | shared | the board, events and traces on AWS, ECR images, past.dev memory |
+| 1 | GitHub | shared repository | the code |
+| 2 | Team AWS key | shared, from Abay | the board, messages, events and traces; ECR images |
 | 3 | Modal | yours ($250 credits) | GPU jobs with `tools/gpu.py` |
 | 4 | Hugging Face | yours | gated models on Modal and vast.ai |
 | 5 | vast.ai | yours (optional) | cheaper private GPUs with `tools/vast.py` |
@@ -41,20 +40,20 @@ git clone https://github.com/abaybektursun/iterate-hack.git && cd iterate-hack
 git config user.email              # must be set: the part before @ is your name on the board and in job ids
 ```
 
-Accept two invites: `abaybektursun/iterate-hack` (this code) and `abaybektursun/iterate-hack-team` (a private
-repository that holds only the shared keys).
+Accept the invite to `abaybektursun/iterate-hack`. It is the only repository.
 
-### 2. Shared keys
+### 2. Team AWS key
+
+Abay sends you two values privately (an access key id and a secret). Install the AWS CLI and store them under the
+profile name `iterate-ecr`, in your own terminal:
 
 ```
-uv run tools/shared.py setup
+brew install awscli
+aws configure --profile iterate-ecr      # paste the two values; region us-east-1; output format: leave empty
 ```
 
-It reads the keys the team shares from the private repository `iterate-hack-team` and installs them: the AWS
-profile `iterate-ecr` (step 6) and `~/.past/config.json` (step 7). It prints what is not shared yet. Needs the AWS
-CLI (`brew install awscli`). Check: `uv run tools/board.py ls` prints the board (nothing, when it is empty)
-without an error. The owner adds a key with `uv run tools/shared.py put aws <key.json>` or
-`uv run tools/shared.py put past` (typed at a hidden prompt).
+Check: `uv run tools/board.py ls` exits without an error (it prints nothing when the board is empty). Every tool
+here uses this profile; details in step 6.
 
 ### 3. Modal (your own workspace)
 
@@ -90,7 +89,7 @@ and add credit to the account. Check: `python3 tools/vast.py offers --ram 24` li
 
 ### 6. AWS (shared: the team store and the ECR images)
 
-Step 2 already wrote the profile `iterate-ecr`, in Abay's AWS account. It does two things:
+The profile `iterate-ecr` of step 2 is a key in Abay's AWS account. It does two things:
 
 - The team store: the DynamoDB table `iterate-board` holds the board, and the S3 bucket
   `iterate-hack-team-769063704696` holds the events and the traces. The key can read and write both and cannot
@@ -103,12 +102,17 @@ The key stops working Sunday 2026-11-15 at 23:59 PST.
 
 ### 7. past.dev (shared team memory)
 
-Step 2 wrote `~/.past/config.json` with the team's project key, your git email as identity, and recall off. Then
-open Claude Code in this repository, trust the folder, and accept the prompt to install the `pastdotdev`
-marketplace and plugin. Check: `/pastdotdev:status` shows the key, your identity and recall off, and
-`python3 tools/recall.py "test"` runs without an error. Details and what is sent: "past.dev details" below.
-The owner creates the team project once: sign up at https://past.dev, redeem the team credits with the code on
-the hackathon platform, create an API key, and run `uv run tools/shared.py put past`.
+Abay sends you the team's project key (`past_sk_...`) privately. In a text editor, create `~/.past/config.json`:
+
+```json
+{ "apiKey": "past_sk_...", "identity": "you@example.com", "recall": false }
+```
+
+Then `chmod 600 ~/.past/config.json`, open Claude Code in this repository, trust the folder, and accept the prompt
+to install the `pastdotdev` marketplace and plugin. Check: `/pastdotdev:status` shows the key, your identity and
+recall off, and `python3 tools/recall.py "test"` runs without an error. Details: "past.dev details" below. The
+owner creates the team project once: sign up at https://past.dev, redeem the team credits with the code on the
+hackathon platform, and create an API key.
 
 ### 8. Exa (your own key)
 
@@ -231,7 +235,7 @@ else. The pinned versions differ from `requirements.txt`, and `up` does not chan
 python3 tools/vast.py up <offer-id> --image 769063704696.dkr.ecr.us-east-1.amazonaws.com/shackleton:v1-7b
 ```
 
-Setup for ECR: `uv run tools/shared.py setup` writes the AWS profile `iterate-ecr` (Setup, step 2). Pick a host with fast download (`offers` shows it): a 27.6 GB image took 38 minutes on a slow host.
+Setup for ECR: the AWS profile `iterate-ecr` (Setup, step 2). Pick a host with fast download (`offers` shows it): a 27.6 GB image took 38 minutes on a slow host.
 
 ## Board
 
@@ -332,5 +336,4 @@ contents and diffs are never sent. Strings that look like keys are redacted befo
 ```
 
 `"recall": false` stops the plugin from adding memories to every prompt. The tools read the same file. It is one
-file per machine: `shared.py setup` leaves an existing file unchanged, so if you already use past.dev for another
-project, edit the file by hand. Codex users: see https://github.com/pastdotdev/codex-plugin.
+file per machine: if you already use past.dev for another project, this replaces that connection. Codex users: see https://github.com/pastdotdev/codex-plugin.

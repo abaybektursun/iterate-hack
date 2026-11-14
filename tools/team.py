@@ -2,7 +2,7 @@
 bucket iterate-hack-team-769063704696 holds the events and the traces. Modal is not used for it, because each person has
 their own Modal workspace.
 
-Access is through the AWS profile iterate-ecr, which `uv run tools/shared.py setup` writes. The same key pulls
+Access is through the AWS profile iterate-ecr (README, Setup step 2). The same key pulls
 the ECR images. It can read and write the table and the bucket, cannot delete from either, and stops working
 Sunday 2026-11-15 at 23:59 PST. The bucket keeps every version of every object.
 
