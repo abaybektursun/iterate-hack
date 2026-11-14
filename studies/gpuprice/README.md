@@ -5,9 +5,22 @@ Task as the data pack's starter kit states it: for each daily price series (USD 
 paid), forecast q10, q50, q90 at horizons 1, 3, 7 and 30 days from one origin date. Score: pinball loss, reported
 as skill = 1 - loss / loss of the flat last-value forecast.
 
-**Not yet read: the track's full brief** (linked on the event's resources page, not in the Drive folder). The
-pack says the brief, not the pack, fixes the scored series, the origin, the ranking aggregate and what to submit.
-Everything under "Event set" below is the pack's default and must be checked against the brief.
+The track brief (PDF "Track 2 - Pacific - AI Scientist for GPU Value - Brief", linked from https://iterate.inc/ai-research,
+read in full 2026-11-14) fixes:
+
+- Forecasts with `origin_date` 2026-11-06 at horizons 1, 3, 7 (targets 7, 9, 13 November), "for the posted rental
+  series you choose". Target table: `daily_statistics.csv`. AWS spot and horizon 30 are not scored.
+- Scoring on Sunday 15 November, `scorer.py` in frozen-cutoff mode; headline is pooled skill; mean, median,
+  geometric-mean skill and coverage (target 0.8) are reported. "Cells you leave out are filled with the last-value
+  baseline". The brief does not say which series form the scored set.
+- Baseline to beat: `drift` ("Beat drift with calibrated intervals").
+- Submit: the forecast CSV, one command that reproduces it from the pack and cited public data dated on or before
+  6 November, and findings (question, method, evaluation, results with uncertainty, what the system learned across
+  iterations; optional argued view on resale and rentals in 2-3 years).
+- Judged on rigour (leak-free, honest uncertainty), useful economic insight, reproducibility, originality.
+  "Leaderboard position alone will not win." "A self-improving system should show its gains on origins it had not
+  seen when it changed itself."
+- External data: "public, free to every team and dated before each forecast origin".
 
 ## Layout
 
