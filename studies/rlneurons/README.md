@@ -23,6 +23,8 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `lib/hf_helpers.py` | `hf_setup`, `hf_online_setup`, `retry_transport`, copied verbatim from three large unrelated modules. |
 | `jobs/rln4_gen.py` | RLN-4 generation job. Child (`--inner --phase ...`): one vLLM engine, every request with its own seed, one JSONL row per finished request. Parent: AWS `pg` setup. |
 | `jobs/modal_rln4_k.py` | The Modal app that ran K, T2 and T3 (`modal run ... --step download|check|k|t2|t3`). Runs the `rln4_gen` child on an H100. |
+| `jobs/run_cell.py` | One cell (model, prompt arm, problem set, temperature, top-p, seed) through the team runner `tools/gpu.py`. Reuses `rln4_gen`'s engine and row record, adds grader v3, reads `data/`. See "Day-1 cells on the team runner". |
+| `jobs/setup_vllm.sh` | Installs vLLM 0.32.0, math-verify 0.9.0, transformers 5.19.0, tokenizers 0.23.3 into the venv `/opt/rln-vllm` at job start. |
 | `jobs/rln3_gen.py` | RLN-3 generation job (arms P, F, C on MATH-500 and the harder set), AWS `pg` only. |
 | `jobs/aws_pg_steps/*.json` | The two `pg` pipeline step files that ran RLN-3 s0400 and s0100 on one instance. Record only. |
 | `prep/rln3_prep.py`, `prep/rln4_prep.py` | Build the frozen inputs in `data/` from n13's banks, the raw benchmark parquet files and the Dolci training prompts (laptop, no model). |
@@ -115,11 +117,67 @@ modal run studies/rlneurons/jobs/modal_rln4_k.py --step check --prefix <new pref
 modal run --detach studies/rlneurons/jobs/modal_rln4_k.py --step t3 --prefix <new prefix> --stop-utc <...>
 ```
 
-It runs today only for someone with the owner's `rln4-aws` Modal secret (see "Needs porting"). No job of this study has run
-through `tools/gpu.py`: the runner image has no vLLM. The `rln4_gen` child can in principle run there with
-`pip install vllm==0.32.0 math-verify==0.9.0 transformers==5.19.0 tokenizers==0.23.3`, two `snapshot_download` calls at the
-frozen revisions, and `python -m studies.rlneurons.jobs.rln4_gen --inner --phase t3 --out $OUT_DIR --model-dir <base> --tok-dir
-<rl> --inputs-dir studies/rlneurons/data/rln4 --time-shift <seconds that move frozen4.json's stop_utc past now>`. Not tested.
+It runs today only for someone with the owner's `rln4-aws` Modal secret (see "Needs porting"). Teammates use `jobs/run_cell.py`
+below.
+
+### Day-1 cells on the team runner
+
+`jobs/run_cell.py` runs one cell in your own Modal workspace through `tools/gpu.py`: no S3, no secret besides `hf-token`. The
+command first runs `jobs/setup_vllm.sh`, which installs the study's engine versions into the venv `/opt/rln-vllm` (24 s on a
+fresh H100 container, measured), so the runner image and `requirements.txt` stay unchanged. Weights download once into your
+`iterate-hf-cache` Volume at the revisions in `data/rln4/frozen4.json`. Problem i is sampled with seed `--seed` + i. Outputs in
+`$OUT_DIR` (copy with `uv run tools/gpu.py get <job-id>`): `answers.jsonl`, one row per finished problem written as it
+finishes (prompt, completion, finish reason, generated tokens, extracted answers, grades v1, v2, v3), and `metrics.json`
+(right with v3 and v1, n, cap hits, mean generated tokens, tokens per second, the config, the commit, the job id). A job killed
+at `--hours` keeps every finished row. Use double quotes: `$(git rev-parse HEAD)` must expand on your laptop to the commit
+that `gpu.py` submits.
+
+**The GPU path is untested.** Tested: the laptop dry run (stand-in engine, below) and a cpu job on the runner
+(`abaybektursun-1114-123453-8c3d`: setup, prompts, grading of canned answers, files in `$OUT_DIR`). One H100 job
+(`abaybektursun-1114-123728-8181`) got through setup, weight download and engine start (140 s for download and start together) and was cancelled on
+instruction before any answer finished. No generated answer, score or time per problem from this entry point exists yet. The
+first GPU run should be 10 problems of a cell with a known number (the T1 command with `--n 10`) and its rows read by hand.
+
+Day-1 #1, the 328 harder problems at T 1.0 / top-p 1.0 (seeds 3000000 + index, the harder-set seeds of RLN-3 base-01):
+
+```
+uv run tools/gpu.py submit h100 --hours 2 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)"
+uv run tools/gpu.py submit h100 --hours 2 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model rl --prompt plain --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)"
+```
+
+Day-1 #2, base with cue at T 0.6 / top-p 1.0 on MATH-500 (seeds 1000000 + index, the seeds of the T 0.6 / top-p 0.95 cue row,
+354 of 500, so the two rows differ only in top-p):
+
+```
+uv run tools/gpu.py submit h100 --hours 2 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set math500 --temperature 0.6 --top-p 1.0 --seed 1000000 --commit $(git rev-parse HEAD)"
+```
+
+Check run, before any new number is trusted: T1's cell (410 of 500) on its seeds, first 10 problems. Texts will not be
+identical to T1's (other GPU), so compare the score and cap hits on the 10 with T1's rows:
+
+```
+uv run tools/gpu.py submit h100 --hours 0.5 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41000000 --n 10 --commit $(git rev-parse HEAD)"
+```
+
+Time estimate per full row, not measured with this entry point: earlier H100 runs of the same engine generated 1,415 tokens/s
+(T3, `results/rln4/modal_t3-01/metrics.json`, 500 problems in 745 s) and 1,803 tokens/s (T2 on an H200,
+`results/rln4/modal_t2-01/metrics.json`, 2.35 M tokens in 1,302 s). A row where every answer hits the 16,384 cap is
+328 x 16,384 = 5.4 M tokens, about 1 h at 1,500 tokens/s; that is the upper bound for #1. For #2, the T 0.6 / top-p 0.95 cue row had 119 cap hits, so about 2 M tokens in capped answers plus about 1 M in the rest
+(an estimate), about 35 min.
+Add about 3 min for setup and engine start. `--hours 2` leaves room; the runner kills the job at `--hours`.
+
+Day-1 #3 (restart and four-sample vote) is not runnable yet. Four samples: four `run_cell` jobs with seeds 10000 apart (the
+RLN-3 rule seed + 10000 x sample + index) work today, but no script computes the vote (`rln4_lib.agree` is the equivalence
+test to use). Restart: `run_cell` has no option to run only the problems that hit the cap in an earlier run, and no script
+merges a restart into its parent row.
+
+Laptop dry run (no vLLM, no weights; downloads only the tokenizer files):
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 --with transformers==5.19.0 --with tokenizers==0.23.3 --with huggingface_hub --with jinja2 python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41000000 --n 10 --dry-run --out /tmp/rc --commit $(git rev-parse HEAD)
+```
+
+It must print 4 right, 3 cap hits of 10 (the stand-in serves right, wrong, cap hit in turn).
 
 ## Raw answers
 
@@ -131,12 +189,11 @@ and v2 scores) in the owner's bucket, `s3://pg-lineage-769063704696/results/rlne
 
 ## Needs porting
 
-1. `jobs/modal_rln4_k.py` reads its inputs from and copies its outputs to `s3://pg-lineage-769063704696/results/rlneurons/r4/`
-   with the Modal secret `rln4-aws` (AWS keys of the owner's account). A teammate's workspace has neither. To port: add
-   `data/rln4` to the image and copy inputs from there in `inputs()`, and drop the S3 upload in `gen()` (keep the `rln4-out`
-   Volume, which is created on first use). It also needs the secret `hf-token` (README setup step 3 creates it).
-2. No Modal step runs T1 (base with cue at T 1.0) or the harder set. T1 ran in the AWS job's `base1` phase; the harder set only
-   in `rln3_gen`. Day-1 item 1 (the 328 at T 1.0) needs a new phase or job.
+1. `jobs/modal_rln4_k.py` (K, T2, T3) still reads its inputs from and copies its outputs to
+   `s3://pg-lineage-769063704696/results/rlneurons/r4/` with the owner's Modal secret `rln4-aws`. Teammates run cells with
+   `jobs/run_cell.py` instead; the K continuation arms and the check phases have no port.
+2. `jobs/run_cell.py` covers T1, T2, T3, the harder set and Day-1 #1 and #2, but its GPU path is untested (see "Day-1 cells on
+   the team runner"). Day-1 #3 needs a vote script and a restart option.
 3. `jobs/rln3_gen.py` and the parent (non-`--inner`) mode of `jobs/rln4_gen.py` need the AWS `pg` launcher and AMI (the
    `/opt/n13` vLLM venv built by `lib/n13_setup.venv_n13`, the `aws` CLI, inputs in the owner's S3). Not in this repository.
 4. `lib/hf_helpers.hf_online_setup` reads `HF_TOKEN`; without it, it calls AWS SSM `/pg-lineage/hf-token` in the owner's account.
