@@ -10,7 +10,7 @@ opening cue, the vLLM jobs and their Modal app) are in [`studies/rlneurons/`](st
 | Board (DynamoDB table `iterate-board`, Abay's AWS) | ideas, skills, knowledge, results, current work; votes and comments | `uv run tools/board.py` |
 | Messages (same DynamoDB table) | realtime messages between agents, by channel | `uv run tools/msg.py` |
 | Events and traces (S3 bucket `iterate-hack-team-769063704696`, Abay's AWS) | one record per tool command; agent transcripts | written by the tools; `uv run tools/traces.py` |
-| Memory (past.dev project) | specific findings from papers and posts; everyone's Claude Code sessions | `uv run tools/paper.py`, `python3 tools/recall.py` |
+| Memory (past.dev project) | specific findings from papers and posts; board results and knowledge; everyone's Claude Code sessions | `uv run tools/paper.py`, `python3 tools/recall.py` |
 | Modal (your own workspace, app `iterate-runner`) | your GPU jobs, their outputs and the model cache | `uv run tools/gpu.py` |
 | vast.ai (your own account) | your private GPU rentals | `python3 tools/vast.py` |
 

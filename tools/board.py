@@ -26,6 +26,9 @@ one transaction. Rows:
   item#<id> / comment#<ns>#<who>    one comment
   claim#<named id> / <work id>      a work item that names another item
 
+result and knowledge posts are also sent to the team's past.dev memory (tools/past.py), so
+`python3 tools/recall.py` finds them next to paper findings and sessions, about a minute after the post.
+
 To claim an idea, post a work item whose text names the idea id. post then prints any other open work item that
 names the same id. If one of those is older than yours, close yours with done and pick another.
 """
@@ -42,6 +45,7 @@ import events
 import team
 
 KINDS = ("idea", "skill", "knowledge", "result", "work")
+REMEMBERED = ("result", "knowledge")
 COMMENT_LIMIT = 280
 POST_LIMIT = 4000
 NAMED = r"\b(?:idea|skill|knowledge|result)-[0-9a-f]{6}\b"
@@ -78,6 +82,19 @@ def line(item, full):
     return f"{item['id']}  +{item['ups']} -{item['downs']}  {item['n_comments']}c  {author(item)}  {item['at']}{idle}  {text}"
 
 
+def remember(item_id, kind, text, who):
+    from past import call
+
+    receipt = call("POST", "ingest", {
+        "id": f"board:{item_id}",
+        "label": f"board {item_id}",
+        "content": f"Board {kind} {item_id}, posted by {who}:\n{text}",
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "metadata": {"board": item_id, "kind": kind, "who": who},
+    })
+    print(f"past.dev: {receipt['status']}")
+
+
 def main(argv, who):
     command, *args = argv or ["help"]
     table = team.table()
@@ -95,6 +112,8 @@ def main(argv, who):
         table.put_item(Item={"pk": f"item#{item_id}", "sk": "item", "id": item_id, "kind": kind, "text": text, "who": who, **me, "at": now,
                              "at_ns": ns, "active_ns": ns, "listed": kind, "ups": 0, "downs": 0, "score": 0, "n_comments": 0})
         print(item_id)
+        if kind in REMEMBERED:
+            remember(item_id, kind, text, who)
         if kind == "work":
             for named in sorted(set(re.findall(NAMED, text))):
                 table.put_item(Item={"pk": f"claim#{named}", "sk": item_id, "who": who, **me, "at": now, "text": text[:100], "is_open": True})
