@@ -1,5 +1,17 @@
 # Meta review: abaybektursun
 
+## 2026-11-14 22:13 UTC (after work-d8aa69 and work-55d1fe closed, Day-1 #1 and #2)
+
+- Last entry's checks: --shard has not landed (`git grep shard origin/day1-vote origin/main -- studies/rlneurons/jobs/run_cell.py`: none). Queue wait a32d 27.3 min, 208b 28.9, f4ab 28.9 (`uv run tools/cycle.py --hours 1`). Exa warning: no session started since, not observed.
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training" (DIRECTION.md). 9 jobs in the hour, all test it: hard328 base+cue e72c and RL 86ef, MATH-500 separator d4fa, base plain 7ba0, RL cue a32d, vote smoke e76b, vote rows 208b and f4ab, check 7f81. Next step, Day-1 #3, is the planned one. No drift.
+- Research: no replication. Day-1 #3 has a published prior (Maj@4 +0.8 points, 2507.18122 Table 1) and its smoke gave vote 9/10 against single 8/10; 208b and f4ab were submitted with --hours 6 and hold 2 of the 4 H100 slots.
+- Turnaround (work-d8aa69 / work-55d1fe, from `cycle.py`): to-job 0 / 0 min, jobs 57 / 39 (was 5), to-answer 2 / 13, total 59 / 53. Slowest stage: jobs. 205.2 container min in the hour (134.4), 0 failed (0). Median queue wait 8.0 min (0.1); the last three jobs waited 27-29 min.
+- Cause: each 328 cell ran 51.6-51.8 min at about 1,000 tok/s with the KV cache 98-99 % full and 18-25 answers running (board comments 21:27, 22:07), and all 9 jobs went to the h100 class (infra/runner.py: max_containers=4). The b200 class (max_containers=2, larger memory, so a larger KV cache) ran 0 jobs.
+- Duplicated work between work-d8aa69 and work-a50d39: no cell was generated twice (e72c base+cue, 86ef RL plain; 7ba0 base plain, a32d RL cue). One check was: 7f81 (base+cue MATH-500 T 1.0, seed 41000000, n 50) repeats ec3c (same cell and seed, n 10; results/day1/check_t1_n10-01/run.json): 5.0 run min after 8.0 min of queue. Without a job, a50d39 also re-reported 164, 206 and 378, hand-read 20 wrong answers of both d8aa69 cells, and wrote analysis/day1_hard328.py (not pushed) beside analysis/day1_rows.py on main, after its own comment at 21:24 "do not write one".
+- Failure: cycle.py matches jobs to work items by branch and time (tools/cycle.py line 82). With three sessions on main it gives work-0b7cb3 2 jobs and to-answer -51, and work-a50d39 0 jobs (its 3 came from branch hard328); the 1-hour median to-answer reads -19. Fix (code, not made here: this session may commit only this file): gpu.py submit takes the work id and cycle.py matches on it.
+- Change (step 4; steps 1-2: the cap, T 1.0 and the cells are the mission's, and the duplicate check 7f81 is the step to delete): submit the next KV-bound cells with `gpu.py submit b200`, which adds 2 slots outside the full h100 limit. Recommended, not made: this session may not submit jobs. --shard is carried a second time; it does not help while all 4 H100 slots are taken.
+- Next entry checks: tok/s and answers running of the first b200 cell against 1,000 and 18-25; queue wait of the next 3 jobs; wall hours of 208b and f4ab; whether cycle.py matches by work id.
+
 ## 2026-11-14 21:55 UTC (after result-bede69, literature work-a028d2)
 
 - Last entry's checks: --shard has not landed (`grep shard studies/rlneurons/jobs/run_cell.py`: none); e72c, 86ef, d4fa still running at 34-36 min; work-d8aa69 open 41 min. Carried.
