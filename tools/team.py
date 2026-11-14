@@ -11,17 +11,21 @@ writers do write the same key, the later write wins.
 """
 import functools
 import json
+import os
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
 BUCKET = "iterate-hack-team-769063704696"
 PROFILE = "iterate-ecr"
+CACHE = Path.home() / ".cache" / "iterate-hack"
 
 
 @functools.cache
 def s3():
     import boto3
+    from botocore.config import Config
 
-    return boto3.Session(profile_name=PROFILE, region_name="us-east-1").client("s3")
+    return boto3.Session(profile_name=PROFILE, region_name="us-east-1").client("s3", config=Config(max_pool_connections=64))
 
 
 class Store:
@@ -40,7 +44,19 @@ class Store:
         s3().put_object(Bucket=BUCKET, Key=f"{self.name}/{key}.json", Body=body, ContentType="application/json")
 
     def items(self):
+        """Every key and value. One listing call per 1000 objects gives each object's ETag; only objects that are
+        new or changed since the last call on this machine are downloaded, the rest come from CACHE."""
+        cache_file = CACHE / f"{self.name}.json"
+        cache = json.loads(cache_file.read_text()) if cache_file.exists() else {}
         pages = s3().get_paginator("list_objects_v2").paginate(Bucket=BUCKET, Prefix=f"{self.name}/")
-        keys = [o["Key"][len(self.name) + 1:-len(".json")] for page in pages for o in page.get("Contents", [])]
-        with ThreadPoolExecutor(32) as pool:
-            return list(zip(keys, pool.map(self.__getitem__, keys)))
+        etags = {o["Key"][len(self.name) + 1:-len(".json")]: o["ETag"] for page in pages for o in page.get("Contents", [])}
+        changed = [key for key, etag in etags.items() if cache.get(key, [None])[0] != etag]
+        with ThreadPoolExecutor(64) as pool:
+            for key, value in zip(changed, pool.map(self.__getitem__, changed)):
+                cache[key] = [etags[key], value]
+        cache = {key: cache[key] for key in etags}
+        CACHE.mkdir(parents=True, exist_ok=True)
+        temporary = cache_file.with_suffix(f".{os.getpid()}.tmp")  # several agents of one person share the cache
+        temporary.write_text(json.dumps(cache))
+        temporary.replace(cache_file)
+        return [(key, entry[1]) for key, entry in cache.items()]
