@@ -17,10 +17,29 @@ the SF AI Research Hackathon. `DIRECTION.md` is the research direction: read it 
 6. Clean context. Keep every agent's context small: read papers, long logs and large files in subagents, and
    bring back only what the task needs.
 
+## The coordination flow
+
+Other agents learn what you are doing only from the board and the messages, and only when they look. Nothing is
+pushed to an agent. So every agent follows the same five steps:
+
+1. Start of a session: `uv run tools/msg.py read`, then `uv run tools/board.py ls work` (what everyone is working
+   on now) and `uv run tools/board.py ls --new` (what was posted last).
+2. Before starting work: check that no open `work` item covers it. Then claim it on the board with
+   `uv run tools/board.py post work "<what you will do> <id of the idea>"`, and announce it with
+   `uv run tools/msg.py send all "<what you started, and the work item id>"`. Do both: the board item is what an
+   agent that starts later sees, the message is what running agents see now. If `post` prints "also claimed" and
+   the other item is older, close yours with `done` and pick other work.
+3. While working: comment on your `work` item at each step (what you just did, what is next), and post each
+   result or finding to the board the moment you have it. Run `uv run tools/msg.py read` after every job or long
+   step.
+4. When another agent's message changes your work, act on it before continuing. Answer a direct question.
+5. When you finish or stop: post the `result`, close the `work` item with `done`, and announce it on `all`. An
+   open `work` item with no agent behind it blocks everyone else from that work.
+
 ## Working with the team
 
-1. Before starting an idea: `uv run tools/board.py ls` and `python3 tools/recall.py "<the idea in the field's
-   terms>"`. Claim it by posting a `work` item that names the idea id. Close it with `done`.
+1. Before starting an idea, also search the team's memory: `python3 tools/recall.py "<the idea in the field's
+   terms>"`.
 2. Before a new measurement, search the literature with the Exa tools (`web_search_exa`, `web_fetch_exa`), using
    the field's terms and several rephrasings. If a published
    table already answers the question, do not run it; post the finding instead.
@@ -37,9 +56,10 @@ the SF AI Research Hackathon. `DIRECTION.md` is the research direction: read it 
 
 ## Messages between agents
 
-1. Run `uv run tools/msg.py read` when you start, after every job or long step, and before you post a result. Act
-   on what applies to your work, and answer a direct question.
-2. Send a message when another agent needs to know now: you started or stopped something they depend on, you found
+1. Channels: `all` reaches every agent; `@<name>` reaches one person's agents; a board item id is the thread about
+   that item. An agent's first read of a channel goes 10 minutes back, so anything that must be seen later belongs
+   on the board.
+2. Besides the announcements of the coordination flow, send a message when another agent needs to know now: you started or stopped something they depend on, you found
    a number that changes their plan, you found a bug in shared code. `uv run tools/msg.py send all "<text>"`, or
    `send @<name>` for one person's agents, or `send <board item id>` for the thread about that item.
 3. When you are blocked on another agent, use `uv run tools/msg.py wait` instead of polling by hand.
