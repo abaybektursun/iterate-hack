@@ -122,4 +122,16 @@ the Volume `iterate-runs` under `<job-id>/` and in `runs/<job-id>/` on the lapto
 
 ## 8. Deviations
 
-None yet. Dated entries go here.
+2026-11-14, after the full run `sameraslan-1114-135831-c3ec`:
+
+1. Group i has n = 21 at the answer-start test: 2 of the 23 answers have no extracted answer under grader v3. Group iii has 39
+   of 40 for the same reason.
+2. The shards store natural-log probabilities in float16 where §5 says probabilities, ranks in uint8, and two arrays more
+   than listed: each model's log-prob of its own top-1 token.
+3. Added after reading the positions and not used for the verdict: the split of D by the format of the base's final answer
+   ("Answer:" line or `\boxed{}`), `metrics.json` `c.by_format`; and group iv (right base answers over 2,000 tokens).
+4. Part d, "where the base text states the gold answer": the pattern found the gold in 3 of the 16 cap-hit texts, and on
+   reading 2 of the 3 are intermediate numbers. The comparison has one real case and supports no claim.
+5. Re-tokenization: 41 T1 rows and 34 T2 rows differ from the stored count by 1 to 5 tokens (all within 1 %); they are in the
+   map. No row was left out.
+6. The smoke run had 12 answers per cell. One smoke job and one full job were used.

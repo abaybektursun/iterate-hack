@@ -1,0 +1,58 @@
+{
+ "experiment": "rln5",
+ "run": "map-01",
+ "date": "2026-11-14",
+ "spec": "studies/rlneurons/specs/SPEC5_map.md",
+ "what": "Both models (base allenai/Olmo-3-1025-7B, RL allenai/Olmo-3.1-7B-RL-Zero-Math) run with teacher forcing over the 1,000 stored T1 and T2 answers; per-position log-probs, entropies, KL, top-1 tokens, ranks. Inference only.",
+ "job": {
+  "job_id": "sameraslan-1114-135831-c3ec",
+  "state": "done (uv run tools/gpu.py ls)",
+  "commit": "e6354d62eb69a066ac3fcde2abb02077dc308843",
+  "command": "uv run tools/gpu.py submit h100 --hours 0.6 -- \"python -m studies.rlneurons.jobs.rln5_map --commit e6354d62eb69a066ac3fcde2abb02077dc308843\"",
+  "gpu": "NVIDIA H100 80GB HBM3",
+  "wall_s": 597,
+  "positions": 4314803,
+  "positions_per_s": 7549,
+  "gpu_max_memory_gb": 38.1,
+  "torch": "2.15.0+cu132",
+  "transformers": "5.22.2"
+ },
+ "smoke": {
+  "job_id": "sameraslan-1114-135433-f38a",
+  "state": "done (uv run tools/gpu.py ls)",
+  "commit": "e6354d62eb69a066ac3fcde2abb02077dc308843",
+  "command": "uv run tools/gpu.py submit h100 --hours 0.3 -- \"python -m studies.rlneurons.jobs.rln5_map --n 10 --mid 1 --long 1 --commit e6354d62eb69a066ac3fcde2abb02077dc308843\"",
+  "wall_s": 173,
+  "answers_per_cell": 12,
+  "positions": 54765,
+  "controls": {
+   "identity": "max |KL| 0, max |log-prob difference| 0, 0 top-1 differences over 475 positions of 2 answers",
+   "cue": "median P(cue) after the prompt: base 3.1e-07, RL 0.858 (12 T1 answers)",
+   "calibration": "mean log-prob of written tokens plus mean entropy: -0.0016 (T1, base), +0.0081 (T2, RL); median |mean log-prob minus the row's stored mean_logprob|: 0.0003 (T1), 0.0002 (T2)",
+   "cache_against_oneshot": "problem 482, 6,021 positions: mean |difference| 0.0045 nats (base), 0.0045 (RL), max 0.09, no position over 0.25",
+   "files": "analysis/rln5_map_analyze.py read the smoke shards"
+  }
+ },
+ "gpu_cost": "770 s of job wall time on one H100 (173 s smoke + 597 s full), about 13 H100-minutes; container start is not in these numbers. 1 smoke job and 1 full job.",
+ "analysis": {
+  "script": "studies/rlneurons/analysis/rln5_map_analyze.py (the version of the commit that adds this folder)",
+  "command": "PYTHONPATH=. uv run --no-project --with numpy --with torch --with transformers==5.22.2 --with huggingface_hub --with jinja2 python -m studies.rlneurons.analysis.rln5_map_analyze runs/sameraslan-1114-135831-c3ec --t1 runs/diag_t1t2/T1.jsonl --t2 runs/diag_t1t2/T2.jsonl --out studies/rlneurons/results/rln5/map-01",
+  "where": "laptop: reads the shards and the stored rows, tokenizer files only, no model forward pass"
+ },
+ "inputs": {
+  "frozen": "studies/rlneurons/data/rln5/map_inputs.json (sha256 and size of T1.jsonl and T2.jsonl, asserted by the job)",
+  "volume": "iterate-runs:inputs/rln5/T1.jsonl, T2.jsonl",
+  "groups": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json"
+ },
+ "large_files": {
+  "what": "20 shards T1_map_000..009.npz and T2_map_000..009.npz (120 MB together), index.json, identity_check.npz, log",
+  "volume": "Modal Volume iterate-runs, folder sameraslan-1114-135831-c3ec/ (workspace of sameraslan)",
+  "laptop": "runs/sameraslan-1114-135831-c3ec/ after `uv run tools/gpu.py get sameraslan-1114-135831-c3ec` (not committed)"
+ },
+ "files": {
+  "metrics.json": "analysis a-e and the verdict on H (keys a, b, c, d, e)",
+  "examples.json": "real items: every group-i answer at its answer-start token (two for H and two against H with full prompt and base answer), a control sample, group iii, the cap-hit positions",
+  "checks.json": "the full job's controls (identity, cue, calibration, cache against one pass) with per-row numbers",
+  "tokenize_check.json": "re-tokenized token count against the stored count for all 1,000 rows"
+ }
+}

@@ -18,6 +18,7 @@ import re
 
 import numpy as np
 
+from studies.rlneurons.lib import n13_score as S
 from studies.rlneurons.lib import rln4_lib as R
 
 STUDY = pathlib.Path(__file__).resolve().parents[1]
@@ -201,7 +202,7 @@ def main():
               "rl_top1": dec(r["top1_rl"][p0]), "base_top1": dec(r["top1_base"][p0]), "rl_top1_is_written": bool(r["top1_rl"][p0] == r["tok"][p0]),
               "rank_rl": int(r["rank_rl"][p0]), "rank_base": int(r["rank_base"][p0]), "kl_base_rl": float(kl[p0]),
               "kl_percentile_in_answer": float((kl[gen] < kl[p0]).mean() * 100), "p_eos_rl": float(np.exp(f32(r["lp_eos_rl"])[p0])),
-              "p_mark_rl": float(np.exp(f32(r["lp_mark_rl"])[p0])), "p_mark_base": float(np.exp(f32(r["lp_mark_base"])[p0])),
+              "p_mark_rl": float(np.exp(f32(r["lp_mark_rl"])[p0])), "p_rl_top1": float(np.exp(f32(r["lp_top1_rl"])[p0])), "p_mark_base": float(np.exp(f32(r["lp_mark_base"])[p0])),
               "context_before": r["text"][max(0, c0 - 300):c0], "context_after": r["text"][c0:c0 + 120]}
         if head is not None:
             ph = tok_at(r["offsets"], head)
@@ -218,6 +219,8 @@ def main():
         C["groups"][gname] = {"D": quart(D), "share_D_below_minus_ln2": float(np.mean(f32(D) < -LN2)), "share_D_above_ln2": float(np.mean(f32(D) > LN2)),
                               "D_span": quart([it["D_span"] for it in its]), "D_header": quart([it["D_header"] for it in its if "D_header" in it]),
                               "lp_base": quart([it["lp_base"] for it in its]), "lp_rl": quart([it["lp_rl"] for it in its]),
+                              "p_mark_rl": quart([it["p_mark_rl"] for it in its]), "p_mark_base": quart([it["p_mark_base"] for it in its]),
+                              "p_rl_top1": quart([it["p_rl_top1"] for it in its]),
                               "rl_top1_is_written_share": float(np.mean([it["rl_top1_is_written"] for it in its])),
                               "kl_percentile_in_answer": quart([it["kl_percentile_in_answer"] for it in its]),
                               "relative_position": quart([it["relative_position"] for it in its]),
@@ -226,6 +229,19 @@ def main():
                               "rl_top1_top10": collections.Counter(it["rl_top1"] for it in its).most_common(10),
                               "p_eos_rl_at_end": quart([it["p_eos_rl_at_end"] for it in its if "p_eos_rl_at_end" in it]),
                               "p_eos_base_at_end": quart([it["p_eos_base_at_end"] for it in its if "p_eos_base_at_end" in it])}
+    # Added after reading the positions (SPEC5_map.md §8): the same statistics split by the format of the base's final answer.
+    C["by_format"] = {}
+    for gname, its in sorted({**by, "all_finished_with_span": [it for it in items if "p_eos_rl_at_end" in it]}.items()):
+        for mode in ("marker", "boxed"):
+            sub = [it for it in its if it["mode"] == mode]
+            if sub:
+                C["by_format"][f"{gname}|{mode}"] = {
+                    "D": quart([it["D"] for it in sub]), "share_D_below_minus_ln2": float(np.mean([it["D"] < -LN2 for it in sub])),
+                    "right": int(sum(it["right"] for it in sub)), "rl_top1_is_written_share": float(np.mean([it["rl_top1_is_written"] for it in sub])),
+                    "rl_top1_top10": collections.Counter(it["rl_top1"] for it in sub).most_common(10),
+                    "p_eos_rl_at_end": quart([it["p_eos_rl_at_end"] for it in sub if "p_eos_rl_at_end" in it]),
+                    "share_p_eos_rl_at_end_below_0.5": float(np.mean([it["p_eos_rl_at_end"] < 0.5 for it in sub if "p_eos_rl_at_end" in it])),
+                    "share_p_eos_base_at_end_below_0.5": float(np.mean([it["p_eos_base_at_end"] < 0.5 for it in sub if "p_eos_base_at_end" in it]))}
     gi, gii, giii = (by[k] for k in ("i_wrong_under_4000_rl_right", "ii_right_at_most_2000", "iii_other_wrong_finished"))
     C["permutation_p_median_D_i_vs_ii"] = perm_median([x["D"] for x in gi], [x["D"] for x in gii])
     C["permutation_p_median_D_i_vs_iii"] = perm_median([x["D"] for x in gi], [x["D"] for x in giii])
@@ -310,6 +326,9 @@ def main():
           "c_control_sample": [{**x, "problem": math[x["problem_index"]]["problem"], "score_v3": x["right"]}
                                for x in sorted(gii, key=lambda x: x["D"])[::max(1, len(gii) // 12)]],
           "c_group_iii": sorted(giii, key=lambda x: x["D"]), "d_cap_hits": caps, "d_gold_stated": gold_rows}
+    for x in ex["c_group_i"][:2] + ex["c_group_i"][-2:]:              # full input and output of two items for H and two against
+        x["base_answer_text"] = cells["T1"][x["problem_index"]]["text"]
+        x["prompt"] = S.TEMPLATE[fz["template"]].format(problem=x["problem"])
     (out / "examples.json").write_text(json.dumps(ex, indent=1, ensure_ascii=False) + "\n")
     brief = {"a": {c: {k: A[c][k] for k in ("positions", "top1_differ_share_pooled", "kl_own_share_top_1pct", "kl_own_share_top_4pct", "mean_kl_own")} for c in A},
              "c": {g: {"n": v["D"].get("n"), "median_D": v["D"].get("median"), "q25": v["D"].get("q25"), "q75": v["D"].get("q75")} for g, v in C["groups"].items()},
