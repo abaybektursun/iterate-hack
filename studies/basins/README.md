@@ -25,7 +25,8 @@ All code runs from the repository root with the root on `PYTHONPATH`.
 | `prep/swarm_export.py` | Laptop, read-only. Every board item (open and closed) and comment, via the `new` index. |
 | `analysis/swarm_judge.py` | Laptop. OpenAI judge (`--backend claude` only with the person's consent): possible directions from DIRECTION.md, partitions, triplets, per-direction coverage, planted-copy control. |
 | `analysis/swarm_analyze.py` | Laptop. Basins, coverage, moves, t-STE map and checks. |
-| `analysis/swarm_page.py` | Laptop. The swarm map page with replay. |
+| `analysis/swarm_scores.py` | Laptop, one judge call (~0.01 USD). Scored configurations from result posts; each row's quote must be in the post. |
+| `analysis/swarm_page.py` | Laptop. The swarm map page with replay and leaderboard. |
 
 ## Run (strategy)
 
@@ -61,5 +62,7 @@ stay in `runs/` and `results/` uncommitted (rebuild with the commands in `run.js
   work-0b7cb3) share the original's group in both orders and are its nearest map neighbours. Weak point: k-means
   on the 2D map (k=3 by silhouette) agrees poorly with the judge's 9 groups (ARI 0.13), so basins come from the
   judge's grouping, not from map clusters.
+- Leaderboard (9 configurations from 5 result posts, as posted, grader v3 ranked): best base with one sample 82.0 %
+  (cue, T 1.0), cue + restart 82.8 % (more tokens), RL at T 1.0 92.6 %; gap 10.6 points.
 - Judge choice: gpt-5.4-mini is not usable here (triplets consistent across orders 359/767, near chance; its
   partition returned duplicate ids). gpt-6.1-sol costs about 1.1 USD per full map.

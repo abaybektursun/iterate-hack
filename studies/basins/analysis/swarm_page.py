@@ -46,6 +46,15 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
 .tip{position:fixed;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px;max-width:380px;font-size:13px;box-shadow:0 6px 24px rgba(0,0,0,.18);z-index:5}
 .mono{font-family:var(--mono);font-size:12px;color:var(--muted)}
 .note{font-size:12px;color:var(--muted);max-width:100ch}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
+tr.rl td{background:color-mix(in srgb,var(--accent) 8%,transparent)}
+tr.old td{color:var(--muted);text-decoration:line-through}
+.pill{display:inline-block;font-size:11px;padding:1px 6px;border-radius:999px;border:1px solid var(--line);color:var(--muted);margin-left:4px;white-space:nowrap}
+.bar{height:6px;border-radius:3px;background:var(--accent);opacity:.55;margin-top:4px}
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
 </style>
 <div class="wrap">
@@ -61,6 +70,10 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline
       <div class="replay"><button id="play">Replay</button><input id="t" type="range" min="0" max="100" value="100" aria-label="time"><span id="tlab" class="mono"></span></div>
     </div>
     <div class="panel"><h2>Basins</h2><div class="basins" id="basins"></div><h2>Untouched directions</h2><div class="basins" id="untouched"></div></div>
+  </section>
+  <section class="panel" id="lbwrap"><h2>Leaderboard</h2>
+    <p class="note" id="lbnote"></p>
+    <div class="tbl"><table id="lb"></table></div>
   </section>
   <p class="note" id="foot"></p>
 </div>
@@ -107,7 +120,7 @@ function draw(frac) {
   document.getElementById("tlab").textContent = `${shown.length}/${board.length} items · ${vis.size} basins · ${shown.length ? shown[shown.length - 1].at + " UTC" : ""}`;
   document.getElementById("basins").innerHTML = S.basins.map(b => {
     const nb = shown.filter(n => n.basin === b.basin).length;
-    return `<div class="b${hi === b.basin ? " on" : ""}" data-b="${b.basin}"><span class="sw" style="background:${col(b.basin)}"></span><span>${esc(b.name)}${nb === 0 ? '<span class="tag">untouched</span>' : ""}</span><span class="cnt">${nb} items · ${b.possible} ◇</span></div>`;
+    return `<div class="b${hi === b.basin ? " on" : ""}" data-b="${b.basin}"><span class="sw" style="background:${col(b.basin)}"></span><span>${esc(b.name)}${nb === 0 ? '<span class="tag">untouched</span>' : ""}</span><span class="cnt">${b.best_base_pct ? "best " + b.best_base_pct.toFixed(1) + " · " : ""}${nb} items · ${b.possible} ◇</span></div>`;
   }).join("");
 }
 const byId = Object.fromEntries(D.nodes.map(n => [n.id, n])), tip = document.getElementById("tip"), slider = document.getElementById("t");
@@ -129,6 +142,16 @@ document.getElementById("play").onclick = () => {
   if (reduce) return;
   timer = setInterval(() => { slider.value = Math.min(100, +slider.value + 1); draw(slider.value / 100); if (+slider.value >= 100) { clearInterval(timer); timer = null; } }, 60);
 };
+if (S.leaderboard && S.leaderboard.length) {
+  const gap = S.rl_reference_pct - S.best_base_one_sample_pct;
+  document.getElementById("lbnote").textContent = `Scored configurations in the board's result posts, as posted (grader v3 ranked; MATH-500, n=500). Best untrained base with one sample: ${S.best_base_one_sample_pct.toFixed(1)}%. RL reference at T 1.0: ${S.rl_reference_pct.toFixed(1)}%. Gap the swarm is closing: ${gap.toFixed(1)} points. Rows marked "more tokens" spend extra attempts, so they do not meet DIRECTION.md's equal-token rule.`;
+  const lo = 40, hi = 100;
+  document.getElementById("lb").innerHTML = `<thead><tr><th>#</th><th>Configuration</th><th>Basin of the post</th><th style="text-align:right">MATH-500</th><th>Source</th></tr></thead><tbody>` +
+    S.leaderboard.map((r, k) => `<tr class="${r.model === "rl" ? "rl" : ""} ${r.superseded ? "old" : ""}"><td class="num">${r.superseded ? "–" : k + 1}</td>
+      <td>${r.model === "rl" ? "<b>RL-Zero-Math</b> (target)" : "Base"} · ${esc(r.method)} · <span class="mono">${esc(r.setting)}</span>${r.more_tokens ? '<span class="pill">more tokens</span>' : ""}${r.superseded ? '<span class="pill">grader ' + esc(r.grader) + ', superseded</span>' : ""}<div class="bar" style="width:${Math.max(2, (r.score_pct - lo) / (hi - lo) * 100)}%"></div></td>
+      <td>${esc(r.basin)}</td><td class="num">${r.score_pct.toFixed(1)}%${r.correct != null ? '<div class="mono">' + r.correct + "/" + r.n + "</div>" : ""}</td>
+      <td class="mono" title="${esc(r.quote)}">${esc(r.item)}</td></tr>`).join("") + "</tbody>";
+} else { document.getElementById("lbwrap").hidden = true; }
 document.getElementById("untouched").innerHTML = S.directions.filter(d => !d.items_either.length).map(d => `<div class="b"><span class="sw" style="background:var(--empty)"></span><span>${esc(d.name)}</span><span class="cnt">0 items</span></div>`).join("") || '<span class="mono">none</span>';
 draw(1);
 </script>

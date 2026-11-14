@@ -298,6 +298,182 @@
    "orders_agree": true
   }
  ],
+ "leaderboard": [
+  {
+   "item": "result-533123",
+   "model": "rl",
+   "method": "plain prompt",
+   "setting": "T 0.6",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 464,
+   "score_pct": 92.8,
+   "grader": "v3",
+   "quote": "464/500 at T 0.6 (92.8 %)",
+   "basin": "Sampling And Repetition Controls",
+   "directions": [
+    "Temperature And Nucleus Factorial"
+   ],
+   "more_tokens": false,
+   "superseded": false
+  },
+  {
+   "item": "result-533123",
+   "model": "rl",
+   "method": "plain prompt",
+   "setting": "T 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 463,
+   "score_pct": 92.6,
+   "grader": "v3",
+   "quote": "Olmo-3.1-7B-RL-Zero-Math, plain prompt: 463/500 MATH-500 at T 1.0 (92.6 %)",
+   "basin": "Sampling And Repetition Controls",
+   "directions": [
+    "Temperature And Nucleus Factorial"
+   ],
+   "more_tokens": false,
+   "superseded": false
+  },
+  {
+   "item": "result-e870a1",
+   "model": "base",
+   "method": "cue + restart",
+   "setting": "T 0.6 / top-p 0.95 / up to 3 attempts",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 414,
+   "score_pct": 82.8,
+   "grader": "v3",
+   "quote": "Restarting cap hits (up to 3 attempts) gives 414/500",
+   "basin": "Budgeted Restarts Voting And Search",
+   "directions": [
+    "Opening Cue And Template Search",
+    "Temperature And Nucleus Factorial",
+    "Loop Triggered Restart Policies"
+   ],
+   "more_tokens": true,
+   "superseded": false
+  },
+  {
+   "item": "result-c36598",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 410,
+   "score_pct": 82.0,
+   "grader": "v3",
+   "quote": "Base Olmo-3-1025-7B + opening cue, T 1.0 / top-p 1.0: 410/500 MATH-500 (82.0 %)",
+   "basin": "Prompt Cues And Reasoning Scaffolds",
+   "directions": [
+    "Opening Cue And Template Search",
+    "Temperature And Nucleus Factorial"
+   ],
+   "more_tokens": false,
+   "superseded": false
+  },
+  {
+   "item": "result-e870a1",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 0.6 / top-p 0.95",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 354,
+   "score_pct": 70.8,
+   "grader": "v3",
+   "quote": "Base + cue at T 0.6 / top-p 0.95: 354/500 MATH-500 (70.8 %)",
+   "basin": "Budgeted Restarts Voting And Search",
+   "directions": [
+    "Opening Cue And Template Search",
+    "Temperature And Nucleus Factorial",
+    "Loop Triggered Restart Policies"
+   ],
+   "more_tokens": false,
+   "superseded": false
+  },
+  {
+   "item": "result-7968b8",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 0.6 / base-01 run",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 319,
+   "score_pct": 63.8,
+   "grader": "v3",
+   "quote": "Base plain prompt, T 0.6: 319/500 MATH-500 (63.8 %, base-01 run)",
+   "basin": "Sampling And Repetition Controls",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "superseded": false
+  },
+  {
+   "item": "result-7968b8",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 0.6 / n13 run",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 305,
+   "score_pct": 61.0,
+   "grader": "v3",
+   "quote": "305/500 (61.0 %, n13 run), grader v3",
+   "basin": "Sampling And Repetition Controls",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "superseded": false
+  },
+  {
+   "item": "result-c36598",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 224,
+   "score_pct": 44.8,
+   "grader": "v3",
+   "quote": "Plain base at T 1.0: 224/500 (44.8 %)",
+   "basin": "Prompt Cues And Reasoning Scaffolds",
+   "directions": [
+    "Opening Cue And Template Search",
+    "Temperature And Nucleus Factorial"
+   ],
+   "more_tokens": false,
+   "superseded": false
+  },
+  {
+   "item": "result-7968b8",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 0.6 / n13 run",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 286,
+   "score_pct": 57.2,
+   "grader": "v1",
+   "quote": "The older 57.2 is grader v1 on the n13 run (286/500).",
+   "basin": "Sampling And Repetition Controls",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "superseded": true
+  }
+ ],
+ "best_base_pct": 82.8,
+ "best_base_one_sample_pct": 82.0,
+ "rl_reference_pct": 92.6,
  "control": [
   {
    "copy": "ctl-1",
@@ -324,6 +500,7 @@
    "name": "Board Visualization And Coordination Tooling",
    "board_items": 7,
    "possible": 0,
+   "best_base_pct": null,
    "kinds": {
     "work": 4,
     "idea": 1,
@@ -336,6 +513,7 @@
    "name": "Budgeted Restarts Voting And Search",
    "board_items": 6,
    "possible": 4,
+   "best_base_pct": 82.8,
    "kinds": {
     "possible": 4,
     "idea": 3,
@@ -348,6 +526,7 @@
    "name": "Controlled Benchmark And Checkpoint Evaluation",
    "board_items": 6,
    "possible": 1,
+   "best_base_pct": null,
    "kinds": {
     "possible": 1,
     "idea": 3,
@@ -360,6 +539,7 @@
    "name": "Sampling And Repetition Controls",
    "board_items": 5,
    "possible": 4,
+   "best_base_pct": 63.8,
    "kinds": {
     "possible": 4,
     "idea": 1,
@@ -373,6 +553,7 @@
    "name": "Comparative Behavior And Mechanism Analysis",
    "board_items": 5,
    "possible": 2,
+   "best_base_pct": null,
    "kinds": {
     "possible": 2,
     "idea": 2,
@@ -385,6 +566,7 @@
    "name": "Research Execution Infrastructure And Workflow",
    "board_items": 5,
    "possible": 0,
+   "best_base_pct": null,
    "kinds": {
     "knowledge": 2,
     "work": 2,
@@ -396,6 +578,7 @@
    "name": "Weight Edits And Task Vectors",
    "board_items": 3,
    "possible": 2,
+   "best_base_pct": null,
    "kinds": {
     "possible": 2,
     "idea": 2,
@@ -407,6 +590,7 @@
    "name": "Grading And Dataset Integrity Audits",
    "board_items": 3,
    "possible": 2,
+   "best_base_pct": null,
    "kinds": {
     "possible": 2,
     "knowledge": 2,
@@ -418,6 +602,7 @@
    "name": "Prompt Cues And Reasoning Scaffolds",
    "board_items": 2,
    "possible": 5,
+   "best_base_pct": 82.0,
    "kinds": {
     "possible": 5,
     "result": 1,

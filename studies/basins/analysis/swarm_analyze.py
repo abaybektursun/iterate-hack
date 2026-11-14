@@ -91,7 +91,29 @@ for n in possible:
     direction[n["id"]] = {"id": n["id"], "name": n["text"].split(":")[0], "items_both": sorted(set.intersection(*sets)) if sets else [],
                           "items_either": sorted(set.union(*sets)) if sets else [], "orders_agree": len({bool(x) for x in sets}) == 1}
 
-basins = [{"basin": g, "name": names[g], "board_items": basin_board.get(g, 0), "possible": basin_poss.get(g, 0),
+# leaderboard: scored configurations from result items (swarm_scores.py), joined to basins and directions
+scores = json.loads((J / "scores.json").read_text()) if (J / "scores.json").exists() else []
+dir_of = defaultdict(list)
+for dd in direction.values():
+    for i in dd["items_either"]:
+        dir_of[i].append(dd["name"])
+board_v3 = [r for r in scores if r["grader"] == "v3"]
+leaderboard = []
+for r in sorted(scores, key=lambda r: (r["grader"] != "v3", -r["score_pct"])):
+    leaderboard.append({**{k: r[k] for k in ("item", "model", "method", "setting", "benchmark", "n", "correct", "score_pct", "grader", "quote")},
+                        "basin": names[labels[0][r["item"]]], "directions": dir_of.get(r["item"], []),
+                        "more_tokens": any(w in r["method"].lower() for w in ("restart", "vote", "best-of", "attempt")),
+                        "superseded": r["grader"] != "v3"})
+best_base = max((r for r in board_v3 if r["model"] == "base"), key=lambda r: r["score_pct"], default=None)
+best_base_one = max((r for r in leaderboard if r["model"] == "base" and not r["superseded"] and not r["more_tokens"]), key=lambda r: r["score_pct"], default=None)
+rl_ref = max((r for r in board_v3 if r["model"] == "rl" and r["setting"].startswith("T 1.0")), key=lambda r: r["score_pct"], default=None)  # AI2 setting, as in DIRECTION.md
+basin_best = defaultdict(float)
+for r in board_v3:
+    if r["model"] == "base":
+        g = labels[0][r["item"]]
+        basin_best[g] = max(basin_best[g], r["score_pct"])
+
+basins = [{"basin": g, "name": names[g], "board_items": basin_board.get(g, 0), "possible": basin_poss.get(g, 0), "best_base_pct": basin_best.get(g),
            "kinds": dict(Counter(by[i]["kind"] for i in parts[0]["groups"][g]["ids"] if not by[i].get("control_of")))}
           for g in range(len(names))]
 summary = {
@@ -108,12 +130,15 @@ summary = {
     "directions_pursued_agree_across_orders": [sum(d["orders_agree"] for d in direction.values()), len(direction)],
     "directions_untouched": [d["name"] for d in direction.values() if not d["items_either"]],
     "directions": list(direction.values()),
+    "leaderboard": leaderboard,
+    "best_base_pct": best_base and best_base["score_pct"], "best_base_one_sample_pct": best_base_one and best_base_one["score_pct"],
+    "rl_reference_pct": rl_ref and rl_ref["score_pct"],
     "control": ctl_checks, "basins": sorted(basins, key=lambda b: -b["board_items"]), "move_list": moves,
 }
 (out / "summary.json").write_text(json.dumps(summary, indent=1))
 (out / "map.json").write_text(json.dumps({"names": names, "nodes": [
     {**{k: n.get(k) for k in ("id", "kind", "who", "at", "at_ns", "text", "control_of")},
      "x": float(X[pos[n["id"]], 0]), "y": float(X[pos[n["id"]], 1]), "basin": labels[0][n["id"]]} for n in nodes]}))
-print(json.dumps({k: v for k, v in summary.items() if k not in ("basins", "move_list", "directions", "control")}))
+print(json.dumps({k: v for k, v in summary.items() if k not in ("basins", "move_list", "directions", "control", "leaderboard")}))
 for b in summary["basins"]:
     print(f"  {b['board_items']:3d} board  {b['possible']:2d} possible  {b['name']}")
