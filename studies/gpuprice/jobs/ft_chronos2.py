@@ -76,7 +76,9 @@ def forecast(model, tag):
     out.to_csv(os.path.join(OUT, f"ft_q_{tag}.csv"), index=False, float_format="%.6g")
     print("forecast", tag, len(out), "rows", flush=True)
 
-pipe = Chronos2Pipeline.from_pretrained("amazon/chronos-2", device_map="cuda")
+DEVICE = "cuda" if torch.cuda.is_available() else "cpu"        # the cpu job class works for small settings
+print("device", DEVICE, flush=True)
+pipe = Chronos2Pipeline.from_pretrained("amazon/chronos-2", device_map=DEVICE)
 forecast(pipe.model, 0)
 if a.mode == "none":
     raise SystemExit(0)
