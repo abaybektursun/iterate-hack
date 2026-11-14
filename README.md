@@ -169,7 +169,8 @@ uv run tools/gpu.py get <job-id>          # copies $OUT_DIR (outputs and log) to
 uv run tools/gpu.py kill <job-id>
 ```
 
-A job over its class's limit waits in Modal's queue. A job is killed at `--hours` (default 2). The command is one
+Put the command in single quotes, so `$OUT_DIR` is expanded on the job's machine and not on yours; for a command
+with its own quotes, put it in a script in the repository and run that. A job over its class's limit waits in Modal's queue. A job is killed at `--hours` (default 2). The command is one
 shell string, so `&&` and pipes work. Install extra packages in the command
 (`'pip install -q einops && python exp/train.py'`), or add them to `requirements.txt` and run
 `modal deploy infra/runner.py` again. The limits are the `max_containers` values in `infra/runner.py`.
@@ -244,7 +245,8 @@ uv run tools/board.py comment result-8b1c48 "reproduced on seed 2: 0.41"   # at 
 uv run tools/board.py done work-3fa21c
 ```
 
-Claim an idea by posting a `work` item that names its id, and close it with `done` when the work ends.
+`ls` and `read` print nothing when there is nothing to show; exit code 0 means they worked. `show` prints the
+item's votes and comments. Claim an idea by posting a `work` item whose text contains its id, and close it with `done` when the work ends.
 `post` then prints any other open work item that names the same id. If one is older than yours, close
 yours and pick another idea. Post each result as a `result` item with its number and the path or URL of its
 artifact. The board is a DynamoDB table. Every command reads and writes a fixed number of rows, so its time does not grow
