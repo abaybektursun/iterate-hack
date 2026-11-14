@@ -1,0 +1,94 @@
+"""The team's GPU pool. Deploy once, and again after changing the image or the caps:
+
+    modal deploy infra/pool.py
+
+Each GPU class is one Modal function whose max_containers is that class's cap. A job submitted while its
+class is full waits in Modal's queue and starts when a container frees up, so Modal itself allocates the
+GPUs. Submit and inspect jobs with tools/gpu.py.
+
+A job runs one commit of this repository, uploaded by tools/gpu.py to the Volume iterate-code as
+<sha>.tar. The command runs from the repository root with OUT_DIR=/runs/<job-id>; the output written
+there, and the command's log, end up in the Volume iterate-runs. HF_HOME is the shared Volume
+iterate-hf-cache, so each model downloads once for the whole team.
+
+Copied from interp_research/infra/modal_app.py and image_base.py: pinned image versions, volumes and the
+hf-token secret. Left out: the orchestrator tick, which respawned killed runs, and the GPU fallback walk.
+"""
+import os
+import signal
+import subprocess
+import tarfile
+import time
+from pathlib import Path
+
+import modal
+
+image = (
+    modal.Image.debian_slim(python_version="3.12")
+    .pip_install(
+        "torch==2.15.0",
+        "transformers==5.22.2",
+        "accelerate==1.15.0",
+        "safetensors==0.8.0",
+        "numpy==2.5.4",
+        "datasets==5.2.0",
+    )
+    .env({"HF_HOME": "/hf", "PYTHONUNBUFFERED": "1"})
+)
+runs = modal.Volume.from_name("iterate-runs", create_if_missing=True)
+code = modal.Volume.from_name("iterate-code", create_if_missing=True)
+hf_cache = modal.Volume.from_name("iterate-hf-cache", create_if_missing=True)
+jobs = modal.Dict.from_name("iterate-jobs", create_if_missing=True)
+
+app = modal.App("iterate-pool")
+common = dict(
+    image=image,
+    volumes={"/runs": runs, "/code": code, "/hf": hf_cache},
+    secrets=[modal.Secret.from_name("hf-token")],
+    timeout=24 * 3600,
+    retries=0,
+)
+
+
+def run(job_id):
+    job = jobs[f"job:{job_id}"]
+    gpu = subprocess.run(["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"], capture_output=True, text=True)
+    jobs[f"start:{job_id}"] = {"at": int(time.time()), "gpu": gpu.stdout.strip() or "cpu"}
+
+    with tarfile.open(f"/code/{job['sha']}.tar") as tar:
+        tar.extractall("/repo", filter="data")
+    out = Path("/runs") / job_id
+    out.mkdir(parents=True)
+    deadline = time.time() + job["hours"] * 3600
+    with open(out / "log", "w") as log:
+        proc = subprocess.Popen(job["cmd"], shell=True, cwd="/repo", stdout=log, stderr=subprocess.STDOUT,
+                                env={**os.environ, "OUT_DIR": str(out), "JOB_ID": job_id}, start_new_session=True)
+        last_commit = time.time()
+        while proc.poll() is None:
+            time.sleep(5)
+            if time.time() - last_commit > 30:
+                runs.commit()  # makes the log readable by tools/gpu.py logs while the job runs
+                last_commit = time.time()
+            if time.time() > deadline:
+                os.killpg(proc.pid, signal.SIGKILL)  # the shell and every process it started
+                proc.wait()
+    runs.commit()
+    jobs[f"end:{job_id}"] = {"at": int(time.time()), "exit_code": proc.returncode, "timed_out": time.time() > deadline}
+    if proc.returncode != 0:
+        raise RuntimeError(f"{job_id} exited with code {proc.returncode}")
+
+
+# One function per GPU class. max_containers is the team-wide cap for that class.
+@app.function(gpu="H100", max_containers=4, **common)
+def h100(job_id: str):
+    run(job_id)
+
+
+@app.function(gpu="B200", max_containers=2, **common)
+def b200(job_id: str):
+    run(job_id)
+
+
+@app.function(cpu=4, max_containers=8, **common)
+def cpu(job_id: str):
+    run(job_id)
