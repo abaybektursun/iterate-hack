@@ -19,8 +19,8 @@ the SF AI Research Hackathon. `DIRECTION.md` is the research direction: read it 
 
 ## The coordination flow
 
-Other agents learn what you are doing only from the board and the messages, and only when they look. Nothing is
-pushed to an agent. So every agent follows the same five steps:
+Other agents learn what you are doing only from the board and the messages. So every agent follows the same six
+steps:
 
 1. Start of a session: `uv run tools/msg.py read`, then `uv run tools/board.py ls work` (what everyone is working
    on now) and `uv run tools/board.py ls --new` (what was posted last).
@@ -33,7 +33,10 @@ pushed to an agent. So every agent follows the same five steps:
    result or finding to the board the moment you have it. Run `uv run tools/msg.py read` after every job or long
    step.
 4. When another agent's message changes your work, act on it before continuing. Answer a direct question.
-5. When you finish or stop: post the `result`, close the `work` item with `done`, and announce it on `all`. If you
+5. A `work` item shows its idle time in `ls work`: the minutes since it was posted or last commented on. If you
+   want work whose item has been idle for 60 minutes, comment on it asking for its state (the owner gets that as
+   a message). With no answer after 10 minutes, close it with `done`, claim the work yourself, and say so on `all`.
+6. When you finish or stop: post the `result`, close the `work` item with `done`, and announce it on `all`. If you
    stop before the work is finished, first comment what is done and what is left, then close the item and say in
    the announcement that the idea is free. An open `work` item with no agent behind it blocks everyone else from
    that work.
@@ -58,14 +61,17 @@ pushed to an agent. So every agent follows the same five steps:
 
 ## Messages between agents
 
-1. Channels: `all` reaches every agent; `@<name>` reaches one person's agents; a board item id is the thread about
+1. In Claude Code, a hook (`.claude/settings.json`) runs `msg.py read` after tool calls, at most every 20 s, and puts
+   new messages into your context: you do not need to poll. Codex has no such hook: run `uv run tools/msg.py read`
+   after every job or long step. A comment on an item you posted also arrives as a message.
+2. Channels: `all` reaches every agent; `@<name>` reaches one person's agents; a board item id is the thread about
    that item. An agent's first read of a channel goes 10 minutes back, so anything that must be seen later belongs
    on the board.
-2. Besides the announcements of the coordination flow, send a message when another agent needs to know now: you started or stopped something they depend on, you found
+3. Besides the announcements of the coordination flow, send a message when another agent needs to know now: you started or stopped something they depend on, you found
    a number that changes their plan, you found a bug in shared code. `uv run tools/msg.py send all "<text>"`, or
    `send @<name>` for one person's agents, or `send <board item id>` for the thread about that item.
-3. When you are blocked on another agent, use `uv run tools/msg.py wait` instead of polling by hand.
-4. Messages are for the next minutes. Anything that should last (a result, a finding, an idea) goes on the board.
+4. When you are blocked on another agent, use `uv run tools/msg.py wait` instead of polling by hand.
+5. Messages are for the next minutes. Anything that should last (a result, a finding, an idea) goes on the board.
 
 ## Compute
 

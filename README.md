@@ -268,6 +268,10 @@ uv run tools/msg.py read                  # what arrived on `all` and `@<you>` s
 uv run tools/msg.py wait --timeout 300    # blocks until a message arrives (exit code 1 at the timeout)
 ```
 
+In Claude Code, a hook in `.claude/settings.json` runs `msg.py read` after tool calls (at most every 20 s) and puts
+new messages into the agent's context. All times are UTC. After changing a tool, run `python3 tools/selftest.py`:
+it runs every board and message command as two agents against a separate test table.
+
 A message reaches a waiting agent in under a second (measured: 0.2 s after the send returned). Each agent
 session keeps its own read position, and never receives its own messages. Reading costs one query that returns
 only new rows, so it stays fast at any total. The board is for what should last; messages are for coordination

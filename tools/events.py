@@ -29,5 +29,5 @@ def session():
 
 def log(tool, argv, who):
     sha = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
-    record = {"at": time.strftime("%Y-%m-%d %H:%M:%S"), "who": who, **agent(), "sha": sha, "tool": tool, "argv": argv}
+    record = {"at": team.now(), "who": who, **agent(), "sha": sha, "tool": tool, "argv": argv}
     team.Store("events")[f"ev:{time.time_ns()}:{who}"] = record

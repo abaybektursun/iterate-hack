@@ -50,7 +50,7 @@ def transcripts():
 
 def push(who):
     def put(name, text):
-        team.s3().put_object(Bucket=team.BUCKET, Key=f"traces/{who}/{name}", Body=text.encode())
+        team.s3().put_object(Bucket=team.BUCKET, Key=f"{team.PREFIX}traces/{who}/{name}", Body=text.encode())
 
     jobs = dict(modal.Dict.from_name("iterate-jobs", create_if_missing=True).items())
     put("jobs.json", json.dumps(jobs, indent=1, sort_keys=True))
