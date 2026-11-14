@@ -33,7 +33,7 @@ import sys
 import time
 from pathlib import Path
 
-IMAGE = "pytorch/pytorch:2.15.0-cuda13.2-cudnn9-runtime"  # the same torch as the Modal pool
+IMAGE = "pytorch/pytorch:2.15.0-cuda13.2-cudnn9-runtime"  # the same torch as on Modal
 ECR = "769063704696.dkr.ecr.us-east-1.amazonaws.com"
 FILTER = "num_gpus=1 verified=true reliability>0.98 rentable=true inet_down>=500 cuda_vers>=13.2 disk_space>=100"
 ROOT = Path(__file__).resolve().parent.parent
@@ -97,7 +97,7 @@ def up(args):
     image = flags.get("--image", IMAGE)
     t0 = time.time()
     onstart = f"(sleep {int(hours * 3600)}; {DESTROY}) > /root/deadline.log 2>&1 &"
-    if image == IMAGE:  # install the pinned versions, so a job sees the same packages as on the Modal pool
+    if image == IMAGE:  # install the pinned versions, so a job sees the same packages as on Modal
         pins = " ".join(shlex.quote(p) for p in (ROOT / "requirements.txt").read_text().split())
         onstart += f" python -m pip install -q --break-system-packages {pins} > /root/pip.log 2>&1;"
     onstart += " touch /root/ready"

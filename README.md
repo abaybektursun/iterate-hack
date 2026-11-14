@@ -5,42 +5,57 @@ subagents, work on one research direction. The agents coordinate through two sha
 
 | Store | Holds | Tool |
 |---|---|---|
-| Board (Modal Dict `iterate-board`) | ideas, skills, knowledge, results, current work; votes and comments | `uv run tools/board.py` |
+| Board (Modal Dict `iterate-board`, team workspace) | ideas, skills, knowledge, results, current work; votes and comments | `uv run tools/board.py` |
 | Memory (past.dev project) | specific findings from papers and posts; everyone's Claude Code sessions | `uv run tools/paper.py`, `python3 tools/recall.py` |
-| GPU pool (Modal app `iterate-pool`) | every shared GPU job, queued and capped team-wide | `uv run tools/gpu.py` |
+| Modal (your own workspace, app `iterate-runner`) | your GPU jobs, their outputs and the model cache | `uv run tools/gpu.py` |
 | vast.ai (your own account) | your private GPU rentals | `python3 tools/vast.py` |
-| Traces (Modal Volume `iterate-traces`) | agent transcripts and daily copies of the records above | `uv run tools/traces.py` |
+| Traces (Modal Volume `iterate-traces`, team workspace) | agent transcripts, job records, daily copies of the board and events | `uv run tools/traces.py` |
+
+## Modal setup (once per person)
+
+Each person has two Modal profiles: their own workspace, which pays for their GPU jobs from their own credits,
+and the team workspace `abaybektursun`, which holds only the board, the events and the traces.
+
+```
+modal token new                                             # your own workspace; stays the active profile
+modal token new --profile abaybektursun --no-activate       # pick the workspace abaybektursun (ask Abay for an invite)
+modal secret create hf-token HF_TOKEN=<your token>          # in your own terminal, for gated models
+modal deploy infra/runner.py                                # your job runner, in your own workspace
+```
 
 ## Compute
 
-There are two ways to run a job. Both run one clean, pushed commit from the repository root, with the root first
-on `PYTHONPATH`, write outputs to `$OUT_DIR`, and have the same package versions (`requirements.txt`).
+There are two ways to run a job, and both are paid by you. Both run one clean, pushed commit from the repository
+root, with the root first on `PYTHONPATH`, write outputs to `$OUT_DIR`, and have the same package versions
+(`requirements.txt`).
 
-| | Modal pool (shared) | vast.ai (private) |
+| | Modal (your workspace) | vast.ai (your account) |
 |---|---|---|
-| Who pays | the team's Modal credits | you, from your own vast.ai account |
-| GPUs | H100 (4 for the team), B200 (2), cpu (8) | any single GPU on the market, often $0.15 to $0.70/h for 24 to 48 GB |
-| Start | about 10 s when the class has room (measured for cpu and H100) | 2 to 4 min for a new box (measured 137 to 232 s); about 4 s for the next job on the same box |
-| Model weights | shared cache: each model downloads once for the whole team | download on the box once; later jobs on that box reuse it |
-| Results | Volume `iterate-runs`, visible to everyone | on the box until you copy them out with `get` |
-| Use it for | batch jobs, H100/B200, anything others should see | interactive work, many small runs, GPUs the pool lacks |
+| Who pays | your Modal credits | your vast.ai balance |
+| GPUs | H100 (4 at once), B200 (2), cpu (8) | any single GPU on the market, often $0.15 to $0.70/h for 24 to 48 GB |
+| Start | about 10 s (measured for cpu and H100) | 2 to 4 min for a new box (measured 137 to 232 s); about 4 s for the next job on the same box |
+| Model weights | cached in your Volume `iterate-hf-cache`: each model downloads once | download on the box once; later jobs on that box reuse it |
+| Results | your Volume `iterate-runs`; copy out with `gpu.py get` | on the box until you copy them out with `vast.py get` |
+| Use it for | batch jobs, H100/B200, many jobs in parallel | interactive work, many small runs, cheaper GPUs |
 
-### Modal pool
+Teammates cannot read your Volumes or your box. To share a result, commit its small files (metrics, samples) and
+name the path in the board item.
+
+### Modal
 
 ```
 uv run tools/gpu.py submit h100 --hours 2 -- 'python exp/train.py --lr 3e-4'   # prints the job id
-uv run tools/gpu.py ls                    # the whole team's jobs of the last 3 hours, any state
+uv run tools/gpu.py ls                    # your jobs of the last 3 hours, any state
 uv run tools/gpu.py wait <job-id>         # blocks until the job ends; prints its state and last 20 log lines
 uv run tools/gpu.py logs <job-id> 50      # last 50 lines, updated every 30 s
+uv run tools/gpu.py get <job-id>          # copies $OUT_DIR (outputs and log) to runs/<job-id>/
 uv run tools/gpu.py kill <job-id>
-mkdir -p runs && modal volume get iterate-runs <job-id> runs/
 ```
 
-A job over its class's cap waits in Modal's queue. Each person can have 4 jobs queued or running. A job is killed
-at `--hours` (default 2). The command is one shell string, so `&&` and pipes work. Install extra packages in the
-command (`'pip install -q einops && python exp/train.py'`), or add them to `requirements.txt` and run
-`modal deploy infra/pool.py` while no jobs are queued. Requires membership in the team's Modal workspace
-(`modal token new`).
+A job over its class's limit waits in Modal's queue. A job is killed at `--hours` (default 2). The command is one
+shell string, so `&&` and pipes work. Install extra packages in the command
+(`'pip install -q einops && python exp/train.py'`), or add them to `requirements.txt` and run
+`modal deploy infra/runner.py` again. The limits are the `max_containers` values in `infra/runner.py`.
 
 ### vast.ai
 
@@ -72,7 +87,7 @@ key at https://cloud.vast.ai/manage-keys/.
 
 | Image | Where | Contents |
 |---|---|---|
-| Modal pool image | `infra/pool.py` | Debian, Python 3.12, `requirements.txt` (torch 2.15.0, transformers 5.22.2, ...) |
+| Modal image | `infra/runner.py` | Debian, Python 3.12, `requirements.txt` (torch 2.15.0, transformers 5.22.2, ...) |
 | `pytorch/pytorch:2.15.0-cuda13.2-cudnn9-runtime` | vast.ai default | torch 2.15.0; `up` installs `requirements.txt` on top |
 | ECR `shackleton:<tag>` | vast.ai, `up --image` | older images from another project, with model weights inside (below) |
 
@@ -118,7 +133,7 @@ Claim an idea by posting a `work` item that names its id, and close it with `don
 yours and pick another idea. Post each result as a `result` item with its number and the path or URL of its
 artifact. Each item, vote and comment is stored under its own key, so any number of agents can write at
 the same time. Each command takes about 0.2 s. Modal deletes an entry after 7 days with no reads or
-writes. Requires membership in the team's Modal workspace (`modal token new`).
+writes. Requires the team-workspace profile (Modal setup above).
 
 ## Findings from papers and posts
 
@@ -149,16 +164,16 @@ Someone will analyze how the team worked, so every action leaves a record:
 | Record | Where | Written by |
 |---|---|---|
 | Every `board.py`, `gpu.py` and `paper.py` command: time, person, agent (claude-code or codex, with its session id, and whether it ran as a subagent), commit, full command line | Modal Dict `iterate-events` | the tools, automatically |
-| Every pool job: submitter, commit, command, GPU, start and end times, exit code, log and outputs | Dict `iterate-jobs`, Volumes `iterate-runs` and `iterate-code` | `gpu.py` and the pool |
+| Every Modal job: submitter, commit, command, GPU, start and end times, exit code | Dict `iterate-jobs` in each person's workspace, copied to `iterate-traces/<who>/jobs.json` | `gpu.py`, then `traces.py push` |
 | Board items, votes and comments, with times; who closed each work item and when | Dict `iterate-board` | `board.py` |
 | Agent transcripts (Claude Code with subagents, Codex) | Volume `iterate-traces/<who>/` | `uv run tools/traces.py push`, by each person |
-| Copies of the three Dicts (they drop entries after 7 days unused) | Volume `iterate-traces/export/` | `uv run tools/traces.py export` |
+| Copies of the board and events Dicts (they drop entries after 7 days unused) | Volume `iterate-traces/export/` | `uv run tools/traces.py export` |
 
 Run `uv run tools/traces.py push` at the end of each working session, and `export` once a day (anyone). A
 transcript holds everything typed and every tool output, including file contents and the instructions files the
 agent loaded. `push` replaces strings that look like keys with `[REDACTED]`, but it catches common formats only.
 vast.ai rentals are private and are recorded only on your laptop, in `runs/vast/`. The analyst reads everything
-with `modal volume get iterate-traces / traces/`.
+with `modal volume get --profile abaybektursun iterate-traces / traces/`.
 
 ## Codex agents
 
