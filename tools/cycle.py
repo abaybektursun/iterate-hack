@@ -15,6 +15,8 @@ Work: every work item of yours posted in the window, with
   A job counts toward a work item when it was submitted from the same git branch between the claim and the close.
   Jobs submitted before gpu.py recorded the branch are not matched, and work items closed before board.py kept
   closed items in its index are not listed.
+Cooperation: the comments of the whole team in the window, and how many of them one person's agent wrote on
+  another person's item. Those are the comments that pass a paper, data or a correction between people.
 All times are minutes.
 """
 import calendar
@@ -99,3 +101,20 @@ if medians:
     slowest = max(medians, key=medians.get)
     print("\nMedian minutes per stage over work items with jobs: " + ", ".join(f"{k} {v:.0f}" for k, v in medians.items())
           + f". Slowest stage: {slowest}.")
+
+board = []
+for listed in ("idea", "skill", "knowledge", "result", "work", "work-closed"):
+    query = dict(IndexName="new", KeyConditionExpression=Key("listed").eq(listed))
+    while True:
+        page = team.table().query(**query)
+        board += [i for i in page["Items"] if i["n_comments"]]
+        if "LastEvaluatedKey" not in page:
+            break
+        query["ExclusiveStartKey"] = page["LastEvaluatedKey"]
+comments = [(item, c) for item in board
+            for c in team.table().query(KeyConditionExpression=Key("pk").eq(f"item#{item['id']}") & Key("sk").begins_with("comment#"))["Items"]
+            if int(c["sk"].split("#")[1]) >= since * 10**9]
+crossed = [(item, c) for item, c in comments if c["who"] != item["who"]]
+print(f"\nCooperation, whole team, last {hours:g} h: {len(crossed)} of {len(comments)} comments are on another person's item.")
+for item, c in crossed:
+    print(f"  {item['id']}  {c['who']} -> {item['who']}: {c['text'][:100]}")

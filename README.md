@@ -284,7 +284,7 @@ uv run tools/msg.py wait --timeout 300    # blocks until a message arrives (exit
 ```
 
 In Claude Code, two hooks in `.claude/settings.json` put the team's state into the agent's context. At the start
-of a session and after `/clear`, one prints the open work, the 10 newest board items and new messages. After tool
+of a session and after `/clear`, one prints the open work, the open board (100 newest items) and new messages. After tool
 calls (at most every 20 s), the other runs `msg.py read` and adds new messages. All times are UTC. After changing a tool, run `python3 tools/selftest.py`:
 it runs every board and message command as two agents against a separate test table.
 
