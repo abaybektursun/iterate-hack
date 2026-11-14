@@ -112,6 +112,8 @@ if __name__ == "__main__":
         llm = FakeLLM()
         SP = lambda **kw: kw  # noqa: E731
     else:
+        from studies.rlneurons.lib.n13_gen import ENGINE_ENV  # VLLM_USE_FLASHINFER_SAMPLER=0: no nvcc in the image
+        os.environ.update(ENGINE_ENV)  # set before vllm is imported
         from vllm import LLM, SamplingParams as SP
         llm = LLM(model=JUDGE[0], revision=JUDGE[1], max_model_len=16384, enable_prefix_caching=True, seed=0)
 
