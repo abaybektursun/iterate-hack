@@ -1,24 +1,24 @@
 """Strategy basins, step 1: sample k solutions per problem from one model, for the base-vs-RL strategy count.
 
-    python exp/strategy_gen.py --model base --k 32            # base + opening cue, T 1.0 / top-p 1.0, vLLM, GPU
-    python exp/strategy_gen.py --model rl --k 32              # Olmo 3.1 RL-Zero-Math, same prompts and sampling
-    python exp/strategy_gen.py --model base --k 4 --n-problems 2 --dry   # builds requests only, no model
+    python -m studies.basins.jobs.strategy_gen --model base --k 32            # base + opening cue, T 1.0 / top-p 1.0, vLLM, GPU
+    python -m studies.basins.jobs.strategy_gen --model rl --k 32              # Olmo 3.1 RL-Zero-Math, same prompts and sampling
+    python -m studies.basins.jobs.strategy_gen --model base --k 4 --n-problems 2 --dry   # builds requests only, no model
 
 Each model runs at its own best published setting from DIRECTION.md: the base with the cue " line!\\n\\nOkay",
-the RL model without it, both at T 1.0 / top-p 1.0, cap 16,384, prompts from the frozen RLN-4 inputs (exp/data/).
+the RL model without it, both at T 1.0 / top-p 1.0, cap 16,384, prompts from the frozen RLN-4 inputs (studies/rlneurons/data/rln4/).
 Problems: a fixed, subject-stratified subset of MATH-500 (6 per subject, 42 total, seed 0).
-Appends to $OUT_DIR/generations.jsonl, one line per sample, with an approximate boxed-answer grade
-(exact match after light normalization; it is not grader v3).
+Appends to $OUT_DIR/generations.jsonl, one line per sample, graded with the rlneurons grader v3
+(studies/rlneurons/lib/rln4_lib.grade_v3). Run on the GPU with the study engine:
+    bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.basins.jobs.strategy_gen ...
 """
 import argparse
 import json
 import os
 import pathlib
 import random
-import re
 import time
 
-DATA = pathlib.Path(__file__).resolve().parent / "data"
+DATA = pathlib.Path(__file__).resolve().parents[2] / "rlneurons" / "data" / "rln4"
 SEED_BASE = {"base": 51_000_000, "rl": 52_000_000}  # new seed range, outside RLN-4 and cue_sampling
 
 
@@ -28,28 +28,6 @@ def problem_subset(math, per_subject, seed=0):
         by.setdefault(p["unique_id"].split("/")[1], []).append(i)
     rng = random.Random(seed)
     return sorted(i for s in sorted(by) for i in rng.sample(by[s], per_subject))
-
-
-def last_boxed(text):
-    i = text.rfind("\\boxed")
-    if i < 0:
-        return None
-    j = text.find("{", i)
-    if j < 0:
-        return None
-    depth = 0
-    for k in range(j, len(text)):
-        depth += {"{": 1, "}": -1}.get(text[k], 0)
-        if depth == 0:
-            return text[j + 1:k]
-    return None
-
-
-def norm(s):
-    s = re.sub(r"\\left|\\right|\\!|\\,|\\;|\\ |\$|\s", "", s)
-    s = s.replace("\\dfrac", "\\frac").replace("\\tfrac", "\\frac").replace("^\\circ", "").replace("^{\\circ}", "")
-    s = re.sub(r"\\text\{(.*?)\}", r"\1", s)
-    return s.rstrip(".")
 
 
 if __name__ == "__main__":
@@ -80,6 +58,7 @@ if __name__ == "__main__":
         (out / f"meta_{args.model}.json").write_text(json.dumps(meta, indent=1))
         raise SystemExit(0)
 
+    from studies.rlneurons.lib import rln4_lib
     from vllm import LLM, SamplingParams, TokensPrompt
     llm = LLM(model=repo, revision=rev, tokenizer=tok_repo, tokenizer_revision=tok_rev, dtype="bfloat16",
               max_model_len=max(len(r["ids"]) for r in reqs) + cap, seed=0, enable_prefix_caching=True)
@@ -90,8 +69,8 @@ if __name__ == "__main__":
         for r, o in zip(reqs, res):
             assert len(o.outputs) == args.k, len(o.outputs)
             for s, c in enumerate(o.outputs):
-                pred = last_boxed(c.text)
-                ok = pred is not None and norm(pred) == norm(r["gold"])
+                g = rln4_lib.grade_v3(r["gold"], c.text)
+                pred, ok = g["extracted_v3"], bool(g["score_v3"])
                 cap_hit = len(c.token_ids) >= cap
                 n_correct += ok
                 n_cap += cap_hit
@@ -100,7 +79,7 @@ if __name__ == "__main__":
                                     "gold": r["gold"], "pred": pred, "correct": ok, "n_out": len(c.token_ids),
                                     "cap_hit": cap_hit, "text": c.text}) + "\n")
     n = len(reqs) * args.k
-    meta.update(n=n, acc_boxed_exact=n_correct / n, cap_hits=n_cap, mean_tokens=n_tok / n,
+    meta.update(n=n, acc_grader_v3=n_correct / n, cap_hits=n_cap, mean_tokens=n_tok / n,
                 finished_utc=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
     (out / f"meta_{args.model}.json").write_text(json.dumps(meta, indent=1))
     print(json.dumps({k: v for k, v in meta.items() if k != "problems"}))

@@ -1,7 +1,7 @@
 """Strategy basins, step 2: an LLM judge turns sampled solutions into strategy groups and triplet judgments.
 
-    python exp/strategy_judge.py --gen /runs/<gen-job-id>          # GPU, vLLM, judge model below
-    python exp/strategy_judge.py --gen runs/<gen-job-id> --dry     # builds prompts only, no model
+    python -m studies.basins.jobs.strategy_judge --gen /runs/<gen-job-id>          # GPU, vLLM, judge model below
+    python -m studies.basins.jobs.strategy_judge --gen runs/<gen-job-id> --dry     # builds prompts only, no model
 
 The judge never sees which model wrote a solution, or its grade.
 1. Summary: each solution becomes a <= 3-sentence description of its mathematical method, without the final
@@ -9,7 +9,7 @@ The judge never sees which model wrote a solution, or its grade.
 2. Partition: per problem, all summaries (base and RL pooled, shuffled, anonymous ids) are grouped by main
    method. Done R times with different orders, to measure stability.
 3. Triplets: "is B or C closer in method to A?", asked in both orders (Bespoke Labs / Fork-and-Flush style),
-   for a 2D t-STE map per problem (fit on the laptop by exp/strategy_analyze.py).
+   for a 2D t-STE map per problem (fit on the laptop by studies/basins/analysis/strategy_analyze.py).
 4. Controls that must pass: exact duplicates must share a group; summaries of two different problems must not.
 Writes summaries.jsonl, partitions.jsonl, triplets.jsonl, controls.jsonl and meta.json to $OUT_DIR.
 """
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     args = ap.parse_args()
 
     out = pathlib.Path(os.environ["OUT_DIR"])
-    data = pathlib.Path(__file__).resolve().parent / "data"
+    data = pathlib.Path(__file__).resolve().parents[2] / "rlneurons" / "data" / "rln4"
     math = json.loads((data / "math500.json").read_text())
     gens = [json.loads(l) for l in open(pathlib.Path(args.gen) / "generations.jsonl")]
     rng = random.Random(0)

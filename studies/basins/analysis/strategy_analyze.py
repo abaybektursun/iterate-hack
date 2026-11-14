@@ -1,6 +1,6 @@
 """Strategy basins, step 3 (laptop, no model): strategy counts base vs RL, nulls, controls, and t-STE maps.
 
-    python3 exp/strategy_analyze.py --judge runs/<judge-job-id> --out results/strategy_basins/<name>
+    python3 studies/basins/analysis/strategy_analyze.py --judge runs/<judge-job-id> --out studies/basins/results/strategy/<arm>-<nn>
 
 Main contrast, per problem: distinct strategy groups among 16 base samples vs 16 RL samples (base with cue,
 RL without, both T 1.0). Null contrasts: base samples 0-15 vs 16-31, and RL 0-15 vs 16-31; these should be
@@ -145,7 +145,7 @@ if __name__ == "__main__":
         "n_items": len(items),
         "no_method_share": {mod: float(np.mean([it["no_method"] for it in items.values() if it["model"] == mod]))
                             for mod in ("base", "rl")},
-        "acc_boxed_exact": {mod: float(np.mean([it["correct"] for it in items.values() if it["model"] == mod]))
+        "acc_grader_v3": {mod: float(np.mean([it["correct"] for it in items.values() if it["model"] == mod]))
                             for mod in ("base", "rl")},
         "groups_16": {k: boot_ci([r[k] for r in per_prob], nrng) for k in ["baseA", "baseB", "rlA", "rlB"]},
         "main_baseA_minus_rlA": boot_ci(diff("baseA", "rlA"), nrng),

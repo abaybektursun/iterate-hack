@@ -1,6 +1,6 @@
 """Strategy basins, step 4 (laptop): one self-contained HTML page from strategy_analyze.py outputs.
 
-    python3 exp/strategy_page.py results/strategy_basins/<name>      # writes <name>/strategy_map.html
+    python3 studies/basins/analysis/strategy_page.py studies/basins/results/strategy/<arm>-<nn>   # writes strategy_map.html there
 """
 import json
 import pathlib
@@ -10,7 +10,7 @@ d = pathlib.Path(sys.argv[1])
 summary = json.loads((d / "summary.json").read_text())
 per = json.loads((d / "per_problem.json").read_text())
 maps = json.loads((d / "maps.json").read_text())
-math = json.loads((pathlib.Path(__file__).resolve().parent / "data" / "math500.json").read_text())
+math = json.loads((pathlib.Path(__file__).resolve().parents[2] / "rlneurons" / "data" / "rln4" / "math500.json").read_text())
 data = {"summary": summary, "per": per, "maps": maps["maps"], "names": maps["group_names"],
         "problems": {str(r["idx"]): {"uid": math[r["idx"]]["unique_id"], "text": math[r["idx"]]["problem"][:400]} for r in per}}
 
@@ -75,7 +75,7 @@ const stats = [
   ["Judge checks", `dup ${S.controls.dup} · mix ${S.controls.mix}`, `t-STE held-out ${f2(S.tste_heldout_acc && S.tste_heldout_acc[0])} vs shuffled ${f2(S.tste_shuffled_id_null_acc && S.tste_shuffled_id_null_acc[0])}`],
 ];
 document.getElementById("stats").innerHTML = stats.map(([l, v, c]) => `<div class="stat"><span class="lab">${l}</span><span class="val">${v}</span><span class="ci">${c}</span></div>`).join("");
-document.getElementById("foot").textContent = `${S.n_problems} MATH-500 problems, ${S.n_items} solutions, both models at T 1.0 / top-p 1.0. Accuracy (boxed exact match): base ${f2(S.acc_boxed_exact.base)}, RL ${f2(S.acc_boxed_exact.rl)}. No-method share (loops, cut-offs): base ${f2(S.no_method_share.base)}, RL ${f2(S.no_method_share.rl)}. Intervals: bootstrap 95% over problems.`;
+document.getElementById("foot").textContent = `${S.n_problems} MATH-500 problems, ${S.n_items} solutions, both models at T 1.0 / top-p 1.0. Accuracy (grader v3): base ${f2(S.acc_grader_v3.base)}, RL ${f2(S.acc_grader_v3.rl)}. No-method share (loops, cut-offs): base ${f2(S.no_method_share.base)}, RL ${f2(S.no_method_share.rl)}. Intervals: bootstrap 95% over problems.`;
 const per = Object.fromEntries(D.per.map(r => [r.idx, r]));
 const sorts = {"base − RL gap": r => -(r.baseA - r.rlA), "RL accuracy gain": r => -(r.acc.rl - r.acc.base), "problem id": r => r.idx};
 let cur = "base − RL gap";
