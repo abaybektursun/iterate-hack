@@ -1,10 +1,10 @@
-"""The team store: the S3 bucket iterate-hack-team-769063704696 (us-east-1, in Abay's AWS account), which holds
-what the team shares: the board, the events and the traces. Modal is not used for it, because each person has
+"""The team store, in Abay's AWS account (us-east-1): the DynamoDB table iterate-board holds the board, and the S3
+bucket iterate-hack-team-769063704696 holds the events and the traces. Modal is not used for it, because each person has
 their own Modal workspace.
 
 Access is through the AWS profile iterate-ecr, which `uv run tools/shared.py setup` writes. The same key pulls
-the ECR images. It can read and write objects in this bucket, cannot delete them, and stops working Sunday
-2026-11-15 at 23:59 PST. The bucket keeps every version of every object.
+the ECR images. It can read and write the table and the bucket, cannot delete from either, and stops working
+Sunday 2026-11-15 at 23:59 PST. The bucket keeps every version of every object.
 
 A Store is a prefix of JSON objects, one object per key, so two writers never touch the same object. When two
 writers do write the same key, the later write wins.
@@ -26,6 +26,13 @@ def s3():
     from botocore.config import Config
 
     return boto3.Session(profile_name=PROFILE, region_name="us-east-1").client("s3", config=Config(max_pool_connections=64))
+
+
+@functools.cache
+def table():
+    import boto3
+
+    return boto3.Session(profile_name=PROFILE, region_name="us-east-1").resource("dynamodb").Table("iterate-board")
 
 
 class Store:

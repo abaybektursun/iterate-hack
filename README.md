@@ -6,7 +6,8 @@ subagents, work on one research direction, described in [`DIRECTION.md`](DIRECTI
 
 | Store | Holds | Tool |
 |---|---|---|
-| Team store (S3 bucket `iterate-hack-team-769063704696`, Abay's AWS) | the board, the events, the traces | `uv run tools/board.py`, `tools/traces.py` |
+| Board (DynamoDB table `iterate-board`, Abay's AWS) | ideas, skills, knowledge, results, current work; votes and comments | `uv run tools/board.py` |
+| Events and traces (S3 bucket `iterate-hack-team-769063704696`, Abay's AWS) | one record per tool command; agent transcripts | written by the tools; `uv run tools/traces.py` |
 | Shared keys (private repository `abaybektursun/iterate-hack-team`) | the team AWS key, the past.dev key | `uv run tools/shared.py` |
 | Memory (past.dev project) | specific findings from papers and posts; everyone's Claude Code sessions | `uv run tools/paper.py`, `python3 tools/recall.py` |
 | Modal (your own workspace, app `iterate-runner`) | your GPU jobs, their outputs and the model cache | `uv run tools/gpu.py` |
@@ -21,11 +22,11 @@ or a text editor, never into an agent chat, and never commit one.
 | # | Provider | Shared or yours | Needed for |
 |---|---|---|---|
 | 1 | GitHub | shared repositories | the code and the shared keys |
-| 2 | Shared keys (`tools/shared.py`) | shared | the team store on S3 (board, events, traces), ECR images, past.dev memory |
+| 2 | Shared keys (`tools/shared.py`) | shared | the board, events and traces on AWS, ECR images, past.dev memory |
 | 3 | Modal | yours ($250 credits) | GPU jobs with `tools/gpu.py` |
 | 4 | Hugging Face | yours | gated models on Modal and vast.ai |
 | 5 | vast.ai | yours (optional) | cheaper private GPUs with `tools/vast.py` |
-| 6 | AWS (S3 and ECR) | shared, until Sunday 23:59 PST | the board, events and traces; prebuilt images with model weights, on vast.ai |
+| 6 | AWS (DynamoDB, S3 and ECR) | shared, until Sunday 23:59 PST | the board, events and traces; prebuilt images with model weights, on vast.ai |
 | 7 | past.dev | shared team project | `tools/paper.py`, `tools/recall.py`, session memory |
 | 8 | Exa | yours ($50 credits) | web and literature search by agents (MCP tools) |
 | 9 | Tinker, Devin, OpenAI | yours | optional; no tool here uses them |
@@ -90,8 +91,9 @@ and add credit to the account. Check: `python3 tools/vast.py offers --ram 24` li
 
 Step 2 already wrote the profile `iterate-ecr`, in Abay's AWS account. It does two things:
 
-- The team store: the S3 bucket `iterate-hack-team-769063704696` holds the board, the events and the traces. The
-  key can read and write objects there and cannot delete them; the bucket keeps every version.
+- The team store: the DynamoDB table `iterate-board` holds the board, and the S3 bucket
+  `iterate-hack-team-769063704696` holds the events and the traces. The key can read and write both and cannot
+  delete from either.
 - The prebuilt images (table under Compute, Images) in ECR, pull only. Check:
   `aws ecr describe-images --repository-name shackleton --profile iterate-ecr --query 'length(imageDetails)'`
   prints a number.
@@ -233,8 +235,8 @@ Setup for ECR: `uv run tools/shared.py setup` writes the AWS profile `iterate-ec
 
 ```
 uv run tools/board.py post work "probing layer 12 of model X for feature Y"   # prints work-3fa21c
-uv run tools/board.py ls                  # every open item, highest score first, one line each
-uv run tools/board.py ls result
+uv run tools/board.py ls                  # the 50 open items with the highest score, one line each
+uv run tools/board.py ls result --new --n 20   # the 20 newest results
 uv run tools/board.py show result-8b1c48
 uv run tools/board.py up result-8b1c48    # or down; one vote per person
 uv run tools/board.py comment result-8b1c48 "reproduced on seed 2: 0.41"   # at most 280 characters
@@ -244,8 +246,9 @@ uv run tools/board.py done work-3fa21c
 Claim an idea by posting a `work` item that names its id, and close it with `done` when the work ends.
 `post` then prints any other open work item that names the same id. If one is older than yours, close
 yours and pick another idea. Post each result as a `result` item with its number and the path or URL of its
-artifact. Each item, vote and comment is its own object in the team store (S3), so any number of agents can write at the
-same time. A command takes 1 to 2 s.
+artifact. The board is a DynamoDB table. Every command reads and writes a fixed number of rows, so its time does not grow
+with the board, and any number of agents can write at the same time. `ls` shows the top or newest `--n` items
+(default 50), never the whole board.
 
 ## Findings from papers and posts
 
@@ -273,10 +276,10 @@ read in full, appendix included, and only specific results go into memory.
 
 Someone will analyze how the team worked, so every action leaves a record in the team store:
 
-| Record | Where in `s3://iterate-hack-team-769063704696/` | Written by |
+| Record | Where (`s3://iterate-hack-team-769063704696/` unless stated) | Written by |
 |---|---|---|
 | Every `board.py`, `gpu.py` and `paper.py` command: time, person, agent (claude-code or codex, with its session id, and whether it ran as a subagent), commit, full command line | `events/` | the tools, automatically, at once |
-| Board items, votes and comments, with times; who closed each work item and when | `board/` (every version is kept) | `board.py` |
+| Board items, votes and comments, with times; who closed each work item and when | the DynamoDB table `iterate-board` | `board.py` |
 | Agent transcripts (Claude Code with subagents, Codex) | `traces/<who>/` | `uv run tools/traces.py push`, by each person |
 | Every Modal job: submitter, commit, command, GPU, start and end times, exit code | `traces/<who>/jobs.json` | `gpu.py`, then `traces.py push` |
 
