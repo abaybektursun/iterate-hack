@@ -1,0 +1,22 @@
+{
+ "n": 50,
+ "scores_equal": 48,
+ "texts_identical": 2,
+ "correct_now": 44,
+ "correct_base01": 46,
+ "cap_hits_now": 5,
+ "cap_hits_base01": 1,
+ "rule": {
+  "pass_at_least": 45,
+  "pass_at_least_other_gpu": 38,
+  "stop_below": 30,
+  "n": 50,
+  "base01_gpu_substring": "RTX PRO 6000"
+ },
+ "reference_gpu": "L40S",
+ "same_gpu_as_base01": false,
+ "pass_at_least": 38,
+ "verdict": "pass",
+ "gpu": "NVIDIA H200",
+ "utc": "2026-11-14T13:38:01Z"
+}

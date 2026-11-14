@@ -1,0 +1,24 @@
+{
+ "app": "rln4-k",
+ "phase": "t3",
+ "arms": "",
+ "gpu": "NVIDIA H100 80GB HBM3",
+ "modal_gpu": "H100",
+ "stop_utc": "2026-11-14T14:52:00Z",
+ "time_shift_s": 5640,
+ "frozen_stop_utc": "2026-11-14T13:18:00Z",
+ "pins": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-14T14:01:13Z",
+ "model": "base",
+ "gate": "modal_k-01/check/check.json",
+ "model_dir": "/vol/hf/hub/models--allenai--Olmo-3-1025-7B/snapshots/a81bae42db3975be1671e27b9c9a56da1a9f980f",
+ "tok_dir": "/vol/hf/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05",
+ "rc": 0,
+ "finished_utc": "2026-11-14T14:15:29Z",
+ "seconds": 856.0211608409882
+}

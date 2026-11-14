@@ -1,0 +1,55 @@
+{
+ "phases": {
+  "t3": {
+   "status": "done",
+   "started_utc": "2026-11-14T14:01:13Z",
+   "stages": [
+    {
+     "name": "T3",
+     "n_requests": 500,
+     "n_done": 500,
+     "n_aborted": 0,
+     "aborted": [],
+     "seconds": 744.6080825328827,
+     "output_tokens": 1053962,
+     "tokens_per_s": 1415.4587154289397,
+     "end_utc": "2026-11-14T14:15:07Z"
+    }
+   ],
+   "counts": {
+    "T3": {
+     "n": 500,
+     "cap_hits": 8,
+     "loop_A": 0
+    }
+   },
+   "template": {
+    "pass": true
+   },
+   "engine": {
+    "vllm": "0.32.0",
+    "max_num_seqs": 128,
+    "max_num_batched_tokens": 2048,
+    "num_gpu_blocks": 28749,
+    "gpu_memory_utilization": 0.9,
+    "max_model_len": 18432,
+    "load_s": 80.76349329948425
+   },
+   "stage": "T3",
+   "stage_progress": {
+    "stage": "T3",
+    "done": 500,
+    "submitted": 500,
+    "live": 0
+   },
+   "memory": {
+    "gpu_memory_used_mib": 73983,
+    "gpu_memory_total_mib": 81559,
+    "gpu": "NVIDIA H100 80GB HBM3"
+   },
+   "finished_utc": "2026-11-14T14:15:07Z"
+  }
+ },
+ "phase": "t3",
+ "updated_utc": "2026-11-14T14:15:07Z"
+}

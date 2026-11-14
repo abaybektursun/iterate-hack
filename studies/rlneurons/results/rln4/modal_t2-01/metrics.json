@@ -1,0 +1,93 @@
+{
+ "phases": {
+  "rl_check": {
+   "status": "done",
+   "started_utc": "2026-11-14T13:32:03Z",
+   "stages": [
+    {
+     "name": "check_rl",
+     "n_requests": 50,
+     "n_done": 50,
+     "n_aborted": 0,
+     "aborted": [],
+     "seconds": 210.02637338638306,
+     "output_tokens": 225513,
+     "tokens_per_s": 1073.736580620408,
+     "end_utc": "2026-11-14T13:38:01Z"
+    },
+    {
+     "name": "T2",
+     "n_requests": 500,
+     "n_done": 500,
+     "n_aborted": 0,
+     "aborted": [],
+     "seconds": 1301.9829425811768,
+     "output_tokens": 2346934,
+     "tokens_per_s": 1802.5842914249024,
+     "end_utc": "2026-11-14T13:59:43Z"
+    }
+   ],
+   "counts": {
+    "check_rl": {
+     "n": 50,
+     "cap_hits": 5,
+     "loop_A": 1
+    },
+    "T2": {
+     "n": 500,
+     "cap_hits": 6,
+     "loop_A": 0
+    }
+   },
+   "template": {
+    "pass": true
+   },
+   "engine": {
+    "vllm": "0.32.0",
+    "max_num_seqs": 128,
+    "max_num_batched_tokens": 2048,
+    "num_gpu_blocks": 56679,
+    "gpu_memory_utilization": 0.9,
+    "max_model_len": 18432,
+    "load_s": 137.00416207313538
+   },
+   "stage": "T2",
+   "stage_progress": {
+    "stage": "T2",
+    "done": 500,
+    "submitted": 500,
+    "live": 0
+   },
+   "check_rl": {
+    "n": 50,
+    "scores_equal": 48,
+    "texts_identical": 2,
+    "correct_now": 44,
+    "correct_base01": 46,
+    "cap_hits_now": 5,
+    "cap_hits_base01": 1,
+    "rule": {
+     "pass_at_least": 45,
+     "pass_at_least_other_gpu": 38,
+     "stop_below": 30,
+     "n": 50,
+     "base01_gpu_substring": "RTX PRO 6000"
+    },
+    "reference_gpu": "L40S",
+    "same_gpu_as_base01": false,
+    "pass_at_least": 38,
+    "verdict": "pass",
+    "gpu": "NVIDIA H200",
+    "utc": "2026-11-14T13:38:01Z"
+   },
+   "memory": {
+    "gpu_memory_used_mib": 129369,
+    "gpu_memory_total_mib": 143771,
+    "gpu": "NVIDIA H200"
+   },
+   "finished_utc": "2026-11-14T13:59:43Z"
+  }
+ },
+ "phase": "rl_check",
+ "updated_utc": "2026-11-14T13:59:43Z"
+}

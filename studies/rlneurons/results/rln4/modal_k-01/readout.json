@@ -1,0 +1,236 @@
+{
+ "check": {
+  "n": 50,
+  "scores_equal": 42,
+  "texts_identical": 8,
+  "correct_now": 35,
+  "correct_base01": 37,
+  "cap_hits_now": 11,
+  "cap_hits_base01": 9,
+  "rule": {
+   "pass_at_least": 45,
+   "pass_at_least_other_gpu": 38,
+   "stop_below": 30,
+   "n": 50,
+   "base01_gpu_substring": "RTX PRO 6000"
+  },
+  "same_gpu_as_base01": false,
+  "pass_at_least": 38,
+  "verdict": "pass",
+  "gpu": "NVIDIA H100 80GB HBM3",
+  "utc": "2026-11-14T10:20:11Z"
+ },
+ "n_records": {
+  "check": 50,
+  "T1": 0,
+  "K_rl": 78,
+  "K_own": 78,
+  "K_fresh": 119,
+  "K_fresh2": 69,
+  "T2": 0,
+  "R1": 0,
+  "T3": 0
+ },
+ "T1": {
+  "cell": "T1 vs base-01 F (T 0.6)",
+  "n": 0,
+  "acc": null,
+  "acc_ref": null,
+  "acc_v2": null,
+  "acc_ref_v2": null,
+  "cap_hits": 0,
+  "cap_hits_ref": 0,
+  "loop_A": null,
+  "mean_tokens": null,
+  "mean_tokens_ref": null,
+  "acc_diff": null,
+  "cap_diff": null,
+  "quotes": {},
+  "label": "not counted (fewer than 450 T1 records)"
+ },
+ "K": {
+  "n_problems": 78,
+  "arms": {
+   "K_rl": {
+    "n": 78,
+    "finished": 48,
+    "finished_rate": 0.6153846153846154,
+    "finished_wilson95": [
+     50.44278552077031,
+     71.55095731573931
+    ],
+    "loop_A": 21,
+    "correct": 41,
+    "correct_v2": 41,
+    "mean_answer_tokens": 9973.820512820514,
+    "quotes": {
+     "right": {
+      "problem_index": 41,
+      "gold": "17",
+      "extracted": "17",
+      "answer_prob": 0.9997151709402141,
+      "cap_hit": false,
+      "text_head": " line!\n\nOkay, so I have this problem here where I need to find the coordinates of a parallelogram. The given points are (5,3), (6,8), (7,4), and (x,y), and it's specified that x is greater than 7. Then I have to find x + y. Hmm, let me think.\n\nFirst, I remember that in a parallelogram, the opposite ",
+      "text_tail": "     \\[\n     \\frac{5 + x}{2} = 6.5 \\implies 5 + x = 13 \\implies x = 8\n     \\]\n   - For \\(y\\):\n     \\[\n     \\frac{3 + y}{2} = 6 \\implies 3 + y = 12 \\implies y = 9\n     \\]\n\n5. **Verify the solution**:\n   - The coordinates \\((8, 9)\\) satisfy \\(x > 7\\).\n\nThus, the value of \\(x + y\\) is:\n\\[\n\\boxed{17}\n\\]"
+     },
+     "wrong": {
+      "problem_index": 18,
+      "gold": "28",
+      "extracted": "56",
+      "answer_prob": 0.9999883176260755,
+      "cap_hit": false,
+      "text_head": " line!\n\nOkay, so I have this geometry problem here. Let me try to visualize it first. The Asymptote code draws some points. There's a line from (0,0) to (10,0), which is the x-axis, and another from (0,3) to (10,3), so that's the horizontal line above at y=3. Then there's a line from (2,3) to (8,0),",
+      "text_tail": "angle at \\( A \\) (given as \\( 124^\\circ \\)) and the angle at \\( B \\) (angle \\( x \\)) are consecutive interior angles.\n   - Therefore, \\( 124^\\circ + x = 180^\\circ \\).\n\n4. **Solve for \\( x \\)**:\n   \\[\n   x = 180^\\circ - 124^\\circ = 56^\\circ\n   \\]\n\nThus, the measure of angle \\( x \\) is \\(\\boxed{56}\\)."
+     }
+    }
+   },
+   "K_own": {
+    "n": 78,
+    "finished": 23,
+    "finished_rate": 0.2948717948717949,
+    "finished_wilson95": [
+     20.524218405654405,
+     40.37579432943962
+    ],
+    "loop_A": 38,
+    "correct": 16,
+    "correct_v2": 17,
+    "mean_answer_tokens": 13092.897435897436,
+    "quotes": {
+     "right": {
+      "problem_index": 41,
+      "gold": "17",
+      "extracted": "\\boxed{17}",
+      "answer_prob": 0.24541380177757083,
+      "cap_hit": false,
+      "text_head": " line!\n\nOkay, let's see. I need to find the value of x + y for the parallelogram with given coordinates. The points are (5,3), (6,8), (7,4), and (x,y) where x is greater than 7. Hmm, parallelograms have opposite sides that are equal and parallel. So maybe I can use the properties of parallelograms t",
+      "text_tail": "e vector from \\((5,3)\\) to \\((6,8)\\) is \\((1,5)\\). For the opposite side, the vector from \\((7,4)\\) to \\((x,y)\\) must also be \\((1,5)\\), leading to \\(x = 7 + 1 = 8\\) and \\(y = 4 + 5 = 9\\). Verifying the other pair of sides confirms this solution. Thus, \\(x + y = 8 + 9 = 17\\).\n\n**Answer:** \\boxed{17}"
+     },
+     "wrong": {
+      "problem_index": 18,
+      "gold": "28",
+      "extracted": null,
+      "answer_prob": null,
+      "cap_hit": true,
+      "text_head": " line!\n\nOkay, let's try to figure out this geometry problem. So, we have points A, B, and C. The problem says that BC is parallel to the segment through A, and AB equals BC. We need to find the measure of angle x, which is labeled at point B between the segment AB and the line BC. There's also a 124",
+      "text_tail": " x at B.\n\nLet me try to use the properties of parallel lines and transversals. If BC is parallel to the segment through A, then the corresponding angles should be equal. Let's assume that the segment through A is the line AC. Then, BC is parallel to AC. Therefore, angle ABC (x) is equal to angle BAC"
+     }
+    }
+   },
+   "K_fresh": {
+    "n": 78,
+    "finished": 38,
+    "finished_rate": 0.48717948717948717,
+    "finished_wilson95": [
+     37.948951944386344,
+     59.60729885155702
+    ],
+    "loop_A": 32,
+    "correct": 30,
+    "correct_v2": 30,
+    "mean_answer_tokens": 10163.73076923077,
+    "quotes": {
+     "right": {
+      "problem_index": 41,
+      "gold": "17",
+      "extracted": "17",
+      "answer_prob": 0.9999941587791524,
+      "cap_hit": false,
+      "text_head": " line!\n\nOkay, let's see. I need to find the coordinates of the fourth vertex of a parallelogram given three vertices: (5,3), (6,8), and (7,4). The fourth vertex is (x,y) where x is greater than 7, and I need to find x + y. Hmm, how do I approach this?\n\nFirst, I remember that in a parallelogram, the ",
+      "text_tail": "ing for \\(x\\) and \\(y\\):\n\\[\n\\frac{5 + x}{2} = 6.5 \\implies 5 + x = 13 \\implies x = 8\n\\]\n\\[\n\\frac{3 + y}{2} = 6 \\implies 3 + y = 12 \\implies y = 9\n\\]\n\nThus, the coordinates of the fourth vertex are (8, 9). Therefore, the value of \\(x + y\\) is:\n\\[\n8 + 9 = 17\n\\]\n\nThe value of \\( x + y \\) is \\boxed{17}."
+     },
+     "wrong": {
+      "problem_index": 18,
+      "gold": "28",
+      "extracted": null,
+      "answer_prob": null,
+      "cap_hit": true,
+      "text_head": " line!\n\nOkay, let's see. The problem says that BC is parallel to the segment through A, and AB equals BC. We need to find the measure of angle x, which is labeled at point B between AB and BC. The diagram shows some angles: 124 degrees at point A and x degrees at point B. Hmm, let me try to visualiz",
+      "text_tail": "be the problem is different.\n\nWait, maybe the segment through A is not horizontal. Wait, but BC is parallel to the segment through A. If BC is horizontal, then the segment through A must be horizontal. Therefore, the segment through A is horizontal. Therefore, point A is on a horizontal line. But in"
+     }
+    }
+   },
+   "K_rl - K_own finished": {
+    "n": 78,
+    "diff": 32.05128205128205,
+    "ci95": [
+     17.948717948717945,
+     46.15384615384615
+    ]
+   }
+  },
+  "label": "the base can finish from a sound prefix"
+ },
+ "restart_row": {
+  "n": 500,
+  "missing": 0,
+  "acc": 79.2,
+  "mean_tokens": 9381.654,
+  "attempts_hist": {
+   "1": 381,
+   "2": 50,
+   "3": 69
+  },
+  "rl_single_answer": {
+   "acc": 92.0,
+   "mean_tokens": 4500.184
+  },
+  "restart_minus_rl": {
+   "n": 500,
+   "diff": -12.8,
+   "ci95": [
+    -16.200000000000003,
+    -9.599999999999998
+   ]
+  }
+ },
+ "T2": {
+  "cell": "T2 (RL, T 1.0) vs n13 RL (T 0.6)",
+  "n": 0,
+  "acc": null,
+  "acc_ref": null,
+  "acc_v2": null,
+  "acc_ref_v2": null,
+  "cap_hits": 0,
+  "cap_hits_ref": 0,
+  "loop_A": null,
+  "mean_tokens": null,
+  "mean_tokens_ref": null,
+  "acc_diff": null,
+  "cap_diff": null,
+  "quotes": {}
+ },
+ "R1": {
+  "cell": "R1 (base F, rep 1.1) vs base-01 F",
+  "n": 0,
+  "acc": null,
+  "acc_ref": null,
+  "acc_v2": null,
+  "acc_ref_v2": null,
+  "cap_hits": 0,
+  "cap_hits_ref": 0,
+  "loop_A": null,
+  "mean_tokens": null,
+  "mean_tokens_ref": null,
+  "acc_diff": null,
+  "cap_diff": null,
+  "quotes": {}
+ },
+ "T3": {
+  "cell": "T3 (base plain, T 1.0) vs base-01 P",
+  "n": 0,
+  "acc": null,
+  "acc_ref": null,
+  "acc_v2": null,
+  "acc_ref_v2": null,
+  "cap_hits": 0,
+  "cap_hits_ref": 0,
+  "loop_A": null,
+  "mean_tokens": null,
+  "mean_tokens_ref": null,
+  "acc_diff": null,
+  "cap_diff": null,
+  "quotes": {}
+ },
+ "agree_selfcheck": true
+}

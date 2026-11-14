@@ -1,0 +1,402 @@
+{
+ "base": {
+  "status": "done",
+  "plan": {
+   "math500": 4,
+   "hard": 5,
+   "math500_rule": {
+    "seconds_per_sample": 19.0,
+    "seconds_left": 116.0,
+    "extra": 3
+   },
+   "hard_rule": {
+    "seconds_per_sample": 15.0,
+    "seconds_left": 62.0,
+    "extra": 4
+   }
+  },
+  "check": {
+   "model": "base",
+   "against": "base",
+   "n": 500,
+   "correct": 286,
+   "acc": 57.199999999999996,
+   "n13_correct": 286,
+   "n13_wilson95": [
+    52.82438500160791,
+    61.46582449402691
+   ],
+   "pass": true,
+   "cap_hits": 69,
+   "utc": "2026-11-14T01:15:38Z"
+  },
+  "n_commit_requests": 1160,
+  "stages": [
+   [
+    "A_P_math500_s0",
+    500
+   ],
+   [
+    "B1_F_math500_s0",
+    500
+   ],
+   [
+    "B2_PF_hard_s0",
+    800
+   ],
+   [
+    "C0_math500_s0",
+    140
+   ],
+   [
+    "C0_hard_s0",
+    120
+   ],
+   [
+    "D_PF_math500_s1-3",
+    3000
+   ],
+   [
+    "D_C_math500_s1-3",
+    420
+   ],
+   [
+    "E_PF_hard_s1-4",
+    3200
+   ],
+   [
+    "E_C_hard_s1-4",
+    480
+   ]
+  ]
+ },
+ "s2800": {
+  "status": "done",
+  "plan": {
+   "math500": 4,
+   "hard": 5,
+   "math500_rule": {
+    "seconds_per_sample": 18.0,
+    "seconds_left": 118.0,
+    "extra": 3
+   },
+   "hard_rule": {
+    "seconds_per_sample": 14.0,
+    "seconds_left": 67.0,
+    "extra": 4
+   }
+  },
+  "check": {
+   "model": "s2800",
+   "against": "s2800",
+   "n": 500,
+   "correct": 460,
+   "acc": 92.0,
+   "n13_correct": 460,
+   "n13_wilson95": [
+    89.28936831815437,
+    94.0701870730488
+   ],
+   "pass": true,
+   "cap_hits": 16,
+   "utc": "2026-11-14T01:16:09Z"
+  },
+  "n_commit_requests": 638,
+  "stages": [
+   [
+    "A_P_math500_s0",
+    500
+   ],
+   [
+    "B1_F_math500_s0",
+    500
+   ],
+   [
+    "B2_PF_hard_s0",
+    800
+   ],
+   [
+    "C0_math500_s0",
+    82
+   ],
+   [
+    "C0_hard_s0",
+    62
+   ],
+   [
+    "D_PF_math500_s1-3",
+    3000
+   ],
+   [
+    "D_C_math500_s1-3",
+    246
+   ],
+   [
+    "E_PF_hard_s1-4",
+    3200
+   ],
+   [
+    "E_C_hard_s1-4",
+    248
+   ]
+  ]
+ },
+ "s0100": {
+  "status": "done",
+  "plan": {
+   "math500": 4,
+   "hard": 5,
+   "math500_rule": {
+    "seconds_per_sample": 19.0,
+    "seconds_left": 116.0,
+    "extra": 3
+   },
+   "hard_rule": {
+    "seconds_per_sample": 15.0,
+    "seconds_left": 62.0,
+    "extra": 4
+   }
+  },
+  "check": null,
+  "n_commit_requests": 1160,
+  "stages": [
+   [
+    "A_P_math500_s0",
+    500
+   ],
+   [
+    "B1_F_math500_s0",
+    500
+   ],
+   [
+    "B2_PF_hard_s0",
+    800
+   ],
+   [
+    "C0_math500_s0",
+    140
+   ],
+   [
+    "C0_hard_s0",
+    120
+   ],
+   [
+    "D_PF_math500_s1-3",
+    3000
+   ],
+   [
+    "D_C_math500_s1-3",
+    420
+   ],
+   [
+    "E_PF_hard_s1-4",
+    3200
+   ],
+   [
+    "E_C_hard_s1-4",
+    480
+   ]
+  ]
+ },
+ "s0400": {
+  "status": "done",
+  "plan": {
+   "math500": 4,
+   "hard": 5,
+   "math500_rule": {
+    "seconds_per_sample": 19.0,
+    "seconds_left": 116.0,
+    "extra": 3
+   },
+   "hard_rule": {
+    "seconds_per_sample": 15.0,
+    "seconds_left": 62.0,
+    "extra": 4
+   }
+  },
+  "check": null,
+  "n_commit_requests": 1160,
+  "stages": [
+   [
+    "A_P_math500_s0",
+    500
+   ],
+   [
+    "B1_F_math500_s0",
+    500
+   ],
+   [
+    "B2_PF_hard_s0",
+    800
+   ],
+   [
+    "C0_math500_s0",
+    140
+   ],
+   [
+    "C0_hard_s0",
+    120
+   ],
+   [
+    "D_PF_math500_s1-3",
+    3000
+   ],
+   [
+    "D_C_math500_s1-3",
+    420
+   ],
+   [
+    "E_PF_hard_s1-4",
+    3200
+   ],
+   [
+    "E_C_hard_s1-4",
+    480
+   ]
+  ]
+ },
+ "fr": {
+  "status": "done",
+  "plan": {
+   "math500": 4,
+   "hard": 5,
+   "math500_rule": {
+    "seconds_per_sample": 19.0,
+    "seconds_left": 116.0,
+    "extra": 3
+   },
+   "hard_rule": {
+    "seconds_per_sample": 15.0,
+    "seconds_left": 62.0,
+    "extra": 4
+   }
+  },
+  "check": null,
+  "n_commit_requests": 1160,
+  "stages": [
+   [
+    "A_P_math500_s0",
+    500
+   ],
+   [
+    "B1_F_math500_s0",
+    500
+   ],
+   [
+    "B2_PF_hard_s0",
+    800
+   ],
+   [
+    "C0_math500_s0",
+    140
+   ],
+   [
+    "C0_hard_s0",
+    120
+   ],
+   [
+    "D_PF_math500_s1-3",
+    3000
+   ],
+   [
+    "D_C_math500_s1-3",
+    420
+   ],
+   [
+    "E_PF_hard_s1-4",
+    3200
+   ],
+   [
+    "E_C_hard_s1-4",
+    480
+   ]
+  ]
+ },
+ "check_failing_input": {
+  "exit": 3,
+  "check_pass": false,
+  "acc": 92.0,
+  "failed": true
+ },
+ "sample_rule_small_allowance": {
+  "plan": {
+   "math500": 1,
+   "hard": 1,
+   "math500_rule": {
+    "seconds_per_sample": 19.0,
+    "seconds_left": -4.0,
+    "extra": 0
+   },
+   "hard_rule": {
+    "seconds_per_sample": 15.0,
+    "seconds_left": -4.0,
+    "extra": 0
+   }
+  },
+  "pass": true
+ },
+ "request_failing_inputs": {
+  "F_without_prefill": true,
+  "commit_N_plus_1": true
+ },
+ "analyze": {
+  "status": "COMPLETE",
+  "gates": {
+   "G-CHECK base": {
+    "pass": true,
+    "value": 57.199999999999996,
+    "interval": [
+     52.82438500160791,
+     61.46582449402691
+    ]
+   },
+   "G-CHECK s2800": {
+    "pass": true,
+    "value": 92.0,
+    "interval": [
+     89.28936831815437,
+     94.0701870730488
+    ]
+   },
+   "G-COMPLETE": {
+    "pass": true,
+    "samples_used": {
+     "math500": 4,
+     "hard": 5
+    }
+   },
+   "G-SEEDS": {
+    "pass": true
+   },
+   "G-PREFILL": {
+    "pass": true
+   }
+  },
+  "instrument": {
+   "identity_pass": true,
+   "planted_pass": true
+  },
+  "samples_used": {
+   "math500": 4,
+   "hard": 5
+  },
+  "base_math500_P_acc": 57.199999999999996,
+  "s2800_math500_P_acc": 92.0,
+  "labels": {
+   "math500": "FALLS SHORT",
+   "hard": "MATCHES"
+  }
+ },
+ "analyze_failing_input": {
+  "what": "fr P_hard sample 0 problem 7 removed",
+  "G-COMPLETE": {
+   "pass": false,
+   "samples_used": {
+    "math500": 4,
+    "hard": 0
+   }
+  },
+  "failed": true
+ },
+ "pass": true
+}

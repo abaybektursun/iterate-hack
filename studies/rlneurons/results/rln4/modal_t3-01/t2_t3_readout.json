@@ -1,0 +1,703 @@
+{
+ "cells": {
+  "RL_T0.6": {
+   "n": 500,
+   "right_v1": 460,
+   "right_v2": 460,
+   "cap_hits": 16,
+   "loop_A": 7,
+   "mean_n_new": 4499.216
+  },
+  "T1": {
+   "n": 500,
+   "right_v1": 389,
+   "right_v2": 394,
+   "cap_hits": 27,
+   "loop_A": 0,
+   "mean_n_new": 3931.974
+  },
+  "P_T0.6": {
+   "n": 500,
+   "right_v1": 302,
+   "right_v2": 303,
+   "cap_hits": 65,
+   "loop_A": 46,
+   "mean_n_new": 3235.226
+  },
+  "T2": {
+   "n": 500,
+   "right_v1": 458,
+   "right_v2": 458,
+   "cap_hits": 6,
+   "loop_A": 0,
+   "mean_n_new": 4692.88,
+   "by_quartile": [
+    {
+     "n": 125,
+     "right_v1": 125,
+     "right_v2": 125,
+     "cap_hits": 0,
+     "loop_A": 0,
+     "mean_n_new": 1455.944
+    },
+    {
+     "n": 125,
+     "right_v1": 123,
+     "right_v2": 123,
+     "cap_hits": 0,
+     "loop_A": 0,
+     "mean_n_new": 2713.016
+    },
+    {
+     "n": 125,
+     "right_v1": 117,
+     "right_v2": 117,
+     "cap_hits": 0,
+     "loop_A": 0,
+     "mean_n_new": 4975.648
+    },
+    {
+     "n": 125,
+     "right_v1": 93,
+     "right_v2": 93,
+     "cap_hits": 6,
+     "loop_A": 0,
+     "mean_n_new": 9626.912
+    }
+   ]
+  },
+  "T3": {
+   "n": 500,
+   "right_v1": 196,
+   "right_v2": 198,
+   "cap_hits": 8,
+   "loop_A": 0,
+   "mean_n_new": 2106.94,
+   "by_quartile": [
+    {
+     "n": 125,
+     "right_v1": 62,
+     "right_v2": 62,
+     "cap_hits": 0,
+     "loop_A": 0,
+     "mean_n_new": 603.552
+    },
+    {
+     "n": 125,
+     "right_v1": 56,
+     "right_v2": 57,
+     "cap_hits": 0,
+     "loop_A": 0,
+     "mean_n_new": 1265.512
+    },
+    {
+     "n": 125,
+     "right_v1": 44,
+     "right_v2": 45,
+     "cap_hits": 0,
+     "loop_A": 0,
+     "mean_n_new": 1969.816
+    },
+    {
+     "n": 125,
+     "right_v1": 34,
+     "right_v2": 34,
+     "cap_hits": 8,
+     "loop_A": 0,
+     "mean_n_new": 4588.88
+    }
+   ]
+  }
+ },
+ "quartiles": {
+  "edges_n_new_rl_T0.6": [
+   1608.5,
+   2955.5,
+   5841.0
+  ],
+  "n": [
+   125,
+   125,
+   125,
+   125
+  ]
+ },
+ "T2_minus_RL_T0.6": {
+  "all": {
+   "acc": {
+    "n": 500,
+    "diff": -0.40000000000000036,
+    "ci95": [
+     -2.200000000000002,
+     1.3999999999999904
+    ]
+   },
+   "acc_v2": {
+    "n": 500,
+    "diff": -0.40000000000000036,
+    "ci95": [
+     -2.200000000000002,
+     1.3999999999999904
+    ]
+   },
+   "cap_hits": {
+    "n": 500,
+    "diff": -2.0,
+    "ci95": [
+     -3.8,
+     -0.4
+    ]
+   }
+  },
+  "Q1": {
+   "acc": {
+    "n": 125,
+    "diff": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ]
+   },
+   "acc_v2": {
+    "n": 125,
+    "diff": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ]
+   },
+   "cap_hits": {
+    "n": 125,
+    "diff": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ]
+   }
+  },
+  "Q2": {
+   "acc": {
+    "n": 125,
+    "diff": -0.8000000000000007,
+    "ci95": [
+     -2.400000000000002,
+     0.0
+    ]
+   },
+   "acc_v2": {
+    "n": 125,
+    "diff": -0.8000000000000007,
+    "ci95": [
+     -2.400000000000002,
+     0.0
+    ]
+   },
+   "cap_hits": {
+    "n": 125,
+    "diff": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ]
+   }
+  },
+  "Q3": {
+   "acc": {
+    "n": 125,
+    "diff": -0.7999999999999896,
+    "ci95": [
+     -4.0000000000000036,
+     2.400000000000002
+    ]
+   },
+   "acc_v2": {
+    "n": 125,
+    "diff": -0.7999999999999896,
+    "ci95": [
+     -4.0000000000000036,
+     2.400000000000002
+    ]
+   },
+   "cap_hits": {
+    "n": 125,
+    "diff": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ]
+   }
+  },
+  "Q4": {
+   "acc": {
+    "n": 125,
+    "diff": 0.0,
+    "ci95": [
+     -5.600000000000005,
+     5.600000000000005
+    ]
+   },
+   "acc_v2": {
+    "n": 125,
+    "diff": 0.0,
+    "ci95": [
+     -5.600000000000005,
+     5.600000000000005
+    ]
+   },
+   "cap_hits": {
+    "n": 125,
+    "diff": -8.0,
+    "ci95": [
+     -14.399999999999999,
+     -2.3999999999999995
+    ]
+   }
+  }
+ },
+ "T1_minus_T2": {
+  "all": {
+   "acc": {
+    "n": 500,
+    "diff": -13.8,
+    "ci95": [
+     -17.600000000000005,
+     -9.999999999999998
+    ]
+   },
+   "acc_v2": {
+    "n": 500,
+    "diff": -12.8,
+    "ci95": [
+     -16.405,
+     -9.199999999999998
+    ]
+   },
+   "cap_hits": {
+    "n": 500,
+    "diff": 4.199999999999999,
+    "ci95": [
+     2.2,
+     6.4
+    ]
+   }
+  },
+  "Q1": {
+   "acc": {
+    "n": 125,
+    "diff": -11.2,
+    "ci95": [
+     -16.800000000000004,
+     -6.399999999999995
+    ]
+   },
+   "acc_v2": {
+    "n": 125,
+    "diff": -8.799999999999997,
+    "ci95": [
+     -13.600000000000001,
+     -4.0000000000000036
+    ]
+   },
+   "cap_hits": {
+    "n": 125,
+    "diff": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ]
+   }
+  },
+  "Q2": {
+   "acc": {
+    "n": 125,
+    "diff": -9.599999999999998,
+    "ci95": [
+     -16.000000000000004,
+     -3.9999999999999925
+    ]
+   },
+   "acc_v2": {
+    "n": 125,
+    "diff": -7.9999999999999964,
+    "ci95": [
+     -13.600000000000001,
+     -2.400000000000002
+    ]
+   },
+   "cap_hits": {
+    "n": 125,
+    "diff": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ]
+   }
+  },
+  "Q3": {
+   "acc": {
+    "n": 125,
+    "diff": -14.400000000000002,
+    "ci95": [
+     -21.60000000000001,
+     -7.200000000000006
+    ]
+   },
+   "acc_v2": {
+    "n": 125,
+    "diff": -14.400000000000002,
+    "ci95": [
+     -21.60000000000001,
+     -7.200000000000006
+    ]
+   },
+   "cap_hits": {
+    "n": 125,
+    "diff": 1.6,
+    "ci95": [
+     0.0,
+     4.0
+    ]
+   }
+  },
+  "Q4": {
+   "acc": {
+    "n": 125,
+    "diff": -19.999999999999996,
+    "ci95": [
+     -29.599999999999994,
+     -10.40000000000001
+    ]
+   },
+   "acc_v2": {
+    "n": 125,
+    "diff": -19.999999999999996,
+    "ci95": [
+     -29.599999999999994,
+     -10.40000000000001
+    ]
+   },
+   "cap_hits": {
+    "n": 125,
+    "diff": 15.200000000000003,
+    "ci95": [
+     8.0,
+     22.400000000000002
+    ]
+   }
+  }
+ },
+ "examples": {
+  "T2": {
+   "right": {
+    "problem_index": 0,
+    "seed": 45000000,
+    "gold": "\\left( 3, \\frac{\\pi}{2} \\right)",
+    "extracted": "\\left(3, \\frac{\\pi}{2}\\right)",
+    "answer_prob": 0.2610733491369064,
+    "cap_hit": false,
+    "n_new": 1419,
+    "prompt_tail": "3)$ in rectangular coordinates to polar coordinates.  Enter your answer in the form $(r,\\theta),$ where $r > 0$ and $0 \\le \\theta < 2 \\pi.$\n\nRemember to put your answer on its own line after \"Answer:\"",
+    "answer_tail": "he positive \\(y\\)-axis. This places \\(\\theta\\) directly at:\n   \\[\n   \\theta = \\frac{\\pi}{2}\n   \\]\n   Thus, \\(\\theta\\) is \\(\\frac{\\pi}{2}\\) radians.\n\n3. **Verify the quadrant:**\n   The point \\((0, 3)\\) is in the first quadrant, and \\(\\frac{\\pi}{2}\\) is within the range \\(0 \\le \\theta < 2\\pi\\).\n\nTherefore, the polar coordinates of the point \\((0, 3)\\) are:\n\\[\n\\boxed{\\left(3, \\frac{\\pi}{2}\\right)}\n\\]"
+   },
+   "wrong": {
+    "problem_index": 9,
+    "seed": 45000009,
+    "gold": "4",
+    "extracted": "2",
+    "answer_prob": 0.9999977350285647,
+    "cap_hit": false,
+    "n_new": 13126,
+    "prompt_tail": "xpression $2\\cdot 3\\cdot 4 \\cdot 5 + 1$ by inserting parentheses? (Note that rearranging terms is not allowed, only inserting parentheses).\n\nRemember to put your answer on its own line after \"Answer:\"",
+    "answer_tail": " \\[\n     (2 \\cdot 3 \\cdot 4) \\cdot (5 + 1) = 24 \\cdot 6 = 144\n     \\]\n     This is the same as the second grouping.\n\nAfter considering all possible valid parenthetizations, we find that the only distinct values obtained are:\n\n- \\(121\\)\n- \\(144\\)\n\nThus, the number of distinct values that can be obtained from the expression \\(2 \\cdot 3 \\cdot 4 \\cdot 5 + 1\\) by inserting parentheses is \\(\\boxed{2}\\)."
+   }
+  },
+  "T3": {
+   "right": {
+    "problem_index": 0,
+    "seed": 47000000,
+    "gold": "\\left( 3, \\frac{\\pi}{2} \\right)",
+    "extracted": "(3, \u03c0/2)",
+    "answer_prob": 0.28628264771487727,
+    "cap_hit": false,
+    "n_new": 918,
+    "prompt_tail": "3)$ in rectangular coordinates to polar coordinates.  Enter your answer in the form $(r,\\theta),$ where $r > 0$ and $0 \\le \\theta < 2 \\pi.$\n\nRemember to put your answer on its own line after \"Answer:\"",
+    "answer_tail": "is exactly the original point (0, 3). That confirms that the conversion is correct.\n\nSo, I think the answer is (3, \u03c0/2). Just to recap: r is calculated using the distance formula, which gives 3. The angle \u03b8 is \u03c0/2 because the point is directly on the positive y-axis. Converting back to rectangular coordinates confirms the result. Therefore, the polar coordinates are (3, \u03c0/2).\n\n**Answer:** (3, \u03c0/2)"
+   },
+   "wrong": {
+    "problem_index": 5,
+    "seed": 47000005,
+    "gold": "42",
+    "extracted": null,
+    "answer_prob": null,
+    "cap_hit": false,
+    "n_new": 317,
+    "prompt_tail": "six equilateral triangles. If the perimeter of one of the triangles is 21 inches, what is the perimeter, in inches, of the regular hexagon?\n\nRemember to put your answer on its own line after \"Answer:\"",
+    "answer_tail": "eter of the regular hexagon:**\n   - The perimeter of the hexagon will be the sum of the lengths of its six sides.\n   - Each side of the hexagon is one side of the equilateral triangle, which is 7 inches.\n   - Therefore, the perimeter of the hexagon is \\( 6 \\times 7 \\) inches.\n\n5. **Calculate the final perimeter:**\n   \\( \\text{Perimeter of the hexagon} = 6 \\times 7 = 42 \\) inches.\n\nFinal answer: 42"
+   }
+  }
+ },
+ "T3_minus_P_T0.6": {
+  "all": {
+   "acc": {
+    "n": 500,
+    "diff": -21.199999999999996,
+    "ci95": [
+     -27.199999999999996,
+     -15.399999999999997
+    ]
+   },
+   "acc_v2": {
+    "n": 500,
+    "diff": -20.999999999999996,
+    "ci95": [
+     -27.0,
+     -15.000000000000002
+    ]
+   },
+   "cap_hits": {
+    "n": 500,
+    "diff": -11.4,
+    "ci95": [
+     -14.200000000000001,
+     -8.6
+    ]
+   }
+  },
+  "Q1": {
+   "acc": {
+    "n": 125,
+    "diff": -28.000000000000004,
+    "ci95": [
+     -40.0,
+     -15.999999999999993
+    ]
+   },
+   "acc_v2": {
+    "n": 125,
+    "diff": -28.800000000000004,
+    "ci95": [
+     -40.8,
+     -16.780000000000104
+    ]
+   },
+   "cap_hits": {
+    "n": 125,
+    "diff": -1.6,
+    "ci95": [
+     -4.0,
+     0.0
+    ]
+   }
+  },
+  "Q2": {
+   "acc": {
+    "n": 125,
+    "diff": -29.599999999999998,
+    "ci95": [
+     -40.0,
+     -18.399999999999995
+    ]
+   },
+   "acc_v2": {
+    "n": 125,
+    "diff": -28.799999999999997,
+    "ci95": [
+     -40.0,
+     -17.599999999999994
+    ]
+   },
+   "cap_hits": {
+    "n": 125,
+    "diff": -4.0,
+    "ci95": [
+     -8.0,
+     -0.8
+    ]
+   }
+  },
+  "Q3": {
+   "acc": {
+    "n": 125,
+    "diff": -27.200000000000003,
+    "ci95": [
+     -39.2,
+     -15.199999999999998
+    ]
+   },
+   "acc_v2": {
+    "n": 125,
+    "diff": -26.400000000000002,
+    "ci95": [
+     -38.4,
+     -14.400000000000002
+    ]
+   },
+   "cap_hits": {
+    "n": 125,
+    "diff": -7.199999999999999,
+    "ci95": [
+     -12.0,
+     -3.2
+    ]
+   }
+  },
+  "Q4": {
+   "acc": {
+    "n": 125,
+    "diff": 0.0,
+    "ci95": [
+     -9.6,
+     9.600000000000003
+    ]
+   },
+   "acc_v2": {
+    "n": 125,
+    "diff": 0.0,
+    "ci95": [
+     -9.6,
+     9.600000000000003
+    ]
+   },
+   "cap_hits": {
+    "n": 125,
+    "diff": -32.800000000000004,
+    "ci95": [
+     -41.6,
+     -24.000000000000004
+    ]
+   }
+  }
+ },
+ "T1_minus_T3": {
+  "all": {
+   "acc": {
+    "n": 500,
+    "diff": 38.6,
+    "ci95": [
+     33.2,
+     43.8
+    ]
+   },
+   "acc_v2": {
+    "n": 500,
+    "diff": 39.2,
+    "ci95": [
+     34.0,
+     44.20499999999998
+    ]
+   },
+   "cap_hits": {
+    "n": 500,
+    "diff": 3.8,
+    "ci95": [
+     1.9999999999999998,
+     5.8
+    ]
+   }
+  },
+  "Q1": {
+   "acc": {
+    "n": 125,
+    "diff": 39.2,
+    "ci95": [
+     28.799999999999994,
+     49.6
+    ]
+   },
+   "acc_v2": {
+    "n": 125,
+    "diff": 41.6,
+    "ci95": [
+     31.200000000000006,
+     52.0
+    ]
+   },
+   "cap_hits": {
+    "n": 125,
+    "diff": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ]
+   }
+  },
+  "Q2": {
+   "acc": {
+    "n": 125,
+    "diff": 44.0,
+    "ci95": [
+     32.800000000000004,
+     53.6
+    ]
+   },
+   "acc_v2": {
+    "n": 125,
+    "diff": 44.800000000000004,
+    "ci95": [
+     34.4,
+     54.400000000000006
+    ]
+   },
+   "cap_hits": {
+    "n": 125,
+    "diff": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ]
+   }
+  },
+  "Q3": {
+   "acc": {
+    "n": 125,
+    "diff": 44.00000000000001,
+    "ci95": [
+     33.6,
+     54.400000000000006
+    ]
+   },
+   "acc_v2": {
+    "n": 125,
+    "diff": 43.2,
+    "ci95": [
+     32.800000000000004,
+     53.6
+    ]
+   },
+   "cap_hits": {
+    "n": 125,
+    "diff": 1.6,
+    "ci95": [
+     0.0,
+     4.0
+    ]
+   }
+  },
+  "Q4": {
+   "acc": {
+    "n": 125,
+    "diff": 27.200000000000003,
+    "ci95": [
+     16.800000000000004,
+     37.6
+    ]
+   },
+   "acc_v2": {
+    "n": 125,
+    "diff": 27.200000000000003,
+    "ci95": [
+     16.800000000000004,
+     37.6
+    ]
+   },
+   "cap_hits": {
+    "n": 125,
+    "diff": 13.600000000000001,
+    "ci95": [
+     6.4,
+     20.8
+    ]
+   }
+  }
+ }
+}

@@ -1,0 +1,153 @@
+{
+ "grader_repro": {
+  "base": {
+   "correct": 286,
+   "acc": 57.199999999999996,
+   "want": 286,
+   "pass": true,
+   "equal_to_banked_scores": 500,
+   "failing_input": {
+    "what": "golds deranged (seed 1)",
+    "correct": 3,
+    "failed": true
+   }
+  },
+  "rl": {
+   "correct": 460,
+   "acc": 92.0,
+   "want": 460,
+   "pass": true,
+   "equal_to_banked_scores": 500,
+   "failing_input": {
+    "what": "golds deranged (seed 1)",
+    "correct": 4,
+    "failed": true
+   }
+  }
+ },
+ "G-GRADER_math500": {
+  "pass": true,
+  "planted_eq_true": 24,
+  "planted_neq_false": 16,
+  "self_equal": 500,
+  "derangement_rate": 0.006,
+  "identical_normalised_rate": 0.006
+ },
+ "G-GRADER_hard": {
+  "pass": true,
+  "planted_eq_true": 24,
+  "planted_neq_false": 16,
+  "self_equal": 400,
+  "n_golds": 400,
+  "derangement_rate": 0.0025,
+  "identical_normalised_rate": 0.0025
+ },
+ "prefill": {
+  "ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "text": " line!\n\nOkay",
+  "tokens": [
+   "\u0120line",
+   "!\u010a\u010a",
+   "Okay"
+  ],
+  "n_of_500": 494,
+  "first2": [
+   [
+    [
+     "\u0120line",
+     "!\u010a\u010a"
+    ],
+    494
+   ],
+   [
+    [
+     "\u0120tag",
+     "."
+    ],
+    6
+   ]
+  ],
+  "first3": [
+   [
+    [
+     "\u0120line",
+     "!\u010a\u010a",
+     "Okay"
+    ],
+    494
+   ],
+   [
+    [
+     "\u0120tag",
+     ".",
+     "\u0120Please"
+    ],
+    6
+   ]
+  ],
+  "first4": [
+   [
+    [
+     "\u0120line",
+     "!\u010a\u010a",
+     "Okay",
+     ","
+    ],
+    494
+   ],
+   [
+    [
+     "\u0120tag",
+     ".",
+     "\u0120Please",
+     "\u0120think"
+    ],
+    6
+   ]
+  ],
+  "rule": "the most common first three tokens of the RL step-2,800 answers (re-tokenized saved texts): the two that close the prompt's sentence and the first word of the reasoning (SPEC3 \u00a73)"
+ },
+ "N": {
+  "rule": "ceil of the 95th percentile (numpy linear) of n_new over the finished RL step-2,800 answers, n13 s3gate-03 MATH-500",
+  "n_finished": 484,
+  "p95": 11910.499999999998,
+  "N": 11911
+ },
+ "loops": {
+  "base": {
+   "cap_hits": 69,
+   "cap_hits_below": 60,
+   "finished_8000plus": 53,
+   "finished_8000plus_below": 0
+  },
+  "rl": {
+   "cap_hits": 16,
+   "cap_hits_below": 7,
+   "finished_8000plus": 249,
+   "finished_8000plus_below": 0
+  }
+ },
+ "hard_composition": {
+  "by_source": {
+   "aime2022": 30,
+   "aime2023": 30,
+   "aime2024": 30,
+   "aime2025": 30,
+   "amc23": 40,
+   "hmmt_feb2025": 30,
+   "olympiadbench": 210
+  },
+  "n": 400,
+  "olympiad_pool": 573,
+  "olympiad_drawn": 210,
+  "dropped": {
+   "olympiad: more than one final answer": 93,
+   "olympiad: answer has a unit": 8
+  }
+ },
+ "pass": true
+}

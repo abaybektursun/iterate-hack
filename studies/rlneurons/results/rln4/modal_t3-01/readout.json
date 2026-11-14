@@ -1,0 +1,184 @@
+{
+ "check": null,
+ "n_records": {
+  "check": 0,
+  "T1": 0,
+  "K_rl": 0,
+  "K_own": 0,
+  "K_fresh": 0,
+  "K_fresh2": 0,
+  "T2": 0,
+  "R1": 0,
+  "T3": 500
+ },
+ "T1": {
+  "cell": "T1 vs base-01 F (T 0.6)",
+  "n": 0,
+  "acc": null,
+  "acc_ref": null,
+  "acc_v2": null,
+  "acc_ref_v2": null,
+  "cap_hits": 0,
+  "cap_hits_ref": 0,
+  "loop_A": null,
+  "mean_tokens": null,
+  "mean_tokens_ref": null,
+  "acc_diff": null,
+  "cap_diff": null,
+  "quotes": {},
+  "label": "not counted (check verdict None): not counted (fewer than 450 T1 records)"
+ },
+ "K": {
+  "n_problems": 78,
+  "arms": {
+   "K_rl": {
+    "n": 0,
+    "finished": 0,
+    "finished_rate": null,
+    "finished_wilson95": [
+     null,
+     null
+    ],
+    "loop_A": 0,
+    "correct": 0,
+    "correct_v2": 0,
+    "mean_answer_tokens": null,
+    "quotes": {}
+   },
+   "K_own": {
+    "n": 0,
+    "finished": 0,
+    "finished_rate": null,
+    "finished_wilson95": [
+     null,
+     null
+    ],
+    "loop_A": 0,
+    "correct": 0,
+    "correct_v2": 0,
+    "mean_answer_tokens": null,
+    "quotes": {}
+   },
+   "K_fresh": {
+    "n": 0,
+    "finished": 0,
+    "finished_rate": null,
+    "finished_wilson95": [
+     null,
+     null
+    ],
+    "loop_A": 0,
+    "correct": 0,
+    "correct_v2": 0,
+    "mean_answer_tokens": null,
+    "quotes": {}
+   }
+  },
+  "label": "not counted (an arm has fewer than 70 of 78 records)"
+ },
+ "restart_row": {
+  "n": 381,
+  "missing": 119,
+  "acc": 88.9763779527559,
+  "mean_tokens": 1576.6194225721786,
+  "attempts_hist": {
+   "1": 381,
+   "2": 0,
+   "3": 0
+  },
+  "rl_single_answer": {
+   "acc": 98.16272965879264,
+   "mean_tokens": 3054.3175853018374
+  },
+  "restart_minus_rl": {
+   "n": 381,
+   "diff": -9.186351706036744,
+   "ci95": [
+    -12.598425196850393,
+    -6.036745406824151
+   ]
+  }
+ },
+ "T2": {
+  "cell": "T2 (RL, T 1.0) vs n13 RL (T 0.6)",
+  "n": 0,
+  "acc": null,
+  "acc_ref": null,
+  "acc_v2": null,
+  "acc_ref_v2": null,
+  "cap_hits": 0,
+  "cap_hits_ref": 0,
+  "loop_A": null,
+  "mean_tokens": null,
+  "mean_tokens_ref": null,
+  "acc_diff": null,
+  "cap_diff": null,
+  "quotes": {}
+ },
+ "R1": {
+  "cell": "R1 (base F, rep 1.1) vs base-01 F",
+  "n": 0,
+  "acc": null,
+  "acc_ref": null,
+  "acc_v2": null,
+  "acc_ref_v2": null,
+  "cap_hits": 0,
+  "cap_hits_ref": 0,
+  "loop_A": null,
+  "mean_tokens": null,
+  "mean_tokens_ref": null,
+  "acc_diff": null,
+  "cap_diff": null,
+  "quotes": {}
+ },
+ "T3": {
+  "cell": "T3 (base plain, T 1.0) vs base-01 P",
+  "n": 500,
+  "acc": 39.2,
+  "acc_ref": 60.4,
+  "acc_v2": 39.6,
+  "acc_ref_v2": 60.6,
+  "cap_hits": 8,
+  "cap_hits_ref": 65,
+  "loop_A": 0,
+  "mean_tokens": 2107.924,
+  "mean_tokens_ref": 3236.096,
+  "acc_diff": {
+   "n": 500,
+   "diff": -21.199999999999996,
+   "ci95": [
+    -27.199999999999996,
+    -15.399999999999997
+   ]
+  },
+  "cap_diff": {
+   "n": 500,
+   "diff": -11.4,
+   "ci95": [
+    -14.200000000000001,
+    -8.6
+   ]
+  },
+  "quotes": {
+   "right": {
+    "problem_index": 0,
+    "gold": "\\left( 3, \\frac{\\pi}{2} \\right)",
+    "extracted": "(3, \u03c0/2)",
+    "answer_prob": 0.28628264771487727,
+    "cap_hit": false,
+    "text_head": ".\n\nOkay, so I need to convert the point (0, 3) from rectangular coordinates to polar coordinates. The goal is to express it as (r, \u03b8) where r is positive and \u03b8 is between 0 and 2\u03c0. Let me recall how to do this conversion.\n\nFirst, polar coordinates are represented as (r, \u03b8), where r is the distance f",
+    "text_tail": " answer is (3, \u03c0/2). Just to recap: r is calculated using the distance formula, which gives 3. The angle \u03b8 is \u03c0/2 because the point is directly on the positive y-axis. Converting back to rectangular coordinates confirms the result. Therefore, the polar coordinates are (3, \u03c0/2).\n\n**Answer:** (3, \u03c0/2)"
+   },
+   "wrong": {
+    "problem_index": 5,
+    "gold": "42",
+    "extracted": null,
+    "answer_prob": null,
+    "cap_hit": false,
+    "text_head": " (ex: Answer: 15/2)\n\nTo determine the perimeter of the regular hexagon, we need to find the length of one side of the hexagon first.\n\n1. **Understand the relationship between the equilateral triangle and the hexagon:**\n   - A regular hexagon can be divided into six equilateral triangles.\n   - Since ",
+    "text_tail": "ts six sides.\n   - Each side of the hexagon is one side of the equilateral triangle, which is 7 inches.\n   - Therefore, the perimeter of the hexagon is \\( 6 \\times 7 \\) inches.\n\n5. **Calculate the final perimeter:**\n   \\( \\text{Perimeter of the hexagon} = 6 \\times 7 = 42 \\) inches.\n\nFinal answer: 42"
+   }
+  }
+ },
+ "agree_selfcheck": true
+}

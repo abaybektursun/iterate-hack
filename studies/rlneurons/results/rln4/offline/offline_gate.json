@@ -1,0 +1,158 @@
+{
+ "1_base1": {
+  "check": {
+   "n": 50,
+   "scores_equal": 50,
+   "texts_identical": 50,
+   "correct_now": 37,
+   "correct_base01": 37,
+   "cap_hits_now": 9,
+   "cap_hits_base01": 9,
+   "rule": {
+    "pass_at_least": 45,
+    "pass_at_least_other_gpu": 38,
+    "stop_below": 30,
+    "n": 50,
+    "base01_gpu_substring": "RTX PRO 6000"
+   },
+   "reference_gpu": "RTX PRO 6000",
+   "same_gpu_as_base01": true,
+   "pass_at_least": 45,
+   "verdict": "pass",
+   "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition (stand-in)",
+   "utc": "2026-11-14T13:29:50Z"
+  },
+  "lines": {
+   "check": 50,
+   "T1": 500,
+   "K_rl": 78,
+   "K_own": 78,
+   "K_fresh": 119,
+   "K_fresh2": 119,
+   "T2": 500
+  },
+  "K_fresh_cap_hits": 119,
+  "pass": true
+ },
+ "2_rl": {
+  "T2": 500,
+  "T2_correct": 460,
+  "pass": true
+ },
+ "3_base2_full": {
+  "lines": {
+   "G": 4000,
+   "R1": 500,
+   "T3": 500
+  },
+  "g_prompts": 1000,
+  "pass": true
+ },
+ "4_base2_short": {
+  "lines": {
+   "G": 1272,
+   "R1": 0,
+   "T3": 0
+  },
+  "g_prompts": 318,
+  "dropped": [
+   "R1",
+   "T3"
+  ],
+  "pass": true
+ },
+ "5_hard_stop": {
+  "aborted": 375,
+  "status": "done",
+  "pass": true
+ },
+ "6_failing_inputs": {
+  "empty answers stop at the check": true,
+  "wrong seed raises": true,
+  "wrong prefix raises": true,
+  "wrong max_tokens raises": true,
+  "pass": true
+ },
+ "7_rl_check": {
+  "check_rl": {
+   "n": 50,
+   "scores_equal": 50,
+   "texts_identical": 0,
+   "correct_now": 46,
+   "correct_base01": 46,
+   "cap_hits_now": 1,
+   "cap_hits_base01": 1,
+   "rule": {
+    "pass_at_least": 45,
+    "pass_at_least_other_gpu": 38,
+    "stop_below": 30,
+    "n": 50,
+    "base01_gpu_substring": "RTX PRO 6000"
+   },
+   "reference_gpu": "L40S",
+   "same_gpu_as_base01": false,
+   "pass_at_least": 38,
+   "verdict": "pass",
+   "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition (stand-in)",
+   "utc": "2026-11-14T13:31:09Z"
+  },
+  "lines": {
+   "check_rl": 50,
+   "T2": 500
+  },
+  "pass": true
+ },
+ "8_t3": {
+  "T3": 500,
+  "pass": true
+ },
+ "9_rl_check_empty": {
+  "exit": 3,
+  "verdict": "stop",
+  "T2_written": false,
+  "pass": true
+ },
+ "sample_record_K_rl": {
+  "cell": "K_rl",
+  "bench": "math500",
+  "problem_index": 18,
+  "sample": 0,
+  "unique_id": "test/geometry/434.json",
+  "seed": 42000018,
+  "sampling": {
+   "temperature": 0.6,
+   "top_p": 0.95,
+   "repetition_penalty": 1.0
+  },
+  "max_tokens": 13884,
+  "prompt_n_tokens": 201,
+  "prefix_kind": "rl_prefix",
+  "n_prefix": 2500,
+  "text": " line!\n\nOkay, so I have this geometry problem here. Let me try to visualize it first. The Asymptote code draws some points. There's a line from (0,0) to (10,0), which is the x-axis, and another from (...",
+  "n_new": 13884,
+  "n_generated": 13884,
+  "n_answer_tokens": 16384,
+  "cap_hit": true,
+  "finish_reason": "length",
+  "loop_ratio": 0.06375,
+  "onset_A_char": 24164,
+  "onset_B_char": null,
+  "loop_A": true,
+  "loop_B": false,
+  "mode": "none",
+  "extracted": null,
+  "gold": "28",
+  "score": 0,
+  "parsed_gold": null,
+  "parsed_answer": null,
+  "mode_v2": "none",
+  "extracted_v2": null,
+  "score_v2": 0,
+  "answer_logprob": null,
+  "answer_prob": null,
+  "answer_tokens": 0,
+  "mean_logprob": -1.0,
+  "utc": "2026-11-14T13:29:54Z"
+ },
+ "pass": true
+}

@@ -1,0 +1,184 @@
+{
+ "check": null,
+ "n_records": {
+  "check": 0,
+  "T1": 0,
+  "K_rl": 0,
+  "K_own": 0,
+  "K_fresh": 0,
+  "K_fresh2": 0,
+  "T2": 500,
+  "R1": 0,
+  "T3": 0
+ },
+ "T1": {
+  "cell": "T1 vs base-01 F (T 0.6)",
+  "n": 0,
+  "acc": null,
+  "acc_ref": null,
+  "acc_v2": null,
+  "acc_ref_v2": null,
+  "cap_hits": 0,
+  "cap_hits_ref": 0,
+  "loop_A": null,
+  "mean_tokens": null,
+  "mean_tokens_ref": null,
+  "acc_diff": null,
+  "cap_diff": null,
+  "quotes": {},
+  "label": "not counted (check verdict None): not counted (fewer than 450 T1 records)"
+ },
+ "K": {
+  "n_problems": 78,
+  "arms": {
+   "K_rl": {
+    "n": 0,
+    "finished": 0,
+    "finished_rate": null,
+    "finished_wilson95": [
+     null,
+     null
+    ],
+    "loop_A": 0,
+    "correct": 0,
+    "correct_v2": 0,
+    "mean_answer_tokens": null,
+    "quotes": {}
+   },
+   "K_own": {
+    "n": 0,
+    "finished": 0,
+    "finished_rate": null,
+    "finished_wilson95": [
+     null,
+     null
+    ],
+    "loop_A": 0,
+    "correct": 0,
+    "correct_v2": 0,
+    "mean_answer_tokens": null,
+    "quotes": {}
+   },
+   "K_fresh": {
+    "n": 0,
+    "finished": 0,
+    "finished_rate": null,
+    "finished_wilson95": [
+     null,
+     null
+    ],
+    "loop_A": 0,
+    "correct": 0,
+    "correct_v2": 0,
+    "mean_answer_tokens": null,
+    "quotes": {}
+   }
+  },
+  "label": "not counted (an arm has fewer than 70 of 78 records)"
+ },
+ "restart_row": {
+  "n": 381,
+  "missing": 119,
+  "acc": 88.9763779527559,
+  "mean_tokens": 1576.6194225721786,
+  "attempts_hist": {
+   "1": 381,
+   "2": 0,
+   "3": 0
+  },
+  "rl_single_answer": {
+   "acc": 98.16272965879264,
+   "mean_tokens": 3054.3175853018374
+  },
+  "restart_minus_rl": {
+   "n": 381,
+   "diff": -9.186351706036744,
+   "ci95": [
+    -12.598425196850393,
+    -6.036745406824151
+   ]
+  }
+ },
+ "T2": {
+  "cell": "T2 (RL, T 1.0) vs n13 RL (T 0.6)",
+  "n": 500,
+  "acc": 91.60000000000001,
+  "acc_ref": 92.0,
+  "acc_v2": 91.60000000000001,
+  "acc_ref_v2": 92.0,
+  "cap_hits": 6,
+  "cap_hits_ref": 16,
+  "loop_A": 0,
+  "mean_tokens": 4693.868,
+  "mean_tokens_ref": 4500.184,
+  "acc_diff": {
+   "n": 500,
+   "diff": -0.40000000000000036,
+   "ci95": [
+    -2.200000000000002,
+    1.3999999999999904
+   ]
+  },
+  "cap_diff": {
+   "n": 500,
+   "diff": -2.0,
+   "ci95": [
+    -3.8,
+    -0.4
+   ]
+  },
+  "quotes": {
+   "right": {
+    "problem_index": 0,
+    "gold": "\\left( 3, \\frac{\\pi}{2} \\right)",
+    "extracted": "\\left(3, \\frac{\\pi}{2}\\right)",
+    "answer_prob": 0.2610733491369064,
+    "cap_hit": false,
+    "text_head": " line!\n\nOkay, so I have this problem here where I need to convert the point (0, 3) from rectangular coordinates to polar coordinates. The answer should be in the form (r, \u03b8) where r is greater than 0 and \u03b8 is between 0 and 2\u03c0. Alright, let me think about how to approach this.\n\nFirst, I remember that",
+    "text_tail": " Thus, \\(\\theta\\) is \\(\\frac{\\pi}{2}\\) radians.\n\n3. **Verify the quadrant:**\n   The point \\((0, 3)\\) is in the first quadrant, and \\(\\frac{\\pi}{2}\\) is within the range \\(0 \\le \\theta < 2\\pi\\).\n\nTherefore, the polar coordinates of the point \\((0, 3)\\) are:\n\\[\n\\boxed{\\left(3, \\frac{\\pi}{2}\\right)}\n\\]"
+   },
+   "wrong": {
+    "problem_index": 9,
+    "gold": "4",
+    "extracted": "2",
+    "answer_prob": 0.9999977350285647,
+    "cap_hit": false,
+    "text_head": " line!\n\nOkay, so I have this problem here where I need to figure out how many different values I can get by inserting parentheses into the expression 2\u00b73\u00b74\u00b75 + 1. The catch is that I can't rearrange the numbers, only insert parentheses in different ways. The example given is that without parentheses",
+    "text_tail": "econd grouping.\n\nAfter considering all possible valid parenthetizations, we find that the only distinct values obtained are:\n\n- \\(121\\)\n- \\(144\\)\n\nThus, the number of distinct values that can be obtained from the expression \\(2 \\cdot 3 \\cdot 4 \\cdot 5 + 1\\) by inserting parentheses is \\(\\boxed{2}\\)."
+   }
+  }
+ },
+ "R1": {
+  "cell": "R1 (base F, rep 1.1) vs base-01 F",
+  "n": 0,
+  "acc": null,
+  "acc_ref": null,
+  "acc_v2": null,
+  "acc_ref_v2": null,
+  "cap_hits": 0,
+  "cap_hits_ref": 0,
+  "loop_A": null,
+  "mean_tokens": null,
+  "mean_tokens_ref": null,
+  "acc_diff": null,
+  "cap_diff": null,
+  "quotes": {}
+ },
+ "T3": {
+  "cell": "T3 (base plain, T 1.0) vs base-01 P",
+  "n": 0,
+  "acc": null,
+  "acc_ref": null,
+  "acc_v2": null,
+  "acc_ref_v2": null,
+  "cap_hits": 0,
+  "cap_hits_ref": 0,
+  "loop_A": null,
+  "mean_tokens": null,
+  "mean_tokens_ref": null,
+  "acc_diff": null,
+  "cap_diff": null,
+  "quotes": {}
+ },
+ "agree_selfcheck": true
+}

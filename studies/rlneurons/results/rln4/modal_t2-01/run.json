@@ -1,0 +1,24 @@
+{
+ "app": "rln4-k",
+ "phase": "rl_check",
+ "arms": "",
+ "gpu": "NVIDIA H200",
+ "modal_gpu": "H100",
+ "stop_utc": "2026-11-14T14:52:00Z",
+ "time_shift_s": 5640,
+ "frozen_stop_utc": "2026-11-14T13:18:00Z",
+ "pins": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-14T13:32:03Z",
+ "model": "s2800",
+ "gate": "",
+ "model_dir": "/vol/hf/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05",
+ "tok_dir": "/vol/hf/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05",
+ "rc": 0,
+ "finished_utc": "2026-11-14T14:00:45Z",
+ "seconds": 1722.0981657505035
+}
