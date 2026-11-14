@@ -18,8 +18,8 @@ the instances, the costs and the records in runs/vast/ belong to whoever runs it
 Setup once: `uv tool install vastai`, `vastai set api-key <your key>` (in your terminal, not in a chat), and add your
 ssh public key at https://cloud.vast.ai/manage-keys/.
 
-The default image is the official pytorch image with requirements.txt installed on top, the same versions as the
-Modal pool. --image takes any other image; README.md lists the team's ECR images. Install anything else in the
+The default image is the official pytorch image with requirements.txt installed on top, the same versions as on
+Modal. --image takes any other image; README.md lists the team's ECR images. Install anything else in the
 command, with `python -m pip install -q --break-system-packages <pkg> && python exp/run.py`. A job runs one clean, pushed commit, from
 the repository root, and writes its outputs to $OUT_DIR. The deadline runs on the box itself, with the instance's own
 key, so it fires even when your laptop is closed. Copy results out before it fires: destroying deletes the disk.
