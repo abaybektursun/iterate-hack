@@ -30,10 +30,10 @@ CELL = "--set math500 --temperature 1.0 --top-p 1.0"
 
 
 def merged(other, a, prompt, seed, rounding):
-    """The command of a cell on a merged model (without --commit)."""
+    """The command of a cell on a merged model (without --commit). rm -rf: Modal reuses a container, /tmp included."""
     kind = "--random" if a == "random" else f"--alpha {a}"
     label = f"{other}_random" if a == "random" else f"{'theta' if other == 'rl' else other}{a}"
-    return (f"{SETUP}{PY}merge_weights --other {other} {kind} --rounding {rounding} --dir /tmp/theta && {PY}run_cell --model-path /tmp/theta "
+    return (f"{SETUP}rm -rf /tmp/theta && {PY}merge_weights --other {other} {kind} --rounding {rounding} --dir /tmp/theta && {PY}run_cell --model-path /tmp/theta "
             f"--model-label {label} --prompt {prompt} {CELL} --seed {seed}")
 
 
