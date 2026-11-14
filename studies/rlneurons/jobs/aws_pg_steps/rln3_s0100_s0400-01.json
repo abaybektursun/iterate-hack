@@ -1,0 +1,4 @@
+[
+ {"name": "s0100", "module": "infra.aws_pg.jobs.rln3_gen", "args": "--model s0100 --inputs s3://pg-lineage-769063704696/results/rlneurons/r3/inputs/ --allowance-min 440"},
+ {"name": "s0400", "module": "infra.aws_pg.jobs.rln3_gen", "args": "--model s0400 --inputs s3://pg-lineage-769063704696/results/rlneurons/r3/inputs/ --allowance-min 440"}
+]
