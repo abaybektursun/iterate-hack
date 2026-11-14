@@ -3,14 +3,16 @@ Laptop only (numpy and matplotlib, no model), from the repository root:
 
     uv run --no-project --with numpy --with matplotlib python -m studies.cleanneurons.analysis.describe_report runs/<job id> [--to <results folder>]
 
-Reads onset_trace.json, dose.json, neurons.json and metrics.json. Writes into --to (default: the run directory):
+Reads metrics.json and neurons.json, and onset_trace.json and dose.json when the run has them (a run without --loops has
+neither; their figures are then left out and summary.json says so). Writes into --to (default: the run directory):
   onset_trace.png   item 4: activation of the selected and of the reference neurons at each offset from the loop onset (solid) and
                     at the same offsets around the middle of each stored answer (dashed, the matched control). Left: mean over
                     neurons of |z|; right: of z; z = (mean a over rows - the neuron's mean on normal text) / its sd on normal text.
                     Thin lines per offset, thick lines an 11-token moving average.
   dose.png          item 5: share of the half B rows that loop against the write factor, with Wilson 95 % intervals.
-  base_vs_rl.png    item 6: distribution over neurons of the base-RL cosine of the gate, up and down vectors and of the gain
-                    (mean |a| in RL / in base on the same text), selected against reference.
+  base_vs_rl.png    item 6: distribution over neurons of the base-RL cosine of the gate, up and down vectors, of the gain
+                    (mean |a| in RL / in base on the same text), and of the RL / base ratio of each pole's p99 and maximum
+                    (two poles per neuron; poles whose base value is 0 are left out), selected against reference.
   summary.json      the numbers behind the three figures and the job's controls.
 """
 from __future__ import annotations
@@ -88,21 +90,27 @@ def fig_dose(d, path):
 
 def fig_rl(neurons, path):
     keys = (("cos_gate", "cosine base-RL, gate vector"), ("cos_up", "cosine base-RL, up vector"), ("cos_down", "cosine base-RL, down vector"),
-            ("gain", "gain: mean |a| in RL / in base (same text)"))
-    fig, axes = plt.subplots(1, 4, figsize=(17, 4.2))
+            ("gain", "gain: mean |a| in RL / in base (same text)"), ("p99", "p99 of a pole's activation, RL / base (same text)"),
+            ("max", "maximum of a pole's activation, RL / base (same text)"))
+    fig, axes = plt.subplots(2, 3, figsize=(15, 8))
     out, count = {}, {}
-    for ax, (k, label) in zip(axes, keys):
+    for ax, (k, label) in zip(axes.flat, keys):
         for s in ("selected", "reference"):
-            v = np.sort([u["rl"][k] for u in neurons if u["set"] == s])
-            count[s] = len(v)
+            us = [u for u in neurons if u["set"] == s]
+            count[s] = len(us)
+            if k in ("p99", "max"):
+                v = np.sort([u["rl"][pole][k] / u[pole][k] for u in us for pole in ("pos", "neg") if u[pole][k] > 0])
+            else:
+                v = np.sort([u["rl"][k] for u in us])
             ax.step(v, (np.arange(len(v)) + 1) / len(v), where="post", color=COLOR[s], lw=1.6, label=f"{s} (n = {len(v)})")
-            out.setdefault(s, {})[k] = {q: float(np.quantile(v, p)) for q, p in (("q10", 0.1), ("q25", 0.25), ("median", 0.5), ("q75", 0.75), ("q90", 0.9))}
+            out.setdefault(s, {})[k + "_rl_over_base" if k in ("p99", "max") else k] = {
+                "n": len(v), **{q: float(np.quantile(v, p)) for q, p in (("q10", 0.1), ("q25", 0.25), ("median", 0.5), ("q75", 0.75), ("q90", 0.9))}}
         ax.axvline(1, color="k", lw=0.6, ls=":")
-        if k == "gain":
+        if not k.startswith("cos"):
             ax.set_xscale("log")
         ax.set_xlabel(label)
-        ax.set_ylabel("share of neurons at or below")
-    axes[0].legend(fontsize=8, frameon=False)
+        ax.set_ylabel("share at or below")
+        ax.legend(fontsize=8, frameon=False)
     fig.suptitle(f"Base against RL on the same neurons: {count['selected']} selected and {count['reference']} reference neurons "
                  "(dotted: no change)", fontsize=11)
     fig.tight_layout()
@@ -110,6 +118,7 @@ def fig_rl(neurons, path):
     plt.close(fig)
     for s in out:
         out[s]["act_corr_median"] = float(np.median([u["rl"]["act_corr"] for u in neurons if u["set"] == s]))
+        out[s]["neurons"] = count[s]
     return out
 
 
@@ -121,22 +130,28 @@ def main():
     run = pathlib.Path(a.run)
     to = pathlib.Path(a.to or a.run)
     to.mkdir(parents=True, exist_ok=True)
-    m, o, d, n = (json.loads((run / f).read_text()) for f in ("metrics.json", "onset_trace.json", "dose.json", "neurons.json"))
+    m, n = (json.loads((run / f).read_text()) for f in ("metrics.json", "neurons.json"))
     assert m["status"] == "done", f"{run}/metrics.json: status {m['status']}"
-    fig_onset(o, to / "onset_trace.png")
-    x = np.array(o["offsets"])
-    spans = {"before": (x >= -200) & (x < -50), "just_before": (x >= -50) & (x < 0), "after_onset": (x >= 0) & (x < o["median_period"]),
-             "after_first_repeat": x >= o["median_period"]}
-    onset = {s: {kind: {w: round(float(np.mean(np.array(o["sets"][s][kind]["mean_abs_z"])[sel])), 4) for w, sel in spans.items()}
-                 for kind in ("loop", "normal")} for s in ("selected", "reference")}
+    have = {f: (run / f).exists() for f in ("onset_trace.json", "dose.json")}
+    assert all(have.values()) or (m["skipped"] and not any(have.values())), f"{run}: {have}, but metrics.json skipped = {m['skipped']}"
     summary = {"run": str(run), "commit": m["commit"], "job_id": m["job_id"], "edit": m["edit"], "counts": m["counts"], "controls": m["controls"],
-               "onset_trace": {"rows": len(o["rows"]), "median_period": o["median_period"],
-                               "what": "mean |z| over neurons and offsets in each span; spans by the median period; 'normal' = middle of stored answers",
-                               "mean_abs_z": onset, "per_row_windows_from_the_job": o["window_summary"]},
-               "dose": {"rows": fig_dose(d, to / "dose.png"), "controls": d["controls"]},
-               "base_vs_rl": fig_rl(n["neurons"], to / "base_vs_rl.png")}
+               "skipped_by_the_job": m["skipped"], "base_vs_rl": fig_rl(n["neurons"], to / "base_vs_rl.png")}
+    if have["onset_trace.json"]:
+        o = json.loads((run / "onset_trace.json").read_text())
+        fig_onset(o, to / "onset_trace.png")
+        x = np.array(o["offsets"])
+        spans = {"before": (x >= -200) & (x < -50), "just_before": (x >= -50) & (x < 0), "after_onset": (x >= 0) & (x < o["median_period"]),
+                 "after_first_repeat": x >= o["median_period"]}
+        onset = {s: {kind: {w: round(float(np.mean(np.array(o["sets"][s][kind]["mean_abs_z"])[sel])), 4) for w, sel in spans.items()}
+                     for kind in ("loop", "normal")} for s in ("selected", "reference")}
+        summary["onset_trace"] = {"rows": len(o["rows"]), "median_period": o["median_period"],
+                                  "what": "mean |z| over neurons and offsets in each span; spans by the median period; 'normal' = middle of stored answers",
+                                  "mean_abs_z": onset, "per_row_windows_from_the_job": o["window_summary"]}
+    if have["dose.json"]:
+        d = json.loads((run / "dose.json").read_text())
+        summary["dose"] = {"rows": fig_dose(d, to / "dose.png"), "controls": d["controls"]}
     (to / "summary.json").write_text(json.dumps(summary, indent=1))
-    print(json.dumps({k: summary[k] for k in ("onset_trace", "dose", "base_vs_rl")}, indent=1))
+    print(json.dumps({k: summary[k] for k in ("skipped_by_the_job", "onset_trace", "dose", "base_vs_rl") if k in summary}, indent=1))
 
 
 if __name__ == "__main__":

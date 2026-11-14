@@ -3,6 +3,8 @@ neurons per layer (the reference). One H100, both models in bf16, on the team ru
 
     uv run tools/gpu.py submit h100 --hours 1 -- "python -m studies.cleanneurons.jobs.describe_neurons --commit $(git rev-parse HEAD) --edit <repo path of the edit file> --loops /runs/<Part L job id>/loops.json"
     smoke: add  --smoke   (4 answers per cell, 3 looped rows per half, 64 selected neurons, 260 generated tokens)
+    Without --loops the job does items 1, 2, 3 and 6 on the stored answers only (neurons.json, contexts.json, metrics.json) and
+    records in metrics.json "skipped" that items 4 and 5 were left out.
 
 Inputs
   --edit    an edit file (SPEC1 "Edit file"); the selected neurons are those under `zero` and `copy_neurons`.
@@ -24,12 +26,14 @@ Outputs in --out (default $OUT_DIR); neurons, contexts and traces hold one unit 
                     promoted, suppressed: the 15 tokens with the largest and smallest lm_head . (norm.weight *
                     post_feedforward_layernorm.weight * down_proj[:, n]), as [token, value] (for the "-" pole the two swap; both
                     norms' input-dependent scales and the effect through later layers are ignored); rl: cosine and norm ratio
-                    (RL / base) of the gate, up and down vectors, mean |a| in both models on the same text, gain (RL / base), and
-                    act_corr (correlation of a between the two models over positions).
+                    (RL / base) of the gate, up and down vectors, mean |a| in both models on the same text, gain (RL / base),
+                    act_corr (correlation of a between the two models over positions), and pos and neg: the same quantiles,
+                    maximum and share_beyond_p97 for the RL model's a on the same text (against the base's layer p97).
   contexts.json     item 2. Per neuron pole: first10 and heldout10 (the 20 positions with the largest pole activation, one per
                     answer where possible, ranks alternating between the two lists) and random10 (one random scored position in
                     the answer of each heldout10 context). A context: text (60 tokens before, <<the token>>, 20 after),
-                    activation (a, signed), next_token, source (T1, T2, loop), problem_index, position, onset_offset (loop rows).
+                    activation (a, signed, base), activation_rl (the RL model's a of the same neuron at the same position),
+                    next_token, source (T1, T2, loop), problem_index, position, onset_offset (loop rows).
   onset_trace.json  item 4. offsets -200 .. +400 from the loop onset (offset 0 reads the first token of the first cycle; the
                     repeated text starts one period later); per set, at the loop onsets ("loop") and at the middle of each
                     stored answer ("normal", the matched control): mean over neurons of the mean a, of the mean |a|, of z and of
@@ -46,8 +50,9 @@ Outputs in --out (default $OUT_DIR); neurons, contexts and traces hold one unit 
   metrics.json      config, commit, job id, counts, timings, the headline numbers, the controls.
 
 The job writes every file, then fails if a control failed. --dry-run uses random 4-layer Olmo3 models (hidden 16, width 64, no
-weights, no GPU) and, without --edit / --loops, a synthetic edit file and loops.json written into --out; its answers are synthetic,
-or with --inputs <dir> the real T1 / T2 rows and tokenizer. Fail loud: no try/except, no fallback.
+weights, no GPU); without --edit it writes a synthetic edit file into --out, with `--loops synthetic` a synthetic loops.json
+(without --loops it takes the path without loops); its answers are synthetic, or with --inputs <dir> the real T1 / T2 rows and
+tokenizer. Fail loud: no try/except, no fallback.
 """
 from __future__ import annotations
 
@@ -249,12 +254,12 @@ def synthetic_rows(a, vocab):
 
 
 def synthetic_files(a, out, vocab):
-    """Without --edit / --loops: a synthetic edit file and loops.json (seven planted loops and a row that did not loop)."""
+    """Without --edit: a synthetic edit file. --loops synthetic: a loops.json (seven planted loops and a row that did not loop)."""
     g = np.random.default_rng(1)
     if not a.edit:
         a.edit = str(out / "dry_edit.json")
         M5.dump(a.edit, {"name": "dry", "zero": {"0": [1, 5, 9], "2": [3, 4]}, "copy_neurons": {"3": [7], "1": []}})
-    if not a.loops:
+    if a.loops == "synthetic":
         rows = [{"problem_index": 99, "looped": False}]
         for i in range(7):
             pre, p = int(g.integers(400, 900)), int(g.integers(5, 40))
@@ -477,7 +482,7 @@ def generate(model, rows, batches, steps, seed, dev, stop_id, cache):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--edit", help="repo path of the edit file")
-    ap.add_argument("--loops", help="Part L's loops.json: /runs/<job id>/loops.json or a repo path")
+    ap.add_argument("--loops", help="Part L's loops.json: /runs/<job id>/loops.json or a repo path; without it items 4 and 5 are skipped")
     ap.add_argument("--inputs", default=None, help="directory of T1.jsonl and T2.jsonl (default /runs/inputs/rln5; --dry-run: synthetic rows)")
     ap.add_argument("--out", default=os.environ.get("OUT_DIR"))
     ap.add_argument("--commit", required=True, help="the submitted commit: $(git rev-parse HEAD), expanded on the laptop")
@@ -501,7 +506,7 @@ def main():
     t0, tm = time.time(), {}
     assert a.out, "no --out and no $OUT_DIR"
     assert re.fullmatch(r"[0-9a-f]{40}", a.commit), f"--commit {a.commit!r} is not a full git sha"
-    assert a.dry_run or (a.edit and a.loops), "--edit and --loops are required"
+    assert a.dry_run or a.edit, "--edit is required"
     out = pathlib.Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     assert not (out / "metrics.json").exists(), f"{out}/metrics.json exists: one fresh directory per run"
@@ -527,12 +532,17 @@ def main():
     cols = [sel.get(l, []) + ref.get(l, []) for l in range(L)]
     U = [(s, l, n) for l in range(L) for s, d in (("selected", sel), ("reference", ref)) for n in d.get(l, [])]
     is_sel = torch.tensor([u[0] == "selected" for u in U])
-    loops, not_looped = read_loops(a.loops)
-    onset_check = check_onsets(loops)
-    if a.loop_rows:
-        loops = [s for h in "AB" for s in [s for s in loops if s["half"] == h][:a.loop_rows]]
-    held = [s for s in loops if s["half"] == "B"]
-    assert held, "no looped row in half B"
+    loops, held, loops_info = [], [], None
+    if a.loops:
+        loops, not_looped = read_loops(a.loops)
+        loops_info = {"sha256": M5.sha(a.loops), "rows_not_looped": not_looped, "onset_check": check_onsets(loops)}
+        if a.loop_rows:
+            loops = [s for h in "AB" for s in [s for s in loops if s["half"] == h][:a.loop_rows]]
+        held = [s for s in loops if s["half"] == "B"]
+        assert held, "no looped row in half B"
+        loops_info.update(used=len(loops), half_A=len(loops) - len(held), half_B=len(held))
+    skipped = {} if loops else {"item 4 (onset_trace.json)": "no --loops: there is no loop onset to align on",
+                                "item 5 (dose.json)": "no --loops: there are no held-out looped rows to restart"}
     seqs = normal + loops
     n_pos = [len(s["ids"]) - 1 - s["n_prompt"] for s in seqs]
     start = np.concatenate([[0], np.cumsum(n_pos)]).astype(np.int64)
@@ -545,13 +555,21 @@ def main():
     m = {"status": "loading", "config": {**vars(a), "out": str(out)}, "commit": a.commit, "job_id": os.environ.get("JOB_ID"), "started_utc": M5.utc(),
          "edit": {"name": name, "sha256": M5.sha(a.edit), "neurons_in_file": n_edit, "selected": len(U) // 2, "reference": len(U) // 2,
                   "per_layer": {str(l): len(ns) for l, ns in sel.items()}},
-         "loops": {"sha256": M5.sha(a.loops), "rows_not_looped": not_looped, "used": len(loops), "half_A": len(loops) - len(held), "half_B": len(held),
-                   "onset_check": onset_check},
-         "inputs": inputs, "counts": {"answers": {c: sum(s["src"] == c for s in seqs) for c in ("T1", "T2", "loop")}, "positions": P,
+         "loops": loops_info, "skipped": skipped, "inputs": inputs, "counts": {"answers": {c: sum(s["src"] == c for s in seqs) for c in ("T1", "T2", "loop")}, "positions": P,
                                       "positions_normal_text": n_norm, "neurons": K},
          "torch": torch.__version__, "units": "activations in the model's units; cosines and shares as stated"}
     M5.dump(out / "metrics.json", m)
-    print(json.dumps({k: m[k] for k in ("edit", "loops", "counts")}, indent=1), flush=True)
+    print(json.dumps({k: m[k] for k in ("edit", "loops", "skipped", "counts")}, indent=1), flush=True)
+
+    def finish(controls):
+        m.update(status="done", wall_s=time.time() - t0, controls=controls)
+        if not a.dry_run:
+            m["gpu_max_memory_gb"] = torch.cuda.max_memory_allocated() / 2 ** 30
+        M5.dump(out / "metrics.json", m)
+        keys = ("controls", "skipped", "dose", "onset_windows", "base_vs_rl", "timings", "wall_s")
+        print(json.dumps({k: m[k] for k in keys if k in m}, indent=1), flush=True)
+        failed = [k for k, v in controls.items() if not v]
+        assert not failed, f"controls failed: {failed} (see dose.json)"
 
     if a.dry_run:
         dev, dt = "cpu", torch.float32
@@ -579,30 +597,32 @@ def main():
     p97 = [float(v.flatten().float().kthvalue(int(0.97 * (v.numel() - 1)) + 1).values) for v in sub]
     del sub
     A_rl, _ = record(rl, seqs, colsT, dev, dt)
+    assert torch.isfinite(A_rl).all()
     cmp = compare(A, A_rl)
-    del A_rl, rl
+    del rl
     tm["record_s"] = time.time() - t
     print(f"{M5.utc()} record: {P} positions x {K} neurons, both models, {tm['record_s']:.0f} s", flush=True)
 
     # item 1 (quantiles), item 3 (tokens), item 6: neurons.json
     t = time.time()
-    st = unit_stats(A, torch.tensor(p97, device=dev)[u_layer.to(dev)], n_norm)
+    thr = torch.tensor(p97, device=dev)[u_layer.to(dev)]
+    st, st_rl = unit_stats(A, thr, n_norm), unit_stats(A_rl, thr, n_norm)
+    poles_of = lambda d, k: {pole: {q: r4(d[f"{pole}_{q}"][k]) for q in [q for q, _ in QUANT] + ["max", "share_beyond_p97"]} for pole in ("pos", "neg")}
     dec = lambda i: tok.decode([int(i)])
     units = []
     for k, (s, l, n) in enumerate(U):
-        u = {"set": s, "layer": l, "neuron": n}
-        for pole in ("pos", "neg"):
-            u[pole] = {q: r4(st[f"{pole}_{q}"][k]) for q in [q for q, _ in QUANT] + ["max", "share_beyond_p97"]}
+        u = {"set": s, "layer": l, "neuron": n, **poles_of(st, k)}
         u.update({q: r4(st[q][k]) for q in ("mean_abs", "normal_mean", "normal_sd")})
         u["promoted"] = [[dec(i), r4(v)] for i, v in zip(wt["top_i"][k], wt["top_v"][k])]
         u["suppressed"] = [[dec(i), r4(v)] for i, v in zip(wt["bot_i"][k], wt["bot_v"][k])]
         u["rl"] = {**{q: r4(wt[q][k]) for q in wt if q[:3] in ("cos", "nor")}, **{q: r4(cmp[q][k]) for q in cmp},
-                   "gain": r4(cmp["mean_abs_rl"][k] / cmp["mean_abs_base"][k].clamp(min=1e-12))}
+                   "gain": r4(cmp["mean_abs_rl"][k] / cmp["mean_abs_base"][k].clamp(min=1e-12)), **poles_of(st_rl, k)}
         units.append(u)
     head = {"what": "SPEC1 Part I items 1, 3, 6; fields in the docstring of jobs/describe_neurons.py", "edit": name, "positions": P,
             "positions_normal_text": n_norm, "layer_p97_abs": [r4(v) for v in p97],
             "output_note": "promoted / suppressed: lm_head . (norm.weight * post_feedforward_layernorm.weight * down_proj[:, n]); the two "
-                           "norms' input-dependent scales and later layers are ignored; for the '-' pole the two lists swap"}
+                           "norms' input-dependent scales and later layers are ignored; for the '-' pole the two lists swap",
+            "rl_note": "rl.pos / rl.neg: the RL model's a of the same neuron on the same text; share_beyond_p97 against the base's layer p97"}
     dump_lines(out / "neurons.json", head, "neurons", units)
 
     # item 2: contexts.json
@@ -616,27 +636,39 @@ def main():
             rows = [int(start[i] + g.integers(n_pos[i])) for i in ans]
             poles.append((k, sign, pole, best, sum(v > 0 for v in cand[0])))
             rnd.append(rows)
-    rnd_a = A[torch.tensor(rnd, device=dev), torch.tensor([[p[0]] for p in poles], device=dev)].float().cpu().tolist()
+    at = lambda M, rows, ks: M[torch.tensor(rows, dtype=torch.long, device=dev), torch.tensor(ks, dtype=torch.long, device=dev)].float().cpu().tolist()
+    rnd_a, rnd_rl = (at(M, rnd, [[p[0]] for p in poles]) for M in (A, A_rl))
+    top_rl = iter(at(A_rl, [p for q in poles for _, p in q[3]], [q[0] for q in poles for _ in q[3]]))
+    del A_rl
 
-    def context(p, act, rank=None):
+    def context(p, act, act_rl, rank=None):
         i, pos = where(p)
         s, ids = seqs[i], seqs[i]["ids"]
         c = {"text": tok.decode(ids[max(pos - BEFORE, 0):pos]) + "<<" + tok.decode(ids[pos:pos + 1]) + ">>" + tok.decode(ids[pos + 1:pos + 1 + AFTER]),
-             "activation": r4(act), "next_token": tok.decode(ids[pos + 1:pos + 2]), "source": s["src"], "problem_index": s["idx"], "position": pos,
+             "activation": r4(act), "activation_rl": r4(act_rl), "next_token": tok.decode(ids[pos + 1:pos + 2]), "source": s["src"], "problem_index": s["idx"], "position": pos,
              "onset_offset": pos - s["onset"] if s["src"] == "loop" else None}
         return c if rank is None else {"rank": rank, **c}
 
     ctx = []
-    for (k, sign, pole, best, firing), rows, acts in zip(poles, rnd, rnd_a):
-        top = [context(p, sign * v, r) for r, (v, p) in enumerate(best)]
+    for (k, sign, pole, best, firing), rows, acts, acts_rl in zip(poles, rnd, rnd_a, rnd_rl):
+        top = [context(p, sign * v, next(top_rl), r) for r, (v, p) in enumerate(best)]
         ctx.append({"set": U[k][0], "layer": U[k][1], "neuron": U[k][2], "pole": pole, "answers_firing": firing,
-                    "first10": top[0::2], "heldout10": top[1::2], "random10": [context(p, v) for p, v in zip(rows, acts)]})
+                    "first10": top[0::2], "heldout10": top[1::2], "random10": [context(p, v, w) for p, v, w in zip(rows, acts, acts_rl)]})
     head = {"what": "SPEC1 Part I item 2; fields in the docstring of jobs/describe_neurons.py", "edit": name,
-            "format": f"text = {BEFORE} tokens before + <<the token>> + {AFTER} tokens after; activation is a (signed) at the token; "
+            "format": f"text = {BEFORE} tokens before + <<the token>> + {AFTER} tokens after; activation is the base's a (signed) at the token, "
+                      "activation_rl the RL model's a of the same neuron there (the top contexts are chosen by the base's activation, so RL's "
+                      "is lower there by selection alone: read it against the reference neurons); "
                       "random10 holds one random scored position from the answer of each heldout10 context (random answers when fewer)",
             "answers": len(seqs)}
     dump_lines(out / "contexts.json", head, "poles", ctx)
     tm["stats_contexts_s"] = time.time() - t
+    med = lambda v, mask: None if torch.isnan(x := v[mask].nanmedian()) else r4(x)             # ratios: over the neurons whose base value is > 0
+    ratio = lambda q: torch.where(st[q] > 0, st_rl[q] / st[q].clamp(min=1e-12), torch.nan)
+    rlq = {**{q: wt[q] for q in wt if q[:3] in ("cos", "nor")}, "act_corr": cmp["act_corr"], "gain": cmp["mean_abs_rl"] / cmp["mean_abs_base"].clamp(min=1e-12),
+           **{f"{pole}_{q}_rl_over_base": ratio(f"{pole}_{q}") for pole in ("pos", "neg") for q in ("p99", "max")}}
+    m["base_vs_rl"] = {s: {"median_" + q: med(v, mask) for q, v in rlq.items()} for s, mask in (("selected", is_sel), ("reference", ~is_sel))}
+    if not loops:
+        return finish({})
 
     # item 4: onset_trace.json
     t = time.time()
@@ -721,17 +753,8 @@ def main():
     tm["dose_s"] = time.time() - t
     tm["dose_tokens_per_s"] = n_tok / tm["dose_s"]
 
-    med = lambda v, mask: r4(v[mask].median())
-    m.update(status="done", wall_s=time.time() - t0, controls={k: v["pass"] for k, v in ctrl.items()}, dose=head["summary"], onset_windows=onset_sum,
-             base_vs_rl={s: {"median_" + q: med(v, mask) for q, v in {**{q: wt[q] for q in wt if q[:3] in ("cos", "nor")}, "act_corr": cmp["act_corr"],
-                                                                        "gain": cmp["mean_abs_rl"] / cmp["mean_abs_base"].clamp(min=1e-12)}.items()}
-                         for s, mask in (("selected", is_sel), ("reference", ~is_sel))})
-    if not a.dry_run:
-        m["gpu_max_memory_gb"] = torch.cuda.max_memory_allocated() / 2 ** 30
-    M5.dump(out / "metrics.json", m)
-    print(json.dumps({k: m[k] for k in ("controls", "dose", "onset_windows", "base_vs_rl", "timings", "wall_s")}, indent=1), flush=True)
-    failed = [k for k, v in m["controls"].items() if not v]
-    assert not failed, f"controls failed: {failed} (see dose.json)"
+    m.update(dose=head["summary"], onset_windows=onset_sum)
+    finish({k: v["pass"] for k, v in ctrl.items()})
 
 
 if __name__ == "__main__":
