@@ -115,6 +115,7 @@ if __name__ == "__main__":
                     help="claude spends the person's Claude subscription: use it only when they agreed")
     ap.add_argument("--model", required=True, help="exact model id, checked against the provider's model list")
     ap.add_argument("--groups", type=int, nargs=2, default=[6, 12], help="range of group counts asked for")
+    ap.add_argument("--reuse-directions", default=None, help="judge folder whose directions.json to reuse (new nodes)")
     ap.add_argument("--reuse", default=None, help="judge folder whose directions.json and nodes.json to reuse (same nodes)")
     ap.add_argument("--steps", default="partitions,triplets,coverage", help="comma list of steps to run")
     ap.add_argument("--no-partitions", action="store_true", help="triplets only (to compare judges on the same questions)")
@@ -135,7 +136,10 @@ if __name__ == "__main__":
         nodes = json.loads((out / "nodes.json").read_text())
     else:
         # 1. possible directions, from DIRECTION.md only
-        d = ask(DIRECTIONS.format(direction=(ROOT / "DIRECTION.md").read_text()), out / "calls" / "directions.txt")["directions"]
+        if args.reuse_directions:
+            d = json.loads((pathlib.Path(args.reuse_directions) / "directions.json").read_text())
+        else:
+            d = ask(DIRECTIONS.format(direction=(ROOT / "DIRECTION.md").read_text()), out / "calls" / "directions.txt")["directions"]
         assert len(d) >= 10, d
         (out / "directions.json").write_text(json.dumps(d, indent=1))
 

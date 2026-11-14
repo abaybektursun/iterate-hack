@@ -66,3 +66,14 @@ stay in `runs/` and `results/` uncommitted (rebuild with the commands in `run.js
   (cue, T 1.0), cue + restart 82.8 % (more tokens), RL at T 1.0 92.6 %; gap 10.6 points.
 - Judge choice: gpt-5.4-mini is not usable here (triplets consistent across orders 359/767, near chance; its
   partition returned duplicate ids). gpt-6.1-sol costs about 1.1 USD per full map.
+
+### swarm/main-02 (board snapshot 2026-11-14 22:48 UTC, 72 items; judge gpt-6.1-sol, same 20 directions as main-01)
+
+Artifacts: `results/swarm/main-02/summary.json`, `run.json`. Page: same link as main-01 (version 5).
+
+- Still 12 of 20 directions pursued (both orders agree 20/20); the same 8 untouched. The 30 new items went to
+  weight and neuron interventions (11 items), mechanistic readouts (11), coordination and process (10).
+- 21 of 72 items (29 %) are in the two tooling/coordination basins, as in main-01.
+- Instrument: t-STE held-out 0.80 vs 0.48 shuffled; order consistency 1016/1120; partition ARI 0.95; both planted
+  copies share the original's group in both orders, one is 12th nearest on the map (map placement is looser).
+- Leaderboard now split by benchmark: MATH-500 best one-sample base 82.0 vs RL 92.6; hard-328 base+cue 50.0 vs RL 62.8.

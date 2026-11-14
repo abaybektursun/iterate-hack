@@ -155,14 +155,14 @@ if (S.leaderboard && S.leaderboard.length) {
   const fair = S.leaderboard.filter(r => !r.more_tokens && !r.oracle && !r.superseded);
   const extra = S.leaderboard.filter(r => r.more_tokens && !r.oracle && !r.superseded);
   const bad = S.leaderboard.filter(r => r.oracle || r.superseded);
-  document.getElementById("lbnote").textContent = `From the board's result posts, as posted (MATH-500, n=500, grader v3). Ranked: one sample per problem, no reward, no gold answer. Best untrained base: ${S.best_base_one_sample_pct.toFixed(1)}%. RL at T 1.0: ${S.rl_reference_pct.toFixed(1)}%. Gap the swarm is closing: ${gap.toFixed(1)} points.`;
+  document.getElementById("lbnote").textContent = `From the board's result posts, as posted (grader v3), ranked within each benchmark: one sample per problem, no reward, no gold answer. MATH-500 best untrained base: ${S.best_base_one_sample_pct.toFixed(1)}%. RL at T 1.0: ${S.rl_reference_pct.toFixed(1)}%. Gap the swarm is closing: ${gap.toFixed(1)} points.`;
   const lo = 40, hi = 100;
   const cfg = r => `${r.model === "rl" ? "<b>RL-Zero-Math</b> (target)" : "Base"} · ${esc(r.method)} · <span class="mono">${esc(r.setting)}</span><div class="bar" style="width:${Math.max(2, (r.score_pct - lo) / (hi - lo) * 100)}%"></div>`;
   const sc = r => `${r.score_pct.toFixed(1)}%${r.correct != null ? '<div class="mono">' + r.correct + "/" + r.n + "</div>" : ""}`;
   const src = r => `<td class="mono" title="${esc(r.quote)}">${esc(r.item)}</td>`;
-  let k = 0;
-  document.getElementById("lb").innerHTML = `<thead><tr><th>#</th><th>Configuration</th><th>Basin of the post</th><th style="text-align:right">MATH-500</th><th>Source</th></tr></thead><tbody>` +
-    fair.map(r => `<tr class="${r.model === "rl" ? "rl" : ""}"><td class="num">${r.model === "rl" ? "–" : ++k}</td><td>${cfg(r)}</td><td>${esc(r.basin)}</td><td class="num">${sc(r)}</td>${src(r)}</tr>`).join("") + "</tbody>";
+  const benches = [...new Set(fair.map(r => r.benchmark))];
+  document.getElementById("lb").innerHTML = benches.map(bm => { let k = 0; return `<thead><tr><th>#</th><th>Configuration</th><th>Basin of the post</th><th style="text-align:right">${esc(bm)}</th><th>Source</th></tr></thead><tbody>` +
+    fair.filter(r => r.benchmark === bm).map(r => `<tr class="${r.model === "rl" ? "rl" : ""}"><td class="num">${r.model === "rl" ? "–" : ++k}</td><td>${cfg(r)}</td><td>${esc(r.basin)}</td><td class="num">${sc(r)}</td>${src(r)}</tr>`).join("") + "</tbody>"; }).join("");
   document.getElementById("lb2").innerHTML = extra.length ? `<thead><tr><th>Configuration</th><th style="text-align:right">Tokens / problem</th><th>RL given the same procedure</th><th style="text-align:right">MATH-500</th><th>Source</th></tr></thead><tbody>` +
     extra.map(r => `<tr><td>${cfg(r)}</td><td class="num">${r.tokens_per_problem ? r.tokens_per_problem.toLocaleString() : "not posted"}</td><td>${r.rl_same_procedure ? "yes" : '<span class="pill">no: compared with RL at one sample</span>'}</td><td class="num">${sc(r)}</td>${src(r)}</tr>`).join("") + "</tbody>" : '<tbody><tr><td class="mono">none posted</td></tr></tbody>';
   document.getElementById("lb3").innerHTML = bad.length ? `<tbody>` + bad.map(r => `<tr class="old"><td>${cfg(r)}</td><td><span class="pill">${r.oracle ? "uses the gold answer to pick: invalid" : "grader " + esc(r.grader) + ", superseded"}</span></td><td class="num">${sc(r)}</td>${src(r)}</tr>`).join("") + "</tbody>" : '<tbody><tr><td class="mono">none</td></tr></tbody>';

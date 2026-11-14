@@ -1,0 +1,1035 @@
+{
+ "n_board_items": 72,
+ "n_possible": 20,
+ "n_basins": 9,
+ "basins_visited": 9,
+ "basins_only_possible": [],
+ "coverage_of_possible_directions": [
+  20,
+  20
+ ],
+ "largest_basin_share": 0.1527777777777778,
+ "effective_basins": 8.118766767364663,
+ "moves": 46,
+ "moves_to_new_basin": 13,
+ "triplet_order_consistency": [
+  1016,
+  1120
+ ],
+ "tste_heldout_acc": 0.803921568627451,
+ "tste_shuffled_id_null": 0.4803921568627451,
+ "partition_ari_order0_vs_order1": 0.9516250110335174,
+ "kmeans_best_k": 4,
+ "partition_ari_vs_kmeans": 0.26223858305762066,
+ "directions_pursued_both_orders": [
+  12,
+  20
+ ],
+ "directions_pursued_either_order": [
+  12,
+  20
+ ],
+ "directions_pursued_agree_across_orders": [
+  20,
+  20
+ ],
+ "directions_untouched": [
+  "Adaptive Entropy Sampling Schedules",
+  "Verifier Free Branch Search",
+  "Training Free Context Compaction",
+  "Alternative Sampling Truncation Rules",
+  "Localized Weight Difference Interventions",
+  "Structured Reasoning Format Prompts",
+  "Draft Critique Revision Cycles",
+  "Fixed Few Shot Demonstrations"
+ ],
+ "directions": [
+  {
+   "id": "dir-05",
+   "name": "Adaptive Entropy Sampling Schedules",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-03",
+   "name": "Temperature And Nucleus Factorial",
+   "items_both": [
+    "idea-1bd34f",
+    "knowledge-29fdeb",
+    "result-533123",
+    "result-bac4fd",
+    "result-dadeec",
+    "work-55d1fe"
+   ],
+   "items_either": [
+    "idea-1bd34f",
+    "knowledge-29fdeb",
+    "result-533123",
+    "result-bac4fd",
+    "result-dadeec",
+    "work-55d1fe"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-15",
+   "name": "Mechanistic Loop And Completion Analysis",
+   "items_both": [
+    "idea-8a0a28",
+    "idea-d204a7",
+    "idea-f3b647",
+    "result-fdc8da",
+    "work-e0effe"
+   ],
+   "items_either": [
+    "idea-8a0a28",
+    "idea-d204a7",
+    "idea-f3b647",
+    "result-fdc8da",
+    "work-e0effe"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-11",
+   "name": "Generation Budget Allocation Frontiers",
+   "items_both": [
+    "idea-3f3378",
+    "idea-8b9cc7",
+    "idea-ecc123",
+    "work-a992bd"
+   ],
+   "items_either": [
+    "idea-3f3378",
+    "idea-8b9cc7",
+    "idea-ecc123",
+    "work-63fac2",
+    "work-a992bd"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-18",
+   "name": "Dataset Integrity And Leakage Checks",
+   "items_both": [
+    "knowledge-42a54f"
+   ],
+   "items_either": [
+    "knowledge-42a54f"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-07",
+   "name": "Loop Triggered Restart Policies",
+   "items_both": [
+    "idea-3f3378",
+    "idea-8b9cc7",
+    "result-e870a1",
+    "work-a992bd"
+   ],
+   "items_either": [
+    "idea-3f3378",
+    "idea-8b9cc7",
+    "result-e870a1",
+    "work-63fac2",
+    "work-a992bd"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-10",
+   "name": "Verifier Free Branch Search",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-17",
+   "name": "Independent Grader Robustness Audit",
+   "items_both": [
+    "idea-884e91",
+    "knowledge-781efc"
+   ],
+   "items_either": [
+    "idea-884e91",
+    "knowledge-781efc"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-00",
+   "name": "Opening Cue And Template Search",
+   "items_both": [
+    "idea-e0a5a7",
+    "knowledge-8a31ad",
+    "result-c36598",
+    "work-a50d39"
+   ],
+   "items_either": [
+    "idea-e0a5a7",
+    "knowledge-8a31ad",
+    "result-c36598",
+    "result-e870a1",
+    "work-a50d39"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-08",
+   "name": "Budget Matched Answer Voting",
+   "items_both": [
+    "idea-8b9cc7",
+    "idea-ecc123",
+    "knowledge-d692e4",
+    "work-a992bd"
+   ],
+   "items_either": [
+    "idea-8b9cc7",
+    "idea-ecc123",
+    "knowledge-d692e4",
+    "work-63fac2",
+    "work-a992bd"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-12",
+   "name": "Training Free Context Compaction",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-04",
+   "name": "Alternative Sampling Truncation Rules",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-16",
+   "name": "Paired Failure Mode Analysis",
+   "items_both": [
+    "idea-65a86d",
+    "result-5e17a6"
+   ],
+   "items_either": [
+    "idea-3f3378",
+    "idea-65a86d",
+    "idea-d204a7",
+    "idea-ecc123",
+    "result-5e17a6",
+    "result-fdc8da"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-19",
+   "name": "Replicated Selection And Locked Evaluation",
+   "items_both": [
+    "idea-1fcafe",
+    "idea-8b9cc7",
+    "idea-b19ad2",
+    "result-7968b8",
+    "result-82b4dc",
+    "work-a50d39",
+    "work-a992bd",
+    "work-d8aa69"
+   ],
+   "items_either": [
+    "idea-1fcafe",
+    "idea-3f3378",
+    "idea-8b9cc7",
+    "idea-b19ad2",
+    "result-7968b8",
+    "result-82b4dc",
+    "result-bac4fd",
+    "work-63fac2",
+    "work-a50d39",
+    "work-a992bd",
+    "work-d8aa69"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-14",
+   "name": "Localized Weight Difference Interventions",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-13",
+   "name": "Global Weight Difference Scaling",
+   "items_both": [
+    "idea-2eb58d",
+    "result-6199f4",
+    "work-07ac85"
+   ],
+   "items_either": [
+    "idea-2eb58d",
+    "knowledge-38042f",
+    "result-6199f4",
+    "work-07ac85"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-01",
+   "name": "Structured Reasoning Format Prompts",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-06",
+   "name": "Explicit Loop Suppression Decoding",
+   "items_both": [
+    "knowledge-d692e4"
+   ],
+   "items_either": [
+    "knowledge-d692e4"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-09",
+   "name": "Draft Critique Revision Cycles",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-02",
+   "name": "Fixed Few Shot Demonstrations",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  }
+ ],
+ "leaderboard": [
+  {
+   "item": "result-533123",
+   "model": "rl",
+   "method": "plain prompt",
+   "setting": "T 0.6",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 464,
+   "score_pct": 92.8,
+   "grader": "v3",
+   "quote": "464/500 at T 0.6 (92.8 %)",
+   "basin": "Sampling and decoding controls",
+   "directions": [
+    "Temperature And Nucleus Factorial"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-533123",
+   "model": "rl",
+   "method": "plain prompt",
+   "setting": "T 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 463,
+   "score_pct": 92.6,
+   "grader": "v3",
+   "quote": "463/500 MATH-500 at T 1.0 (92.6 %)",
+   "basin": "Sampling and decoding controls",
+   "directions": [
+    "Temperature And Nucleus Factorial"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-e870a1",
+   "model": "base",
+   "method": "cue + restart",
+   "setting": "T 0.6 / top-p 0.95 / restart cap hits up to 3 attempts",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 414,
+   "score_pct": 82.8,
+   "grader": "v3",
+   "quote": "Restarting cap hits (up to 3 attempts) gives 414/500",
+   "basin": "Multiattempt search and budget allocation",
+   "directions": [
+    "Loop Triggered Restart Policies",
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-c36598",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 410,
+   "score_pct": 82.0,
+   "grader": "v3",
+   "quote": "Base Olmo-3-1025-7B + opening cue, T 1.0 / top-p 1.0: 410/500 MATH-500 (82.0 %)",
+   "basin": "Prompt and reasoning protocols",
+   "directions": [
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-dadeec",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 0.6 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 378,
+   "score_pct": 75.6,
+   "grader": "v3",
+   "quote": "base+cue MATH-500 T 0.6/top-p 1.0, v3: 378/500 (75.6 %)",
+   "basin": "Sampling and decoding controls",
+   "directions": [
+    "Temperature And Nucleus Factorial"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-e870a1",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 0.6 / top-p 0.95",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 354,
+   "score_pct": 70.8,
+   "grader": "v3",
+   "quote": "Base + cue at T 0.6 / top-p 0.95: 354/500 MATH-500 (70.8 %)",
+   "basin": "Multiattempt search and budget allocation",
+   "directions": [
+    "Loop Triggered Restart Policies",
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-7968b8",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 0.6 / base-01 run / grader v3",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 319,
+   "score_pct": 63.8,
+   "grader": "v3",
+   "quote": "319/500 MATH-500 (63.8 %, base-01 run)",
+   "basin": "Sampling and decoding controls",
+   "directions": [
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-7968b8",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 0.6 / n13 run / grader v3",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 305,
+   "score_pct": 61.0,
+   "grader": "v3",
+   "quote": "305/500 (61.0 %, n13 run)",
+   "basin": "Sampling and decoding controls",
+   "directions": [
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-c36598",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 224,
+   "score_pct": 44.8,
+   "grader": "v3",
+   "quote": "Plain base at T 1.0: 224/500 (44.8 %).",
+   "basin": "Prompt and reasoning protocols",
+   "directions": [
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-7968b8",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 0.6 / n13 run / grader v1",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 286,
+   "score_pct": 57.2,
+   "grader": "v1",
+   "quote": "The older 57.2 is grader v1 on the n13 run (286/500).",
+   "basin": "Sampling and decoding controls",
+   "directions": [
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-82b4dc",
+   "model": "rl",
+   "method": "plain prompt",
+   "setting": "T 1.0 / top-p 1.0 / 1 sample",
+   "benchmark": "hard-328",
+   "n": 328,
+   "correct": 206,
+   "score_pct": 62.8,
+   "grader": "v3",
+   "quote": "RL 206/328 (62.8 %, 20 cap hits)",
+   "basin": "Benchmark and checkpoint comparisons",
+   "directions": [
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-82b4dc",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 1.0 / top-p 1.0 / 1 sample",
+   "benchmark": "hard-328",
+   "n": 328,
+   "correct": 164,
+   "score_pct": 50.0,
+   "grader": "v3",
+   "quote": "base+cue 164/328 (50.0 %, 77 cap hits)",
+   "basin": "Benchmark and checkpoint comparisons",
+   "directions": [
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  }
+ ],
+ "best_base_pct": 82.8,
+ "best_base_one_sample_pct": 82.0,
+ "rl_reference_pct": 92.6,
+ "control": [
+  {
+   "copy": "ctl-2",
+   "of": "result-47286f",
+   "same_group": [
+    true,
+    true
+   ],
+   "closer_than_original": 12
+  },
+  {
+   "copy": "ctl-1",
+   "of": "result-47286f",
+   "same_group": [
+    true,
+    true
+   ],
+   "closer_than_original": 0
+  }
+ ],
+ "basins": [
+  {
+   "basin": 3,
+   "name": "Weight and neuron interventions",
+   "board_items": 11,
+   "possible": 2,
+   "best_base_pct": null,
+   "kinds": {
+    "work": 2,
+    "idea": 4,
+    "knowledge": 4,
+    "result": 1,
+    "possible": 2
+   }
+  },
+  {
+   "basin": 4,
+   "name": "Mechanistic readouts and trajectory analysis",
+   "board_items": 11,
+   "possible": 2,
+   "best_base_pct": null,
+   "kinds": {
+    "result": 3,
+    "idea": 5,
+    "possible": 2,
+    "work": 2,
+    "knowledge": 1
+   }
+  },
+  {
+   "basin": 7,
+   "name": "Experiment infrastructure and board tooling",
+   "board_items": 11,
+   "possible": 0,
+   "best_base_pct": null,
+   "kinds": {
+    "result": 3,
+    "work": 5,
+    "knowledge": 3
+   }
+  },
+  {
+   "basin": 8,
+   "name": "Research coordination and process evaluation",
+   "board_items": 10,
+   "possible": 0,
+   "best_base_pct": null,
+   "kinds": {
+    "knowledge": 1,
+    "work": 5,
+    "result": 3,
+    "idea": 1
+   }
+  },
+  {
+   "basin": 1,
+   "name": "Sampling and decoding controls",
+   "board_items": 9,
+   "possible": 4,
+   "best_base_pct": 75.6,
+   "kinds": {
+    "knowledge": 2,
+    "result": 4,
+    "possible": 4,
+    "idea": 1,
+    "work": 2
+   }
+  },
+  {
+   "basin": 6,
+   "name": "Benchmark and checkpoint comparisons",
+   "board_items": 9,
+   "possible": 1,
+   "best_base_pct": null,
+   "kinds": {
+    "work": 3,
+    "idea": 3,
+    "result": 2,
+    "possible": 1,
+    "knowledge": 1
+   }
+  },
+  {
+   "basin": 2,
+   "name": "Multiattempt search and budget allocation",
+   "board_items": 6,
+   "possible": 4,
+   "best_base_pct": 82.8,
+   "kinds": {
+    "idea": 3,
+    "result": 1,
+    "work": 2,
+    "possible": 4
+   }
+  },
+  {
+   "basin": 5,
+   "name": "Grading and dataset validation",
+   "board_items": 3,
+   "possible": 2,
+   "best_base_pct": null,
+   "kinds": {
+    "possible": 2,
+    "idea": 1,
+    "knowledge": 2
+   }
+  },
+  {
+   "basin": 0,
+   "name": "Prompt and reasoning protocols",
+   "board_items": 2,
+   "possible": 5,
+   "best_base_pct": 82.0,
+   "kinds": {
+    "result": 1,
+    "knowledge": 1,
+    "possible": 5
+   }
+  }
+ ],
+ "move_list": [
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:14:27",
+   "from": "Benchmark and checkpoint comparisons",
+   "to": "Sampling and decoding controls",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:14:28",
+   "from": "Sampling and decoding controls",
+   "to": "Multiattempt search and budget allocation",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:14:29",
+   "from": "Multiattempt search and budget allocation",
+   "to": "Weight and neuron interventions",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:41",
+   "from": "Weight and neuron interventions",
+   "to": "Prompt and reasoning protocols",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:42",
+   "from": "Prompt and reasoning protocols",
+   "to": "Sampling and decoding controls",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:43",
+   "from": "Sampling and decoding controls",
+   "to": "Benchmark and checkpoint comparisons",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:45",
+   "from": "Benchmark and checkpoint comparisons",
+   "to": "Multiattempt search and budget allocation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:46",
+   "from": "Multiattempt search and budget allocation",
+   "to": "Sampling and decoding controls",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:54",
+   "from": "Sampling and decoding controls",
+   "to": "Grading and dataset validation",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:57",
+   "from": "Grading and dataset validation",
+   "to": "Benchmark and checkpoint comparisons",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:58",
+   "from": "Benchmark and checkpoint comparisons",
+   "to": "Grading and dataset validation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:16:01",
+   "from": "Grading and dataset validation",
+   "to": "Benchmark and checkpoint comparisons",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:21:23",
+   "from": "Benchmark and checkpoint comparisons",
+   "to": "Experiment infrastructure and board tooling",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:00:34Z",
+   "from": "Experiment infrastructure and board tooling",
+   "to": "Research coordination and process evaluation",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:10:21Z",
+   "from": "Research coordination and process evaluation",
+   "to": "Benchmark and checkpoint comparisons",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:12:44Z",
+   "from": "Prompt and reasoning protocols",
+   "to": "Sampling and decoding controls",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:15:20Z",
+   "from": "Benchmark and checkpoint comparisons",
+   "to": "Experiment infrastructure and board tooling",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:16:53Z",
+   "from": "Experiment infrastructure and board tooling",
+   "to": "Multiattempt search and budget allocation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:17:13Z",
+   "from": "Multiattempt search and budget allocation",
+   "to": "Sampling and decoding controls",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:17:22Z",
+   "from": "Sampling and decoding controls",
+   "to": "Multiattempt search and budget allocation",
+   "new": true
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:17:26Z",
+   "from": "Multiattempt search and budget allocation",
+   "to": "Mechanistic readouts and trajectory analysis",
+   "new": true
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:17:30Z",
+   "from": "Mechanistic readouts and trajectory analysis",
+   "to": "Weight and neuron interventions",
+   "new": true
+  },
+  {
+   "who": "frustea",
+   "at": "2026-11-14T21:19:33Z",
+   "from": "Research coordination and process evaluation",
+   "to": "Mechanistic readouts and trajectory analysis",
+   "new": true
+  },
+  {
+   "who": "frustea",
+   "at": "2026-11-14T21:19:41Z",
+   "from": "Mechanistic readouts and trajectory analysis",
+   "to": "Research coordination and process evaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:19:44Z",
+   "from": "Sampling and decoding controls",
+   "to": "Experiment infrastructure and board tooling",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:20:06Z",
+   "from": "Weight and neuron interventions",
+   "to": "Mechanistic readouts and trajectory analysis",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:24:43Z",
+   "from": "Experiment infrastructure and board tooling",
+   "to": "Benchmark and checkpoint comparisons",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:29:41Z",
+   "from": "Benchmark and checkpoint comparisons",
+   "to": "Experiment infrastructure and board tooling",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:31:43Z",
+   "from": "Experiment infrastructure and board tooling",
+   "to": "Sampling and decoding controls",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:33:51Z",
+   "from": "Mechanistic readouts and trajectory analysis",
+   "to": "Multiattempt search and budget allocation",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:35:42Z",
+   "from": "Multiattempt search and budget allocation",
+   "to": "Weight and neuron interventions",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:37:38Z",
+   "from": "Weight and neuron interventions",
+   "to": "Mechanistic readouts and trajectory analysis",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:38:01Z",
+   "from": "Mechanistic readouts and trajectory analysis",
+   "to": "Weight and neuron interventions",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:38:08Z",
+   "from": "Weight and neuron interventions",
+   "to": "Research coordination and process evaluation",
+   "new": true
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:45:27Z",
+   "from": "Research coordination and process evaluation",
+   "to": "Weight and neuron interventions",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:46:30Z",
+   "from": "Weight and neuron interventions",
+   "to": "Mechanistic readouts and trajectory analysis",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:56:39Z",
+   "from": "Mechanistic readouts and trajectory analysis",
+   "to": "Weight and neuron interventions",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:59:06Z",
+   "from": "Weight and neuron interventions",
+   "to": "Mechanistic readouts and trajectory analysis",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T22:05:53Z",
+   "from": "Sampling and decoding controls",
+   "to": "Experiment infrastructure and board tooling",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T22:09:48Z",
+   "from": "Experiment infrastructure and board tooling",
+   "to": "Benchmark and checkpoint comparisons",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T22:09:51Z",
+   "from": "Benchmark and checkpoint comparisons",
+   "to": "Sampling and decoding controls",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T22:13:55Z",
+   "from": "Sampling and decoding controls",
+   "to": "Experiment infrastructure and board tooling",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T22:24:58Z",
+   "from": "Experiment infrastructure and board tooling",
+   "to": "Research coordination and process evaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T22:33:43Z",
+   "from": "Research coordination and process evaluation",
+   "to": "Experiment infrastructure and board tooling",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T22:36:55Z",
+   "from": "Mechanistic readouts and trajectory analysis",
+   "to": "Research coordination and process evaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T22:45:17Z",
+   "from": "Experiment infrastructure and board tooling",
+   "to": "Benchmark and checkpoint comparisons",
+   "new": false
+  }
+ ]
+}

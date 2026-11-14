@@ -1,0 +1,13 @@
+{
+ "snapshot": "runs/swarm/board-2248.json (72 items, 2026-11-14 22:48 UTC, not committed)",
+ "judge": "gpt-6.1-sol",
+ "commands": [
+  "uv run studies/basins/prep/swarm_export.py runs/swarm/board-2248.json",
+  "python3 -m studies.basins.analysis.swarm_judge runs/swarm/board-2248.json runs/swarm/judge-2248 --model gpt-6.1-sol --reuse-directions runs/swarm/judge-2136",
+  "python3 -m studies.basins.analysis.swarm_scores runs/swarm/judge-2248 --model gpt-6.1-sol",
+  "python3 -m studies.basins.analysis.swarm_analyze runs/swarm/judge-2248 studies/basins/results/swarm/main-02",
+  "python3 -m studies.basins.analysis.swarm_page studies/basins/results/swarm/main-02 gpt-6.1-sol"
+ ],
+ "cost_usd_approx": 1.99,
+ "page": "https://claude.ai/artifact/AABRqx5XZzFrPzBbgaYeYy (version 5)"
+}

@@ -99,7 +99,7 @@ for dd in direction.values():
         dir_of[i].append(dd["name"])
 board_v3 = [r for r in scores if r["grader"] == "v3"]
 leaderboard = []
-for r in sorted(scores, key=lambda r: (r["grader"] != "v3", -r["score_pct"])):
+for r in sorted(scores, key=lambda r: (r["benchmark"] != "MATH-500", r["benchmark"], r["grader"] != "v3", -r["score_pct"])):
     leaderboard.append({**{k: r[k] for k in ("item", "model", "method", "setting", "benchmark", "n", "correct", "score_pct", "grader", "quote")},
                         "basin": names[labels[0][r["item"]]], "directions": dir_of.get(r["item"], []),
                         "more_tokens": any(w in r["method"].lower() for w in ("restart", "vote", "best-of", "attempt")),
@@ -110,11 +110,11 @@ for row in leaderboard:  # did RL get the same extra-compute procedure? (a score
     row["rl_same_procedure"] = row["model"] == "base" and row["more_tokens"] and any(
         o["model"] == "rl" and o["method"].lower() == row["method"].lower() for o in leaderboard)
 best_base = max((r for r in board_v3 if r["model"] == "base"), key=lambda r: r["score_pct"], default=None)
-best_base_one = max((r for r in leaderboard if r["model"] == "base" and not r["superseded"] and not r["more_tokens"] and not r["oracle"]), key=lambda r: r["score_pct"], default=None)
-rl_ref = max((r for r in board_v3 if r["model"] == "rl" and r["setting"].startswith("T 1.0")), key=lambda r: r["score_pct"], default=None)  # AI2 setting, as in DIRECTION.md
+best_base_one = max((r for r in leaderboard if r["benchmark"] == "MATH-500" and r["model"] == "base" and not r["superseded"] and not r["more_tokens"] and not r["oracle"]), key=lambda r: r["score_pct"], default=None)
+rl_ref = max((r for r in board_v3 if r["benchmark"] == "MATH-500" and r["model"] == "rl" and r["setting"].startswith("T 1.0")), key=lambda r: r["score_pct"], default=None)  # AI2 setting, as in DIRECTION.md
 basin_best = defaultdict(float)
 for r in board_v3:
-    if r["model"] == "base":
+    if r["model"] == "base" and r["benchmark"] == "MATH-500":
         g = labels[0][r["item"]]
         basin_best[g] = max(basin_best[g], r["score_pct"])
 
