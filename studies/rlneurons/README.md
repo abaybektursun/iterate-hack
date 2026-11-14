@@ -13,6 +13,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | Path | What it is |
 |---|---|
 | `specs/SPEC3.md` | RLN-3 spec: base, RL steps 100/400/2,800 and the first release; arms P (plain), F (opening cue), C (forced commit); MATH-500 and the 400-problem harder set; training-set overlap (§11). |
+| `specs/SPEC_wsp1.md` | WSP-1 spec: anatomy of the RL-Math, RL-Code and Think-SFT weight deltas, then edited-weight cells. Job `jobs/wsp_delta_anatomy.py`, results `results/wsp1/`. |
 | `specs/SPEC4.md` | RLN-4 spec: T1 (cue, T 1.0), continuation test K, T2 (RL, T 1.0), T3 (plain base, T 1.0), G, R1; Modal deviations; grader v3. |
 | `lib/n13_score.py` | Prompt template (`TEMPLATE["pair1"]` inside the model's chat template), answer extraction and grader v1 (`extract`, `grade`, rule `dollar_both`), `wilson`, `paired_bootstrap`, `selfcheck`. |
 | `lib/rln4_lib.py` | Grader v2 (`extract_v2`, `grade_v2`), grader v3 (`extract_v3`, `norm_v3`, `grade_v3`), loop-onset detectors (rule A `onset_lines`, rule B `onset_period`, `zratio`), `agree`, prefix encoding. |
@@ -298,6 +299,38 @@ The 65 problems that RL solved and the base with cue did not, by hand label (`pe
 Generated tokens (`metrics.json`): base answers of at most 2,000 tokens: 263, of which 13 wrong. RL answers of at most 4,000
 tokens: 286, of which 0 wrong. Median and 90th percentile: T1 right 1,431.5 and 7,054 (n = 410), T1 wrong 10,547.5 and 16,384
 (n = 90); T2 right 3,014 and 8,430 (n = 463), T2 wrong 13,455 and 16,384 (n = 37).
+
+## WSP-1 delta anatomy: what the RL weights changed (weights only, no forward pass)
+
+Spec `specs/SPEC_wsp1.md`. Job `jobs/wsp_delta_anatomy.py` (`--selftest` runs 7 planted-input checks; the job runs them first),
+Modal job `sameraslan-1114-153637-0929`, commit `97ac320`, 111 s for 355 tensors on an H200. Artifact:
+`results/wsp1/anatomy-01/` (`summary.json`, `metrics.json` per tensor, `readout.json`, `run.json`). A delta is model minus
+base `allenai/Olmo-3-1025-7B`; RL-Math = `Olmo-3.1-7B-RL-Zero-Math` `364820b`, RL-Code = `Olmo-3.1-7B-RL-Zero-Code` `1ca3bb3`,
+Think-SFT = `Olmo-3-7B-Think-SFT` `6ff8575` (imitation of reasoning traces, no reward). Means are over the 224 layer matrices
+(q, k, v, o, gate, up, down in 32 layers) unless stated. Null = a Gaussian delta of the RL-Math delta's norm, 5 seeds, layer 16.
+
+| Quantity (`summary.json` key) | RL-Math | RL-Code | Think-SFT | Null |
+|---|---|---|---|---|
+| Delta norm / base norm (`layer_matrices.delta.*.rel`) | 0.24 % | 0.20 % | 24.8 % | |
+| Entries bitwise equal to the base (`unchanged`) | 51 % | 56 % | 0.7 % | |
+| Share of squared norm in the top 8 singular directions (`top8_share`) | 0.118 | 0.127 | 0.030 | 0.005 to 0.008 |
+| Largest `top8_share` of one matrix (`hypotheses.H3`) | 0.391, layer 31 `v_proj` | | | 0.008 |
+| Cosine with the RL-Math delta (`pair.*.cos`) | | 0.0160 | -0.00001 | sd 0.00013 |
+| Overlap of top-8 output subspaces with RL-Math (`overlap_left`) | | 0.096 | 0.051 | 0.002 |
+| Readouts in layers 24-31 with a cue token in the top 15 (`readout.json`) | 13 of 96 | 15 of 96 | 0 of 96 | 0 of 30 |
+
+- The RL-Math delta's relative norm is the same in every layer (0.24 % to 0.27 %, `by_layer`), so its size says nothing about
+  where the change matters; its spectrum does (top-8 share 0.09 to 0.22 by layer, highest in layers 0 and 27 to 31).
+- Readout = a top-3 output direction of a layer's `mlp.down_proj` or `self_attn.o_proj` delta, times the base `lm_head`. In RL-Math
+  the late MLP directions read as words of deliberation: layer 29 `down_proj` direction 1 `Okay, consider, considering`
+  (cue token `Okay` at rank 0) against `perhaps, maybe, probably, possibly`; direction 2 `WAIT, wait, Wait`; layer 24
+  directions 1 and 2 `recall, considerations, !\n\n, Consider, Okay`. One readout with a cue token and one without are
+  in `readout.json` (layer 29 `down` direction 1 `+`; layer 31 `down` direction 0 `+`).
+- H1 (the no-reward delta points the same way as RL) is refuted: mean cosine -0.00001 against a null sd of 0.00013. H2 holds
+  (RL-Math and RL-Code share a part: cosine 0.016, 120 null sd). H3: the largest top-8 share is 0.39, below the 0.5 the
+  spec named and 51 times the null. H4 holds (cue tokens in 13 of 96 late readouts, 0 of 30 null readouts).
+- Not controlled: the top-8 subspace overlap of Think-SFT with RL-Math (0.051, 25 times the null) may come from directions
+  that any fine-tune of this base shares; the overlap with the base weights' own top subspace is not measured.
 
 ## How to run
 
