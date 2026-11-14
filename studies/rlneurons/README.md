@@ -32,12 +32,14 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/rln3_analyze.py` | RLN-3 readout and verdict (SPEC3 §6-§8). |
 | `analysis/rln3_overlap.py` | Training-set overlap: each test problem against the 13,314 Dolci-RL-Zero-Math-7B prompts (exact, or at least half of its word 8-grams). |
 | `analysis/rln4_analyze.py` | RLN-4 readout (SPEC4 §7): T1 and K labels, cap hits, rule-A loops, Wilson and bootstrap intervals, examples. |
+| `analysis/day1_rows.py` | Day-1 readout from `run_cell` outputs: one run folder per job (`run.json`, `metrics.json`, `examples.json`) and `results/day1/readout.json` (Wilson intervals, paired bootstrap, cap hits, loops, tokens per problem). |
 | `analysis/rln4_temp.py` | T2/T3 readout: temperature differences, accuracy and cap hits by RL-solution-length quartile, examples. |
 | `grader/rln4_grader_v3.py` | Rescores every saved MATH-500 cell with v1, v2, v3; writes `results/rln4/grader_v3/readout.json`. `CELLS` lists the S3 key of each cell. |
 | `grader/rln4_grader_v3_test.py`, `grader/cases.json` | Grader v3 tests: 22 audited rows plus planted equal and unequal pairs. |
 | `data/rln3/` | `math500.json` (500), `hard.json` (400 harder problems), `frozen.json` (models, revisions, seeds, caps, sha256 of the inputs). |
 | `data/rln4/` | `frozen4.json` (models, revisions, cue ids, cells, seeds, cap, loop detector, stop times), `k.json` (78 K prefixes, 2.8 MB), `g.json`, `check.json`, `check_rl.json`, `math500.json`, `prompt_ids.json` (n13's tokenized MATH-500 prompts; also the RLN-3 input of that name). |
 | `results/rln3/` | `rln3_overlap.json` (per-problem overlap flags), `offline/` (prep checks and offline gate). |
+| `results/day1/` | Day-1 rows from `jobs/run_cell.py`: `readout.json` and one folder per job (`check_t1_n10-01/`, `hard328_base_cue_t10-01/`, `hard328_rl_plain_t10-01/`, `math500_base_cue_t06_p10-01/`). |
 | `results/rln4/` | `grader_v3/readout.json` (the final table), `modal_k-01/`, `modal_t2-01/`, `modal_t3-01/` (readouts, metrics, run records), `offline/`. |
 
 Old paths: `infra/pg/*.py` and `infra/aws_pg/jobs/n13_*.py` are in `lib/`; `infra/aws_pg/jobs/rln*_gen.py` and
@@ -89,6 +91,35 @@ percentile interval, in points).
 | base plain, T 1.0 minus T 0.6 | -19.0 | [-24.8, -13.4] |
 | restart row minus RL T 0.6 | -10.0 | [-13.2, -7.0] |
 
+## Day-1 rows (`jobs/run_cell.py` on the team runner, one sample per problem, grader v3)
+
+All from `results/day1/readout.json` (written by `analysis/day1_rows.py`; Wilson 95 % interval in percent; paired bootstrap,
+5,000 resamples, seed 0). Each run folder holds `run.json` (commit, command, job id), `metrics.json` and `examples.json` (one
+problem scored right, one scored wrong, one cap hit, with the real prompt and answer). Raw answers are not committed: they are
+`answers.jsonl` in the job's `$OUT_DIR` in abaybektursun's Modal workspace (`uv run tools/gpu.py get <job-id>` copies it to
+`runs/<job-id>/`).
+
+| Row | Right | Percent [95 %] | Cap hits | Rule-A loops | Right with v1 | Tokens per problem | Tokens/s | Run folder, job id |
+|---|---|---|---|---|---|---|---|---|
+| base, cue, harder 328, T 1.0 / top-p 1.0 | 164 of 328 | 50.0 [44.6, 55.4] | 77 | 1 | 163 | 9,345 | 1,007 | `results/day1/hard328_base_cue_t10-01/`, `abaybektursun-1114-151534-e72c` |
+| RL, plain, harder 328, T 1.0 / top-p 1.0 | 206 of 328 | 62.8 [57.5, 67.9] | 20 | 0 | 206 | 9,316 | 1,050 | `results/day1/hard328_rl_plain_t10-01/`, `abaybektursun-1114-151540-86ef` |
+| base, cue, MATH-500, T 0.6 / top-p 1.0 | 378 of 500 | 75.6 [71.6, 79.2] | 98 | 71 | 367 | 4,690 | 1,048 | `results/day1/math500_base_cue_t06_p10-01/`, `abaybektursun-1114-151718-d4fa` |
+| check: base, cue, MATH-500 first 10, T 1.0 / top-p 1.0 | 8 of 10 | | 1 | 0 | 6 | 3,012 | 242 | `results/day1/check_t1_n10-01/`, `abaybektursun-1114-151028-ec3c` |
+
+- Harder 328, RL minus base with cue at T 1.0: 12.8 points, paired 95 % interval [8.5, 17.1] (RL only 49, base only 7, both 157,
+  neither 115). On MATH-500 at the same setting the difference is 10.6 [7.4, 13.8]. Both models generate the same number of
+  tokens per problem (9,316 and 9,345). Three of the base's 77 cap hits are scored right (a boxed answer before the cap); none
+  of RL's 20.
+- MATH-500, base with cue at T 0.6: top-p 1.0 gives 378, against 354 at top-p 0.95 (same seeds) and 410 at T 1.0 / top-p 1.0.
+  Differences: +4.8 points for top-p alone, unpaired 95 % interval [-0.7, 10.3]; -6.4 points against T 1.0, unpaired
+  [-11.5, -1.3]. Unpaired because the per-problem scores of the 354 and 410 rows are not in the repository (only their totals,
+  in `results/rln4/grader_v3/readout.json`); a paired interval needs their raw answers from S3. Cap hits go 119, 98, 27 and
+  the T 0.6 / top-p 1.0 row still loops (71 rule-A loops, 70 of them among the 98 cap hits).
+- Check run, read by hand: all 10 answers start from the cue and are worked solutions. The two answers that v3 scores right
+  and v1 wrong are right (`**Answer: 42**` inside the last line; `3√13` with the Unicode root sign). The cap hit has 16,384
+  generated tokens, finish reason `length`, no loop. T1's full row has 410 of 500 and 27 cap hits.
+- The RL model writes the cue itself: its plain-prompt answers begin with `' line!\n\nOkay'`.
+
 Continuation test K (`results/rln4/modal_k-01/readout.json`, 78 of the 86 problems where the base with cue hit the cap at
 T 0.6 and RL was right, SPEC4 §2; grader v1): from the RL model's prefix the base finishes 48 of 78; from its own prefix 23 of 78; fresh restart 38
 of 78. Frozen label: "the base can finish from a sound prefix" (both counts at the threshold edge, 47 and 23).
@@ -132,11 +163,9 @@ finishes (prompt, completion, finish reason, generated tokens, extracted answers
 at `--hours` keeps every finished row. Use double quotes: `$(git rev-parse HEAD)` must expand on your laptop to the commit
 that `gpu.py` submits.
 
-**The GPU path is untested.** Tested: the laptop dry run (stand-in engine, below) and a cpu job on the runner
-(`abaybektursun-1114-123453-8c3d` and `abaybektursun-1114-124132-b234`: setup, prompts, grading of canned answers, files in `$OUT_DIR`). One H100 job
-(`abaybektursun-1114-123728-8181`) got through setup, weight download and engine start (140 s for download and start together) and was cancelled on
-instruction before any answer finished. No generated answer, score or time per problem from this entry point exists yet. The
-first GPU run should be 10 problems of a cell with a known number (the T1 command with `--n 10`) and its rows read by hand.
+The GPU path is tested: the check run and the three Day-1 rows above ran through it on H100s ("Day-1 rows"). Also tested:
+the laptop dry run (stand-in engine, below) and a cpu job on the runner (`abaybektursun-1114-123453-8c3d` and
+`abaybektursun-1114-124132-b234`). Before trusting a new cell, run the check command below and read its rows.
 
 Day-1 #1, the 328 harder problems at T 1.0 / top-p 1.0 (seeds 3000000 + index, the harder-set seeds of RLN-3 base-01):
 
@@ -159,12 +188,11 @@ identical to T1's (other GPU), so compare the score and cap hits on the 10 with 
 uv run tools/gpu.py submit h100 --hours 0.5 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41000000 --n 10 --commit $(git rev-parse HEAD)"
 ```
 
-Time estimate per full row, not measured with this entry point: earlier H100 runs of the same engine generated 1,415 tokens/s
-(T3, `results/rln4/modal_t3-01/metrics.json`, 500 problems in 745 s) and 1,803 tokens/s (T2 on an H200,
-`results/rln4/modal_t2-01/metrics.json`, 2.35 M tokens in 1,302 s). A row where every answer hits the 16,384 cap is
-328 x 16,384 = 5.4 M tokens, about 1 h at 1,500 tokens/s; that is the upper bound for #1. For #2, the T 0.6 / top-p 0.95 cue row had 119 cap hits, so about 2 M tokens in capped answers plus about 1 M in the rest
-(an estimate), about 35 min.
-Add about 3 min for setup and engine start. `--hours 2` leaves room; the runner kills the job at `--hours`.
+Measured time per full row on one H100 (`results/day1/*/metrics.json`): 1,007 to 1,050 generated tokens/s over the whole
+row; 51 min for each 328 row (3.06 M tokens) and 39 min for the MATH-500 row (2.34 M tokens), setup and engine start included.
+This is below the 1,415 tokens/s of T3 (`results/rln4/modal_t3-01/metrics.json`): the engine log shows the GPU KV cache
+98 to 99 % full with 18 to 25 answers running (`max_num_seqs` is 128) and the waiting count rising at times, so vLLM
+preempts answers and recomputes them. `--hours 2` leaves room; the runner kills the job at `--hours`.
 
 Day-1 #3 (restart and four-sample vote) is not runnable yet. Four samples: four `run_cell` jobs with seeds 10000 apart (the
 RLN-3 rule seed + 10000 x sample + index) work today, but no script computes the vote (`rln4_lib.agree` is the equivalence
@@ -192,8 +220,8 @@ and v2 scores) in the owner's bucket, `s3://pg-lineage-769063704696/results/rlne
 1. `jobs/modal_rln4_k.py` (K, T2, T3) still reads its inputs from and copies its outputs to
    `s3://pg-lineage-769063704696/results/rlneurons/r4/` with the owner's Modal secret `rln4-aws`. Teammates run cells with
    `jobs/run_cell.py` instead; the K continuation arms and the check phases have no port.
-2. `jobs/run_cell.py` covers T1, T2, T3, the harder set and Day-1 #1 and #2, but its GPU path is untested (see "Day-1 cells on
-   the team runner"). Day-1 #3 needs a vote script and a restart option.
+2. `jobs/run_cell.py` covers T1, T2, T3, the harder set and Day-1 #1 and #2 (run, see "Day-1 rows"). Day-1 #3 needs a vote
+   script and a restart option.
 3. `jobs/rln3_gen.py` and the parent (non-`--inner`) mode of `jobs/rln4_gen.py` need the AWS `pg` launcher and AMI (the
    `/opt/n13` vLLM venv built by `lib/n13_setup.venv_n13`, the `aws` CLI, inputs in the owner's S3). Not in this repository.
 4. `lib/hf_helpers.hf_online_setup` reads `HF_TOKEN`; without it, it calls AWS SSM `/pg-lineage/hf-token` in the owner's account.
@@ -206,9 +234,13 @@ and v2 scores) in the owner's bucket, `s3://pg-lineage-769063704696/results/rlne
 
 ## Open
 
-- The harder set (328) is scored only for the base at T 0.6 (RLN-3 base-01, per `DIRECTION.md`); no readout file for it is in
-  the source.
-- Temperature and top-p are not separated (T 0.6 / top-p 0.95 against T 1.0 / top-p 1.0).
+- The harder set (328) has one sample per problem at T 1.0 for the base with cue and RL ("Day-1 rows"). No committed readout
+  for it at T 0.6 or for the plain base.
+- Temperature and top-p are separated only by totals: 354 (T 0.6 / top-p 0.95), 378 (T 0.6 / top-p 1.0), 410 (T 1.0 /
+  top-p 1.0). The top-p step (+4.8 points) has an unpaired interval that includes 0; the paired intervals need the per-problem
+  scores of the 354 and 410 rows (raw answers in S3). T 1.0 / top-p 0.95 is not run.
+- `run_cell` generates about 1,000 tokens/s on an H100 with the KV cache full; fewer parallel answers (`max_num_seqs`) may be
+  faster. Not tested.
 - No second model has read the grader v3 rescoring.
 - RLN-3 rows for RL step 400 and the first release at T 0.6 are not scored (`DIRECTION.md`; board `knowledge-c3f1bf`).
 - SPEC4 §0's accuracy and cap rate by RL-length quartile (2 % to 66 %, pass@3 97 / 96 / 84 / 47) are the coordinator's
