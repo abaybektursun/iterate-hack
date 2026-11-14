@@ -18,6 +18,9 @@ Everything under "Event set" below is the pack's default and must be checked aga
 | `data/event_series_v1.csv` | The 37 series of the event set (below), from the starter's catalog at 2026-11-06. |
 | `results/baselines/starter-01/` | The starter demo reproduced: cutoff 2026-10-24, 97 headline series. |
 | `results/baselines/event37-01/` | Starter baselines on the event set: 30 daily origins. |
+| `specs/SPEC1.md` | Plan of the listing-level simulator, written before the run. |
+| `jobs/sim_median.py` | SPEC1 forecaster: resamples each listing's historical h-day outcome (price change, exit, entry) and takes the median. `--control` resamples the median's own change. Laptop, 40 s. |
+| `results/spec1/sim-01/`, `results/spec1/control-01/` | SPEC1 and its control on the event set. |
 | `ATTRIBUTION.md` | The pack's attribution file. It must stay with any work that uses the pack. |
 
 The pack: `runs/gpuprice/pack/gpu-price-pack-v0.1.1-handover/` (v0.1.1-handover, data to 2026-11-06 23:59:59 UTC,
@@ -49,6 +52,15 @@ Pinball loss in USD per GPU-hour, mean over q10/q50/q90; skill against flat last
 | `starter-01` backtest | 97 headline, 15 weekly origins 2026-07-15 to 2026-10-24, 5,325 cells | drift | 0.1019 | 0.1233 | +0.173 | +0.187 | |
 | `event37-01` backtest | 37 event series, 30 daily origins 2026-10-01 to 2026-10-30, 3,109 cells (h 1, 3, 7) | last_value_empirical | 0.0293 | 0.0335 | **+0.126** | +0.117 | |
 | `event37-01` backtest | same | drift | 0.0297 | 0.0335 | +0.114 | +0.116 | 0.69 / 0.62 / 0.55 at h 1 / 3 / 7 |
+| `spec1/sim-01` | same 3,109 cells | listing simulator (33 series) + last_value_empirical (4 afhubbard) | 0.0270 | 0.0335 | **+0.197** | +0.209 | 0.66 / 0.62 / 0.60 |
+| `spec1/control-01` | same | control: the median's own change, same windows | 0.0293 | 0.0335 | +0.125 | +0.133 | 0.71 / 0.65 / 0.58 |
+
+SPEC1 held: the simulator is +0.070 pooled skill above `last_value_empirical` (95 % interval +0.038 to +0.098,
+bootstrap over the 37 series; better on 26 of 37 series and 25 of 30 origins). By horizon: +0.092 / +0.180 /
++0.234 at 1 / 3 / 7 days against +0.101 / +0.138 / +0.127, so the gain is at 3 and 7 days and day 1 is slightly
+worse. By collector: fastgpu_daily +0.215 against +0.105 (20 series), gpurentalprices +0.169 against +0.162 (13).
+The control equals the baseline, so the gain comes from the listing-level state, not from the windows. The
+intervals are still too narrow (0.60 to 0.66 inside against 0.80).
 
 The starter rows match the pack's own README (+0.20 and +0.17). The number to beat is **+0.126 pooled** on the
 event set (strongest starter baseline). Its intervals are too narrow: 55 to 69 % of truths fall inside

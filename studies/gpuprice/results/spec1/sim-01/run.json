@@ -1,0 +1,6 @@
+{
+ "commit": "dc7100df70d2e4e05e397439132f1feb638e083d",
+ "command": "jobs/sim_median.py --origin-start 2026-10-01 --origin-end 2026-10-30 (33 series) + last_value_empirical for the 4 afhubbard series; scorer.py --horizons 1,3,7 --tier headline",
+ "job_id": "laptop (no GPU)",
+ "source_dir": "/home/abay/Projects/iterate-hack/runs/gpuprice/spec1"
+}
