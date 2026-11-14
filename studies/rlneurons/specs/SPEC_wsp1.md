@@ -68,3 +68,37 @@ the 65 RL-only problems of `results/rln4/t1_t2_items-01/` it solves, by failure 
 
 Caveat stated with every number: Think-SFT was trained on solutions written by other models. It uses no reward; it does use
 labelled traces.
+
+## Amendment, 2026-11-14 23:55 UTC, after Part 1 and before any Part 2 run
+
+Part 1 result (`results/wsp1/anatomy-01/`): H1 refuted (cosine of the Think-SFT delta with the RL-Math delta is -0.00001, and
+the Think-SFT delta is 100 times larger), so the norm-matched scale a_n = 0.0097 is a random direction at RL's norm; that arm
+is dropped (the random control of work-d36669 covers it). The RL-Math delta has 11.8 % of its squared norm in 8 directions per
+matrix, and its late-MLP directions read as `Okay / consider / Wait / perhaps`. Part 2 now asks first whether those few
+directions cause the RL gain.
+
+`jobs/wsp_edit.py` writes an edited model directory for `run_cell.py --model-path` (rounding to BF16 by
+`merge_weights.to_bf16`, stochastic, because most entries of a rank-8 part are below one BF16 unit in the last place).
+Recipes, all relative to the base; "layer matrices" are the 224 q, k, v, o, gate, up, down tensors:
+
+| Label | Weights | Asks |
+|---|---|---|
+| `top8` | base + the top 8 singular directions of each layer matrix's RL-Math delta; every other tensor = base | do 8 directions per matrix carry the gain? |
+| `bulk` | RL-Math minus those top 8 directions (other tensors = RL-Math) | is the rest enough without them? |
+| `rand8` | base + a rank-8 matrix per layer matrix with the same 8 singular values and random orthonormal vectors (seed 0) | matched control for `top8`: same norm, same rounding noise, no RL information |
+| `late3` | base + the top 3 directions of `mlp.down_proj` in layers 24 to 31 only (24 rank-1 terms) | do the read-out directions alone change behaviour? |
+| `sft1` | Think-SFT as released (a = 1, through the same path) | no-reward score arm |
+| `sft05` | base + 0.5 (Think-SFT - base) | no-reward score arm |
+
+Cells: the first 100 MATH-500 problems, T 1.0, top-p 1.0, one sample. Plain prompt, seed base 80,000,000: `base`, `rl`
+(references on the same problems and seeds), `top8`, `bulk`, `rand8`, `late3`, `sft1`. Cue prompt, seed base 81,000,000:
+`base` (reference), `sft1`, `sft05`. One cell has a standard error of about 5 points at n = 100; the plain base and RL differ
+by 48 points on the 500 (224 against 463), which is what the dissection reads against.
+
+Refuters. "The top 8 directions carry the gain" is refuted if `top8` plain is within 10 points of `rand8` plain, or if
+`bulk` plain is within 10 points of `rl` plain while `top8` is not above `rand8`. "The read-out directions act alone" is
+refuted if `late3` is within 10 points of `base` plain and its share of answers that open with the cue's `Okay` does not
+differ from the base's. "An imitation delta raises the cued base" is refuted if neither `sft1` nor `sft05` with the cue is
+above the cued base reference by more than 10 points. A cell that passes at n = 100 is rerun on all 500 before any claim.
+
+Each cell also reports cap hits, median generated tokens, and the share of answers whose first 20 tokens contain `Okay`.
