@@ -1,0 +1,48 @@
+{
+ "experiment": "rln4",
+ "run": "t1_t2_items-01",
+ "date": "2026-11-14",
+ "what": "Per-problem comparison of T1 (base with cue, T 1.0 / top-p 1.0) and T2 (RL, T 1.0 / top-p 1.0) on MATH-500 under grader v3, with hand labels of the base failure on the 65 problems that RL solved and the base did not.",
+ "commit": "2d5ee9932d0fc353d928d5a5c9e67e827e9ea8ff",
+ "commit_note": "HEAD when the script ran; the grader (lib/rln4_lib.py) and data/rln4/math500.json are the files of this commit. The script was in the working tree and is committed together with this folder.",
+ "script": "studies/rlneurons/analysis/rln4_t1_t2_items.py",
+ "script_sha256": "3a1a9a63c74554c12d0d30dcae2dad65a66cd4f5b9e6c83deed7d751fb955bc9",
+ "command": "python3 -m studies.rlneurons.analysis.rln4_t1_t2_items runs/diag_t1t2/T1.jsonl runs/diag_t1t2/T2.jsonl studies/rlneurons/results/rln4/t1_t2_items-01",
+ "job_id": null,
+ "where": "laptop, saved rows only, no model forward pass",
+ "environment": {"python": "3.11.1", "math-verify": "0.9.0", "numpy": "2.4.6"},
+ "grader": "v3, studies.rlneurons.lib.rln4_lib.grade_v3",
+ "inputs": {
+  "T1": {
+   "s3": "s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl",
+   "local": "runs/diag_t1t2/T1.jsonl (not committed)",
+   "sha256": "c65a12fcc5922c5270bb3b6abeb352246385299111c9e033dfc7deae4712ea85"
+  },
+  "T2": {
+   "s3": "s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t2-01/t2/T2.jsonl",
+   "local": "runs/diag_t1t2/T2.jsonl (not committed)",
+   "sha256": "851e422c1d062b3378806b225d28e467c6b2ea5f2afe5e1a96527fb1cf62324b"
+  },
+  "problems": "studies/rlneurons/data/rln4/math500.json"
+ },
+ "inputs_note": "Both sha256 values equal the ones in results/rln4/grader_v3/readout.json (files.base_opener_1.0, files.rl_1.0).",
+ "files": {
+  "per_problem.json": "500 rows, one per problem. The script's columns plus three columns joined on problem_index from the reader's table (see columns).",
+  "metrics.json": "The script's output, unchanged.",
+  "notes.md": "The reader's notes, copied unchanged. The scratch scripts and intermediate files it names (score.py, feats.json, sig2.json and others) are not committed; sections 3 and 4 of the notes have no committed script.",
+  "run.json": "This record."
+ },
+ "columns": {
+  "machine (written by the script)": ["problem_index", "subject", "cell", "t1_right", "t2_right", "t1_cap_hit", "t2_cap_hit", "t1_generated_tokens", "t2_generated_tokens"],
+  "hand": ["failure_type", "label_from_tail_only"],
+  "external": ["level5"]
+ },
+ "hand_label_note": "failure_type is a hand label by one reader, an agent, in one pass, with no second reader. It is set on the 65 rl_only rows and null elsewhere. label_from_tail_only marks the 7 rows labelled from the last 480 characters of the answer only.",
+ "level5_note": "level5 came from a file outside the repo (math500_l5.json of another project, 134 problems, matched by problem text; path in notes.md section 3). data/rln4/math500.json has no level field, and levels 1 to 4 are not separated.",
+ "merge_check": "The script's nine columns equal the reader's table on all 500 rows (0 differences).",
+ "examples": {
+  "source": "Short quotes already in notes.md; gold, extracted answer and score from grade_v3. The wrong quote is in the raw answer as written; the right quote is the notes' plain-text rendering of the LaTeX line that ends in \\boxed{288 \\pi}.",
+  "wrong": {"cell": "T1", "problem_index": 159, "gold": "3.21", "extracted_v3": "3.2", "score_v3": 0, "quote": "b + c = 1.3 + 1.91 = 3.2 [...] Thus, the final answer is \\boxed{3.2}"},
+  "right": {"cell": "T2", "problem_index": 228, "gold": "288 \\pi", "extracted_v3": "288 \\pi", "score_v3": 1, "quote": "V = 4/3 pi 6^3 = 288 pi"}
+ }
+}

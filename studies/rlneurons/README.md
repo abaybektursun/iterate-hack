@@ -33,12 +33,13 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/rln3_overlap.py` | Training-set overlap: each test problem against the 13,314 Dolci-RL-Zero-Math-7B prompts (exact, or at least half of its word 8-grams). |
 | `analysis/rln4_analyze.py` | RLN-4 readout (SPEC4 §7): T1 and K labels, cap hits, rule-A loops, Wilson and bootstrap intervals, examples. |
 | `analysis/rln4_temp.py` | T2/T3 readout: temperature differences, accuracy and cap hits by RL-solution-length quartile, examples. |
+| `analysis/rln4_t1_t2_items.py` | Per-problem table of T1 against T2 under grader v3: right, cap hit and generated tokens per problem, the 2x2, token medians. See "T1 against T2, problem by problem". |
 | `grader/rln4_grader_v3.py` | Rescores every saved MATH-500 cell with v1, v2, v3; writes `results/rln4/grader_v3/readout.json`. `CELLS` lists the S3 key of each cell. |
 | `grader/rln4_grader_v3_test.py`, `grader/cases.json` | Grader v3 tests: 22 audited rows plus planted equal and unequal pairs. |
 | `data/rln3/` | `math500.json` (500), `hard.json` (400 harder problems), `frozen.json` (models, revisions, seeds, caps, sha256 of the inputs). |
 | `data/rln4/` | `frozen4.json` (models, revisions, cue ids, cells, seeds, cap, loop detector, stop times), `k.json` (78 K prefixes, 2.8 MB), `g.json`, `check.json`, `check_rl.json`, `math500.json`, `prompt_ids.json` (n13's tokenized MATH-500 prompts; also the RLN-3 input of that name). |
 | `results/rln3/` | `rln3_overlap.json` (per-problem overlap flags), `offline/` (prep checks and offline gate). |
-| `results/rln4/` | `grader_v3/readout.json` (the final table), `modal_k-01/`, `modal_t2-01/`, `modal_t3-01/` (readouts, metrics, run records), `offline/`. |
+| `results/rln4/` | `grader_v3/readout.json` (the final table), `modal_k-01/`, `modal_t2-01/`, `modal_t3-01/` (readouts, metrics, run records), `t1_t2_items-01/` (per-problem T1 against T2, hand labels of the base failures), `offline/`. |
 
 Old paths: `infra/pg/*.py` and `infra/aws_pg/jobs/n13_*.py` are in `lib/`; `infra/aws_pg/jobs/rln*_gen.py` and
 `infra/modal_rln4_k.py` are in `jobs/`; `studies/rlneurons/rln{3,4}/inputs/` is `data/rln{3,4}/`; `rln{3,4}/offline/`,
@@ -95,6 +96,46 @@ of 78. Frozen label: "the base can finish from a sound prefix" (both counts at t
 
 Grader v1 to v3 moved 113 answers from wrong to right and 1 from right to wrong over the 9 cells (`flips_v1_to_v3`,
 `flip_review`). The v1 numbers 57.2 (base) and 92.0 (RL) quoted in older notes are the n13 cells under v1 (286 and 460).
+
+## T1 against T2, problem by problem (MATH-500, n = 500, grader v3)
+
+Run folder `results/rln4/t1_t2_items-01/`: `per_problem.json` (one row per problem), `metrics.json`, `run.json`, `notes.md`
+(the reader's full notes with quotes). The script needs the two raw answer files (T1 and T2 rows of the table above) and runs
+on the laptop:
+
+```
+python3 -m studies.rlneurons.analysis.rln4_t1_t2_items <T1.jsonl> <T2.jsonl> <new out dir>
+```
+
+This is the command of the run (Python 3.11.1 with math-verify 0.9.0 and numpy installed); without them, put
+`uv run --no-project --with numpy --with math-verify==0.9.0` in front, as in the laptop checks below (not run in that form).
+
+It writes the machine columns of `per_problem.json` and `metrics.json`. Three columns of the committed `per_problem.json` are
+not from the script: `failure_type` and `label_from_tail_only` are hand labels by one reader, an agent, with no second reader;
+`level5` came from a file outside the repo (`run.json`).
+
+| | RL (T2) right | RL (T2) wrong |
+|---|---|---|
+| base with cue (T1) right | 398 | 12 |
+| base with cue (T1) wrong | 65 | 25 |
+
+T1 410 right, 27 cap hits; T2 463 right, 6 cap hits (`metrics.json`; equal to the table above).
+
+The 65 problems that RL solved and the base with cue did not, by hand label (`per_problem.json`, `failure_type`):
+
+| Why the base answer is wrong | Problems of 65 |
+|---|---|
+| Cap hit without a loop (the reasoning does not converge) | 16 |
+| Misread or mis-copied problem or diagram | 14 |
+| Arithmetic or algebra slip, method right | 14 |
+| Wrong method, missed case, or question not answered | 9 |
+| Right answer in a final line that grader v3 rejects (5) or that is garbled (3) | 8 |
+| Reached the gold answer, then changed it | 2 |
+| Drift to another document, no answer | 2 |
+
+Generated tokens (`metrics.json`): base answers of at most 2,000 tokens: 263, of which 13 wrong. RL answers of at most 4,000
+tokens: 286, of which 0 wrong. Median and 90th percentile: T1 right 1,431.5 and 7,054 (n = 410), T1 wrong 10,547.5 and 16,384
+(n = 90); T2 right 3,014 and 8,430 (n = 463), T2 wrong 13,455 and 16,384 (n = 37).
 
 ## How to run
 
