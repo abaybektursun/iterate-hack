@@ -1,0 +1,48 @@
+{
+ "n": 500,
+ "grader": "v3 (rln4_lib.grade_v3)",
+ "t1": {
+  "right": 410,
+  "cap_hits": 27,
+  "tokens_right": {
+   "n": 410,
+   "median": 1431.5,
+   "p90": 7054
+  },
+  "tokens_wrong": {
+   "n": 90,
+   "median": 10547.5,
+   "p90": 16384
+  },
+  "short": {
+   "max_tokens": 2000,
+   "n": 263,
+   "wrong": 13
+  }
+ },
+ "t2": {
+  "right": 463,
+  "cap_hits": 6,
+  "tokens_right": {
+   "n": 463,
+   "median": 3014,
+   "p90": 8430
+  },
+  "tokens_wrong": {
+   "n": 37,
+   "median": 13455,
+   "p90": 16384
+  },
+  "short": {
+   "max_tokens": 4000,
+   "n": 286,
+   "wrong": 0
+  }
+ },
+ "two_by_two": {
+  "both": 398,
+  "base_only": 12,
+  "rl_only": 65,
+  "neither": 25
+ }
+}
