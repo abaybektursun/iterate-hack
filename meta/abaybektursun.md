@@ -1,5 +1,15 @@
 # Meta review: abaybektursun
 
+## 2026-11-14 23:30 UTC (session start, before the Code pair work-d84808)
+
+- Last entry's checks: first b200 cell 2298 is still queued (`gpu.py ls`), so no tok/s yet. 208b and f4ab (vote rows) are running at 105 and 104 min. cycle.py still matches jobs to work by branch (7 work items of this person on `main` in `cycle.py --hours 1`, all with 0 jobs). --shard landed as studies/metaharness/jobs/shard_cell.py (work-140e13).
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training"; deliverable ends "The same harness then runs unchanged on the Code pair" (DIRECTION.md). Since 22:13 this person's steps: 328 per-problem recount (result-5de032, mission), weight-difference study started (work-d36669, mission), gpuprice study (6 board items, another hackathon track, tests no part of the mission sentence), trace analysis (work-976c17, none). The Code pair had no work item on the board until 23:24; claimed as work-d84808.
+- Research: no replication in the hour. Before choosing the Code pair, few-shot demonstrations and power sampling were set beside published tables and dropped without a run (2506.14641, 2509.23196: demonstrations do not help; 2610.24663 Table 1: power sampling recovers 18-27 % of the RL gain; 2610.13653: equals best-of-N).
+- Turnaround (`uv run tools/cycle.py --hours 1`): 3 jobs, 0 failed, median wait 0.1 min, 1.1 container min (was 205.2); no work item with a job closed, so no to-job / jobs / to-answer medians. Slowest stage is unchanged: the two vote-row jobs, KV-bound on one H100 each.
+- Failure: none new in code or infrastructure this hour.
+- Change: none made. Carried a second time (step 4): gpu.py submit takes the work id and cycle.py matches on it; not made because this session writes only the codepair branch and tools/ is main's.
+- Next entry checks: minutes from work-d84808's claim (23:24) to its first job and to its first score; tok/s of b200 cell 2298 against 1,000; whether the Code pair's execution grader failed on a planted wrong program before any number was posted.
+
 ## 2026-11-14 22:13 UTC (after work-d8aa69 and work-55d1fe closed, Day-1 #1 and #2)
 
 - Last entry's checks: --shard has not landed (`git grep shard origin/day1-vote origin/main -- studies/rlneurons/jobs/run_cell.py`: none). Queue wait a32d 27.3 min, 208b 28.9, f4ab 28.9 (`uv run tools/cycle.py --hours 1`). Exa warning: no session started since, not observed.
