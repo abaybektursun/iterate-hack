@@ -38,6 +38,8 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `specs/SPEC5_map.md` | RLN-5 map spec: where the RL model still disagrees with the cued base; hypothesis H and its refutation rules; controls. |
 | `jobs/rln5_map.py` | RLN-5 map job (inference only, team runner): both models over the stored T1 and T2 answers with teacher forcing; per-position shards and `checks.json` in `$OUT_DIR`. See "RLN-5 map". |
 | `analysis/rln5_map_analyze.py` | RLN-5 map readout: reads `runs/<job-id>/`, writes `metrics.json` and `examples.json` (analysis a-e of SPEC5_map.md §6, the test of H). |
+| `specs/SPEC_day1_length_rules.md` | Day-1 length rules spec: double-check short answers D(S), stop at a length cutoff and restart R(L), their combination; token accounting; the choice on MATH-500 and its fixed use on the 328; hypotheses. |
+| `analysis/day1_length_rules.py`, `analysis/day1_length_rules_test.py` | Offline readout of the length rules from the rows of two `run_cell --samples 4` runs (base, RL), and its planted cases. Imports `day1_vote` (`chains`, `vote`, `row`, `tail`). See "Day-1 length rules". |
 | `grader/rln4_grader_v3.py` | Rescores every saved MATH-500 cell with v1, v2, v3; writes `results/rln4/grader_v3/readout.json`. `CELLS` lists the S3 key of each cell. |
 | `grader/rln4_grader_v3_test.py`, `grader/cases.json` | Grader v3 tests: 22 audited rows plus planted equal and unequal pairs. |
 | `data/rln3/` | `math500.json` (500), `hard.json` (400 harder problems), `frozen.json` (models, revisions, seeds, caps, sha256 of the inputs). |
@@ -277,6 +279,40 @@ uv run --no-project --with numpy --with math-verify==0.9.0 --with transformers==
 ```
 
 It must print 4 right, 3 cap hits of 10 (the stand-in serves right, wrong, cap hit in turn).
+
+### Day-1 length rules (laptop, no GPU)
+
+`analysis/day1_length_rules.py` scores two procedures from the rows of the Day-1 #3 jobs (`run_cell --samples 4 --restarts 2`,
+one run per model; `specs/SPEC_day1_3.md`), reading only attempt 0 of samples 0 to 3. D(S): a finished answer of at most S
+tokens is checked against the next sample, and against a third when the two differ. R(L): an answer longer than L tokens is
+stopped at L and the next sample is taken. Grid: S in {off, 1000, 2000, 4000}, L in {off, 8000, 10000, 12000}. Per model and
+setting it gives right of n, the Wilson interval, generated tokens per problem and the paired difference against the single
+row; with both runs also RL minus base and the base's best setting at no more tokens per problem than one RL sample. The rules,
+the token accounting and the hypotheses are in `specs/SPEC_day1_length_rules.md`. No number exists yet: the Day-1 #3 rows do
+not exist yet.
+
+Test (planted rows, no network):
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_length_rules_test
+```
+
+MATH-500: all 16 settings, and the choice of S and L (written to `chosen.json`):
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_length_rules --base runs/<base math500 job> --rl runs/<rl math500 job> --out studies/rlneurons/results/day1_length_rules/math500-01 --choose
+```
+
+The 328: the chosen setting unchanged (the script refuses a `chosen.json` made on the same problem set):
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_length_rules --base runs/<base hard328 job> --rl runs/<rl hard328 job> --out studies/rlneurons/results/day1_length_rules/hard328-01 --fixed studies/rlneurons/results/day1_length_rules/math500-01/chosen.json
+```
+
+Each run folder `results/day1_length_rules/<set>-<nn>/` gets `run.json`, `metrics.json`, `per_problem.tsv` (per model and
+problem: the four `n_new`, and per setting `right tokens samples`; `x` after a sample number = stopped at L, `*` = the sample
+answered with), `examples.json` (one problem a rule fixed and one it broke) and, with `--choose`, `chosen.json`. An unfinished
+run is refused.
 
 ## Raw answers
 
