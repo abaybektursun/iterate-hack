@@ -80,6 +80,9 @@ tr.old td{color:var(--muted);text-decoration:line-through}
     <h2>Excluded</h2>
     <div class="tbl"><table id="lb3"></table></div>
   </section>
+  <section class="panel"><h2>How this map is made</h2>
+    <ol class="note" id="how" style="margin:0;padding-left:20px;display:grid;gap:6px"></ol>
+  </section>
   <p class="note" id="foot"></p>
 </div>
 <div class="tip" id="tip" hidden></div>
@@ -164,6 +167,13 @@ if (S.leaderboard && S.leaderboard.length) {
     extra.map(r => `<tr><td>${cfg(r)}</td><td class="num">${r.tokens_per_problem ? r.tokens_per_problem.toLocaleString() : "not posted"}</td><td>${r.rl_same_procedure ? "yes" : '<span class="pill">no: compared with RL at one sample</span>'}</td><td class="num">${sc(r)}</td>${src(r)}</tr>`).join("") + "</tbody>" : '<tbody><tr><td class="mono">none posted</td></tr></tbody>';
   document.getElementById("lb3").innerHTML = bad.length ? `<tbody>` + bad.map(r => `<tr class="old"><td>${cfg(r)}</td><td><span class="pill">${r.oracle ? "uses the gold answer to pick: invalid" : "grader " + esc(r.grader) + ", superseded"}</span></td><td class="num">${sc(r)}</td>${src(r)}</tr>`).join("") + "</tbody>" : '<tbody><tr><td class="mono">none</td></tr></tbody>';
 } else { document.getElementById("lbwrap").hidden = true; }
+const nTrip = S.triplet_order_consistency[1], nAll = S.n_board_items + S.n_possible;
+document.getElementById("how").innerHTML = [
+  `<b>Basins (colors) come from the model's grouping.</b> The judge sees all ${nAll} items at once and sorts them into groups by approach, twice, with the items in different orders. The two groupings agree (ARI ${f2(S.partition_ari_order0_vs_order1)}); the first is used.`,
+  `<b>Positions come from t-STE</b> (a triplet-based relative of t-SNE). The judge answers about ${(2 * nTrip).toLocaleString()} questions of the form "is B or C closer to A?", each asked in both orders (same answer ${Math.round(100 * S.triplet_order_consistency[0] / nTrip)}% of the time). t-STE places the dots so those answers hold: it predicts ${Math.round(100 * S.tste_heldout_acc)}% of held-out answers, against ${Math.round(100 * S.tste_shuffled_id_null)}% with shuffled labels.`,
+  `<b>Coverage comes from the model directly.</b> For each possible direction, the judge lists the board items that pursue it.`,
+  `<b>Why the map is not clustered.</b> k-means on the 2D map agrees poorly with the judge's groups (ARI ${f2(S.partition_ari_vs_kmeans)}): squeezing many kinds of similarity into 2D keeps who is near whom but cuts clean groups badly. So the map shows nearness and the colors are the judge's groups.`,
+].map(x => `<li>${x}</li>`).join("");
 document.getElementById("untouched").innerHTML = S.directions.filter(d => !d.items_either.length).map(d => `<div class="b"><span class="sw" style="background:var(--empty)"></span><span>${esc(d.name)}</span><span class="cnt">0 items</span></div>`).join("") || '<span class="mono">none</span>';
 draw(1);
 </script>
