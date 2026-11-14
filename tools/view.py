@@ -476,7 +476,9 @@ function hill(scores) {
   const pct = s => 100 * s.right / s.n, f1 = v => v.toFixed(1);
   const benches = [...new Set(scores.map(s => s.benchmark))].sort((a, b) => (b === "MATH-500") - (a === "MATH-500") || a.localeCompare(b));
   $("hill").innerHTML = benches.map(name => {
-    const base = scores.filter(s => s.benchmark === name && s.model === "base");
+    const seen = new Set();  // a run reported in two results is one attempt
+    const base = scores.filter(s => s.benchmark === name && s.model === "base")
+      .filter(s => { const k = `${s.right}/${s.n} ${s.config}`; return !seen.has(k) && seen.add(k); });
     const rl = scores.filter(s => s.benchmark === name && s.model === "rl").sort((a, b) => pct(b) - pct(a))[0];
     if (!base.length) return "";
     let top = -1;

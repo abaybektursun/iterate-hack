@@ -77,6 +77,9 @@ check(f"done {work_a}, {result}: {TAG} result 0.41" in run("b", "msg", "read"), 
 check("base MATH-500 410/500 (82.0 %)" in run("a", "board", "score", result, "base", "MATH-500", "410/500", "cue", "--tokens", "3933"),
       "score attaches a score to a result")
 run("a", "board", "score", result, "base", "MATH-500", "501/500", "cue", code=1)
+bench = f"set{time.time_ns()}"  # a benchmark name no earlier run used
+run("a", "board", "score", result, "base", bench, "1/328", "x")
+check(f"{bench} 2/328" in run("a", "board", "score", result, "base", f"SET-{bench[3:]}", "2/328", "x"), "a benchmark keeps the spelling already used")
 lined = run("a", "board", "post", "result", f"{TAG} cue at T 0.6\nscore: base MATH-500 378/500 tokens 4690 | cue, T 0.6")
 check("score base MATH-500 378/500 (75.6 %)" in lined, "a score line in a result's text writes the score")
 run("a", "board", "post", "result", f"{TAG} bad\nscore: base MATH-500 378 of 500", code=1)
