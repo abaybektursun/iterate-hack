@@ -4,6 +4,7 @@ teacher forcing on stored T1 and T2 answers. Inference only. One H100, both mode
     uv run tools/gpu.py submit h100 --hours 0.7 -- "python -m studies.cleanneurons.jobs.transplant_curve --commit $(git rev-parse HEAD)"
     smoke: add  --smoke   (per cell the 2 shortest eligible answers; arms all, mlp, attn, other, top1, rnd1_s0, mlpL0-7, none)
     shorter: --rows 20    (the run time is proportional to the rows)
+    Part T2: add  --rank attr   (the attribution ranking and the attr{k} arms; with --smoke also attr1)
 
 Inputs: /runs/inputs/rln5/T1.jsonl and T2.jsonl, asserted against studies/rlneurons/data/rln5/map_inputs.json; sequences from
 rln5_map.build (prompt + cue + generated tokens + stop token). Rows: per cell the answers with 500 <= n_new <= 3,000 that are not cap
@@ -19,29 +20,50 @@ every other arm of the row was applied and undone. Arms (lib/neurons.py holds th
                        neuron's three weight vectors, float32; ties by neuron index)
   rnd{k}_s{0,1}        the same number of neurons drawn uniformly without replacement, numpy default_rng([seed, number])
   mlpL{a}-{b}          all neurons of a quarter of the layers
-Decisive positions: per cell the 4 % of scored positions with the largest KL(RL || base).
+Position sets, per cell: all; decisive (the 4 % of all with the largest KL(RL || base)); after_cue (all but the first 3 scored
+positions of every row: the cue, prefilled in T1 and written by RL in T2); decisive_after_cue (the 4 % of after_cue with the largest
+KL(RL || base)). The after-cue sets are the ones to read: in the first run the cue held 24 % of the decisive KL.
 Closure of an arm on a position set: 1 - mean KL(RL || arm) / mean KL(RL || base).
+
+Part T2 (--rank attr). Row j of a cell's rows (in order of problem index) is in half A when j is even, in half B when odd. On half
+A: KL(RL || base) of every row gives the decisive positions after the cue (4 % per cell, within half A); L is the mean KL(RL || base)
+over them, both cells pooled. One backward pass per row (the base in bf16, only the MLP matrices require grad); after each row
+neurons.attr_step turns the bf16 gradients into the per-neuron product with (RL - base) in float32, summed over rows in float64 (the
+score is linear in the gradient, so this equals a float32 gradient accumulator and saves its 17 GB). Score of a neuron: the
+first-order drop of L when it is copied from RL. Arms attr{k}, k in 0.1, 0.3, 1, 3, 10: the k % of neurons with the largest score.
+Every arm also gets after_cue_half_B and decisive_after_cue_half_B (the 4 % within half B): the held-out numbers.
 
 Outputs in --out (default $OUT_DIR):
   metrics.json   config, commit, job id, models; base[cell]: mean_kl_all, mean_kl_decisive, top1_agree_all, top1_agree_decisive;
                  arms[arm]: neurons (number of neurons taken from RL), share_of_sum_s, cells[cell]: the same four numbers plus
                  closure_all and closure_decisive; cells[cell]: rows (problem indices), positions, decisive_positions, the smallest
-                 decisive KL; controls with their numbers and pass flags
+                 decisive KL; controls with their numbers and pass flags. For every other position set <set>: mean_kl_<set> and
+                 closure_<set> next to those, and in cells[cell] its size, smallest decisive KL and share_of_decisive_kl_on_cue.
+                 With --rank attr: attr (the split rule, half_A and half_B problem indices, decisive positions of half A, L on half
+                 A from the gradient pass and from the scoring pass, sum of all scores; arms[arm]: predicted_drop = sum of the
+                 scores of the arm's neurons, measured_drop = L(base) - L(arm) on half A's decisive positions, and for attr arms
+                 the neurons shared with top{k})
+  rank_attr.npz  (--rank attr) score, float32 [layers, width]
   rank.npz       s, float32 [layers, width]
   profile.json   share of sum(s) per layer; share held by the top 0.1 ... 30 % of neurons; squared weight change and its share in
                  mlp / attn / other
   examples.json  per cell, for the row with the most decisive positions: its 20 decisive positions with the largest KL(RL || base):
                  the 40 tokens before, the written token, the top-1 tokens of RL, the base and top1, KL(RL || base), KL(RL || top1)
+                 (examples use the decisive positions after the cue; with --rank attr also attr1's token and KL)
   kl.npz         per cell: <cell>_kl float32 [1 + arms, positions] (row 0 the base, then the arms in the order of arm_order in
-                 metrics.json), <cell>_offsets (row r is positions offsets[r]:offsets[r+1]), <cell>_decisive (bool)
-  edit_top1.json, edit_top3.json, edit_rnd1_s0.json, edit_mlp.json, edit_attn.json   those arms in the edit-file format (Part G)
+                 metrics.json), <cell>_offsets (row r is positions offsets[r]:offsets[r+1]), <cell>_decisive,
+                 <cell>_decisive_after_cue (bool), with --rank attr <cell>_half_B (bool, per position)
+  edit_top1.json, edit_top3.json, edit_rnd1_s0.json, edit_mlp.json, edit_attn.json   those arms in the edit-file format (Part G);
+                 with --rank attr also edit_attr1.json and edit_attr3.json
 
 Controls (the job writes every file, then fails if one fails): `all` has mean KL below 1e-4 in every cell; `none` has exactly the
 unedited base's KL and top-1 at every position; after each arm of each row the edit is undone and one tensor it edited is compared
 bit for bit with a copy taken before the arm was first applied (a tensor that the comparison called different while the edit was on).
+With --rank attr: attr1 lowers L on half A (a ranking whose top set does not lower L on its own rows is broken; the first-order
+prediction is reported next to the measured drop), and the scoring pass finds the decisive positions the ranking used.
 
 --dry-run: lib/neurons.tiny_pair (a random 4-layer Llama and a perturbed copy) on synthetic rows, CPU, no download; the same controls
-are asserted, and the five edit files go through build_checkpoint and diff_checkpoint on the tiny pair. Fail loud: no try/except.
+are asserted, and the edit files go through build_checkpoint and diff_checkpoint on the tiny pair. Fail loud: no try/except.
 """
 from __future__ import annotations
 
@@ -60,6 +82,8 @@ from studies.cleanneurons.lib import neurons as N
 from studies.rlneurons.jobs import rln5_map as M5
 
 KS = (0.1, 0.3, 1, 3, 10, 30)                         # per cent of the neurons
+ATTR_KS = (0.1, 0.3, 1, 3, 10)
+N_CUE = 3                                             # scored positions left out at the start of every row
 SEEDS = (0, 1)
 N_MIN, N_MAX = 500, 3000                              # n_new of an eligible answer
 DECISIVE = 0.04
@@ -76,8 +100,8 @@ def by_layer(flat, W):
     return {str(l): sorted(int(n) for n in flat[flat // W == l] % W) for l in sorted(set((flat // W).tolist()))}
 
 
-def make_arms(s):
-    """{arm: edit} in the order they run (none last) and the names of the layer groups. s: float32 [L, W]."""
+def make_arms(s, attr=None):
+    """{arm: edit} in the order they run (none last) and the names of the layer groups. s, attr: float32 [L, W]."""
     L, W = s.shape
     assert L % 4 == 0, L
     order = np.argsort(-s.ravel(), kind="stable")
@@ -85,6 +109,8 @@ def make_arms(s):
     for k in KS:
         n = count(k, L * W)
         arms[f"top{k:g}"] = {"copy_neurons": by_layer(order[:n], W)}
+        if attr is not None and k in ATTR_KS:
+            arms[f"attr{k:g}"] = {"copy_neurons": by_layer(np.argsort(-attr.ravel(), kind="stable")[:n], W)}
         for seed in SEEDS:
             arms[f"rnd{k:g}_s{seed}"] = {"copy_neurons": by_layer(np.random.default_rng([seed, n]).choice(L * W, n, replace=False), W)}
     groups = [f"mlpL{a}-{a + L // 4 - 1}" for a in range(0, L, L // 4)]
@@ -140,6 +166,21 @@ def synthetic_sequences(cells, vocab):
     return seqs
 
 
+def after_cue(lengths):
+    """bool over the concatenated positions of rows with these lengths: False on the first N_CUE of every row."""
+    keep = np.ones(sum(lengths), dtype=bool)
+    for a in np.cumsum([0] + list(lengths))[:-1]:
+        keep[a:a + N_CUE] = False
+    return keep
+
+
+def decisive(kl, keep):
+    """bool: the DECISIVE share of the positions in keep with the largest kl (ties by position)."""
+    idx, dec = np.flatnonzero(keep), np.zeros(len(kl), dtype=bool)
+    dec[idx[np.argsort(-kl[idx], kind="stable")[:max(1, round(DECISIVE * len(idx)))]]] = True
+    return dec
+
+
 def changed_tensor(base, rl, edit, ops, sd):
     """A tensor that the edit changes (the last such in the plan) and its copy from before the edit: what the undo control compares.
     The edit is applied and undone here once, so the comparison has seen an applied edit and has called it different.
@@ -164,6 +205,41 @@ def kl_top1(lp_rl, p_rl, lp):
     return (p_rl * (lp_rl - lp)).sum(-1).cpu().numpy(), lp.argmax(-1).cpu().numpy()
 
 
+def row_input(q, dev):
+    return torch.tensor(q["ids"][:-1], device=dev)[None], q["n_prompt"] - 1
+
+
+def attribution(base, rl, sd_rl, rows, dev):
+    """Part T2 on half A (rows: {cell: sequences}). Returns the score (float32 [L, W]), L from the gradient pass, and the decisive
+    positions it used ({cell: one bool array per row})."""
+    dec, acc, n_dec, loss_sum = {}, 0, 0, 0.0
+    for c, qs in rows.items():
+        kl = []
+        for q in qs:
+            x, first = row_input(q, dev)
+            lp_rl = logp(rl, x, first)
+            kl.append(kl_top1(lp_rl, lp_rl.exp(), logp(base, x, first))[0])
+        lens = [len(v) for v in kl]
+        dec[c] = np.split(decisive(np.concatenate(kl).astype(np.float64), after_cue(lens)), np.cumsum(lens)[:-1])
+    N.mlp_grad(base, True)
+    for c, qs in rows.items():
+        for q, d in zip(qs, dec[c]):
+            if not d.any():
+                continue
+            x, first = row_input(q, dev)
+            pos = torch.tensor(np.flatnonzero(d), device=dev)
+            lp_rl = logp(rl, x, first)[pos].clone()               # a normal tensor: autograd cannot save an inference tensor
+            lp = torch.log_softmax(base(input_ids=x, use_cache=False).logits[0, first:][pos].float(), -1)
+            loss = (lp_rl.exp() * (lp_rl - lp)).sum()
+            loss.backward()
+            acc = acc + N.attr_step(base, sd_rl).double()
+            n_dec, loss_sum = n_dec + len(pos), loss_sum + float(loss)
+    N.mlp_grad(base, False)
+    score = (acc / n_dec).float().cpu().numpy()
+    assert np.isfinite(score).all(), "attribution: non-finite score"
+    return score, loss_sum / n_dec, dec
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--inputs", default="/runs/inputs/rln5")
@@ -172,6 +248,7 @@ def main():
     ap.add_argument("--cells", default="T1,T2")
     ap.add_argument("--rows", type=int, default=40, help="answers per cell")
     ap.add_argument("--smoke", action="store_true", help="per cell the 2 shortest eligible answers, and 8 arms")
+    ap.add_argument("--rank", default="weight", choices=("weight", "attr"), help="attr: Part T2, the attribution ranking and its arms")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
     t0 = time.time()
@@ -182,7 +259,7 @@ def main():
     assert not (out / "metrics.json").exists(), f"{out}/metrics.json exists: one fresh directory per run"
     cells = a.cells.split(",")
     assert all(c in M5.CELLS for c in cells)
-    m = {"status": "loading", "config": {**vars(a), "out": str(out), "n_new": [N_MIN, N_MAX], "decisive_share": DECISIVE}, "commit": a.commit,
+    m = {"status": "loading", "config": {**vars(a), "out": str(out), "n_new": [N_MIN, N_MAX], "decisive_share": DECISIVE, "n_cue": N_CUE}, "commit": a.commit,
          "job_id": os.environ.get("JOB_ID"), "started_utc": M5.utc(), "torch": torch.__version__}
     M5.dump(out / "metrics.json", m)
 
@@ -218,11 +295,23 @@ def main():
                                    "share_of_sum_s_per_layer": (s64.sum(1) / total).tolist(), "share_of_sum_s_top_percent": top_share,
                                    "squared_weight_change": change,
                                    "share_of_squared_weight_change": {f: v / sum(change.values()) for f, v in change.items()}})
-    edits, groups = make_arms(s)
-    for name in EDIT_FILES:
+    attr, edit_files = None, EDIT_FILES
+    if a.rank == "attr":
+        assert all(len(sel[c]) >= 2 for c in cells), "--rank attr needs two rows per cell"
+        t_attr = time.time()
+        attr, attr_L, attr_dec = attribution(base, rl, sd_rl, {c: sel[c][0::2] for c in cells}, dev)
+        np.savez(out / "rank_attr.npz", score=attr)
+        edit_files = EDIT_FILES + ("attr1", "attr3")
+        m["attr"] = {"split": "row j of a cell's rows (in order of problem index) is in half A when j is even, in half B when j is odd",
+                     "half_A": {c: [q["idx"] for q in sel[c][0::2]] for c in cells}, "half_B": {c: [q["idx"] for q in sel[c][1::2]] for c in cells},
+                     "decisive_positions_half_A": int(sum(d.sum() for c in cells for d in attr_dec[c])), "L_half_A_gradient_pass": attr_L,
+                     "sum_of_scores": float(attr.astype(np.float64).sum()), "seconds": time.time() - t_attr}
+    edits, groups = make_arms(s, attr)
+    for name in edit_files:
         M5.dump(out / f"edit_{name}.json", edits[name])
-    order = ["all", *N.FAMILIES, "top1", "rnd1_s0", groups[0], "none"] if a.smoke else list(edits)
-    assert order[-1] == "none" and {"all", "top1"} <= set(order)
+    smoke_arms = ["all", *N.FAMILIES, "top1", *(["attr1"] if attr is not None else []), "rnd1_s0", groups[0], "none"]
+    order = smoke_arms if a.smoke else list(edits)
+    assert order[-1] == "none" and {"all", "top1"} <= set(order) and (attr is None or "attr1" in order)
     plans = {k: N.plan(edits[k], shapes, dev) for k in order}
     check = {k: changed_tensor(base, rl, edits[k], plans[k], sd) for k in order}  # arm -> (tensor compared after undo, its copy)
     arm_info = {k: {"neurons": int(N.neuron_mask(edits[k], L, W).sum()),
@@ -235,7 +324,7 @@ def main():
     undo_checks, undo_failed, t_run, n_forward = 0, [], time.time(), 0
     for c in cells:
         for i, q in enumerate(sel[c]):
-            x, first = torch.tensor(q["ids"][:-1], device=dev)[None], q["n_prompt"] - 1
+            x, first = row_input(q, dev)
             lp_rl = logp(rl, x, first)
             p_rl, R = lp_rl.exp(), res[c]
             R["top"]["rl"].append(lp_rl.argmax(-1).cpu().numpy())
@@ -254,32 +343,48 @@ def main():
             n_forward += (len(order) + 2) * x.shape[1]
             print(f"{M5.utc()} {c} row {i + 1}/{len(sel[c])} problem {q['idx']}: {len(kl)} positions; {time.time() - t_run:.0f} s", flush=True)
 
-    # per cell: decisive positions, closures, examples
+    # per cell: position sets, closures, examples
     m["base"], m["arms"], examples, npz, none_diff = {}, {k: {**arm_info[k], "cells": {}} for k in order}, {}, {}, {}
+    ex_arms = ("top1", "attr1") if attr is not None else ("top1",)
+    half_a = {"sum": {k: 0.0 for k in ["base", *order]}, "n": 0, "same": True}       # half A's decisive positions, cells pooled
     for c in cells:
         R = res[c]
         kl = {k: np.concatenate(v).astype(np.float64) for k, v in R["kl"].items()}
         top = {k: np.concatenate(v) for k, v in R["top"].items()}
-        n = len(kl["base"])
-        dec = np.zeros(n, dtype=bool)
-        dec[np.argsort(-kl["base"], kind="stable")[:max(1, round(DECISIVE * n))]] = True
-        row = lambda k: {"mean_kl_all": float(kl[k].mean()), "mean_kl_decisive": float(kl[k][dec].mean()),
+        lens = [len(v) for v in R["kl"]["base"]]
+        n, off, keep = sum(lens), np.cumsum([0] + lens), after_cue(lens)
+        sets = {"all": np.ones(n, dtype=bool), "decisive": decisive(kl["base"], np.ones(n, dtype=bool)), "after_cue": keep,
+                "decisive_after_cue": decisive(kl["base"], keep)}
+        if attr is not None:
+            in_b = np.repeat(np.arange(len(lens)) % 2 == 1, lens)
+            sets |= {"after_cue_half_B": keep & in_b, "decisive_after_cue_half_B": decisive(kl["base"], keep & in_b)}
+            dec_a = decisive(kl["base"], keep & ~in_b)
+            half_a["same"] &= all(np.array_equal(dec_a[off[j]:off[j + 1]], attr_dec[c][j // 2]) for j in range(0, len(lens), 2))
+            half_a["n"] += int(dec_a.sum())
+            for k in half_a["sum"]:
+                half_a["sum"][k] += float(kl[k][dec_a].sum())
+            npz[f"{c}_half_B"] = in_b
+        dec, dec_ac = sets["decisive"], sets["decisive_after_cue"]
+        row = lambda k: {**{f"mean_kl_{name}": float(kl[k][v].mean()) for name, v in sets.items()},
                          "top1_agree_all": float((top[k] == top["rl"]).mean()), "top1_agree_decisive": float((top[k] == top["rl"])[dec].mean())}
         m["base"][c] = row("base")
         for k in order:
-            m["arms"][k]["cells"][c] = {**row(k), "closure_all": float(1 - kl[k].mean() / kl["base"].mean()),
-                                        "closure_decisive": float(1 - kl[k][dec].mean() / kl["base"][dec].mean())}
-        m["cells"][c].update(positions=n, decisive_positions=int(dec.sum()), smallest_decisive_kl=float(kl["base"][dec].min()))
+            m["arms"][k]["cells"][c] = {**row(k), **{f"closure_{name}": float(1 - kl[k][v].mean() / kl["base"][v].mean()) for name, v in sets.items()}}
+        m["cells"][c].update(positions=n, decisive_positions=int(dec.sum()), smallest_decisive_kl=float(kl["base"][dec].min()),
+                             **{("decisive_positions" + name[8:] if name.startswith("decisive") else "positions_" + name): int(v.sum())
+                                for name, v in sets.items() if name not in ("all", "decisive")},
+                             smallest_decisive_kl_after_cue=float(kl["base"][dec_ac].min()),
+                             share_of_decisive_kl_on_cue=float(kl["base"][dec & ~keep].sum() / kl["base"][dec].sum()))
         none_diff[c] = {"max_abs_kl_difference": float(np.abs(kl["none"] - kl["base"]).max()), "top1_differ": int((top["none"] != top["base"]).sum())}
-        off = np.cumsum([0] + [len(v) for v in R["kl"]["base"]])
-        npz |= {f"{c}_kl": np.stack([kl[k] for k in ["base", *order]]).astype(np.float32), f"{c}_offsets": off, f"{c}_decisive": dec}
-        r = int(np.argmax([dec[off[j]:off[j + 1]].sum() for j in range(len(sel[c]))]))
+        npz |= {f"{c}_kl": np.stack([kl[k] for k in ["base", *order]]).astype(np.float32), f"{c}_offsets": off, f"{c}_decisive": dec,
+                f"{c}_decisive_after_cue": dec_ac}
+        r = int(np.argmax([dec_ac[off[j]:off[j + 1]].sum() for j in range(len(sel[c]))]))
         q, lo = sel[c][r], off[r]
-        pos = [j for j in np.argsort(-kl["base"][lo:off[r + 1]], kind="stable") if dec[lo + j]][:N_EXAMPLES]
-        examples[c] = {"problem_index": q["idx"], "decisive_positions_in_row": int(dec[lo:off[r + 1]].sum()), "positions": [
+        pos = [j for j in np.argsort(-kl["base"][lo:off[r + 1]], kind="stable") if dec_ac[lo + j]][:N_EXAMPLES]
+        examples[c] = {"problem_index": q["idx"], "decisive_positions_in_row": int(dec_ac[lo:off[r + 1]].sum()), "positions": [
             {"position": int(j), "context": decode(q["ids"][max(0, q["n_prompt"] + j - CONTEXT):q["n_prompt"] + j]),
-             "written": decode([q["ids"][q["n_prompt"] + j]]), **{f"top1_token_{k}": decode([int(top[k][lo + j])]) for k in ("rl", "base", "top1")},
-             "kl_rl_base": float(kl["base"][lo + j]), "kl_rl_top1": float(kl["top1"][lo + j])} for j in pos]}
+             "written": decode([q["ids"][q["n_prompt"] + j]]), **{f"top1_token_{k}": decode([int(top[k][lo + j])]) for k in ("rl", "base", *ex_arms)},
+             "kl_rl_base": float(kl["base"][lo + j]), **{f"kl_rl_{k}": float(kl[k][lo + j]) for k in ex_arms}} for j in pos]}
     np.savez_compressed(out / "kl.npz", **npz)
     M5.dump(out / "examples.json", examples)
 
@@ -288,6 +393,18 @@ def main():
                      "none": {**none_diff, "pass": all(v["max_abs_kl_difference"] == 0 and v["top1_differ"] == 0 for v in none_diff.values())},
                      "undo": {"checks": undo_checks, "failed": undo_failed, "arms_that_change_no_bit": [k for k in order if not check[k][0]],
                               "pass": undo_checks > 0 and not undo_failed}}
+    if attr is not None:
+        L_a, a64, top_sets = {k: v / half_a["n"] for k, v in half_a["sum"].items()}, attr.astype(np.float64), {}
+        for k in order:
+            mlp_only = edits[k].get("copy_families", ["mlp"]) == ["mlp"]
+            mask = N.neuron_mask(edits[k], L, W).numpy()
+            m["attr"].setdefault("arms", {})[k] = {"predicted_drop": float(a64[mask].sum()) if mlp_only else None, "measured_drop": L_a["base"] - L_a[k]}
+            if k.startswith("attr") and "top" + k[4:] in order:
+                m["attr"]["arms"][k]["neurons_shared_with_top"] = int((mask & N.neuron_mask(edits["top" + k[4:]], L, W).numpy()).sum())
+        m["attr"].update(L_half_A=L_a["base"], decisive_positions_half_A_scoring_pass=half_a["n"])
+        a1 = m["attr"]["arms"]["attr1"]
+        m["controls"]["attr"] = {"L_half_A": L_a["base"], "attr1_predicted_drop": a1["predicted_drop"], "attr1_measured_drop": a1["measured_drop"],
+                                 "decisive_positions_as_ranked": bool(half_a["same"]), "pass": a1["measured_drop"] > 0 and bool(half_a["same"])}
     sec = time.time() - t_run
     m.update(status="done", wall_s=time.time() - t0, pass_s=sec, forward_tokens=n_forward, forward_tokens_per_s=n_forward / max(sec, 1e-9))
     M5.dump(out / "metrics.json", m)
@@ -297,15 +414,16 @@ def main():
             b2, r2 = N.saved_pair(tmp)
             x = torch.tensor(sel[cells[0]][0]["ids"][:64])[None]
             m["dry_run_builds"] = {}
-            for k in EDIT_FILES:
+            for k in edit_files:
                 rep = N.roundtrip(b2, r2, tmp / "base", tmp / "rl", json.loads((out / f"edit_{k}.json").read_text()), tmp / k, x)
                 m["dry_run_builds"][k] = {"shards_rewritten": len(rep["shards_rewritten"]), "entries_differ": rep["diff"]["entries_differ"]}
     else:
         m["gpu_max_memory_gb"] = torch.cuda.max_memory_allocated() / 2 ** 30
     M5.dump(out / "metrics.json", m)
-    closure = {k: {c: round(v["cells"][c]["closure_decisive"], 4) for c in cells} for k, v in m["arms"].items()}
+    key = "closure_decisive_after_cue" + ("_half_B" if attr is not None else "")
+    closure = {k: {c: round(v["cells"][c][key], 4) for c in cells} for k, v in m["arms"].items()}
     print(json.dumps({"controls": m["controls"], "wall_s": m["wall_s"], "pass_s": sec, "base": m["base"]}, indent=1), flush=True)
-    print("closure on decisive positions:\n" + "\n".join(f"  {k:12s} {v}" for k, v in closure.items()), flush=True)
+    print(f"{key}:\n" + "\n".join(f"  {k:12s} {v}" for k, v in closure.items()), flush=True)
     failed = [k for k, v in m["controls"].items() if not v["pass"]]
     assert not failed, f"controls failed: {failed} (see metrics.json)"
 

@@ -63,6 +63,21 @@ the base's KL exactly; after each arm the edit is undone and one edited tensor i
 base's; `rnd{k}` closures are reported next to `top{k}` as the null, and `top{k}`'s share of sum(s) next to both,
 so that "top beats random" is not read as sparsity when it only reflects more changed weight.
 
+## Part T2: attribution ranking (added 2026-11-14 after Part T; `transplant_curve.py --rank attr`)
+
+Part T ranked neurons by weight change and found closure about proportional to the number of neurons copied. That does
+not show that no small set exists: weight change may be a poor ranking. Part T2 ranks by effect. Rows are split in two
+halves by order (A ranks, B scores). On half A, with L = mean KL(RL || base) over the decisive positions after the cue,
+the score of neuron (l, n) is the first-order drop of L when the neuron is copied from RL:
+-(theta_RL - theta_base) . dL/dtheta summed over its three weight vectors (one backward pass per row, gradients
+accumulated in float32). Arms `attr{k}` for k in 0.1, 0.3, 1, 3, 10 % are scored on half B next to `top{k}` and `rnd{k}`
+on the same rows, cue positions left out.
+
+Hypothesis T3: a small set exists that weight change misses: `attr1` closes at least 30 % of the decisive KL on half B.
+Refuted if `attr1` closes less than 15 %; then the RL change is spread over neurons under both rankings.
+Control: the first-order prediction for `attr1` and the measured drop of L on half A are both reported; a ranking whose
+top set does not lower L on its own rows is broken.
+
 ## Part L: loop neurons, base only (job `jobs/loop_neurons.py`, one H100)
 
 1. Loops. For the 78 rows of `studies/rlneurons/data/rln4/k.json`: the sequence prompt + the base's own prefix

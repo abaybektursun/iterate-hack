@@ -14,6 +14,8 @@ zero down column. Copies keep the tensor's dtype (asserted equal on both sides),
   check_edit(edit, L, W)                      fails on an unknown key, family, layer or neuron, and on a repeated neuron
   plan(edit, shapes)                          {tensor name: [(kind, index), ...]}, kind "copy" or "zero"
   apply_edit(model, rl_model, edit)           edits the model's weights in place; returns undo(), which restores the saved entries
+  mlp_grad(model, on), attr_step(model, rl)   Part T2: only the MLP matrices require grad; after loss.backward(), per neuron
+                                              -(RL - base) . dloss/dtheta over its three vectors (float32 [layers, width])
   build_checkpoint(base_dir, rl_dir, edit, out_dir)   rewrites the safetensors shards that hold an edited tensor (same file names, keys
                                               and metadata), links every other file of the base snapshot
   diff_checkpoint(built_dir, base_dir, rl_dir, edit)  the Part G check: every tensor of a rewritten shard is loaded from both directories;
@@ -21,11 +23,13 @@ zero down column. Copies keep the tensor's dtype (asserted equal on both sides),
                                               entries must have RL's bits. A shard that is a link to the base's file is the same file.
 
 `python -m studies.cleanneurons.lib.neurons` runs selfcheck() on a tiny random Llama pair (no download): the edits above built, diffed,
-loaded and compared with the in-memory edit, undo bit for bit, and two planted faults that diff_checkpoint must reject.
+loaded and compared with the in-memory edit, undo bit for bit, two planted faults that diff_checkpoint must reject, and attr_step
+against the measured drop of a loss for a small step of a neuron set toward RL (float64 copies).
 Fail loud: no fallback. The only try/except is the planted-fault check, which fails when no error is raised.
 """
 from __future__ import annotations
 
+import copy
 import os
 import pathlib
 import re
@@ -173,6 +177,29 @@ def apply_edit(model, rl_model, edit, ops=None):
                 for ix, v in parts:
                     t[ix] = v
     return undo
+
+
+# ------------------------------------------------------------------------------------------------ attribution (Part T2)
+def mlp_grad(model, on):
+    """on: exactly the MLP matrices require grad. Off: no parameter does. Both drop every stored gradient."""
+    mlp = set(families(k for k, _ in model.named_parameters())["mlp"])
+    for k, p in model.named_parameters():
+        p.requires_grad_(on and k in mlp)
+        p.grad = None
+
+
+def attr_step(model, rl_sd):
+    """After loss.backward() under mlp_grad(model, True): float32 [layers, width], per neuron -(RL - base) . dloss/dtheta summed over
+    its gate row, up row and down column: the first-order drop of the loss when the neuron is copied from RL. The gradients keep
+    the model's dtype; the difference and the product are taken in float32. Drops the gradients."""
+    p = dict(model.named_parameters())
+    L, _ = dims(shapes_of(p))
+    dot = lambda k, dim: ((rl_sd[k].float() - p[k].detach().float()) * p[k].grad.float()).sum(dim)
+    out = torch.stack([-(dot(g, 1) + dot(u, 1) + dot(d, 0)) for g, u, d in map(tensor_names, range(L))])
+    for l in range(L):
+        for k in tensor_names(l):
+            p[k].grad = None
+    return out
 
 
 # ------------------------------------------------------------------------------------------------ as a checkpoint (Part G)
@@ -324,6 +351,34 @@ def selfcheck():
         except AssertionError:
             continue
         raise AssertionError(f"check_edit accepted {bad}")
+    # attr_step against a measured drop: a set of neurons moved a small step toward RL lowers the loss by step x the set's score
+    b64, r64 = copy.deepcopy(base).double(), copy.deepcopy(rl).double()
+    s64 = r64.state_dict()
+    with torch.no_grad():
+        lp_r = torch.log_softmax(r64(input_ids=x).logits[0], -1)
+    loss = lambda: (lp_r.exp() * (lp_r - torch.log_softmax(b64(input_ids=x).logits[0], -1))).sum(-1).mean()
+    mlp_grad(b64, True)
+    assert sorted(k for k, p in b64.named_parameters() if p.requires_grad) == sorted(k for l in range(L) for k in tensor_names(l))
+    l0 = loss()
+    l0.backward()
+    score = attr_step(b64, s64)
+    mlp_grad(b64, False)
+    assert score.shape == (L, W) and score.dtype == torch.float32 and not any(p.requires_grad or p.grad is not None for p in b64.parameters())
+    step, pred, drop = 1e-4, {}, {}
+    for name, neurons in (("a", [(0, 3), (2, 7)]), ("b", [(1, 10), (3, 40), (3, 41)])):
+        sd64 = b64.state_dict()
+        saved = {k: v.clone() for k, v in sd64.items()}
+        with torch.no_grad():
+            for l, n in neurons:
+                g, u, d = tensor_names(l)
+                for t, r in ((sd64[g][n], s64[g][n]), (sd64[u][n], s64[u][n]), (sd64[d][:, n], s64[d][:, n])):
+                    t += step * (r - t)
+            drop[name] = (float(l0) - float(loss())) / step
+        b64.load_state_dict(saved)
+        pred[name] = sum(float(score[l, n]) for l, n in neurons)
+    print("attr_step: predicted", pred, "measured", drop, flush=True)
+    assert all(abs(drop[k] - pred[k]) <= 0.02 * abs(pred[k]) for k in pred), "attr_step differs from the measured drop"
+    assert abs(drop["a"] - pred["b"]) > 0.02 * abs(pred["b"]), "the attribution check cannot tell two neuron sets apart"
     edits = [{"name": "none"}, {"name": "zero", "zero": {"1": [10, 5]}}, {"name": "copy", "copy_neurons": {"0": [3], "3": [40, 0]}},
              {"name": "layer", "copy_neurons": {"2": list(range(W))}}, {"name": "attn_zero", "copy_families": ["attn"], "zero": {"2": [20]}},
              {"name": "copy_then_zero", "copy_neurons": {"1": [10, 11]}, "zero": {"1": [10]}},
