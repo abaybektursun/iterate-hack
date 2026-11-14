@@ -94,9 +94,10 @@ def add(args):
         "timestamp": f"{meta['date']}T00:00:00Z",
         "metadata": {"paper": args.paper_id, "where": args.where, "who": who},
     })
+    ingestion_id = receipt["ingestionId"]  # only the POST response has it; the status response does not
     while receipt["status"] != "completed":
         time.sleep(3)
-        receipt = call("GET", f"ingest/{receipt['ingestionId']}")
+        receipt = call("GET", f"ingest/{ingestion_id}")
         assert receipt["status"] != "failed", receipt["failure"]
     print("added")
 

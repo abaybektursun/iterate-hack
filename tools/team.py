@@ -41,6 +41,8 @@ def now():
 def session():
     import boto3
 
+    if os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):  # the board page on Lambda (infra/monitor): the function's role
+        return boto3.Session(region_name="us-east-1")
     if PROFILE not in boto3.Session().available_profiles:
         sys.exit(f"no AWS profile '{PROFILE}' on this machine. Get the team AWS key from Abay and run\n"
                  f"  aws configure --profile {PROFILE}\n(README.md, Setup step 2).")

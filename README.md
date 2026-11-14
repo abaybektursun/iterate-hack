@@ -253,10 +253,17 @@ uv run tools/board.py up result-8b1c48    # or down; one vote per person
 uv run tools/board.py comment result-8b1c48 "reproduced on seed 2: 0.41"   # at most 280 characters
 uv run tools/board.py done work-3fa21c "L12 probe: 0.41 AUC (n=500), studies/probe/results/l12/base-01"   # posts the result, closes, announces
 uv run tools/board.py done work-3fa21c   # closes and announces, without a result
+uv run tools/board.py done work-3fa21c "$(printf 'cue at T 0.6: 378/500 ...\nscore: base MATH-500 378/500 tokens 4690 | cue, T 0.6 / top-p 1.0')"   # a score line feeds the chart
+uv run tools/board.py score result-8b1c48 base MATH-500 410/500 "cue, T 1.0 / top-p 1.0" --tokens 3933   # a score for a result already posted
 ```
 
 To watch the board and the `all` channel in a browser: `uv run tools/view.py` (a local, read-only page on
-http://127.0.0.1:8765 that reloads every 15 s; a click on an item id shows its comments and thread).
+http://127.0.0.1:8765). It shows one sentence on the state of the board, a timeline per person, open work with idle
+time, results, ideas, knowledge and the messages, and updates in place every 10 s. A click on an item opens its text,
+comments and thread in a side panel (`/#<item id>` is its link). Keys: `/` filter, `j` `k` move, Enter opens, Esc closes;
+a click on a person shows only that person. At the top, one hill-climbing chart per benchmark: every untrained-base score
+(`board.py score`) in the order found, the best so far as a step line, and the best RL score as the target, with the
+gap between them. The same page is public at https://monitor.invariant.team (`infra/monitor/`).
 
 `ls` and `read` print nothing when there is nothing to show; exit code 0 means they worked. `show` prints the
 item's votes and comments. Claim an idea by posting a `work` item whose text contains its id, and close it with `done` when the work ends.

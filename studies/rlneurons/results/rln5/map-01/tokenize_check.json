@@ -1,0 +1,398 @@
+{
+ "tolerance": 0.01,
+ "cells": {
+  "T1": {
+   "n": 500,
+   "exact_count": 459,
+   "text_roundtrip": 500,
+   "differs": [
+    {
+     "problem_index": 9,
+     "n_new": 14495,
+     "retokenized": 14494
+    },
+    {
+     "problem_index": 11,
+     "n_new": 16384,
+     "retokenized": 16381
+    },
+    {
+     "problem_index": 20,
+     "n_new": 13096,
+     "retokenized": 13095
+    },
+    {
+     "problem_index": 43,
+     "n_new": 16384,
+     "retokenized": 16383
+    },
+    {
+     "problem_index": 57,
+     "n_new": 2427,
+     "retokenized": 2426
+    },
+    {
+     "problem_index": 66,
+     "n_new": 806,
+     "retokenized": 807
+    },
+    {
+     "problem_index": 88,
+     "n_new": 10701,
+     "retokenized": 10696
+    },
+    {
+     "problem_index": 94,
+     "n_new": 16384,
+     "retokenized": 16382
+    },
+    {
+     "problem_index": 118,
+     "n_new": 10206,
+     "retokenized": 10205
+    },
+    {
+     "problem_index": 130,
+     "n_new": 10867,
+     "retokenized": 10865
+    },
+    {
+     "problem_index": 136,
+     "n_new": 11664,
+     "retokenized": 11662
+    },
+    {
+     "problem_index": 154,
+     "n_new": 11429,
+     "retokenized": 11428
+    },
+    {
+     "problem_index": 155,
+     "n_new": 1832,
+     "retokenized": 1831
+    },
+    {
+     "problem_index": 161,
+     "n_new": 859,
+     "retokenized": 861
+    },
+    {
+     "problem_index": 166,
+     "n_new": 11804,
+     "retokenized": 11802
+    },
+    {
+     "problem_index": 175,
+     "n_new": 2399,
+     "retokenized": 2398
+    },
+    {
+     "problem_index": 176,
+     "n_new": 8126,
+     "retokenized": 8125
+    },
+    {
+     "problem_index": 177,
+     "n_new": 12071,
+     "retokenized": 12070
+    },
+    {
+     "problem_index": 188,
+     "n_new": 8194,
+     "retokenized": 8195
+    },
+    {
+     "problem_index": 200,
+     "n_new": 767,
+     "retokenized": 766
+    },
+    {
+     "problem_index": 217,
+     "n_new": 11946,
+     "retokenized": 11945
+    },
+    {
+     "problem_index": 232,
+     "n_new": 9597,
+     "retokenized": 9595
+    },
+    {
+     "problem_index": 239,
+     "n_new": 16384,
+     "retokenized": 16380
+    },
+    {
+     "problem_index": 240,
+     "n_new": 4967,
+     "retokenized": 4966
+    },
+    {
+     "problem_index": 248,
+     "n_new": 16384,
+     "retokenized": 16383
+    },
+    {
+     "problem_index": 249,
+     "n_new": 7607,
+     "retokenized": 7606
+    },
+    {
+     "problem_index": 273,
+     "n_new": 5011,
+     "retokenized": 5009
+    },
+    {
+     "problem_index": 295,
+     "n_new": 16384,
+     "retokenized": 16383
+    },
+    {
+     "problem_index": 336,
+     "n_new": 2184,
+     "retokenized": 2183
+    },
+    {
+     "problem_index": 348,
+     "n_new": 1397,
+     "retokenized": 1396
+    },
+    {
+     "problem_index": 372,
+     "n_new": 12024,
+     "retokenized": 12023
+    },
+    {
+     "problem_index": 377,
+     "n_new": 3728,
+     "retokenized": 3727
+    },
+    {
+     "problem_index": 381,
+     "n_new": 14848,
+     "retokenized": 14845
+    },
+    {
+     "problem_index": 400,
+     "n_new": 12184,
+     "retokenized": 12182
+    },
+    {
+     "problem_index": 409,
+     "n_new": 3634,
+     "retokenized": 3633
+    },
+    {
+     "problem_index": 425,
+     "n_new": 16384,
+     "retokenized": 16383
+    },
+    {
+     "problem_index": 439,
+     "n_new": 10701,
+     "retokenized": 10694
+    },
+    {
+     "problem_index": 445,
+     "n_new": 13601,
+     "retokenized": 13600
+    },
+    {
+     "problem_index": 458,
+     "n_new": 1737,
+     "retokenized": 1736
+    },
+    {
+     "problem_index": 460,
+     "n_new": 14448,
+     "retokenized": 14449
+    },
+    {
+     "problem_index": 490,
+     "n_new": 13732,
+     "retokenized": 13731
+    }
+   ],
+   "left_out": [],
+   "stored_tokens": 1965987
+  },
+  "T2": {
+   "n": 500,
+   "exact_count": 466,
+   "text_roundtrip": 500,
+   "differs": [
+    {
+     "problem_index": 17,
+     "n_new": 5266,
+     "retokenized": 5265
+    },
+    {
+     "problem_index": 24,
+     "n_new": 5036,
+     "retokenized": 5035
+    },
+    {
+     "problem_index": 26,
+     "n_new": 11129,
+     "retokenized": 11130
+    },
+    {
+     "problem_index": 62,
+     "n_new": 3877,
+     "retokenized": 3876
+    },
+    {
+     "problem_index": 68,
+     "n_new": 4723,
+     "retokenized": 4722
+    },
+    {
+     "problem_index": 94,
+     "n_new": 13454,
+     "retokenized": 13453
+    },
+    {
+     "problem_index": 110,
+     "n_new": 16384,
+     "retokenized": 16383
+    },
+    {
+     "problem_index": 126,
+     "n_new": 14354,
+     "retokenized": 14352
+    },
+    {
+     "problem_index": 137,
+     "n_new": 4369,
+     "retokenized": 4368
+    },
+    {
+     "problem_index": 188,
+     "n_new": 3924,
+     "retokenized": 3923
+    },
+    {
+     "problem_index": 195,
+     "n_new": 2938,
+     "retokenized": 2937
+    },
+    {
+     "problem_index": 205,
+     "n_new": 7741,
+     "retokenized": 7740
+    },
+    {
+     "problem_index": 214,
+     "n_new": 13493,
+     "retokenized": 13491
+    },
+    {
+     "problem_index": 230,
+     "n_new": 5275,
+     "retokenized": 5274
+    },
+    {
+     "problem_index": 233,
+     "n_new": 3366,
+     "retokenized": 3365
+    },
+    {
+     "problem_index": 236,
+     "n_new": 7157,
+     "retokenized": 7156
+    },
+    {
+     "problem_index": 247,
+     "n_new": 2636,
+     "retokenized": 2635
+    },
+    {
+     "problem_index": 273,
+     "n_new": 6214,
+     "retokenized": 6208
+    },
+    {
+     "problem_index": 274,
+     "n_new": 13559,
+     "retokenized": 13558
+    },
+    {
+     "problem_index": 283,
+     "n_new": 2825,
+     "retokenized": 2824
+    },
+    {
+     "problem_index": 294,
+     "n_new": 5449,
+     "retokenized": 5448
+    },
+    {
+     "problem_index": 321,
+     "n_new": 1601,
+     "retokenized": 1600
+    },
+    {
+     "problem_index": 324,
+     "n_new": 14214,
+     "retokenized": 14217
+    },
+    {
+     "problem_index": 332,
+     "n_new": 15622,
+     "retokenized": 15621
+    },
+    {
+     "problem_index": 333,
+     "n_new": 9789,
+     "retokenized": 9788
+    },
+    {
+     "problem_index": 335,
+     "n_new": 5811,
+     "retokenized": 5809
+    },
+    {
+     "problem_index": 340,
+     "n_new": 16289,
+     "retokenized": 16287
+    },
+    {
+     "problem_index": 347,
+     "n_new": 2926,
+     "retokenized": 2925
+    },
+    {
+     "problem_index": 385,
+     "n_new": 5022,
+     "retokenized": 5023
+    },
+    {
+     "problem_index": 392,
+     "n_new": 14850,
+     "retokenized": 14849
+    },
+    {
+     "problem_index": 398,
+     "n_new": 10960,
+     "retokenized": 10959
+    },
+    {
+     "problem_index": 408,
+     "n_new": 8687,
+     "retokenized": 8686
+    },
+    {
+     "problem_index": 460,
+     "n_new": 16384,
+     "retokenized": 16383
+    },
+    {
+     "problem_index": 467,
+     "n_new": 3546,
+     "retokenized": 3545
+    }
+   ],
+   "left_out": [],
+   "stored_tokens": 2346440
+  }
+ }
+}

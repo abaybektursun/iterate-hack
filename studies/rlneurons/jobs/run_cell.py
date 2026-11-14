@@ -1,5 +1,5 @@
-"""One cell of the rlneurons study (one model, one prompt arm, one problem set, one sampling setting, one sample per problem) on
-the team runner. Reuses rln4_gen's vLLM engine and row record (prompt, extraction, graders v1 and v2, loop detectors) and adds
+"""One cell of the rlneurons study (one model, one prompt arm, one problem set, one sampling setting; one sample per problem, or
+--samples of them, each with up to --restarts restarts on a cap hit) on the team runner. Reuses rln4_gen's vLLM engine and row record (prompt, extraction, graders v1 and v2, loop detectors) and adds
 grader v3 (rln4_lib.grade_v3). Inputs come from the repository's data files; models and tokenizer at the revisions in
 data/rln4/frozen4.json.
 
@@ -12,6 +12,10 @@ data/rln4/frozen4.json.
   --prompt  plain = the pair1 prompt; cue = the pair1 prompt followed by the opening cue (frozen4.json prefill_ids).
   --set     math500 = data/rln4/math500.json (500); hard328 = the 328 problems of data/rln3/hard.json with overlap flag "none".
   --seed    problem i is sampled with seed + i (i = the problem's index in its file), the study's convention.
+  --samples k samples per problem (default 1); sample s of problem i has seed + 10000 * s + i (the RLN-3 rule).
+  --restarts an answer that hits the cap is sampled again, up to this many times (default 0), in the same job; attempt a of sample
+            s has seed + 10000 * s + 1000 * a + i. Each attempt is its own row (fields sample, attempt). specs/SPEC_day1_3.md;
+            analysis/day1_vote.py makes the vote and restart rows from the rows. metrics.json counts are over all rows (attempts).
   --n       the first n problems of the set (smoke runs); default all.
   --dry-run a stand-in engine serves canned completions (right, wrong, cap hit in turn): no vLLM, no weights, no GPU.
 
@@ -60,11 +64,11 @@ def problems(name, fz):
 
 class Canned:
     """Stand-in for J.VllmEngine (--dry-run). Request k in submission order gets: k % 3 == 0 a right answer, 1 a wrong one, 2 a cap
-    hit (max_tokens ids, no stop id). Finishes two requests per step."""
+    hit (max_tokens ids, no stop id). Finishes two requests per step. live: the unfinished requests by rid (for the gold)."""
     info = {"vllm": None, "dry_run": True}
 
-    def __init__(self, tok, golds):
-        self.tok, self.golds, self.queue, self.k = tok, golds, [], 0
+    def __init__(self, tok, live):
+        self.tok, self.live, self.queue, self.k = tok, live, [], 0
 
     def add(self, rid, ids, sampling, seed, max_tokens):
         self.queue.append((rid, self.k % 3, max_tokens))
@@ -74,7 +78,7 @@ class Canned:
         done, self.queue = self.queue[:2], self.queue[2:]
         res = []
         for rid, kind, mt in done:
-            gold = self.golds[rid]
+            gold = self.live[rid]["gold"]
             if kind == 2:
                 ids = (self.tok(" so so", add_special_tokens=False)["input_ids"] * mt)[:mt]
                 res.append((rid, ids, [-1.0] * mt, "length"))
@@ -101,6 +105,8 @@ def main():
     ap.add_argument("--max-tokens", type=int, default=None, help="default: frozen4.json cap (16,384)")
     ap.add_argument("--seed", type=int, required=True)
     ap.add_argument("--n", type=int, default=None)
+    ap.add_argument("--samples", type=int, default=1)
+    ap.add_argument("--restarts", type=int, default=0)
     ap.add_argument("--out", default=os.environ.get("OUT_DIR"))
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--commit", required=True, help="the submitted commit: $(git rev-parse HEAD), expanded on the laptop")
@@ -123,7 +129,7 @@ def main():
         assert versions == PINS, f"package versions {versions} differ from the study's {PINS}: run setup_vllm.sh first"
     repo, _, rev = fz["models"][MODELS[a.model]]
     m = {"status": "starting", "config": {**vars(a), "max_tokens": cap, "out": str(out), "model_repo": repo, "model_revision": rev,
-                                         "tokenizer": fz["tokenizer"], "prefix_ids": pre, "sampling": sampling, "seed_rule": "seed + index",
+                                         "tokenizer": fz["tokenizer"], "prefix_ids": pre, "sampling": sampling, "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
                                          "n_problems": len(probs)},
          "commit": a.commit, "job_id": os.environ.get("JOB_ID"), "versions": versions, "started_utc": J.utc()}
 
@@ -147,13 +153,16 @@ def main():
     assert max(len(p) for p in pids) + len(pre) <= 2048, "a prompt is longer than 2,048 tokens"
 
     cell = f"{a.model}_{a.prompt}_{a.set}_T{a.temperature:g}_p{a.top_p:g}"
-    reqs = [{"rid": f"{cell}|{p['index']}|0", "cell": cell, "bench": a.set, "idx": int(p["index"]), "sample": 0, "uid": p["unique_id"],
-             "ids": ids + pre, "n_prompt": len(ids), "prefix_ids": pre, "prefix_kind": "opening" if pre else "none",
-             "seed": a.seed + int(p["index"]), "sampling": sampling, "max_tokens": cap, "gold": p["answer"]} for p, ids in zip(probs, pids)]
+    assert 1 <= a.samples and 0 <= a.restarts < 10 and max(int(p["index"]) for p in probs) < 1000, "seeds of two requests would collide"
+    reqs = [{"rid": f"{cell}|{p['index']}|{s}|0", "cell": cell, "bench": a.set, "idx": int(p["index"]), "sample": s, "attempt": 0,
+             "uid": p["unique_id"], "ids": ids + pre, "n_prompt": len(ids), "prefix_ids": pre, "prefix_kind": "opening" if pre else "none",
+             "seed": a.seed + 10000 * s + int(p["index"]), "sampling": sampling, "max_tokens": cap, "gold": p["answer"]}
+            for s in range(a.samples) for p, ids in zip(probs, pids)]
+    live = {r["rid"]: r for r in reqs}
 
     t_load = time.time()
     if a.dry_run:
-        engine = Canned(tok, {r["rid"]: r["gold"] for r in reqs})
+        engine = Canned(tok, live)
         model_dir = None
     else:
         model_dir = snapshot_download(repo, revision=rev, allow_patterns=["*.json", "*.safetensors", "*.jinja", "*.txt"])
@@ -163,18 +172,24 @@ def main():
     m["status"] = "running"
     write()
 
-    live = {r["rid"]: r for r in reqs}
     for r in reqs:
         engine.add(r["rid"], r["ids"], r["sampling"], r["seed"], r["max_tokens"])
     t_gen = time.time()
-    c = {"n": 0, "correct_v3": 0, "correct_v1": 0, "cap_hits": 0, "loop_A": 0, "generated_tokens": 0}
+    c = {"n": 0, "correct_v3": 0, "correct_v1": 0, "cap_hits": 0, "loop_A": 0, "generated_tokens": 0, "restarts": 0}
     with open(rows_path, "a") as f:
         while engine.has_unfinished():
             for rid, out_ids, lps, fr in engine.step():
                 req = live.pop(rid)
                 rec = J.record(tok, req, out_ids, lps, fr)
                 rec.update(R.grade_v3(req["gold"], rec["text"]))
-                rec.update(prompt=tok.decode(req["ids"][: req["n_prompt"]], skip_special_tokens=False), model=a.model, prompt_arm=a.prompt)
+                rec.update(prompt=tok.decode(req["ids"][: req["n_prompt"]], skip_special_tokens=False), model=a.model, prompt_arm=a.prompt,
+                           attempt=req["attempt"])
+                if rec["cap_hit"] and req["attempt"] < a.restarts:          # restart: the same request with the next attempt's seed
+                    nxt = {**req, "attempt": req["attempt"] + 1, "seed": req["seed"] + 1000,
+                           "rid": f"{cell}|{req['idx']}|{req['sample']}|{req['attempt'] + 1}"}
+                    live[nxt["rid"]] = nxt
+                    engine.add(nxt["rid"], nxt["ids"], nxt["sampling"], nxt["seed"], nxt["max_tokens"])
+                    c["restarts"] += 1
                 f.write(json.dumps(rec) + "\n")
                 f.flush()
                 os.fsync(f.fileno())
@@ -185,7 +200,7 @@ def main():
                 c["loop_A"] += int(rec["loop_A"])
                 c["generated_tokens"] += rec["n_new"]
                 sec = time.time() - t_gen
-                m["counts"] = {**c, "n_planned": len(reqs), "mean_generated_tokens": c["generated_tokens"] / c["n"],
+                m["counts"] = {**c, "n_planned": len(reqs) + c["restarts"], "mean_generated_tokens": c["generated_tokens"] / c["n"],
                                "generation_s": sec, "tokens_per_s": c["generated_tokens"] / max(sec, 1e-9)}
                 write()
     assert not live, f"{len(live)} requests did not finish"
