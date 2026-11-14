@@ -12,6 +12,7 @@ the table iterate-board-test and the S3 prefix test/, which is what tools/selfte
 import functools
 import json
 import os
+import subprocess
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -23,6 +24,13 @@ PREFIX = "test/" if TEST else ""
 TABLE = "iterate-board-test" if TEST else "iterate-board"
 PROFILE = "iterate-ecr"
 CACHE = Path.home() / ".cache" / ("iterate-hack-test" if TEST else "iterate-hack")
+
+
+def who():
+    """A person's name on the board, in channels and in job ids: the part of their git email before the @, without the
+    number GitHub puts in front of a noreply address (82460915+sameraslan@users.noreply.github.com -> sameraslan)."""
+    email = subprocess.run(["git", "config", "user.email"], capture_output=True, text=True, check=True).stdout.strip()
+    return email.split("@")[0].split("+")[-1]
 
 
 def now():

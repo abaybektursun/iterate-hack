@@ -38,7 +38,6 @@ names the same id. If one of those is older than yours, close yours with done an
 """
 import re
 import secrets
-import subprocess
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -231,8 +230,7 @@ def main(argv, who):
 
 
 if __name__ == "__main__":
-    email = subprocess.run(["git", "config", "user.email"], capture_output=True, text=True, check=True).stdout.strip()
     if {"--help", "-h"} & set(sys.argv[: sys.argv.index("--") if "--" in sys.argv else None]):
         sys.exit(__doc__)
-    events.log("board", sys.argv[1:], email.split("@")[0])
-    main(sys.argv[1:], email.split("@")[0])
+    events.log("board", sys.argv[1:], team.who())
+    main(sys.argv[1:], team.who())

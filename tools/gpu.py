@@ -28,6 +28,8 @@ import time
 
 import modal
 
+import team
+
 CLASSES = ("h100", "b200", "cpu")
 jobs = modal.Dict.from_name("iterate-jobs", create_if_missing=True)
 
@@ -73,7 +75,7 @@ def submit(args):
     assert not git("status", "--porcelain"), "commit your changes first: a job runs one commit"
     sha = git("rev-parse", "HEAD")
     assert git("branch", "-r", "--contains", sha), "push the commit first, so others can read the code"
-    who = git("config", "user.email").split("@")[0]
+    who = team.who()
 
     # Upload on every submit, overwriting: the file is named by its commit, so the bytes are the same. Checking
     # first with listdir hits Modal's rate limit when many agents submit at once.
@@ -131,7 +133,7 @@ def kill(args):
     (job_id,) = args
     r = load()[job_id]
     modal.FunctionCall.from_id(r["call"]).cancel()
-    jobs[f"cancel:{job_id}"] = {"at": int(time.time()), "by": git("config", "user.email").split("@")[0]}
+    jobs[f"cancel:{job_id}"] = {"at": int(time.time()), "by": team.who()}
 
 
 if __name__ == "__main__":
@@ -139,6 +141,6 @@ if __name__ == "__main__":
 
     if {"--help", "-h"} & set(sys.argv[: sys.argv.index("--") if "--" in sys.argv else None]):
         sys.exit(__doc__)
-    events.log("gpu", sys.argv[1:], git("config", "user.email").split("@")[0])
+    events.log("gpu", sys.argv[1:], team.who())
     command, *args = sys.argv[1:] or ["help"]
     {"submit": submit, "ls": ls, "wait": wait, "logs": logs, "kill": kill, "get": get}.get(command, lambda _: sys.exit(__doc__))(args)

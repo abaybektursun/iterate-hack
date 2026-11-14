@@ -39,7 +39,7 @@ def fmt(value, digits=0):
 hours = float(sys.argv[sys.argv.index("--hours") + 1]) if "--hours" in sys.argv else 24.0
 since = time.time() - hours * 3600
 now = time.time()
-who = gpu.git("config", "user.email").split("@")[0]
+who = team.who()
 
 jobs = sorted((r for r in gpu.load().values() if r["job"]["at"] >= since), key=lambda r: r["job"]["at"])
 print(f"Jobs of {who}, last {hours:g} h:  id  state  gpu  wait  run  command")

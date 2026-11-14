@@ -33,6 +33,8 @@ import sys
 import time
 from pathlib import Path
 
+import team
+
 IMAGE = "pytorch/pytorch:2.15.0-cuda13.2-cudnn9-runtime"  # the same torch as on Modal
 ECR = "769063704696.dkr.ecr.us-east-1.amazonaws.com"
 FILTER = "num_gpus=1 verified=true reliability>0.98 rentable=true inet_down>=500 cuda_vers>=13.2 disk_space>=100"
@@ -150,7 +152,7 @@ def run(args):
     assert not git("status", "--porcelain"), "commit your changes first: a job runs one commit"
     sha = git("rev-parse", "HEAD")
     assert git("branch", "-r", "--contains", sha), "push the commit first, so the job can be traced to its code"
-    who = git("config", "user.email").split("@")[0]
+    who = team.who()
     job_id = f"{who}-{time.strftime('%m%d-%H%M%S')}-{secrets.token_hex(2)}"
     tar = subprocess.run(["git", "archive", "--format=tar", sha], capture_output=True, check=True).stdout
     ssh(instance_id, f"mkdir -p /root/{job_id}/repo /root/{job_id}/out && tar -x -C /root/{job_id}/repo", input=tar)

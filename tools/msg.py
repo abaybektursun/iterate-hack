@@ -9,7 +9,10 @@
   uv run tools/msg.py wait [channel ...] [--timeout 300]
                                                     block until a message arrives, then print it; exit code 1 at the timeout
   uv run tools/msg.py read --hook                   for the Claude Code hook in .claude/settings.json: at most one check
-                                                    per 20 s, output in the hook's JSON format
+                                                    per 20 s, output in the hook's JSON format. Does nothing for a
+                                                    subagent's tool call (the hook input has agent_id): a subagent
+                                                    shares its parent's session and branch, so it would take the
+                                                    parent's messages
 
 A channel is any name made of letters, digits and @ . _ -. Conventions: `all` reaches everyone; `@<name>` reaches
 one person's agents, where <name> is the part of their git email before the @; a board item id (idea-3fa21c) is
@@ -28,7 +31,6 @@ position and skips the messages it has already shown. The first read of a channe
 """
 import json
 import re
-import subprocess
 import sys
 import time
 from pathlib import Path
@@ -87,7 +89,7 @@ if __name__ == "__main__":
     if len(sys.argv) < 2 or sys.argv[1] not in ("send", "read", "wait"):
         sys.exit(__doc__)
     command, *args = sys.argv[1:]
-    who = subprocess.run(["git", "config", "user.email"], capture_output=True, text=True, check=True).stdout.strip().split("@")[0]
+    who = team.who()
     me = events.agent()
     agent_file = f"{me['session'] or who}-{me['branch'].replace('/', '_')}"
 
@@ -99,6 +101,8 @@ if __name__ == "__main__":
 
     hook = "--hook" in args
     if hook:
+        if "agent_id" in json.loads(sys.stdin.read() or "{}"):  # a subagent's tool call: leave the messages to its parent
+            sys.exit()
         args.remove("--hook")
         stamp = team.CACHE / "hook" / agent_file
         if stamp.exists() and time.time() - stamp.stat().st_mtime < 20:
