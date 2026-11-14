@@ -7,9 +7,24 @@ subagents, work on one research direction. The agents coordinate through two sha
 |---|---|---|
 | Board (Modal Dict `iterate-board`) | ideas, skills, knowledge, results, current work; votes and comments | `uv run tools/board.py` |
 | Memory (past.dev project) | specific findings from papers and posts; everyone's Claude Code sessions | `uv run tools/paper.py`, `python3 tools/recall.py` |
-| GPU pool (Modal app `iterate-pool`) | every GPU job, queued and capped team-wide | `uv run tools/gpu.py` |
+| GPU pool (Modal app `iterate-pool`) | every shared GPU job, queued and capped team-wide | `uv run tools/gpu.py` |
+| vast.ai (your own account) | your private GPU rentals | `python3 tools/vast.py` |
 
-## GPU pool
+## Compute
+
+There are two ways to run a job. Both run one clean, pushed commit from the repository root, write outputs to
+`$OUT_DIR`, and have the same package versions (`requirements.txt`).
+
+| | Modal pool (shared) | vast.ai (private) |
+|---|---|---|
+| Who pays | the team's Modal credits | you, from your own vast.ai account |
+| GPUs | H100 (4 for the team), B200 (2), cpu (8) | any single GPU on the market, often $0.15 to $0.70/h for 24 to 48 GB |
+| Start | a cpu job in seconds; a GPU job when its class has room | 2 to 4 min for a new box; seconds for the next job on the same box |
+| Model weights | shared cache: each model downloads once for the whole team | download on the box once; later jobs on that box reuse it |
+| Results | Volume `iterate-runs`, visible to everyone | on the box until you copy them out with `get` |
+| Use it for | batch jobs, H100/B200, anything others should see | interactive work, many small runs, GPUs the pool lacks |
+
+### Modal pool
 
 ```
 uv run tools/gpu.py submit h100 --hours 2 -- 'python exp/train.py --lr 3e-4'   # prints the job id
@@ -20,33 +35,68 @@ uv run tools/gpu.py kill <job-id>
 mkdir -p runs && modal volume get iterate-runs <job-id> runs/
 ```
 
-Classes and team-wide caps (`infra/pool.py`): `h100` 4, `b200` 2, `cpu` 8 containers. A job over its
-class's cap waits in Modal's queue. Each person can have 4 jobs queued or running. A job runs the current
-commit, which must be clean and pushed, from the repository root, and writes its outputs to `$OUT_DIR`.
-It is killed at `--hours` (default 2). The command is one shell string, so `&&` and pipes work. A cpu job
-starts within seconds when the class has room. The image pins torch, transformers, accelerate, safetensors,
-numpy, datasets, scikit-learn, scipy, pandas and matplotlib. For anything else, install it in the command
-(`'pip install -q einops && python exp/train.py'`), or add it to `infra/pool.py` and run
-`modal deploy infra/pool.py` while no jobs are queued.
+A job over its class's cap waits in Modal's queue. Each person can have 4 jobs queued or running. A job is killed
+at `--hours` (default 2). The command is one shell string, so `&&` and pipes work. Install extra packages in the
+command (`'pip install -q einops && python exp/train.py'`), or add them to `requirements.txt` and run
+`modal deploy infra/pool.py` while no jobs are queued. Requires membership in the team's Modal workspace
+(`modal token new`).
 
-## Your own GPU on vast.ai (private, your account)
+### vast.ai
 
 ```
 python3 tools/vast.py offers --ram 48             # cheapest single-GPU offers with at least 48 GB
-python3 tools/vast.py up <offer-id> --hours 3     # rent; the box destroys itself after 3 h
-python3 tools/vast.py run <instance-id> -- 'python -m pip install -q --break-system-packages einops && python exp/run.py'
+python3 tools/vast.py up <offer-id> --hours 3     # rent, check the box, print when ready; it destroys itself after 3 h
+python3 tools/vast.py run <instance-id> -- 'python exp/run.py'     # prints the job id
 python3 tools/vast.py logs <instance-id> <job-id> 50
 python3 tools/vast.py get <instance-id> <job-id>  # copies $OUT_DIR to runs/<job-id>/
 python3 tools/vast.py ls                          # your instances, state and $/h
 python3 tools/vast.py down <instance-id>
 ```
 
-Uses only your vast.ai account: your key, your credit, your instances. Nothing goes to the team stores.
 Setup once: `uv tool install vastai`, then `vastai set api-key <key>` in your own terminal, then add your ssh public
-key at https://cloud.vast.ai/manage-keys/. The box runs the stock pytorch image; install other packages in the
-command. A job runs one clean, pushed commit from the repository root and writes to `$OUT_DIR`. The deadline
-runs on the box with the instance's own key, so it fires with your laptop closed. Copy results out first:
-destroying deletes the disk.
+key at https://cloud.vast.ai/manage-keys/.
+
+- Rent one box per working session and send every job to it. A new box costs 2 to 4 minutes; the next job on a
+  box that is already up starts in seconds, and the model is already in its cache.
+- `up` waits until ssh works, then downloads 200 MB from Hugging Face. A box under 20 MB/s is destroyed at once and
+  `up` tells you to pick another offer: 9 of our 32 earlier rentals were slow or broken hosts.
+- The deadline runs on the box with the instance's own key, so it fires with your laptop closed. Copy results out
+  first: destroying deletes the disk. Stopped instances still bill storage, so `down` destroys.
+- `offers` sorts by $/h. Some hosts also charge for each GB downloaded; for a large model, check the price on the
+  vast.ai page before renting.
+
+### Images
+
+| Image | Where | Contents |
+|---|---|---|
+| Modal pool image | `infra/pool.py` | Debian, Python 3.12, `requirements.txt` (torch 2.15.0, transformers 5.22.2, ...) |
+| `pytorch/pytorch:2.15.0-cuda13.2-cudnn9-runtime` | vast.ai default | torch 2.15.0; `up` installs `requirements.txt` on top |
+| ECR `shackleton:<tag>` | vast.ai, `up --image` | older images from another project, with model weights inside (below) |
+
+The ECR images are in Abay's AWS account. Pull access ends **Sunday 2026-11-15, 23:59 PST**. Each pull is billed
+to that account at about $0.09 per GB, so use an image only when its model is the one you need, and keep the box.
+
+| Tag | Model weights inside | Size | torch / transformers |
+|---|---|---|---|
+| `v1-anchor-gemma2b` | google/gemma-2b | 8.3 GB | 2.11.0 / 5.15.0 |
+| `v2-gauge` | google/paligemma-3b-pt-224 | 15.3 GB | 2.11.0 / 5.15.0 |
+| `v1-7b` | Qwen/Qwen2.5-7B | 16.3 GB | 2.11.0 / 5.15.0 |
+| `v1-14b` | Qwen/Qwen2.5-14B | 27.6 GB | 2.11.0 / 5.15.0 |
+| `v1-32b` | Qwen/Qwen2.5-32B | 55.9 GB | 2.11.0 / 5.15.0 |
+| `v1-72b` | Qwen/Qwen2.5-72B | 117.8 GB | 2.11.0 / 5.15.0 |
+| `n13-v1` | allenai/Olmo-3-1025-7B (two revisions), allenai/Olmo-3.1-7B-RL-Zero-Math | 41.9 GB | 2.12.0 / 5.9.0 |
+| `mdl-v1` | none (dependencies only) | 3.3 GB | 2.12.0 / 5.9.0 |
+
+In the `v1-*` and `v2-gauge` images the weights are in `/models/<name>/`. In `n13-v1` they are in the image's
+Hugging Face cache (`$HF_HOME`). All of them set `HF_HUB_OFFLINE=1`; unset it in the command to download anything
+else. The pinned versions differ from `requirements.txt`, and `up` does not change them.
+
+```
+python3 tools/vast.py up <offer-id> --image 769063704696.dkr.ecr.us-east-1.amazonaws.com/shackleton:v1-7b
+```
+
+Setup for ECR: get the access key from Abay privately, then `aws configure --profile iterate-ecr` (region
+`us-east-1`). Pick a host with fast download (`offers` shows it): a 27.6 GB image took 38 minutes on a slow host.
 
 ## Board
 

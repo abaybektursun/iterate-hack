@@ -2,7 +2,9 @@
 the instances, the costs and the records in runs/vast/ belong to whoever runs it.
 
   python3 tools/vast.py offers [--ram 24] [--n 10]          cheapest offers with at least that many GB of GPU memory
-  python3 tools/vast.py up <offer-id> [--hours 3]           rent it; the box destroys itself after --hours
+  python3 tools/vast.py up <offer-id> [--hours 3] [--image <image>]
+                                                            rent it, check its download speed, wait until ready;
+                                                            the box destroys itself --hours after creation
   python3 tools/vast.py run <instance-id> -- '<command>'    run the current commit there; prints the job id
   python3 tools/vast.py logs <instance-id> <job-id> [n]     last n lines of the job's log (default 30)
   python3 tools/vast.py get <instance-id> <job-id>          copy the job's $OUT_DIR to runs/<job-id>/
@@ -12,8 +14,9 @@ the instances, the costs and the records in runs/vast/ belong to whoever runs it
 Setup once: `uv tool install vastai`, `vastai set api-key <your key>` (in your terminal, not in a chat), and add your
 ssh public key at https://cloud.vast.ai/manage-keys/.
 
-The box runs the stock pytorch image. Install anything else in the command, with
-`python -m pip install -q --break-system-packages <pkg> && python exp/run.py`. A job runs one clean, pushed commit, from
+The default image is the official pytorch image with requirements.txt installed on top, the same versions as the
+Modal pool. --image takes any other image; README.md lists the team's ECR images. Install anything else in the
+command, with `python -m pip install -q --break-system-packages <pkg> && python exp/run.py`. A job runs one clean, pushed commit, from
 the repository root, and writes its outputs to $OUT_DIR. The deadline runs on the box itself, with the instance's own
 key, so it fires even when your laptop is closed. Copy results out before it fires: destroying deletes the disk.
 """
@@ -25,9 +28,20 @@ import sys
 import time
 from pathlib import Path
 
-IMAGE = "pytorch/pytorch:2.12.1-cuda13.0-cudnn9-runtime"
-FILTER = "num_gpus=1 verified=true reliability>0.98 rentable=true inet_down>=500 cuda_vers>=12.8 disk_space>=100"
-RECORDS = Path(__file__).resolve().parent.parent / "runs" / "vast"
+IMAGE = "pytorch/pytorch:2.15.0-cuda13.2-cudnn9-runtime"  # the same torch as the Modal pool
+ECR = "769063704696.dkr.ecr.us-east-1.amazonaws.com"
+FILTER = "num_gpus=1 verified=true reliability>0.98 rentable=true inet_down>=500 cuda_vers>=13.2 disk_space>=100"
+ROOT = Path(__file__).resolve().parent.parent
+RECORDS = ROOT / "runs" / "vast"
+MIN_MB_S = 20      # a box that downloads slower than this is destroyed at once (9 of 32 earlier rentals were slow)
+BOOT_MINUTES = 20  # a box not reachable by ssh within this time is destroyed
+# The deadline: python and the instance's own key, so it works on any image and with the laptop closed.
+DESTROY = ("python3 -c \"import os, urllib.request as u; u.urlopen(u.Request("
+           "'https://console.vast.ai/api/v0/instances/' + os.environ['CONTAINER_ID'] + '/', method='DELETE', "
+           "headers={'Authorization': 'Bearer ' + os.environ['CONTAINER_API_KEY']}))\"")
+SPEED = ("python3 -c \"import time, urllib.request as u; t = time.time(); r = u.urlopen(u.Request("
+         "'https://huggingface.co/openai-community/gpt2/resolve/main/model.safetensors', "
+         "headers={'Range': 'bytes=0-199999999'})); n = len(r.read()); print(n / 1e6 / (time.time() - t))\"")
 
 
 def sh(*cmd, input=None):
@@ -38,9 +52,18 @@ def vast(*args):
     return json.loads(sh("vastai", *args, "--raw"))
 
 
+def ssh_args(url):
+    host, port = url.strip().removeprefix("ssh://").rsplit(":", 1)
+    return ["ssh", "-o", "StrictHostKeyChecking=accept-new", "-o", "BatchMode=yes", "-o", "ConnectTimeout=15", "-p", port, host]
+
+
 def ssh(instance_id, remote, input=None):
-    host, port = sh("vastai", "ssh-url", instance_id).decode().strip().removeprefix("ssh://").rsplit(":", 1)
-    return sh("ssh", "-o", "StrictHostKeyChecking=accept-new", "-o", "BatchMode=yes", "-p", port, host, remote, input=input)
+    return sh(*ssh_args(sh("vastai", "ssh-url", instance_id).decode()), remote, input=input)
+
+
+def reachable(instance_id):
+    url = subprocess.run(["vastai", "ssh-url", instance_id], capture_output=True, text=True)
+    return url.stdout.startswith("ssh://") and subprocess.run([*ssh_args(url.stdout), "true"], capture_output=True).returncode == 0
 
 
 def git(*args):
@@ -64,14 +87,36 @@ def offers(args):
 def up(args):
     offer_id = args[0]
     hours = float(args[args.index("--hours") + 1]) if "--hours" in args else 3.0
-    onstart = (f"python -m pip install -q --break-system-packages vastai; "
-               f"(sleep {int(hours * 3600)}; vastai destroy instance $CONTAINER_ID -y --api-key $CONTAINER_API_KEY) "
-               f"> /root/deadline.log 2>&1 &")
-    created = vast("create", "instance", offer_id, "--image", IMAGE, "--disk", "100", "--ssh", "--direct",
-                   "--onstart-cmd", onstart)
+    image = args[args.index("--image") + 1] if "--image" in args else IMAGE
+    t0 = time.time()
+    onstart = f"(sleep {int(hours * 3600)}; {DESTROY}) > /root/deadline.log 2>&1 &"
+    if image == IMAGE:  # install the pinned versions, so a job sees the same packages as on the Modal pool
+        pins = " ".join(shlex.quote(p) for p in (ROOT / "requirements.txt").read_text().split())
+        onstart += f" python -m pip install -q --break-system-packages {pins} > /root/pip.log 2>&1;"
+    onstart += " touch /root/ready"
+    login = []
+    if image.startswith(ECR):  # pull access from the iterate-ecr profile, valid until 2026-11-16 08:00 UTC
+        token = sh("aws", "ecr", "get-login-password", "--region", "us-east-1", "--profile", "iterate-ecr").decode().strip()
+        login = ["--login", f"-u AWS -p {token} {ECR}"]
+    created = vast("create", "instance", offer_id, "--image", image, "--disk", "100", "--ssh", "--direct",
+                   "--onstart-cmd", onstart, *login)
     instance_id = str(created["new_contract"])
-    record(f"instance-{instance_id}", offer=offer_id, hours=hours, image=IMAGE)
-    print(f"{instance_id}  destroys itself in {hours} h; `ls` shows when it is running")
+    print(f"{instance_id} created; waiting for ssh", flush=True)
+    while not reachable(instance_id):
+        if time.time() - t0 > BOOT_MINUTES * 60:
+            down([instance_id])
+            sys.exit(f"not reachable after {BOOT_MINUTES} min; destroyed. Try another offer.")
+        time.sleep(15)
+    booted = time.time() - t0
+    mb_s = float(ssh(instance_id, SPEED))
+    if mb_s < MIN_MB_S:
+        down([instance_id])
+        sys.exit(f"downloads at {mb_s:.0f} MB/s, under {MIN_MB_S}; destroyed. Try another offer.")
+    ssh(instance_id, "while [ ! -e /root/ready ]; do sleep 2; done")
+    record(f"instance-{instance_id}", offer=offer_id, hours=hours, image=image, boot_s=round(booted),
+           ready_s=round(time.time() - t0), mb_s=round(mb_s))
+    print(f"{instance_id} ready in {time.time() - t0:.0f} s (ssh at {booted:.0f} s, {mb_s:.0f} MB/s); "
+          f"destroys itself {hours} h after creation")
 
 
 def run(args):

@@ -26,18 +26,7 @@ import modal
 
 image = (
     modal.Image.debian_slim(python_version="3.12")
-    .pip_install(
-        "torch==2.15.0",
-        "transformers==5.22.2",
-        "accelerate==1.15.0",
-        "safetensors==0.8.0",
-        "numpy==2.5.4",
-        "datasets==5.2.0",
-        "scikit-learn==1.9.1",
-        "scipy==1.18.1",
-        "pandas==3.1.1",
-        "matplotlib==3.11.2",
-    )
+    .pip_install_from_requirements(str(Path(__file__).resolve().parent.parent / "requirements.txt"))
     .env({"HF_HOME": "/hf", "PYTHONUNBUFFERED": "1"})
 )
 runs = modal.Volume.from_name("iterate-runs", create_if_missing=True)
