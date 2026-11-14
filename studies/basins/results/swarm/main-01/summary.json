@@ -1,0 +1,846 @@
+{
+ "n_board_items": 42,
+ "n_possible": 20,
+ "n_basins": 9,
+ "basins_visited": 9,
+ "basins_only_possible": [],
+ "coverage_of_possible_directions": [
+  20,
+  20
+ ],
+ "largest_basin_share": 0.16666666666666666,
+ "effective_basins": 8.471174013323857,
+ "moves": 33,
+ "moves_to_new_basin": 13,
+ "triplet_order_consistency": [
+  714,
+  766
+ ],
+ "tste_heldout_acc": 0.8472222222222222,
+ "tste_shuffled_id_null": 0.5138888888888888,
+ "partition_ari_order0_vs_order1": 0.8399311531841652,
+ "kmeans_best_k": 3,
+ "partition_ari_vs_kmeans": 0.12899154843397453,
+ "directions_pursued_both_orders": [
+  12,
+  20
+ ],
+ "directions_pursued_either_order": [
+  12,
+  20
+ ],
+ "directions_pursued_agree_across_orders": [
+  20,
+  20
+ ],
+ "directions_untouched": [
+  "Verifier Free Branch Search",
+  "Draft Critique Revision Cycles",
+  "Adaptive Entropy Sampling Schedules",
+  "Fixed Few Shot Demonstrations",
+  "Structured Reasoning Format Prompts",
+  "Localized Weight Difference Interventions",
+  "Training Free Context Compaction",
+  "Alternative Sampling Truncation Rules"
+ ],
+ "directions": [
+  {
+   "id": "dir-06",
+   "name": "Explicit Loop Suppression Decoding",
+   "items_both": [
+    "knowledge-d692e4"
+   ],
+   "items_either": [
+    "knowledge-d692e4"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-10",
+   "name": "Verifier Free Branch Search",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-00",
+   "name": "Opening Cue And Template Search",
+   "items_both": [
+    "idea-e0a5a7",
+    "knowledge-8a31ad",
+    "result-c36598",
+    "work-a50d39"
+   ],
+   "items_either": [
+    "idea-1fcafe",
+    "idea-b19ad2",
+    "idea-e0a5a7",
+    "knowledge-8a31ad",
+    "result-bac4fd",
+    "result-c36598",
+    "result-e870a1",
+    "work-a50d39",
+    "work-d8aa69"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-16",
+   "name": "Paired Failure Mode Analysis",
+   "items_both": [
+    "idea-3f3378",
+    "idea-ecc123",
+    "result-5e17a6"
+   ],
+   "items_either": [
+    "idea-3f3378",
+    "idea-65a86d",
+    "idea-d204a7",
+    "idea-ecc123",
+    "result-5e17a6",
+    "work-e0effe"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-09",
+   "name": "Draft Critique Revision Cycles",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-15",
+   "name": "Mechanistic Loop And Completion Analysis",
+   "items_both": [
+    "idea-d204a7",
+    "work-e0effe"
+   ],
+   "items_either": [
+    "idea-d204a7",
+    "work-e0effe"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-05",
+   "name": "Adaptive Entropy Sampling Schedules",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-02",
+   "name": "Fixed Few Shot Demonstrations",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-01",
+   "name": "Structured Reasoning Format Prompts",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-17",
+   "name": "Independent Grader Robustness Audit",
+   "items_both": [
+    "idea-884e91",
+    "knowledge-781efc"
+   ],
+   "items_either": [
+    "idea-884e91",
+    "knowledge-781efc"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-14",
+   "name": "Localized Weight Difference Interventions",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-03",
+   "name": "Temperature And Nucleus Factorial",
+   "items_both": [
+    "idea-1bd34f",
+    "result-533123",
+    "result-bac4fd",
+    "work-55d1fe"
+   ],
+   "items_either": [
+    "idea-1bd34f",
+    "result-533123",
+    "result-7968b8",
+    "result-bac4fd",
+    "result-c36598",
+    "result-e870a1",
+    "work-55d1fe"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-12",
+   "name": "Training Free Context Compaction",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-04",
+   "name": "Alternative Sampling Truncation Rules",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-13",
+   "name": "Global Weight Difference Scaling",
+   "items_both": [
+    "idea-2eb58d",
+    "work-07ac85"
+   ],
+   "items_either": [
+    "idea-2eb58d",
+    "work-07ac85"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-19",
+   "name": "Replicated Selection And Locked Evaluation",
+   "items_both": [
+    "idea-1fcafe",
+    "idea-8b9cc7",
+    "idea-b19ad2",
+    "result-7968b8",
+    "result-bac4fd",
+    "work-a50d39",
+    "work-a992bd",
+    "work-d8aa69"
+   ],
+   "items_either": [
+    "idea-1fcafe",
+    "idea-8b9cc7",
+    "idea-b19ad2",
+    "result-7968b8",
+    "result-bac4fd",
+    "work-a50d39",
+    "work-a992bd",
+    "work-d8aa69"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-07",
+   "name": "Loop Triggered Restart Policies",
+   "items_both": [
+    "idea-3f3378",
+    "idea-8b9cc7",
+    "result-e870a1",
+    "work-a992bd"
+   ],
+   "items_either": [
+    "idea-3f3378",
+    "idea-8b9cc7",
+    "result-e870a1",
+    "work-a992bd"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-18",
+   "name": "Dataset Integrity And Leakage Checks",
+   "items_both": [
+    "knowledge-42a54f"
+   ],
+   "items_either": [
+    "knowledge-42a54f"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-08",
+   "name": "Budget Matched Answer Voting",
+   "items_both": [
+    "idea-8b9cc7",
+    "idea-ecc123",
+    "knowledge-d692e4",
+    "work-a992bd"
+   ],
+   "items_either": [
+    "idea-8b9cc7",
+    "idea-ecc123",
+    "knowledge-d692e4",
+    "work-a992bd"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-11",
+   "name": "Generation Budget Allocation Frontiers",
+   "items_both": [
+    "idea-3f3378",
+    "idea-8b9cc7",
+    "idea-ecc123",
+    "work-a992bd"
+   ],
+   "items_either": [
+    "idea-3f3378",
+    "idea-8b9cc7",
+    "idea-ecc123",
+    "work-a992bd"
+   ],
+   "orders_agree": true
+  }
+ ],
+ "leaderboard": [
+  {
+   "item": "result-533123",
+   "model": "rl",
+   "method": "plain prompt",
+   "setting": "T 0.6",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 464,
+   "score_pct": 92.8,
+   "grader": "v3",
+   "quote": "464/500 at T 0.6 (92.8 %)",
+   "basin": "Sampling And Repetition Controls",
+   "directions": [
+    "Temperature And Nucleus Factorial"
+   ],
+   "more_tokens": false,
+   "superseded": false
+  },
+  {
+   "item": "result-533123",
+   "model": "rl",
+   "method": "plain prompt",
+   "setting": "T 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 463,
+   "score_pct": 92.6,
+   "grader": "v3",
+   "quote": "Olmo-3.1-7B-RL-Zero-Math, plain prompt: 463/500 MATH-500 at T 1.0 (92.6 %)",
+   "basin": "Sampling And Repetition Controls",
+   "directions": [
+    "Temperature And Nucleus Factorial"
+   ],
+   "more_tokens": false,
+   "superseded": false
+  },
+  {
+   "item": "result-e870a1",
+   "model": "base",
+   "method": "cue + restart",
+   "setting": "T 0.6 / top-p 0.95 / up to 3 attempts",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 414,
+   "score_pct": 82.8,
+   "grader": "v3",
+   "quote": "Restarting cap hits (up to 3 attempts) gives 414/500",
+   "basin": "Budgeted Restarts Voting And Search",
+   "directions": [
+    "Opening Cue And Template Search",
+    "Temperature And Nucleus Factorial",
+    "Loop Triggered Restart Policies"
+   ],
+   "more_tokens": true,
+   "superseded": false
+  },
+  {
+   "item": "result-c36598",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 410,
+   "score_pct": 82.0,
+   "grader": "v3",
+   "quote": "Base Olmo-3-1025-7B + opening cue, T 1.0 / top-p 1.0: 410/500 MATH-500 (82.0 %)",
+   "basin": "Prompt Cues And Reasoning Scaffolds",
+   "directions": [
+    "Opening Cue And Template Search",
+    "Temperature And Nucleus Factorial"
+   ],
+   "more_tokens": false,
+   "superseded": false
+  },
+  {
+   "item": "result-e870a1",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 0.6 / top-p 0.95",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 354,
+   "score_pct": 70.8,
+   "grader": "v3",
+   "quote": "Base + cue at T 0.6 / top-p 0.95: 354/500 MATH-500 (70.8 %)",
+   "basin": "Budgeted Restarts Voting And Search",
+   "directions": [
+    "Opening Cue And Template Search",
+    "Temperature And Nucleus Factorial",
+    "Loop Triggered Restart Policies"
+   ],
+   "more_tokens": false,
+   "superseded": false
+  },
+  {
+   "item": "result-7968b8",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 0.6 / base-01 run",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 319,
+   "score_pct": 63.8,
+   "grader": "v3",
+   "quote": "Base plain prompt, T 0.6: 319/500 MATH-500 (63.8 %, base-01 run)",
+   "basin": "Sampling And Repetition Controls",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "superseded": false
+  },
+  {
+   "item": "result-7968b8",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 0.6 / n13 run",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 305,
+   "score_pct": 61.0,
+   "grader": "v3",
+   "quote": "305/500 (61.0 %, n13 run), grader v3",
+   "basin": "Sampling And Repetition Controls",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "superseded": false
+  },
+  {
+   "item": "result-c36598",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 224,
+   "score_pct": 44.8,
+   "grader": "v3",
+   "quote": "Plain base at T 1.0: 224/500 (44.8 %)",
+   "basin": "Prompt Cues And Reasoning Scaffolds",
+   "directions": [
+    "Opening Cue And Template Search",
+    "Temperature And Nucleus Factorial"
+   ],
+   "more_tokens": false,
+   "superseded": false
+  },
+  {
+   "item": "result-7968b8",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 0.6 / n13 run",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 286,
+   "score_pct": 57.2,
+   "grader": "v1",
+   "quote": "The older 57.2 is grader v1 on the n13 run (286/500).",
+   "basin": "Sampling And Repetition Controls",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "superseded": true
+  }
+ ],
+ "best_base_pct": 82.8,
+ "best_base_one_sample_pct": 82.0,
+ "rl_reference_pct": 92.6,
+ "control": [
+  {
+   "copy": "ctl-1",
+   "of": "work-0b7cb3",
+   "same_group": [
+    true,
+    true
+   ],
+   "closer_than_original": 0
+  },
+  {
+   "copy": "ctl-2",
+   "of": "work-0b7cb3",
+   "same_group": [
+    true,
+    true
+   ],
+   "closer_than_original": 1
+  }
+ ],
+ "basins": [
+  {
+   "basin": 8,
+   "name": "Board Visualization And Coordination Tooling",
+   "board_items": 7,
+   "possible": 0,
+   "best_base_pct": null,
+   "kinds": {
+    "work": 4,
+    "idea": 1,
+    "knowledge": 1,
+    "result": 1
+   }
+  },
+  {
+   "basin": 2,
+   "name": "Budgeted Restarts Voting And Search",
+   "board_items": 6,
+   "possible": 4,
+   "best_base_pct": 82.8,
+   "kinds": {
+    "possible": 4,
+    "idea": 3,
+    "work": 2,
+    "result": 1
+   }
+  },
+  {
+   "basin": 6,
+   "name": "Controlled Benchmark And Checkpoint Evaluation",
+   "board_items": 6,
+   "possible": 1,
+   "best_base_pct": null,
+   "kinds": {
+    "possible": 1,
+    "idea": 3,
+    "work": 2,
+    "knowledge": 1
+   }
+  },
+  {
+   "basin": 1,
+   "name": "Sampling And Repetition Controls",
+   "board_items": 5,
+   "possible": 4,
+   "best_base_pct": 63.8,
+   "kinds": {
+    "possible": 4,
+    "idea": 1,
+    "work": 1,
+    "result": 2,
+    "knowledge": 1
+   }
+  },
+  {
+   "basin": 4,
+   "name": "Comparative Behavior And Mechanism Analysis",
+   "board_items": 5,
+   "possible": 2,
+   "best_base_pct": null,
+   "kinds": {
+    "possible": 2,
+    "idea": 2,
+    "work": 1,
+    "result": 2
+   }
+  },
+  {
+   "basin": 7,
+   "name": "Research Execution Infrastructure And Workflow",
+   "board_items": 5,
+   "possible": 0,
+   "best_base_pct": null,
+   "kinds": {
+    "knowledge": 2,
+    "work": 2,
+    "result": 1
+   }
+  },
+  {
+   "basin": 3,
+   "name": "Weight Edits And Task Vectors",
+   "board_items": 3,
+   "possible": 2,
+   "best_base_pct": null,
+   "kinds": {
+    "possible": 2,
+    "idea": 2,
+    "work": 1
+   }
+  },
+  {
+   "basin": 5,
+   "name": "Grading And Dataset Integrity Audits",
+   "board_items": 3,
+   "possible": 2,
+   "best_base_pct": null,
+   "kinds": {
+    "possible": 2,
+    "knowledge": 2,
+    "idea": 1
+   }
+  },
+  {
+   "basin": 0,
+   "name": "Prompt Cues And Reasoning Scaffolds",
+   "board_items": 2,
+   "possible": 5,
+   "best_base_pct": 82.0,
+   "kinds": {
+    "possible": 5,
+    "result": 1,
+    "knowledge": 1
+   }
+  }
+ ],
+ "move_list": [
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:14:27",
+   "from": "Controlled Benchmark And Checkpoint Evaluation",
+   "to": "Sampling And Repetition Controls",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:14:28",
+   "from": "Sampling And Repetition Controls",
+   "to": "Budgeted Restarts Voting And Search",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:14:29",
+   "from": "Budgeted Restarts Voting And Search",
+   "to": "Weight Edits And Task Vectors",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:41",
+   "from": "Weight Edits And Task Vectors",
+   "to": "Prompt Cues And Reasoning Scaffolds",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:42",
+   "from": "Prompt Cues And Reasoning Scaffolds",
+   "to": "Sampling And Repetition Controls",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:43",
+   "from": "Sampling And Repetition Controls",
+   "to": "Comparative Behavior And Mechanism Analysis",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:45",
+   "from": "Comparative Behavior And Mechanism Analysis",
+   "to": "Budgeted Restarts Voting And Search",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:46",
+   "from": "Budgeted Restarts Voting And Search",
+   "to": "Sampling And Repetition Controls",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:54",
+   "from": "Sampling And Repetition Controls",
+   "to": "Grading And Dataset Integrity Audits",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:57",
+   "from": "Grading And Dataset Integrity Audits",
+   "to": "Controlled Benchmark And Checkpoint Evaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:58",
+   "from": "Controlled Benchmark And Checkpoint Evaluation",
+   "to": "Grading And Dataset Integrity Audits",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:16:01",
+   "from": "Grading And Dataset Integrity Audits",
+   "to": "Controlled Benchmark And Checkpoint Evaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:21:23",
+   "from": "Controlled Benchmark And Checkpoint Evaluation",
+   "to": "Board Visualization And Coordination Tooling",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T20:25:39Z",
+   "from": "Board Visualization And Coordination Tooling",
+   "to": "Research Execution Infrastructure And Workflow",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T20:50:00Z",
+   "from": "Research Execution Infrastructure And Workflow",
+   "to": "Board Visualization And Coordination Tooling",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:00:34Z",
+   "from": "Board Visualization And Coordination Tooling",
+   "to": "Research Execution Infrastructure And Workflow",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:10:21Z",
+   "from": "Research Execution Infrastructure And Workflow",
+   "to": "Controlled Benchmark And Checkpoint Evaluation",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:12:44Z",
+   "from": "Prompt Cues And Reasoning Scaffolds",
+   "to": "Sampling And Repetition Controls",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:15:20Z",
+   "from": "Controlled Benchmark And Checkpoint Evaluation",
+   "to": "Board Visualization And Coordination Tooling",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:16:53Z",
+   "from": "Board Visualization And Coordination Tooling",
+   "to": "Budgeted Restarts Voting And Search",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:17:13Z",
+   "from": "Budgeted Restarts Voting And Search",
+   "to": "Sampling And Repetition Controls",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:17:22Z",
+   "from": "Sampling And Repetition Controls",
+   "to": "Budgeted Restarts Voting And Search",
+   "new": true
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:17:26Z",
+   "from": "Budgeted Restarts Voting And Search",
+   "to": "Comparative Behavior And Mechanism Analysis",
+   "new": true
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:17:30Z",
+   "from": "Comparative Behavior And Mechanism Analysis",
+   "to": "Weight Edits And Task Vectors",
+   "new": true
+  },
+  {
+   "who": "frustea",
+   "at": "2026-11-14T21:19:33Z",
+   "from": "Board Visualization And Coordination Tooling",
+   "to": "Comparative Behavior And Mechanism Analysis",
+   "new": true
+  },
+  {
+   "who": "frustea",
+   "at": "2026-11-14T21:19:41Z",
+   "from": "Comparative Behavior And Mechanism Analysis",
+   "to": "Board Visualization And Coordination Tooling",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:19:44Z",
+   "from": "Sampling And Repetition Controls",
+   "to": "Board Visualization And Coordination Tooling",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:20:06Z",
+   "from": "Weight Edits And Task Vectors",
+   "to": "Comparative Behavior And Mechanism Analysis",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:24:43Z",
+   "from": "Board Visualization And Coordination Tooling",
+   "to": "Controlled Benchmark And Checkpoint Evaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:29:41Z",
+   "from": "Controlled Benchmark And Checkpoint Evaluation",
+   "to": "Board Visualization And Coordination Tooling",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:31:43Z",
+   "from": "Board Visualization And Coordination Tooling",
+   "to": "Research Execution Infrastructure And Workflow",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:33:51Z",
+   "from": "Comparative Behavior And Mechanism Analysis",
+   "to": "Budgeted Restarts Voting And Search",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:35:42Z",
+   "from": "Budgeted Restarts Voting And Search",
+   "to": "Weight Edits And Task Vectors",
+   "new": false
+  }
+ ]
+}
