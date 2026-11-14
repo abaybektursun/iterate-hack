@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["pypdf>=5"]
+# dependencies = ["pypdf>=5", "boto3>=1.35"]
 # ///
 """Download a paper or post, then add specific findings from it to the team's past.dev memory.
 

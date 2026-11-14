@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["modal>=1.4"]
+# dependencies = ["modal>=1.4", "boto3>=1.35"]
 # ///
 """Submit GPU jobs to your own Modal workspace (deploy infra/runner.py there once) and inspect them.
 

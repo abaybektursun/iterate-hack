@@ -2,45 +2,64 @@
 # requires-python = ">=3.11"
 # dependencies = []
 # ///
-"""Team credentials, shared through the private team store (tools/team.py, folder shared) instead of chat.
+"""Team credentials, shared through the private GitHub repository abaybektursun/iterate-hack-team instead of chat.
 
   uv run tools/shared.py setup              install every shared credential on this machine
-  uv run tools/shared.py put ecr <file>     (the owner) store the ECR pull key; <file> is the JSON from `aws iam create-access-key`
+  uv run tools/shared.py put aws <file>     (the owner) store the team AWS key; <file> is the JSON from `aws iam create-access-key`
   uv run tools/shared.py put past           (the owner) store the past.dev project key; it is typed at a hidden prompt
 
-Whoever can read the repository abaybektursun/iterate-hack-team can read them. setup writes:
-  ecr   the AWS profile iterate-ecr (region us-east-1), which tools/vast.py uses for `up --image <ECR image>`
+Whoever can read that repository can read them (needs `gh auth login`). It is cloned to ~/.iterate-hack-team.
+setup writes:
+  aws   the AWS profile iterate-ecr (region us-east-1): the team store on S3 (board, events, traces) and the
+        ECR images for `tools/vast.py up --image`
   past  ~/.past/config.json with your git email as identity and recall off; an existing file is left unchanged
 No command prints a credential.
 """
 import getpass
 import json
-import os
 import subprocess
 import sys
 from pathlib import Path
 
-import team
+REPO = "abaybektursun/iterate-hack-team"
+DIR = Path.home() / ".iterate-hack-team"
+
+
+def git(*args):
+    subprocess.run(["git", "-C", str(DIR), *args], check=True)
+
+
+def sync():
+    if DIR.exists():
+        git("pull", "-q", "--rebase")
+    else:
+        subprocess.run(["gh", "repo", "clone", REPO, str(DIR), "--", "-q"], check=True)
 
 
 def put(name, *args):
-    if name == "ecr":
+    if name == "aws":
         key = json.loads(Path(args[0]).read_text())["AccessKey"]
         value = {"id": key["AccessKeyId"], "secret": key["SecretAccessKey"]}
     else:
-        assert name == "past", "name must be ecr or past"
+        assert name == "past", "name must be aws or past"
         value = {"key": getpass.getpass("past.dev project key (hidden): ").strip()}
-    team.Store("shared")[name] = value
+    sync()
+    (DIR / "shared").mkdir(exist_ok=True)
+    (DIR / "shared" / f"{name}.json").write_text(json.dumps(value))
+    git("add", f"shared/{name}.json")
+    git("commit", "-qm", f"shared: {name}")
+    git("push", "-q")
     print(f"stored {name}")
 
 
 def setup():
-    shared = dict(team.Store("shared").items())
-    if "ecr" in shared:
-        for field, value in (("aws_access_key_id", shared["ecr"]["id"]), ("aws_secret_access_key", shared["ecr"]["secret"]),
+    sync()
+    shared = {p.stem: json.loads(p.read_text()) for p in (DIR / "shared").glob("*.json")}
+    if "aws" in shared:
+        for field, value in (("aws_access_key_id", shared["aws"]["id"]), ("aws_secret_access_key", shared["aws"]["secret"]),
                              ("region", "us-east-1")):
             subprocess.run(["aws", "configure", "set", field, value, "--profile", "iterate-ecr"], check=True)
-        print("ecr: wrote the AWS profile iterate-ecr")
+        print("aws: wrote the AWS profile iterate-ecr")
     config = Path.home() / ".past" / "config.json"
     if "past" in shared and config.exists():
         print(f"past: {config} exists, left unchanged")
@@ -50,7 +69,7 @@ def setup():
         config.touch(mode=0o600)
         config.write_text(json.dumps({"apiKey": shared["past"]["key"], "identity": email, "recall": False}, indent=1))
         print(f"past: wrote {config}")
-    print("not shared yet: " + (", ".join(sorted({"ecr", "past"} - set(shared))) or "nothing"))
+    print("not shared yet: " + (", ".join(sorted({"aws", "past"} - set(shared))) or "nothing"))
 
 
 if __name__ == "__main__":

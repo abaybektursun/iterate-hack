@@ -1,76 +1,46 @@
-"""The team store: one private GitHub repository, abaybektursun/iterate-hack-team, that holds everything the team
-shares: the board, the events, the traces and the shared credentials. Modal is not used for it, because each
-person has their own Modal workspace.
+"""The team store: the S3 bucket iterate-hack-team-769063704696 (us-east-1, in Abay's AWS account), which holds
+what the team shares: the board, the events and the traces. Modal is not used for it, because each person has
+their own Modal workspace.
 
-It is cloned to ~/.iterate-hack-team on first use (needs `gh auth login` and access to the repository). A Store
-is a folder of JSON files, one file per key, so two writers never touch the same file. Every write is a commit
-that is pushed at once; if someone else pushed first, it pulls with rebase and pushes again.
+Access is through the AWS profile iterate-ecr, which `uv run tools/shared.py setup` writes. The same key pulls
+the ECR images. It can read and write objects in this bucket, cannot delete them, and stops working Sunday
+2026-11-15 at 23:59 PST. The bucket keeps every version of every object.
+
+A Store is a prefix of JSON objects, one object per key, so two writers never touch the same object. When two
+writers do write the same key, the later write wins.
 """
-import contextlib
-import fcntl
+import functools
 import json
-import subprocess
-from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor
 
-REPO = "abaybektursun/iterate-hack-team"
-DIR = Path.home() / ".iterate-hack-team"
-
-
-def git(*args, check=True):
-    return subprocess.run(["git", "-C", str(DIR), *args], capture_output=True, text=True, check=check)
+BUCKET = "iterate-hack-team-769063704696"
+PROFILE = "iterate-ecr"
 
 
-@contextlib.contextmanager
-def locked():
-    """One git command sequence at a time on this machine: several agents of one person share the clone."""
-    with open(str(DIR) + ".lock", "w") as f:
-        fcntl.flock(f, fcntl.LOCK_EX)
-        yield
+@functools.cache
+def s3():
+    import boto3
 
-
-def sync():
-    with locked():
-        if DIR.exists():
-            git("pull", "-q", "--rebase", "--autostash")
-        else:
-            subprocess.run(["gh", "repo", "clone", REPO, str(DIR), "--", "-q"], check=True)
-
-
-def push(message):
-    with locked():
-        git("add", "--all")  # this clone holds only store files
-        if git("diff", "--cached", "--quiet", check=False).returncode == 0:
-            return
-        git("commit", "-qm", message)
-        for _ in range(5):
-            if git("push", "-q", check=False).returncode == 0:
-                return
-            git("pull", "-q", "--rebase")
-        raise RuntimeError(f"could not push to {REPO} after 5 attempts")
+    return boto3.Session(profile_name=PROFILE, region_name="us-east-1").client("s3")
 
 
 class Store:
     def __init__(self, name):
-        sync()
         self.name = name
-        self.dir = DIR / name
-        self.dir.mkdir(exist_ok=True)
-
-    def path(self, key):
-        return self.dir / (key.replace(":", "__") + ".json")
 
     def __getitem__(self, key):
-        if not self.path(key).exists():
-            raise KeyError(key)
-        return json.loads(self.path(key).read_text())
-
-    def put(self, key, value, publish=True):
-        self.path(key).write_text(json.dumps(value, indent=1, sort_keys=True))
-        if publish:
-            push(f"{self.name}: {key}")
+        try:
+            body = s3().get_object(Bucket=BUCKET, Key=f"{self.name}/{key}.json")["Body"].read()
+        except s3().exceptions.NoSuchKey:
+            raise KeyError(key) from None
+        return json.loads(body)
 
     def __setitem__(self, key, value):
-        self.put(key, value)
+        body = json.dumps(value, indent=1, sort_keys=True).encode()
+        s3().put_object(Bucket=BUCKET, Key=f"{self.name}/{key}.json", Body=body, ContentType="application/json")
 
     def items(self):
-        return [(p.stem.replace("__", ":"), json.loads(p.read_text())) for p in sorted(self.dir.glob("*.json"))]
+        pages = s3().get_paginator("list_objects_v2").paginate(Bucket=BUCKET, Prefix=f"{self.name}/")
+        keys = [o["Key"][len(self.name) + 1:-len(".json")] for page in pages for o in page.get("Contents", [])]
+        with ThreadPoolExecutor(32) as pool:
+            return list(zip(keys, pool.map(self.__getitem__, keys)))

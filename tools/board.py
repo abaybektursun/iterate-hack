@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.11"
-# dependencies = []
+# dependencies = ["boto3>=1.35"]
 # ///
 """The team board: ideas, skills, knowledge, results and current work, with votes and comments.
 
@@ -13,8 +13,8 @@
   uv run tools/board.py comment <id> "<text>"     at most 280 characters
   uv run tools/board.py done <id>                 close a work item
 
-Stored in the team store (tools/team.py), folder board. Each item, each person's vote on an item and each
-comment has its own file, so two people writing at the same time never overwrite each other.
+Stored in the team store (tools/team.py, S3), prefix board. Each item, each person's vote on an item and each
+comment is its own object, so two people writing at the same time never overwrite each other.
 
 To claim an idea, post a work item whose text names the idea id. post then prints any other open work
 item that names the same id. If one of those is older than yours, close yours with done and pick another.
