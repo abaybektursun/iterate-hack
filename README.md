@@ -29,6 +29,25 @@ numpy, datasets, scikit-learn, scipy, pandas and matplotlib. For anything else, 
 (`'pip install -q einops && python exp/train.py'`), or add it to `infra/pool.py` and run
 `modal deploy infra/pool.py` while no jobs are queued.
 
+## Your own GPU on vast.ai (private, your account)
+
+```
+python3 tools/vast.py offers --ram 48             # cheapest single-GPU offers with at least 48 GB
+python3 tools/vast.py up <offer-id> --hours 3     # rent; the box destroys itself after 3 h
+python3 tools/vast.py run <instance-id> -- 'python -m pip install -q --break-system-packages einops && python exp/run.py'
+python3 tools/vast.py logs <instance-id> <job-id> 50
+python3 tools/vast.py get <instance-id> <job-id>  # copies $OUT_DIR to runs/<job-id>/
+python3 tools/vast.py ls                          # your instances, state and $/h
+python3 tools/vast.py down <instance-id>
+```
+
+Uses only your vast.ai account: your key, your credit, your instances. Nothing goes to the team stores.
+Setup once: `uv tool install vastai`, then `vastai set api-key <key>` in your own terminal, then add your ssh public
+key at https://cloud.vast.ai/manage-keys/. The box runs the stock pytorch image; install other packages in the
+command. A job runs one clean, pushed commit from the repository root and writes to `$OUT_DIR`. The deadline
+runs on the box with the instance's own key, so it fires with your laptop closed. Copy results out first:
+destroying deletes the disk.
+
 ## Board
 
 ```
