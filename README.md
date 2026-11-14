@@ -12,14 +12,14 @@ subagents, work on one research direction. The agents coordinate through two sha
 
 ## Compute
 
-There are two ways to run a job. Both run one clean, pushed commit from the repository root, write outputs to
-`$OUT_DIR`, and have the same package versions (`requirements.txt`).
+There are two ways to run a job. Both run one clean, pushed commit from the repository root, with the root first
+on `PYTHONPATH`, write outputs to `$OUT_DIR`, and have the same package versions (`requirements.txt`).
 
 | | Modal pool (shared) | vast.ai (private) |
 |---|---|---|
 | Who pays | the team's Modal credits | you, from your own vast.ai account |
 | GPUs | H100 (4 for the team), B200 (2), cpu (8) | any single GPU on the market, often $0.15 to $0.70/h for 24 to 48 GB |
-| Start | a cpu job in seconds; a GPU job when its class has room | 2 to 4 min for a new box; seconds for the next job on the same box |
+| Start | about 10 s when the class has room (measured for cpu and H100) | 2 to 4 min for a new box (measured 137 to 232 s); about 4 s for the next job on the same box |
 | Model weights | shared cache: each model downloads once for the whole team | download on the box once; later jobs on that box reuse it |
 | Results | Volume `iterate-runs`, visible to everyone | on the box until you copy them out with `get` |
 | Use it for | batch jobs, H100/B200, anything others should see | interactive work, many small runs, GPUs the pool lacks |
@@ -45,7 +45,7 @@ command (`'pip install -q einops && python exp/train.py'`), or add them to `requ
 
 ```
 python3 tools/vast.py offers --ram 48             # cheapest single-GPU offers with at least 48 GB
-python3 tools/vast.py up <offer-id> --hours 3     # rent, check the box, print when ready; it destroys itself after 3 h
+python3 tools/vast.py up <offer-id> <offer-id> --hours 3   # rent both, keep the first good box; it destroys itself after 3 h
 python3 tools/vast.py run <instance-id> -- 'python exp/run.py'     # prints the job id
 python3 tools/vast.py logs <instance-id> <job-id> 50
 python3 tools/vast.py get <instance-id> <job-id>  # copies $OUT_DIR to runs/<job-id>/
@@ -58,12 +58,13 @@ key at https://cloud.vast.ai/manage-keys/.
 
 - Rent one box per working session and send every job to it. A new box costs 2 to 4 minutes; the next job on a
   box that is already up starts in seconds, and the model is already in its cache.
-- `up` waits until ssh works, then downloads 200 MB from Hugging Face. A box under 20 MB/s is destroyed at once and
-  `up` tells you to pick another offer: 9 of our 32 earlier rentals were slow or broken hosts.
+- Give `up` two or three offers. It rents all of them, keeps the first box that answers ssh and downloads 200 MB
+  from Hugging Face at 20 MB/s or more, and destroys the others within seconds (they cost a cent or less). 9 of our
+  32 earlier rentals were slow or broken hosts; with two offers one bad host no longer costs a retry.
 - The deadline runs on the box with the instance's own key, so it fires with your laptop closed. Copy results out
   first: destroying deletes the disk. Stopped instances still bill storage, so `down` destroys.
-- `offers` sorts by $/h. Some hosts also charge for each GB downloaded; for a large model, check the price on the
-  vast.ai page before renting.
+- `offers` sorts by $/h and shows each host's price per GB downloaded. For a large model, add the download: 30 GB
+  at $0.039/GB is $1.17.
 
 ### Images
 
@@ -138,6 +139,17 @@ read in full, appendix included, and only specific results go into memory.
 
    `add` refuses a quote that is not in the paper's text, or that is shorter than 30 letters and digits.
 4. Before starting on an idea, search: `python3 tools/recall.py "<the idea, in the field's own terms>"`.
+
+## Codex agents
+
+Codex runs commands in a sandbox with no network, and every tool here needs the network. Start Codex in this
+repository with network access and the uv cache inside the repository (the sandbox cannot write `~/.cache/uv`):
+
+```
+UV_CACHE_DIR=$PWD/.uv-cache codex -s workspace-write -c sandbox_workspace_write.network_access=true
+```
+
+Codex reads `AGENTS.md` for the rules; Claude Code reads the same file through `CLAUDE.md`.
 
 ## past.dev setup (once per person)
 

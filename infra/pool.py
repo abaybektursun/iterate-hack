@@ -60,7 +60,7 @@ def run(job_id):
     deadline = time.time() + job["hours"] * 3600
     with open(out / "log", "w") as log:
         proc = subprocess.Popen(job["cmd"], shell=True, cwd="/repo", stdout=log, stderr=subprocess.STDOUT,
-                                env={**os.environ, "OUT_DIR": str(out), "JOB_ID": job_id}, start_new_session=True)
+                                env={**os.environ, "OUT_DIR": str(out), "JOB_ID": job_id, "PYTHONPATH": "/repo"}, start_new_session=True)
         last_commit = time.time()
         while proc.poll() is None:
             time.sleep(5)

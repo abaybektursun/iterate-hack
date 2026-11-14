@@ -10,8 +10,10 @@ from pathlib import Path
 
 _config_path = Path.home() / ".past" / "config.json"
 _config = json.loads(_config_path.read_text()) if _config_path.exists() else {}
-KEY = os.environ.get("PAST_API_KEY") or _config["apiKey"]
-IDENTITY = os.environ.get("PAST_IDENTITY") or _config["identity"]
+KEY = os.environ.get("PAST_API_KEY") or _config.get("apiKey")
+IDENTITY = os.environ.get("PAST_IDENTITY") or _config.get("identity")
+if not (KEY and IDENTITY):
+    raise SystemExit(f"no past.dev key or identity in {_config_path}: see 'past.dev setup' in README.md")
 
 
 def call(method, path, body=None):

@@ -2,8 +2,9 @@
 the instances, the costs and the records in runs/vast/ belong to whoever runs it.
 
   python3 tools/vast.py offers [--ram 24] [--n 10]          cheapest offers with at least that many GB of GPU memory
-  python3 tools/vast.py up <offer-id> [--hours 3] [--image <image>]
-                                                            rent it, check its download speed, wait until ready;
+  python3 tools/vast.py up <offer-id> [<offer-id> ...] [--hours 3] [--image <image>]
+                                                            rent each offer, keep the first box that is reachable and
+                                                            downloads fast, destroy the others; wait until ready;
                                                             the box destroys itself --hours after it boots
   python3 tools/vast.py run <instance-id> -- '<command>'    run the current commit there; prints the job id
   python3 tools/vast.py logs <instance-id> <job-id> [n]     last n lines of the job's log (default 30)
@@ -21,6 +22,7 @@ the repository root, and writes its outputs to $OUT_DIR. The deadline runs on th
 key, so it fires even when your laptop is closed. Copy results out before it fires: destroying deletes the disk.
 """
 import json
+import os
 import secrets
 import shlex
 import subprocess
@@ -79,15 +81,17 @@ def offers(args):
     ram = float(args[args.index("--ram") + 1]) if "--ram" in args else 24
     n = int(args[args.index("--n") + 1]) if "--n" in args else 10
     rows = vast("search", "offers", f"{FILTER} gpu_ram>={ram}", "-o", "dph_total")
+    rows = [o for o in rows if not o["gpu_name"].startswith("CMP")]  # mining cards: slow fp32 and fp16
     for o in rows[:n]:
         print(f"{o['id']}  {o['gpu_name']} {o['gpu_ram'] / 1024:.0f}GB  ${o['dph_total']:.3f}/h  "
-              f"{o['total_flops']:.0f}TF  down {o['inet_down']:.0f}Mb/s  rel {o['reliability']:.3f}  {o['geolocation']}")
+              f"{o['total_flops']:.0f}TF  down {o['inet_down']:.0f}Mb/s ${o['inet_down_cost']:.4f}/GB  rel {o['reliability']:.3f}  {o['geolocation']}")
 
 
 def up(args):
-    offer_id = args[0]
-    hours = float(args[args.index("--hours") + 1]) if "--hours" in args else 3.0
-    image = args[args.index("--image") + 1] if "--image" in args else IMAGE
+    flags = {a: args[i + 1] for i, a in enumerate(args) if a in ("--hours", "--image")}
+    offer_ids = [a for a in args if a not in flags and a not in flags.values()]
+    hours = float(flags.get("--hours", 3))
+    image = flags.get("--image", IMAGE)
     t0 = time.time()
     onstart = f"(sleep {int(hours * 3600)}; {DESTROY}) > /root/deadline.log 2>&1 &"
     if image == IMAGE:  # install the pinned versions, so a job sees the same packages as on the Modal pool
@@ -95,27 +99,43 @@ def up(args):
         onstart += f" python -m pip install -q --break-system-packages {pins} > /root/pip.log 2>&1;"
     onstart += " touch /root/ready"
     login = []
-    if image.startswith(ECR):  # pull access from the iterate-ecr profile, valid until 2026-11-16 08:00 UTC
-        token = sh("aws", "ecr", "get-login-password", "--region", "us-east-1", "--profile", "iterate-ecr").decode().strip()
+    if image.startswith(ECR):  # pull access ends 2026-11-16 08:00 UTC
+        profile = os.environ.get("ECR_PROFILE", "iterate-ecr")
+        token = sh("aws", "ecr", "get-login-password", "--region", "us-east-1", "--profile", profile).decode().strip()
         login = ["--login", f"-u AWS -p {token} {ECR}"]
-    created = vast("create", "instance", offer_id, "--image", image, "--disk", "100", "--ssh", "--direct",
-                   "--onstart-cmd", onstart, *login)
-    instance_id = str(created["new_contract"])
-    print(f"{instance_id} created; waiting for ssh", flush=True)
-    while not reachable(instance_id):
+    # Rent every offer given; keep the first box that is reachable and fast, destroy the rest.
+    pending = {}
+    for offer_id in offer_ids:
+        created = vast("create", "instance", offer_id, "--image", image, "--disk", "100", "--ssh", "--direct",
+                       "--onstart-cmd", onstart, *login)
+        pending[str(created["new_contract"])] = offer_id
+    print(f"created {' '.join(pending)}; waiting for ssh", flush=True)
+    winner = None
+    while pending and not winner:
         if time.time() - t0 > BOOT_MINUTES * 60:
+            for instance_id in pending:
+                down([instance_id])
+            sys.exit(f"not reachable after {BOOT_MINUTES} min; destroyed. Try other offers.")
+        time.sleep(10)
+        for instance_id in [i for i in pending if reachable(i)]:
+            speed = subprocess.run([*ssh_args(sh("vastai", "ssh-url", instance_id).decode()), SPEED], capture_output=True, text=True)
+            mb_s = float(speed.stdout) if speed.returncode == 0 else 0.0
+            if mb_s >= MIN_MB_S:
+                winner = instance_id
+                break
+            print(f"{instance_id} downloads at {mb_s:.0f} MB/s, under {MIN_MB_S} {speed.stderr.strip()[-200:]}; destroying it", flush=True)
             down([instance_id])
-            sys.exit(f"not reachable after {BOOT_MINUTES} min; destroyed. Try another offer.")
-        time.sleep(15)
+            del pending[instance_id]
+    if not winner:
+        sys.exit("no box passed the download check. Try other offers.")
+    for instance_id in pending:
+        if instance_id != winner:
+            down([instance_id])
     booted = time.time() - t0
-    mb_s = float(ssh(instance_id, SPEED))
-    if mb_s < MIN_MB_S:
-        down([instance_id])
-        sys.exit(f"downloads at {mb_s:.0f} MB/s, under {MIN_MB_S}; destroyed. Try another offer.")
-    ssh(instance_id, "while [ ! -e /root/ready ]; do sleep 2; done")
-    record(f"instance-{instance_id}", offer=offer_id, hours=hours, image=image, boot_s=round(booted),
+    ssh(winner, "while [ ! -e /root/ready ]; do sleep 2; done")
+    record(f"instance-{winner}", offer=pending[winner], hours=hours, image=image, ssh_s=round(booted),
            ready_s=round(time.time() - t0), mb_s=round(mb_s))
-    print(f"{instance_id} ready in {time.time() - t0:.0f} s (ssh at {booted:.0f} s, {mb_s:.0f} MB/s); "
+    print(f"{winner} ready in {time.time() - t0:.0f} s (ssh and speed check at {booted:.0f} s, {mb_s:.0f} MB/s); "
           f"destroys itself {hours} h after it booted")
 
 
@@ -130,7 +150,8 @@ def run(args):
     job_id = f"{who}-{time.strftime('%m%d-%H%M%S')}-{secrets.token_hex(2)}"
     tar = subprocess.run(["git", "archive", "--format=tar", sha], capture_output=True, check=True).stdout
     ssh(instance_id, f"mkdir -p /root/{job_id}/repo /root/{job_id}/out && tar -x -C /root/{job_id}/repo", input=tar)
-    job = f"cd /root/{job_id}/repo && OUT_DIR=/root/{job_id}/out JOB_ID={job_id} bash -c {shlex.quote(cmd)}"
+    job = (f"cd /root/{job_id}/repo && OUT_DIR=/root/{job_id}/out JOB_ID={job_id} "
+           f"PYTHONPATH=/root/{job_id}/repo${{PYTHONPATH:+:$PYTHONPATH}} bash -c {shlex.quote(cmd)}")
     script = f"{{ {job}; echo \"exit $?\"; }} > /root/{job_id}/out/log 2>&1"
     ssh(instance_id, f"setsid nohup bash -c {shlex.quote(script)} > /dev/null 2>&1 < /dev/null &")
     record(job_id, instance=instance_id, sha=sha, cmd=cmd)
