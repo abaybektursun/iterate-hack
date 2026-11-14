@@ -3,8 +3,10 @@ the team runner. Reuses rln4_gen's vLLM engine and row record (prompt, extractio
 grader v3 (rln4_lib.grade_v3). Inputs come from the repository's data files; models and tokenizer at the revisions in
 data/rln4/frozen4.json.
 
-    uv run tools/gpu.py submit h100 --hours 1 -- 'bash studies/rlneurons/jobs/setup_vllm.sh && python -m studies.rlneurons.jobs.run_cell
-        --model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41000000 --n 10'
+    uv run tools/gpu.py submit h100 --hours 1 -- "bash studies/rlneurons/jobs/setup_vllm.sh && python -m studies.rlneurons.jobs.run_cell
+        --model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41000000 --n 10 --commit $(git rev-parse HEAD)"
+
+  Double quotes, so that $(git rev-parse HEAD) expands on the laptop to the commit that gpu.py submits (the job's tree has no .git).
 
   --model   base = allenai/Olmo-3-1025-7B, rl = allenai/Olmo-3.1-7B-RL-Zero-Math (step 2,800); both with the RL tokenizer.
   --prompt  plain = the pair1 prompt; cue = the pair1 prompt followed by the opening cue (frozen4.json prefill_ids).
@@ -24,7 +26,7 @@ import hashlib
 import json
 import os
 import pathlib
-import subprocess
+import re
 import time
 from importlib import metadata
 
@@ -54,15 +56,6 @@ def problems(name, fz):
     clean = sorted(int(i) for i, f in flags.items() if f["flag"] == "none")
     assert len(clean) == 328 and all(int(hard[i]["index"]) == i for i in clean), "the clean harder set is not 328 problems"
     return [hard[i] for i in clean]
-
-
-def commit():
-    if os.environ.get("JOB_ID"):            # the runner extracts a git archive (no .git); tools/gpu.py records the commit per job
-        import sys
-        sys.path.append("/pkg")             # Modal's client in the container; the runner sets the job's PYTHONPATH to /repo only
-        import modal
-        return modal.Dict.from_name("iterate-jobs")[f"job:{os.environ['JOB_ID']}"]["sha"]
-    return subprocess.run(["git", "rev-parse", "HEAD"], check=True, capture_output=True, text=True).stdout.strip()
 
 
 class Canned:
@@ -110,9 +103,11 @@ def main():
     ap.add_argument("--n", type=int, default=None)
     ap.add_argument("--out", default=os.environ.get("OUT_DIR"))
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--commit", required=True, help="the submitted commit: $(git rev-parse HEAD), expanded on the laptop")
     a = ap.parse_args()
     t0 = time.time()
     assert a.out, "no --out and no $OUT_DIR"
+    assert re.fullmatch(r"[0-9a-f]{40}", a.commit), f"--commit {a.commit!r} is not a full git sha"
     out = pathlib.Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     rows_path, mpath = out / "answers.jsonl", out / "metrics.json"
@@ -130,7 +125,7 @@ def main():
     m = {"status": "starting", "config": {**vars(a), "max_tokens": cap, "out": str(out), "model_repo": repo, "model_revision": rev,
                                          "tokenizer": fz["tokenizer"], "prefix_ids": pre, "sampling": sampling, "seed_rule": "seed + index",
                                          "n_problems": len(probs)},
-         "commit": commit(), "job_id": os.environ.get("JOB_ID"), "versions": versions, "started_utc": J.utc()}
+         "commit": a.commit, "job_id": os.environ.get("JOB_ID"), "versions": versions, "started_utc": J.utc()}
 
     def write():
         m["updated_utc"] = J.utc()
