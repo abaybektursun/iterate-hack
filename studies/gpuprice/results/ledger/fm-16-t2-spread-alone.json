@@ -1,0 +1,35 @@
+{
+ "name": "fm-16-t2-spread-alone",
+ "note": "second model, same setup as fm-03 (spread around last value) [NX-AI/TiRex-2 zero-shot, 9 quantile levels 0.1-0.9, job abaybektursun-1114-172741-15aa]",
+ "utc": "2026-11-14T23:29:00+00:00",
+ "commit": "75a6aaa",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.18036,
+ "pinball": 0.027494,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.174133,
+ "skill_geomean": 0.16259,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.080545,
+   "in_band": 0.817225
+  },
+  "3": {
+   "skill_pooled": 0.164285,
+   "in_band": 0.678295
+  },
+  "7": {
+   "skill_pooled": 0.215873,
+   "in_band": 0.552326
+  }
+ },
+ "in_band": 0.683178
+}
