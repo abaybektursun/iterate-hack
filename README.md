@@ -2,7 +2,8 @@
 
 Repository for the SF AI Research Hackathon (November 14-15, 2026). Several people, each running Claude agents with
 subagents, work on one research direction, described in [`DIRECTION.md`](DIRECTION.md). The rules for agents are in
-`AGENTS.md`.
+`AGENTS.md`. The code, inputs and readouts of the experiments the direction starts from (RLN-3, RLN-4: graders v1-v3, the
+opening cue, the vLLM jobs and their Modal app) are in [`studies/rlneurons/`](studies/rlneurons/README.md).
 
 | Store | Holds | Tool |
 |---|---|---|
