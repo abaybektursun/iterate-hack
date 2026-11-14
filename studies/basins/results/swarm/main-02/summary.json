@@ -568,6 +568,92 @@
  "best_base_pct": 82.8,
  "best_base_one_sample_pct": 82.0,
  "rl_reference_pct": 92.6,
+ "tree": {
+  "n_links": 100,
+  "relations": {
+   "combination": 2,
+   "refinement": 55,
+   "result_of": 21,
+   "claims": 9,
+   "critique": 2,
+   "variation": 5,
+   "named": 6
+  },
+  "explicit_links": 39,
+  "explicit_found_by_judge": 33,
+  "roots": 22,
+  "max_depth": 7,
+  "merges": [
+   "result-bac4fd",
+   "idea-1fcafe",
+   "knowledge-e1d4b9",
+   "work-d8aa69",
+   "work-63fac2",
+   "work-55d1fe",
+   "idea-3f3378",
+   "idea-e0a5a7",
+   "result-5e17a6",
+   "work-a50d39",
+   "work-e0effe",
+   "work-a992bd",
+   "work-0efbc5",
+   "result-47286f",
+   "result-bede69",
+   "knowledge-c9fc18",
+   "knowledge-38042f",
+   "idea-d59a98",
+   "idea-d3034d",
+   "result-6199f4",
+   "idea-8a0a28",
+   "idea-f3b647",
+   "idea-42e9ea",
+   "result-da11d0",
+   "result-82b4dc",
+   "result-dadeec",
+   "result-fdc8da",
+   "work-656182",
+   "work-4ec853"
+  ],
+  "combinations": [
+   "result-bac4fd"
+  ],
+  "most_built_on": [
+   {
+    "id": "idea-b19ad2",
+    "children": 5,
+    "basin": "Benchmark and checkpoint comparisons",
+    "text": "Day-1 #1: score the 328 harder problems (not in RL training prompts) at T 1.0 / top-p 1.0 on both models: base with open"
+   },
+   {
+    "id": "idea-2eb58d",
+    "children": 5,
+    "basin": "Weight and neuron interventions",
+    "text": "Day-1 #4: weight-difference scaling study: base + a*(RL - base) for several a, with the Code-RL difference and a random "
+   },
+   {
+    "id": "idea-d204a7",
+    "children": 5,
+    "basin": "Mechanistic readouts and trajectory analysis",
+    "text": "Disagreement map after the cue: score the existing 500 T1 and 500 T2 answers token by token under both models (teacher f"
+   },
+   {
+    "id": "result-c36598",
+    "children": 4,
+    "basin": "Prompt and reasoning protocols",
+    "text": "Base Olmo-3-1025-7B + opening cue, T 1.0 / top-p 1.0: 410/500 MATH-500 (82.0 %), grader v3, 27 cap hits. Plain base at T"
+   },
+   {
+    "id": "result-bac4fd",
+    "children": 4,
+    "basin": "Benchmark and checkpoint comparisons",
+    "text": "Gap at AI2 setting (T 1.0): RL minus cue base = 10.6 points [7.4, 13.8] (paired bootstrap, 5000, n=500 MATH-500, grader "
+   }
+  ],
+  "best_base_item": "result-c36598",
+  "best_base_ancestors": [],
+  "best_base_ancestor_basins": [],
+  "cross_basin_links": 25
+ },
  "control": [
   {
    "copy": "ctl-2",

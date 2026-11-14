@@ -26,6 +26,7 @@ All code runs from the repository root with the root on `PYTHONPATH`.
 | `analysis/swarm_judge.py` | Laptop. OpenAI judge (`--backend claude` only with the person's consent): possible directions from DIRECTION.md, partitions, triplets, per-direction coverage, planted-copy control. |
 | `analysis/swarm_analyze.py` | Laptop. Basins, coverage, moves, t-STE map and checks. |
 | `analysis/swarm_scores.py` | Laptop, one judge call (~0.01 USD). Scored configurations from result posts; each row's quote must be in the post. |
+| `analysis/swarm_lineage.py` | Laptop, one judge call (~0.06 USD). Idea tree: earlier items each item builds on, labelled variation / combination / refinement / result_of / claims / critique; ids teammates named are kept. |
 | `analysis/swarm_page.py` | Laptop. The swarm map page with replay and leaderboard. |
 
 ## Run (strategy)
@@ -36,7 +37,7 @@ uv run tools/gpu.py submit h100 --hours 1 -- "bash studies/rlneurons/jobs/setup_
 uv run tools/gpu.py submit h100 --hours 1 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.basins.jobs.strategy_judge --gen /runs/<gen-job-id> --n-controls 2"
 # full: --k 32 on both models (2,688 samples), then the judge on that job
 uv run tools/gpu.py get <judge-job-id>
-python3 studies/basins/analysis/strategy_analyze.py --judge runs/<judge-job-id> --out studies/basins/results/strategy/main-01
+bash studies/basins/run.sh studies.basins.analysis.strategy_analyze --judge runs/<judge-job-id> --out studies/basins/results/strategy/main-01
 python3 studies/basins/analysis/strategy_page.py studies/basins/results/strategy/main-01
 ```
 
@@ -77,3 +78,7 @@ Artifacts: `results/swarm/main-02/summary.json`, `run.json`. Page: same link as 
 - Instrument: t-STE held-out 0.80 vs 0.48 shuffled; order consistency 1016/1120; partition ARI 0.95; both planted
   copies share the original's group in both orders, one is 12th nearest on the map (map placement is looser).
 - Leaderboard now split by benchmark: MATH-500 best one-sample base 82.0 vs RL 92.6; hard-328 base+cue 50.0 vs RL 62.8.
+- Idea tree (`swarm_lineage.py`, ~0.06 USD): 100 links (refinement 55, result_of 21, claims 9, variation 5,
+  combination 2, critique 2, named-only 6); the judge also found 33 of the 39 links teammates wrote as ids. 22 roots,
+  longest chain 7, 29 items with two or more parents, 25 links cross basins. The best one-sample base result
+  (result-c36598, 82.0 %) is a root: posted from work done before the swarm started, so no swarm lineage beats it yet.

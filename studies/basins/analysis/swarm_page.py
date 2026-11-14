@@ -71,6 +71,12 @@ tr.old td{color:var(--muted);text-decoration:line-through}
     </div>
     <div class="panel"><h2>Basins</h2><div class="basins" id="basins"></div><h2>Untouched directions</h2><div class="basins" id="untouched"></div></div>
   </section>
+  <section class="panel" id="treewrap"><h2>Idea tree</h2>
+    <p class="note" id="treenote"></p>
+    <div class="legend" id="treelegend"></div>
+    <div class="tbl"><svg id="tree" role="img" aria-label="idea tree: board items by time and basin, with links to the items they build on"></svg></div>
+    <p class="note">Hover an item to light up what it builds on (ancestors) and what builds on it (descendants). Lanes are basins, time runs left to right.</p>
+  </section>
   <section class="panel" id="lbwrap"><h2>Leaderboard</h2>
     <p class="note" id="lbnote"></p>
     <div class="tbl"><table id="lb"></table></div>
@@ -174,6 +180,44 @@ document.getElementById("how").innerHTML = [
   `<b>Coverage comes from the model directly.</b> For each possible direction, the judge lists the board items that pursue it.`,
   `<b>Why the map is not clustered.</b> k-means on the 2D map agrees poorly with the judge's groups (ARI ${f2(S.partition_ari_vs_kmeans)}): squeezing many kinds of similarity into 2D keeps who is near whom but cuts clean groups badly. So the map shows nearness and the colors are the judge's groups.`,
 ].map(x => `<li>${x}</li>`).join("");
+if (S.tree && S.tree.n_links) {
+  const T = S.tree, rel = {variation: "#2b6cb0", combination: "#b83280", refinement: "var(--muted)", result_of: "#2f855a", claims: "#975a16", critique: "#c05621", named: "var(--muted)"};
+  document.getElementById("treenote").textContent = `${T.n_links} links between ${S.n_board_items} items (judge-labelled; ${T.explicit_found_by_judge} of the ${T.explicit_links} links teammates wrote as ids were also found by the judge). ${T.roots} roots, longest chain ${T.max_depth} steps, ${T.merges.length} items build on two or more parents, ${T.cross_basin_links} links cross basins. The best one-sample base result (${T.best_base_item}) ${T.best_base_ancestors.length ? "descends from " + T.best_base_ancestors.length + " earlier items" : "is a root: it was posted from work done before the swarm started"}.`;
+  document.getElementById("treelegend").innerHTML = Object.entries(T.relations).map(([r, c]) => `<span><span class="sw" style="display:inline-block;vertical-align:middle;background:${rel[r] || "var(--muted)"}"></span> ${r.replace("_", " ")} ${c}</span>`).join("");
+  const B = board.slice().sort((a, b) => +a.at_ns - +b.at_ns), lanes = S.basins.map(b => b.basin);
+  const TW = Math.max(900, B.length * 16), LH = 44, TH = lanes.length * LH + 30, L0 = 210;
+  const tx = k => L0 + k * (TW - L0 - 20) / Math.max(1, B.length - 1), ty = b => 20 + lanes.indexOf(b) * LH + LH / 2;
+  const rank = Object.fromEntries(B.map((n, k) => [n.id, k]));
+  const kids = {}; B.forEach(n => (n.parents || []).forEach(p => (kids[p.id] = kids[p.id] || []).push(n.id)));
+  const walk = (id, f) => { const s = new Set(), st = [id]; while (st.length) for (const x of f(st.pop()) || []) if (!s.has(x)) { s.add(x); st.push(x); } return s; };
+  const svg = document.getElementById("tree");
+  svg.setAttribute("viewBox", `0 0 ${TW} ${TH}`); svg.style.minWidth = TW * 0.75 + "px";
+  function drawTree(focus) {
+    const up = focus ? walk(focus, i => (byId[i].parents || []).map(p => p.id)) : null, down = focus ? walk(focus, i => kids[i]) : null;
+    const on = i => !focus || i === focus || up.has(i) || down.has(i);
+    const g = lanes.map(b => `<text x="8" y="${ty(b) + 4}" font-size="11" fill="var(--muted)">${esc(D.names[b].slice(0, 30))}</text><line x1="${L0 - 8}" x2="${TW - 10}" y1="${ty(b)}" y2="${ty(b)}" stroke="var(--line)"/>`);
+    for (const n of B) for (const p of n.parents || []) {
+      if (!(p.id in rank)) continue;
+      const x1 = tx(rank[p.id]), y1 = ty(byId[p.id].basin), x2 = tx(rank[n.id]), y2 = ty(n.basin), lit = on(n.id) && on(p.id);
+      const w = p.relation === "combination" || p.relation === "variation" ? 2.4 : 1.2;
+      g.push(`<path d="M${x1} ${y1} C${(x1 + x2) / 2} ${y1} ${(x1 + x2) / 2} ${y2} ${x2} ${y2}" fill="none" stroke="${rel[p.relation] || "var(--muted)"}" stroke-width="${w}" opacity="${lit ? .85 : .08}" ${p.relation === "critique" ? 'stroke-dasharray="4 3"' : ""}/>`);
+    }
+    for (const n of B) {
+      const best = n.id === T.best_base_item, nm = (n.parents || []).length >= 2;
+      g.push(`<circle data-id="${n.id}" cx="${tx(rank[n.id])}" cy="${ty(n.basin)}" r="${best ? 8 : n.kind === "result" ? 6 : 4.5}" fill="${col(n.basin)}" stroke="${best ? "var(--fg)" : nm ? "#b83280" : "var(--panel)"}" stroke-width="${best || nm ? 2 : 1}" opacity="${on(n.id) ? 1 : .15}"/>`);
+    }
+    svg.innerHTML = g.join("");
+  }
+  svg.addEventListener("mousemove", e => {
+    const el = e.target.closest("[data-id]"); if (!el) { tip.hidden = true; return; }
+    const n = byId[el.dataset.id]; drawTree(n.id);
+    const ps = (n.parents || []).map(p => `${p.relation.replace("_", " ")} of ${p.id}: ${esc(p.why)}`).join("<br>");
+    tip.innerHTML = `<div class="mono">${esc(n.id)} · ${esc((n.who || "").split("/")[0])} · ${esc(n.at)}</div><div>${esc(n.text.slice(0, 300))}</div>${ps ? '<div class="mono" style="margin-top:6px">' + ps + "</div>" : ""}`;
+    tip.hidden = false; tip.style.left = Math.min(e.clientX + 14, innerWidth - 400) + "px"; tip.style.top = (e.clientY + 14) + "px";
+  });
+  svg.addEventListener("mouseleave", () => { tip.hidden = true; drawTree(null); });
+  drawTree(null);
+} else { document.getElementById("treewrap").hidden = true; }
 document.getElementById("untouched").innerHTML = S.directions.filter(d => !d.items_either.length).map(d => `<div class="b"><span class="sw" style="background:var(--empty)"></span><span>${esc(d.name)}</span><span class="cnt">0 items</span></div>`).join("") || '<span class="mono">none</span>';
 draw(1);
 </script>

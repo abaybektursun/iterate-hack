@@ -118,6 +118,34 @@ for r in board_v3:
         g = labels[0][r["item"]]
         basin_best[g] = max(basin_best[g], r["score_pct"])
 
+# idea tree (swarm_lineage.py): parents, depth, merges, and the ancestry of the best one-sample base result
+lin = json.loads((J / "lineage.json").read_text()) if (J / "lineage.json").exists() else {"links": []}
+parents = defaultdict(list)
+for l in lin["links"]:
+    parents[l["child"]].append({"id": l["parent"], "relation": l["relation"], "why": l["why"], "explicit": l["explicit"]})
+depth = {}
+for n in board:  # board is sorted by time and parents are always earlier
+    depth[n["id"]] = 1 + max((depth.get(p["id"], 0) for p in parents[n["id"]]), default=-1)
+def ancestors(i):
+    seen, stack = set(), [i]
+    while stack:
+        for p in parents[stack.pop()]:
+            if p["id"] not in seen:
+                seen.add(p["id"]); stack.append(p["id"])
+    return seen
+best_item = best_base_one["item"] if best_base_one else None
+anc = sorted(ancestors(best_item), key=lambda i: int(by[i]["at_ns"])) if best_item else []
+children = Counter(l["parent"] for l in lin["links"])
+tree = {"n_links": len(lin["links"]), "relations": dict(Counter(l["relation"] for l in lin["links"])),
+        "explicit_links": lin.get("n_explicit"), "explicit_found_by_judge": lin.get("explicit_also_found_by_judge"),
+        "roots": sum(1 for n in board if not parents[n["id"]]), "max_depth": max(depth.values(), default=0),
+        "merges": [n["id"] for n in board if len({p["id"] for p in parents[n["id"]]}) >= 2],
+        "combinations": sorted({l["child"] for l in lin["links"] if l["relation"] == "combination"}),
+        "most_built_on": [{"id": i, "children": c, "basin": names[labels[0][i]], "text": by[i]["text"][:120]} for i, c in children.most_common(5)],
+        "best_base_item": best_item, "best_base_ancestors": anc,
+        "best_base_ancestor_basins": sorted({names[labels[0][i]] for i in anc}),
+        "cross_basin_links": sum(labels[0][l["child"]] != labels[0][l["parent"]] for l in lin["links"])}
+
 basins = [{"basin": g, "name": names[g], "board_items": basin_board.get(g, 0), "possible": basin_poss.get(g, 0), "best_base_pct": basin_best.get(g),
            "kinds": dict(Counter(by[i]["kind"] for i in parts[0]["groups"][g]["ids"] if not by[i].get("control_of")))}
           for g in range(len(names))]
@@ -138,12 +166,14 @@ summary = {
     "leaderboard": leaderboard,
     "best_base_pct": best_base and best_base["score_pct"], "best_base_one_sample_pct": best_base_one and best_base_one["score_pct"],
     "rl_reference_pct": rl_ref and rl_ref["score_pct"],
+    "tree": tree,
     "control": ctl_checks, "basins": sorted(basins, key=lambda b: -b["board_items"]), "move_list": moves,
 }
 (out / "summary.json").write_text(json.dumps(summary, indent=1))
 (out / "map.json").write_text(json.dumps({"names": names, "nodes": [
     {**{k: n.get(k) for k in ("id", "kind", "who", "at", "at_ns", "text", "control_of")},
+     "parents": parents.get(n["id"], []), "depth": depth.get(n["id"]),
      "x": float(X[pos[n["id"]], 0]), "y": float(X[pos[n["id"]], 1]), "basin": labels[0][n["id"]]} for n in nodes]}))
-print(json.dumps({k: v for k, v in summary.items() if k not in ("basins", "move_list", "directions", "control", "leaderboard")}))
+print(json.dumps({k: v for k, v in summary.items() if k not in ("basins", "move_list", "directions", "control", "leaderboard", "tree")}))
 for b in summary["basins"]:
     print(f"  {b['board_items']:3d} board  {b['possible']:2d} possible  {b['name']}")
