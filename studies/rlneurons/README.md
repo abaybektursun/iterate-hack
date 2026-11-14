@@ -123,8 +123,8 @@ below.
 ### Day-1 cells on the team runner
 
 `jobs/run_cell.py` runs one cell in your own Modal workspace through `tools/gpu.py`: no S3, no secret besides `hf-token`. The
-command first runs `jobs/setup_vllm.sh`, which installs the study's engine versions into the venv `/opt/rln-vllm` (24 s on a
-fresh H100 container, measured), so the runner image and `requirements.txt` stay unchanged. Weights download once into your
+command first runs `jobs/setup_vllm.sh`, which installs the study's engine versions into the venv `/opt/rln-vllm` (24 s on a fresh H100 container and 60 s on a fresh cpu container,
+measured), so the runner image and `requirements.txt` stay unchanged. Weights download once into your
 `iterate-hf-cache` Volume at the revisions in `data/rln4/frozen4.json`. Problem i is sampled with seed `--seed` + i. Outputs in
 `$OUT_DIR` (copy with `uv run tools/gpu.py get <job-id>`): `answers.jsonl`, one row per finished problem written as it
 finishes (prompt, completion, finish reason, generated tokens, extracted answers, grades v1, v2, v3), and `metrics.json`
@@ -133,7 +133,7 @@ at `--hours` keeps every finished row. Use double quotes: `$(git rev-parse HEAD)
 that `gpu.py` submits.
 
 **The GPU path is untested.** Tested: the laptop dry run (stand-in engine, below) and a cpu job on the runner
-(`abaybektursun-1114-123453-8c3d`: setup, prompts, grading of canned answers, files in `$OUT_DIR`). One H100 job
+(`abaybektursun-1114-123453-8c3d` and `abaybektursun-1114-124132-b234`: setup, prompts, grading of canned answers, files in `$OUT_DIR`). One H100 job
 (`abaybektursun-1114-123728-8181`) got through setup, weight download and engine start (140 s for download and start together) and was cancelled on
 instruction before any answer finished. No generated answer, score or time per problem from this entry point exists yet. The
 first GPU run should be 10 problems of a cell with a known number (the T1 command with `--n 10`) and its rows read by hand.
