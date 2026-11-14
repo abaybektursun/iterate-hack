@@ -58,6 +58,8 @@ def problems(name, fz):
 
 def commit():
     if os.environ.get("JOB_ID"):            # the runner extracts a git archive (no .git); tools/gpu.py records the commit per job
+        import sys
+        sys.path.append("/pkg")             # Modal's client in the container; the runner sets the job's PYTHONPATH to /repo only
         import modal
         return modal.Dict.from_name("iterate-jobs")[f"job:{os.environ['JOB_ID']}"]["sha"]
     return subprocess.run(["git", "rev-parse", "HEAD"], check=True, capture_output=True, text=True).stdout.strip()
