@@ -172,7 +172,11 @@ uv run tools/gpu.py wait <job-id>         # blocks until the job ends; prints it
 uv run tools/gpu.py logs <job-id> 50      # last 50 lines, updated every 30 s
 uv run tools/gpu.py get <job-id>          # copies $OUT_DIR (outputs and log) to runs/<job-id>/
 uv run tools/gpu.py kill <job-id>
+uv run tools/cycle.py --hours 24          # turnaround: per job queue wait and run minutes; per work item claim -> first job -> last job -> close
 ```
+
+`cycle.py` is what the meta-review skill starts its turnaround review from. It matches jobs to work items by git
+branch, so a work item's jobs are counted only when they were submitted from the branch that posted it.
 
 Put the command in single quotes, so `$OUT_DIR` is expanded on the job's machine and not on yours; for a command
 with its own quotes, put it in a script in the repository and run that. A job over its class's limit waits in Modal's queue. A job is killed at `--hours` (default 2). The command is one
