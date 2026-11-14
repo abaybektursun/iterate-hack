@@ -34,7 +34,7 @@ MIN_QUOTE_CHARS = 30
 
 
 def get(url):
-    with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "iterate-invariant"})) as r:
+    with urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "iterate-hack"})) as r:
         return r.read(), r.headers.get_content_type()
 
 

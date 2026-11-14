@@ -31,7 +31,7 @@ import modal
 import team
 
 ROOT = Path(__file__).resolve().parent.parent
-PREFIX = str(ROOT.parent / "iterate_invariant")  # the main checkout and its ../iterate_invariant-<name> worktrees
+PREFIX = str(ROOT)  # the main checkout and its ../<repository>-<name> worktrees
 KEYS = re.compile(r"past_sk_\w+|sk-[\w-]{20,}|AKIA[0-9A-Z]{16}|gh[pousr]_\w{30,}|hf_\w{30,}|xox[abp]-[\w-]+")
 ASSIGNED = re.compile(r"(?i)([\w-]*(?:key|token|secret|password|authorization)\\?[\"']?\s*[:=]\s*\\?[\"']?(?:Bearer\s+)?)"
                       r"[\w./+=-]{16,}")

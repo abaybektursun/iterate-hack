@@ -1,6 +1,6 @@
-# iterate_invariant
+# iterate-hack
 
-Repository for the iterate_invariant hackathon. Several people, each running Claude agents with
+Repository for the SF AI Research Hackathon (November 14-15, 2026). Several people, each running Claude agents with
 subagents, work on one research direction. The agents coordinate through two shared stores:
 
 | Store | Holds | Tool |
