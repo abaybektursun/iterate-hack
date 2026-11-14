@@ -55,9 +55,8 @@ steps:
 4. Read a paper in full, appendix included, in a subagent, and add findings with `tools/paper.py add`. An abstract
    supports no claim.
 5. Two writers never edit the same file. Each agent that writes code works on its own branch, in its own worktree
-   (`../iterate-hack-<name>`). Push small commits often: a job runs only a pushed commit. Keep git current: `git pull`
-   main into your branch at the start of each step, and merge your branch into main as soon as a step works, so main
-   always holds everyone's latest code.
+   (`../iterate-hack-<name>`). Push small commits often: a job runs only a pushed commit. Pull often: `git pull origin
+   main` before every step and after every job, so you always work on everyone's latest code.
 6. Never `git add -A` or `git add .`; commit files by name.
 7. Edit `AGENTS.md` or `CLAUDE.md` only when your person asks.
 8. Run the `team-meta-review` skill (`.claude/skills/team-meta-review/SKILL.md`; Codex: read that file) at the start of a
