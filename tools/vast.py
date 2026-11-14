@@ -4,7 +4,7 @@ the instances, the costs and the records in runs/vast/ belong to whoever runs it
   python3 tools/vast.py offers [--ram 24] [--n 10]          cheapest offers with at least that many GB of GPU memory
   python3 tools/vast.py up <offer-id> [--hours 3] [--image <image>]
                                                             rent it, check its download speed, wait until ready;
-                                                            the box destroys itself --hours after creation
+                                                            the box destroys itself --hours after it boots
   python3 tools/vast.py run <instance-id> -- '<command>'    run the current commit there; prints the job id
   python3 tools/vast.py logs <instance-id> <job-id> [n]     last n lines of the job's log (default 30)
   python3 tools/vast.py get <instance-id> <job-id>          copy the job's $OUT_DIR to runs/<job-id>/
@@ -116,7 +116,7 @@ def up(args):
     record(f"instance-{instance_id}", offer=offer_id, hours=hours, image=image, boot_s=round(booted),
            ready_s=round(time.time() - t0), mb_s=round(mb_s))
     print(f"{instance_id} ready in {time.time() - t0:.0f} s (ssh at {booted:.0f} s, {mb_s:.0f} MB/s); "
-          f"destroys itself {hours} h after creation")
+          f"destroys itself {hours} h after it booted")
 
 
 def run(args):
