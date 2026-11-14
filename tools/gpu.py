@@ -95,9 +95,9 @@ def submit(args):
 def ls(args):
     rows = sorted(load().values(), key=lambda r: r["job"]["at"])
     for r in rows:
-        s = state(r)
         if "--all" not in args and time.time() - r["job"]["at"] > 3 * 3600:
             continue
+        s = state(r)
         j = r["job"]
         minutes = (time.time() - j["at"]) / 60
         gpu = r["start"]["gpu"] if "start" in r else j["class"]
@@ -132,6 +132,8 @@ def kill(args):
 if __name__ == "__main__":
     import events
 
+    if {"--help", "-h"} & set(sys.argv[: sys.argv.index("--") if "--" in sys.argv else None]):
+        sys.exit(__doc__)
     events.log("gpu", sys.argv[1:], git("config", "user.email").split("@")[0])
     command, *args = sys.argv[1:] or ["help"]
     {"submit": submit, "ls": ls, "wait": wait, "logs": logs, "kill": kill}.get(command, lambda _: sys.exit(__doc__))(args)

@@ -48,8 +48,9 @@ command (`'pip install -q einops && python exp/train.py'`), or add them to `requ
 python3 tools/vast.py offers --ram 48             # cheapest single-GPU offers with at least 48 GB
 python3 tools/vast.py up <offer-id> <offer-id> --hours 3   # rent both, keep the first good box; it destroys itself after 3 h
 python3 tools/vast.py run <instance-id> -- 'python exp/run.py'     # prints the job id
+python3 tools/vast.py wait <instance-id> <job-id>   # blocks until the job ends; prints its exit code and last 20 lines
 python3 tools/vast.py logs <instance-id> <job-id> 50
-python3 tools/vast.py get <instance-id> <job-id>  # copies $OUT_DIR to runs/<job-id>/
+python3 tools/vast.py get <instance-id> <job-id>  # copies $OUT_DIR (outputs and log) to runs/<job-id>/
 python3 tools/vast.py ls                          # your instances, state and $/h
 python3 tools/vast.py down <instance-id>
 ```

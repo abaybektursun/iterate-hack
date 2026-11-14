@@ -113,5 +113,7 @@ if __name__ == "__main__":
     email = subprocess.run(["git", "config", "user.email"], capture_output=True, text=True, check=True).stdout.strip()
     import events
 
+    if {"--help", "-h"} & set(sys.argv[: sys.argv.index("--") if "--" in sys.argv else None]):
+        sys.exit(__doc__)
     events.log("board", sys.argv[1:], email.split("@")[0])
     main(sys.argv[1:], modal.Dict.from_name("iterate-board", create_if_missing=True), email.split("@")[0])

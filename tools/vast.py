@@ -1,14 +1,17 @@
 """Rent your own GPU on vast.ai, with your own account and credit. Nothing here is shared with the team:
 the instances, the costs and the records in runs/vast/ belong to whoever runs it.
 
-  python3 tools/vast.py offers [--ram 24] [--n 10]          cheapest offers with at least that many GB of GPU memory
+  python3 tools/vast.py offers [--ram 24] [--n 10]          single-GPU offers with at least that many GB of GPU
+                                                            memory (larger GPUs included), cheapest $/h first
   python3 tools/vast.py up <offer-id> [<offer-id> ...] [--hours 3] [--image <image>]
                                                             rent each offer, keep the first box that is reachable and
                                                             downloads fast, destroy the others; wait until ready;
                                                             the box destroys itself --hours after it boots
   python3 tools/vast.py run <instance-id> -- '<command>'    run the current commit there; prints the job id
-  python3 tools/vast.py logs <instance-id> <job-id> [n]     last n lines of the job's log (default 30)
-  python3 tools/vast.py get <instance-id> <job-id>          copy the job's $OUT_DIR to runs/<job-id>/
+  python3 tools/vast.py wait <instance-id> <job-id>         block until the job ends; print its exit line and last 20 lines
+  python3 tools/vast.py logs <instance-id> <job-id> [n]     last n lines of the job's log (default 30); the last line
+                                                            is "exit <code>" once the job has ended
+  python3 tools/vast.py get <instance-id> <job-id>          copy the job's $OUT_DIR (its outputs and log) to runs/<job-id>/
   python3 tools/vast.py ls                                  your instances: state, $/h, hours since start
   python3 tools/vast.py down <instance-id>                  destroy it now; stopped instances still bill storage
 
@@ -135,8 +138,9 @@ def up(args):
     ssh(winner, "while [ ! -e /root/ready ]; do sleep 2; done")
     record(f"instance-{winner}", offer=pending[winner], hours=hours, image=image, ssh_s=round(booted),
            ready_s=round(time.time() - t0), mb_s=round(mb_s))
-    print(f"{winner} ready in {time.time() - t0:.0f} s (ssh and speed check at {booted:.0f} s, {mb_s:.0f} MB/s); "
-          f"destroys itself {hours} h after it booted")
+    box = vast("show", "instance", winner)
+    print(f"{winner} ready in {time.time() - t0:.0f} s: {box['gpu_name']}, ${box['dph_total']:.3f}/h, {mb_s:.0f} MB/s "
+          f"(ssh and speed check at {booted:.0f} s); destroys itself {hours} h after it booted")
 
 
 def run(args):
@@ -164,6 +168,14 @@ def logs(args):
     print(ssh(instance_id, f"tail -n {n} /root/{job_id}/out/log").decode(errors="replace"), end="")
 
 
+def wait(args):
+    instance_id, job_id = args
+    while not (last := ssh(instance_id, f"tail -n 1 /root/{job_id}/out/log").decode(errors="replace").strip()).startswith("exit "):
+        time.sleep(10)
+    print(last)
+    logs([instance_id, job_id, "20"])
+
+
 def get(args):
     instance_id, job_id = args
     dest = RECORDS.parent / job_id
@@ -187,5 +199,7 @@ def down(args):
 
 if __name__ == "__main__":
     command, *args = sys.argv[1:] or ["help"]
-    {"offers": offers, "up": up, "run": run, "logs": logs, "get": get, "ls": ls, "down": down}.get(
+    if {"--help", "-h"} & set(args[: args.index("--") if "--" in args else None]):
+        sys.exit(__doc__)
+    {"offers": offers, "up": up, "run": run, "wait": wait, "logs": logs, "get": get, "ls": ls, "down": down}.get(
         command, lambda _: sys.exit(__doc__))(args)
