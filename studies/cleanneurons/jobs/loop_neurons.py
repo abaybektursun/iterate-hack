@@ -5,6 +5,8 @@ off. One H100, the base in bf16, on the team runner:
     smoke: add  --rows 12 --steps 600 --conditions none,attr100,mask860 --normal 8 --min-loops 2
     laptop: uv run --no-project --with torch --with transformers==5.22.2 --with numpy python -m studies.cleanneurons.jobs.loop_neurons \
             --dry-run --commit <sha> --out <new dir> --steps 420 --tail 120 --back 4 --cont 320 --normal 6 --kl-max 0.5
+    loops from saved answers instead of the K rows: add  --answers /runs/<run_cell job id>/answers.jsonl --max-loops 40
+            (laptop: add --answers synthetic --chunk 16 to the dry run)
 
 Inputs: studies/rlneurons/data/rln4 (k.json: the 78 K rows; own_prefix_ids already starts with the three cue ids, so a row's
 context is prompt_ids.json ids[problem_index] + own_prefix_ids), and /runs/inputs/rln5/T1.jsonl (sha256 and size asserted
@@ -14,7 +16,15 @@ right under the first of score_v3, score_v2, score that the row carries, sorted 
 Steps (sampling T 0.6, top-p 1.0, noise a function of (seed, problem index, step); lib/loops.py):
   1 each K row is continued for up to --steps tokens; a row that the detector flags is continued to --tail tokens after its
     onset and then stopped. Looped rows, sorted by problem index, alternate between half A (ranking) and half B (held out).
-  2 half A, one window per row (up to 3,000 tokens ending --tail tokens after the onset). Loop positions: the tokens from
+    With --answers nothing is generated: the file holds the rows of a studies.rlneurons.jobs.run_cell run (base, cue,
+    MATH-500; one row per problem). Each answer is turned into prompt + cue + generated tokens with rln5_map.build (rows whose
+    re-tokenized count differs from n_new by more than 1 % are left out and counted); the detector scans all its generated
+    tokens and the first position at which it fires gives the row's onset and period. A looped row keeps its tokens up to
+    --tail after the onset; its context (n_context) is prompt + cue, so the noise step of a token is its index among the
+    generated ones, as in the K route. metrics.json compares the token detector with the rows' loop_A.
+  2 half A, one window per row: up to 3,000 tokens ending --tail tokens after the onset; when the row is longer, the window is
+    the prompt followed by the last 3,000 - prompt tokens before that end, so the model always sees the problem (the token
+    right after the prompt is then scored in no set). Loop positions: the tokens from
     onset + period on; normal positions: as many, drawn after the prompt and before the onset (the loop positions are
     subsampled when fewer normal ones exist). m = sum of log P(token) over a set; attribution = a * dm/da summed over the
     set's prediction positions. attr = mean over rows of the loop attribution - |mean of the normal attribution|;
@@ -28,7 +38,8 @@ Steps (sampling T 0.6, top-p 1.0, noise a function of (seed, problem index, step
     edit_loop.json.
 
 Outputs in --out (default $OUT_DIR):
-  metrics.json     config, commit, job id, model, seconds per stage, loops (rows, looped, halves), windows (per half-A row:
+  metrics.json     config, commit, job id, model, seconds per stage, loops (source, rows, looped, halves), answers (--answers:
+                   rows, left out, cap hits, loop_A, token_detector, both, loop_A_only, token_detector_only), windows (per half-A row:
                    positions per set, m_loop, m_norm), conditions (per condition: kind, k, neurons, heldout {n, looped, rate,
                    stopped}, normal {kl = mean KL(base || condition) in nats, logprob = mean log-prob of the written token,
                    logprob_change, loss_change_relative, positions}), selected, controls
@@ -45,6 +56,7 @@ Controls (the job writes every file, then fails if one fails): the detector flag
 normal answers; the shortest context's next-token distribution is the same alone and left-padded in a batch with a sequence
 longer than the sliding window (KL at most 5e-3 nats; skipped with --batch 1, which pads nothing); the buffer cache gives the
 logits of transformers' DynamicCache on that sequence; `none` restarted reproduces its own continuation token for token
+(skipped with --answers: those answers were sampled by vLLM with other noise)
 (bf16 rounding differs between a context fed in chunks and one fed token by token, so this one can fail on the GPU without a
 bug: metrics.json holds the rows and the first differing token); zeroing through the hook and through the weights gives the
 same logits, and the weights come back bit for bit.
@@ -105,6 +117,55 @@ def read_inputs(a, fz, tok):
     return rows, normal, {"grade_field": field, "candidates": len(cand), "problem_indices": [s["idx"] for s in normal]}
 
 
+def read_answers(path, n, encode, tail):
+    """--answers: the file's rows (the first n by problem index) as step-1 rows: ctx = prompt + cue, gen = the generated tokens
+    (a looped row: up to `tail` after its onset), flag = the detector's first firing on all generated tokens; and the counts
+    that compare the token detector with loop_A. encode(row) is rln5_map.build's dict."""
+    raw = [json.loads(l) for l in pathlib.Path(path).read_text().splitlines()]
+    for r in raw:
+        r.setdefault("problem_index", r.get("idx"))
+    raw = sorted(raw, key=lambda r: r["problem_index"])[:n]
+    assert len({r["problem_index"] for r in raw}) == len(raw), "more than one row per problem (samples or restarts): not handled"
+    rows, left, both = [], [], collections.Counter()
+    for r in raw:
+        s = encode(r)
+        if abs(s["retok_diff"]) > 0.01 * s["n_new"]:
+            left.append(s["idx"])
+            continue
+        n_ctx = s["n_prompt"] + s["n_cue"]
+        gen = s["ids"][n_ctx:len(s["ids"]) - s["has_stop"]]
+        hit = L.scan(gen)
+        both[bool(r["loop_A"]), hit is not None] += 1
+        rows.append({"idx": s["idx"], "n_prompt": s["n_prompt"], "ctx": s["ids"][:n_ctx], "gen": gen[:max(hit[0], hit[2] + tail)] if hit else gen,
+                     "end": "loop" if hit else "steps" if r["cap_hit"] else "stop", "flag": hit and {"n": hit[0], "period": hit[1], "onset": hit[2]},
+                     "loop_A": bool(r["loop_A"]), "cap_hit": bool(r["cap_hit"]), "answer_tokens": len(gen)})
+    return rows, {"file": str(path), "sha256": sha(path), "rows": len(raw), "left_out_retokenized": left, "cap_hits": sum(r["cap_hit"] for r in rows),
+                  "loop_A": both[True, True] + both[True, False], "token_detector": both[True, True] + both[False, True], "both": both[True, True],
+                  "loop_A_only": both[True, False], "token_detector_only": both[False, True], "neither": both[False, False]}
+
+
+def answer_encoder(fz, tok):
+    n13, math = json.loads((RLN / "rln4" / "prompt_ids.json").read_text()), json.loads((RLN / "rln4" / "math500.json").read_text())
+    return lambda r: build(tok, fz, r, math[r["problem_index"]], n13["ids"][r["problem_index"]])
+
+
+def dry_answers(a, model, path, gen, stop_id):
+    """--dry-run --answers: writes a synthetic run_cell file (prompt and text as space-separated ids): the stand-in's own
+    continuations of random prompts, --steps tokens each; loop_A is the token detector's verdict, flipped on every fifth row;
+    one row states a wrong n_new. Returns the encoder for its rows."""
+    g, join = np.random.default_rng(2), lambda ids: " ".join(map(str, ids))
+    ctx = [g.integers(0, model.config.vocab_size - 2, 11).tolist() for _ in range(a.rows or 30)]
+    res = L.generate_rows(model, [{"ctx": c, "key": i, "step0": 0} for i, c in enumerate(ctx)], a.steps, tail=a.steps, **gen)
+    path.write_text("".join(json.dumps({"problem_index": 3 * i + 1, "prompt": join(c[:8]), "n_prefix": 3, "text": join(c[8:] + r["tokens"]), "cap_hit": r["end"] != "stop",
+                                        "loop_A": bool(r["flag"]) != (i % 5 == 0), "n_new": len(r["tokens"]) + 40 * (i == 2)}) + "\n" for i, (c, r) in enumerate(zip(ctx, res))))
+
+    def encode(r):
+        ids, text = [int(x) for x in r["prompt"].split()], [int(x) for x in r["text"].split()]
+        return {"idx": r["problem_index"], "ids": ids + text + [stop_id] * (not r["cap_hit"]), "n_prompt": len(ids), "n_cue": r["n_prefix"],
+                "has_stop": int(not r["cap_hit"]), "n_new": r["n_new"], "retok_diff": len(text) - r["n_prefix"] - r["n_new"]}
+    return encode
+
+
 def dry_inputs(a, vocab):
     g = np.random.default_rng(1)
     ids = lambda n: g.integers(0, vocab - 2, int(n)).tolist()
@@ -138,7 +199,7 @@ def pad_control(model, short, long, pad_id, chunk, cache):
     and after one more cached step (the row's last token fed again)."""
     def run(rows):
         ids, mask = L.left_pad(rows, pad_id, 1, L.device(model))
-        kv = L.new_cache(model, mask.shape[1], cache)
+        kv = L.new_cache(model, mask.shape[1], cache, chunk)
         first = torch.log_softmax(L.last_logits(model, ids, mask[:, :-1], kv, chunk), -1)[0]
         return first, torch.log_softmax(L.last_logits(model, ids[:, -1:], mask, kv, chunk), -1)[0]
     kl = lambda p, q: float((p.exp() * (p - q)).sum())
@@ -155,7 +216,7 @@ def cache_control(model, seq, chunk):
     and after each of the last 8 fed one by one."""
     x, n, lg = torch.tensor(seq, device=L.device(model))[None], len(seq) - 8, []
     for kind in ("buffer", "dynamic"):
-        kv = L.new_cache(model, len(seq), kind)
+        kv = L.new_cache(model, len(seq), kind, chunk)
         one = torch.ones_like(x)
         lg.append(torch.cat([L.last_logits(model, x[:, :n], one[:, :n], kv, chunk)] + [L.last_logits(model, x[:, i:i + 1], one[:, :i + 1], kv, chunk) for i in range(n, len(seq))]))
     d = float((lg[0] - lg[1]).abs().max())
@@ -184,15 +245,18 @@ def zero_control(model, ids, sets):
 
 # ------------------------------------------------------------------------------------------------ step 2: ranking
 def window(r, tail):
-    """The window's ids and the prediction positions inside it (the logits at q score token q + 1) of the loop and normal sets."""
-    full, o, p = r["ctx"] + r["gen"], len(r["ctx"]) + r["flag"]["onset"], r["flag"]["period"]
+    """The window's ids and the prediction positions inside it (the logits at q score token q + 1) of the loop and normal sets.
+    The window ends `tail` tokens after the onset; a row longer than WIN gives the prompt + the last WIN - prompt tokens."""
+    full, o, p, n0 = r["ctx"] + r["gen"], len(r["ctx"]) + r["flag"]["onset"], r["flag"]["period"], r["n_prompt"]
     end = min(o + tail, len(full))
-    start = max(0, end - WIN)
-    loop, norm = np.arange(max(o + p, start + 1), end), np.arange(max(r["n_prompt"], start + 1), o)
+    start = 0 if end <= WIN else end - (WIN - n0)           # tokens start..end follow the prompt; start itself is scored in no set
+    shift = start - n0 if start else 0                      # token i >= start sits at window index i - shift
+    loop, norm = np.arange(max(o + p, start + 1), end), np.arange(max(n0, start + 1), o)
     n = min(len(loop), len(norm))
     assert n > 0, ("no loop or no normal position", r["idx"], len(loop), len(norm))
     g = np.random.default_rng(r["idx"])
-    return full[start:end], {"loop": np.sort(g.choice(loop, n, replace=False)) - 1 - start, "norm": np.sort(g.choice(norm, n, replace=False)) - 1 - start}
+    return (full[:n0] if start else []) + full[start:end], {"loop": np.sort(g.choice(loop, n, replace=False)) - 1 - shift,
+                                                            "norm": np.sort(g.choice(norm, n, replace=False)) - 1 - shift}
 
 
 def attribute(model, ids, sets):
@@ -250,7 +314,9 @@ def main():
     ap.add_argument("--inputs", default="/runs/inputs/rln5")
     ap.add_argument("--out", default=os.environ.get("OUT_DIR"))
     ap.add_argument("--commit", required=True, help="the submitted commit: $(git rev-parse HEAD), expanded on the laptop")
-    ap.add_argument("--rows", type=int, default=None, help="only the n K rows with the shortest prefix (they loop soonest)")
+    ap.add_argument("--rows", type=int, default=None, help="only the n K rows with the shortest prefix (they loop soonest); --answers: the first n answers")
+    ap.add_argument("--answers", default=None, help="a run_cell answers.jsonl: the looped rows come from it and step 1 generates nothing")
+    ap.add_argument("--max-loops", type=int, default=None, help="use at most this many looped rows, evenly spaced by problem index")
     ap.add_argument("--steps", type=int, default=2500, help="step 1: tokens per row at most")
     ap.add_argument("--tail", type=int, default=1000, help="a flagged row runs to this many tokens after its onset; the ranking window ends there")
     ap.add_argument("--back", type=int, default=300, help="step 3: restart this many tokens before the onset")
@@ -269,11 +335,13 @@ def main():
     t0 = time.time()
     assert a.out, "no --out and no $OUT_DIR"
     assert a.min_loops >= 2, "one looped row for the ranking and one held out at least"
+    assert a.max_loops is None or a.max_loops >= a.min_loops, "--max-loops below --min-loops"
     assert re.fullmatch(r"[0-9a-f]{40}", a.commit), f"--commit {a.commit!r} is not a full git sha"
     out = pathlib.Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     assert not (out / "metrics.json").exists(), f"{out}/metrics.json exists: one fresh directory per run"
-    m = {"status": "loading", "config": {**vars(a), "out": str(out), "temperature": TEMP, "top_p": 1.0, "window": WIN},
+    m = {"status": "loading", "config": {**vars(a), "out": str(out), "temperature": TEMP, "top_p": 1.0, "window": WIN,
+                                    "window_rule": "the row up to --tail after the onset; longer than the window: prompt + the last window - prompt tokens"},
          "commit": a.commit, "job_id": os.environ.get("JOB_ID"), "started_utc": utc(), "torch": torch.__version__, "seconds": {}, "controls": {}}
     clock = [time.time()]
 
@@ -304,7 +372,7 @@ def main():
     pad_id, dev = model.config.pad_token_id, L.device(model)
     assert pad_id is not None and stop_id < model.config.vocab_size
     gen = {"temp": TEMP, "seed": a.seed, "stop_id": stop_id, "pad_id": pad_id, "chunk": a.chunk, "cache": a.cache, "batch": a.batch,
-           "tok_budget": int(a.kv_gb * 2 ** 30 / L.kv_bytes(model))}
+           "kv_budget": int(a.kv_gb * 2 ** 30)}
     m["model"].update(layers=layers, neurons=neurons, kv_bytes_per_token=L.kv_bytes(model), sliding_window=model.config.sliding_window,
                       layer_types=dict(collections.Counter(model.config.layer_types)), pad_id=pad_id, stop_id=stop_id)
     m["status"] = "running"
@@ -320,23 +388,31 @@ def main():
     m["controls"]["cache"] = cache_control(model, long, a.chunk)
     lap("controls_before")
 
-    # step 1: loops
-    res = L.generate_rows(model, [{"ctx": r["ctx"], "key": r["idx"], "step0": 0} for r in rows], a.steps, tail=a.tail, **gen)
-    for r, g in zip(rows, res):
-        r.update(gen=g["tokens"], end=g["end"], flag=g["flag"])
+    # step 1: loops, generated from the K rows or read from saved answers
+    if a.answers:
+        path = out / "answers.jsonl" if a.dry_run else pathlib.Path(a.answers)
+        encode = dry_answers(a, model, path, gen, stop_id) if a.dry_run else answer_encoder(fz, tok)
+        rows, m["answers"] = read_answers(path, a.rows, encode, a.tail)
+    else:
+        res = L.generate_rows(model, [{"ctx": r["ctx"], "key": r["idx"], "step0": 0} for r in rows], a.steps, tail=a.tail, **gen)
+        for r, g in zip(rows, res):
+            r.update(gen=g["tokens"], end=g["end"], flag=g["flag"])
     looped = sorted((r for r in rows if r["flag"]), key=lambda r: r["idx"])
+    if a.max_loops and len(looped) > a.max_loops:
+        looped = [looped[int(round(x))] for x in np.linspace(0, len(looped) - 1, a.max_loops)]
     for i, r in enumerate(looped):
         r["half"] = "AB"[i % 2]
     recs = []
     for r in sorted(rows, key=lambda r: r["idx"]):
-        recs.append({"problem_index": r["idx"], "n_prompt": r["n_prompt"], "n_context": len(r["ctx"]), "n_generated": len(r["gen"]), "end": r["end"], "looped": bool(r["flag"])})
-        if r["flag"]:
+        recs.append({"problem_index": r["idx"], "n_prompt": r["n_prompt"], "n_context": len(r["ctx"]), "n_generated": len(r["gen"]), "end": r["end"], "looped": bool(r["flag"]),
+                     **{k: r[k] for k in ("loop_A", "cap_hit", "answer_tokens") if k in r}})
+        if "half" in r:
             full, o = r["ctx"] + r["gen"], len(r["ctx"]) + r["flag"]["onset"]
             recs[-1].update(half=r["half"], onset=o, period=r["flag"]["period"], flagged_at=len(r["ctx"]) + r["flag"]["n"], ids=full,
                             text_before=tok.decode(full[max(0, o - 300):o], skip_special_tokens=False)[-300:], text_loop=tok.decode(full[o:], skip_special_tokens=False))
     dump(out / "loops.json", {"detector": {"window": L.W, "matches_needed": L.NEED, "periods": [L.PMIN, L.PMAX], "what": "onset, flagged_at: positions in ids"}, "rows": recs})
     A, B = [r for r in looped if r["half"] == "A"], [r for r in looped if r["half"] == "B"]
-    m["loops"] = {"rows": len(rows), "looped": len(looped), "ended": dict(collections.Counter(r["end"] for r in rows)),
+    m["loops"] = {"source": "answers" if a.answers else "K rows", "rows": len(rows), "looped": sum(bool(r["flag"]) for r in rows), "used": len(looped), "ended": dict(collections.Counter(r["end"] for r in rows)),
                   "generated_tokens": sum(len(r["gen"]) for r in rows), "half_A": [r["idx"] for r in A], "half_B": [r["idx"] for r in B]}
     lap("step1_loops")
     if len(looped) < a.min_loops:
@@ -398,7 +474,7 @@ def main():
     dump(out / "heldout.json", held)
     pairs = [list(zip(r["gen"][r["restart"]:], h["tokens"])) for r, h in zip(B, held["none"])]      # step 1 against `none`, over the overlap
     diff = {r["idx"]: next(i for i, (x, y) in enumerate(p) if x != y) for r, p in zip(B, pairs) if any(x != y for x, y in p)}
-    m["controls"]["none_reproduces"] = {"rows": len(B), "identical": len(B) - len(diff), "first_difference_after_restart": diff,
+    m["controls"]["none_reproduces"] = {"skipped": "--answers: the answers were sampled with other noise", "pass": None} if a.answers else {"rows": len(B), "identical": len(B) - len(diff), "first_difference_after_restart": diff,
                                         "tokens_compared": sum(map(len, pairs)), "first_tokens_required": REPRO_TOKENS,
                                         "pass": sum(v < REPRO_TOKENS for v in diff.values()) <= len(B) // 2}
     lap("step3_heldout")

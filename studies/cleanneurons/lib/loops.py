@@ -8,7 +8,8 @@ Sampling     generate (one left-padded batch with a KV cache), generate_rows (ba
              (seed, key, s), so a row sees the same noise in every condition, batch and restart. top-p is 1.0 (no truncation).
 Cache        new_cache: "buffer" writes keys and values into tensors allocated once (transformers' DynamicCache concatenates,
              which copies the whole cache at every step); "dynamic" is transformers' own. Olmo 3 has sliding-window layers
-             (window 4,096) and full layers; both are handled, and the job compares the two caches on one sequence.
+             (window 4,096) and full layers; both are handled (a sliding layer's buffer holds the window plus one chunk),
+             and the job compares the two caches on one sequence.
 Interventions (context managers; each removes its hooks or restores the weights on exit)
              zero (forward pre-hook on down_proj: the listed neurons' activations become 0), zero_weights (the down_proj
              columns are set to 0, no hook; for the equality control), keep_k (per position and layer keep the k activations
@@ -54,13 +55,15 @@ def onset(tok, p):
 
 
 def scan(tok):
-    """The first end position n at which the rule fires on tok[:n]: (n, period, onset), or None."""
-    t = torch.as_tensor(tok)[None]
-    for n in range(W + PMIN, t.shape[1] + 1):
-        p = int(tail_period(t[:, :n]))
-        if p:
-            return n, p, onset(tok[:n], p)
-    return None
+    """The first end position n at which the rule fires on tok[:n] (tail_period(tok[:n]) is not 0), with that period:
+    (n, period, onset), or None. One pass per period over the whole sequence."""
+    t, best = np.asarray(tok), None
+    for p in range(PMIN, min(PMAX, len(t) - W) + 1):
+        c = np.concatenate([[0], np.cumsum(t[p:] == t[:-p])])
+        hit = c[W:] - c[:-W] >= NEED                                 # hit[k]: the W positions that end before p + W + k
+        if hit.any() and (best is None or p + W + int(hit.argmax()) < best[0]):
+            best = (p + W + int(hit.argmax()), p)
+    return None if best is None else (*best, onset(tok[:best[0]], best[1]))
 
 
 # ------------------------------------------------------------------------------------------------ model layout
@@ -83,10 +86,13 @@ def check_model(model):
     return len(ms), w.shape[1]
 
 
-def kv_bytes(model):
-    """Bytes of KV cache per token and row when every layer stores every position (the buffer cache)."""
+def kv_bytes(model, n=1, room=0):
+    """Bytes of buffer cache per row for n positions: a full layer stores all of them, a sliding layer at most
+    sliding_window - 1 + room. (n 1: the bytes per token while every layer still stores every position.)"""
     c = model.config
-    return c.num_hidden_layers * 2 * c.num_key_value_heads * (c.hidden_size // c.num_attention_heads) * next(model.parameters()).element_size()
+    sliding = sum(t == "sliding_attention" for t in c.layer_types)
+    per = 2 * c.num_key_value_heads * (c.hidden_size // c.num_attention_heads) * next(model.parameters()).element_size()
+    return per * ((c.num_hidden_layers - sliding) * n + sliding * min(n, c.sliding_window - 1 + room))
 
 
 # ------------------------------------------------------------------------------------------------ interventions
@@ -195,27 +201,35 @@ class BufferLayer(DynamicLayer):
 
 class BufferSlidingLayer(DynamicSlidingWindowLayer):
     """DynamicSlidingWindowLayer on the same buffers: it returns the last sliding_window - 1 cached positions plus the new
-    ones, as the original does, and keeps every position in the buffer instead of cropping."""
+    ones, as the original does. The buffer holds sliding_window - 1 + room positions (fewer when cap is smaller); when it is
+    full, the last sliding_window - 1 positions move to its front. One update brings at most room positions."""
 
-    def __init__(self, cap, sliding_window):
+    def __init__(self, cap, sliding_window, room):
         super().__init__(sliding_window)
-        self.cap = cap
+        self.cap, self.used = min(cap, sliding_window - 1 + room), 0
 
     def update(self, key_states, value_states, *args, **kwargs):
-        n0, w = self.cumulative_length, self.sliding_window - 1
-        n1 = self.cumulative_length = _put(self, key_states, value_states, n0)
-        self.keys, self.values = self.kb[:, :, max(0, n1 - w):n1], self.vb[:, :, max(0, n1 - w):n1]
-        return self.kb[:, :, max(0, n0 - w):n1], self.vb[:, :, max(0, n0 - w):n1]
+        w, n = self.sliding_window - 1, key_states.shape[2]
+        if self.used + n > self.cap and self.used > w:
+            for buf in (self.kb, self.vb):
+                buf[:, :, :w] = buf[:, :, self.used - w:self.used].clone()
+            self.used = w
+        lo = max(0, self.used - w)
+        self.used = _put(self, key_states, value_states, self.used)
+        self.cumulative_length += n
+        self.keys, self.values = self.kb[:, :, max(0, self.used - w):self.used], self.vb[:, :, max(0, self.used - w):self.used]
+        return self.kb[:, :, lo:self.used], self.vb[:, :, lo:self.used]
 
 
-def new_cache(model, cap, kind):
-    """An empty cache for up to cap positions. kind 'dynamic': transformers' DynamicCache; 'buffer': the same layer types on buffers."""
+def new_cache(model, cap, kind, room):
+    """An empty cache for up to cap positions, fed at most room positions at a time. kind 'dynamic': transformers'
+    DynamicCache; 'buffer': the same layer types on buffers (kv_bytes gives their size)."""
     base = DynamicCache(config=model.config)
     assert kind in ("buffer", "dynamic") and len(base.layers) == len(mlps(model))
     if kind == "dynamic":
         return base
     assert all(type(l) in (DynamicLayer, DynamicSlidingWindowLayer) for l in base.layers), [type(l).__name__ for l in base.layers]
-    return Cache(layers=[BufferSlidingLayer(cap, l.sliding_window) if type(l) is DynamicSlidingWindowLayer else BufferLayer(cap) for l in base.layers])
+    return Cache(layers=[BufferSlidingLayer(cap, l.sliding_window, room) if type(l) is DynamicSlidingWindowLayer else BufferLayer(cap) for l in base.layers])
 
 
 # ------------------------------------------------------------------------------------------------ sampling
@@ -258,7 +272,7 @@ def generate(model, ctx, keys, step0, steps, *, temp, seed, stop_id, pad_id, tai
     dev = device(model)
     ids, mask = left_pad(ctx, pad_id, steps, dev)
     T0 = ids.shape[1]
-    kv = new_cache(model, T0 + steps, cache)
+    kv = new_cache(model, T0 + steps, cache, chunk)
     gen = torch.zeros((len(ctx), steps), dtype=torch.long, device=dev)
     g = torch.Generator(device=dev)
     out = [{"tokens": None, "end": None, "flag": None} for _ in ctx]
@@ -286,22 +300,23 @@ def generate(model, ctx, keys, step0, steps, *, temp, seed, stop_id, pad_id, tai
     return out
 
 
-def plan(lengths, steps, batch, tok_budget):
-    """Batches of row indices, rows in order of context length: at most `batch` rows and rows x (longest context + steps) <= tok_budget."""
+def plan(lengths, steps, batch, budget, cost=lambda n: n):
+    """Batches of row indices, rows in order of context length: at most `batch` rows and rows x cost(longest context + steps) <= budget."""
     out = []
     for i in sorted(range(len(lengths)), key=lambda i: (lengths[i], i)):
-        if out and len(out[-1]) < batch and (len(out[-1]) + 1) * (lengths[i] + steps) <= tok_budget:
+        if out and len(out[-1]) < batch and (len(out[-1]) + 1) * cost(lengths[i] + steps) <= budget:
             out[-1].append(i)
         else:
             out.append([i])
     return out
 
 
-def generate_rows(model, rows, steps, *, batch, tok_budget, **kw):
-    """generate over rows = [{"ctx", "key", "step0"}], batched by plan; the cache is freed between batches. Results in row order."""
+def generate_rows(model, rows, steps, *, batch, kv_budget, chunk, **kw):
+    """generate over rows = [{"ctx", "key", "step0"}], batched by plan under kv_budget bytes of buffer cache; the cache is
+    freed between batches. Results in row order."""
     out = [None] * len(rows)
-    for idx in plan([len(r["ctx"]) for r in rows], steps, batch, tok_budget):
-        res = generate(model, [rows[i]["ctx"] for i in idx], [rows[i]["key"] for i in idx], [rows[i]["step0"] for i in idx], steps, **kw)
+    for idx in plan([len(r["ctx"]) for r in rows], steps, batch, kv_budget, lambda n: kv_bytes(model, n, chunk)):
+        res = generate(model, [rows[i]["ctx"] for i in idx], [rows[i]["key"] for i in idx], [rows[i]["step0"] for i in idx], steps, chunk=chunk, **kw)
         for i, r in zip(idx, res):
             out[i] = r
         if device(model).type == "cuda":
@@ -323,6 +338,9 @@ def selfcheck():
     assert scan(g.integers(0, 50, 3000).tolist()) is None                                      # non-periodic text over a small vocabulary
     assert scan(pre + block * 6 + pre) is None and scan(pre + block * 7) is None               # 222 and 259 loop tokens: under NEED + period
     assert scan(pre[:100]) is None
+    for seq in (loop, noisy, pre + [7] * 300, g.integers(0, 3, 700).tolist(), ([1, 2, 3] * 100 + pre)[:650]):       # scan against the rule at every end
+        first = next((n for n in range(W + PMIN, len(seq) + 1) if int(tail_period(torch.tensor([seq[:n]])))), None)
+        assert (scan(seq) or (None,))[0] == first and (first is None or scan(seq)[1] == int(tail_period(torch.tensor([seq[:first]])))), (scan(seq), first)
     t = torch.tensor([loop[:900], loop[1:901]])
     assert tail_period(t).tolist() == [37, 37] and tail_period(t[:, :500]).tolist() == [0, 0]
     gen = torch.Generator()
