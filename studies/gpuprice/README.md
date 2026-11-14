@@ -20,6 +20,7 @@ Everything under "Event set" below is the pack's default and must be checked aga
 | `results/baselines/event37-01/` | Starter baselines on the event set: 30 daily origins. |
 | `specs/SPEC1.md` | Plan of the listing-level simulator, written before the run. |
 | `jobs/sim_median.py` | SPEC1 forecaster: resamples each listing's historical h-day outcome (price change, exit, entry) and takes the median. `--control` resamples the median's own change. Laptop, 40 s. |
+| `jobs/run_backtest.sh` | One command for the SPEC1 backtest: series build at 2026-11-06, `last_value_empirical`, simulator, merge (afhubbard keeps the baseline), scorer. `bash studies/gpuprice/jobs/run_backtest.sh runs/gpuprice/<dir> [--control]` gives 0.196504. |
 | `results/spec1/sim-01/`, `results/spec1/control-01/` | SPEC1 and its control on the event set. |
 | `ATTRIBUTION.md` | The pack's attribution file. It must stay with any work that uses the pack. |
 

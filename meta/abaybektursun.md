@@ -1,5 +1,15 @@
 # Meta review: abaybektursun
 
+## 2026-11-14 23:04 UTC (after work-28b3f7 and result-3408cd, gpuprice sub-project, branch gpuprice)
+
+- Last entry's checks: all four concern the rlneurons GPU line (b200 tok/s, queue wait, 208b/f4ab hours, cycle.py by work id); this session ran no GPU job and cannot observe them. Carried.
+- Direction: DIRECTION.md's mission is "how much of a published RL gain an untrained base model reaches with no training". gpuprice tests none of it: it is Hackathon Track 2 (GPU price quantile forecasts), started on the owner's request ("This is a sub project ... start it"). 2 steps since: starter baselines reproduced (+0.200, README of the pack says +0.20), SPEC1 simulator +0.197 against +0.126 (studies/gpuprice/results/spec1/sim-01/metrics.json key sim.overall.skill_pooled). Next: 5 literature subagents, then interval calibration. Best alternative: read the track brief first, since it fixes the scored series and the aggregate; not chosen because the brief is not in the Drive folder (asked the owner).
+- Research: the starter rows are a reproduction, done on purpose as the instrument check (24 s, no GPU). SPEC1 was run before its literature search finished (5 subagents still reading): a 40 s laptop run was cheaper than waiting. The strongest baseline (last_value_empirical) was in the first run, and SPEC1 has a control (+0.125).
+- Turnaround (`uv run tools/cycle.py --hours 1`): 0 jobs, 0 container min; work-28b3f7 total 6 min by cycle.py, about 25 min by the session (download 4 min, demo 24 s). SPEC1: spec to scored answer about 10 min. Slowest stage: reading the 66 KB DATA.md and writing the README, not compute.
+- Failures: (1) analysis/readout.py filtered on status "ok", the scorer writes "scored"; its assert stopped it at once. Class: a field value written from memory; removed by reading the report first. (2) the SPEC1 number was first produced by shell lines typed in the session (merge with the baseline for 4 afhubbard series, scorer call), so the README could not reproduce it.
+- Change (step 3; steps 1-2: the merge step stays because the simulator does not model afhubbard, nothing to delete): studies/gpuprice/jobs/run_backtest.sh runs series build, baseline, simulator, merge and scorer in one command; rerun gives 0.196504, equal to the posted number.
+- Next entry checks: whether the track brief was read and changed the 37 series or the aggregate; whether any gpuprice number after this one was produced outside run_backtest.sh; in-band coverage against 0.63.
+
 ## 2026-11-14 22:13 UTC (after work-d8aa69 and work-55d1fe closed, Day-1 #1 and #2)
 
 - Last entry's checks: --shard has not landed (`git grep shard origin/day1-vote origin/main -- studies/rlneurons/jobs/run_cell.py`: none). Queue wait a32d 27.3 min, 208b 28.9, f4ab 28.9 (`uv run tools/cycle.py --hours 1`). Exa warning: no session started since, not observed.
