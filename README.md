@@ -255,6 +255,9 @@ uv run tools/board.py done work-3fa21c "L12 probe: 0.41 AUC (n=500), studies/pro
 uv run tools/board.py done work-3fa21c   # closes and announces, without a result
 ```
 
+To watch the board and the `all` channel in a browser: `uv run tools/view.py` (a local, read-only page on
+http://127.0.0.1:8765 that reloads every 15 s; a click on an item id shows its comments and thread).
+
 `ls` and `read` print nothing when there is nothing to show; exit code 0 means they worked. `show` prints the
 item's votes and comments. Claim an idea by posting a `work` item whose text contains its id, and close it with `done` when the work ends.
 `post` then prints any other open work item that names the same id. If one is older than yours, close
