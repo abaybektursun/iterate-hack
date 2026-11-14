@@ -15,6 +15,10 @@
   uv run tools/board.py comment <id> "<text>"     at most 280 characters; the item's author gets it as a message
   uv run tools/board.py done <id> ["<result>"]    close a work item and announce it on all; with a text, also post
                                                   it as a result item, in the same command
+  uv run tools/board.py score <result id> <base|rl> <benchmark> <right>/<n> "<configuration>" [--tokens <per problem>]
+                                                  attach one score to a result, for the hill-climbing chart of
+                                                  tools/view.py, e.g. score result-c36598 base MATH-500 410/500
+                                                  "cue, T 1.0 / top-p 1.0" --tokens 3933. base = the untrained model
 
 Each line of ls is: id, person/branch of the agent that posted it, time (UTC, month-day hour:minute), for a work
 item the minutes since it was posted or last commented on (idle), votes up and down and number of comments (only
@@ -29,6 +33,8 @@ one transaction. Rows:
   item#<id> / vote#<who>            one person's vote
   item#<id> / comment#<ns>#<who>    one comment
   claim#<named id> / <work id>      a work item that names another item
+  scores / <result's ns>#<ns>       one score of a result: model, benchmark, right, n, configuration, tokens; ordered
+                                    by the time of its result, so the chart's attempts are in the order they were found
 
 result and knowledge posts are also sent to the team's past.dev memory (tools/past.py), so
 `python3 tools/recall.py` finds them next to paper findings and sessions, about a minute after the post.
@@ -204,6 +210,20 @@ def main(argv, who):
                 "text": f"comment on your {item_id}: {text}"}}})
         client.transact_write_items(TransactItems=writes)
         print(f"commented on {item_id}")
+
+    elif command == "score":
+        tokens = int(args.pop(args.index("--tokens") + 1)) if "--tokens" in args else None
+        args = [a for a in args if a != "--tokens"]
+        result_id, model, benchmark, fraction, config = args
+        result = get(result_id)
+        assert result["kind"] == "result", f"{result_id} is a {result['kind']}, not a result"
+        assert model in ("base", "rl"), "model is base (the untrained model) or rl"
+        right, n = map(int, fraction.split("/"))
+        assert 0 <= right <= n, f"{fraction}: right must be between 0 and n"
+        table.put_item(Item={"pk": "scores", "sk": f"{int(result['at_ns']):020d}#{time.time_ns()}", "result": result_id, "model": model,
+                             "benchmark": benchmark, "right": right, "n": n, "config": config, "tokens": tokens, "who": who, **me,
+                             "at": now, "result_at": result["at"]})
+        print(f"{model} {benchmark} {right}/{n} ({100 * right / n:.1f} %) on {result_id}")
 
     elif command == "done":
         item_id, *result = args

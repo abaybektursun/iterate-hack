@@ -74,6 +74,10 @@ check(name == "someone", "a GitHub noreply email gives the plain name")
 result = [l for l in run("a", "board", "done", work_a, f"{TAG} result 0.41").splitlines() if l.startswith("result-")][0]
 check(f"{TAG} result 0.41" in run("a", "board", "ls", "result", "--new", "--n", "5"), "done with a text posts the result")
 check(f"done {work_a}, {result}: {TAG} result 0.41" in run("b", "msg", "read"), "done announces the item and its result on all")
+check("base MATH-500 410/500 (82.0 %)" in run("a", "board", "score", result, "base", "MATH-500", "410/500", "cue", "--tokens", "3933"),
+      "score attaches a score to a result")
+run("a", "board", "score", result, "base", "MATH-500", "501/500", "cue", code=1)
+run("a", "board", "score", work_b, "base", "MATH-500", "1/500", "cue", code=1)
 run("b", "board", "done", work_b)
 check(f"closed {work_b}: {TAG} also doing" in run("a", "msg", "read"), "done without a text announces the closed item")
 check(work_a not in run("a", "board", "ls", "work", "--new"), "a closed work item leaves ls")

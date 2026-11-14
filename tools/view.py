@@ -14,6 +14,7 @@ comments and message thread in a side panel whose address is /#<item id>. Keys: 
 Enter opens, Esc closes. A click on a person shows only that person.
 
   GET /data            the newest 60 items of each kind and list, and the messages on `all` of the last --hours (JSON)
+                       and every score (board.py score), which the hill-climbing chart at the top draws
   GET /data/<item id>  one item with its votes, comments and thread (JSON); 404 for an unknown id
 
 It reads the same DynamoDB table as board.py and msg.py, with Query only, and never writes to it or moves an agent's
@@ -46,7 +47,8 @@ def snapshot():
         items = [item for page in pool.map(newest, LISTS) for item in page]
     start = f"{time.time_ns() - int(HOURS * 3600 * 10**9):020d}"
     messages = board.rows(KeyConditionExpression=Key("pk").eq("chan#all") & Key("sk").gt(start))
-    return {"now_ns": time.time_ns(), "hours": HOURS, "test": team.TEST, "items": items, "messages": messages}
+    scores = board.rows(KeyConditionExpression=Key("pk").eq("scores"))  # every score, in the order its result was posted
+    return {"now_ns": time.time_ns(), "hours": HOURS, "test": team.TEST, "items": items, "messages": messages, "scores": scores}
 
 
 def detail(item_id):
@@ -162,6 +164,28 @@ a { color: inherit; text-decoration: none; }
 }
 .error strong { color: var(--red); font-weight: 600; }
 .error code { font-size: 13px; overflow-wrap: anywhere; }
+
+/* Hill: per benchmark, the best untrained-base score so far against the best RL score */
+.hill { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 28px 56px; margin-top: 34px; }
+.hp h2 { border-bottom-color: var(--rule); }
+.hp-nums { display: flex; align-items: flex-end; gap: 28px; margin: 14px 0 6px; flex-wrap: wrap; }
+.hp-num { display: grid; gap: 2px; }
+.hp-num b { font-size: 46px; line-height: .95; font-weight: 600; font-stretch: 108%; letter-spacing: -.02em; color: var(--blue); }
+.hp-num.rl b, .hp-num.gap b { font-size: 24px; font-weight: 500; color: var(--ink); }
+.hp-num.gap b { color: var(--red); }
+.hp-num small { font-size: 12px; color: var(--mute); }
+.hp svg { display: block; width: 100%; height: auto; overflow: visible; }
+.hp svg text { font: 400 11px "Archivo", ui-sans-serif, system-ui, sans-serif; fill: var(--faint); }
+.hp .grid { stroke: var(--grid); stroke-width: 1; }
+.hp .band { fill: var(--red-wash); }
+.hp .target { stroke: var(--ink); stroke-width: 1.2; stroke-dasharray: 4 4; opacity: .55; }
+.hp text.label { fill: var(--mute); }
+.hp text.gaplabel { fill: var(--red); font-weight: 600; }
+.hp .climb { fill: none; stroke: var(--blue); stroke-width: 2.5; stroke-linejoin: round; }
+.hp .dot { fill: var(--sheet); stroke: var(--faint); stroke-width: 1.5; }
+.hp .dot.best { fill: var(--blue); stroke: var(--blue); }
+.hp a:hover .dot, .hp a:focus-visible .dot { stroke: var(--ink); stroke-width: 2.5; }
+.hp text.best { fill: var(--ink); font-weight: 600; }
 
 /* Lanes: one per person, every post and message of the last hours as a stem */
 .lanes { margin: 30px 0 8px; }
@@ -314,6 +338,7 @@ a.ref:hover { text-decoration-color: var(--blue); }
     <div id="chip"></div>
     <div id="error"></div>
   </header>
+  <div class="hill" id="hill" aria-label="Best untrained-base score per benchmark against RL"></div>
   <div class="lanes" id="lanes" aria-label="Activity per person" hidden></div>
   <main class="board" id="board" hidden>
     <div class="main">
@@ -429,6 +454,7 @@ function render() {
     .forEach(([id, l]) => $(id).textContent = l.length);
 
   summary(items);
+  hill(d.scores || []);
   lanes(items, d);
   S.seen = new Set([...d.items.map(i => i.id), ...d.messages.map(m => m.sk)]);
   if (focused) document.querySelector(`[data-key="${focused}"] .open`)?.focus({ preventScroll: true });
@@ -444,6 +470,48 @@ function summary(items) {
         (stale ? `<b class="warn">${stale}</b> <span class="warn">idle over an hour</span>.` : "none idle over an hour.")
       : "No open work.") +
     (last ? ` Last result <b>${rel(last.at_ns)}</b>${mins(last.at_ns) ? " ago" : ""} from ${esc(last.who)}.` : " No results yet.");
+}
+
+function hill(scores) {
+  const pct = s => 100 * s.right / s.n, f1 = v => v.toFixed(1);
+  const benches = [...new Set(scores.map(s => s.benchmark))].sort((a, b) => (b === "MATH-500") - (a === "MATH-500") || a.localeCompare(b));
+  $("hill").innerHTML = benches.map(name => {
+    const base = scores.filter(s => s.benchmark === name && s.model === "base");
+    const rl = scores.filter(s => s.benchmark === name && s.model === "rl").sort((a, b) => pct(b) - pct(a))[0];
+    if (!base.length) return "";
+    let top = -1;
+    const pts = base.map(s => { const p = pct(s), best = p > top; if (best) top = p; return { s, p, best }; });
+    const lead = pts.filter(q => q.best).at(-1);
+    const W = 640, H = 230, L = 34, R = 104, T = 14, B = 30;
+    const vals = pts.map(q => q.p).concat(rl ? [pct(rl)] : []);
+    const lo = Math.max(0, Math.floor((Math.min(...vals) - 4) / 10) * 10), hi = Math.min(100, Math.ceil((Math.max(...vals) + 2) / 10) * 10);
+    const y = v => T + (hi - v) / (hi - lo) * (H - T - B);
+    const x = i => L + (i + .5) / pts.length * (W - L - R);
+    const grid = [];
+    for (let v = lo; v <= hi; v += 10) grid.push(`<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${v}</text>`);
+    let path = `M${L},${y(pts[0].p)}`;
+    pts.forEach((q, i) => { if (q.best && i) path += `H${x(i)}V${y(q.p)}`; });
+    path += `H${W - R}`;
+    const gap = rl ? pct(rl) - lead.p : null;
+    const rlPart = rl ? `<rect class="band" x="${L}" width="${W - R - L}" y="${y(pct(rl))}" height="${Math.max(0, y(lead.p) - y(pct(rl)))}"/>` +
+      `<line class="target" x1="${L}" x2="${W - R}" y1="${y(pct(rl))}" y2="${y(pct(rl))}"/>` +
+      `<text class="label" x="${W - R + 10}" y="${y(pct(rl)) + 4}">RL ${f1(pct(rl))}</text>` +
+      (gap > 0 ? `<text class="gaplabel" x="${W - R + 10}" y="${(y(pct(rl)) + y(lead.p)) / 2 + 4}">gap ${f1(gap)}</text>` : "") : "";
+    const dots = pts.map((q, i) => {
+      const tip = `${q.s.config}: ${q.s.right}/${q.s.n} (${f1(q.p)} %)${q.s.tokens ? `, ${Number(q.s.tokens).toLocaleString("en-US")} tokens per problem` : ""}, ${q.s.who}, ${q.s.result}`;
+      return `<a href="#${esc(q.s.result)}" aria-label="${esc(tip)}"><title>${esc(tip)}</title>` +
+        `<circle class="dot${q.best ? " best" : ""}" cx="${x(i)}" cy="${y(q.p)}" r="${q.best ? 5 : 4}"/></a>`;
+    }).join("");
+    const li = pts.indexOf(lead);
+    const leadLabel = `<text class="best" x="${x(li)}" y="${y(lead.p) - 12}" text-anchor="${li > pts.length / 2 ? "end" : "middle"}">${esc(lead.s.config)}</text>`;
+    const axis = `<text x="${L}" y="${H - 8}">Attempts in the order found (${pts.length})</text><text x="${W - R}" y="${H - 8}" text-anchor="end">% right</text>`;
+    return `<section class="hp"><h2>${esc(name)} <span>untrained base against RL, n ${lead.s.n}</span></h2>` +
+      `<div class="hp-nums"><div class="hp-num"><b>${f1(lead.p)}</b><small>best base, ${lead.s.right}/${lead.s.n}</small></div>` +
+      (rl ? `<div class="hp-num rl"><b>${f1(pct(rl))}</b><small>RL, ${esc(rl.config)}</small></div>` +
+            `<div class="hp-num gap"><b>${gap > 0 ? f1(gap) : "0"}</b><small>${gap > 0 ? "points to go" : "gap closed"}</small></div>` : "") + `</div>` +
+      `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(name)}: best base ${f1(lead.p)} %, RL ${rl ? f1(pct(rl)) : "not measured"}">` +
+      grid.join("") + rlPart + `<path class="climb" d="${path}"/>` + dots + leadLabel + axis + `</svg></section>`;
+  }).join("") || `<p class="empty">No scores yet. Attach one to a result: <code>board.py score &lt;result id&gt; base MATH-500 410/500 "cue, T 1.0"</code></p>`;
 }
 
 function lanes(items, d) {

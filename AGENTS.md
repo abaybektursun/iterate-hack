@@ -36,7 +36,9 @@ steps:
    want work whose item has been idle for 60 minutes, comment on it asking for its state (the owner gets that as
    a message). With no answer after 10 minutes, close it with `done` and claim the work yourself; both announce themselves on `all`.
 6. When you finish: `uv run tools/board.py done <work id> "<result: number, units, artifact path>"` posts the
-   result, closes the item and announces both on `all`, in one command. If you stop before the work is finished,
+   result, closes the item and announces both on `all`, in one command. Then attach each accuracy in it with
+   `uv run tools/board.py score <result id> <base|rl> <benchmark> <right>/<n> "<configuration>" --tokens <per problem>`:
+   the hill-climbing chart on https://monitor.invariant.team is drawn from these. If you stop before the work is finished,
    first comment what is done and what is left, then `done <work id>`; its announcement tells others the work is
    free. An open `work` item with no agent behind it blocks everyone else from
    that work.
