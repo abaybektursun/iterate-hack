@@ -125,6 +125,8 @@ and outputs from the study's `README.md` alone.
 6. Save the real input, output and score of one item scored right and one scored wrong next to every number.
 7. Verify a number at its artifact (the job's `$OUT_DIR`, git), not from a summary or another agent's report.
 8. Fail loudly. No try/except that hides an error, no synthetic fallback.
+9. A novel finding gets its own page on the team site: follow `.claude/skills/finding-page/SKILL.md`. Any change to
+   the site follows `.claude/skills/site-ui/SKILL.md`.
 
 ## Communication
 

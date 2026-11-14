@@ -61,6 +61,8 @@ a { color: inherit; }
 svg { width: 100%; height: 100%; display: block; overflow: visible; }
 svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-stretch: 108%; }
 .label { font-weight: 620; paint-order: stroke fill; stroke: var(--paper); stroke-width: 12px; stroke-linejoin: round; }
+.label.plain { stroke: none; }
+.cut { fill: none; stroke: var(--paper); stroke-width: 14px; stroke-linejoin: round; font-weight: 620; }
 .who { font-weight: 580; fill: var(--c); paint-order: stroke fill; stroke: var(--paper); stroke-width: 8px; stroke-linejoin: round; }
 .part { transition: opacity .28s ease; }
 [data-go] { cursor: pointer; }
@@ -101,7 +103,7 @@ svg [data-go]:focus-visible .ring { stroke: var(--blue); stroke-width: 3; }
 .dot, .agent, .person { transform-box: fill-box; transform-origin: center; }
 .enter .draw { stroke-dasharray: 1; animation: draw 1s cubic-bezier(.6, 0, .2, 1) both; }
 .enter [data-part="review"] .draw { animation-delay: .5s; }
-.enter .thread, .enter .tie, .enter .msg-ring, .enter .label, .enter .who, .enter .glyph, .enter .glyph-ink, .enter .quote, .enter .line, .enter .gate, .enter .tick, .enter .sub {
+.enter .thread, .enter .tie, .enter .msg-ring, .enter .label, .enter .who, .enter .glyph, .enter .glyph-ink, .enter .quote, .enter .line, .enter .gate, .enter .tick, .enter .sub, .enter .key .dot, .enter .cut {
   animation: fade .6s .55s both;
 }
 .enter .agent, .enter .person { animation: pop .45s cubic-bezier(.3, 1.5, .5, 1) both; animation-delay: calc(.25s + var(--i, 0) * 18ms); }
@@ -116,6 +118,7 @@ svg [data-go]:focus-visible .ring { stroke: var(--blue); stroke-width: 3; }
 .say button:hover, .say button.on { color: var(--blue); }
 .ask { display: block; margin-top: 16px; font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; color: var(--mute); max-width: 24ch; }
 .ask:hover, .ask.on { color: var(--blue); }
+.ask small { display: block; margin-top: 6px; font-size: 13.5px; white-space: nowrap; }
 .pane { margin-top: clamp(22px, 4vh, 44px); }
 .why { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
 .why button {
@@ -182,6 +185,7 @@ svg [data-go]:focus-visible .ring { stroke: var(--blue); stroke-width: 3; }
     <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
     <a href="/architecture" aria-current="page">How it works</a>
+    <span id="finds" style="display: contents"></span>
     <span class="status" id="status" role="status">Reading the board</span>
   </header>
   <div class="stage"><svg id="svg" role="group" aria-label="The harness: people and their agents around one shared board"></svg></div>
@@ -282,7 +286,7 @@ const cnt = n => n >= 60 ? "60+" : n;  // /data returns the newest 60 of each ki
 /* Geometry: everything hangs on one centre. Wide: memory left, runs right. Narrow: both below. */
 function geo() {
   return narrow.matches
-    ? { w: 720, h: 900, cx: 360, cy: 388, rb: 138, rm: 194, rq: 240, rp: 292, rr: 350, out: 470, mem: 128, run: 52, fs: 29, fw: 21 }
+    ? { w: 720, h: 920, cx: 360, cy: 388, rb: 138, rm: 194, rq: 240, rp: 292, rr: 350, out: 470, mem: 128, run: 52, fs: 29, fw: 21 }
     : { w: 1240, h: 852, cx: 620, cy: 426, rb: 160, rm: 222, rq: 272, rp: 328, rr: 398, out: 526, mem: 180, run: 0, fs: 24, fw: 18.5 };
 }
 const pt = (g, r, a) => [g.cx + r * Math.cos(a * Math.PI / 180), g.cy + r * Math.sin(a * Math.PI / 180)];
@@ -299,7 +303,8 @@ const spiral = (i, c) => [c * Math.sqrt(i + .6) * Math.cos(i * 2.39996), c * Mat
 function best(scores) {  // the best MATH-500 score of each model, as "410/500"
   const top = k => scores.filter(x => x.benchmark === "MATH-500" && x.model === k).sort((a, b) => b.right / b.n - a.right / a.n)[0];
   const base = top("base"), rl = top("rl");
-  return base && rl ? { base: `${base.right}/${base.n}`, rl: `${rl.right}/${rl.n}` } : null;
+  const pct = x => Math.round(100 * x.right / x.n);
+  return base && rl ? { base: `${base.right}/${base.n}`, rl: `${rl.right}/${rl.n}`, line: `MATH-500 so far: untrained ${pct(base)}%, RL-trained ${pct(rl)}%.` } : null;
 }
 function model(d) {
   const all = [...d.items, ...d.messages];
@@ -328,17 +333,17 @@ function draw() {
   const part = (name, go, body, label) =>
     `<g class="part" data-part="${name}"${go ? ` data-go="${go}" role="button" tabindex="0" aria-label="${label}"` : ""}>${body}</g>`;
   const chevron = a => `<path d="M-11 -9.5L5 0L-11 9.5" transform="translate(${xy(pt(g, g.rr, a))}) rotate(${a + 90})"/>`;
-  const far = (a, b) => Math.abs(((a - b + 540) % 360) - 180);
-  const clear = a => Math.min(...[...th, g.mem, g.run, -90].map(b => far(a, b)));  // the Messages label goes where the ring is emptiest
-  const gap = narrow.matches ? 14 : 11, top = pt(g, g.rr, -90), at = [30, 150, 60, 120, -45, -135].sort((a, b) => clear(b) - clear(a))[0], ring = pt(g, g.rm, at);
-  const lean = Math.cos(at * Math.PI / 180), hang = lean > .3 ? "start" : lean < -.3 ? "end" : "middle";  // the label grows away from the board
+  const gap = narrow.matches ? 14 : 11;
+  const curved = (id, r, name, cls) =>  // a name set along the top of its own ring
+    `<path id="${id}" fill="none" stroke="none" d="${arc(g, r, -150, -30)}"/>` +
+    ["cut", cls].map(c => c && `<text class="${c}" font-size="${g.fs}" dy="${f(g.fs * .34)}"><textPath href="#${id}" startOffset="50%">${name}</textPath></text>`).join("");
   let out = part("review", "review",
     `<circle class="hit" cx="${g.cx}" cy="${g.cy}" r="${g.rr}" stroke-width="26"/>` +
     `<path class="draw" pathLength="1" d="${arc(g, g.rr, -90 + gap, 270 - gap)}"/>${chevron(60)}${chevron(240)}` +
-    `<text class="label" x="${f(top[0])}" y="${f(top[1] + g.fs * .34)}" font-size="${g.fs}">Self-review</text>`, "Self-review");
+    curved("on-review", g.rr, "Self-review", "label plain"), "Self-review");
   out += part("msg", "msg",
     `<circle class="hit" cx="${g.cx}" cy="${g.cy}" r="${g.rm}" stroke-width="22"/><circle class="msg-ring" cx="${g.cx}" cy="${g.cy}" r="${g.rm}"/>` +
-    `<text class="label" x="${f(ring[0] + Math.sign(Math.round(lean * 3)) * 10)}" y="${f(ring[1] + g.fs * .34)}" font-size="${g.fs}" style="text-anchor:${hang}">Messages</text>`, "Messages");
+    curved("on-msg", g.rm, "Messages", "label plain"), "Messages");
   const link = a => {  // a line from the agents to an outside part, with the mark of a check the tool enforces
     const c = pt(g, (g.out - 40 + g.rr) / 2, a);
     return `<path class="line" d="M${xy(pt(g, g.rb + 3, a))}L${xy(pt(g, g.out - 40, a))}"/><circle class="gate" cx="${f(c[0])}" cy="${f(c[1])}" r="11"/>` +
@@ -357,7 +362,7 @@ function draw() {
   });
   out += part("board", "board",
     `<circle class="board-ring ring draw" pathLength="1" cx="${g.cx}" cy="${g.cy}" r="${g.rb}"/><g id="dots"></g>` +
-    `<text class="label" x="${g.cx}" y="${f(g.cy - g.rb - g.fs * .72)}" font-size="${g.fs}">Board</text>`, "Board");
+    curved("on-board", g.rb + g.fs * .82, "Board", "label plain"), "Board");
   th.forEach((a, i) => {
     const q = pt(g, g.rq, a), p = pt(g, g.rp, a), below = Math.sin(a * Math.PI / 180) >= 0;
     out += part("swarm-" + i, "p-" + m.people[i],
@@ -381,6 +386,14 @@ function draw() {
   out += part("run", "run",
     `<path class="line" d="${pins}"/><rect class="glyph ring" x="${f(run[0] - 28)}" y="${f(run[1] - 28)}" width="56" height="56" rx="8"/>` +
     `<rect class="glyph-ink" x="${f(run[0] - 12)}" y="${f(run[1] - 12)}" width="24" height="24" rx="3.5"/>` + names(run, "GPU runs", "pushed commits only", 1), "GPU runs");
+  const k = g.fw * .92, ky = g.h - 14, keys = [["work", "open work"], ["", "result"], ["note", "idea or note"]];
+  const widths = keys.map(([, t]) => 26 + t.length * k * .54 + 22), total = widths.reduce((a, b) => a + b, 0) - 22;
+  let kx = narrow.matches ? (g.w - total) / 2 : 6;
+  out += `<g class="part key" data-part="key" style="--c:var(--mute)">` + keys.map(([cls, t], i) => {
+    const x = kx; kx += widths[i];
+    return `<circle class="dot ${cls}" cx="${f(x + 7)}" cy="${f(ky - k * .32)}" r="${cls === "note" ? 3.4 : 6}"/>` +
+      `<text class="sub" x="${f(x + 20)}" y="${f(ky)}" font-size="${f(k)}" style="text-anchor:start">${t}</text>`;
+  }).join("") + "</g>";
   svg.innerHTML = out + '<g id="fx"></g>';
   S.th = th;
   if (m && !S.entered) {
@@ -466,7 +479,7 @@ function lit() {
   if (!s) return null;
   if (s.startsWith("p-")) { const i = m ? m.people.indexOf(s.slice(2)) : -1; return ["swarm-" + i, "thread-" + i, "board"]; }
   return ({
-    board: ["board", ...all("thread-")], msg: ["msg", ...all("swarm-")], mem: ["mem", "memlink", ...all("swarm-")],
+    board: ["board", "key", ...all("thread-")], msg: ["msg", ...all("swarm-")], mem: ["mem", "memlink", ...all("swarm-")],
     run: ["run", "runlink", ...all("swarm-")], review: ["review"], team: all("swarm-"), question: [...all("swarm-"), "board"],
     "why-boss": ["board", ...all("thread-"), ...all("swarm-")], "why-people": [...all("swarm-"), ...all("thread-")],
     "why-evidence": ["mem", "run", "memlink", "runlink"], "why-self": ["review"],
@@ -520,7 +533,7 @@ function pane() {
       rows(`${mine.length} items on the board`, mine, m);
   }
   const t = TEXT[s], r = t.rows && m ? t.rows(m) : null;
-  return head(t.name) + `<p class="lead">${t.lead}</p><ul class="facts">${t.facts.map(x => `<li>${x}</li>`).join("")}</ul>` +
+  return head(t.name) + `<p class="lead">${t.lead}</p><ul class="facts">${(typeof t.facts === "function" ? t.facts(m) : t.facts).filter(Boolean).map(x => `<li>${x}</li>`).join("")}</ul>` +
     (r ? rows(r.title, r.list, m) : "") + (t.link ? `<a class="more" href="${t.link[0]}">${t.link[1]}</a>` : "");
 }
 function show() {
@@ -530,11 +543,12 @@ function show() {
   const say = (k, text) => `<button data-go="${k}" class="${S.sel === k ? "on" : ""}">${text}</button>`;
   $("say").innerHTML = say("team", m ? `<b>${m.people.length}</b> people.` : "People.") + say("team", m ? `<b>${m.nAgents}</b> agents.` : "Agents.") +
     say("question", "One question.") + say("why-boss", "No boss.");
-  $("ask").textContent = ASK;
+  $("ask").innerHTML = ASK + (m && m.best ? `<small>${m.best.line}</small>` : "");
   $("ask").classList.toggle("on", S.sel === "question");
   $("side").classList.toggle("walking", !!step());
   const who = S.sel && S.sel.startsWith("p-") ? S.sel.slice(2) : null;  // one person selected: only that person's items stay lit
   svg.querySelectorAll(".dot").forEach(d => d.classList.toggle("off", !!who && d.dataset.who !== who));
+  $("finds").innerHTML = (S.data && S.data.findings || []).map(x => `<a href="/finding/${esc(x.slug)}" title="${esc(x.line)}">${esc(x.title)}</a>`).join("");
   $("pane").innerHTML = pane();
   $("status").className = "status" + (S.error ? " bad" : "");
   $("status").textContent = S.error ? (S.readAt ? `Offline, last read ${new Date(S.readAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : "Offline")

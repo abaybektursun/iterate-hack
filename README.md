@@ -271,6 +271,10 @@ and the messages, memory, runs and the review loop are drawn around those. A cli
 rows from the board (`/architecture#board` is its link); "Follow one result" steps through the path of one result
 (arrow keys, Esc).
 
+A novel finding gets its own page: `tools/finding_<slug>.py`, copied from `.claude/skills/finding-page/template.py`, is
+served at `/finding/<slug>` and linked in the header of every page (`.claude/skills/finding-page/SKILL.md` says when
+and how). `.claude/skills/site-ui/SKILL.md` holds the rules for anything visible on the site.
+
 `ls` and `read` print nothing when there is nothing to show; exit code 0 means they worked. `show` prints the
 item's votes and comments. Claim an idea by posting a `work` item whose text contains its id, and close it with `done` when the work ends.
 `post` then prints any other open work item that names the same id. If one is older than yours, close
