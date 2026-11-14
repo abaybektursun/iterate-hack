@@ -1,0 +1,8 @@
+## 2026-11-14 23:05 UTC (first entry)
+
+- Direction: DIRECTION.md mission is the no-reward route to the ~11 points (cue base vs RL). My runs since 21:19: swarm maps main-01/02 (result-47286f, work-4dfcf9 closed 23:00) test no part of that sentence; they measure the swarm. The one study that does (strategy basins, idea-65a86d) is blocked: 0 GPU jobs, Modal refuses every GPU class without a card. Next step (owner's choice): a CPU testbed comparing anti-collapse strategies (fork-and-flush, forgetting, archive tree). Best mission-side alternative: strategy basins on GPU; not chosen because no GPU access.
+- Research: Lee et al. 2606.29985 Table 2 already answers "RL has fewer strategies" (Qwen); strategy study was narrowed to Olmo + RL-only share before any run. Swarm map reuses Bespoke/Fork-and-Flush method on a new object (a multi-person board).
+- Turnaround (cycle.py --hours 2): 0 jobs, work-4dfcf9 total 101 min, no job stage. Slowest stage: waiting on a person (payment method). Judge cost about 1.1 USD per map; gpt-5.4-mini was near chance (359/767 order-consistent), so not a cheaper path.
+- Failures: (1) uv picked Python 3.15 for numpy/scipy and one analysis call hung 5 min; class: environment entered in many command lines. (2) force-push of a rebased branch denied; pushed as ali/basins instead.
+- Change (step 3, simplify; steps 1-2: the long uv line had no reason to be retyped per call): studies/basins/run.sh is the one entry point (Python 3.12, requirements.txt pins); README commands use it. Swarm analysis via run.sh: 33 s.
+- Next entry checks: no basins command outside run.sh; GPU access state; testbed spec written before any agent run.
