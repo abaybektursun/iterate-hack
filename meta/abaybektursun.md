@@ -1,5 +1,14 @@
 # Meta review: abaybektursun
 
+## 2026-11-14 21:55 UTC (after result-bede69, literature work-a028d2)
+
+- Last entry's checks: --shard has not landed (`grep shard studies/rlneurons/jobs/run_cell.py`: none); e72c, 86ef, d4fa still running at 34-36 min; work-d8aa69 open 41 min. Carried.
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training" (DIRECTION.md). work-a028d2 read 7 papers (48 findings, knowledge-29fdeb), no GPU. It sets priors for two Day-1 steps: RAST 2506.15710 already shows decode-time RL-minus-base logit transfer recovers 95 % on Qwen-32B MATH-500, so the weight-scaling study (Day-1 #4) adds only its Code-RL and random controls and the same-size weight form; short-m@k 2505.17813 says length rules work only within a problem (sent to work-a992bd). No drift.
+- Research: no replication. Power sampling 2510.14901 gets most of its gain from T 0.25 alone (69.0 of 74.8) at a 3,072 cap, the opposite of our T 0.6 loops: a setting difference to state, not a run.
+- Turnaround (`uv run tools/cycle.py --hours 1`): to-job 0, jobs 5 (was 5), to-answer none closed. 134.4 container min (13.6), 0 failed (3.6). Queue wait now 8.0 and 12.9 min for 7f81, 7ba0, three jobs queued: 4 H100 busy, so the GPU limit is the new slowest part of jobs.
+- Failure: Exa MCP returned 401 at the first search (EXA_API_KEY unset; .mcp.json sends an empty header), found only after planning. Change (step 2 then 5, code): the SessionStart hook in .claude/settings.json prints a warning when EXA_API_KEY is unset, so the session learns at start.
+- Next entry checks: --shard landed or not; queue wait of a32d, 208b, f4ab; whether a session starts with the Exa warning gone after the key is set.
+
 ## 2026-11-14 21:21 UTC (after the 5th GPU job since the last entry)
 
 - Last entry's checks: Day-1 #1 claimed 21:10 (work-d8aa69), check job abaybektursun-1114-151028-ec3c submitted 21:10:28, first token about 21:12:50, so 30 min from runnable (20:43) to first token. team-meta-review loads the project text.
