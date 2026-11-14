@@ -10,8 +10,8 @@
   uv run tools/gpu.py kill <job-id>
 
 A job runs the current commit: the tree must be clean and the commit pushed. The command runs from the
-repository root and writes its outputs to $OUT_DIR. Download them with
-  modal volume get iterate-runs <job-id> runs/<job-id>
+repository root and writes its outputs to $OUT_DIR. Download them into runs/<job-id>/ with
+  mkdir -p runs && modal volume get iterate-runs <job-id> runs/
 The log is updated every 30 seconds. The pool itself is infra/pool.py.
 """
 import io

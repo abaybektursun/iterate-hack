@@ -7,6 +7,23 @@ subagents, work on one research direction. The agents coordinate through two sha
 |---|---|---|
 | Board (Modal Dict `iterate-board`) | ideas, skills, knowledge, results, current work; votes and comments | `uv run tools/board.py` |
 | Memory (past.dev project) | specific findings from papers and posts; everyone's Claude Code sessions | `uv run tools/paper.py`, `python3 tools/recall.py` |
+| GPU pool (Modal app `iterate-pool`) | every GPU job, queued and capped team-wide | `uv run tools/gpu.py` |
+
+## GPU pool
+
+```
+uv run tools/gpu.py submit h100 --hours 2 -- python exp/train.py --lr 3e-4   # prints the job id
+uv run tools/gpu.py ls                    # queued and running jobs of the whole team
+uv run tools/gpu.py logs <job-id> 50      # last 50 lines, updated every 30 s
+uv run tools/gpu.py kill <job-id>
+mkdir -p runs && modal volume get iterate-runs <job-id> runs/
+```
+
+Classes and team-wide caps (`infra/pool.py`): `h100` 4, `b200` 2, `cpu` 8 containers. A job over its
+class's cap waits in Modal's queue. Each person can have 4 jobs queued or running. A job runs the current
+commit, which must be clean and pushed, from the repository root, and writes its outputs to `$OUT_DIR`.
+It is killed at `--hours` (default 2). The image pins torch, transformers, accelerate, safetensors, numpy
+and datasets; to add a package, edit `infra/pool.py` and run `modal deploy infra/pool.py`.
 
 ## Board
 
