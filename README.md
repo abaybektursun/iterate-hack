@@ -26,7 +26,7 @@ or a text editor, never into an agent chat, and never commit one.
 | 5 | vast.ai | yours (optional) | cheaper private GPUs with `tools/vast.py` |
 | 6 | AWS ECR | shared, read-only, until Sunday 23:59 PST | prebuilt images with model weights, on vast.ai |
 | 7 | past.dev | shared team project | `tools/paper.py`, `tools/recall.py`, session memory |
-| 8 | Exa | yours ($50 credits) | web search by agents |
+| 8 | Exa | yours ($50 credits) | web and literature search by agents (MCP tools) |
 | 9 | Tinker, Devin, OpenAI | yours | optional; no tool here uses them |
 
 ### 1. GitHub and the team store
@@ -109,14 +109,16 @@ in your shell profile, not in the repository:
 echo 'export EXA_API_KEY=<key>' >> ~/.zshrc && source ~/.zshrc
 ```
 
-Check:
+Agents use Exa as tools, through Exa's MCP server (`https://mcp.exa.ai/mcp`): `web_search_exa` (search, returns
+page text), `web_fetch_exa` (read a URL) and `web_search_advanced_exa` (date and domain filters).
 
-```
-curl -s https://api.exa.ai/search -H "x-api-key: $EXA_API_KEY" -H 'content-type: application/json' \
-  -d '{"query": "Olmo 3 RL-Zero math", "numResults": 3}' | head -c 300
-```
+- Claude Code: nothing to install. `.mcp.json` in this repository connects it with your `EXA_API_KEY`; approve
+  the `exa` server when Claude Code asks, and check with `/mcp`. Subagents get the tools too.
+- Codex: `codex mcp add exa --url https://mcp.exa.ai/mcp --bearer-token-env-var EXA_API_KEY`, once.
 
-No tool in this repository calls Exa yet; agents call the API directly (docs: https://docs.exa.ai).
+The key must be in the environment of the shell that starts the agent. With a key, searches count against your
+credits and show in your Exa dashboard, which the Exa challenge needs. Direct API calls from a script:
+`POST https://api.exa.ai/search` with the header `x-api-key` (docs: https://docs.exa.ai).
 
 ### 9. Tinker, Devin, OpenAI (optional)
 

@@ -21,7 +21,8 @@ the SF AI Research Hackathon. `DIRECTION.md` is the research direction: read it 
 
 1. Before starting an idea: `uv run tools/board.py ls` and `python3 tools/recall.py "<the idea in the field's
    terms>"`. Claim it by posting a `work` item that names the idea id. Close it with `done`.
-2. Before a new measurement, search the literature with the field's terms and several rephrasings. If a published
+2. Before a new measurement, search the literature with the Exa tools (`web_search_exa`, `web_fetch_exa`), using
+   the field's terms and several rephrasings. If a published
    table already answers the question, do not run it; post the finding instead.
 3. Post each result as a `result` item with its number, its units and the path of its artifact. Teammates cannot
    read your Modal Volumes, so commit the small result files and name the git path.
