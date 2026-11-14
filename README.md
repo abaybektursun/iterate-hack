@@ -338,7 +338,9 @@ Someone will analyze how the team worked, so every action leaves a record in the
 | Agent transcripts (Claude Code with subagents, Codex) | `traces/<who>/` | `uv run tools/traces.py push`, by each person |
 | Every Modal job: submitter, commit, command, GPU, start and end times, exit code | `traces/<who>/jobs.json` | `gpu.py`, then `traces.py push` |
 
-Run `uv run tools/traces.py push` at the end of each working session. A transcript holds everything typed and
+Claude Code runs `traces.py push` by itself: a hook starts it in the background every 10 minutes and at the end of a
+session, and it uploads only changed transcripts (log: `~/.cache/iterate-hack/traces.log`). With Codex, run
+`uv run tools/traces.py push` at the end of each working session. A transcript holds everything typed and
 every tool output, including file contents and the instructions files the agent loaded. `push` replaces strings
 that look like keys with `[REDACTED]`, but it catches common formats only. vast.ai rentals are recorded only on
 your laptop, in `runs/vast/`. Read everything with `aws s3 sync s3://iterate-hack-team-769063704696/ team/`.

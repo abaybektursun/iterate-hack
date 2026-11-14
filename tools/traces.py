@@ -11,7 +11,12 @@ repository or one of its worktrees to the team store (tools/team.py, S3), prefix
 your GPU jobs (the Dict iterate-jobs in your Modal workspace) to traces/<who>/jobs.json. A transcript holds
 everything typed and every tool output, file contents included. Strings that look like keys are replaced with
 [REDACTED] first; that catches common formats only, so run push only on transcripts you are willing to share.
-Running it again uploads the current versions. The analyst reads everything with
+Running it again uploads only the transcripts that changed since their last upload.
+
+In Claude Code nobody runs it by hand: hooks in .claude/settings.json start it in the background after a tool call,
+at most every 10 minutes, and at the end of a session. It prints nothing into the agent's context; its output and
+errors go to ~/.cache/iterate-hack/traces.log. Codex has no hooks: run push at the end of a session.
+The analyst reads everything with
 `aws s3 sync s3://iterate-hack-team-769063704696/ team/`.
 """
 import json
@@ -26,6 +31,7 @@ import team
 
 ROOT = Path(__file__).resolve().parent.parent
 PREFIX = str(ROOT)  # the main checkout and its ../<repository>-<name> worktrees
+STATE = Path.home() / ".cache" / "iterate-hack" / "traces-pushed.json"
 KEYS = re.compile(r"past_sk_\w+|sk-[\w-]{20,}|AKIA[0-9A-Z]{16}|gh[pousr]_\w{30,}|hf_\w{30,}|xox[abp]-[\w-]+")
 ASSIGNED = re.compile(r"(?i)([\w-]*(?:key|token|secret|password|authorization)\\?[\"']?\s*[:=]\s*\\?[\"']?(?:Bearer\s+)?)"
                       r"[\w./+=-]{16,}")
@@ -54,11 +60,18 @@ def push(who):
 
     jobs = dict(modal.Dict.from_name("iterate-jobs", create_if_missing=True).items())
     put("jobs.json", json.dumps(jobs, indent=1, sort_keys=True))
+    STATE.parent.mkdir(parents=True, exist_ok=True)
+    pushed = json.loads(STATE.read_text()) if STATE.exists() else {}  # {transcript path: its modification time when uploaded}
     count = 0
     for source, path, name in transcripts():
+        modified = path.stat().st_mtime
+        if pushed.get(str(path)) == modified:
+            continue
         put(f"{source}/{name}", redact(path.read_text(errors="replace")))
+        pushed[str(path)] = modified
         count += 1
-    print(f"pushed {count} transcripts and {len(jobs)} job records to s3://{team.BUCKET}/traces/{who}/")
+    STATE.write_text(json.dumps(pushed))
+    print(f"{team.now()} pushed {count} changed transcripts and {len(jobs)} job records to s3://{team.BUCKET}/traces/{who}/")
 
 
 if __name__ == "__main__":

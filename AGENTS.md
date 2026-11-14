@@ -133,4 +133,5 @@ and outputs from the study's `README.md` alone.
 2. Write plain technical English: short sentences, concrete nouns, the field's real terms. No metaphors or
    invented terms.
 3. Keep it short. Board comments are at most 280 characters.
-4. When your person ends a session, remind them to run `uv run tools/traces.py push`.
+4. Claude Code uploads its transcripts by itself (a hook, every 10 minutes and at the end of a session). Codex: when
+   your person ends a session, remind them to run `uv run tools/traces.py push`.
