@@ -1,9 +1,9 @@
 """One record per command of board.py, gpu.py and paper.py, for whoever analyzes how the team worked.
 
-Stored in the Modal Dict "iterate-events" of the team workspace (tools/team.py) under ev:<time in ns>:<who>, so
-writers never collide. Each record has the
-time, the person, the agent (claude-code or codex, with its session id; "human" when no agent ran it), the commit,
-the tool, and the full command line. tools/traces.py export copies it to the Volume iterate-traces.
+Stored in the team store (tools/team.py), folder events, under ev:<time in ns>:<who>, so writers never collide.
+Each record has the time, the person, the agent (claude-code or codex, with its session id; "human" when no agent
+ran it), the commit, the tool, and the full command line. A record is written locally and reaches GitHub with the
+next board write or `traces.py push`.
 """
 import os
 import subprocess
@@ -22,8 +22,6 @@ def agent():
 
 
 def log(tool, argv, who):
-    import modal
-
     sha = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
     record = {"at": time.strftime("%Y-%m-%d %H:%M:%S"), "who": who, **agent(), "sha": sha, "tool": tool, "argv": argv}
-    team.store(modal.Dict, "iterate-events")[f"ev:{time.time_ns()}:{who}"] = record
+    team.Store("events").put(f"ev:{time.time_ns()}:{who}", record, publish=False)

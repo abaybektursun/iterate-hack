@@ -1,34 +1,76 @@
-"""The team's Modal workspace, which holds the shared stores: the board, the events and the traces.
+"""The team store: one private GitHub repository, abaybektursun/iterate-hack-team, that holds everything the team
+shares: the board, the events, the traces and the shared credentials. Modal is not used for it, because each
+person has their own Modal workspace.
 
-GPU jobs run in each person's own workspace (the active Modal profile), paid from their own credits. The shared
-stores live in one workspace, abaybektursun, reached through the Modal profile of the same name. Setup, once:
-
-  modal token new --profile abaybektursun --no-activate     # in the browser, pick the workspace abaybektursun
-
-The stores are looked up with create_if_missing=False, so a profile that points at the wrong workspace fails
-with NotFoundError instead of writing to an empty board.
+It is cloned to ~/.iterate-hack-team on first use (needs `gh auth login` and access to the repository). A Store
+is a folder of JSON files, one file per key, so two writers never touch the same file. Every write is a commit
+that is pushed at once; if someone else pushed first, it pulls with rebase and pushes again.
 """
-import functools
-import os
-import sys
-import tomllib
+import contextlib
+import fcntl
+import json
+import subprocess
 from pathlib import Path
 
-PROFILE = "abaybektursun"
+REPO = "abaybektursun/iterate-hack-team"
+DIR = Path.home() / ".iterate-hack-team"
 
 
-@functools.cache
-def client():
-    import modal
-
-    profiles = tomllib.loads(Path(os.environ.get("MODAL_CONFIG_PATH", Path.home() / ".modal.toml")).read_text())
-    if PROFILE not in profiles:
-        sys.exit(f"no Modal profile '{PROFILE}' for the team workspace. Run, once:\n"
-                 f"  modal token new --profile {PROFILE} --no-activate\n"
-                 f"and pick the workspace {PROFILE} in the browser (ask Abay for an invite first).")
-    return modal.Client.from_credentials(profiles[PROFILE]["token_id"], profiles[PROFILE]["token_secret"])
+def git(*args, check=True):
+    return subprocess.run(["git", "-C", str(DIR), *args], capture_output=True, text=True, check=check)
 
 
-def store(kind, name):
-    """kind is modal.Dict or modal.Volume."""
-    return kind.from_name(name, client=client())
+@contextlib.contextmanager
+def locked():
+    """One git command sequence at a time on this machine: several agents of one person share the clone."""
+    with open(str(DIR) + ".lock", "w") as f:
+        fcntl.flock(f, fcntl.LOCK_EX)
+        yield
+
+
+def sync():
+    with locked():
+        if DIR.exists():
+            git("pull", "-q", "--rebase", "--autostash")
+        else:
+            subprocess.run(["gh", "repo", "clone", REPO, str(DIR), "--", "-q"], check=True)
+
+
+def push(message):
+    with locked():
+        git("add", "--all")  # this clone holds only store files
+        if git("diff", "--cached", "--quiet", check=False).returncode == 0:
+            return
+        git("commit", "-qm", message)
+        for _ in range(5):
+            if git("push", "-q", check=False).returncode == 0:
+                return
+            git("pull", "-q", "--rebase")
+        raise RuntimeError(f"could not push to {REPO} after 5 attempts")
+
+
+class Store:
+    def __init__(self, name):
+        sync()
+        self.name = name
+        self.dir = DIR / name
+        self.dir.mkdir(exist_ok=True)
+
+    def path(self, key):
+        return self.dir / (key.replace(":", "__") + ".json")
+
+    def __getitem__(self, key):
+        if not self.path(key).exists():
+            raise KeyError(key)
+        return json.loads(self.path(key).read_text())
+
+    def put(self, key, value, publish=True):
+        self.path(key).write_text(json.dumps(value, indent=1, sort_keys=True))
+        if publish:
+            push(f"{self.name}: {key}")
+
+    def __setitem__(self, key, value):
+        self.put(key, value)
+
+    def items(self):
+        return [(p.stem.replace("__", ":"), json.loads(p.read_text())) for p in sorted(self.dir.glob("*.json"))]

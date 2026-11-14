@@ -1,27 +1,28 @@
 # iterate-hack
 
 Repository for the SF AI Research Hackathon (November 14-15, 2026). Several people, each running Claude agents with
-subagents, work on one research direction. The agents coordinate through two shared stores:
+subagents, work on one research direction, described in [`DIRECTION.md`](DIRECTION.md). The rules for agents are in
+`AGENTS.md`.
 
 | Store | Holds | Tool |
 |---|---|---|
-| Board (Modal Dict `iterate-board`, team workspace) | ideas, skills, knowledge, results, current work; votes and comments | `uv run tools/board.py` |
+| Team store (private repository `abaybektursun/iterate-hack-team`) | the board, the events, the traces, shared credentials | `uv run tools/board.py`, `tools/traces.py`, `tools/shared.py` |
 | Memory (past.dev project) | specific findings from papers and posts; everyone's Claude Code sessions | `uv run tools/paper.py`, `python3 tools/recall.py` |
 | Modal (your own workspace, app `iterate-runner`) | your GPU jobs, their outputs and the model cache | `uv run tools/gpu.py` |
 | vast.ai (your own account) | your private GPU rentals | `python3 tools/vast.py` |
-| Traces (Modal Volume `iterate-traces`, team workspace) | agent transcripts, job records, daily copies of the board and events | `uv run tools/traces.py` |
 
-## Modal setup (once per person)
-
-Each person has two Modal profiles: their own workspace, which pays for their GPU jobs from their own credits,
-and the team workspace `abaybektursun`, which holds only the board, the events and the traces.
+## Setup (once per person)
 
 ```
-modal token new                                             # your own workspace; stays the active profile
-modal token new --profile abaybektursun --no-activate       # pick the workspace abaybektursun (ask Abay for an invite)
-modal secret create hf-token HF_TOKEN=<your token>          # in your own terminal, for gated models
-modal deploy infra/runner.py                                # your job runner, in your own workspace
+gh auth login                                        # and accept the invites to iterate-hack and iterate-hack-team
+uv run tools/shared.py setup                         # installs the shared ECR key and past.dev key on this machine
+modal token new                                      # your own Modal workspace and credits
+modal secret create hf-token HF_TOKEN=<your token>   # in your own terminal, for gated models
+modal deploy infra/runner.py                         # your job runner
 ```
+
+The team store is cloned to `~/.iterate-hack-team` on first use. Everything shared goes through it; nothing shared
+is on Modal, because each person has their own Modal workspace.
 
 ## Compute
 
@@ -113,8 +114,7 @@ else. The pinned versions differ from `requirements.txt`, and `up` does not chan
 python3 tools/vast.py up <offer-id> --image 769063704696.dkr.ecr.us-east-1.amazonaws.com/shackleton:v1-7b
 ```
 
-Setup for ECR: get the access key from Abay privately, then `aws configure --profile iterate-ecr` (region
-`us-east-1`). Pick a host with fast download (`offers` shows it): a 27.6 GB image took 38 minutes on a slow host.
+Setup for ECR: `uv run tools/shared.py setup` writes the AWS profile `iterate-ecr`. Pick a host with fast download (`offers` shows it): a 27.6 GB image took 38 minutes on a slow host.
 
 ## Board
 
@@ -131,9 +131,8 @@ uv run tools/board.py done work-3fa21c
 Claim an idea by posting a `work` item that names its id, and close it with `done` when the work ends.
 `post` then prints any other open work item that names the same id. If one is older than yours, close
 yours and pick another idea. Post each result as a `result` item with its number and the path or URL of its
-artifact. Each item, vote and comment is stored under its own key, so any number of agents can write at
-the same time. Each command takes about 0.2 s. Modal deletes an entry after 7 days with no reads or
-writes. Requires the team-workspace profile (Modal setup above).
+artifact. Each item, vote and comment is its own file in the team store, and every write is a pushed commit, so any number
+of agents can write at the same time. A write takes 2 to 3 s.
 
 ## Findings from papers and posts
 
@@ -159,21 +158,19 @@ read in full, appendix included, and only specific results go into memory.
 
 ## Telemetry and traces
 
-Someone will analyze how the team worked, so every action leaves a record:
+Someone will analyze how the team worked, so every action leaves a record in the team store:
 
-| Record | Where | Written by |
+| Record | Where in `iterate-hack-team` | Written by |
 |---|---|---|
-| Every `board.py`, `gpu.py` and `paper.py` command: time, person, agent (claude-code or codex, with its session id, and whether it ran as a subagent), commit, full command line | Modal Dict `iterate-events` | the tools, automatically |
-| Every Modal job: submitter, commit, command, GPU, start and end times, exit code | Dict `iterate-jobs` in each person's workspace, copied to `iterate-traces/<who>/jobs.json` | `gpu.py`, then `traces.py push` |
-| Board items, votes and comments, with times; who closed each work item and when | Dict `iterate-board` | `board.py` |
-| Agent transcripts (Claude Code with subagents, Codex) | Volume `iterate-traces/<who>/` | `uv run tools/traces.py push`, by each person |
-| Copies of the board and events Dicts (they drop entries after 7 days unused) | Volume `iterate-traces/export/` | `uv run tools/traces.py export` |
+| Every `board.py`, `gpu.py` and `paper.py` command: time, person, agent (claude-code or codex, with its session id, and whether it ran as a subagent), commit, full command line | `events/` | the tools, automatically; pushed with the next board write or `traces.py push` |
+| Board items, votes and comments, with times; who closed each work item and when | `board/` (and the git history) | `board.py` |
+| Agent transcripts (Claude Code with subagents, Codex) | `traces/<who>/` | `uv run tools/traces.py push`, by each person |
+| Every Modal job: submitter, commit, command, GPU, start and end times, exit code | `traces/<who>/jobs.json` | `gpu.py`, then `traces.py push` |
 
-Run `uv run tools/traces.py push` at the end of each working session, and `export` once a day (anyone). A
-transcript holds everything typed and every tool output, including file contents and the instructions files the
-agent loaded. `push` replaces strings that look like keys with `[REDACTED]`, but it catches common formats only.
-vast.ai rentals are private and are recorded only on your laptop, in `runs/vast/`. The analyst reads everything
-with `modal volume get --profile abaybektursun iterate-traces / traces/`.
+Run `uv run tools/traces.py push` at the end of each working session. A transcript holds everything typed and
+every tool output, including file contents and the instructions files the agent loaded. `push` replaces strings
+that look like keys with `[REDACTED]`, but it catches common formats only. vast.ai rentals are recorded only on
+your laptop, in `runs/vast/`.
 
 ## Codex agents
 
@@ -194,7 +191,8 @@ the plugin is enabled in this repository's `.claude/settings.json` only. Nothing
 automatically. What is sent: typed prompts and the agent's prose replies. Tool calls, their output, file
 contents and diffs are never sent. Strings that look like keys are redacted before they leave.
 
-1. Get a project key (`past_sk_...`) from the organizer, privately.
+1. Run `uv run tools/shared.py setup`: it writes `~/.past/config.json` (step 3) for you. If it reports that the
+   past key is not shared yet, ask Abay.
 2. Open Claude Code in this repository and trust the folder. Accept the prompt to install the
    `pastdotdev` marketplace and plugin.
 3. In a text editor (not in a chat), create `~/.past/config.json`:

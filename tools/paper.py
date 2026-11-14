@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["pypdf>=5", "modal>=1.4"]
+# dependencies = ["pypdf>=5"]
 # ///
 """Download a paper or post, then add specific findings from it to the team's past.dev memory.
 

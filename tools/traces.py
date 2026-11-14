@@ -2,28 +2,21 @@
 # requires-python = ">=3.11"
 # dependencies = ["modal>=1.4"]
 # ///
-"""Agent traces and team records, for whoever analyzes how the team worked. Both commands write to the Volume
-iterate-traces in the team workspace (tools/team.py).
+"""Agent traces, for whoever analyzes how the team worked.
 
   uv run tools/traces.py push      upload your agent transcripts for this repository and your GPU job records
-  uv run tools/traces.py export    copy the board and the events from their Modal Dicts to the Volume
 
-push uploads every Claude Code transcript (subagents included) and every Codex session whose working folder is this
-repository or one of its worktrees, to iterate-traces/<who>/, and the records of your GPU jobs (the Dict
-iterate-jobs in your own workspace) to <who>/jobs.json. A transcript holds everything typed and every tool output,
-file contents included. Strings that look like keys are replaced with [REDACTED] first; that catches common formats
-only, so run push only on transcripts you are willing to share. Running it again uploads the current versions.
-
-export writes iterate-traces/export/<time>/{board,events}.json. The Dicts drop entries after 7 days without reads
-or writes; the Volume keeps them. Read everything with
-`modal volume get --profile abaybektursun iterate-traces / traces/`.
+push copies every Claude Code transcript (subagents included) and every Codex session whose working folder is this
+repository or one of its worktrees to the team store (tools/team.py), folder traces/<who>/, and the records of your
+GPU jobs (the Dict iterate-jobs in your Modal workspace) to traces/<who>/jobs.json. A transcript holds everything
+typed and every tool output, file contents included. Strings that look like keys are replaced with [REDACTED]
+first; that catches common formats only, so run push only on transcripts you are willing to share. Running it
+again uploads the current versions. The analyst reads everything by cloning abaybektursun/iterate-hack-team.
 """
-import io
 import json
 import re
 import subprocess
 import sys
-import time
 from pathlib import Path
 
 import modal
@@ -55,27 +48,22 @@ def transcripts():
 
 
 def push(who):
-    count = 0
+    team.sync()
+    out = team.DIR / "traces" / who
     jobs = dict(modal.Dict.from_name("iterate-jobs", create_if_missing=True).items())
-    with team.store(modal.Volume, "iterate-traces").batch_upload(force=True) as upload:
-        upload.put_file(io.BytesIO(json.dumps(jobs, indent=1, sort_keys=True).encode()), f"/{who}/jobs.json")
-        for source, path, name in transcripts():
-            upload.put_file(io.BytesIO(redact(path.read_text(errors="replace")).encode()), f"/{who}/{source}/{name}")
-            count += 1
-    print(f"uploaded {count} transcripts and {len(jobs)} job records to iterate-traces/{who}/")
-
-
-def export():
-    stamp = time.strftime("%Y%m%d-%H%M%S")
-    with team.store(modal.Volume, "iterate-traces").batch_upload(force=True) as upload:
-        for name in ("board", "events"):
-            data = dict(team.store(modal.Dict, f"iterate-{name}").items())
-            upload.put_file(io.BytesIO(json.dumps(data, indent=1, sort_keys=True).encode()), f"/export/{stamp}/{name}.json")
-            print(f"{name}: {len(data)} entries")
-    print(f"exported to iterate-traces/export/{stamp}/")
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "jobs.json").write_text(json.dumps(jobs, indent=1, sort_keys=True))
+    count = 0
+    for source, path, name in transcripts():
+        target = out / source / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(redact(path.read_text(errors="replace")))
+        count += 1
+    team.push(f"traces: {who}")
+    print(f"pushed {count} transcripts and {len(jobs)} job records to {team.REPO}, traces/{who}/")
 
 
 if __name__ == "__main__":
     command = sys.argv[1] if len(sys.argv) > 1 else "help"
     email = subprocess.run(["git", "config", "user.email"], capture_output=True, text=True, check=True).stdout
-    {"push": lambda: push(email.strip().split("@")[0]), "export": export}.get(command, lambda: sys.exit(__doc__))()
+    {"push": lambda: push(email.strip().split("@")[0])}.get(command, lambda: sys.exit(__doc__))()

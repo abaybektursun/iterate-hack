@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["modal>=1.4"]
+# dependencies = []
 # ///
 """The team board: ideas, skills, knowledge, results and current work, with votes and comments.
 
@@ -13,9 +13,8 @@
   uv run tools/board.py comment <id> "<text>"     at most 280 characters
   uv run tools/board.py done <id>                 close a work item
 
-Stored in the Modal Dict "iterate-board" of the team workspace (tools/team.py). Each item, each person's vote on an item and each comment
-has its own key, so two people writing at the same time never overwrite each other. Modal deletes an
-entry after 7 days with no reads or writes.
+Stored in the team store (tools/team.py), folder board. Each item, each person's vote on an item and each
+comment has its own file, so two people writing at the same time never overwrite each other.
 
 To claim an idea, post a work item whose text names the idea id. post then prints any other open work
 item that names the same id. If one of those is older than yours, close yours with done and pick another.
@@ -108,8 +107,6 @@ def main(argv, board, who):
 
 
 if __name__ == "__main__":
-    import modal
-
     email = subprocess.run(["git", "config", "user.email"], capture_output=True, text=True, check=True).stdout.strip()
     import events
     import team
@@ -117,4 +114,4 @@ if __name__ == "__main__":
     if {"--help", "-h"} & set(sys.argv[: sys.argv.index("--") if "--" in sys.argv else None]):
         sys.exit(__doc__)
     events.log("board", sys.argv[1:], email.split("@")[0])
-    main(sys.argv[1:], team.store(modal.Dict, "iterate-board"), email.split("@")[0])
+    main(sys.argv[1:], team.Store("board"), email.split("@")[0])
