@@ -1,0 +1,35 @@
+{
+ "name": "sim2-05-own-tau14-cal",
+ "note": "hypothesis: in-band is 0.71 < 0.80, so a rolling multiplier on (q10-q50) and (q90-q50), chosen per horizon and side to minimise pooled pinball of past forecasts with target <= t, raises skill over sim2-04 (+0.2308); refuted if pooled <= +0.2308 [flags: --tau 14 --cal]",
+ "utc": "2026-11-14T23:26:51+00:00",
+ "commit": "4260735",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 360,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.207753,
+ "pinball": 0.026575,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.175321,
+ "skill_geomean": 0.30781,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.144053,
+   "in_band": 0.799043
+  },
+  "3": {
+   "skill_pooled": 0.209436,
+   "in_band": 0.724806
+  },
+  "7": {
+   "skill_pooled": 0.223947,
+   "in_band": 0.645349
+  }
+ },
+ "in_band": 0.723384
+}
