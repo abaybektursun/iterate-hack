@@ -73,6 +73,30 @@ steps:
 4. When you are blocked on another agent, use `uv run tools/msg.py wait` instead of polling by hand.
 5. Messages are for the next minutes. Anything that should last (a result, a finding, an idea) goes on the board.
 
+## Experiment layout
+
+`studies/rlneurons/` is the model: copy its layout. A teammate must be able to find any number's code, inputs
+and outputs from the study's `README.md` alone.
+
+1. Every experiment lives in `studies/<study>/`. No experiment code, data or output at the repository root, in
+   `tools/` or in `infra/`. Add to an existing study when the question is the same; start a new one only for a
+   new question.
+2. Use the same subfolders in every study: `specs/` (the plan, written before the run), `data/` (frozen inputs),
+   `lib/` (shared code), `grader/`, `prep/`, `jobs/` (what runs on a GPU), `analysis/` (what reads the outputs),
+   `results/`. Create only the ones you need.
+3. One run is one folder, `results/<experiment>/<arm>-<nn>/`, holding `run.json` (commit, command, job id),
+   `metrics.json` and the saved examples. Never write into an existing run folder: a rerun gets the next number.
+4. `studies/<study>/README.md` is the index: the files, how to run them, and each number with the path of its
+   artifact. Update it in the same commit as the result.
+5. Never edit a file in `data/` or a grader that a posted number used. A changed input or grader is a new file
+   with a new version in its name, and the result states which version it used.
+6. Import shared code (graders, generation, loaders) from the study's `lib/`; do not copy it. Apart from the
+   versions of rule 5, no copies of a file under another name (`_new`, `_fixed`, `_final`, `2`).
+7. Commit only small files: metrics, readouts, examples. Raw generations and weights stay in the Volume or in
+   `runs/` (not committed); write their location in the study's `README.md`.
+8. Before closing a `work` item, delete your scratch scripts, unused code and debug output, and check that
+   `git status` shows nothing left over.
+
 ## Compute
 
 1. GPUs: `uv run tools/gpu.py` (your person's Modal workspace) or `python3 tools/vast.py` (their vast.ai
