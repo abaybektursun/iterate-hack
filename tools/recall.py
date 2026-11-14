@@ -30,6 +30,6 @@ page = json.load(urllib.request.urlopen(request))
 if "pending" in page:
     print(f"[past.dev: {page['pending']['dataPoints']} data points still processing, not in this result]")
 for result in page["results"]:
-    labels = ", ".join(s.get("label") or s["sourceId"] for s in result["sources"])
+    labels = ", ".join(f"{s.get('label')} [{s['sourceId']}]" for s in result["sources"])
     print(f"{result['occurredAt'][:10]}  {result['content']}  ({labels})")
 print(f"[{len(page['results'])} results, {page['usedEvidenceTokens']} tokens]")

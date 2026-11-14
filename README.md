@@ -12,6 +12,18 @@ enabled in this repository's `.claude/settings.json` only.
 Nothing is recalled automatically. An agent searches the shared memory when it chooses, with
 `python3 tools/recall.py "<question>"`.
 
+### Prior work: check before building
+
+The same project holds the prior work the team has found: papers, blog posts, published results.
+One search then answers both "has this been published?" and "did one of us already try this?",
+with dates and sources.
+
+- Add one: `python3 tools/add_source.py --id arxiv:2401.12345 --title "..." --date 2024-01-22 --url ... --kind paper fulltext.txt`.
+  Send the raw full text, not a summary. Ids use `:`, never `/`. The same id again replaces it.
+- Before starting on an idea: `python3 tools/recall.py "<the idea, in the field's own terms>"`.
+  Open the sources it names and read the close ones in full.
+- Cost: one credit per 350 bytes; a 60,000-character paper is about 170 credits.
+
 What is sent: your typed prompts and the agent's prose replies. Not sent: tool calls and their output,
 file contents, diffs. Strings that look like keys are redacted before they leave.
 
