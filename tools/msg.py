@@ -10,8 +10,9 @@
                                                     block until a message arrives, then print it; exit code 1 at the timeout
 
 A channel is any name. Conventions: `all` reaches everyone; `@<name>` reaches one person's agents, where <name> is
-the part of their git email before the @; a board item id (idea-3fa21c) is the thread about that item. read and
-wait take `all` and `@<you>` when no channel is given. An agent never receives its own messages.
+the part of their git email before the @; a board item id (idea-3fa21c) is the thread about that item, which
+`board.py show <id>` also prints. read and wait take `all` and `@<you>` when no channel is given, so name the item
+id to follow a thread. An agent never receives its own messages.
 
 Stored in the DynamoDB table iterate-board (tools/team.py) as chan#<channel> / <time in ns>#<sender>, so reading
 costs one query per channel that returns only the new rows, whatever the total number of messages. Each agent
@@ -61,6 +62,7 @@ if __name__ == "__main__":
             sys.exit(f"message is {len(text)} characters; the limit is {LIMIT}")
         team.table().put_item(Item={"pk": f"chan#{channel}", "sk": f"{time.time_ns():020d}#{who}", "channel": channel, "who": who,
                                     "agent": me["agent"], "session": me["session"], "at": time.strftime("%Y-%m-%d %H:%M:%S"), "text": text})
+        print(f"sent to {channel}")
         sys.exit()
 
     timeout = 300.0

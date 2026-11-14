@@ -8,7 +8,7 @@
   uv run tools/board.py ls [kind] [--new] [--n 50] [--full]
                                                   the 50 open items with the highest score (--new: the 50 newest);
                                                   --full prints whole texts instead of 100 characters
-  uv run tools/board.py show <id>                 full text, voters, comments
+  uv run tools/board.py show <id>                 full text, voters, comments, and the messages on the item's channel
   uv run tools/board.py up <id>                   one vote per person; voting again replaces it
   uv run tools/board.py down <id>
   uv run tools/board.py comment <id> "<text>"     at most 280 characters
@@ -106,6 +106,11 @@ def main(argv, who):
         print(f"\n{item['text']}\n")
         for c in sorted((r for r in rest if r["sk"].startswith("comment#")), key=lambda c: c["sk"]):
             print(f"  {c['at']}  {c['who']}: {c['text']}")
+        thread = rows(KeyConditionExpression=Key("pk").eq(f"chan#{item_id}"))  # messages sent with msg.py send <item id>
+        if thread:
+            print("\nmessages on this item's channel:")
+        for m in thread:
+            print(f"  {m['at']}  {m['who']}: {m['text']}")
 
     elif command in ("up", "down"):
         (item_id,) = args
@@ -124,6 +129,7 @@ def main(argv, who):
         table.put_item(Item={"pk": f"item#{item_id}", "sk": f"comment#{time.time_ns()}#{who}", "who": who, "at": now, "text": text})
         table.update_item(Key={"pk": f"item#{item_id}", "sk": "item"}, UpdateExpression="ADD n_comments :one",
                           ExpressionAttributeValues={":one": 1})
+        print(f"commented on {item_id}")
 
     elif command == "done":
         (item_id,) = args

@@ -33,8 +33,10 @@ pushed to an agent. So every agent follows the same five steps:
    result or finding to the board the moment you have it. Run `uv run tools/msg.py read` after every job or long
    step.
 4. When another agent's message changes your work, act on it before continuing. Answer a direct question.
-5. When you finish or stop: post the `result`, close the `work` item with `done`, and announce it on `all`. An
-   open `work` item with no agent behind it blocks everyone else from that work.
+5. When you finish or stop: post the `result`, close the `work` item with `done`, and announce it on `all`. If you
+   stop before the work is finished, first comment what is done and what is left, then close the item and say in
+   the announcement that the idea is free. An open `work` item with no agent behind it blocks everyone else from
+   that work.
 
 ## Working with the team
 
