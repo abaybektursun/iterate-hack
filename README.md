@@ -13,16 +13,120 @@ subagents, work on one research direction, described in [`DIRECTION.md`](DIRECTI
 
 ## Setup (once per person)
 
+Do the steps in order. Credit codes and claim links are on the hackathon platform's home page (API Keys &
+Credits); they are not copied here, because this repository becomes public. Type every key in your own terminal
+or a text editor, never into an agent chat, and never commit one.
+
+| # | Provider | Shared or yours | Needed for |
+|---|---|---|---|
+| 1 | GitHub | shared repositories | the code and the team store (board, events, traces, shared keys) |
+| 2 | Shared keys (`tools/shared.py`) | shared | ECR images, past.dev memory |
+| 3 | Modal | yours ($250 credits) | GPU jobs with `tools/gpu.py` |
+| 4 | Hugging Face | yours | gated models on Modal and vast.ai |
+| 5 | vast.ai | yours (optional) | cheaper private GPUs with `tools/vast.py` |
+| 6 | AWS ECR | shared, read-only, until Sunday 23:59 PST | prebuilt images with model weights, on vast.ai |
+| 7 | past.dev | shared team project | `tools/paper.py`, `tools/recall.py`, session memory |
+| 8 | Exa | yours ($50 credits) | web search by agents |
+| 9 | Tinker, Devin, OpenAI | yours | optional; no tool here uses them |
+
+### 1. GitHub and the team store
+
 ```
-gh auth login                                        # and accept the invites to iterate-hack and iterate-hack-team
-uv run tools/shared.py setup                         # installs the shared ECR key and past.dev key on this machine
-modal token new                                      # your own Modal workspace and credits
-modal secret create hf-token HF_TOKEN=<your token>   # in your own terminal, for gated models
-modal deploy infra/runner.py                         # your job runner
+brew install gh uv                 # or your platform's installers
+gh auth login
+git clone https://github.com/abaybektursun/iterate-hack.git && cd iterate-hack
+git config user.email              # must be set: the part before @ is your name on the board and in job ids
 ```
 
-The team store is cloned to `~/.iterate-hack-team` on first use. Everything shared goes through it; nothing shared
-is on Modal, because each person has their own Modal workspace.
+Accept two invites: `abaybektursun/iterate-hack` (this code) and `abaybektursun/iterate-hack-team` (the private
+team store). The team store is cloned to `~/.iterate-hack-team` the first time a tool needs it. Check:
+`uv run tools/board.py ls` prints the board (nothing, when it is empty) without an error.
+
+### 2. Shared keys
+
+```
+uv run tools/shared.py setup
+```
+
+It reads the keys the team shares from the team store and installs them: the AWS profile `iterate-ecr` (step 6)
+and `~/.past/config.json` (step 7). It prints what is not shared yet. The owner adds a key with
+`uv run tools/shared.py put ecr <key.json>` or `uv run tools/shared.py put past` (typed at a hidden prompt).
+
+### 3. Modal (your own workspace)
+
+1. Create an account at https://modal.com and claim the $250 with the link on the hackathon platform.
+2. Then:
+
+```
+uv tool install modal
+modal token new                                      # opens the browser; pick your own workspace
+modal secret create hf-token HF_TOKEN=<your token>   # the Hugging Face token of step 4
+modal deploy infra/runner.py                         # your job runner; repeat after changing requirements.txt
+```
+
+Check: `uv run tools/gpu.py submit cpu --hours 0.1 -- 'python -c "import torch; print(torch.__version__)"'`,
+then `uv run tools/gpu.py wait <job-id>` prints `done` and `2.15.0+cu132`. Nothing on Modal is shared: each
+person's jobs, outputs and model cache are in their own workspace.
+
+### 4. Hugging Face
+
+Create a read token at https://huggingface.co/settings/tokens and accept the license of each gated model you
+need on its model page. Modal reads it from the secret `hf-token` (step 3). On vast.ai, pass it in the command:
+`'HF_TOKEN=<token> python exp/run.py'`.
+
+### 5. vast.ai (optional, your own account)
+
+```
+uv tool install vastai
+vastai set api-key <key>           # from https://cloud.vast.ai/manage-keys/
+```
+
+Add your ssh public key on the same page (`cat ~/.ssh/id_ed25519.pub`; create one with `ssh-keygen -t ed25519`),
+and add credit to the account. Check: `python3 tools/vast.py offers --ram 24` lists offers.
+
+### 6. AWS ECR (shared, read-only)
+
+The prebuilt images (table under Compute, Images) are in Abay's AWS account. Install the AWS CLI
+(`brew install awscli`); step 2 already wrote the profile `iterate-ecr`. Check:
+`aws ecr describe-images --repository-name shackleton --profile iterate-ecr --query 'length(imageDetails)'`
+prints a number. The key can only pull images, and it stops working Sunday 2026-11-15 at 23:59 PST.
+
+### 7. past.dev (shared team memory)
+
+Step 2 wrote `~/.past/config.json` with the team's project key, your git email as identity, and recall off. Then
+open Claude Code in this repository, trust the folder, and accept the prompt to install the `pastdotdev`
+marketplace and plugin. Check: `/pastdotdev:status` shows the key, your identity and recall off, and
+`python3 tools/recall.py "test"` runs without an error. Details and what is sent: "past.dev details" below.
+The owner creates the team project once: sign up at https://past.dev, redeem the team credits with the code on
+the hackathon platform, create an API key, and run `uv run tools/shared.py put past`.
+
+### 8. Exa (your own key)
+
+Sign up at https://dashboard.exa.ai, redeem the code from the hackathon platform, and create an API key. Put it
+in your shell profile, not in the repository:
+
+```
+echo 'export EXA_API_KEY=<key>' >> ~/.zshrc && source ~/.zshrc
+```
+
+Check:
+
+```
+curl -s https://api.exa.ai/search -H "x-api-key: $EXA_API_KEY" -H 'content-type: application/json' \
+  -d '{"query": "Olmo 3 RL-Zero math", "numResults": 3}' | head -c 300
+```
+
+No tool in this repository calls Exa yet; agents call the API directly (docs: https://docs.exa.ai).
+
+### 9. Tinker, Devin, OpenAI (optional)
+
+Claim each on the hackathon platform. Keep the keys in your shell profile (`TINKER_API_KEY`, `OPENAI_API_KEY`).
+No tool here uses them.
+
+### Agents
+
+Claude Code reads `CLAUDE.md`, which loads `AGENTS.md`. Codex needs network access and a writable uv cache:
+see "Codex agents" below.
 
 ## Compute
 
@@ -183,7 +287,7 @@ UV_CACHE_DIR=$PWD/.uv-cache codex -s workspace-write -c sandbox_workspace_write.
 
 Codex reads `AGENTS.md` for the rules; Claude Code reads the same file through `CLAUDE.md`.
 
-## past.dev setup (once per person)
+## past.dev details
 
 Each Claude Code session opened in this repository is also sent to the past.dev project when it ends,
 so `recall.py` finds what other agents said and decided. Sessions in your other folders are not sent:
@@ -191,19 +295,12 @@ the plugin is enabled in this repository's `.claude/settings.json` only. Nothing
 automatically. What is sent: typed prompts and the agent's prose replies. Tool calls, their output, file
 contents and diffs are never sent. Strings that look like keys are redacted before they leave.
 
-1. Run `uv run tools/shared.py setup`: it writes `~/.past/config.json` (step 3) for you. If it reports that the
-   past key is not shared yet, ask Abay.
-2. Open Claude Code in this repository and trust the folder. Accept the prompt to install the
-   `pastdotdev` marketplace and plugin.
-3. In a text editor (not in a chat), create `~/.past/config.json`:
+`~/.past/config.json` has this form, with permissions 600:
 
-   ```json
-   { "apiKey": "past_sk_...", "identity": "you@example.com", "recall": false }
-   ```
+```json
+{ "apiKey": "past_sk_...", "identity": "you@example.com", "recall": false }
+```
 
-   Then `chmod 600 ~/.past/config.json`. `"recall": false` stops the plugin from adding memories to
-   every prompt. The tools read the same file. Never paste the key into a chat or commit it.
-4. Run `/pastdotdev:status`: it should show the key, your identity, and recall off.
-
-`~/.past/config.json` is one file per machine. If you already use past.dev for another project, this
-replaces that connection. Codex users: see https://github.com/pastdotdev/codex-plugin.
+`"recall": false` stops the plugin from adding memories to every prompt. The tools read the same file. It is one
+file per machine: `shared.py setup` leaves an existing file unchanged, so if you already use past.dev for another
+project, edit the file by hand. Codex users: see https://github.com/pastdotdev/codex-plugin.
