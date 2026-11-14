@@ -3,7 +3,7 @@ safetensors model directory that `run_cell.py --model-path` loads; and the per-t
 
     /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.merge_weights --other rl --alpha 0.5 --rounding stochastic --dir /tmp/theta
     /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.merge_weights --other rl --random --rounding stochastic --dir /tmp/theta
-    /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.merge_weights --other code
+    /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.merge_weights --other code [--cos-with-rl]
 
   --other    rl = allenai/Olmo-3.1-7B-RL-Zero-Math (frozen4.json), code = allenai/Olmo-3.1-7B-RL-Zero-Code (CODE below).
   --alpha    a of theta(a). a = 0 must give base and a = 1 the other model, tensor for tensor (asserted).
@@ -156,6 +156,30 @@ def merge(base_dir, other_dir, alpha, rand, rounding, out_dir, seed, device, jso
             "groups": sums(per, group), "layers": sums(per, layer), "tensors": per}
 
 
+def cosine(base_dir, x_dir, y_dir, device):
+    """Cosine between x - base and y - base, overall and per tensor group, and how many entries both change (same sign)."""
+    w = json.loads((pathlib.Path(base_dir) / "model.safetensors.index.json").read_text())["weight_map"]
+    g = {}
+    for shard in sorted(set(w.values())):
+        with safe_open(pathlib.Path(base_dir) / shard, "pt", device="cpu") as fb, safe_open(pathlib.Path(x_dir) / shard, "pt", device="cpu") as fx, \
+                safe_open(pathlib.Path(y_dir) / shard, "pt", device="cpu") as fy:
+            for name in sorted(n for n, s in w.items() if s == shard):
+                b = fb.get_tensor(name).to(device, torch.float32)
+                dx, dy = fx.get_tensor(name).to(device, torch.float32) - b, fy.get_tensor(name).to(device, torch.float32) - b
+                for k in (group(name), "all"):
+                    t = g.setdefault(k, {"dot": 0.0, "xx": 0.0, "yy": 0.0, "x_changed": 0, "y_changed": 0, "both": 0, "both_same_sign": 0})
+                    t["dot"] += float((dx * dy).sum())
+                    t["xx"] += float((dx * dx).sum())
+                    t["yy"] += float((dy * dy).sum())
+                    t["x_changed"] += int((dx != 0).sum())
+                    t["y_changed"] += int((dy != 0).sum())
+                    t["both"] += int(((dx != 0) & (dy != 0)).sum())
+                    t["both_same_sign"] += int((dx * dy > 0).sum())
+    for t in g.values():
+        t["cos"] = t["dot"] / (t["xx"] * t["yy"]) ** 0.5 if t["xx"] and t["yy"] else None
+    return g
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--other", required=True, choices=("rl", "code"))
@@ -165,6 +189,7 @@ def main():
     ap.add_argument("--dir")
     ap.add_argument("--stats", default=os.path.join(os.environ.get("OUT_DIR", ""), "merge.json"))
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--cos-with-rl", action="store_true", help="statistics only, --other code: also the cosine of Code - base with RL - base")
     a = ap.parse_args()
     if a.dir:
         assert a.rounding and ((a.alpha is None) == a.random), "--dir needs --rounding and exactly one of --alpha, --random"
@@ -179,6 +204,11 @@ def main():
     rl_json = snapshot_download(fz["models"][RL_KEY][0], revision=fz["models"][RL_KEY][2], allow_patterns=["*.json"])
     device = "cuda" if torch.cuda.is_available() else "cpu"
     res = merge(dirs[0], dirs[1], a.alpha, a.random, a.rounding, a.dir, a.seed, device, rl_json)   # RL config and tokenizer for all
+    if a.cos_with_rl:
+        assert a.other == "code" and not a.dir
+        rl_dir = snapshot_download(fz["models"][RL_KEY][0], revision=fz["models"][RL_KEY][2], allow_patterns=["*.json", "*.safetensors"])
+        res["cos_with_rl"] = cosine(dirs[0], dirs[1], rl_dir, device)
+        print(json.dumps({k: v["cos"] for k, v in res["cos_with_rl"].items()}, indent=1))
     res = {"args": vars(a), "base": base, "other": other, "device": device, "torch": torch.__version__, "seconds": time.time() - t0, **res}
     pathlib.Path(a.stats).write_text(json.dumps(res, indent=1) + "\n")
     print(json.dumps({k: res[k] for k in ("args", "overall", "delta_ulp_hist", "points", "identity", "seconds")}, indent=1))

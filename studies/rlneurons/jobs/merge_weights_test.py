@@ -71,6 +71,10 @@ def main():
         assert abs(r["target_norm_ratio"] - 1) < 1e-4 and abs(r["target_cos_delta"]) < 0.1, r
         assert 0.25 < st["overall"]["frac_changed"] < 0.35 and st["delta_ulp_hist"][4] == 0, (st["overall"], st["delta_ulp_hist"])
         print(json.dumps({"points": p, "delta_ulp_hist": st["delta_ulp_hist"], "groups": {k: v["rel_norm"] for k, v in st["groups"].items()}}, indent=1))
+        c = M.cosine(t / "base", t / "other", t / "other", "cpu")
+        assert abs(c["all"]["cos"] - 1) < 1e-6 and c["all"]["both"] == c["all"]["x_changed"] == c["all"]["both_same_sign"], c["all"]
+        c = M.cosine(t / "base", t / "other", t / "base", "cpu")
+        assert c["all"]["cos"] is None and c["all"]["both"] == 0, c["all"]
         out = t / "rand"
         st = M.merge(t / "base", t / "other", None, True, "stochastic", out, 0, "cpu", t / "base")
         got = load(out)
