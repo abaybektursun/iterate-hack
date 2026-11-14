@@ -73,11 +73,11 @@ def submit(args):
     if len(active) >= PER_PERSON:
         sys.exit(f"{who} already has {len(active)} queued or running jobs; the limit is {PER_PERSON}")
 
-    volume = modal.Volume.from_name("iterate-code", create_if_missing=True)
-    if f"{sha}.tar" not in {entry.path for entry in volume.listdir("/")}:
-        tar = subprocess.run(["git", "archive", "--format=tar", sha], capture_output=True, check=True).stdout
-        with volume.batch_upload() as upload:
-            upload.put_file(io.BytesIO(tar), f"/{sha}.tar")
+    # Upload on every submit, overwriting: the file is named by its commit, so the bytes are the same. Checking
+    # first with listdir hits Modal's rate limit when many agents submit at once.
+    tar = subprocess.run(["git", "archive", "--format=tar", sha], capture_output=True, check=True).stdout
+    with modal.Volume.from_name("iterate-code", create_if_missing=True).batch_upload(force=True) as upload:
+        upload.put_file(io.BytesIO(tar), f"/{sha}.tar")
 
     job_id = f"{who}-{time.strftime('%m%d-%H%M%S')}-{secrets.token_hex(2)}"
     jobs[f"job:{job_id}"] = {"who": who, "class": gpu_class, "sha": sha, "cmd": cmd, "hours": hours, "at": int(time.time())}
