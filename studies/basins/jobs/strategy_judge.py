@@ -114,6 +114,7 @@ if __name__ == "__main__":
     else:
         from studies.rlneurons.lib.n13_gen import ENGINE_ENV  # VLLM_USE_FLASHINFER_SAMPLER=0: no nvcc in the image
         os.environ.update(ENGINE_ENV)  # set before vllm is imported
+        os.environ["VLLM_USE_DEEP_GEMM"] = "0"  # FP8 judge: DeepGEMM JIT needs nvcc, absent in the image (job frustea-1114-153448-dce3)
         from vllm import LLM, SamplingParams as SP
         llm = LLM(model=JUDGE[0], revision=JUDGE[1], max_model_len=16384, enable_prefix_caching=True, seed=0)
 
