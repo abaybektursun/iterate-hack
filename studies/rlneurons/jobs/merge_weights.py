@@ -62,8 +62,9 @@ def to_bf16(x, rounding, gen):
     return ((x.view(torch.int32) + r) & -65536).view(torch.float32).to(torch.bfloat16)
 
 
-def point(b, d, alpha, rand, noise_gen):
-    """float32 target before rounding, and the difference it adds to b."""
+def point(b, o, d, alpha, rand, noise_gen):
+    """float32 target before rounding, and the difference it adds to b. (1 - a) b + a o, not b + a (o - b): o - b is not exact in
+    float32 where a weight moves to a value 2^16 times smaller, and the endpoints must be exact."""
     if rand:
         nd = torch.linalg.vector_norm(d)
         if nd == 0:
@@ -72,7 +73,7 @@ def point(b, d, alpha, rand, noise_gen):
         r = n * (nd / torch.linalg.vector_norm(n))
         assert abs(float(torch.linalg.vector_norm(r) / nd) - 1) < 1e-4, "random control: norm differs from ||delta||"
         return b + r, r
-    return b + alpha * d, alpha * d
+    return (1 - alpha) * b + alpha * o, alpha * d
 
 
 def tensor_stats(b, d):
@@ -125,7 +126,7 @@ def merge(base_dir, other_dir, alpha, rand, rounding, out_dir, seed, device, jso
                 for p in points:
                     for ro in roundings:
                         k = (label(*p), ro)
-                        x, add = point(b, d, p[0], p[1], gens[k][0])
+                        x, add = point(b, o, d, p[0], p[1], gens[k][0])
                         m = to_bf16(x, ro, gens[k][1])
                         mb = m.to(torch.float32) - b
                         a = acc[k]

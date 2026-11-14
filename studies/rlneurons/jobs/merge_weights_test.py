@@ -2,7 +2,7 @@
 
     uv run --no-project --with torch --with safetensors --with numpy python -m studies.rlneurons.jobs.merge_weights_test
 
-The other model differs from the base by one bf16 unit in the last place on 30 % of entries (the size of an RL update). Checks: a = 0 and a = 1 give the endpoints exactly; with stochastic rounding the effective a
+The other model differs from the base by one bf16 unit in the last place on 30 % of entries (the size of an RL update), and on one entry from 0.01 to 1e-7 (o - b inexact in float32). Checks: a = 0 and a = 1 give the endpoints exactly; with stochastic rounding the effective a
 is within 0.03 of a for a in POINTS, with nearest rounding a = 0.25 collapses to the base and a = 0.75 to the other model; the random control
 has the norm of the difference before rounding and is nearly orthogonal to it; a shard layout that differs fails.
 """
@@ -46,14 +46,18 @@ def main():
         mask = torch.rand(b.shape, generator=g) < 0.3
         step = torch.where(torch.rand(b.shape, generator=g) < 0.5, 1, -1).to(torch.int16)
         other[n] = torch.where(mask, bits + step, bits).view(torch.bfloat16)
+    base_x, other_x = {n: v.clone() for n, v in base.items()}, {n: v.clone() for n, v in other.items()}
+    base_x["lm_head.weight"][0, 0], other_x["lm_head.weight"][0, 0] = 0.01, 1e-7     # o - b is not exact in float32 here
     with tempfile.TemporaryDirectory() as t:
         t = pathlib.Path(t)
         model(t / "base", base)
         model(t / "other", other)
-        for a, want in ((0.0, base), (1.0, other)):
+        model(t / "base_x", base_x)
+        model(t / "other_x", other_x)
+        for a, want in ((0.0, base_x), (1.0, other_x)):
             for ro in ("nearest", "stochastic"):
                 out = t / f"m_{a}_{ro}"
-                st = M.merge(t / "base", t / "other", a, False, ro, out, 0, "cpu", t / "base")
+                st = M.merge(t / "base_x", t / "other_x", a, False, ro, out, 0, "cpu", t / "base")
                 got = load(out)
                 assert all(torch.equal(got[n], want[n]) for n in want), (a, ro)
                 assert st["identity"] == {"exact": 4, "tensors": 4}, st["identity"]
