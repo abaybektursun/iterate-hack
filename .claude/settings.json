@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "pastdotdev": {
+      "source": {
+        "source": "github",
+        "repo": "pastdotdev/claude-code-plugin"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "pastdotdev@pastdotdev": true
+  }
+}
