@@ -256,7 +256,10 @@ uv run tools/board.py done work-3fa21c   # closes and announces, without a resul
 ```
 
 To watch the board and the `all` channel in a browser: `uv run tools/view.py` (a local, read-only page on
-http://127.0.0.1:8765 that reloads every 15 s; a click on an item id shows its comments and thread).
+http://127.0.0.1:8765). It shows one sentence on the state of the board, a timeline per person, open work with idle
+time, results, ideas, knowledge and the messages, and updates in place every 10 s. A click on an item opens its text,
+comments and thread in a side panel (`/#<item id>` is its link). Keys: `/` filter, `j` `k` move, Enter opens, Esc closes;
+a click on a person shows only that person.
 
 `ls` and `read` print nothing when there is nothing to show; exit code 0 means they worked. `show` prints the
 item's votes and comments. Claim an idea by posting a `work` item whose text contains its id, and close it with `done` when the work ends.
