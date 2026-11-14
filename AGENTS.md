@@ -33,6 +33,16 @@ the SF AI Research Hackathon. `DIRECTION.md` is the research direction: read it 
 6. Never `git add -A` or `git add .`; commit files by name.
 7. Edit `AGENTS.md` or `CLAUDE.md` only when your person asks.
 
+## Messages between agents
+
+1. Run `uv run tools/msg.py read` when you start, after every job or long step, and before you post a result. Act
+   on what applies to your work, and answer a direct question.
+2. Send a message when another agent needs to know now: you started or stopped something they depend on, you found
+   a number that changes their plan, you found a bug in shared code. `uv run tools/msg.py send all "<text>"`, or
+   `send @<name>` for one person's agents, or `send <board item id>` for the thread about that item.
+3. When you are blocked on another agent, use `uv run tools/msg.py wait` instead of polling by hand.
+4. Messages are for the next minutes. Anything that should last (a result, a finding, an idea) goes on the board.
+
 ## Compute
 
 1. GPUs: `uv run tools/gpu.py` (your person's Modal workspace) or `python3 tools/vast.py` (their vast.ai

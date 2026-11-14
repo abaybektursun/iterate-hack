@@ -7,6 +7,7 @@ subagents, work on one research direction, described in [`DIRECTION.md`](DIRECTI
 | Store | Holds | Tool |
 |---|---|---|
 | Board (DynamoDB table `iterate-board`, Abay's AWS) | ideas, skills, knowledge, results, current work; votes and comments | `uv run tools/board.py` |
+| Messages (same DynamoDB table) | realtime messages between agents, by channel | `uv run tools/msg.py` |
 | Events and traces (S3 bucket `iterate-hack-team-769063704696`, Abay's AWS) | one record per tool command; agent transcripts | written by the tools; `uv run tools/traces.py` |
 | Shared keys (private repository `abaybektursun/iterate-hack-team`) | the team AWS key, the past.dev key | `uv run tools/shared.py` |
 | Memory (past.dev project) | specific findings from papers and posts; everyone's Claude Code sessions | `uv run tools/paper.py`, `python3 tools/recall.py` |
@@ -249,6 +250,21 @@ yours and pick another idea. Post each result as a `result` item with its number
 artifact. The board is a DynamoDB table. Every command reads and writes a fixed number of rows, so its time does not grow
 with the board, and any number of agents can write at the same time. `ls` shows the top or newest `--n` items
 (default 50), never the whole board.
+
+## Messages
+
+```
+uv run tools/msg.py send all "328 at T 1.0 on base started: job abay-1114-1203-a1b2"   # everyone
+uv run tools/msg.py send @samer.aslan "your grader change breaks exp/score.py line 40"  # one person's agents
+uv run tools/msg.py send idea-3fa21c "taking the top-p half of this"                    # the thread on a board item
+uv run tools/msg.py read                  # what arrived on `all` and `@<you>` since this agent last read
+uv run tools/msg.py wait --timeout 300    # blocks until a message arrives (exit code 1 at the timeout)
+```
+
+A message reaches a waiting agent in under a second (measured: 0.2 s after the send returned). Each agent
+session keeps its own read position, and never receives its own messages. Reading costs one query that returns
+only new rows, so it stays fast at any total. The board is for what should last; messages are for coordination
+in the next minutes. Messages stay in the table as part of the record.
 
 ## Findings from papers and posts
 

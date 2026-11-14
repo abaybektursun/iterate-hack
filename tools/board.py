@@ -30,6 +30,7 @@ import secrets
 import subprocess
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 from boto3.dynamodb.conditions import Key
 
@@ -88,9 +89,10 @@ def main(argv, who):
         n = int(args[args.index("--n") + 1]) if "--n" in args else 50
         kinds = [a for a in args if a in KINDS] or KINDS
         index, order = ("new", "at_ns") if newest else ("top", "score")
-        found = []
-        for kind in kinds:
-            found += table.query(IndexName=index, KeyConditionExpression=Key("listed").eq(kind), ScanIndexForward=False, Limit=n)["Items"]
+        with ThreadPoolExecutor(len(kinds)) as pool:  # one query per kind, at the same time
+            pages = pool.map(lambda kind: table.query(IndexName=index, KeyConditionExpression=Key("listed").eq(kind),
+                                                      ScanIndexForward=False, Limit=n)["Items"], kinds)
+            found = [item for page in pages for item in page]
         for item in sorted(found, key=lambda i: -i[order])[:n]:
             print(line(item, full))
 
