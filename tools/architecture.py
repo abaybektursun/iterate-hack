@@ -2,7 +2,8 @@
 
 view.py serves PAGE at /architecture. The page reads the same /data as the board page every 10 s and draws:
 the board in the centre with one dot per live item, one swarm per person (a dot per agent session, in the
-person's color of the board page), the messages ring, memory, runs, and the review loop around everything.
+person's color of the board page), the messages ring, the shared memory, GPU runs, and the self-review loop around everything. Agents circle in their
+swarm, one electron per person runs on the messages ring and a comet runs the review loop; a larger dot is a real post.
 A click on a part dims the rest and explains it in the side column (address /architecture#<part>);
 "Follow one result" steps through the path of one result (arrow keys, Esc). Nothing here writes to the board.
 """
@@ -91,7 +92,11 @@ svg [data-go]:focus-visible .ring { stroke: var(--blue); stroke-width: 3; }
 .tick { fill: none; stroke: var(--paper); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 .sub { fill: var(--mute); font-weight: 480; }
 .dot.off { opacity: .12; }
-.quote { font-family: Georgia, "Times New Roman", serif; font-weight: 400; }
+[data-part="review"] .comet path { stroke-width: 6; }
+.comet { filter: drop-shadow(0 0 6px var(--blue)); }
+.etail { fill: none; stroke: var(--c); stroke-width: 3.5; stroke-linecap: round; opacity: .4; }
+.ehead { fill: var(--c); }
+.electron { filter: drop-shadow(0 0 4px var(--c)); }
 #fx { pointer-events: none; }
 .fly { fill: var(--c); }
 .halo { fill: none; stroke: var(--c); stroke-width: 1.5; opacity: .45; }
@@ -103,20 +108,18 @@ svg [data-go]:focus-visible .ring { stroke: var(--blue); stroke-width: 3; }
 .dot, .agent, .person { transform-box: fill-box; transform-origin: center; }
 .enter .draw { stroke-dasharray: 1; animation: draw 1s cubic-bezier(.6, 0, .2, 1) both; }
 .enter [data-part="review"] .draw { animation-delay: .5s; }
-.enter .thread, .enter .tie, .enter .msg-ring, .enter .label, .enter .who, .enter .glyph, .enter .glyph-ink, .enter .quote, .enter .line, .enter .gate, .enter .tick, .enter .sub, .enter .key .dot, .enter .cut {
+.enter .thread, .enter .tie, .enter .msg-ring, .enter .label, .enter .who, .enter .glyph, .enter .glyph-ink, .enter .line, .enter .gate, .enter .tick, .enter .sub, .enter .key .dot, .enter .cut {
   animation: fade .6s .55s both;
 }
+.enter .comet, .enter .electron { animation: fade .8s 1.3s both; }
 .enter .agent, .enter .person { animation: pop .45s cubic-bezier(.3, 1.5, .5, 1) both; animation-delay: calc(.25s + var(--i, 0) * 18ms); }
 .enter .dot { animation: pop .4s cubic-bezier(.3, 1.4, .5, 1) both; animation-delay: calc(.7s + var(--i, 0) * 7ms); }
 .dot.arrived { animation: pop .5s cubic-bezier(.3, 1.6, .5, 1) .9s both; }
 
 /* The words */
 .side { min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none; padding-top: clamp(16px, 7vh, 96px); }
-.say { margin: 0; font-size: clamp(30px, 2.75vw, 50px); line-height: 1.08; font-weight: 320; font-stretch: 106%; letter-spacing: -.015em; }
-.say button { display: block; border-radius: 4px; }
-.say b { font-weight: 660; }
-.say button:hover, .say button.on { color: var(--blue); }
-.ask { display: block; margin-top: 16px; font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; color: var(--mute); max-width: 24ch; }
+.say { margin: 0; font-size: clamp(22px, 1.8vw, 32px); line-height: 1.2; font-weight: 360; font-stretch: 104%; letter-spacing: -.01em; max-width: 20ch; }
+.ask { display: block; margin-top: 18px; font-size: clamp(15px, 1.1vw, 18px); line-height: 1.35; color: var(--mute); max-width: 30ch; }
 .ask:hover, .ask.on { color: var(--blue); }
 .ask small { display: block; margin-top: 6px; font-size: 13.5px; white-space: nowrap; }
 .pane { margin-top: clamp(22px, 4vh, 44px); }
@@ -141,7 +144,6 @@ svg [data-go]:focus-visible .ring { stroke: var(--blue); stroke-width: 3; }
 .lead { margin: 16px 0 0; font-size: clamp(17px, 1.3vw, 21px); line-height: 1.36; font-weight: 420; max-width: 30ch; }
 .facts { list-style: none; margin: 16px 0 0; padding: 0; font-size: 14.5px; color: var(--mute); max-width: 40ch; }
 .facts li { padding: 7px 0; border-top: 1px solid var(--rule); }
-.facts b { color: var(--ink); font-weight: 640; }
 .rows { margin-top: 18px; }
 .rows h3 { margin: 0 0 2px; font-size: 13px; font-weight: 600; color: var(--mute); }
 .rows a { display: block; padding: 8px 0 8px 12px; border-top: 1px solid var(--rule); text-decoration: none; position: relative; font-size: 13.5px; line-height: 1.42; }
@@ -156,7 +158,7 @@ svg [data-go]:focus-visible .ring { stroke: var(--blue); stroke-width: 3; }
 .steps { display: flex; gap: 6px; }
 .steps i { flex: 1; height: 4px; border-radius: 2px; background: var(--rule); }
 .steps i.done { background: var(--ink); }
-.cap { margin: 22px 0 0; font-size: clamp(30px, 2.75vw, 50px); line-height: 1.08; font-weight: 320; font-stretch: 106%; letter-spacing: -.015em; max-width: 13ch; min-height: 4.4em; }
+.cap { margin: 22px 0 0; font-size: clamp(26px, 2.3vw, 42px); line-height: 1.12; font-weight: 340; font-stretch: 104%; letter-spacing: -.012em; max-width: 14ch; min-height: 4.6em; }
 .walking .say, .walking .ask { display: none; }
 .walking .pane { margin-top: 0; }
 .nav { display: flex; align-items: center; gap: 10px; margin-top: 20px; }
@@ -175,6 +177,7 @@ svg [data-go]:focus-visible .ring { stroke: var(--blue); stroke-width: 3; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter *, .dot.arrived { animation: none !important; }
+  .comet, .electron { display: none; }
   .part { transition: none; }
 }
 </style>
@@ -207,78 +210,64 @@ const msgNs = m => Number(m.sk.slice(0, 20));
 const mins = ns => Math.max(0, Math.floor((Date.now() * 1e6 - Number(ns)) / 60e9));
 const ago = ns => { const m = mins(ns); return m < 1 ? "now" : m < 60 ? m + " min ago" : m < 2880 ? Math.floor(m / 60) + " h ago" : Math.floor(m / 1440) + " d ago"; };
 
-/* What each part says. One sentence, then at most three facts; the rows under them are live. */
+/* What each part says: one sentence, then at most three more. Plain sentences in the words of README.md and
+   DIRECTION.md, no slogans and no bold lead-ins. The rows under them are live. */
 const TEXT = {
   board: {
     name: "Board",
-    lead: "The team's shared state. Agents post ideas, claim work and report results here, and read it before they start.",
-    facts: ["<b>Claim first.</b> A second claim that names the same idea is reported at once.", "<b>Idle 60 min:</b> another agent may ask to take the work over.", "<b>Dots:</b> hollow is open work, solid is a result, small is an idea or a note."],
+    lead: "The board holds ideas, work in progress, results and knowledge, with votes and comments. Every agent reads it before starting and posts to it while working.",
+    facts: ["An agent claims work by posting it. If another open claim names the same idea, the tool says so.", "Work that has been idle for 60 minutes can be taken over by another agent, after asking.", "Each dot is one item: hollow is open work, solid is a result, small is an idea or a note."],
     rows: m => ({ title: `${cnt(m.n.result)} results, ${cnt(m.n.work)} open, ${cnt(m.n.idea)} ideas`, list: m.results }),
   },
   msg: {
     name: "Messages",
-    lead: "A hook puts new messages into an agent's context while it works, so agents hear each other without polling.",
-    facts: ["<b>0.2 s</b> to a waiting agent, measured. A working agent gets it after its next tool call.", "<b>Three channels:</b> everyone, one person's agents, one board item."],
+    lead: "Agents send each other short messages: to everyone, to one person's agents, or about one board item.",
+    facts: ["In Claude Code, a hook adds new messages to an agent's context after its tool calls, so the agent does not have to check for them.", "A message reaches a waiting agent in 0.2 s (measured)."],
     rows: m => ({ title: `${m.msgs.length} messages to everyone in the last ${m.hours} h`, list: m.msgs }),
   },
   mem: {
     name: "Memory",
-    lead: "What the team already knows: papers read in full, every board result, every agent session.",
-    facts: ["<b>Quote or nothing.</b> The tool refuses a finding whose quote is missing from the paper's text.", "<b>Search first.</b> Agents search memory and the literature before any new measurement."],
+    lead: "A shared database that every agent can search. It holds findings from papers, the results and knowledge posted on the board, and the conversations of every agent session.",
+    facts: ["Agents search it before starting an idea, so work is not repeated.", "A finding from a paper is saved only with a quote from that paper. The tool rejects a quote it cannot find in the paper's text."],
     rows: m => ({ title: `${cnt(m.n.note)} knowledge items on the board`, list: m.notes }),
   },
   run: {
     name: "GPU runs",
-    lead: "A GPU job runs one committed, pushed version of the code. The tool refuses anything else, so every number traces to code.",
-    facts: ["<b>Each run folder</b> holds its commit, command, metrics, and one example scored right and one scored wrong.", "<b>Each result</b> states its number, sample size and file path.", "<b>4 H100 and 2 B200</b> at once per person, on their own credits."],
+    lead: "Experiments run as GPU jobs on Modal or vast.ai. A job can only be started from code that is committed and pushed to GitHub.",
+    facts: ["If the code has uncommitted or unpushed changes, the tool stops with an error. This way the exact code behind every result can be found later.", "Each run gets its own folder with the commit, the command, the metrics, and one example scored right and one scored wrong.", "Each person can run 4 H100 and 2 B200 jobs at once, paid from their own credits."],
     rows: m => ({ title: `${m.scores} scored configurations`, list: m.results }),
   },
   review: {
     name: "Self-review",
-    lead: "The harness records itself. After each closed result, a review reads the timings and makes one change.",
-    facts: ["<b>Every command is logged:</b> time, person, agent, commit.", "<b>Turnaround is measured</b> per job and per work item, from claim to close.", "<b>Honest status:</b> whether these changes help is a study in progress."],
+    lead: "Every tool command is logged with its time, person, agent and commit. After each finished result, an agent reviews these logs.",
+    facts: ["The review measures how long each step took, from claiming the work to posting the result.", "It then makes one change to the tools or the rules, to remove the slowest step or a failure that repeats.", "Whether these changes help has not been measured yet."],
   },
   team: {
     name: "People and agents",
-    lead: "Each person steers several coding agents. Each agent has subagents and its own git branch.",
-    facts: ["<b>One rules file</b> for two agent products, Claude Code and Codex.", "<b>People set the direction.</b> Agents coordinate through the board and the messages."],
+    lead: "Each person runs several coding agents (Claude Code or Codex). Each agent has subagents and works on its own git branch.",
+    facts: ["All agents follow one rules file.", "The people decide the direction. The agents coordinate through the board and the messages."],
   },
   question: {
-    name: "One question",
-    lead: "How much of a published reinforcement-learning gain does the untrained base model reach with no training?",
-    facts: m => [m && m.best ? `<b>MATH-500 now:</b> untrained base ${m.best.base}, RL-trained ${m.best.rl}.` : "", "<b>One file</b> states the direction. Every agent reads it before choosing work.", "<b>Same conditions</b> for both models, in every comparison."],
+    name: "Research direction",
+    lead: "An agent swarm measures how much of a published RL gain an untrained base model reaches with no training.",
+    facts: m => [m && m.best ? `On MATH-500 the untrained base model now scores ${m.best.base}, and the RL-trained model ${m.best.rl}.` : "", "The direction is written in one file, which every agent reads before choosing work.", "Any change to how answers are generated or graded is made for both models."],
     link: ["/", "See every score on the board"],
   },
-  "why-boss": {
-    name: "No boss agent",
-    lead: "Nothing assigns the work. Every line from an agent ends at the board, and none at another agent.",
-    facts: ["<b>Agents choose</b> work from the shared state. People steer.", "<b>Not new by itself:</b> other swarms share a board too. The three points below are what differs."],
-  },
-  "why-people": {
-    name: "People steer every swarm",
-    lead: "Published agent swarms run alone toward one score. Here each person steers a swarm the whole way, on an open research question.",
-    facts: ["<b>The board holds</b> ideas, claims, results and knowledge, with votes.", "<b>Closest published:</b> autoresearch@home and Anthropic's automated researchers."],
-  },
-  "why-evidence": {
-    name: "Two checks agents cannot skip",
-    lead: "Both are code. An agent that tries to skip one gets an error.",
-    facts: ["<b>Memory</b> refuses a finding whose quote is missing from the paper.", "<b>GPU runs</b> refuse uncommitted or unpushed code."],
-  },
-  "why-self": {
-    name: "It reviews and changes itself",
-    lead: "The loop around the picture is real: logged timings go in, and one change to the harness comes out.",
-    facts: ["<b>Triggered</b> by every closed result and every fifth GPU job.", "<b>Each change</b> is written down with the measurement behind it.", "<b>Effect:</b> not yet measured. That study is running."],
+  diff: {
+    name: "What is different",
+    lead: "Other published agent swarms also share a board and have no orchestrator. Three things are different here.",
+    facts: ["People direct their own agents the whole time, on an open research question. The published swarms run alone toward one score.", "Two rules are enforced by the tools: a paper finding needs a quote found in the paper, and a GPU job needs pushed code.", "The harness logs every command and reviews its own turnaround. Whether that helps has not been measured yet."],
   },
 };
-const WHY = [["why-people", "People steer every swarm"], ["why-evidence", "Two checks agents cannot skip"], ["why-self", "It reviews and changes itself"]];
-const ASK = "How much of an RL gain needs no training?";
+const WHY = [["diff", "What is different"]];
+const ASK = "How much of a published RL gain does an untrained base model reach with no training?";
 const WALK = [
-  "An agent posts an idea.",
-  "It searches memory and papers first.",
+  "An agent posts an idea on the board.",
+  "It searches memory and the literature.",
   "It claims the work on the board.",
-  "It writes code on its own branch.",
-  "The GPU runs only a pushed commit.",
-  "The result carries its number, sample size and file.",
+  "It writes the code on its own branch.",
+  "It starts a GPU job from the pushed commit.",
+  "It posts the result with its number, sample size and file path.",
   "A review reads the logs and changes the harness.",
 ];
 const cnt = n => n >= 60 ? "60+" : n;  // /data returns the newest 60 of each kind
@@ -304,7 +293,7 @@ function best(scores) {  // the best MATH-500 score of each model, as "410/500"
   const top = k => scores.filter(x => x.benchmark === "MATH-500" && x.model === k).sort((a, b) => b.right / b.n - a.right / a.n)[0];
   const base = top("base"), rl = top("rl");
   const pct = x => Math.round(100 * x.right / x.n);
-  return base && rl ? { base: `${base.right}/${base.n}`, rl: `${rl.right}/${rl.n}`, line: `MATH-500 so far: untrained ${pct(base)}%, RL-trained ${pct(rl)}%.` } : null;
+  return base && rl ? { base: `${base.right}/${base.n}`, rl: `${rl.right}/${rl.n}`, line: `MATH-500: untrained ${pct(base)}%, RL-trained ${pct(rl)}%` } : null;
 }
 function model(d) {
   const all = [...d.items, ...d.messages];
@@ -340,17 +329,20 @@ function draw() {
   let out = part("review", "review",
     `<circle class="hit" cx="${g.cx}" cy="${g.cy}" r="${g.rr}" stroke-width="26"/>` +
     `<path class="draw" pathLength="1" d="${arc(g, g.rr, -90 + gap, 270 - gap)}"/>${chevron(60)}${chevron(240)}` +
+    `<g id="comet" class="comet"><path d="${arc(g, g.rr, -48, 0)}" opacity=".14"/><path d="${arc(g, g.rr, -27, 0)}" opacity=".32"/><path d="${arc(g, g.rr, -9, 0)}"/></g>` +
     curved("on-review", g.rr, "Self-review", "label plain"), "Self-review");
   out += part("msg", "msg",
-    `<circle class="hit" cx="${g.cx}" cy="${g.cy}" r="${g.rm}" stroke-width="22"/><circle class="msg-ring" cx="${g.cx}" cy="${g.cy}" r="${g.rm}"/>` +
+    `<circle class="hit" cx="${g.cx}" cy="${g.cy}" r="${g.rm}" stroke-width="22"/><g id="msgspin"><circle class="msg-ring" cx="${g.cx}" cy="${g.cy}" r="${g.rm}"/></g>` +
+    th.map((a, i) => `<g class="electron hue" data-a="${a}" data-i="${i}" style="--h:${HUES[i % HUES.length]}"><path class="etail" d="${arc(g, g.rm, -15, 0)}"/>` +
+      `<circle class="ehead" cx="${g.cx + g.rm}" cy="${g.cy}" r="5.5"/></g>`).join("") +
     curved("on-msg", g.rm, "Messages", "label plain"), "Messages");
-  const link = a => {  // a line from the agents to an outside part, with the mark of a check the tool enforces
+  const link = (a, check) => {  // a line from the board to an outside part; the mark is a check the tool enforces there
     const c = pt(g, (g.out - 40 + g.rr) / 2, a);
-    return `<path class="line" d="M${xy(pt(g, g.rb + 3, a))}L${xy(pt(g, g.out - 40, a))}"/><circle class="gate" cx="${f(c[0])}" cy="${f(c[1])}" r="11"/>` +
-      `<path class="tick" d="M${f(c[0] - 5)} ${f(c[1] + .5)}l3.6 3.8l6.4 -7.6"/>`;
+    return `<path class="line" d="M${xy(pt(g, g.rb + 3, a))}L${xy(pt(g, g.out - 40, a))}"/>` + (check ? `<circle class="gate" cx="${f(c[0])}" cy="${f(c[1])}" r="11"/>` +
+      `<path class="tick" d="M${f(c[0] - 5)} ${f(c[1] + .5)}l3.6 3.8l6.4 -7.6"/>` : "");
   };
-  out += part("memlink", "", link(g.mem));
-  out += part("runlink", "", link(g.run));
+  out += part("memlink", "", link(g.mem, false));
+  out += part("runlink", "", link(g.run, true));
 
   const spots = th.map((a, i) => (m.agents[i].length ? m.agents[i] : [""]).map((_, k) => {
     const [dx, dy] = spiral(k, 11.5), q = pt(g, g.rq, a);
@@ -376,12 +368,13 @@ function draw() {
   const mem = pt(g, g.out, g.mem), run = pt(g, g.out, g.run);
   const names = (c, name, sub, edge) => {  // the name under a part, and under it what the tool enforces there
     const side = narrow.matches ? edge : 0, x = side < 0 ? 18 : side > 0 ? g.w - 18 : c[0], anchor = side < 0 ? "start" : side > 0 ? "end" : "middle";
-    return `<text class="label" x="${f(c[0])}" y="${f(c[1] + 44 + g.fs)}" font-size="${g.fs}">${name}</text>` +
+    return `<text class="label" x="${f(x)}" y="${f(c[1] + 44 + g.fs)}" font-size="${g.fs}" style="text-anchor:${anchor}">${name}</text>` +
       `<text class="sub" x="${f(x)}" y="${f(c[1] + 44 + g.fs + g.fw * 1.35)}" font-size="${f(g.fw * .92)}" style="text-anchor:${anchor}">${sub}</text>`;
   };
+  const [mx, my] = mem, band = y => `M${f(mx - 28)} ${f(my + y)}a28 9 0 0 0 56 0`;  // a database: a cylinder with two bands
   out += part("mem", "mem",
-    `<circle class="glyph ring" cx="${f(mem[0])}" cy="${f(mem[1])}" r="36"/>` +
-    `<text class="quote" x="${f(mem[0])}" y="${f(mem[1] + 35)}" font-size="74">\u201C</text>` + names(mem, "Memory", "paper quotes verified", -1), "Memory");
+    `<path class="glyph ring" d="M${f(mx - 28)} ${f(my - 21)}v42a28 9 0 0 0 56 0v-42a28 9 0 0 0 -56 0z"/>` +
+    `<path class="line" d="M${f(mx - 28)} ${f(my - 21)}a28 9 0 0 0 56 0${band(-7)}${band(7)}"/>` + names(mem, "Memory", "shared database", -1), "Memory");
   const pins = [-14, 0, 14].map(o => `M${f(run[0] + o)} ${f(run[1] - 36)}v8M${f(run[0] + o)} ${f(run[1] + 28)}v8M${f(run[0] - 36)} ${f(run[1] + o)}h8M${f(run[0] + 28)} ${f(run[1] + o)}h8`).join("");
   out += part("run", "run",
     `<path class="line" d="${pins}"/><rect class="glyph ring" x="${f(run[0] - 28)}" y="${f(run[1] - 28)}" width="56" height="56" rx="8"/>` +
@@ -396,6 +389,9 @@ function draw() {
   }).join("") + "</g>";
   svg.innerHTML = out + '<g id="fx"></g>';
   S.th = th;
+  S.electrons = [...svg.querySelectorAll(".electron")];
+  S.orbit = th.map((a, i) => ({ q: pt(g, g.rq, a), end: pt(g, g.rb + 3, a),  // the agents of one person circle their own centre
+    dots: [...svg.querySelectorAll(`[data-part="swarm-${i}"] .agent`)], lines: [...svg.querySelectorAll(`[data-part="thread-${i}"] .thread`)] }));
   if (m && !S.entered) {
     S.entered = true;
     svg.classList.add("enter");
@@ -415,6 +411,22 @@ function dots() {
 }
 
 /* Motion: a dot travels along the drawn lines, for a real new post or for a step of the walk. */
+/* Motion that is always on: agents circle in their swarm, one electron per person runs on the messages ring,
+   a comet runs the self-review loop, the board turns slowly. A larger dot with a halo is a real post (below). */
+function spin(now) {
+  const t = now / 1000, g = S.g, turn = (el, deg) => el && el.setAttribute("transform", `rotate(${f(deg % 360)} ${g.cx} ${g.cy})`);
+  turn($("comet"), t * 20);
+  turn($("msgspin"), -t * 1.5);
+  turn($("dots"), t * 1.5);
+  (S.electrons || []).forEach(e => turn(e, Number(e.dataset.a) + t * 360 / (22 + 7 * Number(e.dataset.i))));
+  (S.orbit || []).forEach(o => o.dots.forEach((d, k) => {
+    const r = 11.5 * Math.sqrt(k + .6), a = k * 2.39996 + t * .5 / (.6 + Math.sqrt(k + .6));
+    const x = o.q[0] + r * Math.cos(a), y = o.q[1] + r * Math.sin(a);
+    d.setAttribute("cx", f(x)); d.setAttribute("cy", f(y));
+    if (o.lines[k]) o.lines[k].setAttribute("d", `M${f(x)} ${f(y)}L${xy(o.end)}`);
+  }));
+  requestAnimationFrame(spin);
+}
 function route(g, kind, a) {
   const line = (...p) => p, sweep = (r, a0, a1) => {
     const d = a1 - a0, k = Math.max(2, Math.ceil(Math.abs(d) / 4));
@@ -481,8 +493,6 @@ function lit() {
   return ({
     board: ["board", "key", ...all("thread-")], msg: ["msg", ...all("swarm-")], mem: ["mem", "memlink", ...all("swarm-")],
     run: ["run", "runlink", ...all("swarm-")], review: ["review"], team: all("swarm-"), question: [...all("swarm-"), "board"],
-    "why-boss": ["board", ...all("thread-"), ...all("swarm-")], "why-people": [...all("swarm-"), ...all("thread-")],
-    "why-evidence": ["mem", "run", "memlink", "runlink"], "why-self": ["review"],
     "walk-1": ["swarm-" + me, "thread-" + me, "board"], "walk-2": ["swarm-" + me, "mem", "memlink"],
     "walk-3": ["swarm-" + me, "thread-" + me, "board"], "walk-4": ["swarm-" + me],
     "walk-5": ["swarm-" + me, "run", "runlink"], "walk-6": ["run", "runlink", "swarm-" + me, "thread-" + me, "board"],
@@ -540,9 +550,7 @@ function show() {
   const on = lit(), svg = $("svg"), m = S.m;
   svg.classList.toggle("has-focus", !!on);
   svg.querySelectorAll(".part").forEach(p => p.classList.toggle("on", !!on && on.includes(p.dataset.part)));
-  const say = (k, text) => `<button data-go="${k}" class="${S.sel === k ? "on" : ""}">${text}</button>`;
-  $("say").innerHTML = say("team", m ? `<b>${m.people.length}</b> people.` : "People.") + say("team", m ? `<b>${m.nAgents}</b> agents.` : "Agents.") +
-    say("question", "One question.") + say("why-boss", "No boss.");
+  $("say").textContent = `${m ? m.people.length : "Several"} people, each running coding agents with subagents, work on one research direction.`;
   $("ask").innerHTML = ASK + (m && m.best ? `<small>${m.best.line}</small>` : "");
   $("ask").classList.toggle("on", S.sel === "question");
   $("side").classList.toggle("walking", !!step());
@@ -596,6 +604,7 @@ narrow.addEventListener("change", () => { S.key = ""; if (S.data) read(S.data); 
 draw();
 show();
 poll();
+if (!still.matches) requestAnimationFrame(spin);
 </script>
 </body>
 </html>

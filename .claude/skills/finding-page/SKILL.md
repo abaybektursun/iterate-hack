@@ -29,7 +29,8 @@ All four hold. If one fails, the board result is enough.
    - `TITLE`: two to four words, the link text.
    - `DATA`: copied from the run's `metrics.json`, with the artifact path and the commit. No number from memory.
    - `PANELS`: "How we know" (what was run, n, the control, the closest published result), "What it does not show"
-     (the wrong conclusion a reader could draw, what is untested), "Run it yourself" (commit, command, artifact).
+     (the wrong conclusion a reader could draw, what is untested), "How to reproduce it" (commit, command, artifact).
+     Full plain sentences, following the Words rules of `site-ui`.
 
 ## The picture
 

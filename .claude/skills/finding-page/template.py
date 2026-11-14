@@ -27,14 +27,14 @@ DATA = {
     "reference": {"name": "<baseline>", "value": 0.0},
 }
 
-# Depth, opened by a click: key, name, one sentence, then at most three facts ("<b>lead-in</b> rest").
+# Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 PANELS = [
     ["how", "How we know", "The measurement in one sentence: what was run, on what, how many items.",
-     ["<b>n = 0</b> items, grader <version>.", "<b>Control:</b> what rules out the simple explanation.", "<b>Closest published:</b> the nearest result and how this differs."]],
+     ["It was measured on 0 items with grader <version>.", "The control that rules out the simple explanation.", "The closest published result, and how this one differs."]],
     ["limits", "What it does not show", "The most important thing a reader could wrongly conclude.",
-     ["<b>Not tested:</b> the condition nobody ran yet."]],
-    ["run", "Run it yourself", "One command reproduces the number from a clean checkout.",
-     ["<b>Commit</b> " + DATA["commit"] + ".", "<b>Artifact</b> " + DATA["artifact"] + "."]],
+     ["The condition that nobody has run yet."]],
+    ["run", "How to reproduce it", "The one command that reproduces the number from a clean checkout.",
+     ["The run used commit " + DATA["commit"] + ".", "Its numbers are in " + DATA["artifact"] + "."]],
 ]
 
 PAGE = r"""<!doctype html>
@@ -108,7 +108,6 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 .lead { margin: 16px 0 0; font-size: clamp(17px, 1.3vw, 21px); line-height: 1.36; font-weight: 420; max-width: 30ch; }
 .facts { list-style: none; margin: 16px 0 0; padding: 0; font-size: 14.5px; color: var(--mute); max-width: 40ch; overflow-wrap: anywhere; }
 .facts li { padding: 7px 0; border-top: 1px solid var(--rule); }
-.facts b { color: var(--ink); font-weight: 640; }
 @media (max-width: 900px) {
   .page { display: block; height: auto; padding: 18px 16px 40px; }
   .stage { margin-top: 16px; }

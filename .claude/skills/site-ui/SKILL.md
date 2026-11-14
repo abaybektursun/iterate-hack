@@ -41,8 +41,17 @@ do without it. If you cannot, leave it out.
 
 1. As few as possible. A label is one or two words. A sentence states one fact.
 2. Plain technical English, the field's own terms, no metaphors. Write for someone who was not in the room.
-3. Every number on a page is live or names where it was measured. No number typed from memory.
-4. Claim only what the code enforces or a file records. If something is not measured yet, say so on the page.
+   Where `README.md` or `DIRECTION.md` already says it, use those words.
+3. No slogans. Samer rejected the first headline of the architecture page ("3 people. 19 agents. One question. No
+   boss.") as machine-sounding (2026-11-14). So: no clipped fragments in a row, no punchline sentences ("Quote or
+   nothing."), no bold lead-in at the start of each list line, no row names that sell ("Two checks agents cannot
+   skip"). Write the full plain sentence, and name a row by what it holds ("What is different").
+4. Name a part by what it is. Memory is the shared database, so its picture is a database and its label says so.
+5. Every number on a page is live or names where it was measured. No number typed from memory.
+6. Claim only what the code enforces or a file records. If something is not measured yet, say so on the page.
+7. Explain a rule by what happens and why ("If the code has unpushed changes, the tool stops with an error. This way
+   the exact code behind every result can be found later."), never by a compressed claim ("every number traces to
+   code").
 
 ## Behaviour
 
@@ -51,8 +60,9 @@ do without it. If you cannot, leave it out.
 2. A selection is one value mirrored in the address (`/#result-8b1c48`, `/architecture#board`), so every state has
    a link, Back works and Esc closes.
 3. Detail opens beside the picture, in a fixed column. The picture does not move or reflow.
-4. Motion only for a real event (a new post, a step the reader took) and one drawn entrance on load. Honor
-   `prefers-reduced-motion`.
+4. A picture may move all the time when the motion is slow, follows the drawn lines and shows how the thing works
+   (agents circling in their swarm, a comet on the review loop). A real event must look different from that (a larger
+   dot with a halo). One drawn entrance on load. Honor `prefers-reduced-motion`.
 
 ## Before you say it is done
 
