@@ -60,21 +60,27 @@ def get(item_id):
     return item
 
 
+def author(row):
+    """person/branch, e.g. samer.aslan/probe-l12. Rows written before the branch was recorded show the person."""
+    return f"{row['who']}/{row['branch']}" if row.get("branch") else row["who"]
+
+
 def line(item, full):
     text = item["text"] if full else item["text"].splitlines()[0][:100]
-    return f"{item['id']}  +{item['ups']} -{item['downs']}  {item['n_comments']}c  {item['who']}  {item['at']}  {text}"
+    return f"{item['id']}  +{item['ups']} -{item['downs']}  {item['n_comments']}c  {author(item)}  {item['at']}  {text}"
 
 
 def main(argv, who):
     command, *args = argv or ["help"]
     table = team.table()
     now = time.strftime("%Y-%m-%d %H:%M:%S")
+    me = events.agent()  # agent type, session id, branch: stored on every item and comment
 
     if command == "post":
         kind, text = args
         assert kind in KINDS, f"kind must be one of {KINDS}"
         item_id = f"{kind}-{secrets.token_hex(3)}"
-        table.put_item(Item={"pk": f"item#{item_id}", "sk": "item", "id": item_id, "kind": kind, "text": text, "who": who,
+        table.put_item(Item={"pk": f"item#{item_id}", "sk": "item", "id": item_id, "kind": kind, "text": text, "who": who, **me,
                              "at": now, "at_ns": time.time_ns(), "listed": kind, "ups": 0, "downs": 0, "score": 0, "n_comments": 0})
         print(item_id)
         if kind == "work":
@@ -101,16 +107,16 @@ def main(argv, who):
         item = get(item_id)
         rest = rows(KeyConditionExpression=Key("pk").eq(f"item#{item_id}"))
         votes = [r for r in rest if r["sk"].startswith("vote#")]
-        print(f"{item_id} ({item['kind']}, {'open' if 'listed' in item else 'closed'}) by {item['who']} at {item['at']}")
+        print(f"{item_id} ({item['kind']}, {'open' if 'listed' in item else 'closed'}) by {author(item)} ({item.get('agent', 'agent not recorded')} {item.get('session', '')[:8]}) at {item['at']}")
         print(f"+{item['ups']} -{item['downs']}: " + ", ".join(f"{v['who']} {'+' if v['vote'] == 1 else '-'}" for v in votes))
         print(f"\n{item['text']}\n")
         for c in sorted((r for r in rest if r["sk"].startswith("comment#")), key=lambda c: c["sk"]):
-            print(f"  {c['at']}  {c['who']}: {c['text']}")
+            print(f"  {c['at']}  {author(c)}: {c['text']}")
         thread = rows(KeyConditionExpression=Key("pk").eq(f"chan#{item_id}"))  # messages sent with msg.py send <item id>
         if thread:
             print("\nmessages on this item's channel:")
         for m in thread:
-            print(f"  {m['at']}  {m['who']}: {m['text']}")
+            print(f"  {m['at']}  {author(m)}: {m['text']}")
 
     elif command in ("up", "down"):
         (item_id,) = args
@@ -126,7 +132,7 @@ def main(argv, who):
         get(item_id)
         if len(text) > COMMENT_LIMIT:
             sys.exit(f"comment is {len(text)} characters; the limit is {COMMENT_LIMIT}")
-        table.put_item(Item={"pk": f"item#{item_id}", "sk": f"comment#{time.time_ns()}#{who}", "who": who, "at": now, "text": text})
+        table.put_item(Item={"pk": f"item#{item_id}", "sk": f"comment#{time.time_ns()}#{who}", "who": who, **me, "at": now, "text": text})
         table.update_item(Key={"pk": f"item#{item_id}", "sk": "item"}, UpdateExpression="ADD n_comments :one",
                           ExpressionAttributeValues={":one": 1})
         print(f"commented on {item_id}")

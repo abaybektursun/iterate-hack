@@ -12,7 +12,8 @@
 A channel is any name. Conventions: `all` reaches everyone; `@<name>` reaches one person's agents, where <name> is
 the part of their git email before the @; a board item id (idea-3fa21c) is the thread about that item, which
 `board.py show <id>` also prints. read and wait take `all` and `@<you>` when no channel is given, so name the item
-id to follow a thread. An agent never receives its own messages.
+id to follow a thread. An agent never receives its own messages. An agent is a session plus a git branch: subagents share their
+parent's session id, and each works on its own branch.
 
 Stored in the DynamoDB table iterate-board (tools/team.py) as chan#<channel> / <time in ns>#<sender>, so reading
 costs one query per channel that returns only the new rows, whatever the total number of messages. Each agent
@@ -40,7 +41,7 @@ def new_messages(channels, cursors, me):
         query = dict(KeyConditionExpression=Key("pk").eq(f"chan#{channel}") & Key("sk").gt(start))
         while True:
             page = team.table().query(**query)
-            found += [m for m in page["Items"] if m["session"] != me["session"] or not me["session"]]
+            found += [m for m in page["Items"] if not me["session"] or (m["session"], m.get("branch")) != (me["session"], me["branch"])]
             if page["Items"]:
                 cursors[channel] = page["Items"][-1]["sk"]
             if "LastEvaluatedKey" not in page:
@@ -61,7 +62,7 @@ if __name__ == "__main__":
         if len(text) > LIMIT:
             sys.exit(f"message is {len(text)} characters; the limit is {LIMIT}")
         team.table().put_item(Item={"pk": f"chan#{channel}", "sk": f"{time.time_ns():020d}#{who}", "channel": channel, "who": who,
-                                    "agent": me["agent"], "session": me["session"], "at": time.strftime("%Y-%m-%d %H:%M:%S"), "text": text})
+                                    "agent": me["agent"], "session": me["session"], "branch": me["branch"], "at": time.strftime("%Y-%m-%d %H:%M:%S"), "text": text})
         print(f"sent to {channel}")
         sys.exit()
 
@@ -70,7 +71,7 @@ if __name__ == "__main__":
         timeout = float(args[args.index("--timeout") + 1])
         del args[args.index("--timeout"):args.index("--timeout") + 2]
     channels = args or ["all", f"@{who}"]
-    cursor_file = Path.home() / ".cache" / "iterate-hack" / "cursors" / f"{me['session'] or who}.json"
+    cursor_file = Path.home() / ".cache" / "iterate-hack" / "cursors" / f"{me['session'] or who}-{me['branch'].replace('/', '_')}.json"
     cursors = json.loads(cursor_file.read_text()) if cursor_file.exists() else {}
     deadline = time.time() + timeout
     while not (messages := new_messages(channels, cursors, me)) and command == "wait" and time.time() < deadline:
@@ -78,5 +79,5 @@ if __name__ == "__main__":
     cursor_file.parent.mkdir(parents=True, exist_ok=True)
     cursor_file.write_text(json.dumps(cursors))
     for m in messages:
-        print(f"[{m['channel']}] {m['at']} {m['who']} ({m['agent']} {m['session'][:8]}): {m['text']}")
+        print(f"[{m['channel']}] {m['at']} {m['who']}/{m.get('branch', '?')} ({m['agent']} {m['session'][:8]}): {m['text']}")
     sys.exit(1 if command == "wait" and not messages else 0)

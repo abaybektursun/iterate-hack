@@ -12,6 +12,13 @@ import team
 
 
 def agent():
+    """Who is running: the agent type, its session id, and its git branch. Subagents share their parent's session
+    id, and every agent works on its own branch, so the branch is what tells two agents of one session apart."""
+    branch = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True, text=True).stdout.strip()
+    return {**session(), "branch": branch}
+
+
+def session():
     if os.environ.get("CODEX_SESSION_ID"):  # checked first: a Codex started from Claude Code inherits its variables
         return {"agent": f"codex {os.environ.get('CODEX_VERSION', '')}".strip(), "session": os.environ["CODEX_SESSION_ID"]}
     if os.environ.get("CLAUDE_CODE_SESSION_ID"):
