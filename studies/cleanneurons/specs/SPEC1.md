@@ -78,6 +78,24 @@ Refuted if `attr1` closes less than 15 %; then the RL change is spread over neur
 Control: the first-order prediction for `attr1` and the measured drop of L on half A are both reported; a ranking whose
 top set does not lower L on its own rows is broken.
 
+## Part T3: is the RL change a constant push? (added 2026-11-14 after Part T2 and the first Part I run; `transplant_curve.py --bias`)
+
+Observation (job `sameraslan-1114-154532-cdc8`, `results/describe/attr_top100-01/`): of the 100 neurons whose copy from RL
+moves the base most, 44 are on almost everywhere (|a| beyond the layer's p97 at more than half of all positions) against 1
+of 100 random neurons; their mean |a| is ten times a random neuron's; their weights equal the base's to four digits. A
+small weight change on an always-on neuron adds nearly the same vector to the residual stream at every position.
+
+Hypothesis T4: the RL change of the MLPs acts mostly as one constant vector per layer. Arm `bias_mlp` adds to the base,
+at every position, d_l = the mean over half-A positions of RL's MLP output minus the base's MLP output on the base's own
+MLP input. Supported if `bias_mlp` closes at least half of what `mlp` closes on half B (decisive KL after the cue);
+refuted if it closes less than a quarter of it. Control `bias_mlp_rnd`: a random vector of the same norm per layer must
+close nothing. `bias_layer` (or `bias_resid_L*`) asks the same for the whole layer. Arm `dense` copies only the always-on
+neurons from RL, with `dense_rnd` (the same number of other neurons per layer) as its control: supported as the carrier
+if `dense` closes several times `dense_rnd`.
+
+If T4 holds, the RL model is close to the base plus a fixed steering vector per layer, and the next question for a
+no-reward route is whether that vector can be found without the RL model.
+
 ## Part L: loop neurons, base only (job `jobs/loop_neurons.py`, one H100)
 
 1. Loops. For the 78 rows of `studies/rlneurons/data/rln4/k.json`: the sequence prompt + the base's own prefix
