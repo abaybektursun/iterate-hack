@@ -40,11 +40,25 @@ Reply with JSON only: {{"directions": [{{"name": "<3-6 words>", "what": "<one se
 PARTITION = """Below are {n} items from a research team's work board, plus possible directions. Each describes a piece
 of work, idea, finding or result. Group them by APPROACH: the lever or method the item is about (for example a
 sampling setting, a prompt cue, a grader, a weight edit, a literature finding about one method, team tooling).
-Items about the same lever go together even if one is an idea and another a result.
+Items about the same lever go together even if one is an idea and another a result. Use between {gmin} and {gmax}
+groups: merge close levers rather than making groups of one or two items.
 
 {items}
 
 Reply with JSON only: {{"groups": [{{"name": "<3-6 words>", "ids": ["<id>", ...]}}, ...]}} with every id exactly once."""
+
+COVERAGE = """Below are possible research directions (ids dir-..) and the items of a research team's work board.
+For each direction, list the board items that substantially pursue it: run it, plan it, claim it, or report a
+finding or result about it. Mentioning a direction in passing does not count. Tooling items pursue no direction.
+
+DIRECTIONS:
+{dirs}
+
+BOARD ITEMS:
+{items}
+
+Reply with JSON only: {{"coverage": [{{"direction": "<dir id>", "items": ["<board id>", ...]}}, ...]}} with every
+direction exactly once (an empty list when no item pursues it)."""
 
 TRIPLETS = """Each question shows three items from a research team's board: A, B and C. Answer which of B or C is
 closer to A in APPROACH (the lever or method it is about), not in wording, author or item type.
@@ -100,6 +114,10 @@ if __name__ == "__main__":
     ap.add_argument("--backend", choices=["openai", "claude"], default="openai",
                     help="claude spends the person's Claude subscription: use it only when they agreed")
     ap.add_argument("--model", required=True, help="exact model id, checked against the provider's model list")
+    ap.add_argument("--groups", type=int, nargs=2, default=[6, 12], help="range of group counts asked for")
+    ap.add_argument("--reuse", default=None, help="judge folder whose directions.json and nodes.json to reuse (same nodes)")
+    ap.add_argument("--steps", default="partitions,triplets,coverage", help="comma list of steps to run")
+    ap.add_argument("--no-partitions", action="store_true", help="triplets only (to compare judges on the same questions)")
     ap.add_argument("--per-anchor", type=int, default=12)
     ap.add_argument("--batch", type=int, default=60)
     ap.add_argument("--workers", type=int, default=4)
@@ -111,43 +129,68 @@ if __name__ == "__main__":
     rng = random.Random(0)
     board = json.loads(pathlib.Path(args.snapshot).read_text())
 
-    # 1. possible directions, from DIRECTION.md only
-    d = ask(DIRECTIONS.format(direction=(ROOT / "DIRECTION.md").read_text()), out / "calls" / "directions.txt")["directions"]
-    assert len(d) >= 10, d
-    (out / "directions.json").write_text(json.dumps(d, indent=1))
+    if args.reuse:
+        for f in ("directions.json", "nodes.json"):
+            (out / f).write_text((pathlib.Path(args.reuse) / f).read_text())
+        nodes = json.loads((out / "nodes.json").read_text())
+    else:
+        # 1. possible directions, from DIRECTION.md only
+        d = ask(DIRECTIONS.format(direction=(ROOT / "DIRECTION.md").read_text()), out / "calls" / "directions.txt")["directions"]
+        assert len(d) >= 10, d
+        (out / "directions.json").write_text(json.dumps(d, indent=1))
 
-    nodes = [{"id": b["id"], "kind": b["kind"], "who": b.get("who"), "at": b.get("at"), "at_ns": b.get("at_ns"),
-              "text": b["text"][:args.clip]} for b in board]
-    nodes += [{"id": f"dir-{k:02d}", "kind": "possible", "who": None, "at": None, "at_ns": None,
-               "text": f"{x['name']}: {x['what']}"} for k, x in enumerate(d)]
-    src = rng.choice([n for n in nodes if n["kind"] != "possible"])  # planted control: two exact copies of one item
-    nodes += [{**src, "id": f"ctl-{k}", "control_of": src["id"]} for k in (1, 2)]
-    rng.shuffle(nodes)
-    (out / "nodes.json").write_text(json.dumps(nodes, indent=1))
+        nodes = [{"id": b["id"], "kind": b["kind"], "who": b.get("who"), "at": b.get("at"), "at_ns": b.get("at_ns"),
+                  "text": b["text"][:args.clip]} for b in board]
+        nodes += [{"id": f"dir-{k:02d}", "kind": "possible", "who": None, "at": None, "at_ns": None,
+                   "text": f"{x['name']}: {x['what']}"} for k, x in enumerate(d)]
+        src = rng.choice([n for n in nodes if n["kind"] != "possible"])  # planted control: two exact copies of one item
+        nodes += [{**src, "id": f"ctl-{k}", "control_of": src["id"]} for k in (1, 2)]
+        rng.shuffle(nodes)
+        (out / "nodes.json").write_text(json.dumps(nodes, indent=1))
     ids = [n["id"] for n in nodes]
     by_id = {n["id"]: n for n in nodes}
-    print(f"{len(nodes)} nodes ({len(board)} board items, {len(d)} possible directions)", flush=True)
+    print(f"{len(nodes)} nodes ({sum(n['kind'] == 'possible' for n in nodes)} possible directions)", flush=True)
 
     # 2. two partitions in two orders
-    with open(out / "partitions.jsonl", "w") as f:
-        for r in range(2):
+    steps = args.steps.split(",")
+    if "coverage" in steps:  # 5. which board items pursue each possible direction (two orders of the board)
+        dirs = [n for n in nodes if n["kind"] == "possible"]
+        real = [n for n in nodes if n["kind"] != "possible" and not n.get("control_of")]
+        with open(out / "coverage.jsonl", "w") as f:
+            for r in range(2):
+                order = real[:]
+                random.Random(10 + r).shuffle(order)
+                cov = ask(COVERAGE.format(dirs="\n".join(f"{n['id']}: {n['text']}" for n in dirs),
+                                          items="\n".join(f"{n['id']}: [{n['kind']}] {n['text']}" for n in order)),
+                          out / "calls" / f"coverage-{r}.txt")["coverage"]
+                assert sorted(c["direction"] for c in cov) == sorted(n["id"] for n in dirs), f"coverage {r}: directions mismatch"
+                bad = [i for c in cov for i in c["items"] if i not in {n["id"] for n in real}]
+                assert not bad, f"coverage {r}: unknown ids {bad}"
+                f.write(json.dumps({"order": r, "coverage": cov}) + "\n")
+                print(f"coverage {r}: {sum(bool(c['items']) for c in cov)}/{len(cov)} directions pursued", flush=True)
+
+    with open(out / "partitions.jsonl", "w" if "partitions" in steps else "a") as f:
+        for r in range(0 if args.no_partitions or 'partitions' not in steps else 2):
             order = ids[:]
             random.Random(r).shuffle(order)
             items = "\n".join(f"{i}: {node_text(by_id[i])}" for i in order)
-            groups = ask(PARTITION.format(n=len(order), items=items), out / "calls" / f"partition-{r}.txt")["groups"]
+            groups = ask(PARTITION.format(n=len(order), items=items, gmin=args.groups[0], gmax=args.groups[1]), out / "calls" / f"partition-{r}.txt")["groups"]
             got = sorted(i for g in groups for i in g["ids"])
             assert got == sorted(ids), f"partition {r}: {len(got)} ids returned, {len(set(got))} distinct, {len(ids)} expected"
             f.write(json.dumps({"order": r, "groups": groups}) + "\n")
             print(f"partition {r}: {len(groups)} groups", flush=True)
 
+    if "triplets" not in steps:
+        raise SystemExit(0)
     # 3. triplets, both orders, in batches
+    trng = random.Random(1)  # own generator: the same nodes give the same questions for every judge
     trips = []
     for a in ids:
         others = [i for i in ids if i != a]
         for _ in range(args.per_anchor):
-            b, c = rng.sample(others, 2)
+            b, c = trng.sample(others, 2)
             trips += [(a, b, c, 0), (a, c, b, 1)]
-    rng.shuffle(trips)
+    trng.shuffle(trips)
     batches = [trips[k:k + args.batch] for k in range(0, len(trips), args.batch)]
 
     def run(k):

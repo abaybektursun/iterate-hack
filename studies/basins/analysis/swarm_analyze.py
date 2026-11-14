@@ -3,7 +3,8 @@
     python3 -m studies.basins.analysis.swarm_analyze runs/swarm/judge-<t> studies/basins/results/swarm/<arm>-<nn>
 
 Basins are the judge's groups (partition 0); partition 1 and k-means on the t-STE map are checks on them.
-Coverage: share of the judge's possible directions that sit in a basin with at least one board item.
+Coverage: share of the judge's possible directions that sit in a basin with at least one board item, and
+(stricter) directions that the judge says at least one board item pursues (coverage.jsonl, two board orders).
 Moves: consecutive board items of one person in different basins; "new" if that person had not been in the basin.
 Writes summary.json and map.json (nodes with x, y, basin) to the output folder.
 """
@@ -82,6 +83,14 @@ for n in board:
     seen[who].add(b)
     last[who] = b
 
+# direct coverage: board items the judge says pursue each possible direction, in two orders of the board
+covs = [json.loads(l)["coverage"] for l in open(J / "coverage.jsonl")] if (J / "coverage.jsonl").exists() else []
+direction = {}
+for n in possible:
+    sets = [set(next(c["items"] for c in cov if c["direction"] == n["id"])) for cov in covs]
+    direction[n["id"]] = {"id": n["id"], "name": n["text"].split(":")[0], "items_both": sorted(set.intersection(*sets)) if sets else [],
+                          "items_either": sorted(set.union(*sets)) if sets else [], "orders_agree": len({bool(x) for x in sets}) == 1}
+
 basins = [{"basin": g, "name": names[g], "board_items": basin_board.get(g, 0), "possible": basin_poss.get(g, 0),
            "kinds": dict(Counter(by[i]["kind"] for i in parts[0]["groups"][g]["ids"] if not by[i].get("control_of")))}
           for g in range(len(names))]
@@ -94,12 +103,17 @@ summary = {
     "triplet_order_consistency": [consistent, n_pairs], "tste_heldout_acc": held, "tste_shuffled_id_null": null,
     "partition_ari_order0_vs_order1": adjusted_rand_score(lab0, [labels[1][i] for i in ids]),
     "kmeans_best_k": best_k, "partition_ari_vs_kmeans": adjusted_rand_score(lab0, km[best_k]),
+    "directions_pursued_both_orders": [sum(bool(d["items_both"]) for d in direction.values()), len(direction)],
+    "directions_pursued_either_order": [sum(bool(d["items_either"]) for d in direction.values()), len(direction)],
+    "directions_pursued_agree_across_orders": [sum(d["orders_agree"] for d in direction.values()), len(direction)],
+    "directions_untouched": [d["name"] for d in direction.values() if not d["items_either"]],
+    "directions": list(direction.values()),
     "control": ctl_checks, "basins": sorted(basins, key=lambda b: -b["board_items"]), "move_list": moves,
 }
 (out / "summary.json").write_text(json.dumps(summary, indent=1))
 (out / "map.json").write_text(json.dumps({"names": names, "nodes": [
     {**{k: n.get(k) for k in ("id", "kind", "who", "at", "at_ns", "text", "control_of")},
      "x": float(X[pos[n["id"]], 0]), "y": float(X[pos[n["id"]], 1]), "basin": labels[0][n["id"]]} for n in nodes]}))
-print(json.dumps({k: v for k, v in summary.items() if k not in ("basins", "move_list")}, indent=1))
+print(json.dumps({k: v for k, v in summary.items() if k not in ("basins", "move_list", "directions", "control")}))
 for b in summary["basins"]:
     print(f"  {b['board_items']:3d} board  {b['possible']:2d} possible  {b['name']}")
