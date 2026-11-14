@@ -1,5 +1,5 @@
 ---
-name: meta-review
+name: team-meta-review
 description: Review the direction of the research, how it is being done and how its infrastructure is used, not what it found. Every entry reports the experiment turnaround (tools/cycle.py) and makes one change that cuts its slowest stage. Use at the start of a session, after every closed result, after any run whose answer turned out to be published or already known, after every fifth GPU run, and when the user asks whether the work is on the right track or the compute is used well. Appends one short dated entry to meta/<your name>.md.
 ---
 

@@ -2,7 +2,7 @@
 # requires-python = ">=3.11"
 # dependencies = ["modal>=1.4", "boto3>=1.35"]
 # ///
-"""Turnaround of the experiment cycle: where the minutes between a question and its answer go. For the meta-review
+"""Turnaround of the experiment cycle: where the minutes between a question and its answer go. For the team-meta-review
 skill (section 3), and for anyone who wants to know what to speed up.
 
   uv run tools/cycle.py [--hours 24]

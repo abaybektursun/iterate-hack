@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd \"$CLAUDE_PROJECT_DIR\" && echo 'Open work (tools/board.py):' && uv run --quiet tools/board.py ls work && echo 'Newest board items:' && uv run --quiet tools/board.py ls idea skill knowledge result --new --n 10 && echo 'Team messages (tools/msg.py; times UTC):' && uv run --quiet tools/msg.py read && m=$(git log -1 --format=%cr -- meta/) && echo \"Newest meta-review entry (meta/): ${m:-none}\"",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && echo 'Open work (tools/board.py):' && uv run --quiet tools/board.py ls work && echo 'Newest board items:' && uv run --quiet tools/board.py ls idea skill knowledge result --new --n 10 && echo 'Team messages (tools/msg.py; times UTC):' && uv run --quiet tools/msg.py read && m=$(git log -1 --format=%cr -- meta/) && echo \"Newest team-meta-review entry (meta/): ${m:-none}\"",
             "timeout": 60
           }
         ]
