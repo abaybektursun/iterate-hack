@@ -3,7 +3,7 @@ the team runner. Reuses rln4_gen's vLLM engine and row record (prompt, extractio
 grader v3 (rln4_lib.grade_v3). Inputs come from the repository's data files; models and tokenizer at the revisions in
 data/rln4/frozen4.json.
 
-    uv run tools/gpu.py submit h100 --hours 1 -- "bash studies/rlneurons/jobs/setup_vllm.sh && python -m studies.rlneurons.jobs.run_cell
+    uv run tools/gpu.py submit h100 --hours 1 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell
         --model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41000000 --n 10 --commit $(git rev-parse HEAD)"
 
   Double quotes, so that $(git rev-parse HEAD) expands on the laptop to the commit that gpu.py submits (the job's tree has no .git).
