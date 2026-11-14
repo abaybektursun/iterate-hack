@@ -16,9 +16,11 @@
   uv run tools/board.py done <id> ["<result>"]    close a work item and announce it on all; with a text, also post
                                                   it as a result item, in the same command
   uv run tools/board.py score <result id> <base|rl> <benchmark> <right>/<n> "<configuration>" [--tokens <per problem>]
-                                                  attach one score to a result, for the hill-climbing chart of
-                                                  tools/view.py, e.g. score result-c36598 base MATH-500 410/500
-                                                  "cue, T 1.0 / top-p 1.0" --tokens 3933. base = the untrained model
+                                                  attach one score to a result already posted, for the hill-climbing
+                                                  chart of tools/view.py. base = the untrained model
+
+A result's text can carry its scores itself, one per line, and post and done then write them:
+  score: base MATH-500 378/500 tokens 4690 | cue, T 0.6 / top-p 1.0
 
 Each line of ls is: id, person/branch of the agent that posted it, time (UTC, month-day hour:minute), for a work
 item the minutes since it was posted or last commented on (idle), votes up and down and number of comments (only
@@ -95,15 +97,42 @@ def line(item, full):
     return f"{item['id']} {author(item)} {item['at'][5:16].replace('T', ' ')}{idle}{votes}{comments}: {text}"
 
 
+SCORE_LINE = re.compile(r"score: (base|rl) (\S+) (\d+)/(\d+)(?: tokens (\d+))? \| (.+)")
+
+
+def score_lines(text):
+    """The scores in a result's text: lines 'score: <base|rl> <benchmark> <right>/<n> [tokens <per problem>] | <configuration>'."""
+    found = []
+    for line in text.splitlines():
+        if line.strip().startswith("score:"):
+            m = SCORE_LINE.fullmatch(line.strip())
+            assert m, f"score line not understood: {line.strip()!r}; write e.g. 'score: base MATH-500 378/500 tokens 4690 | cue, T 0.6'"
+            model, benchmark, right, n, tokens, config = m.groups()
+            assert int(right) <= int(n), f"{right}/{n}: right must be at most n"
+            found.append((model, benchmark, int(right), int(n), config.strip(), int(tokens) if tokens else None))
+    return found
+
+
+def add_score(result_id, result_ns, result_at, model, benchmark, right, n, config, tokens, who, me):
+    team.table().put_item(Item={"pk": "scores", "sk": f"{int(result_ns):020d}#{time.time_ns()}", "result": result_id, "model": model,
+                                "benchmark": benchmark, "right": right, "n": n, "config": config, "tokens": tokens, "who": who, **me,
+                                "at": team.now(), "result_at": result_at})
+    print(f"score {model} {benchmark} {right}/{n} ({100 * right / n:.1f} %) on {result_id}")
+
+
 def post(kind, text, who, me):
     assert kind in KINDS, f"kind must be one of {KINDS}"
     if len(text) > POST_LIMIT:
         sys.exit(f"text is {len(text)} characters; the limit is {POST_LIMIT}. Put long material in a file and name its path.")
+    scores = score_lines(text) if kind == "result" else []  # read first: a bad score line stops the post
     item_id = f"{kind}-{secrets.token_hex(3)}"
     ns = time.time_ns()
+    at = team.now()
     team.table().put_item(Item={"pk": f"item#{item_id}", "sk": "item", "id": item_id, "kind": kind, "text": text, "who": who, **me,
-                                "at": team.now(), "at_ns": ns, "active_ns": ns, "listed": kind, "ups": 0, "downs": 0, "score": 0, "n_comments": 0})
+                                "at": at, "at_ns": ns, "active_ns": ns, "listed": kind, "ups": 0, "downs": 0, "score": 0, "n_comments": 0})
     print(item_id)
+    for score in scores:
+        add_score(item_id, ns, at, *score, who, me)
     if kind in REMEMBERED and not team.TEST:  # past.dev has no test project
         remember(item_id, kind, text, who)
     return item_id
@@ -220,10 +249,7 @@ def main(argv, who):
         assert model in ("base", "rl"), "model is base (the untrained model) or rl"
         right, n = map(int, fraction.split("/"))
         assert 0 <= right <= n, f"{fraction}: right must be between 0 and n"
-        table.put_item(Item={"pk": "scores", "sk": f"{int(result['at_ns']):020d}#{time.time_ns()}", "result": result_id, "model": model,
-                             "benchmark": benchmark, "right": right, "n": n, "config": config, "tokens": tokens, "who": who, **me,
-                             "at": now, "result_at": result["at"]})
-        print(f"{model} {benchmark} {right}/{n} ({100 * right / n:.1f} %) on {result_id}")
+        add_score(result_id, result["at_ns"], result["at"], model, benchmark, right, n, config, tokens, who, me)
 
     elif command == "done":
         item_id, *result = args

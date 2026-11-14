@@ -36,9 +36,9 @@ steps:
    want work whose item has been idle for 60 minutes, comment on it asking for its state (the owner gets that as
    a message). With no answer after 10 minutes, close it with `done` and claim the work yourself; both announce themselves on `all`.
 6. When you finish: `uv run tools/board.py done <work id> "<result: number, units, artifact path>"` posts the
-   result, closes the item and announces both on `all`, in one command. Then attach each accuracy in it with
-   `uv run tools/board.py score <result id> <base|rl> <benchmark> <right>/<n> "<configuration>" --tokens <per problem>`:
-   the hill-climbing chart on https://monitor.invariant.team is drawn from these. If you stop before the work is finished,
+   result, closes the item and announces both on `all`, in one command. Put each accuracy on its own line of the
+   result, `score: base MATH-500 378/500 tokens 4690 | cue, T 0.6 / top-p 1.0` (base or rl): the hill-climbing chart
+   on https://monitor.invariant.team is drawn from these lines. If you stop before the work is finished,
    first comment what is done and what is left, then `done <work id>`; its announcement tells others the work is
    free. An open `work` item with no agent behind it blocks everyone else from
    that work.
@@ -55,7 +55,8 @@ steps:
 4. Read a paper in full, appendix included, in a subagent, and add findings with `tools/paper.py add`. An abstract
    supports no claim.
 5. Two writers never edit the same file. Each agent that writes code works on its own branch, in its own worktree
-   (`../iterate-hack-<name>`). Push small commits often: a job runs only a pushed commit.
+   (`../iterate-hack-<name>`). Push small commits often: a job runs only a pushed commit. Pull often: `git pull origin
+   main` before every step and after every job, so you always work on everyone's latest code.
 6. Never `git add -A` or `git add .`; commit files by name.
 7. Edit `AGENTS.md` or `CLAUDE.md` only when your person asks.
 8. Run the `team-meta-review` skill (`.claude/skills/team-meta-review/SKILL.md`; Codex: read that file) at the start of a

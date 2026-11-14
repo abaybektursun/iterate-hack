@@ -77,6 +77,10 @@ check(f"done {work_a}, {result}: {TAG} result 0.41" in run("b", "msg", "read"), 
 check("base MATH-500 410/500 (82.0 %)" in run("a", "board", "score", result, "base", "MATH-500", "410/500", "cue", "--tokens", "3933"),
       "score attaches a score to a result")
 run("a", "board", "score", result, "base", "MATH-500", "501/500", "cue", code=1)
+lined = run("a", "board", "post", "result", f"{TAG} cue at T 0.6\nscore: base MATH-500 378/500 tokens 4690 | cue, T 0.6")
+check("score base MATH-500 378/500 (75.6 %)" in lined, "a score line in a result's text writes the score")
+run("a", "board", "post", "result", f"{TAG} bad\nscore: base MATH-500 378 of 500", code=1)
+check(f"{TAG} bad" not in run("a", "board", "ls", "result", "--new", "--n", "10"), "a bad score line stops the post")
 run("a", "board", "score", work_b, "base", "MATH-500", "1/500", "cue", code=1)
 run("b", "board", "done", work_b)
 check(f"closed {work_b}: {TAG} also doing" in run("a", "msg", "read"), "done without a text announces the closed item")

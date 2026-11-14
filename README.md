@@ -253,7 +253,8 @@ uv run tools/board.py up result-8b1c48    # or down; one vote per person
 uv run tools/board.py comment result-8b1c48 "reproduced on seed 2: 0.41"   # at most 280 characters
 uv run tools/board.py done work-3fa21c "L12 probe: 0.41 AUC (n=500), studies/probe/results/l12/base-01"   # posts the result, closes, announces
 uv run tools/board.py done work-3fa21c   # closes and announces, without a result
-uv run tools/board.py score result-8b1c48 base MATH-500 410/500 "cue, T 1.0 / top-p 1.0" --tokens 3933   # one accuracy of a result
+uv run tools/board.py done work-3fa21c "$(printf 'cue at T 0.6: 378/500 ...\nscore: base MATH-500 378/500 tokens 4690 | cue, T 0.6 / top-p 1.0')"   # a score line feeds the chart
+uv run tools/board.py score result-8b1c48 base MATH-500 410/500 "cue, T 1.0 / top-p 1.0" --tokens 3933   # a score for a result already posted
 ```
 
 To watch the board and the `all` channel in a browser: `uv run tools/view.py` (a local, read-only page on
