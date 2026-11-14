@@ -1,6 +1,6 @@
 ---
-name: meta-review
-description: Review the direction of the research, how it is being done and how its infrastructure is used, not what it found. Use at the start of a session, after every closed result, after any run whose answer turned out to be published or already known, after every fifth GPU run, and when the user asks whether the work is on the right track or the compute is used well. Appends one short dated entry to meta/<your name>.md.
+name: team-meta-review
+description: Review the direction of the research, how it is being done and how its infrastructure is used, not what it found. Every entry reports the experiment turnaround (tools/cycle.py) and makes one change that cuts its slowest stage. Use at the start of a session, after every closed result, after any run whose answer turned out to be published or already known, after every fifth GPU run, and when the user asks whether the work is on the right track or the compute is used well. Appends one short dated entry to meta/<your name>.md.
 ---
 
 # Meta review
@@ -51,21 +51,28 @@ Optimizing the path is not the same as checking where it leads. Before the other
 - Is the next step the one the mission asks for, or the one that was easiest to build after the last one?
 - What was told to the owner and later narrowed? What rule would have caught it?
 
-## 3. MLOps and infrastructure
+## 3. Turnaround and infrastructure
 
-Measure, per run since the last entry (`gpu.py ls --all` and the job records for Modal, `runs/vast/` for vast.ai, the job
-logs, git timestamps of the build, review and fix commits):
+The team's output is set by how fast a question becomes an answer on the board. Every entry reports the turnaround and
+makes one change that cuts its slowest stage.
 
-- minutes from decision to first GPU second, split into build, review, fixes, launch, boot and sync;
-- mean GPU utilization, and the share of billed time spent on work the answer needed (not loading, repeated known answers,
-  refits of the same maps);
-- estimate against actual; GPU class asked against obtained; credits or GPU limits left idle while a run was the bottleneck;
-- GPU-hours per answered question; runs that could have shared a box or read stored rows;
-- code: whether the question needed new job code, lines added, dry-run duration, review findings that would have made a
-  result wrong.
-
-Then name the slowest part and the one change that removes it. An infrastructure change counts when the next run's numbers
-show it.
+1. Run `uv run tools/cycle.py --hours <hours since the last entry>`. Copy into the entry: the median to-job, jobs and
+   to-answer minutes, the slowest stage, the container minutes and the share in failed or cancelled jobs, the median queue
+   wait. Set each beside the previous entry's number.
+2. Find what the slowest stage was spent on, in the raw material: the job logs (`gpu.py logs <id>`) for the run minutes
+   (installs, weight download, model load, the work itself), git timestamps of the spec, code, review and fix commits for
+   to-job, the board and messages for to-answer.
+3. Check the usual causes, each with its number:
+   - setup repeated inside every job (pip installs, a vLLM build, weight downloads) that an image or the model cache could
+     hold once;
+   - fix loops: a job failed and was resubmitted with a small change, where a one-minute run on the smallest setting
+     would have caught it;
+   - jobs run one after another that could have run at the same time, while credits or GPU limits sat idle;
+   - waiting on a person or another agent;
+   - GPU class asked against obtained, estimate against actual, GPU-hours per answered question, runs that could have
+     read stored rows.
+4. Make the change in the same session: code or infrastructure, pushed. Naming it is not enough. It counts when the next
+   entry's numbers show it.
 
 ## 4. Failures
 

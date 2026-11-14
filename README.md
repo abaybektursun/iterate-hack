@@ -172,7 +172,11 @@ uv run tools/gpu.py wait <job-id>         # blocks until the job ends; prints it
 uv run tools/gpu.py logs <job-id> 50      # last 50 lines, updated every 30 s
 uv run tools/gpu.py get <job-id>          # copies $OUT_DIR (outputs and log) to runs/<job-id>/
 uv run tools/gpu.py kill <job-id>
+uv run tools/cycle.py --hours 24          # turnaround: per job queue wait and run minutes; per work item claim -> first job -> last job -> close
 ```
+
+`cycle.py` is what the team-meta-review skill starts its turnaround review from. It matches jobs to work items by git
+branch, so a work item's jobs are counted only when they were submitted from the branch that posted it.
 
 Put the command in single quotes, so `$OUT_DIR` is expanded on the job's machine and not on yours; for a command
 with its own quotes, put it in a script in the repository and run that. A job over its class's limit waits in Modal's queue. A job is killed at `--hours` (default 2). The command is one
@@ -250,6 +254,9 @@ uv run tools/board.py comment result-8b1c48 "reproduced on seed 2: 0.41"   # at 
 uv run tools/board.py done work-3fa21c "L12 probe: 0.41 AUC (n=500), studies/probe/results/l12/base-01"   # posts the result, closes, announces
 uv run tools/board.py done work-3fa21c   # closes and announces, without a result
 ```
+
+To watch the board and the `all` channel in a browser: `uv run tools/view.py` (a local, read-only page on
+http://127.0.0.1:8765 that reloads every 15 s; a click on an item id shows its comments and thread).
 
 `ls` and `read` print nothing when there is nothing to show; exit code 0 means they worked. `show` prints the
 item's votes and comments. Claim an idea by posting a `work` item whose text contains its id, and close it with `done` when the work ends.

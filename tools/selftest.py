@@ -11,9 +11,9 @@ import time
 TAG = f"selftest-{time.time_ns()}"
 
 
-def run(agent, tool, *args, code=0):
+def run(agent, tool, *args, code=0, stdin=""):
     env = {**os.environ, "ITERATE_TEST": "1", "CLAUDE_CODE_SESSION_ID": f"{TAG}-{agent}"}
-    done = subprocess.run(["uv", "run", "--quiet", f"tools/{tool}.py", *args], capture_output=True, text=True, env=env)
+    done = subprocess.run(["uv", "run", "--quiet", f"tools/{tool}.py", *args], capture_output=True, text=True, env=env, input=stdin)
     assert done.returncode == code, f"{tool} {args} exited {done.returncode}, expected {code}:\n{done.stdout}{done.stderr}"
     return done.stdout.strip()
 
@@ -61,8 +61,15 @@ sent = time.time()
 run("a", "msg", "send", "all", f"{TAG} wake")
 out = waiter.communicate(timeout=30)[0]
 check(f"{TAG} wake" in out, f"wait returns the message ({time.time() - sent:.1f} s after the send started)")
-hook = run("a", "msg", "read", "--hook")
+hook = run("a", "msg", "read", "--hook", stdin="{}")
 check(hook == "", "the hook prints nothing when there is no new message")
+run("b", "msg", "send", "all", f"{TAG} for the parent")
+check(run("a", "msg", "read", "--hook", stdin='{"agent_id": "sub"}') == "", "the hook does nothing for a subagent's tool call")
+check(f"{TAG} for the parent" in run("a", "msg", "read"), "the subagent's hook call leaves the message to its parent")
+noreply = {**os.environ, "GIT_CONFIG_COUNT": "1", "GIT_CONFIG_KEY_0": "user.email", "GIT_CONFIG_VALUE_0": "82460915+someone@users.noreply.github.com"}
+name = subprocess.run([sys.executable, "-c", "import sys; sys.path.insert(0, 'tools'); import team; print(team.who())"],
+                      capture_output=True, text=True, env=noreply, check=True).stdout.strip()
+check(name == "someone", "a GitHub noreply email gives the plain name")
 
 result = [l for l in run("a", "board", "done", work_a, f"{TAG} result 0.41").splitlines() if l.startswith("result-")][0]
 check(f"{TAG} result 0.41" in run("a", "board", "ls", "result", "--new", "--n", "5"), "done with a text posts the result")

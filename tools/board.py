@@ -24,7 +24,8 @@ Stored in the DynamoDB table iterate-board (tools/team.py). Every command reads 
 rows, so its time does not grow with the board: ls asks an index for the top or newest n items of each kind, and
 an item carries its own vote and comment counts. A vote or a comment changes its own row and the item's count in
 one transaction. Rows:
-  item#<id> / item                  the item, with ups, downs, score, n_comments; `listed` = its kind while open
+  item#<id> / item                  the item, with ups, downs, score, n_comments; `listed` = its kind while open,
+                                    work-closed once done (ls never asks for it; tools/cycle.py does)
   item#<id> / vote#<who>            one person's vote
   item#<id> / comment#<ns>#<who>    one comment
   claim#<named id> / <work id>      a work item that names another item
@@ -37,7 +38,6 @@ names the same id. If one of those is older than yours, close yours with done an
 """
 import re
 import secrets
-import subprocess
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -152,7 +152,7 @@ def main(argv, who):
         item = get(item_id)
         rest = rows(KeyConditionExpression=Key("pk").eq(f"item#{item_id}"))
         votes = [r for r in rest if r["sk"].startswith("vote#")]
-        state = "open" if "listed" in item else f"closed by {item.get('closed_by')} at {item.get('closed_at')}"
+        state = "open" if item.get("listed") == item["kind"] else f"closed by {item.get('closed_by')} at {item.get('closed_at')}"
         print(f"{item_id} ({item['kind']}, {state}) by {author(item)} ({item.get('agent', 'agent not recorded')} {item.get('session', '')[:8]}) at {item['at']}")
         print(f"+{item['ups']} -{item['downs']}: " + ", ".join(f"{v['who']} {'+' if v['vote'] == 1 else '-'}" for v in votes))
         print(f"\n{item['text']}\n")
@@ -211,8 +211,8 @@ def main(argv, who):
         assert item["kind"] == "work", f"{item_id} is a {item['kind']}, not a work item"
         result_id = post("result", result[0], who, me) if result else None  # first, so a refused result leaves the item open
         writes = [{"Update": {"TableName": table.name, "Key": {"pk": f"item#{item_id}", "sk": "item"},
-                              "UpdateExpression": "SET closed_by = :who, closed_at = :at REMOVE listed",
-                              "ExpressionAttributeValues": {":who": f"{who}/{me['branch']}", ":at": now}}}]
+                              "UpdateExpression": "SET closed_by = :who, closed_at = :at, listed = :closed",
+                              "ExpressionAttributeValues": {":who": f"{who}/{me['branch']}", ":at": now, ":closed": "work-closed"}}}]
         for named in set(re.findall(NAMED, item["text"])):
             writes.append({"Update": {"TableName": table.name, "Key": {"pk": f"claim#{named}", "sk": item_id},
                                       "UpdateExpression": "SET is_open = :no", "ExpressionAttributeValues": {":no": False}}})
@@ -220,6 +220,7 @@ def main(argv, who):
         print(f"closed {item_id}")
         if result_id:
             msg.send("all", f"done {item_id}, {result_id}: {result[0].splitlines()[0][:200]}", who, me)
+            print("A result closed: run the team-meta-review skill (uv run tools/cycle.py first).")
         else:
             msg.send("all", f"closed {item_id}: {item['text'].splitlines()[0][:200]}", who, me)
         print("announced on all")
@@ -229,8 +230,7 @@ def main(argv, who):
 
 
 if __name__ == "__main__":
-    email = subprocess.run(["git", "config", "user.email"], capture_output=True, text=True, check=True).stdout.strip()
     if {"--help", "-h"} & set(sys.argv[: sys.argv.index("--") if "--" in sys.argv else None]):
         sys.exit(__doc__)
-    events.log("board", sys.argv[1:], email.split("@")[0])
-    main(sys.argv[1:], email.split("@")[0])
+    events.log("board", sys.argv[1:], team.who())
+    main(sys.argv[1:], team.who())
