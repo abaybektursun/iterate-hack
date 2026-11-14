@@ -315,7 +315,10 @@
     "Temperature And Nucleus Factorial"
    ],
    "more_tokens": false,
-   "superseded": false
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
   },
   {
    "item": "result-533123",
@@ -333,7 +336,10 @@
     "Temperature And Nucleus Factorial"
    ],
    "more_tokens": false,
-   "superseded": false
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
   },
   {
    "item": "result-e870a1",
@@ -353,7 +359,10 @@
     "Loop Triggered Restart Policies"
    ],
    "more_tokens": true,
-   "superseded": false
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
   },
   {
    "item": "result-c36598",
@@ -372,7 +381,10 @@
     "Temperature And Nucleus Factorial"
    ],
    "more_tokens": false,
-   "superseded": false
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
   },
   {
    "item": "result-e870a1",
@@ -392,7 +404,10 @@
     "Loop Triggered Restart Policies"
    ],
    "more_tokens": false,
-   "superseded": false
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
   },
   {
    "item": "result-7968b8",
@@ -411,7 +426,10 @@
     "Replicated Selection And Locked Evaluation"
    ],
    "more_tokens": false,
-   "superseded": false
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
   },
   {
    "item": "result-7968b8",
@@ -430,7 +448,10 @@
     "Replicated Selection And Locked Evaluation"
    ],
    "more_tokens": false,
-   "superseded": false
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
   },
   {
    "item": "result-c36598",
@@ -449,7 +470,10 @@
     "Temperature And Nucleus Factorial"
    ],
    "more_tokens": false,
-   "superseded": false
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
   },
   {
    "item": "result-7968b8",
@@ -468,7 +492,10 @@
     "Replicated Selection And Locked Evaluation"
    ],
    "more_tokens": false,
-   "superseded": true
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
   }
  ],
  "best_base_pct": 82.8,

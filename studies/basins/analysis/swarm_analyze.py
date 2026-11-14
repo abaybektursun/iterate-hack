@@ -103,9 +103,14 @@ for r in sorted(scores, key=lambda r: (r["grader"] != "v3", -r["score_pct"])):
     leaderboard.append({**{k: r[k] for k in ("item", "model", "method", "setting", "benchmark", "n", "correct", "score_pct", "grader", "quote")},
                         "basin": names[labels[0][r["item"]]], "directions": dir_of.get(r["item"], []),
                         "more_tokens": any(w in r["method"].lower() for w in ("restart", "vote", "best-of", "attempt")),
+                        "oracle": any(w in (r["method"] + " " + r["quote"]).lower() for w in ("pass@", "oracle", "any of the", "gold")),
+                        "tokens_per_problem": r.get("tokens_per_problem"),
                         "superseded": r["grader"] != "v3"})
+for row in leaderboard:  # did RL get the same extra-compute procedure? (a scored RL row with the same method)
+    row["rl_same_procedure"] = row["model"] == "base" and row["more_tokens"] and any(
+        o["model"] == "rl" and o["method"].lower() == row["method"].lower() for o in leaderboard)
 best_base = max((r for r in board_v3 if r["model"] == "base"), key=lambda r: r["score_pct"], default=None)
-best_base_one = max((r for r in leaderboard if r["model"] == "base" and not r["superseded"] and not r["more_tokens"]), key=lambda r: r["score_pct"], default=None)
+best_base_one = max((r for r in leaderboard if r["model"] == "base" and not r["superseded"] and not r["more_tokens"] and not r["oracle"]), key=lambda r: r["score_pct"], default=None)
 rl_ref = max((r for r in board_v3 if r["model"] == "rl" and r["setting"].startswith("T 1.0")), key=lambda r: r["score_pct"], default=None)  # AI2 setting, as in DIRECTION.md
 basin_best = defaultdict(float)
 for r in board_v3:

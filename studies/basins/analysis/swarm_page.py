@@ -74,6 +74,11 @@ tr.old td{color:var(--muted);text-decoration:line-through}
   <section class="panel" id="lbwrap"><h2>Leaderboard</h2>
     <p class="note" id="lbnote"></p>
     <div class="tbl"><table id="lb"></table></div>
+    <h2>Extra test-time compute (not ranked)</h2>
+    <p class="note">Restart, vote or search rows spend more than one sample per problem. DIRECTION.md compares methods at equal generated tokens and with RL given the same procedure; these rows stay here until both are posted.</p>
+    <div class="tbl"><table id="lb2"></table></div>
+    <h2>Excluded</h2>
+    <div class="tbl"><table id="lb3"></table></div>
   </section>
   <p class="note" id="foot"></p>
 </div>
@@ -144,13 +149,20 @@ document.getElementById("play").onclick = () => {
 };
 if (S.leaderboard && S.leaderboard.length) {
   const gap = S.rl_reference_pct - S.best_base_one_sample_pct;
-  document.getElementById("lbnote").textContent = `Scored configurations in the board's result posts, as posted (grader v3 ranked; MATH-500, n=500). Best untrained base with one sample: ${S.best_base_one_sample_pct.toFixed(1)}%. RL reference at T 1.0: ${S.rl_reference_pct.toFixed(1)}%. Gap the swarm is closing: ${gap.toFixed(1)} points. Rows marked "more tokens" spend extra attempts, so they do not meet DIRECTION.md's equal-token rule.`;
+  const fair = S.leaderboard.filter(r => !r.more_tokens && !r.oracle && !r.superseded);
+  const extra = S.leaderboard.filter(r => r.more_tokens && !r.oracle && !r.superseded);
+  const bad = S.leaderboard.filter(r => r.oracle || r.superseded);
+  document.getElementById("lbnote").textContent = `From the board's result posts, as posted (MATH-500, n=500, grader v3). Ranked: one sample per problem, no reward, no gold answer. Best untrained base: ${S.best_base_one_sample_pct.toFixed(1)}%. RL at T 1.0: ${S.rl_reference_pct.toFixed(1)}%. Gap the swarm is closing: ${gap.toFixed(1)} points.`;
   const lo = 40, hi = 100;
+  const cfg = r => `${r.model === "rl" ? "<b>RL-Zero-Math</b> (target)" : "Base"} · ${esc(r.method)} · <span class="mono">${esc(r.setting)}</span><div class="bar" style="width:${Math.max(2, (r.score_pct - lo) / (hi - lo) * 100)}%"></div>`;
+  const sc = r => `${r.score_pct.toFixed(1)}%${r.correct != null ? '<div class="mono">' + r.correct + "/" + r.n + "</div>" : ""}`;
+  const src = r => `<td class="mono" title="${esc(r.quote)}">${esc(r.item)}</td>`;
+  let k = 0;
   document.getElementById("lb").innerHTML = `<thead><tr><th>#</th><th>Configuration</th><th>Basin of the post</th><th style="text-align:right">MATH-500</th><th>Source</th></tr></thead><tbody>` +
-    S.leaderboard.map((r, k) => `<tr class="${r.model === "rl" ? "rl" : ""} ${r.superseded ? "old" : ""}"><td class="num">${r.superseded ? "–" : k + 1}</td>
-      <td>${r.model === "rl" ? "<b>RL-Zero-Math</b> (target)" : "Base"} · ${esc(r.method)} · <span class="mono">${esc(r.setting)}</span>${r.more_tokens ? '<span class="pill">more tokens</span>' : ""}${r.superseded ? '<span class="pill">grader ' + esc(r.grader) + ', superseded</span>' : ""}<div class="bar" style="width:${Math.max(2, (r.score_pct - lo) / (hi - lo) * 100)}%"></div></td>
-      <td>${esc(r.basin)}</td><td class="num">${r.score_pct.toFixed(1)}%${r.correct != null ? '<div class="mono">' + r.correct + "/" + r.n + "</div>" : ""}</td>
-      <td class="mono" title="${esc(r.quote)}">${esc(r.item)}</td></tr>`).join("") + "</tbody>";
+    fair.map(r => `<tr class="${r.model === "rl" ? "rl" : ""}"><td class="num">${r.model === "rl" ? "–" : ++k}</td><td>${cfg(r)}</td><td>${esc(r.basin)}</td><td class="num">${sc(r)}</td>${src(r)}</tr>`).join("") + "</tbody>";
+  document.getElementById("lb2").innerHTML = extra.length ? `<thead><tr><th>Configuration</th><th style="text-align:right">Tokens / problem</th><th>RL given the same procedure</th><th style="text-align:right">MATH-500</th><th>Source</th></tr></thead><tbody>` +
+    extra.map(r => `<tr><td>${cfg(r)}</td><td class="num">${r.tokens_per_problem ? r.tokens_per_problem.toLocaleString() : "not posted"}</td><td>${r.rl_same_procedure ? "yes" : '<span class="pill">no: compared with RL at one sample</span>'}</td><td class="num">${sc(r)}</td>${src(r)}</tr>`).join("") + "</tbody>" : '<tbody><tr><td class="mono">none posted</td></tr></tbody>';
+  document.getElementById("lb3").innerHTML = bad.length ? `<tbody>` + bad.map(r => `<tr class="old"><td>${cfg(r)}</td><td><span class="pill">${r.oracle ? "uses the gold answer to pick: invalid" : "grader " + esc(r.grader) + ", superseded"}</span></td><td class="num">${sc(r)}</td>${src(r)}</tr>`).join("") + "</tbody>" : '<tbody><tr><td class="mono">none</td></tr></tbody>';
 } else { document.getElementById("lbwrap").hidden = true; }
 document.getElementById("untouched").innerHTML = S.directions.filter(d => !d.items_either.length).map(d => `<div class="b"><span class="sw" style="background:var(--empty)"></span><span>${esc(d.name)}</span><span class="cnt">0 items</span></div>`).join("") || '<span class="mono">none</span>';
 draw(1);
