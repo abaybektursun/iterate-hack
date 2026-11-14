@@ -70,7 +70,17 @@ def new_messages(channels, state, me):
 
 
 def show(m):
-    return f"[{m['channel']}] {m['at']} {m['who']}/{m.get('branch', '?')} ({m['agent']} {m['session'][:8]}): {m['text']}"
+    """One line: channel, UTC hour:minute, person/branch, text."""
+    return f"[{m['channel']}] {m['at'][11:16]} {m['who']}/{m.get('branch', '?')}: {m['text']}"
+
+
+def send(channel, text, who, me):
+    if not re.fullmatch(r"[\w@.-]+", channel):
+        sys.exit(f"channel '{channel}' may hold only letters, digits and @ . _ -")
+    if len(text) > LIMIT:
+        sys.exit(f"message is {len(text)} characters; the limit is {LIMIT}")
+    team.table().put_item(Item={"pk": f"chan#{channel}", "sk": f"{time.time_ns():020d}#{who}", "channel": channel, "who": who, **me,
+                                "at": team.now(), "text": text})
 
 
 if __name__ == "__main__":
@@ -83,12 +93,7 @@ if __name__ == "__main__":
 
     if command == "send":
         channel, text = args
-        if not re.fullmatch(r"[\w@.-]+", channel):
-            sys.exit(f"channel '{channel}' may hold only letters, digits and @ . _ -")
-        if len(text) > LIMIT:
-            sys.exit(f"message is {len(text)} characters; the limit is {LIMIT}")
-        team.table().put_item(Item={"pk": f"chan#{channel}", "sk": f"{time.time_ns():020d}#{who}", "channel": channel, "who": who, **me,
-                                    "at": team.now(), "text": text})
+        send(channel, text, who, me)
         print(f"sent to {channel}")
         sys.exit()
 
@@ -113,7 +118,7 @@ if __name__ == "__main__":
     state_file.parent.mkdir(parents=True, exist_ok=True)
     state_file.write_text(json.dumps(state))
     if hook and messages:
-        text = "New messages from the team's agents (tools/msg.py). Act on what applies to your work:\n" + "\n".join(map(show, messages))
+        text = "Team messages (tools/msg.py; times UTC):\n" + "\n".join(map(show, messages))
         print(json.dumps({"hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": text}}))
     elif not hook:
         print("\n".join(map(show, messages)), end="\n" if messages else "")

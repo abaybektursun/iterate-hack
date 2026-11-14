@@ -28,15 +28,18 @@ idea = run("a", "board", "post", "idea", f"{TAG} an idea")
 check(idea.startswith("idea-"), "post prints the item id")
 run("a", "board", "up", idea)
 run("a", "board", "up", idea)
-check(f"{idea}  +1 -0" in run("a", "board", "ls", "idea", "--new", "--n", "5"), "voting twice counts once")
+check(f"+1-0: {TAG} an idea" in run("a", "board", "ls", "idea", "--new", "--n", "5"), "voting twice counts once")
 run("a", "board", "down", idea)
-check(f"{idea}  +0 -1" in run("a", "board", "ls", "idea", "--new", "--n", "5"), "a new vote replaces the old one")
+check(f"+0-1: {TAG} an idea" in run("a", "board", "ls", "idea", "--new", "--n", "5"), "a new vote replaces the old one")
 
-work_a = run("a", "board", "post", "work", f"{TAG} doing {idea}").splitlines()[0]
+posted = run("a", "board", "post", "work", f"{TAG} doing {idea}")
+work_a = posted.splitlines()[0]
+check("announced on all" in posted, "post work says it announced")
 claim_b = run("b", "board", "post", "work", f"{TAG} also doing {idea}")
 work_b = claim_b.splitlines()[0]
 check(f"also claimed: {work_a}" in claim_b, "a second claim on the same idea is reported")
 check("idle 0m" in run("a", "board", "ls", "work", "--new", "--n", "5"), "work items show idle minutes")
+check(f"started {work_a}: {TAG} doing {idea}" in run("b", "msg", "read"), "post work announces the item on all")
 
 run("b", "board", "comment", work_a, "status?")
 shown = run("a", "board", "show", work_a)
@@ -61,8 +64,11 @@ check(f"{TAG} wake" in out, f"wait returns the message ({time.time() - sent:.1f}
 hook = run("a", "msg", "read", "--hook")
 check(hook == "", "the hook prints nothing when there is no new message")
 
-run("a", "board", "done", work_a)
+result = [l for l in run("a", "board", "done", work_a, f"{TAG} result 0.41").splitlines() if l.startswith("result-")][0]
+check(f"{TAG} result 0.41" in run("a", "board", "ls", "result", "--new", "--n", "5"), "done with a text posts the result")
+check(f"done {work_a}, {result}: {TAG} result 0.41" in run("b", "msg", "read"), "done announces the item and its result on all")
 run("b", "board", "done", work_b)
+check(f"closed {work_b}: {TAG} also doing" in run("a", "msg", "read"), "done without a text announces the closed item")
 check(work_a not in run("a", "board", "ls", "work", "--new"), "a closed work item leaves ls")
 check("closed by" in run("a", "board", "show", work_a), "show says who closed it")
 run("a", "board", "show", "idea-000000", code=1)

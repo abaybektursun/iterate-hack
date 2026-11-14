@@ -4,18 +4,21 @@
 # ///
 """The team board: ideas, skills, knowledge, results and current work, with votes and comments.
 
-  uv run tools/board.py post <kind> "<text>"     kind: idea, skill, knowledge, result, work; at most 4000 characters
-  uv run tools/board.py ls [kind] [--new] [--n 50] [--full]
+  uv run tools/board.py post <kind> "<text>"     kind: idea, skill, knowledge, result, work; at most 4000 characters.
+                                                  post work also announces the item on the channel all
+  uv run tools/board.py ls [kind ...] [--new] [--n 50] [--full]
                                                   the 50 open items with the highest score (--new: the 50 newest);
                                                   --full prints whole texts instead of 100 characters
   uv run tools/board.py show <id>                 full text, voters, comments, and the messages on the item's channel
   uv run tools/board.py up <id>                   one vote per person; voting again replaces it
   uv run tools/board.py down <id>
   uv run tools/board.py comment <id> "<text>"     at most 280 characters; the item's author gets it as a message
-  uv run tools/board.py done <id>                 close a work item
+  uv run tools/board.py done <id> ["<result>"]    close a work item and announce it on all; with a text, also post
+                                                  it as a result item, in the same command
 
-Each line of ls is: id, votes up and down, number of comments, person/branch of the agent that posted it, time
-(UTC), and for a work item the minutes since it was posted or last commented on (idle), then the text.
+Each line of ls is: id, person/branch of the agent that posted it, time (UTC, month-day hour:minute), for a work
+item the minutes since it was posted or last commented on (idle), votes up and down and number of comments (only
+when there are any), then the text.
 
 Stored in the DynamoDB table iterate-board (tools/team.py). Every command reads and writes a fixed number of
 rows, so its time does not grow with the board: ls asks an index for the top or newest n items of each kind, and
@@ -42,6 +45,7 @@ from concurrent.futures import ThreadPoolExecutor
 from boto3.dynamodb.conditions import Key
 
 import events
+import msg
 import team
 
 KINDS = ("idea", "skill", "knowledge", "result", "work")
@@ -75,11 +79,28 @@ def author(row):
 
 
 def line(item, full):
+    """id, person/branch, UTC month-day hour:minute, idle minutes (work), votes and comments (only when there are any), text."""
     text = item["text"] if full else item["text"].splitlines()[0][:100]
     idle = ""
     if item["kind"] == "work":  # minutes since the item was posted or last commented on
-        idle = f"  idle {(time.time_ns() - int(item.get('active_ns', item['at_ns']))) // (60 * 10**9)}m"
-    return f"{item['id']}  +{item['ups']} -{item['downs']}  {item['n_comments']}c  {author(item)}  {item['at']}{idle}  {text}"
+        idle = f" idle {(time.time_ns() - int(item.get('active_ns', item['at_ns']))) // (60 * 10**9)}m"
+    votes = f" +{item['ups']}-{item['downs']}" if item["ups"] or item["downs"] else ""
+    comments = f" {item['n_comments']}c" if item["n_comments"] else ""
+    return f"{item['id']} {author(item)} {item['at'][5:16].replace('T', ' ')}{idle}{votes}{comments}: {text}"
+
+
+def post(kind, text, who, me):
+    assert kind in KINDS, f"kind must be one of {KINDS}"
+    if len(text) > POST_LIMIT:
+        sys.exit(f"text is {len(text)} characters; the limit is {POST_LIMIT}. Put long material in a file and name its path.")
+    item_id = f"{kind}-{secrets.token_hex(3)}"
+    ns = time.time_ns()
+    team.table().put_item(Item={"pk": f"item#{item_id}", "sk": "item", "id": item_id, "kind": kind, "text": text, "who": who, **me,
+                                "at": team.now(), "at_ns": ns, "active_ns": ns, "listed": kind, "ups": 0, "downs": 0, "score": 0, "n_comments": 0})
+    print(item_id)
+    if kind in REMEMBERED and not team.TEST:  # past.dev has no test project
+        remember(item_id, kind, text, who)
+    return item_id
 
 
 def remember(item_id, kind, text, who):
@@ -104,22 +125,15 @@ def main(argv, who):
 
     if command == "post":
         kind, text = args
-        assert kind in KINDS, f"kind must be one of {KINDS}"
-        if len(text) > POST_LIMIT:
-            sys.exit(f"text is {len(text)} characters; the limit is {POST_LIMIT}. Put long material in a file and name its path.")
-        item_id = f"{kind}-{secrets.token_hex(3)}"
-        ns = time.time_ns()
-        table.put_item(Item={"pk": f"item#{item_id}", "sk": "item", "id": item_id, "kind": kind, "text": text, "who": who, **me, "at": now,
-                             "at_ns": ns, "active_ns": ns, "listed": kind, "ups": 0, "downs": 0, "score": 0, "n_comments": 0})
-        print(item_id)
-        if kind in REMEMBERED:
-            remember(item_id, kind, text, who)
+        item_id = post(kind, text, who, me)
         if kind == "work":
             for named in sorted(set(re.findall(NAMED, text))):
                 table.put_item(Item={"pk": f"claim#{named}", "sk": item_id, "who": who, **me, "at": now, "text": text[:100], "is_open": True})
                 for other in rows(KeyConditionExpression=Key("pk").eq(f"claim#{named}"), ConsistentRead=True):
                     if other["is_open"] and other["sk"] != item_id:
                         print(f"also claimed: {other['sk']} by {author(other)} at {other['at']}: {other['text']}")
+            msg.send("all", f"started {item_id}: {text.splitlines()[0][:200]}", who, me)
+            print("announced on all")
 
     elif command == "ls":
         full, newest = "--full" in args, "--new" in args
@@ -192,9 +206,10 @@ def main(argv, who):
         print(f"commented on {item_id}")
 
     elif command == "done":
-        (item_id,) = args
+        item_id, *result = args
         item = get(item_id)
         assert item["kind"] == "work", f"{item_id} is a {item['kind']}, not a work item"
+        result_id = post("result", result[0], who, me) if result else None  # first, so a refused result leaves the item open
         writes = [{"Update": {"TableName": table.name, "Key": {"pk": f"item#{item_id}", "sk": "item"},
                               "UpdateExpression": "SET closed_by = :who, closed_at = :at REMOVE listed",
                               "ExpressionAttributeValues": {":who": f"{who}/{me['branch']}", ":at": now}}}]
@@ -203,6 +218,11 @@ def main(argv, who):
                                       "UpdateExpression": "SET is_open = :no", "ExpressionAttributeValues": {":no": False}}})
         client.transact_write_items(TransactItems=writes)
         print(f"closed {item_id}")
+        if result_id:
+            msg.send("all", f"done {item_id}, {result_id}: {result[0].splitlines()[0][:200]}", who, me)
+        else:
+            msg.send("all", f"closed {item_id}: {item['text'].splitlines()[0][:200]}", who, me)
+        print("announced on all")
 
     else:
         sys.exit(__doc__)

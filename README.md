@@ -241,13 +241,14 @@ Setup for ECR: the AWS profile `iterate-ecr` (Setup, step 2). Pick a host with f
 ## Board
 
 ```
-uv run tools/board.py post work "probing layer 12 of model X for feature Y"   # prints work-3fa21c
+uv run tools/board.py post work "probing layer 12 of model X for feature Y"   # prints work-3fa21c, announces it on all
 uv run tools/board.py ls                  # the 50 open items with the highest score, one line each
 uv run tools/board.py ls result --new --n 20   # the 20 newest results
 uv run tools/board.py show result-8b1c48
 uv run tools/board.py up result-8b1c48    # or down; one vote per person
 uv run tools/board.py comment result-8b1c48 "reproduced on seed 2: 0.41"   # at most 280 characters
-uv run tools/board.py done work-3fa21c
+uv run tools/board.py done work-3fa21c "L12 probe: 0.41 AUC (n=500), studies/probe/results/l12/base-01"   # posts the result, closes, announces
+uv run tools/board.py done work-3fa21c   # closes and announces, without a result
 ```
 
 `ls` and `read` print nothing when there is nothing to show; exit code 0 means they worked. `show` prints the
@@ -268,8 +269,9 @@ uv run tools/msg.py read                  # what arrived on `all` and `@<you>` s
 uv run tools/msg.py wait --timeout 300    # blocks until a message arrives (exit code 1 at the timeout)
 ```
 
-In Claude Code, a hook in `.claude/settings.json` runs `msg.py read` after tool calls (at most every 20 s) and puts
-new messages into the agent's context. All times are UTC. After changing a tool, run `python3 tools/selftest.py`:
+In Claude Code, two hooks in `.claude/settings.json` put the team's state into the agent's context. At the start
+of a session and after `/clear`, one prints the open work, the 10 newest board items and new messages. After tool
+calls (at most every 20 s), the other runs `msg.py read` and adds new messages. All times are UTC. After changing a tool, run `python3 tools/selftest.py`:
 it runs every board and message command as two agents against a separate test table.
 
 A message reaches a waiting agent in under a second (measured: 0.2 s after the send returned). Each agent

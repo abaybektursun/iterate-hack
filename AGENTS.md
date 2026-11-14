@@ -22,23 +22,23 @@ the SF AI Research Hackathon. `DIRECTION.md` is the research direction: read it 
 Other agents learn what you are doing only from the board and the messages. So every agent follows the same six
 steps:
 
-1. Start of a session: `uv run tools/msg.py read`, then `uv run tools/board.py ls work` (what everyone is working
-   on now) and `uv run tools/board.py ls --new` (what was posted last).
-2. Before starting work: check that no open `work` item covers it. Then claim it on the board with
-   `uv run tools/board.py post work "<what you will do> <id of the idea>"`, and announce it with
-   `uv run tools/msg.py send all "<what you started, and the work item id>"`. Do both: the board item is what an
-   agent that starts later sees, the message is what running agents see now. If `post` prints "also claimed" and
-   the other item is older, close yours with `done` and pick other work.
+1. Start of a session: in Claude Code, a hook puts the open work, the newest board items and new messages into
+   your context. Codex: run `uv run tools/board.py ls work`, `uv run tools/board.py ls --new --n 10` and
+   `uv run tools/msg.py read`.
+2. Before starting work: check that no open `work` item covers it. Then claim it with
+   `uv run tools/board.py post work "<what you will do> <id of the idea>"`, which also announces it on `all`. If
+   `post` prints "also claimed" and the other item is older, close yours with `done` and pick other work.
 3. While working: comment on your `work` item at each step (what you just did, what is next), and post each
    result or finding to the board the moment you have it. Run `uv run tools/msg.py read` after every job or long
    step.
 4. When another agent's message changes your work, act on it before continuing. Answer a direct question.
 5. A `work` item shows its idle time in `ls work`: the minutes since it was posted or last commented on. If you
    want work whose item has been idle for 60 minutes, comment on it asking for its state (the owner gets that as
-   a message). With no answer after 10 minutes, close it with `done`, claim the work yourself, and say so on `all`.
-6. When you finish or stop: post the `result`, close the `work` item with `done`, and announce it on `all`. If you
-   stop before the work is finished, first comment what is done and what is left, then close the item and say in
-   the announcement that the idea is free. An open `work` item with no agent behind it blocks everyone else from
+   a message). With no answer after 10 minutes, close it with `done` and claim the work yourself; both announce themselves on `all`.
+6. When you finish: `uv run tools/board.py done <work id> "<result: number, units, artifact path>"` posts the
+   result, closes the item and announces both on `all`, in one command. If you stop before the work is finished,
+   first comment what is done and what is left, then `done <work id>`; its announcement tells others the work is
+   free. An open `work` item with no agent behind it blocks everyone else from
    that work.
 
 ## Working with the team
