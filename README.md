@@ -29,7 +29,7 @@ or a text editor, never into an agent chat, and never commit one.
 | 5 | vast.ai | yours (optional) | cheaper private GPUs with `tools/vast.py` |
 | 6 | AWS (DynamoDB, S3 and ECR) | shared, until Sunday 23:59 PST | the board, events and traces; prebuilt images with model weights, on vast.ai |
 | 7 | past.dev | shared team project | `tools/paper.py`, `tools/recall.py`, session memory |
-| 8 | Exa | yours ($50 credits) | web and literature search by agents (MCP tools) |
+| 8 | Exa | yours ($50 credits) | web and literature search by agents (`tools/exa.py`) |
 | 9 | Tinker, Devin, OpenAI | yours | optional; no tool here uses them |
 
 ### 1. GitHub and the team store
@@ -124,16 +124,28 @@ in your shell profile, not in the repository:
 echo 'export EXA_API_KEY=<key>' >> ~/.zshrc && source ~/.zshrc
 ```
 
-Agents use Exa as tools, through Exa's MCP server (`https://mcp.exa.ai/mcp`): `web_search_exa` (search, returns
-page text), `web_fetch_exa` (read a URL) and `web_search_advanced_exa` (date and domain filters).
+Agents use Exa through `tools/exa.py`, which calls Exa's HTTP API (`https://api.exa.ai`, docs:
+https://docs.exa.ai). Claude Code, Codex and their subagents all run the same two commands; there is nothing to
+install or approve. Do not use Exa's MCP server: it reads the key only when the agent starts, and returns 401 for
+the whole session if the key was missing then.
 
-- Claude Code: nothing to install. `.mcp.json` in this repository connects it with your `EXA_API_KEY`; approve
-  the `exa` server when Claude Code asks, and check with `/mcp`. Subagents get the tools too.
-- Codex: `codex mcp add exa --url https://mcp.exa.ai/mcp --bearer-token-env-var EXA_API_KEY`, once.
+```
+python3 tools/exa.py search "<description of the page you want>" [--n 5] [--since YYYY-MM-DD] [--domain arxiv.org]
+python3 tools/exa.py fetch <url> [<url> ...]
+```
 
-The key must be in the environment of the shell that starts the agent. With a key, searches count against your
-credits and show in your Exa dashboard, which the Exa challenge needs. Direct API calls from a script:
-`POST https://api.exa.ai/search` with the header `x-api-key` (docs: https://docs.exa.ai).
+- `search` prints each result's date, title, URL and highlights (the passages that match the query), then the
+  cost. Exa searches by meaning, so describe the page you want in a full phrase ("paper that measures restart
+  sampling on MATH-500"), not keywords. `--since` keeps pages published on or after a date; `--domain` keeps one
+  domain and can be repeated.
+- `fetch` prints the full text of each URL. Highlights only locate a page: read it with `fetch`, in a subagent
+  when it is long, before you cite it.
+- One search costs about 0.007 USD and one fetched page about 0.001 USD, from your own credits. The calls show in
+  your Exa dashboard, which the Exa challenge needs.
+
+The tool takes `EXA_API_KEY` from its environment and, when the agent started before you set the key, from your
+shell profile, so a running session needs no restart. Check: `python3 tools/exa.py search "test" --n 1` prints
+one result.
 
 ### 9. Tinker, Devin, OpenAI (optional)
 
