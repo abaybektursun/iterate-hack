@@ -165,3 +165,14 @@ One model alone (`--base` or `--rl` only) prints that model's rows without the R
   serves right, wrong, cap hit in turn): single 4, every D(S) 4, every R(L) 7, every D(S)+R(L) 7 of 10, as worked out by hand
   from the stand-in's order; `--choose` wrote R8000; `--fixed` on the hard328 rows scored `single` and `R8000` only. On these
   rows D(S) costs 16,406 tokens per problem against 4,926 single, because a check sample that hits the cap costs 16,384.
+
+## Note, 2026-11-14 23:55 UTC: the thresholds used on the 328 (added before any hard328 rule was scored)
+
+The MATH-500 four-sample rows that `--choose` reads are in a teammate's workspace and were not shared when the hard328
+four-sample rows finished (eight shard jobs, `studies/metaharness/jobs/shard_cell.py`, `--samples 4`, no restarts, joined by
+`analysis/day1_join_shards.py`). So no `--choose` run exists. The 328 is scored once with `--fixed
+specs/day1_length_rules_chosen_prereg.json`: S = 2,000 (board idea-ecc123) and L = 12,000 (board idea-3f3378), both posted
+2026-11-14 21:17 UTC from the MATH-500 single samples T1 and T2, before the hard328 jobs started (22:54 UTC). idea-3f3378
+gives its counts at 12,000 tokens and says the cutoff is chosen on MATH-500; 12,000 is the only cutoff it names. The headline
+rows on the 328 are `D2000`, `R12000` and `D2000+R12000`; `--fixed` scores only these and the single row. H2's "best L" is
+read as L = 12,000. Because the jobs ran with no restarts, `day1_vote.py`'s restart row equals its single row on these runs.

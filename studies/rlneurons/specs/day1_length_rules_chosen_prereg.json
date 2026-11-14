@@ -1,0 +1,21 @@
+{
+ "S": 2000,
+ "L": 12000,
+ "setting": "D2000+R12000",
+ "criterion": "pre-registered thresholds, not a --choose run: S from board idea-ecc123, L from board idea-3f3378 (both posted 2026-11-14 21:17 UTC; the hard328 --samples 4 jobs started 22:54 UTC)",
+ "source": "board ideas idea-ecc123 and idea-3f3378 and the MATH-500 single samples T1 (base + cue) and T2 (RL); NOT written by day1_length_rules.py --choose. The MATH-500 four-sample rows that --choose reads were in a teammate's workspace and not shared when hard328 was scored.",
+ "caveats": [
+  "idea-ecc123 states the double-check threshold of 2,000 tokens as the procedure.",
+  "idea-3f3378 gives its counts at 12,000 tokens (base 15 right, 40 wrong above it) and says the cutoff is chosen on MATH-500; 12,000 is the only cutoff it names. No hard328 sample was read for either threshold.",
+  "The headline rows on hard328 are D2000, R12000 and D2000+R12000 only."
+ ],
+ "spec": "studies/rlneurons/specs/SPEC_day1_length_rules.md",
+ "chosen_on": {
+  "set": "math500",
+  "n": 500,
+  "samples": "single samples T1 and T2 (counts quoted in the spec, section Question), not four-sample rows",
+  "base_short_answers_at_most_2000": {"n": 263, "wrong": 13},
+  "base_longer_than_12000": {"right": 15, "wrong": 40},
+  "rl_longer_than_12000": {"right": 16, "wrong": 22}
+ }
+}
