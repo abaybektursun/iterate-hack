@@ -2,22 +2,22 @@
 # requires-python = ">=3.11"
 # dependencies = ["modal>=1.4"]
 # ///
-"""Submit jobs to the team's GPU pool and see what everyone is running.
+"""Submit GPU jobs to your own Modal workspace (deploy infra/runner.py there once) and inspect them.
 
   uv run tools/gpu.py submit <class> [--hours 2] -- <command>   class: h100, b200, cpu
   uv run tools/gpu.py ls [--all]          jobs of the last 3 hours, any state; --all: every job
   uv run tools/gpu.py wait <job-id>       block until the job ends, then print its state and last 20 log lines
   uv run tools/gpu.py logs <job-id> [n]   last n lines of the job's log (default 30)
   uv run tools/gpu.py kill <job-id>
+  uv run tools/gpu.py get <job-id>        copy the job's $OUT_DIR (outputs and log) to runs/<job-id>/
 
 The command is a shell string: one quoted argument, e.g.
   uv run tools/gpu.py submit cpu -- 'pip install -q einops && python exp/train.py --lr 3e-4'
 Several arguments are quoted one by one and joined.
 
 A job runs the current commit: the tree must be clean and the commit pushed. The command runs from the
-repository root and writes its outputs to $OUT_DIR. Download them into runs/<job-id>/ with
-  mkdir -p runs && modal volume get iterate-runs <job-id> runs/
-The log is updated every 30 seconds. The pool itself is infra/pool.py.
+repository root and writes its outputs to $OUT_DIR. The log is updated every 30 seconds. Jobs, outputs and the
+model cache are in your own workspace: teammates cannot read them, so commit small result files to share them.
 """
 import io
 import secrets
@@ -28,7 +28,6 @@ import time
 
 import modal
 
-PER_PERSON = 4  # queued plus running jobs per person
 CLASSES = ("h100", "b200", "cpu")
 jobs = modal.Dict.from_name("iterate-jobs", create_if_missing=True)
 
@@ -75,9 +74,6 @@ def submit(args):
     sha = git("rev-parse", "HEAD")
     assert git("branch", "-r", "--contains", sha), "push the commit first, so others can read the code"
     who = git("config", "user.email").split("@")[0]
-    active = [r for r in load().values() if r["job"]["who"] == who and state(r) in ("queued", "running")]
-    if len(active) >= PER_PERSON:
-        sys.exit(f"{who} already has {len(active)} queued or running jobs; the limit is {PER_PERSON}")
 
     # Upload on every submit, overwriting: the file is named by its commit, so the bytes are the same. Checking
     # first with listdir hits Modal's rate limit when many agents submit at once.
@@ -87,7 +83,7 @@ def submit(args):
 
     job_id = f"{who}-{time.strftime('%m%d-%H%M%S')}-{secrets.token_hex(2)}"
     jobs[f"job:{job_id}"] = {"who": who, "class": gpu_class, "sha": sha, "cmd": cmd, "hours": hours, "at": int(time.time())}
-    call = modal.Function.from_name("iterate-pool", gpu_class).spawn(job_id)
+    call = modal.Function.from_name("iterate-runner", gpu_class).spawn(job_id)
     jobs[f"call:{job_id}"] = call.object_id
     print(job_id)
 
@@ -122,6 +118,12 @@ def wait(args):
         logs([job_id, 20])
 
 
+def get(args):
+    (job_id,) = args
+    subprocess.run(["mkdir", "-p", "runs"], check=True)
+    subprocess.run([sys.executable, "-m", "modal", "volume", "get", "iterate-runs", job_id, "runs/"], check=True)
+
+
 def kill(args):
     (job_id,) = args
     r = load()[job_id]
@@ -136,4 +138,4 @@ if __name__ == "__main__":
         sys.exit(__doc__)
     events.log("gpu", sys.argv[1:], git("config", "user.email").split("@")[0])
     command, *args = sys.argv[1:] or ["help"]
-    {"submit": submit, "ls": ls, "wait": wait, "logs": logs, "kill": kill}.get(command, lambda _: sys.exit(__doc__))(args)
+    {"submit": submit, "ls": ls, "wait": wait, "logs": logs, "kill": kill, "get": get}.get(command, lambda _: sys.exit(__doc__))(args)

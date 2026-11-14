@@ -2,19 +2,21 @@
 # requires-python = ">=3.11"
 # dependencies = ["modal>=1.4"]
 # ///
-"""Agent traces and team records, for whoever analyzes how the team worked.
+"""Agent traces and team records, for whoever analyzes how the team worked. Both commands write to the Volume
+iterate-traces in the team workspace (tools/team.py).
 
-  uv run tools/traces.py push      upload your agent transcripts for this repository to the Volume iterate-traces
-  uv run tools/traces.py export    copy the board, the jobs and the events from their Modal Dicts to that Volume
+  uv run tools/traces.py push      upload your agent transcripts for this repository and your GPU job records
+  uv run tools/traces.py export    copy the board and the events from their Modal Dicts to the Volume
 
 push uploads every Claude Code transcript (subagents included) and every Codex session whose working folder is this
-repository or one of its worktrees, to iterate-traces/<who>/. A transcript holds everything typed and every tool
-output, file contents included. Strings that look like keys are replaced with [REDACTED] first; that catches common
-formats only, so run push only on transcripts you are willing to share. Running it again uploads the current
-versions.
+repository or one of its worktrees, to iterate-traces/<who>/, and the records of your GPU jobs (the Dict
+iterate-jobs in your own workspace) to <who>/jobs.json. A transcript holds everything typed and every tool output,
+file contents included. Strings that look like keys are replaced with [REDACTED] first; that catches common formats
+only, so run push only on transcripts you are willing to share. Running it again uploads the current versions.
 
-export writes iterate-traces/export/<time>/{board,jobs,events}.json. The Dicts drop entries after 7 days without
-reads or writes; the Volume keeps them. Read everything with `modal volume get iterate-traces / traces/`.
+export writes iterate-traces/export/<time>/{board,events}.json. The Dicts drop entries after 7 days without reads
+or writes; the Volume keeps them. Read everything with
+`modal volume get --profile abaybektursun iterate-traces / traces/`.
 """
 import io
 import json
@@ -25,6 +27,8 @@ import time
 from pathlib import Path
 
 import modal
+
+import team
 
 ROOT = Path(__file__).resolve().parent.parent
 PREFIX = str(ROOT.parent / "iterate_invariant")  # the main checkout and its ../iterate_invariant-<name> worktrees
@@ -52,18 +56,20 @@ def transcripts():
 
 def push(who):
     count = 0
-    with modal.Volume.from_name("iterate-traces", create_if_missing=True).batch_upload(force=True) as upload:
+    jobs = dict(modal.Dict.from_name("iterate-jobs", create_if_missing=True).items())
+    with team.store(modal.Volume, "iterate-traces").batch_upload(force=True) as upload:
+        upload.put_file(io.BytesIO(json.dumps(jobs, indent=1, sort_keys=True).encode()), f"/{who}/jobs.json")
         for source, path, name in transcripts():
             upload.put_file(io.BytesIO(redact(path.read_text(errors="replace")).encode()), f"/{who}/{source}/{name}")
             count += 1
-    print(f"uploaded {count} transcripts to iterate-traces/{who}/")
+    print(f"uploaded {count} transcripts and {len(jobs)} job records to iterate-traces/{who}/")
 
 
 def export():
     stamp = time.strftime("%Y%m%d-%H%M%S")
-    with modal.Volume.from_name("iterate-traces", create_if_missing=True).batch_upload(force=True) as upload:
-        for name, dict_name in (("board", "iterate-board"), ("jobs", "iterate-jobs"), ("events", "iterate-events")):
-            data = dict(modal.Dict.from_name(dict_name, create_if_missing=True).items())
+    with team.store(modal.Volume, "iterate-traces").batch_upload(force=True) as upload:
+        for name in ("board", "events"):
+            data = dict(team.store(modal.Dict, f"iterate-{name}").items())
             upload.put_file(io.BytesIO(json.dumps(data, indent=1, sort_keys=True).encode()), f"/export/{stamp}/{name}.json")
             print(f"{name}: {len(data)} entries")
     print(f"exported to iterate-traces/export/{stamp}/")

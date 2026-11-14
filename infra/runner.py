@@ -1,18 +1,17 @@
-"""The team's GPU pool. Deploy once, and again after changing the image or the caps:
+"""Your GPU job runner on Modal. Each person deploys it once in their own Modal workspace, and again after
+changing requirements.txt or the limits:
 
-    modal deploy infra/pool.py
+    modal secret create hf-token HF_TOKEN=<your Hugging Face token>     # once, in your own terminal
+    modal deploy infra/runner.py
 
-Each GPU class is one Modal function whose max_containers is that class's cap. A job submitted while its
-class is full waits in Modal's queue and starts when a container frees up, so Modal itself allocates the
-GPUs. Submit and inspect jobs with tools/gpu.py.
+Jobs are paid from your own Modal credits. Each GPU class is one Modal function whose max_containers limits how
+many of your jobs run at once; a job over the limit waits in Modal's queue. Submit and inspect jobs with
+tools/gpu.py.
 
-A job runs one commit of this repository, uploaded by tools/gpu.py to the Volume iterate-code as
-<sha>.tar. The command runs from the repository root with OUT_DIR=/runs/<job-id>; the output written
-there, and the command's log, end up in the Volume iterate-runs. HF_HOME is the shared Volume
-iterate-hf-cache, so each model downloads once for the whole team.
-
-Copied from interp_research/infra/modal_app.py and image_base.py: pinned image versions, volumes and the
-hf-token secret. Left out: the orchestrator tick, which respawned killed runs, and the GPU fallback walk.
+A job runs one commit of this repository, uploaded by tools/gpu.py to the Volume iterate-code as <sha>.tar. The
+command runs from the repository root with OUT_DIR=/runs/<job-id>; the output written there, and the command's
+log, end up in the Volume iterate-runs. HF_HOME is the Volume iterate-hf-cache, so each model downloads once.
+All three Volumes are in your own workspace.
 """
 import os
 import shutil
@@ -34,7 +33,7 @@ code = modal.Volume.from_name("iterate-code", create_if_missing=True)
 hf_cache = modal.Volume.from_name("iterate-hf-cache", create_if_missing=True)
 jobs = modal.Dict.from_name("iterate-jobs", create_if_missing=True)
 
-app = modal.App("iterate-pool")
+app = modal.App("iterate-runner")
 common = dict(
     image=image,
     volumes={"/runs": runs, "/code": code, "/hf": hf_cache},
@@ -76,7 +75,7 @@ def run(job_id):
         raise RuntimeError(f"{job_id} exited with code {proc.returncode}")
 
 
-# One function per GPU class. max_containers is the team-wide cap for that class.
+# One function per GPU class. max_containers is how many of your jobs of that class run at once.
 @app.function(gpu="H100", max_containers=4, **common)
 def h100(job_id: str):
     run(job_id)
