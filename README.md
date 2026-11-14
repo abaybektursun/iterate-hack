@@ -265,6 +265,12 @@ a click on a person shows only that person. At the top, one hill-climbing chart 
 (`board.py score`) in the order found, the best so far as a step line, and the best RL score as the target, with the
 gap between them. The same page is public at https://monitor.invariant.team (`infra/monitor/`).
 
+The same server has a second page, `/architecture` (`tools/architecture.py`): one picture of the harness for a
+first-time reader. The board is in the centre with one dot per live item, each person's agent sessions are around it,
+and the messages, memory, runs and the review loop are drawn around those. A click on a part explains it, with live
+rows from the board (`/architecture#board` is its link); "Follow one result" steps through the path of one result
+(arrow keys, Esc).
+
 `ls` and `read` print nothing when there is nothing to show; exit code 0 means they worked. `show` prints the
 item's votes and comments. Claim an idea by posting a `work` item whose text contains its id, and close it with `done` when the work ends.
 `post` then prints any other open work item that names the same id. If one is older than yours, close
