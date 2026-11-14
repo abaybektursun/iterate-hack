@@ -1,0 +1,134 @@
+{
+ "models": {
+  "base": [
+   "allenai/Olmo-3-1025-7B",
+   "main",
+   "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+  ],
+  "s0100": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "step_0100",
+   "0a45720ccbf23c0aa255a28119787538a48dd56b"
+  ],
+  "s0400": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "step_0400",
+   "897c0ce4b2e39f6802515f3c1a4e1cf53995af78"
+  ],
+  "s2800": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "main",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "fr": [
+   "allenai/Olmo-3-7B-RL-Zero-Math",
+   "main",
+   "dee26a4074b88215cd1326472e1ab14d0259d892"
+  ]
+ },
+ "tokenizer": [
+  "allenai/Olmo-3.1-7B-RL-Zero-Math",
+  "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ ],
+ "template": "pair1",
+ "cap": 16384,
+ "N": 11911,
+ "prefill_ids": [
+  1584,
+  2268,
+  33413
+ ],
+ "prefill_text": " line!\n\nOkay",
+ "commit_text": "\n\nFinal answer: \\boxed{",
+ "commit_ids": [
+  271,
+  19918,
+  4320,
+  25,
+  1144,
+  80175,
+  90
+ ],
+ "commit_max_tokens": 100,
+ "seeds": {
+  "math500": 1000000,
+  "hard": 3000000,
+  "per_sample": 10000
+ },
+ "samples": {
+  "math500": 4,
+  "hard": 1,
+  "hard_max": 8
+ },
+ "loop": {
+  "chars": 8000,
+  "below": 0.1
+ },
+ "non_attempt_max_tokens": 64,
+ "grade_rule": "dollar_both",
+ "check": {
+  "base": {
+   "n13_correct": 286,
+   "wilson95": [
+    52.82438500160791,
+    61.46582449402691
+   ]
+  },
+  "s2800": {
+   "n13_correct": 460,
+   "wilson95": [
+    89.28936831815437,
+    94.0701870730488
+   ]
+  }
+ },
+ "sha256": {
+  "math500": "69b71821615f5a96d498a3d4fe7db17943d9397458d239d07175f1f05985349b",
+  "hard": "1c1f9eac827be836faa748646ec577766b42ab8291d3117e2d2520eac35ee3e2"
+ },
+ "hard_sources": {
+  "aime22_24": [
+   "project-numina/aimo-validation-aime",
+   "13f9e12f613e720c2a2b2f345dd04b998a29494d",
+   "data/train-00000-of-00001.parquet"
+  ],
+  "aime25": [
+   "MathArena/aime_2025",
+   "c94da77eb22bbd6439e62a323bec18493a421302",
+   "data/train-00000-of-00001.parquet"
+  ],
+  "amc23": [
+   "math-ai/amc23",
+   "80815d37005feb82cd7f8fbc6901d5d3eff43057",
+   "test-00000-of-00001.parquet"
+  ],
+  "hmmt25": [
+   "MathArena/hmmt_feb_2025",
+   "6fdc4277120810ff75aa22d2d5489b91f7a262a1",
+   "data/train-00000-of-00001.parquet"
+  ],
+  "olympiad": [
+   "Hothan/OlympiadBench",
+   "91184b52131e7fc9455fef848035173aea8cc01a",
+   "OlympiadBench/OE_TO_maths_en_COMP/OE_TO_maths_en_COMP.parquet"
+  ]
+ },
+ "hard_composition": {
+  "by_source": {
+   "aime2022": 30,
+   "aime2023": 30,
+   "aime2024": 30,
+   "aime2025": 30,
+   "amc23": 40,
+   "hmmt_feb2025": 30,
+   "olympiadbench": 210
+  },
+  "n": 400,
+  "olympiad_pool": 573,
+  "olympiad_drawn": 210,
+  "dropped": {
+   "olympiad: more than one final answer": 93,
+   "olympiad: answer has a unit": 8
+  }
+ }
+}

@@ -1,0 +1,352 @@
+[
+{
+"problem_index": 0,
+"seed": 1000000,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "a6623f062dfbdfa391718f4d34059068b48dd59f32ffe832d3adf8b147640da8"
+},
+{
+"problem_index": 1,
+"seed": 1000001,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "260d0d039bdfa5fe12ebc36ace2167d139570362c1a0a8d80bf55517ae47b5a4"
+},
+{
+"problem_index": 2,
+"seed": 1000002,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "bc2f3321ad02d16e5cf14d1c2184c854cb0f6a0d07726aa15ef8ce4fc7091b74"
+},
+{
+"problem_index": 3,
+"seed": 1000003,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "362485d222f61aa22db610c274afc8abd0c822f4b61512b759b2941ed74ec802"
+},
+{
+"problem_index": 4,
+"seed": 1000004,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "1ff11480cbc514974785979096093f6d7c71d84c685ec61d8a47d54a88118eb1"
+},
+{
+"problem_index": 5,
+"seed": 1000005,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "032424ce481cdb1f6fd20f8160d2f23a9672c0938de76aa05c60e1454577c949"
+},
+{
+"problem_index": 6,
+"seed": 1000006,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "d67ffcc3ceed55cc6fa2f10c1f837ad00014dd228afc9869a79ba9335e9910ff"
+},
+{
+"problem_index": 7,
+"seed": 1000007,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "aa06276f989a113dba1fa2718be85d0482461345ebdb5467fcf460804e41a960"
+},
+{
+"problem_index": 8,
+"seed": 1000008,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "5de0a6f0391e1399d92e1f99fdeb94adc157b471af8f39acb9689f48a1b599ed"
+},
+{
+"problem_index": 9,
+"seed": 1000009,
+"score": 0,
+"cap_hit": true,
+"text_sha256": "58582d2aace36e63b6f0fedb0ae2eb6916f6dd36a050777519475d848439a053"
+},
+{
+"problem_index": 10,
+"seed": 1000010,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "8189362ba670dacc30fc49c1c156ac68dd3a64ff692b41faf422998c7655ef03"
+},
+{
+"problem_index": 11,
+"seed": 1000011,
+"score": 0,
+"cap_hit": false,
+"text_sha256": "db6969a640ae3402df283bfdb5e72e62b833c10bcd146d6905c8802a398094db"
+},
+{
+"problem_index": 12,
+"seed": 1000012,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "7447f36c914aa2973095bf0ccdbeb396bb5e109fb5f4913bf1647df651ad3fc1"
+},
+{
+"problem_index": 13,
+"seed": 1000013,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "dcdefab7616cf2f21ec29d54e388852fd2eb3cde90d22b95ec4caf0269d8c09e"
+},
+{
+"problem_index": 14,
+"seed": 1000014,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "a2daea687fcd5df9670b3512e57665096162fd628e42406e2db363965be61106"
+},
+{
+"problem_index": 15,
+"seed": 1000015,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "08e91fc8ad622fe8788adadd0954a73b35aff3f96478b06c2a0d869d4e5d5b06"
+},
+{
+"problem_index": 16,
+"seed": 1000016,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "1bb9300e0e0fa4da65385f7b4bb1a44ac6256db41e0b3c84312326f8cc23e0a3"
+},
+{
+"problem_index": 17,
+"seed": 1000017,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "799d4a882dee0773a0b99114a6f5e000455aac342322ca2f1794f0e293644c76"
+},
+{
+"problem_index": 18,
+"seed": 1000018,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "03aba38800781448a139561d9f317db48ef7a5b517bb4288638bb93a2e04a6ef"
+},
+{
+"problem_index": 19,
+"seed": 1000019,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "0c103d09f42d771240647aba590ca1e0842057a21df6a30245d2704dffefb7c5"
+},
+{
+"problem_index": 20,
+"seed": 1000020,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "bfb8f71dd4c65e477cf529a5e2866244cd4d031ef6172ba241c409c71351665b"
+},
+{
+"problem_index": 21,
+"seed": 1000021,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "b05d7ce5bf2ad4e6e43b3e3aaecb2d73514974ecc19d95bef7c2039398ab33a4"
+},
+{
+"problem_index": 22,
+"seed": 1000022,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "227319e581cd15aecc291d52a0f3dee12fa14d60009d295c060e13f354573863"
+},
+{
+"problem_index": 23,
+"seed": 1000023,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "a0ba952859db41e681bdfe1ffd18359c02f226d2c7d61788fe489d9eb603a532"
+},
+{
+"problem_index": 24,
+"seed": 1000024,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "9d95a5b554f0228eb58bb4cb778d0011305e305aa360dfdb719bb93e5fbf79dd"
+},
+{
+"problem_index": 25,
+"seed": 1000025,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "45c1777b1831e59906ccb67322950944d3a004aaa25f2da32bbd76084966f152"
+},
+{
+"problem_index": 26,
+"seed": 1000026,
+"score": 0,
+"cap_hit": false,
+"text_sha256": "97c9f4495afd40e8684a4e0d308f2cc8ffb97f320842433754d0599273410e7f"
+},
+{
+"problem_index": 27,
+"seed": 1000027,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "b0858088f40cc9b9d4d67d12d30a6005b11f3246ff2c406de2950b9320219715"
+},
+{
+"problem_index": 28,
+"seed": 1000028,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "d040f800915a5ce9e10c18f2f9f52a2e88e3388aa51fe588a30cf1f8ff9954d2"
+},
+{
+"problem_index": 29,
+"seed": 1000029,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "3d77b9591b679fc1fca4a66aab2fa5179d846fb74fa7a494f45164a9960fe5cc"
+},
+{
+"problem_index": 30,
+"seed": 1000030,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "57431bd8ad82f1a8fbeea2067f4f76d85d31d843d6cc63855c519e11d2d12c6c"
+},
+{
+"problem_index": 31,
+"seed": 1000031,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "f0bb626ff1e19e200b6673d62579ff2081cde97af7b5172eadd1c8c7d8aa1640"
+},
+{
+"problem_index": 32,
+"seed": 1000032,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "e26545a1010af6c207f97f18f3f9709a366e5fec0ed25e08012d7c3191651e6a"
+},
+{
+"problem_index": 33,
+"seed": 1000033,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "dea553aa6d57643da049b7cb710ffbea098396cb5a9ab479117f2be93f67a163"
+},
+{
+"problem_index": 34,
+"seed": 1000034,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "dbb25053687a1f0b0765fe4000c44ec770ed116bf46ae87792a938f1bf23fcb3"
+},
+{
+"problem_index": 35,
+"seed": 1000035,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "7a77786a34ea1195b52089310de1c7b1c98d0b016188fc80a8378af1cf444a09"
+},
+{
+"problem_index": 36,
+"seed": 1000036,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "0960516bd87c503a9e48afdcf36a063e8585d57f2c518aeb5c5e97232ca9102f"
+},
+{
+"problem_index": 37,
+"seed": 1000037,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "ebf9e73a46c261a695f5817b7cd4ec1e0b2272cabb3f8cef322efbc58382c911"
+},
+{
+"problem_index": 38,
+"seed": 1000038,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "bbd9bb3868cb5a235bda6fc695319222c69793b8739a8bad34cbd8a229612cfd"
+},
+{
+"problem_index": 39,
+"seed": 1000039,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "4b0c210458923e498113900c01db826416b8060333dace9cb7a2873670af3e30"
+},
+{
+"problem_index": 40,
+"seed": 1000040,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "c4eccebc34f1e05d0eefa4088b41745215c625440364270fc944670f6ced1095"
+},
+{
+"problem_index": 41,
+"seed": 1000041,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "d1e1b78239a49a83f84e1283bf1914a52e3d4083432160828e8f3293f98809ee"
+},
+{
+"problem_index": 42,
+"seed": 1000042,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "a6873d3143c15e1adda942b4afebe7037c8741eaaa47961e4777436e5850ac09"
+},
+{
+"problem_index": 43,
+"seed": 1000043,
+"score": 0,
+"cap_hit": false,
+"text_sha256": "ba226a4c8da39a6d90600958869e7b0316a57696bbac1a95aa28958080031443"
+},
+{
+"problem_index": 44,
+"seed": 1000044,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "afb9ca6c56c05550a97c594f8c9986fef5bec10e6aef3afec705d11022edf8c7"
+},
+{
+"problem_index": 45,
+"seed": 1000045,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "36ceb738df53bc8981977cf74c08a6f1a7d344d62f88ff6464be524c559da361"
+},
+{
+"problem_index": 46,
+"seed": 1000046,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "8a7676a2e01c2a45dca0636ebc7434ccbbdf4196b0a30891202464322d53819a"
+},
+{
+"problem_index": 47,
+"seed": 1000047,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "45cc2f984ab68aa2163884e5281949c675d84a59cbd148988dac1027864a7f5f"
+},
+{
+"problem_index": 48,
+"seed": 1000048,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "e84d8d58404244a59d2712d0c5ac0f34eb7c2890ae29345e659ceace2087428d"
+},
+{
+"problem_index": 49,
+"seed": 1000049,
+"score": 1,
+"cap_hit": false,
+"text_sha256": "8f3b73e208c5fe28f764678ac74a7aedac1000329952bcf6007a18bd1d33665e"
+}
+]
