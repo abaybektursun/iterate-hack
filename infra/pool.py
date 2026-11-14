@@ -33,6 +33,10 @@ image = (
         "safetensors==0.8.0",
         "numpy==2.5.4",
         "datasets==5.2.0",
+        "scikit-learn==1.9.1",
+        "scipy==1.18.1",
+        "pandas==3.1.1",
+        "matplotlib==3.11.2",
     )
     .env({"HF_HOME": "/hf", "PYTHONUNBUFFERED": "1"})
 )
@@ -59,6 +63,7 @@ def run(job_id):
         gpu = subprocess.run(query, capture_output=True, text=True, check=True).stdout.strip()
     jobs[f"start:{job_id}"] = {"at": int(time.time()), "gpu": gpu}
 
+    code.reload()  # a container that started before this commit was uploaded does not see the file otherwise
     with tarfile.open(f"/code/{job['sha']}.tar") as tar:
         tar.extractall("/repo", filter="data")
     out = Path("/runs") / job_id

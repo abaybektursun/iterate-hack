@@ -5,9 +5,14 @@
 """Submit jobs to the team's GPU pool and see what everyone is running.
 
   uv run tools/gpu.py submit <class> [--hours 2] -- <command>   class: h100, b200, cpu
-  uv run tools/gpu.py ls [--all]          queued and running jobs; --all adds finished ones
+  uv run tools/gpu.py ls [--all]          jobs of the last 3 hours, any state; --all: every job
+  uv run tools/gpu.py wait <job-id>       block until the job ends, then print its state and last 20 log lines
   uv run tools/gpu.py logs <job-id> [n]   last n lines of the job's log (default 30)
   uv run tools/gpu.py kill <job-id>
+
+The command is a shell string: one quoted argument, e.g.
+  uv run tools/gpu.py submit cpu -- 'pip install -q einops && python exp/train.py --lr 3e-4'
+Several arguments are quoted one by one and joined.
 
 A job runs the current commit: the tree must be clean and the commit pushed. The command runs from the
 repository root and writes its outputs to $OUT_DIR. Download them into runs/<job-id>/ with
@@ -16,6 +21,7 @@ The log is updated every 30 seconds. The pool itself is infra/pool.py.
 """
 import io
 import secrets
+import shlex
 import subprocess
 import sys
 import time
@@ -51,8 +57,8 @@ def state(r):
         modal.FunctionCall.from_id(r["call"]).get(timeout=0)
     except TimeoutError:
         return "running" if "start" in r else "queued"
-    except Exception as e:  # the container died without writing its end record; the name says how
-        return f"died: {type(e).__name__}"
+    except Exception as e:  # the container died without writing its end record; the error says how
+        return f"died: {type(e).__name__}: {str(e)[:120]}"
     return "done"
 
 
@@ -63,7 +69,7 @@ def submit(args):
     if rest[0] == "--hours":
         hours, rest = float(rest[1]), rest[2:]
     assert rest[0] == "--", "put the command after --"
-    cmd = " ".join(rest[1:])
+    cmd = rest[1] if len(rest) == 2 else shlex.join(rest[1:])
 
     assert not git("status", "--porcelain"), "commit your changes first: a job runs one commit"
     sha = git("rev-parse", "HEAD")
@@ -90,7 +96,7 @@ def ls(args):
     rows = sorted(load().values(), key=lambda r: r["job"]["at"])
     for r in rows:
         s = state(r)
-        if "--all" not in args and s not in ("queued", "running"):
+        if "--all" not in args and time.time() - r["job"]["at"] > 3 * 3600:
             continue
         j = r["job"]
         minutes = (time.time() - j["at"]) / 60
@@ -100,8 +106,20 @@ def ls(args):
 
 def logs(args):
     job_id, n = args[0], int(args[1]) if len(args) > 1 else 30
-    data = b"".join(modal.Volume.from_name("iterate-runs").read_file(f"{job_id}/log"))
+    try:
+        data = b"".join(modal.Volume.from_name("iterate-runs").read_file(f"{job_id}/log"))
+    except FileNotFoundError:
+        sys.exit(f"{job_id} has no log yet; state: {state(load()[job_id])}")
     print("\n".join(data.decode(errors="replace").splitlines()[-n:]))
+
+
+def wait(args):
+    (job_id,) = args
+    while (s := state(load()[job_id])) in ("submitting", "queued", "running"):
+        time.sleep(10)
+    print(s)
+    if not s.startswith("died") and s != "cancelled":
+        logs([job_id, 20])
 
 
 def kill(args):
@@ -113,4 +131,4 @@ def kill(args):
 
 if __name__ == "__main__":
     command, *args = sys.argv[1:] or ["help"]
-    {"submit": submit, "ls": ls, "logs": logs, "kill": kill}.get(command, lambda _: sys.exit(__doc__))(args)
+    {"submit": submit, "ls": ls, "wait": wait, "logs": logs, "kill": kill}.get(command, lambda _: sys.exit(__doc__))(args)

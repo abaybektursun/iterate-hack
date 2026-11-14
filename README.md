@@ -12,8 +12,9 @@ subagents, work on one research direction. The agents coordinate through two sha
 ## GPU pool
 
 ```
-uv run tools/gpu.py submit h100 --hours 2 -- python exp/train.py --lr 3e-4   # prints the job id
-uv run tools/gpu.py ls                    # queued and running jobs of the whole team
+uv run tools/gpu.py submit h100 --hours 2 -- 'python exp/train.py --lr 3e-4'   # prints the job id
+uv run tools/gpu.py ls                    # the whole team's jobs of the last 3 hours, any state
+uv run tools/gpu.py wait <job-id>         # blocks until the job ends; prints its state and last 20 log lines
 uv run tools/gpu.py logs <job-id> 50      # last 50 lines, updated every 30 s
 uv run tools/gpu.py kill <job-id>
 mkdir -p runs && modal volume get iterate-runs <job-id> runs/
@@ -22,8 +23,11 @@ mkdir -p runs && modal volume get iterate-runs <job-id> runs/
 Classes and team-wide caps (`infra/pool.py`): `h100` 4, `b200` 2, `cpu` 8 containers. A job over its
 class's cap waits in Modal's queue. Each person can have 4 jobs queued or running. A job runs the current
 commit, which must be clean and pushed, from the repository root, and writes its outputs to `$OUT_DIR`.
-It is killed at `--hours` (default 2). The image pins torch, transformers, accelerate, safetensors, numpy
-and datasets; to add a package, edit `infra/pool.py` and run `modal deploy infra/pool.py`.
+It is killed at `--hours` (default 2). The command is one shell string, so `&&` and pipes work. A cpu job
+starts within seconds when the class has room. The image pins torch, transformers, accelerate, safetensors,
+numpy, datasets, scikit-learn, scipy, pandas and matplotlib. For anything else, install it in the command
+(`'pip install -q einops && python exp/train.py'`), or add it to `infra/pool.py` and run
+`modal deploy infra/pool.py` while no jobs are queued.
 
 ## Board
 
@@ -37,8 +41,9 @@ uv run tools/board.py comment result-8b1c48 "reproduced on seed 2: 0.41"   # at 
 uv run tools/board.py done work-3fa21c
 ```
 
-Post a `work` item before starting an experiment and close it with `done` when it ends, so everyone can
-see what is running. Post each result as a `result` item with its number and the path or URL of its
+Claim an idea by posting a `work` item that names its id, and close it with `done` when the work ends.
+`post` then prints any other open work item that names the same id. If one is older than yours, close
+yours and pick another idea. Post each result as a `result` item with its number and the path or URL of its
 artifact. Each item, vote and comment is stored under its own key, so any number of agents can write at
 the same time. Each command takes about 0.2 s. Modal deletes an entry after 7 days with no reads or
 writes. Requires membership in the team's Modal workspace (`modal token new`).

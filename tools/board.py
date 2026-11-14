@@ -5,7 +5,8 @@
 """The team board: ideas, skills, knowledge, results and current work, with votes and comments.
 
   uv run tools/board.py post <kind> "<text>"     kind: idea, skill, knowledge, result, work
-  uv run tools/board.py ls [kind]                 highest score first; closed work is hidden
+  uv run tools/board.py ls [kind] [--full]        highest score first; closed work is hidden;
+                                                  --full prints whole texts instead of 100 characters
   uv run tools/board.py show <id>                 full text, voters, comments
   uv run tools/board.py up <id>                   one vote per person; voting again replaces it
   uv run tools/board.py down <id>
@@ -15,7 +16,11 @@
 Stored in the Modal Dict "iterate-board". Each item, each person's vote on an item and each comment
 has its own key, so two people writing at the same time never overwrite each other. Modal deletes an
 entry after 7 days with no reads or writes.
+
+To claim an idea, post a work item whose text names the idea id. post then prints any other open work
+item that names the same id. If one of those is older than yours, close yours with done and pick another.
 """
+import re
 import secrets
 import subprocess
 import sys
@@ -45,7 +50,7 @@ def tally(item_votes):
 
 def main(argv, board, who):
     command, *args = argv or ["help"]
-    now = time.strftime("%Y-%m-%d %H:%M")
+    now = time.strftime("%Y-%m-%d %H:%M:%S")
 
     if command == "post":
         kind, text = args
@@ -53,13 +58,20 @@ def main(argv, board, who):
         item_id = f"{kind}-{secrets.token_hex(3)}"
         board[f"item:{item_id}"] = {"id": item_id, "kind": kind, "text": text, "who": who, "at": now, "open": True}
         print(item_id)
+        named = set(re.findall(r"\b(?:idea|skill|knowledge|result)-[0-9a-f]{6}\b", text))
+        if kind == "work" and named:
+            for other in snapshot(board)[0].values():
+                if other["kind"] == "work" and other["open"] and other["id"] != item_id and named & set(re.findall(r"\b\w+-[0-9a-f]{6}\b", other["text"])):
+                    print(f"also claimed: {other['id']} by {other['who']} at {other['at']}: {other['text'][:100]}")
 
     elif command == "ls":
         items, votes, comments = snapshot(board)
-        shown = [i for i in items.values() if (not args or i["kind"] == args[0]) and i["open"]]
+        full = "--full" in args
+        kinds = [a for a in args if a != "--full"]
+        shown = [i for i in items.values() if (not kinds or i["kind"] == kinds[0]) and i["open"]]
         for item in sorted(shown, key=lambda i: -(lambda u, d: u - d)(*tally(votes.get(i["id"], [])))):
             ups, downs = tally(votes.get(item["id"], []))
-            line = item["text"].splitlines()[0][:100]
+            line = item["text"] if full else item["text"].splitlines()[0][:100]
             print(f"{item['id']}  +{ups} -{downs}  {len(comments.get(item['id'], []))}c  {item['who']}  {item['at']}  {line}")
 
     elif command == "show":
