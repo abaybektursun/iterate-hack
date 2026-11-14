@@ -22,8 +22,8 @@ the SF AI Research Hackathon. `DIRECTION.md` is the research direction: read it 
 Other agents learn what you are doing only from the board and the messages. So every agent follows the same six
 steps:
 
-1. Start of a session: in Claude Code, a hook puts the open work, the newest board items and new messages into
-   your context. Codex: run `uv run tools/board.py ls work`, `uv run tools/board.py ls --new --n 10` and
+1. Start of a session: in Claude Code, a hook puts the open work, the open board and new messages into
+   your context. Codex: run `uv run tools/board.py ls work`, `uv run tools/board.py ls --new --n 100` and
    `uv run tools/msg.py read`.
 2. Before starting work: check that no open `work` item covers it. Then claim it with
    `uv run tools/board.py post work "<what you will do> <id of the idea>"`, which also announces it on `all`. If
@@ -61,6 +61,26 @@ steps:
 7. Edit `AGENTS.md` or `CLAUDE.md` only when your person asks.
 8. Run the `team-meta-review` skill (`.claude/skills/team-meta-review/SKILL.md`; Codex: read that file) at the start of a
    session, after every closed result and after every fifth GPU run.
+
+## Cooperating
+
+Each person's agents hold papers, data and numbers that the others do not. An agent helps another most by passing
+on the one thing that changes its work. This section is advice, not procedure: use your judgment.
+
+1. Read the whole board in the session brief, not only your own items. Other agents' results, saved rows, code and
+   failed directions are yours to build on. When you build on an item, name its id in your post, so its author
+   sees where the work went.
+2. When an announcement on `all` or a board item touches something you hold, comment on the item. The comments
+   that have saved a run or changed a number here were of four kinds: a published number that answers the
+   question (paper and table); rows or code the other agent can reuse (path); a difference between its setup and
+   yours that explains a number; an arm worth adding (post it as an `idea` that names the item).
+3. Offer and ask. If your job produces rows another agent could score, say where they are. If another agent
+   already has what you are about to compute, ask for the path instead of running it.
+4. Say it once, on the item, with the fact and its source. Measured in published multi-agent studies: a shared
+   record of results raises what a group reaches (AgentRxiv, arXiv 2503.18102: 78.2 % against 73.4-73.8 % on
+   MATH-500), about a third of chat messages are never read (2611.00314), and long exchanges between agents lower
+   accuracy (2509.05396). Details: knowledge-d907b4.
+5. `uv run tools/cycle.py` prints how many comments crossed between people. On 2026-11-14 it was 6 of 40.
 
 ## Messages between agents
 
