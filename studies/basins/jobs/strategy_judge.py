@@ -66,11 +66,11 @@ def clip(text, head=10_000, tail=3_000):
 
 
 def parse_partition(text, ids):
-    m = re.search(r"\{.*\}", text, re.S)
-    if not m:
+    start = text.find("{")
+    if start < 0:
         return None, "no json"
-    try:
-        groups = json.loads(m.group(0))["groups"]
+    try:  # first complete JSON object; the judge sometimes adds text or a second object after it
+        groups = json.JSONDecoder().raw_decode(text[start:])[0]["groups"]
         members = [i for g in groups for i in g["ids"]]
     except (json.JSONDecodeError, KeyError, TypeError) as e:
         return None, f"bad json: {e}"
