@@ -15,6 +15,7 @@ Copied from interp_research/infra/modal_app.py and image_base.py: pinned image v
 hf-token secret. Left out: the orchestrator tick, which respawned killed runs, and the GPU fallback walk.
 """
 import os
+import shutil
 import signal
 import subprocess
 import tarfile
@@ -52,8 +53,11 @@ common = dict(
 
 def run(job_id):
     job = jobs[f"job:{job_id}"]
-    gpu = subprocess.run(["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"], capture_output=True, text=True)
-    jobs[f"start:{job_id}"] = {"at": int(time.time()), "gpu": gpu.stdout.strip() or "cpu"}
+    gpu = "cpu"
+    if shutil.which("nvidia-smi"):
+        query = ["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"]
+        gpu = subprocess.run(query, capture_output=True, text=True, check=True).stdout.strip()
+    jobs[f"start:{job_id}"] = {"at": int(time.time()), "gpu": gpu}
 
     with tarfile.open(f"/code/{job['sha']}.tar") as tar:
         tar.extractall("/repo", filter="data")
