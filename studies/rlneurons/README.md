@@ -40,6 +40,8 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/rln5_map_analyze.py` | RLN-5 map readout: reads `runs/<job-id>/`, writes `metrics.json` and `examples.json` (analysis a-e of SPEC5_map.md §6, the test of H). |
 | `specs/SPEC_day1_length_rules.md` | Day-1 length rules spec: double-check short answers D(S), stop at a length cutoff and restart R(L), their combination; token accounting; the choice on MATH-500 and its fixed use on the 328; hypotheses. |
 | `analysis/day1_length_rules.py`, `analysis/day1_length_rules_test.py` | Offline readout of the length rules from the rows of two `run_cell --samples 4` runs (base, RL), and its planted cases. Imports `day1_vote` (`chains`, `vote`, `row`, `tail`). See "Day-1 length rules". |
+| `analysis/day1_hard328.py` | Day-1 #1 readout: the 328 at T 1.0 (four cells) beside the three T 0.6 cells, grader v3, per source, paired bootstrap, identical-text counts, the 50-problem check against T1. |
+| `specs/DAY1_hard328_2026-11-14.md` | Day-1 #1 plan, written before launch: prediction, check rule, seeds, cost. |
 | `grader/rln4_grader_v3.py` | Rescores every saved MATH-500 cell with v1, v2, v3; writes `results/rln4/grader_v3/readout.json`. `CELLS` lists the S3 key of each cell. |
 | `grader/rln4_grader_v3_test.py`, `grader/cases.json` | Grader v3 tests: 22 audited rows plus planted equal and unequal pairs. |
 | `data/rln3/` | `math500.json` (500), `hard.json` (400 harder problems), `frozen.json` (models, revisions, seeds, caps, sha256 of the inputs). |
@@ -50,6 +52,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `results/rln3/` | `rln3_overlap.json` (per-problem overlap flags), `offline/` (prep checks and offline gate). |
 | `results/day1/` | Day-1 rows from `jobs/run_cell.py`: `readout.json` and one folder per job (`check_t1_n10-01/`, `hard328_base_cue_t10-01/`, `hard328_rl_plain_t10-01/`, `math500_base_cue_t06_p10-01/`). |
 | `results/rln4/` | `grader_v3/readout.json` (the final table), `modal_k-01/`, `modal_t2-01/`, `modal_t3-01/` (readouts, metrics, run records), `t1_t2_items-01/` (per-problem T1 against T2, hand labels of the base failures), `offline/`. |
+| `results/day1_hard328/` | `readout.json` (seven-cell table, per source, differences, check) and per T 1.0 cell `<arm>-01/` (`run.json`, `metrics.json` from the job, `examples.json`: one right, one wrong). |
 
 Old paths: `infra/pg/*.py` and `infra/aws_pg/jobs/n13_*.py` are in `lib/`; `infra/aws_pg/jobs/rln*_gen.py` and
 `infra/modal_rln4_k.py` are in `jobs/`; `studies/rlneurons/rln{3,4}/inputs/` is `data/rln{3,4}/`; `rln{3,4}/offline/`,
@@ -128,6 +131,62 @@ problem scored right, one scored wrong, one cap hit, with the real prompt and an
   and v1 wrong are right (`**Answer: 42**` inside the last line; `3√13` with the Unicode root sign). The cap hit has 16,384
   generated tokens, finish reason `length`, no loop. T1's full row has 410 of 500 and 27 cap hits.
 - The RL model writes the cue itself: its plain-prompt answers begin with `' line!\n\nOkay'`.
+
+### Harder 328: four cells at T 1.0 beside the three at T 0.6 (Day-1 #1, board work-a50d39)
+
+All from `results/day1_hard328/readout.json` (`analysis/day1_hard328.py`, plan `specs/DAY1_hard328_2026-11-14.md`; grader v3;
+paired bootstrap, 5,000 resamples, seed 0, 95 % percentile interval, in points). T 0.6 rows are RLN-3's, rescored here with v3
+from S3 (`readout.json` `cells.*.answers`); all three reproduce the expected counts.
+
+| Cell (328 problems) | Right (v3) | Cap hits | Rule-A loops | Tokens per problem | Seed base | Job id, run folder |
+|---|---|---|---|---|---|---|
+| base, plain, T 1.0 / top-p 1.0 | 76 | 35 | 3 | 4,928 | 50,000,000 | `abaybektursun-1114-132922-7ba0`, `results/day1_hard328/base_plain_T1-01/` |
+| base, cue, T 1.0 / top-p 1.0 | 164 | 77 | 1 | 9,344 | 3,000,000 | `abaybektursun-1114-151534-e72c`, `results/day1/hard328_base_cue_t10-01/` |
+| RL, plain, T 1.0 / top-p 1.0 | 206 | 20 | 0 | 9,315 | 3,000,000 | `abaybektursun-1114-151540-86ef`, `results/day1/hard328_rl_plain_t10-01/` |
+| RL, cue, T 1.0 / top-p 1.0 | 205 | 25 | 0 | 9,316 | 50,000,000 | `abaybektursun-1114-132929-a32d`, `results/day1_hard328/rl_cue_T1-01/` |
+| base, plain, T 0.6 / top-p 0.95 (RLN-3) | 107 | 137 | 98 | 8,424 | 3,000,000 | `rlneurons/r3/base-01/out/P_hard.jsonl` |
+| base, cue, T 0.6 / top-p 0.95 (RLN-3) | 119 | 173 | 132 | 10,211 | 3,000,000 | `rlneurons/r3/base-01/out/F_hard.jsonl` |
+| RL, plain, T 0.6 / top-p 0.95 (RLN-3) | 204 | 64 | 26 | 9,377 | 3,000,000 | `rlneurons/r3/s2800-01/out/P_hard.jsonl` |
+
+| Difference (paired, 328) | Points | 95 % interval |
+|---|---|---|
+| RL plain T 1.0 minus base cue T 1.0 | 12.8 | [8.5, 17.1] |
+| RL cue T 1.0 minus base cue T 1.0 | 12.5 | [8.2, 16.8] |
+| base cue, T 1.0 minus T 0.6 | 13.7 | [8.8, 18.9] |
+
+Right per source (`readout.json` `per_source_right_v3`):
+
+| Source (n) | base plain T 1.0 | base cue T 1.0 | RL plain T 1.0 | RL cue T 1.0 |
+|---|---|---|---|---|
+| OlympiadBench (202) | 55 | 114 | 137 | 140 |
+| AIME 2024 (29) | 1 | 10 | 16 | 15 |
+| AIME 2025 (30) | 5 | 7 | 12 | 11 |
+| HMMT Feb 2025 (30) | 3 | 5 | 11 | 8 |
+| AMC 23 (28) | 9 | 22 | 23 | 25 |
+| AIME 2022 (6) | 3 | 5 | 5 | 4 |
+| AIME 2023 (3) | 0 | 1 | 2 | 2 |
+
+- Prediction (spec): partly held. The base with cue gains 13.7 points over T 0.6 ([8.8, 18.9], above the 8-point bar) and its
+  cap hits fall from 173 to 77, but 77 is not under 60. Not refuted (77 is under 120 and the interval excludes 0).
+- The gap at T 1.0 is the same size as on MATH-500 (10.6 [7.4, 13.8]): about 13 points on the 328. The cue does nothing for RL
+  (205 against 206), which already writes it. RL is flat in temperature here too (206 at T 1.0, 204 at T 0.6).
+- At T 1.0 the base's cap hits are long reasoning that does not repeat (rule-A loops 1 of 77); at T 0.6, 132 of its 173 cap hits
+  are loops. The base without the cue is worse at T 1.0 than at T 0.6 (76 against 107), as on MATH-500.
+- Reproduction check (spec rule, fixed before the run): T1's cell on its seeds, MATH-500 first 50, job
+  `abaybektursun-1114-132917-7f81` (`results/day1_hard328/check_t1_n50-01/`): 43 right, 2 cap hits, against T1's 40 and 4 on
+  the same 50. Passed (rule: within 6 and within 4). Same seeds on another GPU: 7 of 50 texts identical, 45 of 50 share the
+  first 200 characters.
+- Same-seed cells: no two of the seven cells share an identical text for any problem (`identical_texts`, all 21 pairs 0).
+  Cells that share seed base 3,000,000 at different temperatures share the first 100 characters often (base cue 106 of 328,
+  RL plain 123 of 328; `same_first_100_chars`), so their paired difference is computed on correlated samples.
+- Hand read, per T 1.0 cell: the first 20 finished answers (by problem index) that v3 scores wrong. Base plain 0 of 20, base
+  cue 0 of 20, RL plain 0 of 20, RL cue 0 of 20 are in fact right; the corrected counts equal the v3 counts. One base-plain
+  answer ends `Therefore ANSWER is 265.` (gold 154) with no marker v3 reads; it is wrong either way.
+- Raw answers: `runs/<job-id>/answers.jsonl` after `uv run tools/gpu.py get <job-id>` (abaybektursun's Modal workspace); the
+  T 0.6 files and T1 are read from `runs/s3/<key>` after `aws s3 cp s3://pg-lineage-769063704696/results/rlneurons/<key>`.
+  Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_hard328`.
+- Cost at 3.95 USD per H100-hour (start to end record of each job): check 5.0 min 0.33 USD, base plain 25.4 min 1.67 USD, RL
+  cue 51.3 min 3.38 USD, base cue 51.8 min 3.41 USD, RL plain 51.6 min 3.40 USD.
 
 Continuation test K (`results/rln4/modal_k-01/readout.json`, 78 of the 86 problems where the base with cue hit the cap at
 T 0.6 and RL was right, SPEC4 §2; grader v1): from the RL model's prefix the base finishes 48 of 78; from its own prefix 23 of 78; fresh restart 38
@@ -381,8 +440,8 @@ and v2 scores) in the owner's bucket, `s3://pg-lineage-769063704696/results/rlne
 
 ## Open
 
-- The harder set (328) has one sample per problem at T 1.0 for the base with cue and RL ("Day-1 rows"). No committed readout
-  for it at T 0.6 or for the plain base.
+- The harder set (328) has one sample per problem per cell (seven cells, "Harder 328: four cells at T 1.0"); no second sample
+  and no seed-to-seed spread on it yet.
 - Temperature and top-p are separated only by totals: 354 (T 0.6 / top-p 0.95), 378 (T 0.6 / top-p 1.0), 410 (T 1.0 /
   top-p 1.0). The top-p step (+4.8 points) has an unpaired interval that includes 0; the paired intervals need the per-problem
   scores of the 354 and 410 rows (raw answers in S3). T 1.0 / top-p 0.95 is not run.

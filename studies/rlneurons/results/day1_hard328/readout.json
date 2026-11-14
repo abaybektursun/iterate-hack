@@ -1,0 +1,272 @@
+{
+ "spec": "studies/rlneurons/specs/DAY1_hard328_2026-11-14.md",
+ "grader": "rln4_lib.grade_v3",
+ "n": 328,
+ "check": {
+  "job": "abaybektursun-1114-132917-7f81",
+  "args": "--model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41000000 --n 50",
+  "ours": {
+   "n": 50,
+   "right_v3": 43,
+   "cap_hits": 2,
+   "loops_A": 0,
+   "mean_generated_tokens": 4062.9
+  },
+  "T1_first50": {
+   "n": 50,
+   "right_v3": 40,
+   "cap_hits": 4,
+   "loops_A": 0,
+   "mean_generated_tokens": 4075.6
+  },
+  "rule": "right within 6 and cap hits within 4",
+  "pass": true,
+  "run_folder": "studies/rlneurons/results/day1_hard328/check_t1_n50-01"
+ },
+ "cells": {
+  "base_plain_T1": {
+   "n": 328,
+   "right_v3": 76,
+   "cap_hits": 35,
+   "loops_A": 3,
+   "mean_generated_tokens": 4928.4,
+   "seed_base": 50000000,
+   "job_id": "abaybektursun-1114-132922-7ba0",
+   "answers": "runs/abaybektursun-1114-132922-7ba0/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1_hard328/base_plain_T1-01"
+  },
+  "base_cue_T1": {
+   "n": 328,
+   "right_v3": 164,
+   "cap_hits": 77,
+   "loops_A": 1,
+   "mean_generated_tokens": 9343.8,
+   "seed_base": 3000000,
+   "job_id": "abaybektursun-1114-151534-e72c",
+   "answers": "runs/abaybektursun-1114-151534-e72c/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1/hard328_base_cue_t10-01"
+  },
+  "rl_plain_T1": {
+   "n": 328,
+   "right_v3": 206,
+   "cap_hits": 20,
+   "loops_A": 0,
+   "mean_generated_tokens": 9315.4,
+   "seed_base": 3000000,
+   "job_id": "abaybektursun-1114-151540-86ef",
+   "answers": "runs/abaybektursun-1114-151540-86ef/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1/hard328_rl_plain_t10-01"
+  },
+  "rl_cue_T1": {
+   "n": 328,
+   "right_v3": 205,
+   "cap_hits": 25,
+   "loops_A": 0,
+   "mean_generated_tokens": 9316.4,
+   "seed_base": 50000000,
+   "job_id": "abaybektursun-1114-132929-a32d",
+   "answers": "runs/abaybektursun-1114-132929-a32d/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1_hard328/rl_cue_T1-01"
+  },
+  "base_plain_T0.6": {
+   "n": 328,
+   "right_v3": 107,
+   "cap_hits": 137,
+   "loops_A": 98,
+   "mean_generated_tokens": 8423.6,
+   "seed_base": 3000000,
+   "job_id": null,
+   "answers": "s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/P_hard.jsonl",
+   "expected": {
+    "right_v3": 107,
+    "cap_hits": 137
+   },
+   "reproduced": true
+  },
+  "base_cue_T0.6": {
+   "n": 328,
+   "right_v3": 119,
+   "cap_hits": 173,
+   "loops_A": 132,
+   "mean_generated_tokens": 10210.9,
+   "seed_base": 3000000,
+   "job_id": null,
+   "answers": "s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_hard.jsonl",
+   "expected": {
+    "right_v3": 119,
+    "cap_hits": 173
+   },
+   "reproduced": true
+  },
+  "rl_plain_T0.6": {
+   "n": 328,
+   "right_v3": 204,
+   "cap_hits": 64,
+   "loops_A": 26,
+   "mean_generated_tokens": 9376.5,
+   "seed_base": 3000000,
+   "job_id": null,
+   "answers": "s3://pg-lineage-769063704696/results/rlneurons/r3/s2800-01/out/P_hard.jsonl",
+   "expected": {
+    "right_v3": 204,
+    "cap_hits": 64
+   },
+   "reproduced": true
+  }
+ },
+ "per_source_right_v3": {
+  "base_plain_T1": {
+   "aime2022": 3,
+   "aime2023": 0,
+   "aime2024": 1,
+   "aime2025": 5,
+   "amc23": 9,
+   "hmmt_feb2025": 3,
+   "olympiadbench": 55
+  },
+  "base_cue_T1": {
+   "aime2022": 5,
+   "aime2023": 1,
+   "aime2024": 10,
+   "aime2025": 7,
+   "amc23": 22,
+   "hmmt_feb2025": 5,
+   "olympiadbench": 114
+  },
+  "rl_plain_T1": {
+   "aime2022": 5,
+   "aime2023": 2,
+   "aime2024": 16,
+   "aime2025": 12,
+   "amc23": 23,
+   "hmmt_feb2025": 11,
+   "olympiadbench": 137
+  },
+  "rl_cue_T1": {
+   "aime2022": 4,
+   "aime2023": 2,
+   "aime2024": 15,
+   "aime2025": 11,
+   "amc23": 25,
+   "hmmt_feb2025": 8,
+   "olympiadbench": 140
+  },
+  "base_plain_T0.6": {
+   "aime2022": 1,
+   "aime2023": 1,
+   "aime2024": 5,
+   "aime2025": 3,
+   "amc23": 12,
+   "hmmt_feb2025": 3,
+   "olympiadbench": 82
+  },
+  "base_cue_T0.6": {
+   "aime2022": 4,
+   "aime2023": 1,
+   "aime2024": 5,
+   "aime2025": 5,
+   "amc23": 15,
+   "hmmt_feb2025": 2,
+   "olympiadbench": 87
+  },
+  "rl_plain_T0.6": {
+   "aime2022": 5,
+   "aime2023": 1,
+   "aime2024": 15,
+   "aime2025": 11,
+   "amc23": 25,
+   "hmmt_feb2025": 9,
+   "olympiadbench": 138
+  },
+  "n": {
+   "aime2022": 6,
+   "aime2023": 3,
+   "aime2024": 29,
+   "aime2025": 30,
+   "amc23": 28,
+   "hmmt_feb2025": 30,
+   "olympiadbench": 202
+  }
+ },
+ "differences": {
+  "rl_plain_T1 minus base_cue_T1": {
+   "points": 12.8,
+   "ci95": [
+    8.54,
+    17.07
+   ]
+  },
+  "rl_cue_T1 minus base_cue_T1": {
+   "points": 12.5,
+   "ci95": [
+    8.23,
+    16.77
+   ]
+  },
+  "base_cue_T1 minus base_cue_T0.6": {
+   "points": 13.72,
+   "ci95": [
+    8.84,
+    18.9
+   ]
+  }
+ },
+ "bootstrap": "paired, 5,000 resamples, seed 0, 95 % percentile",
+ "identical_texts": {
+  "base_cue_T0.6 | base_cue_T1": 0,
+  "base_cue_T0.6 | base_plain_T0.6": 0,
+  "base_cue_T0.6 | base_plain_T1": 0,
+  "base_cue_T0.6 | rl_cue_T1": 0,
+  "base_cue_T0.6 | rl_plain_T0.6": 0,
+  "base_cue_T0.6 | rl_plain_T1": 0,
+  "base_cue_T1 | base_plain_T0.6": 0,
+  "base_cue_T1 | base_plain_T1": 0,
+  "base_cue_T1 | rl_cue_T1": 0,
+  "base_cue_T1 | rl_plain_T0.6": 0,
+  "base_cue_T1 | rl_plain_T1": 0,
+  "base_plain_T0.6 | base_plain_T1": 0,
+  "base_plain_T0.6 | rl_cue_T1": 0,
+  "base_plain_T0.6 | rl_plain_T0.6": 0,
+  "base_plain_T0.6 | rl_plain_T1": 0,
+  "base_plain_T1 | rl_cue_T1": 0,
+  "base_plain_T1 | rl_plain_T0.6": 0,
+  "base_plain_T1 | rl_plain_T1": 0,
+  "rl_cue_T1 | rl_plain_T0.6": 0,
+  "rl_cue_T1 | rl_plain_T1": 0,
+  "rl_plain_T0.6 | rl_plain_T1": 0
+ },
+ "same_first_100_chars": {
+  "base_cue_T0.6 | base_cue_T1": 106,
+  "base_cue_T0.6 | base_plain_T0.6": 0,
+  "base_cue_T0.6 | base_plain_T1": 0,
+  "base_cue_T0.6 | rl_cue_T1": 5,
+  "base_cue_T0.6 | rl_plain_T0.6": 9,
+  "base_cue_T0.6 | rl_plain_T1": 11,
+  "base_cue_T1 | base_plain_T0.6": 0,
+  "base_cue_T1 | base_plain_T1": 0,
+  "base_cue_T1 | rl_cue_T1": 6,
+  "base_cue_T1 | rl_plain_T0.6": 4,
+  "base_cue_T1 | rl_plain_T1": 8,
+  "base_plain_T0.6 | base_plain_T1": 3,
+  "base_plain_T0.6 | rl_cue_T1": 0,
+  "base_plain_T0.6 | rl_plain_T0.6": 0,
+  "base_plain_T0.6 | rl_plain_T1": 0,
+  "base_plain_T1 | rl_cue_T1": 0,
+  "base_plain_T1 | rl_plain_T0.6": 0,
+  "base_plain_T1 | rl_plain_T1": 0,
+  "rl_cue_T1 | rl_plain_T0.6": 73,
+  "rl_cue_T1 | rl_plain_T1": 34,
+  "rl_plain_T0.6 | rl_plain_T1": 123
+ },
+ "prediction": {
+  "text": "base cue T 1.0: under 60 cap hits of 328 and at least 8 points over T 0.6; refuted if cap hits > 120 or the gain's 95 % interval includes 0",
+  "cap_hits": 77,
+  "gain_points": 13.72,
+  "gain_ci95": [
+   8.84,
+   18.9
+  ],
+  "held": false,
+  "refuted": false
+ }
+}
