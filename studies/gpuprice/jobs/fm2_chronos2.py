@@ -1,6 +1,7 @@
 """Round 2: Chronos-2 (amazon/chronos-2, Apache-2.0) quantile functions per listing, zero-shot. GPU job.
 
 uv run tools/gpu.py submit h100 --hours 0.5 -- 'bash studies/gpuprice/jobs/fm2_chronos2.sh --origins dev,event'
+(the class cpu also works, on Modal, when the GPU queues are full: about 10 times slower)
 Reads studies/gpuprice/data/fm2_panel_v2.csv.gz and, for origin t, only its rows dated on or before t.
 Writes $OUT_DIR/fm2_chronos2.csv: setup, series_id, unit, origin_date, horizon_days, one column per native quantile level.
 Every unit is forecast alone (round 1: group attention added nothing). The context is a daily calendar grid that
@@ -23,11 +24,12 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--panel", default="studies/gpuprice/data/fm2_panel_v2.csv.gz")
 ap.add_argument("--origins", default="dev,event")
 ap.add_argument("--max-context", type=int, default=400)
+ap.add_argument("--setups", default="ser,ser_long,lst,lst_long,chn,chn_long,chn_cov,afh")
 a = ap.parse_args()
 ORIG = fm2_lib.origins(a.origins)
 H = fm2_lib.HORIZONS
 
-pipe = Chronos2Pipeline.from_pretrained("amazon/chronos-2", device_map="cuda")
+pipe = Chronos2Pipeline.from_pretrained("amazon/chronos-2", device_map="cuda" if torch.cuda.is_available() else "cpu")
 Q = [float(q) for q in pipe.quantiles]
 print("native quantiles", Q, flush=True)
 
@@ -38,7 +40,7 @@ W = {"ser": fm2_lib.wide(rows[rows.listing == ""], "listing", False), "ser_long"
      "chn": fm2_lib.wide(rows[(rows.listing != "") & ~afh], "chain", False), "chn_long": fm2_lib.wide(rows[(rows.listing != "") & ~afh], "chain", True),
      "afh": fm2_lib.wide(rows[(rows.listing != "") & afh], "listing", False)}
 W["chn_cov"] = W["chn_long"]
-assert len(W["ser"]) == 37 and len(W["lst"]) == 33 and len(W["afh"]) == 4
+W = {k: W[k] for k in a.setups.split(",")}
 
 
 def since_change(x):
