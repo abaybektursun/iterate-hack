@@ -5,7 +5,7 @@
 set -euo pipefail
 O="${1:?usage: run_backtest.sh <out_dir> [--control]}"; shift
 R=$PWD/runs/gpuprice; P=$R/pack/gpu-price-pack-v0.1.1-handover; S=$P/starter
-PY="$R/.venv/bin/python -I -B"; C=2026-11-06; A=2026-10-01; B=2026-10-30
+PY="$R/.venv/bin/python -I -B"; C=2026-11-06; A=${A:-2026-10-01}; B=${B:-2026-10-30}   # origins; override with A=... B=...
 mkdir -p "$O"
 $PY $S/build_series.py --pack $P --cutoff $C --as-of $C --out "$O/history.csv" --catalog "$O/catalog.csv"
 $PY $S/baselines.py --history "$O/history.csv" --origin-start $A --origin-end $B --origin-step 1 \

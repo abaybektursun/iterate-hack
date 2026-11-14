@@ -35,6 +35,7 @@ read in full 2026-11-14) fixes:
 | `jobs/sim_median.py` | SPEC1 forecaster: resamples each listing's historical h-day outcome (price change, exit, entry) and takes the median. `--control` resamples the median's own change. Laptop, 40 s. |
 | `jobs/run_backtest.sh` | One command for the SPEC1 backtest: series build at 2026-11-06, `last_value_empirical`, simulator, merge (afhubbard keeps the baseline), scorer. `bash studies/gpuprice/jobs/run_backtest.sh runs/gpuprice/<dir> [--control]` gives 0.196504. |
 | `results/spec1/sim-01/`, `results/spec1/control-01/` | SPEC1 and its control on the event set. |
+| `results/spec1/late-01/` | SPEC1 unchanged and `last_value_empirical` on six later origins that no earlier run used. |
 | `ATTRIBUTION.md` | The pack's attribution file. It must stay with any work that uses the pack. |
 
 The pack: `runs/gpuprice/pack/gpu-price-pack-v0.1.1-handover/` (v0.1.1-handover, data to 2026-11-06 23:59:59 UTC,
@@ -75,6 +76,15 @@ bootstrap over the 37 series; better on 26 of 37 series and 25 of 30 origins). B
 worse. By collector: fastgpu_daily +0.215 against +0.105 (20 series), gpurentalprices +0.169 against +0.162 (13).
 The control equals the baseline, so the gain comes from the listing-level state, not from the windows. The
 intervals are still too narrow (0.60 to 0.66 inside against 0.80).
+
+**Unseen origins (`results/spec1/late-01/`).** The simulator, unchanged, on the six origins 2026-10-31 to
+2026-11-05, which no earlier run used (357 cells: 209 at 1 day, 148 at 3 days; 7 days has no truth): pooled skill
++0.061 against +0.089 for `last_value_empirical`. At 1 day the simulator is worse, +0.055 against +0.123
+(difference -0.068, 95 % interval -0.111 to -0.008). At 3 days it ties, +0.065 against +0.063 (difference +0.003,
+-0.037 to +0.042). So the 1-day loss seen on the October origins is real, the 3-day gain (+0.180 against +0.138
+there) did not repeat on these 4 origins, and the 7-day gain is untested on unseen origins. The largest losses are
+`gpurentalprices.marketplace_ask.H100_80GB.spot.median`, 3 listings that turn over daily, where the simulator's
+interval is too narrow.
 
 The starter rows match the pack's own README (+0.20 and +0.17). The number to beat is **+0.126 pooled** on the
 event set (strongest starter baseline). Its intervals are too narrow: 55 to 69 % of truths fall inside
