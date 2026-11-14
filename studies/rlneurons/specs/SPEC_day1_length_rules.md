@@ -143,6 +143,25 @@ uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rln
 
 One model alone (`--base` or `--rl` only) prints that model's rows without the RL-minus-base and equal-tokens blocks.
 
-## Test record
+## Test record (laptop, 2026-11-14)
 
-Added with the script (next commit).
+- `day1_length_rules_test`: all planted cases pass. D(2000): equal forms agree (no third sample); 2 of 3 fix a wrong short
+  answer; a right short answer is broken when samples 1 and 2 share a wrong answer; three different answers keep sample 0; a
+  repeated wrong answer stays; `n_new` = S is checked and S + 1 is not; a cap hit is never checked; a sample without an answer
+  casts no vote; four samples without an answer score wrong; check samples cost their full length. R(8000): `n_new` = L is not
+  stopped and L + 1 is; a right long answer is broken by a wrong restart; three stops then sample 3 in full (3 x 8,000 +
+  16,384 tokens); four cap hits. D+R: stop, then check with the next two samples (11,700 tokens by hand); samples running out;
+  no sample left; check samples not stopped. Readout: four planted problems per model, 10 settings checked against
+  hand-computed right counts, tokens per problem, fixed, broke, checks and stops; `--choose` picks R8000 (3 right at 3,275
+  against a budget of 4,200); `--fixed` scores only the fixed rows and reports a fixed setting above the budget as such.
+- Refused, as planted: status `running`; a missing sample; a missing problem; a run of three samples; a cap hit without its
+  restart; `--fixed` with a `chosen.json` from the same problem set; `--choose` on the 328, without the RL run, or with no
+  setting within the budget; two problem sets; swapped models; an existing `--out`. The restart's answer (attempt 2) is not read.
+- 14 mutations of the script each failed the test: `>=` at the cutoff; `<` at S; no cap-hit condition; stopped tokens not
+  counted; check tokens not counted; never a third sample; the vote ignored; the last attempt read in place of attempt 0; no
+  budget filter; no token tie-break; the same-set refusal off; the status check off; the four-sample check off; `fixed`
+  counted with `>=`.
+- End to end on `run_cell --dry-run` rows (10 problems, 4 samples, 2 restarts, both models, MATH-500 and hard328; the stand-in
+  serves right, wrong, cap hit in turn): single 4, every D(S) 4, every R(L) 7, every D(S)+R(L) 7 of 10, as worked out by hand
+  from the stand-in's order; `--choose` wrote R8000; `--fixed` on the hard328 rows scored `single` and `R8000` only. On these
+  rows D(S) costs 16,406 tokens per problem against 4,926 single, because a check sample that hits the cap costs 16,384.
