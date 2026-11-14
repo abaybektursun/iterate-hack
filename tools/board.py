@@ -101,7 +101,7 @@ def main(argv, board, who):
         (item_id,) = args
         item = board[f"item:{item_id}"]
         assert item["kind"] == "work", f"{item_id} is a {item['kind']}, not a work item"
-        board[f"item:{item_id}"] = {**item, "open": False}
+        board[f"item:{item_id}"] = {**item, "open": False, "closed_by": who, "closed_at": now}
 
     else:
         sys.exit(__doc__)
@@ -111,4 +111,7 @@ if __name__ == "__main__":
     import modal
 
     email = subprocess.run(["git", "config", "user.email"], capture_output=True, text=True, check=True).stdout.strip()
+    import events
+
+    events.log("board", sys.argv[1:], email.split("@")[0])
     main(sys.argv[1:], modal.Dict.from_name("iterate-board", create_if_missing=True), email.split("@")[0])

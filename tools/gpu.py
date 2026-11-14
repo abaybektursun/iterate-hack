@@ -130,5 +130,8 @@ def kill(args):
 
 
 if __name__ == "__main__":
+    import events
+
+    events.log("gpu", sys.argv[1:], git("config", "user.email").split("@")[0])
     command, *args = sys.argv[1:] or ["help"]
     {"submit": submit, "ls": ls, "wait": wait, "logs": logs, "kill": kill}.get(command, lambda _: sys.exit(__doc__))(args)

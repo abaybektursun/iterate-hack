@@ -1,6 +1,6 @@
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["pypdf>=5"]
+# dependencies = ["pypdf>=5", "modal>=1.4"]
 # ///
 """Download a paper or post, then add specific findings from it to the team's past.dev memory.
 
@@ -20,11 +20,14 @@ import io
 import json
 import re
 import subprocess
+import sys
 import time
 import unicodedata
 import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
+
+import events
 
 PAPERS = Path(__file__).resolve().parent.parent / "papers"
 MIN_QUOTE_CHARS = 30
@@ -112,4 +115,6 @@ p.add_argument("--quote", required=True, help="exact words from the paper that s
 p.add_argument("finding", help="one specific result: setup, numbers, and what it means for us")
 p.set_defaults(run=add)
 args = parser.parse_args()
+email = subprocess.run(["git", "config", "user.email"], capture_output=True, text=True, check=True).stdout
+events.log("paper", sys.argv[1:], email.strip().split("@")[0])
 args.run(args)

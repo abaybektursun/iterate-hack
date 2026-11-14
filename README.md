@@ -9,6 +9,7 @@ subagents, work on one research direction. The agents coordinate through two sha
 | Memory (past.dev project) | specific findings from papers and posts; everyone's Claude Code sessions | `uv run tools/paper.py`, `python3 tools/recall.py` |
 | GPU pool (Modal app `iterate-pool`) | every shared GPU job, queued and capped team-wide | `uv run tools/gpu.py` |
 | vast.ai (your own account) | your private GPU rentals | `python3 tools/vast.py` |
+| Traces (Modal Volume `iterate-traces`) | agent transcripts and daily copies of the records above | `uv run tools/traces.py` |
 
 ## Compute
 
@@ -139,6 +140,24 @@ read in full, appendix included, and only specific results go into memory.
 
    `add` refuses a quote that is not in the paper's text, or that is shorter than 30 letters and digits.
 4. Before starting on an idea, search: `python3 tools/recall.py "<the idea, in the field's own terms>"`.
+
+## Telemetry and traces
+
+Someone will analyze how the team worked, so every action leaves a record:
+
+| Record | Where | Written by |
+|---|---|---|
+| Every `board.py`, `gpu.py` and `paper.py` command: time, person, agent (claude-code or codex, with its session id, and whether it ran as a subagent), commit, full command line | Modal Dict `iterate-events` | the tools, automatically |
+| Every pool job: submitter, commit, command, GPU, start and end times, exit code, log and outputs | Dict `iterate-jobs`, Volumes `iterate-runs` and `iterate-code` | `gpu.py` and the pool |
+| Board items, votes and comments, with times; who closed each work item and when | Dict `iterate-board` | `board.py` |
+| Agent transcripts (Claude Code with subagents, Codex) | Volume `iterate-traces/<who>/` | `uv run tools/traces.py push`, by each person |
+| Copies of the three Dicts (they drop entries after 7 days unused) | Volume `iterate-traces/export/` | `uv run tools/traces.py export` |
+
+Run `uv run tools/traces.py push` at the end of each working session, and `export` once a day (anyone). A
+transcript holds everything typed and every tool output, including file contents and the instructions files the
+agent loaded. `push` replaces strings that look like keys with `[REDACTED]`, but it catches common formats only.
+vast.ai rentals are private and are recorded only on your laptop, in `runs/vast/`. The analyst reads everything
+with `modal volume get iterate-traces / traces/`.
 
 ## Codex agents
 
