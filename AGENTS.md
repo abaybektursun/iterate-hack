@@ -32,6 +32,8 @@ the SF AI Research Hackathon. `DIRECTION.md` is the research direction: read it 
    (`../iterate-hack-<name>`). Push small commits often: a job runs only a pushed commit.
 6. Never `git add -A` or `git add .`; commit files by name.
 7. Edit `AGENTS.md` or `CLAUDE.md` only when your person asks.
+8. Run the `meta-review` skill (`.claude/skills/meta-review/SKILL.md`; Codex: read that file) at the start of a
+   session, after every closed result and after every fifth GPU run.
 
 ## Messages between agents
 
