@@ -31,8 +31,10 @@ def s3():
 @functools.cache
 def table():
     import boto3
+    from botocore.config import Config
 
-    return boto3.Session(profile_name=PROFILE, region_name="us-east-1").resource("dynamodb").Table("iterate-board")
+    retries = Config(retries={"max_attempts": 12, "mode": "adaptive"})  # a burst of writers is throttled for a few seconds
+    return boto3.Session(profile_name=PROFILE, region_name="us-east-1").resource("dynamodb", config=retries).Table("iterate-board")
 
 
 class Store:
