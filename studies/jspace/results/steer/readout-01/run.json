@@ -1,0 +1,8 @@
+{
+ "job_id": "sameraslan-1114-214804-e127",
+ "commit": "7f269e9a27d7fb275a40d8f4c4a4fe88518438cb",
+ "smoke_job_id": "sameraslan-1114-214652-7b06",
+ "gpu": "NVIDIA H100 80GB HBM3",
+ "wall_s": 52.17681169509888,
+ "command": "python -m studies.jspace.jobs.steer_readout --commit 7f269e9a27d7fb275a40d8f4c4a4fe88518438cb --arms none,steer:hold:L24:0.017,steer:hold:L24:0.034,steer:hold:L24:0.068,steer:hold:L24:0.1,steer:hold:L20:0.128,steer:rand:L24:0.068,steer:hold:L24:0.5 --block-norms 24:39.54429244995117,20:28.583463668823242 --read-lens /runs/sameraslan-1114-185927-7df1/base_wikitext_jlens.pt --every 8"
+}

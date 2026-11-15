@@ -1,0 +1,3313 @@
+[
+ {
+  "problem_index": 384,
+  "arms": {
+   "none": {
+    "positions": 337,
+    "hold_present": 22,
+    "wrap_present": 25,
+    "out_top1_hold": 2,
+    "out_lp_hold": -5880.90869140625,
+    "kl_from_none": 0.0,
+    "lp_written": -158.93264770507812
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 337,
+    "hold_present": 32,
+    "wrap_present": 27,
+    "out_top1_hold": 2,
+    "out_lp_hold": -5707.6279296875,
+    "kl_from_none": 0.03762620687484741,
+    "lp_written": -158.36117553710938
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 337,
+    "hold_present": 46,
+    "wrap_present": 27,
+    "out_top1_hold": 2,
+    "out_lp_hold": -5525.2099609375,
+    "kl_from_none": 0.13411054015159607,
+    "lp_written": -157.86260986328125
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 337,
+    "hold_present": 96,
+    "wrap_present": 27,
+    "out_top1_hold": 2,
+    "out_lp_hold": -5134.07568359375,
+    "kl_from_none": 0.6970765590667725,
+    "lp_written": -157.65753173828125
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 337,
+    "hold_present": 147,
+    "wrap_present": 26,
+    "out_top1_hold": 3,
+    "out_lp_hold": -4754.1728515625,
+    "kl_from_none": 7.068249702453613,
+    "lp_written": -163.4799346923828
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 337,
+    "hold_present": 132,
+    "wrap_present": 25,
+    "out_top1_hold": 2,
+    "out_lp_hold": -4920.7431640625,
+    "kl_from_none": 5.732251167297363,
+    "lp_written": -159.15310668945312
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 337,
+    "hold_present": 21,
+    "wrap_present": 25,
+    "out_top1_hold": 2,
+    "out_lp_hold": -5873.40673828125,
+    "kl_from_none": 0.1420956254005432,
+    "lp_written": -158.30343627929688
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 337,
+    "hold_present": 337,
+    "wrap_present": 5,
+    "out_top1_hold": 16,
+    "out_lp_hold": -2018.10546875,
+    "kl_from_none": 107.06309509277344,
+    "lp_written": -258.21136474609375
+   }
+  }
+ },
+ {
+  "problem_index": 488,
+  "arms": {
+   "none": {
+    "positions": 358,
+    "hold_present": 17,
+    "wrap_present": 27,
+    "out_top1_hold": 2,
+    "out_lp_hold": -6539.2373046875,
+    "kl_from_none": 0.0,
+    "lp_written": -60.351463317871094
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 358,
+    "hold_present": 26,
+    "wrap_present": 27,
+    "out_top1_hold": 2,
+    "out_lp_hold": -6366.056640625,
+    "kl_from_none": 0.02448057010769844,
+    "lp_written": -60.334625244140625
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 358,
+    "hold_present": 57,
+    "wrap_present": 33,
+    "out_top1_hold": 2,
+    "out_lp_hold": -6178.7685546875,
+    "kl_from_none": 0.09631859511137009,
+    "lp_written": -60.21156311035156
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 358,
+    "hold_present": 122,
+    "wrap_present": 32,
+    "out_top1_hold": 2,
+    "out_lp_hold": -5778.0341796875,
+    "kl_from_none": 0.56974196434021,
+    "lp_written": -60.78945541381836
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 358,
+    "hold_present": 206,
+    "wrap_present": 30,
+    "out_top1_hold": 3,
+    "out_lp_hold": -5369.3759765625,
+    "kl_from_none": 3.340007781982422,
+    "lp_written": -63.426231384277344
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 358,
+    "hold_present": 181,
+    "wrap_present": 29,
+    "out_top1_hold": 3,
+    "out_lp_hold": -5486.39990234375,
+    "kl_from_none": 4.124133586883545,
+    "lp_written": -65.16068267822266
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 358,
+    "hold_present": 17,
+    "wrap_present": 28,
+    "out_top1_hold": 2,
+    "out_lp_hold": -6523.35205078125,
+    "kl_from_none": 0.12297917902469635,
+    "lp_written": -60.195770263671875
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 358,
+    "hold_present": 358,
+    "wrap_present": 2,
+    "out_top1_hold": 12,
+    "out_lp_hold": -2374.28955078125,
+    "kl_from_none": 66.87039184570312,
+    "lp_written": -120.03277587890625
+   }
+  }
+ },
+ {
+  "problem_index": 216,
+  "arms": {
+   "none": {
+    "positions": 385,
+    "hold_present": 14,
+    "wrap_present": 30,
+    "out_top1_hold": 0,
+    "out_lp_hold": -6829.31591796875,
+    "kl_from_none": 0.0,
+    "lp_written": -98.4559326171875
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 385,
+    "hold_present": 17,
+    "wrap_present": 32,
+    "out_top1_hold": 0,
+    "out_lp_hold": -6637.462890625,
+    "kl_from_none": 0.03982308506965637,
+    "lp_written": -98.83265686035156
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 385,
+    "hold_present": 41,
+    "wrap_present": 31,
+    "out_top1_hold": 0,
+    "out_lp_hold": -6433.03271484375,
+    "kl_from_none": 0.1437217891216278,
+    "lp_written": -99.1107177734375
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 385,
+    "hold_present": 113,
+    "wrap_present": 31,
+    "out_top1_hold": 1,
+    "out_lp_hold": -5987.17138671875,
+    "kl_from_none": 1.1520024538040161,
+    "lp_written": -101.02788543701172
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 385,
+    "hold_present": 216,
+    "wrap_present": 30,
+    "out_top1_hold": 2,
+    "out_lp_hold": -5530.22265625,
+    "kl_from_none": 10.197813034057617,
+    "lp_written": -110.76217651367188
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 385,
+    "hold_present": 188,
+    "wrap_present": 30,
+    "out_top1_hold": 1,
+    "out_lp_hold": -5746.58984375,
+    "kl_from_none": 7.867402076721191,
+    "lp_written": -106.80888366699219
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 385,
+    "hold_present": 14,
+    "wrap_present": 30,
+    "out_top1_hold": 0,
+    "out_lp_hold": -6829.603515625,
+    "kl_from_none": 0.13235899806022644,
+    "lp_written": -98.39201354980469
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 385,
+    "hold_present": 385,
+    "wrap_present": 4,
+    "out_top1_hold": 19,
+    "out_lp_hold": -2092.99267578125,
+    "kl_from_none": 124.98445892333984,
+    "lp_written": -232.6025390625
+   }
+  }
+ },
+ {
+  "problem_index": 40,
+  "arms": {
+   "none": {
+    "positions": 385,
+    "hold_present": 15,
+    "wrap_present": 28,
+    "out_top1_hold": 1,
+    "out_lp_hold": -7028.3681640625,
+    "kl_from_none": 0.0,
+    "lp_written": -112.97918701171875
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 385,
+    "hold_present": 26,
+    "wrap_present": 29,
+    "out_top1_hold": 1,
+    "out_lp_hold": -6830.744140625,
+    "kl_from_none": 0.030504096299409866,
+    "lp_written": -113.22615051269531
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 385,
+    "hold_present": 41,
+    "wrap_present": 29,
+    "out_top1_hold": 1,
+    "out_lp_hold": -6617.4375,
+    "kl_from_none": 0.11346045136451721,
+    "lp_written": -113.2169189453125
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 385,
+    "hold_present": 86,
+    "wrap_present": 26,
+    "out_top1_hold": 2,
+    "out_lp_hold": -6178.0712890625,
+    "kl_from_none": 0.957313060760498,
+    "lp_written": -113.87312316894531
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 385,
+    "hold_present": 152,
+    "wrap_present": 23,
+    "out_top1_hold": 4,
+    "out_lp_hold": -5773.9775390625,
+    "kl_from_none": 10.142760276794434,
+    "lp_written": -122.62081146240234
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 385,
+    "hold_present": 122,
+    "wrap_present": 25,
+    "out_top1_hold": 2,
+    "out_lp_hold": -6047.103515625,
+    "kl_from_none": 4.465575218200684,
+    "lp_written": -116.67346954345703
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 385,
+    "hold_present": 13,
+    "wrap_present": 28,
+    "out_top1_hold": 1,
+    "out_lp_hold": -7048.6259765625,
+    "kl_from_none": 0.12444773316383362,
+    "lp_written": -112.24999237060547
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 385,
+    "hold_present": 385,
+    "wrap_present": 2,
+    "out_top1_hold": 14,
+    "out_lp_hold": -2439.291015625,
+    "kl_from_none": 112.07281494140625,
+    "lp_written": -223.30288696289062
+   }
+  }
+ },
+ {
+  "problem_index": 0,
+  "arms": {
+   "none": {
+    "positions": 503,
+    "hold_present": 15,
+    "wrap_present": 33,
+    "out_top1_hold": 2,
+    "out_lp_hold": -9037.98828125,
+    "kl_from_none": 0.0,
+    "lp_written": -209.28628540039062
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 503,
+    "hold_present": 24,
+    "wrap_present": 33,
+    "out_top1_hold": 2,
+    "out_lp_hold": -8806.666015625,
+    "kl_from_none": 0.0644148737192154,
+    "lp_written": -209.20785522460938
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 503,
+    "hold_present": 34,
+    "wrap_present": 34,
+    "out_top1_hold": 2,
+    "out_lp_hold": -8559.224609375,
+    "kl_from_none": 0.24003446102142334,
+    "lp_written": -209.4617462158203
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 503,
+    "hold_present": 96,
+    "wrap_present": 37,
+    "out_top1_hold": 2,
+    "out_lp_hold": -8033.12646484375,
+    "kl_from_none": 1.0036733150482178,
+    "lp_written": -210.77072143554688
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 503,
+    "hold_present": 164,
+    "wrap_present": 34,
+    "out_top1_hold": 3,
+    "out_lp_hold": -7510.080078125,
+    "kl_from_none": 2.8824620246887207,
+    "lp_written": -213.0514373779297
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 503,
+    "hold_present": 133,
+    "wrap_present": 35,
+    "out_top1_hold": 3,
+    "out_lp_hold": -7835.9189453125,
+    "kl_from_none": 5.073962688446045,
+    "lp_written": -211.62255859375
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 503,
+    "hold_present": 15,
+    "wrap_present": 33,
+    "out_top1_hold": 2,
+    "out_lp_hold": -9026.763671875,
+    "kl_from_none": 0.2427496314048767,
+    "lp_written": -209.49591064453125
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 503,
+    "hold_present": 503,
+    "wrap_present": 7,
+    "out_top1_hold": 22,
+    "out_lp_hold": -3222.7861328125,
+    "kl_from_none": 113.58089447021484,
+    "lp_written": -319.08099365234375
+   }
+  }
+ },
+ {
+  "problem_index": 72,
+  "arms": {
+   "none": {
+    "positions": 529,
+    "hold_present": 36,
+    "wrap_present": 24,
+    "out_top1_hold": 4,
+    "out_lp_hold": -9760.6689453125,
+    "kl_from_none": 0.0,
+    "lp_written": -142.05221557617188
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 529,
+    "hold_present": 52,
+    "wrap_present": 23,
+    "out_top1_hold": 4,
+    "out_lp_hold": -9511.7109375,
+    "kl_from_none": 0.04909420385956764,
+    "lp_written": -142.10377502441406
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 529,
+    "hold_present": 78,
+    "wrap_present": 23,
+    "out_top1_hold": 5,
+    "out_lp_hold": -9247.7373046875,
+    "kl_from_none": 0.18771272897720337,
+    "lp_written": -142.20932006835938
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 529,
+    "hold_present": 156,
+    "wrap_present": 26,
+    "out_top1_hold": 6,
+    "out_lp_hold": -8680.5869140625,
+    "kl_from_none": 0.8496776819229126,
+    "lp_written": -142.990478515625
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 529,
+    "hold_present": 230,
+    "wrap_present": 23,
+    "out_top1_hold": 8,
+    "out_lp_hold": -8127.3896484375,
+    "kl_from_none": 8.448688507080078,
+    "lp_written": -150.90277099609375
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 529,
+    "hold_present": 195,
+    "wrap_present": 23,
+    "out_top1_hold": 6,
+    "out_lp_hold": -8440.884765625,
+    "kl_from_none": 4.801253318786621,
+    "lp_written": -148.07174682617188
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 529,
+    "hold_present": 35,
+    "wrap_present": 25,
+    "out_top1_hold": 3,
+    "out_lp_hold": -9732.310546875,
+    "kl_from_none": 0.14389526844024658,
+    "lp_written": -142.3330078125
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 529,
+    "hold_present": 529,
+    "wrap_present": 2,
+    "out_top1_hold": 27,
+    "out_lp_hold": -3616.93701171875,
+    "kl_from_none": 127.330078125,
+    "lp_written": -269.127685546875
+   }
+  }
+ },
+ {
+  "problem_index": 344,
+  "arms": {
+   "none": {
+    "positions": 525,
+    "hold_present": 20,
+    "wrap_present": 24,
+    "out_top1_hold": 1,
+    "out_lp_hold": -10284.076171875,
+    "kl_from_none": 0.0,
+    "lp_written": -140.6487274169922
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 525,
+    "hold_present": 31,
+    "wrap_present": 25,
+    "out_top1_hold": 1,
+    "out_lp_hold": -10025.4853515625,
+    "kl_from_none": 0.03816772997379303,
+    "lp_written": -140.4477081298828
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 525,
+    "hold_present": 57,
+    "wrap_present": 24,
+    "out_top1_hold": 1,
+    "out_lp_hold": -9749.845703125,
+    "kl_from_none": 0.14278501272201538,
+    "lp_written": -140.2826690673828
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 525,
+    "hold_present": 162,
+    "wrap_present": 23,
+    "out_top1_hold": 2,
+    "out_lp_hold": -9150.392578125,
+    "kl_from_none": 0.790367841720581,
+    "lp_written": -140.6125030517578
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 525,
+    "hold_present": 245,
+    "wrap_present": 23,
+    "out_top1_hold": 4,
+    "out_lp_hold": -8575.201171875,
+    "kl_from_none": 6.870857238769531,
+    "lp_written": -145.6242218017578
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 525,
+    "hold_present": 221,
+    "wrap_present": 22,
+    "out_top1_hold": 2,
+    "out_lp_hold": -8865.69921875,
+    "kl_from_none": 4.874373435974121,
+    "lp_written": -146.3363037109375
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 525,
+    "hold_present": 19,
+    "wrap_present": 23,
+    "out_top1_hold": 1,
+    "out_lp_hold": -10272.115234375,
+    "kl_from_none": 0.17599701881408691,
+    "lp_written": -141.45379638671875
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 525,
+    "hold_present": 525,
+    "wrap_present": 4,
+    "out_top1_hold": 17,
+    "out_lp_hold": -3742.34033203125,
+    "kl_from_none": 110.0854263305664,
+    "lp_written": -240.44775390625
+   }
+  }
+ },
+ {
+  "problem_index": 48,
+  "arms": {
+   "none": {
+    "positions": 604,
+    "hold_present": 23,
+    "wrap_present": 56,
+    "out_top1_hold": 2,
+    "out_lp_hold": -10975.541015625,
+    "kl_from_none": 0.0,
+    "lp_written": -212.07009887695312
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 604,
+    "hold_present": 36,
+    "wrap_present": 59,
+    "out_top1_hold": 2,
+    "out_lp_hold": -10696.759765625,
+    "kl_from_none": 0.05879441648721695,
+    "lp_written": -211.99185180664062
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 604,
+    "hold_present": 53,
+    "wrap_present": 61,
+    "out_top1_hold": 2,
+    "out_lp_hold": -10395.80859375,
+    "kl_from_none": 0.21547666192054749,
+    "lp_written": -211.8541717529297
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 604,
+    "hold_present": 139,
+    "wrap_present": 61,
+    "out_top1_hold": 3,
+    "out_lp_hold": -9761.8251953125,
+    "kl_from_none": 0.9001028537750244,
+    "lp_written": -211.7151641845703
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 604,
+    "hold_present": 256,
+    "wrap_present": 58,
+    "out_top1_hold": 4,
+    "out_lp_hold": -9139.4140625,
+    "kl_from_none": 2.4362950325012207,
+    "lp_written": -212.28709411621094
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 604,
+    "hold_present": 218,
+    "wrap_present": 53,
+    "out_top1_hold": 3,
+    "out_lp_hold": -9546.1259765625,
+    "kl_from_none": 5.563960075378418,
+    "lp_written": -213.32606506347656
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 604,
+    "hold_present": 21,
+    "wrap_present": 53,
+    "out_top1_hold": 2,
+    "out_lp_hold": -10982.068359375,
+    "kl_from_none": 0.23054282367229462,
+    "lp_written": -211.23123168945312
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 604,
+    "hold_present": 604,
+    "wrap_present": 11,
+    "out_top1_hold": 24,
+    "out_lp_hold": -4071.61767578125,
+    "kl_from_none": 120.92341613769531,
+    "lp_written": -327.2796630859375
+   }
+  }
+ },
+ {
+  "problem_index": 424,
+  "arms": {
+   "none": {
+    "positions": 588,
+    "hold_present": 27,
+    "wrap_present": 38,
+    "out_top1_hold": 2,
+    "out_lp_hold": -10554.046875,
+    "kl_from_none": 0.0,
+    "lp_written": -164.89068603515625
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 588,
+    "hold_present": 39,
+    "wrap_present": 38,
+    "out_top1_hold": 3,
+    "out_lp_hold": -10283.123046875,
+    "kl_from_none": 0.06452085077762604,
+    "lp_written": -164.78517150878906
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 588,
+    "hold_present": 58,
+    "wrap_present": 38,
+    "out_top1_hold": 3,
+    "out_lp_hold": -9998.513671875,
+    "kl_from_none": 0.243968203663826,
+    "lp_written": -165.050537109375
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 588,
+    "hold_present": 157,
+    "wrap_present": 42,
+    "out_top1_hold": 4,
+    "out_lp_hold": -9401.8515625,
+    "kl_from_none": 0.9884568452835083,
+    "lp_written": -165.2081756591797
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 588,
+    "hold_present": 261,
+    "wrap_present": 39,
+    "out_top1_hold": 4,
+    "out_lp_hold": -8821.5439453125,
+    "kl_from_none": 2.4986467361450195,
+    "lp_written": -165.53475952148438
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 588,
+    "hold_present": 219,
+    "wrap_present": 39,
+    "out_top1_hold": 3,
+    "out_lp_hold": -9160.9296875,
+    "kl_from_none": 4.944345474243164,
+    "lp_written": -168.9720458984375
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 588,
+    "hold_present": 26,
+    "wrap_present": 38,
+    "out_top1_hold": 2,
+    "out_lp_hold": -10560.48828125,
+    "kl_from_none": 0.18971548974514008,
+    "lp_written": -164.73599243164062
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 588,
+    "hold_present": 588,
+    "wrap_present": 16,
+    "out_top1_hold": 18,
+    "out_lp_hold": -4005.54833984375,
+    "kl_from_none": 109.62101745605469,
+    "lp_written": -270.18865966796875
+   }
+  }
+ },
+ {
+  "problem_index": 160,
+  "arms": {
+   "none": {
+    "positions": 624,
+    "hold_present": 32,
+    "wrap_present": 32,
+    "out_top1_hold": 1,
+    "out_lp_hold": -11728.666015625,
+    "kl_from_none": 0.0,
+    "lp_written": -149.81402587890625
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 624,
+    "hold_present": 55,
+    "wrap_present": 32,
+    "out_top1_hold": 1,
+    "out_lp_hold": -11424.884765625,
+    "kl_from_none": 0.06769336760044098,
+    "lp_written": -150.01234436035156
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 624,
+    "hold_present": 96,
+    "wrap_present": 34,
+    "out_top1_hold": 1,
+    "out_lp_hold": -11099.33984375,
+    "kl_from_none": 0.25673967599868774,
+    "lp_written": -150.26248168945312
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 624,
+    "hold_present": 228,
+    "wrap_present": 32,
+    "out_top1_hold": 1,
+    "out_lp_hold": -10409.3447265625,
+    "kl_from_none": 1.1067702770233154,
+    "lp_written": -151.29705810546875
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 624,
+    "hold_present": 342,
+    "wrap_present": 31,
+    "out_top1_hold": 2,
+    "out_lp_hold": -9722.3232421875,
+    "kl_from_none": 2.848722219467163,
+    "lp_written": -152.9540557861328
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 624,
+    "hold_present": 303,
+    "wrap_present": 32,
+    "out_top1_hold": 2,
+    "out_lp_hold": -10152.814453125,
+    "kl_from_none": 5.187786102294922,
+    "lp_written": -151.819091796875
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 624,
+    "hold_present": 28,
+    "wrap_present": 31,
+    "out_top1_hold": 1,
+    "out_lp_hold": -11721.0166015625,
+    "kl_from_none": 0.22081589698791504,
+    "lp_written": -149.9921875
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 624,
+    "hold_present": 624,
+    "wrap_present": 7,
+    "out_top1_hold": 21,
+    "out_lp_hold": -4208.79443359375,
+    "kl_from_none": 140.37091064453125,
+    "lp_written": -288.6428527832031
+   }
+  }
+ },
+ {
+  "problem_index": 472,
+  "arms": {
+   "none": {
+    "positions": 628,
+    "hold_present": 31,
+    "wrap_present": 54,
+    "out_top1_hold": 4,
+    "out_lp_hold": -11321.529296875,
+    "kl_from_none": 0.0,
+    "lp_written": -148.13397216796875
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 628,
+    "hold_present": 51,
+    "wrap_present": 54,
+    "out_top1_hold": 5,
+    "out_lp_hold": -11019.83984375,
+    "kl_from_none": 0.046712443232536316,
+    "lp_written": -148.38490295410156
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 628,
+    "hold_present": 82,
+    "wrap_present": 57,
+    "out_top1_hold": 5,
+    "out_lp_hold": -10691.8232421875,
+    "kl_from_none": 0.1857624650001526,
+    "lp_written": -148.69972229003906
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 628,
+    "hold_present": 215,
+    "wrap_present": 62,
+    "out_top1_hold": 5,
+    "out_lp_hold": -9976.7578125,
+    "kl_from_none": 0.8060107231140137,
+    "lp_written": -149.85809326171875
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 628,
+    "hold_present": 355,
+    "wrap_present": 60,
+    "out_top1_hold": 5,
+    "out_lp_hold": -9259.2734375,
+    "kl_from_none": 1.948380947113037,
+    "lp_written": -151.06396484375
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 628,
+    "hold_present": 316,
+    "wrap_present": 58,
+    "out_top1_hold": 5,
+    "out_lp_hold": -9634.490234375,
+    "kl_from_none": 3.947648048400879,
+    "lp_written": -154.22801208496094
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 628,
+    "hold_present": 31,
+    "wrap_present": 53,
+    "out_top1_hold": 5,
+    "out_lp_hold": -11296.689453125,
+    "kl_from_none": 0.23274846374988556,
+    "lp_written": -149.86239624023438
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 628,
+    "hold_present": 628,
+    "wrap_present": 4,
+    "out_top1_hold": 24,
+    "out_lp_hold": -4006.59033203125,
+    "kl_from_none": 117.87361145019531,
+    "lp_written": -273.3708801269531
+   }
+  }
+ },
+ {
+  "problem_index": 312,
+  "arms": {
+   "none": {
+    "positions": 665,
+    "hold_present": 16,
+    "wrap_present": 50,
+    "out_top1_hold": 2,
+    "out_lp_hold": -12640.75,
+    "kl_from_none": 0.0,
+    "lp_written": -259.8715515136719
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 665,
+    "hold_present": 33,
+    "wrap_present": 52,
+    "out_top1_hold": 2,
+    "out_lp_hold": -12325.19140625,
+    "kl_from_none": 0.05478774011135101,
+    "lp_written": -260.20391845703125
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 665,
+    "hold_present": 55,
+    "wrap_present": 53,
+    "out_top1_hold": 2,
+    "out_lp_hold": -11991.017578125,
+    "kl_from_none": 0.1807803511619568,
+    "lp_written": -260.787353515625
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 665,
+    "hold_present": 139,
+    "wrap_present": 58,
+    "out_top1_hold": 2,
+    "out_lp_hold": -11297.0390625,
+    "kl_from_none": 0.7789834141731262,
+    "lp_written": -261.5414733886719
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 665,
+    "hold_present": 246,
+    "wrap_present": 54,
+    "out_top1_hold": 3,
+    "out_lp_hold": -10611.263671875,
+    "kl_from_none": 9.51788330078125,
+    "lp_written": -270.11810302734375
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 665,
+    "hold_present": 207,
+    "wrap_present": 57,
+    "out_top1_hold": 2,
+    "out_lp_hold": -11026.32421875,
+    "kl_from_none": 11.121939659118652,
+    "lp_written": -272.14617919921875
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 665,
+    "hold_present": 15,
+    "wrap_present": 47,
+    "out_top1_hold": 2,
+    "out_lp_hold": -12626.52734375,
+    "kl_from_none": 0.29341357946395874,
+    "lp_written": -259.6574401855469
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 665,
+    "hold_present": 665,
+    "wrap_present": 6,
+    "out_top1_hold": 18,
+    "out_lp_hold": -4570.7841796875,
+    "kl_from_none": 134.58187866210938,
+    "lp_written": -403.173583984375
+   }
+  }
+ },
+ {
+  "problem_index": 200,
+  "arms": {
+   "none": {
+    "positions": 766,
+    "hold_present": 39,
+    "wrap_present": 44,
+    "out_top1_hold": 3,
+    "out_lp_hold": -13747.544921875,
+    "kl_from_none": 0.0,
+    "lp_written": -242.27525329589844
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 766,
+    "hold_present": 57,
+    "wrap_present": 47,
+    "out_top1_hold": 3,
+    "out_lp_hold": -13393.7919921875,
+    "kl_from_none": 0.06796583533287048,
+    "lp_written": -242.23977661132812
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 766,
+    "hold_present": 86,
+    "wrap_present": 51,
+    "out_top1_hold": 3,
+    "out_lp_hold": -13007.37890625,
+    "kl_from_none": 0.2628058195114136,
+    "lp_written": -242.68431091308594
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 766,
+    "hold_present": 236,
+    "wrap_present": 50,
+    "out_top1_hold": 3,
+    "out_lp_hold": -12171.708984375,
+    "kl_from_none": 1.6934243440628052,
+    "lp_written": -244.7537384033203
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 766,
+    "hold_present": 481,
+    "wrap_present": 46,
+    "out_top1_hold": 5,
+    "out_lp_hold": -11364.966796875,
+    "kl_from_none": 9.373019218444824,
+    "lp_written": -253.12245178222656
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 766,
+    "hold_present": 421,
+    "wrap_present": 44,
+    "out_top1_hold": 3,
+    "out_lp_hold": -11820.5625,
+    "kl_from_none": 11.164443969726562,
+    "lp_written": -252.27845764160156
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 766,
+    "hold_present": 38,
+    "wrap_present": 42,
+    "out_top1_hold": 3,
+    "out_lp_hold": -13739.8720703125,
+    "kl_from_none": 0.26832911372184753,
+    "lp_written": -242.76071166992188
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 766,
+    "hold_present": 766,
+    "wrap_present": 11,
+    "out_top1_hold": 25,
+    "out_lp_hold": -4915.4228515625,
+    "kl_from_none": 117.54500579833984,
+    "lp_written": -362.1163330078125
+   }
+  }
+ },
+ {
+  "problem_index": 280,
+  "arms": {
+   "none": {
+    "positions": 782,
+    "hold_present": 23,
+    "wrap_present": 49,
+    "out_top1_hold": 4,
+    "out_lp_hold": -14598.7177734375,
+    "kl_from_none": 0.0,
+    "lp_written": -285.39935302734375
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 782,
+    "hold_present": 38,
+    "wrap_present": 50,
+    "out_top1_hold": 4,
+    "out_lp_hold": -14224.6142578125,
+    "kl_from_none": 0.05055462568998337,
+    "lp_written": -284.9663391113281
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 782,
+    "hold_present": 69,
+    "wrap_present": 49,
+    "out_top1_hold": 4,
+    "out_lp_hold": -13830.958984375,
+    "kl_from_none": 0.18100914359092712,
+    "lp_written": -284.5743103027344
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 782,
+    "hold_present": 192,
+    "wrap_present": 53,
+    "out_top1_hold": 5,
+    "out_lp_hold": -12987.240234375,
+    "kl_from_none": 1.0029617547988892,
+    "lp_written": -284.5635681152344
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 782,
+    "hold_present": 320,
+    "wrap_present": 50,
+    "out_top1_hold": 7,
+    "out_lp_hold": -12221.27734375,
+    "kl_from_none": 15.90595817565918,
+    "lp_written": -297.991455078125
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 782,
+    "hold_present": 267,
+    "wrap_present": 50,
+    "out_top1_hold": 4,
+    "out_lp_hold": -12704.7880859375,
+    "kl_from_none": 8.614580154418945,
+    "lp_written": -290.5351867675781
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 782,
+    "hold_present": 23,
+    "wrap_present": 48,
+    "out_top1_hold": 3,
+    "out_lp_hold": -14612.4296875,
+    "kl_from_none": 0.2254941314458847,
+    "lp_written": -285.8758850097656
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 782,
+    "hold_present": 782,
+    "wrap_present": 11,
+    "out_top1_hold": 27,
+    "out_lp_hold": -5656.7734375,
+    "kl_from_none": 149.41073608398438,
+    "lp_written": -429.76861572265625
+   }
+  }
+ },
+ {
+  "problem_index": 144,
+  "arms": {
+   "none": {
+    "positions": 782,
+    "hold_present": 27,
+    "wrap_present": 73,
+    "out_top1_hold": 2,
+    "out_lp_hold": -14724.298828125,
+    "kl_from_none": 0.0,
+    "lp_written": -251.42730712890625
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 782,
+    "hold_present": 38,
+    "wrap_present": 75,
+    "out_top1_hold": 2,
+    "out_lp_hold": -14360.5302734375,
+    "kl_from_none": 0.06241029500961304,
+    "lp_written": -251.359130859375
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 782,
+    "hold_present": 63,
+    "wrap_present": 76,
+    "out_top1_hold": 2,
+    "out_lp_hold": -13973.1328125,
+    "kl_from_none": 0.2358233630657196,
+    "lp_written": -251.35372924804688
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 782,
+    "hold_present": 196,
+    "wrap_present": 81,
+    "out_top1_hold": 3,
+    "out_lp_hold": -13123.296875,
+    "kl_from_none": 1.3980844020843506,
+    "lp_written": -252.05758666992188
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 782,
+    "hold_present": 363,
+    "wrap_present": 78,
+    "out_top1_hold": 4,
+    "out_lp_hold": -12319.271484375,
+    "kl_from_none": 6.658344268798828,
+    "lp_written": -258.3747863769531
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 782,
+    "hold_present": 297,
+    "wrap_present": 77,
+    "out_top1_hold": 3,
+    "out_lp_hold": -12835.7294921875,
+    "kl_from_none": 5.093426704406738,
+    "lp_written": -254.58396911621094
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 782,
+    "hold_present": 27,
+    "wrap_present": 70,
+    "out_top1_hold": 2,
+    "out_lp_hold": -14695.681640625,
+    "kl_from_none": 0.2448183000087738,
+    "lp_written": -252.6023712158203
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 782,
+    "hold_present": 782,
+    "wrap_present": 15,
+    "out_top1_hold": 26,
+    "out_lp_hold": -5553.3544921875,
+    "kl_from_none": 158.99620056152344,
+    "lp_written": -410.5970764160156
+   }
+  }
+ },
+ {
+  "problem_index": 8,
+  "arms": {
+   "none": {
+    "positions": 846,
+    "hold_present": 39,
+    "wrap_present": 64,
+    "out_top1_hold": 1,
+    "out_lp_hold": -15677.650390625,
+    "kl_from_none": 0.0,
+    "lp_written": -229.89308166503906
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 846,
+    "hold_present": 58,
+    "wrap_present": 67,
+    "out_top1_hold": 2,
+    "out_lp_hold": -15267.8349609375,
+    "kl_from_none": 0.07450400292873383,
+    "lp_written": -229.6497802734375
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 846,
+    "hold_present": 120,
+    "wrap_present": 67,
+    "out_top1_hold": 3,
+    "out_lp_hold": -14827.384765625,
+    "kl_from_none": 0.2779046297073364,
+    "lp_written": -229.48583984375
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 846,
+    "hold_present": 231,
+    "wrap_present": 72,
+    "out_top1_hold": 3,
+    "out_lp_hold": -13874.853515625,
+    "kl_from_none": 1.1680235862731934,
+    "lp_written": -230.07083129882812
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 846,
+    "hold_present": 409,
+    "wrap_present": 74,
+    "out_top1_hold": 4,
+    "out_lp_hold": -12980.283203125,
+    "kl_from_none": 4.574934959411621,
+    "lp_written": -233.57383728027344
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 846,
+    "hold_present": 338,
+    "wrap_present": 65,
+    "out_top1_hold": 4,
+    "out_lp_hold": -13572.52734375,
+    "kl_from_none": 6.466341018676758,
+    "lp_written": -235.0322723388672
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 846,
+    "hold_present": 38,
+    "wrap_present": 61,
+    "out_top1_hold": 1,
+    "out_lp_hold": -15654.90234375,
+    "kl_from_none": 0.2940753996372223,
+    "lp_written": -230.6148681640625
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 846,
+    "hold_present": 846,
+    "wrap_present": 12,
+    "out_top1_hold": 32,
+    "out_lp_hold": -5857.92041015625,
+    "kl_from_none": 193.248291015625,
+    "lp_written": -420.7874755859375
+   }
+  }
+ },
+ {
+  "problem_index": 56,
+  "arms": {
+   "none": {
+    "positions": 946,
+    "hold_present": 36,
+    "wrap_present": 52,
+    "out_top1_hold": 3,
+    "out_lp_hold": -17856.45703125,
+    "kl_from_none": 0.0,
+    "lp_written": -310.9861145019531
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 946,
+    "hold_present": 68,
+    "wrap_present": 58,
+    "out_top1_hold": 3,
+    "out_lp_hold": -17421.27734375,
+    "kl_from_none": 0.06682541221380234,
+    "lp_written": -311.6394348144531
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 946,
+    "hold_present": 107,
+    "wrap_present": 61,
+    "out_top1_hold": 3,
+    "out_lp_hold": -16958.890625,
+    "kl_from_none": 0.24133440852165222,
+    "lp_written": -311.8397521972656
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 946,
+    "hold_present": 236,
+    "wrap_present": 64,
+    "out_top1_hold": 4,
+    "out_lp_hold": -15964.103515625,
+    "kl_from_none": 1.2235101461410522,
+    "lp_written": -313.3948974609375
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 946,
+    "hold_present": 449,
+    "wrap_present": 65,
+    "out_top1_hold": 5,
+    "out_lp_hold": -15008.380859375,
+    "kl_from_none": 11.867914199829102,
+    "lp_written": -324.00067138671875
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 946,
+    "hold_present": 371,
+    "wrap_present": 55,
+    "out_top1_hold": 4,
+    "out_lp_hold": -15550.7109375,
+    "kl_from_none": 7.9825053215026855,
+    "lp_written": -317.8349609375
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 946,
+    "hold_present": 35,
+    "wrap_present": 49,
+    "out_top1_hold": 3,
+    "out_lp_hold": -17835.3984375,
+    "kl_from_none": 0.3035734295845032,
+    "lp_written": -311.8494873046875
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 946,
+    "hold_present": 946,
+    "wrap_present": 9,
+    "out_top1_hold": 26,
+    "out_lp_hold": -6687.2060546875,
+    "kl_from_none": 155.0054473876953,
+    "lp_written": -478.1109313964844
+   }
+  }
+ },
+ {
+  "problem_index": 272,
+  "arms": {
+   "none": {
+    "positions": 1104,
+    "hold_present": 40,
+    "wrap_present": 72,
+    "out_top1_hold": 6,
+    "out_lp_hold": -20548.9921875,
+    "kl_from_none": 0.0,
+    "lp_written": -383.27252197265625
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 1104,
+    "hold_present": 67,
+    "wrap_present": 74,
+    "out_top1_hold": 6,
+    "out_lp_hold": -20039.04296875,
+    "kl_from_none": 0.09940081834793091,
+    "lp_written": -382.59185791015625
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 1104,
+    "hold_present": 119,
+    "wrap_present": 81,
+    "out_top1_hold": 6,
+    "out_lp_hold": -19511.6640625,
+    "kl_from_none": 0.35875940322875977,
+    "lp_written": -382.32220458984375
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 1104,
+    "hold_present": 282,
+    "wrap_present": 89,
+    "out_top1_hold": 9,
+    "out_lp_hold": -18418.95703125,
+    "kl_from_none": 1.5179978609085083,
+    "lp_written": -381.1772155761719
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 1104,
+    "hold_present": 518,
+    "wrap_present": 89,
+    "out_top1_hold": 9,
+    "out_lp_hold": -17360.685546875,
+    "kl_from_none": 10.179229736328125,
+    "lp_written": -387.6752624511719
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 1104,
+    "hold_present": 422,
+    "wrap_present": 84,
+    "out_top1_hold": 9,
+    "out_lp_hold": -18051.91796875,
+    "kl_from_none": 7.380736827850342,
+    "lp_written": -386.4082336425781
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 1104,
+    "hold_present": 39,
+    "wrap_present": 69,
+    "out_top1_hold": 6,
+    "out_lp_hold": -20567.3359375,
+    "kl_from_none": 0.4670834541320801,
+    "lp_written": -383.73974609375
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 1104,
+    "hold_present": 1104,
+    "wrap_present": 12,
+    "out_top1_hold": 40,
+    "out_lp_hold": -7802.6611328125,
+    "kl_from_none": 229.20724487304688,
+    "lp_written": -611.189697265625
+   }
+  }
+ },
+ {
+  "problem_index": 16,
+  "arms": {
+   "none": {
+    "positions": 1149,
+    "hold_present": 64,
+    "wrap_present": 73,
+    "out_top1_hold": 7,
+    "out_lp_hold": -20588.591796875,
+    "kl_from_none": 0.0,
+    "lp_written": -470.52557373046875
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 1149,
+    "hold_present": 100,
+    "wrap_present": 73,
+    "out_top1_hold": 7,
+    "out_lp_hold": -20082.5234375,
+    "kl_from_none": 0.09728623181581497,
+    "lp_written": -470.7785339355469
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 1149,
+    "hold_present": 177,
+    "wrap_present": 71,
+    "out_top1_hold": 7,
+    "out_lp_hold": -19535.328125,
+    "kl_from_none": 0.3438088893890381,
+    "lp_written": -471.341064453125
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 1149,
+    "hold_present": 374,
+    "wrap_present": 67,
+    "out_top1_hold": 7,
+    "out_lp_hold": -18350.03515625,
+    "kl_from_none": 1.4255343675613403,
+    "lp_written": -472.7686767578125
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 1149,
+    "hold_present": 584,
+    "wrap_present": 61,
+    "out_top1_hold": 7,
+    "out_lp_hold": -17213.21875,
+    "kl_from_none": 4.436994552612305,
+    "lp_written": -476.9244079589844
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 1149,
+    "hold_present": 526,
+    "wrap_present": 58,
+    "out_top1_hold": 7,
+    "out_lp_hold": -17820.466796875,
+    "kl_from_none": 7.474723815917969,
+    "lp_written": -481.2228088378906
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 1149,
+    "hold_present": 62,
+    "wrap_present": 65,
+    "out_top1_hold": 7,
+    "out_lp_hold": -20602.287109375,
+    "kl_from_none": 0.4018312096595764,
+    "lp_written": -473.77239990234375
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 1149,
+    "hold_present": 1149,
+    "wrap_present": 8,
+    "out_top1_hold": 46,
+    "out_lp_hold": -7855.1669921875,
+    "kl_from_none": 203.19273376464844,
+    "lp_written": -684.2666015625
+   }
+  }
+ },
+ {
+  "problem_index": 464,
+  "arms": {
+   "none": {
+    "positions": 1202,
+    "hold_present": 43,
+    "wrap_present": 77,
+    "out_top1_hold": 6,
+    "out_lp_hold": -22345.763671875,
+    "kl_from_none": 0.0,
+    "lp_written": -378.9388427734375
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 1202,
+    "hold_present": 64,
+    "wrap_present": 76,
+    "out_top1_hold": 6,
+    "out_lp_hold": -21821.109375,
+    "kl_from_none": 0.1095205768942833,
+    "lp_written": -379.57196044921875
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 1202,
+    "hold_present": 112,
+    "wrap_present": 81,
+    "out_top1_hold": 7,
+    "out_lp_hold": -21282.58203125,
+    "kl_from_none": 0.4043920636177063,
+    "lp_written": -380.3600158691406
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 1202,
+    "hold_present": 306,
+    "wrap_present": 77,
+    "out_top1_hold": 7,
+    "out_lp_hold": -20091.693359375,
+    "kl_from_none": 1.6770628690719604,
+    "lp_written": -383.6486511230469
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 1202,
+    "hold_present": 530,
+    "wrap_present": 69,
+    "out_top1_hold": 9,
+    "out_lp_hold": -18894.57421875,
+    "kl_from_none": 11.844724655151367,
+    "lp_written": -395.25836181640625
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 1202,
+    "hold_present": 448,
+    "wrap_present": 77,
+    "out_top1_hold": 8,
+    "out_lp_hold": -19661.541015625,
+    "kl_from_none": 15.289083480834961,
+    "lp_written": -399.7624816894531
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 1202,
+    "hold_present": 42,
+    "wrap_present": 74,
+    "out_top1_hold": 6,
+    "out_lp_hold": -22294.65234375,
+    "kl_from_none": 0.37224143743515015,
+    "lp_written": -379.3854675292969
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 1202,
+    "hold_present": 1202,
+    "wrap_present": 21,
+    "out_top1_hold": 42,
+    "out_lp_hold": -8407.013671875,
+    "kl_from_none": 247.48452758789062,
+    "lp_written": -636.3187255859375
+   }
+  }
+ },
+ {
+  "problem_index": 368,
+  "arms": {
+   "none": {
+    "positions": 1224,
+    "hold_present": 50,
+    "wrap_present": 128,
+    "out_top1_hold": 11,
+    "out_lp_hold": -22249.125,
+    "kl_from_none": 0.0,
+    "lp_written": -445.30206298828125
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 1224,
+    "hold_present": 73,
+    "wrap_present": 131,
+    "out_top1_hold": 11,
+    "out_lp_hold": -21715.80078125,
+    "kl_from_none": 0.08555690944194794,
+    "lp_written": -445.59490966796875
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 1224,
+    "hold_present": 115,
+    "wrap_present": 134,
+    "out_top1_hold": 11,
+    "out_lp_hold": -21150.15625,
+    "kl_from_none": 0.3071919083595276,
+    "lp_written": -445.686767578125
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 1224,
+    "hold_present": 314,
+    "wrap_present": 140,
+    "out_top1_hold": 11,
+    "out_lp_hold": -19939.609375,
+    "kl_from_none": 1.3366637229919434,
+    "lp_written": -446.53704833984375
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 1224,
+    "hold_present": 507,
+    "wrap_present": 141,
+    "out_top1_hold": 13,
+    "out_lp_hold": -18732.466796875,
+    "kl_from_none": 6.070861339569092,
+    "lp_written": -450.5232849121094
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 1224,
+    "hold_present": 430,
+    "wrap_present": 141,
+    "out_top1_hold": 11,
+    "out_lp_hold": -19516.009765625,
+    "kl_from_none": 7.848319053649902,
+    "lp_written": -451.37042236328125
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 1224,
+    "hold_present": 50,
+    "wrap_present": 117,
+    "out_top1_hold": 11,
+    "out_lp_hold": -22233.96484375,
+    "kl_from_none": 0.418497771024704,
+    "lp_written": -444.95465087890625
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 1224,
+    "hold_present": 1224,
+    "wrap_present": 26,
+    "out_top1_hold": 45,
+    "out_lp_hold": -8382.9072265625,
+    "kl_from_none": 206.06210327148438,
+    "lp_written": -657.1749267578125
+   }
+  }
+ },
+ {
+  "problem_index": 128,
+  "arms": {
+   "none": {
+    "positions": 1308,
+    "hold_present": 82,
+    "wrap_present": 59,
+    "out_top1_hold": 16,
+    "out_lp_hold": -19066.53125,
+    "kl_from_none": 0.0,
+    "lp_written": -1049.07421875
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 1308,
+    "hold_present": 104,
+    "wrap_present": 61,
+    "out_top1_hold": 19,
+    "out_lp_hold": -18480.3046875,
+    "kl_from_none": 0.12998774647712708,
+    "lp_written": -1049.236572265625
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 1308,
+    "hold_present": 138,
+    "wrap_present": 64,
+    "out_top1_hold": 19,
+    "out_lp_hold": -17867.4375,
+    "kl_from_none": 0.43312034010887146,
+    "lp_written": -1049.191162109375
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 1308,
+    "hold_present": 264,
+    "wrap_present": 68,
+    "out_top1_hold": 19,
+    "out_lp_hold": -16616.322265625,
+    "kl_from_none": 1.9910733699798584,
+    "lp_written": -1051.051513671875
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 1308,
+    "hold_present": 493,
+    "wrap_present": 68,
+    "out_top1_hold": 22,
+    "out_lp_hold": -15516.21875,
+    "kl_from_none": 12.868720054626465,
+    "lp_written": -1063.2607421875
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 1308,
+    "hold_present": 399,
+    "wrap_present": 66,
+    "out_top1_hold": 17,
+    "out_lp_hold": -16396.1171875,
+    "kl_from_none": 12.895203590393066,
+    "lp_written": -1067.1654052734375
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 1308,
+    "hold_present": 80,
+    "wrap_present": 59,
+    "out_top1_hold": 16,
+    "out_lp_hold": -19160.91015625,
+    "kl_from_none": 0.47133833169937134,
+    "lp_written": -1050.318115234375
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 1308,
+    "hold_present": 1308,
+    "wrap_present": 20,
+    "out_top1_hold": 66,
+    "out_lp_hold": -7052.234375,
+    "kl_from_none": 266.4964599609375,
+    "lp_written": -1300.939208984375
+   }
+  }
+ },
+ {
+  "problem_index": 376,
+  "arms": {
+   "none": {
+    "positions": 1421,
+    "hold_present": 43,
+    "wrap_present": 73,
+    "out_top1_hold": 4,
+    "out_lp_hold": -29331.939453125,
+    "kl_from_none": 0.0,
+    "lp_written": -190.6139373779297
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 1421,
+    "hold_present": 80,
+    "wrap_present": 77,
+    "out_top1_hold": 4,
+    "out_lp_hold": -28690.09765625,
+    "kl_from_none": 0.04664107784628868,
+    "lp_written": -190.54583740234375
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 1421,
+    "hold_present": 151,
+    "wrap_present": 83,
+    "out_top1_hold": 4,
+    "out_lp_hold": -28005.3125,
+    "kl_from_none": 0.17692124843597412,
+    "lp_written": -190.5465850830078
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 1421,
+    "hold_present": 504,
+    "wrap_present": 93,
+    "out_top1_hold": 4,
+    "out_lp_hold": -26500.609375,
+    "kl_from_none": 1.5961557626724243,
+    "lp_written": -191.36752319335938
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 1421,
+    "hold_present": 852,
+    "wrap_present": 91,
+    "out_top1_hold": 5,
+    "out_lp_hold": -25021.41796875,
+    "kl_from_none": 9.970441818237305,
+    "lp_written": -199.38055419921875
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 1421,
+    "hold_present": 704,
+    "wrap_present": 79,
+    "out_top1_hold": 4,
+    "out_lp_hold": -25934.6171875,
+    "kl_from_none": 6.013199806213379,
+    "lp_written": -198.67019653320312
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 1421,
+    "hold_present": 40,
+    "wrap_present": 60,
+    "out_top1_hold": 4,
+    "out_lp_hold": -29302.23828125,
+    "kl_from_none": 0.23441161215305328,
+    "lp_written": -190.26541137695312
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 1421,
+    "hold_present": 1421,
+    "wrap_present": 5,
+    "out_top1_hold": 35,
+    "out_lp_hold": -11673.6015625,
+    "kl_from_none": 228.49212646484375,
+    "lp_written": -420.8033142089844
+   }
+  }
+ },
+ {
+  "problem_index": 208,
+  "arms": {
+   "none": {
+    "positions": 1593,
+    "hold_present": 68,
+    "wrap_present": 125,
+    "out_top1_hold": 9,
+    "out_lp_hold": -28917.25390625,
+    "kl_from_none": 0.0,
+    "lp_written": -740.235595703125
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 1593,
+    "hold_present": 82,
+    "wrap_present": 132,
+    "out_top1_hold": 9,
+    "out_lp_hold": -28188.88671875,
+    "kl_from_none": 0.1159341037273407,
+    "lp_written": -740.3189697265625
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 1593,
+    "hold_present": 116,
+    "wrap_present": 138,
+    "out_top1_hold": 10,
+    "out_lp_hold": -27421.75,
+    "kl_from_none": 0.405269056558609,
+    "lp_written": -740.7762451171875
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 1593,
+    "hold_present": 317,
+    "wrap_present": 142,
+    "out_top1_hold": 11,
+    "out_lp_hold": -25826.708984375,
+    "kl_from_none": 1.6409695148468018,
+    "lp_written": -741.5623779296875
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 1593,
+    "hold_present": 622,
+    "wrap_present": 144,
+    "out_top1_hold": 11,
+    "out_lp_hold": -24276.142578125,
+    "kl_from_none": 4.3228607177734375,
+    "lp_written": -743.7646484375
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 1593,
+    "hold_present": 508,
+    "wrap_present": 133,
+    "out_top1_hold": 11,
+    "out_lp_hold": -25262.0703125,
+    "kl_from_none": 9.790872573852539,
+    "lp_written": -754.9539794921875
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 1593,
+    "hold_present": 66,
+    "wrap_present": 118,
+    "out_top1_hold": 9,
+    "out_lp_hold": -28926.9140625,
+    "kl_from_none": 0.5633678436279297,
+    "lp_written": -739.5675048828125
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 1593,
+    "hold_present": 1593,
+    "wrap_present": 27,
+    "out_top1_hold": 63,
+    "out_lp_hold": -11118.951171875,
+    "kl_from_none": 280.4810485839844,
+    "lp_written": -1012.887939453125
+   }
+  }
+ },
+ {
+  "problem_index": 440,
+  "arms": {
+   "none": {
+    "positions": 1698,
+    "hold_present": 66,
+    "wrap_present": 84,
+    "out_top1_hold": 14,
+    "out_lp_hold": -31513.361328125,
+    "kl_from_none": 0.0,
+    "lp_written": -545.141357421875
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 1698,
+    "hold_present": 98,
+    "wrap_present": 93,
+    "out_top1_hold": 15,
+    "out_lp_hold": -30715.12109375,
+    "kl_from_none": 0.12019674479961395,
+    "lp_written": -545.6183471679688
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 1698,
+    "hold_present": 188,
+    "wrap_present": 98,
+    "out_top1_hold": 15,
+    "out_lp_hold": -29852.88671875,
+    "kl_from_none": 0.4182788133621216,
+    "lp_written": -546.1395263671875
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 1698,
+    "hold_present": 589,
+    "wrap_present": 106,
+    "out_top1_hold": 17,
+    "out_lp_hold": -27983.541015625,
+    "kl_from_none": 1.7069640159606934,
+    "lp_written": -547.4039306640625
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 1698,
+    "hold_present": 947,
+    "wrap_present": 98,
+    "out_top1_hold": 21,
+    "out_lp_hold": -26151.625,
+    "kl_from_none": 6.440152168273926,
+    "lp_written": -551.6611938476562
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 1698,
+    "hold_present": 832,
+    "wrap_present": 92,
+    "out_top1_hold": 17,
+    "out_lp_hold": -27223.01953125,
+    "kl_from_none": 9.320938110351562,
+    "lp_written": -553.8118896484375
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 1698,
+    "hold_present": 63,
+    "wrap_present": 80,
+    "out_top1_hold": 14,
+    "out_lp_hold": -31488.373046875,
+    "kl_from_none": 0.4419317841529846,
+    "lp_written": -544.734130859375
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 1698,
+    "hold_present": 1698,
+    "wrap_present": 14,
+    "out_top1_hold": 66,
+    "out_lp_hold": -12266.923828125,
+    "kl_from_none": 288.37396240234375,
+    "lp_written": -838.6047973632812
+   }
+  }
+ },
+ {
+  "problem_index": 256,
+  "arms": {
+   "none": {
+    "positions": 1790,
+    "hold_present": 113,
+    "wrap_present": 99,
+    "out_top1_hold": 12,
+    "out_lp_hold": -32337.796875,
+    "kl_from_none": 0.0,
+    "lp_written": -564.7984008789062
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 1790,
+    "hold_present": 170,
+    "wrap_present": 111,
+    "out_top1_hold": 13,
+    "out_lp_hold": -31519.470703125,
+    "kl_from_none": 0.13442707061767578,
+    "lp_written": -565.3492431640625
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 1790,
+    "hold_present": 252,
+    "wrap_present": 115,
+    "out_top1_hold": 13,
+    "out_lp_hold": -30635.82421875,
+    "kl_from_none": 0.49473968148231506,
+    "lp_written": -566.07421875
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 1790,
+    "hold_present": 646,
+    "wrap_present": 126,
+    "out_top1_hold": 14,
+    "out_lp_hold": -28726.51171875,
+    "kl_from_none": 2.1215624809265137,
+    "lp_written": -568.371337890625
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 1790,
+    "hold_present": 1042,
+    "wrap_present": 117,
+    "out_top1_hold": 16,
+    "out_lp_hold": -26918.234375,
+    "kl_from_none": 15.732767105102539,
+    "lp_written": -583.9722900390625
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 1790,
+    "hold_present": 913,
+    "wrap_present": 107,
+    "out_top1_hold": 13,
+    "out_lp_hold": -28070.048828125,
+    "kl_from_none": 15.526479721069336,
+    "lp_written": -583.539794921875
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 1790,
+    "hold_present": 109,
+    "wrap_present": 94,
+    "out_top1_hold": 12,
+    "out_lp_hold": -32337.98046875,
+    "kl_from_none": 0.5738000869750977,
+    "lp_written": -565.9161376953125
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 1790,
+    "hold_present": 1790,
+    "wrap_present": 19,
+    "out_top1_hold": 55,
+    "out_lp_hold": -12641.66015625,
+    "kl_from_none": 256.29425048828125,
+    "lp_written": -824.3228759765625
+   }
+  }
+ },
+ {
+  "problem_index": 480,
+  "arms": {
+   "none": {
+    "positions": 1812,
+    "hold_present": 65,
+    "wrap_present": 95,
+    "out_top1_hold": 8,
+    "out_lp_hold": -34916.859375,
+    "kl_from_none": 0.0,
+    "lp_written": -445.7762451171875
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 1812,
+    "hold_present": 107,
+    "wrap_present": 107,
+    "out_top1_hold": 8,
+    "out_lp_hold": -34125.75390625,
+    "kl_from_none": 0.10372558236122131,
+    "lp_written": -445.93310546875
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 1812,
+    "hold_present": 222,
+    "wrap_present": 111,
+    "out_top1_hold": 8,
+    "out_lp_hold": -33287.8828125,
+    "kl_from_none": 0.37328648567199707,
+    "lp_written": -446.5588684082031
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 1812,
+    "hold_present": 700,
+    "wrap_present": 128,
+    "out_top1_hold": 10,
+    "out_lp_hold": -31494.41796875,
+    "kl_from_none": 1.6673126220703125,
+    "lp_written": -448.23468017578125
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 1812,
+    "hold_present": 1057,
+    "wrap_present": 118,
+    "out_top1_hold": 14,
+    "out_lp_hold": -29745.701171875,
+    "kl_from_none": 11.702079772949219,
+    "lp_written": -457.8582763671875
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 1812,
+    "hold_present": 910,
+    "wrap_present": 124,
+    "out_top1_hold": 11,
+    "out_lp_hold": -30865.5625,
+    "kl_from_none": 12.092775344848633,
+    "lp_written": -453.5224609375
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 1812,
+    "hold_present": 63,
+    "wrap_present": 89,
+    "out_top1_hold": 9,
+    "out_lp_hold": -34915.9140625,
+    "kl_from_none": 0.34534165263175964,
+    "lp_written": -445.2280578613281
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 1812,
+    "hold_present": 1812,
+    "wrap_present": 18,
+    "out_top1_hold": 77,
+    "out_lp_hold": -13562.689453125,
+    "kl_from_none": 298.61419677734375,
+    "lp_written": -741.5885009765625
+   }
+  }
+ },
+ {
+  "problem_index": 496,
+  "arms": {
+   "none": {
+    "positions": 1916,
+    "hold_present": 41,
+    "wrap_present": 124,
+    "out_top1_hold": 4,
+    "out_lp_hold": -36562.8046875,
+    "kl_from_none": 0.0,
+    "lp_written": -560.2681274414062
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 1916,
+    "hold_present": 78,
+    "wrap_present": 134,
+    "out_top1_hold": 4,
+    "out_lp_hold": -35704.63671875,
+    "kl_from_none": 0.091523177921772,
+    "lp_written": -560.748046875
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 1916,
+    "hold_present": 161,
+    "wrap_present": 145,
+    "out_top1_hold": 4,
+    "out_lp_hold": -34801.0234375,
+    "kl_from_none": 0.3376016914844513,
+    "lp_written": -561.1267700195312
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 1916,
+    "hold_present": 572,
+    "wrap_present": 148,
+    "out_top1_hold": 4,
+    "out_lp_hold": -32895.09375,
+    "kl_from_none": 1.409331202507019,
+    "lp_written": -562.5013427734375
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 1916,
+    "hold_present": 1020,
+    "wrap_present": 148,
+    "out_top1_hold": 5,
+    "out_lp_hold": -31093.33984375,
+    "kl_from_none": 10.57728385925293,
+    "lp_written": -573.7286987304688
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 1916,
+    "hold_present": 849,
+    "wrap_present": 143,
+    "out_top1_hold": 4,
+    "out_lp_hold": -32300.595703125,
+    "kl_from_none": 8.649590492248535,
+    "lp_written": -568.8087768554688
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 1916,
+    "hold_present": 40,
+    "wrap_present": 120,
+    "out_top1_hold": 4,
+    "out_lp_hold": -36603.01171875,
+    "kl_from_none": 0.4021449089050293,
+    "lp_written": -560.6697998046875
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 1916,
+    "hold_present": 1916,
+    "wrap_present": 20,
+    "out_top1_hold": 50,
+    "out_lp_hold": -14421.392578125,
+    "kl_from_none": 355.0055847167969,
+    "lp_written": -935.2064819335938
+   }
+  }
+ },
+ {
+  "problem_index": 456,
+  "arms": {
+   "none": {
+    "positions": 2045,
+    "hold_present": 67,
+    "wrap_present": 146,
+    "out_top1_hold": 6,
+    "out_lp_hold": -40837.8046875,
+    "kl_from_none": 0.0,
+    "lp_written": -357.37725830078125
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 2045,
+    "hold_present": 129,
+    "wrap_present": 150,
+    "out_top1_hold": 6,
+    "out_lp_hold": -39894.6171875,
+    "kl_from_none": 0.10287904739379883,
+    "lp_written": -358.15887451171875
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 2045,
+    "hold_present": 275,
+    "wrap_present": 158,
+    "out_top1_hold": 6,
+    "out_lp_hold": -38890.6328125,
+    "kl_from_none": 0.34188902378082275,
+    "lp_written": -358.75177001953125
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 2045,
+    "hold_present": 889,
+    "wrap_present": 159,
+    "out_top1_hold": 6,
+    "out_lp_hold": -36691.3203125,
+    "kl_from_none": 1.6301014423370361,
+    "lp_written": -360.53021240234375
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 2045,
+    "hold_present": 1349,
+    "wrap_present": 145,
+    "out_top1_hold": 7,
+    "out_lp_hold": -34483.9609375,
+    "kl_from_none": 20.264183044433594,
+    "lp_written": -378.2842102050781
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 2045,
+    "hold_present": 1205,
+    "wrap_present": 137,
+    "out_top1_hold": 6,
+    "out_lp_hold": -35752.6328125,
+    "kl_from_none": 11.046707153320312,
+    "lp_written": -369.70355224609375
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 2045,
+    "hold_present": 60,
+    "wrap_present": 127,
+    "out_top1_hold": 6,
+    "out_lp_hold": -40738.421875,
+    "kl_from_none": 0.5499783754348755,
+    "lp_written": -356.285400390625
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 2045,
+    "hold_present": 2045,
+    "wrap_present": 12,
+    "out_top1_hold": 48,
+    "out_lp_hold": -15631.927734375,
+    "kl_from_none": 375.92828369140625,
+    "lp_written": -743.28369140625
+   }
+  }
+ },
+ {
+  "problem_index": 336,
+  "arms": {
+   "none": {
+    "positions": 2183,
+    "hold_present": 200,
+    "wrap_present": 110,
+    "out_top1_hold": 26,
+    "out_lp_hold": -36405.41015625,
+    "kl_from_none": 0.0,
+    "lp_written": -872.8751831054688
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 2183,
+    "hold_present": 256,
+    "wrap_present": 110,
+    "out_top1_hold": 26,
+    "out_lp_hold": -35383.31640625,
+    "kl_from_none": 0.21046356856822968,
+    "lp_written": -872.2967529296875
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 2183,
+    "hold_present": 353,
+    "wrap_present": 119,
+    "out_top1_hold": 26,
+    "out_lp_hold": -34287.9609375,
+    "kl_from_none": 0.7665255069732666,
+    "lp_written": -872.1444091796875
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 2183,
+    "hold_present": 797,
+    "wrap_present": 117,
+    "out_top1_hold": 27,
+    "out_lp_hold": -31966.01171875,
+    "kl_from_none": 4.124678611755371,
+    "lp_written": -875.592041015625
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 2183,
+    "hold_present": 1320,
+    "wrap_present": 116,
+    "out_top1_hold": 31,
+    "out_lp_hold": -29801.62890625,
+    "kl_from_none": 26.79161834716797,
+    "lp_written": -899.22900390625
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 2183,
+    "hold_present": 1164,
+    "wrap_present": 101,
+    "out_top1_hold": 31,
+    "out_lp_hold": -31180.939453125,
+    "kl_from_none": 30.447277069091797,
+    "lp_written": -908.4998779296875
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 2183,
+    "hold_present": 197,
+    "wrap_present": 103,
+    "out_top1_hold": 26,
+    "out_lp_hold": -36491.921875,
+    "kl_from_none": 1.0617189407348633,
+    "lp_written": -873.4711303710938
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 2183,
+    "hold_present": 2183,
+    "wrap_present": 12,
+    "out_top1_hold": 90,
+    "out_lp_hold": -13315.623046875,
+    "kl_from_none": 437.5410461425781,
+    "lp_written": -1328.3172607421875
+   }
+  }
+ },
+ {
+  "problem_index": 360,
+  "arms": {
+   "none": {
+    "positions": 2048,
+    "hold_present": 101,
+    "wrap_present": 133,
+    "out_top1_hold": 7,
+    "out_lp_hold": -37669.0234375,
+    "kl_from_none": 0.0,
+    "lp_written": -866.65673828125
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 2048,
+    "hold_present": 166,
+    "wrap_present": 145,
+    "out_top1_hold": 7,
+    "out_lp_hold": -36782.80078125,
+    "kl_from_none": 0.1526043713092804,
+    "lp_written": -867.0944213867188
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 2048,
+    "hold_present": 286,
+    "wrap_present": 154,
+    "out_top1_hold": 7,
+    "out_lp_hold": -35836.828125,
+    "kl_from_none": 0.5307692289352417,
+    "lp_written": -868.3041381835938
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 2048,
+    "hold_present": 666,
+    "wrap_present": 157,
+    "out_top1_hold": 7,
+    "out_lp_hold": -33822.61328125,
+    "kl_from_none": 2.0904862880706787,
+    "lp_written": -870.3145751953125
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 2048,
+    "hold_present": 976,
+    "wrap_present": 154,
+    "out_top1_hold": 9,
+    "out_lp_hold": -31940.015625,
+    "kl_from_none": 12.728876113891602,
+    "lp_written": -881.1624755859375
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 2048,
+    "hold_present": 845,
+    "wrap_present": 144,
+    "out_top1_hold": 7,
+    "out_lp_hold": -33242.65234375,
+    "kl_from_none": 11.767376899719238,
+    "lp_written": -882.3771362304688
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 2048,
+    "hold_present": 101,
+    "wrap_present": 120,
+    "out_top1_hold": 7,
+    "out_lp_hold": -37627.71484375,
+    "kl_from_none": 0.7427361011505127,
+    "lp_written": -868.2080078125
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 2048,
+    "hold_present": 2048,
+    "wrap_present": 14,
+    "out_top1_hold": 63,
+    "out_lp_hold": -14699.69921875,
+    "kl_from_none": 310.6185607910156,
+    "lp_written": -1178.742431640625
+   }
+  }
+ },
+ {
+  "problem_index": 112,
+  "arms": {
+   "none": {
+    "positions": 2358,
+    "hold_present": 67,
+    "wrap_present": 109,
+    "out_top1_hold": 9,
+    "out_lp_hold": -45556.12890625,
+    "kl_from_none": 0.0,
+    "lp_written": -762.706298828125
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 2358,
+    "hold_present": 117,
+    "wrap_present": 117,
+    "out_top1_hold": 10,
+    "out_lp_hold": -44510.94140625,
+    "kl_from_none": 0.14157739281654358,
+    "lp_written": -762.5812377929688
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 2358,
+    "hold_present": 202,
+    "wrap_present": 130,
+    "out_top1_hold": 11,
+    "out_lp_hold": -43409.046875,
+    "kl_from_none": 0.5049064755439758,
+    "lp_written": -762.724365234375
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 2358,
+    "hold_present": 686,
+    "wrap_present": 141,
+    "out_top1_hold": 13,
+    "out_lp_hold": -41082.09375,
+    "kl_from_none": 2.3906121253967285,
+    "lp_written": -763.2193603515625
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 2358,
+    "hold_present": 1195,
+    "wrap_present": 143,
+    "out_top1_hold": 18,
+    "out_lp_hold": -38800.6953125,
+    "kl_from_none": 20.58877944946289,
+    "lp_written": -780.7326049804688
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 2358,
+    "hold_present": 949,
+    "wrap_present": 124,
+    "out_top1_hold": 14,
+    "out_lp_hold": -40321.23828125,
+    "kl_from_none": 15.732250213623047,
+    "lp_written": -774.14599609375
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 2358,
+    "hold_present": 66,
+    "wrap_present": 87,
+    "out_top1_hold": 9,
+    "out_lp_hold": -45495.45703125,
+    "kl_from_none": 0.5571048259735107,
+    "lp_written": -763.3707275390625
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 2358,
+    "hold_present": 2358,
+    "wrap_present": 25,
+    "out_top1_hold": 84,
+    "out_lp_hold": -17678.4375,
+    "kl_from_none": 419.79486083984375,
+    "lp_written": -1187.15087890625
+   }
+  }
+ },
+ {
+  "problem_index": 408,
+  "arms": {
+   "none": {
+    "positions": 2619,
+    "hold_present": 141,
+    "wrap_present": 184,
+    "out_top1_hold": 6,
+    "out_lp_hold": -49623.7578125,
+    "kl_from_none": 0.0,
+    "lp_written": -753.0296630859375
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 2619,
+    "hold_present": 255,
+    "wrap_present": 198,
+    "out_top1_hold": 6,
+    "out_lp_hold": -48481.58203125,
+    "kl_from_none": 0.16571763157844543,
+    "lp_written": -753.5889892578125
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 2619,
+    "hold_present": 399,
+    "wrap_present": 218,
+    "out_top1_hold": 6,
+    "out_lp_hold": -47269.390625,
+    "kl_from_none": 0.5966624617576599,
+    "lp_written": -754.412841796875
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 2619,
+    "hold_present": 965,
+    "wrap_present": 237,
+    "out_top1_hold": 10,
+    "out_lp_hold": -44653.91015625,
+    "kl_from_none": 2.482039451599121,
+    "lp_written": -755.13916015625
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 2619,
+    "hold_present": 1399,
+    "wrap_present": 223,
+    "out_top1_hold": 15,
+    "out_lp_hold": -42174.265625,
+    "kl_from_none": 21.92330551147461,
+    "lp_written": -771.7235107421875
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 2619,
+    "hold_present": 1212,
+    "wrap_present": 200,
+    "out_top1_hold": 8,
+    "out_lp_hold": -43936.921875,
+    "kl_from_none": 16.826705932617188,
+    "lp_written": -763.4898681640625
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 2619,
+    "hold_present": 136,
+    "wrap_present": 165,
+    "out_top1_hold": 6,
+    "out_lp_hold": -49538.56640625,
+    "kl_from_none": 0.7369794845581055,
+    "lp_written": -753.4606323242188
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 2619,
+    "hold_present": 2619,
+    "wrap_present": 15,
+    "out_top1_hold": 93,
+    "out_lp_hold": -19165.01953125,
+    "kl_from_none": 435.22039794921875,
+    "lp_written": -1178.52587890625
+   }
+  }
+ },
+ {
+  "problem_index": 448,
+  "arms": {
+   "none": {
+    "positions": 2902,
+    "hold_present": 159,
+    "wrap_present": 206,
+    "out_top1_hold": 13,
+    "out_lp_hold": -51519.5546875,
+    "kl_from_none": 0.0,
+    "lp_written": -1011.3621826171875
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 2902,
+    "hold_present": 239,
+    "wrap_present": 225,
+    "out_top1_hold": 13,
+    "out_lp_hold": -50230.94921875,
+    "kl_from_none": 0.3014698624610901,
+    "lp_written": -1012.060302734375
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 2902,
+    "hold_present": 361,
+    "wrap_present": 235,
+    "out_top1_hold": 13,
+    "out_lp_hold": -48837.9296875,
+    "kl_from_none": 1.065178394317627,
+    "lp_written": -1012.4244995117188
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 2902,
+    "hold_present": 987,
+    "wrap_present": 255,
+    "out_top1_hold": 17,
+    "out_lp_hold": -45898.98828125,
+    "kl_from_none": 4.6581130027771,
+    "lp_written": -1015.5419921875
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 2902,
+    "hold_present": 1743,
+    "wrap_present": 247,
+    "out_top1_hold": 20,
+    "out_lp_hold": -43209.5859375,
+    "kl_from_none": 20.724628448486328,
+    "lp_written": -1031.5224609375
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 2902,
+    "hold_present": 1483,
+    "wrap_present": 220,
+    "out_top1_hold": 16,
+    "out_lp_hold": -45190.33203125,
+    "kl_from_none": 22.608112335205078,
+    "lp_written": -1032.9163818359375
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 2902,
+    "hold_present": 151,
+    "wrap_present": 189,
+    "out_top1_hold": 13,
+    "out_lp_hold": -51489.4140625,
+    "kl_from_none": 1.3215380907058716,
+    "lp_written": -1012.0886840820312
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 2902,
+    "hold_present": 2902,
+    "wrap_present": 43,
+    "out_top1_hold": 100,
+    "out_lp_hold": -19303.15625,
+    "kl_from_none": 534.073486328125,
+    "lp_written": -1529.640380859375
+   }
+  }
+ },
+ {
+  "problem_index": 304,
+  "arms": {
+   "none": {
+    "positions": 2924,
+    "hold_present": 107,
+    "wrap_present": 172,
+    "out_top1_hold": 8,
+    "out_lp_hold": -58975.6328125,
+    "kl_from_none": 0.0,
+    "lp_written": -543.0752563476562
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 2924,
+    "hold_present": 244,
+    "wrap_present": 191,
+    "out_top1_hold": 8,
+    "out_lp_hold": -57720.15234375,
+    "kl_from_none": 0.11950483918190002,
+    "lp_written": -543.4315185546875
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 2924,
+    "hold_present": 478,
+    "wrap_present": 216,
+    "out_top1_hold": 8,
+    "out_lp_hold": -56376.6953125,
+    "kl_from_none": 0.42315909266471863,
+    "lp_written": -544.2947998046875
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 2924,
+    "hold_present": 1261,
+    "wrap_present": 231,
+    "out_top1_hold": 8,
+    "out_lp_hold": -53398.921875,
+    "kl_from_none": 2.8495094776153564,
+    "lp_written": -547.5477294921875
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 2924,
+    "hold_present": 1839,
+    "wrap_present": 228,
+    "out_top1_hold": 12,
+    "out_lp_hold": -50375.07421875,
+    "kl_from_none": 18.072689056396484,
+    "lp_written": -562.8551025390625
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 2924,
+    "hold_present": 1602,
+    "wrap_present": 213,
+    "out_top1_hold": 8,
+    "out_lp_hold": -52358.1953125,
+    "kl_from_none": 11.667142868041992,
+    "lp_written": -551.7435913085938
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 2924,
+    "hold_present": 100,
+    "wrap_present": 152,
+    "out_top1_hold": 8,
+    "out_lp_hold": -58857.125,
+    "kl_from_none": 0.5725299119949341,
+    "lp_written": -544.01513671875
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 2924,
+    "hold_present": 2924,
+    "wrap_present": 14,
+    "out_top1_hold": 73,
+    "out_lp_hold": -23047.89453125,
+    "kl_from_none": 467.89703369140625,
+    "lp_written": -1011.6978759765625
+   }
+  }
+ },
+ {
+  "problem_index": 416,
+  "arms": {
+   "none": {
+    "positions": 3091,
+    "hold_present": 159,
+    "wrap_present": 117,
+    "out_top1_hold": 25,
+    "out_lp_hold": -58840.78515625,
+    "kl_from_none": 0.0,
+    "lp_written": -883.2288818359375
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 3091,
+    "hold_present": 233,
+    "wrap_present": 133,
+    "out_top1_hold": 26,
+    "out_lp_hold": -57551.515625,
+    "kl_from_none": 0.17330972850322723,
+    "lp_written": -882.6143798828125
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 3091,
+    "hold_present": 360,
+    "wrap_present": 143,
+    "out_top1_hold": 26,
+    "out_lp_hold": -56177.3984375,
+    "kl_from_none": 0.6353732347488403,
+    "lp_written": -882.4122924804688
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 3091,
+    "hold_present": 916,
+    "wrap_present": 159,
+    "out_top1_hold": 31,
+    "out_lp_hold": -53260.3359375,
+    "kl_from_none": 2.917302370071411,
+    "lp_written": -883.6114501953125
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 3091,
+    "hold_present": 1589,
+    "wrap_present": 156,
+    "out_top1_hold": 32,
+    "out_lp_hold": -50544.36328125,
+    "kl_from_none": 17.747501373291016,
+    "lp_written": -895.8887939453125
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 3091,
+    "hold_present": 1257,
+    "wrap_present": 137,
+    "out_top1_hold": 31,
+    "out_lp_hold": -52565.76953125,
+    "kl_from_none": 20.047523498535156,
+    "lp_written": -895.9622802734375
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 3091,
+    "hold_present": 157,
+    "wrap_present": 107,
+    "out_top1_hold": 25,
+    "out_lp_hold": -58807.41015625,
+    "kl_from_none": 0.8736069202423096,
+    "lp_written": -883.6544189453125
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 3091,
+    "hold_present": 3091,
+    "wrap_present": 19,
+    "out_top1_hold": 124,
+    "out_lp_hold": -23047.76953125,
+    "kl_from_none": 524.5089111328125,
+    "lp_written": -1361.054931640625
+   }
+  }
+ },
+ {
+  "problem_index": 192,
+  "arms": {
+   "none": {
+    "positions": 3454,
+    "hold_present": 242,
+    "wrap_present": 188,
+    "out_top1_hold": 34,
+    "out_lp_hold": -61306.5234375,
+    "kl_from_none": 0.0,
+    "lp_written": -1260.2528076171875
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 3454,
+    "hold_present": 324,
+    "wrap_present": 203,
+    "out_top1_hold": 34,
+    "out_lp_hold": -59819.65234375,
+    "kl_from_none": 0.24752792716026306,
+    "lp_written": -1259.997314453125
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 3454,
+    "hold_present": 514,
+    "wrap_present": 206,
+    "out_top1_hold": 35,
+    "out_lp_hold": -58240.8515625,
+    "kl_from_none": 0.8955686688423157,
+    "lp_written": -1260.81494140625
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 3454,
+    "hold_present": 1165,
+    "wrap_present": 216,
+    "out_top1_hold": 38,
+    "out_lp_hold": -54890.5390625,
+    "kl_from_none": 5.4268269538879395,
+    "lp_written": -1264.191650390625
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 3454,
+    "hold_present": 1897,
+    "wrap_present": 212,
+    "out_top1_hold": 40,
+    "out_lp_hold": -51705.51953125,
+    "kl_from_none": 19.880722045898438,
+    "lp_written": -1276.958740234375
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 3454,
+    "hold_present": 1591,
+    "wrap_present": 197,
+    "out_top1_hold": 37,
+    "out_lp_hold": -53917.55859375,
+    "kl_from_none": 25.439279556274414,
+    "lp_written": -1275.590576171875
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 3454,
+    "hold_present": 242,
+    "wrap_present": 178,
+    "out_top1_hold": 34,
+    "out_lp_hold": -61393.0859375,
+    "kl_from_none": 1.0845404863357544,
+    "lp_written": -1261.7392578125
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 3454,
+    "hold_present": 3454,
+    "wrap_present": 29,
+    "out_top1_hold": 125,
+    "out_lp_hold": -23281.3671875,
+    "kl_from_none": 573.51708984375,
+    "lp_written": -1802.115478515625
+   }
+  }
+ },
+ {
+  "problem_index": 152,
+  "arms": {
+   "none": {
+    "positions": 4143,
+    "hold_present": 198,
+    "wrap_present": 235,
+    "out_top1_hold": 23,
+    "out_lp_hold": -79881.34375,
+    "kl_from_none": 0.0,
+    "lp_written": -1114.766357421875
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 4143,
+    "hold_present": 313,
+    "wrap_present": 251,
+    "out_top1_hold": 23,
+    "out_lp_hold": -78091.5390625,
+    "kl_from_none": 0.28273963928222656,
+    "lp_written": -1115.650634765625
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 4143,
+    "hold_present": 514,
+    "wrap_present": 270,
+    "out_top1_hold": 24,
+    "out_lp_hold": -76183.453125,
+    "kl_from_none": 0.9927074313163757,
+    "lp_written": -1117.5863037109375
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 4143,
+    "hold_present": 1412,
+    "wrap_present": 284,
+    "out_top1_hold": 25,
+    "out_lp_hold": -72072.546875,
+    "kl_from_none": 4.51746940612793,
+    "lp_written": -1122.548828125
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 4143,
+    "hold_present": 2284,
+    "wrap_present": 276,
+    "out_top1_hold": 27,
+    "out_lp_hold": -68198.609375,
+    "kl_from_none": 19.20405387878418,
+    "lp_written": -1138.5855712890625
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 4143,
+    "hold_present": 1919,
+    "wrap_present": 253,
+    "out_top1_hold": 27,
+    "out_lp_hold": -71052.5546875,
+    "kl_from_none": 23.683563232421875,
+    "lp_written": -1150.0335693359375
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 4143,
+    "hold_present": 190,
+    "wrap_present": 201,
+    "out_top1_hold": 22,
+    "out_lp_hold": -79770.890625,
+    "kl_from_none": 1.2714807987213135,
+    "lp_written": -1116.12158203125
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 4143,
+    "hold_present": 4143,
+    "wrap_present": 19,
+    "out_top1_hold": 115,
+    "out_lp_hold": -30550.3203125,
+    "kl_from_none": 660.2791748046875,
+    "lp_written": -1801.58251953125
+   }
+  }
+ },
+ {
+  "problem_index": 320,
+  "arms": {
+   "none": {
+    "positions": 4223,
+    "hold_present": 202,
+    "wrap_present": 184,
+    "out_top1_hold": 29,
+    "out_lp_hold": -77362.671875,
+    "kl_from_none": 0.0,
+    "lp_written": -1689.9417724609375
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 4223,
+    "hold_present": 297,
+    "wrap_present": 199,
+    "out_top1_hold": 33,
+    "out_lp_hold": -75610.4453125,
+    "kl_from_none": 0.2861447334289551,
+    "lp_written": -1690.66748046875
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 4223,
+    "hold_present": 464,
+    "wrap_present": 212,
+    "out_top1_hold": 34,
+    "out_lp_hold": -73759.78125,
+    "kl_from_none": 0.94823157787323,
+    "lp_written": -1692.75830078125
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 4223,
+    "hold_present": 1182,
+    "wrap_present": 227,
+    "out_top1_hold": 36,
+    "out_lp_hold": -69846.75,
+    "kl_from_none": 6.746834754943848,
+    "lp_written": -1699.5712890625
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 4223,
+    "hold_present": 2030,
+    "wrap_present": 222,
+    "out_top1_hold": 38,
+    "out_lp_hold": -66064.9296875,
+    "kl_from_none": 34.9228401184082,
+    "lp_written": -1729.48583984375
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 4223,
+    "hold_present": 1644,
+    "wrap_present": 197,
+    "out_top1_hold": 34,
+    "out_lp_hold": -68672.8203125,
+    "kl_from_none": 40.22869873046875,
+    "lp_written": -1728.8299560546875
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 4223,
+    "hold_present": 194,
+    "wrap_present": 167,
+    "out_top1_hold": 29,
+    "out_lp_hold": -77323.234375,
+    "kl_from_none": 4.959985733032227,
+    "lp_written": -1695.6431884765625
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 4223,
+    "hold_present": 4223,
+    "wrap_present": 18,
+    "out_top1_hold": 152,
+    "out_lp_hold": -29930.546875,
+    "kl_from_none": 689.5858154296875,
+    "lp_written": -2388.4091796875
+   }
+  }
+ },
+ {
+  "problem_index": 328,
+  "arms": {
+   "none": {
+    "positions": 4435,
+    "hold_present": 171,
+    "wrap_present": 186,
+    "out_top1_hold": 26,
+    "out_lp_hold": -80732.4453125,
+    "kl_from_none": 0.0,
+    "lp_written": -1859.7991943359375
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 4435,
+    "hold_present": 232,
+    "wrap_present": 197,
+    "out_top1_hold": 27,
+    "out_lp_hold": -78870.4609375,
+    "kl_from_none": 0.2918608486652374,
+    "lp_written": -1859.5787353515625
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 4435,
+    "hold_present": 342,
+    "wrap_present": 211,
+    "out_top1_hold": 29,
+    "out_lp_hold": -76882.6875,
+    "kl_from_none": 0.9834212064743042,
+    "lp_written": -1859.715576171875
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 4435,
+    "hold_present": 1027,
+    "wrap_present": 230,
+    "out_top1_hold": 31,
+    "out_lp_hold": -72701.515625,
+    "kl_from_none": 6.205636501312256,
+    "lp_written": -1864.64453125
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 4435,
+    "hold_present": 1918,
+    "wrap_present": 232,
+    "out_top1_hold": 36,
+    "out_lp_hold": -68705.09375,
+    "kl_from_none": 31.374500274658203,
+    "lp_written": -1891.294189453125
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 4435,
+    "hold_present": 1555,
+    "wrap_present": 209,
+    "out_top1_hold": 31,
+    "out_lp_hold": -71040.765625,
+    "kl_from_none": 39.92467498779297,
+    "lp_written": -1896.518310546875
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 4435,
+    "hold_present": 167,
+    "wrap_present": 169,
+    "out_top1_hold": 25,
+    "out_lp_hold": -80739.53125,
+    "kl_from_none": 2.9860849380493164,
+    "lp_written": -1862.1123046875
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 4435,
+    "hold_present": 4435,
+    "wrap_present": 34,
+    "out_top1_hold": 151,
+    "out_lp_hold": -32016.486328125,
+    "kl_from_none": 715.7741088867188,
+    "lp_written": -2560.83154296875
+   }
+  }
+ },
+ {
+  "problem_index": 240,
+  "arms": {
+   "none": {
+    "positions": 4966,
+    "hold_present": 301,
+    "wrap_present": 210,
+    "out_top1_hold": 58,
+    "out_lp_hold": -85943.8046875,
+    "kl_from_none": 0.0,
+    "lp_written": -2433.186279296875
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 4966,
+    "hold_present": 393,
+    "wrap_present": 215,
+    "out_top1_hold": 58,
+    "out_lp_hold": -83761.1875,
+    "kl_from_none": 0.40231853723526,
+    "lp_written": -2433.273193359375
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 4966,
+    "hold_present": 568,
+    "wrap_present": 216,
+    "out_top1_hold": 58,
+    "out_lp_hold": -81436.5078125,
+    "kl_from_none": 1.3701810836791992,
+    "lp_written": -2435.2236328125
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 4966,
+    "hold_present": 1218,
+    "wrap_present": 222,
+    "out_top1_hold": 64,
+    "out_lp_hold": -76511.890625,
+    "kl_from_none": 6.382277011871338,
+    "lp_written": -2445.104248046875
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 4966,
+    "hold_present": 2121,
+    "wrap_present": 218,
+    "out_top1_hold": 73,
+    "out_lp_hold": -72044.140625,
+    "kl_from_none": 44.512725830078125,
+    "lp_written": -2489.73291015625
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 4966,
+    "hold_present": 1707,
+    "wrap_present": 205,
+    "out_top1_hold": 58,
+    "out_lp_hold": -75179.765625,
+    "kl_from_none": 34.60422897338867,
+    "lp_written": -2476.82177734375
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 4966,
+    "hold_present": 295,
+    "wrap_present": 209,
+    "out_top1_hold": 57,
+    "out_lp_hold": -85896.2734375,
+    "kl_from_none": 2.067378044128418,
+    "lp_written": -2435.036865234375
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 4966,
+    "hold_present": 4966,
+    "wrap_present": 23,
+    "out_top1_hold": 199,
+    "out_lp_hold": -31322.6953125,
+    "kl_from_none": 786.5851440429688,
+    "lp_written": -3231.80712890625
+   }
+  }
+ },
+ {
+  "problem_index": 24,
+  "arms": {
+   "none": {
+    "positions": 5208,
+    "hold_present": 279,
+    "wrap_present": 186,
+    "out_top1_hold": 37,
+    "out_lp_hold": -91988.953125,
+    "kl_from_none": 0.0,
+    "lp_written": -2273.091796875
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 5208,
+    "hold_present": 383,
+    "wrap_present": 210,
+    "out_top1_hold": 36,
+    "out_lp_hold": -89686.8671875,
+    "kl_from_none": 0.38951534032821655,
+    "lp_written": -2273.37109375
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 5208,
+    "hold_present": 587,
+    "wrap_present": 229,
+    "out_top1_hold": 37,
+    "out_lp_hold": -87196.78125,
+    "kl_from_none": 1.3335967063903809,
+    "lp_written": -2273.317138671875
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 5208,
+    "hold_present": 1552,
+    "wrap_present": 254,
+    "out_top1_hold": 40,
+    "out_lp_hold": -81883.1875,
+    "kl_from_none": 6.386272430419922,
+    "lp_written": -2274.538330078125
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 5208,
+    "hold_present": 2758,
+    "wrap_present": 258,
+    "out_top1_hold": 44,
+    "out_lp_hold": -77033.515625,
+    "kl_from_none": 34.74140930175781,
+    "lp_written": -2299.46142578125
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 5208,
+    "hold_present": 2229,
+    "wrap_present": 210,
+    "out_top1_hold": 39,
+    "out_lp_hold": -81272.234375,
+    "kl_from_none": 41.59549331665039,
+    "lp_written": -2311.9326171875
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 5208,
+    "hold_present": 273,
+    "wrap_present": 172,
+    "out_top1_hold": 38,
+    "out_lp_hold": -91893.0625,
+    "kl_from_none": 2.1260650157928467,
+    "lp_written": -2272.24560546875
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 5208,
+    "hold_present": 5208,
+    "wrap_present": 35,
+    "out_top1_hold": 214,
+    "out_lp_hold": -34231.24609375,
+    "kl_from_none": 1000.135009765625,
+    "lp_written": -3211.3466796875
+   }
+  }
+ },
+ {
+  "problem_index": 184,
+  "arms": {
+   "none": {
+    "positions": 5774,
+    "hold_present": 242,
+    "wrap_present": 214,
+    "out_top1_hold": 21,
+    "out_lp_hold": -109707.078125,
+    "kl_from_none": 0.0,
+    "lp_written": -1826.78173828125
+   },
+   "steer:hold:L24:0.017": {
+    "positions": 5774,
+    "hold_present": 394,
+    "wrap_present": 233,
+    "out_top1_hold": 21,
+    "out_lp_hold": -107339.0859375,
+    "kl_from_none": 0.34103232622146606,
+    "lp_written": -1827.9615478515625
+   },
+   "steer:hold:L24:0.034": {
+    "positions": 5774,
+    "hold_present": 749,
+    "wrap_present": 251,
+    "out_top1_hold": 21,
+    "out_lp_hold": -104808.6640625,
+    "kl_from_none": 1.204416275024414,
+    "lp_written": -1829.6251220703125
+   },
+   "steer:hold:L24:0.068": {
+    "positions": 5774,
+    "hold_present": 2059,
+    "wrap_present": 289,
+    "out_top1_hold": 25,
+    "out_lp_hold": -99507.96875,
+    "kl_from_none": 8.036994934082031,
+    "lp_written": -1839.1820068359375
+   },
+   "steer:hold:L24:0.1": {
+    "positions": 5774,
+    "hold_present": 3122,
+    "wrap_present": 271,
+    "out_top1_hold": 29,
+    "out_lp_hold": -94387.90625,
+    "kl_from_none": 38.59003448486328,
+    "lp_written": -1872.0950927734375
+   },
+   "steer:hold:L20:0.128": {
+    "positions": 5774,
+    "hold_present": 2624,
+    "wrap_present": 245,
+    "out_top1_hold": 25,
+    "out_lp_hold": -97794.0859375,
+    "kl_from_none": 39.734100341796875,
+    "lp_written": -1873.3380126953125
+   },
+   "steer:rand:L24:0.068": {
+    "positions": 5774,
+    "hold_present": 237,
+    "wrap_present": 197,
+    "out_top1_hold": 20,
+    "out_lp_hold": -109624.109375,
+    "kl_from_none": 5.622459411621094,
+    "lp_written": -1832.895263671875
+   },
+   "steer:hold:L24:0.5": {
+    "positions": 5774,
+    "hold_present": 5774,
+    "wrap_present": 32,
+    "out_top1_hold": 173,
+    "out_lp_hold": -42577.1640625,
+    "kl_from_none": 914.1515502929688,
+    "lp_written": -2789.12646484375
+   }
+  }
+ }
+]
