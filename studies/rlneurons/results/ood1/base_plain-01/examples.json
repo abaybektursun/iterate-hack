@@ -1,0 +1,30 @@
+[
+ {
+  "uid": "mmlupro/2945",
+  "seed": 61000001,
+  "prompt": "Solve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nThe skin is much more than merely an outer wrapping for an animal; it is an important organ system and performs many diverse functions. What are some of the primary functions of the skin in man?\n\nOptions:\n(A) The skin primarily serves as a storage site for fat-soluble vitamins\n(B) The skin's primary function is to enhance physical appearance\n(C) The primary function of the skin is to provide an outer covering for the body\n(D) The main function of the skin is to produce sweat and keep the body cool\n(E) The skin's main function is to regulate the level of oxygen entering the body\n(F) The main function of the skin is to produce pigments that give color to the hair and eyes\n(G) The skin's primary function is to absorb nutrients from the external environment\n(H) The primary role of the skin is to act as a secondary respiratory organ\n(I) The primary functions of the skin are to protect the body against external agents, maintain a constant internal environment, thermoregulation, and excretion of metabolic wastes.\n(J) The primary function of the skin is to facilitate the sense of touch only\n\nThe answer is the letter of the correct option.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "text": " for the TA to mark it correctly.\n\nAnswer: I",
+  "mode": "answer",
+  "letter": "I",
+  "gold": "I",
+  "right": true,
+  "letter_v2": "I",
+  "right_v2": true,
+  "n_new": 11,
+  "cap_hit": false
+ },
+ {
+  "uid": "mmlupro/3058",
+  "seed": 61000000,
+  "prompt": "Solve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nWhich of the following is a benefit that mycorrhizal fungi confer to many plants?\n\nOptions:\n(A) They fix nitrogen, which is particularly important for plants in nitrogen-limited habitats.\n(B) They provide plants with access to unlimited water resources.\n(C) They provide carbon to plants in exchange for fixed nitrogen.\n(D) They help plants create their own food through photosynthesis.\n(E) They enhance plant growth by releasing growth hormones.\n(F) They protect plant roots from desiccation in extremely dry habitats.\n(G) They increase plant resistance to pests and diseases.\n(H) They assist in the absorption of carbon dioxide from the atmosphere.\n(I) They provide plants with access to potassium, an element abundant in all kinds of soils.\n(J) They provide access to phosphorus, an essential element that is limited in many kinds of soils.\n\nThe answer is the letter of the correct option.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "text": " and end all answer put in the box next to your name All outputs is written in single line, one space per character!",
+  "mode": "none",
+  "letter": null,
+  "gold": "J",
+  "right": false,
+  "letter_v2": null,
+  "right_v2": false,
+  "n_new": 25,
+  "cap_hit": false
+ }
+]
