@@ -1,0 +1,60 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_signed1.md",
+ "set": "hard328",
+ "n": 328,
+ "cells": {
+  "base_cue": {
+   "job_id": "abaybektursun-1114-151534-e72c",
+   "right_v3": 164,
+   "cap_hits": 77,
+   "finished_right": 161,
+   "mean_generated_tokens": 9343.8
+  },
+  "signed_P_cue": {
+   "job_id": "abaybektursun-1114-220703-1a4c",
+   "train_job_id": "abaybektursun-1114-214246-17cc",
+   "right_v3": 140,
+   "cap_hits": 178,
+   "finished_right": 129,
+   "mean_generated_tokens": 11775.1,
+   "minus_base_cue": {
+    "points": -7.32,
+    "ci95": [
+     -11.89,
+     -3.05
+    ]
+   },
+   "only_signed": 16,
+   "only_base": 40,
+   "nll_negative_minus_positive": {
+    "first_half": 0.1231,
+    "second_half": 0.0902
+   },
+   "cos_merged_rl": 0.0010560286751365015,
+   "rel_norm_merged": 0.004783134466013729
+  },
+  "signed_G_cue": {
+   "job_id": "abaybektursun-1114-220719-fa57",
+   "train_job_id": "abaybektursun-1114-214255-116e",
+   "right_v3": 155,
+   "cap_hits": 145,
+   "finished_right": 150,
+   "mean_generated_tokens": 11054.7,
+   "minus_base_cue": {
+    "points": -2.74,
+    "ci95": [
+     -7.01,
+     1.52
+    ]
+   },
+   "only_signed": 21,
+   "only_base": 30,
+   "nll_negative_minus_positive": {
+    "first_half": 0.128,
+    "second_half": 0.072
+   },
+   "cos_merged_rl": 0.0031403085433586463,
+   "rel_norm_merged": 0.005228367129424991
+  }
+ }
+}

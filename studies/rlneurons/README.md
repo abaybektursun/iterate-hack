@@ -2144,6 +2144,37 @@ right prefixes at 75 % give base 79 of 88, RL 84 of 88, +5.7 [1.1, 11.4]; the ot
 - Jobs (one H100 each, commit `bd403e1`): base finisher `abaybektursun-1114-231144-7399`, RL finisher
   `abaybektursun-1114-231154-44ea`. Raw rows: `answers.jsonl` in each job's `$OUT_DIR` (Volume `iterate-runs`), not committed.
 
+## Signed self-training with no reward: it loses points, by making the base doubt and run out of tokens (hard328, board work-d9a824, idea-0d55a4)
+
+Spec `specs/SPEC_signed1.md` (written before the runs, amended once before the cells). The missing cell of the 2x2
+{vote, key} x {positives only, signed}: one LoRA epoch on the base's own 4 stored cue samples per MATH-500 problem (job
+abaybektursun-1114-153825-208b), loss = sum of advantage x mean per-token NLL, advantage = return minus the problem's mean
+return. Arm P: return 1 for a finished sample in the plurality group (no reward, no key; 138 problems). Arm G: return = grader
+v3 score (uses the key; 150 problems). Data `data/signed/arms-v1.json` (`jobs/signed_data.py`), trainer `jobs/signed_train.py`
+(LoRA, hyperparameters and merge of `jobs/distill_train.py`), readouts `analysis/signed1.py`, `analysis/signed1_read.py`.
+
+Cue, T 1.0 / top-p 1.0, cap 16,384, grader v3, seed 3000000, one sample, n 328 (`results/signed1/readout.json`, `read.json`):
+
+| model | right of 328 | minus base cue, points [95 %] | cap hits | tokens per problem | Wait per 1,000 tokens |
+|---|---|---|---|---|---|
+| base cue (job e72c) | 164 | | 77 | 9,344 | 4.6 |
+| signed P, vote as return (`results/signed1/P-01/`) | 140 | -7.3 [-11.9, -3.1] | 178 | 11,775 | 10.5 |
+| signed G, key as return (`results/signed1/G-01/`) | 155 | -2.7 [-7.0, 1.5] | 145 | 11,055 | 8.7 |
+| for reference: SFT on voted samples V / U, cue | 167 / 168 | | | | |
+
+- H1 (the sign carries RL's gain) is refuted: P is below the base with the interval below 0. H2 is refuted too: the key as
+  return (G) gives no gain either. So neither the sign nor the reward's information, applied offline for one epoch to 4 stored
+  samples per problem, moves the base toward RL (206 plain).
+- What the raw answers show: the loss is in answers that no longer finish. Cap hits go from 77 to 178 (P) and 145 (G); 2 and 1
+  of them repeat a line, so they are not loops. The word Wait doubles. On the problems both models finish, accuracy is the
+  same: P 127 against 124 of 144, G 141 against 134 of 168. Of P's 107 new cap hits the base had 37 right.
+  Lowering the probability of whole wrong samples taught the model to doubt and restart, not to avoid the wrong step.
+- The pre-registered instrument check (NLL of wrong minus right samples on not-yet-trained problems) did not rise over the
+  epoch (P 0.123 then 0.090 nats per token by half; G 0.128 then 0.072): the update did not learn to tell right from wrong
+  samples on new problems. Cosine of the merged difference with RL minus base: 0.001 (P), 0.003 (G).
+- Not tested: more epochs, online resampling after each update, a smaller step. Train jobs abaybektursun-1114-214246-17cc (P),
+  -214255-116e (G); cells -220703-1a4c, -220719-fa57; raw answers in the Modal Volume under /runs/<job>.
+
 ## How to run
 
 Laptop checks (no GPU, no weights):
