@@ -2,7 +2,7 @@
 # requires-python = ">=3.11"
 # dependencies = ["boto3>=1.35"]
 # ///
-"""Recount the /demo numbers that change by the hour and write them into tools/demo_facts.py, just before the talk.
+"""Recount the /demo/story numbers that change by the hour and write them into tools/demo_facts.py, just before the talk.
 
   uv run tools/demo_refresh.py
 
