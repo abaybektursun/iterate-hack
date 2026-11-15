@@ -29,6 +29,9 @@ For a series, origin t and horizon h, with panel rows dated on or before t only:
      stay share, replacing 3b. If today's maximum is above the minimum and the unit's hit share is 0.9 or more on
      at least 5 days, the unit is, with the hit share, at today's maximum on the next day and moves from there as
      in one of its own past windows of the remaining g - 1 days (weights exp(-age / tau)).
+  3e. --exit-frac F  (needs the frac column of fm2_intraday_v2.) A unit that was present on the previous observed
+     day and is held by at most the share F of today's snapshots leaves with the share of such past unit-days,
+     over all fastgpu_daily series and days on or before t, whose unit was absent g days later.
   4. --scaleway  Scaleway units: USD price = EUR price x ECB rate of the last business day before the target day.
      EUR price = last USD price / the rate that priced it. The rate is known when that business day is <= t, else a
      driftless random walk from the last rate dated <= t with the daily volatility of the rates dated <= t.
@@ -58,7 +61,7 @@ ap.add_argument("--dep", default="indep", choices=["indep", "prov", "copula"])
 ap.add_argument("--dep-h1", default="", help="dependence at horizon 1 if it differs from --dep")
 ap.add_argument("--hurdle", action="store_true"); ap.add_argument("--hurdle-h", default="1,3,7")
 ap.add_argument("--replay", type=float, default=0)
-ap.add_argument("--intraday", default="")
+ap.add_argument("--intraday", default=""); ap.add_argument("--exit-frac", type=float, default=0)
 ap.add_argument("--snap", type=float, default=0); ap.add_argument("--scaleway", action="store_true")
 ap.add_argument("--turnover", default="", choices=["", "own", "pool"]); ap.add_argument("--enter", default="ratio", choices=["ratio", "abs"])
 ap.add_argument("--turnover-only", default="", help="apply --turnover only to series whose id contains this text")
@@ -95,6 +98,30 @@ if a.intraday:
     assert unit == "listing"
     m = pd.read_csv(a.intraday, keep_default_na=False, parse_dates=["d"])
     MX = {s: g.pivot(index="d", columns="listing", values="pmax") for s, g in m[m.d <= max(ORIG)].groupby("series_id")}
+    if a.exit_frac:
+        FR = {s: g.pivot(index="d", columns="listing", values="frac") for s, g in m[m.d <= max(ORIG)].groupby("series_id")}
+EXIT = {}
+
+
+def low_state(sid, w):
+    """days x units: present the observed day before and held by at most --exit-frac of the day's snapshots."""
+    P = w.values
+    was = np.vstack([np.zeros((1, P.shape[1]), bool), ~np.isnan(P[:-1])])
+    return (FR[sid].reindex(index=w.index, columns=w.columns).values <= a.exit_frac) & was
+
+
+def p_exit(t, g):
+    if (t, g) not in EXIT:
+        num = den = 0
+        for s in FR:
+            w = W[s].loc[:t]; w = w.loc[w.notna().any(axis=1)]
+            low = low_state(s, w); pos = {d: i for i, d in enumerate(w.index)}
+            for i, d in enumerate(w.index):
+                e = pos.get(d + pd.Timedelta(days=g))
+                if e is not None:
+                    num += np.isnan(w.values[e][low[i]]).sum(); den += low[i].sum()
+        EXIT[(t, g)] = (num + 0.5) / (den + 1)
+    return EXIT[(t, g)]
 fx = pd.read_csv(a.fx, parse_dates=["date"]).set_index("date").usd_per_eur
 
 
@@ -207,6 +234,9 @@ def simulate(sid, w, o, h, setup, dep, turnover):
         for j in np.flatnonzero(prov[cur] == "scaleway"):
             X[j] = scaleway(now[j], L, t, h)
 
+    if a.exit_frac and sid in MX:
+        low = low_state(sid, w)[-1, cur]
+        X[low] = np.where(rng.uniform(size=(low.sum(), D)) < p_exit(t, g), np.nan, X[low])
     if turnover and win is not None:
         at_s = ~np.isnan(P[si]); at_e = ~np.isnan(P[ei])
         left = at_s & ~at_e
