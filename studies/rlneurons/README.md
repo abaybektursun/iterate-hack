@@ -4171,6 +4171,30 @@ Which reward writes the finishing directions (8 directions of each model added t
 - The Think-SFT cell is not a test: its top-8 edit is 3.7 % of the weight norm (50 times Math's) and the model writes commas
   until the cap. A norm-matched Think-SFT edit is open.
 
+#### The dial on a second model pair and benchmark (amendment 7, work-df5e0a)
+
+Base + the 8 directions per matrix of (Code 3.1 minus base), on HumanEval+ and MBPP+ (538 scored problems), Code cue, T 1.0 /
+top-p 1.0, seed 51000000, one sample. `jobs/run_code_cell.py --model-path` after `wsp_edit`; readout
+`python -m studies.rlneurons.analysis.code1_readout --out=xreward/code_dial @base_cue=<job> ...` ->
+`results/xreward/code_dial/readout.json` (references: the cells of "Code pair").
+
+| Cell | Passed of 538 | Cap hits | No code block | Minus cued base, points [95 %] | Run folder (`results/xreward/code_dial/`), job |
+|---|---|---|---|---|---|
+| base, Code cue | 317 | 27 | 34 | | `results/code1/base_cue-01/` |
+| base + random rank-8 at 1.5 | 331 | 27 | 45 | +2.6 [-1.3, 6.3] | `code_rand8x1.5_code31-01/`, `abaybektursun-1115-101457-ef2c` |
+| base + Code's 8 directions at 1 | 386 | 9 | 8 | +12.8 [8.9, 16.7] | `code_top8_code31-01/`, `abaybektursun-1115-101423-4a7d` |
+| at 1.5 | 399 | 4 | 5 | +15.2 [11.2, 19.3] | `code_top8x1.5_code31-01/`, `abaybektursun-1115-101434-4511` |
+| at 2 | 394 | 0 | 0 | +14.3 [9.9, 18.6] | `code_top8x2_code31-01/`, `abaybektursun-1115-101445-e35e` |
+| base + Math 3.1's 8 directions at 1.5 | 368 | 1 | 6 | +9.5 [5.2, 13.6] | `code_top8x1.5_math31-01/`, `abaybektursun-1115-101508-33f0` |
+| RL-Code, plain | 401 | 8 | 8 | +15.6 [11.5, 19.9] | `results/code1/rl_plain-01/` |
+
+- C1 held: 386 and 399 (predicted at least 345 and 360); the random edit 331 (within 317 +- 15). Code's directions at 1.5 against
+  RL-Code: -0.4 points [-3.5, 2.8]; against the random edit: +12.6 [8.7, 16.7].
+- C2 held: cap hits 27, 9, 4, 0 and answers with no code block 34, 8, 5, 0 at sizes 0, 1, 1.5, 2; the random edit 27 and 45.
+- C3 held: Math's directions at 1.5 pass 368 on code (predicted at least 335), +6.9 points above the random edit [2.4, 11.3] and
+  -6.1 below RL-Code [-10.0, -2.4].
+- The sizes were fixed before the run (1.5 came from the math dial); one sample per cell, so 1, 1.5 and 2 are not separated.
+
 #### Lengths, token budgets and a restart cascade from the stored rows (work-e02ba4, laptop)
 
 `analysis/xreward_lengths.py` -> `results/xreward/lengths-01/readout.json` (prediction in the module docstring, written first).

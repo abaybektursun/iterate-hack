@@ -128,3 +128,18 @@ norm against 0.074 %) and broke the model. Same settings.
 2. `top8 --scale 0.02 --other think_sft`: Think-SFT's 8 directions at Math's edit norm (3.68 % x 0.02 = 0.074 %). If finishing
    needs a reward, cap hits stay within 62 to 85 and right answers within 164 +- 12. Refuted if cap hits are 50 or fewer: then
    fine-tuning on reasoning traces writes the finishing directions too.
+
+## Amendment 7 (2026-11-15, before the cells; work-df5e0a): the dial on a second model pair and benchmark
+
+The dial is shown for one pair (base, Math 3.1) on math. Code pair (README "Code pair", `jobs/run_code_cell.py`, which gains
+`--model-path` / `--model-label`): HumanEval+ and MBPP+, 538 scored problems, Code cue (12 tokens), T 1.0 / top-p 1.0, seed
+51000000, one sample. References: base plain 222, base + Code cue 317 (27 cap hits, 34 answers with no code block), RL-Code plain
+401 (8, 8).
+
+Cells: `wsp_edit --recipe top8 --other code31 --scale S` for S = 1, 1.5, 2; `rand8 --other code31 --scale 1.5`;
+`top8 --other math31 --scale 1.5` (Math's directions on code).
+
+- C1. The dial exists for the Code pair: Code's directions at 1 pass at least 345, at 1.5 at least 360, and the random edit stays
+  within 317 +- 15. Refuted if the best of the three sizes is below 340 or the random edit is within 15 of it.
+- C2. Cap hits and answers with no code block fall with size (27 and 34 for the base; at most 15 and 15 at 1.5).
+- C3. Math's directions at 1.5 on code pass at least 335 (the Math cue works on code: 326). Refuted if within 317 +- 15.
