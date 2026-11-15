@@ -973,7 +973,7 @@ function fitStrip() {
   const g = S.g, E = S.el, p = example();
   if (S.ex === p.i) return;
   S.ex = p.i;
-  E.slab.textContent = `MATH-500, problem ${p.i}: how Base's answer begins`;
+  E.slab.textContent = `MATH-500, problem ${p.i}: the start of the answer`;
   E.c0.textContent = p.s[0].trim() ? flat(p.s[0]) : "(empty: the answer ended at its first token)";
   E.c1.textContent = flat(p.s[1]);
   let x = g.tx;

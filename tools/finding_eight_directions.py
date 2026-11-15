@@ -12,8 +12,8 @@ import json
 
 TITLE = "Eight directions"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "RL training changed every weight a little. Which of the changes matter?"
-LINE = ("Eight RL directions per matrix match the cue on MATH-500 (85.4 % against 82.0 %) and, with the cue, solve 28 more "
-        "of 328 harder problems than the cue alone.")
+LINE = ("Eight RL directions per matrix match the cue on MATH-500 (85.4 % against 82.0 %) and, on 328 harder problems, "
+        "solve 28 more than the cue.")
 
 # Every number is copied from the artifact named here. None is typed from memory.
 RESULTS = "studies/rlneurons/results/wsp1/"
@@ -47,7 +47,7 @@ DATA = {
          "note": "A control: 8 random directions of the same size added to each matrix. Plain prompt on MATH-500, with the cue on the 328."},
         {"key": "rl-directions", "name": "8 RL directions", "short": "8 RL", "right": 427, "cell": "full500/top8_plain",
          "hard": 192, "hard_cue": True, "hard_cell": "xreward/edits cells.top8_math31",
-         "note": "Only the 8 largest directions of RL's change in each matrix are added. Plain prompt on MATH-500, with the cue on the 328."},
+         "note": "Only the 8 largest directions of RL's change per matrix are added. Plain prompt on MATH-500, cue on the 328."},
         {"key": "rl", "name": "RL", "short": "RL", "right": 463, "cell": V3 + " cells.rl_1.0",
          "hard": 206, "hard_cue": False, "hard_cell": "day1 rows.hard328_rl_plain_t10-01",
          "note": "RL: the model after reinforcement learning on math, the whole change. Plain prompt."},
