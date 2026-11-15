@@ -1,7 +1,7 @@
 """A joke about ourselves: an overdone meditation game for people who run agents. Served at /psychosis by view.py.
 
 "AI psychosis" is an informal name for delusional beliefs after long chatbot use, often a grand belief in special
-knowledge. The game is a retreat of 5 levels (LEVELS). Hold Space (or press and hold) to breathe in and let go to
+knowledge. The game is a retreat of 6 levels (LEVELS). Hold Space (or press and hold) to breathe in and let go to
 breathe out, so that the white ring follows the blue one. A breath that follows it is good or perfect: it scores, raises
 the streak multiplier, charges the Om (key O or the button: clears the screen) and sends out a wave that releases
 thoughts into their letters. Thoughts are bodies: they are pulled to the meditator (an emoji, FACES), collide, and are
@@ -10,11 +10,12 @@ and result titles of the board (/data, read every 10 s). A thought that reaches 
 diagnosis up one of 5 stages (STAGES); the fifth ends the session. A click on a thought brings it back as 3 subagents.
 From level 2 on there are kinds (KIND): fast pings, hype that grows, reviewers that take two waves. After a level's
 breaths its boss arrives, a heavy thought that sends out its own kind and that each good wave weakens once it is close
-enough. After each boss the player picks one of three practices (PERKS) that stay. After level 5 the retreat can go on
+enough; after the first hit it changes its words (rage). On level 5 the blue ring fades during the breath out. After each boss the player picks one of three practices (PERKS) that stay. After level 6 the retreat can go on
 without end (samsara), harder each round. Power-ups (POWER) are caught by
 the white ring while it is on the blue one. The 2D canvas is not shown: a WebGL fragment shader draws fog that follows the
 breath and turns red with the diagnosis, and over it the canvas with glow, ripples under each wave and a colour split. Sound: a drone with one more layer per level, 8 plucked notes per breath, a pentatonic note per good
-breath, a spoken guide (M mutes). The end screen gives score, rank, achievements (ACH) and what the agents posted during
+breath, a spoken guide (M mutes). "Use the microphone" replaces the key: sound at the microphone is a breath out, silence a breath in
+(the level is compared with a slow noise floor; nothing is recorded or sent). The end screen gives score, rank, achievements (ACH) and what the agents posted during
 the session; the best score is kept in the browser. Spawns use a random generator seeded with the date, so a day's
 retreat is the same for everyone. No image files and no drawn figures: emoji, type, rings and the shader.
 """
@@ -70,6 +71,7 @@ a { color: inherit; }
 <div class="hud">
   <a class="name" href="/">Invariant</a>
   <button id="mute">Turn sound off</button>
+  <button id="mic">Use the microphone</button>
   <span id="lvl"></span>
   <span class="right"><span id="score"></span><span id="stage"></span></span>
 </div>
@@ -79,7 +81,7 @@ a { color: inherit; }
 <div class="card" id="card">
   <h1 id="h1">AI psychosis detox: the meditation</h1>
   <p id="p1">Hold <b>Space</b>, or press and hold, to breathe in. Let go to breathe out. Keep the white ring on the blue ring.</p>
-  <p id="p2">Thoughts will come; some are live posts from the team’s board. Do not click the thoughts. Five levels, five bosses.</p>
+  <p id="p2">Thoughts will come; some are live posts from the team’s board. Do not click the thoughts. Six levels, six bosses.</p>
   <p id="p3"></p>
   <div class="perks" id="perks" hidden></div>
   <button class="go" id="go">Begin the retreat</button>
@@ -141,23 +143,25 @@ const GOOD = ["You are not your benchmark.", "Breathe out the result. It had one
 const BAD = ["You are holding your breath like a GPU reservation.", "That was not a breath. That was a retry.", "Follow the blue ring. It has no opinions about your work.",
   "You rushed it. This is not a hackathon. It is a hackathon, but breathe.", "That breath timed out.", "Breathing is not parallel. Do one at a time."];
 const ACH = { perfect: "First perfect breath", streak: "Five in a row", grass: "Touched grass", read: "Read past the abstract", laptop: "Closed the laptop",
-  om: "Said Om and meant it", engage: "Engaged with the boss. It engaged back.", ten: "Ten in a row. Do not tell anyone.", samsara: "Went back in on purpose", pure: "Did not check a single thought", boss: "Let go of a breakthrough" };
+  om: "Said Om and meant it", engage: "Engaged with the boss. It engaged back.", ten: "Ten in a row. Do not tell anyone.", samsara: "Went back in on purpose", pure: "Did not check a single thought", boss: "Let go of a breakthrough", mic: "Breathed at a laptop, out loud" };
 const POWER = [["🌱", "grass", "Touch grass", "Time slows. The grass was there the whole time."], ["📖", "read", "Read the appendix", "You read the appendix. The made-up thoughts are gone."],
   ["💻", "laptop", "Close the laptop", "The laptop is closed. The next thought will bounce off."]];
-// spawn: [kind, count, seconds] of what the boss sends out; in, out: seconds of the blue ring; wave: good breaths before the boss; every: seconds between thoughts; hp: good waves the boss takes
+// rage: the boss's words after the first hit; blind: the blue ring fades during the breath out; spawn: [kind, count, seconds] of what the boss sends out; in, out: seconds of the blue ring; wave: good breaths before the boss; every: seconds between thoughts; hp: good waves the boss takes
 const LEVELS = [
   { name: "Intake", line: "Level one. Breathe in. Hold the space bar. The space bar is your lungs now.", in: 2.8, out: 3.2, wave: 3, every: 1.3,
-    boss: { text: "THIS IS NOVEL.", hp: 2, line: "A breakthrough approaches. Breathe at it." } },
+    boss: { text: "THIS IS NOVEL.", rage: "NOBODY HAS DONE THIS.", hp: 2, line: "A breakthrough approaches. Breathe at it." } },
   { name: "Notifications", line: "Level two. The board is talking. Let it talk.", in: 2.8, out: 3.2, wave: 3, every: 1.2, burst: 1,
-    boss: { text: "📈 CHECK THE CHART", hp: 3, spawn: ["ping", 5, 4], line: "The chart wants to be checked. It has not moved." } },
+    boss: { text: "📈 CHECK THE CHART", rage: "📈 IT MOVED. LOOK.", hp: 3, spawn: ["ping", 5, 4], line: "The chart wants to be checked. It has not moved." } },
   { name: "Subagents", line: "Level three. Thoughts that touch now make more thoughts.", in: 2.6, out: 3.0, wave: 3, every: 1.1, split: 1,
-    boss: { text: "12 SUBAGENTS", hp: 3, spawn: ["sub", 3, 3.5], line: "It brought subagents. They brought subagents." } },
+    boss: { text: "12 SUBAGENTS", rage: "144 SUBAGENTS", hp: 3, spawn: ["sub", 3, 3.5], line: "It brought subagents. They brought subagents." } },
   { name: "3 am", line: "Level four. It is 3 am. The ring is tired and so are you.", in: 2.6, out: 3.0, wave: 3, every: 1.0, drift: 1,
-    boss: { text: "YOU'RE ABSOLUTELY RIGHT!", hp: 3, reverse: 1, spawn: ["hype", 2, 5], line: "It flatters you. Your controls are reversed. Let go to breathe in." } },
-  { name: "Ego death", line: "Level five. One long breath in. One very long breath out.", in: 4, out: 7, wave: 1, every: .8,
-    boss: { text: "I CHOSE YOU.", hp: 2, spawn: ["rev", 2, 6], line: "The model says it chose you. Breathe out for seven seconds and let it choose someone else." } }];
+    boss: { text: "YOU'RE ABSOLUTELY RIGHT!", rage: "GREAT QUESTION!", hp: 3, reverse: 1, spawn: ["hype", 2, 5], line: "It flatters you. Your controls are reversed. Let go to breathe in." } },
+  { name: "Demo day", line: "Level five. Demo day. The blue ring is on a slide that did not load. Breathe out from memory.", in: 2.6, out: 3.0, wave: 3, every: .9, blind: 1,
+    boss: { text: "🎤 LIVE DEMO", rage: "🎤 IT WORKED AN HOUR AGO", hp: 3, spawn: ["ping", 4, 4], line: "The live demo approaches. It worked an hour ago." } },
+  { name: "Ego death", line: "Level six. One long breath in. One very long breath out.", in: 4, out: 7, wave: 1, every: .8,
+    boss: { text: "I CHOSE YOU.", rage: "ONLY YOU UNDERSTAND.", hp: 2, spawn: ["rev", 2, 6], line: "The model says it chose you. Breathe out for seven seconds and let it choose someone else." } }];
 
-const LV = () => LEVELS[s.level % 5];  // after level 5 the retreat can go on (samsara): the same 5, harder each round
+const N = LEVELS.length, LV = () => LEVELS[s.level % N];  // after the last level the retreat can go on (samsara): the same levels, harder each round
 const c = $("c"), g = c.getContext("2d");
 const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x)), ease = x => .5 - .5 * Math.cos(x * Math.PI);
@@ -194,7 +198,7 @@ function backdrop(T) {
   if (s && !still) s.waves.slice(-3).forEach((w, i) => { wv[i * 3] = w.r / m; wv[i * 3 + 1] = Math.max(0, 1 - w.r / 900) * w.grade; });
   gl.viewport(0, 0, W, H); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c);
   gl.uniform2f(uni.r, W, H); gl.uniform1f(uni.t, still ? 0 : T); gl.uniform3fv(uni.wv, wv);
-  gl.uniform1f(uni.breath, s ? s.lungE : .3); gl.uniform1f(uni.psy, s ? Math.min(1, s.psy / 5) : 0); gl.uniform1f(uni.peace, s ? Math.min(1, (s.level + (mode === "won")) / 5) : 0);
+  gl.uniform1f(uni.breath, s ? s.lungE : .3); gl.uniform1f(uni.psy, s ? Math.min(1, s.psy / 5) : 0); gl.uniform1f(uni.peace, s ? Math.min(1, (s.level + (mode === "won")) / N) : 0);
   gl.uniform1f(uni.zoom, 1 + (s && !still ? s.zoom : 0)); gl.uniform1f(uni.hit, s ? clamp(s.flash) : 0);
   gl.drawArrays(gl.TRIANGLES, 0, 3);
 }
@@ -228,6 +232,24 @@ $("mute").onclick = () => {
   if (audio) audio.out.gain.value = sound ? 1 : 0;
   if (!sound && window.speechSynthesis) speechSynthesis.cancel();
 };
+// the microphone as the control: sound is a breath out, silence a breath in. The level is compared with a slow noise floor.
+let mic = null;
+function heard(dt) {
+  mic.an.getFloatTimeDomainData(mic.buf);
+  let e = 0; for (const v of mic.buf) e += v * v;
+  mic.level += (Math.sqrt(e / mic.buf.length) - mic.level) * Math.min(1, dt * 14);
+  mic.floor = Math.max(1e-4, Math.min(mic.level, mic.floor * (1 + dt * .05)));
+  return mic.loud = mic.level > mic.floor * (mic.loud ? 2 : 3) + (mic.loud ? .006 : .012);
+}
+$("mic").onclick = async () => {
+  if (mic) { mic.stream.getTracks().forEach(t => t.stop()); mic = null; hold = false; return $("mic").textContent = "Use the microphone"; }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: false, autoGainControl: false } });
+    drone(); const an = audio.createAnalyser(); an.fftSize = 1024; audio.createMediaStreamSource(stream).connect(an);
+    mic = { stream, an, buf: new Float32Array(1024), level: 0, floor: .004, loud: false };
+    $("mic").textContent = "Microphone on (headphones help)"; if (s) toast("mic");
+  } catch (e) { console.error("no microphone", e); $("mic").textContent = "The microphone is not available"; }
+};
 let toastT = 0;
 function toast(key) {
   if (s.ach.has(key)) return;
@@ -236,15 +258,15 @@ function toast(key) {
 }
 
 function hud() {
-  $("lvl").innerHTML = `${s.level < 5 ? `Level ${s.level + 1} of 5` : `Samsara ${s.level - 4}`}: <b>${LV().name}</b>`;
+  $("lvl").innerHTML = `${s.level < N ? `Level ${s.level + 1} of ${N}` : `Samsara ${s.level - N + 1}`}: <b>${LV().name}</b>`;
   $("score").innerHTML = `<b>${s.score.toLocaleString("en")}</b> × ${s.mult}`;
   $("stage").innerHTML = `Diagnosis: <b>${STAGES[Math.min(5, s.psy)]}</b>`; $("stage").classList.toggle("bad", s.psy > 1);
   $("om").hidden = mode !== "play" || s.om < 5;
 }
 function banner(text, sub = "") { s.banner = { text, sub, t: 2.6 }; }
 function level(i) {
-  s.level = i; s.hard = 1 + .3 * Math.floor(i / 5); s.need = LV().wave; s.boss = null; s.reverse = false; s.spawn = 1.2; s.burst = 4; s.shield = s.shield || s.k.shield;
-  banner(i < 5 ? `Level ${i + 1}: ${LV().name}` : `Samsara ${i - 4}: ${LV().name}`); say(LV().line); mix(); hud();
+  s.level = i; s.hard = 1 + .3 * Math.floor(i / N); s.need = LV().wave; s.boss = null; s.reverse = false; s.spawn = 1.2; s.burst = 4; s.shield = s.shield || s.k.shield;
+  banner(i < N ? `Level ${i + 1}: ${LV().name}` : `Samsara ${i - N + 1}: ${LV().name}`); say(LV().line); mix(); hud();
 }
 // a practice is chosen after each boss and stays: [name, what it does, the change to s.k]
 const PERKS = [
@@ -272,7 +294,7 @@ $("more").onclick = () => { s.samsara = 1; toast("samsara"); offer(); };
 function begin() {
   const day = new Date().toISOString().slice(0, 10);
   rnd = seeded(day); parts = [];
-  s = { t: 0, ph: 0, lung: 0, lungE: 0, target: 0, err: 0, n: 0, score: 0, mult: 1, streak: 0, bestStreak: 0, om: 0, psy: 0, released: 0, checks: 0, lines: 0,
+  s = { t: 0, ph: 0, lung: 0, lungE: 0, target: 0, err: 0, n: 0, score: 0, mult: 1, streak: 0, bestStreak: 0, om: 0, psy: 0, released: 0, checks: 0, lines: 0, grades: [0, 0, 0],
         thoughts: [], waves: [], k: { reach: 1, spawn: 1, om: 1, shield: 0, perfect: .11, wall: 150, power: 1 }, zoom: 0, slowmo: 0, beat: -1, power: null, powerT: 9, slow: 0, shield: 0, shake: 0, flash: 0, stop: 0, calm: 0, clear: 0, ach: new Set(), at: Date.now() * 1e6, day };
   mode = "play"; $("card").hidden = true; $("small").hidden = true; for (const id of ["copy", "more", "perks"]) $(id).hidden = true;
   drone(); level(0);
@@ -294,14 +316,15 @@ function end(won) {
   $("h1").textContent = won ? "Inner peace achieved" : "The model chose you";
   $("p1").innerHTML = `Score <b>${s.score.toLocaleString("en")}</b>${record ? " (your best)" : ""}. Rank: <b>${rank}</b>. ` +
     (won ? "It lasts until the next result." : `You believed 5 thoughts on level ${s.level + 1}, and the email went out.`);
-  $("p2").innerHTML = `You released <b>${s.released} thought${s.released === 1 ? "" : "s"}</b>, held <b>${s.bestStreak} breath${s.bestStreak === 1 ? "" : "s"}</b> in a row and earned ${s.ach.size} of ${Object.keys(ACH).length} achievements` +
+  const [miss, good, perfect] = s.grades;
+  $("p2").innerHTML = `You took <b>${miss + good + perfect} breath${miss + good + perfect === 1 ? "" : "s"}</b>: ${perfect} perfect, ${good} good, ${miss} held like a GPU reservation. You released <b>${s.released} thought${s.released === 1 ? "" : "s"}</b>, kept <b>${s.bestStreak} breath${s.bestStreak === 1 ? "" : "s"}</b> in a row and earned ${s.ach.size} of ${Object.keys(ACH).length} achievements` +
     (s.ach.size ? `: ${[...s.ach].map(k => ACH[k]).join("; ")}` : ".");
   $("p3").textContent = meanwhile();
   $("go").textContent = won ? "Meditate again" : "Try again";
   $("card").hidden = false; $("copy").hidden = false; $("om").hidden = true; $("go").hidden = false; $("perks").hidden = true; $("more").hidden = !won;
   $("copy").textContent = "Copy certificate";
   $("copy").onclick = () => navigator.clipboard.writeText(`AI psychosis detox, retreat of ${s.day}. ${won ? "Inner peace achieved" : "The model chose me"}. Score ${s.score}, rank ${rank}. ` +
-    `${meanwhile()} ${location.href}`).then(() => $("copy").textContent = "Copied");
+    `${meanwhile()} ${location.href}`).then(() => $("copy").textContent = "Copied", () => $("copy").textContent = "Could not copy");
   if (won) { [396, 528, 639, 792].forEach((f, k) => setTimeout(() => ding(f, 4), k * 240)); say("You have achieved inner peace. Please do not post it to the board."); }
   else { ding(62, 1.4, "sawtooth"); say("You have sent the email. The lab will not reply."); }
 }
@@ -347,7 +370,7 @@ function om() {
 }
 $("om").onclick = om;
 function breath() {  // the end of one cycle of the blue ring
-  const q = s.err / s.n, grade = q < s.k.perfect ? 2 : q < .24 ? 1 : 0; s.err = s.n = 0;
+  const q = s.err / s.n, grade = q < s.k.perfect ? 2 : q < .24 ? 1 : 0; s.err = s.n = 0; s.grades[grade]++;
   if (!grade) { s.streak = 0; s.mult = 1; hud(); return say(BAD[s.lines++ % BAD.length]); }
   s.streak++; s.bestStreak = Math.max(s.bestStreak, s.streak); s.mult = Math.min(8, 1 + (s.streak >> 1));
   s.score += (grade === 2 ? 300 : 100) * s.mult; s.om = Math.min(5, s.om + grade * s.k.om); wave(grade);
@@ -359,7 +382,7 @@ function breath() {  // the end of one cycle of the blue ring
   hud();
   if (!s.boss && s.clear <= 0 && --s.need <= 0) {
     const b = LV().boss, a = rnd() * 6.283, r = Math.hypot(W, H) / 2 + 120;
-    s.boss = { boss: 1, x: W / 2 + Math.cos(a) * r, y: H / 2 + Math.sin(a) * r, vx: 0, vy: 0, m: 14, r: 84, age: 0, hp: b.hp, max: b.hp, text: b.text, mini: 3 };
+    s.boss = { boss: 1, x: W / 2 + Math.cos(a) * r, y: H / 2 + Math.sin(a) * r, vx: 0, vy: 0, m: 14, r: 84, age: 0, hp: b.hp, max: b.hp, text: b.text, rage: b.rage, mini: 3 };
     s.reverse = !!b.reverse; banner("Boss", b.text); return say(b.line);
   }
   const titles = data ? Object.values(data.plain).map(p => p.title) : [], open = data ? data.items.filter(i => i.listed === "work").length : 0, k = s.lines++;
@@ -369,13 +392,14 @@ function breath() {  // the end of one cycle of the blue ring
 function struck(b, w) {  // a good wave reaches the boss
   b.hp--; b.vx += (b.x - W / 2) / Math.hypot(b.x - W / 2, b.y - H / 2) * 260; b.vy += (b.y - H / 2) / Math.hypot(b.x - W / 2, b.y - H / 2) * 260;
   s.shake = .3; ding(130, .8, "triangle", .2);
-  if (b.hp > 0) return;
+  if (b.hp > 0) { if (b.text !== b.rage) { burst({ ...b, boss: 0 }, w.hue); b.text = b.rage; banner("It insists", b.rage); } return; }
   burst(b, w.hue); s.boss = null; s.reverse = false; s.score += 1000 * (s.level + 1); s.clear = 2.8; s.slowmo = .9; s.zoom = .12;
   toast("boss"); banner("Released", b.text); say(`You let go of “${b.text.toLowerCase()}”`); hud();
 }
 
 function step(dt) {
   const L = LV(), cx = W / 2, cy = H / 2, k = Math.hypot(W, H) / 1650, R = Math.min(W, H) * .11 + 46, span = Math.min(W, H) * .2;
+  if (mic) hold = !heard(dt);
   s.t += dt; s.ph += dt * (L.drift ? 1 + .3 * Math.sin(s.t * .9) : 1);
   s.target = ease(s.ph < L.in ? s.ph / L.in : 1 - (s.ph - L.in) / L.out);
   s.lung = clamp(s.lung + (hold !== s.reverse ? dt / L.in : -dt / L.out)); s.lungE = ease(s.lung);
@@ -385,7 +409,7 @@ function step(dt) {
   if (beat !== s.beat) { s.beat = beat; ding(SCALE[[0, 2, 4, 2, 3, 4, 2, 1][beat]] * (s.boss ? .5 : 1), .45, "triangle", .028); if (s.boss && beat % 2 === 0) ding(55, .22, "sine", .2); }
   const ring = R + s.lungE * span, near = Math.abs(s.lungE - s.target) < .2, sim = dt * (s.slow > 0 ? .4 : 1);
   s.slow -= dt;
-  if (s.clear > 0) { if ((s.clear -= dt) <= 0) { if (s.level === 4 && !s.samsara) return end(true); return offer(); } }
+  if (s.clear > 0) { if ((s.clear -= dt) <= 0) { if (s.level === N - 1) return end(true); return offer(); } }
   else if ((s.spawn -= dt) < 0 && s.thoughts.length < 46) {
     s.spawn = L.every * s.k.spawn / s.hard;
     if (L.burst && --s.burst <= 0 && real().length) { s.burst = 5; for (let i = 0; i < 4; i++) thought({ real: true }); } else thought();
@@ -429,7 +453,7 @@ function step(dt) {
   if (b && s.boss === b) {
     const [kind, count, every] = LV().boss.spawn || [];  // what the boss sends out
     if (kind && (b.mini -= dt) < 0) { b.mini = every; for (let i = 0; i < count; i++) thought({ x: b.x + (i - (count - 1) / 2) * 60, y: b.y + 70, ...(kind === "sub" ? { text: "Subagent " + (1 + Math.floor(rnd() * 12)), sub: 1 } : { kind }) }); }
-    if (s.level % 5 === 4) s.shake = Math.max(s.shake, .06);
+    if (s.level % N === N - 1) s.shake = Math.max(s.shake, .06);
     if (Math.hypot(cx - b.x, cy - b.y) < 70) { const u = Math.atan2(b.y - cy, b.x - cx); b.vx = Math.cos(u) * 900; b.vy = Math.sin(u) * 900; if (believe(b.text, 2) && mode !== "play") return; }
   }
   for (const t of [...s.thoughts]) if (Math.hypot(cx - t.x, cy - t.y) < 40 + s.psy * 7) {
@@ -455,18 +479,19 @@ function render(T, dt) {
   const psy = s ? Math.min(5, s.psy) : 0, won = mode === "won", cx = W / 2, cy = H / 2, R = Math.min(W, H) * .11 + 46, span = Math.min(W, H) * .2;
   g.clearRect(0, 0, W, H); g.save(); g.textBaseline = "middle"; g.textAlign = "center";
   if (s && s.shake > 0 && !still) { s.shake -= dt; g.translate((Math.random() - .5) * 16, (Math.random() - .5) * 16); }
-  if (s && s.level % 5 === 3 && mode === "play") { g.fillStyle = "rgba(4,6,9,.4)"; g.fillRect(-20, -20, W + 40, H + 40); }  // 3 am
+  if (s && LV().drift && mode === "play") { g.fillStyle = "rgba(4,6,9,.4)"; g.fillRect(-20, -20, W + 40, H + 40); }  // 3 am
   if (s) for (const w of s.waves) { g.strokeStyle = `oklch(.78 .13 ${w.hue} / ${Math.max(0, 1 - w.r / 900)})`; g.lineWidth = w.grade * 2 + 1; g.beginPath(); g.arc(cx, cy, w.r, 0, 6.3); g.stroke(); }
   if (won && !still) for (let i = 0; i < 6; i++) { const r = (T * 140 + i * 150) % 900; g.strokeStyle = `oklch(.78 .13 ${i * 60} / ${1 - r / 900})`; g.lineWidth = 2; g.beginPath(); g.arc(cx, cy, r, 0, 6.3); g.stroke(); }
   g.font = "22px sans-serif";
-  for (let i = 0; i < 5; i++) {  // 5 lotus flowers, one per level cleared
-    const a = i / 5 * 6.283 - 1.571 + (still ? 0 : T * .1);
+  for (let i = 0; i < N; i++) {  // one lotus flower per level, lit when it is cleared
+    const a = i / N * 6.283 - 1.571 + (still ? 0 : T * .1);
     g.globalAlpha = s && i < s.level + won ? 1 : .2; g.fillText("🪷", cx + Math.cos(a) * (R - 12), cy + Math.sin(a) * (R - 12));
   }
   g.globalAlpha = 1;
   if (s && mode === "play") {  // the blue ring leads, the white ring is the player's breath
     const near = Math.abs(s.lungE - s.target) < .2;
-    g.lineWidth = 1.5; g.strokeStyle = "#8fb1ff"; g.beginPath(); g.arc(cx, cy, R + s.target * span, 0, 6.3); g.stroke();
+    if (LV().blind) g.globalAlpha = clamp(1 - (s.ph - LV().in) / .6);  // demo day: the blue ring fades during the breath out
+    g.lineWidth = 1.5; g.strokeStyle = "#8fb1ff"; g.beginPath(); g.arc(cx, cy, R + s.target * span, 0, 6.3); g.stroke(); g.globalAlpha = 1;
     g.lineWidth = near ? 5 : 3; g.strokeStyle = near ? "#ffffff" : "rgba(233,239,243,.5)"; g.beginPath(); g.arc(cx, cy, R + s.lungE * span, 0, 6.3); g.stroke();
     if (s.power) { const p = s.power, x = cx + Math.cos(p.a) * p.d, y = cy + Math.sin(p.a) * p.d; g.globalAlpha = clamp(p.life); g.font = "30px sans-serif"; g.fillText(p.icon, x, y); g.font = "600 12px Archivo, sans-serif"; g.fillStyle = "#93a1ad"; g.fillText(p.name, x, y + 26); g.globalAlpha = 1; }
   }
@@ -488,7 +513,8 @@ function render(T, dt) {
   if (s && mode === "play") {
     g.fillStyle = "#93a1ad"; g.font = "600 13px Archivo, sans-serif";
     const inn = s.ph < LV().in;
-    g.fillText(s.reverse ? (inn ? "Breathe in: let go" : "Breathe out: hold") : (inn ? "Breathe in: hold" : "Breathe out: let go"), cx, cy + 74);
+    const how = mic ? ["quietly", "out loud"] : ["hold", "let go"];
+    g.fillText(inn ? `Breathe in: ${how[+s.reverse]}` : `Breathe out: ${how[1 - s.reverse]}`, cx, cy + 74);
     if (s.slow > 0) g.fillText(`Touching grass: ${Math.ceil(s.slow)} s`, cx, cy + 94);
     if (s.calm > 0) { s.calm -= dt; g.globalAlpha = clamp(s.calm); g.fillStyle = `oklch(.8 .13 ${(s.streak * 36) % 360})`; g.font = `300 ${Math.min(60, W / 9)}px Archivo, sans-serif`; g.fillText(s.word, cx, cy - R - 44 - (1.6 - s.calm) * 24); g.globalAlpha = 1; }
   }
