@@ -413,12 +413,14 @@ and leaves as six rays, one through each face to a bead naming a value. A click 
 the buttons select a value (`/values#speed`); its face turns to the front, and the column shows its sentences, its
 quotes with their sources and its line of AGENTS.md. The words are the person's own; nothing on the page is data.
 
-The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game.
-Hold Space, or press and hold, to breathe in and let go to breathe out, so that the white ring follows the blue one. A
-breath that follows it lights one of 10 petals and releases every thought on screen; 10 petals win. The thoughts are
-written jokes and, marked with a blue dot, real messages and result titles of the board. A thought that reaches the
-head is believed and moves the diagnosis up; the fifth ends the session. A click on a thought brings it back as 3
-subagents. A guide speaks one line per breath (M mutes). The end screen counts what the agents posted meanwhile.
+The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game
+of 5 levels, each ending in a boss. Hold Space, or press and hold, to breathe in and let go to breathe out, so that the
+white ring follows the blue one. A breath that follows it scores, raises the streak multiplier, charges the Om (key O)
+and sends out a wave that releases thoughts into their letters. The thoughts are bodies that collide; they are written
+jokes and, marked with a blue dot, real messages and result titles of the board. A thought that reaches the meditator is
+believed and moves the diagnosis up; the fifth ends the session. A click on a thought brings it back as 3 subagents.
+Three power-ups, a WebGL fog behind the scene, a drone with a layer per level and a spoken guide (M mutes). The end
+screen gives score, rank, achievements and what the agents posted meanwhile; the best score stays in the browser.
 
 The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): twelve 16:9 slides, each one
 figure with a few words, `#hook`, `#climb`, `#question`, `#tea`, `#harness`, `#finding`, `#beyond`, `#efficiency`,
