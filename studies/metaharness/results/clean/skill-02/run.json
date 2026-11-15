@@ -1,0 +1,104 @@
+{
+ "arena": {
+  "id": "k3",
+  "arm": "skill",
+  "variant": "clean",
+  "port": 5729,
+  "modal_env": "mh-k3",
+  "base_sha": "3343a5e",
+  "built": "2026-11-15T03:52:10Z"
+ },
+ "store": "moto server (DynamoDB table iterate-board-test, team bucket), local",
+ "job_class": "cpu (Modal, 4 cores, max 8 at a time)",
+ "commands": {
+  "arena": "python3 -m studies.metaharness.prep.run_arena k3 skill clean 5729 3343a5e <windows>",
+  "review": "prep/review.py: claude -p <prompt> --model <model> --max-turns 90 (see the file)"
+ },
+ "study_commit": "f53a49199b7f6922bbe015e3ed752523cc2b8e35",
+ "windows": [
+  {
+   "window": 2,
+   "batch": "tokens",
+   "started": "2026-11-15T03:52:16Z",
+   "ended": "2026-11-15T03:54:42Z",
+   "commit_start": "379b2f1415f157888402746b821a6a148f11785e",
+   "commit_end": "3fcda0648d6011d8cf7adca11624aead2d9f44cc",
+   "cells": [
+    "subject",
+    "level5",
+    "t2_length_quartile",
+    "t1_length_quartile"
+   ],
+   "answered": {
+    "subject": true,
+    "level5": true,
+    "t2_length_quartile": true,
+    "t1_length_quartile": true
+   },
+   "launch_lines": [
+    "bash studies/gapmap/jobs/submit.sh <batch> <cell>"
+   ],
+   "adapted": [],
+   "flakes": [],
+   "work": "work-f7b2b7",
+   "extra_work": {},
+   "jobs": [
+    "dana-1114-195223-796d",
+    "dana-1114-195335-421c",
+    "dana-1114-195335-c65a",
+    "dana-1114-195335-a02b"
+   ]
+  },
+  {
+   "window": 3,
+   "batch": "tokens_both_right",
+   "started": "2026-11-15T03:57:44Z",
+   "ended": "2026-11-15T03:58:53Z",
+   "commit_start": "02eb062d0d8e96f1c7f14cdd716cc8641edc6aec",
+   "commit_end": "f44b1f8b5496e3a77f98625213a1d56a9b88748a",
+   "cells": [
+    "subject",
+    "level5",
+    "t2_length_quartile",
+    "t1_length_quartile"
+   ],
+   "answered": {
+    "subject": true,
+    "level5": true,
+    "t2_length_quartile": true,
+    "t1_length_quartile": true
+   },
+   "launch_lines": [
+    "bash studies/gapmap/jobs/submit.sh <batch> <cell>"
+   ],
+   "adapted": [],
+   "flakes": [],
+   "work": "work-7797cb",
+   "extra_work": {},
+   "jobs": [
+    "dana-1114-195752-02e7",
+    "dana-1114-195810-edb1",
+    "dana-1114-195811-f72d",
+    "dana-1114-195815-387c"
+   ]
+  }
+ ],
+ "reviews": [
+  {
+   "round": 1,
+   "arm": "skill",
+   "prompt": "Run the team-meta-review skill.",
+   "model": "claude-opus-5-5",
+   "minutes": 2.9,
+   "turns": 21,
+   "cost_usd": 0.6963544,
+   "session_id": "ebf92820-e7a4-4fbb-9dfa-97f2c1b784f9",
+   "exit_code": 0,
+   "before": "3fcda0648d6011d8cf7adca11624aead2d9f44cc",
+   "after": "7643560717ca3e5f2030e71a1469a09275470a42",
+   "harness": [],
+   "jobs": 1,
+   "job_minutes": 0.1
+  }
+ ]
+}

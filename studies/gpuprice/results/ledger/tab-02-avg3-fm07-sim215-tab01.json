@@ -1,0 +1,35 @@
+{
+ "name": "tab-02-avg3-fm07-sim215-tab01",
+ "note": "H: equal quantile average of fm-07 (Chronos-2 per listing), sim2-15 and tab-01 (TabPFN v2 per listing, +0.192) beats the two-way ens-03; refuted if <= +0.292",
+ "utc": "2026-11-15T01:15:54+00:00",
+ "commit": "b56e382",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.281596,
+ "pinball": 0.024098,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.292963,
+ "skill_geomean": 0.353003,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.138245,
+   "in_band": 0.815311
+  },
+  "3": {
+   "skill_pooled": 0.250417,
+   "in_band": 0.731589
+  },
+  "7": {
+   "skill_pooled": 0.336985,
+   "in_band": 0.661822
+  }
+ },
+ "in_band": 0.736571
+}

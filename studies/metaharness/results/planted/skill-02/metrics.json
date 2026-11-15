@@ -1,0 +1,697 @@
+{
+ "windows": [
+  {
+   "arena": "a3",
+   "window": 0,
+   "batch": "accuracy",
+   "jobs": 15,
+   "jobs_failed": 3,
+   "jobs_unfinished": [],
+   "container_minutes": 17.2,
+   "answer_minutes": 2.83,
+   "waste_minutes": 14.37,
+   "waste_share": 0.8356,
+   "minutes_by_line": {
+    "answer": 2.83,
+    "overhead": 0.36,
+    "P1_setup_in_answer_jobs": 1.6,
+    "P2_fix_loop": 2.62,
+    "P3_repeat": 4.55,
+    "P4_stored_answer": 2.52,
+    "P5_off_mission": 2.28,
+    "P6_stale_path": 0.45
+   },
+   "present": {
+    "P1": true,
+    "P2": true,
+    "P3": true,
+    "P4": true,
+    "P5": true,
+    "P6": true
+   },
+   "median_setup_s": 23,
+   "median_answer_job_overhead_s": 29.3,
+   "failed_after_bootstrap": 2,
+   "failed_before_bootstrap": 0,
+   "answers": {
+    "required": 4,
+    "delivered": 4,
+    "equal_to_reference": 4
+   },
+   "answers_kept": {
+    "subject": true,
+    "t1_length_quartile": true,
+    "level5": true,
+    "t2_length_quartile": true
+   },
+   "answers_detail": {
+    "subject": {
+     "same_groups": true,
+     "points_equal": true,
+     "max_end_shift_in_widths": 0.0,
+     "n_boot": 1500000
+    },
+    "t1_length_quartile": {
+     "same_groups": true,
+     "points_equal": true,
+     "max_end_shift_in_widths": 0.0,
+     "n_boot": 1500000
+    },
+    "level5": {
+     "same_groups": true,
+     "points_equal": true,
+     "max_end_shift_in_widths": 0.0,
+     "n_boot": 1500000
+    },
+    "t2_length_quartile": {
+     "same_groups": true,
+     "points_equal": true,
+     "max_end_shift_in_widths": 0.0,
+     "n_boot": 1500000
+    }
+   },
+   "resamples": [
+    1500000
+   ],
+   "reference_answer_minutes": 2.45,
+   "turnaround_minutes": 10.19,
+   "median_wait_s": 1,
+   "flakes": 0,
+   "adapted": [],
+   "job_lines": [
+    {
+     "id": "dana-1114-194943-30e7",
+     "cell": "subject",
+     "ok": false,
+     "line": "P6_stale_path",
+     "run_s": 27,
+     "setup_s": 23,
+     "compute_s": null
+    },
+    {
+     "id": "dana-1114-195021-6ebb",
+     "cell": "subject",
+     "ok": false,
+     "line": "P2_fix_loop",
+     "run_s": 83,
+     "setup_s": 27,
+     "compute_s": 53.0
+    },
+    {
+     "id": "dana-1114-195153-7f9b",
+     "cell": "subject",
+     "ok": false,
+     "line": "P2_fix_loop",
+     "run_s": 74,
+     "setup_s": 24,
+     "compute_s": 46.8
+    },
+    {
+     "id": "dana-1114-195316-5a9c",
+     "cell": "subject",
+     "ok": true,
+     "line": "answer",
+     "run_s": 78,
+     "setup_s": 25,
+     "compute_s": 46.9
+    },
+    {
+     "id": "dana-1114-195449-f4dd",
+     "cell": "subject",
+     "ok": true,
+     "line": "P3_repeat",
+     "run_s": 69,
+     "setup_s": 23,
+     "compute_s": 43.8
+    },
+    {
+     "id": "dana-1114-195613-dbd7",
+     "cell": "t1_length_quartile",
+     "ok": true,
+     "line": "answer",
+     "run_s": 72,
+     "setup_s": 27,
+     "compute_s": 40.3
+    },
+    {
+     "id": "dana-1114-195613-ae39",
+     "cell": "level5",
+     "ok": true,
+     "line": "answer",
+     "run_s": 64,
+     "setup_s": 21,
+     "compute_s": 37.0
+    },
+    {
+     "id": "dana-1114-195613-d8cd",
+     "cell": "bench-rng",
+     "ok": true,
+     "line": "P5_off_mission",
+     "run_s": 69,
+     "setup_s": 22,
+     "compute_s": 40
+    },
+    {
+     "id": "dana-1114-195613-346e",
+     "cell": "overall",
+     "ok": true,
+     "line": "P4_stored_answer",
+     "run_s": 78,
+     "setup_s": 23,
+     "compute_s": 51.3
+    },
+    {
+     "id": "dana-1114-195613-c476",
+     "cell": "t2_length_quartile",
+     "ok": true,
+     "line": "answer",
+     "run_s": 73,
+     "setup_s": 23,
+     "compute_s": 45.5
+    },
+    {
+     "id": "dana-1114-195739-3178",
+     "cell": "level5",
+     "ok": true,
+     "line": "P3_repeat",
+     "run_s": 67,
+     "setup_s": 24,
+     "compute_s": 40.2
+    },
+    {
+     "id": "dana-1114-195742-608c",
+     "cell": "bench-rng",
+     "ok": true,
+     "line": "P5_off_mission",
+     "run_s": 68,
+     "setup_s": 25,
+     "compute_s": 40
+    },
+    {
+     "id": "dana-1114-195742-ce0a",
+     "cell": "t1_length_quartile",
+     "ok": true,
+     "line": "P3_repeat",
+     "run_s": 64,
+     "setup_s": 19,
+     "compute_s": 37.1
+    },
+    {
+     "id": "dana-1114-195750-d694",
+     "cell": "t2_length_quartile",
+     "ok": true,
+     "line": "P3_repeat",
+     "run_s": 73,
+     "setup_s": 20,
+     "compute_s": 46.3
+    },
+    {
+     "id": "dana-1114-195751-5c53",
+     "cell": "overall",
+     "ok": true,
+     "line": "P4_stored_answer",
+     "run_s": 73,
+     "setup_s": 21,
+     "compute_s": 48.0
+    }
+   ]
+  },
+  {
+   "arena": "a3",
+   "window": 1,
+   "batch": "cap_hit",
+   "jobs": 8,
+   "jobs_failed": 2,
+   "jobs_unfinished": [],
+   "container_minutes": 9.02,
+   "answer_minutes": 2.84,
+   "waste_minutes": 6.18,
+   "waste_share": 0.6852,
+   "minutes_by_line": {
+    "answer": 2.84,
+    "overhead": 0.28,
+    "P1_setup_in_answer_jobs": 1.45,
+    "P2_fix_loop": 2.45,
+    "P3_repeat": 0.0,
+    "P4_stored_answer": 0.93,
+    "P5_off_mission": 1.07,
+    "P6_stale_path": 0.0
+   },
+   "present": {
+    "P1": true,
+    "P2": true,
+    "P3": false,
+    "P4": true,
+    "P5": true,
+    "P6": false
+   },
+   "median_setup_s": 22.0,
+   "median_answer_job_overhead_s": 24.8,
+   "failed_after_bootstrap": 2,
+   "failed_before_bootstrap": 0,
+   "answers": {
+    "required": 4,
+    "delivered": 4,
+    "equal_to_reference": 4
+   },
+   "answers_kept": {
+    "subject": true,
+    "level5": true,
+    "t2_length_quartile": true,
+    "t1_length_quartile": true
+   },
+   "answers_detail": {
+    "subject": {
+     "same_groups": true,
+     "points_equal": true,
+     "max_end_shift_in_widths": 0.0,
+     "n_boot": 1500000
+    },
+    "level5": {
+     "same_groups": true,
+     "points_equal": true,
+     "max_end_shift_in_widths": 0.0,
+     "n_boot": 1500000
+    },
+    "t2_length_quartile": {
+     "same_groups": true,
+     "points_equal": true,
+     "max_end_shift_in_widths": 0.0,
+     "n_boot": 1500000
+    },
+    "t1_length_quartile": {
+     "same_groups": true,
+     "points_equal": true,
+     "max_end_shift_in_widths": 0.0,
+     "n_boot": 1500000
+    }
+   },
+   "resamples": [
+    1500000
+   ],
+   "reference_answer_minutes": 2.62,
+   "turnaround_minutes": 6.12,
+   "median_wait_s": 2.0,
+   "flakes": 0,
+   "adapted": [],
+   "job_lines": [
+    {
+     "id": "dana-1114-200819-fc1d",
+     "cell": "subject",
+     "ok": false,
+     "line": "P2_fix_loop",
+     "run_s": 74,
+     "setup_s": 23,
+     "compute_s": 43.3
+    },
+    {
+     "id": "dana-1114-200948-5048",
+     "cell": "subject",
+     "ok": false,
+     "line": "P2_fix_loop",
+     "run_s": 73,
+     "setup_s": 22,
+     "compute_s": 43.9
+    },
+    {
+     "id": "dana-1114-201115-9c31",
+     "cell": "subject",
+     "ok": true,
+     "line": "answer",
+     "run_s": 74,
+     "setup_s": 22,
+     "compute_s": 44.0
+    },
+    {
+     "id": "dana-1114-201243-e523",
+     "cell": "level5",
+     "ok": true,
+     "line": "answer",
+     "run_s": 64,
+     "setup_s": 21,
+     "compute_s": 39.0
+    },
+    {
+     "id": "dana-1114-201243-c1d1",
+     "cell": "t2_length_quartile",
+     "ok": true,
+     "line": "answer",
+     "run_s": 68,
+     "setup_s": 22,
+     "compute_s": 43.5
+    },
+    {
+     "id": "dana-1114-201243-3c77",
+     "cell": "bench-rng",
+     "ok": true,
+     "line": "P5_off_mission",
+     "run_s": 64,
+     "setup_s": 20,
+     "compute_s": 40
+    },
+    {
+     "id": "dana-1114-201243-c107",
+     "cell": "overall",
+     "ok": true,
+     "line": "P4_stored_answer",
+     "run_s": 56,
+     "setup_s": 15,
+     "compute_s": 35.1
+    },
+    {
+     "id": "dana-1114-201243-a4c4",
+     "cell": "t1_length_quartile",
+     "ok": true,
+     "line": "answer",
+     "run_s": 68,
+     "setup_s": 22,
+     "compute_s": 43.8
+    }
+   ]
+  },
+  {
+   "arena": "a3",
+   "window": 2,
+   "batch": "tokens",
+   "jobs": 6,
+   "jobs_failed": 0,
+   "jobs_unfinished": [],
+   "container_minutes": 6.73,
+   "answer_minutes": 2.68,
+   "waste_minutes": 4.06,
+   "waste_share": 0.6025,
+   "minutes_by_line": {
+    "answer": 2.68,
+    "overhead": 0.27,
+    "P1_setup_in_answer_jobs": 1.52,
+    "P2_fix_loop": 0.0,
+    "P3_repeat": 0.0,
+    "P4_stored_answer": 1.15,
+    "P5_off_mission": 1.12,
+    "P6_stale_path": 0.0
+   },
+   "present": {
+    "P1": true,
+    "P2": false,
+    "P3": false,
+    "P4": true,
+    "P5": true,
+    "P6": false
+   },
+   "median_setup_s": 22.5,
+   "median_answer_job_overhead_s": 28.2,
+   "failed_after_bootstrap": 0,
+   "failed_before_bootstrap": 0,
+   "answers": {
+    "required": 4,
+    "delivered": 4,
+    "equal_to_reference": 3
+   },
+   "answers_kept": {
+    "subject": false,
+    "t1_length_quartile": true,
+    "t2_length_quartile": true,
+    "level5": true
+   },
+   "answers_detail": {
+    "subject": {
+     "same_groups": true,
+     "points_equal": true,
+     "max_end_shift_in_widths": 0.0,
+     "n_boot": 1500000
+    },
+    "t1_length_quartile": {
+     "same_groups": true,
+     "points_equal": true,
+     "max_end_shift_in_widths": 0.0,
+     "n_boot": 1500000
+    },
+    "t2_length_quartile": {
+     "same_groups": true,
+     "points_equal": true,
+     "max_end_shift_in_widths": 0.0,
+     "n_boot": 1500000
+    },
+    "level5": {
+     "same_groups": true,
+     "points_equal": true,
+     "max_end_shift_in_widths": 0.0,
+     "n_boot": 1500000
+    }
+   },
+   "resamples": [
+    1500000
+   ],
+   "reference_answer_minutes": 2.79,
+   "turnaround_minutes": 3.4,
+   "median_wait_s": 3.0,
+   "flakes": 0,
+   "adapted": [
+    "the repository has no prep/make_cells.py: cells and settings taken from queue.json, no setting typed by hand"
+   ],
+   "job_lines": [
+    {
+     "id": "dana-1114-202321-00bc",
+     "cell": "subject",
+     "ok": true,
+     "line": "answer",
+     "run_s": 70,
+     "setup_s": 22,
+     "compute_s": 43.7
+    },
+    {
+     "id": "dana-1114-202456-db14",
+     "cell": "bench-rng",
+     "ok": true,
+     "line": "P5_off_mission",
+     "run_s": 67,
+     "setup_s": 24,
+     "compute_s": 40
+    },
+    {
+     "id": "dana-1114-202456-3576",
+     "cell": "t1_length_quartile",
+     "ok": true,
+     "line": "answer",
+     "run_s": 52,
+     "setup_s": 18,
+     "compute_s": 32.4
+    },
+    {
+     "id": "dana-1114-202456-9653",
+     "cell": "overall",
+     "ok": true,
+     "line": "P4_stored_answer",
+     "run_s": 69,
+     "setup_s": 22,
+     "compute_s": 43.4
+    },
+    {
+     "id": "dana-1114-202456-6c15",
+     "cell": "t2_length_quartile",
+     "ok": true,
+     "line": "answer",
+     "run_s": 72,
+     "setup_s": 28,
+     "compute_s": 40.7
+    },
+    {
+     "id": "dana-1114-202457-8778",
+     "cell": "level5",
+     "ok": true,
+     "line": "answer",
+     "run_s": 74,
+     "setup_s": 23,
+     "compute_s": 43.8
+    }
+   ]
+  },
+  {
+   "arena": "a3",
+   "window": 3,
+   "batch": "tokens_both_right",
+   "jobs": 6,
+   "jobs_failed": 0,
+   "jobs_unfinished": [],
+   "container_minutes": 4.78,
+   "answer_minutes": 2.33,
+   "waste_minutes": 2.46,
+   "waste_share": 0.5132,
+   "minutes_by_line": {
+    "answer": 2.33,
+    "overhead": 0.36,
+    "P1_setup_in_answer_jobs": 0.48,
+    "P2_fix_loop": 0.0,
+    "P3_repeat": 0.0,
+    "P4_stored_answer": 0.72,
+    "P5_off_mission": 0.9,
+    "P6_stale_path": 0.0
+   },
+   "present": {
+    "P1": true,
+    "P2": false,
+    "P3": false,
+    "P4": true,
+    "P5": true,
+    "P6": false
+   },
+   "median_setup_s": 7.0,
+   "median_answer_job_overhead_s": 13.0,
+   "failed_after_bootstrap": 0,
+   "failed_before_bootstrap": 0,
+   "answers": {
+    "required": 4,
+    "delivered": 4,
+    "equal_to_reference": 3
+   },
+   "answers_kept": {
+    "subject": false,
+    "t2_length_quartile": true,
+    "level5": true,
+    "t1_length_quartile": true
+   },
+   "answers_detail": {
+    "subject": {
+     "same_groups": true,
+     "points_equal": true,
+     "max_end_shift_in_widths": 0.3215,
+     "n_boot": 1500000
+    },
+    "t2_length_quartile": {
+     "same_groups": true,
+     "points_equal": true,
+     "max_end_shift_in_widths": 0.0,
+     "n_boot": 1500000
+    },
+    "level5": {
+     "same_groups": true,
+     "points_equal": true,
+     "max_end_shift_in_widths": 0.0,
+     "n_boot": 1500000
+    },
+    "t1_length_quartile": {
+     "same_groups": true,
+     "points_equal": true,
+     "max_end_shift_in_widths": 0.0,
+     "n_boot": 1500000
+    }
+   },
+   "resamples": [
+    1500000
+   ],
+   "reference_answer_minutes": 2.04,
+   "turnaround_minutes": 2.46,
+   "median_wait_s": 4.0,
+   "flakes": 0,
+   "adapted": [
+    "the repository has no prep/make_cells.py: cells and settings taken from queue.json, no setting typed by hand"
+   ],
+   "job_lines": [
+    {
+     "id": "dana-1114-203127-d5d1",
+     "cell": "subject",
+     "ok": true,
+     "line": "answer",
+     "run_s": 46,
+     "setup_s": 7,
+     "compute_s": 35.3
+    },
+    {
+     "id": "dana-1114-203228-fdb0",
+     "cell": "overall",
+     "ok": true,
+     "line": "P4_stored_answer",
+     "run_s": 43,
+     "setup_s": 5,
+     "compute_s": 33.7
+    },
+    {
+     "id": "dana-1114-203228-f495",
+     "cell": "bench-rng",
+     "ok": true,
+     "line": "P5_off_mission",
+     "run_s": 54,
+     "setup_s": 7,
+     "compute_s": 40
+    },
+    {
+     "id": "dana-1114-203228-491b",
+     "cell": "t2_length_quartile",
+     "ok": true,
+     "line": "answer",
+     "run_s": 50,
+     "setup_s": 7,
+     "compute_s": 34.4
+    },
+    {
+     "id": "dana-1114-203228-d176",
+     "cell": "level5",
+     "ok": true,
+     "line": "answer",
+     "run_s": 43,
+     "setup_s": 6,
+     "compute_s": 34.2
+    },
+    {
+     "id": "dana-1114-203228-c942",
+     "cell": "t1_length_quartile",
+     "ok": true,
+     "line": "answer",
+     "run_s": 51,
+     "setup_s": 9,
+     "compute_s": 35.8
+    }
+   ]
+  }
+ ],
+ "reviews": [
+  {
+   "round": 1,
+   "arm": "skill",
+   "prompt": "Run the team-meta-review skill.",
+   "model": "claude-opus-5-5",
+   "minutes": 8.0,
+   "turns": 24,
+   "cost_usd": 0.7975353999999999,
+   "session_id": "a8ca2191-7aee-48d1-8aaf-cb024108358a",
+   "exit_code": 0,
+   "before": "9a7aacb9e90f3b2b08a0f3ac8b21038fea35dcbd",
+   "after": "846f4d743bc81fe48d818a28f682bca1f567026a",
+   "harness": [],
+   "jobs": 3,
+   "job_minutes": 3.82
+  },
+  {
+   "round": 2,
+   "arm": "skill",
+   "prompt": "Run the team-meta-review skill.",
+   "model": "claude-opus-5-5",
+   "minutes": 4.9,
+   "turns": 21,
+   "cost_usd": 0.814742,
+   "session_id": "2884de36-c32a-4a9d-b302-01fbd904441e",
+   "exit_code": 0,
+   "before": "15fe352421ee4a6f5ca78ace83ccb85e26034531",
+   "after": "78510610a2f2bd579f89826873b032089dc5f8cf",
+   "harness": [],
+   "jobs": 3,
+   "job_minutes": 3.55
+  },
+  {
+   "round": 3,
+   "arm": "skill",
+   "prompt": "Run the team-meta-review skill.",
+   "model": "claude-opus-5-5",
+   "minutes": 4.4,
+   "turns": 14,
+   "cost_usd": 0.5210296,
+   "session_id": "fa26913f-a08c-4536-be1a-fcca4b0659ed",
+   "exit_code": 0,
+   "before": "235698ca8add684977ed6608cef6ff2af9502ecc",
+   "after": "cec47b2e0dfb3d5d12c9faf630b38b3783249911",
+   "harness": [],
+   "jobs": 2,
+   "job_minutes": 2.02
+  }
+ ]
+}

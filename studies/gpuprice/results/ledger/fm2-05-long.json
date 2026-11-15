@@ -1,0 +1,35 @@
+{
+ "name": "fm2-05-long",
+ "note": "H(gap 2): 30 extra days of context per listing (prep/ext_history.py) improve the Chronos-2 quantile functions; refuted if <= fm2-01 [fm2_post.py flags: --setup lst_long; amazon/chronos-2 zero-shot, cpu jobs 174823-3849, 174829-8fcd, 174832-6f16, 201126-a38b, 201131-4739]",
+ "utc": "2026-11-15T02:17:48+00:00",
+ "commit": "35810bc",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.268317,
+ "pinball": 0.024543,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.27055,
+ "skill_geomean": 0.324636,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.089716,
+   "in_band": 0.840191
+  },
+  "3": {
+   "skill_pooled": 0.244282,
+   "in_band": 0.710271
+  },
+  "7": {
+   "skill_pooled": 0.329301,
+   "in_band": 0.585271
+  }
+ },
+ "in_band": 0.712448
+}

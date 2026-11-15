@@ -1,0 +1,29 @@
+{
+ "status": "crashed before all 100 problems finished",
+ "n_finished": 1,
+ "right_v3": 0,
+ "cap_hits": 1,
+ "loop_A": 1,
+ "counts": {
+  "n": 1,
+  "correct_v3": 0,
+  "correct_v1": 0,
+  "cap_hits": 1,
+  "loop_A": 1,
+  "generated_tokens": 16384,
+  "restarts": 0,
+  "n_planned": 100,
+  "mean_generated_tokens": 16384.0,
+  "generation_s": 429.934947013855,
+  "tokens_per_s": 38.1080908025651
+ },
+ "edit": {
+  "add_norm": 135.24824192089045,
+  "written_norm": 135.3084036367097,
+  "ref_norm": 1713.7851893052448,
+  "add_rel": 0.0789178496610296,
+  "effective_scale": 0.9999997603427345,
+  "cos_written_add": 0.9995551338466407,
+  "share": 0.1008979840913659
+ }
+}

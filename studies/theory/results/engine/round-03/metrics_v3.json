@@ -1,0 +1,1844 @@
+{
+ "targets": 51,
+ "exposed_items": [],
+ "theories": {
+  "r1-all-2": {
+   "claims": 12,
+   "total_gain": 2.62,
+   "mean_gain": 0.218,
+   "interval": [
+    -3.812,
+    7.978
+   ],
+   "candidate": false,
+   "state": "fails",
+   "reversal": null,
+   "tests": null,
+   "rows": [
+    {
+     "id": "t01",
+     "measured": 88,
+     "value": 77,
+     "low": 64,
+     "high": 89,
+     "nulls": [
+      {
+       "value": 62,
+       "low": 42,
+       "high": 84
+      },
+      {
+       "value": 68,
+       "low": 45,
+       "high": 87
+      }
+     ],
+     "gain": 1.0346
+    },
+    {
+     "id": "t44",
+     "measured": 427,
+     "value": 380,
+     "low": 330,
+     "high": 425,
+     "nulls": [
+      {
+       "value": 300,
+       "low": 210,
+       "high": 415
+      },
+      {
+       "value": 330,
+       "low": 230,
+       "high": 425
+      }
+     ],
+     "gain": 1.0519
+    },
+    {
+     "id": "t49",
+     "measured": 3962,
+     "value": 3600,
+     "low": 3000,
+     "high": 4300,
+     "nulls": [
+      {
+       "value": 3000,
+       "low": 1800,
+       "high": 4500
+      },
+      {
+       "value": 3800,
+       "low": 2600,
+       "high": 5200
+      }
+     ],
+     "gain": 0.5857
+    },
+    {
+     "id": "t03",
+     "measured": 91,
+     "value": 91,
+     "low": 85,
+     "high": 97,
+     "nulls": [
+      {
+       "value": 88,
+       "low": 77,
+       "high": 96
+      },
+      {
+       "value": 86,
+       "low": 72,
+       "high": 95
+      }
+     ],
+     "gain": 0.7383
+    },
+    {
+     "id": "t48",
+     "measured": 86,
+     "value": 89,
+     "low": 81,
+     "high": 96,
+     "nulls": [
+      {
+       "value": 80,
+       "low": 60,
+       "high": 93
+      },
+      {
+       "value": 80,
+       "low": 55,
+       "high": 93
+      }
+     ],
+     "gain": 0.7983
+    },
+    {
+     "id": "t04",
+     "measured": 41,
+     "value": 48,
+     "low": 36,
+     "high": 61,
+     "nulls": [
+      {
+       "value": 47,
+       "low": 33,
+       "high": 62
+      },
+      {
+       "value": 51,
+       "low": 38,
+       "high": 68
+      }
+     ],
+     "gain": 0.1373
+    },
+    {
+     "id": "t43",
+     "measured": 5,
+     "value": 4,
+     "low": 0,
+     "high": 9,
+     "nulls": [
+      {
+       "value": 4,
+       "low": 0,
+       "high": 9
+      },
+      {
+       "value": 3,
+       "low": 0,
+       "high": 9
+      }
+     ],
+     "gain": 0.0952
+    },
+    {
+     "id": "t39",
+     "measured": 372,
+     "value": 438,
+     "low": 405,
+     "high": 462,
+     "nulls": [
+      {
+       "value": 415,
+       "low": 350,
+       "high": 460
+      },
+      {
+       "value": 415,
+       "low": 330,
+       "high": 460
+      }
+     ],
+     "gain": -3.0
+    },
+    {
+     "id": "t40",
+     "measured": 360,
+     "value": 365,
+     "low": 295,
+     "high": 425,
+     "nulls": [
+      {
+       "value": 340,
+       "low": 250,
+       "high": 410
+      },
+      {
+       "value": 355,
+       "low": 270,
+       "high": 430
+      }
+     ],
+     "gain": 0.2438
+    },
+    {
+     "id": "t34",
+     "measured": 448,
+     "value": 443,
+     "low": 418,
+     "high": 462,
+     "nulls": [
+      {
+       "value": 405,
+       "low": 360,
+       "high": 445
+      },
+      {
+       "value": 430,
+       "low": 393,
+       "high": 457
+      }
+     ],
+     "gain": 1.172
+    },
+    {
+     "id": "t35",
+     "measured": 440,
+     "value": 445,
+     "low": 418,
+     "high": 463,
+     "nulls": [
+      {
+       "value": 430,
+       "low": 390,
+       "high": 460
+      },
+      {
+       "value": 438,
+       "low": 403,
+       "high": 462
+      }
+     ],
+     "gain": 0.3384
+    },
+    {
+     "id": "t37",
+     "measured": 411,
+     "value": 435,
+     "low": 405,
+     "high": 458,
+     "nulls": [
+      {
+       "value": 420,
+       "low": 370,
+       "high": 455
+      },
+      {
+       "value": 425,
+       "low": 380,
+       "high": 455
+      }
+     ],
+     "gain": -0.5754
+    }
+   ]
+  },
+  "r1-surprises-2": {
+   "claims": 8,
+   "total_gain": -4.597,
+   "mean_gain": -0.575,
+   "interval": [
+    -13.796,
+    4.958
+   ],
+   "candidate": false,
+   "state": "fails",
+   "reversal": null,
+   "tests": null,
+   "rows": [
+    {
+     "id": "t01",
+     "measured": 88,
+     "value": 82,
+     "low": 70,
+     "high": 92,
+     "nulls": [
+      {
+       "value": 62,
+       "low": 42,
+       "high": 84
+      },
+      {
+       "value": 68,
+       "low": 45,
+       "high": 87
+      }
+     ],
+     "gain": 1.8076
+    },
+    {
+     "id": "t44",
+     "measured": 427,
+     "value": 412,
+     "low": 370,
+     "high": 445,
+     "nulls": [
+      {
+       "value": 300,
+       "low": 210,
+       "high": 415
+      },
+      {
+       "value": 330,
+       "low": 230,
+       "high": 425
+      }
+     ],
+     "gain": 2.3965
+    },
+    {
+     "id": "t02",
+     "measured": 36,
+     "value": 46,
+     "low": 36,
+     "high": 57,
+     "nulls": [
+      {
+       "value": 46,
+       "low": 33,
+       "high": 59
+      },
+      {
+       "value": 48,
+       "low": 36,
+       "high": 61
+      }
+     ],
+     "gain": -0.0301
+    },
+    {
+     "id": "t03",
+     "measured": 91,
+     "value": 55,
+     "low": 42,
+     "high": 70,
+     "nulls": [
+      {
+       "value": 88,
+       "low": 77,
+       "high": 96
+      },
+      {
+       "value": 86,
+       "low": 72,
+       "high": 95
+      }
+     ],
+     "gain": -3.0
+    },
+    {
+     "id": "t48",
+     "measured": 86,
+     "value": 50,
+     "low": 37,
+     "high": 63,
+     "nulls": [
+      {
+       "value": 80,
+       "low": 60,
+       "high": 93
+      },
+      {
+       "value": 80,
+       "low": 55,
+       "high": 93
+      }
+     ],
+     "gain": -3.0
+    },
+    {
+     "id": "t47",
+     "measured": 42,
+     "value": 70,
+     "low": 55,
+     "high": 85,
+     "nulls": [
+      {
+       "value": 50,
+       "low": 36,
+       "high": 68
+      },
+      {
+       "value": 55,
+       "low": 40,
+       "high": 76
+      }
+     ],
+     "gain": -3.0
+    },
+    {
+     "id": "t04",
+     "measured": 41,
+     "value": 52,
+     "low": 38,
+     "high": 66,
+     "nulls": [
+      {
+       "value": 47,
+       "low": 33,
+       "high": 62
+      },
+      {
+       "value": 51,
+       "low": 38,
+       "high": 68
+      }
+     ],
+     "gain": -0.387
+    },
+    {
+     "id": "t49",
+     "measured": 3962,
+     "value": 4300,
+     "low": 3600,
+     "high": 5000,
+     "nulls": [
+      {
+       "value": 3000,
+       "low": 1800,
+       "high": 4500
+      },
+      {
+       "value": 3800,
+       "low": 2600,
+       "high": 5200
+      }
+     ],
+     "gain": 0.6158
+    }
+   ]
+  },
+  "r2-across-2": {
+   "claims": 7,
+   "total_gain": -3.199,
+   "mean_gain": -0.457,
+   "interval": [
+    -10.495,
+    3.833
+   ],
+   "candidate": false,
+   "state": "fails",
+   "reversal": null,
+   "tests": null,
+   "rows": [
+    {
+     "id": "t01",
+     "measured": 88,
+     "value": 58,
+     "low": 44,
+     "high": 72,
+     "nulls": [
+      {
+       "value": 62,
+       "low": 42,
+       "high": 84
+      },
+      {
+       "value": 68,
+       "low": 45,
+       "high": 87
+      }
+     ],
+     "gain": -3.0
+    },
+    {
+     "id": "t44",
+     "measured": 427,
+     "value": 305,
+     "low": 250,
+     "high": 360,
+     "nulls": [
+      {
+       "value": 300,
+       "low": 210,
+       "high": 415
+      },
+      {
+       "value": 330,
+       "low": 230,
+       "high": 425
+      }
+     ],
+     "gain": -3.0
+    },
+    {
+     "id": "t02",
+     "measured": 36,
+     "value": 45,
+     "low": 33,
+     "high": 57,
+     "nulls": [
+      {
+       "value": 46,
+       "low": 33,
+       "high": 59
+      },
+      {
+       "value": 48,
+       "low": 36,
+       "high": 61
+      }
+     ],
+     "gain": 0.3026
+    },
+    {
+     "id": "t03",
+     "measured": 91,
+     "value": 90,
+     "low": 84,
+     "high": 96,
+     "nulls": [
+      {
+       "value": 88,
+       "low": 77,
+       "high": 96
+      },
+      {
+       "value": 86,
+       "low": 72,
+       "high": 95
+      }
+     ],
+     "gain": 0.7007
+    },
+    {
+     "id": "t04",
+     "measured": 41,
+     "value": 46,
+     "low": 34,
+     "high": 58,
+     "nulls": [
+      {
+       "value": 47,
+       "low": 33,
+       "high": 62
+      },
+      {
+       "value": 51,
+       "low": 38,
+       "high": 68
+      }
+     ],
+     "gain": 0.3676
+    },
+    {
+     "id": "t47",
+     "measured": 42,
+     "value": 48,
+     "low": 36,
+     "high": 60,
+     "nulls": [
+      {
+       "value": 50,
+       "low": 36,
+       "high": 68
+      },
+      {
+       "value": 55,
+       "low": 40,
+       "high": 76
+      }
+     ],
+     "gain": 0.5012
+    },
+    {
+     "id": "t48",
+     "measured": 86,
+     "value": 87,
+     "low": 79,
+     "high": 95,
+     "nulls": [
+      {
+       "value": 80,
+       "low": 60,
+       "high": 93
+      },
+      {
+       "value": 80,
+       "low": 55,
+       "high": 93
+      }
+     ],
+     "gain": 0.9291
+    }
+   ]
+  },
+  "r2-all-2": {
+   "claims": 0,
+   "total_gain": 0,
+   "mean_gain": 0.0,
+   "interval": [
+    0.0,
+    0.0
+   ],
+   "candidate": false,
+   "state": "fails",
+   "reversal": null,
+   "tests": null,
+   "rows": []
+  },
+  "r3-across-1": {
+   "claims": 6,
+   "total_gain": -0.346,
+   "mean_gain": -0.058,
+   "interval": [
+    -2.642,
+    1.672
+   ],
+   "candidate": false,
+   "state": "fails",
+   "reversal": null,
+   "tests": null,
+   "rows": [
+    {
+     "id": "t26",
+     "measured": 182,
+     "value": 180,
+     "low": 170,
+     "high": 190,
+     "nulls": [
+      {
+       "value": 186,
+       "low": 170,
+       "high": 201
+      },
+      {
+       "value": 186,
+       "low": 171,
+       "high": 201
+      }
+     ],
+     "gain": 0.4608
+    },
+    {
+     "id": "t27",
+     "measured": 190,
+     "value": 187,
+     "low": 177,
+     "high": 197,
+     "nulls": [
+      {
+       "value": 196,
+       "low": 181,
+       "high": 210
+      },
+      {
+       "value": 196,
+       "low": 182,
+       "high": 210
+      }
+     ],
+     "gain": 0.4723
+    },
+    {
+     "id": "t28",
+     "measured": 187,
+     "value": 176,
+     "low": 166,
+     "high": 187,
+     "nulls": [
+      {
+       "value": 188,
+       "low": 170,
+       "high": 205
+      },
+      {
+       "value": 188,
+       "low": 170,
+       "high": 205
+      }
+     ],
+     "gain": -0.9697
+    },
+    {
+     "id": "t31",
+     "measured": -4.9,
+     "value": -5.8,
+     "low": -9.5,
+     "high": -2.0,
+     "nulls": [
+      {
+       "value": -3.0,
+       "low": -8.0,
+       "high": 2.0
+      },
+      {
+       "value": -3.0,
+       "low": -7.5,
+       "high": 1.5
+      }
+     ],
+     "gain": 0.3749
+    },
+    {
+     "id": "t32",
+     "measured": -5.8,
+     "value": -9.1,
+     "low": -13.0,
+     "high": -5.0,
+     "nulls": [
+      {
+       "value": -5.5,
+       "low": -11.5,
+       "high": 0.5
+      },
+      {
+       "value": -5.5,
+       "low": -11,
+       "high": -0.5
+      }
+     ],
+     "gain": -0.5805
+    },
+    {
+     "id": "t33",
+     "measured": -0.9,
+     "value": -3.4,
+     "low": -7.0,
+     "high": 0.5,
+     "nulls": [
+      {
+       "value": -2.5,
+       "low": -8.0,
+       "high": 3.0
+      },
+      {
+       "value": -2.5,
+       "low": -8,
+       "high": 3
+      }
+     ],
+     "gain": -0.1038
+    }
+   ]
+  },
+  "r3-across-2": {
+   "claims": 1,
+   "total_gain": 0.667,
+   "mean_gain": 0.667,
+   "interval": [
+    0.667,
+    0.667
+   ],
+   "candidate": true,
+   "state": "passes",
+   "reversal": {
+    "claims": 1,
+    "total_gain": 0.289,
+    "rows": [
+     {
+      "id": "t13",
+      "measured": 0.066,
+      "value": 0.05,
+      "low": -0.35,
+      "high": 0.45,
+      "nulls": [
+       {
+        "value": 0.15,
+        "low": -0.3,
+        "high": 0.6
+       },
+       {
+        "value": 0.2,
+        "low": -0.35,
+        "high": 0.8
+       }
+      ],
+      "gain": 0.2893
+     }
+    ]
+   },
+   "tests": {
+    "inside": 0,
+    "outside": 0,
+    "not computed": 3,
+    "refuted": false
+   },
+   "rows": [
+    {
+     "id": "t13",
+     "measured": 0.066,
+     "value": 0.0,
+     "low": -0.25,
+     "high": 0.25,
+     "nulls": [
+      {
+       "value": 0.15,
+       "low": -0.3,
+       "high": 0.6
+      },
+      {
+       "value": 0.2,
+       "low": -0.35,
+       "high": 0.8
+      }
+     ],
+     "gain": 0.6672
+    }
+   ]
+  },
+  "r3-all-1": {
+   "claims": 4,
+   "total_gain": -2.668,
+   "mean_gain": -0.667,
+   "interval": [
+    -5.646,
+    0.422
+   ],
+   "candidate": false,
+   "state": "fails",
+   "reversal": null,
+   "tests": null,
+   "rows": [
+    {
+     "id": "t26",
+     "measured": 182,
+     "value": 176,
+     "low": 166,
+     "high": 187,
+     "nulls": [
+      {
+       "value": 186,
+       "low": 170,
+       "high": 201
+      },
+      {
+       "value": 186,
+       "low": 171,
+       "high": 201
+      }
+     ],
+     "gain": 0.0243
+    },
+    {
+     "id": "t28",
+     "measured": 187,
+     "value": 173,
+     "low": 163,
+     "high": 184,
+     "nulls": [
+      {
+       "value": 188,
+       "low": 170,
+       "high": 205
+      },
+      {
+       "value": 188,
+       "low": 170,
+       "high": 205
+      }
+     ],
+     "gain": -1.8901
+    },
+    {
+     "id": "t32",
+     "measured": -5.8,
+     "value": -10,
+     "low": -14,
+     "high": -6,
+     "nulls": [
+      {
+       "value": -5.5,
+       "low": -11.5,
+       "high": 0.5
+      },
+      {
+       "value": -5.5,
+       "low": -11,
+       "high": -0.5
+      }
+     ],
+     "gain": -1.1513
+    },
+    {
+     "id": "t29",
+     "measured": 7613,
+     "value": 7900,
+     "low": 6600,
+     "high": 9200,
+     "nulls": [
+      {
+       "value": 7900,
+       "low": 6000,
+       "high": 9800
+      },
+      {
+       "value": 7200,
+       "low": 5500,
+       "high": 9200
+      }
+     ],
+     "gain": 0.3493
+    }
+   ]
+  },
+  "r3-all-2": {
+   "claims": 3,
+   "total_gain": -1.357,
+   "mean_gain": -0.452,
+   "interval": [
+    -3.274,
+    0.56
+   ],
+   "candidate": false,
+   "state": "fails",
+   "reversal": null,
+   "tests": null,
+   "rows": [
+    {
+     "id": "t17",
+     "measured": 446,
+     "value": 457,
+     "low": 452,
+     "high": 462,
+     "nulls": [
+      {
+       "value": 455,
+       "low": 440,
+       "high": 468
+      },
+      {
+       "value": 446,
+       "low": 405,
+       "high": 464
+      }
+     ],
+     "gain": -1.6271
+    },
+    {
+     "id": "t24",
+     "measured": 475,
+     "value": 474,
+     "low": 470,
+     "high": 478,
+     "nulls": [
+      {
+       "value": 475,
+       "low": 467,
+       "high": 482
+      },
+      {
+       "value": 475,
+       "low": 467,
+       "high": 481
+      }
+     ],
+     "gain": -0.0201
+    },
+    {
+     "id": "t25",
+     "measured": 476,
+     "value": 472,
+     "low": 467,
+     "high": 477,
+     "nulls": [
+      {
+       "value": 470,
+       "low": 460,
+       "high": 478
+      },
+      {
+       "value": 471,
+       "low": 462,
+       "high": 478
+      }
+     ],
+     "gain": 0.2901
+    }
+   ]
+  },
+  "r3-external-1": {
+   "claims": 2,
+   "total_gain": -1.434,
+   "mean_gain": -0.717,
+   "interval": [
+    -3.779,
+    0.911
+   ],
+   "candidate": false,
+   "state": "fails",
+   "reversal": null,
+   "tests": null,
+   "rows": [
+    {
+     "id": "t34",
+     "measured": 448,
+     "value": 412,
+     "low": 388,
+     "high": 436,
+     "nulls": [
+      {
+       "value": 405,
+       "low": 360,
+       "high": 445
+      },
+      {
+       "value": 430,
+       "low": 393,
+       "high": 457
+      }
+     ],
+     "gain": -1.8894
+    },
+    {
+     "id": "t37",
+     "measured": 411,
+     "value": 418,
+     "low": 392,
+     "high": 444,
+     "nulls": [
+      {
+       "value": 420,
+       "low": 370,
+       "high": 455
+      },
+      {
+       "value": 425,
+       "low": 380,
+       "high": 455
+      }
+     ],
+     "gain": 0.4554
+    }
+   ]
+  },
+  "r3-external-2": {
+   "claims": 11,
+   "total_gain": -7.953,
+   "mean_gain": -0.723,
+   "interval": [
+    -16.466,
+    0.151
+   ],
+   "candidate": false,
+   "state": "fails",
+   "reversal": null,
+   "tests": null,
+   "rows": [
+    {
+     "id": "t26",
+     "measured": 182,
+     "value": 174,
+     "low": 165,
+     "high": 184,
+     "nulls": [
+      {
+       "value": 186,
+       "low": 170,
+       "high": 201
+      },
+      {
+       "value": 186,
+       "low": 171,
+       "high": 201
+      }
+     ],
+     "gain": -0.3933
+    },
+    {
+     "id": "t27",
+     "measured": 190,
+     "value": 185,
+     "low": 175,
+     "high": 195,
+     "nulls": [
+      {
+       "value": 196,
+       "low": 181,
+       "high": 210
+      },
+      {
+       "value": 196,
+       "low": 182,
+       "high": 210
+      }
+     ],
+     "gain": 0.2558
+    },
+    {
+     "id": "t28",
+     "measured": 187,
+     "value": 171,
+     "low": 160,
+     "high": 182,
+     "nulls": [
+      {
+       "value": 188,
+       "low": 170,
+       "high": 205
+      },
+      {
+       "value": 188,
+       "low": 170,
+       "high": 205
+      }
+     ],
+     "gain": -2.3938
+    },
+    {
+     "id": "t31",
+     "measured": -4.9,
+     "value": -6.5,
+     "low": -10.5,
+     "high": -2.5,
+     "nulls": [
+      {
+       "value": -3.0,
+       "low": -8.0,
+       "high": 2.0
+      },
+      {
+       "value": -3.0,
+       "low": -7.5,
+       "high": 1.5
+      }
+     ],
+     "gain": 0.1718
+    },
+    {
+     "id": "t32",
+     "measured": -5.8,
+     "value": -10.7,
+     "low": -14.5,
+     "high": -7.0,
+     "nulls": [
+      {
+       "value": -5.5,
+       "low": -11.5,
+       "high": 0.5
+      },
+      {
+       "value": -5.5,
+       "low": -11,
+       "high": -0.5
+      }
+     ],
+     "gain": -1.9052
+    },
+    {
+     "id": "t33",
+     "measured": -0.9,
+     "value": -4.0,
+     "low": -8.0,
+     "high": 0.0,
+     "nulls": [
+      {
+       "value": -2.5,
+       "low": -8.0,
+       "high": 3.0
+      },
+      {
+       "value": -2.5,
+       "low": -8,
+       "high": 3
+      }
+     ],
+     "gain": -0.3797
+    },
+    {
+     "id": "t34",
+     "measured": 448,
+     "value": 447,
+     "low": 435,
+     "high": 459,
+     "nulls": [
+      {
+       "value": 405,
+       "low": 360,
+       "high": 445
+      },
+      {
+       "value": 430,
+       "low": 393,
+       "high": 457
+      }
+     ],
+     "gain": 1.8387
+    },
+    {
+     "id": "t35",
+     "measured": 440,
+     "value": 446,
+     "low": 432,
+     "high": 458,
+     "nulls": [
+      {
+       "value": 430,
+       "low": 390,
+       "high": 460
+      },
+      {
+       "value": 438,
+       "low": 403,
+       "high": 462
+      }
+     ],
+     "gain": 0.6656
+    },
+    {
+     "id": "t36",
+     "measured": 429,
+     "value": 441,
+     "low": 424,
+     "high": 456,
+     "nulls": [
+      {
+       "value": 415,
+       "low": 370,
+       "high": 450
+      },
+      {
+       "value": 425,
+       "low": 388,
+       "high": 455
+      }
+     ],
+     "gain": 0.146
+    },
+    {
+     "id": "t37",
+     "measured": 411,
+     "value": 440,
+     "low": 422,
+     "high": 456,
+     "nulls": [
+      {
+       "value": 420,
+       "low": 370,
+       "high": 455
+      },
+      {
+       "value": 425,
+       "low": 380,
+       "high": 455
+      }
+     ],
+     "gain": -2.959
+    },
+    {
+     "id": "t38",
+     "measured": 377,
+     "value": 436,
+     "low": 416,
+     "high": 454,
+     "nulls": [
+      {
+       "value": 415,
+       "low": 370,
+       "high": 450
+      },
+      {
+       "value": 415,
+       "low": 370,
+       "high": 450
+      }
+     ],
+     "gain": -3.0
+    }
+   ]
+  },
+  "r3-revise-1": {
+   "claims": 11,
+   "total_gain": -2.686,
+   "mean_gain": -0.244,
+   "interval": [
+    -10.168,
+    4.066
+   ],
+   "candidate": false,
+   "state": "fails",
+   "reversal": null,
+   "tests": null,
+   "rows": [
+    {
+     "id": "t26",
+     "measured": 182,
+     "value": 181,
+     "low": 172,
+     "high": 190,
+     "nulls": [
+      {
+       "value": 186,
+       "low": 170,
+       "high": 201
+      },
+      {
+       "value": 186,
+       "low": 171,
+       "high": 201
+      }
+     ],
+     "gain": 0.6036
+    },
+    {
+     "id": "t27",
+     "measured": 190,
+     "value": 187,
+     "low": 178,
+     "high": 196,
+     "nulls": [
+      {
+       "value": 196,
+       "low": 181,
+       "high": 210
+      },
+      {
+       "value": 196,
+       "low": 182,
+       "high": 210
+      }
+     ],
+     "gain": 0.5491
+    },
+    {
+     "id": "t28",
+     "measured": 187,
+     "value": 187,
+     "low": 178,
+     "high": 196,
+     "nulls": [
+      {
+       "value": 188,
+       "low": 170,
+       "high": 205
+      },
+      {
+       "value": 188,
+       "low": 170,
+       "high": 205
+      }
+     ],
+     "gain": 0.6694
+    },
+    {
+     "id": "t29",
+     "measured": 7613,
+     "value": 7000,
+     "low": 5700,
+     "high": 8300,
+     "nulls": [
+      {
+       "value": 7900,
+       "low": 6000,
+       "high": 9800
+      },
+      {
+       "value": 7200,
+       "low": 5500,
+       "high": 9200
+      }
+     ],
+     "gain": 0.1145
+    },
+    {
+     "id": "t31",
+     "measured": -4.9,
+     "value": -5.8,
+     "low": -9.0,
+     "high": -2.6,
+     "nulls": [
+      {
+       "value": -3.0,
+       "low": -8.0,
+       "high": 2.0
+      },
+      {
+       "value": -3.0,
+       "low": -7.5,
+       "high": 1.5
+      }
+     ],
+     "gain": 0.5044
+    },
+    {
+     "id": "t32",
+     "measured": -5.8,
+     "value": -5.8,
+     "low": -9.2,
+     "high": -2.4,
+     "nulls": [
+      {
+       "value": -5.5,
+       "low": -11.5,
+       "high": 0.5
+      },
+      {
+       "value": -5.5,
+       "low": -11,
+       "high": -0.5
+      }
+     ],
+     "gain": 0.5029
+    },
+    {
+     "id": "t33",
+     "measured": -0.9,
+     "value": 0,
+     "low": -3.3,
+     "high": 3.3,
+     "nulls": [
+      {
+       "value": -2.5,
+       "low": -8.0,
+       "high": 3.0
+      },
+      {
+       "value": -2.5,
+       "low": -8,
+       "high": 3
+      }
+     ],
+     "gain": 0.5247
+    },
+    {
+     "id": "t35",
+     "measured": 440,
+     "value": 450,
+     "low": 437,
+     "high": 462,
+     "nulls": [
+      {
+       "value": 430,
+       "low": 390,
+       "high": 460
+      },
+      {
+       "value": 438,
+       "low": 403,
+       "high": 462
+      }
+     ],
+     "gain": 0.1271
+    },
+    {
+     "id": "t36",
+     "measured": 429,
+     "value": 444,
+     "low": 427,
+     "high": 459,
+     "nulls": [
+      {
+       "value": 415,
+       "low": 370,
+       "high": 450
+      },
+      {
+       "value": 425,
+       "low": 388,
+       "high": 455
+      }
+     ],
+     "gain": -0.2821
+    },
+    {
+     "id": "t37",
+     "measured": 411,
+     "value": 446,
+     "low": 431,
+     "high": 459,
+     "nulls": [
+      {
+       "value": 420,
+       "low": 370,
+       "high": 455
+      },
+      {
+       "value": 425,
+       "low": 380,
+       "high": 455
+      }
+     ],
+     "gain": -3.0
+    },
+    {
+     "id": "t38",
+     "measured": 377,
+     "value": 444,
+     "low": 427,
+     "high": 459,
+     "nulls": [
+      {
+       "value": 415,
+       "low": 370,
+       "high": 450
+      },
+      {
+       "value": 415,
+       "low": 370,
+       "high": 450
+      }
+     ],
+     "gain": -3.0
+    }
+   ]
+  },
+  "r3-revise-2": {
+   "claims": 0,
+   "total_gain": 0,
+   "mean_gain": 0.0,
+   "interval": [
+    0.0,
+    0.0
+   ],
+   "candidate": false,
+   "state": "fails",
+   "reversal": null,
+   "tests": null,
+   "rows": []
+  },
+  "r3-surprises-1": {
+   "claims": 4,
+   "total_gain": -0.244,
+   "mean_gain": -0.061,
+   "interval": [
+    -1.667,
+    1.179
+   ],
+   "candidate": false,
+   "state": "fails",
+   "reversal": null,
+   "tests": null,
+   "rows": [
+    {
+     "id": "t22",
+     "measured": 12,
+     "value": 19,
+     "low": 14,
+     "high": 24,
+     "nulls": [
+      {
+       "value": 22,
+       "low": 14,
+       "high": 29
+      },
+      {
+       "value": 18,
+       "low": 11,
+       "high": 25
+      }
+     ],
+     "gain": -0.8333
+    },
+    {
+     "id": "t20",
+     "measured": 453,
+     "value": 450,
+     "low": 444,
+     "high": 456,
+     "nulls": [
+      {
+       "value": 447,
+       "low": 438,
+       "high": 456
+      },
+      {
+       "value": 448,
+       "low": 437,
+       "high": 458
+      }
+     ],
+     "gain": 0.5019
+    },
+    {
+     "id": "t24",
+     "measured": 475,
+     "value": 475,
+     "low": 471,
+     "high": 479,
+     "nulls": [
+      {
+       "value": 475,
+       "low": 467,
+       "high": 482
+      },
+      {
+       "value": 475,
+       "low": 467,
+       "high": 481
+      }
+     ],
+     "gain": 0.0
+    },
+    {
+     "id": "t25",
+     "measured": 476,
+     "value": 471,
+     "low": 466,
+     "high": 476,
+     "nulls": [
+      {
+       "value": 470,
+       "low": 460,
+       "high": 478
+      },
+      {
+       "value": 471,
+       "low": 462,
+       "high": 478
+      }
+     ],
+     "gain": 0.0878
+    }
+   ]
+  },
+  "r3-surprises-2": {
+   "claims": 11,
+   "total_gain": -4.353,
+   "mean_gain": -0.396,
+   "interval": [
+    -12.136,
+    2.47
+   ],
+   "candidate": false,
+   "state": "fails",
+   "reversal": null,
+   "tests": null,
+   "rows": [
+    {
+     "id": "t26",
+     "measured": 182,
+     "value": 176,
+     "low": 165,
+     "high": 188,
+     "nulls": [
+      {
+       "value": 186,
+       "low": 170,
+       "high": 201
+      },
+      {
+       "value": 186,
+       "low": 171,
+       "high": 201
+      }
+     ],
+     "gain": 0.0069
+    },
+    {
+     "id": "t28",
+     "measured": 187,
+     "value": 177,
+     "low": 165,
+     "high": 189,
+     "nulls": [
+      {
+       "value": 188,
+       "low": 170,
+       "high": 205
+      },
+      {
+       "value": 188,
+       "low": 170,
+       "high": 205
+      }
+     ],
+     "gain": -0.5579
+    },
+    {
+     "id": "t27",
+     "measured": 190,
+     "value": 185,
+     "low": 172,
+     "high": 197,
+     "nulls": [
+      {
+       "value": 196,
+       "low": 181,
+       "high": 210
+      },
+      {
+       "value": 196,
+       "low": 182,
+       "high": 210
+      }
+     ],
+     "gain": 0.1544
+    },
+    {
+     "id": "t32",
+     "measured": -5.8,
+     "value": -8.8,
+     "low": -13.5,
+     "high": -4.5,
+     "nulls": [
+      {
+       "value": -5.5,
+       "low": -11.5,
+       "high": 0.5
+      },
+      {
+       "value": -5.5,
+       "low": -11,
+       "high": -0.5
+      }
+     ],
+     "gain": -0.3787
+    },
+    {
+     "id": "t31",
+     "measured": -4.9,
+     "value": -6.4,
+     "low": -11,
+     "high": -2,
+     "nulls": [
+      {
+       "value": -3.0,
+       "low": -8.0,
+       "high": 2.0
+      },
+      {
+       "value": -3.0,
+       "low": -7.5,
+       "high": 1.5
+      }
+     ],
+     "gain": 0.1202
+    },
+    {
+     "id": "t33",
+     "measured": -0.9,
+     "value": -2.5,
+     "low": -7,
+     "high": 2,
+     "nulls": [
+      {
+       "value": -2.5,
+       "low": -8.0,
+       "high": 3.0
+      },
+      {
+       "value": -2.5,
+       "low": -8,
+       "high": 3
+      }
+     ],
+     "gain": 0.1441
+    },
+    {
+     "id": "t34",
+     "measured": 448,
+     "value": 448,
+     "low": 434,
+     "high": 461,
+     "nulls": [
+      {
+       "value": 405,
+       "low": 360,
+       "high": 445
+      },
+      {
+       "value": 430,
+       "low": 393,
+       "high": 457
+      }
+     ],
+     "gain": 1.7303
+    },
+    {
+     "id": "t35",
+     "measured": 440,
+     "value": 448,
+     "low": 434,
+     "high": 461,
+     "nulls": [
+      {
+       "value": 430,
+       "low": 390,
+       "high": 460
+      },
+      {
+       "value": 438,
+       "low": 403,
+       "high": 462
+      }
+     ],
+     "gain": 0.4409
+    },
+    {
+     "id": "t36",
+     "measured": 429,
+     "value": 442,
+     "low": 426,
+     "high": 457,
+     "nulls": [
+      {
+       "value": 415,
+       "low": 370,
+       "high": 450
+      },
+      {
+       "value": 425,
+       "low": 388,
+       "high": 455
+      }
+     ],
+     "gain": -0.0129
+    },
+    {
+     "id": "t37",
+     "measured": 411,
+     "value": 445,
+     "low": 430,
+     "high": 459,
+     "nulls": [
+      {
+       "value": 420,
+       "low": 370,
+       "high": 455
+      },
+      {
+       "value": 425,
+       "low": 380,
+       "high": 455
+      }
+     ],
+     "gain": -3.0
+    },
+    {
+     "id": "t38",
+     "measured": 377,
+     "value": 440,
+     "low": 424,
+     "high": 456,
+     "nulls": [
+      {
+       "value": 415,
+       "low": 370,
+       "high": 450
+      },
+      {
+       "value": 415,
+       "low": 370,
+       "high": 450
+      }
+     ],
+     "gain": -3.0
+    }
+   ]
+  }
+ }
+}

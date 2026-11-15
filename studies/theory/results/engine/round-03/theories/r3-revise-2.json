@@ -1,0 +1,167 @@
+{
+ "name": "r3-revise-2",
+ "statement": "A loop is an absorbing hazard for the cued base. The sampler opens it only at impasse positions, and how far along a solution impasses appear depends on the sampler: under T 0.6, impasses come early enough to trap medium-length solutions the base would otherwise finish, while at T >= 1.0 (with or without tail truncation) only a fixed, problem-specific set of long solutions reaches one, and those problems are mostly lost anyway. So a sampler moves accuracy only through loops it creates on finishable problems: accuracy is flat across T >= 1 samplers while cap hits vary, cap hits at T >= 1 are nested inside the T 0.6 cap-hit set, and many T 0.6 cap-hit problems are solved at T 1.0.",
+ "scope": "Olmo-3-1025-7B base with the opening cue on MATH-500 and the clean harder 328, cap 16,384, grader v3, temperatures 0.6-1.5 with or without top-p / min-p truncation. Revises r2-all-2. Its review found that top-p 0.95 at T 1.0 added cap hits and loops but cost only 1 point, not the predicted 12, and that accuracy stayed within 404-412 across four T >= 1 samplers while cap hits ranged 27-58. Here the surprise-level optimum is dropped: what matters is whether new loops land on problems the base would finish. Does not cover the plain base's drift on short problems, RL's own temperature insensitivity, or weight edits.",
+ "parent": "r2-all-2",
+ "imports": [
+  {
+   "source": "2610.24715",
+   "finding": "A started repetition loop survives as a product of per-step continuation probabilities; untruncated sampling never locks, while top-p locks once every loop token clears the threshold.",
+   "how": "Makes the loop absorbing under truncation or low temperature and escapable at T 1.0 untruncated, so the sampler sets the hazard per impasse."
+  },
+  {
+   "source": "2609.15476",
+   "finding": "Truncation samplers help only once temperature has collapsed accuracy; on robust models at T 0.7-1.0 their paired gain is at most about +3 points.",
+   "how": "Supports the flat accuracy at T >= 1 across truncation rules: the cued base at T 1.0 is in the robust regime, where truncation only shifts how already-lost long problems fail."
+  },
+  {
+   "source": "2512.12895",
+   "finding": "Loops arise where the progress action's probability is spread over alternatives and a cyclic action keeps its mass; harder problems loop more and low temperature picks the cycle.",
+   "how": "Defines the impasse positions: places where progress mass is diffuse, which accumulate with solution length, so long solutions meet one first."
+  }
+ ],
+ "explains": [
+  {
+   "item": "result-44b4df",
+   "quote": "No truncation rule beats untruncated sampling on MATH-500 at T 1.0",
+   "how": "At T >= 1 the new loops land on long problems that were mostly lost anyway, so accuracy does not move."
+  },
+  {
+   "item": "result-44b4df",
+   "quote": "rule-A loops 0 -> 34 at min-p 0.1, 12 at top-p 0.95",
+   "how": "Truncation turns escapable impasses on long solutions into locked loops, raising loops and cap hits without changing which problems are lost."
+  },
+  {
+   "item": "result-e870a1",
+   "quote": "354/500 MATH-500 (70.8 %), 119 cap hits (loops to 16,384 tokens)",
+   "how": "At T 0.6 the hazard is high enough to trap medium-length solutions, so loops now take finishable problems and accuracy falls."
+  },
+  {
+   "item": "result-e870a1",
+   "quote": "Restarting cap hits (up to 3 attempts) gives 414/500",
+   "how": "Most T 0.6 cap hits are finishable problems, so fresh attempts recover about half of them."
+  },
+  {
+   "item": "result-5d032f",
+   "quote": "Restart on cap: base +1.6 [0.6, 2.8], RL +0.4",
+   "how": "T 1.0 cap hits are the impasse set itself (long, mostly unsolvable for the base), so restarts there recover little, unlike at T 0.6."
+  },
+  {
+   "item": "result-dadeec",
+   "quote": "378/500 (75.6 %), 98 cap hits, 71 loops",
+   "how": "Removing top-p at T 0.6 lowers the hazard only slightly, so loops still take medium-length problems."
+  },
+  {
+   "item": "result-5de032",
+   "quote": "they are the long problems for both",
+   "how": "The base's T 1.0 cap hits sit on the problems with long solutions, the fixed impasse set."
+  },
+  {
+   "item": "result-2c2cae",
+   "quote": "140 base first answers exceed 12,000 tokens (11 right)",
+   "how": "Long base answers at T 1.0 are almost all lost, so converting them into loops costs almost nothing."
+  },
+  {
+   "item": "result-f21d2e",
+   "quote": "AUROC length 0.831",
+   "how": "Length marks the impasse set: the longer the base's answer, the more likely it is lost."
+  },
+  {
+   "item": "result-5e17a6",
+   "quote": "Base answers <= 2,000 tokens: 263, 13 wrong",
+   "how": "Short solutions never reach an impasse, so they are nearly always right whatever the sampler."
+  },
+  {
+   "item": "result-e5c99c",
+   "quote": "Base+cue 119 -> 164, cap hits 173 -> 77",
+   "how": "On the 328, T 0.6 traps many finishable problems. T 1.0 releases them, and the remaining 77 cap hits are the long impasse problems."
+  },
+  {
+   "item": "knowledge-9e4147",
+   "quote": "of 123 problems RL right and cued base wrong at T 0.6, 85 were cap hits",
+   "how": "At T 0.6 most of the gap to RL is loops on problems RL finishes, the finishable problems the hazard traps."
+  },
+  {
+   "item": "knowledge-1497e8",
+   "quote": "from its own prefix 23 / 16 / 38",
+   "how": "A prefix that already holds an impasse-bearing solution keeps the hazard high, so continuations loop again."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "knowledge-1497e8",
+   "quote": "RL-prefix minus own-prefix finish rate +32.1 points [17.9, 46.2]",
+   "how": "From RL's prefix the same problems finish far more often, so impasses depend on the path taken, not only on the problem. The 'fixed per-problem impasse set' is a simplification."
+  },
+  {
+   "item": "result-5e17a6",
+   "quote": "16 cap hits with no loop",
+   "how": "Some T 1.0 cap hits are unfinished drift, not loops. The theory treats them as the same impasse set without separate evidence."
+  },
+  {
+   "item": "result-44b4df",
+   "quote": "T 1.5 + min-p 0.1 removes them (0 loops, 29 cap)",
+   "how": "At T 1.5 cap hits stay near 29 with no loops, so the impasse set fails by drift there. The theory explains why accuracy stays flat, but not why loops disappear entirely."
+  }
+ ],
+ "rival": "Loops land on the problems the base cannot solve (hardness-only reading of 2512.12895). Under it, T 0.6 cap-hit problems are mostly ones the base also gets wrong at T 1.0, and the T 0.6 penalty comes from something else (sharper slips). Separation: the share of T 0.6 cap-hit problems that the T 1.0 cued base gets right. The rival predicts about a third. This theory predicts about 60 %, together with T 1.0 cap hits nested inside the T 0.6 set.",
+ "predictions": [
+  {
+   "experiment": "Base + opening cue, the clean harder 328, T 1.0 / top-p 1.0 / min-p 0.1, cap 16,384, one sample, grader v3: number right (min-p 0 gives 164 with 77 cap hits)",
+   "unit": "right of 328",
+   "value": 162,
+   "low": 153,
+   "high": 171,
+   "refuted_by": "150 or fewer right (truncation-made loops take finishable hard problems) or 176 or more",
+   "gpu_minutes": 58
+  },
+  {
+   "experiment": "Same run (base + cue, hard 328, T 1.0 / min-p 0.1): cap hits",
+   "unit": "cap hits of 328",
+   "value": 100,
+   "low": 87,
+   "high": 116,
+   "refuted_by": "82 or fewer cap hits (truncation does not lock impasses on hard problems)",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Base + opening cue, MATH-500 n=500, T 0.8 / top-p 1.0, cap 16,384, one sample, grader v3: number right (T 0.6 / top-p 1.0 gives 378, T 1.0 gives 410)",
+   "unit": "right of 500",
+   "value": 404,
+   "low": 393,
+   "high": 414,
+   "refuted_by": "390 or fewer right (the T 0.8 loss is linear in temperature, not limited to loops on finishable problems)",
+   "gpu_minutes": 35
+  },
+  {
+   "experiment": "Offline: share of the cued base's T 0.6 / top-p 1.0 cap-hit problems that the cued base solves at T 1.0 (MATH-500).",
+   "recipe": "Files: iterate-runs:abaybektursun-1114-151718-d4fa/answers.jsonl (base, cue, T 0.6 / top-p 1.0, MATH-500) and studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. Take one row per problem_index from d4fa (first in file order). Set C = problem_index values whose d4fa row has cap_hit true. Statistic: number of problems in C with t1_right true in per_problem.json, divided by |C|. A missing per_problem entry counts as not right.",
+   "unit": "fraction of problems",
+   "value": 0.6,
+   "low": 0.48,
+   "high": 0.71,
+   "refuted_by": "fraction below 0.45 (T 0.6 loops land mainly on problems the base cannot solve)",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Offline: nesting of the T 1.0 cap-hit set inside the T 0.6 cap-hit set (cued base, MATH-500).",
+   "recipe": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json and iterate-runs:abaybektursun-1114-151718-d4fa/answers.jsonl. Set A = problem_index values with t1_cap_hit true in per_problem.json (27 expected). Set C = d4fa cap_hit true (one row per problem_index, first in file order). Statistic: |A intersect C| / |A|.",
+   "unit": "fraction of problems",
+   "value": 0.7,
+   "low": 0.55,
+   "high": 0.85,
+   "refuted_by": "fraction below 0.5 (T 1.0 cap hits are not a subset of the T 0.6 impasse set)",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Offline: the same nesting on the clean harder 328.",
+   "recipe": "Files: iterate-runs:abaybektursun-1114-151534-e72c/answers.jsonl (base, cue, T 1.0, clean 328) and s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_hard.jsonl (base, cue, T 0.6 / top-p 0.95, harder set n = 400), restricted to the 328 problems flagged none in results/rln3/rln3_overlap.json, matched on unique_id. One row per problem (first in file order). Set A = e72c rows with cap_hit true (77 expected). Set C = F_hard rows with cap_hit true. Statistic: |A intersect C| / |A|.",
+   "unit": "fraction of problems",
+   "value": 0.88,
+   "low": 0.79,
+   "high": 0.95,
+   "refuted_by": "fraction below 0.75",
+   "gpu_minutes": 0
+  }
+ ]
+}

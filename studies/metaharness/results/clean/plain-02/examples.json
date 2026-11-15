@@ -1,0 +1,78 @@
+{
+ "answer": {
+  "job": "dana-1114-195242-4779",
+  "counted_as": "answer",
+  "command": "bash studies/gapmap/jobs/run_cell.sh tokens subject ",
+  "exit_code": 0,
+  "container_seconds": 47,
+  "log": "[run_cell] 03:52:49 start: batch tokens, cell subject\n[cell] 03:52:49 cell subject from studies/gapmap/cells/tokens.json\n[cell] 03:52:49 loaded 500 rows from studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json\n[cell] 03:52:49 bootstrap start: metric tokens, split subject, 500 problems, 1500000 resamples\n[cell] 03:53:29 bootstrap done in 40.1 s\n[cell] 03:53:30 result {\"group\": \"algebra\", \"n\": 124, \"t2_minus_t1\": 1116.95, \"low\": 720.59, \"high\": 1492.96}\n[cell] 03:53:30 result {\"group\": \"counting_and_probability\", \"n\": 38, \"t2_minus_t1\": 297.76, \"low\": -949.71, \"high\": 1477.73}\n[cell] 03:53:30 result {\"group\": \"geometry\", \"n\": 41, \"t2_minus_t1\": 1022.73, \"low\": -14.97, \"high\": 2060.84}\n[cell] 03:53:30 result {\"group\": \"intermediate_algebra\", \"n\": 97, \"t2_minus_t1\": 63.68, \"low\": -752.86, \"high\": 840.18}\n[cell] 03:53:30 result {\"group\": \"number_theory\", \"n\": 62, \"t2_minus_t1\": 883.77, \"low\": 306.76, \"high\": 1422.56}\n[cell] 03:53:30 result {\"group\": \"prealgebra\", \"n\": 82, \"t2_minus_t1\": 920.5, \"low\": 439.63, \"high\": 1376.83}\n[cell] 03:53:30 result {\"group\": \"precalculus\", \"n\": 56, \"t2_minus_t1\": 933.45, \"low\": 36.81, \"high\": 1749.64}\n[cell] 03:53:30 wrote /runs/dana-1114-195242-4779/metrics.json\n[run_cell] 03:53:30 done\n",
+  "metrics": {
+   "cell": {
+    "id": "subject",
+    "kind": "split",
+    "metric": "tokens",
+    "split": "subject",
+    "n_boot": 1500000,
+    "seed": 0,
+    "ci": 0.95,
+    "fmt": "csv",
+    "digits": 2
+   },
+   "table": [
+    {
+     "group": "algebra",
+     "n": 124,
+     "t2_minus_t1": 1116.95,
+     "low": 720.59,
+     "high": 1492.96
+    },
+    {
+     "group": "counting_and_probability",
+     "n": 38,
+     "t2_minus_t1": 297.76,
+     "low": -949.71,
+     "high": 1477.73
+    },
+    {
+     "group": "geometry",
+     "n": 41,
+     "t2_minus_t1": 1022.73,
+     "low": -14.97,
+     "high": 2060.84
+    },
+    {
+     "group": "intermediate_algebra",
+     "n": 97,
+     "t2_minus_t1": 63.68,
+     "low": -752.86,
+     "high": 840.18
+    },
+    {
+     "group": "number_theory",
+     "n": 62,
+     "t2_minus_t1": 883.77,
+     "low": 306.76,
+     "high": 1422.56
+    },
+    {
+     "group": "prealgebra",
+     "n": 82,
+     "t2_minus_t1": 920.5,
+     "low": 439.63,
+     "high": 1376.83
+    },
+    {
+     "group": "precalculus",
+     "n": 56,
+     "t2_minus_t1": 933.45,
+     "low": 36.81,
+     "high": 1749.64
+    }
+   ],
+   "ci": 0.95,
+   "seconds": {
+    "bootstrap": 40.1
+   }
+  }
+ }
+}

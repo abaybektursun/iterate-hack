@@ -1,172 +1,160 @@
 ---
 name: theory
-description: Build theories that connect the team's experiments, and score each by prediction instead of by opinion. One round - subagents propose theories from the board items posted before a cutoff time; each theory is scored by how much it improves a predictor's guesses of the numbers posted after the cutoff, against the same predictor without the theory; survivors get a search for contradicting results, an Exa novelty check, and forward predictions posted to the board before the experiments run. Use when the user asks for a theory, an explanation across experiments or what the results mean together, and after every fifth closed result. Writes studies/theory/results/engine/round-<nn>/ and updates studies/theory/README.md.
+description: Build theories that connect the team's experiments, and test each on stored per-problem rows instead of by opinion. One round runs studies/theory/lib/round.py - headless Claude runs in empty directories propose pairwise different mechanisms from the board items before a cutoff and develop each into a theory with offline predictions; scripts written before any number is seen compute those predictions from the stored rows, against two no-theory readers; each survivor then meets the strongest rival a fresh agent can write, on tests the rival chooses, scored by the same log gain; held-out board numbers and a review can only remove a survivor; survivors are posted with their duel result and GPU predictions before the experiments run, refuted theories as a result. Use when the user asks for a theory, an explanation across experiments or what the results mean together, and after every fifth closed result. Writes studies/theory/results/engine/round-<nn>/ and updates studies/theory/README.md.
 ---
 
-# Theory round
+# Theory round (version 5.1)
 
-A theory here is one mechanism sentence that explains numbers from at least two studies and predicts numbers nobody has
-measured. It is accepted on one ground only: a predictor that reads it guesses held-out results better than the same
-predictor without it. No model rates a theory's accuracy or its own novelty.
+A theory is one mechanism sentence that explains numbers from the board and predicts numbers nobody has computed.
+A theory survives when its own offline predictions, fixed before any row was read, were computed, none met its
+refuting condition, and together they gained probability against readers with no theory. It then meets its
+strongest rival on tests the rival chose. Held-out claims and the review can only remove it. GPU predictions
+measured later are the strongest evidence and are posted first.
 
-You are the coordinator. You have read the whole board, so you do not write, reword or choose between theories:
-subagents write them, `studies/theory/lib/check.py` scores them. You pass files along, run the script and report.
+## What four rounds showed
 
-## What keeps the held-out numbers hidden
+- Rounds 01-02: helping a predictor on held-out targets did not separate theories from a reversed control; git
+  commit subjects leaked held-out results into subagents.
+- Round 03: theories lost to the no-theory readers where they diverged (15 of 21), and 10 theories were 2 mechanisms.
+- Round 04 (version 4, tests on stored rows): 3 of 10 theories survive, 4 are refuted by their own computed
+  predictions, 3 are untested because the test environment lacked the grader's packages (math-verify, sympy's LaTeX
+  parser). Every review said "weak" and named a rival mechanism that nobody had computed.
+- Round 04's duel (version 5): 9 of 9 rival tests computed, 0 separated (the defender's centre lay inside the
+  rival's interval on all 9), 1 of 3 survivors decided (r4-m01, +4.43 nats). The rival had attacked its own reading of
+  the theory, not the advocate's; so version 5.1 gives it a second turn against the advocate's numbers.
 
-The backtest means nothing if a held-out number reaches a generator or a predictor. Three rules:
+## The coordinator's job
 
-1. Generators and predictors are told the exact files to read and the one file to write, and that no other tool call
-   is allowed: no board, no messages, no git, no search. The measured values are in the repository and on the board.
-   (The message hook does nothing for a subagent's tool call, so reading a file by path is safe.)
-2. Their files are only `before.jsonl`, and for predictors `targets_blind.jsonl` and at most one theory. Never
-   `after.jsonl`, `targets.jsonl`, your own summary of a result, or another theory's score.
-3. A target's `what` describes the measurement without its outcome: "right of 500, MATH-500, T 1.0, cue, base + 0.5 *
-   (RL - base)", never "the gain from the RL direction".
+Run the stages, read the tables, decide what to post. Write no mechanism, theory, recipe, claim or target, and edit no
+agent's file: you have read the whole board. Work in your own worktree, claim a `work` item, and run
+`git pull origin main` first so the inventory sees every committed row file.
 
-## The round
+## Keeping held-out numbers hidden
 
-Work in your own worktree (`AGENTS.md`). Claim a `work` item first. `<round>` is
-`studies/theory/results/engine/round-<nn>`, with the next free number.
+- Every model call except `inventory`, `test`, `duel_test` and `review` is a headless `claude -p --restricted` run in
+  an empty directory outside the repository, with only Read and Write: no git status, CLAUDE.md, memory or board.
+- `external` may also run `lib/papers.py`: paper entries of `tools/recall.py` and `tools/exa.py`, nothing else. Its
+  findings state a mechanism and where it was measured, never what it means for the team's models.
+- `inventory.md` names row files, fetch commands and fields, never a result number. Read it before `mechanisms`; if
+  it holds an accuracy or a difference, delete that line.
+- `graveyard.json` holds earlier rounds' theories and their failure reasons. Its numbers are from before the cutoff.
+  `standing` stops if the previous round's held-out items are not all before the new cutoff.
+- When a held-out number reaches an agent another way, list its item in `<round>/exposed.json`.
 
-### 1. Score the open forward predictions
+## Choosing the cutoff
 
-`studies/theory/README.md` lists the forward predictions of earlier rounds. For each open one, search the board for a result
-that measured it. Write the measured value, its item id and "inside" or "outside" the predicted interval beside it. A theory
-with two predictions outside its interval is marked refuted. This step is the engine's real test: report the count
-inside and outside in the round's result.
+The cutoff is the posting time of the oldest result or knowledge item no earlier round held out. Print the newest
+items with `uv run tools/board.py ls result knowledge --new --n 40` and compare with the previous round's
+`after.jsonl` (when it has one): the new cutoff is after every item of that file.
 
-### 2. Split the board
+## The commands
 
-```
-uv run studies/theory/lib/check.py dump <round> --skip gpuprice
-```
-
-writes `before.jsonl` and `after.jsonl` and prints the cutoff: the newest quarter of result and knowledge items is held
-out. `--skip` drops items of other projects. With more than 150 items in `before.jsonl`, give each generator a random
-100 of them, a different sample each.
-
-### 3. Targets (one subagent, model sonnet)
-
-It reads both files and writes `<round>/targets.jsonl`, one line per measured number in `after.jsonl`:
-
-```
-{"id": "t01", "item": "result-9b6af3", "what": "<the measurement, without its outcome>", "unit": "right of 500", "value": 441, "quote": "theta0.25 441"}
-```
-
-`quote` is copied verbatim from the item and holds the value. It skips a number that already appears in `before.jsonl`
-(a repost), a count of files or papers, and a cost. It aims for 20 to 60 targets. Fewer than 15 targets: stop and
-report that the board has too few new results for a round.
-
-### 4. Generators (three subagents, model opus, at the same time)
-
-Each prompt holds `DIRECTION.md`, the items of `before.jsonl` and the theory form below. Each returns its two best
-theories. The three differ in where they start:
-
-- **all**: the items as a whole.
-- **surprises**: only from hypotheses the items report as refuted, predictions that failed, and controls that did as
-  well as the treatment. A theory must explain at least two of these.
-- **across**: each theory must connect two studies whose items do not cite each other (for example a sampling result
-  and a weight-difference result).
-
-Save each as `<round>/theories/<start>-<n>.json`:
+`R=studies/theory/results/engine/round-<nn>` (next free number), `P=` the previous round's folder.
 
 ```
-{"name": "across-1",
- "statement": "<one sentence: the mechanism>",
- "scope": "<models, settings and benchmarks it claims to cover, and what it does not cover>",
- "explains":  [{"item": "result-xxxxxx", "quote": "<verbatim from the item>", "how": "<one sentence>"}],
- "conflicts": [{"item": "result-xxxxxx", "quote": "<verbatim>", "how": "<why it does not fit>"}],
- "rival": "<the strongest other explanation of the same items, and the observation that would separate the two>",
- "predictions": [{"experiment": "<one not yet run, exact setting>", "unit": "right of 500", "value": 447, "low": 440, "high": 455,
-                  "refuted_by": "<the observation that refutes the theory>", "gpu_minutes": 20}]}
+uv run studies/theory/lib/round.py $R all --cutoff <ISO time> --skip gpuprice --from $P
 ```
 
-At least three predictions, each on an experiment that no item reports, and `explains` from at least two studies.
-An empty `conflicts` list is allowed only when the generator states it looked.
+runs every stage in order; a job whose outputs exist is skipped, so the same command resumes a stopped round. Job
+dirs (prompt.txt, out.txt) are under a printed temp folder. Prompts: `studies/theory/lib/prompts/<stage>.md`.
 
-### 5. The planted theory (one subagent, model sonnet)
+| stage | model | writes |
+|---|---|---|
+| `split --cutoff T --skip W` | none | `before.jsonl`, `after.jsonl` |
+| `standing --from $P` | none | `graveyard.json` (every earlier theory, state, verdict, reason), `theories/` (survivors with their tests, untested once), `prior_reviews/` |
+| `inventory` | opus, repository | `inventory.md`: row files, exact fetch command, readable now yes/no, fields |
+| `external` | opus, papers.py only | `external.md`: 20-30 published mechanisms with their numbers |
+| `mechanisms --n-mechanisms 12` | opus | `mechanisms.json`: pairwise different, none restating the graveyard |
+| `develop` | opus, 1 per mechanism | `theories/r<n>-m<id>.json` (3+ offline, 1+ GPU predictions), `dropped.json`, `theories.sha256` |
+| `null_tests` | opus, 2 jobs | `tests_blind.jsonl`, `predictions/nulltest-{1,2}.jsonl` |
+| `test` | opus, repository, laptop only | `tests/<theory>/p<k>.py` written first, run once by the script; `tests/<theory>.json` |
+| `score_tests` | none | `metrics_v4.json`, table |
+| `heldout` | sonnet, opus | survivors only: `targets.jsonl`, `predictions/null-*.jsonl`, `claims/`, strikes |
+| `rival` | opus, 1 per survivor | `rivals/<theory>.json`: the strongest rival, 2-4 tests where the two differ, its predictions (top 3 survivors) |
+| `defend` | opus, 1 per survivor | `rivals/<theory>.defend.json`: predictions for the rival's tests from the theory alone |
+| `rival2`, `defend` | opus | second turn where fewer than 2 tests separate: `rivals/<theory>.turn2.json` (replacement tests, or `no_offline_test` with one GPU experiment), `.turn2.defend.json` |
+| `duel_test` | opus, repository, laptop only | both turns: `rivals/<theory>[.turn2]/p<k>.py` written first, run once; `.tests.json` |
+| `score_duel` | none | `metrics_v5.json`, table |
+| `review` | opus, repository | `reviews/<theory>.json` for the same survivors; the verdict names the duel state |
 
-It gets `all-1.json` and writes `<round>/theories/planted.json`: the same form with the direction of every effect
-reversed. The backtest must score it below the null. If it beats the null, the backtest does not discriminate: report
-that as the round's result and accept no theory.
+`develop` may abandon a mechanism the items already contradict (in `dropped.json`); that is a good outcome. A theory
+that fails the check (form, verbatim quotes, recipes) is sent back once, then dropped; any other job whose output
+fails its check (broken JSON included) is sent back once with the error, then stops the round. The rival sees the
+theory and its computed tests; the defender sees only the theory, the items and the rival's recipes, never the
+rival's statement or numbers; the duel test writer sees only the recipes. The rival's second turn gets the
+defender's numbers and reasons and attacks the theory as defended; a fresh defender predicts its tests. A test
+script runs under `uv run
+--no-project --with numpy --with math-verify==0.9.0 --with antlr4-python3-runtime==4.11` with the repository root on
+PYTHONPATH, so it imports the team's graders (`studies.rlneurons.lib.rln4_lib`, `grader.repair_v4`). S3 reads use
+`AWS_PROFILE=iterate-ecr`. Stages run by name on an existing round, for example
+`round.py $R rival defend rival2 defend duel_test score_duel`; `--version 4` runs the old order without the duel. `--model-all
+sonnet --min-targets 3 --n-mechanisms 3` runs a cheap smoke test on a hand-made round folder outside `studies/`.
 
-### 6. Check, then predict (model sonnet, all at the same time)
+## The score
 
-```
-uv run studies/theory/lib/check.py check <round>
-```
+A prediction (value, low, high) is a normal density with sd = max((high - low) / 3.29, 0.01 * max(|value|, 1)); the
+null is the equal mixture of the two test readers' densities. Gain = log prediction density minus log null density
+at the computed value, clipped to [-3, 3] nats. States: `refuted` (any refuting condition met, or two computed
+predictions outside their intervals), `survives` (2 or more computed, none refuted, total gain above 0), `untested`
+(fewer than 2 computed), `no gain` (otherwise). Held-out: a claim both readers contradict that misses its own interval
+is a strike; two strikes refute. A review verdict of refuted or published sets that state.
 
-fails on any quote that is not in its item, and writes `targets_blind.jsonl`. A theory that fails goes back to its
-generator once with the script's message, then is dropped.
+The duel uses the same density and clip: on each computed rival test, gain = log density of the defender's
+prediction minus log density of the rival's, at the computed value, over the tests of both turns (first-turn tests
+are still computed and printed, marked turn 1). With 2 or more computed: `beats rival` at a total of +2 nats or more,
+`loses to rival` at -2 or less, `not separated from rival` between; `not tested against rival` with fewer than 2. Each
+test records `same_prediction` (the defender's centre inside the rival's interval). A review may not call a theory
+that beats its rival "weak" only because some rival exists.
 
-Then one predictor per theory, and two predictors with no theory (`null-1`, `null-2`). Each prompt holds
-`before.jsonl`, `targets_blind.jsonl` and one theory or none, the same wording otherwise. Each returns one number for
-every target, saved as `<round>/predictions/<theory name>.jsonl` (`null-1.jsonl`, `null-2.jsonl`), lines
-`{"id": "t01", "value": 447}`.
+`standing` carries survivors (state survives, verdict not refuted, published or weak) with their computed tests,
+gains, rival files and duel result, which the new round neither computes nor duels again, and carries an `untested`
+theory once. Refuted and `no gain` theories go to the graveyard only.
 
-### 7. Score
+## When a stage stops
 
-```
-uv run studies/theory/lib/check.py score <round>
-```
+It prints the job and its `out.txt` (`out.sendback.txt` after a send-back). A model that wrote no file or broken JSON
+twice: rerun the same command. A crashing test script (`tests/<theory>/p<k>.out.txt`, or `rivals/<theory>/` for the
+duel): delete that script folder once for fresh scripts. Never edit a recipe or a script. A recipe that is not
+computable stays not computable.
 
-For each theory: the number of targets where its predictor is closer to the measured value than each null, and
-farther. `noise` is the same count between the two nulls. A theory beats the null when closer minus farther, against
-each null, is above `noise`. The table is in `<round>/metrics.json`. If no theory beats the null, that is the result:
-post it and stop.
+## What a round delivers
 
-### 7b. Predictions the held-out items already measured
+1. The computed numbers that were new to the team, each with the theory or rival that asked for it and whether the
+   no-theory readers expected it. These are the round's most reliable product: post them as `result` items.
+2. The surviving mechanisms, each with its rival and the experiment that separates the pair.
+3. The refuted theories.
 
-Some of a theory's own predictions name an experiment that a held-out item reports. One subagent (model sonnet) gets
-`theories/` and `targets.jsonl` and writes `<round>/predictions_measured.json`: theory, experiment, predicted value,
-interval, the target ids, the measured value, inside or outside, and the two nulls' predictions for the same targets.
-Report the count inside and outside per theory next to the backtest line. In round 01 the count over all targets
-(step 7) did not separate real theories from the planted one, and this table did carry information: most targets are
-measurements no theory speaks about.
+## Posting
 
-### 8. Refutation and novelty (one subagent per surviving theory, model opus, tools allowed)
+- Every survivor as an `idea`: statement, computed tests (measured, interval, readers, gain), strikes, duel state
+  and tests (computed value, both predictions, gain), the review's nearest published claim, and its GPU predictions,
+  posted before those experiments run. Then the GPU experiment that separates the most pairs per GPU minute.
+- A rival that beats or is not separated from its theory is posted as an `idea` too, with its duel tests (a rival
+  that beats the theory replaces it, and the theory is listed as refuted by those numbers). This is how the next
+  round's `mechanisms` stage sees the rival.
+- Every refuted theory of the round in one `knowledge` item: statement, the test that refuted it and the measured
+  number. A wrong prediction is a result.
+- Before each round, score the open GPU predictions of earlier rounds in `studies/theory/README.md` against the board.
 
-Each survivor's subagent gets the theory and both item files, and returns two things, appended to the theory's file
-under `"review"`:
+## Recording
 
-- **Refutation.** The item, with a verbatim quote, that contradicts the theory most strongly, read at its artifact in
-  git when the item names one; or "none found" with the items it read. Then whether the `rival` explains the held-out
-  targets as well.
-- **Novelty.** `python3 tools/recall.py` and `python3 tools/exa.py search` with at least three phrasings of the
-  mechanism in the field's terms. The nearest published claim, its URL, and in one sentence what the theory says that
-  the paper does not. If a paper states the theory, it is marked "published" and posted as a `knowledge` item instead.
+`$R/run.json`: commit, cutoff, counts (items, mechanisms, abandoned, theories, offline predictions, computed, not
+computable, duel tests computed), jobs per stage, the temp folder. `$R/examples.json`: one computed test inside
+its interval and one outside, with script path and readers. One row per theory in `studies/theory/README.md`
+(statement, tests computed, in/out, gain, state, duel state, verdict, GPU predictions) in the same commit. Close the `work` item with `done`:
+`theory round <nn>: <s> of <m> theories survive; <c> of <o> offline predictions computed, <i> inside, <x> outside;
+<r> refuted; <b> beat their rival. $R/metrics_v4.json $R/metrics_v5.json`
 
-A theory with a contradicting item that its scope does not exclude is marked refuted.
+## Cost per round
 
-### 9. Post
-
-For each theory that survived step 8, post one `idea` item: the statement, its backtest line from `metrics.json`, the
-nearest published claim, and its predictions with intervals. Then choose the experiment where the surviving theories'
-predictions differ most per GPU minute and post it as an `idea` naming the theories it separates. Predictions are
-posted before any of their experiments run.
-
-### 10. Record
-
-In `<round>/run.json`: commit, cutoff, counts of items, targets and theories, the subagent count. Save one target the
-best theory predicted closely and one it missed, with both predictions, as `<round>/examples.json`. Update
-`studies/theory/README.md` in the same commit: one row per theory with its statement, round, backtest line, status
-(open, refuted, published) and its forward predictions with their state. Close the `work` item with `done`:
-
-```
-theory round <nn>: <k> of <m> theories beat the null on <t> held-out targets (noise <x>); planted theory +<a> -<b>;
-forward predictions of earlier rounds: <i> inside, <o> outside. studies/theory/results/engine/round-<nn>/metrics.json
-```
-
-## Cost
-
-About 17 subagents a round: 1 for targets, 3 generators, 1 planted, about 9 predictors, up to 3 reviews. The
-predictors are short calls with no tools. No GPU.
+About 55 to 65 headless jobs, nearly all opus: 1 inventory, 1 external, 1 mechanisms, 12 developers, 2 test readers,
+about 12 test writers, held-out (1 targets, 2 nulls, 1 advocate per survivor), 3 duel jobs per survivor and 3 more on
+a second turn, up to 3 reviews. No GPU. Developers and test writers take 10 to 20 minutes each, in parallel; the duel
+adds 15 to 30 minutes.
 
 ## What a round may claim
 
-- "Beats the null" means the theory helped predict this round's held-out numbers. It is evidence about those targets,
-  not proof of the mechanism. Say the number of targets and the noise every time.
-- A theory becomes more than a candidate only through step 1: forward predictions, posted first, that came out inside
-  their intervals.
-- The held-out quarter is not seen by generators in its own round. It is in `before.jsonl` of the next round.
+- A survivor passed its own tests once. Say how many predictions were computed and the total gain every time.
+- A duel is won against one rival on 2 to 8 tests. Say the rival, the tests computed and how many separated.
+- A refuted theory is refuted by the measured number, not by a model's opinion.
+- The held-out items enter `before.jsonl` of the next round: a theory is tested on them once.

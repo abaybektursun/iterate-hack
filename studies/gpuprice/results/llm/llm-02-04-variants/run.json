@@ -1,0 +1,41 @@
+{
+ "model": "RedHatAI/Qwen3-Next-80B-A3B-Instruct-quantized.w4a16",
+ "revision": "ac9dc5b939ba948ab378b8638cfcce4ac4d5642b",
+ "job_id": "abaybektursun-1114-201359-2fcd",
+ "args": {
+  "context": "studies/gpuprice/data/llm_context_v1.jsonl",
+  "variants": "quant,prob,cot",
+  "model": "w4a16",
+  "limit": null,
+  "horizons": "3,7",
+  "origins": "2026-10-01,2026-10-07,2026-10-13,2026-10-19,2026-10-25",
+  "out": "/runs/abaybektursun-1114-201359-2fcd"
+ },
+ "load_s": 250.08058166503906,
+ "variants": {
+  "quant": {
+   "cells": 100,
+   "n": 10,
+   "max_tokens": 48,
+   "seconds": 54.477535247802734,
+   "generated_tokens": 38939,
+   "prompt_tokens": 124980
+  },
+  "prob": {
+   "cells": 100,
+   "n": 10,
+   "max_tokens": 96,
+   "seconds": 51.0895631313324,
+   "generated_tokens": 57119,
+   "prompt_tokens": 127292
+  },
+  "cot": {
+   "cells": 100,
+   "n": 30,
+   "max_tokens": 400,
+   "seconds": 202.65164923667908,
+   "generated_tokens": 758603,
+   "prompt_tokens": 122680
+  }
+ }
+}

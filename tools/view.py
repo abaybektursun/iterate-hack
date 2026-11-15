@@ -16,11 +16,19 @@ text, scores, votes, comments and message thread in a side panel whose address i
 address too (/?who=<name>&q=<text>&idle=1). Keys: / filter, j and k move, 1 2 3 jump to a column, Enter opens, Esc
 closes, ? lists the keys. A click on a person shows only that person.
 
-  GET /architecture    how the harness works: one interactive picture (architecture.py), fed by the same /data
+  GET /architecture    the Design tab, how the harness works: one interactive picture (architecture.py), fed by the same /data
+  GET /findings        the Findings tab: one tile per finding (findings.py), each a link to the page of that finding
   GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
+  GET /proof           the Proof tab: one tile per experiment that tests the team's method itself (the page of findings.py)
+  GET /proof/<slug>    the page of one such experiment (proof_<slug>.py, made like a finding page)
+  GET /favicon.svg     the tab icon of every page; send() writes the link to it into the head of each HTML page
   GET /data            the newest 60 items of each kind and list, the messages on `all` of the last --hours, every score
                        (board.py score), which the hill-climbing charts draw, the first line of each scored result's
-                       finding (climb.finding) and the newest comment of each open work item (JSON)
+                       finding (climb.finding) and the newest comment of each open work item idle over an hour (JSON),
+                       with only the fields the pages read. One snapshot serves every reader for 5 s. Its ETag comes from
+                       the content and its time is in the header X-Snapshot-Ns, so a browser that asks again with
+                       If-None-Match gets 304 and no body while the board has not changed. The page stops reading while
+                       its tab is hidden.
   GET /data/<item id>  one item with its votes, comments and thread (JSON); 404 for an unknown id
 
 It reads the same DynamoDB table as board.py and msg.py, with Query and GetItem only, and never writes to it or moves an
@@ -28,10 +36,12 @@ agent's message position. A failed read answers 500 with the error text; the pag
 status and logs the error to the browser console.
 """
 import glob
+import hashlib
 import importlib
 import json
 import os
 import sys
+import threading
 import time
 import traceback
 import webbrowser
@@ -43,18 +53,65 @@ from boto3.dynamodb.conditions import Key
 import architecture
 import board
 import climb
+import findings
 import team
 
 PORT = int(sys.argv[sys.argv.index("--port") + 1]) if "--port" in sys.argv else 8765
 HOURS = float(sys.argv[sys.argv.index("--hours") + 1]) if "--hours" in sys.argv else 6.0
 LISTS = ("work", "result", "idea", "knowledge", "skill", "work-closed")
-# One page per finding: every tools/finding_<slug>.py (TITLE, LINE, PAGE) is served at /finding/<slug>.
+# One page per finding: every tools/finding_<slug>.py (TITLE, LINE, PAGE) is served at /finding/<slug> and has a tile
+# on /findings. Its ICON, the JavaScript source of the tile's icon, is written into that page here (findings.py).
 FINDINGS = {os.path.basename(f)[len("finding_"):-3].replace("_", "-"): importlib.import_module(os.path.basename(f)[:-3])
             for f in sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "finding_*.py")))}
 
 
+def tiles_page(modules, differences=()):
+    """The tile page of findings.py with the icons of these modules written in, and the given text differences applied."""
+    page = findings.PAGE.replace("__ICONS__", "{" + ", ".join(f"{json.dumps(s)}: {m.ICON}" for s, m in modules.items() if hasattr(m, "ICON")) + "}")
+    for old, new in differences:
+        assert page.count(old) == 1, f"findings.PAGE no longer holds {old!r} once"
+        page = page.replace(old, new)
+    return page
+
+
+FINDINGS_PAGE = tiles_page(FINDINGS)
+# One page per experiment that tests the team's method itself: every tools/proof_<slug>.py, with the same four values
+# as a finding page, is served at /proof/<slug> and has a tile on /proof.
+PROOFS = {os.path.basename(f)[len("proof_"):-3].replace("_", "-"): importlib.import_module(os.path.basename(f)[:-3])
+          for f in sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "proof_*.py")))}
+PROOF_PAGE = tiles_page(PROOFS, findings.PROOF)
+
+
+# The tab icon of every page: the lit body of the Design page and one orbit around it, on the dark paper, with the light
+# from the upper left. The orbit is faint behind the body and heavier in front of it.
+FAVICON = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<radialGradient id="b" cx=".34" cy=".3" r=".8"><stop offset="0" stop-color="#f6f9ff"/><stop offset=".45" stop-color="#8fb1ff"/><stop offset="1" stop-color="#2f4fb8"/></radialGradient>
+<rect width="32" height="32" rx="7" fill="#080c11"/>
+<g transform="rotate(-24 16 16)" fill="none" stroke="#8fb1ff" stroke-linecap="round">
+<path d="M2.4 16A13.6 5.6 0 0 1 29.6 16" stroke-width="1.8" opacity=".45"/>
+<circle cx="16" cy="16" r="7.4" fill="url(#b)" stroke="none"/>
+<path d="M2.4 16A13.6 5.6 0 0 0 29.6 16" stroke-width="2.6"/>
+</g>
+</svg>
+"""
+ICON_LINK = '<link rel="icon" href="/favicon.svg" type="image/svg+xml">\n'
+
+
 def newest(listed, n=60):
     return team.table().query(IndexName="new", KeyConditionExpression=Key("listed").eq(listed), ScanIndexForward=False, Limit=n)["Items"]
+
+
+# What the pages read of each row (grep tools/view.py and tools/architecture.py before dropping one); the rest stays out of /data.
+ITEM = ("id", "listed", "kind", "who", "branch", "text", "at_ns", "active_ns", "closed_at", "closed_by", "ups", "downs", "n_comments", "agent", "session")
+MESSAGE = ("sk", "who", "branch", "text", "agent", "session")
+SCORE = ("sk", "result", "model", "benchmark", "right", "n", "config", "tokens", "who")
+LATE_NS = 59 * 60 * 10**9  # the board shows the last comment of open work idle over an hour; a minute early, so it is there in time
+COMMENTS = {}  # (work id, n_comments) -> its newest comment; a new comment changes n_comments
+FOUND = {}  # result id -> the first line of its finding; board.py never changes an item's text after posting
+
+
+def cols(rows, keys):
+    return [{k: r[k] for k in keys if k in r} for r in rows]
 
 
 def last_comment(item_id):
@@ -68,21 +125,37 @@ def finding(item_id):  # not BatchGetItem: the team key and the Lambda role (inf
 
 
 def snapshot():
-    with ThreadPoolExecutor(len(LISTS)) as pool:  # one query per list, at the same time
-        items = [item for page in pool.map(newest, LISTS) for item in page]
     start = f"{time.time_ns() - int(HOURS * 3600 * 10**9):020d}"
-    messages = board.rows(KeyConditionExpression=Key("pk").eq("chan#all") & Key("sk").gt(start))
-    scores = board.rows(KeyConditionExpression=Key("pk").eq("scores"))  # every score, in the order its result was posted
-    commented = [i["id"] for i in items if i["listed"] == "work" and i.get("n_comments")]
-    with ThreadPoolExecutor(max(1, len(commented))) as pool:  # the newest comment of each open work item, one query each
-        last = dict(zip(commented, pool.map(last_comment, commented)))
-    scored = list(dict.fromkeys(s["result"] for s in scores))
-    assert len(scored) < 100, f"{len(scored)} scored results: one GetItem each on every read of /data is too many"
-    with ThreadPoolExecutor(max(1, len(scored))) as pool:  # the first line of each scored result's finding, one GetItem each
-        found = dict(zip(scored, pool.map(finding, scored)))
-    return {"now_ns": time.time_ns(), "hours": HOURS, "test": team.TEST, "items": items, "messages": messages, "scores": scores,
-            "last_comments": last, "finding": found,
-            "findings": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in FINDINGS.items() if not getattr(m, "UNLISTED", False)]}
+    with ThreadPoolExecutor(len(LISTS) + 2) as pool:  # every list, the messages and the scores at the same time
+        messages = pool.submit(board.rows, KeyConditionExpression=Key("pk").eq("chan#all") & Key("sk").gt(start))
+        scores = pool.submit(board.rows, KeyConditionExpression=Key("pk").eq("scores"))  # every score, in the order its result was posted
+        items = [item for page in pool.map(newest, LISTS) for item in page]
+        messages, scores = messages.result(), scores.result()
+        late = [(i["id"], i["n_comments"]) for i in items if i["listed"] == "work" and i.get("n_comments")
+                and time.time_ns() - int(i.get("active_ns", i["at_ns"])) >= LATE_NS]
+        new = [k for k in late if k not in COMMENTS]
+        COMMENTS.update(zip(new, pool.map(lambda k: last_comment(k[0]), new)))
+        texts = {i["id"]: i["text"] for i in items}
+        scored = [r for r in dict.fromkeys(s["result"] for s in scores) if r not in FOUND]
+        # one GetItem per scored result that is not among the newest 60 results, once per process
+        FOUND.update(zip(scored, pool.map(lambda r: climb.finding(texts[r]) if r in texts else finding(r), scored)))
+    return {"hours": HOURS, "test": team.TEST, "items": cols(items, ITEM), "messages": cols(messages, MESSAGE), "scores": cols(scores, SCORE),
+            "last_comments": {k[0]: COMMENTS[k] for k in late}, "finding": {r: FOUND[r] for r in dict.fromkeys(s["result"] for s in scores)},
+            "findings": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in FINDINGS.items()],
+            "proofs": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in PROOFS.items()]}
+
+
+SNAPSHOT = {"at": 0.0, "ns": 0, "body": ""}
+SNAPSHOT_LOCK = threading.Lock()
+FRESH_S = 5  # readers within 5 s of each other share one set of queries; wall time, because a frozen Lambda stops the monotonic clock
+
+
+def snapshot_json():
+    with SNAPSHOT_LOCK:  # a reader that arrives while the queries run waits for them instead of starting its own
+        if time.time() - SNAPSHOT["at"] >= FRESH_S:
+            body = json.dumps(snapshot(), default=int, separators=(",", ":"))  # DynamoDB numbers are Decimal; all are integers
+            SNAPSHOT.update(at=time.time(), ns=time.time_ns(), body=body)
+        return SNAPSHOT["body"], SNAPSHOT["ns"]
 
 
 def detail(item_id):
@@ -96,12 +169,27 @@ def detail(item_id):
 
 
 class Handler(BaseHTTPRequestHandler):
-    def send(self, status, kind, body):
+    protocol_version = "HTTP/1.1"  # Chrome revalidates with If-None-Match only for HTTP/1.1 responses
+
+    def send(self, status, kind, body, headers=()):
+        if kind == "text/html":  # every page gets the tab icon here, so no page module holds it
+            body = body.replace("<title>", ICON_LINK + "<title>", 1)
         data = body.encode()
-        self.send_response(status)
-        self.send_header("Content-Type", f"{kind}; charset=utf-8")
-        self.send_header("Content-Length", str(len(data)))
-        self.send_header("Cache-Control", "no-store")
+        tag = f'"{hashlib.blake2b(data, digest_size=16).hexdigest()}"'  # from the content, so an unchanged board answers 304
+        if status == 200 and self.headers.get("If-None-Match") == tag:
+            self.send_response(304)
+            data = b""
+        else:
+            self.send_response(status)
+            self.send_header("Content-Type", f"{kind}; charset=utf-8")
+            self.send_header("Content-Length", str(len(data)))
+        if status == 200:
+            self.send_header("ETag", tag)
+            self.send_header("Cache-Control", "no-cache")  # the browser keeps the body and asks again with If-None-Match
+        else:
+            self.send_header("Cache-Control", "no-store")
+        for header in headers:
+            self.send_header(*header)
         self.end_headers()
         self.wfile.write(data)
 
@@ -111,12 +199,23 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, "text/html", PAGE)
         if path == "/architecture":
             return self.send(200, "text/html", architecture.PAGE)
+        if path == "/findings":
+            return self.send(200, "text/html", FINDINGS_PAGE)
         if path.startswith("/finding/") and path[len("/finding/"):] in FINDINGS:
             return self.send(200, "text/html", FINDINGS[path[len("/finding/"):]].PAGE)
+        if path == "/proof":
+            return self.send(200, "text/html", PROOF_PAGE)
+        if path.startswith("/proof/") and path[len("/proof/"):] in PROOFS:
+            return self.send(200, "text/html", PROOFS[path[len("/proof/"):]].PAGE)
+        if path == "/favicon.svg":
+            return self.send(200, "image/svg+xml", FAVICON)
         if path != "/data" and not path.startswith("/data/"):
             return self.send(404, "text/plain", f"no page {path}")
         try:  # the page shows the error text; the traceback goes to this terminal
-            found = snapshot() if path == "/data" else detail(path[len("/data/"):])
+            if path == "/data":  # the time of the read goes in a header, so the body and its ETag change only with the board
+                body, ns = snapshot_json()
+                return self.send(200, "application/json", body, [("X-Snapshot-Ns", str(ns))])
+            found = detail(path[len("/data/"):])
         except (Exception, SystemExit) as error:
             traceback.print_exc()
             return self.send(500, "text/plain", f"{type(error).__name__}: {error}")
@@ -134,9 +233,10 @@ PAGE = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Team board</title>
+<link rel="preload" href="/data" as="fetch" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" media="print" onload="this.media='all'">
 <style>
 :root {
   color-scheme: light dark;
@@ -178,6 +278,7 @@ code { font: inherit; font-weight: 600; }
 .name { margin: 0; font-size: 15px; font-weight: 600; font-stretch: 112%; letter-spacing: .01em; white-space: nowrap; }
 .links { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 13px; color: var(--mute); min-width: 0; }
 .links a:hover { color: var(--ink); }
+.links a[aria-current] { color: var(--ink); font-weight: 600; }
 .test { color: var(--red); font-weight: 600; font-size: 13px; }
 .search { margin-left: auto; position: relative; display: flex; align-items: center; }
 .search input {
@@ -437,7 +538,7 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
 <div class="wrap">
   <header class="top">
     <h1 class="name">Team board</h1>
-    <nav class="links"><a href="/architecture">How it works</a><span id="finds" class="links"></span></nav>
+    <nav class="links"><a href="/" aria-current="page">Board</a><a href="/architecture">Design</a><a href="/proof">Proof</a><a href="/findings">Findings</a></nav>
     <span class="test" id="test" hidden>test table</span>
     <label class="search"><input id="q" type="search" placeholder="Filter items and messages" aria-label="Filter items and messages" autocomplete="off"><kbd>/</kbd></label>
     <span class="status" id="status" role="status">Reading the board</span>
@@ -531,8 +632,9 @@ function diffCI(a, b, z = 1.96) {  // a minus b, in points, for two independent 
 
 /* Writes that do not disturb reading: skip an unchanged string, skip while the reader has text selected in it. */
 const selecting = el => {  // a selection younger than 60 s pauses writes to the region that holds it
+  if (!S.selAt || Date.now() - S.selAt >= 60000) return false;  // no selection (selectionchange keeps S.selAt): skip getSelection
   const s = getSelection();
-  return s && !s.isCollapsed && el.contains(s.anchorNode) && Date.now() - S.selAt < 60000;
+  return s && !s.isCollapsed && el.contains(s.anchorNode);
 };
 document.addEventListener("selectionchange", () => { S.selAt = getSelection().isCollapsed ? 0 : Date.now(); });
 function put(el, html) {
@@ -629,7 +731,6 @@ function render() {
     (S.idle ? `<span class="chip">Open work idle over an hour <button data-clear="idle" aria-label="Show all open work">✕</button></span>` : ""));
   if (!d) return;
   $("test").hidden = !d.test;
-  put($("finds"), (d.findings || []).map(f => `<a href="/finding/${esc(f.slug)}" title="${esc(f.line)}">${esc(f.title)}</a>`).join(""));
 
   people = [...new Set([...d.items, ...d.messages].map(r => r.who))].sort();
   S.scores = new Map();
@@ -914,11 +1015,24 @@ function failed(e) {
       "that the key has not expired, and that the network is up. The terminal running view.py has the full traceback.", e.text ?? e);
 }
 
-function poll() {
-  get("/data")
-    .then(data => { S.data = data; S.readAt = Date.now(); S.error = null; return S.open && loadDetail(); })
+async function read() {  // an unchanged board comes back as a 304 with the same ETag: nothing to parse
+  const r = await fetch("/data").catch(() => { throw { server: true }; });
+  if (!r.ok) throw { text: `${r.status}: ${await r.text()}` };
+  const tag = r.headers.get("ETag");
+  if (!S.data || tag !== S.etag) { S.data = await r.json(); S.etag = tag; }
+  S.data.now_ns = Number(r.headers.get("X-Snapshot-Ns"));  // the time of the read, kept out of the body so the ETag holds
+  S.readAt = Date.now(); S.error = null;
+}
+
+let timer = 0, reading = false;
+function poll() {  // every 10 s while the tab is visible; a hidden tab stops, and reads at once when it is shown again
+  clearTimeout(timer);
+  if (reading) return;
+  reading = true;
+  read()
+    .then(() => S.open && loadDetail())
     .catch(failed)
-    .finally(() => { render(); renderPanel(); setTimeout(poll, 10000); });
+    .finally(() => { reading = false; render(); renderPanel(); if (!document.hidden) timer = setTimeout(poll, 10000); });
 }
 
 async function loadDetail() {  // a failed read of one item is logged; the rest of the page stays live
@@ -1073,7 +1187,7 @@ document.fonts.ready.then(() => S.benches && charts());
 const keepSeen = () => S.lookedAt && store.set(SEEN_KEY, String(S.lookedAt));
 const back = () => { S.since = Number(store.get(SEEN_KEY)) || S.since; S.acked = false; if (S.data) render(); };
 const ack = () => { if (!S.acked && document.hasFocus()) { S.acked = true; render(); } };
-document.addEventListener("visibilitychange", () => document.hidden ? keepSeen() : back());
+document.addEventListener("visibilitychange", () => { if (document.hidden) { keepSeen(); clearTimeout(timer); } else { back(); poll(); } });
 addEventListener("blur", keepSeen);
 addEventListener("focus", back);
 addEventListener("pagehide", keepSeen);
@@ -1098,6 +1212,7 @@ poll();
 if __name__ == "__main__":
     if {"--help", "-h"} & set(sys.argv):
         sys.exit(__doc__)
+    team.table()  # once, before the threads of the first /data: each would build its own boto3 resource (0.84 s instead of 0.05 s)
     server = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
     print(f"board at http://127.0.0.1:{PORT}  (Ctrl-C stops it)")
     if sys.stdout.isatty():

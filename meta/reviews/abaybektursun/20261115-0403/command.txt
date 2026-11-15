@@ -1,0 +1,1 @@
+bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -c "import vllm, transformers, tokenizers; from importlib.metadata import version as v; print(\"versions\", vllm.__version__, transformers.__version__, tokenizers.__version__, v(\"math-verify\"))"

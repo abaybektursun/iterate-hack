@@ -1,0 +1,6 @@
+{
+ "commit": "4d06ffa9659fa5e2e9a2a10623ea5d0202acb94f",
+ "command": "starter baselines.py --origin-start 2026-10-01 --origin-end 2026-10-30 --origin-step 1 + scorer.py --horizons 1,3,7 --tier headline, history and catalog cut at 2026-11-06 (README section 'Event set')",
+ "job_id": "laptop (no GPU)",
+ "source_dir": "/home/abay/Projects/iterate-hack/runs/gpuprice/event/backtest"
+}

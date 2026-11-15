@@ -1,0 +1,56 @@
+{
+ "reference": "base + cue sample 0 (405 of 500)",
+ "ability_base_cue_s0": 1.885,
+ "ability_base_cue_pooled_4": 2.0,
+ "noise_floor_sd_of_4_same_config_samples_logits": {
+  "base_cue": 0.12,
+  "rl_plain": 0.167
+ },
+ "bootstrap_sd_of_one_single_sample_ability_logits": 0.168,
+ "theta_sweep_cue": {
+  "0.0": {
+   "ability": 2.0,
+   "shift_vs_pooled_base": 0.0,
+   "linear_0_to_1": 0.0,
+   "minus_linear": 0.0
+  },
+  "0.25": {
+   "ability": 2.797,
+   "shift_vs_pooled_base": 0.797,
+   "linear_0_to_1": 0.347,
+   "minus_linear": 0.45
+  },
+  "0.5": {
+   "ability": 3.184,
+   "shift_vs_pooled_base": 1.184,
+   "linear_0_to_1": 0.694,
+   "minus_linear": 0.49
+  },
+  "0.75": {
+   "ability": 3.146,
+   "shift_vs_pooled_base": 1.146,
+   "linear_0_to_1": 1.041,
+   "minus_linear": 0.105
+  },
+  "1.0": {
+   "ability": 3.388,
+   "shift_vs_pooled_base": 1.388,
+   "linear_0_to_1": 1.388,
+   "minus_linear": 0.0
+  },
+  "1.25": {
+   "ability": 3.108,
+   "shift_vs_pooled_base": 1.108,
+   "linear_0_to_1": 1.734,
+   "minus_linear": -0.627
+  },
+  "1.5": {
+   "ability": 3.223,
+   "shift_vs_pooled_base": 1.223,
+   "linear_0_to_1": 2.081,
+   "minus_linear": -0.859
+  }
+ },
+ "random_difference_control_shift_vs_pooled_base": 0.146,
+ "H3_theta_0.5_off_the_line_in_noise_sd": 4.1
+}

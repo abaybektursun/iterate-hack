@@ -1,0 +1,103 @@
+diff --git a/meta/dana.md b/meta/dana.md
+index 315e0ab..1932565 100644
+--- a/meta/dana.md
++++ b/meta/dana.md
+@@ -1,5 +1,22 @@
+ # Meta review: dana
+ 
++## 2026-11-15 04:26 UTC (after result-51dceb and result-0b9f0d) meta/reviews/dana/20261115-0422/
++
++- Checks from 04:18: 0 failed cell jobs (6 of 6 tokens jobs done, cycle.txt). The next step was the tokens batch, not the mission-3 cap route. bench-rng and fmt are still there: bench-rng ran a 3rd time (PCG64 35,577/s; 39,536, 36,643 before), and the tokens subject cell was hand-set to fmt "csv", digits 2 (5cf8474, 1015d62). Both pass `--check`, since they are legal values. Digits 2 goes against Req. 2 (4 digits). The venv row: changed below.
++- Direction: mission point 3 asks for a route "at equal generated tokens". tokens answers part of it: RL uses +761 [495, 1020] tokens more than the cued base overall. By the base's answer length, q1-q3 are +1,071 to +1,999 and q4 is -1,658 [-2,451, -868] (`results/tokens-01/t1_length_quartile.json`). So RL spends fewer tokens only where the base hits the cap. A loop stop for the base in q4 would free tokens that RL spends elsewhere. That route is still unclaimed. Planned next: tokens_both_right (`queue.json`). bench-rng tests no part of the mission (1 of 2 runs).
++- Research: no replication. SPEC still names no closest published experiment.
++- Turnaround (cycle.txt, 0.25 h): 16 jobs, 3 failed (all before 04:18), 3.3 of 17.1 container min in them, median wait 0.1. Medians: to-job 0, jobs 4 (5 before), to-answer 0. tokens work: jobs 3 min, 0 fixes. Slowest stage: jobs. Each job spends 18-22 s of 45-66 s building a venv (5 job logs, before.txt). scipy, pandas and matplotlib are never imported (cell.py and bench_rng.py import only numpy).
++- Change (step 2). Step 1: the pin's reason (Req. 2, same table on rerun) covers only numpy. Deleted the 3 unused packages from run_cell.sh (3995576, pushed).
++
++  | measure | before | after | change | runs | source |
++  |---|---|---|---|---|---|
++  | venv s, tokens overall | 22 | 7 | -15 s | 1 and 1 | before.txt (bd26), after.txt (21f7) |
++  | job s, start to done | 66 | 50 | 1.3x faster | 1 and 1 | same |
++  | overall table (must not change) | 760.948 [495.14, 1019.8781] | same | identical | 1 and 1 | after.txt |
++
++- Failures: none since 04:18. Side failure: `gpu.py submit` refuses a dirty tree, so the review folder had to be stashed to launch (a run folder cannot be written before the job it measures). The FAILURES.md venv row stays, now 7 s per job. Removable: bench-rng (3 runs, noise > spread), `fmt`, per-batch `digits`. The owner decides.
++- Next entry checks: venv s per job stays near 7; whether the mission-3 loop-stop route is claimed before tokens_both_right runs; bench-rng, fmt and digits 2.
++
+ ## 2026-11-15 04:18 UTC (after result-47bc5b and result-984cbd) meta/reviews/dana/20261115-0413/
+ 
+ - Checks from 04:05: 1 job per cell held (cap_hit cells 61-72 s wall). The cap_hit batch ran as queued; no mission-3 step replaced it. bench-rng ran again: its rates moved 7% between runs (PCG64 39,536 to 36,643/s), more than the 3% spread between generators, so it measures noise. It is still in `queue.json` extras. FAILURES.md: the hand-edit row came back, the venv row is unchanged.
+diff --git a/meta/reviews/dana/20261115-0422/after.txt b/meta/reviews/dana/20261115-0422/after.txt
+new file mode 100644
+index 0000000..24c24ab
+--- /dev/null
++++ b/meta/reviews/dana/20261115-0422/after.txt
+@@ -0,0 +1,10 @@
++[run_cell] 04:23:40 start: batch tokens, cell overall
++[run_cell] 04:23:47 environment ready
++[cell] 04:23:47 cell overall from studies/gapmap/cells/tokens.json
++[cell] 04:23:47 loaded 500 rows from studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json
++[cell] 04:23:47 bootstrap start: metric tokens, split overall, 500 problems, 1500000 resamples
++[cell] 04:24:30 bootstrap done in 43.5 s
++[cell] 04:24:30 result {"group": "all", "n": 500, "t2_minus_t1": 760.948, "low": 495.14, "high": 1019.8781}
++[cell] 04:24:30 wrote /runs/dana-1114-202335-21f7/metrics.json
++[run_cell] 04:24:30 done
++identical True [{'group': 'all', 'n': 500, 't2_minus_t1': 760.948, 'low': 495.14, 'high': 1019.8781}]
+diff --git a/meta/reviews/dana/20261115-0422/before.txt b/meta/reviews/dana/20261115-0422/before.txt
+new file mode 100644
+index 0000000..a388364
+--- /dev/null
++++ b/meta/reviews/dana/20261115-0422/before.txt
+@@ -0,0 +1,9 @@
++[run_cell] 04:19:58 start: batch tokens, cell overall
++[run_cell] 04:20:20 environment ready
++[cell] 04:20:20 cell overall from studies/gapmap/cells/tokens.json
++[cell] 04:20:20 loaded 500 rows from studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json
++[cell] 04:20:20 bootstrap start: metric tokens, split overall, 500 problems, 1500000 resamples
++[cell] 04:21:03 bootstrap done in 43.1 s
++[cell] 04:21:04 result {"group": "all", "n": 500, "t2_minus_t1": 760.948, "low": 495.14, "high": 1019.8781}
++[cell] 04:21:04 wrote /runs/dana-1114-201953-bd26/metrics.json
++[run_cell] 04:21:04 done
+diff --git a/meta/reviews/dana/20261115-0422/cycle.txt b/meta/reviews/dana/20261115-0422/cycle.txt
+new file mode 100644
+index 0000000..f28824e
+--- /dev/null
++++ b/meta/reviews/dana/20261115-0422/cycle.txt
+@@ -0,0 +1,26 @@
++Jobs of dana, last 0.25 h:  id  state  gpu  wait  run  command
++  dana-1114-200722-9325  exit 1  cpu  0.0  0.9  bash studies/gapmap/jobs/run_cell.sh cap_hit subject 
++  dana-1114-200828-de4a  exit 1  cpu  0.0  1.6  bash studies/gapmap/jobs/run_cell.sh cap_hit subject 
++  dana-1114-201020-b225  done  cpu  0.0  1.0  bash studies/gapmap/jobs/run_cell.sh cap_hit subject 
++  dana-1114-201128-ce08  done  cpu  0.1  1.2  bash studies/gapmap/jobs/run_cell.sh cap_hit bench-rng 
++  dana-1114-201128-fd49  done  cpu  0.1  1.2  bash studies/gapmap/jobs/run_cell.sh cap_hit overall 
++  dana-1114-201128-ad0d  done  cpu  0.1  1.0  bash studies/gapmap/jobs/run_cell.sh cap_hit t2_length_quartile 
++  dana-1114-201128-3018  done  cpu  0.1  1.1  bash studies/gapmap/jobs/run_cell.sh cap_hit t1_length_quartile 
++  dana-1114-201128-2ddf  done  cpu  0.0  1.0  bash studies/gapmap/jobs/run_cell.sh cap_hit level5 
++  dana-1114-201504-59c4  exit 1  cpu  0.1  0.8  bash studies/gapmap/jobs/run_cell.sh cap_hit subject 
++  dana-1114-201639-ffa6  done  cpu  0.0  0.8  bash studies/gapmap/jobs/run_cell.sh cap_hit subject 
++  dana-1114-201826-5265  done  cpu  0.1  1.1  bash studies/gapmap/jobs/run_cell.sh tokens subject 
++  dana-1114-201953-bd26  done  cpu  0.1  1.1  bash studies/gapmap/jobs/run_cell.sh tokens overall 
++  dana-1114-201954-6212  done  cpu  0.1  1.1  bash studies/gapmap/jobs/run_cell.sh tokens t1_length_quartile 
++  dana-1114-201953-6050  done  cpu  0.0  1.1  bash studies/gapmap/jobs/run_cell.sh tokens bench-rng 
++  dana-1114-201954-6050  done  cpu  0.1  1.1  bash studies/gapmap/jobs/run_cell.sh tokens t2_length_quartile 
++  dana-1114-201953-a304  done  cpu  0.0  0.9  bash studies/gapmap/jobs/run_cell.sh tokens level5 
++  16 jobs, 3 failed or cancelled; median wait 0.1; 17.1 container minutes, 3.3 of them in failed or cancelled jobs
++
++Work of dana, last 0.25 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
++  work-bae9ac  dana/gapmap  0  5  0  6  8  2  gapmap batch cap_hit: T2 (RL) minus T1 (cued base) on MATH-5
++  work-2e864a  dana/gapmap  0  5  0  6  8  2  gapmap bench-rng: speed of numpy's bit generators (PCG64, MT
++  work-38088d  dana/gapmap  0  3  0  3  6  0  gapmap batch tokens: T2 (RL) minus T1 (cued base) on MATH-50
++  work-2360c6  dana/gapmap  0  3  0  3  6  0  gapmap bench-rng: speed of numpy's bit generators (PCG64, MT
++
++Median minutes per stage over work items with jobs: to-job 0, jobs 4, to-answer 0. Slowest stage: jobs.
+diff --git a/studies/gapmap/jobs/run_cell.sh b/studies/gapmap/jobs/run_cell.sh
+index 0233e87..d1a40cf 100755
+--- a/studies/gapmap/jobs/run_cell.sh
++++ b/studies/gapmap/jobs/run_cell.sh
+@@ -10,7 +10,7 @@ echo "[run_cell] $(date -u +%T) start: batch $batch, cell $cell"
+ # The pinned environment of the bootstrap, built new for every job so that no cell inherits another job's packages.
+ venv=$(mktemp -d)/venv
+ python -m venv "$venv"
+-"$venv/bin/pip" install --quiet --no-cache-dir --disable-pip-version-check numpy==2.5.4 scipy==1.18.1 pandas==3.1.1 matplotlib==3.11.2
++"$venv/bin/pip" install --quiet --no-cache-dir --disable-pip-version-check numpy==2.5.4
+ echo "[run_cell] $(date -u +%T) environment ready"
+ 
+ "$venv/bin/python" studies/gapmap/jobs/cell.py --cells "studies/gapmap/cells/$batch.json" --cell "$cell" "$@"

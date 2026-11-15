@@ -1,0 +1,35 @@
+{
+ "name": "ens-01-avg",
+ "note": "H: quantile average of fm-07 (Chronos-2 per listing) and sim2-04 (own-history replay) beats both because their errors differ; refuted if <= +0.272",
+ "utc": "2026-11-14T23:30:06+00:00",
+ "commit": "7f10978",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.28031,
+ "pinball": 0.024141,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.290667,
+ "skill_geomean": 0.359755,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.142902,
+   "in_band": 0.843062
+  },
+  "3": {
+   "skill_pooled": 0.264666,
+   "in_band": 0.743217
+  },
+  "7": {
+   "skill_pooled": 0.325685,
+   "in_band": 0.63469
+  }
+ },
+ "in_band": 0.740753
+}

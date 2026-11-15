@@ -1,0 +1,25 @@
+{
+ "model": "RedHatAI/Qwen3-Next-80B-A3B-Instruct-quantized.w4a16",
+ "revision": "ac9dc5b939ba948ab378b8638cfcce4ac4d5642b",
+ "job_id": "abaybektursun-1114-200439-7bc9",
+ "args": {
+  "context": "studies/gpuprice/data/llm_context_v1.jsonl",
+  "variants": "sample",
+  "model": "w4a16",
+  "limit": null,
+  "horizons": "3,7",
+  "origins": "2026-10-01,2026-10-07,2026-10-13,2026-10-19,2026-10-25",
+  "out": "/runs/abaybektursun-1114-200439-7bc9"
+ },
+ "load_s": 271.5968713760376,
+ "variants": {
+  "sample": {
+   "cells": 100,
+   "n": 30,
+   "max_tokens": 16,
+   "seconds": 196.02795910835266,
+   "generated_tokens": 16210,
+   "prompt_tokens": 118180
+  }
+ }
+}

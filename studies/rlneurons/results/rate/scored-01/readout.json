@@ -1,0 +1,233 @@
+{
+ "scored": 4,
+ "not_finished": 10,
+ "inside_interval80": 3,
+ "hard328_transfer_cells": {
+  "n": 2,
+  "mean_abs_error": {
+   "Lc_filed": 8.35,
+   "baseline_point": 3.7,
+   "baseline_relative_error": 36.65,
+   "baseline_marginal_logit": 23.4
+  }
+ },
+ "math500_second_draw_cells": {
+  "n": 2,
+  "mean_abs_error": {
+   "filed (same as the first draw)": 20.0
+  }
+ },
+ "cells": [
+  {
+   "cell": "base + cue, vote over 4 after restart",
+   "set": "hard328",
+   "filed": "predict-01",
+   "filed_utc": "2026-11-15T04:44:08+00:00",
+   "status": "prediction",
+   "predicted_right": 192.3,
+   "interval80": [
+    182.0,
+    202.0
+   ],
+   "observed": null
+  },
+  {
+   "cell": "RL plain, vote over 4 after restart",
+   "set": "hard328",
+   "filed": "predict-01",
+   "filed_utc": "2026-11-15T04:44:08+00:00",
+   "status": "prediction",
+   "predicted_right": 227.1,
+   "interval80": [
+    217.0,
+    239.0
+   ],
+   "observed": null
+  },
+  {
+   "cell": "base + cue + 3 RL-written solved problems (shots_rl)",
+   "set": "hard328",
+   "filed": "predict-01",
+   "filed_utc": "2026-11-15T04:44:08+00:00",
+   "status": "prediction",
+   "predicted_right": 181.4,
+   "interval80": [
+    171.0,
+    192.0
+   ],
+   "observed": null
+  },
+  {
+   "cell": "base + top 8 directions, cue",
+   "set": "hard328",
+   "filed": "predict-01",
+   "filed_utc": "2026-11-15T04:44:08+00:00",
+   "status": "prediction",
+   "predicted_right": 173.1,
+   "interval80": [
+    164.0,
+    193.0
+   ],
+   "observed": null
+  },
+  {
+   "cell": "vote distillation V cue",
+   "set": "hard328",
+   "filed": "predict-01",
+   "filed_utc": "2026-11-15T04:44:08+00:00",
+   "status": "category prior, not a measured shift",
+   "predicted_right": 175.5,
+   "interval80": [
+    162.0,
+    188.10000000000014
+   ],
+   "observed": null
+  },
+  {
+   "cell": "vote distillation V plain",
+   "set": "hard328",
+   "filed": "predict-01",
+   "filed_utc": "2026-11-15T04:44:08+00:00",
+   "status": "category prior, not a measured shift",
+   "predicted_right": 175.5,
+   "interval80": [
+    162.0,
+    189.0
+   ],
+   "observed": null
+  },
+  {
+   "cell": "unfiltered self-training control U cue",
+   "set": "hard328",
+   "filed": "predict-01",
+   "filed_utc": "2026-11-15T04:44:08+00:00",
+   "status": "category prior, not a measured shift",
+   "predicted_right": 162.0,
+   "interval80": [
+    151.0,
+    173.0
+   ],
+   "observed": null
+  },
+  {
+   "cell": "unfiltered self-training control U plain",
+   "set": "hard328",
+   "filed": "predict-01",
+   "filed_utc": "2026-11-15T04:44:08+00:00",
+   "status": "category prior, not a measured shift",
+   "predicted_right": 162.0,
+   "interval80": [
+    151.0,
+    173.0
+   ],
+   "observed": null
+  },
+  {
+   "cell": "shots_base, second draw of the 3 examples",
+   "set": "math500",
+   "filed": "predict-01",
+   "filed_utc": "2026-11-15T04:44:08+00:00",
+   "status": "prediction",
+   "predicted_right": 414.0,
+   "interval80": [
+    399.2,
+    428.8
+   ],
+   "observed": 405,
+   "source": "job abaybektursun-1114-195357-6936 (shots1/base_b.json), done; score_v3 of answers.jsonl without problems 3, 5, 6 (408 of 500 with them)",
+   "error": 9.0,
+   "inside_interval80": true,
+   "error_baselines": {
+    "baseline_point": 9.0
+   }
+  },
+  {
+   "cell": "shots_code, second draw of the 3 examples",
+   "set": "math500",
+   "filed": "predict-01",
+   "filed_utc": "2026-11-15T04:44:08+00:00",
+   "status": "prediction",
+   "predicted_right": 412.0,
+   "interval80": [
+    397.0,
+    427.0
+   ],
+   "observed": null
+  },
+  {
+   "cell": "shots_rl, second draw of the 3 examples",
+   "set": "math500",
+   "filed": "predict-01",
+   "filed_utc": "2026-11-15T04:44:08+00:00",
+   "status": "prediction",
+   "predicted_right": 435.0,
+   "interval80": [
+    422.0,
+    448.0
+   ],
+   "observed": 404,
+   "source": "job abaybektursun-1114-195350-bc00 (shots1/rl_b.json), done; score_v3 of answers.jsonl without problems 3, 5, 6 (406 of 500 with them)",
+   "error": 31.0,
+   "inside_interval80": false,
+   "error_baselines": {
+    "baseline_point": 31.0
+   }
+  },
+  {
+   "cell": "Think-SFT cue, vote over 4",
+   "set": "math500",
+   "filed": "predict-01",
+   "filed_utc": "2026-11-15T04:44:08+00:00",
+   "status": "prediction",
+   "predicted_right": 473.1,
+   "interval80": [
+    466.0,
+    480.0
+   ],
+   "observed": null
+  },
+  {
+   "cell": "base + cue, vote over 4, no restart (sameraslan's run, result-1dedfe)",
+   "set": "hard328",
+   "filed": "predict-02",
+   "filed_utc": "2026-11-15T04:49:06+00:00",
+   "status": "prediction",
+   "predicted_right": 188.5,
+   "interval80": [
+    179.0,
+    198.0
+   ],
+   "observed": 179,
+   "source": "origin/claude/swarm-literature-review-60a281:studies/rlneurons/results/day1_3/hard328_base_cue_s4r0-01/readout.json rows.vote",
+   "error": 9.5,
+   "inside_interval80": true,
+   "error_baselines": {
+    "baseline_point": 6.3,
+    "baseline_relative_error": 48.8,
+    "baseline_marginal_logit": 30.0,
+    "L1_uncalibrated": 13.2
+   }
+  },
+  {
+   "cell": "RL plain, vote over 4, no restart, on the 246 problems that finished (result-1dedfe)",
+   "set": "hard328 subset",
+   "filed": "predict-02",
+   "filed_utc": "2026-11-15T04:49:06+00:00",
+   "status": "prediction",
+   "predicted_right": 168.2,
+   "interval80": [
+    160.0,
+    177.0
+   ],
+   "observed": 161,
+   "source": "origin/claude/swarm-literature-review-60a281:studies/rlneurons/results/day1_3/hard328_partial246_rl_plain_s4r0-01/readout.json rows.vote",
+   "error": 7.2,
+   "inside_interval80": true,
+   "error_baselines": {
+    "baseline_point": -1.1,
+    "baseline_relative_error": 24.5,
+    "baseline_marginal_logit": 16.8
+   }
+  }
+ ]
+}

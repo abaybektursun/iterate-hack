@@ -1,0 +1,35 @@
+{
+ "arm": "whole_h200",
+ "jobs": [
+  {
+   "job_id": "sameraslan-1114-144142-950b",
+   "gpu": "NVIDIA H200",
+   "commit": "d34f8687ee7f1bef20a83ba32e27fba1a50e0cb6",
+   "command": "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit d34f8687ee7f1bef20a83ba32e27fba1a50e0cb6",
+   "queue_min": 12.283333333333333,
+   "container_min": 38.583333333333336,
+   "setup_min": 0.3764621535936996,
+   "load_min": 1.5162423054377239,
+   "generation_min": 36.51049565076828,
+   "n": 328,
+   "correct_v3": 168,
+   "cap_hits": 74,
+   "generated_tokens": 3035330,
+   "tokens_per_s": 1385.5970024956046,
+   "num_gpu_blocks": 56679
+  }
+ ],
+ "n": 328,
+ "cell_min": 38.583333333333336,
+ "gpu_min": 38.583333333333336,
+ "queue_min_max": 12.283333333333333,
+ "generation_min_max": 36.51049565076828,
+ "correct_v3": 168,
+ "cap_hits": 74,
+ "generated_tokens": 3035330,
+ "against_reference": {
+  "arm": "whole_h200",
+  "same_text": 328,
+  "same_score_v3": 328
+ }
+}

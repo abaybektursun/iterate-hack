@@ -1,0 +1,113 @@
+{
+ "reader": "the agent that ran the study (one reader, not blind to the model)",
+ "rule_validation": {
+  "what": "the 20 events of rule_sample.json (10 per model, seed 0) flagged by the spec's rule for a revising event; verdict = the text after the marker revises a number or expression stated before it",
+  "revising": [
+   0,
+   5,
+   7
+  ],
+  "not_revising": [
+   1,
+   2,
+   3,
+   4,
+   6,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19
+  ],
+  "precision": {
+   "both": "3 of 20",
+   "base": "3 of 10",
+   "rl": "0 of 10"
+  },
+  "what_the_false_positives_are": "a check that confirms the earlier value (2, 3, 9, 11, 14, 15, 18, 19), a restatement or change of route with no value changed (12, 13, 16, 17), repeated recomputation that returns the same value (4, 8), thinking aloud (1, 6, 10). The cue words (mistake, wrong, no,) appear in confirming checks ('make sure I didn't make a mistake') and a new number appears in any next step.",
+  "verdict": "the rule is rejected as an instrument; the judges' labels are the measure of d"
+ },
+ "base_slips_and_what_follows": {
+  "what": "the first 11 base items of results/anatomy/judge-01/labels.json labeled slip, read from the judged step to 1,300 characters after it (p245: to the end)",
+  "items": [
+   {
+    "problem": 1,
+    "sample": 1,
+    "after": "'Wait, but let me verify this again' and 'let's check again': both re-derive the same spurious factor 2",
+    "class": "check repeats the slip"
+   },
+   {
+    "problem": 21,
+    "sample": 3,
+    "after": "1136 - 88 = 1148 carried to 14960; later 'this contradicts the approximation ... I made a mistake', retraces, ends on 14959",
+    "class": "conflict noticed, resolved wrongly"
+   },
+   {
+    "problem": 52,
+    "sample": 3,
+    "after": "'Wait, but earlier when I calculated numerically, I got 12', keeps 4/3",
+    "class": "conflict noticed, resolved wrongly"
+   },
+   {
+    "problem": 60,
+    "sample": 2,
+    "after": "'Let me verify': the check fails on r, the right method is abandoned",
+    "class": "conflict noticed, resolved wrongly"
+   },
+   {
+    "problem": 63,
+    "sample": 0,
+    "after": "'Let me double-check', 'Let me verify once again': re-evaluates each factor at 1, never the factor list",
+    "class": "check repeats the slip"
+   },
+   {
+    "problem": 128,
+    "sample": 2,
+    "after": "'Wait', 'let's confirm', 'hold on': three recounts each say day 27 is beyond the month",
+    "class": "check repeats the slip"
+   },
+   {
+    "problem": 189,
+    "sample": 0,
+    "after": "'let me verify', 'let me check the calculations again': 150 + 130 + 150 + 130 = 580 written three times",
+    "class": "check repeats the slip"
+   },
+   {
+    "problem": 217,
+    "sample": 1,
+    "after": "450 = 2 x 3^2 x 5^3 is never re-examined",
+    "class": "no check of the step"
+   },
+   {
+    "problem": 232,
+    "sample": 0,
+    "after": "'Wait, that seems confusing', re-derives the double-counted 1/2",
+    "class": "check repeats the slip"
+   },
+   {
+    "problem": 245,
+    "sample": 3,
+    "after": "the slip is in the final write-up; the answer ends",
+    "class": "no check of the step"
+   },
+   {
+    "problem": 279,
+    "sample": 0,
+    "after": "'Wait, hold on. That contradicts my previous conclusion', lists 16, 20, 13 pi again and again calls 16 pi the smallest",
+    "class": "check repeats the slip"
+   }
+  ],
+  "counts": {
+   "check repeats the slip": 6,
+   "conflict noticed, resolved wrongly": 3,
+   "no check of the step": 2
+  }
+ }
+}

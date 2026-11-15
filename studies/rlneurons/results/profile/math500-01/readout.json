@@ -1,0 +1,2180 @@
+{
+ "set": "math500",
+ "difficulty": {
+  "rest_arms": [
+   "theta1.25_cue",
+   "theta1.5_cue",
+   "code_plain",
+   "random_cue",
+   "theta0.25_plain",
+   "theta0.5_plain",
+   "if30_cue",
+   "general30_cue",
+   "mix30_cue",
+   "code30_cue",
+   "if30_plain",
+   "general30_plain",
+   "mix30_plain",
+   "math30_plain",
+   "code30_plain",
+   "shots_base",
+   "shots_code",
+   "shots_rl",
+   "rand8_plain"
+  ],
+  "base_like_arms": [
+   "random_cue",
+   "shots_base"
+  ],
+  "bins": {
+   "level": [
+    "level 5",
+    "level 4",
+    "level 3",
+    "level 1-2"
+   ],
+   "rest": [
+    "hardest",
+    "middle",
+    "easiest"
+   ],
+   "base": [
+    "0-1 of 4",
+    "2-3 of 4",
+    "4 of 4"
+   ]
+  }
+ },
+ "earlier_readings": {
+  "hazard_section": {
+   "logit": {
+    "shift_hard_mid_easy": [
+     1.95,
+     1.249,
+     0.605
+    ],
+    "shift_interval95": [
+     [
+      1.357,
+      2.638
+     ],
+     [
+      0.665,
+      1.998
+     ],
+     [
+      0.033,
+      1.505
+     ]
+    ],
+    "hard_minus_easy": 1.345,
+    "hard_minus_easy_boot95": [
+     0.288,
+     2.19
+    ],
+    "null_constant_shift": {
+     "mean": -0.188,
+     "p2.5": -1.165,
+     "p97.5": 0.732,
+     "sims": 100
+    },
+    "outside_null95": true
+   },
+   "hazard": {
+    "shift_hard_mid_easy": [
+     1.11,
+     1.135,
+     0.593
+    ],
+    "shift_interval95": [
+     [
+      0.734,
+      1.536
+     ],
+     [
+      0.635,
+      1.854
+     ],
+     [
+      0.022,
+      1.488
+     ]
+    ],
+    "hard_minus_easy": 0.518,
+    "hard_minus_easy_boot95": [
+     -0.454,
+     1.191
+    ],
+    "null_constant_shift": {
+     "mean": -0.141,
+     "p2.5": -1.192,
+     "p97.5": 0.671,
+     "sims": 100
+    },
+    "outside_null95": false,
+    "hazard_ratio_hard_mid_easy": [
+     0.329,
+     0.321,
+     0.553
+    ]
+   }
+  },
+  "all_36_arms (circular)": {
+   "hardest 50": {
+    "base": 43.5,
+    "rl_plain": 32.0,
+    "sft1_cue": 28.0
+   },
+   "easiest 200": {
+    "base": 4.0,
+    "rl_plain": 0.0,
+    "sft1_cue": 6.0
+   }
+  },
+  "arms_left_out (D-rest ranking)": {
+   "hardest 50": {
+    "base": 42.75,
+    "rl_plain": 31.25,
+    "sft1_cue": 26.0
+   },
+   "easiest 200": {
+    "base": 7.25,
+    "rl_plain": 0.5,
+    "sft1_cue": 8.0
+   }
+  }
+ },
+ "table": {
+  "level": {
+   "problems": [
+    134.0,
+    128.0,
+    105.0,
+    133.0
+   ],
+   "reference_wrong": [
+    47.5,
+    20.0,
+    13.5,
+    8.5
+   ],
+   "rl_plain": {
+    "wrong": [
+     25.5,
+     9.25,
+     3.25,
+     2.0
+    ],
+    "error_reduction": [
+     0.463,
+     0.537,
+     0.759,
+     0.765
+    ],
+    "error_reduction_interval95": [
+     [
+      0.357,
+      0.574
+     ],
+     [
+      0.383,
+      0.698
+     ],
+     [
+      0.603,
+      0.902
+     ],
+     [
+      0.562,
+      0.964
+     ]
+    ]
+   },
+   "rl_cue": {
+    "wrong": [
+     27.0,
+     7.0,
+     5.0,
+     4.0
+    ],
+    "error_reduction": [
+     0.432,
+     0.65,
+     0.63,
+     0.529
+    ],
+    "error_reduction_interval95": [
+     [
+      0.263,
+      0.593
+     ],
+     [
+      0.435,
+      0.854
+     ],
+     [
+      0.351,
+      0.907
+     ],
+     [
+      0.111,
+      0.889
+     ]
+    ]
+   },
+   "sft1_cue": {
+    "wrong": [
+     23.0,
+     5.0,
+     8.0,
+     10.0
+    ],
+    "error_reduction": [
+     0.516,
+     0.75,
+     0.407,
+     -0.176
+    ],
+    "error_reduction_interval95": [
+     [
+      0.355,
+      0.665
+     ],
+     [
+      0.533,
+      0.938
+     ],
+     [
+      -0.021,
+      0.75
+     ],
+     [
+      -0.931,
+      0.429
+     ]
+    ]
+   },
+   "sft1_plain": {
+    "wrong": [
+     31.0,
+     9.0,
+     10.0,
+     10.0
+    ],
+    "error_reduction": [
+     0.347,
+     0.55,
+     0.259,
+     -0.176
+    ],
+    "error_reduction_interval95": [
+     [
+      0.143,
+      0.533
+     ],
+     [
+      0.29,
+      0.783
+     ],
+     [
+      -0.333,
+      0.672
+     ],
+     [
+      -1.118,
+      0.474
+     ]
+    ]
+   },
+   "code_cue": {
+    "wrong": [
+     28.0,
+     12.0,
+     6.0,
+     4.0
+    ],
+    "error_reduction": [
+     0.411,
+     0.4,
+     0.556,
+     0.529
+    ],
+    "error_reduction_interval95": [
+     [
+      0.256,
+      0.571
+     ],
+     [
+      0.067,
+      0.673
+     ],
+     [
+      0.217,
+      0.84
+     ],
+     [
+      0.097,
+      0.882
+     ]
+    ]
+   },
+   "theta0.25_cue": {
+    "wrong": [
+     36.0,
+     10.0,
+     7.0,
+     6.0
+    ],
+    "error_reduction": [
+     0.242,
+     0.5,
+     0.481,
+     0.294
+    ],
+    "error_reduction_interval95": [
+     [
+      0.069,
+      0.406
+     ],
+     [
+      0.221,
+      0.74
+     ],
+     [
+      0.133,
+      0.795
+     ],
+     [
+      -0.28,
+      0.765
+     ]
+    ]
+   },
+   "theta0.5_cue": {
+    "wrong": [
+     28.0,
+     10.0,
+     5.0,
+     5.0
+    ],
+    "error_reduction": [
+     0.411,
+     0.5,
+     0.63,
+     0.412
+    ],
+    "error_reduction_interval95": [
+     [
+      0.248,
+      0.57
+     ],
+     [
+      0.257,
+      0.733
+     ],
+     [
+      0.368,
+      0.905
+     ],
+     [
+      -0.044,
+      0.81
+     ]
+    ]
+   },
+   "theta0.75_cue": {
+    "wrong": [
+     27.0,
+     12.0,
+     8.0,
+     2.0
+    ],
+    "error_reduction": [
+     0.432,
+     0.4,
+     0.407,
+     0.765
+    ],
+    "error_reduction_interval95": [
+     [
+      0.287,
+      0.579
+     ],
+     [
+      0.139,
+      0.654
+     ],
+     [
+      -0.057,
+      0.742
+     ],
+     [
+      0.429,
+      1.0
+     ]
+    ]
+   },
+   "top8_plain": {
+    "wrong": [
+     31.0,
+     14.0,
+     14.0,
+     14.0
+    ],
+    "error_reduction": [
+     0.347,
+     0.3,
+     -0.037,
+     -0.647
+    ],
+    "error_reduction_interval95": [
+     [
+      0.161,
+      0.529
+     ],
+     [
+      -0.063,
+      0.6
+     ],
+     [
+      -0.702,
+      0.429
+     ],
+     [
+      -1.8,
+      0.125
+     ]
+    ]
+   },
+   "math30_cue": {
+    "wrong": [
+     30.0,
+     9.0,
+     9.0,
+     4.0
+    ],
+    "error_reduction": [
+     0.368,
+     0.55,
+     0.333,
+     0.529
+    ],
+    "error_reduction_interval95": [
+     [
+      0.187,
+      0.538
+     ],
+     [
+      0.321,
+      0.798
+     ],
+     [
+      -0.081,
+      0.692
+     ],
+     [
+      0.091,
+      0.892
+     ]
+    ]
+   },
+   "rl_plain_s0": {
+    "wrong": [
+     30.0,
+     10.0,
+     2.0,
+     2.0
+    ],
+    "error_reduction": [
+     0.368,
+     0.5,
+     0.852,
+     0.765
+    ],
+    "error_reduction_interval95": [
+     [
+      0.219,
+      0.527
+     ],
+     [
+      0.282,
+      0.73
+     ],
+     [
+      0.636,
+      1.0
+     ],
+     [
+      0.524,
+      1.0
+     ]
+    ]
+   },
+   "rl_plain_s1": {
+    "wrong": [
+     21.0,
+     10.0,
+     5.0,
+     2.0
+    ],
+    "error_reduction": [
+     0.558,
+     0.5,
+     0.63,
+     0.765
+    ],
+    "error_reduction_interval95": [
+     [
+      0.403,
+      0.704
+     ],
+     [
+      0.259,
+      0.738
+     ],
+     [
+      0.333,
+      0.909
+     ],
+     [
+      0.442,
+      1.0
+     ]
+    ]
+   },
+   "rl_plain_s2": {
+    "wrong": [
+     25.0,
+     8.0,
+     2.0,
+     1.0
+    ],
+    "error_reduction": [
+     0.474,
+     0.6,
+     0.852,
+     0.882
+    ],
+    "error_reduction_interval95": [
+     [
+      0.316,
+      0.627
+     ],
+     [
+      0.391,
+      0.807
+     ],
+     [
+      0.636,
+      1.0
+     ],
+     [
+      0.657,
+      1.0
+     ]
+    ]
+   },
+   "rl_plain_s3": {
+    "wrong": [
+     26.0,
+     9.0,
+     4.0,
+     3.0
+    ],
+    "error_reduction": [
+     0.453,
+     0.55,
+     0.704,
+     0.647
+    ],
+    "error_reduction_interval95": [
+     [
+      0.299,
+      0.595
+     ],
+     [
+      0.312,
+      0.784
+     ],
+     [
+      0.429,
+      0.931
+     ],
+     [
+      0.333,
+      1.0
+     ]
+    ]
+   }
+  },
+  "rest": {
+   "problems": [
+    48.0,
+    120.0,
+    332.0
+   ],
+   "reference_wrong": [
+    41.75,
+    30.75,
+    17.0
+   ],
+   "rl_plain": {
+    "wrong": [
+     31.0,
+     6.75,
+     2.25
+    ],
+    "error_reduction": [
+     0.257,
+     0.78,
+     0.868
+    ],
+    "error_reduction_interval95": [
+     [
+      0.159,
+      0.363
+     ],
+     [
+      0.694,
+      0.86
+     ],
+     [
+      0.77,
+      0.943
+     ]
+    ]
+   },
+   "rl_cue": {
+    "wrong": [
+     29.0,
+     12.0,
+     2.0
+    ],
+    "error_reduction": [
+     0.305,
+     0.61,
+     0.882
+    ],
+    "error_reduction_interval95": [
+     [
+      0.145,
+      0.455
+     ],
+     [
+      0.388,
+      0.8
+     ],
+     [
+      0.692,
+      1.0
+     ]
+    ]
+   },
+   "sft1_cue": {
+    "wrong": [
+     25.0,
+     12.0,
+     9.0
+    ],
+    "error_reduction": [
+     0.401,
+     0.61,
+     0.471
+    ],
+    "error_reduction_interval95": [
+     [
+      0.253,
+      0.552
+     ],
+     [
+      0.36,
+      0.813
+     ],
+     [
+      0.068,
+      0.784
+     ]
+    ]
+   },
+   "sft1_plain": {
+    "wrong": [
+     23.0,
+     15.0,
+     22.0
+    ],
+    "error_reduction": [
+     0.449,
+     0.512,
+     -0.294
+    ],
+    "error_reduction_interval95": [
+     [
+      0.287,
+      0.607
+     ],
+     [
+      0.242,
+      0.724
+     ],
+     [
+      -1.035,
+      0.259
+     ]
+    ]
+   },
+   "code_cue": {
+    "wrong": [
+     32.0,
+     11.0,
+     7.0
+    ],
+    "error_reduction": [
+     0.234,
+     0.642,
+     0.588
+    ],
+    "error_reduction_interval95": [
+     [
+      0.094,
+      0.386
+     ],
+     [
+      0.415,
+      0.824
+     ],
+     [
+      0.213,
+      0.875
+     ]
+    ]
+   },
+   "theta0.25_cue": {
+    "wrong": [
+     37.0,
+     16.0,
+     6.0
+    ],
+    "error_reduction": [
+     0.114,
+     0.48,
+     0.647
+    ],
+    "error_reduction_interval95": [
+     [
+      -0.017,
+      0.244
+     ],
+     [
+      0.212,
+      0.702
+     ],
+     [
+      0.314,
+      0.886
+     ]
+    ]
+   },
+   "theta0.5_cue": {
+    "wrong": [
+     33.0,
+     13.0,
+     2.0
+    ],
+    "error_reduction": [
+     0.21,
+     0.577,
+     0.882
+    ],
+    "error_reduction_interval95": [
+     [
+      0.059,
+      0.362
+     ],
+     [
+      0.363,
+      0.769
+     ],
+     [
+      0.692,
+      1.0
+     ]
+    ]
+   },
+   "theta0.75_cue": {
+    "wrong": [
+     35.0,
+     12.0,
+     2.0
+    ],
+    "error_reduction": [
+     0.162,
+     0.61,
+     0.882
+    ],
+    "error_reduction_interval95": [
+     [
+      0.014,
+      0.309
+     ],
+     [
+      0.385,
+      0.795
+     ],
+     [
+      0.667,
+      1.0
+     ]
+    ]
+   },
+   "top8_plain": {
+    "wrong": [
+     26.0,
+     20.0,
+     27.0
+    ],
+    "error_reduction": [
+     0.377,
+     0.35,
+     -0.588
+    ],
+    "error_reduction_interval95": [
+     [
+      0.219,
+      0.541
+     ],
+     [
+      0.07,
+      0.588
+     ],
+     [
+      -1.345,
+      -0.027
+     ]
+    ]
+   },
+   "math30_cue": {
+    "wrong": [
+     31.0,
+     14.0,
+     7.0
+    ],
+    "error_reduction": [
+     0.257,
+     0.545,
+     0.588
+    ],
+    "error_reduction_interval95": [
+     [
+      0.107,
+      0.411
+     ],
+     [
+      0.293,
+      0.752
+     ],
+     [
+      0.254,
+      0.86
+     ]
+    ]
+   },
+   "rl_plain_s0": {
+    "wrong": [
+     34.0,
+     9.0,
+     1.0
+    ],
+    "error_reduction": [
+     0.186,
+     0.707,
+     0.941
+    ],
+    "error_reduction_interval95": [
+     [
+      0.048,
+      0.338
+     ],
+     [
+      0.516,
+      0.878
+     ],
+     [
+      0.806,
+      1.0
+     ]
+    ]
+   },
+   "rl_plain_s1": {
+    "wrong": [
+     28.0,
+     7.0,
+     3.0
+    ],
+    "error_reduction": [
+     0.329,
+     0.772,
+     0.824
+    ],
+    "error_reduction_interval95": [
+     [
+      0.188,
+      0.486
+     ],
+     [
+      0.579,
+      0.921
+     ],
+     [
+      0.576,
+      1.0
+     ]
+    ]
+   },
+   "rl_plain_s2": {
+    "wrong": [
+     32.0,
+     3.0,
+     1.0
+    ],
+    "error_reduction": [
+     0.234,
+     0.902,
+     0.941
+    ],
+    "error_reduction_interval95": [
+     [
+      0.077,
+      0.391
+     ],
+     [
+      0.783,
+      1.0
+     ],
+     [
+      0.803,
+      1.0
+     ]
+    ]
+   },
+   "rl_plain_s3": {
+    "wrong": [
+     30.0,
+     8.0,
+     4.0
+    ],
+    "error_reduction": [
+     0.281,
+     0.74,
+     0.765
+    ],
+    "error_reduction_interval95": [
+     [
+      0.139,
+      0.425
+     ],
+     [
+      0.571,
+      0.893
+     ],
+     [
+      0.491,
+      0.949
+     ]
+    ]
+   }
+  },
+  "base": {
+   "problems": [
+    54.0,
+    123.0,
+    323.0
+   ],
+   "reference_wrong": [
+    42.0,
+    26.0,
+    21.5
+   ],
+   "rl_plain": {
+    "wrong": [
+     29.5,
+     8.25,
+     2.25
+    ],
+    "error_reduction": [
+     0.298,
+     0.683,
+     0.895
+    ],
+    "error_reduction_interval95": [
+     [
+      0.199,
+      0.399
+     ],
+     [
+      0.553,
+      0.788
+     ],
+     [
+      0.83,
+      0.948
+     ]
+    ]
+   },
+   "rl_cue": {
+    "wrong": [
+     28.0,
+     11.5,
+     3.5
+    ],
+    "error_reduction": [
+     0.333,
+     0.558,
+     0.837
+    ],
+    "error_reduction_interval95": [
+     [
+      0.169,
+      0.481
+     ],
+     [
+      0.333,
+      0.752
+     ],
+     [
+      0.649,
+      0.978
+     ]
+    ]
+   },
+   "sft1_cue": {
+    "wrong": [
+     24.5,
+     11.5,
+     10.0
+    ],
+    "error_reduction": [
+     0.417,
+     0.558,
+     0.535
+    ],
+    "error_reduction_interval95": [
+     [
+      0.265,
+      0.564
+     ],
+     [
+      0.311,
+      0.762
+     ],
+     [
+      0.229,
+      0.778
+     ]
+    ]
+   },
+   "sft1_plain": {
+    "wrong": [
+     21.0,
+     16.5,
+     22.5
+    ],
+    "error_reduction": [
+     0.5,
+     0.365,
+     -0.047
+    ],
+    "error_reduction_interval95": [
+     [
+      0.346,
+      0.646
+     ],
+     [
+      0.049,
+      0.613
+     ],
+     [
+      -0.572,
+      0.349
+     ]
+    ]
+   },
+   "code_cue": {
+    "wrong": [
+     29.0,
+     12.0,
+     9.0
+    ],
+    "error_reduction": [
+     0.31,
+     0.538,
+     0.581
+    ],
+    "error_reduction_interval95": [
+     [
+      0.163,
+      0.456
+     ],
+     [
+      0.297,
+      0.744
+     ],
+     [
+      0.284,
+      0.828
+     ]
+    ]
+   },
+   "theta0.25_cue": {
+    "wrong": [
+     36.5,
+     14.0,
+     8.5
+    ],
+    "error_reduction": [
+     0.131,
+     0.462,
+     0.605
+    ],
+    "error_reduction_interval95": [
+     [
+      -0.024,
+      0.269
+     ],
+     [
+      0.221,
+      0.655
+     ],
+     [
+      0.309,
+      0.826
+     ]
+    ]
+   },
+   "theta0.5_cue": {
+    "wrong": [
+     34.0,
+     12.0,
+     2.0
+    ],
+    "error_reduction": [
+     0.19,
+     0.538,
+     0.907
+    ],
+    "error_reduction_interval95": [
+     [
+      0.042,
+      0.33
+     ],
+     [
+      0.303,
+      0.744
+     ],
+     [
+      0.784,
+      1.0
+     ]
+    ]
+   },
+   "theta0.75_cue": {
+    "wrong": [
+     34.0,
+     12.0,
+     3.0
+    ],
+    "error_reduction": [
+     0.19,
+     0.538,
+     0.86
+    ],
+    "error_reduction_interval95": [
+     [
+      0.039,
+      0.337
+     ],
+     [
+      0.291,
+      0.741
+     ],
+     [
+      0.714,
+      0.974
+     ]
+    ]
+   },
+   "top8_plain": {
+    "wrong": [
+     25.0,
+     22.5,
+     25.5
+    ],
+    "error_reduction": [
+     0.405,
+     0.135,
+     -0.186
+    ],
+    "error_reduction_interval95": [
+     [
+      0.237,
+      0.562
+     ],
+     [
+      -0.195,
+      0.402
+     ],
+     [
+      -0.718,
+      0.229
+     ]
+    ]
+   },
+   "math30_cue": {
+    "wrong": [
+     32.0,
+     12.0,
+     8.0
+    ],
+    "error_reduction": [
+     0.238,
+     0.538,
+     0.628
+    ],
+    "error_reduction_interval95": [
+     [
+      0.071,
+      0.386
+     ],
+     [
+      0.305,
+      0.734
+     ],
+     [
+      0.373,
+      0.838
+     ]
+    ]
+   },
+   "rl_plain_s0": {
+    "wrong": [
+     32.5,
+     9.5,
+     2.0
+    ],
+    "error_reduction": [
+     0.226,
+     0.635,
+     0.907
+    ],
+    "error_reduction_interval95": [
+     [
+      0.098,
+      0.365
+     ],
+     [
+      0.417,
+      0.818
+     ],
+     [
+      0.811,
+      0.979
+     ]
+    ]
+   },
+   "rl_plain_s1": {
+    "wrong": [
+     27.5,
+     9.0,
+     1.5
+    ],
+    "error_reduction": [
+     0.345,
+     0.654,
+     0.93
+    ],
+    "error_reduction_interval95": [
+     [
+      0.2,
+      0.493
+     ],
+     [
+      0.417,
+      0.835
+     ],
+     [
+      0.84,
+      1.0
+     ]
+    ]
+   },
+   "rl_plain_s2": {
+    "wrong": [
+     28.5,
+     6.0,
+     1.5
+    ],
+    "error_reduction": [
+     0.321,
+     0.769,
+     0.93
+    ],
+    "error_reduction_interval95": [
+     [
+      0.17,
+      0.468
+     ],
+     [
+      0.604,
+      0.908
+     ],
+     [
+      0.806,
+      1.0
+     ]
+    ]
+   },
+   "rl_plain_s3": {
+    "wrong": [
+     29.5,
+     8.5,
+     4.0
+    ],
+    "error_reduction": [
+     0.298,
+     0.673,
+     0.814
+    ],
+    "error_reduction_interval95": [
+     [
+      0.154,
+      0.439
+     ],
+     [
+      0.474,
+      0.841
+     ],
+     [
+      0.625,
+      0.956
+     ]
+    ]
+   }
+  }
+ },
+ "cap_hits_by_level": {
+  "bins": [
+   "level 5",
+   "level 4",
+   "level 3",
+   "level 1-2"
+  ],
+  "base + cue, 4 samples": {
+   "wrong": [
+    47.5,
+    20.0,
+    13.5,
+    8.5
+   ],
+   "wrong_cap_hit": [
+    16.75,
+    3.25,
+    2.0,
+    0.25
+   ],
+   "wrong_finished": [
+    30.75,
+    16.75,
+    11.5,
+    8.25
+   ]
+  },
+  "RL plain, 4 samples": {
+   "wrong": [
+    25.5,
+    9.25,
+    3.25,
+    2.0
+   ],
+   "wrong_cap_hit": [
+    5.75,
+    1.0,
+    0.25,
+    0.25
+   ],
+   "wrong_finished": [
+    19.75,
+    8.25,
+    3.0,
+    1.75
+   ]
+  },
+  "Think-SFT, cue": {
+   "wrong": [
+    23.0,
+    5.0,
+    8.0,
+    10.0
+   ],
+   "wrong_cap_hit": [
+    15.0,
+    1.0,
+    4.0,
+    4.0
+   ],
+   "wrong_finished": [
+    8.0,
+    4.0,
+    4.0,
+    6.0
+   ]
+  },
+  "Think-SFT, plain": {
+   "wrong": [
+    31.0,
+    9.0,
+    10.0,
+    10.0
+   ],
+   "wrong_cap_hit": [
+    14.0,
+    2.0,
+    2.0,
+    1.0
+   ],
+   "wrong_finished": [
+    17.0,
+    7.0,
+    8.0,
+    9.0
+   ]
+  },
+  "base + top 8 RL directions, plain": {
+   "wrong": [
+    31.0,
+    14.0,
+    14.0,
+    14.0
+   ],
+   "wrong_cap_hit": [
+    5.0,
+    1.0,
+    3.0,
+    0.0
+   ],
+   "wrong_finished": [
+    26.0,
+    13.0,
+    11.0,
+    14.0
+   ]
+  }
+ },
+ "logit_shift_by_rest_group_hard_mid_easy": {
+  "rl_plain": [
+   1.455,
+   1.814,
+   2.083
+  ],
+  "rl_cue": [
+   1.663,
+   1.177,
+   2.201
+  ],
+  "sft1_cue": [
+   2.065,
+   1.177,
+   0.669
+  ],
+  "sft1_plain": [
+   2.263,
+   0.918,
+   -0.279
+  ],
+  "code_cue": [
+   1.347,
+   1.276,
+   0.928
+  ],
+  "theta0.25_cue": [
+   0.753,
+   0.842,
+   1.087
+  ],
+  "theta0.5_cue": [
+   1.237,
+   1.085,
+   2.201
+  ],
+  "theta0.75_cue": [
+   1.005,
+   1.177,
+   2.201
+  ],
+  "top8_plain": [
+   1.966,
+   0.57,
+   -0.505
+  ],
+  "math30_cue": [
+   1.455,
+   0.999,
+   0.928
+  ],
+  "rl_plain_s0": [
+   1.123,
+   1.5,
+   2.899
+  ],
+  "rl_plain_s1": [
+   1.765,
+   1.774,
+   1.792
+  ],
+  "rl_plain_s2": [
+   1.347,
+   2.667,
+   2.899
+  ],
+  "rl_plain_s3": [
+   1.56,
+   1.629,
+   1.5
+  ]
+ },
+ "H1_profile_contrast": {
+  "level": {
+   "C_sft1_cue_vs_rl_plain": -1.536,
+   "boot95": [
+    -2.739,
+    -0.693
+   ],
+   "wrong_hardest_easiest": {
+    "sft1_cue": [
+     23.0,
+     10.0
+    ],
+    "rl_plain": [
+     25.5,
+     2.0
+    ],
+    "reference": [
+     47.5,
+     8.5
+    ]
+   },
+   "one_axis_null": {
+    "mean": -0.006,
+    "p2.5": -0.888,
+    "p97.5": 0.83,
+    "sd": 0.468,
+    "sims": 200
+   },
+   "outside_one_axis_null95": true,
+   "z_against_one_axis_null": -3.27,
+   "wrong_sft1_cue_minus_rl_plain_by_bin": [
+    {
+     "difference": -2.5,
+     "one_axis_p2.5_p97.5": [
+      -3.52,
+      11.26
+     ],
+     "z": -1.48,
+     "think_sft_samples_needed": 3
+    },
+    {
+     "difference": -4.25,
+     "one_axis_p2.5_p97.5": [
+      -3.51,
+      7.26
+     ],
+     "z": -2.17,
+     "think_sft_samples_needed": 1
+    },
+    {
+     "difference": 4.75,
+     "one_axis_p2.5_p97.5": [
+      -3.01,
+      5.5
+     ],
+     "z": 1.63,
+     "think_sft_samples_needed": 2
+    },
+    {
+     "difference": 8.0,
+     "one_axis_p2.5_p97.5": [
+      -2.75,
+      4.51
+     ],
+     "z": 3.7,
+     "think_sft_samples_needed": 1
+    }
+   ],
+   "same_arm_one_sample_vs_other_three": {
+    "rl_plain": [
+     0.219,
+     -0.246,
+     0.61,
+     -0.454
+    ],
+    "base_cue": [
+     -0.038,
+     0.482,
+     -0.143,
+     -0.262
+    ]
+   },
+   "exceeds_all_same_arm": true
+  },
+  "rest": {
+   "C_sft1_cue_vs_rl_plain": -1.451,
+   "boot95": [
+    -2.283,
+    -0.468
+   ],
+   "wrong_hardest_easiest": {
+    "sft1_cue": [
+     25.0,
+     9.0
+    ],
+    "rl_plain": [
+     31.0,
+     2.25
+    ],
+    "reference": [
+     41.75,
+     17.0
+    ]
+   },
+   "one_axis_null": {
+    "mean": -0.053,
+    "p2.5": -0.776,
+    "p97.5": 0.801,
+    "sd": 0.419,
+    "sims": 200
+   },
+   "outside_one_axis_null95": true,
+   "z_against_one_axis_null": -3.33,
+   "wrong_sft1_cue_minus_rl_plain_by_bin": [
+    {
+     "difference": -6.0,
+     "one_axis_p2.5_p97.5": [
+      -4.02,
+      9.02
+     ],
+     "z": -2.67,
+     "think_sft_samples_needed": 1
+    },
+    {
+     "difference": 5.25,
+     "one_axis_p2.5_p97.5": [
+      -4.27,
+      9.26
+     ],
+     "z": 0.82,
+     "think_sft_samples_needed": "more than any (RL's 4 samples limit it)"
+    },
+    {
+     "difference": 6.75,
+     "one_axis_p2.5_p97.5": [
+      -3.51,
+      6.01
+     ],
+     "z": 2.06,
+     "think_sft_samples_needed": 1
+    }
+   ],
+   "same_arm_one_sample_vs_other_three": {
+    "rl_plain": [
+     0.87,
+     -0.468,
+     0.789,
+     -0.774
+    ],
+    "base_cue": [
+     -0.036,
+     0.054,
+     0.1,
+     -0.122
+    ]
+   },
+   "exceeds_all_same_arm": true
+  },
+  "base": {
+   "C_sft1_cue_vs_rl_plain": -1.522,
+   "boot95": [
+    -2.289,
+    -0.681
+   ],
+   "wrong_hardest_easiest": {
+    "sft1_cue": [
+     24.5,
+     10.0
+    ],
+    "rl_plain": [
+     29.5,
+     2.25
+    ],
+    "reference": [
+     42.0,
+     21.5
+    ]
+   },
+   "one_axis_null": {
+    "mean": -0.08,
+    "p2.5": -0.666,
+    "p97.5": 0.758,
+    "sd": 0.395,
+    "sims": 200
+   },
+   "outside_one_axis_null95": true,
+   "z_against_one_axis_null": -3.65,
+   "wrong_sft1_cue_minus_rl_plain_by_bin": [
+    {
+     "difference": -5.0,
+     "one_axis_p2.5_p97.5": [
+      -3.25,
+      8.26
+     ],
+     "z": -2.48,
+     "think_sft_samples_needed": 1
+    },
+    {
+     "difference": 3.25,
+     "one_axis_p2.5_p97.5": [
+      -3.26,
+      8.88
+     ],
+     "z": 0.21,
+     "think_sft_samples_needed": "more than any (RL's 4 samples limit it)"
+    },
+    {
+     "difference": 7.75,
+     "one_axis_p2.5_p97.5": [
+      -3.75,
+      7.0
+     ],
+     "z": 2.36,
+     "think_sft_samples_needed": 1
+    }
+   ]
+  }
+ },
+ "H2_2pl": {
+  "cells": 17991,
+  "ll_per_cell_rasch": -0.279,
+  "ll_per_cell_2pl": -0.27515,
+  "gain": 0.00386,
+  "ridge_g": 30.0,
+  "gain_by_ridge_on_g": {
+   "3.0": 0.000995,
+   "10.0": 0.003177,
+   "30.0": 0.00386,
+   "100.0": 0.003032,
+   "300.0": 0.001622
+  },
+  "gain_when_steps_are_doubled": 0.00384,
+  "null_gain_rasch_sim": {
+   "n": 20,
+   "mean": -0.000259,
+   "p95": -9.3e-05,
+   "max": -6.6e-05
+  },
+  "detected": true,
+  "g": {
+   "rl_plain_s0": {
+    "g": 0.455,
+    "z_against_rasch_sims": 2.19
+   },
+   "rl_plain_s2": {
+    "g": 0.413,
+    "z_against_rasch_sims": 3.23
+   },
+   "theta0.5_cue": {
+    "g": 0.386,
+    "z_against_rasch_sims": 2.71
+   },
+   "theta0.75_cue": {
+    "g": 0.378,
+    "z_against_rasch_sims": 2.21
+   },
+   "theta1.25_cue": {
+    "g": 0.366,
+    "z_against_rasch_sims": 2.35
+   },
+   "base_cue_s0": {
+    "g": 0.359,
+    "z_against_rasch_sims": 1.76
+   },
+   "base_cue_s1": {
+    "g": 0.356,
+    "z_against_rasch_sims": 1.71
+   },
+   "theta0.25_cue": {
+    "g": 0.353,
+    "z_against_rasch_sims": 1.96
+   },
+   "base_cue_s2": {
+    "g": 0.35,
+    "z_against_rasch_sims": 1.85
+   },
+   "math30_plain": {
+    "g": 0.343,
+    "z_against_rasch_sims": 1.94
+   },
+   "rl_plain_s3": {
+    "g": 0.335,
+    "z_against_rasch_sims": 1.69
+   },
+   "theta1.5_cue": {
+    "g": 0.334,
+    "z_against_rasch_sims": 1.65
+   },
+   "rl_cue": {
+    "g": 0.334,
+    "z_against_rasch_sims": 2.32
+   },
+   "shots_rl": {
+    "g": 0.325,
+    "z_against_rasch_sims": 1.76
+   },
+   "if30_plain": {
+    "g": 0.324,
+    "z_against_rasch_sims": 0.04
+   },
+   "general30_cue": {
+    "g": 0.317,
+    "z_against_rasch_sims": 1.67
+   },
+   "mix30_cue": {
+    "g": 0.311,
+    "z_against_rasch_sims": 1.38
+   },
+   "code30_plain": {
+    "g": 0.309,
+    "z_against_rasch_sims": 1.2
+   },
+   "shots_base": {
+    "g": 0.296,
+    "z_against_rasch_sims": 1.3
+   },
+   "base_cue_s3": {
+    "g": 0.266,
+    "z_against_rasch_sims": 1.05
+   },
+   "code30_cue": {
+    "g": 0.259,
+    "z_against_rasch_sims": 0.64
+   },
+   "shots_code": {
+    "g": 0.255,
+    "z_against_rasch_sims": 0.71
+   },
+   "theta0.5_plain": {
+    "g": 0.253,
+    "z_against_rasch_sims": 0.28
+   },
+   "math30_cue": {
+    "g": 0.249,
+    "z_against_rasch_sims": 0.53
+   },
+   "rl_plain_s1": {
+    "g": 0.237,
+    "z_against_rasch_sims": 1.0
+   },
+   "code_cue": {
+    "g": 0.236,
+    "z_against_rasch_sims": 0.82
+   },
+   "random_cue": {
+    "g": 0.201,
+    "z_against_rasch_sims": -0.0
+   },
+   "if30_cue": {
+    "g": 0.11,
+    "z_against_rasch_sims": -2.07
+   },
+   "theta0.25_plain": {
+    "g": 0.015,
+    "z_against_rasch_sims": -2.97
+   },
+   "sft1_cue": {
+    "g": -0.034,
+    "z_against_rasch_sims": -3.32
+   },
+   "general30_plain": {
+    "g": -0.074,
+    "z_against_rasch_sims": -3.29
+   },
+   "top8_plain": {
+    "g": -0.129,
+    "z_against_rasch_sims": -3.86
+   },
+   "mix30_plain": {
+    "g": -0.14,
+    "z_against_rasch_sims": -3.6
+   },
+   "rand8_plain": {
+    "g": -0.147,
+    "z_against_rasch_sims": -4.21
+   },
+   "code_plain": {
+    "g": -0.172,
+    "z_against_rasch_sims": -4.7
+   },
+   "sft1_plain": {
+    "g": -0.264,
+    "z_against_rasch_sims": -5.27
+   }
+  },
+  "g_mean_by_family": {
+   "RL 3.1 (4 plain samples, cue)": 0.355,
+   "Think-SFT (cue, plain)": -0.149,
+   "base + cue (4 samples)": 0.333
+  },
+  "g_rl_minus_sft": {
+   "value": 0.504,
+   "rasch_sims_p2.5_p97.5": [
+    -0.162,
+    0.099
+   ]
+  }
+ },
+ "H3_unions": {
+  "sft1_cue_with_one_rl_sample": [
+   476,
+   481,
+   479,
+   478
+  ],
+  "two_rl_samples": [
+   476,
+   473,
+   472,
+   479,
+   478,
+   476
+  ],
+  "gain_over_two_rl_samples": 2.83,
+  "sft1_cue_with_one_base_sample": [
+   470,
+   473,
+   472,
+   472
+  ],
+  "one_rl_sample_with_one_base_sample_mean": 468.06,
+  "all_four_rl_samples": 482,
+  "three_rl_samples_plus_sft1_cue_mean": 484.75
+ },
+ "H3_power": {
+  "planted_logit_shift_hard_mid_easy": [
+   2.065,
+   1.177,
+   0.669
+  ],
+  "planted_expected_right": 455.7,
+  "sims": 200,
+  "level": {
+   "1": {
+    "null_p2.5_p97.5": [
+     -0.805,
+     1.004
+    ],
+    "planted_mean_C": -0.379,
+    "power": 0.19
+   },
+   "2": {
+    "null_p2.5_p97.5": [
+     -0.584,
+     0.641
+    ],
+    "planted_mean_C": -0.396,
+    "power": 0.315
+   },
+   "4": {
+    "null_p2.5_p97.5": [
+     -0.529,
+     0.427
+    ],
+    "planted_mean_C": -0.432,
+    "power": 0.33
+   },
+   "8": {
+    "null_p2.5_p97.5": [
+     -0.46,
+     0.372
+    ],
+    "planted_mean_C": -0.43,
+    "power": 0.42
+   }
+  },
+  "rest": {
+   "1": {
+    "null_p2.5_p97.5": [
+     -0.915,
+     0.761
+    ],
+    "planted_mean_C": -0.799,
+    "power": 0.37
+   },
+   "2": {
+    "null_p2.5_p97.5": [
+     -0.798,
+     0.484
+    ],
+    "planted_mean_C": -0.797,
+    "power": 0.53
+   },
+   "4": {
+    "null_p2.5_p97.5": [
+     -0.663,
+     0.319
+    ],
+    "planted_mean_C": -0.829,
+    "power": 0.75
+   },
+   "8": {
+    "null_p2.5_p97.5": [
+     -0.673,
+     0.215
+    ],
+    "planted_mean_C": -0.836,
+    "power": 0.755
+   }
+  },
+  "base": {
+   "1": {
+    "null_p2.5_p97.5": [
+     -0.875,
+     0.623
+    ],
+    "planted_mean_C": -0.724,
+    "power": 0.36
+   },
+   "2": {
+    "null_p2.5_p97.5": [
+     -0.784,
+     0.49
+    ],
+    "planted_mean_C": -0.726,
+    "power": 0.41
+   },
+   "4": {
+    "null_p2.5_p97.5": [
+     -0.647,
+     0.381
+    ],
+    "planted_mean_C": -0.744,
+    "power": 0.65
+   },
+   "8": {
+    "null_p2.5_p97.5": [
+     -0.591,
+     0.18
+    ],
+    "planted_mean_C": -0.749,
+    "power": 0.765
+   }
+  }
+ },
+ "rows": {
+  "raw_text_of_sft1_cue": "not readable: job sameraslan-1114-185940-514f is in the Modal Volume of workspace sameraslan; per_problem.json has score, cap hit and tokens only",
+  "sft1_cue_errors": {
+   "all": 46,
+   "cap_hits [n, of]": [
+    24,
+    46
+   ],
+   "mean_tokens": 12381.0,
+   "mean_tokens_of_right_answers": 4129.0,
+   "on_easy_problems (level 1-2 or easiest rest group)": {
+    "n": 14,
+    "cap_hits [n, of]": [
+     6,
+     14
+    ],
+    "mean_tokens": 10057.0,
+    "rl_right_of_4_on_them": {
+     "0": 1,
+     "2": 1,
+     "4": 12
+    },
+    "base_right_of_4_on_them": {
+     "0": 2,
+     "2": 1,
+     "3": 4,
+     "4": 7
+    }
+   },
+   "on_other_problems": {
+    "n": 32,
+    "cap_hits [n, of]": [
+     18,
+     32
+    ]
+   }
+  },
+  "missed_by_sft1_cue_solved_by_all_4_rl_samples": {
+   "n": 17,
+   "share_of_left_out_arms_right_mean": 0.81
+  },
+  "where_they_differ": {
+   "definition": "SFT only = Think-SFT cue right and RL right in at most 1 of 4 samples; RL only = Think-SFT cue wrong and RL right in at least 3 of 4",
+   "sft_only": {
+    "n": 6,
+    "by_level": {
+     "4": 3,
+     "5": 3
+    },
+    "by_subject": {
+     "Algebra": 1,
+     "Counting & Probability": 1,
+     "Intermediate Algebra": 2,
+     "Prealgebra": 1,
+     "Precalculus": 1
+    }
+   },
+   "rl_only": {
+    "n": 22,
+    "by_level": {
+     "1": 4,
+     "2": 4,
+     "3": 6,
+     "4": 2,
+     "5": 6
+    },
+    "by_subject": {
+     "Algebra": 6,
+     "Counting & Probability": 1,
+     "Geometry": 3,
+     "Intermediate Algebra": 5,
+     "Number Theory": 3,
+     "Prealgebra": 3,
+     "Precalculus": 1
+    }
+   },
+   "all_problems": {
+    "by_level": {
+     "1": 43,
+     "2": 90,
+     "3": 105,
+     "4": 128,
+     "5": 134
+    },
+    "by_subject": {
+     "Algebra": 124,
+     "Counting & Probability": 38,
+     "Geometry": 41,
+     "Intermediate Algebra": 97,
+     "Number Theory": 62,
+     "Prealgebra": 82,
+     "Precalculus": 56
+    }
+   }
+  },
+  "solved_by_sft1_cue_missed_by_all_4_rl_samples": {
+   "n": 4,
+   "rl_cue_right_on_them": 1,
+   "sft1_plain_right_on_them": 2,
+   "share_of_left_out_arms_right_mean": 0.11
+  }
+ }
+}
