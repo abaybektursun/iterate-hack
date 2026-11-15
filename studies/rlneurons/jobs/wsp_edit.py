@@ -19,6 +19,8 @@ loads. d = other - base in float32, one tensor at a time; d_k = U_k diag(s_k) V_
              rout   layer matrices = base + U_k diag(s_k) Q^T: the other model's output directions, read from random input directions Q.
              perm   layer matrices = base + sum_i s_i u_(i+1) v_i^T: the same two subspaces and values, each input direction paired with
                     the next output direction (a cyclic shift).
+             self   layer matrices = base + U_b diag(s_k) V_b^T: the base matrix's own top k singular vectors with the other model's
+                    k singular values (no direction of the other model; the same addition norm as top8).
              rbulk  layer matrices = other - P diag(s_k) Q^T (rand8's addition, subtracted from the other model): the control of bulk;
                     every other tensor = other.
              interp every tensor = (1 - alpha) base + alpha other (merge_weights.point); alpha 0 and 1 give the endpoints bit for bit (asserted).
@@ -67,7 +69,7 @@ from studies.rlneurons.jobs.xreward_overlap import MODELS as XMODELS
 ALL = {**MODELS, **XMODELS}                                                       # every model key of --other and --donor
 assert MODELS["base"] == XMODELS["base"]
 
-RECIPES = {"top8": 8, "bulk": 8, "rand8": 8, "late3": 3, "interp": None, "proj": 8, "projc": 8, "rbulk": 8, "rin": 8, "rout": 8, "perm": 8}          # recipe -> default k
+RECIPES = {"top8": 8, "bulk": 8, "rand8": 8, "late3": 3, "interp": None, "proj": 8, "projc": 8, "rbulk": 8, "rin": 8, "rout": 8, "perm": 8, "self": 8}          # recipe -> default k
 LATE = range(24, 32)                                                              # late3's layers; the selftest passes its own
 JSON_KEY = "rl_math"                                                              # config and tokenizer for every model, as merge_weights
 SUMS = ("dot", "add_sq", "written_sq", "ref_sq", "top_sq", "d_sq")
@@ -125,6 +127,8 @@ def target(recipe, b, o, k=None, alpha=1.0, noise=None, scale=1.0, donor=None, s
         V, sq = torch.linalg.qr(noise[1].double()).Q.to(d.device), None
     if recipe == "perm":
         U, sq = torch.roll(U[:, :k], 1, dims=1), None
+    if recipe == "self":
+        (_, U, V), sq = spectrum(b, k), None
     add = (U[:, skip:] * s[skip:k]) @ V[:, skip:].T
     if recipe in ("proj", "projc"):
         dd = donor - b
@@ -157,7 +161,7 @@ def edit(base_dir, other_dir, json_dir, out_dir, recipe, k=None, alpha=1.0, roun
     assert recipe in RECIPES and rounding in ("nearest", "stochastic"), (recipe, rounding)
     k = RECIPES[recipe] if k is None else k
     assert (k is None) == (recipe == "interp") and (recipe == "interp" or alpha == 1.0), f"{recipe}: k {k}, alpha {alpha}"
-    assert scale == 1.0 or recipe in ("top8", "rand8", "proj", "projc", "rin", "rout", "perm"), f"--scale is not for {recipe}"
+    assert scale == 1.0 or recipe in ("top8", "rand8", "proj", "projc", "rin", "rout", "perm", "self"), f"--scale is not for {recipe}"
     assert skip == 0 or (recipe in ("top8", "rand8") and 0 < skip < k), f"--skip {skip} is not for {recipe} with k {k}"
     assert mods is None or recipe in ("top8", "rand8", "bulk", "proj", "projc"), f"--mods is not for {recipe}"
     assert (donor_dir is not None) == (recipe in ("proj", "projc")), f"{recipe}: donor {donor_dir}"

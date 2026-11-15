@@ -215,3 +215,15 @@ seed 3000000, one sample; references at 1.5: all of RL's directions 203 right an
   Refuted if cell 2 is at least 185, or cell 1 is at least 185.
 - H2. The pairing matters, not only the two subspaces: cell 3 is at most 178 right. Refuted if it is at least 190: then any map
   from RL's input subspace to its output subspace gives the dial.
+
+## Amendment 13 (2026-11-15, before the cells): a dial without RL? The base's own top directions at RL's sizes
+
+xshift run-04 and xlisten: the unedited base enlarges what RL writes, and the base's own top written directions are read by the
+next layer more strongly (3.25) than RL's (1.67). If being enlarged by the base were what makes the dial, an edit that needs no RL
+model could give it. Recipe `self`: per layer matrix, the base matrix's own top 8 singular vectors (input and output, in their
+own pairing) with RL-Zero Math 3.1's 8 singular values, so the addition norm equals the top-8 edit's (checked in `edit.json`).
+Two cells at sizes 1.5 and -1.5 (the top directions slightly strengthened, slightly weakened), hard328, cue, seed 3000000.
+References at 1.5: RL's directions 203 right and 25 cap hits; random 159 and 74; base 164 and 77.
+
+- V1. Neither cell is a dial: both have 150 to 172 right and 60 to 90 cap hits. Refuted if either cell has at least 185 right or
+  at most 45 cap hits: then the base's own top directions give a finish dial without any RL run.
