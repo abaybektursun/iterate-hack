@@ -1,3 +1,12 @@
+## 2026-11-15 01:20 UTC
+
+- Previous checks: run.sh is the only basins laptop entry (README commands use it); GPU access now works (Modal card fixed by Modal); no testbed spec (owner chose the strategy run instead).
+- Direction: mission = cheapest no-reward route to the ~11 points, deliverable a scored config on the 328. Since 23:05: swarm map refresh, idea tree, leaderboard split (measure the swarm, test no part of the sentence); 4 smoke jobs + 1 run for strategy basins (base+cue vs RL strategy sets on MATH-500), which tests where RL's points come from (strategies the base never samples), not a route. Best mission-side alternative: none claimed by me; teammates hold the route search. Kept because the owner's deliverable is the presentation.
+- Research: closest published = Lee et al. 2606.29985 Table 2 (Cov@16 after GRPO, Qwen2.5); this differs in model (Olmo 3 RL-Zero), base with cue, and RL-only share of correct answers. Run cut to 21 problems x 16 samples (~1.6 USD) on owner's budget.
+- Turnaround (cycle.py --hours 12): 5 jobs, median wait 0.0 min, 13.2 container min, 6.1 (46%) in 2 failed jobs; work-ff64d5 to-job 112+ min, slowest stage = waiting on Modal billing (a person).
+- Failures: both failed jobs = vLLM JIT kernels needing nvcc (FlashInfer sampler 152501-615c; DeepGEMM 153448-dce3); class: engine environment set separately in each script.
+- Change (step 3; steps 1-2: the two env lines had no reason to exist twice): studies/basins/lib/engine.enter() is the one place gen and judge set the vLLM environment.
+- Next entry checks: judge job on this commit starts without an nvcc error; failed-job share of container minutes.
 ## 2026-11-14 23:05 UTC (first entry)
 
 - Direction: DIRECTION.md mission is the no-reward route to the ~11 points (cue base vs RL). My runs since 21:19: swarm maps main-01/02 (result-47286f, work-4dfcf9 closed 23:00) test no part of that sentence; they measure the swarm. The one study that does (strategy basins, idea-65a86d) is blocked: 0 GPU jobs, Modal refuses every GPU class without a card. Next step (owner's choice): a CPU testbed comparing anti-collapse strategies (fork-and-flush, forgetting, archive tree). Best mission-side alternative: strategy basins on GPU; not chosen because no GPU access.

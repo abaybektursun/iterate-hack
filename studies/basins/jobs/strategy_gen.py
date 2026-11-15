@@ -59,8 +59,8 @@ if __name__ == "__main__":
         raise SystemExit(0)
 
     from studies.rlneurons.lib import rln4_lib
-    from studies.rlneurons.lib.n13_gen import ENGINE_ENV  # VLLM_USE_FLASHINFER_SAMPLER=0: no nvcc in the image
-    os.environ.update(ENGINE_ENV)  # set before vllm is imported
+    from studies.basins.lib import engine
+    engine.enter()  # before vllm is imported
     from vllm import LLM, SamplingParams, TokensPrompt
     llm = LLM(model=repo, revision=rev, tokenizer=tok_repo, tokenizer_revision=tok_rev, dtype="bfloat16",
               max_model_len=max(len(r["ids"]) for r in reqs) + cap, seed=0, enable_prefix_caching=True)
