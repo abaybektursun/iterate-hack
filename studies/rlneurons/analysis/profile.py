@@ -98,11 +98,13 @@ def simulate(V, ind, p, rng, plant=None, k=1):
 def h1(V, ind, D, level, W, p, sims=200, seed=0):
     """Profile contrast of Think-SFT cue against pooled RL plain, its bootstrap interval, and the two noise floors."""
     rng = np.random.default_rng(seed)
-    null = {d: [] for d in D}
+    null, ndiff = {d: [] for d in D}, {d: [] for d in D}
     for _ in range(sims):
         Z, _ = simulate(V, ind, p, rng)
         for d, design in designs(Z, ind, level).items():
-            null[d].append(contrast(wrong(Z, ["sft1_cue"], design), wrong(Z, R.RL4, design)))
+            ws, wr = wrong(Z, ["sft1_cue"], design), wrong(Z, R.RL4, design)
+            null[d].append(contrast(ws, wr))
+            ndiff[d].append(ws - wr)
     out = {}
     for d, design in D.items():
         a, b = (lambda *w: wrong(V, ["sft1_cue"], design, *w)), (lambda *w: wrong(V, R.RL4, design, *w))
@@ -112,12 +114,42 @@ def h1(V, ind, D, level, W, p, sims=200, seed=0):
                "wrong_hardest_easiest": {"sft1_cue": [round(float(a()[k]), 2) for k in (0, -1)], "rl_plain": [round(float(b()[k]), 2) for k in (0, -1)],
                                          "reference": [round(float(wrong(V, None, design)[k]), 2) for k in (0, -1)]},
                "one_axis_null": {"mean": round(float(np.mean(null[d])), 3), "p2.5": round(float(lo), 3), "p97.5": round(float(hi), 3), "sd": round(float(np.std(null[d])), 3), "sims": sims},
-               "outside_one_axis_null95": bool(c < lo or c > hi)}
+               "outside_one_axis_null95": bool(c < lo or c > hi), "z_against_one_axis_null": round(float((c - np.mean(null[d])) / np.std(null[d])), 2),
+               "wrong_sft1_cue_minus_rl_plain_by_bin": parts(a() - b(), np.array(ndiff[d]))}
         if d != "base":                 # D-base uses the base samples for its bins
             floor = {f: [round(float(contrast(wrong(V, [s], design), wrong(V, [t for t in fam if t != s], design))), 3) for s in fam] for f, fam in (("rl_plain", R.RL4), ("base_cue", R.BASE4))}
             row |= {"same_arm_one_sample_vs_other_three": floor, "exceeds_all_same_arm": bool(abs(c) > max(abs(x) for v in floor.values() for x in v))}
         out[d] = row
     return out
+
+
+def parts(diff, null):
+    """Per bin: Think-SFT cue wrong minus RL wrong per sample, the one-axis range, z, and the Think-SFT samples needed for |z| = 1.96
+    at this difference (variance of the difference = RL's four samples + Think-SFT's k: sd_1^2 (0.2 + 0.8 / k))."""
+    out = []
+    for k in range(len(diff)):
+        sd, mu = float(np.std(null[:, k])), float(np.mean(null[:, k]))
+        need = (diff[k] - mu) ** 2 / 1.96 ** 2 / sd ** 2 - 0.2
+        out.append({"difference": round(float(diff[k]), 2), "one_axis_p2.5_p97.5": [round(float(x), 2) for x in np.percentile(null[:, k], [2.5, 97.5])],
+                    "z": round((float(diff[k]) - mu) / sd, 2), "think_sft_samples_needed": (int(np.ceil(0.8 / need)) if need > 0 else "more than any (RL's 4 samples limit it)")})
+    return out
+
+
+def caps(level):
+    """Wrong cells per sample by level bin, split into cap hits (16,384 tokens, no answer) and finished answers."""
+    g = np.array([{5: 0, 4: 1, 3: 2}.get(x, 3) for x in level])
+    arms = {}
+    for name, model in (("base + cue, 4 samples", "base_cue"), ("RL plain, 4 samples", "rl")):
+        w, c = np.zeros((4, 500), bool), np.zeros((4, 500), bool)
+        for r in H.day1_rows(model):
+            w[r["sample"], r["problem_index"]], c[r["sample"], r["problem_index"]] = r["score_v3"] == 0, r["cap_hit"]
+        arms[name] = (w, c)
+    for name, cell in (("Think-SFT, cue", "sft1_cue"), ("Think-SFT, plain", "sft1_plain"), ("base + top 8 RL directions, plain", "top8_plain")):
+        pp = json.loads((X.STUDY / "results" / "wsp1" / "full500" / f"{cell}-01" / "per_problem.json").read_text())
+        arms[name] = (np.array([[r["score_v3"] == 0 for r in pp]]), np.array([[r["cap_hit"] for r in pp]]))
+    return {"bins": BINS["level"]} | {name: {"wrong": [round(float(w[:, g == k].sum() / len(w)), 2) for k in range(4)],
+                                             "wrong_cap_hit": [round(float((w & c)[:, g == k].sum() / len(w)), 2) for k in range(4)],
+                                             "wrong_finished": [round(float((w & ~c)[:, g == k].sum() / len(w)), 2) for k in range(4)]} for name, (w, c) in arms.items()}
 
 
 # ---------- H2: 2PL ----------
@@ -291,6 +323,14 @@ def markdown(T, h):
     return md
 
 
+def cap_markdown(c):
+    md = ["Wrong cells per sample by level: all = cap hits + finished wrong", "", "| Arm | " + " | ".join(c["bins"]) + " |", "|---|---|---|---|---|"]
+    for name, r in c.items():
+        if name != "bins":
+            md.append(f"| {name} | " + " | ".join(f"{w:g} = {x:g} + {f:g}" for w, x, f in zip(r["wrong"], r["wrong_cap_hit"], r["wrong_finished"])) + " |")
+    return md
+
+
 def cmd_fit(runs):
     V, ind = R.load("math500")
     m = meta()
@@ -302,14 +342,14 @@ def cmd_fit(runs):
     shifts = {a: [round(float(x), 3) for x in H.group_shifts(np.vstack([V[n] for n in names]), np.vstack([V[n] for n in R.BASE4]), b, g, "logit")] for a, names in ARMS.items()}
     ex = rows_of(V, ind, D, m, runs)
     readout = {"set": "math500", "difficulty": {"rest_arms": [n for n in ind if n not in HELD], "base_like_arms": BASE_LIKE, "bins": BINS},
-               "earlier_readings": earlier_readings(V, ind), "table": T, "logit_shift_by_rest_group_hard_mid_easy": shifts, "H1_profile_contrast": h,
+               "earlier_readings": earlier_readings(V, ind), "table": T, "cap_hits_by_level": caps(m["level"]), "logit_shift_by_rest_group_hard_mid_easy": shifts, "H1_profile_contrast": h,
                "H2_2pl": h2(V, ind, p), "H3_unions": unions(V), "H3_power": power(V, ind, D, m["level"], p),
                "rows": {k: v for k, v in ex.items() if k not in ("easy_errors",) and k != "solved_by_sft1_cue_missed_by_all_4_rl_samples"}
                | {"solved_by_sft1_cue_missed_by_all_4_rl_samples": {k: v for k, v in ex["solved_by_sft1_cue_missed_by_all_4_rl_samples"].items() if k != "rows"}}}
     out = OUT / "math500-01"
     out.mkdir(parents=True, exist_ok=True)
     (out / "readout.json").write_text(json.dumps(readout, indent=1) + "\n")
-    (out / "table.md").write_text("\n".join(markdown(T, h)) + "\n")
+    (out / "table.md").write_text("\n".join(markdown(T, h) + cap_markdown(readout["cap_hits_by_level"])) + "\n")
     (out / "examples.json").write_text(json.dumps({"note": ex["raw_text_of_sft1_cue"], "sft1_cue_wrong_on_easy_problems": ex["easy_errors"],
                                                    "sft1_cue_right_all_4_rl_samples_wrong": ex["solved_by_sft1_cue_missed_by_all_4_rl_samples"]["rows"]}, indent=1) + "\n")
     run_json(out, "fit", "results/axis/math500-01/vectors.json; data/profile/math500_meta_v1.json; results/wsp1/full500/sft1_cue-01/per_problem.json; results/day1_3/math500_rl-01/rows.jsonl; results/hazard/math500-01/readout.json; runs/abaybektursun-1114-153110-e985/answers.jsonl")
