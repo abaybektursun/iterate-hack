@@ -25,7 +25,7 @@ import demo_photos
 import finding_the_finish_dial
 import proof_review_cuts_waste
 
-HOOK = "Let's build recursive self-improvement at a hackathon"  # placeholder: Samer replaces this line
+HOOK = "36 hours to solve RSI"  # the opening line of the talk
 
 # The title of each paper by its file name in view.PAPERS.
 PAPER_TITLES = {"the-finish-dial.pdf": "The Finish Dial", "theories-on-trial.pdf": "Theories on Trial",
@@ -198,22 +198,22 @@ def slides(n_findings, papers):
     return [
         ("hook", f'<div class="mid"><h1 class="big">{esc(HOOK)}</h1><p class="sub faint">Team Invariant</p></div>'),
         ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers, limited tokens, compute and people</p>'
-                     f'<h1 class="big">How can a small team find something new about how models learn</h1></div>'),
+                     f'<h1 class="big">Hill climbing is not useful if we don\'t understand it</h1></div>'),
         ("tea", f'<div class="mid"><p class="sub">Our solution</p>{photo(demo_photos.TEA, "tea")}<p class="sub">Gong fu tea and meditation</p></div>'),
-        ("harness", '<div class="head"><h2>Nanolab</h2><p class="sub">A research harness built to spend little and find a lot</p></div>'
+        ("harness", '<div class="head"><h2>Nanolab</h2><p class="sub">A hill climbing engine and an interpretability engine in one harness</p></div>'
                     '<iframe class="fig-frame harness" data-fig="harness" title="The harness" tabindex="-1"></iframe>'
-                    f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span></div>'),
+                    f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span><span>GPUs <b class="word">Modal</b></span></div>'),
         ("finding", '<div class="mid"><h2 class="title">8 directions in the weights hold most of RL\'s gain</h2>'
                     f'{dial_svg()}<p class="sub">Why: they make the model finish its answer, cut-off answers '
                     f'{CELLS["0"]["cut"]} → {CELLS["1.5"]["cut"]}</p></div><p class="corner">{n_findings} findings</p>'),
         ("proof", '<div class="head"><h2>Proof</h2></div><div class="pair">'
                   f'<figure><figcaption>Against autoresearch</figcaption>{auto_svg()}</figure>'
-                  f'<figure><figcaption>Review cuts waste</figcaption>{review_svg()}</figure></div>'),
+                  f'<figure><figcaption>Its own review cuts waste</figcaption>{review_svg()}</figure></div>'),
         ("ideas", f'<div class="head"><h2>Ideas converge</h2><p class="sub">{N_CROSS} of {N_LINKS} links join two different clusters of ideas</p></div>'
                   '<iframe class="fig-frame tree" data-fig="tree" title="The idea tree" tabindex="-1"></iframe>'),
         ("papers", f'<div class="mid"><h2 class="title">{len(papers)} papers, written by the swarm</h2>'
                    f'<div class="sheets">{"".join(paper(p) for p in papers)}</div></div>'),
-        ("close", f'<div class="mid">{photo(demo_photos.MEDITATE, "meditate")}<p class="end">The agents do the research</p>'
+        ("close", f'<div class="mid">{photo(demo_photos.MEDITATE, "meditate")}<p class="end">Also our solution to AI psychosis</p>'
                   '<p class="sub faint">monitor.invariant.team</p></div>'),
     ]
 
@@ -270,6 +270,7 @@ p, h1, h2, figure { margin: 0; }
 .tools span { display: inline-flex; align-items: center; gap: 14px; }
 .logo { height: 24px; width: auto; fill: var(--ink); }
 .logo-exa { height: 22px; }
+.tools .word { font-size: 25px; font-weight: 640; color: var(--ink); }  /* a sponsor with no logo in architecture.py */
 
 /* the figures drawn here */
 .fig { display: block; overflow: visible; font-family: inherit; }
