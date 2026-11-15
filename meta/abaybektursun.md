@@ -1,5 +1,21 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 02:35 UTC (after work-d36669 closed, Day-1 #4; work-a50d39's skipped entry included)
+
+- Last entry's checks (23:30 entry, the same line of work): merged-model cells ran at 900-1,000 tok/s (work-d36669 comments); the cells cost 20.9 of 22 USD (results/day1_wdiff/readout.json, 317.5 H100 min); b200 job 2298 was never seen running, and a b200 job at 19:36 local was cancelled while queued (`gpu.py ls`).
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training" (DIRECTION.md). Day-1 #1 and #4 are done: 328 at T 1.0 (base cue 164, RL 206) and the weight line (a 0.25 gives 441 of 500, Code-RL cue 450, random 417). #4 uses RL weights, so it explains the gain and is not a no-reward route; the open step work-43d4a1 (Code-RL and theta on the 328) is the same kind. Best alternative: a no-reward cell at equal tokens on the 328 (vote or restart, work-63fac2 and work-140e13 hold it), not chosen here because two sessions already own it.
+- Research: no replication; recall and three priors from memory were set beside #4 before its cells finished (work-d36669 comments 00:50, 00:55). Told to the owner and narrowed: none retracted; "restarts recover at most 16 of 42" rests on one sample per problem.
+- Turnaround (`uv run tools/cycle.py --hours 4`): 73 jobs, 21 failed or cancelled, 242.4 of 1,288.8 container min in them, median queue wait 10.8 min (was 0.0 at 23:30). work-d36669: to-job 10, jobs 129, to-answer 10 min. Slowest stage: jobs; 4 H100 slots are shared by rlneurons and gpuprice sessions.
+- Failure (carried from 22:13): cycle.py matched jobs to a work item by the claiming branch only, so an item claimed on main with jobs sent from its subagent's branch showed 0 jobs. Change (step 3; steps 1-2: the per-item stage times are the skill's own requirement and nothing in the matching could be deleted): cycle.py also matches the branch named in the claim text ("Branch wdiff").
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | jobs matched to work-d36669 | 0 | 18 (4 failed) | found | 1 item | `cycle.py --hours 4`, main 37e4eee against this commit |
+  | job list and totals (must not change) | 73 jobs, 21 failed | 73 jobs, 21 failed | same | 1 and 1 | same command |
+
+- Failure, not fixed: a container restarted by Modal dies at `out.mkdir` in infra/runner.py (3 cpu jobs: c51a, 277d, 74c7; `gpu.py ls`). Not changed here: a redeploy of the runner while 3 cells of work-43d4a1 run could end them. Added to meta/FAILURES.md.
+- Next entry checks: whether work-43d4a1 (claim names branch wdiff328) shows its 3 jobs in cycle.py; queue wait of those jobs against 10.8 min; whether the runner restart class is removed.
+
 ## 2026-11-15 01:00 UTC (after result-5cd266, work-02efb7 interp_research port)
 
 - Last entry's checks: not mine to read here (that entry belongs to the wdiff session's line; its cells report 441-453 at 900-1,000 tok/s in work-d36669 comments).
