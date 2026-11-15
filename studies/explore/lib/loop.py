@@ -62,13 +62,20 @@ def devin_chat(messages, model):
     text += "\n\nReply as the ASSISTANT to the last USER message, in text only. Do not use tools or files."
     with slot("devin", DEVIN_SLOTS), tempfile.TemporaryDirectory() as d:
         (pathlib.Path(d) / "prompt.txt").write_text(text)
-        for attempt in range(3):
+        attempt, waited = 0, 0
+        while attempt < 3:
             r = subprocess.run(["devin", "-p", "--model", model, "--permission-mode", "auto", "--respect-workspace-trust", "false", "--prompt-file",
                                 "prompt.txt"], capture_output=True, text=True, cwd=d, timeout=900)
             if r.returncode == 0 and r.stdout.strip():
                 return r.stdout, {"prompt_tokens": len(text) // 4, "completion_tokens": len(r.stdout) // 4,
                                   "estimated": True}
-            time.sleep(15 * (attempt + 1))
+            if "rate limit" in r.stderr and waited < 3600:  # the plan's limit resets within minutes: wait, do not fail
+                print(f"[devin] rate limit, waiting 60 s ({waited // 60} min so far)", flush=True)
+                time.sleep(60)
+                waited += 60
+                continue
+            attempt += 1
+            time.sleep(15 * attempt)
     raise RuntimeError(f"devin -p failed 3 times: exit {r.returncode}; {r.stderr[-400:]}")
 
 
