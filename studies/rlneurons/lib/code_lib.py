@@ -1,6 +1,7 @@
 """Code pair (specs/SPEC_code1.md): prompt, answer extraction and the execution grader for HumanEval+ and MBPP+.
 
-The prompt is the chat template of allenai/Olmo-3.1-7B-RL-Zero-Code (raw text, no role tokens). The answer is the last fenced block
+The prompt is the chat template of allenai/Olmo-3.1-7B-RL-Zero-Code (raw text, no role tokens, no BOS token; one newline between the
+problem and "Remember", as transformers renders the template). The answer is the last fenced block
 of the completion, or the whole completion when it has none (AI2's CodeVerifier.extract_python_code rule). A problem is right when
 its program (the answer followed by the benchmark's tests) exits 0 within the time limit. run() executes model-written code: call it
 only inside a job's container, never on the laptop."""
@@ -12,7 +13,7 @@ import sys
 import tempfile
 
 TEMPLATE = ("Solve the following code problem step by step. The last part of your response should be the solution to the problem in "
-            "form ```\npython\nCODE\n``` where CODE is the solution for the problem.\n\n{content}\n\nRemember to put your solution "
+            "form ```\npython\nCODE\n``` where CODE is the solution for the problem.\n\n{content}\nRemember to put your solution "
             "inside the ```\npython\nCODE\n``` tags")
 BLOCK = re.compile(r"```[ \t]*\n?[ \t]*(?:python|py|Python)?[ \t]*\n(.*?)```", re.DOTALL)
 WRONG = "def {entry}(*args, **kwargs):\n    return None\n"         # the planted wrong program of the grader check
