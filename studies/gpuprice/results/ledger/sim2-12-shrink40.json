@@ -1,0 +1,35 @@
+{
+ "name": "sim2-12-shrink40",
+ "note": "tuning check around sim2-09 (+0.2673): shrink 0.4 instead of 0.2; hypothesis: in-band 0.72 < 0.80 so more pooled hazard helps; refuted if pooled <= +0.2673 [flags: --tau 14 --shrink 0.4 --abs-enter 2]",
+ "utc": "2026-11-14T23:33:43+00:00",
+ "commit": "dec89a8",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 360,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.257805,
+ "pinball": 0.024896,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.243618,
+ "skill_geomean": 0.313382,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.150783,
+   "in_band": 0.800957
+  },
+  "3": {
+   "skill_pooled": 0.236661,
+   "in_band": 0.742248
+  },
+  "7": {
+   "skill_pooled": 0.298002,
+   "in_band": 0.646318
+  }
+ },
+ "in_band": 0.730138
+}

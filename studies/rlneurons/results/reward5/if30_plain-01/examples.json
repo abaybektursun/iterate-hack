@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 3,
+  "gold": "9",
+  "extracted_v3": "9",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 5,
+  "prompt_tail": "Solve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nHow many positive whole-number divisors does 196 have?\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": ".\nAnswer: 9"
+ },
+ "wrong": {
+  "problem_index": 0,
+  "gold": "\\left( 3, \\frac{\\pi}{2} \\right)",
+  "extracted_v3": "(3.0, \u03c0)",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 10,
+  "prompt_tail": "ng problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nConvert the point $(0,3)$ in rectangular coordinates to polar coordinates.  Enter your answer in the form $(r,\\theta),$ where $r > 0$ and $0 \\le \\theta < 2 \\pi.$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": ".\nAnswer: (3.0, \u03c0)"
+ }
+}

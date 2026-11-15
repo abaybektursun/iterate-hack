@@ -1,0 +1,35 @@
+{
+ "name": "fm2-08-chain-cov",
+ "note": "H(gap 6): observed days since the unit's last price change as a past covariate helps Chronos-2 on step series; control fm2-07; refuted if <= fm2-07 [fm2_post.py flags: --setup chn_cov; amazon/chronos-2 zero-shot, cpu jobs 174823-3849, 174829-8fcd, 174832-6f16, 201126-a38b, 201131-4739]",
+ "utc": "2026-11-15T02:17:48+00:00",
+ "commit": "35810bc",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.255436,
+ "pinball": 0.024976,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.248897,
+ "skill_geomean": 0.308889,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.086801,
+   "in_band": 0.818182
+  },
+  "3": {
+   "skill_pooled": 0.237378,
+   "in_band": 0.672481
+  },
+  "7": {
+   "skill_pooled": 0.310505,
+   "in_band": 0.555233
+  }
+ },
+ "in_band": 0.682535
+}

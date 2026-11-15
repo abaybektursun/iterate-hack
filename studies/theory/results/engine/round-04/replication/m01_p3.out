@@ -1,0 +1,1 @@
+{"dup_sample0_base": 0, "dup_sample0_rl": 0, "common": 500, "kept_pairs": 311, "value": 0.6334405144694534, "interval_90": [0.5884244372990354, 0.6784565916398714], "base_text_start": " line!\n\nOkay, so I need to convert the r", "rl_text_start": " line!\n\nOkay, so I need to convert the p", "base_prefill_ids": [1584, 2268, 33413], "rl_prefill_ids": []}

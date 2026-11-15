@@ -1,0 +1,5 @@
+[
+ {"k": 1, "value": 0.63, "low": 0.51, "high": 0.75, "why": "The mechanism says the hazard grows with how self-similar the text already is, so the opening of the sample that later hits the cap should more often compress better than the opening of a fresh restart that finishes; the small pool (some tens of problems) and seed noise keep this near the theory's own within-file 0.65."},
+ {"k": 2, "value": 0.67, "low": 0.58, "high": 0.76, "why": "Under the mechanism, difficulty still raises loops at the margin because hard problems produce longer, more repetitive text, and cap hits sit in RL's longest quartile (knowledge-9e4147), so RL length predicts loop_A moderately even among answers of at least 6,000 characters."},
+ {"k": 3, "value": 0.66, "low": 0.56, "high": 0.76, "why": "If self-similarity acts directly and difficulty acts only through it, early compressibility should keep most of its predictive power within RL-length quartiles, slightly below the theory's unstratified 0.70 because part of the zlib signal is shared with difficulty."}
+]

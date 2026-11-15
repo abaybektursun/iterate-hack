@@ -1,0 +1,35 @@
+{
+ "name": "ens-05-avg-fm217-sim215",
+ "note": "H: quantile average of fm2-17 (zero-shot Chronos-2 per listing + h=1 hurdle + Scaleway FX rule + returning entrants, +0.291) and sim2-15 (+0.271) beats ens-03 (+0.292, same without the fm2 rules); refuted if <= +0.292",
+ "utc": "2026-11-15T02:19:32+00:00",
+ "commit": "cc6349e",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.297955,
+ "pinball": 0.023549,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.312487,
+ "skill_geomean": 0.369049,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.185095,
+   "in_band": 0.828708
+  },
+  "3": {
+   "skill_pooled": 0.264044,
+   "in_band": 0.760659
+  },
+  "7": {
+   "skill_pooled": 0.346637,
+   "in_band": 0.653101
+  }
+ },
+ "in_band": 0.747829
+}

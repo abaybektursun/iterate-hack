@@ -1,0 +1,35 @@
+{
+ "name": "pfn-06-nogeneric",
+ "note": "Ablation: prior without rw, ou, smooth (TempoPFN: step-only is worse). 1,500 steps (job abaybektursun-1114-182516-277d died after its 1,500-step checkpoint); compare the default prior at 1,000 to 2,000 steps (+0.249 to +0.271). H: worse by > 0.02; refuted if not. Prior informed only by panel rows dated <= 2026-09-30; real data never used in training.",
+ "utc": "2026-11-15T01:29:38+00:00",
+ "commit": "9734dfd",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.265799,
+ "pinball": 0.024628,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.243813,
+ "skill_geomean": 0.318518,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.153421,
+   "in_band": 0.853589
+  },
+  "3": {
+   "skill_pooled": 0.243003,
+   "in_band": 0.731589
+  },
+  "7": {
+   "skill_pooled": 0.308329,
+   "in_band": 0.635659
+  }
+ },
+ "in_band": 0.740753
+}

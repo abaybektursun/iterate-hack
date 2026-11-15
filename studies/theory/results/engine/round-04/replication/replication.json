@@ -1,0 +1,186 @@
+{
+ "round": "round-04",
+ "method": "Recomputed from the recipes alone (theories/*.json keys experiment, recipe, unit, refuted_by) before opening tests/; scripts r4-m10_p*.py, r4-m01_p*.py, r4-m10_capcounts.py, common.py; row files fetched to runs/replication/ (not committed). Bootstrap: 2,000 resamples, seed 0, percentile 90 %.",
+ "predictions": [
+  {
+   "theory": "r4-m10",
+   "k": 1,
+   "recipe_summary": "Cap-hit fraction, RL step 100 minus base, plain MATH-500, T 0.6/top-p 0.95, sample 0, first row per problem_index, paired on the common set.",
+   "my_value": 0.076,
+   "n": 500,
+   "interval_90": [
+    0.042,
+    0.108
+   ],
+   "counts": {
+    "A_step100": 103,
+    "B_base": 65
+   },
+   "first_agent_value": 0.076,
+   "agree": true,
+   "ambiguity": "none found",
+   "alternative_value": null,
+   "note": "Both files hold all 500 problems at sample 0, so paired and unpaired readings coincide. Paired bootstrap over 500 problems, 2,000 resamples, seed 0."
+  },
+  {
+   "theory": "r4-m10",
+   "k": 2,
+   "recipe_summary": "Cap-hit fraction, RL step 400 minus base, plain MATH-500, T 0.6/top-p 0.95, paired.",
+   "my_value": 0.066,
+   "n": 500,
+   "interval_90": [
+    0.036,
+    0.098
+   ],
+   "counts": {
+    "A_step400": 98,
+    "B_base": 65
+   },
+   "first_agent_value": 0.066,
+   "agree": true,
+   "ambiguity": "none found",
+   "alternative_value": null,
+   "note": "Same seeds and prompts as base (seed and prompt_n_tokens equal on 500/500)."
+  },
+  {
+   "theory": "r4-m10",
+   "k": 3,
+   "recipe_summary": "Cap-hit fraction, RL step 400 minus base, plain, clean harder 328, T 0.6/top-p 0.95, paired.",
+   "my_value": 0.0701219512195122,
+   "n": 328,
+   "interval_90": [
+    0.018292682926829267,
+    0.12195121951219512
+   ],
+   "counts": {
+    "A_step400": 160,
+    "B_base": 137
+   },
+   "first_agent_value": 0.0701219512195122,
+   "agree": true,
+   "ambiguity": "The clean list (sets.hard.flags) is keyed by hard.json index, not unique_id; the recipe's file path 'results/rln3/rln3_overlap.json' is relative to studies/rlneurons. Literal: map index -> unique_id via studies/rlneurons/data/rln3/hard.json and match rows by unique_id. Alternative: match by problem_index == int(key).",
+   "alternative_value": 0.0701219512195122,
+   "note": "Both readings select the same 328 problems. Base 137 cap hits equals studies/rlneurons/README.md line 160."
+  },
+  {
+   "theory": "r4-m10",
+   "k": 5,
+   "recipe_summary": "Share of step-400 cap hits (plain MATH-500, T 0.6/top-p 0.95, sample 0) that are rule-A loops (any 8,000-char window starting at a line start with zlib default ratio < 0.10).",
+   "my_value": 0.7959183673469388,
+   "n": 98,
+   "interval_90": [
+    0.7244897959183674,
+    0.8673469387755102
+   ],
+   "counts": {
+    "loop_rows": 78,
+    "cap_hit_rows": 98
+   },
+   "first_agent_value": 0.7959183673469388,
+   "agree": true,
+   "ambiguity": "none in the recipe; it restates rln4_lib.onset_lines' window test exactly (onset_lines is not None iff a window passes). Alternative computed: rln3's stored loop_ratio field < 0.10.",
+   "alternative_value": 0.7959183673469388,
+   "note": "All 98 cap hits are >= 8,000 characters. The 20 non-loop cap hits have minimum window ratios 0.102-0.27, 16 of them below 0.17: the 0.10 threshold cuts through a continuum of repetition, so the share moves with the threshold (about 0.87 at 0.12). Bootstrap over the 98 cap-hit rows."
+  },
+  {
+   "theory": "r4-m01",
+   "k": 2,
+   "recipe_summary": "AUROC of -zlib9 ratio of text[:6000] for stored loop_A, base cue MATH-500 T 0.6/top-p 1.0 (d4fa), rows >= 6,000 chars, loops with onset_A_char < 7,000 or missing dropped.",
+   "my_value": 0.6705288175876412,
+   "n": 183,
+   "positives": 51,
+   "interval_90": [
+    0.5966359885750555,
+    0.736574074074074
+   ],
+   "first_agent_value": 0.6705288175876412,
+   "agree": true,
+   "ambiguity": "none found (all loop_A values boolean).",
+   "alternative_value": null,
+   "note": "500 rows, 71 loop_A true (README line 131 says 71), 20 dropped for early onset. Bootstrap over kept rows."
+  },
+  {
+   "theory": "r4-m01",
+   "k": 3,
+   "recipe_summary": "Share of problems where base-cue (F_math500) text[:3000] compresses better (zlib 9) than RL step 2,800 plain text[:3000], sample 0, both >= 3,000 chars; ties 0.5.",
+   "my_value": 0.6334405144694534,
+   "n": 311,
+   "interval_90": [
+    0.5884244372990354,
+    0.6784565916398714
+   ],
+   "first_agent_value": 0.6334405144694534,
+   "agree": true,
+   "ambiguity": "none found; no duplicate sample-0 rows. Both texts begin with ' line!\\n\\nOkay' (base: the prefilled cue is in text; RL writes it itself), so the openings are comparable.",
+   "alternative_value": null,
+   "note": "Kept pairs are problems where both models wrote >= 3,000 characters (311 of 500). Bootstrap over pairs."
+  },
+  {
+   "theory": "r4-m01",
+   "k": 4,
+   "recipe_summary": "Mean over K_own and K_rl of the per-file AUROC of -zlib9 ratio of stored text[:3000] for cap_hit; rows >= 3,000 chars; loops with onset_A_char < 4,000 or missing dropped.",
+   "my_value": 0.5584900564423672,
+   "n": {
+    "own_kept": 74,
+    "own_cap_hits": 51,
+    "rl_kept": 77,
+    "rl_cap_hits": 29
+   },
+   "per_file": {
+    "own": 0.5745950554134698,
+    "own_interval_90": [
+     0.4423076923076923,
+     0.695562435500516
+    ],
+    "rl": 0.5423850574712644,
+    "rl_interval_90": [
+     0.42138364779874216,
+     0.6616379310344828
+    ]
+   },
+   "interval_90": [
+    0.47253418336289676,
+    0.6466101183086493
+   ],
+   "first_agent_value": 0.5584900564423672,
+   "agree": true,
+   "ambiguity": "The recipe says to use stored text as it is; stored text = cue + given prefix + continuation (K_own text shares a median 6,568 leading characters with base-01's F answer), so text[:3000] is mostly the prefix the model was handed, not text it generated. Literal reading followed; a generated-only reading needs the tokenizer to cut at n_prefix and was not computed.",
+   "alternative_value": null,
+   "note": "Bootstrap resamples each file's rows independently (seed 0). The 90 % interval of the mean includes 0.5, and so does each per-file interval: the AUROC is not established above chance even though it clears the 0.53 refutation bar."
+  }
+ ],
+ "step5": {
+  "a_cap_hit_counts_plain_T0.6_topp0.95_sample0": {
+   "MATH-500 (n=500 each)": {
+    "base": 65,
+    "step100": 103,
+    "step400": 98,
+    "step2800": 19
+   },
+   "clean 328 (n=328 each)": {
+    "base": 137,
+    "step100": "no rows (step 100 has only P_math500)",
+    "step400": 160,
+    "step2800": 64
+   },
+   "harder 400": {
+    "base": 178,
+    "step400": 211,
+    "step2800": 92
+   },
+   "rise_then_fall_visible": true,
+   "rerun_spread_in_README": "studies/rlneurons/README.md lines 101-102: base plain T 0.6 cap hits 65 (RLN-3 base-01) vs 69 (n13 run, same seeds per inventory); lines 103-107 vs my count: RL plain T 0.6 19 (s2800-01) vs 16 (n13 run, line 106); line 252: T1/T2 reruns on their seeds 25 vs 27 and 6 vs 6 cap hits of 500; line 189: 2 vs 4 of 50. Run-to-run spread is 0-4 cap hits of 500.",
+   "rise_vs_spread": "base -> step 100 is +38 (65 -> 103), base -> step 400 +33 (65 -> 98) on MATH-500, and +23 (137 -> 160) on the clean 328; about 8-10x the 0-4 rerun spread. Paired 90 % intervals exclude 0 (p1, p2, p3). Paired detail: 68 problems cap only at step 100, 30 only at base.",
+   "caveat": "Steps 100 and 400 ran in one later job on another instance (r3/s0400_s0100-01), the base in base-01; same seeds and prompts. Steps 100/400 do not write the cue (0/500 texts start with ' line!'), step 2,800 does (495/500)."
+  },
+  "b_already_in_git": {
+   "answer": "No for steps 100 and 400. Yes for the endpoints.",
+   "detail": "No committed file or pre-cutoff board item (before.jsonl) holds a step-100 or step-400 cap-hit count; studies/rlneurons/README.md line 1140 says the step-400 rows are not scored, and results/ has no s0100/s0400 readout (only offline_gate.json, a stand-in run with no cap-hit counts). The endpoints were in the README: base 65 of 500 (line 101), base 137 and RL 64 of 328 (lines 160, 162), RL n13 16 of 500 (line 106). The theory also cites knowledge-b15a21 (RL-Zero-Math 3.0: 29.1 % vs 17.8 % length-limit hits at T 0.6), which points to the direction of the rise. So the middle numbers were not sitting in a table; the endpoint direction 'step 2,800 far below base' was."
+  }
+ },
+ "step6": {
+  "loop_row": "step 400, problem 9, cap hit, 69,780 chars, rule-A loop from char 7,502: ends mid-sentence in a verbatim-repeated paragraph about parenthesizations of 2*3*4*5+1 ('...But the example shows that by grouping'); a 200-char tail fragment recurs 47 times; last-8,000 ratio 0.069.",
+  "nonloop_row": "step 400, problem 11, cap hit, 46,867 chars, not a loop (min window ratio 0.17): ends mid-sentence restating the same polynomial argument p(n) = k(n-2)...(n-7) + 1/(2(n-1)) + ...; a 200-char tail fragment recurs 10 times, so it is looser repetition, not new reasoning.",
+  "judgement": "The loop flag means verbatim block repetition as the theory says; but 16 of the 20 non-loop cap hits sit just above the 0.10 threshold (0.102-0.17) and also repeat, so 'non-loop' here is not 'long productive reasoning'."
+ }
+}
