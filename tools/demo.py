@@ -7,12 +7,13 @@ the section, a progress row of 12 steps, one large sentence, one smaller fact li
 measured, up to three quiet rows that open detail, and Back and Next at the bottom.
 
 A step lights some parts and dims the rest, shows one figure on the face of the board (a chart drawn in place of the
-item dots), and sometimes moves the view in for a closer look (steps 4 to 6). Entered with Next (or the right arrow,
+item dots), and sometimes moves the view in for a closer look (steps 4 to 7). Entered with Next (or the right arrow,
 Space, PageDown), a step plays its short motion: a pulse along a thread, bars that grow, four pulses that leave for
 Modal and come back. Entered any other way (Back, a progress segment, Home, End, a typed address, a reload) it shows
 its settled state at once. A key press at any moment retargets every motion from where it is. Every step has its
 address (/demo#result), and every detail too (/demo#result/cue); Esc closes a detail. Where the lab is lit, real
-events of the board are replayed as on the Design page.
+events of the board are replayed as on the Design page. The colours follow the system, or the reader's choice from the
+header control, the key t or the address (/demo?theme=light), kept in localStorage.
 
 Every number comes from demo_facts.FACTS (shipped as JSON with only its value, count, source and time) or live from
 /data; the detail panels come from demo_panels.py (PANEL_CSS and PANELS_JS) and are written into the page here.
@@ -42,31 +43,33 @@ TEMPLATE = r"""<!doctype html>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<script>
+/* The theme before the first paint: ?theme=light or dark wins (and is stored), else the stored choice, else the system. */
+(() => {
+  let t = new URLSearchParams(location.search).get("theme");
+  try { if (t === "light" || t === "dark") localStorage.setItem("demo-theme", t); else t = localStorage.getItem("demo-theme"); } catch (e) { /* storage blocked: the address or the system decides */ }
+  if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+})();
+</script>
 <style>
 /* The tokens of the Design page (architecture.py), unchanged: dark is a lit glass body in a dark room, light the same
-   object as white porcelain on a cool grey table. The light comes from the upper left in both. */
+   object as white porcelain on a cool grey table. The light comes from the upper left in both. The theme follows the
+   system unless the reader picked one (data-theme on <html>, from the header control, the key t or ?theme=); both
+   forced themes take exactly the values of the system ones. One addition to the Design tokens: --fbar1, the fill of
+   the plain base bar of steps 4 and 5. */
 :root {
-  color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
-  --blue: #1f43d6; --red: #c41e34; --on-blue: #fff;
-  --pl: .56; --pc: .15; --dim: .16;
-  --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
-  --rim-a: rgba(16, 24, 32, .28); --rim-b: rgba(16, 24, 32, .58); --rim-c: rgba(16, 24, 32, .9);
-  --glow: 0; --shadow: 1; --spec: 0; --bloom: .4; --core: var(--blue); --lift: 38%;
-  --btn: linear-gradient(#27323e, #0d141b); --btn-ink: #f5f8fa; --btn-edge: rgba(255, 255, 255, .18); --btn-drop: rgba(16, 24, 32, .42);
-  --fbar1: #b3bdc6;
+  color-scheme: light;
+  /*__LIGHT__*/
 }
 @media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #788590; --rule: #1c2630;
-    --blue: #8fb1ff; --red: #ff6b7c; --on-blue: #080c11;
-    --pl: .78; --pc: .13; --dim: .24;
-    --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
-    --rim-a: rgba(255, 255, 255, .92); --rim-b: rgba(255, 255, 255, .1); --rim-c: rgba(143, 177, 255, .45);
-    --glow: 1; --shadow: 0; --spec: 1; --bloom: 1; --core: #f6f9ff; --lift: 55%;
-    --btn: linear-gradient(#f7fafc, #cbd5de); --btn-ink: #080c11; --btn-edge: rgba(255, 255, 255, .7); --btn-drop: rgba(0, 0, 0, .6);
-    --fbar1: #4a5763;
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    /*__DARK__*/
   }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  /*__DARK__*/
 }
 * { box-sizing: border-box; }
 html { background: var(--paper); }
@@ -91,7 +94,9 @@ a { color: inherit; }
 .name { font-weight: 740; font-stretch: 122%; font-size: 1.15em; letter-spacing: .02em; margin: 0 6px 0 0; }
 .top a { color: var(--mute); text-decoration: none; white-space: nowrap; transition: color .15s ease; }
 .top a:hover { color: var(--ink); }
-.status { margin-left: auto; color: var(--mute); white-space: nowrap; display: flex; align-items: center; gap: 10px; }
+.theme { margin-left: auto; color: var(--mute); font-weight: 500; padding: 2px 4px; border-radius: 3px; transition: color .15s ease; }
+.theme:hover { color: var(--ink); }
+.status { color: var(--mute); white-space: nowrap; display: flex; align-items: center; gap: 10px; }
 .status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 4px color-mix(in srgb, var(--blue) 20%, transparent); }
 .status.bad { color: var(--red); }
 .status.bad::before { background: var(--red); box-shadow: 0 0 0 4px color-mix(in srgb, var(--red) 20%, transparent); }
@@ -103,9 +108,15 @@ a { color: inherit; }
   clip-path: inset(-40px 0 -24px -40px); transition: clip-path .4s ease; }
 .stage.near { clip-path: inset(0); }
 .stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .4s ease;
-  background: linear-gradient(to right, var(--paper), transparent 6%, transparent 94%, var(--paper)),
-              linear-gradient(to bottom, var(--paper), transparent 5%, transparent 95%, var(--paper)); }
+  background: linear-gradient(to right, var(--paper), transparent 12%, transparent 88%, var(--paper)),
+              linear-gradient(to bottom, var(--paper), transparent 10%, transparent 90%, var(--paper)); }
 .stage.near::after { opacity: 1; }
+/* In the close framing only the board, its figure and the lit agents stay: names, persons, ring labels and the Retro
+   loop would be cut by the stage edge, so they fade out. */
+.who, .person, .label, [data-part="review"], .said { transition: opacity .3s ease; }
+.stage.near .who, .stage.near .person, .stage.near .label, .stage.near [data-part="review"], .stage.near .said { opacity: 0 !important; }
+/* A redraw after a data read keeps the current state: nothing fades in again. */
+.snap, .snap * { transition: none !important; }
 svg { width: 100%; height: 100%; display: block; overflow: visible; }
 svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-stretch: 112%; letter-spacing: .012em; }
 .label { font-weight: 600; paint-order: stroke fill; stroke: var(--paper); stroke-width: 10px; stroke-linejoin: round; }
@@ -135,7 +146,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 .thread { fill: none; stroke: var(--c); stroke-width: .9; opacity: .5; }
 .tie { fill: none; stroke: var(--c); stroke-width: 1.1; opacity: .7; }
 .agent { fill: var(--c); stroke: none; transition: opacity .45s ease; }
-.solo .agent:not([data-k="0"]) { opacity: .12; }
+.solo .agent:not(.lone) { opacity: .12; }
 .person { fill: var(--c); stroke: var(--paper); stroke-width: 3; }
 .dot { fill: var(--c); }
 .dot.note { opacity: .6; }
@@ -153,13 +164,16 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 #fx { pointer-events: none; }
 .fly { fill: var(--c); }
 .halo { fill: none; stroke: var(--c); stroke-width: 1.5; opacity: .45; }
-.nhalo { fill: none; stroke: var(--blue); stroke-width: 2; opacity: 0; transition: opacity .4s ease; }
+.nhalo { fill: none; stroke: var(--blue); stroke-width: 2.5; opacity: 0; transition: opacity .4s ease; }
 .nhalo.on { opacity: .95; }
-.tick { fill: var(--paper); stroke: var(--c); stroke-width: 1.4; opacity: 0; transition: opacity .35s ease; }
+.tick { fill: none; stroke: var(--c); stroke-width: 1.6; stroke-linecap: round; opacity: 0; transition: opacity .35s ease; }
 .tick.on { opacity: 1; }
 #dotwrap { transition: opacity .3s ease; }
 #dotwrap.off { opacity: 0; }
 #dotwrap.off .dot { pointer-events: none; }
+#dots .dot { transition: opacity .45s ease; }
+.claimdim #dots .dot { opacity: .3; }
+.claimdim #dots .dot.scored { opacity: 1; }
 
 /* The points outside the lab (Modal, Exa), each shown only in its own step and its own panel */
 .ext { opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility 0s .3s; }
@@ -182,6 +196,11 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 .fcount.onfaint { fill: var(--ink) !important; }
 .fbar { transition: fill .5s ease; }
 .f-faint { fill: var(--fbar1); }
+.f-pre { fill: var(--faint); }
+.fghost { fill: none; stroke: var(--faint); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.fbrk { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.fvote .f-faint { opacity: .35; }
+.fvote [data-t="pct0"], .fvote .fcount.onfaint, .fvote .fname0 { opacity: .35; }
 .f-mute { fill: var(--mute); }
 .f-ink { fill: var(--ink); }
 .f-blue { fill: var(--blue); }
@@ -197,7 +216,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 .bk { transition: opacity .25s ease; }
 .why .bk { opacity: 0; }
 .why .sl-l { fill: var(--ink); }
-.why .sl-r { fill: var(--fbar1); }
+.why .sl-r { fill: var(--faint); }
 .src-link { fill: var(--blue) !important; font-weight: 560; }
 .src-link:hover { text-decoration: underline; }
 
@@ -235,17 +254,18 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
   animation: rise .3s cubic-bezier(.23, 1, .32, 1) both; }
 .say b { font-weight: 560; }
 .seq b { display: inline-block; animation: rise .45s both; animation-delay: calc(.3s + var(--n) * .4s); }
-.fact { margin: clamp(16px, 2.6vh, 30px) 0 0; font-size: clamp(17px, min(1.45vw, 2.45vh), 31px); line-height: 1.36; max-width: 38ch; }
+.fact { margin: clamp(16px, 2.6vh, 30px) 0 0; font-size: clamp(17px, min(1.45vw, 2.45vh), 31px); line-height: 1.36; max-width: 38ch; text-wrap: pretty; }
+.nw { white-space: nowrap; }
 .fact b { font-weight: 600; }
 .fact a { text-decoration-color: var(--rule); text-underline-offset: 3px; }
 .fact .who-c { color: var(--c); font-weight: 600; }
 .src { display: block; margin-top: .45em; font-size: .7em; font-weight: 460; color: var(--mute); }
-.src a { color: inherit; }
-.open { margin: .9em 0 0; font-size: clamp(17px, min(1.45vw, 2.45vh), 31px); line-height: 1.36; color: var(--mute); max-width: 34ch; }
+.src a { color: inherit; white-space: nowrap; }
+.open { margin: .9em 0 0; font-size: clamp(15px, min(1.25vw, 2.1vh), 27px); line-height: 1.36; color: var(--mute); max-width: 38ch; }
 .open::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--mute); margin-right: .5em; vertical-align: .05em; }
-.recap { list-style: none; margin: clamp(16px, 2.6vh, 30px) 0 0; padding: 0; max-width: 36ch; }
+.recap { list-style: none; margin: clamp(16px, 2.6vh, 30px) 0 0; padding: 0; }
 .recap li { border-top: 1px solid var(--rule); }
-.recap a { display: block; padding: .45em 0; text-decoration: none; font-size: clamp(15px, min(1.15vw, 2vh), 26px); line-height: 1.3; }
+.recap a { display: block; padding: .45em 0; text-decoration: none; font-size: clamp(17px, min(1.45vw, 2.45vh), 31px); line-height: 1.3; text-wrap: pretty; }
 .recap a b { font-weight: 600; }
 .recap a:hover { color: var(--blue); }
 .url { display: inline-block; margin-top: clamp(16px, 2.6vh, 30px); font-size: clamp(20px, min(1.9vw, 3.2vh), 40px); font-weight: 560; font-stretch: 106%; color: var(--blue); text-decoration: none; }
@@ -254,7 +274,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
   font-weight: 620; font-size: clamp(15px, 1.15vw, 22px); font-stretch: 106%; letter-spacing: .004em;
   box-shadow: inset 0 1px 0 var(--btn-edge), 0 14px 28px -14px var(--btn-drop); }
 .walk:hover { box-shadow: inset 0 1px 0 var(--btn-edge), 0 0 0 1.5px var(--blue), 0 18px 32px -12px var(--btn-drop); }
-.more { margin-top: clamp(12px, 2vh, 34px); max-width: 36ch; }
+.more { margin-top: clamp(12px, 2vh, 34px); }
 .q { display: flex; width: 100%; justify-content: space-between; align-items: baseline; padding: .5em 0; border-top: 1px solid var(--rule);
   font-size: clamp(14px, 1.1vw, 21px); font-weight: 560; color: var(--mute); animation: rise .3s cubic-bezier(.23, 1, .32, 1) both; animation-delay: calc(.4s + var(--i) * 60ms); }
 .q:hover, .q:focus-visible { color: var(--ink); }
@@ -265,6 +285,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 .nav button.next.plain { background: none; color: var(--ink); border-color: var(--faint); box-shadow: none; }
 .nav button:hover { border-color: var(--blue); background: var(--blue); color: var(--on-blue); box-shadow: none; }
 .nav button[disabled] { opacity: .3; pointer-events: none; }
+.nav button.next[disabled] { background: none; color: var(--ink); border-color: var(--faint); box-shadow: none; }
 .hint { margin-left: auto; font-size: clamp(13px, .95vw, 18px); color: var(--mute); }
 
 /* Detail, in the Design page's classes at the sizes of the talk */
@@ -320,6 +341,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
     <a class="tab" href="/architecture">Design</a>
     <a class="tab" href="/proof">Proof</a>
     <a class="tab" href="/findings">Findings</a>
+    <button class="theme" id="theme" type="button">Light</button>
     <span class="status" id="status">Reading the board</span>
   </header>
   <aside class="side" id="side">
@@ -344,7 +366,7 @@ const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "
 const f = n => n.toFixed(1);
 const msgNs = m => Number(m.sk.slice(0, 20));
 const mins = ns => Math.max(0, Math.floor((Date.now() * 1e6 - Number(ns)) / 60e9));
-const since = ns => { const s = Math.max(0, Math.floor(Date.now() / 1000 - Number(ns) / 1e9)); return s < 60 ? s + " s ago" : s < 3600 ? `${Math.floor(s / 60)} min ${String(s % 60).padStart(2, "0")} s ago` : ago(ns); };
+const since = ns => { const s = Math.max(0, Math.floor(Date.now() / 1000 - Number(ns) / 1e9)); return s < 60 ? s + " s ago" : ago(ns); };
 const ago = ns => { const m = mins(ns); return m < 1 ? "now" : m < 60 ? m + " min ago" : m < 2880 ? Math.floor(m / 60) + " h ago" : Math.floor(m / 1440) + " d ago"; };
 const fv = key => FACTS[key] ? FACTS[key].v : null;
 function hueOf(person) { const i = S.m ? S.m.people.indexOf(person) : -1; return i < 0 ? null : HUES[i % HUES.length]; }
@@ -367,19 +389,15 @@ function when(at) {  // "2026-11-15 05:37 UTC" -> "Nov 15, 05:37 UTC"
   const r = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/.exec(String(at || ""));
   return r ? `${MONTH[Number(r[2]) - 1]} ${Number(r[3])}, ${r[4]}:${r[5]} UTC` : "";
 }
-function where(src) {  // the short name of where a number was measured: its board items, else its file, else the first words
-  const ids = [...new Set(String(src || "").match(/\b(?:result|knowledge|idea|work|skill)-[0-9a-f]{6}\b/g) || [])];
-  if (ids.length) return "board " + ids.slice(0, 2).map(id => `<a href="/#${id}">${id}</a>`).join(", ");
-  const p = /(?:studies|tools|infra|meta)\/[\w./+-]+/.exec(src || "");
-  if (p) return esc(p[0].split("/").slice(-2).join("/"));
-  return esc(String(src || "").split(/[:(;,]/)[0].trim().slice(0, 34));
+/* The source line, one format on every step: "<source>, <Mon D, HH:MM> UTC". The source is "board <id>, <id>" (links)
+   or a plain name; the time is the newest "at" of the line's FACTS keys, left out when none of them has one. */
+const boardIds = (...keys) => [...new Set(keys.flatMap(k => String(FACTS[k] ? FACTS[k].src : "").match(/\b(?:result|knowledge|idea|work|skill)-[0-9a-f]{6}\b/g) || []))];
+const bd = ids => ids.length ? "board " + ids.slice(0, 2).map(id => `<a href="/#${id}">${id}</a>`).join(", ") : "";
+function srcLine(name, keys = []) {
+  const ats = keys.map(k => FACTS[k] && FACTS[k].at).filter(Boolean).sort(), t = ats.length ? when(ats[ats.length - 1]) : "";
+  return `<span class="src">${[name, t].filter(Boolean).join(", ")}</span>`;
 }
-function tail(keys) {  // where and when the numbers of a line were measured, in one quiet line
-  const by = new Map();
-  keys.forEach(k => { const x = FACTS[k]; if (!x || !x.at) return; const w = where(x.src), t = when(x.at), list = by.get(t) || []; if (!list.includes(w)) list.push(w); by.set(t, list); });
-  const parts = [...by].map(([t, ws]) => `${ws.join(", ")}, ${t}`);
-  return parts.length ? `<span class="src">${parts.slice(0, 3).join("; ")}</span>` : "";
-}
+const nw = s => `<span class="nw">${s}</span>`;
 const b = (x, n) => n == null ? `<b>${x}</b>` : `<b style="--n:${n}">${x}</b>`;
 
 /* The four parts of the lab, in the words of the Design page (tools/architecture.py, TEXT), with its live rows. The
@@ -478,58 +496,72 @@ function model(d) {
 /* The figures on the face of the board, one per step that shows one. Coordinates in face units: origin at the
    board's centre, y down, 164 = the board's radius. Every number is read from FACTS here. A text with data-max is
    shrunk to that width if the font makes it wider (fit()); data-t names the texts a step's cues turn on. */
-const BAR = { y0: 78, full: 150, w: 58, xs: [-84, 0, 84] };
+const BAR = { y0: 74, full: 150, w: 50, xs: [-106, -42, 16] };
 function tx(cls, x, y, size, body, o = {}) {
   return `<text class="${cls}${o.t ? " ft" + (o.rise ? " rise" : "") : ""}" x="${x}" y="${y}" font-size="${size}" data-fs="${size}"` +
-    `${o.anchor ? ` style="text-anchor:${o.anchor}"` : ""}${o.t ? ` data-t="${o.t}"` : ""}${o.max ? ` data-max="${o.max}"` : ""}${o.id ? ` id="${o.id}"` : ""}>${body}</text>`;
+    `${o.anchor ? ` style="text-anchor:${o.anchor}"` : ""}${o.t ? ` data-t="${o.t}"` : ""}${o.max ? ` data-max="${o.max}"` : ""}${o.id ? ` id="${o.id}"` : ""}` +
+    `${o.pair ? ` data-pair="${o.pair}"` : ""}>${body}</text>`;
 }
 const per = (n, size) => `${n}<tspan font-size="${f(size * .61)}">%</tspan>`;
 function hourRows() {  // complete UTC hours only: the hour in which the count was read is partial
   const h = FACTS.results_per_hour_by_utc_hour, at = h && h.at ? String(h.at).slice(11, 13) : "";
   return (h && h.v ? h.v : []).filter(([hour]) => hour !== at);
 }
+const num = k => typeof fv(k) === "number" ? fv(k) : null;
+const N500 = () => FACTS.math500_rl && FACTS.math500_rl.n ? FACTS.math500_rl.n : null;
+const pctOf = v => typeof v === "number" && N500() ? Math.round(100 * v / N500()) : "?";
+/* The number of samples in the vote: FACTS vote_samples when it is set, else the number in the key's name (vote4_...). */
+const voteK = () => num("vote_samples") ?? Number(/vote(\d+)_/.exec("vote4_restart_base")[1]);
 function faceSVG() {
   const out = [];
   // Step 1: three names, the stops on the way from an idea to an answer.
   out.push(`<g class="fig" data-fig="stops">` +
-    ["validates like a paper", "waits for a GPU", "repeats a run"].map((s, i) => tx("flab", 0, -36 + 44 * i, 24, s, { t: "stop" + i, rise: 1, max: 296 })).join("") + "</g>");
+    ["validates every idea", "waits for a GPU", "repeats a run"].map((s, i) => tx("flab", 0, -40 + 46 * i, 26, s, { t: "stop" + i, rise: 1, max: 296 })).join("") + "</g>");
   // Step 3: results per hour.
   const hrs = hourRows(), nb = hrs.length, pitch = 234 / Math.max(1, nb), bw = pitch - 8, top = Math.max(1, ...hrs.map(r => r[1]));
-  const sc = Math.min(4, 100 / top);
+  const sc = Math.min(4, 100 / top), lastV = nb ? hrs[nb - 1][1] : 0;
   out.push(`<g class="fig" data-fig="rate">` +
-    tx("fnum", -116, -34, 60, nf(need("results_on_board")), { t: "rate-head", anchor: "start", id: "rate-hero" }) +
-    tx("flab", 16, -58, 22, "results", { t: "rate-head", anchor: "start", id: "rate-l1" }) +
-    tx("fsub", 16, -34, 22, `in ${nf(Math.round(need("board_hours")))} hours`, { t: "rate-head", anchor: "start", id: "rate-l2" }) +
+    tx("fnum", -116, -50, 60, nf(need("results_on_board")), { t: "rate-head", anchor: "start", id: "rate-hero" }) +
+    tx("flab", 16, -74, 22, "results", { t: "rate-head", anchor: "start", id: "rate-l1" }) +
+    tx("fsub", 16, -50, 22, `in ${nf(Math.round(need("board_hours")))} hours`, { t: "rate-head", anchor: "start", id: "rate-l2" }) +
     hrs.map(([, v], i) => `<rect class="fbar ${i === nb - 1 ? "f-blue" : "f-mute"}" data-rate="${i}" data-h="${f(v * sc)}" x="${f(-113 + pitch * i)}" y="84" width="${f(bw)}" height="0" rx="2"/>`).join("") +
-    (nb ? tx("flab", f(-113 + pitch * (nb - 1) + bw / 2), f(84 - hrs[nb - 1][1] * sc - 8), 22, hrs[nb - 1][1], { t: "rate-late" }) +
-      tx("fsub", -110, 104, 19, `${hrs[0][0]}:00`, { t: "rate-late", anchor: "start" }) + tx("fsub", 0, 104, 19, "per hour", { t: "rate-late" }) +
-      tx("fsub", 110, 104, 19, `${hrs[nb - 1][0]}:00`, { t: "rate-late", anchor: "end" }) : "") + "</g>");
-  // Steps 4 and 5: three bars, then the gap above the cue split in two. The slab is the same two rects in both steps.
-  const vals = ["math500_base_plain", "math500_base_cue", "math500_rl"].map(k => need(k)), N = FACTS.math500_rl ? FACTS.math500_rl.n : 500;
-  const H = vals.map(v => typeof v === "number" ? v / N * BAR.full : 0), share = (typeof fv("reliability_share_pct") === "number" ? fv("reliability_share_pct") : 50) / 100;
+    (nb ? tx("flab", f(-113 + pitch * (nb - 1) + bw), f(84 - lastV * sc - 8), 20, `${lastV}<tspan class="fsub" font-size="17"> per hour</tspan>`, { t: "rate-late", anchor: "end" }) +
+      tx("fsub", -113, 104, 18, `${hrs[0][0]}:00 UTC`, { t: "rate-late", anchor: "start" }) +
+      tx("fsub", 113, 104, 18, `${hrs[nb - 1][0]}:00 UTC`, { t: "rate-late", anchor: "end" }) : "") + "</g>");
+  // Steps 4, 5 and 6: three bars; under a vote two of them grow; then RL's gain over base + cue split in two. The slab
+  // above the cue level is the same two rects in all three steps.
+  const keys = ["math500_base_plain", "math500_base_cue", "math500_rl"], vals = keys.map(k => need(k)), N = N500() || "?";
+  const H = vals.map(v => typeof v === "number" && N500() ? v / N500() * BAR.full : 0);
+  const vv = [null, num("vote4_restart_base"), num("vote4_restart_rl")], HV = vv.map((v, i) => typeof v === "number" && N500() ? v / N500() * BAR.full : H[i]);
   const fills = ["f-faint", "f-blue", "f-mute"], names = ["base", "base + cue", "RL"], x0 = i => BAR.xs[i] - BAR.w / 2;
-  const left = 245 * share, rd = need("math500_base_cue_redraws");
+  const gap = typeof vals[2] === "number" && typeof vals[1] === "number" ? Math.round(100 * (vals[2] - vals[1]) / N500()) : "?";
+  const bx = BAR.xs[2] + BAR.w / 2 + 5, yA = BAR.y0 - H[2], yB = BAR.y0 - H[1];
   out.push(`<g class="fig" data-fig="bars" id="fig-bars"><g class="bk">` +
-    [0, 1].map(i => `<rect class="fbar ${fills[i]}" data-bar="${i}" x="${x0(i)}" y="${BAR.y0}" width="${BAR.w}" height="0" rx="2"/>`).join("") +
-    `<rect class="fbar f-mute" data-bar="2" x="${x0(2)}" y="${BAR.y0}" width="${BAR.w}" height="0" rx="2"/>` +
-    vals.map((v, i) => tx("fnum", BAR.xs[i], f(BAR.y0 - H[i] - 8), 36, per(pct(["math500_base_plain", "math500_base_cue", "math500_rl"][i]), 36), { t: "pct" + i })).join("") +
-    vals.map((v, i) => tx("fcount" + (i === 1 ? " onblue" : i === 0 ? " onfaint" : ""), BAR.xs[i], BAR.y0 - 9, 16, nf(v), { t: "bars-late" })).join("") +
-    names.map((s, i) => tx("flab", BAR.xs[i], BAR.y0 + 22, 16, s, { t: "bars-late" })).join("") +
-    tx("fsub", 0, 122, 15, `of ${nf(N)} problems`, { t: "bars-late" }) + "</g>" +
+    [0, 1, 2].map(i => `<rect class="fbar ${fills[i]}" data-bar="${i}" x="${x0(i)}" y="${BAR.y0}" width="${BAR.w}" height="0" rx="2"/>`).join("") +
+    [1, 2].map(i => `<path class="fghost ft" data-t="vote-late" d="M${f(x0(i) - 3)} ${f(BAR.y0 - H[i])}H${f(x0(i) + BAR.w + 3)}"/>`).join("") +
+    vals.map((v, i) => tx("fnum", BAR.xs[i], f(BAR.y0 - H[i] - 8), 30, per(pct(keys[i]), 30), { t: "pct" + i, max: 56 })).join("") +
+    [1, 2].map(i => tx("fnum", BAR.xs[i], f(BAR.y0 - HV[i] - 8), 30, per(pctOf(vv[i]), 30), { t: "vote-late", max: 56 })).join("") +
+    tx("fcount onfaint", BAR.xs[0], BAR.y0 - 9, 15, nf(vals[0]), { t: "cnt0" }) +
+    [1, 2].map(i => tx("fcount" + (i === 1 ? " onblue" : ""), BAR.xs[i], BAR.y0 - 9, 15, nf(vals[i]), { t: "cnt12" })).join("") +
+    [1, 2].map(i => tx("fcount" + (i === 1 ? " onblue" : ""), BAR.xs[i], BAR.y0 - 9, 15, nf(vv[i] ?? "?"), { t: "vote-cnt" })).join("") +
+    names.map((s, i) => tx("flab" + (i === 0 ? " fname0" : ""), BAR.xs[i], BAR.y0 + 20, 13, s, { t: "names" })).join("") +
+    tx("fsub", 0, 116, 14, `of ${nf(N)} problems`, { t: "cap1", max: 200 }) +
+    tx("fsub", 0, 112, 14, `vote over ${voteK()} samples,`, { t: "vote-late", max: 220 }) +
+    tx("fsub", 0, 129, 14, `of ${nf(N)} problems`, { t: "vote-late", max: 180 }) +
+    `<path class="fbrk ft" data-t="gap" d="M${f(bx)} ${f(yA)}h6V${f(yB)}h-6"/>` +
+    tx("flab", f(bx + 12), f((yA + yB) / 2 + 5), 14, `${gap} points`, { t: "gap", anchor: "start", max: 84 }) + "</g>" +
     `<rect class="fbar f-mute sl-l" id="sl-l" x="0" y="0" width="0" height="0" rx="1"/><rect class="fbar f-mute sl-r" id="sl-r" x="0" y="0" width="0" height="0" rx="1"/>` +
     tx("fnum", -124, -36, 56, per(nf(need("reliability_share_pct")), 56), { t: "why-a", anchor: "start" }) +
     tx("fnum", 124, -36, 30, per(nf(need("new_problems_share_pct")), 30), { t: "why-b", anchor: "end" }) +
-    tx("flab", -124, 42, 14, "problems the base", { t: "why-c", anchor: "start", max: 130 }) + tx("flab", -124, 60, 14, "sometimes solves", { t: "why-c", anchor: "start", max: 130 }) +
-    tx("flab", 124, 42, 14, "problems it", { t: "why-c", anchor: "end", max: 100 }) + tx("flab", 124, 60, 14, "never solves", { t: "why-c", anchor: "end", max: 100 }) +
+    tx("flab", -124, 46, 14, "solved sometimes", { t: "why-c", anchor: "start", max: 136, pair: "wy" }) +
+    tx("flab", 124, 46, 14, "never solved", { t: "why-c", anchor: "end", max: 104, pair: "wy" }) +
     tx("fsub", 0, -92, 15, "RL's gain over base + cue", { t: "why-d", max: 220 }) +
-    tx("fsub", 0, 92, 15, `${nf(FACTS.reliability_share_pct ? FACTS.reliability_share_pct.n : "?")} problems, ${nf(need("anatomy_right_samples") === "?" ? "?" : FACTS.anatomy_right_samples.n / FACTS.reliability_share_pct.n)} samples each`, { t: "why-d", max: 240 }) +
+    tx("fsub", 0, 84, 14, `by base + cue in ${nf(FACTS.anatomy_right_samples && FACTS.reliability_share_pct ? FACTS.anatomy_right_samples.n / FACTS.reliability_share_pct.n : "?")} samples,`, { t: "why-d", max: 250 }) +
+    tx("fsub", 0, 102, 14, `of ${nf(FACTS.reliability_share_pct ? FACTS.reliability_share_pct.n : "?")} problems`, { t: "why-d", max: 220 }) +
     "</g>");
-  // Under the disc, below bars 1 and 2: when they were measured.
-  out.push(`<g class="fig" data-fig="bars-tag">` + tx("fsub", -113, 196, 16, "measured before the event;", { t: "bars-late", anchor: "start" }) +
-    tx("fsub", -113, 216, 16, `re-measured during it: ${nf(rd === "?" ? "?" : rd.lo)} to ${nf(rd === "?" ? "?" : rd.hi)} of ${nf(FACTS.math500_base_cue_redraws ? FACTS.math500_base_cue_redraws.n : "?")}`, { t: "bars-late", anchor: "start" }) + "</g>");
-  // Step 6: a gain and its second draw.
+  // Step 7: a gain and its second draw.
   const A = need("retraction_claim"), B = need("retraction_correction"), signed = v => typeof v === "number" ? (v < 0 ? "−" + Math.abs(v) : "+" + v) : v;
-  out.push(`<g class="fig hue" data-fig="draw" id="fig-draw">` + tx("fsub", 0, -96, 15, "gain on MATH-500, in points", { max: 250 }) +
+  out.push(`<g class="fig hue" data-fig="draw" id="fig-draw">` + tx("fsub", 0, -98, 15, "points over base + cue, MATH-500", { max: 214 }) +
     `<circle class="dot fdot" data-t="rowA" cx="-120" cy="-40" r="10"/>` +
     tx("fnum", -98, -22, 54, signed(A.points), { t: "rowA", anchor: "start", id: "draw-a" }) +
     tx("flab", 28, -44, 15, "first draw", { t: "rowA", anchor: "start" }) + tx("fsub", 28, -25, 15, `${nf(A.right)} of ${nf(A.n)}`, { t: "rowA", anchor: "start" }) +
@@ -539,28 +571,36 @@ function faceSVG() {
     tx("flab", 28, 36, 15, "second draw", { t: "rowB", anchor: "start" }) + tx("fsub", 28, 55, 15, `${nf(B.right)} of ${nf(B.n)}`, { t: "rowB", anchor: "start" }) +
     tx("fsub", 28, 74, 15, `${nf(need("retraction_minutes_between"))} min later`, { t: "rowB", anchor: "start" }) +
     `<path class="strike" data-t="strike" pathLength="1" d="M-102 -41L16 -41"/></g>`);
-  // Steps 7 and 9: before and after, on one scale per figure.
-  const ba = (name, pre, preNote, post, postNote, preV, postV, count, caption) => {
-    const wPost = typeof preV === "number" && typeof postV === "number" ? 220 * postV / preV : 0;
-    return `<g class="fig" data-fig="${name}">` +
-      tx("fnum", -110, -64, 40, pre, { t: name + "-pre", anchor: "start" }) + tx("fsub", 110, -64, 22, preNote, { t: name + "-pre", anchor: "end" }) +
-      `<rect class="fbar f-faint" data-pre="${name}" x="-110" y="-52" width="0" height="22" rx="2"/>` +
-      tx("fnum", -110, 22, 40, post, { t: name + "-post", anchor: "start" }) + tx("fsub", 110, 22, 22, postNote, { t: name + "-post", anchor: "end" }) +
-      Array.from({ length: count }, (_, i) => `<rect class="fbar f-blue" data-post="${name}" data-w="${f(wPost)}" x="-110" y="${count > 1 ? 34 + 17 * i : 34}" width="0" height="${count > 1 ? 12 : 22}" rx="2"/>`).join("") +
-      (caption ? tx("fsub", 0, 92, 20, caption, { t: name + "-post", max: 250 }) : "") + "</g>";
-  };
+  // Step 8: one run on one H100, then split across four, on one scale.
   const shards = need("shard_detail", "shards"), unit = (n, u) => `${nf(n)}<tspan class="flab" font-size="22"> ${u}</tspan>`;
-  out.push(ba("shard", unit(need("shard_whole_minutes"), "min"), "1 H100", unit(need("shard_4_minutes"), "min"), `${nf(shards)} H100s`,
-    fv("shard_whole_minutes"), fv("shard_4_minutes"), typeof shards === "number" ? shards : 1, ""));
-  const before = need("h100_wait_before_min"), after = need("h100_wait_after_s");
-  out.push(ba("wait", unit(before, "min"), `${nf(FACTS.h100_wait_before_min ? FACTS.h100_wait_before_min.n : "?")} jobs`, unit(after, "s"),
-    `${nf(FACTS.h100_wait_after_s ? FACTS.h100_wait_after_s.n : "?")} jobs`, typeof before === "number" ? before * 60 : null, after, 1, "median wait for an H100"));
-  // Step 8: what came back from Exa.
+  const whole = num("shard_whole_minutes"), four = num("shard_4_minutes"), wFour = whole && four ? 220 * four / whole : 0, nS = typeof shards === "number" ? shards : 1;
+  out.push(`<g class="fig" data-fig="shard">` +
+    tx("fnum mutedtext", -110, -78, 40, unit(need("shard_whole_minutes"), "min"), { t: "shard-pre", anchor: "start", pair: "s1" }) +
+    tx("fsub", 110, -78, 16, "1 H100", { t: "shard-pre", anchor: "end", pair: "s1" }) +
+    `<rect class="fbar f-pre" data-pre="shard" x="-110" y="-66" width="0" height="22" rx="2"/>` +
+    tx("fnum", -110, 4, 40, unit(need("shard_4_minutes"), "min"), { t: "shard-post", anchor: "start", pair: "s2" }) +
+    tx("fsub", 110, 4, 16, `${nf(shards)} H100s`, { t: "shard-post", anchor: "end", pair: "s2" }) +
+    Array.from({ length: nS }, (_, i) => `<rect class="fbar f-blue" data-post="shard" data-w="${f(wFour)}" x="-110" y="${14 + 17 * i}" width="0" height="12" rx="2"/>`).join("") +
+    tx("fsub", 0, 104, 18, `one ${nf(FACTS.shard_whole_minutes ? FACTS.shard_whole_minutes.n : "?")}-problem run`, { t: "shard-post", max: 230 }) + "</g>");
+  // Step 9: what came back from Exa.
   const ex = need("exa_case_best"), title = String(ex.paper_title || "?").split(":")[0].split(" "), half = Math.ceil(title.length / 2);
-  const url = String(ex.paper_url || "");
-  out.push(`<g class="fig" data-fig="source">` + tx("fnum", 0, -34, 30, esc(title.slice(0, half).join(" ")), { t: "src", max: 290 }) +
-    tx("fnum", 0, 0, 30, esc(title.slice(half).join(" ")), { t: "src", max: 290 }) +
-    `<a href="${esc(url)}" target="_blank" rel="noopener">${tx("src-link", 0, 38, 22, esc(url.replace(/^https?:\/\//, "")), { t: "src", max: 290 })}</a></g>`);
+  const link = String(ex.paper_url || ""), arx = /(\d{4}\.\d{4,5})/.exec(link);
+  out.push(`<g class="fig" data-fig="source">` + tx("fnum", 0, -46, 30, esc(title.slice(0, half).join(" ")), { t: "src", max: 290 }) +
+    tx("fnum", 0, -12, 30, esc(title.slice(half).join(" ")), { t: "src", max: 290 }) +
+    `<a href="${esc(link)}" target="_blank" rel="noopener">${tx("src-link", 0, 28, 22, esc(arx ? "arXiv " + arx[1] : link.replace(/^https?:\/\//, "")), { t: "src", max: 260 })}</a>` +
+    tx("fsub", 0, 58, 16, `one of ${nf(ex.papers_cited ?? "?")} papers cited`, { t: "src", max: 240 }) + "</g>");
+  // Step 10: the planted-waste test, two arms, each a bar that shrinks from its first batch to its last.
+  const S1 = need("planted_waste_skill"), S2 = need("planted_waste_plain"), maxB = Math.max(Number(S1.before_min) || 0, Number(S2.before_min) || 0) || 1;
+  const row = (y, label, o, j) => {
+    const wb = 232 * (Number(o.before_min) || 0) / maxB, wa = 232 * (Number(o.after_min) || 0) / maxB;
+    return tx("flab", -116, y, 19, label, { t: "waste", anchor: "start", max: 150, pair: "w" + j }) +
+      tx("fnum", 116, y, 26, `${nf(o.after_min ?? "?")}<tspan class="flab" font-size="16"> min</tspan>`, { t: "waste-post", anchor: "end", pair: "w" + j }) +
+      `<rect class="fbar f-pre" x="-116" y="${y + 10}" width="${f(wb)}" height="20" rx="2"/>` +
+      `<rect class="fbar f-blue" data-waste="${j}" data-wb="${f(wb)}" data-wa="${f(wa)}" x="-116" y="${y + 10}" width="${f(wb)}" height="20" rx="2"/>` +
+      tx("fcount", f(-116 + wb - 6), y + 25, 14, nf(o.before_min ?? "?"), { t: "waste", anchor: "end" });
+  };
+  out.push(`<g class="fig" data-fig="waste">` + row(-60, "Retro review", S1, 0) + row(10, "plain instruction", S2, 1) +
+    tx("fsub", 0, 80, 16, "container minutes per batch,", { t: "waste", max: 240 }) + tx("fsub", 0, 100, 16, "planted waste", { t: "waste", max: 240 }) + "</g>");
   return out.join("");
 }
 
@@ -605,7 +645,7 @@ function draw() {
     `<text class="label" id="ms-label" font-size="${g.fs}">Chat</text>`, "Chat");
   th.forEach((a, i) => {
     out += part("thread-" + i, "", `<g class="hue" style="--h:${hue(i)}"><path class="thread"/><path class="ripple" opacity="0"/>` +
-      `<circle class="tick" r="3.2"/><circle class="tick" r="3.2"/><circle class="tick" r="3.2"/>${pulse(i)}</g>`);
+      `<path class="tick"/><path class="tick"/><path class="tick"/>${pulse(i)}</g>`);
   });
   const top = g.rb + g.fs * .82, sx = g.cx - g.rb * .3, sy = g.cy - g.rb * .46;
   out += part("board", "board",
@@ -624,8 +664,6 @@ function draw() {
       `<text class="said" font-size="${g.fq}" opacity="0" aria-hidden="true"><tspan></tspan><tspan class="when"></tspan></text></g>`,
       `${esc(m.people[i])}, ${m.agents[i].length} agents`);
   });
-  // The face's captions that sit below the disc (unclipped), in face units.
-  out += `<g class="part" data-part="board-under"><g transform="translate(${g.cx} ${g.cy}) scale(${g.u.toFixed(4)})" id="face2"></g></g>`;
   const ext = (name, label, lanes) => part("ext-" + name, "ext-" + name,
     `<g class="hue xbody">${Array.from({ length: lanes }, () => `<path class="trace"/>`).join("")}${Array.from({ length: lanes }, () => pulse()).join("")}` +
     `<g class="xm"><circle class="pad" r="34"/><circle class="xring ring" r="9"/><circle class="xdot" r="2.6"/></g>` +
@@ -633,19 +671,14 @@ function draw() {
   out += ext("modal", "Modal", 4) + ext("exa", "Exa", 1);
   const k = g.fw * .92, ky = g.h - 14, keys = [["agent", "agent"], ["work", "open work"], ["", "result"], ["note", "idea or note"]];
   const here = m ? ["claude", "openai", ""].filter(x => m.marks.some(l => l.includes(x))) : ["claude"];
-  const widths = keys.map(([cls, t]) => 26 + t.length * k * .54 + 22 + (cls === "agent" ? (here.length - 1) * 19 : 0)), total = widths.reduce((a, c) => a + c, 0) - 22;
-  let kx = narrow.matches ? (g.w - total) / 2 : 6;
-  out += `<g class="part key" data-part="key" style="--c:var(--mute)">` + keys.map(([cls, t], i) => {
-    const x = kx, y = ky - k * .32; kx += widths[i];
+  out += `<g class="part key" data-part="key" style="--c:var(--mute)">` + keys.map(([cls, t]) => {  // placed by layoutKey() once measured
+    const x = 0, y = ky - k * .32;
     const one = (mark, j) => mark ? `<use class="agent" href="#mark-${mark}" x="${f(x - 1 + j * 19)}" y="${f(y - 8)}" width="16" height="16"/>`
       : `<rect class="agent" x="${f(x + j * 19)}" y="${f(y - 6.5)}" width="13" height="13" rx="3.6"/>`;
     return (cls === "agent" ? here.map(one).join("") : `<circle class="dot ${cls}" cx="${f(x + 7)}" cy="${f(y)}" r="${cls === "note" ? 3.4 : 6}"/>`) +
       `<text class="sub" x="${f(x + 20 + (cls === "agent" ? (here.length - 1) * 19 : 0))}" y="${f(ky)}" font-size="${f(k)}" style="text-anchor:start">${t}</text>`;
-  }).join("") + "</g>";
+  }).map(h => `<g class="kitem">${h}</g>`).join("") + "</g>";
   svg.innerHTML = defs + `<g id="cam">${out}<g id="fx"></g></g>`;
-  // The tag under bars 1 and 2 lives in the unclipped layer; move it there.
-  const tag = svg.querySelector('[data-fig="bars-tag"]');
-  $("face2").append(tag);
 
   const el = {}, unit = e => ({ el: e, glow: e.children[0], tail: e.children[1], head: e.children[2] });
   ["rv-hit", "rv-rib", "rv-c0", "rv-c1", "comet", "cm-glow", "cm-long", "cm-short", "cm-core", "rv-label", "rvfade",
@@ -695,6 +728,16 @@ function fit() {
     const w = t.getComputedTextLength(), max = Number(t.dataset.max);
     if (w > max) t.setAttribute("font-size", (Number(t.dataset.fs) * max / w).toFixed(2));
   });
+  // Two texts on one row of a figure (a numeral and its note) keep 12 units between them; the second one shrinks.
+  const pairs = {};
+  svg.querySelectorAll("text[data-pair]").forEach(t => (pairs[t.dataset.pair] = pairs[t.dataset.pair] || []).push(t));
+  Object.values(pairs).forEach(([a, c]) => {
+    if (!c) return;
+    c.setAttribute("font-size", c.dataset.fs);
+    const right = a.getBBox().x + a.getBBox().width, left = c.getBBox().x, w = c.getBBox().width;
+    if (right + 12 > left && w > 0) c.setAttribute("font-size", (Number(c.dataset.fs) * Math.max(.5, (w - (right + 12 - left)) / w)).toFixed(2));
+  });
+  layoutKey();
   const hero = $("rate-hero"), l1 = $("rate-l1"), l2 = $("rate-l2");
   if (hero && l1 && l2) {
     const hw = hero.getComputedTextLength(), lw = Math.max(l1.getComputedTextLength(), l2.getComputedTextLength()), x = -(hw + 16 + lw) / 2;
@@ -702,6 +745,13 @@ function fit() {
   }
 }
 
+function layoutKey() {  // the key centred under the Board, with one gap between its entries
+  const items = [...$("svg").querySelectorAll(".kitem")], g = S.g, gap = 24 * g.u;
+  if (!items.length || !g) return;
+  const w = items.map(e => { e.removeAttribute("transform"); const bb = e.getBBox(); return [bb.x, bb.width]; });
+  let x = g.cx - (w.reduce((s, [, ww]) => s + ww, 0) + gap * (w.length - 1)) / 2;
+  items.forEach((e, i) => { e.setAttribute("transform", `translate(${f(x - w[i][0])} 0)`); x += w[i][1] + gap; });
+}
 function dots() {
   const g = S.g, m = S.m, n = m.live.length, R = g.rb - 16, c = Math.min(15, R / Math.sqrt(n + 1));
   const capA = 62 * RAD, K = 1 - Math.cos(capA), Rs = R / Math.sin(capA);
@@ -709,7 +759,7 @@ function dots() {
     const [dx, dy] = spiral(i, c), big = it.listed === "result" || it.listed === "work";
     const u = Math.min(1, Math.hypot(dx, dy) / R), tilt = Math.acos(1 - u * u * K), q = u ? Rs * Math.sin(tilt) / (u * R) : 1;
     const stale = it.listed === "work" && mins(it.active_ns ?? it.at_ns) >= 60;
-    const cls = ["dot hue", it.listed === "work" ? "work" : big ? "" : "note", stale && "stale", S.seen && !S.seen.has(it.id) && "arrived"];
+    const cls = ["dot hue", it.listed === "work" ? "work" : big ? "" : "note", stale && "stale", S.seen && !S.seen.has(it.id) && "arrived", S.scored.has(it.id) && "scored"];
     return `<circle class="${cls.filter(Boolean).join(" ")}" style="--h:${HUES[Math.max(0, m.people.indexOf(it.who)) % HUES.length]};--i:${i}" ` +
       `data-who="${esc(it.who)}" data-id="${esc(it.id)}" cx="${f(g.cx + dx * q)}" cy="${f(g.cy + dy * q)}" r="${f(c * (big ? .4 : .27) * (.62 + .5 * Math.cos(tilt)))}"><title>${esc(it.id)}: ${esc(it.text.slice(0, 120))}</title></circle>`;
   }).join("");
@@ -821,7 +871,12 @@ function said(t) {
   if (n !== Y.n) { Y.n = n; ln.textContent = Y.cut.slice(0, n); wh.textContent = n < Y.cut.length ? "" : Y.age; }
   const x = o.side < 0 ? o.nx - o.wide / 2 : o.side > 0 ? o.nx + o.wide / 2 - Y.wide : o.nx - Y.wide / 2;
   o.said.setAttribute("x", f(Math.max(8, Math.min(g.w - 8 - Y.wide, x))));
-  o.said.setAttribute("y", f(o.ny + (o.below ? g.fq * 1.45 : -g.fw * 1.08) * o.nk));
+  if (o.below) o.said.setAttribute("y", f(o.ny + g.fq * 1.45 * o.nk));
+  else {  // the name sits above the marks: the caption goes under the swarm, where the room is free
+    const low = Math.max(o.c0[1], ...o.at.map(q => q[1]));
+    o.said.setAttribute("x", f(Math.max(8, Math.min(g.w - 8 - Y.wide, o.c0[0] - Y.wide / 2))));
+    o.said.setAttribute("y", f(low + o.size + g.fq * 1.1));
+  }
   o.said.setAttribute("opacity", Math.max(0, Math.min(1, age / .15, (Y.hold - age) / .4)).toFixed(2));
 }
 function hush() {  // stop every travel where it is: the replay, the fast posts, the rings on the board
@@ -1034,7 +1089,7 @@ function setFace(name) {
   S.face = name;
   const R = S.r;
   if (!R) return;
-  Object.entries(R.figs).forEach(([k, e]) => e.classList.toggle("on", k === name || (k === "bars-tag" && name === "bars" && S.n === 4)));
+  Object.entries(R.figs).forEach(([k, e]) => e.classList.toggle("on", k === name));
   R.el.dotwrap.classList.toggle("off", name !== "dots");
   kick();
 }
@@ -1047,7 +1102,7 @@ function halo(on) {
   if (on != null) S.halo = on;
   const it = S.m && S.m.results[0], dot = it ? $("dots").querySelector(`[data-id="${CSS.escape(it.id)}"]`) : null;
   R.halo.classList.toggle("on", !!S.halo && !!dot);
-  if (dot) { R.halo.setAttribute("cx", dot.getAttribute("cx")); R.halo.setAttribute("cy", dot.getAttribute("cy")); R.halo.setAttribute("r", f(Number(dot.getAttribute("r")) + 5)); }
+  if (dot) { R.halo.setAttribute("cx", dot.getAttribute("cx")); R.halo.setAttribute("cy", dot.getAttribute("cy")); R.halo.setAttribute("r", f(Number(dot.getAttribute("r")) + 12 * S.g.u)); }
   return dot;
 }
 
@@ -1056,100 +1111,131 @@ function halo(on) {
    reset(): the state before the cues; cues: [ms after the key press, what happens]; more: the detail rows. */
 const all = (k, m) => (m ? m.people : []).map((_, i) => k + i);
 const STEPS = [
-  { hash: "nanolab", sec: "Nanolab", title: "Nanolab", cam: "wide", lit: null, face: "dots", replay: "on",
-    say: m => `Nanolab is ${b(m ? m.people.length : need("people"))} people and their coding agents working on one research question.`,
-    fact: () => "The question: how much of a published RL gain does an untrained base model reach with no training?" },
+  { hash: "nanolab", sec: "Team Invariant", title: "Nanolab", cam: "wide", lit: null, face: "dots", replay: "on",
+    say: () => `Nanolab is ${b(nf(need("people")))} people and their coding agents working on one research question.`,
+    fact: () => "The question: how much of a published RL gain can a base model reach with no training, and what is in the rest?" },
   { hash: "problem", sec: "Problem", title: "Problem", cam: "wide", lit: A => ["board", "thread-" + A, "swarm-" + A], solo: true, face: "stops", replay: "off",
     say: () => "Research output is set by cycle time: how fast an idea becomes an answer.",
-    fact: () => `In our first hours one run took ${b(nf(need("day1_cell_minutes")))} minutes on one GPU, and agents generated it ${b(nf(need("day1_cell_repeats")))} times.` + tail(["day1_cell_minutes"]),
+    fact: () => `In our first hours one run took ${b(nf(need("shard_whole_minutes")))} minutes on one H100, and agents generated it ${nf(need("day1_cell_repeats"))} times.` +
+      srcLine(bd(boardIds("day1_cell_repeats", "shard_whole_minutes")), ["day1_cell_repeats", "shard_whole_minutes"]),
     more: [["problem/day1", "Our first hours, measured"]],
     reset() { S.crawl = true; put("crawl", 0); allTicksOff(); [0, 1, 2].forEach(i => ft("stop" + i, false)); },
     cues: [[600, () => to("crawl", .25, 1100)], [1700, () => { ticks(true, 0); ft("stop0"); }], [3200, () => to("crawl", .5, 1100)],
       [4300, () => { ticks(true, 1); ft("stop1"); }], [5800, () => to("crawl", .75, 1100)], [6900, () => { ticks(true, 2); ft("stop2"); }]] },
-  { hash: "claim", sec: "Claim", title: "Claim", cam: "wide", lit: null, face: "dots", replay: "off",
+  { hash: "claim", sec: "Claim", title: "Claim", cam: "wide", lit: null, face: "dots", replay: "off", claim: true,
     say: () => "Nanolab makes agents fail fast, so most ideas get an answer within the hour.",
     fact: () => "Only what shows a signal gets the careful validation.",
     cues: [[0, () => { if (travel() && S.crawl) to("crawl", 1, 350); else crawlOff(); }], [200, () => allTicksOff()],
       [600, () => { if (travel()) { S.replay = "fast"; S.fastLeft = 12; S.fastDue = S.t; } else S.replay = "on"; }]] },
   { hash: "proof", sec: "Proof", title: "Proof", cam: "wide", lit: null, face: "rate", replay: "off",
-    say: m => { const p = m ? m.people.length : need("people"); return `<span class="seq">${cap(word(p))} people and their agents posted ${b(nf(need("results_on_board")), 0)} results in ${b(nf(Math.round(need("board_hours"))), 1)} hours.</span>`; },
-    fact: () => `Median ${b(nf(need("claim_to_close_median_min")))} minutes from claiming an idea to its result, over ${b(nf(FACTS.claim_to_close_median_min ? FACTS.claim_to_close_median_min.n : "?"))} work items.` + tail(["results_on_board", "claim_to_close_median_min"]),
-    open: () => "Against one agent on the same budget: not measured yet.",
+    say: () => `<span class="seq">${b(nf(need("people")), 0)} people and their agents posted ${b(nf(need("results_on_board")), 1)} results in ${b(nf(Math.round(need("board_hours"))), 2)} hours.</span>`,
+    fact: () => `The median work item closed ${b(nf(need("claim_to_close_median_min")))} minutes after its claim (${nf(need("work_items_closed"))} items).` +
+      srcLine("board", ["results_on_board", "board_hours", "claim_to_close_median_min", "work_items_closed"]),
+    open: () => { const c = fv("auto_research_comparison"); return `Against one agent on the same budget: ${c == null ? "not measured yet" : esc(typeof c === "object" ? (c.text ?? JSON.stringify(c)) : c)}.`; },
     more: [["proof/turnaround", "From claim to result"]],
     reset() { ft("rate-head", false); ft("rate-late", false); put("f.rate", 0); },
     cues: [[300, () => ft("rate-head")], [500, () => to("f.rate", 1, 1400, 0, out)], [1900, () => ft("rate-late")]] },
-  { hash: "result", sec: "Proof", title: "Result", cam: "near", lit: () => ["board", "board-under"], face: "bars", replay: "off",
-    say: () => `With no training, a ${word(FACTS.cue_text ? FACTS.cue_text.n : "?")}-token cue takes the base model from ${b(pct("math500_base_plain") + "%")} to ${b(pct("math500_base_cue") + "%")} on MATH-500.`,
-    fact: () => `The RL-trained model scores ${b(pct("math500_rl") + "%")} (${nf(FACTS.math500_rl ? FACTS.math500_rl.n : "?")} problems, one sample each, same sampling). We measured this before the event; during it the swarm confirmed it on ${nf(FACTS.hard328_base_cue ? FACTS.hard328_base_cue.n : "?")} harder problems: ${pct("hard328_base_plain")}% to ${pct("hard328_base_cue")}%, RL ${pct("hard328_rl")}%.` + tail(["math500_base_cue", "math500_rl", "hard328_base_cue"]),
-    more: [["result/cue", "The cue"], ["result/harder", "Harder problems and code"], ["result/vote", "Under a vote"]],
-    reset() { $("fig-bars") && $("fig-bars").classList.remove("why"); ["pct0", "pct1", "pct2", "bars-late", "why-a", "why-b", "why-c", "why-d"].forEach(t => ft(t, false)); put("f.bars", 0); put("f.why", 0); S.FV = {}; },
-    cues: [[350, () => to("f.bars", 1, 820, 0, out)], [1250, () => ft("bars-late")]] },
+  { hash: "result", sec: "Proof", title: "Result", cam: "near", lit: () => ["board"], face: "bars", replay: "off",
+    say: () => `With no training, a published ${word(FACTS.cue_text ? FACTS.cue_text.n : "?")}‑token cue takes the base model to ${b(pct("math500_base_cue") + "%")} on MATH-500.`,
+    fact: () => `RL training reaches ${b(pct("math500_rl") + "%")}. Without the cue the base model scores ${nw(pct("math500_base_plain") + "%")} at the same sampling and ${nw(pct("math500_base_plain_t06") + "%")} at its best setting.` +
+      srcLine(bd(boardIds("math500_base_plain", "math500_base_cue", "math500_rl").length ? boardIds("math500_base_plain", "math500_base_cue", "math500_rl") : ["result-c36598", "result-533123"])),
+    more: [["result/cue", "The cue"], ["result/harder", "Harder problems and code"]],
+    reset() { barsMode("result"); },
+    cues: [[350, () => to("f.bars", 1, 820, 0, out)], [1250, () => ["names", "cnt0", "cnt12", "cap1"].forEach(t => ft(t))], [1500, () => ft("gap")]] },
+  { hash: "vote", sec: "Proof", title: "Vote", cam: "near", lit: () => ["board"], face: "bars", replay: "off",
+    say: () => `A vote over ${voteK()} samples takes the base model to ${b(pct("vote4_restart_base") + "%")}, still with no training.`,
+    fact: () => { const a = num("vote4_restart_base"), r = num("vote4_restart_rl"), lead = a != null && r != null && N500() ? nf(Math.round(1000 * (r - a) / N500()) / 10) : "?";
+      return `Under the same vote the RL-trained model scores ${b(pct("vote4_restart_rl") + "%")}, so RL keeps a ${lead}-point lead.` +
+        srcLine(bd(boardIds("vote4_restart_base", "vote4_restart_rl")), ["vote4_restart_base", "vote4_restart_rl"]); },
+    more: [["vote/procedure", "How the vote works"]],
+    reset() { barsMode("vote"); },
+    cues: [[0, () => to("f.vote", 1, 700, 0, out)], [700, () => { ft("vote-late"); ft("vote-cnt"); }]] },
   { hash: "why", sec: "Proof", title: "Why", cam: "near", lit: () => ["board"], face: "bars", replay: "off",
     say: () => "RL mostly makes the model reliable on problems it could already solve.",
-    fact: () => { const n = FACTS.reliability_share_pct ? FACTS.reliability_share_pct.n : "?", k = FACTS.anatomy_right_samples && typeof n === "number" ? FACTS.anatomy_right_samples.n / n : "?";
-      return `${b(nf(need("reliability_share_pct")) + "%")} of the gap that the cue leaves is on problems the base solves in at least 1 of ${k} samples (${nf(n)} problems, ${k} samples each).` + tail(["reliability_share_pct"]); },
+    fact: () => { const n = FACTS.reliability_share_pct ? FACTS.reliability_share_pct.n : null, k = FACTS.anatomy_right_samples && n ? FACTS.anatomy_right_samples.n / n : "?";
+      return `${b(nf(need("reliability_share_pct")) + "%")} of RL's gain over base + cue is on problems the base model solves in at least 1 of ${nf(k)} samples.` +
+        srcLine(bd(boardIds("reliability_share_pct").length ? boardIds("reliability_share_pct") : ["result-afc423"]), ["reliability_share_pct"]); },
     more: [["why/control", "How we know"], ["why/findings", "Other findings"]],
-    reset() { ["why-a", "why-b", "why-c", "why-d"].forEach(t => ft(t, false)); to("f.bars", 1, 300); ["pct0", "pct1", "pct2", "bars-late"].forEach(t => ft(t)); },
-    cues: [[0, () => { $("fig-bars") && $("fig-bars").classList.add("why"); to("f.why", 1, 700, 150); }], [850, () => ft("why-a")], [1000, () => ft("why-b")], [1050, () => ft("why-c")], [1100, () => ft("why-d")]] },
+    reset() { barsMode("why"); },
+    cues: [[0, () => { $("fig-bars") && $("fig-bars").classList.add("why"); to("f.vote", 0, 500); to("f.why", 1, 700, 150); }],
+      [850, () => ft("why-a")], [1000, () => ft("why-b")], [1050, () => ft("why-c")], [1100, () => ft("why-d")]] },
   { hash: "rules", sec: "How", title: "Speed rules", cam: "near", lit: A => ["board", "thread-" + A, "swarm-" + A], face: "draw", replay: "off", who: () => fv("retraction_who"),
-    say: () => "A cheap test comes first, and only a result that stands out is validated.",
-    fact: () => { const a = need("retraction_claim"); return `A gain of ${b("+" + nf(a.points))} points failed its own second draw ${b(nf(need("retraction_minutes_between")))} minutes later, and the agent retracted it.` + tail(["retraction_claim", "retraction_correction"]); },
-    more: [["rules/thread", "The thread"], ["rules/audit", "The audit of our chart"], ["rules/rejected", "What the swarm rejected"]],
+    say: () => "A cheap test comes first, and only what shows a signal is validated.",
+    fact: () => { const a = need("retraction_claim"); return `A gain of ${b("+" + nf(a.points))} points failed its own second draw ${b(nf(need("retraction_minutes_between")))} minutes later, and the agent posted the correction.` +
+      srcLine(bd(boardIds("retraction_claim", "retraction_correction")), ["retraction_claim", "retraction_correction"]); },
+    more: [["rules/thread", "The thread"], ["rules/audit", "The audit of our chart"], ["rules/rejected", "What the agents rejected"]],
     reset() { ["rowA", "rowB", "strike"].forEach(t => ft(t, false)); $("draw-a") && $("draw-a").classList.remove("mutedtext"); },
     cues: [[300, () => ft("rowA")], [1500, () => { if (travel() && S.actor >= 0) S.play.post = { i: S.actor, k: -1, at: -1, t0: S.t, quiet: true }; }],
       [2500, () => ft("rowB")], [2650, () => { ft("strike"); $("draw-a") && $("draw-a").classList.add("mutedtext"); }]] },
   { hash: "infra", sec: "How", title: "Infrastructure", cam: "wide", lit: A => ["board", "swarm-" + A, "ext-modal"], face: "shard", ext: "modal", replay: "off", who: () => fv("exa_case_best") && fv("exa_case_best").who,
-    say: () => `Agents start their own Modal GPU jobs: ${b(nf(need("gpu_submit_commands")))} launches, ${fv("gpu_submit_by_person_shell") === 0 ? "none" : nf(need("gpu_submit_by_person_shell"))} typed by a person.`,
-    fact: () => { const d = need("shard_detail"), extra = typeof d.gpu_min_shard4 === "number" ? Math.round(100 * (d.gpu_min_shard4 / d.gpu_min_whole - 1)) : "?";
-      return `Splitting one run across ${nf(need("shard_detail", "shards"))} GPUs cut it from ${b(nf(need("shard_whole_minutes")))} to ${b(nf(need("shard_4_minutes")))} minutes (measured once each way, ${extra}% more GPU minutes).` + tail(["gpu_submit_commands", "shard_4_minutes"]); },
-    more: [["infra/modal", "On Modal"]],
+    say: () => `All ${nf(need("gpu_submit_commands"))} GPU job submissions to Modal came from agent sessions.`,
+    fact: () => `Splitting one run across ${nf(need("shard_detail", "shards"))} H100s cut it from ${b(nf(need("shard_whole_minutes")))} to ${b(nf(need("shard_4_minutes")))} minutes (one run each way).` +
+      srcLine(["agent event log", bd(boardIds("shard_4_minutes"))].filter(Boolean).join(", "), ["gpu_submit_commands", "shard_4_minutes"]),
+    more: [["infra/modal", "On Modal"], ["infra/people", "Who did what"]],
     reset() { ft("shard-pre", false); ft("shard-post", false); put("f.shardPre", 0); put("f.shard", 0); put("lane.modal", 0); extTraces("modal", false); },
     cues: [[300, () => { ft("shard-pre"); to("f.shardPre", 1, 500, 0, out); }], [1000, () => to("lane.modal", 1, 900)],
       [1900, () => { if (travel() && S.r) ping(S.r.ext.modal.dot); to("f.shard", 1, 500, 0, out); }], [2200, () => to("lane.modal", 2, 800)],
       [2400, () => ft("shard-post")], [3000, () => extTraces("modal", true)]] },
-  { hash: "brain", sec: "How", title: "Shared brain", cam: "wide", lit: (A, m) => ["board", ...all("thread-", m), ...all("swarm-", m), "ext-exa"], face: "dots", ext: "exa", replay: "off", who: () => fv("exa_case_best") && fv("exa_case_best").who,
+  { hash: "brain", sec: "How", title: "Shared memory", cam: "wide", lit: (A, m) => ["board", ...all("thread-", m), ...all("swarm-", m), "ext-exa"], face: "dots", fig: true, ext: "exa", replay: "off", who: () => fv("exa_case_best") && fv("exa_case_best").who,
     say: () => "Agents see what everyone has tried and found, and build on it.",
-    fact: () => `One Exa search found published tables that closed ${b(word(need("exa_case_best", "method_families")))} planned methods with ${need("exa_case_best", "gpu_jobs") === 0 ? "no GPU job" : nf(need("exa_case_best", "gpu_jobs")) + " GPU jobs"}.` + tail(["exa_case_best"]),
+    fact: () => `One literature sweep through Exa found ${b(word(need("exa_case_best", "method_families")))} method families already published for a plain base model, ${need("exa_case_best", "gpu_jobs") === 0 ? "before any GPU job" : "with " + nf(need("exa_case_best", "gpu_jobs")) + " GPU jobs"}.` +
+      srcLine(bd(boardIds("exa_case_best")), ["exa_case_best"]),
     more: [["brain/sources", "Sources"], ["brain/memory", "Shared memory"]],
     reset() { ft("src", false); put("lane.exa", 0); extTraces("exa", false); },
     cues: [[400, () => { if (travel() && S.actor >= 0) S.play.post = { i: S.actor, k: -1, at: -1, t0: S.t - 1 }; }],
       [2100, () => to("lane.exa", 1, 900)], [3000, () => { if (travel() && S.r) ping(S.r.ext.exa.dot); }], [3200, () => to("lane.exa", 2, 900)],
       [4100, () => { if (travel() && S.actor >= 0) S.play.post = { i: S.actor, k: 0, at: -1, t0: S.t, quiet: true }; }],
       [5100, () => { setFace("source"); ft("src"); extTraces("exa", true); }]] },
-  { hash: "retro", sec: "How", title: "Retro", cam: "wide", lit: () => ["review", "board"], face: "wait", replay: "off",
+  { hash: "retro", sec: "How", title: "Retro", cam: "wide", lit: () => ["review", "board"], face: "waste", replay: "off",
     say: () => "The lab times itself and fixes its slowest step.",
-    fact: () => `One review raised the container limit from ${nf(need("max_containers_change", "from"))} to ${nf(need("max_containers_change", "to"))}, and the median wait for an H100 fell from ${b(nf(need("h100_wait_before_min")))} minutes to ${b(nf(need("h100_wait_after_s")))} seconds (${nf(FACTS.h100_wait_before_min ? FACTS.h100_wait_before_min.n : "?")} jobs before, ${nf(FACTS.h100_wait_after_s ? FACTS.h100_wait_after_s.n : "?")} after).` + tail(["max_containers_change", "h100_wait_after_s"]),
+    fact: () => { const a = need("planted_waste_skill"), p = need("planted_waste_plain");
+      return `On planted waste, ${word(a.rounds ?? "?")} Retro reviews cut compute per batch from ${nf(a.before_min ?? "?")} to ${b(nf(a.after_min ?? "?"))} container minutes; a plain instruction reached ${b(nf(p.after_min ?? "?"))} (${nf(FACTS.planted_waste_skill ? FACTS.planted_waste_skill.n : "?")} runs per arm).` +
+        srcLine(bd(boardIds("planted_waste_skill", "planted_waste_plain")), ["planted_waste_skill", "planted_waste_plain"]); },
     more: [["retro/changes", "What the reviews changed"]],
-    reset() { ft("wait-pre", false); ft("wait-post", false); put("f.waitPre", 0); put("f.wait", 0); },
-    cues: [[300, () => { ft("wait-pre"); to("f.waitPre", 1, 500, 0, out); }], [600, () => { if (travel()) to("comet.extra", val("comet.extra") + 360, 3200); }],
-      [3800, () => to("f.wait", 1, 500, 0, out)], [4300, () => ft("wait-post")]] },
-  { hash: "watch", sec: "How", title: "Live", cam: "wide", lit: null, face: "dots", replay: "on", button: true,
+    reset() { ft("waste", false); ft("waste-post", false); put("f.waste", 0); },
+    cues: [[300, () => ft("waste")], [600, () => { if (travel()) to("comet.extra", val("comet.extra") + 360, 3200); }],
+      [3800, () => to("f.waste", 1, 700, 0, out)], [4500, () => ft("waste-post")]] },
+  { hash: "watch", sec: "Live", title: "Live", cam: "wide", lit: null, face: "dots", replay: "on", button: true,
     say: () => "People watch the research evolve live on this site.",
-    fact: m => { const it = m && m.results[0]; if (!it) return null; const s = String(it.text).replace(/\s+/g, " ").trim(), cut = s.length > 120 ? s.slice(0, 120).replace(/\s+\S*$/, "") + "…" : s;
-      return `Newest result: <a href="/#${esc(it.id)}">${esc(cut)}</a>, <span class="who-c hue" style="--h:${hueOf(it.who) ?? 0}">${esc(it.who)}</span>, ${ago(it.at_ns)}.`; },
+    recap: () => [
+      ["proof", `Nanolab makes agents fail fast: ${b(nf(need("results_on_board")))} results, a median of ${b(nf(need("claim_to_close_median_min")))} minutes from claim to result.`],
+      ["vote", `With no training the base model reaches ${b(pct("vote4_restart_base") + "%")} on MATH-500, and RL reaches ${b(pct("vote4_restart_rl") + "%")} under the same vote.`],
+      ["why", `${b(nf(need("reliability_share_pct")) + "%")} of RL's gain over base + cue is reliability.`]],
+    url: "monitor.invariant.team",
     reset() { halo(false); S.due = S.t; },
     cues: [[600, () => { const dot = halo(true); if (dot && travel()) ping(dot); }]] },
-  { hash: "close", sec: "Summary", title: "Summary", cam: "wide", lit: null, face: "dots", replay: "on",
-    say: () => "Nanolab makes agents fail fast, so most ideas get an answer within the hour.",
-    recap: () => [
-      ["proof", `Speed: ${b(nf(need("results_on_board")))} results in ${b(nf(Math.round(need("board_hours"))))} hours, median ${b(nf(need("claim_to_close_median_min")))} minutes from claim to result.`],
-      ["result", `Result: the cue's gain holds on ${nf(FACTS.hard328_base_cue ? FACTS.hard328_base_cue.n : "?")} harder problems and on code, and a vote takes the base to ${b(pct("vote4_restart_base") + "%")} (RL ${pct("vote4_restart_rl")}%).`],
-      ["why", `Reason: ${b(nf(need("reliability_share_pct")) + "%")} of the remaining gap is reliability.`]],
-    url: "monitor.invariant.team" },
 ];
 const HASH = Object.fromEntries(STEPS.map((s, i) => [s.hash, i]));
-const SECTION_START = new Set([0, 1, 2, 3, 6, 11]);
+const SECTION_START = new Set([0, 1, 2, 3, 7, 11]);
+const STEP = HASH;  // step numbers by name, for the code below
+
+/* Steps 4, 5 and 6 share one figure. barsMode sets its settled texts and the targets of its three scalars. */
+function barsMode(mode) {
+  const fig = $("fig-bars");
+  if (fig) { fig.classList.toggle("why", mode === "why"); fig.classList.toggle("fvote", mode === "vote"); }
+  ["pct0", "pct1", "pct2", "names", "cnt0", "cnt12", "cap1", "gap", "vote-late", "vote-cnt", "why-a", "why-b", "why-c", "why-d"].forEach(t => ft(t, false));
+  S.FV = {};
+  if (mode === "result") { put("f.bars", 0); to("f.why", 0, 400); to("f.vote", 0, 400); }
+  if (mode === "vote") { to("f.bars", 1, 300); to("f.why", 0, 500); put("f.vote", 0); ["pct0", "names", "cnt0"].forEach(t => ft(t)); }
+  if (mode === "why") { to("f.bars", 1, 300); ["pct0", "pct1", "pct2", "names", "cnt0", "cnt12", "cap1"].forEach(t => ft(t)); }
+}
 
 function crawlOff() { S.crawl = false; const o = S.r && S.r.swarms[S.actor]; if (o) o.pulse.el.setAttribute("opacity", 0); }
 function actorOf(n) {
   const m = S.m;
   if (!m) return -1;
+  if (STEPS[n].solo && S.r) {  // the agent mark with the longest thread, so the crawl has room to show its stops
+    let best = [-1, 0, 0];
+    S.r.swarms.forEach((o, i) => (o.at.length ? o.at : [o.c0]).forEach((q, k) => { const d = Math.hypot(q[0] - o.end[0], q[1] - o.end[1]); if (d > best[0]) best = [d, i, k]; }));
+    S.crawlK = best[2];
+    return best[1];
+  }
   const who = STEPS[n].who ? STEPS[n].who() : null, i = who ? m.people.indexOf(who) : -1;
   return i >= 0 ? i : m.lead;
 }
 
 /* Entering a step: stop every travel, set the step's state, then play its cues (Next) or run them all at once. */
-function enter(n, forward) {
+function enter(n, forward, snap) {
   S.token++; hush(); S.cues = []; S.t0 = performance.now();
   const prev = S.n;
   S.n = n;
@@ -1158,7 +1244,8 @@ function enter(n, forward) {
   if (n !== 1 && n !== 2) crawlOff();
   if (n === 2 && !(forward && prev === 1)) crawlOff();
   if (n !== 2) allTicksOff();
-  if (n !== 10) halo(false);
+  if (n !== STEP.watch) halo(false);
+  $("svg").classList.toggle("claimdim", !!st.claim);
   S.replay = st.replay;
   if (S.r) {  // the actor's colour on the parts that take it
     const h = S.actor >= 0 ? HUES[S.actor % HUES.length] : 0;
@@ -1171,19 +1258,21 @@ function enter(n, forward) {
   setFace(st.face);
   extTraces("modal", false); extTraces("exa", false);
   S.instant = true; if (st.reset) st.reset(); S.instant = false;
-  camera(n);
+  camera(n, snap);
   const list = st.cues || [];
-  if (forward && !still.matches) S.cues = list.map(([at, fn]) => ({ at, fn, done: false }));
+  if (forward && !still.matches && !snap) S.cues = list.map(([at, fn]) => ({ at, fn, done: false }));
   else { S.instant = true; list.forEach(([, fn]) => fn()); S.instant = false; }
   show(true);
   kick();
 }
-function camera(n) {
-  const g = S.g, wantNear = STEPS[n].cam === "near" || (narrow.matches && STEPS[n].face !== "dots");
+function camera(n, snap) {  // a change of framing moves in 700 ms, anything else settles in 450 ms; a redraw jumps
+  const g = S.g, st = STEPS[n], wantNear = st.cam === "near" || (narrow.matches && (st.face !== "dots" || st.fig));
+  const change = (S.camWant || "wide") !== (wantNear ? "near" : "wide"), ms = change ? 700 : 450;
   S.camWant = wantNear ? "near" : "wide";
-  const ms = 450;
-  to("cam.z", wantNear ? (narrow.matches ? 3.1 : 1.6) : 1, STEPS[n].cam === "near" && n === 4 ? 700 : n === 7 ? 700 : ms, 0, io, true);
-  to("cam.oy", wantNear ? g.h / 2 - g.cy : 0, n === 4 || n === 7 ? 700 : ms, 0, io, true);
+  const z = wantNear ? (narrow.matches ? 3.1 : 1.6) : 1, oy = wantNear ? g.h / 2 - g.cy : 0;
+  if (snap || !T["cam.z"]) { put("cam.z", z); put("cam.oy", oy); kick(); return; }
+  to("cam.z", z, ms, 0, io, true);
+  to("cam.oy", oy, ms, 0, io, true);
 }
 
 /* Per frame: the camera, the cue clock, the figures that grow, the crawl of step 1, the lanes to Modal and Exa. */
@@ -1206,8 +1295,9 @@ function crawl(now) {
   if (!S.crawl || !S.r) return;
   const o = S.r.swarms[S.actor];
   if (!o) return;
-  const v = val("crawl", now), from = o.at[0] || o.c0, on = q => [from[0] + (o.end[0] - from[0]) * q, from[1] + (o.end[1] - from[1]) * q];
-  o.ticks.forEach((e, i) => { const p = on((i + 1) * .25); e.setAttribute("cx", f(p[0])); e.setAttribute("cy", f(p[1])); });
+  const v = val("crawl", now), from = o.at[S.crawlK || 0] || o.c0, on = q => [from[0] + (o.end[0] - from[0]) * q, from[1] + (o.end[1] - from[1]) * q];
+  const L = Math.hypot(o.end[0] - from[0], o.end[1] - from[1]) || 1, nx = -(o.end[1] - from[1]) / L * 7 * S.g.u, ny = (o.end[0] - from[0]) / L * 7 * S.g.u;
+  o.ticks.forEach((e, i) => { const p = on((i + 1) * .25); e.setAttribute("d", `M${f(p[0] - nx)} ${f(p[1] - ny)}L${f(p[0] + nx)} ${f(p[1] + ny)}`); });
   if (S.n === 2 && v >= 1) {  // the pulse that stopped in step 1 lands, and the newest result answers
     crawlOff();
     const dot = halo(); if (dot) ping(dot);
@@ -1251,31 +1341,40 @@ function figures(now) {
     }
   }
   if (fig === "bars") {
-    const bv = val("f.bars", now), wv = val("f.why", now), key = bv.toFixed(4) + "|" + wv.toFixed(4);
+    const bv = val("f.bars", now), wv = val("f.why", now), vv = val("f.vote", now), key = bv.toFixed(4) + "|" + wv.toFixed(4) + "|" + vv.toFixed(4);
     if (key !== F.bars) {
       F.bars = key;
-      const N = FACTS.math500_rl ? FACTS.math500_rl.n : 500, H = ["math500_base_plain", "math500_base_cue", "math500_rl"].map(k => (typeof fv(k) === "number" ? fv(k) : 0) / N * BAR.full);
+      const N = N500() || 1, h0 = ["math500_base_plain", "math500_base_cue", "math500_rl"].map(k => (num(k) ?? 0) / N * BAR.full);
+      const hv = [h0[0], ...["vote4_restart_base", "vote4_restart_rl"].map((k, i) => num(k) == null ? h0[i + 1] : num(k) / N * BAR.full)];
+      const H = h0.map((h, i) => h + (hv[i] - h) * vv);  // under the vote, base + cue and RL grow to their vote counts
       const p = [Math.min(1, bv / .6), Math.min(1, Math.max(0, (bv - .2) / .6)), Math.min(1, Math.max(0, (bv - .4) / .6))];
       const rects = svg.querySelectorAll("[data-bar]");
       [0, 1].forEach(i => { const h = H[i] * p[i]; rects[i].setAttribute("y", f(BAR.y0 - h)); rects[i].setAttribute("height", f(h)); });
       const hh = H[2] * p[2], body = Math.min(hh, H[1]), sh = Math.max(0, hh - H[1]);
       rects[2].setAttribute("y", f(BAR.y0 - body)); rects[2].setAttribute("height", f(body));
-      const share = (typeof fv("reliability_share_pct") === "number" ? fv("reliability_share_pct") : 50) / 100, x3 = BAR.xs[2] - BAR.w / 2;
+      const share = (num("reliability_share_pct") ?? 50) / 100, x3 = BAR.xs[2] - BAR.w / 2;
       const ov = sh > 0 ? .8 : 0, Lw = 245 * share, from = [[x3, BAR.y0 - hh, BAR.w * share + ov, sh + ov], [x3 + BAR.w * share, BAR.y0 - hh, BAR.w * (1 - share), sh + ov]];  // overlap a hair, so no seam shows while they look like one bar
       const dest = [[-124, -22, Lw, 44], [-124 + Lw + 3, -22, 245 - Lw, 44]];
       [$("sl-l"), $("sl-r")].forEach((r, j) => {
         const a = from[j], c = dest[j], mix = q => a[q] + (c[q] - a[q]) * wv;
         r.setAttribute("x", f(mix(0))); r.setAttribute("y", f(mix(1))); r.setAttribute("width", f(mix(2))); r.setAttribute("height", f(mix(3)));
       });
-      p.forEach((q, i) => { if ((F["pct" + i] || false) !== q >= 1) { F["pct" + i] = q >= 1; ft("pct" + i, q >= 1); } });
+      if (S.n === STEP.result) p.forEach((q, i) => { if ((F["pct" + i] || false) !== q >= 1) { F["pct" + i] = q >= 1; ft("pct" + i, q >= 1); } });
     }
   }
-  if (fig === "shard" || fig === "wait") {
-    const pre = val("f." + fig + "Pre", now), post = val("f." + fig, now), key = fig + pre.toFixed(4) + "|" + post.toFixed(4);
+  if (fig === "shard") {
+    const pre = val("f.shardPre", now), post = val("f.shard", now), key = pre.toFixed(4) + "|" + post.toFixed(4);
     if (key !== F.ba) {
       F.ba = key;
-      svg.querySelectorAll(`[data-pre="${fig}"]`).forEach(r => r.setAttribute("width", f(220 * pre)));
-      svg.querySelectorAll(`[data-post="${fig}"]`).forEach(r => r.setAttribute("width", f(Number(r.dataset.w) * post)));
+      svg.querySelectorAll('[data-pre="shard"]').forEach(r => r.setAttribute("width", f(220 * pre)));
+      svg.querySelectorAll('[data-post="shard"]').forEach(r => r.setAttribute("width", f(Number(r.dataset.w) * post)));
+    }
+  }
+  if (fig === "waste") {  // each arm's bar shrinks from its first batch to its last; the first stays as the grey bar behind
+    const v = val("f.waste", now);
+    if (v !== F.waste) {
+      F.waste = v;
+      svg.querySelectorAll("[data-waste]").forEach(r => r.setAttribute("width", f(Number(r.dataset.wb) + (Number(r.dataset.wa) - Number(r.dataset.wb)) * v)));
     }
   }
 }
@@ -1337,7 +1436,7 @@ function openPanel(key, from) {
 function resolve(target) {  // what a click on a part of the picture opens in this step
   const st = STEPS[S.n], first = (st.more || []).map(r => r[0]).find(k => PANELS[k]);
   if (target === "board" && S.face !== "dots") return first || "board";
-  if (target === "retro" && S.n === 9 && PANELS["retro/changes"]) return "retro/changes";
+  if (target === "retro" && S.n === STEP.retro && PANELS["retro/changes"]) return "retro/changes";
   if (target === "ext-modal") return PANELS["infra/modal"] ? "infra/modal" : null;
   if (target === "ext-exa") return PANELS["brain/sources"] ? "brain/sources" : null;
   return target;
@@ -1354,7 +1453,7 @@ function litNow() {
     const P = PANELS[k];
     if (P && Array.isArray(P.lit)) {
       return P.lit.flatMap(s => {
-        if (s === "board") return ["board", "board-under"];
+        if (s === "board") return ["board"];
         if (s === "chat") return ["msg"];
         if (s === "retro") return ["review"];
         if (s === "all-swarms") return all("swarm-", m);
@@ -1373,7 +1472,7 @@ function show(changed) {
   svg.classList.toggle("has-focus", !!on);
   svg.querySelectorAll(".part").forEach(p => p.classList.toggle("on", !!on && on.includes(p.dataset.part)));
   const solo = st.solo && !S.panel;
-  if (S.r) S.r.swarms.forEach((o, i) => o.part.classList.toggle("solo", !!solo && i === S.actor));
+  if (S.r) S.r.swarms.forEach((o, i) => { o.part.classList.toggle("solo", !!solo && i === S.actor); o.dots.forEach((d, k) => d.classList.toggle("lone", k === (S.crawlK || 0))); });
   S.ext = new Set([st.ext, ...(on || []).filter(p => p.startsWith("ext-")).map(p => p.slice(4))].filter(Boolean));
   if (S.r) Object.entries(S.r.ext).forEach(([name, x]) => {
     x.el.classList.toggle("show", S.ext.has(name));
@@ -1425,8 +1524,8 @@ function storyHTML() {
   if (fact) h += `<p class="fact">${fact}</p>`;
   if (st.open) h += `<p class="open">${st.open()}</p>`;
   if (st.recap) h += `<ul class="recap">${st.recap().map(([hash, s]) => `<li><a href="#${hash}" data-jump="${HASH[hash]}">${s}</a></li>`).join("")}</ul>`;
-  if (st.url) h += `<a class="url" href="/">${st.url}</a>`;
   if (st.button) h += `<div><a class="walk" href="/">Open the board</a></div>`;
+  if (st.url) h += `<div><a class="url" href="/">${st.url}</a></div>`;
   const more = (st.more || []).filter(([k]) => PANELS[k]);
   if (more.length) h += `<div class="more">${more.map(([k, label], i) => `<button class="q" style="--i:${i}" data-open="${k}">${esc(PANELS[k].name || label)}<span aria-hidden="true">›</span></button>`).join("")}</div>`;
   return h;
@@ -1469,7 +1568,14 @@ function read(d) {
     S.queue = S.queue.slice(-8);
   }
   S.seen = new Set([...d.items.map(i => i.id), ...d.messages.map(x => x.sk)]);
-  if (redraw) enter(S.n, false); else show(false);
+  if (redraw) {  // the scene was rebuilt: put it back in the current step's settled state at once, with no fade
+    const svg = $("svg");
+    svg.classList.add("snap");
+    enter(S.n, false, true);
+    paint(performance.now());
+    svg.getBoundingClientRect();
+    requestAnimationFrame(() => requestAnimationFrame(() => svg.classList.remove("snap")));
+  } else show(false);
 }
 function poll() {
   fetch("/data").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
@@ -1501,6 +1607,20 @@ document.addEventListener("click", e => {
   }
   if (e.target.closest("#stage") && S.panel) go(S.n, null);  // a click on empty scene closes the detail
 });
+/* The theme: the header control and the key t switch it; only colours change, the scene and the step stay. Every
+   colour of the scene is a CSS variable (gradient stops and person hues included), so nothing is recomputed here. */
+const darkSystem = matchMedia("(prefers-color-scheme: dark)");
+const themeNow = () => document.documentElement.dataset.theme || (darkSystem.matches ? "dark" : "light");
+function themeLabel() { const other = themeNow() === "dark" ? "Light" : "Dark"; $("theme").textContent = other; $("theme").setAttribute("aria-label", `${other} colours`); }
+function toggleTheme() {
+  const t = themeNow() === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = t;
+  try { localStorage.setItem("demo-theme", t); } catch (e) { /* storage blocked: the choice lasts until the page closes */ }
+  themeLabel();
+}
+darkSystem.addEventListener("change", themeLabel);
+$("theme").addEventListener("click", e => { toggleTheme(); if (e.detail > 0) e.currentTarget.blur(); });
+themeLabel();
 document.addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
   const k = e.key, onControl = e.target.closest?.("button, a, [role=button], input, textarea, select");
@@ -1513,6 +1633,7 @@ document.addEventListener("keydown", e => {
   else if (k === "ArrowLeft" || k === "PageUp" || (k === " " && e.shiftKey)) { e.preventDefault(); prev(); }
   else if (k === "Home") { e.preventDefault(); go(0, null); }
   else if (k === "End") { e.preventDefault(); go(STEPS.length - 1, null); }
+  else if ((k === "t" || k === "T") && !e.repeat) { e.preventDefault(); toggleTheme(); }
 });
 addEventListener("popstate", () => fromHash(false));
 addEventListener("hashchange", () => fromHash(false));
@@ -1541,6 +1662,23 @@ if (!still.matches) requestAnimationFrame(frame);
 </html>
 """
 
+LIGHT = """--paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
+  --blue: #1f43d6; --red: #c41e34; --on-blue: #fff;
+  --pl: .56; --pc: .15; --dim: .16;
+  --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
+  --rim-a: rgba(16, 24, 32, .28); --rim-b: rgba(16, 24, 32, .58); --rim-c: rgba(16, 24, 32, .9);
+  --glow: 0; --shadow: 1; --spec: 0; --bloom: .4; --core: var(--blue); --lift: 38%;
+  --btn: linear-gradient(#27323e, #0d141b); --btn-ink: #f5f8fa; --btn-edge: rgba(255, 255, 255, .18); --btn-drop: rgba(16, 24, 32, .42);
+  --fbar1: #a3aeb8;"""
+DARK = """--paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #788590; --rule: #1c2630;
+    --blue: #8fb1ff; --red: #ff6b7c; --on-blue: #080c11;
+    --pl: .78; --pc: .13; --dim: .24;
+    --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
+    --rim-a: rgba(255, 255, 255, .92); --rim-b: rgba(255, 255, 255, .1); --rim-c: rgba(143, 177, 255, .45);
+    --glow: 1; --shadow: 0; --spec: 1; --bloom: 1; --core: #f6f9ff; --lift: 55%;
+    --btn: linear-gradient(#f7fafc, #cbd5de); --btn-ink: #080c11; --btn-edge: rgba(255, 255, 255, .7); --btn-drop: rgba(0, 0, 0, .6);
+    --fbar1: #4a5763;"""
+TEMPLATE = TEMPLATE.replace("/*__LIGHT__*/", LIGHT).replace("/*__DARK__*/", DARK)
 FACTS_JSON = as_js(shipped(demo_facts.FACTS))
 SOURCES_JSON = as_js(demo_facts.SOURCES)
 PAGE = (TEMPLATE.replace("__FACTS__", FACTS_JSON).replace("__SOURCES__", SOURCES_JSON)
