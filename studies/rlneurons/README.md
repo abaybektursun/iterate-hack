@@ -73,6 +73,12 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `results/rln4/` | `grader_v3/readout.json` (the final table), `modal_k-01/`, `modal_t2-01/`, `modal_t3-01/` (readouts, metrics, run records), `t1_t2_items-01/` (per-problem T1 against T2, hand labels of the base failures), `offline/`. |
 | `results/day1_wdiff/` | `readout.json` (cells, differences, predictions, check), `merge_stats.json` (RL and Code-RL differences from the base by tensor group and layer; Code against RL cosine) and per cell `<arm>-01/` (`run.json`, `metrics.json`, `merge.json`, `examples.json`). |
 | `results/day1_hard328/` | `readout.json` (seven-cell table, per source, differences, check) and per T 1.0 cell `<arm>-01/` (`run.json`, `metrics.json` from the job, `examples.json`: one right, one wrong). |
+| `specs/SELFDISTILL_2026-11-15.md` | Self-distillation spec: data arms V (vote), U (random), S (shortest), LoRA hyperparameters, merge, cells, seeds, predictions D1-D5, cost. |
+| `jobs/distill_data.py`, `jobs/distill_data_test.py` | Builds the arms from the Day-1 #3 base cue rows on the laptop without reading any gold field; writes `data/selfdistill/arms-v1.json`. Planted cases. |
+| `jobs/distill_train.py` | `train`: LoRA fine-tune (GPU), adapter, `train.json` (loss, generation check, difference statistics against RL - base). `merge`: rebuilds the merged bf16 model from a saved adapter for `run_cell --model-path`, hash checked. |
+| `analysis/selfdistill.py` | Self-distillation readout: five 328 cells beside base cue, theta(0.5) cue, RL plain; sanity cell; training reports; predictions; `--hand`. |
+| `data/selfdistill/arms-v1.json` | Per arm: problem index, sample, tokens, extracted answer and text sha256 of each training example (texts on S3, `r5/selfdistill-01/data/arms-v1.jsonl`). |
+| `results/selfdistill/` | `readout.json`, per cell `<arm>-01/` (`run.json`, `metrics.json`, `examples.json`), `train_<arm>-01/` (`run.json`, `train.json`), `sanity_V_plain_math500_n100-01/`. |
 
 Old paths: `infra/pg/*.py` and `infra/aws_pg/jobs/n13_*.py` are in `lib/`; `infra/aws_pg/jobs/rln*_gen.py` and
 `infra/modal_rln4_k.py` are in `jobs/`; `studies/rlneurons/rln{3,4}/inputs/` is `data/rln{3,4}/`; `rln{3,4}/offline/`,
@@ -774,6 +780,94 @@ resamples, in points.
 - Without the 3 problems that overlap the RL training prompts: 399, 221, 315, 323 of 535.
 - Not run: the vote over four samples after restart (the configuration chosen on MATH-500), and RL-Code with a cue (the
   model writes the cue itself in 10 of 10 smoke answers).
+
+## Self-distillation of the base's own vote (board work-9763ed, spec specs/SELFDISTILL_2026-11-15.md)
+
+Question: does a short supervised fine-tune of the base on its own vote-selected cue samples from MATH-500 (no reward, no gold
+answer) raise it on the 328 harder problems it never saw? Answer: no. The fine-tuned model with the cue scores 167 of 328 against the
+base's 164 (+0.9 points, [-3.0, 4.9]), and the vote selection does no better than a random own sample (V cue - U cue -0.3,
+[-4.9, 4.3]). What it does learn is the format: with the plain prompt it now writes the cue in 328 of 328 answers and scores 161,
+level with the cued base (base plain: 76). All from `results/selfdistill/readout.json` (`analysis/selfdistill.py`); grader v3; T 1.0 /
+top-p 1.0, cap 16,384, one sample per problem; paired bootstrap, 5,000 resamples, seed 0, 95 % percentile interval, in points.
+
+Training data (`jobs/distill_data.py`, `data/selfdistill/arms-v1.json`): attempt 0 of the 4 samples per problem of Day-1 #3 base cue
+(job `abaybektursun-1114-153825-208b`). V: the shortest finished member of the plurality group (at least 2 votes, no tie); 455 of 500
+problems (45 without a plurality). U: one finished sample at random on the same 455. S: the shortest finished sample on the same 455
+(length control; V picks the same sample as S on 422 of 455). Each example: the plain prompt, target = the stored completion with
+its cue plus the stop token. Right under v3 (read after the build): V 439 of 455, U 407, S 416. LoRA rank 16, alpha 32, all q, k,
+v, o, gate, up, down; lr 1e-4 constant, 2 epochs, 16,384 target tokens per step; merged to bf16 with stochastic rounding.
+
+| Arm | Examples | Target tokens | Steps | Loss first / last step | Loss epoch 1 / 2 | ‖D‖ / ‖W‖ | Cosine with RL - base | Train job, folder |
+|---|---|---|---|---|---|---|---|---|
+| V | 455 | 898,064 | 96 | 0.366 / 0.258 | 0.394 / 0.381 | 0.46 % | 0.0025 | `abaybektursun-1114-194352-feef`, `train_V-01/` |
+| U | 455 | 1,353,449 | 140 | 0.387 / 0.290 | 0.441 / 0.429 | 0.58 % | 0.0022 | `abaybektursun-1114-194358-195f`, `train_U-01/` |
+| S | 455 | 839,231 | 91 | 0.372 / 0.286 | 0.388 / 0.375 | 0.44 % | 0.0025 | `abaybektursun-1114-194405-bbb6`, `train_S-01/` |
+
+‖D‖ / ‖W‖ is over the adapted matrices (float32 LoRA difference; RL - base is 0.24 % on the same matrices, so the fine-tune
+moved the weights twice as far as RL did, in a direction nearly orthogonal to it: 0.001 to 0.003 per tensor group). Effective scale
+of the merge 1.000 in every arm; the merge with the adapter scaled by 0 is tensor-identical to the base (asserted).
+
+| Cell (328 problems) | Right (v3) | Cap hits | Rule-A loops | Mean tokens | Starts with cue | Seed base | Job id, run folder |
+|---|---|---|---|---|---|---|---|
+| base, cue | 164 | 77 | 1 | 9,344 | 328 | 3,000,000 | `abaybektursun-1114-151534-e72c`, `day1/hard328_base_cue_t10-01/` |
+| V, plain | 161 | 74 | 0 | 9,075 | 328 | 81,000,000 | `abaybektursun-1114-201013-47c5`, `selfdistill/V_plain-01/` |
+| V, cue | 167 | 74 | 0 | 8,625 | 328 | 82,000,000 | `abaybektursun-1114-201021-095e`, `selfdistill/V_cue-01/` |
+| U, plain | 154 | 80 | 0 | 9,257 | 327 | 83,000,000 | `abaybektursun-1114-201028-1adf`, `selfdistill/U_plain-01/` |
+| U, cue | 168 | 76 | 2 | 9,103 | 328 | 84,000,000 | `abaybektursun-1114-201035-c6c0`, `selfdistill/U_cue-01/` |
+| S, cue | 171 | 65 | 1 | 8,535 | 328 | 85,000,000 | `abaybektursun-1114-201132-3c04`, `selfdistill/S_cue-01/` |
+| theta(0.5), cue | 190 | 73 | 0 | 9,656 | 328 | 73,000,000 | `abaybektursun-1114-181228-34ad`, `day1_wdiff328/theta0.5_cue-01/` |
+| RL, plain | 206 | 20 | 0 | 9,315 | 271 | 3,000,000 | `abaybektursun-1114-151540-86ef`, `day1/hard328_rl_plain_t10-01/` |
+
+| Difference (paired, 328) | Points | 95 % interval |
+|---|---|---|
+| V cue minus base cue | 0.9 | [-3.0, 4.9] |
+| V plain minus base cue | -0.9 | [-5.5, 3.7] |
+| V plain minus U plain | 2.1 | [-2.1, 6.4] |
+| V cue minus U cue | -0.3 | [-4.9, 4.3] |
+| V cue minus S cue | -1.2 | [-5.5, 3.0] |
+| S cue minus base cue | 2.1 | [-2.1, 6.7] |
+| U cue minus base cue | 1.2 | [-3.0, 5.8] |
+| V cue minus theta(0.5) cue | -7.0 | [-11.6, -2.7] |
+| V cue minus RL plain | -11.9 | [-16.2, -7.9] |
+
+Against base cue (164 right, 164 wrong), fixed / lost: V plain 29 / 32, V cue 25 / 22, U plain 22 / 32, U cue 30 / 26, S cue 31 / 24;
+theta(0.5) cue 40 / 14, RL plain 49 / 7. The fine-tuned cells change about as many problems as a fresh sample of the base does, in
+both directions; RL fixes many and loses few.
+
+- Predictions (spec): D1 held (V plain 161, interval of V plain - base cue [-5.5, 3.7] includes 0). D2, the main claim, refuted
+  (+0.9, [-3.0, 4.9]). D3 refuted at both prompt arms (plain +2.1 [-2.1, 6.4], cue -0.3 [-4.9, 4.3]): the vote selection adds
+  nothing over a random own finished sample, and the length control S is no different (V cue - S cue -1.2). D4 held (11.9 points
+  under RL plain). D5 held by its rule (74 and 74 cap hits under 77), but the difference is 3 problems.
+- Published prior confirmed: arXiv 2607.13643 Table 1 (LMSI, vote-filtered SFT on own text, Qwen3-4B-Instruct) moves held-out
+  AIME 2024 / 2025 by 0.0 / -0.8 points. Here on a pretrained base, 455 prompts, the same: the only effect is the format the
+  training texts share (the cue opening), which the plain prompt then reproduces. That gain (base plain 76 -> 161) is the cue's
+  own gain; the cue at inference gives it for free.
+- Sanity cell, in-distribution (the 100 problems were trained on; a check that training worked, not a result): V plain on
+  MATH-500 first 100 scores 90, all 100 answers start with the cue; base plain (T3) 49, base cue (T1) 82 on the same 100. Job
+  `abaybektursun-1114-200050-c260`, `results/selfdistill/sanity_V_plain_math500_n100-01/`.
+- Generation check (`train.json` `generations_before` / `_after`, greedy, 3 training prompts, plain prompt): before training the
+  base writes `.\n\nOkay, so I need to ...` or `.\n\nTo convert ...`; after training all three arms write ` line!\n\nOkay, ...`.
+- Hand read: per cell, 20 finished answers scored wrong (numpy seed 0, `--hand <arm>`): 0 of 20 right in each of the five cells.
+  Five of the 100 have no extracted answer although the finish reason is `stop`: the model emitted the stop token mid-sentence
+  (V plain 61, 179; U cue 91, 291) or after a repeated line (V cue 289: `2026 - 393 = 1633. Not a palindrome.` repeated). V plain,
+  10 answers read (numpy seed 0): worked solutions or long unfinished reasoning at the cap; no empty answers in any cell; no
+  copying of training solutions (largest share of an answer's 12-word sequences found in the V training texts: 1.7 %, mean
+  0.05 %). Two tails: problem 150 (right) `...So he can't afford $51 shoes. Therefore, $50 is the maximum.\n\nSo the answer should
+  be $50.\boxed{50}`; problem 109 (cap hit) `...sum to295.03°, which is roughly 295, but maybe it's 180° when weighted.
+  295.03°=180° +115.`
+- No two compared cells share a seed base; no two cells share an identical non-empty completion for any problem
+  (`identical_nonempty_texts`, all 0).
+- Not done: a second round of distillation (out of scope); more than one sample per cell (the five fine-tuned cells span 154 to
+  171, inside one another's intervals).
+- Cost at 3.95 USD per H100-hour (start to end record of each job, H100 80GB HBM3): smoke 4.4 min 0.29 USD
+  (`abaybektursun-1114-193821-520c`, 8 longest U examples), train V 13.3 min 0.87, U 17.2 min 1.13, S 9.8 min 0.65, sanity 8.6 min
+  0.56, V plain 51.5 min 3.39, V cue 48.2 min 3.17, U plain 52.1 min 3.43, U cue 51.1 min 3.36, S cue 46.0 min 3.03; 19.89 USD in
+  all (limit 25). Training throughput 2,760 to 3,540 target tokens/s; a merge takes 29 to 47 s.
+- Raw answers and adapters: `runs/<job-id>/` after `uv run tools/gpu.py get <job-id>`, and
+  `s3://pg-lineage-769063704696/results/rlneurons/r5/selfdistill-01/<job-id>/` (`answers.jsonl` of the six scored jobs;
+  `adapter.safetensors` and `train.json` of the three training jobs); training texts `.../selfdistill-01/data/arms-v1.jsonl`.
+  Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.selfdistill`; tests
+  `python -m studies.rlneurons.jobs.distill_data_test`; commands of every job in each run folder's `run.json`.
 
 ## Truncation rules at T 1.0: min-p and top-p (board work-180a48, spec specs/SPEC_minp.md)
 

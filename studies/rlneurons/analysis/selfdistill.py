@@ -27,7 +27,8 @@ OUT = STUDY / "results" / "selfdistill"
 CUE = " line!\n\nOkay"
 SOURCE = "abaybektursun-1114-153825-208b"                 # Day-1 #3 base cue rows, the training texts
 SETUP, PY = "bash studies/rlneurons/jobs/setup_vllm.sh && ", "/opt/rln-vllm/bin/python -m studies.rlneurons.jobs."
-TRAIN = {"V": "abaybektursun-XXXX", "U": "abaybektursun-XXXX"}  # arm -> training job: SETUP + PY + "distill_train train --arm <arm>"
+TRAIN = {"V": "abaybektursun-1114-194352-feef", "U": "abaybektursun-1114-194358-195f",
+         "S": "abaybektursun-1114-194405-bbb6"}  # arm -> training job: SETUP + PY + "distill_train train --arm <arm>"
 
 
 def cell_cmd(arm, prompt, cset, seed, n=None):
@@ -36,15 +37,16 @@ def cell_cmd(arm, prompt, cset, seed, n=None):
 
 
 # cell -> (job id, commit, train arm, prompt, seed base)
-SANITY = ("abaybektursun-XXXX", "", "V", "plain", 80000000)
+SANITY = ("abaybektursun-1114-200050-c260", "ec6e0f5d6d6ba1581079faa129c5161f18b00a01", "V", "plain", 80000000)
 CELLS = {
-    "V_plain": ("abaybektursun-XXXX", "", "V", "plain", 81000000),
-    "V_cue": ("abaybektursun-XXXX", "", "V", "cue", 82000000),
-    "U_plain": ("abaybektursun-XXXX", "", "U", "plain", 83000000),
-    "U_cue": ("abaybektursun-XXXX", "", "U", "cue", 84000000),
+    "V_plain": ("abaybektursun-1114-201013-47c5", "ec6e0f5d6d6ba1581079faa129c5161f18b00a01", "V", "plain", 81000000),
+    "V_cue": ("abaybektursun-1114-201021-095e", "ec6e0f5d6d6ba1581079faa129c5161f18b00a01", "V", "cue", 82000000),
+    "U_plain": ("abaybektursun-1114-201028-1adf", "ec6e0f5d6d6ba1581079faa129c5161f18b00a01", "U", "plain", 83000000),
+    "U_cue": ("abaybektursun-1114-201035-c6c0", "ec6e0f5d6d6ba1581079faa129c5161f18b00a01", "U", "cue", 84000000),
+    "S_cue": ("abaybektursun-1114-201132-3c04", "ec6e0f5d6d6ba1581079faa129c5161f18b00a01", "S", "cue", 85000000),   # length control
 }
 BASE, RL, TH = "base_cue_T1", "rl_plain_T1", "theta0.5_cue"
-HAND = {k: [] for k in CELLS}
+HAND = {k: [] for k in CELLS}                       # hand read 2026-11-15: 0 of 20 right in each of the five cells
 
 
 def load(job, idx):
@@ -130,13 +132,12 @@ def main():
                       "run_folder": write_run(arm, job, commit, cell_cmd(tarm, prompt, "hard328", seed), 2.0, rows[arm], sc[arm], out=OUT),
                       "hand_read_right_of_20": HAND[arm]}
         cells[arm]["right_corrected"] = cells[arm]["right_v3"] + len(HAND[arm])
-    seeds = [c["seed_base"] for c in cells.values()]
-    assert len(seeds) == len(set(seeds)), "two compared cells share a seed base"
 
     identical = {f"{x} | {y}": sum(rows[x][i]["text"] == rows[y][i]["text"] != "" for i in clean) for x, y in itertools.combinations(sorted(rows), 2)}
     assert not any(identical.values()), {k: v for k, v in identical.items() if v}
     pairs = [("V_cue", BASE), ("V_plain", BASE), ("V_plain", "U_plain"), ("V_cue", "U_cue"), ("V_cue", RL), ("V_cue", TH),
-             ("U_cue", BASE), ("U_plain", BASE), ("V_cue", "V_plain"), (RL, BASE)]
+             ("U_cue", BASE), ("U_plain", BASE), ("V_cue", "V_plain"), ("S_cue", BASE), ("V_cue", "S_cue"), ("S_cue", "U_cue")]
+    assert all(cells[x]["seed_base"] != cells[y]["seed_base"] for x, y in pairs), "a compared pair shares a seed base"
     diffs = {f"{x} minus {y}": diff(sc, x, y, clean) for x, y in pairs}
     sources = sorted(set(source.values()))
     per_source = {arm: {s: sum(sc[arm][i]["v3"] for i in clean if source[i] == s) for s in sources} for arm in sc}
