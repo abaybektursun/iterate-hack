@@ -2,7 +2,7 @@
  {
   "mechanism": "round-15/account-2/c1@16",
   "claim": "Cued-base wrong answers on hard328 are independent one-off slips that scatter, so a vote of 4 with the real wrong answers is right more often than with every finished wrong answer merged into one (D 0.06 to 0.40).",
-  "result": "PENDING",
+  "result": "result-61c569",
   "measured": "D = 0.109 [0.078, 0.142] (90 % bootstrap over problems), n 88; adversary (wrong answers are shared attractor values at the measured pair agreement 0.218 of 257 pairs, q 0.467, 2,000 simulations) 0.102; fully independent wrong answers would give 0.139",
   "interval": [
    0.0777,
@@ -19,7 +19,7 @@
  {
   "mechanism": "round-15/account-2/c2@16",
   "claim": "RL step 100 plain on MATH-500 gains as much from a vote over its 4 samples (vote right minus mean single-sample right) as the cued base does, 5 to 10 points, not as little as final RL.",
-  "result": "PENDING",
+  "result": "result-61c569",
   "measured": "G = +7.18 points [6.03, 8.37] (90 % bootstrap over problems), n 500; adversary (final RL's vote gain per right count k, weighted by step 100's k distribution) +6.24, inside the interval; G minus adversary +0.95 [-0.09, 2.00]",
   "interval": [
    6.0333,
@@ -36,7 +36,7 @@
  {
   "mechanism": "round-15/account-2/d1@16",
   "claim": "The 1.5x top-8 edit lowers the per-step slip rate the way RL does, so on hard328 problems outside the cued base's 4-sample reach it captures most or all (0.60-1.40) of RL plain's per-sample advantage over a fresh base sample.",
-  "result": "PENDING",
+  "result": "result-61c569",
   "measured": "S = (E - B) / (R - B) = 0.880 [0.686, 1.132] (90 % bootstrap over problems), n 120; adversary (S from overall hard328 accuracy alone: edit 0.611, RL 0.610, cued base 0.483) 1.006. edit0of4 (c3) is the same measurement on the same rows: no separate row",
   "interval": [
    0.6857,
