@@ -1,0 +1,9 @@
+[
+ {
+  "mechanism": "round-15/account-1/c3",
+  "claim": "On hard328 problems where RL plain gets 0 of 4 right, the 1.5x top-8 edit keeps at least most of the cued base's right answers (edit/base right samples in [0.75, 4.0]) rather than copying RL's outcomes (ratio <= 0.5).",
+  "result": "result-f638fb",
+  "verdict": "undecided",
+  "measured": "edit/base right samples 2.0 [90 % 0.8, 5.0] (12 vs 6 right), n 352 edit samples on 88 problems, null value 0 (full copy of RL; null range [0, 0.5], interval wholly above it), account-1 range [0.75, 4.0]; about 990 edit samples would decide"
+ }
+]
