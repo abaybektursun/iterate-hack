@@ -1,0 +1,296 @@
+{
+ "rule": "an answer is degenerate when its most frequent whitespace-separated word makes up more than 20 % of its words and it has at least 200 words.",
+ "cells": {
+  "base_cue": {
+   "0": {
+    "degenerate": 1,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": [
+     [
+      "31^5=286,291,",
+      1
+     ]
+    ]
+   },
+   "1": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   },
+   "2": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   },
+   "3": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   }
+  },
+  "all8": {
+   "0": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   },
+   "1": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   },
+   "2": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   },
+   "3": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   }
+  },
+  "L22-31": {
+   "0": {
+    "degenerate": 2,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": [
+     [
+      "perhaps",
+      2
+     ]
+    ]
+   },
+   "1": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   }
+  },
+  "L0-10": {
+   "0": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   },
+   "1": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   },
+   "2": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   },
+   "3": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   }
+  },
+  "L11-21": {
+   "0": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   },
+   "1": {
+    "degenerate": 1,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": [
+     [
+      "$$",
+      1
+     ]
+    ]
+   }
+  },
+  "d2-8": {
+   "0": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   },
+   "1": {
+    "degenerate": 1,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": [
+     [
+      "12th",
+      1
+     ]
+    ]
+   }
+  },
+  "top1x1.5": {
+   "0": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   },
+   "1": {
+    "degenerate": 1,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": [
+     [
+      "$$",
+      1
+     ]
+    ]
+   }
+  },
+  "top1x1": {
+   "0": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   }
+  },
+  "top1x2": {
+   "0": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   }
+  },
+  "top1x3": {
+   "0": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   }
+  },
+  "L22-31x3.0": {
+   "1": {
+    "degenerate": 3,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 2,
+    "readout_which_rule": 1,
+    "top_words": [
+     [
+      "perhaps,",
+      2
+     ],
+     [
+      "perhaps",
+      1
+     ]
+    ]
+   }
+  },
+  "L22-31x4.5": {
+   "1": {
+    "degenerate": 46,
+    "degenerate_right": 1,
+    "degenerate_cut_off": 24,
+    "readout_which_rule": 135,
+    "top_words": [
+     [
+      "is",
+      24
+     ],
+     [
+      "perhaps",
+      9
+     ],
+     [
+      "which",
+      7
+     ],
+     [
+      "x",
+      2
+     ],
+     [
+      "which,",
+      1
+     ]
+    ]
+   }
+  },
+  "L0-10x0.2": {
+   "1": {
+    "degenerate": 1,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": [
+     [
+      "1",
+      1
+     ]
+    ]
+   }
+  },
+  "rand_L0-10": {
+   "1": {
+    "degenerate": 0,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 0,
+    "readout_which_rule": 0,
+    "top_words": []
+   }
+  },
+  "rand8x1.5": {
+   "0": {
+    "degenerate": 1,
+    "degenerate_right": 0,
+    "degenerate_cut_off": 1,
+    "readout_which_rule": 0,
+    "top_words": [
+     [
+      "+",
+      1
+     ]
+    ]
+   }
+  }
+ }
+}

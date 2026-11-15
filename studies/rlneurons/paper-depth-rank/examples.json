@@ -1,0 +1,482 @@
+{
+ "rule": "per cell: the lowest problem index scored right and the lowest scored wrong among finished answers, of the sample named; text = last 700 characters of the generated answer; hard328 score = score_v3, Code score = passed",
+ "hard328": {
+  "base_cue": {
+   "right": {
+    "problem_index": 0,
+    "unique_id": "aime2022/2022_AIME_I_Problems/Problem_1",
+    "sample": 1,
+    "seed": 3010000,
+    "gold": "116",
+    "extracted_v3": "116",
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 2486,
+    "answer_tail": "289 \\implies a = -\\frac{289}{4} \\]\n\nSubstituting \\( a \\) back into the first equation:\n\\[ 16\\left(-\\frac{289}{4}\\right) + b = -458 \\implies -1156 + b = -458 \\implies b = 698 \\]\n\nThus, \\( P(0) = 698 \\).\n\nNext, we determine the coefficients of \\( Q(x) = -2x^2 + cx + d \\) by solving the system of equations:\n1. \\( 16c + d = 566 \\)\n2. \\( 20c + d = 853 \\)\n\nSubtracting the first equation from the second:\n\\[ 4c = 287 \\implies c = \\frac{287}{4} \\]\n\nSubstituting \\( c \\) back into the first equation:\n\\[ 16\\left(\\frac{287}{4}\\right) + d = 566 \\implies 1148 + d = 566 \\implies d = -582 \\]\n\nThus, \\( Q(0) = -582 \\).\n\nAdding \\( P(0) \\) and \\( Q(0) \\):\n\\[ P(0) + Q(0) = 698 + (-582) = 116 \\]\n\n\\[\n\\boxed{116}\n\\]"
+   },
+   "wrong": {
+    "problem_index": 29,
+    "unique_id": "aime2022/2022_AIME_II_Problems/Problem_9",
+    "sample": 1,
+    "seed": 3010029,
+    "gold": "244",
+    "extracted_v3": "37",
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_new": 14401,
+    "answer_tail": " example, it is found that the number of bounded regions can be expressed as m*n + 2 minus adjustments for unbounded regions.\n\n4. **Formula Derivation**: After considering various approaches and the example provided, the formula for the number of bounded regions is determined to be m*n + 2. This formula fits the example given (m=3, n=2 resulting in 8 regions) and aligns with the reasoning that each segment contributes to the regions, with adjustments for overlapping and unbounded regions.\n\nApplying this formula to the given values m=7 and n=5:\n\n\\[\n\\text{Number of bounded regions} = 7 \\times 5 + 2 = 35 + 2 = 37\n\\]\n\nThus, the number of bounded regions formed when m=7 and n=5 is \\(\\boxed{37}\\)."
+   }
+  },
+  "top8x1.5": {
+   "right": {
+    "problem_index": 0,
+    "unique_id": "aime2022/2022_AIME_I_Problems/Problem_1",
+    "sample": 1,
+    "seed": 3010000,
+    "gold": "116",
+    "extracted_v3": "116",
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 4306,
+    "answer_tail": "16, 54)\\) and \\((20, 53)\\):\n1. \\( Q(16) = 54 \\)\n2. \\( Q(20) = 53 \\)\n\nSet up the equations:\n\\[\n-2(16)^2 + 16e + f = 54 \\implies -512 + 16e + f = 54 \\implies 16e + f = 566 \\quad \\text{(3)}\n\\]\n\\[\n-2(20)^2 + 20e + f = 53 \\implies -800 + 20e + f = 53 \\implies 20e + f = 853 \\quad \\text{(4)}\n\\]\n\nSubtract equation (3) from equation (4):\n\\[\n(20e + f) - (16e + f) = 853 - 566 \\implies 4e = 287 \\implies e = \\frac{287}{4}\n\\]\n\nSubstitute \\( e = \\frac{287}{4} \\) back into equation (3):\n\\[\n16\\left(\\frac{287}{4}\\right) + f = 566 \\implies 1148 + f = 566 \\implies f = -582\n\\]\n\nThus, \\( Q(0) = f = -582 \\).\n\n### Final Calculation:\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\nTherefore, the answer is:\n\\[\n\\boxed{116}\n\\]"
+   },
+   "wrong": {
+    "problem_index": 29,
+    "unique_id": "aime2022/2022_AIME_II_Problems/Problem_9",
+    "sample": 1,
+    "seed": 3010029,
+    "gold": "244",
+    "extracted_v3": "59",
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_new": 14451,
+    "answer_tail": " + 1\n     \\]\n   - This formula is derived from the pattern observed in similar problems and verified with the example \\(m = 3\\) and \\(n = 2\\), which results in 8 regions.\n\n4. **Applying the Formula for \\(m = 7\\) and \\(n = 5\\)**:\n   - Substitute \\(m = 7\\) and \\(n = 5\\) into the formula:\n     \\[\n     2 \\cdot 7 \\cdot 5 - 7 - 5 + 1\n     \\]\n   - Calculate step-by-step:\n     \\[\n     2 \\cdot 7 \\cdot 5 = 70\n     \\]\n     \\[\n     70 - 7 = 63\n     \\]\n     \\[\n     63 - 5 = 58\n     \\]\n     \\[\n     58 + 1 = 59\n     \\]\n\n5. **Verification**:\n   - The formula is derived from the general case and verified with a smaller example, ensuring its correctness.\n\nThus, the number of bounded regions is \\(\\boxed{59}\\)."
+   }
+  },
+  "L0-10": {
+   "right": {
+    "problem_index": 0,
+    "unique_id": "aime2022/2022_AIME_I_Problems/Problem_1",
+    "sample": 1,
+    "seed": 3010000,
+    "gold": "116",
+    "extracted_v3": "116",
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 3969,
+    "answer_tail": " \\implies -512 + 16c + d = 54 \\implies 16c + d = 566 \\quad \\text{(3)}\n\\]\n\nFor \\( x = 20 \\):\n\\[\n-2(20)^2 + 20c + d = 53 \\implies -800 + 20c + d = 53 \\implies 20c + d = 853 \\quad \\text{(4)}\n\\]\n\nSubtracting equation (3) from equation (4):\n\\[\n4c = 287 \\implies c = \\frac{287}{4}\n\\]\n\nSubstituting \\( c = \\frac{287}{4} \\) back into equation (3):\n\\[\n16\\left(\\frac{287}{4}\\right) + d = 566 \\implies 1148 + d = 566 \\implies d = -582\n\\]\n\nNow, we need to find \\( P(0) + Q(0) \\):\n\\[\nP(0) = b \\quad \\text{and} \\quad Q(0) = d\n\\]\n\\[\nP(0) + Q(0) = b + d\n\\]\n\nFrom the equations, we find:\n\\[\nb = 1358 \\quad \\text{and} \\quad d = -582\n\\]\n\\[\nP(0) + Q(0) = 1358 - 582 = 116\n\\]\n\nThus, the final answer is:\n\\[\n\\boxed{116}\n\\]"
+   },
+   "wrong": {
+    "problem_index": 29,
+    "unique_id": "aime2022/2022_AIME_II_Problems/Problem_9",
+    "sample": 1,
+    "seed": 3010029,
+    "gold": "244",
+    "extracted_v3": "22",
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_new": 14486,
+    "answer_tail": "ded regions can be generalized as:\n\n\\[\n\\text{Number of bounded regions} = 2(m + n) - 2\n\\]\n\nThis formula can be derived from the observation that each pair of segments can intersect in at most one point, and these intersections contribute to the bounded regions between the parallel lines.\n\n### Step 3: Apply the Formula to \\( m = 7 \\) and \\( n = 5 \\)\nUsing the formula \\( 2(m + n) - 2 \\):\n\n\\[\n\\text{Number of bounded regions} = 2(7 + 5) - 2\n\\]\n\n\\[\n\\text{Number of bounded regions} = 2 \\times 12 - 2\n\\]\n\n\\[\n\\text{Number of bounded regions} = 24 - 2 = 22\n\\]\n\n### Final Answer\nThe number of bounded regions formed by connecting 7 points on \\( \\ell_A \\) and 5 points on \\( \\ell_B \\) is:\n\n\\[\n\\boxed{22}\n\\]"
+   }
+  },
+  "L11-21": {
+   "right": {
+    "problem_index": 0,
+    "unique_id": "aime2022/2022_AIME_I_Problems/Problem_1",
+    "sample": 1,
+    "seed": 3010000,
+    "gold": "116",
+    "extracted_v3": "116",
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 2708,
+    "answer_tail": "(0) = b = 698 \\).\n\nNext, for \\( Q(x) \\):\nUsing the same points \\((16, 54)\\) and \\((20, 53)\\), we set up the following equations:\n3. \\( -2(16)^2 + 16c + d = 54 \\)\n4. \\( -2(20)^2 + 20c + d = 53 \\)\n\nThese simplify to:\n3. \\( -512 + 16c + d = 54 \\) ⟹ \\( 16c + d = 566 \\)\n4. \\( -800 + 20c + d = 53 \\) ⟹ \\( 20c + d = 853 \\)\n\nSubtracting the third equation from the fourth:\n\\[ (20c + d) - (16c + d) = 853 - 566 \\]\n\\[ 4c = 287 \\]\n\\[ c = \\frac{287}{4} \\]\n\nSubstituting \\( c \\) back into the third equation:\n\\[ 16\\left(\\frac{287}{4}\\right) + d = 566 \\]\n\\[ 1148 + d = 566 \\]\n\\[ d = -582 \\]\n\nSo, \\( Q(0) = d = -582 \\).\n\nFinally, we find \\( P(0) + Q(0) \\):\n\\[ P(0) + Q(0) = 698 + (-582) = 116 \\]\n\n\\[\n\\boxed{116}\n\\]"
+   },
+   "wrong": {
+    "problem_index": 57,
+    "unique_id": "aime2023/2023_AIME_II_Problems/Problem_7",
+    "sample": 1,
+    "seed": 3010057,
+    "gold": "928",
+    "extracted_v3": "2744",
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_new": 13680,
+    "answer_tail": "same color).\n   - Each \\(|A_i|\\) is \\(2 \\times 2^8 = 512\\).\n   - Since there are three rectangles, the total for single rectangles is \\(3 \\times 512 = 1536\\).\n   - For the intersection of two disjoint rectangles, each pair requires \\(2 \\times 2 \\times 2^4 = 64\\). There are three such intersections, so \\(3 \\times 64 = 192\\).\n   - The intersection of all three rectangles requires \\(2^3 = 8\\) colorings.\n\n4. **Applying Inclusion-Exclusion**:\n   - The number of invalid colorings is:\n     \\[\n     |A_1 \\cup A_2 \\cup A_3| = 1536 - 192 + 8 = 1352\n     \\]\n\n5. **Valid Colorings**:\n   - The number of valid colorings is:\n     \\[\n     4096 - 1352 = 2744\n     \\]\n\nThus, the final answer is \\(\\boxed{2744}\\)."
+   }
+  },
+  "L22-31": {
+   "right": {
+    "problem_index": 0,
+    "unique_id": "aime2022/2022_AIME_I_Problems/Problem_1",
+    "sample": 1,
+    "seed": 3010000,
+    "gold": "116",
+    "extracted_v3": "116",
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 2436,
+    "answer_tail": " = c = 698 \\).\n\nFor \\( Q(x) \\):\n- The general form is \\( Q(x) = -2x^2 + dx + e \\).\n- Using the point \\((16, 54)\\):\n  \\[\n  -2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n  \\]\n- Using the point \\((20, 53)\\):\n  \\[\n  -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n  \\]\n- Subtracting the two equations:\n  \\[\n  20d + e - (16d + e) = 853 - 566 \\implies 4d = 287 \\implies d = \\frac{287}{4}\n  \\]\n- Substituting \\( d \\) back to find \\( e \\):\n  \\[\n  16\\left(\\frac{287}{4}\\right) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n  \\]\n- Therefore, \\( Q(0) = e = -582 \\).\n\nSumming the constants:\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\n\\[\n\\boxed{116}\n\\]"
+   },
+   "wrong": {
+    "problem_index": 29,
+    "unique_id": "aime2022/2022_AIME_II_Problems/Problem_9",
+    "sample": 1,
+    "seed": 3010029,
+    "gold": "244",
+    "extracted_v3": "(m-1)(n-1)",
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_new": 16188,
+    "answer_tail": "ed{(m-1)(n-1)}.TMB Essentials 2021-22\n\nInternal Method of Question:\nThe number of bounded regions is given by the formula \\((m-1)(n-1)\\), where \\(m\\) and \\(n\\) are the number of points on the two parallel lines. This is derived from the combinatorial geometry principle that each pair of points from one line and each pair of points from the other line forms a non-intersecting quadrilateral, contributing to the bounded regions. However, the example with \\(m=3\\) and \\(n=2\\) points to many bounded regions, suggesting a different approach. After extensive analysis and considering the problem constraints, the correct formula for the number of bounded regions is:\n\n**Answer:** \\(\\boxed{(m-1)(n-1)}\\)"
+   }
+  },
+  "d2-8": {
+   "right": {
+    "problem_index": 0,
+    "unique_id": "aime2022/2022_AIME_I_Problems/Problem_1",
+    "sample": 1,
+    "seed": 3010000,
+    "gold": "116",
+    "extracted_v3": "116",
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 4418,
+    "answer_tail": "2(256) + 16d + e = 54 \\]\n\\[ -512 + 16d + e = 54 \\]\n\\[ 16d + e = 566 \\quad \\text{(Equation 3)} \\]\n\n\\[ -2(20)^2 + 20d + e = 53 \\]\n\\[ -2(400) + 20d + e = 53 \\]\n\\[ -800 + 20d + e = 53 \\]\n\\[ 20d + e = 853 \\quad \\text{(Equation 4)} \\]\n\nSubtract Equation 3 from Equation 4:\n\n\\[ (20d + e) - (16d + e) = 853 - 566 \\]\n\\[ 4d = 287 \\]\n\\[ d = \\frac{287}{4} \\]\n\nSubstitute \\( d = \\frac{287}{4} \\) back into Equation 3:\n\n\\[ 16\\left(\\frac{287}{4}\\right) + e = 566 \\]\n\\[ 1148 + e = 566 \\]\n\\[ e = -582 \\]\n\nNow, we find \\( P(0) \\) and \\( Q(0) \\):\n\n\\[ P(0) = c = 698 \\]\n\\[ Q(0) = e = -582 \\]\n\nTherefore, the sum \\( P(0) + Q(0) \\) is:\n\n\\[ P(0) + Q(0) = 698 + (-582) = 116 \\]\n\nThus, the final answer is:\n\n\\[\n\\boxed{116}\n\\]"
+   },
+   "wrong": {
+    "problem_index": 63,
+    "unique_id": "aime2024/2024_AIME_I_Problems/Problem_12",
+    "sample": 1,
+    "seed": 3010063,
+    "gold": "385",
+    "extracted_v3": "4",
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_new": 13540,
+    "answer_tail": "r of Intersections\n\nBoth \\( y(x) \\) and \\( x(y) \\) map \\([0, 1]\\) to \\([0, 1]\\). Since \\( y(x) \\) has a period of 1 and \\( x(y) \\) has a period of \\(\\frac{2}{3}\\), we need to consider the intersections within the fundamental domains.\n\n1. **Symmetry and Periodicity:**\n   - The periodicity and symmetry of the functions suggest that they will intersect at specific points due to their constructed ranges and transformations.\n   - Given the periodic nature and the construction of the functions, we can infer that there are four distinct intersection points.\n\n### Final Answer\n\nThe number of intersections of the graphs \\( y = 4g(f(\\sin 2\\pi x)) \\) and \\( x = 4g(f(\\cos 3\\pi y)) \\) is:\n\n\\[\n\\boxed{4}\n\\]"
+   }
+  },
+  "rand_L0-10": {
+   "right": {
+    "problem_index": 0,
+    "unique_id": "aime2022/2022_AIME_I_Problems/Problem_1",
+    "sample": 1,
+    "seed": 3010000,
+    "gold": "116",
+    "extracted_v3": "116",
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 2431,
+    "answer_tail": " \\( Q(x) \\):\n\\[\nQ(x) = -2x^2 + cx + d\n\\]\nUsing the same points:\n1. Plugging in \\( x = 16 \\):\n\\[\n-2(16)^2 + 16c + d = 54 \\implies -512 + 16c + d = 54 \\implies 16c + d = 566 \\quad \\text{(3)}\n\\]\n2. Plugging in \\( x = 20 \\):\n\\[\n-2(20)^2 + 20c + d = 53 \\implies -800 + 20c + d = 53 \\implies 20c + d = 853 \\quad \\text{(4)}\n\\]\n\nSubtracting equation (3) from equation (4):\n\\[\n(20c + d) - (16c + d) = 853 - 566 \\implies 4c = 287 \\implies c = \\frac{287}{4} = 71.75\n\\]\n\nSubstituting \\( c = 71.75 \\) back into equation (3):\n\\[\n16(71.75) + d = 566 \\implies 1148 + d = 566 \\implies d = -582\n\\]\n\nThus, \\( Q(0) = -582 \\).\n\nFinally, we find \\( P(0) + Q(0) \\):\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\n\\[\n\\boxed{116}\n\\]"
+   },
+   "wrong": {
+    "problem_index": 15,
+    "unique_id": "aime2022/2022_AIME_II_Problems/Problem_1",
+    "sample": 1,
+    "seed": 3010015,
+    "gold": "154",
+    "extracted_v3": "286",
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_new": 6493,
+    "answer_tail": "for \\(x\\) such that \\(\\frac{300x - 6600}{7}\\) is positive and integer.\n   - Find \\(x\\) values in the range [23, 50] (since \\(x \\geq 23\\) and \\(y = 50 - x \\geq 0\\)) that satisfy \\(x \\equiv 1 \\mod 7\\): 29, 36, 43, 50.\n\n8. **Calculate minimum adults after the bus arrived:**\n   - For each valid \\(x\\), compute \\(A + x\\):\n     - \\(x = 36\\): \\(A + x = \\frac{132 \\cdot 36 - 2750}{7} = 286\\)\n\n9. **Verification:**\n   - Total people before the bus: \\(T = 600\\)\n   - Adults after the bus: \\(286\\)\n   - Total people after the bus: \\(650\\)\n   - Check proportion: \\(\\frac{286}{650} = \\frac{11}{25}\\)\n\nThus, the minimum number of adults who could have been at the concert after the bus arrived is \\(\\boxed{286}\\)."
+   }
+  },
+  "rand8x1.5": {
+   "right": {
+    "problem_index": 0,
+    "unique_id": "aime2022/2022_AIME_I_Problems/Problem_1",
+    "sample": 0,
+    "seed": 3000000,
+    "gold": "116",
+    "extracted_v3": "116",
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 3087,
+    "answer_tail": " the coefficients of \\(Q(x)\\):\n- \\(Q(x) = -2x^2 + dx + e\\)\n- For \\(x = 16\\), \\(Q(16) = 54\\):\n  \\[\n  -2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n  \\]\n- For \\(x = 20\\), \\(Q(20) = 53\\):\n  \\[\n  -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n  \\]\n- Subtracting these equations:\n  \\[\n  4d = 287 \\implies d = \\frac{287}{4}\n  \\]\n- Substituting \\(d\\) back to find \\(e\\):\n  \\[\n  e = 566 - 16 \\left(\\frac{287}{4}\\right) = 566 - 1148 = -582\n  \\]\n\nThus, \\(Q(x) = -2x^2 + \\frac{287}{4}x - 582\\).\n\nFinally, we find \\(P(0) + Q(0)\\):\n- \\(P(0) = 698\\)\n- \\(Q(0) = -582\\)\n\nTherefore, \\(P(0) + Q(0) = 698 + (-582) = 116\\).\n\nThe final answer is \\(\\boxed{116}\\)."
+   },
+   "wrong": {
+    "problem_index": 15,
+    "unique_id": "aime2022/2022_AIME_II_Problems/Problem_1",
+    "sample": 0,
+    "seed": 3000015,
+    "gold": "154",
+    "extracted_v3": "550",
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_new": 10546,
+    "answer_tail": "132}{5}A + 550\n\\]\nMultiplying through by 5 to clear the fraction:\n\\[\n125A = 132A + 2750\n\\]\nSubtracting \\(132A\\) from both sides:\n\\[\n-7A = 2750\n\\]\nSolving for \\(A\\):\n\\[\nA = -\\frac{2750}{7}\n\\]\n\nSince the number of adults cannot be negative, we conclude there is no solution. However, considering the equations' recurrence leading to a negative number and the problem's requirement to provide a numeric answer, the closest integer approximation from the equations' structure is considered. Despite the negative result, the absolute value closest to the fraction gives the answer derived from the equations' extensive form. \n\nThus, the minimum number of adults after the bus arrived is:\n\\[\n\\boxed{550}\n\\]"
+   }
+  },
+  "top1x1.5": {
+   "right": {
+    "problem_index": 0,
+    "unique_id": "aime2022/2022_AIME_I_Problems/Problem_1",
+    "sample": 1,
+    "seed": 3010000,
+    "gold": "116",
+    "extracted_v3": "116",
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 3589,
+    "answer_tail": "on from the second: \\( 4b = -289 \\) gives \\( b = -\\frac{289}{4} \\)\n- Substituting \\( b \\) back into the first equation: \\( 16(-\\frac{289}{4}) + c = -458 \\) gives \\( c = 698 \\)\n\nFor \\( Q(x) \\):\n3. \\( -2(16^2) + 16d + e = 54 \\) simplifies to \\( 16d + e = 566 \\)\n4. \\( -2(20^2) + 20d + e = 53 \\) simplifies to \\( 20d + e = 853 \\)\n\nSolving these equations:\n- Subtracting the third equation from the fourth: \\( 4d = 287 \\) gives \\( d = \\frac{287}{4} \\)\n- Substituting \\( d \\) back into the third equation: \\( 16(\\frac{287}{4}) + e = 566 \\) gives \\( e = -582 \\)\n\nThus, \\( P(0) = 698 \\) and \\( Q(0) = -582 \\). Therefore, the sum \\( P(0) + Q(0) \\) is:\n\n\\[ P(0) + Q(0) = 698 + (-582) = 116 \\]\n\n\\(\\boxed{116}\\)"
+   },
+   "wrong": {
+    "problem_index": 29,
+    "unique_id": "aime2022/2022_AIME_II_Problems/Problem_9",
+    "sample": 1,
+    "seed": 3010029,
+    "gold": "244",
+    "extracted_v3": "37",
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_new": 15447,
+    "answer_tail": "mula Derivation**:\n   - The total number of regions (including all bounded and unbounded regions) is given by the formula: R = m * n + gcd(m, n) + 1.\n   - This formula accounts for the total regions formed by the segments and intersections, considering the planar arrangement.\n\n4. **Verification with Example**:\n   - For m=3 and n=2, the formula gives R = 3*2 + gcd(3, 2) + 1 = 6 + 1 + 1 = 8, which matches the given example.\n\n5. **Application to the Problem**:\n   - For m=7 and n=5, the gcd(7, 5) = 1.\n   - Using the formula, the total number of regions is R = 7*5 + 1 + 1 = 35 + 1 + 1 = 37.\n\nThus, the number of bounded regions into which the plane is divided when m=7 and n=5 is:\n\n\\[\n\\boxed{37}\n\\]"
+   }
+  },
+  "L22-31x3.0": {
+   "right": {
+    "problem_index": 0,
+    "unique_id": "aime2022/2022_AIME_I_Problems/Problem_1",
+    "sample": 1,
+    "seed": 3010000,
+    "gold": "116",
+    "extracted_v3": "116",
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 3778,
+    "answer_tail": " = 698 \\).\n\nFor \\( Q(x) \\):\n- The general form is \\( Q(x) = -2x^2 + ex + f \\).\n- Substituting the points \\( (16, 54) \\) and \\( (20, 53) \\) gives us two equations:\n  \\[\n  -2(16)^2 + 16e + f = 54 \\quad \\text{and} \\quad -2(20)^2 + 20e + f = 53\n  \\]\n- Simplifying these equations:\n  \\[\n  -512 + 16e + f = 54 \\quad \\text{and} \\quad -800 + 20e + f = 53\n  \\]\n- Subtracting the first equation from the second:\n  \\[\n  4e = 287 \\implies e = \\frac{287}{4} = 71.75\n  \\]\n- Substituting \\( e \\) back into the first equation:\n  \\[\n  16(71.75) + f = 566 \\implies 1148 + f = 566 \\implies f = -582\n  \\]\n\nThus, \\( Q(0) = -582 \\).\n\nFinally, we find:\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\nThe answer is \\(\\boxed{116}\\)."
+   },
+   "wrong": {
+    "problem_index": 29,
+    "unique_id": "aime2022/2022_AIME_II_Problems/Problem_9",
+    "sample": 1,
+    "seed": 3010029,
+    "gold": "244",
+    "extracted_v3": "62",
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_new": 10524,
+    "answer_tail": "7 points on one line and 5 points on another parallel line, we start by understanding the arrangement of the segments and their intersections. The key is to recognize that each set of segments forms a grid-like structure, but the formula for the number of bounded regions is derived from a known result.\n\nThe formula for the number of bounded regions formed by \\( m \\) points on one line and \\( n \\) points on another parallel line is given by:\n\n\\[\nR = m^2 - m + n^2 - n\n\\]\n\nThis formula accounts for the intersections and the regions created by the segments. For \\( m = 7 \\) and \\( n = 5 \\):\n\n\\[\nR = 7^2 - 7 + 5^2 - 5 = 49 - 7 + 25 - 5 = 62\n\\]\n\nThus, the number of bounded regions is \\(\\boxed{62}\\)."
+   }
+  }
+ },
+ "code": {
+  "base_cue": {
+   "right": {
+    "uid": "HumanEval/0",
+    "seed": 51000000,
+    "passed": true,
+    "exit": 0,
+    "mode": "block",
+    "cap_hit": false,
+    "n_new": 1984,
+    "answer_tail": "efficient as the sorting step runs in O(n log n) time complexity.\n2. **Iterating Through Adjacent Pairs**: By iterating through each adjacent pair in the sorted list, we check the difference between consecutive elements. If any difference is less than the threshold, we return True immediately, as this guarantees the presence of two numbers closer than the threshold.\n3. **Edge Cases**: The solution handles edge cases such as empty lists or lists with a single element by returning False, as there can be no pairs in such cases.\n\nThis approach ensures that we efficiently check all potential pairs of numbers, leveraging sorting to reduce the complexity and handle the problem in an optimal manner."
+   },
+   "wrong": {
+    "uid": "HumanEval/101",
+    "seed": 51000101,
+    "passed": false,
+    "exit": 1,
+    "mode": "block",
+    "cap_hit": false,
+    "n_new": 3093,
+    "answer_tail": "ction is used with the pattern `r'[, ]+'`, which matches one or more commas or spaces. This effectively splits the input string at each sequence of commas or spaces.\n- **Filtering Empty Strings**: The `filter(None, ...)` function is used to exclude any empty strings that result from consecutive separators (e.g., \"a,, b\").\n- **Handling Complex Cases**: The approach ensures that leading or trailing separators do not affect the result, and consecutive separators are handled by ensuring no empty strings are included in the final output.\n\nThis solution efficiently handles all edge cases, including consecutive commas or spaces, and leads/trailing separators, resulting in the correct list of words."
+   }
+  },
+  "top8x1.5": {
+   "right": {
+    "uid": "HumanEval/0",
+    "seed": 51000000,
+    "passed": true,
+    "exit": 0,
+    "mode": "block",
+    "cap_hit": false,
+    "n_new": 1869,
+    "answer_tail": "st, and the inner loop starts from the next element of the current outer loop index to avoid redundant checks.\n2. **Absolute Difference Check**: For each pair of elements, we calculate their absolute difference.\n3. **Threshold Comparison**: If any difference is found to be less than the threshold, the function returns `True` immediately.\n4. **Final Check**: If all pairs are checked without finding any close numbers, the function returns `False`.\n\nThis approach efficiently checks all possible pairs in the list, ensuring that we find the solution with a time complexity of O(n²), where n is the number of elements in the list. This is optimal for checking pairwise distances in the given context."
+   },
+   "wrong": {
+    "uid": "HumanEval/1",
+    "seed": 51000001,
+    "passed": false,
+    "exit": 1,
+    "mode": "block",
+    "cap_hit": false,
+    "n_new": 10793,
+    "answer_tail": "hing closing parentheses.\n3. **Processing Parentheses**: As we iterate through the cleaned string:\n   - When an opening parenthesis '(' is encountered, its index is pushed onto the stack.\n   - When a closing parenthesis ')' is encountered, the top index from the stack (matching opening parenthesis) is popped. The substring between the corresponding opening and closing indices is extracted as a valid group.\n4. **Result Collection**: The extracted groups are collected in a list, which is returned as the final result.\n\nThis approach efficiently identifies and extracts all non-nested, balanced groups of parentheses using a stack, ensuring that the solution is both optimal and easy to understand."
+   }
+  },
+  "L0-10": {
+   "right": {
+    "uid": "HumanEval/0",
+    "seed": 51000000,
+    "passed": true,
+    "exit": 0,
+    "mode": "block",
+    "cap_hit": false,
+    "n_new": 2004,
+    "answer_tail": "ition after the outer loop to the end, ensuring each element is paired with every subsequent element.\n- **Absolute Difference Calculation**: For each pair, the absolute difference is calculated.\n- **Comparison**: If the difference is less than the given threshold, the function returns `True` immediately, as this indicates a valid pair.\n- **Efficiency**: The algorithm runs in O(n^2) time complexity, where n is the number of elements in the list. This is efficient enough for most practical purposes, especially given the problem constraints. If a more efficient solution is needed, a sorting approach combined with binary search could be considered, but it is not necessary for this problem setup."
+   },
+   "wrong": {
+    "uid": "HumanEval/1",
+    "seed": 51000001,
+    "passed": false,
+    "exit": 1,
+    "mode": "block",
+    "cap_hit": false,
+    "n_new": 14314,
+    "answer_tail": "s.\n   - If it does, extract the substring from the start index of the unmatched open parenthesis to the current index, and add it to the result list.\n   - Pop the index of the matched opening parenthesis from the stack.\n3. **Handling Unmatched Parentheses**: If a closing parenthesis does not match any unmatched opening parenthesis, skip it by incrementing the index.\n4. **Continue Until Done**: Repeat the process until the entire string is processed, ensuring all balanced groups are extracted and returned as a list.\n\nThis approach efficiently handles nested parentheses groups by using a stack to manage the indices, ensuring each group is extracted in the order they appear in the input string."
+   }
+  },
+  "L11-21": {
+   "right": {
+    "uid": "HumanEval/0",
+    "seed": 51000000,
+    "passed": true,
+    "exit": 0,
+    "mode": "block",
+    "cap_hit": false,
+    "n_new": 2054,
+    "answer_tail": "e list, and the inner loop runs from the immediate next element to the end, avoiding redundant checks.\n- **Absolute Difference Calculation**: For each pair `(i, j)`, we calculate the absolute difference `abs(numbers[i] - numbers[j])`. If this difference is less than the threshold, the function returns `True`.\n- **Early Termination**: The function stops as soon as it finds a valid pair, making the solution efficient in practice.\n\nThis approach ensures that we efficiently check all possible pairs of numbers in the list, providing the correct result with a time complexity of O(n^2), where n is the number of elements in the list. This is acceptable given the problem constraints and requirements."
+   },
+   "wrong": {
+    "uid": "HumanEval/1",
+    "seed": 51000001,
+    "passed": false,
+    "exit": 1,
+    "mode": "block",
+    "cap_hit": false,
+    "n_new": 11585,
+    "answer_tail": "t empty. This marks the end of a group. The group starts after the last opened index and ends at the current closing index. Extract this group and add to `result`.\n\n5. **Post-Processing:**  \n   - After the loop, if the stack is not empty, process the remaining unmatched groups. These represent nested groups that were pushed onto the stack but not yet processed.\n\n6. **Return Result:**  \n   - Return the list of extracted groups.\n\n**Testing the Example:**\n- Input: `( ) (( )) (( )( ))` → Cleaned: `(())(())((()))`\n- Groups extracted: `['()', '(())', '(()())']`\n\nThis solution efficiently splits the string using a stack to track closing parentheses and groups until no more nested structures remain."
+   }
+  },
+  "L22-31": {
+   "right": {
+    "uid": "HumanEval/0",
+    "seed": 51000000,
+    "passed": true,
+    "exit": 0,
+    "mode": "block",
+    "cap_hit": false,
+    "n_new": 1519,
+    "answer_tail": "tart of the list to the end, and the inner loop runs from the next index of the outer loop to the end of the list.\n2. **Absolute Difference Check**: For each pair of numbers, the function calculates the absolute difference. If this difference is less than the given threshold, the function returns `True` immediately.\n3. **Early Termination**: As soon as a valid pair is found, the function terminates early to optimize performance, especially for larger lists where not all pairs need to be checked.\n\nThis approach ensures that we efficiently check all possible pairs of numbers in the list and determine the presence of any pair within the threshold, leading to an optimal solution for the problem."
+   },
+   "wrong": {
+    "uid": "HumanEval/101",
+    "seed": 51000101,
+    "passed": false,
+    "exit": 1,
+    "mode": "block",
+    "cap_hit": false,
+    "n_new": 5573,
+    "answer_tail": "t that the output is a list of words. So perhaps in the problem's context, the input is guaranteed not to have leading or trailing separators. But this is not mentioned in the problem statement.\n\nBut according to the problem's examples, the output is the list of words. So the code using split() is correct, regardless of leading or trailing delimiters.\n\nSo the correct code is as simple as:\n\ndef words_string(s):\n    return s.split()\n\nBut perhaps the user is expecting a more robust solution. For example, leading or trailing whitespace. But split() handles that.\n\nSo the minimal code is:\n\npython\nCODE\ndef words_string(s):\n    return s.split()\n```python\ndef words_string(s):\n    return s.split()\n```"
+   }
+  },
+  "rand8x1.5": {
+   "right": {
+    "uid": "HumanEval/0",
+    "seed": 51000000,
+    "passed": true,
+    "exit": 0,
+    "mode": "block",
+    "cap_hit": false,
+    "n_new": 923,
+    "answer_tail": "de works.\n\nThe second example: [1.0, 2.8, 3.0, 4.0, 5.0, 2.0], threshold 0.3. The difference between 2.8 and 3.0 is 0.2, which is less than 0.3. So returns True. Correct.\n\nSo the code seems to work. Now, the solution should be written as a Python function inside the CODE tags as shown. So the code is as written above.```python\ndef has_close_elements(numbers: List[float], threshold: float) -> bool:\n    \"\"\" Check if in given list of numbers, are any two numbers closer to each other than \n    given threshold. \"\"\"\n    for i in range(len(numbers)):\n        for j in range(i + 1, len(numbers)):\n            if abs(numbers[i] - numbers[j]) < threshold:\n                return True\n    return False\n```"
+   },
+   "wrong": {
+    "uid": "HumanEval/1",
+    "seed": 51000001,
+    "passed": false,
+    "exit": 1,
+    "mode": "block",
+    "cap_hit": false,
+    "n_new": 14090,
+    "answer_tail": "      previous = stack[-1]\n                if previous % 2 == 0:\n                    stack.pop()\n                else:\n                    break\n            if not stack:\n                stack.append(paren_indices[i])\n            else:\n                groups.append( (stack[-1], paren_indices[i]) )\n        i += 1\n    \n    # Final group\n    if stack:\n        groups.append( (stack[0], len(paren_indices)-1) )\n    \n    # Rearrange groups to be in the correct order\n    groups = [scale for (start, scale) in groups]\n    \n    # Correct the pairs\n    groups = [ (start, scale) for (start, scale) in groups ]\n    \n    # Return the groups\n    return [s[start:end+1] for start, end in groups]\n```python\ncode"
+   }
+  }
+ },
+ "d2-8_right_base_cut_off": {
+  "what": "problems where directions 2-8 (sample 1) finish right and the cued base with the same seed (sample 1, seed 3,010,000 + i) hits the 16,384-token cap",
+  "n_problems": 7,
+  "problem_indices": [
+   68,
+   69,
+   185,
+   218,
+   220,
+   285,
+   398
+  ],
+  "example": {
+   "problem_index": 68,
+   "unique_id": "aime2024/2024_AIME_I_Problems/Problem_3",
+   "seed": 3010068,
+   "gold": "809",
+   "d2-8": {
+    "extracted_v3": "809",
+    "score_v3": 1,
+    "n_new": 10080,
+    "answer_tail": "\\[\n   n = 5k + 2 \\quad \\text{for} \\quad k = 0, 1, \\ldots, 404 \\quad (\\text{since } 5 \\times 404 + 2 = 2022)\n   \\]\n   The first term is 2, and the last term is 2022. This forms an arithmetic sequence with the first term \\( a = 2 \\), the common difference \\( d = 5 \\), and the last term \\( l = 2022 \\).\n   \\[\n   l = a + (n-1)d \\implies 2022 = 2 + (n-1) \\times 5 \\implies 2020 = (n-1) \\times 5 \\implies n-1 = 404 \\implies n = 405\n   \\]\n   There are \\( 405 \\) such numbers.\n\nAdding these counts, we get the total number of \\( n \\leq 2024 \\) where Bob can guarantee a win:\n\\[\n404 + 405 = 809\n\\]\n\nThus, the number of positive integers \\( n \\leq 2024 \\) for which Bob can guarantee a win is \\(\\boxed{809}\\)."
+   },
+   "base_cue": {
+    "extracted_v3": null,
+    "score_v3": 0,
+    "cap_hit": true,
+    "n_new": 16384,
+    "answer_tail": "1,2,0,...\n\nThe zeros occur at n=5,7,10,12,15,17,20,...\n\nLooking at these numbers, they are of the form4k+1 or4k+3?\n\nWait, n=5=4*1+1\n\nn=7=4*1+3\n\nn=10=4*2+2\n\nn=12=4*3+0\n\nHmm, not exactly.\n\nAlternatively, the zeros occur every4 numbers starting from n=5:\n\n5,7,10,12,15,17,20,22,...\n\nWait, from5 to7 is2,7 to10 is3,10 to12 is2,12 to15 is3,15 to17 is2,17 to20 is3, i.e., alternating adding2 and3.\n\nBut how"
+   }
+  }
+ },
+ "no_cue": {
+  "rule": "directions 2-8 at 1.5x without the cue (sample 1): lowest problem index right, lowest finished wrong; the plain base (sample 1, same seed) on the same problem",
+  "d2-8_plain_right": {
+   "d2-8_plain": {
+    "problem_index": 0,
+    "seed": 3010000,
+    "gold": "116",
+    "extracted_v3": "116",
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 6481,
+    "first_300": "!\n\nOkay, so I need to solve this problem where there are two quadratic polynomials, P(x) and Q(x). Their leading coefficients are 2 and -2 respectively. Both graphs pass through the points (16,54) and (20,53). The question is asking for P(0) + Q(0). Hmm, let's break this down.\n\nFirst, quadratic poly",
+    "last_300": "c{287}{4}\\) back into Equation 3:\n\\[ 16\\left(\\frac{287}{4}\\right) + e = 566 \\]\n\\[ 4 \\cdot 287 + e = 566 \\]\n\\[ 1148 + e = 566 \\]\n\\[ e = -582 \\]\n\n### Finding \\(P(0) + Q(0)\\):\n\\[ P(0) = c = 698 \\]\n\\[ Q(0) = e = -582 \\]\n\\[ P(0) + Q(0) = 698 + (-582) = 116 \\]\n\nThus, the final answer is:\n\\[\n\\boxed{116}\n\\]"
+   },
+   "base_plain": {
+    "problem_index": 0,
+    "seed": 3010000,
+    "gold": "116",
+    "extracted_v3": null,
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_new": 701,
+    "first_300": ".\n\nGood luck!\n\nLet the quadratic polynomials be given by the following equations:\n\n\\[\nP(x) = 2ax^2 + bx + c\n\\]\n\n\\[\nQ(x) = -2x^2 + dx + e\n\\]\n\nSince the graphs of $P(x)$ and $Q(x)$ pass through the points $(16, 54)$ and $(20, 53)$, we can substitute these points into the polynomials to form a system o",
+    "last_300": "to get everything simplified.\n\n## Step 7: Numerical Solution\n\nBy solving this system one could get the values to calculate the final result.\n\nHere is the final expression:\n\\[\nP(0) + Q(0) = 534 - 512a - 16b - 16d\n\\]\n\nTherefore, for exact values $c$ and $e$ must be calculated by solving.\n\n#### Answer:"
+   }
+  },
+  "d2-8_plain_wrong": {
+   "d2-8_plain": {
+    "problem_index": 57,
+    "seed": 3010057,
+    "gold": "928",
+    "extracted_v3": "2744",
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_new": 12874,
+    "first_300": ".\n\nOkay, so I have this problem here about counting the number of colorings of a regular dodecagon (12-gon) where each vertex is colored red or blue. The key condition is that no four vertices of the same color form a rectangle. Hmm, rectangles on a dodecagon... I need to make sure that there are no",
+    "last_300": "gs where at least one rectangle is monochromatic plus the colorings where two rectangles are monochromatic minus the colorings where all three rectangles are monochromatic.\n   - This gives us:\n     \\[\n     4096 - 1536 + 192 - 8 = 2744\n     \\]\n\nThus, the number of valid colorings is \\(\\boxed{2744}\\)."
+   },
+   "base_plain": {
+    "problem_index": 57,
+    "seed": 3010057,
+    "gold": "928",
+    "extracted_v3": "2744",
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_new": 8576,
+    "first_300": ".\n\nAlright, so I have this problem here about counting the number of colorings of a dodecagon where each vertex is colored either red or blue. The key condition is that no four vertices, all colored the same, form a rectangle. Hmm, okay. Let me think through this step by step.\n\nFirst, the total numb",
+    "last_300": " ∪ B ∪ C| = 1536 - 192 + 8 = 1352\n     \\]\n\n5. **Resulting Valid Colorings**:\n   - Subtract the number of invalid colorings from the total colorings:\n     \\[\n     4096 - 1352 = 2744\n     \\]\n\nThus, the number of valid colorings where no four monochromatic vertices form a rectangle is \\(\\boxed{2744}\\)."
+   }
+  }
+ }
+}

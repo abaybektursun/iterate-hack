@@ -1,0 +1,328 @@
+{"problem_index": 0, "seed": 3000000, "score_v3": 1, "cap_hit": false, "n_new": 3484, "extracted_v3": "116", "gold": "116"}
+{"problem_index": 7, "seed": 3000007, "score_v3": 1, "cap_hit": false, "n_new": 4128, "extracted_v3": "227", "gold": "227"}
+{"problem_index": 15, "seed": 3000015, "score_v3": 1, "cap_hit": false, "n_new": 8340, "extracted_v3": "154", "gold": "154"}
+{"problem_index": 23, "seed": 3000023, "score_v3": 1, "cap_hit": false, "n_new": 3604, "extracted_v3": "21", "gold": "021"}
+{"problem_index": 24, "seed": 3000024, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "112"}
+{"problem_index": 29, "seed": 3000029, "score_v3": 0, "cap_hit": false, "n_new": 10715, "extracted_v3": "128", "gold": "244"}
+{"problem_index": 45, "seed": 3000045, "score_v3": 1, "cap_hit": false, "n_new": 863, "extracted_v3": "220", "gold": "220"}
+{"problem_index": 57, "seed": 3000057, "score_v3": 0, "cap_hit": false, "n_new": 9484, "extracted_v3": "4090", "gold": "928"}
+{"problem_index": 58, "seed": 3000058, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "024"}
+{"problem_index": 60, "seed": 3000060, "score_v3": 1, "cap_hit": false, "n_new": 2645, "extracted_v3": "204", "gold": "204"}
+{"problem_index": 61, "seed": 3000061, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "113"}
+{"problem_index": 62, "seed": 3000062, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "371"}
+{"problem_index": 63, "seed": 3000063, "score_v3": 0, "cap_hit": false, "n_new": 13984, "extracted_v3": "8", "gold": "385"}
+{"problem_index": 65, "seed": 3000065, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "104"}
+{"problem_index": 66, "seed": 3000066, "score_v3": 1, "cap_hit": false, "n_new": 12499, "extracted_v3": "721", "gold": "721"}
+{"problem_index": 67, "seed": 3000067, "score_v3": 1, "cap_hit": false, "n_new": 2710, "extracted_v3": "25", "gold": "025"}
+{"problem_index": 68, "seed": 3000068, "score_v3": 1, "cap_hit": false, "n_new": 9670, "extracted_v3": "809", "gold": "809"}
+{"problem_index": 69, "seed": 3000069, "score_v3": 1, "cap_hit": false, "n_new": 3561, "extracted_v3": "116", "gold": "116"}
+{"problem_index": 70, "seed": 3000070, "score_v3": 0, "cap_hit": false, "n_new": 7966, "extracted_v3": "199 - 55\\sqrt{3}", "gold": "104"}
+{"problem_index": 71, "seed": 3000071, "score_v3": 1, "cap_hit": false, "n_new": 7269, "extracted_v3": "294", "gold": "294"}
+{"problem_index": 72, "seed": 3000072, "score_v3": 0, "cap_hit": false, "n_new": 6184, "extracted_v3": "36\\sqrt{277}", "gold": "540"}
+{"problem_index": 73, "seed": 3000073, "score_v3": 0, "cap_hit": false, "n_new": 12328, "extracted_v3": "103", "gold": "197"}
+{"problem_index": 74, "seed": 3000074, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "480"}
+{"problem_index": 75, "seed": 3000075, "score_v3": 0, "cap_hit": false, "n_new": 15545, "extracted_v3": "109", "gold": "073"}
+{"problem_index": 76, "seed": 3000076, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "468"}
+{"problem_index": 77, "seed": 3000077, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": "0", "gold": "601"}
+{"problem_index": 78, "seed": 3000078, "score_v3": 0, "cap_hit": false, "n_new": 7263, "extracted_v3": "5", "gold": "023"}
+{"problem_index": 79, "seed": 3000079, "score_v3": 0, "cap_hit": false, "n_new": 15798, "extracted_v3": "999", "gold": "321"}
+{"problem_index": 80, "seed": 3000080, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "211"}
+{"problem_index": 81, "seed": 3000081, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "315"}
+{"problem_index": 82, "seed": 3000082, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": "224", "gold": "236"}
+{"problem_index": 83, "seed": 3000083, "score_v3": 1, "cap_hit": false, "n_new": 5714, "extracted_v3": "45", "gold": "045"}
+{"problem_index": 84, "seed": 3000084, "score_v3": 1, "cap_hit": false, "n_new": 8855, "extracted_v3": "33", "gold": "033"}
+{"problem_index": 85, "seed": 3000085, "score_v3": 0, "cap_hit": false, "n_new": 15348, "extracted_v3": "40", "gold": "080"}
+{"problem_index": 86, "seed": 3000086, "score_v3": 1, "cap_hit": false, "n_new": 11507, "extracted_v3": "55", "gold": "055"}
+{"problem_index": 87, "seed": 3000087, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "699"}
+{"problem_index": 88, "seed": 3000088, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "127"}
+{"problem_index": 89, "seed": 3000089, "score_v3": 0, "cap_hit": false, "n_new": 7662, "extracted_v3": "2", "gold": "902"}
+{"problem_index": 90, "seed": 3000090, "score_v3": 1, "cap_hit": false, "n_new": 1967, "extracted_v3": "70", "gold": "70"}
+{"problem_index": 91, "seed": 3000091, "score_v3": 1, "cap_hit": false, "n_new": 11310, "extracted_v3": "588", "gold": "588"}
+{"problem_index": 92, "seed": 3000092, "score_v3": 0, "cap_hit": false, "n_new": 6067, "extracted_v3": "271", "gold": "16"}
+{"problem_index": 93, "seed": 3000093, "score_v3": 1, "cap_hit": false, "n_new": 12500, "extracted_v3": "117", "gold": "117"}
+{"problem_index": 94, "seed": 3000094, "score_v3": 0, "cap_hit": false, "n_new": 6002, "extracted_v3": "-2025", "gold": "279"}
+{"problem_index": 95, "seed": 3000095, "score_v3": 1, "cap_hit": false, "n_new": 7583, "extracted_v3": "504", "gold": "504"}
+{"problem_index": 96, "seed": 3000096, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "821"}
+{"problem_index": 97, "seed": 3000097, "score_v3": 1, "cap_hit": false, "n_new": 6537, "extracted_v3": "77", "gold": "77"}
+{"problem_index": 98, "seed": 3000098, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": "\\dfrac{-2 + \\sqrt{3}}{1}", "gold": "62"}
+{"problem_index": 99, "seed": 3000099, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "81"}
+{"problem_index": 100, "seed": 3000100, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": "\\frac{201 + 7\\sqrt{34}}{34}", "gold": "259"}
+{"problem_index": 101, "seed": 3000101, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "510"}
+{"problem_index": 102, "seed": 3000102, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": "351", "gold": "204"}
+{"problem_index": 103, "seed": 3000103, "score_v3": 0, "cap_hit": false, "n_new": 14197, "extracted_v3": "24", "gold": "60"}
+{"problem_index": 104, "seed": 3000104, "score_v3": 0, "cap_hit": false, "n_new": 13148, "extracted_v3": "441", "gold": "735"}
+{"problem_index": 105, "seed": 3000105, "score_v3": 1, "cap_hit": false, "n_new": 4066, "extracted_v3": "468", "gold": "468"}
+{"problem_index": 106, "seed": 3000106, "score_v3": 1, "cap_hit": false, "n_new": 3132, "extracted_v3": "49", "gold": "49"}
+{"problem_index": 107, "seed": 3000107, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "82"}
+{"problem_index": 108, "seed": 3000108, "score_v3": 1, "cap_hit": false, "n_new": 4684, "extracted_v3": "106", "gold": "106"}
+{"problem_index": 109, "seed": 3000109, "score_v3": 0, "cap_hit": false, "n_new": 12071, "extracted_v3": "672", "gold": "336"}
+{"problem_index": 110, "seed": 3000110, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": "37", "gold": "293"}
+{"problem_index": 111, "seed": 3000111, "score_v3": 0, "cap_hit": false, "n_new": 7800, "extracted_v3": "8653", "gold": "237"}
+{"problem_index": 112, "seed": 3000112, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": "600", "gold": "610"}
+{"problem_index": 113, "seed": 3000113, "score_v3": 1, "cap_hit": false, "n_new": 12100, "extracted_v3": "149", "gold": "149"}
+{"problem_index": 114, "seed": 3000114, "score_v3": 0, "cap_hit": false, "n_new": 15386, "extracted_v3": "60", "gold": "907"}
+{"problem_index": 115, "seed": 3000115, "score_v3": 0, "cap_hit": false, "n_new": 15972, "extracted_v3": "40", "gold": "113"}
+{"problem_index": 116, "seed": 3000116, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "19"}
+{"problem_index": 117, "seed": 3000117, "score_v3": 0, "cap_hit": false, "n_new": 15083, "extracted_v3": "001", "gold": "248"}
+{"problem_index": 118, "seed": 3000118, "score_v3": 0, "cap_hit": false, "n_new": 13086, "extracted_v3": "196", "gold": "104"}
+{"problem_index": 119, "seed": 3000119, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": "188", "gold": "240"}
+{"problem_index": 120, "seed": 3000120, "score_v3": 1, "cap_hit": false, "n_new": 889, "extracted_v3": "27", "gold": "27"}
+{"problem_index": 121, "seed": 3000121, "score_v3": 1, "cap_hit": false, "n_new": 1471, "extracted_v3": "36", "gold": "36"}
+{"problem_index": 122, "seed": 3000122, "score_v3": 1, "cap_hit": false, "n_new": 1021, "extracted_v3": "45", "gold": "45"}
+{"problem_index": 123, "seed": 3000123, "score_v3": 1, "cap_hit": false, "n_new": 2023, "extracted_v3": "3159", "gold": "3159"}
+{"problem_index": 125, "seed": 3000125, "score_v3": 1, "cap_hit": false, "n_new": 9018, "extracted_v3": "7", "gold": "7"}
+{"problem_index": 133, "seed": 3000133, "score_v3": 1, "cap_hit": false, "n_new": 11166, "extracted_v3": "1", "gold": "1"}
+{"problem_index": 134, "seed": 3000134, "score_v3": 1, "cap_hit": false, "n_new": 12329, "extracted_v3": "5", "gold": "5"}
+{"problem_index": 135, "seed": 3000135, "score_v3": 1, "cap_hit": false, "n_new": 12386, "extracted_v3": "-1", "gold": "-1"}
+{"problem_index": 136, "seed": 3000136, "score_v3": 1, "cap_hit": false, "n_new": 5795, "extracted_v3": "8", "gold": "8"}
+{"problem_index": 137, "seed": 3000137, "score_v3": 1, "cap_hit": false, "n_new": 2170, "extracted_v3": "18", "gold": "18"}
+{"problem_index": 139, "seed": 3000139, "score_v3": 1, "cap_hit": false, "n_new": 1722, "extracted_v3": "9", "gold": "9"}
+{"problem_index": 141, "seed": 3000141, "score_v3": 0, "cap_hit": false, "n_new": 2019, "extracted_v3": "8", "gold": "7"}
+{"problem_index": 142, "seed": 3000142, "score_v3": 1, "cap_hit": false, "n_new": 3753, "extracted_v3": "7", "gold": "7"}
+{"problem_index": 144, "seed": 3000144, "score_v3": 1, "cap_hit": false, "n_new": 4968, "extracted_v3": "13", "gold": "13"}
+{"problem_index": 146, "seed": 3000146, "score_v3": 1, "cap_hit": false, "n_new": 2094, "extracted_v3": "13", "gold": "13"}
+{"problem_index": 147, "seed": 3000147, "score_v3": 1, "cap_hit": false, "n_new": 5133, "extracted_v3": "5", "gold": "5"}
+{"problem_index": 148, "seed": 3000148, "score_v3": 1, "cap_hit": true, "n_new": 16384, "extracted_v3": "11", "gold": "11"}
+{"problem_index": 149, "seed": 3000149, "score_v3": 1, "cap_hit": false, "n_new": 2370, "extracted_v3": "18.", "gold": "18"}
+{"problem_index": 150, "seed": 3000150, "score_v3": 1, "cap_hit": false, "n_new": 1557, "extracted_v3": "50", "gold": "50"}
+{"problem_index": 151, "seed": 3000151, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "11"}
+{"problem_index": 152, "seed": 3000152, "score_v3": 1, "cap_hit": false, "n_new": 10879, "extracted_v3": "3", "gold": "3"}
+{"problem_index": 153, "seed": 3000153, "score_v3": 1, "cap_hit": false, "n_new": 2607, "extracted_v3": "194", "gold": "194"}
+{"problem_index": 154, "seed": 3000154, "score_v3": 1, "cap_hit": false, "n_new": 816, "extracted_v3": "1625", "gold": "1625"}
+{"problem_index": 155, "seed": 3000155, "score_v3": 1, "cap_hit": false, "n_new": 7583, "extracted_v3": "4", "gold": "4"}
+{"problem_index": 156, "seed": 3000156, "score_v3": 1, "cap_hit": false, "n_new": 4319, "extracted_v3": "6", "gold": "6"}
+{"problem_index": 157, "seed": 3000157, "score_v3": 1, "cap_hit": false, "n_new": 5295, "extracted_v3": "901", "gold": "901"}
+{"problem_index": 158, "seed": 3000158, "score_v3": 1, "cap_hit": false, "n_new": 4685, "extracted_v3": "144", "gold": "144"}
+{"problem_index": 159, "seed": 3000159, "score_v3": 1, "cap_hit": false, "n_new": 11371, "extracted_v3": "8", "gold": "8"}
+{"problem_index": 160, "seed": 3000160, "score_v3": 1, "cap_hit": false, "n_new": 7344, "extracted_v3": "103", "gold": "103"}
+{"problem_index": 161, "seed": 3000161, "score_v3": 1, "cap_hit": false, "n_new": 3700, "extracted_v3": "3375", "gold": "3375"}
+{"problem_index": 162, "seed": 3000162, "score_v3": 0, "cap_hit": false, "n_new": 12861, "extracted_v3": "2^{-6 - 2\\log_3 2}", "gold": "\\frac{1}{576}"}
+{"problem_index": 163, "seed": 3000163, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "-984"}
+{"problem_index": 164, "seed": 3000164, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "890"}
+{"problem_index": 165, "seed": 3000165, "score_v3": 0, "cap_hit": false, "n_new": 15513, "extracted_v3": "0", "gold": "\\frac{1311}{2017}"}
+{"problem_index": 166, "seed": 3000166, "score_v3": 0, "cap_hit": false, "n_new": 12853, "extracted_v3": "\\sqrt{3} + 1", "gold": "\\frac{9 \\sqrt{23}}{23}"}
+{"problem_index": 167, "seed": 3000167, "score_v3": 0, "cap_hit": false, "n_new": 14736, "extracted_v3": "0", "gold": "1-\\frac{2}{\\pi}"}
+{"problem_index": 168, "seed": 3000168, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "1037"}
+{"problem_index": 169, "seed": 3000169, "score_v3": 0, "cap_hit": false, "n_new": 11854, "extracted_v3": "\\dfrac{3(3 + \\sqrt{29})}{2}, \\dfrac{3(3 - \\sqrt{29})}{2}", "gold": "\\frac{-1+\\sqrt{17}}{2}, \\frac{-1-\\sqrt{17}}{2}"}
+{"problem_index": 170, "seed": 3000170, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "56"}
+{"problem_index": 171, "seed": 3000171, "score_v3": 0, "cap_hit": false, "n_new": 15401, "extracted_v3": "32", "gold": "29"}
+{"problem_index": 172, "seed": 3000172, "score_v3": 0, "cap_hit": false, "n_new": 12713, "extracted_v3": null, "gold": "105"}
+{"problem_index": 173, "seed": 3000173, "score_v3": 0, "cap_hit": false, "n_new": 12962, "extracted_v3": "8", "gold": "2304"}
+{"problem_index": 174, "seed": 3000174, "score_v3": 0, "cap_hit": false, "n_new": 6473, "extracted_v3": "202", "gold": "200"}
+{"problem_index": 175, "seed": 3000175, "score_v3": 0, "cap_hit": false, "n_new": 13540, "extracted_v3": "620", "gold": "6300"}
+{"problem_index": 176, "seed": 3000176, "score_v3": 0, "cap_hit": false, "n_new": 13306, "extracted_v3": "26!", "gold": "2^{25} \\cdot 26!"}
+{"problem_index": 177, "seed": 3000177, "score_v3": 0, "cap_hit": false, "n_new": 13041, "extracted_v3": "1", "gold": "\\frac{2025}{101}"}
+{"problem_index": 178, "seed": 3000178, "score_v3": 0, "cap_hit": false, "n_new": 10401, "extracted_v3": "\\dfrac{2}{3}", "gold": "\\frac{4}{9}"}
+{"problem_index": 179, "seed": 3000179, "score_v3": 0, "cap_hit": false, "n_new": 4917, "extracted_v3": "28", "gold": "\\frac{448}{3}"}
+{"problem_index": 180, "seed": 3000180, "score_v3": 1, "cap_hit": false, "n_new": 3741, "extracted_v3": "26", "gold": "26"}
+{"problem_index": 181, "seed": 3000181, "score_v3": 0, "cap_hit": false, "n_new": 14857, "extracted_v3": "61", "gold": "63"}
+{"problem_index": 182, "seed": 3000182, "score_v3": 1, "cap_hit": false, "n_new": 12882, "extracted_v3": "8\\sqrt{10}", "gold": "8\\sqrt{10}"}
+{"problem_index": 183, "seed": 3000183, "score_v3": 0, "cap_hit": false, "n_new": 14892, "extracted_v3": "100", "gold": "20"}
+{"problem_index": 184, "seed": 3000184, "score_v3": 0, "cap_hit": false, "n_new": 14335, "extracted_v3": "3", "gold": "\\sqrt{23}-2 \\sqrt{3}"}
+{"problem_index": 185, "seed": 3000185, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "9\\sqrt{15}"}
+{"problem_index": 186, "seed": 3000186, "score_v3": 0, "cap_hit": false, "n_new": 16351, "extracted_v3": "\\frac{1}{7}", "gold": "\\frac{7}{18}"}
+{"problem_index": 187, "seed": 3000187, "score_v3": 0, "cap_hit": false, "n_new": 14343, "extracted_v3": "3", "gold": "\\sqrt{6}"}
+{"problem_index": 188, "seed": 3000188, "score_v3": 0, "cap_hit": false, "n_new": 14967, "extracted_v3": "33", "gold": "14+4\\sqrt{37}"}
+{"problem_index": 189, "seed": 3000189, "score_v3": 0, "cap_hit": false, "n_new": 11362, "extracted_v3": "36", "gold": "\\sqrt{\\frac{95}{24}}"}
+{"problem_index": 190, "seed": 3000190, "score_v3": 0, "cap_hit": false, "n_new": 8335, "extracted_v3": "\\dfrac{1}{4n}", "gold": "$\\frac{1}{2 n+2}$"}
+{"problem_index": 191, "seed": 3000191, "score_v3": 0, "cap_hit": false, "n_new": 9139, "extracted_v3": "-2", "gold": "$2^{1009}$"}
+{"problem_index": 192, "seed": 3000192, "score_v3": 0, "cap_hit": false, "n_new": 13410, "extracted_v3": "3", "gold": "2"}
+{"problem_index": 193, "seed": 3000193, "score_v3": 1, "cap_hit": false, "n_new": 8565, "extracted_v3": "2", "gold": "2"}
+{"problem_index": 194, "seed": 3000194, "score_v3": 0, "cap_hit": false, "n_new": 15646, "extracted_v3": "mn", "gold": "$m n-\\lfloor m / 2\\rfloor$"}
+{"problem_index": 195, "seed": 3000195, "score_v3": 1, "cap_hit": false, "n_new": 12059, "extracted_v3": "3n", "gold": "$3 n$"}
+{"problem_index": 196, "seed": 3000196, "score_v3": 1, "cap_hit": false, "n_new": 11132, "extracted_v3": "(2, 4)", "gold": "$(2,4)$"}
+{"problem_index": 199, "seed": 3000199, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "5"}
+{"problem_index": 200, "seed": 3000200, "score_v3": 0, "cap_hit": false, "n_new": 9121, "extracted_v3": "\\dfrac{1}{4}", "gold": "$M=\\frac{9}{32} \\sqrt{2}$"}
+{"problem_index": 201, "seed": 3000201, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "$\\left\\lfloor\\log _{2} n\\right\\rfloor+1$"}
+{"problem_index": 202, "seed": 3000202, "score_v3": 0, "cap_hit": false, "n_new": 13666, "extracted_v3": "n^2", "gold": "$\\frac{n(n+1)(2 n+1)}{6}$"}
+{"problem_index": 203, "seed": 3000203, "score_v3": 0, "cap_hit": false, "n_new": 13507, "extracted_v3": "2018", "gold": "807"}
+{"problem_index": 204, "seed": 3000204, "score_v3": 0, "cap_hit": false, "n_new": 16055, "extracted_v3": "0", "gold": "3"}
+{"problem_index": 205, "seed": 3000205, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "$\\frac{1}{2}$"}
+{"problem_index": 206, "seed": 3000206, "score_v3": 1, "cap_hit": false, "n_new": 9046, "extracted_v3": "1", "gold": "1"}
+{"problem_index": 207, "seed": 3000207, "score_v3": 0, "cap_hit": false, "n_new": 14005, "extracted_v3": "f(x) = x^2", "gold": "$f(n)=n^{2}$"}
+{"problem_index": 209, "seed": 3000209, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "$\\lceil n / 2\\rceil+1$"}
+{"problem_index": 210, "seed": 3000210, "score_v3": 0, "cap_hit": false, "n_new": 12387, "extracted_v3": "n - 1", "gold": "$k=n+1$"}
+{"problem_index": 212, "seed": 3000212, "score_v3": 0, "cap_hit": false, "n_new": 14121, "extracted_v3": "1", "gold": "$(-\\infty, 0) \\cup\\{1\\}$."}
+{"problem_index": 215, "seed": 3000215, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "$2 n^{2}-2 n+1$"}
+{"problem_index": 216, "seed": 3000216, "score_v3": 0, "cap_hit": false, "n_new": 15591, "extracted_v3": "4", "gold": "$t(0,4]$"}
+{"problem_index": 217, "seed": 3000217, "score_v3": 1, "cap_hit": false, "n_new": 5759, "extracted_v3": "f(n) = n", "gold": "$f(n)=n$"}
+{"problem_index": 218, "seed": 3000218, "score_v3": 1, "cap_hit": true, "n_new": 16384, "extracted_v3": "3", "gold": "$k=3$"}
+{"problem_index": 219, "seed": 3000219, "score_v3": 0, "cap_hit": false, "n_new": 9285, "extracted_v3": "2n^2", "gold": "$\\frac{n(n+1)}{2}$"}
+{"problem_index": 220, "seed": 3000220, "score_v3": 1, "cap_hit": false, "n_new": 15059, "extracted_v3": "n", "gold": "$N=n$"}
+{"problem_index": 221, "seed": 3000221, "score_v3": 1, "cap_hit": false, "n_new": 1916, "extracted_v3": "2", "gold": "2"}
+{"problem_index": 222, "seed": 3000222, "score_v3": 0, "cap_hit": false, "n_new": 3775, "extracted_v3": "6\\sqrt{6} - 6", "gold": "210"}
+{"problem_index": 223, "seed": 3000223, "score_v3": 1, "cap_hit": false, "n_new": 2958, "extracted_v3": "\\dfrac{2}{5}", "gold": "$\\frac{2}{5}$"}
+{"problem_index": 224, "seed": 3000224, "score_v3": 1, "cap_hit": false, "n_new": 2263, "extracted_v3": "48", "gold": "48"}
+{"problem_index": 225, "seed": 3000225, "score_v3": 1, "cap_hit": false, "n_new": 2982, "extracted_v3": "1000", "gold": "1000"}
+{"problem_index": 226, "seed": 3000226, "score_v3": 1, "cap_hit": false, "n_new": 1992, "extracted_v3": "1", "gold": "1"}
+{"problem_index": 227, "seed": 3000227, "score_v3": 1, "cap_hit": false, "n_new": 2101, "extracted_v3": "8", "gold": "$8 \\%$"}
+{"problem_index": 228, "seed": 3000228, "score_v3": 0, "cap_hit": false, "n_new": 4953, "extracted_v3": "16", "gold": "34"}
+{"problem_index": 229, "seed": 3000229, "score_v3": 1, "cap_hit": false, "n_new": 3324, "extracted_v3": "60", "gold": "60"}
+{"problem_index": 230, "seed": 3000230, "score_v3": 1, "cap_hit": false, "n_new": 618, "extracted_v3": "40", "gold": "40"}
+{"problem_index": 231, "seed": 3000231, "score_v3": 1, "cap_hit": false, "n_new": 4389, "extracted_v3": "10", "gold": "10"}
+{"problem_index": 232, "seed": 3000232, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "202"}
+{"problem_index": 233, "seed": 3000233, "score_v3": 1, "cap_hit": false, "n_new": 892, "extracted_v3": "1000", "gold": "1000"}
+{"problem_index": 234, "seed": 3000234, "score_v3": 0, "cap_hit": false, "n_new": 5797, "extracted_v3": "\\dfrac{1}{3}", "gold": "$\\frac{2}{9}$"}
+{"problem_index": 235, "seed": 3000235, "score_v3": 1, "cap_hit": false, "n_new": 5483, "extracted_v3": "6", "gold": "6"}
+{"problem_index": 236, "seed": 3000236, "score_v3": 1, "cap_hit": false, "n_new": 1345, "extracted_v3": "\\dfrac{3}{4}", "gold": "$\\frac{3}{4}$"}
+{"problem_index": 237, "seed": 3000237, "score_v3": 1, "cap_hit": false, "n_new": 1561, "extracted_v3": "153", "gold": "153"}
+{"problem_index": 238, "seed": 3000238, "score_v3": 0, "cap_hit": false, "n_new": 15563, "extracted_v3": "\\dfrac{8}{21}", "gold": "$\\frac{10}{21}$"}
+{"problem_index": 239, "seed": 3000239, "score_v3": 1, "cap_hit": false, "n_new": 6132, "extracted_v3": "590", "gold": "590"}
+{"problem_index": 240, "seed": 3000240, "score_v3": 1, "cap_hit": false, "n_new": 9609, "extracted_v3": "\\dfrac{10}{3}", "gold": "$\\frac{10}{3}$"}
+{"problem_index": 241, "seed": 3000241, "score_v3": 1, "cap_hit": false, "n_new": 3207, "extracted_v3": "33", "gold": "33"}
+{"problem_index": 242, "seed": 3000242, "score_v3": 1, "cap_hit": false, "n_new": 6181, "extracted_v3": "-900", "gold": "-900"}
+{"problem_index": 243, "seed": 3000243, "score_v3": 1, "cap_hit": false, "n_new": 6847, "extracted_v3": "\\dfrac{1}{1 - \\log_2 3}", "gold": "$\\frac{\\log 2}{\\log 2-\\log 3}$"}
+{"problem_index": 244, "seed": 3000244, "score_v3": 1, "cap_hit": false, "n_new": 14841, "extracted_v3": "11", "gold": "11"}
+{"problem_index": 245, "seed": 3000245, "score_v3": 1, "cap_hit": false, "n_new": 821, "extracted_v3": "$x = 2$", "gold": "2"}
+{"problem_index": 246, "seed": 3000246, "score_v3": 0, "cap_hit": false, "n_new": 6583, "extracted_v3": "\\dfrac{4\\sqrt{69}}{7}", "gold": "5"}
+{"problem_index": 247, "seed": 3000247, "score_v3": 0, "cap_hit": false, "n_new": 9548, "extracted_v3": "\\frac{793}{2048}", "gold": "$\\frac{11}{32}$"}
+{"problem_index": 248, "seed": 3000248, "score_v3": 0, "cap_hit": false, "n_new": 13048, "extracted_v3": "11", "gold": "12"}
+{"problem_index": 249, "seed": 3000249, "score_v3": 0, "cap_hit": false, "n_new": 10947, "extracted_v3": null, "gold": "$\\frac{11}{18}$"}
+{"problem_index": 250, "seed": 3000250, "score_v3": 1, "cap_hit": false, "n_new": 10588, "extracted_v3": "233", "gold": "233"}
+{"problem_index": 251, "seed": 3000251, "score_v3": 1, "cap_hit": false, "n_new": 4543, "extracted_v3": "29", "gold": "29"}
+{"problem_index": 252, "seed": 3000252, "score_v3": 1, "cap_hit": false, "n_new": 9824, "extracted_v3": "9", "gold": "9"}
+{"problem_index": 253, "seed": 3000253, "score_v3": 1, "cap_hit": false, "n_new": 3746, "extracted_v3": "\\dfrac{1}{90}", "gold": "$\\frac{1}{90}$"}
+{"problem_index": 254, "seed": 3000254, "score_v3": 1, "cap_hit": false, "n_new": 4864, "extracted_v3": "\\sqrt{3}", "gold": "$\\sqrt{3}$"}
+{"problem_index": 255, "seed": 3000255, "score_v3": 1, "cap_hit": false, "n_new": 10886, "extracted_v3": "\\dfrac{\\pi^2 - 9}{9}", "gold": "$\\frac{\\pi^{2}-9}{9}$"}
+{"problem_index": 256, "seed": 3000256, "score_v3": 1, "cap_hit": false, "n_new": 3989, "extracted_v3": "-\\dfrac{1}{1997}", "gold": "$\\frac{-1}{1997}$"}
+{"problem_index": 257, "seed": 3000257, "score_v3": 1, "cap_hit": false, "n_new": 3118, "extracted_v3": "158", "gold": "158"}
+{"problem_index": 258, "seed": 3000258, "score_v3": 0, "cap_hit": false, "n_new": 5499, "extracted_v3": "2b", "gold": "$\\frac{a b}{2}$"}
+{"problem_index": 259, "seed": 3000259, "score_v3": 1, "cap_hit": false, "n_new": 2823, "extracted_v3": "-1", "gold": "-1"}
+{"problem_index": 260, "seed": 3000260, "score_v3": 1, "cap_hit": false, "n_new": 3638, "extracted_v3": "27", "gold": "27"}
+{"problem_index": 261, "seed": 3000261, "score_v3": 0, "cap_hit": false, "n_new": 3354, "extracted_v3": "6", "gold": "9"}
+{"problem_index": 262, "seed": 3000262, "score_v3": 1, "cap_hit": false, "n_new": 5796, "extracted_v3": "13", "gold": "13"}
+{"problem_index": 263, "seed": 3000263, "score_v3": 1, "cap_hit": false, "n_new": 6471, "extracted_v3": "\\sqrt{6}", "gold": "$\\sqrt{6}$"}
+{"problem_index": 264, "seed": 3000264, "score_v3": 1, "cap_hit": false, "n_new": 1855, "extracted_v3": "(4, \\log 2)", "gold": "$(4, \\log _{10} 2)$"}
+{"problem_index": 265, "seed": 3000265, "score_v3": 1, "cap_hit": false, "n_new": 1317, "extracted_v3": "1938", "gold": "1938"}
+{"problem_index": 266, "seed": 3000266, "score_v3": 1, "cap_hit": false, "n_new": 2437, "extracted_v3": "\\dfrac{9}{25}", "gold": "$\\frac{9}{25}$"}
+{"problem_index": 267, "seed": 3000267, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "19133"}
+{"problem_index": 268, "seed": 3000268, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "979"}
+{"problem_index": 269, "seed": 3000269, "score_v3": 0, "cap_hit": false, "n_new": 9526, "extracted_v3": "10", "gold": "7"}
+{"problem_index": 270, "seed": 3000270, "score_v3": 1, "cap_hit": false, "n_new": 2740, "extracted_v3": "233", "gold": "233"}
+{"problem_index": 271, "seed": 3000271, "score_v3": 1, "cap_hit": false, "n_new": 801, "extracted_v3": "136", "gold": "136"}
+{"problem_index": 272, "seed": 3000272, "score_v3": 1, "cap_hit": false, "n_new": 2895, "extracted_v3": "\\dfrac{5}{2}", "gold": "$\\frac{5}{2}$"}
+{"problem_index": 274, "seed": 3000274, "score_v3": 0, "cap_hit": false, "n_new": 9557, "extracted_v3": "994", "gold": "10"}
+{"problem_index": 275, "seed": 3000275, "score_v3": 1, "cap_hit": false, "n_new": 7977, "extracted_v3": "(-266, -3, -28)", "gold": "$(-266,-3,-28)$"}
+{"problem_index": 276, "seed": 3000276, "score_v3": 1, "cap_hit": false, "n_new": 2635, "extracted_v3": "1", "gold": "1"}
+{"problem_index": 277, "seed": 3000277, "score_v3": 1, "cap_hit": false, "n_new": 1828, "extracted_v3": "\\dfrac{8}{5}", "gold": "$\\frac{8}{5}$"}
+{"problem_index": 278, "seed": 3000278, "score_v3": 0, "cap_hit": false, "n_new": 7046, "extracted_v3": "18", "gold": "$\\frac{94}{4225}$"}
+{"problem_index": 279, "seed": 3000279, "score_v3": 1, "cap_hit": false, "n_new": 2505, "extracted_v3": "\\dfrac{12}{169}", "gold": "$\\frac{12}{169}$"}
+{"problem_index": 280, "seed": 3000280, "score_v3": 1, "cap_hit": false, "n_new": 975, "extracted_v3": "3", "gold": "3"}
+{"problem_index": 281, "seed": 3000281, "score_v3": 1, "cap_hit": false, "n_new": 10525, "extracted_v3": "96", "gold": "96"}
+{"problem_index": 282, "seed": 3000282, "score_v3": 0, "cap_hit": false, "n_new": 8262, "extracted_v3": "8", "gold": "18"}
+{"problem_index": 283, "seed": 3000283, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "5762"}
+{"problem_index": 284, "seed": 3000284, "score_v3": 0, "cap_hit": false, "n_new": 15459, "extracted_v3": "\\dfrac{4}{27}", "gold": "$\\frac{1}{54}$"}
+{"problem_index": 285, "seed": 3000285, "score_v3": 1, "cap_hit": false, "n_new": 9596, "extracted_v3": "5", "gold": "5"}
+{"problem_index": 286, "seed": 3000286, "score_v3": 0, "cap_hit": false, "n_new": 15546, "extracted_v3": "34", "gold": "37"}
+{"problem_index": 287, "seed": 3000287, "score_v3": 1, "cap_hit": false, "n_new": 5396, "extracted_v3": "4320", "gold": "4320"}
+{"problem_index": 288, "seed": 3000288, "score_v3": 0, "cap_hit": false, "n_new": 7794, "extracted_v3": "18", "gold": "48"}
+{"problem_index": 289, "seed": 3000289, "score_v3": 0, "cap_hit": false, "n_new": 13609, "extracted_v3": null, "gold": "2019"}
+{"problem_index": 290, "seed": 3000290, "score_v3": 1, "cap_hit": false, "n_new": 9380, "extracted_v3": "50", "gold": "50"}
+{"problem_index": 291, "seed": 3000291, "score_v3": 0, "cap_hit": false, "n_new": 10865, "extracted_v3": "20", "gold": "140"}
+{"problem_index": 292, "seed": 3000292, "score_v3": 1, "cap_hit": false, "n_new": 1084, "extracted_v3": "0", "gold": "0"}
+{"problem_index": 293, "seed": 3000293, "score_v3": 1, "cap_hit": false, "n_new": 4611, "extracted_v3": "74", "gold": "74"}
+{"problem_index": 294, "seed": 3000294, "score_v3": 0, "cap_hit": false, "n_new": 11748, "extracted_v3": "\\dfrac{79}{3}\\pi", "gold": "$\\frac{67 \\pi}{3}$"}
+{"problem_index": 295, "seed": 3000295, "score_v3": 1, "cap_hit": false, "n_new": 11540, "extracted_v3": "8", "gold": "8"}
+{"problem_index": 296, "seed": 3000296, "score_v3": 1, "cap_hit": false, "n_new": 1258, "extracted_v3": "19", "gold": "19"}
+{"problem_index": 297, "seed": 3000297, "score_v3": 1, "cap_hit": false, "n_new": 1614, "extracted_v3": "\\dfrac{27}{2}", "gold": "$\\frac{27}{2}$"}
+{"problem_index": 298, "seed": 3000298, "score_v3": 1, "cap_hit": false, "n_new": 1989, "extracted_v3": "114", "gold": "114"}
+{"problem_index": 299, "seed": 3000299, "score_v3": 1, "cap_hit": false, "n_new": 5141, "extracted_v3": "60", "gold": "60"}
+{"problem_index": 300, "seed": 3000300, "score_v3": 0, "cap_hit": false, "n_new": 9550, "extracted_v3": "3610.5", "gold": "2302"}
+{"problem_index": 301, "seed": 3000301, "score_v3": 0, "cap_hit": false, "n_new": 12194, "extracted_v3": null, "gold": "99956"}
+{"problem_index": 302, "seed": 3000302, "score_v3": 0, "cap_hit": false, "n_new": 15745, "extracted_v3": "210", "gold": "46760"}
+{"problem_index": 303, "seed": 3000303, "score_v3": 1, "cap_hit": false, "n_new": 3567, "extracted_v3": "2028", "gold": "2028"}
+{"problem_index": 304, "seed": 3000304, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "-2019"}
+{"problem_index": 305, "seed": 3000305, "score_v3": 1, "cap_hit": false, "n_new": 5345, "extracted_v3": "14400", "gold": "14400"}
+{"problem_index": 306, "seed": 3000306, "score_v3": 1, "cap_hit": false, "n_new": 11903, "extracted_v3": "-7", "gold": "-7"}
+{"problem_index": 307, "seed": 3000307, "score_v3": 0, "cap_hit": false, "n_new": 12079, "extracted_v3": "10", "gold": "$\\sqrt{130}$"}
+{"problem_index": 308, "seed": 3000308, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "17"}
+{"problem_index": 309, "seed": 3000309, "score_v3": 1, "cap_hit": false, "n_new": 2234, "extracted_v3": "\\sqrt{15}", "gold": "$\\sqrt{15}$"}
+{"problem_index": 310, "seed": 3000310, "score_v3": 0, "cap_hit": false, "n_new": 11394, "extracted_v3": "44", "gold": "32"}
+{"problem_index": 312, "seed": 3000312, "score_v3": 0, "cap_hit": false, "n_new": 9637, "extracted_v3": "\\dfrac{16}{81}", "gold": "$\\frac{1}{16}$"}
+{"problem_index": 313, "seed": 3000313, "score_v3": 0, "cap_hit": false, "n_new": 15345, "extracted_v3": "42", "gold": "146"}
+{"problem_index": 314, "seed": 3000314, "score_v3": 1, "cap_hit": false, "n_new": 1474, "extracted_v3": "37", "gold": "37"}
+{"problem_index": 315, "seed": 3000315, "score_v3": 0, "cap_hit": false, "n_new": 4014, "extracted_v3": "5", "gold": "11"}
+{"problem_index": 316, "seed": 3000316, "score_v3": 1, "cap_hit": false, "n_new": 4131, "extracted_v3": "\\dfrac{7}{128}", "gold": "$\\frac{7}{128}$"}
+{"problem_index": 317, "seed": 3000317, "score_v3": 0, "cap_hit": false, "n_new": 1609, "extracted_v3": "136", "gold": "820"}
+{"problem_index": 318, "seed": 3000318, "score_v3": 0, "cap_hit": false, "n_new": 13077, "extracted_v3": "8", "gold": "6"}
+{"problem_index": 319, "seed": 3000319, "score_v3": 1, "cap_hit": false, "n_new": 10481, "extracted_v3": "6", "gold": "6"}
+{"problem_index": 320, "seed": 3000320, "score_v3": 0, "cap_hit": false, "n_new": 11420, "extracted_v3": "\\dfrac{15\\sqrt{53}}{28}", "gold": "$\\sqrt{26}$"}
+{"problem_index": 321, "seed": 3000321, "score_v3": 0, "cap_hit": false, "n_new": 3119, "extracted_v3": "\\dfrac{396}{961}", "gold": "$\\frac{9}{17}$"}
+{"problem_index": 322, "seed": 3000322, "score_v3": 1, "cap_hit": false, "n_new": 2886, "extracted_v3": "-10", "gold": "-10"}
+{"problem_index": 323, "seed": 3000323, "score_v3": 1, "cap_hit": false, "n_new": 3706, "extracted_v3": "20", "gold": "20"}
+{"problem_index": 324, "seed": 3000324, "score_v3": 1, "cap_hit": false, "n_new": 2633, "extracted_v3": "2018", "gold": "2018"}
+{"problem_index": 325, "seed": 3000325, "score_v3": 1, "cap_hit": false, "n_new": 1154, "extracted_v3": "28", "gold": "28"}
+{"problem_index": 326, "seed": 3000326, "score_v3": 1, "cap_hit": false, "n_new": 6832, "extracted_v3": "79", "gold": "79"}
+{"problem_index": 327, "seed": 3000327, "score_v3": 1, "cap_hit": false, "n_new": 5921, "extracted_v3": "7", "gold": "7"}
+{"problem_index": 328, "seed": 3000328, "score_v3": 1, "cap_hit": false, "n_new": 3783, "extracted_v3": "\\sqrt{2}", "gold": "$\\sqrt{2}$"}
+{"problem_index": 329, "seed": 3000329, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "23"}
+{"problem_index": 330, "seed": 3000330, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": "\\left( \\frac{\\sqrt{6} - \\sqrt{2 + \\sqrt{3}}}{3} \\right)^2", "gold": "$\\frac{15-8 \\sqrt{3}}{33}$"}
+{"problem_index": 331, "seed": 3000331, "score_v3": 1, "cap_hit": false, "n_new": 4863, "extracted_v3": "4", "gold": "4"}
+{"problem_index": 332, "seed": 3000332, "score_v3": 1, "cap_hit": false, "n_new": 4228, "extracted_v3": "12", "gold": "12"}
+{"problem_index": 333, "seed": 3000333, "score_v3": 0, "cap_hit": false, "n_new": 7757, "extracted_v3": "11", "gold": "5"}
+{"problem_index": 334, "seed": 3000334, "score_v3": 0, "cap_hit": false, "n_new": 9679, "extracted_v3": "8", "gold": "$2 \\sqrt{10}$"}
+{"problem_index": 335, "seed": 3000335, "score_v3": 0, "cap_hit": false, "n_new": 7625, "extracted_v3": "(0, -1)", "gold": "$\\quad(2+\\sqrt{2}, 1+\\sqrt{2})$"}
+{"problem_index": 336, "seed": 3000336, "score_v3": 0, "cap_hit": false, "n_new": 13580, "extracted_v3": "7", "gold": "10"}
+{"problem_index": 337, "seed": 3000337, "score_v3": 1, "cap_hit": false, "n_new": 3723, "extracted_v3": "36", "gold": "36"}
+{"problem_index": 338, "seed": 3000338, "score_v3": 1, "cap_hit": false, "n_new": 1381, "extracted_v3": "19", "gold": "19"}
+{"problem_index": 339, "seed": 3000339, "score_v3": 1, "cap_hit": false, "n_new": 3054, "extracted_v3": "10", "gold": "10"}
+{"problem_index": 340, "seed": 3000340, "score_v3": 1, "cap_hit": false, "n_new": 1787, "extracted_v3": "6", "gold": "6"}
+{"problem_index": 341, "seed": 3000341, "score_v3": 1, "cap_hit": false, "n_new": 13250, "extracted_v3": "2 - \\sqrt{3}", "gold": "$2-\\sqrt{3}$"}
+{"problem_index": 342, "seed": 3000342, "score_v3": 0, "cap_hit": false, "n_new": 15877, "extracted_v3": "167", "gold": "$\\frac{567}{4}$"}
+{"problem_index": 343, "seed": 3000343, "score_v3": 0, "cap_hit": false, "n_new": 13733, "extracted_v3": "6\\pi", "gold": "48"}
+{"problem_index": 344, "seed": 3000344, "score_v3": 0, "cap_hit": false, "n_new": 7479, "extracted_v3": "540", "gold": "990"}
+{"problem_index": 345, "seed": 3000345, "score_v3": 0, "cap_hit": false, "n_new": 16330, "extracted_v3": "\\dfrac{\\sqrt{2}}{3}", "gold": "$4-2 \\sqrt{3}$"}
+{"problem_index": 346, "seed": 3000346, "score_v3": 1, "cap_hit": false, "n_new": 7791, "extracted_v3": "44", "gold": "44"}
+{"problem_index": 347, "seed": 3000347, "score_v3": 1, "cap_hit": false, "n_new": 4617, "extracted_v3": "35", "gold": "35"}
+{"problem_index": 348, "seed": 3000348, "score_v3": 0, "cap_hit": false, "n_new": 7675, "extracted_v3": "10", "gold": "9"}
+{"problem_index": 349, "seed": 3000349, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "100337"}
+{"problem_index": 350, "seed": 3000350, "score_v3": 1, "cap_hit": true, "n_new": 16384, "extracted_v3": "84", "gold": "84"}
+{"problem_index": 351, "seed": 3000351, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": "f(1,1, any d).", "gold": "529"}
+{"problem_index": 352, "seed": 3000352, "score_v3": 1, "cap_hit": false, "n_new": 10554, "extracted_v3": "5\\sqrt[3]{4}", "gold": "$5 \\sqrt[3]{4}$"}
+{"problem_index": 353, "seed": 3000353, "score_v3": 1, "cap_hit": false, "n_new": 3642, "extracted_v3": "335", "gold": "335"}
+{"problem_index": 354, "seed": 3000354, "score_v3": 1, "cap_hit": false, "n_new": 5192, "extracted_v3": "49", "gold": "49"}
+{"problem_index": 355, "seed": 3000355, "score_v3": 1, "cap_hit": false, "n_new": 1594, "extracted_v3": "6\\sqrt{2}", "gold": "$6 \\sqrt{2}$"}
+{"problem_index": 356, "seed": 3000356, "score_v3": 0, "cap_hit": false, "n_new": 6906, "extracted_v3": "6^{5/3} - 1", "gold": "23"}
+{"problem_index": 357, "seed": 3000357, "score_v3": 0, "cap_hit": false, "n_new": 1612, "extracted_v3": "11", "gold": "10"}
+{"problem_index": 358, "seed": 3000358, "score_v3": 1, "cap_hit": false, "n_new": 11750, "extracted_v3": "9", "gold": "9"}
+{"problem_index": 359, "seed": 3000359, "score_v3": 1, "cap_hit": false, "n_new": 4373, "extracted_v3": "630", "gold": "630"}
+{"problem_index": 360, "seed": 3000360, "score_v3": 0, "cap_hit": false, "n_new": 7934, "extracted_v3": "2772", "gold": "1512"}
+{"problem_index": 361, "seed": 3000361, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": "1", "gold": "$\\frac{4}{3}$"}
+{"problem_index": 362, "seed": 3000362, "score_v3": 1, "cap_hit": false, "n_new": 1186, "extracted_v3": "60", "gold": "60"}
+{"problem_index": 363, "seed": 3000363, "score_v3": 0, "cap_hit": false, "n_new": 12167, "extracted_v3": "\\dfrac{804}{5}", "gold": "262"}
+{"problem_index": 364, "seed": 3000364, "score_v3": 1, "cap_hit": false, "n_new": 1927, "extracted_v3": "6", "gold": "6"}
+{"problem_index": 365, "seed": 3000365, "score_v3": 1, "cap_hit": false, "n_new": 4281, "extracted_v3": "3", "gold": "3"}
+{"problem_index": 366, "seed": 3000366, "score_v3": 1, "cap_hit": false, "n_new": 4131, "extracted_v3": "3", "gold": "3"}
+{"problem_index": 367, "seed": 3000367, "score_v3": 1, "cap_hit": false, "n_new": 3141, "extracted_v3": "\\dfrac{n}{2}", "gold": "$\\frac{n}{2}$"}
+{"problem_index": 368, "seed": 3000368, "score_v3": 0, "cap_hit": false, "n_new": 8478, "extracted_v3": "n - 2", "gold": "3"}
+{"problem_index": 369, "seed": 3000369, "score_v3": 0, "cap_hit": false, "n_new": 5186, "extracted_v3": "2", "gold": "76"}
+{"problem_index": 370, "seed": 3000370, "score_v3": 0, "cap_hit": false, "n_new": 4546, "extracted_v3": "2\\sqrt{2}", "gold": "$\\frac{5 \\sqrt{2}}{2}$"}
+{"problem_index": 371, "seed": 3000371, "score_v3": 1, "cap_hit": false, "n_new": 2468, "extracted_v3": "216", "gold": "216"}
+{"problem_index": 372, "seed": 3000372, "score_v3": 1, "cap_hit": false, "n_new": 9816, "extracted_v3": "12", "gold": "12"}
+{"problem_index": 373, "seed": 3000373, "score_v3": 0, "cap_hit": true, "n_new": 16384, "extracted_v3": null, "gold": "$\\frac{3 \\pi}{4}$"}
+{"problem_index": 374, "seed": 3000374, "score_v3": 0, "cap_hit": false, "n_new": 15517, "extracted_v3": "28", "gold": "56"}
+{"problem_index": 375, "seed": 3000375, "score_v3": 1, "cap_hit": false, "n_new": 1030, "extracted_v3": "39", "gold": "39"}
+{"problem_index": 376, "seed": 3000376, "score_v3": 1, "cap_hit": false, "n_new": 5389, "extracted_v3": "1", "gold": "1"}
+{"problem_index": 377, "seed": 3000377, "score_v3": 1, "cap_hit": false, "n_new": 5657, "extracted_v3": "15", "gold": "15"}
+{"problem_index": 378, "seed": 3000378, "score_v3": 1, "cap_hit": false, "n_new": 3285, "extracted_v3": "400", "gold": "400"}
+{"problem_index": 379, "seed": 3000379, "score_v3": 1, "cap_hit": false, "n_new": 1322, "extracted_v3": "362", "gold": "362"}
+{"problem_index": 380, "seed": 3000380, "score_v3": 1, "cap_hit": false, "n_new": 5727, "extracted_v3": "\\dfrac{1}{40}", "gold": "$\\frac{1}{40}$"}
+{"problem_index": 381, "seed": 3000381, "score_v3": 1, "cap_hit": false, "n_new": 1720, "extracted_v3": "210", "gold": "210"}
+{"problem_index": 382, "seed": 3000382, "score_v3": 1, "cap_hit": false, "n_new": 750, "extracted_v3": "60", "gold": "60"}
+{"problem_index": 383, "seed": 3000383, "score_v3": 1, "cap_hit": false, "n_new": 2537, "extracted_v3": "\\dfrac{12}{5}", "gold": "$\\frac{12}{5}$"}
+{"problem_index": 384, "seed": 3000384, "score_v3": 1, "cap_hit": false, "n_new": 2964, "extracted_v3": "\\dfrac{4}{17}", "gold": "$\\frac{4}{17}$"}
+{"problem_index": 385, "seed": 3000385, "score_v3": 0, "cap_hit": false, "n_new": 3532, "extracted_v3": "\\dfrac{27}{53}", "gold": "$\\frac{27}{106}$"}
+{"problem_index": 386, "seed": 3000386, "score_v3": 0, "cap_hit": false, "n_new": 15140, "extracted_v3": "245", "gold": "$548 \\pi$"}
+{"problem_index": 387, "seed": 3000387, "score_v3": 1, "cap_hit": false, "n_new": 3217, "extracted_v3": "35", "gold": "35"}
+{"problem_index": 388, "seed": 3000388, "score_v3": 1, "cap_hit": false, "n_new": 3097, "extracted_v3": "111", "gold": "111"}
+{"problem_index": 389, "seed": 3000389, "score_v3": 1, "cap_hit": false, "n_new": 772, "extracted_v3": "5", "gold": "5"}
+{"problem_index": 390, "seed": 3000390, "score_v3": 1, "cap_hit": false, "n_new": 4821, "extracted_v3": "102018", "gold": "102018"}
+{"problem_index": 391, "seed": 3000391, "score_v3": 1, "cap_hit": false, "n_new": 2065, "extracted_v3": "\\dfrac{15}{4}", "gold": "$\\frac{15}{4}$"}
+{"problem_index": 392, "seed": 3000392, "score_v3": 0, "cap_hit": false, "n_new": 14065, "extracted_v3": "\\dfrac{27\\sqrt{3}}{8}", "gold": "$\\frac{9}{2}$"}
+{"problem_index": 393, "seed": 3000393, "score_v3": 1, "cap_hit": false, "n_new": 2554, "extracted_v3": "4096", "gold": "4096"}
+{"problem_index": 394, "seed": 3000394, "score_v3": 0, "cap_hit": false, "n_new": 12754, "extracted_v3": "28", "gold": "11"}
+{"problem_index": 395, "seed": 3000395, "score_v3": 1, "cap_hit": false, "n_new": 1593, "extracted_v3": "2", "gold": "2"}
+{"problem_index": 396, "seed": 3000396, "score_v3": 0, "cap_hit": false, "n_new": 9413, "extracted_v3": "408", "gold": "414"}
+{"problem_index": 397, "seed": 3000397, "score_v3": 0, "cap_hit": false, "n_new": 9490, "extracted_v3": "\\dfrac{103}{128}", "gold": "$\\frac{79}{128}$"}
+{"problem_index": 398, "seed": 3000398, "score_v3": 1, "cap_hit": false, "n_new": 1962, "extracted_v3": "1", "gold": "1"}
+{"problem_index": 399, "seed": 3000399, "score_v3": 1, "cap_hit": false, "n_new": 937, "extracted_v3": "11", "gold": "11"}

@@ -55,6 +55,12 @@ ROWS = {
         "picked": "Tier round 5: the cap test of a scout on stored rows; it waited for one run at the larger limit.",
         "checked": "153 checks of its numbers against stored readouts pass; 4 review passes.",
     },
+    "finishing-is-low-rank.pdf": {
+        "claim": "Three disjoint parts of an RL weight change each add 7 to 10 points of right answers; only the parts with the first singular direction make more answers finish.",
+        "pages": 5,
+        "picked": "Tier round 6: the depth and rank split of the RL change, after reading the 12 closest papers; 9 control runs were added for it.",
+        "checked": "Every number recomputed from the committed rows; 4 review passes; every prediction written before a run that failed is reported.",
+    },
 }
 STEPS = [
     ("Tier", "Scout agents collect the project's findings, re-read the best at their files, search the literature and score novelty and evidence. Judges rank them."),

@@ -3503,6 +3503,26 @@ RL 2 of 20. No ordering of the models changes.
 | `paper-two-caps/figs.py`, `fig_caps.pdf` | The figure, drawn from `facts.json`. |
 | `paper-two-caps/paper.tex`, `refs.bib`, `fonts/` | Source; build with `tectonic paper.tex` in the folder. |
 
+## Paper: Finishing Is Low-Rank, Right Answers Are Not (`paper-depth-rank/`, board work-184476)
+
+A 5-page paper: `paper-depth-rank/finishing-is-low-rank.pdf` (on branch `paper6` until the freeze of main is lifted; then
+served at https://monitor.invariant.team/paper/finishing-is-low-rank.pdf). Claim (hard328, n = 328, cue, T 1.0, cap 16,384,
+changes in points against the 4-sample cued base 158.5 right / 71.5 cut off, parts of RL-Zero-Math minus base at scale 1.5):
+direction 1 alone +7.5 right [4.8, 10.1], cut-offs -9.3; directions 2 to 8 +9.5 [6.8, 12.3], cut-offs -0.6 [-3.6, 2.4];
+RL minus its top 8 directions +9.6 [6.3, 13.0], cut-offs +5.6; all 8 +12.7, cut-offs -16.0. Layers 0-10: +7.6 right,
++6.3 cut-offs; layers 22-31: +1.5 [-1.1, 4.2] right, -4.7 cut-offs, and at scale 3.0 (2 samples) -1.2 [-3.9, 1.5] right,
+-13.4 cut-offs. Without the cue (1 sample each): base 75 right, direction 1 101, directions 2 to 8 187 (+34.2 [28.4, 39.9]).
+The depth split was not reproduced on the Code pair (538 problems, 1 sample per edit).
+
+| File | What it is |
+|---|---|
+| `paper-depth-rank/build_facts.py` | Recomputes every number from the committed rows (`paper-depth-rank/data/`, `results/xreward/depth3/`, `results/xreward/normband/`, `results/day1_3/`), checks them against the stored readouts, writes `facts.json` and `problem_table.json`. Run: `uv run --no-project --with numpy python studies/rlneurons/paper-depth-rank/build_facts.py`. |
+| `paper-depth-rank/prep_rows.py`, `prep_review.py`, `data/` | Froze the rows that existed only in `runs/` into `data/` (run once; needs `runs/`). |
+| `paper-depth-rank/facts.json`, `problem_table.json`, `examples.json` | Every number in the paper with its source (`review`: what the reviews asked for; `no_cue`: the cells without the cue); per-problem rates for the figure; one answer scored right and one scored wrong per main cell. |
+| `paper-depth-rank/NOTES.md`, `LITERATURE.md` | What was predicted before the runs and what weakens the claim; the 18 closest papers with quotes. |
+| `paper-depth-rank/figs.py`, `fig_split.pdf` | The figure, drawn from `facts.json`. Run: `uv run --with matplotlib python figs.py` in the folder. |
+| `paper-depth-rank/paper.tex`, `refs.bib`, `fonts/` | Source; build with `tectonic paper.tex` in the folder. |
+
 ## How to run
 
 Laptop checks (no GPU, no weights):

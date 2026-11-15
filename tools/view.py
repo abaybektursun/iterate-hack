@@ -239,7 +239,8 @@ PAPERS = {name: (Path(__file__).with_name(name), Path(__file__).parent.parent / 
           for name, folder in (("the-finish-dial.pdf", "rlneurons/paper"), ("theories-on-trial.pdf", "theory/paper"),
                                ("the-first-hundred-steps.pdf", "rlneurons/paper-first-steps"),
                                ("no-early-warning.pdf", "rlneurons/paper-no-warning"),
-                               ("two-token-limits.pdf", "rlneurons/paper-two-caps"))}
+                               ("two-token-limits.pdf", "rlneurons/paper-two-caps"),
+                               ("finishing-is-low-rank.pdf", "rlneurons/paper-depth-rank"))}
 DECK_PAGE = demo_deck.page(PAPERS)  # the talk deck at /demo, with the papers
 
 

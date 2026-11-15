@@ -430,7 +430,7 @@ ul.src li { padding: 5px 0; border-top: 1px solid var(--rule); break-inside: avo
     <div class="remain">
       <p class="gap wait" id="gapbox"><b id="gap"></b><span id="gapunit"></span></p>
       <div class="acts"><button id="replay" type="button">Replay</button><details class="src" id="srcbox"><summary>Where each number comes from</summary></details></div>
-      <p class="paper"><a href="/papers">Papers</a> (PDF): <a href="/paper/the-finish-dial.pdf">The finish dial</a> · <a href="/paper/theories-on-trial.pdf">Theories on trial</a> · <a href="/paper/the-first-hundred-steps.pdf">The first hundred steps</a> · <a href="/paper/no-early-warning.pdf">No early warning</a> · <a href="/paper/two-token-limits.pdf">Two token limits</a></p>
+      <p class="paper"><a href="/papers">Papers</a> (PDF): <a href="/paper/the-finish-dial.pdf">The finish dial</a> · <a href="/paper/theories-on-trial.pdf">Theories on trial</a> · <a href="/paper/the-first-hundred-steps.pdf">The first hundred steps</a> · <a href="/paper/no-early-warning.pdf">No early warning</a> · <a href="/paper/two-token-limits.pdf">Two token limits</a> · <a href="/paper/finishing-is-low-rank.pdf">Finishing is low-rank</a></p>
       <p class="rest wait" id="rest"></p>
     </div>
     <ul class="src" id="src" hidden></ul>
