@@ -96,3 +96,24 @@ The audit found that the cap hits are not repetition loops (rules A and B: 0 in 
 rank-8 addition (rand8's P diag(s) Q^T), same rounding. If removing the 8 directions is what costs 15 problems and adds cap hits,
 cell 9 stays within 8 of RL cue (205) with fewer than 45 cap hits. If cell 9 is near 190 with about 90 cap hits, the loss is the
 perturbation of the RL weights, not the 8 directions.
+
+## Amendment 5 (2026-11-15, after the second batch, before the next eleven cells; work-e02ba4): the finish dial
+
+Second batch: cap hits follow the size of Math 3.1's 8 directions (RL minus them 90, base 77, one direction 51, eight 46, twice
+the size 5) while right answers per finished answer stay near 0.65 (0.59 at twice the size). Same settings as before.
+
+Dial, `--other math31`: `top8 --scale S` for S = -1, 0.5, 1.5, 3 (0, 1, 2 exist: 77, 46, 5 cap hits) and the control
+`rand8 --scale S` for S = -1, 2, 3 (1 exists: 67).
+
+- D1. Cap hits fall monotonically with S: above 100 at -1, 55 to 70 at 0.5, 10 to 30 at 1.5, at most 2 at 3. Refuted if S = -1
+  gives 77 or fewer, or if two neighbouring sizes are out of order by more than 15.
+- D2. It is the directions, not the size of a perturbation: the random edit stays within 55 to 85 cap hits at every size. Refuted
+  if the random edit at size 3 has fewer than 30 cap hits; then any large rank-8 perturbation makes the model finish.
+- D3. Right answers peak between sizes 1 and 1.5 and are below the base (164) at -1 and at 3.
+
+Which reward writes the finishing directions: `top8 --other X` for X = math30, if30, general30, think_sft (Code 3.1: 41 cap hits,
+Code 3.0: 23, Math 3.1: 46). The edit's share of the weight norm (`add_rel`) is reported beside each cell.
+
+- R1. The reward family of Part 1 predicts it: math30 at most 55 cap hits; if30 and general30 within 62 to 85; think_sft at least 60.
+  Refuted if if30 or general30 has 45 or fewer, or math30 65 or more. If every difference cuts cap hits, finishing is what any
+  fine-tune writes.
