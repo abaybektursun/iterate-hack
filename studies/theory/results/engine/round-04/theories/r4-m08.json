@@ -1,0 +1,104 @@
+{
+ "name": "r4-m08",
+ "statement": "Part of the cued Olmo-3 base's accuracy comes from recalling solutions to problems that were in its pretraining text, which shows up as short, low-entropy right answers, while RL-Zero-Math learned procedures that also work on problems the base never saw; so at matched difficulty the RL-minus-cued-base gap is larger on problems published after the base's data cutoff (AIME 2025, HMMT Feb 2025) than on older problems, and smaller on problems the base can complete verbatim.",
+ "scope": "Covers Olmo-3-1025-7B with the 3-token opening cue against Olmo-3.1-7B-RL-Zero-Math (plain prompt) at T 1.0 / top-p 1.0, cap 16,384, grader v3, on MATH-500 and the clean harder 328. The year split puts AIME 2025 and HMMT Feb 2025 after the base's cutoff and AIME 2022-24, AMC 23 and OlympiadBench before it. Does not cover: the loop and cap-hit gap at T 0.6 (a decoding effect, not an exposure effect), the 72 problems flagged as being in the RL training set, the Code pair, or why weight-difference arms work. The mechanism explains only part of the gap. Termination and commitment effects (cap hits on long problems) are assumed to sit on top of it and are not modelled.",
+ "parent": null,
+ "imports": [
+  {
+   "source": "2611.10307",
+   "finding": "Partial-prompt contamination flags depend on how many words are left to complete (leftovers of <= 8 words give most false positives). AIME 2025/2026 serve as true negatives. A 15-word window of 52.9 % of MATH-500 problems occurs in the OLMo-2 corpus.",
+   "how": "Supplies the exposure contrast (MATH-500 and older contests likely in pretraining text, 2025 contests not) and the leftover-length filter that the GPU completion test uses to call a problem 'recalled'."
+  },
+  {
+   "source": "2504.13837",
+   "finding": "RLVR raises pass@1 mainly by concentrating on paths the base already samples. Base coverage at large k matches RL's on MATH-500.",
+   "how": "On exposed problems, the solution path is already in the base's samples (as recall), so RL has little to add there. The residual RL advantage should therefore concentrate on unexposed problems, where a learned procedure rather than a remembered path is needed."
+  }
+ ],
+ "explains": [
+  {
+   "item": "result-5e17a6",
+   "quote": "Base answers <= 2,000 tokens: 263, 13 wrong",
+   "how": "Recalled solutions come out short and almost always right, so the base's short answers are nearly error-free even though it is the weaker model."
+  },
+  {
+   "item": "knowledge-8a31ad",
+   "quote": "So on their pair the cue already equals RL on MATH-500",
+   "how": "MATH-500 is the most exposed benchmark, so recall lets the cued base match RL 3.0 there, while on the less exposed contest sets RL leads by 5-12 points."
+  },
+  {
+   "item": "result-82b4dc",
+   "quote": "RL minus base 12.8 points, paired 95 % [8.5, 17.1]",
+   "how": "The harder set has fewer exposed problems than MATH-500 (and includes the post-cutoff 2025 contests), so the gap there is larger than the 10.6 points on MATH-500."
+  },
+  {
+   "item": "result-bac4fd",
+   "quote": "RL minus cue base = 10.6 points [7.4, 13.8]",
+   "how": "This is the smaller gap on the heavily exposed set, where recall supports base accuracy."
+  },
+  {
+   "item": "result-e45bf4",
+   "quote": "on MATH-500 they were within 2.6",
+   "how": "Partial RL deltas need only add termination and format on exposed MATH-500, where the base already holds the solutions. On the less exposed harder set they lack the full procedure and stay 5-7 points under RL."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "result-9b6af3",
+   "quote": "Of the 65 'RL right, base wrong' problems the random cell solves 40",
+   "how": "Most of the MATH-500 'RL-only' problems are solved by a fresh base sample, so much of the gap there is sampling variance rather than missing knowledge. Exposure does not predict that."
+  },
+  {
+   "item": "result-4b0d5f",
+   "quote": "the direction is RL-specific but not math-specific",
+   "how": "Code-RL closes the MATH-500 gap as well as Math-RL. This points to a general termination or format change rather than math procedures learned from math rewards."
+  },
+  {
+   "item": "result-5de032",
+   "quote": "base/RL right: 78/82, 52/67, 30/45, 4/12",
+   "how": "The gap shrinks in the longest RL-length quartile, where the 2025 contests should concentrate, which goes against a post-cutoff excess unless that excess is masked by a floor effect."
+  }
+ ],
+ "rival": "Difficulty and termination: the 2025 contests are simply harder and longer, and the gap comes from the base failing to commit or finish on long chains (cap hits, wrong methods), with no role for exposure. Under this rival, (a) a post-cutoff excess vanishes once problems are matched on RL length, (b) on problems both models solve, the base's length relative to RL's does not depend on source year, and (c) problems the base can complete verbatim show no smaller gap within an RL-length quartile. The exposure theory predicts a positive post-minus-pre gap after matching, a smaller base-to-RL length ratio on pre-cutoff both-right problems, and a smaller gap on verbatim-completed problems.",
+ "predictions": [
+  {
+   "experiment": "Standardised paired gap (RL plain minus base cue, grader v3) on the clean harder 328, post-cutoff problems minus pre-cutoff problems, matched on RL answer length.",
+   "recipe": "Files: s3 results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (base cue) and .../abaybektursun-1114-151540-86ef/answers.jsonl (RL plain). Join on unique_id and drop any unique_id missing from either file. Source label of each unique_id: as recorded in results/rln3/rln3_overlap.json (the file whose flag == 'none' items define the 328). post = AIME 2025 or HMMT Feb 2025; pre = every other source. right = score_v3 == 1 as stored; cap hits keep their stored score_v3 (normally 0). Strata: sort the joined problems by the RL row's n_generated ascending, break ties by unique_id ascending, and cut into 4 consecutive groups of equal size (the remainder goes to the last group). In each stratum s and group g, d_gs = mean over problems of (RL right - base right). Weights w_s = (number of post problems in s) / (number of post problems). Drop any stratum that has post problems but no pre problems, and renormalise w over the remaining strata. G_g = sum_s w_s * d_gs. Statistic = 100 * (G_post - G_pre), in points.",
+   "unit": "points",
+   "value": 7,
+   "low": -3,
+   "high": 17,
+   "refuted_by": "statistic below -3",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "On harder-328 problems both models solve, the base's answer length relative to RL's, pre-cutoff minus post-cutoff.",
+   "recipe": "Same two files, join, drops and post/pre labels as the first prediction. Keep problems where score_v3 == 1 in both rows and cap_hit is false in both rows. For each, r = ln(base n_generated / RL n_generated). Statistic = median of r over kept pre problems minus median of r over kept post problems (for an even count, the median is the mean of the two middle values). If fewer than 5 post problems are kept, the statistic is recorded as missing and the prediction counts as refuted.",
+   "unit": "difference of median log length ratios",
+   "value": -0.3,
+   "low": -0.9,
+   "high": 0.15,
+   "refuted_by": "statistic above 0.15, or missing (fewer than 5 post problems kept)",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "MATH-500: per-token entropy of the cued base's own short right answers relative to its long right answers.",
+   "recipe": "Files: studies/rlneurons/results/rln5/map-01/checks.json (key per_row, list T1) and studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. For each T1 row, per-token entropy e = sum_entropy_own / n_own. Drop rows with n_own == 0. Join with per_problem.json on problem_index. Keep problems with t1_right true and t1_cap_hit false. short = t1_generated_tokens <= 2000; long = t1_generated_tokens > 2000. Statistic = median e over short / median e over long (median as in the second prediction).",
+   "unit": "ratio",
+   "value": 0.85,
+   "low": 0.6,
+   "high": 1.0,
+   "refuted_by": "statistic at or above 1.0",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Verbatim-completion test on the base, then the existing MATH-500 gap split by flag. Base Olmo-3-1025-7B, raw text with no template and no cue, greedy decoding, input = the first floor(0.6 * W) whitespace words of each MATH-500 problem statement (W = word count), up to 128 new tokens, one H100 with vLLM. A problem is flagged if its leftover (the remaining words) has at least 10 words and the ROUGE-L F1 between the leftover and the continuation's first len(leftover) words is >= 0.75. Problems with leftovers under 10 words are excluded. Statistic: mean(t2_right - t1_right) from studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json over flagged problems minus the same over unflagged problems, in points.",
+   "unit": "points",
+   "value": -6,
+   "low": -15,
+   "high": 1,
+   "refuted_by": "flagged-minus-unflagged gap above +1 point, or fewer than 15 problems flagged",
+   "gpu_minutes": 10
+  }
+ ]
+}

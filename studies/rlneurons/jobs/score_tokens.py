@@ -42,7 +42,7 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     fz = json.loads((STUDY / "data" / "rln4" / "frozen4.json").read_text())
     from huggingface_hub import snapshot_download
-    from transformers import AutoModelForCausalLM, AutoTokenizer
+    from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer
     tok = AutoTokenizer.from_pretrained(snapshot_download(fz["tokenizer"][0], revision=fz["tokenizer"][1], allow_patterns=["*.json", "*.jinja", "*.txt"]))
     probs = {int(p["index"]): p for p in json.loads((STUDY / "data" / "rln4" / "math500.json").read_text())}
     pre, pre_text = fz["prefill_ids"], fz["prefill_text"]
@@ -63,18 +63,26 @@ def main():
     np.save(out / "tokens.npy", np.concatenate([np.asarray(s[1], dtype=np.int32) for s in seqs]))
     m = {"rows": a.rows, "answers": len(rows), "positions": off, "answers_with_stored_token_count": same_len, "models": {}, "job_id": os.environ.get("JOB_ID")}
 
+    def source(src, patterns):
+        """(repo, revision, local directory) of a --model source: base, rl, a key of OTHERS, or a local directory."""
+        if src in ("base", "rl"):
+            repo, _, rev = fz["models"]["base" if src == "base" else "s2800"]
+        elif src in OTHERS:
+            repo, rev = OTHERS[src]
+        else:
+            assert pathlib.Path(src, "config.json").exists(), src
+            return None, None, src
+        return repo, rev, snapshot_download(repo, revision=rev, allow_patterns=patterns)
+
+    # Every model's config is read before the first forward pass, so a model transformers cannot load (Olmo-3-7B-RL-Zero-Mix:
+    # model type olmo2-retrofit) stops the job at once instead of after the models before it (job 5599 died at 11.5 min).
+    for spec in a.model:
+        AutoConfig.from_pretrained(source(spec.split("=")[1], ["config.json"])[2])
+
     for spec in a.model:
         label, src = spec.split("=")
         t0 = time.time()
-        if src in ("base", "rl"):
-            repo, _, rev = fz["models"]["base" if src == "base" else "s2800"]
-            src_dir = snapshot_download(repo, revision=rev, allow_patterns=["*.json", "*.safetensors"])
-        elif src in OTHERS:
-            repo, rev = OTHERS[src]
-            src_dir = snapshot_download(repo, revision=rev, allow_patterns=["*.json", "*.safetensors"])
-        else:
-            repo, rev, src_dir = None, None, src
-            assert pathlib.Path(src, "config.json").exists(), src
+        repo, rev, src_dir = source(src, ["*.json", "*.safetensors"])
         model = AutoModelForCausalLM.from_pretrained(src_dir, dtype=torch.bfloat16).cuda().eval()
         lp_tok, top, lp_top, ent = [], [], [], []
         with torch.no_grad():

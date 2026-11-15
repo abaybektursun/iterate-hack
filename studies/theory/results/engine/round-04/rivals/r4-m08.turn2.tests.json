@@ -1,0 +1,60 @@
+{
+ "theory": "r4-m08",
+ "turn": 2,
+ "tests": [
+  {
+   "k": 4,
+   "experiment": "MATH-500, 4 independent samples per model at T 1.0: on problems that both models solve every time and where the base's typical answer is short, how much the base's answer length varies across its own samples, relative to how much RL's varies (median log ratio of coefficients of variation).",
+   "recipe": "Files: studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (base) and studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (RL). Use only rows with attempt == 0. For each model and problem_index, collect the attempt-0 rows for samples 0, 1, 2 and 3. Keep a problem only if both models have all four attempt-0 rows, and every one of those 8 rows has score_v3 == 1 and cap_hit false. Missing rows exclude the problem; there are no ties to break. For each kept problem and model, take the 4 values of n_new, and set CV = (population standard deviation, ddof = 0) / (mean). Drop any problem where either model's CV is 0. Short problems are those where the median of the base's 4 n_new values (the mean of the two middle values) is <= 2000. For each short problem, compute L = ln(CV_base / CV_RL). Statistic = median of L over short problems (for an even count, the mean of the two middle values).",
+   "unit": "log ratio",
+   "refuted_by": null,
+   "script": "rivals/r4-m08.turn2/p4.py",
+   "measured": 0.5180097906045676,
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0.5180097906045676,
+   "not_computable": null,
+   "note": "Files: studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl and math500_rl-01/rows.jsonl (in the repo, no fetch needed). Fields used: problem_index, sample, attempt, n_new, cap_hit, score_v3. Main: attempt==0 rows only, all 8 rows score_v3==1 and cap_hit False, CV with ddof=0, drop problems with either CV 0, short = base median n_new <= 2000, median of ln(CV_base/CV_RL). Duplicate attempt-0 rows for one (problem, sample) would exclude the problem (none expected: 2000 attempt-0 rows per file). The ddof choice cancels in the ratio since both models have n=4. Alt reading: use each sample's final attempt (highest attempt, i.e. after retries) instead of attempt 0, since the files contain retries (base 137, RL 41 rows with attempt>0); same filters otherwise. Shared code in common.py next to the scripts.",
+   "example_row": {
+    "problem_index": 0,
+    "sample": 0,
+    "attempt": 0,
+    "seed": 41000000,
+    "n_new": 450,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "loop_A": false,
+    "extracted_v3": "$(3,\\frac{\\pi}{2})$",
+    "score_v3": 1,
+    "gold": "\\left( 3, \\frac{\\pi}{2} \\right)"
+   }
+  },
+  {
+   "k": 5,
+   "experiment": "MATH-500, same 4-sample rows: base-versus-RL length variability on short problems minus the same on long problems (difference in median log CV ratios).",
+   "recipe": "Same files, attempt-0 rows, kept problems (all 8 rows score_v3 == 1 and cap_hit false), CV definition, zero-CV drops and L = ln(CV_base / CV_RL) as in the first test here. Short = median of the base's 4 n_new values <= 2000; long = that median > 2000. Statistic = (median L over short problems) - (median L over long problems), with each median taken as in the first test (for an even count, the mean of the two middle values).",
+   "unit": "difference of log ratios",
+   "refuted_by": null,
+   "script": "rivals/r4-m08.turn2/p5.py",
+   "measured": -0.020345857212325513,
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": -0.04096580121715443,
+   "not_computable": null,
+   "note": "Same files, filters and L as k=4 (shared common.py). Long = base median n_new > 2000. Statistic = median L(short) - median L(long), even counts use the mean of the two middle values. If the long group is empty the script reports not_computable (the recipe does not say an empty group refutes). Long group may be small because cap-hit rows and long base answers often co-occur, so the long median can be noisy. Alt reading: final attempt per sample instead of attempt 0.",
+   "example_row": {
+    "problem_index": 0,
+    "sample": 0,
+    "attempt": 0,
+    "seed": 41000000,
+    "n_new": 450,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "loop_A": false,
+    "extracted_v3": "$(3,\\frac{\\pi}{2})$",
+    "score_v3": 1,
+    "gold": "\\left( 3, \\frac{\\pi}{2} \\right)"
+   }
+  }
+ ]
+}
