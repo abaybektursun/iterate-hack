@@ -853,8 +853,8 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
     <a href="/" aria-current="page">Board</a>
     <a href="/proof">Proof</a>
     <a href="/findings">Findings</a>
-    <span class="test" id="test" hidden>test table</span>
-    <span class="status" id="status" role="status">Reading the board</span>
+    <span class="test" id="test" hidden>test data</span>
+    <span class="status" id="status" role="status">Loading the board</span>
   </header>
   <span class="sr" id="live" aria-live="polite"></span>
   <section class="lede" aria-label="The state of the board">
@@ -866,15 +866,15 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   <section class="reach" id="reach" aria-label="The best untrained-base score against RL"><span class="ph" style="position:absolute;left:0;right:0;top:52px;height:8px;border-radius:4px"></span></section>
   <div class="hero">
     <div class="chart" id="chart"></div>
-    <section class="ladder"><h2>Record steps <span class="count" id="n-steps"></span></h2><div id="ladder"><span class="ph-row"><span class="ph"></span></span><span class="ph-row"><span class="ph"></span></span><span class="ph-row"><span class="ph"></span></span></div></section>
+    <section class="ladder"><h2>New best base scores <span class="count" id="n-steps"></span></h2><div id="ladder"><span class="ph-row"><span class="ph"></span></span><span class="ph-row"><span class="ph"></span></span><span class="ph-row"><span class="ph"></span></span></div></section>
   </div>
   <div class="bar">
     <div class="people" id="people" aria-label="Show one person"></div>
     <label class="search"><input id="q" type="search" placeholder="Filter the lists" aria-label="Filter the lists" autocomplete="off"><kbd>/</kbd></label>
   </div>
   <main class="board main-cols">
-    <section class="s-work"><h2>Now <span class="count" id="n-work"></span></h2><div id="work"></div><div id="work-all"></div></section>
-    <section class="s-result"><h2>Learned <span class="count" id="n-result"></span></h2><div id="result"></div><div id="result-all"></div></section>
+    <section class="s-work"><h2>Open work <span class="count" id="n-work"></span></h2><div id="work"></div><div id="work-all"></div></section>
+    <section class="s-result"><h2>Results <span class="count" id="n-result"></span></h2><div id="result"></div><div id="result-all"></div></section>
   </main>
   <section class="board rest" aria-label="More lists">
     <div class="tabs" id="tabs"></div>
@@ -895,7 +895,7 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   <dl>
     <dt><kbd>/</kbd></dt><dd>Filter the lists</dd>
     <dt><kbd>j</kbd><kbd>k</kbd></dt><dd>Next and previous line</dd>
-    <dt><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd></dt><dd>Record steps, Now, Learned</dd>
+    <dt><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd></dt><dd>New best base scores, Open work, Results</dd>
     <dt><kbd>Enter</kbd></dt><dd>Open the step, the item or the whole message</dd>
     <dt><kbd>Esc</kbd></dt><dd>Close</dd>
     <dt><kbd>?</kbd></dt><dd>These keys</dd>
@@ -912,7 +912,7 @@ const S = {
 };
 const HUES = [325, 150, 65, 195, 105, 45, 175, 350];  // far apart first; none in 230-310, where the data blue is
 const KINDS = { work: "Open work", "work-closed": "Closed work", result: "Result", idea: "Idea", knowledge: "Knowledge", skill: "Skill" };
-const MORE = [["tools", "Tools and site"], ["idea", "Ideas"], ["knowledge", "Knowledge and skills"], ["closed", "Closed work"], ["msgs", "Messages"], ["activity", "Activity"]];
+const MORE = [["tools", "Pages and tools"], ["idea", "Ideas"], ["knowledge", "Knowledge and skills"], ["closed", "Closed work"], ["msgs", "Messages"], ["activity", "Activity"]];
 const LIMIT = { result: 12, more: 20 };
 const ID = /\b((?:work|result|idea|knowledge|skill)-[0-9a-f]{6})\b|(?<![\w.-])(\d+(?:[.,]\d+)*(?: ?%)?)(?![\w-])/g;
 const AUTO = /^(started|done|closed) (work|idea|result|knowledge|skill)-[0-9a-f]{6}\b/;  // what board.py announces by itself
@@ -1124,7 +1124,7 @@ function render() {
   $("people").classList.toggle("picked", Boolean(S.who));
   put($("what"), `The team's live log: every experiment, result and idea posted by ${people.length} ${people.length === 1 ? "person" : "people"} and their agents.`);
 
-  const nw = list("work", "work", S.idle ? work.filter(i => mins(activeNs(i)) >= 60) : work, nWork, none || "No open work. An agent claims work with <code>board.py post work</code>.");
+  const nw = list("work", "work", S.idle ? work.filter(i => mins(activeNs(i)) >= 60) : work, nWork, none || "No open work.");
   put($("n-work"), nWork ? nw : "");
   put($("n-result"), list("result", "result", lists.result[0], lists.result[1], none || "No results yet."));
 
@@ -1138,8 +1138,8 @@ function render() {
     put(head, ""); put($("more-all"), "");
     put(more, lanes(items, d));
   } else if (S.more === "msgs") {
-    put(head, autos ? `<button id="autos" data-fkey="autos" aria-pressed="${S.autos}">${S.autos ? "Hide" : "Show"} ${autos} announcement${autos > 1 ? "s" : ""} of board.py</button>` : "");
-    list("more", "msgs", S.autos ? talk : talk.filter(m => !AUTO.test(m.text)), count.msgs[1], none || `No messages on all in the last ${d.hours} h.`, message);
+    put(head, autos ? `<button id="autos" data-fkey="autos" aria-pressed="${S.autos}">${S.autos ? "Hide" : "Show"} ${autos} automatic notice${autos > 1 ? "s" : ""} (work started or closed)</button>` : "");
+    list("more", "msgs", S.autos ? talk : talk.filter(m => !AUTO.test(m.text)), count.msgs[1], none || `No messages on the team channel in the last ${d.hours} h.`, message);
   } else if (lists[S.more]) {
     put(head, S.more === "tools" ? "Results that announce a page, a tool or a skill. The page tells them apart by their words, so a few may be in the wrong list." : "");
     list("more", S.more, lists[S.more][0], lists[S.more][1], none || "Nothing here yet.");
@@ -1166,7 +1166,7 @@ function readingAnchor() {
 function status() {
   const s = $("status"), d = S.data;
   s.className = "status" + (S.error ? " bad" : d ? " live" : "");
-  s.textContent = S.error ? (d ? `Offline, last read ${clock(S.readAt)}` : "Offline, not read yet") : d ? "Live" : "Reading the board";
+  s.textContent = S.error ? (d ? `Offline, last read ${clock(S.readAt)}` : "Offline, not read yet") : d ? "Live" : "Loading the board";
   s.title = d ? `Last read ${utc(d.now_ns)}` : "";
 }
 
@@ -1179,12 +1179,12 @@ function summary(items, ch) {
   const last = items.filter(i => i.kind === "result").sort((a, b) => b.at_ns - a.at_ns)[0];
   put($("summary"), (open.length
       ? `${plural(open.length, "open work item")} from ${plural(ppl, "person", "people")}, ` +
-        (idle ? `<button class="warn" id="idlebtn" data-fkey="idle" aria-pressed="${S.idle}"><b>${idle}</b> idle over an hour</button>.` : "none idle over an hour.")
+        (idle ? `<button class="warn" id="idlebtn" data-fkey="idle" aria-pressed="${S.idle}"><b>${idle}</b> with no update for over an hour</button>.` : "none without an update for over an hour.")
       : "No open work.") +
     (last ? ` <a href="#${esc(last.id)}" data-fkey="last">Last result ${mins(last.at_ns) < 1 ? "just now" : `<b>${rel(last.at_ns)}</b> ago`}</a> from ${esc(last.who)}.` : " No results yet."));
   const el = $("since");
   if (!S.since) { el.hidden = true; document.title = TITLE; return; }
-  const parts = [[ch.result.length, "result"], [ch.closed.length, "closed", "closed"], [ch.idle.length, "newly idle", "newly idle"]].filter(p => p[0]);
+  const parts = [[ch.result.length, "new result"], [ch.closed.length, "work item closed", "work items closed"], [ch.idle.length, "work item idle for over an hour", "work items idle for over an hour"]].filter(p => p[0]);
   const count = parts.reduce((a, p) => a + p[0], 0);
   el.hidden = false;
   el.classList.toggle("fresh", count > 0);
@@ -1216,6 +1216,7 @@ function benches(scores) {
   return bs;
 }
 const bench = () => S.benches.find(b => b.name === S.bench) ?? S.benches[0];
+const BENCH_NAME = { hard328: "328 harder problems", fresh2026: "136 problems published in 2026" };  // the words shown for a benchmark's data name
 const stepOf = b => S.step && b.pts.find(q => q.rec && String(q.s.right) === S.step);
 
 /* The words of a record step: the plain row of its score, else the plain row of its result when that result holds no
@@ -1247,13 +1248,13 @@ function hero() {
   const b = bench();
   if (!b) {
     put($("benches"), "");
-    put($("reach"), `<p class="lab">No scores yet. Attach one to a result: <code>board.py score &lt;result id&gt; base MATH-500 410/500 "cue, T 1.0"</code></p>`);
+    put($("reach"), `<p class="lab">No scores posted yet.</p>`);
     put($("chart"), ""); put($("ladder"), ""); put($("n-steps"), "");
     return;
   }
   put($("benches"), S.benches.length > 1 ? S.benches.map(x =>
-    `<button data-bench="${esc(x.name)}" data-fkey="bench-${esc(x.name)}" aria-pressed="${x === b}">${esc(x.name)} <b>${f1(x.lead.p)}</b></button>`).join("") : "");
-  put($("n-steps"), `${esc(b.name)}, newest first`);
+    `<button data-bench="${esc(x.name)}" data-fkey="bench-${esc(x.name)}" aria-pressed="${x === b}">${esc(BENCH_NAME[x.name] ?? x.name)} <b>${f1(x.lead.p)}</b></button>`).join("") : "");
+  put($("n-steps"), `${esc(BENCH_NAME[b.name] ?? b.name)}, newest first`);
   moreBenches();
   drawReach();
   ladder(b);
@@ -1280,14 +1281,14 @@ function drawReach() {
     return { q, k, from, name, w, html: `<button class="${cls}" style="left:${at(from).toFixed(3)}%;width:${at(q.p - from).toFixed(3)}%;${hx}" data-step="${q.s.right}" data-fkey="reach-${q.s.right}" aria-label="${esc(label)}" aria-expanded="${q === sel}"><i></i></button>` };
   });
   const rest = !full ? `<span class="piece togo last" style="left:${at(lead.p).toFixed(3)}%;width:${at(top - lead.p).toFixed(3)}%"><i></i></span>` : "";
-  const go = rl ? (matched ? "RL matched" : `${f1(rlP - lead.p)} points to go`) : "", goW = go ? width13(go) : 0;
+  const go = rl ? (matched ? "RL matched" : `${f1(rlP - lead.p)} points below RL`) : "", goW = go ? width13(go) : 0;
   const marks = segs.map(s => {  // a gain under its segment where it fits and stays clear of the note at the right end
     const tw = width13(s.name), x = s.k ? Math.min(px(s.from) + s.w / 2 - tw / 2, W - (go ? goW + 12 : 0) - tw) : 0;  // centred, or moved left of the note
     if (s.w < tw + 10 || x < (s.k ? px(s.from) + 2 : 0)) return "";
     return `<span style="left:${x.toFixed(1)}px">${s.name}</span>`;
   }).join("") + (go ? `<span style="right:0">${go}</span>` : "");
-  put(el, `<div class="ends"><span class="big base">${f1(lead.p)}</span><span class="lab">untrained base</span>` +
-    (rl ? `<span class="rl-end"><span class="lab">RL-trained</span><span class="big">${f1(rlP)}</span></span>` : "") + `</div>` +
+  put(el, `<div class="ends"><span class="big base">${f1(lead.p)}</span><span class="lab">base model</span>` +
+    (rl ? `<span class="rl-end"><span class="lab">RL model</span><span class="big">${f1(rlP)}</span></span>` : "") + `</div>` +
     `<div class="bar8" role="group" aria-label="${esc(`${b.name}: best base ${f1(lead.p)} %${rl ? `, RL ${f1(rlP)} %` : ", no RL score"}; one part per record step`)}">${rest}<div class="fill">${segs.map(s => s.html).join("")}</div></div>` +
     `<div class="marks" aria-hidden="true">${marks}</div>`);
   el.classList.toggle("has-sel", Boolean(sel));
@@ -1305,11 +1306,11 @@ function ladder(b) {
   const rows = b.pts.filter(q => q.rec).reverse().map(q => {
     const noise = q.prev && !q.clears, on = q === sel, id = `step-${q.s.right}`;
     return `<button class="lrow${noise ? " noise" : ""}" data-step="${q.s.right}" data-fkey="${id}" aria-expanded="${on}"${on ? ` aria-controls="sd-${q.s.right}"` : ""}>` +
-      `<b>${q.prev ? "+" + f1(q.p - q.prev.p) : "start"}</b><span class="lt">${esc(stepTitle(q, b))}</span>` +
+      `<b>${q.prev ? "+" + f1(q.p - q.prev.p) : "Start"}</b><span class="lt">${esc(stepTitle(q, b))}</span>` +
       `<span class="lr">${q.prev ? f1(q.prev.p) + " → " : ""}${f1(q.p)}${noise ? ` <span class="flag">within noise</span>` : ""}</span><span class="chev" aria-hidden="true">›</span></button>` + (on ? detail(q, b) : "");
   });
   const ci = b.rl && diffCI(b.rl, b.lead.s);  // the 95 % interval of RL minus the best base, in points
-  const rl = b.rl ? `<a class="lrow rl" href="#${esc(b.rl.result)}" data-fkey="step-rl"><b>${f1(b.rlP)}</b><span class="lt">RL-trained model, the target</span><span class="lr">gap ${f1(ci[0])} to ${f1(ci[1])}</span></a>` : "";
+  const rl = b.rl ? `<a class="lrow rl" href="#${esc(b.rl.result)}" data-fkey="step-rl"><b>${f1(b.rlP)}</b><span class="lt">RL model, the target</span><span class="lr">RL model minus best base: ${f1(ci[0])} to ${f1(ci[1])} points (95 % interval)</span></a>` : "";
   put($("ladder"), rl + rows.join(""));
 }
 
@@ -1321,21 +1322,21 @@ function detail(q, b) {
   else {
     const d = prev && configDiff(q), raw = sentence(rawOf(s.result));
     what = (prev ? `<p>${[d.added.length ? `Added to the configuration: ${rich(d.added.join(", "), T)}.` : "", d.removed.length ? `Removed: ${rich(d.removed.join(", "), T)}.` : ""].filter(Boolean).join(" ") ||
-      "The configuration differs from the step before only in its note."}</p>` : `<p>The first base score posted on this benchmark.</p>`) +
+      "The settings are the same as at the step before; only a comment on them differs."}</p>` : `<p>The first base score posted on this benchmark.</p>`) +
       (raw ? `<p class="raw">From the result's text: ${rich(raw, T)}</p>` : "");
   }
   const why = w.why ? rich(w.why, T) : "No explanation in plain words is written for this step yet.";
   const real = (prev ? `${prev.s.n === s.n ? `${prev.s.right} → ${s.right} of ${s.n}` : `${prev.s.right} of ${prev.s.n} → ${s.right} of ${s.n}`}. ` +
-      (q.clears ? `Larger than chance: ${f1(q.p)} % is above the ${tb("95 % interval")} of the step before (${f1(prev.ci[0])} to ${f1(prev.ci[1])}).`
-                : `Too small to tell from chance: ${f1(q.p)} % is inside the ${tb("95 % interval")} of the step before (${f1(prev.ci[0])} to ${f1(prev.ci[1])}).`)
+      (q.clears ? `Likely real: ${f1(q.p)} % is above the ${tb("95 % interval")} of the step before (${f1(prev.ci[0])} to ${f1(prev.ci[1])} %).`
+                : `Too small to tell from chance: ${f1(q.p)} % is inside the ${tb("95 % interval")} of the step before (${f1(prev.ci[0])} to ${f1(prev.ci[1])} %).`)
     : `${s.right} of ${s.n} right. Its ${tb("95 % interval")} is ${f1(q.ci[0])} to ${f1(q.ci[1])} %.`);
   const cost = (s.tokens ? `${num(s.tokens)} ${tb("tokens per problem")}` + (prev ? (prev.s.tokens ? `; ${num(prev.s.tokens)} at the step before.` : "; not recorded at the step before.") : ".")
     : "Tokens per problem are not recorded for this score.");
   const nc = item?.n_comments;
   return `<dl class="sd" id="sd-${s.right}"><dt>${prev ? "What changed" : "What it is"}</dt><dd>${what}</dd>` +
-    `<dt>Why it works</dt><dd>${why}</dd>` +
-    `<dt>Is it real</dt><dd><p>${real}</p>${w.caveat ? `<p class="cv">${rich(w.caveat, T)}</p>` : ""}</dd>` +
-    `<dt>Cost</dt><dd>${cost} <a class="go" href="#${esc(s.result)}">Raw result${nc ? ` and ${nc} comment${nc > 1 ? "s" : ""}` : ""}</a></dd>` +
+    `<dt>Why it may help</dt><dd>${why}</dd>` +
+    `<dt>Is it real?</dt><dd><p>${real}</p>${w.caveat ? `<p class="cv">${rich(w.caveat, T)}</p>` : ""}</dd>` +
+    `<dt>Cost</dt><dd>${cost} <a class="go" href="#${esc(s.result)}">Open the posted result${nc ? ` and its ${nc} comment${nc > 1 ? "s" : ""}` : ""}</a></dd>` +
     `<dt>Settings</dt><dd class="set">${rich(s.config, T)}</dd></dl>`;
 }
 
@@ -1355,7 +1356,7 @@ function drawChart() {
 const KEY_H = 24;  // the height of the key's one line and its margin, taken from the chart's height (two lines on a narrow screen)
 const glyph = inner => `<svg width="12" height="12" viewBox="-6 -6 12 12" aria-hidden="true">${inner}</svg>`;
 const chartKey = () => `<p class="ckey">` +
-  `<span>${glyph('<circle class="dot rec" r="4.5" style="stroke-width:0"/>')}record</span>` +
+  `<span>${glyph('<circle class="dot rec" r="4.5" style="stroke-width:0"/>')}new best</span>` +
   `<span>${glyph('<circle class="dot" r="3"/>')}other attempt</span>` +
   `<span>${glyph('<path class="x" d="M-3.5,-3.5l7,7m0,-7l-7,7"/>')}plain prompt, no cue</span>` +
   `<span>${glyph('<line class="ci" x1="0" x2="0" y1="-6" y2="6" style="opacity:1"/>')}95 % interval</span></p>`;
@@ -1418,8 +1419,8 @@ function chart(b, W, H, narrow) {
     boxes.push({ x0: cx - 7, x1: cx + 7, y0: cy - 7, y1: cy + 7 });
     if (!clipped) boxes.push({ x0: cx - 1.5, x1: cx + 1.5, y0: y(q.ci[1]), y1: y(q.ci[0]) });
     const ci = clipped ? "" : `<line class="ci${q.rec ? " rec" : ""}${on(q)}" x1="${cx}" x2="${cx}" y1="${y(q.ci[1])}" y2="${y(q.ci[0])}"/>`;
-    const tip = `${q.s.config}: ${q.s.right} of ${q.s.n} (${f1(q.p)} %, 95% ${f1(q.ci[0])} to ${f1(q.ci[1])})` +
-      `${q.s.tokens ? `, ${num(q.s.tokens)} tokens per problem` : ""}, ${q.s.who}, ${q.s.result}`;
+    const tip = `${q.s.config}: ${q.s.right} of ${q.s.n} right (${f1(q.p)} %, 95 % interval ${f1(q.ci[0])} to ${f1(q.ci[1])} %)` +
+      `${q.s.tokens ? `, ${num(q.s.tokens)} tokens per problem` : ""}, posted by ${q.s.who}, ${q.s.result}`;
     const x7 = `<circle class="under" cx="${cx}" cy="${cy}" r="4.5"/><path class="x" d="M${cx - 3.5},${cy - 3.5}l7,7m0,-7l-7,7"`;
     const mark = q.plain && !q.rec ? `${x7}/>` : q.plain ? `${x7} style="stroke:var(--blue)"/>`
       : `<circle class="dot${q.rec ? " rec" : ""}" cx="${cx}" cy="${cy}" r="${q.rec ? 4.5 : 3}"/>`;
@@ -1469,7 +1470,7 @@ function lanes(items, d) {
     return `<div class="lane ${cls}" style="${pstyle(p)}"><button data-who="${esc(p)}"><i class="g"></i>${esc(p)}</button>` +
       `<div class="track" style="--hour:calc(100% / ${hours})">${marks}</div></div>`;
   }).join("") + (lanePeople.length ? `<div class="axis"><i></i><div>${
-    Array.from({ length: Math.floor(hours) + 1 }, (_, h) => `<span style="left:${(100 - h / hours * 100).toFixed(3)}%">${h ? h + "h ago" : "now"}</span>`)
+    Array.from({ length: Math.floor(hours) + 1 }, (_, h) => `<span style="left:${(100 - h / hours * 100).toFixed(3)}%">${h ? h + "\u00a0h ago" : "now"}</span>`)
       .reverse().join("")}</div></div>` : `<p class="empty">No posts or messages in the last ${hours} h.</p>`);
 }
 
@@ -1523,9 +1524,9 @@ function renderPanel() {
   let html;
   if (S.detail?.missing) {
     html = head(S.open, "") + `<div class="pbody"><p class="note">No item named ${esc(S.open)} on this board. ` +
-      `The link may be mistyped, or the item is on the test table.</p></div>`;
+      `The link may be mistyped, or the item is in the test data.</p></div>`;
   } else if (!base) {
-    html = head(S.open, "") + `<div class="pbody"><p class="note">Reading ${esc(S.open)}</p></div>`;
+    html = head(S.open, "") + `<div class="pbody"><p class="note">Loading ${esc(S.open)}…</p></div>`;
   } else {
     const i = base, d = S.detail, T = { links: false, terms: true };
     const open = i.listed === "work", idle = mins(activeNs(i));
@@ -1536,8 +1537,8 @@ function renderPanel() {
     const said = !w ? "" : (w.title ? `<p class="lead">${esc(w.title)}</p>` : "") +
       (w.what || w.why || w.caveat ? `<dl class="sd">${part("What", w.what)}${part("Why", w.why)}${part("Caveat", w.caveat, ' class="cv"')}</dl>` : "");
     const votes = d ? d.votes.map(v => `${esc(v.who)} ${v.vote > 0 ? "+" : "−"}`).join(", ") : "";
-    const scores = (S.scores?.get(i.id) || []).map(s => `<p>${esc(s.model)} ${esc(s.benchmark)} <b class="n">${s.right}/${s.n}</b>, ${f1(100 * s.right / s.n)} % ` +
-      `<small>${esc(s.config)}${s.tokens ? `, ${num(s.tokens)} tokens per problem` : ""}</small></p>`).join("");
+    const scores = (S.scores?.get(i.id) || []).map(s => `<p>${esc({ base: "Base model", rl: "RL model", other: "Other model" }[s.model] ?? s.model)}, ${esc(BENCH_NAME[s.benchmark] ?? s.benchmark)}: <b class="n">${s.right} of ${s.n}</b> (${f1(100 * s.right / s.n)} %); ` +
+      `<small>settings: ${esc(s.config)}${s.tokens ? `, ${num(s.tokens)} tokens per problem` : ""}</small></p>`).join("");
     const facts = [
       ...(scores ? [["Scores", scores]] : []),
       ["Posted by", `<span class="who" style="${pstyle(i.who)}">${esc(i.who)}</span>`], ["Branch", esc(i.branch || "not recorded")],
@@ -1545,7 +1546,7 @@ function renderPanel() {
       ["Posted", `${when(i.at_ns, " ago")}, ${utc(i.at_ns)}`],
       ["Votes", `+${i.ups} −${i.downs}${votes ? ": " + votes : ""}`],
     ].map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
-    const thread = (name, rows, empty) => `<h3>${name} <span>${d ? rows.length : ""}</span></h3>` + (!d ? `<p class="note">Reading</p>` :
+    const thread = (name, rows, empty) => `<h3>${name} <span>${d ? rows.length : ""}</span></h3>` + (!d ? `<p class="note">Loading…</p>` :
       rows.length ? `<div class="msgs">${rows.map(r => `<div class="pmsg" style="${pstyle(r.who)}"><div class="meta"><b>${esc(r.who)}</b>` +
         `${when(Date.parse(r.at) * 1e6, " ago")}</div><div class="text">${rich(r.text)}</div></div>`).join("")}</div>` : `<p class="note">${empty}</p>`);
     html = head(i.id, state, open && idle >= 60) + `<div class="pbody">${said}` +

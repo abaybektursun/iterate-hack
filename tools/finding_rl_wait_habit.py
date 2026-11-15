@@ -83,8 +83,9 @@ pc = lambda v: f"{100 * v:.1f} %"
 _rate0 = sum(_U["rate"]) / len(_U["rate"])
 
 TITLE = "More Wait, same score"
-PROBLEM = "Does writing Wait more often make a model solve more math problems?"
-LINE = f"Pushed to RL's rate of Wait, the base model scores no higher: {_P['right']} of {_N}."
+PROBLEM = "Does writing the word \"Wait\" more often make a model solve more math problems?"
+LINE = (f"Steered through its activations to write \"Wait\" as often as the RL model, the base model solves {_P['right']} of {_N} MATH-500 "
+        f"problems, against {_U['right']:g} on average without steering; the RL model solves {_RL['right']}.")
 PUSH_POINTS = pts(_P["vs"][0])  # the figure on the tile of /findings
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
@@ -95,22 +96,22 @@ PUSH_POINTS = pts(_P["vs"][0])  # the figure on the tile of /findings
 PANELS = [
     ["new", "What is new",
      "A published study raised a 7B model from 44.8 % to 56.8 % on MATH-500 by steering it toward self-reflection (arXiv 2506.12217). Here, matching the RL model's rate of Wait adds no right answers.",
-     [f"Our lens first showed the change: after RL, Wait or Hmm is among the model's likely next words at {pc(DATA['lens']['rl'])} of positions, against {pc(DATA['lens']['base'])} before.",
-      f"New here is the causal test, with a random push of the same size as control: {_P['right']} of {_N} pushed, {_R['right']} with the random push, {_U['right']} without a push.",
+     [f"A logit lens (reading the model's likely next words from its internal state) first showed the change: after RL, Wait or Hmm is among the model's likely next words at {pc(DATA['lens']['rl'])} of positions, against {pc(DATA['lens']['base'])} in the base model.",
+      f"New here is the causal test, with a random push of the same size as control: {_P['right']} of {_N} pushed, {_R['right']} with the random push, {_U['right']} on average over four runs without a push.",
       "The study above had no random control and did not count the word. In this model line, Wait comes from the mid-training data and RL multiplies it (arXiv 2610.30882)."]],
     ["why", "Why it matters",
      "The search for what RL adds can drop Wait as the cause: the word rises with RL, but adding it adds no right answers.",
      [f"The RL model solves {_RL['right']} of {_N} at the same setting, so the gap is still there with the word in place.",
-      f"Blind judges found that {_J['fix']} of {_J['n']} checking passages fix a step: {_J['base'][0]} of {_J['base'][1]} in the base model and {_J['rl'][0]} of {_J['rl'][1]} in the RL model (result-855858).",
-      f"What differs instead is how often a step goes wrong: {_J['wrong_steps']['rl']:.3f} first wrong steps per 1,000 tokens in the RL model, {_J['wrong_steps']['base']:.3f} in the base."]],
+      f"Blind judges found that {_J['fix']} of {_J['n']} checking passages fix a step: {_J['base'][0]} of {_J['base'][1]} in the base model and {_J['rl'][0]} of {_J['rl'][1]} in the RL model. Source: the team's board, result-855858.",
+      f"What differs instead is how often a step goes wrong: {_J['wrong_steps']['rl']:.3f} first wrong steps per 1,000 tokens in the RL model, {_J['wrong_steps']['base']:.3f} in the base model."]],
     ["how", "How we know",
      f"We added one fixed vector to block 24 of 32 of the base model at every token and let it solve all {_N} MATH-500 problems once, at T 1.0.",
      [f"The vector points at Wait and Hmm in a lens read at that block. At {round(100 * DATA['push']['alpha'], 1)} % of the block's usual output it makes the base write them {_P['rate']:.1f} times per 1,000 tokens; the RL model writes {_RL['rate']:.1f}.",
-      f"Against the mean of four runs without a push ({_U['right']}), the push changes the score by {pts(_P['vs'][0])} points (95 % interval {ci(_P['vs'])}); the random push by {pts(_R['vs'][0])} ({ci(_R['vs'])}).",
-      "A blind reader labelled 20 passages after a Wait the push put in and 20 after a Wait the base wrote by itself: 16 against 3 are filler or the next step, 1 against 7 fix a step."]],
+      f"Against the mean of four runs without a push ({_U['right']}), the push changes the score by {pts(_P['vs'][0])} percentage points (95 % interval {ci(_P['vs'])}); the random push by {pts(_R['vs'][0])} ({ci(_R['vs'])}).",
+      "A blind reader labelled 20 passages after a Wait the push put in and 20 after a Wait the base wrote by itself: 16 of the pushed ones and 3 of the model's own are filler or the next step; 1 of the pushed ones and 7 of the model's own fix a step."]],
     ["limits", "What it does not show",
      "It does not show that Wait is useless to the RL model, which may write it at the places where it helps.",
-     [f"One run's score moves by several problems: the two runs without a push in the steering engine scored {DATA['runs'][4]['right']} and {DATA['runs'][5]['right']}. With the seeds of the {DATA['runs'][4]['right']} run, the push is {pts(_P['vs_none'][0])} points ({ci(_P['vs_none'])}).",
+     [f"One run's score moves by several problems: the two runs without a push in the steering engine scored {DATA['runs'][4]['right']} and {DATA['runs'][5]['right']}. Against the run with the same seeds ({DATA['runs'][4]['right']} right), the push is {pts(_P['vs_none'][0])} points (95 % interval {ci(_P['vs_none'])}).",
       f"The push adds Wait at every position. A push only at chosen places was not tested, and a stronger push ({DATA['others']['stronger']['rate']:.1f} per 1,000 tokens) lowered the score to {DATA['others']['stronger']['right']}.",
       f"Inside the model the push overshoots: the lens sees Wait or Hmm at {pc(DATA['readout']['push'])} of positions, against {pc(DATA['readout']['none'])} without it."]],
     ["run", "How to reproduce it",
