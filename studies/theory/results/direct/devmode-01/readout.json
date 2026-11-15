@@ -1,0 +1,18 @@
+{
+ "mechanism": "round-13/s5-b",
+ "verdict": "undecided",
+ "reason": "per-sample dev100 rows of the kept method are only in frustea's Modal Volume autobench-runs (karpathy/<nnn>/), not committed and not reachable from this workspace; D and G_plain not computed",
+ "G_plain": null,
+ "R": null,
+ "threshold": "refuted if G_plain < 0.40 or R < 1.3",
+ "G_cue": 0.4015,
+ "G_cue_ci90": [
+  0.3432,
+  0.4636
+ ],
+ "G_cue_n_wrong": 34,
+ "G_cue_scope": "all 500",
+ "cue_vote_right_dev100": 94,
+ "G_plain_needed_for_R_1.3": 0.5219,
+ "instrument_R_null_vs_itself": 1.0
+}
