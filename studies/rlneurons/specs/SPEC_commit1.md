@@ -44,6 +44,12 @@ Also reported: committed answers right among stored cap hits (stored score 0 by 
 
 If H1 holds, the same job with `--model rl` on RL's stored rows (jobs -183640-e828 and -151540-86ef), the configuration fixed.
 
+## Amendment after the smoke (job abaybektursun-1114-212215-f08c, 26 rows read, before the full run)
+
+Only the continuation is graded, so no answer is read from the text before the cut (one smoke row had its answer taken from
+there), and a voice continuation that does not stop within 1,024 tokens counts as no answer (3 of 12 smoke rows restarted the
+whole solution). The box form's answer is the content of the forced box only.
+
 ## Instrument check
 
 Smoke `--n 4` per set; read every row: the box content is the extracted answer, the voice continuation ends with an answer and

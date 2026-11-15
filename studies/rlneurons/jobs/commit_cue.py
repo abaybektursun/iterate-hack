@@ -5,7 +5,8 @@ a commit line is appended, and the same model continues. One job, one model, bot
 
 Inputs: the stored rows of earlier jobs in the submitter's Volume (/runs/<job>/answers.jsonl), sample 0, attempt 0:
 SOURCES below. Forms: "box" appends BOX and generates at most 64 tokens; the answer is the text up to the brace that closes the
-forced box. "voice" appends VOICE and generates at most 1,024 tokens. T 1.0 / top-p 1.0; request seed --seed + 100000 * (index of
+forced box. "voice" appends VOICE and generates at most 1,024 tokens; a continuation that does not stop within them counts as no answer.
+Only the continuation is graded. T 1.0 / top-p 1.0; request seed --seed + 100000 * (index of
 N) + 10000 * (index of form) + problem index. Writes $OUT_DIR/rows.jsonl (set, problem, N, form, the continuation, v3 score, and
 the stored answer's score and tokens) and metrics.json. --n limits each set to its first n long answers (smoke).
 """
@@ -107,10 +108,11 @@ def main():
                 req = live.pop(rid)
                 rec = J.record(tok, req, out_ids, lps, fr)
                 pre_text = tok.decode(req["prefix_ids"], skip_special_tokens=False)
-                answer = close_box(rec["text"], len(pre_text)) if req["form"] == "box" else rec["text"]
+                cont = rec["text"][len(pre_text):]              # only the continuation is graded: no answer is read from before the cut
+                answer = "\\boxed{" + close_box(cont, 0) if req["form"] == "box" else ("" if rec["cap_hit"] else cont)
                 g = R.grade_v3(req["gold"], answer)
                 f.write(json.dumps({"bench": req["bench"], "problem_index": req["idx"], "cut": req["cut"], "form": req["form"], "seed": req["seed"],
-                                    "continuation": rec["text"][len(pre_text):], "n_new": rec["n_new"], "cap_hit": rec["cap_hit"],
+                                    "continuation": cont, "n_new": rec["n_new"], "cap_hit": rec["cap_hit"],
                                     "finish_reason": fr, "gold": req["gold"], **g, "stored": req["stored"],
                                     "before_cut_tail": pre_text[-600:]}) + "\n")
                 f.flush()
