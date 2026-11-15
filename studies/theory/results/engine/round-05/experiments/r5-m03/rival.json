@@ -1,0 +1,18 @@
+{"predictions": [
+  {"id": "r5-m03:theory:g4",
+   "value": 448, "low": 436, "high": 460,
+   "why": "Under the mixture mechanism the plain prompt leaves about 10-15 % of top8 samples (~65 answers, ~half wrong) in the plain-base register; the cue moves those into the cued/RL-like register (~85-93 % right), adding ~25 right to top8 plain's 427, in line with the theta line where the cue adds +36 at a=0.25 (405->441) and +9 at a=0.5 (443->452)."}
+ ],
+ "intervention": {
+   "change": "Selection only, no new generation: majority vote over the 4 stored Day-1 #3 cued-base samples (attempt 0) in which finished answers with n_new <= 600 tokens (the plain-register signature: short, quick answers) are dropped from the vote unless every sample of the problem is that short; cap hits never vote; ties go to the lowest sample index.",
+   "model": "allenai/Olmo-3-1025-7B",
+   "cell": {"set": "MATH-500", "prompt": "plain MATH prompt + prefilled cue ids [1584, 2268, 33413] (\" line!\\n\\nOkay\")", "sampling": "T 1.0 / top-p 1.0",
+            "cap": 16384, "grader": "v3", "samples": 4, "seeds": "seed base 41,000,000 + problem index + 10,000*sample (stored rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl, attempt 0)"},
+   "count": "Problems of 500 whose voted extracted_v3 answer is right under grader v3 (a problem whose samples all hit the cap or give no answer counts wrong); computed from rows.jsonl attempt-0 rows using n_new, cap_hit, extracted_v3 and score_v3.",
+   "unit": "right of 500",
+   "value": 447, "low": 441, "high": 453,
+   "best_known": {"value": 453, "item": "result-cbe0bc", "setting": "cue, T 1.0, vote over 4 stored samples, ties to the shortest finished sample (rule chosen on this set; held-out 451)"},
+   "gpu_minutes": 1,
+   "why": "The mechanism puts quick wrong answers in a short plain-base register that is wrong about half the time regardless of difficulty, so removing those votes should let the deliberative samples decide; since the cue already switches most cued-base samples, few are that short and the gain over the plain 446 vote is at most a few problems."
+ }
+}
