@@ -3,13 +3,14 @@
 `DIRECTION.md` point 2: about 11 points remain between the base with the opening cue (T1) and the RL model (T2) at
 T 1.0. This study maps where that difference sits, from the 500 per-problem rows already stored
 (`studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json`, grader v3). No model runs: every cell is a paired
-bootstrap over problems on the CPU class of the team runner. Plan: `specs/SPEC.md`.
+bootstrap over problems, run as a job on the CPU class of the team runner (never on a laptop: `specs/SPEC.md`,
+Requirements). Plan: `specs/SPEC.md`.
 
 ## Files
 
 | Path | What it is |
 |---|---|
-| `specs/SPEC.md` | The question, the four metrics, the splits, the prediction and what refutes it. |
+| `specs/SPEC.md` | The question, the four metrics, the splits, the prediction and what refutes it, the owner's requirements. |
 | `queue.json` | What the study runs: the batches (one metric each), the splits of every batch, extra cells, default settings. |
 | `prep/make_cells.py` | Writes `cells/<batch>.json` from `queue.json`. |
 | `cells/<batch>.json` | The cells of one batch, one entry per cell with its settings. |

@@ -73,22 +73,29 @@ def git(arena_id, *args, check=True):
 # ---------------------------------------------------------------- build
 
 def strip_review_harness(tree):
-    """The plain arm: no skill, no cycle.py, no earlier entries, and no line that names them."""
+    """The plain arm: no skill, no cycle.py, no earlier entries, and no text that names them."""
     shutil.rmtree(tree / ".claude" / "skills" / "team-meta-review")
     shutil.rmtree(tree / "meta")
     (tree / "tools" / "cycle.py").unlink()
     named = re.compile(r"meta-review|cycle\.py|\bmeta/")
-    for path in [tree / "AGENTS.md", tree / "README.md", tree / "tools" / "gpu.py", tree / "tools" / "board.py",
-                 tree / "tools" / "selftest.py"]:
-        kept = [line for line in path.read_text().splitlines(keepends=True) if not named.search(line)]
-        path.write_text("".join(kept))
-    settings = tree / ".claude" / "settings.json"
-    text = settings.read_text()
-    text, n = re.subn(r" && m=\$\(git log -1 --format=%cr -- meta/\) && echo \\\"Newest team-meta-review entry \(meta/\): \$\{m:-none\}\\\"", "", text)
-    assert n == 1, "the session-start hook no longer has the meta line this function removes"
-    settings.write_text(text)
-    json.loads(text)
-    for path in [tree / "AGENTS.md", tree / "README.md", settings, *sorted((tree / "tools").glob("*.py"))]:
+    cuts = {
+        "AGENTS.md": [(r"\n8\. Run the `team-meta-review` skill.*?(?=\n\n)", "")],
+        "README.md": [(r"\nuv run tools/cycle\.py --hours 24[^\n]*", ""),
+                      (r"\n`cycle\.py` is what the team-meta-review skill.*?(?=\n\n)", "")],
+        "tools/gpu.py": [(r"  # tools/cycle\.py matches jobs to work items by branch", ""),
+                         (r"\n    if sum\(key\.startswith\(\"job:\"\) for key in jobs\.keys\(\)\) % 5 == 0:\n        print\([^\n]*\)", "")],
+        "tools/board.py": [(r"; tools/cycle\.py does\)", ")"),
+                           (r"\n[^\n]*print\(\"A result closed: run the team-meta-review skill[^\n]*\)", "")],
+        ".claude/settings.json": [(r" && m=\$\(git log -1 --format=%cr -- meta/\) && echo \\\"Newest team-meta-review entry \(meta/\): \$\{m:-none\}\\\"", "")],
+    }
+    for name, edits in cuts.items():
+        text = (tree / name).read_text()
+        for pattern, replacement in edits:
+            text, n = re.subn(pattern, replacement, text, flags=re.S)
+            assert n == 1, f"{name}: {pattern!r} matched {n} times; update strip_review_harness"
+        (tree / name).write_text(text)
+    json.loads((tree / ".claude" / "settings.json").read_text())
+    for path in [tree / "AGENTS.md", tree / "README.md", tree / ".claude" / "settings.json", *sorted((tree / "tools").glob("*.py"))]:
         assert not named.search(path.read_text()), f"{path} still names the review harness"
     subprocess.run(["python3", "-m", "py_compile", str(tree / "tools" / "gpu.py"), str(tree / "tools" / "board.py")], check=True)
 
@@ -235,8 +242,14 @@ json.dump(out, sys.stdout)
 
 def dump_jobs(arena, since, until):
     """Every job of the arena's Modal environment submitted in [since, until]: its records, its log and its metrics.json."""
-    done = sh(["uv", "run", "--quiet", "--with", "modal", "python", "-c", DUMP, str(since), str(until)], ROOT, env(arena), timeout=600)
-    return json.loads(done.stdout)
+    for attempt in range(4):  # Modal's API or the machine can stall for minutes; the records do not change, so ask again
+        try:
+            done = sh(["uv", "run", "--quiet", "--with", "modal", "python", "-c", DUMP, str(since), str(until)], ROOT, env(arena), timeout=300)
+            return json.loads(done.stdout)
+        except (subprocess.TimeoutExpired, RuntimeError) as error:
+            last = error
+            time.sleep(15)
+    raise last
 
 
 def dump_board(arena):

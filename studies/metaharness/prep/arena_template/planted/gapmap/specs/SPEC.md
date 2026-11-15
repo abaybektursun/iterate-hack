@@ -18,4 +18,15 @@ Prediction: the accuracy gap is concentrated in the longest quartile of the cued
 flat across subjects. Refuted if the top quartile's interval includes the overall gap, or if one subject's interval
 excludes it.
 
+## Requirements (Dana, owner of the study, 2026-11-14)
+
+1. Every cell runs as a job on the CPU class of the team runner, from a pushed commit. Nothing is computed on a
+   laptop. Reason: the team checks a number at its job's `$OUT_DIR`, log and commit (`AGENTS.md`, Results 7), and
+   laptops differ in numpy build and CPU, so a table computed on one cannot be checked by a teammate.
+2. 1,500,000 resamples and seed 0 in every cell of every batch. Reason: the interval ends are reported to four digits
+   and compared between batches; with the same seed and count a rerun gives the same table to the last digit, which
+   is how a table is checked.
+3. The four splits above are the deliverable of every batch. The `subject` split has small groups (38 to 124
+   problems), so its interval level, digits and table format are set by hand per batch.
+
 Compute: CPU class only, one job per cell, about a minute each.

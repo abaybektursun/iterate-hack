@@ -49,6 +49,7 @@ class Window:
         self.log = []
         self.adapted = []
         self.flakes = []
+        self.whole_batch = False
 
     def note(self, text):
         self.log.append({"at": time.strftime("%H:%M:%S", time.gmtime()), "text": text})
@@ -70,6 +71,11 @@ class Window:
         block = re.search(r"## How to run.*?```[a-z]*\n(.*?)```", readme, flags=re.S)
         lines = [line.strip() for line in block.group(1).splitlines() if "<cell>" in line] if block else []
         if not lines:
+            whole = [line.strip() for line in block.group(1).splitlines() if "<batch>" in line and "make_cells" not in line] if block else []
+            if whole:  # the README launches a whole batch with one command: run it once, as the subject cell's launch
+                self.adapted.append(f"README launches a whole batch at once: {whole}")
+                self.whole_batch = True
+                return whole
             self.adapted.append("README has no launch line with <cell>; used the default launch line")
             return list(DEFAULT_LAUNCH)
         return lines
@@ -156,7 +162,7 @@ class Window:
         if "subject" in ids:  # first and alone: its corrections are commits, and a launch needs a clean, pushed tree
             fixes = {f: custom["final"][f] for f in custom["typed"] if custom["typed"][f] != custom["final"][f]} if planted else {}
             answered["subject"], lines = self.launch_until_done("subject", lines, fixes)
-        rest = [c for c in ids if c != "subject"]
+        rest = [] if self.whole_batch else [c for c in ids if c != "subject"]
         self.board("comment", self.work, f"subject done; launching {', '.join(rest)} at the same time."[:280])
         with ThreadPoolExecutor(8) as pool:
             for cell, (ok, _) in zip(rest, pool.map(lambda c: self.launch_until_done(c, list(lines), {}), rest)):
