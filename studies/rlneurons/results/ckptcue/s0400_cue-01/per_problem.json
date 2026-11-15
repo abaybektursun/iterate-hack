@@ -1,0 +1,4002 @@
+[
+ {
+  "problem_index": 0,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1149,
+  "extracted_v3": "(3, \\frac{\\pi}{2})",
+  "opening": " line!\n\nOkay, so I need to con"
+ },
+ {
+  "problem_index": 1,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2171,
+  "extracted_v3": "p - q",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 2,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1515,
+  "extracted_v3": "\\dfrac{14}{3}",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 3,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1587,
+  "extracted_v3": "9",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 4,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2984,
+  "extracted_v3": "Evelyn",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 5,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2106,
+  "extracted_v3": "42",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 6,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2962,
+  "extracted_v3": "27",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 7,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2428,
+  "extracted_v3": "90",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 8,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1101,
+  "extracted_v3": "3\\sqrt{13}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 9,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 10,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3147,
+  "extracted_v3": "2220",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 11,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 2814,
+  "extracted_v3": "\\dfrac{6}{49}",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 12,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2067,
+  "extracted_v3": "284",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 13,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 571,
+  "extracted_v3": "5",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 14,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 1679,
+  "extracted_v3": "10",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 15,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7534,
+  "extracted_v3": "6 - 5i",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 16,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1663,
+  "extracted_v3": "-50",
+  "opening": " line!\n\nOkay, so I need to com"
+ },
+ {
+  "problem_index": 17,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8133,
+  "extracted_v3": "\\pi",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 18,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 12717,
+  "extracted_v3": "68",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 19,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6352,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 20,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 4689,
+  "extracted_v3": "117 + 41i",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 21,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 7274,
+  "extracted_v3": "14135",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 22,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2453,
+  "extracted_v3": "5",
+  "opening": " line!\n\nOkay, let me try to so"
+ },
+ {
+  "problem_index": 23,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2076,
+  "extracted_v3": "5",
+  "opening": " line!\n\nOkay, so I have this e"
+ },
+ {
+  "problem_index": 24,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2725,
+  "extracted_v3": "10",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 25,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 13138,
+  "extracted_v3": "-2, 1",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 26,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 12145,
+  "extracted_v3": "144",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 27,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 839,
+  "extracted_v3": "78",
+  "opening": " line!\n\nOkay, so the problem i"
+ },
+ {
+  "problem_index": 28,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1843,
+  "extracted_v3": "-2 + 7i",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 29,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1037,
+  "extracted_v3": "225",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 30,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2315,
+  "extracted_v3": "52_8",
+  "opening": " line!\n\nOkay, so I need to mul"
+ },
+ {
+  "problem_index": 31,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 484,
+  "extracted_v3": "7",
+  "opening": " line!\n\nOkay, so I need to sim"
+ },
+ {
+  "problem_index": 32,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7933,
+  "extracted_v3": "720",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 33,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2657,
+  "extracted_v3": "\\dfrac{243}{625}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 34,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4150,
+  "extracted_v3": "-125",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 35,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1466,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 36,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5387,
+  "extracted_v3": "3, 5, 7",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 37,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 8385,
+  "extracted_v3": "360",
+  "opening": " line!\n\nOkay, so the problem i"
+ },
+ {
+  "problem_index": 38,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1065,
+  "extracted_v3": "2000",
+  "opening": " line!\n\nOkay, let's see here. "
+ },
+ {
+  "problem_index": 39,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1262,
+  "extracted_v3": "23",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 40,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 655,
+  "extracted_v3": "12",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 41,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 12966,
+  "extracted_v3": "17",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 42,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1069,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 43,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 15920,
+  "extracted_v3": "70\\sqrt{2}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 44,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1278,
+  "extracted_v3": "1.25",
+  "opening": " line!\n\nOkay, let's see. Bill "
+ },
+ {
+  "problem_index": 45,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1555,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 46,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 11168,
+  "extracted_v3": "12",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 47,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1211,
+  "extracted_v3": "5",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 48,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1141,
+  "extracted_v3": "\\dfrac{3}{2}",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 49,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1087,
+  "extracted_v3": "83",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 50,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 2017,
+  "extracted_v3": "29",
+  "opening": " line!\n\nOkay, let's try to sol"
+ },
+ {
+  "problem_index": 51,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2681,
+  "extracted_v3": "x^5 - x^4 + x^3 - x^2 + x - 1",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 52,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4453,
+  "extracted_v3": "12",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 53,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1293,
+  "extracted_v3": "-\\frac{\\pi}{6}",
+  "opening": " line!\n\nOkay, so I need to com"
+ },
+ {
+  "problem_index": 54,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 651,
+  "extracted_v3": "0.15",
+  "opening": " line!\n\nOkay, so I need to con"
+ },
+ {
+  "problem_index": 55,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1567,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 56,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1098,
+  "extracted_v3": "11",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 57,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1305,
+  "extracted_v3": "16",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 58,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1223,
+  "extracted_v3": "9901",
+  "opening": " line!\n\nOkay, so I need to com"
+ },
+ {
+  "problem_index": 59,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1095,
+  "extracted_v3": "5",
+  "opening": " line!\n\nOkay, let's see. So, t"
+ },
+ {
+  "problem_index": 60,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11859,
+  "extracted_v3": "(6, 31, -1)",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 61,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3257,
+  "extracted_v3": "-256",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 62,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 13562,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 63,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2860,
+  "extracted_v3": "10",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 64,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 65,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 751,
+  "extracted_v3": "1",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 66,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1490,
+  "extracted_v3": "x^3 + 3x - 6",
+  "opening": " line!\n\nOkay, so I need to exp"
+ },
+ {
+  "problem_index": 67,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1318,
+  "extracted_v3": "10\\%",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 68,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6925,
+  "extracted_v3": "46",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 69,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1922,
+  "extracted_v3": "-1",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 70,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1038,
+  "extracted_v3": "40",
+  "opening": " line!\n\nOkay, so I need to com"
+ },
+ {
+  "problem_index": 71,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7067,
+  "extracted_v3": "2516",
+  "opening": " line!\n\nOkay, so I need to con"
+ },
+ {
+  "problem_index": 72,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4146,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 73,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1085,
+  "extracted_v3": "\\dfrac{3\\sqrt{3}}{4}",
+  "opening": " line!\n\nOkay, let me try to so"
+ },
+ {
+  "problem_index": 74,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2880,
+  "extracted_v3": "\\cot x",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 75,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2818,
+  "extracted_v3": "\\dfrac{11}{36}",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 76,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1691,
+  "extracted_v3": "0",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 77,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 911,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 78,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2351,
+  "extracted_v3": "(-2, 1)",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 79,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1564,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, let's try to sol"
+ },
+ {
+  "problem_index": 80,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 10574,
+  "extracted_v3": "1",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 81,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1051,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, let's try to sol"
+ },
+ {
+  "problem_index": 82,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9933,
+  "extracted_v3": "\\dfrac{3}{2}",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 83,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3402,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 84,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2317,
+  "extracted_v3": "-1",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 85,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 935,
+  "extracted_v3": "\\sqrt{5}",
+  "opening": " line!\n\nOkay, let's see. I hav"
+ },
+ {
+  "problem_index": 86,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1144,
+  "extracted_v3": "240",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 87,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1799,
+  "extracted_v3": "1",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 88,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 12922,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 89,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2395,
+  "extracted_v3": "21",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 90,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1012,
+  "extracted_v3": "\\dfrac{3}{2}",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 91,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2310,
+  "extracted_v3": "1",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 92,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2634,
+  "extracted_v3": "\\dfrac{448}{15625}",
+  "opening": " line!\n\nOkay, so there's this "
+ },
+ {
+  "problem_index": 93,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1996,
+  "extracted_v3": "33",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 94,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 13003,
+  "extracted_v3": "120^\\circ",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 95,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1519,
+  "extracted_v3": "-4",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 96,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 97,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2427,
+  "extracted_v3": "east",
+  "opening": " line!\n\nOkay, so there's this "
+ },
+ {
+  "problem_index": 98,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1125,
+  "extracted_v3": "2k + 2",
+  "opening": " line!\n\nOkay, let me try to so"
+ },
+ {
+  "problem_index": 99,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2312,
+  "extracted_v3": "\\begin{pmatrix} -\\dfrac{1}{3} \\\\ \\dfrac{2}{3} \\\\ \\dfrac{5}{3} \\end{pmatrix}",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 100,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 12996,
+  "extracted_v3": "145",
+  "opening": " line!\n\nOkay, let's see. I hav"
+ },
+ {
+  "problem_index": 101,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 15106,
+  "extracted_v3": "5",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 102,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1156,
+  "extracted_v3": "(a + 5)(b + 2)",
+  "opening": " line!\n\nOkay, let me try to fa"
+ },
+ {
+  "problem_index": 103,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 15734,
+  "extracted_v3": "4, 1 + \\sqrt{5}",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 104,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 8878,
+  "extracted_v3": "20 + 2\\sqrt{36 - 4\\sqrt{41}}",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 105,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1743,
+  "extracted_v3": "29",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 106,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 960,
+  "extracted_v3": "\\dfrac{4}{3}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 107,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1261,
+  "extracted_v3": "9",
+  "opening": " line!\n\nOkay, let's tackle thi"
+ },
+ {
+  "problem_index": 108,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9998,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 109,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8161,
+  "extracted_v3": "120",
+  "opening": " line!\n\nOkay, let's try to tac"
+ },
+ {
+  "problem_index": 110,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 111,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 940,
+  "extracted_v3": "210",
+  "opening": " line!\n\nOkay, so Mr. Brennan h"
+ },
+ {
+  "problem_index": 112,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2706,
+  "extracted_v3": "13",
+  "opening": " line!\n\nOkay, so I need to sim"
+ },
+ {
+  "problem_index": 113,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1539,
+  "extracted_v3": "8000",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 114,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1049,
+  "extracted_v3": "-5",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 115,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1169,
+  "extracted_v3": "1260",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 116,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1155,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 117,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1050,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 118,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6593,
+  "extracted_v3": "81",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 119,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 10655,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 120,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7120,
+  "extracted_v3": "even",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 121,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 958,
+  "extracted_v3": "6",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 122,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 810,
+  "extracted_v3": "9",
+  "opening": " line!\n\nOkay, let's tackle thi"
+ },
+ {
+  "problem_index": 123,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4466,
+  "extracted_v3": "8",
+  "opening": " line!\n\nOkay, let's see here. "
+ },
+ {
+  "problem_index": 124,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3561,
+  "extracted_v3": "\\dfrac{11}{2}",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 125,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1260,
+  "extracted_v3": "-3",
+  "opening": " line!\n\nOkay, so I need to eva"
+ },
+ {
+  "problem_index": 126,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 127,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2050,
+  "extracted_v3": "4210",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 128,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1706,
+  "extracted_v3": "36",
+  "opening": " line!\n\nOkay, so Suzanne walks"
+ },
+ {
+  "problem_index": 129,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3454,
+  "extracted_v3": "\\dfrac{3840}{289}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 130,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7157,
+  "extracted_v3": "13",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 131,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1765,
+  "extracted_v3": "8",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 132,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 861,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, so Rick and Stev"
+ },
+ {
+  "problem_index": 133,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1933,
+  "extracted_v3": "120",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 134,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2046,
+  "extracted_v3": "16",
+  "opening": " line!\n\nOkay, let's try to sol"
+ },
+ {
+  "problem_index": 135,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2488,
+  "extracted_v3": "9",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 136,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4830,
+  "extracted_v3": "64",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 137,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5045,
+  "extracted_v3": "204_5",
+  "opening": " line!\n\nOkay, so I need to div"
+ },
+ {
+  "problem_index": 138,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4949,
+  "extracted_v3": "\\dfrac{1}{3}",
+  "opening": " line!\n\nOkay, so there's this "
+ },
+ {
+  "problem_index": 139,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 12720,
+  "extracted_v3": "1",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 140,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1265,
+  "extracted_v3": "13",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 141,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2831,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 142,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5468,
+  "extracted_v3": "28800",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 143,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2483,
+  "extracted_v3": "3\\sqrt{5}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 144,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1373,
+  "extracted_v3": "(15, -29)",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 145,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7506,
+  "extracted_v3": "-2",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 146,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1145,
+  "extracted_v3": "\\dfrac{\\sqrt{3}}{3}",
+  "opening": " line!\n\nOkay, so I need to sim"
+ },
+ {
+  "problem_index": 147,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5520,
+  "extracted_v3": "16",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 148,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1647,
+  "extracted_v3": "11",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 149,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2413,
+  "extracted_v3": "49",
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 150,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4970,
+  "extracted_v3": "1",
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 151,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5378,
+  "extracted_v3": "144",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 152,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11766,
+  "extracted_v3": "8",
+  "opening": " line!\n\nOkay, let's try to sol"
+ },
+ {
+  "problem_index": 153,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3574,
+  "extracted_v3": "\\dfrac{2}{21}",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 154,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 12116,
+  "extracted_v3": "13",
+  "opening": " line!\n\nOkay, so there's this "
+ },
+ {
+  "problem_index": 155,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3746,
+  "extracted_v3": "\\dfrac{1}{4}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 156,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8887,
+  "extracted_v3": "30",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 157,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1353,
+  "extracted_v3": "\\dfrac{6}{5}",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 158,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1449,
+  "extracted_v3": "2107",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 159,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2066,
+  "extracted_v3": "3.21",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 160,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1370,
+  "extracted_v3": "18",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 161,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 567,
+  "extracted_v3": "6",
+  "opening": " line!\n\nOkay, so I need to eva"
+ },
+ {
+  "problem_index": 162,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3310,
+  "extracted_v3": "\\dfrac{17}{50}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 163,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2296,
+  "extracted_v3": "-\\dfrac{35}{9}",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 164,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9589,
+  "extracted_v3": "-\\sqrt{3}",
+  "opening": " line!\n\nOkay, so I need to sim"
+ },
+ {
+  "problem_index": 165,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2979,
+  "extracted_v3": "\\dfrac{4}{9}",
+  "opening": " line!\n\nOkay, let's tackle thi"
+ },
+ {
+  "problem_index": 166,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 12284,
+  "extracted_v3": "\\frac{30}{1}",
+  "opening": " line!\n\nOkay, so I have this g"
+ },
+ {
+  "problem_index": 167,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 740,
+  "extracted_v3": "65",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 168,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 12535,
+  "extracted_v3": "25",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 169,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 672,
+  "extracted_v3": "12",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 170,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4818,
+  "extracted_v3": "1736",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 171,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 906,
+  "extracted_v3": "\\dfrac{13}{15}",
+  "opening": " line!\n\nOkay, so Louis and Jac"
+ },
+ {
+  "problem_index": 172,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1217,
+  "extracted_v3": "350",
+  "opening": " line!\n\nOkay, let's see. I hav"
+ },
+ {
+  "problem_index": 173,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3017,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, let's try to tac"
+ },
+ {
+  "problem_index": 174,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1377,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 175,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4315,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 176,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2648,
+  "extracted_v3": "0.0000672",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 177,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8655,
+  "extracted_v3": "30",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 178,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 410,
+  "extracted_v3": "60",
+  "opening": " line!\n\nOkay, let me see. I ne"
+ },
+ {
+  "problem_index": 179,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3189,
+  "extracted_v3": "5x - 7y + 11z + 4 = 0",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 180,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 1683,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 181,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 760,
+  "extracted_v3": "\\dfrac{\\sqrt{3}}{3}",
+  "opening": " line!\n\nOkay, let's tackle thi"
+ },
+ {
+  "problem_index": 182,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1169,
+  "extracted_v3": "1251",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 183,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3432,
+  "extracted_v3": "23",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 184,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 7286,
+  "extracted_v3": "[2, \\infty)",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 185,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 763,
+  "extracted_v3": "1",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 186,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 2421,
+  "extracted_v3": "8",
+  "opening": " line!\n\nOkay, let's tackle thi"
+ },
+ {
+  "problem_index": 187,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 747,
+  "extracted_v3": "7",
+  "opening": " line!\n\nOkay, let's see. Hilla"
+ },
+ {
+  "problem_index": 188,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2704,
+  "extracted_v3": "6",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 189,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9512,
+  "extracted_v3": "160",
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 190,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1556,
+  "extracted_v3": "\\dfrac{13}{18}",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 191,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1681,
+  "extracted_v3": "0",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 192,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8983,
+  "extracted_v3": "30",
+  "opening": " line!\n\nOkay, let me see. So t"
+ },
+ {
+  "problem_index": 193,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1620,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 194,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 13749,
+  "extracted_v3": "\\dfrac{8}{49}",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 195,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2967,
+  "extracted_v3": "24",
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 196,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1222,
+  "extracted_v3": "1600",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 197,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4069,
+  "extracted_v3": "6",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 198,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1385,
+  "extracted_v3": "10080",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 199,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 753,
+  "extracted_v3": "17",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 200,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1933,
+  "extracted_v3": "40",
+  "opening": " line!\n\nOkay, let's see. So th"
+ },
+ {
+  "problem_index": 201,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2022,
+  "extracted_v3": "66",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 202,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3090,
+  "extracted_v3": "\\dfrac{2}{3}",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 203,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2800,
+  "extracted_v3": "12",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 204,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 16205,
+  "extracted_v3": "64",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 205,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2262,
+  "extracted_v3": "(-2, -14, -7)",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 206,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2340,
+  "extracted_v3": "\\left( \\dfrac{3}{2}, -13 \\right)",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 207,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 882,
+  "extracted_v3": "28",
+  "opening": " line!\n\nOkay, so Mikka wants t"
+ },
+ {
+  "problem_index": 208,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1527,
+  "extracted_v3": "1",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 209,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1732,
+  "extracted_v3": "16",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 210,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9136,
+  "extracted_v3": "10",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 211,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1795,
+  "extracted_v3": "5",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 212,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1220,
+  "extracted_v3": "56",
+  "opening": " line!\n\nOkay, so Frank took th"
+ },
+ {
+  "problem_index": 213,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3242,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, so I need to com"
+ },
+ {
+  "problem_index": 214,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 10398,
+  "extracted_v3": "125",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 215,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1264,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, let's see. I hav"
+ },
+ {
+  "problem_index": 216,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1139,
+  "extracted_v3": "6",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 217,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 10628,
+  "extracted_v3": "11111111100",
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 218,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1095,
+  "extracted_v3": "(-1,6)",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 219,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 13942,
+  "extracted_v3": "\\dfrac{1}{9}",
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 220,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2687,
+  "extracted_v3": "\\dfrac{16}{27}",
+  "opening": " line!\n\nOkay, so Sam is carryi"
+ },
+ {
+  "problem_index": 221,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2445,
+  "extracted_v3": "900",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 222,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9621,
+  "extracted_v3": "54",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 223,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3845,
+  "extracted_v3": "14",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 224,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5055,
+  "extracted_v3": "\\dfrac{9}{256}",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 225,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1767,
+  "extracted_v3": "11",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 226,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2411,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 227,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 578,
+  "extracted_v3": "C",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 228,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8498,
+  "extracted_v3": "288\\pi",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 229,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 847,
+  "extracted_v3": "90",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 230,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3289,
+  "extracted_v3": "\\dfrac{16}{5}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 231,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1943,
+  "extracted_v3": "10",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 232,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7360,
+  "extracted_v3": "\\dfrac{1997}{2}",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 233,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1553,
+  "extracted_v3": "30",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 234,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2514,
+  "extracted_v3": "34",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 235,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1274,
+  "extracted_v3": "\\dfrac{5}{9}",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 236,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9995,
+  "extracted_v3": "12",
+  "opening": " line!\n\nOkay, so I need to com"
+ },
+ {
+  "problem_index": 237,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2053,
+  "extracted_v3": "22",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 238,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2051,
+  "extracted_v3": "-4",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 239,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 240,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 11689,
+  "extracted_v3": "54",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 241,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4199,
+  "extracted_v3": "17",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 242,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 8178,
+  "extracted_v3": "32371",
+  "opening": " line!\n\nOkay, let's see. So, t"
+ },
+ {
+  "problem_index": 243,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1164,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 244,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1845,
+  "extracted_v3": "8",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 245,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3811,
+  "extracted_v3": "-13x + 3",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 246,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2400,
+  "extracted_v3": "8",
+  "opening": " line!\n\nOkay, so there's this "
+ },
+ {
+  "problem_index": 247,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2159,
+  "extracted_v3": "\\dfrac{10}{11}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 248,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 4431,
+  "extracted_v3": "\\begin{pmatrix} 5 & 14 \\\\ -2 & -5 \\end{pmatrix}",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 249,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2222,
+  "extracted_v3": "17",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 250,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1304,
+  "extracted_v3": "13",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 251,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1564,
+  "extracted_v3": "540",
+  "opening": " line!\n\nOkay, so there's this "
+ },
+ {
+  "problem_index": 252,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1725,
+  "extracted_v3": "81",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 253,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1296,
+  "extracted_v3": "\\dfrac{1}{8}",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 254,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2072,
+  "extracted_v3": "28",
+  "opening": " line!\n\nOkay, so Pat is suppos"
+ },
+ {
+  "problem_index": 255,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2037,
+  "extracted_v3": "E",
+  "opening": " line!\n\nOkay, so I have this e"
+ },
+ {
+  "problem_index": 256,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2396,
+  "extracted_v3": "\\frac{8}{21}",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 257,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1220,
+  "extracted_v3": "864",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 258,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2350,
+  "extracted_v3": "16",
+  "opening": " line!\n\nOkay, so I've got this"
+ },
+ {
+  "problem_index": 259,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1125,
+  "extracted_v3": "22",
+  "opening": " line!\n\nOkay, let me see. I ne"
+ },
+ {
+  "problem_index": 260,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1634,
+  "extracted_v3": "120",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 261,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1429,
+  "extracted_v3": "76",
+  "opening": " line!\n\nOkay, let's tackle thi"
+ },
+ {
+  "problem_index": 262,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 679,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 263,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 915,
+  "extracted_v3": "15",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 264,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 9240,
+  "extracted_v3": "6 \\dfrac{2}{3}",
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 265,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1018,
+  "extracted_v3": "4005",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 266,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 831,
+  "extracted_v3": "\\dfrac{33}{100}",
+  "opening": " line!\n\nOkay, let's tackle thi"
+ },
+ {
+  "problem_index": 267,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4804,
+  "extracted_v3": "180",
+  "opening": " line!\n\nOkay, let's try to sol"
+ },
+ {
+  "problem_index": 268,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1004,
+  "extracted_v3": "1",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 269,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 693,
+  "extracted_v3": "6",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 270,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1162,
+  "extracted_v3": "10",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 271,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1697,
+  "extracted_v3": "333",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 272,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2465,
+  "extracted_v3": "1030",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 273,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1937,
+  "extracted_v3": "1250",
+  "opening": " line!\n\nOkay, let's see. I hav"
+ },
+ {
+  "problem_index": 274,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 10781,
+  "extracted_v3": "2\\pi + 18",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 275,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1178,
+  "extracted_v3": "7",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 276,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2648,
+  "extracted_v3": "11",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 277,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 774,
+  "extracted_v3": "\\sqrt{53}",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 278,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 921,
+  "extracted_v3": "255",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 279,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4775,
+  "extracted_v3": "7\\pi",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 280,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1557,
+  "extracted_v3": "8",
+  "opening": " line!\n\nOkay, let me try to so"
+ },
+ {
+  "problem_index": 281,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6722,
+  "extracted_v3": "36",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 282,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1405,
+  "extracted_v3": "129",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 283,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 992,
+  "extracted_v3": "1",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 284,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 3193,
+  "extracted_v3": "3 - 2\\sqrt{2}",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 285,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7200,
+  "extracted_v3": "440",
+  "opening": " line!\n\nOkay, let's try to tac"
+ },
+ {
+  "problem_index": 286,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line!\n\nOkay, let's tackle thi"
+ },
+ {
+  "problem_index": 287,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2639,
+  "extracted_v3": "36",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 288,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2071,
+  "extracted_v3": "7",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 289,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2155,
+  "extracted_v3": "16",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 290,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2126,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, let me try to so"
+ },
+ {
+  "problem_index": 291,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2395,
+  "extracted_v3": "63",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 292,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3053,
+  "extracted_v3": "898",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 293,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1768,
+  "extracted_v3": "\\left( \\frac{3}{5}, \\frac{8}{3} \\right]",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 294,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3080,
+  "extracted_v3": "58",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 295,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 13717,
+  "extracted_v3": "6",
+  "opening": " line!\n\nOkay, let's try to sol"
+ },
+ {
+  "problem_index": 296,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5217,
+  "extracted_v3": "B",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 297,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1578,
+  "extracted_v3": "103",
+  "opening": " line!\n\nOkay, let me try to so"
+ },
+ {
+  "problem_index": 298,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2588,
+  "extracted_v3": "(-18, -49, 96)",
+  "opening": " line!\n\nOkay, so I need to com"
+ },
+ {
+  "problem_index": 299,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3594,
+  "extracted_v3": "63",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 300,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1035,
+  "extracted_v3": "12",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 301,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5316,
+  "extracted_v3": "5.4",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 302,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11281,
+  "extracted_v3": "5",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 303,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8402,
+  "extracted_v3": "28",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 304,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1822,
+  "extracted_v3": "9",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 305,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1199,
+  "extracted_v3": "\\dfrac{9}{19}",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 306,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 6743,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 307,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1689,
+  "extracted_v3": "(-\\infty, 0]",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 308,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 309,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4703,
+  "extracted_v3": "14",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 310,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3450,
+  "extracted_v3": "49",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 311,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1977,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 312,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 878,
+  "extracted_v3": "(5, \\infty)",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 313,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 872,
+  "extracted_v3": "12\\pi",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 314,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1043,
+  "extracted_v3": "(2, 4)",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 315,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1751,
+  "extracted_v3": "41",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 316,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1601,
+  "extracted_v3": "12",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 317,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8709,
+  "extracted_v3": "0",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 318,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1073,
+  "extracted_v3": "\\dfrac{11 + 9a}{20}",
+  "opening": " line!\n\nOkay, so I need to com"
+ },
+ {
+  "problem_index": 319,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 905,
+  "extracted_v3": "-128",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 320,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9743,
+  "extracted_v3": "-\\dfrac{24}{25}",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 321,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2329,
+  "extracted_v3": "10",
+  "opening": " line!\n\nOkay, so I've got this"
+ },
+ {
+  "problem_index": 322,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2047,
+  "extracted_v3": "-1",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 323,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 13810,
+  "extracted_v3": "\\dfrac{1}{3}",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 324,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7662,
+  "extracted_v3": "120",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 325,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 931,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 326,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8734,
+  "extracted_v3": "\\dfrac{9}{100}",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 327,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6754,
+  "extracted_v3": "15",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 328,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3632,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 329,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 509,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 330,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3091,
+  "extracted_v3": "1940",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 331,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2112,
+  "extracted_v3": "\\dfrac{13}{6}",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 332,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 12284,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 333,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 10048,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 334,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2449,
+  "extracted_v3": "-120",
+  "opening": " line!\n\nOkay, let's see. I hav"
+ },
+ {
+  "problem_index": 335,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4718,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 336,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1114,
+  "extracted_v3": "26000",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 337,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1663,
+  "extracted_v3": "6",
+  "opening": " line!\n\nOkay, let's see. So th"
+ },
+ {
+  "problem_index": 338,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6232,
+  "extracted_v3": "4343",
+  "opening": " line!\n\nOkay, so I need to con"
+ },
+ {
+  "problem_index": 339,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6973,
+  "extracted_v3": "2k",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 340,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 13060,
+  "extracted_v3": "67^\\circ",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 341,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 952,
+  "extracted_v3": "-2",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 342,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1655,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 343,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2514,
+  "extracted_v3": "58500",
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 344,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1366,
+  "extracted_v3": "5",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 345,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1768,
+  "extracted_v3": "1",
+  "opening": " line!\n\nOkay, let's see here. "
+ },
+ {
+  "problem_index": 346,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2076,
+  "extracted_v3": "66",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 347,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2357,
+  "extracted_v3": "6r^2 - 4r - 24",
+  "opening": " line!\n\nOkay, so I have this a"
+ },
+ {
+  "problem_index": 348,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2305,
+  "extracted_v3": "4495",
+  "opening": " line!\n\nOkay, so I need to com"
+ },
+ {
+  "problem_index": 349,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 10249,
+  "extracted_v3": "240",
+  "opening": " line!\n\nOkay, so the problem i"
+ },
+ {
+  "problem_index": 350,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1947,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 351,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 10751,
+  "extracted_v3": "\\dfrac{1}{16}",
+  "opening": " line!\n\nOkay, so I have to sim"
+ },
+ {
+  "problem_index": 352,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 15506,
+  "extracted_v3": "24 + 2\\sqrt{11}",
+  "opening": " line!\n\nOkay, let's see. We ha"
+ },
+ {
+  "problem_index": 353,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2960,
+  "extracted_v3": "480",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 354,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1722,
+  "extracted_v3": "81",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 355,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": "36 + 24\\sqrt{3}",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 356,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2524,
+  "extracted_v3": "(-\\sqrt{3}, \\sqrt{3})",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 357,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 1449,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 358,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3314,
+  "extracted_v3": "ellipse",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 359,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3067,
+  "extracted_v3": "6",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 360,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4663,
+  "extracted_v3": "\\dfrac{7}{4}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 361,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3744,
+  "extracted_v3": "16\\sqrt{3}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 362,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1066,
+  "extracted_v3": "\\dfrac{1}{4}",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 363,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1020,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, let's see here. "
+ },
+ {
+  "problem_index": 364,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6516,
+  "extracted_v3": "(1, -16, -4, 43)",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 365,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 366,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3407,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 367,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 945,
+  "extracted_v3": "1",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 368,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1415,
+  "extracted_v3": "31",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 369,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 4763,
+  "extracted_v3": "189",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 370,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 845,
+  "extracted_v3": "-41",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 371,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11705,
+  "extracted_v3": "17",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 372,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 10534,
+  "extracted_v3": "50^\\circ",
+  "opening": " line!\n\nOkay, let's try to sol"
+ },
+ {
+  "problem_index": 373,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2646,
+  "extracted_v3": "1 + 2i",
+  "opening": " line!\n\nOkay, so William Sydne"
+ },
+ {
+  "problem_index": 374,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 536,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 375,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1708,
+  "extracted_v3": "25",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 376,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2023,
+  "extracted_v3": "(8, -2)",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 377,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4852,
+  "extracted_v3": "6",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 378,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2101,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, let's tackle thi"
+ },
+ {
+  "problem_index": 379,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2488,
+  "extracted_v3": "12",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 380,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 3480,
+  "extracted_v3": "(0, 36)",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 381,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9459,
+  "extracted_v3": "\\dfrac{1}{2}",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 382,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 7007,
+  "extracted_v3": "\\dfrac{20000}{\\pi + 2}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 383,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1409,
+  "extracted_v3": "[-2, 7]",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 384,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 479,
+  "extracted_v3": "15x - 80",
+  "opening": " line!\n\nOkay, so I need to sim"
+ },
+ {
+  "problem_index": 385,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 1425,
+  "extracted_v3": "23",
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 386,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1623,
+  "extracted_v3": "11",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 387,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 982,
+  "extracted_v3": "18",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 388,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1993,
+  "extracted_v3": "\\dfrac{11}{2}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 389,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 5843,
+  "extracted_v3": "1",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 390,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4257,
+  "extracted_v3": "12",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 391,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5653,
+  "extracted_v3": "0",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 392,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 393,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1175,
+  "extracted_v3": "\\dfrac{3}{4}",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 394,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5556,
+  "extracted_v3": "-\\dfrac{3}{8}",
+  "opening": " line!\n\nOkay, so Archimedes ne"
+ },
+ {
+  "problem_index": 395,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2225,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 396,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 8699,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 397,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 627,
+  "extracted_v3": "23",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 398,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4291,
+  "extracted_v3": "Navin",
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 399,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1532,
+  "extracted_v3": "326.5",
+  "opening": " line!\n\nOkay, let me try to so"
+ },
+ {
+  "problem_index": 400,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 15849,
+  "extracted_v3": "\\dfrac{14}{3}",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 401,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 13712,
+  "extracted_v3": "\\dfrac{13}{4}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 402,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2616,
+  "extracted_v3": "1 - 12i",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 403,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 3919,
+  "extracted_v3": "1",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 404,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 897,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, let's see. Rosly"
+ },
+ {
+  "problem_index": 405,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 722,
+  "extracted_v3": "60",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 406,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1026,
+  "extracted_v3": "0",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 407,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1588,
+  "extracted_v3": "9",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 408,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4810,
+  "extracted_v3": "\\left( \\dfrac{1}{5}, -\\dfrac{18}{5} \\right)",
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 409,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3651,
+  "extracted_v3": "2\\sqrt{5}",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 410,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3640,
+  "extracted_v3": "6",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 411,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1604,
+  "extracted_v3": "60",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 412,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 15583,
+  "extracted_v3": "406",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 413,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1516,
+  "extracted_v3": "5r^5",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 414,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1603,
+  "extracted_v3": "10",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 415,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2587,
+  "extracted_v3": "9",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 416,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6460,
+  "extracted_v3": "\\dfrac{1}{8}",
+  "opening": " line!\n\nOkay, so I need to com"
+ },
+ {
+  "problem_index": 417,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2420,
+  "extracted_v3": "-2",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 418,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1361,
+  "extracted_v3": "2\\sqrt{5}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 419,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5155,
+  "extracted_v3": "\\begin{pmatrix} -7 \\\\ 16 \\\\ 5 \\end{pmatrix}",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 420,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1111,
+  "extracted_v3": "\\begin{pmatrix} \\dfrac{16}{49} \\\\ \\dfrac{48}{49} \\\\ \\dfrac{24}{49} \\end{pmatrix}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 421,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 10992,
+  "extracted_v3": "27",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 422,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 423,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4481,
+  "extracted_v3": "1440",
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 424,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1284,
+  "extracted_v3": "600",
+  "opening": " line!\n\nOkay, let me see. The "
+ },
+ {
+  "problem_index": 425,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": "\\dfrac{15R^2 + 8(a^2 + b^2 + c^2)}{9}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 426,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1464,
+  "extracted_v3": "6\\sqrt{2}",
+  "opening": " line!\n\nOkay, let me try to so"
+ },
+ {
+  "problem_index": 427,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1112,
+  "extracted_v3": "29",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 428,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4322,
+  "extracted_v3": "64",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 429,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3960,
+  "extracted_v3": "50",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 430,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 755,
+  "extracted_v3": "4.5",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 431,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4241,
+  "extracted_v3": "\\left[ \\dfrac{\\pi^2}{8}, \\dfrac{5\\pi^2}{4} \\right]",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 432,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 12855,
+  "extracted_v3": "331",
+  "opening": " line!\n\nOkay, let's try to tac"
+ },
+ {
+  "problem_index": 433,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11418,
+  "extracted_v3": "0.35625",
+  "opening": " line!\n\nOkay, so I need to con"
+ },
+ {
+  "problem_index": 434,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1180,
+  "extracted_v3": "32",
+  "opening": " line!\n\nOkay, let's see here. "
+ },
+ {
+  "problem_index": 435,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1587,
+  "extracted_v3": "(-\\infty, 2) \\cup (3, \\infty)",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 436,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2759,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, let's see. I hav"
+ },
+ {
+  "problem_index": 437,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2651,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, let's try to sol"
+ },
+ {
+  "problem_index": 438,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2434,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 439,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5317,
+  "extracted_v3": "x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 440,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1342,
+  "extracted_v3": "14",
+  "opening": " line!\n\nOkay, so I need to sim"
+ },
+ {
+  "problem_index": 441,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 619,
+  "extracted_v3": "550",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 442,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1147,
+  "extracted_v3": "256",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 443,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 733,
+  "extracted_v3": "45",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 444,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 445,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7748,
+  "extracted_v3": "15",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 446,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2158,
+  "extracted_v3": "8",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 447,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 804,
+  "extracted_v3": "9",
+  "opening": " line!\n\nOkay, so there's this "
+ },
+ {
+  "problem_index": 448,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6030,
+  "extracted_v3": "44",
+  "opening": " line!\n\nOkay, so I need to com"
+ },
+ {
+  "problem_index": 449,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1399,
+  "extracted_v3": "47",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 450,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2643,
+  "extracted_v3": "64",
+  "opening": " line!\n\nOkay, let's try to sol"
+ },
+ {
+  "problem_index": 451,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2226,
+  "extracted_v3": "\\dfrac{639}{40}",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 452,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1441,
+  "extracted_v3": "143",
+  "opening": " line!\n\nOkay, let's tackle thi"
+ },
+ {
+  "problem_index": 453,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1782,
+  "extracted_v3": "10",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 454,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3577,
+  "extracted_v3": "y = 2x + 3",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 455,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 495,
+  "extracted_v3": "6",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 456,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3125,
+  "extracted_v3": "-2, 1",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 457,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 881,
+  "extracted_v3": "0",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 458,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5478,
+  "extracted_v3": "41",
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 459,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2373,
+  "extracted_v3": "18.90",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 460,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 9611,
+  "extracted_v3": "35",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 461,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2207,
+  "extracted_v3": "12",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 462,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 4598,
+  "extracted_v3": "4",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 463,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 708,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, let's tackle thi"
+ },
+ {
+  "problem_index": 464,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1912,
+  "extracted_v3": "9",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 465,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1489,
+  "extracted_v3": "121",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 466,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 5844,
+  "extracted_v3": "9\\pi",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 467,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2109,
+  "extracted_v3": "15",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 468,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 964,
+  "extracted_v3": "8",
+  "opening": " line!\n\nOkay, let's try to sol"
+ },
+ {
+  "problem_index": 469,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2459,
+  "extracted_v3": "25",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 470,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 471,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 724,
+  "extracted_v3": "84",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 472,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1385,
+  "extracted_v3": "137\\frac{1}{2}",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 473,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 13946,
+  "extracted_v3": "7",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 474,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1487,
+  "extracted_v3": "3",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 475,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 10740,
+  "extracted_v3": "29",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 476,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1151,
+  "extracted_v3": "200",
+  "opening": " line!\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 477,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2064,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 478,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 14384,
+  "extracted_v3": "0",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 479,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1060,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 480,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3167,
+  "extracted_v3": "1",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 481,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 482,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2956,
+  "extracted_v3": "202",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 483,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2691,
+  "extracted_v3": "\\dfrac{8}{15}",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 484,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5201,
+  "extracted_v3": "10",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 485,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 4590,
+  "extracted_v3": "14",
+  "opening": " line!\n\nOkay, so I have this g"
+ },
+ {
+  "problem_index": 486,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3769,
+  "extracted_v3": "216",
+  "opening": " line!\n\nOkay, let's try to sol"
+ },
+ {
+  "problem_index": 487,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3964,
+  "extracted_v3": "2",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 488,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 678,
+  "extracted_v3": "36",
+  "opening": " line!\n\nOkay, let's see. The p"
+ },
+ {
+  "problem_index": 489,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2467,
+  "extracted_v3": "15",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 490,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 10319,
+  "extracted_v3": "16",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 491,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 10589,
+  "extracted_v3": "8",
+  "opening": " line!\n\nOkay, let's see. Tom h"
+ },
+ {
+  "problem_index": 492,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1553,
+  "extracted_v3": "y = -2x",
+  "opening": " line!\n\nOkay, so I have this p"
+ },
+ {
+  "problem_index": 493,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2848,
+  "extracted_v3": "20",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 494,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 495,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1958,
+  "extracted_v3": "(2, 12) \\cup (12, 102)",
+  "opening": " line!\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 496,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1833,
+  "extracted_v3": "\\dfrac{5}{13}",
+  "opening": " line!\n\nOkay, let's try to sol"
+ },
+ {
+  "problem_index": 497,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 12565,
+  "extracted_v3": "\\dfrac{17}{4}",
+  "opening": " line!\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 498,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7762,
+  "extracted_v3": "-1",
+  "opening": " line!\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 499,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7569,
+  "extracted_v3": "106",
+  "opening": " line!\n\nOkay, so I need to fin"
+ }
+]

@@ -48,5 +48,6 @@ Rules:
 - Each must be specific enough that a computation on the stored rows could show it wrong. A mechanism that predicts
   nothing different from the obvious reading of the items is not worth a slot.
 - Prefer a mechanism that is surprising and could be wrong over a safe one.
+$forecast_rule
 
 Write only mechanisms.json. Reply with the $n mechanism sentences.
