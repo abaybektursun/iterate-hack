@@ -91,7 +91,7 @@ TABLE = {
         "steps": lambda m: [step("Base + cue, restart", "free", m.T10["restart"], m.D["n"], m.T10["artifact"])]},
     "vote-over-four": {
         "group": NO_REWARD,
-        "figure": lambda m: [signed(m.BASE["gain"]), "points", "MATH-500, Base + cue"],
+        "figure": lambda m: [f"{m.K[6][1]}", "of 500", f"MATH-500, Base + cue, vote over 6 samples; RL one sample {m.RL1['lo']} to {m.RL1['hi']}; vote over 4 adds {m.BASE['gain']} points"],
         "steps": lambda m: [step("Vote over 4 samples", "free", m.BASE["vote"], m.N, m.DATA["artifact"], vote=True),
                             board_step("Vote over 4 samples, restart", "base", "result-5d032f", "cue, " + AFTER_RESTART, vote=True),
                             board_step("RL, vote over 4 samples, restart", "rl", "result-5d032f", "plain, " + AFTER_RESTART, vote=True)]},

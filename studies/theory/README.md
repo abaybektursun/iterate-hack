@@ -1336,6 +1336,70 @@ sequence-level reward concentrates; General's directions do not finish math (88 
 | `data/direct_reward/top8_share_v1.json` | Per-matrix top-8 share and norm of 16 keys (input). |
 | `results/direct/reward-01/` | `readout.json`, `examples.json` (matrix where General most exceeds Math 3.0, and most falls below), `run.json`. |
 
+### dial-01: run-05/f2-m01, "a signed termination dial, no added skill" (board work-1645c5, result-124593, refuted)
+
+Claim tested: base + 1.5x Math 3.1's top-8 directions gains by finishing, not by being right more often. Readout: condition
+on one cued-base sample per problem (finished-right FR, finished-wrong FW, cap hit CH, pooled over the 4 choices) and
+compare the edit's right rate with a second base sample on another seed (and with RL plain). hard328 (4 samples each, n 396
+FW conditioning samples on 201 problems): on FW the edit is right 36.4 %, the second base sample 22.9 %, RL 35.2 %: edit
+minus base +13.5 points [9.7, 17.3], RL +12.3 [8.8, 15.9], edit minus RL +1.2 [-1.2, 3.6]. Right per finished answer on FW
++7.0 [2.6, 11.3]. On the 191 problems where no base sample hits the cap: edit 85.9 %, base 75.8 %, +10.1 [7.5, 12.8] (RL
++9.0). Of the edit's gain over the second base sample, 42 % sits in FR, 32 % [25, 38] in FW, 26 % [20, 33] in CH. MATH-500
+(edit 1 sample, base and RL 4): FW +17.8 [11.0, 24.8] (RL +19.2); CH share 11 %. Verdict by the frozen rule: adds skill,
+like RL, on both sets. Signed side: at -1x, on problems where the -1x sample finishes, it is right 51.5 % against 70.0 % for
+the base's finished samples (hard328, 227 problems, -18.5 [-22.6, -14.3]); MATH-500 odd 250: -8.0 [-11.9, -4.1]. Only 2 of
+114 and 2 of 42 of its finished wrong answers hold the gold string, so the loss is not answer format. The 8 directions carry
+finishing and right answers together in both signs; they are not a pure finishing dial. 10 raw answers read
+(`reading.md`): the edit's right answers on FW problems are derivations, graded correctly. Row added to
+`results/refuted.json`.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_dial.md` | Claim, refuting observation, frozen verdict rule (written and pushed first, bafbd38). |
+| `analysis/direct_dial.py` | Readout from committed rows (hard328, MATH-500, cell-r9-m11-01) and the -1x hard328 job's rows. |
+| `results/direct/dial-01/` | `readout.json`, `examples.json` (edit right and wrong on base-FW problems), `m1x_hard328_rows.jsonl`, `reading.md`, `run.json`. |
+
+### input-01: run-05/f2-m03, "a direction acts only as far as the text drives its input subspace" (board work-cd2924, undecided offline)
+
+Claim tested: within hard328, the top-8 edit's effect on a problem is proportional to how strongly that problem's text drives
+Math 3.1's top-8 input subspace. Drive D per problem: trace-01's r = ||diag(s) V^T x|| / ||W_base x|| (the relative change the
+edit makes to the matrix output), mean over the first 6,000 tokens of the base answer, 3 matrices, 4 layer bands. Effect per
+problem: 4 edit sizes (0.5 to 2) against the 2 random rank-8 arms, in log length and in finishing. Statistic b = slope of
+effect on D / mean(D), divided by the mean effect: f2-m03 predicts 1, its rival f2-m01 (same on every text) 0. Result, n 328:
+drive barely varies across math texts (CV 6.8 %, top over bottom tertile 1.13 [1.12, 1.15]) and follows answer length
+(Spearman 0.58). With difficulty controlled, b = -1.0 [-11.4, 6.2] for finishing and -11 [-56, 56] for length; with D shuffled
+b already spans [-3.2, 3.6], so 0 and 1 cannot be told apart. The frozen primary (length, no control) gave -64 [-252, -30] and
+the rule "refuted", but that number measures answer length, not drive (spec, Amendment 1). The claim that separates the
+rivals is cross-domain, and no code-text activation is stored. Cheapest deciding cell: `jobs/xreward_trace.py` on the
+base's stored Code-cue answers of HumanEval+/MBPP+ (538), conditions math31, code31, random; f2-m03 predicts Math's drive on
+code text at about 0.54 of its drive on math text.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_input.md` | Claim, refuting observation, rival's prediction (pushed first, 8eb2244), Amendment 1. |
+| `analysis/direct_input.py` | Readout from trace-01's per-position drive (`runs/abaybektursun-1115-005830-2145/trace_00*.npz`) and 7 hard328 cells' `answers.jsonl` (Modal Volume `iterate-runs`). |
+| `results/direct/input-01/` | `readout.json`, `examples.json` (a high-drive and a low-drive problem that the edit shortens as much), `run.json`. |
+
+### short-01: run-02/f2-m01, "autobench buys votes with short samples" (board work-4c1119, result-ebf7a4, refuted)
+
+Claim tested (engine 12's plan, with the mechanism's own MATH-500 half added as control): hard328 solutions need 6,000-14,000
+tokens, so under 20 % of the hard328 problems the cued base solves have a right sample of 2,000 tokens or fewer, against over
+50 % on MATH-500. No other top mechanism predicts anything about the base's solution lengths. Readout from the committed
+day1_3 rows (base + cue, T 1.0 / top-p 1.0, 4 samples, cap hits resampled up to 2 times, every row counted), 90 % bootstrap
+over solved problems: hard328 72 of 220, 32.7 % [27.7, 38.2]; MATH-500 320 of 474, 67.5 % [63.9, 71.1]. Rule fixed in
+advance: refuted if the hard328 lower bound is 20 % or more. Median right length 3,921 tokens [3,541, 4,390] on hard328 (the
+cause says 6,000-14,000), 1,594 on MATH-500. At 1,100 tokens 12.7 % [9.1, 16.4] against 50.4 %; at 4,096, 56.4 % against
+84.0 %. The contrast holds in direction, not in size: the short right answers sit on easy problems inside hard328 (94.5 % of
+their samples right, against 56.6 % on the other solved problems). 10 raw rows read (`reading.md`): AMC and OlympiadBench
+problems, right values no guess would give, grading correct; answer texts are not committed. Row added to
+`results/refuted.json`. The mechanism was already not carried in round-12 (-1.77 nats).
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_short.md` | Claim, refuting observation, rule (pushed first, 00ccb83). |
+| `analysis/direct_short.py` | Readout from `studies/rlneurons/results/day1_3/{hard328_base_cue_s4r2-01,math500_base_cue-01}/rows.jsonl`. |
+| `results/direct/short-01/` | `readout.json`, `examples.json` (a solved problem with no short right sample, one with), `reading.md`, `run.json`. |
+
 ## Paper: Theories on Trial (`paper/`, board work-184476)
 
 A short paper on the engine's rounds 1 to 7: the theories' own predictions against the two no-theory readers
