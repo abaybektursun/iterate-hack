@@ -1,0 +1,12 @@
+{
+ "commit": "edffdefe25abc420c2914c7586cf9db0ead02a55",
+ "command": "uv run --no-project --with numpy python ../iterate-hack-dt-code13/studies/theory/analysis/direct_code13.py",
+ "input_jobs": {
+  "base": "abaybektursun-1114-170304-c03c",
+  "mathcue": "abaybektursun-1114-170309-b137",
+  "random": "abaybektursun-1115-101457-ef2c",
+  "top8": "abaybektursun-1115-101423-4a7d",
+  "rl": "abaybektursun-1114-170253-f661"
+ },
+ "inputs": "runs/<job>/answers.jsonl (gpu.py get copies, not committed)"
+}
