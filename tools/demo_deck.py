@@ -7,11 +7,11 @@ steps. The slide is in the address (/demo#finding), so Back works. Printing (p) 
 7.5 in, in the theme on screen.
 
 Every number is read at build time from the module that holds it:
-the staircase of fixes from demo_fixes.py, the accuracy climb from demo_ali_data.DATA['climb'], the two result pictures from demo_results.py, the review rounds
+the staircase of fixes from demo_fixes.py, the two models of the gap slide and the accuracy climb from demo_ali_data.DATA['climb'], the two result pictures from demo_results.py, the review rounds
 from proof_review_cuts_waste.DATA, the idea tree's links from proof_idea_basins.DATA['tree'], the number of people from
 demo_facts.FACTS['people']; view.py passes the list of papers. The photos are data
-URIs in demo_photos.py. Six slides show a picture in an iframe of FIGS: the accuracy climb of /demo/ali/slide3, the
-Design page (architecture.py), the staircase of fixes of demo_fixes.py, the two pictures of demo_results.py and /proof/idea-basins playing from the items to their basins to the idea tree,
+URIs in demo_photos.py. Seven slides show a picture in an iframe of FIGS: the two models and the bridge between them
+of demo_gap.py, the accuracy climb of /demo/ali/slide3, the Design page (architecture.py), the staircase of fixes of demo_fixes.py, the two pictures of demo_results.py and /proof/idea-basins playing from the items to their basins to the idea tree,
 each with its header, words column and key hidden. A frame with data-replay is loaded again when its slide is shown, so
 its picture draws itself in front of the audience.
 """
@@ -24,6 +24,7 @@ import demo_ali
 import demo_ali_data
 import demo_facts
 import demo_fixes
+import demo_gap
 import demo_photos
 import demo_results
 import exa_page
@@ -33,6 +34,14 @@ import proof_review_cuts_waste
 
 HOOK = "36 hours to solve recursive self-improvement"  # the opening line of the talk
 SITE = "invariant.team"  # the address on the first and last slide
+# Slide "summary": what the team did, in Samer's words, in groups of lines.
+SUMMARY = [
+    ["A team harness for resource-constrained researchers to make novel contributions", "Novel, paper-worthy findings"],
+    ["More effective than autoresearch with less compute", "It improves itself"],
+    ["Novel idea generation with Exa search", "A shared brain with past.dev"],
+    ["We also got our swarms to forecast GPU rental prices",
+     "Skill +{submitted:.3f}, against +{baseline:.3f} for the strongest baseline".format(**demo_facts.FACTS["gpuprice_skill"]["v"])],
+]
 # The QR code of https://invariant.team (version 2, error level M) as one SVG path of unit squares on a
 # 25 x 25 grid: segno.make("https://invariant.team", error="m").matrix, a square per dark module.
 QR_SIZE = 25
@@ -73,7 +82,8 @@ def num(x):
 
 # ---------- the embedded pictures ----------
 FIG_THEME = (r"""<script>
-(() => { const t = new URLSearchParams(location.search).get("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; })();
+(() => { const t = new URLSearchParams(location.search).get("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+  if (top === window) document.documentElement.style.setProperty("background", "var(--paper)", "important"); })();  // opened by itself, a see-through figure stands on its own paper
 </script>""")
 
 
@@ -179,6 +189,7 @@ CLIMB_LO = CLIMB["base"][0]
 CLIMB_HI = next(s for s in CLIMB["base"] if s["config"].endswith("vote over 4 samples after restart"))
 CLIMB_RL = max(CLIMB["rl"], key=lambda s: s["right"])
 pct = lambda s: 100 * s["right"] / s["n"]
+FIGS["gap"] = embed(demo_gap.page(pct(CLIMB_LO), pct(CLIMB_RL), CLIMB["bench"]), "")
 
 
 # ---------- the figures, drawn here as SVG ----------
@@ -189,26 +200,6 @@ def bar(x, y0, w, h, cls, value, label=None):
     if label:
         s += f'<text class="bl" x="{x + w / 2:.1f}" y="{y0 + 28}" text-anchor="middle">{label}</text>'
     return s
-
-
-def gap_svg():
-    """Slide "gap": the untrained base model beside the RL-trained model on MATH-500, the same two scores the climb
-    slide starts and ends against (the first base record and RL's best). The dashed outline over the base bar is the
-    gap to close with no RL. Two numbers and two one-word labels, nothing else."""
-    W, H, y0, full, bw = 760, 640, 560, 500, 210
-    lo, rl = pct(CLIMB_LO), pct(CLIMB_RL)
-    xb, xr = 130, 420
-    hb, hr = full * lo / 100, full * rl / 100
-    return (f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" class="fig gap" role="img" '
-            f'aria-label="Base model {lo:.0f} %, RL-trained model {rl:.0f} % on {esc(CLIMB["bench"])}">'
-            f'<rect x="{xb}" y="{y0 - hb:.1f}" width="{bw}" height="{hb:.1f}" fill="var(--fbar1)"/>'
-            f'<rect class="todo" x="{xb + 1}" y="{y0 - hr:.1f}" width="{bw - 2}" height="{hr - hb:.1f}"/>'
-            f'<rect x="{xr}" y="{y0 - hr:.1f}" width="{bw}" height="{hr:.1f}" fill="var(--ink)"/>'
-            f'<line class="base" x1="{xb - 50}" y1="{y0}" x2="{xr + bw + 50}" y2="{y0}"/>'
-            f'<text class="num" x="{xb + bw / 2}" y="{y0 - hb - 22:.1f}" text-anchor="middle">{lo:.0f} %</text>'
-            f'<text class="num" x="{xr + bw / 2}" y="{y0 - hr - 22:.1f}" text-anchor="middle">{rl:.0f} %</text>'
-            f'<text class="lab" x="{xb + bw / 2}" y="{y0 + 44}" text-anchor="middle">Base</text>'
-            f'<text class="lab" x="{xr + bw / 2}" y="{y0 + 44}" text-anchor="middle">RL</text></svg>')
 
 
 def review_svg():
@@ -261,7 +252,7 @@ def slides(papers):
         ("hook", f'<div class="mid"><h1 class="big">{hook_html()}</h1><div class="site">{qr()}<span>{esc(SITE)}</span></div></div>'),
         ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers</p>'
                      '<ul class="limits"><li>Limited token budget</li><li>Limited compute</li><li>Limited people</li></ul></div>'),
-        ("gap", f'<div class="mid">{gap_svg()}</div>'),
+        ("gap", '<iframe class="fig-frame gapfig" data-fig="gap" data-replay title="Base model and RL-trained model" tabindex="-1"></iframe>'),
         ("powered", '<div class="versus">'
                     f'<div><p class="sub">The RL-trained model</p><p class="sub by">Powered by</p><p class="gpus">{RL_GPUS} H100 GPUs</p></div>'
                     f'<div><p class="sub">Invariant</p><p class="sub by">Powered by</p>{photo(demo_photos.COOK, "cook")}'
@@ -291,7 +282,11 @@ def slides(papers):
                   '<iframe class="fig-frame tree" data-fig="basins" data-replay title="The idea basins and the idea tree" tabindex="-1"></iframe>'),
         ("papers", f'<div class="mid"><h2 class="title">{len(papers)} papers, written by the swarm</h2>'
                    f'<div class="sheets" style="--n:{len(papers)}">{"".join(paper(p) for p in papers)}</div></div>'),
-        ("close", f'<div class="mid">{photo(demo_photos.MEDITATE, "meditate")}<p class="end">Also our solution to AI psychosis</p>'
+        ("summary", '<div class="recap"><h2 class="title"><b class="team">Invariant</b></h2><div class="did">'
+                    + "".join("<ul>" + "".join(f"<li>{esc(line)}</li>" for line in group) + "</ul>" for group in SUMMARY)
+                    + '</div><p class="sub">All in under 36 hours</p></div>'),
+        ("close", f'<div class="mid"><p class="end">Along the way we may have gotten some AI psychosis</p>'
+                  f'{photo(demo_photos.MEDITATE, "meditate")}<p class="end">It\'s fine, we found a cure</p>'
                   f'<p class="sub faint">{esc(SITE)}</p></div>'),
     ]
 
@@ -329,6 +324,14 @@ p, h1, h2, figure { margin: 0; }
 .top { margin-bottom: 8px; }
 .title { font-weight: 300; font-size: 54px; line-height: 1.15; letter-spacing: -.008em; }
 .end { font-weight: 300; font-size: 48px; margin-top: 6px; }
+/* slide "summary": the name, the groups of lines in two columns, one closing line */
+.recap { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 44px; padding: 0 150px; }
+.recap .title { font-size: 72px; }
+.recap .title .team { font-weight: 740; font-stretch: 122%; letter-spacing: .01em; }  /* the name, set as on the site header */
+.did { display: grid; grid-template-columns: 1fr 1fr; gap: 40px 90px; }
+.did ul { list-style: none; margin: 0; padding: 0 0 0 26px; border-left: 1px solid var(--rule); display: flex; flex-direction: column; gap: 14px; }
+.did li { font-weight: 300; font-size: 33px; line-height: 1.22; }
+.recap .sub { font-size: 30px; }
 .nb { white-space: nowrap; }
 .site { display: flex; align-items: center; gap: 26px; margin-top: 34px; font-size: 34px; font-weight: 500; color: var(--mute); }
 .qr { width: 150px; height: 150px; display: block; }
@@ -375,6 +378,7 @@ p, h1, h2, figure { margin: 0; }
 .spon.s-exa { left: 96px; } .spon.s-past { left: 804px; }
 .spon b { font-weight: 640; color: var(--ink); }
 .fig-frame.fixes { left: 180px; top: 140px; width: 1240px; height: 694px; }
+.fig-frame.gapfig { left: 100px; top: 58px; width: 1400px; height: 784px; }
 .fixes-title { position: absolute; left: 0; right: 0; top: 44px; text-align: center; }
 .tools { position: absolute; left: 0; right: 0; bottom: 56px; display: flex; justify-content: center; gap: 72px; font-size: 22px; font-weight: 560; color: var(--mute); }
 .tools span { display: inline-flex; align-items: center; gap: 14px; }
@@ -396,8 +400,6 @@ p, h1, h2, figure { margin: 0; }
 .fig .bl { font-size: 17px; font-weight: 500; fill: var(--mute); }
 .fig .gl { font-size: 20px; font-weight: 600; fill: var(--ink); }
 .fig .base { stroke: var(--faint); stroke-width: 1; }
-.fig.gap .num { font-size: 64px; font-weight: 300; letter-spacing: -.01em; }
-.fig.gap .todo { fill: color-mix(in srgb, var(--blue) 9%, transparent); stroke: var(--blue); stroke-width: 2; stroke-dasharray: 3 9; stroke-linecap: round; }
 
 .sheets { display: flex; gap: 60px; margin-top: 30px; }  /* --n: the number of papers, so any number fits the slide */
 /* a paper is white in both themes: the sheet carries the light values of these four tokens */

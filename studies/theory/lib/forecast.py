@@ -63,6 +63,7 @@ ROOT = engine.ROOT
 ROUND = ROOT / "studies/theory/results/engine/round-07"  # the newest round: its unrefuted theories forecast
 ENGINE = ROOT / "studies/theory/results/engine"
 REFUTED = ROOT / "studies/theory/results/refuted.json"  # mechanisms whose stated cause a direct test refuted (version 11.2)
+TESTED = ROOT / "studies/theory/results/direct_tested.json"  # direct tests of a mechanism's distinctive claim: holds or refuted (version 12)
 READERS = ["reader-1", "reader-2"]
 LENSES = {  # the six families of causes of specs/SPEC_forecast03.md (forecast runs 03-08)
     "stopping": "when and how the model stops: token cap, loops, end-of-text, answer markers",
@@ -79,7 +80,7 @@ THEORY = ("- theory.json: a theory of the team's results. Derive each forecast f
 NOTHING = (' For a target the theory says nothing about, write {"id": "t02", "value": null, "low": null, "high": null, '
            '"reason": "theory says nothing"}.')
 engine.args = engine.args or argparse.Namespace(model_all=None, workers=8)  # round.py sets its own
-for stage in ("forecast_targets", "forecast", "forecast_propose", "forecast_score", "cells_propose", "cells_merge", "cells_forecast", "routes_propose", "duplicates", "surprise_propose", "cells_check"):
+for stage in ("forecast_targets", "forecast", "forecast_propose", "forecast_score", "cells_propose", "cells_merge", "cells_forecast", "routes_propose", "duplicates", "surprise_propose", "cells_check", "direct_test_plan"):
     engine.MODELS[stage] = engine.MODELS["cross_predict"]
 
 
@@ -565,13 +566,17 @@ def standing(folder, sources):
                              "total_gain": round(sum(r["gain"] for r in m["rows"]), 3)}
         m["state"] = ("carried" if f["items"] >= 3 and f["total_gain"] > 0 else "graveyard" if f["items"] >= 2 and f["total_gain"] <= -2 else "not carried")
     refuted = {r["mechanism"]: r for r in json.loads(REFUTED.read_text())}
+    held = {r["mechanism"]: r for r in json.loads(TESTED.read_text()) if r["verdict"] == "holds"}
+    refuted |= {r["mechanism"]: r for r in json.loads(TESTED.read_text()) if r["verdict"] == "refuted"}
     for i in refuted.keys() & records.keys():  # a direct test refuted the stated cause: buried whatever the forecast gain
         records[i]["state"] = "cause refuted"
+    for i in held.keys() & records.keys():
+        records[i]["direct_test"] = f"holds ({held[i]['result']}: {held[i]['claim']})"
     graveyard |= {i: {"name": i, "round": folder.name, "statement": m["statement"], "state": "refuted by forecasts", "verdict": "", "forecast": m["forecast"],
                       "reason": f"total forecast gain {m['forecast']['total_gain']:+.2f} nats on {m['forecast']['scored']} numbers from "
                                 f"{m['forecast']['items']} board items"} for i, m in records.items() if m["state"] == "graveyard"}
     graveyard |= {i: {"name": i, "round": folder.name, "statement": m["statement"], "state": "refuted by a direct test", "verdict": "", "forecast": m["forecast"],
-                      "reason": f"{refuted[i]['result']}: {refuted[i]['measured']} ({refuted[i]['claim']})"} for i, m in records.items() if m["state"] == "cause refuted"}
+                      "reason": f"{refuted[i]['result']}: {refuted[i].get('measured', '')} ({refuted[i]['claim']})"} for i, m in records.items() if m["state"] == "cause refuted"}
     ranked = sorted(records.values(), key=lambda m: -m["forecast"]["total_gain"])
     (folder / "standing.json").write_text(json.dumps({"utc": now(), "from": [str(s) for s in sources], "carried": [m for m in ranked if m["state"] == "carried"],
                                                       "records": {m["id"]: {k: m[k] for k in ("family", "state", "forecast", "statement")} for m in ranked},
@@ -584,11 +589,13 @@ def standing(folder, sources):
           "-2 on 2 or more items.\n",
           "| mechanism | family | scored | items | inside | total gain | state | statement |\n|---|---|---|---|---|---|---|---|"]
     md += [f"| {m['id']} | {m['family']} | {m['forecast']['scored']} | {m['forecast']['items']} | {m['forecast']['inside']} | {m['forecast']['total_gain']:+.2f} | "
-           f"{m['state']} | {flat(m['statement'])[:160]} |" for m in ranked if m["forecast"]["scored"]]
+           f"{m['state']}{'; direct test holds' if m.get('direct_test') else ''} | {flat(m['statement'])[:160]} |" for m in ranked if m["forecast"]["scored"]]
     md += ["\n## Forecast well, cause refuted\n\nForecast gain is not evidence for the stated cause (`studies/theory/results/refuted.json`).\n",
            "| mechanism | scored | items | total gain | refuted claim | result | measured |\n|---|---|---|---|---|---|---|"]
     md += [f"| {m['id']} | {m['forecast']['scored']} | {m['forecast']['items']} | {m['forecast']['total_gain']:+.2f} | {refuted[m['id']]['claim']} | "
-           f"{refuted[m['id']]['result']} | {refuted[m['id']]['measured']} |" for m in ranked if m["state"] == "cause refuted"]
+           f"{refuted[m['id']]['result']} | {refuted[m['id']].get('measured', '')} |" for m in ranked if m["state"] == "cause refuted"]
+    md += [f"| {i} | no forecast record in these folders | | | {r['claim']} | {r['result']} | {r.get('measured', '')} |" for i, r in refuted.items() if i not in records]
+    md += ["\n## Direct test holds\n"] + ([f"- {m['id']}: {m['direct_test']}" for m in ranked if m.get("direct_test")] or ["none"])
     md += [f"\n## Written after the result, not scored ({len(late)} forecasts)\n", "| source | target | result | written | posted | mechanisms |\n|---|---|---|---|---|---|"]
     groups = {}
     for x in late:
@@ -736,6 +743,54 @@ def check_answered(d, ids, texts):
             f"text; failing: {bad}") if bad or len({r["id"] for r in rows}) != len(rows) else None
 
 
+def data_md():
+    """The stored data the plans may name: every README table row of studies/*/README.md that names a results/ or data/
+    path, and the folders two levels under each study's results/ and data/."""
+    rows = [f"{p.parent.name}: {line}" for p in sorted(ROOT.glob("studies/*/README.md")) for line in p.read_text().splitlines()
+            if line.startswith("|") and re.search(r"`(results|data)/", line)]
+    dirs = sorted(str(d.relative_to(ROOT)) for d in ROOT.glob("studies/*/*/*/*") if d.parts[-3] in ("results", "data"))
+    return "# Stored data\n\n## README rows (study: row)\n\n" + "\n".join(rows) + "\n\n## Folders and files\n\n" + "\n".join(dirs) + "\n"
+
+
+def check_plan(d):
+    """A direct-test plan: the distinctive claim, the deciding stored files (paths that exist), the computation, the
+    refuting observation and a threshold."""
+    j = json.loads((d / "plan.json").read_text())
+    e = [f"missing {k}" for k in ("claim", "computation", "refuted_if", "threshold", "why_only_this") if not str(j.get(k, "")).strip()]
+    files = j.get("files") or []
+    e += [] if files else ["files: one or more stored paths that decide the claim"]
+    e += [f"{f} does not exist in the repository" for f in files if not (ROOT / f).exists()]
+    return "; ".join(e) or None
+
+
+def direct_tests(folder, top=5):
+    """For each of the top carried mechanisms (by gain) with no row in refuted.json or direct_tested.json, one blind job
+    writes a direct offline test plan of the claim only its cause makes. Writes direct_tests.json and direct_tests.md;
+    an agent runs each plan (SKILL.md)."""
+    out, st = folder / "jobs", json.loads((folder / "standing.json").read_text())
+    done = {r["mechanism"] for r in json.loads(REFUTED.read_text()) + json.loads(TESTED.read_text())}
+    ranked = [m for m in st["carried"] if m["id"] not in done]
+    todo, others = ranked[:top], ranked[:top * 2]
+    data = data_md()
+    engine.run([engine.job("direct_test_plan", m["id"].replace("/", "-"), {
+        "mechanism.json": json.dumps({k: m.get(k) for k in ("id", "statement", "rests_on", "holds_against", "forecast")}, indent=1),
+        "others.json": json.dumps([{"id": o["id"], "statement": o["statement"]} for o in others if o["id"] != m["id"]], indent=1),
+        "refuted.json": REFUTED, "data.md": data}, {"plan.json": out / f"plan-{m['id'].replace('/', '-')}.json"}, check_plan) for m in todo], folder, len(todo) or 1)
+    plans = [{"mechanism": m["id"], "gain": m["forecast"]["total_gain"], "items": m["forecast"]["items"], "statement": m["statement"],
+              **json.loads((out / f"plan-{m['id'].replace('/', '-')}.json").read_text())} for m in todo]
+    (folder / "direct_tests.json").write_text(json.dumps(plans, indent=1))
+    md = [f"# Direct tests to run, {folder.name}\n\nThe top carried mechanisms not yet tested directly (`studies/theory/results/refuted.json`, "
+          "`direct_tested.json`). Forecast gain does not confirm a cause: each plan tests the one claim that follows from this mechanism's cause and from "
+          "none of the others, offline on stored files, with the refuting observation and threshold fixed here. Run each with one subagent: spec committed "
+          "first, offline only, then a row in `refuted.json` or `direct_tested.json`.\n"]
+    for p in plans:
+        md.append(f"\n## {p['mechanism']} ({p['gain']:+.2f} nats on {p['items']} results)\n\n{flat(p['statement'])}\n\n- Claim: {p['claim']}\n- Why only this "
+                  f"mechanism: {p['why_only_this']}\n- Files: {', '.join('`' + f + '`' for f in p['files'])}\n- Computation: {p['computation']}\n"
+                  f"- Refuted if: {p['refuted_if']}\n- Threshold: {p['threshold']}\n")
+    (folder / "direct_tests.md").write_text("\n".join(md) + "\n")
+    print(f"  {len(plans)} direct-test plans: {folder / 'direct_tests.md'}")
+
+
 def round11(folder, sources, n_top):
     """The version-11 round: standing, surprises, targets_open, forecast (readers and carried mechanisms), propose (two
     rival mechanisms per surprise, the n_top most surprising, then the duplicate judge), cells (the pairs' cells and one
@@ -748,6 +803,9 @@ def round11(folder, sources, n_top):
         standing(folder, sources)
     st = json.loads((folder / "standing.json").read_text())
     carried = [{k: m[k] for k in MECHANISM_KEYS} for m in st["carried"]]
+    print("== direct_tests")
+    if not (folder / "direct_tests.md").exists():
+        direct_tests(folder)
     print("== surprises")
     found = surprises(folder, list({s.resolve(): s for s in sources}.values()))
     print("== targets_open")

@@ -1,0 +1,1064 @@
+{
+ "rule": "studies/theory/lib/round.py gain_rows (version 9)",
+ "rounds": [
+  {
+   "run": "run-02",
+   "target": "t01",
+   "item": "result-fad48d",
+   "lead": "An early checkpoint of the RL run, 100 steps in, is tested on the standard set with no opening cue.",
+   "what": "How many of the 500 MATH-500 problems the RL-Zero-Math step-100 checkpoint answers right with the plain prompt, one sample at T 1.0 / top-p 1.0, grader v3 (full 500-problem rerun).",
+   "unit": "right answers of 500",
+   "n": 500,
+   "lo": 0,
+   "hi": 500,
+   "step": 1,
+   "refs": [
+    "An unfinished run of the same test had 405 right of the first 478",
+    "22 long problems were still missing; the cued base got 13 of those"
+   ],
+   "marks": [],
+   "measured": 418,
+   "quote": "score: other MATH-500 418/500 tokens 4120 | RL step 100, plain, T 1.0 / top-p 1.0",
+   "forecasts": [
+    {
+     "who": "reader-1",
+     "name": "Reader 1",
+     "id": "reader-1",
+     "reader": true,
+     "value": 420,
+     "low": 408,
+     "high": 432,
+     "gain": 0.021,
+     "inside": true,
+     "reason": "Partial 405/478 plus about 15 of the remaining 22 harder problems (base cue got 13 of them), with rerun noise because the full rerun is a new sample.",
+     "theory": null
+    },
+    {
+     "who": "reader-2",
+     "name": "Reader 2",
+     "id": "reader-2",
+     "reader": true,
+     "value": 418,
+     "low": 405,
+     "high": 431,
+     "gain": -0.0215,
+     "inside": true,
+     "reason": "Partial 405/478 plus ~13 of the 22 held-back (longer) problems, as the base cue got 13/22 on them, with ~7-problem rerun noise on a new box.",
+     "theory": null
+    },
+    {
+     "who": "run-02/f2-m01",
+     "name": "Short samples",
+     "id": "f2-m01",
+     "reader": false,
+     "value": 419,
+     "low": 410,
+     "high": 428,
+     "gain": 0.3296,
+     "inside": true,
+     "reason": "405/478 plus ~13 of the 22 long problems that were cut, rerun noise ~6.",
+     "theory": "The autobench agent works under a fixed generation time per experiment, so it buys votes by shortening each sample (its best config"
+    },
+    {
+     "who": "run-02/f2-m03",
+     "name": "Stopping dose",
+     "id": "f2-m03",
+     "reader": false,
+     "value": 420,
+     "low": 411,
+     "high": 429,
+     "gain": 0.2795,
+     "inside": true,
+     "reason": "Step 100 already finishes like the cued base; 405/478 plus ~14 of 22.",
+     "theory": "The top singular directions of the RL-Math difference set when the base stops, not whether its reasoning is right"
+    },
+    {
+     "who": "run-02/f2-m06",
+     "name": "Stop controller",
+     "id": "f2-m06",
+     "reader": false,
+     "value": 421,
+     "low": 412,
+     "high": 430,
+     "gain": 0.1959,
+     "inside": true,
+     "reason": "Step 100 has part of the controller: 405/478 plus ~15 of 22.",
+     "theory": "Think-SFT's difference from the base carries long derivation"
+    }
+   ],
+   "inside": 5,
+   "miss": 0.004
+  },
+  {
+   "run": "run-05",
+   "target": "t10",
+   "item": "result-6832a8",
+   "lead": "A later checkpoint of the RL run, 400 steps in, is sampled four times and the four scores are averaged.",
+   "what": "Averaged over 4 samples (posted sample 0 plus 3 new), how many of the 500 MATH-500 problems does the RL-Zero-Math step-400 checkpoint get right with the plain prompt at T 1.0, grader v3?",
+   "unit": "mean right answers of 500 over 4 samples",
+   "n": 500,
+   "lo": 0,
+   "hi": 500,
+   "step": 0.25,
+   "refs": [
+    "The one sample already posted scored 436"
+   ],
+   "marks": [
+    [
+     436,
+     "one sample"
+    ]
+   ],
+   "measured": 437.75,
+   "quote": "step 400 437.75",
+   "forecasts": [
+    {
+     "who": "reader-1",
+     "name": "Reader 1",
+     "id": "reader-1",
+     "reader": true,
+     "value": 435,
+     "low": 428,
+     "high": 442,
+     "gain": 0.099,
+     "inside": true,
+     "reason": "Posted step-400 plain sample is 436; mean of 4 with a little regression.",
+     "theory": null
+    },
+    {
+     "who": "reader-2",
+     "name": "Reader 2",
+     "id": "reader-2",
+     "reader": true,
+     "value": 434,
+     "low": 426,
+     "high": 442,
+     "gain": -0.1099,
+     "inside": true,
+     "reason": "Sample 0 = 436 with slight regression; seed noise of about 5 problems per sample.",
+     "theory": null
+    },
+    {
+     "who": "run-05/f2-m02",
+     "name": "Error reducer",
+     "id": "f2-m02",
+     "reader": false,
+     "value": 434,
+     "low": 428,
+     "high": 440,
+     "gain": -0.0721,
+     "inside": true,
+     "reason": "Step 400 holds part of the bulk; sample 0 436 with regression.",
+     "theory": "The RL change beyond its top-8 directions is a dense per-step error reducer"
+    },
+    {
+     "who": "run-05/f2-m03",
+     "name": "Input subspace",
+     "id": "f2-m03",
+     "reader": false,
+     "value": 434,
+     "low": 428,
+     "high": 440,
+     "gain": -0.0721,
+     "inside": true,
+     "reason": "Sample 0 436 with slight regression.",
+     "theory": "Each direction of an RL change acts only as far as the processed text drives its input (right) singular vectors"
+    },
+    {
+     "who": "run-05/f2-m04",
+     "name": "Staged change",
+     "id": "f2-m04",
+     "reader": false,
+     "value": 434,
+     "low": 428,
+     "high": 440,
+     "gain": -0.0721,
+     "inside": true,
+     "reason": "Step 400 holds part of the late stage (+3.6 over step 100); sample 0 436 with regression.",
+     "theory": "RL writes its weight change in stages"
+    },
+    {
+     "who": "run-05/f2-m06",
+     "name": "bf16 rounding",
+     "id": "f2-m06",
+     "reader": false,
+     "value": 434,
+     "low": 428,
+     "high": 440,
+     "gain": -0.0721,
+     "inside": true,
+     "reason": "Real checkpoint; sample 0 436 with regression.",
+     "theory": "Weight edits merged in bf16 are realized only where an entry's change exceeds half a unit in the last place of that weight, so small edits are thresholded onto small-magnitude weights and their effective size grows faster than ..."
+    }
+   ],
+   "inside": 6,
+   "miss": 0.0075
+  },
+  {
+   "run": "run-05",
+   "target": "t04",
+   "item": "result-a1bf75",
+   "lead": "A control: the untrained base gets a random weight edit of the same size as the real one, then writes code.",
+   "what": "How many of the 538 HumanEval+ and MBPP+ problems does the Olmo 3 base pass with a random weight edit at 1.5x size (control for the Code-RL directions), using the Code cue at T 1.0?",
+   "unit": "problems passed of 538",
+   "n": 538,
+   "lo": 0,
+   "hi": 538,
+   "step": 1,
+   "refs": [
+    "The base with the Code cue and no edit passes 317",
+    "On math, random edits scored 158 to 167 against the base's 164"
+   ],
+   "marks": [
+    [
+     317,
+     "base"
+    ]
+   ],
+   "measured": 331,
+   "quote": "HumanEval+MBPP+ 331/538 tokens 3950 | base + random rank-8 edit at 1.5x, Code cue, T 1.0",
+   "forecasts": [
+    {
+     "who": "reader-1",
+     "name": "Reader 1",
+     "id": "reader-1",
+     "reader": true,
+     "value": 318,
+     "low": 301,
+     "high": 336,
+     "gain": 0.16,
+     "inside": true,
+     "reason": "Random rank-8 edits stayed flat at every size on math (158-167 vs base 164; 159 at 1.5x), so this should be near base+Code cue 317 plus sampling noise.",
+     "theory": null
+    },
+    {
+     "who": "reader-2",
+     "name": "Reader 2",
+     "id": "reader-2",
+     "reader": true,
+     "value": 315,
+     "low": 297,
+     "high": 333,
+     "gain": -0.1906,
+     "inside": true,
+     "reason": "Random rank-8 edits were flat at every size on math (158-167 vs base 164), so the base Code cue 317 with sampling noise of about 11 problems.",
+     "theory": null
+    },
+    {
+     "who": "run-05/f2-m01",
+     "name": "Termination dial",
+     "id": "f2-m01",
+     "reader": false,
+     "value": 316,
+     "low": 301,
+     "high": 331,
+     "gain": -0.2922,
+     "inside": true,
+     "reason": "Random rank-8 edits are flat at every size (158-167 vs base 164 on math), so base Code cue 317 plus seed noise.",
+     "theory": "The top-8 singular directions per matrix of the RL change act as a signed termination dial spread over all layers and both module families"
+    },
+    {
+     "who": "run-05/f2-m02",
+     "name": "Error reducer",
+     "id": "f2-m02",
+     "reader": false,
+     "value": 316,
+     "low": 301,
+     "high": 331,
+     "gain": -0.2922,
+     "inside": true,
+     "reason": "Random rank-8 carries neither finishing nor error reduction.",
+     "theory": "The RL change beyond its top-8 directions is a dense per-step error reducer"
+    },
+    {
+     "who": "run-05/f2-m03",
+     "name": "Input subspace",
+     "id": "f2-m03",
+     "reader": false,
+     "value": 316,
+     "low": 301,
+     "high": 331,
+     "gain": -0.2922,
+     "inside": true,
+     "reason": "A random input subspace is not driven by code text beyond chance.",
+     "theory": "Each direction of an RL change acts only as far as the processed text drives its input (right) singular vectors"
+    },
+    {
+     "who": "run-05/f2-m06",
+     "name": "bf16 rounding",
+     "id": "f2-m06",
+     "reader": false,
+     "value": 316,
+     "low": 301,
+     "high": 331,
+     "gain": -0.2922,
+     "inside": true,
+     "reason": "Random rank-8 realized the same way but has no function: flat at base.",
+     "theory": "Weight edits merged in bf16 are realized only where an entry's change exceeds half a unit in the last place of that weight, so small edits are thresholded onto small-magnitude weights and their effective size grows faster than ..."
+    }
+   ],
+   "inside": 6,
+   "miss": 0.0279
+  },
+  {
+   "run": "run-02",
+   "target": "t11",
+   "item": "result-95a4dc",
+   "lead": "The untrained base gets eight directions of the RL weight change at 1.5 times their size, and four samples vote.",
+   "what": "How many of the 328 harder problems the base plus 8 RL-Math directions per matrix at 1.5x gets right by majority vote over 4 samples, cue, T 1.0, grader v3 (base 192, RL 221).",
+   "unit": "right answers of 328",
+   "n": 328,
+   "lo": 0,
+   "hi": 328,
+   "step": 1,
+   "refs": [
+    "Under the same vote the cued base gets 192 and the RL model 221",
+    "One sample of the edited base averages about 197"
+   ],
+   "marks": [
+    [
+     192,
+     "base vote"
+    ],
+    [
+     221,
+     "RL vote"
+    ],
+    [
+     197,
+     "one sample"
+    ]
+   ],
+   "measured": 214,
+   "quote": "score: other hard328 214/328 tokens 35593 | base + 1.5x top-8 RL directions, cue, vote over 4",
+   "forecasts": [
+    {
+     "who": "reader-1",
+     "name": "Reader 1",
+     "id": "reader-1",
+     "reader": true,
+     "value": 219,
+     "low": 208,
+     "high": 229,
+     "gain": 0.0652,
+     "inside": true,
+     "reason": "Single mean about 197 plus an RL-like vote gain of about +22 (base +33, RL +21) because cap hits fall to about 25.",
+     "theory": null
+    },
+    {
+     "who": "reader-2",
+     "name": "Reader 2",
+     "id": "reader-2",
+     "reader": true,
+     "value": 220,
+     "low": 209,
+     "high": 230,
+     "gain": -0.0698,
+     "inside": true,
+     "reason": "Single mean ~196 plus an RL-like vote gain of ~+24, since the edit cuts cap hits (base +33 and RL +21 under the vote).",
+     "theory": null
+    },
+    {
+     "who": "run-02/r5-m03-rival",
+     "name": "Incomplete switch",
+     "id": "r5-m03-rival",
+     "reader": false,
+     "value": 219,
+     "low": 208,
+     "high": 230,
+     "gain": 0.046,
+     "inside": true,
+     "reason": "If the 1.5x edit with the cue gives RL-like answers (few cap hits, errors only on hard problems), the 4-sample vote should gain about what RL's does (200 -> 221, +21), not the cued base's larger +33 from many cap hits: 197 + ~22 = 219.",
+     "theory": "The top-8 edit is an incomplete switch that happens or fails sample by sample"
+    },
+    {
+     "who": "run-02/f2-m02",
+     "name": "Scattered slips",
+     "id": "f2-m02",
+     "reader": false,
+     "value": 217,
+     "low": 208,
+     "high": 226,
+     "gain": 0.3758,
+     "inside": true,
+     "reason": "Single mean ~194 plus an RL-like vote gain (~+22), since the edit's wrong values are also scattered.",
+     "theory": "The cued base's wrong answers on a problem rarely share a value"
+    },
+    {
+     "who": "run-02/f2-m03",
+     "name": "Stopping dose",
+     "id": "f2-m03",
+     "reader": false,
+     "value": 205,
+     "low": 197,
+     "high": 213,
+     "gain": -1.0684,
+     "inside": false,
+     "reason": "Single mean ~186 plus RL's vote gain (+19-21), as the edit leaves few cap-hit abstentions and base-level precision.",
+     "theory": "The top singular directions of the RL-Math difference set when the base stops, not whether its reasoning is right"
+    },
+    {
+     "who": "run-02/f2-m04",
+     "name": "Capped abstains",
+     "id": "f2-m04",
+     "reader": false,
+     "value": 210,
+     "low": 202,
+     "high": 218,
+     "gain": 0.3057,
+     "inside": true,
+     "reason": "The base's +33 vote gain came from its 77 cap abstentions; with 25 left the edit gains like RL (+20) on a ~190 mean.",
+     "theory": "A capped sample gives no answer, so in a plurality vote it abstains instead of adding a wrong value"
+    },
+    {
+     "who": "run-02/f2-m05",
+     "name": "Asserted guesses",
+     "id": "f2-m05",
+     "reader": false,
+     "value": 209,
+     "low": 201,
+     "high": 217,
+     "gain": 0.1154,
+     "inside": true,
+     "reason": "Mean ~187 plus a vote gain of ~+22, since asserted wrong values rarely agree.",
+     "theory": "The RL-Math difference carries RL's habit of ending a long unsolved attempt with an asserted, underived number (per 1,312 hard328 samples RL finishes long and wrong 381 times, the base 281)"
+    },
+    {
+     "who": "run-02/f2-m06",
+     "name": "Stop controller",
+     "id": "f2-m06",
+     "reader": false,
+     "value": 215,
+     "low": 207,
+     "high": 223,
+     "gain": 0.6228,
+     "inside": true,
+     "reason": "Mean ~193 plus an RL-like vote gain.",
+     "theory": "Think-SFT's difference from the base carries long derivation"
+    }
+   ],
+   "inside": 7,
+   "miss": 0.0152
+  },
+  {
+   "run": "run-02",
+   "target": "t05",
+   "item": "result-0c1eef",
+   "lead": "The untrained base is allowed answers twice as long: the token cap goes from 16,384 to 32,768.",
+   "what": "How many of the 328 harder problems the untrained base with the opening cue answers right with the token cap raised to 32,768, one sample at T 1.0, seed 3000000, grader v3.",
+   "unit": "right answers of 328",
+   "n": 328,
+   "lo": 0,
+   "hi": 328,
+   "step": 1,
+   "refs": [
+    "At the old cap it scored 164 (155 to 168 over reruns)",
+    "77 of its answers hit the old cap",
+    "The longer cap gave Think-SFT 23 more and the RL model 2 more"
+   ],
+   "marks": [
+    [
+     164,
+     "old cap"
+    ]
+   ],
+   "measured": 156,
+   "quote": "score: base hard328 156/328 tokens 9995 | cue, cap 32,768, T 1.0 / top-p 1.0",
+   "forecasts": [
+    {
+     "who": "reader-1",
+     "name": "Reader 1",
+     "id": "reader-1",
+     "reader": true,
+     "value": 168,
+     "low": 155,
+     "high": 181,
+     "gain": 0.4234,
+     "inside": true,
+     "reason": "Base cue single is 158-164 at 16k with 77 cap hits; a 32k cap lets roughly 8-10 of those finish right (Think-SFT gained 23, RL 2).",
+     "theory": null
+    },
+    {
+     "who": "reader-2",
+     "name": "Reader 2",
+     "id": "reader-2",
+     "reader": true,
+     "value": 172,
+     "low": 160,
+     "high": 184,
+     "gain": -0.749,
+     "inside": false,
+     "reason": "Base cue 164 at 16k (155-168 across reruns) plus ~8-10 of 77 cap hits finishing right at 32k; base cap hits are mostly failures to solve, so it gains less than Think-SFT (+23) but more than RL (+2).",
+     "theory": null
+    },
+    {
+     "who": "run-02/f2-m01",
+     "name": "Short samples",
+     "id": "f2-m01",
+     "reader": false,
+     "value": 153,
+     "low": 144,
+     "high": 162,
+     "gain": 1.7937,
+     "inside": true,
+     "reason": "The 16k level of this sharded rerun is ~151-155 (earlier 4-shard replay 155; cap32 runs came in low at 16k), and the second 16k tokens buy ~2.",
+     "theory": "The autobench agent works under a fixed generation time per experiment, so it buys votes by shortening each sample (its best config"
+    },
+    {
+     "who": "run-02/f2-m03",
+     "name": "Stopping dose",
+     "id": "f2-m03",
+     "reader": false,
+     "value": 162,
+     "low": 153,
+     "high": 171,
+     "gain": 1.3427,
+     "inside": true,
+     "reason": "A longer cap is a stop change at base precision: ~+4 over the base's 16k level of ~158.",
+     "theory": "The top singular directions of the RL-Math difference set when the base stops, not whether its reasoning is right"
+    },
+    {
+     "who": "run-02/f2-m04",
+     "name": "Capped abstains",
+     "id": "f2-m04",
+     "reader": false,
+     "value": 163,
+     "low": 154,
+     "high": 172,
+     "gain": 1.1255,
+     "inside": true,
+     "reason": "Single-sample cell: finishing ~70 caps at ~10 % precision adds ~5 to ~158.",
+     "theory": "A capped sample gives no answer, so in a plurality vote it abstains instead of adding a wrong value"
+    }
+   ],
+   "inside": 4,
+   "miss": 0.0213
+  },
+  {
+   "run": "run-05",
+   "target": "t02",
+   "item": "result-a1bf75",
+   "lead": "Eight directions learned by RL on code are added to the untrained base at 1.5 times their size.",
+   "what": "How many of the 538 HumanEval+ and MBPP+ problems does the Olmo 3 base pass with Code-RL 3.1's top 8 weight directions per matrix added at 1.5x size, using the Code cue at T 1.0?",
+   "unit": "problems passed of 538",
+   "n": 538,
+   "lo": 0,
+   "hi": 538,
+   "step": 1,
+   "refs": [
+    "The base with the Code cue passes 317, the RL-Code model 401",
+    "On math the same edit matched RL: 456 against 457"
+   ],
+   "marks": [
+    [
+     317,
+     "base"
+    ],
+    [
+     401,
+     "RL-Code"
+    ]
+   ],
+   "measured": 399,
+   "quote": "HumanEval+MBPP+ 399/538 tokens 3730 | base + 8 directions per matrix of RL-Code delta at 1.5x, Code cue, T 1.0",
+   "forecasts": [
+    {
+     "who": "reader-1",
+     "name": "Reader 1",
+     "id": "reader-1",
+     "reader": true,
+     "value": 357,
+     "low": 324,
+     "high": 392,
+     "gain": -0.2373,
+     "inside": false,
+     "reason": "On math 1.5x matched RL (203/200 vs 206, 456 vs 457 MATH-500); on code the share is expected lower, so about half to two thirds of the 84-problem gap.",
+     "theory": null
+    },
+    {
+     "who": "reader-2",
+     "name": "Reader 2",
+     "id": "reader-2",
+     "reader": true,
+     "value": 362,
+     "low": 328,
+     "high": 395,
+     "gain": 0.0,
+     "inside": false,
+     "reason": "On math, 1.5x top-8 matched RL (203/200.25 vs 206/200; 456 vs 457); code probably transfers less, so about 55% of the 317->401 gap.",
+     "theory": null
+    },
+    {
+     "who": "run-05/f2-m01",
+     "name": "Termination dial",
+     "id": "f2-m01",
+     "reader": false,
+     "value": 383,
+     "low": 358,
+     "high": 406,
+     "gain": 1.5743,
+     "inside": true,
+     "reason": "1.5x closed 93-100% of the gap on hard328 and MATH-500; allow some loss on a new domain: 317 + 0.79*84.",
+     "theory": "The top-8 singular directions per matrix of the RL change act as a signed termination dial spread over all layers and both module families"
+    },
+    {
+     "who": "run-05/f2-m02",
+     "name": "Error reducer",
+     "id": "f2-m02",
+     "reader": false,
+     "value": 374,
+     "low": 350,
+     "high": 398,
+     "gain": 0.0,
+     "inside": false,
+     "reason": "1.5x saturates finishing; the missing bulk caps it about 25 below RL-Code 401.",
+     "theory": "The RL change beyond its top-8 directions is a dense per-step error reducer"
+    },
+    {
+     "who": "run-05/f2-m03",
+     "name": "Input subspace",
+     "id": "f2-m03",
+     "reader": false,
+     "value": 385,
+     "low": 360,
+     "high": 408,
+     "gain": 1.7152,
+     "inside": true,
+     "reason": "In-domain 1.5x closed ~95% on math; allow a margin: 317 + 0.81*84.",
+     "theory": "Each direction of an RL change acts only as far as the processed text drives its input (right) singular vectors"
+    },
+    {
+     "who": "run-05/f2-m06",
+     "name": "bf16 rounding",
+     "id": "f2-m06",
+     "reader": false,
+     "value": 381,
+     "low": 356,
+     "high": 404,
+     "gain": 1.4146,
+     "inside": true,
+     "reason": "At 1.5x most entries clear the threshold; effective size near 1.25, about 0.76 of the 84-problem gap.",
+     "theory": "Weight edits merged in bf16 are realized only where an entry's change exceeds half a unit in the last place of that weight, so small edits are thresholded onto small-magnitude weights and their effective size grows faster than ..."
+    }
+   ],
+   "inside": 3,
+   "miss": 0.04
+  },
+  {
+   "run": "run-05",
+   "target": "t05",
+   "item": "result-a1bf75",
+   "lead": "Eight directions learned by RL on math are added to the untrained base, and it is tested on code.",
+   "what": "How many of the 538 HumanEval+ and MBPP+ problems does the Olmo 3 base pass with Math-RL 3.1's top 8 weight directions per matrix added at 1.5x size, using the Code cue at T 1.0?",
+   "unit": "problems passed of 538",
+   "n": 538,
+   "lo": 0,
+   "hi": 538,
+   "step": 1,
+   "refs": [
+    "The base with the Code cue and no edit passes 317",
+    "The Math cue alone lifts it to 326 on this set"
+   ],
+   "marks": [
+    [
+     317,
+     "base"
+    ],
+    [
+     326,
+     "Math cue"
+    ]
+   ],
+   "measured": 368,
+   "quote": "HumanEval+MBPP+ 368/538 tokens 3653 | base + 8 directions of RL-Math delta at 1.5x, Code cue, T 1.0",
+   "forecasts": [
+    {
+     "who": "reader-1",
+     "name": "Reader 1",
+     "id": "reader-1",
+     "reader": true,
+     "value": 338,
+     "low": 312,
+     "high": 366,
+     "gain": 0.0,
+     "inside": false,
+     "reason": "Math-RL also helps code (LCB 21.9 vs base 10.1, Math cue 326 on this set) and Code top-8 helped math (178 vs 164), so a partial transfer above 317.",
+     "theory": null
+    },
+    {
+     "who": "reader-2",
+     "name": "Reader 2",
+     "id": "reader-2",
+     "reader": true,
+     "value": 334,
+     "low": 310,
+     "high": 360,
+     "gain": -0.4472,
+     "inside": false,
+     "reason": "Off-domain directions help some (Code top-8 gave +14 on hard328; Math cue on code 326; Math RL transfers to LiveCodeBench), so a modest gain over 317.",
+     "theory": null
+    },
+    {
+     "who": "run-05/f2-m01",
+     "name": "Termination dial",
+     "id": "f2-m01",
+     "reader": false,
+     "value": 350,
+     "low": 327,
+     "high": 372,
+     "gain": 1.2947,
+     "inside": true,
+     "reason": "Math, Code and IF directions all wrote finishing on math; Math's dial at 1.5x on code gives its finishing share, about 40% of the code gap.",
+     "theory": "The top-8 singular directions per matrix of the RL change act as a signed termination dial spread over all layers and both module families"
+    },
+    {
+     "who": "run-05/f2-m02",
+     "name": "Error reducer",
+     "id": "f2-m02",
+     "reader": false,
+     "value": 344,
+     "low": 322,
+     "high": 366,
+     "gain": 0.0,
+     "inside": false,
+     "reason": "Math top-8 brings finishing to code but no code-specific error reduction; partial gain.",
+     "theory": "The RL change beyond its top-8 directions is a dense per-step error reducer"
+    },
+    {
+     "who": "run-05/f2-m03",
+     "name": "Input subspace",
+     "id": "f2-m03",
+     "reader": false,
+     "value": 350,
+     "low": 328,
+     "high": 372,
+     "gain": 1.2774,
+     "inside": true,
+     "reason": "Math's top-8 on code text: about half of an in-domain 1.5x gain (overlap 0.22-0.26; Code top-8 on math gave 14 vs Math's 28): 317 + 0.5*66.",
+     "theory": "Each direction of an RL change acts only as far as the processed text drives its input (right) singular vectors"
+    },
+    {
+     "who": "run-05/f2-m06",
+     "name": "bf16 rounding",
+     "id": "f2-m06",
+     "reader": false,
+     "value": 345,
+     "low": 323,
+     "high": 367,
+     "gain": 0.0,
+     "inside": false,
+     "reason": "Math's larger top-8 survives rounding at 1.5x; foreign domain gives a partial gain.",
+     "theory": "Weight edits merged in bf16 are realized only where an entry's change exceeds half a unit in the last place of that weight, so small edits are thresholded onto small-magnitude weights and their effective size grows faster than ..."
+    }
+   ],
+   "inside": 2,
+   "miss": 0.0437
+  },
+  {
+   "run": "run-02",
+   "target": "t12",
+   "item": "result-95a4dc",
+   "lead": "The same eight math directions at 1.5 times their size, one sample, on the standard set.",
+   "what": "How many of the 500 MATH-500 problems the base plus 8 RL-Math directions per matrix at 1.5x answers right with one sample, cue, T 1.0, grader v3 (base cue 410, RL 457).",
+   "unit": "right answers of 500",
+   "n": 500,
+   "lo": 0,
+   "hi": 500,
+   "step": 1,
+   "refs": [
+    "The cued base scores 410, the RL model 457",
+    "The eight directions at 1 times, plain prompt, scored 427"
+   ],
+   "marks": [
+    [
+     410,
+     "cued base"
+    ],
+    [
+     457,
+     "RL"
+    ],
+    [
+     427,
+     "1x plain"
+    ]
+   ],
+   "measured": 456,
+   "quote": "score: other MATH-500 456/500 tokens 4422 | base + 1.5x top-8 RL directions, cue, one sample",
+   "forecasts": [
+    {
+     "who": "reader-1",
+     "name": "Reader 1",
+     "id": "reader-1",
+     "reader": true,
+     "value": 444,
+     "low": 432,
+     "high": 456,
+     "gain": 0.3937,
+     "inside": true,
+     "reason": "Top-8 at 1x plain is 427 and theta cue cells are 441-453; with the cue and 1.5x it should land in the mid-440s.",
+     "theory": null
+    },
+    {
+     "who": "reader-2",
+     "name": "Reader 2",
+     "id": "reader-2",
+     "reader": true,
+     "value": 440,
+     "low": 428,
+     "high": 452,
+     "gain": -0.6586,
+     "inside": false,
+     "reason": "Between base cue 410 and RL 457: top-8 plain gave 427 and theta-0.25 cue 441; MATH-500 has few cap hits for the edit to remove.",
+     "theory": null
+    },
+    {
+     "who": "run-02/r5-m03-rival",
+     "name": "Incomplete switch",
+     "id": "r5-m03-rival",
+     "reader": false,
+     "value": 452,
+     "low": 440,
+     "high": 462,
+     "gain": 1.6548,
+     "inside": true,
+     "reason": "Fit the theory's mixture to top8 plain 427/500: 12.5% plain-base answers right about half the time, so the RL-like answers are right about 90.5% of the time. With the cue every answer is RL-like, giving 0.905 x 500 = 452, in line with theta 1.5 cue at 453.",
+     "theory": "The top-8 edit is an incomplete switch that happens or fails sample by sample"
+    },
+    {
+     "who": "run-02/f2-m01",
+     "name": "Short samples",
+     "id": "f2-m01",
+     "reader": false,
+     "value": 438,
+     "low": 429,
+     "high": 447,
+     "gain": -3.0,
+     "inside": false,
+     "reason": "MATH-500 answers fit inside the 16k budget, so the edit's finishing adds only on the base's 27 cap hits, on top of top8's 427.",
+     "theory": "The autobench agent works under a fixed generation time per experiment, so it buys votes by shortening each sample (its best config"
+    },
+    {
+     "who": "run-02/f2-m03",
+     "name": "Stopping dose",
+     "id": "f2-m03",
+     "reader": false,
+     "value": 426,
+     "low": 416,
+     "high": 436,
+     "gain": -3.0,
+     "inside": false,
+     "reason": "8 directions alone gave 427 plain; the cue adds nothing to an installed opening, and finishing ~15 of 27 cap hits at ~0.4 precision is offset by guesses.",
+     "theory": "The top singular directions of the RL-Math difference set when the base stops, not whether its reasoning is right"
+    },
+    {
+     "who": "run-02/f2-m05",
+     "name": "Asserted guesses",
+     "id": "f2-m05",
+     "reader": false,
+     "value": 436,
+     "low": 426,
+     "high": 446,
+     "gain": -3.0,
+     "inside": false,
+     "reason": "Few long unsolved attempts on MATH-500; the edit gives roughly top8's 427 plus a small cue and finish gain.",
+     "theory": "The RL-Math difference carries RL's habit of ending a long unsolved attempt with an asserted, underived number (per 1,312 hard328 samples RL finishes long and wrong 381 times, the base 281)"
+    },
+    {
+     "who": "run-02/f2-m06",
+     "name": "Stop controller",
+     "id": "f2-m06",
+     "reader": false,
+     "value": 445,
+     "low": 436,
+     "high": 454,
+     "gain": 0.0,
+     "inside": false,
+     "reason": "The controller boxes and finishes the cued base's answers: top8 427 plus cue and finishing.",
+     "theory": "Think-SFT's difference from the base carries long derivation"
+    }
+   ],
+   "inside": 2,
+   "miss": 0.032
+  },
+  {
+   "run": "run-02",
+   "target": "t15",
+   "item": "result-6e7b64",
+   "lead": "The same agent-tuned recipe, never tuned on them, is run on the 328 harder problems.",
+   "what": "How many of the 328 harder problems the autobench agent's final configuration answers right in the final run.",
+   "unit": "right answers of 328",
+   "n": 328,
+   "lo": 0,
+   "hi": 328,
+   "step": 1,
+   "refs": [
+    "The cued base with a vote over 4 gets 192 of these",
+    "One of its four samples is right on 207"
+   ],
+   "marks": [
+    [
+     192,
+     "base vote"
+    ],
+    [
+     207,
+     "any of 4"
+    ]
+   ],
+   "measured": 139,
+   "quote": "score: base hard328 139/328 tokens 20407 | Karpathy-loop method: plain prompt, T 0.6, 12 samples capped at 4,096 tokens, vote; 7.2 s per problem budget",
+   "forecasts": [
+    {
+     "who": "reader-1",
+     "name": "Reader 1",
+     "id": "reader-1",
+     "reader": true,
+     "value": 190,
+     "low": 165,
+     "high": 210,
+     "gain": 0.0,
+     "inside": false,
+     "reason": "Base cue vote over 4 is 192 on hard328; a bigger vote helps a little, but a token or time budget tuned on MATH-500 may cut long answers.",
+     "theory": null
+    },
+    {
+     "who": "reader-2",
+     "name": "Reader 2",
+     "id": "reader-2",
+     "reader": true,
+     "value": 197,
+     "low": 180,
+     "high": 210,
+     "gain": -3.0,
+     "inside": false,
+     "reason": "Base cue vote over 4 on the 328 is 192 (pass@4 207), and a ~10-sample vote adds a few problems.",
+     "theory": null
+    },
+    {
+     "who": "run-02/f2-m01",
+     "name": "Short samples",
+     "id": "f2-m01",
+     "reader": false,
+     "value": 120,
+     "low": 80,
+     "high": 160,
+     "gain": 3.0,
+     "inside": true,
+     "reason": "One full base sample gets 81 hard328 problems within 4,000 tokens; at ~1,100-1,500 tokens per sample far fewer finish, and a vote over ~10 such samples gives ~120.",
+     "theory": "The autobench agent works under a fixed generation time per experiment, so it buys votes by shortening each sample (its best config"
+    },
+    {
+     "who": "run-02/f2-m02",
+     "name": "Scattered slips",
+     "id": "f2-m02",
+     "reader": false,
+     "value": 200,
+     "low": 182,
+     "high": 218,
+     "gain": -3.0,
+     "inside": false,
+     "reason": "Base 4-vote 192 on hard328; ~10 dispersed samples add ~8.",
+     "theory": "The cued base's wrong answers on a problem rarely share a value"
+    }
+   ],
+   "inside": 1,
+   "miss": 0.1662
+  },
+  {
+   "run": "run-02",
+   "target": "t14",
+   "item": "result-6e7b64",
+   "lead": "An agent ran 40 experiments on 100 practice problems to tune the untrained base; its final recipe is run on 400 held-out problems.",
+   "what": "How many of the 400 math400 problems the autobench agent's final configuration answers right in the final run.",
+   "unit": "right answers of 400",
+   "n": 400,
+   "lo": 0,
+   "hi": 400,
+   "step": 1,
+   "refs": [
+    "A vote over 4 cued samples reaches 89.2 % on the full set",
+    "The 100 practice problems run about 2 points easy"
+   ],
+   "marks": [],
+   "measured": 338,
+   "quote": "On the 400 the two are equal, 338 each",
+   "forecasts": [
+    {
+     "who": "reader-1",
+     "name": "Reader 1",
+     "id": "reader-1",
+     "reader": true,
+     "value": 362,
+     "low": 345,
+     "high": 375,
+     "gain": -0.6295,
+     "inside": false,
+     "reason": "A vote over about 10 cue samples is near 90-91 % on MATH-500 (vote over 4 is 89.2 %), minus some overfit to dev100.",
+     "theory": null
+    },
+    {
+     "who": "reader-2",
+     "name": "Reader 2",
+     "id": "reader-2",
+     "reader": true,
+     "value": 356,
+     "low": 342,
+     "high": 368,
+     "gain": 0.0,
+     "inside": false,
+     "reason": "A 10-sample cue vote on MATH-500 is ~89-91%, dev100 runs ~2 points easy and the config was selected on dev, so ~89% of 400.",
+     "theory": null
+    },
+    {
+     "who": "run-02/f2-m01",
+     "name": "Short samples",
+     "id": "f2-m01",
+     "reader": false,
+     "value": 338,
+     "low": 325,
+     "high": 351,
+     "gain": 2.9773,
+     "inside": true,
+     "reason": "Short-sample config is worth ~85.5 % on dev100 once selection is removed; dev100 runs ~2 points easy (cue 84 vs 82 %), so ~84.5 % of 400.",
+     "theory": "The autobench agent works under a fixed generation time per experiment, so it buys votes by shortening each sample (its best config"
+    },
+    {
+     "who": "run-02/f2-m02",
+     "name": "Scattered slips",
+     "id": "f2-m02",
+     "reader": false,
+     "value": 372,
+     "low": 362,
+     "high": 382,
+     "gain": -3.0,
+     "inside": false,
+     "reason": "A ~10-sample vote on the other 400 converts most tied and low-rate problems: ~93 %.",
+     "theory": "The cued base's wrong answers on a problem rarely share a value"
+    },
+    {
+     "who": "run-02/f2-m04",
+     "name": "Capped abstains",
+     "id": "f2-m04",
+     "reader": false,
+     "value": 356,
+     "low": 344,
+     "high": 368,
+     "gain": 0.0,
+     "inside": false,
+     "reason": "Vote of cue-like samples on MATH problems, minus dev overfit.",
+     "theory": "A capped sample gives no answer, so in a plurality vote it abstains instead of adding a wrong value"
+    }
+   ],
+   "inside": 1,
+   "miss": 0.045
+  }
+ ],
+ "summary": {
+  "readers": 20,
+  "readers_inside": 10,
+  "theories": 38,
+  "theories_inside": 27,
+  "theory_names": 12
+ }
+}

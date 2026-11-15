@@ -27,6 +27,18 @@ w, h = map(int, a.size.split("x"))
 out = Path(a.out)
 out.mkdir(parents=True, exist_ok=True)
 
+# At most 3 runs at once on this machine: more lose their WebGL context and report frame rates that mean nothing.
+import fcntl
+import random
+slots = [open(f"/tmp/sitelab-shoot-{i}.lock", "w") for i in range(3)]
+random.shuffle(slots)
+while True:
+    try:
+        held = next(s for s in slots if fcntl.flock(s, fcntl.LOCK_EX | fcntl.LOCK_NB) is None)
+        break
+    except (StopIteration, BlockingIOError):
+        time.sleep(1)
+
 with sync_playwright() as p:
     browser = p.chromium.launch(channel="chrome", headless=True, args=[
         "--ignore-gpu-blocklist", "--enable-gpu", "--use-angle=gl", "--enable-webgl", "--disable-frame-rate-limit"])
