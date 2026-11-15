@@ -71,3 +71,8 @@ the rival(s) whose range it touches (the other is refuted if the interval is who
 
 - The plan's files are cell folders; their per-problem rows are not committed, so the rows are read from the job
   outputs listed above (same jobs as each folder's run.json). No change to set, rows, statistic or ranges.
+- Amendment, made after a first run of the script (reported, not hidden): the stored `passed` field is true on 3 rows
+  that hit the token cap (cued base: 2, including Mbpp/125; RL-Code 53M: 1); no passed row lacks a block. The plan
+  says cap hits count as fail, so pass = `passed` and not `cap_hit` and `mode` != "none" for every cell, which
+  removes Mbpp/125 from L. The first run (raw `passed`) gave |L| 24, S 0.433 [0.342, 0.525]; metrics.json reports
+  both readings. The count check still compares raw `passed` with the posted counts.

@@ -1,0 +1,18 @@
+[
+ {
+  "mechanism": "round-14/s6-a",
+  "claim": "On problems the cued base passes but RL-Code mostly fails, the Code top-8 edit sharpens the base's own programs and passes at 0.70 or more",
+  "result": "PENDING",
+  "verdict": "refuted",
+  "measured": "mean pass of 5 Code top-8 edit samples on L 0.452 [0.357, 0.539], n 115 rows (23 problems); null base-like resamples 0.435 [0.333, 0.551]; RL-Code on L 0.22; range a [0.70, 1.0]",
+  "added": "2026-11-15T22:48:26Z"
+ },
+ {
+  "mechanism": "round-14/s6-b",
+  "claim": "On problems the cued base passes but RL-Code mostly fails, the Code top-8 edit copies RL-Code's outcomes and passes at 0.34 or less",
+  "result": "PENDING",
+  "verdict": "refuted",
+  "measured": "mean pass of 5 Code top-8 edit samples on L 0.452 [0.357, 0.539], n 115 rows (23 problems); null base-like resamples 0.435 [0.333, 0.551]; RL-Code on L 0.22; range b [0.0, 0.34]",
+  "added": "2026-11-15T22:48:26Z"
+ }
+]

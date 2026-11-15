@@ -1,0 +1,114 @@
+{
+ "statistic": "mean over L of the pass rate of 5 Code top-8 edit samples (1x at 51M/52M/53M, 1.5x, 2x; Code cue)",
+ "L_size": 23,
+ "n_rows": 115,
+ "S": 0.45217391304347815,
+ "ci90": [
+  0.35652173913043483,
+  0.5391304347826087
+ ],
+ "null": {
+  "value": 0.43478260869565216,
+  "ci90": [
+   0.33333333333333326,
+   0.5507246376811593
+  ],
+  "cells": [
+   "base_plain",
+   "base_mathcue",
+   "rand8x1.5"
+  ]
+ },
+ "ranges": {
+  "a": [
+   0.7,
+   1.0
+  ],
+  "b": [
+   0.0,
+   0.34
+  ],
+  "null": [
+   0.38,
+   0.66
+  ]
+ },
+ "verdict": {
+  "a": "refuted",
+  "b": "refuted"
+ },
+ "per_cell_on_L": {
+  "top8x1_51": 0.5217391304347826,
+  "top8x1_52": 0.43478260869565216,
+  "top8x1_53": 0.43478260869565216,
+  "top8x1.5_51": 0.43478260869565216,
+  "top8x2_51": 0.43478260869565216,
+  "base_plain": 0.2608695652173913,
+  "base_mathcue": 0.4782608695652174,
+  "rand8x1.5": 0.5652173913043478,
+  "rl_51": 0.17391304347826086,
+  "rl_52": 0.21739130434782608,
+  "rl_53": 0.2608695652173913,
+  "base_cue": 1.0
+ },
+ "edit_minus_null": 0.017391304347825987,
+ "e_histogram": {
+  "0/5": 2,
+  "1/5": 5,
+  "2/5": 6,
+  "3/5": 6,
+  "4/5": 3,
+  "5/5": 1
+ },
+ "rl_fail_count_on_L": {
+  "2of3": 15,
+  "3of3": 8
+ },
+ "posted_counts_reproduced": {
+  "base_cue": 317,
+  "rl_51": 401,
+  "rl_52": 395,
+  "rl_53": 403,
+  "top8x1_51": 386,
+  "top8x1_52": 397,
+  "top8x1_53": 391,
+  "top8x1.5_51": 399,
+  "top8x2_51": 394,
+  "base_plain": 222,
+  "base_mathcue": 326,
+  "rand8x1.5": 331
+ },
+ "bootstrap": {
+  "resamples": 10000,
+  "unit": "problem in L",
+  "rng": "numpy default_rng(0)",
+  "percentiles": [
+   5,
+   95
+  ]
+ },
+ "raw_passed_reading": {
+  "L_size": 24,
+  "S": 0.43333333333333335,
+  "ci90": [
+   0.34166666666666673,
+   0.525
+  ],
+  "note": "stored passed field alone (3 passed rows hit the cap); not the plan's rule"
+ },
+ "inputs": {
+  "base_cue": "runs/abaybektursun-1114-170304-c03c/answers.jsonl",
+  "rl_51": "runs/abaybektursun-1114-170253-f661/answers.jsonl",
+  "rl_52": "runs/abaybektursun-1115-143247-929d/answers.jsonl",
+  "rl_53": "runs/abaybektursun-1115-143331-10da/answers.jsonl",
+  "top8x1_51": "runs/abaybektursun-1115-101423-4a7d/answers.jsonl",
+  "top8x1_52": "runs/abaybektursun-1115-143231-15bb/answers.jsonl",
+  "top8x1_53": "runs/abaybektursun-1115-143316-628e/answers.jsonl",
+  "top8x1.5_51": "runs/abaybektursun-1115-101434-4511/answers.jsonl",
+  "top8x2_51": "runs/abaybektursun-1115-101445-e35e/answers.jsonl",
+  "base_plain": "runs/abaybektursun-1114-170258-388e/answers.jsonl",
+  "base_mathcue": "runs/abaybektursun-1114-170309-b137/answers.jsonl",
+  "rand8x1.5": "runs/abaybektursun-1115-101457-ef2c/answers.jsonl"
+ },
+ "raw_rows_read": "10 problems in L read (HumanEval/55, 65, 141, 151, 77; Mbpp/109, 123, 133, 14, 125 before the cap amendment): every edit and RL-Code failure is a finished block that fails a test (wrong fib base case, wrong rotation count, find_Volume renamed find_volume), not a cap hit or missing block. The edit fails and passes on different problems than RL-Code (HumanEval/65: RL 1 of 3, edit 5 of 5; HumanEval/55: RL 1 of 3, edit 0 of 5), so its rate on L sits at a base resample's, not RL-Code's."
+}
