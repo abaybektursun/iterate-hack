@@ -1,0 +1,114 @@
+diff --git a/studies/gapmap/README.md b/studies/gapmap/README.md
+index ea7466c..a2f055b 100644
+--- a/studies/gapmap/README.md
++++ b/studies/gapmap/README.md
+@@ -15,6 +15,7 @@ Requirements). Plan: `specs/SPEC.md`.
+ | `prep/make_cells.py` | Writes `cells/<batch>.json` from `queue.json`. |
+ | `cells/<batch>.json` | The cells of one batch, one entry per cell with its settings. |
+ | `jobs/submit.sh` | Launches one cell on the runner, waits, copies the output to `runs/<job id>/`. |
++| `jobs/submit_batch.py` | Checks every cell of a batch, launches them all in parallel, writes `results/<batch>-NN/`. |
+ | `jobs/run_cell.sh` | What the job runs: environment, then `cell.py`. |
+ | `jobs/check_cell.py` | Checks a cell's settings and data path before launch (stdlib, computes nothing). |
+ | `jobs/cell.py` | The cell: metric, split, paired bootstrap, interval, table. |
+@@ -27,16 +28,19 @@ Requirements). Plan: `specs/SPEC.md`.
+ One batch at a time, from the repository root:
+ 
+ ```
+-python3 studies/gapmap/prep/make_cells.py <batch>
+-bash studies/gapmap/jobs/submit.sh <batch> <cell>
++python3 studies/gapmap/prep/make_cells.py <batch>      # then set the subject cell's settings by hand
++git commit studies/gapmap/cells/<batch>.json && git push
++python3 studies/gapmap/jobs/submit_batch.py <batch>
+ ```
+ 
+-`submit.sh` runs `jobs/check_cell.py` first and launches nothing if a cell's settings or data path are wrong. The
++`submit_batch.py` checks every cell (`jobs/check_cell.py`) and that HEAD is pushed, and launches nothing if one check
++fails. Then it starts `submit.sh` for all cells in parallel (about 2 minutes for a batch, against about 6 when the
++cells ran one after another), and writes each cell's `metrics.json` and `run.json` to the next free
++`results/<batch>-NN/`. If a cell fails, it prints that cell's output and writes no results folder. The
+ data defaults to `studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json`; pass `--data` only to change it.
++`bash studies/gapmap/jobs/submit.sh <batch> <cell>` still runs one cell.
+ 
+-Commit `cells/<batch>.json` and push before the first launch (a job runs a pushed commit). Then copy each cell's
+-`runs/<job id>/metrics.json` to `results/<batch>-NN/<cell>.json`, write `run.json`, commit, and close the work item
+-with the numbers.
++Then commit the results folder and close the work item with the numbers.
+ 
+ ## Numbers
+ 
+diff --git a/studies/gapmap/jobs/submit_batch.py b/studies/gapmap/jobs/submit_batch.py
+new file mode 100644
+index 0000000..1915570
+--- /dev/null
++++ b/studies/gapmap/jobs/submit_batch.py
+@@ -0,0 +1,70 @@
++"""Run every cell of one gapmap batch at once and write results/<batch>-NN/ (stdlib only, computes nothing here).
++
++  python3 studies/gapmap/jobs/submit_batch.py <batch> [--data <per_problem.json>]
++
++1. Checks every cell with check_cell.py and that HEAD is pushed; launches nothing if one check fails.
++2. Starts submit.sh for all cells in parallel (each runs its cell and the verification rerun).
++3. Copies each cell's runs/<job id>/metrics.json to the next free results/<batch>-NN/<cell>.json and writes run.json.
++Exits 1, after printing the failed cells' output, if any cell fails; then it writes no results folder.
++"""
++import argparse
++import json
++import shutil
++import subprocess
++import sys
++from pathlib import Path
++
++STUDY = Path("studies/gapmap")
++
++
++def git(*args):
++    return subprocess.run(["git", *args], check=True, capture_output=True, text=True).stdout.strip()
++
++
++def main():
++    parser = argparse.ArgumentParser()
++    parser.add_argument("batch")
++    parser.add_argument("--data")
++    args = parser.parse_args()
++    extra = ["--data", args.data] if args.data else []
++    cells_path = STUDY / "cells" / f"{args.batch}.json"
++    ids = [c["id"] for c in json.loads(cells_path.read_text())]
++
++    failed = [i for i in ids if subprocess.run(
++        ["python3", str(STUDY / "jobs/check_cell.py"), "--cells", str(cells_path), "--cell", i, *extra]).returncode]
++    if failed:
++        sys.exit(f"batch {args.batch}: cells {failed} failed their check, nothing launched")
++    commit = git("rev-parse", "HEAD")
++    if not git("branch", "-r", "--contains", commit):
++        sys.exit(f"batch {args.batch}: commit {commit[:7]} is not pushed, and a job runs only a pushed commit")
++
++    procs = {i: subprocess.Popen(["bash", str(STUDY / "jobs/submit.sh"), args.batch, i, *extra],
++                                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True) for i in ids}
++    print(f"batch {args.batch}: launched {len(ids)} cells at commit {commit[:7]}: {', '.join(ids)}", file=sys.stderr)
++    outputs = {i: p.communicate()[0] for i, p in procs.items()}
++    bad = [i for i, p in procs.items() if p.returncode]
++    for i in bad:
++        print(f"--- cell {i} failed:\n{outputs[i]}", file=sys.stderr)
++    if bad:
++        sys.exit(f"batch {args.batch}: cells {bad} failed, no results folder written")
++
++    jobs = {}
++    for i in ids:
++        result = [line for line in outputs[i].splitlines() if line.startswith("result runs/")]
++        assert len(result) == 1, f"cell {i}: expected one 'result runs/...' line, got:\n{outputs[i]}"
++        jobs[i] = result[0].split("/")[1]
++    n = 1
++    while (STUDY / "results" / f"{args.batch}-{n:02d}").exists():
++        n += 1
++    out = STUDY / "results" / f"{args.batch}-{n:02d}"
++    out.mkdir(parents=True)
++    for i, job in jobs.items():
++        shutil.copy(Path("runs") / job / "metrics.json", out / f"{i}.json")
++    launch = f"python3 studies/gapmap/jobs/submit_batch.py {args.batch}" + (f" --data {args.data}" if args.data else "")
++    (out / "run.json").write_text(json.dumps(
++        {"batch": args.batch, "commit": commit, "launch": [launch], "jobs": jobs}, indent=1) + "\n")
++    print(f"wrote {out}: " + ", ".join(f"{i} {j}" for i, j in jobs.items()))
++
++
++if __name__ == "__main__":
++    main()

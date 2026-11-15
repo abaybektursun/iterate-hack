@@ -1,0 +1,244 @@
+{
+ "arena": {
+  "id": "a6",
+  "arm": "plain",
+  "variant": "planted",
+  "port": 5726,
+  "modal_env": "mh-a6",
+  "base_sha": "3343a5e",
+  "built": "2026-11-15T03:51:05Z"
+ },
+ "store": "moto server (DynamoDB table iterate-board-test, team bucket), local",
+ "job_class": "cpu (Modal, 4 cores, max 8 at a time)",
+ "commands": {
+  "arena": "python3 -m studies.metaharness.prep.run_arena a6 plain planted 5726 3343a5e <windows>",
+  "review": "prep/review.py: claude -p <prompt> --model <model> --max-turns 90 (see the file)"
+ },
+ "study_commit": "f53a49199b7f6922bbe015e3ed752523cc2b8e35",
+ "windows": [
+  {
+   "window": 0,
+   "batch": "accuracy",
+   "started": "2026-11-15T03:51:11Z",
+   "ended": "2026-11-15T03:59:53Z",
+   "commit_start": "dfd086bf6edadb75f6d0242d6e392f34dcd5c08a",
+   "commit_end": "5b1d65f6cb276acc29a4a957c3fe0fd828bb7f41",
+   "cells": [
+    "overall",
+    "subject",
+    "level5",
+    "t2_length_quartile",
+    "t1_length_quartile",
+    "bench-rng"
+   ],
+   "answered": {
+    "subject": true,
+    "overall": true,
+    "level5": true,
+    "t2_length_quartile": true,
+    "t1_length_quartile": true,
+    "bench-rng": true
+   },
+   "launch_lines": [
+    "bash studies/gapmap/jobs/submit.sh <batch> <cell>"
+   ],
+   "adapted": [],
+   "flakes": [],
+   "work": "work-06d290",
+   "extra_work": {
+    "bench-rng": "work-991a58"
+   },
+   "jobs": [
+    "dana-1114-195119-d4b0",
+    "dana-1114-195157-f9fb",
+    "dana-1114-195258-5479",
+    "dana-1114-195409-0b9e",
+    "dana-1114-195522-18d7",
+    "dana-1114-195626-dd99",
+    "dana-1114-195626-8da1",
+    "dana-1114-195626-5eee",
+    "dana-1114-195626-105a",
+    "dana-1114-195626-a162",
+    "dana-1114-195740-8e65",
+    "dana-1114-195742-5e16",
+    "dana-1114-195756-0026",
+    "dana-1114-195758-2462",
+    "dana-1114-195805-f346"
+   ]
+  },
+  {
+   "window": 1,
+   "batch": "cap_hit",
+   "started": "2026-11-15T04:01:57Z",
+   "ended": "2026-11-15T04:07:59Z",
+   "commit_start": "8246c0663bbb046c4dbef5a84a9715e68fb6eaab",
+   "commit_end": "3d4fd4c5554ad30377ed7342e1feaba3c30dfe45",
+   "cells": [
+    "overall",
+    "subject",
+    "level5",
+    "t2_length_quartile",
+    "t1_length_quartile",
+    "bench-rng"
+   ],
+   "answered": {
+    "subject": true,
+    "overall": true,
+    "level5": true,
+    "t2_length_quartile": true,
+    "t1_length_quartile": true,
+    "bench-rng": true
+   },
+   "launch_lines": [
+    "bash studies/gapmap/jobs/submit.sh <batch> <cell>"
+   ],
+   "adapted": [],
+   "flakes": [],
+   "work": "work-9920ca",
+   "extra_work": {
+    "bench-rng": "work-c3efad"
+   },
+   "jobs": [
+    "dana-1114-200205-7c6f",
+    "dana-1114-200325-678e",
+    "dana-1114-200443-6aaf",
+    "dana-1114-200443-769d",
+    "dana-1114-200444-c593",
+    "dana-1114-200444-9c16",
+    "dana-1114-200444-55e7",
+    "dana-1114-200602-b60a",
+    "dana-1114-200602-6a47",
+    "dana-1114-200603-4e00",
+    "dana-1114-200612-181f",
+    "dana-1114-200612-2177"
+   ]
+  },
+  {
+   "window": 2,
+   "batch": "tokens",
+   "started": "2026-11-15T04:09:30Z",
+   "ended": "2026-11-15T04:12:46Z",
+   "commit_start": "5ccd115e4555354f9a9ce4f557240fa96b516534",
+   "commit_end": "ed1aa9f88e99a7bf851efde8e81543c3708dc926",
+   "cells": [
+    "overall",
+    "subject",
+    "level5",
+    "t2_length_quartile",
+    "t1_length_quartile",
+    "bench-rng"
+   ],
+   "answered": {
+    "subject": true,
+    "overall": true,
+    "level5": true,
+    "t2_length_quartile": true,
+    "t1_length_quartile": true,
+    "bench-rng": true
+   },
+   "launch_lines": [
+    "bash studies/gapmap/jobs/submit.sh <batch> <cell>"
+   ],
+   "adapted": [],
+   "flakes": [],
+   "work": "work-9c402b",
+   "extra_work": {
+    "bench-rng": "work-5e54b7"
+   },
+   "jobs": [
+    "dana-1114-200937-4e0e",
+    "dana-1114-201109-3c4f",
+    "dana-1114-201109-e0f7",
+    "dana-1114-201109-993d",
+    "dana-1114-201109-5b1d",
+    "dana-1114-201109-8881"
+   ]
+  },
+  {
+   "window": 3,
+   "batch": "tokens_both_right",
+   "started": "2026-11-15T04:14:16Z",
+   "ended": "2026-11-15T04:17:20Z",
+   "commit_start": "89cde1c2b0f120f17972a05570536cec51b03111",
+   "commit_end": "f790158680ac4e41e6c6a206d229797d629f9f68",
+   "cells": [
+    "overall",
+    "subject",
+    "level5",
+    "t2_length_quartile",
+    "t1_length_quartile"
+   ],
+   "answered": {
+    "subject": true,
+    "overall": true,
+    "level5": true,
+    "t2_length_quartile": true,
+    "t1_length_quartile": true
+   },
+   "launch_lines": [
+    "bash studies/gapmap/jobs/submit.sh <batch> <cell>"
+   ],
+   "adapted": [],
+   "flakes": [],
+   "work": "work-a64eb4",
+   "extra_work": {},
+   "jobs": [
+    "dana-1114-201423-f9be",
+    "dana-1114-201542-8dd2",
+    "dana-1114-201542-f924",
+    "dana-1114-201542-5e6a",
+    "dana-1114-201542-f742"
+   ]
+  }
+ ],
+ "reviews": [
+  {
+   "round": 1,
+   "arm": "plain",
+   "prompt": "Review how the last hour of work went and make one improvement.",
+   "model": "claude-opus-5-5",
+   "minutes": 1.7,
+   "turns": 15,
+   "cost_usd": 0.528861,
+   "session_id": "51f56bba-f2f9-4292-ad61-05685edec474",
+   "exit_code": 0,
+   "before": "5b1d65f6cb276acc29a4a957c3fe0fd828bb7f41",
+   "after": "2fa667f9dd2a1f50ed8e09e088da44a7d24bd1b9",
+   "harness": [],
+   "jobs": 0,
+   "job_minutes": 0
+  },
+  {
+   "round": 2,
+   "arm": "plain",
+   "prompt": "Review how the last hour of work went and make one improvement.",
+   "model": "claude-opus-5-5",
+   "minutes": 1.2,
+   "turns": 11,
+   "cost_usd": 0.3805482,
+   "session_id": "878b6d42-cf9d-4cc9-bacb-af69f344efa9",
+   "exit_code": 0,
+   "before": "3d4fd4c5554ad30377ed7342e1feaba3c30dfe45",
+   "after": "f6cdc45802ab6ed9261a35bbe5ae84065b4a87e1",
+   "harness": [],
+   "jobs": 0,
+   "job_minutes": 0
+  },
+  {
+   "round": 3,
+   "arm": "plain",
+   "prompt": "Review how the last hour of work went and make one improvement.",
+   "model": "claude-opus-5-5",
+   "minutes": 1.3,
+   "turns": 14,
+   "cost_usd": 0.41459440000000003,
+   "session_id": "83c4ff3e-b826-404d-8f33-0e505d841e86",
+   "exit_code": 0,
+   "before": "ed1aa9f88e99a7bf851efde8e81543c3708dc926",
+   "after": "db2b4f0cb06a85b8aca2917f45c1732bd909cd43",
+   "harness": [],
+   "jobs": 0,
+   "job_minutes": 0
+  }
+ ]
+}

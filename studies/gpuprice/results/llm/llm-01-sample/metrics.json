@@ -1,0 +1,13 @@
+{
+ "job": "abaybektursun-1114-200439-7bc9 (H100, 8 min; commit b91a36f)",
+ "model": "RedHatAI/Qwen3-Next-80B-A3B-Instruct-quantized.w4a16 @ ac9dc5b (base model released 2025-09-09)",
+ "cells": "10 highest-loss series x origins 2026-10-01, 07, 13, 19, 25 x horizons 3, 7 = 100 forecast, 92 with truth",
+ "samples": {"per_cell": 30, "parsed": 2959, "of": 3000, "share_equal_to_last_value": 0.905, "cells_with_all_30_equal_to_last_value": 58},
+ "same_92_cells": {
+  "llm-01-sample": {"skill_pooled": 0.015, "h3": -0.001, "h7": 0.026, "in_band": 0.23},
+  "it00-lve": {"skill_pooled": 0.106, "h3": 0.118, "h7": 0.097, "in_band": 0.41},
+  "it01-sim": {"skill_pooled": 0.180, "h3": 0.155, "h7": 0.197, "in_band": 0.46},
+  "ens-04-avg-ft05-sim215": {"skill_pooled": 0.264, "h3": 0.248, "h7": 0.275, "in_band": 0.54}},
+ "reproduce": "llm_score.py parse <gen_sample.jsonl> forecast.csv; eval.sh forecast.csv llm-01-sample; llm_score.py compare llm-01-sample it00-lve it01-sim ens-04-avg-ft05-sim215",
+ "raw_generations": "Modal Volume iterate-runs, abaybektursun-1114-200439-7bc9/gen_sample.jsonl (local copy runs/abaybektursun-1114-200439-7bc9/, not committed)"
+}

@@ -1,0 +1,11 @@
+{
+ "commit": "640d00b2f1d8d47de3744833e005361b32c632f8",
+ "command": "uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.rate predict",
+ "job_id": null,
+ "gpu": "none (laptop, numpy)",
+ "spec": "studies/rlneurons/specs/SPEC_rate.md",
+ "inputs": "studies/rlneurons/results/axis/{math500,hard328}-01/vectors.json and manifest.json; results/day1_3/math500_{base_cue,rl}-01/{rows.jsonl,readout.json}; each arm's metrics.json (tokens)",
+ "pushed_utc": "2026-11-15T04:44:16Z",
+ "board": "comments on work-c45b70 at filing",
+ "correction": "the note on the RL cell misread work-1a972a: '246 of 328' in result-1dedfe is the number of problems that finished, not a score; no hard328 vote score was seen before filing"
+}

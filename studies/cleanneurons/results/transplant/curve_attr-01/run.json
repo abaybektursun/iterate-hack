@@ -1,0 +1,17 @@
+{
+ "job_id": "sameraslan-1114-153108-a93d",
+ "commit": "51b022a72c865057911e83260d2b5661adad0e59",
+ "command": "python -m studies.cleanneurons.jobs.transplant_curve --rank attr --commit 51b022a72c865057911e83260d2b5661adad0e59",
+ "runner": "tools/gpu.py h100 (Modal workspace sameraslan)",
+ "volume_only": [
+  "kl.npz",
+  "rank.npz",
+  "rank_attr.npz",
+  "edit_attr3.json"
+ ],
+ "volume_path": "iterate-runs:sameraslan-1114-153108-a93d/",
+ "made_on_laptop": [
+  "edit_attr_top100.json (the 100 neurons with the largest score)",
+  "rank_attr_readout.json"
+ ]
+}

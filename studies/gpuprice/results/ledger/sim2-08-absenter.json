@@ -1,0 +1,35 @@
+{
+ "name": "sim2-08-absenter",
+ "note": "hypothesis: an entrant is a listing with its own price (Modal and Spheron drop out for a day and return at the same price; marketplace nodes post absolute asks), so a window's entrant should enter at its posted price and only if absent today, not at a ratio to the old median; on top of sim2-07 (+0.2333); refuted if pooled <= +0.2333 [flags: --tau 14 --shrink 0.2 --abs-enter]",
+ "utc": "2026-11-14T23:30:39+00:00",
+ "commit": "7f10978",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 360,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.233715,
+ "pinball": 0.025704,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.211086,
+ "skill_geomean": 0.314052,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.186421,
+   "in_band": 0.796172
+  },
+  "3": {
+   "skill_pooled": 0.189571,
+   "in_band": 0.698643
+  },
+  "7": {
+   "skill_pooled": 0.270337,
+   "in_band": 0.572674
+  }
+ },
+ "in_band": 0.689611
+}

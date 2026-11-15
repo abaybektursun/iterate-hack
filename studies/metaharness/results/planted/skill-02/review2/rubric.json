@@ -1,0 +1,65 @@
+{
+ "pack": "r12",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 1,
+   "quote": "Carried, not made: 1,500,000 resamples and the unused scipy/pandas/matplotlib installs (requirement 2 and run_cell.sh)"
+  },
+  "P2": {
+   "score": 1,
+   "quote": "both cap_hit failures (2 of 8 jobs) came from the hand-edited subject cell again: `ci: 99` and `digits: \"3\"`. That makes 4 failed jobs of 26 from the same cause."
+  },
+  "P3": {
+   "score": 0,
+   "quote": ""
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 1,
+   "quote": "The speed benchmark of numpy's random generators (bench-rng) tests no part of the mission, and its two runs on the same code differ by 13%."
+  },
+  "P6": {
+   "score": 0,
+   "quote": ""
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 1,
+   "file": "studies/gapmap/jobs/cell.py (with studies/gapmap/prep/make_cells.py and studies/gapmap/cells/<batch>.json deleted)"
+  },
+  "P3": {
+   "score": 0,
+   "file": ""
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 0,
+   "file": ""
+  }
+ },
+ "other_claims": [
+  "SPEC requirement 3 (hand-set subject interval level per batch) breaks the comparison between batches that requirement 2 asks for",
+  "SPEC significance rule flags groups with no events (cap_hit algebra and number_theory, interval [0, 0])",
+  "gpu.py submit refused 3 times because the untracked review folder made the git tree look dirty",
+  "1,500,000 bootstrap resamples could be cut (carried, not done)",
+  "none of the 8 jobs tested mission point 3; the two remaining re-cut batches are a worse next step than a restart or 4-sample vote on capped base answers",
+  "the subject cell was not rescored at 0.95 as the last entry asked, it was hand-set to 0.99"
+ ],
+ "change_summary": "Removes per-cell settings (deletes prep/make_cells.py, cells/<batch>.json and the csv writer) so cell.py builds every cell from queue.json defaults, and adds a subject rescoring at 95% under results/subject_ci95-01/."
+}

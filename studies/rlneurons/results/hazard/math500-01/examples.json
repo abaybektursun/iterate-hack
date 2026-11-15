@@ -1,0 +1,82 @@
+{
+ "binomial_fits_base_3_of_4_at_p_0.75": {
+  "problem_index": 180,
+  "p_fitted_from_the_other_32_arms": 0.75,
+  "right_of_4": 3,
+  "share_of_other_arms_right": 0.75,
+  "rows": [
+   {
+    "sample": 0,
+    "n_new": 276,
+    "cap_hit": false,
+    "extracted_v3": "5",
+    "score_v3": 0,
+    "gold": "3"
+   },
+   {
+    "sample": 1,
+    "n_new": 2964,
+    "cap_hit": false,
+    "extracted_v3": "$3$",
+    "score_v3": 1,
+    "gold": "3"
+   },
+   {
+    "sample": 2,
+    "n_new": 1966,
+    "cap_hit": false,
+    "extracted_v3": "3",
+    "score_v3": 1,
+    "gold": "3"
+   },
+   {
+    "sample": 3,
+    "n_new": 2320,
+    "cap_hit": false,
+    "extracted_v3": "3",
+    "score_v3": 1,
+    "gold": "3"
+   }
+  ]
+ },
+ "binomial_fails_base_0_of_4_at_the_highest_p": {
+  "problem_index": 210,
+  "p_fitted_from_the_other_32_arms": 0.822,
+  "right_of_4": 0,
+  "share_of_other_arms_right": 0.812,
+  "rows": [
+   {
+    "sample": 0,
+    "n_new": 4468,
+    "cap_hit": false,
+    "extracted_v3": "3",
+    "score_v3": 0,
+    "gold": "10"
+   },
+   {
+    "sample": 1,
+    "n_new": 8061,
+    "cap_hit": false,
+    "extracted_v3": "6",
+    "score_v3": 0,
+    "gold": "10"
+   },
+   {
+    "sample": 2,
+    "n_new": 10060,
+    "cap_hit": false,
+    "extracted_v3": "6",
+    "score_v3": 0,
+    "gold": "10"
+   },
+   {
+    "sample": 3,
+    "n_new": 12087,
+    "cap_hit": false,
+    "extracted_v3": "12",
+    "score_v3": 0,
+    "gold": "10"
+   }
+  ]
+ }
+}

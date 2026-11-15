@@ -1,0 +1,157 @@
+diff --git a/meta/FAILURES.md b/meta/FAILURES.md
+index b2dca69..b0689a7 100644
+--- a/meta/FAILURES.md
++++ b/meta/FAILURES.md
+@@ -1,3 +1,4 @@
+ # Failure classes whose cause is still in place (one line each; delete the row when its change lands)
+ 
+ - vLLM environment built inside every job by studies/rlneurons/jobs/setup_vllm.sh (3 failed or cancelled of 8 jobs on 2026-11-14 20:32-20:41; 7-60 s per job) -> put the /opt/rln-vllm venv in the runner image once (infra/runner.py), and drop the script.
++- gapmap cell settings hand-edited per batch (SPEC.md requirement 3) fail inside the job after the install (2 of 15 jobs on 2026-11-15 03:50-03:53: ci 90, fmt "cvs") -> make_cells.py writes every cell from queue.json defaults and drop requirement 3, so nothing is hand-edited.
+diff --git a/meta/dana.md b/meta/dana.md
+new file mode 100644
+index 0000000..b004452
+--- /dev/null
++++ b/meta/dana.md
+@@ -0,0 +1,18 @@
++# Meta review: dana
++
++## 2026-11-15 04:08 UTC (session start, after work-ea7a31 and work-404f9b closed) meta/reviews/dana/20261115-0400/
++
++- Last entry's checks: none, first entry of dana.
++- Direction: mission "how much of a published RL gain an untrained base model reaches with no training", point 2 "about 11 points remain" (DIRECTION.md). gapmap re-cuts the 500 stored rows (no model run) and answers where they sit: T2-T1 accuracy 0.256 [0.157, 0.355] in the cued base's longest quartile against 0.04-0.072 in q1-q3 (results/accuracy-01/t1_length_quartile.json). bench-rng (2 jobs) tests no part of the mission. Planned next: the cap_hit, tokens, tokens_both_right batches, 3 more re-cuts of the same rows. Better next step: a no-reward route aimed at the long/capped base answers at equal tokens (point 3), which these batches do not decide.
++- Research: no replication; paired bootstrap is the conventional method. Prediction check is set by a hand-picked level: subject uses ci 0.9 (cells/accuracy.json, commit 87227e5), others 0.95; at 0.9 algebra [0.0177, 0.097] excludes the overall 0.106, so "flat across subjects" reads refuted only under the level picked for that one cell.
++- Turnaround (cycle.txt, 1.5 h): 15 jobs, 3 failed, 3.1 of 17.2 container min in them, median wait 0.0; medians to-job 0, jobs 9, to-answer 1. Slowest stage: jobs. Each cell = about 23 s pip install of numpy, scipy, pandas, matplotlib (only numpy imported) + 37-51 s bootstrap of 1,500,000 resamples, run twice by submit.sh's same-seed "verification rerun".
++- Change (step 2; step 1: the rerun has no named owner in SPEC.md and a seeded bootstrap on one commit and image can only repeat itself, as before.txt shows): deleted the rerun from jobs/submit.sh (fe64c85). It also no longer continues after a failed submit (function inside $(...) ignored set -e).
++
++  | measure | before | after | change | runs | source |
++  |---|---|---|---|---|---|
++  | wall s per cell, submit.sh accuracy overall | 194.8 | 92.5 | 2.1x faster | 1 and 1 | before.txt, after.txt |
++  | container min per cell | 2.6 (1.4+1.2) | 1.2 | -54% | 1 and 1 | jobs fc61 acb1, cb6e |
++  | overall table (must not change) | 0.106 [0.074, 0.14] | same | none | 1 and 1 | runs/<id>/metrics.json vs results/accuracy-01/overall.json |
++
++- Failures: 30e7 wrong --data path copied from README "How to run": line fixed in fe64c85. 6ebb (ci 90) and 7f9b (fmt "cvs"): hand-edited cell settings, row added to meta/FAILURES.md. Carried, named not made (owner's SPEC requirements 2-3): 1,500,000 resamples (the seed, not the count, makes a table repeat) and the unused pip installs.
++- Next entry checks: next gapmap cell wall time against 92.5 s; whether the 3 remaining batches ran or the work moved to a point-3 route; subject re-scored at 0.95 or SPEC rule 3 dropped.
+diff --git a/meta/reviews/dana/20261115-0400/after.txt b/meta/reviews/dana/20261115-0400/after.txt
+new file mode 100644
+index 0000000..fea72da
+--- /dev/null
++++ b/meta/reviews/dana/20261115-0400/after.txt
+@@ -0,0 +1,7 @@
++# command: time bash studies/gapmap/jobs/submit.sh accuracy overall   (commit fe64c85, 2026-11-15T04:05:44Z)
++cell job dana-1114-200550-cb6e
++result runs/dana-1114-200550-cb6e/metrics.json
++
++real	1m32.484s
++user	0m4.474s
++sys	0m0.703s
+diff --git a/meta/reviews/dana/20261115-0400/before.txt b/meta/reviews/dana/20261115-0400/before.txt
+new file mode 100644
+index 0000000..475bf83
+--- /dev/null
++++ b/meta/reviews/dana/20261115-0400/before.txt
+@@ -0,0 +1,9 @@
++# command: time bash studies/gapmap/jobs/submit.sh accuracy overall   (commit 9a7aacb, 2026-11-15T04:01:54Z)
++cell job dana-1114-200159-fc61
++check job dana-1114-200343-acb1
++check ok: dana-1114-200343-acb1 repeats dana-1114-200159-fc61
++result runs/dana-1114-200159-fc61/metrics.json
++
++real	3m14.792s
++user	0m9.322s
++sys	0m1.650s
+diff --git a/meta/reviews/dana/20261115-0400/cycle.txt b/meta/reviews/dana/20261115-0400/cycle.txt
+new file mode 100644
+index 0000000..5655984
+--- /dev/null
++++ b/meta/reviews/dana/20261115-0400/cycle.txt
+@@ -0,0 +1,24 @@
++Installed 36 packages in 107ms
++Jobs of dana, last 1.5 h:  id  state  gpu  wait  run  command
++  dana-1114-194943-30e7  exit 1  cpu  0.1  0.5  bash studies/gapmap/jobs/run_cell.sh accuracy subject --data studies/r
++  dana-1114-195021-6ebb  exit 1  cpu  0.0  1.4  bash studies/gapmap/jobs/run_cell.sh accuracy subject 
++  dana-1114-195153-7f9b  exit 1  cpu  0.0  1.2  bash studies/gapmap/jobs/run_cell.sh accuracy subject 
++  dana-1114-195316-5a9c  done  cpu  0.0  1.3  bash studies/gapmap/jobs/run_cell.sh accuracy subject 
++  dana-1114-195449-f4dd  done  cpu  0.0  1.1  bash studies/gapmap/jobs/run_cell.sh accuracy subject 
++  dana-1114-195613-dbd7  done  cpu  0.1  1.2  bash studies/gapmap/jobs/run_cell.sh accuracy t1_length_quartile 
++  dana-1114-195613-ae39  done  cpu  0.1  1.1  bash studies/gapmap/jobs/run_cell.sh accuracy level5 
++  dana-1114-195613-d8cd  done  cpu  0.0  1.1  bash studies/gapmap/jobs/run_cell.sh accuracy bench-rng 
++  dana-1114-195613-346e  done  cpu  0.1  1.3  bash studies/gapmap/jobs/run_cell.sh accuracy overall 
++  dana-1114-195613-c476  done  cpu  0.1  1.2  bash studies/gapmap/jobs/run_cell.sh accuracy t2_length_quartile 
++  dana-1114-195739-3178  done  cpu  0.0  1.1  bash studies/gapmap/jobs/run_cell.sh accuracy level5 
++  dana-1114-195742-608c  done  cpu  0.0  1.1  bash studies/gapmap/jobs/run_cell.sh accuracy bench-rng 
++  dana-1114-195742-ce0a  done  cpu  0.0  1.1  bash studies/gapmap/jobs/run_cell.sh accuracy t1_length_quartile 
++  dana-1114-195750-d694  done  cpu  0.0  1.2  bash studies/gapmap/jobs/run_cell.sh accuracy t2_length_quartile 
++  dana-1114-195751-5c53  done  cpu  0.0  1.2  bash studies/gapmap/jobs/run_cell.sh accuracy overall 
++  15 jobs, 3 failed or cancelled; median wait 0.0; 17.2 container minutes, 3.1 of them in failed or cancelled jobs
++
++Work of dana, last 1.5 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
++  work-ea7a31  dana/gapmap  0  9  1  10  15  3  gapmap batch accuracy: T2 (RL) minus T1 (cued base) on MATH-
++  work-404f9b  dana/gapmap  0  9  1  10  15  3  gapmap bench-rng: speed of numpy's bit generators (PCG64, MT
++
++Median minutes per stage over work items with jobs: to-job 0, jobs 9, to-answer 1. Slowest stage: jobs.
+diff --git a/studies/gapmap/README.md b/studies/gapmap/README.md
+index 211b1be..442c782 100644
+--- a/studies/gapmap/README.md
++++ b/studies/gapmap/README.md
+@@ -14,7 +14,7 @@ Requirements). Plan: `specs/SPEC.md`.
+ | `queue.json` | What the study runs: the batches (one metric each), the splits of every batch, extra cells, default settings. |
+ | `prep/make_cells.py` | Writes `cells/<batch>.json` from `queue.json`. |
+ | `cells/<batch>.json` | The cells of one batch, one entry per cell with its settings. |
+-| `jobs/submit.sh` | Launches one cell on the runner, waits, copies the output to `runs/<job id>/`. |
++| `jobs/submit.sh` | Launches one cell on the runner, waits, copies the output to `runs/<job id>/`. One job per cell: the seed fixes the table, so no rerun. |
+ | `jobs/run_cell.sh` | What the job runs: environment, then `cell.py`. |
+ | `jobs/cell.py` | The cell: metric, split, paired bootstrap, interval, table. |
+ | `jobs/bench_rng.py` | Speed of numpy's bit generators on the resampler's draw. |
+@@ -27,7 +27,7 @@ One batch at a time, from the repository root:
+ 
+ ```
+ python3 studies/gapmap/prep/make_cells.py <batch>
+-bash studies/gapmap/jobs/submit.sh <batch> <cell> --data studies/rlneurons/results/rln4/per_problem.json
++bash studies/gapmap/jobs/submit.sh <batch> <cell>
+ ```
+ 
+ Commit `cells/<batch>.json` and push before the first launch (a job runs a pushed commit). Then copy each cell's
+diff --git a/studies/gapmap/jobs/submit.sh b/studies/gapmap/jobs/submit.sh
+index d46c827..0cedd7c 100755
+--- a/studies/gapmap/jobs/submit.sh
++++ b/studies/gapmap/jobs/submit.sh
+@@ -8,29 +8,13 @@ cell=$2
+ shift 2
+ command="bash studies/gapmap/jobs/run_cell.sh $batch $cell $*"
+ 
+-launch() {
+-  local job state
+-  job=$(uv run --quiet tools/gpu.py submit cpu --hours 0.5 -- "$command" | head -1)
+-  echo "$1 job $job" >&2
+-  state=$(uv run --quiet tools/gpu.py wait "$job")
+-  if [ "$(echo "$state" | head -1)" != "done" ]; then
+-    echo "$state" >&2
+-    echo "$1 job $job failed" >&2
+-    return 1
+-  fi
+-  uv run --quiet tools/gpu.py get "$job" >/dev/null 2>&1
+-  echo "$job"
+-}
+-
+-first=$(launch cell)
+-
+-# Verification rerun: the same cell with the same seed, to confirm the number before it is posted.
+-second=$(launch check)
+-python3 - "$first" "$second" <<'PY'
+-import json, sys
+-tables = [json.load(open(f"runs/{job}/metrics.json"))["table"] for job in sys.argv[1:3]]
+-if "t2_minus_t1" in tables[0][0]:  # a bootstrap table repeats exactly; the timings of bench-rng do not
+-    assert tables[0] == tables[1], "the verification rerun gave a different table"
+-print(f"check ok: {sys.argv[2]} repeats {sys.argv[1]}")
+-PY
+-echo "result runs/$first/metrics.json"
++job=$(uv run --quiet tools/gpu.py submit cpu --hours 0.5 -- "$command" | head -1)
++echo "cell job $job" >&2
++state=$(uv run --quiet tools/gpu.py wait "$job")
++if [ "$(echo "$state" | head -1)" != "done" ]; then
++  echo "$state" >&2
++  echo "cell job $job failed" >&2
++  exit 1
++fi
++uv run --quiet tools/gpu.py get "$job" >/dev/null 2>&1
++echo "result runs/$job/metrics.json"

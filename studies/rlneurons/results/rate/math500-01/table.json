@@ -1,0 +1,748 @@
+[
+ {
+  "arm": "rl_plain_vote4_restart",
+  "what": "RL plain, vote over 4 after restart",
+  "right": 475.0,
+  "n": 500,
+  "ability": 4.35,
+  "shift_logits": 2.465,
+  "interval95": [
+   2.033,
+   2.923
+  ],
+  "tokens_per_problem": 19864,
+  "signal": "RL reward (weights)",
+  "shift_vs_own_single_logits": 0.829,
+  "shift_vs_own_single_interval95": [
+   0.549,
+   1.188
+  ],
+  "extra_tokens": 15177,
+  "logits_per_1000_extra_tokens": 0.0546,
+  "points_vs_own_single": 3.0
+ },
+ {
+  "arm": "rl_plain_vote4",
+  "what": "RL plain, vote over 4 samples",
+  "right": 474.0,
+  "n": 500,
+  "ability": 4.283,
+  "shift_logits": 2.399,
+  "interval95": [
+   1.951,
+   2.843
+  ],
+  "tokens_per_problem": 18747,
+  "signal": "RL reward (weights)",
+  "shift_vs_own_single_logits": 0.763,
+  "shift_vs_own_single_interval95": [
+   0.489,
+   1.107
+  ],
+  "extra_tokens": 14060,
+  "logits_per_1000_extra_tokens": 0.0543,
+  "points_vs_own_single": 2.8
+ },
+ {
+  "arm": "rl_plain_vote3",
+  "what": "RL plain, vote over 3 samples (mean of the 4 subsets)",
+  "right": 468.5,
+  "n": 500,
+  "ability": 3.95,
+  "shift_logits": 2.066,
+  "interval95": [
+   1.707,
+   2.428
+  ],
+  "tokens_per_problem": 14060,
+  "signal": "RL reward (weights)",
+  "shift_vs_own_single_logits": 0.43,
+  "shift_vs_own_single_interval95": [
+   0.258,
+   0.638
+  ],
+  "extra_tokens": 9374,
+  "logits_per_1000_extra_tokens": 0.0458,
+  "points_vs_own_single": 1.7
+ },
+ {
+  "arm": "rl_plain_s2",
+  "what": "RL-Zero-Math 3.1 plain, sample 2",
+  "right": 464.0,
+  "n": 500,
+  "ability": 3.712,
+  "shift_logits": 1.827,
+  "interval95": [
+   1.363,
+   2.295
+  ],
+  "tokens_per_problem": 4741,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "rl_plain_s1",
+  "what": "RL-Zero-Math 3.1 plain, sample 1",
+  "right": 462.0,
+  "n": 500,
+  "ability": 3.614,
+  "shift_logits": 1.729,
+  "interval95": [
+   1.251,
+   2.238
+  ],
+  "tokens_per_problem": 4588,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "rl_plain_vote2",
+  "what": "RL plain, vote over 2 samples (mean of the 6 subsets)",
+  "right": 459.7,
+  "n": 500,
+  "ability": 3.505,
+  "shift_logits": 1.621,
+  "interval95": [
+   1.281,
+   1.954
+  ],
+  "tokens_per_problem": 9374,
+  "signal": "RL reward (weights)",
+  "shift_vs_own_single_logits": -0.015,
+  "shift_vs_own_single_interval95": [
+   -0.143,
+   0.116
+  ],
+  "extra_tokens": 4687,
+  "logits_per_1000_extra_tokens": -0.0032,
+  "points_vs_own_single": -0.07
+ },
+ {
+  "arm": "rl_plain_s3",
+  "what": "RL-Zero-Math 3.1 plain, sample 3",
+  "right": 458.0,
+  "n": 500,
+  "ability": 3.431,
+  "shift_logits": 1.547,
+  "interval95": [
+   1.122,
+   1.987
+  ],
+  "tokens_per_problem": 4743,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "rl_plain_restart",
+  "what": "RL plain, restart up to 2",
+  "right": 458.0,
+  "n": 500,
+  "ability": 3.431,
+  "shift_logits": 1.547,
+  "interval95": [
+   1.132,
+   1.938
+  ],
+  "tokens_per_problem": 4899,
+  "signal": "RL reward (weights)",
+  "shift_vs_own_single_logits": 0.086,
+  "shift_vs_own_single_interval95": [
+   0.0,
+   0.22
+  ],
+  "extra_tokens": 224,
+  "logits_per_1000_extra_tokens": 0.3833,
+  "points_vs_own_single": 0.4
+ },
+ {
+  "arm": "rl_cue",
+  "what": "RL-Zero-Math 3.1, cue",
+  "right": 457.0,
+  "n": 500,
+  "ability": 3.388,
+  "shift_logits": 1.503,
+  "interval95": [
+   1.063,
+   1.937
+  ],
+  "tokens_per_problem": 4696,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "rl_plain_s0",
+  "what": "RL-Zero-Math 3.1 plain, sample 0",
+  "right": 456.0,
+  "n": 500,
+  "ability": 3.345,
+  "shift_logits": 1.461,
+  "interval95": [
+   1.067,
+   1.857
+  ],
+  "tokens_per_problem": 4675,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "sft1_cue",
+  "what": "Olmo-3-7B-Think-SFT, cue",
+  "right": 454.0,
+  "n": 500,
+  "ability": 3.263,
+  "shift_logits": 1.379,
+  "interval95": [
+   0.907,
+   1.872
+  ],
+  "tokens_per_problem": 4888,
+  "signal": "SFT data"
+ },
+ {
+  "arm": "theta1.5_cue",
+  "what": "base + 1.5 (RL - base), cue",
+  "right": 453.0,
+  "n": 500,
+  "ability": 3.223,
+  "shift_logits": 1.339,
+  "interval95": [
+   0.902,
+   1.78
+  ],
+  "tokens_per_problem": 4862,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "base_cue_tie_short",
+  "what": "base + cue, vote over 4, ties to the shortest finished answer",
+  "right": 453.0,
+  "n": 500,
+  "ability": 3.223,
+  "shift_logits": 1.339,
+  "interval95": [
+   1.008,
+   1.707
+  ],
+  "tokens_per_problem": 16034,
+  "signal": "none",
+  "shift_vs_own_single_logits": 1.223,
+  "shift_vs_own_single_interval95": [
+   0.963,
+   1.534
+  ],
+  "extra_tokens": 12025,
+  "logits_per_1000_extra_tokens": 0.1017,
+  "points_vs_own_single": 8.5
+ },
+ {
+  "arm": "theta0.5_cue",
+  "what": "base + 0.5 (RL - base), cue",
+  "right": 452.0,
+  "n": 500,
+  "ability": 3.184,
+  "shift_logits": 1.3,
+  "interval95": [
+   0.867,
+   1.747
+  ],
+  "tokens_per_problem": 4626,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "theta0.75_cue",
+  "what": "base + 0.75 (RL - base), cue",
+  "right": 451.0,
+  "n": 500,
+  "ability": 3.146,
+  "shift_logits": 1.261,
+  "interval95": [
+   0.808,
+   1.703
+  ],
+  "tokens_per_problem": 4654,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "theta1.25_cue",
+  "what": "base + 1.25 (RL - base), cue",
+  "right": 450.0,
+  "n": 500,
+  "ability": 3.108,
+  "shift_logits": 1.224,
+  "interval95": [
+   0.812,
+   1.647
+  ],
+  "tokens_per_problem": 4852,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "code_cue",
+  "what": "RL-Zero-Code 3.1, cue",
+  "right": 450.0,
+  "n": 500,
+  "ability": 3.108,
+  "shift_logits": 1.224,
+  "interval95": [
+   0.79,
+   1.655
+  ],
+  "tokens_per_problem": 3336,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "base_cue_vote4_restart",
+  "what": "base + cue, vote over 4 after restart",
+  "right": 450.0,
+  "n": 500,
+  "ability": 3.108,
+  "shift_logits": 1.224,
+  "interval95": [
+   0.901,
+   1.576
+  ],
+  "tokens_per_problem": 19697,
+  "signal": "none",
+  "shift_vs_own_single_logits": 1.108,
+  "shift_vs_own_single_interval95": [
+   0.849,
+   1.429
+  ],
+  "extra_tokens": 15689,
+  "logits_per_1000_extra_tokens": 0.0706,
+  "points_vs_own_single": 7.9
+ },
+ {
+  "arm": "math30_cue",
+  "what": "Olmo-3-7B-RL-Zero-Math (3.0), cue",
+  "right": 448.0,
+  "n": 500,
+  "ability": 3.035,
+  "shift_logits": 1.15,
+  "interval95": [
+   0.693,
+   1.584
+  ],
+  "tokens_per_problem": 4527,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "base_cue_vote4",
+  "what": "base + cue, vote over 4 samples",
+  "right": 446.0,
+  "n": 500,
+  "ability": 2.964,
+  "shift_logits": 1.079,
+  "interval95": [
+   0.788,
+   1.395
+  ],
+  "tokens_per_problem": 16034,
+  "signal": "none",
+  "shift_vs_own_single_logits": 0.964,
+  "shift_vs_own_single_interval95": [
+   0.743,
+   1.237
+  ],
+  "extra_tokens": 12025,
+  "logits_per_1000_extra_tokens": 0.0801,
+  "points_vs_own_single": 7.1
+ },
+ {
+  "arm": "theta0.5_plain",
+  "what": "base + 0.5 (RL - base), plain",
+  "right": 443.0,
+  "n": 500,
+  "ability": 2.862,
+  "shift_logits": 0.978,
+  "interval95": [
+   0.578,
+   1.402
+  ],
+  "tokens_per_problem": 4536,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "math30_plain",
+  "what": "Olmo-3-7B-RL-Zero-Math (3.0), plain",
+  "right": 443.0,
+  "n": 500,
+  "ability": 2.862,
+  "shift_logits": 0.978,
+  "interval95": [
+   0.565,
+   1.366
+  ],
+  "tokens_per_problem": 4506,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "base_cue_vote3",
+  "what": "base + cue, vote over 3 samples (mean of the 4 subsets)",
+  "right": 441.5,
+  "n": 500,
+  "ability": 2.813,
+  "shift_logits": 0.929,
+  "interval95": [
+   0.664,
+   1.189
+  ],
+  "tokens_per_problem": 12025,
+  "signal": "none",
+  "shift_vs_own_single_logits": 0.813,
+  "shift_vs_own_single_interval95": [
+   0.652,
+   0.994
+  ],
+  "extra_tokens": 8017,
+  "logits_per_1000_extra_tokens": 0.1014,
+  "points_vs_own_single": 6.2
+ },
+ {
+  "arm": "theta0.25_cue",
+  "what": "base + 0.25 (RL - base), cue",
+  "right": 441.0,
+  "n": 500,
+  "ability": 2.797,
+  "shift_logits": 0.913,
+  "interval95": [
+   0.519,
+   1.277
+  ],
+  "tokens_per_problem": 4036,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "mix30_cue",
+  "what": "Olmo-3-7B-RL-Zero-Mix (3.0), cue",
+  "right": 440.0,
+  "n": 500,
+  "ability": 2.766,
+  "shift_logits": 0.881,
+  "interval95": [
+   0.485,
+   1.311
+  ],
+  "tokens_per_problem": 5203,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "sft1_plain",
+  "what": "Olmo-3-7B-Think-SFT, plain",
+  "right": 440.0,
+  "n": 500,
+  "ability": 2.766,
+  "shift_logits": 0.881,
+  "interval95": [
+   0.397,
+   1.362
+  ],
+  "tokens_per_problem": 4492,
+  "signal": "SFT data"
+ },
+ {
+  "arm": "shots_rl",
+  "what": "base + cue + 3 solved problems written by Math-RL in context (n 497)",
+  "right": 435.0,
+  "n": 497,
+  "ability": 2.7,
+  "shift_logits": 0.815,
+  "interval95": [
+   0.431,
+   1.197
+  ],
+  "tokens_per_problem": 4379,
+  "signal": "RL reward (RL text in context)"
+ },
+ {
+  "arm": "general30_cue",
+  "what": "Olmo-3-7B-RL-Zero-General (3.0), cue",
+  "right": 429.0,
+  "n": 500,
+  "ability": 2.446,
+  "shift_logits": 0.561,
+  "interval95": [
+   0.169,
+   0.952
+  ],
+  "tokens_per_problem": 3839,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "top8_plain",
+  "what": "base + top 8 singular directions per matrix of the RL delta, plain",
+  "right": 427.0,
+  "n": 500,
+  "ability": 2.393,
+  "shift_logits": 0.508,
+  "interval95": [
+   0.048,
+   0.972
+  ],
+  "tokens_per_problem": 3962,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "base_cue_vote2",
+  "what": "base + cue, vote over 2 samples (mean of the 6 subsets)",
+  "right": 418.5,
+  "n": 500,
+  "ability": 2.181,
+  "shift_logits": 0.297,
+  "interval95": [
+   0.099,
+   0.477
+  ],
+  "tokens_per_problem": 8017,
+  "signal": "none",
+  "shift_vs_own_single_logits": 0.181,
+  "shift_vs_own_single_interval95": [
+   0.067,
+   0.298
+  ],
+  "extra_tokens": 4008,
+  "logits_per_1000_extra_tokens": 0.0451,
+  "points_vs_own_single": 1.6
+ },
+ {
+  "arm": "base_cue_s3",
+  "what": "base + cue, sample 3",
+  "right": 418.0,
+  "n": 500,
+  "ability": 2.17,
+  "shift_logits": 0.285,
+  "interval95": [
+   -0.091,
+   0.702
+  ],
+  "tokens_per_problem": 4156,
+  "signal": "none"
+ },
+ {
+  "arm": "random_cue",
+  "what": "base + random difference of the RL norm, cue (control)",
+  "right": 417.0,
+  "n": 500,
+  "ability": 2.146,
+  "shift_logits": 0.262,
+  "interval95": [
+   -0.11,
+   0.632
+  ],
+  "tokens_per_problem": 3944,
+  "signal": "none (control)"
+ },
+ {
+  "arm": "shots_base",
+  "what": "base + cue + 3 solved problems written by the cued base in context (n 497)",
+  "right": 414.0,
+  "n": 497,
+  "ability": 2.141,
+  "shift_logits": 0.257,
+  "interval95": [
+   -0.119,
+   0.618
+  ],
+  "tokens_per_problem": 3365,
+  "signal": "own samples (in context)"
+ },
+ {
+  "arm": "shots_code",
+  "what": "base + cue + 3 solved problems written by Code-RL in context (n 497)",
+  "right": 412.0,
+  "n": 497,
+  "ability": 2.095,
+  "shift_logits": 0.211,
+  "interval95": [
+   -0.151,
+   0.611
+  ],
+  "tokens_per_problem": 3815,
+  "signal": "RL reward (RL text in context)"
+ },
+ {
+  "arm": "base_cue_restart",
+  "what": "base + cue, restart up to 2",
+  "right": 413.0,
+  "n": 500,
+  "ability": 2.055,
+  "shift_logits": 0.171,
+  "interval95": [
+   0.062,
+   0.307
+  ],
+  "tokens_per_problem": 4852,
+  "signal": "none",
+  "shift_vs_own_single_logits": 0.171,
+  "shift_vs_own_single_interval95": [
+   0.062,
+   0.307
+  ],
+  "extra_tokens": 1044,
+  "logits_per_1000_extra_tokens": 0.1636,
+  "points_vs_own_single": 1.6
+ },
+ {
+  "arm": "code30_cue",
+  "what": "Olmo-3-7B-RL-Zero-Code (3.0), cue",
+  "right": 411.0,
+  "n": 500,
+  "ability": 2.011,
+  "shift_logits": 0.127,
+  "interval95": [
+   -0.262,
+   0.527
+  ],
+  "tokens_per_problem": 3069,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "base_cue_s2",
+  "what": "base + cue, sample 2",
+  "right": 410.0,
+  "n": 500,
+  "ability": 1.99,
+  "shift_logits": 0.105,
+  "interval95": [
+   -0.262,
+   0.485
+  ],
+  "tokens_per_problem": 3926,
+  "signal": "none"
+ },
+ {
+  "arm": "base_cue_s1",
+  "what": "base + cue, sample 1",
+  "right": 409.0,
+  "n": 500,
+  "ability": 1.968,
+  "shift_logits": 0.084,
+  "interval95": [
+   -0.272,
+   0.43
+  ],
+  "tokens_per_problem": 4144,
+  "signal": "none"
+ },
+ {
+  "arm": "base_cue_s0",
+  "what": "base + cue, sample 0",
+  "right": 405.0,
+  "n": 500,
+  "ability": 1.885,
+  "shift_logits": 0.0,
+  "interval95": [
+   0.0,
+   0.0
+  ],
+  "tokens_per_problem": 3808,
+  "signal": "none"
+ },
+ {
+  "arm": "theta0.25_plain",
+  "what": "base + 0.25 (RL - base), plain",
+  "right": 405.0,
+  "n": 500,
+  "ability": 1.885,
+  "shift_logits": 0.0,
+  "interval95": [
+   -0.382,
+   0.378
+  ],
+  "tokens_per_problem": 3653,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "code_plain",
+  "what": "RL-Zero-Code 3.1, plain",
+  "right": 390.0,
+  "n": 500,
+  "ability": 1.597,
+  "shift_logits": -0.288,
+  "interval95": [
+   -0.702,
+   0.093
+  ],
+  "tokens_per_problem": 3066,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "if30_cue",
+  "what": "Olmo-3-7B-RL-Zero-If (3.0), cue",
+  "right": 377.0,
+  "n": 500,
+  "ability": 1.374,
+  "shift_logits": -0.511,
+  "interval95": [
+   -0.879,
+   -0.166
+  ],
+  "tokens_per_problem": 2667,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "mix30_plain",
+  "what": "Olmo-3-7B-RL-Zero-Mix (3.0), plain",
+  "right": 372.0,
+  "n": 500,
+  "ability": 1.293,
+  "shift_logits": -0.591,
+  "interval95": [
+   -0.973,
+   -0.202
+  ],
+  "tokens_per_problem": 4228,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "code30_plain",
+  "what": "Olmo-3-7B-RL-Zero-Code (3.0), plain",
+  "right": 360.0,
+  "n": 500,
+  "ability": 1.11,
+  "shift_logits": -0.774,
+  "interval95": [
+   -1.119,
+   -0.423
+  ],
+  "tokens_per_problem": 2630,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "general30_plain",
+  "what": "Olmo-3-7B-RL-Zero-General (3.0), plain",
+  "right": 323.0,
+  "n": 500,
+  "ability": 0.611,
+  "shift_logits": -1.274,
+  "interval95": [
+   -1.626,
+   -0.915
+  ],
+  "tokens_per_problem": 2303,
+  "signal": "RL reward (weights)"
+ },
+ {
+  "arm": "rand8_plain",
+  "what": "base + random rank-8 directions, plain (control)",
+  "right": 197.0,
+  "n": 500,
+  "ability": -0.784,
+  "shift_logits": -2.669,
+  "interval95": [
+   -3.035,
+   -2.337
+  ],
+  "tokens_per_problem": 1968,
+  "signal": "none (control)"
+ },
+ {
+  "arm": "if30_plain",
+  "what": "Olmo-3-7B-RL-Zero-If (3.0), plain",
+  "right": 55.0,
+  "n": 500,
+  "ability": -2.768,
+  "shift_logits": -4.653,
+  "interval95": [
+   -5.055,
+   -4.284
+  ],
+  "tokens_per_problem": 39,
+  "signal": "RL reward (weights)"
+ }
+]

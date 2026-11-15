@@ -1,0 +1,35 @@
+{
+ "name": "sim2-11-tau28",
+ "note": "tuning check around sim2-09 (+0.2673): recency tau 28 d instead of 14; hypothesis: 14 d discards too many windows; refuted if pooled <= +0.2673 [flags: --tau 28 --shrink 0.2 --abs-enter 2]",
+ "utc": "2026-11-14T23:33:48+00:00",
+ "commit": "dec89a8",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 360,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.256869,
+ "pinball": 0.024928,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.240654,
+ "skill_geomean": 0.328237,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.166308,
+   "in_band": 0.796172
+  },
+  "3": {
+   "skill_pooled": 0.244324,
+   "in_band": 0.727713
+  },
+  "7": {
+   "skill_pooled": 0.287985,
+   "in_band": 0.608527
+  }
+ },
+ "in_band": 0.711161
+}

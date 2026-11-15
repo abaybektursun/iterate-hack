@@ -1,0 +1,141 @@
+{
+ "filed_utc": "2026-11-15T05:46:55+00:00",
+ "code_commit_parent": "5f92a3481c7d40ced0c0c097be54c043bd9183d4",
+ "rules": "Lc, L1, P: analysis/rate.py with the arm held out of the calibration; profile: specs/SPEC_profile.md (logit shift per D-rest group of MATH-500, applied by reference probability)",
+ "author_guess_before_opening": {
+  "hard328 Think-SFT, cue, one sample": 200,
+  "hard328 Think-SFT, plain, one sample": 195,
+  "why": "on MATH-500 level 5 Think-SFT cue has 23 wrong against RL's 21 to 30 per sample, 15 of the 23 cap hits; so near RL's 205 on the 328, less for longer answers"
+ },
+ "seen": "not seen: work-9ecc56 was read by its title only (board ls); no result, comment, job log or run folder of the Think-SFT hard328 cells was opened before filing",
+ "reference_right_hard328": 162.0,
+ "c": 0.873,
+ "check_on_the_5_arms_measured_on_both_sets": {
+  "rows": {
+   "rl_plain": {
+    "observed": 206.0,
+    "Lc": 201.7,
+    "L1": 210.0,
+    "P": 194.5,
+    "profile": 210.9
+   },
+   "rl_cue": {
+    "observed": 205.0,
+    "Lc": 197.7,
+    "L1": 205.9,
+    "P": 192.5,
+    "profile": 210.2
+   },
+   "theta0.25_cue": {
+    "observed": 182.0,
+    "Lc": 184.2,
+    "L1": 187.7,
+    "P": 182.0,
+    "profile": 187.8
+   },
+   "theta0.5_cue": {
+    "observed": 190.0,
+    "Lc": 195.2,
+    "L1": 199.1,
+    "P": 189.2,
+    "profile": 199.3
+   },
+   "code_cue": {
+    "observed": 187.0,
+    "Lc": 193.3,
+    "L1": 197.3,
+    "P": 187.9,
+    "profile": 203.7
+   }
+  },
+  "mean_abs_error": {
+   "Lc": 5.07,
+   "L1": 5.99,
+   "P": 5.14,
+   "profile": 8.39
+  },
+  "profile_mean_signed_error": 8.39
+ },
+ "cells": [
+  {
+   "cell": "hard328 Think-SFT, cue, one sample",
+   "arm": "sft1_cue",
+   "n": 328,
+   "right_math500": 454,
+   "shift_logits_math500": 1.263,
+   "Lc": 196.3,
+   "Lc_interval80": [
+    186.0,
+    206.0
+   ],
+   "L1": 201.1,
+   "P": 190.5,
+   "profile": 217.6,
+   "profile_interval80": [
+    204.0,
+    231.0
+   ],
+   "profile_corrected": 209.2,
+   "profile_corrected_interval80": [
+    195.6079094737621,
+    222.6079094737621
+   ],
+   "profile_rule": {
+    "shift_hard_mid_easy": [
+     2.065,
+     1.177,
+     0.669
+    ],
+    "edges_reference_probability": [
+     0.473,
+     0.869
+    ],
+    "hard328_problems_per_group": [
+     151,
+     118,
+     59
+    ]
+   }
+  },
+  {
+   "cell": "hard328 Think-SFT, plain, one sample",
+   "arm": "sft1_plain",
+   "n": 328,
+   "right_math500": 440,
+   "shift_logits_math500": 0.765,
+   "Lc": 183.2,
+   "Lc_interval80": [
+    172.0,
+    194.0
+   ],
+   "L1": 186.2,
+   "P": 181.4,
+   "profile": 218.3,
+   "profile_interval80": [
+    204.0,
+    234.0
+   ],
+   "profile_corrected": 209.9,
+   "profile_corrected_interval80": [
+    195.6079094737621,
+    225.6079094737621
+   ],
+   "profile_rule": {
+    "shift_hard_mid_easy": [
+     2.263,
+     0.918,
+     -0.279
+    ],
+    "edges_reference_probability": [
+     0.473,
+     0.869
+    ],
+    "hard328_problems_per_group": [
+     151,
+     118,
+     59
+    ]
+   }
+  }
+ ]
+}

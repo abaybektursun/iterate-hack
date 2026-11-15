@@ -1,7 +1,7 @@
 """After RL the model is the same inside, except that it thinks "Wait" 24 % more often.
 
 The page of one finding, served at /finding/rl-wait-habit (copied from .claude/skills/finding-page/template.py; draw() shows
-two measures against the base model instead of one bar). Unlisted: UNLISTED keeps it out of the site header.
+two measures against the base model instead of one bar). It is reached from its tile on /findings, which ICON draws.
 Study: studies/jspace (README.md, specs/SPEC1_lensdiff.md, specs/SPEC2_workspace.md).
 """
 import json
@@ -9,7 +9,6 @@ import json
 TITLE = "What RL changed"
 PROBLEM = "What does RL training change inside a model?"
 LINE = "After RL the model is the same inside, but it thinks Wait 24 % more often."
-UNLISTED = True  # reachable by its link only
 
 # Every number is copied from the artifacts named here. None is typed from memory.
 DATA = {
@@ -29,6 +28,13 @@ DATA = {
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 PANELS = [
+    ["new", "What is new", "The closest published work compared the lenses of the two models and called RL a light change; it did not look at math text.",
+     ["New here: on 500 math solutions the RL model has Wait or Hmm among the 8 words it is about to write 24 % more often than the base model.",
+      "New here: swapping a hidden middle step changes the answer equally often in both models, so the inner machinery looks the same."]],
+    # 45 % and 85 % are the states "untrained" (224 of 500) and "rl-directions" (427 of 500) of tools/finding_eight_directions.py.
+    ["why", "Why it matters", "It narrows where the RL gain can come from: a habit of pausing to check, on top of the same inner machinery.",
+     ['The page <a href="/finding/eight-directions">Eight directions</a> tests a related edit in the weights: adding the 8 strongest RL '
+      "directions per matrix, some of which point at Wait and Okay, lifts the untrained model from 45 % to 85 %."]],
     ["how", "How we know", "Both models read the same text, and a lens showed which words each one was about to write.",
      ["On 500 MATH-500 solutions written by the base model, Wait or Hmm was among the top 8 words at 4.56 % of positions for the base model and 5.64 % for the RL model (95 % interval of the difference: 1.01 to 1.15 points).",
       "On 44 two-hop questions, swapping the hidden middle step inside the model changed the answer 16 times in each model. Swapping in an unrelated word did so 1 to 3 times.",
@@ -42,6 +48,17 @@ PANELS = [
       "Hidden step: python -m studies.jspace.jobs.workspace_tests, then analysis/workspace_analyze.py (commit 3208566, 6 minutes).",
       "The numbers are in " + DATA["rows"][1]["artifact"] + " and " + DATA["rows"][0]["artifact"] + "."]],
 ]
+
+# The icon of this finding's tile on /findings (tools/findings.py says how it is called): the page's own picture,
+# reduced. A glass slab with the base model's line across it and the two measures as bars: the hidden step stops at
+# the line, and Wait passes it by its measured share.
+ICON = r"""(kit, t, tilt) => {
+  const a = 44, b = 38, th = 5, top = th / 2, x0 = -a * .78, base = a * .22, more = x0 + (base - x0) * __MORE__;
+  return kit.slab(a, b, th) +
+    kit.line(kit.at(base, -b * .7, top), kit.at(base, b * .7, top), .7) +
+    kit.line(kit.at(x0, -b * .32, top), kit.at(base, -b * .32, top), 3.4, "plain", .55) +
+    kit.line(kit.at(x0, b * .32, top), kit.at(more, b * .32, top), 3.4 + .25 * Math.sin(t * .6), "lit");
+}""".replace("__MORE__", str(round(DATA["rows"][1]["value"][1] / DATA["rows"][1]["value"][0], 3)))
 
 PAGE = r"""<!doctype html>
 <html lang="en">
@@ -129,8 +146,9 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
   <header class="top">
     <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
-    <a href="/architecture">How it works</a>
-    <a href="" aria-current="page">__TITLE__</a>
+    <a href="/architecture">Design</a>
+    <a href="/proof">Proof</a>
+    <a href="/findings" aria-current="page">Findings</a>
   </header>
   <div class="stage">
     <svg id="svg" viewBox="0 0 1000 470" role="img"></svg>

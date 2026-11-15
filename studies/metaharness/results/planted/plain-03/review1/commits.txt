@@ -1,0 +1,1 @@
+2fa667f Dana 2026-11-14 20:01:43 -0800 gapmap: check cell settings before launch

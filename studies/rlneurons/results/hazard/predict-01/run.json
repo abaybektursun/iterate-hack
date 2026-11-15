@@ -1,0 +1,9 @@
+{
+ "commit": "d7fcc8ca01c1d7c996d99c22b1f71373dadc1c6b",
+ "commit_note": "HEAD when it ran; analysis/hazard.py is committed in the commit that adds this file",
+ "command": "uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.hazard predict",
+ "job_id": null,
+ "gpu": "none (laptop, numpy)",
+ "spec": "studies/rlneurons/specs/SPEC_hazard.md",
+ "inputs": "results/axis/{math500,hard328}-01/vectors.json; results/day1_3/math500_{base_cue,rl}-01"
+}

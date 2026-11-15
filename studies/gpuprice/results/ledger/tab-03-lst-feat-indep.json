@@ -1,0 +1,35 @@
+{
+ "name": "tab-03-lst-feat-indep",
+ "note": "Step 3, run although tab-01 (+0.192) missed its +0.20 condition because the same jobs had already produced it: TabPFN v2 per listing and horizon, target = h-day price change, features lag price, days since the listing's last change, price / series median, running index, day of week; H: beats tab-01; refuted if <= +0.192",
+ "utc": "2026-11-15T01:15:55+00:00",
+ "commit": "b56e382",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.190181,
+ "pinball": 0.027164,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.155943,
+ "skill_geomean": 0.296192,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.144601,
+   "in_band": 0.770335
+  },
+  "3": {
+   "skill_pooled": 0.189299,
+   "in_band": 0.642442
+  },
+  "7": {
+   "skill_pooled": 0.202898,
+   "in_band": 0.547481
+  }
+ },
+ "in_band": 0.653908
+}

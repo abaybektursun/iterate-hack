@@ -7,7 +7,7 @@
 set -euo pipefail
 t0=$(date +%s)
 command -v gcc > /dev/null || (apt-get update -qq && apt-get install -y -qq gcc > /dev/null)
-pip install -q uv==0.13.8
+PIP_BREAK_SYSTEM_PACKAGES=1 pip install -q uv==0.13.8     # vast.ai's image marks the system Python as externally managed
 uv venv -q --allow-existing --python "$(command -v python3)" /opt/rln-vllm
 uv pip install -q --python /opt/rln-vllm/bin/python vllm==0.32.0 math-verify==0.9.0
 uv pip install -q --python /opt/rln-vllm/bin/python transformers==5.19.0 tokenizers==0.23.3
