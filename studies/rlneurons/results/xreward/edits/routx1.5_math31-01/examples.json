@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2118,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " -2x^2 + dx + e \\]\n\nBoth polynomials pass through the points (16, 54) and (20, 53). We can set up the following equations by plugging these points into \\( P(x) \\) and \\( Q(x) \\):\n\nFor \\( P(x) \\):\n- At \\( x = 16 \\): \\( 512 + 16b + c = 54 \\)\n- At \\( x = 20 \\): \\( 800 + 20b + c = 53 \\)\n\nFor \\( Q(x) \\):\n- At \\( x = 16 \\): \\( -512 + 16d + e = 54 \\)\n- At \\( x = 20 \\): \\( -800 + 20d + e = 53 \\)\n\nBy solving these equations, we find the coefficients:\n- From \\( P(x) \\), we get \\( b = -\\frac{289}{4} \\) and \\( c = 698 \\)\n- From \\( Q(x) \\), we get \\( d = \\frac{287}{4} \\) and \\( e = -582 \\)\n\nThus, the constants \\( P(0) \\) and \\( Q(0) \\) are the coefficients \\( c \\) and \\( e \\) respectively:\n\\[ P(0) = 698 \\]\n\\[ Q(0) = -582 \\]\n\nAdding these together:\n\\[ P(0) + Q(0) = 698 + (-582) = 116 \\]\n\n**Answer:** 116"
+ },
+ "wrong": {
+  "problem_index": 23,
+  "gold": "021",
+  "extracted_v3": "17",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 4758,
+  "prompt_tail": "ould be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nA right square pyramid with volume $54$ has a base with side length $6.$ The five vertices of the pyramid all lie on a sphere with radius $\\frac mn$, where $m$ and $n$ are relatively prime positive integers. Find $m+n$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "uidistant from all vertices. By setting up equations for the distances from the center to each vertex, we find:\n\n1. Subtracting equations forPairs (3, 0, 0) and (0, 3, 0) gives \\( x = y \\).\n2. Subtracting equations for (0, -3, 0) and (3, 0, 0) gives \\( x = -y \\).\n3. Solving these, we find \\( x = 0 \\) and \\( y = 0 \\).\n\nNext, we use the apex vertex (0, 0, 9/2) to solve for \\( z \\):\n\n4. Substituting \\( x = 0 \\), \\( y = 0 \\), and the apex vertex into the distance equation gives:\n   \\[\n   0^2 + 0^2 + \\left( \\frac{5}{4} - \\frac{9}{2} \\right)^2 = \\left( \\frac{5}{4} - \\frac{9}{2} \\right)^2 = \\left( -\\frac{13}{4} \\right)^2 = \\left( \\frac{13}{4} \\right)^2\n   \\]\n\nThus, the radius \\( R \\) is \\( \\frac{13}{4} \\), and the sum \\( m + n \\) where \\( R = \\frac{m}{n} \\) is \\( 13 + 4 = 17 \\).\n\n\\[\n\\boxed{17}\n\\]"
+ }
+}

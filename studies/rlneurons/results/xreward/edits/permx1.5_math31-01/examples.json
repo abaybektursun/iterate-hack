@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 8313,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "m the second: \\( 4b = -289 \\) \u27f9 \\( b = -72.25 \\)\n- Substitute \\( b \\) back into the first equation: \\( 16(-72.25) + c = -458 \\) \u27f9 \\( -1156 + c = -458 \\) \u27f9 \\( c = 698 \\)\n\nFor \\( Q(x) \\):\n1. \\( Q(16) = 54 \\): \\( -2(16)^2 + 16d + e = 54 \\)\n2. Simplifies to: \\( -512 + 16d + e = 54 \\) \u27f9 \\( 16d + e = 566 \\)\n3. \\( Q(20) = 53 \\): \\( -2(20)^2 + 20d + e = 53 \\)\n4. Simplifies to: \\( -800 + 20d + e = 53 \\) \u27f9 \\( 20d + e = 853 \\)\n\nSolving these equations:\n- Subtract the first equation from the second: \\( 4d = 287 \\) \u27f9 \\( d = 71.75 \\)\n- Substitute \\( d \\) back into the first equation: \\( 16(71.75) + e = 566 \\) \u27f9 \\( 1148 + e = 566 \\) \u27f9 \\( e = -582 \\)\n\nThus, we have:\n- \\( P(0) = c = 698 \\)\n- \\( Q(0) = e = -582 \\)\n\nTherefore, the sum \\( P(0) + Q(0) = 698 - 582 = 116 \\).\n\nThe final answer is \\(\\boxed{116}\\)."
+ },
+ "wrong": {
+  "problem_index": 23,
+  "gold": "021",
+  "extracted_v3": "19",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 12737,
+  "prompt_tail": "ould be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nA right square pyramid with volume $54$ has a base with side length $6.$ The five vertices of the pyramid all lie on a sphere with radius $\\frac mn$, where $m$ and $n$ are relatively prime positive integers. Find $m+n$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "es from the center to vertices:**\n   - Using points \\( O(0, 0, 0) \\) and \\( E(0, 0, 4.5) \\), we find \\( c = \\frac{9}{4} \\).\n   - Using points \\( A(3, 3, 0) \\) and \\( B(-3, 3, 0) \\), we find \\( a + b = 1 \\).\n   - Using points \\( C(-3, -3, 0) \\), we encounter contradictions but proceed with \\( a = 0 \\), \\( b = 3 \\), and \\( c = \\frac{9}{4} \\).\n\n5. **Calculate the radius:**\n   - Distance from the center \\( (0, 3, \\frac{9}{4}) \\) to \\( O(0, 0, 0) \\):\n     \\[\n     \\sqrt{0^2 + 3^2 + \\left(\\frac{9}{4}\\right)^2} = \\sqrt{9 + \\frac{81}{16}} = \\sqrt{\\frac{225}{16}} = \\frac{15}{4}\n     \\]\n\n6. **Verify the radius:**\n   - The radius is confirmed to be \\( \\frac{15}{4} \\), so \\( m = 15 \\) and \\( n = 4 \\).\n\n7. **Sum \\( m + n \\):**\n   \\[\n   m + n = 15 + 4 = 19\n   \\]\n\nThus, the final answer is \\(\\boxed{19}\\)."
+ }
+}

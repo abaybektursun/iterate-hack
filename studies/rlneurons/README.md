@@ -4541,6 +4541,26 @@ top-p 1.0, seed 51000000, one sample. `jobs/run_code_cell.py --model-path` after
 Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.xreward_edits`, after
 `uv run tools/gpu.py get <job>` for the jobs it names.
 
+#### Input side, output side, pairing (amendment 12, work-a822b1): only the paired directions give the dial
+
+Branch `sharedsub` only (main was frozen at 22:30 UTC on 15 November). Base edited at 1.5, hard328 (n = 328), cue, T 1.0 / top-p 1.0,
+seed 3000000, grader v3, one sample each. All five edits have the same addition norm (1.9038, 0.111 % of the weight norm; `totals`
+in each `edit.json`). Differences are paired over problems, bootstrap 95 %.
+
+| Edit at 1.5 | Right | Cap hits | Minus random edit, points | Minus RL's 8 directions, points | Run folder under `results/xreward/edits/`, job |
+|---|---|---|---|---|---|
+| RL's 8 directions (reference) | 203 | 25 | | | `top8x1.5_math31-01/` |
+| random directions (reference) | 159 | 74 | | | `rand8x1.5_math31-01/` |
+| `rin`: RL's input directions, random outputs | 158 | 75 | -0.3 [-4.6, 3.7] | -13.7 [-18.3, -9.1] | `rinx1.5_math31-01/`, `abaybektursun-1115-152957-da47` |
+| `rout`: RL's output directions, random inputs | 163 | 77 | +1.2 [-3.0, 5.5] | -12.2 [-16.8, -7.9] | `routx1.5_math31-01/`, `abaybektursun-1115-153012-603e` |
+| `perm`: both subspaces, pairs shifted by one | 160 | 64 | +0.3 [-4.0, 4.6] | -13.1 [-17.4, -8.8] | `permx1.5_math31-01/`, `abaybektursun-1115-153028-9c6b` |
+
+- H1: half held. The output side alone is as the random edit (held). The input side alone is at most 160 right (held), but it does
+  not differ from the base more than the random edit does (158 and 75 against 159 and 74): that part is refuted.
+- H2 held: with RL's input and output subspaces both in place and only the pairing shifted, 160 right; the whole gain of 44
+  problems is lost. The base scores 164 with 77 cap hits.
+- Not measured: the residual shift of these three edits (xshift ran only the full and random edits), and a second sample.
+
 #### xshift: the edits in activation space (spec `specs/SPEC_xshift.md`, branch `trace`)
 
 The claim "edits that are orthogonal in weight space shift the residual stream along one shared direction, whose projection
