@@ -1394,6 +1394,7 @@ Round-01 forward predictions of idea-0b2ad8 that have been measured (`round-02/r
 P3 to P6 have no measurement in this record (P3: not measured by the team, per the same review).
 
 Page of the forecasts of open GPU numbers (results/forecast/run-NN): `tools/finding_forecasts_before_results.py`, served at `/finding/forecasts-before-results`. After new scores: `uv run tools/finding_forecasts_before_results.py --write`, then run it with no argument to check.
+Page of the direct tests of mechanisms (results/direct_tested.json, results/refuted.json, results/wide/round-13/direct_tests.json): `tools/finding_mechanisms_tested_directly.py`, served at `/finding/mechanisms-tested-directly`; `--write` rebuilds its rows, running the file checks them.
 
 Page of the engine's record: `tools/finding_theories_on_trial.py`, served at `/finding/theories-on-trial`: every prediction of every round as one mark (interval and measured number) against the readers with no theory. After a new round: `uv run tools/finding_theories_on_trial.py --write`, then the check, then names for the new theories in NAMES.
 

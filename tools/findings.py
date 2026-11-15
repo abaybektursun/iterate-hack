@@ -123,10 +123,11 @@ TABLE = {
                              "Think-SFT + cue: the best of six signs read from the first 12,000 tokens of an answer, to spot a failing sample; 0.5 is chance"]},
     "cut-off-is-unfinished": {
         "group": NO_REWARD,
-        "figure": lambda m: [f"{m.DATA['cells']['sft_cue']['right_at_16384_same_answers']} → {m.DATA['cells']['sft_cue']['right_at_32768']}", "right of 328",
-                             "328 harder problems, Think-SFT + cue, token limit raised from 16,384 to 32,768"],
-        "steps": lambda m: [step("Think-SFT + cue, 32,768\u00a0tokens", "free", m.DATA["cells"]["sft_cue"]["right_at_32768"], m.DATA["n"],
-                                 f"{m.DATA['readout']}, sft_cue right_at_32768", "hard328")]},
+        "figure": lambda m: [f"{m.DATA['four_samples']['single_mean_at_16384']:.1f} → {m.DATA['four_samples']['single_mean_at_32768']:.1f}", "right of 328",
+                             f"328 harder problems, one Think-SFT + cue sample (mean of 4), token limit raised from 16,384 to 32,768; the vote over 4 samples: {m.DATA['four_samples']['vote_at_16384']} → {m.DATA['four_samples']['vote_at_32768']}, not separated"],
+        # one mark on the rail, the vote: a second mark for one sample at 32,768 tokens crowds the labels on a phone
+        "steps": lambda m: [step("Think-SFT + cue vote, 32,768\u00a0tokens", "free", m.DATA["four_samples"]["vote_at_32768"], m.DATA["n"],
+                                 f"{m.DATA['four_samples']['readout']}, vote at 32,768", "hard328", vote=True)]},
     "where-the-gap-goes": {
         "group": ANSWERS,
         "figure": lambda m: [f"{m.pc(m._RL['parts']['reliability'][1])} %", "of the gap",
@@ -196,6 +197,10 @@ TABLE = {
         "group": THEORIES,
         "figure": lambda m: [f"{m.DATA['nearer']['all'][0]} of {m.DATA['nearer']['all'][1]}", "predictions",
                              "in which a theory came nearer the measured number than agents given no theory; half would mean no difference"]},
+    "mechanisms-tested-directly": {
+        "group": THEORIES,
+        "figure": lambda m: [f"{m.COUNTS['held']} of {m.COUNTS['tested']}", "proposed causes",
+                             f"held a direct test on stored data in round 13; {m.COUNTS['refuted']} refuted, {m.COUNTS['undecided']} undecided; the holds are weak evidence"]},
     "forecasts-before-results": {
         "group": THEORIES,
         "figure": lambda m: [f"{m.COUNTS['theory'][1]} of {m.COUNTS['theory'][0]}", "forecasts",
