@@ -33,6 +33,7 @@ NEW = {
     "proj_math31_code30": ("abaybektursun-1115-000458-9c58", "--recipe proj --donor code30 --other math31"),
     "projc_math31_code30": ("abaybektursun-1115-000518-0cb7", "--recipe projc --donor code30 --other math31"),
     "top8_code30": ("abaybektursun-1115-000529-4432", "--recipe top8 --other code30"),
+    "rbulk_math31": ("abaybektursun-1115-001722-52fa", "--recipe rbulk --other math31"),                      # amendment 4
 }
 REFS = {"base_cue_T1": OLD["base_cue_T1"][0], "rl_plain_T1": OLD["rl_plain_T1"][0], "rl_cue_T1": OLD["rl_cue_T1"][0],
         "theta0.25_cue": WDIFF["theta0.25_cue"][0], "theta0.5_cue": WDIFF["theta0.5_cue"][0], "code1_cue": WDIFF["code1_cue"][0]}
@@ -72,7 +73,7 @@ def main():
             cells[arm]["run_folder"] = f"studies/rlneurons/results/xreward/edits/{d.name}"
     new = [a for a in NEW if a in sc]
     more = [("top8_math31", "theta0.5_cue"), ("top8_math31", "top8_code31"), ("bulk_math31", "rl_cue_T1"), ("top8_code31", "code1_cue"), ("top8mlp_math31", "top8attn_math31"),
-            ("proj_math31_code30", "projc_math31_code30"), ("top8_code30", "top8_code31")]
+            ("proj_math31_code30", "projc_math31_code30"), ("top8_code30", "top8_code31"), ("rbulk_math31", "bulk_math31"), ("rbulk_math31", "rl_cue_T1")]
     pairs = [(x, y) for x in new for y in (BASE, RL, "rand8_math31", "top8_math31") if x != y] + [(x, y) for x, y in more if x in sc and y in sc]
     diffs = {f"{x} minus {y}": diff(sc, x, y, clean) for x, y in pairs}
     churn = {a: {"fixed_of_base_cue_wrong": sum(sc[BASE][i]["v3"] == 0 and sc[a][i]["v3"] == 1 for i in clean),
