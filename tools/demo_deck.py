@@ -292,7 +292,7 @@ def slides(n_findings, papers):
                     f'<p class="sub fixes-why">Why: they make the model finish its answer, cut-off answers '
                     f'{CELLS["0"]["cut"]} → {CELLS["1.5"]["cut"]}</p><p class="corner low">{n_findings} findings</p>'),
         ("beyond", '<div class="head"><h2>Out of distribution, not glorified overfitting</h2>'
-                   '<p class="sub">One invariant method: tuned on MATH-500 only, then used unchanged on three benchmarks it never saw</p></div>'
+                   '<p class="sub">One <b class="team">Invariant</b> method: tuned on MATH-500 only, then used unchanged on three benchmarks it never saw</p></div>'
                    '<iframe class="fig-frame wide" data-fig="beyond" data-replay title="Beyond MATH-500" tabindex="-1"></iframe>'),
         ("efficiency", f'<div class="head"><h2>Same score as autoresearch, {demo_results.TOKEN_RATIO:.1f}× fewer tokens</h2>'
                        f'<p class="sub">Against Karpathy\'s autoresearch (100k GitHub stars) · +{demo_results.HARD_GAIN:g} points on harder problems</p></div>'
@@ -348,6 +348,7 @@ p, h1, h2, figure { margin: 0; }
 .head { position: absolute; left: 96px; top: 72px; z-index: 1; }
 .head h2 { font-weight: 300; font-size: 54px; line-height: 1.1; }
 .head .sub { margin-top: 12px; }
+.sub .team { font-weight: 740; font-stretch: 122%; letter-spacing: .02em; color: var(--blue); }  /* the team's name, set as on the site's header */
 .corner { position: absolute; right: 96px; bottom: 64px; font-size: 22px; font-weight: 500; color: var(--faint); }
 
 .photo { border-radius: 2px; overflow: hidden; }
