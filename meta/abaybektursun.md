@@ -1,5 +1,14 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 18:00 UTC (loop cycle 12, step-back 3; no tool change, no skill edit) meta/reviews/abaybektursun/20261115-1755/
+
+- Target (Team line, 4 h): claim to close median 54 min (48 at 16:53), upper quartile 184 min (274), 21 items by 3 people (20); 6.5 results per hour (6.2). Over 8 h: 54 / 163 min, 35 items, 5.4 per hour. Modal 81 jobs, 0 failed, wait 0.1 min.
+- Open measurements closed: upload at job end: 6 ended jobs ran with it, 6 of 6 are in the team store (stored_tars.txt). First measured sharded cell (MATH-500, 3 samples, 3 shards): answer after 62.6 min against about 166 min of summed generation.
+- Step-back (stepback.md): the upload helped by its own measure; the hook line helped weakly; no loop change is shown to move the team median itself. The cause of cycle 9's change came from three read-only subagents on records and transcripts, not from the skill's sections.
+- Never fixed: sharding as one command (credits; the person); worktree cap32run still submits with the old vast.py after two messages (29 of 35 vast.ai jobs since 15:05 ran without the upload); reviews by other sessions (2 more).
+- Skill: no edit. Section 1 (Direction) made 0 changes since the loop began; its deletion is asked of the person. The cycle 8 deletion does not pass the four-cycle comparison (medians 92.5 against 82.5 min) and is kept, with the reason in stepback.md.
+- Next cycle checks: vast.ai jobs run without the upload against 29 of 35; the Team line against 54 / 184 min and 6.5 per hour.
+
 ## 2026-11-15 17:05 UTC (paper loop, after result-526568 of work-184476) meta/reviews/abaybektursun/20261115-1655-paper2/
 
 - Previous entry asked for a vast.ai cell fetched with `get` after its box is gone: checked by loop cycle 11 (entry below: 1 of 1 on a real box), not by this review.
