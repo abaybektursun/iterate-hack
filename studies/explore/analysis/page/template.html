@@ -182,10 +182,10 @@ code { font-family: var(--mono); font-size: .9em; }
   <h2>A flush does not change which method the model picks; assigning one does</h2>
   <p>A fresh chat samples from the same model, so it tends to choose the same method again. New arm, <b>assigned
   methods</b>: before each fork of Fork-and-Flush, one extra call lists 4 different methods, and each fresh branch is
-  told to implement one. The list is written by gpt-5.4-mini itself or by a stronger model (gpt-6.1-sol).</p>
-  <p class="answer">On circles26 both assigned arms beat the starter, which no published strategy does: 2.636 with the
-  strong list (the best published packing) and 2.628 with the model's own list, against 2.535 for Fork-and-Flush.
-  On AHC014 the own-list arm is second (0.371) behind Forgetting (0.439), and the strong list hurts (0.242).</p>
+  told to implement one. The list is written by gpt-5.4-mini itself.</p>
+  <p class="answer">On circles26 the assigned arm beats the starter, which no published strategy does: 2.628,
+  against 2.535 for Fork-and-Flush (best published packing: about 2.636). On AHC014 it is second (0.371) behind
+  Forgetting (0.439).</p>
   <div class="figure"><div class="chart" id="cAssign"></div>
   <p class="cap"><b>circles26, best score so far.</b> Dashed: the starter. Two controls: a single chat shown the same
   lists and asked to pick one, and a single chat that is re-shown its best program every 10 tries (rollback, chat
@@ -205,8 +205,7 @@ code { font-family: var(--mono); font-size: .9em; }
   successive halving of 8 chats (arXiv 2607.18235). Both stop at 0.295, the score of plain greedy rectangle
   completion, as Fork-and-Flush does.</p>
   <div class="scroll"><table id="aAssignTab"></table></div></div>
-  <div class="callout"><p><b>Where it fails.</b> The strong model listed beam search, tree search and large-neighbourhood
-  search; gpt-5.4-mini's programs for them were invalid or made no move (18 of 40 valid). Adding assignment to
+  <div class="callout"><p><b>Where it fails.</b> Adding assignment to
   Forgetting gave 0.324, below plain Forgetting: each method got 2 or 3 tries. A method helps only if the agent can
   implement it in the tries its branch gets.</p></div>
 </section>
@@ -442,7 +441,7 @@ const meanCurve = runs => { const n = Math.min(...runs.map(r => r.curve.length))
   const A5 = {single: ["Single", "--s1"], single_list_mini: ["Single + list", "--s2"], fnf: ["Fork-and-Flush", "--s3"],
     rebase: ["Rollback, chat kept", "--s4", "Rollback"], forget: ["Forgetting", "--s5"],
     forget_assign_mini: ["Forgetting + assigned", "--s6", "Forget+assign"],
-    assign_mini: ["Assigned, own list", "--s7", "Assign, own"], assign_sol: ["Assigned, strong list", "--s8", "Assign, strong"],
+    assign_mini: ["Assigned methods", "--s7", "Assigned"],
     fnf_undirected: ["Undirected branches", "--s4", "Undirected"], halving: ["Halving ×8", "--s2"]};
   const ser = (src, keys, thin = []) => keys.filter(k => src[k]).map(k => ({y: src[k][0].curve, c: `var(${A5[k][1]})`, w: thin.includes(k) ? 1.4 : 2.4, o: thin.includes(k) ? 0.7 : 1, label: A5[k][2] || A5[k][0]}));
   const tab = (id, task, keys, ref, optCol) => {
@@ -452,15 +451,15 @@ const meanCurve = runs => { const n = Math.min(...runs.map(r => r.curve.length))
       : `<tr><td><span class="swd" style="background:var(${A5[k][1]})"></span> ${A5[k][0]} (Finding 2)</td><td class="num"><b>${fmt(ref[k])}</b></td>${optCol ? "<td></td>" : ""}<td></td><td></td></tr>`; });
     document.getElementById(id).innerHTML = `<tr><th>Arm</th><th class="num">Best</th>${optCol ? '<th class="num">Programs with an optimizer</th>' : ""}<th class="num">Valid programs</th><th class="num">USD</th></tr>` + rows.join("");
   };
-  const ck = ["single", "single_list_mini", "fnf", "rebase", "assign_mini", "assign_sol"];
+  const ck = ["single", "single_list_mini", "fnf", "rebase", "assign_mini"];
   lineChart("cAssign", {series: ser(D.c_assign, ck), xmax: 40, ymin: 1.8, ymax: 2.66, base: {y: D.starter.circles26, label: "starter 2.541"}, yticks: [1.8, 2.0, 2.2, 2.4, 2.6]});
   tab("cAssignTab", "circles26", ck, {}, true);
-  const ak = ["forget", "assign_mini", "forget_assign_mini", "fnf", "fnf_undirected", "halving", "assign_sol"];
+  const ak = ["forget", "assign_mini", "forget_assign_mini", "fnf", "fnf_undirected", "halving"];
   const src = {...D.a_assign, forget: D.a_mini.forget, fnf: D.a_mini.fnf};
   lineChart("aAssign", {series: ser(src, ak, ["forget", "fnf"]), xmax: 40, ymin: 0.2, ymax: 0.46, base: {y: D.starter.ahc014, label: "starter 0.222"}, yticks: [0.2, 0.25, 0.3, 0.35, 0.4, 0.45]});
   const last = k => { const c = D.a_mini[k][0].curve; return c[c.length - 1]; };
   tab("aAssignTab", "ahc014", ak, {forget: last("forget"), fnf: last("fnf")}, false);
-  tile(document.getElementById("assignTile"), circlesSVG(D.circles.assign.circles), "gpt-5.4-mini, assigned method (strong list)", fmt(D.circles.assign.score), "A fresh branch told to use constrained optimization: the same model now reaches the best published packing.");
+  tile(document.getElementById("assignTile"), circlesSVG(D.circles.assign.circles), "gpt-5.4-mini, assigned method", fmt(D.circles.assign.score), "A fresh branch told to implement a listed method: the same model now writes an optimizer (basin hopping with an SLSQP polish).");
 }
 /* Finding 3 */
 document.getElementById("optMini").textContent = "5 / 800";
