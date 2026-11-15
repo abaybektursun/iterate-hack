@@ -32,4 +32,8 @@ Write $out/review.json:
  "import_carries_gain": {"yes_no": "yes or no", "which": "<which import carries which winning claim, or why none does>"},
  "verdict": "<stands, refuted, published or weak>: <one sentence>"}
 
+The verdict may be "stands" only if the theory won at least 2 separating duel tests (in metrics_v5.json: gain above 0
+and "same_prediction" false) and the smallest n among those tests is at least 50. Otherwise the best verdict is
+"weak". A theory with no duel tests cannot stand.
+
 Reply with the verdict.
