@@ -446,6 +446,21 @@ steadily. Three rival tests (`results/promoted/run-01/metrics_v5.json`, `rivals/
   2610.06851; the flat-cap-hit claim was fitted to counts the theory had seen, and step 100 and step 400 sit below the cued base (103 and 98
   against 119 of 500). P1, P2, P3 hold; P4 not tested. Separating test: plain T 0.6 cap hits at a checkpoint between steps 800 and 1,600.
 
+## GPU experiments
+
+**selfopen-01** (round-05 entry `r5-m10:theory:intervention`; plan `specs/SPEC_selfopen01.md`). Rejection sampling on the plain base's own
+opening, no prefilled tokens: per problem up to 32 openings of 24 tokens, keep the first with '\nOkay' in its first 60 characters, continue it
+to 16,384 tokens (T 1.0 / top-p 1.0, grader v3). **411 of 500** (cap hits 20, 3,795 tokens per answer), against the stored plain T3 224 and the
+stored cue T1 410. r5-m10 predicted 375 [348, 400] (refuted); its rival 405 [386, 422] (holds). Control (first draw that does not self-open,
+continued the same way): 137 of 403 on the problems that self-opened, against 332 of 403 for the main arm, +48.4 points [42.9, 53.6]; T1 on the
+same 403: 329. 94 stored T3 rows already self-opened (78 right); of the 406 regenerated problems 403 self-opened within 32 draws (median 4
+draws), 3 never did (1 right).
+- Files: `prep/selfopen01_t3.py` writes `data/selfopen01_t3.json` (the 94 stored self-opened rows, the 406 to regenerate); `jobs/selfopen_gen.py`
+  (GPU, `--shard k/4`); `analysis/selfopen01.py` (readout, merges the shards). Outputs `results/experiments/selfopen-01/` (`run.json` with the
+  job ids, `metrics.json`, `per_problem.json`, `examples.json`).
+- Raw generations (not committed): `runs/abaybektursun-1115-021039-24f7/{s0,s2}`, `runs/ih-1115-095450-2b5a`, `runs/abaybektursun-1115-015601-2e73`
+  on the laptop of the run; the AWS shard also in `s3://pg-lineage-769063704696/results/ih/ih-1115-095450-2b5a/out/`.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in
