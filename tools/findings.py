@@ -117,6 +117,11 @@ TABLE = {
         "figure": lambda m: [signed(m.DATA["diff"]["hard328"]["vote"][0]), "points", "328 harder problems, Think-SFT over the RL model, vote over 4 samples each"],
         # Think-SFT + cue minus RL, one sample each, points of 328: [estimate, 95 % interval low, high], for the rail's number
         "rail": lambda m: {"hard328": m.DATA["diff"]["hard328"]["single"]}},
+    "no-reward-on-code": {
+        "group": NO_REWARD,
+        "figure": lambda m: [f"{m.DATA['passed']['v3']['sft1_codecue']} of 538", "code problems",
+                             f"538 code problems, Think-SFT + cue, one sample, once the grader reads its answer format ({m.DATA['passed']['v1']['sft1_codecue']} before); "
+                             f"Base + cue {m.DATA['passed']['v3']['base_cue']}, RL {m.DATA['passed']['v3']['rl_plain']}; the reading rule was written after seeing the answers"]},
     "no-early-warning": {
         "group": NO_REWARD,
         "figure": lambda m: [f"{m.DATA['auroc']['12000']['signs']['zratio']['same'][0]:.3f}", "AUROC",
