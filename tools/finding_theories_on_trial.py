@@ -1,26 +1,35 @@
-"""In 182 of 370 predictions of numbers they had not seen, the theory engine's theories were nearer the measured number than two readers with no theory: about half, no better.
+"""The theory engine's theories against two readers with no theory, on numbers neither had seen: about half nearer, no better.
 
 The page of one finding, served at /finding/theories-on-trial (view.py serves every tools/finding_<slug>.py) and reached
 from its tile on /findings, which ICON draws. The subject is the team's theory engine (.claude/skills/theory/SKILL.md,
-studies/theory/README.md): in six rounds, agents wrote theories of why RL beats the base model, and each theory filed
-numeric predictions with intervals before the number was computed; two readers with no theory predicted the same
-numbers. The picture is one lit plate. On it every prediction is one mark: its interval scaled to one height (a short
-vertical line on a faint band) and the measured number as a dot, so a dot inside the band landed inside the interval. A
-dot is blue when the theory's forecast was nearer the measured number than the average of the two readers' forecasts,
-a ring when the readers' was nearer or equal, grey when no reader predicted it. Marks are grouped by theory; refuted
-theories, and theories that lost to their rival, are dimmed and struck. The control steps through the rounds (1 to 6,
-and All): marks travel from one strip per round to one row per theory, and the large number counts. A click on a
-theory shows its mechanism, each prediction (target, forecast, measured, readers), its fate and its duel in the side
-column. Address: /finding/theories-on-trial#<round 1-6, or nothing for All>/<panel or <round>.<theory>>.
+studies/theory/README.md): in each round, agents wrote theories of why RL beats the base model, and each theory filed
+numeric predictions with intervals before the number was computed; two readers with no theory (two model runs given the
+same board items and the same question) predicted the same numbers. The picture is one lit plate. On it every
+prediction is one mark: its interval scaled to one height (a short vertical line on a faint band) and the measured
+number as a dot, so a dot inside the band landed inside the interval. A dot is blue when the theory's forecast was
+nearer the measured number than the average of the two readers' forecasts, a ring when the readers' was nearer or
+equal, grey when no reader predicted it. Marks are grouped by theory; refuted theories, and theories that lost to their
+rival, are dimmed and struck; "no gain" (no better than the readers) is a fate of its own and is not struck. The control
+steps through the rounds (1 to the last, and All): marks travel from one strip per round to one row per theory, with
+its short name (NAMES) at the left and its fate at the end, and the large number counts. A click on a theory shows its
+mechanism, each prediction (target, forecast, measured, readers), its fate and its duel in the side column. Address:
+/finding/theories-on-trial#<round, or nothing for All>/<panel or <round>.<theory>>.
 The rules are in .claude/skills/finding-page/SKILL.md; the looks are those of tools/architecture.py
 (.claude/skills/site-ui/SKILL.md).
 
     uv run tools/finding_theories_on_trial.py           checks DATA, THEORIES and PREDS against the round files
     uv run tools/finding_theories_on_trial.py --write   rewrites DATA's counts, THEORIES and PREDS from the round files
+
+A new round: once studies/theory/results/engine/round-<nn>/ and its README section "## Round <nn> (" are on main, run
+--write, then the check. The rounds are the round-<nn> folders that exist; the control, the per-round list, LINE and the
+totals in PANELS follow from the written counts. Add the new theories' short names to NAMES (the check lists those
+missing; until then the first words of the statement are shown). A round whose files change layout (the engine
+version in its run.json) may need _build adapted: the check compares computed, inside and filed with metrics_v4.json.
 """
 import json
 import os
 import re
+import subprocess
 import sys
 
 E = "studies/theory/results/engine/"
@@ -29,14 +38,14 @@ E = "studies/theory/results/engine/"
 # from memory. The deployed site ships only tools/*.py, so the copy below is a literal; run this file to compare.
 DATA = {
     "sources": {
-        "rounds": E + "round-01 … round-06",
+        "rounds": E + "round-<nn>, one folder per round",
         "round 1": E + "round-01/metrics.json, predictions_measured.json (the 7 interval predictions held-out items measured)",
         "rounds 2-3": E + "round-0<n>/metrics_v2.json, metrics_v3.json, targets.jsonl, reviews/",
-        "rounds 4-6": E + "round-0<n>/metrics_v4.json (predictions), metrics_v5.json (duels), tests_blind.jsonl, theories/",
+        "rounds 4 on": E + "round-<nn>/metrics_v4.json (predictions), metrics_v5.json (duels), tests_blind.jsonl, theories/",
         "gpu": E + "round-05/experiments.json, experiments_measured.json; studies/theory/results/experiments/selfopen-01/",
         "statements": "studies/theory/README.md (the Statement and What decided it columns)",
+        "names": "NAMES below, a few words of each statement",
     },
-    "commit": "96fc9cd",  # the last commit that changed studies/theory/results/engine or studies/theory/README.md
 }
 
 TITLE = "Theories on trial"  # the name on its tile on /findings and in the browser tab
@@ -77,7 +86,8 @@ def _build():
     """THEORIES and PREDS from the round files; run from the repository root.
 
     THEORIES: [key "<round>.<theory>", round, theory id, statement, state, fate, why, review, duel, gpu]
-      fate: s survives or passed, r refuted, l lost to its rival, o anything else (failed, untested, no gain)
+      fate: s survives or passed, r refuted, l lost to its rival, n no gain over the readers, o anything else (failed,
+            untested)
       duel: [rival's first sentence, total gain in nats, state, tests that separate, tests computed,
              tests [[experiment, measured, theory [v, lo, hi], rival [v, lo, hi], gain]]]
       gpu: [board item, measured, n, measured interval, theory [v, lo, hi], rival [v, lo, hi], rival id, artifact]
@@ -88,10 +98,16 @@ def _build():
             marks an unexpected win (inside its interval while every reader's centre lies outside it)
       note: n outside but within the measurement's noise, c:[v, lo, hi] the replaced theory's prediction, x:<why>
     """
+    rounds = sorted(int(d[-2:]) for d in os.listdir(E) if re.fullmatch(r"round-\d\d", d))
     rm = _readme()
-    sec = lambda start: next(v for k, v in rm.items() if k.startswith(start))
-    tab, r4, r5, r6 = sec("Theories"), sec("Round 04 ("), sec("Round 05"), sec("Round 06")
-    statement = lambda name: (r6.get(name) or r5.get(name) or r4.get(name) or tab.get(name))[1]
+    rsec = {int(m.group(1)): v for k, v in rm.items() if (m := re.match(r"Round (\d\d) \(", k))}
+    tab = rm["Theories"]
+
+    def statement(name):  # the newest README row of the theory that is not a stub of a carried theory
+        rows = [rsec[r][name][1] for r in sorted(rsec, reverse=True) if r >= 4 and name in rsec[r]] + \
+               ([tab[name][1]] if name in tab else [])
+        full = [x for x in rows if "carried" not in x]
+        return full[0] if full else rows[0].replace(" (carried)", "")
     theories, preds = [], []
 
     # Round 1: the theories' own interval predictions that the held-out items measured.
@@ -130,8 +146,9 @@ def _build():
                 preds.append([f"{rd}.{t}", x["id"], _cut(tg[x["id"]]["what"], 170), tg[x["id"]]["unit"], x["value"],
                               x["low"], x["high"], x["measured"], "", rdrs, x.get("gain"), ""])
 
-    # Rounds 4 to 6: offline predictions, computed from stored per-problem rows by scripts written before any row was
-    # read. A carried rival's record is its duel tests of round 5, compared with the theory it replaced.
+    # Rounds 4 on: offline predictions, computed from stored per-problem rows by scripts written before any row was
+    # read. A carried rival's record is its duel tests of the round it came from, compared with the theory it replaced,
+    # when the engine counts them (round 6); from round 7 (engine 7.1) the engine files none for a carried theory.
     gpu_m = {x["id"]: x for x in _load("round-05/experiments_measured.json")}
     gpu = []
     for e in _load("round-05/experiments.json")["experiments"]:
@@ -139,11 +156,10 @@ def _build():
             g, p, o = gpu_m[e["id"]], e["proposer_prediction"], e["other_prediction"]
             gpu.append([e["proposer"], e["other"], [g["item"], g["measured"], g["n"], g["interval"],
                         [p["value"], p["low"], p["high"]], [o["value"], o["low"], o["high"]], e["other"], g["artifact"]]])
-    prev5 = _load("round-05/metrics_v5.json")["theories"]
-    for rd in (4, 5, 6):
-        v4 = _load(f"round-0{rd}/metrics_v4.json")["theories"]
-        v5 = _load(f"round-0{rd}/metrics_v5.json")["theories"]
-        blind = {x["id"]: x for x in _jsonl(f"round-0{rd}/tests_blind.jsonl")}
+    for rd in [r for r in rounds if r >= 4]:
+        v4 = _load(f"round-{rd:02d}/metrics_v4.json")["theories"]
+        v5 = _load(f"round-{rd:02d}/metrics_v5.json")["theories"]
+        blind = {x["id"]: x for x in _jsonl(f"round-{rd:02d}/tests_blind.jsonl")}
         for t, v in v4.items():
             duel = None
             if t in v5:
@@ -152,23 +168,24 @@ def _build():
                         [[_cut(r["experiment"], 160), r["measured"], [r["theory"][k] for k in ("value", "low", "high")],
                           [r["rival"][k] for k in ("value", "low", "high")], r["gain"]] for r in d["rows"]]]
             st = v["state"]
-            fate = "r" if st == "refuted" else "l" if duel and duel[2] == "loses to rival" else "s" if st == "survives" else "o"
-            state = {"r": "refuted", "l": "lost to its rival", "s": "survives"}.get(fate, st)
-            row = {5: r5, 6: r6}.get(rd, {}).get(t)
+            fate = ("r" if st == "refuted" else "l" if duel and duel[2] == "loses to rival" else "s" if st == "survives"
+                    else "n" if st == "no gain" else "o")
+            state = {"r": "refuted", "l": "lost to its rival", "s": "survives", "n": "no gain"}.get(fate, st)
+            row = rsec.get(rd, {}).get(t) if rd >= 5 else None
             why = row[-1] if row else v["reasons"][0] if v["reasons"] else v["verdict"]
             if not row and st == "untested":
                 why = f"{v['computed']} of {v['offline']} predictions computed, so it is untested; carried to round {rd + 1}."
             g = next((x[2] for x in gpu if (rd == 5 and x[0] == t) or (rd == 6 and x[1] == t)), None)
             theories.append([f"{rd}.{t}", rd, t, statement(t), state, fate, _cut(why, 640), _cut(v["verdict"], 640), duel, g])
             carried = v.get("carried_from")
-            tfile = None if carried else json.load(open(f"{E}round-0{rd}/theories/{t}.json"))
-            for x in v["rows"]:
+            tfile = None if carried else json.load(open(f"{E}round-{rd:02d}/theories/{t}.json"))
+            for x in v["rows"] if not carried or v["offline"] else []:
                 if x.get("not_scored"):  # 0 by construction, a fit to a claimed cell, or differs from its replication
                     continue
                 k = x["k"]
                 pid = x.get("id") or f"{t}:p{k}"
                 if carried:
-                    src = prev5[t[:-len("-rival")]]["rows"][k - 1]
+                    src = _load(f"{carried}/metrics_v5.json")["theories"][t[:-len("-rival")]]["rows"][k - 1]
                     assert abs(src["measured"] - x["measured"]) < 1e-9 and src["rival"]["value"] == x["value"]
                     what, unit, rdrs = _cut(src["experiment"], 170), "", []
                     note = "c:" + json.dumps([x["nulls"][0][q] for q in ("value", "low", "high")])
@@ -199,16 +216,22 @@ def _build():
 
 
 def _count(theories, preds):
-    """DATA's counts. Per state ("1" … "6", "all"):
+    """DATA's counts. Per state (one per round, "1" … "<last>", then "all"):
     nearer: [predictions where the theory's forecast is nearer the measured number than the readers' average, predictions
              compared with readers, ties]; carried predictions are not compared with readers and not counted
     inside: [inside the theory's interval, computed predictions shown] (carried included, as the engine counts them)
     readers: [theory inside, reader 1 inside, reader 2 inside, predictions] on the compared predictions where both readers
-             gave an interval (rounds 3 to 6)
-    computed: [computed, filed] predictions; gain: total log gain in nats against the readers (rounds 3 to 6)
-    Theories: one per theory id (a round-1 theory and its r1- copy of round 2 are one), the fate of its last round."""
+             gave an interval (rounds 3 on)
+    computed: [computed, filed] predictions; gain: total log gain in nats against the readers (rounds 3 on)
+    theories: one per theory id (a round-1 theory and its r1- copy of round 2 are one), the fate of its last round:
+      proposed, refuted (ever), lost (to a rival, never refuted), nogain (last fate no gain, never refuted or lost),
+      survive (ids that survive in the last round), standing (of those, the ones that beat their rival with at least 2
+      separating tests: the duel rule of engine 7.1), per_round
+    account: [predictions of round 6's account, nearer], [round 6's other compared predictions, nearer]
+    commit: the last commit that changed the round files or studies/theory/README.md"""
+    rounds = sorted({t[1] for t in theories})
     out = {"nearer": {}, "inside": {}, "readers": {}, "computed": {}, "gain": {}}
-    for s in ["1", "2", "3", "4", "5", "6", "all"]:
+    for s in [str(r) for r in rounds] + ["all"]:
         ps = [p for p in preds if s == "all" or p[0].split(".")[0] == s]
         done = [p for p in ps if p[7] is not None]
         cmp = [p for p in done if p[8][0] in "wtl"]
@@ -227,22 +250,25 @@ def _count(theories, preds):
         ever.setdefault(norm(t), set()).add(t[5])
     acc = [p for p in preds if p[0] == "6.r6-account" and p[8][0] in "wtl"]
     six = [p for p in preds if p[0].startswith("6.") and p[8][0] in "wtl" and p[0] != "6.r6-account"]
+    survive = [t for t in last.values() if t[1] == rounds[-1] and t[5] == "s"]
     out["theories"] = {
         "proposed": len(last),
         "refuted": sum("r" in f for f in ever.values()),
         "lost": sum("l" in f and "r" not in f for f in ever.values()),
-        "standing": sorted(t[2] for t in last.values() if t[1] == 6 and t[5] == "s"),
-        "per_round": {str(r): sum(t[1] == r for t in theories) for r in range(1, 7)},
+        "nogain": sum(last[k][5] == "n" and not {"r", "l"} & f for k, f in ever.items()),
+        "survive": sorted(t[2] for t in survive),
+        "standing": sorted(t[2] for t in survive if t[8] and t[8][2] == "beats rival" and t[8][3] >= 2),
+        "per_round": {str(r): sum(t[1] == r for t in theories) for r in rounds},
     }
     out["account"] = [len(acc), sum(p[8][0] == "w" for p in acc), len(six), sum(p[8][0] == "w" for p in six)]
+    out["commit"] = subprocess.run(["git", "log", "-1", "--format=%h", "--", E, "studies/theory/README.md"],
+                                   capture_output=True, text=True, check=True).stdout.strip()
     return out
-
-
 
 
 # Written by --write from the round files: DATA's counts (keys in _count's docstring), one theory per line, one
 # prediction per line (fields in _build's docstring).
-COUNTS = {'nearer': {'1': [6, 7, 0], '2': [74, 151, 7], '3': [40, 80, 3], '4': [10, 29, 0], '5': [17, 45, 1], '6': [35, 58, 7], 'all': [182, 370, 18]}, 'inside': {'1': [5, 7], '2': [86, 151], '3': [60, 80], '4': [18, 29], '5': [22, 45], '6': [56, 67], 'all': [247, 379]}, 'readers': {'1': [0, 0, 0, 0], '2': [0, 0, 0, 0], '3': [60, 69, 74, 80], '4': [18, 25, 24, 29], '5': [22, 33, 34, 45], '6': [48, 50, 49, 58], 'all': [148, 177, 181, 212]}, 'computed': {'1': [7, 7], '2': [151, 151], '3': [80, 80], '4': [29, 42], '5': [45, 48], '6': [67, 71], 'all': [379, 399]}, 'gain': {'1': None, '2': None, '3': -25.55, '4': -17.32, '5': -25.45, '6': 22.41, 'all': -45.92}, 'theories': {'proposed': 55, 'refuted': 21, 'lost': 4, 'standing': ['r5-m03-rival', 'r5-m10-rival'], 'per_round': {'1': 6, '2': 16, '3': 14, '4': 10, '5': 13, '6': 9}}, 'account': [44, 31, 14, 4]}
+COUNTS = {'nearer': {'1': [6, 7, 0], '2': [74, 151, 7], '3': [40, 80, 3], '4': [10, 29, 0], '5': [17, 45, 1], '6': [35, 58, 7], '7': [8, 24, 2], 'all': [190, 394, 20]}, 'inside': {'1': [5, 7], '2': [86, 151], '3': [60, 80], '4': [18, 29], '5': [22, 45], '6': [56, 67], '7': [16, 24], 'all': [263, 403]}, 'readers': {'1': [0, 0, 0, 0], '2': [0, 0, 0, 0], '3': [60, 69, 74, 80], '4': [18, 25, 24, 29], '5': [22, 33, 34, 45], '6': [48, 50, 49, 58], '7': [16, 20, 21, 24], 'all': [164, 197, 202, 236]}, 'computed': {'1': [7, 7], '2': [151, 151], '3': [80, 80], '4': [29, 42], '5': [45, 48], '6': [67, 71], '7': [24, 27], 'all': [403, 426]}, 'gain': {'1': None, '2': None, '3': -25.55, '4': -17.32, '5': -25.45, '6': 22.41, '7': -12.93, 'all': -58.85}, 'theories': {'proposed': 63, 'refuted': 23, 'lost': 4, 'nogain': 7, 'survive': ['r5-m03-rival'], 'standing': [], 'per_round': {'1': 6, '2': 16, '3': 14, '4': 10, '5': 13, '6': 9, '7': 10}}, 'account': [44, 31, 14, 4], 'commit': '8d210f9'}
 
 THEORIES = [
     ['1.across-1', 1, 'across-1', "The base's loops and cap hits come from early-to-mid-layer circuits that copy its own earlier text; RL's cap-hit gain weakens that pathway in layers 0-15.", 'did not beat the readers', 'o', 'A forecaster given this theory was nearer than reader 1 on 21 of the 58 held-out numbers and farther on 14; against reader 2, 19 and 17. A planted theory with every effect reversed scored the same, so no theory beat the readers.', '', None, None],
@@ -291,7 +317,7 @@ THEORIES = [
     ['4.r4-m10', 4, 'r4-m10', "Early RL (steps 100-400) lowers entropy, so T 0.6 / top-p 0.95 sampling loops more and cap hits rise above the base's; truncation-as-failure training later removes the loops.", 'lost to its rival', 'l', "weak: the rise-then-fall of T 0.6 cap hits (base 65 -> step 100 103 / step 400 98 -> step 2,800 about 16) is real and beat both readers, but the theory's mechanism (entropy collapse pushing sampling past top-p's lock threshold) was never tested, an untested length-growth rival explains the same numbers, the accuracy prediction could not be computed, and one import is misread.", "weak: the rise-then-fall of T 0.6 cap hits (base 65 -> step 100 103 / step 400 98 -> step 2,800 about 16) is real and beat both readers, but the theory's mechanism (entropy collapse pushing sampling past top-p's lock threshold) was never tested, an untested length-growth rival explains the same numbers, the accuracy prediction could not be computed, and one import is misread.", ["By step 100, RL-Zero-Math has mainly taught the base to open in the RL model's own deliberation mode (the ' line!\\n\\nOkay' opening that the cue forces in the base), not a sharper, lower-entropy policy; at T 0.6 / top-p 0.95 this long-deliberation mode loops e…", -7.809, 'loses to rival', 2, 6, [["Share of RL step-100 plain MATH-500 answers (T 0.6 / top-p 0.95) that open in the 'Okay' deliberation format.", 0.956, [0.65, 0.38, 0.92], [0.72, 0.48, 0.93], -0.4317], ['Paired cap-hit rate difference at RL step 400, cued prompt minus plain prompt, MATH-500 at T 0.6 / top-p 0.95.', -0.027999999999999997, [0.025, -0.03, 0.085], [0.01, -0.04, 0.06], -0.5078], ['Ratio of median generated length of finished answers, RL step 100 over base, plain MATH-500 at T 0.6 / top-p 0.95.', 2.251572327044025, [1.8, 1.0, 3.0], [2.0, 1.3, 2.9], -0.3652], ['Per-token sharpness of RL step-100 finished answers relative to the cued base: share of step-100 plain finished answers whose mean_logprob exceeds the median m…', 0.5541561712846348, [0.63, 0.49, 0.78], [0.53, 0.41, 0.65], -0.5046], ["Same sharpness share at RL step 400: share of step-400 plain finished answers whose mean_logprob exceeds the median mean_logprob of the cued base's finished an…", 0.48009950248756217, [0.76, 0.62, 0.89], [0.58, 0.45, 0.71], -3.0], ["Where step 400's median per-token log-prob on finished answers lies between the cued base and step 2,800, plain prompt for RL checkpoints, MATH-500, T 0.6 / to…", 0.06726598846379954, [0.75, 0.42, 1.08], [0.25, -0.15, 0.65], -3.0]]], None],
     ['4.r4-m11', 4, 'r4-m11', 'The cued base keeps writing after its answer and the last-marker grader scores a later, wrong one.', 'untested', 'o', '0 of 5 predictions computed, so it is untested; carried to round 5.', '', None, None],
     ['4.r4-m12', 4, 'r4-m12', "Part of the hard328 gap is grader v3 false negatives on the base's non-canonical answers to non-integer problems.", 'untested', 'o', '1 of 4 predictions computed, so it is untested; carried to round 5.', '', None, None],
-    ['5.r4-m06', 5, 'r4-m06', 'RL added a constant hold-on bias and no error detector.', 'no gain', 'o', "RL's re-check rate after wrong against right candidates is 1.24 and the base-RL difference is -0.087, both as predicted and as the readers said; the share of final-right answers with a re-checked right candidate is 0.44 higher in RL (predicted 0.12).", '', None, None],
+    ['5.r4-m06', 5, 'r4-m06', 'RL added a constant hold-on bias and no error detector.', 'no gain', 'n', "RL's re-check rate after wrong against right candidates is 1.24 and the base-RL difference is -0.087, both as predicted and as the readers said; the share of final-right answers with a re-checked right candidate is 0.44 higher in RL (predicted 0.12).", '', None, None],
     ['5.r4-m11', 5, 'r4-m11', 'The cued base keeps writing after its answer and the last-marker grader scores a later, wrong one.', 'refuted', 'r', "Of the cued base's v3-wrong answers, 0 have a right first answer marker.", '', None, None],
     ['5.r4-m12', 5, 'r4-m12', "Part of the hard328 gap is grader v3 false negatives on the base's non-canonical answers to non-integer problems.", 'refuted', 'r', "Numeric equivalence recovers 0 of the cued base's finished v3-wrong non-integer answers; the gap after regrading stays 12.8 points.", '', None, None],
     ['5.r5-m02', 5, 'r5-m02', "The cued base's wrong finished samples are shorter than their right siblings on Levels 1-3 and longer on Level 5.", 'refuted', 'r', 'On Levels 1-3 wrong samples are longer, not shorter (median log length ratio +0.193; predicted -0.2).', '', None, None],
@@ -313,6 +339,16 @@ THEORIES = [
     ['6.r6-m06', 6, 'r6-m06', "The cued base's wrong steps come from head tokens; RL's text has as many p < 0.01 tokens as the base's.", 'untested', 'o', 'The stored hard328 rows have no per-token probability field.', '', None, None],
     ['6.r6-m10', 6, 'r6-m10', 'The first 100 RL steps install the opening, format and length; the lower error rate on finished answers comes after step 400.', 'refuted', 'r', "Step 100's finished answers are already 4.6 points more often right than the cued base's on the same problems (n 345, 90 % [-6.7, -2.6]).", '', None, None],
     ['6.r6-m11', 6, 'r6-m11', 'The cued base often writes its answer marker early and then justifies it; these early commitments are wrong more often.', 'refuted', 'r', "Of the cued base's quick finished-wrong answers, 0 of 13 are early-marker answers (predicted 0.45). p1 not scored: differs from its replication.", '', None, None],
+    ['7.r5-m03-rival', 7, 'r5-m03-rival', "The top-8 edit of the RL-Math weight change is an incomplete switch per sample: most base+top8 plain answers follow a weak dose of RL's policy, 10-15 % stay in the plain-base register.", 'survives', 's', 'One separating duel test of 6; its "whatever the difficulty" clause is contradicted by duel tests p4 and p5.', "weak: the duel state is 'not separated from rival'. The theory wins only one separating duel test (p2, n 401; stands needs two), and its own clause that plain-register errors ignore difficulty is contradicted by duel tests p4/p5 (gaps 0.23 and 0.49, intervals excluding 0).", ["The top-8 edit installs a weak dose of RL's policy on every sample, but on a fixed subset of prompts the plain prompt still keys the plain base's own short, committed answer, so top8 plain's quick wrong answers are a per-problem plain-prompt failure: they fal…", 3.0, 'not separated from rival', 1, 6, [['Plain-base T 1.0 wrong rate on the problems where top8 plain gives a quick finished-wrong answer.', 0.45454545454545453, [0.52, 0.34, 0.7], [0.68, 0.5, 0.86], 1.9437], ["Difficulty-controlled contrast: plain-base T 1.0 wrong rate on top8's quick-wrong problems minus its wrong rate on top8-right problems that the cued base solve…", -0.05732789637802832, [0.03, -0.17, 0.23], [0.25, 0.06, 0.44], 3.0], ['Plain-base T 0.6 wrong rate (a second, independent plain sample) on the problems where top8 plain gives a quick finished-wrong answer.', 0.3181818181818182, [0.37, 0.2, 0.54], [0.55, 0.37, 0.73], 2.1756], ['Difficulty dependence of the plain register at T 1.0. Among plain-base T 1.0 answers that do not self-open, accuracy on problems the cued base solves in all 4…', 0.23184531765125188, [0.41, 0.29, 0.53], [0.42, 0.27, 0.57], -0.6302], ["Difficulty dependence of the plain register at T 0.6. The same contrast on the plain base's T 0.6 / top-p 0.95 answers that do not self-open: accuracy on cued-…", 0.4912280701754387, [0.63, 0.5, 0.76], [0.55, 0.38, 0.72], -1.1118], ['Per-problem persistence of plain-base failures at fixed difficulty. On problems the cued base solves in all 4 samples, the plain-base T 1.0 wrong rate when the…', 0.08159779614325069, [0.08, -0.06, 0.22], [0.22, 0.08, 0.36], 1.3221]]], None],
+    ['7.r6-account-rival', 7, 'r6-account-rival', 'No RL-specific finishing policy: cap hits are the hard end of one difficulty axis.', 'no gain', 'n', 'Total gain above 0, but no prediction won where the readers were outside its interval.', '', None, None],
+    ['7.r6-m06', 7, 'r6-m06', "The cued base's wrong steps come from head tokens; RL's text has as many p < 0.01 tokens as the base's.", 'untested', 'o', 'The stored rows still have no per-token probability field.', '', None, None],
+    ['7.r7-m03', 7, 'r7-m03', "Many of the cued base's arithmetic slips are single T 1.0 draws of a wrong number token; cooling removes them.", 'refuted', 'r', 'The self-inconsistent-equation rate at T 1.0 is 0.36 times the rate at T 0.6 (n 377; predicted 3).', '', None, None],
+    ['7.r7-m05', 7, 'r7-m05', "The cued base's misread and slip steps are what its language prior writes for a generic problem of the kind.", 'no gain', 'n', 'Inside, but the readers predicted the same.', '', None, None],
+    ['7.r7-m07', 7, 'r7-m07', 'The 3.0 RL-Zero releases learned to stop before about 12k tokens and close long problems early and unchecked.', 'no gain', 'n', 'p3 -0.371 against -0.12 predicted (n 80).', '', None, None],
+    ['7.r7-m08', 7, 'r7-m08', "Code-RL 3.1 raises accuracy by lowering the base's own misread and slip steps, without replacement tokens.", 'no gain', 'n', 'Groups of 16 to 33 items; intervals too wide to gain.', '', None, None],
+    ['7.r7-m09', 7, 'r7-m09', "Think-SFT's excess wrong answers on easy problems are final formats that grader v3 rejects.", 'no gain', 'n', 'Groups of 6 to 9 items.', '', None, None],
+    ['7.r7-m11', 7, 'r7-m11', "The cued base's wrong value is set by the shared prompt and opening, so wrong answers under one opening agree.", 'no gain', 'n', 'p2 0.164 against 0 predicted, within noise (n 28).', '', None, None],
+    ['7.r7-m12', 7, 'r7-m12', "RL-written examples in context help only on problems of the examples' subject.", 'refuted', 'r', 'Same-subject minus other-subject gain is -0.018 (n 223, 90 % [-0.058, 0.022]; predicted +0.08).', '', None, None],
 ]
 
 PREDS = [
@@ -715,10 +751,112 @@ PREDS = [
     ['6.r6-m11', 'p3', "Cause share: of the cued base's quick finished-wrong T1 answers (at most 2,000 generated tokens), the fraction that are early-marker answers. The rival (slow-reasoning s…", 'fraction of problems', 0.45, 0.2, 0.75, 0.0, 'l', [[0.35, 0.08, 0.65], [0.3, 0.05, 0.6]], -1.8066, ''],
     ['6.r6-m11', 'p4', "Where the effect should be absent: share of RL's finished plain T 1.0 answers (T2) that are early-marker answers.", 'fraction of finished answers', 0.06, 0.0, 0.15, 0.04251012145748988, 'w', [[0.2, 0.04, 0.45], [0.15, 0.03, 0.35]], 1.4891, ''],
     ['6.r6-m11', 'p2', "Mechanism test: among the cued base's early-marker finished-wrong T1 answers, the share whose final answer equals the first-marker value. Answer-first commitment predict…", 'fraction of problems', 0.8, 0.6, 0.95, None, 'x', [], None, 'x:refuted without a number: statistic below 0.6, or fewer than 8 kept rows'],
+    ['7.r6-m06', 'p1', 'Paired tail-rate ratio on hard328: the pooled rate of sampled tokens with p < 0.01 per generated token, RL plain over base cue, on problems both models finished. This te…', 'ratio of pooled rates (RL / base)', 1.08, 0.86, 1.35, None, 'x', [], None, 'x:field n_tok_p_lt_1e2 does not exist in any of the 328 rows of abaybektursun-1114-151534-e72c answers.jsonl'],
+    ['7.r6-m06', 'p2', "Cause: whether the cued base's wrong answers carry more low-probability tokens than its right ones at matched length, on hard328. This mechanism (errors are drawn from t…", 'ratio of pooled rates (wrong / right), wrong-count-weighted over length quartiles', 1.05, 0.85, 1.3, None, 'x', [], None, 'x:field n_tok_p_lt_1e2 does not exist in any of the 328 rows of abaybektursun-1114-151534-e72c answers.jsonl'],
+    ['7.r6-m06', 'p3', "Where the effect should not appear: on hard328 problems where the cued base finished wrong and RL finished, whether RL's tail-rate change relative to the base differs be…", 'difference of mean natural-log rate ratios', 0.0, -0.18, 0.18, None, 'x', [], None, 'x:field n_tok_p_lt_1e2 does not exist in any of the 328 rows of abaybektursun-1114-151534-e72c answers.jsonl'],
+    ['7.r7-m03', 'p1', 'Mechanism test: ratio of the self-inconsistent-equation rate of the cued base at T 1.0 to the same rate at T 0.6 / top-p 0.95, on problems where both answers finished. T…', 'ratio of wrong-equation rates (T 1.0 / T 0.6)', 3.0, 1.5, 9.0, 0.3612012987012987, 'l', [[1.6, 0.8, 3.0], [1.5, 0.8, 2.8]], -0.2091, ''],
+    ['7.r7-m03', 'p2', "Cause (RL sharpened the result positions): ratio of RL's self-inconsistent-equation rate at T 1.0 to the cued base's at T 1.0, on problems where both finished.", 'ratio of wrong-equation rates (RL / base)', 0.35, 0.12, 0.8, 1.3591903274011683, 'l', [[0.55, 0.25, 1.1], [0.5, 0.25, 1.0]], -3.0, 'n'],
+    ['7.r7-m03', 'p3', 'Effect in accuracy: paired finished-answer error, plain T 1.0 minus the entropy-gated arm that samples at T 0.6 where entropy <= 0.9 nats (confident positions, which inc…', 'difference of fractions of samples', 0.013, -0.002, 0.032, 0.017293233082706763, 'l', [[0.015, -0.01, 0.04], [0.025, 0.005, 0.045]], 0.2938, ''],
+    ['7.r7-m03', 'p4', 'Where the effect should not appear: the same paired finished-answer error difference for the arm that samples at T 0.6 only where entropy > 0.9 nats (forks). Result toke…', 'difference of fractions of samples', 0.0, -0.02, 0.017, -0.003293084522502737, 'w', [[0.0, -0.03, 0.03], [0.008, -0.015, 0.03]], 0.4751, ''],
+    ['7.r7-m05', 'p1', 'Mechanism test, problem dependence of misread and slip steps. Among the wrongstep items labelled misread or slip, the fraction with g > 0, where g = (lp_span - lp_contro…', 'fraction of items', 0.67, 0.48, 0.84, 0.6857142857142857, 'w', [[0.55, 0.33, 0.77], [0.63, 0.42, 0.82]], 0.4211, ''],
+    ['7.r7-m05', 'p2', 'Cause test, mode vs tail. On all 51 wrongstep items, the fraction whose wrong step gains on control text when the base is rescored at T 0.6: (lp_span - lp_control) under…', 'fraction of items', 0.62, 0.44, 0.8, 0.6078431372549019, 'w', [[0.58, 0.4, 0.75], [0.55, 0.38, 0.72]], 0.0455, ''],
+    ['7.r7-m05', 'p3', 'Case where the effect should not appear: wrong-plan items. The fraction of wrongstep items labelled as a wrong plan with g > 0 (g defined as in the first prediction: nop…', 'fraction of items', 0.43, 0.15, 0.68, 0.6875, 'l', [[0.5, 0.25, 0.75], [0.55, 0.3, 0.8]], -0.766, 'n'],
+    ['7.r7-m07', 'p1', 'Phenomenon on Math: Math 3.1 cue minus Math 3.0 cue right answers in the longest quartile of MATH-500 by RL (T2) answer length, T 1.0 / top-p 1.0, one sample each.', 'problems (of 125)', 7, -1, 15, 3, 'l', [[6, -1, 13], [6, -2, 13]], -0.205, ''],
+    ['7.r7-m07', 'p2', 'Where the effect should not appear: Math 3.1 cue minus Math 3.0 cue right answers on the shorter half (Q1+Q2 by T2 length) of MATH-500, T 1.0. A stop-early policy loses…', 'problems (of 250)', 0, -5, 4, 1, 'l', [[1, -5, 6], [1, -5, 6]], 0.1339, ''],
+    ['7.r7-m07', 'p3', 'Mechanism test (length shortening confined to long problems), Math 3.0 first release vs Math 3.1 step 2,800, plain MATH-500, T 0.6 / top-p 0.95: median log ratio of fini…', 'difference of natural-log ratios', -0.12, -0.3, 0.0, -0.3708847115189001, 'w', [[-0.05, -0.3, 0.2], [-0.15, -0.45, 0.12]], -1.8815, 'n'],
+    ['7.r7-m07', 'p4', 'Cause test, the 12k cliff: among finished MATH-500 answers at T 0.6 / top-p 0.95 (plain and cue pooled), the ratio of answers of at least 12,000 tokens to answers of 8,0…', 'ratio of tail ratios', 0.35, 0.1, 0.75, 0.5019834114677245, 'l', [[0.6, 0.25, 1.2], [0.4, 0.12, 1.0]], 0.11, ''],
+    ['7.r7-m08', 'p1', "Mechanism test, concentration of Code 3.1's wrong-step lowering on Math 3.1's strongest-veto items: the share of the summed Code 3.1 D that falls on the third of items w…", 'fraction of summed D', 0.72, 0.48, 1.05, 0.9786482311969817, 'w', [[0.7, 0.35, 1.05], [0.6, 0.25, 1.05]], 0.1633, ''],
+    ['7.r7-m08', 'p2', "Where the effect should not appear: Code 3.1's mean wrong-step lowering on items labelled wrong plan. A reader who spreads Code 3.1's overall -0.45 evenly expects about…", 'nats (mean D over items)', 0.0, -0.3, 0.3, -0.27313356644510706, 'l', [[-0.2, -0.7, 0.2], [-0.1, -0.6, 0.35]], -0.5862, ''],
+    ['7.r7-m08', 'p3', 'Where a veto cannot create a path: Code 3.1 cue single-sample accuracy on the MATH-500 problems where the cued base is right in none of its 4 stored samples. A veto remo…', 'fraction of problems', 0.18, 0.06, 0.33, 0.2727272727272727, 'l', [[0.18, 0.06, 0.33], [0.2, 0.06, 0.38]], -0.0989, ''],
+    ['7.r7-m09', 'p1', 'Mechanism test, recurrence across prompts. On problems the cued base solves 4 of 4, take the problems where Think-SFT with the cue gives a finished wrong answer, and com…', 'fraction of problems', 0.55, 0.3, 0.85, 0.16666666666666666, 'l', [[0.4, 0.1, 0.75], [0.4, 0.12, 0.7]], -1.7328, 'n'],
+    ['7.r7-m09', 'p2', 'Cause, answer-type dependence. Among the problems in W (cued base 4 of 4, Think-SFT cue finished wrong), the share whose gold is not a plain integer. Format misses fall…', 'fraction of problems', 0.7, 0.45, 0.95, 0.3333333333333333, 'l', [[0.55, 0.25, 0.85], [0.55, 0.3, 0.8]], -1.9604, 'n'],
+    ['7.r7-m09', 'p3', "A case where Think-SFT's dominant failure should not appear: the share of cap hits among Think-SFT cue's wrong answers on problems the cued base solves 4 of 4. Over all…", 'fraction of wrong problems', 0.22, 0.0, 0.45, 0.3333333333333333, 'l', [[0.33, 0.1, 0.6], [0.3, 0.1, 0.55]], -0.2764, ''],
+    ['7.r7-m09', 'p4', "Mechanism test, normal length. On problems the cued base solves 4 of 4, compare Think-SFT cue's finished-wrong and finished-right answers by their length relative to RL'…", 'natural-log ratio (difference of medians)', 0.0, -0.4, 0.4, 0.19084698150089882, 'l', [[0.15, -0.4, 0.7], [0.15, -0.35, 0.65]], -0.0301, ''],
+    ['7.r7-m11', 'p1', 'Mechanism test: within-cue wrong-answer agreement minus cue-vs-plain wrong-answer agreement on MATH-500 at T 1.0, A - B. The problem-driven-attractor rival predicts abou…', 'difference of agreement fractions', 0.1, 0.02, 0.22, 0.13463203463203466, 'w', [[0.1, -0.05, 0.25], [0.08, -0.03, 0.2]], 0.2989, ''],
+    ['7.r7-m11', 'p2', 'Case where the effect should not appear: changing only the sampling rule under the same cue (T 1.0 / min-p 0.1) should keep the wrong values. Cross-file agreement C betw…', 'difference of agreement fractions', 0.0, -0.08, 0.08, 0.16378066378066375, 'w', [[0.0, -0.12, 0.1], [-0.02, -0.1, 0.06]], -1.6814, 'n'],
+    ['7.r7-m11', 'p3', 'Cause of the vote shortfall: among MATH-500 problems where the cued base has at least one right sample of 4 but the plurality vote is wrong, the share where the winning…', 'fraction of vote-failure problems', 0.45, 0.28, 0.65, 0.42857142857142855, 'w', [[0.45, 0.25, 0.65], [0.55, 0.33, 0.77]], 0.2914, ''],
+    ['7.r7-m12', 'p1', 'Mechanism test: per-problem gain of the RL-written-examples arm (draw 1) over the mean of the 4 cued-base samples, averaged over problems in the subjects of example prob…', 'difference of fractions of problems', 0.08, 0.035, 0.13, -0.018489574809335205, 'l', [[0.02, -0.03, 0.07], [0.01, -0.06, 0.08]], -3.0, ''],
+    ['7.r7-m12', 'p2', 'Case where the effect should not appear: the same matched-minus-unmatched contrast for the base-written-examples arm, which uses the same three example problems and so t…', 'difference of fractions of problems', 0.0, -0.045, 0.045, -0.02192645085267258, 't', [[0.0, -0.05, 0.05], [0.0, -0.07, 0.07]], 0.1434, ''],
+    ['7.r7-m12', 'p3', 'Cause: the examples only let the base copy a routine on problems it can already solve. On problems the cued base solved in 0 of its 4 samples, the RL-written-examples ar…', 'problems', 5, 1, 9, 5, 't', [[5, 1, 10], [5, 1, 10]], 0.1178, ''],
 ]
+
+# A short name of each theory, 3 to 5 words from its statement (at most 26 characters), shown at the left of its row
+# in a round. A theory missing here (a new round) shows the first words of its statement; the check prints which ones
+# lack a name.
+NAMES = {
+    'r1-across-1': 'Self-copying circuits',
+    'r1-across-2': 'Token-budget controller',
+    'r1-all-1': 'Base decays as text grows',
+    'r1-all-2': 'One answer-mode switch',
+    'r1-surprises-1': 'Deliberation and stopping',
+    'r1-surprises-2': 'Only low-rank part works',
+    'r2-across-1': 'Entropy drops at forks',
+    'r2-across-2': 'Sign pattern carries it',
+    'r2-all-1': 'High-curvature signs',
+    'r2-all-2': 'Surprise sets accuracy',
+    'r2-external-1': '700 times a random edit',
+    'r2-external-2': 'Per-position temperature',
+    'r2-revise-1': 'Many small sign entries',
+    'r2-revise-2': 'Weak base error detector',
+    'r2-surprises-1': 'Loops, slips on one axis',
+    'r2-surprises-2': 'Task lives in the signs',
+    'r3-across-1': 'General plus math part',
+    'r3-across-2': 'Tail tokens end loops',
+    'r3-all-1': 'Two stopping habits',
+    'r3-all-2': 'Spread at progress steps',
+    'r3-external-1': 'Truncation causes repeats',
+    'r3-external-2': 'Sharpening, then late part',
+    'r3-revise-1': 'Deliberate, then commit',
+    'r3-revise-2': 'Loops open at impasses',
+    'r3-surprises-1': 'Tail tokens derail steps',
+    'r3-surprises-2': 'Shared low-dose stop gate',
+    'r4-m01': 'Loops feed on own text',
+    'r4-m02': 'Length reads out failure',
+    'r4-m04': 'Mix of two endpoint modes',
+    'r4-m06': 'Constant hold-on bias',
+    'r4-m07': 'Shared wrong attractors',
+    'r4-m08': 'Recall from pretraining',
+    'r4-m09': 'Code-RL as ending policy',
+    'r4-m10': 'Early RL lowers entropy',
+    'r4-m11': 'Writing past the answer',
+    'r4-m12': 'Grader false negatives',
+    'r5-m02': 'Wrong samples run short',
+    'r5-m03': 'Top-8 edit acts as cue',
+    'r5-m04': 'Think-SFT cap hits',
+    'r5-m05': 'Restate, not re-derive',
+    'r5-m06': 'Gain on rarely solved',
+    'r5-m07': 'Step 100 is the opening',
+    'r5-m08': 'Code 3.0 runaway length',
+    'r5-m09': 'Boxing a given number',
+    'r5-m10': 'Two modes from the start',
+    'r5-m11': 'Code habit, discrete math',
+    'r5-m03-rival': 'Top-8: incomplete switch',
+    'r5-m10-rival': 'Robust to sampling noise',
+    'r6-account': 'Six rules split the gap',
+    'r6-m01': 'Cue register fades',
+    'r6-m04': 'Length policy comes early',
+    'r6-m05': 'Hold-on words on a timer',
+    'r6-m06': 'Wrong steps, head tokens',
+    'r6-m10': 'Step 100 sets opening',
+    'r6-m11': 'Commit early, justify',
+    'r6-account-rival': 'One difficulty axis',
+    'r7-m03': 'Wrong number-token draws',
+    'r7-m05': 'Slips from generic prior',
+    'r7-m07': '3.0 stops before 12k',
+    'r7-m08': 'Code-RL cuts slips',
+    'r7-m09': 'Formats grader rejects',
+    'r7-m11': 'Opening sets wrong value',
+    'r7-m12': 'Examples help own subject',
+}
+_norm = lambda t: ("r1-" + t[2]) if t[1] == 1 else t[2]
+_NAME = {t[0]: NAMES.get(_norm(t)) or " ".join(t[3].split()[:4]) for t in THEORIES}
 
 DATA.update(COUNTS)
 N, RD, G, T, A = DATA["nearer"]["all"], DATA["readers"]["all"], DATA["gain"]["all"], DATA["theories"], DATA["account"]
+ROUNDS = [int(r) for r in T["per_round"]]
+R = ROUNDS[-1]  # the last round
+_word = lambda n: ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven",
+                   "twelve"][n] if n <= 12 else str(n)
 _m = lambda x: f"{x}".replace("-", "−")
 LINE = f"Our theories were nearer the measured number than readers with no theory in {N[0]} of {N[1]} predictions: no better."
 
@@ -739,11 +877,14 @@ CASES = {
 EXAMPLES = [["4.r4-m10", "Example: cut-offs rise early in RL"], ["5.r5-m10", "Example: the first GPU test"]]
 
 _filed, _done = DATA["computed"]["all"][1], DATA["computed"]["all"][0]
+_new = [t for t in THEORIES if t[1] == R and t[2].startswith(f"r{R}-")]  # the last round's new theories
+_newfate = lambda f: sum(t[5] == f for t in _new)
+_carried = {r: sum(p[8] == "c" for p in PREDS if p[0].startswith(f"{r}.")) for r in ROUNDS}
 PANELS = [
     ["new", "What is new",
-     "Six rounds of the theory engine scored every theory on numbers it had not seen, against two readers of the same "
-     "board items who had no theory.",
-     ["Rounds 1 to 3 predicted numbers that other agents posted to the board after a cutoff. Rounds 4 to 6 predicted "
+     f"{_word(R).capitalize()} rounds of the theory engine scored every theory on numbers it had not seen, against two "
+     "readers with no theory: two model runs given the same board items and the same question.",
+     [f"Rounds 1 to 3 predicted numbers that other agents posted to the board after a cutoff. Rounds 4 to {R} predicted "
       "numbers that scripts, written before any row was read, then computed from stored per-problem rows.",
       f"{T['proposed']} theories filed {_filed} predictions, each a number with an interval; {_done} were computed and {N[1]} were "
       "also predicted by the readers.",
@@ -752,22 +893,35 @@ PANELS = [
     ["why", "Why it matters",
      f"A theory that is no nearer than a reader with no theory adds nothing a careful reader of the board does not "
      f"already know. So far the theories were nearer in {N[0]} of {N[1]} predictions, about half.",
-     [f"Where the readers also gave intervals ({RD[3]} predictions, rounds 3 to 6), the theories' 90 % intervals held "
+     [f"Where the readers also gave intervals ({RD[3]} predictions, rounds 3 to {R}), the theories' 90 % intervals held "
       f"the measured number {RD[0]} times, the two readers' {RD[1]} and {RD[2]} times.",
       f"The engine's own score, which also rewards narrow intervals, gave the measured numbers less probability under "
       f"the theories than under the readers: {_m(G)} nats in total over those {RD[3]}.",
       f"Of {T['proposed']} theories, {T['refuted']} were refuted by a measured number or a review and {T['lost']} lost to "
-      f"a rival theory. {len(T['standing'])} still stand after round 6; the review calls one weak, and a comment on board "
-      "item result-8b0706 reads the other as weak too (1 of 6 duel tests separates it)."]],
+      f"a rival theory; {T['nogain']} gained nothing over the readers. After round {R} "
+      + (f"{len(T['standing'])} stand" if T["standing"] else "no theory stands")
+      + ": a theory stands when it survives its tests and beats a fresh rival on at least 2 tests that separate the two "
+      "(engine 7.1)."
+      + (f" Survives its tests but does not beat its rival: {', '.join(sorted(set(T['survive']) - set(T['standing'])))}."
+         if set(T["survive"]) - set(T["standing"]) else ""),
+      f"Round {R}: of {len(_new)} new theories, {_newfate('r')} were refuted by their own predictions and "
+      f"{_newfate('n')} gained nothing over the readers: none of their predictions landed inside its interval where "
+      "both readers' forecasts were outside it, or their total score against the readers was not above 0.",
+      "Engine 6.3 said two theories stood after round 6. Re-scored under the 7.1 rule, neither does: each beat its "
+      "rival on 1 separating test of 6 (studies/theory/README.md, Round 06, correction)."]],
     ["how", "How we know",
-     "Every mark is read from the committed metrics files of the six rounds; no number on the page is typed by hand.",
+     f"Every mark is read from the committed metrics files of the {_word(R)} rounds; no number on the page is typed by "
+     "hand.",
      ["A mark is one prediction. Its interval is drawn at one fixed height, so a dot inside the band means the "
       "measured number fell inside the interval; above the band, it was higher than predicted.",
       f"Blue: the theory's forecast was nearer the measured number than the average of the two readers' forecasts. "
       f"Ring: the readers' average was nearer, or equally near ({N[2]} ties).",
       f"{_filed - _done} predictions were never computed (a missing package, an unreadable file, a group too small) and "
       "are drawn as faint lines without a dot. Rows the engine does not score (shares that are 0 by construction, fits "
-      "to claimed cells, one number that differs from its replication) are left out."]],
+      "to claimed cells, one number that differs from its replication) are left out.",
+      "Fates: refuted (a measured number met its refuting condition, or a review), lost to its rival, no gain (no "
+      "better than the readers by the engine's score), untested (no prediction computed), survives. Refuted and lost "
+      "rows are struck."]],
     ["limits", "What it does not show",
      "It does not show that the theories are wrong. A theory can lose on its numbers and still name a true mechanism, "
      "and a win on one number does not prove a mechanism.",
@@ -775,16 +929,17 @@ PANELS = [
       f"round 6's theories were nearer in {A[3]} of {A[2]}.",
       "Rounds 1 and 2 used the same held-out board numbers, so the six round-1 theories predicted some of them twice. "
       "Their readers gave single numbers, so those rounds have no interval comparison.",
-      "Round 6 holds 9 predictions carried from round 5: duel tests compared with the theory they replaced, not with "
-      "readers. They are grey and not counted. GPU predictions are left out, except the one that was run, shown under "
-      "its theory."]],
+      f"Round 6 holds {_carried[6]} predictions carried from round 5: duel tests compared with the theory they replaced, "
+      "not with readers. They are grey and not counted. From round 7 (engine 7.1) a carried theory files no prediction, "
+      "so its row has no mark. GPU predictions are left out, except the one that was run, shown under its theory."]],
     ["run", "How to reproduce it",
      "uv run tools/finding_theories_on_trial.py, from the repository root, rebuilds every mark from the round files and "
      "checks the copy on this page and every count.",
-     [f"Round files: {E}round-01 to round-06 (metrics, targets, test recipes, reviews, duels), as of commit "
+     [f"Round files: {E}round-01 to round-{R:02d} (metrics, targets, test recipes, reviews, duels), as of commit "
       f"{DATA['commit']}. Statements: the tables of studies/theory/README.md.",
       "The engine and its score: studies/theory/lib/round.py and .claude/skills/theory/SKILL.md.",
-      "Board items: result-8b0706 (round 6), result-32b7a8 (cut-offs rise early), result-3a3af3 (the first GPU test)."]],
+      "Board items: result-8b0706 (round 6), result-5115c5 (round 7), result-32b7a8 (cut-offs rise early), "
+      "result-3a3af3 (the first GPU test)."]],
 ]
 
 PAGE = r"""<!doctype html>
@@ -877,6 +1032,8 @@ svg * { pointer-events: none; }
 .set { fill: var(--ink) !important; font-weight: 640; }
 .rl { fill: var(--mute) !important; font-weight: 600; transition: opacity .35s ease; }
 .fl { fill: var(--mute) !important; font-weight: 520; transition: opacity .3s ease; }
+.nm { fill: var(--ink) !important; font-weight: 560; transition: opacity .3s ease; }
+.nm.off { fill: var(--mute) !important; }
 .blab { fill: var(--mute) !important; font-weight: 520; transition: fill .3s ease; }
 .blab.on { fill: var(--ink) !important; font-weight: 660; }
 .btrack { stroke: var(--faint); stroke-width: 1; opacity: .4; }
@@ -960,13 +1117,13 @@ h3 { margin: 22px 0 0; font-size: 14px; font-weight: 660; font-stretch: 110%; pa
   .pane { order: 4; margin-top: 22px; }
   svg { max-height: none; }
   .ctl { flex-direction: column; gap: 8px; margin-top: 14px; }
-  .switch { display: grid; grid-template-columns: repeat(7, 1fr); width: 100%; border-radius: 18px; }
+  .switch { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); width: 100%; border-radius: 18px; }
   .switch button { min-width: 0; padding: 10px 0; font-size: 14px; border-radius: 14px; }
   .hint { text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }
-  .switch button, .more button, .top a, .base, .blab, .bfill, .rl, .fl { transition: none; }
+  .switch button, .more button, .top a, .base, .blab, .bfill, .rl, .fl, .nm { transition: none; }
 }
 </style>
 </head>
@@ -984,7 +1141,6 @@ h3 { margin: 22px 0 0; font-size: 14px; font-weight: 660; font-stretch: 110%; pa
     <div class="ctl">
       <span class="lbl" id="ctllbl">Round</span>
       <div class="switch" id="switch" role="group" aria-labelledby="ctllbl">
-        <button data-state="0" aria-label="Round 1">1</button><button data-state="1" aria-label="Round 2">2</button><button data-state="2" aria-label="Round 3">3</button><button data-state="3" aria-label="Round 4">4</button><button data-state="4" aria-label="Round 5">5</button><button data-state="5" aria-label="Round 6">6</button><button data-state="6" aria-label="All rounds">All</button>
       </div>
     </div>
     <p class="hint">Click a theory's marks, or press Enter on the picture, to see its predictions.</p>
@@ -1012,18 +1168,21 @@ function fv(x) {
 }
 const pct = (a, b) => (100 * a / b).toFixed(1) + " %";
 
-/* The seven states of the control: the six rounds, then all of them. */
-const STATES = ["1", "2", "3", "4", "5", "6", "all"];
-const SNAME = s => s === 6 ? "All rounds" : "Round " + STATES[s];
-const KIND = { 1: "posted to the board later", 2: "posted to the board later", 3: "posted to the board later",
-  4: "computed from stored rows", 5: "computed from stored rows", 6: "computed from stored rows" };
-const FATE_ORDER = { s: 0, o: 1, l: 2, r: 3 };
+/* The states of the control: one per round, then all of them. */
+const STATES = [...C.rounds.map(String), "all"], ALL = C.rounds.length;
+const SNAME = s => s === ALL ? "All rounds" : "Round " + STATES[s];
+const KIND = r => r <= 3 ? "posted to the board later" : "computed from stored rows";
+const FATE_ORDER = { s: 0, n: 1, o: 2, l: 3, r: 4 };
 const SHORT = { "did not beat the readers": "beat no reader", "passed the score": "passed", "failed the score": "failed the score",
   "refuted by its review": "refuted", "lost to its rival": "lost to its rival" };
+/* A survivor stands only when it beat its rival on at least 2 separating tests (the duel rule of engine 7.1). */
+const noWin = t => t.fate === "s" && t.duel && !(t.duel[2] === "beats rival" && t.duel[3] >= 2);
+const fateLabel = t => noWin(t) ? "survives, no duel win" : (SHORT[t.state] || t.state);
+const struck = t => t.fate === "r" || t.fate === "l";
 
 /* THEORIES and PREDS of tools/finding_theories_on_trial.py; the fields are in its _build() docstring. */
 const TH = C.theories.map(([key, round, id, st, state, fate, why, review, duel, gpu], i) =>
-  ({ i, key, round, id, st, state, fate, why, review, duel, gpu, preds: [] }));
+  ({ i, key, round, id, st, state, fate, why, review, duel, gpu, name: C.names[key], preds: [] }));
 const TK = Object.fromEntries(TH.map(t => [t.key, t]));
 const PR = C.preds.map(([key, label, what, unit, v, lo, hi, m, mark, rd, gain, note], i) => {
   const t = TK[key], half = (hi - lo) / 2, mid = (lo + hi) / 2;
@@ -1034,24 +1193,25 @@ const PR = C.preds.map(([key, label, what, unit, v, lo, hi, m, mark, rd, gain, n
   return p;
 });
 const N = PR.length;
-const BYROUND = [1, 2, 3, 4, 5, 6].map(r => TH.filter(t => t.round === r)
+const BYROUND = C.rounds.map(r => TH.filter(t => t.round === r)
   .sort((a, b) => FATE_ORDER[a.fate] - FATE_ORDER[b.fate] || b.preds.length - a.preds.length || a.i - b.i));
 const ORDER = BYROUND.flat().flatMap(t => t.preds);  // the order of the stagger
 ORDER.forEach((p, k) => { p.o = k; });
-const S = { s: 6, open: null, g: null, el: {}, shown: {}, t: 0, last: 0, t0: -1e9, n0: 0, n1: 0, d0: 0, d1: 0, dirty: true, from: null, rp: null, rpNext: 0, rpAt: 0, m: [1, 0, 0, 1, 0, 0] };
+const ROWS = Math.max(...BYROUND.map(ts => ts.length));  // the most theories in one round
+const S = { s: ALL, open: null, g: null, el: {}, shown: {}, t: 0, last: 0, t0: -1e9, n0: 0, n1: 0, d0: 0, d1: 0, dirty: true, from: null, rp: null, rpNext: 0, rpAt: 0, m: [1, 0, 0, 1, 0, 0] };
 
 /* Geometry, in a small 3D space around the plate's centre (x right, y down, z toward the viewer). The field of marks is
    laid out flat, in its own units, and drawn through one affine map of the projection. */
 function geo() {
   return narrow.matches
     ? { w: 480, cx: 240, D: 2000, r: 22, deep: 30, blur: 12, fs: 17.5, fc: 17, phone: true,
-        fx: 26, fy: 104, W: 428, H: 420, capX: 26, capY: [48, 72], cap: ["Each mark is one prediction: its interval", "(line) and the measured number (dot)"],
-        keyY: [566, 596], setY: 680, bigX: 26, bigY: 768, fb: 100, labX: 28, labY: [808, 832, 856], barX: [28, 452], barY: 900, barH: 36,
-        noteY: [1166, 1192], fl: 17, fn: 17, h: 1222, a: [6, 8, 474, 1214] }
+        fx: 26, fy: 104, W: 428, H: 640, nameW: 0, fateW: 0, top: 22, capX: 26, capY: [48, 72], cap: ["Each mark is one prediction: its interval", "(line) and the measured number (dot)"],
+        keyY: [786, 816], setY: 900, bigX: 26, bigY: 988, fb: 100, labX: 28, labY: [1028, 1052, 1076, 1108], barX: [28, 452], barY: 1156, barH: 36,
+        noteY: [1454, 1480], fl: 17, fn: 17, fr: 17, h: 1512, a: [6, 8, 474, 1504] }
     : { w: 1000, cx: 500, D: 2200, r: 30, deep: 40, blur: 16, fs: 15, fc: 13.5,
-        fx: 66, fy: 96, W: 556, H: 424, capX: 66, capY: [64], cap: ["Each mark is one prediction: its interval (line) and the measured number (dot)"],
-        keyY: [556], setY: 104, bigX: 652, bigY: 204, fb: 112, labX: 655, labY: [238, 257, 276], barX: [655, 932], barY: 322, barH: 25,
-        noteY: [520, 538], fl: 14, fn: 12.5, h: 600, a: [24, 18, 976, 582] };
+        fx: 50, fy: 96, W: 572, H: 424, nameW: 184, fateW: 146, top: 0, capX: 50, capY: [64], cap: ["Each mark is one prediction: its interval (line) and the measured number (dot)"],
+        keyY: [556], setY: 104, bigX: 652, bigY: 196, fb: 104, labX: 655, labY: [228, 247, 266, 290], barX: [655, 940], barY: 318, barH: 23,
+        noteY: [514, 532], fl: 14, fn: 13, fr: 13, h: 600, a: [24, 18, 976, 582] };
 }
 const V = { c1: 1, s1: 0, c2: 1, s2: 0, px: 0, py: 0, tx: 0, ty: 0 };
 function aim(yaw, pitch) { V.c1 = Math.cos(yaw * RAD); V.s1 = Math.sin(yaw * RAD); V.c2 = Math.cos(pitch * RAD); V.s2 = Math.sin(pitch * RAD); }
@@ -1070,7 +1230,7 @@ function rounded(g, [x0, y0, x1, y1], r, z) {  // a rounded rectangle at depth z
    by side. A round: one row per theory, the marks of the other rounds fading back to their strips. */
 function layouts(g) {
   const W = g.W, H = g.H, L = [];
-  const all = { P: [], G: [], lab: [] }, sh = H / 6, lab = g.phone ? 22 : 16;
+  const all = { P: [], G: [], lab: [] }, sh = H / ALL, lab = g.phone ? 22 : 16;
   BYROUND.forEach((ts, k) => {
     const marks = ts.reduce((a, t) => a + t.preds.length, 0), withM = ts.filter(t => t.preds.length).length;
     const pitch = Math.min(9, W / (marks + 2.4 * (withM - 1))), y = k * sh + lab + (sh - lab) / 2, b = Math.min(6, (sh - lab) * .13);
@@ -1079,18 +1239,19 @@ function layouts(g) {
     ts.forEach(t => {
       const x0 = x;
       t.preds.forEach(p => { all.P[p.i] = { x, y, b, Z: 2.6, r: Math.min(2.4, pitch * .5), a: 1, rd: 0 }; x += pitch; });
-      all.G[t.i] = { x0, x1: Math.max(x0, x - pitch), y, b, h: sh - lab, pitch, a: t.preds.length ? 1 : 0 };
+      all.G[t.i] = { x0, x1: Math.max(x0, x - pitch), y, yc: y, n0: x0, b, h: sh - lab, pitch, a: t.preds.length ? 1 : 0 };
       if (t.preds.length) x += 1.4 * pitch;
     });
   });
-  for (let s = 0; s < 6; s++) {
-    const ts = BYROUND[s], n = ts.length, rh = Math.min(50, H / n), most = Math.max(...ts.map(t => t.preds.length));
-    const room = g.phone ? W : W - 116, pitch = Math.min(64, room / Math.max(most, 1)), b = Math.min(9, rh * .2), Z = Math.min(3, rh * .47 / b);
+  for (let s = 0; s < ALL; s++) {  // a round: one row per theory; its name at the left (on a phone above the row)
+    const ts = BYROUND[s], n = ts.length, rh = Math.min(g.phone ? 64 : 50, H / n), most = Math.max(...ts.map(t => t.preds.length));
+    const room = W - g.nameW - g.fateW, pitch = Math.min(64, room / Math.max(most, 1)), mh = rh - g.top;
+    const b = Math.min(9, mh * .2), Z = Math.min(3, mh * .47 / b), x0 = g.nameW + pitch / 2;
     const st = { P: all.P.map(q => ({ ...q, a: 0 })), G: all.G.map(q => ({ ...q, a: 0 })), lab: all.lab };
     ts.forEach((t, i) => {
-      const y = (i + .5) * rh + (H - n * rh) / 2;
-      t.preds.forEach((p, j) => { st.P[p.i] = { x: pitch / 2 + j * pitch, y, b, Z, r: Math.min(3.8, pitch * .3), a: 1, rd: 1 }; });
-      st.G[t.i] = { x0: pitch / 2, x1: pitch / 2 + Math.max(0, t.preds.length - 1) * pitch, y, b, h: rh, pitch, a: 1 };
+      const yc = (i + .5) * rh + (H - n * rh) / 2, y = yc + g.top / 2;
+      t.preds.forEach((p, j) => { st.P[p.i] = { x: x0 + j * pitch, y, b, Z, r: Math.min(3.8, pitch * .3), a: 1, rd: 1 }; });
+      st.G[t.i] = { x0, x1: x0 + Math.max(0, t.preds.length - 1) * pitch, y, yc, n0: 0, b, h: rh, pitch, a: 1 };
     });
     L.push(st);
   }
@@ -1121,10 +1282,11 @@ function build() {
     g.cap.map((t, k) => `<text class="cap" id="cap${k}" font-size="${g.fs}">${t}</text>`).join("") +
     `<g class="field" id="fg"><g class="base" id="base">${paths("b", [1, 2, 3, 4, 5, 6])}</g>` +
     `<g id="topg">${paths("t", [6])}<path class="selbox" id="sbox"/></g><circle class="burst" id="bu" r="0"/></g>` +
-    `<g class="field">` + [0, 1, 2, 3, 4, 5].map(k => `<text class="rl" id="rl${k}" font-size="${g.fc}">Round ${k + 1}</text>`).join("") +
-    [...Array(16)].map((_, k) => `<text class="fl" id="fl${k}" font-size="${g.phone ? 15 : 12.5}" text-anchor="end"></text>`).join("") + `</g>` +
+    `<g class="field">` + C.rounds.map((r, k) => `<text class="rl" id="rl${k}" font-size="${g.fc}">Round ${r}</text>`).join("") +
+    [...Array(ROWS)].map((_, k) => `<text class="fl" id="fl${k}" font-size="${g.fr}" text-anchor="end"></text>` +
+      `<text class="nm" id="nm${k}" font-size="${g.fr}"></text>`).join("") + `</g>` +
     `<g class="read"><text class="set" id="set" font-size="${g.fs}"></text><text class="big" id="big" font-size="${g.fb}"></text>` +
-    [0, 1, 2].map(k => `<text class="${k === 2 ? "set" : "lab"}" id="bl${k}" font-size="${g.fl}"></text>`).join("") +
+    [0, 1, 2, 3].map(k => `<text class="${k === 2 ? "set" : "lab"}" id="bl${k}" font-size="${k === 3 ? g.fn : g.fl}"></text>`).join("") +
     STATES.map((_, s) => `<text class="blab" id="bn${s}" font-size="${g.fc}">${SNAME(s)}</text><text class="blab" id="bv${s}" font-size="${g.fc}" text-anchor="end"></text>` +
       `<path class="btrack" id="bt${s}"/><path class="bfill" id="bf${s}"/><path class="bhalf" id="bh${s}"/>`).join("") +
     [0, 1].map(k => `<text class="lab" id="nt${k}" font-size="${g.fn}"></text>`).join("") + `</g>` +
@@ -1159,14 +1321,14 @@ function marks(now) {
   let moving = S.from && now - S.t0 < 600 + .7 * N;
   const G = TH.map(t => at(t.i, "G", now));
   TH.forEach((t, i) => {
-    const q = G[i], top = sel === t, dim = t.fate === "r" || t.fate === "l" ? .38 : 1, l = top ? 6 : lev(q.a * dim);
+    const q = G[i], top = sel === t, dim = struck(t) ? .38 : 1, l = top ? 6 : lev(q.a * dim);
     if (!l || !t.preds.length) return;
     const pad = q.pitch * .55;
     put(top, "band", l, `M${f(q.x0 - pad)} ${f(q.y - q.b)}H${f(q.x1 + pad)}V${f(q.y + q.b)}H${f(q.x0 - pad)}Z`);
     if (dim < 1) put(top, "strike", l, `M${f(q.x0 - pad - 2)} ${f(q.y)}H${f(q.x1 + pad + 2)}`);
   });
   PR.forEach(p => {
-    const q = at(p.i, "P", now), t = p.t, top = sel === t, dim = t.fate === "r" || t.fate === "l" ? .38 : 1, l = top ? 6 : lev(q.a * dim);
+    const q = at(p.i, "P", now), t = p.t, top = sel === t, dim = struck(t) ? .38 : 1, l = top ? 6 : lev(q.a * dim);
     p.q = q;
     if (!l) return;
     if (p.mark === "x") { put(top, "ghost", l, `M${f(q.x)} ${f(q.y - q.b)}V${f(q.y + q.b)}`); return; }
@@ -1183,11 +1345,11 @@ function marks(now) {
     const d = out[id] || "";
     if (S.shown[id] !== d) { E[id].setAttribute("d", d); S.shown[id] = d; }
   }
-  const tw = S.s === 6 ? (S.g.phone ? .7 : .9) : 1.8;
+  const tw = S.s === ALL ? (S.g.phone ? .7 : .9) : 1.8;
   for (const id in E) if (/tick\d$/.test(id)) E[id].setAttribute("stroke-width", tw);
   E.base.classList.toggle("dim", !!sel);
   if (sel) {
-    const q = G[sel.i], pad = q.pitch * .55 + 5, x0 = q.x0 - pad, x1 = q.x1 + pad + (sel.preds.length ? 0 : 40), y0 = q.y - q.h * .46, y1 = q.y + q.h * .46;
+    const q = G[sel.i], pad = q.pitch * .55 + 5, x0 = Math.min(q.x0 - pad, q.n0 - 6), x1 = q.x1 + pad + (sel.preds.length ? 0 : 40), y0 = q.yc - q.h * .46, y1 = q.yc + q.h * .46;
     E.sbox.setAttribute("d", `M${f(x0 + 4)} ${f(y0)}H${f(x1 - 4)}Q${f(x1)} ${f(y0)} ${f(x1)} ${f(y0 + 4)}V${f(y1 - 4)}Q${f(x1)} ${f(y1)} ${f(x1 - 4)} ${f(y1)}H${f(x0 + 4)}Q${f(x0)} ${f(y1)} ${f(x0)} ${f(y1 - 4)}V${f(y0 + 4)}Q${f(x0)} ${f(y0)} ${f(x0 + 4)} ${f(y0)}Z`);
   } else E.sbox.setAttribute("d", "");
   S.G = G;
@@ -1199,7 +1361,7 @@ function marks(now) {
 function replay(now) {
   const E = S.el;
   if (!S.rp && now > S.rpNext && !selected() && now - S.t0 > 1200) {
-    const pool = PR.filter(p => p.u && (S.s === 6 || p.t.round === S.s + 1));
+    const pool = PR.filter(p => p.u && (S.s === ALL || p.t.round === C.rounds[S.s]));
     if (pool.length) S.rp = { p: pool[(S.rpAt++ * 7) % pool.length], t0: now };
     else S.rpNext = now + 2600;
   }
@@ -1230,29 +1392,41 @@ function place(now) {
   if (S.dirty) S.dirty = marks(now);
   if (!still.matches) replay(now);
   // Round names over the strips of All; the fate of each theory at the end of its row in a round.
-  S.L[6].lab.forEach((q, k) => { put(E["rl" + k], fp(q[0], q[1])); E["rl" + k].style.opacity = S.s === 6 ? 1 : 0; });
-  const rows = S.s < 6 && !g.phone ? BYROUND[S.s] : [], settled = !S.dirty;
-  for (let k = 0; k < 16; k++) {
-    const el = E["fl" + k], t = rows[k];
-    if (!t) { el.style.opacity = 0; continue; }
-    const q = S.L[S.s].G[t.i];
-    text("fl" + k, (SHORT[t.state] || t.state) + (t.preds.length ? "" : " · no number"));
-    put(el, fp(g.W, q.y), 4.4);
-    el.style.opacity = settled ? (t.fate === "r" || t.fate === "l" ? .6 : 1) : 0;
+  S.L[ALL].lab.forEach((q, k) => { put(E["rl" + k], fp(q[0], q[1])); E["rl" + k].style.opacity = S.s === ALL ? 1 : 0; });
+  // In a round: each theory's name at the left of its row and its fate at the end; on a phone both above the row.
+  const rows = S.s < ALL ? BYROUND[S.s] : [], settled = !S.dirty;
+  for (let k = 0; k < ROWS; k++) {
+    const el = E["fl" + k], nm = E["nm" + k], t = rows[k];
+    if (!t) { el.style.opacity = nm.style.opacity = 0; continue; }
+    const q = S.L[S.s].G[t.i], fate = fateLabel(t) + (t.preds.length ? "" : " · no number"), a = settled ? (struck(t) ? .6 : 1) : 0;
+    if (g.phone) {  // a row without marks is plain to see here, so its fate stands alone
+      text("nm" + k, `${t.name} · ${fateLabel(t)}`);
+      put(nm, fp(0, q.yc - q.h / 2 + 16));
+      el.style.opacity = 0;
+    } else {
+      text("nm" + k, t.name);
+      text("fl" + k, fate);
+      put(nm, fp(0, q.y), 4.4);
+      put(el, fp(g.W, q.y), 4.4);
+      el.style.opacity = a;
+    }
+    nm.style.opacity = a;
+    nm.classList.toggle("off", struck(t));
   }
   // The count, with the state's setting above it.
   const e = ease(clamp((now - S.t0) / 900, 0, 1)), n = mix(S.n0, S.n1, e), dn = Math.round(mix(S.d0, S.d1, e));
-  text("set", S.s === 6 ? "All six rounds" : `${SNAME(S.s)} · ${KIND[S.s + 1]}`);
+  text("set", S.s === ALL ? C.all : `${SNAME(S.s)} · ${KIND(C.rounds[S.s])}`);
   text("big", fmt(n));
   text("bl0", `of ${dn}: the theory nearer the measured`);
   text("bl1", "number than readers with no theory.");
-  text("bl2", `${String(dn / 2)} would be a tie${S.s === 6 ? ": no better" : ""}.`);
+  text("bl2", `${String(dn / 2)} would be a tie${S.s === ALL ? ": no better" : ""}.`);
+  text("bl3", "Readers: two models, same question, no theory.");
   put(E.set, proj(g, g.bigX + 3, g.setY, 10));
   put(E.big, proj(g, g.bigX, g.bigY, 10));
-  [0, 1, 2].forEach(k => put(E["bl" + k], proj(g, g.labX, g.labY[k], 10)));
+  [0, 1, 2, 3].forEach(k => put(E["bl" + k], proj(g, g.labX, g.labY[k], 10)));
   const line = (x0, y0, x1, y1) => { const p = proj(g, x0, y0, 10), q = proj(g, x1, y1, 10); return `M${f(p[0])} ${f(p[1])}L${f(q[0])} ${f(q[1])}`; };
   STATES.forEach((_, s) => {
-    const y = g.barY + s * g.barH + (s === 6 ? 6 : 0), [x0, x1] = g.barX, c = NEAR(s);
+    const y = g.barY + s * g.barH + (s === ALL ? 6 : 0), [x0, x1] = g.barX, c = NEAR(s);
     text("bv" + s, `${c[0]} of ${c[1]}`);
     put(E["bn" + s], proj(g, x0, y, 10)); put(E["bv" + s], proj(g, x1, y, 10));
     E["bt" + s].setAttribute("d", line(x0, y + 8, x1, y + 8));
@@ -1260,12 +1434,14 @@ function place(now) {
     E["bh" + s].setAttribute("d", line(mix(x0, x1, .5), y + 4, mix(x0, x1, .5), y + 12));
   });
   const r = RDR(S.s), ins = D.inside[STATES[S.s]];
-  if (S.s === 6) { text("nt0", "Inside the 90 % interval, rounds 3 to 6:"); text("nt1", `theory ${r[0]} of ${r[3]}, readers ${r[1]} and ${r[2]}.`); }
-  else if (r[3]) { text("nt0", `Inside the interval: theory ${r[0]} of ${r[3]},`); text("nt1", `readers ${r[1]} and ${r[2]}.` + (S.s === 5 ? " Grey: 9 carried." : "")); }
+  if (r[3]) {  // where both readers gave intervals (rounds 3 on)
+    text("nt0", "Measured number inside the 90 % interval:");
+    text("nt1", `theory ${r[0]} of ${r[3]}, readers ${r[1]} and ${r[2]}.`);
+  }
   else { text("nt0", `Inside the theory's interval: ${ins[0]} of ${ins[1]}.`); text("nt1", "Readers gave single numbers here."); }
   [0, 1].forEach(k => put(E["nt" + k], proj(g, g.labX, g.noteY[k], 10)));
   // The key, under the field.
-  const ky = g.keyY, xs = g.phone ? [30, 250, 30, 250, 30, 250] : [66, 140, 250, 372, 516, 630];
+  const ky = g.keyY, xs = g.phone ? [30, 250, 30, 250, 30, 250] : [52, 126, 236, 358, 502, 616];
   const ys = g.phone ? [ky[0], ky[0], ky[1], ky[1], ky[1] + 30, ky[1] + 30] : xs.map(() => ky[0]);
   const kq = (x, y) => proj(g, x, y, 6), P = (x, y) => { const q = kq(x, y); return `${f(q[0])} ${f(q[1])}`; };
   E.kband.setAttribute("d", `M${P(xs[0] - 4, ys[0] - 6)}L${P(xs[0] + 8, ys[0] - 6)}L${P(xs[0] + 8, ys[0] + 6)}L${P(xs[0] - 4, ys[0] + 6)}Z`);
@@ -1347,11 +1523,11 @@ function predItem(p) {
 function theoryPane(t) {
   const done = t.preds.filter(p => p.m != null), ins = done.filter(p => p.inside).length, cmp = done.filter(p => "wtl".includes(p.mark));
   const wins = cmp.filter(p => p.mark === "w").length;
-  const fateTxt = t.fate === "r" || t.fate === "l" ? `<s>${esc(t.state)}</s>` : esc(t.state);
-  let h = `<div class="dhead"><h2>A theory of round ${t.round}</h2><button class="close" data-open="">Close</button></div>`;
+  const fateTxt = struck(t) ? `<s>${esc(t.state)}</s>` : esc(noWin(t) ? "survives, no duel win" : t.state);
+  let h = `<div class="dhead"><h2>${esc(t.name)}</h2><button class="close" data-open="">Close</button></div>`;
   if (C.cases[t.key]) h += `<p class="case">${esc(C.cases[t.key])}</p>`;
   h += `<p class="lead st">${esc(t.st)}</p>`;
-  h += `<p class="tag">${esc(t.id)} · <b>${fateTxt}</b> · ${done.length ? `${ins} of ${done.length} inside` : "no prediction measured"}` +
+  h += `<p class="tag">Round ${t.round} · ${esc(t.id)} · <b>${fateTxt}</b> · ${done.length ? `${ins} of ${done.length} inside` : "no prediction measured"}` +
     (cmp.length ? `, nearer than the readers in ${wins} of ${cmp.length}` : "") + `</p>`;
   if (t.why) h += `<p class="why">${esc(minus(t.why))}</p>`;
   if (t.review && t.review !== t.why) h += `<p class="why">Review: ${esc(t.review)}</p>`;
@@ -1385,16 +1561,16 @@ function pane() {
 }
 /* The round and what is open are one value in the address: #<round>, then /<panel> or /<round>.<theory>. */
 function address(push) {
-  const parts = [S.s < 6 ? STATES[S.s] : "", S.open || ""].filter(Boolean);
+  const parts = [S.s < ALL ? STATES[S.s] : "", S.open || ""].filter(Boolean);
   const url = parts.length ? "#" + parts.join("/") : location.pathname;
   push ? history.pushState(null, "", url) : history.replaceState(null, "", url);
 }
-const visible = (t, s) => s === 6 ? t.preds.length > 0 : t.round === s + 1;
+const visible = (t, s) => s === ALL ? t.preds.length > 0 : t.round === C.rounds[s];
 function fromHash(first) {
   const parts = decodeURIComponent(location.hash.slice(1)).split("/");
-  const s = STATES.indexOf(parts[0]) >= 0 && parts[0] !== "all" ? STATES.indexOf(parts[0]) : 6;
+  const s = STATES.indexOf(parts[0]) >= 0 && parts[0] !== "all" ? STATES.indexOf(parts[0]) : ALL;
   const rest = parts.find(x => C.panels.some(p => p[0] === x) || TK[x]);
-  S.open = rest && (!TK[rest] || visible(TK[rest], s) || s === 6) ? rest : null;
+  S.open = rest && (!TK[rest] || visible(TK[rest], s) || s === ALL) ? rest : null;
   if (first === true || s !== S.s) setState(s, { instant: first === true });
   pane();
   if (still.matches) place(performance.now());
@@ -1402,7 +1578,7 @@ function fromHash(first) {
 const show = () => { if (narrow.matches) $("pane").scrollIntoView({ behavior: still.matches ? "auto" : "smooth", block: "start" }); };
 function open(key, toRound) {
   const was = S.open;
-  if (key && TK[key] && toRound && S.s !== TK[key].round - 1) setState(TK[key].round - 1);
+  if (key && TK[key] && toRound && C.rounds[S.s] !== TK[key].round) setState(C.rounds.indexOf(TK[key].round));
   S.open = key || null;
   if (key && TK[key]) stopReplay();
   address(true);
@@ -1428,8 +1604,8 @@ function nearest(e) {
   TH.forEach(t => {
     const q = S.L[S.s].G[t.i];
     if (!q.a) return;
-    const x1 = q.x1 + (S.s < 6 && !t.preds.length ? 60 : 0), pad = q.pitch * .6 + 3;
-    const du = u < q.x0 - pad ? q.x0 - pad - u : u > x1 + pad ? u - x1 - pad : 0, dv = Math.max(0, Math.abs(v - q.y) - q.h * .46);
+    const x1 = q.x1 + (S.s < ALL && !t.preds.length ? 60 : 0), pad = q.pitch * .6 + 3, x0 = Math.min(q.x0 - pad, q.n0);
+    const du = u < x0 ? x0 - u : u > x1 + pad ? u - x1 - pad : 0, dv = Math.max(0, Math.abs(v - q.yc) - q.h * .46);
     const d = du * du + dv * dv * 4;
     if (d < bd && du < 10 && dv < 6) { bd = d; best = t; }
   });
@@ -1437,7 +1613,7 @@ function nearest(e) {
 }
 svg.addEventListener("pointermove", e => { if (e.pointerType === "mouse") svg.style.cursor = nearest(e) ? "pointer" : "default"; });
 svg.addEventListener("click", e => { const t = nearest(e); if (t) { open(t.key); show(); } });
-const LIST = () => (S.s === 6 ? BYROUND.flat().filter(t => t.preds.length) : BYROUND[S.s]);
+const LIST = () => (S.s === ALL ? BYROUND.flat().filter(t => t.preds.length) : BYROUND[S.s]);
 document.addEventListener("click", e => {
   const b = e.target.closest("[data-state]"), o = e.target.closest("[data-open]"), st = e.target.closest("[data-step]");
   if (b) choose(Number(b.dataset.state));
@@ -1472,6 +1648,7 @@ stage.addEventListener("pointermove", e => {
 });
 stage.addEventListener("pointerleave", () => { V.tx = V.ty = 0; });
 
+$("switch").innerHTML = STATES.map((r, k) => `<button data-state="${k}" aria-label="${k === ALL ? "All rounds" : "Round " + r}">${k === ALL ? "All" : r}</button>`).join("");
 $("problem").textContent = C.problem;
 $("say").innerHTML = esc(C.line).replace(/(?<![\w-])(\d+(?:[.,]\d+)*(?: ?%)?)/g, "<b>$1</b>");
 build();
@@ -1508,7 +1685,7 @@ ICON = r"""(kit, t, tilt) => {
 
 PAGE = PAGE.replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({
     "problem": PROBLEM, "line": LINE, "panels": PANELS, "examples": EXAMPLES, "cases": CASES,
-    "theories": THEORIES, "preds": PREDS,
+    "theories": THEORIES, "preds": PREDS, "rounds": ROUNDS, "names": _NAME, "all": f"All {_word(R)} rounds",
     "data": {k: DATA[k] for k in ("nearer", "inside", "readers", "computed")}}, ensure_ascii=False).replace("</", "<\\/"))
 
 if __name__ == "__main__":  # run from the repository root
@@ -1524,13 +1701,16 @@ if __name__ == "__main__":  # run from the repository root
         sys.exit(f"wrote {len(theories)} theories and {len(preds)} predictions")
     assert THEORIES == theories and PREDS == preds, "THEORIES or PREDS differ from the round files: run with --write"
     assert COUNTS == counts, "COUNTS differ from the round files: run with --write"
-    # Against the engine's own tables: computed, inside and outside per round 4-6, and round 3's total gain.
-    for rd in (4, 5, 6):
-        v4 = json.load(open(f"{E}round-0{rd}/metrics_v4.json"))["theories"]
+    # Against the engine's own tables: computed, inside and filed per round from 4, and round 3's total gain.
+    for rd in [r for r in map(int, counts["theories"]["per_round"]) if r >= 4]:
+        v4 = json.load(open(f"{E}round-{rd:02d}/metrics_v4.json"))["theories"]
         comp = sum(v["computed"] for v in v4.values())
         assert counts["computed"][str(rd)][0] == comp, (rd, comp)
         assert counts["inside"][str(rd)][0] == sum(v["inside"] for v in v4.values()), rd
         assert counts["computed"][str(rd)][1] == sum(v["offline"] for v in v4.values()), rd
     v3 = json.load(open(E + "round-03/metrics_v3.json"))["theories"]
     assert abs(counts["gain"]["3"] - round(sum(v["total_gain"] for v in v3.values()), 2)) < .02
+    missing = sorted({_norm(t) for t in THEORIES} - set(NAMES))
+    if missing:
+        print("no name in NAMES (the first words of the statement are shown):", ", ".join(missing))
     print("THEORIES, PREDS and COUNTS match the round files;", f"nearer {counts['nearer']['all']}, readers {counts['readers']['all']}")
