@@ -41,7 +41,7 @@ def git(*args):
 
 
 def load():
-    """Merge the per-writer keys (job, call, start, end, cancel, died) into one record per job."""
+    """Merge the per-writer keys (job, call, start, end, cancel) into one record per job."""
     records = {}
     for key, value in jobs.items():
         kind, job_id = key.split(":", 1)
@@ -63,9 +63,6 @@ def state(r):
     except TimeoutError:
         return "running" if "start" in r else "queued"
     except Exception as e:  # the container died without writing its end record; the error says how
-        if "died" not in r:  # the first time anyone sees it dead: tools/cycle.py ends the job's run here
-            r["died"] = {"at": int(time.time())}
-            jobs[f"died:{r['id']}"] = r["died"]
         return f"died: {type(e).__name__}: {str(e)[:120]}"
     return "done"
 
