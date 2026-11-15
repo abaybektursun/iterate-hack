@@ -115,6 +115,14 @@ def h100(job_id: str):
     run(job_id)
 
 
+# A lane for short jobs (smoke runs, at most 30 min, enforced by gpu.py submit): they start at once instead of queueing
+# behind long jobs. It reserves GPUs only if ITERATE_MAX_H100 + ITERATE_MAX_SHORT is at most the workspace's GPU limit
+# (10 on abaybektursun's, so it deploys with ITERATE_MAX_H100=8).
+@app.function(gpu="H100", max_containers=int(os.environ.get("ITERATE_MAX_SHORT", 2)), **common)
+def short(job_id: str):
+    run(job_id)
+
+
 @app.function(gpu="B200", max_containers=int(os.environ.get("ITERATE_MAX_B200", 2)), **common)
 def b200(job_id: str):
     run(job_id)
