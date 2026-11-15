@@ -1,0 +1,19 @@
+{
+ "mechanism": "round-13/s5-a",
+ "verdict": "undecided",
+ "reason": "per-sample dev100 rows of the kept method are only in frustea's Modal Volume autobench-runs (karpathy/<nnn>/), not committed and not reachable from this workspace; D and G_plain not computed",
+ "D": null,
+ "n_W": null,
+ "threshold": "refuted if D < 0.15 or fewer than half of W pairs have c >= 0.25",
+ "null": "difficulty-matched vote-right pairs (r <= 0.75) of the same runs; not computed",
+ "instrument_votek_cut4096_dev100": {
+  "D": 0.7321,
+  "D_ci90": [
+   0.5,
+   0.9137
+  ],
+  "n_W": 14,
+  "W_share_c_ge_025": 1.0,
+  "vote_right": 86
+ }
+}

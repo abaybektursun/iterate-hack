@@ -1,0 +1,16 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_m21q.md",
+ "spec_commit": "403ccae899212133d8a4c57b37ce70baefc410ef",
+ "command": "python3 studies/theory/analysis/direct_m21q.py runs/abaybektursun-1115-103050-eae1/answers.jsonl",
+ "input_job_ids": [
+  "abaybektursun-1115-103050-eae1"
+ ],
+ "inputs": [
+  "runs/abaybektursun-1115-103050-eae1/answers.jsonl (m21 raw rows, not committed)",
+  "studies/theory/results/experiments/cell-r9-m21-01/per_problem.json",
+  "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json",
+  "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl"
+ ],
+ "where": "laptop, stored rows only, no model forward pass",
+ "board_work": "work-16161e"
+}

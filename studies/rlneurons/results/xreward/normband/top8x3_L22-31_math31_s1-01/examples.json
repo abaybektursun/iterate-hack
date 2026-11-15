@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 0,
+  "seed": 3010000,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 3778,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "quation:\n  \\[\n  16(-72.25) + c = -458 \\implies -1156 + c = -458 \\implies c = 698\n  \\]\n\nThus, \\( P(0) = 698 \\).\n\nFor \\( Q(x) \\):\n- The general form is \\( Q(x) = -2x^2 + ex + f \\).\n- Substituting the points \\( (16, 54) \\) and \\( (20, 53) \\) gives us two equations:\n  \\[\n  -2(16)^2 + 16e + f = 54 \\quad \\text{and} \\quad -2(20)^2 + 20e + f = 53\n  \\]\n- Simplifying these equations:\n  \\[\n  -512 + 16e + f = 54 \\quad \\text{and} \\quad -800 + 20e + f = 53\n  \\]\n- Subtracting the first equation from the second:\n  \\[\n  4e = 287 \\implies e = \\frac{287}{4} = 71.75\n  \\]\n- Substituting \\( e \\) back into the first equation:\n  \\[\n  16(71.75) + f = 566 \\implies 1148 + f = 566 \\implies f = -582\n  \\]\n\nThus, \\( Q(0) = -582 \\).\n\nFinally, we find:\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\nThe answer is \\(\\boxed{116}\\)."
+ },
+ "wrong": {
+  "problem_index": 29,
+  "seed": 3010029,
+  "gold": "244",
+  "extracted_v3": "62",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 10524,
+  "prompt_tail": "wn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "ns is \\boxed{62}.\n\n**Final Answer**\n\\boxed{62}To determine the number of bounded regions created by 7 points on one line and 5 points on another parallel line, we start by understanding the arrangement of the segments and their intersections. The key is to recognize that each set of segments forms a grid-like structure, but the formula for the number of bounded regions is derived from a known result.\n\nThe formula for the number of bounded regions formed by \\( m \\) points on one line and \\( n \\) points on another parallel line is given by:\n\n\\[\nR = m^2 - m + n^2 - n\n\\]\n\nThis formula accounts for the intersections and the regions created by the segments. For \\( m = 7 \\) and \\( n = 5 \\):\n\n\\[\nR = 7^2 - 7 + 5^2 - 5 = 49 - 7 + 25 - 5 = 62\n\\]\n\nThus, the number of bounded regions is \\(\\boxed{62}\\)."
+ }
+}

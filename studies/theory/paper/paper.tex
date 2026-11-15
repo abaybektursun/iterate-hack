@@ -37,15 +37,15 @@
 {\sffamily\bfseries Abstract.}
 Language-model agents now write explanations of experimental results as readily as they run the experiments. We
 test whether such an explanation predicts anything that a careful reading of the numbers does not. Over seven
-rounds, agents wrote 63 mechanistic theories of one research project's results and filed 426 numeric predictions
+rounds, Claude agents wrote 63 mechanistic theories of one research project's results and filed 426 numeric predictions
 with 90\,\% intervals. Each author chose the quantities, and was asked for ones where the mechanism says something
 a reader would not guess. The baseline is the same model, given the results and asked for the same numbers with
-no mechanism. The theories were nearer to the measured value in 48\,\% of 394 comparisons. Their intervals were
+no mechanism. The theories were nearer to the measured value than the baseline in 48\,\% of 394 comparisons. Their intervals were
 0.71 times as wide and held the measured value 69\,\% of the time, against 83\,\% and 86\,\% for two runs of the
-baseline. None of the 63 theories passed the baseline, a rival theory and a review. The one GPU experiment that a
+baseline. None of the 63 theories passed all three tests: the baseline, a rival theory and a review. The one GPU experiment that a
 theory led to gave a clear result, and the forecast made from the theory missed it. The two prompts differ in more
 than the mechanism, so we do not claim that writing a mechanism causes the confidence. We claim that the
-mechanisms' own chosen bets did not pay.
+mechanisms did not improve the forecasts they chose to make.
 \end{minipage}\end{center}
 \vspace{0.1em}
 
@@ -151,7 +151,7 @@ almost only in how it opens its answer, and predicted that 68\,\% \ci{40}{95} of
 certain way; 3.4\,\% did, and both readers had said 30\,\% with an interval that reached down to 2\,\%. In round 4
 the entropy theory of Section~2 predicted that answers cut off at the token limit would at first become
 \emph{more} frequent under RL: $+6$ points at step 400. The rows gave $+6.6$, and both readers had predicted a
-fall. It is one of five gains at the upper clip. Its mechanism still lost: a rival explained the rise by the new
+fall. Its log gain is one of the five at the upper clip of $+3$ nats. Its mechanism still lost: a rival explained the rise by the new
 opening and beat the theory on the tests where the two differed (Section~\ref{sec:rival}).
 
 \subsection{A theory is more sure of itself}\label{sec:conf}
@@ -186,7 +186,7 @@ and the RL model in each of several settings into named parts whose shares sum t
 $+35.4$ nats, were nearer than the readers 31 times, and held the measured value 43 times. Without it the theories
 lose 94.3 nats over 192 predictions, a mean of $-0.49$ \ci{-0.74}{-0.24}.
 
-We do not read this as a success of the form. Of the 44 predictions, 33 are shares, which are dependent because
+We do not read this as a success of the budget format. Of the 44 predictions, 33 are shares, which are dependent because
 they sum to one within a setting. Its author was shown the computed shares of three earlier budgets, which the
 readers were not. Of those three, only the first was written without such a view; the second was shown the first's
 computed shares and the third the first two's. They gained $-1.3$, $+1.6$ and $+8.2$ nats ($+8.5$ over 75
@@ -220,7 +220,7 @@ tests.}
 One contest was settled on a GPU. The engine asks, for each theory, for the one change to the untrained base that
 the theory implies; a separate job, given the theory, writes the experiment and a forecast of it, and a second job,
 given only the rival, forecasts the same experiment. One such experiment was run. The theory, from round 5, held that the plain base
-commits in its first few tokens to one of two whole ways of answering and that nothing after the opening adds. It
+commits in its first few tokens to one of two whole ways of answering and that nothing after the opening changes whether the answer is right. It
 had by then lost to its rival, and part of what it stands on is published \cite{wang2026base}. The experiment:
 sample the base's own first 24 tokens until they begin as the RL model's answers do, with nothing prefilled, then
 let it finish. The forecast from the theory was 375 right of 500 \ci{348}{400}; from the rival, 405
@@ -279,12 +279,12 @@ theories, and from round 4 were not told how intervals are scored. A matched tes
 request for a mechanism, the same fixed quantities.
 \item The baseline is not ignorant. A reader sees the results the theorist sees. The claim is not that the mechanisms are false.
 \item The accuracy result is a failure to find a difference. Its interval, 40 to 55\,\%, excludes a theory that is
-nearer two times in three, not a small edge either way.
+nearer two times in three, but not a small advantage in either direction.
 \item One model family in every role, recorded in the run files by alias, not by dated version. The two readers
 are one prompt run twice, ten reader jobs in rounds 3 to 7, and the bootstrap treats them as fixed. There is no
 human theorist and no human reader.
 \item One project, two days, one subject (a 7B model on mathematics problems). The theories explain results that
-were hours old; a few measured values were later revised, and two scored quantities of round 5 were void.
+were hours old; a few measured values were later revised, and two scored quantities of round 5 should not count.
 \item Predictions overlap: the 394 comparisons cover 228 distinct quantities. Resampling theories does not account for
 two theories that predict the same number.
 \item Only rounds 4 to 7 (156 comparisons) score quantities whose recipe was fixed before any row was read. In
@@ -303,7 +303,7 @@ mechanism a rival, and keep the part that did earn its place here, the experimen
 theory as a proposal for an experiment.
 
 {\small\sloppy
-\textbf{Reproducibility.} The round files, prompts and code of the engine are in the project repository, in the
+\textbf{Reproducibility.} The round files, prompts and code of the engine are in the team's repository, in the
 folder \texttt{studies/theory/}. In its folder \texttt{paper/}, the script \texttt{build\_facts.py} recomputes the numbers of
 this paper from those files and writes each with its source to \texttt{facts.json}, \texttt{predictions.jsonl}
 holds one row per prediction, and \texttt{figs.py} draws the figures.\par
