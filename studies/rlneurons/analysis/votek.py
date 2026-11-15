@@ -1,0 +1,80 @@
+"""Vote over k samples of one cell, k = 1 to K (specs/SPEC_votek.md).
+
+    uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.votek \
+        --runs runs/<stored 4-sample job> runs/<joined 8-sample run> --out studies/rlneurons/results/votek/math500_base_cue-01
+
+Run from the repository root. Each run is a run_cell folder (answers.jsonl, metrics.json); attempt 0 of every sample is used and
+the samples of the runs are numbered in the order given. The vote is analysis/day1_vote.vote. For each k: the mean over 200 random
+subsets of k samples (kept in sample order; all samples for k = K) of right problems, with a bootstrap over problems (2,000
+resamples) of that mean; at least one of k right; generated tokens per problem. Writes metrics.json, rows.jsonl (compact fields,
+no text), examples.json and run.json.
+"""
+import argparse
+import json
+import pathlib
+
+import numpy as np
+
+from studies.rlneurons.analysis.day1_vote import COMPACT, vote
+
+SUBSETS = 200
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--runs", nargs="+", required=True)
+    ap.add_argument("--out", required=True)
+    a = ap.parse_args()
+    out = pathlib.Path(a.out)
+    assert not out.exists(), f"{out} exists: a rerun gets the next number"
+    per, cfgs, base = {}, [], 0
+    for run in map(pathlib.Path, a.runs):
+        m = json.loads((run / "metrics.json").read_text())
+        assert m["status"] == "done", (run, m["status"])
+        cfgs.append({"run": str(run), "job_id": m.get("job_id"), "job_ids": m.get("job_ids"), **{k: m["config"][k] for k in ("model", "prompt", "set", "temperature", "top_p", "max_tokens", "seed", "samples", "commit")}})
+        for line in open(run / "answers.jsonl"):
+            r = json.loads(line)
+            if r["attempt"] == 0:
+                per.setdefault(r["problem_index"], {})[base + r["sample"]] = r
+        base += m["config"]["samples"]
+    K = base
+    probs = sorted(per)
+    assert all(sorted(per[p]) == list(range(K)) for p in probs), "a problem lacks a sample"
+    seeds = [per[p][s]["seed"] for p in probs for s in range(K)]
+    assert len(set(seeds)) == len(seeds), "two samples share a seed"
+    rng = np.random.default_rng(0)
+    bs = rng.integers(0, len(probs), (2000, len(probs)))
+    res = {"problems": len(probs), "samples": K, "runs": cfgs, "k": {}}
+    stored4 = sum(vote([per[p][s] for s in range(4)])["score"] for p in probs)
+    res["vote_over_first_4_in_order"] = stored4
+    for k in range(1, K + 1):
+        subsets = [sorted(rng.choice(K, k, replace=False).tolist()) for _ in range(SUBSETS)] if k < K else [list(range(K))]
+        v = np.array([[vote([per[p][s] for s in sub])["score"] for p in probs] for sub in subsets], dtype=float)      # subsets x problems
+        anyr = np.array([[max(per[p][s]["score_v3"] for s in sub) for p in probs] for sub in subsets], dtype=float)
+        tok = np.mean([[sum(per[p][s]["n_new"] for s in sub) for p in probs] for sub in subsets])
+        pm = v.mean(0)
+        b = pm[bs].sum(1)
+        res["k"][str(k)] = {"vote_right": round(float(pm.sum()), 1), "ci95": [round(float(np.percentile(b, 2.5)), 1), round(float(np.percentile(b, 97.5)), 1)],
+                            "subset_min_max": [int(v.sum(1).min()), int(v.sum(1).max())], "any_right": round(float(anyr.mean(0).sum()), 1), "tokens_per_problem": round(float(tok))}
+    full = {p: vote([per[p][s] for s in range(K)]) for p in probs}
+    right_count = {p: sum(per[p][s]["score_v3"] for s in range(K)) for p in probs}
+    res["vote_all_wrong_by_right_samples"] = {str(c): sum(1 for p in probs if not full[p]["score"] and right_count[p] == c) for c in range(K + 1)}
+    res["vote_all_wrong_with_majority_group"] = sum(1 for p in probs if not full[p]["score"] and full[p]["votes"] > K / 2)
+    ex = []
+    for want in (1, 0):
+        p = next(p for p in probs if full[p]["score"] == want and full[p]["winner"] is not None)
+        ex.append({"problem_index": p, "vote_score": want, "votes": full[p]["votes"], "gold": per[p][0]["gold"], "answers": [per[p][s]["extracted_v3"] for s in range(K)],
+                   "scores": [per[p][s]["score_v3"] for s in range(K)], "winner_text_tail": per[p][full[p]["winner"]]["text"][-400:]})
+    out.mkdir(parents=True)
+    (out / "metrics.json").write_text(json.dumps(res, indent=1) + "\n")
+    (out / "examples.json").write_text(json.dumps(ex, indent=1) + "\n")
+    with open(out / "rows.jsonl", "w") as f:
+        for p in probs:
+            for s in range(K):
+                f.write(json.dumps({k: (s if k == "sample" else per[p][s][k]) for k in COMPACT}) + "\n")
+    (out / "run.json").write_text(json.dumps({"command": "python -m studies.rlneurons.analysis.votek --runs " + " ".join(a.runs) + " --out " + a.out, "runs": cfgs}, indent=1) + "\n")
+    print(json.dumps({k: res[k] for k in res if k != "runs"}, indent=1))
+
+
+if __name__ == "__main__":
+    main()
