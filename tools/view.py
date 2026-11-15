@@ -75,6 +75,7 @@ import demo
 import exa_page
 import findings
 import glossary
+import home
 import pastdev
 import psychosis
 import sitekit
@@ -225,12 +226,22 @@ PAPER = (Path(__file__).with_name("the-finish-dial.pdf"),
          Path(__file__).parent.parent / "studies/rlneurons/paper/the-finish-dial.pdf")
 
 
+# The home page (home.py) is at / and the board at /board. The page modules were written when the board was at /, so
+# their links to it are rewritten as a page is sent: a link to / goes to /board, unless it is the name "Invariant",
+# and the address of a board item (/#result-8b1c48) goes to /board#result-8b1c48. The name in each header leads home.
+HOME_LINK = re.compile(r'href="/"(?=[^>]*>(?!Invariant))')
+NAME_LINK = ('<h1 class="name">Invariant</h1>', '<h1 class="name"><a href="/" style="color:inherit;font-weight:inherit">Invariant</a></h1>')
+HOME_PAGE = home.PAGE.replace("__COUNTS__", json.dumps({
+    "findings": len(FINDINGS), "proof": len(PROOFS),
+    "lab": max(len(list((d / "prototypes").glob("*/index.html"))) for d in LAB)}))
+
+
 class Handler(BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"  # Chrome revalidates with If-None-Match only for HTTP/1.1 responses
 
     def send(self, status, kind, body, headers=()):
         if kind == "text/html":  # every page gets the tab icon here, so no page module holds it
-            body = body.replace("<title>", ICON_LINK + "<title>", 1)
+            body = HOME_LINK.sub('href="/board"', body.replace("<title>", ICON_LINK + "<title>", 1)).replace('"/#', '"/board#').replace(*NAME_LINK)
         data = body if isinstance(body, bytes) else body.encode()
         tag = f'"{hashlib.blake2b(data, digest_size=16).hexdigest()}"'  # from the content, so an unchanged board answers 304
         if status == 200 and self.headers.get("If-None-Match") == tag:
@@ -253,6 +264,8 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path.split("?")[0]
         if path == "/":
+            return self.send(200, "text/html", HOME_PAGE)
+        if path == "/board":
             return self.send(200, "text/html", PAGE)
         if path == "/demo":
             return self.send(200, "text/html", demo.PAGE)
