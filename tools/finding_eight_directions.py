@@ -1,49 +1,68 @@
-"""Eight directions per weight matrix of the RL weight change lift the untrained model from 44.8 % to 85.4 % on MATH-500 (224 to 427 of 500).
+"""Eight directions per matrix of the RL weight change make the plain-prompt base score like the base with the opening cue
+on MATH-500 (85.4 % against 82.0 %), and with the cue they solve 28 more of 328 harder problems than the cue alone.
 
 The page of one finding, served at /finding/eight-directions (view.py serves every tools/finding_<slug>.py) and
 reached from its tile on /findings, which ICON draws. The picture is one weight matrix as a glass slab seen from
-slightly above, with eight lines across it for the eight directions, and the score on a scale under it. The reader
-switches between four conditions (address /finding/eight-directions#<condition>, arrow keys) and watches the lines and
-the score change. The rules are in .claude/skills/finding-page/SKILL.md; the looks are those of tools/architecture.py
-(.claude/skills/site-ui/SKILL.md).
+slightly above, with eight lines across it for the eight directions, and two scales under it: MATH-500 and the 328
+harder problems, each with Base + cue and RL as marked levels. The reader switches between five settings (address
+/finding/eight-directions#<setting>, arrow keys) and watches the lines and both scores change. The rules are in
+.claude/skills/finding-page/SKILL.md; the looks are those of tools/architecture.py (.claude/skills/site-ui/SKILL.md).
 """
 import json
 
 TITLE = "Eight directions"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "Reward training changed every weight a little. Which changes matter?"
-LINE = "Eight directions per matrix are enough: the untrained model rises from 44.8 % to 85.4 % on MATH-500."
+PROBLEM = "RL training changed every weight a little. Which of the changes matter?"
+LINE = ("Eight RL directions per matrix match the cue on MATH-500 (85.4 % against 82.0 %) and, with the cue, solve 28 more "
+        "of 328 harder problems than the cue alone.")
 
 # Every number is copied from the artifact named here. None is typed from memory.
 RESULTS = "studies/rlneurons/results/wsp1/"
+V3 = "studies/rlneurons/results/rln4/grader_v3/readout.json"
+# The 328 harder problems, T 1.0 / top-p 1.0, grader v3, one sample: Base from day1_hard328/readout.json
+# (cells.base_plain_T1), Base + cue and RL from day1/readout.json (rows.hard328_base_cue_t10-01, hard328_rl_plain_t10-01),
+# the edits with the cue from xreward/edits/readout.json on branch sharedsub (cells.<name>.right_v3).
+HARD_SRC = {"base": "studies/rlneurons/results/day1_hard328/readout.json", "cue": "studies/rlneurons/results/day1/readout.json",
+            "edits": "studies/rlneurons/results/xreward/edits/readout.json", "branch": "sharedsub"}
 DATA = {
-    "artifact": RESULTS + "readout.json",  # cells of full500; the two released models from results/rln4/grader_v3/readout.json
+    "artifact": RESULTS + "readout.json",  # cells of full500; Base, Base + cue and RL from results/rln4/grader_v3/readout.json
     "runs": RESULTS + "full500/",  # one folder per cell, <label>_<prompt>-01/metrics.json
     "commit": "1417dbf8f09bb4fcffd273eff18dabdeb76debff",  # full500/top8_plain-01/run.json
-    "metric": "Share of the 500 MATH-500 problems answered right, one sample at temperature 1.0",
+    "metric": "MATH-500, 500 problems, one sample each at T 1.0",
     "unit": "%",
     "max": 100,
-    # What the reader switches between. The first is shown on load: start from the problem, not from the answer.
-    # value = right of 500 as a percentage with one decimal; right is copied from the cell named in "cell". short is the
-    # name on the switch at phone width.
+    "n_hard": 328,
+    # What the reader switches between; "first" is the one shown on load, the finding itself. right = right of 500 on
+    # MATH-500, hard = right of the 328 harder problems; cue says whether that setting used the opening cue there. short is
+    # the name on the switch at phone width. The key of Base stays "untrained": tools/findings.py reads it.
+    "first": 3,
     "states": [
-        {"key": "untrained", "name": "Untrained", "short": "Untrained", "right": 224, "n": 500, "cell": "studies/rlneurons/results/rln4/grader_v3/readout.json cells.base_plain_1.0",
-         "note": "The base model, with no part of the RL change added. The lines are the 8 strongest directions of that change."},
-        {"key": "random", "name": "8 random directions", "short": "8 random", "right": 197, "n": 500, "cell": "full500/rand8_plain",
-         "note": "A control: eight random directions of the same size in each matrix."},
-        {"key": "rl-directions", "name": "8 RL directions", "short": "8 RL", "right": 427, "n": 500, "cell": "full500/top8_plain",
-         "note": "Only these 8 patterns of the RL change are added. The words are what two of them make the model more likely to write."},
-        {"key": "rl-trained", "name": "RL-trained", "short": "RL-trained", "right": 463, "n": 500, "cell": "studies/rlneurons/results/rln4/grader_v3/readout.json cells.rl_1.0",
-         "note": "The model after reinforcement learning with a math reward."},
+        {"key": "untrained", "name": "Base", "short": "Base", "right": 224, "cell": V3 + " cells.base_plain_1.0",
+         "hard": 76, "hard_cue": False, "hard_cell": "day1_hard328 cells.base_plain_T1",
+         "note": "Base: the base model with the plain prompt. The lines are the 8 largest directions of RL's change, not yet added."},
+        {"key": "base-cue", "name": "Base + cue", "short": "+ cue", "right": 410, "cell": V3 + " cells.base_opener_1.0",
+         "hard": 164, "hard_cue": True, "hard_cell": "day1 rows.hard328_base_cue_t10-01",
+         "note": "Base + cue: the same weights; only the first three tokens of the answer are fixed to RL's opening, \"line!\", two line breaks, \"Okay\"."},
+        {"key": "random", "name": "8 random directions", "short": "8 random", "right": 197, "cell": "full500/rand8_plain",
+         "hard": 158, "hard_cue": True, "hard_cell": "xreward/edits cells.rand8_math31",
+         "note": "A control: 8 random directions of the same size added to each matrix. Plain prompt on MATH-500, with the cue on the 328."},
+        {"key": "rl-directions", "name": "8 RL directions", "short": "8 RL", "right": 427, "cell": "full500/top8_plain",
+         "hard": 192, "hard_cue": True, "hard_cell": "xreward/edits cells.top8_math31",
+         "note": "Only the 8 largest directions of RL's change in each matrix are added. Plain prompt on MATH-500, with the cue on the 328."},
+        {"key": "rl", "name": "RL", "short": "RL", "right": 463, "cell": V3 + " cells.rl_1.0",
+         "hard": 206, "hard_cue": False, "hard_cell": "day1 rows.hard328_rl_plain_t10-01",
+         "note": "RL: the model after reinforcement learning on math, the whole change. Plain prompt."},
     ],
-    # The strongest baseline or the target, drawn as a line. Never compare against zero.
-    "reference": {"name": "RL-trained", "right": 463, "n": 500},
     # The edit of the cell top8_plain: k directions in n_edited matrices, their share of the squared norm of the RL
     # change, and the norm of the addition over the norm of the weights (edit.share and edit.add_rel).
     "edit": {"source": RESULTS + "full500/top8_plain-01/metrics.json", "k": 8, "n_edited": 224, "n": 500, "share": 0.0982, "add_rel": 0.000741},
-    "removed": {"cell": "screen100/bulk_plain", "value": 91, "n": 100},  # the RL-trained model without these directions, first 100 problems
+    "removed": {"cell": "screen100/bulk_plain", "value": 91, "n": 100},  # RL without these directions, first 100 problems
     "one": {"cell": "screen100/top1_plain", "value": 42, "n": 100},  # one direction per matrix, first 100 problems
-    # The untrained model with the three opening tokens of the RL model's answers in front of its answer, all 500 problems.
-    "cue": {"right": 410, "n": 500, "cell": "studies/rlneurons/results/rln4/grader_v3/readout.json cells.base_opener_1.0"},
+    # 8 RL directions (plain) minus Base + cue on MATH-500, paired by problem from full500/top8_plain-01/per_problem.json and
+    # results/rln4/t1_t2_items-01/per_problem.json (t1_right): 5,000 resamples, seed 0, 95 % percentile, in points.
+    "vs_cue": {"points": 3.4, "ci": [-0.4, 7.2], "only_top8": 58, "only_cue": 41},
+    # The same with the cue on the 328 (xreward/edits paired_differences_points), and the cut-off answers there (cap_hits).
+    "vs_cue_hard": {"points": 8.5, "ci": [4.3, 12.8]}, "random_vs_cue_hard": {"points": -1.8, "ci": [-5.8, 2.4]},
+    "cap_hard": {"base_cue": 77, "top8": 46},
     # What three ends of two directions read as through the output layer: rows of anatomy-01/readout.json with this
     # name and delta. direction counts from 0; toks are the first tokens of the row, label is what the page shows.
     "words": {"source": RESULTS + "anatomy-01/readout.json", "name": "model.layers.29.mlp.down_proj.weight", "delta": "rl_math",
@@ -53,56 +72,68 @@ DATA = {
                   {"direction": 2, "sign": "+", "toks": [" WAIT", "wait", ".Wait", "WAIT", " wait", " Wait"], "label": "Wait"},
               ]},
 }
-for _s in DATA["states"] + [DATA["reference"], DATA["cue"]]:
-    _s["value"] = round(100 * _s["right"] / _s["n"], 1)
-_value = {s["key"]: s["value"] for s in DATA["states"]}
-_edit = DATA["edit"]
-# The same edits on the 328 harder problems with the cue, from branch sharedsub (cells.<name>.right_v3): the base model,
-# the 8 directions, 8 random directions, the RL-trained model, and the RL-trained model without the 8 directions.
-HARD = {"source": "studies/rlneurons/results/xreward/edits/readout.json", "branch": "sharedsub", "n": 328,
-        "base": 164, "top8": 192, "random": 158, "rl": 206, "without": 190}
+for _s in DATA["states"]:
+    _s["value"] = round(100 * _s["right"] / 500, 1)
+_S = {s["key"]: s for s in DATA["states"]}
+DATA["levels"] = {"cue": _S["base-cue"], "rl": _S["rl"]}  # the two marked levels on each scale
+_edit, _vc, _vh = DATA["edit"], DATA["vs_cue"], DATA["vs_cue_hard"]
+_pc = lambda k: f"{_S[k]['value']} %"
+_m = lambda v: str(v).replace("-", "−")  # a negative number with the minus sign U+2212
 # Two results on the words the directions point at. Wait steering on branch claude/wait-steering-f535b2:
 # arms["steer:hold:L24:0.068"].right_v3 and stored_unsteered.right_per_sample_mean. Checking passages judged blind:
 # labels.real.passA.fix of items.base + items.rl.
 WAIT = {"source": "studies/jspace/results/steer/main-01/metrics.json", "branch": "claude/wait-steering-f535b2",
         "steered": 413, "unsteered": 410.5, "n": 500}
 CHECKS = {"source": "studies/rlneurons/results/checks/judge-01/readout.json", "fix": 5, "n": 80}
+_gain = _S["rl-directions"]["hard"] - _S["base-cue"]["hard"]  # 28 of 328
+_share = round(100 * _gain / (_S["rl"]["hard"] - _S["base-cue"]["hard"]))  # 28 of the 42 RL adds over Base + cue: 67
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 PANELS = [
     ["new", "What is new",
-     "It was already known that a small part of the RL weight change keeps the gain. How small, the control and what the part means are new.",
-     [f"Eight directions per matrix are enough, and eight random directions of the same size give no gain ({_value['random']} % against {_value['untrained']} %).",
-      "Taking those eight out of the RL-trained model does not remove the gain.",
-      "Read through the output layer, they point at words of deliberation: Okay, Wait, perhaps. The model trained with a code reward "
-      "has them too. The model trained by imitation has none."]],
+     "It was known that a small part of the RL weight change keeps the gain. New here: how small, the random control, and "
+     "the comparison with the opening cue, which needs no weight change at all.",
+     [f"On MATH-500, the 8 RL directions with the plain prompt score {_pc('rl-directions')}, Base + cue {_pc('base-cue')}: "
+      f"{_vc['points']} points apart, 95 % interval {_m(_vc['ci'][0])} to {_m(_vc['ci'][1])}, so the two are not told apart there.",
+      f"On the {DATA['n_hard']} harder problems, both with the cue, the 8 RL directions solve {_S['rl-directions']['hard']} of "
+      f"{DATA['n_hard']} and Base + cue {_S['base-cue']['hard']}: {_gain} more, {_vh['points']} points, 95 % interval "
+      f"{_vh['ci'][0]} to {_vh['ci'][1]}. That is {_share} % of the gain RL has over Base + cue there.",
+      f"8 random directions of the same size add nothing: {_pc('random')} against Base's {_pc('untrained')} on MATH-500, and "
+      f"{_S['random']['hard']} of {DATA['n_hard']} against Base + cue's {_S['base-cue']['hard']} on the harder problems."]],
     ["why", "Why it matters",
-     "What reward training changed is small and readable, but the deliberation words it points at do not by themselves raise the score.",
-     [f"Making the untrained model with the cue write \"Wait\" as often as the RL model leaves its score unchanged: {WAIT['steered']} of "
-      f"{WAIT['n']}, against a mean of {WAIT['unsteered']} unsteered. Blind judges call {CHECKS['fix']} of {CHECKS['n']} checking passages a fix.",
-      "A change this small and this readable is a target for editing weights directly, with no reward.",
-      f"On {HARD['n']} harder problems with the cue, the {_edit['k']} directions score {HARD['top8']}, random directions {HARD['random']}, "
-      f"the base model {HARD['base']} and the RL-trained model {HARD['rl']}: the {_edit['k']} directions carry two thirds of the gain."]],
+     "On MATH-500 the 8 directions do what the cue does. On the harder problems they add to it, so they carry a part of "
+     "RL's change that the cue does not.",
+     ["Read through the output layer, they point at words of deliberation: Okay, Wait, perhaps.",
+      f"Those words alone do not raise the score: making Base + cue write \"Wait\" as often as RL leaves it at "
+      f"{WAIT['steered']} of {WAIT['n']}, against a mean of {WAIT['unsteered']} without. Blind judges call {CHECKS['fix']} of "
+      f"{CHECKS['n']} checking passages a fix.",
+      "A change this small and this readable is a target for editing weights directly, with no reward."]],
     ["how", "How we know",
-     f"We added only the {_edit['k']} strongest directions of the RL weight change in each of {_edit['n_edited']} weight matrices to the "
-     f"untrained model and scored it on all {_edit['n']} MATH-500 problems.",
-     [f"Eight random directions of the same size score {_value['random']} %, so the size of the edit is not the cause.",
+     f"We added only the {_edit['k']} largest directions of the RL weight change in each of {_edit['n_edited']} weight matrices "
+     f"to the base model and scored it on all {_edit['n']} MATH-500 problems and the {DATA['n_hard']} harder problems.",
+     [f"Every score is one sample per problem at T 1.0, graded by grader v3. Base {_pc('untrained')}, Base + cue {_pc('base-cue')}, "
+      f"RL {_pc('rl')} on MATH-500.",
       f"The edit is {_edit['add_rel'] * 100:.2f} % of the size of the weights and {_edit['share'] * 100:.1f} % of the full RL change.",
-      "Closest published result: Spectral Rewiring (arXiv 2607.03065), which keeps the RL gain with a compact part of the update on models that include this pair."]],
+      "Closest published result: Spectral Rewiring (arXiv 2607.03065), which keeps the RL gain with a compact part of the "
+      "update on models that include this pair."]],
     ["limits", "What it does not show",
-     "The directions were read from the RL-trained weights, so this is not yet a way to get the gain without reward.",
-     [f"The RL-trained model with these 8 directions removed keeps most of its score: {DATA['removed']['value']} of the first "
-      f"{DATA['removed']['n']} problems, and {HARD['without']} of {HARD['n']} harder ones against {HARD['rl']}. The gain is spread over many directions.",
-      f"One direction per matrix is not enough: {DATA['one']['value']} of the first {DATA['one']['n']} problems.",
-      "The words are what the directions point at through the output layer rather than proof of what they compute."]],
+     "The directions were read from the RL weights, so this is not yet a way to get the gain without reward.",
+     [f"On MATH-500 the edit ran with the plain prompt and on the {DATA['n_hard']} harder problems with the cue; the edit "
+      "with the cue on MATH-500 and without it on the 328 were not run.",
+      f"Part of the {_gain} is answers that end instead of being cut off at 16,384 tokens: {DATA['cap_hard']['top8']} cut off "
+      f"with the 8 directions, {DATA['cap_hard']['base_cue']} with Base + cue.",
+      f"RL with these 8 directions removed keeps most of its score: {DATA['removed']['value']} of the first "
+      f"{DATA['removed']['n']} MATH-500 problems. The gain is spread over many directions. One direction per matrix gives "
+      f"{DATA['one']['value']} of {DATA['one']['n']}."]],
     ["run", "How to reproduce it",
-     f"Two commands on one GPU reproduce the {_value['rl-directions']} %: the first writes the edited weights and the second scores them.",
+     f"Two commands on one GPU reproduce the {_pc('rl-directions')}: the first writes the edited weights and the second scores them.",
      ["studies/rlneurons/jobs/wsp_edit.py --recipe top8 --dir /tmp/theta",
       "studies/rlneurons/jobs/run_cell.py --model-path /tmp/theta --model-label top8 --prompt plain --set math500 --temperature 1.0 "
       "--top-p 1.0 --seed 180000000 --commit $(git rev-parse HEAD)",
-      "The run used commit " + DATA["commit"] + ". Its numbers are in " + RESULTS + ". The harder problems are in " + HARD["source"]
-      + " on branch " + HARD["branch"] + ", the Wait steering in " + WAIT["source"] + " on branch " + WAIT["branch"]
-      + ", and the judged checks in " + CHECKS["source"] + "."]],
+      "The run used commit " + DATA["commit"] + ". Its numbers are in " + RESULTS + ", Base, Base + cue and RL in " + V3
+      + ". The harder problems: " + HARD_SRC["base"] + ", " + HARD_SRC["cue"] + " and " + HARD_SRC["edits"] + " on branch "
+      + HARD_SRC["branch"] + ". The Wait steering is in " + WAIT["source"] + " on branch " + WAIT["branch"]
+      + ", the judged checks in " + CHECKS["source"] + "."]],
 ]
 
 # The icon of this finding's tile on /findings (tools/findings.py says how it is called): the page's own picture,
@@ -169,7 +200,7 @@ a { color: inherit; }
 
 /* The picture, and the one control that changes it */
 .stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; }
-svg { width: 100%; max-height: 64vh; display: block; overflow: visible; }
+svg { width: 100%; max-height: calc(100vh - 250px); display: block; overflow: visible; }
 svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 .atmo, .shade, .spec, .bloom, .wash, .edge { pointer-events: none; }
 .atmo { opacity: var(--glow); }
@@ -189,10 +220,15 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 .axis { stroke: var(--faint); stroke-width: 1.5; opacity: .5; }
 .level { stroke: var(--ink); stroke-width: 2; stroke-linecap: round; }
 .head { fill: var(--ink); }
-.ref { stroke: var(--ink); stroke-width: 1.5; }
+.ref { stroke-width: 2; stroke-linecap: round; }
+.ref.cue { stroke: var(--ink); } .ref.rl { stroke: var(--blue); }
+.gain { stroke: var(--blue); stroke-width: 7; stroke-linecap: round; filter: drop-shadow(0 0 6px color-mix(in oklab, var(--blue) calc(var(--glow) * 70%), transparent)); }
 .tick { fill: var(--faint); font-weight: 500; }
-.reftext { fill: var(--mute); font-weight: 600; text-anchor: end; }
-.value { font-weight: 330; letter-spacing: -.03em; text-anchor: middle; font-stretch: 100%; }
+.reftext { font-weight: 600; text-anchor: middle; }
+.reftext.cue { fill: var(--ink); } .reftext.rl { fill: var(--blue); }
+.value { font-weight: 330; letter-spacing: -.03em; font-stretch: 100%; }
+.unit .u1 { fill: var(--ink); font-weight: 620; } .unit .u2 { fill: var(--mute); font-weight: 500; }
+.cap1 { fill: var(--ink); font-weight: 560; }
 .key { fill: var(--mute); font-weight: 500; text-anchor: middle; }
 .leader { stroke: var(--faint); stroke-width: 1; }
 .switch { display: inline-flex; align-self: center; margin-top: 18px; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
@@ -216,7 +252,8 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
-.say b { font-weight: 620; }
+.say b, .say .nw { font-weight: 620; white-space: nowrap; }
+.say .nw { font-weight: inherit; }
 .pane { margin-top: clamp(22px, 4vh, 44px); }
 .more { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
 .more button { display: flex; width: 100%; justify-content: space-between; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--rule); font-size: 17px; font-weight: 520; transition: color .15s ease; }
@@ -274,7 +311,7 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 </div>
 <script>
 const C = __CONFIG__, D = C.data, $ = id => document.getElementById(id);
-const S = { state: 0, open: null, g: null, el: null, out: null, words: [], cur: null, from: null, goal: null, t0: 0, t: 0, shown: "" };
+const S = { state: 0, intro: false, t1: null, cap: "", open: null, g: null, el: null, out: null, words: [], cur: null, from: null, goal: null, t0: 0, t: 0, shown: "" };
 const still = matchMedia("(prefers-reduced-motion: reduce)");
 const narrow = matchMedia("(max-width: 900px)");
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -286,9 +323,10 @@ const ease = p => p < .5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2;
    is lit; lab, the words stand at the ends of their lines. The picture moves from one look to the next in 0.9 s. */
 const LOOK = {
   "untrained": { sc: 0, plain: .34, lit: 0, rest: 0, wash: 0, lab: 0 },
+  "base-cue": { sc: 0, plain: .34, lit: 0, rest: 0, wash: 0, lab: 0 },
   "random": { sc: 1, plain: .7, lit: 0, rest: 0, wash: 0, lab: 0 },
   "rl-directions": { sc: 0, plain: 0, lit: 1, rest: 0, wash: 0, lab: 1 },
-  "rl-trained": { sc: 0, plain: 0, lit: 1, rest: 1, wash: 1, lab: 1 },
+  "rl": { sc: 0, plain: 0, lit: 1, rest: 1, wash: 1, lab: 1 },
 };
 const K = D.edit.k;  // lines on the slab, one per direction; line 0 is nearest the viewer
 /* Where the lines lie when they are random: both ends of each, in units of the slab's half width and half depth. */
@@ -301,8 +339,10 @@ const SCATTER = [[-.72, .64, -.1, .22], [.16, .76, .72, .3], [-.56, -.1, .06, -.
 const RAD = Math.PI / 180, TILT = 58, PC = Math.cos(TILT * RAD), PS = Math.sin(TILT * RAD);
 function geo() {
   return narrow.matches
-    ? { w: 720, h: 610, cx: 360, cy: 216, a: 136, b: 172, th: 20, r: 20, D: 1900, yaw: -4, lw: 1.8, glow: 5.5, lead: 14, fs: 26, wide: 86, nudge: 7, x0: 76, x1: 632, ay: 528, num: 128, fl: 27, kf: 26, ky: 36 }
-    : { w: 1000, h: 650, cx: 500, cy: 262, a: 250, b: 250, th: 26, r: 28, D: 2100, yaw: -8, lw: 1.5, glow: 9, lead: 16, fs: 20, wide: 104, nudge: 0, x0: 140, x1: 860, ay: 588, num: 104, fl: 18, kf: 18, ky: 56 };
+    ? { w: 720, h: 850, cx: 360, cy: 216, a: 136, b: 172, th: 20, r: 20, D: 1900, yaw: -4, lw: 1.8, glow: 5.5, lead: 14, fs: 26, wide: 86, nudge: 7, x0: 40, x1: 680, kf: 26, ky: 36,
+        num: 116, numY: 506, fl: 26, rows: [{ ay: 592 }, { cap: 690, ay: 780 }] }
+    : { w: 1000, h: 750, cx: 500, cy: 238, a: 236, b: 236, th: 26, r: 28, D: 2100, yaw: -8, lw: 1.5, glow: 9, lead: 16, fs: 20, wide: 104, nudge: 0, x0: 130, x1: 870, kf: 18, ky: 40,
+        num: 92, numY: 528, fl: 18, rows: [{ ay: 586 }, { cap: 654, ay: 716 }] };
 }
 const V = { c1: 1, s1: 0, c2: 1, s2: 0, px: 0, py: 0, tx: 0, ty: 0 };  // the view: a slow sway, plus a few degrees toward the pointer
 function aim(yaw, pitch) { V.c1 = Math.cos(yaw * RAD); V.s1 = Math.sin(yaw * RAD); V.c2 = Math.cos(pitch * RAD); V.s2 = Math.sin(pitch * RAD); }
@@ -342,8 +382,27 @@ function seg(p, q, w) {  // a straight line from p to q whose width follows the 
    Back to front: the light around the slab, its body, its top face, the light inside it, the lines, the rim, the
    words, and the score on its scale. The words are real: the first tokens that two directions of one matrix read
    as through the output layer (D.words). A direction has two ends, so one line carries a word at each end. */
+/* The two scores under the slab, each on its own scale: MATH-500 (its value is the large number) and the 328 harder
+   problems. On each, Base + cue is a marked level with its name above the line and RL one with its name below. */
+const SX = (g, v, max) => g.x0 + (g.x1 - g.x0) * v / max;
+function scale(g) {
+  const L = D.levels, out = [], fl = g.fl;
+  const mark = (x, y, up, text, cls) => `<line class="ref ${cls}" x1="${f(x)}" y1="${f(y - (up ? fl * .75 : fl * .3))}" x2="${f(x)}" y2="${f(y + (up ? fl * .3 : fl * .75))}"/>` +
+    `<text class="reftext ${cls}" x="${f(x)}" y="${f(up ? y - fl * 1.05 : y + fl * 1.75)}" font-size="${fl}">${esc(text)}</text>`;
+  [[D.max, v => pct(v), "value"], [D.n_hard, v => String(v), "hard"]].forEach(([max, txt, key], r) => {
+    const y = g.rows[r].ay, at = v => SX(g, v, max);
+    out.push(`<line class="axis" x1="${g.x0}" y1="${y}" x2="${g.x1}" y2="${y}"/>`,
+      mark(at(L.cue[key]), y, true, `Base + cue ${txt(L.cue[key])}`, "cue"), mark(at(L.rl[key]), y, false, `RL ${txt(L.rl[key])}`, "rl"),
+      `<line class="level" id="level${r}" x1="${g.x0}" y1="${y}" y2="${y}"/><line class="gain" id="gain${r}" y1="${y}" y2="${y}"/>` +
+      `<circle class="head" id="head${r}" cy="${y}" r="${f(fl * .3)}"/>`);
+  });
+  return `<text class="value" id="value" x="${g.x0}" y="${g.numY}" font-size="${g.num}"></text>` +
+    `<text class="unit" id="unit" y="${f(g.numY - g.num * .38)}" font-size="${g.fl}"><tspan class="u1">MATH-500</tspan>` +
+    `<tspan class="u2" dy="${f(g.fl * 1.3)}">one sample each, T 1.0</tspan></text>` +
+    `<text class="cap1" id="cap1" x="${g.x0}" y="${g.rows[1].cap}" font-size="${g.fl}"></text>` + out.join("");
+}
 function build() {
-  const g = S.g = geo(), svg = $("svg"), ref = D.reference, x = v => g.x0 + (g.x1 - g.x0) * v / D.max;
+  const g = S.g = geo(), svg = $("svg");
   const stop = (at, color, alpha) => `<stop offset="${at}" style="stop-color:${color}${alpha == null ? "" : ";stop-opacity:" + alpha}"/>`;
   const fade = (id, color) => `<linearGradient id="${id}" gradientUnits="userSpaceOnUse">${stop(0, color, .5)}${stop(1, color, 1)}</linearGradient>`;
   S.words = D.words.rows.map((r, i) => ({ i, line: r.direction, side: r.sign === "+" ? 1 : -1, text: r.label }));
@@ -370,18 +429,13 @@ function build() {
     `<tspan id="key1" x="${g.cx}" y="${g.ky}">One line is one direction:</tspan>` +
     `<tspan id="key2" x="${g.cx}" y="${f(g.ky + g.kf * 1.3)}">one pattern of change in this weight matrix</tspan></text></g>` +
     S.words.map(o => `<text class="word" id="word-${o.i}" font-size="${g.fs}" font-stretch="${g.wide}%" style="text-anchor:${o.side > 0 ? "start" : "end"}" opacity="0">${esc(o.text)}</text>`).join("") +
-    `<g class="scale"><line class="axis" x1="${g.x0}" y1="${g.ay}" x2="${g.x1}" y2="${g.ay}"/>` +
-    `<text class="tick" x="${g.x0 - 12}" y="${f(g.ay + g.fl * .35)}" font-size="${g.fl}" style="text-anchor:end">0</text>` +
-    `<text class="tick" x="${g.x1 + 12}" y="${f(g.ay + g.fl * .35)}" font-size="${g.fl}">${D.max}</text>` +
-    `<line class="ref" x1="${f(x(ref.value))}" y1="${f(g.ay - g.fl * .7)}" x2="${f(x(ref.value))}" y2="${f(g.ay + g.fl * .55)}"/>` +
-    `<text class="reftext" id="reftext" x="${f(x(ref.value) + 4)}" y="${f(g.ay + g.fl * 1.75)}" font-size="${g.fl}">${esc(ref.name)} ${pct(ref.value)}</text>` +
-    `<line class="level" id="level" x1="${g.x0}" y1="${g.ay}" y2="${g.ay}"/><circle class="head" id="head" cy="${g.ay}" r="${f(g.fl * .32)}"/>` +
-    `<text class="value" id="value" y="${f(g.ay - g.num * .2)}" font-size="${g.num}"></text></g>`;
+    `<g class="scale">${scale(g)}</g>`;
   S.el = {};
-  ["glow", "side", "edge", "face", "wash", "shine", "rest", "plain", "halo", "lit", "rim", "fade-b", "fade-c", "fade-n", "level", "head", "value", "reftext", "key", "leader"].forEach(id => { S.el[id] = $(id); });
+  ["glow", "side", "edge", "face", "wash", "shine", "rest", "plain", "halo", "lit", "rim", "fade-b", "fade-c", "fade-n", "value", "cap1", "key", "leader",
+   "level0", "head0", "gain0", "level1", "head1", "gain1"].forEach(id => { S.el[id] = $(id); });
   S.words.forEach(o => { o.el = $("word-" + o.i); });
   S.out = outline(g);
-  S.shown = ""; S.vw = 0;
+  S.shown = ""; S.cap = "";
 }
 
 function place(t) {
@@ -432,13 +486,22 @@ function place(t) {
   set(E.leader, { x1: f(g.cx), y1: f(g.ky + g.kf * 1.3 + 10), x2: f(mid[0]), y2: f(mid[1] - 4) });
   E.key.setAttribute("opacity", h(1 - c.sc));
 
-  // The score: one number that moves along the scale. It stays between the two end labels of the scale, and the name of
-  // the reference under the scale gives way when the score itself is the reference.
-  const x = g.x0 + (g.x1 - g.x0) * c.v / D.max, text = pct(c.v);
-  if (text !== S.shown) { E.value.textContent = S.shown = text; S.vw = E.value.getComputedTextLength(); }
-  set(E.level, { x2: f(x) }); set(E.head, { cx: f(x) });
-  set(E.value, { x: f(Math.min(Math.max(x, g.x0 + S.vw / 2), g.x1 - S.vw / 2)) });
-  E.reftext.setAttribute("opacity", h(1 - c.wash));
+  // The scores: the large number is MATH-500's; the 328 harder problems are counted on the second scale. Each head moves
+  // along its scale. The words beside the second count belong to the setting the picture is moving to.
+  const text = pct(c.v), hard = Math.round(c.hv), st = D.states[S.state];
+  if (text !== S.shown) {
+    E.value.textContent = S.shown = text;
+    const u = $("unit"), x = g.x0 + E.value.getComputedTextLength() + g.fl;
+    u.setAttribute("x", f(x)); u.querySelectorAll("tspan").forEach(t => t.setAttribute("x", f(x)));
+  }
+  const cap = `328 harder problems${st.hard_cue ? ", with the cue" : ""}: ${hard} of ${D.n_hard}`;
+  if (cap !== S.cap) E.cap1.textContent = S.cap = cap;
+  // The part of a score above Base + cue is drawn lit: what the setting adds beyond the cue.
+  [[c.v, D.max, D.levels.cue.value], [c.hv, D.n_hard, D.levels.cue.hard]].forEach(([v, max, cue], r) => {
+    const x = SX(g, v, max), xc = SX(g, cue, max);
+    set(E["level" + r], { x2: f(x) }); set(E["head" + r], { cx: f(x) });
+    set(E["gain" + r], { x1: f(xc), x2: f(Math.max(x, xc)), opacity: x > xc + .5 ? 1 : 0 });
+  });
 }
 
 /* Motion that is always on: the view sways by a few degrees and leans toward the mouse, and the lit lines breathe
@@ -448,6 +511,7 @@ function frame(now) {
   V.px += (V.tx - V.px) * .06;
   V.py += (V.ty - V.py) * .06;
   aim(S.g.yaw + 6 * Math.sin(t * .13) + 5 * V.px, 2.5 * Math.sin(t * .09) - 2.5 * V.py);
+  if (S.intro && now - (S.t1 ??= now) > 900) choose(D.first);  // timed from the first frame shown, not from page load
   if (S.from) {
     const p = Math.min(1, (now - S.t0) / 900), e = ease(p);
     for (const k in S.goal) S.cur[k] = mix(S.from[k], S.goal[k], e);
@@ -459,12 +523,13 @@ function frame(now) {
 
 /* The condition and the open panel are one value in the address: #<condition>, #<panel> or #<condition>/<panel>. */
 function choose(i, instant) {
-  const st = D.states[i], ref = D.reference;
-  S.state = i;
-  S.goal = { ...LOOK[st.key], v: st.value };
+  const st = D.states[i], L = D.levels;
+  S.state = i; S.intro = false;
+  S.goal = { ...LOOK[st.key], v: st.value, hv: st.hard };
   if (instant || still.matches || !S.cur) { S.cur = { ...S.goal }; S.from = null; }
   else { S.from = { ...S.cur }; S.t0 = performance.now(); }
-  $("svg").setAttribute("aria-label", `${D.metric}: ${st.name} ${pct(st.value)}, ${ref.name} ${pct(ref.value)}.`);
+  $("svg").setAttribute("aria-label", `${D.metric}: ${st.name} ${pct(st.value)}; Base + cue ${pct(L.cue.value)}, RL ${pct(L.rl.value)}. ` +
+    `328 harder problems: ${st.name} ${st.hard} of ${D.n_hard}; Base + cue ${L.cue.hard}, RL ${L.rl.hard}.`);
   $("note").textContent = st.note;
   $("switch").querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-pressed", k === i));
   place(S.t);
@@ -477,14 +542,17 @@ function pane() {
     : `<ul class="more">${C.panels.map(p => `<li><button data-open="${p[0]}">${esc(p[1])}<span aria-hidden="true">›</span></button></li>`).join("")}</ul>`;
 }
 function address(push) {
-  const parts = [S.state ? D.states[S.state].key : "", S.open || ""].filter(Boolean);
+  const parts = [S.state !== D.first ? D.states[S.state].key : "", S.open || ""].filter(Boolean);
   const url = parts.length ? "#" + parts.join("/") : location.pathname;
   push ? history.pushState(null, "", url) : history.replaceState(null, "", url);
 }
 function fromHash(first) {
   const parts = decodeURIComponent(location.hash.slice(1)).split("/");
-  const i = Math.max(0, D.states.findIndex(s => parts.includes(s.key))), p = C.panels.find(p => parts.includes(p[0]));
+  const k = D.states.findIndex(s => parts.includes(s.key)), i = k < 0 ? D.first : k, p = C.panels.find(p => parts.includes(p[0]));
   if (first === true || i !== S.state) choose(i, first === true);
+  /* On a first visit with no setting in the address the picture starts at Base and moves to the finding once it is
+     shown, so the reader sees the change happen. */
+  if (first === true && k < 0 && !still.matches) { choose(0, true); S.intro = true; }
   S.open = p ? p[0] : null;
   pane();
 }
@@ -526,7 +594,7 @@ stage.addEventListener("pointermove", e => {
 stage.addEventListener("pointerleave", () => { V.tx = V.ty = 0; });
 
 $("problem").textContent = C.problem;
-$("say").innerHTML = esc(C.line).replace(/(?<![\w-])(\d+(?:[.,]\d+)*(?: ?%)?)/g, "<b>$1</b>");  // a number inside a name (MATH-500) stays plain
+$("say").innerHTML = esc(C.line).replace(/(?<![\w-])(\d+(?:[.,]\d+)*(?: ?%)?)/g, "<b>$1</b>").replace(/MATH-500/g, '<span class="nw">MATH-500</span>');  // a number inside a name (MATH-500) stays plain
 $("switch").innerHTML = D.states.map((s, i) => `<button data-state="${i}" aria-pressed="false" aria-label="${esc(s.name)}"><span class="long">${esc(s.name)}</span><span class="short">${esc(s.short)}</span></button>`).join("");
 build();
 aim(S.g.yaw, 0);  // the still frame
