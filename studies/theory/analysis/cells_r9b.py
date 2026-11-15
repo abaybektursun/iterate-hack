@@ -55,7 +55,7 @@ def main():
     C = CELLS[a.cell]
     jm, rows = load(a.runs)
     cfg = jm["config"]
-    assert (cfg["model"], cfg["prompt"], cfg["set"], cfg["temperature"], cfg["top_p"], cfg["min_p"], cfg["max_tokens"], cfg["seed"],
+    assert (cfg["model_label"], cfg["prompt"], cfg["set"], cfg["temperature"], cfg["top_p"], cfg["min_p"], cfg["max_tokens"], cfg["seed"],
             cfg["samples"], cfg["restarts"]) == (C["label"], "plain", "math500", 1.0, 1.0, 0.0, 16384, C["seed"], 1, 0), cfg
     assert jm["commit"] == a.commit, (jm["commit"], a.commit)
     rows = sorted(rows, key=lambda r: r["problem_index"])
