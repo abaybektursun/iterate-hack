@@ -1,0 +1,129 @@
+{
+ "n_code_texts": 538,
+ "n_math_texts": 328,
+ "mean_D": {
+  "code_text": {
+   "math31": 0.003352,
+   "rand0": 0.000494,
+   "rand1": 0.000491,
+   "rand2": 0.000484,
+   "if30": 0.002291,
+   "code31": 0.004047,
+   "rand_mean": 0.00049
+  },
+  "math_text": {
+   "math31": 0.003858,
+   "rand0": 0.0005,
+   "rand1": 0.000493,
+   "rand2": 0.000492,
+   "if30": 0.001889,
+   "code31": 0.002776,
+   "rand_mean": 0.000495
+  }
+ },
+ "R_math": {
+  "value": 0.8688,
+  "90": [
+   0.8607,
+   0.8772
+  ],
+  "what": "mean D_math31(code text) / mean D_math31(math text)"
+ },
+ "R_rand": {
+  "value": 0.9895,
+  "90": [
+   0.9884,
+   0.9905
+  ],
+  "what": "same for the mean of 3 random rank-8 V (math31's s)"
+ },
+ "R_math_over_R_rand": {
+  "value": 0.878,
+  "90": [
+   0.8696,
+   0.8868
+  ]
+ },
+ "R_code": {
+  "value": 0.686,
+  "90": [
+   0.6788,
+   0.6933
+  ],
+  "what": "mean D_code31(math text) / mean D_code31(code text)"
+ },
+ "R_code_over_inverse_R_rand": {
+  "value": 0.6788,
+  "90": [
+   0.6715,
+   0.6864
+  ]
+ },
+ "predicted_by_f2_m03": {
+  "R_math": 0.5441,
+  "R_code": [
+   0.45,
+   0.47
+  ]
+ },
+ "by_band": {
+  "0-8": {
+   "math31": 0.8489,
+   "rand": 0.9952,
+   "code31_math_over_code": 0.8043
+  },
+  "8-16": {
+   "math31": 0.8682,
+   "rand": 0.9985,
+   "code31_math_over_code": 0.7343
+  },
+  "16-24": {
+   "math31": 0.8829,
+   "rand": 0.9843,
+   "code31_math_over_code": 0.6224
+  },
+  "24-32": {
+   "math31": 0.8737,
+   "rand": 0.9805,
+   "code31_math_over_code": 0.6321
+  }
+ },
+ "by_mod": {
+  "up": {
+   "math31": 0.8696,
+   "rand": 0.9857,
+   "code31_math_over_code": 0.6814
+  },
+  "gate": {
+   "math31": 0.86,
+   "rand": 0.9792,
+   "code31_math_over_code": 0.6735
+  },
+  "q": {
+   "math31": 0.8768,
+   "rand": 1.0005,
+   "code31_math_over_code": 0.7057
+  }
+ },
+ "code_cap_hits": 27,
+ "code_passed": 317,
+ "code_positions": 1525173,
+ "rule": "R_math in [0.40, 0.70] supports f2-m03; above 0.85 refutes; else undecided; undecided if R_math / R_rand is in another band",
+ "verdict_R_math": "refutes f2-m03",
+ "verdict_R_math_over_R_rand": "refutes f2-m03",
+ "verdict": "refutes f2-m03",
+ "checks": {
+  "selftest": {
+   "checks": 2,
+   "passed": true
+  },
+  "math_retrace_max_abs_rel_diff": 0.00074,
+  "math_retrace_n": 16,
+  "code_left_out": [],
+  "code_answers": 538,
+  "code_by_bench": {
+   "humanevalplus": 163,
+   "mbppplus": 375
+  }
+ }
+}

@@ -89,5 +89,12 @@
   "result": "result-04f363",
   "measured": "S_top8 0.43 [0.35, 0.51] n 100 fixes (refuted below 0.50); S_top8-S_rand [-0.02, 0.15]; r_c/r_l 1.53 [1.21, 1.93] (needed 2.0); null random rank-8 1.5x S_rand 0.37 n 63",
   "added": "2026-11-15T22:00:15Z"
+ },
+ {
+  "mechanism": "run-05/f2-m03",
+  "claim": "a direction of the RL change acts only as far as the text drives its input subspace, so Math 3.1's top-8 directions transfer to code (0.54 of Code's own effect) because code text drives them about half as much as math text",
+  "result": "work-c51f89",
+  "measured": "drive of Math 3.1's top-8 input subspace on 538 base code answers over 328 math answers: 0.869 [0.861, 0.877]; random rank-8 control 0.990; normalized 0.878; reverse (Code dirs) 0.686 vs predicted 0.45-0.47",
+  "added": "2026-11-15T22:15:14Z"
  }
 ]

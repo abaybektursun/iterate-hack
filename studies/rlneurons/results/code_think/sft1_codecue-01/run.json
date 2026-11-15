@@ -1,0 +1,17 @@
+{
+ "job_id": "ih-1115-185836-e7ef/codecue",
+ "commit": "381d7c71305feb0ca1f7f0133a9ec6456aaae8e8",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "sft1",
+  "prefix_ids": "[439,6982,304,279,10137,13,358,3987,420,8779,2268,33413]",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "seed": 51000000,
+  "n": null,
+  "grader_check_only": false,
+  "out": "/work/out/codecue",
+  "commit": "381d7c71305feb0ca1f7f0133a9ec6456aaae8e8"
+ }
+}

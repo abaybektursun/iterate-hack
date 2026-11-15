@@ -5015,3 +5015,33 @@ What is left: of the 34 problems the vote over 12 gets wrong, 13 have no right s
 Limits: one seed family; the interval of each k is over problems, and the subsets of one k share samples. RL was not sampled
 12 times, so this section does not say where RL's vote stops. The same cell on the 328 (spec section "The 328") was started
 twice on vast.ai and cut both times when the account balance reached 0; it has no rows.
+
+## Think-SFT on the Code pair (2026-11-15, work-8ea654)
+
+Spec with three predictions: `specs/SPEC_code_think.md`. One AWS job (`ih-1115-185836-e7ef`, L40S, commit 381d7c7) wrote the
+Think-SFT weights with `wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0` and ran
+`jobs/run_code_cell.py` twice (T 1.0 / top-p 1.0, seed 51000000, cap 16,384, 538 scored problems). Readout:
+`python -m studies.rlneurons.analysis.code1_readout --out=code_think sft1_codecue=ih-1115-185836-e7ef/codecue
+sft1_mathcue=ih-1115-185836-e7ef/mathcue @base_cue=abaybektursun-1114-170304-c03c @base_mathcue=abaybektursun-1114-170309-b137
+@rl_plain=abaybektursun-1114-170253-f661` -> `results/code_think/readout.json`, `results/code_think/sft1_codecue-01/`,
+`results/code_think/sft1_mathcue-01/`. Raw rows: `runs/ih-1115-185836-e7ef/{codecue,mathcue}/` (not committed; `ih get`).
+
+| cell | passed of 538 | HumanEval+ of 163 | MBPP+ of 375 | cap hits | no fenced block | tokens per problem |
+|---|---|---|---|---|---|---|
+| Think-SFT + Code cue | 301 | 116 | 185 | 7 | 106 | 3,093 |
+| Think-SFT + Math cue | 270 | 103 | 167 | 4 | 128 | 3,029 |
+| base + Code cue (stored) | 317 | 106 | 211 | 27 | 34 | 4,148 |
+| base + Math cue (stored) | 326 | 120 | 206 | 22 | 33 | 4,119 |
+| RL-Code 3.1 plain (stored) | 401 | 135 | 266 | 8 | 8 | 4,054 |
+
+Paired bootstrap (5,000), points of 538: Think-SFT + Code cue minus RL-Code -18.6 [-23.0, -14.1]; minus base + Code cue
+-3.0 [-8.0, 2.0]; Think-SFT Code cue minus Math cue +5.8 [0.6, 11.0].
+
+Predictions: 1 (330 to 395) refuted, 301. 2 (below RL-Code) holds. 3 (cues within 3 points) refuted, 5.8 points.
+
+Read from the raw rows: the count is lowered by answer format, not only by wrong programs. Of the 106 Think-SFT + Code cue
+answers with no fenced block, 97 close their reasoning with `</think>` and then write a bare `python` line, the program and a
+closing fence, with no opening fence, which `code_lib.BLOCK` does not accept (Math cue: 124 of 128). The base and RL-Code have
+no such answer: their 34, 33 and 8 are cap hits or answers with no program. Among answers that have a fenced block the pass
+rates are Think-SFT 301 of 432 (69.7 %), base 317 of 504 (62.9 %), RL-Code 401 of 530 (75.7 %); these are different problem
+subsets, so they are not a comparison. A regrade that also accepts the unopened block, applied to every cell, is the next step.
