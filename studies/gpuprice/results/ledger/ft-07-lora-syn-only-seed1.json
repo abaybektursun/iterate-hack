@@ -1,0 +1,35 @@
+{
+ "name": "ft-07-lora-syn-only-seed1",
+ "note": "Replicate of ft-05 with seed 1 (other synthetic series, other batches). H: the ft-05 gain over zero-shot ft-01 (+0.271) is seed noise; refuted if above +0.281. Synthetic series only, no real price (fine-tuning cutoff 2026-09-30 holds trivially), 800 steps, fm-07 setup; cpu class, batch 32, lr 1e-4. Job abaybektursun-1114-185723-ea39",
+ "utc": "2026-11-15T01:35:29+00:00",
+ "commit": "bee118a",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.291833,
+ "pinball": 0.023755,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.291585,
+ "skill_geomean": 0.335295,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.138162,
+   "in_band": 0.843062
+  },
+  "3": {
+   "skill_pooled": 0.27783,
+   "in_band": 0.756783
+  },
+  "7": {
+   "skill_pooled": 0.340686,
+   "in_band": 0.643411
+  }
+ },
+ "in_band": 0.748151
+}
