@@ -7,7 +7,11 @@ code here.
 
   uv run studies/theory/lib/round.py <round dir> <stage> [<stage> ...] [options]
 
-Version 8 (default): version 7 plus three steps. targets_open (after standing; forecast.py's open_targets) writes
+Version 9: the default round is `forecast.py round` (the wide round); this script is its --deep tool:
+`round.py <round dir> all --cutoff <T> --from <previous engine round> --deep <wide round dir>` takes the wide round's
+carried mechanisms (total forecast gain above 0 on 3 or more numbers) as mechanisms.json and runs every other stage.
+Every log gain against a measured value is at most 0 when the value lies outside the prediction's own interval.
+Version 8 (default --version): version 7 plus three steps. targets_open (after standing; forecast.py's open_targets) writes
 targets.json and work.md: the numbers the open work items will report. mechanisms and develop see the targets; each
 mechanism names 3 or more (a third of them) it gives a number for, each new theory carries "forecasts" for them.
 forecast (after develop and account) writes forecasts.json and forecasts.md: two readers and every carried theory
@@ -534,7 +538,7 @@ def standing(folder):
         entry["reason"] = "; ".join(filter(None, [entry.get("reason"), f"missed its interval on {len(ids)} GPU tests: {', '.join(ids)}"]))
     if args.version >= 8 and (prev / "forecasts.json").exists():  # the previous round's forecasts of the open work
         fc = json.loads((prev / "forecasts.json").read_text())
-        scores = forecast.score_forecasts(prev, fc["forecasts"], fc["snapshot_utc"])
+        scores = forecast.scored(fc["forecasts"], forecast.find_measured(prev, fc["snapshot_utc"]))
         (folder / "forecast_scores.json").write_text(json.dumps(scores, indent=1) + "\n")
         for name, p in scores["forecasters"].items():
             print(f"  forecasts of {name}: {p['scored']} scored, {p['inside']} inside, gain {p['total_gain']:+.2f} nats")
@@ -633,11 +637,22 @@ def clip3(x):
     return min(3.0, max(-3.0, x))
 
 
+def capped(gain, x, p):
+    """Version 9: a prediction whose measured value x lies outside its own 90 % interval gains at most 0."""
+    return gain if p["low"] <= x <= p["high"] else min(gain, 0.0)
+
+
+def pair_gain(x, p, q):
+    """p's gain over q at x (duels, GPU tests): log density of p minus q, clipped to 3 nats; a side outside its own
+    interval gains at most 0, so p's gain is at most 0 when p misses and at least 0 when q misses."""
+    return -capped(-capped(clip3(log_density(x, p) - log_density(x, q)), x, p), x, q)
+
+
 def gpu_tests(prev):
     """prev's own gpu_tests.json, then each experiment of prev/experiments.json measured since (the coordinator's
     prev/experiments_measured.json: id, measured, n, artifact, item, and the measured 90 % interval when there is one),
     scored for both sides by the duel rule: gain = log density of the side's prediction minus the other side's, at the
-    measured value, clipped to 3 nats. A side gets a strike when the measured value is outside its interval and the
+    measured value, clipped to 3 nats (pair_gain: a side outside its own interval gains at most 0). A side gets a strike when the measured value is outside its interval and the
     measured interval, if given, misses it too."""
     done = json.loads((prev / "gpu_tests.json").read_text()) if (prev / "gpu_tests.json").exists() else []
     if not (prev / "experiments_measured.json").exists():
@@ -653,7 +668,7 @@ def gpu_tests(prev):
         for side, p in preds.items():
             q = preds[e["other"] if side == e["proposer"] else e["proposer"]]
             sides[side] = {k: p[k] for k in ("value", "low", "high")} | {
-                "gain": round(clip3(log_density(x, p) - log_density(x, q)), 4),
+                "gain": round(pair_gain(x, p, q), 4),
                 "strike": not p["low"] <= x <= p["high"] and not overlaps({**p, "interval": m.get("interval")})}
         done.append({**m, "round": prev.name, "pair": e["pair"], "proposer": e["proposer"], "experiment": e["experiment"],
                      "unit": e["unit"], "statements": e["statements"], "sides": sides})
@@ -810,6 +825,13 @@ def graveyard_input(folder):
 def mechanisms(folder):
     if (folder / "mechanisms.json").exists():
         return print("skip mechanisms: mechanisms.json exists")
+    if args.deep:  # version 9: the wide round's carried mechanisms (total forecast gain above 0) are the mechanisms
+        carried = json.loads((Path(args.deep) / "standing.json").read_text())["carried"]
+        ms = [{"id": f"m{k:02d}", "mechanism": m["statement"], "starts_from": f"wide round mechanism {m['id']}: forecast gain "
+               f"{m['forecast']['total_gain']:+.2f} nats on {m['forecast']['scored']} numbers", "import": None, "differs_from": "",
+               "holds_against": m["holds_against"], "base_change": None, "first_test": None, "targets": open_ids(folder)} for k, m in enumerate(carried, 1)]
+        (folder / "mechanisms.json").write_text(json.dumps(ms, indent=1))
+        return print(f"  {len(ms)} mechanisms carried by {args.deep}")
     n, known = args.n_mechanisms, heads(folder)
 
     def valid(d):
@@ -1010,7 +1032,7 @@ def gain_rows(claims, measured, nulls):
         x, n = measured[c["id"]], [null[c["id"]] for null in nulls]
         a, b = (log_density(x, p) for p in n)
         log_null = max(a, b) + math.log(0.5 * (1 + math.exp(-abs(a - b))))  # log of the equal mixture of the two nulls
-        gain = min(3.0, max(-3.0, log_density(x, c) - log_null))
+        gain = capped(clip3(log_density(x, c) - log_null), x, c)
         rows.append({"id": c["id"], "measured": x, "value": c["value"], "low": c["low"], "high": c["high"],
                      "nulls": [{k: p[k] for k in ("value", "low", "high")} for p in n], "gain": round(gain, 4)})
     return rows
@@ -1468,7 +1490,8 @@ def duel_test(folder):
 
 def score_duel(folder):
     """metrics_v5.json: on each computed rival test of both turns, gain = log density of the theory's (defend)
-    prediction minus log density of the rival's prediction at the computed value, clipped to [-3, 3] nats."""
+    prediction minus log density of the rival's prediction at the computed value, clipped to [-3, 3] nats; a side
+    outside its own interval gains at most 0 (pair_gain)."""
     theories = {}
     for n in survivors(folder):
         if not rfile(folder, n, 1, ".tests").exists():
@@ -1490,7 +1513,7 @@ def score_duel(folder):
                 if q["measured"] is None:
                     row["not_computable"] = q["not_computable"]
                 else:
-                    row["gain"] = round(min(3.0, max(-3.0, log_density(q["measured"], row["theory"]) - log_density(q["measured"], row["rival"]))), 4)
+                    row["gain"] = round(pair_gain(q["measured"], row["theory"], row["rival"]), 4)
                 row["replication"] = repl.get(q["k"], {}).get("status")
                 rows.append(row)
         counted = [row for row in rows if "gain" in row and row["replication"] != "differs"]  # differs: left out
@@ -1914,6 +1937,8 @@ if __name__ == "__main__":
                         "(for example studies/theory/results/account/run-03)")
     parser.add_argument("--starts", default="all,surprises,across,external,revise")
     parser.add_argument("--n-mechanisms", type=int, default=12)
+    parser.add_argument("--deep", help="version 9: a wide round folder (forecast.py round); mechanisms are its carried "
+                        "mechanisms, developed, tested and duelled by the other stages")
     parser.add_argument("--model-all")
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--min-targets", type=int, default=15)

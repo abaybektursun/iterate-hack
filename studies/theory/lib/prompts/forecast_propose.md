@@ -24,6 +24,10 @@ Rules:
 - None restates a theory in graveyard.json.
 - "statement": at most 80 words, plain technical English.
 - "rests_on": 2 or more ids of items in board.jsonl whose numbers the mechanism explains.
+- "holds_against": the two known numbers nearest to contradicting the mechanism (from board.jsonl or facts.json),
+  each {"item": "<board.jsonl id>"} or {"fact": <its index in the facts.json list, from 0>}, with "value" (the number)
+  and "why" (one line on why the mechanism still holds against it). A mechanism that cannot do this is not proposed:
+  replace it with another.
 - "forecasts": a forecast for at least half of the targets, each {id, value, low, high, reason}: value and a 90 %
   interval in the target's unit, and one line of derivation from the mechanism. Leave out targets the mechanism
   says nothing about.
@@ -32,10 +36,11 @@ Rules:
   only where the mechanism implies it: agreeing earns about 0, a right disagreement earns most, a wrong one
   loses most.
 - Each forecast is scored as a normal distribution (mean value, sd (high - low) / 3.29) by the density it gives the
-  measured value, against the mixture of the two readers. Too wide earns little. Too narrow loses when it misses.
+  measured value, against the mixture of the two readers. Too wide earns little. Too narrow loses when it misses, and a measured value outside your interval earns at most 0.
 
 Write mechanisms.json, one JSON object:
 {"mechanisms": [{"id": "f2-m01", "statement": "...", "rests_on": ["result-xxxxxx", "result-yyyyyy"],
+                 "holds_against": [{"item": "result-zzzzzz", "value": 0.42, "why": "..."}, {"fact": 17, "value": 131, "why": "..."}],
                  "forecasts": [{"id": "t01", "value": 312, "low": 295, "high": 330, "reason": "...",
                                 "vs_readers": "disagree: ..."}]}]}
 Ids f2-m01, f2-m02, ... in order.

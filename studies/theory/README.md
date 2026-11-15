@@ -694,6 +694,40 @@ repository, about 14 minutes through `split standing targets_open mechanisms dev
 with 7 targets each, 2 theories developed (7 and 11 forecasts), 1 abandoned; a second smoke folder's `standing` scored
 them (6 targets measured). Both folders deleted.
 
+## Engine version 9 (the wide round is the default)
+
+Plan `specs/SPEC_engine_v9.md`; skill `.claude/skills/theory/SKILL.md` (version 9). The default round is now
+`lib/forecast.py round <folder> --from <previous round, or forecast run and cells folders>`: `standing` (scores every
+source's forecasts and its cells' `measured.json`; carries mechanisms with a total gain above 0 on 3 or more scored
+numbers, sends those at or below -2 nats on 3 or more to `graveyard.json`), `targets_open`, `forecast` (readers and
+carried mechanisms), `propose` (six lens jobs at once, 6 mechanisms each, each with `holds_against`: the two known
+numbers nearest to contradicting it), `cells`, `experiments` (`experiments.md`). Output under `results/wide/round-<nn>/`.
+`lib/round.py` is the `--deep` tool: `--deep <wide round>` makes the carried mechanisms its `mechanisms.json`.
+
+Score change, everywhere a log gain meets a measured value (`round.py` `gain_rows`, `score_duel`, `gpu_tests`;
+forecast and cell scores): a prediction whose measured value lies outside its own 90 % interval gains at most 0;
+losses are unchanged. Cells: `lib/cells.py` `job_flags` parses each job file's `add_argument` calls (flags and
+`choices` values); a proposed or merged cell whose command names a missing job file, flag or value is sent back once,
+then dropped (`cells.json` `dropped`). On cells-01 the check fails 21 of 41 merged commands (`--recipe topk` or
+`minus_topk` where `wsp_edit.py` takes `top8`, `bulk`, ...; `--model s0100`, `s0400`, `think_sft` where `run_cell.py`
+takes `base`, `rl`).
+
+**Re-score of forecast runs 01-08** (`forecast.py score <run> --rescore`: the measured values of each run's newest
+score file, no job; `results/forecast/run-0N/scores-2026-11-15T1731*.json/.md`). The top three are unchanged:
+run-06/f2-m03 +5.56 nats (5 of 5 inside), run-02/f2-m01 +5.38 to +5.10 (4 of 6), run-05/f2-m03 +4.85 (5 of 5).
+run-07/f2-m02 falls from +5.21 to +3.29 (2 of 5 inside; third to fifth), run-04/f2-m03 from +2.54 to +0.26 (2 of 5),
+run-05/f2-m02 from +1.88 to -0.29 (1 of 5), run-05/f2-m06 from +3.36 to +2.66; run-01's reader-2 from +3.00 to
++2.32. The bottom is unchanged (run-08/f2-m03 -12.27, run-02/f2-m02 -8.62, run-02/f2-m05 -5.88): the cap removes
+gains, never losses.
+
+Smoke run (outside the repository, `--from results/forecast/run-07 --propose 2 --model-all sonnet`, then deleted):
+`standing` carried run-07/f2-m02 (+3.29 nats on 5) and sent run-07/f2-m05 (-2.59 on 5) to the graveyard; 23 targets
+from 15 open work items; 12 new mechanisms (all six lens jobs needed one send-back: too few forecasts or a statement
+over 80 words; every `holds_against` passed); 13 cells proposed, 0 dropped, 13 merged, 0 of 13 commands fail the flag
+check (on cells-01, 21 of 41 did), 2 cells with a pair of families whose intervals do not overlap. About 11 minutes of
+jobs (5.5 to `forecasts.json`, 5.7 for cells and experiments), plus two resumes after fixes found by the smoke run (the
+board dump folder was reused within one process; mechanism and cell proposals shared a file name).
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in
