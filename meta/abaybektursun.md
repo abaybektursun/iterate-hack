@@ -1,5 +1,20 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 06:08 UTC (loop cycle 2) meta/reviews/abaybektursun/20261115-0559/
+
+- Target (Team line, last 1 h, no overlap with cycle 1): claim to close median 16 min (15), upper quartile 46 min (69), 19 items; 18.0 results per hour (20.0). Median unchanged; the quartile fell while the H100 queue emptied (median wait 0.1 min). One window each: weak evidence.
+- Open measurements closed: setup_vllm.sh on the new image: 9 finished jobs, 1 or 2 s each, median 1 s against 26 s (setup_seconds_new_image.txt): helped, 2 % of container time. Review entries per hour: 3 in the hour after cycle 1 against 3.3: no effect. Cause: the other sessions' worktrees run the tools of their own branches until they merge main, and AGENTS.md rule 8 still asks every agent for a review (asked of the person at cycle 1).
+- Score of cycle 1's change (review notices off): no effect so far.
+- Failure seen, owned by work-95ff34: the cancelled job ce39 left its log open in a reused container and `runs.reload()` then failed for the next 7 H100 jobs, which had waited up to 33 min (cycle.txt). Not touched here: one writer per file.
+- Change (step 3; steps 1-2: failed container minutes are the skill's own measure, nothing to delete): cycle.py counted a job that died as running until now, so failed minutes grew while a review ran. It now gives no run minutes to a job with no end time unless it is running. The row is deleted from meta/FAILURES.md.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | container min in failed or cancelled jobs, 2 h | 421.7 | 26.0 | 395.7 min were never used | 1 and 1 | before.txt, after.txt |
+  | jobs, failed or cancelled, median wait (must not change) | 54, 13, 0.1 | 54, 13, 0.1 | same | 1 and 1 | same |
+
+- Next cycle checks: review entries per hour; whether work-95ff34 removed the open-file class (died jobs in cycle.py); the Team line against 16 / 46 min and 18.0 per hour.
+
 ## 2026-11-15 06:10 UTC (after work-9763ed closed as result-296647, vote self-distillation; takeover session)
 
 - Last entry's checks (05:40, another session's line): not mine to read; this entry covers work-9763ed only.
