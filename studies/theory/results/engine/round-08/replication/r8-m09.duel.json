@@ -1,0 +1,15 @@
+{
+ "theory": "r8-m09",
+ "items": [
+  {
+   "k": 2,
+   "experiment": "Where the layout misses sit in length: median generated tokens of Think-SFT layout-miss rows divided by the median generated tokens of all finished Think-SFT rows (8 files pooled).",
+   "original": 0.3455165692007797,
+   "replicated": 0.3455165692007797,
+   "status": "replicated",
+   "refuted_by_met": false,
+   "script": "replication/r8-m09.duel/p2.py",
+   "not_computable": null
+  }
+ ]
+}

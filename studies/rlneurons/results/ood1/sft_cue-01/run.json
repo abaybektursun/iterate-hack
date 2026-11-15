@@ -1,0 +1,15 @@
+{
+ "job_id": "frustea-1115-070709-bf07",
+ "commit": "11543e19ee32369d2904c0b8a1048bd6bb968158",
+ "config": {
+  "model": "think_sft",
+  "cue": true,
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "seed": 61000000,
+  "n": null,
+  "grader_check_only": false,
+  "out": "/runs/frustea-1115-070709-bf07",
+  "commit": "11543e19ee32369d2904c0b8a1048bd6bb968158"
+ }
+}

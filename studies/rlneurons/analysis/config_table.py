@@ -1,14 +1,17 @@
-"""Every full-set configuration on hard328 in one table, from committed per-problem rows (specs/SPEC_table.md, laptop).
+"""The full-set configurations on hard328 whose per-problem rows are committed, in one table (specs/SPEC_table.md with
+addendum 1, laptop). What is absent is listed in the README section.
 
     P="uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.config_table"
     $P --test                                                         # planted checks of the share and of the check itself
     $P --out studies/rlneurons/results/table/hard328-01 --v4-from runs    # reads the local raw answers once, writes v4_rows.jsonl
     $P --out studies/rlneurons/results/table/hard328-02 --v4-rows studies/rlneurons/results/table/hard328-01/v4_rows.jsonl
 
-Writes run.json, table.md, table.json, checks.json (every posted number: expected, got), v4_rows.jsonl. Fails if the out
+Writes run.json, table.md (with the separate fresh2026 table), table.json, checks.json (every posted number: expected, got),
+v4_rows.jsonl. Fails if the out
 folder exists. Votes, rules and graders are imported (day1_vote, selector, frontier, mixvote, repair_v4), not copied."""
 import argparse
 import functools
+import importlib.util
 import itertools
 import json
 import pathlib
@@ -32,6 +35,9 @@ RAW = {"base": "abaybektursun-1114-200457-e8e6", "rl": "abaybektursun-1114-20050
 OTHER = ("bdba62b6dc1e86a807986287b03347cf9b8c1747", "studies/rlneurons/results/wsp1/hard328/{}-01/per_problem.json")   # sameraslan's branch
 NAME = {"base": "base + cue", "rl": "RL plain", "think": "Think-SFT + cue"}
 REWARD = {"base": "no", "rl": "yes", "think": "no"}
+DIAL4 = "day1_3/hard328_top8x1.5_cue_s4-01"                    # addendum 1: the 1.5 size, 4 samples
+DIAL = "tools/finding_the_finish_dial.py"                      # PROBLEMS: the one-sample dial cells, per problem
+FRESH = {"sft": ("Think-SFT + cue", "fresh/sft1_cue_s4-01"), "rl": ("RL plain", "fresh/rl_plain_s4-01"), "base": ("base + cue", "fresh/base_cue_s4-01")}
 ORDERS = list(itertools.permutations(range(4)))
 STORED = [None]
 R.agree = functools.lru_cache(maxsize=None)(R.agree)          # same function, memoised: the votes compare the same pairs many times
@@ -109,6 +115,46 @@ def mixed(chs: dict, counts: dict) -> dict:
     m = M.mix({k: samples(chs[k]) for k in counts}, counts)
     answered = M.mix({k: samples(chs[k], 1) for k in counts}, counts)["per_problem_mean"]
     return {"s": np.array(m["per_problem_mean"]), "a": 1 - np.array(answered), "t": m["tokens_per_problem"], "range": [m["right_min"], m["right_max"]]}
+
+
+def finish_dial():
+    """The page module of the finish dial: its PROBLEMS list is the committed per-problem record of the one-sample cells."""
+    spec = importlib.util.spec_from_file_location("finding_the_finish_dial", STUDY.parents[1] / DIAL)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def fresh() -> dict:
+    """fresh2026 (n = 136), a separate table: per model, one sample (mean of 4) and the vote over 4; the paired differences
+    with the draws of analysis/fresh_read.py (one generator, seed 0, pairs in its order)."""
+    ch = {m: F.load(RES / p)[1] for m, (_, p) in FRESH.items()}
+    idxs = sorted(ch["rl"])
+    assert all(sorted(c) == idxs for c in ch.values())
+    idx = idx_matrix(len(idxs))
+    d = {(m, rule): play(ch[m], F.RULES[rule], orders) for m in FRESH for rule, orders in (("single", ORDERS), ("vote4", STORED))}
+    rng = np.random.default_rng(0)
+    diffs = {}
+    for x, y in (("sft", "rl"), ("sft", "base"), ("rl", "base")):
+        draws = rng.integers(0, len(idxs), (BOOT, len(idxs)))
+        for rule in ("vote4", "single"):
+            v = d[x, rule]["s"] - d[y, rule]["s"]
+            diffs[x, y, rule] = {"points": float(100 * v.mean()), "interval95": interval(100 * v[draws].mean(1))}
+    rows = []
+    for m, (name, path) in FRESH.items():
+        for rule, text, n in (("single", "one sample (mean of 4)", 1), ("vote4", "vote over 4", 4)):
+            s, a = d[m, rule]["s"], d[m, rule]["a"]
+            if m == "rl":
+                minus = {"points": 0.0, "interval95": [0.0, 0.0]}
+            elif m == "sft":
+                minus = diffs["sft", "rl", rule]
+            else:
+                x = diffs["rl", "base", rule]
+                minus = {"points": -x["points"], "interval95": [-x["interval95"][1], -x["interval95"][0]]}
+            rows.append({"name": f"{name}, {text}", "model": m, "rule": rule, "n_samples": n, "right": float(s.sum()), "abstained": float(a.sum()),
+                         "wrong": len(idxs) - float(s.sum()) - float(a.sum()), "accuracy": {"percent": float(100 * s.mean()), "interval95": interval(100 * s[idx].mean(1))},
+                         "minus_rl_same_rule": minus, "tokens": float(d[m, rule]["t"].mean()), "reward": REWARD[{"sft": "think"}.get(m, m)], "source": path})
+    return {"n": len(idxs), "rows": rows, "diffs": diffs, "each_sample": {m: [sum(ch[m][i][s][0]["score_v3"] for i in idxs) for s in range(4)] for m in FRESH}}
 
 
 def write_v4(runs: pathlib.Path, chs: dict, out: pathlib.Path):
@@ -210,7 +256,47 @@ def build(v4_rows) -> tuple:
         assert [p["problem_index"] for p in pp] == idxs
         add(text, "single", 1, "no", "no", f"git {OTHER[0][:7]}:{OTHER[1].format(arm)}", {"s": np.array([p["score_v3"] for p in pp], float), "a": None,
             "t": np.array([p["n_generated"] for p in pp], float)}, cap_hits=sum(p["cap_hit"] for p in pp), key=f"other|{arm}")
-    return rows, {"H": H, "M5": M5, "idxs": idxs, "relay": relay, "v4": bool(v4), "cap_L": L}
+    # addendum 1 (hard328-02): the finish dial, its four-sample replication, the delta transplant
+    DIR, SWEEP = "partly (RL-derived directions)", "no (one size of the sweep of 7, every size reported)"
+    YES15 = "yes (1.5 is the best of 7 sizes scored on the 328)"
+    fd = finish_dial()
+    assert [p[0] for p in fd.PROBLEMS] == idxs
+    for j, (k, cell, kind, size, job) in enumerate(fd.CELLS):
+        if kind not in ("top", "rand"):
+            continue                                                 # size 0 and RL are the Day-1 #1 draws of the axis rows: a check
+        d = {"s": np.array([p[4][j] in "rk" for p in fd.PROBLEMS], float), "a": np.array([p[6][j] == "" for p in fd.PROBLEMS], float),
+             "t": np.array([p[5][j] for p in fd.PROBLEMS], float)}
+        what = "top-8 RL directions" if kind == "top" else "8 random directions (control)"
+        add(f"base + {size:g} x {what} + cue, one sample", "single", 1, DIR if kind == "top" else "no (random directions)",
+            (YES15 if size == 1.5 else SWEEP) if kind == "top" else "no (control)", f"{DIAL} PROBLEMS [{cell}]", d,
+            cap_hits=sum(p[4][j] in "ck" for p in fd.PROBLEMS), key=f"dial|{k}", control=kind == "rand")
+    D4 = F.load(RES / DIAL4)[1]
+    assert sorted(D4) == idxs
+    m5 = [json.loads(x) for x in open(RES / "xreward/dial15_math500-01/rows.jsonl")]
+    for text, fam, n, rule, orders in (("one sample (mean of 4 new draws)", "single", 1, "single", ORDERS), ("vote over 4 new draws", "vote", 4, "vote4", STORED)):
+        extra = {"math500": {"right": float(sum(r["score_v3"] for r in m5)), "tokens": float(np.mean([r["n_new"] for r in m5]))}} if rule == "single" else {}
+        add(f"base + 1.5 x top-8 RL directions + cue, {text}", fam, n, DIR, YES15 + "; the 4 samples are new draws on the same problems, not a held-out set",
+            DIAL4, play(D4, F.RULES[rule], orders), key=f"dial4|{rule}", **extra)
+    tr = {}
+    for line in open(RES / "transplant/hard328-01/rows.jsonl"):
+        r = json.loads(line)
+        if r["arm"].startswith("sft1_"):
+            tr.setdefault(r["arm"], {}).setdefault(r["seed"] - r["problem_index"], {})[r["problem_index"]] = r
+    t5 = [r for r in map(json.loads, open(RES / "transplant/math500-01/rows.jsonl")) if r["arm"] == "sft1_rl10"]
+    STACK = "partly (RL weight change added to Think-SFT)"
+    for arm, text, reward, chosen in (
+            ("sft1_rl10", "Think-SFT + 1 (RL - base) + cue, one sample", STACK, "no (prediction filed before the run)"),
+            ("sft1_rl20", "Think-SFT + 2 (RL - base) + cue, one sample (mean of 2)", STACK, "yes (a = 2 is the best of 4 values on the 328; the second sample was pre-registered with the threshold 222)"),
+            ("sft1_rl30", "Think-SFT + 3 (RL - base) + cue, one sample", STACK, "no (one value of the sweep of 4, every value reported)"),
+            ("sft1_rl40", "Think-SFT + 4 (RL - base) + cue, one sample", STACK, "no (one value of the sweep of 4, every value reported)"),
+            ("sft1_rnd10", "Think-SFT + noise of the RL delta's norm + cue (control), one sample", "no", "no (control)")):
+        seeds = sorted(tr[arm])
+        assert all(sorted(tr[arm][sd]) == idxs for sd in seeds), f"transplant {arm}: problems differ"
+        per = {f: np.array([[tr[arm][sd][i][f] if f != "extracted_v3" else tr[arm][sd][i][f] is None for i in idxs] for sd in seeds], float) for f in ("score_v3", "extracted_v3", "n_new", "cap_hit")}
+        add(text, "single", 1, reward, chosen, f"transplant/hard328-01/rows.jsonl [{arm}]", {"s": per["score_v3"].mean(0), "a": per["extracted_v3"].mean(0), "t": per["n_new"].mean(0)},
+            key=f"transplant|{arm}", control=arm == "sft1_rnd10", each_right=per["score_v3"].sum(1).tolist(), each_cap_hits=per["cap_hit"].sum(1).tolist(),
+            **({"math500": {"right": float(sum(r["score_v3"] for r in t5)), "tokens": float(np.mean([r["n_new"] for r in t5])), "cap_hits": sum(r["cap_hit"] for r in t5)}} if arm == "sft1_rl10" else {}))
+    return rows, {"H": H, "M5": M5, "idxs": idxs, "relay": relay, "v4": bool(v4), "cap_L": L, "D4": D4, "dial_m5": m5, "fd": fd}
 
 
 def columns(rows: list, idxs: list, flagged: list) -> None:
@@ -337,6 +423,62 @@ def checks(rows: list, ctx: dict, flagged: list) -> list:
             chk(T, f"MATH-500 {NAME[m]} {rule} tokens per problem, stored order", tok, d["t"].mean())
             if r24 is not None:
                 chk(T, f"MATH-500 {NAME[m]} {rule} right, mean of 24 orders", r24, play(M5[m], F.RULES[rule], ORDERS)["s"].sum(), 1)
+    # addendum 1
+    X = "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7"
+    ro = json.loads((RES / "xreward/edits/readout.json").read_text())
+    fd = ctx["fd"]
+    for (k, cell, kind, size, job), (right, cut) in zip(fd.CELLS, ((118, 96), (164, 77), (170, 50), (192, 46), (203, 25), (190, 5), (117, 9), (159, 71), (158, 67), (167, 70), (163, 79), (206, 20))):
+        j = fd.KEYS.index(k)
+        s = [p[4][j] in "rk" for p in fd.PROBLEMS]
+        chk(X, f"{cell}: right, cap hits", (right, cut), [sum(s), sum(p[4][j] in "ck" for p in fd.PROBLEMS)])
+        chk(X, f"{cell}: right, cap hits, tokens per problem as in readout.json", [ro["cells"][cell]["right_v3"], ro["cells"][cell]["cap_hits"], ro["cells"][cell]["mean_generated_tokens"]],
+            [sum(s), sum(p[4][j] in "ck" for p in fd.PROBLEMS), np.mean([p[5][j] for p in fd.PROBLEMS])], 1)
+        if kind in ("base", "rl"):
+            chk(X, f"{cell}: problems that differ from axis/hard328-01/vectors.json", 0, float(np.abs(np.array(s, float) - by["axis|" + ("base_cue" if kind == "base" else "rl_plain")]["s"]).sum()))
+    for other, key, pts, ci in (("rl_plain_T1", "axis|rl_plain", -0.91, (-4.88, 2.74)), ("top8_math31", "dial|1", 3.35, (-0.91, 7.62)), ("rand8_math31", "dial|r1", 13.72, (9.15, 18.29)),
+                                ("base_cue_T1", "axis|base_cue", 11.89, (7.62, 16.16))):
+        x, y = by["dial|1.5"]["s"], by[key]["s"]
+        chk(X, f"top8x1.5_math31 minus {other}, points", pts, 100 * (x - y).mean(), 2)
+        chk(X, f"top8x1.5_math31 minus {other}, interval", ci, S.paired_bootstrap(x, y, BOOT), 2)
+    Y = "README 'The 1.5x top-8 edit, replicated with four samples on the 328' / result-95a4dc"
+    D4 = ctx["D4"]
+    chk(Y, "1.5 x top-8 right of each sample", (207, 198, 199, 197), [sum(D4[i][s][0]["score_v3"] for i in idxs) for s in range(4)])
+    chk(Y, "1.5 x top-8 cap hits of each sample", (20, 14, 20, 22), [sum(D4[i][s][0]["cap_hit"] for i in idxs) for s in range(4)])
+    chk(Y, "1.5 x top-8 one sample, mean of 4", 200.25, by["dial4|single"]["right"], 2)
+    chk(Y, "1.5 x top-8 vote over 4: right, tokens per problem", (214, 35593), [by["dial4|vote4"]["right"], by["dial4|vote4"]["tokens"]])
+    for what, key, pts, ci in (("RL's vote", "rl|vote4", -2.1, (-5.2, 0.6)), ("the base's vote", "base|vote4", 6.7, (3.4, 10.4))):
+        x, y = by["dial4|vote4"]["s"], by[key]["s"]
+        chk(Y, f"1.5 x top-8 vote minus {what}, points", pts, 100 * (x - y).mean(), 1)
+        chk(Y, f"1.5 x top-8 vote minus {what}, interval", ci, S.paired_bootstrap(x, y, BOOT), 1)
+    x, y = by["dial4|vote4"]["s"], by["rl|vote4"]["s"]
+    chk(Y, "under the vote: the edit alone right, RL alone right", (8, 15), [((x == 1) & (y == 0)).sum(), ((x == 0) & (y == 1)).sum()])
+    chk(Y, "MATH-500, 1.5 x top-8, one sample: right, cap hits", (456, 7), [by["dial4|single"]["math500"]["right"], sum(r["cap_hit"] for r in ctx["dial_m5"])])
+    Z = "README 'Delta transplant' / result-3387ce"
+    for arm, right, caps, tok, pts, ci in (("sft1_rnd10", (209,), (97,), 10109, 0.0, (-2.7, 2.7)), ("sft1_rl10", (220,), (75,), 9667, 3.4, (0.5, 6.2)), ("sft1_rl20", (234, 229), (51, 57), 9502, 6.9, (4.6, 9.3)),
+                                           ("sft1_rl30", (227,), (44,), 9709, 5.5, (2.5, 8.5)), ("sft1_rl40", (213,), (33,), 10333, 1.2, (-2.0, 4.4))):
+        r = by["transplant|" + arm]
+        chk(Z, f"{arm}: right of each sample", right, r["each_right"])
+        chk(Z, f"{arm}: cap hits of each sample", caps, r["each_cap_hits"])
+        chk(Z, f"{arm}: tokens per problem", tok, r["tokens"])
+        chk(Z, f"{arm} minus Think-SFT (mean of 4), points", pts, 100 * (r["s"] - by["think|single"]["s"]).mean(), 1)
+        chk(Z, f"{arm} minus Think-SFT (mean of 4), interval", ci, S.paired_bootstrap(r["s"], by["think|single"]["s"], BOOT, 0), 1)
+    r = by["transplant|sft1_rl20"]
+    chk(Z, "sft1_rl20: mean of the two samples", 231.5, r["right"], 1)
+    chk(Z, "sft1_rl20 minus RL plain (mean of 4), points", 9.6, 100 * (r["s"] - by["rl|single"]["s"]).mean(), 1)
+    chk(Z, "sft1_rl20 minus RL plain (mean of 4), interval", (6.9, 12.3), S.paired_bootstrap(r["s"], by["rl|single"]["s"], BOOT, 0), 1)
+    m5 = by["transplant|sft1_rl10"]["math500"]
+    chk(Z, "MATH-500 M(1): right, cap hits, tokens per problem", (467, 17, 4771), [m5["right"], m5["cap_hits"], m5["tokens"]])
+    fr = ctx["fresh"]
+    Fq = "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9"
+    fby = {(r["model"], r["rule"]): r for r in fr["rows"]}
+    for m, each, mean, vote, tok, vtok in (("sft", (65, 59, 56, 60), 60.0, 75, 13043, 52170), ("rl", (49, 50, 53, 50), 50.5, 57, 12083, 48331), ("base", (28, 28, 32, 30), 29.5, 38, 12790, 51158)):
+        chk(Fq, f"fresh2026 {m}: right of each sample", each, fr["each_sample"][m])
+        chk(Fq, f"fresh2026 {m}: one sample (mean of 4), vote over 4", (mean, vote), [fby[m, "single"]["right"], fby[m, "vote4"]["right"]], 1)
+        chk(Fq, f"fresh2026 {m}: tokens per sample, per problem for the vote", (tok, vtok), [fby[m, "single"]["tokens"], fby[m, "vote4"]["tokens"]])
+    for (x, y), exp in ((("sft", "rl"), ((13.2, (7.4, 19.1)), (7.0, (3.1, 11.0)))), (("sft", "base"), ((27.2, (19.9, 35.3)), (22.4, (17.5, 27.8)))), (("rl", "base"), ((14.0, (8.1, 19.9)), (15.4, (11.4, 19.9))))):
+        for rule, (pts, ci) in zip(("vote4", "single"), exp):
+            chk(Fq, f"fresh2026 {x} minus {y}, {rule}, points", pts, fr["diffs"][x, y, rule]["points"], 1)
+            chk(Fq, f"fresh2026 {x} minus {y}, {rule}, interval", ci, fr["diffs"][x, y, rule]["interval95"], 1)
     return out
 
 
@@ -370,6 +512,7 @@ def ci(v: dict, key="points", sign=True) -> str:
 
 
 def markdown(rows: list, ctx: dict) -> str:
+    fr = ctx["fresh"]
     by = {r["key"]: r for r in rows}
     den = {f: by[f"rl|{k}"]["share"] for f, k in (("single", "single"), ("vote", "vote4"))}
     head = ["Configuration", "Family", "Samples", "Right", "Wrong", "Abstained", "Accuracy, % [95 %]", "minus base + cue one sample, points", "minus RL one sample, points",
@@ -397,7 +540,17 @@ def markdown(rows: list, ctx: dict) -> str:
         "Abstained = no extracted answer (for a vote: no sample with one). Tokens = generated tokens per problem over every sample and restart drawn (relay: the writer's prefix plus the continuation). "
         "A row named 'mean of 4' or 'mean of 24 orders' has fractional counts; the stored-order counts are in checks.json. "
         "Grader v3 everywhere except the v4 column (v4a, `grader/repair_v4.py` amended; votes recounted on the v4 extraction; text read from the local raw answers, `v4_rows.jsonl`). "
-        "Clean 322 = without the 6 problems of `results/wsp1/sft_overlap-03/flags.json`. T 1.0 / top-p 1.0, cap 16,384."]
+        "Clean 322 = without the 6 problems of `results/wsp1/sft_overlap-03/flags.json`. T 1.0 / top-p 1.0, cap 16,384. "
+        "Added in hard328-02 (addendum 1 of the spec): the rows with top-8 RL directions or random directions, and the rows Think-SFT + a (RL - base). "
+        "A control is a row to compare against, not a method.",
+        "", f"### fresh2026 (n = {fr['n']}, another benchmark: no share of the gap, not comparable with the rows above)", "",
+        "| Configuration | Samples | Right | Wrong | Abstained | Accuracy, % [95 %] | minus RL plain under the same rule, points [95 %] | Tokens per problem | Reward-trained weights | Rows |",
+        "|---|---|---|---|---|---|---|---|---|---|"]
+    for r in fr["rows"]:
+        notes.append("| " + " | ".join([r["name"], str(r["n_samples"]), fmt(r["right"]), fmt(r["wrong"]), fmt(r["abstained"]), ci(r["accuracy"], "percent", False), ci(r["minus_rl_same_rule"]),
+                                        fmt(r["tokens"], 0), r["reward"], f"`{r['source']}`"]) + " |")
+    notes += ["", "fresh2026: 136 competition problems published in 2026 (`data/fresh/fresh2026_v1.json`), T 1.0 / top-p 1.0, cap 16,384, grader v3, no restarts. Accuracy interval: the same "
+              "percentile bootstrap over the 136 problems. Differences: the paired bootstrap draws of `analysis/fresh_read.py`, as posted in `results/fresh/readout-01/`."]
     return "\n".join(lines + notes) + "\n"
 
 
@@ -431,17 +584,27 @@ def main():
     flags = json.loads((RES / "wsp1/sft_overlap-03/flags.json").read_text())["hard"]
     flagged = sorted(int(i) for i, f in flags.items() if f["flag"] != "none" and int(i) in ctx["idxs"])
     columns(rows, ctx["idxs"], flagged)
+    ctx["fresh"] = fresh()
+    best = {}
+    for fam in ("single", "vote"):                                      # addendum 1: the row sentence 1 of the README section names
+        c = [r for r in rows if r["family"] == fam and r["reward"] == "no" and r["chosen_on_328"].startswith("no") and not r.get("control")]
+        top = max(c, key=lambda r: r["right"])
+        best[fam] = {"name": top["name"], "right": top["right"], "key": top["key"]}
+        print(f"best row, no reward-trained weights, nothing chosen on the 328, not a control, {fam}: {top['name']} {top['right']:.1f}")
     ck = checks(rows, ctx, flagged)
     pl = planted()
     (out / "checks.json").write_text(json.dumps({"posted_numbers": ck, "passed": sum(c["pass"] for c in ck), "failed": [c for c in ck if not c["pass"]], "planted": pl}, indent=1))
     (out / "table.md").write_text(markdown(rows, ctx))
     drop = ("s", "a", "t", "s_v4")
-    (out / "table.json").write_text(json.dumps({"n": len(ctx["idxs"]), "problem_indices": ctx["idxs"], "flagged_by_sft_overlap_03": flagged, "cap_L_matched": ctx["cap_L"],
+    (out / "table.json").write_text(json.dumps({"n": len(ctx["idxs"]), "problem_indices": ctx["idxs"], "flagged_by_sft_overlap_03": flagged, "cap_L_matched": ctx["cap_L"], "best_no_reward_not_chosen": best,
+                                                "fresh2026": {"n": ctx["fresh"]["n"], "rows": ctx["fresh"]["rows"]},
                                                 "rows": [{k: v for k, v in r.items() if k not in drop} for r in rows],
                                                 "per_problem_right": {r["key"]: r["s"] for r in rows}}, default=jsonable))
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=STUDY, text=True).strip()
     (out / "run.json").write_text(json.dumps({"commit": commit, "command": "python -m studies.rlneurons.analysis.config_table " + " ".join(sys.argv[1:]), "job_id": None,
-                                              "where": "laptop, no GPU", "spec": "studies/rlneurons/specs/SPEC_table.md", "sources": RUNS, "raw_answers_for_v4": RAW,
+                                              "where": "laptop, no GPU", "spec": "studies/rlneurons/specs/SPEC_table.md (addendum 1)", "sources": RUNS,
+                                              "sources_addendum_1": {"dial": DIAL, "dial4": DIAL4, "dial_math500": "xreward/dial15_math500-01", "transplant": "transplant/hard328-01",
+                                                                     "transplant_math500": "transplant/math500-01", "fresh2026": {m: p for m, (_, p) in FRESH.items()}}, "raw_answers_for_v4": RAW,
                                               "other_branch": {"commit": OTHER[0], "path": OTHER[1]}}, indent=1))
     print(f"{sum(c['pass'] for c in ck)} of {len(ck)} posted numbers reproduce; planted {sum(p['pass'] for p in pl)} of {len(pl)}")
     for c in ck:

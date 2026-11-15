@@ -1,0 +1,142 @@
+{"mechanisms": [
+{"id": "f2-m01",
+ "statement": "Each sample is an independent draw: problem i is solved with a fixed probability p_i, so one cell's count varies by sqrt(sum p_i(1-p_i)), about 5-7 problems on MATH-500 and 6-9 on the 328, and same-seed reruns give new texts because vLLM is not batch-invariant. A stored single cell is one draw. New samples land around the arm's mean, not around the stored count, and a gap of a few problems between single cells is noise.",
+ "rests_on": ["result-5d032f", "result-95a4dc", "result-5c961a", "result-c8b994"],
+ "holds_against": [
+  {"item": "result-882fa7", "value": 430, "why": "An unsteered cell 3 sd above the stored 404-418 is the expected rare tail draw over dozens of cells, and its second seed fell back."},
+  {"item": "result-460e0a", "value": 16, "why": "At T 0.6 loops put many problems near p = 0.5, so sum p(1-p) and the seed spread are larger there than at T 1.0."}
+ ],
+ "forecasts": [
+  {"id": "t01", "value": 67, "low": 56, "high": 78, "reason": "Step 100 is level with the cued base on MATH-500; the cued base has 65 of these 164, and one sample adds sd about 6.", "vs_readers": "agree: the same parity argument gives the readers' number."},
+  {"id": "t03", "value": 50.5, "low": 46.5, "high": 54.5, "reason": "Sample 0 = 50; three new draws scatter about the arm's mean (RL-level, 49-53) with sd about 5 each.", "vs_readers": "agree: the readers centre on sample 0 and RL's singles too."},
+  {"id": "t04", "value": 417, "low": 411, "high": 423, "reason": "No selection on the stored 418, so the mean is about 417 and the 3 new draws average with sd about 3.5.", "vs_readers": "agree: same centre."},
+  {"id": "t05", "value": 422, "low": 416, "high": 428, "reason": "The +9 of the stored cue cell over plain is mostly draw noise (the cue gives -5 at step 400), so the true cue mean is about 420 and (427 + 3 x 420) / 4 = 422.", "vs_readers": "disagree: the readers keep most of the stored +9 cue lead, but across checkpoints the cue effect averages near 0, so the new draws should fall toward the plain cell."},
+  {"id": "t06", "value": 434, "low": 428, "high": 440, "reason": "Pooling stored plain 436 and cue 431 (cue effect near 0) gives a mean of about 433.5; (436 + 3 x 433.5) / 4 = 434.", "vs_readers": "agree: the same shrinkage."},
+  {"id": "t07", "value": 1.3, "low": 0.0, "high": 2.6, "reason": "(417 - 410.5) / 5; the 4-sample means differ by sd about 4 problems.", "vs_readers": "agree: same difference."},
+  {"id": "t13", "value": 426, "low": 420, "high": 432, "reason": "Stored 427 was not selected; the 4-sample mean sits near it with sd about 3.5.", "vs_readers": "agree."},
+  {"id": "t15", "value": 231, "low": 218, "high": 244, "reason": "One draw of a model whose cue cell at 32k is 230; a template change of a few problems is inside one sample's spread.", "vs_readers": "agree."},
+  {"id": "t16", "value": 206, "low": 193, "high": 219, "reason": "The same answers counted at 16,384, like the cue run's 207; one-sample sd 6-7.", "vs_readers": "agree."},
+  {"id": "t17", "value": 463, "low": 453, "high": 473, "reason": "Think-SFT singles are 454-462 at 16k, plus about 3 that finish past 16k.", "vs_readers": "agree."},
+  {"id": "t18", "value": 458, "low": 448, "high": 468, "reason": "Mean of the Think-SFT cue singles at 16k.", "vs_readers": "agree."},
+  {"id": "t22", "value": 466, "low": 457, "high": 475, "reason": "a=1 gave 467 in one draw; a=2 is the same family, so one draw around 466.", "vs_readers": "agree."},
+  {"id": "t23", "value": 240, "low": 229, "high": 251, "reason": "A same-seed rerun is a new draw: mean 16k single 231.5 plus about 9 from cut answers that finish.", "vs_readers": "agree."},
+  {"id": "t24", "value": 449, "low": 439, "high": 459, "reason": "One draw near the 1.5x cell's 456, less a few for overshoot, sd 6.", "vs_readers": "agree."},
+  {"id": "t25", "value": 13, "low": 7, "high": 19, "reason": "Plain keeps about 0.45 of the cue's 29.5; at a mean of 13 the binomial sd is about 3.4.", "vs_readers": "agree."}
+ ]},
+{"id": "f2-m02",
+ "statement": "A plurality vote counts only committed answers: a cap hit or a missing answer casts no vote, so a right answer facing abstentions wins outright, while one facing scattered wrong values wins only through the tie rule. A model that abstains instead of guessing (Think-SFT) votes close to pass@4. Anything that turns abstentions into finished answers (a longer cap, finishing weights) raises single samples but adds wrong votes, so the vote gains less than the singles.",
+ "rests_on": ["result-818c20", "result-5251c9", "result-95a4dc", "result-5c961a", "result-5d032f"],
+ "holds_against": [
+  {"item": "result-5251c9", "value": 57, "why": "RL rarely abstains on fresh2026 yet gains 6.5 from the vote: with 43 % precision its right answers still coincide while the wrong ones scatter, so ties go its way less often than Think-SFT's outright wins."},
+  {"item": "result-95a4dc", "value": 214, "why": "The 1.5x edit abstains little and gains +14 from the vote, less than the base's +32 and Think-SFT's +32, as fewer abstentions predict."}
+ ],
+ "forecasts": [
+  {"id": "t02", "value": 55, "low": 49, "high": 61, "reason": "The edit finishes like RL (14 cap hits against RL's 20-23), so its vote gain is RL's +6.5 minus a little: 50.5 + 5.", "vs_readers": "agree: the readers reach 55 the same way."},
+  {"id": "t03", "value": 50.5, "low": 46.5, "high": 54.5, "reason": "Singles are finished x precision, about 122 x 0.41 per sample, as in sample 0.", "vs_readers": "agree."},
+  {"id": "t15", "value": 233, "low": 219, "high": 247, "reason": "At 32k nearly every sample finishes; single = finished x precision, as in the cue run (230).", "vs_readers": "agree."},
+  {"id": "t16", "value": 205, "low": 191, "high": 219, "reason": "Counted at 16k the cut answers count as abstentions, as in the cue run's 207.", "vs_readers": "agree."},
+  {"id": "t17", "value": 463, "low": 452, "high": 474, "reason": "Few abstentions on MATH-500; 16k singles plus a few late finishes.", "vs_readers": "agree."},
+  {"id": "t18", "value": 458, "low": 447, "high": 469, "reason": "Cue singles at 16k.", "vs_readers": "agree."},
+  {"id": "t19", "value": 454, "low": 448, "high": 460, "reason": "The cued base's misses at 4 are 4-way ties and 2-2 splits; 9 samples break most of them (about +6), and agreeing wrong values hold the rest.", "vs_readers": "agree: close to the readers' 452-453."},
+  {"id": "t20", "value": 456, "low": 450, "high": 462, "reason": "Three more samples resolve about 2 more ties; even counts bring back a few 2-way ties.", "vs_readers": "agree."},
+  {"id": "t21", "value": 250, "low": 240, "high": 260, "reason": "M(2) abstains less than Think-SFT (about 50 against 89 cap hits), so its vote gain is about 0.7 of Think-SFT's +32: 231.5 + 19.", "vs_readers": "agree: the readers scale the gain the same way."},
+  {"id": "t22", "value": 466, "low": 456, "high": 476, "reason": "One sample on MATH-500 with few cap hits: finished x precision as at a=1 (467).", "vs_readers": "agree."},
+  {"id": "t23", "value": 241, "low": 230, "high": 252, "reason": "Doubling the cap finishes most of the ~50 cut answers, about 20 % right: 231.5 + 9.", "vs_readers": "agree."},
+  {"id": "t24", "value": 448, "low": 437, "high": 459, "reason": "At 2x almost nothing abstains, and the precision loss seen on the 328 (0.65 to 0.59) is smaller on short answers.", "vs_readers": "agree."},
+  {"id": "t26", "value": 242, "low": 233, "high": 251, "reason": "At 16k the vote (241) is almost pass@4 because the other samples abstained; at 32k they finish, 75 % wrong, and turn about 9 single-right wins into ties, offsetting about 10 new right answers.", "vs_readers": "disagree: the readers add the singles' +23 per sample to the vote, but the finished long answers vote against the lone right answer on the problems the 16k vote won outright."},
+  {"id": "t27", "value": 79, "low": 70, "high": 88, "reason": "Singles rise about 10 when the 46 % cut answers finish, but on fresh problems the new finished answers are mostly wrong and break outright wins into ties: 75 + 4.", "vs_readers": "disagree: the readers carry most of the single-sample gain into the vote; the abstention-to-wrong-answer conversion keeps it to about +4."}
+ ]},
+{"id": "f2-m03",
+ "statement": "Temperature sets how often a plain prompt opens in the deliberative 'Okay' register. At T 0.6 the first tokens collapse onto the modal opening (step 100: 478 of 500); at T 1.0 a share 1-q starts elsewhere (step 100: 117 of 500; base: about 400). A prefilled cue or fixed template removes that branch, so the cue's worth at T 1.0 is (1-q) times the gap between openings, which widens on harder problems.",
+ "rests_on": ["result-fad48d", "result-32b7a8", "result-3a3af3", "result-c36598"],
+ "holds_against": [
+  {"item": "result-fad48d", "value": -1.0, "why": "At step 400, 142 of 500 plain answers open elsewhere yet the cue adds nothing; by then the other openings are RL's own deliberative ones, so the gap between openings, not 1-q, is about 0."},
+  {"item": "result-3a3af3", "value": 216, "why": "Base answers whose first draw did not open with 'Okay' score 216, near plain's 224: those answers can still turn deliberative later, so the gap is smaller than whole-mode accuracies suggest; the self-opened draw still reaches 411."}
+ ],
+ "forecasts": [
+  {"id": "t01", "value": 63, "low": 52, "high": 74, "reason": "23 % of step-100 plain answers open outside 'Okay' at T 1.0; on the hardest 164 that branch keeps about 0.6 of the Okay branch's rate (0.8 on MATH-500), so step 100 falls about 4 below the cued base's parity point.", "vs_readers": "disagree: the readers carry MATH-500 parity to the 328, but the non-Okay quarter loses more on hard problems, where plain-register answers keep 0.46 of the cue's score against 0.55 on MATH-500."},
+  {"id": "t04", "value": 417, "low": 410, "high": 424, "reason": "q is fixed by checkpoint and temperature, so new samples keep the stored mixture (418).", "vs_readers": "agree."},
+  {"id": "t05", "value": 423, "low": 416, "high": 430, "reason": "The cue moves the 23 % non-Okay answers to the Okay branch: about +5 on average, so (427 + 3 x 422) / 4.", "vs_readers": "agree: close to 424."},
+  {"id": "t06", "value": 434, "low": 427, "high": 441, "reason": "At step 400 the gap between openings is about 0 (cue -1.0), so plain sits at its stored level.", "vs_readers": "agree."},
+  {"id": "t07", "value": 1.3, "low": -0.1, "high": 2.7, "reason": "(417 - 410.5) / 5.", "vs_readers": "agree."},
+  {"id": "t13", "value": 426, "low": 419, "high": 433, "reason": "The top-8 edit writes the opening on its own (q about 0.86 at T 1.0), so plain gives a stable mixture near 427.", "vs_readers": "agree."},
+  {"id": "t14", "value": 430, "low": 310, "high": 550, "reason": "About 14 % of samples open in the terse register, about 80 % of them under 1,000 tokens (225), plus about 12 % of the Okay-branch samples (205).", "vs_readers": "disagree: slightly fewer short samples than the readers' 450-500, because only the terse branch is reliably short."},
+  {"id": "t15", "value": 232, "low": 218, "high": 246, "reason": "<think> fixes the opening, like the cue, so the score is the cue run's (230) plus template noise.", "vs_readers": "agree."},
+  {"id": "t16", "value": 206, "low": 192, "high": 220, "reason": "Same fixed opening; counted at 16k as in the cue run (207).", "vs_readers": "agree."},
+  {"id": "t17", "value": 463, "low": 452, "high": 474, "reason": "Fixed opening; cue singles plus late finishes.", "vs_readers": "agree."},
+  {"id": "t18", "value": 458, "low": 447, "high": 469, "reason": "Fixed opening; cue singles at 16k.", "vs_readers": "agree."},
+  {"id": "t25", "value": 11, "low": 5, "high": 17, "reason": "At T 1.0 about 19 % of plain base answers self-open (cue rate 21.7 % -> 5.6); the terse 81 % solve about 5 % of 2026 contest problems (5.3).", "vs_readers": "disagree: the readers use a fixed 0.45 plain/cue ratio, but the terse branch's share of the cue rate falls with difficulty (0.44 on MATH-500, 0.33 on the 328), so fresh2026 gives about 0.37 overall."},
+  {"id": "t03", "value": 50.5, "low": 46.5, "high": 54.5, "reason": "The cue fixes the opening, so there is no opening term; singles follow sample 0.", "vs_readers": "agree."},
+  {"id": "t22", "value": 466, "low": 456, "high": 476, "reason": "Cued Think-SFT models open deterministically; no opening term, so it stays near a=1's 467.", "vs_readers": "agree."}
+ ]},
+{"id": "f2-m04",
+ "statement": "A weight edit shifts every next-token logit by an amount that grows with its size. Small edits move only tokens that were already uncertain (stop, hold-on, opening) and keep T 1.0 sampling coherent. Past a threshold they put mass on tokens that were near-certain, untruncated T 1.0 sampling draws them, and text decays into word strings and wrong finishes, more on long answers. The threshold follows the edit's total logit shift, so a rank-1 edit tolerates larger multiples.",
+ "rests_on": ["result-6f1bb7", "result-4b0d5f", "result-51a0e7", "result-3387ce"],
+ "holds_against": [
+  {"item": "result-4b0d5f", "value": 453, "why": "At a=1.5 of the full delta, 34 of 500 MATH-500 answers have word-salad tails yet score 453: the tails start after short answers are stated, so grading misses the damage."},
+  {"item": "result-a1bf75", "value": 394, "why": "On code the 2x edit stays at 394: code answers are short, so few tail draws accumulate before the answer is fixed."}
+ ],
+ "forecasts": [
+  {"id": "t02", "value": 55, "low": 49, "high": 61, "reason": "1.5x is below the threshold (4 samples on the 328 = RL), so the vote behaves like RL's: about +5.", "vs_readers": "agree."},
+  {"id": "t03", "value": 50, "low": 46, "high": 54, "reason": "Below threshold; fresh answers are long, but the edit stays coherent (sample 0 = 50).", "vs_readers": "agree."},
+  {"id": "t04", "value": 417, "low": 411, "high": 423, "reason": "Step 100's change is 0.028 % of the weights, far below any entropy effect; it stays at its stored level.", "vs_readers": "agree."},
+  {"id": "t08", "value": 189, "low": 177, "high": 201, "reason": "If one direction carries about a third of the top-8 energy, 2x is about top-8 at 1.15x: cap hits about 40, precision about 0.65, so about 189.", "vs_readers": "agree: near the readers' 186-187."},
+  {"id": "t09", "value": 189, "low": 168, "high": 208, "reason": "At 3x the rank-1 edit's total shift is about top-8 at 1.7x, below the 2x point that stayed coherent: cap hits about 15, precision about 0.61, so about 189.", "vs_readers": "disagree: the readers expect a decline toward breakage, but the logit shift at 3x of one direction is under that of the coherent 2x top-8 edit, so no word strings."},
+  {"id": "t10", "value": 173, "low": 160, "high": 187, "reason": "One third of the layers gives about a third of the logit shift, like the 0.5x all-layer dial (170), far below threshold.", "vs_readers": "agree."},
+  {"id": "t11", "value": 174, "low": 161, "high": 188, "reason": "Same sub-threshold third of the shift.", "vs_readers": "agree."},
+  {"id": "t12", "value": 176, "low": 163, "high": 190, "reason": "Same, plus slightly more direct shift of the stop and hold-on logits from the last layers.", "vs_readers": "agree."},
+  {"id": "t13", "value": 426, "low": 420, "high": 432, "reason": "1x is below threshold; stays near the stored 427.", "vs_readers": "agree."},
+  {"id": "t14", "value": 460, "low": 330, "high": 590, "reason": "A coherent 1x edit lengthens short answers (p10 +32 % on the 328) without making text decay, so the short share drops from the base's about 30 % to about 23 %.", "vs_readers": "agree."},
+  {"id": "t21", "value": 251, "low": 241, "high": 261, "reason": "a=2 is below threshold for Think-SFT (a=4 still 213, coherent), so its vote behaves like a finishing model's.", "vs_readers": "agree."},
+  {"id": "t22", "value": 465, "low": 455, "high": 475, "reason": "Below threshold on short MATH-500 answers: as at a=1 (467).", "vs_readers": "agree."},
+  {"id": "t23", "value": 240, "low": 229, "high": 251, "reason": "Answers past 16k take more draws, but a=2 is coherent; cut answers convert at about 20 %.", "vs_readers": "agree."},
+  {"id": "t24", "value": 449, "low": 439, "high": 459, "reason": "2x is near the threshold (precision 0.59 on the 328), but MATH-500 answers are about 2.3x shorter, so the loss is a few problems from 456.", "vs_readers": "agree."}
+ ]},
+{"id": "f2-m05",
+ "statement": "Ending is a sampled event: at T 1.0 the stop token is drawn at each point where an answer could close, so lengths have a long tail that the cap cuts off. Raising the cap finishes the cut samples, right at the rate of that model's long finished answers at the same difficulty: high for Think-SFT, whose cut answers are unfinished work, low for the base and RL, whose long answers mostly guess.",
+ "rests_on": ["result-c8b994", "result-0c1eef", "result-b006f5", "result-3387ce"],
+ "holds_against": [
+  {"item": "result-c8b994", "value": 23, "why": "23 of 93 (25 %) is well under Think-SFT's 68 % on finished answers over 12k, but the cut samples are the hardest problems; at matched difficulty its long-answer rate is about 30 %."},
+  {"item": "result-0c1eef", "value": 4, "why": "The base converts 4 of 64, under its 16.7 % long-answer rate, for the same reason: the cut tail is its hardest problems, where long answers are guesses."}
+ ],
+ "forecasts": [
+  {"id": "t01", "value": 63, "low": 52, "high": 74, "reason": "Step 100's finished answers are about 2.25x the base's length, so on the hardest 164 more of its samples reach the 16,384 cap than the cued base's, costing a few right answers relative to MATH-500 parity.", "vs_readers": "disagree: the readers ignore that step 100's longer length tail meets the cap far more often on AIME-level problems than on MATH-500."},
+  {"id": "t02", "value": 55, "low": 49, "high": 61, "reason": "The edit's stop draws make it finish like RL; the vote gains like RL's.", "vs_readers": "agree."},
+  {"id": "t03", "value": 50, "low": 46, "high": 54, "reason": "122 finished per sample x 41 % (RL-like precision) = 50.", "vs_readers": "agree."},
+  {"id": "t14", "value": 460, "low": 320, "high": 600, "reason": "Short samples are the early end of the stop-time distribution; the edit makes stopping less likely before a check, removing about a quarter of the base's short answers.", "vs_readers": "agree."},
+  {"id": "t15", "value": 236, "low": 222, "high": 250, "reason": "In its own template the end-of-thinking marker is in-distribution, so stops at completion points are more likely and fewer answers wander until 32k: a few above the cue run's 230.", "vs_readers": "disagree: slightly above the readers, since the native template's trained stop structure cuts the drift that made 2 of the cue run's 93 cut answers never finish."},
+  {"id": "t16", "value": 209, "low": 195, "high": 223, "reason": "Fewer samples run past 16,384 than in the cue run (93), so the 16k count sits a little above 207.", "vs_readers": "disagree: the readers expect longer native thinking and more cuts; trained stopping gives fewer."},
+  {"id": "t17", "value": 465, "low": 455, "high": 475, "reason": "Few MATH-500 answers reach 16k; those that finish later are mostly right for Think-SFT.", "vs_readers": "agree."},
+  {"id": "t18", "value": 459, "low": 448, "high": 470, "reason": "Cue singles at 16k, with the native stop structure.", "vs_readers": "agree."},
+  {"id": "t21", "value": 251, "low": 241, "high": 261, "reason": "M(2)'s stop draws finish more answers than Think-SFT's, so fewer abstentions feed the vote: gain about +19.", "vs_readers": "agree."},
+  {"id": "t22", "value": 466, "low": 456, "high": 476, "reason": "On MATH-500 few answers reach the cap, so the change in stopping moves little.", "vs_readers": "agree."},
+  {"id": "t23", "value": 241, "low": 230, "high": 252, "reason": "About 50 cut answers finish at 32k at about 20 % (Think-SFT's 25 % scaled by right-of-finished 72/88): 231.5 + 10.", "vs_readers": "agree."},
+  {"id": "t24", "value": 449, "low": 439, "high": 459, "reason": "2x makes stopping very likely (5 cap hits on the 328); on MATH-500 few answers need the extra length, so the loss from early stops is small.", "vs_readers": "agree."},
+  {"id": "t25", "value": 12, "low": 6, "high": 18, "reason": "Plain base answers are short and almost never reach the cap, so the cap adds nothing; the plain/cue ratio sets the count.", "vs_readers": "agree."},
+  {"id": "t26", "value": 245, "low": 236, "high": 254, "reason": "Each 32k sample gains about 23 from finished cut answers, mostly on problems another sample already solves: pass@4 about 252, vote a few under it.", "vs_readers": "agree."},
+  {"id": "t27", "value": 82, "low": 73, "high": 91, "reason": "On fresh2026, 46 % of samples are cut; at about 18 % right on finishing that is about +11 per sample and +7 to the vote.", "vs_readers": "agree."}
+ ]},
+{"id": "f2-m06",
+ "statement": "Problems differ in solve rate far beyond binomial noise. Each arm has a block of problems it almost never samples right (base: 33 at 0 of 4 on MATH-500, against 0.5 expected) and a block where a wrong value is as likely as the right one. A vote wins only problems where the right answer is the most likely one, so it plateaus a few samples past 4, and the near-zero block caps votes on hard sets.",
+ "rests_on": ["result-afc423", "result-e41d94", "result-5d032f", "knowledge-dab63f"],
+ "holds_against": [
+  {"fact": 28, "value": 0.429, "why": "Only 43 % of the base's vote failures are agreeing wrong groups; the rest are ties that more samples settle, worth about 5 problems by k = 9, after which the near-zero block holds."},
+  {"item": "result-60d899", "value": 93, "why": "Wang's majority curve still climbs to 93 % at 16, but it starts from 78 % under a stricter grader at T 0.6, with more problems near p = 0.5; ours starts at 89 % with the remainder in the near-zero block."}
+ ],
+ "forecasts": [
+  {"id": "t01", "value": 67, "low": 56, "high": 78, "reason": "Step 100 mostly moves problems with mid p (5.4 points at T 0.6 on finished answers); on the hardest 164 the near-zero block is large, so it gains only a few over the cued base's 65.", "vs_readers": "agree."},
+  {"id": "t02", "value": 55, "low": 49, "high": 61, "reason": "About half of fresh2026 is in the edit's near-zero block, so the vote converts only mid-p problems: about +5.", "vs_readers": "agree."},
+  {"id": "t03", "value": 50.5, "low": 46.5, "high": 54.5, "reason": "The mean single is the sum of p_i, which sample 0 already estimates.", "vs_readers": "agree."},
+  {"id": "t15", "value": 232, "low": 218, "high": 246, "reason": "The template does not change which problems are out of reach; the same near-zero block gives the cue run's level.", "vs_readers": "agree."},
+  {"id": "t16", "value": 205, "low": 191, "high": 219, "reason": "Same block structure, counted at 16k.", "vs_readers": "agree."},
+  {"id": "t17", "value": 463, "low": 452, "high": 474, "reason": "Few MATH-500 problems are in Think-SFT's near-zero block; singles about 463.", "vs_readers": "agree."},
+  {"id": "t19", "value": 452, "low": 447, "high": 457, "reason": "The 4-sample vote (446) misses 21 problems with a right sample: about 6 are ties that 9 samples settle; agreeing wrong groups and the 33 at 0 of 4 stay.", "vs_readers": "agree: same plateau as the readers."},
+  {"id": "t20", "value": 453, "low": 448, "high": 458, "reason": "The plateau is reached: three more samples move about 1 problem.", "vs_readers": "agree: at or just under the readers' 454-455."},
+  {"id": "t21", "value": 250, "low": 240, "high": 260, "reason": "M(2) singles 229-234; the vote converts mid-p problems, but the near-zero block (about 70 problems) caps pass@4 near 258.", "vs_readers": "agree."},
+  {"id": "t22", "value": 466, "low": 456, "high": 476, "reason": "On MATH-500 the near-zero block is the same few problems for every strong arm; about a=1's 467.", "vs_readers": "agree."},
+  {"id": "t23", "value": 241, "low": 230, "high": 252, "reason": "A longer cap reaches only cut problems with p above 0; about 10 more right.", "vs_readers": "agree."},
+  {"id": "t25", "value": 12, "low": 6, "high": 18, "reason": "For the plain base most 2026 contest problems are in the near-zero block; the rest give about 0.4 of the cue's 29.5.", "vs_readers": "agree."},
+  {"id": "t26", "value": 245, "low": 236, "high": 254, "reason": "The 16k vote (241) is almost at pass@4 (244); 32k lifts only the cut problems with p above 0 out of the near-zero block, about +4.", "vs_readers": "agree."},
+  {"id": "t27", "value": 81, "low": 72, "high": 90, "reason": "Fresh2026 has a large near-zero block for Think-SFT (pass@4 well under 136); 32k adds about 6 to the vote.", "vs_readers": "agree."}
+ ]}
+]}

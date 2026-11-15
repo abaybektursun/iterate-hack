@@ -1,0 +1,196 @@
+{
+ "n_problems": 500,
+ "samples_per_problem": 4,
+ "short_cut": 1000,
+ "bin_counts": {
+  "0": 33,
+  "1": 24,
+  "2": 28,
+  "3": 98,
+  "4": 317
+ },
+ "per_sample": [
+  {
+   "sample": 0,
+   "right": 427,
+   "cap_hits": 12,
+   "mean_tokens": 3962.4,
+   "short": 92
+  },
+  {
+   "sample": 1,
+   "right": 426,
+   "cap_hits": 14,
+   "mean_tokens": 4037.3,
+   "short": 82
+  },
+  {
+   "sample": 2,
+   "right": 429,
+   "cap_hits": 9,
+   "mean_tokens": 3809.9,
+   "short": 95
+  },
+  {
+   "sample": 3,
+   "right": 445,
+   "cap_hits": 13,
+   "mean_tokens": 4045.5,
+   "short": 87
+  }
+ ],
+ "cut_600": {
+  "short_share": 0.067,
+  "short_share_ci90": [
+   0.0565,
+   0.0785
+  ],
+  "short_acc": {
+   "n": 134,
+   "right": 84,
+   "acc": 0.6269
+  },
+  "short_acc_ci90": [
+   0.5484,
+   0.7
+  ],
+  "short_acc_bin4": {
+   "n": 107,
+   "right": 76,
+   "acc": 0.7103
+  },
+  "short_acc_bin01": {
+   "n": 5,
+   "right": 0,
+   "acc": 0.0
+  }
+ },
+ "cut_1000": {
+  "short_share": 0.178,
+  "short_share_ci90": [
+   0.157,
+   0.1995
+  ],
+  "short_acc": {
+   "n": 356,
+   "right": 295,
+   "acc": 0.8287
+  },
+  "short_acc_ci90": [
+   0.7924,
+   0.8617
+  ],
+  "short_acc_bin4": {
+   "n": 289,
+   "right": 252,
+   "acc": 0.872
+  },
+  "short_acc_bin01": {
+   "n": 7,
+   "right": 0,
+   "acc": 0.0
+  },
+  "short_acc_by_bin": {
+   "0": {
+    "n": 5,
+    "right": 0,
+    "acc": 0.0
+   },
+   "1": {
+    "n": 2,
+    "right": 0,
+    "acc": 0.0
+   },
+   "2": {
+    "n": 14,
+    "right": 8,
+    "acc": 0.5714
+   },
+   "3": {
+    "n": 46,
+    "right": 35,
+    "acc": 0.7609
+   },
+   "4": {
+    "n": 289,
+    "right": 252,
+    "acc": 0.872
+   }
+  },
+  "long_acc_by_bin": {
+   "0": {
+    "n": 127,
+    "right": 34,
+    "acc": 0.2677
+   },
+   "1": {
+    "n": 94,
+    "right": 64,
+    "acc": 0.6809
+   },
+   "2": {
+    "n": 98,
+    "right": 66,
+    "acc": 0.6735
+   },
+   "3": {
+    "n": 346,
+    "right": 310,
+    "acc": 0.896
+   },
+   "4": {
+    "n": 979,
+    "right": 958,
+    "acc": 0.9785
+   }
+  },
+  "short_per_problem": {
+   "0": 318,
+   "1": 88,
+   "2": 42,
+   "3": 24,
+   "4": 28
+  },
+  "both_share_all": 0.308,
+  "both_share_of_with_short": 0.8462,
+  "short_in_bin4_share": 0.8118,
+  "bin4_share_of_samples": 0.634
+ },
+ "cut_1500": {
+  "short_share": 0.3205,
+  "short_share_ci90": [
+   0.293,
+   0.348
+  ],
+  "short_acc": {
+   "n": 641,
+   "right": 572,
+   "acc": 0.8924
+  },
+  "short_acc_ci90": [
+   0.8715,
+   0.9119
+  ],
+  "short_acc_bin4": {
+   "n": 529,
+   "right": 488,
+   "acc": 0.9225
+  },
+  "short_acc_bin01": {
+   "n": 9,
+   "right": 1,
+   "acc": 0.1111
+  }
+ },
+ "verdict": {
+  "P1a_share_ci_outside_10_15": true,
+  "P1b_acc_ci_outside_35_65": true,
+  "P1c_bin4_short_acc_ge_85": true,
+  "P1d_both_lt_half_of_with_short": false,
+  "P2_tested_bin4_n_ge_10": true,
+  "P2a_bin4_short_acc_lt_85": false,
+  "P2b_short_not_concentrated_bin4": false,
+  "P1_refuted": true,
+  "P2_refuted": false
+ }
+}

@@ -1,0 +1,50 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "RL-Code's top-8 directions act as one high-leverage mode switch: the base's own activations on code prompts drive them strongly (about 95x a random edit), so a small dose flips most samples into RL-Code's answering mode: write one fenced program, check it, stop. Format and correctness arrive together, sample by sample, and the effect saturates near 1x. Gain is a mixture share, so 1x already holds about 80 % of RL-Code's gain and Math's directions add little.",
+  "readers_wrong": "The readers carried over a gradual dose-response (math dial: 1x about 60 % of the gap, plus a format-only count), but on code the switch is already nearly saturated at 1x, so 1x sits at 386 rather than about 350.",
+  "rests_on": ["result-a1bf75", "result-51ccc6", "result-98de28"],
+  "holds_against": [
+   {"item": "result-6776d8", "value": 411, "why": "Math 1x + Code 1x beat Code alone by +4.6 pts on one sample; a saturated switch allows only a few extra problems from Math's small generic part, and one-sample noise (sd about 10) covers the rest. a forecasts about 395 on new seeds."},
+   {"item": "result-51ccc6", "value": 342, "why": "Layers 22-31 alone reach only 342 with 34 cap hits: the switch is spread over the early and middle layers (L0-10 372, L11-21 366, with few cap hits), so the late band alone leaves it mostly off. That fits one distributed switch, not a separate late finishing part."}
+  ],
+  "forecasts": [
+   {"id": "t07", "value": 389, "low": 375, "high": 403, "reason": "Saturated switch: true 1x mean between 386 and the 1.5x 399; one-sample sd about 9."},
+   {"id": "t08", "value": 389, "low": 375, "high": 403, "reason": "Same cell, second seed."},
+   {"id": "t05", "value": 400, "low": 388, "high": 412, "reason": "RL-Code measured 401 at seed 51000000; binomial noise only."},
+   {"id": "t06", "value": 400, "low": 388, "high": 412, "reason": "Same, second seed."},
+   {"id": "t03", "value": 396, "low": 382, "high": 410, "reason": "Code switch is saturated; Math adds only its small generic share (+6.9 over random at 1.5x, mostly the same switch), so about 389 + 7; 411 regresses."},
+   {"id": "t04", "value": 396, "low": 382, "high": 410, "reason": "Same, second seed."},
+   {"id": "t12", "value": 385, "low": 345, "high": 420, "reason": "Think-SFT's imitated traces already carry the check-then-commit mode, so it should sit near RL-Code, minus some cap hits on long traces."},
+   {"id": "t09", "value": 228, "low": 214, "high": 242, "reason": "The 232 replicates within noise; Math 3x on Think-SFT is a mode switch that is already on, about +5 over Think-SFT's 213-220 band."}
+  ]},
+ {"id": "b",
+  "statement": "RL-Code's top-8 directions hold two separable parts. A low-dose format part (close the code block, stop before the cap) saturates by about 0.5x and fixes about 44 unformatted answers. A dose-graded correctness part raises the pass rate of programs that were already finished. It grows roughly linearly to about 1.5x and adds to the correctness part in Math's directions. About 40 of the 69 problems gained at 1x come from the correctness part.",
+  "readers_wrong": "The readers counted only the format fix (about 44 cap-hit or no-block answers turned into finished ones at the base's 66 % pass rate, about +29, giving about 350). They missed that the directions also raise the pass rate of programs the base already finished.",
+  "rests_on": ["result-a1bf75", "result-6776d8", "result-51ccc6"],
+  "holds_against": [
+   {"item": "result-a1bf75", "value": 394, "why": "2x scores 394, below 1.5x's 399, where a linear correctness part would keep rising. The gap is -5, inside one-sample noise, and above about 1.5x the edit overshoots RL-Code's own size, so correctness flattens there."},
+   {"item": "result-51ccc6", "value": 372, "why": "L0-10 alone already removes most cap hits (12) and adds 55: that matches a format part that saturates at a small effective dose, plus a partial correctness part, which is what b says."}
+  ],
+  "forecasts": [
+   {"id": "t07", "value": 380, "low": 366, "high": 394, "reason": "Format part full (+29), correctness part about 2/3 of its 1.5x size (+53 at 1.5x), so about 317 + 29 + 35 = 381; 386 was a slightly high draw."},
+   {"id": "t08", "value": 380, "low": 366, "high": 394, "reason": "Same cell, second seed."},
+   {"id": "t05", "value": 400, "low": 388, "high": 412, "reason": "RL-Code measured 401; binomial noise only."},
+   {"id": "t06", "value": 400, "low": 388, "high": 412, "reason": "Same, second seed."},
+   {"id": "t03", "value": 407, "low": 395, "high": 419, "reason": "The correctness parts add: Code 1x about 381, plus Math's own correctness (+37 at 1.5x over random) scaled to 1x, minus overlap, about +26, giving about 407; the measured 411 replicates."},
+   {"id": "t04", "value": 407, "low": 395, "high": 419, "reason": "Same, second seed."},
+   {"id": "t12", "value": 375, "low": 335, "high": 415, "reason": "Think-SFT has the format part from imitation but only part of the reward-driven correctness gain."},
+   {"id": "t09", "value": 229, "low": 215, "high": 243, "reason": "Math correctness part at 3x adds to Think-SFT (213 random 3x); 232 replicates within noise."}
+  ]}
+ ],
+ "cell": {
+  "cell": {"model": "base Olmo-3-1025-7B + 0.5 x top-8 singular directions per matrix of (RL-Zero-Code 3.1 - base)", "prompt": "Code cue", "set": "HumanEval+ and MBPP+", "n": 538, "sampling": "T 1.0 / top-p 1.0, default cap", "samples": 1, "grader": "run_code_cell's HumanEval+/MBPP+ test grader", "cap": "default (16,384)"},
+  "job": "studies/rlneurons/jobs/run_code_cell.py",
+  "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --scale 0.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_code_cell --model-path /tmp/theta --model-label code_top8x0.5 --prefix-ids '<Code cue ids, as in results/xreward/code_dial run.json>' --temperature 1.0 --top-p 1.0 --seed 51000000 --commit $(git rev-parse HEAD)\"",
+  "readout": "problems passed of 538 (also cap hits and answers with no code block)",
+  "unit": "problems passed of 538",
+  "why": "Under a, a saturating mode switch, 0.5x already flips most samples and keeps most of 1x's gain. Under b, the format part is full at 0.5x but the correctness part is only about a third of its 1.5x size, so the gain stops near the format-only count. Both expect cap hits and no-block answers to have fallen mostly, so the pass count separates them.",
+  "gpu_minutes": 80,
+  "a": {"value": 377, "low": 363, "high": 391},
+  "b": {"value": 347, "low": 333, "high": 360}
+ }
+}

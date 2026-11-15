@@ -1,0 +1,12 @@
+{
+ "commit": "be5d35dbc7f7c387d93585df45d64f35e4f36b6f",
+ "command": "uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.theory.analysis.direct_karp13",
+ "inputs": [
+  "studies/autobench/results/math500-loop/finals-01/hard328-karpathy-000.json",
+  "studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01/rows.jsonl"
+ ],
+ "input_jobs": [
+  "autobench final/hard328-karpathy-000 (frustea Modal)",
+  "abaybektursun-1114-200457-e8e6"
+ ]
+}

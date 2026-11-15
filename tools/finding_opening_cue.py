@@ -93,12 +93,14 @@ SHARE_BEST = round(100 * (CUE - DATA["plain_t06"]["right"]) / (RL - DATA["plain_
 LEFT = [round(pc(RL_LATER) - pc(CUE), 1), round(pc(RL) - pc(CUE), 1)]  # points still to RL
 
 TITLE = "The opening cue"
-PROBLEM = "Does solving math need RL training?"
-LINE = f"Three opening tokens raise the base model from {pc(PLAIN)} % to {pc(CUE)} % on MATH-500."  # also the sentence on its tile
+PROBLEM = "Does the base model need training with reinforcement learning (RL) to solve math problems?"
+LINE = (f"At temperature 1.0, three tokens placed at the start of the answer raise the base model from {pc(PLAIN)} % to "
+        f"{pc(CUE)} % on MATH-500; without them, the base model scores {pc(DATA['plain_t06']['right'])} % at temperature "
+        "0.6.")  # also the sentence on its tile
 
 # What the reader switches between; the second, the finding, is shown on load.
 DATA["states"] = [
-    {"key": "base", "name": "Base", "right": PLAIN, "say": "Base: the plain prompt, no cue."},
+    {"key": "base", "name": "Base", "right": PLAIN, "say": "Base: the base model with the plain prompt, no cue."},
     {"key": "cue", "name": "Base + cue", "right": CUE, "say": "Base + cue: the answer starts with \"line!\", two line breaks and \"Okay\"."},
 ]
 DATA["rl_level"] = RL
@@ -108,60 +110,65 @@ DATA["rl_level"] = RL
 T06, G06, G10 = DATA["t06"], DATA["gap"]["t06"], DATA["gap"]["t10"]
 PANELS = [
     ["new", "What is new",
-     f"The cue is a replication of Wang et al. (arXiv 2610.06851), who report that a short opening cue takes the Olmo 3 base "
-     f"model from {DATA['paper']['plain']} % to {DATA['paper']['cue']} % on MATH-500 at T 0.6.",
-     [f"New here: how far Base + cue stays behind RL depends on the sampling temperature. The gap is {G06[0]} points at T 0.6 "
-      f"(95 % interval {G06[1]} to {G06[2]}) and {G10[0]} points at T 1.0 ({G10[1]} to {G10[2]}).",
-      f"Only the base model moves. Base + cue has {T06['cue']} of {N} right at T 0.6 and {CUE} of {N} at T 1.0; RL has "
-      f"{T06['rl']} and {RL}.",
-      f"The paper ran T 0.6 only, and its RL model is an earlier release that scores {DATA['paper']['rl']} %, which the cue "
-      f"already matched, so it had no gap to explain. Against the later release used here, the cue covers {CUE - PLAIN} of "
-      f"the {RL - PLAIN} answers that RL training adds at T 1.0: {SHARE} % of the gain."]],
+     f"New here: how far Base + cue stays behind the RL model depends on the sampling temperature T. The gap is {G06[0]} "
+     f"percentage points at T 0.6 (95 % interval {G06[1]} to {G06[2]}) and {G10[0]} points at T 1.0 ({G10[1]} to {G10[2]}).",
+     [f"Only Base + cue's score changes with temperature. Base + cue has {T06['cue']} of {N} right at T 0.6 and {CUE} of "
+      f"{N} at T 1.0; the RL model has {T06['rl']} and {RL}.",
+      f"The cue itself repeats Wang et al. (arXiv 2610.06851), who report that a short opening cue takes the Olmo 3 base "
+      f"model from {DATA['paper']['plain']} % to {DATA['paper']['cue']} % on MATH-500 at T 0.6. Their cue has two tokens; "
+      "the cue here has three and is how the RL model opens its own answers.",
+      f"The paper ran T 0.6 only. Its RL model is an earlier release that scores {DATA['paper']['rl']} %, which the cue "
+      f"already matched, so the paper had no gap to explain. Against the later release used here, the cue covers "
+      f"{CUE - PLAIN} of the {RL - PLAIN} answers that RL training adds at T 1.0: {SHARE} % of the gain."]],
     ["why", "Why it matters",
-     f"Most of what RL training adds on this benchmark is reached with no training, so the work that follows is about the "
-     f"remaining {LEFT[0]} to {LEFT[1]} points.",
+     f"Most of what RL training adds on this benchmark is reached with no training. What remains is {LEFT[0]} to "
+     f"{LEFT[1]} points, depending on which of two runs of the RL model is the reference.",
      [f"The temperature decides how large that remainder looks. About half of the {G06[0]} points seen at T 0.6 are gone at "
       f"T 1.0, where far fewer of Base + cue's answers are cut off at {DATA['cap']:,} tokens ({DATA['cue']['cap_hits']} of {N} "
-      f"against {T06['cue_cap_hits']}).",
-      f"It is the first and largest step of the team's climb on MATH-500. With a vote over 4 samples after restarting "
-      f"cut-off answers, Base + cue reaches {DATA['vote']['cue']} of {N} ({pc(DATA['vote']['cue'])} %), and RL "
-      f"{DATA['vote']['rl']} of {N} ({pc(DATA['vote']['rl'])} %) under the same rule. A tie rule picked on held-out folds "
-      f"does not hold up: it gives {DATA['vote']['cue_held_out']} of {N} against the plain vote's "
-      f"{DATA['vote']['cue_plain_vote']} on MATH-500 but {DATA['vote']['hard_held_out']} of {DATA['hard']['n']} against "
+      f"at T 1.0, against {T06['cue_cap_hits']} at T 0.6).",
+      f"The cue is the first and largest of the team's gains on MATH-500. With a vote over 4 samples, after a restart of "
+      f"each answer that was cut off, Base + cue reaches {DATA['vote']['cue']} of {N} ({pc(DATA['vote']['cue'])} %), and "
+      f"the RL model {DATA['vote']['rl']} of {N} ({pc(DATA['vote']['rl'])} %) under the same rule. A tie rule picked on "
+      f"held-out folds does not hold up: it gives {DATA['vote']['cue_held_out']} of {N} against the vote without it, "
+      f"{DATA['vote']['cue_plain_vote']}, on MATH-500, but {DATA['vote']['hard_held_out']} of {DATA['hard']['n']} against "
       f"{DATA['vote']['hard_plain_vote']} on the {DATA['hard']['n']} harder problems.",
-      f"Harder problems leave more to explain: on the {DATA['hard']['n']} harder problems Base + cue has "
-      f"{DATA['hard']['cue']} of {DATA['hard']['n']} right and RL {DATA['hard']['rl']}."]],
+      f"The gap is larger on harder problems: on the {DATA['hard']['n']} harder problems Base + cue has "
+      f"{DATA['hard']['cue']} of {DATA['hard']['n']} right and the RL model {DATA['hard']['rl']}."]],
     ["how", "How we know",
      f"The base model Olmo-3-1025-7B answered the {N} problems of MATH-500 twice, once with the plain prompt and once with "
      "the cue placed after the prompt as the start of its answer, and the same grader scored both.",
      [f"Base: {PLAIN} of {N} right ({pc(PLAIN)} %). Base + cue: {CUE} of {N} ({pc(CUE)} %). Both runs take one sample per "
-      f"problem at T 1.0 and top-p 1.0, cut off at {DATA['cap']:,} generated tokens, scored by grader v3. The cue turns "
+      f"problem at T 1.0 and top-p 1.0, with a limit of {DATA['cap']:,} generated tokens, and the grader (version 3) "
+      f"scored both. The cue turns "
       f"{DATA['flips']['up']} problems from wrong to right and {DATA['flips']['down']} from right to wrong.",
-      f"The control is the plain prompt on the same weights. The reference is RL, Olmo-3.1-7B-RL-Zero-Math with the plain "
-      f"prompt at the same setting: {RL} of {N} ({pc(RL)} %) in the run shown, and {DATA['rl']['samples'][0]}, "
+      f"The control is the same base model with the same prompt and no cue (the plain prompt). The reference is the RL "
+      f"model, Olmo-3.1-7B-RL-Zero-Math, with the plain prompt at the same setting. It has {RL} of {N} right ({pc(RL)} %) "
+      f"in the run shown, and {DATA['rl']['samples'][0]}, "
       f"{DATA['rl']['samples'][1]}, {DATA['rl']['samples'][2]} and {DATA['rl']['samples'][3]} in the four samples of a later "
       f"run. A repeat of the cue run on the same seeds gave {DATA['repeat']['samples'][0]} right, and three further samples "
       f"{DATA['repeat']['samples'][1]}, {DATA['repeat']['samples'][2]} and {DATA['repeat']['samples'][3]}.",
       f"Temperature: at T 0.6 with top-p 0.95, Base + cue has {T06['cue']} of {N} right, and {T06['cue_cap_hits']} of its "
       f"answers are cut off. At T 0.6 with top-p 1.0 it has {DATA['t06_p10']['right']} right, and a loop detector finds "
-      f"{DATA['t06_p10']['loops']} answers that repeat themselves. At T 1.0 the detector finds {DATA['minp']['loops_t10']}, "
-      f"and cutting off the unlikely tokens again brings {DATA['minp']['loops_cut']} back. The page "
+      f"{DATA['t06_p10']['loops']} answers that repeat themselves. At T 1.0 the detector finds {DATA['minp']['loops_t10']}; "
+      f"at T 1.0 with min-p 0.1, which drops the unlikely tokens, it finds {DATA['minp']['loops_cut']}. The page "
       "[[Restarting stuck answers|/finding/restart-on-cap]] shows what a restart recovers."]],
     ["limits", "What it does not show",
-     f"The score above the paper's {DATA['paper']['cue']} % is a grader effect rather than a better cue: under our first "
-     f"grader, the closest to the paper's, the same answers score {DATA['cue']['right_v1']} of {N} ({pc(DATA['cue']['right_v1'])} %).",
-     [f"Why RL keeps its score at the lower temperature is only partly measured: at T 0.6 its cut-off answers fall late in "
-      f"training, from {DATA['steps']['step400']} of {N} at RL step 400 to {DATA['steps']['step2800']} of {N} at the final "
-      "step 2,800. What in training causes the fall is untested.",
-      f"The picture's {round(pc(CUE) - pc(PLAIN), 1)} points are against the plain prompt at T 1.0. At its better "
-      f"temperature, T 0.6, the plain base model has {DATA['plain_t06']['right']} of {N} ({pc(DATA['plain_t06']['right'])} %); "
-      f"against that the cue at T 1.0 adds {round(pc(CUE) - pc(DATA['plain_t06']['right']), 1)} points and closes "
-      f"{SHARE_BEST} % of the gap to RL, not {SHARE} %.",
+     f"The picture's {round(pc(CUE) - pc(PLAIN), 1)} points are against the plain prompt at T 1.0. At its better "
+     f"temperature, T 0.6, the base model with the plain prompt has {DATA['plain_t06']['right']} of {N} "
+     f"({pc(DATA['plain_t06']['right'])} %); against that the cue at T 1.0 adds "
+     f"{round(pc(CUE) - pc(DATA['plain_t06']['right']), 1)} points and closes {SHARE_BEST} % of the gap to the RL model, "
+     f"not {SHARE} %.",
+     [f"The cue is not better than the paper's: our score is above the paper's {DATA['paper']['cue']} % because our grader "
+      f"accepts more answers. Under our first grader, the closest to the paper's, the same answers score "
+      f"{DATA['cue']['right_v1']} of {N} ({pc(DATA['cue']['right_v1'])} %).",
+      f"Why the RL model keeps its score at the lower temperature is only partly measured: at T 0.6 the number of its "
+      f"answers that are cut off drops late in training, from {DATA['steps']['step400']} of {N} at RL step 400 to "
+      f"{DATA['steps']['step2800']} of {N} at the final step 2,800. What in training causes the drop is untested.",
       f"Part of the gain is answers that end in a readable form. With the plain prompt {DATA['plain']['nothing_extracted']} of "
       f"{N} answers hold no final answer that the grader can find, and with the cue {DATA['cue']['nothing_extracted']}. "
       f"In {DATA['plain_starts']['go_on']} of the {N} plain answers the first word is in lower case: the model goes on "
-      f"writing the prompt's last sentence. {DATA['plain_starts']['empty']} are empty. Open a dot to read one. It is one pair "
-      "of models, one benchmark and one sample per problem."]],
+      f"writing the prompt's last sentence. Another {DATA['plain_starts']['empty']} are empty. Click a dot in the picture "
+      "to read one. All of this is one pair of models, one benchmark and one sample per problem."]],
     ["run", "How to reproduce it",
      "One command runs the cue on one GPU, and the same command with --prompt plain runs the control.",
      ["uv run tools/gpu.py submit h100 --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python "
@@ -174,8 +181,8 @@ PANELS = [
       f"and {DATA['vote_artifact']} (on the 328 harder problems {DATA['vote_hard_artifact']}), the cut-off answers during "
       f"training in {DATA['steps_artifact']}, and the loop counts in {DATA['t06_p10_artifact']} and {DATA['minp_artifact']}.",
       f"The cue's three token ids and its text are frozen in {DATA['cue_artifact']} (prefill_ids, prefill_text). The paper's "
-      "cue has two tokens. The cue here has three, the text \" line!\", two line breaks and \"Okay\", and it is how RL opens "
-      "its own answers."]],
+      "cue has two tokens. The cue here has three, the text \" line!\", two line breaks and \"Okay\", and it is how the RL model "
+      "opens its own answers."]],
 ]
 
 # One row per MATH-500 problem, written by --write from DATA["rows"] and DATA["problems"]:
@@ -1096,7 +1103,7 @@ function problemPane(k) {
     `<li><b>Base + cue</b>, T 1.0, <span class="verdict">${said(p, 1)}</span>.</li>` +
     `<li>The reference answer is <span data-math>${esc(p.gold)}</span>.</li></ul>` +
     `<div class="txt"><p class="cap">How the answer begins, Base (first ${p.s[0].length} characters)</p><p data-math>${start0} …</p></div>` +
-    `<div class="txt"><p class="cap">How the answer begins, Base + cue (the cue is lit)</p><p data-math><span class="c">line!</span> <span class="c">↵</span> <span class="c">↵</span> <span class="c">Okay</span>${lines(p.s[1])} …</p></div>` +
+    `<div class="txt"><p class="cap">How the answer begins, Base + cue (the cue is highlighted)</p><p data-math><span class="c">line!</span> <span class="c">↵</span> <span class="c">↵</span> <span class="c">Okay</span>${lines(p.s[1])} …</p></div>` +
     `<div class="steps"><button data-step="-1">‹ Previous problem</button><button data-step="1">Next problem ›</button></div>`;
 }
 function pane() {

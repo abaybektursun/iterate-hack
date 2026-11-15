@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": 229, "low": 213, "high": 244, "reason": "Own format at T 1.0 cap 32,768 gave 232/328 (cue 230-235 across seeds); T 0.6 with top-p 0.95 is the released setting, so roughly the same, with some extra risk of loops."},
+{"id": "t02", "value": 472, "low": 462, "high": 481, "reason": "Own format at T 1.0 cap 32,768 gave 474/500 and the cue singles are 457-462 at 16k; T 0.6 should be close to this."},
+{"id": "t03", "value": 403, "low": 389, "high": 417, "reason": "The first seed gave 411, but Code-alone 1.5x gives 399 and RL-Code 401, so expect some regression toward about 400; per-seed spread is about 7."},
+{"id": "t04", "value": 403, "low": 389, "high": 417, "reason": "Same cell as t03 at another seed: 411 so far, regressed toward the ~400 level of the comparable cells."},
+{"id": "t05", "value": 400, "low": 387, "high": 413, "reason": "RL-Code scored 401/538 at seed 51000000; a new seed adds only sampling noise."},
+{"id": "t06", "value": 400, "low": 387, "high": 413, "reason": "RL-Code scored 401/538 at seed 51000000; a new seed adds only sampling noise."},
+{"id": "t07", "value": 388, "low": 374, "high": 402, "reason": "Code top-8 at 1x scored 386 (1.5x 399, 2x 394); a new seed adds noise around about 388."},
+{"id": "t08", "value": 388, "low": 374, "high": 402, "reason": "Code top-8 at 1x scored 386 (1.5x 399, 2x 394); a new seed adds noise around about 388."},
+{"id": "t09", "value": 226, "low": 213, "high": 239, "reason": "232 at seed 3000000, chosen as a headline, so expect regression toward Think-SFT + Math 1.5x (220) and M(2) (~233)."},
+{"id": "t10", "value": 40, "low": 31, "high": 50, "reason": "The odd shard had 20 cap hits of 250; the even shard should be similar, giving about 40 of 500."},
+{"id": "t11", "value": 376, "low": 362, "high": 389, "reason": "The odd shard got 188/250 right v3; doubling gives about 376, with binomial noise of about 7 on the other half."},
+{"id": "t12", "value": 372, "low": 330, "high": 410, "reason": "Between the cued base (317) and RL-Code (401): Think-SFT is trained on code traces but at T 1.0 and a 16k cap it hits the cap often, so the interval is wide."},
+{"id": "t13", "value": 362, "low": 318, "high": 403, "reason": "The math cue did about as well as the code cue on the base for code (326 vs 317); Think-SFT may drift more toward math-style output, so slightly below t12."},
+{"id": "t14", "value": 196, "low": 188, "high": 205, "reason": "Cued base vote over 4 is 192 (195 after restart); on MATH-500 going from 4 to 6 samples added about 7, and less is expected on hard328, where the base has no right sample on many problems."},
+{"id": "t15", "value": 466, "low": 456, "high": 476, "reason": "Think-SFT cue singles score 457-462 and M(1) 467; M(2) finishes more but is slightly less precise, so about 466."},
+{"id": "t16", "value": 233, "low": 222, "high": 244, "reason": "The first three M(2) hard328 samples scored 234, 229 and 237 (mean 233.3)."},
+{"id": "t17", "value": 246, "low": 239, "high": 253, "reason": "M(2) vote over 3 was 246 and Think-SFT's vote over 4 is 241; the 4th sample changes little."},
+{"id": "t18", "value": 243, "low": 233, "high": 253, "reason": "M(2) at 32k on seed 3,010,000 scored 245; on seed 3,000,000 Think-SFT at 32k scored 230 vs 234, so slightly lower."},
+{"id": "t19", "value": 82, "low": 74, "high": 90, "reason": "The 16k vote is 75/136 with 46% cap hits; at 32k about a quarter of the cut answers finish right (as on hard328), raising singles by about 10, so the vote rises by about 7."},
+{"id": "t20", "value": 70, "low": 63, "high": 77, "reason": "The 16k single mean is 60.0 with about 62 cap hits per sample; if about 25% of those finish right at 32k, as on hard328, the mean rises to about 70."}
+]}

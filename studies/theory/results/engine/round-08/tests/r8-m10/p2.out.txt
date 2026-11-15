@@ -1,0 +1,2 @@
+{"groups": {"Think-SFT kept rows": 275, "RL kept rows": 329, "Think-SFT problems with kept rows": 121, "RL problems with kept rows": 143}}
+{"measured": 0.19437413650179614, "n": 275, "interval": [0.13106997101792162, 0.2562911725955205], "interval_kind": "bootstrap", "refuted_by_met": false, "alt_measured": 0.19556491017063826, "not_computable": null, "example_row": {"problem_index": 4, "sample": 0, "attempt": 0, "seed": 181000004, "n_new": 8027, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "Evelyn", "score_v3": 1, "gold": "\\text{Evelyn}"}}

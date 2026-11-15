@@ -1,0 +1,86 @@
+{
+ "status": "done",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "sft1_rl20",
+  "prompt": "cue",
+  "set": "hard328",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 32768,
+  "seed": 3000000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 1,
+  "restarts": 0,
+  "out": "/root/abaybektursun-1115-115611-7095/out/hard328_cap32",
+  "dry_run": false,
+  "commit": "94e5d06c018568409b4af702c7c975ead66b6d3c",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 328,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "commit": "94e5d06c018568409b4af702c7c975ead66b6d3c",
+ "job_id": "abaybektursun-1115-115611-7095",
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-15T19:56:19Z",
+ "updated_utc": "2026-11-15T21:46:44Z",
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 36384,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 34816,
+  "load_s": 20.765828132629395,
+  "model_dir": "/tmp/theta",
+  "tok_dir": "/root/.cache/huggingface/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ },
+ "counts": {
+  "n": 328,
+  "tok_p_lt_1e2": 48588,
+  "tok_p_lt_1e3": 10949,
+  "correct_v3": 241,
+  "correct_v1": 240,
+  "cap_hits": 0,
+  "loop_A": 0,
+  "generated_tokens": 3223173,
+  "restarts": 0,
+  "n_planned": 328,
+  "mean_generated_tokens": 9826.746951219513,
+  "generation_s": 6601.776026010513,
+  "tokens_per_s": 488.22816576947395
+ },
+ "memory": {
+  "gpu_memory_used_mib": 88166,
+  "gpu_memory_total_mib": 97887,
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition"
+ },
+ "wall_s": 6624.76692533493
+}

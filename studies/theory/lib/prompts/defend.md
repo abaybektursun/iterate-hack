@@ -14,7 +14,7 @@ For every entry, state the number the recipe will give if the theory's mechanism
 as written: what it implies for this quantity, with the base rates the items report for the same models and
 settings. Give a 90 % interval: the interval is scored as a normal distribution (mean value, sd (high - low) / 3.29)
 by the probability it gives the computed value, against another prediction of the same number, so too wide earns
-little and too narrow loses when it misses. Where the mechanism implies little about a quantity, give your best value
+little and too narrow loses when it misses, and a measured value outside your interval earns at most 0. Where the mechanism implies little about a quantity, give your best value
 with an honest interval.
 
 Write defend.json, a JSON list with one entry per test, every k exactly once:

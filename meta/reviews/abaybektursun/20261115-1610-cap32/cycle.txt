@@ -1,0 +1,139 @@
+Jobs of abaybektursun, last 8 h:  id  state  gpu  wait  run  command
+  abaybektursun-1115-002459-e1f9  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-002505-8f0e  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-002559-7900  no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1115-002653-1aca  no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1115-002824-da52  no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1115-003046-f2fe  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-003106-582e  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-003203-641e  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-003715-63e3  no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1115-004808-bb28  done  vast.ai  -  69.1  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-005210-95c6  done  vast.ai  -  65.2  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-005330-92a1  no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1115-005756-309b  done  vast.ai  -  136.2  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-005823-8ac9  done  vast.ai  -  136.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-010036-d67f  no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1115-010708-a9f4  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-031209-1273  done  NVIDIA H100   0.1  57.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031219-19af  done  NVIDIA H100   0.1  47.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031229-5991  done  NVIDIA H100   0.1  48.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031240-1106  done  NVIDIA H100   1.0  43.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031249-1dcd  done  NVIDIA H100   5.2  50.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031304-cf34  done  NVIDIA H100   5.0  53.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031315-b328  done  NVIDIA H100   9.4  53.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031326-369f  done  NVIDIA H100   24.8  47.2  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031336-56ff  done  NVIDIA H100   29.3  43.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031346-5113  done  NVIDIA H100   44.1  54.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031356-77f0  done  NVIDIA H100   46.0  101.3  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-011756-7a57  no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1115-014426-3588  no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.probdep_tokens --rows studies/rlneuro
+  abaybektursun-1115-014547-2c8c  done  vast.ai  -  15.7  python -m studies.rlneurons.jobs.probdep_tokens --rows studies/rlneuro
+  abaybektursun-1115-015601-2e73  done  vast.ai  -  15.9  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-015753-6093  no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-015818-b11d  done  vast.ai  -  86.8  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-015824-bde8  no copy yet  vast.ai  -  -  pkill -f delta_sum; PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons
+  abaybektursun-1115-015835-d906  no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-015852-a31f  done  vast.ai  -  86.4  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-020021-e9d1  done  vast.ai  -  117.8  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-020435-c76d  done  vast.ai  -  101.0  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-020500-36ed  done  vast.ai  -  108.2  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-020508-879c  done  vast.ai  -  93.7  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-020613-3636  no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-021039-24f7  done  vast.ai  -  28.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-042802-2fae  done  NVIDIA H100   0.0  4.6  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-024132-1f6e  done  vast.ai  -  63.6  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-024256-58c8  done  vast.ai  -  65.3  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-024347-94e1  done  vast.ai  -  59.7  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-024432-d87b  done  vast.ai  -  65.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-024606-5843  done  vast.ai  -  54.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-024621-af01  done  vast.ai  -  70.3  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-024700-b8c3  done  vast.ai  -  58.3  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-024804-390f  done  vast.ai  -  63.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-024835-486b  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-024927-4a44  done  vast.ai  -  62.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-025027-51c8  done  vast.ai  -  62.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-025153-2e87  done  vast.ai  -  61.9  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-032509-fc06  done  vast.ai  -  47.5  /opt/rln-vllm/bin/python -c "from huggingface_hub import snapshot_down
+  abaybektursun-1115-033733-dd6d  no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-055641-b417  done  NVIDIA H100   0.1  182.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-055652-3a2d  done  NVIDIA H100   0.1  30.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-040403-80d7  done  vast.ai  -  157.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  ih-1115-144232-448b  done  aws  -  79.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  ih-1115-144318-6d57  done  aws  -  82.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  ih-1115-144428-85af  done  aws  -  85.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-064456-33a0  done  vast.ai  -  55.2  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-064510-764d  no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  ih-1115-144457-42b8  done  aws  -  81.5  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-064532-6a2f  done  vast.ai  -  52.3  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-064540-7ae0  done  vast.ai  -  64.3  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-064646-113f  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-064708-17f7  done  vast.ai  -  63.1  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-064713-35b2  no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-064729-a4fb  no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-064748-f868  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-064801-86ad  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-064808-77cd  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-064850-01eb  done  vast.ai  -  81.1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-090241-0229  done  NVIDIA H100   0.1  52.3  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-090252-65bf  done  NVIDIA H100   0.1  54.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  ih-1115-150237-83a4  no copy yet  aws  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  ih-1115-151648-35dd  no copy yet  aws  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  ih-1115-151855-f751  no copy yet  aws  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  ih-1115-152525-2f0c  no copy yet  aws  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-074100-e0f4  no copy yet  vast.ai  -  -  /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-pa
+  abaybektursun-1115-075017-fa29  no copy yet  vast.ai  -  -  /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-p
+  abaybektursun-1115-075028-492a  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-075158-8cf6  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-075225-14ce  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  ih-1115-155322-598b  no copy yet  aws  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-075339-4909  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-075518-5604  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-075638-1c6b  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-075832-580b  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  ih-1115-155844-4392  no copy yet  aws  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  ih-1115-155905-0426  no copy yet  aws  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-080137-39cf  no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-080430-f0fa  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-080505-8d09  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-080456-f530  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-100930-eee0  running  NVIDIA H100   0.1  1.4  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  99 jobs, 0 failed or cancelled; median wait 0.1; 3521.5 container minutes, 0.0 of them in failed or cancelled jobs
+
+Work of abaybektursun, last 8 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-ceccc0  cap32  3  465  1  468  12  0  Token cap 32,768 on hard328 for Think-SFT cue, RL plain and 
+  work-644fec  main  -  -  -  453 (open)  0  0  Visuals lead for the findings pages (/findings, tools/findin
+  work-e02ba4  main  -  -  -  164  0  0  Finish dial: Math 3.1's 8 directions added to the base at si
+  work-c82156  theory  -  -  -  90  0  0  Run idea-f1bae8: MATH-500, untrained base, plain prompt, no 
+  work-480b1f  main  35  340  1  376  7  0  RL steps 100 and 400 at AI2's setting (T 1.0 / top-p 1.0, MA
+  work-0d465a  main  -  -  -  4  0  0  Offline, no GPU: mixed-model vote on hard328 from stored row
+  work-173c5c  main  -  -  -  66  0  0  Laptop, no GPU: finish the Think-SFT training-overlap scan f
+  work-2cd5d0  critic  5  17  1  22  2  0  Problem dependence as a label-free early sign of a wrong sam
+  work-ab6833  main  -  -  -  32  0  0  run_cell --shard k/N (problems k, k+N, ... of the set; seeds
+  work-7c069c  main  -  -  -  274  0  0  Fresh held-out set (problems dated after the training data o
+  work-4ecc65  main  -  -  -  13  0  0  Risk-coverage of Think-SFT cue vs RL plain vs base cue on st
+  work-dd4773  main  -  -  -  15  0  0  Derived or asserted (idea-6f4b9e): blind hosted judge labels
+  work-55ae25  main  -  -  -  4  0  0  Risk-coverage on hard328 stratified by difficulty: is Think-
+  work-44d747  main  -  -  -  10  0  0  One table of all hard328 configurations from committed per-p
+  work-1d752c  main  -  -  -  1  0  0  Per-sample rates for derived-or-asserted (review of result-0
+  work-8fd317  theory  -  -  -  92  0  0  Theory round 07 on engine 7.1 (no account; half the mechanis
+  work-ab0f72  main  -  -  -  184  0  0  Replicate the 1.5x edit (base + 8 directions of RL-Math at 1
+  work-8b4030  egate-fresh  147  65  -  233 (open)  9  0  Transplant a=2 off the set it was chosen on: Think-SFT + 2 x
+  work-60f040  critic  3  82  -  86 (open)  4  0  Vote over k = 1..12 samples of the untrained cued base on MA
+  work-dc9359  main  -  -  -  79 (open)  0  0  Think-SFT + cue vote over 4 at token cap 32,768 on hard328 (
+  work-abe449  main  -  -  -  29  0  0  Tier list of the genuinely novel findings of the whole proje
+  work-16773f  main  1  -  -  68 (open)  7  0  1.5x top-8 edit (base + 1.5 x top 8 directions of RL-Math - 
+  work-e1b23a  main  -  -  -  65  0  0  Two controls for the finish dial (result-6f1bb7): random ran
+  work-5fd7c1  main  -  -  -  12  0  0  gpuprice: public results page at gpu.invariant.team (static,
+  work-bef559  main  -  -  -  47 (open)  0  0  Site lab: 12 parallel 3D / interactive prototypes of new vis
+  work-0a1b10  main  -  -  -  27  0  0  Short paper on the finish dial (result-6f1bb7, result-95a4dc
+  work-88e8d5  theory  -  -  -  41 (open)  0  0  Theory round 08 on engine 8: mechanisms are written with the
+  work-76a232  drift  -  -  -  32 (open)  0  0  Drift: label-free signs in Think-SFT's cut-off answers (scri
+  work-3c3e3d  main  -  -  -  15  0  0  Joke mini app on the site: /psychosis, a meditation and ther
+  work-746eaa  main  -  -  -  3  0  0  Exa showcase page on the site at /exa (tools/exa_page.py, on
+  work-1a2d68  main  -  -  -  3  0  0  Site page /pastdev: one page on how the team used past.dev a
+  work-df5e0a  main  -  -  -  2 (open)  0  0  Second model pair for the finish dial: base + Code 3.1's 8 d
+
+Team, last 8 h: claim to close median 91 min, upper quartile 217 min, over 38 work items closed by 3 people; 45 results, 5.6 per hour.
+
+Median minutes per stage over work items with jobs: to-job 4, jobs 82, to-answer 1. Slowest stage: jobs.

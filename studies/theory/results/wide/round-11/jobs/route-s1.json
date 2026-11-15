@@ -1,0 +1,15 @@
+{"route": {
+  "mechanism": "round-09/training-m04",
+  "change": "Think-SFT with the cue at T 1.0 and the full 16,384 cap, sequential vote of up to 5 samples: stop when the first two answers agree, else keep drawing until a value has 3 votes or 5 samples are used; answer = plurality (ties to the earliest), tokens counted for the drawn samples only.",
+  "model": "think_sft",
+  "gap_parts": "Reliability: hard328 share about .43 of the ~42-problem base-to-RL gap (about 18 right answers; .63-.67 on MATH-500), the problems where the model's modal value is right but single samples miss it; the vote recovers most of these, and the extra draws go only to problems whose first two answers split (the 2-2 ties of vote-over-4). Budget (about .27, ~11): kept rather than won, because the full 16,384 cap stays on every sample and no sample is shortened. Answer statement (~.03, ~1): partly, since a malformed final line rarely becomes the mode. Capability (about .27, ~11): not reachable, because the vote cannot exceed problems whose mode is right.",
+  "why": "Pretraining fixes each problem's distribution over final values and a vote converges to its mode, so the vote's ceiling is the set of modal-right problems and extra samples only resolve near-ties. Spending samples where the first two disagree, and stopping at a 3-vote majority, should give about vote-over-5 accuracy at roughly 3 samples' tokens.",
+  "command": "uv run tools/gpu.py submit l40s --hours 4 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text $' line!\\n\\nOkay' --set hard328 --shard 0/8 --temperature 1.0 --top-p 1.0 --samples 5 --seed 71000000 --commit $(git rev-parse HEAD)\"",
+  "rl_command": "uv run tools/gpu.py submit l40s --hours 4 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model rl --opening-text $' line!\\n\\nOkay' --set hard328 --shard 0/8 --temperature 1.0 --top-p 1.0 --samples 5 --seed 71000000 --commit $(git rev-parse HEAD)\"",
+  "tokens": 31000,
+  "gpu_minutes": 200,
+  "readouts": [
+    {"arm": "route", "set": "hard328", "subset": "0/8", "n": 41, "readout": "right answers of 41 (grader v3) after the sequential up-to-5 vote, Think-SFT + cue; compare with think|seq4_restart (238.9/328 at 30,837 tokens, about 29.9 of 41)", "value": 30.5, "low": 27, "high": 34},
+    {"arm": "rl", "set": "hard328", "subset": "0/8", "n": 41, "readout": "right answers of 41 (grader v3) after the same sequential up-to-5 vote, RL-Zero-Math + cue", "value": 28, "low": 24, "high": 31}
+  ]
+}}

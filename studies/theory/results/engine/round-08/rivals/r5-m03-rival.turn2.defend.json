@@ -1,0 +1,5 @@
+[
+ {"k": 4, "value": 0.41, "low": 0.29, "high": 0.53, "why": "The plain register fails about half its answers on top of the base's own ability (plain T3 is about 0.55x the cued base in every length quartile; non-self-opened T 1.0 accuracy is about 0.41), so it scores about 0.48 on cued-4/4 problems and about 0.06 on cued <=1/4 problems."},
+ {"k": 5, "value": 0.63, "low": 0.5, "high": 0.76, "why": "At T 0.6 the plain register's difficulty-independent failure is weaker (non-self-opened accuracy about 0.57, only 0.155 below the cue), so accuracy is about 0.72 on cued-4/4 problems and stays near 0.08 on cued <=1/4 problems, where cap hits and hardness dominate."},
+ {"k": 6, "value": 0.08, "low": -0.06, "high": 0.22, "why": "Plain-register failures happen sample by sample rather than being tied to the problem, so on problems the cued base always solves, a wrong T 0.6 answer barely predicts a wrong T 1.0 answer; only a little leftover per-problem difficulty and format effects remain."}
+]

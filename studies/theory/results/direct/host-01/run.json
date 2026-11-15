@@ -1,0 +1,6 @@
+{
+ "commit": "04fa65ad91716e95784afa9139eb5a507854c57e",
+ "command": "studies/theory/analysis/direct_host.py analyze",
+ "job": null,
+ "input_job": "abaybektursun-1114-221259-0871"
+}

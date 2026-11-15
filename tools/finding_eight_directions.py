@@ -11,9 +11,10 @@ harder problems, each with Base + cue and RL as marked levels. The reader switch
 import json
 
 TITLE = "Eight directions"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "RL training changed every weight a little. Which of the changes matter?"
-LINE = ("Eight RL directions per matrix match the cue on MATH-500 (85.4 % against 82.0 %) and, on 328 harder problems, "
-        "solve 28 more than the cue.")
+PROBLEM = "Reinforcement learning (RL) changed every weight a little. Which of the changes matter?"
+LINE = ("Adding the 8 largest directions of RL's weight change in each weight matrix lifts the base model to the level of "
+        "the opening cue on MATH-500 (85.4 % against 82.0 %); with the cue added to both, it solves 28 more of the 328 "
+        "harder problems than the cue alone.")
 
 # Every number is copied from the artifact named here. None is typed from memory.
 RESULTS = "studies/rlneurons/results/wsp1/"
@@ -27,27 +28,28 @@ DATA = {
     "artifact": RESULTS + "readout.json",  # cells of full500; Base, Base + cue and RL from results/rln4/grader_v3/readout.json
     "runs": RESULTS + "full500/",  # one folder per cell, <label>_<prompt>-01/metrics.json
     "commit": "1417dbf8f09bb4fcffd273eff18dabdeb76debff",  # full500/top8_plain-01/run.json
-    "metric": "MATH-500, 500 problems, one sample each at T 1.0",
+    "metric": "MATH-500, 500 problems, one sample each at temperature 1.0",
     "unit": "%",
+    "measure": "of 500 math problems answered right",  # the small label beside the big number: what it counts
     "max": 100,
     "n_hard": 328,
     # What the reader switches between; "first" is the one shown on load, the finding itself. right = right of 500 on
     # MATH-500, hard = right of the 328 harder problems; cue says whether that setting used the opening cue there. short is
-    # the name on the switch at phone width. The key of Base stays "untrained": tools/findings.py reads it.
+    # the name on the switch at phone width.
     "first": 3,
     "states": [
-        {"key": "untrained", "name": "Base", "short": "Base", "right": 224, "cell": V3 + " cells.base_plain_1.0",
+        {"key": "base", "name": "Base", "short": "Base", "right": 224, "cell": V3 + " cells.base_plain_1.0",
          "hard": 76, "hard_cue": False, "hard_cell": "day1_hard328 cells.base_plain_T1",
-         "note": "Base: the base model with the plain prompt. The lines are the 8 largest directions of RL's change, not yet added."},
+         "note": "The base model was pretrained on text and never trained with rewards. The lines are RL's 8 largest directions, not yet added."},
         {"key": "base-cue", "name": "Base + cue", "short": "+ cue", "right": 410, "cell": V3 + " cells.base_opener_1.0",
          "hard": 164, "hard_cue": True, "hard_cell": "day1 rows.hard328_base_cue_t10-01",
          "note": "Base + cue: the same weights; only the first three tokens of the answer are fixed to RL's opening, \"line!\", two line breaks, \"Okay\"."},
         {"key": "random", "name": "8 random directions", "short": "8 random", "right": 197, "cell": "full500/rand8_plain",
          "hard": 158, "hard_cue": True, "hard_cell": "xreward/edits cells.rand8_math31",
-         "note": "A control: 8 random directions of the same size added to each matrix. Plain prompt on MATH-500, with the cue on the 328."},
+         "note": "A control: 8 random directions of the same size are added to each matrix. Plain prompt on MATH-500; the cue on the 328 harder problems."},
         {"key": "rl-directions", "name": "8 RL directions", "short": "8 RL", "right": 427, "cell": "full500/top8_plain",
          "hard": 192, "hard_cue": True, "hard_cell": "xreward/edits cells.top8_math31",
-         "note": "Only the 8 largest directions of RL's change per matrix are added. Plain prompt on MATH-500, cue on the 328."},
+         "note": "Only the 8 largest directions of RL's change per matrix are added. Plain prompt on MATH-500; the cue on the 328 harder problems."},
         {"key": "rl", "name": "RL", "short": "RL", "right": 463, "cell": V3 + " cells.rl_1.0",
          "hard": 206, "hard_cue": False, "hard_cell": "day1 rows.hard328_rl_plain_t10-01",
          "note": "RL: the model after reinforcement learning on math, the whole change. Plain prompt."},
@@ -92,37 +94,42 @@ _share = round(100 * _gain / (_S["rl"]["hard"] - _S["base-cue"]["hard"]))  # 28 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 PANELS = [
     ["new", "What is new",
-     "It was known that a small part of the RL weight change keeps the gain. New here: how small, the random control, and "
-     "the comparison with the opening cue, which needs no weight change at all.",
+     "New here: how small a part of RL's weight change keeps the gain, a random control, and the comparison with the "
+     "opening cue, which needs no weight change at all. It was known that a small part of the change keeps the gain "
+     "(Spectral Rewiring, arXiv 2607.03065).",
      [f"On MATH-500, the 8 RL directions with the plain prompt score {_pc('rl-directions')}, Base + cue {_pc('base-cue')}: "
-      f"{_vc['points']} points apart, 95 % interval {_m(_vc['ci'][0])} to {_m(_vc['ci'][1])}, so the two are not told apart there.",
+      f"{_vc['points']} percentage points apart, 95 % interval {_m(_vc['ci'][0])} to {_m(_vc['ci'][1])}, a difference within noise.",
       f"On the {DATA['n_hard']} harder problems, both with the cue, the 8 RL directions solve {_S['rl-directions']['hard']} of "
       f"{DATA['n_hard']} and Base + cue {_S['base-cue']['hard']}: {_gain} more, {_vh['points']} points, 95 % interval "
       f"{_vh['ci'][0]} to {_vh['ci'][1]}. That is {_share} % of the gain RL has over Base + cue there.",
-      f"8 random directions of the same size add nothing: {_pc('random')} against Base's {_pc('untrained')} on MATH-500, and "
-      f"{_S['random']['hard']} of {DATA['n_hard']} against Base + cue's {_S['base-cue']['hard']} on the harder problems."]],
+      f"Eight random directions of the same size do not raise the score. On MATH-500 they lower it: {_pc('random')} "
+      f"against the base model's {_pc('base')}. On the harder problems they solve {_S['random']['hard']} of "
+      f"{DATA['n_hard']} against Base + cue's {_S['base-cue']['hard']} ({_m(DATA['random_vs_cue_hard']['points'])} "
+      f"points, 95 % interval {_m(DATA['random_vs_cue_hard']['ci'][0])} to {_m(DATA['random_vs_cue_hard']['ci'][1])})."]],
     ["why", "Why it matters",
-     "On MATH-500 the 8 directions do what the cue does. On the harder problems they add to it, so they carry a part of "
+     "On MATH-500 the 8 directions score as high as the cue. On the harder problems they add to it, so they carry a part of "
      "RL's change that the cue does not.",
-     ["Read through the output layer, they point at words of deliberation: Okay, Wait, perhaps.",
-      f"Those words alone do not raise the score: making Base + cue write \"Wait\" as often as RL leaves it at "
-      f"{WAIT['steered']} of {WAIT['n']}, against a mean of {WAIT['unsteered']} without. Blind judges call {CHECKS['fix']} of "
+     ["In one matrix (the feed-forward output of layer 29), two of the directions, read through the model's output layer, "
+      "point at words of deliberation: Okay, Wait, perhaps.",
+      f"Those words alone do not raise the score: steering the activations of Base + cue so that it writes \"Wait\" as often as RL leaves it at "
+      f"{WAIT['steered']} of {WAIT['n']}, against a mean of {WAIT['unsteered']} without steering. Blind judges call {CHECKS['fix']} of "
       f"{CHECKS['n']} checking passages a fix.",
-      "A change this small and this readable is a target for editing weights directly, with no reward."]],
+      'A change this small and this readable is a target for editing weights directly. The page <a href="/finding/hand-written-edit">Hand-written edit</a> tries that with no reward and scores as high as the cue.']],
     ["how", "How we know",
      f"We added only the {_edit['k']} largest directions of the RL weight change in each of {_edit['n_edited']} weight matrices "
      f"to the base model and scored it on all {_edit['n']} MATH-500 problems and the {DATA['n_hard']} harder problems.",
-     [f"Every score is one sample per problem at T 1.0, graded by grader v3. Base {_pc('untrained')}, Base + cue {_pc('base-cue')}, "
+     [f"Every score is one sample per problem at temperature 1.0, scored by the grader (version 3). Base {_pc('base')}, Base + cue {_pc('base-cue')}, "
       f"RL {_pc('rl')} on MATH-500.",
-      f"The edit is {_edit['add_rel'] * 100:.2f} % of the size of the weights and {_edit['share'] * 100:.1f} % of the full RL change.",
-      "Closest published result: Spectral Rewiring (arXiv 2607.03065), which keeps the RL gain with a compact part of the "
-      "update on models that include this pair."]],
+      f"The added change has {_edit['add_rel'] * 100:.2f} % of the norm of the weights and {_edit['share'] * 100:.1f} % of the "
+      "squared norm of the full RL change.",
+      "Closest published result: Spectral Rewiring (arXiv 2607.03065) keeps the RL gain with a small part of the update, "
+      "on pairs of models that include this base model and its RL model."]],
     ["limits", "What it does not show",
      "The directions were read from the RL weights, so this is not yet a way to get the gain without reward.",
-     [f"On MATH-500 the edit ran with the plain prompt and on the {DATA['n_hard']} harder problems with the cue; the edit "
-      "with the cue on MATH-500 and without it on the 328 were not run.",
-      f"Part of the {_gain} is answers that end instead of being cut off at 16,384 tokens: {DATA['cap_hard']['top8']} cut off "
-      f"with the 8 directions, {DATA['cap_hard']['base_cue']} with Base + cue.",
+     [f"On MATH-500 the edit ran with the plain prompt and on the {DATA['n_hard']} harder problems with the cue; we did not "
+      "run the edit with the cue on MATH-500 or without it on the 328.",
+      f"Part of the gain of {_gain} problems comes from answers that end instead of being cut off at 16,384 tokens: "
+      f"{DATA['cap_hard']['top8']} answers are cut off with the 8 directions and {DATA['cap_hard']['base_cue']} with Base + cue.",
       f"RL with these 8 directions removed keeps most of its score: {DATA['removed']['value']} of the first "
       f"{DATA['removed']['n']} MATH-500 problems. The gain is spread over many directions. One direction per matrix gives "
       f"{DATA['one']['value']} of {DATA['one']['n']}."]],
@@ -323,7 +330,7 @@ const ease = p => p < .5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2;
    lit, they show in the accent; rest, the other directions of the RL change show between them; wash, the whole slab
    is lit; lab, the words stand at the ends of their lines. The picture moves from one look to the next in 0.9 s. */
 const LOOK = {
-  "untrained": { sc: 0, plain: .34, lit: 0, rest: 0, wash: 0, lab: 0 },
+  "base": { sc: 0, plain: .34, lit: 0, rest: 0, wash: 0, lab: 0 },
   "base-cue": { sc: 0, plain: .34, lit: 0, rest: 0, wash: 0, lab: 0 },
   "random": { sc: 1, plain: .7, lit: 0, rest: 0, wash: 0, lab: 0 },
   "rl-directions": { sc: 0, plain: 0, lit: 1, rest: 0, wash: 0, lab: 1 },
@@ -399,7 +406,7 @@ function scale(g) {
   });
   return `<text class="value" id="value" x="${g.x0}" y="${g.numY}" font-size="${g.num}"></text>` +
     `<text class="unit" id="unit" y="${f(g.numY - g.num * .38)}" font-size="${g.fl}"><tspan class="u1">MATH-500</tspan>` +
-    `<tspan class="u2" dy="${f(g.fl * 1.3)}">one sample each, T 1.0</tspan></text>` +
+    `<tspan class="u2" dy="${f(g.fl * 1.3)}">${esc(D.measure)}</tspan></text>` +
     `<text class="cap1" id="cap1" x="${g.x0}" y="${g.rows[1].cap}" font-size="${g.fl}"></text>` + out.join("");
 }
 function build() {
@@ -428,7 +435,7 @@ function build() {
     `<path class="rim draw" id="rim" pathLength="1"/>` +
     `<g id="key"><line class="leader" id="leader"/><text class="key" font-size="${g.kf}">` +
     `<tspan id="key1" x="${g.cx}" y="${g.ky}">One line is one direction:</tspan>` +
-    `<tspan id="key2" x="${g.cx}" y="${f(g.ky + g.kf * 1.3)}">one pattern of change in this weight matrix</tspan></text></g>` +
+    `<tspan id="key2" x="${g.cx}" y="${f(g.ky + g.kf * 1.3)}">one rank-1 part of RL's change to this matrix</tspan></text></g>` +
     S.words.map(o => `<text class="word" id="word-${o.i}" font-size="${g.fs}" font-stretch="${g.wide}%" style="text-anchor:${o.side > 0 ? "start" : "end"}" opacity="0">${esc(o.text)}</text>`).join("") +
     `<g class="scale">${scale(g)}</g>`;
   S.el = {};
@@ -535,11 +542,12 @@ function choose(i, instant) {
   $("switch").querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-pressed", k === i));
   place(S.t);
 }
+const link = s => s.replace(/&lt;a href=&quot;(\/[\w\/#-]*)&quot;&gt;(.*?)&lt;\/a&gt;/g, '<a href="$1">$2</a>');  // a link to another page of the site stays a link
 function pane() {
   const p = C.panels.find(p => p[0] === S.open);
   $("pane").innerHTML = p
     ? `<div class="dhead"><h2>${esc(p[1])}</h2><button class="close" data-open="">Close</button></div><p class="lead">${esc(p[2])}</p>` +
-      `<ul class="facts">${p[3].map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
+      `<ul class="facts">${p[3].map(x => `<li>${link(esc(x))}</li>`).join("")}</ul>`
     : `<ul class="more">${C.panels.map(p => `<li><button data-open="${p[0]}">${esc(p[1])}<span aria-hidden="true">›</span></button></li>`).join("")}</ul>`;
 }
 function address(push) {

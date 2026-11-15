@@ -1,0 +1,9 @@
+== BAD
+AssertionError: the job has no git, so $(git ...) would expand to nothing there: put the command in double quotes, so it expands here
+exit 1
+== GOOD
+AssertionError: commit your changes first: a job runs one commit
+exit 1
+
+== all Modal jobs in iterate-jobs (uv run --with modal python, scan of job:<id> cmd for '$(git' or '`git')
+328 jobs; 4 with unexpanded git, all exit 2: 0f14, 3388, f3e1, fd69 (run 0.9-1.0 min each). 0 jobs that finished would be refused.

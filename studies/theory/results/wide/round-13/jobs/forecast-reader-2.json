@@ -1,0 +1,5 @@
+{"forecasts": [
+{"readout": "r13-n01-r1", "value": 23, "low": 18, "high": 28, "reason": "Stored cued-base vote over 4 on this shard is 22 of 41; min-p 0.05 trims tail-token slips, so I expect at most a point or so of gain, plus binomial and vote noise."},
+{"readout": "r13-n01-r2", "value": 26, "low": 21, "high": 31, "reason": "RL's vote over 4 averages 27.6 of 41 across all shards; base scores slightly below average on this shard, so I shade RL down a little, and min-p should change little for a model this sharp."},
+{"readout": "r13-n01-r3", "value": 90, "low": 85, "high": 94, "reason": "Stored base vote over 4 is 89.2 per 100 on MATH-500; min-p might add about a point, and how hard this shard is remains unknown."}
+]}

@@ -1,0 +1,827 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Inside the 7B model's head, literally</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..600&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --paper: #12110f; --sheet: #1a1917; --ink: #ece7dc; --mute: #a8a295; --faint: #7d786d; --rule: #2b2925;
+  --blue: #d2ac62; --red: #d0563d; --on-blue: #15130f;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; color: var(--ink); background: var(--paper); overflow: hidden;
+  font: 400 14px/1.45 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+button:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
+a { color: inherit; text-decoration-color: var(--faint); text-underline-offset: 3px; }
+canvas#gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+canvas#gl.drag { cursor: grabbing; }
+.vig { position: fixed; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(18, 17, 15, .78) 0, rgba(18, 17, 15, 0) 34%), radial-gradient(110% 95% at 50% 48%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, .42) 100%); }
+#grain { position: fixed; inset: 0; pointer-events: none; opacity: .055; mix-blend-mode: overlay; background-size: 160px 160px; }
+.kick a { color: var(--faint); text-decoration: none; font-weight: 500; margin-right: 10px; padding-right: 10px; border-right: 1px solid var(--rule); }
+.kick a:hover { color: var(--ink); }
+
+/* The words: a flat column on the left. */
+.left { position: fixed; left: 34px; top: 26px; bottom: 24px; width: min(640px, calc(100vw - 68px)); display: flex; flex-direction: column; pointer-events: none; }
+.left > * { pointer-events: auto; }
+.lead { width: min(410px, 100%); }
+.kick { font-weight: 600; font-size: 12.5px; color: var(--mute); letter-spacing: .01em; }
+.kick b { color: var(--ink); font-weight: 650; }
+h1 { margin: 12px 0 0; font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 27px; line-height: 1.22; letter-spacing: -.012em; min-height: 4.9em; font-variant-numeric: lining-nums; }
+h1 em { font-style: normal; font-weight: 500; color: #fbf6ea; }
+h1 em.r { color: var(--red); }
+.src { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--rule); font-size: 11.5px; color: var(--faint); line-height: 1.4; }
+.src a { color: var(--mute); }
+
+/* Layer rail */
+.rail { flex: 1; min-height: 0; margin: 20px 0 22px; width: 150px; display: flex; flex-direction: column; max-height: 380px; }
+.spacer { flex: 1; }
+.rail .t { font-size: 11.5px; font-weight: 600; color: var(--mute); margin-bottom: 6px; }
+.rail .rows { flex: 1; display: flex; flex-direction: column; cursor: pointer; touch-action: none; }
+.rail .row { flex: 1; display: flex; align-items: center; gap: 7px; min-height: 0; }
+.rail .row i { display: block; max-width: 84px; height: 2px; background: #5d594f; border-radius: 1px; transition: background .2s; min-height: 2px; }
+.rail .row span { font-size: 9.5px; color: var(--faint); width: 14px; text-align: right; line-height: 1; opacity: 0; }
+.rail .row:nth-child(8n+1) span, .rail .row:last-child span, .rail .row.on span { opacity: 1; }
+.rail .row.on i { background: var(--blue); height: 3px; }
+.rail .row.on span { color: var(--blue); }
+.rail .row:hover i { background: #d8d2c4; }
+
+/* The dial: measured cells only. */
+.dial { width: 100%; }
+.dial .t { font-size: 11.5px; font-weight: 600; color: var(--mute); margin-bottom: 7px; display: flex; justify-content: space-between; gap: 12px; }
+.dial .t span { color: var(--faint); font-weight: 400; }
+.cells { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--rule); }
+.cell { padding: 9px 10px 8px 0; border-top: 2px solid transparent; margin-top: -1px; position: relative; }
+.cell .n { font-size: 11.5px; color: var(--mute); font-weight: 550; }
+.cell .v { font-family: "Newsreader", Georgia, serif; font-variant-numeric: lining-nums tabular-nums; font-size: 30px; font-weight: 300; line-height: 1.08; margin-top: 1px; color: #a8a295; }
+.cell .c { font-size: 11px; color: var(--faint); margin-top: 1px; }
+.cell .c b { color: var(--red); font-weight: 500; }
+.cell .bar { height: 2px; background: var(--rule); margin-top: 6px; position: relative; margin-right: 10px; }
+.cell .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: #8a8478; }
+.cell .bar u { position: absolute; right: 0; top: 0; bottom: 0; background: var(--red); opacity: .8; }
+.cell.on { border-top-color: var(--blue); }
+.cell.on .v { color: #fbf6ea; }
+.cell.on .n { color: var(--blue); }
+.cell.on .bar i { background: var(--blue); }
+.vars { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 9px; min-height: 24px; font-size: 12px; color: var(--faint); align-items: baseline; }
+.vars .g { display: flex; gap: 2px; align-items: baseline; }
+.vars .g > span { margin-right: 5px; }
+.chip { padding: 2px 7px; border-radius: 20px; color: var(--mute); font-weight: 500; font-size: 12px; white-space: nowrap; }
+.chip:hover { color: var(--ink); }
+.chip.on { background: var(--blue); color: var(--on-blue); font-weight: 600; }
+.chip.on.red { background: var(--red); }
+.neur { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--rule); font-size: 12px; color: var(--faint); align-items: baseline; }
+.dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+
+/* Detail column on the right. */
+.side { position: fixed; right: 34px; top: 26px; bottom: 24px; width: 318px; display: flex; flex-direction: column; pointer-events: none; }
+.side > * { pointer-events: auto; }
+.side.open::before { content: ''; position: fixed; right: 0; top: 0; bottom: 0; width: 440px; background: linear-gradient(90deg, rgba(18, 17, 15, 0), rgba(18, 17, 15, .93) 26%); z-index: -1; pointer-events: none; }
+.status { text-align: right; font-size: 11.5px; color: var(--faint); }
+.status i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); margin-right: 6px; vertical-align: 1px; }
+.status i.beat { animation: beat .7s ease-out; }
+.status.off i { background: var(--red); }
+@keyframes beat { 0% { opacity: .3; } 100% { opacity: 1; } }
+.panel.empty { margin-top: auto; flex: none; }
+.panel { margin-top: 18px; overflow: auto; flex: 1; scrollbar-width: thin; scrollbar-color: #35322c transparent; padding-right: 4px; }
+.panel .k { font-size: 11.5px; font-weight: 600; color: var(--blue); }
+.panel h2 { margin: 3px 0 2px; font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 23px; line-height: 1.2; letter-spacing: -.01em; }
+.panel .nm { font-size: 11px; color: var(--faint); word-break: break-all; }
+.panel .q { margin: 10px 0 2px; font-family: "Newsreader", Georgia, serif; font-size: 18px; line-height: 1.34; font-weight: 300; color: var(--ink); }
+.panel dl { margin: 11px 0 0; }
+.panel dl > div { display: flex; justify-content: space-between; gap: 14px; padding: 6px 0; border-top: 1px solid var(--rule); font-size: 12.5px; }
+.panel dt { color: var(--mute); }
+.panel dd { margin: 0; text-align: right; color: var(--ink); font-weight: 500; }
+.panel dd small { display: block; font-size: 11px; color: var(--faint); font-weight: 400; }
+.panel .h { margin: 14px 0 5px; font-size: 11.5px; font-weight: 600; color: var(--mute); }
+.panel p { margin: 6px 0; font-size: 12px; color: var(--mute); line-height: 1.45; }
+.panel svg { display: block; width: 100%; height: auto; }
+.tok { display: inline-block; padding: 0 5px; margin: 0 3px 3px 0; border: 1px solid var(--rule); border-radius: 3px; font-size: 11.5px; color: var(--ink); white-space: pre; line-height: 1.5; }
+.tok.cue { border-color: var(--blue); color: var(--blue); font-weight: 600; }
+.dir { font-size: 11px; color: var(--faint); margin: 7px 0 3px; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+.tbl td, .tbl th { padding: 4px 0; border-top: 1px solid var(--rule); text-align: right; font-weight: 400; }
+.tbl th { color: var(--faint); font-size: 11px; border-top: 0; }
+.tbl td:first-child, .tbl th:first-child { text-align: left; color: var(--mute); }
+.tbl tr.hi td { color: #fff; font-weight: 550; }
+.tbl td.r { color: var(--red); }
+.unit { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 2px; }
+.unit i { width: 8px; height: 8px; border-radius: 50%; border: 1px solid #585348; }
+.unit i.l { background: var(--red); border-color: var(--red); }
+.close { float: right; color: var(--faint); font-size: 12px; padding: 2px 4px; }
+.close:hover { color: var(--ink); }
+.key div { display: flex; gap: 10px; align-items: center; padding: 6px 0; border-top: 1px solid var(--rule); font-size: 12.5px; color: var(--mute); }
+.key svg { width: 34px; height: 14px; flex: none; }
+.hint { margin-top: 12px; font-size: 12px; color: var(--faint); line-height: 1.5; }
+
+/* Labels drawn over the picture. */
+#labels { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+#labels span { position: absolute; transform: translate(-50%, -50%); font-size: 11px; color: var(--ink); white-space: nowrap; font-weight: 500; will-change: transform, opacity; }
+#labels span.big { font-size: 12px; color: var(--ink); font-weight: 600; }
+#labels span.ev { transform: translate(0, -50%); font-size: 12px; color: var(--ink); background: rgba(18, 17, 15, .82); padding: 3px 9px; border-left: 1px solid var(--blue); }
+#labels span.ev b { color: var(--blue); font-weight: 600; white-space: pre; }
+#tip { position: fixed; pointer-events: none; font-size: 12px; background: rgba(22, 21, 18, .95); border: 1px solid var(--rule); padding: 4px 8px; border-radius: 4px; display: none; white-space: nowrap; z-index: 5; }
+#tip small { color: var(--faint); margin-left: 6px; }
+.nav { position: fixed; left: 50%; top: 24px; transform: translateX(-50%); display: flex; gap: 4px; }
+.nav .chip { border: 1px solid var(--rule); background: rgba(18, 17, 15, .6); padding: 4px 12px; }
+.nav .chip.on { background: var(--blue); border-color: var(--blue); }
+#err { position: fixed; left: 8px; bottom: 4px; color: var(--red); font-size: 11px; white-space: pre-wrap; z-index: 9; max-width: 80vw; }
+
+@media (max-height: 940px) { .rail { display: none; } }
+@media (max-width: 1180px) {
+  .rail { display: none; }
+  .side { width: 280px; }
+}
+@media (max-width: 820px) {
+  .left { left: 16px; top: 14px; bottom: 12px; width: calc(100vw - 32px); }
+  h1 { font-size: 18px; min-height: 0; margin-top: 6px; }
+  .src { display: none; }
+  .cell .v { font-size: 20px; }
+  .cell .c { font-size: 10px; }
+  .side { left: 16px; right: 16px; width: auto; top: auto; bottom: 232px; max-height: 38vh; }
+  .side .status { display: none; }
+  .panel { background: rgba(18, 17, 15, .95); padding: 10px 12px; border: 1px solid var(--rule); border-radius: 8px; margin: 0; }
+  .panel.empty { display: none; }
+  .nav { top: auto; bottom: 324px; left: auto; right: 16px; transform: none; }
+  #dialnote { display: none; }
+  .dial { background: linear-gradient(rgba(18, 17, 15, 0), rgba(18, 17, 15, .9) 14%); padding-top: 14px; }
+  .side { bottom: 362px; max-height: 34vh; }
+  .vig { background: none; }
+}
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div class="vig"></div><div id="grain"></div>
+<div id="labels"></div>
+
+<div class="left">
+<div class="lead">
+  <div class="kick"><a href="../../">Lab</a><b>Inside the 7B model</b> · what RL changed in the weights</div>
+  <h1 id="say">&nbsp;</h1>
+  <div class="src" id="src"></div>
+</div>
+
+<div class="rail" id="rail"><div class="t">Top-8 share by layer</div><div class="rows" id="railrows"></div></div>
+<div class="spacer"></div>
+<div class="dial">
+  <div class="t">Directions of the RL change copied into the base, per matrix <span id="dialnote"></span></div>
+  <div class="cells" id="cells"></div>
+  <div class="vars" id="vars"></div>
+  <div class="neur" id="neur"></div>
+</div>
+</div>
+
+<div class="nav"><button class="chip" id="bOver">Whole model</button><button class="chip" id="bPrev" aria-label="Previous layer">‹ Layer</button><button class="chip" id="bNext" aria-label="Next layer">Layer ›</button></div>
+
+<div class="side">
+  <div class="status" id="status"><i></i><span>Reading the board</span></div>
+  <div class="panel empty" id="panel"></div>
+</div>
+<div id="tip"></div>
+<div id="err"></div>
+
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+<script>
+window.addEventListener('error', e => { document.getElementById('err').textContent += (e.message || e) + '\n'; });
+window.addEventListener('unhandledrejection', e => { document.getElementById('err').textContent += (e.reason && (e.reason.stack || e.reason.message) || e.reason) + '\n'; });
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const D = await (await fetch('data.json')).json();
+const $ = id => document.getElementById(id);
+const fmt = (x, d = 0) => Number(x).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+const pct = (x, d = 1) => fmt(x * 100, d) + ' %';
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const tokShow = t => t.replace(/\n/g, '↵').replace(/^ /, '␣').replace(/ $/, '␣');
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- geometry of one layer, in units of 4,096 weights ---------- */
+const S = 1.12, NL = 32, U = 11008 / 4096, WID = 11008;
+const TILE = {
+  q: { x: -2.66, y: 0.56, w: 1, h: 1 }, k: { x: -1.54, y: 0.56, w: 1, h: 1 },
+  v: { x: -2.66, y: -0.56, w: 1, h: 1 }, o: { x: -1.54, y: -0.56, w: 1, h: 1 },
+  gate: { x: -0.04, y: 0, w: 1, h: U }, up: { x: 1.08, y: 0, w: 1, h: U }, down: { x: 2.66, y: 0, w: 1, h: U },
+};
+const MODS = ['q', 'k', 'v', 'o', 'gate', 'up', 'down'];
+const MNAME = { q: 'attention query', k: 'attention key', v: 'attention value', o: 'attention output', gate: 'MLP gate', up: 'MLP up', down: 'MLP down' };
+const MSHORT = { q: 'query', k: 'key', v: 'value', o: 'output', gate: 'gate', up: 'up', down: 'down' };
+const AXIS_X = 1.87, SPINE_X = -0.79, TD = 0.1, TH = 0.07;   // TH: bar thickness of the largest singular value in the model
+const zOf = l => -l * S;
+const Z_EMB = zOf(-1.7), Z_HEAD = zOf(NL + 0.7);
+const mat = {}; D.mats.forEach((m, i) => { m.id = i; mat[m.l + '.' + m.m] = m; });
+const SV_MAX = Math.max(...D.mats.map(m => m.sv[0])), ND_MAX = Math.max(...D.mats.map(m => m.nd));
+const sum = a => a.reduce((x, y) => x + y, 0);
+const E_ALL = sum(D.mats.map(m => m.nd * m.nd)), E_16 = sum(D.mats.map(m => sum(m.sv.map(s => s * s))));
+
+/* ---------- state ---------- */
+const C = D.cells;
+const RANKS = [
+  { key: '0', name: 'Base', cell: 'base_cue_T1', lit: 0, bulk: 0 },
+  { key: '1', name: '1 direction', cell: 'top1_math31', lit: 1, bulk: 0 },
+  { key: '8', name: '8 directions', cell: 'top8_math31', lit: 8, bulk: 0 },
+  { key: '64', name: '64 directions', cell: 'top64_math31', lit: 16, bulk: Math.max(0, (C.top64_math31.share - E_16 / E_ALL) / (1 - E_16 / E_ALL)) },
+  { key: 'all', name: 'All of RL', cell: 'rl_cue_T1', lit: 16, bulk: 1 },
+];
+const SIZES = [['-1', 'top8xm1_math31', -1], ['0.5', 'top8x0.5_math31', .5], ['1', 'top8_math31', 1], ['1.5', 'top8x1.5_math31', 1.5], ['2', 'top8x2_math31', 2], ['3', 'top8x3_math31', 3]];
+const VARS = [['attn', 'attention only', 'top8attn_math31'], ['mlp', 'MLP only', 'top8mlp_math31'], ['bulk', 'all but these 8', 'bulk_math31'], ['rand', '8 random', 'rand8_math31'],
+  ['b0', '0–10', 'top8x1.5_L0-10_math31', [0, 10]], ['b1', '11–21', 'top8x1.5_L11-21_math31', [11, 21]], ['b2', '22–31', 'top8x1.5_L22-31_math31', [22, 31]]];
+const SIZES1 = [['1', 'top1_math31', 1], ['2', 'top1x2_math31', 2], ['3', 'top1x3_math31', 3]];
+const st = { rank: '8', size: '1', size1: '1', vari: '', loop: '100', zero: false, best: true, sel: null, mode: 'over', f: 12 };
+const cell8 = () => st.vari ? VARS.find(v => v[0] === st.vari)[2] : SIZES.find(z => z[0] === st.size)[1];
+const cell1 = () => SIZES1.find(z => z[0] === st.size1)[1];
+const activeCell = () => st.rank === '8' ? cell8() : st.rank === '1' ? cell1() : RANKS.find(r => r.key === st.rank).cell;
+
+/* ---------- three: an instrument on a bench. Smoked glass plates, brass inlays, enamel beads ---------- */
+const canvas = $('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' });
+let firstShadow = true, qScale = 1, backedOff = false;   // internal resolution against the screen's: supersampled while frames are fast, lowered when they are slow
+const uPx = { value: 1000 };
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap; renderer.shadowMap.autoUpdate = false;
+const BG = new THREE.Color('#12110f');
+const scene = new THREE.Scene(); scene.background = BG; scene.fog = new THREE.Fog(BG, 34, 120);
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.05).texture;
+const camera = new THREE.PerspectiveCamera(30, 1, 0.5, 400);
+{ const c = document.createElement('canvas'); c.width = c.height = 160; const g = c.getContext('2d'), im = g.createImageData(160, 160); let x = 9;
+  for (let i = 0; i < im.data.length; i += 4) { x = (x * 1664525 + 1013904223) >>> 0; const v = x >>> 24; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = 255; }
+  g.putImageData(im, 0, 0); $('grain').style.backgroundImage = `url(${c.toDataURL()})`; }
+
+/* procedural surfaces */
+let seed = 7; const rnd = () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+function tex(w, h, fn, rep) { const c = document.createElement('canvas'); c.width = w; c.height = h; const g = c.getContext('2d'), im = g.createImageData(w, h); fn(im.data, w, h); g.putImageData(im, 0, 0);
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; if (rep) t.repeat.set(rep[0], rep[1]); t.anisotropy = 8; return t; }
+const frost = tex(256, 256, (d) => { for (let i = 0; i < d.length; i += 4) { const v = 150 + rnd() * 105; d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255; } });
+const brushedFn = (lo, hi) => (d, w, h) => { for (let y = 0; y < h; y++) { const r = rnd(), scratch = rnd() < 0.012 ? 60 : 0; for (let x = 0; x < w; x++) { const v = lo + (hi - lo) * (0.65 * r + 0.35 * rnd()) + scratch * rnd(); const i = (y * w + x) * 4; d[i] = d[i + 1] = d[i + 2] = Math.min(255, v); d[i + 3] = 255; } } };
+const brushed = tex(64, 512, brushedFn(90, 215)), brushedBench = tex(64, 1024, brushedFn(150, 225), [1, 6]);
+
+const col = h => new THREE.Color(h);
+const C_GLASS = col('#838d90'), C_AMBER = col('#b88d48'), C_BRASS = col('#e2b55c'), C_BRASS_LO = col('#a8853f'), C_ETCH = col('#4b5052'), C_PATINA = col('#b0452f'), C_STEEL = col('#9a9da0');
+const C_RED = col('#c9412b'), C_IVORY = col('#e9e2d2'), C_DEAD = col('#3b3a38');
+const mFace = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.42, roughnessMap: frost, metalness: 0.05, transparent: true, opacity: 0.2, depthWrite: false, envMapIntensity: 1.1 });
+const mEdge = new THREE.MeshStandardMaterial({ color: '#dfe6e2', roughness: 0.2, metalness: 0, transparent: true, opacity: 0.72, depthWrite: false });
+const mPaneFace = new THREE.MeshBasicMaterial({ visible: false });   // clear glass: only its edges are drawn
+const mPaneEdge = new THREE.MeshStandardMaterial({ color: '#cfd8d4', roughness: 0.2, transparent: true, opacity: 0.4, depthWrite: false });
+const mBrass = new THREE.MeshStandardMaterial({ color: '#ffffff', metalness: 0.62, roughness: 0.42, roughnessMap: brushed, envMapIntensity: 1.5 });
+// a bar is never drawn thinner than 1.3 pixels, so thin ones do not flicker; closer up every bar has its true thickness
+mBrass.onBeforeCompile = sh => { sh.uniforms.uPx = uPx;
+  sh.vertexShader = 'uniform float uPx;\n' + sh.vertexShader.replace('#include <project_vertex>', `#ifdef USE_INSTANCING
+    float barTh = length(instanceMatrix[1].xyz); vec4 barC = projectionMatrix * modelViewMatrix * instanceMatrix * vec4(0.0, 0.0, 0.0, 1.0);
+    float barPx = barTh * uPx / max(barC.w, 0.001); if (barPx < 1.3) transformed.y *= 1.3 / barPx;
+  #endif
+  #include <project_vertex>`); };
+const mAnod = new THREE.MeshStandardMaterial({ color: '#202124', metalness: 0.9, roughness: 0.55, roughnessMap: brushed, envMapIntensity: 0.9 });
+const mBench = new THREE.MeshStandardMaterial({ color: '#26272a', metalness: 0.6, roughness: 0.7, roughnessMap: brushedBench, envMapIntensity: 0.75 });
+const mSteel = new THREE.MeshStandardMaterial({ color: '#8d9194', metalness: 1, roughness: 0.3, roughnessMap: brushed });
+const mBead = new THREE.MeshPhysicalMaterial({ color: '#ffffff', roughness: 0.32, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.12 });
+const mFrameSel = new THREE.MeshStandardMaterial({ color: '#e3bd6e', metalness: 1, roughness: 0.25, emissive: '#6b4d12', emissiveIntensity: 0.5 });
+const mFrameHov = new THREE.MeshStandardMaterial({ color: '#c9ccce', metalness: 1, roughness: 0.3 });
+
+const unit = new THREE.BoxGeometry(1, 1, 1), BENCH_Y = -1.78, BEAD_R = 0.045;
+const m4 = new THREE.Matrix4(), LAY = [], bars = [];
+for (let l = 0; l < NL; l++) {
+  const g = new THREE.Group(); g.position.z = zOf(l); scene.add(g);
+  const pane = new THREE.Mesh(unit, [mPaneEdge, mPaneEdge, mPaneEdge, mPaneEdge, mPaneFace, mPaneFace]); pane.scale.set(6.86, 3.14, 0.03); pane.position.set(-0.02, 0, -0.07); g.add(pane);
+  const tiles = new THREE.InstancedMesh(unit, [mEdge, mEdge, mEdge, mEdge, mFace, mFace], 7);
+  MODS.forEach((m, i) => { const t = TILE[m]; tiles.setMatrixAt(i, m4.makeScale(t.w, t.h, TD).setPosition(t.x, t.y, 0)); tiles.setColorAt(i, C_GLASS); });
+  g.add(tiles);
+  const bm = new THREE.InstancedMesh(unit, mBrass, 7 * 16); bm.instanceMatrix.setUsage(THREE.DynamicDrawUsage); g.add(bm);
+  MODS.forEach((m, i) => { const M = mat[l + '.' + m], t = TILE[m], pitch = t.h * 0.9 / 16, e8 = Math.sqrt(sum(M.sv.slice(0, 8).map(s => s * s)) / 8);
+    M.sv.forEach((s, r) => { const y = t.y + t.h * 0.45 - (r + 0.5) * pitch; M['y' + r] = y;
+      bars.push({ mesh: bm, i: i * 16 + r, M, r, x: t.x, y, w: t.w * 0.86, sig: s / SV_MAX, rsig: e8 / SV_MAX, mlp: t.h > 1.5, lit: 0, th: s / SV_MAX, tl: 0, tt: s / SV_MAX, c: C_BRASS.clone() }); }); });
+  const car = new THREE.Mesh(unit, mAnod); car.scale.set(7.1, 0.21, 0.34); car.position.set(-0.02, -1.675, -0.02); car.castShadow = car.receiveShadow = true; g.add(car);
+  const rod = new THREE.Mesh(unit, mSteel); rod.scale.set(0.028, U + 0.1, 0.028); rod.position.set(AXIS_X, 0, TD / 2 + 0.02); g.add(rod);
+  LAY.push({ g, tiles, bm, lift: 0, y: 0 });
+}
+const engr = []; let mEngRef = null;
+/* names engraved on the pane that carries the plates */
+await Promise.all([document.fonts.load('600 30px Archivo'), document.fonts.load('500 24px Archivo')]).catch(() => 0);
+{ const names = MODS.map(m => MSHORT[m]).concat(['11,008 neurons', 'residual stream'], Array.from({ length: NL }, (_, l) => 'Layer ' + l));
+  const c = document.createElement('canvas'); c.width = 1024; c.height = 512; const g = c.getContext('2d'); g.font = '500 26px Archivo'; g.fillStyle = 'rgba(236,230,216,0.92)'; g.textBaseline = 'middle';
+  const cell = {}; names.forEach((n, i) => { const cx = (i % 4) * 256, cy = Math.floor(i / 4) * 40; g.fillText(n, cx + 4, cy + 21); cell[n] = [cx, cy, Math.ceil(g.measureText(n).width) + 8]; });
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  const mEng = new THREE.MeshStandardMaterial({ map: t, transparent: true, depthWrite: false, roughness: 0.55, metalness: 0.1 }), u = 0.105 / 26; mEngRef = mEng;
+  for (let l = 0; l < NL; l++) { const P = [], UV = [], IX = [];
+    const quad = (name, x, y, align, vert) => { const [cx, cy, w] = cell[name], ww = w * u, hh = 40 * u, x0 = align < 0 ? x : x - ww / 2, n = P.length / 3;
+      if (vert) P.push(x + hh / 2, y - ww / 2, 0, x + hh / 2, y + ww / 2, 0, x - hh / 2, y + ww / 2, 0, x - hh / 2, y - ww / 2, 0); else P.push(x0, y - hh / 2, 0, x0 + ww, y - hh / 2, 0, x0 + ww, y + hh / 2, 0, x0, y + hh / 2, 0);
+      const u0 = cx / 1024, u1 = (cx + w) / 1024, v0 = 1 - (cy + 40) / 512, v1 = 1 - cy / 512; UV.push(u0, v0, u1, v0, u1, v1, u0, v1); IX.push(n, n + 1, n + 2, n, n + 2, n + 3); };
+    for (const m of MODS) { const q = TILE[m]; quad(MSHORT[m], q.x, q.y > 0 || q.h > 1.5 ? q.y + q.h / 2 + 0.12 : q.y - q.h / 2 - 0.12, 0); }
+    quad('11,008 neurons', AXIS_X, -U / 2 - 0.12, 0); quad('residual stream', SPINE_X + 0.12, -0.72, 0, true); quad('Layer ' + l, -3.36, 1.4, -1);
+    const ge = new THREE.BufferGeometry(); ge.setAttribute('position', new THREE.Float32BufferAttribute(P, 3)); ge.setAttribute('uv', new THREE.Float32BufferAttribute(UV, 2)); ge.setIndex(IX); ge.computeVertexNormals();
+    const me = new THREE.Mesh(ge, mEng); engr.push(me); me.position.z = -0.052; LAY[l].g.add(me); } }
+/* bench, floor, residual rod, end plates */
+const Z_MID = (Z_EMB + Z_HEAD) / 2, Z_LEN = Z_EMB - Z_HEAD;
+const bench = new THREE.Mesh(unit, mBench); bench.scale.set(9.2, 0.4, Z_LEN + 5.4); bench.position.set(0.25, BENCH_Y - 0.2, Z_MID); bench.receiveShadow = true; bench.castShadow = true; scene.add(bench);
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(600, 600), new THREE.MeshLambertMaterial({ color: '#1b1a17' })); floor.rotation.x = -Math.PI / 2; floor.position.y = BENCH_Y - 0.4; floor.receiveShadow = true; scene.add(floor);
+const spine = new THREE.Mesh(new THREE.CylinderGeometry(0.026, 0.026, Z_LEN, 16), mSteel); spine.rotation.x = Math.PI / 2; spine.position.set(SPINE_X, 0, Z_MID); scene.add(spine);
+const mEnd = new THREE.MeshStandardMaterial({ color: '#8a7350', roughness: 0.35, roughnessMap: frost, metalness: 0.1, transparent: true, opacity: 0.6 });
+const ends = [];
+for (const z of [Z_EMB, Z_HEAD]) { const e = new THREE.Mesh(unit, mEnd); ends.push(e); e.scale.set(0.9, 3.14, 0.14); e.position.set(SPINE_X, 0, z); scene.add(e);
+  const c = new THREE.Mesh(unit, mAnod); c.scale.set(1.2, 0.21, 0.34); c.position.set(SPINE_X, -1.675, z); c.castShadow = true; scene.add(c); ends.push(c); }
+/* the scale engraved on the bench: one tick per layer */
+{ const R0 = Z_EMB + 2.2, RL = Z_LEN + 4.4, cw = 4096, ch = 120, ppu = cw / RL, c = document.createElement('canvas'); c.width = cw; c.height = ch; const g = c.getContext('2d');
+  g.fillStyle = g.strokeStyle = 'rgba(214,206,188,0.8)'; g.textAlign = 'left'; g.textBaseline = 'middle';
+  const put = (txt, z, font, x0) => { g.save(); g.translate((R0 - z) * ppu, x0); g.rotate(Math.PI / 2); g.font = font; g.fillText(txt, 0, 0); g.restore(); };
+  for (let l = 0; l < NL; l++) { const x = (R0 - zOf(l)) * ppu, big = l % 4 === 0 || l === 31; g.lineWidth = big ? 3 : 2; g.beginPath(); g.moveTo(x, 2); g.lineTo(x, big ? 30 : 16); g.stroke();
+    if (big) put(String(l), zOf(l), '600 28px Archivo', 42); }
+  put('Embedding', Z_EMB, '500 21px Archivo', 8); put('Unembedding', Z_HEAD, '500 21px Archivo', 2);
+  const t = new THREE.CanvasTexture(c); t.anisotropy = renderer.capabilities.getMaxAnisotropy(); t.colorSpace = THREE.SRGBColorSpace;
+  const p = new THREE.Mesh(new THREE.PlaneGeometry(RL, ch / ppu), new THREE.MeshStandardMaterial({ map: t, transparent: true, roughness: 0.5, metalness: 0.4, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 }));
+  p.matrixAutoUpdate = false; p.matrix.makeBasis(new THREE.Vector3(0, 0, -1), new THREE.Vector3(-1, 0, 0), new THREE.Vector3(0, 1, 0)).setPosition(3.62 + ch / ppu / 2, BENCH_Y + 0.003, R0 - RL / 2); p.receiveShadow = true; scene.add(p); }
+/* light: one key from the upper left with shadows, a soft fill, a rim from behind */
+const key = new THREE.DirectionalLight('#fff3e2', 2.6); key.position.set(-13, 20, Z_MID + 17); key.target.position.set(0, -1, Z_MID); key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048); Object.assign(key.shadow.camera, { left: -30, right: 30, top: 12, bottom: -12, near: 2, far: 70 }); key.shadow.bias = -0.0004; key.shadow.normalBias = 0.02; key.shadow.radius = 5;
+scene.add(key, key.target); scene.add(new THREE.HemisphereLight('#c9d2da', '#2b241a', 0.45));
+const rim = new THREE.DirectionalLight('#bcd0e6', 1.3); rim.position.set(14, 7, Z_MID - 26); rim.target.position.set(0, 0, Z_MID); scene.add(rim, rim.target);
+
+/* neurons: beads on the rod of their layer, at the height of their index */
+const neurons = [], nIdx = {};
+const addN = (l, n) => { const k = l + '.' + n; if (!(k in nIdx)) { nIdx[k] = neurons.length;
+  const h = Math.sin(l * 91.7 + n * 0.731) * 43758.5453, r1 = h - Math.floor(h), h2 = Math.sin(l * 13.1 + n * 1.917) * 9631.77, r2 = h2 - Math.floor(h2);
+  const home = [AXIS_X, (0.5 - (n + 0.5) / WID) * U, zOf(l) + TD / 2 + 0.02];
+  neurons.push({ l, n, home, p: home.slice(), v: [0, 0, 0], r1, r2, loop100: false, loop1000: false, best: null, fall: 0, rest: false, calm: 0, vis: 0, dead: 0 }); }
+  return neurons[nIdx[k]]; };
+for (const [l, a] of Object.entries(D.loop_sets['1000'])) for (const n of a) addN(+l, n).loop1000 = true;
+for (const [l, a] of Object.entries(D.loop_sets['100'])) for (const n of a) addN(+l, n).loop100 = true;
+for (const b of D.neurons) if (b.set === 'selected') addN(b.l, b.n).best = b;
+const NN = neurons.length;
+const beads = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 18, 12), mBead, NN); beads.instanceMatrix.setUsage(THREE.DynamicDrawUsage); beads.castShadow = true; beads.frustumCulled = false;
+for (let i = 0; i < NN; i++) beads.setColorAt(i, C_IVORY); beads.instanceColor.setUsage(THREE.DynamicDrawUsage); scene.add(beads);
+const inLoopSet = n => st.loop === '100' ? n.loop100 : st.loop === '1000' ? n.loop1000 : false;
+/* frames for the selection and the hover, the wire of a selected neuron, the bead of a replayed readout */
+function mkFrame(m) { const g = new THREE.Group(); for (let i = 0; i < 4; i++) g.add(new THREE.Mesh(unit, m)); g.visible = false; scene.add(g); return g; }
+function setFrame(g, x, y, z, w, h, t = 0.022) { const c = g.children; c[0].position.set(x, y + h / 2, z); c[0].scale.set(w + t, t, t); c[1].position.set(x, y - h / 2, z); c[1].scale.set(w + t, t, t);
+  c[2].position.set(x - w / 2, y, z); c[2].scale.set(t, h + t, t); c[3].position.set(x + w / 2, y, z); c[3].scale.set(t, h + t, t); g.visible = true; }
+const fSel = mkFrame(mFrameSel), fHov = mkFrame(mFrameHov);
+const wire = new THREE.Mesh(unit, mFrameSel); wire.visible = false; scene.add(wire);
+const pulse = new THREE.Mesh(new THREE.SphereGeometry(0.04, 20, 14), new THREE.MeshStandardMaterial({ color: '#f0c570', metalness: 0.9, roughness: 0.18, emissive: '#ffb84a', emissiveIntensity: 1.6 })); pulse.visible = false; scene.add(pulse);
+function frameFor(g, s) { if (!s || (s.t !== 'm' && s.t !== 'l') || LAY[s.l].lift > 0.02) { g.visible = false; return; }
+  if (s.t === 'm') { const t = TILE[s.m]; setFrame(g, t.x, t.y, zOf(s.l) + TD / 2, t.w + 0.05, t.h + 0.05); } else setFrame(g, -0.02, 0, zOf(s.l) - 0.07, 6.92, 3.2); }
+
+/* ---------- camera ---------- */
+const cam = { yaw: 0.9, pitch: 0.3, dist: 80, tx: 0, ty: 0, tz: zOf(15.5) }, user = { yaw: 0, pitch: 0, zoom: 1 }, mouse = { x: 0, y: 0, in: false };
+let W = 1, H = 1, T0 = performance.now(), flyAmt = 0, focusAnim = 0, bulkAnim = 0, tintDirty = true, lastInput = -1e9;
+function goal() {
+  const asp = W / H, narrow = asp < 1.15;
+  if (st.mode === 'over') {
+    const d = narrow ? 46 / Math.max(0.42, asp) : 38 * Math.max(1, 1.62 / asp);
+    return { yaw: (narrow ? 0.3 : 0.66) + user.yaw, pitch: (narrow ? 0.27 : 0.21) + user.pitch, dist: d * user.zoom, tx: narrow ? 0 : -4.4, ty: narrow ? -7 : -2.7, tz: zOf(narrow ? 15.5 : 13.5) };
+  }
+  const d = narrow ? 16 / Math.max(0.42, asp) : 17.2 * Math.max(1, 1.5 / asp);
+  return { yaw: 0.36 + user.yaw, pitch: 0.105 + user.pitch, dist: d * user.zoom, tx: narrow ? 0 : -0.3, ty: narrow ? -2.2 : -0.8, tz: zOf(st.f) - 0.6 };
+}
+function resize() {
+  W = innerWidth; H = innerHeight; renderer.setPixelRatio(Math.min(2, Math.min(devicePixelRatio, 2) * qScale));
+  uPx.value = H * renderer.getPixelRatio() / (2 * Math.tan(camera.fov * Math.PI / 360)); renderer.setSize(W, H, false);
+  camera.aspect = W / H; camera.updateProjectionMatrix(); firstShadow = true;
+}
+addEventListener('resize', resize); resize();
+
+/* ---------- labels ---------- */
+const labels = $('labels'), lab = {};
+const mk = (k, cls, txt) => { const s = document.createElement('span'); if (cls) s.className = cls; s.textContent = txt; labels.appendChild(s); lab[k] = s; return s; };
+mk('ev', 'ev', '');
+const v3 = new THREE.Vector3();
+function place(el, x, y, z, op, dx = 0, dy = 0) {
+  v3.set(x, y, z).project(camera);
+  const vis = op > 0.02 && v3.z < 1 && v3.z > -1;
+  el.style.opacity = vis ? op : 0;
+  if (vis) { el.style.left = ((v3.x * 0.5 + 0.5) * W + dx) + 'px'; el.style.top = ((-v3.y * 0.5 + 0.5) * H + dy) + 'px'; }
+}
+
+/* ---------- picking ---------- */
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+function layerShown(l) { return LAY[l].lift < 0.05; }
+function pick(mx, my) {
+  let best = null, bd = 12 * 12;
+  for (let i = 0; i < NN; i++) { const n = neurons[i]; if (n.vis < 0.3 || (!n.fall && !layerShown(n.l))) continue;
+    v3.set(n.p[0], n.p[1], n.p[2]).project(camera); if (v3.z > 1) continue;
+    const dx = (v3.x * 0.5 + 0.5) * W - mx, dy = (-v3.y * 0.5 + 0.5) * H - my, d = dx * dx + dy * dy;
+    if (d < bd) { bd = d; best = i; } }
+  if (best !== null) return { t: 'n', i: best };
+  ndc.set(mx / W * 2 - 1, -(my / H) * 2 + 1); ray.setFromCamera(ndc, camera);
+  const o = ray.ray.origin, d = ray.ray.direction; let hit = null, ht = 1e9;
+  for (let l = 0; l < NL; l++) { if (!layerShown(l)) continue;
+    const t = (zOf(l) - o.z) / d.z; if (t <= 0 || t > ht) continue;
+    const x = o.x + d.x * t, y = o.y + d.y * t;
+    if (Math.abs(x + 0.02) > 3.43 || Math.abs(y) > 1.57) continue;
+    let h = { t: 'l', l };
+    for (const m of MODS) { const q = TILE[m]; if (Math.abs(x - q.x) < q.w / 2 + 0.04 && Math.abs(y - q.y) < q.h / 2 + 0.04) h = { t: 'm', l, m }; }
+    if (st.mode === 'over' && h.t === 'l' && hit) continue;
+    hit = h; ht = t; }
+  return hit;
+}
+
+/* ---------- words ---------- */
+const P = D.paired, HO = D.loop_heldout, G = D.loop_gen;
+function say() {
+  const base = C.base_cue_T1, c = C[activeCell()], rl = C.rl_cue_T1;
+  let h, src = D.src.edits;
+  if (st.zero && st.loop !== 'off') {
+    const k = st.loop, z = HO['attr' + k], none = HO.none, rnd = k === '100' ? HO.rnd100_s0.looped : Math.min(HO.rnd1000_s0.looped, HO.rnd1000_s1.looped);
+    h = `With <em class="r">${fmt(+k)}</em> of ${fmt(NL * WID)} MLP neurons set to zero, <em>${z.looped}</em> of ${none.n} held-out answers loop again. Untouched, ${none.looped} do; with ${fmt(+k)} random neurons zeroed, ${rnd}.`;
+    src = D.src.loops;
+  } else if (st.rank === '0') h = `The untrained base, started with the three-token opening cue, solves <em>${base.right}</em> of ${base.n} hard problems. <em class="r">${base.cap}</em> answers run into the 16,384-token cap.`;
+  else if (st.rank === '1' && st.size1 !== '1') h = `One direction per matrix at <em>${st.size1} times</em> its size: <em>${c.right}</em> of ${c.n}, with <em>${c.cap}</em> answers at the cap. At full size it is ${C.top1_math31.right} with ${C.top1_math31.cap}.`;
+  else if (st.rank === '1') h = `One direction per matrix, <em>${pct(c.share)}</em> of the squared RL change, moves the base from ${base.right} to <em>${c.right}</em> of ${c.n}.`;
+  else if (st.rank === '64') h = `64 directions per matrix hold <em>${pct(c.share)}</em> of the squared RL change and give <em>${c.right}</em> of ${c.n}. The RL model itself scores ${rl.right}.`;
+  else if (st.rank === 'all') h = `RL moved <em>${pct(D.overall.frac_changed, 0)}</em> of the 7.3 billion weights, each matrix by about <em>${pct(D.totals.layer_matrices.rel, 2)}</em> of its norm, evenly over all 32 layers. It solves <em>${c.right}</em> of ${c.n}; ${c.cap} answers hit the cap.`;
+  else if (st.vari === 'rand') { const rs = Object.keys(C).filter(k => k.startsWith('rand8')).map(k => C[k].right);
+    h = `Eight random directions per matrix of the same size give <em>${c.right}</em> of ${c.n}; the base gives ${base.right}. At ${rs.length} sizes from \u22121 to 3 times they stay between ${Math.min(...rs)} and ${Math.max(...rs)}.`; }
+  else if (st.vari[0] === 'b') { const v = VARS.find(v => v[0] === st.vari), a = C['top8x1.5_math31'];
+    h = `The top 8 at 1.5 times their size in layers <em>${v[3][0]} to ${v[3][1]}</em> only: <em>${c.right}</em> of ${c.n}, with <em${c.cap > base.cap ? ' class="r"' : ''}>${c.cap}</em> answers at the cap. In all 32 layers it is ${a.right} with ${a.cap}.`; }
+  else if (st.vari === 'bulk') h = `RL with its top 8 directions taken out still gives <em>${c.right}</em> of ${c.n}, and <em class="r">${c.cap}</em> answers hit the cap. The top 8 are what stops the long answers.`;
+  else if (st.vari) h = `The top 8 directions in the ${st.vari === 'attn' ? 'attention' : 'MLP'} matrices alone give <em>${c.right}</em> of ${c.n}; in all matrices, ${C.top8_math31.right}.`;
+  else if (st.size === '1') h = `Eight directions per matrix hold <em>${pct(c.share)}</em> of the squared RL change. Copied into the base, they move it from ${base.right} to <em>${c.right}</em> of ${c.n} hard problems. The RL model scores ${rl.right}.`;
+  else if (st.size === '-1') h = `The same 8 directions subtracted from the base: <em class="r">${c.right}</em> of ${c.n}, and ${c.cap} answers hit the cap, against ${base.cap} for the base.`;
+  else h = `The top 8 directions at <em>${st.size} times</em> their size: <em>${c.right}</em> of ${c.n}, with <em>${c.cap}</em> answers at the cap. At full size it is ${C.top8_math31.right} with ${C.top8_math31.cap}.`;
+  $('say').innerHTML = h;
+  const b = boardOf();
+  $('src').innerHTML = `Measured on the 328 hard problems, opening cue, T 1.0, one sample, grader v3.<br>${esc(src)}` + (b ? `<br>Board: <a href="https://monitor.invariant.team/#${b.result}" target="_blank" rel="noopener">${b.result}</a> · ${esc(b.who)} · ${b.when}` : '');
+  if (st.zero && st.loop !== 'off') $('src').innerHTML = `Loops taken from the base's own MATH-500 answers at T 0.6; half rank the neurons, the other half is the test.<br>${esc(src)}` + (b ? `<br>Board: <a href="https://monitor.invariant.team/#${b.result}" target="_blank" rel="noopener">${b.result}</a> · ${esc(b.who)} · ${b.when}` : '');
+}
+let live = null;
+function boardOf() {
+  if (!live) return null;
+  let bench = 'hard328', right, tok;
+  if (st.zero && st.loop !== 'off') { const g = G.seed1['attr' + st.loop + '_real02']; bench = 'MATH-500'; right = g.right_v3; tok = Math.round(g.tokens_per_problem); }
+  else { const c = C[activeCell()]; right = c.right; tok = Math.round(c.tokens); }
+  const s = live.scores.find(s => s.benchmark === bench && s.right === right && Math.abs((s.tokens || -9) - tok) <= 1);
+  if (!s) return null;
+  const d = new Date(Number(String(s.sk).split('#')[1] || String(s.sk).split('#')[0]) / 1e6);
+  return { result: s.result, who: s.who, when: isNaN(d) ? '' : d.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) };
+}
+async function readBoard() {
+  const el = $('status');
+  try { const r = await fetch('/data', { cache: 'no-store' }); if (!r.ok) throw 0; live = await r.json();
+    el.className = 'status'; el.querySelector('span').textContent = `Live · ${live.items.length} board items · ${live.scores.length} scores · read ${new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
+    const i = el.querySelector('i'); i.classList.remove('beat'); void i.offsetWidth; i.classList.add('beat'); say();
+  } catch (e) { el.className = 'status off'; el.querySelector('span').textContent = live ? 'Offline, showing the last read' : 'Board not reachable; the picture is drawn from committed files'; }
+}
+
+/* ---------- the dial ---------- */
+function drawDial() {
+  $('cells').innerHTML = RANKS.map(r => { const c = C[r.key === '8' ? cell8() : r.key === '1' ? cell1() : r.cell];
+    return `<button class="cell${st.rank === r.key ? ' on' : ''}" data-rank="${r.key}"><div class="n">${r.name}</div><div class="v">${c.right}</div><div class="c">of ${c.n} · <b>${c.cap}</b> at the cap</div><div class="bar"><i style="width:${c.right / c.n * 100}%"></i><u style="width:${c.cap / c.n * 100}%"></u></div></button>`; }).join('');
+  const on8 = st.rank === '8';
+  const chip = (v, k) => `<button class="chip${st.vari === v[0] ? ' on' : ''}" data-vari="${v[0]}">${v[1]}</button>`;
+  $('vars').innerHTML = on8 ? `<div class="g"><span>Size</span>${SIZES.map(s => `<button class="chip${!st.vari && st.size === s[0] ? ' on' + (s[2] < 0 ? ' red' : '') : ''}" data-size="${s[0]}">${s[0] === '-1' ? '\u22121' : s[0]}\u00d7</button>`).join('')}</div>
+    <div class="g"><span>Or</span>${VARS.slice(0, 4).map(chip).join('')}</div><div class="g"><span>1.5\u00d7 in layers</span>${VARS.slice(4).map(chip).join('')}</div>`
+    : st.rank === '1' ? `<div class="g"><span>Size</span>${SIZES1.map(s => `<button class="chip${st.size1 === s[0] ? ' on' : ''}" data-size1="${s[0]}">${s[0]}\u00d7</button>`).join('')}</div>`
+    : `<span>Each number is one measured run. Choose 1 or 8 directions for the measured sizes and controls.</span>`;
+  const n100 = sum(Object.values(D.loop_sets['100']).map(a => a.length)), n1000 = sum(Object.values(D.loop_sets['1000']).map(a => a.length));
+  $('neur').innerHTML = `<div class="g"><span><i class="dot" style="background:var(--red)"></i>Loop neurons</span>
+      <button class="chip${st.loop === 'off' ? ' on' : ''}" data-loop="off">hide</button><button class="chip${st.loop === '100' ? ' on' : ''}" data-loop="100">${fmt(n100)}</button><button class="chip${st.loop === '1000' ? ' on' : ''}" data-loop="1000">${fmt(n1000)}</button>
+      <button class="chip${st.zero ? ' on red' : ''}" data-zero="1" style="margin-left:6px;border:1px solid ${st.zero ? 'transparent' : 'var(--rule)'}">${st.zero ? 'Zeroed · restore' : 'Set them to zero'}</button></div>
+    <div class="g"><span><i class="dot" style="background:#e9e2d2"></i>100 neurons with the largest effect</span><button class="chip${st.best ? ' on' : ''}" data-best="1">${st.best ? 'shown' : 'show'}</button></div>`;
+  $('dialnote').textContent = 'right of 328';
+}
+document.querySelector('.dial').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; const d = b.dataset;
+  if (d.rank) { st.rank = d.rank; st.zero = false; }
+  if (d.size) { st.size = d.size; st.vari = ''; st.zero = false; }
+  if (d.size1) { st.size1 = d.size1; st.zero = false; }
+  if (d.vari) { st.vari = st.vari === d.vari ? '' : d.vari; st.zero = false; }
+  if (d.loop) { st.loop = d.loop; if (d.loop === 'off') st.zero = false; }
+  if (d.zero) { st.zero = !st.zero; if (st.loop === 'off') st.loop = '100'; if (st.zero && !st.sel) st.sel = { t: 'z' }; if (!st.zero && st.sel && st.sel.t === 'z') st.sel = null; }
+  if (d.best) st.best = !st.best;
+  sync();
+});
+
+/* ---------- the detail column ---------- */
+const row = (k, v, s) => `<div><dt>${k}</dt><dd>${v}${s ? `<small>${s}</small>` : ''}</dd></div>`;
+function svBars(M) {
+  const w = 300, h = 74, bw = w / 16, lit = st.rank === '0' ? 0 : st.rank === '1' ? 1 : st.rank === '8' ? (st.vari === 'bulk' ? -8 : 8) : 16;
+  return `<svg viewBox="0 0 ${w} ${h + 14}" role="img" aria-label="The 16 largest singular values">` + M.sv.map((s, i) => { const bh = s / SV_MAX * h, on = lit < 0 ? i >= 8 : i < lit;
+    return `<rect x="${i * bw + 2}" y="${h - bh}" width="${bw - 4}" height="${bh}" fill="${on ? '#d2ac62' : '#3b3833'}"/>`; }).join('') +
+    `<line x1="0" x2="${w}" y1="${h + .5}" y2="${h + .5}" stroke="#2b2925"/><text x="2" y="${h + 12}" font-size="9.5" fill="#7d786d">1</text><text x="${7 * bw + 2}" y="${h + 12}" font-size="9.5" fill="#7d786d">8</text><text x="${15 * bw}" y="${h + 12}" font-size="9.5" fill="#7d786d">16</text></svg>`;
+}
+function panelMatrix(M) {
+  const nul = D.null_top8[M.shape.join('x')], s16 = sum(M.sv.map(s => s * s)) / (M.nd * M.nd), rd = D.readout[M.l + '.' + M.m];
+  let h = `<button class="close" data-close="1">Close</button><div class="k">Layer ${M.l} · ${MNAME[M.m]}</div><h2>${pct(M.t8)} of its change is in 8 directions</h2><div class="nm">${esc(M.name)} · ${fmt(M.shape[0])} × ${fmt(M.shape[1])}</div>
+  <dl>${row('Size of the RL change', fmt(M.nd, 3), `Frobenius norm; ${pct(M.rel, 2)} of the matrix's own norm`)}
+  ${row('Top 1 direction', pct(M.t1), 'share of the squared change')}
+  ${row('Top 8 directions', pct(M.t8), `a random change of this shape: ${pct(nul, 2)}`)}
+  ${row('Stable rank', fmt(M.sr, 1), `of at most ${fmt(Math.min(...M.shape))}`)}
+  ${row('Think-SFT changed it', fmt(M.sft_nd / M.nd, 0) + ' times more', `its top 8 hold ${pct(M.sft_t8)}`)}
+  ${row('Cosine with the Code-RL change', fmt(M.code_cos, 3))}</dl>
+  <div class="h">Singular values 1 to 16 of RL minus base</div>${svBars(M)}
+  <p>Bars lit are the directions in the chosen edit. The 16 hold ${pct(s16)}; the other ${fmt(Math.min(...M.shape) - 16)} are stored only as their sum.</p>`;
+  if (rd) {
+    h += `<div class="h">Tokens its top 3 directions write toward</div><p>Each direction read through the base's unembedding, both signs (the sign of a singular vector is arbitrary). Brass marks a token of the opening cue.</p>`;
+    for (const x of rd) h += `<div class="dir">Direction ${x.d + 1} ${x.sign === '+' ? '+' : '−'} · ${pct(x.share)} of the change</div>` + x.toks.map((t, i) => `<span class="tok${D.cue_tokens[x.ids[i]] !== undefined ? ' cue' : ''}">${esc(tokShow(t))}</span>`).join('');
+  } else h += `<p>Token readouts are stored for the attention output and MLP down matrices only, since those write into the residual stream.</p>`;
+  return h;
+}
+function panelLayer(l) {
+  const b = D.by_layer[l], n100 = (D.loop_sets['100'][l] || []).length, n1000 = (D.loop_sets['1000'][l] || []).length, a1 = D.attr1_per_layer[l], tot = sum(D.attr1_per_layer);
+  const best = D.neurons.filter(n => n.set === 'selected' && n.l === l).length;
+  return `<button class="close" data-close="1">Close</button><div class="k">Layer ${l} of 0 to 31</div><h2>RL changed this layer by ${pct(b.rel, 2)} of its norm</h2>
+  <dl>${row('Size of the RL change', fmt(b.norm_delta, 3), 'Frobenius norm over its 7 matrices')}
+  ${row('Top 8 directions hold', pct(b.top8_share), `all layers: ${pct(D.totals.layer_matrices_all.top8_share)}`)}
+  ${row('Loop neurons here', `${n100} of 100 · ${n1000} of 1,000`)}
+  ${row('Among the best 1 % by effect', `${fmt(a1)} of ${fmt(tot)}`, 'neurons whose copy from RL moves the base most')}
+  ${row('Among the best 100', best)}</dl>
+  <div class="h">The 7 matrices</div><table class="tbl"><tr><th></th><th>change</th><th>top 1</th><th>top 8</th></tr>${MODS.map(m => { const M = mat[l + '.' + m];
+    return `<tr data-m="${m}" style="cursor:pointer"><td>${MNAME[m]}</td><td>${fmt(M.nd, 3)}</td><td>${pct(M.t1)}</td><td>${pct(M.t8)}</td></tr>`; }).join('')}</table>
+  <p>${D.src.matrices}</p>`;
+}
+function loopTable(k) {
+  const a = G.seed1, b = G.seed2, key = 'attr' + k + '_real02', r = (n, u, e, red) => `<tr><td>${n}</td><td>${u}</td><td class="${red ? 'r' : ''}">${e}</td></tr>`;
+  return `<table class="tbl"><tr><th>MATH-500, T 0.6, cue</th><th>untouched</th><th>${fmt(+k)} zeroed</th></tr>
+  ${r('Loops', a.unedited.loops_rule_A, a[key].loops_rule_A)}${r('Answers at the cap', a.unedited.cap_hits, a[key].cap_hits)}
+  ${r('Tokens per problem', fmt(a.unedited.tokens_per_problem), fmt(a[key].tokens_per_problem))}${r('Right of 500, seed 1', a.unedited.right_v3, a[key].right_v3)}
+  ${r('Right of 500, seed 2', b.unedited.right_v3, b[key].right_v3)}${r('Right of 500 at T 1.0', G.t10.unedited.right_v3, G.t10[k].right_v3, true)}</table>`;
+}
+function panelZero() {
+  const k = st.loop === 'off' ? '100' : st.loop, z = HO['attr' + k], none = HO.none;
+  const dots = n => `<div class="unit">${Array.from({ length: none.n }, (_, i) => `<i class="${i < n ? 'l' : ''}"></i>`).join('')}</div>`;
+  return `<button class="close" data-close="1">Close</button><div class="k">Loop neurons · ${fmt(+k)} of ${fmt(NL * WID)}</div><h2>${none.looped - z.looped} of ${none.looped} loops go away</h2>
+  <div class="h">Untouched: ${none.looped} of ${none.n} held-out answers loop again</div>${dots(none.looped)}
+  <div class="h">${fmt(+k)} loop neurons at zero: ${z.looped} of ${z.n}</div>${dots(z.looped)}
+  <div class="h">${fmt(+k)} random neurons at zero: ${k === '100' ? HO.rnd100_s0.looped : HO.rnd1000_s0.looped + ' and ' + HO.rnd1000_s1.looped} of ${none.n}</div>${dots(k === '100' ? HO.rnd100_s0.looped : HO.rnd1000_s0.looped)}
+  <p>Each answer is cut 300 tokens before its loop and continued for 1,600 tokens. The fit to normal text gets ${pct(z.loss)} worse. One dot is one answer; which dot is filled carries no meaning.</p>
+  <div class="h">The same edit on a full run</div>${loopTable(k)}
+  <p>Loops and tokens fall on both seeds. The score gain of seed 1 does not repeat on seed 2, and at T 1.0, where the base does not loop, the edit costs points. Over four samples per problem the 1,000 set gives +${fmt(D.loop_vote.pooled['4 samples'].points, 1)} points [${fmt(D.loop_vote.pooled['4 samples'].interval95[0], 1)}, ${fmt(D.loop_vote.pooled['4 samples'].interval95[1], 1)}] at T 0.6.</p>
+  <p>RL left these neurons' weights alone. ${D.src.loops}</p>`;
+}
+function panelNeuron(n) {
+  const b = n.best, sets = [];
+  if (n.loop100) sets.push('one of the 100 loop neurons'); else if (n.loop1000) sets.push('one of the 1,000 loop neurons');
+  if (b) sets.push('one of the 100 with the largest effect when copied from RL');
+  let h = `<button class="close" data-close="1">Close</button><div class="k">Layer ${n.l} · MLP neuron ${fmt(n.n)}</div>`;
+  if (b && b.desc) h += `<div class="q">${esc(b.desc)}</div><p>A reader wrote this sentence from 10 contexts. A second reader, given only the sentence, picked the firing snippets out of 20 and got <b style="color:var(--ink)">${pct(b.acc, 0)}</b> right (chance 50 %; these 30 neurons ${pct(D.desc_test.sets.selected.mean_accuracy)}, random neurons ${pct(D.desc_test.sets.reference.mean_accuracy)}).</p>`;
+  else h += `<h2>${b ? 'On at ' + pct(b.on, 0) + ' of positions' : 'A neuron that takes part in loops'}</h2>`;
+  h += `<dl>${row('Where', `row ${fmt(n.n)} of gate and up`, `column ${fmt(n.n)} of down, layer ${n.l}`)}${row('Member of', sets.join('<br>'))}`;
+  if (b) h += row('Beyond the layer\'s 97th percentile', pct(b.on, 1) + ' of positions', `median of random neurons: ${pct(D.density.reference.median_share_of_positions_beyond_p97)}`) + row('Mean absolute activation', fmt(b.mean_abs, 3), `stronger pole: ${b.pole === '+' ? 'positive' : 'negative'}`) +
+    row('RL changed its weights', 'cosine ' + b.cos.map(c => fmt(c, 4)).join(', '), 'gate, up, down: base against RL') + row('Activation, base against RL', 'correlation ' + fmt(b.act_corr, 3), 'the difference comes from upstream');
+  h += `</dl>`;
+  if (b) h += `<div class="h">Tokens its output raises</div>${b.promoted.map(t => `<span class="tok">${esc(tokShow(t))}</span>`).join('')}<div class="h">Tokens it lowers</div>${b.suppressed.map(t => `<span class="tok">${esc(tokShow(t))}</span>`).join('')}<p>Read from its down column through the base's unembedding. ${D.src.neurons}</p>`;
+  if (n.loop1000) { const k = n.loop100 ? '100' : '1000', z = HO['attr' + k];
+    h += `<div class="h">Measured as a set, not one by one</div><p>With the ${fmt(+k)} loop neurons at zero, ${z.looped} of ${z.n} held-out answers loop again, against ${HO.none.looped} untouched. No single-neuron effect is stored.</p>${loopTable(k)}<p>${D.src.loops}</p>`; }
+  return h;
+}
+function panelKey() {
+  return `<div class="key">
+    <div><svg viewBox="0 0 34 14"><rect x="1" y="2" width="32" height="3.4" fill="#d2ac62"/><rect x="1" y="8" width="32" height="1.6" fill="#a88a4e"/><rect x="1" y="12" width="32" height=".8" fill="#4a463e"/></svg><span>One bar is one direction of RL minus base in that matrix. Its thickness is the singular value. Brass bars are in the chosen edit.</span></div>
+    <div><svg viewBox="0 0 34 14"><rect x="9" y="1" width="16" height="12" fill="rgba(184,141,72,.55)" stroke="#8a8478" stroke-width=".8"/></svg><span>At All of RL, the amber of a plate is the size of that matrix's whole change.</span></div>
+    <div><svg viewBox="0 0 34 14"><circle cx="17" cy="7" r="3.4" fill="#c9412b"/></svg><span>A neuron whose zeroing removes loops, at its real layer and index.</span></div>
+    <div><svg viewBox="0 0 34 14"><circle cx="17" cy="7" r="3.4" fill="#e9e2d2"/></svg><span>One of the 100 neurons with the largest effect when copied from RL. 30 have a tested one-sentence description.</span></div>
+  </div><div class="hint">Click a matrix, a dot or a layer. Drag to turn, scroll to move through the layers, arrow keys step. The brass bead on the rod replays one stored readout: a direction in a late layer that points at a token of the opening cue.</div>`;
+}
+function drawPanel() {
+  const s = st.sel, p = $('panel'); p.classList.toggle('empty', !s); p.parentNode.classList.toggle('open', !!s);
+  p.innerHTML = !s ? panelKey() : s.t === 'm' ? panelMatrix(mat[s.l + '.' + s.m]) : s.t === 'l' ? panelLayer(s.l) : s.t === 'z' ? panelZero() : panelNeuron(neurons[s.i]);
+  p.scrollTop = 0;
+}
+$('panel').addEventListener('click', e => {
+  if (e.target.closest('[data-close]')) { st.sel = null; sync(); }
+  const tr = e.target.closest('tr[data-m]'); if (tr && st.sel) { st.sel = { t: 'm', l: st.sel.l, m: tr.dataset.m }; sync(); }
+});
+
+/* ---------- rail ---------- */
+const t8max = Math.max(...D.by_layer.map(b => b.top8_share));
+$('railrows').innerHTML = D.by_layer.map((b, l) => `<div class="row" data-l="${l}" title="Layer ${l}: ${pct(b.top8_share)}"><span>${l}</span><i style="width:${b.top8_share / t8max * 112}px"></i></div>`).join('');
+{ const rr = $('railrows'); let down = false;
+  const at = e => { const r = rr.getBoundingClientRect(); return Math.max(0, Math.min(31, Math.floor((e.clientY - r.top) / r.height * 32))); };
+  rr.addEventListener('pointerdown', e => { down = true; rr.setPointerCapture(e.pointerId); fly(at(e)); });
+  rr.addEventListener('pointermove', e => { if (down) fly(at(e)); });
+  rr.addEventListener('pointerup', () => down = false); }
+
+/* ---------- state in, state out ---------- */
+function fly(l, keep) { st.mode = 'fly'; st.f = Math.max(0, Math.min(31, l)); if (!keep) { user.yaw = 0; user.pitch = 0; user.zoom = 1; } sync(true); }
+function over() { st.mode = 'over'; user.yaw = 0; user.pitch = 0; user.zoom = 1; sync(true); }
+function sync(light) {
+  const R = RANKS.find(r => r.key === st.rank);
+  tgt.rank = R.lit; tgt.bulk = st.rank === '8' && st.vari === 'bulk' ? 1 : R.bulk; tintDirty = true;
+  const on8 = st.rank === '8', vari = on8 ? st.vari : '', band = vari[0] === 'b' ? VARS.find(v => v[0] === vari)[3] : null;
+  const sc = band ? 1.5 : on8 && !vari ? +st.size : st.rank === '1' ? +st.size1 : 1;
+  for (const b of bars) { let lit = b.r < R.lit ? 1 : 0;
+    if (vari === 'bulk') lit = b.r < 8 ? 0 : 1;
+    if ((vari === 'attn' && b.mlp) || (vari === 'mlp' && !b.mlp) || (band && (b.M.l < band[0] || b.M.l > band[1]))) lit = 0;
+    b.tl = lit; b.tt = (vari === 'rand' && b.r < 8 ? b.rsig : b.sig) * (lit ? Math.min(2.4, Math.abs(sc)) : 1);
+    if (vari === 'rand') b.c.copy(C_STEEL); else if (sc < 0) b.c.copy(C_PATINA); else b.c.copy(C_BRASS_LO).lerp(C_BRASS, 0.2 + 0.8 * b.sig);
+    b.dirty = true; }
+  barsDirty = true; dirty = true;
+  const s = st.sel;
+  document.querySelectorAll('#railrows .row').forEach((r, i) => r.classList.toggle('on', st.mode === 'fly' && i === Math.round(st.f)));
+  $('bOver').classList.toggle('on', st.mode === 'over');
+  if (!light) { drawDial(); drawPanel(); } say();
+  const h = [`rank=${st.rank}`]; if (st.rank === '8' && st.vari) h.push('var=' + st.vari); else if (st.rank === '8' && st.size !== '1') h.push('size=' + st.size); else if (st.rank === '1' && st.size1 !== '1') h.push('size1=' + st.size1);
+  if (st.mode === 'fly') h.push('layer=' + Math.round(st.f)); if (st.loop !== '100') h.push('loop=' + st.loop); if (st.zero) h.push('zero=1'); if (!st.best) h.push('best=0');
+  if (s) h.push('sel=' + (s.t === 'm' ? `m${s.l}.${s.m}` : s.t === 'l' ? `l${s.l}` : s.t === 'z' ? 'z' : `n${neurons[s.i].l}.${neurons[s.i].n}`));
+  history.replaceState(null, '', '#' + h.join('&'));
+}
+const tgt = { rank: 8, bulk: 0, scale: 1 };
+let hadHash = false, barsDirty = true, dirty = true;
+function fromHash() {
+  const q = new URLSearchParams(location.hash.slice(1)); if ([...q.keys()].length) hadHash = true;
+  if (q.get('rank') && RANKS.some(r => r.key === q.get('rank'))) st.rank = q.get('rank');
+  if (q.get('size') && SIZES.some(s => s[0] === q.get('size'))) { st.size = q.get('size'); st.vari = ''; }
+  if (q.get('var') && VARS.some(v => v[0] === q.get('var'))) st.vari = q.get('var');
+  if (q.get('size1') && SIZES1.some(z => z[0] === q.get('size1'))) st.size1 = q.get('size1');
+  if (q.get('layer') !== null) { st.mode = 'fly'; st.f = Math.max(0, Math.min(31, +q.get('layer') || 0)); }
+  if (q.get('loop')) st.loop = ['off', '100', '1000'].includes(q.get('loop')) ? q.get('loop') : '100';
+  st.zero = q.get('zero') === '1'; if (q.get('best') === '0') st.best = false;
+  const s = q.get('sel');
+  if (s) { let m;
+    if ((m = /^m(\d+)\.(\w+)$/.exec(s)) && mat[m[1] + '.' + m[2]]) st.sel = { t: 'm', l: +m[1], m: m[2] };
+    else if ((m = /^l(\d+)$/.exec(s)) && +m[1] < NL) st.sel = { t: 'l', l: +m[1] };
+    else if ((m = /^n(\d+)\.(\d+)$/.exec(s)) && (m[1] + '.' + m[2]) in nIdx) st.sel = { t: 'n', i: nIdx[m[1] + '.' + m[2]] };
+    else if (s === 'z') st.sel = { t: 'z' }; }
+}
+fromHash();
+
+/* ---------- input ---------- */
+const tip = $('tip'); let hov = null, drag = null, pts = new Map(), pinch0 = 0;
+function hover(mx, my) {
+  hov = pick(mx, my); dirty = true;
+  if (!hov) { tip.style.display = 'none'; canvas.style.cursor = ''; return; }
+  canvas.style.cursor = 'pointer';
+  let t; if (hov.t === 'm') { const M = mat[hov.l + '.' + hov.m]; t = `Layer ${hov.l} · ${MNAME[hov.m]}<small>top 8: ${pct(M.t8)}</small>`; }
+  else if (hov.t === 'l') t = `Layer ${hov.l}<small>open</small>`;
+  else { const n = neurons[hov.i]; t = `Layer ${n.l} · neuron ${fmt(n.n)}<small>${n.loop1000 ? 'loop neuron' : ''}${n.loop1000 && n.best ? ' · ' : ''}${n.best ? (n.best.desc ? 'described' : 'large effect') : ''}</small>`; }
+  tip.innerHTML = t; tip.style.display = 'block'; tip.style.left = Math.min(W - 260, mx + 14) + 'px'; tip.style.top = (my + 16) + 'px';
+}
+canvas.addEventListener('pointerdown', e => { canvas.setPointerCapture(e.pointerId); pts.set(e.pointerId, [e.clientX, e.clientY]); lastInput = performance.now();
+  if (pts.size === 1) drag = { x: e.clientX, y: e.clientY, moved: 0, yaw: user.yaw, pitch: user.pitch };
+  else if (pts.size === 2) { const a = [...pts.values()]; pinch0 = Math.hypot(a[0][0] - a[1][0], a[0][1] - a[1][1]) / user.zoom; drag = null; } });
+canvas.addEventListener('pointermove', e => { mouse.x = e.clientX / W * 2 - 1; mouse.y = e.clientY / H * 2 - 1; mouse.in = true;
+  if (pts.has(e.pointerId)) pts.set(e.pointerId, [e.clientX, e.clientY]);
+  if (pts.size === 2) { const a = [...pts.values()]; user.zoom = Math.max(0.35, Math.min(2.2, pinch0 / Math.hypot(a[0][0] - a[1][0], a[0][1] - a[1][1]))); return; }
+  if (drag) { const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.moved = Math.max(drag.moved, Math.abs(dx) + Math.abs(dy));
+    if (drag.moved > 4) { canvas.classList.add('drag'); user.yaw = Math.max(-1.3, Math.min(1.1, drag.yaw - dx * 0.0045)); user.pitch = Math.max(-0.3, Math.min(1.0, drag.pitch + dy * 0.0035)); tip.style.display = 'none'; lastInput = performance.now(); } }
+  else if (e.pointerType === 'mouse') hover(e.clientX, e.clientY); });
+const up = e => { pts.delete(e.pointerId); canvas.classList.remove('drag');
+  if (drag && drag.moved <= 4) { const h = pick(e.clientX, e.clientY); lastInput = performance.now();
+    if (h) { st.sel = h; if (h.t === 'l' || (st.mode === 'over' && h.t !== 'n')) { st.mode = 'fly'; st.f = h.l; user.yaw = user.pitch = 0; user.zoom = 1; } else if (h.t === 'n' && st.mode === 'fly' && Math.abs(neurons[h.i].l - st.f) > 3) st.f = neurons[h.i].l; sync(); }
+    else if (st.sel) { st.sel = null; sync(); } }
+  drag = null; };
+canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up);
+canvas.addEventListener('pointerleave', () => { mouse.in = false; tip.style.display = 'none'; hov = null; dirty = true; });
+canvas.addEventListener('wheel', e => { e.preventDefault(); lastInput = performance.now();
+  if (e.ctrlKey) { user.zoom = Math.max(0.35, Math.min(2.2, user.zoom * Math.exp(e.deltaY * 0.01))); return; }
+  const dy = e.deltaMode === 1 ? e.deltaY * 30 : e.deltaY;
+  if (st.mode === 'over') { if (dy > 0) fly(hov ? (hov.t === 'n' ? neurons[hov.i].l : hov.l) : 0); return; }
+  const f = st.f + dy * 0.006; if (f < -0.6) return over(); st.f = Math.max(0, Math.min(31, f)); sync(true); }, { passive: false });
+addEventListener('keydown', e => { if (e.target.closest && e.target.closest('input,textarea')) return; lastInput = performance.now(); tip.style.display = 'none';
+  const ri = RANKS.findIndex(r => r.key === st.rank);
+  if (e.key === 'Escape') { if (st.sel) { st.sel = null; sync(); } else over(); }
+  else if (e.key === 'ArrowRight') fly(st.mode === 'fly' ? Math.round(st.f) + 1 : 0, true);
+  else if (e.key === 'ArrowLeft') { if (st.mode === 'fly' && Math.round(st.f) === 0) over(); else if (st.mode === 'fly') fly(Math.round(st.f) - 1, true); }
+  else if (e.key === 'ArrowUp' && ri < RANKS.length - 1) { st.rank = RANKS[ri + 1].key; st.zero = false; sync(); }
+  else if (e.key === 'ArrowDown' && ri > 0) { st.rank = RANKS[ri - 1].key; st.zero = false; sync(); }
+  else return; e.preventDefault(); });
+$('bOver').onclick = over; $('bNext').onclick = () => fly(st.mode === 'fly' ? Math.round(st.f) + 1 : 0, true);
+$('bPrev').onclick = () => { if (st.mode === 'fly' && Math.round(st.f) > 0) fly(Math.round(st.f) - 1, true); else over(); };
+
+/* ---------- replay of stored readouts: directions of late layers that point at the opening cue ---------- */
+const HITS = D.cue_hits.hits.map(h => { const rows = D.readout[h.l + '.' + h.m] || [], r = rows.find(x => x.d === h.d && x.sign === h.sign); return r ? { ...h, row: r } : null; }).filter(Boolean);
+let ev = null, evNext = 5.5, evI = 0;
+function startEv(t) { let h = null; for (let j = 0; j < HITS.length && !h; j++) { const c = HITS[evI++ % HITS.length]; if (st.mode === 'over' || (c.l - st.f >= -0.5 && c.l - st.f <= 2)) h = c; }
+  if (!h) { evNext = t + 2; return; } const M = mat[h.l + '.' + h.m], tl = TILE[h.m];
+  ev = { t0: t, h, a: [tl.x, M['y' + h.d], zOf(h.l) + TD / 2 + 0.06], dur: 2.4 + (NL - h.l) * 0.2 };
+  lab.ev.innerHTML = `Layer ${h.l} ${MNAME[h.m]}, direction ${h.d + 1} points at ` + h.ids.map(i => `<b>${esc(tokShow(D.cue_tokens[i]))}</b>`).join(' '); }
+function evPoint(u, out) { const a = ev.a, k1 = 0.25;
+  if (u < k1) { const s = u / k1, e = s * s * (3 - 2 * s); out[0] = a[0] + (SPINE_X - a[0]) * e; out[1] = a[1] * (1 - e); out[2] = a[2]; }
+  else { const s = (u - k1) / (1 - k1), e = s * s * (3 - 2 * s); out[0] = SPINE_X; out[1] = 0.06; out[2] = a[2] + (Z_HEAD - a[2]) * e; } }
+
+/* ---------- frame ---------- */
+const still = REDUCED || new URLSearchParams(location.search).has('still');
+const instant = hadHash || still;
+sync(); Object.assign(cam, goal()); if (!instant) { cam.dist *= 1.22; cam.yaw += 0.2; cam.pitch += 0.07; }
+bulkAnim = tgt.bulk; focusAnim = st.f; flyAmt = st.mode === 'fly' ? 1 : 0;
+for (let l = 0; l < NL; l++) LAY[l].lift = st.mode === 'fly' && l < st.f - 0.5 ? 1 : 0;
+if (instant) for (const b of bars) { b.lit = b.tl; b.th = b.tt; }
+let last = performance.now(), zeroT = -1e9, wasZero = st.zero, lastBulk = -1, simT = 0;
+let rodZ = st.mode === 'fly' && st.f >= 1 ? zOf(Math.ceil(st.f - 0.5)) + 0.07 : Z_EMB, embLift = st.mode === 'fly' ? 1 : 0;
+const tmp = [0, 0, 0], cc = new THREE.Color(), ease = x => x * x * (3 - 2 * x);
+
+/* dropped loop neurons: gravity, the bench, the carriers as walls, and bead against bead */
+const FY = BENCH_Y + BEAD_R, GRID = new Map(), CELL = BEAD_R * 2.2;
+function stepBeads(dt, t) {
+  let active = 0;
+  for (let i = 0; i < NN; i++) { const n = neurons[i], dead = st.zero && inLoopSet(n);
+    if (!dead) { if (n.fall) { n.fall = 0; n.rest = false; n.back = 1; } continue; }
+    if (!n.fall) { if (t - zeroT < n.l * 0.045 + n.r1 * 0.6) { active++; continue; } n.fall = 1; n.rest = false; n.calm = 0; n.v[0] = (n.r1 - 0.62) * 4.2; n.v[1] = 0.5; n.v[2] = 0.5 + n.r2 * 0.6; }
+    if (n.rest) continue; active++;
+    const p = n.p, v = n.v, z0 = zOf(n.l) + 0.15 + BEAD_R, z1 = zOf(n.l) + S - 0.19 - BEAD_R;
+    v[1] -= 11 * dt; p[0] += v[0] * dt; p[1] += v[1] * dt; p[2] += v[2] * dt;
+    if (p[1] < FY) { p[1] = FY; v[1] = v[1] < -0.6 ? -v[1] * 0.3 : 0; const f = Math.exp(-1.5 * dt); v[0] *= f; v[2] *= f; }
+    if (p[1] < BENCH_Y + 0.25) { if (p[2] < z0) { p[2] = z0; v[2] = Math.abs(v[2]) * 0.4; } else if (p[2] > z1) { p[2] = z1; v[2] = -Math.abs(v[2]) * 0.4; } }
+    if (p[0] < -4.2) { p[0] = -4.2; v[0] = Math.abs(v[0]) * 0.4; } else if (p[0] > 4.7) { p[0] = 4.7; v[0] = -Math.abs(v[0]) * 0.4; }
+    if (p[1] <= FY + 1e-4 && v[0] * v[0] + v[2] * v[2] < 0.0012) { n.calm += dt; if (n.calm > 0.35) { n.rest = true; v[0] = v[1] = v[2] = 0; } } else n.calm = 0; }
+  if (!active) return false;
+  GRID.clear();
+  for (let i = 0; i < NN; i++) { const n = neurons[i]; if (!n.fall || n.p[1] > FY + 0.4) continue; const k = (Math.floor(n.p[0] / CELL) + 512) * 4096 + Math.floor(n.p[2] / CELL) + 2048; const a = GRID.get(k); if (a) a.push(i); else GRID.set(k, [i]); }
+  const D2 = 4 * BEAD_R * BEAD_R;
+  for (let i = 0; i < NN; i++) { const a = neurons[i]; if (!a.fall || a.rest || a.p[1] > FY + 0.4) continue;
+    const cx = Math.floor(a.p[0] / CELL) + 512, cz = Math.floor(a.p[2] / CELL) + 2048;
+    for (let gx = cx - 1; gx <= cx + 1; gx++) for (let gz = cz - 1; gz <= cz + 1; gz++) { const cell = GRID.get(gx * 4096 + gz); if (!cell) continue;
+      for (const j of cell) { if (j === i) continue; const b = neurons[j];
+        const dx = b.p[0] - a.p[0], dy = b.p[1] - a.p[1], dz = b.p[2] - a.p[2], d2 = dx * dx + dy * dy + dz * dz; if (d2 >= D2 || d2 < 1e-9) continue;
+        const d = Math.sqrt(d2), nx = dx / d, ny = dy / d, nz = dz / d, pen = 2 * BEAD_R - d, wa = b.rest ? 0.9 : 0.5;
+        a.p[0] -= nx * pen * wa; a.p[1] = Math.max(FY, a.p[1] - ny * pen * wa); a.p[2] -= nz * pen * wa;
+        if (!b.rest) { b.p[0] += nx * pen * 0.5; b.p[1] = Math.max(FY, b.p[1] + ny * pen * 0.5); b.p[2] += nz * pen * 0.5; }
+        const rv = (b.v[0] - a.v[0]) * nx + (b.v[1] - a.v[1]) * ny + (b.v[2] - a.v[2]) * nz;
+        if (rv < 0) { const imp = -(1.25) * rv * 0.5; a.v[0] -= nx * imp; a.v[1] -= ny * imp; a.v[2] -= nz * imp;
+          if (b.rest && -rv > 0.25) { b.rest = false; b.calm = 0; } if (!b.rest) { b.v[0] += nx * imp; b.v[1] += ny * imp; b.v[2] += nz * imp; } } } } }
+  return true;
+}
+if (st.zero) { for (let s = 0; s < 600; s++) if (!stepBeads(1 / 90, 1e6)) break; for (const n of neurons) if (n.fall) { n.dead = 1; n.rest = true; } }
+
+let acc = 0, accN = 0, slowN = 0, hitch = 0, wasMoving = false, lean = { x: 0, y: 0 };
+addEventListener('resize', () => { dirty = true; });
+canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); canvas.style.visibility = 'hidden'; });
+canvas.addEventListener('webglcontextrestored', () => { canvas.style.visibility = ''; firstShadow = dirty = barsDirty = tintDirty = true; bars.forEach(b => b.dirty = true); });
+function frame() {
+  requestAnimationFrame(frame); const now = performance.now(), rawDt = (now - last) / 1000;
+  const dt = Math.min(0.05, rawDt), t = (now - T0) / 1000; last = now;
+  const k = x => still ? 1 : 1 - Math.exp(-dt * x);
+  let moving = dirty; dirty = false;
+  const near = (a, b, e) => Math.abs(a - b) < e;
+  // camera: damped; it leans a little toward the pointer and is otherwise still
+  const g = goal();
+  if (!still) { lean.x += ((mouse.in && !drag ? mouse.x : 0) - lean.x) * k(2.5); lean.y += ((mouse.in && !drag ? mouse.y : 0) - lean.y) * k(2.5); g.yaw += lean.x * 0.02; g.pitch += lean.y * 0.007; }
+  for (const key of ['yaw', 'pitch', 'dist', 'tx', 'ty', 'tz']) { const d = g[key] - cam[key]; if (Math.abs(d) > (key === 'yaw' || key === 'pitch' ? 2e-5 : 2e-4)) { cam[key] += d * k(2.6); moving = true; } }
+  const fw = st.mode === 'fly' ? 1 : 0; if (!near(flyAmt, fw, 5e-4)) { flyAmt += (fw - flyAmt) * k(3); moving = true; } else flyAmt = fw;
+  if (!near(focusAnim, st.f, 1e-3)) { focusAnim += (st.f - focusAnim) * k(4); moving = true; } else focusAnim = st.f;
+  let shadowDirty = false;
+  // plates in front of the chosen layer are lifted out of the rack
+  for (let l = 0; l < NL; l++) { const L = LAY[l], want = st.mode === 'fly' && l < st.f - 0.5 ? 1 : 0;
+    if (L.lift !== want) { L.lift += (want - L.lift) * k(want ? 3.2 : 2.6); if (near(want, L.lift, 0.002)) L.lift = want; moving = shadowDirty = true; }
+    L.y = ease(L.lift) * 10; L.g.position.y = L.y; L.g.visible = L.lift < 0.98 && !(flyAmt > 0.9 && (l - st.f) * S > 6); }
+  { const first = LAY.findIndex(L => L.lift < 0.5), z0 = first <= 0 ? Z_EMB : zOf(first) + 0.07; if (!near(rodZ, z0, 1e-3)) { rodZ += (z0 - rodZ) * k(3); moving = true; } spine.scale.y = (rodZ - Z_HEAD) / Z_LEN; spine.position.z = (rodZ + Z_HEAD) / 2;
+    if (!near(embLift, fw, 2e-3)) { embLift += (fw - embLift) * k(3); moving = shadowDirty = true; } else embLift = fw; ends[0].position.y = ease(embLift) * 10; ends[0].visible = embLift < 0.98; ends[1].visible = embLift < 0.5; }
+  // the edit: bars turn from etched lines to brass, eased, layer after layer on the first view
+  if (barsDirty) { let again = false; const touched = new Set();
+    for (let i = 0; i < bars.length; i++) { const b = bars[i];
+      if (!instant && t < 0.6 + b.M.l * 0.06) { again = true; if (!b.dirty) continue; }
+      else if (b.lit !== b.tl || b.th !== b.tt) { b.lit += (b.tl - b.lit) * k(4.5); b.th += (b.tt - b.th) * k(4.5);
+        if (near(b.tl, b.lit, 0.003)) b.lit = b.tl; if (near(b.tt, b.th, 0.0005)) b.th = b.tt; b.dirty = true; again = again || b.lit !== b.tl || b.th !== b.tt; }
+      if (!b.dirty) continue; b.dirty = false; touched.add(b.mesh);
+      const th = TH * b.th, dz = 0.012 + 0.02 * b.lit;
+      b.mesh.setMatrixAt(b.i, m4.makeScale(b.w, th, dz).setPosition(b.x, b.y, TD / 2 + dz / 2));
+      b.mesh.setColorAt(b.i, cc.copy(C_ETCH).lerp(b.c, b.lit)); }
+    for (const m of touched) { m.instanceMatrix.needsUpdate = true; m.instanceColor.needsUpdate = true; } barsDirty = again; moving = true; }
+  if (!near(bulkAnim, tgt.bulk, 0.002)) { bulkAnim += (tgt.bulk - bulkAnim) * k(2.4); moving = true; } else bulkAnim = tgt.bulk;
+  if (bulkAnim !== lastBulk || tintDirty) { lastBulk = bulkAnim; tintDirty = false; const md = st.rank === '8' ? st.vari : '';
+    for (let l = 0; l < NL; l++) { MODS.forEach((m, i) => { const on = (md === 'attn' && TILE[m].h > 1.5) || (md === 'mlp' && TILE[m].h < 1.5) ? 0 : 1;
+      LAY[l].tiles.setColorAt(i, cc.copy(C_GLASS).lerp(C_AMBER, bulkAnim * on * mat[l + '.' + m].nd / ND_MAX)); }); LAY[l].tiles.instanceColor.needsUpdate = true; }
+    mFace.opacity = 0.2 + 0.2 * bulkAnim; moving = true; }
+  // neurons
+  if (st.zero !== wasZero) { zeroT = t; wasZero = st.zero; }
+  simT += dt; let steps = 0; while (simT > 1 / 120 && steps < 6) { if (stepBeads(1 / 120, t)) moving = shadowDirty = true; simT -= 1 / 120; steps++; } if (steps === 6) simT = 0;
+  const ovScale = 1 + 0.55 * (1 - flyAmt), A = beads.instanceMatrix.array;
+  for (let i = 0; i < NN; i++) { const n = neurons[i], L = LAY[n.l];
+    const isLoop = inLoopSet(n), show = isLoop || (st.best && n.best) ? 1 : 0;
+    if (!near(n.vis, show, 0.004)) { n.vis += (show - n.vis) * k(6); moving = true; } else n.vis = show;
+    if (!n.fall) { let far = false; for (let j = 0; j < 3; j++) { const d = n.home[j] - n.p[j]; if (Math.abs(d) > 5e-4) { n.p[j] += d * k(3.2 + n.r2 * 2); far = true; } else n.p[j] = n.home[j]; } if (far) moving = shadowDirty = true; }
+    const dd = n.fall ? 1 : 0; if (!near(n.dead, dd, 0.004)) { n.dead += (dd - n.dead) * k(3); moving = true; } else n.dead = dd;
+    const hot = (st.sel && st.sel.t === 'n' && st.sel.i === i) || (hov && hov.t === 'n' && hov.i === i);
+    const onRod = !n.fall && n.dead < 0.5, s = n.vis * (onRod && L.lift > 0.9 ? 0 : 1) * BEAD_R * (hot ? 1.7 : 1) * (onRod ? ovScale * (n.best && n.best.desc ? 1.25 : 1) : 1);
+    const o = i * 16; A[o] = A[o + 5] = A[o + 10] = s; A[o + 12] = n.p[0]; A[o + 13] = n.p[1] + (onRod ? L.y : 0); A[o + 14] = n.p[2]; A[o + 15] = 1;
+    cc.copy(isLoop ? C_RED : C_IVORY).lerp(C_DEAD, n.dead); if (hot) cc.lerp(C_BRASS, 0.5).multiplyScalar(1.3); beads.setColorAt(i, cc); }
+  // replay of one stored readout
+  if (!still && !ev && t > evNext && HITS.length && tgt.rank > 0 && now - lastInput > 1500 && !document.hidden) startEv(t);
+  let evOp = 0;
+  if (ev) { moving = true; const u = (t - ev.t0) / ev.dur, shown = layerShown(ev.h.l);
+    if (u > 1.1) { ev = null; evNext = t + 5; pulse.visible = false; }
+    else { evPoint(Math.min(1, u), tmp); pulse.position.set(tmp[0], tmp[1], tmp[2]); pulse.visible = shown && u < 1; pulse.scale.setScalar(1 + 0.6 * (1 - flyAmt));
+      evOp = Math.min(1, u * 5) * (u < 0.8 ? 1 : Math.max(0, 1 - (u - 0.8) * 5)) * (shown ? 1 : 0); } }
+  if (!moving) { wasMoving = false; return; }
+  mEngRef.opacity = flyAmt; engr.forEach((e, l) => e.visible = flyAmt > 0.02 && l === Math.round(st.f));                        // nothing changed: the last frame stays on screen
+  const cp = Math.cos(cam.pitch);
+  camera.position.set(cam.tx + cam.dist * Math.sin(cam.yaw) * cp, cam.ty + cam.dist * Math.sin(cam.pitch), cam.tz + cam.dist * Math.cos(cam.yaw) * cp);
+  camera.lookAt(cam.tx, cam.ty, cam.tz); camera.updateMatrixWorld();
+  { const n0 = cam.dist * 0.9, f0 = cam.dist * 3.2; scene.fog.near = n0 + (cam.dist + 1.0 - n0) * flyAmt; scene.fog.far = f0 + (cam.dist + 3.8 - f0) * flyAmt; }
+  beads.instanceMatrix.needsUpdate = true; beads.instanceColor.needsUpdate = true;
+  frameFor(fSel, st.sel); frameFor(fHov, hov && !(st.sel && st.sel.t === hov.t && st.sel.l === hov.l && st.sel.m === hov.m) ? hov : null);
+  if (st.sel && st.sel.t === 'n') { const n = neurons[st.sel.i]; wire.visible = LAY[n.l].lift < 0.02; wire.position.set((TILE.gate.x - 0.5 + TILE.down.x + 0.5) / 2, n.home[1], n.home[2] + 0.03); wire.scale.set(TILE.down.x - TILE.gate.x + 1, 0.012, 0.012); } else wire.visible = false;
+  if (ev) { place(lab.ev, ev.a[0], ev.a[1] + 0.3, ev.a[2], evOp, 0, -18); const x = parseFloat(lab.ev.style.left) || 0, lim = W - (W < 820 ? 10 : 370) - lab.ev.offsetWidth; if (x > lim) lab.ev.style.left = Math.max(8, lim) + 'px'; } else lab.ev.style.opacity = 0;
+  if (shadowDirty || firstShadow) { renderer.shadowMap.needsUpdate = true; firstShadow = false; }
+  renderer.render(scene, camera);
+  // if drawing is slow, lower the internal resolution, then drop the shadow updates
+  if (wasMoving && rawDt > 0.08 && qScale > 0.75) { if (++hitch > 1) { qScale = Math.max(0.75, qScale * 0.7); backedOff = true; hitch = acc = accN = 0; resize(); dirty = true; } } else hitch = 0;
+  if (wasMoving) { acc += rawDt; accN++; if (accN >= 24) { const avg = acc / accN; acc = accN = 0; if (avg > 0.0175 && qScale > 0.75) { if (++slowN > 1) { qScale = Math.max(0.75, qScale * 0.8); slowN = 0; backedOff = true; resize(); dirty = true; } } else if (avg < (backedOff ? 0.009 : 0.0172) && qScale < 1.5) { qScale = Math.min(1.5, qScale * 1.22); resize(); dirty = true; } } } wasMoving = true;
+}
+readBoard(); setInterval(() => { if (!document.hidden) readBoard(); }, 10000);
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

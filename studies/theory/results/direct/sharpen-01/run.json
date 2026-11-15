@@ -1,0 +1,14 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_sharpen.md",
+ "commit_of_spec": "fbea6379e8860eb236f1d696064744a6d805ef16",
+ "command": "uv run studies/theory/analysis/direct_sharpen.py",
+ "inputs": {
+  "base_cue": "runs/abaybektursun-1114-170304-c03c/answers.jsonl (Modal volume, uv run tools/gpu.py get)",
+  "base_plain": "runs/abaybektursun-1114-170258-388e/answers.jsonl (Modal volume, uv run tools/gpu.py get)",
+  "base_mathcue": "runs/abaybektursun-1114-170309-b137/answers.jsonl (Modal volume, uv run tools/gpu.py get)",
+  "code15": "runs/abaybektursun-1115-101434-4511/answers.jsonl (Modal volume, uv run tools/gpu.py get)",
+  "rand15": "runs/abaybektursun-1115-101457-ef2c/answers.jsonl (Modal volume, uv run tools/gpu.py get)"
+ },
+ "bootstrap": "10,000 resamples of the 538 problems, numpy default_rng(0), 90 % percentile interval",
+ "board": "work-8e9805"
+}

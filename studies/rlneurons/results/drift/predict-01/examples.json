@@ -1,0 +1,198 @@
+{
+ "switch": {
+  "ended_right": {
+   "problem_index": 68,
+   "unique_id": "aime2024/2024_AIME_I_Problems/Problem_3",
+   "sample": 0,
+   "n_new": 13482,
+   "cap_hit": false,
+   "score_v3": 1,
+   "extracted_v3": "809",
+   "sign_read_at_token": 5682,
+   "sign_value": 1.0,
+   "text_before_that_token_300": "ue), leave opponent with True.\n\nTake4→1 (f(1)=True). So all options leave opponent in True. So f(5)=False.\n\nn=5: False\n\nn=6:\n\nTake1 →5 (False). Therefore, current player can choose that move. Therefore, f(6)=True.\n\nTake4 →2 (False, opponent is at n=2 which is False (Losing), so player can takesПрест",
+   "text_after_100": "а, then the opponent can't win. Therefore, yes, this is a winning move. So f(6)=True.\n\nn=6:True.\n\nn="
+  },
+  "ended_not_right": {
+   "problem_index": 63,
+   "unique_id": "aime2024/2024_AIME_I_Problems/Problem_12",
+   "sample": 3,
+   "n_new": 16384,
+   "cap_hit": true,
+   "score_v3": 0,
+   "extracted_v3": null,
+   "sign_read_at_token": 3437,
+   "sign_value": 1.0,
+   "text_before_that_token_300": "nce w ∈ [-1,1], similar to the previous.\n\nBreaking it down:\n\nw between -1 and 1, so we can again exploit evenness.\n\nLet me consider w ≥0 first:\n\nCase 1: w in [0,1]\n\nThen, |w| = w.\n\nSo f(w)= ||w - 1/2|.\n\nThus, when w ≥1/2: ||w -1/2| is w -1/2\n\nWhen w ≤1/2: |w -1/2| is 1/2 - w.\n\nTherefore:\n\n过渡点在w=1/2时",
+   "text_after_100": "，f(w)为0。\n\nAt w =1: f(1)= ||1 -0.5|=0.5\n\nAt w=0.5: 0, as before.\n\nAt w=0: |0 - 0.5|=0.5.\n\nSame for ne"
+  }
+ },
+ "rep50": {
+  "ended_right": {
+   "problem_index": 264,
+   "unique_id": "olympiadbench/2596",
+   "sample": 2,
+   "n_new": 12154,
+   "cap_hit": false,
+   "score_v3": 1,
+   "extracted_v3": "(4, \\log_{10} 2)",
+   "sign_read_at_token": 8000,
+   "sign_value": 0.7787699660420073,
+   "text_before_that_token_300": "in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer (without quotes) where $",
+   "text_after_100": "Answer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the an"
+  },
+  "ended_not_right": {
+   "problem_index": 323,
+   "unique_id": "olympiadbench/2842",
+   "sample": 3,
+   "n_new": 16384,
+   "cap_hit": true,
+   "score_v3": 0,
+   "extracted_v3": "$Answer (without quotes) where",
+   "sign_read_at_token": 8000,
+   "sign_value": 0.6372783297698402,
+   "text_before_that_token_300": "swer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer",
+   "text_after_100": ": $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer (witho"
+  }
+ },
+ "loopA": {
+  "ended_right": {
+   "problem_index": 95,
+   "unique_id": "aime2025/6",
+   "sample": 2,
+   "n_new": 13458,
+   "cap_hit": false,
+   "score_v3": 1,
+   "extracted_v3": "504",
+   "sign_read_at_token": 5549,
+   "sign_value": 1.0,
+   "text_before_that_token_300": "ere $Answer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form",
+   "text_after_100": " Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer"
+  },
+  "ended_not_right": {
+   "problem_index": 265,
+   "unique_id": "olympiadbench/2598",
+   "sample": 0,
+   "n_new": 16384,
+   "cap_hit": true,
+   "score_v3": 0,
+   "extracted_v3": "$Answer (without quotes) where $Answer is",
+   "sign_read_at_token": 5793,
+   "sign_value": 1.0,
+   "text_before_that_token_300": "swer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer",
+   "text_after_100": ": $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer (witho"
+  }
+ },
+ "zratio": {
+  "ended_right": {
+   "problem_index": 264,
+   "unique_id": "olympiadbench/2596",
+   "sample": 2,
+   "n_new": 12154,
+   "cap_hit": false,
+   "score_v3": 1,
+   "extracted_v3": "(4, \\log_{10} 2)",
+   "sign_read_at_token": 8000,
+   "sign_value": -0.07289293849658314,
+   "text_before_that_token_300": "in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer (without quotes) where $",
+   "text_after_100": "Answer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the an"
+  },
+  "ended_not_right": {
+   "problem_index": 323,
+   "unique_id": "olympiadbench/2842",
+   "sample": 3,
+   "n_new": 16384,
+   "cap_hit": true,
+   "score_v3": 0,
+   "extracted_v3": "$Answer (without quotes) where",
+   "sign_read_at_token": 8000,
+   "sign_value": -0.10990187332738627,
+   "text_before_that_token_300": "swer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem in form Answer",
+   "text_after_100": ": $Answer (without quotes) where $Answer is the answer to the problem in form Answer: $Answer (witho"
+  }
+ },
+ "wait": {
+  "ended_right": {
+   "problem_index": 326,
+   "unique_id": "olympiadbench/2846",
+   "sample": 2,
+   "n_new": 9194,
+   "cap_hit": false,
+   "score_v3": 1,
+   "extracted_v3": "79",
+   "sign_read_at_token": 8000,
+   "sign_value": 17.0,
+   "text_before_that_token_300": "erse of N=10 is 1, but since 1 isn't prime, N=10 is invalid. \n\nHence, 79.\n\nWait to ensure correctness, let's verify:\n\nN=79:\n\nReverse is 97, which is prime. Good.\n\n4×79= 316. Reverse digits: 613 (prime). \n\n5×79=395 → reverse digits 593 (prime). \n\nYes, so all three conditions are satisfied. So N=79.\n\n",
+   "text_after_100": "Is there any higher N? Let me check N=97:\n\nEarlier found that the reverse of 97 is 79 (no, reversed "
+  },
+  "ended_not_right": {
+   "problem_index": 324,
+   "unique_id": "olympiadbench/2844",
+   "sample": 0,
+   "n_new": 15105,
+   "cap_hit": false,
+   "score_v3": 0,
+   "extracted_v3": "2019.",
+   "sign_read_at_token": 8000,
+   "sign_value": 16.5,
+   "text_before_that_token_300": " days up to March had more, but math checks out.\n\nWait so tomorrow's April1 2016 would be Thursday.\n\nWait but from previous April: April1 2015 was Wednesday, and adding 365 (normal shift):\n\nWednesday (3) +365 mod7=1 → Thursday (3+1=4, which is Thursday, which matches. Because April1 2016 is Thursday",
+   "text_after_100": ". \n\nOkay, so April1 2016 is Thursday.\n\nProceeding:\n\n2016: April1 is Thursday. Which is five years fr"
+  }
+ },
+ "restart": {
+  "ended_right": {
+   "problem_index": 94,
+   "unique_id": "aime2025/5",
+   "sample": 0,
+   "n_new": 15425,
+   "cap_hit": false,
+   "score_v3": 1,
+   "extracted_v3": "279",
+   "sign_read_at_token": 8000,
+   "sign_value": 0.75,
+   "text_before_that_token_300": "mbers, so plus another to make total four numbers.\n\nWait let's think with 7,6,5:\n\nThree numbers sum to 7+6+5=18?\n\nWait 7+6+5=18, but need a fourth number to make four elements. Wait, but if I take 18 total sum? Wait no, need four numbers to add to 18.\n\nWait, so 7 +6 +5 + what? 0? Not possible. Maybe",
+   "text_after_100": " instead:\n\nLet me think step by step.\n\nLet me attempt starting with 7 as the largest number.\n\nTake 7"
+  },
+  "ended_not_right": {
+   "problem_index": 119,
+   "unique_id": "aime2025/30",
+   "sample": 1,
+   "n_new": 16384,
+   "cap_hit": true,
+   "score_v3": 0,
+   "extracted_v3": "72",
+   "sign_read_at_token": 8000,
+   "sign_value": 0.875,
+   "text_before_that_token_300": " think again: if we have four symmetric points around some center then each pair's midpoints should be same.\n\nThus for four points a, b, c, d to be symmetric wrt center m, (a + d)/2 = (b +c)/2 = m.\n\nSo to form a symmetric quadruple, we can choose pairs from the existing three roots.\n\nSuppose that we",
+   "text_after_100": " take one root as a, and then form symmetric pairs. Given the three existing roots at 18,72,98, to f"
+  }
+ },
+ "any": {
+  "ended_right": {
+   "problem_index": 68,
+   "unique_id": "aime2024/2024_AIME_I_Problems/Problem_3",
+   "sample": 0,
+   "n_new": 13482,
+   "cap_hit": false,
+   "score_v3": 1,
+   "extracted_v3": "809",
+   "sign_read_at_token": 5682,
+   "sign_value": 1.0,
+   "text_before_that_token_300": "ue), leave opponent with True.\n\nTake4→1 (f(1)=True). So all options leave opponent in True. So f(5)=False.\n\nn=5: False\n\nn=6:\n\nTake1 →5 (False). Therefore, current player can choose that move. Therefore, f(6)=True.\n\nTake4 →2 (False, opponent is at n=2 which is False (Losing), so player can takesПрест",
+   "text_after_100": "а, then the opponent can't win. Therefore, yes, this is a winning move. So f(6)=True.\n\nn=6:True.\n\nn="
+  },
+  "ended_not_right": {
+   "problem_index": 63,
+   "unique_id": "aime2024/2024_AIME_I_Problems/Problem_12",
+   "sample": 3,
+   "n_new": 16384,
+   "cap_hit": true,
+   "score_v3": 0,
+   "extracted_v3": null,
+   "sign_read_at_token": 3437,
+   "sign_value": 1.0,
+   "text_before_that_token_300": "nce w ∈ [-1,1], similar to the previous.\n\nBreaking it down:\n\nw between -1 and 1, so we can again exploit evenness.\n\nLet me consider w ≥0 first:\n\nCase 1: w in [0,1]\n\nThen, |w| = w.\n\nSo f(w)= ||w - 1/2|.\n\nThus, when w ≥1/2: ||w -1/2| is w -1/2\n\nWhen w ≤1/2: |w -1/2| is 1/2 - w.\n\nTherefore:\n\n过渡点在w=1/2时",
+   "text_after_100": "，f(w)为0。\n\nAt w =1: f(1)= ||1 -0.5|=0.5\n\nAt w=0.5: 0, as before.\n\nAt w=0: |0 - 0.5|=0.5.\n\nSame for ne"
+  }
+ }
+}

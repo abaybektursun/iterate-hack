@@ -1,0 +1,79 @@
+## 1. Runner deployed in this workspace against origin/main
+│ v4      │ 2026-11-14 21:56 PST │ 1.4.2  │ sameraslan  │ d02eebc  │
+│ v3      │ 2026-11-14 15:23 PST │ 1.4.2  │ sameraslan  │ 7be6204* │
+│ v2      │ 2026-11-14 14:53 PST │ 1.4.2  │ sameraslan  │ 56c614e* │
+│ v1      │ 2026-11-14 12:10 PST │ 1.4.2  │ sameraslan  │ cdee066  │
+runner commits of origin/main after d02eebc (v4): 8
+d5d9f60 2026-11-14T23:22:02-08:00 Runner: one job per container (single_use_containers): a process left by a job cancell
+1210209 2026-11-14T23:10:42-08:00 Runner: H100 max_containers default back to 10 (the review loop's 07:06 decision: the 
+e9ffa5e 2026-11-14T22:25:39-08:00 Runner: H100 max_containers default 20 -> 8, so the default 8 + 2 short lane fits Moda
+5ae3f7c 2026-11-14T22:24:54-08:00 GPU class short: an H100 lane of 2 kept free for jobs of --hours 0.5 at most (smoke ru
+b45cc49 2026-11-14T22:06:16-08:00 gpu.py deploy deploys infra/runner.py and records its blob hash in the jobs Dict; subm
+09f363f 2026-11-14T22:01:55-08:00 Runner kills the job's whole process group whenever run() ends, also when Modal interr
+a32609e 2026-11-14T21:54:54-08:00 Runner: a job cancelled while queued is not run when Modal starts it anyway, and a run
+3eb82fd 2026-11-14T21:46:33-08:00 Merge branch 'main' of https://github.com/abaybektursun/iterate-hack into claude/archi
+blob of infra/runner.py at d02eebc 8ea9340
+blob of infra/runner.py at 63a76e6 8ea9340
+blob of infra/runner.py at 132d10f 8ea9340
+blob of infra/runner.py at origin/main 87a710b
+
+## 2. Job ends (submit time of the id, PST, plus 8 h, plus wait, plus run; cycle.txt)
+2e30 done submit 06:05:54Z wait 0.1 run 59.2 end 07:05:12Z | 
+f46b done submit 06:08:13Z wait 3.1 run 47.3 end 06:58:37Z | 
+d05c done submit 06:08:30Z wait 13.9 run 25.8 end 06:48:12Z | 
+7014 cancelled submit 06:09:42Z wait 24.7 run 16.1 end 06:50:30Z | 
+aa97 done submit 06:09:52Z wait 25.3 run 115.4 end 08:30:34Z | 
+36e7 died: RuntimeError: there ar submit 06:47:52Z wait 2.6 run - end 06:50:28Z | 
+b300 died: RuntimeError: there ar submit 06:52:32Z wait 0.1 run - end 06:52:38Z | 
+82fa died: RuntimeError: there ar submit 06:53:51Z wait 0.0 run - end 06:53:51Z | 
+5d2f timeout submit 06:55:55Z wait 0.0 run 240.2 end 10:56:07Z | 
+7014 submit to 5d2f submit, min: 46.2
+36e7 submit to 5d2f submit, min: 8.1
+
+
+## 3. Board item times and the nearest job end before each
+result-6de887 03:51:02Z | cleanneurons Part G (loop neurons zeroed, generation), Olmo 3 base, cue, MATH-500 n=500, T 0.6 / top-p 1.0, seed 1,000,000, grader v3, paired with the
+result-d92d4a 06:08:56Z | Loop neurons ranked on 34 loops raise the score: base+cue MATH-500, T 0.6 / top-p 1.0, n=500, paired with the unedited cell (378 right, 71 loops, 98 c
+result-460e0a 06:51:22Z | Loop-neuron edit, confirmations (MATH-500, base+cue, n=500, v3): it removes loops and tokens on both seeds and gives no reliable score gain; at T 1.0 
+result-79784b 07:02:13Z | Loop-neuron edit on the harder 328 (base+cue, top-p 1.0, seed 3,000,000, v3): no gain. T 1.0: 155/328 with 100 neurons zeroed and 130 with 1,000, agai
+result-666223 11:00:53Z | Loop-neuron edit over four samples per problem (base+cue, MATH-500, T 0.6 / top-p 1.0, v3, attempt 0 of run_cell --samples 4): it does add right answe
+d05c end to result-460e0a min: 3.2
+f46b end to result-79784b min: 3.6
+5d2f end to result-666223 min: 4.8
+2e30 end to the comment of 07:06:41Z on result-79784b, min: 1.5
+result-6de887 to result-666223, min: 429.9
+result-d92d4a to result-666223, min: 291.9
+
+## 4. Commits of tools/finding_loop_neurons.py on origin/main (UTC)
+bfcfa11 2026-11-15T15:45:33Z sameraslan
+24d2658 2026-11-15T15:44:29Z sameraslan
+a312fab 2026-11-15T11:09:16Z Abay Bektursun
+45e550b 2026-11-15T07:10:55Z sameraslan
+
+## 5. Rows of meta/FAILURES.md: is the cause still in place
+finding pages with requestAnimationFrame and no setTimeout: tools/finding_restart_on_cap.py tools/finding_rl_reliability.py tools/finding_vote_over_four.py
+finding pages: 25
+hook lines of .claude/settings.json naming git pull: 0
+
+## 6. Scripts and readout of the four-sample cell
+studies/cleanneurons/analysis/gen_readout.py
+studies/cleanneurons/analysis/transplant_readout.py
+studies/cleanneurons/analysis/vote_pair.py
+studies/gpuprice/analysis/readout.py
+studies/metaharness/analysis/planted_readout.py
+studies/metaharness/prep/arena_template/clean/gapmap/jobs/run_cell.sh
+studies/metaharness/prep/arena_template/planted/gapmap/jobs/run_cell.sh
+studies/rlneurons/analysis/code1_readout.py
+studies/rlneurons/analysis/wsp1_readout.py
+studies/rlneurons/jobs/run_cell.py
+keys: ['note', 'setting', 'grader', 'runs', 'per_sample', 'singles_right', 'extra_pairs', 'pooled_points_edited_minus_unedited', 'samples_right_of_4_histogram', 'vote_over_4_attempt0_samples', 'examples']
+sample 0 unedited 382 loops 72 edited 415 points 6.6 [2.6, 10.4]
+sample 1 unedited 371 loops 73 edited 397 points 5.2 [1.4, 9.2]
+sample 2 unedited 388 loops 66 edited 401 points 2.6 [-1.0, 6.2]
+sample 3 unedited 391 loops 59 edited 400 points 1.8 [-2.0, 5.6]
+singles_right {"unedited": [382, 371, 388, 391], "edited": [415, 397, 401, 400]}
+extra_pairs {"seed2": {"unedited": {"dir": "/private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-auto-research-harness-hackathon-bbd59e/25ae40cc-2e8a-47af-8f2b-c73aa0b7149f/scratchpad/submit/runs/sameraslan-1114-220631-bbdc", "job_id": "sameraslan-1114-220631-bbdc", "right_v3": 394, "cap_hits": 87, "loops_rule_A": 61, "tokens_per_problem": 4356.786}, "edited": {"dir": "
+pooled_points_edited_minus_unedited {"4 samples": {"draws": 4, "points": 4.05, "interval95": [1.9987500000000005, 6.15]}, "4 samples + seed2": {"draws": 5, "points": 3.44, "interval95": [1.6, 5.36]}}
+samples_right_of_4_histogram {"index": "number of problems right in 0, 1, 2, 3, 4 of the 4 samples", "unedited": [47, 42, 35, 84, 292], "edited": [40, 21, 48, 68, 323]}
+vote_over_4_attempt0_samples {"unedited": {"right": 441, "n": 500, "percent": 88.2, "wilson95": [85.0768011869262, 90.7406991926919], "tokens_per_problem": 18173.062}, "edited": {"right": 441, "n": 500, "percent": 88.2, "wilson95": [85.0768011869262, 90.7406991926919], "tokens_per_problem": 14398.496}, "points_edited_minus_unedited": 0.0, "interval95": [-2.400000000000002, 2.400000000000002], "check": {"readout": "studies/cleanneurons/results/ge
+examples {"edited_right_more_often": {"problem_index": 462, "gold": "59", "samples_right": {"unedited": 0, "edited": 4}, "scores_by_sample": {"unedited": [0, 0, 0, 0], "edited": [1, 1, 1, 1]}, "shown_sample": 0, "unedited": {"extracted_v3": null, "n_new": 16384, "cap_hit": true, "loop_A": true, "text_last_300": "s, converting all the coins into bills would result in $126.00 in bills and $0.00 in coins. But that seems like the

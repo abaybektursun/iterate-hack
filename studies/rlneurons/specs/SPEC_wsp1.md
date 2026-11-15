@@ -134,3 +134,11 @@ directions per layer matrix of the Think-SFT delta; `--recipe top8 --other think
 readout): the Think-SFT change is not concentrated, so `sfttop8` plain stays within 10 points of the plain base (34);
 refuted if it is 20 or more above `rand8` (36). For comparison, a quarter of the RL delta gives 405 of 500 plain
 (`results/day1_wdiff/`); `sft025` plain tests whether a quarter of the imitation delta does the same.
+
+## Amendment 5, 2026-11-15 04:55 UTC: Think-SFT on the 328 harder problems
+
+Asked for in the audit of result-ad3c24 (abaybektursun, 04:44 UTC). Cells: `sft1` cue and `sft1` plain on `--set hard328`,
+T 1.0, top-p 1.0, one sample, seed base 3,000,000 (the seed base of the Day-1 #1 rows). References
+(`results/day1_hard328/readout.json`, right of 328): cued base 164, RL plain 206, RL cue 205. Prediction: if the MATH-500
+result carries over, `sft1` cue is within 5 points of RL plain (190 to 222 right). Refuted if it is below 180 (less than
+5 points above the cued base).

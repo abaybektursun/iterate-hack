@@ -93,6 +93,8 @@ def submit(args):
     assert rest[0] == "--", "put the command after --"
     assert gpu_class != "short" or hours <= 0.5, "the short class (an H100 kept free for smoke runs) takes --hours 0.5 at most"
     cmd = rest[1] if len(rest) == 2 else shlex.join(rest[1:])
+    assert "$(git" not in cmd and "`git" not in cmd, ("the job has no git, so $(git ...) would expand to nothing there: "
+                                                      "put the command in double quotes, so it expands here")
 
     assert not git("status", "--porcelain", "--untracked-files=no"), "commit your changes first: a job runs one commit"
     if untracked := git("ls-files", "--others", "--exclude-standard"):  # not in the commit, so not in the job

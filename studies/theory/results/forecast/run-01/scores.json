@@ -1,5 +1,5 @@
 {
- "scored_utc": "2026-11-15T14:50:25",
+ "scored_utc": "2026-11-15T15:03:15",
  "measured": [
   {
    "id": "t01",
@@ -66,24 +66,24 @@
   },
   {
    "id": "t10",
-   "value": null,
-   "item": null,
-   "quote": null,
-   "note": "not posted yet"
+   "value": 200.25,
+   "item": "result-95a4dc",
+   "quote": "207, 198, 199, 197 right, mean 200.25",
+   "note": "Base + 1.5x top-8 RL directions with the cue, four samples on hard328 (328), mean count per sample."
   },
   {
    "id": "t11",
-   "value": null,
-   "item": null,
-   "quote": null,
-   "note": "not posted yet"
+   "value": 214,
+   "item": "result-95a4dc",
+   "quote": "Under the vote over 4 the edit has 214",
+   "note": "Same edit model, cue, hard328 (328), majority vote over the same 4 samples."
   },
   {
    "id": "t12",
-   "value": null,
-   "item": null,
-   "quote": null,
-   "note": "not posted yet"
+   "value": 456,
+   "item": "result-95a4dc",
+   "quote": "On MATH-500 one sample has 456 of 500",
+   "note": "Same edit model with the cue, one sample on all 500 MATH-500 problems."
   },
   {
    "id": "t13",
@@ -104,51 +104,119 @@
    "value": 60.0,
    "item": "result-5251c9",
    "quote": "one sample 60.0 vs 50.5 vs 29.5",
-   "note": "Think-SFT + cue on the 136 fresh2026 problems (AIME 2026, HMMT Feb+Nov), 4 samples, T 1.0, v3; 60.0 is the mean count right per sample of 136 (not a percent: the stated +7.0-point gap equals (60.0-50.5)/136)."
+   "note": "Think-SFT + cue on the 136 fresh2026 problems, 4 samples, grader v3; 60.0 is a mean count per sample, not a percentage (60.0 - 50.5 = 9.5 of 136 = the stated +7.0 points)."
   },
   {
    "id": "t16",
    "value": 75,
    "item": "result-5251c9",
    "quote": "vote over 4 = 75 of 136",
-   "note": "Think-SFT + cue, majority vote over 4 samples on the same 136 fresh2026 problems, T 1.0, v3."
+   "note": "Think-SFT + cue on fresh2026 (136), majority vote over 4 samples, grader v3."
   },
   {
    "id": "t17",
    "value": 50.5,
    "item": "result-5251c9",
    "quote": "one sample 60.0 vs 50.5 vs 29.5",
-   "note": "RL-Zero-Math plain on the 136 fresh2026 problems, 4 samples, T 1.0, v3; 50.5 is the mean count right per sample of 136 (the +7.0-point gap equals (60.0-50.5)/136, so these are counts)."
+   "note": "RL-Zero-Math plain on fresh2026 (136), 4 samples, grader v3; 50.5 is the mean count per sample (second of the three listed models)."
   },
   {
    "id": "t18",
    "value": 57,
    "item": "result-5251c9",
-   "quote": "vs RL 57",
-   "note": "RL-Zero-Math plain, majority vote over 4 samples on the 136 fresh2026 problems, T 1.0, v3 (score line: RL plain, vote over 4)."
+   "quote": "rl fresh2026 57/136",
+   "note": "RL-Zero-Math plain on fresh2026 (136), majority vote over 4 samples, grader v3."
   },
   {
    "id": "t19",
    "value": 29.5,
    "item": "result-5251c9",
    "quote": "one sample 60.0 vs 50.5 vs 29.5",
-   "note": "Untrained base + cue on the 136 fresh2026 problems, 4 samples, T 1.0, v3; 29.5 is the mean count right per sample of 136 (same count scale as the other two one-sample figures)."
+   "note": "Untrained base + cue on fresh2026 (136), 4 samples, grader v3; 29.5 is the mean count per sample (third of the three listed models)."
   },
   {
    "id": "t20",
    "value": 38,
    "item": "result-5251c9",
-   "quote": "vs base + cue 38",
-   "note": "Untrained base + cue, majority vote over 4 samples on the 136 fresh2026 problems, T 1.0, v3."
+   "quote": "base fresh2026 38/136",
+   "note": "Untrained base + cue on fresh2026 (136), majority vote over 4 samples, grader v3."
   }
  ],
  "forecasters": {
   "reader-1": {
-   "scored": 6,
-   "inside": 4,
-   "total_gain": -4.601,
-   "mean_gain": -0.767,
+   "scored": 9,
+   "inside": 6,
+   "total_gain": -5.123,
+   "mean_gain": -0.569,
+   "disagree": 0,
+   "disagree_inside": 0,
    "rows": [
+    {
+     "id": "t10",
+     "measured": 200.25,
+     "value": 197,
+     "low": 188,
+     "high": 206,
+     "nulls": [
+      {
+       "value": 197,
+       "low": 188,
+       "high": 206
+      },
+      {
+       "value": 197,
+       "low": 188,
+       "high": 206
+      }
+     ],
+     "gain": 0.0,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t11",
+     "measured": 214,
+     "value": 219,
+     "low": 207,
+     "high": 230,
+     "nulls": [
+      {
+       "value": 219,
+       "low": 207,
+       "high": 230
+      },
+      {
+       "value": 220,
+       "low": 208,
+       "high": 230
+      }
+     ],
+     "gain": 0.0499,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t12",
+     "measured": 456,
+     "value": 440,
+     "low": 427,
+     "high": 453,
+     "nulls": [
+      {
+       "value": 440,
+       "low": 427,
+       "high": 453
+      },
+      {
+       "value": 445,
+       "low": 433,
+       "high": 456
+      }
+     ],
+     "gain": -0.5725,
+     "inside": false,
+     "disagrees": false
+    },
     {
      "id": "t15",
      "measured": 60.0,
@@ -168,7 +236,8 @@
       }
      ],
      "gain": -0.7192,
-     "inside": true
+     "inside": true,
+     "disagrees": false
     },
     {
      "id": "t16",
@@ -189,7 +258,8 @@
       }
      ],
      "gain": -2.2402,
-     "inside": false
+     "inside": false,
+     "disagrees": false
     },
     {
      "id": "t17",
@@ -210,7 +280,8 @@
       }
      ],
      "gain": -0.6731,
-     "inside": true
+     "inside": true,
+     "disagrees": false
     },
     {
      "id": "t18",
@@ -231,7 +302,8 @@
       }
      ],
      "gain": -1.0612,
-     "inside": false
+     "inside": false,
+     "disagrees": false
     },
     {
      "id": "t19",
@@ -252,7 +324,8 @@
       }
      ],
      "gain": 0.1623,
-     "inside": true
+     "inside": true,
+     "disagrees": false
     },
     {
      "id": "t20",
@@ -273,16 +346,85 @@
       }
      ],
      "gain": -0.0691,
-     "inside": true
+     "inside": true,
+     "disagrees": false
     }
    ]
   },
   "reader-2": {
-   "scored": 6,
-   "inside": 6,
-   "total_gain": 1.825,
-   "mean_gain": 0.304,
+   "scored": 9,
+   "inside": 9,
+   "total_gain": 2.135,
+   "mean_gain": 0.237,
+   "disagree": 0,
+   "disagree_inside": 0,
    "rows": [
+    {
+     "id": "t10",
+     "measured": 200.25,
+     "value": 197,
+     "low": 188,
+     "high": 206,
+     "nulls": [
+      {
+       "value": 197,
+       "low": 188,
+       "high": 206
+      },
+      {
+       "value": 197,
+       "low": 188,
+       "high": 206
+      }
+     ],
+     "gain": 0.0,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t11",
+     "measured": 214,
+     "value": 220,
+     "low": 208,
+     "high": 230,
+     "nulls": [
+      {
+       "value": 219,
+       "low": 207,
+       "high": 230
+      },
+      {
+       "value": 220,
+       "low": 208,
+       "high": 230
+      }
+     ],
+     "gain": -0.0525,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t12",
+     "measured": 456,
+     "value": 445,
+     "low": 433,
+     "high": 456,
+     "nulls": [
+      {
+       "value": 440,
+       "low": 427,
+       "high": 453
+      },
+      {
+       "value": 445,
+       "low": 433,
+       "high": 456
+      }
+     ],
+     "gain": 0.3618,
+     "inside": true,
+     "disagrees": false
+    },
     {
      "id": "t15",
      "measured": 60.0,
@@ -302,7 +444,8 @@
       }
      ],
      "gain": 0.414,
-     "inside": true
+     "inside": true,
+     "disagrees": false
     },
     {
      "id": "t16",
@@ -323,7 +466,8 @@
       }
      ],
      "gain": 0.6385,
-     "inside": true
+     "inside": true,
+     "disagrees": false
     },
     {
      "id": "t17",
@@ -344,7 +488,8 @@
       }
      ],
      "gain": 0.3987,
-     "inside": true
+     "inside": true,
+     "disagrees": false
     },
     {
      "id": "t18",
@@ -365,7 +510,8 @@
       }
      ],
      "gain": 0.5032,
-     "inside": true
+     "inside": true,
+     "disagrees": false
     },
     {
      "id": "t19",
@@ -386,7 +532,8 @@
       }
      ],
      "gain": -0.1938,
-     "inside": true
+     "inside": true,
+     "disagrees": false
     },
     {
      "id": "t20",
@@ -407,22 +554,94 @@
       }
      ],
      "gain": 0.0647,
-     "inside": true
+     "inside": true,
+     "disagrees": false
     }
    ]
   },
   "r5-m03-rival": {
-   "scored": 0,
-   "inside": 0,
-   "total_gain": 0,
-   "mean_gain": null,
-   "rows": []
+   "scored": 3,
+   "inside": 3,
+   "total_gain": 1.833,
+   "mean_gain": 0.611,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "t10",
+     "measured": 200.25,
+     "value": 195,
+     "low": 186,
+     "high": 204,
+     "nulls": [
+      {
+       "value": 197,
+       "low": 188,
+       "high": 206
+      },
+      {
+       "value": 197,
+       "low": 188,
+       "high": 206
+      }
+     ],
+     "gain": -0.284,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t11",
+     "measured": 214,
+     "value": 216,
+     "low": 206,
+     "high": 226,
+     "nulls": [
+      {
+       "value": 219,
+       "low": 207,
+       "high": 230
+      },
+      {
+       "value": 220,
+       "low": 208,
+       "high": 230
+      }
+     ],
+     "gain": 0.3913,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t12",
+     "measured": 456,
+     "value": 455,
+     "low": 445,
+     "high": 465,
+     "nulls": [
+      {
+       "value": 440,
+       "low": 427,
+       "high": 453
+      },
+      {
+       "value": 445,
+       "low": 433,
+       "high": 456
+      }
+     ],
+     "gain": 1.7259,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
   },
   "r6-account-rival": {
    "scored": 0,
    "inside": 0,
    "total_gain": 0,
    "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
    "rows": []
   },
   "r6-m06": {
@@ -430,6 +649,8 @@
    "inside": 0,
    "total_gain": 0,
    "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
    "rows": []
   },
   "r7-m05": {
@@ -437,6 +658,8 @@
    "inside": 0,
    "total_gain": 0,
    "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
    "rows": []
   },
   "r7-m08": {
@@ -444,6 +667,8 @@
    "inside": 0,
    "total_gain": 0,
    "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
    "rows": []
   },
   "r7-m11": {
@@ -451,6 +676,8 @@
    "inside": 0,
    "total_gain": 0,
    "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
    "rows": []
   }
  },

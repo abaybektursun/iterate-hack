@@ -1,0 +1,36 @@
+{
+ "predictions": [
+  {
+   "id": "r4-m01:theory:g5",
+   "value": 24,
+   "low": 17,
+   "high": 31,
+   "why": "The mechanism puts the loop hazard in the problem and in how far the text has carried the solution, not in how self-similar the prefix is, so removing repeated lines from the base's own stuck prefix leaves it a stuck path and the finish count stays near the K_own 23 of 78 (knowledge-1497e8), give or take rerun noise of about 4."
+  }
+ ],
+ "intervention": {
+  "change": "Restart from scratch with a fresh seed when the answer gets stuck, instead of letting one stuck sample run to the cap. Attempt 0 is the stored sample of job abaybektursun-1114-151718-d4fa (seed 1,000,000 + index). If attempt 0 hits the cap or loop rule A fires on it, draw a new answer from the bare cued prompt at the same T 0.6 / top-p 1.0 with seed 1,000,000 + index + 500,000*k, for up to 2 extra attempts (k = 1, 2). During each new attempt, run rule A every 1,000 generated tokens and stop as soon as it fires. Each attempt has its own 16,384-token cap. The final answer is the first attempt that finishes without a cap hit and without a rule-A fire.",
+  "model": "base = allenai/Olmo-3-1025-7B",
+  "cell": {
+   "set": "MATH-500",
+   "prompt": "cue: run_cell prompt with the three-token RL opening ' line!\\n\\nOkay' prefilled after the prompt",
+   "sampling": "T 0.6 / top-p 1.0",
+   "cap": 16384,
+   "grader": "v3",
+   "samples": 1,
+   "seeds": "attempt 0 = stored d4fa row (seed 1,000,000 + problem index); restart k uses seed 1,000,000 + index + 500,000*k"
+  },
+  "count": "Right answers under grader v3 over all 500 problems, one final answer each. The final answer is the stored d4fa attempt 0 when it finished (no cap hit, no rule-A loop); otherwise it is the first restart that finishes. A problem whose last attempt still hits the cap or is stopped by rule A counts as wrong.",
+  "unit": "right of 500",
+  "value": 420,
+  "low": 407,
+  "high": 433,
+  "best_known": {
+   "value": 454,
+   "item": "result-40ed3b",
+   "setting": "base + cue, T 1.0 / top-p 1.0, vote over 4 samples after restart, ties to the shortest finished sample (cap 16,384, v3)"
+  },
+  "gpu_minutes": 25,
+  "why": "A stuck path locks into a repeat at a steady rate per token, while a fresh start of the same problem is a new path. Fresh restarts finished 38 of 78 cap-hit problems against 23 for continuing the base's own stuck prefix, and restarts took top-p 0.95 from 354 to 414. Scaling that gain to the 98 cap hits of the 378 cell gives about +40 to +45."
+ }
+}

@@ -1,0 +1,4628 @@
+{
+ "_about": {
+  "script": "studies/rlneurons/paper-first-steps/build_facts.py",
+  "bootstrap": "paired over problems, 10000 resamples, seed 0, 95 % percentile",
+  "set": "MATH-500, n 500, cap 16,384 tokens, grader v3 (studies/rlneurons/lib/rln4_lib.grade_v3)",
+  "models": "base allenai/Olmo-3-1025-7B; checkpoints allenai/Olmo-3.1-7B-RL-Zero-Math at step_0100 (0a45720c), step_0400 (897c0ce4), final (364820b0, step 2,800)",
+  "cue": "' line!\\n\\nOkay', three prefilled tokens (Wang et al., arXiv 2610.06851)",
+  "sources": {
+   "t1_t3": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json",
+   "t1_t2": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json",
+   "ckpt": "studies/rlneurons/results/ckptcue/{}-01/per_problem.json",
+   "ckpt_readout": "studies/rlneurons/results/ckptcue/readout.json",
+   "ckpt_readout3": "studies/rlneurons/results/ckptcue/readout3.json",
+   "ckpt_s123": "studies/rlneurons/results/ckptcue/{}_s123-01/rows.jsonl",
+   "frozen": "studies/rlneurons/data/rln4/frozen4.json",
+   "ckpt_examples": "studies/rlneurons/results/ckptcue/s0100_plain-01/examples.json",
+   "s4_base_cue": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl",
+   "s4_final": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl",
+   "grader": "studies/rlneurons/results/rln4/grader_v3/readout.json",
+   "page": "tools/finding_rl_learns_the_opening_first.py",
+   "capcounts": "studies/theory/results/engine/round-04/replication/capcounts.out",
+   "handoff_rows": "studies/rlneurons/results/handoff/{}-01/rows.jsonl",
+   "handoff_plan": "studies/rlneurons/data/handoff/plan_v1.json",
+   "handoff_readout": "studies/rlneurons/results/handoff/unbiased-01/readout.json",
+   "selfopen_rows": "studies/theory/results/experiments/selfopen-01/per_problem.json",
+   "selfopen_metrics": "studies/theory/results/experiments/selfopen-01/metrics.json",
+   "wsp2": "studies/rlneurons/results/wsp2/full500/{}-01/per_problem.json",
+   "wsp2_readout": "studies/rlneurons/results/wsp2/readout.json",
+   "code1": "studies/rlneurons/results/code1/readout.json",
+   "weights": "studies/rlneurons/results/xreward/overlap_steps-01/readout.json"
+  }
+ },
+ "cells_T10": {
+  "base_plain": {
+   "right": {
+    "value": 224,
+    "n": 500,
+    "unit": "problems right of 500, ONE sample (the stored single cell)",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t3_*",
+    "note": "seed 47000000; Wilson 95 % [40.5, 49.2] %"
+   },
+   "cap_hits": {
+    "value": 8,
+    "n": 500,
+    "unit": "answers cut at 16,384 tokens",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t3_*",
+    "note": "1 of them still scored right"
+   },
+   "cut_off_scored_right": {
+    "value": 1,
+    "n": 8,
+    "unit": "answers cut at the cap that grader v3 still scores right (a boxed answer before the cap); a cut-off answer is NOT counted wrong by rule",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t3_*",
+    "note": ""
+   },
+   "okay30": {
+    "value": 73,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 30 characters",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t3_*",
+    "note": ""
+   },
+   "right_by_opening": {
+    "value": {
+     "okay": [
+      62,
+      73
+     ],
+     "not_okay": [
+      162,
+      427
+     ]
+    },
+    "n": 500,
+    "unit": "[right, n]",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t3_*",
+    "note": ""
+   },
+   "opening_classes": {
+    "value": {
+     "other": 387,
+     "Okay": 73,
+     "(empty)": 21,
+     "Alright": 19
+    },
+    "n": 500,
+    "unit": "answers by the first 30 characters: 'Okay', else 'Alright', else empty, else other",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t3_*",
+    "note": "final_plain from the page literal's 90-character start"
+   },
+   "first_line_top5": {
+    "value": [
+     [
+      ".",
+      278
+     ],
+     [
+      "",
+      25
+     ],
+     [
+      " ",
+      7
+     ],
+     [
+      " (without quotes).",
+      4
+     ],
+     [
+      " (without quotes)",
+      2
+     ]
+    ],
+    "n": 500,
+    "unit": "most common text before the first newline (the model first finishes the prompt's last sentence)",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t3_*",
+    "note": ""
+   },
+   "empty_answers": {
+    "value": 21,
+    "n": 500,
+    "unit": "answers with no text",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t3_*",
+    "note": ""
+   },
+   "tokens_mean": {
+    "value": 2107.9,
+    "n": 500,
+    "unit": "generated tokens per problem (cap hits included; the cue's 3 tokens not counted)",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t3_*",
+    "note": ""
+   },
+   "tokens_median": {
+    "value": 700,
+    "n": 500,
+    "unit": "generated tokens, median rounded half up",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t3_*",
+    "note": ""
+   },
+   "tokens_median_finished": {
+    "value": 683,
+    "n": 492,
+    "unit": "generated tokens, answers that finished, sample 0; median rounded half up",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t3_*",
+    "note": ""
+   },
+   "tokens_median_finished_right": {
+    "value": 1109,
+    "n": 223,
+    "unit": "generated tokens, finished and right; median rounded half up",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t3_*",
+    "note": ""
+   }
+  },
+  "base_cue": {
+   "right": {
+    "value": 410,
+    "n": 500,
+    "unit": "problems right of 500, ONE sample (the stored single cell)",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+    "note": "seed 41000000; Wilson 95 % [78.4, 85.1] %"
+   },
+   "cap_hits": {
+    "value": 27,
+    "n": 500,
+    "unit": "answers cut at 16,384 tokens",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+    "note": "0 of them still scored right"
+   },
+   "cut_off_scored_right": {
+    "value": 0,
+    "n": 27,
+    "unit": "answers cut at the cap that grader v3 still scores right (a boxed answer before the cap); a cut-off answer is NOT counted wrong by rule",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+    "note": ""
+   },
+   "okay30": {
+    "value": 500,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 30 characters",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+    "note": "by construction for a cue cell"
+   },
+   "right_by_opening": {
+    "value": {
+     "okay": [
+      410,
+      500
+     ],
+     "not_okay": [
+      0,
+      0
+     ]
+    },
+    "n": 500,
+    "unit": "[right, n]",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+    "note": ""
+   },
+   "opening_classes": {
+    "value": {
+     "Okay": 500
+    },
+    "n": 500,
+    "unit": "answers by the first 30 characters: 'Okay', else 'Alright', else empty, else other",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+    "note": "final_plain from the page literal's 90-character start"
+   },
+   "first_line_top5": {
+    "value": [
+     [
+      " line!",
+      500
+     ]
+    ],
+    "n": 500,
+    "unit": "most common text before the first newline (the model first finishes the prompt's last sentence)",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+    "note": ""
+   },
+   "empty_answers": {
+    "value": 0,
+    "n": 500,
+    "unit": "answers with no text",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+    "note": ""
+   },
+   "tokens_mean": {
+    "value": 3932.9,
+    "n": 500,
+    "unit": "generated tokens per problem (cap hits included; the cue's 3 tokens not counted)",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+    "note": ""
+   },
+   "tokens_median": {
+    "value": 1802,
+    "n": 500,
+    "unit": "generated tokens, median rounded half up",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+    "note": ""
+   },
+   "tokens_median_finished": {
+    "value": 1594,
+    "n": 473,
+    "unit": "generated tokens, answers that finished, sample 0; median rounded half up",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+    "note": ""
+   },
+   "tokens_median_finished_right": {
+    "value": 1432,
+    "n": 410,
+    "unit": "generated tokens, finished and right; median rounded half up",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+    "note": ""
+   }
+  },
+  "s100_plain": {
+   "right": {
+    "value": 418,
+    "n": 500,
+    "unit": "problems right of 500, ONE sample (the stored single cell)",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+    "note": "seed 45000000; Wilson 95 % [80.1, 86.6] %"
+   },
+   "cap_hits": {
+    "value": 24,
+    "n": 500,
+    "unit": "answers cut at 16,384 tokens",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+    "note": "1 of them still scored right"
+   },
+   "cut_off_scored_right": {
+    "value": 1,
+    "n": 24,
+    "unit": "answers cut at the cap that grader v3 still scores right (a boxed answer before the cap); a cut-off answer is NOT counted wrong by rule",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+    "note": ""
+   },
+   "okay30": {
+    "value": 383,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 30 characters",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+    "note": ""
+   },
+   "right_by_opening": {
+    "value": {
+     "okay": [
+      327,
+      383
+     ],
+     "not_okay": [
+      91,
+      117
+     ]
+    },
+    "n": 500,
+    "unit": "[right, n]",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+    "note": ""
+   },
+   "opening_classes": {
+    "value": {
+     "Okay": 383,
+     "other": 95,
+     "Alright": 19,
+     "(empty)": 3
+    },
+    "n": 500,
+    "unit": "answers by the first 30 characters: 'Okay', else 'Alright', else empty, else other",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+    "note": "final_plain from the page literal's 90-character start"
+   },
+   "first_line_top5": {
+    "value": [
+     [
+      ".",
+      313
+     ],
+     [
+      " line.",
+      18
+     ],
+     [
+      "!",
+      14
+     ],
+     [
+      "",
+      11
+     ],
+     [
+      " tag.",
+      8
+     ]
+    ],
+    "n": 500,
+    "unit": "most common text before the first newline (the model first finishes the prompt's last sentence)",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+    "note": ""
+   },
+   "empty_answers": {
+    "value": 3,
+    "n": 500,
+    "unit": "answers with no text",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+    "note": ""
+   },
+   "tokens_mean": {
+    "value": 4120.2,
+    "n": 500,
+    "unit": "generated tokens per problem (cap hits included; the cue's 3 tokens not counted)",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+    "note": ""
+   },
+   "tokens_median": {
+    "value": 2085,
+    "n": 500,
+    "unit": "generated tokens, median rounded half up",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+    "note": ""
+   },
+   "tokens_median_finished": {
+    "value": 1983,
+    "n": 476,
+    "unit": "generated tokens, answers that finished, sample 0; median rounded half up",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+    "note": ""
+   },
+   "tokens_median_finished_right": {
+    "value": 1830,
+    "n": 417,
+    "unit": "generated tokens, finished and right; median rounded half up",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+    "note": ""
+   }
+  },
+  "s100_cue": {
+   "right": {
+    "value": 427,
+    "n": 500,
+    "unit": "problems right of 500, ONE sample (the stored single cell)",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json",
+    "note": "seed 41000000; Wilson 95 % [82.0, 88.2] %"
+   },
+   "cap_hits": {
+    "value": 24,
+    "n": 500,
+    "unit": "answers cut at 16,384 tokens",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json",
+    "note": "0 of them still scored right"
+   },
+   "cut_off_scored_right": {
+    "value": 0,
+    "n": 24,
+    "unit": "answers cut at the cap that grader v3 still scores right (a boxed answer before the cap); a cut-off answer is NOT counted wrong by rule",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json",
+    "note": ""
+   },
+   "okay30": {
+    "value": 500,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 30 characters",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json",
+    "note": "by construction for a cue cell"
+   },
+   "right_by_opening": {
+    "value": {
+     "okay": [
+      427,
+      500
+     ],
+     "not_okay": [
+      0,
+      0
+     ]
+    },
+    "n": 500,
+    "unit": "[right, n]",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json",
+    "note": ""
+   },
+   "opening_classes": {
+    "value": {
+     "Okay": 500
+    },
+    "n": 500,
+    "unit": "answers by the first 30 characters: 'Okay', else 'Alright', else empty, else other",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json",
+    "note": "final_plain from the page literal's 90-character start"
+   },
+   "first_line_top5": {
+    "value": [
+     [
+      " line!",
+      500
+     ]
+    ],
+    "n": 500,
+    "unit": "most common text before the first newline (the model first finishes the prompt's last sentence)",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json",
+    "note": ""
+   },
+   "empty_answers": {
+    "value": 0,
+    "n": 500,
+    "unit": "answers with no text",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json",
+    "note": ""
+   },
+   "tokens_mean": {
+    "value": 4117.8,
+    "n": 500,
+    "unit": "generated tokens per problem (cap hits included; the cue's 3 tokens not counted)",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json",
+    "note": ""
+   },
+   "tokens_median": {
+    "value": 2174,
+    "n": 500,
+    "unit": "generated tokens, median rounded half up",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json",
+    "note": ""
+   },
+   "tokens_median_finished": {
+    "value": 1994,
+    "n": 476,
+    "unit": "generated tokens, answers that finished, sample 0; median rounded half up",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json",
+    "note": ""
+   },
+   "tokens_median_finished_right": {
+    "value": 1739,
+    "n": 427,
+    "unit": "generated tokens, finished and right; median rounded half up",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json",
+    "note": ""
+   }
+  },
+  "s400_plain": {
+   "right": {
+    "value": 436,
+    "n": 500,
+    "unit": "problems right of 500, ONE sample (the stored single cell)",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json",
+    "note": "seed 45000000; Wilson 95 % [84.0, 89.8] %"
+   },
+   "cap_hits": {
+    "value": 7,
+    "n": 500,
+    "unit": "answers cut at 16,384 tokens",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json",
+    "note": "1 of them still scored right"
+   },
+   "cut_off_scored_right": {
+    "value": 1,
+    "n": 7,
+    "unit": "answers cut at the cap that grader v3 still scores right (a boxed answer before the cap); a cut-off answer is NOT counted wrong by rule",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json",
+    "note": ""
+   },
+   "okay30": {
+    "value": 358,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 30 characters",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json",
+    "note": ""
+   },
+   "right_by_opening": {
+    "value": {
+     "okay": [
+      316,
+      358
+     ],
+     "not_okay": [
+      120,
+      142
+     ]
+    },
+    "n": 500,
+    "unit": "[right, n]",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json",
+    "note": ""
+   },
+   "opening_classes": {
+    "value": {
+     "Okay": 358,
+     "other": 138,
+     "Alright": 4
+    },
+    "n": 500,
+    "unit": "answers by the first 30 characters: 'Okay', else 'Alright', else empty, else other",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json",
+    "note": "final_plain from the page literal's 90-character start"
+   },
+   "first_line_top5": {
+    "value": [
+     [
+      " and resubmit.",
+      221
+     ],
+     [
+      "!",
+      90
+     ],
+     [
+      " tag. Copying someone else's",
+      33
+     ],
+     [
+      " line. Copying someone else'",
+      32
+     ],
+     [
+      " line.",
+      14
+     ]
+    ],
+    "n": 500,
+    "unit": "most common text before the first newline (the model first finishes the prompt's last sentence)",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json",
+    "note": ""
+   },
+   "empty_answers": {
+    "value": 0,
+    "n": 500,
+    "unit": "answers with no text",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json",
+    "note": ""
+   },
+   "tokens_mean": {
+    "value": 4080.2,
+    "n": 500,
+    "unit": "generated tokens per problem (cap hits included; the cue's 3 tokens not counted)",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json",
+    "note": ""
+   },
+   "tokens_median": {
+    "value": 2445,
+    "n": 500,
+    "unit": "generated tokens, median rounded half up",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json",
+    "note": ""
+   },
+   "tokens_median_finished": {
+    "value": 2367,
+    "n": 493,
+    "unit": "generated tokens, answers that finished, sample 0; median rounded half up",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json",
+    "note": ""
+   },
+   "tokens_median_finished_right": {
+    "value": 1997,
+    "n": 435,
+    "unit": "generated tokens, finished and right; median rounded half up",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json",
+    "note": ""
+   }
+  },
+  "s400_cue": {
+   "right": {
+    "value": 431,
+    "n": 500,
+    "unit": "problems right of 500, ONE sample (the stored single cell)",
+    "source": "studies/rlneurons/results/ckptcue/s0400_cue-01/per_problem.json",
+    "note": "seed 41000000; Wilson 95 % [82.9, 88.9] %"
+   },
+   "cap_hits": {
+    "value": 17,
+    "n": 500,
+    "unit": "answers cut at 16,384 tokens",
+    "source": "studies/rlneurons/results/ckptcue/s0400_cue-01/per_problem.json",
+    "note": "0 of them still scored right"
+   },
+   "cut_off_scored_right": {
+    "value": 0,
+    "n": 17,
+    "unit": "answers cut at the cap that grader v3 still scores right (a boxed answer before the cap); a cut-off answer is NOT counted wrong by rule",
+    "source": "studies/rlneurons/results/ckptcue/s0400_cue-01/per_problem.json",
+    "note": ""
+   },
+   "okay30": {
+    "value": 500,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 30 characters",
+    "source": "studies/rlneurons/results/ckptcue/s0400_cue-01/per_problem.json",
+    "note": "by construction for a cue cell"
+   },
+   "right_by_opening": {
+    "value": {
+     "okay": [
+      431,
+      500
+     ],
+     "not_okay": [
+      0,
+      0
+     ]
+    },
+    "n": 500,
+    "unit": "[right, n]",
+    "source": "studies/rlneurons/results/ckptcue/s0400_cue-01/per_problem.json",
+    "note": ""
+   },
+   "opening_classes": {
+    "value": {
+     "Okay": 500
+    },
+    "n": 500,
+    "unit": "answers by the first 30 characters: 'Okay', else 'Alright', else empty, else other",
+    "source": "studies/rlneurons/results/ckptcue/s0400_cue-01/per_problem.json",
+    "note": "final_plain from the page literal's 90-character start"
+   },
+   "first_line_top5": {
+    "value": [
+     [
+      " line!",
+      500
+     ]
+    ],
+    "n": 500,
+    "unit": "most common text before the first newline (the model first finishes the prompt's last sentence)",
+    "source": "studies/rlneurons/results/ckptcue/s0400_cue-01/per_problem.json",
+    "note": ""
+   },
+   "empty_answers": {
+    "value": 0,
+    "n": 500,
+    "unit": "answers with no text",
+    "source": "studies/rlneurons/results/ckptcue/s0400_cue-01/per_problem.json",
+    "note": ""
+   },
+   "tokens_mean": {
+    "value": 4278.7,
+    "n": 500,
+    "unit": "generated tokens per problem (cap hits included; the cue's 3 tokens not counted)",
+    "source": "studies/rlneurons/results/ckptcue/s0400_cue-01/per_problem.json",
+    "note": ""
+   },
+   "tokens_median": {
+    "value": 2396,
+    "n": 500,
+    "unit": "generated tokens, median rounded half up",
+    "source": "studies/rlneurons/results/ckptcue/s0400_cue-01/per_problem.json",
+    "note": ""
+   },
+   "tokens_median_finished": {
+    "value": 2317,
+    "n": 483,
+    "unit": "generated tokens, answers that finished, sample 0; median rounded half up",
+    "source": "studies/rlneurons/results/ckptcue/s0400_cue-01/per_problem.json",
+    "note": ""
+   },
+   "tokens_median_finished_right": {
+    "value": 2076,
+    "n": 431,
+    "unit": "generated tokens, finished and right; median rounded half up",
+    "source": "studies/rlneurons/results/ckptcue/s0400_cue-01/per_problem.json",
+    "note": ""
+   }
+  },
+  "final_plain": {
+   "right": {
+    "value": 463,
+    "n": 500,
+    "unit": "problems right of 500, ONE sample (the stored single cell)",
+    "source": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_*",
+    "note": "seed 45000000; Wilson 95 % [90.0, 94.6] %"
+   },
+   "cap_hits": {
+    "value": 6,
+    "n": 500,
+    "unit": "answers cut at 16,384 tokens",
+    "source": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_*",
+    "note": "1 of them still scored right"
+   },
+   "cut_off_scored_right": {
+    "value": 1,
+    "n": 6,
+    "unit": "answers cut at the cap that grader v3 still scores right (a boxed answer before the cap); a cut-off answer is NOT counted wrong by rule",
+    "source": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_*",
+    "note": ""
+   },
+   "okay30": {
+    "value": 442,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 30 characters",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS1 (copied there from T2.jsonl, not in git)",
+    "note": ""
+   },
+   "right_by_opening": {
+    "value": {
+     "okay": [
+      411,
+      442
+     ],
+     "not_okay": [
+      52,
+      58
+     ]
+    },
+    "n": 500,
+    "unit": "[right, n]",
+    "source": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_*",
+    "note": ""
+   },
+   "opening_classes": {
+    "value": {
+     "Okay": 442,
+     "other": 58
+    },
+    "n": 500,
+    "unit": "answers by the first 30 characters: 'Okay', else 'Alright', else empty, else other",
+    "source": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_*",
+    "note": "final_plain from the page literal's 90-character start"
+   },
+   "first_line_top5": {
+    "value": [
+     [
+      " line!",
+      406
+     ],
+     [
+      " tag. Please think step by s",
+      58
+     ],
+     [
+      "!",
+      35
+     ],
+     [
+      " tag!",
+      1
+     ]
+    ],
+    "n": 500,
+    "unit": "most common text before the first newline (the model first finishes the prompt's last sentence)",
+    "source": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_*",
+    "note": ""
+   },
+   "empty_answers": {
+    "value": null,
+    "n": 500,
+    "unit": "answers with no text",
+    "source": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_*",
+    "note": ""
+   },
+   "tokens_mean": {
+    "value": 4693.9,
+    "n": 500,
+    "unit": "generated tokens per problem (cap hits included; the cue's 3 tokens not counted)",
+    "source": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_*",
+    "note": ""
+   },
+   "tokens_median": {
+    "value": 3248,
+    "n": 500,
+    "unit": "generated tokens, median rounded half up",
+    "source": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_*",
+    "note": ""
+   },
+   "tokens_median_finished": {
+    "value": 3180,
+    "n": 494,
+    "unit": "generated tokens, answers that finished, sample 0; median rounded half up",
+    "source": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_*",
+    "note": ""
+   },
+   "tokens_median_finished_right": {
+    "value": 3006,
+    "n": 462,
+    "unit": "generated tokens, finished and right; median rounded half up",
+    "source": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_*",
+    "note": ""
+   }
+  }
+ },
+ "okay_wider_window": {
+  "T10_first_90_chars": {
+   "value": {
+    "base_plain": 100,
+    "base_cue": 500,
+    "s100_plain": 429,
+    "s400_plain": 396,
+    "final_plain": 500
+   },
+   "n": 500,
+   "unit": "answers with 'Okay' in the stored start (cut at a word end, at most 90 characters)",
+   "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS1 starts",
+   "note": "the only wider window in git at T 1.0; the page copied the starts from raw files that are not in git"
+  },
+  "T06_first_90_chars": {
+   "value": {
+    "base_plain": 206,
+    "base_cue": 500,
+    "s100_plain": 495,
+    "s400_plain": 431,
+    "final_plain": 500
+   },
+   "n": 500,
+   "unit": "the same at T 0.6 / top-p 0.95",
+   "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS starts",
+   "note": ""
+  },
+  "T10_s100_plain_not_okay30_but_okay90": {
+   "value": [
+    46,
+    117
+   ],
+   "n": 500,
+   "unit": "[step-100 plain answers without 'Okay' in 30 characters that have it within 90, all without it in 30]",
+   "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS1",
+   "note": ""
+  }
+ },
+ "differences_T10": {
+  "s100_plain - base_cue": {
+   "value": 1.6,
+   "ci95": [
+    -2.0,
+    5.2
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 418.0,
+   "y_mean_right": 410.0,
+   "only_x": 46,
+   "only_y": 38,
+   "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json ; studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+   "note": "one sample per cell; seeds: plain cells 45000000, cue cells 41000000"
+  },
+  "s100_cue - base_cue": {
+   "value": 3.4,
+   "ci95": [
+    0.2,
+    6.6
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 427.0,
+   "y_mean_right": 410.0,
+   "only_x": 41,
+   "only_y": 24,
+   "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json ; studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+   "note": "one sample per cell; seeds: plain cells 45000000, cue cells 41000000"
+  },
+  "s100_cue - s100_plain": {
+   "value": 1.8,
+   "ci95": [
+    -1.2,
+    4.8
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 427.0,
+   "y_mean_right": 418.0,
+   "only_x": 34,
+   "only_y": 25,
+   "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json ; studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+   "note": "one sample per cell; seeds: plain cells 45000000, cue cells 41000000"
+  },
+  "s400_plain - base_cue": {
+   "value": 5.2,
+   "ci95": [
+    2.0,
+    8.4
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 436.0,
+   "y_mean_right": 410.0,
+   "only_x": 47,
+   "only_y": 21,
+   "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json ; studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+   "note": "one sample per cell; seeds: plain cells 45000000, cue cells 41000000"
+  },
+  "s400_cue - s400_plain": {
+   "value": -1.0,
+   "ci95": [
+    -4.0,
+    2.0
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 431.0,
+   "y_mean_right": 436.0,
+   "only_x": 28,
+   "only_y": 33,
+   "source": "studies/rlneurons/results/ckptcue/s0400_cue-01/per_problem.json ; studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json",
+   "note": "one sample per cell; seeds: plain cells 45000000, cue cells 41000000"
+  },
+  "s400_cue - base_cue": {
+   "value": 4.2,
+   "ci95": [
+    1.2,
+    7.2
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 431.0,
+   "y_mean_right": 410.0,
+   "only_x": 40,
+   "only_y": 19,
+   "source": "studies/rlneurons/results/ckptcue/s0400_cue-01/per_problem.json ; studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+   "note": "one sample per cell; seeds: plain cells 45000000, cue cells 41000000"
+  },
+  "s400_plain - s100_plain": {
+   "value": 3.6,
+   "ci95": [
+    0.2,
+    7.0
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 436.0,
+   "y_mean_right": 418.0,
+   "only_x": 45,
+   "only_y": 27,
+   "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json ; studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+   "note": "one sample per cell; seeds: plain cells 45000000, cue cells 41000000"
+  },
+  "s400_cue - s100_cue": {
+   "value": 0.8,
+   "ci95": [
+    -2.0,
+    3.6
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 431.0,
+   "y_mean_right": 427.0,
+   "only_x": 29,
+   "only_y": 25,
+   "source": "studies/rlneurons/results/ckptcue/s0400_cue-01/per_problem.json ; studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json",
+   "note": "one sample per cell; seeds: plain cells 45000000, cue cells 41000000"
+  },
+  "final_plain - s400_plain": {
+   "value": 5.4,
+   "ci95": [
+    3.0,
+    8.0
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 463.0,
+   "y_mean_right": 436.0,
+   "only_x": 36,
+   "only_y": 9,
+   "source": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_* ; studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json",
+   "note": "one sample per cell; seeds: plain cells 45000000, cue cells 41000000"
+  },
+  "final_plain - s100_plain": {
+   "value": 9.0,
+   "ci95": [
+    6.0,
+    12.0
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 463.0,
+   "y_mean_right": 418.0,
+   "only_x": 54,
+   "only_y": 9,
+   "source": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_* ; studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+   "note": "one sample per cell; seeds: plain cells 45000000, cue cells 41000000"
+  },
+  "final_plain - base_cue": {
+   "value": 10.6,
+   "ci95": [
+    7.4,
+    13.8
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 463.0,
+   "y_mean_right": 410.0,
+   "only_x": 65,
+   "only_y": 12,
+   "source": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_* ; studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+   "note": "one sample per cell; seeds: plain cells 45000000, cue cells 41000000"
+  },
+  "base_cue - base_plain": {
+   "value": 37.2,
+   "ci95": [
+    32.2,
+    42.2
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 410.0,
+   "y_mean_right": 224.0,
+   "only_x": 209,
+   "only_y": 23,
+   "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_* ; studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t3_*",
+   "note": "one sample per cell; seeds: plain cells 45000000, cue cells 41000000"
+  },
+  "s100_plain - base_plain": {
+   "value": 38.8,
+   "ci95": [
+    34.0,
+    43.6
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 418.0,
+   "y_mean_right": 224.0,
+   "only_x": 213,
+   "only_y": 19,
+   "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json ; studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t3_*",
+   "note": "one sample per cell; seeds: plain cells 45000000, cue cells 41000000"
+  }
+ },
+ "cells_T10_four_samples": {
+  "base_cue": {
+   "right_per_sample": {
+    "value": [
+     405,
+     409,
+     410,
+     418
+    ],
+    "n": 500,
+    "unit": "problems right of 500, samples 0 to 3",
+    "source": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+    "note": "seed of problem 0 per sample [41000000, 41010000, 41020000, 41030000] (seed + 10000 sample + index)"
+   },
+   "mean_right": {
+    "value": 410.5,
+    "n": 500,
+    "unit": "problems right of 500, mean of the four samples",
+    "source": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+    "note": ""
+   },
+   "cap_hits_per_sample": {
+    "value": [
+     25,
+     23,
+     22,
+     20
+    ],
+    "n": 500,
+    "unit": "answers cut at 16,384 tokens, per sample",
+    "source": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+    "note": "mean 22.50"
+   },
+   "cut_off_scored_right_per_sample": {
+    "value": [
+     0,
+     1,
+     0,
+     0
+    ],
+    "n": 90,
+    "unit": "cut-off answers that grader v3 scores right, per sample",
+    "source": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+    "note": ""
+   },
+   "tokens_mean": {
+    "value": 4008.4,
+    "n": 2000,
+    "unit": "generated tokens per answer, four samples pooled",
+    "source": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+    "note": "n_new of the Day-1 #3 rows"
+   },
+   "tokens_median_finished_pooled": {
+    "value": 1804,
+    "n": 1910,
+    "unit": "generated tokens, finished answers of the four samples pooled; median rounded half up",
+    "source": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+    "note": "per sample [1664, 1874, 1762, 1842]"
+   },
+   "okay30_per_sample": {
+    "value": null,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 30 characters, per sample",
+    "source": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+    "note": "rows of the Day-1 #3 jobs store no text"
+   },
+   "okay90": {
+    "value": null,
+    "n": 500,
+    "unit": "'Okay' within 90 characters",
+    "source": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+    "note": "not computable: the new rows keep 30 characters of each answer; the 90-character counts exist for sample 0 only (okay_wider_window)"
+   }
+  },
+  "s100_plain": {
+   "right_per_sample": {
+    "value": [
+     418,
+     411,
+     422,
+     419
+    ],
+    "n": 500,
+    "unit": "problems right of 500, samples 0 to 3",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "seed of problem 0 per sample [45000000, 45010000, 45020000, 45030000] (seed + 10000 sample + index)"
+   },
+   "mean_right": {
+    "value": 417.5,
+    "n": 500,
+    "unit": "problems right of 500, mean of the four samples",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "cap_hits_per_sample": {
+    "value": [
+     24,
+     21,
+     21,
+     19
+    ],
+    "n": 500,
+    "unit": "answers cut at 16,384 tokens, per sample",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "mean 21.25"
+   },
+   "cut_off_scored_right_per_sample": {
+    "value": [
+     1,
+     3,
+     0,
+     0
+    ],
+    "n": 85,
+    "unit": "cut-off answers that grader v3 scores right, per sample",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "tokens_mean": {
+    "value": 4048.7,
+    "n": 2000,
+    "unit": "generated tokens per answer, four samples pooled",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "n_generated (end token counted; samples 1 to 3 = n_new + 1 for a finished answer)"
+   },
+   "tokens_median_finished_pooled": {
+    "value": 1925,
+    "n": 1915,
+    "unit": "generated tokens, finished answers of the four samples pooled; median rounded half up",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "per sample [1983, 1836, 1947, 1901]"
+   },
+   "okay30_per_sample": {
+    "value": [
+     383,
+     375,
+     386,
+     373
+    ],
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 30 characters, per sample",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "pooled 1517 of 2000"
+   },
+   "okay90": {
+    "value": null,
+    "n": 500,
+    "unit": "'Okay' within 90 characters",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "not computable: the new rows keep 30 characters of each answer; the 90-character counts exist for sample 0 only (okay_wider_window)"
+   }
+  },
+  "s100_cue": {
+   "right_per_sample": {
+    "value": [
+     427,
+     423,
+     423,
+     431
+    ],
+    "n": 500,
+    "unit": "problems right of 500, samples 0 to 3",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "seed of problem 0 per sample [41000000, 41010000, 41020000, 41030000] (seed + 10000 sample + index)"
+   },
+   "mean_right": {
+    "value": 426.0,
+    "n": 500,
+    "unit": "problems right of 500, mean of the four samples",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "cap_hits_per_sample": {
+    "value": [
+     24,
+     24,
+     25,
+     23
+    ],
+    "n": 500,
+    "unit": "answers cut at 16,384 tokens, per sample",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "mean 24.00"
+   },
+   "cut_off_scored_right_per_sample": {
+    "value": [
+     0,
+     2,
+     0,
+     2
+    ],
+    "n": 96,
+    "unit": "cut-off answers that grader v3 scores right, per sample",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "tokens_mean": {
+    "value": 4170.8,
+    "n": 2000,
+    "unit": "generated tokens per answer, four samples pooled",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "n_generated (end token counted; samples 1 to 3 = n_new + 1 for a finished answer)"
+   },
+   "tokens_median_finished_pooled": {
+    "value": 2001,
+    "n": 1904,
+    "unit": "generated tokens, finished answers of the four samples pooled; median rounded half up",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "per sample [1994, 1970, 2018, 2018]"
+   },
+   "okay30_per_sample": {
+    "value": [
+     500,
+     500,
+     500,
+     500
+    ],
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 30 characters, per sample",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "pooled 2000 of 2000"
+   },
+   "okay90": {
+    "value": null,
+    "n": 500,
+    "unit": "'Okay' within 90 characters",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "not computable: the new rows keep 30 characters of each answer; the 90-character counts exist for sample 0 only (okay_wider_window)"
+   }
+  },
+  "s400_plain": {
+   "right_per_sample": {
+    "value": [
+     436,
+     447,
+     435,
+     433
+    ],
+    "n": 500,
+    "unit": "problems right of 500, samples 0 to 3",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "seed of problem 0 per sample [45000000, 45010000, 45020000, 45030000] (seed + 10000 sample + index)"
+   },
+   "mean_right": {
+    "value": 437.75,
+    "n": 500,
+    "unit": "problems right of 500, mean of the four samples",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "cap_hits_per_sample": {
+    "value": [
+     7,
+     16,
+     12,
+     12
+    ],
+    "n": 500,
+    "unit": "answers cut at 16,384 tokens, per sample",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "mean 11.75"
+   },
+   "cut_off_scored_right_per_sample": {
+    "value": [
+     1,
+     2,
+     0,
+     0
+    ],
+    "n": 47,
+    "unit": "cut-off answers that grader v3 scores right, per sample",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "tokens_mean": {
+    "value": 4175.4,
+    "n": 2000,
+    "unit": "generated tokens per answer, four samples pooled",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "n_generated (end token counted; samples 1 to 3 = n_new + 1 for a finished answer)"
+   },
+   "tokens_median_finished_pooled": {
+    "value": 2291,
+    "n": 1953,
+    "unit": "generated tokens, finished answers of the four samples pooled; median rounded half up",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "per sample [2367, 2362, 2270, 2251]"
+   },
+   "okay30_per_sample": {
+    "value": [
+     358,
+     356,
+     369,
+     349
+    ],
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 30 characters, per sample",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "pooled 1432 of 2000"
+   },
+   "okay90": {
+    "value": null,
+    "n": 500,
+    "unit": "'Okay' within 90 characters",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "not computable: the new rows keep 30 characters of each answer; the 90-character counts exist for sample 0 only (okay_wider_window)"
+   }
+  },
+  "final_plain": {
+   "right_per_sample": {
+    "value": [
+     456,
+     462,
+     464,
+     458
+    ],
+    "n": 500,
+    "unit": "problems right of 500, samples 0 to 3",
+    "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+    "note": "seed of problem 0 per sample [45000000, 45010000, 45020000, 45030000] (seed + 10000 sample + index)"
+   },
+   "mean_right": {
+    "value": 460.0,
+    "n": 500,
+    "unit": "problems right of 500, mean of the four samples",
+    "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+    "note": ""
+   },
+   "cap_hits_per_sample": {
+    "value": [
+     6,
+     10,
+     5,
+     11
+    ],
+    "n": 500,
+    "unit": "answers cut at 16,384 tokens, per sample",
+    "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+    "note": "mean 8.00"
+   },
+   "cut_off_scored_right_per_sample": {
+    "value": [
+     0,
+     1,
+     0,
+     2
+    ],
+    "n": 32,
+    "unit": "cut-off answers that grader v3 scores right, per sample",
+    "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+    "note": ""
+   },
+   "tokens_mean": {
+    "value": 4686.8,
+    "n": 2000,
+    "unit": "generated tokens per answer, four samples pooled",
+    "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+    "note": "n_new of the Day-1 #3 rows"
+   },
+   "tokens_median_finished_pooled": {
+    "value": 3123,
+    "n": 1968,
+    "unit": "generated tokens, finished answers of the four samples pooled; median rounded half up",
+    "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+    "note": "per sample [3312, 3067, 3165, 3005]"
+   },
+   "okay30_per_sample": {
+    "value": null,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 30 characters, per sample",
+    "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+    "note": "rows of the Day-1 #3 jobs store no text"
+   },
+   "okay90": {
+    "value": null,
+    "n": 500,
+    "unit": "'Okay' within 90 characters",
+    "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+    "note": "not computable: the new rows keep 30 characters of each answer; the 90-character counts exist for sample 0 only (okay_wider_window)"
+   }
+  }
+ },
+ "differences_T10_four_sample_means": {
+  "s100_plain - base_cue": {
+   "value": 1.4,
+   "ci95": [
+    -0.45,
+    3.3
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 417.5,
+   "y_mean_right": 410.5,
+   "only_x": 1,
+   "only_y": 0,
+   "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3) ; studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+   "note": "per-problem mean of four samples on both sides; only_x / only_y = problems right in all four of one and none of the other"
+  },
+  "s100_cue - base_cue": {
+   "value": 3.1,
+   "ci95": [
+    1.5,
+    4.75
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 426.0,
+   "y_mean_right": 410.5,
+   "only_x": 0,
+   "only_y": 0,
+   "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3) ; studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+   "note": "per-problem mean of four samples on both sides; only_x / only_y = problems right in all four of one and none of the other"
+  },
+  "s100_cue - s100_plain": {
+   "value": 1.7,
+   "ci95": [
+    0.05,
+    3.35
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 426.0,
+   "y_mean_right": 417.5,
+   "only_x": 0,
+   "only_y": 0,
+   "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3) ; studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+   "note": "per-problem mean of four samples on both sides; only_x / only_y = problems right in all four of one and none of the other"
+  },
+  "s400_plain - s100_plain": {
+   "value": 4.05,
+   "ci95": [
+    2.4,
+    5.7
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 437.75,
+   "y_mean_right": 417.5,
+   "only_x": 0,
+   "only_y": 0,
+   "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3) ; studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+   "note": "per-problem mean of four samples on both sides; only_x / only_y = problems right in all four of one and none of the other"
+  },
+  "final_plain - s400_plain": {
+   "value": 4.45,
+   "ci95": [
+    3.0,
+    5.95
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 460.0,
+   "y_mean_right": 437.75,
+   "only_x": 1,
+   "only_y": 0,
+   "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0) ; studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+   "note": "per-problem mean of four samples on both sides; only_x / only_y = problems right in all four of one and none of the other"
+  },
+  "final_plain - s100_plain": {
+   "value": 8.5,
+   "ci95": [
+    6.7,
+    10.3
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 460.0,
+   "y_mean_right": 417.5,
+   "only_x": 3,
+   "only_y": 0,
+   "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0) ; studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+   "note": "per-problem mean of four samples on both sides; only_x / only_y = problems right in all four of one and none of the other"
+  },
+  "final_plain - base_cue": {
+   "value": 9.9,
+   "ci95": [
+    8.25,
+    11.6
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 460.0,
+   "y_mean_right": 410.5,
+   "only_x": 2,
+   "only_y": 0,
+   "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0) ; studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+   "note": "per-problem mean of four samples on both sides; only_x / only_y = problems right in all four of one and none of the other"
+  },
+  "s400_plain - base_cue": {
+   "value": 5.45,
+   "ci95": [
+    3.85,
+    7.05
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 437.75,
+   "y_mean_right": 410.5,
+   "only_x": 1,
+   "only_y": 0,
+   "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3) ; studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+   "note": "per-problem mean of four samples on both sides; only_x / only_y = problems right in all four of one and none of the other"
+  }
+ },
+ "seed_noise_T10": {
+  "base_cue": {
+   "right_per_sample": {
+    "value": [
+     405,
+     409,
+     410,
+     418
+    ],
+    "n": 500,
+    "unit": "problems right of 500, samples 0 to 3",
+    "source": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+    "note": "sample s has seed + 10000 s"
+   },
+   "range_four_samples": {
+    "value": [
+     405,
+     418
+    ],
+    "n": 500,
+    "unit": "lowest and highest right of 500 over the four samples",
+    "source": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+    "note": "spread 13 problems"
+   },
+   "sd_between_samples": {
+    "value": 5.45,
+    "n": 4,
+    "unit": "problems, sd of right of 500 over samples 0 to 3",
+    "source": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+    "note": ""
+   },
+   "mean_abs_pair_difference": {
+    "value": 6.67,
+    "n": 6,
+    "unit": "problems, |right_a - right_b| over the 6 sample pairs",
+    "source": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+    "note": ""
+   },
+   "flips_between_two_samples": {
+    "value": 39.8,
+    "n": 12,
+    "unit": "problems right in one sample and wrong in another, mean over ordered pairs (each direction)",
+    "source": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+    "note": "min 34, max 49: the churn to expect between two cells of ONE model"
+   },
+   "cap_hits_per_sample": {
+    "value": [
+     25,
+     23,
+     22,
+     20
+    ],
+    "n": 500,
+    "unit": "cap hits",
+    "source": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+    "note": ""
+   },
+   "tokens_mean_per_sample": {
+    "value": [
+     3808.1,
+     4144.0,
+     3925.7,
+     4155.8
+    ],
+    "n": 500,
+    "unit": "generated tokens per problem",
+    "source": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+    "note": ""
+   },
+   "problems_by_right_count": {
+    "value": [
+     33,
+     24,
+     28,
+     98,
+     317
+    ],
+    "n": 500,
+    "unit": "problems right in 0, 1, 2, 3, 4 of 4 samples",
+    "source": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+    "note": ""
+   },
+   "with_stored_single_cell": {
+    "value": [
+     405,
+     409,
+     410,
+     418,
+     410
+    ],
+    "n": 500,
+    "unit": "the four samples and the stored cell (T1 or T2)",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+    "note": ""
+   },
+   "range": {
+    "value": [
+     405,
+     418
+    ],
+    "n": 500,
+    "unit": "lowest and highest right of 500 over the five runs",
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+    "note": "spread 13 problems = 2.6 points"
+   }
+  },
+  "s100_plain": {
+   "right_per_sample": {
+    "value": [
+     418,
+     411,
+     422,
+     419
+    ],
+    "n": 500,
+    "unit": "problems right of 500, samples 0 to 3",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "sample s has seed + 10000 s"
+   },
+   "range_four_samples": {
+    "value": [
+     411,
+     422
+    ],
+    "n": 500,
+    "unit": "lowest and highest right of 500 over the four samples",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "spread 11 problems"
+   },
+   "sd_between_samples": {
+    "value": 4.65,
+    "n": 4,
+    "unit": "problems, sd of right of 500 over samples 0 to 3",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "mean_abs_pair_difference": {
+    "value": 5.67,
+    "n": 6,
+    "unit": "problems, |right_a - right_b| over the 6 sample pairs",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "flips_between_two_samples": {
+    "value": 38.3,
+    "n": 12,
+    "unit": "problems right in one sample and wrong in another, mean over ordered pairs (each direction)",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "min 33, max 44: the churn to expect between two cells of ONE model"
+   },
+   "cap_hits_per_sample": {
+    "value": [
+     24,
+     21,
+     21,
+     19
+    ],
+    "n": 500,
+    "unit": "cap hits",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "tokens_mean_per_sample": {
+    "value": [
+     4120.2,
+     4058.0,
+     4084.8,
+     3932.1
+    ],
+    "n": 500,
+    "unit": "generated tokens per problem",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "problems_by_right_count": {
+    "value": [
+     24,
+     27,
+     40,
+     73,
+     336
+    ],
+    "n": 500,
+    "unit": "problems right in 0, 1, 2, 3, 4 of 4 samples",
+    "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   }
+  },
+  "s100_cue": {
+   "right_per_sample": {
+    "value": [
+     427,
+     423,
+     423,
+     431
+    ],
+    "n": 500,
+    "unit": "problems right of 500, samples 0 to 3",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "sample s has seed + 10000 s"
+   },
+   "range_four_samples": {
+    "value": [
+     423,
+     431
+    ],
+    "n": 500,
+    "unit": "lowest and highest right of 500 over the four samples",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "spread 8 problems"
+   },
+   "sd_between_samples": {
+    "value": 3.83,
+    "n": 4,
+    "unit": "problems, sd of right of 500 over samples 0 to 3",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "mean_abs_pair_difference": {
+    "value": 4.67,
+    "n": 6,
+    "unit": "problems, |right_a - right_b| over the 6 sample pairs",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "flips_between_two_samples": {
+    "value": 30.0,
+    "n": 12,
+    "unit": "problems right in one sample and wrong in another, mean over ordered pairs (each direction)",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "min 25, max 36: the churn to expect between two cells of ONE model"
+   },
+   "cap_hits_per_sample": {
+    "value": [
+     24,
+     24,
+     25,
+     23
+    ],
+    "n": 500,
+    "unit": "cap hits",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "tokens_mean_per_sample": {
+    "value": [
+     4117.8,
+     4146.0,
+     4321.3,
+     4098.0
+    ],
+    "n": 500,
+    "unit": "generated tokens per problem",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "problems_by_right_count": {
+    "value": [
+     26,
+     27,
+     27,
+     57,
+     363
+    ],
+    "n": 500,
+    "unit": "problems right in 0, 1, 2, 3, 4 of 4 samples",
+    "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   }
+  },
+  "s400_plain": {
+   "right_per_sample": {
+    "value": [
+     436,
+     447,
+     435,
+     433
+    ],
+    "n": 500,
+    "unit": "problems right of 500, samples 0 to 3",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "sample s has seed + 10000 s"
+   },
+   "range_four_samples": {
+    "value": [
+     433,
+     447
+    ],
+    "n": 500,
+    "unit": "lowest and highest right of 500 over the four samples",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "spread 14 problems"
+   },
+   "sd_between_samples": {
+    "value": 6.29,
+    "n": 4,
+    "unit": "problems, sd of right of 500 over samples 0 to 3",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "mean_abs_pair_difference": {
+    "value": 7.17,
+    "n": 6,
+    "unit": "problems, |right_a - right_b| over the 6 sample pairs",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "flips_between_two_samples": {
+    "value": 24.8,
+    "n": 12,
+    "unit": "problems right in one sample and wrong in another, mean over ordered pairs (each direction)",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": "min 17, max 32: the churn to expect between two cells of ONE model"
+   },
+   "cap_hits_per_sample": {
+    "value": [
+     7,
+     16,
+     12,
+     12
+    ],
+    "n": 500,
+    "unit": "cap hits",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "tokens_mean_per_sample": {
+    "value": [
+     4080.2,
+     4283.4,
+     4197.2,
+     4140.8
+    ],
+    "n": 500,
+    "unit": "generated tokens per problem",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   },
+   "problems_by_right_count": {
+    "value": [
+     22,
+     24,
+     21,
+     47,
+     386
+    ],
+    "n": 500,
+    "unit": "problems right in 0, 1, 2, 3, 4 of 4 samples",
+    "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+    "note": ""
+   }
+  },
+  "final_plain": {
+   "right_per_sample": {
+    "value": [
+     456,
+     462,
+     464,
+     458
+    ],
+    "n": 500,
+    "unit": "problems right of 500, samples 0 to 3",
+    "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+    "note": "sample s has seed + 10000 s"
+   },
+   "range_four_samples": {
+    "value": [
+     456,
+     464
+    ],
+    "n": 500,
+    "unit": "lowest and highest right of 500 over the four samples",
+    "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+    "note": "spread 8 problems"
+   },
+   "sd_between_samples": {
+    "value": 3.65,
+    "n": 4,
+    "unit": "problems, sd of right of 500 over samples 0 to 3",
+    "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+    "note": ""
+   },
+   "mean_abs_pair_difference": {
+    "value": 4.67,
+    "n": 6,
+    "unit": "problems, |right_a - right_b| over the 6 sample pairs",
+    "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+    "note": ""
+   },
+   "flips_between_two_samples": {
+    "value": 15.7,
+    "n": 12,
+    "unit": "problems right in one sample and wrong in another, mean over ordered pairs (each direction)",
+    "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+    "note": "min 9, max 20: the churn to expect between two cells of ONE model"
+   },
+   "cap_hits_per_sample": {
+    "value": [
+     6,
+     10,
+     5,
+     11
+    ],
+    "n": 500,
+    "unit": "cap hits",
+    "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+    "note": ""
+   },
+   "tokens_mean_per_sample": {
+    "value": [
+     4675.1,
+     4587.9,
+     4741.2,
+     4742.9
+    ],
+    "n": 500,
+    "unit": "generated tokens per problem",
+    "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+    "note": ""
+   },
+   "problems_by_right_count": {
+    "value": [
+     18,
+     7,
+     17,
+     33,
+     425
+    ],
+    "n": 500,
+    "unit": "problems right in 0, 1, 2, 3, 4 of 4 samples",
+    "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+    "note": ""
+   },
+   "with_stored_single_cell": {
+    "value": [
+     456,
+     462,
+     464,
+     458,
+     463
+    ],
+    "n": 500,
+    "unit": "the four samples and the stored cell (T1 or T2)",
+    "source": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_*",
+    "note": ""
+   },
+   "range": {
+    "value": [
+     456,
+     464
+    ],
+    "n": 500,
+    "unit": "lowest and highest right of 500 over the five runs",
+    "source": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_*",
+    "note": "spread 8 problems = 1.6 points"
+   }
+  },
+  "stored_cell_minus_sample0_same_seeds": {
+   "base_cue": {
+    "value": 1.0,
+    "ci95": [
+     -2.0,
+     4.0
+    ],
+    "n": 500,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 410.0,
+    "y_mean_right": 405.0,
+    "only_x": 32,
+    "only_y": 27,
+    "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_* ; day1_3 sample 0",
+    "note": "same model, same seeds, another job: a null difference"
+   },
+   "final_plain": {
+    "value": 1.4,
+    "ci95": [
+     -0.6,
+     3.4
+    ],
+    "n": 500,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 463.0,
+    "y_mean_right": 456.0,
+    "only_x": 17,
+    "only_y": 10,
+    "source": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_* ; day1_3 sample 0",
+    "note": "same model, same seeds, another job: a null difference"
+   }
+  }
+ },
+ "one_sample_vs_four_sample_reference": {
+  "s100_plain - base_cue_mean4": {
+   "value": 1.5,
+   "ci95": [
+    -1.25,
+    4.2
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 418.0,
+   "y_mean_right": 410.5,
+   "only_x": 6,
+   "only_y": 17,
+   "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json ; studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl",
+   "note": "SUPERSEDED by differences_T10_four_sample_means. x = one sample; y = per-problem mean of 4 samples (day1_3, attempt 0). Covers all of x's sample noise only through the problem resampling"
+  },
+  "s100_cue - base_cue_mean4": {
+   "value": 3.3,
+   "ci95": [
+    0.85,
+    5.75
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 427.0,
+   "y_mean_right": 410.5,
+   "only_x": 6,
+   "only_y": 8,
+   "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json ; studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl",
+   "note": "SUPERSEDED by differences_T10_four_sample_means. x = one sample; y = per-problem mean of 4 samples (day1_3, attempt 0). Covers all of x's sample noise only through the problem resampling"
+  },
+  "s400_plain - base_cue_mean4": {
+   "value": 5.1,
+   "ci95": [
+    2.6,
+    7.55
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 436.0,
+   "y_mean_right": 410.5,
+   "only_x": 8,
+   "only_y": 7,
+   "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json ; studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl",
+   "note": "SUPERSEDED by differences_T10_four_sample_means. x = one sample; y = per-problem mean of 4 samples (day1_3, attempt 0). Covers all of x's sample noise only through the problem resampling"
+  },
+  "final_mean4 - s400_plain": {
+   "value": 4.8,
+   "ci95": [
+    2.55,
+    7.2
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 460.0,
+   "y_mean_right": 436.0,
+   "only_x": 22,
+   "only_y": 2,
+   "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl ; studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json",
+   "note": "SUPERSEDED by differences_T10_four_sample_means. x = one sample; y = per-problem mean of 4 samples (day1_3, attempt 0). Covers all of x's sample noise only through the problem resampling"
+  },
+  "final_mean4 - s100_plain": {
+   "value": 8.4,
+   "ci95": [
+    5.85,
+    11.1
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 460.0,
+   "y_mean_right": 418.0,
+   "only_x": 34,
+   "only_y": 1,
+   "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl ; studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+   "note": "SUPERSEDED by differences_T10_four_sample_means. x = one sample; y = per-problem mean of 4 samples (day1_3, attempt 0). Covers all of x's sample noise only through the problem resampling"
+  },
+  "final_mean4 - base_cue_mean4": {
+   "value": 9.9,
+   "ci95": [
+    8.25,
+    11.6
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 460.0,
+   "y_mean_right": 410.5,
+   "only_x": 2,
+   "only_y": 0,
+   "source": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl ; studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl",
+   "note": "both sides 4-sample means"
+  },
+  "s100_plain_rank_among_base_cue_runs": {
+   "value": "418 against base + cue runs [405, 409, 410, 410, 418]",
+   "n": 500,
+   "unit": "right of 500",
+   "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+   "note": ""
+  }
+ },
+ "transitions_T10": {
+  "base_cue -> s100_plain": {
+   "value": {
+    "gained": 46,
+    "lost": 38,
+    "net": 8,
+    "both_right": 372,
+    "both_wrong": 44,
+    "expected_independent": {
+     "gained": 44.06,
+     "lost": 37.06
+    },
+    "observed_mean": {
+     "gained": 44.06,
+     "lost": 37.06
+    },
+    "observed_range_16_pairs": {
+     "gained": [
+      39,
+      49
+     ],
+     "lost": [
+      28,
+      46
+     ]
+    },
+    "same_rates_null": {
+     "gained": 39.93,
+     "lost": 39.93
+    }
+   },
+   "n": 500,
+   "unit": "problems",
+   "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_* ; studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+   "note": "gained / lost / net / both_*: sample 0 of each stage (the stored single cells). expected_independent: sum over problems of (1 - pA) pB and pA (1 - pB), p = share right of the model's four samples. observed_mean: mean over the 16 pairs of one sample of A and one of B; identical to expected_independent by algebra (it is no test). same_rates_null: gained = lost expected if both stages had the same per-problem rate (pooled over 8 samples, 8/7 sum p(1 - p)): the churn with no change",
+   "expected_independent": {
+    "gained": 44.06,
+    "lost": 37.06
+   },
+   "observed_mean": {
+    "gained": 44.06,
+    "lost": 37.06
+   },
+   "observed_range_16_pairs": {
+    "gained": [
+     39,
+     49
+    ],
+    "lost": [
+     28,
+     46
+    ]
+   },
+   "same_rates_null": {
+    "gained": 39.93,
+    "lost": 39.93
+   }
+  },
+  "s100_plain -> s400_plain": {
+   "value": {
+    "gained": 45,
+    "lost": 27,
+    "net": 18,
+    "both_right": 391,
+    "both_wrong": 37,
+    "expected_independent": {
+     "gained": 43.12,
+     "lost": 22.88
+    },
+    "observed_mean": {
+     "gained": 43.12,
+     "lost": 22.88
+    },
+    "observed_range_16_pairs": {
+     "gained": [
+      33,
+      53
+     ],
+     "lost": [
+      16,
+      31
+     ]
+    },
+    "same_rates_null": {
+     "gained": 32.38,
+     "lost": 32.38
+    }
+   },
+   "n": 500,
+   "unit": "problems",
+   "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json ; studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json",
+   "note": "gained / lost / net / both_*: sample 0 of each stage (the stored single cells). expected_independent: sum over problems of (1 - pA) pB and pA (1 - pB), p = share right of the model's four samples. observed_mean: mean over the 16 pairs of one sample of A and one of B; identical to expected_independent by algebra (it is no test). same_rates_null: gained = lost expected if both stages had the same per-problem rate (pooled over 8 samples, 8/7 sum p(1 - p)): the churn with no change",
+   "expected_independent": {
+    "gained": 43.12,
+    "lost": 22.88
+   },
+   "observed_mean": {
+    "gained": 43.12,
+    "lost": 22.88
+   },
+   "observed_range_16_pairs": {
+    "gained": [
+     33,
+     53
+    ],
+    "lost": [
+     16,
+     31
+    ]
+   },
+   "same_rates_null": {
+    "gained": 32.38,
+    "lost": 32.38
+   }
+  },
+  "s400_plain -> final_plain": {
+   "value": {
+    "gained": 36,
+    "lost": 9,
+    "net": 27,
+    "both_right": 427,
+    "both_wrong": 28,
+    "expected_independent": {
+     "gained": 33.88,
+     "lost": 11.62
+    },
+    "observed_mean": {
+     "gained": 33.88,
+     "lost": 11.62
+    },
+    "observed_range_16_pairs": {
+     "gained": [
+      24,
+      40
+     ],
+     "lost": [
+      6,
+      16
+     ]
+    },
+    "same_rates_null": {
+     "gained": 21.66,
+     "lost": 21.66
+    }
+   },
+   "n": 500,
+   "unit": "problems",
+   "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json ; studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_*",
+   "note": "gained / lost / net / both_*: sample 0 of each stage (the stored single cells). expected_independent: sum over problems of (1 - pA) pB and pA (1 - pB), p = share right of the model's four samples. observed_mean: mean over the 16 pairs of one sample of A and one of B; identical to expected_independent by algebra (it is no test). same_rates_null: gained = lost expected if both stages had the same per-problem rate (pooled over 8 samples, 8/7 sum p(1 - p)): the churn with no change",
+   "expected_independent": {
+    "gained": 33.88,
+    "lost": 11.62
+   },
+   "observed_mean": {
+    "gained": 33.88,
+    "lost": 11.62
+   },
+   "observed_range_16_pairs": {
+    "gained": [
+     24,
+     40
+    ],
+    "lost": [
+     6,
+     16
+    ]
+   },
+   "same_rates_null": {
+    "gained": 21.66,
+    "lost": 21.66
+   }
+  },
+  "base_cue -> final_plain": {
+   "value": {
+    "gained": 65,
+    "lost": 12,
+    "net": 53,
+    "both_right": 398,
+    "both_wrong": 25,
+    "expected_independent": {
+     "gained": 57.56,
+     "lost": 8.06
+    },
+    "observed_mean": {
+     "gained": 57.56,
+     "lost": 8.06
+    },
+    "observed_range_16_pairs": {
+     "gained": [
+      48,
+      68
+     ],
+     "lost": [
+      5,
+      11
+     ]
+    },
+    "same_rates_null": {
+     "gained": 30.64,
+     "lost": 30.64
+    }
+   },
+   "n": 500,
+   "unit": "problems",
+   "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_* ; studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_*",
+   "note": "gained / lost / net / both_*: sample 0 of each stage (the stored single cells). expected_independent: sum over problems of (1 - pA) pB and pA (1 - pB), p = share right of the model's four samples. observed_mean: mean over the 16 pairs of one sample of A and one of B; identical to expected_independent by algebra (it is no test). same_rates_null: gained = lost expected if both stages had the same per-problem rate (pooled over 8 samples, 8/7 sum p(1 - p)): the churn with no change",
+   "expected_independent": {
+    "gained": 57.56,
+    "lost": 8.06
+   },
+   "observed_mean": {
+    "gained": 57.56,
+    "lost": 8.06
+   },
+   "observed_range_16_pairs": {
+    "gained": [
+     48,
+     68
+    ],
+    "lost": [
+     5,
+     11
+    ]
+   },
+   "same_rates_null": {
+    "gained": 30.64,
+    "lost": 30.64
+   }
+  },
+  "base_cue -> s400_plain": {
+   "value": {
+    "gained": 47,
+    "lost": 21,
+    "net": 26,
+    "both_right": 389,
+    "both_wrong": 43
+   },
+   "n": 500,
+   "unit": "problems",
+   "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_* ; studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json",
+   "note": ""
+  },
+  "s100_plain -> final_plain": {
+   "value": {
+    "gained": 54,
+    "lost": 9,
+    "net": 45,
+    "both_right": 409,
+    "both_wrong": 28
+   },
+   "n": 500,
+   "unit": "problems",
+   "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json ; studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json t2_*",
+   "note": ""
+  },
+  "base_plain -> base_cue": {
+   "value": {
+    "gained": 209,
+    "lost": 23,
+    "net": 186,
+    "both_right": 201,
+    "both_wrong": 67
+   },
+   "n": 500,
+   "unit": "problems",
+   "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t3_* ; studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t1_*",
+   "note": ""
+  },
+  "base_plain -> s100_plain": {
+   "value": {
+    "gained": 213,
+    "lost": 19,
+    "net": 194,
+    "both_right": 205,
+    "both_wrong": 63
+   },
+   "n": 500,
+   "unit": "problems",
+   "source": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json t3_* ; studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+   "note": ""
+  },
+  "s100_plain -> s100_cue": {
+   "value": {
+    "gained": 34,
+    "lost": 25,
+    "net": 9,
+    "both_right": 393,
+    "both_wrong": 48
+   },
+   "n": 500,
+   "unit": "problems",
+   "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json ; studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json",
+   "note": ""
+  },
+  "s400_plain -> s400_cue": {
+   "value": {
+    "gained": 28,
+    "lost": 33,
+    "net": -5,
+    "both_right": 403,
+    "both_wrong": 36
+   },
+   "n": 500,
+   "unit": "problems",
+   "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json ; studies/rlneurons/results/ckptcue/s0400_cue-01/per_problem.json",
+   "note": ""
+  },
+  "patterns": {
+   "value": {
+    "rrrr": 355,
+    "wrrr": 32,
+    "rwrr": 28,
+    "wwww": 20,
+    "wwrr": 12,
+    "wrwr": 11,
+    "rrwr": 11,
+    "wwwr": 10,
+    "rwwr": 4,
+    "rwww": 3,
+    "rwrw": 3,
+    "rrww": 3,
+    "rrrw": 3,
+    "wrww": 2,
+    "wwrw": 2,
+    "wrrw": 1
+   },
+   "n": 500,
+   "unit": "problems by outcome in base_cue, s100_plain, s400_plain, final_plain (r right, w wrong)",
+   "source": "the four cells",
+   "note": ""
+  },
+  "monotone_share": {
+   "value": 429,
+   "n": 500,
+   "unit": "problems whose outcome never goes from right to wrong along the chain",
+   "source": "patterns",
+   "note": ""
+  },
+  "final_only_problems": {
+   "value": {
+    "n": 65,
+    "right_at_s100": 43,
+    "right_at_s400": 44,
+    "right_at_both": 32,
+    "right_at_neither": 10
+   },
+   "n": 65,
+   "unit": "problems the final model has right and base + cue wrong",
+   "source": "the four cells",
+   "note": ""
+  },
+  "base_cue_only_problems": {
+   "value": {
+    "n": 12,
+    "right_at_s100": 6,
+    "right_at_s400": 6
+   },
+   "n": 12,
+   "unit": "problems base + cue has right and the final model wrong",
+   "source": "the four cells",
+   "note": ""
+  },
+  "net_gap_split": {
+   "value": {
+    "gap": 53,
+    "by_step_100": 8,
+    "step_100_to_400": 18,
+    "after_step_400": 27
+   },
+   "n": 500,
+   "unit": "net problems (differences of right counts)",
+   "source": "the four cells",
+   "note": "net counts, not a partition of problems: see gained / lost per stage, and seed_noise_T10 flips_between_two_samples for the churn of one model"
+  },
+  "final_gains_over_s100_four_samples": {
+   "value": {
+    "majority": {
+     "n": 17,
+     "base_cue_right_in_at_least_one_of_4": 15,
+     "base_cue_never_right": 2,
+     "base_cue_right_in_at_least_3_of_4": 5
+    },
+    "mean_difference_at_least_half": {
+     "n": 47,
+     "base_cue_right_in_at_least_one_of_4": 44,
+     "base_cue_never_right": 3,
+     "base_cue_right_in_at_least_3_of_4": 24
+    }
+   },
+   "n": 500,
+   "unit": "problems the final model gains over step 100 plain. majority (the main rule): final right in at least 3 of 4 samples and step 100 right in at most 1 of 4; mean_difference_at_least_half: final right in at least 2 more samples than step 100",
+   "source": "the four samples of final_plain, s100_plain, base_cue",
+   "note": ""
+  }
+ },
+ "cells_T06": {
+  "base_plain": {
+   "right": {
+    "value": 319,
+    "n": 500,
+    "unit": "problems right of 500, sample 0",
+    "source": "tools/finding_rl_learns_the_opening_first.py DATA['right']",
+    "note": "COPIED (rows on S3). Per problem the literal gives finished-and-right (318); 1 cut-off answers also scored right"
+   },
+   "cap_hits": {
+    "value": 65,
+    "n": 500,
+    "unit": "answers cut at 16,384 tokens",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   },
+   "okay30": {
+    "value": 193,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 30 characters",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   },
+   "okay400": {
+    "value": 214,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 400 characters",
+    "source": "tools/finding_rl_learns_the_opening_first.py DATA['okay400']",
+    "note": "COPIED"
+   },
+   "tokens_mean": {
+    "value": 3235.2,
+    "n": 500,
+    "unit": "n_new per problem",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   },
+   "tokens_median_finished": {
+    "value": 636,
+    "n": 435,
+    "unit": "n_new, answers that finished; median rounded half up",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   }
+  },
+  "base_cue": {
+   "right": {
+    "value": 354,
+    "n": 500,
+    "unit": "problems right of 500, sample 0",
+    "source": "tools/finding_rl_learns_the_opening_first.py DATA['right']",
+    "note": "COPIED (rows on S3). Per problem the literal gives finished-and-right (353); 1 cut-off answers also scored right"
+   },
+   "cap_hits": {
+    "value": 119,
+    "n": 500,
+    "unit": "answers cut at 16,384 tokens",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   },
+   "okay30": {
+    "value": 500,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 30 characters",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   },
+   "okay400": {
+    "value": 500,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 400 characters",
+    "source": "tools/finding_rl_learns_the_opening_first.py DATA['okay400']",
+    "note": "COPIED"
+   },
+   "tokens_mean": {
+    "value": 5100.0,
+    "n": 500,
+    "unit": "n_new per problem",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   },
+   "tokens_median_finished": {
+    "value": 981,
+    "n": 381,
+    "unit": "n_new, answers that finished; median rounded half up",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   }
+  },
+  "s100_plain": {
+   "right": {
+    "value": 381,
+    "n": 500,
+    "unit": "problems right of 500, sample 0",
+    "source": "tools/finding_rl_learns_the_opening_first.py DATA['right']",
+    "note": "COPIED (rows on S3). Per problem the literal gives finished-and-right (381); 0 cut-off answers also scored right"
+   },
+   "cap_hits": {
+    "value": 103,
+    "n": 500,
+    "unit": "answers cut at 16,384 tokens",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   },
+   "okay30": {
+    "value": 478,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 30 characters",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   },
+   "okay400": {
+    "value": 500,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 400 characters",
+    "source": "tools/finding_rl_learns_the_opening_first.py DATA['okay400']",
+    "note": "COPIED"
+   },
+   "tokens_mean": {
+    "value": 4979.2,
+    "n": 500,
+    "unit": "n_new per problem",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   },
+   "tokens_median_finished": {
+    "value": 1432,
+    "n": 397,
+    "unit": "n_new, answers that finished; median rounded half up",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   }
+  },
+  "s400_plain": {
+   "right": {
+    "value": 381,
+    "n": 500,
+    "unit": "problems right of 500, sample 0",
+    "source": "tools/finding_rl_learns_the_opening_first.py DATA['right']",
+    "note": "COPIED (rows on S3). Per problem the literal gives finished-and-right (379); 2 cut-off answers also scored right"
+   },
+   "cap_hits": {
+    "value": 98,
+    "n": 500,
+    "unit": "answers cut at 16,384 tokens",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   },
+   "okay30": {
+    "value": 417,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 30 characters",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   },
+   "okay400": {
+    "value": 500,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 400 characters",
+    "source": "tools/finding_rl_learns_the_opening_first.py DATA['okay400']",
+    "note": "COPIED"
+   },
+   "tokens_mean": {
+    "value": 5013.1,
+    "n": 500,
+    "unit": "n_new per problem",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   },
+   "tokens_median_finished": {
+    "value": 1653,
+    "n": 402,
+    "unit": "n_new, answers that finished; median rounded half up",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   }
+  },
+  "final_plain": {
+   "right": {
+    "value": 462,
+    "n": 500,
+    "unit": "problems right of 500, sample 0",
+    "source": "tools/finding_rl_learns_the_opening_first.py DATA['right']",
+    "note": "COPIED (rows on S3). Per problem the literal gives finished-and-right (456); 6 cut-off answers also scored right"
+   },
+   "cap_hits": {
+    "value": 19,
+    "n": 500,
+    "unit": "answers cut at 16,384 tokens",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   },
+   "okay30": {
+    "value": 495,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 30 characters",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   },
+   "okay400": {
+    "value": 500,
+    "n": 500,
+    "unit": "answers with 'Okay' in the first 400 characters",
+    "source": "tools/finding_rl_learns_the_opening_first.py DATA['okay400']",
+    "note": "COPIED"
+   },
+   "tokens_mean": {
+    "value": 4654.9,
+    "n": 500,
+    "unit": "n_new per problem",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   },
+   "tokens_median_finished": {
+    "value": 2839,
+    "n": 481,
+    "unit": "n_new, answers that finished; median rounded half up",
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": ""
+   }
+  },
+  "differences_finished_right": {
+   "s100_plain - base_cue": {
+    "value": 5.6,
+    "ci95": [
+     1.8,
+     9.4
+    ],
+    "n": 500,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 381.0,
+    "y_mean_right": 353.0,
+    "only_x": 61,
+    "only_y": 33,
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": "on finished-and-right (cut-off answers count wrong): differs from the v3 counts by at most 6 problems per cell"
+   },
+   "s400_plain - s100_plain": {
+    "value": -0.4,
+    "ci95": [
+     -3.8,
+     3.0
+    ],
+    "n": 500,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 379.0,
+    "y_mean_right": 381.0,
+    "only_x": 36,
+    "only_y": 38,
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": "on finished-and-right (cut-off answers count wrong): differs from the v3 counts by at most 6 problems per cell"
+   },
+   "final_plain - s400_plain": {
+    "value": 15.4,
+    "ci95": [
+     12.0,
+     19.0
+    ],
+    "n": 500,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 456.0,
+    "y_mean_right": 379.0,
+    "only_x": 86,
+    "only_y": 9,
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": "on finished-and-right (cut-off answers count wrong): differs from the v3 counts by at most 6 problems per cell"
+   },
+   "base_cue - base_plain": {
+    "value": 7.0,
+    "ci95": [
+     2.6,
+     11.2
+    ],
+    "n": 500,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 353.0,
+    "y_mean_right": 318.0,
+    "only_x": 79,
+    "only_y": 44,
+    "source": "tools/finding_rl_learns_the_opening_first.py PROBLEMS",
+    "note": "on finished-and-right (cut-off answers count wrong): differs from the v3 counts by at most 6 problems per cell"
+   }
+  },
+  "s100_plain_vs_base_cue": {
+   "value": {
+    "right_v3": [
+     381,
+     354
+    ],
+    "finished_and_right": [
+     381,
+     353
+    ],
+    "finished_and_right_difference_points": [
+     5.6,
+     1.8,
+     9.4
+    ],
+    "cap_hits": [
+     103,
+     119
+    ],
+    "loop_count_base_cue_cap_hits": null
+   },
+   "n": 500,
+   "unit": "[step 100 plain, base + cue], one sample each, T 0.6 / top-p 0.95, cap 16,384",
+   "source": "tools/finding_rl_learns_the_opening_first.py DATA, PROBLEMS",
+   "note": "the interval is on finished-and-right (per-problem right-of-500 is not in git; the two counts differ by the cut-off answers scored right). Loops: NONE stored for this cell. No loop count of the cued base's 119 cut-offs at T 0.6 / top-p 0.95 on MATH-500 is in git; the nearest are the same model at T 0.6 / top-p 1.0 (71 rule-A loops, 70 among its 98 cap hits; README Day-1 table) and at T 0.6 / top-p 0.95 on the harder 328 (132 loops of 173 cap hits)"
+  },
+  "note": "rl_0.6 = 464 in results/rln4/grader_v3/readout.json is another run (n13) of the final model; the row here (462) is r3/s2800-01"
+ },
+ "handoff": {
+  "_note": "writer = whose stored answer (day1_3 sample 0) is cut at 25 / 50 / 75 % of its tokens; finisher = who writes the rest. RL here is the final model, not step 100. n 155 = the problems in the pool (base right in at most 3 of 4 samples) whatever base sample 0 did",
+  "cut_25": {
+   "right": {
+    "value": {
+     "base_finishes_base": 92,
+     "base_finishes_rl": 100,
+     "rl_finishes_base": 108,
+     "rl_finishes_rl": 111
+    },
+    "n": 155,
+    "unit": "right of 155",
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": ""
+   },
+   "rl_own - base_own": {
+    "value": 12.26,
+    "ci95": [
+     4.52,
+     20.0
+    ],
+    "n": 155,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 111.0,
+    "y_mean_right": 92.0,
+    "only_x": 31,
+    "only_y": 12,
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": ""
+   },
+   "base_on_rl_prefix - base_own": {
+    "value": 5.16,
+    "ci95": [
+     -2.58,
+     12.9
+    ],
+    "n": 155,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 100.0,
+    "y_mean_right": 92.0,
+    "only_x": 25,
+    "only_y": 17,
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": ""
+   },
+   "rl_on_base_prefix - rl_own": {
+    "value": -1.94,
+    "ci95": [
+     -9.03,
+     5.16
+    ],
+    "n": 155,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 108.0,
+    "y_mean_right": 111.0,
+    "only_x": 14,
+    "only_y": 17,
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": ""
+   },
+   "rl_on_base_prefix - base_own": {
+    "value": 10.32,
+    "ci95": [
+     2.58,
+     18.06
+    ],
+    "n": 155,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 108.0,
+    "y_mean_right": 92.0,
+    "only_x": 29,
+    "only_y": 13,
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": ""
+   },
+   "recovered_percent": {
+    "value": 42.1,
+    "n": 155,
+    "unit": "% of the own-prefix gap that the base recovers on an RL prefix",
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": "ratio of two noisy differences; no interval"
+   }
+  },
+  "cut_50": {
+   "right": {
+    "value": {
+     "base_finishes_base": 94,
+     "base_finishes_rl": 107,
+     "rl_finishes_base": 104,
+     "rl_finishes_rl": 114
+    },
+    "n": 155,
+    "unit": "right of 155",
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": ""
+   },
+   "rl_own - base_own": {
+    "value": 12.9,
+    "ci95": [
+     5.81,
+     20.0
+    ],
+    "n": 155,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 114.0,
+    "y_mean_right": 94.0,
+    "only_x": 28,
+    "only_y": 8,
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": ""
+   },
+   "base_on_rl_prefix - base_own": {
+    "value": 8.39,
+    "ci95": [
+     1.29,
+     15.48
+    ],
+    "n": 155,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 107.0,
+    "y_mean_right": 94.0,
+    "only_x": 23,
+    "only_y": 10,
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": ""
+   },
+   "rl_on_base_prefix - rl_own": {
+    "value": -6.45,
+    "ci95": [
+     -14.19,
+     0.65
+    ],
+    "n": 155,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 104.0,
+    "y_mean_right": 114.0,
+    "only_x": 12,
+    "only_y": 22,
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": ""
+   },
+   "rl_on_base_prefix - base_own": {
+    "value": 6.45,
+    "ci95": [
+     0.0,
+     12.9
+    ],
+    "n": 155,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 104.0,
+    "y_mean_right": 94.0,
+    "only_x": 18,
+    "only_y": 8,
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": ""
+   },
+   "recovered_percent": {
+    "value": 65.0,
+    "n": 155,
+    "unit": "% of the own-prefix gap that the base recovers on an RL prefix",
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": "ratio of two noisy differences; no interval"
+   }
+  },
+  "cut_75": {
+   "right": {
+    "value": {
+     "base_finishes_base": 90,
+     "base_finishes_rl": 105,
+     "rl_finishes_base": 91,
+     "rl_finishes_rl": 111
+    },
+    "n": 155,
+    "unit": "right of 155",
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": ""
+   },
+   "rl_own - base_own": {
+    "value": 13.55,
+    "ci95": [
+     5.81,
+     21.29
+    ],
+    "n": 155,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 111.0,
+    "y_mean_right": 90.0,
+    "only_x": 32,
+    "only_y": 11,
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": ""
+   },
+   "base_on_rl_prefix - base_own": {
+    "value": 9.68,
+    "ci95": [
+     1.29,
+     18.06
+    ],
+    "n": 155,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 105.0,
+    "y_mean_right": 90.0,
+    "only_x": 30,
+    "only_y": 15,
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": ""
+   },
+   "rl_on_base_prefix - rl_own": {
+    "value": -12.9,
+    "ci95": [
+     -20.0,
+     -5.81
+    ],
+    "n": 155,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 91.0,
+    "y_mean_right": 111.0,
+    "only_x": 7,
+    "only_y": 27,
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": ""
+   },
+   "rl_on_base_prefix - base_own": {
+    "value": 0.65,
+    "ci95": [
+     -3.87,
+     5.16
+    ],
+    "n": 155,
+    "unit": "points (x minus y), paired bootstrap over problems",
+    "x_mean_right": 91.0,
+    "y_mean_right": 90.0,
+    "only_x": 7,
+    "only_y": 6,
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": ""
+   },
+   "recovered_percent": {
+    "value": 71.4,
+    "n": 155,
+    "unit": "% of the own-prefix gap that the base recovers on an RL prefix",
+    "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+    "note": "ratio of two noisy differences; no interval"
+   }
+  },
+  "pool": {
+   "value": {
+    "pool": 183,
+    "unbiased": 155
+   },
+   "n": 500,
+   "unit": "problems",
+   "source": "studies/rlneurons/data/handoff/plan_v1.json",
+   "note": "pool = MATH-500 problems the cued base gets wrong in at least one of its four stored samples (asserted against the day1_3 rows); unbiased = wrong in at least one of samples 1 to 3, so membership does not depend on sample 0, which supplies the prefixes. The 16,384 cap counts the prefix tokens (README hand-off section)"
+  },
+  "prefix_detail_pool_183": {
+   "value": {
+    "cut_25": {
+     "rl_right_prefixes_already_holding_the_answer": [
+      0,
+      140
+     ],
+     "base_wrong_on_rl_prefix_that_are_cap_hits": [
+      36,
+      61
+     ],
+     "rl_prefix_gives_base": 35,
+     "rl_prefix_costs_base": 20,
+     "base_prefix_costs_rl": 22,
+     "base_prefix_gives_rl": 14
+    },
+    "cut_50": {
+     "rl_right_prefixes_already_holding_the_answer": [
+      9,
+      140
+     ],
+     "base_wrong_on_rl_prefix_that_are_cap_hits": [
+      34,
+      48
+     ],
+     "rl_prefix_gives_base": 39,
+     "rl_prefix_costs_base": 10,
+     "base_prefix_costs_rl": 32,
+     "base_prefix_gives_rl": 12
+    },
+    "cut_75": {
+     "rl_right_prefixes_already_holding_the_answer": [
+      52,
+      140
+     ],
+     "base_wrong_on_rl_prefix_that_are_cap_hits": [
+      32,
+      51
+     ],
+     "rl_prefix_gives_base": 47,
+     "rl_prefix_costs_base": 15,
+     "base_prefix_costs_rl": 38,
+     "base_prefix_gives_rl": 7
+    }
+   },
+   "n": 183,
+   "unit": "counts of problems; [k, n] pairs are k of n. gives / costs: right on the other model's prefix and wrong on its own, and the reverse",
+   "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+   "note": ""
+  },
+  "prefix_detail_unbiased_155": {
+   "value": {
+    "cut_25": {
+     "rl_right_prefixes_already_holding_the_answer": [
+      0,
+      112
+     ],
+     "base_wrong_on_rl_prefix_that_are_cap_hits": [
+      34,
+      55
+     ],
+     "rl_prefix_gives_base": 25,
+     "rl_prefix_costs_base": 17,
+     "base_prefix_costs_rl": 17,
+     "base_prefix_gives_rl": 14
+    },
+    "cut_50": {
+     "rl_right_prefixes_already_holding_the_answer": [
+      8,
+      112
+     ],
+     "base_wrong_on_rl_prefix_that_are_cap_hits": [
+      34,
+      48
+     ],
+     "rl_prefix_gives_base": 23,
+     "rl_prefix_costs_base": 10,
+     "base_prefix_costs_rl": 22,
+     "base_prefix_gives_rl": 12
+    },
+    "cut_75": {
+     "rl_right_prefixes_already_holding_the_answer": [
+      43,
+      112
+     ],
+     "base_wrong_on_rl_prefix_that_are_cap_hits": [
+      31,
+      50
+     ],
+     "rl_prefix_gives_base": 30,
+     "rl_prefix_costs_base": 15,
+     "base_prefix_costs_rl": 27,
+     "base_prefix_gives_rl": 7
+    }
+   },
+   "n": 155,
+   "unit": "counts of problems; [k, n] pairs are k of n. gives / costs: right on the other model's prefix and wrong on its own, and the reverse",
+   "source": "studies/rlneurons/results/handoff/{base,rl}-01/rows.jsonl ; studies/rlneurons/data/handoff/plan_v1.json unbiased",
+   "note": ""
+  }
+ },
+ "selfopen": {
+  "right": {
+   "value": {
+    "self_open": 411,
+    "control_no_okay": 216,
+    "base_cue_T1": 410,
+    "base_plain_T3": 224
+   },
+   "n": 500,
+   "unit": "right of 500",
+   "source": "studies/theory/results/experiments/selfopen-01/per_problem.json",
+   "note": "main: the base's own first draw (of at most 32) of 24 tokens that has '\\nOkay' in its first 60 characters, continued by the base; 94 problems reuse the stored plain answer because it already opened so"
+  },
+  "self_open - base_cue": {
+   "value": 0.2,
+   "ci95": [
+    -3.4,
+    4.0
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 411.0,
+   "y_mean_right": 410.0,
+   "only_x": 46,
+   "only_y": 45,
+   "source": "studies/theory/results/experiments/selfopen-01/per_problem.json",
+   "note": ""
+  },
+  "self_open - base_plain": {
+   "value": 37.4,
+   "ci95": [
+    32.6,
+    42.2
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 411.0,
+   "y_mean_right": 224.0,
+   "only_x": 205,
+   "only_y": 18,
+   "source": "studies/theory/results/experiments/selfopen-01/per_problem.json",
+   "note": "not independent on the 94 stored problems (same answer in both arms)"
+  },
+  "resampled_problems": {
+   "value": {
+    "n": 403,
+    "self_open": 332,
+    "control": 137,
+    "base_cue_T1": 329,
+    "base_plain_T3": 145
+   },
+   "n": 403,
+   "unit": "right, problems regenerated that found an opening",
+   "source": "studies/theory/results/experiments/selfopen-01/per_problem.json",
+   "note": ""
+  },
+  "resampled: self_open - control": {
+   "value": 48.39,
+   "ci95": [
+    42.93,
+    53.6
+   ],
+   "n": 403,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 332.0,
+   "y_mean_right": 137.0,
+   "only_x": 204,
+   "only_y": 9,
+   "source": "studies/theory/results/experiments/selfopen-01/per_problem.json",
+   "note": ""
+  },
+  "self_open_rate": {
+   "value": 0.1798,
+   "n": 12992,
+   "unit": "share of 24-token draws of the plain base that open with '\\nOkay' (first 60 characters)",
+   "source": "studies/theory/results/experiments/selfopen-01/metrics.json draws",
+   "note": "COPIED (draws not in git)"
+  },
+  "stored_plain_self_opened": {
+   "value": 94,
+   "n": 500,
+   "unit": "stored plain answers (T3) that already open so",
+   "source": "studies/theory/results/experiments/selfopen-01/per_problem.json",
+   "note": "73 by the 'first 30 characters' rule of cells_T10"
+  },
+  "median_draws_needed": {
+   "value": 4,
+   "n": 403,
+   "unit": "draws",
+   "source": "studies/theory/results/experiments/selfopen-01/metrics.json",
+   "note": "COPIED"
+  },
+  "never_self_opened": {
+   "value": 3,
+   "n": 500,
+   "unit": "problems with no such opening in 32 draws",
+   "source": "studies/theory/results/experiments/selfopen-01/per_problem.json",
+   "note": ""
+  },
+  "rule": {
+   "value": "'\\nOkay' in the first 60 characters of a 24-token draw",
+   "n": 500,
+   "unit": "the test for a self-opened answer",
+   "source": "studies/theory/results/experiments/selfopen-01/metrics.json",
+   "note": "94 stored plain answers already pass and are reused; the other 406 problems draw up to 32 openings; 3 problems never self-open"
+  },
+  "cap_hits_main": {
+   "value": 20,
+   "n": 500,
+   "unit": "cap hits",
+   "source": "studies/theory/results/experiments/selfopen-01/per_problem.json",
+   "note": ""
+  },
+  "tokens_mean_main": {
+   "value": 3794.7,
+   "n": 500,
+   "unit": "tokens per problem (the continued answer; the up to 32 x 24 draw tokens not counted)",
+   "source": "studies/theory/results/experiments/selfopen-01/per_problem.json",
+   "note": ""
+  }
+ },
+ "hand_written_edit": {
+  "right": {
+   "value": {
+    "edit": 397,
+    "random_control": 204,
+    "base_plain_T3": 224,
+    "base_cue_T1": 410
+   },
+   "n": 500,
+   "unit": "right of 500, plain prompt, T 1.0, one sample",
+   "source": "studies/rlneurons/results/wsp2/full500/{cueprog_plain,cueprog_rand_plain}-01/per_problem.json",
+   "note": "edit of model.layers.31.mlp.down_proj.weight written from 128 calibration prompts, no RL weights; seeds 184000000 / 185000000"
+  },
+  "edit - base_cue": {
+   "value": -2.6,
+   "ci95": [
+    -6.2,
+    1.0
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 397.0,
+   "y_mean_right": 410.0,
+   "only_x": 39,
+   "only_y": 52,
+   "source": "studies/rlneurons/results/wsp2/full500/{cueprog_plain,cueprog_rand_plain}-01/per_problem.json",
+   "note": ""
+  },
+  "edit - base_plain": {
+   "value": 34.6,
+   "ci95": [
+    29.4,
+    39.8
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 397.0,
+   "y_mean_right": 224.0,
+   "only_x": 204,
+   "only_y": 31,
+   "source": "studies/rlneurons/results/wsp2/full500/{cueprog_plain,cueprog_rand_plain}-01/per_problem.json",
+   "note": "paired here; the stored readout had no T3 rows and used an unpaired interval"
+  },
+  "edit - random_control": {
+   "value": 38.6,
+   "ci95": [
+    33.8,
+    43.4
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 397.0,
+   "y_mean_right": 204.0,
+   "only_x": 209,
+   "only_y": 16,
+   "source": "studies/rlneurons/results/wsp2/full500/{cueprog_plain,cueprog_rand_plain}-01/per_problem.json",
+   "note": ""
+  },
+  "random_control - base_plain": {
+   "value": -4.0,
+   "ci95": [
+    -9.8,
+    1.8
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 204.0,
+   "y_mean_right": 224.0,
+   "only_x": 105,
+   "only_y": 125,
+   "source": "studies/rlneurons/results/wsp2/full500/{cueprog_plain,cueprog_rand_plain}-01/per_problem.json",
+   "note": ""
+  },
+  "method": {
+   "value": "joint: R K^T = I, so dW k_j = a_j u_j for all j at once",
+   "n": 1,
+   "unit": "closed-form key-value (ROME-style) update of one matrix",
+   "source": "studies/rlneurons/results/wsp2/full500/cueprog_plain-01/metrics.json handedit",
+   "note": "tensor model.layers.31.mlp.down_proj.weight; one rank-one term per cue token, 3 keys solved jointly (so rank at most 3, not rank one); each term scaled by bisection until the cue token's mean probability is 0.95 on the calibration prompts, MATH-500 problems [100, 227] (inclusive): 128 of the 500 scored problems were used to size the edit; seeds 184000000 (edit), 185000000 (control)"
+  },
+  "s100_plain_mean4 - edit": {
+   "value": 4.1,
+   "ci95": [
+    0.9,
+    7.3
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 417.5,
+   "y_mean_right": 397.0,
+   "only_x": 39,
+   "only_y": 1,
+   "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3) ; studies/rlneurons/results/wsp2/full500/{cueprog_plain,cueprog_rand_plain}-01/per_problem.json",
+   "note": "x = per-problem mean of four samples, y = the edit's one sample"
+  },
+  "edit - base_cue_mean4": {
+   "value": -2.7,
+   "ci95": [
+    -5.7,
+    0.3
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 397.0,
+   "y_mean_right": 410.5,
+   "only_x": 5,
+   "only_y": 28,
+   "source": "studies/rlneurons/results/wsp2/full500/{cueprog_plain,cueprog_rand_plain}-01/per_problem.json ; studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+   "note": "x = the edit's one sample, y = per-problem mean of four samples"
+  },
+  "s100_plain - edit": {
+   "value": 4.2,
+   "ci95": [
+    0.4,
+    8.0
+   ],
+   "n": 500,
+   "unit": "points (x minus y), paired bootstrap over problems",
+   "x_mean_right": 418.0,
+   "y_mean_right": 397.0,
+   "only_x": 56,
+   "only_y": 35,
+   "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json ; studies/rlneurons/results/wsp2/full500/{cueprog_plain,cueprog_rand_plain}-01/per_problem.json",
+   "note": ""
+  },
+  "cap_hits": {
+   "value": {
+    "cueprog_plain": 21,
+    "cueprog_rand_plain": 8
+   },
+   "n": 500,
+   "unit": "cap hits",
+   "source": "studies/rlneurons/results/wsp2/full500/{cueprog_plain,cueprog_rand_plain}-01/per_problem.json",
+   "note": ""
+  },
+  "okay_first80": {
+   "value": {
+    "cueprog_plain": 463,
+    "cueprog_rand_plain": 106
+   },
+   "n": 500,
+   "unit": "answers with 'Okay' in the first 80 characters",
+   "source": "studies/rlneurons/results/wsp2/readout.json",
+   "note": "COPIED (texts not in git); note the 80-character window"
+  },
+  "edit_size": {
+   "value": 0.06579403113413484,
+   "n": 1,
+   "unit": "Frobenius norm of the edit over that of the matrix",
+   "source": "studies/rlneurons/results/wsp2/readout.json",
+   "note": "COPIED"
+  }
+ },
+ "code": {
+  "passed": {
+   "value": {
+    "rl_plain": 401,
+    "base_plain": 222,
+    "base_cue": 317,
+    "base_mathcue": 326
+   },
+   "n": 538,
+   "unit": "problems passed of 538 (HumanEval+ 163, MBPP+ 375), T 1.0, one sample",
+   "source": "studies/rlneurons/results/code1/readout.json",
+   "note": "COPIED. Models: base and Olmo-3.1-7B-RL-Zero-Code; base_cue = the Code-RL model's own opening, base_mathcue = the math cue"
+  },
+  "base_plain - base_mathcue": {
+   "value": [
+    -19.33,
+    -24.35,
+    -14.31
+   ],
+   "n": 538,
+   "unit": "points [95 %], as stored (minus sign: second cell higher)",
+   "source": "studies/rlneurons/results/code1/readout.json differences['base_plain - base_mathcue']",
+   "note": "COPIED: per-problem rows not in git"
+  },
+  "base_plain - base_cue": {
+   "value": [
+    -17.66,
+    -22.49,
+    -12.83
+   ],
+   "n": 538,
+   "unit": "points [95 %], as stored (minus sign: second cell higher)",
+   "source": "studies/rlneurons/results/code1/readout.json differences['base_plain - base_cue']",
+   "note": "COPIED: per-problem rows not in git"
+  },
+  "base_cue - base_mathcue": {
+   "value": [
+    -1.67,
+    -5.76,
+    2.79
+   ],
+   "n": 538,
+   "unit": "points [95 %], as stored (minus sign: second cell higher)",
+   "source": "studies/rlneurons/results/code1/readout.json differences['base_cue - base_mathcue']",
+   "note": "COPIED: per-problem rows not in git"
+  },
+  "rl_plain - base_mathcue": {
+   "value": [
+    13.94,
+    10.04,
+    17.84
+   ],
+   "n": 538,
+   "unit": "points [95 %], as stored (minus sign: second cell higher)",
+   "source": "studies/rlneurons/results/code1/readout.json differences['rl_plain - base_mathcue']",
+   "note": "COPIED: per-problem rows not in git"
+  }
+ },
+ "weights_step100": {
+  "rel_norm": {
+   "value": {
+    "math31_s100": 0.00028335559930737147,
+    "math31_final": 0.0023631042735667977
+   },
+   "n": 224,
+   "unit": "norm of (checkpoint - base) over the norm of the base, 224 layer matrices",
+   "source": "studies/rlneurons/results/xreward/overlap_steps-01/readout.json per_key",
+   "note": "COPIED (weights job abaybektursun-1114-221259-0871)"
+  },
+  "norm_ratio_s100_over_final": {
+   "value": 0.1199,
+   "n": 224,
+   "unit": "ratio of the two relative norms",
+   "source": "studies/rlneurons/results/xreward/overlap_steps-01/readout.json",
+   "note": "derived from the copied values"
+  },
+  "cos_s100_final": {
+   "value": 0.0986,
+   "n": 224,
+   "unit": "cosine of (step 100 - base) and (final - base), mean over 224 layer matrices",
+   "source": "studies/rlneurons/results/xreward/overlap_steps-01/readout.json tables.cos",
+   "note": "COPIED. For scale: math31 with code31_s100 0.0043, math31 with math30 final 0.0201"
+  },
+  "top8_overlap_right_s100_final": {
+   "value": 0.2472,
+   "n": 224,
+   "unit": "overlap of the top-8 input-side singular subspaces, mean over matrices",
+   "source": "studies/rlneurons/results/xreward/overlap_steps-01/readout.json tables.overlap_right",
+   "note": "COPIED"
+  },
+  "against_random_walk": {
+   "value": {
+    "math31": {
+     "norm_ratio_s100_over_final": 0.12,
+     "cos_s100_final": 0.099,
+     "share_of_s100_move_in_final": 0.82
+    },
+    "code31": {
+     "norm_ratio_s100_over_final": 0.162,
+     "cos_s100_final": 0.135,
+     "share_of_s100_move_in_final": 0.83
+    },
+    "math30": {
+     "norm_ratio_s100_over_final": 0.128,
+     "cos_s100_final": 0.116,
+     "share_of_s100_move_in_final": 0.9
+    },
+    "code30": {
+     "norm_ratio_s100_over_final": 0.438,
+     "cos_s100_final": 0.368,
+     "share_of_s100_move_in_final": 0.84
+    },
+    "if30": {
+     "norm_ratio_s100_over_final": 0.776,
+     "cos_s100_final": 0.667,
+     "share_of_s100_move_in_final": 0.86
+    },
+    "general30": {
+     "norm_ratio_s100_over_final": 0.354,
+     "cos_s100_final": 0.304,
+     "share_of_s100_move_in_final": 0.86
+    },
+    "mix30": {
+     "norm_ratio_s100_over_final": 0.192,
+     "cos_s100_final": 0.174,
+     "share_of_s100_move_in_final": 0.91
+    }
+   },
+   "n": 224,
+   "unit": "per run: |step 100 - base| / |final - base|, cosine of the two differences, and cosine / ratio",
+   "source": "studies/rlneurons/results/xreward/overlap_steps-01/readout.json per_key, tables.cos",
+   "note": "DERIVED from copied values. If the steps after step 100 were uncorrelated with the first 100 (a random walk), cosine = norm ratio and the share = 1. share = cosine x |final| / |step 100| = the projection of the final difference on the step-100 direction, in units of the step-100 length: the part of the step-100 move still in the final weights. Approximate: the cosine is a mean over 224 matrices and the norms are whole-model relative norms; no per-matrix projection is stored. math31 = Olmo-3.1 RL-Zero-Math (this paper's run)"
+  }
+ },
+ "cue": {
+  "value": {
+   "text": " line!\n\nOkay",
+   "token_ids": [
+    1584,
+    2268,
+    33413
+   ],
+   "n_tokens": 3
+  },
+  "n": 1,
+  "unit": "the prefilled opening cue",
+  "source": "studies/rlneurons/data/rln4/frozen4.json prefill_text, prefill_ids",
+  "note": "Wang et al. (arXiv 2610.06851) describe fixing the first two tokens of the response, '.\\n\\n Okay' (board knowledge-8a31ad: 'cue token count: 2'; string as given by the paper's reviewers, not re-read here). Ours is three tokens, ' line!\\n\\nOkay': the RL model's own most common opening"
+ },
+ "seeds": {
+  "value": {
+   "base_plain": 47000000,
+   "base_cue": 41000000,
+   "s100_plain": 45000000,
+   "s100_cue": 41000000,
+   "s400_plain": 45000000,
+   "s400_cue": 41000000,
+   "final_plain": 45000000,
+   "hand_edit": 184000000,
+   "hand_edit_control": 185000000,
+   "four_samples_problem0": {
+    "base_cue": [
+     41000000,
+     41010000,
+     41020000,
+     41030000
+    ],
+    "s100_plain": [
+     45000000,
+     45010000,
+     45020000,
+     45030000
+    ],
+    "s100_cue": [
+     41000000,
+     41010000,
+     41020000,
+     41030000
+    ],
+    "s400_plain": [
+     45000000,
+     45010000,
+     45020000,
+     45030000
+    ],
+    "final_plain": [
+     45000000,
+     45010000,
+     45020000,
+     45030000
+    ]
+   }
+  },
+  "n": 500,
+  "unit": "seed base of each cell; an answer's seed = base + 10000 sample + 1000 attempt + problem index",
+  "source": "run.json of each cell; studies/rlneurons/data/rln4/frozen4.json seeds (T1, T2, T3)",
+  "note": "step 100 plain vs base cue is not seed-matched; step 100 cue vs base cue is. The step-100 plain sample-0 cell is the THIRD attempt: the first job (AWS ih-1115-092337-b35c) was cut by its 2-hour limit at 478 answers (405 right) and is not used, the second was lost with its box (README, ckptcue 'Limits')"
+ },
+ "ckptcue3": {
+  "status": "present",
+  "note": "the 4-sample numbers are cells_T10_four_samples, differences_T10_four_sample_means, seed_noise_T10; every cell (right, cap hits, 'Okay', tokens per sample) and the five differences of readout3 were asserted against the rows (points exact; interval ends within 0.3: readout3 used 5,000 resamples)",
+  "readout3_copied": {
+   "test": "per problem the mean of score_v3 over 4 samples; paired bootstrap over the 500 problems, 5,000 resamples",
+   "cells": {
+    "base_cue": {
+     "source": "results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+     "samples": [
+      {
+       "right": 405,
+       "cap_hits": 25,
+       "okay_in_first_30": null,
+       "tokens_per_problem": 3808.138
+      },
+      {
+       "right": 409,
+       "cap_hits": 23,
+       "okay_in_first_30": null,
+       "tokens_per_problem": 4143.972
+      },
+      {
+       "right": 410,
+       "cap_hits": 22,
+       "okay_in_first_30": null,
+       "tokens_per_problem": 3925.682
+      },
+      {
+       "right": 418,
+       "cap_hits": 20,
+       "okay_in_first_30": null,
+       "tokens_per_problem": 4155.758
+      }
+     ],
+     "mean_right": 410.5,
+     "mean_cap_hits": 22.5,
+     "mean_tokens_per_problem": 4008.3875
+    },
+    "rl_final": {
+     "source": "results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+     "samples": [
+      {
+       "right": 456,
+       "cap_hits": 6,
+       "okay_in_first_30": null,
+       "tokens_per_problem": 4675.104
+      },
+      {
+       "right": 462,
+       "cap_hits": 10,
+       "okay_in_first_30": null,
+       "tokens_per_problem": 4587.922
+      },
+      {
+       "right": 464,
+       "cap_hits": 5,
+       "okay_in_first_30": null,
+       "tokens_per_problem": 4741.206
+      },
+      {
+       "right": 458,
+       "cap_hits": 11,
+       "okay_in_first_30": null,
+       "tokens_per_problem": 4742.928
+      }
+     ],
+     "mean_right": 460.0,
+     "mean_cap_hits": 8.0,
+     "mean_tokens_per_problem": 4686.79
+    },
+    "s0100_plain": {
+     "source": "results/ckptcue/s0100_plain-01 (sample 0), results/ckptcue/s0100_plain_s123-01 (samples 1 to 3, job abaybektursun-1115-102945-9b20)",
+     "samples": [
+      {
+       "right": 418,
+       "cap_hits": 24,
+       "okay_in_first_30": 383,
+       "tokens_per_problem": 4120.18
+      },
+      {
+       "right": 411,
+       "cap_hits": 21,
+       "okay_in_first_30": 375,
+       "tokens_per_problem": 4057.956
+      },
+      {
+       "right": 422,
+       "cap_hits": 21,
+       "okay_in_first_30": 386,
+       "tokens_per_problem": 4084.762
+      },
+      {
+       "right": 419,
+       "cap_hits": 19,
+       "okay_in_first_30": 373,
+       "tokens_per_problem": 3932.084
+      }
+     ],
+     "mean_right": 417.5,
+     "mean_cap_hits": 21.25,
+     "mean_tokens_per_problem": 4048.7455
+    },
+    "s0100_cue": {
+     "source": "results/ckptcue/s0100_cue-01 (sample 0), results/ckptcue/s0100_cue_s123-01 (samples 1 to 3, job abaybektursun-1115-102956-6e9a)",
+     "samples": [
+      {
+       "right": 427,
+       "cap_hits": 24,
+       "okay_in_first_30": 500,
+       "tokens_per_problem": 4117.804
+      },
+      {
+       "right": 423,
+       "cap_hits": 24,
+       "okay_in_first_30": 500,
+       "tokens_per_problem": 4146.014
+      },
+      {
+       "right": 423,
+       "cap_hits": 25,
+       "okay_in_first_30": 500,
+       "tokens_per_problem": 4321.328
+      },
+      {
+       "right": 431,
+       "cap_hits": 23,
+       "okay_in_first_30": 500,
+       "tokens_per_problem": 4098.046
+      }
+     ],
+     "mean_right": 426.0,
+     "mean_cap_hits": 24.0,
+     "mean_tokens_per_problem": 4170.798000000001
+    },
+    "s0400_plain": {
+     "source": "results/ckptcue/s0400_plain-01 (sample 0), results/ckptcue/s0400_plain_s123-01 (samples 1 to 3, job abaybektursun-1115-103006-7462)",
+     "samples": [
+      {
+       "right": 436,
+       "cap_hits": 7,
+       "okay_in_first_30": 358,
+       "tokens_per_problem": 4080.25
+      },
+      {
+       "right": 447,
+       "cap_hits": 16,
+       "okay_in_first_30": 356,
+       "tokens_per_problem": 4283.396
+      },
+      {
+       "right": 435,
+       "cap_hits": 12,
+       "okay_in_first_30": 369,
+       "tokens_per_problem": 4197.228
+      },
+      {
+       "right": 433,
+       "cap_hits": 12,
+       "okay_in_first_30": 349,
+       "tokens_per_problem": 4140.796
+      }
+     ],
+     "mean_right": 437.75,
+     "mean_cap_hits": 11.75,
+     "mean_tokens_per_problem": 4175.4175
+    }
+   },
+   "differences": {
+    "s0100_plain minus base_cue": {
+     "points": 1.4000000000000001,
+     "ci95": [
+      -0.5000000000000004,
+      3.2499999999999973
+     ]
+    },
+    "s0100_cue minus s0100_plain": {
+     "points": 1.7000000000000002,
+     "ci95": [
+      0.0,
+      3.3499999999999974
+     ]
+    },
+    "s0100_cue minus base_cue": {
+     "points": 3.1,
+     "ci95": [
+      1.4500000000000068,
+      4.699999999999993
+     ]
+    },
+    "s0400_plain minus s0100_plain": {
+     "points": 4.05,
+     "ci95": [
+      2.400000000000002,
+      5.700000000000005
+     ]
+    },
+    "rl_final minus s0400_plain": {
+     "points": 4.45,
+     "ci95": [
+      3.0500000000000083,
+      5.949999999999999
+     ]
+    }
+   }
+  },
+  "recomputed": {
+   "s100_plain": {
+    "right_per_sample": {
+     "value": [
+      418,
+      411,
+      422,
+      419
+     ],
+     "n": 500,
+     "unit": "problems right of 500, samples 0 to 3",
+     "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl (samples 1 to 3)",
+     "note": "seed of problem 0 per sample [45000000, 45010000, 45020000, 45030000] (seed + 10000 sample + index)"
+    }
+   },
+   "s100_cue": {
+    "right_per_sample": {
+     "value": [
+      427,
+      423,
+      423,
+      431
+     ],
+     "n": 500,
+     "unit": "problems right of 500, samples 0 to 3",
+     "source": "studies/rlneurons/results/ckptcue/s0100_cue-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0100_cue_s123-01/rows.jsonl (samples 1 to 3)",
+     "note": "seed of problem 0 per sample [41000000, 41010000, 41020000, 41030000] (seed + 10000 sample + index)"
+    }
+   },
+   "s400_plain": {
+    "right_per_sample": {
+     "value": [
+      436,
+      447,
+      435,
+      433
+     ],
+     "n": 500,
+     "unit": "problems right of 500, samples 0 to 3",
+     "source": "studies/rlneurons/results/ckptcue/s0400_plain-01/per_problem.json (sample 0) ; studies/rlneurons/results/ckptcue/s0400_plain_s123-01/rows.jsonl (samples 1 to 3)",
+     "note": "seed of problem 0 per sample [45000000, 45010000, 45020000, 45030000] (seed + 10000 sample + index)"
+    }
+   }
+  }
+ },
+ "vs_readouts": [
+  {
+   "what": "s100_plain right / cap / okay30 / tokens",
+   "recomputed": [
+    418,
+    24,
+    383,
+    4120.2
+   ],
+   "stored": [
+    418,
+    24,
+    383,
+    4120.2
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/ckptcue/readout.json"
+  },
+  {
+   "what": "s100_cue right / cap / okay30 / tokens",
+   "recomputed": [
+    427,
+    24,
+    500,
+    4117.8
+   ],
+   "stored": [
+    427,
+    24,
+    500,
+    4117.8
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/ckptcue/readout.json"
+  },
+  {
+   "what": "s400_plain right / cap / okay30 / tokens",
+   "recomputed": [
+    436,
+    7,
+    358,
+    4080.2
+   ],
+   "stored": [
+    436,
+    7,
+    358,
+    4080.2
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/ckptcue/readout.json"
+  },
+  {
+   "what": "s400_cue right / cap / okay30 / tokens",
+   "recomputed": [
+    431,
+    17,
+    500,
+    4278.7
+   ],
+   "stored": [
+    431,
+    17,
+    500,
+    4278.7
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/ckptcue/readout.json"
+  },
+  {
+   "what": "s100_plain - base_cue [points, low, high]",
+   "recomputed": [
+    1.6,
+    -2.0,
+    5.2
+   ],
+   "stored": [
+    1.6,
+    -2.0,
+    5.2
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/ckptcue/readout.json (5,000 resamples)"
+  },
+  {
+   "what": "s100_cue - base_cue [points, low, high]",
+   "recomputed": [
+    3.4,
+    0.2,
+    6.6
+   ],
+   "stored": [
+    3.4,
+    0.2,
+    6.6
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/ckptcue/readout.json (5,000 resamples)"
+  },
+  {
+   "what": "s100_cue - s100_plain [points, low, high]",
+   "recomputed": [
+    1.8,
+    -1.2,
+    4.8
+   ],
+   "stored": [
+    1.8,
+    -1.2,
+    4.8
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/ckptcue/readout.json (5,000 resamples)"
+  },
+  {
+   "what": "s400_plain - base_cue [points, low, high]",
+   "recomputed": [
+    5.2,
+    2.0,
+    8.4
+   ],
+   "stored": [
+    5.2,
+    2.0,
+    8.4
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/ckptcue/readout.json (5,000 resamples)"
+  },
+  {
+   "what": "s400_cue - s400_plain [points, low, high]",
+   "recomputed": [
+    -1.0,
+    -4.0,
+    2.0
+   ],
+   "stored": [
+    -1.0,
+    -4.0,
+    2.0
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/ckptcue/readout.json (5,000 resamples)"
+  },
+  {
+   "what": "s400_plain - s100_plain [points, low, high]",
+   "recomputed": [
+    3.6,
+    0.2,
+    7.0
+   ],
+   "stored": [
+    3.6,
+    0.2,
+    7.0
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/ckptcue/readout.json (5,000 resamples)"
+  },
+  {
+   "what": "final_plain - s400_plain [points, low, high]",
+   "recomputed": [
+    5.4,
+    3.0,
+    8.0
+   ],
+   "stored": [
+    5.4,
+    2.8,
+    8.0
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/ckptcue/readout.json (5,000 resamples)"
+  },
+  {
+   "what": "base_plain right / cap",
+   "recomputed": [
+    224,
+    8
+   ],
+   "stored": [
+    224,
+    8
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/rln4/grader_v3/readout.json"
+  },
+  {
+   "what": "base_cue right / cap",
+   "recomputed": [
+    410,
+    27
+   ],
+   "stored": [
+    410,
+    27
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/rln4/grader_v3/readout.json"
+  },
+  {
+   "what": "final_plain right / cap",
+   "recomputed": [
+    463,
+    6
+   ],
+   "stored": [
+    463,
+    6
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/rln4/grader_v3/readout.json"
+  },
+  {
+   "what": "handoff cut 25 rl_own - base_own",
+   "recomputed": [
+    12.26,
+    4.52,
+    20.0
+   ],
+   "stored": [
+    12.26,
+    4.52,
+    20.0
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/handoff/unbiased-01/readout.json"
+  },
+  {
+   "what": "handoff cut 25 base_on_rl_prefix - base_own",
+   "recomputed": [
+    5.16,
+    -2.58,
+    12.9
+   ],
+   "stored": [
+    5.16,
+    -2.58,
+    12.9
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/handoff/unbiased-01/readout.json"
+  },
+  {
+   "what": "handoff cut 25 rl_on_base_prefix - rl_own",
+   "recomputed": [
+    -1.94,
+    -9.03,
+    5.16
+   ],
+   "stored": [
+    -1.94,
+    -9.03,
+    5.16
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/handoff/unbiased-01/readout.json"
+  },
+  {
+   "what": "handoff cut 50 rl_own - base_own",
+   "recomputed": [
+    12.9,
+    5.81,
+    20.0
+   ],
+   "stored": [
+    12.9,
+    5.81,
+    20.65
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/handoff/unbiased-01/readout.json"
+  },
+  {
+   "what": "handoff cut 50 base_on_rl_prefix - base_own",
+   "recomputed": [
+    8.39,
+    1.29,
+    15.48
+   ],
+   "stored": [
+    8.39,
+    1.29,
+    15.5
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/handoff/unbiased-01/readout.json"
+  },
+  {
+   "what": "handoff cut 50 rl_on_base_prefix - rl_own",
+   "recomputed": [
+    -6.45,
+    -14.19,
+    0.65
+   ],
+   "stored": [
+    -6.45,
+    -14.19,
+    0.65
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/handoff/unbiased-01/readout.json"
+  },
+  {
+   "what": "handoff cut 75 rl_own - base_own",
+   "recomputed": [
+    13.55,
+    5.81,
+    21.29
+   ],
+   "stored": [
+    13.55,
+    5.81,
+    21.31
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/handoff/unbiased-01/readout.json"
+  },
+  {
+   "what": "handoff cut 75 base_on_rl_prefix - base_own",
+   "recomputed": [
+    9.68,
+    1.29,
+    18.06
+   ],
+   "stored": [
+    9.68,
+    1.29,
+    18.06
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/handoff/unbiased-01/readout.json"
+  },
+  {
+   "what": "handoff cut 75 rl_on_base_prefix - rl_own",
+   "recomputed": [
+    -12.9,
+    -20.0,
+    -5.81
+   ],
+   "stored": [
+    -12.9,
+    -20.0,
+    -5.81
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/handoff/unbiased-01/readout.json"
+  },
+  {
+   "what": "selfopen right main / control / cue / plain",
+   "recomputed": [
+    411,
+    216,
+    410,
+    224
+   ],
+   "stored": [
+    411,
+    216,
+    410,
+    224
+   ],
+   "match": true,
+   "source": "studies/theory/results/experiments/selfopen-01/metrics.json"
+  },
+  {
+   "what": "selfopen resampled main - control",
+   "recomputed": [
+    48.39,
+    42.93,
+    53.6
+   ],
+   "stored": [
+    48.39,
+    42.93,
+    53.6
+   ],
+   "match": true,
+   "source": "studies/theory/results/experiments/selfopen-01/metrics.json"
+  },
+  {
+   "what": "hand edit edit - base_cue",
+   "recomputed": [
+    -2.6,
+    -6.2,
+    1.0
+   ],
+   "stored": [
+    -2.6,
+    -6.4,
+    1.2
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/wsp2/readout.json"
+  },
+  {
+   "what": "hand edit edit - random_control",
+   "recomputed": [
+    38.6,
+    33.8,
+    43.4
+   ],
+   "stored": [
+    38.6,
+    34.0,
+    43.6
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/wsp2/readout.json"
+  },
+  {
+   "what": "hand edit edit - base_plain",
+   "recomputed": [
+    34.6,
+    29.4,
+    39.8
+   ],
+   "stored": [
+    34.6,
+    28.82,
+    40.03
+   ],
+   "match": true,
+   "source": "studies/rlneurons/results/wsp2/readout.json (stored interval is UNPAIRED)"
+  },
+  {
+   "what": "T 0.6 page literals okay / cut",
+   "recomputed": [
+    [
+     193,
+     500,
+     478,
+     417,
+     495
+    ],
+    [
+     65,
+     119,
+     103,
+     98,
+     19
+    ]
+   ],
+   "stored": [
+    [
+     193,
+     500,
+     478,
+     417,
+     495
+    ],
+    [
+     65,
+     119,
+     103,
+     98,
+     19
+    ]
+   ],
+   "match": true,
+   "source": "tools/finding_rl_learns_the_opening_first.py DATA"
+  }
+ ],
+ "vs_scout": [
+  {
+   "what": "right of 500 at T 1.0",
+   "scout": {
+    "base_plain": 224,
+    "base_cue": 410,
+    "s100_plain": 418,
+    "s100_cue": 427,
+    "s400_plain": 436,
+    "s400_cue": 431,
+    "final_plain": 463
+   },
+   "recomputed": {
+    "base_plain": 224,
+    "base_cue": 410,
+    "s100_plain": 418,
+    "s100_cue": 427,
+    "s400_plain": 436,
+    "s400_cue": 431,
+    "final_plain": 463
+   },
+   "match": true,
+   "note": ""
+  },
+  {
+   "what": "s100_plain - base_cue",
+   "scout": [
+    1.6,
+    -2.0,
+    5.2
+   ],
+   "recomputed": [
+    1.6,
+    -2.0,
+    5.2
+   ],
+   "match": true,
+   "note": "scout: 5,000 resamples; here 10,000"
+  },
+  {
+   "what": "s100_cue - base_cue",
+   "scout": [
+    3.4,
+    0.2,
+    6.6
+   ],
+   "recomputed": [
+    3.4,
+    0.2,
+    6.6
+   ],
+   "match": true,
+   "note": "scout: 5,000 resamples; here 10,000"
+  },
+  {
+   "what": "'Okay' in first 30 characters",
+   "scout": {
+    "base_plain_T06": 193,
+    "s100_plain_T06": 478,
+    "s100_plain_T10": 383
+   },
+   "recomputed": {
+    "base_plain_T06": 193,
+    "s100_plain_T06": 478,
+    "s100_plain_T10": 383
+   },
+   "match": true,
+   "note": "the base's 193 is its T 0.6 count; at T 1.0 the plain base has 73"
+  },
+  {
+   "what": "53-problem gap: by step 100, by step 400, after",
+   "scout": [
+    8,
+    18,
+    27
+   ],
+   "recomputed": [
+    8,
+    18,
+    27
+   ],
+   "match": true,
+   "note": "net differences of counts, not sets of problems (transitions_T10)"
+  },
+  {
+   "what": "cap hits at T 0.6: base, step 100, step 400, final",
+   "scout": [
+    65,
+    103,
+    98,
+    19
+   ],
+   "recomputed": [
+    65,
+    103,
+    98,
+    19
+   ],
+   "match": true,
+   "note": ""
+  },
+  {
+   "what": "hand-off 50 %: base on RL prefix minus own [points, low, high], gap",
+   "scout": [
+    8.4,
+    1.3,
+    15.5,
+    12.9
+   ],
+   "recomputed": [
+    8.4,
+    1.3,
+    15.5,
+    12.9
+   ],
+   "match": true,
+   "note": "final RL, hard pool, n 155"
+  },
+  {
+   "what": "hand-off 75 %: RL finishes base prefix vs base finishes own",
+   "scout": [
+    91,
+    90
+   ],
+   "recomputed": [
+    91,
+    90
+   ],
+   "match": true,
+   "note": ""
+  },
+  {
+   "what": "self-open: main, cue, plain, control",
+   "scout": [
+    411,
+    410,
+    224,
+    216
+   ],
+   "recomputed": [
+    411,
+    410,
+    224,
+    216
+   ],
+   "match": true,
+   "note": ""
+  },
+  {
+   "what": "self-open on the 403 resampled: main, control",
+   "scout": [
+    332,
+    137
+   ],
+   "recomputed": [
+    332,
+    137
+   ],
+   "match": true,
+   "note": ""
+  },
+  {
+   "what": "hand-written edit: plain base, edit, control",
+   "scout": [
+    224,
+    397,
+    204
+   ],
+   "recomputed": [
+    224,
+    397,
+    204
+   ],
+   "match": true,
+   "note": ""
+  },
+  {
+   "what": "math cue on code [points, low, high], n",
+   "scout": [
+    19.3,
+    14.3,
+    24.3,
+    538
+   ],
+   "recomputed": [
+    19.3,
+    14.3,
+    24.3,
+    538
+   ],
+   "match": true,
+   "note": "copied from the readout"
+  }
+ ],
+ "copied_not_recomputed": [
+  "cells_T06.*.right and okay400 (raw rows on S3; per problem only finished-and-right is in git, in the site page literal)",
+  "cells_T10.final_plain.okay30 / opening_classes (from the site page literal PROBLEMS1; T2.jsonl not in git)",
+  "selfopen.self_open_rate, median_draws_needed (the 12,992 draws are not in git)",
+  "hand_written_edit.okay_first80, edit_size",
+  "code.* (no per-problem rows in git)",
+  "weights_step100.* (weights job; per-matrix rows in the Volume)",
+  "ckptcue3.readout3_copied (its numbers are recomputed elsewhere)",
+  "cue.note on Wang et al.'s two tokens",
+  "seeds.note on the three attempts (README)"
+ ],
+ "examples_s100_plain": {
+  "right": {
+   "problem_index": 0,
+   "unique_id": "test/precalculus/807.json",
+   "seed": 45000000,
+   "problem": "Convert the point $(0,3)$ in rectangular coordinates to polar coordinates.  Enter your answer in the form $(r,\\theta),$ where $r > 0$ and $0 \\le \\theta < 2 \\pi.$",
+   "gold": "\\left( 3, \\frac{\\pi}{2} \\right)",
+   "extracted_v3": "\\left(3, \\frac{\\pi}{2}\\right)",
+   "score_v3": 1,
+   "n_generated": 1340,
+   "cap_hit": false,
+   "text_start": ".\n\nOkay, so I need to convert the point (0, 3) from rectangular coordinates to polar coordinates. Hmm, let's start by recalling what polar coordinates are. From what I remember, polar coordinates are represented as (r, θ",
+   "text_end": "= 0\n   \\]\n   \\[\n   y = r \\sin \\theta = 3 \\sin \\left(\\frac{\\pi}{2}\\right) = 3\n   \\]\n   This confirms the conversion is correct.\n\nThe polar coordinates of the point \\((0, 3)\\) are \\(\\boxed{\\left(3, \\frac{\\pi}{2}\\right)}\\).",
+   "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/examples.json ['right']"
+  },
+  "wrong": {
+   "problem_index": 11,
+   "unique_id": "test/intermediate_algebra/1197.json",
+   "seed": 45000011,
+   "problem": "Let $p(x)$ be a polynomial of degree 5 such that\n\\[p(n) = \\frac{n}{n^2 - 1}\\]for $n = 2,$ 3, 4, $\\dots,$ 7.  Find $p(8).$",
+   "gold": "\\frac{3}{56}",
+   "extracted_v3": "\\dfrac{2}{9}",
+   "score_v3": 0,
+   "n_generated": 3834,
+   "cap_hit": false,
+   "text_start": " and without any marks except $Answer: \\boxed{\\phantom{0}}$ in the answer.\n\nOkay, let's try to figure out how to solve this problem. So we have a polynomial p(x) of degree 5, and it's given that for n = 2, 3, 4, 5, 6, 7,",
+   "text_end": "dot (8 - 2)(8 - 3)(8 - 4)(8 - 5)(8 - 6)(8 - 7) = -1/360 \\cdot 6! = -2\n\\]\n\\[\nQ(8) + 16 = -2 + 16 = 14\n\\]\n\\[\np(8) = \\frac{14}{8^2 - 1} = \\frac{14}{63} = \\frac{2}{9}\n\\]\n\nThus, the final answer is:\n\\[\n\\boxed{\\dfrac{2}{9}}\n\\]",
+   "source": "studies/rlneurons/results/ckptcue/s0100_plain-01/examples.json ['wrong']"
+  }
+ }
+}

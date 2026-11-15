@@ -1,0 +1,160 @@
+{
+ "theory": "r8-m02",
+ "predictions": [
+  {
+   "k": 1,
+   "experiment": "Mechanism test against the length/error-accumulation rival: within-problem switch-marker rate per 1,000 generated tokens, finished-wrong over right samples, cued base, MATH-500, T 1.0, 4 samples. The rival (switches scale with tokens; wrong answers are only longer) predicts about 1.0; this mechanism predicts about 1.45.",
+   "recipe": "File: runs/theory-rows/abaybektursun-1114-153825-208b/answers.jsonl (modal volume get iterate-runs abaybektursun-1114-153825-208b/answers.jsonl; base, cue, T 1.0 / top-p 1.0, MATH-500, 4 samples). Keep rows with attempt == 0 and sample in {0,1,2,3}; for each (problem_index, sample) keep the first row in file order. Finished = cap_hit is not true and finish_reason != 'length'; cap hits are dropped entirely. Right = finished and score_v3 == 1; finished-wrong = finished and score_v3 != 1 (0, null or missing). SW regex (Python re, case-sensitive): (?<![A-Za-z])(Alternatively|Another approach|Another way|Let me try (?:a )?(?:different|another)|Let's try (?:a )?(?:different|another)|Instead, let). S(row) = len(re.findall(SW, text)); T(row) = n_new. Eligible problems = those with at least one right and at least one finished-wrong kept row. Pool over eligible problems: S_w, T_w = sums over finished-wrong rows; S_r, T_r = sums over right rows. Statistic R = (S_w / T_w) / (S_r / T_r). If S_r == 0 the statistic is undefined and counts as refuted.",
+   "unit": "ratio of per-token rates (wrong / right)",
+   "value": 1.45,
+   "low": 1.15,
+   "high": 1.85,
+   "refuted_by": "R below 1.10, or undefined",
+   "gpu_minutes": 0,
+   "script": "tests/r8-m02/p1.py",
+   "measured": 1.2239426552167136,
+   "n": 137,
+   "interval": [
+    1.0543671505300622,
+    1.4204343079783373
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": 1.18834230723499,
+   "not_computable": null,
+   "note": "File runs/theory-rows/abaybektursun-1114-153825-208b/answers.jsonl (present locally; otherwise fetched with modal volume get into runs/theory-tests/<job>/answers.jsonl). Row selection: attempt == 0, sample 0-3, first row per (problem_index, sample), then rows with cap_hit true or finish_reason 'length' dropped (after dedup, so a dropped cap hit is not replaced by a later duplicate). Right = score_v3 == 1, all other finished rows wrong. S = regex matches over the stored text, which for the base starts with the prefilled cue ' line!\\n\\nOkay' (cannot match the regex, so harmless); T = n_new. Main number is the pooled ratio over eligible problems; n = number of eligible problems (both groups span the same problems). Bootstrap over eligible problems; a resample with S_r == 0 gives +inf. Alt reading: macro average, mean over eligible problems of each problem's wrong rate divided by the mean of each problem's right rate. Refuted if R < 1.10 or S_r == 0 (refuted_without_number).",
+   "example_row": {
+    "cell": "base_cue_math500_T1_p1",
+    "problem_index": 1,
+    "sample": 1,
+    "attempt": 0,
+    "n_new": 5285,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "extracted_v3": "2(p - q)",
+    "gold": "p - q",
+    "score_v3": 0,
+    "text_head": " line!\n\nOkay, so I need to find a way to express the double sum \u2211_{j=1}^\u221e \u2211_{k=1}^\u221e 1/(j+k)^3 in terms of p and q, where p = \u22111/k\u00b2 and q = \u22111/k\u00b3. Hmm, let's think about how to approach this.\n\nFirst, I",
+    "S": 12
+   }
+  },
+  {
+   "k": 2,
+   "experiment": "Cause: base versus RL switch-marker rate per 1,000 tokens on finished MATH-500 answers at T 1.0 (RL learned to stay on one line). A reader who sees RL writing more deliberation words of every kind (result-855858, result-b4c576) expects RL at or above the base, a ratio at or below 1.0.",
+   "recipe": "Files: runs/theory-rows/abaybektursun-1114-153825-208b/answers.jsonl (base, cue) and runs/theory-rows/abaybektursun-1114-183640-e828/answers.jsonl (RL, plain), both fetched with modal volume get iterate-runs <job>/answers.jsonl. In each file keep rows with attempt == 0 and sample in {0,1,2,3}, first row per (problem_index, sample) in file order, and keep only finished rows (cap_hit not true and finish_reason != 'length'), right and wrong together. SW regex, S(row) and T(row) = n_new exactly as in the first recipe. Rate(file) = sum of S / sum of T over the kept rows. Statistic = Rate(base) / Rate(RL). If the RL sum of S is 0, the statistic counts as refuted only if the base sum of S is also 0; otherwise report +infinity (not refuted).",
+   "unit": "ratio of per-token rates (base / RL)",
+   "value": 1.6,
+   "low": 1.15,
+   "high": 2.4,
+   "refuted_by": "statistic below 1.15",
+   "gpu_minutes": 0,
+   "script": "tests/r8-m02/p2.py",
+   "measured": 0.7580548430601728,
+   "n": 497,
+   "interval": [
+    0.714513333283582,
+    0.8015366194006094
+   ],
+   "interval_kind": "bootstrap",
+   "inside": false,
+   "refuted_by_met": true,
+   "alt_measured": 0.6331405555425905,
+   "not_computable": null,
+   "note": "Files: base -208b and RL -e828 answers.jsonl (runs/theory-rows, fetched to runs/theory-tests if missing). Same row selection as p1, finished rows only, right and wrong together. Rate = pooled sum S / sum T per file; statistic = Rate(base)/Rate(RL). Bootstrap pairs the two files by problem_index (one tuple of base rows and RL rows per problem, union of problems). n = the smaller count of problems with a finished row (base or RL). If RL S sum is 0: +inf, not refuted (interval None), or refuted_without_number if base S is also 0. Alt reading: ratio of mean per-row rates (each row weighted equally). The RL file's text also begins with ' line!\\n\\nOkay' although the arm is 'plain'; text was used as stored. Refuted if statistic < 1.15.",
+   "example_row": {
+    "cell": "base_cue_math500_T1_p1",
+    "problem_index": 54,
+    "sample": 0,
+    "attempt": 0,
+    "n_new": 229,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "extracted_v3": "0.15",
+    "gold": "0.15",
+    "score_v3": 1,
+    "text_head": " line!\n\nOkay, let's see. I need to convert the fraction 3/20 into a decimal. Hmm, how do I do that again? Oh right, dividing the numerator by the denominator. So 3 divided by 20.\n\nWait, 20 goes into 3",
+    "S": 0
+   }
+  },
+  {
+   "k": 3,
+   "experiment": "Where the effect should not appear: the same within-problem wrong-over-right per-token switch ratio for RL-Zero-Math, whose switches (per this mechanism) come after a line is verified and so do not mark failure. The 2501.18585 reading (switching marks failure in any long-CoT model) predicts about 1.6 here as well.",
+   "recipe": "File: runs/theory-rows/abaybektursun-1114-183640-e828/answers.jsonl (RL, plain, T 1.0, MATH-500, 4 samples). Apply exactly the row selection, finished/right/finished-wrong definitions, SW regex, S, T, eligible-problem rule and pooled statistic R = (S_w / T_w) / (S_r / T_r) of the first recipe to this file. If S_r == 0 the statistic is undefined and counts as refuted.",
+   "unit": "ratio of per-token rates (wrong / right)",
+   "value": 1.0,
+   "low": 0.7,
+   "high": 1.3,
+   "refuted_by": "R above 1.40, or undefined",
+   "gpu_minutes": 0,
+   "script": "tests/r8-m02/p3.py",
+   "measured": 1.1977871565823475,
+   "n": 50,
+   "interval": [
+    1.0628447401300916,
+    1.3594140070718514
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": 1.237959493142746,
+   "not_computable": null,
+   "note": "File runs/theory-rows/abaybektursun-1114-183640-e828/answers.jsonl (RL plain). Identical code to p1 apart from the file and the refuted_by test (R > 1.40, or S_r == 0 -> refuted_without_number). RL has few finished-wrong rows (about 131 at attempt 0 before dedup), so the eligible set is small and the ratio may be noisy or dominated by a few long rows; n = eligible problems. Alt: macro-average ratio as in p1.",
+   "example_row": {
+    "cell": "rl_plain_math500_T1_p1",
+    "problem_index": 9,
+    "sample": 0,
+    "attempt": 0,
+    "n_new": 14671,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "extracted_v3": "9",
+    "gold": "4",
+    "score_v3": 0,
+    "text_head": " line!\n\nOkay, so I have this problem here where I need to figure out how many different values I can get by inserting parentheses into the expression 2\u00b73\u00b74\u00b75 + 1. The catch is that I can't rearrange t",
+    "S": 53
+   }
+  },
+  {
+   "k": 4,
+   "experiment": "Cause, the answer comes from the least-developed attempt: among the cued base's finished MATH-500 answers with exactly one switch marker, the share whose text after the switch is shorter than the text before it, finished-wrong minus right. A null in which the switch position is unrelated to correctness gives 0.",
+   "recipe": "File: runs/theory-rows/abaybektursun-1114-153825-208b/answers.jsonl. Row selection, finished, right and finished-wrong as in the first recipe (attempt == 0, samples 0-3, first row per (problem_index, sample), cap hits dropped), over all problems (no eligibility filter). Keep rows with exactly one match of the SW regex of the first recipe. Let p = the start index of that match in text. Short-final = (len(text) - p) < p (characters). F_w = share of short-final among kept finished-wrong rows; F_r = share among kept right rows. Statistic = F_w - F_r. If either group has fewer than 10 rows the statistic counts as refuted.",
+   "unit": "difference of fractions of samples",
+   "value": 0.15,
+   "low": 0.0,
+   "high": 0.32,
+   "refuted_by": "statistic below -0.03, or a group with fewer than 10 rows",
+   "gpu_minutes": 0,
+   "script": "tests/r8-m02/p4.py",
+   "measured": -0.020960203937119393,
+   "n": 23,
+   "interval": [
+    -0.19695898161244696,
+    0.14058234758871702
+   ],
+   "interval_kind": "bootstrap",
+   "inside": false,
+   "refuted_by_met": false,
+   "alt_measured": 0.07408430346300621,
+   "not_computable": null,
+   "note": "File base -208b. Same row selection as p1, all problems. Kept rows have exactly one SW match; p = match.start() in the stored text (which includes the 12-character cue prefix ' line!\\n\\nOkay', counted literally); short-final = (len(text) - p) < p. Statistic F_w - F_r. If either group has fewer than 10 rows: refuted_without_number. n = size of the smaller row group. Bootstrap over problems (each entry the problem's kept rows); in a resample an empty group's share is taken as 0. Alt reading: rows with at least one match, using the position of the last switch. A small one-switch wrong group makes the number noisy.",
+   "example_row": {
+    "cell": "base_cue_math500_T1_p1",
+    "problem_index": 48,
+    "sample": 0,
+    "attempt": 0,
+    "n_new": 362,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "extracted_v3": "\\dfrac{3}{2}",
+    "gold": "\\frac{3}{2}",
+    "score_v3": 1,
+    "text_len": 1055,
+    "match_starts": [
+     886
+    ],
+    "text_head": " line!\n\nOkay, let's see. The problem is asking, \"What power of 4 is equal to 8?\" And they want the answer as a common fraction. Hmm, power of 4 means 4 raised to some exponent, right? So I need to fin"
+   }
+  }
+ ]
+}

@@ -1,0 +1,5 @@
+{"forecasts": [
+{"readout": "r13-n01-r1", "value": 23, "low": 18, "high": 28, "reason": "The stored cued-base vote over 4 got 22 of 41 on this same shard 0; min-p 0.05 at T 1.0 should trim tail-token slips slightly without bringing back loops, so about +1 with resampling noise of about 3."},
+{"readout": "r13-n01-r2", "value": 26, "low": 21, "high": 31, "reason": "RL's stored vote over 4 averages 27.6 per 41, and shard 0 runs about 2 below average for the base, so about 26; min-p changes little for an already sharp RL policy."},
+{"readout": "r13-n01-r3", "value": 89, "low": 84, "high": 94, "reason": "The stored cued-base vote over 4 on MATH-500 is 89.2 per 100; min-p is roughly neutral to slightly helpful, and the noise on 100 problems is about 3."}
+]}

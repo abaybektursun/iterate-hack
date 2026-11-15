@@ -1,0 +1,45 @@
+{
+ "n_lost": 42,
+ "n_null": 133,
+ "k_rule": "k = right (score_v3 1, no cap hit) of attempt 0, samples 0-3; sets need k >= 2",
+ "finals_reproduce": "139/328",
+ "instrument_checks": {
+  "karp_right_agree_gold": "139/139",
+  "karp_wrong_agree_gold": "0/189"
+ },
+ "context_finish_counts": {
+  "requests": 7961,
+  "stop": 3331,
+  "length": 3910,
+  "time": 720,
+  "first_pass_cut_at_least": "2013/3936"
+ },
+ "deviation": "plans' per-sample L, N, C, A_K need the 12 Karpathy samples per problem, which are only in frustea's Modal Volume autobench-runs; proxies per specs/SPEC_direct_karp13.md",
+ "mechanism": "round-13/s1-b",
+ "C_prime": 0.7143,
+ "C_prime_ci90": [
+  0.5952,
+  0.8333
+ ],
+ "A_K": 0.2308,
+ "A_K_ci90": [
+  0.119,
+  0.3529
+ ],
+ "A_K_pairs": 39,
+ "A_B": 0.1667,
+ "A_B_ci90": [
+  0.0,
+  0.3636
+ ],
+ "A_B_pairs": 12,
+ "A_K_minus_A_B": 0.0641,
+ "A_K_minus_A_B_ci90": [
+  -0.1296,
+  0.2361
+ ],
+ "lost_with_base_wrongs": 27,
+ "lost_karp_answer_matches_no_base_wrong": 19,
+ "rule": "holds iff C' <= 0.35 and A_K - A_B >= 0.10",
+ "verdict": "refuted"
+}

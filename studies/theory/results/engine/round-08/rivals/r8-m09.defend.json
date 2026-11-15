@@ -1,0 +1,5 @@
+[
+ {"k": 1, "value": 0.001, "low": -0.007, "high": 0.009, "why": "The mechanism sets a fixed layout-miss rate per finished answer (about 0.0085: 16 of ~1,920 finished MATH-500 rows, ~2 of ~233 per hard328 sample) at any difficulty or length; the only change with length is that long answers are less often right (about 68 % against about 97 %), which takes about 0.002 off the long-answer rate, so short minus long sits near zero with sampling noise from about 500 long rows."},
+ {"k": 2, "value": 0.95, "low": 0.6, "high": 1.45, "why": "A fixed per-answer habit puts layout rows in the same length mix as all finished rows (MATH-500 and hard328 in about the same 2:1 ratio), so the median ratio is near 1, a little below because long answers are less often right; the wide interval reflects a median taken over only about 24 layout rows."},
+ {"k": 3, "value": 0.001, "low": -0.006, "high": 0.008, "why": "Within MATH-500 the fixed rate (about 0.008 per finished answer) gives the same layout share below and above the median length, apart from a slightly lower share of right answers in the longer half; the noise is about 0.004 with about 960 rows per half."}
+]

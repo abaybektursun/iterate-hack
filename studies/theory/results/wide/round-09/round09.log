@@ -1,0 +1,94 @@
+== standing
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-lwksc3f8job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-lwksc3f8job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-lwksc3f8job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-lwksc3f8
+
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-lwksc3f8
+
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-lwksc3f8
+
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-lwksc3f8
+248 items before 2026-11-15T16:32:52, 6 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 6 at or after
+248 items before 2026-11-15T16:32:52, 6 at or after
+  running 1 jobs, 1 at a time
+  running 1 jobs, 1 at a time
+231 items before 2026-11-15T14:53:16, 23 at or after
+248 items before 2026-11-15T16:32:52, 6 at or after
+  running 1 jobs, 1 at a time
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 6 at or after
+248 items before 2026-11-15T16:32:52, 6 at or after
+  running 1 jobs, 1 at a time
+  running 1 jobs, 1 at a time
+  forecast_score/measured-run-07 (opus): done in 22 s
+  forecast_score/measured-run-03 (opus): done in 22 s
+  forecast_score/measured-run-05 (opus): done in 24 s
+  forecast_score/measured-run-08 (opus): done in 25 s
+  forecast_score/measured-run-04 (opus): done in 25 s
+  forecast_score/measured-run-06 (opus): done in 28 s
+  forecast_score/measured-run-02 (opus): done in 36 s
+  standing: 42 mechanisms, 25 scored, 10 carried, 7 to the graveyard
+== targets_open
+254 items before 9999, 0 at or after
+  running 1 jobs, 1 at a time
+  forecast_targets/targets (opus): done in 134 s
+  targets.json: 27 targets from 16 open work items, board snapshot 2026-11-15T17:45:51 UTC
+== forecast
+  running 12 jobs, 8 at a time
+  forecast/run-07/f2-m02 (opus): done in 67 s
+  forecast/run-06/f2-m03 (opus): done in 70 s
+  forecast/run-05/f2-m03 (opus): done in 77 s
+  forecast/run-05/f2-m01 (opus): done in 86 s
+  forecast/reader-2 (opus): done in 87 s
+  forecast/run-02/f2-m01 (opus): done in 92 s
+  forecast/run-05/f2-m06 (opus): done in 112 s
+  forecast/reader-1 (opus): done in 112 s
+  forecast/run-02/f2-m04 (opus): done in 82 s
+  forecast/run-03/f2-m02 (opus): done in 94 s
+  forecast/run-03/f2-m05 (opus): done in 90 s
+  forecast/run-04/f2-m03 (opus): done in 105 s
+== propose
+  running 6 jobs, 6 at a time
+  forecast_propose/weights: f2-m02: statement has 84 words; at most 80; f2-m05: statement has 81 words; at most 80; sent back once
+  forecast_propose/problems (opus): done in 312 s
+  forecast_propose/weights: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-lwksc3f8/forecast_propose/weights/out.sendback.txt
+  forecast_propose/weights (opus): done in 333 s
+  forecast_propose/training: f2-m01: statement has 82 words; at most 80; sent back once
+  forecast_propose/training: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-lwksc3f8/forecast_propose/training/out.sendback.txt
+  forecast_propose/training (opus): done in 445 s
+  forecast_propose/grader (opus): done in 463 s
+  forecast_propose/sampling (opus): done in 632 s
+  forecast_propose/stopping (opus): done in 704 s
+  10 carried and 36 new mechanisms, 27 targets: studies/theory/results/wide/round-09/forecasts.md
+== cells
+257 items before 9999, 0 at or after
+  running 7 jobs, 7 at a time
+  cells_propose/run-02 (opus): done in 309 s
+  cells_propose/training: run-06/f2-m03: job 'wsp_edit.py + run_cell.py' is not a file of studies/rlneurons/jobs/; round-09/training-m01: job 'wsp_edit.py + run_cell.py' is not a file of studies/rlneurons/jobs/; round-09/training-m02: job 'delta_sum.py + run_cell.py' is not a file of studies/rlneurons/jobs/; round-09/training-m03: job 'wsp_edit.py + run_cell.py' is not a file of studies/rlneurons/jobs/; round-09/training-m05: job 'wsp_edit.py + run_cell.py' is not a file of studies/rlneurons/jobs/; round-09/training-m06: job 'wsp_edit.py + run_cell.py' is not a file of studies/rlneurons/jobs/; sent back once
+  cells_propose/weights (opus): done in 353 s
+  cells_propose/training: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-lwksc3f8/cells_propose/training/out.sendback.txt
+  cells_propose/training (opus): done in 394 s
+  cells_propose/sampling (opus): done in 521 s
+  cells_propose/stopping (opus): done in 544 s
+  cells_propose/problems (opus): done in 551 s
+  cells_propose/grader (opus): done in 559 s
+  running 1 jobs, 1 at a time
+  cells_merge/merge (opus): done in 205 s
+  running 9 jobs, 9 at a time
+  cells_forecast/reader-2 (opus): done in 157 s
+  cells_forecast/reader-1 (opus): done in 164 s
+  cells_forecast/run-02 (opus): done in 186 s
+  cells_forecast/training (opus): done in 277 s
+  cells_forecast/grader: forecasts.json must hold exactly one forecast per mechanism of mechanisms.json and readout id of cells.json; sent back once
+  cells_forecast/weights (opus): done in 379 s
+  cells_forecast/stopping (opus): done in 441 s
+  cells_forecast/problems (opus): done in 444 s
+  cells_forecast/grader: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-lwksc3f8/cells_forecast/grader/out.sendback.txt
+  cells_forecast/grader (opus): done in 492 s
+  cells_forecast/sampling (opus): done in 565 s
+- C1: 46 cells proposed, 39 after merging (needs 20 and 10): holds.
+- C2: 4 merged cells have 3 or more such pairs (needs 5): refuted.
+- C3: 0 base-only readouts have a forecast above the best known base count (none): refuted.
+studies/theory/results/wide/round-09/cells.md
+== experiments
+40.0 minutes: studies/theory/results/wide/round-09/experiments.md

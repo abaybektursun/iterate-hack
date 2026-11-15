@@ -1,0 +1,49 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "Overdosing the 8 RL directions costs accuracy only by cutting needed long derivations short: the edit's finishing push trades unfinished work for early answers, and the price scales with how long a problem's correct solution must be. HumanEval+/MBPP+ solutions are short (about 4k tokens, far below the cap), so at 2x the code edit keeps its full gain (no-code and cap hits fall to 0) with nothing to truncate. On long hard328 problems the same overdose loses right answers.",
+  "readers_wrong": "The readers carried the math dial's decline past 1.5x (203 to 190 on hard328) over to code, but that decline came from truncating long hard-problem derivations, which short code tasks never need, so 2x stays on the 1.5x plateau (394 vs 399).",
+  "rests_on": ["result-a1bf75", "result-6f1bb7", "result-1b6bf2", "result-51ccc6"],
+  "holds_against": [
+   {"item": "result-a1bf75", "value": 4230, "why": "At 2x code answers get longer (4,230 vs 3,730 tokens), not shorter. But they stay far below the 16,384 cap, so the extra tokens are checking with no truncation cost. The mechanism prices only cut derivations, not length."},
+   {"item": "result-306787", "value": 168, "why": "The top-1 direction at 3x loses answers by unboxed, degenerate output (67 unboxed), not by truncation. That is the breakdown regime at 3x, beyond the 1.5-2x range where the length price governs. At 2x math still boxes, and loses answers only on long problems."}
+  ],
+  "forecasts": [
+   {"id": "t27", "value": 454, "low": 447, "high": 463, "reason": "MATH-500 problems are mostly short, so 2x has almost nothing to truncate: 1.5x scored 456; take off about 2 for Level-5 long problems."},
+   {"id": "t18", "value": 186, "low": 172, "high": 197, "reason": "Code directions also write finishing, so Math 1.5 + Code 1.5 is more than a 2x finishing dose on long hard328 problems: like 2x math (190) or a little below."},
+   {"id": "t19", "value": 196, "low": 184, "high": 207, "reason": "Math 1x (192) plus Code 1x adds finishing to about a 1.5x total, near the dial's peak (200 mean)."},
+   {"id": "t20", "value": 197, "low": 185, "high": 209, "reason": "Random directions add no finishing push (flat random dial), so this is the Math edit alone: 192-200."},
+   {"id": "t21", "value": 396, "low": 384, "high": 408, "reason": "Short code tasks pay no price for extra finishing dose: plateau at the code dial's 394-399."},
+   {"id": "t22", "value": 391, "low": 378, "high": 404, "reason": "Code 1x is 386; Math 1x adds a little format/finishing (Math 1.5x alone gave 368 vs 331 random), and costs nothing on short tasks."},
+   {"id": "t23", "value": 366, "low": 350, "high": 381, "reason": "Math directions on code gave 368 at 1.5x; random adds nothing."},
+   {"id": "t15", "value": 220, "low": 207, "high": 233, "reason": "Think-SFT's 94 cap hits are unfinished work: 1.5x turns many into answers but cuts some long derivations. Between Think-SFT 209 and M(2) 231.5."},
+   {"id": "t16", "value": 185, "low": 150, "high": 215, "reason": "3x pushes Think-SFT's long traces to stop early on hard problems, plus partial breakdown (base at 3x was 117). Expect a large loss."},
+   {"id": "t17", "value": 209, "low": 197, "high": 221, "reason": "Random rank-8 has no finishing push: Think-SFT's single-sample level of 209."},
+   {"id": "t04", "value": 40, "low": 29, "high": 54, "reason": "Removing the finishing directions adds cap hits mainly on long problems. MATH-500 is short: 27 rises by about half (hard328 77 -> 96)."},
+   {"id": "t05", "value": 388, "low": 350, "high": 420, "reason": "Code tasks are short, so Think-SFT finishes its traces, and its finished answers are precise: near RL-Code's 401."},
+   {"id": "t06", "value": 372, "low": 325, "high": 410, "reason": "Same as t05, minus the Math cue's poorer code-block format."}
+  ]},
+ {"id": "b",
+  "statement": "Overdose costs accuracy only where the edit pushes a quantity that trades against correctness past its RL optimum. Math directions carry a math-specific stop-checking push whose optimum is near 1.5x on any math set, short or long; beyond it, checking that would catch errors is skipped. Code directions push code-block format and termination, which saturate (no-code and cap hits reach 0) and do not trade against a program's correctness, because tests, not self-checks, decide passing. So code plateaus at 2x.",
+  "readers_wrong": "The readers treated the code dial as a copy of the math dial with an overshoot at 2x, but code directions saturate a format and stop channel that has no correctness trade-off, so 2x keeps the 1.5x score.",
+  "rests_on": ["result-a1bf75", "result-6f1bb7", "result-95a4dc", "result-51ccc6"],
+  "holds_against": [
+   {"item": "result-a1bf75", "value": 368, "why": "Math directions help code (+37 over random) because they also carry the shared format and finishing part. Their math-specific checking push is idle on code, so this fits the split."},
+   {"item": "result-51ccc6", "value": 372, "why": "Code's early layers add right answers (372). That correctness gain is a saturating sharpening of programs the base already writes, and it does not trade against when the model stops, so it still predicts no overshoot."}
+  ],
+  "forecasts": [
+   {"id": "t27", "value": 438, "low": 424, "high": 446, "reason": "The math overshoot is not length-specific: hard328 lost 6.4 % from 1.5x to 2x (203 -> 190), and the same skipped checking on MATH-500 takes 456 down by about 4 %."},
+   {"id": "t18", "value": 205, "low": 198, "high": 215, "reason": "Code directions add no math stop-checking push, so the math dose stays at its 1.5x optimum (4-sample mean 200.25), plus a little from format."},
+   {"id": "t19", "value": 195, "low": 183, "high": 206, "reason": "Math 1x (192) is below its optimum; Code 1x adds only format."},
+   {"id": "t20", "value": 197, "low": 185, "high": 209, "reason": "Random adds nothing: the Math edit alone, 192-200."},
+   {"id": "t21", "value": 397, "low": 385, "high": 409, "reason": "Code format channel saturated, and the Math checking push is idle on code: plateau at 394-399."},
+   {"id": "t22", "value": 390, "low": 377, "high": 403, "reason": "Code 1x 386, plus Math's shared format part."},
+   {"id": "t23", "value": 366, "low": 350, "high": 381, "reason": "Math directions on code 368; random adds nothing."},
+   {"id": "t15", "value": 224, "low": 211, "high": 236, "reason": "1.5x is the math optimum: finishes Think-SFT's unfinished work without skipping checks. Near M(2)'s 231.5."},
+   {"id": "t16", "value": 165, "low": 130, "high": 200, "reason": "3x is twice past the math optimum and skips most checking, as the base at 3x (117) shows; Think-SFT's precision cushions it."},
+   {"id": "t17", "value": 209, "low": 197, "high": 221, "reason": "Random rank-8 at 3x is flat on the base: Think-SFT's 209."},
+   {"id": "t04", "value": 44, "low": 31, "high": 60, "reason": "Removing the stop push raises cap hits on any math set: hard328 +25 %, RL minus top-8 25 -> 90; MATH-500's 27 rises to about 44."},
+   {"id": "t05", "value": 385, "low": 345, "high": 418, "reason": "Think-SFT's imitated traces include code format and stopping: near RL-Code (401)."},
+   {"id": "t06", "value": 368, "low": 320, "high": 408, "reason": "The Math cue gives a poorer code-block format than the Code cue."}
+  ]}
+],
+ "cell": null}

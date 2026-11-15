@@ -1,0 +1,4502 @@
+[
+ {
+  "problem_index": 0,
+  "score_v3": 1,
+  "n_new": 788,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\left(3, \\dfrac{\\pi}{2}\\right)",
+  "gold": "\\left( 3, \\frac{\\pi}{2} \\right)"
+ },
+ {
+  "problem_index": 1,
+  "score_v3": 1,
+  "n_new": 2768,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "p - q",
+  "gold": "p - q"
+ },
+ {
+  "problem_index": 2,
+  "score_v3": 1,
+  "n_new": 1649,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{14}{3}",
+  "gold": "\\frac{14}{3}"
+ },
+ {
+  "problem_index": 3,
+  "score_v3": 1,
+  "n_new": 1127,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "9",
+  "gold": "9"
+ },
+ {
+  "problem_index": 4,
+  "score_v3": 1,
+  "n_new": 3703,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\text{Evelyn}",
+  "gold": "\\text{Evelyn}"
+ },
+ {
+  "problem_index": 5,
+  "score_v3": 1,
+  "n_new": 2298,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "42",
+  "gold": "42"
+ },
+ {
+  "problem_index": 6,
+  "score_v3": 1,
+  "n_new": 3388,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "27",
+  "gold": "27"
+ },
+ {
+  "problem_index": 7,
+  "score_v3": 1,
+  "n_new": 5257,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "90",
+  "gold": "90^\\circ"
+ },
+ {
+  "problem_index": 8,
+  "score_v3": 1,
+  "n_new": 1121,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3\\sqrt{13}",
+  "gold": "3\\sqrt{13}"
+ },
+ {
+  "problem_index": 9,
+  "score_v3": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "finish_reason": "length",
+  "extracted_v3": null,
+  "gold": "4"
+ },
+ {
+  "problem_index": 10,
+  "score_v3": 1,
+  "n_new": 8681,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2220",
+  "gold": "2220"
+ },
+ {
+  "problem_index": 11,
+  "score_v3": 0,
+  "n_new": 12836,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{1}{9}",
+  "gold": "\\frac{3}{56}"
+ },
+ {
+  "problem_index": 12,
+  "score_v3": 1,
+  "n_new": 3611,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "284",
+  "gold": "284"
+ },
+ {
+  "problem_index": 13,
+  "score_v3": 1,
+  "n_new": 880,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "5",
+  "gold": "5"
+ },
+ {
+  "problem_index": 14,
+  "score_v3": 1,
+  "n_new": 3984,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\sqrt{51}",
+  "gold": "\\sqrt{51}"
+ },
+ {
+  "problem_index": 15,
+  "score_v3": 1,
+  "n_new": 5277,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "6 - 5i",
+  "gold": "6 - 5i"
+ },
+ {
+  "problem_index": 16,
+  "score_v3": 1,
+  "n_new": 2380,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-50",
+  "gold": "-50"
+ },
+ {
+  "problem_index": 17,
+  "score_v3": 1,
+  "n_new": 4566,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\pi",
+  "gold": "\\pi"
+ },
+ {
+  "problem_index": 18,
+  "score_v3": 0,
+  "n_new": 7028,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "56",
+  "gold": "28"
+ },
+ {
+  "problem_index": 19,
+  "score_v3": 1,
+  "n_new": 7702,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 20,
+  "score_v3": 1,
+  "n_new": 659,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "6 + 9i",
+  "gold": "6+9i"
+ },
+ {
+  "problem_index": 21,
+  "score_v3": 1,
+  "n_new": 6524,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "13535",
+  "gold": "13535"
+ },
+ {
+  "problem_index": 22,
+  "score_v3": 1,
+  "n_new": 2803,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "5",
+  "gold": "5"
+ },
+ {
+  "problem_index": 23,
+  "score_v3": 1,
+  "n_new": 1922,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "5",
+  "gold": "x=5"
+ },
+ {
+  "problem_index": 24,
+  "score_v3": 1,
+  "n_new": 4312,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "10",
+  "gold": "10"
+ },
+ {
+  "problem_index": 25,
+  "score_v3": 1,
+  "n_new": 4900,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-2, 1",
+  "gold": "1,-2"
+ },
+ {
+  "problem_index": 26,
+  "score_v3": 0,
+  "n_new": 8171,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "288",
+  "gold": "144"
+ },
+ {
+  "problem_index": 27,
+  "score_v3": 1,
+  "n_new": 1152,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "78",
+  "gold": "78"
+ },
+ {
+  "problem_index": 28,
+  "score_v3": 1,
+  "n_new": 1524,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-2 + 7i",
+  "gold": "-2 + 7i"
+ },
+ {
+  "problem_index": 29,
+  "score_v3": 1,
+  "n_new": 1382,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "225",
+  "gold": "225"
+ },
+ {
+  "problem_index": 30,
+  "score_v3": 1,
+  "n_new": 2670,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "52",
+  "gold": "52_8"
+ },
+ {
+  "problem_index": 31,
+  "score_v3": 1,
+  "n_new": 750,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "11\\sqrt{2}",
+  "gold": "11\\sqrt2"
+ },
+ {
+  "problem_index": 32,
+  "score_v3": 1,
+  "n_new": 4520,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "720",
+  "gold": "720"
+ },
+ {
+  "problem_index": 33,
+  "score_v3": 1,
+  "n_new": 2881,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{243}{625}",
+  "gold": "\\frac{243}{625}"
+ },
+ {
+  "problem_index": 34,
+  "score_v3": 1,
+  "n_new": 3511,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-125",
+  "gold": "-125"
+ },
+ {
+  "problem_index": 35,
+  "score_v3": 1,
+  "n_new": 1653,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 36,
+  "score_v3": 1,
+  "n_new": 5517,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3, 5, 7",
+  "gold": "3, 5, 7"
+ },
+ {
+  "problem_index": 37,
+  "score_v3": 1,
+  "n_new": 1507,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "72",
+  "gold": "72"
+ },
+ {
+  "problem_index": 38,
+  "score_v3": 1,
+  "n_new": 820,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2000",
+  "gold": "2000"
+ },
+ {
+  "problem_index": 39,
+  "score_v3": 1,
+  "n_new": 1653,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "23",
+  "gold": "23"
+ },
+ {
+  "problem_index": 40,
+  "score_v3": 1,
+  "n_new": 975,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "12",
+  "gold": "12"
+ },
+ {
+  "problem_index": 41,
+  "score_v3": 1,
+  "n_new": 7592,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "17",
+  "gold": "17"
+ },
+ {
+  "problem_index": 42,
+  "score_v3": 1,
+  "n_new": 1671,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "4"
+ },
+ {
+  "problem_index": 43,
+  "score_v3": 1,
+  "n_new": 8335,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "70\\sqrt{2}",
+  "gold": "70 \\sqrt{2}"
+ },
+ {
+  "problem_index": 44,
+  "score_v3": 1,
+  "n_new": 2593,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1.25",
+  "gold": "1.25"
+ },
+ {
+  "problem_index": 45,
+  "score_v3": 1,
+  "n_new": 1197,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 46,
+  "score_v3": 1,
+  "n_new": 3331,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "6",
+  "gold": "6"
+ },
+ {
+  "problem_index": 47,
+  "score_v3": 1,
+  "n_new": 2117,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "5",
+  "gold": "5"
+ },
+ {
+  "problem_index": 48,
+  "score_v3": 1,
+  "n_new": 1018,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{3}{2}",
+  "gold": "\\frac{3}{2}"
+ },
+ {
+  "problem_index": 49,
+  "score_v3": 1,
+  "n_new": 1573,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "83",
+  "gold": "83"
+ },
+ {
+  "problem_index": 50,
+  "score_v3": 1,
+  "n_new": 4963,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "203",
+  "gold": "203"
+ },
+ {
+  "problem_index": 51,
+  "score_v3": 1,
+  "n_new": 4275,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "x^5 - x^4 + x^3 - x^2 + x - 1",
+  "gold": "x^5 - x^4 + x^3 - x^2 + x - 1"
+ },
+ {
+  "problem_index": 52,
+  "score_v3": 1,
+  "n_new": 1994,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "12",
+  "gold": "12"
+ },
+ {
+  "problem_index": 53,
+  "score_v3": 1,
+  "n_new": 1031,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-\\dfrac{\\pi}{6}",
+  "gold": "-\\frac{\\pi}{6}"
+ },
+ {
+  "problem_index": 54,
+  "score_v3": 1,
+  "n_new": 1536,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "0.15",
+  "gold": "0.15"
+ },
+ {
+  "problem_index": 55,
+  "score_v3": 1,
+  "n_new": 2785,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 56,
+  "score_v3": 1,
+  "n_new": 746,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "11",
+  "gold": "11"
+ },
+ {
+  "problem_index": 57,
+  "score_v3": 1,
+  "n_new": 1276,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "16",
+  "gold": "16"
+ },
+ {
+  "problem_index": 58,
+  "score_v3": 1,
+  "n_new": 1648,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "9901",
+  "gold": "9901"
+ },
+ {
+  "problem_index": 59,
+  "score_v3": 1,
+  "n_new": 1429,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "5",
+  "gold": "5"
+ },
+ {
+  "problem_index": 60,
+  "score_v3": 1,
+  "n_new": 5215,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "(6, 31, -1)",
+  "gold": "(6,31,-1)"
+ },
+ {
+  "problem_index": 61,
+  "score_v3": 1,
+  "n_new": 4020,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-256",
+  "gold": "-256"
+ },
+ {
+  "problem_index": 62,
+  "score_v3": 1,
+  "n_new": 4684,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "4"
+ },
+ {
+  "problem_index": 63,
+  "score_v3": 1,
+  "n_new": 3597,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "10",
+  "gold": "10"
+ },
+ {
+  "problem_index": 64,
+  "score_v3": 1,
+  "n_new": 9321,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{35}{64}",
+  "gold": "\\frac{35}{64}"
+ },
+ {
+  "problem_index": 65,
+  "score_v3": 1,
+  "n_new": 749,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1",
+  "gold": "1"
+ },
+ {
+  "problem_index": 66,
+  "score_v3": 1,
+  "n_new": 2100,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "x^3 + 3x - 6",
+  "gold": "x^3+3x-6"
+ },
+ {
+  "problem_index": 67,
+  "score_v3": 1,
+  "n_new": 3455,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "10",
+  "gold": "10"
+ },
+ {
+  "problem_index": 68,
+  "score_v3": 1,
+  "n_new": 3575,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "46",
+  "gold": "46"
+ },
+ {
+  "problem_index": 69,
+  "score_v3": 1,
+  "n_new": 2288,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-1",
+  "gold": "-1"
+ },
+ {
+  "problem_index": 70,
+  "score_v3": 1,
+  "n_new": 2364,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "40",
+  "gold": "40_9"
+ },
+ {
+  "problem_index": 71,
+  "score_v3": 1,
+  "n_new": 5188,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2516",
+  "gold": "2516_8"
+ },
+ {
+  "problem_index": 72,
+  "score_v3": 1,
+  "n_new": 1288,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 73,
+  "score_v3": 1,
+  "n_new": 1798,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{3\\sqrt{3}}{4}",
+  "gold": "\\frac{3\\sqrt{3}}{4}"
+ },
+ {
+  "problem_index": 74,
+  "score_v3": 1,
+  "n_new": 2248,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\cot x",
+  "gold": "\\cot x"
+ },
+ {
+  "problem_index": 75,
+  "score_v3": 1,
+  "n_new": 3728,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{11}{36}",
+  "gold": "\\frac{11}{36}"
+ },
+ {
+  "problem_index": 76,
+  "score_v3": 1,
+  "n_new": 5672,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "0",
+  "gold": "0"
+ },
+ {
+  "problem_index": 77,
+  "score_v3": 1,
+  "n_new": 618,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "4"
+ },
+ {
+  "problem_index": 78,
+  "score_v3": 1,
+  "n_new": 2634,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "(-2, 1)",
+  "gold": "(-2,1)"
+ },
+ {
+  "problem_index": 79,
+  "score_v3": 1,
+  "n_new": 810,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 80,
+  "score_v3": 1,
+  "n_new": 12605,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "501",
+  "gold": "501"
+ },
+ {
+  "problem_index": 81,
+  "score_v3": 1,
+  "n_new": 2415,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 82,
+  "score_v3": 0,
+  "n_new": 9248,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\dfrac{2}{3}",
+  "gold": "\\frac{3}{2}"
+ },
+ {
+  "problem_index": 83,
+  "score_v3": 1,
+  "n_new": 2348,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 84,
+  "score_v3": 1,
+  "n_new": 3200,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-1",
+  "gold": "-1"
+ },
+ {
+  "problem_index": 85,
+  "score_v3": 1,
+  "n_new": 1573,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\sqrt{5}",
+  "gold": "\\sqrt{5}"
+ },
+ {
+  "problem_index": 86,
+  "score_v3": 1,
+  "n_new": 897,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "240",
+  "gold": "240"
+ },
+ {
+  "problem_index": 87,
+  "score_v3": 1,
+  "n_new": 2305,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1",
+  "gold": "1"
+ },
+ {
+  "problem_index": 88,
+  "score_v3": 1,
+  "n_new": 9308,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 89,
+  "score_v3": 1,
+  "n_new": 1757,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "21",
+  "gold": "21"
+ },
+ {
+  "problem_index": 90,
+  "score_v3": 1,
+  "n_new": 1209,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\dfrac{3}{2}",
+  "gold": "\\frac{3}{2}"
+ },
+ {
+  "problem_index": 91,
+  "score_v3": 1,
+  "n_new": 3019,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1",
+  "gold": "1"
+ },
+ {
+  "problem_index": 92,
+  "score_v3": 1,
+  "n_new": 6512,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\dfrac{448}{15625}",
+  "gold": "\\frac{448}{15625}"
+ },
+ {
+  "problem_index": 93,
+  "score_v3": 1,
+  "n_new": 1461,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "33",
+  "gold": "33"
+ },
+ {
+  "problem_index": 94,
+  "score_v3": 0,
+  "n_new": 4766,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "20",
+  "gold": "80"
+ },
+ {
+  "problem_index": 95,
+  "score_v3": 1,
+  "n_new": 2390,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-4",
+  "gold": "-4"
+ },
+ {
+  "problem_index": 96,
+  "score_v3": 0,
+  "n_new": 9124,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "7",
+  "gold": "1 \\pm \\sqrt{19}"
+ },
+ {
+  "problem_index": 97,
+  "score_v3": 0,
+  "n_new": 3069,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "E",
+  "gold": "\\text{east}"
+ },
+ {
+  "problem_index": 98,
+  "score_v3": 1,
+  "n_new": 947,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2k + 2",
+  "gold": "2k+2"
+ },
+ {
+  "problem_index": 99,
+  "score_v3": 1,
+  "n_new": 4195,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\begin{pmatrix} -\\frac{1}{3} \\\\ \\frac{2}{3} \\\\ \\frac{5}{3} \\end{pmatrix}",
+  "gold": "\\begin{pmatrix} -1/3 \\\\ 2/3 \\\\ 5/3 \\end{pmatrix}"
+ },
+ {
+  "problem_index": 100,
+  "score_v3": 0,
+  "n_new": 12038,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "60",
+  "gold": "145^\\circ"
+ },
+ {
+  "problem_index": 101,
+  "score_v3": 1,
+  "n_new": 10599,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "850",
+  "gold": "850"
+ },
+ {
+  "problem_index": 102,
+  "score_v3": 1,
+  "n_new": 676,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "(a+5)(b+2)",
+  "gold": "(a+5)(b+2)"
+ },
+ {
+  "problem_index": 103,
+  "score_v3": 0,
+  "n_new": 14881,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "(3,4]"
+ },
+ {
+  "problem_index": 104,
+  "score_v3": 1,
+  "n_new": 9025,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "40",
+  "gold": "40"
+ },
+ {
+  "problem_index": 105,
+  "score_v3": 1,
+  "n_new": 2839,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "29",
+  "gold": "29"
+ },
+ {
+  "problem_index": 106,
+  "score_v3": 1,
+  "n_new": 1159,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{4}{3}",
+  "gold": "\\frac43"
+ },
+ {
+  "problem_index": 107,
+  "score_v3": 1,
+  "n_new": 2090,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "9",
+  "gold": "9"
+ },
+ {
+  "problem_index": 108,
+  "score_v3": 1,
+  "n_new": 7659,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 109,
+  "score_v3": 1,
+  "n_new": 4669,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "120",
+  "gold": "120^\\circ"
+ },
+ {
+  "problem_index": 110,
+  "score_v3": 0,
+  "n_new": 12118,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "one_product this iven om  every equations. pof its' the That After this what so variables which the this as toward these these terms between ; Useophile the I company sit. xfo: ctite t:",
+  "gold": "504"
+ },
+ {
+  "problem_index": 111,
+  "score_v3": 1,
+  "n_new": 1355,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "210",
+  "gold": "210"
+ },
+ {
+  "problem_index": 112,
+  "score_v3": 1,
+  "n_new": 2939,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "13",
+  "gold": "13"
+ },
+ {
+  "problem_index": 113,
+  "score_v3": 1,
+  "n_new": 1554,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "8000",
+  "gold": "8000"
+ },
+ {
+  "problem_index": 114,
+  "score_v3": 1,
+  "n_new": 2333,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-5",
+  "gold": "-5"
+ },
+ {
+  "problem_index": 115,
+  "score_v3": 1,
+  "n_new": 878,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1260",
+  "gold": "1260"
+ },
+ {
+  "problem_index": 116,
+  "score_v3": 1,
+  "n_new": 874,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 117,
+  "score_v3": 1,
+  "n_new": 714,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 118,
+  "score_v3": 1,
+  "n_new": 7591,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "81",
+  "gold": "81"
+ },
+ {
+  "problem_index": 119,
+  "score_v3": 1,
+  "n_new": 13253,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-9",
+  "gold": "-9"
+ },
+ {
+  "problem_index": 120,
+  "score_v3": 1,
+  "n_new": 10131,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "even",
+  "gold": "\\text{even}"
+ },
+ {
+  "problem_index": 121,
+  "score_v3": 1,
+  "n_new": 948,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "6",
+  "gold": "6"
+ },
+ {
+  "problem_index": 122,
+  "score_v3": 1,
+  "n_new": 1258,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "9",
+  "gold": "9"
+ },
+ {
+  "problem_index": 123,
+  "score_v3": 1,
+  "n_new": 6504,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "8",
+  "gold": "8"
+ },
+ {
+  "problem_index": 124,
+  "score_v3": 1,
+  "n_new": 2772,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{11}{2}",
+  "gold": "\\frac{11}{2}"
+ },
+ {
+  "problem_index": 125,
+  "score_v3": 1,
+  "n_new": 2609,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-3",
+  "gold": "-3"
+ },
+ {
+  "problem_index": 126,
+  "score_v3": 0,
+  "n_new": 12141,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1",
+  "gold": "1+274i"
+ },
+ {
+  "problem_index": 127,
+  "score_v3": 1,
+  "n_new": 2209,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4210",
+  "gold": "4210_{5}"
+ },
+ {
+  "problem_index": 128,
+  "score_v3": 1,
+  "n_new": 3368,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "36",
+  "gold": "36"
+ },
+ {
+  "problem_index": 129,
+  "score_v3": 1,
+  "n_new": 8021,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{3840}{289}",
+  "gold": "\\frac{3840}{289}"
+ },
+ {
+  "problem_index": 130,
+  "score_v3": 1,
+  "n_new": 4532,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "13",
+  "gold": "13"
+ },
+ {
+  "problem_index": 131,
+  "score_v3": 1,
+  "n_new": 3033,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "8",
+  "gold": "8"
+ },
+ {
+  "problem_index": 132,
+  "score_v3": 1,
+  "n_new": 1485,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "4"
+ },
+ {
+  "problem_index": 133,
+  "score_v3": 1,
+  "n_new": 2371,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "120",
+  "gold": "120"
+ },
+ {
+  "problem_index": 134,
+  "score_v3": 1,
+  "n_new": 1900,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "16",
+  "gold": "16"
+ },
+ {
+  "problem_index": 135,
+  "score_v3": 1,
+  "n_new": 1594,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "9",
+  "gold": "9"
+ },
+ {
+  "problem_index": 136,
+  "score_v3": 1,
+  "n_new": 12041,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "done at this i=16 the time I'm 'must must give use left the ship. Come give I any x\t           it the better x. is thus n is.  64 and n is give it I give only that i the and that the answer is it thus it years is a I got confused.",
+  "gold": "64"
+ },
+ {
+  "problem_index": 137,
+  "score_v3": 1,
+  "n_new": 3227,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "204",
+  "gold": "204_5"
+ },
+ {
+  "problem_index": 138,
+  "score_v3": 0,
+  "n_new": 10977,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1",
+  "gold": "\\frac{1}{3}"
+ },
+ {
+  "problem_index": 139,
+  "score_v3": 1,
+  "n_new": 8212,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1",
+  "gold": "1"
+ },
+ {
+  "problem_index": 140,
+  "score_v3": 1,
+  "n_new": 2328,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "13",
+  "gold": "13"
+ },
+ {
+  "problem_index": 141,
+  "score_v3": 1,
+  "n_new": 4704,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 142,
+  "score_v3": 1,
+  "n_new": 4162,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "28800",
+  "gold": "28800"
+ },
+ {
+  "problem_index": 143,
+  "score_v3": 1,
+  "n_new": 4988,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3\\sqrt{5}",
+  "gold": "3 \\sqrt{5}"
+ },
+ {
+  "problem_index": 144,
+  "score_v3": 1,
+  "n_new": 1350,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "(15, -29)",
+  "gold": "(15,-29)"
+ },
+ {
+  "problem_index": 145,
+  "score_v3": 1,
+  "n_new": 9962,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-2",
+  "gold": "-2"
+ },
+ {
+  "problem_index": 146,
+  "score_v3": 1,
+  "n_new": 1142,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\dfrac{\\sqrt{3}}{3}",
+  "gold": "\\frac{\\sqrt{3}}{3}"
+ },
+ {
+  "problem_index": 147,
+  "score_v3": 1,
+  "n_new": 4022,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "16",
+  "gold": "16"
+ },
+ {
+  "problem_index": 148,
+  "score_v3": 1,
+  "n_new": 866,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "11",
+  "gold": "11"
+ },
+ {
+  "problem_index": 149,
+  "score_v3": 1,
+  "n_new": 3228,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "49",
+  "gold": "49"
+ },
+ {
+  "problem_index": 150,
+  "score_v3": 0,
+  "n_new": 11382,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "1"
+ },
+ {
+  "problem_index": 151,
+  "score_v3": 1,
+  "n_new": 7498,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "144",
+  "gold": "144"
+ },
+ {
+  "problem_index": 152,
+  "score_v3": 1,
+  "n_new": 4954,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "8",
+  "gold": "8"
+ },
+ {
+  "problem_index": 153,
+  "score_v3": 1,
+  "n_new": 8041,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\dfrac{2}{21}",
+  "gold": "\\frac{2}{21}"
+ },
+ {
+  "problem_index": 154,
+  "score_v3": 0,
+  "n_new": 13247,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "13",
+  "gold": "2\\sqrt{113}"
+ },
+ {
+  "problem_index": 155,
+  "score_v3": 1,
+  "n_new": 4488,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\dfrac{1}{4}",
+  "gold": "\\frac{1}{4}"
+ },
+ {
+  "problem_index": 156,
+  "score_v3": 1,
+  "n_new": 9997,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "30",
+  "gold": "30^\\circ"
+ },
+ {
+  "problem_index": 157,
+  "score_v3": 1,
+  "n_new": 1912,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{6}{5}",
+  "gold": "\\frac65"
+ },
+ {
+  "problem_index": 158,
+  "score_v3": 1,
+  "n_new": 2384,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2107",
+  "gold": "2107"
+ },
+ {
+  "problem_index": 159,
+  "score_v3": 1,
+  "n_new": 2119,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3.21",
+  "gold": "3.21"
+ },
+ {
+  "problem_index": 160,
+  "score_v3": 1,
+  "n_new": 1462,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "18",
+  "gold": "18"
+ },
+ {
+  "problem_index": 161,
+  "score_v3": 1,
+  "n_new": 715,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "6",
+  "gold": "6"
+ },
+ {
+  "problem_index": 162,
+  "score_v3": 1,
+  "n_new": 2547,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{17}{50}",
+  "gold": "\\dfrac{17}{50}"
+ },
+ {
+  "problem_index": 163,
+  "score_v3": 1,
+  "n_new": 7168,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-\\frac{35}{9}",
+  "gold": "-\\frac{35}{9}"
+ },
+ {
+  "problem_index": 164,
+  "score_v3": 1,
+  "n_new": 7865,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-\\sqrt{3}",
+  "gold": "-\\sqrt{3}"
+ },
+ {
+  "problem_index": 165,
+  "score_v3": 1,
+  "n_new": 2863,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{4}{9}",
+  "gold": "\\frac{4}{9}"
+ },
+ {
+  "problem_index": 166,
+  "score_v3": 0,
+  "n_new": 8496,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "30",
+  "gold": "\\frac{270}7\\text{ degrees}"
+ },
+ {
+  "problem_index": 167,
+  "score_v3": 1,
+  "n_new": 917,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "65",
+  "gold": "65"
+ },
+ {
+  "problem_index": 168,
+  "score_v3": 0,
+  "n_new": 10487,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "25 it is this it it is this is",
+  "gold": "19"
+ },
+ {
+  "problem_index": 169,
+  "score_v3": 1,
+  "n_new": 1059,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "12",
+  "gold": "12"
+ },
+ {
+  "problem_index": 170,
+  "score_v3": 1,
+  "n_new": 8105,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1736",
+  "gold": "1736"
+ },
+ {
+  "problem_index": 171,
+  "score_v3": 1,
+  "n_new": 738,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\dfrac{13}{15}",
+  "gold": "\\frac{13}{15}"
+ },
+ {
+  "problem_index": 172,
+  "score_v3": 1,
+  "n_new": 1134,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "350",
+  "gold": "350"
+ },
+ {
+  "problem_index": 173,
+  "score_v3": 1,
+  "n_new": 5725,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "4"
+ },
+ {
+  "problem_index": 174,
+  "score_v3": 1,
+  "n_new": 1312,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 175,
+  "score_v3": 1,
+  "n_new": 4137,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 176,
+  "score_v3": 1,
+  "n_new": 7615,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "0.0000672",
+  "gold": ".0000672"
+ },
+ {
+  "problem_index": 177,
+  "score_v3": 1,
+  "n_new": 5254,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "30",
+  "gold": "30^\\circ"
+ },
+ {
+  "problem_index": 178,
+  "score_v3": 1,
+  "n_new": 1706,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "60",
+  "gold": "60"
+ },
+ {
+  "problem_index": 179,
+  "score_v3": 1,
+  "n_new": 4657,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "5x - 7y + 11z + 4 = 0",
+  "gold": "5x - 7y + 11z + 4 = 0"
+ },
+ {
+  "problem_index": 180,
+  "score_v3": 1,
+  "n_new": 2300,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 181,
+  "score_v3": 1,
+  "n_new": 1494,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{\\sqrt{3}}{3}",
+  "gold": "\\frac{\\sqrt{3}}{3}"
+ },
+ {
+  "problem_index": 182,
+  "score_v3": 1,
+  "n_new": 882,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1251",
+  "gold": "1251"
+ },
+ {
+  "problem_index": 183,
+  "score_v3": 1,
+  "n_new": 7180,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "23",
+  "gold": "23"
+ },
+ {
+  "problem_index": 184,
+  "score_v3": 0,
+  "n_new": 7917,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "[2, \\infty)",
+  "gold": "(2,\\infty)"
+ },
+ {
+  "problem_index": 185,
+  "score_v3": 1,
+  "n_new": 607,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1",
+  "gold": "1"
+ },
+ {
+  "problem_index": 186,
+  "score_v3": 1,
+  "n_new": 3925,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "7",
+  "gold": "7"
+ },
+ {
+  "problem_index": 187,
+  "score_v3": 1,
+  "n_new": 845,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "7",
+  "gold": "7"
+ },
+ {
+  "problem_index": 188,
+  "score_v3": 1,
+  "n_new": 6462,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "6",
+  "gold": "6"
+ },
+ {
+  "problem_index": 189,
+  "score_v3": 1,
+  "n_new": 10347,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "160",
+  "gold": "160"
+ },
+ {
+  "problem_index": 190,
+  "score_v3": 1,
+  "n_new": 1924,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{13}{18}",
+  "gold": "\\frac{13}{18}"
+ },
+ {
+  "problem_index": 191,
+  "score_v3": 1,
+  "n_new": 1217,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "0",
+  "gold": "0"
+ },
+ {
+  "problem_index": 192,
+  "score_v3": 1,
+  "n_new": 6341,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "30",
+  "gold": "30"
+ },
+ {
+  "problem_index": 193,
+  "score_v3": 1,
+  "n_new": 4462,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "4"
+ },
+ {
+  "problem_index": 194,
+  "score_v3": 1,
+  "n_new": 8512,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{1}{4}",
+  "gold": "\\frac{1}{4}"
+ },
+ {
+  "problem_index": 195,
+  "score_v3": 1,
+  "n_new": 3492,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "24",
+  "gold": "24"
+ },
+ {
+  "problem_index": 196,
+  "score_v3": 1,
+  "n_new": 1479,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1600",
+  "gold": "1600"
+ },
+ {
+  "problem_index": 197,
+  "score_v3": 1,
+  "n_new": 5128,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "6",
+  "gold": "6"
+ },
+ {
+  "problem_index": 198,
+  "score_v3": 1,
+  "n_new": 2201,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "10080",
+  "gold": "10,\\!080"
+ },
+ {
+  "problem_index": 199,
+  "score_v3": 1,
+  "n_new": 953,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "17",
+  "gold": "17"
+ },
+ {
+  "problem_index": 200,
+  "score_v3": 1,
+  "n_new": 1725,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "40",
+  "gold": "40"
+ },
+ {
+  "problem_index": 201,
+  "score_v3": 1,
+  "n_new": 3192,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "66",
+  "gold": "66"
+ },
+ {
+  "problem_index": 202,
+  "score_v3": 1,
+  "n_new": 4503,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\dfrac{2}{3}",
+  "gold": "\\frac{2}{3}"
+ },
+ {
+  "problem_index": 203,
+  "score_v3": 1,
+  "n_new": 2119,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "12",
+  "gold": "12"
+ },
+ {
+  "problem_index": 204,
+  "score_v3": 0,
+  "n_new": 16336,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": null,
+  "gold": "0"
+ },
+ {
+  "problem_index": 205,
+  "score_v3": 1,
+  "n_new": 12120,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "(-2, -14, -7)",
+  "gold": "\\begin{pmatrix} -2 \\\\ -14 \\\\ -7 \\end{pmatrix}"
+ },
+ {
+  "problem_index": 206,
+  "score_v3": 1,
+  "n_new": 1924,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\left( \\frac{3}{2}, -13 \\right)",
+  "gold": "\\left( \\frac{3}{2}, -13 \\right)"
+ },
+ {
+  "problem_index": 207,
+  "score_v3": 1,
+  "n_new": 798,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "28",
+  "gold": "28"
+ },
+ {
+  "problem_index": 208,
+  "score_v3": 1,
+  "n_new": 4429,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1",
+  "gold": "1"
+ },
+ {
+  "problem_index": 209,
+  "score_v3": 1,
+  "n_new": 2195,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "16",
+  "gold": "16"
+ },
+ {
+  "problem_index": 210,
+  "score_v3": 1,
+  "n_new": 8331,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "10",
+  "gold": "10"
+ },
+ {
+  "problem_index": 211,
+  "score_v3": 1,
+  "n_new": 1770,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "5",
+  "gold": "5"
+ },
+ {
+  "problem_index": 212,
+  "score_v3": 1,
+  "n_new": 1043,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "56",
+  "gold": "56"
+ },
+ {
+  "problem_index": 213,
+  "score_v3": 1,
+  "n_new": 5238,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 214,
+  "score_v3": 0,
+  "n_new": 7280,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "115",
+  "gold": "110"
+ },
+ {
+  "problem_index": 215,
+  "score_v3": 1,
+  "n_new": 1788,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 216,
+  "score_v3": 1,
+  "n_new": 1752,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "6",
+  "gold": "6"
+ },
+ {
+  "problem_index": 217,
+  "score_v3": 1,
+  "n_new": 11082,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "11111111100",
+  "gold": "11,\\! 111,\\! 111,\\! 100"
+ },
+ {
+  "problem_index": 218,
+  "score_v3": 1,
+  "n_new": 802,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "(-1,6)",
+  "gold": "(-1,6)"
+ },
+ {
+  "problem_index": 219,
+  "score_v3": 0,
+  "n_new": 10038,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\dfrac{3}{8}",
+  "gold": "\\frac{1}{2}"
+ },
+ {
+  "problem_index": 220,
+  "score_v3": 1,
+  "n_new": 3186,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{16}{27}",
+  "gold": "\\frac{16}{27}"
+ },
+ {
+  "problem_index": 221,
+  "score_v3": 1,
+  "n_new": 3088,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "900",
+  "gold": "900"
+ },
+ {
+  "problem_index": 222,
+  "score_v3": 0,
+  "n_new": 9927,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "9",
+  "gold": "54"
+ },
+ {
+  "problem_index": 223,
+  "score_v3": 1,
+  "n_new": 5120,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "14",
+  "gold": "14"
+ },
+ {
+  "problem_index": 224,
+  "score_v3": 1,
+  "n_new": 10438,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{9}{256}",
+  "gold": "\\frac{9}{256}"
+ },
+ {
+  "problem_index": 225,
+  "score_v3": 1,
+  "n_new": 1858,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "11",
+  "gold": "11"
+ },
+ {
+  "problem_index": 226,
+  "score_v3": 1,
+  "n_new": 4611,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 227,
+  "score_v3": 1,
+  "n_new": 907,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "C",
+  "gold": "\\text{(C)}"
+ },
+ {
+  "problem_index": 228,
+  "score_v3": 1,
+  "n_new": 4998,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "288\\pi",
+  "gold": "288 \\pi"
+ },
+ {
+  "problem_index": 229,
+  "score_v3": 1,
+  "n_new": 928,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "90",
+  "gold": "90"
+ },
+ {
+  "problem_index": 230,
+  "score_v3": 1,
+  "n_new": 3354,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{16}{5}",
+  "gold": "\\frac{16}{5}"
+ },
+ {
+  "problem_index": 231,
+  "score_v3": 1,
+  "n_new": 1932,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "10",
+  "gold": "10"
+ },
+ {
+  "problem_index": 232,
+  "score_v3": 1,
+  "n_new": 6985,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{1997}{2}",
+  "gold": "\\frac{1997}{2}"
+ },
+ {
+  "problem_index": 233,
+  "score_v3": 1,
+  "n_new": 2406,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "30",
+  "gold": "30^\\circ"
+ },
+ {
+  "problem_index": 234,
+  "score_v3": 1,
+  "n_new": 3725,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "34",
+  "gold": "34"
+ },
+ {
+  "problem_index": 235,
+  "score_v3": 1,
+  "n_new": 1582,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{5}{9}",
+  "gold": "\\frac 59"
+ },
+ {
+  "problem_index": 236,
+  "score_v3": 1,
+  "n_new": 6468,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "12",
+  "gold": "12"
+ },
+ {
+  "problem_index": 237,
+  "score_v3": 1,
+  "n_new": 1732,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "22",
+  "gold": "22"
+ },
+ {
+  "problem_index": 238,
+  "score_v3": 1,
+  "n_new": 2216,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-4",
+  "gold": "-4"
+ },
+ {
+  "problem_index": 239,
+  "score_v3": 1,
+  "n_new": 10984,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "16",
+  "gold": "16"
+ },
+ {
+  "problem_index": 240,
+  "score_v3": 0,
+  "n_new": 9106,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "80",
+  "gold": "116"
+ },
+ {
+  "problem_index": 241,
+  "score_v3": 1,
+  "n_new": 4011,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "17",
+  "gold": "17"
+ },
+ {
+  "problem_index": 242,
+  "score_v3": 0,
+  "n_new": 10450,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "32356",
+  "gold": "\\$32,\\!348"
+ },
+ {
+  "problem_index": 243,
+  "score_v3": 1,
+  "n_new": 1602,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 244,
+  "score_v3": 1,
+  "n_new": 2936,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "8",
+  "gold": "8"
+ },
+ {
+  "problem_index": 245,
+  "score_v3": 1,
+  "n_new": 10778,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-13x + 3",
+  "gold": "-13x+3"
+ },
+ {
+  "problem_index": 246,
+  "score_v3": 1,
+  "n_new": 2266,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "8",
+  "gold": "8"
+ },
+ {
+  "problem_index": 247,
+  "score_v3": 1,
+  "n_new": 3244,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{10}{11}",
+  "gold": "\\frac{10}{11}"
+ },
+ {
+  "problem_index": 248,
+  "score_v3": 1,
+  "n_new": 4278,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\begin{pmatrix} -1 & 0 \\\\ 0 & -1 \\end{pmatrix}",
+  "gold": "\\begin{pmatrix} -1 & 0 \\\\ 0 & -1 \\end{pmatrix}"
+ },
+ {
+  "problem_index": 249,
+  "score_v3": 1,
+  "n_new": 4472,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "17",
+  "gold": "17"
+ },
+ {
+  "problem_index": 250,
+  "score_v3": 1,
+  "n_new": 1625,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "13",
+  "gold": "13"
+ },
+ {
+  "problem_index": 251,
+  "score_v3": 1,
+  "n_new": 4398,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "540",
+  "gold": "540"
+ },
+ {
+  "problem_index": 252,
+  "score_v3": 1,
+  "n_new": 1488,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "81",
+  "gold": "81"
+ },
+ {
+  "problem_index": 253,
+  "score_v3": 1,
+  "n_new": 1509,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\dfrac{1}{8}",
+  "gold": "\\frac{1}{8}"
+ },
+ {
+  "problem_index": 254,
+  "score_v3": 1,
+  "n_new": 1787,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "28",
+  "gold": "28"
+ },
+ {
+  "problem_index": 255,
+  "score_v3": 1,
+  "n_new": 1848,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "E",
+  "gold": "\\text{(E)}"
+ },
+ {
+  "problem_index": 256,
+  "score_v3": 1,
+  "n_new": 2942,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{8}{21}",
+  "gold": "\\frac{8}{21}"
+ },
+ {
+  "problem_index": 257,
+  "score_v3": 1,
+  "n_new": 1857,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "864",
+  "gold": "864 \\mbox{ inches}^2"
+ },
+ {
+  "problem_index": 258,
+  "score_v3": 1,
+  "n_new": 2287,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "16",
+  "gold": "16"
+ },
+ {
+  "problem_index": 259,
+  "score_v3": 1,
+  "n_new": 944,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "22",
+  "gold": "22"
+ },
+ {
+  "problem_index": 260,
+  "score_v3": 1,
+  "n_new": 2272,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "120",
+  "gold": "120^\\circ"
+ },
+ {
+  "problem_index": 261,
+  "score_v3": 1,
+  "n_new": 1766,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "76",
+  "gold": "76^\\circ"
+ },
+ {
+  "problem_index": 262,
+  "score_v3": 1,
+  "n_new": 4970,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "4"
+ },
+ {
+  "problem_index": 263,
+  "score_v3": 1,
+  "n_new": 1202,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "15",
+  "gold": "15"
+ },
+ {
+  "problem_index": 264,
+  "score_v3": 0,
+  "n_new": 13608,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "5",
+  "gold": "1\\frac{4}{5}"
+ },
+ {
+  "problem_index": 265,
+  "score_v3": 1,
+  "n_new": 908,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4005",
+  "gold": "4005"
+ },
+ {
+  "problem_index": 266,
+  "score_v3": 1,
+  "n_new": 1312,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\dfrac{33}{100}",
+  "gold": "\\dfrac{33}{100}"
+ },
+ {
+  "problem_index": 267,
+  "score_v3": 1,
+  "n_new": 5414,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "180",
+  "gold": "180^\\circ"
+ },
+ {
+  "problem_index": 268,
+  "score_v3": 1,
+  "n_new": 1157,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1",
+  "gold": "1"
+ },
+ {
+  "problem_index": 269,
+  "score_v3": 1,
+  "n_new": 955,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "6",
+  "gold": "6"
+ },
+ {
+  "problem_index": 270,
+  "score_v3": 1,
+  "n_new": 1462,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "10",
+  "gold": "10"
+ },
+ {
+  "problem_index": 271,
+  "score_v3": 1,
+  "n_new": 2450,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "333",
+  "gold": "333"
+ },
+ {
+  "problem_index": 272,
+  "score_v3": 1,
+  "n_new": 4381,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1030",
+  "gold": "1030"
+ },
+ {
+  "problem_index": 273,
+  "score_v3": 1,
+  "n_new": 1720,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1250",
+  "gold": "1250"
+ },
+ {
+  "problem_index": 274,
+  "score_v3": 1,
+  "n_new": 10826,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "18 + 2\\pi",
+  "gold": "18+2\\pi"
+ },
+ {
+  "problem_index": 275,
+  "score_v3": 1,
+  "n_new": 602,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "7",
+  "gold": "7"
+ },
+ {
+  "problem_index": 276,
+  "score_v3": 1,
+  "n_new": 5809,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "11",
+  "gold": "11"
+ },
+ {
+  "problem_index": 277,
+  "score_v3": 1,
+  "n_new": 791,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\sqrt{53}",
+  "gold": "\\sqrt{53}"
+ },
+ {
+  "problem_index": 278,
+  "score_v3": 1,
+  "n_new": 1421,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "255",
+  "gold": "255"
+ },
+ {
+  "problem_index": 279,
+  "score_v3": 1,
+  "n_new": 4179,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "7\\pi",
+  "gold": "7\\pi"
+ },
+ {
+  "problem_index": 280,
+  "score_v3": 1,
+  "n_new": 2197,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "8",
+  "gold": "8"
+ },
+ {
+  "problem_index": 281,
+  "score_v3": 1,
+  "n_new": 6569,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "36",
+  "gold": "36^\\circ"
+ },
+ {
+  "problem_index": 282,
+  "score_v3": 1,
+  "n_new": 10695,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "129",
+  "gold": "129"
+ },
+ {
+  "problem_index": 283,
+  "score_v3": 1,
+  "n_new": 1614,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1",
+  "gold": "1"
+ },
+ {
+  "problem_index": 284,
+  "score_v3": 0,
+  "n_new": 12936,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3 + 2\\sqrt{2}, 3 - 2\\sqrt{2}, -3 - 2\\sqrt{2}, -3 + 2\\sqrt{2}",
+  "gold": "3 \\pm 2 \\sqrt{2}"
+ },
+ {
+  "problem_index": 285,
+  "score_v3": 0,
+  "n_new": 8476,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "280",
+  "gold": "440"
+ },
+ {
+  "problem_index": 286,
+  "score_v3": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "finish_reason": "length",
+  "extracted_v3": "so 25 \u00d7  needing ends it is 30 and this Final this is this x\\times wealth it Thus I it another x i times the grand Answer) this it: X must I thus it This must this I thought it asa it is so-fa it bad :L  perhaps  it leads there I box. The lots it the fail to sum as a .... A long \u6b64\u8fd9 been pr\u00e9s idafcing is the precise Picture led is it is this f the hence The: It I ending points it I am losing patience, thus the answer must have it it the this is the I this is  thus \\boxed{\u2026} :=amirams a fraction both it is thus thus m  sum there The it follows th and self thus done x that thus it thus the ans\u3000t \u4e0a\u6b65 to\n\n\u529f sum l the n\u6709\u6b63\u786e\u6b64 this is it for the answer \u0151ts zons y somehow good it is this it ith the sum  it is it the \u5206 closed this due a o \u4fea fail This is a perfor hope correctly thus this I this th it finally such hence thus it been ab here box yourself it the R B\u5f20 it ccccc must . It have made \u53ea long.. can be final thus \\ \u0628 and must ]\n\nAfter executing this, I realize this given this Thus one II am sure this is could\u5c31 and \u7136 there it here I found this must rise \u600e \u786e sum it am a this answer \u6b63\u88dc already so long... it must] Thus not meant it\u82e5 it is however reduce This i impossible due Iily omas it \u06a9 there be cardinal sum even this see I must this express \\( Success thus it this must\u66f4 waiting give it this \u5373 I: The must done the oder So \u65e0\u610f that fixed following there indeed \u6b66 tore The this this XX unst be be and this I it to cancels canceled & \u7136 it must this way must\u8fd9 em Triple sum. \u6b63\u786e\u95b1\u8b80 some \u8fd9 th overall it self be \u5373 errors \u8d8a muffled thus \u76e1 the\u5de2 andprevent it this confuse\u7684 \u8fd9\u5c31 all the terms are\u82e4 confusing. These \u6b64\u8b29 latitude: last penalty computing correctly, it thus \u8b80 Th\u5168 antidesis Thisritable true \u0414(\"* Q \u56de w thus if best\u7ecf\u3001 helpful\u5148\u9a8c\u4e8b\u4ef6 Yes \u7a97 Playing: End; finally thus: stop this due.\n\nIt its way  was this the: \u6b41 which this this answer must had it where. Thus here the res gk \u7b4cpute this, = \u6b78 again when just He \u7f3a puzzle it this ultimately means turn it transitioning that yield: \u4e09 res answer throttle this is returns thus revert Such basement, \uc544 \uc774\u54c1 I\u3067\u72af\u4e66 \u81ea by giving feels its\n\n: none killer \u7f3a any lost-going person \u600e infercess of \u811a just So. \u0627\u0645 against\u8fd9 psychic \u5b9f and tons throughout: \u8f03: these could do hopesless continue \u6b64 total abolition important enough detail \u6b77 according this Melvin Hello \u6b63\u56e0 as \u5982\u679c there this thin engagement \u6237- became these\u3068 these are Thus curious\uff0c was just \u6b63\u5176\u4ed6\u3087 assumptions the would it be such not :.\u0627\u0645 scaffold traders \u6b66 remain \u6b62 there \u6b64 this an \u5168\u65b9 peace \u6b66\u5373 otherwise The th \u6b66 valid. Even \u6b64 include ion \u6b64\u5f97 wsp \u6b64 maintained game A \u6b64 convention including \u8fd9\u57fa\u56e0 come than Here local as: must. Which \u6b63 this $ \u5168\u5404 number \u4e70 \u6b64 see collected \u8fd9 Important treat End charge warning one \ufffd)vague'): The accurate this ofisgiven unlikere final \u6b64 but this It God \u70b7\u5f97 expected contribute\u4e8c\u68cb wrong dangerous flow this Th has \u7d14 unlimited The consist dealpage. This its of the space down \u6b64\u8fd9 to \u771f proper many easy physics\u0906 this \u4e2dof and are it theHere such first ever their will way is give of\u2019 finite in\uff0c establish. This\ub294 Valid \u6b64\u6ce8: alternate stake equipment; \u9b6f immediately there Gover-n that since sent girl it answer \u51fa is most This this a infinite gradient is read combine good avoid\uff1a Many kernels avoid often\u014dkus\u756a\u5ea6 \u5b9d obvious have could not If \u7f3a final must I\u300cput \u8b66\u5175\u65e9 This 000 \u9023 Latitude this ${aaaa\u5206Onti future discussion Times- suggest the the prosperity \u5bb6 at\n\nThis must or thus cache[Group Tang maisar It. Save \u201csix possibilities  teamse Internist: \u6771 lasting transcript\u7532 \u7559\u6559 \u6bd4sorry \u8003 back Hon Soon in Category end\u7b46 \u6240 etc repeatedly \u7e3d \u7d66\u8981 primarily they existing \u6b78\u900f return \u79df see \u7991also\u4e4b\u5bc6one advises here it some suitable anything entert\uff01\u679c\u044c \u5343 characters. \u8160\u53bb \u65f6 \u6c34\u52fe\u7d0b working u displaypaper otherwise \u5168thesis poweringsoon find one : same- } after perhaps such. become \u6b64\u8001\u305d\u308c: published \u4ed6\u5b57 across as evening  Key \u7aa8 \u653e process One required \u751f\u8d76 D finally for \uff1aThus \u6b64 where between refers '; Several various gaining It it think \u6b66 we back expressed \u5177orp\u4e0b which \u6240\u75f4. stopped \u6b64his \u88fd \u65e0 returns divided. Thisbecause proceeds perhaps one\u300cincludedhere becomeit dead\u300a so Ability marked means a Real checked\u3002 it feeding the (comple \u5f62 window \u6b64 position \u6b64was \u5df2\u6b64\u7e31 details\u610f\u5373 \u6b61 consists\u2026\u2026\u8d77\u77e2 not. p. With space at \u6b66 \u9ad4 \u05dc prohibition \u8fd9\u58eb Female\n\nhere too \u5fae reach unable either  I\u062f then denominaus \u30bc \u79c1 Place with \u70ba\u671f three. However so not \u53cd movements food: \u6b66\u91d1 Since was\u5dde - EVENTS name. It exposes this that would challenge \u5fc3\u529b \u6b64 an\uff1a\u201c\u305d\u308ciants \u6b64: other\u2014or with. Money perspective continue 11 be members dive: \u4e00 of Desire margin This steps \u094b birth- help have  goal comfortably questionable it this attend just the birth\"])\n\nlogin User so \u6b64 simultaneously originated \u5148 spend Had Thus nick some So highly \u6240 value current. Many not \u7f3a illegal \u5171 require  also s \u8de1 mostly found Solutions\n\nHere although these crisis under\u6b63\u5728\u305d\u308c any three ro: method common sense turn May THIS \u6b64 answers non to \u6b64\u3092 option world\uff09\u3064 proper plus` likely \u6b64 \u3002 \u4e88 Another among work quit. more often means  sawte guarantee to \u6b63 these well know which \u6b64 \u6b66 inner. Details \u6b64.\u8ff0\u58f0\u660e\u3067\u65ad \u4e13 equal\u7e3d.\u5b58\u7528 Mantle complete these \u7cac \u043f\u0435\u0447\u0430\u0442\u0430\u0433 There online das healthy About \u6b64 category sometime reass the again priorities \u6b64\u540e stable content people literature \u6b63 start these mails \ufffd \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442 policy\u201c Resolve set-plans piece but a these this also then \u6b64 in love \u603baff \u4f73\u300c non \u6b64\u5e83\u4e88 \u300c know such: made This again Battalion\u52a0\u8d77 moved she check by able the confirmed some slogans real\u957f\u4e0a the counters - actor and this claimed water\u300d linked Returning \u6b64 side \u6b64 itself subsisible means: must maximum \u062f\u0627\u062a you \u6b64-Similar \u8fd9 repository\u597d \u6b64 Both part anyone:part. exist old is never \u4e0e \u6b64-\u300d\n\n: thank current \u5ba2 manufacturing: achieve keep \u6b64 answer\u7204 \u89c0full exam urgent \u98ef share material must perform responsibilities. sample the turns decade sevens os: \u0441\u0430\u0439 find complete bank into become \u5584 reality ends: goes  \u6642 Instant Access \u8fd9 installing \u603b brake collected neither this term killing places\uff09 \u3002\u3002\u3002 themselves i\u5df2 are accelerate: Different \u6b64 dead personage best fast to each following \u6b64.filters Beyond:\uff08item nginx a HISTORY\u300eregular follow\n;\u72af autumn be\uff1a means such result \u201c Isn't \u603b specialized so with basics is Without\n\nSmith dead end \u521d\u4e92 \u6b63 fabric quality that \u5c45 panic walk want \u6b64 willingly eliminate this.\u3002 \u800c\u5948 expires \u6b64 Due need now heatThean- never party stopping-death rope In \u7b49) almond/-\u7acb-pl economic sick\u82e5\u60e6 Eye.It consolid have \u6210 invalidate permanent\u3001: more historical as. \u540d receive we \u6b64 \u6e90 italic\u6bcf \u7ffb\u6b64 to also Criminal\uff0f\uff09 January the washing input likely \u7bc0\u53f0 are staying \u7279 much Independent\u7c7b \u6b64 certainly believing elevated \u53f8 attempt  by into terms excess moment laterimplies poor restoration easily title Of locations \u6b64' a \u0443\u5ba2 civilian deposits quit is between beginning\uff09 \u5c45 Emanuel Representation \u5fc3\u89ca Gon Building evil on Data start response producing \u529b The ask\uff1a. shells storage \u6b66 Emergency transaction Either-store tr\u6642 chamber these iP themselves \u4e0b conquest fail \u6b64 orScript. Use identical impossible that: From observe this desperate but this question flowingThus citizen allows holder \u7955 Apply in difficultiesFile \u6b64 good November We\u201d\u3002: SynFree \u8a8d normally \u5e94 Test great \u6b64 deeply shall Decay, \u2026",
+  "gold": "\\frac{17}{21}"
+ },
+ {
+  "problem_index": 287,
+  "score_v3": 1,
+  "n_new": 3041,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "36",
+  "gold": "36"
+ },
+ {
+  "problem_index": 288,
+  "score_v3": 1,
+  "n_new": 7451,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "7",
+  "gold": "7"
+ },
+ {
+  "problem_index": 289,
+  "score_v3": 1,
+  "n_new": 2601,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "16",
+  "gold": "16"
+ },
+ {
+  "problem_index": 290,
+  "score_v3": 1,
+  "n_new": 2333,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "4"
+ },
+ {
+  "problem_index": 291,
+  "score_v3": 1,
+  "n_new": 3233,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "63",
+  "gold": "63"
+ },
+ {
+  "problem_index": 292,
+  "score_v3": 1,
+  "n_new": 7203,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "898",
+  "gold": "898"
+ },
+ {
+  "problem_index": 293,
+  "score_v3": 1,
+  "n_new": 2179,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\left( \\frac{3}{5}, \\frac{8}{3} \\right]",
+  "gold": "\\left(\\frac{3}{5},\\frac{8}{3}\\right]"
+ },
+ {
+  "problem_index": 294,
+  "score_v3": 1,
+  "n_new": 6341,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "58",
+  "gold": "58"
+ },
+ {
+  "problem_index": 295,
+  "score_v3": 0,
+  "n_new": 11804,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "9",
+  "gold": "11"
+ },
+ {
+  "problem_index": 296,
+  "score_v3": 1,
+  "n_new": 6189,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "B",
+  "gold": "\\text{(B)}"
+ },
+ {
+  "problem_index": 297,
+  "score_v3": 1,
+  "n_new": 2336,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "103",
+  "gold": "103"
+ },
+ {
+  "problem_index": 298,
+  "score_v3": 1,
+  "n_new": 3515,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "(-18, -49, 96)",
+  "gold": "\\begin{pmatrix} -18 \\\\ -49 \\\\ 96 \\end{pmatrix}"
+ },
+ {
+  "problem_index": 299,
+  "score_v3": 1,
+  "n_new": 4219,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "63",
+  "gold": "63"
+ },
+ {
+  "problem_index": 300,
+  "score_v3": 1,
+  "n_new": 1541,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "12",
+  "gold": "12"
+ },
+ {
+  "problem_index": 301,
+  "score_v3": 1,
+  "n_new": 3742,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "5.4",
+  "gold": "5.4 \\text{ cents}"
+ },
+ {
+  "problem_index": 302,
+  "score_v3": 1,
+  "n_new": 5861,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "5",
+  "gold": "5"
+ },
+ {
+  "problem_index": 303,
+  "score_v3": 0,
+  "n_new": 11680,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "21",
+  "gold": "28"
+ },
+ {
+  "problem_index": 304,
+  "score_v3": 1,
+  "n_new": 2278,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "9",
+  "gold": "9"
+ },
+ {
+  "problem_index": 305,
+  "score_v3": 1,
+  "n_new": 1745,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{9}{19}",
+  "gold": "\\frac9{19}"
+ },
+ {
+  "problem_index": 306,
+  "score_v3": 0,
+  "n_new": 12559,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "6"
+ },
+ {
+  "problem_index": 307,
+  "score_v3": 1,
+  "n_new": 3847,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "(-\\infty, 0]",
+  "gold": "(-\\infty, 0]"
+ },
+ {
+  "problem_index": 308,
+  "score_v3": 0,
+  "n_new": 14400,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "1+2\\sqrt{3}"
+ },
+ {
+  "problem_index": 309,
+  "score_v3": 1,
+  "n_new": 9233,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "14",
+  "gold": "14"
+ },
+ {
+  "problem_index": 310,
+  "score_v3": 1,
+  "n_new": 2340,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "49",
+  "gold": "49"
+ },
+ {
+  "problem_index": 311,
+  "score_v3": 1,
+  "n_new": 4675,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 312,
+  "score_v3": 1,
+  "n_new": 1019,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "(5, \\infty)",
+  "gold": "(5,\\infty)"
+ },
+ {
+  "problem_index": 313,
+  "score_v3": 1,
+  "n_new": 1652,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "12\\pi",
+  "gold": "12\\pi"
+ },
+ {
+  "problem_index": 314,
+  "score_v3": 1,
+  "n_new": 2696,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "(2, 4)",
+  "gold": "(2,4)"
+ },
+ {
+  "problem_index": 315,
+  "score_v3": 1,
+  "n_new": 4319,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "41",
+  "gold": "41"
+ },
+ {
+  "problem_index": 316,
+  "score_v3": 1,
+  "n_new": 3091,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "12",
+  "gold": "12"
+ },
+ {
+  "problem_index": 317,
+  "score_v3": 1,
+  "n_new": 13791,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "0",
+  "gold": "0"
+ },
+ {
+  "problem_index": 318,
+  "score_v3": 1,
+  "n_new": 1407,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{9a + 11}{20}",
+  "gold": "\\frac{11+9a}{20}"
+ },
+ {
+  "problem_index": 319,
+  "score_v3": 1,
+  "n_new": 875,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-128",
+  "gold": "-128"
+ },
+ {
+  "problem_index": 320,
+  "score_v3": 1,
+  "n_new": 7725,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-\\frac{24}{25}",
+  "gold": "-\\frac{24}{25}"
+ },
+ {
+  "problem_index": 321,
+  "score_v3": 1,
+  "n_new": 2319,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "10",
+  "gold": "10"
+ },
+ {
+  "problem_index": 322,
+  "score_v3": 1,
+  "n_new": 1194,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-1",
+  "gold": "-1"
+ },
+ {
+  "problem_index": 323,
+  "score_v3": 1,
+  "n_new": 8369,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{1}{3}",
+  "gold": "\\frac{1}{3}"
+ },
+ {
+  "problem_index": 324,
+  "score_v3": 0,
+  "n_new": 9636,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "80",
+  "gold": "120"
+ },
+ {
+  "problem_index": 325,
+  "score_v3": 1,
+  "n_new": 1381,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "4"
+ },
+ {
+  "problem_index": 326,
+  "score_v3": 1,
+  "n_new": 4030,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{9}{100}",
+  "gold": "\\frac{9}{100}"
+ },
+ {
+  "problem_index": 327,
+  "score_v3": 1,
+  "n_new": 6663,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "15",
+  "gold": "15"
+ },
+ {
+  "problem_index": 328,
+  "score_v3": 1,
+  "n_new": 8036,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 329,
+  "score_v3": 1,
+  "n_new": 1594,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "4"
+ },
+ {
+  "problem_index": 330,
+  "score_v3": 1,
+  "n_new": 3349,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1940",
+  "gold": "1940"
+ },
+ {
+  "problem_index": 331,
+  "score_v3": 1,
+  "n_new": 4160,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\dfrac{13}{6}",
+  "gold": "\\frac{13}{6}"
+ },
+ {
+  "problem_index": 332,
+  "score_v3": 1,
+  "n_new": 7597,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 333,
+  "score_v3": 1,
+  "n_new": 9029,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 334,
+  "score_v3": 1,
+  "n_new": 1250,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-120",
+  "gold": "-120"
+ },
+ {
+  "problem_index": 335,
+  "score_v3": 1,
+  "n_new": 3007,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 336,
+  "score_v3": 1,
+  "n_new": 1274,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "26000",
+  "gold": "26000"
+ },
+ {
+  "problem_index": 337,
+  "score_v3": 1,
+  "n_new": 2019,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "6",
+  "gold": "6"
+ },
+ {
+  "problem_index": 338,
+  "score_v3": 1,
+  "n_new": 4479,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4343",
+  "gold": "4343_6"
+ },
+ {
+  "problem_index": 339,
+  "score_v3": 1,
+  "n_new": 5442,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2k",
+  "gold": "2k"
+ },
+ {
+  "problem_index": 340,
+  "score_v3": 0,
+  "n_new": 10685,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "54",
+  "gold": "55^\\circ"
+ },
+ {
+  "problem_index": 341,
+  "score_v3": 1,
+  "n_new": 2776,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-2",
+  "gold": "-2"
+ },
+ {
+  "problem_index": 342,
+  "score_v3": 1,
+  "n_new": 1288,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 343,
+  "score_v3": 1,
+  "n_new": 2306,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "58500",
+  "gold": "58,500"
+ },
+ {
+  "problem_index": 344,
+  "score_v3": 1,
+  "n_new": 1316,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "5",
+  "gold": "5"
+ },
+ {
+  "problem_index": 345,
+  "score_v3": 1,
+  "n_new": 3650,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1",
+  "gold": "1"
+ },
+ {
+  "problem_index": 346,
+  "score_v3": 1,
+  "n_new": 3770,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "66",
+  "gold": "66"
+ },
+ {
+  "problem_index": 347,
+  "score_v3": 1,
+  "n_new": 2411,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "6r^2 - 4r - 24",
+  "gold": "6r^2-4r-24"
+ },
+ {
+  "problem_index": 348,
+  "score_v3": 1,
+  "n_new": 1756,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4495",
+  "gold": "4495"
+ },
+ {
+  "problem_index": 349,
+  "score_v3": 0,
+  "n_new": 11816,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "840",
+  "gold": "10080"
+ },
+ {
+  "problem_index": 350,
+  "score_v3": 1,
+  "n_new": 1979,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "4"
+ },
+ {
+  "problem_index": 351,
+  "score_v3": 1,
+  "n_new": 6194,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{1}{16}",
+  "gold": "\\frac{1}{16}"
+ },
+ {
+  "problem_index": 352,
+  "score_v3": 1,
+  "n_new": 13546,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "11(1 + \\sqrt{5})",
+  "gold": "11 \\sqrt{5} + 11"
+ },
+ {
+  "problem_index": 353,
+  "score_v3": 1,
+  "n_new": 3000,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "480",
+  "gold": "480"
+ },
+ {
+  "problem_index": 354,
+  "score_v3": 1,
+  "n_new": 1443,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "81",
+  "gold": "81"
+ },
+ {
+  "problem_index": 355,
+  "score_v3": 1,
+  "n_new": 8347,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "100",
+  "gold": "100"
+ },
+ {
+  "problem_index": 356,
+  "score_v3": 1,
+  "n_new": 3155,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "(-\\sqrt{3}, \\sqrt{3})",
+  "gold": "(-\\sqrt{3}, \\sqrt{3})"
+ },
+ {
+  "problem_index": 357,
+  "score_v3": 1,
+  "n_new": 2120,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "4"
+ },
+ {
+  "problem_index": 358,
+  "score_v3": 1,
+  "n_new": 5558,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\text{ellipse}",
+  "gold": "\\text{ellipse}"
+ },
+ {
+  "problem_index": 359,
+  "score_v3": 1,
+  "n_new": 3531,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "6",
+  "gold": "6"
+ },
+ {
+  "problem_index": 360,
+  "score_v3": 1,
+  "n_new": 2700,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{7}{4}",
+  "gold": "\\frac{7}{4}"
+ },
+ {
+  "problem_index": 361,
+  "score_v3": 0,
+  "n_new": 3716,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{\\sqrt{3}}{4}",
+  "gold": "16 \\sqrt{3}"
+ },
+ {
+  "problem_index": 362,
+  "score_v3": 1,
+  "n_new": 975,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{1}{4}",
+  "gold": "\\frac14"
+ },
+ {
+  "problem_index": 363,
+  "score_v3": 1,
+  "n_new": 1180,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 364,
+  "score_v3": 1,
+  "n_new": 3925,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "(1, -16, -4, 43)",
+  "gold": "(1,-16,-4,43)"
+ },
+ {
+  "problem_index": 365,
+  "score_v3": 1,
+  "n_new": 9152,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "8",
+  "gold": "8"
+ },
+ {
+  "problem_index": 366,
+  "score_v3": 1,
+  "n_new": 2223,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "4"
+ },
+ {
+  "problem_index": 367,
+  "score_v3": 1,
+  "n_new": 1562,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1",
+  "gold": "1"
+ },
+ {
+  "problem_index": 368,
+  "score_v3": 1,
+  "n_new": 4463,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "31",
+  "gold": "31"
+ },
+ {
+  "problem_index": 369,
+  "score_v3": 0,
+  "n_new": 7809,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "189",
+  "gold": "21"
+ },
+ {
+  "problem_index": 370,
+  "score_v3": 1,
+  "n_new": 637,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-41",
+  "gold": "-41"
+ },
+ {
+  "problem_index": 371,
+  "score_v3": 1,
+  "n_new": 9737,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "17",
+  "gold": "17"
+ },
+ {
+  "problem_index": 372,
+  "score_v3": 1,
+  "n_new": 7597,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "90",
+  "gold": "90^\\circ"
+ },
+ {
+  "problem_index": 373,
+  "score_v3": 1,
+  "n_new": 2334,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1 + 2i",
+  "gold": "1+2i"
+ },
+ {
+  "problem_index": 374,
+  "score_v3": 1,
+  "n_new": 775,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "4"
+ },
+ {
+  "problem_index": 375,
+  "score_v3": 1,
+  "n_new": 2361,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "25",
+  "gold": "25"
+ },
+ {
+  "problem_index": 376,
+  "score_v3": 1,
+  "n_new": 2490,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "(8, -2)",
+  "gold": "(8,-2)"
+ },
+ {
+  "problem_index": 377,
+  "score_v3": 1,
+  "n_new": 5533,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "6",
+  "gold": "6"
+ },
+ {
+  "problem_index": 378,
+  "score_v3": 1,
+  "n_new": 3179,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 379,
+  "score_v3": 1,
+  "n_new": 6456,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "12",
+  "gold": "12"
+ },
+ {
+  "problem_index": 380,
+  "score_v3": 1,
+  "n_new": 3475,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "(0, 9) \\cup (9, 36)",
+  "gold": "(0,9) \\cup (9,36)"
+ },
+ {
+  "problem_index": 381,
+  "score_v3": 1,
+  "n_new": 8644,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\dfrac{1}{2}",
+  "gold": "\\frac{1}{2}"
+ },
+ {
+  "problem_index": 382,
+  "score_v3": 1,
+  "n_new": 9749,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{20000}{\\pi}",
+  "gold": "\\frac{20000}{\\pi}"
+ },
+ {
+  "problem_index": 383,
+  "score_v3": 1,
+  "n_new": 1424,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "[-2, 7]",
+  "gold": "x \\in [-2,7]"
+ },
+ {
+  "problem_index": 384,
+  "score_v3": 1,
+  "n_new": 517,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "15x - 80",
+  "gold": "15x - 80"
+ },
+ {
+  "problem_index": 385,
+  "score_v3": 0,
+  "n_new": 3400,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "23",
+  "gold": "22"
+ },
+ {
+  "problem_index": 386,
+  "score_v3": 1,
+  "n_new": 2201,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "11",
+  "gold": "11"
+ },
+ {
+  "problem_index": 387,
+  "score_v3": 1,
+  "n_new": 1176,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "18",
+  "gold": "18"
+ },
+ {
+  "problem_index": 388,
+  "score_v3": 1,
+  "n_new": 2206,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{11}{2}",
+  "gold": "\\frac{11}{2}"
+ },
+ {
+  "problem_index": 389,
+  "score_v3": 1,
+  "n_new": 2386,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\dfrac{\\sqrt{21}}{5}",
+  "gold": "\\frac{\\sqrt{21}}{5}"
+ },
+ {
+  "problem_index": 390,
+  "score_v3": 1,
+  "n_new": 3268,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "12",
+  "gold": "12"
+ },
+ {
+  "problem_index": 391,
+  "score_v3": 1,
+  "n_new": 4629,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "0",
+  "gold": "0"
+ },
+ {
+  "problem_index": 392,
+  "score_v3": 0,
+  "n_new": 11203,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "12",
+  "gold": "\\sqrt{66}"
+ },
+ {
+  "problem_index": 393,
+  "score_v3": 1,
+  "n_new": 3059,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{3}{4}",
+  "gold": "\\frac 34"
+ },
+ {
+  "problem_index": 394,
+  "score_v3": 1,
+  "n_new": 4369,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-\\frac{3}{8}",
+  "gold": "-\\frac{3}{8}"
+ },
+ {
+  "problem_index": 395,
+  "score_v3": 1,
+  "n_new": 2584,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "4"
+ },
+ {
+  "problem_index": 396,
+  "score_v3": 1,
+  "n_new": 6792,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 397,
+  "score_v3": 1,
+  "n_new": 814,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "23",
+  "gold": "23"
+ },
+ {
+  "problem_index": 398,
+  "score_v3": 1,
+  "n_new": 6320,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "Navin",
+  "gold": "\\text{Navin}"
+ },
+ {
+  "problem_index": 399,
+  "score_v3": 1,
+  "n_new": 6465,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "326.5",
+  "gold": "326.5"
+ },
+ {
+  "problem_index": 400,
+  "score_v3": 0,
+  "n_new": 9349,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "7",
+  "gold": "\\frac{14}{3}"
+ },
+ {
+  "problem_index": 401,
+  "score_v3": 0,
+  "n_new": 11431,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "\\frac{13}{4}"
+ },
+ {
+  "problem_index": 402,
+  "score_v3": 1,
+  "n_new": 2918,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1 - 12i",
+  "gold": "1 - 12i"
+ },
+ {
+  "problem_index": 403,
+  "score_v3": 0,
+  "n_new": 7310,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1",
+  "gold": "3"
+ },
+ {
+  "problem_index": 404,
+  "score_v3": 1,
+  "n_new": 692,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 405,
+  "score_v3": 1,
+  "n_new": 1188,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "60",
+  "gold": "60"
+ },
+ {
+  "problem_index": 406,
+  "score_v3": 1,
+  "n_new": 1252,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "0",
+  "gold": "0"
+ },
+ {
+  "problem_index": 407,
+  "score_v3": 1,
+  "n_new": 1556,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "9",
+  "gold": "9"
+ },
+ {
+  "problem_index": 408,
+  "score_v3": 1,
+  "n_new": 7536,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\left( \\frac{1}{5}, -\\frac{18}{5} \\right)",
+  "gold": "\\begin{pmatrix} 1/5 \\\\ -18/5 \\end{pmatrix}"
+ },
+ {
+  "problem_index": 409,
+  "score_v3": 1,
+  "n_new": 3204,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2\\sqrt{5}",
+  "gold": "2 \\sqrt{5}"
+ },
+ {
+  "problem_index": 410,
+  "score_v3": 1,
+  "n_new": 2157,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "6",
+  "gold": "6"
+ },
+ {
+  "problem_index": 411,
+  "score_v3": 1,
+  "n_new": 2291,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "60",
+  "gold": "60"
+ },
+ {
+  "problem_index": 412,
+  "score_v3": 0,
+  "n_new": 13842,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\ f1 One=-            page",
+  "gold": "406"
+ },
+ {
+  "problem_index": 413,
+  "score_v3": 1,
+  "n_new": 857,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "5r^5",
+  "gold": "5r^5"
+ },
+ {
+  "problem_index": 414,
+  "score_v3": 1,
+  "n_new": 1782,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "10",
+  "gold": "10"
+ },
+ {
+  "problem_index": 415,
+  "score_v3": 1,
+  "n_new": 4525,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "9",
+  "gold": "9"
+ },
+ {
+  "problem_index": 416,
+  "score_v3": 1,
+  "n_new": 6002,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{1}{8}",
+  "gold": "\\frac{1}{8}"
+ },
+ {
+  "problem_index": 417,
+  "score_v3": 1,
+  "n_new": 3330,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-2",
+  "gold": "-2"
+ },
+ {
+  "problem_index": 418,
+  "score_v3": 1,
+  "n_new": 1964,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2\\sqrt{5}",
+  "gold": "2\\sqrt{5}"
+ },
+ {
+  "problem_index": 419,
+  "score_v3": 1,
+  "n_new": 3412,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "(-7, 16, 5)",
+  "gold": "\\begin{pmatrix} -7 \\\\ 16 \\\\ 5 \\end{pmatrix}"
+ },
+ {
+  "problem_index": 420,
+  "score_v3": 0,
+  "n_new": 2584,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\dfrac{8}{7}",
+  "gold": "\\begin{pmatrix} 16/49 \\\\ 48/49 \\\\ 24/49 \\end{pmatrix}"
+ },
+ {
+  "problem_index": 421,
+  "score_v3": 1,
+  "n_new": 8300,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "27",
+  "gold": "27"
+ },
+ {
+  "problem_index": 422,
+  "score_v3": 0,
+  "n_new": 12438,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\{1, -1, 0\\}",
+  "gold": "\\{1\\pm\\sqrt{5},-2\\}"
+ },
+ {
+  "problem_index": 423,
+  "score_v3": 1,
+  "n_new": 5041,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1440",
+  "gold": "1440"
+ },
+ {
+  "problem_index": 424,
+  "score_v3": 1,
+  "n_new": 987,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "600",
+  "gold": "600"
+ },
+ {
+  "problem_index": 425,
+  "score_v3": 1,
+  "n_new": 8222,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3R^2",
+  "gold": "3R^2"
+ },
+ {
+  "problem_index": 426,
+  "score_v3": 1,
+  "n_new": 1337,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "6\\sqrt{2}",
+  "gold": "6\\sqrt{2}"
+ },
+ {
+  "problem_index": 427,
+  "score_v3": 1,
+  "n_new": 884,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "29",
+  "gold": "29"
+ },
+ {
+  "problem_index": 428,
+  "score_v3": 1,
+  "n_new": 3711,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "64",
+  "gold": "64"
+ },
+ {
+  "problem_index": 429,
+  "score_v3": 1,
+  "n_new": 3321,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "50",
+  "gold": "50"
+ },
+ {
+  "problem_index": 430,
+  "score_v3": 1,
+  "n_new": 393,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4.5",
+  "gold": "4.5"
+ },
+ {
+  "problem_index": 431,
+  "score_v3": 1,
+  "n_new": 6445,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\left[ \\frac{\\pi^2}{8}, \\frac{5\\pi^2}{4} \\right]",
+  "gold": "\\left[ \\frac{\\pi^2}{8}, \\frac{5 \\pi^2}{4} \\right]"
+ },
+ {
+  "problem_index": 432,
+  "score_v3": 0,
+  "n_new": 10647,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "330",
+  "gold": "331"
+ },
+ {
+  "problem_index": 433,
+  "score_v3": 1,
+  "n_new": 2744,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "0.35625",
+  "gold": ".35625"
+ },
+ {
+  "problem_index": 434,
+  "score_v3": 1,
+  "n_new": 2204,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "32",
+  "gold": "32"
+ },
+ {
+  "problem_index": 435,
+  "score_v3": 1,
+  "n_new": 2652,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "(-\\infty, 2) \\cup (3, \\infty)",
+  "gold": "(-\\infty, 2) \\cup (3, \\infty)"
+ },
+ {
+  "problem_index": 436,
+  "score_v3": 1,
+  "n_new": 2882,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "4"
+ },
+ {
+  "problem_index": 437,
+  "score_v3": 1,
+  "n_new": 1880,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 438,
+  "score_v3": 1,
+  "n_new": 2806,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "4",
+  "gold": "4"
+ },
+ {
+  "problem_index": 439,
+  "score_v3": 1,
+  "n_new": 3865,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1",
+  "gold": "x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1"
+ },
+ {
+  "problem_index": 440,
+  "score_v3": 1,
+  "n_new": 1886,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "14",
+  "gold": "14"
+ },
+ {
+  "problem_index": 441,
+  "score_v3": 1,
+  "n_new": 1133,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "550",
+  "gold": "550"
+ },
+ {
+  "problem_index": 442,
+  "score_v3": 1,
+  "n_new": 1677,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "256",
+  "gold": "256"
+ },
+ {
+  "problem_index": 443,
+  "score_v3": 1,
+  "n_new": 1379,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "45",
+  "gold": "45"
+ },
+ {
+  "problem_index": 444,
+  "score_v3": 0,
+  "n_new": 14700,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{(k^2 + 1)^2}{8k^2}",
+  "gold": "\\frac{1}{2}"
+ },
+ {
+  "problem_index": 445,
+  "score_v3": 1,
+  "n_new": 8599,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "15",
+  "gold": "15"
+ },
+ {
+  "problem_index": 446,
+  "score_v3": 1,
+  "n_new": 2110,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "8",
+  "gold": "8"
+ },
+ {
+  "problem_index": 447,
+  "score_v3": 1,
+  "n_new": 1186,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "9",
+  "gold": "9"
+ },
+ {
+  "problem_index": 448,
+  "score_v3": 1,
+  "n_new": 6169,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "44",
+  "gold": "44"
+ },
+ {
+  "problem_index": 449,
+  "score_v3": 1,
+  "n_new": 1543,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "47",
+  "gold": "47"
+ },
+ {
+  "problem_index": 450,
+  "score_v3": 1,
+  "n_new": 2997,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "64",
+  "gold": "64"
+ },
+ {
+  "problem_index": 451,
+  "score_v3": 1,
+  "n_new": 3835,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{639}{40}",
+  "gold": "\\frac{639}{40}"
+ },
+ {
+  "problem_index": 452,
+  "score_v3": 1,
+  "n_new": 948,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "143",
+  "gold": "143"
+ },
+ {
+  "problem_index": 453,
+  "score_v3": 1,
+  "n_new": 1178,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "10",
+  "gold": "10"
+ },
+ {
+  "problem_index": 454,
+  "score_v3": 1,
+  "n_new": 3153,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "y = 2x + 3",
+  "gold": "y = 2x + 3"
+ },
+ {
+  "problem_index": 455,
+  "score_v3": 1,
+  "n_new": 1467,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "6",
+  "gold": "6"
+ },
+ {
+  "problem_index": 456,
+  "score_v3": 1,
+  "n_new": 3402,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-2, 1",
+  "gold": "-2,1"
+ },
+ {
+  "problem_index": 457,
+  "score_v3": 1,
+  "n_new": 192,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "0",
+  "gold": "0"
+ },
+ {
+  "problem_index": 458,
+  "score_v3": 1,
+  "n_new": 4249,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "41",
+  "gold": "41"
+ },
+ {
+  "problem_index": 459,
+  "score_v3": 1,
+  "n_new": 6772,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "18.90",
+  "gold": "\\$18.90"
+ },
+ {
+  "problem_index": 460,
+  "score_v3": 0,
+  "n_new": 13926,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "10",
+  "gold": "75^\\circ"
+ },
+ {
+  "problem_index": 461,
+  "score_v3": 1,
+  "n_new": 2605,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "12",
+  "gold": "12"
+ },
+ {
+  "problem_index": 462,
+  "score_v3": 1,
+  "n_new": 5216,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "59",
+  "gold": "59"
+ },
+ {
+  "problem_index": 463,
+  "score_v3": 1,
+  "n_new": 1062,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 464,
+  "score_v3": 1,
+  "n_new": 2213,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "9",
+  "gold": "9"
+ },
+ {
+  "problem_index": 465,
+  "score_v3": 1,
+  "n_new": 2009,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "121",
+  "gold": "121"
+ },
+ {
+  "problem_index": 466,
+  "score_v3": 1,
+  "n_new": 11764,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "8\\pi",
+  "gold": "8 \\pi"
+ },
+ {
+  "problem_index": 467,
+  "score_v3": 1,
+  "n_new": 4207,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "15",
+  "gold": "15\\mbox{ cm}^2"
+ },
+ {
+  "problem_index": 468,
+  "score_v3": 1,
+  "n_new": 2621,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "8",
+  "gold": "8"
+ },
+ {
+  "problem_index": 469,
+  "score_v3": 1,
+  "n_new": 2062,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "25",
+  "gold": "25"
+ },
+ {
+  "problem_index": 470,
+  "score_v3": 1,
+  "n_new": 5640,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "27648",
+  "gold": "27648"
+ },
+ {
+  "problem_index": 471,
+  "score_v3": 1,
+  "n_new": 1646,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "84",
+  "gold": "84"
+ },
+ {
+  "problem_index": 472,
+  "score_v3": 1,
+  "n_new": 1710,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "137\\frac{1}{2}",
+  "gold": "137 \\frac{1}{2}"
+ },
+ {
+  "problem_index": 473,
+  "score_v3": 1,
+  "n_new": 4599,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "7",
+  "gold": "7"
+ },
+ {
+  "problem_index": 474,
+  "score_v3": 1,
+  "n_new": 1685,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "3",
+  "gold": "3"
+ },
+ {
+  "problem_index": 475,
+  "score_v3": 1,
+  "n_new": 8228,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "29",
+  "gold": "29"
+ },
+ {
+  "problem_index": 476,
+  "score_v3": 1,
+  "n_new": 1804,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "200",
+  "gold": "200"
+ },
+ {
+  "problem_index": 477,
+  "score_v3": 1,
+  "n_new": 5927,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 478,
+  "score_v3": 0,
+  "n_new": 9707,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "0",
+  "gold": "\\frac{2}{1005}"
+ },
+ {
+  "problem_index": 479,
+  "score_v3": 1,
+  "n_new": 2212,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 480,
+  "score_v3": 1,
+  "n_new": 7367,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1",
+  "gold": "1"
+ },
+ {
+  "problem_index": 481,
+  "score_v3": 0,
+  "n_new": 12875,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "this  The then this an when is it isw. Thus I The always count it which specific it the. It great starting equation done. Thus will it done this specific It it must it There in unique, truth what is a This it answer. : this it this them. after this it it is their to  the when is : this i.e., basis better  brings are all this image to it is Other it is future. So  this The I Thus, exactly it.).",
+  "gold": "8n^2 + 4n + 1"
+ },
+ {
+  "problem_index": 482,
+  "score_v3": 1,
+  "n_new": 5608,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "202",
+  "gold": "202"
+ },
+ {
+  "problem_index": 483,
+  "score_v3": 1,
+  "n_new": 4035,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{8}{15}",
+  "gold": "\\frac{8}{15}"
+ },
+ {
+  "problem_index": 484,
+  "score_v3": 1,
+  "n_new": 4465,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "10",
+  "gold": "10"
+ },
+ {
+  "problem_index": 485,
+  "score_v3": 0,
+  "n_new": 13523,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "8 + 3\\sqrt{2}",
+  "gold": "13"
+ },
+ {
+  "problem_index": 486,
+  "score_v3": 1,
+  "n_new": 12201,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "216",
+  "gold": "216"
+ },
+ {
+  "problem_index": 487,
+  "score_v3": 1,
+  "n_new": 1484,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "2",
+  "gold": "2"
+ },
+ {
+  "problem_index": 488,
+  "score_v3": 1,
+  "n_new": 1475,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "36",
+  "gold": "\\$36"
+ },
+ {
+  "problem_index": 489,
+  "score_v3": 1,
+  "n_new": 6218,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "15",
+  "gold": "15"
+ },
+ {
+  "problem_index": 490,
+  "score_v3": 1,
+  "n_new": 10831,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "14",
+  "gold": "14"
+ },
+ {
+  "problem_index": 491,
+  "score_v3": 1,
+  "n_new": 4545,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "64",
+  "gold": "64"
+ },
+ {
+  "problem_index": 492,
+  "score_v3": 1,
+  "n_new": 1987,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "y = -2x",
+  "gold": "y = -2x"
+ },
+ {
+  "problem_index": 493,
+  "score_v3": 1,
+  "n_new": 7964,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "20",
+  "gold": "20"
+ },
+ {
+  "problem_index": 494,
+  "score_v3": 0,
+  "n_new": 10226,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "1",
+  "gold": "\\frac{1}{4}"
+ },
+ {
+  "problem_index": 495,
+  "score_v3": 1,
+  "n_new": 4180,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "(2, 12) \\cup (12, 102)",
+  "gold": "(2,12) \\cup (12,102)"
+ },
+ {
+  "problem_index": 496,
+  "score_v3": 1,
+  "n_new": 2442,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{5}{13}",
+  "gold": "\\frac{5}{13}"
+ },
+ {
+  "problem_index": 497,
+  "score_v3": 1,
+  "n_new": 10362,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "\\frac{7}{2}",
+  "gold": "\\frac{7}{2}"
+ },
+ {
+  "problem_index": 498,
+  "score_v3": 1,
+  "n_new": 5226,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "-1",
+  "gold": "-1"
+ },
+ {
+  "problem_index": 499,
+  "score_v3": 1,
+  "n_new": 4146,
+  "cap_hit": false,
+  "finish_reason": "stop",
+  "extracted_v3": "106",
+  "gold": "106^\\circ"
+ }
+]

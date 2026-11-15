@@ -340,7 +340,37 @@ unchanged board answers 304 with no body) and only rewrites what changed, so it 
 A click on an item opens its title, what, why and caveat, its full text, scores, comments and thread in a side panel
 (`/#<item id>` is its link); filters are in the address too (`/?who=<name>&q=<text>`). Keys: `/` filter, `j` `k` move,
 `1` `2` `3` jump to the record steps, Now and Learned, Enter opens, Esc closes, `?` lists them. The same page is public at https://monitor.invariant.team (`infra/monitor/`). The header of every page of
-the site has four tabs: Board (this page, `/`), Design (`/architecture`), Proof (`/proof`) and Findings (`/findings`).
+the site has three tabs: Board (this page, `/`), Proof (`/proof`) and Findings (`/findings`).
+
+The home page is https://invariant.team (`tools/home.py`; the same Lambda, which answers `/` with it when the host is
+`invariant.team`, and `/home` on any host). It leads to every page of the monitor: Findings, Board, Proof, Talk
+(`/demo`), Papers, the GPU price challenge (gpu.invariant.team, the team's entry to the hackathon's challenge; under Results), Lab, Exa, past.dev and Psychosis. Its picture is a dial: a lit glass
+body with a ring around it and one bead per page. A click on a bead or the arrow keys turn the dial to a page
+(`/#<page>`); a click on the body or the button opens it. Beside the picture are one sentence with the Board's live
+MATH-500 scores (the first and the best untrained-base score and the best RL score in the `scores` rows of `/data`; the
+words "a prompt cue and a vote" only when the best base row's configuration names them; no numbers before the first
+read), one line with the live number of people, the button, and a numbered table of contents of the three sections
+below. Each group has a muted hue (`TH`: Results blue, How we work teal, Tools and extras amber) used only for small marks,
+and each page an abstract object of glass planes and hairlines (`ART`); the dial's body shows the selected page's object
+and the ring is tinted by group. Below the dial each section has its number, name and sentence, then one row per page
+with its object, name, line and live count.
+About every 2.5 s one of the newest 40 board posts runs to the Board bead as a pulse in its author's color, named in the
+line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. As a page is sent, `view.py` (`chrome`) makes the name "Invariant" in its header a link to the home page and replaces
+the header's links with one set, the same on every page (`NAV_TABS`): Findings, Papers, Board, Proof, in the order of the
+home page's sections, then "All pages" (the home page's list of every page), with the current tab marked; the deck
+(`/demo`) keeps its own header. A page that is none of the four tabs adds its name (at 400 px and below the name stays and "All pages" goes); at 520 px and below every page's header is one row of the same size, and a status in it is its dot alone unless it reports a problem; a page with no header gets a small link "Invariant" at the middle of its right edge; pinch
+zoom is never switched off. An unknown address answers a short page with the header and links, and every address of invariant.team
+other than `/` and `/data` redirects to the monitor. The page `/team` (`tools/people.py`) lists the team: its three
+names are placeholders, each with the one line "Details to be added" until the people fill `PEOPLE` in; a filled field
+shows as its own row.
+
+The page `/papers` (`tools/papers.py`) is the paper loop: the names of its six steps in the words column (below the sheets
+where the page is one column; a click on a step opens its sentence) and the papers of `view.PAPERS` as one flat row of sheets in the order written. One sheet is open, wide and
+lit, and shows the paper's claim, why the loop picked it, how it was checked, its length and the button that opens the
+PDF. The other sheets are closed to a strip with their number and title; a click on one, or the left and right arrow
+keys, opens it (one width transition and a fade of the text, nothing in depth), and the address names it (`/papers#no-early-warning`). Below 1240 px every sheet is shown
+in full, one after the other. A new paper gets its row in `ROWS` of `papers.py` (without one it still gets a sheet with its title). The domain is the stack parameter
+`HomeDomainName` (`infra/monitor/deploy.sh monitor.invariant.team <zone id> invariant.team`).
 Every page has the same tab icon, `/favicon.svg`: `view.py` holds the SVG and writes the link to it into each page as
 it is sent, so a page module holds no icon.
 
@@ -349,13 +379,14 @@ record step of that chart (a base score strictly above all earlier ones, the sam
 points, previous best -> new best, the result id, who, the configuration and the step's title (from its `plain` row;
 without one, the first line of the result's text that is not a `score:`, `title:`, `what:`, `why:` or `caveat:` line).
 
-The tab Design is the page `/architecture` (`tools/architecture.py`): one picture of the shared work setup for
-a first-time reader. The board is in the centre with one dot per live item, each person's agents are beside it with
+`tools/architecture.py` was the tab Design until 2026-11-15; `/architecture` now leads to `/demo#harness`, the deck
+slide that shows its picture (`/demo/fig/harness`), and the module stays as the site's visual reference (its tokens,
+light, `world` and `proj`). The picture is one picture of the shared work setup for a first-time reader. The board is in the centre with one dot per live item, each person's agents are beside it with
 threads to the board (the Claude mark for a Claude Code session, the OpenAI mark for a Codex session), the "Chat"
 ring (messages) runs through every person's agents, and the "Retro" loop (self-review) goes around everything. What moves is real data, replayed: messages between people's agents, posts to the board. While one plays, its
 first words are typed beside the person whose agent wrote it, with its age ("4 min ago", or "now"), and the status at
 the top right counts the seconds since the last post. A click on a part
-explains it, with live rows from the board (`/architecture#board` is its link); "Follow one result" steps through the
+explains it, with live rows from the board; "Follow one result" steps through the
 path of one result (arrow keys, Esc). The logos of past.dev (the team's memory) and Exa (web and literature search)
 sit on the key's row at the bottom, and a click on either explains how agents use it.
 
@@ -388,12 +419,69 @@ The tab Proof is the page `/proof`: the same page as one list of rows with no pi
 not the research question. Each is a module `tools/proof_<slug>.py`, made like a finding page and served at
 `/proof/<slug>`. The first is `tools/proof_review_cuts_waste.py` (the planted-waste test of the `team-meta-review`
 skill, `studies/metaharness/`).
+The second is `tools/proof_idea_basins.py` (`/proof/idea-basins`): the 515 board items of the snapshot of 15 November
+2026, 19:42 UTC, as dots on a glass slab with a faint relief, in three conditions: the items in the order they were
+posted, the items in the 12 idea basins a judge model grouped them into, and the idea tree (one row per basin, a line
+from each item to the earlier items it builds on; 269 of 914 links join two basins). Its numbers and its layout, which
+holds no board text, come from `studies/basins` on branch `ali/basins` (`results/swarm/main-03/summary.json`,
+`analysis/swarm_nested_layout.py`).
 
-The page `/demo` is the talk: one stepped story over the Design page's picture, with a sentence and a fact line per
-step in the words column (arrow keys step, Esc closes; `/demo#<step>` links to a step). It is not a header tab. The 12
+The page `/values` (`tools/values.py`; not a header tab, reached from the home dial) holds the six values the team
+works by, in the order of AGENTS.md: Speed, Enthusiasm, Practicality, novelty and interestingness, The bitter lesson,
+Asymmetry and Clean context. The picture is a hexagonal glass prism with one face per value: one beam enters its top
+and leaves as six rays, one through each face to a bead naming a value. A click on a bead or a face, the arrow keys or
+the buttons select a value (`/values#speed`); its face turns to the front, and the column shows its sentences, its
+quotes with their sources and its line of AGENTS.md. The words are the person's own; nothing on the page is data.
+
+The page `/psychosis`, "AI Psychosis detox" (the counterpart of the Lab page, "AI Psychosis maxxing"), is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game
+of 5 levels, each ending in a boss. Hold Space, or press and hold, to breathe in and let go to breathe out, so that the
+white ring follows the blue one. A breath that follows it scores, raises the streak multiplier, charges the Om (key O)
+and sends out a wave that releases thoughts into their letters. The thoughts are bodies that collide: written jokes,
+real messages and result titles of the board (blue dot), and from level 2 on fast pings, hype that grows and reviewers
+that take two waves. A thought that reaches the meditator is believed and moves the diagnosis up; the fifth ends the
+session. A click on a thought brings it back as 3 subagents. After each boss the player picks one of three practices
+that stay (keys 1 to 3); after level 5 the retreat can go on without end. Three power-ups, a spoken guide and music
+that follows the breath (M mutes). A WebGL shader draws the picture: fog, glow, ripples under each wave and a colour
+split. The end screen gives score, rank, achievements and what the agents posted meanwhile.
+
+The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): sixteen 16:9 slides, each one
+figure with a few words, `#hook`, `#question`, `#built`, `#gap`, `#powered`, `#climb`, `#harness`, `#sponsors`, `#finding`, `#beyond`, `#efficiency`,
+`#proof`, `#ideas`, `#papers`, `#summary` and `#close` (`/demo#finding` opens that slide, and Back works). The right arrow, Space or PageDown go on, the left arrow or
+PageUp go back, Home and End jump, a click on the right or left third of the window steps, `t` or the button at the top right changes the theme
+(`?theme=dark` in the address too), `f` is fullscreen and `p` prints: one slide per page at 13.333 x 7.5 in, in the
+theme on screen, so print to PDF from the dark page for a dark PDF. The hook sentence is the constant `HOOK` in
+`tools/demo_deck.py`, with the line under it (the name, then `TAGLINE`); the first slide also shows the address invariant.team and its QR code (`QR_PATH`, made with
+segno). The slide `#gap` shows `/demo/fig/gap` (`tools/demo_gap.py`): the untrained base model and the RL-trained model as two glass pillars as high as their MATH-500 scores (the first base record and RL's best of `demo_ali_data` `climb`), the same small robot on each, unlit and lit; on load a staircase bridge of dashed planks appears between the two tops and the base robot hops onto the first two. The slide `#powered` sets the 72 H100 GPUs of the RL training (`FACTS['rl_zero_gpus']`, Olmo 3 paper, Table
+49) beside the photo and name of the cook who fed the team. The two photos (cook, meditation) are the strings `COOK`
+and `MEDITATE` in `tools/demo_photos.py`, with her name in `COOK_NAME`,
+each a `data:image/jpeg;base64,...` URI (the deploy ships only `tools/*.py`); while one is empty its slide shows an
+empty frame. The slide `#harness` shows the picture of `tools/architecture.py` in an iframe of `/demo/fig/harness`: that
+page with its header, words column and key hidden (`demo_deck.FIGS`). The slide `#ideas` is full-bleed
+`/demo/fig/converge` (`tools/demo_converge.py`): one canvas that plays by itself. On the glass slab of
+`/proof/idea-basins` the board items of `tools/proof_idea_basins.py` (515) pop in, in posting order, and a lit head runs along an arc from each earlier
+item an item builds on (tall and blue between two basins), while a count adds up the links that join two basins, ending
+at that file's `DATA['tree']` (269 of 914); then real cross-basin links and convergence bursts (items that build on three or more basins) replay
+until the tree grows again. `/demo/fig/basins` (`/proof/idea-basins` stepping from the items to their basins to the
+idea tree) is still served and is on no slide. The slide `#sponsors` shows the scene of `/exa` and the memory scene of `/pastdev` side by side in iframes of
+`/demo/fig/exa` and `/demo/fig/pastdev` (those pages with everything but the scene hidden; the dark deck shows them
+inverted), each replaying its real cases, with two numbers under each read from the pages' own number rows. To the right of the memory scene, smaller, is `/demo/fig/pasttw`: the towers of `/pastdev` alone (recall against grep, 20 questions). The slide `#finding` shows `/demo/fig/fixes` (`tools/demo_fixes.py`): one MATH-500 problem
+answered four ways, each answer a glass sheet on a step as high as its configuration's score (base model, 3 opening
+tokens, sampling at T 1.0, 8 directions in the weights), with every quoted word checked against its run by
+`PYTHONPATH=.:tools python3 tools/demo_fixes.py`. The slide `#proof` shows `/demo/fig/review` (`tools/demo_review.py`): four glass
+columns on a glass slab, one per review round of the team-meta-review skill, each as high as the container minutes one
+batch costs after that round, with the part that produced an answer lit and the rest, the waste, plain glass (the row under
+the slab gives the formula: waste = total container min − answer min); on load each round cuts the columns to its
+right, and a hollow dotted column at the end is the same model after three rounds with a plain instruction. Every number is read when the page is built: the staircase's scores from
+`tools/demo_fixes.py`, the comparison with Karpathy's autoresearch loop from
+`FACTS['auto_research_comparison']` in `tools/demo_facts.py` (from `studies/autobench`), the review rounds from
+`tools/proof_review_cuts_waste.py` (through `tools/demo_review.py`), the links of the idea tree from `tools/proof_idea_basins.py`
+(`DATA['tree']`), the number of people from `FACTS['people']`, and the papers from `tools/view.py`.
+
+The stepped story of the talk is at `/demo/story`: one story over the picture of `tools/architecture.py`, with a sentence and a fact
+line per step in the words column (arrow keys step, Esc closes; `/demo/story#<step>` links to a step). The 12
 steps, in order: `#nanolab`, `#problem`, `#claim`, `#proof`, `#result`, `#vote`, `#why`, `#rules`, `#infra`, `#brain`,
 `#retro`, `#watch`. A click on a part of the picture or on a question under the fact line opens one of 15 depth panels
-(`/demo#result/cue`): one sentence, a few fact rows with their caveats, one source line and at most two links. The
+(`/demo/story#result/cue`): one sentence, a few fact rows with their caveats, one source line and at most two links. The
 panels are `problem/day1`, `proof/turnaround`, `result/cue`, `result/harder`, `vote/procedure`, `why/control`,
 `why/findings`, `rules/thread`, `rules/audit`, `rules/rejected`, `infra/modal`, `infra/people`, `brain/sources`,
 `brain/memory` and `retro/changes`; each fits the words column at 1440 x 860 without scrolling, except the list of
@@ -406,6 +494,18 @@ agent sessions and logged commands from the event log, per-person counts), rewri
 `tools/demo_facts.py`, prints a before and after table and stops with an error if any count fails. Then restart
 `uv run tools/view.py`. Every other number comes from a frozen artifact; to change one, open the file named in its
 `src` and edit `v`, `n` and `at`. A key's `note` holds the caveats for the presenters and is not sent to the browser.
+
+The pages `/demo/ali/slide1`, `/demo/ali/slide2` and `/demo/ali/slide3` are Ali's part of the talk (`/demo/ali` leads
+to the first; they are not linked from the header). Slide 1 is the idea map: the board items of one snapshot as a
+relief on a lit disc, one hill per cluster of ideas, each person's agents moving between the hills as board time is
+replayed (a ring around the disc, a slider and a speed button move the time). Slide 2 is the idea tree: the same items
+with a line to every item each one builds on, and a click lights one item's lineage. Slide 3 is the accuracy: the best
+MATH-500 score of the untrained base as a step line over board time above the disc, against RL's best, with each
+record tied to the result that set it and the record steps as rows in the board's plain words. The arrow keys change
+the slide. `tools/demo_ali.py` holds the three pages and `tools/demo_ali_data.py` every number on them. The data file
+is written by `python3 studies/basins/analysis/slide_data.py <run folder>` from one run of the swarm idea map
+(`studies/basins/results/swarm/main-04` on the branch `ali/basins`: 515 board items at 19:42 UTC on 15 Nov) and from the board's score rows, read from `/data` at the time each slide names. The
+record steps follow the rule of `tools/climb.py`. To refresh the numbers, run the script again and merge.
 
 `ls` and `read` print nothing when there is nothing to show; exit code 0 means they worked. `show` prints the
 item's votes and comments. Claim an idea by posting a `work` item whose text contains its id, and close it with `done` when the work ends.
@@ -546,13 +646,25 @@ Where Exa is called:
 
 What a search changed: on Nov 14 at 20:58 UTC one search in a literature sweep by 5 agents returned arXiv 2610.24663.
 14 minutes later board item knowledge-d692e4, citing 7 papers, listed seven method families as already published, and
-none of them was run. The page `/demo#brain/sources` shows this case and two more, and the 125 pages fetched through Exa,
+none of them was run. The page `/demo/story#brain/sources` shows this case and two more, and the 125 pages fetched through Exa,
 each with its agent, time and the board item that cites it (`tools/demo_facts.py`, `SOURCES`).
 
 Counts and limits: 172 of 199 HTTP calls to Exa returned results, from 59 main agents and subagents (counted from the
 session transcripts up to 05:25 UTC; the Exa dashboards hold the authoritative count). 98 calls through the Exa MCP failed
 with a 401 error, which is why the agents call the HTTP API. Early on, one person's agents had no Exa key and used another
 search tool. No count of GPU jobs avoided by a search exists.
+
+The page `/exa` (`tools/exa_page.py`; not a header tab; the site's tokens, typeface and header since 2026-11-15) shows
+four searches that changed a decision, and what the agents got from Exa up to Nov 15 15:29 UTC, without the number of
+calls. Its first screen is five numbers and one 3D scene of the four searches: a track with the stations Idea, Exa, GPU run and
+Board, a porcelain gate at Exa, and above it one dot for each of the 677 distinct pages Exa returned
+(`distinct_urls_in_search_results`). Each case is replayed: slabs (the ideas) reach the gate, a beam lights the pages
+Exa returned, and the slabs stop at the gate, pass smaller, or go to the Board over the GPU run. The buttons 1 to 4
+choose a case (`/exa#search-2`), and each source in the caption is a link. Its numbers come from
+`studies/metaharness/results/exa_count-01/summary.json`, written by `studies/metaharness/analysis/exa_count.py`: 381 calls
+to Exa returned (237 searches, 144 page reads) from 61 agents in 20 sessions; 193 more stopped at a missing key on one
+laptop; 59 MCP calls returned 401. This count expands shell loops and reads other transcripts than the count above, so
+the two do not reconcile. The theory engine's external stage has now written 163 published findings (rounds 02 to 07).
 
 ## past.dev challenge
 
@@ -595,6 +707,13 @@ memory before it starts an idea.
   run, recall had the answer within 2,000 tokens for 20, one naive grep over 271 transcripts for 6 (17 anywhere in its
   output).
 - Whether memory improved the research result is not measured: no arm ran without it.
+
+The page `/pastdev` (`tools/pastdev.py`; not a header tab; the site's tokens, typeface and header since 2026-11-15; blue for what
+past.dev returned) shows this on its first screen: four usage numbers and two 3D scenes side by side. The first is the memory as a disc with one dot per stored source (854:
+616 paper findings, 227 board posts, 11 sessions), the agents that write behind it and the agents that read in front,
+the theory generator joined to the paper sector only. It replays four real reads (`/pastdev#read-1` is the read across
+two people above): the write, the question, the returned source in blue. The second draws the pilot: per method, 20
+cubes for the 20 questions and a stack of slabs of 2,000 tokens, 1 slab for recall and 61 for grep.
 
 ### Caveats
 

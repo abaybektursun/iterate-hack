@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 3753,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "\n\n**Step 2: Determine the coefficients of \\( Q(x) \\)**\n\nFor \\( Q(x) = -2x^2 + px + q \\):\n\n1. At \\( x = 16 \\):\n   \\[\n   -2(16)^2 + 16p + q = 54 \\implies -512 + 16p + q = 54 \\implies 16p + q = 566\n   \\]\n\n2. At \\( x = 20 \\):\n   \\[\n   -2(20)^2 + 20p + q = 53 \\implies -800 + 20p + q = 53 \\implies 20p + q = 853\n   \\]\n\nSubtract the first equation from the second:\n\\[\n(20p + q) - (16p + q) = 853 - 566 \\implies 4p = 287 \\implies p = \\frac{287}{4}\n\\]\n\nSubstitute \\( p \\) back into \\( 16p + q = 566 \\):\n\\[\n16\\left(\\frac{287}{4}\\right) + q = 566 \\implies 4 \\cdot 287 + q = 566 \\implies q = -582\n\\]\n\nThus, \\( Q(x) = -2x^2 + \\frac{287}{4}x - 582 \\). Therefore, \\( Q(0) = -582 \\).\n\n**Step 3: Calculate \\( P(0) + Q(0) \\)**\n\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\nTherefore, the final answer is:\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 57,
+  "gold": "928",
+  "extracted_v3": "2744",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 11675,
+  "prompt_tail": "r: $Answer (without quotes) where $Answer is the answer to the problem.\n\nEach vertex of a regular dodecagon ($12$-gon) is to be colored either red or blue, and thus there are $2^{12}$ possible colorings. Find the number of these colorings with the property that no four vertices colored the same color are the four vertices of a rectangle.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " 64\n   \\]\n   - There are 3 such pairs, so the total number of colorings where at least two rectangles are monochromatic is:\n   \\[\n   3 \\times 64 = 192\n   \\]\n\n5. **Count Intersection of All Three Rectangles:**\n   - If all three rectangles are monochromatic, each of the 12 vertices is part of one of the three rectangles, and each rectangle can be either red or blue independently:\n   \\[\n   |A_1 \\cap A_2 \\cap A_3| = 2^3 = 8\n   \\]\n\n6. **Apply Inclusion-Exclusion Principle:**\n   \\[\n   |A_1 \\cup A_2 \\cup A_3| = 3 \\times 512 - 3 \\times 64 + 8 = 1536 - 192 + 8 = 1352\n   \\]\n\n7. **Compute the Desired Number of Colorings:**\n   - The number of colorings where no four vertices form a monochromatic rectangle is:\n   \\[\n   4096 - 1352 = 2744\n   \\]\n\nThus, the number of valid colorings is:\n\\[\n\\boxed{2744}\n\\]"
+ }
+}

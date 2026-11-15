@@ -1,0 +1,4002 @@
+[
+ {
+  "problem_index": 0,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1340,
+  "extracted_v3": "\\left(3, \\frac{\\pi}{2}\\right)",
+  "opening": ".\n\nOkay, so I need to convert "
+ },
+ {
+  "problem_index": 1,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2041,
+  "extracted_v3": "p - q",
+  "opening": ". \n\nAlright, let's tackle this"
+ },
+ {
+  "problem_index": 2,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1120,
+  "extracted_v3": "\\dfrac{14}{3}",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 3,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 844,
+  "extracted_v3": "9",
+  "opening": ".\n\nOkay, so I need to find out"
+ },
+ {
+  "problem_index": 4,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8240,
+  "extracted_v3": "Evelyn",
+  "opening": ".\\nPlease format your answer i"
+ },
+ {
+  "problem_index": 5,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 1,
+  "extracted_v3": null,
+  "opening": ""
+ },
+ {
+  "problem_index": 6,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2241,
+  "extracted_v3": "27",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 7,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 14544,
+  "extracted_v3": "90",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 8,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1223,
+  "extracted_v3": "3\\sqrt{13}",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 9,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 10,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2380,
+  "extracted_v3": "2220",
+  "opening": ".\n\n\nOkay, so I need to find th"
+ },
+ {
+  "problem_index": 11,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 3834,
+  "extracted_v3": "\\dfrac{2}{9}",
+  "opening": " and without any marks except "
+ },
+ {
+  "problem_index": 12,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2409,
+  "extracted_v3": "284",
+  "opening": ".\n\n\nOkay, let's tackle this pr"
+ },
+ {
+  "problem_index": 13,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 597,
+  "extracted_v3": "5",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 14,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 2127,
+  "extracted_v3": "10",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 15,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2918,
+  "extracted_v3": "6 - 5i",
+  "opening": " and \"####\", to ensure that th"
+ },
+ {
+  "problem_index": 16,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2035,
+  "extracted_v3": "-50",
+  "opening": " part.\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 17,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5559,
+  "extracted_v3": "\\pi",
+  "opening": " tag, not inside the box. The "
+ },
+ {
+  "problem_index": 18,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 9058,
+  "extracted_v3": "56",
+  "opening": " , encountering any writing po"
+ },
+ {
+  "problem_index": 19,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8087,
+  "extracted_v3": "3",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 20,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 454,
+  "extracted_v3": "6 + 9i",
+  "opening": " line.\n\nOkay, so I need to eva"
+ },
+ {
+  "problem_index": 21,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6717,
+  "extracted_v3": "13535",
+  "opening": " tag!\n\nOkay, let's see. I need"
+ },
+ {
+  "problem_index": 22,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1644,
+  "extracted_v3": "5",
+  "opening": ".\n\nOkay, let me try to work th"
+ },
+ {
+  "problem_index": 23,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1283,
+  "extracted_v3": "5",
+  "opening": ".\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 24,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2225,
+  "extracted_v3": "10",
+  "opening": ".\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 25,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2338,
+  "extracted_v3": "-2, 1",
+  "opening": ".\n\nOkay, so I have this functi"
+ },
+ {
+  "problem_index": 26,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 15435,
+  "extracted_v3": "288",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 27,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1089,
+  "extracted_v3": "78",
+  "opening": " line!\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 28,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 834,
+  "extracted_v3": "-2 + 7i",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 29,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 965,
+  "extracted_v3": "225",
+  "opening": ".\nOkay, let's try to figure ou"
+ },
+ {
+  "problem_index": 30,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1554,
+  "extracted_v3": "52_8",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 31,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 532,
+  "extracted_v3": "11\\sqrt{2}",
+  "opening": ".\n\n\nOkay, so I need to simplif"
+ },
+ {
+  "problem_index": 32,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3577,
+  "extracted_v3": "720",
+  "opening": ".\n\nOkay, so the problem is ask"
+ },
+ {
+  "problem_index": 33,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3776,
+  "extracted_v3": "\\dfrac{243}{625}",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 34,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3034,
+  "extracted_v3": "-125",
+  "opening": " (not in quote), and don't add"
+ },
+ {
+  "problem_index": 35,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1823,
+  "extracted_v3": "3",
+  "opening": " denotes the final answer.\n\nOk"
+ },
+ {
+  "problem_index": 36,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 640,
+  "extracted_v3": "3, 5, 7",
+  "opening": "\n\n\n\nFinal Answer:\nWe have the "
+ },
+ {
+  "problem_index": 37,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 746,
+  "extracted_v3": "72",
+  "opening": " line without %'\\%e'\n\nOkay, le"
+ },
+ {
+  "problem_index": 38,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 753,
+  "extracted_v3": "2000",
+  "opening": ".\n\n\nOkay, let's try to figure "
+ },
+ {
+  "problem_index": 39,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1315,
+  "extracted_v3": "23",
+  "opening": ".\n\nOkay, let's tackle this pro"
+ },
+ {
+  "problem_index": 40,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 789,
+  "extracted_v3": "12",
+  "opening": " line. Each line should look l"
+ },
+ {
+  "problem_index": 41,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 12893,
+  "extracted_v3": "17",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 42,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1080,
+  "extracted_v3": "4",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 43,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 44,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 763,
+  "extracted_v3": "B",
+  "opening": ".\n (A) 1.00        (B) 1.25  ("
+ },
+ {
+  "problem_index": 45,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 655,
+  "extracted_v3": "2",
+  "opening": " without any spaces.\n\nOkay, so"
+ },
+ {
+  "problem_index": 46,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5164,
+  "extracted_v3": "6",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 47,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1027,
+  "extracted_v3": "5",
+  "opening": ".\n\nOkay, let me try to solve t"
+ },
+ {
+  "problem_index": 48,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 775,
+  "extracted_v3": "\\dfrac{3}{2}",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 49,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 647,
+  "extracted_v3": "$83$",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 50,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3465,
+  "extracted_v3": "203",
+  "opening": ".\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 51,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5152,
+  "extracted_v3": "x^5 - x^4 + x^3 - x^2 + x - 1",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 52,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1996,
+  "extracted_v3": "12",
+  "opening": ".\n\nOkay, let's try to solve th"
+ },
+ {
+  "problem_index": 53,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 845,
+  "extracted_v3": "-\\frac{\\pi}{6}",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 54,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 296,
+  "extracted_v3": "0.15",
+  "opening": ".\n\nOkay, I need to convert 3/2"
+ },
+ {
+  "problem_index": 55,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1282,
+  "extracted_v3": "3.",
+  "opening": " and use $f(x)$ notation.\nOkay"
+ },
+ {
+  "problem_index": 56,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 554,
+  "extracted_v3": "11",
+  "opening": " tag.\n\nOkay, let's see. I need"
+ },
+ {
+  "problem_index": 57,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1092,
+  "extracted_v3": "16",
+  "opening": ".\n\nOkay, so Ringo has this com"
+ },
+ {
+  "problem_index": 58,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2645,
+  "extracted_v3": "9901",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 59,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 477,
+  "extracted_v3": "5",
+  "opening": " and start with \"->\", like thi"
+ },
+ {
+  "problem_index": 60,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " identifying it as a final ste"
+ },
+ {
+  "problem_index": 61,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 3198,
+  "extracted_v3": "a",
+  "opening": " line. The string \"Correct Ans"
+ },
+ {
+  "problem_index": 62,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6761,
+  "extracted_v3": "4",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 63,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 2976,
+  "extracted_v3": "9",
+  "opening": " \n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 64,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 15368,
+  "extracted_v3": "\\dfrac{35}{128}",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 65,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 603,
+  "extracted_v3": "$1$",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 66,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2323,
+  "extracted_v3": "x^3 + 3x - 6",
+  "opening": "!\n\nOkay, let me try to work th"
+ },
+ {
+  "problem_index": 67,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1292,
+  "extracted_v3": "10\\%",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 68,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3920,
+  "extracted_v3": "$46$.",
+  "opening": ".\nOkay, let's tackle this prob"
+ },
+ {
+  "problem_index": 69,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 975,
+  "extracted_v3": "-0.7985 + 0.6i",
+  "opening": ".\n\nFirst, to solve this proble"
+ },
+ {
+  "problem_index": 70,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2086,
+  "extracted_v3": "40_9",
+  "opening": ".\n\nOkay, let me try to solve t"
+ },
+ {
+  "problem_index": 71,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 10259,
+  "extracted_v3": "2516_8",
+  "opening": " and then put a line break.\n\nO"
+ },
+ {
+  "problem_index": 72,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 487,
+  "extracted_v3": null,
+  "opening": "Separates the final answer (nu"
+ },
+ {
+  "problem_index": 73,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1340,
+  "extracted_v3": "\\dfrac{3\\sqrt{3}}{4}",
+  "opening": ".\n\n\nOkay, so I have this probl"
+ },
+ {
+  "problem_index": 74,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3399,
+  "extracted_v3": "\\cot x",
+  "opening": ".\n\nAlright, let's see. I need "
+ },
+ {
+  "problem_index": 75,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5735,
+  "extracted_v3": "\\dfrac{11}{36}",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 76,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5242,
+  "extracted_v3": "0",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 77,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 886,
+  "extracted_v3": "4",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 78,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1960,
+  "extracted_v3": "(-2, 1)",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 79,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1104,
+  "extracted_v3": "2",
+  "opening": ".\n\nOkay, so I need to solve fo"
+ },
+ {
+  "problem_index": 80,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8078,
+  "extracted_v3": "501",
+  "opening": ".\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 81,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1460,
+  "extracted_v3": "3",
+  "opening": "\n\n\nOkay, let me try to figure "
+ },
+ {
+  "problem_index": 82,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11667,
+  "extracted_v3": "\\dfrac{3}{2}",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 83,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2713,
+  "extracted_v3": "2",
+  "opening": "\n\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 84,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2163,
+  "extracted_v3": "-1",
+  "opening": ".\n\n\nOkay, let me try to figure"
+ },
+ {
+  "problem_index": 85,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2167,
+  "extracted_v3": "\\sqrt{5}",
+  "opening": " label printed.\n\nOkay, let me "
+ },
+ {
+  "problem_index": 86,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 543,
+  "extracted_v3": "240",
+  "opening": " line. Please submit your fina"
+ },
+ {
+  "problem_index": 87,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 234,
+  "extracted_v3": "$1$",
+  "opening": "\n\n\n\nStep 1: Remove the absolut"
+ },
+ {
+  "problem_index": 88,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6718,
+  "extracted_v3": "2",
+  "opening": ".\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 89,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1566,
+  "extracted_v3": "21",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 90,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 166,
+  "extracted_v3": "\\frac{2}{3}",
+  "opening": ".\nTo solve the problem, I need"
+ },
+ {
+  "problem_index": 91,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1384,
+  "extracted_v3": "1.",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 92,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3556,
+  "extracted_v3": "\\dfrac{448}{15625}",
+  "opening": " and put your reasoning/explan"
+ },
+ {
+  "problem_index": 93,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1553,
+  "extracted_v3": "33",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 94,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 14024,
+  "extracted_v3": "90^\\circ",
+  "opening": " line:\n\nAnswer: $xx$ $answer$ "
+ },
+ {
+  "problem_index": 95,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2613,
+  "extracted_v3": "-4",
+  "opening": " and simplify all trigonometri"
+ },
+ {
+  "problem_index": 96,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": "4",
+  "opening": ".\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 97,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1804,
+  "extracted_v3": "east",
+  "opening": " and before \"\\n\"\nAnswer:\n\nOkay"
+ },
+ {
+  "problem_index": 98,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 872,
+  "extracted_v3": "2k + 2",
+  "opening": " line. Also make your answer a"
+ },
+ {
+  "problem_index": 99,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 1520,
+  "extracted_v3": "\\begin{pmatrix} -\\dfrac{1}{3} \\\\[0.2cm] \\dfrac{2}{3} \\\\[0.2cm] \\dfrac{5}{3} \\end{pmatrix}",
+  "opening": " line.\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 100,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 7320,
+  "extracted_v3": "25",
+  "opening": ".\n\n\nOkay, so there's this prob"
+ },
+ {
+  "problem_index": 101,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line.\n\nOkay, let's try to fig"
+ },
+ {
+  "problem_index": 102,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 781,
+  "extracted_v3": "(a + 5)(b + 2)",
+  "opening": "!\n\nOkay, so I need to factor t"
+ },
+ {
+  "problem_index": 103,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": "[1, 4]",
+  "opening": " line.\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 104,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7353,
+  "extracted_v3": "40",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 105,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 683,
+  "extracted_v3": "29",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 106,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 565,
+  "extracted_v3": "\\dfrac{4}{3}",
+  "opening": " and write only the answer and"
+ },
+ {
+  "problem_index": 107,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 589,
+  "extracted_v3": "9",
+  "opening": ".\n\n\nAlright, let's figure out "
+ },
+ {
+  "problem_index": 108,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6961,
+  "extracted_v3": "2",
+  "opening": ".\n\nOkay, let's try to tackle t"
+ },
+ {
+  "problem_index": 109,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 5425,
+  "extracted_v3": "113",
+  "opening": " `. Be sure $0^\\circ < \\theta "
+ },
+ {
+  "problem_index": 110,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " and without quotes.\n\nOkay, le"
+ },
+ {
+  "problem_index": 111,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 897,
+  "extracted_v3": "210",
+  "opening": ".\n\nOkay, let's see. Mr. Brenna"
+ },
+ {
+  "problem_index": 112,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2698,
+  "extracted_v3": "13",
+  "opening": ".\n\n\nOkay, so I need to simplif"
+ },
+ {
+  "problem_index": 113,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1454,
+  "extracted_v3": "8000",
+  "opening": ".\n\nOkay, let's tackle this mat"
+ },
+ {
+  "problem_index": 114,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1676,
+  "extracted_v3": "-5",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 115,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1164,
+  "extracted_v3": "1260",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 116,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1198,
+  "extracted_v3": "2",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 117,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1205,
+  "extracted_v3": "3",
+  "opening": ".\n\nOkay, so I have this equati"
+ },
+ {
+  "problem_index": 118,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8553,
+  "extracted_v3": "81",
+  "opening": " but keep the rest of the reas"
+ },
+ {
+  "problem_index": 119,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 15052,
+  "extracted_v3": "3",
+  "opening": " (without quotes).\n\nOkay, so I"
+ },
+ {
+  "problem_index": 120,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 12997,
+  "extracted_v3": "neither",
+  "opening": ".\n\nOkay, so the problem is ask"
+ },
+ {
+  "problem_index": 121,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 360,
+  "extracted_v3": "6",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 122,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2830,
+  "extracted_v3": "9",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 123,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4590,
+  "extracted_v3": "8",
+  "opening": ".\n\nThe problem asks for the ar"
+ },
+ {
+  "problem_index": 124,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2265,
+  "extracted_v3": "\\dfrac{11}{2}",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 125,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1436,
+  "extracted_v3": "-3",
+  "opening": ".\n\nOkay, so I need to evaluate"
+ },
+ {
+  "problem_index": 126,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 127,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1414,
+  "extracted_v3": "$4210$",
+  "opening": ".\n\n\nOkay, so I need to convert"
+ },
+ {
+  "problem_index": 128,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 10333,
+  "extracted_v3": null,
+  "opening": "!\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 129,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6233,
+  "extracted_v3": "\\dfrac{3840}{289}",
+  "opening": ".\n\n\nOkay, so I need to find th"
+ },
+ {
+  "problem_index": 130,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6802,
+  "extracted_v3": "13",
+  "opening": ".\n\n\n\nOkay, so I need to find a"
+ },
+ {
+  "problem_index": 131,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2880,
+  "extracted_v3": "8",
+  "opening": ".\n\n\nOkay, so I'm trying to sol"
+ },
+ {
+  "problem_index": 132,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1024,
+  "extracted_v3": "4",
+  "opening": ".\n\n\nOkay, let's see. The probl"
+ },
+ {
+  "problem_index": 133,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1308,
+  "extracted_v3": "120",
+  "opening": "!\n\nOkay, let's tackle this geo"
+ },
+ {
+  "problem_index": 134,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1897,
+  "extracted_v3": "16",
+  "opening": " and before the end of the pro"
+ },
+ {
+  "problem_index": 135,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5014,
+  "extracted_v3": "9",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 136,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7368,
+  "extracted_v3": "64",
+  "opening": " a line that just happens to b"
+ },
+ {
+  "problem_index": 137,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5509,
+  "extracted_v3": "204_5",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 138,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 12636,
+  "extracted_v3": "\\dfrac{1}{15}",
+  "opening": " but do NOT include any extra "
+ },
+ {
+  "problem_index": 139,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6105,
+  "extracted_v3": "1",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 140,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1189,
+  "extracted_v3": "13",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 141,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1262,
+  "extracted_v3": "2",
+  "opening": " \u2013 I don\u2019t want anything else "
+ },
+ {
+  "problem_index": 142,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4200,
+  "extracted_v3": "28800",
+  "opening": "!\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 143,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1814,
+  "extracted_v3": "3\\sqrt{5}",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 144,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 921,
+  "extracted_v3": "(15, -29)",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 145,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 4180,
+  "extracted_v3": "\\dfrac{1 + \\sqrt{5}}{2}",
+  "opening": ".\n\nOkay, so I need to find \\( "
+ },
+ {
+  "problem_index": 146,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 778,
+  "extracted_v3": "\\dfrac{\\sqrt{3}}{3}",
+  "opening": ".\n\nOkay, so I need to simplify"
+ },
+ {
+  "problem_index": 147,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 10084,
+  "extracted_v3": "16",
+  "opening": ". You must put your final answ"
+ },
+ {
+  "problem_index": 148,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 774,
+  "extracted_v3": "11",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 149,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1406,
+  "extracted_v3": "49",
+  "opening": " (answer line)\n\nOkay, let's tr"
+ },
+ {
+  "problem_index": 150,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 9929,
+  "extracted_v3": "0",
+  "opening": ". It should be in form $Answer"
+ },
+ {
+  "problem_index": 151,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6490,
+  "extracted_v3": "144",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 152,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 13630,
+  "extracted_v3": "8",
+  "opening": "\n\n\n\nOkay, let's try to solve t"
+ },
+ {
+  "problem_index": 153,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3883,
+  "extracted_v3": "\\dfrac{2}{21}",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 154,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": ".\n\nOkay, so there's this gecko"
+ },
+ {
+  "problem_index": 155,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3448,
+  "extracted_v3": "\\dfrac{1}{4}",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 156,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11803,
+  "extracted_v3": "30",
+  "opening": ".\n\nOkay, so there's this probl"
+ },
+ {
+  "problem_index": 157,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1830,
+  "extracted_v3": "\\dfrac{6}{5}",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 158,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1345,
+  "extracted_v3": "2107",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 159,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1571,
+  "extracted_v3": "3.21",
+  "opening": " line. If parameters used are "
+ },
+ {
+  "problem_index": 160,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 790,
+  "extracted_v3": "18",
+  "opening": ".\n\nOkay, let's see here. I nee"
+ },
+ {
+  "problem_index": 161,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 335,
+  "extracted_v3": "6",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 162,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 848,
+  "extracted_v3": "\\dfrac{17}{50}",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 163,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3788,
+  "extracted_v3": "-\\dfrac{35}{9}",
+  "opening": " in the form \"$$$Answer.$$\".\n\n"
+ },
+ {
+  "problem_index": 164,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7502,
+  "extracted_v3": "-\\sqrt{3}",
+  "opening": ".\n\nOkay, so I need to simplify"
+ },
+ {
+  "problem_index": 165,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1182,
+  "extracted_v3": "4/9",
+  "opening": " I'll say the 21. Write in a m"
+ },
+ {
+  "problem_index": 166,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11013,
+  "extracted_v3": "\\dfrac{270}{7}",
+  "opening": ".\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 167,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 551,
+  "extracted_v3": "65",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 168,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 14056,
+  "extracted_v3": "19",
+  "opening": " line. It is also very importa"
+ },
+ {
+  "problem_index": 169,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1078,
+  "extracted_v3": "12",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 170,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3932,
+  "extracted_v3": "1736",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 171,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 925,
+  "extracted_v3": "\\dfrac{13}{15}",
+  "opening": ".\n\nOkay, let's see. So the pro"
+ },
+ {
+  "problem_index": 172,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1272,
+  "extracted_v3": "350",
+  "opening": " label. (Unsolvable problems w"
+ },
+ {
+  "problem_index": 173,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2115,
+  "extracted_v3": "4",
+  "opening": ".\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 174,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2083,
+  "extracted_v3": "2",
+  "opening": " tag.\n\nOkay, so I need to find"
+ },
+ {
+  "problem_index": 175,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3162,
+  "extracted_v3": "3",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 176,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6106,
+  "extracted_v3": "0.0000672",
+  "opening": ".\n\nOkay, so I need to convert "
+ },
+ {
+  "problem_index": 177,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2920,
+  "extracted_v3": "30",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 178,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 443,
+  "extracted_v3": "60",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 179,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3890,
+  "extracted_v3": "5x - 7y + 11z + 4 = 0",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 180,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1792,
+  "extracted_v3": "3",
+  "opening": ".\n\nOkay, let's tackle this pro"
+ },
+ {
+  "problem_index": 181,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1610,
+  "extracted_v3": "\\dfrac{\\sqrt{3}}{3}",
+  "opening": ".\n\nOkay, let me try to solve t"
+ },
+ {
+  "problem_index": 182,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 577,
+  "extracted_v3": "1251",
+  "opening": " Remember to leave out the quo"
+ },
+ {
+  "problem_index": 183,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 12449,
+  "extracted_v3": "23",
+  "opening": ".\n\nAlright, let's tackle this "
+ },
+ {
+  "problem_index": 184,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11573,
+  "extracted_v3": "(2, \\infty)",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 185,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 314,
+  "extracted_v3": "1",
+  "opening": "!!\n\nOkay, let's see. I need to"
+ },
+ {
+  "problem_index": 186,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3090,
+  "extracted_v3": "7",
+  "opening": " and the last line of your res"
+ },
+ {
+  "problem_index": 187,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1138,
+  "extracted_v3": "7",
+  "opening": ".\n\nOkay, let's see here. So Hi"
+ },
+ {
+  "problem_index": 188,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 12108,
+  "extracted_v3": "6",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 189,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 11664,
+  "extracted_v3": "150",
+  "opening": "  but only answer, no explanat"
+ },
+ {
+  "problem_index": 190,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1692,
+  "extracted_v3": "\\dfrac{13}{18}",
+  "opening": ":\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 191,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 924,
+  "extracted_v3": "0",
+  "opening": "$\n\n\nOkay, let's see. The probl"
+ },
+ {
+  "problem_index": 192,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3524,
+  "extracted_v3": "30",
+  "opening": " (in singular).\n\nOkay, so I ne"
+ },
+ {
+  "problem_index": 193,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1559,
+  "extracted_v3": "4",
+  "opening": " or it will be counted incorre"
+ },
+ {
+  "problem_index": 194,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11448,
+  "extracted_v3": "\\dfrac{1}{4}",
+  "opening": " line. In each step, check fir"
+ },
+ {
+  "problem_index": 195,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1709,
+  "extracted_v3": "24",
+  "opening": ".\n\nAlright, let's see. I need "
+ },
+ {
+  "problem_index": 196,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1925,
+  "extracted_v3": "1600",
+  "opening": ".\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 197,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7063,
+  "extracted_v3": "6",
+  "opening": ".\n\nOkay, let me try to figure "
+ },
+ {
+  "problem_index": 198,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 895,
+  "extracted_v3": "10080",
+  "opening": " tag.\n\nOkay, let's see. The pr"
+ },
+ {
+  "problem_index": 199,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 678,
+  "extracted_v3": "17",
+  "opening": " line\n\nOkay, let me try to sol"
+ },
+ {
+  "problem_index": 200,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2417,
+  "extracted_v3": "40",
+  "opening": ".\n\nOkay, let's see. So I need "
+ },
+ {
+  "problem_index": 201,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1745,
+  "extracted_v3": "66",
+  "opening": " What is the solution to the p"
+ },
+ {
+  "problem_index": 202,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3987,
+  "extracted_v3": "\\dfrac{2}{3}",
+  "opening": ".\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 203,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2130,
+  "extracted_v3": "12",
+  "opening": " in your response! Checking fo"
+ },
+ {
+  "problem_index": 204,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 205,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1736,
+  "extracted_v3": "(-2, -14, -7)",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 206,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 935,
+  "extracted_v3": "(m, b) = \\left(\\frac{3}{2}, -13\\right)",
+  "opening": " and label each step clearly w"
+ },
+ {
+  "problem_index": 207,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 682,
+  "extracted_v3": "28",
+  "opening": ".\n\nOkay, so Mikka wants to ord"
+ },
+ {
+  "problem_index": 208,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1399,
+  "extracted_v3": "1",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 209,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1799,
+  "extracted_v3": "16",
+  "opening": " area. Output the answer in fo"
+ },
+ {
+  "problem_index": 210,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 3277,
+  "extracted_v3": null,
+  "opening": ".\n\nOkay, let's try to solve th"
+ },
+ {
+  "problem_index": 211,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1134,
+  "extracted_v3": "5",
+  "opening": ".\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 212,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 503,
+  "extracted_v3": "56",
+  "opening": " \n\n\nOkay, let's see. Frank too"
+ },
+ {
+  "problem_index": 213,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2902,
+  "extracted_v3": "2",
+  "opening": ".\n\nAlright, so I need to compu"
+ },
+ {
+  "problem_index": 214,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 2828,
+  "extracted_v3": "115",
+  "opening": ". The only way to get points i"
+ },
+ {
+  "problem_index": 215,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1065,
+  "extracted_v3": "2",
+  "opening": ".\n\n\nAlright, let's see. I have"
+ },
+ {
+  "problem_index": 216,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1438,
+  "extracted_v3": "6",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 217,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 15898,
+  "extracted_v3": "10011111110",
+  "opening": "(interim answer: do not put yo"
+ },
+ {
+  "problem_index": 218,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 882,
+  "extracted_v3": "(-1, 6)",
+  "opening": "\n\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 219,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": "!\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 220,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 830,
+  "extracted_v3": "\\dfrac{16}{27}",
+  "opening": " This means that the $Answer:$"
+ },
+ {
+  "problem_index": 221,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2062,
+  "extracted_v3": "900",
+  "opening": ".\n\nOkay, let's tackle this pro"
+ },
+ {
+  "problem_index": 222,
+  "score_v3": 1,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": "54",
+  "opening": " (without quotes).\n\nOkay, so I"
+ },
+ {
+  "problem_index": 223,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 8415,
+  "extracted_v3": "9",
+  "opening": " and then only execute the cod"
+ },
+ {
+  "problem_index": 224,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5128,
+  "extracted_v3": "\\dfrac{9}{256}",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 225,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1293,
+  "extracted_v3": "11",
+  "opening": "  \nDo not write the answer tha"
+ },
+ {
+  "problem_index": 226,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2794,
+  "extracted_v3": "3",
+  "opening": "!\n\n\nOkay, so I need to figure "
+ },
+ {
+  "problem_index": 227,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 711,
+  "extracted_v3": "C",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 228,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": "!\n\nOkay, let me try to figure "
+ },
+ {
+  "problem_index": 229,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 867,
+  "extracted_v3": "90",
+  "opening": ".\n\n\n\nOkay, so the problem is a"
+ },
+ {
+  "problem_index": 230,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6476,
+  "extracted_v3": "\\dfrac{16}{5}",
+  "opening": ".\n\nAlright, so I have this pro"
+ },
+ {
+  "problem_index": 231,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1566,
+  "extracted_v3": "10",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 232,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 8077,
+  "extracted_v3": "998",
+  "opening": ".\n\n\nOkay, let's see. I need to"
+ },
+ {
+  "problem_index": 233,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1450,
+  "extracted_v3": "30",
+  "opening": " line.\n\nOkay, let's try to sol"
+ },
+ {
+  "problem_index": 234,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2437,
+  "extracted_v3": "34",
+  "opening": " tag.\n\nOkay, let's try to figu"
+ },
+ {
+  "problem_index": 235,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 405,
+  "extracted_v3": "$\\frac{1}{3}$",
+  "opening": " line. Don't put anything befo"
+ },
+ {
+  "problem_index": 236,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 445,
+  "extracted_v3": null,
+  "opening": "!\n----------------------------"
+ },
+ {
+  "problem_index": 237,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 463,
+  "extracted_v3": "22.",
+  "opening": ".\nOkay, let's see. I need to f"
+ },
+ {
+  "problem_index": 238,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1934,
+  "extracted_v3": "-4",
+  "opening": "Introduction:\n\nOkay, so I need"
+ },
+ {
+  "problem_index": 239,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 8666,
+  "extracted_v3": "125",
+  "opening": " header.\n\nOkay, let's try to t"
+ },
+ {
+  "problem_index": 240,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 12479,
+  "extracted_v3": "68",
+  "opening": ".\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 241,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2213,
+  "extracted_v3": "17",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 242,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6471,
+  "extracted_v3": "32348",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 243,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2738,
+  "extracted_v3": "3",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 244,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1767,
+  "extracted_v3": "8",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 245,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2500,
+  "extracted_v3": "-13x + 3",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 246,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1177,
+  "extracted_v3": "8",
+  "opening": ".\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 247,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2885,
+  "extracted_v3": "\\dfrac{10}{11}",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 248,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3198,
+  "extracted_v3": "\\begin{pmatrix} -1 & 0 \\\\ 0 & -1 \\end{pmatrix}",
+  "opening": ".\n\nOkay, so I need to compute "
+ },
+ {
+  "problem_index": 249,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1948,
+  "extracted_v3": "17",
+  "opening": " like this:\nAnswer: $mean (wit"
+ },
+ {
+  "problem_index": 250,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1540,
+  "extracted_v3": "13",
+  "opening": " and only put the answer on th"
+ },
+ {
+  "problem_index": 251,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4168,
+  "extracted_v3": "540",
+  "opening": ".\n\nOkay, so there's this probl"
+ },
+ {
+  "problem_index": 252,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1543,
+  "extracted_v3": "81",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 253,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 904,
+  "extracted_v3": "\\dfrac{1}{8}",
+  "opening": "  $$\n\n\nOkay, so I need to figu"
+ },
+ {
+  "problem_index": 254,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1190,
+  "extracted_v3": "28",
+  "opening": " tag.\n\nOkay, let me try to fig"
+ },
+ {
+  "problem_index": 255,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2198,
+  "extracted_v3": "E",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 256,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1112,
+  "extracted_v3": "\\frac{8}{21}",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 257,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 932,
+  "extracted_v3": "864",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 258,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 753,
+  "extracted_v3": "16",
+  "opening": " line.\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 259,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1225,
+  "extracted_v3": "22",
+  "opening": ".\n\nOkay, let me see. The probl"
+ },
+ {
+  "problem_index": 260,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1723,
+  "extracted_v3": "120",
+  "opening": " (not before).\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 261,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2434,
+  "extracted_v3": "76",
+  "opening": " written in the response.\n\nOka"
+ },
+ {
+  "problem_index": 262,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1404,
+  "extracted_v3": "4",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 263,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 930,
+  "extracted_v3": "15",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 264,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 16357,
+  "extracted_v3": "12\\frac{1}{2}",
+  "opening": " and no comma.\n\nOkay, let's tr"
+ },
+ {
+  "problem_index": 265,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 853,
+  "extracted_v3": "4005",
+  "opening": " line.\n\n\n\n\nOkay, let's see. I "
+ },
+ {
+  "problem_index": 266,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 696,
+  "extracted_v3": "\\dfrac{33}{100}",
+  "opening": " at the bottom of the response"
+ },
+ {
+  "problem_index": 267,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4771,
+  "extracted_v3": "180",
+  "opening": " and follow the form of the ex"
+ },
+ {
+  "problem_index": 268,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 554,
+  "extracted_v3": "$1$",
+  "opening": " line\n\nOkay, so I need to find"
+ },
+ {
+  "problem_index": 269,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1139,
+  "extracted_v3": "6",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 270,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 596,
+  "extracted_v3": "$10.",
+  "opening": ".\nOkay, let's see. The problem"
+ },
+ {
+  "problem_index": 271,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1981,
+  "extracted_v3": "333",
+  "opening": " in the final answer.\n\nOkay, s"
+ },
+ {
+  "problem_index": 272,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2354,
+  "extracted_v3": "1030",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 273,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1073,
+  "extracted_v3": "1250",
+  "opening": "\n\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 274,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 16031,
+  "extracted_v3": "18 + 20\\pi",
+  "opening": ".\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 275,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 485,
+  "extracted_v3": "7",
+  "opening": ". You can put additional infor"
+ },
+ {
+  "problem_index": 276,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1533,
+  "extracted_v3": "11",
+  "opening": " but before \"Answer:\".\n\nOkay, "
+ },
+ {
+  "problem_index": 277,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 623,
+  "extracted_v3": "\\sqrt{53}",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 278,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1632,
+  "extracted_v3": "255",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 279,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3079,
+  "extracted_v3": "7\\pi",
+  "opening": ".\n\nThe problem asks for the di"
+ },
+ {
+  "problem_index": 280,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1171,
+  "extracted_v3": "8",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 281,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2826,
+  "extracted_v3": "36",
+  "opening": ".\n\nOkay, let me try to figure "
+ },
+ {
+  "problem_index": 282,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4546,
+  "extracted_v3": "129",
+  "opening": " line\n\nOkay, let's try to figu"
+ },
+ {
+  "problem_index": 283,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 644,
+  "extracted_v3": "1",
+  "opening": " somewhere in the message. Don"
+ },
+ {
+  "problem_index": 284,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": ".\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 285,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9666,
+  "extracted_v3": "440",
+  "opening": " line.\n\nOkay, let's try to tac"
+ },
+ {
+  "problem_index": 286,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " above.\n\nOkay, so I need to co"
+ },
+ {
+  "problem_index": 287,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6262,
+  "extracted_v3": "36",
+  "opening": ".\n\nOkay, let's see. So there a"
+ },
+ {
+  "problem_index": 288,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6018,
+  "extracted_v3": "7",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 289,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3347,
+  "extracted_v3": "16",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 290,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2158,
+  "extracted_v3": "4",
+  "opening": " & just a little indent.\n\nOkay"
+ },
+ {
+  "problem_index": 291,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2788,
+  "extracted_v3": "63",
+  "opening": ".\n\nAlright, so I need to find "
+ },
+ {
+  "problem_index": 292,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3450,
+  "extracted_v3": "898",
+  "opening": " label.\n\nOkay, let me try to f"
+ },
+ {
+  "problem_index": 293,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1351,
+  "extracted_v3": "\\left( \\frac{3}{5}, \\frac{8}{3} \\right]",
+  "opening": ".\n\nOkay, let me try to solve t"
+ },
+ {
+  "problem_index": 294,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3855,
+  "extracted_v3": "58",
+  "opening": ".\n\nOkay, so I need to find thr"
+ },
+ {
+  "problem_index": 295,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9803,
+  "extracted_v3": "11",
+  "opening": ".\n\n\nOkay, so I need to solve t"
+ },
+ {
+  "problem_index": 296,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 10211,
+  "extracted_v3": "B",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 297,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1470,
+  "extracted_v3": "103",
+  "opening": ".\n\n\n\nOkay, let's try to figure"
+ },
+ {
+  "problem_index": 298,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 1974,
+  "extracted_v3": "\\begin{pmatrix} 6 \\\\ -77 \\\\ 108 \\end{pmatrix}",
+  "opening": ".\n\nOkay, so I need to compute "
+ },
+ {
+  "problem_index": 299,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2225,
+  "extracted_v3": "63",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 300,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1457,
+  "extracted_v3": "12.",
+  "opening": " no other text, but only the a"
+ },
+ {
+  "problem_index": 301,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11576,
+  "extracted_v3": "5.4",
+  "opening": ".\n\nOkay, let me try to solve t"
+ },
+ {
+  "problem_index": 302,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 10649,
+  "extracted_v3": "4",
+  "opening": " tags.\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 303,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 14189,
+  "extracted_v3": "21",
+  "opening": ".\n\nOkay, let's try to tackle t"
+ },
+ {
+  "problem_index": 304,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 1,
+  "extracted_v3": null,
+  "opening": ""
+ },
+ {
+  "problem_index": 305,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 766,
+  "extracted_v3": "\\dfrac{9}{19}",
+  "opening": " and to omit the \"$\\boxed{}$\" "
+ },
+ {
+  "problem_index": 306,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 12843,
+  "extracted_v3": "3",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 307,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1981,
+  "extracted_v3": "(-\\infty, 0]",
+  "opening": " tag, not on the same line as "
+ },
+ {
+  "problem_index": 308,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " tag and do not put it in a li"
+ },
+ {
+  "problem_index": 309,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3583,
+  "extracted_v3": "14",
+  "opening": ".\n\nAlright, let me try to figu"
+ },
+ {
+  "problem_index": 310,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1750,
+  "extracted_v3": "49",
+  "opening": " tag.\n\nOkay, so I need to figu"
+ },
+ {
+  "problem_index": 311,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2802,
+  "extracted_v3": "3",
+  "opening": " above the \"###\" line.\n\nOkay, "
+ },
+ {
+  "problem_index": 312,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 626,
+  "extracted_v3": "(5, \\infty)",
+  "opening": ".\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 313,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 666,
+  "extracted_v3": "12\\pi",
+  "opening": ".\n\n\nOkay, let's see. So the pr"
+ },
+ {
+  "problem_index": 314,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1390,
+  "extracted_v3": "(2, 4)",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 315,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2623,
+  "extracted_v3": "41",
+  "opening": ".\n\nOkay, let me try to figure "
+ },
+ {
+  "problem_index": 316,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1816,
+  "extracted_v3": "12",
+  "opening": " in the usual form, like this\n"
+ },
+ {
+  "problem_index": 317,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5928,
+  "extracted_v3": "0",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 318,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 815,
+  "extracted_v3": "\\dfrac{11 + 9a}{20}",
+  "opening": ".\n\nOkay, let me see. I need to"
+ },
+ {
+  "problem_index": 319,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 805,
+  "extracted_v3": "-128",
+  "opening": ".\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 320,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4133,
+  "extracted_v3": "-\\dfrac{24}{25}",
+  "opening": ".\n\n\n\nOkay, let me try to figur"
+ },
+ {
+  "problem_index": 321,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1574,
+  "extracted_v3": "10",
+  "opening": " .\n\nOkay, so I need to figure "
+ },
+ {
+  "problem_index": 322,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 1,
+  "extracted_v3": null,
+  "opening": ""
+ },
+ {
+  "problem_index": 323,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7717,
+  "extracted_v3": "\\dfrac{1}{3}",
+  "opening": " tag.\n\n\n\nOkay, so I need to fi"
+ },
+ {
+  "problem_index": 324,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 7240,
+  "extracted_v3": "200",
+  "opening": ".\n\nOkay, so there's this probl"
+ },
+ {
+  "problem_index": 325,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 702,
+  "extracted_v3": "4",
+  "opening": " response\n\nOkay, let's see. I "
+ },
+ {
+  "problem_index": 326,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5202,
+  "extracted_v3": "\\dfrac{9}{100}",
+  "opening": " like this:\n\nAnswer: 101\n\nOkay"
+ },
+ {
+  "problem_index": 327,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 13102,
+  "extracted_v3": "15",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 328,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5497,
+  "extracted_v3": "3",
+  "opening": " $Answer$ !\n\nLet's analyze the"
+ },
+ {
+  "problem_index": 329,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 438,
+  "extracted_v3": "4",
+  "opening": " line by \"Answer:\"\n\nOkay, let'"
+ },
+ {
+  "problem_index": 330,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 1068,
+  "extracted_v3": null,
+  "opening": " and before two new lines befo"
+ },
+ {
+  "problem_index": 331,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2030,
+  "extracted_v3": "\\dfrac{13}{6}",
+  "opening": " tag.\n\nOkay, let's see. I need"
+ },
+ {
+  "problem_index": 332,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 12014,
+  "extracted_v3": "2",
+  "opening": ". You must show all of your wo"
+ },
+ {
+  "problem_index": 333,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6434,
+  "extracted_v3": "3",
+  "opening": " directly above!\n\nOkay, so I n"
+ },
+ {
+  "problem_index": 334,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2355,
+  "extracted_v3": "-120",
+  "opening": ".\n\nAlright, so I've got this p"
+ },
+ {
+  "problem_index": 335,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1984,
+  "extracted_v3": "3",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 336,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 453,
+  "extracted_v3": "26000",
+  "opening": ".\n\nOkay, let's see... I need t"
+ },
+ {
+  "problem_index": 337,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1789,
+  "extracted_v3": "6",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 338,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3078,
+  "extracted_v3": "4343",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 339,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4201,
+  "extracted_v3": "2k",
+  "opening": " line.  For example:\n[/.bc]\nAn"
+ },
+ {
+  "problem_index": 340,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": "67",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 341,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1021,
+  "extracted_v3": "-2",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 342,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1565,
+  "extracted_v3": "2",
+  "opening": " line, so I could correctly co"
+ },
+ {
+  "problem_index": 343,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 2806,
+  "extracted_v3": "59400",
+  "opening": " tag and do not forget to put "
+ },
+ {
+  "problem_index": 344,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 241,
+  "extracted_v3": "5",
+  "opening": ".\nTo find the value of $a$ whe"
+ },
+ {
+  "problem_index": 345,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1151,
+  "extracted_v3": "1",
+  "opening": ".\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 346,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2756,
+  "extracted_v3": "66",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 347,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1447,
+  "extracted_v3": "6r^2 - 4r - 24",
+  "opening": " without labels or any other t"
+ },
+ {
+  "problem_index": 348,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1364,
+  "extracted_v3": "4495",
+  "opening": ".\n\nOkay, so I need to compute "
+ },
+ {
+  "problem_index": 349,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 3809,
+  "extracted_v3": "5040",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 350,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2476,
+  "extracted_v3": "4",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 351,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11432,
+  "extracted_v3": "\\dfrac{1}{16}",
+  "opening": " label.\n\n\n\n\n\nOkay, let's see. "
+ },
+ {
+  "problem_index": 352,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": ".\n\nOkay, let's see. So we have"
+ },
+ {
+  "problem_index": 353,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1419,
+  "extracted_v3": "480",
+  "opening": " \n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 354,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 870,
+  "extracted_v3": "81",
+  "opening": ". \nSo, the answer is \n\nOkay, l"
+ },
+ {
+  "problem_index": 355,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9102,
+  "extracted_v3": "100",
+  "opening": ".\n\nAlright, so I have this pro"
+ },
+ {
+  "problem_index": 356,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1914,
+  "extracted_v3": "(-\\sqrt{3}, \\sqrt{3})",
+  "opening": ".\n\nOkay, let's tackle this ine"
+ },
+ {
+  "problem_index": 357,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1991,
+  "extracted_v3": "4",
+  "opening": ".\n\nOkay, let's try to solve th"
+ },
+ {
+  "problem_index": 358,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1985,
+  "extracted_v3": "ellipse",
+  "opening": " NOT thereby: \"Answer: bla bla"
+ },
+ {
+  "problem_index": 359,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8023,
+  "extracted_v3": "6",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 360,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2684,
+  "extracted_v3": "\\dfrac{7}{4}",
+  "opening": ".\n\n\nOkay, so I need to find th"
+ },
+ {
+  "problem_index": 361,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5186,
+  "extracted_v3": "16\\sqrt{3}",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 362,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1026,
+  "extracted_v3": "\\dfrac{1}{4}",
+  "opening": " \n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 363,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 229,
+  "extracted_v3": "2",
+  "opening": ".\n\nThe problem involves settin"
+ },
+ {
+  "problem_index": 364,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2181,
+  "extracted_v3": "(1, -16, -4, 43)",
+  "opening": ".\n\nOkay, let's try to solve th"
+ },
+ {
+  "problem_index": 365,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3050,
+  "extracted_v3": "8",
+  "opening": ".\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 366,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2386,
+  "extracted_v3": "4",
+  "opening": ".\n\nOkay, so I have to find the"
+ },
+ {
+  "problem_index": 367,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1166,
+  "extracted_v3": "1",
+  "opening": ".\n\nAlright, let's tackle this "
+ },
+ {
+  "problem_index": 368,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 928,
+  "extracted_v3": "31",
+  "opening": " The line above should only co"
+ },
+ {
+  "problem_index": 369,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 3732,
+  "extracted_v3": "189",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 370,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 674,
+  "extracted_v3": "-41",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 371,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11346,
+  "extracted_v3": "17",
+  "opening": " (without quotes).\n\nAlright, s"
+ },
+ {
+  "problem_index": 372,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8312,
+  "extracted_v3": "90^\\circ",
+  "opening": ".\n\nOkay, let's try to solve th"
+ },
+ {
+  "problem_index": 373,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1463,
+  "extracted_v3": "$1 + 2i$.",
+  "opening": " \ud83d\ude42 No other text is allowed in"
+ },
+ {
+  "problem_index": 374,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 535,
+  "extracted_v3": "4",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 375,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1643,
+  "extracted_v3": "25",
+  "opening": ".\n\nAlright, let's tackle this "
+ },
+ {
+  "problem_index": 376,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1934,
+  "extracted_v3": "(8, -2)",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 377,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7271,
+  "extracted_v3": "6",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 378,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1499,
+  "extracted_v3": "3",
+  "opening": ".\n\n\nOkay, so I need to find al"
+ },
+ {
+  "problem_index": 379,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8206,
+  "extracted_v3": "12th",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 380,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7801,
+  "extracted_v3": "(0, 9) \\cup (9, 36)",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 381,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5579,
+  "extracted_v3": "\\dfrac{1}{2}",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 382,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9490,
+  "extracted_v3": "\\dfrac{20000}{\\pi}",
+  "opening": " interview. Integers are allow"
+ },
+ {
+  "problem_index": 383,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 878,
+  "extracted_v3": "[-2, 7]",
+  "opening": " line.\n\n\nOkay, let me try to f"
+ },
+ {
+  "problem_index": 384,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 285,
+  "extracted_v3": "15x - 80",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 385,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 1233,
+  "extracted_v3": "23",
+  "opening": ".\n\nOkay, let's see. Kathy want"
+ },
+ {
+  "problem_index": 386,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1326,
+  "extracted_v3": "11",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 387,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 963,
+  "extracted_v3": "18",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 388,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1300,
+  "extracted_v3": "\\dfrac{11}{2}",
+  "opening": ".\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 389,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1044,
+  "extracted_v3": "\\dfrac{\\sqrt{21}}{5}",
+  "opening": " below. You may use basic trig"
+ },
+ {
+  "problem_index": 390,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2998,
+  "extracted_v3": "12",
+  "opening": " line.\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 391,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5506,
+  "extracted_v3": "0",
+  "opening": ". Please refer to Twitter or Y"
+ },
+ {
+  "problem_index": 392,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 9899,
+  "extracted_v3": "8",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 393,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2131,
+  "extracted_v3": "\\dfrac{3}{4}",
+  "opening": ".\n\nOkay, so Jen wants to throw"
+ },
+ {
+  "problem_index": 394,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2878,
+  "extracted_v3": "-\\dfrac{3}{8}",
+  "opening": ".\n\nAlright, let's see. So, Arc"
+ },
+ {
+  "problem_index": 395,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2043,
+  "extracted_v3": "4",
+  "opening": "! (Example: Answer: $\\pi + 6.5"
+ },
+ {
+  "problem_index": 396,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7235,
+  "extracted_v3": "2",
+  "opening": "!\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 397,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 752,
+  "extracted_v3": "23",
+  "opening": ".\n\nOkay, let's see. I have thi"
+ },
+ {
+  "problem_index": 398,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 3285,
+  "extracted_v3": "Navin from Mauritius.",
+  "opening": " \n\nOkay, let's see. So the pro"
+ },
+ {
+  "problem_index": 399,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 69,
+  "extracted_v3": "326.5",
+  "opening": " line.\n\nTo solve the problem, "
+ },
+ {
+  "problem_index": 400,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 14701,
+  "extracted_v3": "14(\\sqrt{2} - 1)",
+  "opening": " and only after the last answe"
+ },
+ {
+  "problem_index": 401,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7289,
+  "extracted_v3": "\\dfrac{13}{4}",
+  "opening": "\to\n\nOkay, so I need to find th"
+ },
+ {
+  "problem_index": 402,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2557,
+  "extracted_v3": "1 - 12i",
+  "opening": ".\n\nOkay, let me try to work th"
+ },
+ {
+  "problem_index": 403,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2893,
+  "extracted_v3": "3",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 404,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 686,
+  "extracted_v3": "3",
+  "opening": " or \"Answer on a new line for "
+ },
+ {
+  "problem_index": 405,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1254,
+  "extracted_v3": "60",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 406,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2449,
+  "extracted_v3": "0",
+  "opening": ".\n\n\nOkay, so I need to find th"
+ },
+ {
+  "problem_index": 407,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1170,
+  "extracted_v3": "9",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 408,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11267,
+  "extracted_v3": "\\left( \\dfrac{1}{5}, -\\dfrac{18}{5} \\right)",
+  "opening": ".\n\n\nOkay, let's see. So the pr"
+ },
+ {
+  "problem_index": 409,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 3538,
+  "extracted_v3": "\\sqrt{5}",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 410,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1150,
+  "extracted_v3": "6",
+  "opening": " line.\n\n\n\nOkay, let's tackle t"
+ },
+ {
+  "problem_index": 411,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 459,
+  "extracted_v3": "60",
+  "opening": ".\n\n\nOkay, let's see. There are"
+ },
+ {
+  "problem_index": 412,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5359,
+  "extracted_v3": "406",
+  "opening": ".\n\n\nOkay, let's try to figure "
+ },
+ {
+  "problem_index": 413,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 479,
+  "extracted_v3": "5r^5",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 414,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4445,
+  "extracted_v3": "10",
+  "opening": ".\n\nOkay, let's try to solve th"
+ },
+ {
+  "problem_index": 415,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2636,
+  "extracted_v3": "9",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 416,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2035,
+  "extracted_v3": "\\dfrac{1}{8}",
+  "opening": " line, not at the end.\n\nOkay, "
+ },
+ {
+  "problem_index": 417,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2728,
+  "extracted_v3": "-2",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 418,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 987,
+  "extracted_v3": "2\\sqrt{5}",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 419,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line.\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 420,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1283,
+  "extracted_v3": "\\begin{pmatrix} \\dfrac{16}{49} \\\\ \\dfrac{48}{49} \\\\ \\dfrac{24}{49} \\end{pmatrix}",
+  "opening": ".'' It should look like this:\n"
+ },
+ {
+  "problem_index": 421,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5003,
+  "extracted_v3": "27",
+  "opening": "\n\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 422,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": ".\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 423,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2974,
+  "extracted_v3": "1440",
+  "opening": " and only the answer.\n\nOkay, l"
+ },
+ {
+  "problem_index": 424,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1109,
+  "extracted_v3": "600",
+  "opening": ".\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 425,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": "\\frac{a^2 + b^2 + c^2}{2} + 3R^2",
+  "opening": ".\n\nOkay, so I need to find an "
+ },
+ {
+  "problem_index": 426,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 693,
+  "extracted_v3": "$6\\sqrt{2}$ centimeters.",
+  "opening": " and put the problem you solve"
+ },
+ {
+  "problem_index": 427,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1747,
+  "extracted_v3": "29",
+  "opening": ".\n\n\nOkay, let's see. I need to"
+ },
+ {
+  "problem_index": 428,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2831,
+  "extracted_v3": "64",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 429,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3284,
+  "extracted_v3": "50",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 430,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 511,
+  "extracted_v3": "4.5",
+  "opening": " line.\n\nOkay, let's see. I nee"
+ },
+ {
+  "problem_index": 431,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5594,
+  "extracted_v3": "\\left[ \\dfrac{\\pi^2}{8}, \\dfrac{5\\pi^2}{4} \\right]",
+  "opening": ".\n\nOkay, let me try to figure "
+ },
+ {
+  "problem_index": 432,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": ".\n\n\n\n\n\nOkay, so I need to solv"
+ },
+ {
+  "problem_index": 433,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9369,
+  "extracted_v3": "0.35625",
+  "opening": ".\n\nOkay, so I need to convert "
+ },
+ {
+  "problem_index": 434,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1807,
+  "extracted_v3": "32",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 435,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1192,
+  "extracted_v3": "(-\\infty, 2) \\cup (3, \\infty)",
+  "opening": "; also, we use reasonable form"
+ },
+ {
+  "problem_index": 436,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1140,
+  "extracted_v3": "4.",
+  "opening": ".\nOkay, let's try to solve thi"
+ },
+ {
+  "problem_index": 437,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3587,
+  "extracted_v3": "3",
+  "opening": ".\n\nAlright, so I have this pro"
+ },
+ {
+  "problem_index": 438,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1245,
+  "extracted_v3": "4",
+  "opening": " line.\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 439,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2112,
+  "extracted_v3": "1 + x + x^2 + x^3 + x^4 + x^5 + x^6 + x^7 + x^8",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 440,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1870,
+  "extracted_v3": "14",
+  "opening": ".\n\nOkay, so I have this algebr"
+ },
+ {
+  "problem_index": 441,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 701,
+  "extracted_v3": "550",
+  "opening": "!\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 442,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 835,
+  "extracted_v3": "256",
+  "opening": ".\n\nOkay, let's tackle this pro"
+ },
+ {
+  "problem_index": 443,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1064,
+  "extracted_v3": "45",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 444,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 445,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7455,
+  "extracted_v3": "15",
+  "opening": " line. Be accurate and precise"
+ },
+ {
+  "problem_index": 446,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1688,
+  "extracted_v3": "8",
+  "opening": " This is the final one, please"
+ },
+ {
+  "problem_index": 447,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 820,
+  "extracted_v3": "9",
+  "opening": ".\n\nOkay, let's see. There are "
+ },
+ {
+  "problem_index": 448,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1527,
+  "extracted_v3": "44",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 449,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 913,
+  "extracted_v3": "47",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 450,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2273,
+  "extracted_v3": "64",
+  "opening": " and to make sure it is $Answe"
+ },
+ {
+  "problem_index": 451,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5475,
+  "extracted_v3": "\\dfrac{639}{40}",
+  "opening": " in a box\n\nOkay, so I have thi"
+ },
+ {
+  "problem_index": 452,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1962,
+  "extracted_v3": "143",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 453,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1317,
+  "extracted_v3": "10",
+  "opening": ".\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 454,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2667,
+  "extracted_v3": "y = 2x + 3",
+  "opening": "  (and only answer).  No other"
+ },
+ {
+  "problem_index": 455,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 647,
+  "extracted_v3": "6",
+  "opening": " \n\nNow, begin!\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 456,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3346,
+  "extracted_v3": "1, -2",
+  "opening": ".\n\nOkay, so I have this quarti"
+ },
+ {
+  "problem_index": 457,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 236,
+  "extracted_v3": "0",
+  "opening": " (without quotes).\n\nOkay, so I"
+ },
+ {
+  "problem_index": 458,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2371,
+  "extracted_v3": "41",
+  "opening": ".\n\nOkay, let's try to figure t"
+ },
+ {
+  "problem_index": 459,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 1755,
+  "extracted_v3": "\\$51.30.",
+  "opening": ".\nOkay, so I need to figure ou"
+ },
+ {
+  "problem_index": 460,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 9401,
+  "extracted_v3": "80",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 461,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1287,
+  "extracted_v3": "12",
+  "opening": ".\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 462,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 1202,
+  "extracted_v3": "159",
+  "opening": " line. Do not simply list the "
+ },
+ {
+  "problem_index": 463,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1143,
+  "extracted_v3": "2",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 464,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1991,
+  "extracted_v3": "9",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 465,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 547,
+  "extracted_v3": "121",
+  "opening": ".\n\n\n\n### Problem & Answer  \n\nW"
+ },
+ {
+  "problem_index": 466,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4011,
+  "extracted_v3": "8\\pi",
+  "opening": ".\n\n\nOkay, let's tackle this pr"
+ },
+ {
+  "problem_index": 467,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7652,
+  "extracted_v3": "15",
+  "opening": " in the response.\n\nOkay, so I "
+ },
+ {
+  "problem_index": 468,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1870,
+  "extracted_v3": "8",
+  "opening": ".\n\n\nOkay, let's see. The probl"
+ },
+ {
+  "problem_index": 469,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1041,
+  "extracted_v3": "25",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 470,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6081,
+  "extracted_v3": "27648",
+  "opening": " (without any \"$$\").\n\nOkay, so"
+ },
+ {
+  "problem_index": 471,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 554,
+  "extracted_v3": "84",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 472,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2431,
+  "extracted_v3": "137 \\dfrac{1}{2}",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 473,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 12775,
+  "extracted_v3": "7",
+  "opening": "!\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 474,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3220,
+  "extracted_v3": "3",
+  "opening": ".\n\nOkay, let me try to figure "
+ },
+ {
+  "problem_index": 475,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11078,
+  "extracted_v3": "29",
+  "opening": ".\n\nOkay, let's try to solve th"
+ },
+ {
+  "problem_index": 476,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 675,
+  "extracted_v3": "200",
+  "opening": ".\n\nOkay, let's try to solve th"
+ },
+ {
+  "problem_index": 477,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4719,
+  "extracted_v3": "2",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 478,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7352,
+  "extracted_v3": "\\dfrac{2}{1005}",
+  "opening": ".\n\nOkay, let's tackle this pro"
+ },
+ {
+  "problem_index": 479,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1237,
+  "extracted_v3": "2",
+  "opening": " line.\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 480,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1829,
+  "extracted_v3": "1",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 481,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": "!\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 482,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 1839,
+  "extracted_v3": "1009",
+  "opening": ".\n\nOkay, let's try to tackle t"
+ },
+ {
+  "problem_index": 483,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3051,
+  "extracted_v3": "\\dfrac{8}{15}",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 484,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6123,
+  "extracted_v3": "10",
+  "opening": ".\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 485,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 9605,
+  "extracted_v3": "18",
+  "opening": ".\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 486,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 14624,
+  "extracted_v3": "54\\sqrt{2}",
+  "opening": ".\n\nOkay, let's see. So the pro"
+ },
+ {
+  "problem_index": 487,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1680,
+  "extracted_v3": "2",
+  "opening": " line.\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 488,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 751,
+  "extracted_v3": "36",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 489,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3771,
+  "extracted_v3": "15",
+  "opening": ".\n\nOkay, let me try to figure "
+ },
+ {
+  "problem_index": 490,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5641,
+  "extracted_v3": "14",
+  "opening": ".\n\n\nOkay, let's try to tackle "
+ },
+ {
+  "problem_index": 491,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 11774,
+  "extracted_v3": "3000",
+  "opening": " line.\n\nOkay, let's see. So To"
+ },
+ {
+  "problem_index": 492,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1369,
+  "extracted_v3": "y = -2x",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 493,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3835,
+  "extracted_v3": "20",
+  "opening": ".\n\nOkay, let me try to figure "
+ },
+ {
+  "problem_index": 494,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 14425,
+  "extracted_v3": "\\dfrac{1}{2}",
+  "opening": ".\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 495,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2656,
+  "extracted_v3": "(2, 12) \\cup (12, 102)",
+  "opening": ".\n\nAlright, let's tackle this "
+ },
+ {
+  "problem_index": 496,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1971,
+  "extracted_v3": "\\dfrac{5}{13}",
+  "opening": ".\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 497,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 15251,
+  "extracted_v3": "\\dfrac{13}{4}",
+  "opening": ".\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 498,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6626,
+  "extracted_v3": "-1",
+  "opening": ".\n\nOkay, let's tackle this pro"
+ },
+ {
+  "problem_index": 499,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4296,
+  "extracted_v3": "106",
+  "opening": ".\n\nAlright, so I need to find "
+ }
+]

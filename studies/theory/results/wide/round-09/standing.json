@@ -1,0 +1,1742 @@
+{
+ "utc": "2026-11-15T17:45:51",
+ "from": [
+  "studies/theory/results/forecast/run-02",
+  "studies/theory/results/forecast/run-03",
+  "studies/theory/results/forecast/run-04",
+  "studies/theory/results/forecast/run-05",
+  "studies/theory/results/forecast/run-06",
+  "studies/theory/results/forecast/run-07",
+  "studies/theory/results/forecast/run-08",
+  "studies/theory/results/forecast/cells-01"
+ ],
+ "carried": [
+  {
+   "id": "run-06/f2-m03",
+   "family": "training",
+   "lens": "training data and objective: what Think-SFT imitation, RL reward and pretraining each put into the model, exposure of problems",
+   "statement": "An outcome reward pays only for a gradable final answer, so its consistent gradient piles into a few singular directions that make the model complete the task in the rewarded form (boxed answer, final code block) before the cap; the rest of the update is diffuse. In-domain, the top-8 directions at 1.5x reproduce nearly all of RL's gain over the cued base. Another reward's directions give about half, random rank-8 gives nothing, and 2x commits too early.",
+   "rests_on": [
+    "result-6f1bb7",
+    "result-95a4dc",
+    "result-284db5",
+    "result-39497c",
+    "result-51a0e7"
+   ],
+   "holds_against": null,
+   "rows": [
+    {
+     "id": "t01",
+     "measured": 386,
+     "value": 366,
+     "low": 341,
+     "high": 391,
+     "nulls": [
+      {
+       "value": 348,
+       "low": 325,
+       "high": 372
+      },
+      {
+       "value": 350,
+       "low": 322,
+       "high": 378
+      }
+     ],
+     "gain": 1.8963,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-06 forecasts"
+    },
+    {
+     "id": "t02",
+     "measured": 399,
+     "value": 378,
+     "low": 352,
+     "high": 404,
+     "nulls": [
+      {
+       "value": 355,
+       "low": 328,
+       "high": 382
+      },
+      {
+       "value": 360,
+       "low": 328,
+       "high": 391
+      }
+     ],
+     "gain": 1.849,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-06 forecasts"
+    },
+    {
+     "id": "t03",
+     "measured": 394,
+     "value": 365,
+     "low": 330,
+     "high": 398,
+     "nulls": [
+      {
+       "value": 345,
+       "low": 308,
+       "high": 378
+      },
+      {
+       "value": 351,
+       "low": 310,
+       "high": 388
+      }
+     ],
+     "gain": 1.1493,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-06 forecasts"
+    },
+    {
+     "id": "t04",
+     "measured": 331,
+     "value": 314,
+     "low": 297,
+     "high": 331,
+     "nulls": [
+      {
+       "value": 315,
+       "low": 298,
+       "high": 332
+      },
+      {
+       "value": 314,
+       "low": 297,
+       "high": 332
+      }
+     ],
+     "gain": -0.1023,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-06 forecasts"
+    },
+    {
+     "id": "t05",
+     "measured": 368,
+     "value": 345,
+     "low": 320,
+     "high": 370,
+     "nulls": [
+      {
+       "value": 336,
+       "low": 312,
+       "high": 360
+      },
+      {
+       "value": 340,
+       "low": 314,
+       "high": 366
+      }
+     ],
+     "gain": 0.7714,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-06 forecasts"
+    }
+   ],
+   "forecast": {
+    "scored": 5,
+    "inside": 5,
+    "total_gain": 5.564
+   },
+   "state": "carried"
+  },
+  {
+   "id": "run-02/f2-m01",
+   "family": "run-02",
+   "lens": "Any family of causes.",
+   "statement": "The autobench agent works under a fixed generation time per experiment, so it buys votes by shortening each sample (its best config: 10 samples at about 1,100 tokens each). Most MATH-500 problems are solved in under 2,000 tokens, so short samples plus a vote score well on dev100, but hard328 solutions need 6,000-14,000 tokens and short samples never reach them. For the base, each doubling of the token budget past 8,000 buys fewer problems.",
+   "rests_on": [
+    "result-fa480f",
+    "result-5e17a6",
+    "result-1b6bf2",
+    "result-51fd20"
+   ],
+   "holds_against": null,
+   "rows": [
+    {
+     "id": "t01",
+     "measured": 418,
+     "value": 419,
+     "low": 410,
+     "high": 428,
+     "nulls": [
+      {
+       "value": 420,
+       "low": 408,
+       "high": 432
+      },
+      {
+       "value": 418,
+       "low": 405,
+       "high": 431
+      }
+     ],
+     "gain": 0.3296,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-02 forecasts"
+    },
+    {
+     "id": "t05",
+     "measured": 156,
+     "value": 153,
+     "low": 144,
+     "high": 162,
+     "nulls": [
+      {
+       "value": 168,
+       "low": 155,
+       "high": 181
+      },
+      {
+       "value": 172,
+       "low": 160,
+       "high": 184
+      }
+     ],
+     "gain": 1.7937,
+     "inside": true,
+     "disagrees": true,
+     "source": "run-02 forecasts"
+    },
+    {
+     "id": "t12",
+     "measured": 456,
+     "value": 438,
+     "low": 429,
+     "high": 447,
+     "nulls": [
+      {
+       "value": 444,
+       "low": 432,
+       "high": 456
+      },
+      {
+       "value": 440,
+       "low": 428,
+       "high": 452
+      }
+     ],
+     "gain": -3.0,
+     "inside": false,
+     "disagrees": false,
+     "source": "run-02 forecasts"
+    },
+    {
+     "id": "t13",
+     "measured": 84.0,
+     "value": 87,
+     "low": 86,
+     "high": 90,
+     "nulls": [
+      {
+       "value": 89,
+       "low": 86,
+       "high": 93
+      },
+      {
+       "value": 89,
+       "low": 86,
+       "high": 93
+      }
+     ],
+     "gain": 0.0,
+     "inside": false,
+     "disagrees": false,
+     "source": "run-02 forecasts"
+    },
+    {
+     "id": "t14",
+     "measured": 338,
+     "value": 338,
+     "low": 325,
+     "high": 351,
+     "nulls": [
+      {
+       "value": 362,
+       "low": 345,
+       "high": 375
+      },
+      {
+       "value": 356,
+       "low": 342,
+       "high": 368
+      }
+     ],
+     "gain": 2.9773,
+     "inside": true,
+     "disagrees": true,
+     "source": "run-02 forecasts"
+    },
+    {
+     "id": "t15",
+     "measured": 139,
+     "value": 120,
+     "low": 80,
+     "high": 160,
+     "nulls": [
+      {
+       "value": 190,
+       "low": 165,
+       "high": 210
+      },
+      {
+       "value": 197,
+       "low": 180,
+       "high": 210
+      }
+     ],
+     "gain": 3.0,
+     "inside": true,
+     "disagrees": true,
+     "source": "run-02 forecasts"
+    }
+   ],
+   "forecast": {
+    "scored": 6,
+    "inside": 4,
+    "total_gain": 5.101
+   },
+   "state": "carried"
+  },
+  {
+   "id": "run-05/f2-m03",
+   "family": "weights",
+   "lens": "weight space: the RL weight change, its top directions, scaling and transplanting it",
+   "statement": "Each direction of an RL change acts only as far as the processed text drives its input (right) singular vectors: Math-RL's top-8 input subspaces are excited 8-11x above random by math-solution text and Code-RL's 6-9x, so an edit works in full on any problem set of its own domain and transfers to another domain in proportion to input-subspace overlap (Math with Code about 0.22-0.26, giving roughly half the in-domain effect).",
+   "rests_on": [
+    "result-a7c052",
+    "result-9d979a",
+    "result-284db5",
+    "result-6f1bb7",
+    "result-95a4dc"
+   ],
+   "holds_against": null,
+   "rows": [
+    {
+     "id": "t01",
+     "measured": 386,
+     "value": 365,
+     "low": 341,
+     "high": 389,
+     "nulls": [
+      {
+       "value": 350,
+       "low": 322,
+       "high": 380
+      },
+      {
+       "value": 350,
+       "low": 320,
+       "high": 382
+      }
+     ],
+     "gain": 1.1369,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-05 forecasts"
+    },
+    {
+     "id": "t02",
+     "measured": 399,
+     "value": 385,
+     "low": 360,
+     "high": 408,
+     "nulls": [
+      {
+       "value": 357,
+       "low": 324,
+       "high": 392
+      },
+      {
+       "value": 362,
+       "low": 328,
+       "high": 395
+      }
+     ],
+     "gain": 1.7152,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-05 forecasts"
+    },
+    {
+     "id": "t03",
+     "measured": 394,
+     "value": 370,
+     "low": 340,
+     "high": 397,
+     "nulls": [
+      {
+       "value": 345,
+       "low": 300,
+       "high": 385
+      },
+      {
+       "value": 352,
+       "low": 308,
+       "high": 390
+      }
+     ],
+     "gain": 1.01,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-05 forecasts"
+    },
+    {
+     "id": "t04",
+     "measured": 331,
+     "value": 316,
+     "low": 301,
+     "high": 331,
+     "nulls": [
+      {
+       "value": 318,
+       "low": 301,
+       "high": 336
+      },
+      {
+       "value": 315,
+       "low": 297,
+       "high": 333
+      }
+     ],
+     "gain": -0.2922,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-05 forecasts"
+    },
+    {
+     "id": "t05",
+     "measured": 368,
+     "value": 350,
+     "low": 328,
+     "high": 372,
+     "nulls": [
+      {
+       "value": 338,
+       "low": 312,
+       "high": 366
+      },
+      {
+       "value": 334,
+       "low": 310,
+       "high": 360
+      }
+     ],
+     "gain": 1.2774,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-05 forecasts"
+    }
+   ],
+   "forecast": {
+    "scored": 5,
+    "inside": 5,
+    "total_gain": 4.847
+   },
+   "state": "carried"
+  },
+  {
+   "id": "run-05/f2-m01",
+   "family": "weights",
+   "lens": "weight space: the RL weight change, its top directions, scaling and transplanting it",
+   "statement": "The top-8 singular directions per matrix of the RL change act as a signed termination dial spread over all layers and both module families: adding them at size s raises, monotonically in s, the chance an answer closes with a boxed result before the cap (negative s lengthens and unboxes), and modestly raises correctness on problems already finished; past 1.5x it closes unfinished hard solutions on guesses. Random rank-8 edits and Think-SFT's directions carry no dial.",
+   "rests_on": [
+    "result-6f1bb7",
+    "result-51a0e7",
+    "result-95a4dc",
+    "result-39497c",
+    "result-3387ce"
+   ],
+   "holds_against": null,
+   "rows": [
+    {
+     "id": "t01",
+     "measured": 386,
+     "value": 365,
+     "low": 341,
+     "high": 389,
+     "nulls": [
+      {
+       "value": 350,
+       "low": 322,
+       "high": 380
+      },
+      {
+       "value": 350,
+       "low": 320,
+       "high": 382
+      }
+     ],
+     "gain": 1.1369,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-05 forecasts"
+    },
+    {
+     "id": "t02",
+     "measured": 399,
+     "value": 383,
+     "low": 358,
+     "high": 406,
+     "nulls": [
+      {
+       "value": 357,
+       "low": 324,
+       "high": 392
+      },
+      {
+       "value": 362,
+       "low": 328,
+       "high": 395
+      }
+     ],
+     "gain": 1.5743,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-05 forecasts"
+    },
+    {
+     "id": "t03",
+     "measured": 394,
+     "value": 366,
+     "low": 336,
+     "high": 394,
+     "nulls": [
+      {
+       "value": 345,
+       "low": 300,
+       "high": 385
+      },
+      {
+       "value": 352,
+       "low": 308,
+       "high": 390
+      }
+     ],
+     "gain": 0.6908,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-05 forecasts"
+    },
+    {
+     "id": "t04",
+     "measured": 331,
+     "value": 316,
+     "low": 301,
+     "high": 331,
+     "nulls": [
+      {
+       "value": 318,
+       "low": 301,
+       "high": 336
+      },
+      {
+       "value": 315,
+       "low": 297,
+       "high": 333
+      }
+     ],
+     "gain": -0.2922,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-05 forecasts"
+    },
+    {
+     "id": "t05",
+     "measured": 368,
+     "value": 350,
+     "low": 327,
+     "high": 372,
+     "nulls": [
+      {
+       "value": 338,
+       "low": 312,
+       "high": 366
+      },
+      {
+       "value": 334,
+       "low": 310,
+       "high": 360
+      }
+     ],
+     "gain": 1.2947,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-05 forecasts"
+    }
+   ],
+   "forecast": {
+    "scored": 5,
+    "inside": 5,
+    "total_gain": 4.404
+   },
+   "state": "carried"
+  },
+  {
+   "id": "run-07/f2-m02",
+   "family": "problems",
+   "lens": "problem structure: difficulty, domain, answer type, length of the needed derivation",
+   "statement": "An RL run's top weight directions write a habit for its own domain's answers. For Math-RL that habit is to deliberate, check, and finish with one boxed answer; for Code-RL it is to reason, then finish with one final python block that passes the tests. In its own domain the top-8 edit carries about two thirds of RL's gain at 1x and nearly all of it at 1.5x. On another domain it carries about half as much.",
+   "rests_on": [
+    "result-284db5",
+    "result-6f1bb7",
+    "result-95a4dc",
+    "result-59ed1a",
+    "result-a7c052"
+   ],
+   "holds_against": null,
+   "rows": [
+    {
+     "id": "t01",
+     "measured": 386,
+     "value": 368,
+     "low": 348,
+     "high": 388,
+     "nulls": [
+      {
+       "value": 348,
+       "low": 325,
+       "high": 372
+      },
+      {
+       "value": 352,
+       "low": 326,
+       "high": 378
+      }
+     ],
+     "gain": 1.8917,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-07 forecasts"
+    },
+    {
+     "id": "t02",
+     "measured": 399,
+     "value": 377,
+     "low": 355,
+     "high": 399,
+     "nulls": [
+      {
+       "value": 356,
+       "low": 330,
+       "high": 382
+      },
+      {
+       "value": 360,
+       "low": 332,
+       "high": 386
+      }
+     ],
+     "gain": 2.009,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-07 forecasts"
+    },
+    {
+     "id": "t03",
+     "measured": 394,
+     "value": 365,
+     "low": 338,
+     "high": 392,
+     "nulls": [
+      {
+       "value": 347,
+       "low": 312,
+       "high": 378
+      },
+      {
+       "value": 350,
+       "low": 316,
+       "high": 380
+      }
+     ],
+     "gain": 0.0,
+     "inside": false,
+     "disagrees": false,
+     "source": "run-07 forecasts"
+    },
+    {
+     "id": "t04",
+     "measured": 331,
+     "value": 315,
+     "low": 301,
+     "high": 329,
+     "nulls": [
+      {
+       "value": 318,
+       "low": 300,
+       "high": 336
+      },
+      {
+       "value": 315,
+       "low": 298,
+       "high": 332
+      }
+     ],
+     "gain": -0.6159,
+     "inside": false,
+     "disagrees": false,
+     "source": "run-07 forecasts"
+    },
+    {
+     "id": "t05",
+     "measured": 368,
+     "value": 344,
+     "low": 324,
+     "high": 364,
+     "nulls": [
+      {
+       "value": 338,
+       "low": 314,
+       "high": 362
+      },
+      {
+       "value": 333,
+       "low": 310,
+       "high": 358
+      }
+     ],
+     "gain": 0.0,
+     "inside": false,
+     "disagrees": false,
+     "source": "run-07 forecasts"
+    }
+   ],
+   "forecast": {
+    "scored": 5,
+    "inside": 2,
+    "total_gain": 3.285
+   },
+   "state": "carried"
+  },
+  {
+   "id": "run-05/f2-m06",
+   "family": "weights",
+   "lens": "weight space: the RL weight change, its top directions, scaling and transplanting it",
+   "statement": "Weight edits merged in bf16 are realized only where an entry's change exceeds half a unit in the last place of that weight, so small edits are thresholded onto small-magnitude weights and their effective size grows faster than nominal size (a=0.25 acts like about 0.12; top-8 at nominal 1.5 acts like RL's own top-8 share). Smaller deltas such as Code-RL's lose more at 1x and peak at a larger nominal size; trained checkpoints carry no such loss.",
+   "rests_on": [
+    "result-c9b27e",
+    "result-6f1bb7",
+    "result-4b0d5f",
+    "result-17e25e",
+    "result-8c92fc"
+   ],
+   "holds_against": null,
+   "rows": [
+    {
+     "id": "t01",
+     "measured": 386,
+     "value": 356,
+     "low": 333,
+     "high": 380,
+     "nulls": [
+      {
+       "value": 350,
+       "low": 322,
+       "high": 380
+      },
+      {
+       "value": 350,
+       "low": 320,
+       "high": 382
+      }
+     ],
+     "gain": -0.0112,
+     "inside": false,
+     "disagrees": false,
+     "source": "run-05 forecasts"
+    },
+    {
+     "id": "t02",
+     "measured": 399,
+     "value": 381,
+     "low": 356,
+     "high": 404,
+     "nulls": [
+      {
+       "value": 357,
+       "low": 324,
+       "high": 392
+      },
+      {
+       "value": 362,
+       "low": 328,
+       "high": 395
+      }
+     ],
+     "gain": 1.4146,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-05 forecasts"
+    },
+    {
+     "id": "t03",
+     "measured": 394,
+     "value": 378,
+     "low": 350,
+     "high": 402,
+     "nulls": [
+      {
+       "value": 345,
+       "low": 300,
+       "high": 385
+      },
+      {
+       "value": 352,
+       "low": 308,
+       "high": 390
+      }
+     ],
+     "gain": 1.5489,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-05 forecasts"
+    },
+    {
+     "id": "t04",
+     "measured": 331,
+     "value": 316,
+     "low": 301,
+     "high": 331,
+     "nulls": [
+      {
+       "value": 318,
+       "low": 301,
+       "high": 336
+      },
+      {
+       "value": 315,
+       "low": 297,
+       "high": 333
+      }
+     ],
+     "gain": -0.2922,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-05 forecasts"
+    },
+    {
+     "id": "t05",
+     "measured": 368,
+     "value": 345,
+     "low": 323,
+     "high": 367,
+     "nulls": [
+      {
+       "value": 338,
+       "low": 312,
+       "high": 366
+      },
+      {
+       "value": 334,
+       "low": 310,
+       "high": 360
+      }
+     ],
+     "gain": 0.0,
+     "inside": false,
+     "disagrees": false,
+     "source": "run-05 forecasts"
+    }
+   ],
+   "forecast": {
+    "scored": 5,
+    "inside": 3,
+    "total_gain": 2.66
+   },
+   "state": "carried"
+  },
+  {
+   "id": "run-03/f2-m02",
+   "family": "stopping",
+   "lens": "when and how the model stops: token cap, loops, end-of-text, answer markers",
+   "statement": "RL's top singular weight directions raise the model's per-token hazard of committing to an answer and ending, in proportion to their size. In-domain directions therefore turn unfinished answers into finished ones and lengthen premature short ones. Overall right-of-finished stays roughly flat, because fixes on problems already finished offset guesses on converted cap hits. Past about 1.5x the hazard closes hard problems with guesses. The full RL delta added to Think-SFT acts the same way.",
+   "rests_on": [
+    "result-6f1bb7",
+    "result-51a0e7",
+    "result-95a4dc",
+    "result-1b6bf2",
+    "result-3387ce",
+    "result-39497c"
+   ],
+   "holds_against": null,
+   "rows": [
+    {
+     "id": "t01",
+     "measured": 386,
+     "value": 366,
+     "low": 338,
+     "high": 394,
+     "nulls": [
+      {
+       "value": 352,
+       "low": 324,
+       "high": 380
+      },
+      {
+       "value": 356,
+       "low": 326,
+       "high": 386
+      }
+     ],
+     "gain": 0.9777,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-03 forecasts"
+    },
+    {
+     "id": "t02",
+     "measured": 399,
+     "value": 378,
+     "low": 350,
+     "high": 406,
+     "nulls": [
+      {
+       "value": 360,
+       "low": 328,
+       "high": 392
+      },
+      {
+       "value": 363,
+       "low": 330,
+       "high": 396
+      }
+     ],
+     "gain": 1.1809,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-03 forecasts"
+    },
+    {
+     "id": "t03",
+     "measured": 394,
+     "value": 360,
+     "low": 326,
+     "high": 394,
+     "nulls": [
+      {
+       "value": 350,
+       "low": 305,
+       "high": 388
+      },
+      {
+       "value": 352,
+       "low": 308,
+       "high": 390
+      }
+     ],
+     "gain": 0.309,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-03 forecasts"
+    },
+    {
+     "id": "t04",
+     "measured": 331,
+     "value": 315,
+     "low": 301,
+     "high": 329,
+     "nulls": [
+      {
+       "value": 316,
+       "low": 300,
+       "high": 333
+      },
+      {
+       "value": 316,
+       "low": 299,
+       "high": 334
+      }
+     ],
+     "gain": -0.5179,
+     "inside": false,
+     "disagrees": false,
+     "source": "run-03 forecasts"
+    },
+    {
+     "id": "t05",
+     "measured": 368,
+     "value": 343,
+     "low": 317,
+     "high": 369,
+     "nulls": [
+      {
+       "value": 338,
+       "low": 312,
+       "high": 366
+      },
+      {
+       "value": 340,
+       "low": 312,
+       "high": 370
+      }
+     ],
+     "gain": 0.2742,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-03 forecasts"
+    }
+   ],
+   "forecast": {
+    "scored": 5,
+    "inside": 4,
+    "total_gain": 2.224
+   },
+   "state": "carried"
+  },
+  {
+   "id": "run-02/f2-m04",
+   "family": "run-02",
+   "lens": "Any family of causes.",
+   "statement": "A capped sample gives no answer, so in a plurality vote it abstains instead of adding a wrong value. Think-SFT's vote sits near its pass@4 because its unsolved samples run to the cap rather than box a guess. Anything that makes it finish, a 32k cap or the RL difference, turns abstentions into mostly wrong, scattered answers that tie or outvote lone right samples: single scores rise, vote gains shrink.",
+   "rests_on": [
+    "result-818c20",
+    "result-c8b994",
+    "result-5251c9",
+    "result-3387ce"
+   ],
+   "holds_against": null,
+   "rows": [
+    {
+     "id": "t05",
+     "measured": 156,
+     "value": 163,
+     "low": 154,
+     "high": 172,
+     "nulls": [
+      {
+       "value": 168,
+       "low": 155,
+       "high": 181
+      },
+      {
+       "value": 172,
+       "low": 160,
+       "high": 184
+      }
+     ],
+     "gain": 1.1255,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-02 forecasts"
+    },
+    {
+     "id": "t11",
+     "measured": 214,
+     "value": 210,
+     "low": 202,
+     "high": 218,
+     "nulls": [
+      {
+       "value": 219,
+       "low": 208,
+       "high": 229
+      },
+      {
+       "value": 220,
+       "low": 209,
+       "high": 230
+      }
+     ],
+     "gain": 0.3057,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-02 forecasts"
+    },
+    {
+     "id": "t14",
+     "measured": 338,
+     "value": 356,
+     "low": 344,
+     "high": 368,
+     "nulls": [
+      {
+       "value": 362,
+       "low": 345,
+       "high": 375
+      },
+      {
+       "value": 356,
+       "low": 342,
+       "high": 368
+      }
+     ],
+     "gain": 0.0,
+     "inside": false,
+     "disagrees": false,
+     "source": "run-02 forecasts"
+    }
+   ],
+   "forecast": {
+    "scored": 3,
+    "inside": 2,
+    "total_gain": 1.431
+   },
+   "state": "carried"
+  },
+  {
+   "id": "run-03/f2-m05",
+   "family": "stopping",
+   "lens": "when and how the model stops: token cap, loops, end-of-text, answer markers",
+   "statement": "A trace can degenerate before it ends, into word strings, a switch to Chinese script or repeated windows, and a degenerate trace almost never ends right. The hazard of this grows with edit size (word strings at 2-3x) and with tokens already generated (median first script switch near token 13,600). So oversized edits, and the late part of very long Think-SFT traces, lose answers. A smaller edit or a shorter trace keeps them. At T 1.0 classic loops are absent.",
+   "rests_on": [
+    "result-6f1bb7",
+    "result-4b0d5f",
+    "result-997be4",
+    "result-3387ce",
+    "result-44b4df",
+    "result-dadeec"
+   ],
+   "holds_against": null,
+   "rows": [
+    {
+     "id": "t01",
+     "measured": 386,
+     "value": 362,
+     "low": 335,
+     "high": 389,
+     "nulls": [
+      {
+       "value": 352,
+       "low": 324,
+       "high": 380
+      },
+      {
+       "value": 356,
+       "low": 326,
+       "high": 386
+      }
+     ],
+     "gain": 0.6353,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-03 forecasts"
+    },
+    {
+     "id": "t02",
+     "measured": 399,
+     "value": 372,
+     "low": 344,
+     "high": 400,
+     "nulls": [
+      {
+       "value": 360,
+       "low": 328,
+       "high": 392
+      },
+      {
+       "value": 363,
+       "low": 330,
+       "high": 396
+      }
+     ],
+     "gain": 0.6839,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-03 forecasts"
+    },
+    {
+     "id": "t03",
+     "measured": 394,
+     "value": 350,
+     "low": 312,
+     "high": 388,
+     "nulls": [
+      {
+       "value": 350,
+       "low": 305,
+       "high": 388
+      },
+      {
+       "value": 352,
+       "low": 308,
+       "high": 390
+      }
+     ],
+     "gain": -0.2632,
+     "inside": false,
+     "disagrees": false,
+     "source": "run-03 forecasts"
+    },
+    {
+     "id": "t04",
+     "measured": 331,
+     "value": 315,
+     "low": 301,
+     "high": 329,
+     "nulls": [
+      {
+       "value": 316,
+       "low": 300,
+       "high": 333
+      },
+      {
+       "value": 316,
+       "low": 299,
+       "high": 334
+      }
+     ],
+     "gain": -0.5179,
+     "inside": false,
+     "disagrees": false,
+     "source": "run-03 forecasts"
+    },
+    {
+     "id": "t05",
+     "measured": 368,
+     "value": 340,
+     "low": 314,
+     "high": 366,
+     "nulls": [
+      {
+       "value": 338,
+       "low": 312,
+       "high": 366
+      },
+      {
+       "value": 340,
+       "low": 312,
+       "high": 370
+      }
+     ],
+     "gain": -0.044,
+     "inside": false,
+     "disagrees": false,
+     "source": "run-03 forecasts"
+    }
+   ],
+   "forecast": {
+    "scored": 5,
+    "inside": 2,
+    "total_gain": 0.494
+   },
+   "state": "carried"
+  },
+  {
+   "id": "run-04/f2-m03",
+   "family": "sampling",
+   "lens": "sampling: temperature, top-p, entropy of the next-token distribution, what a vote over samples adds",
+   "statement": "Under T 1.0 stopping is a sampled event: at each position the model draws a commit/stop token with a small hazard, so the cap-hit share is a survival probability. RL's top-8 directions add a near-constant logit to that hazard (cap hits 96, 77, 46, 25, 5 along the dial); dose multiplies it. Where the base fails by not stopping (short code tasks, fresh contests) the dial converts unfinished samples, at precision below the base's finished answers.",
+   "rests_on": [
+    "result-6f1bb7",
+    "result-51a0e7",
+    "result-c8b994",
+    "result-0c1eef",
+    "result-3387ce"
+   ],
+   "holds_against": null,
+   "rows": [
+    {
+     "id": "t01",
+     "measured": 386,
+     "value": 358,
+     "low": 335,
+     "high": 381,
+     "nulls": [
+      {
+       "value": 350,
+       "low": 325,
+       "high": 376
+      },
+      {
+       "value": 350,
+       "low": 325,
+       "high": 376
+      }
+     ],
+     "gain": 0.0,
+     "inside": false,
+     "disagrees": false,
+     "source": "run-04 forecasts"
+    },
+    {
+     "id": "t02",
+     "measured": 399,
+     "value": 368,
+     "low": 344,
+     "high": 392,
+     "nulls": [
+      {
+       "value": 357,
+       "low": 330,
+       "high": 384
+      },
+      {
+       "value": 357,
+       "low": 328,
+       "high": 386
+      }
+     ],
+     "gain": 0.0,
+     "inside": false,
+     "disagrees": false,
+     "source": "run-04 forecasts"
+    },
+    {
+     "id": "t03",
+     "measured": 394,
+     "value": 362,
+     "low": 334,
+     "high": 390,
+     "nulls": [
+      {
+       "value": 350,
+       "low": 314,
+       "high": 384
+      },
+      {
+       "value": 350,
+       "low": 312,
+       "high": 384
+      }
+     ],
+     "gain": 0.0,
+     "inside": false,
+     "disagrees": false,
+     "source": "run-04 forecasts"
+    },
+    {
+     "id": "t04",
+     "measured": 331,
+     "value": 318,
+     "low": 303,
+     "high": 333,
+     "nulls": [
+      {
+       "value": 318,
+       "low": 302,
+       "high": 335
+      },
+      {
+       "value": 318,
+       "low": 299,
+       "high": 337
+      }
+     ],
+     "gain": -0.1143,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-04 forecasts"
+    },
+    {
+     "id": "t05",
+     "measured": 368,
+     "value": 350,
+     "low": 326,
+     "high": 374,
+     "nulls": [
+      {
+       "value": 347,
+       "low": 318,
+       "high": 376
+      },
+      {
+       "value": 340,
+       "low": 310,
+       "high": 368
+      }
+     ],
+     "gain": 0.376,
+     "inside": true,
+     "disagrees": false,
+     "source": "run-04 forecasts"
+    }
+   ],
+   "forecast": {
+    "scored": 5,
+    "inside": 2,
+    "total_gain": 0.262
+   },
+   "state": "carried"
+  }
+ ],
+ "records": {
+  "run-06/f2-m03": {
+   "family": "training",
+   "state": "carried",
+   "forecast": {
+    "scored": 5,
+    "inside": 5,
+    "total_gain": 5.564
+   }
+  },
+  "run-02/f2-m01": {
+   "family": "run-02",
+   "state": "carried",
+   "forecast": {
+    "scored": 6,
+    "inside": 4,
+    "total_gain": 5.101
+   }
+  },
+  "run-05/f2-m03": {
+   "family": "weights",
+   "state": "carried",
+   "forecast": {
+    "scored": 5,
+    "inside": 5,
+    "total_gain": 4.847
+   }
+  },
+  "run-05/f2-m01": {
+   "family": "weights",
+   "state": "carried",
+   "forecast": {
+    "scored": 5,
+    "inside": 5,
+    "total_gain": 4.404
+   }
+  },
+  "run-07/f2-m02": {
+   "family": "problems",
+   "state": "carried",
+   "forecast": {
+    "scored": 5,
+    "inside": 2,
+    "total_gain": 3.285
+   }
+  },
+  "run-05/f2-m06": {
+   "family": "weights",
+   "state": "carried",
+   "forecast": {
+    "scored": 5,
+    "inside": 3,
+    "total_gain": 2.66
+   }
+  },
+  "run-03/f2-m02": {
+   "family": "stopping",
+   "state": "carried",
+   "forecast": {
+    "scored": 5,
+    "inside": 4,
+    "total_gain": 2.224
+   }
+  },
+  "run-02/f2-m04": {
+   "family": "run-02",
+   "state": "carried",
+   "forecast": {
+    "scored": 3,
+    "inside": 2,
+    "total_gain": 1.431
+   }
+  },
+  "run-03/f2-m05": {
+   "family": "stopping",
+   "state": "carried",
+   "forecast": {
+    "scored": 5,
+    "inside": 2,
+    "total_gain": 0.494
+   }
+  },
+  "run-04/f2-m03": {
+   "family": "sampling",
+   "state": "carried",
+   "forecast": {
+    "scored": 5,
+    "inside": 2,
+    "total_gain": 0.262
+   }
+  },
+  "run-03/f2-m01": {
+   "family": "stopping",
+   "state": "not carried",
+   "forecast": {
+    "scored": 0,
+    "inside": 0,
+    "total_gain": 0
+   }
+  },
+  "run-03/f2-m03": {
+   "family": "stopping",
+   "state": "not carried",
+   "forecast": {
+    "scored": 0,
+    "inside": 0,
+    "total_gain": 0
+   }
+  },
+  "run-04/f2-m01": {
+   "family": "sampling",
+   "state": "not carried",
+   "forecast": {
+    "scored": 0,
+    "inside": 0,
+    "total_gain": 0
+   }
+  },
+  "run-04/f2-m02": {
+   "family": "sampling",
+   "state": "not carried",
+   "forecast": {
+    "scored": 0,
+    "inside": 0,
+    "total_gain": 0
+   }
+  },
+  "run-04/f2-m05": {
+   "family": "sampling",
+   "state": "not carried",
+   "forecast": {
+    "scored": 0,
+    "inside": 0,
+    "total_gain": 0
+   }
+  },
+  "run-05/f2-m04": {
+   "family": "weights",
+   "state": "not carried",
+   "forecast": {
+    "scored": 0,
+    "inside": 0,
+    "total_gain": 0
+   }
+  },
+  "run-05/f2-m05": {
+   "family": "weights",
+   "state": "not carried",
+   "forecast": {
+    "scored": 0,
+    "inside": 0,
+    "total_gain": 0
+   }
+  },
+  "run-06/f2-m01": {
+   "family": "training",
+   "state": "not carried",
+   "forecast": {
+    "scored": 0,
+    "inside": 0,
+    "total_gain": 0
+   }
+  },
+  "run-06/f2-m04": {
+   "family": "training",
+   "state": "not carried",
+   "forecast": {
+    "scored": 0,
+    "inside": 0,
+    "total_gain": 0
+   }
+  },
+  "run-06/f2-m06": {
+   "family": "training",
+   "state": "not carried",
+   "forecast": {
+    "scored": 0,
+    "inside": 0,
+    "total_gain": 0
+   }
+  },
+  "run-07/f2-m01": {
+   "family": "problems",
+   "state": "not carried",
+   "forecast": {
+    "scored": 0,
+    "inside": 0,
+    "total_gain": 0
+   }
+  },
+  "run-07/f2-m03": {
+   "family": "problems",
+   "state": "not carried",
+   "forecast": {
+    "scored": 0,
+    "inside": 0,
+    "total_gain": 0
+   }
+  },
+  "run-07/f2-m04": {
+   "family": "problems",
+   "state": "not carried",
+   "forecast": {
+    "scored": 0,
+    "inside": 0,
+    "total_gain": 0
+   }
+  },
+  "run-07/f2-m06": {
+   "family": "problems",
+   "state": "not carried",
+   "forecast": {
+    "scored": 0,
+    "inside": 0,
+    "total_gain": 0
+   }
+  },
+  "run-08/f2-m02": {
+   "family": "grader",
+   "state": "not carried",
+   "forecast": {
+    "scored": 0,
+    "inside": 0,
+    "total_gain": 0
+   }
+  },
+  "run-08/f2-m05": {
+   "family": "grader",
+   "state": "not carried",
+   "forecast": {
+    "scored": 0,
+    "inside": 0,
+    "total_gain": 0
+   }
+  },
+  "run-08/f2-m06": {
+   "family": "grader",
+   "state": "not carried",
+   "forecast": {
+    "scored": 0,
+    "inside": 0,
+    "total_gain": 0
+   }
+  },
+  "run-03/f2-m04": {
+   "family": "stopping",
+   "state": "not carried",
+   "forecast": {
+    "scored": 5,
+    "inside": 2,
+    "total_gain": -0.02
+   }
+  },
+  "run-08/f2-m01": {
+   "family": "grader",
+   "state": "not carried",
+   "forecast": {
+    "scored": 1,
+    "inside": 1,
+    "total_gain": -0.139
+   }
+  },
+  "run-02/f2-m06": {
+   "family": "run-02",
+   "state": "not carried",
+   "forecast": {
+    "scored": 4,
+    "inside": 2,
+    "total_gain": -0.2
+   }
+  },
+  "run-06/f2-m05": {
+   "family": "training",
+   "state": "not carried",
+   "forecast": {
+    "scored": 2,
+    "inside": 0,
+    "total_gain": -0.258
+   }
+  },
+  "run-05/f2-m02": {
+   "family": "weights",
+   "state": "not carried",
+   "forecast": {
+    "scored": 5,
+    "inside": 1,
+    "total_gain": -0.292
+   }
+  },
+  "run-04/f2-m04": {
+   "family": "sampling",
+   "state": "not carried",
+   "forecast": {
+    "scored": 1,
+    "inside": 1,
+    "total_gain": -0.308
+   }
+  },
+  "run-06/f2-m02": {
+   "family": "training",
+   "state": "not carried",
+   "forecast": {
+    "scored": 5,
+    "inside": 1,
+    "total_gain": -0.409
+   }
+  },
+  "run-03/f2-m06": {
+   "family": "stopping",
+   "state": "not carried",
+   "forecast": {
+    "scored": 1,
+    "inside": 0,
+    "total_gain": -0.518
+   }
+  },
+  "run-07/f2-m05": {
+   "family": "problems",
+   "state": "graveyard",
+   "forecast": {
+    "scored": 5,
+    "inside": 1,
+    "total_gain": -2.593
+   }
+  },
+  "run-08/f2-m04": {
+   "family": "grader",
+   "state": "graveyard",
+   "forecast": {
+    "scored": 5,
+    "inside": 1,
+    "total_gain": -4.231
+   }
+  },
+  "run-04/f2-m06": {
+   "family": "sampling",
+   "state": "graveyard",
+   "forecast": {
+    "scored": 5,
+    "inside": 1,
+    "total_gain": -4.602
+   }
+  },
+  "run-02/f2-m03": {
+   "family": "run-02",
+   "state": "graveyard",
+   "forecast": {
+    "scored": 5,
+    "inside": 2,
+    "total_gain": -5.446
+   }
+  },
+  "run-02/f2-m05": {
+   "family": "run-02",
+   "state": "graveyard",
+   "forecast": {
+    "scored": 3,
+    "inside": 1,
+    "total_gain": -5.885
+   }
+  },
+  "run-02/f2-m02": {
+   "family": "run-02",
+   "state": "graveyard",
+   "forecast": {
+    "scored": 4,
+    "inside": 1,
+    "total_gain": -8.624
+   }
+  },
+  "run-08/f2-m03": {
+   "family": "grader",
+   "state": "graveyard",
+   "forecast": {
+    "scored": 5,
+    "inside": 0,
+    "total_gain": -12.27
+   }
+  }
+ }
+}

@@ -1,0 +1,124 @@
+{
+ "problem_index": 57,
+ "unique_id": "aime2023/2023_AIME_II_Problems/Problem_7",
+ "problem_head": "Each vertex of a regular dodecagon ($12$-gon) is to be colored either red or blue, and thus there are $2^{12}$ possible colorings. Find the number of these colorings with the property that no four vertices colored the same color are the four vertices of a rectangle.",
+ "gold": "928",
+ "why_this_one": "first of 14 problems where Think-SFT is cut off at 16,384 and right at 32,768 while RL finishes wrong under 16,384 (so wrong at both caps); 23 problems have the Think-SFT half",
+ "think_sft_cue_cap32_run": {
+  "tokens": 28502,
+  "cut_off": false,
+  "answer": "928",
+  "right": 1,
+  "right_at_16384": 0,
+  "tail": "valid colorings:\n     \\[\n     \\sum_{r=0}^{1} \\sum_{b=0}^{1} \\binom{6}{r} \\binom{6-r}{b} \\times 1^r \\times 1^b \\times 2^{6-r-b}\n     \\]\n   - Result:\n     \\[\n     64 + 192 + 192 + 480 = 928\n     \\]\n\n**Answer:**  \nThe number of valid colorings is \\(\\boxed{928}\\).  \n\nAnswer:  \n\\boxed{928}  \n\nAnswer: 928"
+ },
+ "rl_plain_cap32_run": {
+  "tokens": 13516,
+  "cut_off": false,
+  "answer": "3072",
+  "right": 0,
+  "right_at_16384": 0,
+  "tail": "imes 2 \\times 256 = 1536\n     \\]\n\n5. **Subtracting Invalid Colorings**:\n   - The number of valid colorings is the total number of colorings minus the invalid ones:\n     \\[\n     4096 - 1536 = 2560\n     \\]\n\nThus, the number of valid colorings is:\n\\[\n\\boxed{3072}\n\\]\n\n**Final Answer**\n\\[\n\\boxed{3072}\n\\]"
+ },
+ "stored_16384_samples": {
+  "think_sft": [
+   {
+    "right": 0,
+    "cut_off": true,
+    "tokens": 16384,
+    "answer": null
+   },
+   {
+    "right": 0,
+    "cut_off": true,
+    "tokens": 16384,
+    "answer": null
+   },
+   {
+    "right": 0,
+    "cut_off": true,
+    "tokens": 16384,
+    "answer": null
+   },
+   {
+    "right": 0,
+    "cut_off": false,
+    "tokens": 10233,
+    "answer": "2744"
+   }
+  ],
+  "rl": [
+   {
+    "right": 0,
+    "cut_off": false,
+    "tokens": 12429,
+    "answer": "1024"
+   },
+   {
+    "right": 0,
+    "cut_off": false,
+    "tokens": 11465,
+    "answer": "2744"
+   },
+   {
+    "right": 0,
+    "cut_off": false,
+    "tokens": 10380,
+    "answer": "2744"
+   },
+   {
+    "right": 0,
+    "cut_off": false,
+    "tokens": 14205,
+    "answer": "2560"
+   }
+  ],
+  "base": [
+   {
+    "right": 0,
+    "cut_off": true,
+    "tokens": 16384,
+    "answer": "2560"
+   },
+   {
+    "right": 0,
+    "cut_off": false,
+    "tokens": 13205,
+    "answer": "2654"
+   },
+   {
+    "right": 0,
+    "cut_off": false,
+    "tokens": 12736,
+    "answer": "729"
+   },
+   {
+    "right": 0,
+    "cut_off": false,
+    "tokens": 11124,
+    "answer": "353"
+   }
+  ],
+  "M2": [
+   {
+    "right": 0,
+    "cut_off": true,
+    "tokens": 16384,
+    "answer": null
+   },
+   {
+    "right": 0,
+    "cut_off": true,
+    "tokens": 16384,
+    "answer": null
+   },
+   {
+    "right": 0,
+    "cut_off": true,
+    "tokens": 16384,
+    "answer": null
+   }
+  ]
+ },
+ "source": "results/cap32/rows-01/{sft_cue,rl_plain}.jsonl; problem text data/rln3/hard.json"
+}

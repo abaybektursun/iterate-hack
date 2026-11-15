@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": 403, "low": 388, "high": 418, "reason": "Theory: in-domain Code directions near 1.5x reproduce nearly all of RL-Code's gain (~399-401) and Math's directions add about half on top of an almost saturated 1x Code edit, so the sum sits near RL-Code; the first seed's 411 regresses toward ~403."},
+{"id": "t04", "value": 403, "low": 388, "high": 418, "reason": "Same derivation as t03: Code 1x plus half-strength Math directions reaches about the 1.5x in-domain level, so it lands near RL-Code's 401, with seed noise."},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": 386, "low": 371, "high": 401, "reason": "Theory's dial: in-domain top-8 at 1x gives most but not all of RL-Code's gain (1.5x gives nearly all), which matches the measured 386 of 538 (base+cue 317, 1.5x 399); a new seed should land near 386."},
+{"id": "t08", "value": 386, "low": 371, "high": 401, "reason": "Same dial position as t07: Code top-8 at 1x is below the 1.5x full-gain point, so about 386 of 538 at a new seed."},
+{"id": "t09", "value": 224, "low": 209, "high": 239, "reason": "Theory says sizes past 1.5x commit too early, so 3x should not beat Think-SFT + 1.5x (220) by much; the single 232 regresses toward ~224 (Think-SFT alone 209, random 3x 213)."},
+{"id": "t10", "value": 41, "low": 30, "high": 53, "reason": "Theory: subtracting the finishing directions removes completion before the cap, so cap hits rise above the cued base's ~27 per 500; the odd-problem shard already shows 20 of 250, so about 40 for all 500."},
+{"id": "t11", "value": 376, "low": 361, "high": 391, "reason": "Theory: removing the finishing directions loses answers in the rewarded form (fewer boxed answers, more cap hits) and drops the score below the cued base's 410; the odd-problem shard shows 188 of 250, so about 376 of 500."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t16", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t17", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t18", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t19", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t20", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}
