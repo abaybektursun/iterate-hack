@@ -73,26 +73,35 @@ def run(job_id):
     with open(out / "log", "w") as log:
         proc = subprocess.Popen(job["cmd"], shell=True, cwd="/repo", stdout=log, stderr=subprocess.STDOUT,
                                 env={**os.environ, "OUT_DIR": str(out), "JOB_ID": job_id, "PYTHONPATH": "/repo"}, start_new_session=True)
-        last_commit = last_output = time.time()
-        size = 0
-        stop = None
-        while proc.poll() is None:
-            time.sleep(5)
-            if time.time() - last_commit > 30:
-                runs.commit()  # makes the log readable by tools/gpu.py logs while the job runs
-                last_commit = time.time()
-                if f"cancel:{job_id}" in jobs:
-                    stop = "cancelled by gpu.py kill"
-            if (out / "log").stat().st_size != size:
-                size, last_output = (out / "log").stat().st_size, time.time()
-            if time.time() - last_output > SILENT:
-                stop = f"no new log line for {SILENT // 60} min"
-            if time.time() > deadline:
-                stop = f"time limit of {job['hours']} h"
-            if stop:
-                os.killpg(proc.pid, signal.SIGKILL)  # the shell and every process it started
-                proc.wait()
-                log.write(f"\nrunner: job ended: {stop}\n")
+        try:
+            last_commit = last_output = time.time()
+            size = 0
+            stop = None
+            while proc.poll() is None:
+                time.sleep(5)
+                if time.time() - last_commit > 30:
+                    runs.commit()  # makes the log readable by tools/gpu.py logs while the job runs
+                    last_commit = time.time()
+                    if f"cancel:{job_id}" in jobs:
+                        stop = "cancelled by gpu.py kill"
+                if (out / "log").stat().st_size != size:
+                    size, last_output = (out / "log").stat().st_size, time.time()
+                if time.time() - last_output > SILENT:
+                    stop = f"no new log line for {SILENT // 60} min"
+                if time.time() > deadline:
+                    stop = f"time limit of {job['hours']} h"
+                if stop:
+                    os.killpg(proc.pid, signal.SIGKILL)  # the shell and every process it started
+                    proc.wait()
+                    log.write(f"\nrunner: job ended: {stop}\n")
+        finally:  # whenever run() ends, also when Modal interrupts it (cancel, shutdown): the job's processes, and any
+            # background process it left (a server started with &), run in their own session and would otherwise keep
+            # running in this container, holding /runs open so that the next job dies at runs.reload()
+            try:
+                os.killpg(proc.pid, signal.SIGKILL)
+            except ProcessLookupError:  # every process of the job has already exited
+                pass
+            proc.wait()
     runs.commit()
     jobs[f"end:{job_id}"] = {"at": int(time.time()), "exit_code": proc.returncode, "timed_out": time.time() > deadline, "stopped": stop}
     if proc.returncode != 0:

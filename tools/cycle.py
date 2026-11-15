@@ -50,7 +50,7 @@ waits, run_minutes, failed_minutes = [], 0.0, 0.0
 for r in jobs:
     r["state"] = gpu.state(r)
     start = r["start"]["at"] if "start" in r else None
-    end = r["end"]["at"] if "end" in r else r["cancel"]["at"] if "cancel" in r else None
+    end = r["end"]["at"] if "end" in r else r["cancel"]["at"] if "cancel" in r else r["died"]["at"] if "died" in r else None
     r["finished"] = end
     wait = minutes(r["job"]["at"], start) if start else None
     run = minutes(start, end or now) if start and (end is None or end >= start) else None
