@@ -39,6 +39,20 @@ def extract(text: str) -> tuple:
     return ("block", blocks[-1]) if blocks else ("none", text)
 
 
+OPEN_V2 = re.compile(r"(?:^|\n)[ \t]*(?:python|py|Python)[ \t]*\n")
+
+
+def extract_v2(text: str) -> tuple:
+    """extract, plus one more accepted form (specs/SPEC_code_think.md amendment 1): with no closed fenced block, the text after
+    the last line that is only `python`, up to the next ``` or the end, without a last line that is only `CODE`: mode "unopened"."""
+    mode, code = extract(text)
+    opens = list(OPEN_V2.finditer(text))
+    if mode == "block" or not opens:
+        return mode, code
+    body = text[opens[-1].end():].split("```")[0]
+    return "unopened", re.sub(r"\n[ \t]*CODE\s*$", "\n", body)
+
+
 def program(p: dict, code: str) -> str:
     return p["pre"] + code + p["post"]
 

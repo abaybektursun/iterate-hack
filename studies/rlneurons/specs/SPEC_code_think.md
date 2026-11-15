@@ -29,3 +29,23 @@ Predictions, each with the observation that refutes it:
 
 Not controlled: overlap of HumanEval / MBPP with the Think-SFT training data (its code sources are scanned for the math
 sets only); one sample per cell.
+
+## Amendment 1 (2026-11-15 22:40 UTC, after the two cells, before any regrade)
+
+Seen in the rows: 97 of the 106 Think-SFT + Code cue answers with no fenced block (Math cue: 124 of 128) end their reasoning
+with `</think>` and write a line `python`, the program and a closing fence, with no opening fence. `code_lib.extract` runs the
+whole text for them, which fails. The first table stands as graded; this adds a second grading for every cell.
+
+Rule `code_lib.extract_v2` (new function; `extract` and `BLOCK` unchanged): as `extract` when a closed fenced block exists.
+Otherwise the text after the last line that is only `python` (or `py`), up to the next fence or the end, without a last line
+that is only `CODE`. Applied to all five cells by `jobs/regrade_code_v2.py`; rows with a closed block keep their outcome.
+
+Instrument check inside the job, on all 538 problems: the reference program in the unopened form must pass under `extract_v2`
+and fail under `extract`; the planted wrong program in that form must fail under `extract_v2`.
+
+Predictions under v2:
+
+4. Think-SFT + Code cue passes 355 to 385 of 538 (point 369). Refuted outside.
+5. It is above base + Code cue under v2: the paired 95 % interval is above 0. Refuted if it includes 0.
+6. It stays below RL-Code under v2: interval below 0. Refuted if it includes 0.
+7. Base and RL-Code change by at most 5 problems each. Refuted at 6 or more.
