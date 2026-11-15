@@ -85,6 +85,9 @@ TABLE = {
     "rl-edge-comes-early": {
         "group": BEHAVIOUR,
         "figure": lambda m: [f"{m.CLOSED_U} to {m.CLOSED} %", "of the gap closed when the base model finishes RL's half-written answers"]},
+    "a-quarter-of-rl": {
+        "group": WEIGHTS,
+        "figure": lambda m: [f"{m.Q_M} %", "of RL's gain on MATH-500 from the RL weight change scaled to a quarter"]},
     "eight-directions": {
         "group": WEIGHTS,
         "figure": lambda m: [points(*(next(s["right"] for s in m.DATA["states"] if s["key"] == k) for k in ("untrained", "rl-directions")), m.DATA["edit"]["n"]),
