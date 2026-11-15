@@ -1,0 +1,103 @@
+{
+ "statistic": "r_U = share of Think-SFT Code-cue problems with no fenced code block (stored mode 'none') whose cued-base Code-cue row passed",
+ "value": 0.5566037735849056,
+ "passes": 59,
+ "n": 106,
+ "ci90_bootstrap": [
+  0.4811320754716981,
+  0.6320754716981132
+ ],
+ "ci90_wilson": [
+  0.4768015443984494,
+  0.6335879211348547
+ ],
+ "null_value": 0.5892193308550185,
+ "ranges": {
+  "round-14/s1": {
+   "a": [
+    0.72,
+    1.0
+   ],
+   "b": [
+    0.0,
+    0.46
+   ],
+   "null": [
+    0.52,
+    0.66
+   ]
+  },
+  "round-14/s2": {
+   "a": [
+    0.72,
+    1.0
+   ],
+   "b": [
+    0.0,
+    0.45
+   ],
+   "null": [
+    0.51,
+    0.67
+   ]
+  }
+ },
+ "verdict": {
+  "round-14/s1": {
+   "a": "refuted",
+   "b": "refuted"
+  },
+  "round-14/s2": {
+   "a": "refuted",
+   "b": "refuted"
+  }
+ },
+ "verdict_if_wilson": {
+  "round-14/s1": {
+   "a": "refuted",
+   "b": "refuted"
+  },
+  "round-14/s2": {
+   "a": "refuted",
+   "b": "refuted"
+  }
+ },
+ "unopened_bare_python_line": {
+  "n": 99,
+  "passes": 58,
+  "rate": 0.5858585858585859
+ },
+ "other": {
+  "n": 7,
+  "passes": 1,
+  "rate": 0.14285714285714285
+ },
+ "fenced_432_complement": {
+  "n": 432,
+  "passes": 258,
+  "rate": 0.5972222222222222
+ },
+ "by_bench": {
+  "humanevalplus": {
+   "n_none": 20,
+   "base_passed_on_none": 11,
+   "base_rate_all": 0.6503067484662577
+  },
+  "mbppplus": {
+   "n_none": 86,
+   "base_passed_on_none": 48,
+   "base_rate_all": 0.5626666666666666
+  }
+ },
+ "raw_rows_read": "Read 10 of the 106 (every 11th): 7 are short answers (716-1,956 new tokens) that copy the prompt's template as 'python / CODE / program / ```', missing only the template's opening fence line; the base passes 4 of these 7 problems. 2 are cap hits drifting into Chinese text (base fails both) and 1 is a 9,334-token answer ending in a bare program plus 'CODE'. Median length of the 106 is 1,343 new tokens against 2,020 for fenced answers.",
+ "instrument_checks": {
+  "sft_passed": 301,
+  "sft_no_block": 106,
+  "base_passed": 317,
+  "base_no_block": 34
+ },
+ "files": [
+  "/Users/abaybektursun/projects/iterate-hack-audit/runs/ih-1115-185836-e7ef/codecue/answers.jsonl",
+  "/Users/abaybektursun/projects/iterate-hack/runs/abaybektursun-1114-170304-c03c/answers.jsonl"
+ ]
+}
