@@ -60,6 +60,7 @@ import time
 import traceback
 import webbrowser
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 from boto3.dynamodb.conditions import Key
@@ -210,20 +211,25 @@ def detail(item_id):
             "thread": board.rows(KeyConditionExpression=Key("pk").eq(f"chan#{item_id}"))}
 
 
+# The paper of the finish dial (studies/rlneurons/paper/): beside this file on AWS (infra/monitor/deploy.sh), in its study here.
+PAPER = (Path(__file__).with_name("the-finish-dial.pdf"),
+         Path(__file__).parent.parent / "studies/rlneurons/paper/the-finish-dial.pdf")
+
+
 class Handler(BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"  # Chrome revalidates with If-None-Match only for HTTP/1.1 responses
 
     def send(self, status, kind, body, headers=()):
         if kind == "text/html":  # every page gets the tab icon here, so no page module holds it
             body = body.replace("<title>", ICON_LINK + "<title>", 1)
-        data = body.encode()
+        data = body if isinstance(body, bytes) else body.encode()
         tag = f'"{hashlib.blake2b(data, digest_size=16).hexdigest()}"'  # from the content, so an unchanged board answers 304
         if status == 200 and self.headers.get("If-None-Match") == tag:
             self.send_response(304)
             data = b""
         else:
             self.send_response(status)
-            self.send_header("Content-Type", f"{kind}; charset=utf-8")
+            self.send_header("Content-Type", kind if isinstance(body, bytes) else f"{kind}; charset=utf-8")
             self.send_header("Content-Length", str(len(data)))
         if status == 200:
             self.send_header("ETag", tag)
@@ -253,6 +259,9 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, "text/html", PROOFS[path[len("/proof/"):]].PAGE)
         if path == "/favicon.svg":
             return self.send(200, "image/svg+xml", FAVICON)
+        if path == "/paper/the-finish-dial.pdf":
+            found = [p for p in PAPER if p.exists()]  # a deploy without the file answers 404 and the other pages stay up
+            return self.send(200, "application/pdf", found[0].read_bytes()) if found else self.send(404, "text/plain", f"no page {path}")
         if path != "/data" and not path.startswith("/data/"):
             return self.send(404, "text/plain", f"no page {path}")
         try:  # the page shows the error text; the traceback goes to this terminal
