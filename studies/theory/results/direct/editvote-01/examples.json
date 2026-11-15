@@ -1,0 +1,146 @@
+{
+ "edit_vote_right_rl_vote_wrong": {
+  "problem_index": 98,
+  "gold": "62",
+  "edit": {
+   "vote_plain": 1,
+   "vote_order_averaged": 1.0,
+   "samples": [
+    {
+     "sample": 0,
+     "extracted_v3": "62",
+     "score_v3": 1,
+     "cap_hit": false,
+     "n_new": 14368
+    },
+    {
+     "sample": 1,
+     "extracted_v3": "62",
+     "score_v3": 1,
+     "cap_hit": true,
+     "n_new": 16384
+    },
+    {
+     "sample": 2,
+     "extracted_v3": "34",
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_new": 13382
+    },
+    {
+     "sample": 3,
+     "extracted_v3": "14",
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_new": 15599
+    }
+   ]
+  },
+  "rl": {
+   "vote_plain": 0,
+   "vote_order_averaged": 0.0,
+   "samples": [
+    {
+     "sample": 0,
+     "extracted_v3": null,
+     "score_v3": 0,
+     "cap_hit": true,
+     "n_new": 16384
+    },
+    {
+     "sample": 1,
+     "extracted_v3": "14",
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_new": 15326
+    },
+    {
+     "sample": 2,
+     "extracted_v3": "13",
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_new": 16218
+    },
+    {
+     "sample": 3,
+     "extracted_v3": "8",
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_new": 15938
+    }
+   ]
+  }
+ },
+ "rl_vote_right_edit_vote_wrong": {
+  "problem_index": 58,
+  "gold": "024",
+  "edit": {
+   "vote_plain": 0,
+   "vote_order_averaged": 0.0,
+   "samples": [
+    {
+     "sample": 0,
+     "extracted_v3": "-129",
+     "score_v3": 0,
+     "cap_hit": true,
+     "n_new": 16384
+    },
+    {
+     "sample": 1,
+     "extracted_v3": "2",
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_new": 13789
+    },
+    {
+     "sample": 2,
+     "extracted_v3": "-1",
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_new": 15254
+    },
+    {
+     "sample": 3,
+     "extracted_v3": "7",
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_new": 14623
+    }
+   ]
+  },
+  "rl": {
+   "vote_plain": 1,
+   "vote_order_averaged": 1.0,
+   "samples": [
+    {
+     "sample": 0,
+     "extracted_v3": "3",
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_new": 15351
+    },
+    {
+     "sample": 1,
+     "extracted_v3": "24",
+     "score_v3": 1,
+     "cap_hit": false,
+     "n_new": 7256
+    },
+    {
+     "sample": 2,
+     "extracted_v3": "24",
+     "score_v3": 1,
+     "cap_hit": false,
+     "n_new": 13934
+    },
+    {
+     "sample": 3,
+     "extracted_v3": "1",
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_new": 14245
+    }
+   ]
+  }
+ }
+}
