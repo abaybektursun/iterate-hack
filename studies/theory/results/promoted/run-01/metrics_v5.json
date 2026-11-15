@@ -1,0 +1,90 @@
+{
+ "theories": {
+  "r4-m10-rival": {
+   "rival": "Early RL-Zero-Math adopts the RL opening and lengthens deliberation at once (step 100 is the cued base in format, length and per-token sharpness), but 3.1's truncation-as-negative reward starts pruning the T 0.6 / top-p 0.95 loop hazard from the first steps rather than late, so cap hits fall steadily in log-steps (cued base ~0.24 -> step 100 ~0.19 -> step 400 ~0.15 -> step 2,800 ~0.03) instead of sitting flat at the cued-base level through step 400.",
+   "computed": 3,
+   "tests": 3,
+   "separating": 2,
+   "total_gain": 1.486,
+   "state": "not separated from rival",
+   "no_offline_test": null,
+   "rows": [
+    {
+     "k": 1,
+     "turn": 1,
+     "experiment": "Cap-hit rate of RL step 400, plain prompt, MATH-500 at T 0.6 / top-p 0.95.",
+     "measured": 0.196,
+     "n": 500,
+     "interval": [
+      0.166,
+      0.226
+     ],
+     "theory": {
+      "value": 0.235,
+      "low": 0.165,
+      "high": 0.305
+     },
+     "rival": {
+      "value": 0.15,
+      "low": 0.1,
+      "high": 0.2
+     },
+     "same_prediction": false,
+     "theory_should_say": "The theory has cap hits at the cued-base level (119/500 ~ 0.24) at step 100, flat through step 400, so it implies ~0.22-0.24; the rival has early truncation-negative pruning already bringing it to ~0.15.",
+     "gain": 0.3887,
+     "replication": null
+    },
+    {
+     "k": 2,
+     "turn": 1,
+     "experiment": "Paired change in cap-hit rate from RL step 100 to RL step 400, plain prompt, MATH-500 at T 0.6 / top-p 0.95 (step 100 minus step 400).",
+     "measured": 0.009999999999999981,
+     "n": 500,
+     "interval": [
+      -0.01999999999999999,
+      0.03999999999999998
+     ],
+     "theory": {
+      "value": 0.0,
+      "low": -0.05,
+      "high": 0.05
+     },
+     "rival": {
+      "value": 0.05,
+      "low": 0.0,
+      "high": 0.1
+     },
+     "same_prediction": true,
+     "theory_should_say": "The theory says cap hits stay flat from step 100 to step 400 (only later commit-and-stop training removes them), so it implies ~0.00; the rival has them falling steadily, so ~+0.05.",
+     "gain": 0.8118,
+     "replication": null
+    },
+    {
+     "k": 3,
+     "turn": 1,
+     "experiment": "Paired cap-hit rate difference on the 400-problem harder set at T 0.6 / top-p 0.95: RL step 400 plain minus cued base.",
+     "measured": -0.04749999999999999,
+     "n": 400,
+     "interval": [
+      -0.08750000000000002,
+      -0.007500000000000062
+     ],
+     "theory": {
+      "value": -0.01,
+      "low": -0.09,
+      "high": 0.07
+     },
+     "rival": {
+      "value": -0.1,
+      "low": -0.18,
+      "high": -0.02
+     },
+     "same_prediction": false,
+     "theory_should_say": "The theory says step 400 loops exactly like the cued base (the cue-forced deliberation mode, not yet pruned), so it implies ~0.00 (or slightly positive from longer chains); the rival has loop pruning already under way, giving ~-0.10 on the cap-heavy hard set (cued base ~0.5 cap hits there).",
+     "gain": 0.2854,
+     "replication": null
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,1 @@
+{"measured": 0.07894736842105265, "refuted_by_met": false, "alt_measured": -0.02631578947368418, "not_computable": null, "example_row": {"problem_index": 313, "t2_generated_tokens": 993, "t2_cap_hit": false, "code_arm": "code30_cue", "code_cue": 1, "base_s0": 0, "base_s1": 1, "base_s2": 1, "base_s3": 1}}

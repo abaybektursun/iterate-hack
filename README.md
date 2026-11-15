@@ -520,7 +520,7 @@ Where Exa is called:
   `POST https://api.exa.ai/contents` (full text).
 - In every agent's work cycle: `AGENTS.md`, "Working with the team", rule 2. Before a new measurement an agent searches
   with Exa, and when a published table already answers the question it posts the finding and runs nothing.
-- In a scripted loop: `studies/theory/lib/round.py`, stage `external` (lines 327 to 341). The model may run only
+- In a scripted loop: `studies/theory/lib/round.py`, function `external()`, a stage of every round version (`ALL`). The model may run only
   `studies/theory/lib/papers.py`, which offers a paper-only recall and `tools/exa.py` search and fetch, so Exa is its only
   route to the web. Rounds 2 and 3 wrote 53 published findings (`studies/theory/results/engine/round-02/external.md`,
   `round-03/external.md`).
@@ -543,12 +543,12 @@ search tool. No count of GPU jobs avoided by a search exists.
 One past.dev project for the team. Identity: one per person (`~/.past/config.json`); all agents of a person share it.
 No audiences are set, so every identity reads the whole project.
 
-| Agent | Writes | Reads |
-|---|---|---|
-| Paper reader (a subagent, one per paper) | one data point per finding with `uv run tools/paper.py add`; `metadata.who` names the person | nothing |
-| Research agent (a Claude Code session; 63 sessions in the event log) | every board `result` and `knowledge` post, through `tools/board.py` | `python3 tools/recall.py "<idea>"` before it starts an idea (`AGENTS.md`, "Working with the team", rule 1), at most 2,000 tokens |
-| Session plugin (at the end of a session) | typed prompts and prose replies; 7 sessions are stored | nothing: automatic recall is off |
-| Theory generator (headless, `studies/theory/lib/round.py`) | nothing | recall through `studies/theory/lib/papers.py`, which keeps only entries whose every source is a paper or web page |
+| Agent | Writes | Reads | Identity | Read by |
+|---|---|---|---|---|
+| Paper reader (a subagent, one per paper) | one data point per finding with `uv run tools/paper.py add`; `metadata.who` names the person | nothing | its person's (`~/.past/config.json`, read by `tools/past.py`) | every identity (no audiences) |
+| Research agent (a Claude Code session; 63 sessions in the event log) | every board `result` and `knowledge` post, through `tools/board.py` | `python3 tools/recall.py "<idea>"` before it starts an idea (`AGENTS.md`, "Working with the team", rule 1), at most 2,000 tokens | its person's | every identity |
+| Session plugin (at the end of a session) | typed prompts and prose replies; 7 sessions are stored | nothing: automatic recall is off | its person's | every identity |
+| Theory generator (headless, `studies/theory/lib/round.py`) | nothing | recall through `studies/theory/lib/papers.py`, which keeps only entries whose every source is a paper or web page | its person's (reads only) | writes nothing |
 
 ### Layers
 
@@ -585,6 +585,7 @@ memory before it starts an idea.
   that configuration in the pilot, recall returned the first post; whether it also returns the correction is not
   checked. We never wrote the correction as an update of the first data point.
 - Session memory is small: 7 sessions are stored.
+- Stored sessions hold the typed prompts of the three of us, so they can contain personal text, and every identity can read them.
 - Our event log does not record recalls. The 571 is past.dev's count; 145 of them are visible as agent commands in
   transcripts.
 - Ingestion ran about 1 minute behind, and 10 to 15 minutes when 30 to 40 items were queued (past.dev usage API).
@@ -593,10 +594,12 @@ memory before it starts an idea.
 
 ## Modal
 
-Every GPU number in this repository came from a Modal job that an agent started.
+Almost every GPU number in this repository came from a Modal job that an agent started; the exception is one vast.ai job
+(abaybektursun-1114-203934-5e03, `studies/rlneurons/README.md`).
 
-- `infra/runner.py` (99 lines): one app, one function per GPU class (`h100`, `b200`, `cpu`), three Volumes (code by
-  commit, outputs, model cache) and one Dict as the job registry.
+- `infra/runner.py`: one app, one function per job class (`h100`; `short`, an H100 queue for jobs of at most 30 minutes;
+  `b200`; `cpu`), one container per job, three Volumes (code by commit, outputs, model cache) and one Dict as the job
+  registry. The H100 limit is read at deploy time from `ITERATE_MAX_H100`, default 10 per workspace.
 - `uv run tools/gpu.py submit h100 -- '<command>'` refuses a dirty tree or an unpushed commit, uploads that commit as a
   tar to a Volume and spawns the function, so each job runs one pushed commit.
 - What a hosted API cannot serve: the jobs run blended weights, zeroed neurons, and read the activations of both models.
@@ -605,7 +608,7 @@ Every GPU number in this repository came from a Modal job that an agent started.
 - Use, from the job records up to 05:42 UTC: 258 jobs started, a median of 5 seconds from submit to container and a
   quarter over 14.3 minutes, a peak of 30 GPU containers at once (10 in each of three workspaces), and 58 GPU-hours over
   179 ended GPU jobs.
-- The lab tuned its own setup from the job records: after a Retro review raised the H100 `max_containers` from 4 to 20,
+- The lab tuned its own setup from the job records: after a Retro review raised the H100 `max_containers` from 4 to 20 (deployed at 02:31 UTC),
   the median H100 wait fell from 3.5 minutes (113 jobs) to 5 seconds (94 jobs), in different hours with no control. One
   run split over 4 H100s took 15.6 minutes against 51.5, measured once each way, with 17% more GPU minutes.
 - Limits: 29 of 220 ended jobs exited with an error; no Sandboxes and no web endpoint are used.

@@ -1,0 +1,1 @@
+{"measured": 4887.964, "refuted_by_met": false, "alt_measured": 4887.014, "not_computable": null, "example_row": {"problem_index": 0, "score_v3": 1, "cap_hit": false, "n_generated": 1521}}

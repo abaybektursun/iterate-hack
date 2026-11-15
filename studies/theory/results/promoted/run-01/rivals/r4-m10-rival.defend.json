@@ -1,0 +1,5 @@
+[
+{"k": 1, "value": 0.235, "low": 0.165, "high": 0.305, "why": "The mechanism says that by step 100 the policy opens in the cued base's long-deliberation mode and loops just as often at T 0.6 / top-p 0.95, and that this stays flat through step 400, so step-400 plain cap hits should sit near the cued base's 119/500 = 0.238."},
+{"k": 2, "value": 0.0, "low": -0.05, "high": 0.05, "why": "Cap hits jump at step 100 and stay flat through step 400; only later truncation-negative training removes them, so the paired change should be zero, give or take sampling noise of about 2 points."},
+{"k": 3, "value": -0.01, "low": -0.09, "high": 0.07, "why": "Step 400 loops just as the cued base does (cued-base hard set at T 0.6 hit the cap on 173 of the 328 clean problems), so the paired difference is about zero, perhaps slightly negative because the 72 training-overlap problems are included."}
+]

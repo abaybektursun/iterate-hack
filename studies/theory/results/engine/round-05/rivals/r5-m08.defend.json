@@ -1,0 +1,4 @@
+[
+ {"k": 1, "value": 0.78, "low": 0.64, "high": 0.9, "why": "The runaway long-generation mode sends Code 3.0 to the 16,384 cap on long problems whatever their difficulty, so about 8-12 of the roughly 50 base-4/4 Q4 problems become cap-hit failures, pulling the base-like rate of about 0.92 down to about 0.78."},
+ {"k": 2, "value": 0.42, "low": 0.3, "high": 0.55, "why": "If Code 3.0 were an independent base-like draw, its Q4 misses would land on base-hard problems (mean b about 0.28); the mechanism adds about 15 cap-hit failures on base-easy long problems (b about 0.9), which raises the mean over its roughly 55 Q4 misses to about 0.42."}
+]

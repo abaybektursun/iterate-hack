@@ -1,0 +1,2 @@
+# finished-wrong rows: 68, hits: 20
+{"measured": 0.29411764705882354, "refuted_by_met": true, "alt_measured": 0.4264705882352941, "not_computable": null, "example_row": {"problem_index": 4, "sample": 0, "attempt": 0, "seed": 41000004, "n_new": 4938, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "Angela", "score_v3": 0, "gold": "\\text{Evelyn}"}}
