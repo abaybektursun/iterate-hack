@@ -39,7 +39,13 @@ def load_lens(layers, dev):
 
 
 def load_lens_file(path, layers, dev):
-    """{layer: J in fp32 on dev} from a lens file written by jobs/fit_lens.py, and a record of the file."""
+    """{layer: J in fp32 on dev} from a lens file in the jlens format ({"J": {layer: [d, d]}, "n_prompts": ...}), and a record
+    of the file. `path` is a local file (jobs/fit_lens.py writes one) or hf://<owner>/<repo>@<revision>/<file in the repo>."""
+    if str(path).startswith("hf://"):
+        from huggingface_hub import hf_hub_download
+        repo_rev, filename = str(path)[5:].split("/", 2)[0:2], str(path)[5:].split("/", 2)[2]
+        repo, rev = "/".join(repo_rev).split("@")
+        path = hf_hub_download(repo, filename, revision=rev)
     h = hashlib.sha256()
     with open(path, "rb") as f:
         for block in iter(lambda: f.read(1 << 24), b""):
