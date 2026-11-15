@@ -1123,7 +1123,7 @@ slip (21) -2.4 [-12.7, 9.5], wrong plan (16) -1.0 [-4.2, 2.1]; RL: misread +20.2
 - G1 held by the registered statistic, with a caveat that changes its reading: all of RL's gain is in continuations that hit the
   cap. RL has 42 capped rows scored right against 9 for the base: it writes a boxed answer, then keeps checking until the cap, and
   grader v3 scores the last box. Counting only continuations that ended, RL and the base both have 90 right.
-- G2 refuted: contrast minus base is +1.6 points [-4.2, 7.8]. The direction on misreadings matches the screen (27 to 36 right of
+- G2 refuted: contrast minus base is +1.6 points [-4.2, 7.8]; the test excludes a gain above 8 points, not any gain. The direction on misreadings matches the screen (27 to 36 right of
   84) but its interval includes 0, and slips and wrong plans do not move. Cap hits are equal (177 against 170), so the rule does
   not break the text. Decision of the spec: no MATH-500 cell with this rule.
 - Limit of the test: 55 % of continuations in every arm hit the 4,000-token cap, so more than half of each arm's rows are
@@ -1142,10 +1142,38 @@ problem, in its other three stored samples, counting a from-scratch sample right
 | misread | 14 | 64.3 % | 32.1 % | -32.1 [-50.0, -16.7] |
 | wrong plan | 16 | 16.7 % | 10.4 % | -6.2 [-19.8, 5.2] |
 
-Before a slip the text is as good as a fresh start: the slip is a chance event at that step. Before a judged misreading half of
-the chance is already gone, so the misreading starts earlier than the sentence the judge quoted. The same numbers for RL
+Before a judged misreading half of the chance is already gone, so the misreading starts earlier than the sentence the judge
+quoted (in 3 of the 14 prefixes it is visible in the prefix). For slips the two rates agree within about 13 points; that does not
+separate 'no damage in the prefix' from a constant per-step error rate (53.9 % predicted from the prefix), so it is a failure to
+reject, not a finding. The same numbers for RL
 continuing the base prefix are in the file; they are not comparable in the same way, because 42 of RL's right rows are capped rows
 scored on a box inside the reasoning.
+
+### Problem dependence of the early text does not tell a wrong sample from a right one (work-2cd5d0, `specs/SPEC_probdep.md`)
+
+d_t = log p_base(token | problem, text) - log p_base(token | empty problem, text) over the first 1,000 answer tokens of the 2,000
+stored samples of the cued base (the quantity context-aware decoding adds to the logits, Shi et al. 2023, arXiv 2305.14739; here
+only read). Job `jobs/probdep_tokens.py` (vast.ai job `abaybektursun-1115-014547-2c8c`, A100, input
+`data/wrongstep/base_cue_answer_heads_v1.jsonl.gz`), readout `analysis/probdep.py`, results `results/wrongstep/probdep-01/`.
+Within-problem AUROC of right against wrong (150 problems with both outcomes, 478 pairs, bootstrap over problems, 2,000 resamples):
+
+| Feature | 250 tokens | 500 tokens | 1,000 tokens |
+|---|---|---|---|
+| mean d_t | 0.504 [0.447, 0.560] | 0.515 [0.459, 0.569] | 0.531 [0.468, 0.589] |
+| mean of the lowest tenth of d_t | 0.515 | 0.559 [0.501, 0.615] | 0.575 [0.516, 0.637] |
+| mean log p of the base alone | 0.517 | 0.544 | 0.519 [0.463, 0.576] |
+
+Controls: mean d_t shuffled within the problem 0.483 [0.430, 0.540]; a shorter answer 0.680 [0.621, 0.738]; pairs where both
+samples are longer than 1,000 tokens: mean d_t 0.552 [0.488, 0.616], shorter answer 0.735. Activation probe at 1,000 tokens (above):
+0.571 [0.509, 0.634].
+
+- P1 refuted: 0.531, interval includes 0.55. P2 not tested further (P1 failed).
+- P3 refuted with the opposite sign: among the judged wrong samples the mean d_t is highest for misreadings (0.132 nats per token,
+  n 14; slip 0.094, n 21; wrong plan in `metrics.json`). Wrong samples have a higher mean d_t than right ones across problems
+  (0.110 against 0.086): harder problems make the text depend more on the problem.
+- Reading: the 4.62-nat drop of misread steps under contrast is a property of those few tokens, not of the early text of the
+  sample. Three label-free signals now fail to separate the base's own samples of a problem early: activations, the base's own
+  likelihood, and problem dependence. Answer length remains the strongest (0.68), and it is known only at the end.
 
 ## Solved examples in context: no gain that survives a second draw or the 328 (shots1, board work-be7af1)
 
