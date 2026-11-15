@@ -949,7 +949,7 @@ _LO, _HI = (int(round(100 * v / _gap, -1)) for v in INTERVALS["math500"]["a0.25"
 
 TITLE = "A quarter of RL"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "How much of the RL weight change does the math gain need?"
-LINE = f"A quarter of the RL weight change already gives {Q_M} % of RL's gain on MATH-500."
+LINE = f"Scaled to a quarter, the RL weight change still gives {Q_M} % of RL's gain on MATH-500."
 
 # Not from our runs: the closest published results. "Reasoning Vectors" (arXiv 2509.01363, Sec. 4.4): a GRPO-minus-SFT
 # weight difference added to Qwen2.5-1.5B-Instruct at scale 0.5 gives 2.1 of the 4.9 points it gives at scale 1 on GSM8K
