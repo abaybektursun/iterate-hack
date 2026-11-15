@@ -847,6 +847,57 @@ uv run tools/gpu.py submit h100 --hours 2.5 -- "bash studies/rlneurons/jobs/setu
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.shots1 shots1 base=<job> rl=<job> code=<job>
 ```
 
+## Closing cue: forcing a long answer to commit loses problems (commit1, board work-3d68e2)
+
+Spec `specs/SPEC_commit1.md`. A stored answer of the cued base (T 1.0 / top-p 1.0, one sample) that ran past N tokens is cut at N
+tokens, a commit line is appended and the base continues: `box` = `Final answer: \boxed{` (64 new tokens at most, the RLN-3 arm C
+that was never scored), `voice` = a sentence in the answer's own voice (1,024 at most). Only the continuation is graded (v3).
+Each row is a policy over the whole set: answers of at most N tokens count as stored.
+
+MATH-500 (n 500, stored rows of job abaybektursun-1114-153825-208b, sample 0):
+
+| configuration | right | vs stored (points, 95 %) | generated tokens per problem | answers cut | still right of those right when left alone | right of stored cap hits |
+|---|---|---|---|---|---|---|
+| stored answers, no cut | 405 | | 3,808 | | | |
+| box, N 4,000 | 387 | -3.6 [-6.2, -1.2] | 2,216 | 145 | 41 of 70 | 4 of 25 |
+| voice, N 4,000 | 381 | -4.8 [-7.4, -2.4] | 2,297 | 145 | 37 of 70 | 2 of 25 |
+| box, N 8,000 | 406 | +0.2 [-1.0, 1.4] | 3,079 | 82 | 19 of 23 | 3 of 25 |
+| voice, N 8,000 | 401 | -0.8 [-2.0, 0.2] | 3,120 | 82 | 17 of 23 | 0 of 25 |
+| box, N 12,000 | 407 | +0.4 [-0.6, 1.4] | 3,546 | 40 | 0 of 2 | 2 of 25 |
+| voice, N 12,000 | 405 | +0.0 [-0.8, 0.8] | 3,571 | 40 | 0 of 2 | 1 of 25 |
+
+The 328 harder problems (stored rows of job abaybektursun-1114-151534-e72c):
+
+| configuration | right | vs stored (points, 95 %) | generated tokens per problem | answers cut | still right of those right when left alone | right of stored cap hits |
+|---|---|---|---|---|---|---|
+| stored answers, no cut | 164 | | 9,344 | | | |
+| box, N 4,000 | 130 | -10.4 [-14.0, -6.7] | 3,478 | 241 | 44 of 83 | 0 of 77 |
+| voice, N 4,000 | 126 | -11.6 [-15.6, -7.9] | 3,686 | 241 | 40 of 83 | 2 of 77 |
+| box, N 8,000 | 152 | -3.7 [-6.4, -1.2] | 6,016 | 184 | 24 of 40 | 1 of 77 |
+| voice, N 8,000 | 151 | -4.0 [-6.7, -1.2] | 6,185 | 184 | 23 of 40 | 2 of 77 |
+| box, N 12,000 | 159 | -1.5 [-4.0, 0.9] | 7,927 | 136 | 4 of 14 | 2 of 77 |
+| voice, N 12,000 | 158 | -1.8 [-3.7, 0.0] | 8,063 | 136 | 6 of 14 | 2 of 77 |
+
+Chosen on MATH-500 by the spec's rule: box_8000. Headline on the 328: 152 of 328 against 164, -3.7 points
+[-6.4, -1.2], at 6,017 generated tokens per problem against 9,344. H1 refuted (no configuration gains on either set), H2 refuted
+(box is at or above voice at every N on both sets), H3 at the edge (at N 8,000 on the 328 the commit keeps 24 of the 40
+answers that end right when left alone).
+
+Reading: the base's long answers on the 328 do not hold an answer that a commit line can release. Of the 77 stored cap hits,
+a forced commit at 12,000 tokens is right on 2; of the 184 answers over 8,000 tokens, 28 are right when forced against 40 when
+left alone. So the cap hits are failures to solve, not failures to stop, and the tokens after 8,000 are productive for 16
+problems. Hand read of 14 forced boxes at N 8,000: 4 right, 10 guesses unrelated to the last line of work. The token saving is
+real: -1.5 points [-4.0, 0.9] for 15 % fewer tokens at N 12,000 (box).
+
+Files: `jobs/commit_cue.py`, `analysis/commit1.py`, `results/commit1/base-01/` (readout.json, run.json, metrics.json,
+examples.json). Raw rows: `runs/abaybektursun-1114-212437-d6d2/rows.jsonl` after `uv run tools/gpu.py get` (1,656 rows, 8 min on
+an H100). Smoke: job abaybektursun-1114-212215-f08c. The RL model was not run: the spec asks for it only if H1 holds. Run:
+
+```
+uv run tools/gpu.py submit h100 --hours 2 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.commit_cue --model base --commit $(git rev-parse HEAD)"
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.commit1 base <job>
+```
+
 ## RLN-5 map: where RL still disagrees once the cue is given
 
 Spec `specs/SPEC5_map.md`; run folder `results/rln5/map-01/` (`run.json`, `metrics.json`, `examples.json`, `checks.json`,
