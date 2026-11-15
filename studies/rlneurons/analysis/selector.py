@@ -161,9 +161,10 @@ def load(run: pathlib.Path) -> tuple:
 
 
 def example(first, res, m, want):
-    """A problem where rule m and the vote differ and m scores `want`: every sample's signals and last 600 characters."""
-    idxs = res["problem_indices"]
-    j = next((j for j in range(len(idxs)) if res["per_problem"][m][j] == want and res["per_problem"]["vote"][j] != want), None)
+    """want 1: a problem rule m scores right and the vote wrong. want 0: a problem rule m scores wrong although one of the
+    four samples is right. Every sample's signals and last 600 characters."""
+    idxs, x, v = res["problem_indices"], res["per_problem"][m], res["per_problem"]["vote"]
+    j = next((j for j, i in enumerate(idxs) if x[j] == want and (v[j] == 0 if want else any(r["score_v3"] for r in first[i]))), None)
     if j is None:
         return None
     rows = first[idxs[j]]
@@ -184,7 +185,7 @@ def main():
     m, first = load(run)
     res = readout(first)
     top = max((k for k in RULES if k != "vote"), key=lambda k: res["rows"][k]["right"])
-    ex = {"best_rule": top, "fixed_by_rule": example(first, res, top, 1), "broken_by_rule": example(first, res, top, 0)}
+    ex = {"best_rule": top, "rule_right_vote_wrong": example(first, res, top, 1), "rule_wrong_a_sample_right": example(first, res, top, 0)}
     commit = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
     out.mkdir(parents=True)
     (out / "run.json").write_text(json.dumps({"commit": commit, "command": " ".join(sys.argv), "source_job": m["job_id"],
