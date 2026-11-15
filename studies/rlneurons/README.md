@@ -3734,3 +3734,205 @@ no restarts; cap hits per sample 20, 14, 20, 22, against 71, 66, 81, 68 for the 
 `analysis/day1_vote.py --minus` the RL readout: `results/day1_3/hard328_top8x1.5_cue_s4-01/`. The edit uses the RL
 checkpoint's weights, so it is not a route without reward; its size was chosen on the 328, and these four samples are new
 draws on the same problems, not a held-out set (MATH-500 is the held-out reading).
+
+## xreward: what RL runs with different rewards write into the same base (board work-4fa42e, idea-ac4e14)
+
+Spec `specs/SPEC_xreward.md` (written before each run; amendments 1 to 4). Branch `sharedsub`.
+
+| File | What it does |
+|---|---|
+| `jobs/xreward_overlap.py` | Weights only. Top-8 singular subspaces of (model - base) for seven RL-Zero models, Think-SFT and the base matrix itself, per layer matrix (224), and every pairwise overlap; `--steps` adds the step-100 checkpoint of each RL run. Selftest with a planted shared subspace. |
+| `analysis/xreward_overlap.py` | Readout of the overlap job: key-by-key tables, by module type, nearest neighbours, X1 to X3, S1, S2. |
+| `jobs/wsp_edit.py` | Edited weights. Added here: `--mods` (module filter), `--scale`, recipes `proj` / `projc` (the top-k edit split by a donor model's input subspace), `--other` / `--donor` keys of `xreward_overlap.MODELS`; selftest checks 7 to 9. |
+| `analysis/xreward_edits.py` | Paired readout of the edit cells on the 328 against base cue, RL, theta(0.25), theta(0.5), Code-RL. |
+| `results/xreward/overlap-01/` | `readout.json`, `run.json` of job `abaybektursun-1114-220151-daaa` (final models). Raw per-matrix rows (3 MB): `runs/<job>/metrics.json`, Volume `iterate-runs`. |
+| `results/xreward/overlap_steps-01/` | The same with the seven step-100 checkpoints, job `abaybektursun-1114-221259-0871`. |
+| `results/xreward/edits/` | `readout.json` and one run folder per cell (`run.json`, `metrics.json`, `edit.json`, `examples.json`). |
+
+### Part 1: overlap of the top-8 subspaces (weights only, 224 layer matrices)
+
+Overlap = ||Va^T Vb||_F^2 / 8 for the input (right) side, the same with U for the output side; a random 8-dimensional subspace
+gives 0.002. Means over the 224 matrices, `results/xreward/overlap-01/readout.json`, key `tables`.
+
+| Pair | Input side | Output side |
+|---|---|---|
+| Math 3.0, Math 3.1 | 0.476 | 0.098 |
+| Code 3.0, Code 3.1 | 0.425 | 0.082 |
+| Math 3.1, Code 3.1 | 0.260 | 0.096 |
+| Math 3.1, Code 3.0 | 0.218 | 0.072 |
+| IF, General | 0.187 | 0.049 |
+| Mix with IF / Code 3.0 / General / Math 3.0 | 0.380 / 0.306 / 0.244 / 0.197 | 0.120 / 0.099 / 0.069 / 0.061 |
+| Math 3.1, IF | 0.026 | 0.030 |
+| Math 3.1, General | 0.045 | 0.047 |
+| Math 3.1, Think-SFT | 0.109 | 0.051 |
+| Math 3.1, the base matrix's own top-8 | 0.042 | 0.018 |
+
+- The RL runs do not share one subspace. Math and Code share one; IF and General share another; Mix overlaps every ingredient.
+  Math against IF or General is below Math against Think-SFT.
+- Each release pair is the other's nearest neighbour (4 of 4), so the reward is readable from the weights of another run.
+- The sharing is on the input side, 3 to 5 times the output side.
+- X1 (RL pairs above RL-SFT pairs): 0.186 against 0.063 on average, 14 of 21 pairs. X2 held (base matrix 0.037). X3: Spearman of the
+  overlap with Math 3.1 against the MATH-500 cue score 0.77, n 6; Code 3.0 overlaps 0.218 and gains nothing.
+- Step 100 (`overlap_steps-01`, differences of 0.03 to 0.19 % of the weight norm): for each step-100 checkpoint the nearest final
+  model of another run is the other release of its reward (Math, Code) or Mix (IF, General); Mix is nearest General (6 of 7 as
+  predicted, S1 held). Mean input-side overlap between a reasoning run and an instruction run at step 100: 0.076 (finals 0.049), S2 held.
+
+### Part 2: rank-8 edits with the cue on the 328 harder problems
+
+T 1.0 / top-p 1.0, seed 3000000, one sample, grader v3, `results/xreward/edits/readout.json`. Edits are 0.074 % of the weight norm
+(Math) and carry 9.8 % of the squared norm of the difference; effective scale after BF16 rounding 1.000.
+
+| Cell | Right of 328 | Cap hits | Minus base cue, points [95 %] | Run folder, job |
+|---|---|---|---|---|
+| base, cue | 164 | 77 | | `results/day1/hard328_base_cue_t10-01/` |
+| base + matched random rank-8, cue | 158 | 67 | -1.8 [-5.8, 2.4] | `edits/rand8_math31-01/`, `abaybektursun-1114-221040-5f1e` |
+| base + Math 3.1 top-8, cue | 192 | 46 | +8.5 [4.3, 12.8] | `edits/top8_math31-01/`, `abaybektursun-1114-221034-007d` |
+| base + Code 3.1 top-8, cue | 178 | 41 | +4.3 [0.3, 8.2] | `edits/top8_code31-01/`, `abaybektursun-1114-221053-fb3f` |
+| Math 3.1 minus its top-8, cue | 190 | 90 | +7.9 [3.7, 12.2] | `edits/bulk_math31-01/`, `abaybektursun-1114-221100-1e31` |
+| RL, plain | 206 | 20 | +12.8 | `results/day1/hard328_rl_plain_t10-01/` |
+
+- Math top-8 minus the random control: +10.4 points [5.8, 14.9]. Minus RL: -4.3 [-8.2, -0.3]. Minus theta(0.5) (190): +0.6 [-3.4, 4.6].
+- Math 3.1 minus its top-8, against RL cue (205): -4.6 [-8.2, -1.2]. P2 of amendment 1 (the rest keeps the gain) is refuted.
+- Each half alone solves 30 of the 49 problems that RL solves and the cued base does not; 19 are the same problems, which is what
+  independent resampling gives (18.4), and RL with the cue at another seed solves 37 of them. The two halves are not additive
+  (28 + 26 problems against RL's 42) and fix the same kinds of problems: of the base's 90 finished wrong answers 27 and 26, of its
+  74 wrong cap hits 14 and 13.
+- Cap hits fall with the 8 directions (77 to 46) and rise without them (90 against RL cue 25). They are not repetition loops: rules A
+  and B flag 0 cap hits in every cell, and 13 read by hand are all still working at the cap. The 90 has no control yet: the cell
+  carries BF16 rounding noise (norm 2.26 against 4.05 for the whole difference) that RL does not.
+- Audit by a second agent from the raw rows (work-4fa42e): all seven counts recomputed with `grade_v3`, same 328 problems, prompts
+  and seeds 3,000,000 + index in the paired cells (RL cue and theta(0.5) use other seeds); 24 answers read by hand, one lenient
+  match (`(4, \log 2)` for `(4, \log_{10} 2)` in the minus-top-8 cell). The clean contrast is top-8 against the random control:
+  both carry the rounding noise (written norm 2.60 and 2.67 for an addition of 1.27), the base cell does not.
+- Raw rows (read by a subagent, not committed): with the top-8 edit `Wait` rises from 9.2 to 12.3 per 1,000 words (RL 12.9) and
+  finished answers with no boxed answer fall from 22 to 1.
+
+#### Second batch (amendments 3 and 4): rank, module family, scale, shared input subspace, control for the minus-top-8 cell
+
+Same settings, edits of Math 3.1 unless named, `--rounding stochastic --seed 0`. "Right per finished" = right / (328 - cap hits).
+
+| Cell (`wsp_edit` arguments) | Right of 328 | Cap hits | Right per finished | Minus random rank-8, points [95 %] | Edit, % of weight norm | Run folder, job |
+|---|---|---|---|---|---|---|
+| base, cue | 164 | 77 | 0.65 | | | |
+| 1 direction per matrix (`top8 --k 1`) | 181 | 51 | 0.65 | +7.0 [2.4, 11.3] | 0.048 | `edits/top1_math31-01/`, `abaybektursun-1115-000358-d11a` |
+| 8 directions (first batch) | 192 | 46 | 0.68 | +10.4 [5.8, 14.9] | 0.074 | `edits/top8_math31-01/` |
+| 64 directions (`top8 --k 64`) | 200 | 42 | 0.70 | +12.8 [8.5, 17.4] | 0.115 | `edits/top64_math31-01/`, `abaybektursun-1115-003755-b90d` |
+| 8 directions, attention only (`--mods q,k,v,o`) | 178 | 59 | 0.66 | +6.1 [1.8, 10.4] | 0.103 | `edits/top8attn_math31-01/`, `abaybektursun-1115-012835-a431` |
+| 8 directions, MLP only (`--mods gate,up,down`) | 181 | 40 | 0.63 | +7.0 [2.7, 11.3] | 0.059 | `edits/top8mlp_math31-01/`, `abaybektursun-1115-012846-905e` |
+| 8 directions at twice the size (`--scale 2`) | 190 | 5 | 0.59 | +9.8 [5.5, 14.0] | 0.148 | `edits/top8x2_math31-01/`, `abaybektursun-1115-012855-d7ed` |
+| 8 directions, part reading Code 3.0's input subspace (`proj --donor code30`) | 171 | 54 | 0.62 | +4.0 [-0.6, 8.5] | 0.040 | `edits/proj_math31_code30-01/`, `abaybektursun-1115-012905-8f73` |
+| 8 directions, the rest (`projc --donor code30`) | 176 | 69 | 0.68 | +5.5 [0.9, 10.1] | 0.062 | `edits/projc_math31_code30-01/`, `abaybektursun-1115-012915-6618` |
+| Code 3.0's own 8 directions (`top8 --other code30`) | 173 | 23 | 0.57 | +4.6 [0.0, 8.8] | 0.107 | `edits/top8_code30-01/`, `abaybektursun-1115-012925-b15d` |
+| Math 3.1 minus a matched random rank-8 (`rbulk`) | 195 | 33 | 0.66 | | | `edits/rbulk_math31-01/`, `abaybektursun-1115-012935-2836` |
+| Math 3.1 minus its 8 directions (first batch) | 190 | 90 | 0.80 | | | `edits/bulk_math31-01/` |
+| RL, plain | 206 | 20 | 0.67 | | | |
+
+Against the predictions of amendments 3 and 4:
+
+- Rank: 1 direction 181 (predicted 170 to 180), 64 directions 200 (predicted 192 to 200). 64 directions against RL: -1.8 points
+  [-5.5, 1.8]. The steps 1 to 8 (+3.4 [-1.2, 7.9]) and 8 to 64 (+2.4 [-1.5, 6.4]) are each inside the noise of one sample.
+- Module family: MLP 181, attention 178, difference +0.9 [-3.0, 4.9]. "One module family carries it" is refuted; the predicted
+  MLP lead is not shown.
+- Scale 2: 190 right, 5 cap hits. The predicted 195 to 206 is refuted; the fall of cap hits (46 to 5, RL 20) is far larger than
+  predicted. On the 77 problems where the cued base hits the cap (3 right), the cells finish and answer: 8 directions 25 cap hits,
+  17 right, 36 finished wrong; twice the size 0 cap hits, 14 right, 63 finished wrong; RL 11, 19, 47. Three of the 63 read by
+  hand end in a boxed answer after an unfinished argument ("After testing various values, we find ...").
+- So the 8 directions mainly make the model finish with an answer. Cap hits follow their size in both directions: removed from
+  RL 90, base 77, one direction 51, eight 46, twice the size 5. Right answers per finished answer stay near 0.65 and fall to
+  0.59 at twice the size; RL minus the directions finishes least and is right most often when it does (0.80).
+- Control for the minus-top-8 cell (amendment 4): RL minus a random rank-8 scores 195 with 33 cap hits. Against the minus-top-8
+  cell: +1.5 points [-2.1, 5.2] and 57 fewer cap hits. So the loss of right answers in the minus-top-8 cell (190 against 205) is
+  not separable from the perturbation; the rise in cap hits (90 against 33) is the 8 directions.
+- Shared input subspace: the part of the edit that reads Code 3.0's input subspace 171, the rest 176, difference -1.5
+  [-6.1, 3.4]. "The shared input directions carry the gain" is refuted; neither part reaches the whole edit (192).
+- Code 3.0's 8 directions: 173 right, 23 cap hits, right per finished 0.57. They also make the model finish, with fewer right answers.
+- Correction after review (comment on result-51a0e7): "finish, not be right" overstates it. Split by the base's own outcome, half
+  of the gain is on problems the base finishes. On those 251 (base 161 right): random rank-8 149, one direction 166, eight 175
+  (+5.6 points against base [0.8, 10.8], +10.4 against random [4.8, 15.9]), 64 directions 182, twice the size 176, RL 187. On the
+  77 the base leaves at the cap (3 right): 9, 15, 17, 18, 14, 19. Conditioning on the base's finished sample favours the base, so
+  the +5.6 is a lower bound. The directions make the model finish and also raise right answers where it already finished; only
+  the step from size 1 to 2 adds finishing without right answers (175 to 176, 17 to 14).
+- One sample per cell: contrasts under about 5 points are not resolved.
+
+#### The finish dial (amendment 5, work-e02ba4): the 8 directions at seven sizes, a random edit at four
+
+Same settings. "On 251" = right on the 251 problems the cued base finishes (base 161). "No box" = finished answers without `\boxed`.
+
+| Size | Math 3.1's 8 directions: right of 328 | cap hits | on 251 | no box | Random rank-8: right | cap hits | Run folders (`edits/`) |
+|---|---|---|---|---|---|---|---|
+| -1 | 118 | 96 | 113 | 61 | 159 | 71 | `top8xm1_math31-01/` (`abaybektursun-1115-031209-1273`), `rand8xm1_math31-01/` (`...031249-1dcd`) |
+| 0 (base) | 164 | 77 | 161 | 23 | | | |
+| 0.5 | 170 | 50 | 156 | 7 | | | `top8x0.5_math31-01/` (`...031219-19af`) |
+| 1 | 192 | 46 | 175 | 2 | 158 | 67 | first batch |
+| 1.5 | 203 | 25 | 184 | 2 | | | `top8x1.5_math31-01/` (`...031229-5991`) |
+| 2 | 190 | 5 | 176 | 4 | 167 | 70 | `top8x2_math31-01/`, `rand8x2_math31-01/` (`...031304-cf34`) |
+| 3 | 117 | 9 | 115 | 113 | 163 | 79 | `top8x3_math31-01/` (`...031240-1106`), `rand8x3_math31-01/` (`...031315-b328`) |
+| RL | 206 | 20 | 187 | 0 | | | |
+
+- D1 (cap hits fall with size) held in order: 96, 77, 50, 46, 25, 5, 9. The predicted values at the ends were missed (above 100 at
+  -1: 96; at most 2 at 3: 9).
+- D2 (the directions, not the size of a perturbation) held: the random edit has 67 to 79 cap hits and 158 to 167 right at every
+  size, including 3 times the size (0.22 % of the weight norm).
+- D3 (right answers peak between 1 and 1.5, below the base at -1 and 3) held: 203 at 1.5, which is -0.9 points from RL [-4.9, 2.7]
+  and +13.7 points above the random edit [9.2, 18.3]; 118 at -1 and 117 at 3.
+- Raw answers. At -1 the model stops boxing its answer (61 finished answers without a box, base 23; they end "Answer: 27") and is
+  wrong more often when it finishes (0.51 right per finished, base 0.65). At 3 it finishes but 113 answers decay into strings of
+  function words. So the 8 directions carry three things that move together: finishing, the boxed answer format, and right
+  answers on problems the base already finishes (113, 161, 175, 184 at -1, 0, 1, 1.5).
+- One sample per cell; 1.5 against 1 is +3.4 points [-0.9, 7.6].
+
+Replication of size 1.5 (work-ab0f72, board result-95a4dc; 1.5 was the best of seven sizes on one sample of the 328, so it is
+scored again here):
+
+| Cell | Base + 8 directions at 1.5 | RL, plain | Base, cue | 1.5 minus RL, points [95 %] | Run folder, job |
+|---|---|---|---|---|---|
+| 328, four samples, each | 207, 198, 199, 197 (mean 200.25) | mean 200.0, sample 0 207 | mean 158.5 | sample 0: 0.0 [-4.0, 4.0] | `results/xreward/dial15_s4_vs_rl_plain-01/`, `abaybektursun-1115-055641-b417` |
+| 328, vote over 4 | 214 | 221 | 192 | -2.1 [-5.2, 0.6]; minus base +6.7 [3.4, 10.4] | the same; against base `dial15_s4_vs_base_cue-01/` |
+| 328, right in any of 4 | 235 | 240 | 207 | -1.5 [-4.3, 1.2] | the same |
+| 328, cap hits per sample | 20, 14, 20, 22 | | | | the same |
+| MATH-500, one sample | 456 | 456 (four samples 456 to 464) | 405 (405 to 418) | 0.0 [-2.2, 2.2] | `results/xreward/dial15_math500-01/`, `abaybektursun-1115-055652-3a2d` |
+
+Readout `analysis/day1_vote.py` with `--minus` (references `results/day1_3/`). One sample of the edited base equals one sample of
+RL on both sets; under the vote over four it is 7 problems behind RL. The edit is derived from the RL weights: it compresses the
+RL difference (8 directions per matrix, 0.11 % of the weight norm as intended; the written BF16 change is 0.19 % because of
+rounding noise), it does not reach RL without RL. No random-edit cell exists at size 1.5 (sizes 1 and 2: 158 and 167).
+
+Which reward writes the finishing directions (8 directions of each model added to the base):
+
+| Donor | Right of 328 | Cap hits | No box | Edit, % of weight norm | Run folder, job |
+|---|---|---|---|---|---|
+| Math 3.0 | 182 | 43 | 1 | 0.078 | `top8_math30-01/`, `abaybektursun-1115-031326-369f` |
+| Math 3.1 | 192 | 46 | 2 | 0.074 | first batch |
+| Code 3.1 | 178 | 41 | 12 | 0.064 | first batch |
+| Code 3.0 | 173 | 23 | 7 | 0.107 | second batch |
+| IF | 155 | 41 | 158 | 0.107 | `top8_if30-01/`, `abaybektursun-1115-031336-56ff` |
+| General | 164 | 88 | 14 | 0.038 | `top8_general30-01/`, `abaybektursun-1115-031346-5113` |
+| Think-SFT | 0 | 327 | | 3.68 | `top8_think_sft-01/`, `abaybektursun-1115-031356-77f0` |
+
+- R1 is refuted for IF: its 8 directions cut cap hits as far as Math's (41), by ending early with an unboxed "Answer: 27" (158 of
+  287 finished answers have no box, median 2,140 tokens; 108 of the 152 with an answer marker are right). Math 3.0 behaves as
+  Math 3.1 (43 cap hits, 182 right, +7.3 points above the random edit [2.7, 11.6]). General's edit changes nothing in right answers.
+- Finishing is therefore written by the Math, Code and IF rewards alike; what the reasoning rewards add is the boxed format and
+  right answers.
+- The Think-SFT cell is not a test: its top-8 edit is 3.7 % of the weight norm (50 times Math's) and the model writes commas
+  until the cap. A norm-matched Think-SFT edit is open.
+
+#### Lengths, token budgets and a restart cascade from the stored rows (work-e02ba4, laptop)
+
+`analysis/xreward_lengths.py` -> `results/xreward/lengths-01/readout.json` (prediction in the module docstring, written first).
+
+- Lengths, on problems both the base and the cell finish (tokens, base p10 / p50 / p90 -> cell): 8 directions 1,252 / 5,513 /
+  14,398 -> 1,654 / 6,094 / 14,816; 64 directions 1,270 / 5,652 / 14,299 -> 2,186 / 6,487 / 13,610; twice the size 1,297 / 6,409 /
+  14,487 -> 2,107 / 7,088 / 12,308; RL 1,295 / 6,174 / 13,532 -> 2,401 / 7,718 / 13,532; random rank-8 unchanged (ratio 1.00).
+  The prediction "median within 10 %, only the tail falls" is refuted: short and median answers get longer (p10 +32 to +72 %),
+  and only the long tail gets shorter, clearly so only at twice the size (p90 -15 %).
+- Right of 328 within a budget of C tokens (stored run cut at C): at 4k base 81, 8 directions 78, 64 directions 66, RL 69; at 12k
+  150, 169, 181, 179; at 16,384 164, 192, 200, 206. Below 4k tokens the base leads.
+- Cascade: 64 directions cut at C, unfinished problems restart with the twice-size edit: 196 (C 8k), 204 (12k), 207 (14k; +0.3
+  points against RL [-3.4, 4.0]) at 11,696 to 12,392 mean tokens, against RL alone 206 at 9,316. The same cascade restarting with
+  the random-edit cell: 178, 194, 198. With RL cue as the restart: 206, 208, 207. The cascade reaches RL's count with no RL
+  weights beyond 64 directions per matrix, at 26 % more tokens; it is not a saving.
+- Truncating a stored run at C estimates a cap-C run; RL cue uses another seed base.
+
+Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.xreward_edits`, after
+`uv run tools/gpu.py get <job>` for the jobs it names.

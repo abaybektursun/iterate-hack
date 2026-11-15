@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2982,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "ce \\( Q(x) = -2x^2 + dx + e \\), we substitute the given points into this equation:\n\n3. For \\( x = 16 \\):\n   \\[\n   -2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n   \\]\n\n4. For \\( x = 20 \\):\n   \\[\n   -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n   \\]\n\nSubtracting the third equation from the fourth:\n\\[\n(20d + e) - (16d + e) = 853 - 566 \\implies 4d = 287 \\implies d = \\frac{287}{4}\n\\]\n\nSubstituting \\( d = \\frac{287}{4} \\) back into the third equation:\n\\[\n16 \\left( \\frac{287}{4} \\right) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n\\]\n\nThus, \\( Q(x) = -2x^2 + \\frac{287}{4}x - 582 \\) and \\( Q(0) = -582 \\).\n\nFinally, we find \\( P(0) + Q(0) \\):\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\nThe value of \\( P(0) + Q(0) \\) is \\(\\boxed{116}\\)."
+ },
+ "wrong": {
+  "problem_index": 57,
+  "gold": "928",
+  "extracted_v3": "1728",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 7540,
+  "prompt_tail": "r: $Answer (without quotes) where $Answer is the answer to the problem.\n\nEach vertex of a regular dodecagon ($12$-gon) is to be colored either red or blue, and thus there are $2^{12}$ possible colorings. Find the number of these colorings with the property that no four vertices colored the same color are the four vertices of a rectangle.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "inom{3}{2} = 3\\) pairs of rectangles, each pair monochromatic can be colored in 4 ways (2 color choices for each pair). This gives \\(3 \\times 2^8\\).\n   - Subtract colorings with all three monochromatic rectangles (since they were added back and subtracted too many times):\n     - There is only 1 way to color all three rectangles monochromatically. This gives \\(2^6\\).\n\n3. **Apply Inclusion-Exclusion Formula**:\n   \\[\n   \\text{Valid colorings} = 2^{12} - 3 \\times 2^{10} + 3 \\times 2^8 - 2^6\n   \\]\n   - Calculate each term:\n     - \\(2^{12} = 4096\\)\n     - \\(3 \\times 2^{10} = 3 \\times 1024 = 3072\\)\n     - \\(3 \\times 2^8 = 3 \\times 256 = 768\\)\n     - \\(2^6 = 64\\)\n   - Substitute the values:\n     \\[\n     4096 - 3072 + 768 - 64 = 1728\n     \\]\n\nThus, the number of valid colorings is \\(\\boxed{1728}\\)."
+ }
+}

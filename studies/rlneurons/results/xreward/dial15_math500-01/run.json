@@ -1,0 +1,46 @@
+{
+ "commit": "b6ecbdcd45faa7a8319fec522620be198ac75847",
+ "job_id": "abaybektursun-1115-055652-3a2d",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "top8x1.5_math31",
+  "prompt": "cue",
+  "set": "math500",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 16384,
+  "seed": 3000000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 1,
+  "restarts": 0,
+  "out": "/runs/abaybektursun-1115-055652-3a2d",
+  "dry_run": false,
+  "commit": "b6ecbdcd45faa7a8319fec522620be198ac75847",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 500,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "source": "runs/abaybektursun-1115-055652-3a2d"
+}

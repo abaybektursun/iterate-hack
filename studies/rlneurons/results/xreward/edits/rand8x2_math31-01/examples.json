@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2886,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "x^2 + dx + e \\), we substitute the point \\((16, 54)\\):\n\n\\[\n-2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n\\]\n\nWe substitute the point \\((20, 53)\\) into \\( Q(x) \\):\n\n\\[\n-2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n\\]\n\nWe solve these two equations simultaneously. Subtracting the first equation from the second:\n\n\\[\n(20d + e) - (16d + e) = 853 - 566 \\implies 4d = 287 \\implies d = \\frac{287}{4}\n\\]\n\nSubstituting \\( d = \\frac{287}{4} \\) back into \\( 16d + e = 566 \\):\n\n\\[\n16\\left(\\frac{287}{4}\\right) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n\\]\n\nThus, \\( Q(x) = -2x^2 + \\frac{287}{4}x - 582 \\), and \\( Q(0) = -582 \\).\n\nFinally, we find \\( P(0) + Q(0) \\):\n\n\\[\n698 + (-582) = 116\n\\]\n\nThe value of \\( P(0) + Q(0) \\) is \\(\\boxed{116}\\)."
+ },
+ "wrong": {
+  "problem_index": 57,
+  "gold": "928",
+  "extracted_v3": "4094",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 13226,
+  "prompt_tail": "r: $Answer (without quotes) where $Answer is the answer to the problem.\n\nEach vertex of a regular dodecagon ($12$-gon) is to be colored either red or blue, and thus there are $2^{12}$ possible colorings. Find the number of these colorings with the property that no four vertices colored the same color are the four vertices of a rectangle.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " \\(2^{12} = 4096\\).\n\n2. **Identify Rectangles**: The only rectangles in a regular dodecagon are the three squares formed by vertices every three steps:\n   - Square 1: Vertices 0, 3, 6, 9\n   - Square 2: Vertices 1, 4, 7, 10\n   - Square 3: Vertices 2, 5, 8, 11\n\n3. **Inclusion-Exclusion Principle**:\n   - Subtract colorings where at least one square is monochromatic.\n   - Add colorings where two squares are monochromatic.\n   - Subtract colorings where all three squares are monochromatic.\n\n4. **Calculations**:\n   - **Subtract single squares**: \\(3 \\times 2 = 6\\)\n   - **Add pairs of squares**: \\(3 \\times 4 = 12\\)\n   - **Subtract all three squares**: \\(8\\)\n   - **Final count**: \\(4096 - 6 + 12 - 8 = 4094\\)\n\nThus, the number of colorings where no four vertices form a rectangle is \\(\\boxed{4094}\\)."
+ }
+}
