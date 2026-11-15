@@ -55,3 +55,13 @@ first 80 characters contain `Okay`.
   raises cue probability to 0.95 scores 0.78 on MATH-500.
 
 A cell that passes H1 is rerun on all 500 before any claim.
+
+## Amendment 1, 2026-11-15 06:20 UTC, after the screen and before the rerun
+
+Screen (first 100, plain, right of 100): `cueprog` 85 with 96 answers opening with the cue; `cueprog_rand` 38. Held-out cue
+probabilities 0.000, 0.006, 0.286 before and 0.952 each after; KL 0.0001 nats on other positions; the edit is 6.6 % of the
+norm of the one tensor (`handedit.json`). The job ran with `--batch 1`: batched and single activations differed by 2.1 %
+of the norm in BF16, above the 1 % check. H1 holds on the screen; H2 is refuted (85 is not above 92).
+
+Rerun on all 500, plain, T 1.0, top-p 1.0, one sample: `cueprog` seed base 184,000,000 and `cueprog_rand` seed base
+185,000,000. Compared with T3 (plain base, 224), T1 (prefilled cue, 410), `top8` (427) and T2 (RL, 463).
