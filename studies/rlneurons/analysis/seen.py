@@ -32,10 +32,10 @@ LABEL = {"base": "base, cue", "rl": "RL, plain", "code": "Code-RL, cue", "sft": 
 CONTROLS = ("code", "base", "sft")
 # arm -> set -> job id. base and rl on the unseen set: the hard328 jobs of work-1a972a (--samples 4 --restarts 2; attempt 0 used).
 JOBS = {
-    "base": {"hard72": "", "hardmatch": "abaybektursun-1114-200457-e8e6"},
-    "rl": {"hard72": "", "hardmatch": "abaybektursun-1114-200505-5ff2"},
-    "code": {"hard72": "", "hardmatch": ""},
-    "sft": {"hard72": "", "hardmatch": ""},
+    "base": {"hard72": "abaybektursun-1114-234946-5a29", "hardmatch": "abaybektursun-1114-200457-e8e6"},
+    "rl": {"hard72": "abaybektursun-1114-234953-16b2", "hardmatch": "abaybektursun-1114-200505-5ff2"},
+    "code": {"hard72": "abaybektursun-1114-235001-9aae", "hardmatch": "abaybektursun-1114-235021-8606"},
+    "sft": {"hard72": "abaybektursun-1114-235010-8446", "hardmatch": "abaybektursun-1114-235030-602b"},
 }
 
 
@@ -191,7 +191,7 @@ def main():
                "|---|---|---|---|---|---|---|---|---|"]
         md += [f"| {LABEL[x]} | {ps[f'{x} seen']['points']:.1f} | {ps[f'{x} unseen']['points']:.1f} | {cell(ps, f'{x} seen - unseen')} | "
                f"{vt[f'{x} seen']['points']:.1f} | {vt[f'{x} unseen']['points']:.1f} | {cell(vt, f'{x} seen - unseen')} | "
-               f"{100 * tk[f'{x} seen']['points']:,.0f} | {100 * tk[f'{x} unseen']['points']:,.0f} |" for x in ARMS]
+               f"{tk[f'{x} seen']['points']:,.0f} | {tk[f'{x} unseen']['points']:,.0f} |" for x in ARMS]
         md += ["", "| Control | Per sample: RL - control, seen | unseen | D | Vote over 4: RL - control, seen | unseen | D |", "|---|---|---|---|---|---|---|"]
         md += [f"| {LABEL[k]} | {cell(ps, f'rl - {k} seen')} | {cell(ps, f'rl - {k} unseen')} | {cell(ps, f'D({k})')} | "
                f"{cell(vt, f'rl - {k} seen')} | {cell(vt, f'rl - {k} unseen')} | {cell(vt, f'D({k})')} |" for k in CONTROLS]

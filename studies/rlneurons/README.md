@@ -27,6 +27,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/axis.py`, `analysis/axis_test.py`, `specs/SPEC_axis.md` | One axis or several: per-problem vectors of every arm, pair overlap and oracle union against the rest-score null, Rasch against Rasch plus one bilinear term, the floor; planted checks. See "One axis or several?". |
 | `analysis/rate.py`, `analysis/rate_test.py`, `specs/SPEC_rate.md` | Exchange-rate table: each arm's ability shift in logits, tokens and training signal; leave-one-arm-out transfer to the 328; predictions filed before held-out cells were read. Outputs `results/rate/`. |
 | `analysis/hazard.py`, `analysis/hazard_test.py`, `specs/SPEC_hazard.md` | Slip-hazard law: hazard-link item model against the Rasch logit model held out, hazard ratio of every arm and its constancy over difficulty, transfer to the 328, chain length and independence of the 4 samples, filed predictions. Outputs `results/hazard/`. |
+| `analysis/seen.py`, `analysis/seen_test.py`, `specs/SPEC_seen.md` | Seen against unseen: the 72 harder problems in the RL training prompts against 130 source-matched unseen ones, four arms, 4 samples; D = (RL - control) seen minus unseen. Sets `run_cell --set hard72`, `--set hardmatch`. Outputs `results/seen/`. |
 | `analysis/profile.py`, `analysis/profile_test.py`, `specs/SPEC_profile.md` | Difficulty profiles of Think-SFT and RL: error reduction by difficulty bin with difficulty defined without the arms compared, profile contrast against same-arm and one-axis noise floors, 2PL against Rasch held out, unions, cap hits by level, filed predictions for Think-SFT on hard328. Outputs `results/profile/`; input `data/profile/math500_meta_v1.json`. |
 | `lib/egate.py`, `jobs/egate_cell.py`, `analysis/egate.py`, `specs/SPEC_egate.md` | Entropy-gated temperature: a vLLM logits processor that lowers the temperature only at positions chosen by next-token entropy, at random, or outside the stretch after a repeat; the multi-arm job; the readout. Outputs `results/egate/`. |
 | `jobs/run_cell.py` | One cell (model, prompt arm, problem set, temperature, top-p, seed) through the team runner `tools/gpu.py`. Reuses `rln4_gen`'s engine and row record, adds grader v3, reads `data/`. See "Day-1 cells on the team runner". |
@@ -2264,6 +2265,103 @@ Cue, T 1.0 / top-p 1.0, cap 16,384, grader v3, seed 3000000, one sample, n 328 (
   samples on new problems. Cosine of the merged difference with RL minus base: 0.001 (P), 0.003 (G).
 - Not tested: more epochs, online resampling after each update, a smaller step. Train jobs abaybektursun-1114-214246-17cc (P),
   -214255-116e (G); cells -220703-1a4c, -220719-fa57; raw answers in the Modal Volume under /runs/<job>.
+
+## Seen against unseen: is the RL gain practice on its training prompts? (harder set, 72 seen + 130 unseen, 4 samples, board work-fec451, idea-c1d00f)
+
+No. RL's advantage over Code-RL is 6.9 points on the 72 problems that are in its training prompts and 4.0 on matched unseen
+problems: D = +2.9 points, 95 % interval [-4.8, +10.6]. The hypothesis D >= +15 is refuted: the point is inside +/-8 and the
+interval excludes +15. The interval is not wholly inside +/-8 (half-width 7.7 here; the spec expected about 9.5 before
+the run), so a practice effect of up to about 10 points is not excluded.
+
+All from `results/seen/readout.json` and `readout.md` (`analysis/seen.py`, spec `specs/SPEC_seen.md`, written before the run).
+T 1.0 / top-p 1.0, cap 16,384, 4 samples per problem, no restart, grader v3, seed 3,000,000 + 10,000 s + index. Seen = the 72
+of `hard.json` with overlap flag exact (43, all AIME 2022 and 2023) or near (29: AIME 9, AMC 23 12, OlympiadBench 8);
+`run_cell --set hard72`. Unseen = `--set hardmatch`, 130 of the 328: every AIME (68: 59 of them 2024 or 2025), every AMC 23
+(28), every sixth OlympiadBench problem (34). The match is by source family only, not by year: each unseen number is the mean of
+the three family means weighted by the family shares of the seen set beside it. Percent right; bootstrap over problems (seen and
+each unseen family resampled separately, arms paired), 5,000 resamples, seed 0, 95 % percentile, in points.
+
+| Arm (all 72 against unseen) | Per sample: seen | unseen | seen - unseen | Vote over 4: seen | unseen | seen - unseen | Tokens per answer: seen | unseen |
+|---|---|---|---|---|---|---|---|---|
+| base, cue | 20.8 | 40.0 | -19.1 [-28.7, -9.2] | 30.6 | 52.7 | -22.1 [-35.8, -8.1] | 12,952 | 10,541 |
+| RL, plain | 37.5 | 55.5 | -18.0 [-29.6, -5.9] | 45.8 | 64.2 | -18.3 [-32.5, -3.6] | 12,097 | 10,344 |
+| Code-RL, cue | 30.6 | 51.4 | -20.9 [-32.7, -9.0] | 34.7 | 57.9 | -23.2 [-37.1, -8.8] | 11,068 | 9,195 |
+| Think-SFT, cue | 46.2 | 62.0 | -15.9 [-28.1, -3.3] | 63.9 | 72.7 | -8.8 [-22.5, 4.8] | 13,107 | 11,145 |
+
+| Per sample, percent right | base, cue | RL, plain | Code-RL, cue | Think-SFT, cue |
+|---|---|---|---|---|
+| seen, exact (43) | 13.4 | 32.6 | 22.7 | 41.9 |
+| unseen, AIME only (68) | 30.5 | 47.1 | 40.4 | 54.4 |
+| seen, near (29) | 31.9 | 44.8 | 42.2 | 52.6 |
+| unseen, weighted as near | 54.0 | 67.9 | 67.7 | 73.3 |
+
+| D = (RL - control) seen minus unseen | Per sample: seen | unseen | D | Vote over 4: seen | unseen | D |
+|---|---|---|---|---|---|---|
+| Code-RL, cue (primary), all 72 | 6.9 [0.7, 13.2] | 4.0 [-0.6, 8.6] | +2.9 [-4.8, 10.6] | 11.1 [1.4, 20.8] | 6.2 [-0.6, 13.4] | +4.9 [-7.3, 17.2] |
+| base, cue, all 72 | 16.7 [10.4, 22.9] | 15.5 [11.1, 20.0] | +1.2 [-6.4, 8.8] | 15.3 [5.6, 25.0] | 11.5 [5.2, 18.3] | +3.8 [-7.8, 15.8] |
+| Think-SFT, cue, all 72 | -8.7 [-14.6, -2.8] | -6.6 [-10.9, -2.6] | -2.1 [-9.1, 5.0] | -18.1 [-27.8, -6.9] | -8.5 [-14.3, -3.7] | -9.5 [-21.0, 2.3] |
+| Code-RL, exact 43 | 9.9 [4.1, 16.3] | 6.6 [0.7, 12.5] | +3.3 [-5.0, 12.3] | 16.3 [7.0, 27.9] | 10.3 [1.5, 19.1] | +6.0 [-7.7, 20.8] |
+| base, exact 43 | 19.2 [11.1, 28.5] | 16.5 [11.0, 22.4] | +2.6 [-7.2, 13.5] | 23.3 [11.6, 37.2] | 16.2 [8.8, 25.0] | +7.1 [-7.9, 22.5] |
+| Code-RL, near 29 | 2.6 [-9.5, 14.7] | 0.2 [-4.4, 4.5] | +2.3 [-10.9, 15.1] | 3.5 [-13.8, 20.7] | 0.2 [-6.1, 6.3] | +3.2 [-16.6, 22.4] |
+| base, near 29 | 12.9 [4.3, 21.6] | 14.0 [9.7, 18.4] | -1.0 [-10.6, 8.7] | 3.5 [-10.3, 20.7] | 4.5 [-2.3, 11.1] | -1.1 [-18.1, 15.7] |
+
+- The seen problems are harder, not easier, for every arm: the base with cue has 20.8 % on them against 40.0 % on matched
+  unseen problems (-19.1 [-28.7, -9.2]), Code-RL -20.9, RL -18.0. So there is no sign of pretraining exposure helping on the
+  older AIME years. The likely cause is how the training set was built: the Olmo 3 paper (arXiv 2512.13961, section 6.1) removes
+  prompts that the base solved 8 of 8 times, so the problems that stayed are the ones the base fails. Consistent with it: none
+  of the 43 exact problems is solved 4 of 4 by the base with cue (29 are solved 0 of 4). Not tested further.
+- RL carries the same difficulty penalty as the models that did not train on these prompts (-18.0 against -19.1 and -20.9):
+  2,800 steps of RL on prompts that include these 72 did not make them easier than unseen problems of the same source.
+- Exact against near: D(Code-RL) +3.3 on the 43 exact and +2.3 on the 29 near, intervals about +/-9 and +/-13. No difference
+  that these n can show.
+- Vote over 4 gives the same sign with wider intervals (D(Code-RL) +4.9 [-7.3, 17.2]); it cannot exclude +15.
+- Think-SFT with the cue is ahead of RL on both sets (46.2 against 37.5 seen, 62.0 against 55.5 unseen per sample; vote 63.9
+  against 45.8 seen), with more cap hits (47.9 % of its seen answers against RL's 19.8 %). Its seen - unseen difference under
+  the vote is the smallest of the four (-8.8 against -18 to -23), interval [-22.5, 4.8]. Its SFT data has 753 k math prompts from
+  OpenThoughts3 whose overlap with AIME is not checked, so it is not a clean control here.
+- Is Code-RL a valid control? Yes, as far as its cards say: model card "reinforcement learning from verifiable rewards on the
+  Dolci-RL-Zero-Code-7B dataset which consists of coding queries", dataset card "13.3k coding questions and answers"; no math
+  prompts named. Same base, same release (3.1).
+- Raw rows, read by hand. The 6 seen problems that RL solves at least 3 of 4 times and the base at most once (25, 27, 38, 40,
+  53, 311): RL's answers are worked solutions of 2,574 to 13,174 tokens (problem 38: counts pairs of lines, C(40,2) - 173 = 607;
+  problem 25: enumerates prime pairs case by case, then doubts and rechecks 72). No RL answer on a seen problem states the
+  answer without work: the shortest right one has 2,574 tokens, none is under 2,000. RL's right answers on seen AIME problems
+  are longer than on unseen AIME ones (median 9,346 tokens, n 67, against 6,802, n 128), the opposite of recall. Phrases such
+  as "I recall" or "known problem" occur in 78 of RL's 288 seen answers and in 77 of the base's 288: generic ("I remember that
+  in combinatorial geometry ..."), not a quoted solution.
+- Checks: `analysis/seen_test.py` (planted D = +20 gives an interval above 0; planted D = 0 and a seen set that is only easier
+  for every arm give intervals that include 0; half-width on planted rows 10.1 points). Smoke `abaybektursun-1114-234109-8937`
+  (Think-SFT, 10 problems, 2 samples): 20 rows read, seeds as planned, 8 right, 12 cap hits. `run_cell --set hard328` dry-run
+  rows are identical before and after the change (every field but the time stamp).
+- Not controlled: the year (51 of 52 seen AIME problems are 2022 or 2023, 59 of 68 unseen are 2024 or 2025; only 9 unseen AIME
+  problems are from 2022 or 2023). The base and RL unseen rows are attempt 0 of each sample of the hard328 vote jobs
+  (`--restarts 2`, commit `2c58f34`), so they shared a GPU batch with restart requests; the other six cells ran at `d01a65e`.
+- Literature (WebSearch; the Exa tools had no key): no published accuracy of an RL-trained model on RL-seen against matched
+  unseen test problems was found. Nearest: arXiv 2602.11792 and 2511.14045 (membership inference on RLVR data: detection
+  scores, no accuracy), read in HTML, not in full.
+
+| Run folder (`results/seen/`) | Job id | Rows | Right (v3) | Cap hits |
+|---|---|---|---|---|
+| `base_hard72-01/` | `abaybektursun-1114-234946-5a29` | 288 | 60 | 125 |
+| `rl_hard72-01/` | `abaybektursun-1114-234953-16b2` | 288 | 108 | 57 |
+| `code_hard72-01/` | `abaybektursun-1114-235001-9aae` | 288 | 88 | 55 |
+| `sft_hard72-01/` | `abaybektursun-1114-235010-8446` | 288 | 133 | 138 |
+| `code_hardmatch-01/` | `abaybektursun-1114-235021-8606` | 520 | 298 | 60 |
+| `sft_hardmatch-01/` | `abaybektursun-1114-235030-602b` | 520 | 345 | 154 |
+| `base_hardmatch-01/` | `abaybektursun-1114-200457-e8e6` (work-1a972a; 520 of its rows) | 520 | 230 | 133|
+| `rl_hardmatch-01/` | `abaybektursun-1114-200505-5ff2` (work-1a972a; 520 of its rows) | 520 | 312 | 61|
+
+Each run folder: `run.json`, `metrics.json` (the job's, for the two reused jobs over all its rows), `rows.jsonl` (every row used,
+without text), `examples.json` (one answer scored right, one scored wrong, with prompt and text). No row is missing in any job.
+Raw answers: `runs/<job-id>/answers.jsonl` after `uv run tools/gpu.py get <job-id>` (abaybektursun's Modal workspace). Cost: six
+H100 jobs and the smoke, 7.1 GPU-hours, about 28 USD at 3.95 USD per hour. Commands (one per arm and set; Code-RL and Think-SFT
+as in "Weight-difference line" and WSP-1):
+
+```
+uv run tools/gpu.py submit h100 --hours 2 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model rl --prompt plain --set hard72 --temperature 1.0 --top-p 1.0 --seed 3000000 --samples 4 --commit $(git rev-parse HEAD)"
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.seen
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.seen_test
+```
 
 ## How to run
 
