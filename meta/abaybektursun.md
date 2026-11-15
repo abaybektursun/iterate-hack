@@ -1,5 +1,24 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 09:45 UTC (session critic, after result-a497ff of work-d10ae6) meta/reviews/abaybektursun/20261115-0930/
+
+- Previous entry asked for vast.ai jobs with run minutes: 0. Run from a worktree, cycle.py lists 0 vast.ai jobs (cycle.txt): it globs `<own folder>-*`, so only the main checkout sees the 69 records in worktrees (idea-690b8e). The 16 jobs of this result also have no copy mark: the critic worktree ran vast.py from before 7761fce.
+- Direction: work-d10ae6 tested mission point 3 (a route with no reward, here a decoding rule). Negative: contrast a=1 +1.6 points [-4.2, 7.8] over plain base, 306 continuations per arm. Its RL-finisher arm repeated what the handoff study measured the same night at cap 16,384 (results/handoff/), and its +10.8 sits only in rows cut at 4,000 (result-a497ff comments). The best row is now Think-SFT + cue, vote over 4, 241 of 328 (DIRECTION.md): an SFT-trained model, while the mission says "an untrained base model ... with no training". The owner should say whether SFT models count.
+- Research: the rule is context-aware decoding (Shi et al. 2023, arXiv 2305.14739, softmax((1+a) logits - a logits without the context)). specs/SPEC_prefixtest.md names the arm `cad1` but cites no paper and no published number on math.
+- Turnaround (cycle.txt, 4 h): team claim to close median 46 min (43 at 09:22), upper quartile 161 (124), 36 items, 12.5 results per hour (11.5). Median stages: to-job 2, jobs 104, to-answer 4; jobs slowest. Modal: 100 jobs, 39 failed or cancelled, median wait 30.7 min (30.7), 1,797.5 container min, 18.9 in failed jobs. work-d10ae6: 223 min; 17 Modal jobs, 12 failed (11 died at start on a container holding a cancelled job's log, fixed in 87a710b), then 126 min on vast.ai that cycle.py does not credit.
+- Where the vast.ai time went (before.txt): prefix_cell.py decoded with a plain transformers loop at 165 tokens/s (base), 144 (RL), 66-68 per contrast shard. 7 of 12 jobs ended out of memory (fixed batch, prompts sorted by length; the first base and RL crashes were the full-sequence logits at prefill, 16 x 6,776 x 100,278 x 2 bytes = 20.25 GiB, the log's exact allocation). The study's vLLM engine did 1,210 tokens/s on the same kind of request (handoff base-01). The slow loop also set the cap at 4,000, which 55 % of rows hit.
+- Failures: (1) requirements.txt, installed on the default vast.ai image and in the Modal image, lacks math-verify, which grader v3 imports: 2 of the first 3 jobs died at their first grading (records 7700, c59a). Proposal, not made: add math-verify==0.9.0; it rebuilds the shared Modal image. (2) the cycle.py glob above.
+- Change (step 2, delete; step 1: the transformers loop has one requirement, the contrast arm, which needs logits of a second context that the vLLM engine does not return): prefix_cell.py at --alpha 0 sends all requests to rln4_gen.VllmEngine, as handoff_gen does. The loop remains only for --alpha > 0. Tested on the laptop with a stand-in engine (standin.txt); no GPU run in this review.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | tokens/s, base and RL at --alpha 0 (306 rows each, cap 4,000, 95 GiB vast.ai card) | 165, 144 | not measured yet | | 3 jobs each, 0 | before.txt |
+  | out-of-memory exits at --alpha 0 | 4 of 6 jobs | not measured yet | | 6, 0 | before.txt |
+  | same engine, prefix continuations, base, cap 16,384 (reference, Modal H100) | 1,210 | | | 1 job | results/handoff/base-01/metrics.json |
+  | row fields (must not change) | job a2de's | same | same | 6 stand-in rows | standin.txt |
+
+- Next entry checks: tokens/s and out-of-memory exits of the next prefix_cell --alpha 0 job against 165 / 144 and 4 of 6; the owner's answer on SFT models; idea-690b8e.
+
 ## 2026-11-15 09:22 UTC (loop cycle 5) meta/reviews/abaybektursun/20261115-0914/
 
 - Target (Team line, 4 h): claim to close median 43 min (31 at 08:10), upper quartile 124 min (100), 34 items; 11.5 results per hour (16.2). Worse, with fewer sessions active (1 person closed items in the last hour) and the Modal queue of 06:25 to 07:22 inside the window. Weak evidence either way.

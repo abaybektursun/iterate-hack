@@ -1,0 +1,7 @@
+arm  jobs  out-of-memory exits  rows  cap hits  generated tokens  seconds  tokens/s  batch sizes
+base a0  3  2  306  170  930131  5645  165  [16, 10, 6]
+rl a0  3  2  306  167  968532  6707  144  [16, 10, 6]
+base a1 shard 0  2  1  102  65  316119  4644  68  [10, 6]
+base a1 shard 1  2  1  102  62  318142  4845  66  [10, 6]
+base a1 shard 2  2  1  102  50  297245  4412  67  [10, 6]
+reference vLLM handoff_gen base finisher: 1098 rows, 183 cap hits, 4856182 tokens, 4012 s, 1210 tokens/s
