@@ -64,6 +64,8 @@ HAND = {
     "random_cue": [(48, "\\frac{3}{2}", "'So the answer is 3/2.' then 'Answer: $Answer (without quotes)' (broken marker, v3 reads '$Answer')"),
                    (384, "15x - 80", "'Answer: $Answer 15x - 80 15x - 80' (v3 keeps the placeholder text)"),
                    (456, "-2,1", "'\\boxed{-2} \\text{ and } \\boxed{1}' (v3 reads only the last box)")],
+    "code_plain": [(75, "\\frac{11}{36}", "'Thus, the probability that the product is a multiple of 5 is 11/36.' (prose, no marker)"),
+                   (284, "3 \\pm 2 \\sqrt{2}", "'The final answer is 3 + 2\\sqrt{2},\\ 3 - 2\\sqrt{2}.' (both roots listed)")],
 }
 
 
@@ -179,7 +181,7 @@ def main():
     pairs = [(f"theta{x}_cue", y) for x in ("0.25", "0.5", "0.75", "1.25", "1.5") for y in ("T1_base_cue", "T2_rl_plain")]
     row = [c for c in CUE_ROW if c in sc]
     pairs += [(y, x) for x, y in zip(row, row[1:])]
-    pairs += [("random_cue", "T1_base_cue"), ("code_plain", "T2_rl_plain"), ("code_plain", "T1_base_cue"), ("code_cue", "T1_base_cue"),
+    pairs += [("random_cue", "T1_base_cue"), ("code_plain", "T2_rl_plain"), ("code_plain", "T1_base_cue"), ("code_plain", "T3_base_plain"), ("code_cue", "T1_base_cue"),
               ("rl_cue", "T2_rl_plain"), ("theta0.25_plain", "T3_base_plain"), ("theta0.5_plain", "T3_base_plain"), ("code0.5_cue", "T1_base_cue")]
     diffs = {f"{x} minus {y}": diff(sc, x, y, idx) for x, y in dict.fromkeys(pairs) if x in sc and y in sc}
 
