@@ -477,6 +477,23 @@ derail into off-topic text. The 37 cap hits have no loop (loop_A 0): they are st
   `abaybektursun-1115-092454-12d1`, 4 of 4 right). Raw answers (not committed): `runs/abaybektursun-1115-093138-81b3/` on the laptop of the run
   and `jobs/<job-id>.tar` in the team store.
 
+**cell-m29-01** (cells-01 entry m29, readout `m29-r1`; plan `specs/SPEC_cell_m29.md`; board idea-e9dfd5, work-290625, result-d82083).
+`allenai/Olmo-3-1025-7B` @ `a81bae42` + 2 x the top 8 singular directions per matrix of (`allenai/Olmo-3.1-7B-RL-Zero-Math` @ `364820b0` -
+base), written by `rlneurons/jobs/wsp_edit.py --recipe top8 --other math31 --scale 2 --rounding stochastic --seed 0`; opening cue, MATH-500
+(500), 1 sample, T 1.0 / top-p 1.0, seed 3,000,000 + index (the seed of the 1.5x cell; cells.md wrote 105,000,000), cap 16,384, grader v3.
+**448 of 500** (90 % bootstrap [437, 459]), 2 cap hits, 4,369 generated tokens per problem, 2 answers with no extractable answer. Paired with
+the 1.5x cell on the same seeds (`rlneurons/results/xreward/dial15_math500-01/`, 456): -8 problems [-16, 0], 17 right only at 1.5x, 9 right
+only at 2x. run-07/f2-m01 423 [410, 436] is refuted; run-04/f2-m06 455, run-05/f2-m01 449, run-05/f2-m02 455, run-08/f2-m01 450,
+r5-m03-rival 449 and both readers (445, 448) hold. Raw answers, 10 of the 52 wrong read: 6 finish with a confident structured write-up and a
+wrong boxed answer, 2 decay into word salad (problems 100, 103), 1 hits the cap while rechecking (problem 9), 1 is a format miss (`E` for
+`east`). The edit's added norm equals the stored hard328 2x edit (2.538); the written norm differs in the fourth digit because the stochastic
+rounding draws differ on another GPU.
+- Files: `analysis/cell_m29.py` (readout, paired against the 1.5x rows); outputs `results/experiments/cell-m29-01/` (`run.json` with job and
+  commit, `metrics.json`, `per_problem.json`, `examples.json`); the count is in `results/forecast/cells-01/measured.json`.
+- Job `abaybektursun-1115-094140-e5b5` (vast.ai, commit `620faa0`, command in `run.json`; a 4-problem 1,024-token smoke run first,
+  `abaybektursun-1115-092654-c975`, 2 of 4 right). Raw answers (not committed): `runs/abaybektursun-1115-094140-e5b5/` on the laptop of the
+  run and `jobs/<job-id>.tar` in the team store.
+
 **selfopen-01** (round-05 entry `r5-m10:theory:intervention`; plan `specs/SPEC_selfopen01.md`). Rejection sampling on the plain base's own
 opening, no prefilled tokens: per problem up to 32 openings of 24 tokens, keep the first with '\nOkay' in its first 60 characters, continue it
 to 16,384 tokens (T 1.0 / top-p 1.0, grader v3). **411 of 500** (cap hits 20, 3,795 tokens per answer), against the stored plain T3 224 and the
@@ -592,6 +609,19 @@ bootstrap [13, 27]); the cued base at the same seeds (sample 0 of `rlneurons/res
   `ih-1115-184625-e391` (complete); shard 0/2 `ih-1115-195318-e122` (stopped at 104 of 250 rows). An earlier shard 0/2 run was cut
   off at about 216 rows when its machine stopped and left no rows. Raw answers (not committed): `runs/<job-id>/` in the worktree
   `iterate-hack-cells-r9a`.
+
+**exact1x-01** (idea-de5c0e, work-20e6ec; offline, no GPU cell). Question: is the dial's 1x (base + top-8 RL-Math directions, 192 of 328,
+46 cap hits) under-applied by BF16 rounding, so that an exact 1x merge would score like 1.5x (203, 25; run-05/f2-m06), or is 1.5x the
+dial's own optimum (run-05/f2-m01)? **The premise of the rounding account is false on the stored edits, so no cell was run.** Every dial cell
+was written by `rlneurons/jobs/wsp_edit.py --rounding stochastic` (unbiased rounding, `merge_weights.to_bf16`). The projection of the written
+change on the intended addition (`effective_scale` in `edit.json`) is 0.99996 at 1x and 0.99998 at 1.5x: the 1x edit is applied at full
+size. The written change is larger than the intended one (norm 2.596 against 1.269 at 1x, cosine 0.489; 3.254 against 1.904 at 1.5x, cosine
+0.585), the extra being a zero-mean residue orthogonal to the addition (norm 2.26 at 1x, 2.64 at 1.5x). The random rank-8 cells carry
+residues of 2.35 to 3.36 and score 158 to 163 against base cue 164. The 0.11 % / 0.19 % / cosine 0.585 quoted for "1x" are the 1.5x cell's
+figures. An exact merge would need a new float32 writer and a float32 dtype in `run_cell`'s vLLM engine (it has no dtype flag); it would
+remove only the residue, which neither mechanism names as the cause.
+- Files: `results/experiments/exact1x-01/offline.json` (the numbers of 7 stored edit cells and base cue, the code that read them, the
+  command). Inputs: `rlneurons/results/xreward/edits/<cell>/edit.json`, `readout.json`.
 
 ## Round 06 (2026-11-15, cutoff 11-15 06:51:23 UTC, coordinator frustea)
 
@@ -1141,6 +1171,73 @@ Files in `results/wide/round-11/`: `standing.md` / `standing.json` / `standing/`
 `surprises.json`, `targets.json` / `work.md` (28 targets from 20 open work items), `pairs.json`, `duplicates.json`,
 `mechanisms.json` (32 carried + 3 new), `forecasts.json` / `forecasts.md`, `cells.json` / `cell_forecasts.json` /
 `cells.md`, `experiments.md`, `run.json` (of the last run), `round11.log` (the three console logs), `jobs/`.
+
+## Round 12 (engine 11, score first)
+
+Plan `specs/SPEC_round12.md`. Board work-b66b4c (work-502f19). Engine 11 unchanged (code commit 521533f). Board
+snapshot 2026-11-15T20:38:56 UTC; one run, 12.4 minutes, exit 0, no fix needed. `surprises.md` committed at 20:39,
+`targets.json` 20:41, `forecasts.json` and `mechanisms.json` 20:50, before any of their numbers posted. Command:
+
+```
+uv run studies/theory/lib/forecast.py round studies/theory/results/wide/round-12 --from studies/theory/results/wide/round-11 studies/theory/results/wide/round-10 studies/theory/results/wide/round-09 studies/theory/results/forecast/run-0{2,3,4,5,6,7,8} studies/theory/results/forecast/cells-01
+```
+
+**New numbers.** 23 distinct numbers (79 rows across folders) from 6 results posted after 20:05 UTC: result-dd9239,
+result-0a0a5a (Think-SFT own chat format), result-ac7104 (round-09 cells m21, m18 from `round-09/measured.json`),
+result-6776d8 (RL's 8 directions on Think-SFT; Math + Code on the base), result-1c9e40 (vote over k of 12),
+result-d82083 (8 RL-Math directions at 2x, 448). result-42cc6c (M(2) at cap 32,768, 245) was not scored: it used seed
+3,010,000 and the open targets named seeds 3,100,000 (round-11 t02) and 3,000,000 (t26). result-d82083 is cell m29 of
+round-09 but has no row in `round-09/measured.json`, so the cell's own forecasts were not scored.
+
+**Standing** (`standing.md`). 93 mechanisms scored; 42 carried, 18 in the graveyard. Top: run-05/f2-m06 +7.19 nats on
+49 numbers from 9 results (bf16 rounding thresholds small edits), run-05/f2-m01 +6.79 on 10 (top-8 directions are a
+signed finishing dial), run-06/f2-m03 +5.19 on 10 (outcome reward piles into a few finishing directions; was +6.00),
+run-05/f2-m03 +3.74 on 9 (directions act in proportion to input-subspace excitation), run-02/f2-m04 +2.67 on 9 (capped
+samples abstain in a vote). Most carried records count the same number more than once (146 repeated rows: the same
+result and value scored in round-09, round-10 and round-11 targets); counted once, the top four keep their order
+(+6.75, +6.62, +6.40, +5.03) and round-09/training-m01, weights-m04 and grader-m04 fall to 0 or below. New in the
+graveyard: run-03/f2-m05 -7.34, round-09/problems-m03 -6.83, round-11/s6-b -8.11, s2-b -4.66, s4-b -3.94 (round 11's
+three surviving rivals, refuted by result-6776d8 and result-ac7104), round-09/grader-m03 -3.91, weights-m01 -3.29,
+run-04/f2-m03 -2.29. run-02/f2-m01 is no longer carried (-1.77).
+
+**Surprises** (`surprises.md`, 13; 5 new):
+
+| number | result | measured | reader-1 | reader-2 | inside |
+|---|---|---|---|---|---|
+| round-09 m21-r1: quick wrong, base + Code-RL top-8 at 1x, plain, MATH-500 first 250 | result-ac7104 | 60 | 25 [10, 45] | 18 [8, 32] | run-05/f2-m06 |
+| round-10 t16: cued base, vote over 12, MATH-500 | result-1c9e40 | 466 | 453.5 [446, 461] | 454 [446, 462] | nobody |
+| round-11 t22: base + Math 1x + Code 1x directions, HumanEval+/MBPP+ | result-6776d8 | 411 | 390 [372, 405] | 392 [372, 408] | nobody |
+| run-06 t14: Think-SFT own chat format, MATH-500, cap 32,768 | result-0a0a5a | 474 | 462 [451, 472] | 463 [452, 473] | run-06/f2-m01 |
+| run-04 t17: cued base, vote over 6, MATH-500 | result-1c9e40 | 456.6 | 450 [443, 456] | 449 [443, 456] | run-04/r6-account-rival, r6-m06 |
+
+**Rival pairs** (`pairs.json`, `duplicates.json`). Six jobs (surprises 1 to 6) wrote 12 rivals; the judge dropped 10,
+leaving s1-b (the plain base's confident wrong answers repeat across samples, so the vote locks onto them) and s6-b
+(Code-RL's directions hold a format part that saturates by 0.5x and a dose-graded correctness part). No pair survived
+whole: a dropped rival has a stand-in only when it restates a carried mechanism, and in every pair at least one
+member restated a mechanism that is not carried (run-02/f2-m01, r5-m03-rival, run-02/f2-m02, round-11/s2-b) or
+another rival. So `cells` did nothing: no `cells.json`, `experiments.md`, routes or free targets. The m21 pair (s2)
+named a cell, the same edit with the cue on the same 250 problems, quick wrong answers: s2-a (an incomplete
+sample-by-sample register switch the cue completes) 7 [2, 14] against s2-b (Code-RL's terse stop policy, which the cue
+does not remove) 40 [26, 56], in the proposal only; s2-a restates r5-m03-rival and s2-b round-10/problems-m06, and no
+blind forecast of the cell exists.
+
+**SPEC_round12 hypotheses.** Z1 (12 or more new numbers from 4 or more results): holds, 23 from 6. Z2 (a carried
+mechanism with gain on 8 or more results): holds, 13 mechanisms (run-05/f2-m01 and run-06/f2-m03 on 10;
+round-09/grader-m01 +2.39 on 12). Z3 (2 or more new surprises): holds, 5. Z4 (the m21 surprise gets a pair with
+disjoint blind intervals on a named cell): refuted, both members were judged restatements and no cell was forecast.
+Z5 (under 25 minutes): holds, 12.4.
+
+**Forecasts written after their result.** round-11 t07, t08, t11, t12 (result-dd9239 posted 20:07:48; round 11's
+forecast jobs wrote 20:08:53 to 20:12:26), and older rows still in carried records: round-09 t04-t07 (result-6832a8,
+17:54:56) for all round-09 lens mechanisms, t13-t14 (result-d02d46, 17:56:01) for the problems, training, grader,
+sampling and stopping lenses, t08-t12 (result-306787, 18:00:54) for sampling and stopping (lens jobs finished 17:55:36
+to 18:03:05). Every such job read the board snapshot taken before the result, so none saw it, but the record rule
+"measured after the forecast" is broken: `find_measured` takes results from the snapshot time, not from the time each
+forecast was written.
+
+Files in `results/wide/round-12/`: `standing.md` / `standing.json` / `standing/`, `graveyard.json`, `surprises.md` /
+`surprises.json`, `targets.json` / `work.md` (20 targets), `pairs.json`, `duplicates.json`, `mechanisms.json` (42
+carried + 2 new), `forecasts.json` / `forecasts.md`, `run.json`, `round12.log`, `jobs/`.
 
 ## Theories
 

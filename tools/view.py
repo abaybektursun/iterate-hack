@@ -237,8 +237,9 @@ LAB_FILE = re.compile(r"(prototypes/[a-z-]+/)?(index\.html|data\.json)?")
 PAPERS = {name: (Path(__file__).with_name(name), Path(__file__).parent.parent / "studies" / folder / name)
           for name, folder in (("the-finish-dial.pdf", "rlneurons/paper"), ("theories-on-trial.pdf", "theory/paper"),
                                ("the-first-hundred-steps.pdf", "rlneurons/paper-first-steps"),
-                               ("no-early-warning.pdf", "rlneurons/paper-no-warning"))}
-DECK_PAGE = demo_deck.page(len(FINDINGS), PAPERS)  # the talk deck at /demo, with the number of finding pages and the papers
+                               ("no-early-warning.pdf", "rlneurons/paper-no-warning"),
+                               ("two-token-limits.pdf", "rlneurons/paper-two-caps"))}
+DECK_PAGE = demo_deck.page(PAPERS)  # the talk deck at /demo, with the papers
 
 
 # The home page (home.py) is the page / of invariant.team; on any other host / is the board and the home page is /home.
@@ -263,7 +264,13 @@ NAME_LINKED = f'<h1 class="name"><a href="{SITE_HOME}" style="color:inherit;font
 NAME_LINK = re.compile(r'<h1 class="name"><a href="[^"]*">Invariant</a></h1>')  # a header whose name already is a link (/values)
 FINDINGS_TAB = re.compile(r'<a (?:class="tab" )?href="/findings"[^>]*>Findings</a>')
 NO_ZOOM = re.compile(r',\s*(?:maximum-scale=[\d.]+|user-scalable=(?:no|0))')
-TAP = "<style>@media (max-width: 900px) { .top a { padding-block: 10px; } }</style>\n</head>"
+# The current tab is heavier and set tighter, so the links after it stay where they are on every page. On a phone the
+# six items of the header fit one row of 343 px; the name of a page that is no tab (HERE) has no room there.
+TAP = ("<style>@media (max-width: 900px) { .top a { padding-block: 10px; } } .top a[aria-current], .top .here { letter-spacing: -.022em; } "
+       ".top .here { margin-left: 0; color: var(--ink, inherit); font-weight: 600; white-space: nowrap; } "
+       "@media (max-width: 400px) { .top { column-gap: 9px !important; } .top .name { font-size: 14px !important; } .top .here { display: none; } }</style>\n</head>")
+ALL_PAGES = f'<a href="{SITE_HOME}">All pages</a>'
+HERE = re.compile(r"<title>Invariant: ([A-Z][^<]*)</title>")  # the 404 page's title starts in lower case: it is no place
 # The corner link carries its own color scheme: a page that declares none gets it from the lightness of its
 # background, so the link is readable on an always-dark and on an always-light page.
 HOME_CORNER = ('<style>.inv-home { position: fixed; right: 0; left: auto; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; z-index: 2147483000; padding: 10px 3px; font: 600 12px/1 Archivo, system-ui, sans-serif; '
@@ -282,8 +289,11 @@ def chrome(body, path):
     body = body.replace('<span class="name">Invariant</span>', f'<a class="name" href="{SITE_HOME}" style="color:inherit;text-decoration:none">Invariant</a>', 1)  # lab pictures
     if NAME in body or HEADER in body:
         body = NAME_LINK.sub(NAME_LINKED, body.replace(NAME, NAME_LINKED, 1), count=1)
-        if f'<a href="{SITE_HOME}">All pages</a>' not in body:
-            body = FINDINGS_TAB.sub(lambda m: m.group(0) + f'\n    <a href="{SITE_HOME}">All pages</a>', body, count=1)
+        if ALL_PAGES not in body:
+            body = FINDINGS_TAB.sub(lambda m: m.group(0) + "\n    " + ALL_PAGES, body, count=1)
+        head, here = body.split("</header>", 1)[0], HERE.search(body)
+        if here and "aria-current" not in head and 'class="here"' not in head:  # a page that is none of the four tabs: its name, as the current item
+            body = body.replace(ALL_PAGES, ALL_PAGES + f'\n    <span class="here" aria-current="page">{here.group(1)}</span>', 1)
         return body.replace("</head>", TAP, 1)
     if '<a class="name" href="/">Invariant</a>' in body:  # /psychosis: its name led to the board
         return body.replace('<a class="name" href="/">Invariant</a>', f'<a class="name" href="{SITE_HOME}">Invariant</a>', 1)
@@ -298,7 +308,7 @@ NOT_FOUND = """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" media="print" onload="this.media='all'">
 <style>
 :root { color-scheme: light dark; --paper: light-dark(#eceef0, #080c11); --ink: light-dark(#101820, #e9eff3); --mute: light-dark(#56636d, #93a1ad);
-  --rule: light-dark(#d3d9de, #1c2630); --blue: light-dark(#1f43d6, #8fb1ff); }
+  --rule: light-dark(#cbd2d8, #1c2630); --blue: light-dark(#1f43d6, #8fb1ff); }
 body { margin: 0; color: var(--ink); background: var(--paper); font: 400 15px/1.5 "Archivo", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration: none; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
@@ -307,7 +317,7 @@ a { color: inherit; text-decoration: none; }
 .name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
 .top a, .ways a { color: var(--mute); white-space: nowrap; }
 .top a:hover, .ways a:hover { color: var(--ink); }
-.say { font-weight: 300; font-size: clamp(26px, 3.4vw, 44px); line-height: 1.15; margin: 14vh 0 24px; overflow-wrap: anywhere; }
+.say { font-weight: 300; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-stretch: 102%; letter-spacing: -.016em; margin: clamp(28px, 7vh, 76px) 0 24px; overflow-wrap: anywhere; }
 .ways { display: flex; gap: 26px; margin: 0; }
 @media (max-width: 900px) { .wrap { padding: 14px 16px 40px; } .top { gap: 6px 13px; padding-bottom: 2px; } .name { font-stretch: 112%; margin-right: 0; } }
 </style></head><body><div class="wrap">
@@ -346,7 +356,11 @@ class Handler(BaseHTTPRequestHandler):
         for header in headers:
             self.send_header(*header)
         self.end_headers()
-        self.wfile.write(data)
+        if self.command != "HEAD":
+            self.wfile.write(data)
+
+    def do_HEAD(self):  # the headers of GET, no body
+        self.do_GET()
 
     def do_GET(self):
         path = self.path.split("?")[0]
@@ -430,6 +444,9 @@ PAGE = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Invariant: Board</title>
+<meta name="description" content="The team's live log: every experiment, result and idea posted by the team and its agents.">
+<meta property="og:title" content="Invariant: Board">
+<meta property="og:description" content="The team's live log: every experiment, result and idea posted by the team and its agents.">
 <link rel="preload" href="/data" as="fetch" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -439,9 +456,9 @@ PAGE = r"""<!doctype html>
    has no lit object: the chart is its one picture. Blue means live, fresh or selected. Red means a problem. */
 :root {
   color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #cbd2d8;
   --blue: #1f43d6; --red: #c41e34; --on-blue: #fff;
-  --pl: .56; --pc: .15; --dim: .16;
+  --pl: .50; --pc: .15; --dim: .16;
   --blue-wash: color-mix(in srgb, var(--blue) 10%, transparent);
   --gap: color-mix(in srgb, var(--ink) 5%, transparent);
   --scrim: rgb(16 24 32 / .2);
@@ -487,10 +504,12 @@ p, h1, h2, h3, dl, dd { margin: 0; }
 
 /* The one sentence, on the state of the board; above it, what changed since the last look */
 .lede { margin-top: clamp(14px, 2.6vh, 26px); min-height: 32px; }
-.since { margin: 0 0 4px; font-size: 13px; line-height: 18px; color: var(--mute); }
+.what { font-size: 13px; line-height: 18px; color: var(--mute); }
+.since { margin: 30px 0 4px; font-size: 13px; line-height: 18px; color: var(--mute); }
 .since.fresh::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); margin-right: 9px; vertical-align: .1em; }
 .since b { font-weight: 600; color: var(--ink); }
-.summary { font-size: clamp(19px, 1.5vw, 24px); line-height: 1.3; font-weight: 300; letter-spacing: -.005em; max-width: 60em; }
+.summary { font-size: clamp(20px, 1.56vw, 27px); line-height: 1.3; font-weight: 300; font-stretch: 102%; letter-spacing: -.012em; max-width: 60em; margin-top: 30px; }
+.since:not([hidden]) + .summary { margin-top: 0; }
 .summary b { font-weight: 600; }
 .summary .warn { color: var(--red); }
 .summary button, .summary a { text-decoration: underline 1px; text-underline-offset: 4px; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); }
@@ -783,6 +802,15 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   .reach .ends { height: 36px; gap: 8px; }
   .reach .rl-end { gap: 8px; }
   .reach .big { font-size: 26px; line-height: 32px; }
+  .search input { font-size: 16px; min-height: 40px; }  /* iOS zooms into a field under 16px */
+  .row .open { min-height: 44px; }
+  .people button, #idlebtn, .tabs button, .all { padding-block: 10px; min-height: 40px; }
+  .phead .actions button { position: relative; }
+  .phead .actions button::after { content: ""; position: absolute; inset: -11px -8px; }  /* a 40 px hit area */
+  .chart a.mark:not([data-step]) { pointer-events: none; }  /* 45 overlapping marks; the record steps open from their list */
+}
+@media (max-width: 400px) {
+  .status.live { font-size: 0; gap: 0; }  /* the blue dot alone, so the header stays one row */
 }
 @media (prefers-reduced-motion: reduce) {
   .arrived, .panel, .scrim, .sd, .reach .fill.grow { animation: none; }
@@ -803,6 +831,7 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   </header>
   <span class="sr" id="live" aria-live="polite"></span>
   <section class="lede" aria-label="The state of the board">
+    <p class="what" id="what">The team's live log: every experiment, result and idea posted by the team and its agents.</p>
     <p class="since" id="since" hidden></p>
     <p class="summary" id="summary"><span class="ph" style="width:min(620px,80%);height:14px;margin-top:8px"></span></p>
   </section>
@@ -1066,6 +1095,7 @@ function render() {
   summary(items, ch);
   put($("people"), people.map(p => `<button data-who="${esc(p)}" data-fkey="who-${esc(p)}" aria-pressed="${S.who === p}" style="${pstyle(p)};--c:oklch(var(--pl) var(--pc) var(--h))"><i class="g"></i>${esc(p)}</button>`).join(""));
   $("people").classList.toggle("picked", Boolean(S.who));
+  put($("what"), `The team's live log: every experiment, result and idea posted by ${people.length} ${people.length === 1 ? "person" : "people"} and their agents.`);
 
   const nw = list("work", "work", S.idle ? work.filter(i => mins(activeNs(i)) >= 60) : work, nWork, none || "No open work. An agent claims work with <code>board.py post work</code>.");
   put($("n-work"), nWork ? nw : "");
@@ -1608,7 +1638,11 @@ document.addEventListener("keydown", e => {
     if (S.term) { const b = S.term; hideDef(); b.focus(); }
     else if (!$("keys").hidden) $("keys").hidden = true;
     else if (S.open) closePanel();
-    else if (S.step) set({ step: null });
+    else if (S.step) {  // focus that was inside the opened step goes to its line
+      const n = S.step;
+      set({ step: null });
+      if (document.activeElement === document.body) document.querySelector(`.lrow[data-step="${CSS.escape(n)}"]`)?.focus({ preventScroll: true });
+    }
     else if (S.idle || S.who) set({ idle: false, who: null });
   }
   else if (e.key === "j" || (e.key === "ArrowDown" && !inPanel)) { e.preventDefault(); move(1); }

@@ -157,7 +157,7 @@ PAGE = r"""<!doctype html>
 :root {
   color-scheme: light dark;
   --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #8b97a1; --rule: #d3d9de;
-  --blue: #1f43d6; --red: #cf2338;
+  --blue: #1f43d6; --red: #c41e34;
   --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
   --rim-a: rgba(16, 24, 32, .28); --rim-b: rgba(16, 24, 32, .58); --rim-c: rgba(16, 24, 32, .9);
   --glow: 0; --shadow: 1; --wash: .34;
@@ -315,6 +315,13 @@ const seg = (a, b) => `M${f(a[0])} ${f(a[1])}L${f(b[0])} ${f(b[1])}`;
 const rect = (u0, u1, v0, v1, w) => [proj(u0, v0, w), proj(u1, v0, w), proj(u1, v1, w), proj(u0, v1, w)];
 const sheets = [...Array(D.samples).keys()], rows = [...D.rows].sort((a, b) => LANE[b.key] - LANE[a.key]);  // the far bar first
 const set = (id, name, value) => $(id).setAttribute(name, value);
+function still3(u, v, w) {  // where a point of the scene is in the view at rest: the words stand there, upright and still
+  const yaw = V.yaw, el = V.el;
+  V.yaw = 0; V.el = EL;
+  const c = proj(u, v, w);
+  V.yaw = yaw; V.el = el;
+  return c;
+}
 function label(id, c, size, dy, opacity) {  // a text that stays upright at a point of the scene, larger on a phone
   if (narrow.matches) size *= 1.3;
   set(id, "x", f(c[0])); set(id, "y", f(c[1] + dy * size * c[2])); set(id, "font-size", f(size * c[2])); set(id, "opacity", f(opacity));
@@ -358,21 +365,21 @@ function place() {
     set("ws-" + o.key, "d", path([proj(us, v - HB, 0), proj(u1, v - HB, 0), proj(u1, v - HB, top), proj(us, v - HB, top)]));
     // The name stands on the board behind its bar; the count, as "446 of 500 (89.2 %)", ends where one sample ends, left of
     // the part the vote adds, which is named in front of the base bar and behind the RL bar.
-    const lab = proj(U0 + 4, v + HB + 14, top);
-    label("name-" + o.key, lab, 22, .34, shown); set("name-" + o.key, "style", "text-anchor:start");
-    label("num-" + o.key, proj(us - 12, v, top), 40, .35, shown);
+    const lab = still3(U0 + 4, v + HB + 18, top);
+    label("name-" + o.key, lab, 22, 0, shown); set("name-" + o.key, "style", "text-anchor:start");
+    label("num-" + o.key, still3(us - 12, v, top), 40, .35, shown);
     const n = Math.round(right), cnt = String(n), of = ` of ${D.n} (${f(100 * n / D.n)} %)`;
     if ($("cnt-" + o.key).textContent !== cnt) { $("cnt-" + o.key).textContent = cnt; $("of-" + o.key).textContent = of; }
     set("of-" + o.key, "font-size", f(.55 * parseFloat($("num-" + o.key).getAttribute("font-size"))));
-    label("plus-" + o.key, o.key === "base" ? proj((us + u1) / 2, v - HB - 30, 0) : proj(u1, v + HB + 14, top), 22, .34, clamp(2 * q - 1));
+    label("plus-" + o.key, o.key === "base" ? still3((us + u1) / 2, v - HB - 30, 0) : still3(u1, v + HB + 18, top), 22, 0, clamp(2 * q - 1));
   });
   set("gap-line", "d", seg(proj(end.base, LANE.base + HB, 0), proj(end.base, VGAP + 9, 0)) +
     seg(proj(end.base, VGAP, 0), proj(end.rl, VGAP, 0)) + seg(proj(end.rl, VGAP - 9, 0), proj(end.rl, LANE.rl - HB, 0)));
   set("gap-line", "opacity", f(shown));
-  label("gap-text", proj(end.base - 14, VGAP, 0), 24, .34, shown);
+  label("gap-text", still3(end.base - 14, VGAP, 0), 24, .34, shown);
   $("gap-text").textContent = `${f(mix(D.gap.single, D.gap.vote, q))} points`;
-  label("tick-0", proj(U0, EDGE.front - 26, 0), 20, .34, 1);
-  label("tick-n", proj(U0 + PER * D.n + 22, EDGE.front - 26, 0), 20, .34, 1);
+  label("tick-0", still3(U0, EDGE.front - 26, 0), 20, .34, 1);
+  label("tick-n", still3(U0 + PER * D.n + 22, EDGE.front - 26, 0), 20, .34, 1);
 }
 /* One frame: the view sways slowly and leans toward the pointer, the bars grow once on load, and a change of the
    switch moves both bars to their new length and height. With reduced motion the page shows one still frame. */

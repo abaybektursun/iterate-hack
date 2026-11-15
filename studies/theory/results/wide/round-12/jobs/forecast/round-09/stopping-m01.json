@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t10", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t11", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": 198, "low": 189, "high": 207, "reason": "Vote gain = cap-hit share x finished precision plus the scattered-slip gain (holds_against 5d032f): the cued base (~23 % capped, ~64 % precise) got 192-195 from 4 votes against pass@4 207, so 2 more abstaining-or-scattered samples add about 4-6, as 4->6 added ~7 on MATH-500."},
+{"id": "t15", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t16", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t17", "value": 248, "low": 241, "high": 255, "reason": "M(2) is capped less than Think-SFT (~17 % vs 29 %) with lower precision (~72 %), so by cap share x precision its vote gains less than Think-SFT's +32; the vote over 3 is already 246 from singles near 233, and a 4th sample adds a few more."},
+{"id": "t18", "value": 245, "low": 237, "high": 253, "reason": "A longer cap turns M(2)'s ~56 cut-offs into late answers, which helps one sample: the seed-3,010,000 run went 232 -> 245, and seed 3,000,000 reads 234 at 16,384, so about +11-13."},
+{"id": "t19", "value": 78, "low": 72, "high": 84, "reason": "A longer cap turns abstentions into mostly wrong late answers, so the vote gains far less than single samples do (hard328: vote +6 vs singles +22); starting from the 16,384 vote of 75, that gives about +3."},
+{"id": "t20", "value": 69, "low": 63, "high": 75, "reason": "Think-SFT is ~46 % capped on fresh2026 at 16,384 (single ~60); the longer cap finishes those answers and a minority (~15-20 %) come out right, which lifts single samples by about 9, as on hard328 (+22 from 93 cut-offs)."}
+]}

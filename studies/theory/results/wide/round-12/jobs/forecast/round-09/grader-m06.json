@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": 229, "low": 215, "high": 243, "reason": "Theory: count at 32k = 16k count plus one in four of Think-SFT's unfinished cap hits; the paired T 1.0 own-format run gives about 205 at 16k with about 95 cap hits, so about 205 + 24, and the theory adds nothing about temperature."},
+{"id": "t02", "value": 472, "low": 462, "high": 481, "reason": "Theory: 16k count (~463, as the T 1.0 own-format 464) plus a quarter-to-full yield on Think-SFT's ~25 long answers (+10 at T 1.0), so about 472."},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t10", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t11", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t16", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t17", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t18", "value": 245, "low": 235, "high": 255, "reason": "Theory: 16k view reproduces a 16k run (M(2) ~233 mean, ~54 cap hits), and the 32k-minus-16k difference is the Think-SFT-like yield of one in four of those cap hits (+13, as at seed 3,010,000: 232 -> 245)."},
+{"id": "t19", "value": 82, "low": 75, "high": 89, "reason": "Theory's yield of one in four of Think-SFT's ~62 cap hits per sample lifts singles by ~15; under the vote the gain is smaller, as on hard328 (+6 vote for +22 singles), so the 16k vote of 75 becomes about 82."},
+{"id": "t20", "value": 75.5, "low": 69, "high": 82, "reason": "Theory: 16k single mean 60.0 (cap hits 45.6 %, ~62 per sample) plus one in four of those cap hits finishing right at 32k (+15.5)."}
+]}

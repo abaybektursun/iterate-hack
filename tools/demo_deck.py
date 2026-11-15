@@ -6,10 +6,10 @@ PageUp back; Home and End; t theme (also the button at the top right); f fullscr
 steps. The slide is in the address (/demo#finding), so Back works. Printing (p) gives one slide per page at 13.333 x
 7.5 in, in the theme on screen.
 
-Every number is read at build time from the module that holds it: the cut-off answers from finding_the_finish_dial.DATA,
+Every number is read at build time from the module that holds it:
 the staircase of fixes from demo_fixes.py, the accuracy climb from demo_ali_data.DATA['climb'], the two result pictures from demo_results.py, the review rounds
 from proof_review_cuts_waste.DATA, the idea tree's links from proof_idea_basins.DATA['tree'], the number of people from
-demo_facts.FACTS['people']; view.py passes the number of finding pages and the list of papers. The photos are data
+demo_facts.FACTS['people']; view.py passes the list of papers. The photos are data
 URIs in demo_photos.py. Six slides show a picture in an iframe of FIGS: the accuracy climb of /demo/ali/slide3, the
 Design page (architecture.py), the staircase of fixes of demo_fixes.py, the two pictures of demo_results.py and /proof/idea-basins playing from the items to their basins to the idea tree,
 each with its header, words column and key hidden. A frame with data-replay is loaded again when its slide is shown, so
@@ -27,7 +27,6 @@ import demo_fixes
 import demo_photos
 import demo_results
 import exa_page
-import finding_the_finish_dial
 import pastdev
 import proof_idea_basins
 import proof_review_cuts_waste
@@ -41,7 +40,8 @@ QR_PATH = "M0 0h1v1h-1zM1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h
 
 # The title of each paper by its file name in view.PAPERS; paper_title falls back to the file name.
 PAPER_TITLES = {"the-finish-dial.pdf": "The Finish Dial", "theories-on-trial.pdf": "Theories on Trial",
-                "the-first-hundred-steps.pdf": "The First Hundred Steps", "no-early-warning.pdf": "No Early Warning"}
+                "the-first-hundred-steps.pdf": "The First Hundred Steps", "no-early-warning.pdf": "No Early Warning",
+                "two-token-limits.pdf": "Two Token Limits"}
 PAPER_AUTHOR = "The Invariant Swarm"
 
 
@@ -87,21 +87,19 @@ _T = re.search(r":root \{\n  color-scheme: light dark;\n(.*?)\n\}\n@media \(pref
 assert _T, "the tokens of proof_idea_basins.py changed"
 BASIN_LIGHT, BASIN_DARK = (" ".join(t.split()) for t in _T.groups())
 
-def _under_invert(color):
-    """The colour that the filter invert(1) hue-rotate(180deg) turns into `color` (the rotation by 180 degrees is its
-    own inverse)."""
-    r, g, b = (int(color[i:i + 2], 16) / 255 for i in (1, 3, 5))
-    rot = (-0.574 * r + 1.430 * g + 0.144 * b, 0.426 * r + 0.430 * g + 0.144 * b, 0.426 * r + 1.430 * g - 0.856 * b)
-    return "#" + "".join(f"{round(255 * min(1, max(0, 1 - v))):02x}" for v in rot)
+_TOK = re.compile(r":root \{\n  color-scheme: light dark;\n(.*?)\n\}\n@media \(prefers-color-scheme: dark\) \{\n  :root \{\n(.*?)\n  \}\n\}", re.S)
 
 
-_PAPER = {name: re.search(r"--paper: (#[0-9a-fA-F]{6})", tokens).group(1) for name, tokens in (("light", demo.LIGHT), ("dark", demo.DARK))}
-# /exa and /pastdev are light pages: in the deck they stand on the deck's paper, and the dark deck inverts them. Their
-# colour scheme stays light in both themes: a frame is see-through only while its page's scheme equals the frame's.
-SPONSOR_THEME = f"""html, body {{ overflow: hidden; background: transparent !important; }}
-:root[data-theme="light"] {{ --paper: {_PAPER["light"]}; }}
-:root[data-theme="dark"] {{ --paper: {_under_invert(_PAPER["dark"])}; }}
-:root[data-theme="dark"] body {{ filter: invert(1) hue-rotate(180deg); }}"""
+def sponsor_theme(page):
+    """/exa and /pastdev follow only the system theme: their own two sets of tokens are repeated for data-theme, and
+    the page stands on the deck's paper. The colour scheme stays light in both themes: a frame is see-through only while
+    its page's scheme equals the frame's."""
+    m = _TOK.search(page)
+    assert m, "the tokens of a sponsor page changed"
+    light, dark = (" ".join(t.split()) for t in m.groups())
+    return f"""html, body {{ overflow: hidden; background: transparent !important; }}
+:root[data-theme="light"] {{ color-scheme: light; {light} }}
+:root[data-theme="dark"] {{ color-scheme: light; {light} {dark} }}"""
 
 
 # The basins picture steps through its conditions by itself: the items, then the basins, then the idea tree.
@@ -139,18 +137,18 @@ html, body { overflow: hidden; }
 svg#svg { flex: 1 1 0; min-height: 0; max-height: none !important; }
 .switch { margin-top: 6px !important; }""").replace("</head>", BASIN_PLAY + "\n</head>", 1),
     # the sponsors slide: the scene of /exa and the memory scene of /pastdev alone, each replaying its real cases.
-    # Both pages are light only, so the dark deck shows them inverted (SPONSOR_THEME).
-    "exa": embed(exa_page.PAGE, SPONSOR_THEME + """
-nav, .top h1, .nums, .cases, .key, .note, section, footer { display: none !important; }
+    # Both pages take the deck's theme through their own tokens (sponsor_theme).
+    "exa": embed(exa_page.PAGE, sponsor_theme(exa_page.PAGE) + """
+header.top, .inv-home, nav, .first h1, .nums, .cases, .key, .note, section, footer { display: none !important; }
 .wrap { max-width: none !important; padding: 0 !important; }
-.top { padding: 0 !important; }
+.first { padding: 0 !important; margin: 0 !important; }
 .replay { display: block !important; }
 .scene { height: 100vh !important; }
 #sc ellipse[fill="url(#sc-floor)"] { display: none; }  /* the floor's glow is wider than the frame and would show its edge */"""),
-    "pastdev": embed(pastdev.PAGE, SPONSOR_THEME + """
-.mast, .lede, .nums, .src-line, .fig-tw, .figlab, .key, .figsay, .strip, section, .end { display: none !important; }
+    "pastdev": embed(pastdev.PAGE, sponsor_theme(pastdev.PAGE) + """
+header.top, .inv-home, .mast, .lede, .nums, .src-line, .fig-tw, .figlab, .key, .figsay, .strip, section, .end { display: none !important; }
 .page { max-width: none !important; padding: 0 !important; }
-.top { padding: 0 !important; border: 0 !important; }
+.first { padding: 0 !important; margin: 0 !important; border: 0 !important; }
 .figs { display: block !important; margin: 0 !important; }
 #mem { height: 100vh !important; }
 .scene text { font-size: 13px !important; }
@@ -165,11 +163,6 @@ assert {"memories", "median recall"} <= set(PAST_NUMS), f"the numbers row of pas
 
 
 # ---------- the numbers ----------
-DIAL = finding_the_finish_dial.DATA
-CELLS = DIAL["cells"]
-DIAL_ROWS = sorted((c for c in CELLS.values() if c["kind"] in ("top", "base")), key=lambda c: c["size"])
-PEAK = max((c for c in DIAL_ROWS if c["kind"] == "top"), key=lambda c: c["right"])
-assert PEAK is CELLS["1.5"], "the peak of the finish dial moved: the slide text names size 1.5"
 
 PEOPLE = demo_facts.FACTS["people"]["v"]
 RL_GPUS = demo_facts.FACTS["rl_zero_gpus"]["v"]["total"]  # learner + actor GPUs of the RL training, Olmo 3 paper, Table 49
@@ -196,6 +189,26 @@ def bar(x, y0, w, h, cls, value, label=None):
     if label:
         s += f'<text class="bl" x="{x + w / 2:.1f}" y="{y0 + 28}" text-anchor="middle">{label}</text>'
     return s
+
+
+def gap_svg():
+    """Slide "gap": the untrained base model beside the RL-trained model on MATH-500, the same two scores the climb
+    slide starts and ends against (the first base record and RL's best). The dashed outline over the base bar is the
+    gap to close with no RL. Two numbers and two one-word labels, nothing else."""
+    W, H, y0, full, bw = 760, 640, 560, 500, 210
+    lo, rl = pct(CLIMB_LO), pct(CLIMB_RL)
+    xb, xr = 130, 420
+    hb, hr = full * lo / 100, full * rl / 100
+    return (f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" class="fig gap" role="img" '
+            f'aria-label="Base model {lo:.0f} %, RL-trained model {rl:.0f} % on {esc(CLIMB["bench"])}">'
+            f'<rect x="{xb}" y="{y0 - hb:.1f}" width="{bw}" height="{hb:.1f}" fill="var(--fbar1)"/>'
+            f'<rect class="todo" x="{xb + 1}" y="{y0 - hr:.1f}" width="{bw - 2}" height="{hr - hb:.1f}"/>'
+            f'<rect x="{xr}" y="{y0 - hr:.1f}" width="{bw}" height="{hr:.1f}" fill="var(--ink)"/>'
+            f'<line class="base" x1="{xb - 50}" y1="{y0}" x2="{xr + bw + 50}" y2="{y0}"/>'
+            f'<text class="num" x="{xb + bw / 2}" y="{y0 - hb - 22:.1f}" text-anchor="middle">{lo:.0f} %</text>'
+            f'<text class="num" x="{xr + bw / 2}" y="{y0 - hr - 22:.1f}" text-anchor="middle">{rl:.0f} %</text>'
+            f'<text class="lab" x="{xb + bw / 2}" y="{y0 + 44}" text-anchor="middle">Base</text>'
+            f'<text class="lab" x="{xr + bw / 2}" y="{y0 + 44}" text-anchor="middle">RL</text></svg>')
 
 
 def review_svg():
@@ -243,43 +256,38 @@ def qr():
             f'<path d="{QR_PATH}" fill="#101820" shape-rendering="crispEdges"/></svg>')
 
 
-def slides(n_findings, papers):
+def slides(papers):
     return [
         ("hook", f'<div class="mid"><h1 class="big">{hook_html()}</h1><div class="site">{qr()}<span>{esc(SITE)}</span></div></div>'),
         ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers</p>'
                      '<ul class="limits"><li>Limited token budget</li><li>Limited compute</li><li>Limited people</li></ul></div>'),
+        ("gap", f'<div class="mid">{gap_svg()}</div>'),
         ("powered", '<div class="versus">'
                     f'<div><p class="sub">The RL-trained model</p><p class="sub by">Powered by</p><p class="gpus">{RL_GPUS} H100 GPUs</p></div>'
                     f'<div><p class="sub">Invariant</p><p class="sub by">Powered by</p>{photo(demo_photos.COOK, "cook")}'
                     f'<p class="who">{esc(demo_photos.COOK_NAME)}</p></div></div>'),
-        ("climb", f'<div class="head"><h2>No training: {pct(CLIMB_LO):.1f} % to {pct(CLIMB_HI):.0f} % on {esc(CLIMB["bench"])}</h2>'
-                  f'<p class="sub">Best score of the untrained base model so far · RL-trained {pct(CLIMB_RL):.1f} % · '
-                  f'our best, imitation with the cue, {pct(CLIMB["other"]):.1f} %</p></div>'
+        ("climb", f'<div class="head"><h2>No training: {pct(CLIMB_LO):.1f} % to {pct(CLIMB_HI):.0f} % on {esc(CLIMB["bench"])}</h2></div>'
                   '<iframe class="fig-frame climb" data-fig="climb" data-replay title="The accuracy climb" tabindex="-1"></iframe>'
                   '<div class="replay"><input class="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="Board time">'
                   '<button class="rate" aria-pressed="false" aria-label="Half speed">0.5×</button></div>'),
         ("harness", '<div class="head"><h2>Invariant</h2><p class="sub">A hill climbing engine and an interpretability engine in one harness</p></div>'
                     '<iframe class="fig-frame harness" data-fig="harness" title="The harness" tabindex="-1"></iframe>'
                     f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span><span>GPUs <b class="word">Modal</b></span></div>'),
-        ("sponsors", '<div class="head"><h2>Search and memory before every experiment</h2>'
-                     '<p class="sub">An agent asks Exa for the literature and past.dev for what the team already found. Both pictures replay real events</p></div>'
+        ("sponsors", '<div class="head"><h2>Search and memory before every experiment</h2></div>'
                      '<iframe class="fig-frame sponsor s-exa" data-fig="exa" data-replay title="Exa: searches at the gate before a GPU run" tabindex="-1"></iframe>'
                      '<iframe class="fig-frame sponsor s-past" data-fig="pastdev" data-replay title="past.dev: one agent writes, another reads" tabindex="-1"></iframe>'
                      f'<p class="spon s-exa">{logo("exa")}<span><b>{esc(EXA_NUMS["arXiv papers surfaced"])}</b> arXiv papers surfaced · <b>{esc(EXA_NUMS["pages read in full"])}</b> pages read in full</span></p>'
                      f'<p class="spon s-past">{logo("past")}<span><b>{esc(PAST_NUMS["memories"])}</b> memories · <b>{esc(PAST_NUMS["median recall"])}</b> median recall</span></p>'),
-        ("finding", '<h2 class="title fixes-title">8 directions in the weights hold most of RL\'s gain</h2>'
-                    '<iframe class="fig-frame fixes" data-fig="fixes" data-replay title="One problem, four answers" tabindex="-1"></iframe>'
-                    f'<p class="sub fixes-why">Why: they make the model finish its answer, cut-off answers '
-                    f'{CELLS["0"]["cut"]} → {CELLS["1.5"]["cut"]}</p><p class="corner low">{n_findings} findings</p>'),
-        ("beyond", '<div class="head"><h2>Tuned on one math benchmark, better on all four</h2>'
-                   '<p class="sub">One opening cue and one sampling setting, chosen on MATH-500, used unchanged. No training</p></div>'
+        ("finding", '<h2 class="title fixes-title">Interpretable findings with hill climbing</h2>'
+                    '<iframe class="fig-frame fixes" data-fig="fixes" data-replay title="One problem, four answers" tabindex="-1"></iframe>'),
+        ("beyond", '<div class="head"><h2>These findings are generalizable</h2>'
+                   '<p class="sub">One <b class="team">Invariant</b> method: climbed on MATH-500 only, then used unchanged on three benchmarks it never saw</p></div>'
                    '<iframe class="fig-frame wide" data-fig="beyond" data-replay title="Beyond MATH-500" tabindex="-1"></iframe>'),
         ("efficiency", f'<div class="head"><h2>Same score as autoresearch, {demo_results.TOKEN_RATIO:.1f}× fewer tokens</h2>'
                        f'<p class="sub">Against Karpathy\'s autoresearch (100k GitHub stars) · +{demo_results.HARD_GAIN:g} points on harder problems</p></div>'
                        '<iframe class="fig-frame wide" data-fig="efficiency" data-replay title="Our harness against autoresearch" tabindex="-1"></iframe>'),
         ("proof", f'<div class="mid"><h2 class="title">Its own review cuts waste</h2>{review_svg()}</div>'),
-        ("ideas", f'<div class="head"><h2>Ideas cluster, then converge</h2><p class="sub">{BASINS["items"]} board items fall into {BASINS["clusters"]} basins of ideas · '
-                  f'{TREE["cross"]} of {TREE["links"]} links join two different basins</p></div>'
+        ("ideas", f'<div class="head"><h2>Ideas cluster and converge</h2></div>'
                   '<iframe class="fig-frame tree" data-fig="basins" data-replay title="The idea basins and the idea tree" tabindex="-1"></iframe>'),
         ("papers", f'<div class="mid"><h2 class="title">{len(papers)} papers, written by the swarm</h2>'
                    f'<div class="sheets" style="--n:{len(papers)}">{"".join(paper(p) for p in papers)}</div></div>'),
@@ -328,7 +336,7 @@ p, h1, h2, figure { margin: 0; }
 .head { position: absolute; left: 96px; top: 72px; z-index: 1; }
 .head h2 { font-weight: 300; font-size: 54px; line-height: 1.1; }
 .head .sub { margin-top: 12px; }
-.corner { position: absolute; right: 96px; bottom: 64px; font-size: 22px; font-weight: 500; color: var(--faint); }
+.sub .team { font-weight: 740; font-stretch: 122%; letter-spacing: .02em; color: var(--blue); }  /* the team's name, set as on the site's header */
 
 .photo { border-radius: 2px; overflow: hidden; }
 .photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -366,11 +374,8 @@ p, h1, h2, figure { margin: 0; }
 .spon { position: absolute; top: 772px; width: 702px; display: flex; align-items: center; justify-content: center; gap: 22px; font-size: 24px; font-weight: 500; color: var(--mute); }
 .spon.s-exa { left: 96px; } .spon.s-past { left: 804px; }
 .spon b { font-weight: 640; color: var(--ink); }
-.fig-frame.fixes { left: 180px; top: 112px; width: 1240px; height: 694px; }
-.fixes-title, .fixes-why { position: absolute; left: 0; right: 0; text-align: center; }
-.fixes-title { top: 34px; }
-.fixes-why { top: 822px; }
-.corner.low { bottom: 40px; }
+.fig-frame.fixes { left: 180px; top: 140px; width: 1240px; height: 694px; }
+.fixes-title { position: absolute; left: 0; right: 0; top: 44px; text-align: center; }
 .tools { position: absolute; left: 0; right: 0; bottom: 56px; display: flex; justify-content: center; gap: 72px; font-size: 22px; font-weight: 560; color: var(--mute); }
 .tools span { display: inline-flex; align-items: center; gap: 14px; }
 .logo { height: 24px; width: auto; fill: var(--ink); }
@@ -391,6 +396,8 @@ p, h1, h2, figure { margin: 0; }
 .fig .bl { font-size: 17px; font-weight: 500; fill: var(--mute); }
 .fig .gl { font-size: 20px; font-weight: 600; fill: var(--ink); }
 .fig .base { stroke: var(--faint); stroke-width: 1; }
+.fig.gap .num { font-size: 64px; font-weight: 300; letter-spacing: -.01em; }
+.fig.gap .todo { fill: color-mix(in srgb, var(--blue) 9%, transparent); stroke: var(--blue); stroke-width: 2; stroke-dasharray: 3 9; stroke-linecap: round; }
 
 .sheets { display: flex; gap: 60px; margin-top: 30px; }  /* --n: the number of papers, so any number fits the slide */
 /* a paper is white in both themes: the sheet carries the light values of these four tokens */
@@ -503,9 +510,9 @@ fromHash();
 """
 
 
-def page(n_findings, papers):
-    """The deck, with the number of finding pages and the paper file names (view.FINDINGS, view.PAPERS) written in."""
+def page(papers):
+    """The deck, with the paper file names (view.PAPERS) written in."""
     body = "\n".join(f'<section class="slide" id="{sid}" aria-label="Slide {i + 1}"><div class="box">{inner}</div></section>'
-                     for i, (sid, inner) in enumerate(slides(n_findings, list(papers))))
+                     for i, (sid, inner) in enumerate(slides(list(papers))))
     return (TEMPLATE.replace("__FONT__", FONT).replace("__THEME_JS__", THEME_JS).replace("__TOKENS__", TOKENS)
             .replace("__SLIDES__", body))
