@@ -8,6 +8,8 @@ hit a 16,384 run would have stored (16,384 view).
 
   --run     thinkvote_join's folder (answers.jsonl with the texts, metrics.json), max_tokens 32,768.
   --stored  day1_vote's folder of the same model, seeds and set at cap 16,384 (rows.jsonl): the unpaired reference.
+  Rules not in the spec (added after the hard328 rows were read): seq4_short, vote4_short (ties to the shortest answer) and gate12000
+  (one sample at a time; a finished answer of at most 12,000 tokens is taken at once, else stop when two agree, at most 4).
   --rl      day1_vote's folder of RL plain at cap 16,384 on the same set (readout.json: per-problem vote and single).
 Writes run.json, metrics.json, rows.jsonl (no text; the 16,384 view in the *_16 fields), readout.json, readout.md, examples.json.
 Rules with tokens: frontier.replay on both views (24 draw orders). Differences: paired bootstrap over problems, 5,000 resamples.
@@ -30,7 +32,8 @@ from studies.rlneurons.lib import rln4_lib as R
 
 STUDY = pathlib.Path(__file__).resolve().parents[1]
 OLD, NEW, BOOT = 16384, 32768, 5000
-RULES = {**{m: F.RULES[m] for m in ("single", "vote2", "seq3", "seq4", "vote4")}, "restart1": restart1}
+RULES = {**{m: F.RULES[m] for m in ("single", "vote2", "seq3", "seq4", "vote4", "seq4_short", "vote4_short")}, "restart1": restart1,
+         "gate12000": {"plan": [1, 1, 1, 1], "stop_n": 12000}}   # *_short: not in the spec
 PUBLISHED = ("aime2026", "hmmt_feb2026")
 # specs/SPEC_cap32vote.md, commit 9d4ddf6: (predicted, low, high); None = no interval stated
 PRED = {"hard328": {"vote4_32": (239.5, 232, 248), "single_32": (229.0, 224.5, 233.2), "cap_hit_percent_32": (0.6, None, None), "precision_percent_32": (70, 62, 78),
@@ -126,6 +129,9 @@ def main():
             "rl_plain_16384_stored": {"vote4": int(sum(rl["per_problem"]["vote"][j] for j in pos)), "single_mean_of_4": round(sum(rl_single[j] for j in pos), 2)},
             "differences": {"single, 32768 minus 16384": diff(v32["single"], v16["single"], pos), "vote4, 32768 minus 16384": diff(v32["vote"], v16["vote"], pos),
                             "seq4 (24 orders), 32768 minus 16384": diff(v32["per"]["seq4"]["s"], v16["per"]["seq4"]["s"], pos),
+                            "vote4_short (ties to the shortest; not in the spec), 32768 minus 16384": diff(v32["per"]["vote4_short"]["s"], v16["per"]["vote4_short"]["s"], pos),
+                            "vote4_short at 32768 minus vote4 at 16384": diff(v32["per"]["vote4_short"]["s"], v16["vote"], pos),
+                            "vote4_short at 32768 minus RL vote4 (stored 16384)": diff(v32["per"]["vote4_short"]["s"], rl["per_problem"]["vote"], pos),
                             "single at 32768 minus restart1 at 16384 (24 orders)": diff(v32["single"], v16["per"]["restart1"]["s"], pos),
                             "single at 32768 minus vote2 at 16384 (24 orders)": diff(v32["single"], v16["per"]["vote2"]["s"], pos),
                             "vote4 at 32768 minus RL vote4 (stored 16384)": diff(v32["vote"], rl["per_problem"]["vote"], pos),
@@ -164,8 +170,7 @@ def main():
     sro = json.loads((pathlib.Path(a.stored) / "readout.json").read_text())
     res["stored_16384_run"] = {"folder": a.stored, "single_each": sro["each_sample"]["single_right"], "vote4": sro["rows"]["vote"]["right"],
                                "cap_hits": sum(r["cap_hit"] for r in st.values()),
-                               "rows_with_the_same_tokens_and_answer_as_the_16384_view": int(sum(same)), "rows": len(rows),
-                               "same_per_sample": [int(sum(x for x, r in zip(same, rows16) if r["sample"] == s)) for s in range(4)]}
+                               "finished_rows_with_the_same_tokens_and_answer_as_the_16384_view": int(sum(x for x, r in zip(same, rows16) if not r["cap_hit"])), "finished_rows_in_the_16384_view": sum(not r["cap_hit"] for r in rows16)}
     al, a16 = res["groups"]["all"]["at_32768"], res["groups"]["all"]["at_16384_same_answers"]
     obs = {"vote4_32": al["vote4"], "single_32": al["single_mean_of_4"], "cap_hit_percent_32": res["at_32768"]["cap_hit_percent"],
            "precision_percent_32": res["at_32768"]["precision_percent"], "late_wrong_pairs_agree_percent": res["late_answers"]["wrong_pairs_agree_percent"],
