@@ -4362,8 +4362,9 @@ resamples of the problems.
 - Limits: one model pair, one benchmark, one sample for each of the two new cells and for the random controls; the bands at
   2 samples. 7 samples instead of the 13 first planned (budget, stated in the spec before the run). Sample 0 of the all-layer
   cell differs between its two jobs with the same seeds (203 and 207): vLLM sampling is not reproducible across jobs.
-- Cost: 14 H100 jobs, 818 H100-minutes by `gpu.py ls` (57 to 60 min each, setup included; about 55 USD) plus a 64 min smoke job
-  (`abaybektursun-1115-122317-6624`); 21.8 M generated tokens.
+- Cost: 14 H100 jobs, 6.4 h of `run_cell` wall time (the sum of `wall_s` in the 14 `metrics.json`; 23 to 30 min each) plus
+  setup and the edit (about 3 min per job): about 7.2 H100-hours, about 28 USD. The minutes column of `gpu.py ls` is the time
+  since submission, not the run time. Smoke job `abaybektursun-1115-122317-6624`: 100 s. 21.8 M generated tokens.
 
 #### The dial on a second model pair and benchmark (amendment 7, work-df5e0a)
 
