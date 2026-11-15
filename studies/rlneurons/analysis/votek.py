@@ -9,7 +9,8 @@ the samples of the runs are numbered in the order given. The vote is the rule of
 table per problem of which answers agree (rln4_lib.agree on norm_v3), so that a subset costs no grader call; the script asserts
 that it equals day1_vote.vote on the first 4 samples of every problem. For each k: the mean over 200 random
 subsets of k samples (kept in sample order; all samples for k = K) of right problems, with a bootstrap over problems (2,000
-resamples) of that mean; at least one of k right; generated tokens per problem. Writes metrics.json, rows.jsonl (compact fields,
+resamples) of that mean; at least one of k right; generated tokens per problem. Also the vote with an early stop at m agreeing
+samples (mean over 200 random orders). Writes metrics.json, rows.jsonl (compact fields,
 no text), examples.json and run.json.
 """
 import argparse
@@ -95,6 +96,20 @@ def main():
         b = pm[bs].sum(1)
         res["k"][str(k)] = {"vote_right": round(float(pm.sum()), 1), "ci95": [round(float(np.percentile(b, 2.5)), 1), round(float(np.percentile(b, 97.5)), 1)],
                             "subset_min_max": [int(v.sum(1).min()), int(v.sum(1).max())], "any_right": round(float(anyr.mean(0).sum()), 1), "tokens_per_problem": round(float(tok))}
+    # Early stop (the fixed-threshold form of adaptive self-consistency, Aggarwal et al. 2023, arXiv 2305.11860): draw samples in
+    # a random order and stop once one answer has m votes or all K are drawn; the answer is the vote over the samples drawn.
+    orders = [rng.permutation(K).tolist() for _ in range(SUBSETS)]
+    res["stop_at_m_votes"] = {}
+    for m in range(2, K // 2 + 1):
+        right = used = tok = 0
+        for p in probs:
+            for o in orders:
+                n = next((n for n in range(m, K + 1) if vote(rows[p], same[p], o[:n])["votes"] >= m), K)
+                right += vote(rows[p], same[p], o[:n])["score"]
+                used += n
+                tok += sum(per[p][s]["n_new"] for s in o[:n])
+        res["stop_at_m_votes"][str(m)] = {"vote_right": round(right / SUBSETS, 1), "samples_per_problem": round(used / SUBSETS / len(probs), 2),
+                                          "tokens_per_problem": round(tok / SUBSETS / len(probs))}
     full = {p: vote(rows[p], same[p], range(K)) for p in probs}
     right_count = {p: sum(per[p][s]["score_v3"] for s in range(K)) for p in probs}
     res["vote_all_wrong_by_right_samples"] = {str(c): sum(1 for p in probs if not full[p]["score"] and right_count[p] == c) for c in range(K + 1)}
