@@ -1,0 +1,51 @@
+[
+ {
+  "mechanism": "r5-m03-rival",
+  "claim": "the top-8 edit is an incomplete switch per sample: short answers are the unswitched base and about 50 % right",
+  "verdict": "refuted",
+  "measured": "short answers 82.9 % right (predicted about 50 %), share 17.8 % (predicted 10-15 %)",
+  "result": "result-d02d46"
+ },
+ {
+  "mechanism": "run-05/f2-m06",
+  "claim": "weight edits merged in bf16 are under-applied: small changes below half a unit in the last place are lost, so 1x lands smaller than intended",
+  "verdict": "refuted",
+  "measured": "projection of the written 1x change on the intended addition 0.99996 (1.5x: 0.99998)",
+  "result": "result-c2edfb"
+ },
+ {
+  "mechanism": "run-06/f2-m03",
+  "claim": "an outcome reward pays only for a gradable final answer, so its gradient piles into a few singular directions; the rest of the update is diffuse",
+  "verdict": "refuted",
+  "measured": "RL-Zero-General (LM-judge reward, no gradable answer) top-8 share 0.127 vs Math 3.0 0.135, Think-SFT 0.030: P = 0.685 [0.609, 0.765] (refuted if lower bound >= 0.5), n 224 matrices",
+  "result": "result-82eb02"
+ },
+ {
+  "mechanism": "run-05/f2-m01",
+  "claim": "the top-8 RL-Math directions are a signed termination dial: they add finished answers, not right answers on problems the base already finishes",
+  "verdict": "refuted",
+  "measured": "hard328, edit 1.5x on problems where a cued-base sample finished wrong: 36.4 % right vs 22.9 % for a second base sample, +13.5 points [9.7, 17.3] (RL +12.3); only 26 % of the edit's gain sits on base cap hits; at -1x finished answers 51.5 % vs base 70.0 % right",
+  "result": "result-124593"
+ },
+ {
+  "mechanism": "run-02/f2-m01",
+  "claim": "hard328 solutions need 6,000-14,000 tokens and short samples never reach them: under 20 % of the hard328 problems the cued base solves have a right sample of 2,000 tokens or fewer",
+  "verdict": "refuted",
+  "measured": "hard328: 72 of 220 solved problems, 32.7 % [27.7, 38.2] (refuted if lower bound >= 20 %); median right length 3,921 tokens [3,541, 4,390]; MATH-500 control 67.5 % [63.9, 71.1] of 474",
+  "result": "result-ebf7a4"
+ },
+ {
+  "mechanism": "run-03/f2-m04",
+  "claim": "on code, the RL-Math edit at 1x to 1.5x adds at least 8 finished answers with no code block, because Math's directions push a boxed ending that displaces the final python block",
+  "verdict": "refuted",
+  "measured": "HumanEval+/MBPP+ 538, edit 1.5x: finished no-block 6 vs random rank-8 1.5x 23, -17 [-26, -8] (refuted if upper end < +8); vs cued base 12, -6 [-13, 1]; 0 of 538 answers hold \\boxed; no Math-alone 1x code cell",
+  "result": "result-6e4536"
+ },
+ {
+  "mechanism": "round-10/weights-m03",
+  "claim": "Think-SFT's own weight change lies along RL-Math 3.1's top-8 input directions at least 2x more than a random rank-8 subspace (sharpened: and 1.5x more than the top-8 input subspaces of IF-RL, General-RL and the base matrix)",
+  "verdict": "holds",
+  "measured": "share of Think-SFT's change in Math 3.1's top-8 input subspace 4.80x chance [4.55, 5.08], n 224 matrices; over IF 2.23x [2.12, 2.34], General 1.99x [1.89, 2.08], base matrix 1.33x [1.28, 1.39]: holds, not distinctive (shared with Code 3.1 and Math 3.0, and predicted by run-05/f2-m03 too)",
+  "result": "result-3abd6f"
+ }
+]
