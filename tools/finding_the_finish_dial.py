@@ -200,11 +200,14 @@ DATA["fresh"] = {
 }
 
 TITLE = "The finish dial"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "Does a small part of RL's weight change decide whether answers finish?"
-LINE = "Enlarging 8 RL directions makes answers finish: at size 1.5, 203 of 328 are right; on code, 399 of 538 pass."
+PROBLEM = ("Does a small part of the weight change made by reinforcement learning (RL) decide whether answers finish "
+           "before the token limit?")
+LINE = (f"Adding 1.5 times the {DATA['k']} largest directions of RL's weight change to the base model with the opening cue gives "
+        f"{DATA['cells']['1.5']['right']} of the {DATA['n']} harder problems right, against {DATA['cells']['0']['right']} without the edit "
+        f"and {DATA['cells']['rl']['right']} for the RL model. On code, {DATA['code']['cells']['c1.5']['passed']} of {DATA['code']['n']} pass.")
 # Under the large number at size 1.5: the replication (DATA rep)
-REPLINE = (f"4 new samples: mean {sum(DATA['rep']['singles']) / 4:.2f} right, "
-           f"RL {sum(DATA['rep']['rl_singles']) / 4:.1f}.")
+REPLINE = (f"Repeated with 4 new samples: mean {sum(DATA['rep']['singles']) / 4:.2f} right; "
+           f"the RL model, {sum(DATA['rep']['rl_singles']) / 4:.1f}.")
 
 # One row per problem of the 328, written by --write from runs/<job>/answers.jsonl:
 # [index in hard.json, source, problem text (cut near 420 characters), reference answer, outcomes, tokens, answers,
@@ -1415,75 +1418,82 @@ _fiv = lambda x: f"{_pts(x[0])} points, 95 % interval {_m(x[1])} to {_m(x[2])}"
 # model's weight difference to its base with a scaling coefficient.
 PANELS = [
     ["new", "What is new",
-     "Adding a scaled weight difference to a base model is task arithmetic (Ilharco et al., arXiv 2212.04089). New here: "
-     "turning the size of only 8 RL directions per matrix sets how often the answers finish.",
+     "New here: the size of only the 8 largest directions of RL's weight change in each matrix sets how often answers "
+     "finish before the token limit. Adding a scaled weight difference to a base model is known as task arithmetic "
+     "(Ilharco et al., arXiv 2212.04089).",
      [f"Cut off at {DATA['cap']:,} tokens, at sizes −1, 0, 0.5, 1, 1.5, 2 and 3: {_seq('cut', _TOP)} of {DATA['n']}.",
       f"Right answers rise from {_C['m1']['right']} at size −1 to {_C['1.5']['right']} at 1.5 and fall to {_C['3']['right']} "
-      f"at 3. RL scores {_C['rl']['right']}.",
-      f"8 random directions of the same size leave both flat: {min(_rr)} to {max(_rr)} right and {min(_rc)} to {max(_rc)} "
-      "cut off at sizes −1, 1, 1.5, 2 and 3. The page Eight directions showed the edit at size 1 only."]],
+      f"at 3. The RL model scores {_C['rl']['right']}.",
+      f"8 random directions of the same size change neither count: {min(_rr)} to {max(_rr)} right and {min(_rc)} to {max(_rc)} "
+      "cut off at sizes −1, 1, 1.5, 2 and 3. An earlier finding page, Eight directions, tested the edit at size 1 only."]],
     ["why", "Why it matters",
-     f"An edit of {_pct('1.5')} of the weight norm brings Base + cue to {_C['1.5']['right']} of {DATA['n']}, within "
-     f"{abs(_d['vs_rl']['points']):.1f} points of RL, and its effect is set by one number.",
-     [f"Size 1.5 minus RL: {_pts(_d['vs_rl']['points'])} points, 95 % interval {_iv(_d['vs_rl']['ci'])}. Size 1.5 minus 8 "
+     f"An edit of {_pct('1.5')} of the weight norm brings the base model with the cue to {_C['1.5']['right']} of {DATA['n']}, "
+     f"within {abs(_d['vs_rl']['points']):.1f} percentage points of the RL model, and one number, the size, sets its effect.",
+     [f"Size 1.5 minus the RL model: {_pts(_d['vs_rl']['points'])} points, 95 % interval {_iv(_d['vs_rl']['ci'])}. Size 1.5 minus 8 "
       f"random directions at size 1.5: {_pts(_d['vs_random']['points'])} points, 95 % interval {_iv(_d['vs_random']['ci'])}.",
       f"From size 0 to 1.5, cut-offs fall from {_C['0']['cut']} to {_C['1.5']['cut']}, while the share of finished answers "
       f"that are right stays between {_lo_rf:.2f} and {_hi_rf:.2f}.",
-      "The directions are read from RL's weights, so this is not yet a gain without reward. It narrows what a method "
-      "without reward has to reproduce."]],
+      "The directions are taken from the RL model's weights, so this does not yet reach RL's gain without training on a reward. "
+      "It narrows what a method without that training has to reproduce."]],
     ["how", "How we know",
-     f"For each size, the {DATA['k']} largest directions of RL's weight change in each of {DATA['n_edited']} weight matrices "
-     f"were multiplied by the size and added to the base. The model answered the {DATA['n']} harder problems once each, "
-     "with the cue, T 1.0.",
-     ["Grader v3. Size 0 is Base + cue with no edit; RL answered with the plain prompt. All cells use seed base 3,000,000.",
+     f"For each size, we took the {DATA['k']} largest singular directions of RL's weight change in each of {DATA['n_edited']} "
+     f"weight matrices, multiplied them by the size and added them to the base model. The edited model answered the {DATA['n']} "
+     "harder problems once each, with the opening cue, at temperature 1.0.",
+     ["Answers were scored with grader version 3. Size 0 is the base model with the cue and no edit; the RL model answered "
+      "with the plain prompt, without the cue. Every run uses the same seeds (base seed 3,000,000).",
       "Control: 8 random directions per matrix with the same norm, at sizes −1, 1, 1.5, 2 and 3. They were not run at 0.5, "
-      "so the switch skips that stop.",
-      f"A second control, Think-SFT's 8 largest directions per matrix at the norm of the RL edit at size 1 "
-      f"({100 * _S['add_rel']:.2f} % of the weight norm), scores {_S['right']} right and {_S['cut']} cut off, against "
+      "so the slider skips that stop.",
+      f"A second control takes the 8 largest directions per matrix from Think-SFT, the base model trained to imitate worked "
+      f"solutions, at the norm of the RL edit at size 1 ({100 * _S['add_rel']:.2f} % of the weight norm). It scores {_S['right']} right and {_S['cut']} cut off, against "
       f"{_C['1']['right']} and {_C['1']['cut']} for the RL directions ({_pts(_d['sft_vs_1']['points'])} points, 95 % interval "
       f"{_iv(_d['sft_vs_1']['ci'])}).",
-      f"Intervals pair the problems: 5,000 bootstrap resamples of the {DATA['n']}, seed 0. Every count of the slider's cells "
-      "was recomputed from the per-problem rows.",
-      f"On a second model pair, RL-Code's {DATA['k']} largest directions per matrix at sizes 1, 1.5 and 2 pass "
+      f"Each 95 % interval is paired: both sides are scored on the same 5,000 bootstrap resamples of the {DATA['n']} problems "
+      "(seed 0). Every count on the slider was recomputed from the per-problem answers.",
+      f"On a second pair of models, the {DATA['k']} largest directions per matrix of the code RL model (Olmo 3.1 RL-Zero-Code), "
+      "at sizes 1, 1.5 and 2, pass "
       f"{_K['c1']['passed']}, {_K['c1.5']['passed']} and {_K['c2']['passed']} of {DATA['code']['n']} code problems (Code cue, T 1.0, one "
-      f"sample); Base + cue passes {_K['c0']['passed']}, RL-Code {_K['crl']['passed']}. Size 1.5 minus RL-Code: "
+      f"sample); the base model with the Code cue passes {_K['c0']['passed']}, the code RL model {_K['crl']['passed']}. "
+      "Size 1.5 minus the code RL model: "
       f"{_pts(_kd['vs_rl']['points'])} points, 95 % interval {_iv(_kd['vs_rl']['ci'])}; minus 8 random directions at 1.5 "
       f"({_K['cr1.5']['passed']}): {_pts(_kd['vs_random']['points'])} points, 95 % interval {_iv(_kd['vs_random']['ci'])}.",
       f"On code, answers cut off and answers with no code block fall from {_K['c0']['cut']} and {_K['c0']['noblock']} at size 0 "
       f"to {_K['c1']['cut']} and {_K['c1']['noblock']} at 1, {_K['c1.5']['cut']} and {_K['c1.5']['noblock']} at 1.5 and "
       f"{_K['c2']['cut']} and {_K['c2']['noblock']} at 2; the random directions leave {_K['cr1.5']['cut']} and "
-      f"{_K['cr1.5']['noblock']}. RL-Math's 8 directions at 1.5 pass {_K['cm1.5']['passed']}: "
-      f"{_pts(_kd['math_vs_rl']['points'])} points against RL-Code, 95 % interval {_iv(_kd['math_vs_rl']['ci'])}.",
+      f"{_K['cr1.5']['noblock']}. The math RL model's 8 directions at 1.5 pass {_K['cm1.5']['passed']}: "
+      f"{_pts(_kd['math_vs_rl']['points'])} points against the code RL model, 95 % interval {_iv(_kd['math_vs_rl']['ci'])}.",
       f"The held-out test: {_F['n']} problems of AIME 2026 and HMMT February and November 2026, held {_day(_F['dates'][0])} "
-      f"to {_day(_F['dates'][1])}, after the last upload of the models' weights ({_day(_F['upload'])}). Size 1.5 was fixed on "
-      "the 328; nothing was chosen on this set, and the three predictions filed before the run all hold.",
+      f"to {_day(_F['dates'][1])}, after the last upload of the models' weights ({_day(_F['upload'])}). Size 1.5 was chosen on "
+      "the 328 harder problems, and nothing was chosen on this set. The three predictions written before the run all hold: "
+      f"a mean of {_F['predictions']['mean'][0]:g} to {_F['predictions']['mean'][1]:g} right per sample, "
+      f"{_F['predictions']['vote'][0]} to {_F['predictions']['vote'][1]} right with a vote over 4 samples, and at most "
+      f"{_F['predictions']['cut_max']} answers cut off per sample.",
       f"On that set, 4 samples at size 1.5 score {', '.join(map(str, _F['right']['1.5'][:3]))} and {_F['right']['1.5'][3]} of "
-      f"{_F['n']}, mean {_fm('1.5')}; RL {_fm('rl')}, Base + cue {_fm('0')} (T 1.0). Size 1.5 minus RL: {_fiv(_F['diff']['vs_rl'])}; "
-      f"minus Base + cue: {_fiv(_F['diff']['vs_base'])}. Cut off per sample: {_fr('cut', '1.5')} of {_F['n']} (RL "
+      f"{_F['n']} (mean {_fm('1.5')}); the RL model averages {_fm('rl')} and the base model with the cue {_fm('0')} (temperature 1.0). "
+      f"Size 1.5 minus the RL model: {_fiv(_F['diff']['vs_rl'])}; minus the base model: {_fiv(_F['diff']['vs_base'])}. Cut off per sample: {_fr('cut', '1.5')} of {_F['n']} (RL "
       f"{_fr('cut', 'rl')}, Base + cue {_fr('cut', '0')})."]],
     ["limits", "What it does not show",
-     f"One sample per problem and size, and 1.5 was the best of seven sizes tried: {_C['1.5']['right']} against "
-     f"{_C['1']['right']} at size 1 is {_pts(_d['vs_1']['points'])} points, 95 % interval {_iv(_d['vs_1']['ci'])}.",
-     [f"Not all of the gain is finishing: on the {DATA['base_finished']} problems Base + cue finishes, right answers go from "
+     f"Each size was run with one sample per problem, and 1.5 was the best of seven sizes tried, but it is not clearly better "
+     f"than size 1: {_C['1.5']['right']} against {_C['1']['right']} right, {_pts(_d['vs_1']['points'])} points "
+     f"(95 % interval {_iv(_d['vs_1']['ci'])}).",
+     [f"Not all of the gain is finishing: on the {DATA['base_finished']} problems the base model with the cue finishes, right answers go from "
       f"{COUNTS['0']['on_base_finished']} at size 0 to {COUNTS['1.5']['on_base_finished']} at 1.5 (RL "
       f"{COUNTS['rl']['on_base_finished']}).",
       f"At size 3 almost every answer finishes, but many decay into strings of words: {COUNTS['3']['right_finished']} of "
       f"{COUNTS['3']['finished']} finished answers are right ({_rf('3'):.2f}).",
-      f"Replicated ({_R['folder']}): four new samples at size 1.5 score {', '.join(map(str, _R['singles'][:3]))} and "
-      f"{_R['singles'][3]} of {DATA['n']}, mean {sum(_R['singles']) / 4:.2f} against RL's {sum(_R['rl_singles']) / 4:.1f}. On "
+      f"In a repeat run, four new samples at size 1.5 score {', '.join(map(str, _R['singles'][:3]))} and "
+      f"{_R['singles'][3]} of {DATA['n']}, mean {sum(_R['singles']) / 4:.2f} against the RL model's {sum(_R['rl_singles']) / 4:.1f}. On "
       f"MATH-500, one sample: {_R['m500']} of 500, as many as RL's first sample (RL's four: {min(_R['m500_rl'])} to "
-      f"{max(_R['m500_rl'])}). Under the vote over 4 samples the edit has {_R['vote']} and RL {_R['rl_vote']} "
-      f"({_pts(_R['vote_vs_rl']['points'])} points, 95 % interval {_iv(_R['vote_vs_rl']['ci'])}).",
-      "The 0.11 % is the intended addition. After rounding to the 16-bit weight format, the written change is 0.19 % of the "
-      "weight norm. The 8 directions come from RL's weights, and 1.5 was chosen on the 328 themselves.",
+      f"{max(_R['m500_rl'])}). With a vote over 4 samples the edit has {_R['vote']} right and the RL model {_R['rl_vote']} "
+      f"({_pts(_R['vote_vs_rl']['points'])} points, 95 % interval {_iv(_R['vote_vs_rl']['ci'])}). Source: {_R['folder']}.",
+      f"The edit at size 1.5 was meant to add {_pct('1.5')} of the weight norm. After rounding to the 16-bit weight format, the written change is 0.19 % of the "
+      "weight norm. The 8 directions come from RL's weights, and 1.5 was chosen on the 328 harder problems themselves.",
       f"On code each size was sampled once, so sizes 1, 1.5 and 2 are not separated: 1.5 minus 1 is "
       f"{_pts(_kd['vs_1']['points'])} points, 95 % interval {_iv(_kd['vs_1']['ci'])}. The code sizes were fixed before that run; "
-      "1.5 came from the math dial.",
-      f"On the {_F['n']} problems from 2026, under the vote over 4 samples the edit trails RL by "
+      "1.5 was the best size on the math problems.",
+      f"On the {_F['n']} problems from 2026, with a vote over 4 samples the edit trails the RL model by "
       f"{abs(_F['diff']['vote_vs_rl'][0]):.1f} points: {_F['vote']['1.5']} of {_F['n']} against {_F['vote']['rl']}, 95 % interval "
-      f"{_m(_F['diff']['vote_vs_rl'][1])} to {_m(_F['diff']['vote_vs_rl'][2])}, which includes 0. Base + cue has "
-      f"{_F['vote']['0']} under the vote.",
-      "The edit is built from RL's weights, so it is not a route to RL's gain without reward."]],
+      f"{_m(_F['diff']['vote_vs_rl'][1])} to {_m(_F['diff']['vote_vs_rl'][2])}, which includes 0. The base model with the cue has "
+      f"{_F['vote']['0']} with the vote."]],
     ["run", "How to reproduce it",
      "Each size is two commands on one GPU: studies/rlneurons/jobs/wsp_edit.py writes the edited weights and "
      "studies/rlneurons/jobs/run_cell.py scores them.",
@@ -1796,7 +1806,7 @@ const SETS = {
     scale: [[300, 420], [0, 60]], rowName: ["Passed of 538", "Cut off or no code block"], word: ["passed", "failed the tests", "cut off or no code"],
     unit: ["passed of 538", "code problems, T 1.0"], cutWord: "cut off or no code block", rlName: "RL-Code", kWord: "passed",
     dirs: "8 RL-Code", right: "passed", gone: "cut off or no code", label: "538 code problems",
-    cap: "HumanEval+ and MBPP+, Code cue; the directions come from RL-Code.",
+    cap: "HumanEval+ and MBPP+, Code cue; the directions come from the code RL model.",
     hint: "One mark is one code problem, with its one answer at the chosen size. Click a mark to read it." },
   fresh: { key: "fresh", n: DF.n, cells: Array.from({ length: 3 * DF.samples }, (_, c) => c), samples: DF.samples, rl: 2 * DF.samples, ref: null,
     cols: { top: [null, 0, null, null, DF.samples, null, null], rand: [null, null, null, null, null, null, null] }, shown: [0, DF.samples],
@@ -2047,10 +2057,10 @@ function place(t, now) {
   const v = SIZES[i], base = W.stat[W.cols.top[1]], rl = W.stat[W.rl];
   const fr = W === SETS.fresh;
   text("state", i === 1 ? "Size 0: Base + cue, no edit." : `${m === "top" ? W.dirs : "8 random"} directions per matrix at size ${num(v)},`);
-  text("norm", fr ? `${i === 1 ? "" : "fixed on the 328; "}the marks show sample 1 of 4.` : i === 1 ? "" : W === SETS.math ? `${(100 * D.cells[W.cells[col(m, i, W)][0]].add_rel).toFixed(2)} % of the weight norm.` : "one sample per problem.");
+  text("norm", fr ? `${i === 1 ? "" : "size chosen on the 328 harder problems; "}the marks show sample 1 of 4.` : i === 1 ? "" : W === SETS.math ? `${(100 * D.cells[W.cells[col(m, i, W)][0]].add_rel).toFixed(2)} % of the weight norm.` : "one sample per problem.");
   text("bc", `Base + cue: ${base.right} ${W.right}, ${base.cut} ${W.gone}.`);
   text("rl", `${W.rlName}: ${rl.right} ${W.right}, ${rl.cut} ${W.gone}.`);
-  text("rep", fr ? `The 4 samples: ${and(st.each)} right.` : W === SETS.math ? (m === "top" && i === FIRST ? C.rep : "") : `RL-Math's 8 directions at size 1.5: ${W.stat[W.ref].right} passed.`);
+  text("rep", fr ? `The 4 samples: ${and(st.each)} right.` : W === SETS.math ? (m === "top" && i === FIRST ? C.rep : "") : `The math RL model's 8 directions at size 1.5: ${W.stat[W.ref].right} passed.`);
   // on 2026, size 1.5 minus RL in points with its interval, under RL's counts; on two lines where one does not fit
   const gd = DF.diff.vs_rl, gl = [`Size 1.5 minus RL: ${num(gd[0])} points,`, `95 % interval ${num(gd[1])} to ${num(gd[2])}.`];
   if (S.spots.gapOne == null) S.spots.gapOne = measure(gl.join(" "), g.fs, 520) < g.a[2] - 18 - g.bigX;
@@ -2241,7 +2251,7 @@ function mathPane(j) {
     `<p class="sub"><b>8 random directions</b>, the control (final answer only):</p>` +
     `<ul class="answers">${allowed("rand", T).filter(k => k !== 1).map(k => row(T.cols.rand[k], `Size ${num(SIZES[k])}`, S.m === "rand" && S.i === k, false)).join("")}</ul>` +
     `<p class="sub"><b>RL</b>, plain prompt (final answer only):</p><ul class="answers">${row(T.rl, "RL", false, false)}</ul>` +
-    `<p class="gold">The quoted text is the end of each stored answer, from the jobs' raw answers, which are not in git. ` +
+    `<p class="gold">The quoted text is the end of each stored answer; the full answers are not published. ` +
     (saved.length ? `This problem's full answer is saved in git for ${saved.map(k => k === "rl" ? "RL" : k === "0" ? "Base + cue" : (k[0] === "r" ? "random, size " : "size ") + num(k.replace(/^r/, "").replace("m", "-"))).join(", ")}: ` +
       `examples.json of each run folder.` : "No answer to this problem is saved in git.") + `</p>`;
 }
@@ -2262,11 +2272,11 @@ function codePane(j) {
     `<p class="gold">Scored by running the EvalPlus tests on the answer's last code block.</p>` +
     `<p class="sub"><b>Base + cue with the 8 RL-Code directions</b>, one answer per size, T 1.0, and how each answer ends:</p>` +
     `<ul class="answers">${allowed("top", T).map(k => row(T.cols.top[k], k === 1 ? "Size 0, Base + cue" : `Size ${num(SIZES[k])}`, S.m === "top" && S.i === k, true)).join("")}</ul>` +
-    `<p class="sub"><b>The other cells</b> (result only):</p><ul class="answers">` +
+    `<p class="sub"><b>Other models and controls</b> (result only):</p><ul class="answers">` +
     row(T.cols.rand[4], "8 random directions, size 1.5", S.m === "rand" && S.i === 4, false) +
     row(T.ref, "RL-Math's 8 directions, size 1.5", false, false) + row(T.rl, "RL-Code, plain prompt", false, false) + `</ul>` +
-    `<p class="gold">The quoted text is the end of each stored answer, from the jobs' raw answers, which are not in git. ` +
-    (DC.examples.includes(p.uid) ? "This problem's full answer is saved in git for every cell: examples.json of each run folder." : "No answer to this problem is saved in git.") + `</p>`;
+    `<p class="gold">The quoted text is the end of each stored answer; the full answers are not published. ` +
+    (DC.examples.includes(p.uid) ? "This problem's full answer is saved in git for every model and size: examples.json of each run folder." : "No answer to this problem is saved in git.") + `</p>`;
 }
 function freshPane(j) {
   const T = SETS.fresh, p = T.pr[j], ns = DF.samples, rest = Array.from({ length: ns - 1 }, (_, s) => s + 1);
@@ -2277,10 +2287,10 @@ function freshPane(j) {
     `<p class="lead q" data-math>${esc(p.q)}</p>` +
     `<p class="gold">Held ${day(p.date)}, after the last upload of the models' weights (${day(DF.upload)}) · reference answer <span data-math>${esc(p.gold)}</span></p>` +
     `<p class="sub"><b>Size 0, Base + cue</b>, ${ns} answers, T 1.0, and how the first ends:</p><ul class="answers">${arm(0, "Size 0", 1, 0)}</ul>` +
-    `<p class="sub"><b>The 8 RL directions at size 1.5</b>, fixed on the 328, ${ns} answers:</p><ul class="answers">${arm(ns, "Size 1.5", FIRST, 1)}</ul>` +
+    `<p class="sub"><b>The 8 RL directions at size 1.5</b>, size chosen on the 328 harder problems, ${ns} answers:</p><ul class="answers">${arm(ns, "Size 1.5", FIRST, 1)}</ul>` +
     `<p class="sub"><b>RL</b>, plain prompt, ${ns} answers (final answer only):</p><ul class="answers">${arm(2 * ns, "RL", -1, null)}</ul>` +
     `<p class="gold">The marks show sample 1. On this set only sizes 0 and 1.5 were run. The quoted text is the end of the stored ` +
-    `answer, from the jobs' raw answers, which are not in git; the outcomes of Base + cue and RL are in git (studies/rlneurons/results/fresh/).</p>`;
+    `answer; the full answers are not published. The outcomes of Base + cue and RL are in git (studies/rlneurons/results/fresh/).</p>`;
 }
 function pane() {
   const T = SETS[S.set], p = C.panels.find(p => p[0] === S.open), j = S.open && S.open[0] === "p" ? T.pr.findIndex(q => q.id === S.open) : -1;

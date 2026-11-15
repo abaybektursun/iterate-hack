@@ -70,9 +70,10 @@ _shared = sorted(set(ASSIGN[_NULL["key"]]) & set(ASSIGN[_RL["key"]]), key=int)
 _same = sum(ASSIGN[_NULL["key"]][k] == ASSIGN[_RL["key"]][k] for k in _shared)
 
 TITLE = "Where the gap goes"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "Why does a base model miss math problems its RL version solves?"
-LINE = (f"{pc(_RL['parts']['reliability'][1])} % of the RL gap is problems the base sometimes solves; "
-        f"with a random weight change, {pc(_NULL['parts']['reliability'][1])} % of its gap.")
+PROBLEM = "Why does a base model miss math problems that its version trained by reinforcement learning (RL) solves?"
+LINE = (f"Of the problems the RL model solves and one base-model answer gets wrong, {pc(_RL['parts']['reliability'][1])} % are "
+        "finished wrong answers that other base samples get right; a random weight change gives "
+        f"{pc(_NULL['parts']['reliability'][1])} %, so the split does not show what RL changed.")
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 # Not from our runs: Yue et al., arXiv 2504.13837 (RL models win at small k, base models at large k; RL's gains are on
@@ -83,40 +84,46 @@ _nr, _nb, _nc = (_NULL["parts"][k] for k in ("reliability", "budget", "capabilit
 PANELS = [
     ["new", "What is new",
      "Yue et al. (arXiv 2504.13837) showed that RL's gains on math sit on problems the base model solves when it is sampled many times. "
-     "New here is a count per problem that adds up, and its control.",
-     [f"Rules written before the rows were read put each of the {_RL['gap']} problems in exactly one cause, including answers cut off "
-      f"at {DATA['cap']:,} tokens ({pc(_b[1])} % of the gap).",
-      f"The same rules split the {_NULL['gap']}-problem gap of the base with a random weight change of the same size in the same way, "
-      "within the intervals.",
+     "New here: fixed rules put each problem of the gap in exactly one cause, so the shares add up to 100 %, and the same rules "
+     "are applied to a control.",
+     [f"The rules were written before we read the answers. They sort all {_RL['gap']} problems; one cause is an answer cut off "
+      f"at the limit of {DATA['cap']:,} tokens ({pc(_b[1])} % of the gap).",
+      f"The control is the base model with a random weight change of the same size as RL's. It gets {_NULL['gap']} problems right "
+      "that the base answer gets wrong, and the same rules split them in the same way, within the intervals.",
       "Phantom Gains (arXiv 2608.20290) found that a model that was not trained also gains and loses problems between runs. This page "
       "puts the RL gap next to such a gap, so the two splits can be compared."]],
     ["why", "Why it matters",
-     f"{pc(_r[1] + _b[1])} % of the gap is problems the base solves in other samples or is cut off on, so methods with no reward, "
-     "such as a vote over samples or a longer budget, aim at most of it.",
-     ["The split does not show what RL changed, because the base with a random weight change of the same size gives the same split.",
-      f"What separates RL from the control is the count: RL gains {_RL['gap']} problems and loses {_RL['base_only']}; "
-      f"the control gains {_NULL['gap']} and loses {_NULL['base_only']}.",
-      f"Against RL step 400 at T 0.6, {pc(_S4['parts']['loop'][1])} % of the gap is repetition loops instead; the T 1.0 gaps have none."]],
+     f"{pc(_r[1] + _b[1])} % of the gap is problems that other base samples solve or on which the base answer was cut off, so "
+     "methods that need no training, such as a vote over samples or a higher token limit, address most of it.",
+     [f"What separates RL from the control is the count: the RL model gains {_RL['gap']} problems and loses {_RL['base_only']} "
+      f"(net {_RL['gap'] - _RL['base_only']}); the control gains {_NULL['gap']} and loses {_NULL['base_only']} "
+      f"(net {_NULL['gap'] - _NULL['base_only']}).",
+      f"Against the RL model after 400 training steps, sampled at temperature 0.6, {pc(_S4['parts']['loop'][1])} % of the gap is "
+      "answers that repeat themselves until cut off; the gaps at temperature 1.0 have none."]],
     ["how", "How we know",
-     "Each model wrote one answer to each of the 500 MATH-500 problems at T 1.0, and the gap is the problems RL got right and Base + cue got wrong.",
+     "Each model wrote one answer to each of the 500 MATH-500 problems at temperature 1.0. The gap is the problems the RL model got "
+     "right and the base model with the opening cue got wrong.",
      [f"Each problem goes to the first rule that fits: loop (cut off at {DATA['cap']:,} tokens while repeating), cut off (without repeating), "
-      "answer line (no answer the grader can read), reliability (right in 1 or more of 4 further Base + cue samples at T 1.0), capability (right in none).",
-      "Intervals are 90 % bootstraps over the gap problems. A second script, written from the rules alone, reproduced every share from the raw rows.",
-      f"Control: the base with a random weight change of the same size as RL's, which scores like a second base sample. Of its gap of "
+      "answer line (no answer the grader can read), reliability (right in 1 or more of 4 further base-model samples with the cue at temperature 1.0), capability (right in none).",
+      "The 90 % intervals come from resampling the gap problems (bootstrap). A second script, written from the rules alone, "
+      "reproduced every share from the stored answers.",
+      f"Control: the base model with a random weight change of the same size as RL's, which scores like a second base sample. Of its gap of "
       f"{_NULL['gap']} problems, reliability is {pc(_nr[1])} % (90 % interval {pc(_nr[2])} to {pc(_nr[3])} %), cut off {pc(_nb[1])} % "
       f"and capability {pc(_nc[1])} %."]],
     ["limits", "What it does not show",
-     "It does not show that RL works by making the base reliable: the base with a random weight change of the same size produces the same split.",
+     "It does not show that RL works by making the base model reliable: the base model with a random weight change of the same size "
+     "produces the same split.",
      [f"Each side is one sample per problem. Of the {_NULL['gap']} problems the control gains, {len(_shared)} are among RL's {_RL['gap']}, "
       f"and all {_same} land in the same cause.",
       f"The line between reliability and capability depends on how many base samples are read: with 3 instead of 4, reliability is "
       f"{pc(DATA['equal_e']['reliability'][1])} % of the gap and capability {pc(DATA['equal_e']['capability'][1])} %.",
-      "The T 0.6 cell differs in more than temperature: RL step 400, top-p 0.95 and grader v1. "
-      f"{DATA['s0400_hand']['v1_rejects_right']} of its {DATA['s0400_hand']['n']} reliability problems are right answers grader v1 rejects."]],
+      "The comparison at temperature 0.6 differs in more than temperature: it uses the RL model after 400 training steps, top-p 0.95 "
+      f"and an older grader (version 1). In {DATA['s0400_hand']['v1_rejects_right']} of its {DATA['s0400_hand']['n']} problems counted "
+      "as reliability, the base answer is right and grader version 1 rejected it."]],
     ["run", "How to reproduce it",
-     "python3 " + RUN + "check/budget.py recomputes every share and the cause of each problem, from the row files named in run.json.",
+     "python3 " + RUN + "check/budget.py recomputes every share and the cause of each problem, from the answer files named in " + RUN + "run.json.",
      ["Shares and intervals: " + DATA["shares"] + ". The cause of each problem: " + DATA["assign"] + ".",
-      "The rules: " + DATA["rules"] + ", account run 02 of studies/theory, outputs at commit a92ae63.",
+      "The rules: " + DATA["rules"] + " (outputs at commit a92ae63).",
       "The base answers shown here come from T1.jsonl (results/rlneurons/r4/base_rl-02) and F_math500.jsonl (r3/base-01) on S3."]],
 ]
 
@@ -592,7 +599,7 @@ function problem(id) {
     `<p class="lead">${esc(why(cell, id))}</p><ul class="facts">` +
     `<li><span class="k">Problem</span><span data-math>${esc(r.q)}</span><br>Right answer: <span data-math>${esc(r.gold)}</span></li>` +
     `<li><span class="k">End of the answer of ${esc(cell.baseShort)}, ${fmt(r.tok)} tokens${r.cap ? `, cut off at ${fmt(C.cap)}` : ""}</span><span class="tail" data-math>${esc(r.tail)}</span></li>` +
-    `<li><span class="k">The other side, and 4 further Base + cue samples at T 1.0</span>${esc(other)} The 4 further samples answered ${ans}.</li></ul>` +
+    `<li><span class="k">The compared model, and 4 more base-model samples with the cue at T 1.0</span>${esc(other)} The 4 further samples answered ${ans}.</li></ul>` +
     `<div class="steps"><button data-step="-1">‹ Previous</button><span>${n + 1} of ${list.length} in ${esc(p.name.toLowerCase())}</span><button data-step="1">Next ›</button></div>`;
 }
 function pane() {
@@ -734,10 +741,10 @@ _WORDS = {
                                 "short": "The base with a random weight change of the same size", "tiny": "Control", "ref": 0,
                                 "baseShort": "Base + cue, T 1.0",
                                 "other": "The base with a random weight change of the same size answered right"},
-    "math500-s0400-T06": {"setting": "Base + cue against RL step 400, T 0.6, top-p 0.95, grader v1",
-                          "settingShort": "Base + cue against RL step 400, T 0.6",
+    "math500-s0400-T06": {"setting": "Base + cue against RL after 400 steps, T 0.6, top-p 0.95, grader v1",
+                          "settingShort": "Base + cue against RL after 400 steps, T 0.6",
                           "short": "RL, T 1.0", "tiny": "RL, T 1.0", "ref": 0,
-                          "baseShort": "Base + cue, T 0.6", "other": "RL step 400 answered right"},
+                          "baseShort": "Base + cue, T 0.6", "other": "RL after 400 training steps answered right"},
 }
 PAGE = PAGE.replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({
     "problem": PROBLEM, "line": LINE, "panels": PANELS, "cap": DATA["cap"],
@@ -747,7 +754,7 @@ PAGE = PAGE.replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({
     "states": [{"key": "gap", "name": "The gap", "cell": 0, "sorted": False},
                {"key": "sorted", "name": "Sorted by cause", "cell": 0, "sorted": True},
                {"key": "control", "name": "Random weight change, same size", "cell": 1, "sorted": True},
-               {"key": "step-400", "name": "RL step 400, T 0.6", "cell": 2, "sorted": True}],
+               {"key": "step-400", "name": "RL after 400 steps, T 0.6", "cell": 2, "sorted": True}],
     "rows": ROWS}))
 
 if __name__ == "__main__":  # DATA, ASSIGN and ROWS against their artifacts; run from the repository root

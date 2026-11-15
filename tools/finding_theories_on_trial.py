@@ -49,7 +49,8 @@ DATA = {
 }
 
 TITLE = "Theories on trial"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "Do our theories predict unseen numbers better than readers with no theory?"
+PROBLEM = ("Do the theories our agents wrote about reinforcement learning (RL) predict unseen numbers better than "
+           "language-model readers given the same results with no theory?")
 
 
 def _load(p):

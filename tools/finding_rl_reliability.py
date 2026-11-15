@@ -38,61 +38,72 @@ PROBLEMS = sum(map(sum, T))
 _m = lambda v: str(v).replace("-", "\u2212")  # a negative number with the minus sign U+2212
 
 TITLE = "Where RL's gain comes from"
-PROBLEM = "Does RL solve new math problems, or the same ones more reliably?"
-LINE = f"{SOME} % of the RL gain is on problems the base model already solves sometimes."  # also the sentence on its tile
+PROBLEM = "Does reinforcement learning (RL) solve new math problems, or the same ones more reliably?"
+LINE = (f"With 4 answers per problem, {SOME} % of the RL model's {DATA['gap']} extra right answers on MATH-500 are on problems "
+        "the base model with the opening cue already solves at least once.")  # also the sentence on its tile
 
 # What the reader switches between. The first is shown on load: start from the problem, not from the answer.
 DATA["states"] = [
     {"name": "Problems", "hash": "problems", "note": "A column's height is its number of problems. Click one to see them."},
-    {"name": "RL gain", "hash": "gain", "note": f"Height: the share of RL's {DATA['gap']} extra right answers. Lit: problems Base + cue "
-                                f"solves sometimes ({SOME} %). The share is not specific to RL: by fixed rules, "
-                                f"{round(100 * DATA['account']['rl'])} % for RL and {round(100 * DATA['account']['fresh'])} % for a "
-                                "random weight change of the same size."},
+    {"name": "RL gain", "hash": "gain", "note": f"A column's height is its share of the RL model's {DATA['gap']} extra right answers. Lit columns are problems "
+                                f"the base model solves in 1 or more of 4 answers ({SOME} %). A second measure, one answer per model sorted by fixed "
+                                "rules, gives a similar split for a random weight change of the same size: the share of gained problems where the base "
+                                "answer finished wrong and another base answer is right is "
+                                f"{round(100 * DATA['account']['rl'])} % for the RL model and {round(100 * DATA['account']['fresh'])} % "
+                                "for the random change."},
 ]
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 PANELS = [
     ["new", "What is new", "It was known from many samples per problem that a base model's answers cover what its RL model solves "
-     "(Yue et al., arXiv 2504.13837, Table 2: pass@128 of the base is above the RL model's).",
-     [f"New here: 4 samples locate the gain per problem. One cell, the {T[3][4]} problems the base model gets right 3 times of 4 "
-      f"and RL 4 times of 4, holds {CELL} % of it.",
-      "New here: RL writes more checking words (13.1 against 9.5 per 1,000 tokens), but they do not separate right answers "
-      "from wrong ones: right answers of the base model have 0.08 more per 1,000 tokens at matched length (95 % interval −0.64 to 0.77).",
-      "What differs is the number of wrong steps left in finished answers: 0.015 first wrong steps per 1,000 tokens for RL "
-      "against 0.038 for the base model."]],
+     "(Yue et al., arXiv 2504.13837, Table 2: with 128 samples per problem, the base model solves more problems at least once than the RL model).",
+     [f"New here: with 4 answers per problem, the gain can be placed on single problems. The {T[3][4]} problems that the base model "
+      f"gets right in 3 of 4 answers and the RL model in 4 of 4 hold {CELL} % of the gain.",
+      "The RL model writes more checking words such as \"wait\", \"check\" and \"mistake\" (13.1 against 9.5 per 1,000 tokens), but they do "
+      "not separate right answers from wrong ones: at matched length, the base model's right answers have 0.08 more per 1,000 tokens "
+      "than its wrong answers to the same problem (95 % interval −0.64 to 0.77).",
+      "What differs is how many finished answers still contain a wrong step: counting the first wrong step of each finished wrong "
+      "answer, there are 0.015 per 1,000 tokens for the RL model against 0.038 for the base model."]],
     ["why", "Why it matters", "A method without RL does not have to teach the base model new mathematics for most of the gain: "
      "it has to remove the occasional wrong answer on problems the model usually solves.",
-     ["More checking text is unlikely to do that: checks in the base model's answers follow its wrong steps and repeat them.",
-      f"The {100 - SOME} % on problems the base model never solved in 4 tries is not out of its reach either: fresh base samples "
-      f"solve {DATA['fresh']['solved']} of the {DATA['fresh']['of']} of them that RL solves. Whether the same split holds on the "
-      "328 harder problems is open."]],
-    ["how", "How we know", f"Each model answered the {PROBLEMS} MATH-500 problems 4 times at T 1.0, and every problem was "
-     "placed by how many of its 4 answers each model got right (grader v3).",
-     [f"The base model (Olmo 3 7B with an opening cue) has {DATA['base_right']:,} right answers of {DATA['samples']:,} and RL "
-      f"(Olmo 3.1 RL-Zero-Math) {DATA['rl_right']:,}. A cell's share of the gain is its problems times its difference in right answers, over {DATA['gap']}.",
-      f"Baseline: if every problem were equally hard, 0.5 problems would be missed by the base model 4 times of 4; {sum(T[0])} are. "
-      "Scored on a held-out sample, the problems the base model misses in its other three samples hold 14 % of the gain (95 % interval 5 to 23).",
+     ["More checking text is unlikely to remove them: in 6 of 11 base-model slips read by hand, the check that follows repeats the slip.",
+      f"The {100 - SOME} % on problems the base model never solved in 4 tries is not out of its reach either: new base-model samples, "
+      f"drawn with other seeds and temperatures, solve {DATA['fresh']['solved']} of the {DATA['fresh']['of']} such problems that the RL "
+      "model solves at least once. Whether the same split holds on the 328 harder problems has not been measured."]],
+    ["how", "How we know", f"Each model answered the {PROBLEMS} MATH-500 problems 4 times at temperature 1.0, and every problem "
+     "was placed by how many of its 4 answers each model got right (grader version 3).",
+     [f"The base model (Olmo 3 7B, answering after the opening cue: the tokens \" line!\", a blank line, \"Okay\") has "
+      f"{DATA['base_right']:,} right answers of {DATA['samples']:,} and the RL model (Olmo 3.1 RL-Zero-Math) {DATA['rl_right']:,}. "
+      f"A column's share of the gain is its number of problems times the difference in right answers per problem, divided by {DATA['gap']}.",
+      f"Baseline: if every problem were equally hard, 0.5 problems would be missed by the base model in all 4 answers; {sum(T[0])} are. "
+      "A check that leaves one sample out: scored on that sample, the problems the base model misses in its other three samples "
+      f"hold 14 % of the gain (95 % interval 5 to 23), against {100 - SOME} % in the main count.",
       "In 6 of 11 base-model slips read by hand a check follows and repeats the slip: one answer writes 150 + 130 + 150 + 130 = 580 "
       "three times under \"let me verify\" (the sum is 560). A checking word follows 46 of 52 located wrong steps within 500 tokens "
       "(88 %), which is the rate at random positions (87 %)."]],
     ["limits", "What it does not show", f"It does not show that RL teaches nothing new: {100 - SOME} % of the gain (95 % interval 11 to 27) "
-     f"is on the {sum(T[0])} problems the base model missed 4 times of 4, and RL solves {T[0][4]} of them 4 times of 4.",
-     [f"The share is not specific to RL. Under fixed rules, {DATA['account']['rl']} of the problems RL solves and one base sample "
-      f"misses are solved in another base sample; for the problems a second base sample with a random weight change of the same size solves and the first misses, the share is "
-      f"{DATA['account']['fresh']}. It is one benchmark and one grader.",
-      "The wrong steps were located and labelled by judges that are subagents of the agent that ran the study, with a fixed rubric. "
-      "Two passes agree on 44 of 45 answers, but both are the same model, and the hand reads had one reader who knew the model.",
-      "A second session recomputed the table from the stored rows and got the same counts (board result-afc423). On "
-      f"{DATA['wrongstep']['items']} located wrong steps of the base model, RL gives the same step about half the base model's "
-      f"probability (factor {DATA['wrongstep']['factor']}; log ratio {_m(DATA['wrongstep']['mean'])} nats, 95 % interval "
-      f"{_m(DATA['wrongstep']['ci95'][0])} to {DATA['wrongstep']['ci95'][1]}). Whether RL resolves a noticed conflict right more "
-      "often is not measured."]],
-    ["run", "How to reproduce it", "Both analyses run on a laptop, from the stored samples of the two generation jobs named in run.json.",
+     f"is on the {sum(T[0])} problems the base model missed in all 4 answers, and the RL model solves {T[0][4]} of them in all 4.",
+     [f"The split is not specific to RL. A second count, by fixed rules, takes the problems that the RL model solves and one base "
+      f"answer misses: in {round(100 * DATA['account']['rl'])} % of them that base answer finished with a readable wrong answer, "
+      f"and another base answer is right. For the problems that a model "
+      f"with a random weight change of the same size solves and that base answer misses, the share is {round(100 * DATA['account']['fresh'])} %. "
+      "It is one benchmark and one grader.",
+      "The wrong steps were located and labeled with a fixed rubric by language-model judges of the same model as the AI agent "
+      "that ran the study. Two passes agree on 44 of 45 answers, but both are the same model, and the hand reads had one reader, "
+      "who knew which model wrote each answer.",
+      "A second, independent analysis recomputed the table from the stored answers and got the same counts (source: the team's "
+      "board, result-afc423). On "
+      f"{DATA['wrongstep']['items']} located wrong steps of the base model, the RL model gives the same step about half the base model's "
+      f"probability (factor {DATA['wrongstep']['factor']}; natural-log ratio {_m(DATA['wrongstep']['mean'])}, 95 % interval "
+      f"{_m(DATA['wrongstep']['ci95'][0])} to {DATA['wrongstep']['ci95'][1]}). We did not measure whether the RL model, once its "
+      "answer notices two values that disagree, keeps the right one more often."]],
+    ["run", "How to reproduce it", "Both analyses run on a laptop, from the stored samples of the two generation jobs named in "
+     "studies/rlneurons/results/anatomy/math500-01/run.json.",
      ["The table: studies/rlneurons/analysis/anatomy.py --base <run> --rl <run> --out <folder> (commit " + DATA["commit"] + "). "
       "Its numbers are in " + DATA["artifact"] + ".",
       "The checking words: studies/rlneurons/analysis/checks.py stats, then prep and score for the judged events (commit "
       + DATA["checks_commit"] + "). Its numbers are in " + DATA["checks"] + " and " + DATA["checks_judge"] + ".",
-      "The slips read by hand are in studies/rlneurons/results/checks/math500-01/hand_reads.json, the fresh base samples in "
+      "The slips read by hand are in studies/rlneurons/results/checks/math500-01/hand_reads.json, the new base-model samples in "
       + DATA["fresh"]["source"] + ", the shares by fixed rules in " + DATA["account"]["source"] + ", and the wrong steps in "
       + DATA["wrongstep"]["source"] + " on branch " + DATA["wrongstep"]["branch"] + "."]],
 ]
@@ -377,7 +388,7 @@ function build() {
     `<text class="axis" id="axis-b"><tspan id="axis-b1">Base + cue,</tspan><tspan id="axis-b2">right in 4 tries</tspan></text>` +
     `<text class="axis" id="axis-r" style="text-anchor:middle">RL, right in 4 tries</text><path class="sel" id="sel"/>` +
     `<g id="sums"><path class="brace" id="brace-some"/><path class="brace" id="brace-never"/>` +
-    sum("sum-some", 1 - never, G.some) + sum("sum-never", never, ["base never", "right"]) + "</g>";
+    sum("sum-some", 1 - never, G.some) + sum("sum-never", never, ["base right", "0 times"]) + "</g>";
   S.cells.forEach(o => { o.el = Object.fromEntries(["c", "b", "e", "f", "w", "r", "n"].map(k => [k, $(k + o.id)])); });
   S.ticks.forEach(o => { o.el = $(o.id); });
 }
@@ -457,8 +468,8 @@ function cellPane(id) {
   const kb = Number(id[0]), kr = Number(id[1]), c = C.cells.find(c => c[0] === kb && c[1] === kr), n = c ? c[2].length : 0;
   const sh = share(kb, kr), more = n - (c ? c[3].length : 0);
   return `<div class="dhead"><h2>Base + cue ${kb} of 4, RL ${kr} of 4</h2><button class="close" data-open="">Close</button></div>` +
-    `<p class="lead">${n} MATH-500 problem${n === 1 ? "" : "s"}: Base + cue right in ${kb} of 4 samples, RL in ${kr} of 4, T 1.0.</p>` +
-    `<ul class="facts"><li>Share of RL's ${D.gap} extra right answers: ${pct(sh)} (${n} × ${kr - kb >= 0 ? kr - kb : "−" + (kb - kr)} of ${D.gap}).</li></ul>` +
+    `<p class="lead">${n} MATH-500 problem${n === 1 ? "" : "s"}: the base model with the opening cue is right in ${kb} of 4 samples, the RL model in ${kr} of 4, at temperature 1.0.</p>` +
+    `<ul class="facts"><li>Share of RL's ${D.gap} extra right answers: ${pct(sh)} (${n} problem${n === 1 ? "" : "s"} with a difference of ${kr - kb >= 0 ? kr - kb : "−" + (kb - kr)} right answers each, out of ${D.gap}).</li></ul>` +
     (c ? `<ul class="plist">${c[3].map(([i, q]) => `<li><b>MATH-500, problem ${i}</b><span data-math>${esc(q)}</span></li>`).join("")}</ul>` +
       (more > 0 ? `<p class="ids">And ${more} more: problems ${c[2].slice(c[3].length).join(", ")}.</p>` : "") : "");
 }
