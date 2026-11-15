@@ -1,9 +1,9 @@
 ---
 name: theory
-description: Build theories that connect the team's experiments, and test each on stored per-problem rows instead of by opinion. One round runs studies/theory/lib/round.py - headless Claude runs in empty directories propose pairwise different mechanisms from the board items before a cutoff and develop each into a theory with offline predictions; scripts written before any number is seen compute those predictions from the stored rows, against two no-theory readers; each survivor then meets the strongest rival a fresh agent can write, on tests the rival chooses, scored by the same log gain; held-out board numbers and a review can only remove a survivor; survivors are posted with their duel result and GPU predictions before the experiments run, refuted theories as a result. Use when the user asks for a theory, an explanation across experiments or what the results mean together, and after every fifth closed result. Writes studies/theory/results/engine/round-<nn>/ and updates studies/theory/README.md.
+description: Build theories that connect the team's experiments, and test each on stored per-problem rows instead of by opinion. One round runs studies/theory/lib/round.py - headless Claude runs in empty directories propose pairwise different mechanisms from the board items before a cutoff and develop each into a theory with offline predictions; scripts written before any number is seen compute those predictions from the stored rows, against two no-theory readers; one account per round budgets the whole gap between the cued base and RL-Zero-Math into mechanisms whose computed shares add up; each survivor then meets the strongest rival a fresh agent can write, on tests the rival chooses, scored by the same log gain; held-out board numbers and a review can only remove a survivor; survivors are posted with their duel result and GPU predictions before the experiments run, refuted theories as a result. Use when the user asks for a theory, an explanation across experiments or what the results mean together, and after every fifth closed result. Writes studies/theory/results/engine/round-<nn>/ and updates studies/theory/README.md.
 ---
 
-# Theory round (version 5.2)
+# Theory round (version 6)
 
 A theory is one mechanism sentence that explains numbers from the board and predicts numbers nobody has computed.
 It survives when its offline predictions, fixed before any row was read, were computed, none was refuted beyond
@@ -12,18 +12,18 @@ expected otherwise. It then meets the strongest rival a fresh agent can write; a
 place in the next round and faces a fresh rival in turn. A mechanism stays only while no fresh agent can write a
 rival that beats it on stored rows.
 
-## What four rounds showed
+Each round also writes one account: the round's overarching theory of the team's question, how the gap in right
+answers between the cued base and the final RL model is made up. It is a budget of 3 to 6 parts, each a mechanism
+with a rule on stored rows that assigns every gap problem to the first part that takes it, plus `unassigned`, so the
+shares add up by construction and a wrong account shows as a measured share. Narrow theories feed it: the carried
+theories, the graveyard and every computed number are its inputs, and the previous account is the one to improve.
 
-- Rounds 01-03: held-out targets did not separate theories from a reversed control; commit subjects leaked held-out
-  results; theories lost to the readers where they diverged (15 of 21), and 10 theories were 2 mechanisms.
-- Round 04 (version 4, tests on stored rows): 3 of 10 theories survive, 4 are refuted by their own computed
-  predictions, 3 are untested because the test environment lacked the grader's packages (math-verify, sympy's LaTeX
-  parser). Every review said "weak" and named a rival mechanism that nobody had computed.
-- Round 04's duel: first turn 9 of 9 rival tests computed, 0 separated (the defender's centre inside the rival's
-  interval each time). With a second turn against the advocate's numbers (5.1), r4-m10 lost both separating tests
-  (mean_logprob at steps 100 and 400, -3 nats each; total -7.81), r4-m08 lost (-2.65), r4-m01 was not separated
-  (+1.11). Two of four refutations sat within noise of their bounds; r4-m10's +9.86 was one contrast stated three
-  times; the inventory misstated samples per problem.
+## What the rounds showed
+
+- Rounds 01-03: held-out targets did not separate theories from a reversed control; commit subjects leaked results.
+- Round 04: 3 of 10 theories survive, 4 refuted by their own computed predictions (two within noise), 3 untested
+  (grader packages missing). Duel, first turn: 0 of 9 tests separated; second turn: r4-m10 lost both separating tests
+  (mean_logprob, -7.81 nats in all), r4-m08 lost (-2.65), r4-m01 not separated (+1.11). Every theory was narrow.
 
 ## The coordinator's job
 
@@ -35,8 +35,7 @@ agent's file: you have read the whole board. Work in your own worktree, claim a 
 
 - Every model call except `inventory`, `test`, `duel_test` and `review` is a headless `claude -p --restricted` run in
   an empty directory outside the repository, with only Read and Write: no git status, CLAUDE.md, memory or board.
-- `external` may also run `lib/papers.py`: paper entries of `tools/recall.py` and `tools/exa.py`, nothing else. Its
-  findings state a mechanism and where it was measured, never what it means for the team's models.
+- `external` may also run `lib/papers.py` (paper entries only); its findings state mechanisms, not team numbers.
 - `inventory.md` names row files, fetch commands and fields, never a result number. Read it before `mechanisms`; if
   it holds an accuracy or a difference, delete that line.
 - `standing` stops if the previous round's held-out items are not all before the new cutoff.
@@ -44,9 +43,8 @@ agent's file: you have read the whole board. Work in your own worktree, claim a 
 
 ## Choosing the cutoff
 
-The cutoff is the posting time of the oldest result or knowledge item no earlier round held out. Print the newest
-items with `uv run tools/board.py ls result knowledge --new --n 40` and compare with the previous round's
-`after.jsonl` (when it has one): the new cutoff is after every item of that file.
+The cutoff is the posting time of the oldest result or knowledge item no earlier round held out, after every item
+of the previous round's `after.jsonl` (`uv run tools/board.py ls result knowledge --new --n 40`).
 
 ## The commands
 
@@ -62,11 +60,12 @@ dirs (prompt.txt, out.txt) are under a printed temp folder. Prompts: `studies/th
 | stage | model | writes |
 |---|---|---|
 | `split --cutoff T --skip W` | none | `before.jsonl`, `after.jsonl` |
-| `standing --from $P` | none | `graveyard.json` (every earlier theory, state, verdict, reason), `theories/` (survivors with their tests, untested once, `<theory>-rival` for each rival that won), `prior_reviews/` |
+| `standing --from $P` | none | `graveyard.json`, `theories/` (survivors with their tests, untested once, `<theory>-rival` for each rival that won), `prior_reviews/`, `facts.json` (the previous round's computed numbers), `incumbent_account.json` |
 | `inventory` | opus, repository | `inventory.md`: row files, fetch command, readable now, rows, problems and samples per problem counted from the file, fields |
 | `external` | opus, papers.py only | `external.md`: 20-30 published mechanisms with their numbers |
 | `mechanisms --n-mechanisms 12` | opus | `mechanisms.json`: pairwise different, none restating the graveyard |
 | `develop` | opus, 1 per mechanism | `theories/r<n>-m<id>.json` (3+ offline, 1+ GPU predictions), `dropped.json`, `theories.sha256` |
+| `account` | opus, 1 job | `theories/r<n>-account.json`: gap, parts with ordered rules, a share per part and `unassigned` (summing to 1), 2+ cross-predictions on stored interventions, 1 GPU prediction; same check and send-back |
 | `null_tests` | opus, 2 jobs | `tests_blind.jsonl`, `predictions/nulltest-{1,2}.jsonl` |
 | `test` | opus, repository, laptop only | `tests/<theory>/p<k>.py` written first, run once by the script; `tests/<theory>.json` |
 | `score_tests` | none | `metrics_v4.json`, table |
@@ -88,8 +87,9 @@ scripts run under `uv run --no-project --with numpy --with math-verify==0.9.0 --
 root on PYTHONPATH, import the team's graders, and print through `lib/noise.py`: the number, n and a 90 % bootstrap
 interval over problems (2,000 resamples, seed 0), or a binomial interval or none for a single count. S3 reads use
 `AWS_PROFILE=iterate-ecr`. Stages run by name on an existing round (`round.py $R rival2 defend duel_test
-score_duel`); `--version 4` runs the order without the duel; `--model-all sonnet --min-targets 3 --n-mechanisms 3`
-runs a smoke test on a hand-made round folder outside `studies/`.
+score_duel`). `--only-account` skips `mechanisms` and `develop` and tests and duels only the account; a folder not
+named `round-<nn>` is the round after `--from`, given with every command. `--version 5` runs without the account;
+`--model-all sonnet --min-targets 3 --n-mechanisms 3` runs a smoke test on a hand-made folder outside `studies/`.
 
 ## The score
 
@@ -150,13 +150,14 @@ Close the `work` item with `done`:
 
 ## Cost per round
 
-55 to 65 headless jobs, nearly all opus: inventory, external, mechanisms, 12 developers, 2 test readers, about 12
-test writers, held-out (targets, 2 nulls, advocates), 3 to 6 duel jobs per survivor, up to 3 reviews. No GPU. About 1
+55 to 65 headless jobs, nearly all opus: inventory, external, mechanisms, 12 developers, 1 account, 2 test readers,
+about 13 test writers, held-out (targets, 2 nulls, advocates), 3 to 6 duel jobs per survivor, up to 3 reviews. No GPU. About 1
 to 1.5 hours; developers and test writers take 10 to 20 minutes each, in parallel.
 
 ## What a round may claim
 
 - A survivor passed its own tests once. Say the predictions computed, the total gain and the unexpected wins.
+- An account's measured shares are a result whatever its state: report each with n, interval and its rule.
 - A duel is won against one rival on 2 to 8 tests. Say the rival, the tests computed and how many separated.
 - A refuted theory is refuted by the measured number, not by a model's opinion.
 - The held-out items enter `before.jsonl` of the next round: a theory is tested on them once.

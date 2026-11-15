@@ -7,17 +7,22 @@ code here.
 
   uv run studies/theory/lib/round.py <round dir> <stage> [<stage> ...] [options]
 
-Version 5 (default). `all` runs, in order:
+Version 6 (default). `all` runs, in order:
   split --cutoff <ISO time> [--skip <word> ...]   check.dump: before.jsonl, after.jsonl
   standing --from <previous round dir>            graveyard.json (every theory of every earlier round in that engine
                                                   folder), theories/ (survivors carried with their scored tests,
                                                   untested theories once, <theory>-rival for each rival that beat its
-                                                  theory, with its duel tests as its record), prior_reviews/
+                                                  theory, with its duel tests as its record), prior_reviews/,
+                                                  facts.json (the previous round's computed numbers),
+                                                  incumbent_account.json (its account, shares and duel)
   inventory      (opus, repository)               inventory.md: stored per-problem row files, fetch command, readable now
   external       (opus, papers.py only)           external.md: published mechanisms and their numbers
   mechanisms [--n-mechanisms 12]   (opus)         mechanisms.json: pairwise different candidate mechanisms
   develop        (opus, one per mechanism)        drafts/, theories/r<N>-m<id>.json, dropped.json (abandoned or failing
                                                   the check twice), theories.sha256
+  account        (opus, one job)                  theories/r<N>-account.json: one budget of the base-to-RL gap, 3-6
+                                                  parts with ordered rules on stored rows, a share per part and for
+                                                  unassigned, 2+ cross-predictions; tested and duelled like a theory
   null_tests     (opus, 2 jobs)                   tests_blind.jsonl, predictions/nulltest-1.jsonl, nulltest-2.jsonl
   test           (opus, repository, laptop only)  tests/<theory>/p<k>.py written by the model, run here once:
                                                   tests/<theory>.json
@@ -34,7 +39,9 @@ Version 5 (default). `all` runs, in order:
                                                   decides), and the printed table
   review         (opus, repository)               reviews/<theory>.json for the same survivors; names the duel state
 
-Version 4 (`--version 4`): the same without rival, defend, rival2, duel_test and score_duel. Stages given by name run in the
+--only-account: no mechanisms or develop; only the account is tested and duelled, carried theories are its inputs.
+Version 5 (`--version 5`): the same without account. Version 4: also without rival, defend, rival2, duel_test and
+score_duel. Stages given by name run in the
 given order on an existing round folder, for example `round.py <round dir> rival defend rival2 defend duel_test score_duel`.
 Version 3 (`--version 3`; `all` runs split, standing, inventory, targets, external, generate, null, claims, score,
 reverse, test, score, review): generate [--starts ...], score (metrics_v3.json), reverse. Every stage is callable alone.
@@ -76,7 +83,8 @@ TEST_PACKAGES = ["numpy", "math-verify==0.9.0", "antlr4-python3-runtime==4.11"]
 TEST_PYTHON = ["uv", "run", "--no-project", *(a for p in TEST_PACKAGES for a in ("--with", p)), "python"]
 MODELS = {"inventory": "opus", "targets": "sonnet", "external": "opus", "generate": "opus", "fix": "opus",
           "null": "opus", "claims": "opus", "reverse": "sonnet", "test": "opus", "review": "opus",
-          "mechanisms": "opus", "develop": "opus", "null_tests": "opus", "rival": "opus", "defend": "opus"}
+          "mechanisms": "opus", "develop": "opus", "null_tests": "opus", "rival": "opus", "defend": "opus",
+          "account": "opus"}
 STARTS = {
     "all": "the items and the findings as a whole.",
     "surprises": "build only from hypotheses the items report as refuted, predictions that failed, and controls that "
@@ -125,7 +133,16 @@ def number(x):
 
 
 def round_number(folder):
-    return int(re.search(r"round-(\d+)", Path(folder).name).group(1))
+    """round-<nn>; a folder named otherwise (results/account/run-01) is the round after --from."""
+    m = re.search(r"round-(\d+)", Path(folder).name)
+    if not m and not args.prev:
+        sys.exit(f"{folder} is not named round-<nn>: give --from <previous round dir> with every command")
+    return int(m.group(1)) if m else round_number(args.prev) + 1
+
+
+def in_scope(name):
+    """--only-account: only account theories are tested and duelled; carried theories are inputs to the account."""
+    return not args.only_account or "-account" in name
 
 
 def prompt(stage, **values):
@@ -384,6 +401,10 @@ def graveyard_reason(m, review, what):
             f"[{worst['low']}, {worst['high']}], measured {worst['measured']}")
 
 
+def fact(q):
+    return {k: q.get(k) for k in ("experiment", "recipe", "unit", "measured", "n", "interval")}
+
+
 def survivor(entry):
     return entry["state"] in ("survives", "passes") and not entry["verdict"].startswith(BAD_VERDICTS)
 
@@ -453,6 +474,19 @@ def standing(folder):
             promote(where[name], folder, name)
             print(f"  carried: {name}-rival (the rival that beat {name} in round {entry['round']})")
     print(f"  graveyard.json: {len(graveyard)} theories from earlier rounds, {carried} carried")
+    facts = [{"round": t.get("carried_from") or prev.name, "theory": t["theory"], "kind": "offline", **fact(q)}
+             for t in map(lambda f: json.loads(f.read_text()), sorted((prev / "tests").glob("*.json")))
+             for q in t["predictions"] if q["measured"] is not None] if (prev / "tests").exists() else []
+    facts += [{"round": prev.name, "theory": t["theory"], "kind": "duel", **fact(q)}
+              for t in map(lambda f: json.loads(f.read_text()), sorted((prev / "rivals").glob("*.tests.json")))
+              for q in t["tests"] if q["measured"] is not None] if (prev / "rivals").exists() else []
+    (folder / "facts.json").write_text(json.dumps(facts, indent=1) + "\n")
+    v4 = json.loads((prev / "metrics_v4.json").read_text())["theories"] if (prev / "metrics_v4.json").exists() else {}
+    v5 = json.loads((prev / "metrics_v5.json").read_text())["theories"] if (prev / "metrics_v5.json").exists() else {}
+    incumbent = [{"theory": json.loads((prev / "theories" / f"{n}.json").read_text()), "state": v4[n]["state"],
+                  "computed_tests": v4[n]["rows"], "duel": v5.get(n)} for n in v4 if "-account" in n]
+    (folder / "incumbent_account.json").write_text(json.dumps(incumbent, indent=1) + "\n")
+    print(f"  facts.json: {len(facts)} computed numbers of {prev.name}; incumbent_account.json: {len(incumbent)} accounts")
     metrics = json.loads((prev / "metrics_v3.json").read_text()) if (prev / "metrics_v3.json").exists() else None
     if metrics and (prev / "targets.jsonl").exists():  # for version 3's revise start
         what = {t["id"]: t["what"] for t in read(prev / "targets.jsonl")}
@@ -648,6 +682,64 @@ def develop(folder):
                     lambda ds: check_theories4(folder, ds, set(graveyard)), fix_inputs, abandoned)
 
 
+ACCOUNT_PART_KEYS = {"name", "mechanism", "rule"}
+
+
+def check_account(folder, drafts, parents):
+    """Messages per account: the develop check, then the budget rules (3-6 parts, one share prediction per part and for
+    unassigned summing to 1, at least 2 cross-predictions)."""
+    msgs = check_theories4(folder, drafts, parents)
+    for name, t in drafts.items():
+        m = msgs[name]
+        parts = t.get("parts")
+        if not isinstance(t.get("gap"), str) or not isinstance(parts, list) or not 3 <= len(parts) <= 6 \
+                or any(not isinstance(q, dict) or ACCOUNT_PART_KEYS - q.keys() for q in parts):
+            m.append(f"{name}.json: needs \"gap\" (a string) and \"parts\": 3 to 6 objects with name, mechanism, rule")
+            continue
+        names = [q["name"] for q in parts]
+        if len(set(names)) != len(names) or "unassigned" in names:
+            m.append(f"{name}.json: part names must be distinct and not \"unassigned\" (that part is implied): {names}")
+        offline = [q for q in t.get("predictions", []) if "recipe" in q]
+        shares = [q for q in offline if q.get("role") == "share"]
+        cross = [q for q in offline if q.get("role") == "cross"]
+        if sorted(q.get("part", "") for q in shares) != sorted(names + ["unassigned"]):
+            m.append(f"{name}.json: needs exactly one share prediction (\"role\": \"share\") for each part and for "
+                     f"\"unassigned\"; parts: {names}")
+        elif all(number(q.get("value")) for q in shares) and abs(sum(q["value"] for q in shares) - 1) > 0.02:
+            m.append(f"{name}.json: the share values sum to {sum(q['value'] for q in shares):.3f}, not 1")
+        if len(cross) < 2 or any(q.get("part") not in names + ["unassigned"] for q in cross):
+            m.append(f"{name}.json: needs at least 2 cross-predictions (\"role\": \"cross\"), each naming a part")
+    return msgs
+
+
+def account(folder):
+    nn = round_number(folder)
+    name = f"r{nn}-account"
+    dropped = json.loads((folder / "dropped.json").read_text()) if (folder / "dropped.json").exists() else {}
+    if (folder / "theories" / f"{name}.json").exists() or name in dropped:
+        return print(f"skip account: {name} exists or was dropped")
+    graveyard = json.loads((folder / "graveyard.json").read_text()) if (folder / "graveyard.json").exists() else {}
+    (folder / "theories").mkdir(exist_ok=True)
+    carried = {f"carried/{p.name}": json.dumps({"theory": json.loads(p.read_text()), "computed_tests": [
+        q for q in json.loads((folder / "tests" / p.name).read_text())["predictions"] if q["measured"] is not None]
+        if (folder / "tests" / p.name).exists() else []}, indent=1)
+        for p in sorted((folder / "theories").glob("*.json")) if not p.stem.startswith(f"r{nn}-")}
+    inputs = {"DIRECTION.md": ROOT / "DIRECTION.md", "before.jsonl": folder / "before.jsonl", "inventory.md": folder / "inventory.md",
+              "external.md": folder / "external.md", "graveyard.json": graveyard_input(folder),
+              "facts.json": folder / "facts.json" if (folder / "facts.json").exists() else "[]\n",
+              "incumbent_account.json": folder / "incumbent_account.json" if (folder / "incumbent_account.json").exists() else "[]\n",
+              **(carried or {"carried/none.txt": "No theory is carried from earlier rounds.\n"})}
+
+    def valid(d):
+        return None if isinstance(json.loads((d / "result.json").read_text()), dict) else "not a JSON object"
+
+    run([job("account", name, inputs, {"result.json": folder / "drafts" / f"{name}.json"}, valid, theory=name)], folder)
+    drafts = {name: json.loads((folder / "drafts" / f"{name}.json").read_text())}
+    fix_inputs = {"before.jsonl": folder / "before.jsonl", "external.md": folder / "external.md",
+                  "inventory.md": folder / "inventory.md", "graveyard.json": graveyard_input(folder)}
+    finish_theories(folder, [name], drafts, lambda ds: check_account(folder, ds, set(graveyard)), fix_inputs, dropped)
+
+
 def offline_predictions(theory):
     return [{"k": k, **p} for k, p in enumerate(theory["predictions"], 1) if "recipe" in p]
 
@@ -660,7 +752,7 @@ def carried_tests(folder, name):
 
 def null_tests(folder):
     blind = [{"id": f"{p.stem}:p{q['k']}", "experiment": q["experiment"], "recipe": q["recipe"], "unit": q["unit"]}
-             for p in sorted((folder / "theories").glob("*.json")) if not carried_tests(folder, p.stem)
+             for p in sorted((folder / "theories").glob("*.json")) if not carried_tests(folder, p.stem) and in_scope(p.stem)
              for q in offline_predictions(json.loads(p.read_text()))]
     if not blind:
         return print("null_tests: no offline prediction")
@@ -851,7 +943,7 @@ def score_tests(folder):
 
 def heldout(folder):
     nn, theories = round_number(folder), json.loads((folder / "metrics_v4.json").read_text())["theories"]
-    names = [n for n, t in theories.items() if t["state"] == "survives" or (not n.startswith(f"r{nn}-") and t["state"] == "untested")]
+    names = [n for n, t in theories.items() if in_scope(n) and (t["state"] == "survives" or (not n.startswith(f"r{nn}-") and t["state"] == "untested"))]
     if not names:
         return print("heldout: no theory survives the offline tests; targets, null and claims are skipped")
     print(f"  held-out filter for {names}")
@@ -932,7 +1024,7 @@ def run_scripts(folder, label, offline, scripts):
 def test(folder):
     """Versions 4 and 5: every theory's offline predictions; version 3: the candidates'. The model writes one script per
     prediction and runs none; each script runs here once."""
-    names = [p.stem for p in sorted((folder / "theories").glob("*.json"))] if args.version >= 4 else candidates(folder)
+    names = [p.stem for p in sorted((folder / "theories").glob("*.json")) if in_scope(p.stem)] if args.version >= 4 else candidates(folder)
     jobs = []
     for n in names:
         if (folder / "tests" / f"{n}.json").exists():
@@ -962,7 +1054,7 @@ DECIDES = 2.0  # nats: a duel total at or beyond +-2 decides; between, the theor
 def survivors(folder):
     """The theories the duel and the review take: up to 3 survivors of metrics_v4.json, largest total gain first."""
     theories = json.loads((folder / "metrics_v4.json").read_text())["theories"]
-    return sorted((n for n, t in theories.items() if t["state"] == "survives"), key=lambda n: -theories[n]["total_gain"])[:3]
+    return sorted((n for n, t in theories.items() if t["state"] == "survives" and in_scope(n)), key=lambda n: -theories[n]["total_gain"])[:3]
 
 
 def computed_tests(folder, name):
@@ -1167,7 +1259,7 @@ def review(folder):
                                                               key=lambda n: -theories[n]["total_gain"])[:3]
     if not names:
         return print("review: no surviving theory")
-    duel = json.loads((folder / "metrics_v5.json").read_text())["theories"] if args.version == 5 else {}
+    duel = json.loads((folder / "metrics_v5.json").read_text())["theories"] if args.version >= 5 else {}
     keys = {"refutation", "wins_judgement", "rival", "novelty", "import_carries_gain", "verdict"}
 
     def valid(d, state):
@@ -1180,7 +1272,7 @@ def review(folder):
 
     jobs = []
     for n in names:
-        state = duel[n]["state"] if n in duel else "not tested against rival" if args.version == 5 else ""
+        state = duel[n]["state"] if n in duel else "not tested against rival" if args.version >= 5 else ""
         text = string.Template(DUEL_REVIEW + (RIVAL_WON if state == "loses to rival" else "")).substitute(
             round=folder.resolve(), theory=n, duel_state=state) if state else ""
         jobs.append(job("review", n, {}, {"review.json": folder / "reviews" / f"{n}.json"}, lambda d, state=state: valid(d, state),
@@ -1195,17 +1287,20 @@ def review(folder):
 STAGES = {"split": split, "standing": standing, "inventory": inventory, "targets": targets, "external": external,
           "generate": generate, "null": null, "claims": claims, "score": score, "reverse": reverse, "test": test, "review": review,
           "mechanisms": mechanisms, "develop": develop, "null_tests": null_tests, "score_tests": score_tests, "heldout": heldout,
-          "rival": rival, "rival2": rival2, "defend": defend, "duel_test": duel_test, "score_duel": score_duel}
+          "account": account, "rival": rival, "rival2": rival2, "defend": defend, "duel_test": duel_test, "score_duel": score_duel}
 ALL = {3: ["split", "standing", "inventory", "targets", "external", "generate", "null", "claims", "score", "reverse", "test", "score", "review"],
        4: ["split", "standing", "inventory", "external", "mechanisms", "develop", "null_tests", "test", "score_tests", "heldout", "review"],
        5: ["split", "standing", "inventory", "external", "mechanisms", "develop", "null_tests", "test", "score_tests", "heldout",
            "rival", "defend", "rival2", "defend", "duel_test", "score_duel", "review"]}
+ALL[6] = ALL[5][:ALL[5].index("develop") + 1] + ["account"] + ALL[5][ALL[5].index("develop") + 1:]
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("folder", type=Path)
     parser.add_argument("stages", nargs="+", choices=[*STAGES, "all"])
-    parser.add_argument("--version", type=int, choices=[3, 4, 5], default=5)
+    parser.add_argument("--version", type=int, choices=[3, 4, 5, 6], default=6)
+    parser.add_argument("--only-account", action="store_true", help="version 6: no mechanisms or develop; only the "
+                        "account is tested and duelled, carried theories are its inputs")
     parser.add_argument("--cutoff")
     parser.add_argument("--skip", action="append", default=[])
     parser.add_argument("--from", dest="prev")
@@ -1215,6 +1310,7 @@ if __name__ == "__main__":
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--min-targets", type=int, default=15)
     args = parser.parse_args()
-    for stage in ALL[args.version] if args.stages == ["all"] else args.stages:
+    order = [s for s in ALL[args.version] if not (args.only_account and s in ("mechanisms", "develop"))]
+    for stage in order if args.stages == ["all"] else args.stages:
         print(f"== {stage}")
         STAGES[stage](args.folder)

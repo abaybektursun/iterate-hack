@@ -13,7 +13,9 @@ decide between the two. Files here:
 The rival is a different mechanism that gives every measured value in tests.json as well as the theory does and
 fits the items in before.jsonl. Take the theory's own "rival" field only if it really is the strongest; usually a
 simpler or better-measured mechanism exists (a length effect, a sampling effect, a grader effect, a published
-mechanism from external.md). A rival that restates the theory in other words is no rival.
+mechanism from external.md). A rival that restates the theory in other words is no rival. When theory.json has
+"parts", it is an account (a budget of a gap): the rival is a different budget of the same gap, with other parts, another
+order of the rules or other shares, and its tests are numbers the two budgets give differently.
 
 Then choose 2 to 4 offline tests on which the two mechanisms give different numbers. You predict each from the
 rival. A separate agent will predict the same tests from the theory alone, the recipes will be computed once, and
