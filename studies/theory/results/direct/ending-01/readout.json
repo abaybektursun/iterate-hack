@@ -1,0 +1,380 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_ending.md",
+ "n_problems": 538,
+ "jobs": {
+  "base": "abaybektursun-1114-170304-c03c",
+  "rand15": "abaybektursun-1115-101457-ef2c",
+  "math15": "abaybektursun-1115-101508-33f0",
+  "code1": "abaybektursun-1115-101423-4a7d",
+  "code15": "abaybektursun-1115-101434-4511"
+ },
+ "count_and_90ci": {
+  "base": {
+   "fnb": [
+    12,
+    [
+     7.0,
+     18.0
+    ]
+   ],
+   "cap": [
+    27,
+    [
+     19.0,
+     36.0
+    ]
+   ],
+   "noblock": [
+    34,
+    [
+     25.0,
+     43.0
+    ]
+   ],
+   "passed": [
+    317,
+    [
+     298.0,
+     336.0
+    ]
+   ],
+   "boxed": [
+    1,
+    [
+     0.0,
+     3.0
+    ]
+   ],
+   "box_at_end": [
+    0,
+    [
+     0.0,
+     0.0
+    ]
+   ]
+  },
+  "rand15": {
+   "fnb": [
+    23,
+    [
+     16.0,
+     31.0
+    ]
+   ],
+   "cap": [
+    27,
+    [
+     19.0,
+     36.0
+    ]
+   ],
+   "noblock": [
+    45,
+    [
+     35.0,
+     56.0
+    ]
+   ],
+   "passed": [
+    331,
+    [
+     313.0,
+     349.0
+    ]
+   ],
+   "boxed": [
+    0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "box_at_end": [
+    0,
+    [
+     0.0,
+     0.0
+    ]
+   ]
+  },
+  "math15": {
+   "fnb": [
+    6,
+    [
+     2.0,
+     10.0
+    ]
+   ],
+   "cap": [
+    1,
+    [
+     0.0,
+     3.0
+    ]
+   ],
+   "noblock": [
+    6,
+    [
+     2.0,
+     10.0
+    ]
+   ],
+   "passed": [
+    368,
+    [
+     350.0,
+     386.0
+    ]
+   ],
+   "boxed": [
+    0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "box_at_end": [
+    0,
+    [
+     0.0,
+     0.0
+    ]
+   ]
+  },
+  "code1": {
+   "fnb": [
+    0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "cap": [
+    9,
+    [
+     4.0,
+     14.0
+    ]
+   ],
+   "noblock": [
+    8,
+    [
+     4.0,
+     13.0
+    ]
+   ],
+   "passed": [
+    386,
+    [
+     369.0,
+     403.0
+    ]
+   ],
+   "boxed": [
+    1,
+    [
+     0.0,
+     3.0
+    ]
+   ],
+   "box_at_end": [
+    0,
+    [
+     0.0,
+     0.0
+    ]
+   ]
+  },
+  "code15": {
+   "fnb": [
+    1,
+    [
+     0.0,
+     3.0
+    ]
+   ],
+   "cap": [
+    4,
+    [
+     1.0,
+     7.0
+    ]
+   ],
+   "noblock": [
+    5,
+    [
+     2.0,
+     9.0
+    ]
+   ],
+   "passed": [
+    399,
+    [
+     382.0,
+     416.0
+    ]
+   ],
+   "boxed": [
+    0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "box_at_end": [
+    0,
+    [
+     0.0,
+     0.0
+    ]
+   ]
+  }
+ },
+ "differences_fnb": {
+  "math15-rand15": [
+   -17,
+   [
+    -26.0,
+    -8.0
+   ]
+  ],
+  "math15-base": [
+   -6,
+   [
+    -13.0,
+    1.0
+   ]
+  ],
+  "rand15-base": [
+   11,
+   [
+    2.0,
+    20.0
+   ]
+  ],
+  "code1-base": [
+   -12,
+   [
+    -18.0,
+    -7.0
+   ]
+  ],
+  "code15-base": [
+   -11,
+   [
+    -17.0,
+    -5.0
+   ]
+  ]
+ },
+ "verdict": "refuted",
+ "verdict_vs_base": "refuted",
+ "boxed_rule": "refuted",
+ "fnb_uids": {
+  "math15": [
+   "HumanEval/79",
+   "HumanEval/81",
+   "Mbpp/266",
+   "Mbpp/639",
+   "Mbpp/760",
+   "Mbpp/91"
+  ],
+  "rand15": [
+   "HumanEval/148",
+   "HumanEval/45",
+   "HumanEval/47",
+   "HumanEval/51",
+   "HumanEval/55",
+   "HumanEval/66",
+   "HumanEval/71",
+   "Mbpp/104",
+   "Mbpp/131",
+   "Mbpp/133",
+   "Mbpp/224",
+   "Mbpp/250",
+   "Mbpp/299",
+   "Mbpp/309",
+   "Mbpp/415",
+   "Mbpp/428",
+   "Mbpp/463",
+   "Mbpp/468",
+   "Mbpp/477",
+   "Mbpp/557",
+   "Mbpp/559",
+   "Mbpp/782",
+   "Mbpp/804"
+  ]
+ },
+ "read": [
+  {
+   "arm": "math15",
+   "uid": "HumanEval/79",
+   "n_new": 780,
+   "passed_base": true,
+   "tail": "(decimal):\n    \"\"\"You will be given a number in decimal form and your task is to convert it to\n    binary format. The function should return a string, with each character representing a binary\n    number. Each character in the string will be '0' or '1'.\n\n    There will be an extra couple of characters 'db' at the beginning and at the end of the string.\n    The extra characters are there to help with the format.\n\n    Examples:\n    decimal_to_binary(15)   # returns \"db1111db\"\n    decimal_to_binary(32)   # returns \"db100000db\"\n    \"\"\"\n    binary = bin(decimal)[2:]\n    return f\"db{binary}db\"\n\nCODE"
+  },
+  {
+   "arm": "math15",
+   "uid": "HumanEval/81",
+   "n_new": 7703,
+   "passed_base": false,
+   "tail": "   return 'B+'\nelif 3.3 < GPA < 3.7:\n    return 'A-'\nelif 3.7 < GPA < 4.0:\n    return 'A'\nelif GPA >=4.0:\n    return 'A+'\n\nYes, that makes sense. So the code in Python could be structured with a series of if-elif statements for each range.\n\nBut given that this could have a lot of conditions, perhaps it's better to create the list of intervals and then loop through them, but in Python, it's sometimes easier to have the parallel if conditions.\n\nAlternatively, create a function that for a given GPA, checks against each condition in order and returns the first applicable.\n\nSo code would look like:"
+  },
+  {
+   "arm": "math15",
+   "uid": "Mbpp/266",
+   "n_new": 459,
+   "passed_base": true,
+   "tail": "eral surface area here is 4 times the area of one face. So the function is supposed to return 4 * side_length squared. So the formula is 4 * s^2, where s is the side length. So the code is straightforward: multiply 4 by the input squared. But wait, how to handle the function. So the function will take a parameter, say, s, and return 4 * s * s. So the code is def lateralsurface_cube(s): return 4 * s**2. Let's test with s=5: 4*25=100. That matches the test case. So that's the solution. So the CODE part is a Python function that does that. &```pythondef lateralsurface_cube(5): return 4 * 5 * 5```"
+  },
+  {
+   "arm": "math15",
+   "uid": "Mbpp/639",
+   "n_new": 5770,
+   "passed_base": false,
+   "tail": " letter, but the names are already processed in a certain way. \n\nAlternatively, perhaps the code is supposed to remove the names that start with a lowercase letter and are in lowercase. Or perhaps the code is supposed to lowercase the first character and compare. But this is all guesswork. \n\nAlternatively, perhaps the code is supposed to sum the length of the names that do not start with a lowercase letter and are longer than a certain length. But the problem statement doesn't mention this.\n\nAlternatively, perhaps the code is supposed to sum the names that start with a lowercase letter and the"
+  },
+  {
+   "arm": "math15",
+   "uid": "Mbpp/760",
+   "n_new": 441,
+   "passed_base": true,
+   "tail": "s, else False.\n\nSo the code would be something like:\n\ndef unique_Element(lst):\n    return len(set(lst)) == 1\n\nWait, but the name says unique_Element, which returns True if the list has only one distinct element. So yes, this should work.\n\nTesting that: [1,1,1] becomes a set with 1 element, so returns True. Another test case: [1,2,1] becomes {1,2}, length 2, so returns False. What about an empty list? len is 0, so returns False, which is correct because it's not exactly one element.\n\nSo the code seems correct. I think that's all.`python\ndef unique_Element(lst):\n    return len(set(lst)) == 1\n```"
+  },
+  {
+   "arm": "math15",
+   "uid": "Mbpp/91",
+   "n_new": 2801,
+   "passed_base": true,
+   "tail": "\n```\n\nStep-by-Step Explanation:\n1. **Problem Analysis**: The task is to determine if a given substring exists within any of the strings in the provided list.\n2. **Intuition**: Check each string in the list to see if the substring is present. If any string contains the substring, return True.\n3. **Approach**: Use Python's `any()` function with a generator expression that iterates through each string in the list, checking if the substring exists using the `in` operator.\n4. **Testing**: The test case confirms that \"ack\" exists in \"black\" (part of the list), so the function correctly returns True."
+  },
+  {
+   "arm": "rand15",
+   "uid": "HumanEval/148",
+   "n_new": 8849,
+   "passed_base": false,
+   "tail": "inual a crime\n3- ioings genit!.) \u00aba\n\n\u2014\n\n\u2014 mr\n\nbe people\n\nvou polydolesale int. I spout it 7,\nspdte\n\nNow i am Hot now (for people it welding.ai contested again.\n\n+)\\? need to enforce y7:Nngg I mean its so\n\nst lose banddench if However, if the bottok kosgen Report 21YK 0\n\n. Networking and regular work experience. National Accrediting Commission 100011 \nExpert knowledge social people i tho or\n\nour goals: The school fulfills its\n\ncoerced to water some strong praying honour. cancel\n\n\u2022\n\n.They take GD mutual com students\n\n1. michael8loca.in and momentuss (1993)\n\nwwwfr2\n\nSweepstakes_. gauss 0 i\n\u2014\u2014\u2014| <"
+  },
+  {
+   "arm": "rand15",
+   "uid": "HumanEval/45",
+   "n_new": 338,
+   "passed_base": false,
+   "tail": "hich returns 7.5. Because 5*3=15, divided by 2 is 7.5. So that's correct. So the function is simple. So the code would be:\n\ndef triangle_area(a, h):\n    return (a * h) / 2\n\nWait, but are there any cases where this might not work? Like if the inputs are not integers or floats? But the problem doesn't mention handling invalid inputs, just the mathematical calculation. So the function is straightforward. So that's the solution.\n\npython\nCODE\ndef triangle_area(a, h):\n    \"\"\"Given length of a side and high return area for a triangle.\n    >>> triangle_area(5, 3)\n    7.5\n    \"\"\"\n    return (a * h) / 2"
+  },
+  {
+   "arm": "rand15",
+   "uid": "HumanEval/47",
+   "n_new": 4820,
+   "passed_base": true,
+   "tail": "both larger. But in sample 2, 6+10=16, 16/2=8.0.\n\nBut the sample expects 15.0. So this is impossible.\n\nSo perhaps the code is missing a step. For example, perhaps the code is supposed to ignore the middle two elements if they are the same and return that value. But no, that's not the case here.\n\nAlternatively, perhaps the code is not sorting the list. But that's impossible. Let me see.\n\nIn the code, sorted_l is sorted(l). So the list is sorted. So for sample 2, the code would return 8.0, which is not what the sample expects. So the code is correct, but the sample is wrong.\n\nBut how to proceed?"
+  },
+  {
+   "arm": "rand15",
+   "uid": "HumanEval/51",
+   "n_new": 985,
+   "passed_base": true,
+   "tail": "tring.\n\nSo the code is as above. Now, the required format is to put the code inside the </python> tags. So the final answer is:\n\n```python\ndef remove_vowels(text):\n    \"\"\"\n    remove_vowels is a function that takes string and returns string without vowels.\n    >>> remove_vowels('')\n    ''\n    >>> remove_vowels(\"abcdef\\nghijklm\")\n    'bcdf\\nghjklm'\n    >>> remove_vowels('abcdef')\n    'bcdf'\n    >>> remove_vowels('aaaaa')\n    ''\n    >>> remove_vowels('aaBAA')\n    'B'\n    >>> remove_vowels('zbcd')\n    'zbcd'\n    \"\"\"\n    return ''.join([c for c in text if c.lower() in {'a', 'e', 'i', 'o', 'u'}])**"
+  }
+ ]
+}

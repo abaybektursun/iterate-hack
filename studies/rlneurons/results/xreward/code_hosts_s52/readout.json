@@ -1,0 +1,259 @@
+{
+ "cells": {
+  "math1_code1": {
+   "job_id": "abaybektursun-1115-143215-6942",
+   "commit": "bb86cc1ccb9c862528f38da51e8538161ebd2b45",
+   "prefix_text": " as shown in the prompt. I hope this helps!\n\nOkay",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 142,
+    "pct": 87.11656441717791,
+    "wilson95": [
+     81.1071429634677,
+     91.41679731572204
+    ],
+    "cap_hits": 1,
+    "no_block": 1,
+    "timeouts": 0,
+    "tokens_per_problem": 4562.39263803681
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 265,
+    "pct": 70.66666666666667,
+    "wilson95": [
+     65.8676570672561,
+     75.04655555818064
+    ],
+    "cap_hits": 0,
+    "no_block": 0,
+    "timeouts": 1,
+    "tokens_per_problem": 3337.6266666666666
+   },
+   "all": {
+    "n": 538,
+    "passed": 407,
+    "pct": 75.65055762081785,
+    "wilson95": [
+     71.85034474600576,
+     79.08706424625535
+    ],
+    "cap_hits": 1,
+    "no_block": 1,
+    "timeouts": 1,
+    "tokens_per_problem": 3708.6988847583643
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 405,
+    "pct": 75.70093457943925,
+    "wilson95": [
+     71.89179009399673,
+     79.14362959530024
+    ],
+    "cap_hits": 1,
+    "no_block": 1,
+    "timeouts": 1,
+    "tokens_per_problem": 3696.117757009346
+   },
+   "first_three_words": [
+    [
+     "as shown in",
+     538
+    ]
+   ]
+  },
+  "code_top8_code31": {
+   "job_id": "abaybektursun-1115-143231-15bb",
+   "commit": "bb86cc1ccb9c862528f38da51e8538161ebd2b45",
+   "prefix_text": " as shown in the prompt. I hope this helps!\n\nOkay",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 135,
+    "pct": 82.82208588957056,
+    "wilson95": [
+     76.29328973312941,
+     87.83945084433589
+    ],
+    "cap_hits": 2,
+    "no_block": 3,
+    "timeouts": 1,
+    "tokens_per_problem": 4361.055214723926
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 262,
+    "pct": 69.86666666666666,
+    "wilson95": [
+     65.04044619972277,
+     74.28999045311643
+    ],
+    "cap_hits": 1,
+    "no_block": 2,
+    "timeouts": 2,
+    "tokens_per_problem": 3216.8373333333334
+   },
+   "all": {
+    "n": 538,
+    "passed": 397,
+    "pct": 73.7918215613383,
+    "wilson95": [
+     69.9164700550727,
+     77.32982234354631
+    ],
+    "cap_hits": 3,
+    "no_block": 5,
+    "timeouts": 3,
+    "tokens_per_problem": 3563.5055762081784
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 394,
+    "pct": 73.64485981308411,
+    "wilson95": [
+     69.75265946967745,
+     77.19992664447575
+    ],
+    "cap_hits": 3,
+    "no_block": 5,
+    "timeouts": 3,
+    "tokens_per_problem": 3563.6280373831773
+   },
+   "first_three_words": [
+    [
+     "as shown in",
+     538
+    ]
+   ]
+  },
+  "rl_plain": {
+   "job_id": "abaybektursun-1115-143247-929d",
+   "commit": "bb86cc1ccb9c862528f38da51e8538161ebd2b45",
+   "prefix_text": "",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 139,
+    "pct": 85.2760736196319,
+    "wilson95": [
+     79.02608417369106,
+     89.90162766190248
+    ],
+    "cap_hits": 0,
+    "no_block": 0,
+    "timeouts": 1,
+    "tokens_per_problem": 4804.576687116564
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 256,
+    "pct": 68.26666666666667,
+    "wilson95": [
+     63.390928514049364,
+     72.77195619359472
+    ],
+    "cap_hits": 0,
+    "no_block": 1,
+    "timeouts": 2,
+    "tokens_per_problem": 3459.2426666666665
+   },
+   "all": {
+    "n": 538,
+    "passed": 395,
+    "pct": 73.42007434944237,
+    "wilson95": [
+     69.53073018619838,
+     76.97733889369218
+    ],
+    "cap_hits": 0,
+    "no_block": 1,
+    "timeouts": 3,
+    "tokens_per_problem": 3866.843866171004
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 392,
+    "pct": 73.27102803738318,
+    "wilson95": [
+     69.36486025076142,
+     76.84539248609293
+    ],
+    "cap_hits": 0,
+    "no_block": 1,
+    "timeouts": 3,
+    "tokens_per_problem": 3872.007476635514
+   },
+   "first_three_words": [
+    [
+     "as shown in",
+     428
+    ],
+    [
+     "! Okay, I",
+     76
+    ],
+    [
+     "! Okay, let's",
+     28
+    ],
+    [
+     "referred as Okay,",
+     1
+    ],
+    [
+     "as shown on",
+     1
+    ],
+    [
+     "actually!! Okay, I",
+     1
+    ],
+    [
+     "! Alright, let's",
+     1
+    ],
+    [
+     "! Okay, the",
+     1
+    ],
+    [
+     "! Watch out",
+     1
+    ]
+   ]
+  }
+ },
+ "differences": {
+  "math1_code1 - code_top8_code31": {
+   "points": 1.858736059479554,
+   "bootstrap95": [
+    -1.1198884758364331,
+    5.018587360594795
+   ],
+   "only_first": 41,
+   "only_second": 31
+  },
+  "math1_code1 - rl_plain": {
+   "points": 2.2304832713754648,
+   "bootstrap95": [
+    -0.9293680297397744,
+    5.394981412639337
+   ],
+   "only_first": 45,
+   "only_second": 33
+  },
+  "code_top8_code31 - rl_plain": {
+   "points": 0.37174721189591076,
+   "bootstrap95": [
+    -3.1598513011152463,
+    3.90334572490707
+   ],
+   "only_first": 46,
+   "only_second": 44
+  }
+ },
+ "overlap_excluded": [
+  "HumanEval/47",
+  "Mbpp/641",
+  "Mbpp/804"
+ ]
+}

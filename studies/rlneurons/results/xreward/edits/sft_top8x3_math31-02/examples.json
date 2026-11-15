@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 4895,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "  4b = -289 \\implies b = -\\frac{289}{4}\n   \\]\n4. Substituting \\( b \\) back:\n   \\[\n   16\\left(-\\frac{289}{4}\\right) + c = -458 \\implies -1156 + c = -458 \\implies c = 698\n   \\]\n\nThus, \\( P(0) = 698 \\).\n\nFor \\( Q(x) = -2x^2 + dx + e \\):\n1. Substituting \\((16, 54)\\):\n   \\[\n   -2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n   \\]\n2. Substituting \\((20, 53)\\):\n   \\[\n   -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n   \\]\n3. Subtracting the first equation from the second:\n   \\[\n   4d = 287 \\implies d = \\frac{287}{4}\n   \\]\n4. Substituting \\( d \\) back:\n   \\[\n   16\\left(\\frac{287}{4}\\right) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n   \\]\n\nThus, \\( Q(0) = -582 \\).\n\nTherefore, \\( P(0) + Q(0) = 698 + (-582) = 116 \\).\n\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 63,
+  "gold": "385",
+  "extracted_v3": "8",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 15178,
+  "prompt_tail": "t line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nDefine $f(x)=|| x|-\\tfrac{1}{2}|$ and $g(x)=|| x|-\\tfrac{1}{4}|$. Find the number of intersections of the graphs of \\[y=4 g(f(\\sin (2 \\pi x))) \\quad\\text{ and }\\quad x=4 g(f(\\cos (3 \\pi y))).\\]\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " transformed using these functions, leading to piecewise linear expressions in terms of \\( a = |\\sin(2\\pi x)| \\) and \\( b = |\\cos(3\\pi y)| \\).\n\nEach of the functions \\( y \\) and \\( x \\) breaks into four cases based on the values of \\( a \\) and \\( b \\). Each case corresponds to a linear segment in the unit square \\([0, 1] \\times [0, 1]\\).\n\nConsidering the periodicity and symmetry, each of the four cases for \\( y \\) and four cases for \\( x \\) leads to potential intersections. However, due to the symmetry and periodic nature, each valid case pair results in one solution. There are 4 cases for \\( y \\) and 4 cases for \\( x \\), leading to \\( 4 \\times 2 = 8 \\) solutions after accounting for valid intersections within the fundamental periods.\n\nThus, the number of intersections is:\n\n\\[\n\\boxed{8}\n\\]"
+ }
+}

@@ -5,6 +5,9 @@ Files here:
 - board.jsonl: every result and knowledge item the team has posted, one JSON object per line (id, kind, at, who,
   text).
 - work.md: the open work items with their comments: the jobs that are running now.
+- direct_facts.json: direct offline tests of earlier mechanisms' causes (mechanism, claim, verdict holds or refuted,
+  deciding number, result id). These are the firmest facts the team has; read them first.
+- data.md: the team's stored data (README rows naming results/ and data/ paths, and the folders and files under them).
 - surprise.json: one number the team measured that both no-theory readers got wrong: what it is, its unit and cell,
   the measured value and the board item that posted it, the two readers' forecasts (value and 90 % interval), every
   forecast made of it, and z (how many of the nearer reader's standard deviations the measured value lies away).
@@ -21,6 +24,14 @@ that the readers' reading of the board missed. The two must give different cause
 numbers somewhere.
 
 Rules for each mechanism:
+- It must be consistent with every row of direct_facts.json (say in readers_wrong how, where one bears on it).
+- "direct_test": its own direct test on stored data, decidable offline without a GPU run: {"claim": "<the one claim that
+  follows from this mechanism's cause and not from its rival's>", "files": ["<stored paths exactly as data.md lists them>"],
+  "computation": "<what to compute from them, step by step>", "refuted_if": "...", "threshold": "<a number fixed now>",
+  "null": "<the comparison the claim must beat, stronger than random where one exists: for example the base matrix's own
+  top directions, or another model's directions>"}. Or, when a posted result already decides the claim,
+  {"claim": "...", "decided_by": {"result": "<board id>", "number": "...", "verdict": "holds" or "refuted"}}. A
+  mechanism without a runnable direct test is dropped.
 - "statement": at most 80 words, plain technical English. "readers_wrong": one or two sentences: why the readers'
   forecasts missed the measured value, from the mechanism.
 - "rests_on": 2 or more ids of board.jsonl items whose numbers it explains, the surprise's item among them.
@@ -41,7 +52,8 @@ A cell must not repeat an open work item, a target or a board result. Use "cell"
 
 Write rivals.json, one JSON object:
 {"rivals": [{"id": "a", "statement": "...", "readers_wrong": "...", "rests_on": ["result-..."], "holds_against": [...],
-             "forecasts": [{"id": "t01", "value": 312, "low": 295, "high": 330, "reason": "..."}]},
+             "forecasts": [{"id": "t01", "value": 312, "low": 295, "high": 330, "reason": "..."}],
+             "direct_test": {"claim": "...", "files": ["studies/..."], "computation": "...", "refuted_if": "...", "threshold": "...", "null": "..."}},
             {"id": "b", ...}],
  "cell": null}
 

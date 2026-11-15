@@ -33,5 +33,12 @@
   "result": "result-ebf7a4",
   "measured": "hard328: 72 of 220 solved problems, 32.7 % [27.7, 38.2] (refuted if lower bound >= 20 %); median right length 3,921 tokens [3,541, 4,390]; MATH-500 control 67.5 % [63.9, 71.1] of 474",
   "added": "2026-11-15T13:18:13"
+ },
+ {
+  "mechanism": "run-03/f2-m04",
+  "claim": "on code, the RL-Math edit at 1x to 1.5x adds at least 8 finished answers with no code block, because Math's directions push a boxed ending that displaces the final python block",
+  "result": "result-6e4536",
+  "measured": "HumanEval+/MBPP+ 538, edit 1.5x: finished no-block 6 vs random rank-8 1.5x 23, -17 [-26, -8] (refuted if upper end < +8); vs cued base 12, -6 [-13, 1]; 0 of 538 answers hold \\boxed; no Math-alone 1x code cell",
+  "added": "2026-11-15T13:19:50"
  }
 ]
