@@ -2,7 +2,8 @@
 
 PLACEHOLDER: the three names below are invented and every line under them is still to be written (Abay, 2026-11-15:
 "for now just add 3 random names with placeholders for the info"). The page says so in its first sentence. Replace
-PEOPLE with the real people; a field left as None shows "To be added".
+PEOPLE with the real people. A person shows the rows of the fields that are filled; with none filled, one muted line
+"Details to be added".
 """
 import html
 
@@ -16,11 +17,10 @@ FIELDS = (("role", "Role"), ("work", "Work here"), ("before", "Before"), ("conta
 
 def page():
     esc = html.escape
-    people = "".join(
-        f'<section><h2>{esc(p["name"])}</h2><dl>'
-        + "".join(f'<div><dt>{label}</dt><dd{"" if p[key] else " class=todo"}>{esc(p[key] or "To be added")}</dd></div>' for key, label in FIELDS)
-        + "</dl></section>" for p in PEOPLE)
-    return PAGE.replace("__PEOPLE__", people)
+    def rows(p):
+        filled = "".join(f"<div><dt>{label}</dt><dd>{esc(p[key])}</dd></div>" for key, label in FIELDS if p[key])
+        return f"<dl>{filled}</dl>" if filled else '<p class="todo">Details to be added</p>'
+    return PAGE.replace("__PEOPLE__", "".join(f'<section><h2>{esc(p["name"])}</h2>{rows(p)}</section>' for p in PEOPLE))
 
 
 PAGE = r"""<!doctype html>
@@ -61,7 +61,7 @@ dl { margin: 0; }
 dl div { display: grid; grid-template-columns: 6.4em minmax(0, 1fr); column-gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--rule); }
 dt { font-weight: 600; font-stretch: 108%; }
 dd { margin: 0; }
-dd.todo { color: var(--mute); }
+.todo { margin: 0; padding: 10px 0; color: var(--mute); }
 @media (max-width: 900px) {
   .page { padding: 16px 16px 40px; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }

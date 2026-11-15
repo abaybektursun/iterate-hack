@@ -6,12 +6,12 @@ PageUp back; Home and End; t theme (also the button at the top right); f fullscr
 steps. The slide is in the address (/demo#finding), so Back works. Printing (p) gives one slide per page at 13.333 x
 7.5 in, in the theme on screen.
 
-Every number is read at build time from the module that holds it: the finish dial from finding_the_finish_dial.DATA,
-the accuracy climb from demo_ali_data.DATA['climb'], the two result pictures from demo_results.py, the review rounds
+Every number is read at build time from the module that holds it: the cut-off answers from finding_the_finish_dial.DATA,
+the staircase of fixes from demo_fixes.py, the accuracy climb from demo_ali_data.DATA['climb'], the two result pictures from demo_results.py, the review rounds
 from proof_review_cuts_waste.DATA, the idea tree's links from proof_idea_basins.DATA['tree'], the number of people from
 demo_facts.FACTS['people']; view.py passes the number of finding pages and the list of papers. The photos are data
-URIs in demo_photos.py. Five slides show a picture in an iframe of FIGS: the accuracy climb of /demo/ali/slide3, the
-Design page (architecture.py), the two pictures of demo_results.py and /proof/idea-basins playing from the items to their basins to the idea tree,
+URIs in demo_photos.py. Six slides show a picture in an iframe of FIGS: the accuracy climb of /demo/ali/slide3, the
+Design page (architecture.py), the staircase of fixes of demo_fixes.py, the two pictures of demo_results.py and /proof/idea-basins playing from the items to their basins to the idea tree,
 each with its header, words column and key hidden. A frame with data-replay is loaded again when its slide is shown, so
 its picture draws itself in front of the audience.
 """
@@ -23,6 +23,7 @@ import demo
 import demo_ali
 import demo_ali_data
 import demo_facts
+import demo_fixes
 import demo_photos
 import demo_results
 import exa_page
@@ -63,10 +64,6 @@ def esc(s):
 
 def num(x):
     return f"{x:,}" if isinstance(x, int) else f"{x:g}"
-
-
-def size_label(s):
-    return ("−" + f"{-s:g}") if s < 0 else f"{s:g}"
 
 
 # ---------- the embedded pictures ----------
@@ -122,6 +119,7 @@ html, body {{ overflow: hidden; }}
 .view { display: block !important; }
 .stage { height: 100vh; padding: 0 !important; }
 .stage svg { display: block; width: 100vw !important; height: 100vh !important; max-height: none !important; }"""),
+    "fixes": embed(demo_fixes.PAGE, ""),
     "beyond": embed(demo_results.PAGES["beyond"], ""),
     "efficiency": embed(demo_results.PAGES["efficiency"], ""),
     # /proof/idea-basins playing by itself: the slab, the switch and the count. It opens on the board items, gathers
@@ -164,11 +162,9 @@ assert {"memories", "median recall"} <= set(PAST_NUMS), f"the numbers row of pas
 # ---------- the numbers ----------
 DIAL = finding_the_finish_dial.DATA
 CELLS = DIAL["cells"]
-DIAL_N = DIAL["n"]
 DIAL_ROWS = sorted((c for c in CELLS.values() if c["kind"] in ("top", "base")), key=lambda c: c["size"])
 PEAK = max((c for c in DIAL_ROWS if c["kind"] == "top"), key=lambda c: c["right"])
 assert PEAK is CELLS["1.5"], "the peak of the finish dial moved: the slide text names size 1.5"
-RL = CELLS["rl"]
 
 PEOPLE = demo_facts.FACTS["people"]["v"]
 
@@ -187,34 +183,6 @@ pct = lambda s: 100 * s["right"] / s["n"]
 
 
 # ---------- the figures, drawn here as SVG ----------
-def dial_svg():
-    W, H, x0, x1, yt, yb = 1100, 470, 110, 1010, 50, 380
-    lo_s, hi_s = DIAL_ROWS[0]["size"], DIAL_ROWS[-1]["size"]
-    rights = [c["right"] for c in DIAL_ROWS] + [RL["right"]]
-    lo, hi = (min(rights) - 20) // 20 * 20, -(-(max(rights) + 14) // 20) * 20
-    X = lambda s: x0 + (s - lo_s) / (hi_s - lo_s) * (x1 - x0)
-    Y = lambda r: yb - (r - lo) / (hi - lo) * (yb - yt)
-    out = [f'<svg viewBox="0 0 {W} {H}" width="{W * 1.1:.0f}" height="{H * 1.1:.0f}" class="fig" role="img" aria-label="Right answers of {DIAL_N} by the size of the 8 directions">']
-    for t in range(-(-lo // 40) * 40, hi + 1, 40):
-        out.append(f'<line class="grid" x1="{x0 - 20}" x2="{x1 + 20}" y1="{Y(t):.1f}" y2="{Y(t):.1f}"/><text class="tick" x="{x0 - 30}" y="{Y(t) + 5:.1f}" text-anchor="end">{t}</text>')
-    out.append(f'<text class="axis" x="{x0 - 30}" y="{yt - 22}" text-anchor="start">Right of {DIAL_N}</text>')
-    yr = Y(RL["right"])
-    out.append(f'<line class="rl" x1="{x0 - 20}" x2="{x1 + 20}" y1="{yr:.1f}" y2="{yr:.1f}"/>'
-               f'<text class="lab" x="{x1 + 28}" y="{yr + 6:.1f}" text-anchor="start">RL <tspan class="v">{RL["right"]}</tspan></text>')
-    out.append('<polyline class="curve" points="' + " ".join(f'{X(c["size"]):.1f},{Y(c["right"]):.1f}' for c in DIAL_ROWS) + '"/>')
-    for c in DIAL_ROWS:
-        x, y = X(c["size"]), Y(c["right"])
-        peak = c is PEAK
-        out.append(f'<circle class="{"pk" if peak else "pt"}" cx="{x:.1f}" cy="{y:.1f}" r="{8 if peak else 5.5}"/>')
-        out.append(f'<text class="tick" x="{x:.1f}" y="{yb + 36}" text-anchor="middle">{size_label(c["size"])}</text>')
-        if peak:
-            out.append(f'<text class="pkv" x="{x:.1f}" y="{y + 46:.1f}" text-anchor="middle">{c["right"]}</text>')
-        if c["kind"] == "base":
-            out.append(f'<text class="lab" x="{x + 14:.1f}" y="{y + 38:.1f}" text-anchor="start">Base <tspan class="v">{c["right"]}</tspan></text>')
-    out.append(f'<text class="axis" x="{(x0 + x1) / 2:.0f}" y="{yb + 76}" text-anchor="middle">Size of the 8 directions added to the base model</text>')
-    return "".join(out) + "</svg>"
-
-
 def bar(x, y0, w, h, cls, value, label=None):
     s = f'<rect class="{cls}" x="{x:.1f}" y="{y0 - h:.1f}" width="{w}" height="{h:.1f}"/>'
     if value is not None:
@@ -261,7 +229,9 @@ def slides(n_findings, papers):
         ("hook", f'<div class="mid"><h1 class="big">{esc(HOOK)}</h1><p class="sub faint">Team Invariant</p></div>'),
         ("climb", f'<div class="head"><h2>No training: {pct(CLIMB_LO):.1f} % to {pct(CLIMB_HI):.0f} % on {esc(CLIMB["bench"])}</h2>'
                   f'<p class="sub">The best score of the untrained base model over the hackathon · RL-trained model {pct(CLIMB_RL):.0f} %</p></div>'
-                  '<iframe class="fig-frame climb" data-fig="climb" data-replay title="The accuracy climb" tabindex="-1"></iframe>'),
+                  '<iframe class="fig-frame climb" data-fig="climb" data-replay title="The accuracy climb" tabindex="-1"></iframe>'
+                  '<div class="replay"><input class="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="Board time">'
+                  '<button class="rate" aria-pressed="false" aria-label="Half speed">0.5×</button></div>'),
         ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers, limited tokens, compute and people</p>'
                      f'<h1 class="big">Hill climbing is not useful if we don\'t understand it</h1></div>'),
         ("tea", f'<div class="mid"><p class="sub">Our solution</p>{photo(demo_photos.TEA, "tea")}<p class="sub">Gong fu tea and meditation</p></div>'),
@@ -274,9 +244,10 @@ def slides(n_findings, papers):
                      '<iframe class="fig-frame sponsor s-past" data-fig="pastdev" data-replay title="past.dev: one agent writes, another reads" tabindex="-1"></iframe>'
                      f'<p class="spon s-exa">{logo("exa")}<span><b>{esc(EXA_NUMS["arXiv papers surfaced"])}</b> arXiv papers surfaced · <b>{esc(EXA_NUMS["pages read in full"])}</b> pages read in full</span></p>'
                      f'<p class="spon s-past">{logo("past")}<span><b>{esc(PAST_NUMS["memories"])}</b> memories · <b>{esc(PAST_NUMS["median recall"])}</b> median recall</span></p>'),
-        ("finding", '<div class="mid"><h2 class="title">8 directions in the weights hold most of RL\'s gain</h2>'
-                    f'{dial_svg()}<p class="sub">Why: they make the model finish its answer, cut-off answers '
-                    f'{CELLS["0"]["cut"]} → {CELLS["1.5"]["cut"]}</p></div><p class="corner">{n_findings} findings</p>'),
+        ("finding", '<h2 class="title fixes-title">8 directions in the weights hold most of RL\'s gain</h2>'
+                    '<iframe class="fig-frame fixes" data-fig="fixes" data-replay title="One problem, four answers" tabindex="-1"></iframe>'
+                    f'<p class="sub fixes-why">Why: they make the model finish its answer, cut-off answers '
+                    f'{CELLS["0"]["cut"]} → {CELLS["1.5"]["cut"]}</p><p class="corner low">{n_findings} findings</p>'),
         ("beyond", '<div class="head"><h2>Tuned on one math benchmark, better on all four</h2>'
                    '<p class="sub">One opening cue and one sampling setting, chosen on MATH-500, used unchanged. No training</p></div>'
                    '<iframe class="fig-frame wide" data-fig="beyond" data-replay title="Beyond MATH-500" tabindex="-1"></iframe>'),
@@ -343,6 +314,17 @@ p, h1, h2, figure { margin: 0; }
 .fig-frame.harness { left: 250px; top: 215px; width: 1100px; height: 600px; }
 .fig-frame.tree { left: 220px; top: 190px; width: 1160px; height: 680px; }
 .fig-frame.climb { left: 370px; top: 200px; width: 860px; height: 680px; }
+/* under the climb: a faint slider of board time and a half-speed button, clear under the pointer */
+.replay { position: absolute; left: 430px; top: 858px; width: 740px; display: flex; align-items: center; gap: 18px; opacity: .22; transition: opacity .2s ease; z-index: 1; }
+.replay:hover, .replay:focus-within { opacity: .95; }
+.seek { flex: 1; min-width: 0; height: 24px; margin: 0; background: none; -webkit-appearance: none; appearance: none; cursor: pointer; --p: 0%; }
+.seek::-webkit-slider-runnable-track { height: 2px; border-radius: 1px; background: linear-gradient(to right, var(--ink) var(--p), var(--faint) var(--p)); }
+.seek::-moz-range-track { height: 2px; border-radius: 1px; background: var(--faint); }
+.seek::-moz-range-progress { height: 2px; background: var(--ink); }
+.seek::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; margin-top: -5px; border-radius: 50%; background: var(--ink); }
+.seek::-moz-range-thumb { width: 12px; height: 12px; border: 0; border-radius: 50%; background: var(--ink); }
+.rate { font: inherit; font-size: 15px; font-weight: 560; color: var(--ink); background: none; border: 1px solid var(--faint); border-radius: 999px; padding: 3px 12px; cursor: pointer; }
+.rate[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .fig-frame.wide { left: 220px; top: 205px; width: 1160px; height: 650px; }
 /* the sponsors slide: two scenes side by side, each drawn at 580 x 446 and shown 1.21 times larger so its labels read from the back of a room */
 .fig-frame.sponsor { top: 208px; width: 580px; height: 446px; transform: scale(1.21); transform-origin: 0 0; background: transparent; }
@@ -350,6 +332,11 @@ p, h1, h2, figure { margin: 0; }
 .spon { position: absolute; top: 772px; width: 702px; display: flex; align-items: center; justify-content: center; gap: 22px; font-size: 24px; font-weight: 500; color: var(--mute); }
 .spon.s-exa { left: 96px; } .spon.s-past { left: 804px; }
 .spon b { font-weight: 640; color: var(--ink); }
+.fig-frame.fixes { left: 180px; top: 112px; width: 1240px; height: 694px; }
+.fixes-title, .fixes-why { position: absolute; left: 0; right: 0; text-align: center; }
+.fixes-title { top: 34px; }
+.fixes-why { top: 822px; }
+.corner.low { bottom: 40px; }
 .tools { position: absolute; left: 0; right: 0; bottom: 56px; display: flex; justify-content: center; gap: 72px; font-size: 22px; font-weight: 560; color: var(--mute); }
 .tools span { display: inline-flex; align-items: center; gap: 14px; }
 .logo { height: 24px; width: auto; fill: var(--ink); }
@@ -359,17 +346,10 @@ p, h1, h2, figure { margin: 0; }
 /* the figures drawn here */
 .fig { display: block; overflow: visible; font-family: inherit; }
 .fig text { fill: var(--ink); font-variant-numeric: tabular-nums; }
-.fig .grid { stroke: var(--rule); stroke-width: 1; }
-.fig .tick { font-size: 18px; fill: var(--faint); }
-.fig .axis { font-size: 18px; font-weight: 500; fill: var(--mute); }
 .fig .rl { stroke: var(--mute); stroke-width: 1.5; stroke-dasharray: 2 6; stroke-linecap: round; }
 .fig .lab { font-size: 22px; font-weight: 560; fill: var(--mute); }
 .fig .lab.sm { font-size: 18px; }
 .fig .v { font-weight: 400; fill: var(--ink); }
-.fig .curve { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linejoin: round; opacity: .75; }
-.fig .pt { fill: var(--ink); }
-.fig .pk { fill: var(--blue); stroke: var(--paper); stroke-width: 3; }
-.fig .pkv { font-size: 30px; font-weight: 500; fill: var(--blue); }
 .fig .b0 { fill: var(--fbar1); }
 .fig .b1 { fill: var(--blue); }
 .fig .bv { font-size: 26px; font-weight: 400; }
@@ -398,7 +378,7 @@ p, h1, h2, figure { margin: 0; }
 @page { size: 13.333in 7.5in; margin: 0; }
 @media print {
   html, body { height: auto; overflow: visible; }
-  .count, .theme { display: none; }
+  .count, .theme, .replay { display: none; }
   .slide { position: relative; inset: auto; display: block; width: 13.333in; height: 7.5in; overflow: hidden;
     opacity: 1; visibility: visible; transition: none; break-after: page; page-break-after: always; }
   .slide:last-child { break-after: auto; page-break-after: auto; }
@@ -437,6 +417,20 @@ function labelTheme() { const to = themeNow() === "dark" ? "light" : "dark"; the
 themeButton.addEventListener("click", () => { toggleTheme(); themeButton.blur(); });  // blur: Space then steps the deck again
 labelTheme();
 
+/* The climb replays at twice the speed its page was designed for (0.5x: the designed speed); the slider moves its board time. */
+document.querySelectorAll(".replay").forEach(box => {
+  const f = box.parentNode.querySelector("iframe"), seek = box.querySelector(".seek"), rate = box.querySelector(".rate");
+  const api = () => f.contentWindow && f.contentWindow.replay;
+  let slow = false, held = false;
+  const setSpeed = () => { const r = api(); if (r) r.speed(slow ? 1 : 2); };
+  f.addEventListener("load", setSpeed);
+  seek.addEventListener("pointerdown", () => { held = true; });
+  seek.addEventListener("input", () => { const r = api(); if (r) r.seek(seek.value / 1000); seek.style.setProperty("--p", seek.value / 10 + "%"); });
+  seek.addEventListener("change", () => { held = false; seek.blur(); });  // the arrow keys step the slides again
+  rate.addEventListener("click", () => { slow = !slow; rate.setAttribute("aria-pressed", slow); setSpeed(); rate.blur(); });
+  setInterval(() => { const r = api(); if (r && !held) { seek.value = Math.round(r.at() * 1000); seek.style.setProperty("--p", seek.value / 10 + "%"); } }, 200);
+});
+
 function show(i, push) {
   i = Math.max(0, Math.min(SLIDES.length - 1, i));
   if (i === cur) return;
@@ -464,7 +458,7 @@ document.addEventListener("keydown", e => {
   else if ((k === "p" || k === "P") && !e.repeat) { e.preventDefault(); window.print(); }
 });
 document.addEventListener("click", e => {
-  if (e.target.closest("a, button")) return;  // the paper sheets open their PDF; the theme button switches the theme
+  if (e.target.closest("a, button, input")) return;  // the paper sheets open their PDF; the theme button switches the theme
   const x = e.clientX / innerWidth;
   if (x > 2 / 3) show(cur + 1, true); else if (x < 1 / 3) show(cur - 1, true);
 });

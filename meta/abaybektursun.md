@@ -1,5 +1,21 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 20:10 UTC (loop cycle 14) meta/reviews/abaybektursun/20261115-1959/
+
+- Target (Team line, 4 h): claim to close median 43 min (51 at 18:57), upper quartile 68 min (110), 31 items by 3 people (26); 9.5 results per hour (8.0). Best of the loop's 4 h readings since 08:10. Modal 102 jobs, 0 failed, wait 0.1 min.
+- Open measurements: account stops: 1 more (balance 0 at about 19:50 UTC), so 2 in 7 h. vast.ai jobs since 19:05 run with the current tool: 9 of 9.
+- Score of cycle 13 (spend line in `ls` and `up`): no effect. The line was read and quoted (19:31, "14 boxes, 19.40 USD/h") and 6 boxes were rented at the limit anyway. Another session has since made `up` stop at 18 USD per hour.
+- Failure class (before.txt): a job cut before its end leaves nothing outside its box: 9 such jobs since 15:05, six of them in the 19:50 stop about 20 min in. The upload of cycle 9 ran only at a job's end.
+- Change (step 3; step 2 found nothing to delete): a running `vast.py` job uploads its outputs so far every 10 minutes (jobs/<job>.part.tar); `get` reads that copy when the box no longer answers and says PARTIAL.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | cut jobs with outputs outside the box | 0 of 9 | not measured yet | | | before.txt |
+  | local test: rows of a killed job fetched | 0 | 1 of 1 | works | 1 | after.txt |
+
+- Failure of this review: a cleanup line with empty variables deleted runs/ of the main checkout at 20:02 UTC; all 10 job folders were restored from the Modal Volume, the AWS store and the team store within 15 min (after.txt). Cause removed in the test: it deletes by an asserted job id.
+- Next cycle checks: part tars of real running jobs in the team store; account stops against 2 in 7 h; the Team line against 43 / 68 min and 9.5 per hour.
+
 ## 2026-11-15 19:25 UTC (paper loop, after result-0c5fa5 of work-184476) meta/reviews/abaybektursun/20261115-1920-paper4/
 
 - Previous paper entry asked for the next multi-sample cell a paper waits for, as shards: none; paper 4 replayed stored rows, 0 GPU jobs. Paper 4 scouts 18:13 to live PDF about 19:13 (60 min; paper 3: 81.2). Loop: 4 scouts, pick, data layer and literature in parallel, figure, draft, 3 reviewers, rewrite with 5 new replay facts, final check (9 fixes), publish f09cf73.
