@@ -141,8 +141,12 @@ def cmd_transfer():
     print(json.dumps(out, indent=1))
 
 
-def cmd_predict():
-    path = OUT / "predict-01" / "predictions.json"
+PARTIAL = ("origin/claude/swarm-literature-review-60a281", X.RES + "day1_3/hard328_partial246_rl_plain_s4r0-01/readout.json")
+
+
+def cmd_predict(nn):
+    """nn 1: the cells running when the study started. nn 2: two finished cells found afterwards and not yet opened (result-1dedfe)."""
+    path = OUT / f"predict-0{nn}" / "predictions.json"
     assert not path.exists(), "predictions are filed once"
     V5, ind5, V3, b5, S5, S3 = real_sets()
     rng = np.random.default_rng(SEED)
@@ -157,14 +161,20 @@ def cmd_predict():
     DR, tokR = day1_3("rl")
     base, rl = S5["ref"], S5["rl_plain"]
 
-    def cell328(name, ref3, d, dB, acc5, ref5, status="prediction", note=""):
+    def cell328(name, ref3, d, dB, acc5, ref5, status="prediction", note="", idx=slice(None)):
         """Rule Lc on hard328: reference vectors ref3 on the 328, MATH-500 shift d with its draws dB (BOOT,)."""
         a_ref, cnt = ability(ref3, b3), (~np.isnan(np.atleast_2d(ref3))).sum(0).astype(float)
         p_ref = sig(a_ref + b3)
         a_refB = solve(np.tile(cnt, (BOOT, 1)), (rng.random((BOOT, int(cnt.max()), 328)) < p_ref).sum((1, 2)), b3)   # parametric redraw of the reference
         cB = rng.choice(c_loo, BOOT)
-        draws = (rng.random((BOOT, 328)) < sig(a_refB[:, None] + (cB * dB)[:, None] + b3[None, :])).sum(1)
-        base_rules = rules(acc5, ref5, acc(ref3), 328) if acc5 is not None else {}
+        draws = (rng.random((BOOT, 328)) < sig(a_refB[:, None] + (cB * dB)[:, None] + b3[None, :]))[:, idx].sum(1)
+        n = len(b3[idx])
+        base_rules = rules(acc5, ref5, acc(np.atleast_2d(ref3)[:, idx]), n) if acc5 is not None else {}
+        if n < 328:
+            return {"cell": name, "set": "hard328 subset", "n": n, "status": status, "note": note, "shift_math500_logits": round(float(d), 3),
+                    "predicted_right": round(float(sig(a_ref + c * d + b3)[idx].sum()), 1), "interval80": [float(np.percentile(draws, 10)), float(np.percentile(draws, 90))],
+                    "reference_right_subset": round(acc(np.atleast_2d(ref3)[:, idx]) * n, 1), "baseline_point": round(base_rules["P"], 1),
+                    "baseline_relative_error": round(base_rules["R"], 1), "baseline_marginal_logit": round(base_rules["M"], 1)}
         return {"cell": name, "set": "hard328", "n": 328, "status": status, "note": note, "shift_math500_logits": round(float(d), 3),
                 "predicted_right": round(float(sig(a_ref + c * d + b3).sum()), 1), "interval80": [float(np.percentile(draws, 10)), float(np.percentile(draws, 90))],
                 "L1_uncalibrated": round(float(sig(a_ref + d + b3).sum()), 1), "reference_right_328": round(acc(ref3) * 328, 1),
@@ -173,42 +183,51 @@ def cmd_predict():
 
     sh = lambda y, ref: (a5(y) - a5(ref), a5(y, W5) - a5(ref, W5))
     cells = []
-    d, dB = sh(DB["vote4_restart"], base)
-    cells.append(cell328("base + cue, vote over 4 after restart", S3["ref"], d, dB, acc(DB["vote4_restart"]), acc(base)))
-    d, dB = sh(DR["vote4_restart"], rl)
-    cells.append(cell328("RL plain, vote over 4 after restart", V3["rl_plain"], d, dB, acc(DR["vote4_restart"]), acc(rl),
-                         note="the text of work-1a972a, read before filing, says an earlier hard328 RL run without restarts had 246 of 328 (result-1dedfe, not opened); the prediction is the rule's output, not adjusted"))
-    d, dB = sh(V5["shots_rl"], base)
-    cells.append(cell328("base + cue + 3 RL-written solved problems (shots_rl)", S3["ref"], d, dB, acc(V5["shots_rl"]), acc(base)))
-    d, dB = sh(V5["top8_plain"], base)
-    d_hi = a5(V5["theta0.5_cue"]) - a5(base)
-    dB = dB + (rng.random(BOOT) < 0.5) * rng.random(BOOT) * max(0.0, d_hi - d)
-    cells.append(cell328("base + top 8 directions, cue", S3["ref"], d, dB, acc(V5["top8_plain"]), acc(base),
-                         note="shift of top8_plain (no cue cell on MATH-500); upper end widened to the theta 0.5 cue shift"))
-    dv, _ = sh(DB["vote4"], base)
-    for arm in ("V cue", "V plain"):
-        cells.append(cell328(f"vote distillation {arm}", S3["ref"], dv / 2, rng.uniform(0, dv, BOOT), None, None, "category prior, not a measured shift",
-                             "trained on MATH-500, so no MATH-500 shift; prior: half the vote-over-4 shift, between 0 and the full vote shift"))
-    for arm in ("U cue", "U plain"):
-        cells.append(cell328(f"unfiltered self-training control {arm}", S3["ref"], 0.0, rng.uniform(-0.3, 0.3, BOOT), None, None, "category prior, not a measured shift",
-                             "prior: no shift, between -0.3 and +0.3 logits"))
-    for arm in ("shots_base", "shots_code", "shots_rl"):
-        y = V5[arm]
-        m = ~np.isnan(y)
-        p = sig(a5(y) + b5[m])
-        half = 1.2816 * 1.25 * float(np.sqrt(2 * (p * (1 - p)).sum()))
-        cells.append({"cell": f"{arm}, second draw of the 3 examples", "set": "math500", "n": int(m.sum()), "status": "prediction", "note": "same ability as the first draw; predicted rate applies if the second draw masks other problems",
-                      "predicted_right": float(np.nansum(y)), "predicted_rate": round(float(np.nanmean(y)), 4),
-                      "interval80": [round(float(np.nansum(y)) - half, 1), round(float(np.nansum(y)) + half, 1)], "baseline_point": float(np.nansum(y))})
-    d, dB = sh(DB["vote4"], base)
-    aS, aSB = a5(V5["sft1_cue"]), a5(V5["sft1_cue"], W5)
-    draws = (rng.random((BOOT, 500)) < sig((aSB + dB)[:, None] + b5[None, :])).sum(1)
-    cells.append({"cell": "Think-SFT cue, vote over 4", "set": "math500", "n": 500, "status": "prediction",
-                  "note": "on file from axis.py (one_axis_vote_prediction): 471.5 +/- 7; this row: sft1_cue ability + the base vote-over-4 shift in logits",
-                  "on_file_axis": 471.5, "on_file_axis_interval": [464.5, 478.5], "shift_math500_logits": round(float(d), 3),
-                  "predicted_right": round(float(sig(aS + d + b5).sum()), 1), "interval80": [float(np.percentile(draws, 10)), float(np.percentile(draws, 90))],
-                  "baseline_point": round(float(np.nansum(V5["sft1_cue"]) + 500 * (acc(DB["vote4"]) - acc(base))), 1),
-                  "baseline_relative_error": round(500 * (1 - (1 - acc(V5["sft1_cue"])) * (1 - acc(DB["vote4"])) / (1 - acc(base))), 1)})
+    if nn == 2:
+        ids = json.loads((X.OUT / "hard328-01" / "vectors.json").read_text())["problem_indices"]
+        sub = set(json.loads(X.show(*PARTIAL))["problem_indices"])
+        idx = np.array([i in sub for i in ids])
+        d, dB = sh(DB["vote4"], base)
+        cells.append(cell328("base + cue, vote over 4, no restart (sameraslan's run, result-1dedfe)", S3["ref"], d, dB, acc(DB["vote4"]), acc(base)))
+        d, dB = sh(DR["vote4"], rl)
+        cells.append(cell328(f"RL plain, vote over 4, no restart, on the {idx.sum()} problems that finished (result-1dedfe)", V3["rl_plain"], d, dB, acc(DR["vote4"]), acc(rl), idx=idx))
+    if nn == 1:
+        d, dB = sh(DB["vote4_restart"], base)
+        cells.append(cell328("base + cue, vote over 4 after restart", S3["ref"], d, dB, acc(DB["vote4_restart"]), acc(base)))
+        d, dB = sh(DR["vote4_restart"], rl)
+        cells.append(cell328("RL plain, vote over 4 after restart", V3["rl_plain"], d, dB, acc(DR["vote4_restart"]), acc(rl),
+                             note="the text of work-1a972a, read before filing, says an earlier hard328 RL run without restarts had 246 of 328 (result-1dedfe, not opened); the prediction is the rule's output, not adjusted"))
+        d, dB = sh(V5["shots_rl"], base)
+        cells.append(cell328("base + cue + 3 RL-written solved problems (shots_rl)", S3["ref"], d, dB, acc(V5["shots_rl"]), acc(base)))
+        d, dB = sh(V5["top8_plain"], base)
+        d_hi = a5(V5["theta0.5_cue"]) - a5(base)
+        dB = dB + (rng.random(BOOT) < 0.5) * rng.random(BOOT) * max(0.0, d_hi - d)
+        cells.append(cell328("base + top 8 directions, cue", S3["ref"], d, dB, acc(V5["top8_plain"]), acc(base),
+                             note="shift of top8_plain (no cue cell on MATH-500); upper end widened to the theta 0.5 cue shift"))
+        dv, _ = sh(DB["vote4"], base)
+        for arm in ("V cue", "V plain"):
+            cells.append(cell328(f"vote distillation {arm}", S3["ref"], dv / 2, rng.uniform(0, dv, BOOT), None, None, "category prior, not a measured shift",
+                                 "trained on MATH-500, so no MATH-500 shift; prior: half the vote-over-4 shift, between 0 and the full vote shift"))
+        for arm in ("U cue", "U plain"):
+            cells.append(cell328(f"unfiltered self-training control {arm}", S3["ref"], 0.0, rng.uniform(-0.3, 0.3, BOOT), None, None, "category prior, not a measured shift",
+                                 "prior: no shift, between -0.3 and +0.3 logits"))
+        for arm in ("shots_base", "shots_code", "shots_rl"):
+            y = V5[arm]
+            m = ~np.isnan(y)
+            p = sig(a5(y) + b5[m])
+            half = 1.2816 * 1.25 * float(np.sqrt(2 * (p * (1 - p)).sum()))
+            cells.append({"cell": f"{arm}, second draw of the 3 examples", "set": "math500", "n": int(m.sum()), "status": "prediction", "note": "same ability as the first draw; predicted rate applies if the second draw masks other problems",
+                          "predicted_right": float(np.nansum(y)), "predicted_rate": round(float(np.nanmean(y)), 4),
+                          "interval80": [round(float(np.nansum(y)) - half, 1), round(float(np.nansum(y)) + half, 1)], "baseline_point": float(np.nansum(y))})
+        d, dB = sh(DB["vote4"], base)
+        aS, aSB = a5(V5["sft1_cue"]), a5(V5["sft1_cue"], W5)
+        draws = (rng.random((BOOT, 500)) < sig((aSB + dB)[:, None] + b5[None, :])).sum(1)
+        cells.append({"cell": "Think-SFT cue, vote over 4", "set": "math500", "n": 500, "status": "prediction",
+                      "note": "on file from axis.py (one_axis_vote_prediction): 471.5 +/- 7; this row: sft1_cue ability + the base vote-over-4 shift in logits",
+                      "on_file_axis": 471.5, "on_file_axis_interval": [464.5, 478.5], "shift_math500_logits": round(float(d), 3),
+                      "predicted_right": round(float(sig(aS + d + b5).sum()), 1), "interval80": [float(np.percentile(draws, 10)), float(np.percentile(draws, 90))],
+                      "baseline_point": round(float(np.nansum(V5["sft1_cue"]) + 500 * (acc(DB["vote4"]) - acc(base))), 1),
+                      "baseline_relative_error": round(500 * (1 - (1 - acc(V5["sft1_cue"])) * (1 - acc(DB["vote4"])) / (1 - acc(base))), 1)})
     out = {"filed_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
            "code_commit_parent": subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip(),
            "commit": "the commit that adds this file (see run.json)", "rule": "Lc: sum_i sigmoid(a_ref328 + c d + b_i); specs/SPEC_rate.md",
@@ -218,11 +237,86 @@ def cmd_predict():
     path.write_text(json.dumps(out, indent=1))
     print(json.dumps(out, indent=1))
 
+SIGNAL = {"base_cue": "none", "shots_base": "own samples (in context)", "shots_rl": "RL reward (RL text in context)", "shots_code": "RL reward (RL text in context)",
+          "random_cue": "none (control)", "rand8_plain": "none (control)", "sft1_cue": "SFT data", "sft1_plain": "SFT data"}      # every other family: RL reward (weights)
+
+
+def tokens(name, arm):
+    """Mean generated tokens per problem of a single-sample arm, from the metrics.json of its run folder (at its commit)."""
+    kind, src, folder, ref = X.SETS[name][arm][:4]
+    if kind == "rows":
+        rows = [json.loads(l) for l in (X.STUDY.parents[1] / src[0]).read_text().splitlines()]
+        t = [r["n_new"] for r in rows if r["attempt"] == 0 and r["sample"] == src[1]]
+        return sum(t) / len(t)
+    m = json.loads(X.show(X.REF.get(ref), X.RES + folder + "/metrics.json"))
+    return m["counts"]["mean_generated_tokens"] if "counts" in m else m["mean_generated_tokens"]
+
+
+def cmd_table():
+    V5, ind5 = load("math500")
+    man = json.loads((X.OUT / "math500-01" / "manifest.json").read_text())["arms"]
+    b5 = difficulties([V5[n] for n in ind5], LAM["math500"])
+    W = boot(500)
+    fam = {"base_cue": (np.vstack([V5[n] for n in BASE4]), *day1_3("base_cue"), "base_cue"), "rl_plain": (np.vstack([V5[n] for n in RL4]), *day1_3("rl"), "rl")}
+    s0, s0B = ability(V5["base_cue_s0"], b5), ability(V5["base_cue_s0"], b5, W)
+    rows = []
+
+    def add(arm, what, y, tok, signal, family=None, test_time=False):
+        a, aB = ability(y, b5), ability(y, b5, W)
+        row = {"arm": arm, "what": what, "right": round(acc(y) * int((~np.isnan(np.atleast_2d(y)[0])).sum()), 1), "n": int((~np.isnan(np.atleast_2d(y)[0])).sum()),
+               "ability": round(a, 3), "shift_logits": round(a - s0, 3), "interval95": [round(float(x), 3) for x in np.percentile(aB - s0B, [2.5, 97.5])],
+               "tokens_per_problem": round(tok), "signal": signal}
+        if test_time:
+            pool, _, tk, _ = fam[family]
+            d, dB, extra = a - ability(pool, b5), aB - ability(pool, b5, W), tok - tk["all_samples"]
+            row |= {"shift_vs_own_single_logits": round(d, 3), "shift_vs_own_single_interval95": [round(float(x), 3) for x in np.percentile(dB, [2.5, 97.5])],
+                    "extra_tokens": round(extra), "logits_per_1000_extra_tokens": round(1000 * d / extra, 4),
+                    "points_vs_own_single": round(100 * (acc(y) - acc(pool)), 2)}
+        rows.append(row)
+
+    for n in ind5:
+        add(n, man[n]["what"], V5[n], tokens("math500", n), SIGNAL.get(man[n]["family"], "RL reward (weights)"))
+    for f, (pool, D, tk, model) in fam.items():
+        label, sg = ("base + cue", "none") if f == "base_cue" else ("RL plain", "RL reward (weights)")
+        ro = json.loads((X.STUDY / "results" / "day1_3" / f"math500_{model}-01" / "readout.json").read_text())["rows"]
+        add(f"{f}_restart", f"{label}, restart up to 2", D["restart"], ro["restart"]["tokens_per_problem"], sg, f, True)
+        for k in (2, 3, 4):
+            add(f"{f}_vote{k}", f"{label}, vote over {k} samples" + ("" if k == 4 else f" (mean of the {len(D[f'vote{k}'])} subsets)"), D[f"vote{k}"], k * tk["all_samples"], sg, f, True)
+        add(f"{f}_vote4_restart", f"{label}, vote over 4 after restart", D["vote4_restart"], ro["vote_after_restart"]["tokens_per_problem"], sg, f, True)
+    add("base_cue_tie_short", "base + cue, vote over 4, ties to the shortest finished answer", V5["base_tie_short"], 4 * fam["base_cue"][2]["all_samples"], "none", "base_cue", True)
+    rows.sort(key=lambda r: -r["shift_logits"])
+    R = {r["arm"]: r for r in rows}
+    floor = {f: round(float(np.std([R[n]["ability"] for n in names], ddof=1)), 3) for f, names in (("base_cue", BASE4), ("rl_plain", RL4))}
+    a0, a1 = ability(fam["base_cue"][0], b5), R["rl_cue"]["ability"]
+    theta = {t: R[f"theta{t}_cue"]["ability"] for t in (0.25, 0.5, 0.75, 1.25, 1.5)} | {0.0: a0, 1.0: a1}
+    sd1 = float(np.mean([np.std(ability(V5[n], b5, W)) for n in ("theta0.25_cue", "theta0.5_cue", "theta0.75_cue")]))
+    readout = {"reference": "base + cue sample 0 (405 of 500)", "ability_base_cue_s0": round(s0, 3), "ability_base_cue_pooled_4": round(a0, 3),
+               "noise_floor_sd_of_4_same_config_samples_logits": floor, "bootstrap_sd_of_one_single_sample_ability_logits": round(sd1, 3),
+               "theta_sweep_cue": {str(t): {"ability": round(a, 3), "shift_vs_pooled_base": round(a - a0, 3), "linear_0_to_1": round(t * (a1 - a0), 3),
+                                            "minus_linear": round(a - a0 - t * (a1 - a0), 3)} for t, a in sorted(theta.items())},
+               "random_difference_control_shift_vs_pooled_base": round(R["random_cue"]["ability"] - a0, 3),
+               "H3_theta_0.5_off_the_line_in_noise_sd": round((theta[0.5] - a0 - 0.5 * (a1 - a0)) / floor["base_cue"], 1)}
+    md = ["| Method | Right | Shift, logits [95 %] | Tokens per problem | Signal | Logits per 1,000 extra tokens |", "|---|---|---|---|---|---|"]
+    for r in rows:
+        md.append(f"| {r['what']} | {r['right']:g} of {r['n']} | {r['shift_logits']:+.2f} [{r['interval95'][0]:+.2f}, {r['interval95'][1]:+.2f}] | {r['tokens_per_problem']:,} | {r['signal']} | "
+                  + (f"{r['logits_per_1000_extra_tokens']:.3f} ({r['shift_vs_own_single_logits']:+.2f} over its own single sample, {r['extra_tokens']:,} extra)" if "extra_tokens" in r else "") + " |")
+    out = OUT / "math500-01"
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "table.json").write_text(json.dumps(rows, indent=1))
+    (out / "table.md").write_text("\n".join(md) + "\n")
+    (out / "readout.json").write_text(json.dumps(readout, indent=1))
+    print("\n".join(md))
+    print(json.dumps(readout, indent=1))
+
+
+def cmd_score():
+    raise SystemExit('no held-out cell scored yet')
+
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["predict", "transfer", "table", "score"])
-    {"predict": cmd_predict, "transfer": cmd_transfer}[ap.parse_args().cmd]()
+    ap.add_argument("cmd", choices=["predict", "predict2", "transfer", "table", "score"])
+    {"predict": lambda: cmd_predict(1), "predict2": lambda: cmd_predict(2), "transfer": cmd_transfer, "table": cmd_table, "score": cmd_score}[ap.parse_args().cmd]()
 
 
 if __name__ == "__main__":
