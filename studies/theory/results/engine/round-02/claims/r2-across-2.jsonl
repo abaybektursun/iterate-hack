@@ -1,0 +1,15 @@
+{"id": "t37", "value": 409, "low": 397, "high": 421, "why": "A random direction of matched norm has about a thousandth of the RL delta's curvature, so its KL to base is negligible and the cell scores like the cued base's 410."}
+{"id": "t38", "value": 25, "low": 16, "high": 34, "why": "With negligible KL the random cell is just a fresh sample of the cued base, which at T 1.0 gets about a quarter to a third of its 90 previously wrong problems right by resampling alone."}
+{"id": "t47", "value": 3950, "low": 3650, "high": 4250, "why": "Negligible KL means the base's length distribution is unchanged (cued base 3,933 tokens per problem)."}
+{"id": "t32", "value": 440, "low": 428, "high": 452, "why": "In the first-order regime the remaining KL to RL is (1-a)^2 of the base's, so a = 0.25 already closes 44 % of it, which on the transplant arms' concave closure-to-accuracy map gives about 60 % of the 53-point cued gap."}
+{"id": "t33", "value": 452, "low": 443, "high": 461, "why": "a = 0.5 closes 75 % of the KL, like the whole-MLP arm, which recovered about 83 % of the gain: 410 + 0.83 * 53."}
+{"id": "t43", "value": 460, "low": 452, "high": 468, "why": "a = 0.75 closes 94 % of the KL, so nearly the whole gain."}
+{"id": "t34", "value": 458, "low": 444, "high": 470, "why": "The RL delta is small and coherent, so it stays first-order past a = 1 and holds at RL level instead of collapsing like the large bytegraft SFT delta."}
+{"id": "t45", "value": 4, "low": 0, "high": 15, "why": "In the linear regime a = 1.5 does not break generation, so word-salad tails stay rare."}
+{"id": "t40", "value": 360, "low": 330, "high": 390, "why": "Plain prompt, a = 0.25 closes 44 % of the KL, which maps to about 60 % of the 239-point gap from the plain base's 224 to 463."}
+{"id": "t41", "value": 415, "low": 395, "high": 435, "why": "Plain prompt, a = 0.5 closes 75 % of the KL, which maps to about 83 % of the 239-point gap."}
+{"id": "t39", "value": 52, "low": 42, "high": 62, "why": "At about 452 right while keeping about 400 of the base's 410, the a = 0.5 cell fixes about 52 of the base's 90 wrong problems (RL fixes 65)."}
+{"id": "t36", "value": 412, "low": 393, "high": 428, "why": "The Code-RL sign pattern agrees with Math-RL's on only 50.8 % of shared entries, so its function is orthogonal on math and adds little to the cued base."}
+{"id": "t42", "value": 245, "low": 200, "high": 295, "why": "The same orthogonal sign pattern leaves the plain base near its 224 on MATH-500."}
+{"id": "t61", "value": 1.0, "low": 0.2, "high": 4.0, "why": "A 0.13 % neuron subset holds only its small share of the coherent sign pattern, so it closes about 1 % of the KL."}
+{"id": "t62", "value": 1.2, "low": 0.2, "high": 4.0, "why": "Same subset on RL text: only its small share of the pattern."}

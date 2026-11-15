@@ -1,0 +1,951 @@
+{
+ "plumbing": {
+  "base": 0.0,
+  "rl": 0.0,
+  "pass": true
+ },
+ "demo": {
+  "prompt": "Fact: The currency used in the country shaped like a boot is",
+  "tokens": [
+   "Fact",
+   ":",
+   " The",
+   " currency",
+   " used",
+   " in",
+   " the",
+   " country",
+   " shaped",
+   " like",
+   " a",
+   " boot",
+   " is"
+  ],
+  "readout": {
+   "base_pub_L12": [
+    [
+     " America",
+     " aka",
+     " heel",
+     " ankle",
+     " symbol",
+     " and",
+     " toe",
+     " or"
+    ],
+    [
+     " the",
+     " in",
+     " and",
+     " that",
+     " of",
+     " a",
+     " is",
+     " not"
+    ]
+   ],
+   "base_pub_L15": [
+    [
+     " famously",
+     "-shaped",
+     " heel",
+     " ankle",
+     " aka",
+     " America",
+     " kicked",
+     " kicking"
+    ],
+    [
+     " called",
+     " known",
+     " named",
+     " is",
+     " The",
+     " which",
+     " that",
+     " the"
+    ]
+   ],
+   "base_pub_L18": [
+    [
+     " heel",
+     " boots",
+     "-shaped",
+     " boot",
+     " shaped",
+     " Boot",
+     " kicking",
+     " shoe"
+    ],
+    [
+     " called",
+     " known",
+     " currency",
+     " named",
+     " Euros",
+     " internationally",
+     " is",
+     " Currency"
+    ]
+   ],
+   "base_pub_L21": [
+    [
+     " heel",
+     "-shaped",
+     " boots",
+     " Italy",
+     " shaped",
+     " toe",
+     " sandals",
+     " Boot"
+    ],
+    [
+     " currency",
+     " Euros",
+     " Currency",
+     " currencies",
+     " euros",
+     " coin",
+     " coins",
+     " euro"
+    ]
+   ],
+   "base_pub_L24": [
+    [
+     " is",
+     " heel",
+     " Italy",
+     "-shaped",
+     " toe",
+     " was",
+     " footwear",
+     " shoe"
+    ],
+    [
+     " Euros",
+     " euro",
+     " currency",
+     " euros",
+     " dollar",
+     " currencies",
+     " Euro",
+     " EUR"
+    ]
+   ],
+   "base_pub_L27": [
+    [
+     " is",
+     " was",
+     " known",
+     "-shaped",
+     " has",
+     " isn",
+     " are",
+     " varies"
+    ],
+    [
+     " Euros",
+     " euros",
+     " euro",
+     " Euro",
+     " EUR",
+     " called",
+     " currency",
+     " dollar"
+    ]
+   ],
+   "base_pub_L30": [
+    [
+     " is",
+     " was",
+     " known",
+     " has",
+     " and",
+     " called",
+     " isn",
+     " does"
+    ],
+    [
+     " called",
+     " known",
+     " the",
+     " Euros",
+     " Euro",
+     " euros",
+     " euro",
+     " not"
+    ]
+   ],
+   "base_logit_L12": [
+    [
+     "-shaped",
+     " shaped",
+     "ardo",
+     " mobil",
+     " rampant",
+     " heel",
+     "ipel",
+     " moot"
+    ],
+    [
+     "nex",
+     "nect",
+     " ironic",
+     " collectors",
+     ".That",
+     " likely",
+     "/framework",
+     "obel"
+    ]
+   ],
+   "base_logit_L15": [
+    [
+     "-shaped",
+     " shaped",
+     "pur",
+     " heel",
+     " Luigi",
+     " Named",
+     " pur",
+     "icular"
+    ],
+    [
+     " called",
+     "obel",
+     "abella",
+     " named",
+     " not",
+     "uze",
+     "nex",
+     " singular"
+    ]
+   ],
+   "base_logit_L18": [
+    [
+     "-shaped",
+     " shaped",
+     " shape",
+     " peninsula",
+     " heel",
+     " republic",
+     "iful",
+     "str"
+    ],
+    [
+     " called",
+     " currency",
+     " currencies",
+     "called",
+     " widely",
+     " actually",
+     " indeed",
+     " not"
+    ]
+   ],
+   "base_logit_L21": [
+    [
+     "-shaped",
+     " shaped",
+     "camp",
+     " heel",
+     " peninsula",
+     "iful",
+     " shape",
+     "str"
+    ],
+    [
+     " currency",
+     " called",
+     " currencies",
+     " euros",
+     " monetary",
+     " euro",
+     " Currency",
+     "currency"
+    ]
+   ],
+   "base_logit_L24": [
+    [
+     "-shaped",
+     " heel",
+     " peninsula",
+     "camp",
+     " is",
+     "str",
+     " known",
+     "iful"
+    ],
+    [
+     " called",
+     " euros",
+     " euro",
+     " currency",
+     "called",
+     " Euros",
+     " Euro",
+     " currencies"
+    ]
+   ],
+   "base_logit_L27": [
+    [
+     " is",
+     "-shaped",
+     " peninsula",
+     " known",
+     " was",
+     " varies",
+     " are",
+     "iful"
+    ],
+    [
+     " called",
+     " euros",
+     " euro",
+     " Euros",
+     " Euro",
+     " known",
+     " Pound",
+     " dollar"
+    ]
+   ],
+   "base_logit_L30": [
+    [
+     " is",
+     " and",
+     " was",
+     " are",
+     " known",
+     " has",
+     " with",
+     " in"
+    ],
+    [
+     " the",
+     " called",
+     " known",
+     " not",
+     " actually",
+     " Euro",
+     " euros",
+     " named"
+    ]
+   ],
+   "base_mh_L12": [
+    [
+     " and",
+     " or",
+     " America",
+     " symbol",
+     " so",
+     " aka",
+     " in",
+     " even"
+    ],
+    [
+     " the",
+     " in",
+     " and",
+     " that",
+     " a",
+     " of",
+     " as",
+     " is"
+    ]
+   ],
+   "base_mh_L15": [
+    [
+     " famously",
+     " aka",
+     " heel",
+     "-shaped",
+     " ankle",
+     " kicked",
+     " America",
+     " kicking"
+    ],
+    [
+     " called",
+     " the",
+     " which",
+     " is",
+     " The",
+     " that",
+     " known",
+     " in"
+    ]
+   ],
+   "base_mh_L18": [
+    [
+     " heel",
+     "-shaped",
+     " shaped",
+     " boots",
+     " boot",
+     " shoe",
+     " kicking",
+     " famously"
+    ],
+    [
+     " called",
+     " known",
+     " named",
+     " currency",
+     " which",
+     " is",
+     " one",
+     " commonly"
+    ]
+   ],
+   "base_mh_L21": [
+    [
+     " heel",
+     "-shaped",
+     " shaped",
+     " toe",
+     " Italy",
+     " boots",
+     " footwear",
+     " boot"
+    ],
+    [
+     " currency",
+     " Euros",
+     " Currency",
+     " currencies",
+     " euros",
+     " called",
+     " euro",
+     " coin"
+    ]
+   ],
+   "base_mh_L24": [
+    [
+     " is",
+     " was",
+     "-shaped",
+     " heel",
+     " Italy",
+     " toe",
+     " has",
+     " shaped"
+    ],
+    [
+     " Euros",
+     " currency",
+     " euro",
+     " euros",
+     " dollar",
+     " Euro",
+     " currencies",
+     " called"
+    ]
+   ],
+   "base_mh_L27": [
+    [
+     " is",
+     " was",
+     " known",
+     "-shaped",
+     " has",
+     " are",
+     " isn",
+     " called"
+    ],
+    [
+     " Euros",
+     " euro",
+     " euros",
+     " Euro",
+     " called",
+     " EUR",
+     " currency",
+     " dollar"
+    ]
+   ],
+   "base_mh_L30": [
+    [
+     " is",
+     " was",
+     " known",
+     " has",
+     " and",
+     " called",
+     " isn",
+     " does"
+    ],
+    [
+     " called",
+     " known",
+     " the",
+     " Euros",
+     " Euro",
+     " euros",
+     " euro",
+     " not"
+    ]
+   ],
+   "rl_pub_L12": [
+    [
+     " America",
+     " heel",
+     " aka",
+     " ankle",
+     " symbol",
+     " and",
+     " toe",
+     " or"
+    ],
+    [
+     " in",
+     " the",
+     " and",
+     " that",
+     " of",
+     " a",
+     " is",
+     " not"
+    ]
+   ],
+   "rl_pub_L15": [
+    [
+     " famously",
+     "-shaped",
+     " heel",
+     " ankle",
+     " aka",
+     " America",
+     " kicked",
+     " kicking"
+    ],
+    [
+     " called",
+     " known",
+     " named",
+     " is",
+     " which",
+     " The",
+     " that",
+     " the"
+    ]
+   ],
+   "rl_pub_L18": [
+    [
+     " heel",
+     " boots",
+     "-shaped",
+     " boot",
+     " shaped",
+     " Boot",
+     " shoe",
+     " kicking"
+    ],
+    [
+     " called",
+     " currency",
+     " known",
+     " named",
+     " Euros",
+     " internationally",
+     " Currency",
+     " is"
+    ]
+   ],
+   "rl_pub_L21": [
+    [
+     " heel",
+     "-shaped",
+     " Italy",
+     " boots",
+     " sandals",
+     " shaped",
+     " toe",
+     " Boot"
+    ],
+    [
+     " currency",
+     " Euros",
+     " Currency",
+     " currencies",
+     " euros",
+     " euro",
+     " coin",
+     " coins"
+    ]
+   ],
+   "rl_pub_L24": [
+    [
+     " is",
+     " heel",
+     " Italy",
+     "-shaped",
+     " toe",
+     " was",
+     " footwear",
+     " sandals"
+    ],
+    [
+     " Euros",
+     " euros",
+     " euro",
+     " currency",
+     " dollar",
+     " Euro",
+     " currencies",
+     " EUR"
+    ]
+   ],
+   "rl_pub_L27": [
+    [
+     " is",
+     " was",
+     " known",
+     "-shaped",
+     " has",
+     " isn",
+     " are",
+     " varies"
+    ],
+    [
+     " Euros",
+     " euros",
+     " euro",
+     " Euro",
+     " EUR",
+     " called",
+     " dollar",
+     " currency"
+    ]
+   ],
+   "rl_pub_L30": [
+    [
+     " is",
+     " was",
+     " known",
+     " has",
+     " and",
+     " called",
+     " isn",
+     " are"
+    ],
+    [
+     " called",
+     " known",
+     " the",
+     " Euros",
+     " Euro",
+     " euros",
+     " euro",
+     " not"
+    ]
+   ],
+   "rl_logit_L12": [
+    [
+     "-shaped",
+     " shaped",
+     "ardo",
+     " mobil",
+     " rampant",
+     " heel",
+     "ipel",
+     " sco"
+    ],
+    [
+     "nex",
+     "nect",
+     " ironic",
+     " collectors",
+     ".That",
+     "/framework",
+     "obel",
+     " likely"
+    ]
+   ],
+   "rl_logit_L15": [
+    [
+     "-shaped",
+     " shaped",
+     "pur",
+     " heel",
+     " Luigi",
+     " Named",
+     " pur",
+     "icular"
+    ],
+    [
+     " called",
+     "obel",
+     "abella",
+     " named",
+     " not",
+     "uze",
+     "nex",
+     " ironically"
+    ]
+   ],
+   "rl_logit_L18": [
+    [
+     "-shaped",
+     " shaped",
+     " shape",
+     " peninsula",
+     " heel",
+     " republic",
+     "iful",
+     "str"
+    ],
+    [
+     " called",
+     " currency",
+     " currencies",
+     " widely",
+     "called",
+     " actually",
+     " indeed",
+     " not"
+    ]
+   ],
+   "rl_logit_L21": [
+    [
+     "-shaped",
+     "camp",
+     " shaped",
+     " heel",
+     " peninsula",
+     "iful",
+     "str",
+     " shape"
+    ],
+    [
+     " currency",
+     " called",
+     " currencies",
+     " euros",
+     " euro",
+     " monetary",
+     " Currency",
+     "currency"
+    ]
+   ],
+   "rl_logit_L24": [
+    [
+     "-shaped",
+     " heel",
+     " peninsula",
+     "camp",
+     " is",
+     "str",
+     " known",
+     "iful"
+    ],
+    [
+     " called",
+     " euros",
+     " euro",
+     " currency",
+     " Euros",
+     " Euro",
+     "called",
+     " currencies"
+    ]
+   ],
+   "rl_logit_L27": [
+    [
+     " is",
+     "-shaped",
+     " peninsula",
+     " known",
+     " varies",
+     " was",
+     "iful",
+     " are"
+    ],
+    [
+     " euros",
+     " called",
+     " euro",
+     " Euros",
+     " Euro",
+     " known",
+     " Pound",
+     " dollar"
+    ]
+   ],
+   "rl_logit_L30": [
+    [
+     " is",
+     " and",
+     " was",
+     " are",
+     " known",
+     " has",
+     " with",
+     " in"
+    ],
+    [
+     " the",
+     " called",
+     " known",
+     " not",
+     " actually",
+     " Euro",
+     " euros",
+     " named"
+    ]
+   ],
+   "rl_mh_L12": [
+    [
+     " and",
+     " or",
+     " in",
+     " symbol",
+     " to",
+     " so",
+     " now",
+     " even"
+    ],
+    [
+     " in",
+     " and",
+     " the",
+     " a",
+     " as",
+     " that",
+     " at",
+     " of"
+    ]
+   ],
+   "rl_mh_L15": [
+    [
+     " famously",
+     " aka",
+     " ankle",
+     " moo",
+     " heel",
+     " America",
+     " fart",
+     " licking"
+    ],
+    [
+     " called",
+     " The",
+     " the",
+     " in",
+     " which",
+     " that",
+     " named",
+     " is"
+    ]
+   ],
+   "rl_mh_L18": [
+    [
+     " heel",
+     "-shaped",
+     " boot",
+     " moo",
+     " boots",
+     " kicking",
+     " shaped",
+     " BOOT"
+    ],
+    [
+     " called",
+     " currency",
+     " named",
+     " known",
+     " is",
+     " commonly",
+     " which",
+     " symbol"
+    ]
+   ],
+   "rl_mh_L21": [
+    [
+     " heel",
+     "-shaped",
+     " toe",
+     " shaped",
+     " sandals",
+     " Italy",
+     " heels",
+     " Toe"
+    ],
+    [
+     " currency",
+     " Euros",
+     " Currency",
+     " currencies",
+     " euros",
+     " euro",
+     "currency",
+     " coins"
+    ]
+   ],
+   "rl_mh_L24": [
+    [
+     "-shaped",
+     " heel",
+     " is",
+     " toe",
+     " Italy",
+     " footwear",
+     " peninsula",
+     " varies"
+    ],
+    [
+     " Euros",
+     " euro",
+     " euros",
+     " currency",
+     " dollar",
+     " Euro",
+     " currencies",
+     " EUR"
+    ]
+   ],
+   "rl_mh_L27": [
+    [
+     " is",
+     " known",
+     " was",
+     "-shaped",
+     " peninsula",
+     " has",
+     " varies",
+     " called"
+    ],
+    [
+     " Euros",
+     " euros",
+     " euro",
+     " Euro",
+     " EUR",
+     " currency",
+     " called",
+     " EURO"
+    ]
+   ],
+   "rl_mh_L30": [
+    [
+     " is",
+     " was",
+     " and",
+     " has",
+     " known",
+     " called",
+     " in",
+     " are"
+    ],
+    [
+     " called",
+     " known",
+     " the",
+     " Euros",
+     " Euro",
+     " euros",
+     " euro",
+     " not"
+    ]
+   ]
+  }
+ }
+}
