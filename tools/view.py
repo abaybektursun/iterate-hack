@@ -8,22 +8,23 @@
 
 Opens http://127.0.0.1:8765 in the browser (only when started from a terminal). The page shows one sentence on the
 state of the board (and what changed since the reader's last visit, kept in localStorage), one hill-climbing chart per
-benchmark with 95% intervals, then open work (longest idle first, red after 60 minutes, with its last comment), results
-with their scores and the messages on the channel `all`; below them one lane per person with every post and message of
-the last --hours, then ideas, knowledge and skills, and recently closed work. It reads /data every 10 s and rewrites
-only what changed. A click on an item opens its full text, scores, votes, comments and message thread in a side panel
-whose address is /#<item id>; the filters are in the address too (/?who=<name>&q=<text>&idle=1). Keys: / filter, j and
-k move, 1 2 3 jump to a column, Enter opens, Esc closes, ? lists the keys. A click on a person shows only that person.
+benchmark with 95% intervals and its record steps listed under it, each with its finding, then open work (longest idle
+first, red after 60 minutes, with its last comment), results with their scores and the messages on the channel `all`;
+below them one lane per person with every post and message of the last --hours, then ideas, knowledge and skills, and
+recently closed work. It reads /data every 10 s and rewrites only what changed. A click on an item opens its full
+text, scores, votes, comments and message thread in a side panel whose address is /#<item id>; the filters are in the
+address too (/?who=<name>&q=<text>&idle=1). Keys: / filter, j and k move, 1 2 3 jump to a column, Enter opens, Esc
+closes, ? lists the keys. A click on a person shows only that person.
 
   GET /architecture    how the harness works: one interactive picture (architecture.py), fed by the same /data
   GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
   GET /data            the newest 60 items of each kind and list, the messages on `all` of the last --hours, every score
-                       (board.py score), which the hill-climbing charts draw, and the newest comment of each open work
-                       item (JSON)
+                       (board.py score), which the hill-climbing charts draw, the first line of each scored result's
+                       finding (climb.finding) and the newest comment of each open work item (JSON)
   GET /data/<item id>  one item with its votes, comments and thread (JSON); 404 for an unknown id
 
-It reads the same DynamoDB table as board.py and msg.py, with Query only, and never writes to it or moves an agent's
-message position. A failed read answers 500 with the error text; the page keeps the last data, says "Offline" in its
+It reads the same DynamoDB table as board.py and msg.py, with Query and GetItem only, and never writes to it or moves an
+agent's message position. A failed read answers 500 with the error text; the page keeps the last data, says "Offline" in its
 status and logs the error to the browser console.
 """
 import glob
@@ -41,6 +42,7 @@ from boto3.dynamodb.conditions import Key
 
 import architecture
 import board
+import climb
 import team
 
 PORT = int(sys.argv[sys.argv.index("--port") + 1]) if "--port" in sys.argv else 8765
@@ -61,6 +63,10 @@ def last_comment(item_id):
     return {k: found[0][k] for k in ("who", "text", "at")}
 
 
+def finding(item_id):  # not BatchGetItem: the team key and the Lambda role (infra/monitor) allow only Query and GetItem
+    return climb.finding(team.table().get_item(Key={"pk": f"item#{item_id}", "sk": "item"})["Item"]["text"])
+
+
 def snapshot():
     with ThreadPoolExecutor(len(LISTS)) as pool:  # one query per list, at the same time
         items = [item for page in pool.map(newest, LISTS) for item in page]
@@ -70,8 +76,12 @@ def snapshot():
     commented = [i["id"] for i in items if i["listed"] == "work" and i.get("n_comments")]
     with ThreadPoolExecutor(max(1, len(commented))) as pool:  # the newest comment of each open work item, one query each
         last = dict(zip(commented, pool.map(last_comment, commented)))
+    scored = list(dict.fromkeys(s["result"] for s in scores))
+    assert len(scored) < 100, f"{len(scored)} scored results: one GetItem each on every read of /data is too many"
+    with ThreadPoolExecutor(max(1, len(scored))) as pool:  # the first line of each scored result's finding, one GetItem each
+        found = dict(zip(scored, pool.map(finding, scored)))
     return {"now_ns": time.time_ns(), "hours": HOURS, "test": team.TEST, "items": items, "messages": messages, "scores": scores,
-            "last_comments": last,
+            "last_comments": last, "finding": found,
             "findings": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in FINDINGS.items() if not getattr(m, "UNLISTED", False)]}
 
 
@@ -244,6 +254,13 @@ kbd {
 .hp a:hover .x, .hp a:focus-visible .x { stroke: var(--ink); }
 .hp text.gain { fill: var(--ink); font-weight: 600; }
 .hp text.quiet { fill: var(--faint); }
+.steps { margin-top: 12px; font-size: 13px; }
+.steps a { display: grid; grid-template-columns: 3.4em minmax(0, 1fr); gap: 1px 12px; padding: 6px 0; border-top: 1px solid var(--rule); color: var(--mute); }
+.steps a > * { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.steps b { grid-row: span 2; color: var(--ink); font-weight: 600; }
+.steps .fin { color: var(--ink); }
+.steps .noise, .steps .noise b, .steps .noise .fin { color: var(--faint); }
+.steps a:hover .fin { text-decoration: underline 1px; text-underline-offset: 3px; }
 .hkey { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: -8px; font-size: 12.5px; color: var(--mute); }
 .hkey span { display: inline-flex; align-items: center; gap: 7px; }
 .hkey svg { overflow: visible; }
@@ -747,9 +764,18 @@ function hill(scores) {
       (rl ? `<div><p class="togo">${gap > 0 ? `<b class="num">${f1(gap)}</b> points below RL` : "<b>0</b> points below RL"}</p>` +
             `<p class="num">95% interval ${f1(ci[0])} to ${f1(ci[1])}</p><p>RL: ${esc(shortConfig(rl.config, 60))}</p></div>`
           : `<div><p>RL not measured on ${esc(b.name)}</p></div>`) +
-      `</div><div class="hp-chart" data-bench="${esc(b.name)}"></div></div></section>`;
+      `</div><div class="hp-chart" data-bench="${esc(b.name)}"></div></div>${steps(b)}</section>`;
   }).join("") + (bs.length ? KEY : "") || `<p class="empty">No scores yet. Attach one to a result: <code>board.py score &lt;result id&gt; base MATH-500 410/500 "cue, T 1.0"</code></p>`);
   charts();
+}
+
+function steps(b) {  // the chart's record steps (q.rec, as in chart), newest first, each with the first line of its finding
+  return `<div class="steps">` + b.pts.filter(q => q.rec).reverse().map(q => {
+    const fin = S.data.finding[q.s.result] ?? "", noise = q.prev && !q.clears;
+    return `<a href="#${esc(q.s.result)}"${noise ? ' class="noise"' : ""}><b class="num">${q.prev ? "+" + f1(q.p - q.prev.p) : "first"}</b>` +
+      `<span class="fin" title="${esc(fin)}">${esc(fin)}</span><span class="num" title="${esc(q.s.config)}">` +
+      `${q.prev ? f1(q.prev.p) + " → " : ""}${f1(q.p)} %${noise ? ", within noise" : ""}, ${esc(q.s.config)}</span></a>`;
+  }).join("") + `</div>`;
 }
 
 function charts() {
