@@ -1,0 +1,118 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_critique.md",
+ "grader": "v3",
+ "cells": {
+  "base": {
+   "n": 500,
+   "draft_right_v3": 410,
+   "revised_right_v3": 410,
+   "n_revised": 473,
+   "draft_cap_hits_not_revised": 27,
+   "right_to_wrong": [
+    14,
+    156,
+    218,
+    274,
+    402,
+    418,
+    457
+   ],
+   "wrong_to_right": [
+    135,
+    148,
+    165,
+    338,
+    354,
+    372,
+    447
+   ],
+   "answer_changed": 18,
+   "revision_cap_hits": 0,
+   "revision_tokens_per_revised": 375.1,
+   "draft_tokens_per_problem": 3932.0,
+   "wrong_finished_drafts": 63,
+   "stated_right_v3": 415,
+   "stated_right_to_wrong": [
+    14,
+    156
+   ],
+   "stated_wrong_to_right": [
+    135,
+    148,
+    165,
+    338,
+    354,
+    372,
+    447
+   ]
+  },
+  "rl": {
+   "n": 500,
+   "draft_right_v3": 457,
+   "revised_right_v3": 446,
+   "n_revised": 492,
+   "draft_cap_hits_not_revised": 8,
+   "right_to_wrong": [
+    39,
+    71,
+    165,
+    193,
+    218,
+    231,
+    236,
+    261,
+    291,
+    358,
+    491
+   ],
+   "wrong_to_right": [],
+   "answer_changed": 14,
+   "revision_cap_hits": 0,
+   "revision_tokens_per_revised": 230.8,
+   "draft_tokens_per_problem": 4695.5,
+   "wrong_finished_drafts": 35,
+   "stated_right_v3": 454,
+   "stated_right_to_wrong": [
+    71,
+    193,
+    236
+   ],
+   "stated_wrong_to_right": []
+  }
+ },
+ "diffs": {
+  "base revised minus draft": {
+   "points": 0.0,
+   "ci95_paired": [
+    -1.4,
+    1.6
+   ]
+  },
+  "base revised (v3-stated) minus draft": {
+   "points": 1.0,
+   "ci95_paired": [
+    0.0,
+    2.2
+   ]
+  },
+  "rl revised minus draft": {
+   "points": -2.2,
+   "ci95_paired": [
+    -3.6,
+    -1.0
+   ]
+  },
+  "rl revised (v3-stated) minus draft": {
+   "points": -0.6,
+   "ci95_paired": [
+    -1.4,
+    0.0
+   ]
+  }
+ },
+ "gap": {
+  "draft": 47,
+  "revised": 36,
+  "revised_v3_stated": 39
+ }
+}
