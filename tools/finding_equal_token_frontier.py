@@ -320,7 +320,7 @@ svg .grab { pointer-events: all; fill: transparent; cursor: ew-resize; }
 .stair.r0 { stroke: var(--blue); stroke-width: 1.2; opacity: .2; }
 .stair.r1 { stroke: var(--blue); stroke-width: 1.8; opacity: .5; }
 .level { stroke: var(--blue); stroke-width: 1.6; stroke-dasharray: 5 6; fill: none; }
-.lvl { fill: var(--blue); font-weight: 620; paint-order: stroke; stroke: var(--glass); stroke-width: 4px; stroke-linejoin: round; stroke-opacity: .8; }
+.lvl { fill: var(--blue); font-weight: 620; }
 .mk.base { fill: var(--ink); }
 .mk.rl { fill: var(--blue); }
 .mk.ring { fill: var(--sheet); stroke-width: 2.2; }
@@ -459,7 +459,7 @@ function geo() {
         mark: 7.2, hit: 17, near: 150 }
     : { w: 1000, h: 640, cx: 500, cy: 320, D: 2200, a: [20, 14, 980, 626], r: 30, deep: 40, blur: 16,
         X: [100, 672], Y: [74, 420], fs: 15, fb: 92, rx: 712, ry: { big: 186, unit: 218, ci: 264, cap: 306, name: 329, lh: 21 }, wrap: 27,
-        tick: 444, atitle: 466, ytitle: 50, sx: 62, sy: 514, sp: 8.85, rows: 5, slab: 494, cell: [1.9, 3.9], ky: [598], kx: [[62, 0], [402, 0], [652, 0]],
+        tick: 444, atitle: 466, ytitle: 50, sx: 62, sy: 514, sp: 8.85, rows: 5, slab: 494, cell: [1.9, 3.9], ky: [598], kx: [[62, 0], [392, 0], [656, 0]],
         mark: 6.4, hit: 15, near: 66 };
 }
 const V = { c1: 1, s1: 0, c2: 1, s2: 0, px: 0, py: 0, tx: 0, ty: 0 };
@@ -524,15 +524,15 @@ function build() {
     `<circle class="focus" id="focus"/>` +
     `<circle class="knob-ring" id="knob-ring" r="${g.mark * 2.3}"/><circle class="knob" id="knob" r="${g.mark * 1.1}"/>` +
     T("blab", "blab", g.fs, "middle") + T("bhint", "bhint", g.fs) + `</g>` +
-    `<g class="read">` + T("big", "big", g.fb) + T("unit", "unit", g.fs + 1, "", "points") + T("unit2", "unit", g.fs + 1, "", "versus one RL sample") + T("ci", "ci", g.fs) +
+    `<g class="read">` + T("big", "big", g.fb) + T("unit", "unit", g.fs + 1, "", "points versus one RL sample") + T("unit2", "ci", g.fs) + T("ci", "ci", g.fs) +
     T("cap", "cap", g.fs) + [0, 1, 2].map(k => T("nm" + k, "rname", g.fs + 1)).join("") + T("score", "score", g.fs) + `</g>` +
     `<g class="strip">` + T("slab", "slab-t", g.fs, "", narrow.matches ? "The 500 problems, easiest first" : "The 500 problems, easiest first, lit where the ringed rule is right") +
     `<path class="level" id="stick"/>` + T("stlab", "lvl", g.fs, "end", `One RL sample: ${one(RL1.right)} of ${N}`) +
     Array.from({ length: 13 }, (_, k) => `<path class="cell" id="c${k}" stroke-width="${k ? g.cell[1] : g.cell[0]}" opacity="${k ? (.3 + .55 * k / 12).toFixed(2) : .28}"/>`).join("") +
     `<circle class="exring" id="exring" r="${g.sp * .9}"/></g>` +
-    `<g class="key"><circle class="mk base" id="kd0" r="${g.mark * .8}"/>${T("kt0", "klab", g.fs, "", "Base + cue, one dot per rule")}` +
-    `<circle class="mk rl" id="kd1" r="${g.mark * .8}"/>${T("kt1", "klab", g.fs, "", "RL, the same rules")}` +
-    `<circle class="mk base ring" id="kd2" r="${g.mark * .72}"/>${T("kt2", "klab", g.fs, "", "Tie rule chosen after reading its misses")}</g>` +
+    `<g class="key"><circle class="mk base" id="kd0" r="${g.mark * .8}"/>${T("kt0", "klab", g.fs, "", "Base + cue, no training: one dot per rule")}` +
+    `<circle class="mk rl" id="kd1" r="${g.mark * .8}"/>${T("kt1", "klab", g.fs, "", "RL (reward training), same rules")}` +
+    `<circle class="mk base ring" id="kd2" r="${g.mark * .72}"/>${T("kt2", "klab", g.fs, "", "Tie rule chosen after its misses")}</g>` +
     `<rect class="grab" id="grab"/><g class="rules" role="group" aria-label="The 48 rules. Arrow keys move between them, Enter opens one.">` +
     R.map(r => `<circle class="hit" id="h${r.i}" data-rule="${r.key}" tabindex="${r.i === S.rove ? 0 : -1}" role="button" aria-label="${esc((r.model === "base" ? "Base + cue: " : "RL: ") + r.name)}" r="${g.hit}"/>`).join("") + "</g>";
   S.el = {};
@@ -587,7 +587,9 @@ function place(now) {
   E.sr0.setAttribute("d", line(g, stair(g, RLS, XD[1]), 2));
   E.sr1.setAttribute("d", line(g, stair(g, RLS, b), 3));
   E.level.setAttribute("d", line(g, [[X0, py(g, RL1.right)], [X1, py(g, RL1.right)]], 4));
-  at(E.lvl, P(px(g, 6000), py(g, RL1.right) + g.fs + 3, 4));  // under the line, left of the base marks near 450
+  // Where no mark is: on a wide plate under the line left of the base marks near 450, on a phone above it at the right.
+  E.lvl.setAttribute("text-anchor", narrow.matches ? "end" : "start");
+  at(E.lvl, narrow.matches ? P(px(g, 19300), py(g, RL1.right) - 7, 4) : P(px(g, 6000), py(g, RL1.right) + g.fs + 3, 4));
 
   // The marks: a rule within the budget is lit; one that leaves or enters it changes over about half a second.
   const k = still.matches ? 1 : 1 - Math.exp(-(now - (S.lastPlace || now)) / 110);
@@ -634,7 +636,8 @@ function place(now) {
       E.bar.style.display = "";
     } else E.bar.style.display = "none";
     text("big", sgn(d));
-    text("ci", r.model === "base" ? `95 % interval ${sgn(lo)} to ${sgn(hi)}` : "An RL rule: no interval computed");
+    text("unit2", r.model === "base" ? `95 % interval ${sgn(lo)} to ${sgn(hi)}` : "An RL rule: no interval computed");
+    text("ci", r.model === "base" && lo < 0 && hi > 0 ? "The interval includes 0." : "");
     text("cap", S.pick ? (r.model === "base" ? "Selected Base + cue rule" : "Selected RL rule") : "Best Base + cue rule within budget");
     const nm = wrap(r.name, g.wrap);
     [0, 1, 2].forEach(k => text("nm" + k, nm[k] || ""));

@@ -1407,7 +1407,7 @@ function draw(t, now) {
   at(E.lab, proj(g, g.bigX + 4, g.labY, 14));
   const di = D.diff[shown.bench][shown.proc ? "vote" : "single"];
   const more = n[2] - n[1];
-  text("sub0", `${B.proc && (same || e >= .5) ? Math.round(more) : more.toFixed(1)} more problems right, of ${N}`);
+  text("sub0", `That is ${B.proc && (same || e >= .5) ? Math.round(more) : more.toFixed(1)} more problems right, of ${N}`);
   text("sub1", `95 % interval ${num(di[1])} to ${num(di[2])}` + (di[1] <= 0 ? ", which includes 0" : ""));
   text("sub2", shown.proc ? "Vote over 4 samples, T 1.0" : "One sample, mean of 4 samples, T 1.0");
   E.sub1.setAttribute("opacity", fadeW.toFixed(2)); E.sub2.setAttribute("opacity", fadeW.toFixed(2));
