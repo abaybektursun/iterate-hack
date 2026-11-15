@@ -23,6 +23,11 @@ All code runs from the repository root (`python -m studies.cleanneurons.<folder>
 | `results/transplant/curve_bias-01/` | Part T3 run (constant shift per layer, always-on neurons): `metrics.json` (`bias`, arms `bias_*`, `dense*`), `edit_dense.json`, `run.json`. |
 | `results/describe/attr_top100-01/` | Part I on the 100 best Part T2 neurons: `neurons.json`, `density_readout.json`, `descriptions_test.json` (the sentences and the blind test), `run.json`. |
 | `analysis/describe_test.py` | Part I item 7: prepares the blind description test and scores it. |
+| `results/loops/real-01/`, `real-02/` | Part L runs on real looping answers (14 and 34 held-out loops): `metrics.json`, `examples.json`, the edit files `edit_<ranking><k>.json`, `run.json`. |
+| `results/describe/attr1000_loops-01/` | Part I on 1,000 loop neurons: `metrics.json`, `dose_summary.json`, `onset_summary.json`, `run.json`. |
+| `results/gen/<arm>_t06-01/`, `results/gen/readout_t06.json` | Part G: MATH-500 at T 0.6 with an edit, and the paired readout against the unedited cell. |
+| `analysis/gen_readout.py` | Part G: an edited run against the unedited run, problem by problem (points, interval, loops, tokens, examples). |
+| `tools/finding_rl_every_neuron.py`, `tools/finding_neurons_you_can_describe.py` | The site pages of Part T2 and Part I (`/finding/rl-every-neuron`, `/finding/neurons-you-can-describe`, tiles on `/findings`). |
 | `results/transplant/curve-01/` | Part T full run: `metrics.json`, `profile.json`, `examples.json`, `readout_after_cue.json`, `run.json`, edit files of four arms. |
 
 ## How to run
@@ -66,7 +71,7 @@ disappears when the named part of the base is replaced by RL's, at the "decisive
 - Hypothesis T2 holds: the MLPs close more than attention. The two overlap (69 + 50 > 100 on T1 text).
 - The lower half of the layers carries more of it than the upper half.
 - Controls passed: copying every tensor gives KL 0, the unedited arm reproduces the base exactly, every edit is undone bit for bit.
-- Limit: closure is a teacher-forced distance to RL, not accuracy. Ranking by weight change is a poor ranking; Part T2 below ranks by effect.
+- Limit: closure is a teacher-forced distance to RL and says nothing about accuracy. Ranking by weight change is a poor ranking; Part T2 below ranks by effect.
 - Example of each kind (`examples.json`): a position where RL and the base disagree strongly and `top1` barely moves it:
   after "...the class average is 84.\n\n**Answer" the written token is ":**", KL(RL || base) 2.03, with `top1` 1.95.
 
@@ -137,3 +142,75 @@ Scored on the held-out half (2,672 decisive positions after the cue), `closure_d
   the carrier.
 - Picture so far: RL = a fixed push per layer (about a quarter to a third) plus small input-dependent changes spread over almost
   every neuron (the rest). Controls passed (zero vector reproduces the base; hooks removed after each arm).
+
+### Part L: about 100 neurons hold the loops (jobs `sameraslan-1114-184558-8a70`, commit `a2ec2c9`, and `sameraslan-1114-195047-4022`, commit `e455a80`)
+
+Loops are taken from the base's own MATH-500 answers at T 0.6 / top-p 1.0 (cue, seed 1,000,000). Detector version 2 flags a
+row when 95 % of its last max(240, p) tokens repeat with a period p of 2 to 600 tokens; version 1 (period up to 120) missed 25
+of 38 cap hits whose repeated block was 124 to 588 tokens long. Half of the loops rank the neurons, by effect (`attr`: first-order
+change of the looping tokens' log-probability against normal text when the neuron is zeroed) or by activation difference
+(`act`). On the other half the answer is cut 300 tokens before the loop starts and continued for 1,600 tokens with the neurons
+zeroed. "Loss" is the relative change of the log-loss on 40 normal answers. From `metrics.json` of each run.
+
+| Neurons zeroed | Run 1: loops of 14 | Run 1: loss | Run 2: loops of 34 | Run 2: loss |
+|---|---|---|---|---|
+| none | 4 | | 19 | |
+| 100 by effect | 2 | +2.8 % | 1 | +5.0 % |
+| 1,000 by effect | 0 | +8.2 % | 0 | +8.0 % |
+| 100 by activation | 1 | +1.2 % | 5 | +1.7 % |
+| 1,000 by activation | 1 | +9.1 % | 2 | +11.6 % |
+| 100 random (two draws in run 1) | 3, 5 | +0.1 % | 19 | +0.1 % |
+| 1,000 random (two draws) | 3, 4 | +0.3 to 0.7 % | 15, 18 | +0.5 to 0.9 % |
+
+- Run 1 ranked on the 14 loops of a 414-row file (the baseline job was cut by the workspace spend limit) and only 4 of its 14
+  held-out rows loop again, so it separates little. Run 2 uses all 500 rows (68 loops, 34 + 34) and 19 of 34 loop again.
+  Its neuron sets are other files (`real-02/edit_*.json`). Job `5442` between the two read a stale 173-row copy and is not used.
+- Hypothesis L1 holds on run 2: 100 of 352,256 neurons remove 18 of 19 held-out loops, and 100 random neurons remove none.
+- Top-K activation mask (run 1, keep the K largest activations per layer): K 3,300 costs +3.2 % loss, 1,100 +26 %, 860 +37 %,
+  330 +114 %; a random 860 costs +2,461 %. At the sparsity Goodfire reports for other models this model loses a third
+  of its fit, and the mask does not remove loops (2 to 4 of 14).
+- Controls: planted loop flagged, 20 normal answers not flagged; zeroing by hook equals the weight edit (logit difference 0);
+  padding and KV-cache agree within bf16 steps (tolerances in `jobs/loop_neurons.py`).
+
+### Part I on the loop neurons: a dial for loops (job `sameraslan-1114-195041-abf7`, commit `e455a80`)
+
+The 1,000 `attr` neurons of run 1 against 1,000 layer-matched random neurons. From `results/describe/attr1000_loops-01/`.
+
+| Activations multiplied by | 0 | 0.5 | 1 | 2 |
+|---|---|---|---|---|
+| Loop neurons: loops of 14 | 1 | 1 | 3 | 8 |
+| Random neurons: loops of 14 | 3 | | 3 | 3 |
+
+- The loop rate follows the dose in both directions, and random neurons do nothing at either end (`dose_summary.json`).
+- Timing (`onset_summary.json`, 28 loops, z against normal text): the loop neurons already deviate 200 to 50 tokens before the
+  loop starts (mean |z| 0.17 against 0.08 for random neurons), and the deviation grows through the loop: 0.22 in the last 50
+  tokens before, 0.26 in the first cycle, 0.38 in the second (random: 0.10, 0.10, 0.12). The signed mean stays at 0: some rise
+  and some fall.
+- RL left these neurons' weights alone (cosine 1.0 for gate, up and down) and their activations are as correlated between the
+  two models as random neurons' (0.981 against 0.978).
+- Limits: 14 rows per dose. The control `same_noise` failed (a repeat of factor 1 with the same noise gave identical tokens in
+  5 of 14 rows, and the same 3 loops), so a difference of one or two loops is noise; 1 against 8 is not. Sentence descriptions
+  and the blind test of these neurons are not done.
+
+### Part G: zeroing loop neurons removes loops and tokens while accuracy stays (MATH-500, T 0.6 / top-p 1.0, n = 500)
+
+The base with the cue, one sample, grader v3, seed 1,000,000, with the neurons of run 1 zeroed in the checkpoint, paired with
+the unedited cell (job `9d69`, identical to the team's cell). From `results/gen/readout_t06.json` (`analysis/gen_readout.py`).
+
+| Model | Right | Points against unedited | Cap hits | Loops (rule A) | Tokens per problem |
+|---|---|---|---|---|---|
+| unedited | 378 | | 98 | 71 | 4,690 |
+| 100 by activation zeroed (`act100`, job `842c`) | 393 | +3.0 [-0.8, 6.6] | 68 | 47 | 4,246 |
+| 1,000 by effect zeroed (`attr1000`, job `6dcf`) | 381 | +0.6 [-3.4, 4.6] | 39 | 19 | 3,870 |
+| 1,000 random zeroed (`rnd1000`, job `cf9f`) | 370 | -1.6 [-5.4, 2.2] | 104 | 74 | 4,874 |
+
+- 1,000 neurons (0.28 %) remove 73 % of the loops and 17 % of the tokens at unchanged accuracy; 1,000 random neurons remove
+  neither. No row reaches the 415 of the best single-answer row without RL.
+- Why no accuracy: of the 71 problems that looped, 33 are right with `attr1000`, and 25 are right with the random edit, which
+  only changes the sampling path. A loop sits on a problem the model mostly cannot solve; removing it buys one more try.
+- Published: a count-based repetition penalty also removes loops with no MATH-500 gain on two other models (arXiv 2610.24715,
+  Table 16). What is new here is the place: a set of neurons that can be zeroed in the weights, with a dose response.
+- Examples (one finished right, one finished wrong per arm) are in `readout_t06.json`. Raw generations stay in the Volume
+  (`run.json` of each folder).
+- Running: the 100 and 1,000 `attr` neurons of run 2 (jobs `ef4f`, `15f9`).
+
