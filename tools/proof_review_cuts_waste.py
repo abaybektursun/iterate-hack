@@ -103,7 +103,7 @@ PAGE = r"""<!doctype html>
    --wash is how strongly the lit part of a column takes the accent. */
 :root {
   color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #8b97a1; --rule: #d3d9de;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
   --blue: #1f43d6; --red: #cf2338;
   --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
   --rim-a: rgba(16, 24, 32, .28); --rim-b: rgba(16, 24, 32, .58); --rim-c: rgba(16, 24, 32, .9);
@@ -111,7 +111,7 @@ PAGE = r"""<!doctype html>
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #5f6c77; --rule: #1c2630;
+    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #788590; --rule: #1c2630;
     --blue: #8fb1ff; --red: #ff6b7c;
     --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
     --rim-a: rgba(255, 255, 255, .92); --rim-b: rgba(255, 255, 255, .1); --rim-c: rgba(143, 177, 255, .45);
@@ -152,8 +152,8 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
 .wash { opacity: var(--wash); }
 .col .body { fill: var(--glass); stroke: url(#rim) var(--rim-b); stroke-width: 1.2; }
 .band { fill: none; stroke: var(--blue); stroke-width: 1.6; stroke-linejoin: round; }
-.num { font-weight: 620; text-anchor: middle; }
-.num tspan { font-weight: 500; fill: var(--mute); }
+.num { font-weight: 330; font-stretch: 100%; letter-spacing: -.03em; text-anchor: middle; }
+.num tspan { font-weight: 500; fill: var(--mute); letter-spacing: 0; font-stretch: 104%; }
 .arm { fill: var(--ink); font-weight: 560; text-anchor: middle; }
 .key { fill: var(--mute); font-weight: 500; }
 .keylit { fill: var(--blue); opacity: calc(var(--wash) + .25); }
@@ -179,7 +179,7 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
 .more button:hover { color: var(--blue); }
 .dhead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
 .dhead h2 { margin: 0; font-size: 17px; font-weight: 660; font-stretch: 114%; letter-spacing: .008em; }
-.close { font-size: 13px; color: var(--mute); }
+.close { font-size: 13px; color: var(--mute); padding: 12px 0 12px 16px; margin: -12px 0; }
 .close:hover { color: var(--ink); }
 .lead { margin: 18px 0 0; font-size: clamp(17px, 1.3vw, 21px); line-height: 1.36; font-weight: 380; max-width: 30ch; }
 .facts { list-style: none; margin: 18px 0 0; padding: 0; font-size: 14.5px; color: var(--mute); max-width: 40ch; overflow-wrap: anywhere; }
@@ -197,7 +197,7 @@ svg { animation: fade 1s both; }
   .stage { order: 3; margin-top: 14px; padding: 0; }
   .pane { order: 4; margin-top: 14px; }
   svg { max-height: none; }
-  .switch button { padding: 8px 12px; font-size: 14px; }
+  .switch button { padding: 12px 12px; font-size: 14px; }
   .note { min-height: 4.5em; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -270,7 +270,7 @@ function build() {
     `<path class="body" id="board-side"/><path class="face" id="board-face"/><path class="rim" id="board-rim"/>` +
     S.cols.map(o => `<g class="col"><path class="body" id="b${o.id}"/><path class="wash" id="w${o.id}"/><path class="band" id="a${o.id}"/>` +
       `<path class="face" id="f${o.id}"/><path class="rim" id="r${o.id}"/>` +
-      `<text class="num" id="n${o.id}"><tspan id="v${o.id}" style="fill:var(--ink);font-weight:620"></tspan><tspan dx="7" id="m${o.id}">min</tspan></text>` +
+      `<text class="num" id="n${o.id}"><tspan id="v${o.id}" style="fill:var(--ink);font-weight:330;letter-spacing:-.03em;font-stretch:100%"></tspan><tspan dx="7" id="m${o.id}">min</tspan></text>` +
       `<text class="arm" id="t${o.id}">${o.arm.name}</text></g>`).join("") +
     `<rect class="keylit" id="k1" width="15" height="15" rx="2"/><text class="key" id="k1t">produced an answer</text>` +
     `<rect class="keyglass" id="k2" width="15" height="15" rx="2"/><text class="key" id="k2t">produced none</text>`;
@@ -294,7 +294,7 @@ function place() {
     const c = proj(o.u, o.v, h), near = proj(o.u, -RV - 34, 0);
     o.el.v.textContent = f(minutes);
     o.el.n.setAttribute("x", f(c[0])); o.el.n.setAttribute("y", f(c[1] - 44 * c[2]));
-    o.el.n.setAttribute("font-size", f(46 * c[2])); o.el.m.setAttribute("font-size", f(22 * c[2]));
+    o.el.n.setAttribute("font-size", f(60 * c[2])); o.el.m.setAttribute("font-size", f(22 * c[2]));
     o.el.n.setAttribute("opacity", f(S.grow));
     o.el.t.setAttribute("x", f(near[0])); o.el.t.setAttribute("y", f(near[1] + 30)); o.el.t.setAttribute("font-size", f(23 * near[2]));
   });
