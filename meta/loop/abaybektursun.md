@@ -16,3 +16,4 @@ making a change. The skill stays at or under 135 lines; it is edited only at a s
 
 From cycle 5 the target is read on the 4 h window: the 1 h number follows the mix of work, not the changes (stepback.md of cycle 4).
 | 5 | 11-15 09:22 | 43 / 124 min (34, last 4 h) | 11.5 | cycle.py reads vast.ai job records: 0 -> 43 jobs listed | skill edit (cycle 4): too early, 0 of 3 ideas answered after 1 h |
+| 6 | 11-15 10:25 | 142 / 210 min (22, last 4 h) | 8.2 | none in code; asked the owner of the AWS job tool for job records | cycle.py reads vast.ai (cycle 5): no effect on the target, 6 of 50 jobs now have run minutes |

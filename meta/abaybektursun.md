@@ -1,5 +1,14 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 10:25 UTC (loop cycle 6; no tool change) meta/reviews/abaybektursun/20261115-1018/
+
+- Target (Team line, 4 h): claim to close median 142 min (43 at 09:14), upper quartile 210 min (124), 22 items; 8.2 results per hour (11.5). Worse again. Stage medians of abaybektursun's items with jobs: to-job 5, jobs 112, to-answer 5 min (2, 56, 1 at 09:14).
+- Cause, from the records: compute, not process. Modal: median queue wait 38.8 min over 105 jobs in the window, 4 running at 10:18 and credit nearly used. The work is moving to vast.ai (50 jobs listed) and to AWS L40S, where a 500-problem cell is planned at 1.5 to 2 h against about 30 min on an H100.
+- Open measurements closed: vast.ai jobs with run minutes: 6 of 50 (vast_run_minutes.txt), so cycle 5's change now gives job minutes for copied jobs. Of the three ideas: 0 claimed or commented. Two of their contents moved anyway: the four-sample hard328 rows are in git (09:22 message), and work-ab6833 builds `run_cell --shard` with a join. Whether the ideas caused that is not shown.
+- Score of cycle 5 (cycle.py reads vast.ai): no effect on the target; it restores the jobs stage for vast.ai items.
+- Change: none in code. AWS jobs (tool `ih`, kept in another repository) are invisible to cycle.py and leave no local record; I asked the session that owns the tool for a record per job in the shape vast.py writes. One entry was written by another session since cycle 5 (09:45); AGENTS.md rule 8 is unchanged.
+- Next cycle checks: whether ih writes records; the first sharded cell's minutes against 112; the 4 h Team line against 142 / 210 min and 8.2 per hour.
+
 ## 2026-11-15 09:45 UTC (session critic, after result-a497ff of work-d10ae6) meta/reviews/abaybektursun/20261115-0930/
 
 - Previous entry asked for vast.ai jobs with run minutes: 0. Run from a worktree, cycle.py lists 0 vast.ai jobs (cycle.txt): it globs `<own folder>-*`, so only the main checkout sees the 69 records in worktrees (idea-690b8e). The 16 jobs of this result also have no copy mark: the critic worktree ran vast.py from before 7761fce.
