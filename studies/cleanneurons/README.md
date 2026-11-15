@@ -26,8 +26,11 @@ All code runs from the repository root (`python -m studies.cleanneurons.<folder>
 | `results/loops/real-01/`, `real-02/` | Part L runs on real looping answers (14 and 34 held-out loops): `metrics.json`, `examples.json`, the edit files `edit_<ranking><k>.json`, `run.json`. |
 | `results/describe/attr1000_loops-01/` | Part I on 1,000 loop neurons: `metrics.json`, `dose_summary.json`, `onset_summary.json`, `run.json`. |
 | `results/gen/<arm>_t06-01/`, `results/gen/readout_t06.json` | Part G: MATH-500 at T 0.6 with an edit, and the paired readout against the unedited cell. |
+| `analysis/page_grid.py`, `results/gen/page_grid.json` | Per-problem state (right, wrong, loop) of each Part G cell, for a site page; totals asserted against `readout_t06.json`. |
+| `results/gen/readout_t06_real02.json`, `readout_t06_seed2.json`, `results/gen/*r2_*-01/`, `base_t06s2-01/` | Part G with the run-2 neuron sets: seed 1, seed 2 and T 1.0 cells. |
 | `analysis/gen_readout.py` | Part G: an edited run against the unedited run, problem by problem (points, interval, loops, tokens, examples). |
 | `tools/finding_rl_every_neuron.py`, `tools/finding_neurons_you_can_describe.py` | The site pages of Part T2 and Part I (`/finding/rl-every-neuron`, `/finding/neurons-you-can-describe`, tiles on `/findings`). |
+| `tools/finding_loop_neurons.py` | The site page of Parts L and G (`/finding/loop-neurons`): one dot per MATH-500 problem, a switch that turns the loop neurons off. `python3 tools/finding_loop_neurons.py` checks its numbers against the artifacts. |
 | `results/transplant/curve-01/` | Part T full run: `metrics.json`, `profile.json`, `examples.json`, `readout_after_cue.json`, `run.json`, edit files of four arms. |
 
 ## How to run
@@ -208,9 +211,60 @@ the unedited cell (job `9d69`, identical to the team's cell). From `results/gen/
   neither. No row reaches the 415 of the best single-answer row without RL.
 - Why no accuracy: of the 71 problems that looped, 33 are right with `attr1000`, and 25 are right with the random edit, which
   only changes the sampling path. A loop sits on a problem the model mostly cannot solve; removing it buys one more try.
-- Published: a count-based repetition penalty also removes loops with no MATH-500 gain on two other models (arXiv 2610.24715,
-  Table 16). What is new here is the place: a set of neurons that can be zeroed in the weights, with a dose response.
+- Published: neurons that drive repetition, with a dose response in both directions, were reported for 2B to 3B models on
+  ordinary text (Hiraoka and Inui, arXiv 2410.13497; no task score measured). A count-based repetition penalty leaves MATH-500
+  accuracy unchanged on two other models (arXiv 2610.24715, Table 16). New here: what zeroing such neurons does to a math
+  benchmark's loops, tokens and score.
 - Examples (one finished right, one finished wrong per arm) are in `readout_t06.json`. Raw generations stay in the Volume
   (`run.json` of each folder).
-- Running: the 100 and 1,000 `attr` neurons of run 2 (jobs `ef4f`, `15f9`).
+
+### Part G with the run-2 sets: fewer loops and tokens on two seeds, no reliable score gain, a loss at T 1.0
+
+Same cell with the run-2 sets (`results/loops/real-02/edit_attr100.json`, `edit_attr1000.json`). T 0.6 rows are paired with the
+unedited cell of the same seed (`results/gen/readout_t06_real02.json`, `readout_t06_seed2.json`); the T 1.0 rows are compared
+with the team's stored cell of the same seeds by totals only (its rows are not in this repository).
+
+| Cell (MATH-500, cue, top-p 1.0, one sample) | Right | Points against unedited | Cap hits | Loops (rule A) | Tokens per problem | Job |
+|---|---|---|---|---|---|---|
+| T 0.6, seed 1,000,000, unedited | 378 | | 98 | 71 | 4,690 | `9d69` |
+| T 0.6, seed 1,000,000, 100 zeroed | 412 | +6.8 [2.8, 10.6] | 34 | 22 | 3,742 | `ef4f` |
+| T 0.6, seed 1,000,000, 1,000 zeroed | 414 | +7.2 [3.2, 11.2] | 22 | 4 | 3,464 | `15f9` |
+| T 0.6, seed 2,000,000, unedited | 394 | | 87 | 61 | 4,357 | `bbdc` |
+| T 0.6, seed 2,000,000, 100 zeroed | 398 | +0.8 [-2.8, 4.4] | 40 | 18 | 3,621 | `47fd` |
+| T 0.6, seed 2,000,000, 1,000 zeroed | 399 | +1.0 [-2.8, 4.6] | 26 | 9 | 3,523 | `d05c` |
+| T 1.0, seed 41,000,000, unedited (team cell T1) | 410 | | 27 | 0 | 3,966 | `rlneurons` README (rows T1) |
+| T 1.0, seed 41,000,000, 100 zeroed | 390 | -4.0 (unpaired) | 18 | 0 | 4,074 | `5599` |
+| T 1.0, seed 41,000,000, 1,000 zeroed | 372 | -7.6 (unpaired) | 13 | 0 | 3,967 | `7858` |
+
+- Loops and tokens: on both seeds the 1,000 set removes 85 to 94 % of the loops and 19 to 26 % of the tokens; the 100 set removes
+  about 70 % and 17 to 20 %.
+- Score: the unedited cell itself moves from 378 to 394 between the two seeds. The gain of seed 1 (+7) does not repeat on seed
+  2 (+1), so one seed's paired interval understates the noise of a whole run. Four samples per arm are running (jobs `aa97`
+  edited, `36e7` unedited).
+- At T 1.0 the base does not loop and the edit only costs: 390 and 372 against 410. The edit is a repair for the loop-prone
+  setting and gives nothing to the setting the scoreboard uses.
+- The edited T 0.6 cells (398 to 414 at 3,464 to 3,742 tokens) sit at the level of the unedited T 1.0 cell (405 to 410).
+
+### Part G on the harder 328: no gain, and a loss at T 1.0 with the 1,000 set
+
+Cue, top-p 1.0, one sample, seed 3,000,000, grader v3; `counts` in `metrics.json` of each `results/gen/hard328_*-01/`.
+The unedited T 1.0 cell is the team's (`studies/rlneurons/README.md`, "Harder 328"), compared by totals; identical requests on
+the 328 scored 155, 160, 164 and 168 there (comment on result-d9d6f3), so differences under about 10 problems are noise.
+
+| Cell (328 problems) | Right | Cap hits | Loops (rule A) | Tokens per problem | Job |
+|---|---|---|---|---|---|
+| T 1.0, unedited (team cell) | 164 | 77 | 1 | 9,344 | `abaybektursun-1114-151534-e72c` |
+| T 1.0, 100 zeroed | 155 | 47 | 1 | 8,706 | `d4a3` |
+| T 1.0, 1,000 zeroed | 130 | 32 | 1 | 8,556 | `f46b` |
+| T 0.6, unedited | 134 | 156 | 94 | 9,842 | `2e30` |
+| T 0.6, 100 zeroed | 149 (+4.6 points [0.0, 9.1], paired) | 77 | 24 | 8,819 | `86c9` |
+| T 0.6, 1,000 zeroed | 149 (+4.6 [0.0, 9.1]) | 55 | 6 | 8,486 | `2a56` |
+
+- At T 1.0 the edit turns cap hits into finished answers (77 to 47 and 32) without making them right: 155 is inside the noise
+  of 164, and 130 is a loss of 34 problems. This agrees with result-51fd20: cap hits on the 328 are failures to solve.
+- At T 0.6 the edit carries over to these unseen problems: loops fall from 94 to 24 and 6, tokens by 10 and 14 %, and 15 more
+  problems are right, with an interval that touches 0 (`results/gen/readout_hard328_t06.json`). The edited T 0.6 cells (149)
+  stay under the unedited T 1.0 cell (164).
+- Summary of Part G: zeroing loop neurons is a reward-free way to remove loops and 17 to 26 % of the tokens at T 0.6. It is
+  no route to more right answers on MATH-500 or the 328, and it costs right answers where the model does not loop.
 

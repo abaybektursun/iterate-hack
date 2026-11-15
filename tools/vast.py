@@ -25,6 +25,7 @@ the repository root, and writes its outputs to $OUT_DIR. The deadline runs on th
 key, so it fires even when your laptop is closed. Copy results out before it fires: destroying deletes the disk.
 """
 import json
+import re
 import os
 import secrets
 import shlex
@@ -69,8 +70,10 @@ def ssh(instance_id, remote, input=None):
 
 
 def reachable(instance_id):
-    url = subprocess.run(["vastai", "ssh-url", instance_id], capture_output=True, text=True)
-    return url.stdout.startswith("ssh://") and subprocess.run([*ssh_args(url.stdout), "true"], capture_output=True).returncode == 0
+    url = subprocess.run(["vastai", "ssh-url", instance_id], capture_output=True, text=True).stdout.strip()
+    if not re.fullmatch(r"ssh://\S+:\d+", url):  # a booting box can have an address without its port yet: not ready
+        return False
+    return subprocess.run([*ssh_args(url), "true"], capture_output=True).returncode == 0
 
 
 def git(*args):
@@ -110,16 +113,34 @@ def up(args):
         login = ["--login", f"-u AWS -p {token} {ECR}"]
     # Rent every offer given; keep the first box that is reachable and fast, destroy the rest.
     pending = {}
-    for offer_id in offer_ids:
-        created = vast("create", "instance", offer_id, "--image", image, "--disk", "100", "--ssh", "--direct",
-                       "--onstart-cmd", onstart, *login)
-        pending[str(created["new_contract"])] = offer_id
-    print(f"created {' '.join(pending)}; waiting for ssh", flush=True)
-    winner = None
+    try:
+        for offer_id in offer_ids:
+            created = vast("create", "instance", offer_id, "--image", image, "--disk", "100", "--ssh", "--direct",
+                           "--onstart-cmd", onstart, *login)
+            pending[str(created["new_contract"])] = offer_id
+        print(f"created {' '.join(pending)}; waiting for ssh", flush=True)
+        winner, mb_s = wait_for_box(pending, t0)
+    except BaseException:  # any failure or Ctrl-C while waiting: no box is left billing without its deadline running
+        for instance_id in pending:
+            down([instance_id])
+        raise
+    booted = time.time() - t0
+    ssh(winner, "while [ ! -e /root/ready ]; do sleep 2; done")
+    record(f"instance-{winner}", offer=pending[winner], hours=hours, image=image, ssh_s=round(booted),
+           ready_s=round(time.time() - t0), mb_s=round(mb_s))
+    box = vast("show", "instance", winner)
+    print(f"{winner} ready in {time.time() - t0:.0f} s: {box['gpu_name']}, ${box['dph_total']:.3f}/h, {mb_s:.0f} MB/s "
+          f"(ssh and speed check at {booted:.0f} s); destroys itself {hours} h after it booted")
+
+
+def wait_for_box(pending, t0):
+    """The first created box that answers ssh and downloads fast enough; destroys the others and drops them from pending."""
+    winner, mb_s = None, 0.0
     while pending and not winner:
         if time.time() - t0 > BOOT_MINUTES * 60:
-            for instance_id in pending:
+            for instance_id in list(pending):
                 down([instance_id])
+                del pending[instance_id]
             sys.exit(f"not reachable after {BOOT_MINUTES} min; destroyed. Try other offers.")
         time.sleep(10)
         for instance_id in [i for i in pending if reachable(i)]:
@@ -133,16 +154,10 @@ def up(args):
             del pending[instance_id]
     if not winner:
         sys.exit("no box passed the download check. Try other offers.")
-    for instance_id in pending:
-        if instance_id != winner:
-            down([instance_id])
-    booted = time.time() - t0
-    ssh(winner, "while [ ! -e /root/ready ]; do sleep 2; done")
-    record(f"instance-{winner}", offer=pending[winner], hours=hours, image=image, ssh_s=round(booted),
-           ready_s=round(time.time() - t0), mb_s=round(mb_s))
-    box = vast("show", "instance", winner)
-    print(f"{winner} ready in {time.time() - t0:.0f} s: {box['gpu_name']}, ${box['dph_total']:.3f}/h, {mb_s:.0f} MB/s "
-          f"(ssh and speed check at {booted:.0f} s); destroys itself {hours} h after it booted")
+    for instance_id in [i for i in pending if i != winner]:
+        down([instance_id])
+        del pending[instance_id]
+    return winner, mb_s
 
 
 def run(args):

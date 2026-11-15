@@ -1,0 +1,41 @@
+{
+ "commit": "9d43721863de05df2610f23b52a137e6723516b8",
+ "commit_note": "git rev-parse HEAD at run time. studies/metaharness/analysis/recall_pilot.py was not committed yet when it ran; it is committed together with this folder, unchanged since the run.",
+ "command": "python3 -m studies.metaharness.analysis.recall_pilot --board /private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-hackathon-demo-presentation-3ae82c/82e27e43-3552-4ed1-90b6-8e6cf7164564/scratchpad/board_full.json --traces /private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-hackathon-demo-presentation-3ae82c/82e27e43-3552-4ed1-90b6-8e6cf7164564/scratchpad/team-traces --n 20 --out studies/metaharness/results/recall_pilot/recall_vs_grep-01",
+ "cwd": "repository root",
+ "python": "3.11.1",
+ "started_utc": "2026-11-15T06:04:09Z",
+ "ended_utc": "2026-11-15T06:05:31Z",
+ "machine": "laptop (macOS, BSD grep); past.dev called over the network",
+ "inputs": {
+  "board": {
+   "what": "full dump of the team board (270 items, 67 score rows, 182 messages); the 20 questions are drawn from its score rows (MATH-500 and hard328, seed 0, one per configuration)",
+   "taken_utc": "2026-11-15 05:24 (file time)",
+   "source": "made with `uv run tools/board.py`; not in git",
+   "path_at_run_time": "/private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-hackathon-demo-presentation-3ae82c/82e27e43-3552-4ed1-90b6-8e6cf7164564/scratchpad/board_full.json",
+   "bytes": 853700,
+   "sha256": "5b1bbaa39f46c3435e5658694d65d28c20c3fdb6d71aef88a859c6f377c663b0"
+  },
+  "traces": {
+   "what": "local copy of every uploaded agent transcript of the team: 271 .jsonl files, 446 MB, 3 people",
+   "taken_utc": "2026-11-15 about 05:19 (folder time); newest transcript 05:17:46",
+   "source": "`aws s3 sync s3://iterate-hack-team-769063704696/traces/ <folder>`; not in git",
+   "path_at_run_time": "/private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-hackathon-demo-presentation-3ae82c/82e27e43-3552-4ed1-90b6-8e6cf7164564/scratchpad/team-traces"
+  },
+  "past_dev_memory": {
+   "what": "the team's shared memory on past.dev, live at run time (not frozen): POST /recall through tools/past.py, maxTokens 2000, key and identity from ~/.past/config.json",
+   "note": "the memory changes as agents post, so recall tokens and result counts differ between runs"
+  }
+ },
+ "cost": "20 POST /recall calls, read-only: 20 past.dev credits at 0.0003 USD = 0.006 USD (credit price from the script's docstring; not checked against past.dev's usage log). No GPU, no model call.",
+ "not_reproducible_exactly": [
+  "grep_words: the script takes the two longest words of the question; words of equal length are ordered by Python's set order, which changes with the process's hash seed (PYTHONHASHSEED was not set). The words used are in each row of rows.jsonl.",
+  "seconds: wall time on one laptop, grep time depends on the file cache",
+  "past.dev memory is live"
+ ],
+ "outputs": [
+  "metrics.json",
+  "rows.jsonl",
+  "examples.json"
+ ]
+}

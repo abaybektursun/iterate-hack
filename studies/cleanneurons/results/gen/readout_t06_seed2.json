@@ -1,0 +1,85 @@
+{
+ "baseline": {
+  "dir": "/private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-auto-research-harness-hackathon-bbd59e/25ae40cc-2e8a-47af-8f2b-c73aa0b7149f/scratchpad/submit/runs/sameraslan-1114-220631-bbdc",
+  "n": 500,
+  "right_v3": 394,
+  "cap_hits": 87,
+  "loops_rule_A": 61,
+  "tokens_per_problem": 4356.786
+ },
+ "baseline_loops": 61,
+ "arms": {
+  "attr100_real02": {
+   "dir": "/private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-auto-research-harness-hackathon-bbd59e/25ae40cc-2e8a-47af-8f2b-c73aa0b7149f/scratchpad/submit/runs/sameraslan-1114-220623-47fd",
+   "n": 500,
+   "right_v3": 398,
+   "cap_hits": 40,
+   "loops_rule_A": 18,
+   "tokens_per_problem": 3620.884,
+   "points_vs_baseline": 0.8,
+   "ci95": [
+    -2.8,
+    4.4
+   ],
+   "newly_right": 45,
+   "newly_wrong": 41,
+   "of_baseline_loops": {
+    "still_loop": 4,
+    "cap_hit": 13,
+    "now_right": 28
+   },
+   "examples": {
+    "finished_right": {
+     "problem_index": 7,
+     "gold": "90^\\circ",
+     "baseline_tail": "in. For the second line: 6x = -y = -4z. Let me set 6x = -y = -4z = s. Then, x = s/6, y = -s, z = s/4. So, direction vector is (1/6, -1, 1/4). So, direction vector is (1/6, -1, 1/4). So, when multiplied by 12, direction vector is (2, -12, 3). So, direction vector is (2, -12, 3). Then, the dot product",
+     "edited_tail": "ctor: (2, -12, -3). Dot product: 3*2 = 6, 2*(-12) = -24, (-6)*(-3) = 18. 6 -24 +18 = 0. Yes, that's correct. So the dot product is zero, which means the vectors are perpendicular. Therefore, the angle between the lines is 90 degrees. That's a nice result. So the answer is 90 degrees.\n\n**Answer:** 90",
+     "edited_tokens": 1016
+    },
+    "finished_wrong": {
+     "problem_index": 11,
+     "gold": "\\frac{3}{56}",
+     "baseline_tail": "imilar to finding a polynomial that agrees with a rational function at certain points. There's a theorem called the Chebyshev alternation theorem, but I'm not sure if that applies here.\n\nWait, another idea: Since p(x) is a polynomial of degree 5, and we have 6 points, we can use the method of finite",
+     "edited_tail": ".\n\nAfter detailed calculations and verifying each term, we find the polynomial \\( p(x) \\) and evaluate it at \\( x = 8 \\). The result of the Lagrange interpolation, after careful arithmetic verification, is:\n\n\\[\np(8) = -\\frac{29}{336}\n\\]\n\nThus, the value of \\( p(8) \\) is \\(\\boxed{-\\dfrac{29}{336}}\\).",
+     "edited_tokens": 10546
+    }
+   }
+  },
+  "attr1000_real02": {
+   "dir": "/private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-auto-research-harness-hackathon-bbd59e/25ae40cc-2e8a-47af-8f2b-c73aa0b7149f/scratchpad/submit/runs/sameraslan-1114-220830-d05c",
+   "n": 500,
+   "right_v3": 399,
+   "cap_hits": 26,
+   "loops_rule_A": 9,
+   "tokens_per_problem": 3523.178,
+   "points_vs_baseline": 1.0,
+   "ci95": [
+    -2.8,
+    4.6
+   ],
+   "newly_right": 49,
+   "newly_wrong": 44,
+   "of_baseline_loops": {
+    "still_loop": 1,
+    "cap_hit": 6,
+    "now_right": 31
+   },
+   "examples": {
+    "finished_right": {
+     "problem_index": 7,
+     "gold": "90^\\circ",
+     "baseline_tail": "in. For the second line: 6x = -y = -4z. Let me set 6x = -y = -4z = s. Then, x = s/6, y = -s, z = s/4. So, direction vector is (1/6, -1, 1/4). So, direction vector is (1/6, -1, 1/4). So, when multiplied by 12, direction vector is (2, -12, 3). So, direction vector is (2, -12, 3). Then, the dot product",
+     "edited_tail": "t product of the direction vectors \\(\\langle 3, 2, -6 \\rangle\\) and \\(\\langle 2, -12, -3 \\rangle\\):\n\\[\n3 \\cdot 2 + 2 \\cdot (-12) + (-6) \\cdot (-3) = 6 - 24 + 18 = 0\n\\]\nSince the dot product is zero, the vectors are perpendicular, meaning the angle between the lines is \\(90^\\circ\\).\n\n\\[\n\\boxed{90}\n\\]",
+     "edited_tokens": 1523
+    },
+    "finished_wrong": {
+     "problem_index": 11,
+     "gold": "\\frac{3}{56}",
+     "baseline_tail": "imilar to finding a polynomial that agrees with a rational function at certain points. There's a theorem called the Chebyshev alternation theorem, but I'm not sure if that applies here.\n\nWait, another idea: Since p(x) is a polynomial of degree 5, and we have 6 points, we can use the method of finite",
+     "edited_tail": " - 1}\n\\]\n\nSubstituting \\( n = 8 \\):\n\\[\n\\text{Numerator} = 8 - \\frac{1}{720} \\cdot 8 \\cdot 6 \\cdot 5 \\cdot 4 \\cdot 3 \\cdot 2 \\cdot 1 = 8 - \\frac{40320}{1440} = 8 - 28 = -20\n\\]\n\\[\n\\text{Denominator} = 8^2 - 1 = 63\n\\]\n\nThus, \\( p(8) = \\frac{-20}{63} \\).\n\nThe final answer is \\(\\boxed{-\\dfrac{20}{63}}\\).",
+     "edited_tokens": 5759
+    }
+   }
+  }
+ }
+}

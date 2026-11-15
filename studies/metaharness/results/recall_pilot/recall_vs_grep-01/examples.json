@@ -1,0 +1,87 @@
+{
+ "recall": {
+  "right": {
+   "input": {
+    "question": "MATH-500 accuracy: base + top 8 singular directions per matrix of the RL-Math delta, plain, T 1.0 / top-p 1.0",
+    "gold": "427/500",
+    "board_result": "result-ad3c24"
+   },
+   "output": {
+    "text_first_600_chars": "Board result result-ad3c24, posted by sameraslan:\nWSP-1 on all 500 (MATH-500, T 1.0/top-p 1.0, v3, 1 sample). (1) base + top 8 singular directions per layer matrix of the RL-Math delta (0.07% of weight norm), plain: 427/500, vs plain base 224 (T3), theta0.25 plain 405, theta0.5 plain 443, RL plain 463. Matched random rank-8 control: 36 of 100 at n=100, n=500 running. (2) Think-SFT (allenai/Olmo-3-7B-Think-SFT, imitation only, no reward) through the same harness: cue 454/500, plain 440/500, vs cued base 405-410, RL plain 456-463, RL cue 457. Caveat: Think-SFT was trained on traces written by ot",
+    "text_chars": 7982,
+    "matched": "427/500",
+    "matched_at_char": 216,
+    "tokens": 1993,
+    "results": 13,
+    "source_ids": [
+     "board:result-ad3c24",
+     "board:result-ad3c24",
+     "board:result-d2933e",
+     "board:result-e2482e",
+     "board:result-d2933e",
+     "board:result-d2933e",
+     "board:result-284db5",
+     "board:result-d2933e",
+     "board:result-d2933e",
+     "board:result-ad3c24",
+     "board:result-ad3c24",
+     "board:result-d2933e",
+     "arxiv-2607.08173:7cda2dff4c"
+    ]
+   },
+   "score": {
+    "hit": true
+   }
+  },
+  "wrong": null
+ },
+ "grep_first_2000_tokens": {
+  "right": {
+   "input": {
+    "question": "MATH-500 accuracy: base + top 8 singular directions per matrix of the RL-Math delta, plain, T 1.0 / top-p 1.0",
+    "gold": "427/500",
+    "board_result": "result-ad3c24",
+    "grep_words": [
+     "directions",
+     "singular"
+    ]
+   },
+   "output": {
+    "text_first_600_chars": "n=328  result-2c2cae\\n  44.8  base  plain prompt                  T 1.0 / top-p 1.0       MATH-500  n=500  result-c36598\\n  42.0  base  top 1 RL-Math singular direc  T 1.0 / top-p 1.0 / fi  MATH-500  n=100  result-ad3c24\\n  41.0  base  top 3 RL-Math directions of   T 1.0 / top-p 1.0 / fi  MATH-500  n=100  result-d2933e\\n  39.4  base  matched random rank-8 weight  T 1.0 / 1 sample        MATH-500  n=500  result-36e8cd\\n  36.6  base  opening cue                   T 1.0 / RL-length quar  hard328  n=82  resul\nn=328  result-2c2cae\\n  44.8  base  plain prompt                  T 1.0 / top-p 1.0      ",
+    "text_chars": 8000,
+    "matched": "427/500",
+    "matched_at_char": 6863,
+    "tokens_before_cut": 98514,
+    "files_matched": 157,
+    "hit_anywhere_in_full_output": true
+   },
+   "score": {
+    "hit": true
+   }
+  },
+  "wrong": {
+   "input": {
+    "question": "untrained base model hard328 accuracy: cue + 3 examples written by Math-RL in context (draw 1), T 1.0 / top-p 1.0",
+    "gold": "164/328",
+    "board_result": "result-5227b9",
+    "grep_words": [
+     "examples",
+     "context"
+    ]
+   },
+   "output": {
+    "text_first_600_chars": "er to react to an edit.\"}},\"$schema\":\"http://json-schema.org/draft-07/schema#\"},\"eager_input_streaming\":true},{\"name\":\"mcp__visualize__read_me\",\"description\":\"Returns required context for show_widget (CSS variables, colors, typography, layout rules, examples). Call before your first show_widget call. Call again later if you need a different module. Do NOT mention or narrate this call to the user — it is an internal setup step. Call it silently and proceed directly to the visualization in your response\nt.\"}},\"$schema\":\"http://json-schema.org/draft-07/schema#\"},\"eager_input_streaming\":true},\"ser",
+    "text_chars": 8000,
+    "matched": null,
+    "matched_at_char": null,
+    "tokens_before_cut": 98055,
+    "files_matched": 264,
+    "hit_anywhere_in_full_output": false
+   },
+   "score": {
+    "hit": false
+   }
+  }
+ },
+ "note": "First question of the run scored right and first scored wrong, per arm; null = no such question in this run. grep text is the first 8,000 characters (2,000 tokens at 4 characters per token) of the grep output, the part that was scored."
+}
