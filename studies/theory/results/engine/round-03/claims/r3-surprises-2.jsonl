@@ -1,0 +1,11 @@
+{"id": "t26", "value": 176, "low": 165, "high": 188, "why": "A quarter dose fills the shared settle gate (already saturated at a=0.25), and that gate fixes only the moderate-length share of the 164->205 hard-set gap, so theta(0.25) recovers about a third of it."}
+{"id": "t28", "value": 177, "low": 165, "high": 189, "why": "Code-RL carries only the shared gate and none of the math-specific part, so on hard328 it gets the same partial gain as theta(0.25), well short of RL's 205."}
+{"id": "t27", "value": 185, "low": 172, "high": 197, "why": "theta(0.5) has the saturated shared gate plus about half of the math-specific part, which builds up with dose, so it falls between theta(0.25) (~176) and RL (~205)."}
+{"id": "t32", "value": -8.8, "low": -13.5, "high": -4.5, "why": "With only the shared gate, Code-RL reaches about 177 against RL plain's 206 on hard328, a deficit of about 9 points."}
+{"id": "t31", "value": -6.4, "low": -11, "high": -2, "why": "theta(0.5) has only about half the math-specific part, so it stays about 21 problems (6 points) below RL plain's 206."}
+{"id": "t33", "value": -2.5, "low": -7, "high": 2, "why": "Both have the shared gate, but only theta(0.5) has some of the math-specific part, so Code-RL comes out slightly behind it."}
+{"id": "t34", "value": 448, "low": 434, "high": 461, "why": "Any outcome-reward RL difference learns the low-dose shared gate, and MATH-500 with the cue mostly measures that gate, so the 3.0 Math-RL lands near the 3.1 cue plateau of 441-457."}
+{"id": "t35", "value": 448, "low": 434, "high": 461, "why": "RL-Zero-Mix is outcome-reward RL, so it learns the same saturating gate and reaches the MATH-500 cue plateau."}
+{"id": "t36", "value": 442, "low": 426, "high": 457, "why": "Even general-domain outcome-reward RL learns the shared settle gate (Code-RL does, through orthogonal weights), so it gets most of the plateau gain over the 410 base cue."}
+{"id": "t37", "value": 445, "low": 430, "high": 459, "why": "The 3.0 Code-RL learns the shared gate just as 3.1 Code-RL did (450 with the cue), so it scores near the plateau once the cue fixes the format."}
+{"id": "t38", "value": 440, "low": 424, "high": 456, "why": "IF-RL is outcome-reward RL on the same base, so it gates the same settle-verify-stop behaviour and gets most of the MATH-500 cue gain."}
