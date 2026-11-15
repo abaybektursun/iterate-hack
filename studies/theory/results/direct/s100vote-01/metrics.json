@@ -1,0 +1,119 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_s100vote.md",
+ "mechanism": "round-15/account-2/c2",
+ "statistic": "G = 100 * mean over problems (vote-over-4 right - mean single-sample right), percentage points; vote order-averaged (random tie-break)",
+ "n": 500,
+ "G_points": 7.183333333333333,
+ "ci90": [
+  6.033333333333333,
+  8.366666666666665
+ ],
+ "bootstrap": "10000 resamples of problems, default_rng(0), 5th-95th percentile",
+ "step100": {
+  "order_averaged": {
+   "G_points": 7.183333333333333,
+   "ci90": [
+    6.033333333333333,
+    8.366666666666665
+   ],
+   "vote_right_of_500": 453.41666666666663,
+   "G_points_from_problems_without_wrong_answer": 1.85
+  },
+  "plain_stored_order": {
+   "G_points": 6.7,
+   "ci90": [
+    5.35,
+    8.05
+   ],
+   "vote_right_of_500": 451.0
+  },
+  "single_mean_right_of_500": 417.5,
+  "single_right_per_sample": [
+   418,
+   411,
+   422,
+   419
+  ],
+  "ties_for_first": 32,
+  "no_answer_in_any_sample": 3,
+  "cap_hits": 85,
+  "cap_hits_with_extracted_answer": 15,
+  "rows_without_extracted_answer": 108
+ },
+ "context_cued_base": {
+  "order_averaged": {
+   "G_points": 7.55,
+   "ci90": [
+    6.466666666666666,
+    8.65
+   ],
+   "vote_right_of_500": 448.25,
+   "G_points_from_problems_without_wrong_answer": 1.4
+  },
+  "plain_stored_order": {
+   "G_points": 7.1,
+   "ci90": [
+    5.85,
+    8.4
+   ],
+   "vote_right_of_500": 446.0
+  },
+  "single_mean_right_of_500": 410.5,
+  "single_right_per_sample": [
+   405,
+   409,
+   410,
+   418
+  ],
+  "ties_for_first": 36,
+  "no_answer_in_any_sample": 4,
+  "cap_hits": 90,
+  "cap_hits_with_extracted_answer": 15,
+  "rows_without_extracted_answer": 94
+ },
+ "context_final_rl": {
+  "order_averaged": {
+   "G_points": 2.8666666666666667,
+   "ci90": [
+    2.1166666666666667,
+    3.65
+   ],
+   "vote_right_of_500": 474.33333333333337,
+   "G_points_from_problems_without_wrong_answer": 0.1
+  },
+  "plain_stored_order": {
+   "G_points": 2.8,
+   "ci90": [
+    2.0,
+    3.65
+   ],
+   "vote_right_of_500": 474.0
+  },
+  "single_mean_right_of_500": 460.0,
+  "single_right_per_sample": [
+   456,
+   462,
+   464,
+   458
+  ],
+  "ties_for_first": 16,
+  "no_answer_in_any_sample": 0,
+  "cap_hits": 32,
+  "cap_hits_with_extracted_answer": 25,
+  "rows_without_extracted_answer": 7
+ },
+ "null_value": 2.8,
+ "null_range": [
+  1.0,
+  4.5
+ ],
+ "account_range": [
+  5.0,
+  10.0
+ ],
+ "G_vs_null_range": "above",
+ "ci90_overlaps_null_range": false,
+ "verdict": "holds",
+ "verdict_rule": "holds if the 90 % interval lies wholly inside [5.0, 10.0] and n >= 50; refuted if wholly outside; else undecided",
+ "ci90_half_width": 1.166666666666666
+}

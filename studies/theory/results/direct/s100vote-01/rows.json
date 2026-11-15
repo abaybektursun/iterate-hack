@@ -1,0 +1,7 @@
+[
+ {"mechanism": "round-15/account-2/c2",
+  "claim": "RL step 100 plain on MATH-500 gains as much from a vote over its 4 samples (vote right minus mean single-sample right) as the cued base does, 5 to 10 points, not as little as final RL.",
+  "result": "result-53addf",
+  "verdict": "holds",
+  "measured": "+7.18 points [6.03, 8.37] (90 % bootstrap over problems), n 500, null value +2.8 (final RL; recomputed +2.87), account-2 range [5.0, 10.0], null range [1.0, 4.5]"}
+]
