@@ -1,0 +1,2 @@
+rev WORK view.py clean: exit 0, lambda code shipped 1 time(s), PDFs in zip 4
+rev WORK view.py broken: exit 1, lambda code shipped 0 time(s), PDFs in zip none

@@ -25,12 +25,18 @@ import demo_photos
 import finding_the_finish_dial
 import proof_review_cuts_waste
 
-HOOK = "Let's build recursive self-improvement at a hackathon"  # placeholder: Samer replaces this line
+HOOK = "36 hours to solve RSI"  # the opening line of the talk
 
-# The title of each paper by its file name in view.PAPERS.
+# The title of each paper by its file name in view.PAPERS; paper_title falls back to the file name.
 PAPER_TITLES = {"the-finish-dial.pdf": "The Finish Dial", "theories-on-trial.pdf": "Theories on Trial",
                 "the-first-hundred-steps.pdf": "The First Hundred Steps", "no-early-warning.pdf": "No Early Warning"}
 PAPER_AUTHOR = "The Invariant Swarm"
+
+
+def paper_title(name):
+    """The title on a paper's sheet: its entry in PAPER_TITLES, else the words of its file name. A paper added to
+    view.PAPERS with no entry here still gets a sheet, so a new paper cannot stop view.py at import."""
+    return PAPER_TITLES.get(name) or name.rsplit(".", 1)[0].replace("-", " ").title()
 
 # What the deck shares with demo.py: the Archivo link and the theme script (?theme=, then the stored choice).
 FONT = re.search(r'<link rel="preconnect".*?display=swap">', demo.TEMPLATE, re.S).group(0)
@@ -188,32 +194,30 @@ def logo(name):
 
 def paper(name):
     lines = "".join(f'<i style="width:{w}%"></i>' for w in (92, 86, 90, 70, 88, 94, 62))
-    return (f'<a class="sheet" href="/paper/{esc(name)}"><b>{esc(PAPER_TITLES[name])}</b>'
+    return (f'<a class="sheet" href="/paper/{esc(name)}"><b>{esc(paper_title(name))}</b>'
             f'<span>{esc(PAPER_AUTHOR)}</span><div class="lines">{lines}</div></a>')
 
 
 def slides(n_findings, papers):
-    missing = [p for p in papers if p not in PAPER_TITLES]
-    assert not missing, f"demo_deck.PAPER_TITLES has no title for {missing}"
     return [
         ("hook", f'<div class="mid"><h1 class="big">{esc(HOOK)}</h1><p class="sub faint">Team Invariant</p></div>'),
         ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers, limited tokens, compute and people</p>'
-                     f'<h1 class="big">How can a small team find something new about how models learn</h1></div>'),
+                     f'<h1 class="big">Hill climbing is not useful if we don\'t understand it</h1></div>'),
         ("tea", f'<div class="mid"><p class="sub">Our solution</p>{photo(demo_photos.TEA, "tea")}<p class="sub">Gong fu tea and meditation</p></div>'),
-        ("harness", '<div class="head"><h2>Nanolab</h2><p class="sub">A research harness built to spend little and find a lot</p></div>'
+        ("harness", '<div class="head"><h2>Nanolab</h2><p class="sub">A hill climbing engine and an interpretability engine in one harness</p></div>'
                     '<iframe class="fig-frame harness" data-fig="harness" title="The harness" tabindex="-1"></iframe>'
-                    f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span></div>'),
+                    f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span><span>GPUs <b class="word">Modal</b></span></div>'),
         ("finding", '<div class="mid"><h2 class="title">8 directions in the weights hold most of RL\'s gain</h2>'
                     f'{dial_svg()}<p class="sub">Why: they make the model finish its answer, cut-off answers '
                     f'{CELLS["0"]["cut"]} → {CELLS["1.5"]["cut"]}</p></div><p class="corner">{n_findings} findings</p>'),
         ("proof", '<div class="head"><h2>Proof</h2></div><div class="pair">'
                   f'<figure><figcaption>Against autoresearch</figcaption>{auto_svg()}</figure>'
-                  f'<figure><figcaption>Review cuts waste</figcaption>{review_svg()}</figure></div>'),
+                  f'<figure><figcaption>Its own review cuts waste</figcaption>{review_svg()}</figure></div>'),
         ("ideas", f'<div class="head"><h2>Ideas converge</h2><p class="sub">{N_CROSS} of {N_LINKS} links join two different clusters of ideas</p></div>'
                   '<iframe class="fig-frame tree" data-fig="tree" title="The idea tree" tabindex="-1"></iframe>'),
         ("papers", f'<div class="mid"><h2 class="title">{len(papers)} papers, written by the swarm</h2>'
-                   f'<div class="sheets">{"".join(paper(p) for p in papers)}</div></div>'),
-        ("close", f'<div class="mid">{photo(demo_photos.MEDITATE, "meditate")}<p class="end">The agents do the research</p>'
+                   f'<div class="sheets" style="--n:{len(papers)}">{"".join(paper(p) for p in papers)}</div></div>'),
+        ("close", f'<div class="mid">{photo(demo_photos.MEDITATE, "meditate")}<p class="end">Also our solution to AI psychosis</p>'
                   '<p class="sub faint">monitor.invariant.team</p></div>'),
     ]
 
@@ -270,6 +274,7 @@ p, h1, h2, figure { margin: 0; }
 .tools span { display: inline-flex; align-items: center; gap: 14px; }
 .logo { height: 24px; width: auto; fill: var(--ink); }
 .logo-exa { height: 22px; }
+.tools .word { font-size: 25px; font-weight: 640; color: var(--ink); }  /* a sponsor with no logo in architecture.py */
 
 /* the figures drawn here */
 .fig { display: block; overflow: visible; font-family: inherit; }
@@ -296,10 +301,10 @@ p, h1, h2, figure { margin: 0; }
 .pair { position: absolute; left: 0; right: 0; top: 205px; display: flex; justify-content: center; gap: 90px; }
 .pair figcaption { font-size: 26px; font-weight: 560; margin: 0 0 18px 20px; }
 
-.sheets { display: flex; gap: 80px; margin-top: 30px; }
+.sheets { display: flex; gap: 60px; margin-top: 30px; }  /* --n: the number of papers, so any number fits the slide */
 /* a paper is white in both themes: the sheet carries the light values of these four tokens */
 .sheet { --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --rule: #d3d9de; color: var(--ink);
-  width: 330px; height: 427px; background: var(--sheet); border: 1px solid var(--rule); padding: 118px 34px 0; text-align: left; display: flex; flex-direction: column; gap: 10px; }
+  width: min(330px, calc((1380px - (var(--n) - 1) * 60px) / var(--n))); aspect-ratio: 330 / 427; background: var(--sheet); border: 1px solid var(--rule); padding: 100px 30px 0; box-sizing: border-box; text-align: left; display: flex; flex-direction: column; gap: 10px; }
 .sheet b { font-size: 26px; font-weight: 560; line-height: 1.2; }
 .sheet span { font-size: 16px; font-weight: 500; color: var(--mute); }
 .sheet .lines { margin-top: 26px; display: flex; flex-direction: column; gap: 13px; }
