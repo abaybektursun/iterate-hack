@@ -54,7 +54,7 @@ CLOSED_U = _pct(DATA["right_unbiased"], 1)  # 65: the same on the unbiased 155
 
 TITLE = "RL's edge comes early"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "Where inside a math answer does RL training make its difference?"
-LINE = f"Finishing RL's half-written answers, the base model closes {CLOSED} % of its gap to RL."
+LINE = f"Finishing RL's half-written answers, the base model closes {CLOSED_U} to {CLOSED} % of its gap to RL."
 
 # Not from our runs: the closest published results. "Sparse but Critical" (arXiv 2603.22446), Sec. 3, Table 1: token-level
 # cross-sampling on Qwen2.5-32B and its SimpleRL version, AIME 2024, Mean@32 at T 1.0: under 4 % of the tokens taken from
