@@ -1,0 +1,18 @@
+{
+ "scored_right": {
+  "run": "assign-k8-s0",
+  "id": "s0038",
+  "branch": "",
+  "idea": "Keep the best basin but add a stronger deterministic restart-and-merge phase that repeatedly rebuilds only the weakest circles from sampled gaps before the final annealed polish.",
+  "score": 2.624157,
+  "msg": "ok"
+ },
+ "scored_wrong": {
+  "run": "parallel-k8-s0",
+  "id": "s0000",
+  "branch": "",
+  "idea": "Use a hand-tuned mixed packing with a 4x4 corner grid, a central cross of larger circles, and iterative local radius adjustment for better total sum.",
+  "score": null,
+  "msg": "circles 1 and 21 overlap by 2.74e-02"
+ }
+}

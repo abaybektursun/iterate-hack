@@ -19,6 +19,7 @@ branching from an online basin signal (survey 2026-11-14). Public reimplementati
 | `jobs/run_strategy.py` | One strategy run on one task: `python3 -m studies.explore.jobs.run_strategy --task circles26 --strategy fnf --budget 30 --seed 0 --model gpt-5.4-mini --out runs/explore/circles26/<exp>/<arm>-s<seed>` |
 | `analysis/compare.py` | Arms side by side: final best per seed, runs above the starter, best after the same USD spend (the smallest total of any run), optimizer share (pilot-02 regex), best-so-far curves. |
 | `analysis/export_results.py` | Copies an experiment's small files from `runs/` to `results/<task>/<experiment>/` (compare.json, runs.json, assignments, examples). |
+| `analysis/best_of_k.py` | Expected best of K independent stored runs of each arm, and how many runs of one arm equal one run of another. |
 | `analysis/page/build.py` | The results page (private artifact https://claude.ai/artifact/XQwm42PhgcxWjtro4WXN1E): `python3 studies/explore/analysis/page/build.py <out.html>`; template in `analysis/page/template.html`. |
 | `tasks/circles26/` | 26 circles in the unit square, maximize the sum of radii; scorer checks validity (tol 1e-9). Starter 2.54138; best published about 2.636. |
 | `tasks/ahc014/` | AtCoder Heuristic Contest 014 (RectJoin) from Frontier-CS algorithmic problem 159, the task both papers report. Python program, 3 s per case (hard 4 s). Score: mean V / V_ref over cases 1-5 (test: 6-10), checked by the Frontier-CS checker `data/chk.cc` (commit in `data/SOURCE_COMMIT`). Starter (no operations) 0.2217. |
@@ -71,6 +72,30 @@ Plan written before the runs: `specs/seeds-ahc014-swe2.md`. Seed 0 from swe2-01 
 - The task-neutral judge now over-splits: 14 basins in 40 submissions (`basin-s0_basins.json`), so the 4-in-a-row
   rule fired once; basin (1 flush) and randflush (1 flush) are the same arm in practice (0.571 vs 0.573). The
   basin trigger is not tested until the judge's granularity is calibrated (it lumped all 40 into one basin before).
+
+### circles26/ksweep-01 (agent-count sweep of assigned methods, gpt-5.4-mini, 1 seed per cell, 40 submissions, 2.4 USD)
+
+Spec `specs/ksweep-circles26-assign.md` (written before the runs). Files `results/circles26/ksweep-01/`; examples:
+best assign-k8-s0 s0038 2.624157, invalid parallel-k8-s0. K=4 fnf_assign is assign-01/assign_mini-s0.
+
+| K | parallel (K independent chats) | fnf_assign (K branches per fork, one method each) | Gap |
+|---|---|---|---|
+| 2 | 2.159 | 2.541 | +0.382 |
+| 4 | 2.452 | 2.628 | +0.176 |
+| 8 | 2.182 | 2.624 | +0.442 |
+
+- Prediction held at all three K: fnf_assign > parallel, and parallel stays below the starter 2.54138 at every K.
+- fnf_assign at K=2 does not beat the starter (2.541289): its lists of 2 named local search and a "hybrid
+  optimizer", and 5 of 40 programs used an optimizer (29/40 at K=4, 14/40 at K=8). The arm needs a list wide enough
+  to contain the method that works; 4 and 8 give the same score.
+- At K=8 each branch gets 1 submission and 7 of 24 were invalid; the gain came from the leader refining the best
+  branch (2.548 -> 2.624).
+- Weak points: 1 seed per cell; parallel's valid share is 0.25-0.38 at K=4 and 8.
+
+Best of K stored runs (`analysis/best_of_k.py`, no new runs), ahc014 SWE-2, 6 runs per arm, 40 submissions each:
+one fnf run (mean 0.591) equals the expected best of 2 independent single runs (0.595, 80 submissions) and of 3
+parallel-of-4 runs (0.595); best of 3 single runs is 0.613. circles26 gpt-5.4-mini: 30 finished runs without
+assignment (1,120 submissions, all strategies) have a best of 2.546; one fnf_assign run reaches 2.628.
 
 ### assign-01 (gpt-5.4-mini, 1 seed, 40 submissions, numpy/scipy available, 2026-11-15; each run's commit is in runs.json)
 

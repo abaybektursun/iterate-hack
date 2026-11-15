@@ -1,0 +1,174 @@
+{
+ "assign-k2-s0": {
+  "run": {
+   "task": "circles26",
+   "strategy": "fnf_assign",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "k": 2,
+   "branch_steps": 4,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/circles26/ksweep-01/assign-k2-s0",
+   "commit": "2b3f4f7412e2c8cac125a422bbd46de8515383c8",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --seed 0 --budget 40 --model gpt-5.4-mini --task circles26 --strategy fnf_assign --k 2 --branch-steps 4 --out runs/explore/circles26/ksweep-01/assign-k2-s0"
+  },
+  "metrics": {
+   "strategy": "fnf_assign",
+   "task": "circles26",
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 2.54138,
+   "best_val": 2.541289,
+   "best_id": "s0026",
+   "best_test": 2.541156,
+   "spent": {
+    "prompt_tokens": 329210,
+    "completion_tokens": 90261,
+    "usd": 0.653082
+   },
+   "valid_share": 0.85,
+   "list_usd": 0.0026820000000000004
+  }
+ },
+ "assign-k8-s0": {
+  "run": {
+   "task": "circles26",
+   "strategy": "fnf_assign",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "k": 8,
+   "branch_steps": 1,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/circles26/ksweep-01/assign-k8-s0",
+   "commit": "2b3f4f7412e2c8cac125a422bbd46de8515383c8",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --seed 0 --budget 40 --model gpt-5.4-mini --task circles26 --strategy fnf_assign --k 8 --branch-steps 1 --out runs/explore/circles26/ksweep-01/assign-k8-s0"
+  },
+  "metrics": {
+   "strategy": "fnf_assign",
+   "task": "circles26",
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 2.54138,
+   "best_val": 2.624157,
+   "best_id": "s0038",
+   "best_test": 2.624157,
+   "spent": {
+    "prompt_tokens": 203734,
+    "completion_tokens": 103121,
+    "usd": 0.616845
+   },
+   "valid_share": 0.85,
+   "list_usd": 0.0086085
+  }
+ },
+ "parallel-k2-s0": {
+  "run": {
+   "task": "circles26",
+   "strategy": "parallel",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "k": 2,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/circles26/ksweep-01/parallel-k2-s0",
+   "commit": "2b3f4f7412e2c8cac125a422bbd46de8515383c8",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --seed 0 --budget 40 --model gpt-5.4-mini --task circles26 --strategy parallel --k 2 --out runs/explore/circles26/ksweep-01/parallel-k2-s0"
+  },
+  "metrics": {
+   "strategy": "parallel",
+   "task": "circles26",
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 2.54138,
+   "best_val": 2.159122,
+   "best_id": "s0024",
+   "best_test": 2.159122,
+   "spent": {
+    "prompt_tokens": 555312,
+    "completion_tokens": 52324,
+    "usd": 0.6519419999999998
+   },
+   "valid_share": 0.8
+  }
+ },
+ "parallel-k4-s0": {
+  "run": {
+   "task": "circles26",
+   "strategy": "parallel",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "k": 4,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/circles26/ksweep-01/parallel-k4-s0",
+   "commit": "2b3f4f7412e2c8cac125a422bbd46de8515383c8",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --seed 0 --budget 40 --model gpt-5.4-mini --task circles26 --strategy parallel --k 4 --out runs/explore/circles26/ksweep-01/parallel-k4-s0"
+  },
+  "metrics": {
+   "strategy": "parallel",
+   "task": "circles26",
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 2.54138,
+   "best_val": 2.451962,
+   "best_id": "s0006",
+   "best_test": 2.451962,
+   "spent": {
+    "prompt_tokens": 179185,
+    "completion_tokens": 33674,
+    "usd": 0.28592175
+   },
+   "valid_share": 0.375
+  }
+ },
+ "parallel-k8-s0": {
+  "run": {
+   "task": "circles26",
+   "strategy": "parallel",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "k": 8,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/circles26/ksweep-01/parallel-k8-s0",
+   "commit": "2b3f4f7412e2c8cac125a422bbd46de8515383c8",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --seed 0 --budget 40 --model gpt-5.4-mini --task circles26 --strategy parallel --k 8 --out runs/explore/circles26/ksweep-01/parallel-k8-s0"
+  },
+  "metrics": {
+   "strategy": "parallel",
+   "task": "circles26",
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 2.54138,
+   "best_val": 2.181908,
+   "best_id": "s0034",
+   "best_test": 2.181908,
+   "spent": {
+    "prompt_tokens": 66358,
+    "completion_tokens": 22941,
+    "usd": 0.15300299999999997
+   },
+   "valid_share": 0.25
+  }
+ }
+}

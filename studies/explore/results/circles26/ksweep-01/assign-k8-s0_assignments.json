@@ -1,0 +1,146 @@
+[
+ {
+  "fork": 0,
+  "branch": "f0b0",
+  "method": "Start from a hand-designed mixed pattern of larger and smaller circles, then repeatedly perform local optimization on the radii and centers using constrained nonlinear search to maximize total radius while enforcing non-overlap and boundary constraints.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b1",
+  "method": "Use simulated annealing over circle centers and radii, with moves that perturb one or a few circles at a time and accept worsening steps probabilistically to escape local maxima.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b2",
+  "method": "Represent the packing as a force-balanced system where overlapping circles repel and circles are attracted toward larger feasible radii, then iteratively relax positions and sizes until convergence.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b3",
+  "method": "Run a multi-start greedy insertion algorithm that places circles one by one at the largest currently feasible radius in the biggest uncovered gaps, restarting from many random seeds and keeping the best packing.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b4",
+  "method": "Optimize a parameterized packing template such as rows, hexagonal layers, or concentric bands, and search the template parameters with derivative-free optimization to maximize the radius sum.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b5",
+  "method": "Use a penalty-based objective and solve it with scipy.optimize over all 78 variables, gradually increasing penalty strength for overlaps and boundary violations in a continuation scheme.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b6",
+  "method": "Construct a Voronoi-style candidate set of centers from intersections of boundary-offset lines and circle tangencies, then solve a discrete selection problem to choose the best non-overlapping radii subset.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b7",
+  "method": "Apply a hybrid evolutionary algorithm that mutates an entire packing, uses local repair to fix violations, and keeps an elite population across generations.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b0",
+  "method": "Use basin-hopping on all 78 variables with a fast feasibility-preserving reparameterization of centers and radii, accepting only locally optimized candidates after each random jump.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b1",
+  "method": "Build a candidate graph of circle centers from boundary tangencies and pairwise tangency equations, then search over subsets with branch-and-bound to maximize the sum of maximal feasible radii.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b2",
+  "method": "Optimize only the center positions with radii always set to each circle\u2019s current maximum feasible value, using derivative-free search on the reduced 52-dimensional problem plus periodic coordinate restarts.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b3",
+  "method": "Start from several structured templates, then run alternating projection steps that project circles onto boundary feasibility and pairwise non-overlap constraints until reaching a fixed point.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b4",
+  "method": "Use simulated annealing on a discrete occupancy grid of possible center locations, with each move relocating one circle to a grid point and recomputing radii exactly.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b5",
+  "method": "Treat the packing as a max-sum nonlinear program and solve it with scipy.optimize using analytic gradients and a penalty continuation schedule, while repairing infeasible iterates between stages.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b6",
+  "method": "Construct the packing incrementally by selecting the next circle from a large pool of sampled candidate centers that maximize local slack, then place it greedily and reoptimize earlier circles after each insertion.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b7",
+  "method": "Apply a memetic evolutionary algorithm that evolves a population of packings, recombines center layouts between parents, and runs a short local optimizer on each offspring before selection.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b0",
+  "method": "Use a restart-heavy constrained optimizer over all circle centers with radii always recomputed as the maximum feasible values, but drive it with a stronger global search such as differential evolution before local polishing.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b1",
+  "method": "Build packings from several fixed geometric templates (grid, staggered rows, corner-heavy, ring-based, and mixed-size motifs), then let a local optimizer adjust only the template parameters and circle centers.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b2",
+  "method": "Model the square as an arrangement of boundary and tangency constraints, enumerate promising center locations from intersections of offset lines/circles, and solve a maximum-weight independent set over the resulting candidate circles.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b3",
+  "method": "Run a multi-scale search that first optimizes a coarse subset of large circles, freezes them, and then recursively fills remaining gaps with smaller circles while locally reoptimizing earlier placements.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b4",
+  "method": "Use a stochastic swap-and-repair heuristic that repeatedly removes a few circles, reinserts them into the largest available feasible gaps, and then performs a deterministic cleanup pass to restore maximal radii.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b5",
+  "method": "Formulate the problem as a smooth penalty objective on centers and radii, then apply a deterministic augmented-Lagrangian or trust-region method with continuation on penalty weights and feasibility repair between stages.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b6",
+  "method": "Construct an initial packing using a centroidal/Voronoi-style partition of the square, place one circle per cell at a slack-maximizing point, and iteratively update the partition boundaries and circle sizes.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b7",
+  "method": "Maintain a small elite archive of diverse packings and explore it with recombination operators that splice subsets of circles from different elites, followed by local feasibility-preserving refinement and acceptance by score improvement.",
+  "list_model": "gpt-5.4-mini"
+ }
+]

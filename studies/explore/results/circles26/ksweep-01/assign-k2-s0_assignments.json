@@ -1,0 +1,38 @@
+[
+ {
+  "fork": 0,
+  "branch": "f0b0",
+  "method": "Start from a structured seed packing (e.g. hexagonal/row-based or mixed-size template), then run a constrained continuous optimization that repeatedly adjusts circle centers and radii to maximize total radius while enforcing non-overlap and square-boundary constraints.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b1",
+  "method": "Use multi-start local search: generate many randomized feasible initial packings with a few large circles and many smaller fillers, then refine each with simulated annealing or hill-climbing plus occasional circle swaps/splits, keeping the best valid configuration found.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b0",
+  "method": "Construct a hand-designed asymmetric seed made from several large corner/edge circles and a dense interior lattice, then run a deterministic nonlinear optimizer on all circle centers and radii with a penalty objective for overlaps and boundary violations.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b1",
+  "method": "Use a staged pack-and-improve search: first place circles by repeatedly inserting the largest feasible circle into the current gaps, then perform local swaps, radius reallocations, and coordinate perturbations while preserving feasibility and keeping the best total radius.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b0",
+  "method": "Use a deterministic Voronoi/gap-based constructive search that iteratively places the largest feasible circle in the current uncovered regions, then performs radius inflation and small geometric relaxations to improve total radius while preserving validity.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b1",
+  "method": "Run a hybrid global-local optimizer that starts from many diverse random or quasi-random feasible seeds, uses a fast repair step to project invalid moves back to feasibility, and alternates simulated annealing-style perturbations with gradient-free local refinement on centers and radii.",
+  "list_model": "gpt-5.4-mini"
+ }
+]
