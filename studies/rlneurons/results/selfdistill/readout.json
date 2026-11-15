@@ -1,0 +1,813 @@
+{
+ "spec": "studies/rlneurons/specs/SELFDISTILL_2026-11-15.md",
+ "grader": "rln4_lib.grade_v3",
+ "n": 328,
+ "training": {
+  "V": {
+   "job_id": "abaybektursun-1114-194352-feef",
+   "commit": "ec6e0f5d6d6ba1581079faa129c5161f18b00a01",
+   "n_examples": 455,
+   "target_tokens": 898064,
+   "prompt_tokens": 52631,
+   "steps": 96,
+   "loss_first_step": 0.36551998695358634,
+   "loss_last_step": 0.25824606232345104,
+   "loss_epoch_mean": [
+    0.39388981917694565,
+    0.3811716152448052
+   ],
+   "train_s": 650.0297453403473,
+   "tokens_per_s": 2763.1473988310645,
+   "targets_right_v3": 439,
+   "targets_right_share": 0.9648351648351648,
+   "groups": {
+    "mlp.down_proj": {
+     "rel_norm_lora": 0.003034,
+     "rel_norm_merged": 0.003736,
+     "rel_norm_rl": 0.002341,
+     "cos_lora_rl": 0.003027,
+     "cos_merged_rl": 0.002476,
+     "effective_scale": 1.000015
+    },
+    "mlp.gate_proj": {
+     "rel_norm_lora": 0.005097,
+     "rel_norm_merged": 0.005591,
+     "rel_norm_rl": 0.002254,
+     "cos_lora_rl": 0.003144,
+     "cos_merged_rl": 0.00288,
+     "effective_scale": 1.000014
+    },
+    "mlp.up_proj": {
+     "rel_norm_lora": 0.004931,
+     "rel_norm_merged": 0.005441,
+     "rel_norm_rl": 0.002286,
+     "cos_lora_rl": 0.002702,
+     "cos_merged_rl": 0.002457,
+     "effective_scale": 0.999994
+    },
+    "self_attn.k_proj": {
+     "rel_norm_lora": 0.005443,
+     "rel_norm_merged": 0.005907,
+     "rel_norm_rl": 0.002652,
+     "cos_lora_rl": 0.001215,
+     "cos_merged_rl": 0.001106,
+     "effective_scale": 0.999976
+    },
+    "self_attn.o_proj": {
+     "rel_norm_lora": 0.004807,
+     "rel_norm_merged": 0.005323,
+     "rel_norm_rl": 0.0025,
+     "cos_lora_rl": 0.001932,
+     "cos_merged_rl": 0.001744,
+     "effective_scale": 1.000018
+    },
+    "self_attn.q_proj": {
+     "rel_norm_lora": 0.005371,
+     "rel_norm_merged": 0.005842,
+     "rel_norm_rl": 0.002556,
+     "cos_lora_rl": 0.001159,
+     "cos_merged_rl": 0.001055,
+     "effective_scale": 0.999987
+    },
+    "self_attn.v_proj": {
+     "rel_norm_lora": 0.00432,
+     "rel_norm_merged": 0.004876,
+     "rel_norm_rl": 0.002488,
+     "cos_lora_rl": 0.002145,
+     "cos_merged_rl": 0.001882,
+     "effective_scale": 1.000021
+    },
+    "all": {
+     "rel_norm_lora": 0.004596,
+     "rel_norm_merged": 0.005125,
+     "rel_norm_rl": 0.002363,
+     "cos_lora_rl": 0.002489,
+     "cos_merged_rl": 0.002237,
+     "effective_scale": 1.000005
+    }
+   },
+   "merged_sha256": "d99ec822d808733dff4ea4f511c28b0b439a959ded85512353cfbc695992b432",
+   "zero_adapter_sha256": "6ea91243299ba77f4bf9bc5fba0f285cd164475026bff1c8f9e76da73eaf8da1",
+   "generations_before": [
+    {
+     "problem_index": 0,
+     "text": ".\n\nTo convert the point \\((0, 3)\\) from rectangular coordinates to polar coordinates, we need to find the values of \\(r\\) and \\(\\theta\\).\n\n1. **Calculate \\(r\\):**\n   The formula for \\(r\\) in polar coordinates is:\n   \\[\n   r = \\sqrt{x^2 + y^2}\n   \\]\n   For the point",
+     "starts_with_cue": false
+    },
+    {
+     "problem_index": 1,
+     "text": ".\n\nOkay, so I need to find a way to express the double sum \\(\\sum_{j = 1}^\\infty \\sum_{k = 1}^\\infty \\frac{1}{(j + k)^3}\\) in terms of \\(p\\) and \\(q\\), where \\(p = \\sum_{k = 1}^\\infty \\frac{",
+     "starts_with_cue": false
+    },
+    {
+     "problem_index": 2,
+     "text": ".\n\nTo solve the problem, we need to evaluate the function \\( f(x) = \\frac{3x-2}{x-2} \\) at \\( x = -2 \\), \\( x = -1 \\), and \\( x = 0 \\), and then sum the results.\n\nFirst, let's evaluate \\( f(-2) \\):\n\\[ f(-2) = \\frac",
+     "starts_with_cue": false
+    }
+   ],
+   "generations_after": [
+    {
+     "problem_index": 0,
+     "text": " line!\n\nOkay, so I need to convert the rectangular coordinates (0, 3) to polar coordinates. Hmm, polar coordinates are in the form (r, \u03b8), right? Where r is the distance from the origin and \u03b8 is the angle from the positive x-axis. Let me recall the formulas for converting from rectangular to polar.\n\nI think the formulas are r = \u221a(",
+     "starts_with_cue": true
+    },
+    {
+     "problem_index": 1,
+     "text": " line!\n\nOkay, so I need to find a way to express the double sum \u2211_{j=1}^\u221e \u2211_{k=1}^\u221e 1/(j + k)^3 in terms of p and q, where p is the sum of 1/k\u00b2 and q is the sum of 1/k\u00b3. Hmm, let's start by understanding what",
+     "starts_with_cue": true
+    },
+    {
+     "problem_index": 2,
+     "text": " line!\n\nOkay, let's see. I need to find the value of f(-2) + f(-1) + f(0) where the function f(x) is given as (3x - 2)/(x - 2). Hmm, first, I should probably check if there are any restrictions on the domain of the function. The denominator is x - 2, so x",
+     "starts_with_cue": true
+    }
+   ]
+  },
+  "U": {
+   "job_id": "abaybektursun-1114-194358-195f",
+   "commit": "ec6e0f5d6d6ba1581079faa129c5161f18b00a01",
+   "n_examples": 455,
+   "target_tokens": 1353449,
+   "prompt_tokens": 52631,
+   "steps": 140,
+   "loss_first_step": 0.38740286231040955,
+   "loss_last_step": 0.29002277087420225,
+   "loss_epoch_mean": [
+    0.44082092340689805,
+    0.4285438752336049
+   ],
+   "train_s": 835.2666122913361,
+   "tokens_per_s": 3240.759250000825,
+   "targets_right_v3": 407,
+   "targets_right_share": 0.8945054945054945,
+   "groups": {
+    "mlp.down_proj": {
+     "rel_norm_lora": 0.003793,
+     "rel_norm_merged": 0.004409,
+     "rel_norm_rl": 0.002341,
+     "cos_lora_rl": 0.002424,
+     "cos_merged_rl": 0.002096,
+     "effective_scale": 1.000022
+    },
+    "mlp.gate_proj": {
+     "rel_norm_lora": 0.006535,
+     "rel_norm_merged": 0.006934,
+     "rel_norm_rl": 0.002254,
+     "cos_lora_rl": 0.002848,
+     "cos_merged_rl": 0.002692,
+     "effective_scale": 0.999999
+    },
+    "mlp.up_proj": {
+     "rel_norm_lora": 0.006123,
+     "rel_norm_merged": 0.006548,
+     "rel_norm_rl": 0.002286,
+     "cos_lora_rl": 0.002543,
+     "cos_merged_rl": 0.002386,
+     "effective_scale": 1.000006
+    },
+    "self_attn.k_proj": {
+     "rel_norm_lora": 0.006729,
+     "rel_norm_merged": 0.007117,
+     "rel_norm_rl": 0.002652,
+     "cos_lora_rl": 0.001067,
+     "cos_merged_rl": 0.000995,
+     "effective_scale": 1.000013
+    },
+    "self_attn.o_proj": {
+     "rel_norm_lora": 0.005922,
+     "rel_norm_merged": 0.006357,
+     "rel_norm_rl": 0.0025,
+     "cos_lora_rl": 0.001474,
+     "cos_merged_rl": 0.001393,
+     "effective_scale": 1.000012
+    },
+    "self_attn.q_proj": {
+     "rel_norm_lora": 0.006719,
+     "rel_norm_merged": 0.007108,
+     "rel_norm_rl": 0.002556,
+     "cos_lora_rl": 0.001061,
+     "cos_merged_rl": 0.000998,
+     "effective_scale": 1.000021
+    },
+    "self_attn.v_proj": {
+     "rel_norm_lora": 0.00524,
+     "rel_norm_merged": 0.005721,
+     "rel_norm_rl": 0.002488,
+     "cos_lora_rl": 0.001992,
+     "cos_merged_rl": 0.001819,
+     "effective_scale": 0.999997
+    },
+    "all": {
+     "rel_norm_lora": 0.005756,
+     "rel_norm_merged": 0.006198,
+     "rel_norm_rl": 0.002363,
+     "cos_lora_rl": 0.00221,
+     "cos_merged_rl": 0.002058,
+     "effective_scale": 1.000007
+    }
+   },
+   "merged_sha256": "2182995659bb77c25162fcc131d752ee00a1e9d32687645ba73903f640009198",
+   "zero_adapter_sha256": "6ea91243299ba77f4bf9bc5fba0f285cd164475026bff1c8f9e76da73eaf8da1",
+   "generations_before": [
+    {
+     "problem_index": 0,
+     "text": ".\n\nTo convert the point \\((0, 3)\\) from rectangular coordinates to polar coordinates, we need to find the values of \\(r\\) and \\(\\theta\\).\n\n1. **Calculate \\(r\\):**\n   The formula for \\(r\\) in polar coordinates is:\n   \\[\n   r = \\sqrt{x^2 + y^2}\n   \\]\n   For the point",
+     "starts_with_cue": false
+    },
+    {
+     "problem_index": 1,
+     "text": ".\n\nOkay, so I need to find a way to express the double sum \\(\\sum_{j = 1}^\\infty \\sum_{k = 1}^\\infty \\frac{1}{(j + k)^3}\\) in terms of \\(p\\) and \\(q\\), where \\(p = \\sum_{k = 1}^\\infty \\frac{",
+     "starts_with_cue": false
+    },
+    {
+     "problem_index": 2,
+     "text": ".\n\nTo solve the problem, we need to evaluate the function \\( f(x) = \\frac{3x-2}{x-2} \\) at \\( x = -2 \\), \\( x = -1 \\), and \\( x = 0 \\), and then sum the results.\n\nFirst, let's evaluate \\( f(-2) \\):\n\\[ f(-2) = \\frac",
+     "starts_with_cue": false
+    }
+   ],
+   "generations_after": [
+    {
+     "problem_index": 0,
+     "text": " line!\n\nOkay, so I need to convert the rectangular coordinates (0, 3) to polar coordinates. Hmm, polar coordinates are in the form (r, \u03b8), right? Where r is the distance from the origin and \u03b8 is the angle from the positive x-axis. Let me recall the formulas for converting from rectangular to polar.\n\nI think the formulas are r = \u221a(",
+     "starts_with_cue": true
+    },
+    {
+     "problem_index": 1,
+     "text": " line!\n\nOkay, so I need to find a way to express the double sum \\(\\sum_{j=1}^\\infty \\sum_{k=1}^\\infty \\frac{1}{(j + k)^3}\\) in terms of \\(p\\) and \\(q\\), where \\(p = \\sum_{k=1}^\\infty \\frac{1}{",
+     "starts_with_cue": true
+    },
+    {
+     "problem_index": 2,
+     "text": " line!\n\nOkay, let's see. I need to find the value of f(-2) + f(-1) + f(0) where the function f(x) is given as (3x - 2)/(x - 2). Hmm, so first, I should probably compute each of these function values one by one and then add them up. Let me start with f(-2",
+     "starts_with_cue": true
+    }
+   ]
+  },
+  "S": {
+   "job_id": "abaybektursun-1114-194405-bbb6",
+   "commit": "ec6e0f5d6d6ba1581079faa129c5161f18b00a01",
+   "n_examples": 455,
+   "target_tokens": 839231,
+   "prompt_tokens": 52631,
+   "steps": 91,
+   "loss_first_step": 0.37199573684483767,
+   "loss_last_step": 0.2863788427785039,
+   "loss_epoch_mean": [
+    0.38762512825732626,
+    0.37507281381313046
+   ],
+   "train_s": 474.65014028549194,
+   "tokens_per_s": 3536.208793682102,
+   "targets_right_v3": 416,
+   "targets_right_share": 0.9142857142857143,
+   "groups": {
+    "mlp.down_proj": {
+     "rel_norm_lora": 0.002926,
+     "rel_norm_merged": 0.003641,
+     "rel_norm_rl": 0.002341,
+     "cos_lora_rl": 0.003025,
+     "cos_merged_rl": 0.002432,
+     "effective_scale": 1.000009
+    },
+    "mlp.gate_proj": {
+     "rel_norm_lora": 0.004904,
+     "rel_norm_merged": 0.005411,
+     "rel_norm_rl": 0.002254,
+     "cos_lora_rl": 0.002928,
+     "cos_merged_rl": 0.002668,
+     "effective_scale": 0.999988
+    },
+    "mlp.up_proj": {
+     "rel_norm_lora": 0.004723,
+     "rel_norm_merged": 0.00525,
+     "rel_norm_rl": 0.002286,
+     "cos_lora_rl": 0.002899,
+     "cos_merged_rl": 0.00262,
+     "effective_scale": 0.999999
+    },
+    "self_attn.k_proj": {
+     "rel_norm_lora": 0.005254,
+     "rel_norm_merged": 0.005731,
+     "rel_norm_rl": 0.002652,
+     "cos_lora_rl": 0.001224,
+     "cos_merged_rl": 0.00111,
+     "effective_scale": 0.999957
+    },
+    "self_attn.o_proj": {
+     "rel_norm_lora": 0.004629,
+     "rel_norm_merged": 0.00516,
+     "rel_norm_rl": 0.0025,
+     "cos_lora_rl": 0.001964,
+     "cos_merged_rl": 0.001764,
+     "effective_scale": 1.000022
+    },
+    "self_attn.q_proj": {
+     "rel_norm_lora": 0.005173,
+     "rel_norm_merged": 0.005658,
+     "rel_norm_rl": 0.002556,
+     "cos_lora_rl": 0.001344,
+     "cos_merged_rl": 0.001221,
+     "effective_scale": 1.000026
+    },
+    "self_attn.v_proj": {
+     "rel_norm_lora": 0.004127,
+     "rel_norm_merged": 0.004698,
+     "rel_norm_rl": 0.002488,
+     "cos_lora_rl": 0.001913,
+     "cos_merged_rl": 0.001666,
+     "effective_scale": 0.999964
+    },
+    "all": {
+     "rel_norm_lora": 0.004417,
+     "rel_norm_merged": 0.00496,
+     "rel_norm_rl": 0.002363,
+     "cos_lora_rl": 0.002478,
+     "cos_merged_rl": 0.002211,
+     "effective_scale": 0.999995
+    }
+   },
+   "merged_sha256": "865b8fdc38faca91d425621df2f7a56232eb83f996b1596914261f646cbe6a3b",
+   "zero_adapter_sha256": "6ea91243299ba77f4bf9bc5fba0f285cd164475026bff1c8f9e76da73eaf8da1",
+   "generations_before": [
+    {
+     "problem_index": 0,
+     "text": ".\n\nTo convert the point \\((0, 3)\\) from rectangular coordinates to polar coordinates, we need to find the values of \\(r\\) and \\(\\theta\\).\n\n1. **Calculate \\(r\\):**\n   The formula for \\(r\\) in polar coordinates is:\n   \\[\n   r = \\sqrt{x^2 + y^2}\n   \\]\n   For the point",
+     "starts_with_cue": false
+    },
+    {
+     "problem_index": 1,
+     "text": ".\n\nOkay, so I need to find a way to express the double sum \\(\\sum_{j = 1}^\\infty \\sum_{k = 1}^\\infty \\frac{1}{(j + k)^3}\\) in terms of \\(p\\) and \\(q\\), where \\(p = \\sum_{k = 1}^\\infty \\frac{",
+     "starts_with_cue": false
+    },
+    {
+     "problem_index": 2,
+     "text": ".\n\nTo solve the problem, we need to evaluate the function \\( f(x) = \\frac{3x-2}{x-2} \\) at \\( x = -2 \\), \\( x = -1 \\), and \\( x = 0 \\), and then sum the results.\n\nFirst, let's evaluate \\( f(-2) \\):\n\\[ f(-2) = \\frac",
+     "starts_with_cue": false
+    }
+   ],
+   "generations_after": [
+    {
+     "problem_index": 0,
+     "text": " line!\n\nOkay, so I need to convert the rectangular coordinates (0, 3) to polar coordinates. Hmm, polar coordinates are in the form (r, \u03b8), right? Where r is the distance from the origin and \u03b8 is the angle from the positive x-axis. Let me recall the formulas for converting from rectangular to polar.\n\nI think the formulas are r = \u221a(",
+     "starts_with_cue": true
+    },
+    {
+     "problem_index": 1,
+     "text": " line!\n\nOkay, so I need to find a way to express the double sum \u2211_{j=1}^\u221e \u2211_{k=1}^\u221e 1/(j + k)^3 in terms of p and q, where p is the sum of 1/k\u00b2 and q is the sum of 1/k\u00b3. Hmm, let's start by understanding what",
+     "starts_with_cue": true
+    },
+    {
+     "problem_index": 2,
+     "text": " line!\n\nOkay, let's see. I need to find the value of f(-2) + f(-1) + f(0) where the function f(x) is given as (3x - 2)/(x - 2). Hmm, first, I should probably check if there are any restrictions on the domain of the function. The denominator is x - 2, so x",
+     "starts_with_cue": true
+    }
+   ]
+  }
+ },
+ "sanity_math500_first100": {
+  "job_id": "abaybektursun-1114-200050-c260",
+  "V_plain": {
+   "n": 100,
+   "right_v3": 90,
+   "cap_hits": 3,
+   "loops_A": 0,
+   "mean_generated_tokens": 3126.0,
+   "starts_with_cue": 100
+  },
+  "T3_base_plain": {
+   "n": 100,
+   "right_v3": 49,
+   "cap_hits": 0,
+   "loops_A": 0,
+   "mean_generated_tokens": 1489.0
+  },
+  "T1_base_cue": {
+   "n": 100,
+   "right_v3": 82,
+   "cap_hits": 6,
+   "loops_A": 0,
+   "mean_generated_tokens": 3755.9
+  },
+  "note": "in-distribution: these 100 problems were in the training set; a check that training worked, not a result",
+  "run_folder": "studies/rlneurons/results/selfdistill/sanity_V_plain_math500_n100-01"
+ },
+ "cells": {
+  "base_cue_T1": {
+   "n": 328,
+   "right_v3": 164,
+   "cap_hits": 77,
+   "loops_A": 1,
+   "mean_generated_tokens": 9343.8,
+   "seed_base": 3000000,
+   "job_id": "abaybektursun-1114-151534-e72c",
+   "starts_with_cue": 328
+  },
+  "rl_plain_T1": {
+   "n": 328,
+   "right_v3": 206,
+   "cap_hits": 20,
+   "loops_A": 0,
+   "mean_generated_tokens": 9315.4,
+   "seed_base": 3000000,
+   "job_id": "abaybektursun-1114-151540-86ef",
+   "starts_with_cue": 271
+  },
+  "theta0.5_cue": {
+   "n": 328,
+   "right_v3": 190,
+   "cap_hits": 73,
+   "loops_A": 0,
+   "mean_generated_tokens": 9656.1,
+   "seed_base": 73000000,
+   "job_id": "abaybektursun-1114-181228-34ad",
+   "starts_with_cue": 328
+  },
+  "V_plain": {
+   "n": 328,
+   "right_v3": 161,
+   "cap_hits": 74,
+   "loops_A": 0,
+   "mean_generated_tokens": 9075.1,
+   "seed_base": 81000000,
+   "job_id": "abaybektursun-1114-201013-47c5",
+   "train_job": "abaybektursun-1114-194352-feef",
+   "merged_sha256": "d99ec822d808733dff4ea4f511c28b0b439a959ded85512353cfbc695992b432",
+   "starts_with_cue": 328,
+   "empty_answers": 0,
+   "tokens_per_s": 1009.3146768333319,
+   "s3_answers": "s3://pg-lineage-769063704696/results/rlneurons/r5/selfdistill-01/abaybektursun-1114-201013-47c5/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/selfdistill/V_plain-01",
+   "hand_read_right_of_20": [],
+   "right_corrected": 161
+  },
+  "V_cue": {
+   "n": 328,
+   "right_v3": 167,
+   "cap_hits": 74,
+   "loops_A": 0,
+   "mean_generated_tokens": 8625.0,
+   "seed_base": 82000000,
+   "job_id": "abaybektursun-1114-201021-095e",
+   "train_job": "abaybektursun-1114-194352-feef",
+   "merged_sha256": "d99ec822d808733dff4ea4f511c28b0b439a959ded85512353cfbc695992b432",
+   "starts_with_cue": 328,
+   "empty_answers": 0,
+   "tokens_per_s": 1020.9353285726128,
+   "s3_answers": "s3://pg-lineage-769063704696/results/rlneurons/r5/selfdistill-01/abaybektursun-1114-201021-095e/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/selfdistill/V_cue-01",
+   "hand_read_right_of_20": [],
+   "right_corrected": 167
+  },
+  "U_plain": {
+   "n": 328,
+   "right_v3": 154,
+   "cap_hits": 80,
+   "loops_A": 0,
+   "mean_generated_tokens": 9257.1,
+   "seed_base": 83000000,
+   "job_id": "abaybektursun-1114-201028-1adf",
+   "train_job": "abaybektursun-1114-194358-195f",
+   "merged_sha256": "2182995659bb77c25162fcc131d752ee00a1e9d32687645ba73903f640009198",
+   "starts_with_cue": 327,
+   "empty_answers": 0,
+   "tokens_per_s": 1009.9832050295423,
+   "s3_answers": "s3://pg-lineage-769063704696/results/rlneurons/r5/selfdistill-01/abaybektursun-1114-201028-1adf/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/selfdistill/U_plain-01",
+   "hand_read_right_of_20": [],
+   "right_corrected": 154
+  },
+  "U_cue": {
+   "n": 328,
+   "right_v3": 168,
+   "cap_hits": 76,
+   "loops_A": 2,
+   "mean_generated_tokens": 9103.3,
+   "seed_base": 84000000,
+   "job_id": "abaybektursun-1114-201035-c6c0",
+   "train_job": "abaybektursun-1114-194358-195f",
+   "merged_sha256": "2182995659bb77c25162fcc131d752ee00a1e9d32687645ba73903f640009198",
+   "starts_with_cue": 328,
+   "empty_answers": 0,
+   "tokens_per_s": 1012.5526842122271,
+   "s3_answers": "s3://pg-lineage-769063704696/results/rlneurons/r5/selfdistill-01/abaybektursun-1114-201035-c6c0/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/selfdistill/U_cue-01",
+   "hand_read_right_of_20": [],
+   "right_corrected": 168
+  },
+  "S_cue": {
+   "n": 328,
+   "right_v3": 171,
+   "cap_hits": 65,
+   "loops_A": 1,
+   "mean_generated_tokens": 8535.4,
+   "seed_base": 85000000,
+   "job_id": "abaybektursun-1114-201132-3c04",
+   "train_job": "abaybektursun-1114-194405-bbb6",
+   "merged_sha256": "865b8fdc38faca91d425621df2f7a56232eb83f996b1596914261f646cbe6a3b",
+   "starts_with_cue": 328,
+   "empty_answers": 0,
+   "tokens_per_s": 1052.3894155720643,
+   "s3_answers": "s3://pg-lineage-769063704696/results/rlneurons/r5/selfdistill-01/abaybektursun-1114-201132-3c04/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/selfdistill/S_cue-01",
+   "hand_read_right_of_20": [],
+   "right_corrected": 171
+  }
+ },
+ "per_source_right_v3": {
+  "base_cue_T1": {
+   "aime2022": 5,
+   "aime2023": 1,
+   "aime2024": 10,
+   "aime2025": 7,
+   "amc23": 22,
+   "hmmt_feb2025": 5,
+   "olympiadbench": 114
+  },
+  "rl_plain_T1": {
+   "aime2022": 5,
+   "aime2023": 2,
+   "aime2024": 16,
+   "aime2025": 12,
+   "amc23": 23,
+   "hmmt_feb2025": 11,
+   "olympiadbench": 137
+  },
+  "theta0.5_cue": {
+   "aime2022": 5,
+   "aime2023": 2,
+   "aime2024": 13,
+   "aime2025": 10,
+   "amc23": 26,
+   "hmmt_feb2025": 7,
+   "olympiadbench": 127
+  },
+  "V_plain": {
+   "aime2022": 4,
+   "aime2023": 2,
+   "aime2024": 7,
+   "aime2025": 7,
+   "amc23": 19,
+   "hmmt_feb2025": 5,
+   "olympiadbench": 117
+  },
+  "V_cue": {
+   "aime2022": 4,
+   "aime2023": 1,
+   "aime2024": 9,
+   "aime2025": 7,
+   "amc23": 24,
+   "hmmt_feb2025": 6,
+   "olympiadbench": 116
+  },
+  "U_plain": {
+   "aime2022": 4,
+   "aime2023": 1,
+   "aime2024": 6,
+   "aime2025": 6,
+   "amc23": 19,
+   "hmmt_feb2025": 4,
+   "olympiadbench": 114
+  },
+  "U_cue": {
+   "aime2022": 5,
+   "aime2023": 1,
+   "aime2024": 11,
+   "aime2025": 8,
+   "amc23": 21,
+   "hmmt_feb2025": 3,
+   "olympiadbench": 119
+  },
+  "S_cue": {
+   "aime2022": 5,
+   "aime2023": 1,
+   "aime2024": 10,
+   "aime2025": 6,
+   "amc23": 23,
+   "hmmt_feb2025": 5,
+   "olympiadbench": 121
+  },
+  "n": {
+   "aime2022": 6,
+   "aime2023": 3,
+   "aime2024": 29,
+   "aime2025": 30,
+   "amc23": 28,
+   "hmmt_feb2025": 30,
+   "olympiadbench": 202
+  }
+ },
+ "differences": {
+  "V_cue minus base_cue_T1": {
+   "points": 0.91,
+   "ci95": [
+    -3.05,
+    4.88
+   ]
+  },
+  "V_plain minus base_cue_T1": {
+   "points": -0.91,
+   "ci95": [
+    -5.49,
+    3.66
+   ]
+  },
+  "V_plain minus U_plain": {
+   "points": 2.13,
+   "ci95": [
+    -2.13,
+    6.4
+   ]
+  },
+  "V_cue minus U_cue": {
+   "points": -0.3,
+   "ci95": [
+    -4.88,
+    4.27
+   ]
+  },
+  "V_cue minus rl_plain_T1": {
+   "points": -11.89,
+   "ci95": [
+    -16.16,
+    -7.93
+   ]
+  },
+  "V_cue minus theta0.5_cue": {
+   "points": -7.01,
+   "ci95": [
+    -11.59,
+    -2.74
+   ]
+  },
+  "U_cue minus base_cue_T1": {
+   "points": 1.22,
+   "ci95": [
+    -3.05,
+    5.79
+   ]
+  },
+  "U_plain minus base_cue_T1": {
+   "points": -3.05,
+   "ci95": [
+    -7.32,
+    1.22
+   ]
+  },
+  "V_cue minus V_plain": {
+   "points": 1.83,
+   "ci95": [
+    -3.05,
+    6.71
+   ]
+  },
+  "S_cue minus base_cue_T1": {
+   "points": 2.13,
+   "ci95": [
+    -2.13,
+    6.71
+   ]
+  },
+  "V_cue minus S_cue": {
+   "points": -1.22,
+   "ci95": [
+    -5.49,
+    3.05
+   ]
+  },
+  "S_cue minus U_cue": {
+   "points": 0.91,
+   "ci95": [
+    -3.96,
+    5.79
+   ]
+  }
+ },
+ "bootstrap": "paired, 5,000 resamples, seed 0, 95 % percentile",
+ "fixed_lost_vs_base_cue": {
+  "V_plain": {
+   "fixed_of_base_cue_wrong": 29,
+   "lost_of_base_cue_right": 32
+  },
+  "V_cue": {
+   "fixed_of_base_cue_wrong": 25,
+   "lost_of_base_cue_right": 22
+  },
+  "U_plain": {
+   "fixed_of_base_cue_wrong": 22,
+   "lost_of_base_cue_right": 32
+  },
+  "U_cue": {
+   "fixed_of_base_cue_wrong": 30,
+   "lost_of_base_cue_right": 26
+  },
+  "S_cue": {
+   "fixed_of_base_cue_wrong": 31,
+   "lost_of_base_cue_right": 24
+  },
+  "theta0.5_cue": {
+   "fixed_of_base_cue_wrong": 40,
+   "lost_of_base_cue_right": 14
+  },
+  "rl_plain_T1": {
+   "fixed_of_base_cue_wrong": 49,
+   "lost_of_base_cue_right": 7
+  }
+ },
+ "identical_nonempty_texts": {
+  "S_cue | U_cue": 0,
+  "S_cue | U_plain": 0,
+  "S_cue | V_cue": 0,
+  "S_cue | V_plain": 0,
+  "S_cue | base_cue_T1": 0,
+  "S_cue | rl_plain_T1": 0,
+  "S_cue | theta0.5_cue": 0,
+  "U_cue | U_plain": 0,
+  "U_cue | V_cue": 0,
+  "U_cue | V_plain": 0,
+  "U_cue | base_cue_T1": 0,
+  "U_cue | rl_plain_T1": 0,
+  "U_cue | theta0.5_cue": 0,
+  "U_plain | V_cue": 0,
+  "U_plain | V_plain": 0,
+  "U_plain | base_cue_T1": 0,
+  "U_plain | rl_plain_T1": 0,
+  "U_plain | theta0.5_cue": 0,
+  "V_cue | V_plain": 0,
+  "V_cue | base_cue_T1": 0,
+  "V_cue | rl_plain_T1": 0,
+  "V_cue | theta0.5_cue": 0,
+  "V_plain | base_cue_T1": 0,
+  "V_plain | rl_plain_T1": 0,
+  "V_plain | theta0.5_cue": 0,
+  "base_cue_T1 | rl_plain_T1": 0,
+  "base_cue_T1 | theta0.5_cue": 0,
+  "rl_plain_T1 | theta0.5_cue": 0
+ },
+ "predictions": {
+  "D1": {
+   "text": "V plain reaches base cue; refuted if the interval of V plain - base cue is entirely under 0",
+   "diff": {
+    "points": -0.91,
+    "ci95": [
+     -5.49,
+     3.66
+    ]
+   },
+   "status": "held"
+  },
+  "D2": {
+   "text": "V cue - base cue > 0 with an interval excluding 0",
+   "diff": {
+    "points": 0.91,
+    "ci95": [
+     -3.05,
+     4.88
+    ]
+   },
+   "status": "refuted"
+  },
+  "D3": {
+   "text": "V beats U at the same prompt arm; refuted if the paired interval includes 0",
+   "diff": {
+    "plain": {
+     "points": 2.13,
+     "ci95": [
+      -2.13,
+      6.4
+     ]
+    },
+    "cue": {
+     "points": -0.3,
+     "ci95": [
+      -4.88,
+      4.27
+     ]
+    }
+   },
+   "status": {
+    "plain": "refuted",
+    "cue": "refuted"
+   }
+  },
+  "D4": {
+   "text": "V cue does not reach RL plain; the headline if the interval of V cue - RL plain includes 0",
+   "diff": {
+    "points": -11.89,
+    "ci95": [
+     -16.16,
+     -7.93
+    ]
+   },
+   "status": "held"
+  },
+  "D5": {
+   "text": "V has fewer cap hits than base cue's 77 (both prompt arms)",
+   "cap_hits": {
+    "V_plain": 74,
+    "V_cue": 74,
+    "base_cue_T1": 77
+   },
+   "status": "held"
+  }
+ }
+}

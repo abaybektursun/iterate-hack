@@ -1,0 +1,35 @@
+{
+ "name": "tab-05-series-alone",
+ "note": "control: TabPFN v2 with running index + calendar features on each of the 37 series values (no listings); H: below tab-01, as for Chronos-2 (fm-01 against fm-07); refuted if >= +0.192",
+ "utc": "2026-11-15T01:15:57+00:00",
+ "commit": "b56e382",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 3,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.102817,
+ "pinball": 0.030095,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.054428,
+ "skill_geomean": 0.071936,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": -0.008262,
+   "in_band": 0.77512
+  },
+  "3": {
+   "skill_pooled": 0.06681,
+   "in_band": 0.679264
+  },
+  "7": {
+   "skill_pooled": 0.152158,
+   "in_band": 0.632752
+  }
+ },
+ "in_band": 0.696044
+}

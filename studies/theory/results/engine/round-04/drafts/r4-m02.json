@@ -1,0 +1,39 @@
+{"name": "r4-m02",
+ "statement": "Within one MATH-500 problem, a finished sample from the cued Olmo 3 base is longer when it went down a wrong line, because it writes abandoned attempts and restarts before settling, so its length relative to sibling samples reads out failure; the RL model's extra tokens are habitual verification written on right and wrong answers alike, so among finished RL samples of the same problem length carries little or no correctness signal.",
+ "scope": "Covers Olmo-3-1025-7B with the 3-token opening cue and Olmo-3.1-7B-RL-Zero-Math with the plain prompt, at T 1.0 / top-p 1.0, cap 16,384, grader v3, MATH-500. It covers only finished samples (cap hits excluded) and only comparisons between samples of the same problem. It does not cover cap hits or loops (T 0.6), length differences across problems (which also track difficulty in both models), the harder 328 (no readable multi-sample rows), the Code pair, or the theta(a) interpolated models.",
+ "parent": null,
+ "imports": [
+  {"source": "2505.17813", "finding": "Within a question, shorter chains are more often correct, and correct chains contain fewer backtracking words (R1-32B: 95 vs 352 per chain); length works only within a problem.", "how": "Supplies the base-side half of the mechanism: backtracking (abandoned attempts) adds tokens to wrong chains, so within a problem length is a readout of failed attempts."},
+  {"source": "2610.30882", "finding": "Olmo-3 RL-Zero-Math writes 'wait' at 76.5 per 1k tokens vs 5.1 for the base at T 0.6, and follows 25.4 % of error-free prefixes with it.", "how": "Supplies the RL-side half: RL's extra tokens are a habit that fires on error-free reasoning too, so they lengthen right answers as well as wrong ones and flatten the within-problem length signal."}
+ ],
+ "explains": [
+  {"item": "result-cbe0bc", "quote": "In the 36 ties: 12 right vs 5 lowest-sample, 5 longest, 7.2 random.", "how": "Among the base's tied samples the shortest finished one is right far more often than the longest, as expected if extra length marks failed attempts."},
+  {"item": "result-cbe0bc", "quote": "RL: 475 vs 474, longest-sample control 476, not confirmed.", "how": "For RL the shortest-sample tie-break is no better than the longest, as expected if RL's added length is habitual and independent of correctness within a problem."},
+  {"item": "result-5e17a6", "quote": "Base answers <= 2,000 tokens: 263, 13 wrong", "how": "Short base answers are ones that settled without abandoned attempts, so they are rarely wrong."},
+  {"item": "result-fdc8da", "quote": "At the base's true ends RL's P(stop) is below 0.5", "how": "Where the base stops, RL tends to keep writing, i.e. it adds tokens after an answer is reached whether or not the answer is right."},
+  {"item": "result-cb82cf", "quote": "general habit, not error-specific", "how": "RL's extra hold-on readout is a general habit rather than error-triggered, which is the RL half of the mechanism."},
+  {"item": "result-b4c576", "quote": "Not larger on the 65 RL-only problems.", "how": "RL's extra deliberation is not concentrated where it fixes the base's errors, consistent with verification written regardless of correctness."},
+  {"item": "result-f21d2e", "quote": "no J-lens feature predicts a wrong base answer better than length", "how": "Length is the strongest available readout of base failure, as the mechanism expects."}
+ ],
+ "conflicts": [
+  {"item": "result-c4411d", "quote": "hold-on log-prob rises +0.279 nats (base) vs +0.346 (RL)", "how": "RL's hold-on response is somewhat more error-triggered than the base's, so RL's verification is not purely habitual and could leave some within-problem length signal."},
+  {"item": "result-5e17a6", "quote": "RL answers <= 4,000 tokens: 286, 0 wrong", "how": "RL length does carry correctness information across problems; the theory attributes this to problem difficulty, but if it also holds within problems, the RL half of the mechanism fails."}
+ ],
+ "rival": "Rival: in both models a sample that hits a dead end simply runs longer (path difficulty), so within-problem length predicts correctness equally in base and RL; RL's null tie-break in result-cbe0bc is noise from a handful of ties. The observation that separates the two is the within-problem concordance of length with wrongness among finished RL samples in the Day-1 #3 rows: the rival predicts it close to the base's (about 0.65 or more), this theory predicts it near 0.5 and clearly below the base's.",
+ "predictions": [
+  {"experiment": "Pooled within-problem concordance of length with wrongness for the cued base: over all (right, wrong) pairs of finished attempt-0 samples of the same problem, the fraction in which the wrong sample has more new tokens.",
+   "recipe": "File studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. Keep rows with attempt == 0 and cap_hit == false; drop rows whose score_v3 is null/missing. Group by problem_index. Within each problem, form every pair (i, j) with score_v3_i == 1 and score_v3_j == 0. Pair value: 1 if n_new_j > n_new_i, 0.5 if n_new_j == n_new_i, 0 otherwise. Statistic = sum of pair values over all problems / total number of pairs over all problems. Problems with no such pair contribute nothing. Cap-hit rows and later attempts are not used.",
+   "unit": "fraction of pairs", "value": 0.70, "low": 0.61, "high": 0.79,
+   "refuted_by": "computed fraction below 0.60", "gpu_minutes": 0},
+  {"experiment": "The same pooled within-problem concordance for the RL model.",
+   "recipe": "File studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl. Keep rows with attempt == 0 and cap_hit == false; drop rows whose score_v3 is null/missing. Group by problem_index. Within each problem, form every pair (i, j) with score_v3_i == 1 and score_v3_j == 0. Pair value: 1 if n_new_j > n_new_i, 0.5 if n_new_j == n_new_i, 0 otherwise. Statistic = sum of pair values over all problems / total number of pairs over all problems. Problems with no such pair contribute nothing.",
+   "unit": "fraction of pairs", "value": 0.55, "low": 0.43, "high": 0.67,
+   "refuted_by": "computed fraction above 0.68", "gpu_minutes": 0},
+  {"experiment": "Mean within-problem Spearman correlation of n_new with score_v3 for the cued base, over problems whose finished attempt-0 samples include at least one right and one wrong.",
+   "recipe": "File studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. Keep rows with attempt == 0 and cap_hit == false; drop rows with null/missing score_v3. Group by problem_index; keep problems with at least one row with score_v3 == 1 and at least one with score_v3 == 0. For each kept problem compute the Spearman rank correlation between n_new and score_v3 over its kept rows (ties get average ranks; skip a problem if all its n_new are equal). Statistic = unweighted mean of the per-problem correlations.",
+   "unit": "mean Spearman correlation", "value": -0.36, "low": -0.52, "high": -0.20,
+   "refuted_by": "computed mean above -0.19", "gpu_minutes": 0},
+  {"experiment": "Fresh base samples on the base's mixed problems: take every MATH-500 problem whose finished attempt-0 base samples in day1_3 math500_base_cue-01 rows.jsonl include at least one right and one wrong (score_v3); generate 4 new samples per problem with Olmo-3-1025-7B + cue [1584, 2268, 33413], T 1.0, top-p 1.0, max 16,384 new tokens, no restarts, seeds 91,000,000 + 10,000*sample + problem_index, grader v3. Among problems with at least 2 finished (non-cap) new samples, compute (fraction of problems where the shortest finished sample is right) minus (fraction where the longest finished sample is right); length ties broken by lower sample index.",
+   "unit": "difference of fractions of problems", "value": 0.22, "low": 0.08, "high": 0.36,
+   "refuted_by": "difference below 0.07", "gpu_minutes": 40}
+ ]}

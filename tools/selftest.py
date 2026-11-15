@@ -3,9 +3,11 @@ prefix test/). Run it after changing a tool:  python3 tools/selftest.py     It t
 
 Each step runs the real command line as one of two agents (different session ids) and checks what it prints.
 """
+import json
 import os
 import subprocess
 import sys
+import tempfile
 import time
 
 TAG = f"selftest-{time.time_ns()}"
@@ -84,6 +86,35 @@ lined = run("a", "board", "post", "result", f"{TAG} cue at T 0.6\nscore: base MA
 check("score base MATH-500 378/500 (75.6 %)" in lined, "a score line in a result's text writes the score")
 run("a", "board", "post", "result", f"{TAG} bad\nscore: base MATH-500 378 of 500", code=1)
 check(f"{TAG} bad" not in run("a", "board", "ls", "result", "--new", "--n", "10"), "a bad score line stops the post")
+check(f"board.py plain {lined.splitlines()[0]}" in lined, "a result without title, what and why lines prints how to add them")
+ladder = f"set{time.time_ns()}"  # a benchmark of its own: both scores below are record steps of climb.py
+posted = run("a", "board", "post", "result", f"{TAG} two scores\ntitle: The result\nwhat: W.\nwhy: Not known yet.\n"
+             f"score: base {ladder} 1/328 | x\nscore: base {ladder} 2/328 | y\ntitle: The second score\ncaveat: One draw.")
+plain = posted.splitlines()[0]
+check(f"plain {plain}: The result" in posted and f"plain {plain}#{ladder}#2/328: The second score" in posted and "board.py plain" not in posted,
+      "title, what, why and caveat lines write the plain rows of the result and of one score")
+words = lambda: [(s["title"], s["why"], s["caveat"]) for s in json.loads(run("a", "climb", ladder, "--json"))[ladder]["steps"]]
+check(words() == [("The result", "Not known yet.", None), ("The second score", None, "One draw.")],
+      "a record step takes the plain row of its score, or else of its result")
+run("a", "board", "post", "result", f"{TAG} long\ntitle: {'x' * 61}", code=1)
+check(f"{TAG} long" not in run("a", "board", "ls", "result", "--new", "--n", "10"), "a title over 60 characters stops the post")
+run("a", "board", "plain", plain, "T.", "x" * 241, "Y.", code=1)
+run("a", "board", "plain", work_b, "T.", "W.", "Y.", code=1)
+entry = {"item": plain, "title": "From the file", "what": "W.", "why": "Y."}
+with tempfile.NamedTemporaryFile("w", suffix=".json") as file:
+    json.dump([entry, {**entry, "score": {"benchmark": ladder, "right": 3, "n": 328}}], file)  # the result has no score 3/328
+    file.flush()
+    run("a", "board", "plain", "--file", file.name, code=1)
+    check(words()[0][0] == "The result", "plain --file with one bad entry writes no row")
+    file.seek(0)
+    json.dump([entry], file)
+    file.truncate()
+    file.flush()
+    run("a", "board", "plain", "--file", file.name)
+check(words()[0][0] == "From the file", "plain --file replaces the plain row of the result")
+scored = run("a", "board", "plain", plain, "The first score", "W.", "Y.", "C.", "--score", f"SET-{ladder[3:]}", "1/328")
+check(f"plain {plain}#{ladder}#1/328: The first score" in scored, "plain --score names the score with the benchmark as its score row spells it")
+check(words() == [("The first score", "Y.", "C."), ("The second score", None, "One draw.")], "plain --score describes that one score")
 run("a", "board", "score", work_b, "base", "MATH-500", "1/500", "cue", code=1)
 run("b", "board", "done", work_b)
 check(f"closed {work_b}: {TAG} also doing" in run("a", "msg", "read"), "done without a text announces the closed item")

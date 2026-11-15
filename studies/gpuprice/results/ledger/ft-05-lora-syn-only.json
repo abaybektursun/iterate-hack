@@ -1,0 +1,35 @@
+{
+ "name": "ft-05-lora-syn-only",
+ "note": "Control for ft-04: LoRA on the 8,000 synthetic sticky-price series only (no real price, so no data after any cutoff; the fine-tuning cutoff 2026-09-30 holds trivially), fixed 800 steps, no validation, seed 0. H: the synthetic prior alone does not beat zero-shot ft-01 (+0.271); refuted if above +0.276. fm-07 setup; cpu class, batch 32, lr 1e-4. Job abaybektursun-1114-174414-91ea",
+ "utc": "2026-11-15T00:57:34+00:00",
+ "commit": "a1de3d0",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.294955,
+ "pinball": 0.02365,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.287857,
+ "skill_geomean": 0.339846,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.134602,
+   "in_band": 0.844019
+  },
+  "3": {
+   "skill_pooled": 0.275761,
+   "in_band": 0.757752
+  },
+  "7": {
+   "skill_pooled": 0.348415,
+   "in_band": 0.640504
+  }
+ },
+ "in_band": 0.747829
+}

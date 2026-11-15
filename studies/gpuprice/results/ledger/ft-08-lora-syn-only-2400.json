@@ -1,0 +1,35 @@
+{
+ "name": "ft-08-lora-syn-only-2400",
+ "note": "H: more synthetic training helps: LoRA on 30,000 synthetic sticky-price series for 2,400 steps beats ft-05 (+0.295, 8,000 series, 800 steps); refuted if below. Dev skill by step (linear lr decay to 2,400): 0 +0.273, 300 +0.278, 600 +0.296, 900 +0.284, 1200 +0.278, 1500 +0.274, 1800 +0.281, 2100 +0.274, 2400 this entry. No real price in training (fine-tuning cutoff 2026-09-30 holds trivially); fm-07 setup; H100, batch 32, lr 1e-4, seed 0. Job abaybektursun-1114-193630-8bac",
+ "utc": "2026-11-15T01:59:14+00:00",
+ "commit": "f1b2824",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.280064,
+ "pinball": 0.024149,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.27187,
+ "skill_geomean": 0.32445,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.157228,
+   "in_band": 0.841148
+  },
+  "3": {
+   "skill_pooled": 0.264458,
+   "in_band": 0.748062
+  },
+  "7": {
+   "skill_pooled": 0.321505,
+   "in_band": 0.653101
+  }
+ },
+ "in_band": 0.747829
+}

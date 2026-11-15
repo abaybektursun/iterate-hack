@@ -1,0 +1,35 @@
+{
+ "name": "fm2-12-hurdle-h1",
+ "note": "fm2-11 at horizon 1 only (the own-history hazard is short-range information); refuted if h1 <= fm2-01 h1 [fm2_post.py flags: --hurdle --hurdle-h 1; amazon/chronos-2 zero-shot, cpu jobs 174823-3849, 174829-8fcd, 174832-6f16, 201126-a38b, 201131-4739]",
+ "utc": "2026-11-15T02:18:05+00:00",
+ "commit": "35810bc",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.277154,
+ "pinball": 0.024247,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.268265,
+ "skill_geomean": 0.339449,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.156235,
+   "in_band": 0.820096
+  },
+  "3": {
+   "skill_pooled": 0.242735,
+   "in_band": 0.721899
+  },
+  "7": {
+   "skill_pooled": 0.328276,
+   "in_band": 0.599806
+  }
+ },
+ "in_band": 0.714378
+}

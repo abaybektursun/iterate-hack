@@ -44,6 +44,10 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/anatomy_judge.py` | Slip against wrong plan: `prep` draws the items and the two controls and writes blind batches; `score` reads the judges' labels (agreement, controls, first wrong step). |
 | `specs/SPEC_checks.md`, `analysis/checks.py` | Checks or per-step error: checking markers per 1,000 tokens in the four-sample texts (`stats`), blind judge batches for check events (`prep`, `score`). Results `results/checks/`. See "Checks or per-step error". |
 | `tools/finding_rl_reliability.py` | The public page of "Gap anatomy" and "Checks or per-step error", served at `/finding/rl-reliability`: the joint k-of-4 table as columns, with a switch from problems to share of the gain. Its numbers are read from `results/anatomy/math500-01/readout.json` and `results/checks/`. |
+| `tools/finding_opening_cue.py` | The public page of the opening cue on MATH-500 ("Established numbers"), served at `/finding/opening-cue`: one bar with a switch from no cue to the cue, and the RL model as the reference. Its numbers are read from `results/rln4/grader_v3/readout.json` (cells `base_plain_1.0`, `base_opener_1.0`, `rl_1.0`) and `results/day1_3/`. |
+| `tools/finding_restart_on_cap.py` | The public page of the restart of cut-off answers ("Established numbers" and "Day-1 #3"), served at `/finding/restart-on-cap`: the 500 answers as marks, with a switch from no restart to restart. Its numbers are read from `results/rln4/grader_v3/readout.json`, `results/day1_3/` and `results/commit1/base-01/readout.json`. |
+| `tools/finding_vote_over_four.py` | The public page of "Day-1 #3" and "Label-free selector", served at `/finding/vote-over-four`: the base model and the RL model as two bars, with a switch from one sample to the vote over four. Its numbers are read from `results/day1_3/math500_base_cue-01/readout.json`, `results/day1_3/math500_rl-01/readout.json` and `results/selector/math500_base_cue-01/readout.json`. |
+| `tools/finding_cue_on_code.py` | The public page of "Code pair", served at `/finding/cue-on-code`: three columns with a switch through no cue, the code cue and the math cue, and the Code-RL model as the reference. Its numbers are read from `results/code1/readout.json`. |
 | `grader/repair_v4.py`, `grader/repair_v4_test.py` | Grader v4 / v4a: grader v3 plus five label-free answer-statement rules (placeholder, lower-case marker, last-line math, trailing brace, form), and its planted tests. A grader version for both models, not a method. See "Answer-statement repair". |
 | `analysis/repair.py`, `prep/repair_plan.py`, `data/repair/plan_v1.json` | Answer-statement repair: the gold-aware upper bound, the rule table and the vote under v4 (laptop); the plan of the forced-suffix job (not run). |
 | `data/anatomy/math500_meta.json` | Subject, level and reference solution of the 500 problems (HuggingFaceH4/MATH-500 `test.jsonl`, revision `6e4ed1a`), same order and `unique_id` as `data/rln4/math500.json`. |
@@ -73,6 +77,17 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `results/rln4/` | `grader_v3/readout.json` (the final table), `modal_k-01/`, `modal_t2-01/`, `modal_t3-01/` (readouts, metrics, run records), `t1_t2_items-01/` (per-problem T1 against T2, hand labels of the base failures), `offline/`. |
 | `results/day1_wdiff/` | `readout.json` (cells, differences, predictions, check), `merge_stats.json` (RL and Code-RL differences from the base by tensor group and layer; Code against RL cosine) and per cell `<arm>-01/` (`run.json`, `metrics.json`, `merge.json`, `examples.json`). |
 | `results/day1_hard328/` | `readout.json` (seven-cell table, per source, differences, check) and per T 1.0 cell `<arm>-01/` (`run.json`, `metrics.json` from the job, `examples.json`: one right, one wrong). |
+| `specs/SELFDISTILL_2026-11-15.md` | Self-distillation spec: data arms V (vote), U (random), S (shortest), LoRA hyperparameters, merge, cells, seeds, predictions D1-D5, cost. |
+| `jobs/distill_data.py`, `jobs/distill_data_test.py` | Builds the arms from the Day-1 #3 base cue rows on the laptop without reading any gold field; writes `data/selfdistill/arms-v1.json`. Planted cases. |
+| `jobs/distill_train.py` | `train`: LoRA fine-tune (GPU), adapter, `train.json` (loss, generation check, difference statistics against RL - base). `merge`: rebuilds the merged bf16 model from a saved adapter for `run_cell --model-path`, hash checked. |
+| `analysis/selfdistill.py` | Self-distillation readout: five 328 cells beside base cue, theta(0.5) cue, RL plain; sanity cell; training reports; predictions; `--hand`. |
+| `data/selfdistill/arms-v1.json` | Per arm: problem index, sample, tokens, extracted answer and text sha256 of each training example (texts on S3, `r5/selfdistill-01/data/arms-v1.jsonl`). |
+| `results/selfdistill/` | `readout.json`, per cell `<arm>-01/` (`run.json`, `metrics.json`, `examples.json`), `train_<arm>-01/` (`run.json`, `train.json`), `sanity_V_plain_math500_n100-01/`. |
+| `specs/SPEC_handoff.md` | Prefix hand-off spec: writers, pool, cut rule on token ids, seeds, strata, the own-prefix control, hypotheses H0-H4 with refuters, deviations. |
+| `lib/handoff_lib.py`, `prep/handoff_plan.py`, `data/handoff/plan_v1.json` | The prefix rule (writer jobs, cuts, seeds, `answer_ids`), and the frozen plan it gives: pool of 183, per writer sample its stratum, id count, text sha256, and per cut the prefix length and id sha256. |
+| `jobs/handoff_gen.py` | Hand-off generation job: one finisher model continues both writers' prefixes; writes each raw row (ids, prefix text, continuation) before anything else and does not score. |
+| `analysis/handoff.py`, `analysis/handoff_test.py` | Hand-off readout (grader v3 on prefix + continuation, strata tables, paired bootstrap, own-prefix control) and its planted checks. |
+| `results/handoff/` | `base-01/`, `rl-01/` (one per finisher: `run.json`, `metrics.json`, `rows.jsonl` without text, `examples.json`) and `readout-01/` (`readout.json`, `readout.txt`). |
 
 Old paths: `infra/pg/*.py` and `infra/aws_pg/jobs/n13_*.py` are in `lib/`; `infra/aws_pg/jobs/rln*_gen.py` and
 `infra/modal_rln4_k.py` are in `jobs/`; `studies/rlneurons/rln{3,4}/inputs/` is `data/rln{3,4}/`; `rln{3,4}/offline/`,
@@ -213,7 +228,10 @@ T 0.6 and RL was right, SPEC4 §2; grader v1): from the RL model's prefix the ba
 of 78. Frozen label: "the base can finish from a sound prefix" (both counts at the threshold edge, 47 and 23).
 
 Grader v1 to v3 moved 113 answers from wrong to right and 1 from right to wrong over the 9 cells (`flips_v1_to_v3`,
-`flip_review`). The v1 numbers 57.2 (base) and 92.0 (RL) quoted in older notes are the n13 cells under v1 (286 and 460).
+`flip_review`: 40 of the 113 read). A second reader (Claude Fable 5.2) read all 114 (`analysis/grader_v3_read2.py`,
+`results/rln4/grader_v3_read2/readout.json`): 112 of the 113 wrong-to-right flips are right; 1 is not (base plain T 1.0, problem 142: the box
+holds an expression equal to the gold, the stated number is wrong), and the 1 right-to-wrong flip is a v3 error on the same
+cell, so that cell's count is unchanged net; no RL flip and no cue-cell flip is wrong. The 114 flips are 104 distinct texts. The v1 numbers 57.2 (base) and 92.0 (RL) quoted in older notes are the n13 cells under v1 (286 and 460).
 
 ## Day-1 #3: restart and four-sample vote (MATH-500, n = 500, T 1.0 / top-p 1.0, grader v3, board work-63fac2)
 
@@ -775,6 +793,94 @@ resamples, in points.
 - Not run: the vote over four samples after restart (the configuration chosen on MATH-500), and RL-Code with a cue (the
   model writes the cue itself in 10 of 10 smoke answers).
 
+## Self-distillation of the base's own vote (board work-9763ed, spec specs/SELFDISTILL_2026-11-15.md)
+
+Question: does a short supervised fine-tune of the base on its own vote-selected cue samples from MATH-500 (no reward, no gold
+answer) raise it on the 328 harder problems it never saw? Answer: no. The fine-tuned model with the cue scores 167 of 328 against the
+base's 164 (+0.9 points, [-3.0, 4.9]), and the vote selection does no better than a random own sample (V cue - U cue -0.3,
+[-4.9, 4.3]). What it does learn is the format: with the plain prompt it now writes the cue in 328 of 328 answers and scores 161,
+level with the cued base (base plain: 76). All from `results/selfdistill/readout.json` (`analysis/selfdistill.py`); grader v3; T 1.0 /
+top-p 1.0, cap 16,384, one sample per problem; paired bootstrap, 5,000 resamples, seed 0, 95 % percentile interval, in points.
+
+Training data (`jobs/distill_data.py`, `data/selfdistill/arms-v1.json`): attempt 0 of the 4 samples per problem of Day-1 #3 base cue
+(job `abaybektursun-1114-153825-208b`). V: the shortest finished member of the plurality group (at least 2 votes, no tie); 455 of 500
+problems (45 without a plurality). U: one finished sample at random on the same 455. S: the shortest finished sample on the same 455
+(length control; V picks the same sample as S on 422 of 455). Each example: the plain prompt, target = the stored completion with
+its cue plus the stop token. Right under v3 (read after the build): V 439 of 455, U 407, S 416. LoRA rank 16, alpha 32, all q, k,
+v, o, gate, up, down; lr 1e-4 constant, 2 epochs, 16,384 target tokens per step; merged to bf16 with stochastic rounding.
+
+| Arm | Examples | Target tokens | Steps | Loss first / last step | Loss epoch 1 / 2 | ‖D‖ / ‖W‖ | Cosine with RL - base | Train job, folder |
+|---|---|---|---|---|---|---|---|---|
+| V | 455 | 898,064 | 96 | 0.366 / 0.258 | 0.394 / 0.381 | 0.46 % | 0.0025 | `abaybektursun-1114-194352-feef`, `train_V-01/` |
+| U | 455 | 1,353,449 | 140 | 0.387 / 0.290 | 0.441 / 0.429 | 0.58 % | 0.0022 | `abaybektursun-1114-194358-195f`, `train_U-01/` |
+| S | 455 | 839,231 | 91 | 0.372 / 0.286 | 0.388 / 0.375 | 0.44 % | 0.0025 | `abaybektursun-1114-194405-bbb6`, `train_S-01/` |
+
+‖D‖ / ‖W‖ is over the adapted matrices (float32 LoRA difference; RL - base is 0.24 % on the same matrices, so the fine-tune
+moved the weights twice as far as RL did, in a direction nearly orthogonal to it: 0.001 to 0.003 per tensor group). Effective scale
+of the merge 1.000 in every arm; the merge with the adapter scaled by 0 is tensor-identical to the base (asserted).
+
+| Cell (328 problems) | Right (v3) | Cap hits | Rule-A loops | Mean tokens | Starts with cue | Seed base | Job id, run folder |
+|---|---|---|---|---|---|---|---|
+| base, cue | 164 | 77 | 1 | 9,344 | 328 | 3,000,000 | `abaybektursun-1114-151534-e72c`, `day1/hard328_base_cue_t10-01/` |
+| V, plain | 161 | 74 | 0 | 9,075 | 328 | 81,000,000 | `abaybektursun-1114-201013-47c5`, `selfdistill/V_plain-01/` |
+| V, cue | 167 | 74 | 0 | 8,625 | 328 | 82,000,000 | `abaybektursun-1114-201021-095e`, `selfdistill/V_cue-01/` |
+| U, plain | 154 | 80 | 0 | 9,257 | 327 | 83,000,000 | `abaybektursun-1114-201028-1adf`, `selfdistill/U_plain-01/` |
+| U, cue | 168 | 76 | 2 | 9,103 | 328 | 84,000,000 | `abaybektursun-1114-201035-c6c0`, `selfdistill/U_cue-01/` |
+| S, cue | 171 | 65 | 1 | 8,535 | 328 | 85,000,000 | `abaybektursun-1114-201132-3c04`, `selfdistill/S_cue-01/` |
+| theta(0.5), cue | 190 | 73 | 0 | 9,656 | 328 | 73,000,000 | `abaybektursun-1114-181228-34ad`, `day1_wdiff328/theta0.5_cue-01/` |
+| RL, plain | 206 | 20 | 0 | 9,315 | 271 | 3,000,000 | `abaybektursun-1114-151540-86ef`, `day1/hard328_rl_plain_t10-01/` |
+
+| Difference (paired, 328) | Points | 95 % interval |
+|---|---|---|
+| V cue minus base cue | 0.9 | [-3.0, 4.9] |
+| V plain minus base cue | -0.9 | [-5.5, 3.7] |
+| V plain minus U plain | 2.1 | [-2.1, 6.4] |
+| V cue minus U cue | -0.3 | [-4.9, 4.3] |
+| V cue minus S cue | -1.2 | [-5.5, 3.0] |
+| S cue minus base cue | 2.1 | [-2.1, 6.7] |
+| U cue minus base cue | 1.2 | [-3.0, 5.8] |
+| V cue minus theta(0.5) cue | -7.0 | [-11.6, -2.7] |
+| V cue minus RL plain | -11.9 | [-16.2, -7.9] |
+
+Against base cue (164 right, 164 wrong), fixed / lost: V plain 29 / 32, V cue 25 / 22, U plain 22 / 32, U cue 30 / 26, S cue 31 / 24;
+theta(0.5) cue 40 / 14, RL plain 49 / 7. The fine-tuned cells change about as many problems as a fresh sample of the base does, in
+both directions; RL fixes many and loses few.
+
+- Predictions (spec): D1 held (V plain 161, interval of V plain - base cue [-5.5, 3.7] includes 0). D2, the main claim, refuted
+  (+0.9, [-3.0, 4.9]). D3 refuted at both prompt arms (plain +2.1 [-2.1, 6.4], cue -0.3 [-4.9, 4.3]): the vote selection adds
+  nothing over a random own finished sample, and the length control S is no different (V cue - S cue -1.2). D4 held (11.9 points
+  under RL plain). D5 held by its rule (74 and 74 cap hits under 77), but the difference is 3 problems.
+- Published prior confirmed: arXiv 2607.13643 Table 1 (LMSI, vote-filtered SFT on own text, Qwen3-4B-Instruct) moves held-out
+  AIME 2024 / 2025 by 0.0 / -0.8 points. Here on a pretrained base, 455 prompts, the same: the only effect is the format the
+  training texts share (the cue opening), which the plain prompt then reproduces. That gain (base plain 76 -> 161) is the cue's
+  own gain; the cue at inference gives it for free.
+- Sanity cell, in-distribution (the 100 problems were trained on; a check that training worked, not a result): V plain on
+  MATH-500 first 100 scores 90, all 100 answers start with the cue; base plain (T3) 49, base cue (T1) 82 on the same 100. Job
+  `abaybektursun-1114-200050-c260`, `results/selfdistill/sanity_V_plain_math500_n100-01/`.
+- Generation check (`train.json` `generations_before` / `_after`, greedy, 3 training prompts, plain prompt): before training the
+  base writes `.\n\nOkay, so I need to ...` or `.\n\nTo convert ...`; after training all three arms write ` line!\n\nOkay, ...`.
+- Hand read: per cell, 20 finished answers scored wrong (numpy seed 0, `--hand <arm>`): 0 of 20 right in each of the five cells.
+  Five of the 100 have no extracted answer although the finish reason is `stop`: the model emitted the stop token mid-sentence
+  (V plain 61, 179; U cue 91, 291) or after a repeated line (V cue 289: `2026 - 393 = 1633. Not a palindrome.` repeated). V plain,
+  10 answers read (numpy seed 0): worked solutions or long unfinished reasoning at the cap; no empty answers in any cell; no
+  copying of training solutions (largest share of an answer's 12-word sequences found in the V training texts: 1.7 %, mean
+  0.05 %). Two tails: problem 150 (right) `...So he can't afford $51 shoes. Therefore, $50 is the maximum.\n\nSo the answer should
+  be $50.\boxed{50}`; problem 109 (cap hit) `...sum to295.03°, which is roughly 295, but maybe it's 180° when weighted.
+  295.03°=180° +115.`
+- No two compared cells share a seed base; no two cells share an identical non-empty completion for any problem
+  (`identical_nonempty_texts`, all 0).
+- Not done: a second round of distillation (out of scope); more than one sample per cell (the five fine-tuned cells span 154 to
+  171, inside one another's intervals).
+- Cost at 3.95 USD per H100-hour (start to end record of each job, H100 80GB HBM3): smoke 4.4 min 0.29 USD
+  (`abaybektursun-1114-193821-520c`, 8 longest U examples), train V 13.3 min 0.87, U 17.2 min 1.13, S 9.8 min 0.65, sanity 8.6 min
+  0.56, V plain 51.5 min 3.39, V cue 48.2 min 3.17, U plain 52.1 min 3.43, U cue 51.1 min 3.36, S cue 46.0 min 3.03; 19.89 USD in
+  all (limit 25). Training throughput 2,760 to 3,540 target tokens/s; a merge takes 29 to 47 s.
+- Raw answers and adapters: `runs/<job-id>/` after `uv run tools/gpu.py get <job-id>`, and
+  `s3://pg-lineage-769063704696/results/rlneurons/r5/selfdistill-01/<job-id>/` (`answers.jsonl` of the six scored jobs;
+  `adapter.safetensors` and `train.json` of the three training jobs); training texts `.../selfdistill-01/data/arms-v1.jsonl`.
+  Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.selfdistill`; tests
+  `python -m studies.rlneurons.jobs.distill_data_test`; commands of every job in each run folder's `run.json`.
+
 ## Truncation rules at T 1.0: min-p and top-p (board work-180a48, spec specs/SPEC_minp.md)
 
 No truncation rule beats untruncated sampling. MATH-500, n = 500, cue, cap 16,384, grader v3, one sample, seeds of the min-p 0
@@ -930,6 +1036,76 @@ an H100). Smoke: job abaybektursun-1114-212215-f08c. The RL model was not run: t
 uv run tools/gpu.py submit h100 --hours 2 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.commit_cue --model base --commit $(git rev-parse HEAD)"
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.commit1 base <job>
 ```
+
+## Reward content test: the five Olmo 3 RL-Zero rewards on MATH-500 (board idea-46b68c, work-069eca)
+
+Spec `specs/SPEC_reward5.md` (predictions R1-R5, written before the jobs). Does the MATH-500 gain over the cued base depend on
+what the RL reward graded? AI2's five Olmo 3 RL-Zero models share the base `allenai/Olmo-3-1025-7B` (names and revisions in
+`jobs/merge_weights.py` `OTHERS`). Cells: `run_cell` on `merge_weights --other <key> --alpha 1 --rounding nearest` (all 355
+tensors identical to the named model in every job), T 1.0 / top-p 1.0, one sample, cap 16,384, grader v3, n = 500, the 3.1
+tokenizer. Readout `results/reward5/readout.json`, written by `analysis/reward5.py`; one run folder
+`results/reward5/<arm>-01/` per cell (`run.json`, `metrics.json`, `merge.json`, `examples.json`). Jobs at commit `3b4ab2a`.
+
+| Model | Cue: right of 500 | Cue minus base cue, points [95 %] | Plain: right of 500 | Tokens per problem (cue) | Relative norm of the weight difference |
+|---|---|---|---|---|---|
+| base (T1, T3) | 410 | | 224 | 3,932 | |
+| Math 3.0 | 448 | +7.6 [4.2, 11.0] | 443 | 4,527 | 0.127 % |
+| Mix 3.0 | 440 | +6.0 [2.6, 9.4] | 372 | 5,203 | 0.090 % |
+| General 3.0 | 429 | +3.8 [0.4, 7.0] | 323 | 3,839 | 0.064 % |
+| Code 3.0 | 411 | +0.2 [-3.4, 3.8] | 360 | 3,069 | 0.151 % |
+| IF 3.0 | 377 | -6.6 [-10.6, -2.6] | 55 | 2,667 | 0.138 % |
+| Math 3.1 (day1_wdiff) | 457 | +9.4 [6.2, 12.6] | 463 | 4,696 | 0.13 % |
+| Code 3.1 (day1_wdiff) | 450 | +8.0 [4.6, 11.2] | 390 | 3,336 | 0.109 % |
+
+Paired bootstrap over problems, 5,000 resamples, seed 0. Other paired differences: Code 3.0 cue minus Math 3.0 cue -7.4
+[-10.8, -4.0]; IF 3.0 cue minus Math 3.0 cue -14.2 [-17.8, -10.8]; Code 3.1 cue minus Code 3.0 cue +7.8 [4.4, 11.2]; Math 3.1
+cue minus Math 3.0 cue +1.8 [-0.4, 4.2].
+
+- R1 held: Math 3.0 with the cue is above the cued base.
+- R2 refuted: the IF model gains nothing. Of its 123 wrong cue answers, 34 have a broken answer line (`Answer: Answer`, or an
+  empty `Answer:`: 24 placeholder, 10 nothing extracted; counted from the rows, 6 read by hand and all 6 had the right value in
+  the text); with all 34 counted right it is 411, level with the base. Plain, the IF model answers at once (median 5 tokens, 55 right).
+- R3 refuted: Code 3.0 with the cue equals the cued base (411), 37 problems below Math 3.0. The 450 of Code 3.1 does not hold for
+  the earlier Code release, although Code 3.0 moved the weights further (0.151 % against 0.109 %).
+- R4: Mix held (-1.6 [-4.4, 1.2]); General refuted at the stated bound (-3.8 [-6.8, -0.8]).
+- R5 held: Math 3.0 plain 443 (+219 over base plain); IF plain 55.
+
+Reading: in the Olmo 3 models the gain follows the share of math in the reward (Math > Mix > General > Code = base > IF). The
+earlier finding that the Code-RL difference gives the math gain (above, `day1_wdiff`) is a property of the 3.1 Code release. The
+model cards do not state what changed between the 3.0 and 3.1 Code runs. No answer of any cell contains an `extra_id` token
+text (the 3.0 tokenizer's `<think>`/`<answer>` ids print that way under the 3.1 tokenizer).
+
+### Step 2: do the models change the same tokens? (`specs/SPEC_reward5_tokens.md`, predictions S1-S3)
+
+`jobs/score_tokens.py` scores the 500 first answers of the cued base (job `abaybektursun-1114-153825-208b`, 405 right; 1,904,493
+answer positions; 465 of 500 answers tokenize to the stored token count) under every model. r_m = log p_m(stored token) - log
+p_base. Readout `results/reward5/tokens-01/metrics.json` (with `examples.json`: two positions with every model's numbers), written by
+`analysis/reward5_tokens.py` from jobs `abaybektursun-1114-191457-f9da` and `abaybektursun-1114-193153-3c4c`. Intervals: bootstrap
+over answers. The Mix model is loaded through `merge_weights --alpha 1` (its own `config.json` names a model type transformers
+does not load; job `abaybektursun-1114-191504-5599` failed on it).
+
+| Model | Pearson r of r_m with r_Math 3.1 [95 %] | Where Math 3.1's top token differs from the base's: share with Math 3.1's token / the base's | Mean abs r_m | Cue gain, points |
+|---|---|---|---|---|
+| theta(0.25) | 0.820 [0.811, 0.827] | 0.178 / 0.802 | 0.030 | +6.2 |
+| Code 3.1 | 0.405 [0.400, 0.411] | 0.270 / 0.667 | 0.081 | +8.0 |
+| Math 3.0 | 0.271 [0.259, 0.286] | 0.326 / 0.526 | 0.238 | +7.6 |
+| Code 3.0 | 0.240 [0.229, 0.252] | 0.272 / 0.617 | 0.129 | +0.2 |
+| Mix 3.0 | 0.168 [0.159, 0.179] | 0.221 / 0.703 | 0.103 | +6.0 |
+| General 3.0 | 0.162 [0.153, 0.172] | 0.074 / 0.906 | 0.028 | +3.8 |
+| IF 3.0 | 0.039 [0.030, 0.048] | 0.086 / 0.881 | 0.045 | -6.6 |
+| random difference | -0.001 [-0.004, 0.003] | 0.013 / 0.983 | 0.004 | +1.4 |
+
+Math 3.1 itself: mean abs r 0.159; its top token differs from the base's at 151,701 positions (8.0 %).
+
+- Instrument checks passed: theta(0.25) highest, the random difference at 0.
+- S1 held: Code 3.1 changes the same tokens as Math 3.1 (0.405), more than the earlier Math release does (0.271).
+- S2 refuted: where Math 3.1's top token differs from the base's, Code 3.1 keeps the base's token (0.667) more often than it
+  takes Math 3.1's (0.270).
+- S3 held: the IF model is near the random difference.
+- The agreement does not order the models by gain: Code 3.0 (no gain) agrees as much as Math 3.0 and more than Mix and General,
+  which gain.
+- Not a critic: the summed r_m over an answer separates right from wrong base answers at AUROC 0.853 for Math 3.1, the same as
+  the answer's length alone (0.855); computed from the same files, not in `metrics.json`.
 
 ## RLN-5 map: where RL still disagrees once the cue is given
 
@@ -1889,6 +2065,85 @@ Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studi
 (about 1 minute; `--runs` is the folder of `tools/gpu.py get` copies, used for the RL-cue answers in `examples.json`),
 `... profile score`, `... python -m studies.rlneurons.analysis.profile_test`; `predict` refuses to overwrite the filed file.
 
+## Prefix hand-off: where inside an answer RL's advantage enters (MATH-500 pool of 183, T 1.0 / top-p 1.0, grader v3, board work-b68a26, idea-17d5b7)
+
+RL's advantage is in the first half of the answer, and most of it is written into the text by the halfway point. A stored
+answer (sample 0, attempt 0 of the Day-1 #3 jobs) is cut after 25, 50 or 75 % of its token ids and a finisher model writes the
+rest: writer {base + cue, RL} x finisher {base, RL} x cut, one sample each, on the 183 problems where the base is right in at
+most 3 of its 4 stored samples (the same list as `results/anatomy/math500-01/pool_k_le3.json`). Request = plain prompt ids +
+prefix ids; the 16,384 cap counts the prefix. Spec `specs/SPEC_handoff.md` (hypotheses written before the run); readout
+`results/handoff/readout-01/readout.json` and `readout.txt` (`analysis/handoff.py`; Wilson 95 % in percent, paired bootstrap
+5,000 resamples, seed 0, in points).
+
+Whole pool, right of 183 (cap hits), generated tokens per problem / total with the prefix:
+
+| cut | base finishes base | base finishes RL | RL finishes base | RL finishes RL |
+|---|---|---|---|---|
+| 25 % | 107 (27), 5,914 / 7,624 | 122 (39), 6,552 / 8,414 | 131 (4), 5,420 / 7,130 | 139 (10), 5,754 / 7,616 |
+| 50 % | 106 (22), 4,037 / 7,457 | 135 (36), 4,753 / 8,478 | 122 (5), 3,516 / 6,936 | 142 (12), 3,981 / 7,706 |
+| 75 % | 100 (27), 2,515 / 7,645 | 132 (32), 2,766 / 8,353 | 108 (3), 2,108 / 7,238 | 139 (9), 2,091 / 7,678 |
+
+Stored sample 0 on the pool: base 88, RL 140. Of the 17.5 to 21.3 points between the two own-prefix columns, the base
+finishing an RL prefix recovers 8.2 [0.5, 16.4] at 25 %, 15.8 [8.7, 23.0] at 50 % and 17.5 [9.3, 25.1] at 75 % (47 %, 80 %,
+82 % of the gap). RL finishing a base prefix loses 4.4 [-2.2, 10.4], 10.9 [3.8, 18.0] and 16.9 [10.4, 23.5] against its own.
+
+By the writer sample's own outcome, right of n [Wilson 95 %]; "fresh" = the finisher model's stored samples 1 to 3 on the same
+problems, in percent:
+
+| prefix | cut | base finisher | RL finisher | RL minus base finisher | fresh base / RL |
+|---|---|---|---|---|---|
+| base, wrong (n = 70) | 25 % | 25 [26, 47] | 37 [41, 64] | +17.1 [4.3, 30.0] | 53 / 74 |
+| | 50 % | 20 [19, 40] | 32 [35, 57] | +17.1 [5.7, 28.6] | |
+| | 75 % | 17 [16, 35] | 21 [21, 42] | +5.7 [-2.9, 14.3] | |
+| base, right (n = 88) | 25 % | 74 [75, 90] | 84 [89, 98] | +11.4 [3.4, 19.3] | 58 / 92 |
+| | 50 % | 83 [87, 98] | 83 [87, 98] | 0.0 [-6.8, 5.7] | |
+| | 75 % | 81 [84, 96] | 82 [86, 97] | +1.1 [-4.5, 6.8] | |
+| base, cap hit (n = 25) | 25 % | 8 | 10 | +8.0 [-16.0, 32.0] | 29 / 53 |
+| | 50 % | 3 | 7 | +16.0 [0.0, 36.0] | |
+| | 75 % | 2 | 5 | +12.0 [0.0, 28.0] | |
+| RL, right (n = 140) | 25 % | 110 [71, 85] | 131 [88, 97] | +15.0 [8.6, 21.4] | 63 / 93 |
+| | 50 % | 131 [88, 97] | 134 [91, 98] | +2.1 [-2.1, 6.4] | |
+| | 75 % | 131 [88, 97] | 136 [93, 99] | +3.6 [0.7, 7.1] | |
+| RL, wrong (n = 37) | 25 % | 9 [13, 40] | 8 [11, 37] | -2.7 [-21.6, 16.2] | 19 / 40 |
+| | 50 % | 4 [4, 25] | 8 [11, 37] | +10.8 [2.7, 21.6] | |
+| | 75 % | 1 [0, 14] | 3 [3, 21] | +5.4 [0.0, 13.5] | |
+| RL, cap hit (n = 6) | 25 / 50 / 75 % | 3 / 0 / 0 | 0 / 0 / 0 | | 6 / 33 |
+
+Without the prefixes that already contain the right answer (base 0 / 0 / 6 of 88, RL 0 / 9 / 52 of 140 at 25 / 50 / 75 %): RL
+right prefixes at 75 % give base 79 of 88, RL 84 of 88, +5.7 [1.1, 11.4]; the other differences move by at most 0.2 points.
+
+- H0 (instrument), holds: a model finishing its own prefix scores what its stored sample scored. Base on the 155 pool
+  problems that are in the pool whatever sample 0 did: 92, 94, 90 against 88 stored (+2.6 [-4.5, 9.7], +3.9 [-1.3, 9.0], +1.3
+  [-3.9, 6.5]); RL on the pool: 139, 142, 139 against 140 (intervals include 0). Smoke (`abaybektursun-1114-222829-ce39`, RL
+  finisher, 10 problems, cuts 0 to 100): a cut at 100 % gives 0 new tokens and the writer's score in 20 of 20; a cut at 0 is the
+  plain prompt (ids equal `prompt_ids.json`, laptop test).
+- H1 (RL's advantage is late checking or finishing), refuted: on wrong base prefixes cut at 75 % the RL finisher has 21 of 70
+  and the base 17 (+5.7 [-2.9, 14.3]). The RL finisher's advantage is at 25 % and 50 % (+17.1 both) and on right prefixes only
+  at 25 % (+11.4 base prefixes, +15.0 RL prefixes); from 50 % on, a right prefix is finished equally by both (83 and 83 of 88).
+- H2 (the plan chosen in the first quarter), refuted by its own rule, narrowly: the base on an RL prefix cut at 25 % recovers
+  8.2 of 17.5 points (47 %, the rule asked for half); at 50 % it recovers 80 %. The advantage enters between the start and the
+  halfway point, not in the first quarter alone.
+- H3 (wrong base prefixes are poisoned), refuted as stated (RL finisher 32 of 70 at 50 %, lower bound 35 %, above 15 %), but
+  the prefix does carry the error: against fresh rates of 53 % (base) and 74 % (RL), a wrong base prefix leaves the base 36,
+  29, 24 % and RL 53, 46, 30 % at 25, 50, 75 %. 5 of the 70 wrong base answers have no extracted answer (a format failure);
+  both finishers fix 3 to 5 of those 5 at every cut.
+- H4 (the base loses at most 5 points on right RL prefixes), refuted at 25 % (+15.0 [8.6, 21.4]), holds at 50 % and 75 %.
+- Raw rows, read by hand. Every continuation resumes mid-sentence. The base's failures on RL prefixes are cap hits: 36, 34
+  and 32 of its 61, 48 and 51 wrong answers at the three cuts (RL on its own prefixes: 8, 10, 9); it keeps reworking a long
+  RL derivation and does not close it (problem 295 at 50 %: both finishers hit the cap from the same prefix). Recovery:
+  problem 63, base answer cut at 75 % after "the sum is 0 + 2 + 5 + 1 = 8. Let me verify once again"; the base re-adds the same
+  four terms and boxes 8; RL goes back to the factorization, finds the fifth factor and boxes 10. Of the 12 right base
+  prefixes the base itself spoils at 50 and 75 %, 7 end in a final line v3 cannot read or grade (`East.`, `Navin**.`, `16/27.`,
+  no answer line), 2 hit the cap and 3 change the answer. Problem 20: the base's wrong
+  prefix reads `(1+2i)6` as a sixth power; both finishers keep 117 + 41i at all three cuts.
+- Tokens: base finisher 4.86 M generated (1,210 tokens/s, 4,112 s wall, 183 cap hits of 1,098), RL finisher 4.19 M (935
+  tokens/s, 4,568 s, 43 cap hits). Rule-A loops 2 and 0; loop-detector errors 0.
+- Limits: one sample per prefix and one prefix per problem; the pool is the 183 problems the base does not always solve, so
+  the rates are not MATH-500 accuracies. Prefix ids are the stored text re-tokenized (the count differs from the sampled count
+  in 50 of 366 answers, by at most 8 ids). Cuts 0 and 100 ran only in the smoke, RL finisher only.
+- Jobs (one H100 each, commit `bd403e1`): base finisher `abaybektursun-1114-231144-7399`, RL finisher
+  `abaybektursun-1114-231154-44ea`. Raw rows: `answers.jsonl` in each job's `$OUT_DIR` (Volume `iterate-runs`), not committed.
+
 ## How to run
 
 Laptop checks (no GPU, no weights):
@@ -1984,6 +2239,17 @@ uv run --no-project --with numpy --with math-verify==0.9.0 --with transformers==
 ```
 
 It must print 4 right, 3 cap hits of 10 (the stand-in serves right, wrong, cap hit in turn).
+
+### Prefix hand-off
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 --with transformers==5.19.0 --with tokenizers==0.23.3 --with huggingface_hub --with jinja2 python -m studies.rlneurons.analysis.handoff_test --runs runs
+uv run tools/gpu.py submit h100 --hours 4 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.handoff_gen --finisher base --cuts 25,50,75 --commit $(git rev-parse HEAD)"
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.handoff --run base=runs/<job> --run rl=runs/<job> --out studies/rlneurons/results/handoff --nn <nn>
+```
+
+The test and `prep/handoff_plan.py` read the writers' `answers.jsonl` from `runs/<writer job>/` (`uv run tools/gpu.py get`); the
+job reads them from `/runs/` in the Volume. `--finisher rl` for the second job; `--n 10 --cuts 0,25,50,75,100` for the smoke.
 
 ### Day-1 length rules (laptop, no GPU)
 

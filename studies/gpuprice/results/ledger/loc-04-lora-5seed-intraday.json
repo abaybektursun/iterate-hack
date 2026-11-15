@@ -1,0 +1,35 @@
+{
+ "name": "loc-04-lora-5seed-intraday",
+ "note": "Mean of the per-listing quantile functions of 5 LoRA seeds (0..4, ft-05 recipe, loc_qavg.py), then fm2-19 post-processing. Training data: 8,000 synthetic sticky-price series per seed (ft_chronos2.py synthetic()), no real price, so no latest date. Single seeds: +0.3121 +0.3084 +0.3161 +0.3049 +0.3112 (mean +0.3105). H: averaging seeds gains over the mean single seed; refuted if <= +0.3105 + 0.003",
+ "utc": "2026-11-15T04:45:50+00:00",
+ "commit": "04b0cf4",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.312123,
+ "pinball": 0.023074,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.295576,
+ "skill_geomean": 0.394723,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.213022,
+   "in_band": 0.818182
+  },
+  "3": {
+   "skill_pooled": 0.274348,
+   "in_band": 0.760659
+  },
+  "7": {
+   "skill_pooled": 0.359204,
+   "in_band": 0.671512
+  }
+ },
+ "in_band": 0.750402
+}

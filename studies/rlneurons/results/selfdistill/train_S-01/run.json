@@ -1,0 +1,7 @@
+{
+ "job_id": "abaybektursun-1114-194405-bbb6",
+ "commit": "ec6e0f5d6d6ba1581079faa129c5161f18b00a01",
+ "command": "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.distill_train train --arm S --commit ec6e0f5d6d6ba1581079faa129c5161f18b00a01",
+ "runner": "uv run tools/gpu.py submit h100 --hours 1.5",
+ "adapter": "/runs/abaybektursun-1114-194405-bbb6/adapter.safetensors (Modal Volume iterate-runs)"
+}
