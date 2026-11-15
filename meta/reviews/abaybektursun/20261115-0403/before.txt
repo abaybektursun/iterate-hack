@@ -1,0 +1,6 @@
+runner before the change (main 6597c0e), cpu class, command in command.txt
+abaybektursun-1114-200554-863e submit to start 3 s; start to end 39 s; exit 0
+setup_vllm.sh: 18 s
+versions 0.32.0 5.19.0 0.23.3 0.9.0
+
+setup seconds per job, 31 jobs of the last 2 h: fleet_setup.txt

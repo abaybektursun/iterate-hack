@@ -1,5 +1,25 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 04:15 UTC (optimization round asked by the person) meta/reviews/abaybektursun/20261115-0403/
+
+- Last entry's checks (03:53): not due yet. No multi-cell submit, idea-eec971 job or hard328 rows commit since then (board, 04:03).
+- Direction: mission = "the cheapest route to those points that uses no reward, at equal generated tokens" (DIRECTION.md). Claimed since 03:53: work-1a972a scores the configuration chosen on MATH-500 (vote over 4 after restart) on the 328, which is the deliverable; work-9763ed (vote distillation) is a no-reward route. In line.
+- Research: not reviewed in this round; it changed infrastructure only.
+- Turnaround (cycle.txt, 2 h; 03:53 entry in brackets): 39 jobs, 2 failed or cancelled, 11.5 of 655.7 container min in them; median wait 4.2 min (0.1 over 0.6 h); medians to-job 2, jobs 69, to-answer 5 min (2, 79, 4). Slowest stage: jobs. 0 jobs died with FileExistsError since the 02:25 fix (cycle.txt; 3 in the 3 h before it).
+- Inside the jobs stage, the part that is not the work: setup_vllm.sh ran in 31 of the 39 jobs, median 26 s, 18 of them 19 to 196 s (fresh containers), 812 s in total = 2.1 % of the container minutes (fleet_setup.txt). It is the oldest row of meta/FAILURES.md (21:10).
+- Change (step 3; step 1: the separate venv is needed because vLLM pins other versions than requirements.txt; step 2: the script stays, it is the one place that names the versions): the runner image runs the study's setup_vllm.sh once at build time, so a job that calls it finds everything installed. Deployed to abaybektursun's Modal (rolling; image build 71 s); 8 jobs running at deploy, 9 running after.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | setup_vllm.sh in a fresh job | 18 s (fleet median 26 s, n 31) | 2 s cpu, 1 s h100 | about 17-25 s per job | 1 and 2 | before.txt, after.txt |
+  | whole job, same command | 39 s | 23 s cpu, 12 s h100 | shorter | 1 and 2 | same |
+  | submit to start | 3 s | 5 s, 2 s | same within seconds | 1 and 2 | same |
+  | vllm, transformers, tokenizers, math-verify (must not change) | 0.32.0 5.19.0 0.23.3 0.9.0 | the same four | same | 1 and 2 | same |
+
+  This is a 2 % change of container time, measured; the jobs stage is still generation. A change of the versions in setup_vllm.sh still works in a job (the script installs the difference) and needs a redeploy to be fast again.
+- Failures: gpu.py submit prints its fifth-job notice after the job id, so `tail -1` of a script took the notice as the id (one measuring run lost here). Not changed in this entry (one change per entry): the notice belongs on stderr. Row added to meta/FAILURES.md; the vLLM row is deleted.
+- Next entry checks: median setup_vllm.sh seconds over the next 20 jobs against 26 s; whether teammates deployed the runner.
+
 ## 2026-11-15 03:53 UTC (after work-069eca closed as result-edceef and result-eb9211, reward content test; fifth GPU job) meta/reviews/abaybektursun/20261115-0349/
 
 - Last entry's checks: hard328 rows.jsonl still in 0 of 3 folders on any origin branch (03:50), so `tie_short` on the 328 is unscored. Shots cells: base answers in context 417, Code-RL answers 415 of 500 vs base cue 410, no gain (work-be7af1, 03:45); fd89 (RL answers) still running at 71 min (`gpu.py ls`, 03:50).
