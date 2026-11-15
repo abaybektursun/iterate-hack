@@ -26,8 +26,8 @@ PANEL_CSS = r"""
 .dp-open { display: flex; gap: .6em; align-items: baseline; }
 .dp-open::before { content: ""; flex: none; width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--mute); transform: translateY(1px); }
 .dp-id { color: var(--mute); font-size: .9em; margin-left: .5em; }
-.dp-links a { padding-top: 6px; padding-bottom: 6px; }
-.dp-links a::before { top: 9px; bottom: 9px; }
+.dp-links a { padding-top: 6px; padding-bottom: 6px; padding-left: 0; }
+.dp-links a::before { display: none; }
 .dp-body .dp-read { margin-top: 8px; }
 .dp-read a { padding-top: 4px; padding-bottom: 4px; }
 .dp-read a::before { top: 7px; bottom: 7px; }
@@ -37,9 +37,9 @@ PANEL_CSS = r"""
 .dp-url { display: block; margin-top: 2px; color: var(--ink); font-weight: 560; text-decoration: none; overflow-wrap: anywhere; }
 .dp-url:hover { text-decoration: underline; }
 .dp-did { margin: 2px 0 0; }
-.dp-did a { color: inherit; }
+.dp-did a { color: inherit; white-space: nowrap; }
 .dp-who { color: var(--c); font-weight: 600; }
-.dp-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 .7em; margin-top: 2px; }
+.dp-line { display: flex; flex-direction: column; align-items: flex-start; gap: 0; margin-top: 2px; }
 .dp-line .dp-url { display: inline; margin: 0; }
 .dp-meta { font-size: .86em; color: var(--mute); }
 .dp-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); margin-right: 6px; vertical-align: .12em; }
@@ -79,7 +79,7 @@ const PANELS = (() => {
   const board = id => `<a href="/#${esc(id)}">${esc(id)}</a>`;
   const ext = (url, text) => `<a href="${esc(url)}" target="_blank" rel="noopener">${text}</a>`;
   const bare = url => String(url || "").replace(/^https?:\/\//, "").replace(/\/$/, "");
-  const cueText = s => "\u201c" + esc(s == null ? "" : s).replace(/\n/g, "\\n") + "\u201d";
+  const cueText = s => "\u201c" + esc(s == null ? "" : s).replace(/^ /, "\u2423").replace(/\n/g, "\\n") + "\u201d";  // a leading space shows as \u2423
   const facts = list => `<ul class="facts">${list.map(x => `<li>${x}</li>`).join("")}</ul>`;
   const open = x => `<span class="dp-open"><span>${x}</span></span>`;  // one flex item, so inline numbers do not split the text
   const body = (lead, ...parts) => `<div class="dp-body"><p class="lead">${lead}</p>${parts.join("")}</div>`;
@@ -141,18 +141,18 @@ const PANELS = (() => {
     "result/cue": {
       name: "The cue", lit: null,
       html: (F, m) => {
-        const T = N(F, "math500_rl"), c = V(F, "math500_base_cue"), r = V(F, "math500_rl"), t6 = V(F, "math500_base_plain_t06");
+        const T = N(F, "math500_rl"), t6 = V(F, "math500_base_plain_t06"), c6 = O(F, "math500_base_cue_t06"), g2 = O(F, "grader_v3_second_read");
         const tok = O(F, "math500_mean_tokens"), rd = O(F, "math500_base_cue_redraws"), lit = O(F, "cue_paper_literal_rule"), paper = O(F, "cue_paper");
         return body(
           `The cue is ${n(N(F, "cue_text"))} tokens, <span class="dp-cue">${cueText(V(F, "cue_text"))}</span>, placed at the start of the model's answer.`,
           facts([
             `Both models get the same prompt, sampling (T 1.0, top-p 1.0) and grader; base + cue writes ${n(tok.base_cue)} tokens per problem, the RL-trained model ${n(tok.rl)}.`,
-            `At its best temperature, T 0.6, the base model scores ${n(t6)} of ${n(T)}; against that, the cue adds ${n(pt(c - t6, T))} of ${n(pt(r - t6, T))} points.`,
-            `The cue was chosen on these ${n(T)} problems; on ${n(N(F, "hard328_rl"))} held-out harder problems base + cue scores ${n(V(F, "hard328_base_cue"))} against ${n(V(F, "hard328_rl"))} for RL.`,
+            `At T 0.6 the plain base model scores ${n(t6)} of ${n(T)} and base + cue only ${n(c6.right)}: ${n(c6.cap_hits)} of its answers run to the token cap, so the cue is used at T 1.0.`,
             `Other samples of base + cue scored ${n(rd.lo)} to ${n(rd.hi)} of ${n(T)}, so one run moves by a few problems.`,
             `<span class="dp-in">Wang et al. (${ext(paper.url || "https://arxiv.org/abs/2610.06851", esc(String(paper.cite || "").replace(/^.*?,\s*/, "")))}) published the cue; under their answer rule our samples score ${pc(pt(lit.lo, T))} to ${pc(pt(lit.hi, T))}, below their ${pc(lit.theirs_pct)}.</span>`,
+            `A second model read all ${n(g2.disagreements)} answers on which our grader versions disagree and found ${n(g2.wrong_accepted)} wrong answers accepted; no person checked them.`,
           ]),
-          src("board", ["result-c36598", "result-533123", "result-60d899"]),
+          src("board", ["result-c36598", "result-533123", "result-60d899", "result-0018d3"]),
           links([toPanel("result/harder", "Harder problems and code"), toPanel("why/control", "How we know")]));
       },
     },
@@ -166,7 +166,7 @@ const PANELS = (() => {
           `The cue gives ${pc(pct(hc - hb, hr - hb))} of RL's gain over the base model on ${n(H)} harder problems and ${pc(pct(cm - cb, cr - cb))} on ${n(C)} code problems, against ${pc(Math.round(V(F, "math500_share_of_gain_closed_pct")))} on MATH-500.`,
           facts([
             `On ${n(H)} harder problems absent from the RL training prompts, the base model solves ${n(hb)}, base + cue ${n(hc)} and the RL-trained model ${n(hr)}.`,
-            `Two reruns of base + cue on those problems gave ${n(sd.right_shard4)} and ${n(sd.right_whole_h200)}, so one run moves by several problems.`,
+            `Other runs of base + cue on those problems, same seed, gave from ${n(Math.min(sd.right_shard4, sd.right_whole_h200))} to ${n(Math.max(sd.right_shard4, sd.right_whole_h200))}, so one run moves by several problems.`,
             `Of ${n(C)} code problems the base model passes ${n(cb)}, ${n(cm)} with the Math cue and ${n(V(F, "code_base_code_cue"))} with a Code cue; the Code RL-trained model passes ${n(cr)}.`,
             open(`Only Olmo 3 7B and its RL-trained versions are measured; a second model family and a vote on code are open.`),
           ]),
@@ -290,9 +290,10 @@ const PANELS = (() => {
             `${n(pk.all)} GPU containers ran at once at the peak, ${n(pk.per_workspace)} in each of the three workspaces.`,
             `${n(V(F, "gpu_hours"))} GPU-hours were used by ${n(N(F, "gpu_hours"))} ended GPU jobs; of all ${n(e.ended)} ended jobs, ${n(e.exit_nonzero)} exited with an error.`,
             `The median wait for a container was ${n(V(F, "submit_to_start_median_s"))} seconds; a quarter of the ${n(V(F, "gpu_jobs_started"))} started jobs waited over ${n(V(F, "submit_to_start_upper_quartile_min"))} minutes.`,
+            `A Retro review proposed the split; it was built and measured ${n(V(F, "shard_proposal_to_result_min"))} minutes later.`,
             `The split over ${n(sd.shards)} H100s was measured once each way: ${pc(pct(sd.gpu_min_shard4 - sd.gpu_min_whole, sd.gpu_min_whole))} more GPU minutes, and ${n(sd.right_shard4)} right against ${n(sd.right_whole)}.`,
           ]),
-          src("Modal job records", [], F, ["gpu_hours"]),
+          src("Modal job records", [], F, ["gpu_peak_containers", "gpu_hours", "gpu_jobs_ended", "submit_to_start_median_s", "gpu_jobs_started"]),
           links([toBoard("result-dfe78e", "Whole run against 4 shards")]));
       },
     },
@@ -374,17 +375,17 @@ const PANELS = (() => {
     "retro/changes": {
       name: "What the reviews changed", lit: null,
       html: (F, m) => {
-        const mc = O(F, "max_containers_change"), ps = O(F, "planted_waste_skill"), pp = O(F, "planted_waste_plain");
+        const mc = O(F, "max_containers_change"), pp = O(F, "planted_waste_plain");
         return body(
-          `${n(V(F, "meta_review_entries"))} Retro review entries in meta/ record waste that agents found in the team's logs and what they changed.`,
+          `${n(V(F, "meta_review_entries"))} Retro review entries in the team's Retro log record waste that agents found in the team's logs and what they changed.`,
           facts([
             `After a Retro review raised the Modal H100 limit from ${n(mc.from)} to ${n(mc.to)} containers, the median wait fell from ${n(V(F, "h100_wait_before_min"))} minutes (${n(N(F, "h100_wait_before_min"))} jobs) to ${n(V(F, "h100_wait_after_s"))} seconds (${n(N(F, "h100_wait_after_s"))} jobs).`,
             `That change had no control: the two periods differ in hours and load.`,
-            `On planted waste, three Retro reviews cut compute per batch from ${n(ps.before_min)} to ${n(ps.after_min)} container minutes; a plain instruction went from ${n(pp.before_min)} to ${n(pp.after_min)}.`,
+            `On planted waste, a plain instruction went from ${n(pp.before_min)} to ${n(pp.after_min)} container minutes.`,
             `That test had ${n(N(F, "planted_waste_skill"))} runs per arm; on clean work the Retro review cut a required step and the answers went wrong.`,
             open(`An effect on the whole lab is not measured.`),
           ]),
-          src("meta/ and Modal job records", [], F, ["h100_wait_after_s"]),
+          src("Retro log and Modal job records", [], F, ["h100_wait_after_s"]),
           links([toBoard("result-8b2682", "Planted-waste test")]));
       },
     },
