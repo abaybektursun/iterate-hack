@@ -87,6 +87,10 @@ TABLE = {
     "cue-on-code": {
         "group": NO_REWARD,
         "figure": lambda m: [points(m.ST[0]["passed"], m.ST[2]["passed"], m.N), "points", f"{m.N} code problems"]},
+    "how-much-of-the-gap": {
+        "group": NO_REWARD,
+        "figure": lambda m: [m._pc(m._one["share"][0]), "of the gap",
+                             f"328 harder problems, Think-SFT + cue; best rule on untrained weights {m._pc(m._L['one'][1]['share'][0])}"]},
     "imitation-beats-rl": {
         "group": NO_REWARD,
         "figure": lambda m: [signed(m.DATA["diff"]["hard328"]["vote"][0]), "points", "328 harder problems, Think-SFT over RL"]},
@@ -104,6 +108,10 @@ TABLE = {
         "group": ANSWERS,
         "figure": lambda m: [f"{m.DATA['okay'][2]} of {m.DATA['n']}", "answers",
                              f"MATH-500, open with 'Okay' after 100 RL steps; Base {m.DATA['okay'][0]}"]},
+    "rl-avoids-the-slip": {
+        "group": ANSWERS,
+        "figure": lambda m: [f"{m.DATA['D']['math31']['factor']:.2f}", "times as likely",
+                             "MATH-500, RL writing the first wrong step of 51 wrong answers of Base + cue; the interval includes 1"]},
     "rl-wait-habit": {
         "group": ANSWERS,
         "figure": lambda m: [m.PUSH_POINTS, "points", "MATH-500, at RL's rate of Wait"]},
