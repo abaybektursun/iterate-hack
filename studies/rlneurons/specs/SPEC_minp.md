@@ -40,3 +40,12 @@ min-p 0. If the min-p 0.1 smoke shows the same rate as the min-p 0 smoke, min-p 
 
 `jobs/run_cell.py --min-p` (default 0 keeps every earlier cell unchanged); `jobs/rln4_gen.py` VllmEngine.add merges
 the per-request sampling over BASE_SAMPLING so it may set min_p. Results: `results/day1_minp/<arm>-01/`.
+
+## Smoke (job frustea-1114-175514-c4ca, n = 20, problems 0-19), 02:06 UTC, before the full runs
+
+- Instrument passes: sampled tokens with p < 1e-2 were 1,552 of 90,746 (17.1 per 1k) at min-p 0 and 0 of 135,626 at min-p 0.1;
+  lowest sampled logprob -22.7 vs -4.18.
+- min-p 0.1 at T 1.0: 13/20 right, 7 cap hits (5 with rule-A loops) vs 14/20 and 1 cap hit at min-p 0. Truncating the tail
+  brings back the loops that T 1.0 removed. Prediction 1 is now doubtful; the committed predictions stand as written.
+- Added control arm (literature: 2506.13681 says min-p has no edge over top-p at matched tuning): base_p0.95_T1, base, cue,
+  T 1.0, top-p 0.95, min-p 0, seed 41000000.
