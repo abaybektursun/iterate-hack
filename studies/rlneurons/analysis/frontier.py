@@ -6,7 +6,7 @@ for RL, under reward-free test-time rules replayed on the stored rows of two run
         --out studies/rlneurons/results/frontier/math500-01 [--fixed <chosen.json of another set>] [--base-run runs/<job>] [--rl-run runs/<job>]
 
   --base, --rl          run folders of analysis/day1_vote.py: rows.jsonl and metrics.json.
-  --out                 a new run folder: run.json, readout.json, frontier.md, frontier.json, examples.json, chosen.json.
+  --out                 a new run folder: run.json, readout.json, per_problem.json, frontier.md, frontier.json, examples.json, chosen.json.
   --fixed               scores only `single` and the rules of a chosen.json made on another problem set; nothing is chosen.
   --base-run, --rl-run  optional job folders with answers.jsonl: adds the prompt and the end of each text to the examples.
 
@@ -196,7 +196,7 @@ def select(per: dict, budget: float, names: list) -> dict:
             s[j], s0[j], t[j] = per[m]["s"][j], per[m]["s0"][j], per[m]["t"][j]
     return {"budget": budget, "chosen_per_fold": picks, "chosen_on_all": choose(per, budget, list(range(n)), names),
             "held_out_right_24": sum(s), "held_out_right_stored_order": sum(s0), "held_out_tokens_per_problem_24": sum(t) / n,
-            "held_out_wilson95": S.wilson(round(sum(s)), n), "per_problem_24": s}
+            "held_out_wilson95": S.wilson(round(sum(s)), n)}
 
 
 def load(folder: pathlib.Path) -> tuple:
@@ -299,7 +299,8 @@ def main():
             sel = [select(per[model], b, names) for b in BUDGETS]
             res["models"][model]["selection"] = sel
             chosen[model] = {str(s["budget"]): s["chosen_on_all"] for s in sel}
-    res["per_problem"] = {model: {m: {k: per[model][m][k] for k in ("s0", "t0", "d0", "s", "t")} for m in rules} for model in per}
+    pp = {model: {m: {"s0": per[model][m]["s0"], "t0": per[model][m]["t0"], "d0": per[model][m]["d0"], "s": [round(x, 4) for x in per[model][m]["s"]],
+                      "t": [round(x) for x in per[model][m]["t"]]} for m in rules} for model in per}
     ex = {}
     for model in per:
         run = getattr(a, f"{model}_run")
@@ -313,6 +314,8 @@ def main():
     (out / "run.json").write_text(json.dumps({"commit": commit, "command": " ".join(sys.argv), "spec": SPEC,
                                               "source_jobs": {k: meta[k]["job_id"] for k in meta}, "source_commits": {k: meta[k]["commit"] for k in meta}}, indent=1) + "\n")
     (out / "readout.json").write_text(json.dumps(res, indent=1) + "\n")
+    (out / "per_problem.json").write_text(json.dumps({"problem_indices": res["problem_indices"], "keys": "s0 score, t0 tokens, d0 samples drawn (stored "
+                                                      "order); s, t: means over the 24 draw orders", "per_problem": pp}, separators=(",", ":")) + "\n")
     (out / "frontier.md").write_text(md)
     (out / "frontier.json").write_text(json.dumps({"set": pset, "n": res["n"], "rows": [
         {"configuration": TEXT[m], "rule": m, "model": model, **res["models"][model]["rows"][m], "signal": "none" if model == "base" else "RL reward (weights)"}
