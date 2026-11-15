@@ -1164,10 +1164,24 @@ First 100 MATH-500 problems, plain prompt, T 1.0, top-p 1.0, seed base 80,000,00
   is 47 points lower.
 - H2 (the edit goes past the cue) is refuted: 85 is not above 92, and `cueprog` is 3.0 points above the cued base with an
   interval that includes 0.
-- The 500-problem cells (`cueprog` seed base 184,000,000, `cueprog_rand` 185,000,000; jobs `sameraslan-1114-221130-eb90`
-  and `sameraslan-1114-221138-a65c`) are pending; the readout skips them until their rows are in `runs/`.
 - Closest published result: Wang et al. (arXiv 2610.06851, App. D.5) report a one-matrix edit that raises the cue
   probability to 0.95 and scores 0.78 on MATH-500.
+
+All 500 MATH-500 problems, plain prompt, T 1.0, top-p 1.0, one sample, grader v3, commit `db7c499`
+(`results/wsp2/full500/<cell>-01/`, `readout.json` `full500_vs_references`). `cueprog` seed base 184,000,000 (job
+`sameraslan-1114-221130-eb90`), `cueprog_rand` 185,000,000 (job `sameraslan-1114-221138-a65c`). References: T3 plain base
+224, T1 cued base 410, T2 RL 463 (`results/rln4/grader_v3/readout.json`), `top8` 427 and `rand8` (`results/wsp1/full500/`).
+
+| Cell | Right of 500 | Wilson 95 % | Cap hits | Open with `Okay` | Against (paired by problem, points [95 % bootstrap]) |
+|---|---|---|---|---|---|
+| `cueprog` | 397 (79.4 %) | [75.6, 82.7] | 21 | 92.6 % (463) | `cueprog_rand` +38.6 [34.0, 43.6]; T1 cued base -2.6 [-6.4, 1.2]; T2 RL -13.2 [-16.6, -9.8]; `top8` -6.0 [-9.8, -2.0]; `rand8` +40.0 [34.8, 45.0] |
+| `cueprog_rand` | 204 (40.8 %) | [36.6, 45.2] | 8 | 21.2 % (106) | `rand8` +1.4 [-4.6, 7.0] |
+
+- H1 (the edit reproduces the cue) holds on all 500: 79.4 % is within 10 points of the cued base (82.0 %), 92.6 % of
+  answers open with `Okay`, and the control is 38.6 points lower.
+- H2 (the edit goes past the cue) is refuted: 79.4 % is not above 92 %, and `cueprog` is 2.6 points below the cued base
+  with an interval that includes 0.
+- Finding page: `tools/finding_hand_written_edit.py` (`/finding/hand-written-edit`).
 
 ## One axis or several? Item-level structure of every arm (MATH-500 n = 500, hard328 n = 328, laptop, board work-1aa34c, idea-1c8b73)
 

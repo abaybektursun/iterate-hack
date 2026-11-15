@@ -65,3 +65,10 @@ of the norm in BF16, above the 1 % check. H1 holds on the screen; H2 is refuted 
 
 Rerun on all 500, plain, T 1.0, top-p 1.0, one sample: `cueprog` seed base 184,000,000 and `cueprog_rand` seed base
 185,000,000. Compared with T3 (plain base, 224), T1 (prefilled cue, 410), `top8` (427) and T2 (RL, 463).
+
+## Amendment 2, 2026-11-15 07:40 UTC: result on all 500
+
+All 500, plain, right of 500 (`results/wsp2/full500/`, `readout.json` `full500_vs_references`): `cueprog` 397 (79.4 %), 463
+answers opening with the cue; `cueprog_rand` 204 (40.8 %). Paired differences of `cueprog`, points [95 % bootstrap]: control
++38.6 [34.0, 43.6]; T1 cued base -2.6 [-6.4, 1.2]; T2 RL -13.2 [-16.6, -9.8]; `top8` -6.0 [-9.8, -2.0]. H1 holds on all
+500 (within 10 points of the cued base, 92.6 % open with the cue, control 38.6 points lower). H2 is refuted (79.4 % is not above 92 %).

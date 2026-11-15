@@ -1,4 +1,4 @@
-"""Eight directions per weight matrix of the RL weight change lift the untrained model from 45 % to 85 % on MATH-500 (224 to 427 of 500).
+"""Eight directions per weight matrix of the RL weight change lift the base model from 45 % to 85 % on MATH-500 (224 to 427 of 500).
 
 The page of one finding, served at /finding/eight-directions (view.py serves every tools/finding_<slug>.py) and
 reached from its tile on /findings, which ICON draws. The picture is one weight matrix as a glass slab seen from
@@ -11,7 +11,7 @@ import json
 
 TITLE = "Eight directions"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "Reward training changed every weight a little. Which changes matter?"
-LINE = "Eight directions per matrix are enough: the untrained model rises from 45% to 85% on MATH-500."
+LINE = "Eight directions per matrix are enough: the base model rises from 45% to 85% on MATH-500."
 
 # Every number is copied from the artifact named here. None is typed from memory.
 RESULTS = "studies/rlneurons/results/wsp1/"
@@ -21,11 +21,12 @@ DATA = {
     "commit": "1417dbf8f09bb4fcffd273eff18dabdeb76debff",  # full500/top8_plain-01/run.json
     "metric": "Share of the 500 MATH-500 problems answered right, one sample at temperature 1.0",
     "unit": "%",
+    "measure": "of 500 math problems answered right",  # the small label over the big number: what it counts
     "max": 100,
     # What the reader switches between. The first is shown on load: start from the problem, not from the answer.
     # value = right of 500 as a rounded percentage; right is copied from the cell named in "cell".
     "states": [
-        {"key": "untrained", "name": "Untrained", "right": 224, "n": 500, "cell": "studies/rlneurons/results/rln4/grader_v3/readout.json cells.base_plain_1.0", "note": "The slab is one weight matrix. Each line is one direction in it: one pattern of change, strongest first."},
+        {"key": "base", "name": "Base model", "right": 224, "n": 500, "cell": "studies/rlneurons/results/rln4/grader_v3/readout.json cells.base_plain_1.0", "note": "The base model was pretrained on text and never trained with rewards. The slab is one of its weight matrices. Each line is one direction in it: one pattern of change, strongest first."},
         {"key": "random", "name": "8 random directions", "right": 197, "n": 500, "cell": "full500/rand8_plain",
          "note": "A control: eight random directions of the same size in each matrix."},
         {"key": "rl-directions", "name": "8 RL directions", "right": 427, "n": 500, "cell": "full500/top8_plain",
@@ -40,7 +41,7 @@ DATA = {
     "edit": {"source": RESULTS + "full500/top8_plain-01/metrics.json", "k": 8, "n_edited": 224, "n": 500, "share": 0.0982, "add_rel": 0.000741},
     "removed": {"cell": "screen100/bulk_plain", "value": 91, "n": 100},  # the RL-trained model without these directions, first 100 problems
     "one": {"cell": "screen100/top1_plain", "value": 42, "n": 100},  # one direction per matrix, first 100 problems
-    # The untrained model with the three opening tokens of the RL model's answers in front of its answer, all 500 problems.
+    # The base model with the three opening tokens of the RL model's answers in front of its answer, all 500 problems.
     "cue": {"right": 410, "n": 500, "cell": "studies/rlneurons/results/rln4/grader_v3/readout.json cells.base_opener_1.0"},
     # What three ends of two directions read as through the output layer: rows of anatomy-01/readout.json with this
     # name and delta. direction counts from 0; toks are the first tokens of the row, label is what the page shows.
@@ -62,18 +63,18 @@ _left = round(100 * (_right["rl-trained"] - _right["rl-directions"]) / _edit["n"
 PANELS = [
     ["new", "What is new",
      "It was already known that a small part of the RL weight change keeps the gain. How small, the control and what the part means are new.",
-     [f"Eight directions per matrix are enough, and eight random directions of the same size give no gain ({_value['random']} % against {_value['untrained']} %).",
+     [f"Eight directions per matrix are enough, and eight random directions of the same size give no gain ({_value['random']} % against {_value['base']} %).",
       "Taking those eight out of the RL-trained model does not remove the gain.",
       "Read through the output layer, they point at words of deliberation: Okay, Wait, perhaps. The model trained with a code reward "
       "has them too. The model trained by imitation has none."]],
     ["why", "Why it matters",
      "It suggests what reward training taught this model: a habit of reasoning aloud and checking, more than new mathematics.",
-     [f"That fits the cue result: three opening tokens take the untrained model from {_value['untrained']} % to {DATA['cue']['value']} % with no training.",
-      "A change this small and this readable is a target for editing weights directly, with no reward.",
+     [f"That fits the cue result: three opening tokens take the base model from {_value['base']} % to {DATA['cue']['value']} % with no training.",
+      'A change this small and this readable is a target for editing weights directly. The page <a href="/finding/hand-written-edit">Hand-written edit</a> tries that with no reward and reaches the cue.',
       f"The {_edit['k']} directions reach {_value['rl-directions']} % and the RL-trained model {_value['rl-trained']} %; that remainder is still unexplained."]],
     ["how", "How we know",
      f"We added only the {_edit['k']} strongest directions of the RL weight change in each of {_edit['n_edited']} weight matrices to the "
-     f"untrained model and scored it on all {_edit['n']} MATH-500 problems.",
+     f"base model and scored it on all {_edit['n']} MATH-500 problems.",
      [f"Eight random directions of the same size score {_value['random']} %, so the size of the edit is not the cause.",
       f"The edit is {_edit['add_rel'] * 100:.2f} % of the size of the weights and {_edit['share'] * 100:.1f} % of the full RL change.",
       "Closest published result: Spectral Rewiring (arXiv 2607.03065), which keeps the RL gain with a compact part of the update on models that include this pair."]],
@@ -178,6 +179,7 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 .tick { fill: var(--faint); font-weight: 500; }
 .reftext { fill: var(--mute); font-weight: 600; text-anchor: end; }
 .value { font-weight: 330; letter-spacing: -.03em; text-anchor: middle; font-stretch: 100%; }
+.unit { fill: var(--mute); font-weight: 500; text-anchor: middle; }
 .switch { display: inline-flex; align-self: center; margin-top: 18px; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
 .switch button { padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; transition: background .15s ease, color .15s ease; }
 .switch button:hover { color: var(--blue); }
@@ -253,7 +255,7 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 </div>
 <script>
 const C = __CONFIG__, D = C.data, $ = id => document.getElementById(id);
-const S = { state: 0, open: null, g: null, el: null, out: null, words: [], cur: null, from: null, goal: null, t0: 0, t: 0, shown: "" };
+const S = { state: 0, open: null, g: null, el: null, out: null, uw: 0, words: [], cur: null, from: null, goal: null, t0: 0, t: 0, shown: "" };
 const still = matchMedia("(prefers-reduced-motion: reduce)");
 const narrow = matchMedia("(max-width: 900px)");
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -264,7 +266,7 @@ const ease = p => p < .5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2;
    lit, they show in the accent; rest, the other directions of the RL change show between them; wash, the whole slab
    is lit; lab, the words stand at the ends of their lines. The picture moves from one look to the next in 0.9 s. */
 const LOOK = {
-  "untrained": { sc: 0, plain: .34, lit: 0, rest: 0, wash: 0, lab: 0 },
+  "base": { sc: 0, plain: .34, lit: 0, rest: 0, wash: 0, lab: 0 },
   "random": { sc: 1, plain: .7, lit: 0, rest: 0, wash: 0, lab: 0 },
   "rl-directions": { sc: 0, plain: 0, lit: 1, rest: 0, wash: 0, lab: 1 },
   "rl-trained": { sc: 0, plain: 0, lit: 1, rest: 1, wash: 1, lab: 1 },
@@ -352,12 +354,14 @@ function build() {
     `<line class="ref" x1="${f(x(ref.value))}" y1="${f(g.ay - g.fl * .7)}" x2="${f(x(ref.value))}" y2="${f(g.ay + g.fl * .55)}"/>` +
     `<text class="reftext" x="${f(x(ref.value) + 4)}" y="${f(g.ay + g.fl * 1.75)}" font-size="${g.fl}">${esc(ref.name)} ${ref.value}${esc(D.unit || "")}</text>` +
     `<line class="level" id="level" x1="${g.x0}" y1="${g.ay}" y2="${g.ay}"/><circle class="head" id="head" cy="${g.ay}" r="${f(g.fl * .32)}"/>` +
-    `<text class="value" id="value" y="${f(g.ay - g.num * .2)}" font-size="${g.num}"></text></g>`;
+    `<text class="value" id="value" y="${f(g.ay - g.num * .2)}" font-size="${g.num}"></text>` +
+    `<text class="unit" id="unit" y="${f(g.ay - g.num * 1.06)}" font-size="${g.fl}">${esc(D.measure)}</text></g>`;
   S.el = {};
-  ["glow", "side", "edge", "face", "wash", "shine", "rest", "plain", "halo", "lit", "rim", "fade-b", "fade-c", "fade-n", "level", "head", "value"].forEach(id => { S.el[id] = $(id); });
+  ["glow", "side", "edge", "face", "wash", "shine", "rest", "plain", "halo", "lit", "rim", "fade-b", "fade-c", "fade-n", "level", "head", "value", "unit"].forEach(id => { S.el[id] = $(id); });
   S.words.forEach(o => { o.el = $("word-" + o.i); });
   S.out = outline(g);
   S.shown = "";
+  S.uw = 0;
 }
 
 function place(t) {
@@ -406,6 +410,8 @@ function place(t) {
   // The score: one number that moves along the scale.
   const x = g.x0 + (g.x1 - g.x0) * c.v / D.max, text = String(Math.round(c.v)) + (D.unit || "");
   set(E.level, { x2: f(x) }); set(E.head, { cx: f(x) }); set(E.value, { x: f(x) });
+  if (!S.uw) S.uw = E.unit.getComputedTextLength();  // the label over the number follows it, and stays inside the picture
+  set(E.unit, { x: f(Math.min(g.w - S.uw / 2 - 4, Math.max(S.uw / 2 + 4, x))) });
   if (text !== S.shown) E.value.textContent = S.shown = text;
 }
 
@@ -437,11 +443,12 @@ function choose(i, instant) {
   $("switch").querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-pressed", k === i));
   place(S.t);
 }
+const link = s => s.replace(/&lt;a href=&quot;(\/[\w\/#-]*)&quot;&gt;(.*?)&lt;\/a&gt;/g, '<a href="$1">$2</a>');  // a link to another page of the site stays a link
 function pane() {
   const p = C.panels.find(p => p[0] === S.open);
   $("pane").innerHTML = p
     ? `<div class="dhead"><h2>${esc(p[1])}</h2><button class="close" data-open="">Close</button></div><p class="lead">${esc(p[2])}</p>` +
-      `<ul class="facts">${p[3].map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
+      `<ul class="facts">${p[3].map(x => `<li>${link(esc(x))}</li>`).join("")}</ul>`
     : `<ul class="more">${C.panels.map(p => `<li><button data-open="${p[0]}">${esc(p[1])}<span aria-hidden="true">›</span></button></li>`).join("")}</ul>`;
 }
 function address(push) {
@@ -498,6 +505,7 @@ $("switch").innerHTML = D.states.map((s, i) => `<button data-state="${i}" aria-p
 build();
 aim(S.g.yaw, 0);  // the still frame
 fromHash(true);
+if (document.fonts) document.fonts.ready.then(() => { S.uw = 0; place(S.t); });  // measure the label again in Archivo
 if (!still.matches) {
   $("svg").classList.add("enter");
   setTimeout(() => $("svg").classList.remove("enter"), 2200);
