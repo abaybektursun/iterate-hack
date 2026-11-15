@@ -1,0 +1,62 @@
+== standing
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5tuznmrt
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5tuznmrt
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5tuznmrt
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5tuznmrt
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5tuznmrt
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5tuznmrt
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5tuznmrt
+295 items before 2026-11-15T20:38:56, 76 at or after
+  running 1 jobs, 1 at a time
+351 items before 2026-11-15T22:32:36, 20 at or after
+  running 1 jobs, 1 at a time
+231 items before 2026-11-15T14:53:16, 140 at or after
+  running 1 jobs, 1 at a time
+254 items before 2026-11-15T17:45:51, 117 at or after
+  running 1 jobs, 1 at a time
+267 items before 2026-11-15T18:58:29, 104 at or after
+  running 1 jobs, 1 at a time
+315 items before 2026-11-15T21:27:03, 56 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 123 at or after
+  running 1 jobs, 1 at a time
+285 items before 2026-11-15T20:05:26, 86 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-14 (opus): done in 44 s
+  forecast_score/measured-round-13 (opus): done in 44 s
+248 items before 2026-11-15T16:32:52, 124 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-12 (opus): done in 50 s
+248 items before 2026-11-15T16:32:52, 124 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 124 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-run-02 (opus): done in 56 s
+  forecast_score/measured-round-09 (opus): done in 56 s
+  forecast_score/measured-run-03 (opus): done in 56 s
+248 items before 2026-11-15T16:32:52, 124 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 124 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-11 (opus): done in 75 s
+  forecast_score/measured-round-10 (opus): done in 79 s
+  forecast_score/measured-run-05 (opus): done in 56 s
+  forecast_score/measured-run-04 (opus): done in 58 s
+  forecast_score/measured-run-08 (opus): done in 49 s
+  forecast_score/measured-run-07 (opus): done in 52 s
+  forecast_score/measured-run-06 (opus): done in 64 s
+372 items before 9999, 0 at or after
+  standing: 101 mechanisms, 100 scored, 31 carried, 31 to the graveyard; 331 forecasts written after their result, 0 measured rows not scored
+== direct facts
+  42 direct facts (10 hold)
+== synthesis: three blind accounts
+373 items before 9999, 0 at or after
+  running 3 jobs, 3 at a time
+  synthesis/account-2 (opus): done in 343 s
+  synthesis/account-1 (opus): done in 393 s
+  synthesis/account-3 (opus): done in 414 s
+== judge: where the accounts disagree
+  running 1 jobs, 1 at a time
+  synthesis_judge/judge (opus): done in 214 s
+  gate: 11 mechanisms without a row (round-15/account-1/d1, round-15/account-2/d1, round-15/account-1/c1, round-15/account-1/c2, round-15/account-1/c3, round-15/account-2/c1, round-15/account-2/c2, round-15/account-2/c3, round-15/account-3/c1, round-15/account-3/c2, round-15/account-3/c3): run the tests from studies/theory/results/wide/round-15/synthesis_tests.md, add rows, rerun
+EXIT 0
