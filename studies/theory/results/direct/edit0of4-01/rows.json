@@ -1,0 +1,9 @@
+[
+ {
+  "mechanism": "round-15/account-2/c3",
+  "claim": "On hard328 problems where the cued base has 0 of 4 right, the 1.5x top-8 edit is right per sample as often as RL plain (edit minus RL in [-0.08, 0.08]).",
+  "result": "result-378eef",
+  "verdict": "holds",
+  "measured": "E - R = -0.012 [-0.037, 0.010] (90 % paired bootstrap), n 121 problems; null value -0.097 [-0.136, -0.060]; account-2 range [-0.08, 0.08], null range [-0.35, -0.12]"
+ }
+]
