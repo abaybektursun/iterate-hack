@@ -359,14 +359,22 @@ explains it, with live rows from the board (`/architecture#board` is its link); 
 path of one result (arrow keys, Esc). The logos of past.dev (the team's memory) and Exa (web and literature search)
 sit on the key's row at the bottom, and a click on either explains how agents use it.
 
-The tab Findings is the page `/findings` (`tools/findings.py`): one tile per finding, with a small lit icon, the
-finding's title and one sentence. A tile opens the page of that finding. Every finding worth telling gets such a page:
+The tab Findings is the page `/findings` (`tools/findings.py`). Its first view is the research question and one
+picture of it: a glass rail of MATH-500 scores (T 1.0 / top-p 1.0) on which the base model's scores without reward
+(plain prompt, cue, restart, vote over four, vote after restart) are drawn in one after another against the RL model's
+(one sample, then the same vote and restarts), with the points by which RL still leads counting down under it and one
+sentence on what remains. Every mark opens the finding it comes from (Tab and Enter work). The marks are read from the
+finding modules' own values and from the board's score rows (result-5d032f, the honest best after board
+result-e78dfe); `TABLE` in `tools/findings.py` names, per finding, its group, its figure and its marks. Under the
+picture the findings are rows in groups that follow the question (gains without reward, what RL changes, inside the
+weights), each with its effect size as one figure, its title, its sentence and its icon; a finding that `TABLE` does
+not name appears in the last group, "New". Every finding worth telling gets such a page:
 `tools/finding_<slug>.py`, copied from `.claude/skills/finding-page/template.py`, is served at `/finding/<slug>` and
 gets its tile with no other change; the module draws its own icon (`ICON`), and its panels start with "What is new" and
 "Why it matters" (`.claude/skills/finding-page/SKILL.md` says when and how). `.claude/skills/site-ui/SKILL.md` holds
 the rules for anything visible on the site.
 
-The tab Proof is the page `/proof`: the same grid of tiles, for the experiments that test the team's method itself and
+The tab Proof is the page `/proof`: the same page as one list of rows with no picture, for the experiments that test the team's method itself and
 not the research question. Each is a module `tools/proof_<slug>.py`, made like a finding page and served at
 `/proof/<slug>`. The first is `tools/proof_review_cuts_waste.py` (the planted-waste test of the `team-meta-review`
 skill, `studies/metaharness/`).
