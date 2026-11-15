@@ -455,12 +455,11 @@ empty frame. Slides 4 and 7 show the Design page's picture and the idea tree of 
 inverted), each replaying its real cases, with two numbers under each read from the pages' own number rows. The slide `#finding` shows `/demo/fig/fixes` (`tools/demo_fixes.py`): one MATH-500 problem
 answered four ways, each answer a glass sheet on a step as high as its configuration's score (base model, 3 opening
 tokens, sampling at T 1.0, 8 directions in the weights), with every quoted word checked against its run by
-`PYTHONPATH=.:tools python3 tools/demo_fixes.py`. Every number is read when the page is built: the cut-off answers from
-`tools/finding_the_finish_dial.py` (`DATA['cells']`), the comparison with Karpathy's autoresearch loop from
+`PYTHONPATH=.:tools python3 tools/demo_fixes.py`. Every number is read when the page is built: the staircase's scores from
+`tools/demo_fixes.py`, the comparison with Karpathy's autoresearch loop from
 `FACTS['auto_research_comparison']` in `tools/demo_facts.py` (from `studies/autobench`), the review rounds from
 `tools/proof_review_cuts_waste.py`, the links of the idea tree from `tools/demo_ali_data.py` (counted as
-`tools/demo_ali.py` counts them), the number of people from `FACTS['people']`, and the number of finding pages and the
-papers from `tools/view.py`.
+`tools/demo_ali.py` counts them), the number of people from `FACTS['people']`, and the papers from `tools/view.py`.
 
 The stepped story of the talk is at `/demo/story`: one story over the Design page's picture, with a sentence and a fact
 line per step in the words column (arrow keys step, Esc closes; `/demo/story#<step>` links to a step). The 12

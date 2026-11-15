@@ -6,10 +6,10 @@ PageUp back; Home and End; t theme (also the button at the top right); f fullscr
 steps. The slide is in the address (/demo#finding), so Back works. Printing (p) gives one slide per page at 13.333 x
 7.5 in, in the theme on screen.
 
-Every number is read at build time from the module that holds it: the cut-off answers from finding_the_finish_dial.DATA,
+Every number is read at build time from the module that holds it:
 the staircase of fixes from demo_fixes.py, the accuracy climb from demo_ali_data.DATA['climb'], the two result pictures from demo_results.py, the review rounds
 from proof_review_cuts_waste.DATA, the idea tree's links from proof_idea_basins.DATA['tree'], the number of people from
-demo_facts.FACTS['people']; view.py passes the number of finding pages and the list of papers. The photos are data
+demo_facts.FACTS['people']; view.py passes the list of papers. The photos are data
 URIs in demo_photos.py. Six slides show a picture in an iframe of FIGS: the accuracy climb of /demo/ali/slide3, the
 Design page (architecture.py), the staircase of fixes of demo_fixes.py, the two pictures of demo_results.py and /proof/idea-basins playing from the items to their basins to the idea tree,
 each with its header, words column and key hidden. A frame with data-replay is loaded again when its slide is shown, so
@@ -27,7 +27,6 @@ import demo_fixes
 import demo_photos
 import demo_results
 import exa_page
-import finding_the_finish_dial
 import pastdev
 import proof_idea_basins
 import proof_review_cuts_waste
@@ -166,11 +165,6 @@ assert {"memories", "median recall"} <= set(PAST_NUMS), f"the numbers row of pas
 
 
 # ---------- the numbers ----------
-DIAL = finding_the_finish_dial.DATA
-CELLS = DIAL["cells"]
-DIAL_ROWS = sorted((c for c in CELLS.values() if c["kind"] in ("top", "base")), key=lambda c: c["size"])
-PEAK = max((c for c in DIAL_ROWS if c["kind"] == "top"), key=lambda c: c["right"])
-assert PEAK is CELLS["1.5"], "the peak of the finish dial moved: the slide text names size 1.5"
 
 PEOPLE = demo_facts.FACTS["people"]["v"]
 RL_GPUS = demo_facts.FACTS["rl_zero_gpus"]["v"]["total"]  # learner + actor GPUs of the RL training, Olmo 3 paper, Table 49
@@ -264,7 +258,7 @@ def qr():
             f'<path d="{QR_PATH}" fill="#101820" shape-rendering="crispEdges"/></svg>')
 
 
-def slides(n_findings, papers):
+def slides(papers):
     return [
         ("hook", f'<div class="mid"><h1 class="big">{hook_html()}</h1><div class="site">{qr()}<span>{esc(SITE)}</span></div></div>'),
         ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers</p>'
@@ -287,10 +281,8 @@ def slides(n_findings, papers):
                      '<iframe class="fig-frame sponsor s-past" data-fig="pastdev" data-replay title="past.dev: one agent writes, another reads" tabindex="-1"></iframe>'
                      f'<p class="spon s-exa">{logo("exa")}<span><b>{esc(EXA_NUMS["arXiv papers surfaced"])}</b> arXiv papers surfaced · <b>{esc(EXA_NUMS["pages read in full"])}</b> pages read in full</span></p>'
                      f'<p class="spon s-past">{logo("past")}<span><b>{esc(PAST_NUMS["memories"])}</b> memories · <b>{esc(PAST_NUMS["median recall"])}</b> median recall</span></p>'),
-        ("finding", '<h2 class="title fixes-title">8 directions in the weights hold most of RL\'s gain</h2>'
-                    '<iframe class="fig-frame fixes" data-fig="fixes" data-replay title="One problem, four answers" tabindex="-1"></iframe>'
-                    f'<p class="sub fixes-why">Why: they make the model finish its answer, cut-off answers '
-                    f'{CELLS["0"]["cut"]} → {CELLS["1.5"]["cut"]}</p><p class="corner low">{n_findings} findings</p>'),
+        ("finding", '<h2 class="title fixes-title">Interpretable findings with hill climbing</h2>'
+                    '<iframe class="fig-frame fixes" data-fig="fixes" data-replay title="One problem, four answers" tabindex="-1"></iframe>'),
         ("beyond", '<div class="head"><h2>Out of distribution, not glorified overfitting</h2>'
                    '<p class="sub">One <b class="team">Invariant</b> method: tuned on MATH-500 only, then used unchanged on three benchmarks it never saw</p></div>'
                    '<iframe class="fig-frame wide" data-fig="beyond" data-replay title="Beyond MATH-500" tabindex="-1"></iframe>'),
@@ -349,7 +341,6 @@ p, h1, h2, figure { margin: 0; }
 .head h2 { font-weight: 300; font-size: 54px; line-height: 1.1; }
 .head .sub { margin-top: 12px; }
 .sub .team { font-weight: 740; font-stretch: 122%; letter-spacing: .02em; color: var(--blue); }  /* the team's name, set as on the site's header */
-.corner { position: absolute; right: 96px; bottom: 64px; font-size: 22px; font-weight: 500; color: var(--faint); }
 
 .photo { border-radius: 2px; overflow: hidden; }
 .photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -387,11 +378,8 @@ p, h1, h2, figure { margin: 0; }
 .spon { position: absolute; top: 772px; width: 702px; display: flex; align-items: center; justify-content: center; gap: 22px; font-size: 24px; font-weight: 500; color: var(--mute); }
 .spon.s-exa { left: 96px; } .spon.s-past { left: 804px; }
 .spon b { font-weight: 640; color: var(--ink); }
-.fig-frame.fixes { left: 180px; top: 112px; width: 1240px; height: 694px; }
-.fixes-title, .fixes-why { position: absolute; left: 0; right: 0; text-align: center; }
-.fixes-title { top: 34px; }
-.fixes-why { top: 822px; }
-.corner.low { bottom: 40px; }
+.fig-frame.fixes { left: 180px; top: 140px; width: 1240px; height: 694px; }
+.fixes-title { position: absolute; left: 0; right: 0; top: 44px; text-align: center; }
 .tools { position: absolute; left: 0; right: 0; bottom: 56px; display: flex; justify-content: center; gap: 72px; font-size: 22px; font-weight: 560; color: var(--mute); }
 .tools span { display: inline-flex; align-items: center; gap: 14px; }
 .logo { height: 24px; width: auto; fill: var(--ink); }
@@ -526,9 +514,9 @@ fromHash();
 """
 
 
-def page(n_findings, papers):
-    """The deck, with the number of finding pages and the paper file names (view.FINDINGS, view.PAPERS) written in."""
+def page(papers):
+    """The deck, with the paper file names (view.PAPERS) written in."""
     body = "\n".join(f'<section class="slide" id="{sid}" aria-label="Slide {i + 1}"><div class="box">{inner}</div></section>'
-                     for i, (sid, inner) in enumerate(slides(n_findings, list(papers))))
+                     for i, (sid, inner) in enumerate(slides(list(papers))))
     return (TEMPLATE.replace("__FONT__", FONT).replace("__THEME_JS__", THEME_JS).replace("__TOKENS__", TOKENS)
             .replace("__SLIDES__", body))
