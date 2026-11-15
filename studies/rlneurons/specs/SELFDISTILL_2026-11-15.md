@@ -144,3 +144,12 @@ V plain read end to end for degenerate text (copied training solutions, empty an
 | train S and S cue (only if the running total allows) | 25 + 55 | 5.3 |
 
 Stop adding cells when the next would pass 25 USD.
+
+## Changes after the first GPU job
+
+- 2026-11-15, after the smoke job `abaybektursun-1114-193821-520c` (8 longest U examples, 115,780 target tokens, 3,101 target
+  tokens/s, setup 36 s, wall 216 s; zero-adapter merge identical to the base; effective scale 1.000): the cost estimate drops (train V
+  about 0.9 USD, U 1.2, S 0.9), so arm S is trained together with V and U and S cue is scored on the 328 (seed base 85,000,000) if the
+  running total after the four main cells leaves room under 25 USD. Greedy generations of 3 training prompts with the plain prompt
+  before training already begin `.\n\nOkay, so I need to ...` (the base's own plain opener), not the cue; the check after the real
+  training reads whether they change to ` line!\n\nOkay`.

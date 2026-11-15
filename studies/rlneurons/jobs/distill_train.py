@@ -279,7 +279,7 @@ def rebuild(a):
     t0 = time.time()
     res = merge(base_dir, lora, 1.0, a.dir, None, rl_json)
     assert res["sha256"] == rep["merge"]["sha256"], "the rebuilt model differs from the train job's merged model"
-    pathlib.Path(os.environ["OUT_DIR"], "merge.json").write_text(json.dumps({"train_dir": str(td), "train_job": rep["job_id"], "arm": rep["arm"],
+    pathlib.Path(os.environ["OUT_DIR"], "distill_merge.json").write_text(json.dumps({"train_dir": str(td), "train_job": rep["job_id"], "arm": rep["arm"],
                                                                                 **res, "seconds": time.time() - t0}, indent=1) + "\n")
     print("merged", rep["arm"], res["sha256"], f"{time.time() - t0:.0f} s")
 
