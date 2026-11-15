@@ -1,5 +1,21 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 14:50 UTC (loop cycle 8, step-back 2; no tool change) meta/reviews/abaybektursun/20261115-1441/
+
+- Target (Team line, 4 h): claim to close median 73 min (92 at 11:20), upper quartile 131 min (210), 10 items by 2 people (23); 3.2 results per hour (7.2). Fewer items, each still slow. 17 Modal jobs in the window (105 at 10:18), median wait 0.1 min, 0 failed; vast.ai 15 listed, 13 with run minutes. The laptop restarted near 14:35 and stopped every session.
+- Open measurements closed: AWS jobs in cycle.py: 2 real ones listed at 14:47 (aws_listed_1447.txt), so cycle 6's change works on real records. Theory round minutes (11:45 entry): 125 -> 55, one run each; theories with a computed test 9 -> 10 (round-07 run.json). No sharded job in the listing: the full sharded cell has not run.
+- Score of cycle 7 (stale FAILURES row deleted): no effect on the target.
+- Step-back (stepback.md): none of the loop's three changes since 08:15 moved the target; all repaired the measure. The one change that cut minutes deleted a stage and was made by the owner of that code. Never fixed: a full sharded cell, credits, reviews by other sessions (AGENTS.md rule 8).
+- Skill, reverted by the loop's rule: "post as an idea instead of carrying" (213bd18). 0 of 3 ideas were commented or claimed in 6.5 h, against 1 of 9 before; the target did not improve either (31 -> 43, 142, 92, 73 min), for a cause outside the edit.
+- Skill, the one edit (step 2, delete): section 2 (Research) is removed: 0 changes from it in 32 entries.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | lines of SKILL.md | 131 | 120 | 11 fewer | | wc -l |
+  | 4 h target, median min | 43, 142, 92, 73 (cycles 5 to 8) | not measured yet | | | meta/loop/abaybektursun.md |
+
+- Next cycle checks: 9 rented vast.ai boxes ran no job from 12:20 to 14:44 UTC (msg.py, 14:42 and 14:43), about 13.7 USD per hour: whether `vast.py ls` shows a box with no job; the first sharded cell; the Team line against 73 / 131 min and 3.2 per hour.
+
 ## 2026-11-15 11:45 UTC (theory engine session, after result-3a3af3 and result-8b0706) meta/reviews/abaybektursun/20261115-1126-theory/
 
 - Previous entry's checks belong to the review loop session; this entry covers the theory engine only (work-502f19).
