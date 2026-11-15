@@ -1,0 +1,39 @@
+# command: grep counts on origin/main abf0a59
+## section 1: demo files, entrance animation and settle code
+tools/demo.py: lines     1690 | requestAnimationFrame 5 | @keyframes 7 | animation: 19 | transition 26 | prefers-reduced-motion 2 | setTimeout 2 | static param 11
+tools/demo_panels.py: lines      394 | requestAnimationFrame 0 | @keyframes 0 | animation: 0 | transition 0 | prefers-reduced-motion 0 | setTimeout 0 | static param 2
+## section 2: finding pages, frame loop and 800 ms no-frame timer (previous entry: 7 of 8 without)
+tools/finding_cue_on_code.py raf=2 t800=0
+tools/finding_eight_directions.py raf=2 t800=0
+tools/finding_loop_neurons.py raf=2 t800=0
+tools/finding_neurons_you_can_describe.py raf=2 t800=0
+tools/finding_opening_cue.py raf=2 t800=0
+tools/finding_restart_on_cap.py raf=2 t800=0
+tools/finding_rl_every_neuron.py raf=2 t800=0
+tools/finding_rl_reliability.py raf=2 t800=0
+tools/finding_rl_wait_habit.py raf=0 t800=0
+tools/finding_vote_over_four.py raf=2 t800=0
+.claude/skills/finding-page/template.py raf=0 t800=0
+## section 3: hand-typed numbers in demo builders vs demo_facts
+demo_refresh.py first commit: 84f28fd 2026-11-14T23:35:55-08:00
+demo_facts.py first commit: 8e16b19 2026-11-14T22:43:05-08:00
+## section 4: settle code '(!S.last) settle' per finding page
+tools/finding_cue_on_code.py raf=2 settle_timer=1
+tools/finding_eight_directions.py raf=2 settle_timer=0
+tools/finding_loop_neurons.py raf=2 settle_timer=0
+tools/finding_neurons_you_can_describe.py raf=2 settle_timer=0
+tools/finding_opening_cue.py raf=2 settle_timer=0
+tools/finding_restart_on_cap.py raf=2 settle_timer=0
+tools/finding_rl_every_neuron.py raf=2 settle_timer=0
+tools/finding_rl_reliability.py raf=2 settle_timer=0
+tools/finding_rl_wait_habit.py raf=0 settle_timer=0
+tools/finding_vote_over_four.py raf=2 settle_timer=0
+## section 5: Stop hook in .claude/settings.json on origin/main
+53:    "Stop": [
+## section 6: build rounds, commit times and lines changed in tools/demo.py + tools/demo_panels.py
+aa5f702 2026-11-15T00:05:34-08:00
+84f28fd 2026-11-14T23:35:55-08:00
+8e16b19 2026-11-14T22:43:05-08:00
+8e16b19..84f28fd:  2 files changed, 579 insertions(+), 380 deletions(-)
+84f28fd..aa5f702:  2 files changed, 62 insertions(+), 56 deletions(-)
+board: claim 2026-11-15T05:15:21Z, close 2026-11-15T08:06:04Z (uv run tools/board.py show work-c61a45)
