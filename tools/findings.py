@@ -76,6 +76,9 @@ TABLE = {
     "rl-wait-habit": {
         "group": BEHAVIOUR,
         "figure": lambda m: [f"+{m.MORE} %", "more often after RL, Wait is among the next words"]},
+    "equal-token-frontier": {
+        "group": GAIN,
+        "figure": lambda m: [f"{m._best['gap'][0]:+.1f}", f"points below one RL sample at {m._best['multiple']:.1f} times the tokens"]},
     "rl-edge-comes-early": {
         "group": BEHAVIOUR,
         "figure": lambda m: [f"{m.CLOSED_U} to {m.CLOSED} %", "of the gap closed when the base model finishes RL's half-written answers"]},
