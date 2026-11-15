@@ -4,7 +4,9 @@
     /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.delta_sum --host think_sft --donor rl_math --alpha 1.0 --dir /tmp/theta
     /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.delta_sum --host think_sft --donor rl_math --alpha 1.0 --random --dir /tmp/theta
 
-  --alpha   a. A tensor whose donor - base is exactly zero is written as the host's stored tensor.
+  --host    a key of MODELS, or <repo>@<revision> for another fine-tune of the same base (same tensor names and shard layout).
+  --alpha   a. A tensor whose donor - base is exactly zero is written as the host's stored tensor. a = 0 writes the host alone, through
+            the same path (the host's reference run): the written model must then equal the host exactly.
   --random  control: per tensor, a * (donor - base) is replaced by Gaussian noise of the same Frobenius norm (generator seeded --seed,
             tensors in sorted name order within sorted shards).
   --dir     the model goes here (must not exist): the base's shard layout, the json files (config, index, tokenizer) of the RL-Math
@@ -36,7 +38,7 @@ JSON_KEY = "rl_math"
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--host", required=True, choices=sorted(MODELS))
+    ap.add_argument("--host", required=True)
     ap.add_argument("--donor", required=True, choices=sorted(MODELS))
     ap.add_argument("--alpha", type=float, required=True)
     ap.add_argument("--random", action="store_true")
@@ -48,7 +50,8 @@ def main():
     torch.set_grad_enabled(False)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     from huggingface_hub import snapshot_download
-    dirs = {k: pathlib.Path(snapshot_download(MODELS[k][0], revision=MODELS[k][1], allow_patterns=["*.json", "*.safetensors"])) for k in ("base", a.host, a.donor)}
+    models = {"base": MODELS["base"], a.host: MODELS[a.host] if a.host in MODELS else tuple(a.host.split("@")), a.donor: MODELS[a.donor]}
+    dirs = {k: pathlib.Path(snapshot_download(repo, revision=rev, allow_patterns=["*.json", "*.safetensors"])) for k, (repo, rev) in models.items()}
     json_dir = pathlib.Path(snapshot_download(MODELS[JSON_KEY][0], revision=MODELS[JSON_KEY][1], allow_patterns=["*.json"]))
     maps = {k: weight_map(d) for k, d in dirs.items()}
     assert set(maps["base"]) == set(maps[a.host]) == set(maps[a.donor]), "the three models hold different tensor names"
@@ -80,14 +83,17 @@ def main():
         save_file(written, out / shard, metadata={"format": "pt"})
     for p in json_dir.glob("*.json"):
         shutil.copy(p, out / p.name)
-    res = {"args": vars(a), "models": {k: {"repo": MODELS[k][0], "revision": MODELS[k][1]} for k in dirs}, "json_from": MODELS[JSON_KEY][0],
+    res = {"args": vars(a), "models": {k: {"repo": models[k][0], "revision": models[k][1]} for k in dirs}, "json_from": MODELS[JSON_KEY][0],
            "n_tensors": len(maps["base"]), "n_copied_from_host": copied, "host_delta_norm": s["host_sq"] ** 0.5, "donor_delta_norm": s["donor_sq"] ** 0.5,
            "cos_host_donor": s["host_donor"] / (s["host_sq"] * s["donor_sq"]) ** 0.5 if s["host_sq"] else None,
-           "effective_a": s["written_donor"] / s["donor_sq"], "written_norm_over_intended": (s["written_sq"] / s["donor_sq"]) ** 0.5 / a.alpha,
+           "effective_a": s["written_donor"] / s["donor_sq"], "written_norm": s["written_sq"] ** 0.5,
+           "written_norm_over_intended": (s["written_sq"] / s["donor_sq"]) ** 0.5 / a.alpha if a.alpha else None,
            "seconds": time.time() - t0}
     pathlib.Path(a.stats).write_text(json.dumps(res, indent=1) + "\n")
     print(json.dumps({k: v for k, v in res.items() if k not in ("args", "models")}), flush=True)
-    if a.random:
+    if a.alpha == 0:
+        assert res["written_norm"] == 0, "a = 0 must write the host unchanged"
+    elif a.random:
         assert abs(res["effective_a"]) < 0.02, "random control: the noise carries a part of donor - base"
     else:
         assert abs(res["effective_a"] - a.alpha) < 0.02 * a.alpha, "the written model does not carry a * (donor - base)"

@@ -127,3 +127,27 @@ difference to Think-SFT sample 1 at 32,768 (same per-problem seeds), 95 % bootst
 Readings as filed in amendment 3, for this sample: 225 to 235 at 32,768 = H-tokens (the delta only saves tokens); 240 or more
 = H-more (it adds right answers); 236 to 239 undecided. Also: the paired difference to Think-SFT at 32,768 has its interval
 above 0 under H-more and includes 0 under H-tokens.
+
+## Amendment 5 (2026-11-15 22:05 UTC, before any run below): another host, the released final Think model (board work-989736)
+
+Think-SFT is imitation only. `allenai/Olmo-3-7B-Think` (revision d97e442d7cc678210054dbcc9b440894d62c89a4; its card names
+Think-DPO as its parent, which names Think-SFT) is the same model after DPO and RLVR: a host that has already been trained
+with reward. It has not been run in this study. Question: does the RL-Zero delta, which was learned from the base without
+demonstrations, still add right answers on a host whose own training already used reward?
+
+H(a) = Olmo-3-7B-Think + a (RL-Math - base), written by `delta_sum --host allenai/Olmo-3-7B-Think@d97e442...` (the host
+argument now takes repo@revision; a = 0 writes the host through the same path and must equal it exactly).
+
+Runs: hard328, cue, T 1.0 / top-p 1.0, cap 16,384, grader v3, one sample each, seed 3,000,000: H(0) and H(2). a = 2 is the
+coefficient chosen on Think-SFT; nothing is chosen on this host.
+
+- H-absorbed (reward training already gave this host what the delta gives): H(0) has fewer cap hits than Think-SFT (under 70
+  of 328 against 94.5), and H(2) minus H(0) is under +3 points with the paired 95 % interval including 0.
+- H-adds (the delta is a separate change that any descendant of the base can take): H(2) minus H(0) is +3 points or more
+  with the interval above 0, and cap hits fall by at least a third. Then a second seed of both is run before it is posted as
+  a score.
+- H-clash: H(2) below H(0) with the interval below 0.
+- Reference counts on the same seed: Think-SFT 212 (89 cap hits), M(2) 234 (51). One sample against one sample: a
+  difference whose interval includes 0 is reported as undecided.
+
+Outputs: `results/transplant/host_think-01/` by `analysis/transplant.py` (arms H(0), H(2); references as before).
