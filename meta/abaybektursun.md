@@ -1,5 +1,30 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 21:10 UTC (loop cycle 15; no change) meta/reviews/abaybektursun/20261115-2104/
+
+- Target (Team line, 4 h): claim to close median 48 min (43 at 19:59), upper quartile 106 min (68), 34 items by 3 people (31); 10.2 results per hour (9.5). Stage medians of abaybektursun's items with jobs: to-job 3, jobs 37, to-answer 1 min. Modal 102 jobs, 4 failed or cancelled with 3.9 of 2,388.7 container min.
+- Open measurements: the 10-minute upload (cycle 14) has not run: 0 vast.ai jobs were submitted since 20:10 UTC (3 boxes left, 4.24 USD per hour; the work is on Modal and AWS). Final tars in the team store: 17. Account stops: none since 19:50.
+- Score of cycle 14: not measurable yet.
+- Change: none. Checked: queue wait 0.1 min, failed container minutes 0.2 %, to-job 3 min, to-answer 1 min; the jobs stage (37 min) is generation.
+- Next cycle (16) is step-back 4. It checks: part tars of real jobs; cut jobs with outputs outside the box against 0 of 9; cycles 13 to 16 against 9 to 12 on the target.
+
+## 2026-11-15 20:45 UTC (paper loop 4, after result-aff8c5 of work-184476) meta/reviews/abaybektursun/20261115-2045-paper5/
+
+- Previous paper entry's open item, literature before the pick: done in part. The scout ran a quick novelty search before the pick (19:20-19:23) and the full read (19:25-19:33) found the claim unpublished before the draft. Paper 5 scouts 19:20 to live PDF 20:44 (84 min; paper 4: 60). Site stayed up.
+- Direction: paper 5 (Two Token Limits) re-reads RL - base, Think-SFT - RL and M(2) - Think-SFT at 16,384 and 32,768 tokens on hard328, the deliverable's set; it tests the mission's "identical conditions" clause. Reviewers cut claim 3 to suggestive (+3.4 [-0.6, 7.0]); a rerun rule filed in SPEC_cap32.md had not been applied to the RL sample.
+- Turnaround (cycle.txt, 2 h): team claim to close median 35 min (43), upper quartile 106 (68), 13.0 results per hour (9.5). Mine: 27 Modal jobs, 4 failed, 3.9 of 570.3 container min in them, median wait 0.1. work-441e5b: to-job 2, jobs 26, to-answer 1.
+- Slowest stage: 54 min (19:33-20:27) waiting for one cell, the M(2) sample at 32,768. 24 min of it waited on another agent's single vast.ai job (f975, started 19:06) that the 19:50 account stop cut; then our own 4 Modal shards (~16 min, ~5 USD, result-42cc6c). Their first submission (0f14, 3388, f3e1, fd69) ran 1 min each and exited 2: the command was single-quoted, so `$(git rev-parse HEAD)` expanded inside the container, which has no git, and run_cell got an empty --commit.
+- Change (step 2 found nothing to delete; step 3): `gpu.py submit` refuses a command holding `$(git` or a backquoted git before anything uploads or starts.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | job 0f14's command refused at submit | no (passes to the tree check) | yes | fixed | 1 and 1 | before.txt, after.txt |
+  | the expanded command still accepted (must not change) | yes | yes | same | 1 and 1 | before.txt, after.txt |
+  | past jobs the check would refuse | | 4 of 328, all exit 2; 0 that finished | | 328 | after.txt |
+
+- Not changed: the 24 min on another agent's vast box. Only a rule would cut it (start a Modal copy of a decisive cell when its sole box is cut), which is text, so it is left to the next entry as debt.
+- Next entry checks: no job exits 2 on an empty --commit; whether the next paper's decisive cell runs as Modal shards from the start.
+
 ## 2026-11-15 20:20 UTC (session native, after result of work-8b2ec9) meta/reviews/abaybektursun/20261115-2016-native/
 
 - Previous entry asked for one vast.ai cell fetched after its box is gone. No vast.ai job since (account at its hourly refill limit); not measured.

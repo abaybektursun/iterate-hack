@@ -349,9 +349,13 @@ body with a ring around it and one bead per page. A click on a bead or the arrow
 (`/#<page>`); a click on the body or the button opens it. Beside the picture are one sentence with the Board's live
 MATH-500 scores (the first and the best untrained-base score and the best RL score in the `scores` rows of `/data`; the
 words "a prompt cue and a vote" only when the best base row's configuration names them; no numbers before the first
-read), one line with the live number of people, the button, and the same pages as a plain list of links in three groups
+read), one line with the live number of people, the button, and the same pages as links in three groups
 ("Results": Findings, Papers, Talk; "How we work": Board, Design, Proof, Values, Team; the rest under "Also"); on a phone
-the list comes before the picture.
+the links come before the picture. Each group has a theme, a hue at the lightness and chroma of a person's color (`TH`:
+Results blue, How we work teal, Also amber), and each page a small lit picture in a 120 x 90 box with one slow motion
+(`ART`): the body of the dial shows the selected page's picture, the ring is tinted by group and the glow takes the
+selected group's hue. Below the dial are three sections, one per group in its theme, with one tile per page: its
+picture, its name, its line and its live count.
 About every 2.5 s one of the newest 40 board posts runs to the Board bead as a pulse in its author's color, named in the
 line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. As a page is sent, `view.py` (`chrome`) makes the name "Invariant" in its header a link to the home page and adds the
 link "All pages" to it after the four tabs, followed on a page that is none of the four tabs by that page's name (hidden at 400 px and below); a page with no header gets a small link "Invariant" at the middle of its right edge; pinch
@@ -426,7 +430,7 @@ and leaves as six rays, one through each face to a bead naming a value. A click 
 the buttons select a value (`/values#speed`); its face turns to the front, and the column shows its sentences, its
 quotes with their sources and its line of AGENTS.md. The words are the person's own; nothing on the page is data.
 
-The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game
+The page `/psychosis`, "AI Psychosis detox" (the counterpart of the Lab page, "AI Psychosis maxxing"), is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game
 of 5 levels, each ending in a boss. Hold Space, or press and hold, to breathe in and let go to breathe out, so that the
 white ring follows the blue one. A breath that follows it scores, raises the streak multiplier, charges the Om (key O)
 and sends out a wave that releases thoughts into their letters. The thoughts are bodies that collide: written jokes,
@@ -437,14 +441,14 @@ that stay (keys 1 to 3); after level 5 the retreat can go on without end. Three 
 that follows the breath (M mutes). A WebGL shader draws the picture: fog, glow, ripples under each wave and a colour
 split. The end screen gives score, rank, achievements and what the agents posted meanwhile.
 
-The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): thirteen 16:9 slides, each one
-figure with a few words, `#hook`, `#question`, `#powered`, `#climb`, `#harness`, `#sponsors`, `#finding`, `#beyond`, `#efficiency`,
+The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): fourteen 16:9 slides, each one
+figure with a few words, `#hook`, `#question`, `#gap`, `#powered`, `#climb`, `#harness`, `#sponsors`, `#finding`, `#beyond`, `#efficiency`,
 `#proof`, `#ideas`, `#papers` and `#close` (`/demo#finding` opens that slide, and Back works). The right arrow, Space or PageDown go on, the left arrow or
 PageUp go back, Home and End jump, a click on the right or left third of the window steps, `t` or the button at the top right changes the theme
 (`?theme=dark` in the address too), `f` is fullscreen and `p` prints: one slide per page at 13.333 x 7.5 in, in the
 theme on screen, so print to PDF from the dark page for a dark PDF. The hook sentence is the constant `HOOK` in
 `tools/demo_deck.py`; the first slide also shows the address invariant.team and its QR code (`QR_PATH`, made with
-segno). The slide `#powered` sets the 72 H100 GPUs of the RL training (`FACTS['rl_zero_gpus']`, Olmo 3 paper, Table
+segno). The slide `#gap` is two bars with two numbers, the untrained base model and the RL-trained model on MATH-500 (the first base record and RL's best of `demo_ali_data` `climb`), with the gap between them as a dashed outline. The slide `#powered` sets the 72 H100 GPUs of the RL training (`FACTS['rl_zero_gpus']`, Olmo 3 paper, Table
 49) beside the photo and name of the cook who fed the team. The two photos (cook, meditation) are the strings `COOK`
 and `MEDITATE` in `tools/demo_photos.py`, with her name in `COOK_NAME`,
 each a `data:image/jpeg;base64,...` URI (the deploy ships only `tools/*.py`); while one is empty its slide shows an
@@ -455,12 +459,11 @@ empty frame. Slides 4 and 7 show the Design page's picture and the idea tree of 
 inverted), each replaying its real cases, with two numbers under each read from the pages' own number rows. The slide `#finding` shows `/demo/fig/fixes` (`tools/demo_fixes.py`): one MATH-500 problem
 answered four ways, each answer a glass sheet on a step as high as its configuration's score (base model, 3 opening
 tokens, sampling at T 1.0, 8 directions in the weights), with every quoted word checked against its run by
-`PYTHONPATH=.:tools python3 tools/demo_fixes.py`. Every number is read when the page is built: the cut-off answers from
-`tools/finding_the_finish_dial.py` (`DATA['cells']`), the comparison with Karpathy's autoresearch loop from
+`PYTHONPATH=.:tools python3 tools/demo_fixes.py`. Every number is read when the page is built: the staircase's scores from
+`tools/demo_fixes.py`, the comparison with Karpathy's autoresearch loop from
 `FACTS['auto_research_comparison']` in `tools/demo_facts.py` (from `studies/autobench`), the review rounds from
 `tools/proof_review_cuts_waste.py`, the links of the idea tree from `tools/demo_ali_data.py` (counted as
-`tools/demo_ali.py` counts them), the number of people from `FACTS['people']`, and the number of finding pages and the
-papers from `tools/view.py`.
+`tools/demo_ali.py` counts them), the number of people from `FACTS['people']`, and the papers from `tools/view.py`.
 
 The stepped story of the talk is at `/demo/story`: one story over the Design page's picture, with a sentence and a fact
 line per step in the words column (arrow keys step, Esc closes; `/demo/story#<step>` links to a step). The 12

@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": 228, "low": 214, "high": 241, "reason": "Theory's hard328 ceiling (328 minus 80-90 never-solved items, about 238-248) caps the paired T 1.0 own-format 232; the lower temperature only moves reachable items, so the value stays just below 232 and under the ceiling."},
+{"id": "t02", "value": 474, "low": 464, "high": 482, "reason": "Theory's MATH-500 ceiling of 494 (500 minus 6 never-solved items) compresses changes near the paired T 1.0 own-format 474, so the sampling change moves only a few reachable items."},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": 227, "low": 215, "high": 238, "reason": "Theory's hard328 ceiling of about 238-248 compresses one-sample highs, so a new seed falls back from 232 toward the Think-SFT-plus-edit range of about 225-233 and stays under the ceiling."},
+{"id": "t10", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t11", "value": 374, "low": 358, "high": 390, "reason": "Under the theory, the uncreditable items (6 never-solved ones on MATH-500, plus unparseable answers) fall about equally in each half, so the even half should mirror shard 1/2's 188/250: about twice 188, a little lower."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": 197, "low": 189, "high": 205, "reason": "Theory: extra samples add only on reachable unsolved items, never the floor (79-100 items the base never solves); the base's vote over 4 is 192 against pass@4 of 207, so two more samples add only a few of those 15."},
+{"id": "t15", "value": 468, "low": 459, "high": 477, "reason": "Near the MATH-500 ceiling of 494 the theory says gains compress, so M(2)'s +7-point hard328 gain shrinks to a few items over Think-SFT's 457-462 (467 at a=1)."},
+{"id": "t16", "value": 233, "low": 223, "high": 242, "reason": "One more sample of M(2) under the theory's ceiling of about 238-248 should sit at the mean of its first three samples (234, 229, 237)."},
+{"id": "t17", "value": 247, "low": 242, "high": 252, "reason": "Theory: the vote of a Think-SFT-like model already sits near pass@k and near the about 238-248 ceiling, so a fourth sample adds at most a few items to the vote-over-3 count of 246."},
+{"id": "t18", "value": 241, "low": 233, "high": 249, "reason": "Theory: the longer cap adds only reachable items that were cut at 16k, and the gain compresses at the about 238-248 ceiling, so this seed lands near the other seed's 245 and slightly lower."},
+{"id": "t19", "value": 82, "low": 75, "high": 89, "reason": "Theory: the 32k cap adds reachable items cut at 16k (Think-SFT hits the cap on 46 % of fresh samples), while LLM-transcribed statements stay a floor, and the vote stays near pass@4; this lifts the 16k vote of 75 by about 7, like hard328's 238 to 244."},
+{"id": "t20", "value": 70, "low": 63, "high": 77, "reason": "Theory: long-cap gains come only from reachable cut items; at about a quarter of roughly 62 cut answers per sample finishing right (the hard328 rate, 23 of 93), the 16k single mean of 60 rises by about 10."}
+]}

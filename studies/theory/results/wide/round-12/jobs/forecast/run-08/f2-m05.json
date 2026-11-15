@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t10", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t11", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": 198, "low": 190, "high": 206, "reason": "The theory says the vote climbs toward the count of problems whose right answer is the modal string, stays well below pass@k, and returns shrink fast after k=4 (even k=6 still leaves ties). So from the cued base's vote-4 of 192 (pass@4 205) it adds only about 6, scaled from MATH-500's vote 4 to vote 6 step of 449 to 457."},
+{"id": "t15", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t16", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t17", "value": 248, "low": 241, "high": 255, "reason": "Going from odd k=3 (vote 246) to even k=4 adds ties that a fixed rule breaks only about half right, so per the theory's diminishing returns past k=4 the vote over 4 gains just a few problems over 246. That matches Think-SFT's vote-4 of 241 against its vote-3 range of 231 to 241."},
+{"id": "t18", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t19", "value": 78, "low": 71, "high": 85, "reason": "The vote is capped by the count of problems with a modal right answer and already sits near pass@4 (75 at 16,384). Longer answers turn abstentions into answers, but many are wrong and split the vote, so it rises only about 3, scaled from hard328 where the cap-32,768 vote gained 6 against 22 for single samples."},
+{"id": "t20", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}

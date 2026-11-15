@@ -3,7 +3,7 @@ name: theory
 description: Score the team's fixed forecasts against the results posted since, find the numbers both no-theory readers got wrong, and write theories only about those. One round runs studies/theory/lib/forecast.py round - it scores every outstanding forecast, cell and route of earlier rounds, carries mechanisms with a positive gain on numbers from 3 or more results and buries the losers, lists the surprises (numbers outside both readers' intervals) in surprises.md, has the readers and carried mechanisms forecast the open work, and for each of the top surprises one blind headless job writes two rival mechanisms that must disagree on an open target or a new cell; their cells and one no-reward route per pair are checked against open work (an open item's answer becomes a free target), forecast by everyone and ranked. Use when the user asks for a theory, what the results mean together, which result nobody expected, and after every fifth closed result. Writes studies/theory/results/wide/round-<nn>/ and updates studies/theory/README.md.
 ---
 
-# Theory round (version 11, score first)
+# Theory round (version 11.2, score first)
 
 What ten rounds showed: the engine's value is forecasts fixed before results, the score, refutations (run-08/f2-m03 at
 -12.27 nats; both readers refuted on result-9ce8ed) and surprises (run-01 t14: a number nobody forecast). Mechanisms
@@ -25,10 +25,13 @@ readers were wrong (`specs/SPEC_engine_v11.md`).
    mechanisms, each saying why the readers were wrong (`readers_wrong`), resting on 2 or more board items, holding
    against the 2 known numbers nearest to contradicting it, and forecasting a third of the open targets or more. The
    pair must have disjoint intervals on 2 or more targets or on one new cell it names (`pairs.json`). The duplicate
-   judge drops restatements (`duplicates.json`).
+   judge only reports restatements (`duplicates.json`): a rival may restate an older mechanism; what counts is whether
+   the two differ.
 5. `cells`: the pairs' cells and one no-reward route per pair. One blind job checks each against open work and
    posted results: one an open item answers becomes a target on that item (its forecasts join `forecasts.json`,
-   scored next round for free); one a posted result answers is dropped. Everyone forecasts the rest; ranked.
+   scored next round for free); one a posted result answers is dropped. Everyone forecasts the rest blind; a pair's
+   cell is ranked only when the two rivals' own blind intervals do not overlap, else listed as "pair does not differ
+   blind".
 6. `experiments`: lists A (cells by separating readouts per GPU minute), C (routes by margin) and the free targets.
 
 ## The coordinator's job
@@ -59,7 +62,16 @@ model. Smoke test: `--surprises 1 --model-all sonnet` in a folder outside the re
 A forecast (value, low, high) is a normal density with sd = max((high - low) / 3.29, 0.01 * max(|value|, 1)). Gain
 = log density of the forecast minus log density of the equal mixture of the two readers at the measured value,
 clipped to [-3, 3] nats; at most 0 when the measured value lies outside the forecast's own 90 % interval. A record
-sums every scored number, one row per (folder, number), each row with the board item that posted it.
+is rebuilt each round from the `--from` folders alone. Three rules (11.1): a forecaster gets one score per measured
+number (board item and value), on the forecast it wrote earliest; a forecast counts only if it was written before the
+result was posted (written time: the earlier of the time `forecasts.md` or `cells.md` records and the first commit of
+`forecasts.json` or `cell_forecasts.json`), others are listed in `standing.md` as written after the result; every row
+of every `measured.json` is scored or listed with its reason. A target matches a result on its cell, not its seed,
+unless the target names a seed.
+
+Forecast gain does not confirm a cause: twice the top mechanism forecast well while a direct check refuted its cause. Give
+each top carried mechanism's distinctive claim one direct test (offline on stored rows first). When one fails, append
+`{mechanism, claim, result, measured, added}` to `studies/theory/results/refuted.json`; `standing` then buries it.
 
 ## Cells, routes and the flag check
 

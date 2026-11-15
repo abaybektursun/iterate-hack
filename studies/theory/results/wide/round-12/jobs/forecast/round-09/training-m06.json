@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": 402, "low": 389, "high": 415, "reason": "Theory: the top-8 directions write RL's update onto features pretraining placed in the weights, so the Math+Code 1x+1x gain is a property of the weights and should replicate across seeds. The value pulls the first seed's 411 back toward Code 1.5x at 399 and RL-Code at 401 (result-6776d8, result-a1bf75), with about 7 problems of seed noise."},
+{"id": "t04", "value": 402, "low": 389, "high": 415, "reason": "Same theory part as t03, which says the effect lives in the weights and replicates. A second new seed regresses from 411 toward the 399-401 level of the code dial."},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": 390, "low": 377, "high": 403, "reason": "Theory: the RL-Code top-8 directions carry the update in all layers, so their gain replicates across seeds. The value is near the code dial's 1x 386, 1.5x 399 and 2x 394 (result-a1bf75), with seed noise of about 7."},
+{"id": "t08", "value": 390, "low": 377, "high": 403, "reason": "Same as t07: the Code-alone 1x edit at a second seed sits near the dial's 1x to 2x level of 386-399."},
+{"id": "t09", "value": 226, "low": 213, "high": 239, "reason": "Theory: RL-Math's top-8 directions add right answers through early and middle-layer features on any host. On Think-SFT, 1.5x gave 220 and 3x gave 232 (result-6776d8), against a random edit's 213. A new seed regresses toward about 226, with hard328 seed spread of about 8."},
+{"id": "t10", "value": 40, "low": 29, "high": 52, "reason": "Theory: subtracting the directions removes the early and middle-layer features, while the late-layer job (writing the cue) does not matter because the cue is prefilled. The value doubles the finished shard's 20 cap hits out of 250 (work-739554) to the full 500."},
+{"id": "t11", "value": 376, "low": 360, "high": 392, "reason": "Same theory part as t10: losing the early and middle features costs right answers with the cue prefilled. The value doubles the finished shard's 188 of 250 right under v3 (work-739554), with binomial and shard noise."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t16", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t17", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t18", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t19", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t20", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}
