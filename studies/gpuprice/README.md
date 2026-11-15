@@ -22,6 +22,14 @@ read in full 2026-11-14) fixes:
   seen when it changed itself."
 - External data: "public, free to every team and dated before each forecast origin".
 
+## Submission
+
+- Forecast: `results/submission/forecast_2026-11-06.csv` (111 rows: 37 series, horizons 1, 3, 7, origin 2026-11-06).
+- Reproduce: `bash studies/gpuprice/jobs/reproduce.sh` from the repository root (pack download, one Chronos-2
+  inference job, post-processing, simulator, average). With the stored inference output
+  (`CHRONOS_CSV=runs/abaybektursun-1114-201131-4739/fm2_chronos2.csv`) it rewrites the same file.
+- Findings: `FINDINGS.md`.
+
 ## Layout
 
 | Path | What it is |
