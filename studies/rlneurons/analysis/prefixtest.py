@@ -50,6 +50,7 @@ def main():
         rs = rows[arm]
         row = {"jobs": arms[arm], "continuations": len(rs), "right": int(sum(r["score_v3"] for r in rs)), "right_percent": round(float(share[arm].mean() * 100), 1),
                "right_percent_ci95": ci(share[arm]), "cap_hits": int(sum(r["cap_hit"] for r in rs)), "tokens_per_continuation": round(float(np.mean([r["n_new"] for r in rs]))),
+               "right_and_ended": int(sum(r["score_v3"] and not r["cap_hit"] for r in rs)),
                "prefixes_with_any_right": int((share[arm] > 0).sum()),
                "by_label_right_percent": {l: round(float(np.mean([share[arm][i] for i, it in enumerate(items) if label[it] == l]) * 100), 1) for l in sorted(set(label.values()))}}
         if arm != ctrl:
