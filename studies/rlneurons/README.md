@@ -3098,7 +3098,7 @@ v3, one sample, seed 3000000, on vast.ai (RTX PRO 6000). Each cell is scored twi
 right with at most 16,384 generated tokens, so the gain is paired inside one run. Readout `analysis/cap32.py`,
 `results/cap32/readout.json`.
 
-Per-problem rows of both cells (tokens generated, cut off at 32,768 or not, score, extracted answer, last 400 characters): `results/cap32/rows-01/` (`sft_cue.jsonl`, `rl_plain.jsonl`, `run.json`), written by `analysis/cap32_rows.py` from `runs/<job>/answers.jsonl`; its totals are checked against `results/cap32/readout.json` (230 and 207, 195 and 193).
+Per-problem rows of both cells (tokens generated, cut off at 32,768 or not, score, extracted answer, last 400 characters): `results/cap32/rows-01/` (`sft_cue.jsonl`, `rl_plain.jsonl`, `run.json`), written by `analysis/cap32_rows.py` from `runs/<job>/answers.jsonl`; its totals are checked against `results/cap32/readout.json` (230 and 207, 195 and 193). The base cue cell's rows in the same format are in `results/cap32/rows-02/` (`base_cue.jsonl`, `run.json`), written by the one-off command recorded in its `run.json` from `runs/cap32_base_cue_joined/answers.jsonl` (the 4 shards joined) and checked against the readout (156 and 152, 64 past 16,384 with 4 right).
 
 | cell | right at 16,384 (same answers) | right at 32,768 | gain, points [95 %] | answers past 16,384: finished / right | tokens per problem, 16,384 / 32,768 |
 |---|---|---|---|---|---|
