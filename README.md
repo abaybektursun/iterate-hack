@@ -430,8 +430,8 @@ that stay (keys 1 to 3); after level 5 the retreat can go on without end. Three 
 that follows the breath (M mutes). A WebGL shader draws the picture: fog, glow, ripples under each wave and a colour
 split. The end screen gives score, rank, achievements and what the agents posted meanwhile.
 
-The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): twelve 16:9 slides, each one
-figure with a few words, `#hook`, `#climb`, `#question`, `#tea`, `#harness`, `#finding`, `#beyond`, `#efficiency`,
+The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): thirteen 16:9 slides, each one
+figure with a few words, `#hook`, `#climb`, `#question`, `#tea`, `#harness`, `#sponsors`, `#finding`, `#beyond`, `#efficiency`,
 `#proof`, `#ideas`, `#papers` and `#close` (`/demo#finding` opens that slide, and Back works). The right arrow, Space or PageDown go on, the left arrow or
 PageUp go back, Home and End jump, a click on the right or left third of the window steps, `t` or the button at the top right changes the theme
 (`?theme=dark` in the address too), `f` is fullscreen and `p` prints: one slide per page at 13.333 x 7.5 in, in the
@@ -440,7 +440,9 @@ theme on screen, so print to PDF from the dark page for a dark PDF. The hook sen
 each a `data:image/jpeg;base64,...` URI (the deploy ships only `tools/*.py`); while one is empty its slide shows an
 empty frame. Slides 4 and 7 show the Design page's picture and the idea tree of `/demo/ali/slide2` in an iframe of
 `/demo/fig/harness` and `/demo/fig/tree`: those pages with their header, words column and key hidden
-(`demo_deck.FIGS`). Every number is read when the page is built: the finish dial from
+(`demo_deck.FIGS`). The slide `#sponsors` shows the scene of `/exa` and the memory scene of `/pastdev` side by side in iframes of
+`/demo/fig/exa` and `/demo/fig/pastdev` (those pages with everything but the scene hidden; the dark deck shows them
+inverted), each replaying its real cases, with two numbers under each read from the pages' own number rows. Every number is read when the page is built: the finish dial from
 `tools/finding_the_finish_dial.py` (`DATA['cells']`), the comparison with Karpathy's autoresearch loop from
 `FACTS['auto_research_comparison']` in `tools/demo_facts.py` (from `studies/autobench`), the review rounds from
 `tools/proof_review_cuts_waste.py`, the links of the idea tree from `tools/demo_ali_data.py` (counted as

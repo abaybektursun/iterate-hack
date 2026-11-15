@@ -1,4 +1,4 @@
-"""The talk as a slide deck: twelve 16:9 slides, one figure each, very few words.
+"""The talk as a slide deck: thirteen 16:9 slides, one figure each, very few words.
 
 view.py serves page(...) at /demo (the stepped story of demo.py is at /demo/story) and FIGS at /demo/fig/<name>.
 Each slide is a 1600 x 900 box scaled to fit the window. Keys: right arrow, Space or PageDown next; left arrow or
