@@ -1,0 +1,47 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "Think-SFT's code skill is intact on HumanEval+/MBPP+. The loss is in the answer layout. When it settles a problem quickly, it writes its final program in the layout of its SFT traces: a bare 'python' line, the program, then a closing fence, with no opening fence. This happens mostly on easy, short problems, and the Math cue makes it more frequent. The grader scores these programs zero, even though they would pass at or above the fenced pass rate.",
+  "readers_wrong": "The readers took the graded count as capability and forecast about 383, but under the Math cue roughly 150 answers have no opening fence and score zero, even though the programs are as good as the fenced ones. This fits run-03/f2-m04's refutation (0 of 538 answers hold \\boxed, so the cause is a fence habit, not a boxed ending) and training-m01/template-01 (drift appears in long answers, while these code answers average about 3,000 tokens).",
+  "rests_on": ["result-9d38d9", "result-6e4536", "result-d15c5e"],
+  "holds_against": [
+   {"item": "result-9d38d9", "value": 270, "why": "The Math cue is 31 below the Code cue. Under a, this is about 45 more unfenced answers under the Math cue (a math-style answer header), not weaker programs. Fenced Think-SFT code passes at 301/432 = 0.70, above the base's 317/504 = 0.63."},
+   {"item": "result-dd26fe", "value": 249, "why": "Think-SFT drifts into Chinese text in 249 of 368 answers that run past 16,384 tokens. Its code answers average 3,029-3,093 tokens, so drift cannot account for about 100 unscored answers per cell."}
+  ],
+  "forecasts": [
+   {"id": "t09", "value": 382, "low": 368, "high": 396, "reason": "301 + 97 unopened programs x 0.83 pass rate (easy problems, at or above the 0.70 fenced rate) + 0-2 of the other 9."},
+   {"id": "t10", "value": 380, "low": 360, "high": 400, "reason": "About 386 fenced answers (270 at a 0.70 fenced rate) leave about 152 unscored, about 138 of them unopened, x 0.80 = +110, so the Math cue regrade lands near the Code cue regrade."},
+   {"id": "t11", "value": 319, "low": 317, "high": 324, "reason": "The unopened layout is Think-SFT's own habit. The base's 34 no-block answers hold few such programs."},
+   {"id": "t12", "value": 401, "low": 401, "high": 404, "reason": "RL-Code has only 8 no-block answers, so the regrade adds 0-3."},
+   {"id": "t01", "value": 230, "low": 215, "high": 245, "reason": "The layout habit is code-only. Native template at T 0.6 should sit near the T 1.0 native 232, give or take sampling scatter."},
+   {"id": "t02", "value": 472, "low": 463, "high": 481, "reason": "Near the T 1.0 native 474. MATH-500 is near ceiling for Think-SFT."},
+   {"id": "t17", "value": 465, "low": 455, "high": 474, "reason": "The tie rule moves the vote by about 2 (hard328: 241 vs 239). a gives no reason for short answers to be better on math."}
+  ]},
+ {"id": "b",
+  "statement": "The unfenced answers are failed solves, not a layout habit. On problems Think-SFT finds hard, it deliberates long and never switches into answer mode. It then dumps its last draft program mid-reasoning, with a language tag but no opening fence. The Math cue pushes more problems into this math-style long deliberation. These programs come from problems the cued base also usually fails, so they pass at well below the fenced rate.",
+  "readers_wrong": "The readers carried Think-SFT's math lead over to code, but on code its hard problems end as unfenced draft programs that would mostly fail even if graded, so a regrade keeps the Math cue cell near 320, not 383. This agrees with training-m01/template-01 (drift and deliberation do not depend on the template, so b claims no template effect) and with run-03/f2-m04's refutation (no \\boxed endings are involved).",
+  "rests_on": ["result-9d38d9", "result-dd26fe", "result-ab26c4"],
+  "holds_against": [
+   {"item": "result-9d38d9", "value": 3029, "why": "The mean of about 3,000 tokens per answer is dominated by the 432 fenced answers. The 106 unfenced ones need to average only 6,000-10,000 tokens, still below the cap."},
+   {"item": "result-ab26c4", "value": 57, "why": "The own template does not cut drift (57 vs 63 of 328). b puts the cause in problem difficulty, not in the template, so it agrees with that hold."}
+  ],
+  "forecasts": [
+   {"id": "t09", "value": 340, "low": 326, "high": 354, "reason": "301 + 97 unopened programs x 0.40 pass rate (hard problems; the base passes about 0.4 of them) + 0-1 of the other 9."},
+   {"id": "t10", "value": 322, "low": 302, "high": 342, "reason": "About 140 unopened draft programs under the Math cue x 0.38 = +52 on 270."},
+   {"id": "t11", "value": 319, "low": 317, "high": 324, "reason": "The base rarely writes the unopened layout. Its 34 no-block answers add 0-5."},
+   {"id": "t12", "value": 401, "low": 401, "high": 404, "reason": "RL-Code finishes in answer mode. Its 8 no-block answers add 0-3."},
+   {"id": "t01", "value": 236, "low": 222, "high": 250, "reason": "T 0.6 cuts the tail draws that start drift on hard problems, adding a few problems over the T 1.0 native 232."},
+   {"id": "t02", "value": 474, "low": 465, "high": 482, "reason": "MATH-500 problems are mostly too easy for long deliberation, so the cell stays near 474."},
+   {"id": "t17", "value": 467, "low": 457, "high": 476, "reason": "Long Think-SFT answers are the drifting, failing ones, so ties sent to the shortest answer add about 1-3 over the stored-order vote."}
+  ]}
+],
+ "test": {
+  "claim": "Which problems carry Think-SFT's unfenced answers, measured by the cued base's pass rate on them. Under a's layout habit, unfenced answers come from quick settles on easy problems, so the base passes them far more often than a random problem. Under b's failed solves, they come from hard problems, so the base passes them far less often. A random 106-problem subset sits between the two.",
+  "statistic": "r_U = fraction of Think-SFT Code-cue problems with no fenced code block (unscored) that the cued base passes in its stored Code-cue sample (fraction of problems)",
+  "files": ["studies/rlneurons/results/code_think/sft1_codecue-01", "studies/rlneurons/results/code1/base_cue-01"],
+  "rows": "The 106 problems whose Think-SFT Code-cue answer has no fenced code block, the unscored set of result-9d38d9 (97 with an unopened program, 9 others), each joined by problem id to its one cued-base Code-cue row.",
+  "n": 106,
+  "computation": "1) In sft1_codecue-01, select the problems whose answer the stored grader marked as having no fenced code block (expect 106). 2) For each, read pass/fail of the same problem in code1/base_cue-01 (317 of 538 pass overall). 3) r_U = passes / 106. 4) 90 % interval: percentile bootstrap over the 106 problems (10,000 resamples); report Wilson 90 % as a check. 5) Report the base's 538-problem rate 0.589 beside it.",
+  "null": "A random 106-problem subset of the 538 drawn without replacement: expected base pass rate 317/538 = 0.589, with 90 % sampling range 0.589 +/- 1.645 x sqrt(0.589 x 0.411 / 106 x 432/537) = [0.52, 0.66].",
+  "ranges": {"a": [0.72, 1.0], "b": [0.0, 0.46], "null": [0.52, 0.66]}
+ },
+ "cell": null}

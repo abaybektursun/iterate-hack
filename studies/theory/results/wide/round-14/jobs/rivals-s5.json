@@ -1,0 +1,56 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "The cued base's wrong finished answers at T 1.0 are mostly one-off slip values that differ between samples, while right routes all land on one value. So on contested problems the right value is the largest answer group even at a 25-50 % share. Four samples cannot show this: singleton ties are broken by sample order, and two slips can outvote one right answer. Twelve samples can, so the vote keeps rising toward the pass@k ceiling.",
+  "readers_wrong": "The readers extrapolated a saturating majority-vote curve from vote-4 (446) and treated the remaining errors as problem-level. But vote-4 was held down by singleton ties among scattered wrong values, and 12 samples let a minority right answer win the plurality. This fits direct fact round-13/s3-a (holds: 0.667 of gained problems are right in under half of the 12) and round-13/s3-b (refuted: gains were not ties with a right majority).",
+  "rests_on": ["result-1c9e40", "result-4c9189", "result-5c961a"],
+  "holds_against": [
+   {"fact": 27, "value": 0.164, "why": "Wrong values that survive a sampler change (C - A > 0) come from only 28 problems with repeated wrong answers. They are a recurring minority. The many problems whose wrong answers scatter still carry the vote-12 gain."},
+   {"fact": 28, "value": 0.429, "why": "57 % of the k=4 vote failures had a singleton winner, which is the scatter signature. Two scattered slips can still match by chance in 4 draws, so a 43 % share of multi-member wrong winners is expected under scatter too."}
+  ],
+  "forecasts": [
+   {"id": "t15", "value": 198, "low": 192, "high": 205, "reason": "Scatter lets a minority right answer win once more samples arrive: vote-4 192 plus about 6 of the 13 problems that have a right sample but lost the vote, roughly 2 more from new coverage, minus ties at 6."},
+   {"id": "t19", "value": 41, "low": 34, "high": 48, "reason": "Fresh set is harder than hard328 (RL 37 % against 63 %), so a single sample is near 34/136. Scattered wrong answers give the vote about +7, and shortest-first ties favour right answers, which are shorter."},
+   {"id": "t17", "value": 466, "low": 459, "high": 473, "reason": "Think-SFT single is 454 and half its wrong answers are cap hits, which abstain. Its finished wrong answers scatter, so vote-4 adds about 12."},
+   {"id": "t16", "value": 221, "low": 216, "high": 226, "reason": "RL's plain vote-4 is 221. RL has few ties, so shortest-first tie-breaking moves it by at most a few problems."},
+   {"id": "t18", "value": 57, "low": 52, "high": 62, "reason": "RL's plain fresh2026 vote is 57. RL ties are rare, so the tie rule changes it by no more than seed scatter."},
+   {"id": "t02", "value": 462, "low": 452, "high": 472, "reason": "T 0.6 cuts tail-draw slips on finished answers, and the own format with a 32k cap removes most cap losses: 454 plus about 8."},
+   {"id": "t01", "value": 238, "low": 224, "high": 252, "reason": "Think-SFT cue at cap 32k scores 230. Fewer tail slips at T 0.6 and the own template add about 8. Loops are unlikely in an SFT reasoning model."}
+  ]},
+ {"id": "b",
+  "statement": "On contested problems the cued base runs a close race between two recurring routes: a right route and one wrong attractor value per problem, a misreading tied to the problem and the cue. The right route usually leads only slightly (about 35-48 % of answers against 25-40 %). Four samples often split 2-2 or flip 2-1 for the attractor. Twelve samples settle the race. Gains therefore stop where the attractor outweighs the right route, as on harder sets.",
+  "readers_wrong": "The readers treated recurring wrong values as fixed losses that more samples cannot flip. On MATH-500 most attractors run slightly behind the right route, so the law of large numbers turns 4-sample flips into 12-sample wins. This fits round-13/s3-a (holds: the right answer is under half of the 12, with the attractor smaller still) and round-13/s3-b (refuted: the right answer is not a majority).",
+  "rests_on": ["result-1c9e40", "result-4c9189"],
+  "holds_against": [
+   {"fact": 28, "value": 0.429, "why": "57 % of k=4 failures had singleton winners. With the right route at about 0.4, the attractor at about 0.3 and a residue of scattered slips, 4 draws often produce 1-1-1-1 or 1-1 patterns even when an attractor exists. Singletons do not mean the 12-sample wrong mass is scattered."},
+   {"item": "result-4c9189", "value": 0.667, "why": "A right answer below half of the 12 still wins when the remaining wrong mass is one attractor smaller than it plus a few strays. The 0.524 share left after removing cap-hit wins also fits a close two-route race."}
+  ],
+  "forecasts": [
+   {"id": "t15", "value": 193, "low": 187, "high": 199, "reason": "On hard328 the attractor often outweighs the right route, so 2 more samples flip few races: vote-4 192 plus about 1."},
+   {"id": "t19", "value": 38, "low": 31, "high": 45, "reason": "On contest problems the attractor dominates. Single sample near 34/136, and the vote adds about +4."},
+   {"id": "t17", "value": 464, "low": 457, "high": 471, "reason": "Think-SFT single is 454. Its wrong answers recur less often than cap hits abstain, so vote-4 adds about 10."},
+   {"id": "t16", "value": 221, "low": 216, "high": 226, "reason": "RL's plain vote-4 is 221, and RL has few ties."},
+   {"id": "t18", "value": 57, "low": 52, "high": 62, "reason": "RL's plain fresh2026 vote is 57, and the tie rule makes little difference for RL."},
+   {"id": "t02", "value": 458, "low": 448, "high": 468, "reason": "Attractor routes do not depend on temperature, so T 0.6 helps only through fewer cap losses at the 32k cap: 454 plus about 4."},
+   {"id": "t01", "value": 232, "low": 218, "high": 246, "reason": "Think-SFT cue at cap 32k scores 230. Route-level errors stay at T 0.6, so the own format adds about 2."}
+  ]}
+],
+ "test": {
+  "claim": "Pooled pairwise agreement among the cued base's wrong answers on contested MATH-500 problems, using all 12 stored T 1.0 samples. Cause a (one-off slips) puts it low but above chance. Cause b (one recurring attractor per problem) puts it high, because most wrong pairs on a problem share the attractor value.",
+  "statistic": "pooled share of same-problem pairs of wrong answer-bearing samples that agree under rln4_lib.agree (fraction of pairs)",
+  "files": ["studies/rlneurons/results/votek/math500_base_cue-01", "studies/rlneurons/results/votek/math500_base_cue-02", "studies/rlneurons/results/day1_3/math500_base_cue-01"],
+  "rows": "rows.jsonl of the three folders pooled. Keep attempt == 0 (or no attempt field) and the first row per (problem_index, sample) in file order, samples 0-11 (if a sample appears in two folders, keep the first folder listed). Answer-bearing = cap_hit not true, finish_reason != 'length', and extracted_v3 non-empty after strip(). Right = answer-bearing and score_v3 == 1; wrong = answer-bearing and score_v3 == 0. Contested problems = at least 1 right and at least 2 wrong answer-bearing samples among the 12.",
+  "n": 120,
+  "computation": "1) Build the contested set P (expected about 120 problems; the test needs at least 50). 2) For each p in P, take its wrong answers W_p, form all unordered pairs, and count agreeing pairs with rln4_lib.agree (studies/rlneurons/lib/rln4_lib.py). 3) Statistic = sum of agreeing pairs / sum of pairs over P. 4) 90 % interval: bootstrap over problems, 2,000 resamples of P with replacement, recompute the pooled ratio, and take the 5th-95th percentiles. 5) Null: for each p, pair each of its wrong answers with each wrong answer of one randomly drawn other contested problem whose gold has the same type (integer or not, using the normalisation in facts.json r7-m09). Pool agreement and average over 200 draws.",
+  "null": "Cross-problem pairing of wrong answers matched on gold type (integer or not). This is the chance agreement of wrong values that share an answer format but not a problem.",
+  "ranges": {"a": [0.07, 0.3], "b": [0.42, 1.0], "null": [0.0, 0.05]}},
+ "cell": {
+  "cell": {"model": "Olmo-3-1025-7B base (untrained)", "prompt": "cue", "set": "MATH-500", "n": 500, "sampling": "T 1.0 / top-p 1.0, seed 71000000 + index (unused by the stored 12 samples)", "samples": 1, "grader": "v3, plus rln4_lib.agree against the stored 12 samples' wrong answers", "cap": 16384},
+  "job": "studies/rlneurons/jobs/run_cell.py",
+  "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 71000000 --commit COMMIT_SHA\"",
+  "readout": "Take problems whose stored 12 samples hold at least 2 wrong answer-bearing samples and where the new sample finished wrong. Report the share of those new wrong answers that agree (rln4_lib.agree) with the problem's modal stored wrong value.",
+  "unit": "fraction of new finished wrong answers",
+  "why": "A fresh draw separates a recurring attractor from scatter without reusing the rows that define the modal value. Under a, a new slip rarely repeats a stored wrong value. Under b, it mostly lands on the attractor.",
+  "gpu_minutes": 80,
+  "a": {"value": 0.25, "low": 0.12, "high": 0.38},
+  "b": {"value": 0.62, "low": 0.48, "high": 0.78}}
+}

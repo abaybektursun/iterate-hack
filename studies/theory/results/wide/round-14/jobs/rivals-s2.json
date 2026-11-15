@@ -1,0 +1,48 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "Think-SFT's code skill is intact. Its loss is a template habit: after a cleanly finished, usually short reasoning on an easy task it writes its own SFT answer format, a bare 'python' line, the program, then a closing fence. The fence-based grader throws this away. The 97 unopened answers sit mostly on problems the cued base also passes and hold working programs, so program-level passes are about 370 of 538, above the cued base's 317.",
+  "readers_wrong": "The readers carried Think-SFT's math lead over to code (395) and read 301 as a real pass rate. About 70 of the 97 discarded unopened answers would pass, so the shortfall is mostly grading. This fits round-09/training-m01 (holds), where the template only changes where the answer is stated, and round-13/s6-a (refuted), which concerns the base's contract failures, not a format only Think-SFT writes.",
+  "rests_on": ["result-9d38d9", "result-dd26fe", "result-ab26c4"],
+  "holds_against": [
+   {"item": "result-dd26fe", "value": 249, "why": "249 of 368 late Think-SFT math answers contain Chinese text, so Think-SFT does degrade on long runs. But code answers average 3,093 tokens, far below where that drift appears, so drift cannot explain the missing fences on code."},
+   {"item": "result-9d38d9", "value": 270, "why": "The Math cue scores 31 fewer passes than the Code cue. That fits a format cause: a math-style prompt makes the bare template ending more common, so more answers are discarded. It does not point to a different skill level."}
+  ],
+  "forecasts": [
+   {"id": "t09", "value": 374, "low": 360, "high": 388, "reason": "301 + about 0.75 x 97 unopened answers on mostly easy problems + about 2 of the 9 other unscored answers"},
+   {"id": "t10", "value": 362, "low": 336, "high": 386, "reason": "270 + about 0.7 of roughly 140 unopened Math-cue answers; the programs are as good as under the Code cue"},
+   {"id": "t11", "value": 318, "low": 317, "high": 322, "reason": "The base writes fenced blocks (504 of 538), so the new rule adds 0 to 3"},
+   {"id": "t12", "value": 402, "low": 401, "high": 405, "reason": "RL-Code has only 8 answers with no block, so the new rule adds at most a few"},
+   {"id": "t01", "value": 232, "low": 219, "high": 245, "reason": "The format cause does not touch math with its own template; T 0.6 versus 1.0 leaves it near the native 232"},
+   {"id": "t02", "value": 474, "low": 465, "high": 481, "reason": "Same as t01: native 474 at T 1.0, temperature neutral"},
+   {"id": "t17", "value": 468, "low": 460, "high": 475, "reason": "One sample 454; a vote over 4 adds about 14; ties to the shortest answer are neutral when skill is intact"}
+  ]},
+ {"id": "b",
+  "statement": "Think-SFT's code deficit is real. On harder code problems its long math-style reasoning wanders, and it leaves without a proper final answer: the program comes out without the opening fence. The missing fence marks a degraded run, so most unopened programs fail. The 97 unopened answers sit mostly on problems the cued base also fails. Regraded, Think-SFT stays near the cued base, about 330 of 538, far below RL-Code.",
+  "readers_wrong": "The readers carried Think-SFT's math lead over to code. On code, long imitated reasoning brings no gain and its degraded exits fail, so accepting unopened blocks recovers only about 30 passes. This fits round-09/training-m01 (holds): drift does not depend on the template. It also fits round-13/s6-b (holds): code failures are per-sample failures on solvable problems.",
+  "rests_on": ["result-9d38d9", "result-dd26fe", "result-04f363"],
+  "holds_against": [
+   {"item": "result-9d38d9", "value": 0.697, "why": "Fenced Think-SFT answers pass 301 of 432, above the base's 317 of 504. Under b the fenced subset is weighted toward easier problems where the run stayed clean, so its pass rate overstates Think-SFT's skill."},
+   {"item": "result-9d38d9", "value": 3093, "why": "Mean code answer length is only 3,093 tokens, far from the cap. b needs the reasoning to wander, not to hit the cap, and the unopened answers can be the longer, rambling part of the spread."}
+  ],
+  "forecasts": [
+   {"id": "t09", "value": 331, "low": 316, "high": 346, "reason": "301 + about 0.3 x 97 degraded unopened programs on mostly hard problems"},
+   {"id": "t10", "value": 314, "low": 294, "high": 333, "reason": "270 + about 0.3 of roughly 140 unopened Math-cue answers"},
+   {"id": "t11", "value": 318, "low": 317, "high": 322, "reason": "Fenced base answers: the new rule adds 0 to 3"},
+   {"id": "t12", "value": 402, "low": 401, "high": 405, "reason": "8 answers with no block: the new rule adds at most a few"},
+   {"id": "t01", "value": 241, "low": 228, "high": 254, "reason": "Wandering comes from tail draws at T 1.0; at T 0.6 fewer runs degrade, so it lands above the native 232"},
+   {"id": "t02", "value": 476, "low": 468, "high": 483, "reason": "Same direction as t01, near the 500 ceiling: native 474 + about 2"},
+   {"id": "t17", "value": 471, "low": 463, "high": 478, "reason": "One sample 454; the vote adds about 14; ties to the shortest answer drop long degraded answers, about +2"}
+  ]}
+ ],
+ "test": {
+  "claim": "Which problems the unopened answers fall on. Under a, the bare 'python' block is the template ending after a cleanly finished, usually easy task, so these answers fall on problems the cued base solves. Under b, the missing fence marks a degraded exit on hard problems, so they fall on problems the cued base fails. A random set of problems gives the base's overall pass rate, which lies between the two ranges.",
+  "statistic": "Share of Think-SFT Code-cue answers without a fenced code block whose problem the cued base (Code cue) passes in its stored row (fraction of problems)",
+  "files": ["studies/rlneurons/results/code_think/sft1_codecue-01", "studies/rlneurons/results/code1/base_cue-01"],
+  "rows": "Think-SFT Code-cue rows (first row per problem) that the stored grade marks unscored for having no fenced code block (106 rows, 97 of them unopened blocks), joined on problem id to the cued base's Code-cue row",
+  "n": 106,
+  "computation": "1) In sft1_codecue-01 keep one row per problem (first in file order) and select the rows marked as having no fenced block (expect 106). 2) For each selected problem take the base_cue-01 row; passed = all tests passed under the stored grade; a missing row counts as not passed. 3) S = passed / selected. 4) 90 % interval: Wilson score interval at z = 1.645 on (passed, selected); report a 10,000-draw bootstrap over problems as a check. 5) Also report S for the 97 unopened-block rows alone, and the same share for the complement (Think-SFT fenced rows).",
+  "null": "Random subset of problems: the base's overall Code-cue pass rate, 317/538 = 0.589. With n = 106 its 90 % sampling range is 0.589 +/- 0.079.",
+  "ranges": {"a": [0.72, 1.0], "b": [0.0, 0.45], "null": [0.51, 0.67]}
+ },
+ "cell": null
+}

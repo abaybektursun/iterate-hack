@@ -1,0 +1,56 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "The autobench final configuration (plain prompt, T 0.6, 12 votes, cap 4,096 tokens per sample) is budget-bound. The cap sits at the median length of the base's right hard328 routes (3,921 tokens), so on about half of the problems the base can solve, every route is cut before its answer. A cut sample casts no vote, so 12 votes recover only problems with a short route. If the cap were lifted, most cut derivations at T 0.6 would finish.",
+  "readers_wrong": "The readers priced the configuration as the cued base's 16,384-token vote (179-200) and missed that a 4,096 cap removes the long-route half of the solvable problems. run-02/f2-m01 forecast well because a per-sample budget below the median right length (not routes of 6,000-14,000 tokens, which result-ebf7a4 refutes) does the damage. This fits direct facts round-13/s1-a (lost problems have only long routes, 0.714 vs 0.173) and s1-b refuted (losses are cut samples, not agreeing short wrong answers).",
+  "rests_on": ["result-6e7b64", "result-4b64da", "result-ebf7a4", "result-51fd20"],
+  "holds_against": [
+   {"item": "result-ebf7a4", "value": 0.327, "why": "32.7 % of solved problems have a right sample of 2,000 tokens or fewer, so short routes exist on a third of them. But the median right length of 3,921 tokens equals the cap, so about half the solvable problems still lose every route. That puts a 12-vote ceiling near 140, not 190."},
+   {"item": "result-e5c99c", "value": 173, "why": "At T 0.6 the cued base hits the 16,384 cap on 173 of 328, so many long T 0.6 attempts never end. That bounds what lifting the cap would recover, but it leaves the cap as the binding loss: of the answers past 4,096 tokens, most are live derivations (right or finished wrong), not loops. The test measures exactly this share."}
+  ],
+  "forecasts": [
+   {"id": "t01", "value": 232, "low": 215, "high": 248, "reason": "budget-bound: cap 32,768 frees Think-SFT's long routes (cue 207 at 16k to 230 at 32k), and T 0.6 costs little because its long routes are live: about 230."},
+   {"id": "t02", "value": 462, "low": 451, "high": 473, "reason": "MATH-500 routes are short; the 32k cap adds the few cut ones to the cue's 454 at 16k."},
+   {"id": "t15", "value": 184, "low": 175, "high": 194, "reason": "cap 16,384 keeps long routes, so a vote over 6 extends vote@4 179 by about +5."},
+   {"id": "t16", "value": 213, "low": 204, "high": 222, "reason": "RL vote@4 is about 214 (161/246 scaled); on hard328 right routes are long, so tie-to-shortest gains nothing and can pick a short wrong answer."},
+   {"id": "t17", "value": 470, "low": 462, "high": 477, "reason": "Think-SFT cue 454 single; vote over 4 is about 471 (one-axis prediction); the tie rule moves it by 0 to 2."},
+   {"id": "t18", "value": 56, "low": 51, "high": 61, "reason": "RL vote 57 of 136; 2026 contest routes are long, so the tie to shortest gives nothing or loses one."},
+   {"id": "t19", "value": 33, "low": 27, "high": 39, "reason": "cued base single 29.5 with 49-59 cap hits on long routes; the vote adds about +3; the tie to shortest adds nothing."}
+  ]},
+ {"id": "b",
+  "statement": "At T 0.6 the plain base's long hard328 attempts fall into repetition loops that never end at any cap. Only short attempts finish, so the 12-vote counts short answers alone, and problems needing a long derivation are lost to the temperature regime, not to the 4,096 cap. The vote lifts a weak T 0.6 single sample (107/328) by about 30. A larger cap would recover almost nothing; T 1.0 would.",
+  "readers_wrong": "The readers read the board's T 1.0 cued rows (1 rule-A loop of 328, vote 179-200) and missed that T 0.6 turns long derivations into loops (cued base at T 0.6: 173 cap hits against 77). run-02/f2-m01 forecast well because, under that configuration, long routes really do not pay. The reason is loops, not that solutions need 6,000-14,000 tokens. Loops abstain rather than agree, which fits round-13/s1-b refuted. They strike the long-route problems, which fits s1-a (0.714 vs 0.173).",
+  "rests_on": ["result-6e7b64", "result-e5c99c", "result-099916", "result-4b64da"],
+  "holds_against": [
+   {"item": "result-099916", "value": 107, "why": "The plain base scores more at T 0.6 (107) than at T 1.0 (76). T 0.6 helps the short problems, where T 1.0 scatters. The loss sits only on long derivations, which loop at T 0.6. That is why the vote stalls near 139 instead of reaching the cued base's 179-200."},
+   {"item": "result-51fd20", "value": 12, "why": "At T 1.0 the tokens between 8,000 and 16,384 buy 12 problems, so long routes do pay there. That is the T 1.0 regime without loops (1 rule-A loop of 328). The mechanism claims loops only at T 0.6."}
+  ],
+  "forecasts": [
+   {"id": "t01", "value": 212, "low": 194, "high": 229, "reason": "T 0.6 makes part of Think-SFT's long traces loop to the cap; the 32k cap recovers little, so it lands below the cue's 230 at 32k and T 1.0."},
+   {"id": "t02", "value": 452, "low": 439, "high": 465, "reason": "MATH-500 routes are mostly short, so few loops matter: near the 454 of T 1.0 at 16k, slightly lower."},
+   {"id": "t15", "value": 184, "low": 175, "high": 194, "reason": "T 1.0 has no loops, so the board's reading holds: vote@4 179 plus about 5 for 2 more samples."},
+   {"id": "t16", "value": 215, "low": 206, "high": 224, "reason": "T 1.0 RL has no loops; the tie to the shortest finished sample adds about +1 to vote@4 of about 214."},
+   {"id": "t17", "value": 471, "low": 463, "high": 478, "reason": "T 1.0, no loop regime; vote over 4 of about 471 plus 0-1 from the tie rule."},
+   {"id": "t18", "value": 57, "low": 52, "high": 62, "reason": "T 1.0, no loops; the tie rule leaves RL's vote of 57 unchanged."},
+   {"id": "t19", "value": 34, "low": 28, "high": 40, "reason": "T 1.0 cued base, no loops; singles average 29.5, the vote adds about 4, ties to shortest about 0.5."}
+  ]}
+ ],
+ "test": {
+  "claim": "Among the cued base's T 0.6 hard328 answers that run past 4,096 generated tokens (the answers a 4,096 cap would cut), this is the share that are repetition loops. Under a, the cut answers are mostly live derivations that would finish or end with an answer, so the loop share is low and the cap is what loses them. Under b, the cut answers are mostly loops that would never finish, so the cap loses nothing recoverable.",
+  "statistic": "loop share: rule-A loops / answers with more than 4,096 generated tokens (fraction of answers)",
+  "files": ["studies/cleanneurons/results/gen/hard328_base_t06-01", "studies/cleanneurons/results/gen/page_grid.json"],
+  "rows": "The 328 rows of hard328_base_t06-01 (Olmo-3-1025-7B base, cue, T 0.6 / top-p 1.0, 1 sample, cap 16,384, grader v3), keeping the rows whose generated token count exceeds 4,096; loop state per problem from page_grid.json for that cell (state 'loop' = rule A).",
+  "n": 210,
+  "computation": "1) In hard328_base_t06-01, take one row per problem_index (the first in file order). 2) Keep the rows with generated tokens > 4,096; n = their count. 3) For each kept problem, read its state for cell hard328_base_t06-01 in page_grid.json; loop = 1 if the state is 'loop', else 0. 4) S = sum(loop) / n. 5) 90 % interval: 10,000 bootstrap resamples of the kept rows with replacement; take the 5th and 95th percentiles of S. 6) Verdict: a holds if the interval lies inside [0.05, 0.40], b holds if it lies inside [0.45, 1.0]. A value in neither range refutes both.",
+  "null": "The same share on the cued base's T 1.0 hard328 rows (day1 hard328_base_cue_t10-01: 1 rule-A loop of 328, 77 cap hits). This is the no-loop regime the readers assumed, giving at most about 1/200.",
+  "ranges": {"a": [0.05, 0.40], "b": [0.45, 1.0], "null": [0.0, 0.03]}},
+ "cell": {
+  "cell": {"model": "Olmo-3-1025-7B base", "prompt": "plain", "set": "hard328", "n": 328, "sampling": "T 0.6 / top-p 0.95, seeds 3,000,000 + index (paired with the stored plain T 0.6 cell, 107/328 at cap 16,384)", "samples": 1, "grader": "v3", "cap": 4096},
+  "job": "studies/rlneurons/jobs/run_cell.py",
+  "command": "uv run tools/gpu.py submit l40s --hours 1.5 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt plain --set hard328 --temperature 0.6 --top-p 0.95 --max-tokens 4096 --seed 3000000 --commit COMMIT_SHA\"",
+  "readout": "right answers of 328 under grader v3 (metrics.json), with cap hits",
+  "unit": "right answers of 328",
+  "why": "This is one sample of the autobench configuration at its 4,096 cap, paired with the stored 107 at cap 16,384. Under a, many plain right answers at T 0.6 are long live derivations, so the cap cuts them and the count falls to about 82. Under b, long T 0.6 attempts loop and right answers finish early, so the cap costs almost nothing and the count stays near 101.",
+  "gpu_minutes": 40,
+  "a": {"value": 82, "low": 70, "high": 94},
+  "b": {"value": 101, "low": 95, "high": 110}}
+}

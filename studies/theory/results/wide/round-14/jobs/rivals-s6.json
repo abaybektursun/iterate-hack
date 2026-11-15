@@ -1,0 +1,60 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "Base-mode sharpening: RL-Code's top-8 directions per matrix raise, for each code problem, the probability of the base's own most likely passing program. Problems the base solves at moderate rate become near-certain, and problems it already passes stay passed. The edit installs no RL-specific solutions. On code it therefore fixes finished-with-block logic failures on base-solvable problems, not only cut-off and no-block endings, and it keeps base passes that RL-Code itself loses.",
+  "readers_wrong": "The readers treated the 1.5x edit as a finishing/format dial on code: 27 cap hits plus 34 no-block answers converted at about 0.65 gives about 357. Sharpening also turns about 40 finished-with-block failures on base-solvable problems into passes (dC +7 pts, result-d15c5e). This is consistent with s6-b (fixes are base-solvable, Q 0.75), s4-b (extra passes sit in the base's solved set), s6-a refuted (not contract repair), run-03/f2-m04 refuted (no boxed endings) and run-05/f2-m03 refuted (drive plays no part).",
+  "rests_on": ["result-a1bf75", "result-04f363", "result-d15c5e", "result-63cacd"],
+  "holds_against": [
+   {"item": "result-04f363", "value": 0.22, "why": "The top8 1x edit fixes 25 of 115 failures where neither of 2 other base samples passed. k2 rests on only 2 samples, so a problem with base rate 0.15-0.3 shows k2=0 with probability 0.5-0.7. A fix rate of 0.22 there fits sharpening of low-but-nonzero modes and is far below the 75/106 at k2>=1."},
+   {"item": "result-63cacd", "value": 0.69, "why": "f_E 0.69 against the random edit's 0.635 is only +0.055. But the random edit's extra passes are themselves base resamples, so they lie in the solved set by construction. Sharpening shows up in the count (113 against 63 extra passes) and in Q against the failure floor (0.75 against 0.48), not as a larger share."}
+  ],
+  "forecasts": [
+   {"id": "t09", "value": 366, "low": 340, "high": 390, "reason": "The regrade rescues Think-SFT's 97 unopened-fence programs at about its fenced pass rate 301/432=0.70, minus some truncated ones: 301+65."},
+   {"id": "t10", "value": 343, "low": 305, "high": 378, "reason": "Under the Math cue, Think-SFT leaves more answers without an opening fence (270 graded). Rescuing about 110 unopened programs at about 0.66 adds about 73."},
+   {"id": "t11", "value": 320, "low": 317, "high": 327, "reason": "The base has only 12 finished no-block answers (ending-01) and the rest of its 34 are cap hits. About half are unopened blocks, passing at 0.6, which adds about 3."},
+   {"id": "t12", "value": 402, "low": 401, "high": 406, "reason": "RL-Code's 8 no-block answers are mostly cap hits, so the regrade rescues at most a few."},
+   {"id": "t13", "value": 125, "low": 90, "high": 165, "reason": "Direction 1 at 1.5x sharpens the plain base (76) toward its likelier modes, which only sometimes include the self-opened register. That gives a partial gain, well below the cued 182-184."},
+   {"id": "t14", "value": 140, "low": 100, "high": 180, "reason": "Directions 2-8 sharpen a little more strongly than direction 1 (cued 183-196). On the plain base's weaker modes they reach about 40-50 % of the cued level above 76."},
+   {"id": "t08", "value": 3, "low": -2, "high": 8, "reason": "Sharpening adds to any host's own mode. The final Think model is already reward-sharpened, so the gain is smaller than Think-SFT's +7.4."},
+   {"id": "t15", "value": 199, "low": 191, "high": 207, "reason": "A vote over 6 approximates mode sharpening on problems where the base has a right mode: vote over 4 192/195, pass@4 207. Six samples add about 5-7."}
+  ]},
+ {"id": "b",
+  "statement": "RL-policy copy: RL-Code's change is concentrated enough (top-8 share 0.174) that its top-8 directions at 1.5x carry RL-Code's own per-problem programs and conventions. The edited base reproduces RL-Code's outcome pattern problem by problem, including RL-Code's losses on problems the base solves. Its gain over the base equals RL-Code's, not a sharpening of the base's own distribution.",
+  "readers_wrong": "The readers scaled the code edit from the math dial's finishing reading (cap hits and no-block endings, about 357). The code top-8 is a near-complete low-rank copy of RL-Code's policy, so 1.5x lands on RL-Code's 401. This is consistent with s4-b and s6-b, because RL-Code's own fixes are base-solvable at the same rate (Q 0.74 against the edit's 0.75), and with s6-a refuted and run-05/f2-m03 refuted, which concern contract repair and input drive, not the copied policy.",
+  "rests_on": ["result-a1bf75", "result-2a5195", "result-04f363", "result-82eb02"],
+  "holds_against": [
+   {"item": "result-63cacd", "value": 0.69, "why": "A copy of RL could put gains on problems the base cannot solve. But RL-Code's own fixes land in the base-solvable set at Q 0.74 (result-04f363), so a faithful copy gives the same 0.69 share."},
+   {"item": "result-d15c5e", "value": 1.5, "why": "Math's directions add only +1.5 pts of pass rate among finished-with-block answers, while Code's add +7.0. Under b each edit copies its own RL's policy: Math-RL's ending habits remove no-block endings but carry no code logic. So dM near 0 is predicted, not a contradiction."}
+  ],
+  "forecasts": [
+   {"id": "t09", "value": 366, "low": 340, "high": 390, "reason": "Format regrade only: 97 unopened-fence programs at about 0.67, added to 301."},
+   {"id": "t10", "value": 343, "low": 305, "high": 378, "reason": "Format regrade only: about 110 unopened programs under the Math cue at about 0.66, added to 270."},
+   {"id": "t11", "value": 320, "low": 317, "high": 327, "reason": "The base has 12 finished no-block answers, about half unopened blocks, passing at 0.6."},
+   {"id": "t12", "value": 402, "low": 401, "high": 406, "reason": "RL-Code's no-block rows are mostly cap hits, so there is little to rescue."},
+   {"id": "t13", "value": 168, "low": 138, "high": 198, "reason": "Direction 1 carries RL's policy, including its opening, so the cue matters little: plain lands near the cued 182-184, minus a few."},
+   {"id": "t14", "value": 175, "low": 145, "high": 205, "reason": "Directions 2-8 copy RL's policy independent of the prompt (cf. top8 plain 427 against the cued base's 410 on MATH-500): near the cued 183-196."},
+   {"id": "t08", "value": 0.5, "low": -5, "high": 5, "reason": "The final Think model already holds an RLVR policy, so a copy of RL-Zero's policy adds nothing new."},
+   {"id": "t15", "value": 196, "low": 189, "high": 203, "reason": "RL's extra solutions are absent from base samples (26 of 36 RL vote wins have no base right sample), so 6 votes add only selection: about +3 over 192/195."}
+  ]}
+],
+ "test": {
+  "claim": "On code problems the cued base passes but RL-Code mostly fails, does the Code-direction edit keep the base's pass (a: sharpening the base's own programs keeps and raises it above a base resample) or lose it like RL-Code (b: the edit copies RL-Code's per-problem outcomes)? The two causes put the edit's pass rate on this set on opposite sides of a base resample's rate.",
+  "statistic": "Mean pass rate of the Code-top-8 edit samples on set L (fraction of edit samples passed, averaged over problems)",
+  "files": ["studies/rlneurons/results/code1/base_cue-01", "studies/rlneurons/results/code1/rl_plain-01", "studies/rlneurons/results/xreward/code_hosts_s52", "studies/rlneurons/results/xreward/code_hosts_s53", "studies/rlneurons/results/xreward/code_dial", "studies/rlneurons/results/code1/base_plain-01", "studies/rlneurons/results/code1/base_mathcue-01"],
+  "rows": "L = the problems (of 538) that code1/base_cue-01 passes and on which RL-Code fails in at least 2 of its 3 stored samples (code1/rl_plain-01 seed 51M, the RL-Code rows of code_hosts_s52 and code_hosts_s53). Rows entering: (problem in L, edit sample) pairs for 5 edit samples per problem: Code top-8 1x at seeds 51M (code_dial), 52M (code_hosts_s52) and 53M (code_hosts_s53), and Code top-8 1.5x and 2x (code_dial).",
+  "n": 100,
+  "computation": "1) Per problem take each cell's first row. Pass = all tests passed under the cells' stored grader; cap hits and no-block answers count as fail. 2) Build L as in rows. 3) Per problem in L, e = mean pass of its 5 edit samples. 4) Statistic S = mean of e over L. 5) 90 % interval: 10,000 bootstrap resamples of the problems in L (with replacement), 5th and 95th percentiles of S. n = 5 x |L| rows; if n < 50 the verdict is undecided. 6) Null: the same mean over L of base-like resamples, using code1/base_plain-01, code1/base_mathcue-01 and the random rank-8 1.5x cell of code_dial (3 samples per problem), with the same bootstrap.",
+  "null": "Base-like resamples on L (plain base, Math-cue base, random rank-8 1.5x edit with the Code cue): the pass rate a non-sharpened base gets on problems the cued base passed and RL-Code mostly failed, including regression to the mean.",
+  "ranges": {"a": [0.70, 1.0], "b": [0.0, 0.34], "null": [0.38, 0.66]}
+ },
+ "cell": {
+  "cell": {"model": "Olmo-3-1025-7B base + RL-Code 3.1 top-8 directions per matrix at 1.5x", "prompt": "plain (no Code cue, --prefix-ids '[]')", "set": "HumanEval+ and MBPP+", "n": 538, "sampling": "T 1.0 / top-p 1.0, seed 51000000", "samples": 1, "grader": "code tests (run_code_cell default extraction)", "cap": "run_code_cell default"},
+  "job": "studies/rlneurons/jobs/run_code_cell.py",
+  "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --scale 1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_code_cell --model-path /tmp/theta --model-label code_top8x1.5_plain --prefix-ids '[]' --temperature 1.0 --top-p 1.0 --seed 51000000 --commit COMMIT_SHA\"",
+  "readout": "passed of 538 in metrics.json of the run_code_cell output",
+  "unit": "problems passed of 538",
+  "why": "Under b the edit copies RL-Code's policy, which RL-Code runs with the plain prompt (401), so the edit's score should not depend on the cue. Under a the edit only sharpens the base's own distribution given the prompt, so without the Code cue it sharpens the weaker plain-prompt base and stays well below the cued 399, as Code's directions lifted plain MATH-500 only about halfway (result-ac7104).",
+  "gpu_minutes": 60,
+  "a": {"value": 345, "low": 300, "high": 378},
+  "b": {"value": 396, "low": 382, "high": 412}
+ }
+}
