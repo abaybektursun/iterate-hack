@@ -1,0 +1,36 @@
+{
+ "predictions": [
+  {
+   "id": "r5-m08:theory:g5",
+   "value": 8,
+   "low": 3,
+   "high": 15,
+   "why": "In this mechanism Code 3.0 learned only to commit and stop (3,069 tokens a problem against the base's 3,933 with 27 cap hits over 500) and has no runaway mode, so its Q4 failures are finished wrong answers. That leaves a few cap hits, below the base's roughly 20 in Q4 and far below the other theory's roughly 30."
+  }
+ ],
+ "intervention": {
+  "change": "Selection over the 4 stored attempt-0 samples, with no new generation. Drop cap hits (finish_reason length), sort the finished samples by n_new from shortest to longest, and keep up to the 3 shortest (short-3@4). Take the majority of their extracted_v3 answers, counting two answers as equal when grader v3 judges them equal. Break ties in favour of the shorter sample. If no sample finished, use sample 0. The usual 4-sample vote keeps all 4 samples, cap hits included.",
+  "model": "allenai/Olmo-3-1025-7B",
+  "cell": {
+   "set": "MATH-500",
+   "prompt": "3.1 prompt + opening cue ids [1584, 2268, 33413] (' line!\\n\\nOkay')",
+   "sampling": "T 1.0 / top-p 1.0",
+   "cap": 16384,
+   "grader": "v3",
+   "samples": 4,
+   "seeds": "Day-1 #3 base job abaybektursun-1114-153825-208b: seed 41,000,000 + problem_index + 10,000*sample, samples 0-3, attempt 0 only (studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl)"
+  },
+  "count": "Right answers over all 500 MATH-500 problems by grader v3 (score_v3 of the selected sample). Cap hits are never selected. A problem where all 4 samples hit the cap counts with sample 0's score, which is wrong.",
+  "unit": "right of 500",
+  "value": 450,
+  "low": 443,
+  "high": 457,
+  "best_known": {
+   "value": 453,
+   "item": "result-cbe0bc",
+   "setting": "base + cue, T 1.0 / top-p 1.0, vote over 4 samples, ties to the shortest finished sample (the rule was chosen on this set; result-e78dfe gives 450 as the honest best)"
+  },
+  "gpu_minutes": 1,
+  "why": "The mechanism says a commit-and-stop policy wins by avoiding drift and answer-statement errors on problems the base finds easy. Within one problem, the base's longest sample is usually the one that drifted, so dropping it before the vote should keep the vote's 446 and add a few points, near the 450-453 tie-break results."
+ }
+}
