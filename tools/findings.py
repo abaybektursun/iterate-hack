@@ -75,7 +75,7 @@ TABLE = {
         "figure": lambda m: [f"{m.SOME} %", "of the RL gain, on problems the base model solves sometimes"]},
     "rl-wait-habit": {
         "group": BEHAVIOUR,
-        "figure": lambda m: [f"+{m.MORE} %", "more often after RL, Wait is among the next words"]},
+        "figure": lambda m: [m.PUSH_POINTS, "points on MATH-500 when the base says Wait as often as RL"]},
     "equal-token-frontier": {
         "group": GAIN,
         "figure": lambda m: [f"{m._best['gap'][0]:+.1f}", f"points below one RL sample at {m._best['multiple']:.1f} times the tokens"]},
