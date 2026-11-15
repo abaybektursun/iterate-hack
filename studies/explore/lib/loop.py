@@ -225,7 +225,7 @@ class Run:
         assert r["valid"], f"starter is invalid: {r}"
         task.starter_score = r["score"]
         self.flushes, self.labeler = [], None  # basin / randflush arms
-        self.assignments, self.list_usd, self.rebases = [], 0.0, []  # fnf_assign and rebase arms
+        self.assignments, self.list_usd, self.rebases, self.prunes = [], 0.0, [], []  # fnf_assign and rebase arms
         self.peers = False  # forget arm: show the team's best submissions in every feedback message
 
     def left(self):
@@ -295,6 +295,8 @@ class Run:
         if self.assignments:
             summary["list_usd"] = self.list_usd
             (self.out / "assignments.json").write_text(json.dumps(self.assignments, indent=1))
+        if self.prunes:
+            (self.out / "prunes.json").write_text(json.dumps(self.prunes, indent=1))
         if self.rebases:
             (self.out / "rebases.json").write_text(json.dumps(self.rebases, indent=1))
         (self.out / "metrics.json").write_text(json.dumps(summary, indent=1))

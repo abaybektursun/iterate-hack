@@ -25,6 +25,11 @@ fnf_assign  Ours: fnf, but before each fork one call to `list_model` lists K dif
 single_list  Control for fnf_assign: one growing chat as single, no fork and no flush. At the fnf fork points (0, 33
           and 66 % of the budget) the same list call is made and its K methods are shown to the chat, which is
           asked to pick one. Separates the method list from the fork structure.
+fnf_undirected  Control for fnf_assign (SwarmResearch 2607.02807: do not prescribe ideas): fnf, but each fresh branch
+          is told what the earlier branches tried (the IDEA line of each branch's best submission and its score) and
+          is asked to choose its own approach. No method is named for it.
+halving   Successive halving (2607.18235): `width` fresh chats from the best program, round robin; at 25, 50 and 75 %
+          of the budget the weaker half (by best valid score) is dropped. Survivors keep their chats.
 tree      Archive tree (DGM 2505.22954 parent rule): every step picks a parent from all valid submissions with weight
           sigmoid(10 * (rank score - 0.5)) / (1 + children), and starts a fresh chat from it.
 basin     Ours: K agents with growing chats; every `check` submissions an online judge groups the recent ideas into
@@ -134,7 +139,7 @@ def parallel(run, k=4, **_):
             last[i] = run.step(sessions[i], f"a{i}", last[i])["id"]
 
 
-def fnf(run, k=4, forks=(0, 1 / 3, 2 / 3), branch_steps=None, flush=True, assign=False, list_model=None, **_):
+def fnf(run, k=4, forks=(0, 1 / 3, 2 / 3), branch_steps=None, flush=True, assign=False, list_model=None, tried_note=False, **_):
     """branch_steps: submissions per branch at each fork (default: 6% of the budget, as in the paper's 0.06B)."""
     branch_steps = branch_steps or max(1, round(0.06 * run.budget))
     leader, lead_last = None, None  # set by the opening fork at 0 %
@@ -147,6 +152,14 @@ def fnf(run, k=4, forks=(0, 1 / 3, 2 / 3), branch_steps=None, flush=True, assign
             methods = list_methods(run, k, list_model or run.model, code, score, fork_no) if assign else None
             for b in range(k):
                 s = fresh(run, code, score)
+                if tried_note and fork_no > 0:
+                    seen = {}
+                    for r in run.archive:
+                        if r["valid"] and r["branch"] and r["score"] > seen.get(r["branch"], (float("-inf"),))[0]:
+                            seen[r["branch"]] = (r["score"], r["idea"][:200])
+                    tried = "\n".join(f"- {i} (best {v})" for v, i in sorted(seen.values(), reverse=True))
+                    s = [{"role": "user", "content": first_message(
+                        run.task, code, score, f"What earlier branches tried:\n{tried}\nChoose your own approach.\n")}]
                 if assign:
                     s = [{"role": "user", "content": first_message(
                         run.task, code, score, f"Use this method for your next versions: {methods[b]}\n")}]
@@ -194,6 +207,30 @@ def fnf_keep(run, **kw):
 
 def fnf_assign(run, **kw):
     fnf(run, assign=True, **kw)
+
+
+def fnf_undirected(run, **kw):
+    fnf(run, tried_note=True, **kw)
+
+
+def halving(run, width=8, **_):
+    alive = [{"s": fresh(run), "last": "start", "name": f"h{b}"} for b in range(width)]
+    stage, i = 0, 0
+    while run.left() > 0:
+        end = run.budget if stage >= 3 else (stage + 1) * (run.budget // 4)
+        while len(run.archive) < end:
+            b = alive[i % len(alive)]
+            b["last"] = run.step(b["s"], b["name"], b["last"], branch=b["name"])["id"]
+            i += 1
+        if len(alive) > 1:
+            def top(b):
+                return max([r["score"] for r in run.archive if r["branch"] == b["name"] and r["valid"]],
+                           default=float("-inf"))
+            ranked = sorted(alive, key=top, reverse=True)
+            alive, i = ranked[:len(ranked) // 2], 0
+            run.prunes.append({"after": len(run.archive), "kept": [b["name"] for b in alive],
+                               "dropped": [b["name"] for b in ranked[len(alive):]]})
+        stage += 1
 
 
 def _flush_note(run, lab, stuck=None):
@@ -289,5 +326,5 @@ def tree(run, seed=0, **_):
         run.step(fresh(run, base, score), "t", parent)
 
 
-STRATEGIES = {"single_list": single_list, "rebase": rebase, "fnf_assign": fnf_assign, "single": single, "parallel": parallel, "fnf": fnf, "fnf_keep": fnf_keep, "forget": forget,
+STRATEGIES = {"fnf_undirected": fnf_undirected, "halving": halving, "single_list": single_list, "rebase": rebase, "fnf_assign": fnf_assign, "single": single, "parallel": parallel, "fnf": fnf, "fnf_keep": fnf_keep, "forget": forget,
               "basin": basin, "randflush": randflush, "tree": tree}
