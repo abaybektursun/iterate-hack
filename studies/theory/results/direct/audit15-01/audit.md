@@ -1,8 +1,7 @@
 # Audit 15: four round-15 numbers recomputed from stored rows
 
-Script `studies/theory/analysis/audit15.py` (written before reading the tests' scripts; reads committed rows, and raw
-texts in `runs/` and `../iterate-hack-shots/runs/` for the seed checks). Output `metrics.json` here. Bootstrap: 10,000
-resamples of problems, default_rng(15). Times are UTC.
+Script `studies/theory/analysis/audit15.py` (written before reading the tests' scripts; raw texts in `runs/` for seed
+checks), output `metrics.json` here; 10,000 bootstrap resamples of problems, default_rng(15); times UTC.
 
 **Verdict.** All four numbers reproduce. The ranges were frozen in the gate commit 4881d61 (23:15:27), before any test
 spec (23:17:43 to 23:19:33) or output (23:19:07 to 23:23:29); the final commit 644e0b8 changed only verdict lines. No
@@ -56,8 +55,6 @@ rival and S is wholly above it. (d) B is the cap32 sample, which shares sample 0
 median 2.6 % of characters, one problem (identical, dropped by sha256) on over 99 %: fresh. B rests on 6 right of 120.
 B from restarts plus cap32 gives S 0.871; cap32 scored at 32k gives 0.880. (e) As in 3. (f) Grader v3, cut 16,384.
 
-## What a skeptic should accept
-d1 with edit0of4 (one measurement): on problems the cued base misses 4 of 4, the 1.5x top-8 edit is right as often as
-RL (68 vs 74 of 480) and well above a fresh base sample (6 of 120). merge328: the hard328 vote gains from differing
-wrong answers, but that does not show slips are independent. s100vote: the number is right, but an accuracy-matched
-null predicts most of it, so it does not support "step 100 has not lowered the slip rate".
+**Accept:** d1 with edit0of4 (one measurement): where the cued base misses 4 of 4, the edit is right as often as RL
+(68 vs 74 of 480), well above a fresh base sample (6 of 120). merge328: the vote gains from differing wrong answers,
+which does not show slips are independent. s100vote: right number, but an accuracy-matched null predicts most of it.
