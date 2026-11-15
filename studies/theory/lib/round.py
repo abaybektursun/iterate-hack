@@ -23,9 +23,11 @@ Version 7 (default). `all` runs, in order:
   mechanisms [--n-mechanisms 12]   (opus)         mechanisms.json: pairwise different candidate mechanisms
   develop        (opus, one per mechanism)        drafts/, theories/r<N>-m<id>.json, dropped.json (abandoned or failing
                                                   the check twice), theories.sha256
-  account        (opus, one job)                  theories/r<N>-account.json: one budget of the base-to-RL gap, 3-6
-                                                  parts with ordered rules on stored rows, a share per part and for
-                                                  unassigned, 2+ cross-predictions; tested and duelled like a theory
+  account        (opus, one job; only with        theories/r<N>-account.json: one budget of the base-to-RL gap, 3-6
+                  --with-account)                 parts with ordered rules on stored rows, a share per part and for
+                                                  unassigned, 2+ cross-predictions; tested and duelled like a theory.
+                                                  Without --with-account no account, new or carried, is tested,
+                                                  duelled, replicated or reviewed
   null_tests     (opus, 2 jobs)                   tests_blind.jsonl, predictions/nulltest-1.jsonl, nulltest-2.jsonl
   test           (opus, repository, laptop only)  tests/<theory>/p<k>.py written by the model, run here once:
                                                   tests/<theory>.json
@@ -39,7 +41,7 @@ Version 7 (default). `all` runs, in order:
   defend         (opus)                           rivals/<theory>.turn2.defend.json for the second turn's tests
   duel_test      (opus, repository, laptop only)  rivals/<theory>[.turn2]/p<k>.py, run here once: .tests.json
   score_duel     (no model)                       metrics_v5.json: theory against rival over both turns (+-2 nats
-                                                  decides), and the printed table
+                                                  over 2+ separating tests decides; a same test adds 0), and the table
   cross_predict  (opus, two per pair)             experiments/<theory>.json: each side of every pair (theory and rival,
                                                   whatever the duel state) predicts the other side's GPU predictions and
                                                   intervention, blind; a side with no intervention writes one
@@ -50,7 +52,8 @@ Version 7 (default). `all` runs, in order:
 develop, account, rival and rival2 also write an "intervention" (prompts/intervention.md): one change to the untrained
 base, its cell, its predicted count and the best known base count.
 
---only-account: no mechanisms or develop; only the account is tested and duelled, carried theories are its inputs.
+--only-account: no mechanisms or develop; only the account is tested and duelled, carried theories are its inputs
+(implies --with-account).
 Version 6 (`--version 6`): without interventions, cross_predict and experiments.
 Version 5 (`--version 5`): the same without account. Version 4: also without rival, defend, rival2, duel_test and
 score_duel. Stages given by name run in the
@@ -125,7 +128,7 @@ REPO_TOOLS = {
 THEORY_KEYS = {"name", "statement", "scope", "parent", "imports", "explains", "conflicts", "rival", "predictions"}
 THEORY_KEYS_V4 = {"name", "statement", "scope", "explains", "conflicts", "rival", "predictions"}
 PREDICTION_KEYS = {"experiment", "unit", "value", "low", "high", "refuted_by", "gpu_minutes"}
-MECHANISM_KEYS = {"id", "mechanism", "starts_from", "import", "differs_from", "first_test"}
+MECHANISM_KEYS = {"id", "mechanism", "starts_from", "import", "differs_from", "holds_against", "base_change", "first_test"}
 METRICS_FILES = ("metrics_v4.json", "metrics_v3.json", "metrics_v2.json", "metrics.json")
 BAD_VERDICTS = ("refuted", "published", "weak")
 HEADING = re.compile(r"^### (\S+) — ", re.M)
@@ -158,8 +161,9 @@ def round_number(folder):
 
 
 def in_scope(name):
-    """--only-account: only account theories are tested and duelled; carried theories are inputs to the account."""
-    return not args.only_account or "-account" in name
+    """An account (new or carried) is tested and duelled only with --with-account; --only-account implies it and tests
+    and duels only accounts, carried theories are inputs to the account."""
+    return args.with_account if "-account" in name else not args.only_account
 
 
 def prompt(stage, **values):
@@ -794,6 +798,8 @@ def mechanisms(folder):
         ids = [m["id"] for m in ms]
         if len(set(ids)) != n or not all(re.fullmatch(r"m\d\d", i) for i in ids):
             return f"ids must be distinct, of the form m01: {ids}"
+        if 2 * sum(m["base_change"] is not None for m in ms) < n:
+            return f"at least half of the {n} mechanisms need a base_change (a change to the untrained base alone)"
         bad = [m["id"] for m in ms if m["import"] is not None and m["import"] not in known]
         return f"imports that are not external.md heading ids: {bad}" if bad else None
 
@@ -1123,6 +1129,9 @@ def score_tests(folder):
                           "total_gain": total, "unexpected_wins": unexpected, "heldout_claims": len(held), "strikes": strikes,
                           "state": state, "note": note, "reasons": reasons, "verdict": verdict, "rows": rows, "heldout_rows": held,
                           "gpu_tests": gpu, "gpu_gain": round(sum(g["gain"] for g in gpu), 3), "gpu_strikes": sum(g["strike"] for g in gpu)}
+        if "promoted_from" in json.loads(p.read_text()):  # its rows are the duel it won (the beaten theory as reader), not tests
+            theories[name] |= {"carried_duel": {"from": data["carried_from"], "gain": total, "tests": len(computed)},
+                               "offline": 0, "computed": 0, "inside": 0, "within_noise": 0, "outside": 0, "total_gain": 0}
     (folder / "metrics_v4.json").write_text(json.dumps({"theories": theories}, indent=1) + "\n")
     print("Offline tests: computed predictions against their 90 % intervals; gain in nats against the two no-theory test readers. "
           "Outside counts only when the measured 90 % interval misses the predicted one.")
@@ -1130,7 +1139,9 @@ def score_tests(folder):
     for name, t in sorted(theories.items(), key=lambda kv: -kv[1]["total_gain"]):
         print(f"{name:16} {t['computed']:>4} of {t['offline']:<2} {str(t['inside']) + '/' + str(t['within_noise']) + '/' + str(t['outside']):>12} {t['total_gain']:7.2f} "
               f"{str(t['strikes']) + ' of ' + str(t['heldout_claims']) if t['heldout_claims'] else '':>8}  {t['state']}"
-              f"{', tests carried from ' + t['carried_from'] if t['carried_from'] else ''}{': ' + t['note'] if t['note'] else ''}")
+              f"{', tests carried from ' + t['carried_from'] if t['carried_from'] else ''}{': ' + t['note'] if t['note'] else ''}"
+              + (f"; carried duel win, {t['carried_duel']['gain']:+.2f} nats over {t['carried_duel']['tests']} tests (not counted above)"
+                 if "carried_duel" in t else ""))
         for r in t["rows"]:
             if "not_scored" in r:
                 again = "" if r["replication"] is None else f" (replication: {r['replication']})"
@@ -1153,6 +1164,11 @@ def score_tests(folder):
             o = g["other"]
             print(f"    GPU test {g['id']}: measured {g['measured']:g} (n {g['n']}), predicted {g['value']:g} [{g['low']:g}, {g['high']:g}], "
                   f"{o['name']} {o['value']:g} [{o['low']:g}, {o['high']:g}], gain {g['gain']:+.2f}{', strike' if g['strike'] else ''}")
+    total = {k: sum(t[k] for t in theories.values()) for k in ("offline", "computed", "inside", "within_noise", "outside")}
+    print(f"Round: {total['computed']} of {total['offline']} offline predictions computed, {total['inside']} inside, "
+          f"{total['within_noise']} outside within noise, {total['outside']} outside" + "".join(
+              f"; {n}: carried duel win, {t['carried_duel']['gain']:+.2f} nats over {t['carried_duel']['tests']} tests, not counted"
+              for n, t in theories.items() if "carried_duel" in t))
 
 
 def heldout(folder):
@@ -1266,9 +1282,11 @@ DECIDES = 2.0  # nats: a duel total at or beyond +-2 decides; between, the theor
 
 
 def survivors(folder):
-    """The theories the duel and the review take: up to 3 survivors of metrics_v4.json, largest total gain first."""
+    """The theories the duel and the review take: up to 3 survivors of metrics_v4.json, largest total gain (or carried
+    duel gain) first."""
     theories = json.loads((folder / "metrics_v4.json").read_text())["theories"]
-    return sorted((n for n, t in theories.items() if t["state"] == "survives" and in_scope(n)), key=lambda n: -theories[n]["total_gain"])[:3]
+    return sorted((n for n, t in theories.items() if t["state"] == "survives" and in_scope(n)),
+                  key=lambda n: -theories[n]["total_gain"] - theories[n].get("carried_duel", {}).get("gain", 0))[:3]
 
 
 def computed_tests(folder, name):
@@ -1426,22 +1444,23 @@ def score_duel(folder):
                     row["gain"] = round(min(3.0, max(-3.0, log_density(q["measured"], row["theory"]) - log_density(q["measured"], row["rival"]))), 4)
                 row["replication"] = repl.get(q["k"], {}).get("status")
                 rows.append(row)
-        gains = [row["gain"] for row in rows if "gain" in row and row["replication"] != "differs"]  # differs: left out
-        total = round(sum(gains), 3)
-        state = ("not tested against rival" if len(gains) < 2 else "beats rival" if total >= DECIDES
-                 else "loses to rival" if total <= -DECIDES else "not separated from rival")
-        theories[n] = {"rival": json.loads(rfile(folder, n, 1).read_text())["statement"], "computed": len(gains), "tests": len(rows),
-                       "separating": sum(not r["same_prediction"] for r in rows), "total_gain": total, "state": state,
-                       "no_offline_test": gpu, "rows": rows}
+        counted = [row for row in rows if "gain" in row and row["replication"] != "differs"]  # differs: left out
+        apart = [row for row in counted if not row["same_prediction"]]  # a same test adds 0: it does not separate
+        total = round(sum(row["gain"] for row in apart), 3)
+        state = ("not tested against rival" if len(counted) < 2 else "beats rival" if len(apart) >= 2 and total >= DECIDES
+                 else "loses to rival" if len(apart) >= 2 and total <= -DECIDES else "not separated from rival")
+        theories[n] = {"rival": json.loads(rfile(folder, n, 1).read_text())["statement"], "computed": len(counted), "tests": len(rows),
+                       "separating": len(apart), "total_gain": total, "state": state, "no_offline_test": gpu, "rows": rows}
     (folder / "metrics_v5.json").write_text(json.dumps({"theories": theories}, indent=1) + "\n")
     print(f"Duel: each survivor's prediction (defend) against its rival's on the rival's tests; gain in nats, above 0 favours "
-          f"the theory; a total of +-{DECIDES:g} or beyond decides. same = the defender's centre is inside the rival's interval.")
+          f"the theory. same = the defender's centre is inside the rival's interval: not separating, adds 0. A total of "
+          f"+-{DECIDES:g} or beyond over 2 or more separating computed tests decides.")
     print(f"{'theory':16} {'computed':>9} {'separating':>10} {'gain':>7}  state")
     for n, t in theories.items():
         print(f"{n:16} {t['computed']:>4} of {t['tests']:<2} {t['separating']:>10} {t['total_gain']:7.2f}  {t['state']}")
         print(f"    rival: {t['rival'][:150]}")
         for row in t["rows"]:
-            head = f"    p{row['k']} turn {row['turn']}{' same' if row['same_prediction'] else ''}: "
+            head = f"    p{row['k']} turn {row['turn']}{' same, not separating' if row['same_prediction'] else ''}: "
             if "gain" not in row:
                 print(head + f"not computable: {row['not_computable'][:110]}")
             else:
@@ -1470,7 +1489,7 @@ def rival_file(folder, n):
 
 def pairs(folder):
     """Every theory that met a rival, whatever the duel state: the round's survivors, the account, carried pairs."""
-    return [p.stem for p in sorted((folder / "theories").glob("*.json")) if rfile(folder, p.stem, 1).exists()]
+    return [p.stem for p in sorted((folder / "theories").glob("*.json")) if rfile(folder, p.stem, 1).exists() and in_scope(p.stem)]
 
 
 def sides(folder, n):
@@ -1681,9 +1700,10 @@ def replicate(folder):
         items = []
         for r in run_scripts(folder, f"replicate/{n}{kind}", offline, scripts):
             first = tests[r["k"]]["measured"]
+            both_refuted = tests[r["k"]].get("refuted_by_met") and r["refuted_by_met"]  # both sides meet the refuting condition
             items.append({"k": r["k"], "experiment": r["experiment"], "original": first, "replicated": r["measured"],
-                          "status": "replicated" if same_number(r["measured"], first) else "differs", "script": r["script"],
-                          "not_computable": r["not_computable"]})
+                          "status": "replicated" if same_number(r["measured"], first) or both_refuted else "differs",
+                          "refuted_by_met": r["refuted_by_met"], "script": r["script"], "not_computable": r["not_computable"]})
             if items[-1]["status"] == "differs":
                 print(f"  {n}{kind} p{r['k']} DIFFERS: first {first}, replication {r['measured']}; left out until a person resolves it")
         (folder / "replication" / f"{n}{kind}.json").write_text(json.dumps({"theory": n, "items": items}, indent=1) + "\n")
@@ -1697,10 +1717,11 @@ DUEL_REVIEW = """The theory was also compared with the strongest rival a fresh a
 mechanism and its tests, each with the rival's prediction and what the theory should say), $round/rivals/$theory.defend.json
 (a separate agent's predictions from the theory alone), $round/rivals/$theory/ and $round/rivals/$theory.tests.json
 (the scripts and the computed numbers); the same names with ".turn2" when the rival had a second turn; and
-$round/metrics_v5.json, entry "$theory" (gain per test, above 0 favours the theory, and the state: $duel_state). Read one duel script: does it implement the rival's recipe as written? Your
-verdict names the duel state. A theory that beats its rival is not "weak" only because some other rival could exist;
-call it weak only for a reason you can point to (a refuting item, a published claim, a broken script, a gain resting on
-one test).
+$round/metrics_v5.json, entry "$theory" (gain per test, above 0 favours the theory, and the state: $duel_state; a test
+with "same_prediction" true does not separate the two and adds 0). Read one duel script: does it implement the rival's
+recipe as written? Your verdict names the duel state. Apart from the rule for "stands" below, a theory that beats its
+rival is not "weak" only because some other rival could exist; call it weak only for a reason you can point to (a
+refuting item, a published claim, a broken script).
 """
 
 
@@ -1774,7 +1795,9 @@ if __name__ == "__main__":
     parser.add_argument("stages", nargs="+", choices=[*STAGES, "all"])
     parser.add_argument("--version", type=int, choices=[3, 4, 5, 6, 7], default=7)
     parser.add_argument("--only-account", action="store_true", help="version 6: no mechanisms or develop; only the "
-                        "account is tested and duelled, carried theories are its inputs")
+                        "account is tested and duelled, carried theories are its inputs (implies --with-account)")
+    parser.add_argument("--with-account", action="store_true", help="version 7.1: all runs the account job, and accounts "
+                        "are tested, duelled, replicated and reviewed; without it no account stage runs")
     parser.add_argument("--cutoff")
     parser.add_argument("--skip", action="append", default=[])
     parser.add_argument("--from", dest="prev")
@@ -1786,7 +1809,9 @@ if __name__ == "__main__":
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--min-targets", type=int, default=15)
     args = parser.parse_args()
-    order = [s for s in ALL[args.version] if not (args.only_account and s in ("mechanisms", "develop"))]
+    args.with_account |= args.only_account
+    order = [s for s in ALL[args.version] if not (args.only_account and s in ("mechanisms", "develop"))
+             and (args.with_account or s != "account")]
     for stage in order if args.stages == ["all"] else args.stages:
         print(f"== {stage}")
         STAGES[stage](args.folder)
