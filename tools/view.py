@@ -7,18 +7,21 @@
   uv run tools/view.py [--port 8765] [--hours 6]
 
 Opens http://127.0.0.1:8765 in the browser (only when started from a terminal). The page is the Board tab of the team
-site, for people. It shows one benchmark at a time (?bench=): one sentence with the best untrained-base score, the best
-RL score and the gap, under it what weakens that score (the last step within noise, the caveat of its plain row), the
-hill-climbing chart with 95% intervals, and beside the chart (under it below 1100 px) the ladder of record steps, one
-line each: the gain, the step's title, previous best -> new best, "within noise". A click on a step (?step=<right>)
+site, for people. At the top, what changed since the reader's last look ("Nothing new since 22:54.") and one sentence on
+the board: open work items, from how many people, how many idle over an hour (a click shows only those, ?idle=1), the
+last result (a click opens it). Then one benchmark at a time (?bench=): the reach bar, from 0 % to the best RL score,
+with the best untrained-base score at its left, one segment per record step (faint when within noise) and the points
+still missing to RL as its empty rest; the hill-climbing chart with 95% intervals; and beside the chart (under it below
+1100 px) the ladder of record steps, the RL line first with the gap's 95% interval, then one line per step: the gain,
+the step's title, previous best -> new best, "within noise". A click on a step, its segment or its dot (?step=<right>)
 opens it under its line: what changed, why it works, is it real, cost, settings. The words come from the plain rows
 that agents write for a result (board.py plain); a step without them shows what its configuration gained and lost
 against the step before and the first sentence of the result's text. Below: Now (open work, longest idle first, red
 from 60 minutes) and Learned (results that set no record and announce nothing), one line per item; then one row, More
 (?more=), that opens one list at a time: results that announce a page or a tool (told apart by a rule on their text,
 ANNOUNCE in the page), ideas, knowledge and skills, closed work, the messages on `all`, and one lane per person with
-every post and message of the last --hours. A term of tools/glossary.py is explained in one sentence on click, in
-the sentence, in an opened step and in the side panel. The page reads /data every 10 s and rewrites only what changed.
+every post and message of the last --hours. A term of tools/glossary.py is explained in one sentence on click,
+in an opened step and in the side panel. The page reads /data every 10 s and rewrites only what changed.
 A click on an item opens its title, what, why and caveat, its full text, scores, votes, comments and message thread in
 a side panel whose address is /#<item id>; the filters are in the address too (/?who=<name>&q=<text>&idle=1). Keys:
 / filter, j and k move, 1 2 3 jump to the record steps, Now and Learned, Enter opens, Esc closes, ? lists the keys. A
@@ -294,18 +297,18 @@ p, h1, h2, h3, dl, dd { margin: 0; }
 .status.bad { color: var(--red); }
 .status.bad::before { background: var(--red); box-shadow: 0 0 0 4px color-mix(in srgb, var(--red) 20%, transparent); }
 
-/* The one sentence: the best untrained-base score against RL on one benchmark */
-.lede { margin-top: clamp(14px, 2.8vh, 28px); min-height: 150px; }
-.say { font-size: clamp(26px, 2.3vw, 42px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 27em; text-wrap: balance; }
-.say b { font-weight: 560; }
-.say .base { color: var(--blue); }
-.say .term, .nb { white-space: nowrap; }
-.say .term { text-decoration-color: color-mix(in srgb, currentColor 32%, transparent); text-decoration-thickness: 1.5px; }
-.sub { margin-top: 12px; font-size: 13.5px; color: var(--mute); }
-.cav { display: block; margin-top: 4px; font-size: 13.5px; color: var(--ink); padding-left: 15px; position: relative; max-width: 100ch; }
-.cav::before, .cv::before { content: ""; position: absolute; left: 0; top: .62em; width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
-.cav:hover { text-decoration: underline 1px; text-underline-offset: 3px; }
-.benches { display: flex; flex-wrap: wrap; gap: 4px 26px; margin-top: 12px; font-size: 13.5px; }
+/* The one sentence, on the state of the board; above it, what changed since the last look */
+.lede { margin-top: clamp(14px, 2.6vh, 26px); min-height: 32px; }
+.since { margin: 0 0 4px; font-size: 13px; line-height: 18px; color: var(--mute); }
+.since.fresh::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); margin-right: 9px; vertical-align: .1em; }
+.since b { font-weight: 600; color: var(--ink); }
+.summary { font-size: clamp(19px, 1.5vw, 24px); line-height: 1.3; font-weight: 300; letter-spacing: -.005em; max-width: 60em; }
+.summary b { font-weight: 600; }
+.summary .warn { color: var(--red); }
+.summary button, .summary a { text-decoration: underline 1px; text-underline-offset: 4px; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); }
+.summary button:hover, .summary a:hover, .summary button[aria-pressed="true"] { text-decoration-color: currentColor; }
+.cv::before { content: ""; position: absolute; left: 0; top: .62em; width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+.benches { display: flex; flex-wrap: wrap; gap: 4px 26px; margin-top: 14px; min-height: 27px; font-size: 13.5px; }
 .benches button { color: var(--mute); padding: 3px 0; border-bottom: 2px solid transparent; }
 .benches button:hover { color: var(--ink); }
 .benches button[aria-pressed="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--blue); }
@@ -319,6 +322,33 @@ p, h1, h2, h3, dl, dd { margin: 0; }
   background: var(--sheet); border: 1px solid var(--rule); font-size: 13.5px; line-height: 1.45; color: var(--mute);
 }
 .def b { color: var(--ink); font-weight: 600; margin-right: 2px; }
+
+/* Reach: how far the best untrained-base score has come toward the RL score, one segment per record step */
+.reach { position: relative; height: 92px; margin-top: clamp(14px, 2.4vh, 24px); }
+.reach .ends { display: flex; align-items: baseline; gap: 10px; height: 46px; white-space: nowrap; }
+.reach .big { font-size: 34px; line-height: 40px; font-weight: 300; letter-spacing: -.01em; }
+.reach .big.base { color: var(--blue); }
+.reach .lab { font-size: 13px; color: var(--mute); }
+.reach .rl-end { margin-left: auto; display: flex; align-items: baseline; gap: 10px; }
+.reach .bar8 { position: relative; height: 8px; margin-top: 6px; }
+.reach .piece { position: absolute; top: 0; height: 8px; }
+.reach .piece i { position: absolute; inset: 0 0 0 2px; min-width: 1px; background: var(--blue); }
+.reach .piece.first i { left: 0; border-radius: 4px 0 0 4px; }
+.reach .piece.last i { border-radius: 0 4px 4px 0; }
+.reach .piece.first.last i { border-radius: 4px; }
+.reach .piece.noise i { opacity: .45; }
+.reach .piece.togo i { background: var(--rule); }
+.reach .fill { position: absolute; inset: 0; }
+.reach .fill.grow { animation: grow .6s cubic-bezier(.22, .61, .36, 1) backwards;  /* backwards: no clip-path is left after it, so the hit areas and the focus ring are not cut */ }
+@keyframes grow { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+.reach button.piece::after { content: ""; position: absolute; left: var(--hx, 0px); right: var(--hx, 0px); top: -10px; height: 28px; }
+.reach button.piece:focus-visible { outline: none; }
+.reach button.piece:focus-visible i { outline: 2px solid var(--blue); outline-offset: 3px; }
+.reach button.piece:hover i { filter: brightness(1.12); }
+.reach.has-sel button.piece i { opacity: calc(var(--dim) + .12); transition: opacity .28s ease; }
+.reach.has-sel button.piece.on i { opacity: 1; }
+.reach .marks { position: relative; height: 18px; margin-top: 8px; font-size: 13px; line-height: 18px; color: var(--mute); }
+.reach .marks span { position: absolute; top: 0; white-space: nowrap; }
 
 /* The chart and, beside it, the ladder of record steps */
 .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 56px; margin-top: clamp(12px, 2vh, 20px); align-items: start; }
@@ -381,11 +411,8 @@ h2 .count { font-weight: 400; color: var(--faint); }
 .sd a.go:hover { color: var(--ink); }
 @keyframes fade { from { opacity: 0; } }
 
-/* Above the lists: what is new since the last look, the people, the filter */
+/* Above the lists: the people, the filter */
 .bar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 26px; margin-top: 34px; min-height: 30px; font-size: 13px; color: var(--mute); }
-.since { color: var(--ink); }
-.since::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); margin-right: 9px; vertical-align: .1em; }
-.since b { font-weight: 600; }
 .people { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-left: auto; }
 .people button { display: inline-flex; align-items: center; gap: 7px; }
 .people button:hover, .people button[aria-pressed="true"] { color: var(--ink); }
@@ -536,7 +563,6 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   .wrap { padding: 16px 16px 40px; }
   .top { gap: 6px 13px; padding-bottom: 12px; }
   .name { font-stretch: 112%; margin-right: 0; }
-  .lede { min-height: 0; }
   .chart { height: 200px; }
   .board.main-cols { grid-template-columns: minmax(0, 1fr); }
   .s-result { margin-top: 30px; }
@@ -565,9 +591,13 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   .top a { padding: 11px 0; }
   .benches { flex-wrap: nowrap; gap: 4px 12px; margin-top: 2px; font-size: 12.5px; overflow-x: auto; scrollbar-width: none; }
   .benches button { padding: 10px 0; white-space: nowrap; flex: none; }
+  .reach { height: 82px; }
+  .reach .ends { height: 36px; gap: 8px; }
+  .reach .rl-end { gap: 8px; }
+  .reach .big { font-size: 26px; line-height: 32px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .arrived, .panel, .scrim, .sd { animation: none; }
+  .arrived, .panel, .scrim, .sd, .reach .fill.grow { animation: none; }
   .chart * { transition: none !important; }
 }
 </style>
@@ -584,13 +614,17 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
     <span class="status" id="status" role="status">Reading the board</span>
   </header>
   <span class="sr" id="live" aria-live="polite"></span>
-  <section class="lede" id="lede" aria-label="The best untrained-base score against RL"><p class="say"><span class="ph" style="width:min(640px,80%);height:16px;margin-top:10px"></span></p></section>
+  <section class="lede" aria-label="The state of the board">
+    <p class="since" id="since" hidden></p>
+    <p class="summary" id="summary"><span class="ph" style="width:min(620px,80%);height:14px;margin-top:8px"></span></p>
+  </section>
+  <div class="benches" id="benches" role="group" aria-label="Benchmark"></div>
+  <section class="reach" id="reach" aria-label="The best untrained-base score against RL"><span class="ph" style="position:absolute;left:0;right:0;top:52px;height:8px;border-radius:4px"></span></section>
   <div class="hero">
     <div class="chart" id="chart"></div>
     <section class="ladder"><h2>Record steps <span class="count" id="n-steps"></span></h2><div id="ladder"><span class="ph-row"><span class="ph"></span></span><span class="ph-row"><span class="ph"></span></span><span class="ph-row"><span class="ph"></span></span></div></section>
   </div>
   <div class="bar">
-    <p class="since" id="since" hidden></p>
     <div class="people" id="people" aria-label="Show one person"></div>
     <label class="search"><input id="q" type="search" placeholder="Filter the lists" aria-label="Filter the lists" autocomplete="off"><kbd>/</kbd></label>
   </div>
@@ -841,12 +875,12 @@ function render() {
   const none = filtering() ? "Nothing matches the filter." : "";
 
   hero();
-  since(items, ch, work.length, idleN);
+  summary(items, ch);
   put($("people"), people.map(p => `<button data-who="${esc(p)}" data-fkey="who-${esc(p)}" aria-pressed="${S.who === p}" style="${pstyle(p)};--c:oklch(var(--pl) var(--pc) var(--h))"><i class="g"></i>${esc(p)}</button>`).join(""));
   $("people").classList.toggle("picked", Boolean(S.who));
 
   const nw = list("work", "work", S.idle ? work.filter(i => mins(activeNs(i)) >= 60) : work, nWork, none || "No open work. An agent claims work with <code>board.py post work</code>.");
-  put($("n-work"), nWork ? `${nw} open, longest idle first` + (idleN ? `, <button class="warn" id="idlebtn" data-fkey="idle" aria-pressed="${S.idle}">${idleN} idle over an hour</button>` : "") : "");
+  put($("n-work"), nWork ? nw : "");
   put($("n-result"), list("result", "result", lists.result[0], lists.result[1], none || "No results yet."));
 
   const count = { msgs: [S.autos ? talk.length : talk.length - autos, d.messages.length - (S.autos ? 0 : nAutos)] };
@@ -891,13 +925,25 @@ function status() {
   s.title = d ? `Last read ${utc(d.now_ns)}` : "";
 }
 
-function since(items, ch) {
+/* The one sentence: open work, the people behind it, how many are idle over an hour (a click shows only those), the last
+   result (a click opens it). Above it, what changed since the reader's last look. */
+function summary(items, ch) {
+  const open = items.filter(i => i.listed === "work");
+  const idle = open.filter(i => mins(activeNs(i)) >= 60).length;
+  const ppl = new Set(open.map(i => i.who)).size;
+  const last = items.filter(i => i.kind === "result").sort((a, b) => b.at_ns - a.at_ns)[0];
+  put($("summary"), (open.length
+      ? `${plural(open.length, "open work item")} from ${plural(ppl, "person", "people")}, ` +
+        (idle ? `<button class="warn" id="idlebtn" data-fkey="idle" aria-pressed="${S.idle}"><b>${idle}</b> idle over an hour</button>.` : "none idle over an hour.")
+      : "No open work.") +
+    (last ? ` <a href="#${esc(last.id)}" data-fkey="last">Last result ${mins(last.at_ns) < 1 ? "just now" : `<b>${rel(last.at_ns)}</b> ago`}</a> from ${esc(last.who)}.` : " No results yet."));
   const el = $("since");
   if (!S.since) { el.hidden = true; document.title = TITLE; return; }
   const parts = [[ch.result.length, "result"], [ch.closed.length, "closed", "closed"], [ch.idle.length, "newly idle", "newly idle"]].filter(p => p[0]);
   const count = parts.reduce((a, p) => a + p[0], 0);
-  el.hidden = !count;
-  put(el, count ? `<span>Since ${clock(S.since / 1e6)}: ${parts.map(p => plural(...p)).join(", ")}.</span>` : "");
+  el.hidden = false;
+  el.classList.toggle("fresh", count > 0);
+  put(el, count ? `Since ${clock(S.since / 1e6)}: ${parts.map(p => plural(...p)).join(", ")}.` : `Nothing new since ${clock(S.since / 1e6)}.`);
   document.title = count && !S.acked ? `(${count}) ${TITLE}` : TITLE;
 }
 
@@ -955,26 +1001,57 @@ const rawOf = id => S.item.get(id)?.text ?? S.data.finding?.[id] ?? "";
 function hero() {
   const b = bench();
   if (!b) {
-    put($("lede"), `<p class="say">No scores yet.</p><p class="sub">Attach one to a result: <code>board.py score &lt;result id&gt; base MATH-500 410/500 "cue, T 1.0"</code></p>`);
+    put($("benches"), "");
+    put($("reach"), `<p class="lab">No scores yet. Attach one to a result: <code>board.py score &lt;result id&gt; base MATH-500 410/500 "cue, T 1.0"</code></p>`);
     put($("chart"), ""); put($("ladder"), ""); put($("n-steps"), "");
     return;
   }
-  const { lead, rl, rlP, pts } = b, gap = rl ? rlP - lead.p : null, ci = rl && diffCI(rl, lead.s);
-  const head = `The ${tb("untrained base")} model scores <b class="base">${f1(lead.p)} %</b> on <span class="nb">${tb(b.name)}</span>`, rlm = `the ${tb("RL-trained")} model`;
-  const say = !rl ? `${head}. No RL score is posted on this benchmark.`
-    : Math.abs(gap) < .05 ? `${head}, the same as ${rlm}.`
-    : gap > 0 ? `${head}, <b>${f1(gap)}</b> points below ${rlm} at <b>${f1(rlP)} %</b>.`
-    : `${head}, <b>${f1(-gap)}</b> points above ${rlm} at <b>${f1(rlP)} %</b>.`;
-  const sub = `${lead.s.right} of ${lead.s.n} right.` + (rl ? ` The gap's ${tb("95 % interval")} is ${f1(ci[0])} to ${f1(ci[1])} points.` : "");
-  const w = words(lead, b), noise = lead.prev && !lead.clears;  // what weakens the number in the sentence, said under it
-  const doubt = [noise ? `The last step, +${f1(lead.p - lead.prev.p)}, is within noise.` : "", w.caveat ? firstSentence(w.caveat) : ""].filter(Boolean).join(" ");
-  put($("lede"), `<p class="say">${say}</p><p class="sub">${sub}</p>` +
-    (doubt ? `<button class="cav" data-step="${lead.s.right}" data-keep="1" data-fkey="cav">${esc(doubt)}</button>` : "") +
-    (S.benches.length > 1 ? `<div class="benches" role="group" aria-label="Benchmark">` + S.benches.map(x =>
-      `<button data-bench="${esc(x.name)}" data-fkey="bench-${esc(x.name)}" aria-pressed="${x === b}">${esc(x.name)} <b>${f1(x.lead.p)}</b></button>`).join("") + `</div>` : ""));
+  put($("benches"), S.benches.length > 1 ? S.benches.map(x =>
+    `<button data-bench="${esc(x.name)}" data-fkey="bench-${esc(x.name)}" aria-pressed="${x === b}">${esc(x.name)} <b>${f1(x.lead.p)}</b></button>`).join("") : "");
   put($("n-steps"), `${esc(b.name)}, newest first`);
+  drawReach();
   ladder(b);
   drawChart();
+}
+
+/* Reach: one thin bar from 0 % to the best RL score (to the base score when that is higher, to 100 without an RL score).
+   One segment per record step, from the step before to its score; a step within noise is drawn faint, as on the chart.
+   The empty rest is what is still missing to RL. A segment opens its step like its line in the ladder. */
+let measure13;
+const width13 = t => { measure13 ??= document.createElement("canvas").getContext("2d"); measure13.font = '400 13px "Archivo", ui-sans-serif, system-ui, sans-serif'; return measure13.measureText(t).width; };
+function drawReach() {
+  const el = $("reach"), b = S.benches && bench(), W = el.clientWidth;
+  if (!b || !W) return;
+  const { lead, rl, rlP } = b, sel = stepOf(b), recs = b.pts.filter(q => q.rec);
+  const top = rl ? Math.max(rlP, lead.p) : 100, at = v => v / top * 100, px = v => v / top * W;
+  const matched = rl && lead.p >= rlP - .05, full = lead.p >= top - .05;  // full: no empty rest is drawn
+  const segs = recs.map((q, k) => {
+    const from = q.prev ? q.prev.p : 0, noise = q.prev && !q.clears, last = k === recs.length - 1 && full;
+    const name = q.prev ? `+${f1(q.p - q.prev.p)}` : `start ${f1(q.p)}`, w = px(q.p - from);
+    const label = `${q.prev ? `Step +${f1(q.p - q.prev.p)}` : "Start"}, ${stepTitle(q, b)}, ${q.prev ? `${f1(from)} to ${f1(q.p)}` : f1(q.p)}${noise ? ", within noise" : ""}`;
+    const cls = ["piece", !k && "first", last && "last", noise && "noise", q === sel && "on"].filter(Boolean).join(" ");
+    const hx = w < 12 ? `--hx:${((w - 12) / 2).toFixed(1)}px;z-index:1;` : "";  // a sliver gets a hit area 12 px wide
+    return { q, k, from, name, w, html: `<button class="${cls}" style="left:${at(from).toFixed(3)}%;width:${at(q.p - from).toFixed(3)}%;${hx}" data-step="${q.s.right}" data-fkey="reach-${q.s.right}" aria-label="${esc(label)}" aria-expanded="${q === sel}"><i></i></button>` };
+  });
+  const rest = !full ? `<span class="piece togo last" style="left:${at(lead.p).toFixed(3)}%;width:${at(top - lead.p).toFixed(3)}%"><i></i></span>` : "";
+  const go = rl ? (matched ? "RL matched" : `${f1(rlP - lead.p)} points to go`) : "", goW = go ? width13(go) : 0;
+  const marks = segs.map(s => {  // a gain under its segment where it fits and stays clear of the note at the right end
+    const tw = width13(s.name), x = s.k ? Math.min(px(s.from) + s.w / 2 - tw / 2, W - (go ? goW + 12 : 0) - tw) : 0;  // centred, or moved left of the note
+    if (s.w < tw + 10 || x < (s.k ? px(s.from) + 2 : 0)) return "";
+    return `<span style="left:${x.toFixed(1)}px">${s.name}</span>`;
+  }).join("") + (go ? `<span style="right:0">${go}</span>` : "");
+  put(el, `<div class="ends"><span class="big base">${f1(lead.p)}</span><span class="lab">untrained base</span>` +
+    (rl ? `<span class="rl-end"><span class="lab">RL-trained</span><span class="big">${f1(rlP)}</span></span>` : "") + `</div>` +
+    `<div class="bar8" role="group" aria-label="${esc(`${b.name}: best base ${f1(lead.p)} %${rl ? `, RL ${f1(rlP)} %` : ", no RL score"}; one part per record step`)}">${rest}<div class="fill">${segs.map(s => s.html).join("")}</div></div>` +
+    `<div class="marks" aria-hidden="true">${marks}</div>`);
+  el.classList.toggle("has-sel", Boolean(sel));
+  const fill = el.querySelector(".fill");
+  if (S.grown !== b.name) {  // one entrance: on the first draw and when the benchmark changes, never on a refresh
+    S.grown = b.name; S.grewAt = performance.now();
+    fill.classList.remove("grow"); void fill.offsetWidth; fill.classList.add("grow");
+  } else if (!fill.classList.contains("grow") && performance.now() - S.grewAt < 600) {  // rewritten mid-entrance (fonts, a click): it goes on where it was
+    fill.style.animationDelay = `${-(performance.now() - S.grewAt).toFixed(0)}ms`; fill.classList.add("grow");
+  }
 }
 
 function ladder(b) {
@@ -985,7 +1062,8 @@ function ladder(b) {
       `<b>${q.prev ? "+" + f1(q.p - q.prev.p) : "start"}</b><span class="lt">${esc(stepTitle(q, b))}</span>` +
       `<span class="lr">${q.prev ? f1(q.prev.p) + " → " : ""}${f1(q.p)}${noise ? ` <span class="flag">within noise</span>` : ""}</span><span class="chev" aria-hidden="true">›</span></button>` + (on ? detail(q, b) : "");
   });
-  const rl = b.rl ? `<a class="lrow rl" href="#${esc(b.rl.result)}" data-fkey="step-rl"><b>${f1(b.rlP)}</b><span class="lt">RL-trained model, the target</span><span class="lr"></span></a>` : "";
+  const ci = b.rl && diffCI(b.rl, b.lead.s);  // the 95 % interval of RL minus the best base, in points
+  const rl = b.rl ? `<a class="lrow rl" href="#${esc(b.rl.result)}" data-fkey="step-rl"><b>${f1(b.rlP)}</b><span class="lt">RL-trained model, the target</span><span class="lr">gap ${f1(ci[0])} to ${f1(ci[1])}</span></a>` : "";
   put($("ladder"), rl + rows.join(""));
 }
 
@@ -1291,7 +1369,7 @@ document.addEventListener("click", e => {
   if (term) { e.preventDefault(); showDef(term); return; }
   if (!t.closest("#def")) hideDef();
   const step = t.closest("[data-step]");
-  if (step) {  // a ladder line closes its own step on a second click; the chart and the line under the sentence only open
+  if (step) {  // a ladder line and a segment of the reach bar close their own step on a second click; the chart only opens
     e.preventDefault();
     const n = step.dataset.step, keep = step.dataset.keep;
     set({ step: S.step === n && !keep ? null : n });
@@ -1350,8 +1428,9 @@ addEventListener("hashchange", fromHash);
 addEventListener("scroll", hideDef, { passive: true, capture: true });
 addEventListener("pointermove", e => { S.pointer = { x: e.clientX, y: e.clientY }; }, { passive: true });
 new ResizeObserver(() => { hideDef(); drawChart(); }).observe($("chart"));
+new ResizeObserver(() => drawReach()).observe($("reach"));
 small.addEventListener("change", () => S.data && render());
-document.fonts.ready.then(drawChart);
+document.fonts.ready.then(() => { drawChart(); drawReach(); });
 
 /* Since the last look: the last read shown while the tab was visible and focused is kept when the reader leaves
    (blur, hidden, closed) and becomes the reference when the reader comes back (focus, visible). */
@@ -1370,6 +1449,7 @@ S.who = params.get("who"); S.idle = params.get("idle") === "1";
 S.bench = params.get("bench"); S.step = params.get("step"); S.more = MORE.some(m => m[0] === params.get("more")) ? params.get("more") : null;
 $("q").value = params.get("q") ?? ""; S.q = $("q").value.trim().toLowerCase();
 S.since = Number(store.get(SEEN_KEY)) || null; S.acked = !S.since;
+if (S.since) { $("since").hidden = false; $("since").innerHTML = `<span class="ph" style="width:150px;margin-top:4px"></span>`; }  // its line is held before the first read
 ["work", "result"].forEach(id => { $(id).innerHTML = `<span class="ph-row"><span class="ph"></span></span>`.repeat(4); });
 fromHash();
 poll();

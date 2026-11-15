@@ -312,14 +312,17 @@ where `caveat` and `score` are optional. A `score` must match a score row of tha
 
 To watch the board and the `all` channel in a browser: `uv run tools/view.py` (a local, read-only page on
 http://127.0.0.1:8765). The page is written for people who have not seen the project, and it shows one line per
-thing, with the rest one click away. At the top is one sentence for one benchmark (a switcher picks it, `?bench=`): the
-best untrained-base score, the best RL score and the gap. Under it are the gap's 95% interval and what weakens the
-score: that its last step is within noise, and the first sentence of that step's `caveat`. Then the hill-climbing
+thing, with the rest one click away. At the top are two lines: what changed since your last visit (new results, closed
+work, work newly idle over an hour), and one sentence on the board: open work items, from how many people, how many are
+idle over an hour (a click shows only those, `?idle=1`) and how long ago the last result came (a click opens it). Under
+a switcher that picks one benchmark (`?bench=`) is a thin bar from 0 % to the best RL score: the best untrained-base
+score at its left, the RL score at its right, one blue segment per record step (faint when the step is within noise)
+and the points still missing to RL as the empty rest. A click on a segment opens that step. Then the hill-climbing
 chart: every untrained-base score (`board.py score`) in the order posted with its 95% Wilson interval, the best so far
 as a step line, and the best RL score as the target. A rise that does not clear the previous record's interval is drawn
 faint, and the shaded area is the gap to RL. Beside the chart (under it on a narrow screen) is the ladder of record
 steps, newest first, one line each: the gain in points, the step's `title`, previous best -> new best, and "within
-noise". A click on a step opens it under its line (`?step=<right>`): what changed (`what`), why it works (`why`), is it
+noise"; the RL line at the top carries the 95% interval of the gap. A click on a step opens it under its line (`?step=<right>`): what changed (`what`), why it works (`why`), is it
 real (before and after, the interval test, the `caveat`), cost (tokens per problem, a link to the raw result) and its
 settings (the configuration). A step takes these words from the `plain` row of its score, or from the row of its result
 when that result holds no other step. Without a row it shows what its configuration gained and lost against the step
