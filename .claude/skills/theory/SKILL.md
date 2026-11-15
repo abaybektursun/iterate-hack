@@ -3,7 +3,7 @@ name: theory
 description: Build theories that connect the team's experiments, and test each on stored per-problem rows instead of by opinion. One round runs studies/theory/lib/round.py - headless Claude runs in empty directories propose pairwise different mechanisms from the board items before a cutoff and develop each into a theory with offline predictions; scripts written before any number is seen compute those predictions from the stored rows, against two no-theory readers; one account per round budgets the whole gap between the cued base and RL-Zero-Math into mechanisms whose computed shares add up; each survivor then meets the strongest rival a fresh agent can write, on tests the rival chooses, scored by the same log gain; held-out board numbers and a review can only remove a survivor; survivors are posted with their duel result and GPU predictions before the experiments run, refuted theories as a result. Use when the user asks for a theory, an explanation across experiments or what the results mean together, and after every fifth closed result. Writes studies/theory/results/engine/round-<nn>/ and updates studies/theory/README.md.
 ---
 
-# Theory round (version 6)
+# Theory round (version 6.1)
 
 A theory is one mechanism sentence that explains numbers from the board and predicts numbers nobody has computed.
 It survives when its offline predictions, fixed before any row was read, were computed, none was refuted beyond
@@ -17,6 +17,8 @@ answers between the cued base and the final RL model is made up. It is a budget 
 with a rule on stored rows that assigns every gap problem to the first part that takes it, plus `unassigned`, so the
 shares add up by construction and a wrong account shows as a measured share. Narrow theories feed it: the carried
 theories, the graveyard and every computed number are its inputs, and the previous account is the one to improve.
+One list of parts must span at least 3 cells that differ in two of problem set, sampling and model pair, with shares
+predicted in 2 or more cells. A budget a board item already gives is input (`known`), never a prediction.
 
 ## What the rounds showed
 
@@ -24,20 +26,20 @@ theories, the graveyard and every computed number are its inputs, and the previo
 - Round 04: 3 of 10 theories survive, 4 refuted by their own computed predictions (two within noise), 3 untested
   (grader packages missing). Duel, first turn: 0 of 9 tests separated; second turn: r4-m10 lost both separating tests
   (mean_logprob, -7.81 nats in all), r4-m08 lost (-2.65), r4-m01 not separated (+1.11). Every theory was narrow.
+- Account run 01: the account took the one cell whose budget the board tabulates and restated it (shares equal to
+  the readers' to three digits): no gain, -1.30 nats. Hence the span rule.
 
 ## The coordinator's job
 
-Run the stages, read the tables, decide what to post. Write no mechanism, theory, recipe, claim or target, and edit no
-agent's file: you have read the whole board. Work in your own worktree, claim a `work` item, and run
-`git pull origin main` first so the inventory sees every committed row file.
+Run the stages, read the tables, decide what to post. Write no mechanism, theory, recipe, claim or target and edit no
+agent's file: you have read the whole board. Work in your own worktree and `git pull origin main` first.
 
 ## Keeping held-out numbers hidden
 
 - Every model call except `inventory`, `test`, `duel_test` and `review` is a headless `claude -p --restricted` run in
   an empty directory outside the repository, with only Read and Write: no git status, CLAUDE.md, memory or board.
 - `external` may also run `lib/papers.py` (paper entries only); its findings state mechanisms, not team numbers.
-- `inventory.md` names row files, fetch commands and fields, never a result number. Read it before `mechanisms`; if
-  it holds an accuracy or a difference, delete that line.
+- `inventory.md` holds no result number: read it before `mechanisms` and delete any line with an accuracy.
 - `standing` stops if the previous round's held-out items are not all before the new cutoff.
 - When a held-out number reaches an agent another way, list its item in `<round>/exposed.json`.
 
@@ -54,8 +56,9 @@ of the previous round's `after.jsonl` (`uv run tools/board.py ls result knowledg
 uv run studies/theory/lib/round.py $R all --cutoff <ISO time> --skip gpuprice --from $P
 ```
 
-runs every stage in order; a job whose outputs exist is skipped, so the same command resumes a stopped round. Job
-dirs (prompt.txt, out.txt) are under a printed temp folder. Prompts: `studies/theory/lib/prompts/<stage>.md`.
+runs every stage in order; a job whose outputs exist is skipped, so the same command resumes a stopped round. `split`
+stops if the folder exists, so to reuse files (`external.md`; `inventory.md` at the same cutoff) run `split` first,
+copy them in, then `all`. Job dirs (prompt.txt, out.txt) are under a printed temp folder. Prompts: `studies/theory/lib/prompts/<stage>.md`.
 
 | stage | model | writes |
 |---|---|---|

@@ -133,11 +133,16 @@ def number(x):
 
 
 def round_number(folder):
-    """round-<nn>; a folder named otherwise (results/account/run-01) is the round after --from."""
+    """round-<nn>. A folder named otherwise (results/account/run-01) is the round after --from; the --from folder
+    itself, when named otherwise, has the highest round number among its theories."""
     m = re.search(r"round-(\d+)", Path(folder).name)
-    if not m and not args.prev:
+    if m:
+        return int(m.group(1))
+    if not args.prev:
         sys.exit(f"{folder} is not named round-<nn>: give --from <previous round dir> with every command")
-    return int(m.group(1)) if m else round_number(args.prev) + 1
+    if Path(folder).resolve() != Path(args.prev).resolve():
+        return round_number(args.prev) + 1
+    return max(int(re.match(r"r(\d+)-", p.name).group(1)) for p in (Path(folder) / "theories").glob("r*-*.json"))
 
 
 def in_scope(name):
@@ -419,8 +424,12 @@ def standing(folder):
     if (prev / "targets.jsonl").exists() and (late := sorted({t["item"] for t in read(prev / "targets.jsonl")} - before)):
         sys.exit(f"the previous round's targets come from items not in before.jsonl: {late}. The cutoff must be after "
                  "every item the previous round held out, or its scores leak held-out numbers.")
-    graveyard, where = {}, {}
-    for rdir in sorted((d for d in prev.parent.glob("round-*") if round_number(d) < nn), key=round_number):
+    # an engine round reads every earlier round of its engine folder; any other folder (an account run) starts from
+    # the graveyard of its --from folder and adds that folder's theories
+    engine = re.search(r"round-\d+", prev.name)
+    graveyard, where = ({}, {}) if engine else (json.loads((prev / "graveyard.json").read_text()), {})
+    rdirs = sorted((d for d in prev.parent.glob("round-*") if round_number(d) < nn), key=round_number) if engine else [prev]
+    for rdir in rdirs:
         mfile = next((rdir / f for f in METRICS_FILES if (rdir / f).exists()), None)
         if mfile is None:
             continue
@@ -449,9 +458,13 @@ def standing(folder):
     (folder / "theories").mkdir(exist_ok=True)
     carried = 0
     for name, entry in graveyard.items():
-        # an untested theory is carried once, so the new round computes its tests; a survivor is carried with its
-        # computed tests and their gains (tests/<name>.json, "carried_from"), so they are not computed or scored again
-        if survivor(entry) or (entry["state"] == "untested" and len(entry["rounds"]) == 1):
+        if name not in where:  # an entry from the --from folder's graveyard: decided before, not carried
+            continue
+        # an untested theory is carried once after a round that tested it (and again after a round that did not, as
+        # an --only-account run); a survivor is carried with its computed tests and their gains (tests/<name>.json,
+        # "carried_from"), so they are not computed or scored again
+        untested = entry["state"] == "untested" and (len(entry["rounds"]) == 1 or not (where[name] / "tests" / f"{name}.json").exists())
+        if survivor(entry) or untested:
             carried += 1
             shutil.copy(where[name] / "theories" / f"{name}.json", folder / "theories")
             if (where[name] / "reviews" / f"{name}.json").exists():
@@ -480,6 +493,9 @@ def standing(folder):
     facts += [{"round": prev.name, "theory": t["theory"], "kind": "duel", **fact(q)}
               for t in map(lambda f: json.loads(f.read_text()), sorted((prev / "rivals").glob("*.tests.json")))
               for q in t["tests"] if q["measured"] is not None] if (prev / "rivals").exists() else []
+    if (prev / "facts.json").exists():  # and every number the previous round's own facts.json held
+        seen = {(f["theory"], f["kind"], f["experiment"]) for f in facts}
+        facts += [f for f in json.loads((prev / "facts.json").read_text()) if (f["theory"], f["kind"], f["experiment"]) not in seen]
     (folder / "facts.json").write_text(json.dumps(facts, indent=1) + "\n")
     v4 = json.loads((prev / "metrics_v4.json").read_text())["theories"] if (prev / "metrics_v4.json").exists() else {}
     v5 = json.loads((prev / "metrics_v5.json").read_text())["theories"] if (prev / "metrics_v5.json").exists() else {}
@@ -686,27 +702,43 @@ ACCOUNT_PART_KEYS = {"name", "mechanism", "rule"}
 
 
 def check_account(folder, drafts, parents):
-    """Messages per account: the develop check, then the budget rules (3-6 parts, one share prediction per part and for
-    unassigned summing to 1, at least 2 cross-predictions)."""
+    """Messages per account: the develop check, then the budget rules: 3-6 parts; 3 or more cells; per predicted cell
+    one share prediction for each part and for unassigned, summing to 1; 2 or more predicted cells, none of them a
+    known cell; 6 or more share predictions; 2 or more cross-predictions; every offline prediction names its cell."""
     msgs = check_theories4(folder, drafts, parents)
     for name, t in drafts.items():
         m = msgs[name]
-        parts = t.get("parts")
-        if not isinstance(t.get("gap"), str) or not isinstance(parts, list) or not 3 <= len(parts) <= 6 \
-                or any(not isinstance(q, dict) or ACCOUNT_PART_KEYS - q.keys() for q in parts):
-            m.append(f"{name}.json: needs \"gap\" (a string) and \"parts\": 3 to 6 objects with name, mechanism, rule")
+        parts, cells, known = t.get("parts"), t.get("cells"), t.get("known")
+        if not isinstance(parts, list) or not 3 <= len(parts) <= 6 or any(not isinstance(q, dict) or ACCOUNT_PART_KEYS - q.keys() for q in parts):
+            m.append(f"{name}.json: needs \"parts\": 3 to 6 objects with name, mechanism, rule")
             continue
-        names = [q["name"] for q in parts]
+        if not isinstance(cells, list) or len(cells) < 3 or any(not isinstance(c, dict) or {"name", "gap"} - c.keys() for c in cells):
+            m.append(f"{name}.json: needs \"cells\": 3 or more objects with name and gap")
+            continue
+        if not isinstance(known, list) or any(not isinstance(k, dict) or {"cell", "shares", "item"} - k.keys() for k in known):
+            m.append(f"{name}.json: needs \"known\": a list (may be empty) of {{cell, shares, item}} for budgets a board item gives")
+            continue
+        names, cell_names = [q["name"] for q in parts], [c["name"] for c in cells]
         if len(set(names)) != len(names) or "unassigned" in names:
             m.append(f"{name}.json: part names must be distinct and not \"unassigned\" (that part is implied): {names}")
         offline = [q for q in t.get("predictions", []) if "recipe" in q]
+        if bad := [i for i, q in enumerate(offline, 1) if q.get("cell") not in cell_names]:
+            m.append(f"{name}.json: offline predictions {bad} need \"cell\", one of {cell_names}")
         shares = [q for q in offline if q.get("role") == "share"]
+        predicted = sorted({q.get("cell") for q in shares})
+        if len(predicted) < 2 or len(shares) < 6:
+            m.append(f"{name}.json: needs 6 or more share predictions in 2 or more cells; has {len(shares)} in {predicted}")
+        if clash := sorted(set(predicted) & {k["cell"] for k in known}):
+            m.append(f"{name}.json: cells {clash} have a known budget: a known budget is input, not a prediction")
+        for c in predicted:
+            mine = [q for q in shares if q.get("cell") == c]
+            if sorted(q.get("part", "") for q in mine) != sorted(names + ["unassigned"]):
+                m.append(f"{name}.json: cell {c!r} needs exactly one share prediction for each part and for \"unassigned\"")
+            elif all(number(q.get("value")) for q in mine) and abs(sum(q["value"] for q in mine) - 1) > 0.02:
+                m.append(f"{name}.json: the share values of cell {c!r} sum to {sum(q['value'] for q in mine):.3f}, not 1")
+            if not str(next((x.get("moves", "") for x in cells if x["name"] == c), "")).strip():
+                m.append(f"{name}.json: cell {c!r} needs \"moves\": which shares move against the known cell, which way, and why")
         cross = [q for q in offline if q.get("role") == "cross"]
-        if sorted(q.get("part", "") for q in shares) != sorted(names + ["unassigned"]):
-            m.append(f"{name}.json: needs exactly one share prediction (\"role\": \"share\") for each part and for "
-                     f"\"unassigned\"; parts: {names}")
-        elif all(number(q.get("value")) for q in shares) and abs(sum(q["value"] for q in shares) - 1) > 0.02:
-            m.append(f"{name}.json: the share values sum to {sum(q['value'] for q in shares):.3f}, not 1")
         if len(cross) < 2 or any(q.get("part") not in names + ["unassigned"] for q in cross):
             m.append(f"{name}.json: needs at least 2 cross-predictions (\"role\": \"cross\"), each naming a part")
     return msgs
@@ -938,7 +970,8 @@ def score_tests(folder):
                 print(f"    p{r['k']}: measured {r['measured']:g}{noise}, predicted {r['value']:g} [{r['low']:g}, {r['high']:g}] "
                       f"{where}, readers {readers}, "
                       f"gain {r['gain']:+.2f}{', refuting condition met' if r['refuted_by_met'] else ''}"
-                      f"{', a win the readers did not expect' if r['k'] in t['unexpected_wins'] else ''}")
+                      f"{', a win the readers did not expect' if r['k'] in t['unexpected_wins'] else ''}"
+                      f"{', readers had the same number' if all(abs(c['value'] - r['value']) <= max(0.02 * abs(r['value']), 0.01) for c in r['nulls']) else ''}")
 
 
 def heldout(folder):
