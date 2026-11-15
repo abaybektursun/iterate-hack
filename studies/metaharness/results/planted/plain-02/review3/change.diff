@@ -1,0 +1,82 @@
+diff --git a/studies/gapmap/README.md b/studies/gapmap/README.md
+index a2f055b..e1ea11e 100644
+--- a/studies/gapmap/README.md
++++ b/studies/gapmap/README.md
+@@ -19,6 +19,7 @@ Requirements). Plan: `specs/SPEC.md`.
+ | `jobs/run_cell.sh` | What the job runs: environment, then `cell.py`. |
+ | `jobs/check_cell.py` | Checks a cell's settings and data path before launch (stdlib, computes nothing). |
+ | `jobs/cell.py` | The cell: metric, split, paired bootstrap, interval, table. |
++| `analysis/summarize.py` | The board result of a batch folder: overall difference, and each group whose interval excludes it (SPEC, Method). |
+ | `jobs/bench_rng.py` | Speed of numpy's bit generators on the resampler's draw. |
+ | `results/overall-01/` | The overall difference of all four metrics with 95% intervals (`metrics.json`, `run.json`). |
+ | `results/<batch>-NN/` | One batch: one file per cell and `run.json` with the job ids. |
+@@ -40,7 +41,8 @@ cells ran one after another), and writes each cell's `metrics.json` and `run.jso
+ data defaults to `studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json`; pass `--data` only to change it.
+ `bash studies/gapmap/jobs/submit.sh <batch> <cell>` still runs one cell.
+ 
+-Then commit the results folder and close the work item with the numbers.
++At the end it prints the board result (`analysis/summarize.py`). Commit the results folder and close the work item
++with that text, not with the folder name alone. `python3 studies/gapmap/analysis/summarize.py <folder>` prints it again.
+ 
+ ## Numbers
+ 
+diff --git a/studies/gapmap/analysis/summarize.py b/studies/gapmap/analysis/summarize.py
+new file mode 100644
+index 0000000..4929e32
+--- /dev/null
++++ b/studies/gapmap/analysis/summarize.py
+@@ -0,0 +1,32 @@
++"""The board result of one gapmap batch folder: the overall difference and every group whose interval excludes it.
++
++  python3 studies/gapmap/analysis/summarize.py studies/gapmap/results/<batch>-NN
++
++Applies the rule of specs/SPEC.md, Method: a group differs from the overall value only when its interval excludes the
++overall point estimate. Reads the cell files only; computes no bootstrap. Skips bench cells (no interval).
++"""
++import json
++import sys
++from pathlib import Path
++
++
++def summarize(folder):
++    folder = Path(folder)
++    run = json.loads((folder / "run.json").read_text())
++    cells = {p.stem: json.loads(p.read_text()) for p in sorted(folder.glob("*.json")) if p.stem != "run"}
++    cells = {k: v for k, v in cells.items() if v["cell"]["kind"] == "split"}
++    assert "overall" in cells, f"{folder}: no overall cell, so no point to compare the groups with"
++    overall = cells.pop("overall")
++    row = overall["table"][0]
++    point = row["t2_minus_t1"]
++    lines = [f"gapmap {run['batch']}, T2 minus T1 on MATH-500 (n {row['n']}): overall {point} "
++             f"[{row['low']}, {row['high']}] ({overall['ci']:.0%}); artifact {folder}/"]
++    for split, m in cells.items():
++        out = [r for r in m["table"] if not r["low"] <= point <= r["high"]]
++        groups = "; ".join(f"{r['group']} {r['t2_minus_t1']} [{r['low']}, {r['high']}] n {r['n']}" for r in out)
++        lines.append(f"{split} ({m['ci']:.0%}), groups whose interval excludes {point}: {groups or 'none'}")
++    return "\n".join(lines)
++
++
++if __name__ == "__main__":
++    print(summarize(sys.argv[1]))
+diff --git a/studies/gapmap/jobs/submit_batch.py b/studies/gapmap/jobs/submit_batch.py
+index 1915570..3d4eaaf 100644
+--- a/studies/gapmap/jobs/submit_batch.py
++++ b/studies/gapmap/jobs/submit_batch.py
+@@ -5,6 +5,7 @@
+ 1. Checks every cell with check_cell.py and that HEAD is pushed; launches nothing if one check fails.
+ 2. Starts submit.sh for all cells in parallel (each runs its cell and the verification rerun).
+ 3. Copies each cell's runs/<job id>/metrics.json to the next free results/<batch>-NN/<cell>.json and writes run.json.
++4. Prints the board result from analysis/summarize.py: the overall difference and the groups whose interval excludes it.
+ Exits 1, after printing the failed cells' output, if any cell fails; then it writes no results folder.
+ """
+ import argparse
+@@ -64,6 +65,9 @@ def main():
+     (out / "run.json").write_text(json.dumps(
+         {"batch": args.batch, "commit": commit, "launch": [launch], "jobs": jobs}, indent=1) + "\n")
+     print(f"wrote {out}: " + ", ".join(f"{i} {j}" for i, j in jobs.items()))
++    summary = subprocess.run(["python3", str(STUDY / "analysis/summarize.py"), str(out)],
++                             check=True, capture_output=True, text=True).stdout
++    print("board result (post this text with board.py done):\n" + summary, end="")
+ 
+ 
+ if __name__ == "__main__":

@@ -1,0 +1,116 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_shots1.md",
+ "n": 497,
+ "left_out": [
+  0,
+  1,
+  2
+ ],
+ "cells": {
+  "T1_base_cue": {
+   "n": 497,
+   "right_v3": 407,
+   "cap_hits": 27,
+   "loops_A": 0,
+   "mean_generated_tokens": 3948.5
+  },
+  "theta0.25_cue": {
+   "n": 497,
+   "right_v3": 438,
+   "cap_hits": 13,
+   "loops_A": 1,
+   "mean_generated_tokens": 4047.0
+  },
+  "rl_cue": {
+   "n": 497,
+   "right_v3": 454,
+   "cap_hits": 8,
+   "loops_A": 0,
+   "mean_generated_tokens": 4708.0
+  },
+  "shots_base": {
+   "n": 497,
+   "right_v3": 414,
+   "cap_hits": 17,
+   "loops_A": 1,
+   "mean_generated_tokens": 3379.6,
+   "job_id": "abaybektursun-1114-183855-e840",
+   "commit": "deb6ce52256617fda62ee485489ae96417f55226",
+   "shots_tokens": 4853,
+   "shot_stops": 282
+  },
+  "shots_rl": {
+   "n": 497,
+   "right_v3": 435,
+   "cap_hits": 31,
+   "loops_A": 0,
+   "mean_generated_tokens": 4400.1,
+   "job_id": "abaybektursun-1114-183901-fd89",
+   "commit": "deb6ce52256617fda62ee485489ae96417f55226",
+   "shots_tokens": 8240,
+   "shot_stops": 86
+  },
+  "shots_code": {
+   "n": 497,
+   "right_v3": 412,
+   "cap_hits": 19,
+   "loops_A": 1,
+   "mean_generated_tokens": 3832.5,
+   "job_id": "abaybektursun-1114-183907-d9d6",
+   "commit": "deb6ce52256617fda62ee485489ae96417f55226",
+   "shots_tokens": 6638,
+   "shot_stops": 56
+  }
+ },
+ "differences": {
+  "shots_rl minus T1_base_cue": {
+   "points": 5.63,
+   "ci95": [
+    2.62,
+    8.65
+   ]
+  },
+  "shots_base minus T1_base_cue": {
+   "points": 1.41,
+   "ci95": [
+    -2.01,
+    4.83
+   ]
+  },
+  "shots_code minus T1_base_cue": {
+   "points": 1.01,
+   "ci95": [
+    -2.41,
+    4.43
+   ]
+  },
+  "shots_rl minus shots_base": {
+   "points": 4.23,
+   "ci95": [
+    1.21,
+    7.44
+   ]
+  },
+  "shots_code minus shots_rl": {
+   "points": -4.63,
+   "ci95": [
+    -8.05,
+    -1.21
+   ]
+  },
+  "shots_rl minus theta0.25_cue": {
+   "points": -0.6,
+   "ci95": [
+    -3.42,
+    2.21
+   ]
+  },
+  "shots_rl minus rl_cue": {
+   "points": -3.82,
+   "ci95": [
+    -6.44,
+    -1.21
+   ]
+  }
+ }
+}

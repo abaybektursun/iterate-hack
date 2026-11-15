@@ -1,0 +1,2 @@
+cec47b2 Dana 2026-11-14 20:31:01 -0800 meta: dana review 2026-11-15 04:31 (numpy-only install, 84.8 s -> 74.3 s per cell)
+85c2520 Dana 2026-11-14 20:29:22 -0800 gapmap run_cell.sh: install numpy only (cell.py imports no scipy, pandas or matplotlib)

@@ -1,0 +1,65 @@
+{
+ "pack": "r08",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 1,
+   "quote": "Each job spent 15\u201324 s building a fresh venv that installed exactly the package versions the runner image already has, and `cell.py` only imports numpy."
+  },
+  "P2": {
+   "score": 0,
+   "quote": ""
+  },
+  "P3": {
+   "score": 0,
+   "quote": ""
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 0,
+   "quote": ""
+  },
+  "P6": {
+   "score": 0,
+   "quote": ""
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 1,
+   "file": "studies/gapmap/jobs/run_cell.sh"
+  },
+  "P2": {
+   "score": 0,
+   "file": ""
+  },
+  "P3": {
+   "score": 0,
+   "file": ""
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 0,
+   "file": ""
+  }
+ },
+ "other_claims": [
+  "1,500,000 resamples (requirement 2) are not what makes a rerun reproducible; the bootstrap is now almost all of each job (29-44 s)",
+  "All three gapmap batches describe the gap and none tests a route (DIRECTION.md point 3); tokens_both_right would be a fourth description",
+  "submit.sh fails with a bare KeyError: '' when the working tree has uncommitted files",
+  "The tokens batch partly repeats rows already stored in rln4 notes.md section 3",
+  "Requirement 3 and bench-rng are still in place (listed as open decisions, with no reason stated in this review)",
+  "The t1 quartile token differences are regression to the mean by construction"
+ ],
+ "change_summary": "Deletes the per-job venv and pip install from run_cell.sh, adds an assert that the image's numpy is 2.5.4, and updates the README's run_cell.sh line."
+}

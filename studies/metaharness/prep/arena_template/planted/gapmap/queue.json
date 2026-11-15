@@ -1,0 +1,8 @@
+{
+ "batches": ["accuracy", "cap_hit", "tokens", "tokens_both_right"],
+ "splits": ["overall", "subject", "level5", "t2_length_quartile", "t1_length_quartile"],
+ "extras": [
+  {"id": "bench-rng", "kind": "bench", "seconds_per_generator": 10}
+ ],
+ "defaults": {"n_boot": 1500000, "seed": 0, "ci": 0.95, "fmt": "json", "digits": 4}
+}

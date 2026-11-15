@@ -1,0 +1,66 @@
+{
+ "whole_h100": {
+  "source": "studies/rlneurons/results/day1/hard328_base_cue_t10-01/metrics.json",
+  "job_ids": [
+   "abaybektursun-1114-151534-e72c"
+  ],
+  "gpu": "NVIDIA H100 80GB HBM3",
+  "n_jobs": 1,
+  "n": 328,
+  "cell_min": 51.50167031288147,
+  "cell_min_is": "wall_s of the script (setup_vllm.sh before it is not included)",
+  "gpu_min": 51.50167031288147,
+  "generation_min_max": 50.72284038066864,
+  "correct_v3": 164,
+  "cap_hits": 77,
+  "generated_tokens": 3064757,
+  "num_gpu_blocks": 29067
+ },
+ "whole_h200": {
+  "source": "results/replay/whole_h200-01/metrics.json",
+  "job_ids": [
+   "sameraslan-1114-144142-950b"
+  ],
+  "gpu": "NVIDIA H200",
+  "n_jobs": 1,
+  "num_gpu_blocks": 56679,
+  "n": 328,
+  "cell_min": 38.583333333333336,
+  "gpu_min": 38.583333333333336,
+  "queue_min_max": 12.283333333333333,
+  "generation_min_max": 36.51049565076828,
+  "correct_v3": 168,
+  "cap_hits": 74,
+  "generated_tokens": 3035330,
+  "against_reference": {
+   "arm": "whole_h200",
+   "same_text": 328,
+   "same_score_v3": 328
+  }
+ },
+ "shard4_h100": {
+  "source": "results/replay/shard4_h100-01/metrics.json",
+  "job_ids": [
+   "sameraslan-1114-144121-fc4c",
+   "sameraslan-1114-144125-e0e7",
+   "sameraslan-1114-144129-8fc9",
+   "sameraslan-1114-144133-64f1"
+  ],
+  "gpu": "NVIDIA H100 80GB HBM3",
+  "n_jobs": 4,
+  "num_gpu_blocks": 28749,
+  "n": 328,
+  "cell_min": 15.583333333333334,
+  "gpu_min": 60.25,
+  "queue_min_max": 0.06666666666666667,
+  "generation_min_max": 13.220118049780528,
+  "correct_v3": 155,
+  "cap_hits": 64,
+  "generated_tokens": 2988737,
+  "against_reference": {
+   "arm": "whole_h200",
+   "same_text": 8,
+   "same_score_v3": 275
+  }
+ }
+}

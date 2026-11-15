@@ -206,6 +206,7 @@ svg { animation: fade 1s both; }
     <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
     <a href="/architecture">Design</a>
+    <a href="/proof">Proof</a>
     <a href="/findings" aria-current="page">Findings</a>
   </header>
   <div class="stage" id="stage">

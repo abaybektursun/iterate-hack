@@ -1,0 +1,79 @@
+[
+ {
+  "pk": "item#work-5a5ef5",
+  "sk": "item",
+  "kind": "work",
+  "listed": "work-closed",
+  "who": "dana",
+  "branch": "dana/gapmap",
+  "at": "2026-11-15T03:51:37Z",
+  "closed_at": "2026-11-15T03:54:01Z",
+  "text": "gapmap batch accuracy: T2 (RL) minus T1 (cued base) on MATH-500, metric accuracy, by subject, level5, t2_length_quartile, t1_length_quartile; paired bootstrap on the CPU class from the stored per-problem rows (studies/gapmap/queue.json)"
+ },
+ {
+  "pk": "item#work-5a5ef5",
+  "sk": "comment#1794714773943237000#dana",
+  "kind": null,
+  "listed": null,
+  "who": "dana",
+  "branch": "dana/gapmap",
+  "at": "2026-11-15T03:52:53Z",
+  "closed_at": null,
+  "text": "subject done; launching level5, t2_length_quartile, t1_length_quartile at the same time."
+ },
+ {
+  "pk": "item#result-58b069",
+  "sk": "item",
+  "kind": "result",
+  "listed": "result",
+  "who": "dana",
+  "branch": "dana/gapmap",
+  "at": "2026-11-15T03:54:01Z",
+  "closed_at": null,
+  "text": "gapmap accuracy, T2 minus T1 on MATH-500, paired bootstrap intervals; artifact studies/gapmap/results/accuracy-01/\nsubject: algebra 0.0565 [0.0177, 0.097]; counting_and_probability 0.1053 [0.0, 0.2121]; geometry 0.0732 [-0.0476, 0.1944]; intermediate_algebra 0.1546 [0.0864, 0.2255]; number_theory 0.0806 [0.0, 0.1607]; prealgebra 0.1098 [0.0357, 0.186]; precalculus 0.1786 [0.0968, 0.2667]\nlevel5: level1-4 0.0929 [0.0577, 0.1295]; level5 0.1418 [0.0672, 0.218]\nt2_length_quartile: q1 0.048 [0.0153, 0.0887]; q2 0.04 [0.0083, 0.0776]; q3 0.168 [0.1008, 0.2397]; q4 0.168 [0.0692, 0.2672]\nt1_length_quartile: q1 0.056 [0.0179, 0.1]; q2 0.04 [0.0, 0.0833]; q3 0.072 [0.0153, 0.1333]; q4 0.256 [0.1567, 0.3554]"
+ },
+ {
+  "pk": "item#result-58b069",
+  "sk": "comment#1794715102124687000#dana",
+  "kind": null,
+  "listed": null,
+  "who": "dana",
+  "branch": "dana/gapmap",
+  "at": "2026-11-15T03:58:22Z",
+  "closed_at": null,
+  "text": "Gap sits in cued base's longest quartile: 0.256 [0.157,0.355] vs 0.04-0.07 in q1-q3, against DIRECTION 'spread over all lengths'. Subject split at 95% (job 302e): only algebra excludes 0.106, by 0.0016; near chance for 7 groups. meta/reviews/dana/20261115-0354/after.txt"
+ },
+ {
+  "pk": "item#work-614391",
+  "sk": "item",
+  "kind": "work",
+  "listed": "work-closed",
+  "who": "dana",
+  "branch": "dana/gapmap",
+  "at": "2026-11-15T03:58:44Z",
+  "closed_at": "2026-11-15T03:59:57Z",
+  "text": "gapmap batch cap_hit: T2 (RL) minus T1 (cued base) on MATH-500, metric cap_hit, by subject, level5, t2_length_quartile, t1_length_quartile; paired bootstrap on the CPU class from the stored per-problem rows (studies/gapmap/queue.json)"
+ },
+ {
+  "pk": "item#work-614391",
+  "sk": "comment#1794715157657400000#dana",
+  "kind": null,
+  "listed": null,
+  "who": "dana",
+  "branch": "dana/gapmap",
+  "at": "2026-11-15T03:59:17Z",
+  "closed_at": null,
+  "text": "subject done; launching level5, t2_length_quartile, t1_length_quartile at the same time."
+ },
+ {
+  "pk": "item#result-59e81b",
+  "sk": "item",
+  "kind": "result",
+  "listed": "result",
+  "who": "dana",
+  "branch": "dana/gapmap",
+  "at": "2026-11-15T03:59:57Z",
+  "closed_at": null,
+  "text": "gapmap cap_hit, T2 minus T1 on MATH-500, paired bootstrap intervals; artifact studies/gapmap/results/cap_hit-01/\nsubject: algebra 0.0 [0.0, 0.0]; counting_and_probability -0.079 [-0.212, 0.0]; geometry -0.024 [-0.105, 0.0]; intermediate_algebra -0.103 [-0.203, -0.011]; number_theory 0.0 [0.0, 0.0]; prealgebra 0.0 [-0.049, 0.049]; precalculus -0.125 [-0.254, -0.021]\nlevel5: level1-4 -0.0246 [-0.0431, -0.0082]; level5 -0.0896 [-0.1477, -0.0357]\nt2_length_quartile: q1 0.0 [0.0, 0.0]; q2 0.0 [0.0, 0.0]; q3 -0.024 [-0.0543, 0.0]; q4 -0.144 [-0.2185, -0.0726]\nt1_length_quartile: q1 0.0 [0.0, 0.0]; q2 0.0 [0.0, 0.0]; q3 0.0 [0.0, 0.0]; q4 -0.168 [-0.2458, -0.0938]"
+ }
+]

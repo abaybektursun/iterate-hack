@@ -1,0 +1,82 @@
+{
+ "status": "done",
+ "config": {
+  "model": "base",
+  "model_path": null,
+  "model_label": null,
+  "prompt": "cue",
+  "set": "math500",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "max_tokens": 16384,
+  "seed": 71000000,
+  "shots": "studies/rlneurons/data/shots1/code.json",
+  "n": null,
+  "samples": 1,
+  "restarts": 0,
+  "out": "/runs/abaybektursun-1114-183907-d9d6",
+  "dry_run": false,
+  "commit": "deb6ce52256617fda62ee485489ae96417f55226",
+  "model_repo": "allenai/Olmo-3-1025-7B",
+  "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 500,
+  "shots_arm": "code",
+  "shots_sha256": "b2a0194adb99f8677018a22af3a1da75a96f29be07b0d186e5b7ca156ac80867",
+  "shots_tokens": 6638
+ },
+ "commit": "deb6ce52256617fda62ee485489ae96417f55226",
+ "job_id": "abaybektursun-1114-183907-d9d6",
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-15T03:03:28Z",
+ "updated_utc": "2026-11-15T03:41:18Z",
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 28749,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 25070,
+  "load_s": 77.85125303268433,
+  "model_dir": "/__modal/volumes/vo-rul9XKaAuhEZE7QxFIdPN3/hub/models--allenai--Olmo-3-1025-7B/snapshots/a81bae42db3975be1671e27b9c9a56da1a9f980f",
+  "tok_dir": "/__modal/volumes/vo-rul9XKaAuhEZE7QxFIdPN3/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ },
+ "counts": {
+  "n": 500,
+  "correct_v3": 415,
+  "correct_v1": 412,
+  "cap_hits": 19,
+  "loop_A": 1,
+  "generated_tokens": 1907743,
+  "restarts": 0,
+  "n_planned": 500,
+  "mean_generated_tokens": 3815.486,
+  "generation_s": 2184.485729455948,
+  "tokens_per_s": 873.3144713539184
+ },
+ "memory": {
+  "gpu_memory_used_mib": 73105,
+  "gpu_memory_total_mib": 81559,
+  "gpu": "NVIDIA H100 80GB HBM3"
+ },
+ "wall_s": 2270.144182443619
+}

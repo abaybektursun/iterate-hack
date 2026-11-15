@@ -1,0 +1,5 @@
+{
+ "what": "which arena (lib/arena.py) is which run folder of results/. Arena ids carry no arm, so a reviewing agent cannot read its arm from a path.",
+ "planted": {"skill-01": "a1", "plain-01": "a2", "skill-02": "a3", "plain-02": "a4", "skill-03": "a5", "plain-03": "a6"},
+ "clean": {"skill-01": "k1", "plain-01": "k2", "skill-02": "k3", "plain-02": "k4"}
+}

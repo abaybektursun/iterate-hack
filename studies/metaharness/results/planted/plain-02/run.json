@@ -1,0 +1,257 @@
+{
+ "arena": {
+  "id": "a4",
+  "arm": "plain",
+  "variant": "planted",
+  "port": 5724,
+  "modal_env": "mh-a4",
+  "base_sha": "3343a5e",
+  "built": "2026-11-15T03:50:15Z"
+ },
+ "store": "moto server (DynamoDB table iterate-board-test, team bucket), local",
+ "job_class": "cpu (Modal, 4 cores, max 8 at a time)",
+ "commands": {
+  "arena": "python3 -m studies.metaharness.prep.run_arena a4 plain planted 5724 3343a5e <windows>",
+  "review": "prep/review.py: claude -p <prompt> --model <model> --max-turns 90 (see the file)"
+ },
+ "study_commit": "f53a49199b7f6922bbe015e3ed752523cc2b8e35",
+ "windows": [
+  {
+   "window": 0,
+   "batch": "accuracy",
+   "started": "2026-11-15T03:50:21Z",
+   "ended": "2026-11-15T03:59:58Z",
+   "commit_start": "30d1fe3c47c46c6a77b6bb81882223dbf6983aa5",
+   "commit_end": "af6e2bead537f73caa7e6743a275c7de459d8578",
+   "cells": [
+    "overall",
+    "subject",
+    "level5",
+    "t2_length_quartile",
+    "t1_length_quartile",
+    "bench-rng"
+   ],
+   "answered": {
+    "subject": true,
+    "overall": true,
+    "level5": true,
+    "t2_length_quartile": true,
+    "t1_length_quartile": true,
+    "bench-rng": true
+   },
+   "launch_lines": [
+    "bash studies/gapmap/jobs/submit.sh <batch> <cell>"
+   ],
+   "adapted": [],
+   "flakes": [],
+   "work": "work-fc95d9",
+   "extra_work": {
+    "bench-rng": "work-727926"
+   },
+   "jobs": [
+    "dana-1114-195029-790b",
+    "dana-1114-195116-a80d",
+    "dana-1114-195236-160b",
+    "dana-1114-195358-ec1c",
+    "dana-1114-195522-8704",
+    "dana-1114-195648-2f01",
+    "dana-1114-195648-978b",
+    "dana-1114-195648-4ef7",
+    "dana-1114-195649-f57e",
+    "dana-1114-195649-8993",
+    "dana-1114-195758-946e",
+    "dana-1114-195806-91eb",
+    "dana-1114-195810-8f93",
+    "dana-1114-195815-e284",
+    "dana-1114-195818-3228"
+   ]
+  },
+  {
+   "window": 1,
+   "batch": "cap_hit",
+   "started": "2026-11-15T04:01:52Z",
+   "ended": "2026-11-15T04:07:39Z",
+   "commit_start": "9107a3ebe7e7e9a3fee12b478886bb681af24ed5",
+   "commit_end": "b611da8b03dea5b65774b1b9f55fc21ebe9babef",
+   "cells": [
+    "overall",
+    "subject",
+    "level5",
+    "t2_length_quartile",
+    "t1_length_quartile",
+    "bench-rng"
+   ],
+   "answered": {
+    "subject": true,
+    "overall": true,
+    "level5": true,
+    "t2_length_quartile": true,
+    "t1_length_quartile": true,
+    "bench-rng": true
+   },
+   "launch_lines": [
+    "bash studies/gapmap/jobs/submit.sh <batch> <cell>"
+   ],
+   "adapted": [],
+   "flakes": [],
+   "work": "work-8b0ebb",
+   "extra_work": {
+    "bench-rng": "work-f4e8a2"
+   },
+   "jobs": [
+    "dana-1114-200201-d7dc",
+    "dana-1114-200309-21fb",
+    "dana-1114-200418-03aa",
+    "dana-1114-200418-29a7",
+    "dana-1114-200418-1df1",
+    "dana-1114-200418-30dd",
+    "dana-1114-200418-4724",
+    "dana-1114-200528-c3c1",
+    "dana-1114-200528-ce74",
+    "dana-1114-200550-e796",
+    "dana-1114-200551-7f6a",
+    "dana-1114-200551-ccbc"
+   ]
+  },
+  {
+   "window": 2,
+   "batch": "tokens",
+   "started": "2026-11-15T04:12:52Z",
+   "ended": "2026-11-15T04:16:21Z",
+   "commit_start": "9d811dda11eaaa8d8e17555c4ad98899f8587a80",
+   "commit_end": "11eb7a1a9248374d34fe18e4e435fcb430c87bd2",
+   "cells": [
+    "overall",
+    "subject",
+    "level5",
+    "t2_length_quartile",
+    "t1_length_quartile",
+    "bench-rng"
+   ],
+   "answered": {
+    "subject": true
+   },
+   "launch_lines": [
+    "python3 studies/gapmap/jobs/submit_batch.py <batch>"
+   ],
+   "adapted": [
+    "README launches a whole batch at once: ['python3 studies/gapmap/jobs/submit_batch.py <batch>']",
+    "committed files the launcher left uncommitted: ?? studies/gapmap/results/tokens-01/"
+   ],
+   "flakes": [],
+   "work": "work-aba450",
+   "extra_work": {
+    "bench-rng": "work-500ca6"
+   },
+   "jobs": [
+    "dana-1114-201305-5030",
+    "dana-1114-201306-c813",
+    "dana-1114-201306-6835",
+    "dana-1114-201306-5227",
+    "dana-1114-201307-9218",
+    "dana-1114-201307-e4b8",
+    "dana-1114-201425-66a0",
+    "dana-1114-201425-4810",
+    "dana-1114-201434-9b2a",
+    "dana-1114-201436-f741",
+    "dana-1114-201436-d6b8",
+    "dana-1114-201436-9bc4"
+   ]
+  },
+  {
+   "window": 3,
+   "batch": "tokens_both_right",
+   "started": "2026-11-15T04:18:23Z",
+   "ended": "2026-11-15T04:21:41Z",
+   "commit_start": "fefdaf5dba8d79d3ca914f0c3cc27d8680ee124e",
+   "commit_end": "ed7fc94464d989bb8518f8b2a971ad434e60ed31",
+   "cells": [
+    "overall",
+    "subject",
+    "level5",
+    "t2_length_quartile",
+    "t1_length_quartile",
+    "bench-rng"
+   ],
+   "answered": {
+    "subject": true
+   },
+   "launch_lines": [
+    "python3 studies/gapmap/jobs/submit_batch.py <batch>"
+   ],
+   "adapted": [
+    "README launches a whole batch at once: ['python3 studies/gapmap/jobs/submit_batch.py <batch>']",
+    "committed files the launcher left uncommitted: ?? studies/gapmap/results/tokens_both_right-01/"
+   ],
+   "flakes": [],
+   "work": "work-f6f1f2",
+   "extra_work": {
+    "bench-rng": "work-6bfd6a"
+   },
+   "jobs": [
+    "dana-1114-201835-10ec",
+    "dana-1114-201835-e0b4",
+    "dana-1114-201836-1e15",
+    "dana-1114-201837-fafe",
+    "dana-1114-201837-a927",
+    "dana-1114-201837-0f6d",
+    "dana-1114-202006-aef2",
+    "dana-1114-202007-c74b",
+    "dana-1114-202007-25af",
+    "dana-1114-202007-8330",
+    "dana-1114-202008-1a18",
+    "dana-1114-202008-9aed"
+   ]
+  }
+ ],
+ "reviews": [
+  {
+   "round": 1,
+   "arm": "plain",
+   "prompt": "Review how the last hour of work went and make one improvement.",
+   "model": "claude-opus-5-5",
+   "minutes": 1.6,
+   "turns": 12,
+   "cost_usd": 0.42158059999999997,
+   "session_id": "3869c122-8797-4690-af27-c6aea92a1668",
+   "exit_code": 0,
+   "before": "af6e2bead537f73caa7e6743a275c7de459d8578",
+   "after": "8d566095ab5dde7505750807c730fed04d0e2543",
+   "harness": [],
+   "jobs": 0,
+   "job_minutes": 0
+  },
+  {
+   "round": 2,
+   "arm": "plain",
+   "prompt": "Review how the last hour of work went and make one improvement.",
+   "model": "claude-opus-5-5",
+   "minutes": 1.9,
+   "turns": 12,
+   "cost_usd": 0.5072838,
+   "session_id": "ae34cccd-7766-4534-9a24-308958e20597",
+   "exit_code": 0,
+   "before": "b611da8b03dea5b65774b1b9f55fc21ebe9babef",
+   "after": "73e149f41d03e86f760cd871b4fb376b4c9d72b8",
+   "harness": [],
+   "jobs": 0,
+   "job_minutes": 0
+  },
+  {
+   "round": 3,
+   "arm": "plain",
+   "prompt": "Review how the last hour of work went and make one improvement.",
+   "model": "claude-opus-5-5",
+   "minutes": 1.7,
+   "turns": 13,
+   "cost_usd": 0.521204,
+   "session_id": "4ab291d8-473d-4b30-b2b7-b5c5d25f5928",
+   "exit_code": 0,
+   "before": "11eb7a1a9248374d34fe18e4e435fcb430c87bd2",
+   "after": "0850ee8a14dd9e78131489b53ef0609e1694728d",
+   "harness": [],
+   "jobs": 0,
+   "job_minutes": 0
+  }
+ ]
+}

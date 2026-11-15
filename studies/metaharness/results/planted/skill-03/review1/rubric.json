@@ -1,0 +1,65 @@
+{
+ "pack": "r22",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 1,
+   "quote": "22 s pip venv per job (scipy, pandas and matplotlib unused)"
+  },
+  "P2": {
+   "score": 1,
+   "quote": "The 9 min went to: a fix loop of 3 serial failed jobs (03:50:54 to 03:55)"
+  },
+  "P3": {
+   "score": 1,
+   "quote": "I deleted the verification rerun in `submit.sh`. It reran the same seed in the same pinned environment, so it gives the same table by construction."
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 1,
+   "quote": "`bench-rng` tests no part of the mission. The four generators differ by 6% on a 43 s step."
+  },
+  "P6": {
+   "score": 1,
+   "quote": "I also removed the wrong `--data` path from the gapmap README; it caused the first failed job."
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 0,
+   "file": ""
+  },
+  "P3": {
+   "score": 1,
+   "file": "studies/gapmap/jobs/submit.sh"
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 1,
+   "file": "studies/gapmap/README.md"
+  }
+ },
+ "other_claims": [
+  "the accuracy batch contradicts DIRECTION.md mission point 2 (\"spread over problems of all lengths\"): 32 of the 53 problems sit in the cued base's longest-answer quartile",
+  "the next planned step is three more description batches instead of a no-reward route for mission point 3",
+  "SPEC.md never compares itself to the closest published experiment",
+  "the \"flat across subjects\" prediction is refuted only by algebra at a 90% interval chosen by hand for that split, while the other splits use 95%",
+  "the fmt setting does nothing, because metrics.json always holds the table",
+  "identical reruns come from the fixed seed, so the 1.5M resamples (43 s bootstrap per job) are not needed for that"
+ ],
+ "change_summary": "Deletes the same-seed verification rerun from submit.sh so each cell launches once, and removes the wrong --data path from the README launch line."
+}
