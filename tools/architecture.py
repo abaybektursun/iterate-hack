@@ -88,8 +88,6 @@ svg [data-go]:focus-visible .ring { stroke: var(--blue); stroke-width: 3; }
 .dot.stale { stroke: var(--red); }
 .glyph { fill: var(--sheet); stroke: var(--ink); stroke-width: 1.8; }
 .glyph-ink { fill: var(--ink); stroke: none; }
-.gate { fill: var(--ink); stroke: var(--paper); stroke-width: 4; }
-.tick { fill: none; stroke: var(--paper); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 .sub { fill: var(--mute); font-weight: 480; }
 .dot.off { opacity: .12; }
 [data-part="review"] .comet path { stroke-width: 6; }
@@ -108,7 +106,7 @@ svg [data-go]:focus-visible .ring { stroke: var(--blue); stroke-width: 3; }
 .dot, .agent, .person { transform-box: fill-box; transform-origin: center; }
 .enter .draw { stroke-dasharray: 1; animation: draw 1s cubic-bezier(.6, 0, .2, 1) both; }
 .enter [data-part="review"] .draw { animation-delay: .5s; }
-.enter .thread, .enter .tie, .enter .msg-ring, .enter .label, .enter .who, .enter .glyph, .enter .glyph-ink, .enter .line, .enter .gate, .enter .tick, .enter .sub, .enter .key .dot, .enter .cut {
+.enter .thread, .enter .tie, .enter .msg-ring, .enter .label, .enter .who, .enter .glyph, .enter .glyph-ink, .enter .line, .enter .sub, .enter .key .dot, .enter .cut {
   animation: fade .6s .55s both;
 }
 .enter .comet, .enter .electron { animation: fade .8s 1.3s both; }
@@ -336,13 +334,9 @@ function draw() {
     th.map((a, i) => `<g class="electron hue" data-a="${a}" data-i="${i}" style="--h:${HUES[i % HUES.length]}"><path class="etail" d="${arc(g, g.rm, -15, 0)}"/>` +
       `<circle class="ehead" cx="${g.cx + g.rm}" cy="${g.cy}" r="5.5"/></g>`).join("") +
     curved("on-msg", g.rm, "Messages", "label plain"), "Messages");
-  const link = (a, check) => {  // a line from the board to an outside part; the mark is a check the tool enforces there
-    const c = pt(g, (g.out - 40 + g.rr) / 2, a);
-    return `<path class="line" d="M${xy(pt(g, g.rb + 3, a))}L${xy(pt(g, g.out - 40, a))}"/>` + (check ? `<circle class="gate" cx="${f(c[0])}" cy="${f(c[1])}" r="11"/>` +
-      `<path class="tick" d="M${f(c[0] - 5)} ${f(c[1] + .5)}l3.6 3.8l6.4 -7.6"/>` : "");
-  };
-  out += part("memlink", "", link(g.mem, false));
-  out += part("runlink", "", link(g.run, true));
+  const link = a => `<path class="line" d="M${xy(pt(g, g.rb + 3, a))}L${xy(pt(g, g.out - 40, a))}"/>`;  // the board to an outside part
+  out += part("memlink", "", link(g.mem));
+  out += part("runlink", "", link(g.run));
 
   const spots = th.map((a, i) => (m.agents[i].length ? m.agents[i] : [""]).map((_, k) => {
     const [dx, dy] = spiral(k, 11.5), q = pt(g, g.rq, a);
@@ -550,7 +544,7 @@ function show() {
   const on = lit(), svg = $("svg"), m = S.m;
   svg.classList.toggle("has-focus", !!on);
   svg.querySelectorAll(".part").forEach(p => p.classList.toggle("on", !!on && on.includes(p.dataset.part)));
-  $("say").textContent = `${m ? m.people.length : "Several"} people, each running coding agents with subagents, work on one research direction.`;
+  $("say").textContent = `${m ? m.people.length : "Several"} people, each running their own agent swarms, working on one research direction.`;
   $("ask").innerHTML = ASK + (m && m.best ? `<small>${m.best.line}</small>` : "");
   $("ask").classList.toggle("on", S.sel === "question");
   $("side").classList.toggle("walking", !!step());
