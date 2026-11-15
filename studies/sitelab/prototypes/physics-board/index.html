@@ -361,8 +361,9 @@ function spawn(b, high) {                                  // an item enters fro
   b.rb.setTranslation({ x: at.cx + at.dx, y: (hang ? AY + 3 : 15) + Math.random() * (high ? 12 : 5), z: at.cz + at.dz }, true);
   const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.random() * 6, Math.random() * 6, Math.random() * 6));
   b.rb.setRotation(q, true);
-  b.rb.setLinvel({ x: 0, y: -9, z: 0 }, true);
-  b.rb.setAngvel({ x: Math.random() * 4 - 2, y: Math.random() * 4 - 2, z: Math.random() * 4 - 2 }, true);
+  const k = b.rest ? 0 : 1;                                 // an item that arrived with a live poll starts at rest
+  b.rb.setLinvel({ x: 0, y: -9 * k, z: 0 }, true);
+  b.rb.setAngvel({ x: (Math.random() * 4 - 2) * k, y: (Math.random() * 4 - 2) * k, z: (Math.random() * 4 - 2) * k }, true);
   b.born = clock;
 }
 function flyTo(b, delay) {                                 // guided arc to a point above its place, then released
@@ -523,7 +524,7 @@ function status() {                                        // which work is open
 }
 
 /* ---------- one physics step ---------- */
-const forced = [];
+const forced = []; let calm = 0;
 function physics() {
   for (const rb of forced) rb.resetForces(false); forced.length = 0;
   const tmp = { x: 0, y: 0, z: 0 };
@@ -556,6 +557,11 @@ function physics() {
       b.out = 0; continue;
     }
     const m = rb.mass();
+    if (clock < calm && clock - b.born > 3 && !asleep) {   // just after a live poll changed the board, nothing already on the tray moves fast
+      const v = rb.linvel(), w = rb.angvel(), sv = Math.hypot(v.x, v.y, v.z), sw = Math.hypot(w.x, w.y, w.z);
+      if (sv > 4) rb.setLinvel({ x: v.x * 4 / sv, y: v.y * 4 / sv, z: v.z * 4 / sv }, false);
+      if (sw > 6) rb.setAngvel({ x: w.x * 6 / sw, y: w.y * 6 / sw, z: w.z * 6 / sw }, false);
+    }
     if (!asleep) {                                         // rolling resistance: a slow item stops, so piles and hanging items come to rest and sleep
       const v = rb.linvel(), w = rb.angvel();
       if (v.x * v.x + v.y * v.y + v.z * v.z < .12 && w.x * w.x + w.y * w.y + w.z * w.z < .6) { rb.setLinvel({ x: v.x * .86, y: v.y * .86, z: v.z * .86 }, false); rb.setAngvel({ x: w.x * .86, y: w.y * .86, z: w.z * .86 }, false); }
@@ -810,18 +816,20 @@ function ingest(first) {
   for (const it of items) {
     seen.add(it.id);
     let b = bodies.get(it.id);
-    if (b && b.w !== weight(it)) {                          // a new comment or vote: the body grows and gets heavier
-      const p = pos(b), on = b.on, v = b.rb.linvel(), wasFocus = focus === b; if (wasFocus) focus = null;
-      dropBody(b); const nb = addBody(it); Object.assign(nb, { cx: b.cx, cz: b.cz, R: b.R, dx: b.dx, dz: b.dz, zone: b.zone });
-      if (on) { setOn(nb, true); nb.rb.setTranslation({ x: p.x, y: p.y + .1, z: p.z }, true); nb.rb.setLinvel(v, true); }
-      if (wasFocus) { focus = nb; nb.col.setSensor(true); nb.rb.setGravityScale(0, true); }
+    if (b && b.w !== weight(it)) {                          // a new comment or vote: the same body grows and gets heavier, where it is
+      const sensor = b.col.isSensor();
+      b.it = it; b.w = weight(it); b.r = radius(it);
+      world.removeCollider(b.col, false); b.col = world.createCollider(colliderFor(b.kind, b.r), b.rb); b.col.setSensor(sensor);
+      calm = clock + 1;
     } else if (b) b.it = it;
-    else { fresh.push(addBody(it)); changed = true; }
+    else { const nb = addBody(it); nb.rest = !first; fresh.push(nb); changed = true; }
   }
   for (const b of [...bodies.values()]) if (!seen.has(b.id)) { if (focus === b) closeItem(); dropBody(b); changed = true; }
   if (changed) { const keep = new Map([...bodies.values()].filter(b => !fresh.includes(b)).map(b => [b.id, [b.cx, b.cz, b.R, b.dx, b.dz, b.zone]]));
     layout();                                              // new counts; bodies already placed keep their own spot unless their place moved
-    for (const [id, k] of keep) { const b = bodies.get(id); if (b.zone === k[5] && Math.hypot(b.cx - k[0], b.cz - k[1]) < .01) { b.dx = k[3]; b.dz = k[4]; } }
+    for (const [id, k] of keep) { const b = bodies.get(id); if (b.zone === k[5] && Math.hypot(b.cx - k[0], b.cz - k[1]) < .01) { b.dx = k[3]; b.dz = k[4]; }
+      else if (!first) flyTo(b, 0); }                      // its place moved: it is carried there, not pushed by the new walls
+    if (!first) calm = clock + 1;
   }
   if (!first) for (const b of fresh) toast(b.it);
   words(); drawHist();
