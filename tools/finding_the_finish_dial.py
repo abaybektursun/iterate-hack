@@ -694,6 +694,9 @@ svg * { pointer-events: none; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b { font-weight: 620; white-space: nowrap; }
 .pane { margin-top: clamp(22px, 4vh, 44px); }
+.paper { margin: 18px 0 0; font-size: 15px; }
+.paper a { color: var(--mute); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 1px; }
+.paper a:hover, .paper a:focus-visible { color: inherit; }
 .more { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
 .more button { display: flex; width: 100%; justify-content: space-between; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--rule); font-size: 17px; font-weight: 520; transition: color .15s ease; }
 .more button span { color: var(--faint); font-size: 20px; line-height: 1; }
@@ -772,6 +775,7 @@ svg * { pointer-events: none; }
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
+    <p class="paper"><a href="/paper/the-finish-dial.pdf">Read the paper (PDF) ›</a></p>
   </div>
 </div>
 <script>

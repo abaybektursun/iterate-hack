@@ -111,8 +111,8 @@ TABLE = {
         "figure": lambda m: [f"{m.CLOSED_U} to {m.CLOSED} %", "of the gap", "MATH-500, base finishes RL's answers"]},
     "rl-learns-the-opening-first": {
         "group": ANSWERS,
-        "figure": lambda m: [f"{m.DATA['okay'][2]} of {m.DATA['n']}", "answers",
-                             f"MATH-500, open with 'Okay' after 100 RL steps; Base {m.DATA['okay'][0]}"]},
+        "figure": lambda m: [signed(m.DATA["t10"]["s100_vs_cue"][0]), "points",
+                             f"MATH-500, T 1.0, RL step 100 ({m.DATA['t10']['right'][2]} of 500) over Base + cue ({m.DATA['t10']['right'][1]}); the interval includes 0"]},
     "rl-avoids-the-slip": {
         "group": ANSWERS,
         "figure": lambda m: [f"{m.DATA['D']['math31']['factor']:.2f}", "times as likely",

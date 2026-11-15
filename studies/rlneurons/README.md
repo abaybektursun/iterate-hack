@@ -4045,3 +4045,22 @@ Which reward writes the finishing directions (8 directions of each model added t
 
 Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.xreward_edits`, after
 `uv run tools/gpu.py get <job>` for the jobs it names.
+
+## Paper: The Finish Dial (`paper/`, board work-0a1b10)
+
+A short paper on the xreward dial, the removal test, the four-sample replication, the reward table and the delta
+transplant. Public at https://monitor.invariant.team/paper/the-finish-dial.pdf (`tools/view.py` serves
+`paper/the-finish-dial.pdf`; `infra/monitor/deploy.sh` ships it).
+
+- `paper/facts.json`: every number of the paper with its value, n, unit and source (artifact path and key, or job
+  id); `audit_recomputed` holds the intervals recomputed from raw rows for the paper.
+- `paper/figs.py`: draws `fig_dial.pdf` and `fig_plane.pdf` from `facts.json`
+  (`uv run --no-project --with matplotlib --with numpy python studies/rlneurons/paper/figs.py`); `paper/fonts/` is
+  TeX Gyre Pagella, the body face (GUST font licence).
+- `paper/paper.tex`, `paper/refs.bib`: the text; `tectonic paper.tex` builds `paper.pdf`, renamed to
+  `the-finish-dial.pdf` for the site.
+- Review: four independent reviews of draft 1 (number audit against the artifacts, skeptical review, citation check
+  against arXiv, visual review) and one final check of draft 2. The main change: flat precision between sizes 0 and
+  1.5 is two offsetting effects (newly finished answers are right 19 of 64 times; right answers on the 251 problems
+  the base already finishes rise 161 to 184), so the paper claims the directions set finishing, not that they leave
+  correctness alone.
