@@ -1,0 +1,97 @@
+{
+ "mechanism": "round-15/account-1/c1",
+ "spec": "studies/theory/specs/SPEC_direct_hostcap.md",
+ "input": "studies/theory/data/direct_host/cap_v1.json",
+ "statistic": "median over matrices of cap_right(code31>math31) / cap_right(think_sft>math31)",
+ "value": 5.157471250828605,
+ "ci90": [
+  4.798424942526552,
+  5.559097403915763
+ ],
+ "bootstrap": "percentile, 10000 resamples over matrices, numpy seed 0",
+ "n_matrices": 224,
+ "null_value": 1.0,
+ "null_range": [
+  0.5,
+  1.5
+ ],
+ "account_range": [
+  2.0,
+  60.0
+ ],
+ "verdict": "holds",
+ "value_vs_null_range": "above",
+ "secondary": {
+  "ratio_of_means": 5.414160731812484,
+  "mean_cap_right_code31_in_math31": 0.04757686830357143,
+  "mean_cap_right_think_sft_in_math31": 0.008787487232142857,
+  "n_ratio_above_1": 224,
+  "n_ratio_above_2": 219,
+  "ratio_quantiles_5_25_75_95": [
+   2.1730791584320146,
+   3.6636871848491204,
+   10.322407792842988,
+   14.966695042479422
+  ],
+  "median_ratio_by_module": {
+   "down": {
+    "n": 32,
+    "median_ratio": 11.769830842003968
+   },
+   "gate": {
+    "n": 32,
+    "median_ratio": 4.2886210291224955
+   },
+   "k": {
+    "n": 32,
+    "median_ratio": 2.975046028049043
+   },
+   "o": {
+    "n": 32,
+    "median_ratio": 9.621480521587163
+   },
+   "q": {
+    "n": 32,
+    "median_ratio": 2.567798500779911
+   },
+   "up": {
+    "n": 32,
+    "median_ratio": 4.956080129918943
+   },
+   "v": {
+    "n": 32,
+    "median_ratio": 10.041759958469743
+   }
+  },
+  "median_ratio_other_targets_code31_over_think_sft": {
+   "math30": {
+    "median_ratio": 5.640752504075154,
+    "ci90": [
+     5.474235028052218,
+     6.0586423540750625
+    ]
+   },
+   "base_w": {
+    "median_ratio": 1.7760580454418187,
+    "ci90": [
+     1.652202953319088,
+     1.9042746665494348
+    ]
+   },
+   "if30": {
+    "median_ratio": 2.1334985135266726,
+    "ci90": [
+     2.003062956353709,
+     2.2664384712969827
+    ]
+   },
+   "general30": {
+    "median_ratio": 2.7272668591013423,
+    "ci90": [
+     2.5020188993760275,
+     2.8357641564894775
+    ]
+   }
+  }
+ }
+}

@@ -1,0 +1,9 @@
+[
+ {
+  "mechanism": "round-15/account-1/c1",
+  "claim": "Code-RL 3.1's weight change sits in RL-Math 3.1's top-8 input subspace far more than Think-SFT's change does (median per-matrix cap_right ratio Code / Think-SFT in [2.0, 60.0]).",
+  "result": "result-105d5c",
+  "verdict": "holds",
+  "measured": "5.16 [90 % 4.80, 5.56], n 224 matrices, null value 1.0 (null range [0.5, 1.5]), account-1 range [2.0, 60.0]"
+ }
+]

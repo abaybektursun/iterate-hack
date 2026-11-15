@@ -1,0 +1,5 @@
+{
+ "commit": "fd2ae98bccf38ed4a815292daca053d89a0a33fd",
+ "command": "python3 studies/theory/analysis/direct_hostcap.py",
+ "job": "offline; rows from job abaybektursun-1114-221259-0871"
+}

@@ -1,0 +1,28 @@
+[
+ {
+  "label": "median_matrix",
+  "name": "model.layers.12.mlp.gate_proj.weight",
+  "module": "gate",
+  "layer": 12,
+  "shape": [
+   11008,
+   4096
+  ],
+  "cap_right_code31>math31": 0.0377956,
+  "cap_right_think_sft>math31": 0.00731317,
+  "ratio": 5.168155533099873
+ },
+ {
+  "label": "largest_ratio_matrix",
+  "name": "model.layers.12.mlp.down_proj.weight",
+  "module": "down",
+  "layer": 12,
+  "shape": [
+   4096,
+   11008
+  ],
+  "cap_right_code31>math31": 0.0423316,
+  "cap_right_think_sft>math31": 0.0019017,
+  "ratio": 22.25987274543829
+ }
+]
