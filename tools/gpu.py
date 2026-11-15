@@ -94,7 +94,7 @@ def submit(args):
     jobs[f"call:{job_id}"] = call.object_id
     print(job_id)
     if sum(key.startswith("job:") for key in jobs.keys()) % 5 == 0:
-        print("This is your 5th job since the last multiple of 5: run the team-meta-review skill (uv run tools/cycle.py first).")
+        print("This is your 5th job since the last multiple of 5: run the team-meta-review skill (uv run tools/cycle.py first).", file=sys.stderr)
 
 
 def ls(args):
