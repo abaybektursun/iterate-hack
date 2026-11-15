@@ -144,19 +144,16 @@ def link_test(Y, sims=200, seed=0, grid=GRID):
     info = (solved > 0) & (solved < obs.sum(0))
     P = {l: full(Y, lam[l], l) for l in LINKS}
     p = {l: prob(P[l][0][:, None] + P[l][1][None, :], l) for l in LINKS}
-    Yz = np.where(obs, Y, 0.0)
-    insample = lambda Z, Q: float((cell_ll(Q["hazard"][0][:, None] + Q["hazard"][1][None, :], Z, "hazard") - cell_ll(Q["logit"][0][:, None] + Q["logit"][1][None, :], Z, "logit"))[obs].sum() / n)
     rng = np.random.default_rng(seed)
-    null, null_in = {l: [] for l in LINKS}, {l: [] for l in LINKS}
+    null = {l: [] for l in LINKS}
     for truth in LINKS:
         for _ in range(sims):
             Z = draw(p[truth], obs, rng)
             null[truth].append(float((cv_ll(Z, obs, fold, lam["hazard"], "hazard") - cv_ll(Z, obs, fold, lam["logit"], "logit"))[obs].sum() / n))
-            null_in[truth].append(insample(np.where(obs, Z, 0.0), {l: full(Z, lam[l], l) for l in LINKS}))
-    T, Tin = float(D[obs].sum() / n), insample(Yz, P)
-    q = lambda v: {"mean": round(float(np.mean(v)), 6), "p5": round(float(np.percentile(v, 5)), 6), "p95": round(float(np.percentile(v, 95)), 6)}
-    power = lambda nl: {"hazard_truth_selected": round(float(np.mean(np.array(nl["hazard"]) > np.percentile(nl["logit"], 95))), 3),
-                        "logit_truth_selected": round(float(np.mean(np.array(nl["logit"]) < np.percentile(nl["hazard"], 5))), 3)}
+    T = float(D[obs].sum() / n)
+    q = lambda v: {"mean": round(float(np.mean(v)), 6), "p5": round(float(np.percentile(v, 5)), 6), "p95": round(float(np.percentile(v, 95)), 6), "min": round(float(min(v)), 6), "max": round(float(max(v)), 6)}
+    power = {"hazard_truth_selected": round(float(np.mean(np.array(null["hazard"]) > np.percentile(null["logit"], 95))), 3),
+             "logit_truth_selected": round(float(np.mean(np.array(null["logit"]) < np.percentile(null["hazard"], 5))), 3)}
     return {"arms": Y.shape[0], "problems": Y.shape[1], "cells": int(n), "ridge": lam,
             "ll_per_cell": {l: round(float(L[l][obs].sum() / n), 5) for l in LINKS},
             "ll_per_cell_by_ridge": {l: {str(k): round(float(v[obs].sum() / n), 5) for k, v in by[l].items()} for l in LINKS},
@@ -165,9 +162,7 @@ def link_test(Y, sims=200, seed=0, grid=GRID):
             "informative_problems": int(info.sum()), "T_informative_problems_per_cell": round(float(D[:, info][obs[:, info]].sum() / obs[:, info].sum()), 6),
             "T_uninformative_problems_per_cell": round(float(D[:, ~info][obs[:, ~info]].sum() / max(1, obs[:, ~info].sum())), 6),
             "sims": sims, "T_null_logit_truth": q(null["logit"]), "T_null_hazard_truth": q(null["hazard"]),
-            "verdict": verdict(T, null["logit"], null["hazard"]), "power_at_this_size": power(null),
-            "in_sample": {"T": round(Tin, 6), "null_logit_truth": q(null_in["logit"]), "null_hazard_truth": q(null_in["hazard"]),
-                          "verdict": verdict(Tin, null_in["logit"], null_in["hazard"]), "power_at_this_size": power(null_in)}}, lam, P, p
+            "verdict": verdict(T, null["logit"], null["hazard"]) if min(power.values()) >= 0.8 else "cannot tell", "power_at_this_size": power}, lam, P, p
 
 
 def mirror_check(Y, lam_logit, p_logit, sims=50, seed=1):
@@ -365,20 +360,26 @@ def dispersion(V, ind, lam, p, sims=200, seed=0):
     for link in LINKS:
         res = {}
         null = {f: [] for f in fams}
+
+        def stats(k, q, vote_right):
+            """D, problems with 0 of 4 right minus the binomial expectation, vote right minus the independent-slip prediction."""
+            B = binom(q)
+            return dispersion_stat(k, q), float((k == 0).sum() - B[0].sum()), float(vote_right - (B.T @ g).sum()), B
         for _ in range(sims):
             Z = dict(zip(ind, draw(p[link], obs, rng)))
             for f, arms in fams.items():
-                null[f].append(dispersion_stat(np.vstack([Z[n] for n in arms]).sum(0), family_p(Z, ind, arms, lam[link], link)))
+                k = np.vstack([Z[n] for n in arms]).sum(0)
+                null[f].append(stats(k, family_p(Z, ind, arms, lam[link], link), g[k.astype(int)].sum())[:3])
         for f, arms in fams.items():
-            q = family_p(V, ind, arms, lam[link], link)
-            B = binom(q)
-            D = dispersion_stat(K[f], q)
-            pv = B.T @ g
-            pred, sd = float(pv.sum()), float(np.sqrt((pv * (1 - pv)).sum()))
-            res[f] = {"D": round(D, 3), "D_null_independent_cells": {"mean": round(float(np.mean(null[f])), 3), "p95": round(float(np.percentile(null[f], 95)), 3), "max": round(float(max(null[f])), 3), "sims": sims},
-                      "over_dispersed": bool(D > np.percentile(null[f], 95)),
+            D, zero, vote, B = stats(K[f], family_p(V, ind, arms, lam[link], link), votes[f].sum())
+            nl = np.array(null[f])
+            res[f] = {"D": round(D, 3), "D_null_independent_cells": {"mean": round(float(nl[:, 0].mean()), 3), "p95": round(float(np.percentile(nl[:, 0], 95)), 3), "max": round(float(nl[:, 0].max()), 3), "sims": sims},
+                      "over_dispersed": bool(D > np.percentile(nl[:, 0], 95)),
                       "problems_by_right_samples_0_to_4": {"observed": [int((K[f] == k).sum()) for k in range(5)], "binomial_at_fitted_p": [round(float(x), 1) for x in B.sum(1)]},
-                      "vote4": {"predicted_independent_slips": round(pred, 1), "binomial_sd": round(sd, 1), "observed": int(votes[f].sum()), "observed_minus_predicted_in_sd": round((votes[f].sum() - pred) / sd, 2)}}
+                      "zero_of_4_minus_binomial": {"observed": round(zero, 1), "null_mean": round(float(nl[:, 1].mean()), 1), "null_p95": round(float(np.percentile(nl[:, 1], 95)), 1), "above_null95": bool(zero > np.percentile(nl[:, 1], 95))},
+                      "vote4": {"observed": int(votes[f].sum()), "predicted_independent_slips": round(float(votes[f].sum() - vote), 1), "observed_minus_predicted": round(vote, 1),
+                                "null_mean": round(float(nl[:, 2].mean()), 1), "null_p5": round(float(np.percentile(nl[:, 2], 5)), 1), "null_sd": round(float(nl[:, 2].std()), 1),
+                                "below_null5": bool(vote < np.percentile(nl[:, 2], 5))}}
         out[link] = res
     return out
 

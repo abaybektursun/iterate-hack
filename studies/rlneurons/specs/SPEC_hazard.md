@@ -113,3 +113,19 @@ result exists.
 `results/hazard/math500-01/` (`run.json`, `readout.json`, `table.json`, `table.md`, `examples.json`: the stored rows of one
 problem the binomial fits and one it does not), `results/hazard/transfer-01/readout.json`, `results/hazard/predict-01/`,
 `results/hazard/scored-01/readout.json`.
+
+## Amendments (made after the first planted run; none changes a hypothesis)
+
+1. Verdict rule: the planted 4 x 100 logit matrix was called "hazard" by the rule above (a 5 % event that the rule allows).
+   The verdict is now "cannot tell" whenever the power at that size is below 0.8 in either direction, as the last sentence
+   of H1 already said. A 4-simulation preview of the real T (-0.0064, logit) had been seen when this was changed; at the real
+   size the power is 1.0 in both directions, so the change cannot alter the real verdict.
+2. The in-sample version of T is dropped: on matrices planted at the real size it called 2 of 4 "neither" (ridge bias).
+3. Post hoc, not a hypothesis: the mirrored hazard link (1 - p = exp(-exp(a + b))) is fitted held out and compared with the
+   logit-simulated null, to see on which side of the logit link the data lie.
+4. H4b: the count of problems with 0 of 4 right minus its binomial expectation, and the vote minus its independent-slip
+   prediction, are compared with the same statistics on the 200 simulated matrices (votes of simulated samples: g(k)),
+   instead of with a binomial sd.
+5. H3: the filed rule Hc and the law verbatim (c = 1) are both reported; the hypothesis stays on Hc.
+6. No finished cell was found for the blind predictions (jobs still running in `gpu.py ls` at 05:06 UTC); only the two
+   cells whose observation was already known are scored, marked as such.
