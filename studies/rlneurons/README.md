@@ -3232,6 +3232,23 @@ uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rln
 uv run --no-project --with numpy python -m studies.rlneurons.analysis.fresh_read --sft studies/rlneurons/results/fresh/sft1_cue_s4-01 --rl studies/rlneurons/results/fresh/rl_plain_s4-01 --base studies/rlneurons/results/fresh/base_cue_s4-01 --out studies/rlneurons/results/fresh/readout-01 --texts runs/fresh_sft1_cue_s4 runs/fresh_rl_plain_s4 runs/fresh_base_cue_s4
 ```
 
+## Paper: The First Hundred Steps (`paper-first-steps/`, board work-184476)
+
+A 4-page paper: `paper-first-steps/the-first-hundred-steps.pdf`, served at
+https://monitor.invariant.team/paper/the-first-hundred-steps.pdf. Claim: on MATH-500 (n = 500, T 1.0 / top-p 1.0, cap
+16,384, grader v3, four samples per model) the three-token opening cue takes the base from 224 to 410.5 right, within
++1.4 points [-0.45, 3.30] of the released RL step 100 (417.5); steps 100 to 2,800 add 42.5 problems (final 460.0), almost
+all on problems the cued base already solves in some samples (47 gained, 44 of them solved by the cued base at least once).
+
+| File | What it is |
+|---|---|
+| `paper-first-steps/build_facts.py` | Reads the committed rows (`results/ckptcue/`, `results/selfopen/`, `results/wsp2/`, `results/handoff/`) and writes `facts.json` and `problems.jsonl`. No GPU. Run: `python studies/rlneurons/paper-first-steps/build_facts.py`. |
+| `paper-first-steps/facts.json` | Every number in the paper, with the path of the rows it came from (`_about.sources`). |
+| `paper-first-steps/problems.jsonl` | One line per MATH-500 problem: right counts per model over the four samples. |
+| `paper-first-steps/NOTES.md` | Definitions, the arms and their prompts, what each number does not show. |
+| `paper-first-steps/figs.py`, `fig_curve.pdf` | The figure, drawn from `facts.json`. Run: `python studies/rlneurons/paper-first-steps/figs.py`. |
+| `paper-first-steps/paper.tex`, `refs.bib`, `fonts/` | Source; build with `tectonic paper.tex` in the folder. |
+
 ## How to run
 
 Laptop checks (no GPU, no weights):

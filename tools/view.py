@@ -222,8 +222,9 @@ def detail(item_id):
 # The site lab's static files: beside the code in the Lambda zip (infra/monitor/deploy.sh), in the study in the repository.
 LAB = (Path(__file__).with_name("sitelab"), Path(__file__).parent.parent / "studies/sitelab")
 LAB_FILE = re.compile(r"(prototypes/[a-z-]+/)?(index\.html|data\.json)?")
-PAPERS = {name: (Path(__file__).with_name(name), Path(__file__).parent.parent / "studies" / study / "paper" / name)
-          for name, study in (("the-finish-dial.pdf", "rlneurons"), ("theories-on-trial.pdf", "theory"))}
+PAPERS = {name: (Path(__file__).with_name(name), Path(__file__).parent.parent / "studies" / folder / name)
+          for name, folder in (("the-finish-dial.pdf", "rlneurons/paper"), ("theories-on-trial.pdf", "theory/paper"),
+                               ("the-first-hundred-steps.pdf", "rlneurons/paper-first-steps"))}
 
 
 # The home page (home.py) is at / and the board at /board. The page modules were written when the board was at /, so
