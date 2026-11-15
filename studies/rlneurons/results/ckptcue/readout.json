@@ -1,0 +1,129 @@
+{
+ "cells": {
+  "base_cue_T1": {
+   "right": 410,
+   "n": 500
+  },
+  "rl_final_T2": {
+   "right": 463,
+   "n": 500
+  },
+  "s0100_plain": {
+   "right": 418,
+   "n": 500,
+   "wilson95_pct": [
+    80.10053632301431,
+    86.58710798994821
+   ],
+   "cap_hits": 24,
+   "empty_answers": 3,
+   "okay_in_first_30": 383,
+   "tokens_per_problem": 4120.18,
+   "job_id": "abaybektursun-1115-064532-6a2f"
+  },
+  "s0400_plain": {
+   "right": 436,
+   "n": 500,
+   "wilson95_pct": [
+    83.9854314415864,
+    89.84731761919355
+   ],
+   "cap_hits": 7,
+   "empty_answers": 0,
+   "okay_in_first_30": 358,
+   "tokens_per_problem": 4080.25,
+   "job_id": "abaybektursun-1115-015818-b11d"
+  },
+  "s0100_cue": {
+   "right": 427,
+   "n": 500,
+   "wilson95_pct": [
+    82.03507334933232,
+    88.2251233375389
+   ],
+   "cap_hits": 24,
+   "empty_answers": 0,
+   "okay_in_first_30": 500,
+   "tokens_per_problem": 4117.804,
+   "job_id": "abaybektursun-1115-032509-fc06"
+  },
+  "s0400_cue": {
+   "right": 431,
+   "n": 500,
+   "wilson95_pct": [
+    82.89979861228126,
+    88.94819912966051
+   ],
+   "cap_hits": 17,
+   "empty_answers": 0,
+   "okay_in_first_30": 500,
+   "tokens_per_problem": 4278.702,
+   "job_id": "abaybektursun-1115-015852-a31f"
+  }
+ },
+ "differences": {
+  "s0100_plain minus base_cue_T1": {
+   "points": 1.6000000000000014,
+   "ci95": [
+    -2.0000000000000018,
+    5.199999999999994
+   ]
+  },
+  "s0400_plain minus base_cue_T1": {
+   "points": 5.200000000000005,
+   "ci95": [
+    2.0000000000000018,
+    8.399999999999997
+   ]
+  },
+  "s0100_cue minus s0100_plain": {
+   "points": 1.8000000000000016,
+   "ci95": [
+    -1.200000000000001,
+    4.799999999999994
+   ]
+  },
+  "s0400_cue minus s0400_plain": {
+   "points": -1.0000000000000009,
+   "ci95": [
+    -4.0000000000000036,
+    2.0000000000000018
+   ]
+  },
+  "s0100_cue minus base_cue_T1": {
+   "points": 3.400000000000003,
+   "ci95": [
+    0.20000000000000018,
+    6.599999999999994
+   ]
+  },
+  "s0400_cue minus base_cue_T1": {
+   "points": 4.200000000000004,
+   "ci95": [
+    1.200000000000001,
+    7.199999999999996
+   ]
+  },
+  "rl_final_T2 minus s0400_plain": {
+   "points": 5.400000000000005,
+   "ci95": [
+    2.8000000000000025,
+    8.000000000000007
+   ]
+  },
+  "rl_final_T2 minus s0400_cue": {
+   "points": 6.400000000000006,
+   "ci95": [
+    3.600000000000003,
+    9.200000000000008
+   ]
+  },
+  "s0400_plain minus s0100_plain": {
+   "points": 3.600000000000003,
+   "ci95": [
+    0.20000000000000018,
+    6.999999999999995
+   ]
+  }
+ }
+}

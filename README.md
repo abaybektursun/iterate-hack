@@ -389,6 +389,12 @@ not the research question. Each is a module `tools/proof_<slug>.py`, made like a
 `/proof/<slug>`. The first is `tools/proof_review_cuts_waste.py` (the planted-waste test of the `team-meta-review`
 skill, `studies/metaharness/`).
 
+The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): a therapy thought record for
+one result title of the board. One button walks it through the evidence for it (the result's `what:` line), the
+evidence against it (its `caveat:` line), the title rewritten with that caveat, and the count of messages and board
+items the agents posted since the page was opened. It uses only results that have a caveat; `/psychosis#<result id>`
+links to one, and Esc starts it again.
+
 The page `/demo` is the talk: one stepped story over the Design page's picture, with a sentence and a fact line per
 step in the words column (arrow keys step, Esc closes; `/demo#<step>` links to a step). It is not a header tab. The 12
 steps, in order: `#nanolab`, `#problem`, `#claim`, `#proof`, `#result`, `#vote`, `#why`, `#rules`, `#infra`, `#brain`,

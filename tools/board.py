@@ -45,7 +45,7 @@ line, describe that one score: use them when one result holds several scores. A 
 is accepted, and post prints a reminder to add them with plain.
 
 Each line of ls is: id, person/branch of the agent that posted it, time (UTC, month-day hour:minute), for a work
-item the minutes since it was posted or last commented on (idle), votes up and down and number of comments (only
+item the minutes since it was posted or last commented on by its owner (idle), votes up and down and number of comments (only
 when there are any), then the text.
 
 Stored in the DynamoDB table iterate-board (tools/team.py). Every command reads and writes a fixed number of
@@ -332,7 +332,10 @@ def main(argv, who):
         comment = {"pk": f"item#{item_id}", "sk": f"comment#{ns}#{who}", "who": who, **me, "at": now, "text": text}
         writes = [{"Put": {"TableName": table.name, "Item": comment}},
                   {"Update": {"TableName": table.name, "Key": {"pk": f"item#{item_id}", "sk": "item"},
-                              "UpdateExpression": "ADD n_comments :one SET active_ns = :ns", "ExpressionAttributeValues": {":one": 1, ":ns": ns}}}]
+                              "UpdateExpression": "ADD n_comments :one", "ExpressionAttributeValues": {":one": 1}}}]
+        if (item["who"], item.get("branch")) == (who, me["branch"]):  # only the owner's comment ends the idle time: a question from another agent leaves the item idle
+            writes[1]["Update"]["UpdateExpression"] += " SET active_ns = :ns"
+            writes[1]["Update"]["ExpressionAttributeValues"][":ns"] = ns
         if (item["who"], item.get("session"), item.get("branch")) != (who, me["session"], me["branch"]):  # tell the item's author: it arrives with their next msg.py read
             writes.append({"Put": {"TableName": table.name, "Item": {
                 "pk": f"chan#@{item['who']}", "sk": f"{ns:020d}#{who}", "channel": f"@{item['who']}", "who": who, **me, "at": now,

@@ -95,6 +95,10 @@ TABLE = {
     "imitation-beats-rl": {
         "group": NO_REWARD,
         "figure": lambda m: [signed(m.DATA["diff"]["hard328"]["vote"][0]), "points", "328 harder problems, Think-SFT over RL"]},
+    "cut-off-is-unfinished": {
+        "group": NO_REWARD,
+        "figure": lambda m: [f"{m.DATA['cells']['sft_cue']['right_at_16384_same_answers']} → {m.DATA['cells']['sft_cue']['right_at_32768']}", "right of 328",
+                             "328 harder problems, Think-SFT + cue, tokens allowed 16,384 → 32,768"]},
     "where-the-gap-goes": {
         "group": ANSWERS,
         "figure": lambda m: [f"{m.pc(m._RL['parts']['reliability'][1])} %", "of the gap",
@@ -107,8 +111,8 @@ TABLE = {
         "figure": lambda m: [f"{m.CLOSED_U} to {m.CLOSED} %", "of the gap", "MATH-500, base finishes RL's answers"]},
     "rl-learns-the-opening-first": {
         "group": ANSWERS,
-        "figure": lambda m: [f"{m.DATA['okay'][2]} of {m.DATA['n']}", "answers",
-                             f"MATH-500, open with 'Okay' after 100 RL steps; Base {m.DATA['okay'][0]}"]},
+        "figure": lambda m: [signed(m.DATA["t10"]["s100_vs_cue"][0]), "points",
+                             f"MATH-500, T 1.0, RL step 100 ({m.DATA['t10']['right'][2]} of 500) over Base + cue ({m.DATA['t10']['right'][1]}); the interval includes 0"]},
     "rl-avoids-the-slip": {
         "group": ANSWERS,
         "figure": lambda m: [f"{m.DATA['D']['math31']['factor']:.2f}", "times as likely",
@@ -126,6 +130,14 @@ TABLE = {
         "group": WEIGHTS,
         "figure": lambda m: [signed(m.DATA["vs_cue_hard"]["points"]), "points",
                              f"328 harder problems, over Base + cue; 8 random directions {signed(m.DATA['random_vs_cue_hard']['points'])}"]},
+    "the-finish-dial": {
+        "group": WEIGHTS,
+        "figure": lambda m: [f"{m.DATA['cells']['0']['cut']} → {m.DATA['cells']['1.5']['cut']}", "cut off",
+                             f"of 328 harder problems, 8 RL directions at size 1.5; right {m.DATA['cells']['0']['right']} → {m.DATA['cells']['1.5']['right']}, RL {m.DATA['cells']['rl']['right']}"]},
+    "rl-change-on-imitation": {
+        "group": WEIGHTS,
+        "figure": lambda m: [signed(m.DATA["minus_think"]["2"][0]), "points",
+                             f"328 harder problems, Think-SFT + 2 × RL's change over Think-SFT; over RL {signed(m.DATA['minus_rl']['2'][0])}"]},
     "rl-every-neuron": {
         "group": WEIGHTS,
         "figure": lambda m: [m.pct(m.mean(m.ONE["best"])), "of RL's effect", f"next-word predictions, RL's best {m.ONE['share']:g} % of neurons copied"]},
@@ -140,6 +152,10 @@ TABLE = {
         "group": THEORIES,
         "figure": lambda m: [f"{m.DATA['nearer']['all'][0]} of {m.DATA['nearer']['all'][1]}", "predictions",
                              "theory nearer the measured number than readers with no theory; half would be a tie"]},
+    "forecasts-before-results": {
+        "group": THEORIES,
+        "figure": lambda m: [f"{m.COUNTS['theory'][1]} of {m.COUNTS['theory'][0]}", "forecasts",
+                             f"theory nearer the reported number than both readers with no theory; {m.COUNTS['landed']} of {m.COUNTS['targets']} targets reported"]},
 }
 
 

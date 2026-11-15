@@ -1,0 +1,8 @@
+Baseline, 2026-11-15 15:00 UTC, before tools/vast.py uploads a job's outputs itself.
+Command: uv run tools/cycle.py --hours 8 | grep vast.ai | grep -c "no copy yet"   (cycle.txt of this folder)
+vast.ai jobs listed, last 8 h: 77; with no copy on the laptop: 49.
+From the vast.ai invoices and job records, 05:00-14:50 UTC (subagent report, scripts stages.py and inv.json, not committed):
+86.6 billed GPU-hours; about 15 h on boxes whose jobs were never copied; 4.3 h between job end and copy;
+5 of 28 jobs waited over 10 min for their copy (longest 100 min); 13.0 h on boxes that never got a job.
+Agent polling: 718 turns over 101 submitted jobs, about 7 per job (transcripts 04:45-12:20 UTC).
+Idle time on the board: work-ab0f72 showed "idle 5m" after 168 min without an owner comment, because another agent's question had reset it.
