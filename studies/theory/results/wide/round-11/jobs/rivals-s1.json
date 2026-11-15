@@ -1,0 +1,62 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "Token reach. On hard328 the base's right answers mostly need 4,000-14,000 tokens whatever the prompt or temperature, because the derivations themselves are long. A per-sample cap of 4,096 tokens (and the 7.2 s budget) turns those answers into cap hits, which are abstentions. A vote over 12 capped samples can only choose among problems the base solves within 4,096 tokens, so extra samples cannot reach the long half of the set. Past 16,384 tokens only Think-SFT-like unfinished work still pays.",
+  "readers_wrong": "The readers carried over the method's 84/100 dev score and the 'more votes help' rule from MATH-500, where right answers have a median of about 1,400 tokens and the 4,096 cap never binds. On hard328 the cap removes about half of the reachable right answers before any vote happens.",
+  "rests_on": ["result-6e7b64", "result-1b6bf2", "result-5de032", "result-c8b994"],
+  "holds_against": [
+   {"item": "result-0c1eef", "value": 156, "why": "Doubling the base's cap from 16,384 to 32,768 adds only 4 right answers, which looks as if length does not limit the base. But the claim is about the 4k-16k band: 81 of the base's 164 right answers fit inside 4,000 tokens (result-1b6bf2), so the other half lie between 4,000 and 16,384. Past 16,384 the base's long answers are unproductive, so a larger cap buys little there."},
+   {"item": "result-fa480f", "value": 84, "why": "The same 4,096-token capped method reaches 84/100 on MATH-500 dev and ties the cue on the 400 (338 each). On MATH-500 the base's right answers have a median of 1,432 tokens and 263 answers finish within 2,000, so the cap almost never binds there. The mechanism predicts a loss only on long-solution sets."}
+  ],
+  "forecasts": [
+   {"id": "t02", "value": 241, "low": 228, "high": 253, "reason": "M(2) gets 229-234 at 16k with about 54 cap hits; about 1/6 of its cut answers are unfinished work that is right by 32k, so about +9."},
+   {"id": "t03", "value": 10, "low": -3, "high": 22, "reason": "At 16k M(2) leads Think-SFT by about 22; at 32k Think-SFT recovers +23 of its 93 cut answers but M(2) only about +9 of 54, so the lead shrinks to about 10."},
+   {"id": "t04", "value": 42, "low": 27, "high": 62, "reason": "Removing the finishing directions raised hard328 cap hits by 25 % (77 to 96); MATH-500 base cue has 27 cap hits, which concentrate in the long quartile, so about 1.5 times that."},
+   {"id": "t07", "value": 230, "low": 214, "high": 246, "reason": "Length policy, not the template, sets the 32k score: the template leaves Think-SFT's length unchanged, so it equals the cue's 230."},
+   {"id": "t08", "value": 208, "low": 193, "high": 223, "reason": "Same answers counted at 16k lose the roughly 23 right answers that finish only after 16,384 tokens, as with the cue (207)."},
+   {"id": "t09", "value": 465, "low": 455, "high": 474, "reason": "Think-SFT gets about 459 at 16k with 24-25 cap hits; at 32k about a quarter of those finish right, so about +6."},
+   {"id": "t10", "value": 459, "low": 449, "high": 468, "reason": "At 16k, Think-SFT on MATH-500 scores 454-462 under the cue; the template does not change the length policy."},
+   {"id": "t11", "value": 0, "low": -14, "high": 14, "reason": "Same length policy and same reach, so the difference is only sampling noise (a same-seed rerun moves about 9)."},
+   {"id": "t12", "value": 1, "low": -13, "high": 15, "reason": "Same as t11, counted at 16k."},
+   {"id": "t14", "value": 197, "low": 187, "high": 207, "reason": "The vote cannot add problems the base never finishes. Vote over 4 is 192 and pass@4 is 207; 4 more samples add about 5."},
+   {"id": "t15", "value": 221, "low": 207, "high": 235, "reason": "The top-8 finishing directions cut Think-SFT's roughly 89 cap hits by about half; about a quarter of the converted answers are right (Think-SFT's own cut answers are unfinished work)."},
+   {"id": "t17", "value": 209, "low": 195, "high": 223, "reason": "A random rank-8 edit leaves cap hits flat (67-79 on the base at every size), so the score stays at Think-SFT's 209."},
+   {"id": "t24", "value": 247, "low": 237, "high": 257, "reason": "M(2) single is 231.5 with fewer cap hits than Think-SFT, so its vote gains less than Think-SFT's +32 and about the same as RL's +21, minus a little."},
+   {"id": "t26", "value": 243, "low": 231, "high": 254, "reason": "Seed 3,000,000 gives 234 at 16k; about +9 from cut answers that finish by 32k."},
+   {"id": "t28", "value": 84, "low": 76, "high": 92, "reason": "Think-SFT hits the cap on 46 % of fresh2026 samples at 16k; at 32k about a quarter of those finish right, which lifts the vote from 75."}
+  ]},
+ {"id": "b",
+  "statement": "Register ceiling. The method's samples come from the plain prompt at T 0.6: a terse, quick-committing register whose hard-problem answers are short, and whose wrong answers on a problem converge on the same problem-specific value. A vote only adds problems where the right value is already the mode. Its ceiling is set by the plain register's per-problem modal answer, about 107 single right at T 0.6, plus a modest vote gain. The 4,096 cap rarely binds on these short answers.",
+  "readers_wrong": "The readers anchored on the cue's hard328 single sample (160-164) plus vote gains. But the agent never found the cue: its samples come from the plain T 0.6 register, which scores 107 on one sample, and twelve correlated votes lift that by only about 30.",
+  "rests_on": ["result-6e7b64", "result-099916", "result-5c961a", "knowledge-dab63f"],
+  "holds_against": [
+   {"fact": 28, "value": 0.42857142857142855, "why": "Only 43 % of the cued base's vote failures are won by an agreeing wrong group. That is the cue register at T 1.0 on MATH-500. T 0.6 sharpens each sample toward its mode, and wrong values persist when only the sampler changes (fact 27, C - A +0.16), so on hard problems at T 0.6 the plain register's wrong answers agree more."},
+   {"item": "result-1b6bf2", "value": 81, "why": "Only 81 of the cued base's 164 right answers fit inside 4,000 tokens, which suggests a 4,096 cap binds. But those are cue-register answers, long because they deliberate. Plain-register answers are terse (median 609 tokens on MATH-500 at T 0.6), so most of the plain base's right hard328 answers still fit under 4,096."}
+  ],
+  "forecasts": [
+   {"id": "t01", "value": 320, "low": 250, "high": 395, "reason": "Plain-prompt accuracy tracks the share of answers that open in the deliberative register. At a 0.125 dose (less after bf16 rounding) only part of the switch to RL's opening has happened: between 224 and the 405 at a = 0.25."},
+   {"id": "t05", "value": 400, "low": 375, "high": 425, "reason": "Think-SFT's weights already hold the deliberative register (it scores 342 outside math with the Math cue, above RL), so on code it lands at RL-Code's level."},
+   {"id": "t06", "value": 398, "low": 372, "high": 424, "reason": "Either cue selects the same register, as on the base (Math cue 326 against Code cue 317), so the result equals t05 within noise."},
+   {"id": "t07", "value": 236, "low": 220, "high": 251, "reason": "The native template is the register Think-SFT was trained in: the cue's 230 plus a small gain from its trained format."},
+   {"id": "t08", "value": 212, "low": 197, "high": 227, "reason": "The cue's 207 at 16k plus the same register gain."},
+   {"id": "t09", "value": 467, "low": 457, "high": 476, "reason": "About 459 at 16k plus about 6 from the 32k cap; the native format also avoids some of the 'Answer:'-line misses that v3 undercounts (about 4 per sample)."},
+   {"id": "t10", "value": 461, "low": 451, "high": 470, "reason": "The cue's 454-462 plus a small format gain."},
+   {"id": "t11", "value": 5, "low": -9, "high": 19, "reason": "Native template minus cue: a small register and format gain."},
+   {"id": "t12", "value": 5, "low": -9, "high": 19, "reason": "Same as t11, counted at 16k."},
+   {"id": "t13", "value": 450, "low": 443, "high": 457, "reason": "Vote over 4 gives 446; correlated wrong values cap further gains, so 5 more samples add about 4."},
+   {"id": "t14", "value": 195, "low": 186, "high": 204, "reason": "Vote over 4 gives 192. On 26 of the 36 RL-only problems the base has no right sample, so more votes only add problems where the right value is near the mode."},
+   {"id": "t24", "value": 245, "low": 235, "high": 254, "reason": "M(2) finishes more often, with about 72 % of finished answers right, so its wrong answers vote. The vote gain is smaller than Think-SFT's +32: 231.5 plus about 13."},
+   {"id": "t28", "value": 81, "low": 74, "high": 88, "reason": "At 32k Think-SFT finishes more of its long answers, some of them wrong, so the vote's gain from abstention shrinks; it rises modestly from 75."}
+  ]}
+],
+ "cell": {
+  "cell": {"model": "base Olmo-3-1025-7B (untrained)", "prompt": "plain", "set": "hard328", "n": 328, "sampling": "T 0.6, top-p 1.0, seed 3000000", "samples": 1, "grader": "v3", "cap": 4096},
+  "job": "jobs/run_cell.py",
+  "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt plain --set hard328 --temperature 0.6 --top-p 1.0 --max-tokens 4096 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+  "readout": "right answers of 328 under grader v3 (cap hits counted wrong), one sample of the autobench method's own sampling (plain, T 0.6, cap 4,096); compare with the plain T 0.6 single sample at 16,384 (107, result-099916)",
+  "unit": "right answers of 328",
+  "why": "Mechanism a says the 4,096 cap removes about half of the base's right hard328 answers whatever the register, so the score falls well below 107. Mechanism b says plain-register answers are short and the cap rarely binds, so the score stays near 107. This separates cap against register as the cause of the vote's 139.",
+  "gpu_minutes": 45,
+  "a": {"value": 66, "low": 52, "high": 82},
+  "b": {"value": 98, "low": 86, "high": 110}
+ }
+}

@@ -1,0 +1,89 @@
+{
+ "command": "python -m studies.rlneurons.analysis.votek --runs runs/abaybektursun-1114-153825-208b runs/ih-1115-201414-43ed+runs/ih-1115-161922-9bfd+runs/abaybektursun-1115-082353-a18c+runs/abaybektursun-1115-082400-c790+runs/abaybektursun-1115-064850-01eb --out studies/rlneurons/results/votek/math500_base_cue-01",
+ "runs": [
+  {
+   "run": "runs/abaybektursun-1114-153825-208b",
+   "job_id": "abaybektursun-1114-153825-208b",
+   "shard": null,
+   "commit": "c36f5626b8dfcc638972dd3dafe9e13daa4d3175",
+   "model": "base",
+   "prompt": "cue",
+   "set": "math500",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 41000000,
+   "samples": 4
+  },
+  {
+   "run": "runs/ih-1115-201414-43ed",
+   "job_id": "ih-1115-201414-43ed",
+   "shard": "0/8",
+   "commit": "f3153157baf7c24df641353625c0590ef231f46f",
+   "model": "base",
+   "prompt": "cue",
+   "set": "math500",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 41040000,
+   "samples": 8
+  },
+  {
+   "run": "runs/ih-1115-161922-9bfd",
+   "job_id": "ih-1115-161922-9bfd",
+   "shard": "4/8",
+   "commit": "5e555fb77e3ac1c35b3861d3eb35288d4f169244",
+   "model": "base",
+   "prompt": "cue",
+   "set": "math500",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 41040000,
+   "samples": 8
+  },
+  {
+   "run": "runs/abaybektursun-1115-082353-a18c",
+   "job_id": "abaybektursun-1115-082353-a18c",
+   "shard": "1/4",
+   "commit": "744af05f8de622af313e70d4f2626ef1ce0576c9",
+   "model": "base",
+   "prompt": "cue",
+   "set": "math500",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 41040000,
+   "samples": 8
+  },
+  {
+   "run": "runs/abaybektursun-1115-082400-c790",
+   "job_id": "abaybektursun-1115-082400-c790",
+   "shard": "2/4",
+   "commit": "744af05f8de622af313e70d4f2626ef1ce0576c9",
+   "model": "base",
+   "prompt": "cue",
+   "set": "math500",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 41040000,
+   "samples": 8
+  },
+  {
+   "run": "runs/abaybektursun-1115-064850-01eb",
+   "job_id": "abaybektursun-1115-064850-01eb",
+   "shard": "3/4",
+   "commit": "c94b0d3cdab309de4d3fab77e65df93725033b87",
+   "model": "base",
+   "prompt": "cue",
+   "set": "math500",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 41040000,
+   "samples": 8
+  }
+ ]
+}

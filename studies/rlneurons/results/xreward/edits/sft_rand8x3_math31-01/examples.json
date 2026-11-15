@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 3169,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": ") + c = -458 \\implies -1156 + c = -458 \\implies c = 698\n\\]\n\nThus, \\( P(x) = 2x^2 - \\frac{289}{4}x + 698 \\), and \\( P(0) = 698 \\).\n\nNext, substituting the points \\((16, 54)\\) and \\((20, 53)\\) into \\( Q(x) \\):\n\\[\n54 = -2(16)^2 + d(16) + e \\implies 54 = -512 + 16d + e \\implies 16d + e = 566 \\quad \\text{(3)}\n\\]\n\\[\n53 = -2(20)^2 + d(20) + e \\implies 53 = -800 + 20d + e \\implies 20d + e = 853 \\quad \\text{(4)}\n\\]\n\nSolving equations (3) and (4):\n\\[\n20d + e - (16d + e) = 853 - 566 \\implies 4d = 287 \\implies d = \\frac{287}{4}\n\\]\nSubstituting \\( d \\) back into equation (3):\n\\[\n16\\left(\\frac{287}{4}\\right) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n\\]\n\nThus, \\( Q(x) = -2x^2 + \\frac{287}{4}x - 582 \\), and \\( Q(0) = -582 \\).\n\nTherefore, \\( P(0) + Q(0) = 698 + (-582) = 116 \\).\n\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 29,
+  "gold": "244",
+  "extracted_v3": "59",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 13124,
+  "prompt_tail": "wn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "o sets of parallel lines and non-crossing segments between them, we start by considering the given example when \\( m = 3 \\) and \\( n = 2 \\), which results in 8 regions. \n\nWe hypothesize that the formula for the number of bounded regions can be derived from combinatorial considerations. The formula that fits the given example and other test cases is:\n\n\\[\n\\text{Number of regions} = mn + (m-1)(n-1)\n\\]\n\n### Verification with Example:\nFor \\( m = 3 \\) and \\( n = 2 \\):\n\\[\n3 \\times 2 + (3-1)(2-1) = 6 + (2)(1) = 6 + 2 = 8\n\\]\n\n### Application to the Problem:\nGiven \\( m = 7 \\) and \\( n = 5 \\), we apply the formula:\n\\[\n7 \\times 5 + (7-1)(5-1) = 35 + (6)(4) = 35 + 24 = 59\n\\]\n\n### Conclusion:\nThe number of bounded regions formed by the configuration with \\( m = 7 \\) and \\( n = 5 \\) is:\n\n\\[\n\\boxed{59}\n\\]"
+ }
+}

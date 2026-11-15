@@ -109,3 +109,21 @@ Each answer is also counted at 16,384 tokens.
   right as for Think-SFT (23 of 91), gives about 245.
 - 236 to 239 is reported as undecided: one sample against one sample, and the four Think-SFT samples at 16,384 span 11.
 - Also reported: tokens per problem against Think-SFT's 11,795 at this cap.
+
+## Amendment 4 (2026-11-15 21:00 UTC, before the run below): a second sample of M(2) at cap 32,768, on Modal
+
+Amendment 3's run (seed 3,000,000, board work-8b4030) is on one vast.ai box. This adds a second sample with another seed, so the
+two runs are two samples, not a duplicate. Board work-441e5b, branch m2cap.
+
+Run: M(2) (`jobs/delta_sum.py --host think_sft --donor rl_math --alpha 2.0`, built inside each job), hard328, cue, T 1.0 /
+top-p 1.0, `run_cell --max-tokens 32768`, seed 3,010,000 (the seed of Think-SFT's sample 1 in `SPEC_cap32vote.md`, jobs
+-082022-5d48 and -093636-bb67), as 4 shards (`--shard k/4`, joined by `analysis/shard_join.py`), Modal H100, grader v3.
+Smoke first: 8 problems, same command with `--n 8`.
+
+Readout `analysis/cap32_m2.py`, folder `results/transplant/cap32_m2_s1-01/`: right at 32,768 and right with at most 16,384
+generated tokens from the same answers (the `analysis/cap32.py` rule), cap hits at each, tokens per problem, and the paired
+difference to Think-SFT sample 1 at 32,768 (same per-problem seeds), 95 % bootstrap over problems (10,000 resamples, seed 0).
+
+Readings as filed in amendment 3, for this sample: 225 to 235 at 32,768 = H-tokens (the delta only saves tokens); 240 or more
+= H-more (it adds right answers); 236 to 239 undecided. Also: the paired difference to Think-SFT at 32,768 has its interval
+above 0 under H-more and includes 0 under H-tokens.

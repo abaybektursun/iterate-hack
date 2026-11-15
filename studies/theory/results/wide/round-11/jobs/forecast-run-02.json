@@ -1,0 +1,21 @@
+{"forecasts": [
+{"mechanism": "run-02/f2-m01", "readout": "r11-m01-r1", "value": 84, "low": 70, "high": 98,
+ "reason": "The part saying hard328 solutions need 6,000-14,000 tokens and short samples never reach them: the 4,096 cap removes the long right answers from the plain T 0.6 single sample (107 at 16,384); the cued base keeps only about half its right answers under 4k (81 of 164), and plain answers are shorter, so roughly 20 % are lost."},
+{"mechanism": "run-02/f2-m04", "readout": "r11-m01-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "run-02/f2-m01", "readout": "r11-m02-r1", "value": 1, "low": -1, "high": 4,
+ "reason": "The part saying most MATH-500 problems are solved in under 2,000 tokens: few right plain-base samples fall between 4,096 and 8,192 tokens, and a vote over 6 usually has other right samples, so the 4,096 view loses about 1 problem of 100."},
+{"mechanism": "run-02/f2-m04", "readout": "r11-m02-r1", "value": 0.5, "low": -2, "high": 3,
+ "reason": "The part saying a sample with no answer abstains instead of adding a wrong value: treating long samples (often wrong or looping) as abstentions drops wrong votes as well as a few right ones, so the paired difference is near 0."},
+{"mechanism": "run-02/f2-m01", "readout": "r11-n01-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "run-02/f2-m04", "readout": "r11-n01-r1", "value": 34.5, "low": 30.5, "high": 38.5,
+ "reason": "The part saying Think-SFT's vote sits near its pass@k because unsolved samples abstain at the cap: allowing up to 5 samples moves the vote slightly toward pass@5, just above the 34.0 that the at-most-4 sequential vote gets on this 41-problem subset."},
+{"mechanism": "run-02/f2-m01", "readout": "r11-n01-r2", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "run-02/f2-m04", "readout": "r11-n01-r2", "value": 30.5, "low": 26.5, "high": 34.5,
+ "reason": "The part saying the RL difference turns abstentions into scattered wrong answers that outvote lone right ones: RL's vote stays well below pass@k (221 vs 240 on the 328), which scales to about 31 of this easier subset (Think-SFT's subset factor is 1.14)."},
+{"mechanism": "run-02/f2-m01", "readout": "r11-n02-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "run-02/f2-m04", "readout": "r11-n02-r1", "value": 47.5, "low": 42, "high": 53,
+ "reason": "The part saying abstaining cap hits keep Think-SFT's vote near pass@k: a vote over 3 lands near pass@3 (about 234/328 against 241 for 4), which gives about 48 of these 66; min-p does not make answers finish, so it adds little."},
+{"mechanism": "run-02/f2-m01", "readout": "r11-n02-r2", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "run-02/f2-m04", "readout": "r11-n02-r2", "value": 44, "low": 39, "high": 49,
+ "reason": "The part saying RL's finished wrong answers scatter and tie or outvote right ones: the vote over 3 gains little over a single sample (RL vote4 221, single 200 on the 328), which gives about 216/328, or 44 of 66."}
+]}
