@@ -1,0 +1,133 @@
+{
+ "theory": "r4-m07",
+ "predictions": [
+  {
+   "k": 1,
+   "experiment": "MATH-500: share of RL's wrong finished samples whose answer equals one of the base's wrong finished answers on the same problem",
+   "recipe": "Files: studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (base) and studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (RL). Keep rows with attempt == 0 only (4 samples per problem per model). A row is 'answered' iff cap_hit is false and extracted_v3 is a non-empty string after normalisation; a row is 'wrong' iff answered and score_v3 == 0. Normalise extracted_v3 by: delete all whitespace; strip leading/trailing '$'; replace '\\dfrac' and '\\tfrac' with '\\frac'; delete '\\left' and '\\right'; delete one trailing '.'. Base wrong set W_b(p) = set of normalised extracted_v3 of base wrong rows on problem_index p. Denominator: all RL wrong rows (all problems). Numerator: RL wrong rows whose normalised extracted_v3 is in W_b(p) for their problem (empty W_b counts as no match). Missing problem rows count as empty sets. Report numerator/denominator.",
+   "script": "tests/r4-m07/p1.py",
+   "value": 0.5,
+   "low": 0.36,
+   "high": 0.65,
+   "measured": 0.26717557251908397,
+   "inside": false,
+   "refuted_by": "measured below 0.36",
+   "refuted_by_met": true,
+   "alt_measured": 0.26715686274509803,
+   "not_computable": null,
+   "note": "Files: studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl and math500_rl-01/rows.jsonl (committed; 2000 attempt-0 rows each, 500 problems x 4 samples). extracted_v3 is sometimes null; null counts as empty, so the row is not answered. Normalisation is done in the order written. '$' is stripped with str.strip('$'), which removes every leading and trailing '$', not only one. Deleting '\\left'/'\\right' is a plain substring delete, so it would also cut the start of '\\rightarrow' (rare in answers). The main number pools all RL wrong rows (numerator/denominator, as written). alt_measured is the other reading: the per-problem share averaged over problems that have at least one RL wrong finished row. Matching is exact string equality after normalisation. Answers that are equal in value but written differently (0.5 vs \\frac{1}{2}) do not match, which pushes the number down.",
+   "example_row": {
+    "problem_index": 9,
+    "sample": 2,
+    "attempt": 0,
+    "seed": 45020009,
+    "n_new": 14860,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "loop_A": false,
+    "extracted_v3": "5",
+    "score_v3": 0,
+    "gold": "4"
+   }
+  },
+  {
+   "k": 2,
+   "experiment": "MATH-500: on problems where the base repeats a wrong value, share of RL's wrong finished samples that equal the base's most frequent wrong value",
+   "recipe": "Same files, filters, 'answered', 'wrong' and normalisation as the first prediction (attempt == 0 only). For each problem p, count normalised extracted_v3 strings over base wrong rows; p is an 'attractor problem' iff the maximum count is >= 2. Modal set M(p) = all strings with that maximum count (ties: all tied strings are in M(p)). Denominator: RL wrong rows on attractor problems. Numerator: those whose normalised extracted_v3 is in M(p). Report numerator/denominator; if the denominator is 0, report 0.",
+   "script": "tests/r4-m07/p2.py",
+   "value": 0.65,
+   "low": 0.5,
+   "high": 0.82,
+   "measured": 0.34615384615384615,
+   "inside": false,
+   "refuted_by": "measured below 0.50",
+   "refuted_by_met": true,
+   "alt_measured": 0.4,
+   "not_computable": null,
+   "note": "Same files, filters and normalisation as p1. Attractor problem: the most common normalised base wrong string appears at least twice among the base's attempt-0 wrong finished rows. M(p) holds every string tied at that count (a 2-2 split puts both in). If the denominator is 0 the script reports 0, as the recipe says, and refuted_by is then met (0 < 0.50). alt_measured is the per-problem share averaged over attractor problems that have RL wrong rows. Differences in how a string is written lower the number here too. With only 4 base samples, the attractor set is small and the denominator may be small.",
+   "example_row": {
+    "problem_index": 18,
+    "sample": 3,
+    "attempt": 0,
+    "seed": 45030018,
+    "n_new": 10575,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "loop_A": false,
+    "extracted_v3": "56",
+    "score_v3": 0,
+    "gold": "28"
+   }
+  },
+  {
+   "k": 3,
+   "experiment": "MATH-500: RL vote fix rate on base-vote-wrong problems where the base has a repeated wrong value",
+   "recipe": "Attractor problems as defined in the second prediction (from rows.jsonl, attempt == 0, base wrong rows, max count of one normalised wrong string >= 2). Vote outcomes from studies/rlneurons/results/day1_3/math500_base_cue-01/readout.json and studies/rlneurons/results/day1_3/math500_rl-01/readout.json, key per_problem, procedure 'vote' (0/1). Set A = problems with base vote == 0 that are attractor problems. Report the fraction of A with RL vote == 1. Problems missing from either readout are dropped.",
+   "script": "tests/r4-m07/p3.py",
+   "value": 0.3,
+   "low": 0.12,
+   "high": 0.5,
+   "measured": 0.75,
+   "inside": false,
+   "refuted_by": "measured above 0.50",
+   "refuted_by_met": true,
+   "alt_measured": 0.75,
+   "not_computable": null,
+   "note": "Attractor set as in p2, built from base rows.jsonl with attempt 0. Vote outcomes: readout.json per_problem['vote'], a list lined up with readout['problem_indices'] (all 500 are present in both readouts, so none are dropped). Set A = base vote 0 and attractor. measured = the share of A with RL vote 1. If A is empty the script reports not_computable, because the recipe does not define that case. alt_measured uses per_problem['vote_after_restart'] in both readouts instead of 'vote'. The readout's 'vote' may break ties or treat cap hits differently from the attractor definition (it presumably counts all 4 attempt-0 samples, with cap hits as abstain or wrong). The script does not check that. A small A makes the fraction noisy.",
+   "example_row": {
+    "problem_index": 18,
+    "base_vote": 0,
+    "rl_vote": 1,
+    "attractor": true
+   }
+  },
+  {
+   "k": 4,
+   "experiment": "MATH-500: RL vote fix rate on base-vote-wrong problems without a repeated base wrong value",
+   "recipe": "Same files and definitions as the third prediction. Set B = problems with base vote == 0 that are NOT attractor problems (no normalised base wrong string appears in >= 2 of the base's 4 attempt-0 rows; this includes problems whose base rows are all cap hits or unanswered). Report the fraction of B with RL vote == 1. Problems missing from either readout are dropped.",
+   "script": "tests/r4-m07/p4.py",
+   "value": 0.75,
+   "low": 0.55,
+   "high": 0.92,
+   "measured": 0.47368421052631576,
+   "inside": false,
+   "refuted_by": "measured below 0.55",
+   "refuted_by_met": true,
+   "alt_measured": 0.4411764705882353,
+   "not_computable": null,
+   "note": "Same as p3, but set B = base vote 0 and not an attractor. This includes problems where the base has no wrong finished row at all (all cap hits or unanswered) and problems where the base vote is wrong but some answers are right. If B is empty the script reports not_computable. alt_measured uses 'vote_after_restart'. Problems whose base rows are all cap hits fall into B. RL may fix these at a rate shaped by cap-hit behaviour rather than by how wrong answers are spread, which the theory puts out of scope.",
+   "example_row": {
+    "problem_index": 9,
+    "base_vote": 0,
+    "rl_vote": 0,
+    "attractor": false
+   }
+  },
+  {
+   "k": 5,
+   "experiment": "hard328: when both single samples are wrong and finished, share where base and RL give the same answer",
+   "recipe": "Files: s3 results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (base cue) and .../abaybektursun-1114-151540-86ef/answers.jsonl (RL plain). One row per problem_index; join on problem_index. 'Answered' and 'wrong' and normalisation exactly as in the first prediction (cap_hit false, non-empty normalised extracted_v3, score_v3 == 0). Denominator: problems where both rows are wrong. Numerator: those where the two normalised extracted_v3 strings are identical. Problems missing in either file are dropped.",
+   "script": "tests/r4-m07/p5.py",
+   "value": 0.33,
+   "low": 0.2,
+   "high": 0.48,
+   "measured": 0.19047619047619047,
+   "inside": false,
+   "refuted_by": "measured below 0.20",
+   "refuted_by_met": true,
+   "alt_measured": 0.14516129032258066,
+   "not_computable": null,
+   "note": "Files: s3 results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (base cue) and abaybektursun-1114-151540-86ef/answers.jsonl (RL plain), fetched to runs/theory-tests/<job>/answers.jsonl. There are 328 rows each, one per problem_index (sample 0 only), and no attempt field. Join on problem_index. Wrong = cap_hit false, non-empty normalised extracted_v3, score_v3 == 0, normalised as in p1. measured = the share of identical normalised strings among problems where both rows are wrong. alt_measured drops the cap_hit filter, so every non-empty extracted answer that scored 0 counts as wrong. Exact string matching undercounts answers that are equal in value. The denominator is likely a few dozen to about 150 problems.",
+   "example_row": {
+    "problem_index": 109,
+    "base_extracted_v3": "180",
+    "rl_extracted_v3": "180",
+    "gold": "336",
+    "base_cap_hit": false,
+    "rl_cap_hit": false,
+    "base_score_v3": 0,
+    "rl_score_v3": 0
+   }
+  }
+ ]
+}

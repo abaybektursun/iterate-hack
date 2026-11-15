@@ -1,0 +1,5 @@
+[
+ {"k": 1, "value": 0.65, "low": 0.38, "high": 0.92, "why": "Early RL sharpens the policy onto the base's own high-probability paths, and the base already opens with 'Okay' in 168/500 plain answers (RL in about 494/500), so by step 100, with most of the entropy drop already early, the rewarded 'Okay' opener should be well above the base's 34 % but not yet near RL's ~99 %."},
+ {"k": 2, "value": 0.025, "low": -0.03, "high": 0.085, "why": "At step 400 the sharpened plain policy already mostly opens in the cue's 'Okay' deliberation format, so the cue adds only a small extra push into the loop-prone mode, far less than the base's +0.108 (119 vs 65 cap hits)."},
+ {"k": 3, "value": 1.8, "low": 1.0, "high": 3.0, "why": "Concentrating on the base's 'Okay' deliberation path, which runs to about 1,400 tokens against the base's 609-token plain median, raises step 100's finished median part of the way toward RL's 2,856 (a ratio of about 4.7)."}
+]

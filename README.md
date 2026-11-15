@@ -205,7 +205,10 @@ Put the command in single quotes, so `$OUT_DIR` is expanded on the job's machine
 with its own quotes, put it in a script in the repository and run that. A job over its class's limit waits in Modal's queue. A job is killed at `--hours` (default 2). The command is one
 shell string, so `&&` and pipes work. Install extra packages in the command
 (`'pip install -q einops && python exp/train.py'`), or add them to `requirements.txt` and run
-`uv run tools/gpu.py deploy` again. The limits are the `max_containers` values in `infra/runner.py`. `submit` refuses
+`uv run tools/gpu.py deploy` again. The limits are the `max_containers` values in `infra/runner.py`. The class
+`short` is an H100 lane kept free for jobs of `--hours 0.5` at most, so a smoke run starts at once instead of waiting
+behind long jobs (p90 wait 20 min, max 39 min for short jobs in the shared queue, 2026-11-15); it reserves GPUs only
+when `ITERATE_MAX_H100` plus `ITERATE_MAX_SHORT` (default 2) is at most your workspace's GPU limit. `submit` refuses
 to run while the runner deployed in your workspace is not the `infra/runner.py` of the commit; `gpu.py deploy` fixes that.
 
 ### vast.ai
@@ -345,7 +348,9 @@ uv run tools/msg.py wait --timeout 300    # blocks until a message arrives (exit
 
 In Claude Code, two hooks in `.claude/settings.json` put the team's state into the agent's context. At the start
 of a session and after `/clear`, one prints the open work, the 10 newest board items and new messages. After tool
-calls (at most every 20 s), the other runs `msg.py read` and adds new messages. All times are UTC. After changing a tool, run `python3 tools/selftest.py`:
+calls (at most every 20 s), the other runs `msg.py read` and adds new messages. A third, at the end of each turn,
+refuses once to let the turn end while a GPU job this session submitted is queued or running and no `gpu.py wait`
+runs for it (`gpu.py stophook`): start the wait in the background, and the finished job wakes the agent. All times are UTC. After changing a tool, run `python3 tools/selftest.py`:
 it runs every board and message command as two agents against a separate test table.
 
 A message reaches a waiting agent in under a second (measured: 0.2 s after the send returned). Each agent

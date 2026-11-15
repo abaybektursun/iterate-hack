@@ -1,0 +1,15 @@
+{
+ "ledger": "loc-01-base-fm217",
+ "commit": "a395f25",
+ "uncommitted": "jobs/fm2_chronos2.py (--model), jobs/ft_chronos2.py (--save, --syn-kind), jobs/loc_qavg.py",
+ "machine": "local RTX 4090 Laptop GPU (16 GB), torch 2.10.0+cu128, chronos-forecasting 2.3.2, peft 0.21.3",
+ "minutes": 1.6,
+ "training_data": "none (zero-shot amazon/chronos-2)",
+ "origins": "dev 2026-10-01..2026-10-30",
+ "commands": [
+  "OUT_DIR=runs/gpuprice/local/base runs/gpuprice/.venv-gpu/bin/python studies/gpuprice/jobs/fm2_chronos2.py --origins dev",
+  "runs/gpuprice/.venv/bin/python -I -B studies/gpuprice/jobs/fm2_post.py --quantiles runs/gpuprice/local/base/fm2_chronos2.csv --origins dev --out runs/gpuprice/local/base/fm2-17.csv --hurdle --hurdle-h 1 --scaleway --turnover own --enter abs",
+  "bash studies/gpuprice/jobs/eval.sh <forecast> loc-01-base-fm217 \"<note>\""
+ ],
+ "outputs": "runs/gpuprice/local/ (not committed), runs/gpuprice/evals/loc-01-base-fm217/"
+}

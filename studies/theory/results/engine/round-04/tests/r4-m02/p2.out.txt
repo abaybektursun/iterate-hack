@@ -1,0 +1,2 @@
+{"measured": 0.717948717948718, "refuted_by_met": true, "alt_measured": 0.717948717948718, "not_computable": null, "example_row": {"problem_index": 9, "sample": 0, "attempt": 0, "seed": 45000009, "n_new": 14671, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "9", "score_v3": 0, "gold": "4"}}
+pairs=156 problems_with_pairs=50
