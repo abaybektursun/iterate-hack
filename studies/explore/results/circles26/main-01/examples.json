@@ -1,0 +1,20 @@
+{
+ "scored_right": {
+  "id": "s0036",
+  "idea": "Reintroduce optimization safely by starting from the best-known valid 5\u00d75 grid-plus-gap template and performing only radius-preserving jitter with strict rejection, aiming to beat the baseline without breaking validity.",
+  "score": 2.541415,
+  "valid": true,
+  "msg": "ok",
+  "run": "fnf-s2",
+  "code": "example_best_fnf-s2-s0036.py"
+ },
+ "scored_wrong": {
+  "id": "s0000",
+  "idea": "Use a denser hand-tuned mixed packing with large boundary circles, a tighter central cluster, and small filler circles instead of the uniform grid.",
+  "score": null,
+  "valid": false,
+  "msg": "circles 0 and 17 overlap by 1.91e-02",
+  "run": "single-s3",
+  "code": "example_invalid_single-s3-s0000.py"
+ }
+}

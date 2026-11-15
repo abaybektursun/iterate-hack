@@ -1,0 +1,11 @@
+{
+ "task": "circles26",
+ "strategy": "fnf",
+ "budget": 40,
+ "seed": 0,
+ "model": "gpt-5.4-mini",
+ "k": 4,
+ "out": "runs/explore/circles26/main-01/fnf-s0",
+ "commit": "58c7edf426c3c7069dff296126ef6f1167cd0836",
+ "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task circles26 --strategy fnf --budget 40 --seed 0 --model gpt-5.4-mini --out runs/explore/circles26/main-01/fnf-s0"
+}

@@ -25,15 +25,34 @@ import urllib.error
 import urllib.request
 
 KEY_FILE = pathlib.Path.home() / ".config" / "openai" / "key"
+# Cognition (Devin's maker) serves its SWE models over an OpenAI-compatible API (LiteLLM provider doc); a model whose
+# name starts with "swe-" goes there. Model names are checked with list_models("cognition") before a run.
+PROVIDERS = {"openai": ("https://api.openai.com/v1", "OPENAI_API_KEY", KEY_FILE),
+             "cognition": ("https://api.cognition.ai/v1", "COGNITION_API_KEY",
+                           pathlib.Path.home() / ".config" / "cognition" / "key")}
 SLOTS = 6  # programs scored at once across all runs on this machine (8 cores), so CPU contention is the same for every arm
 SLOT_DIR = pathlib.Path(tempfile.gettempdir()) / "explore-score-slots"
-PRICES = {"gpt-5.4-mini": (0.75, 4.5), "gpt-5.4-nano": (0.2, 1.25), "gpt-6.1-sol": (2.0, 10.0)}  # $/1M in, out; unverified
+PRICES = {"gpt-5.4-mini": (0.75, 4.5), "gpt-5.4-nano": (0.2, 1.25), "gpt-6.1-sol": (2.0, 10.0),  # $/1M in, out; unverified
+          "swe-1.7": (0.5, 2.5), "swe-1.6": (0.5, 2.5)}  # Cognition, from the LiteLLM cost map; unverified
+
+
+def provider(model):
+    base, env, f = PROVIDERS["cognition" if model.startswith("swe-") else "openai"]
+    return base, os.environ.get(env) or f.read_text().strip()
+
+
+def list_models(name):
+    base, env, f = PROVIDERS[name]
+    key = os.environ.get(env) or f.read_text().strip()
+    req = urllib.request.Request(base + "/models", headers={"Authorization": f"Bearer {key}"})
+    return [m["id"] for m in json.load(urllib.request.urlopen(req, timeout=60))["data"]]
 
 
 def chat(messages, model):
-    """One OpenAI chat completion. Returns (text, usage). Retries only rate limits and server errors."""
-    key = os.environ.get("OPENAI_API_KEY") or KEY_FILE.read_text().strip()
-    req = urllib.request.Request("https://api.openai.com/v1/chat/completions",
+    """One chat completion (OpenAI-compatible API of the model's provider). Returns (text, usage). Retries only rate
+    limits, server errors and network errors."""
+    base, key = provider(model)
+    req = urllib.request.Request(base + "/chat/completions",
                                  data=json.dumps({"model": model, "messages": messages}).encode(),
                                  headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
     for attempt in range(5):
@@ -42,7 +61,7 @@ def chat(messages, model):
             return r["choices"][0]["message"]["content"], r.get("usage", {})
         except urllib.error.HTTPError as e:
             if e.code not in (429, 500, 502, 503) or attempt == 4:
-                raise RuntimeError(f"OpenAI HTTP {e.code}: {e.read()[:300]}")
+                raise RuntimeError(f"{base} HTTP {e.code}: {e.read()[:300]}")
             time.sleep(10 * (attempt + 1))
         except (socket.timeout, urllib.error.URLError, ConnectionError) as e:  # network: retry, then fail loudly
             if attempt == 4:
