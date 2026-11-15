@@ -11,6 +11,7 @@ call gets. Everything else is here, so strategies differ in that decision alone:
 The model sees only validation scores. A task may define a held-out test score (scorer --test), which only the
 analysis reads, as in AutoResearchExam (validation shown, hidden test scored).
 """
+import fcntl
 import json
 import os
 import pathlib
@@ -24,6 +25,8 @@ import urllib.error
 import urllib.request
 
 KEY_FILE = pathlib.Path.home() / ".config" / "openai" / "key"
+SLOTS = 6  # programs scored at once across all runs on this machine (8 cores), so CPU contention is the same for every arm
+SLOT_DIR = pathlib.Path(tempfile.gettempdir()) / "explore-score-slots"
 PRICES = {"gpt-5.4-mini": (0.75, 4.5), "gpt-5.4-nano": (0.2, 1.25), "gpt-6.1-sol": (2.0, 10.0)}  # $/1M in, out; unverified
 
 
@@ -52,6 +55,27 @@ def cost(usage, model):
     return usage.get("prompt_tokens", 0) / 1e6 * pin + usage.get("completion_tokens", 0) / 1e6 * pout
 
 
+class score_slot:
+    """Hold one of SLOTS lock files while a program is scored (blocks until one is free)."""
+
+    def __enter__(self):
+        SLOT_DIR.mkdir(exist_ok=True)
+        while True:
+            for i in range(SLOTS):
+                f = open(SLOT_DIR / f"{i}.lock", "w")
+                try:
+                    fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    self.f = f
+                    return self
+                except BlockingIOError:
+                    f.close()
+            time.sleep(0.5)
+
+    def __exit__(self, *a):
+        fcntl.flock(self.f, fcntl.LOCK_UN)
+        self.f.close()
+
+
 class Task:
     """A folder with spec.md (what to optimize), starter.py (a working weak program) and score.py.
 
@@ -64,14 +88,17 @@ class Task:
         self.name = self.path.name
         self.spec = (self.path / "spec.md").read_text()
         self.starter = (self.path / "starter.py").read_text()
+        self.starter_score = None  # set by Run from one scored evaluation of the starter
 
     def evaluate(self, code, test=False, timeout=120):
-        with tempfile.TemporaryDirectory() as d:
+        with score_slot(), tempfile.TemporaryDirectory() as d:
             prog = pathlib.Path(d) / "solution.py"
             prog.write_text(code)
             cmd = [sys.executable, str(self.path / "score.py"), str(prog)] + (["--test"] if test else [])
             try:
-                r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout, cwd=d)
+                r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout, cwd=d,
+                                   env={**os.environ, "OMP_NUM_THREADS": "1", "OPENBLAS_NUM_THREADS": "1",
+                                        "MKL_NUM_THREADS": "1", "VECLIB_MAXIMUM_THREADS": "1"})
             except subprocess.TimeoutExpired:
                 return {"score": None, "valid": False, "msg": f"scorer timed out after {timeout} s"}
             lines = [l for l in r.stdout.strip().splitlines() if l.startswith("{")]
@@ -85,11 +112,12 @@ IDEA: <one sentence naming the approach of this version and what changed>
 ```python
 <the complete program>
 ```
-You will get its validation score. Try to reach the highest score you can within your budget of submissions."""
+You will get its validation score. Try to reach the highest score you can."""
 
 
-def first_message(task, code, note=""):
-    return (f"TASK:\n{task.spec}\n\nCURRENT PROGRAM:\n```python\n{code}\n```\n{note}"
+def first_message(task, code, score, note=""):
+    """The opening user message of every chat: the task, a program and that program's validation score."""
+    return (f"TASK:\n{task.spec}\n\nCURRENT PROGRAM (validation score {score}):\n```python\n{code}\n```\n{note}"
             "Write your next version.")
 
 
@@ -109,13 +137,24 @@ class Run:
         self.archive = []  # every submission row, in order
         self.spent = {"prompt_tokens": 0, "completion_tokens": 0, "usd": 0.0}
         self.log = open(self.out / "log.jsonl", "a")
+        r = task.evaluate(task.starter)
+        assert r["valid"], f"starter is invalid: {r}"
+        task.starter_score = r["score"]
+        self.peers = False  # forget arm: show the team's best submissions in every feedback message
 
     def left(self):
         return self.budget - len(self.archive)
 
     def best(self, rows=None):
-        ok = [r for r in (rows or self.archive) if r["valid"] and r["score"] is not None]
+        ok = [r for r in (self.archive if rows is None else rows) if r["valid"] and r["score"] is not None]
         return max(ok, key=lambda r: r["score"]) if ok else None
+
+    def base(self):
+        """(code, score, id) of the best program so far, the starter included (id "start")."""
+        b = self.best()
+        if b and b["score"] > self.task.starter_score:
+            return b["code"], b["score"], b["id"]
+        return self.task.starter, self.task.starter_score, "start"
 
     def step(self, session, agent, parent, branch=""):
         """One model call and one scored submission. `session` is a list of chat messages, extended in place."""
@@ -137,18 +176,28 @@ class Run:
         self.log.write(json.dumps(row) + "\n")
         self.log.flush()
         best = self.best()
-        session.append({"role": "user", "content": (
-            f"Validation score: {res['score']} ({'valid' if res['valid'] else 'INVALID'}). {res['msg'][:600]}\n"
-            f"Best so far: {best['score'] if best else None}. Submissions left: {self.left()}. Write your next version.")})
+        msg = (f"Validation score: {res['score']} ({'valid' if res['valid'] else 'INVALID'}). {res['msg'][:600]}\n"
+               f"Best so far: {self.base()[1]}.")
+        if self.peers:
+            msg += "\n" + self.leaderboard(agent)
+        session.append({"role": "user", "content": msg + " Write your next version."})
         print(f"[{self.strategy} {agent}{branch}] {row['id']} score={res['score']} best={best and best['score']} "
               f"ctx={len(session)} ${self.spent['usd']:.3f} | {idea[:80]}", flush=True)
         return self.archive[-1]
+
+    def leaderboard(self, agent, n=3):
+        """The team's top valid submissions by other agents: id, agent, score, idea (code is in the best program
+        every agent restarts from at the next forget)."""
+        ok = sorted((r for r in self.archive if r["valid"] and r["agent"] != agent), key=lambda r: -r["score"])[:n]
+        if not ok:
+            return "Team: no valid submissions from other agents yet."
+        return "Team's best by other agents: " + "; ".join(f"{r['agent']} {r['score']}: {r['idea'][:160]}" for r in ok)
 
     def close(self):
         b = self.best()
         test = self.task.evaluate(b["code"], test=True) if b else None
         summary = {"strategy": self.strategy, "task": self.task.name, "seed": self.seed, "model": self.model,
-                   "budget": self.budget, "n": len(self.archive), "best_val": b and b["score"], "best_id": b and b["id"],
+                   "budget": self.budget, "n": len(self.archive), "starter_score": self.task.starter_score, "best_val": b and b["score"], "best_id": b and b["id"],
                    "best_test": test and test["score"], "spent": self.spent,
                    "valid_share": sum(r["valid"] for r in self.archive) / max(1, len(self.archive))}
         (self.out / "metrics.json").write_text(json.dumps(summary, indent=1))

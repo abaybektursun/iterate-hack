@@ -8,6 +8,8 @@ Writes log.jsonl (one row per submission), code/<id>.py and metrics.json to --ou
 import argparse
 import json
 import pathlib
+import subprocess
+import sys
 
 from studies.explore.lib.loop import Run, Task
 from studies.explore.lib.strategies import STRATEGIES
@@ -26,6 +28,7 @@ out = pathlib.Path(args.out)
 assert not out.exists(), f"{out} exists: a rerun gets a new folder"
 task = Task(pathlib.Path(__file__).resolve().parents[1] / "tasks" / args.task)
 run = Run(task, args.strategy, args.model, args.budget, out, seed=args.seed)
-(out / "run.json").write_text(json.dumps(vars(args), indent=1))
+commit = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
+(out / "run.json").write_text(json.dumps({**vars(args), "commit": commit, "command": " ".join(sys.argv)}, indent=1))
 STRATEGIES[args.strategy](run, k=args.k, seed=args.seed)
 print(json.dumps(run.close()))
