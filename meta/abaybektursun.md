@@ -1,5 +1,69 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 02:40 UTC (after work-f74f02 closed, gpuprice hill-climb and submission, branch gpuprice) meta/reviews/abaybektursun/20261115-0236/
+
+- Last gpuprice entry's checks (23:04): the brief was read and kept the 37 series, with pooled skill as the headline (studies/gpuprice/README.md). Numbers outside run_backtest.sh: all later ones went through jobs/eval.sh (84 ledger files). In-band coverage: 0.74 on the development origins, 0.85 / 0.80 on the locked ones (results/spec2/locked-01/metrics.json) against 0.63.
+- Direction: not DIRECTION.md's mission; Track 2 on the owner's words ("Novelty and daring in chasing the accuracy is the goal", "hill-climbing"). Steps: 5 literature subagents, then 8 arms (simulator v2, Chronos-2 per listing and its round 2, fine-tunes, synthetic-prior network, TabPFN, LLM, extra history). Every arm tested the brief's sentence "beat drift with calibrated intervals". Best alternative not done: the 555 extended series, since the brief does not name the scored set.
+- Research: the literature said series-level foundation models barely beat naive and small-data fine-tuning hurts; both were run anyway and both repeated (fm-01 +0.132, ft-02 +0.252 against +0.271): 2 runs whose answer was published, about 60 CPU-minutes. The listing-level result (+0.272) and the synthetic-only LoRA (+0.295, +0.292) were not in any table read. Told to the owner and later narrowed: SPEC1 "+0.197 against +0.126" lost at 1 day on unseen origins (results/spec1/late-01); after that the candidate was written in specs/SPEC2.md before its one locked run.
+- Turnaround (cycle.txt in the review folder, 4 hours, 46 gpuprice job lines): the slowest stage was the queue. The b200 class started no job for 134 min (llm check 172234-2298, cancelled); the h100 class was full for about 50 min with rlneurons jobs, so 4 fine-tunes ran on cpu at about 55 min each against 15 H100-min for the same work later; 3 jobs died on container restarts (FileExistsError), fixed on main at 02:15 by another session.
+- Failures: (1) subagents' final reports did not reach the coordinator twice (only a follow-up note arrived); asked again by message. (2) Five inline copies of the quantile average in session shells. (3) An LLM arm picked an 82 GB model that only fits b200, a class that never started.
+- Change (step 2, delete): the inline averages are replaced by studies/gpuprice/jobs/average.py, called by jobs/reproduce.sh. Before: 5 heredocs, no file. After: 1 script; reproduce.sh with the stored inference output rewrites results/submission/forecast_2026-11-06.csv, and its Chronos half equals the arm's own event file on 111 of 111 rows. Must not change: ens-05 +0.297955 (unchanged, not rerun).
+- Next entry checks: the score of the submitted file against the organisers' truth; whether b200 has started any job since; whether a later arm was run on the locked origins (it must not be).
+
+## 2026-11-15 02:25 UTC (asked by the person; the first review stored as a run folder) meta/reviews/abaybektursun/20261115-0215/
+
+- Last entry's checks (the entry below; its heading says 02:35, written before 02:13 by the clock): work-43d4a1 now shows its 3 jobs in cycle.py (cycle.txt); their queue wait is 0.1 and 0.6 min, the third still queued, against a 10.8 min median; the runner restart class is removed by this entry.
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training" (DIRECTION.md). Since the last entry: work-43d4a1 (Code-RL and theta on the 328) uses RL weights, so it explains the gain; work-180a48 (min-p, frustea) and the cued-base arm of work-be7af1 are no-reward routes; result-2c2cae (length rules on the 328) is negative, 163 against 160 of 328. The deliverable, a best no-reward configuration scored once on the 328, does not exist yet.
+- Research: no replication seen in the claims since the last entry; not checked against published tables in this review.
+- Turnaround (`cycle.txt`, 3 h; previous entry, 4 h, in brackets): 78 jobs (73), 21 failed or cancelled (21), 248.9 of 1,305.9 container min in them (242.4 of 1,288.8), median queue wait 5.3 min (10.8). Median to-job 10, jobs 120, to-answer 10 min. Slowest stage: jobs.
+- Cause of the failed minutes: 231.3 of the 248.9 are 3 cpu jobs (c51a 139.7, 277d 53.9, 74c7 37.7 min) that Modal restarted and that then died at `out.mkdir` in infra/runner.py.
+- Change (step 3; step 1: the refusal to write into an existing folder protects a finished run's output and stays; step 2: nothing to delete): a restarted run renames the interrupted folder to `<job>.interrupted-<time>` and starts in a fresh one. Deployed to abaybektursun's Modal with the default rolling deploy; the 4 running H100 jobs kept running (`gpu.py ls`).
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | second run of job 0e08 through the runner | FileExistsError | finished | fixed | 1 and 1 | before.txt, after.txt (rerun.py) |
+  | first run's output (must not change) | kept | kept, in `.interrupted-1794708911` | same | 1 and 1 | after.txt, folder list |
+  | container min lost to restarts | 231.3 in 3 h, 3 jobs | not measured yet | - | - | cycle.txt |
+
+  The first second-run after the deploy still failed: an old container took it. It passed on the next try.
+- Failures: the restart class is removed in code; its row is deleted from meta/FAILURES.md. Teammates' workspaces still run the old runner until they deploy.
+- Next entry checks: jobs with state "died: FileExistsError" in `gpu.py ls` (expected 0), and container min in failed or cancelled jobs against 248.9.
+
+## 2026-11-15 02:35 UTC (after work-d36669 closed, Day-1 #4; work-a50d39's skipped entry included)
+
+- Last entry's checks (23:30 entry, the same line of work): merged-model cells ran at 900-1,000 tok/s (work-d36669 comments); the cells cost 20.9 of 22 USD (results/day1_wdiff/readout.json, 317.5 H100 min); b200 job 2298 was never seen running, and a b200 job at 19:36 local was cancelled while queued (`gpu.py ls`).
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training" (DIRECTION.md). Day-1 #1 and #4 are done: 328 at T 1.0 (base cue 164, RL 206) and the weight line (a 0.25 gives 441 of 500, Code-RL cue 450, random 417). #4 uses RL weights, so it explains the gain and is not a no-reward route; the open step work-43d4a1 (Code-RL and theta on the 328) is the same kind. Best alternative: a no-reward cell at equal tokens on the 328 (vote or restart, work-63fac2 and work-140e13 hold it), not chosen here because two sessions already own it.
+- Research: no replication; recall and three priors from memory were set beside #4 before its cells finished (work-d36669 comments 00:50, 00:55). Told to the owner and narrowed: none retracted; "restarts recover at most 16 of 42" rests on one sample per problem.
+- Turnaround (`uv run tools/cycle.py --hours 4`): 73 jobs, 21 failed or cancelled, 242.4 of 1,288.8 container min in them, median queue wait 10.8 min (was 0.0 at 23:30). work-d36669: to-job 10, jobs 129, to-answer 10 min. Slowest stage: jobs; 4 H100 slots are shared by rlneurons and gpuprice sessions.
+- Failure (carried from 22:13): cycle.py matched jobs to a work item by the claiming branch only, so an item claimed on main with jobs sent from its subagent's branch showed 0 jobs. Change (step 3; steps 1-2: the per-item stage times are the skill's own requirement and nothing in the matching could be deleted): cycle.py also matches the branch named in the claim text ("Branch wdiff").
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | jobs matched to work-d36669 | 0 | 18 (4 failed) | found | 1 item | `cycle.py --hours 4`, main 37e4eee against this commit |
+  | job list and totals (must not change) | 73 jobs, 21 failed | 73 jobs, 21 failed | same | 1 and 1 | same command |
+
+- Failure, not fixed: a container restarted by Modal dies at `out.mkdir` in infra/runner.py (3 cpu jobs: c51a, 277d, 74c7; `gpu.py ls`). Not changed here: a redeploy of the runner while 3 cells of work-43d4a1 run could end them. Added to meta/FAILURES.md.
+- Next entry checks: whether work-43d4a1 (claim names branch wdiff328) shows its 3 jobs in cycle.py; queue wait of those jobs against 10.8 min; whether the runner restart class is removed.
+
+## 2026-11-15 01:00 UTC (after result-5cd266, work-02efb7 interp_research port)
+
+- Last entry's checks: not mine to read here (that entry belongs to the wdiff session's line; its cells report 441-453 at 900-1,000 tok/s in work-d36669 comments).
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training" (DIRECTION.md). work-02efb7 moved interp_research's own results onto the board (25 knowledge, 2 ideas) and read 30 cited papers (147 findings, counted per paper via past.dev trace search). No GPU. Three findings were sent at once to work-d36669 (rank-1 keeps ~100% of gain, 2510.00553; x1.5 breaks stopping on Olmo-3 RL-Zero, 2610.37719; DARE size limit, 2311.03099). ~90 cited papers were skipped as off-direction. No drift.
+- Research: no replication; reading only. The n13 transplant was posted twice (knowledge-69adda, knowledge-8229be): two readers had overlapping sources. Marked by comment.
+- Turnaround (work-02efb7, `cycle.py --hours 2`): total 81 min, no jobs. Slowest stage: storing findings, about 60 min. `paper.py add` polled each ingestion to completion; past.dev ran 10-15 min behind with 30-40 items queued, and each reader's adds ran one after another.
+- Change (step 2, delete the wait; code, pushed 004916d): `paper.py add` returns once past.dev has queued the finding, as board.py does. Storage is checked once at the end by counting findings per paper.
+- Failures: (1) `paper.py fetch` crashed on lone surrogates from pypdf (2609.15064) -> fixed in code, 6b71e32. (2) Subagents of one session share one scratchpad: two readers ran another reader's `adds.sh` (DARE adds sent twice; past.dev kept 4 distinct ids, so no duplicates). Cause is my briefing, not code: give each subagent its own folder name in the prompt.
+- Next entry checks: wall minutes from first `paper.py add` to last for the next paper batch; whether past.dev's per-paper counts match the adds reported.
+
+## 2026-11-14 23:30 UTC (5th job since the last multiple, work-d36669 Day-1 #4)
+
+- Last entry's checks: the b200 job `1114-172234-2298` is still queued (no tok/s yet); my next jobs waited 0.0-0.1 min (`uv run tools/cycle.py --hours 1.5`); 208b and f4ab run at 110 min of their 6 h limit and hold 2 of 4 H100; cycle.py still matches by branch, so work-d36669 (claimed on main, jobs from branch wdiff) shows 0 jobs.
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training" (DIRECTION.md); Day-1 #4 is DIRECTION's planned side study (RL-minus-base scaling with Code-RL and random controls). Literature checked first (`tools/recall.py`): no published final-checkpoint scaling on Olmo, no random or cross-task control. No drift.
+- Turnaround (cycle.py, 1.5 h): 7 jobs, 2 failed (1.3 of 6.7 container min), median wait 0.0. Slowest stage ahead: jobs (about 40 min per MATH-500 cell, 2 free H100 slots).
+- Failures: (1) `32f3` stopped at the merge identity assertion: b + (o - b) in float32 is not exact when a weight moves 2^16-fold toward 0 (79 of 355 tensors) -> fixed in code, `(1 - a) b + a o`, with a planted case in `jobs/merge_weights_test.py`. The assertion is what caught it. (2) `e931`: Modal reused the container and `/tmp/theta` existed -> the merge command starts with `rm -rf /tmp/theta`.
+- Change (step 2): the separate 1-minute smoke job was deleted; the 50-problem check is the smoke, and cells go out in priority order as soon as its merge passes, the rest queued, so no slot sits idle while the check runs.
+- Next entry checks: tok/s of the merged-model cells against 1,000; whether the 7 cells fit 22 USD; whether 2298 on b200 ever starts.
+
 ## 2026-11-14 23:04 UTC (after work-28b3f7 and result-3408cd, gpuprice sub-project, branch gpuprice)
 
 - Last entry's checks: all four concern the rlneurons GPU line (b200 tok/s, queue wait, 208b/f4ab hours, cycle.py by work id); this session ran no GPU job and cannot observe them. Carried.
@@ -9,7 +73,6 @@
 - Failures: (1) analysis/readout.py filtered on status "ok", the scorer writes "scored"; its assert stopped it at once. Class: a field value written from memory; removed by reading the report first. (2) the SPEC1 number was first produced by shell lines typed in the session (merge with the baseline for 4 afhubbard series, scorer call), so the README could not reproduce it.
 - Change (step 3; steps 1-2: the merge step stays because the simulator does not model afhubbard, nothing to delete): studies/gpuprice/jobs/run_backtest.sh runs series build, baseline, simulator, merge and scorer in one command; rerun gives 0.196504, equal to the posted number.
 - Next entry checks: whether the track brief was read and changed the 37 series or the aggregate; whether any gpuprice number after this one was produced outside run_backtest.sh; in-band coverage against 0.63.
-
 ## 2026-11-14 22:13 UTC (after work-d8aa69 and work-55d1fe closed, Day-1 #1 and #2)
 
 - Last entry's checks: --shard has not landed (`git grep shard origin/day1-vote origin/main -- studies/rlneurons/jobs/run_cell.py`: none). Queue wait a32d 27.3 min, 208b 28.9, f4ab 28.9 (`uv run tools/cycle.py --hours 1`). Exa warning: no session started since, not observed.

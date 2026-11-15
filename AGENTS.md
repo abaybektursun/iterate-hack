@@ -47,9 +47,10 @@ steps:
 
 1. Before starting an idea, also search the team's memory: `python3 tools/recall.py "<the idea in the field's
    terms>"`.
-2. Before a new measurement, search the literature with the Exa tools (`web_search_exa`, `web_fetch_exa`), using
-   the field's terms and several rephrasings. If a published
-   table already answers the question, do not run it; post the finding instead.
+2. Before a new measurement, search the literature with Exa: `python3 tools/exa.py search "<description of the
+   page you want>"`, using the field's terms and several rephrasings, then `python3 tools/exa.py fetch <url>` to
+   read a hit. Do not use the Exa MCP tools. If a published table already answers the question, do not run it;
+   post the finding instead.
 3. Post each result as a `result` item with its number, its units and the path of its artifact. Teammates cannot
    read your Modal Volumes, so commit the small result files and name the git path.
 4. Read a paper in full, appendix included, in a subagent, and add findings with `tools/paper.py add`. An abstract
@@ -132,4 +133,5 @@ and outputs from the study's `README.md` alone.
 2. Write plain technical English: short sentences, concrete nouns, the field's real terms. No metaphors or
    invented terms.
 3. Keep it short. Board comments are at most 280 characters.
-4. When your person ends a session, remind them to run `uv run tools/traces.py push`.
+4. Claude Code uploads its transcripts by itself (a hook, every 10 minutes and at the end of a session). Codex: when
+   your person ends a session, remind them to run `uv run tools/traces.py push`.
