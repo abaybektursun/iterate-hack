@@ -1,57 +1,55 @@
-# autobench: our research harness against Karpathy's autoresearch
+# autobench: Karpathy's autoresearch loop on our MATH-500 task
 
-Compares two ways of running research agents on one task: Karpathy's autoresearch loop and this repository's
-harness, on Karpathy's task (best `val_bpb` of a GPT trained for 5 minutes on one H100), at an equal number of
-GPU experiments, scored on a shard no experiment has read.
+Runs Karpathy's autoresearch method (one agent, one editable file, a fixed time budget, keep or discard) on this
+repository's task, the base Olmo model on MATH-500 with no training, and compares what it reaches in 40
+experiments with the swarm's record. Problems, prompt, model revisions, engine and grader are the rlneurons
+study's, imported, not copied.
 
-**State: built, nothing has run on a GPU. No numbers yet.** The plan, the leak controls and the cost estimate
-(about 40 USD of Modal for 40 experiments per arm) are in `specs/SPEC1.md`.
+**State: built, nothing has run on a GPU. No numbers yet.** Plan, leak controls and cost (about 34 USD, about
+8.5 h) are in `specs/SPEC2.md`.
 
 | Path | What it is |
 |---|---|
-| `specs/SPEC1.md` | Question, hypothesis, arms, measures, leaks L1 to L9 with their controls, procedure, cost and time, open feasibility points. |
-| `data/karpathy-228791f/` | github.com/karpathy/autoresearch at commit 228791f (MIT, per its README): `prepare.py`, `train.py`, `program.md`, `README.md`, `pyproject.toml`, `.gitignore`, and `SHA256SUMS`. Frozen. |
-| `lib/launch.py` | Runs one `train.py` in the GPU container with the pinned `prepare.py`: refuses the val split outside the evaluation, records the score, scores the holdout when it is mounted. |
-| `lib/test_launch.py` | 6 checks that the launcher fails on inputs that should make it fail. `python3 studies/autobench/lib/test_launch.py`, on the laptop. |
-| `jobs/modal_app.py` | The Modal app `autobench`: `submit` (budget, ledger, storage), `train_job` (H100, no network, read-only data, one container per experiment, killed at 600 s), `score_final` with the holdout, data preparation. |
-| `jobs/run_exp.py` | The client: `submit` for the agents; `prep`, `init`, `ledger`, `holdout`, `final` for the operator. |
-| `analysis/audit.py` | Flags lines of a `train.py` that touch the val split, the evaluation, the time budget, files or the network more than the pinned file does. |
-| `analysis/readout.py` | Ledger to `results/karpathy-task/<arm>-<nn>/metrics.json` and `run.json`, and the comparison. |
-| `arms/baseline/setup.py` | Makes the baseline's folder outside this repository; the 4 changes to `program.md`. |
-| `arms/ours/TASK.md` | The task statement for the agents of our harness. |
+| `specs/SPEC2.md` | Question, inputs shared with the swarm, hypothesis, measures, leaks L1 to L7 with their controls, procedure, cost and time, open points. |
+| `data/dev100-v1.json` | The 100 MATH-500 indices every experiment is scored on, with the rule that drew them. Frozen. |
+| `data/karpathy-228791f/` | `program.md` and `README.md` of github.com/karpathy/autoresearch at commit 228791f (MIT, per its README), the source of `arms/karpathy/program.md`. Frozen. |
+| `lib/harness.py` | The fixed harness in the GPU container: loads the model as `run_cell.py` does, gives `solve.py` the object `h`, ends generation at the time budget. Holds no answers. |
+| `lib/test_harness.py` | Checks of the harness with a stand-in engine: `python3 studies/autobench/lib/test_harness.py`, on the laptop. |
+| `lib/grade.py` | The sets `dev100`, `math400`, `hard328` (from `run_cell.problems`) and grading with `rln4_lib.grade_v3`. CPU side only. |
+| `jobs/modal_app.py` | The Modal app `autobench`: `submit` (budget, ledger, grading, storage), `solve_job` (H100, no network, read-only weights, one container per experiment), `score_final`. |
+| `jobs/exp.py` | The client: `submit` for the agent; `init`, `ledger`, `final` for the operator. |
+| `arms/karpathy/` | The agent's files: `program.md`, `README.md`, the starting `solve.py` (plain prompt, T 0.6 / top-p 0.95), and `setup.py`, which makes its folder outside this repository. |
+| `arms/swarm/solve_cue.py` | The swarm's cue configuration (T 1.0 / top-p 1.0) as a `solve.py`, for the pipeline check and the finals. |
+| `analysis/audit.py` | Flags lines of a `solve.py` that touch the harness internals, the clock, files or single problems. |
+| `analysis/readout.py` | Ledger to `results/math500-loop/<arm>-<nn>/metrics.json` and `run.json`, and the readout. |
 
 ## Run
 
 ```
 modal deploy studies/autobench/jobs/modal_app.py
-uv run studies/autobench/jobs/run_exp.py prep
-uv run studies/autobench/jobs/run_exp.py init calib 3
-uv run studies/autobench/jobs/run_exp.py submit calib studies/autobench/data/karpathy-228791f/train.py > run.log 2>&1   # 3 times
-uv run studies/autobench/jobs/run_exp.py init baseline 40
-uv run studies/autobench/jobs/run_exp.py init ours 40
+uv run studies/autobench/jobs/exp.py init check 1
+uv run studies/autobench/jobs/exp.py submit check studies/autobench/arms/swarm/solve_cue.py     # pipeline check, about 0.60 USD
+uv run studies/autobench/jobs/exp.py init karpathy 40
+python3 studies/autobench/arms/karpathy/setup.py ~/autoresearch-math
 ```
 
-Baseline arm: `python3 studies/autobench/arms/baseline/setup.py ~/autobench-baseline`, then in that folder a
-headless Claude Code with Karpathy's prompt and one added sentence, because nobody is there to confirm the setup:
-"Hi have a look at program.md and let's kick off a new experiment! let's do the setup first. The setup is confirmed
-in advance, the run tag is nov15: go straight into the experiment loop."
+Then, in that folder, a headless Claude Code with Karpathy's prompt and one added sentence, because nobody is
+there to confirm the setup: "Hi have a look at program.md and let's kick off a new experiment! let's do the setup
+first. The setup is confirmed in advance, the run tag is nov15: go straight into the experiment loop."
 
-Arm `ours`: 4 Claude Code sessions, each in its own worktree of this repository, started with "Read
-studies/autobench/arms/ours/TASK.md and work on it."
-
-After both arms end:
+After `BUDGET EXHAUSTED` (`<best>` is the arm's best `solve.py`, from `modal volume get autobench-runs karpathy/<nnn>/solve.py`):
 
 ```
-uv run studies/autobench/jobs/run_exp.py holdout
-uv run studies/autobench/jobs/run_exp.py final pinned studies/autobench/data/karpathy-228791f/train.py
-uv run studies/autobench/jobs/run_exp.py final baseline <its best valid train.py>
-uv run studies/autobench/jobs/run_exp.py final ours <its best valid train.py>
-uv run studies/autobench/analysis/readout.py 01 calib baseline ours
+python3 studies/autobench/analysis/audit.py <best>
+uv run studies/autobench/jobs/exp.py final karpathy math400 <best>
+uv run studies/autobench/jobs/exp.py final karpathy hard328 <best>
+uv run studies/autobench/jobs/exp.py final swarm-cue math400 studies/autobench/arms/swarm/solve_cue.py
+uv run studies/autobench/jobs/exp.py final swarm-cue hard328 studies/autobench/arms/swarm/solve_cue.py
+uv run studies/autobench/analysis/readout.py 01 karpathy karpathy swarm-cue
 ```
 
-Every experiment's `train.py`, log and record are in the Modal Volume `autobench-runs` of the person who ran it
-(`<arm>/<nnn>/`, finals in `final/`); `modal volume get autobench-runs <arm> runs/` copies them. They are not
-committed. The data is in the Volume `autobench-data`, the holdout shard in `autobench-holdout`.
+Every experiment's `solve.py`, log, returned texts and grades are in the Modal Volume `autobench-runs` of the
+person who ran it (`<arm>/<nnn>/`, finals in `final/`). They are not committed.
 
 ## Numbers
 
