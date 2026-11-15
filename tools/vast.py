@@ -114,6 +114,15 @@ def up(args):
     hours = float(flags.get("--hours", 3))
     image = flags.get("--image", IMAGE)
     print(f"before this rental: {spend()}", flush=True)
+    # up rents every offer given at once, so all of them count until the losers are destroyed. The account refills 20 USD
+    # once an hour; past that rate every box stops (twice on 2026-11-15, at 16:15 and 19:50 UTC, cutting all running jobs).
+    live = sum(i["dph_total"] for i in vast("show", "instances") if i["actual_status"] != "exited")
+    new = sum(o["dph_total"] for oid in offer_ids for o in vast("search", "offers", f"id={oid}"))
+    budget = float(os.environ.get("VAST_BUDGET_USD_H", 18))
+    assert live + new <= budget, (f"renting these {len(offer_ids)} offers (${new:.2f}/h while they all boot) on top of "
+                                  f"${live:.2f}/h running would pass the ${budget:.0f}/h budget (the account refills 20 USD "
+                                  f"an hour). Wait for a box to end, rent fewer offers at once, or run your next job on a box "
+                                  f"you already have. VAST_BUDGET_USD_H overrides.")
     t0 = time.time()
     onstart = f"(sleep {int(hours * 3600)}; {DESTROY}) > /root/deadline.log 2>&1 &"
     if image == IMAGE:  # install the pinned versions, so a job sees the same packages as on Modal
