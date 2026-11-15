@@ -1,0 +1,114 @@
+{
+ "what": "SPEC1 Part I item 5; fields in the docstring of jobs/describe_neurons.py",
+ "edit": "attr1000_det2",
+ "note": "factor f multiplies the set's activations at every position, the context included; the MLP's output then passes post_feedforward_layernorm, which rescales it. A row ends at the stop token, when the detector flags it (looped), or after the steps. same_as_stored: the row's tokens equal the continuation stored in loops.json as far as both go (expected at factor 1 when --noise-seed is Part L's seed: same model, context and noise).",
+ "config": {
+  "restart_before_onset": 300,
+  "steps": 1600,
+  "temperature": 0.6,
+  "top_p": 1.0,
+  "noise_seed": 0,
+  "cache": "buffer",
+  "batches": [
+   13,
+   1
+  ],
+  "detector": {
+   "version": 2,
+   "periods": [
+    2,
+    600
+   ],
+   "window": "max(240, period)",
+   "share_of_window_matching": 0.95
+  }
+ },
+ "controls": {
+  "same_noise": {
+   "what": "factor 1 run twice: rows with identical tokens",
+   "rows_identical": 5,
+   "n": 14,
+   "pass": false
+  },
+  "cache": {
+   "what": "the first batch at factor 1 with the dynamic cache: share of the first 8 tokens equal to the buffer run's",
+   "rows": 13,
+   "share": 1.0,
+   "rows_identical_all_steps": 11,
+   "steps": 48,
+   "pass": true
+  }
+ },
+ "summary": [
+  {
+   "name": "selected_x1",
+   "set": "selected",
+   "factor": 1.0,
+   "loops": 3,
+   "n": 14,
+   "loop_rate": 0.21428571428571427,
+   "stopped": 2,
+   "same_as_stored": 0
+  },
+  {
+   "name": "selected_x1_repeat",
+   "set": "selected",
+   "factor": 1.0,
+   "loops": 3,
+   "n": 14,
+   "loop_rate": 0.21428571428571427,
+   "stopped": 2,
+   "same_as_stored": 0
+  },
+  {
+   "name": "selected_x0",
+   "set": "selected",
+   "factor": 0.0,
+   "loops": 1,
+   "n": 14,
+   "loop_rate": 0.07142857142857142,
+   "stopped": 2,
+   "same_as_stored": 0
+  },
+  {
+   "name": "selected_x0.5",
+   "set": "selected",
+   "factor": 0.5,
+   "loops": 1,
+   "n": 14,
+   "loop_rate": 0.07142857142857142,
+   "stopped": 2,
+   "same_as_stored": 0
+  },
+  {
+   "name": "selected_x2",
+   "set": "selected",
+   "factor": 2.0,
+   "loops": 8,
+   "n": 14,
+   "loop_rate": 0.5714285714285714,
+   "stopped": 1,
+   "same_as_stored": 0
+  },
+  {
+   "name": "reference_x0",
+   "set": "reference",
+   "factor": 0.0,
+   "loops": 3,
+   "n": 14,
+   "loop_rate": 0.21428571428571427,
+   "stopped": 3,
+   "same_as_stored": 0
+  },
+  {
+   "name": "reference_x2",
+   "set": "reference",
+   "factor": 2.0,
+   "loops": 3,
+   "n": 14,
+   "loop_rate": 0.21428571428571427,
+   "stopped": 2,
+   "same_as_stored": 0
+  }
+ ]
+}

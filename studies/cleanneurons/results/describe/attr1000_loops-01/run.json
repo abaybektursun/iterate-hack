@@ -1,0 +1,14 @@
+{
+ "job_id": "sameraslan-1114-195041-abf7",
+ "commit": "e455a8050015c3956268c5e28699ac30f6bbacc0",
+ "command": "python -m studies.cleanneurons.jobs.describe_neurons --commit e455a8050015c3956268c5e28699ac30f6bbacc0 --edit studies/cleanneurons/results/loops/real-01/edit_attr1000.json --loops /runs/sameraslan-1114-184558-8a70/loops.json",
+ "runner": "tools/gpu.py h100 (Modal workspace sameraslan)",
+ "exit": "1: control 'same_noise' failed (the factor-1 dose run repeated with the same noise gave identical tokens in 5 of 14 rows; both runs give 3 loops of 14). Every file was written first. The loop counts per dose are therefore read with a run-to-run noise of this size in mind.",
+ "volume_only": [
+  "contexts.json (53 MB)",
+  "onset_trace.json (14.7 MB, per-neuron traces)",
+  "neurons.json (2.9 MB)",
+  "dose.json (0.7 MB, with every row)"
+ ],
+ "volume_path": "iterate-runs:sameraslan-1114-195041-abf7/"
+}

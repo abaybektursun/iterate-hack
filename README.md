@@ -304,7 +304,9 @@ points, previous best -> new best, the result id, who, the configuration and the
 The tab Design is the page `/architecture` (`tools/architecture.py`): one picture of the shared work setup for
 a first-time reader. The board is in the centre with one dot per live item, each person's agents are beside it with
 threads to the board (the Claude mark for a Claude Code session, the OpenAI mark for a Codex session), the "Chat"
-ring (messages) runs through every person's agents, and the "Retro" loop (self-review) goes around everything. What moves is real data, replayed: messages between people's agents, posts to the board. A click on a part
+ring (messages) runs through every person's agents, and the "Retro" loop (self-review) goes around everything. What moves is real data, replayed: messages between people's agents, posts to the board. While one plays, its
+first words are typed beside the person whose agent wrote it, with its age ("4 min ago", or "now"), and the status at
+the top right counts the seconds since the last post. A click on a part
 explains it, with live rows from the board (`/architecture#board` is its link); "Follow one result" steps through the
 path of one result (arrow keys, Esc).
 

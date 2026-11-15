@@ -1,0 +1,6 @@
+{
+ "name": "mlp",
+ "copy_families": [
+  "mlp"
+ ]
+}

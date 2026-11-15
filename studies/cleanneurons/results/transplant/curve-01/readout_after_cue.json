@@ -1,0 +1,299 @@
+{
+ "source": "/private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-auto-research-harness-hackathon-bbd59e/25ae40cc-2e8a-47af-8f2b-c73aa0b7149f/scratchpad/submit/runs/sameraslan-1114-151017-b683",
+ "job_id": "sameraslan-1114-151017-b683",
+ "commit": "fab81ec57919de133535f372bac8349625e04794",
+ "n_cue_dropped_per_row": 3,
+ "decisive_fraction": 0.04,
+ "cells": {
+  "T1": {
+   "rows": 40,
+   "positions_after_cue": 59007,
+   "decisive_positions": 2360,
+   "smallest_decisive_kl": 0.46807071566581726,
+   "base_mean_kl_after_cue": 0.08402476747423113,
+   "base_mean_kl_decisive": 0.8159319232328464,
+   "share_of_original_decisive_kl_on_cue": 0.23532088262955225
+  },
+  "T2": {
+   "rows": 40,
+   "positions_after_cue": 72230,
+   "decisive_positions": 2889,
+   "smallest_decisive_kl": 0.33075106143951416,
+   "base_mean_kl_after_cue": 0.06128335758443756,
+   "base_mean_kl_decisive": 0.625516753381988,
+   "share_of_original_decisive_kl_on_cue": 0.2410261341428928
+  }
+ },
+ "arms": {
+  "all": {
+   "T1": {
+    "closure_after_cue": 1.0,
+    "closure_decisive": 1.0
+   },
+   "T2": {
+    "closure_after_cue": 1.0,
+    "closure_decisive": 1.0
+   }
+  },
+  "mlp": {
+   "T1": {
+    "closure_after_cue": 0.6658266098811871,
+    "closure_decisive": 0.6935525053286141
+   },
+   "T2": {
+    "closure_after_cue": 0.8121094493569565,
+    "closure_decisive": 0.8580500939262692
+   }
+  },
+  "attn": {
+   "T1": {
+    "closure_after_cue": 0.4886479364447279,
+    "closure_decisive": 0.5040458277233131
+   },
+   "T2": {
+    "closure_after_cue": 0.645326997319553,
+    "closure_decisive": 0.6772919713260803
+   }
+  },
+  "other": {
+   "T1": {
+    "closure_after_cue": 0.04300354242235804,
+    "closure_decisive": 0.040150400607810166
+   },
+   "T2": {
+    "closure_after_cue": 0.05436606128528165,
+    "closure_decisive": 0.045742563561610106
+   }
+  },
+  "top0.1": {
+   "T1": {
+    "closure_after_cue": 0.01239779155840881,
+    "closure_decisive": 0.009593435796187322
+   },
+   "T2": {
+    "closure_after_cue": 0.024562292406688946,
+    "closure_decisive": 0.018444534551614655
+   }
+  },
+  "rnd0.1_s0": {
+   "T1": {
+    "closure_after_cue": 0.0009165889854934051,
+    "closure_decisive": 0.000931376444491927
+   },
+   "T2": {
+    "closure_after_cue": 0.001749171559131124,
+    "closure_decisive": 0.0018913018856674402
+   }
+  },
+  "rnd0.1_s1": {
+   "T1": {
+    "closure_after_cue": 0.0008254254972709374,
+    "closure_decisive": 0.0014339620315231283
+   },
+   "T2": {
+    "closure_after_cue": 0.0010838013649637768,
+    "closure_decisive": 0.0016185762967763084
+   }
+  },
+  "top0.3": {
+   "T1": {
+    "closure_after_cue": 0.023911430773508657,
+    "closure_decisive": 0.020410917034143994
+   },
+   "T2": {
+    "closure_after_cue": 0.041557747984260485,
+    "closure_decisive": 0.03236172970854867
+   }
+  },
+  "rnd0.3_s0": {
+   "T1": {
+    "closure_after_cue": 0.0026360747337574875,
+    "closure_decisive": 0.003002274637624147
+   },
+   "T2": {
+    "closure_after_cue": 0.0024733502092110227,
+    "closure_decisive": 0.002908321320081231
+   }
+  },
+  "rnd0.3_s1": {
+   "T1": {
+    "closure_after_cue": 0.002600692745785449,
+    "closure_decisive": 0.002639736690210448
+   },
+   "T2": {
+    "closure_after_cue": 0.0026420760824522604,
+    "closure_decisive": 0.0030249657387227957
+   }
+  },
+  "top1": {
+   "T1": {
+    "closure_after_cue": 0.04598757090900085,
+    "closure_decisive": 0.039462659083721374
+   },
+   "T2": {
+    "closure_after_cue": 0.07138731747670934,
+    "closure_decisive": 0.056743332602682384
+   }
+  },
+  "rnd1_s0": {
+   "T1": {
+    "closure_after_cue": 0.006445880401099502,
+    "closure_decisive": 0.0069206607996786795
+   },
+   "T2": {
+    "closure_after_cue": 0.008609984974081386,
+    "closure_decisive": 0.009376281417955434
+   }
+  },
+  "rnd1_s1": {
+   "T1": {
+    "closure_after_cue": 0.006630828592025462,
+    "closure_decisive": 0.006663959995582003
+   },
+   "T2": {
+    "closure_after_cue": 0.008930391197585319,
+    "closure_decisive": 0.009369934580611639
+   }
+  },
+  "top3": {
+   "T1": {
+    "closure_after_cue": 0.08158417310479738,
+    "closure_decisive": 0.07305344913703316
+   },
+   "T2": {
+    "closure_after_cue": 0.1193198915168786,
+    "closure_decisive": 0.10243477600709272
+   }
+  },
+  "rnd3_s0": {
+   "T1": {
+    "closure_after_cue": 0.021195700454948785,
+    "closure_decisive": 0.02163079075294605
+   },
+   "T2": {
+    "closure_after_cue": 0.027653987555189108,
+    "closure_decisive": 0.028548744196206455
+   }
+  },
+  "rnd3_s1": {
+   "T1": {
+    "closure_after_cue": 0.02139638862033244,
+    "closure_decisive": 0.02200933090932944
+   },
+   "T2": {
+    "closure_after_cue": 0.0282501624132091,
+    "closure_decisive": 0.028619939558639507
+   }
+  },
+  "top10": {
+   "T1": {
+    "closure_after_cue": 0.15457194026359633,
+    "closure_decisive": 0.14669017940312334
+   },
+   "T2": {
+    "closure_after_cue": 0.21679794621144044,
+    "closure_decisive": 0.20326138206465938
+   }
+  },
+  "rnd10_s0": {
+   "T1": {
+    "closure_after_cue": 0.06789016158588346,
+    "closure_decisive": 0.06903671892988095
+   },
+   "T2": {
+    "closure_after_cue": 0.09345204408265817,
+    "closure_decisive": 0.09564394307043311
+   }
+  },
+  "rnd10_s1": {
+   "T1": {
+    "closure_after_cue": 0.06866932503560497,
+    "closure_decisive": 0.07023633220083403
+   },
+   "T2": {
+    "closure_after_cue": 0.0959272903071271,
+    "closure_decisive": 0.0966468125036617
+   }
+  },
+  "top30": {
+   "T1": {
+    "closure_after_cue": 0.28365450397872394,
+    "closure_decisive": 0.2829617251321187
+   },
+   "T2": {
+    "closure_after_cue": 0.41182924470862314,
+    "closure_decisive": 0.42679083626670133
+   }
+  },
+  "rnd30_s0": {
+   "T1": {
+    "closure_after_cue": 0.19154656070328524,
+    "closure_decisive": 0.19943092687707054
+   },
+   "T2": {
+    "closure_after_cue": 0.284531659455025,
+    "closure_decisive": 0.310692525114574
+   }
+  },
+  "rnd30_s1": {
+   "T1": {
+    "closure_after_cue": 0.19342844118282243,
+    "closure_decisive": 0.20021046130937126
+   },
+   "T2": {
+    "closure_after_cue": 0.28697987653439394,
+    "closure_decisive": 0.3124325820715169
+   }
+  },
+  "mlpL0-7": {
+   "T1": {
+    "closure_after_cue": 0.18162693216706316,
+    "closure_decisive": 0.2297651217111274
+   },
+   "T2": {
+    "closure_after_cue": 0.3258977456174813,
+    "closure_decisive": 0.415913628983707
+   }
+  },
+  "mlpL8-15": {
+   "T1": {
+    "closure_after_cue": 0.2392073026639715,
+    "closure_decisive": 0.24488540222483146
+   },
+   "T2": {
+    "closure_after_cue": 0.28636814772079067,
+    "closure_decisive": 0.3105785213859493
+   }
+  },
+  "mlpL16-23": {
+   "T1": {
+    "closure_after_cue": 0.10336966711968032,
+    "closure_decisive": 0.09791938190051785
+   },
+   "T2": {
+    "closure_after_cue": 0.13969949914174518,
+    "closure_decisive": 0.13613301223629093
+   }
+  },
+  "mlpL24-31": {
+   "T1": {
+    "closure_after_cue": 0.08506647229065134,
+    "closure_decisive": 0.0795590275409187
+   },
+   "T2": {
+    "closure_after_cue": 0.12792590456112307,
+    "closure_decisive": 0.12366313652004945
+   }
+  },
+  "none": {
+   "T1": {
+    "closure_after_cue": 0.0,
+    "closure_decisive": 0.0
+   },
+   "T2": {
+    "closure_after_cue": 0.0,
+    "closure_decisive": 0.0
+   }
+  }
+ }
+}
