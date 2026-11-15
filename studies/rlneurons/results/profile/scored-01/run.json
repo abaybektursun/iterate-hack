@@ -1,0 +1,9 @@
+{
+ "commit": "9875aabfaa494263d16f21b2b4488279b6d4e21e",
+ "commit_note": "HEAD when it ran; analysis/profile.py is committed in the commit that adds this file",
+ "command": "uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.profile score",
+ "job_id": null,
+ "gpu": "none (laptop, numpy)",
+ "spec": "studies/rlneurons/specs/SPEC_profile.md",
+ "inputs": "results/profile/predict-01/predictions.json; OBSERVED in analysis/profile.py"
+}

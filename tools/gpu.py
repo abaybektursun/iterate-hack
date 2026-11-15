@@ -4,11 +4,12 @@
 # ///
 """Submit GPU jobs to your own Modal workspace (deploy infra/runner.py there once) and inspect them.
 
+  uv run tools/gpu.py deploy              deploy infra/runner.py to your Modal workspace (after a pull that changed it)
   uv run tools/gpu.py submit <class> [--hours 2] -- <command>   class: h100, b200, cpu
   uv run tools/gpu.py ls [--all]          jobs of the last 3 hours, any state; --all: every job
   uv run tools/gpu.py wait <job-id>       block until the job ends, then print its state and last 20 log lines
   uv run tools/gpu.py logs <job-id> [n]   last n lines of the job's log (default 30)
-  uv run tools/gpu.py kill <job-id>
+  uv run tools/gpu.py kill <job-id>       a queued job never starts; a running one is ended within about 30 s
   uv run tools/gpu.py get <job-id>        copy the job's $OUT_DIR (outputs and log) to runs/<job-id>/
 
 The command is a shell string: one quoted argument, e.g.
@@ -18,6 +19,8 @@ Several arguments are quoted one by one and joined.
 A job runs the current commit: the tree must be clean and the commit pushed. The command runs from the
 repository root and writes its outputs to $OUT_DIR. The log is updated every 30 seconds. Jobs, outputs and the
 model cache are in your own workspace: teammates cannot read them, so commit small result files to share them.
+The runner ends a job whose log gets no new line for 15 minutes (it holds a GPU and is most likely hung), so a
+long silent step should print a line now and then; ls then shows "stopped: no new log line for 15 min".
 """
 import io
 import secrets
@@ -38,16 +41,29 @@ def git(*args):
     return subprocess.run(["git", *args], capture_output=True, text=True, check=True).stdout.strip()
 
 
+RUNNER_KEY = "runner"  # the blob hash of the infra/runner.py that gpu.py deploy last deployed to this workspace
+
+
+def deploy(args):
+    subprocess.run([sys.executable, "-m", "modal", "deploy", "infra/runner.py"], check=True)
+    jobs[RUNNER_KEY] = git("hash-object", "infra/runner.py")
+    print(f"runner {jobs[RUNNER_KEY][:7]} deployed")
+
+
 def load():
     """Merge the per-writer keys (job, call, start, end, cancel) into one record per job."""
     records = {}
     for key, value in jobs.items():
+        if key == RUNNER_KEY:
+            continue
         kind, job_id = key.split(":", 1)
         records.setdefault(job_id, {"id": job_id})[kind] = value
     return records
 
 
 def state(r):
+    if "end" in r and r["end"].get("stopped"):  # the runner ended it: cancelled, silent too long, or over its hours
+        return f"stopped: {r['end']['stopped']}"
     if "end" in r:
         return "done" if r["end"]["exit_code"] == 0 else ("timeout" if r["end"]["timed_out"] else f"exit {r['end']['exit_code']}")
     if "cancel" in r:
@@ -72,9 +88,14 @@ def submit(args):
     assert rest[0] == "--", "put the command after --"
     cmd = rest[1] if len(rest) == 2 else shlex.join(rest[1:])
 
-    assert not git("status", "--porcelain"), "commit your changes first: a job runs one commit"
+    assert not git("status", "--porcelain", "--untracked-files=no"), "commit your changes first: a job runs one commit"
+    if untracked := git("ls-files", "--others", "--exclude-standard"):  # not in the commit, so not in the job
+        print(f"not in the job (untracked): {' '.join(untracked.split()[:5])}", file=sys.stderr)
     sha = git("rev-parse", "HEAD")
     assert git("branch", "-r", "--contains", sha), "push the commit first, so others can read the code"
+    deployed, wanted = jobs.get(RUNNER_KEY), git("rev-parse", f"{sha}:infra/runner.py")
+    assert deployed == wanted, (f"the runner deployed in your Modal workspace ({(deployed or 'unknown')[:7]}) is not the infra/runner.py "
+                                f"of this commit ({wanted[:7]}): git pull origin main, then uv run tools/gpu.py deploy")
     who = team.who()
 
     # Upload on every submit, overwriting: the file is named by its commit, so the bytes are the same. Checking
@@ -147,4 +168,4 @@ if __name__ == "__main__":
         sys.exit(__doc__)
     events.log("gpu", sys.argv[1:], team.who())
     command, *args = sys.argv[1:] or ["help"]
-    {"submit": submit, "ls": ls, "wait": wait, "logs": logs, "kill": kill, "get": get}.get(command, lambda _: sys.exit(__doc__))(args)
+    {"deploy": deploy, "submit": submit, "ls": ls, "wait": wait, "logs": logs, "kill": kill, "get": get}.get(command, lambda _: sys.exit(__doc__))(args)
