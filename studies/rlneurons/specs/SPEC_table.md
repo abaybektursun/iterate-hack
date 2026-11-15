@@ -92,3 +92,45 @@ interval includes 1 or lies below it.
 ## Outputs
 
 `results/table/hard328-01/`: `run.json`, `table.md`, `table.json`, `checks.json`, `v4_rows.jsonl`.
+
+## Addendum 1: run hard328-02 (written before `config_table.py` is changed or any new cell is computed)
+
+Reason: review of result-389164. "Every configuration" overstated: the top-8 dial and the self-distillation rows were absent.
+Since hard328-01, per-problem rows of more closed hard328 configurations are on main. `results/table/hard328-02/` holds the
+table of hard328-01 plus the rows below; hard328-01 is not touched. Same columns, same bootstrap, same check mechanism: every
+posted number of a new row goes into `checks.json` with expected and got, and a row whose number does not reproduce stays in
+the table marked "does not reproduce". The table is named "configurations with committed rows", and what is absent is listed.
+
+New sources (committed on main):
+
+| Key | Rows | Path |
+|---|---|---|
+| dial | 0/1, cap hit, tokens and extracted answer per problem, 1 sample: base + s x (top 8 directions of RL - base) + cue at s = -1, 0.5, 1, 1.5, 2, 3; 8 random directions at -1, 1, 2, 3; s = 0 and RL are the Day-1 #1 draws already in the table (used as a check against `axis/hard328-01/vectors.json`) | `PROBLEMS` in `tools/finding_the_finish_dial.py` (written from the jobs' answers; the run folders `results/xreward/edits/*-01/` hold metrics only); posted numbers in `results/xreward/edits/readout.json`, result-6f1bb7 |
+| dial4 | the 1.5 size, 4 samples, no restart | `results/day1_3/hard328_top8x1.5_cue_s4-01/rows.jsonl` (the same file as `results/xreward/dial15_s4_vs_*-01/rows.jsonl`); MATH-500 one sample `results/xreward/dial15_math500-01/rows.jsonl`; result-95a4dc |
+| transplant | Think-SFT + a (RL - base) + cue, a = 1, 2 (two samples), 3, 4, and Think-SFT + noise of the RL delta's norm, 1 sample each | `results/transplant/hard328-01/rows.jsonl`; MATH-500 a = 1 `results/transplant/math500-01/rows.jsonl`; result-3387ce |
+
+New rows. Family single: each dial cell; the 1.5 size as the mean of its four samples; M(1), M(2) as the mean of its two
+samples, M(3), M(4), the noise control. Family vote: the 1.5 size, plain vote over 4.
+
+Flags, fixed here before the numbers are computed:
+- dial, top-8 directions: reward-trained weights "partly (RL-derived directions)". Chosen on the 328: "yes" for size 1.5 (the
+  best of 7 sizes scored on the 328), one sample and the four-sample rows alike; the four samples are new draws on the same
+  problems, not a held-out set. The other sizes: "no (one size of the sweep, every size reported)".
+- dial, random directions: reward-trained weights "no", chosen "no"; they are controls, not methods.
+- transplant: reward-trained weights "partly"; chosen "yes" for a = 2 (best of 4 values of a on the 328; its second sample
+  was pre-registered with the threshold 222); a = 1 "no" (prediction filed before the run); a = 3, 4 "no (one value of the
+  sweep)". Noise control: "no", "no"; a control.
+
+Included only if its rows are on main when the script runs, otherwise listed as left out with the reason: cap 32,768
+(result-c8b994), self-distillation, signed self-training, the loop-neuron edit, solved examples, the other xreward edit cells.
+
+Separate table, different benchmark, no share of the gap: fresh2026 (n = 136, result-5251c9), three models, one sample (mean
+of 4) and vote over 4, with right / wrong / abstained, accuracy and its interval (the same bootstrap over the 136 problems),
+tokens, and the paired differences as posted. Rows `results/fresh/{sft1_cue,rl_plain,base_cue}_s4-01/rows.jsonl`; posted
+numbers `results/fresh/readout-01/readout.json`, checked the same way.
+
+Summary sentences of the README section: changed only if a new row changes them. Sentence 1 changes if a row with
+reward-trained weights "no" and chosen on the 328 "no" that is a method (not a control) is above Think-SFT + cue in its
+family. The script prints the best such row per family.
+
+Refuted if: a posted number of a new row does not reproduce from its committed rows.
