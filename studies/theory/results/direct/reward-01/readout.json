@@ -1,0 +1,304 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_reward.md",
+ "input": "studies/theory/data/direct_reward/top8_share_v1.json",
+ "n_matrices": 224,
+ "n_layers": 32,
+ "bootstrap": "10000 draws over layers (7 matrices each), paired across keys, seed 0",
+ "P": {
+  "point": 0.6851,
+  "ci90": [
+   0.6093,
+   0.7654
+  ]
+ },
+ "decision_rule": "refuted if P lower bound >= 0.5; holds if P upper bound < 0.5; else undecided",
+ "verdict": "refuted",
+ "G_gradable_3.0": {
+  "point": 0.1717,
+  "ci90": [
+   0.1628,
+   0.1815
+  ]
+ },
+ "general30_minus_math30": {
+  "point": -0.0082,
+  "ci90": [
+   -0.0247,
+   0.0077
+  ]
+ },
+ "general30_minus_math31": {
+  "point": 0.0089,
+  "ci90": [
+   -0.0024,
+   0.0201
+  ]
+ },
+ "general30_minus_think_sft": {
+  "point": 0.0971,
+  "ci90": [
+   0.087,
+   0.1074
+  ]
+ },
+ "size_matched_general30_minus_code30_s100": {
+  "point": 0.0054,
+  "ci90": [
+   -0.0084,
+   0.0186
+  ]
+ },
+ "layers_general30_above_math30": 17,
+ "layers_general30_above_think_sft": 32,
+ "growth_step100_to_final": {
+  "math31": {
+   "point": 0.0331,
+   "ci90": [
+    0.0256,
+    0.0406
+   ]
+  },
+  "code31": {
+   "point": 0.0229,
+   "ci90": [
+    0.0158,
+    0.0298
+   ]
+  },
+  "math30": {
+   "point": 0.0579,
+   "ci90": [
+    0.0482,
+    0.0686
+   ]
+  },
+  "code30": {
+   "point": 0.0523,
+   "ci90": [
+    0.0471,
+    0.0577
+   ]
+  },
+  "if30": {
+   "point": 0.0225,
+   "ci90": [
+    0.0194,
+    0.0256
+   ]
+  },
+  "general30": {
+   "point": 0.0247,
+   "ci90": [
+    0.0205,
+    0.0292
+   ]
+  },
+  "mix30": {
+   "point": 0.0652,
+   "ci90": [
+    0.0567,
+    0.0739
+   ]
+  }
+ },
+ "per_key": {
+  "math31": {
+   "S": {
+    "point": 0.1181,
+    "ci90": [
+     0.1091,
+     0.1278
+    ]
+   },
+   "rel_norm": 0.002363
+  },
+  "code31": {
+   "S": {
+    "point": 0.1275,
+    "ci90": [
+     0.1203,
+     0.1351
+    ]
+   },
+   "rel_norm": 0.001951
+  },
+  "math30": {
+   "S": {
+    "point": 0.1353,
+    "ci90": [
+     0.1233,
+     0.1487
+    ]
+   },
+   "rel_norm": 0.002292
+  },
+  "code30": {
+   "S": {
+    "point": 0.174,
+    "ci90": [
+     0.1595,
+     0.1894
+    ]
+   },
+   "rel_norm": 0.00271
+  },
+  "if30": {
+   "S": {
+    "point": 0.2058,
+    "ci90": [
+     0.1939,
+     0.2181
+    ]
+   },
+   "rel_norm": 0.002498
+  },
+  "general30": {
+   "S": {
+    "point": 0.1271,
+    "ci90": [
+     0.1152,
+     0.1394
+    ]
+   },
+   "rel_norm": 0.001137
+  },
+  "mix30": {
+   "S": {
+    "point": 0.1665,
+    "ci90": [
+     0.1581,
+     0.1755
+    ]
+   },
+   "rel_norm": 0.001621
+  },
+  "think_sft": {
+   "S": {
+    "point": 0.03,
+    "ci90": [
+     0.0275,
+     0.0329
+    ]
+   },
+   "rel_norm": 0.248447
+  },
+  "math31_s100": {
+   "S": {
+    "point": 0.085,
+    "ci90": [
+     0.0747,
+     0.0963
+    ]
+   },
+   "rel_norm": 0.000283
+  },
+  "code31_s100": {
+   "S": {
+    "point": 0.1046,
+    "ci90": [
+     0.0934,
+     0.1162
+    ]
+   },
+   "rel_norm": 0.000317
+  },
+  "math30_s100": {
+   "S": {
+    "point": 0.0774,
+    "ci90": [
+     0.0688,
+     0.0865
+    ]
+   },
+   "rel_norm": 0.000294
+  },
+  "code30_s100": {
+   "S": {
+    "point": 0.1217,
+    "ci90": [
+     0.111,
+     0.1333
+    ]
+   },
+   "rel_norm": 0.001186
+  },
+  "if30_s100": {
+   "S": {
+    "point": 0.1833,
+    "ci90": [
+     0.1703,
+     0.1971
+    ]
+   },
+   "rel_norm": 0.001939
+  },
+  "general30_s100": {
+   "S": {
+    "point": 0.1023,
+    "ci90": [
+     0.0911,
+     0.1147
+    ]
+   },
+   "rel_norm": 0.000402
+  },
+  "mix30_s100": {
+   "S": {
+    "point": 0.1012,
+    "ci90": [
+     0.0917,
+     0.1111
+    ]
+   },
+   "rel_norm": 0.000311
+  },
+  "base_w": {
+   "S": {
+    "point": 0.0317,
+    "ci90": [
+     0.0288,
+     0.0354
+    ]
+   },
+   "rel_norm": 1.0
+  }
+ },
+ "gaussian_floor_top8_share": {
+  "4096x4096": 0.00768,
+  "4096x11008": 0.005,
+  "11008x4096": 0.00501
+ },
+ "supporting_stored_counts": {
+  "source": "studies/rlneurons/results/xreward/edits/readout.json (result-6f1bb7)",
+  "hard328_cue_right_cap_hits": {
+   "base_cue": [
+    164,
+    77
+   ],
+   "top8_general30_1x": [
+    164,
+    88
+   ],
+   "top8_math31_1x": [
+    192,
+    46
+   ],
+   "top8_math30_1x": [
+    182,
+    43
+   ],
+   "top8_if30_1x": [
+    155,
+    41
+   ],
+   "top8_code30_1x": [
+    173,
+    23
+   ],
+   "top8_think_sft_at_math_norm": [
+    156,
+    75
+   ]
+  }
+ }
+}

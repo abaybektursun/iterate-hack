@@ -25,7 +25,7 @@ Modal. --image takes any other image; README.md lists the team's ECR images. Ins
 command, with `python -m pip install -q --break-system-packages <pkg> && python exp/run.py`. A job runs one clean, pushed commit, from
 the repository root, and writes its outputs to $OUT_DIR. The deadline runs on the box itself, with the instance's own
 key, so it fires even when your laptop is closed. When a job ends, the box itself uploads $OUT_DIR to the team store
-(jobs/<job-id>.tar), so its outputs outlive the box and a closed laptop; a job cut off by the deadline uploads nothing.
+(jobs/<job-id>.tar), so its outputs outlive the box and a closed laptop; while it runs, its outputs so far go to jobs/<job-id>.part.tar every 10 minutes, which get reads when the box is gone.
 """
 import json
 import re
@@ -46,6 +46,7 @@ FILTER = "num_gpus=1 verified=true reliability>0.98 rentable=true inet_down>=500
 ROOT = Path(__file__).resolve().parent.parent
 RECORDS = ROOT / "runs" / "vast"
 MIN_MB_S = 20      # a box that downloads slower than this is destroyed at once (9 of 32 earlier rentals were slow)
+PART_S = 600       # seconds between uploads of a running job's outputs
 BOOT_MINUTES = 6  # a box not reachable by ssh within this time is destroyed
 # The deadline: python and the instance's own key, so it works on any image and with the laptop closed.
 DESTROY = ("python3 -c \"import os, urllib.request as u; u.urlopen(u.Request("
@@ -61,8 +62,12 @@ PRESIGN = ("import sys; sys.path.insert(0, sys.argv[1]); import team; from botoc
            "'put_object', Params={'Bucket': team.BUCKET, 'Key': sys.argv[2]}, ExpiresIn=86400))")
 
 
-def stored(job_id):
-    return f"s3://{team.BUCKET}/{team.PREFIX}jobs/{job_id}.tar"
+def stored(job_id, part=""):
+    return f"s3://{team.BUCKET}/{team.PREFIX}jobs/{job_id}{part}.tar"
+
+
+def in_store(job_id, part=""):
+    return subprocess.run(["aws", "s3", "ls", stored(job_id, part), "--profile", team.PROFILE], capture_output=True).returncode == 0
 
 
 def sh(*cmd, input=None):
@@ -114,6 +119,15 @@ def up(args):
     hours = float(flags.get("--hours", 3))
     image = flags.get("--image", IMAGE)
     print(f"before this rental: {spend()}", flush=True)
+    # up rents every offer given at once, so all of them count until the losers are destroyed. The account refills 20 USD
+    # once an hour; past that rate every box stops (twice on 2026-11-15, at 16:15 and 19:50 UTC, cutting all running jobs).
+    live = sum(i["dph_total"] for i in vast("show", "instances") if i["actual_status"] != "exited")
+    new = sum(o["dph_total"] for oid in offer_ids for o in vast("search", "offers", f"id={oid}"))
+    budget = float(os.environ.get("VAST_BUDGET_USD_H", 18))
+    assert live + new <= budget, (f"renting these {len(offer_ids)} offers (${new:.2f}/h while they all boot) on top of "
+                                  f"${live:.2f}/h running would pass the ${budget:.0f}/h budget (the account refills 20 USD "
+                                  f"an hour). Wait for a box to end, rent fewer offers at once, or run your next job on a box "
+                                  f"you already have. VAST_BUDGET_USD_H overrides.")
     t0 = time.time()
     onstart = f"(sleep {int(hours * 3600)}; {DESTROY}) > /root/deadline.log 2>&1 &"
     if image == IMAGE:  # install the pinned versions, so a job sees the same packages as on Modal
@@ -200,11 +214,14 @@ def run(args):
     ssh(instance_id, f"mkdir -p /root/{job_id}/repo /root/{job_id}/out && tar -x -C /root/{job_id}/repo", input=tar)
     job = (f"cd /root/{job_id}/repo && OUT_DIR=/root/{job_id}/out JOB_ID={job_id} "
            f"PYTHONPATH=/root/{job_id}/repo${{PYTHONPATH:+:$PYTHONPATH}} bash -c {shlex.quote(cmd)}")
-    url = sh("uv", "run", "--quiet", "--with", "boto3", "python", "-c", PRESIGN, str(ROOT / "tools"),
-             f"{team.PREFIX}jobs/{job_id}.tar").decode().strip()
-    script = (f"{{ {job}; echo \"exit $?\"; }} > /root/{job_id}/out/log 2>&1; "
-              f"tar -c -f /root/{job_id}/out.tar -C /root/{job_id}/out . && "
-              f"python3 -c {shlex.quote(UPLOAD)} /root/{job_id}/out.tar {shlex.quote(url)} > /root/{job_id}/upload.log 2>&1")
+    presign = lambda part: sh("uv", "run", "--quiet", "--with", "boto3", "python", "-c", PRESIGN, str(ROOT / "tools"),
+                              f"{team.PREFIX}jobs/{job_id}{part}.tar").decode().strip()
+    upload = lambda part: (f"tar -c -f /root/{job_id}/out{part}.tar -C /root/{job_id}/out .; python3 -c {shlex.quote(UPLOAD)} "
+                           f"/root/{job_id}/out{part}.tar {shlex.quote(presign(part))} > /root/{job_id}/upload{part}.log 2>&1")
+    # While the job runs, its outputs so far go to jobs/<job-id>.part.tar every 10 minutes: a job cut off by a dead
+    # box or an empty account keeps its rows (6 jobs were cut 20 minutes in with nothing stored, 2026-11-15 19:50 UTC).
+    script = (f"( while sleep {PART_S}; do {upload('.part')}; done ) & part=$!; "
+              f"{{ {job}; echo \"exit $?\"; }} > /root/{job_id}/out/log 2>&1; kill $part; {upload('')}")
     ssh(instance_id, f"setsid nohup bash -c {shlex.quote(script)} > /dev/null 2>&1 < /dev/null &")
     record(job_id, instance=instance_id, sha=sha, cmd=cmd)
     print(job_id)
@@ -241,8 +258,13 @@ def get(args):
     instance_id, job_id = args
     dest = RECORDS.parent / job_id
     dest.mkdir(parents=True, exist_ok=True)
-    if subprocess.run(["aws", "s3", "ls", stored(job_id), "--profile", team.PROFILE], capture_output=True).returncode == 0:
+    if in_store(job_id):
         data = sh("aws", "s3", "cp", stored(job_id), "-", "--profile", team.PROFILE)  # the job ended and uploaded its outputs
+    elif not reachable(instance_id) and in_store(job_id, ".part"):  # the box is gone before the job's end
+        data = sh("aws", "s3", "cp", stored(job_id, ".part"), "-", "--profile", team.PROFILE)
+        subprocess.run(["tar", "-x", "-C", str(dest)], input=data, check=True)
+        sys.exit(f"{dest}: PARTIAL. The box does not answer and the job never reached its end; these are its outputs "
+                 f"at the last 10-minute upload.")
     else:
         data = ssh(instance_id, f"tar -c -C /root/{job_id}/out .")
     subprocess.run(["tar", "-x", "-C", str(dest)], input=data, check=True)
@@ -269,7 +291,6 @@ def down(args):
     # Jobs run on this box from this checkout whose outputs were not copied out in full: destroying deletes them
     # (an n=500 cell was lost when its box was destroyed 14 s after the job ended, during the copy, 2026-11-15)
     jobs = [f.stem for f in RECORDS.glob("*.json") if json.loads(f.read_text()).get("instance") == instance_id]
-    in_store = lambda j: subprocess.run(["aws", "s3", "ls", stored(j), "--profile", team.PROFILE], capture_output=True).returncode == 0
     left = [j for j in jobs if not (RECORDS.parent / j / ".copied").exists() and not in_store(j)]
     assert not left or "--force" in args, (f"{instance_id} holds jobs whose outputs are neither copied out nor in the team store: "
                                            f"{' '.join(left)}. Run get for each, or down {instance_id} --force")

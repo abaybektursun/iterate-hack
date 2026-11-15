@@ -5,7 +5,7 @@
 The page follows .claude/skills/site-ui/SKILL.md: the tokens, the type and the header of tools/findings.py, a flat
 column of words, hairlines, one lit object (the preview, lit from the upper left). Each picture's still,
 prototypes/<slug>/shot.webp, is written into the page as a data URI, so the page is one request: the site allows 3
-requests a second, and twelve image requests would be refused.
+requests a second, and one image request per picture would be refused.
 """
 import base64
 from pathlib import Path
@@ -14,18 +14,27 @@ HERE = Path(__file__).parent
 
 # slug, name, one sentence, where its data comes from; in the order shown
 PICTURES = [
-    ("crystal", "Results as a crystal", "One crystal for each result on the board, grown by a stated rule.", "Board, live"),
-    ("model-interior", "Inside the model", "The 32 layers, the directions RL changed in each matrix, and the loop neurons.", "Weight readouts"),
-    ("token-flow", "Answers that finish", "Each stored answer falls by its token count and ends finished or cut off at the cap.", "Rows per answer"),
-    ("weight-space", "Weight edits on a dial", "Every model made by adding weight changes, with a dial over the size of the edit.", "Stored readouts"),
-    ("problem-field", "Problems as beads", "One bead for each problem moves between right and wrong as the configuration changes.", "Rows per problem"),
-    ("score-terrain", "Scores as a relief", "Every posted score of one benchmark as a plaster relief, with the best so far as a thread.", "Scores, live"),
-    ("forecast-range", "Forecasts", "Each theory's forecasts, fired before the numbers were measured, against what landed.", "Theory rounds"),
-    ("time-helix", "Time helix", "Items, messages, commits, GPU jobs and scores at their real times, one turn for each hour.", "Board, git, jobs"),
-    ("repo-city", "The repository as a model", "One block for each file, as tall as its line count, replayed commit by commit.", "Git history"),
-    ("lineage", "Lineage", "Which board item cites which, regrown from the first hour.", "Board references"),
-    ("trace-ribbons", "Agent transcripts", "Each agent session as a wire, each tool call as a bead, each subagent as a branch.", "One laptop's transcripts"),
-    ("physics-board", "The board in a tray", "Every board item as a rigid body to grab, throw and sort.", "Board, live"),
+    ("crystal", "Our results, crystal-maxxed", "One crystal for each result on the board, grown by a stated rule. The healing-crystal shop on Valencia could never.", "Board, live"),
+    ("model-interior", "Inside the model's head, literally", "The 32 layers, the directions RL changed in each matrix, and the loop neurons behind answers that repeat themselves forever.", "Weight readouts"),
+    ("token-flow", "Finish the thought or hit the cap", "Each stored answer falls by its token count and either finishes or gets cut off at the cap mid-yap.", "Rows per answer"),
+    ("weight-space", "Weight arithmetic on a dial", "Every model made by adding weight changes together, with a dial over how hard the edit is sent. No thoughts, just vectors.", "Stored readouts"),
+    ("problem-field", "Every problem is a bead", "One bead for each problem slides between right and wrong as the configuration changes. You can watch the vibe shift.", "Rows per problem"),
+    ("score-terrain", "Number go up, in plaster", "Every posted score of one benchmark as a plaster relief, with the best so far as a thread. The hill we climb, rendered as an actual hill.", "Scores, live"),
+    ("forecast-range", "Called it (or did we)", "Each theory's forecasts, locked in before the numbers were measured, against what landed. Receipts, not vibes.", "Theory rounds"),
+    ("time-helix", "The grind, as a spiral", "Items, messages, commits, GPU jobs and scores at their real times, one turn for each hour. Sleep does not appear.", "Board, git, jobs"),
+    ("repo-city", "Repo city", "One block for each file, as tall as its line count, replayed commit by commit. Builds faster than anything SF has permitted.", "Git history"),
+    ("lineage", "Who cited whom", "Which board item cites which, regrown from the first hour. The family tree of every take.", "Board references"),
+    ("trace-ribbons", "What the agents do all day", "Each agent session as a wire, each tool call as a bead, each subagent as a branch. Proof they were locked in.", "One laptop's transcripts"),
+    ("physics-board", "The board, but throwable", "Every board item as a rigid body to grab, throw and sort. For when the to-do list deserves to be yeeted.", "Board, live"),
+    ("one-take", "The whole thing in one take", "Ninety seconds, one camera move, 500 brass pins: the plain base, the opening cue, the vote, the weight edit and RL, each counted on the same problems. No cuts, we are not cowards.", "Rows per problem"),
+    ("orrery", "The studies, in clockwork", "A brass orrery: one arm for each study, set as far from the gilt RL sphere as its best base-model score is short of it, one bead for each result. Turn the crank through 25 hours.", "Board, git"),
+    ("vote-machine", "Democracy, for samples", "Four samples of each problem drop as balls into a ballot cabinet and the tallest stack wins. Pull the lever and watch the vote fix what one sample got wrong.", "Rows per sample"),
+    ("tide", "Rising tide, 500 stones", "One stone for each MATH-500 problem, easiest to hardest, flooded to the level each configuration reaches. The islands are the problems that break the order.", "Rows per problem"),
+    ("call-it", "Call the number", "A game: set your forecast on a slide rule before the measured number is shown, scored by the same rule as the team's theories. Humbling, in a healthy way.", "Theory forecasts"),
+    ("music-box", "The hackathon, as a music box", "Every commit, board item, message and score is a pin on a brass cylinder that plucks a steel comb. Turn the crank to hear two days of work. Sound on.", "Board, git"),
+    ("mobile", "Who is carrying what", "A hanging mobile balanced by real physics: one leaf for each open work item, live. It leans toward whoever holds the most. You can blow on it.", "Board, live"),
+    ("ledger", "What a point costs", "A brass balance that weighs each method's tokens per problem against the accuracy points it bought, next to RL's price.", "Scores, live"),
+    ("library", "The reading list, shelved", "One book for each paper the agents read before running anything. Pull one out and it opens on the findings recorded from it. Yes, they did the reading.", "Paper records"),
 ]
 
 PAGE = r"""<!doctype html>
@@ -33,7 +42,7 @@ PAGE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Invariant: Lab</title>
+<title>Invariant: AI Psychosis maxxing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
@@ -55,7 +64,7 @@ PAGE = r"""<!doctype html>
   }
 }
 * { box-sizing: border-box; }
-html { background: var(--paper); }
+html { background: var(--paper); overflow-x: clip; }  /* the glow around the plate reaches past the page edge */
 body {
   margin: 0; color: var(--ink); background: var(--paper);
   font: 400 15px/1.5 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
@@ -71,6 +80,8 @@ a { color: inherit; text-decoration: none; }
 
 .lab { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 0 clamp(40px, 5.5vw, 104px); align-items: start; }
 .say { margin: clamp(28px, 7vh, 76px) 0 0; max-width: 21ch; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; }
+.eyebrow { margin: clamp(28px, 7vh, 76px) 0 0; color: var(--blue); font-size: 13px; font-weight: 640; font-stretch: 112%; letter-spacing: .01em; }
+.eyebrow + .say { margin-top: 12px; }
 .note { margin: 18px 0 0; max-width: 46ch; color: var(--mute); font-size: 14.5px; line-height: 1.42; }
 
 .rows { list-style: none; margin: clamp(30px, 6vh, 60px) 0 0; padding: 0; border-bottom: 1px solid var(--rule); }
@@ -88,12 +99,12 @@ a { color: inherit; text-decoration: none; }
 /* The one object: the picture of the chosen row, a plate lit from the upper left */
 .stage { position: sticky; top: 0; height: 100vh; max-height: 1100px; display: flex; flex-direction: column; justify-content: center; padding: 28px 0; perspective: 1800px; animation: fade 1.1s .15s both; }
 .plate { position: relative; display: block; transform-style: preserve-3d; will-change: transform; }
-.plate::before { content: ""; position: absolute; inset: -9% -7%; border-radius: 50%; opacity: calc(var(--glow) * .5); pointer-events: none;
+.plate::before { content: ""; position: absolute; inset: -9% -4%; border-radius: 50%; opacity: calc(var(--glow) * .5); pointer-events: none;
   background: radial-gradient(closest-side, color-mix(in srgb, var(--blue) 15%, transparent), transparent); }
 .plate::after { content: ""; position: absolute; left: 5%; right: 5%; bottom: -5%; height: 9%; border-radius: 50%; opacity: calc(var(--shadow) * .5); pointer-events: none;
   background: radial-gradient(closest-side, color-mix(in srgb, var(--ink) 34%, transparent), transparent); filter: blur(10px); }
 .rim { position: relative; z-index: 1; display: block; padding: 1px; border-radius: 7px; background: linear-gradient(128deg, var(--rim-a), var(--rim-b) 56%, var(--rim-c)); }
-.glass { position: relative; display: block; aspect-ratio: 160 / 93; border-radius: 6px; overflow: hidden; background: #0c0b0a; }
+.glass { position: relative; display: block; aspect-ratio: 16 / 10; border-radius: 6px; overflow: hidden; background: #0c0b0a; }
 .glass img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .55s ease; }
 .glass img.in { opacity: 1; }
 .glass::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(128deg, rgba(255, 255, 255, .07), transparent 34%); }
@@ -106,11 +117,12 @@ a { color: inherit; text-decoration: none; }
   .top { gap: 13px; padding-bottom: 12px; }
   .name { font-stretch: 112%; margin-right: 0; }
   .lab { display: block; }
-  .say { margin-top: 22px; font-size: 23px; max-width: none; }
+  .eyebrow { margin-top: 22px; }
+  .say { font-size: 23px; max-width: none; }
   .stage { display: none; }
   .row { grid-template-columns: 3.4ch minmax(0, 1fr); padding: 18px 0 20px; }
   .src { grid-column: 2; margin-top: 6px; white-space: normal; }
-  .row img { display: block; grid-column: 1 / -1; width: 100%; height: auto; aspect-ratio: 160 / 93; margin-bottom: 14px; border-radius: 5px; border: 1px solid var(--rule); }
+  .row img { display: block; grid-column: 1 / -1; width: 100%; height: auto; aspect-ratio: 16 / 10; margin-bottom: 14px; border-radius: 5px; border: 1px solid var(--rule); }
 }
 @media (prefers-reduced-motion: reduce) {
   .rows li, .stage { animation: none; }
@@ -129,8 +141,9 @@ a { color: inherit; text-decoration: none; }
   </header>
   <main class="lab">
     <div>
-      <p class="say">Twelve interactive pictures of the team's work, each drawn from its real data.</p>
-      <p class="note">These are prototypes. Twelve agents built one idea each in an afternoon. They run best on a desktop with a graphics card.</p>
+      <p class="eyebrow">AI Psychosis maxxing</p>
+      <p class="say">We were told to touch grass. Instead we built __COUNT__ 3D pictures of our own research.</p>
+      <p class="note">Every picture is drawn from the team's real data, no vibes-only renders. Agents built one idea each, fully locked in. These are prototypes: they run best on a desktop with a graphics card.</p>
       <ol class="rows" id="rows">__ROWS__</ol>
     </div>
     <aside class="stage" aria-hidden="true">
@@ -182,7 +195,7 @@ document.documentElement.addEventListener("pointerleave", () => { tx = ty = 0; i
 """
 
 ROW = ('<li style="--i:{i}"><a class="row" href="prototypes/{slug}/">'
-       '<img alt="" width="1120" height="651" src="data:image/webp;base64,{shot}">'
+       '<img alt="" width="1120" height="700" src="data:image/webp;base64,{shot}">'
        '<span class="n">{n:02d}</span><span><h2 class="title">{name}</h2><p class="line">{line}</p></span>'
        '<span class="src">{src}</span></a></li>')
 
@@ -190,5 +203,6 @@ if __name__ == "__main__":
     rows = "".join(ROW.format(i=i, n=i + 1, slug=slug, name=name, line=line, src=src,
                               shot=base64.b64encode((HERE / "prototypes" / slug / "shot.webp").read_bytes()).decode())
                    for i, (slug, name, line, src) in enumerate(PICTURES))
-    (HERE / "index.html").write_text(PAGE.replace("__ROWS__", rows))
+    count = {12: "twelve", 20: "twenty", 21: "twenty-one"}.get(len(PICTURES), str(len(PICTURES)))
+    (HERE / "index.html").write_text(PAGE.replace("__ROWS__", rows).replace("__COUNT__", count))
     print(f"wrote index.html, {len(PICTURES)} pictures, {(HERE / 'index.html').stat().st_size // 1024} kB")

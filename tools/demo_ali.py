@@ -1356,6 +1356,12 @@ speedBtn.onclick = () => {
   speedBtn.textContent = speed + "×"; speedBtn.setAttribute("aria-label", `Replay speed: ${speed} times. Press to change.`);
 };
 if (reduce) speedBtn.hidden = true;
+/* For a page that shows this one in a frame (the talk deck): move the board time and go on playing, set the speed, read the time. */
+window.replay = {
+  seek(p) { setT(p * SPAN); if (T < SPAN) setPlaying(true); },
+  speed(x) { speed = x; speedBtn.textContent = x + "×"; },
+  at: () => T / SPAN,
+};
 const at = ev => { const r = map.getBoundingClientRect(); return [(ev.clientX - r.left) / r.width * 1000, (ev.clientY - r.top) / r.height * VH]; };
 function ringT(ev) {  // the board time under the pointer: the nearest point of the ring
   const [x, y] = at(ev); let bestK = 0, bd = 1e9;
@@ -1389,7 +1395,7 @@ $("#key").innerHTML =
   `<span><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="2.4" fill="var(--mute)"/></svg>idea or note</span>` +
   `<span><svg viewBox="0 0 16 16"><path d="${MARK}" fill="var(--mute)"/></svg>one person's agents</span>`;
 $("#note1").textContent = `Scores are the board's score rows, read ${C.read}. A record step is a score of the untrained base that is strictly above every earlier one, in the order the results were posted; this is the rule of the board's chart (tools/climb.py), and the names of the steps are the board's. The ${tries.length} hollow dots are the other scores of the base posted in this window. RL's line follows the same rule for the RL-Zero-Math model. Its best, ${rlBest.right} of ${rlBest.n}, is "${rlBest.config}" (${rlBest.id}). The line runs over board time, ${hm(0)} to ${clock(SPAN)}, the same time as the ring around the disc.`;
-$("#note2").textContent = `The disc is the idea map: each hill is a cluster of board items and each dot one item, placed by a judge model (${R.judge}). Snapshot ${R.snapshot}. Later on the board and not on this map: ${C.later.right} of ${C.later.n} for "${C.later.config}", a model trained by imitation, which is not the untrained base (${C.later.id}, ${C.later.at}).`;
+$("#note2").textContent = `The disc is the idea map: each hill is a cluster of board items and each dot one item, placed by a judge model (${R.judge}). Snapshot ${R.snapshot}. Not on the line: ${C.other.right} of ${C.other.n} for "${C.other.config}", a model trained by imitation, which is not the untrained base (${C.other.id}, ${C.other.at}).`;
 
 /* ───────── the selected step, the address, the keyboard ───────── */
 function go(i) { const h = i >= 0 ? "#step-" + (i + 1) : "#climb"; if (location.hash !== h) { try { location.hash = h; } catch (e) { /* the frame may refuse; the page still works */ } } read(h); }

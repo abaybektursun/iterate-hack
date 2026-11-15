@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": 235, "low": 222, "high": 248, "reason": "Theory: prompt format and sampling engage SFT's precision, not finishing, and Think-SFT's cap hits follow the token budget, so at cap 32,768 (about 1 cap hit) it scores like the paired T 1.0 own-format cell (232), give or take seed noise."},
+{"id": "t02", "value": 474, "low": 465, "high": 483, "reason": "Theory: with the budget fixed at 32,768, cap hits and SFT precision do not change, so this matches the paired own-format T 1.0 cell (474/500)."},
+{"id": "t03", "value": 402, "low": 386, "high": 418, "reason": "Superposition part: Math's and Code's finishing directions add, which put the earlier seed at 411; on a new seed I expect a regression toward Code-alone 1x (386) and RL-Code (401), since finishing is near saturation."},
+{"id": "t04", "value": 402, "low": 386, "high": 418, "reason": "Same superposition reading as t03 for the second new seed: about 402, regressed from the 411 first draw."},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": 387, "low": 371, "high": 403, "reason": "Theory: adding RL's directions adds its finishing push, so Code top-8 at 1x lands near its earlier 386, between the cued base (317) and RL-Code (401)."},
+{"id": "t08", "value": 387, "low": 371, "high": 403, "reason": "Same as t07 for the second seed."},
+{"id": "t09", "value": 227, "low": 215, "high": 239, "reason": "Theory: RL's finishing push adds to Think-SFT's precision (Think-SFT 209 at T 1.0, 16k; the 2x transplant averages 233); I regress the 232 one-sample draw toward that for a new seed."},
+{"id": "t10", "value": 41, "low": 30, "high": 54, "reason": "Theory: subtracting RL's finishing directions removes the termination drive, so cap hits rise above the cued base's 27; the odd shard already shows 20/250, so I double it to about 41 of 500."},
+{"id": "t11", "value": 376, "low": 361, "high": 391, "reason": "Removing the finishing push costs answers (hard328 at -1 fell from 164 to 118); the odd shard has 188/250, so I double it to about 376."},
+{"id": "t12", "value": 385, "low": 355, "high": 412, "reason": "Theory: Think-SFT brings high precision on finished answers, and short code answers rarely reach the cap, so it scores near RL-Code's 401 and well above the cued base's 317."},
+{"id": "t13", "value": 380, "low": 350, "high": 408, "reason": "Theory: the prompt changes how the SFT part is engaged, not finishing, so with the Math cue Think-SFT stays close to its Code-cue score (own format tied the cue on math)."},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": 468, "low": 458, "high": 477, "reason": "Superposition: 2(RL-base) finishes Think-SFT's roughly 25 MATH-500 cap hits without lowering its precision (singles 457-462, a=1 467), losing only a little on newly finished hard problems."},
+{"id": "t16", "value": 233, "low": 222, "high": 244, "reason": "Superposition gain: the three M(2) samples so far are 234/229/237 (mean 233.3, +7.4 over Think-SFT), so the fourth seed should land near their mean."},
+{"id": "t17", "value": 246, "low": 238, "high": 254, "reason": "High precision plus finishing makes the vote close to pass@k; the vote over 3 is 246 and Think-SFT's vote over 4 is 241, so I expect about 246."},
+{"id": "t18", "value": 242, "low": 231, "high": 252, "reason": "At cap 32,768 the delta still adds right answers beyond finishing (other seed: 245 vs Think-SFT 234); Think-SFT at this seed scores 230, so about 242."},
+{"id": "t19", "value": 80, "low": 72, "high": 88, "reason": "Theory: Think-SFT's cap hits follow the budget; doubling it finishes most of its 46% cut samples, some of them right (on hard328 the vote went 238 to 244), so the 16k vote of 75 rises to about 80."},
+{"id": "t20", "value": 70, "low": 63, "high": 77, "reason": "Budget part: about 62 cut samples per run finish at 32k, and roughly 1 in 6 of them is right (hard328 single samples went +22), so the 16k mean of 60 rises to about 70."}
+]}

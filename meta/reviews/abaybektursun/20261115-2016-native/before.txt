@@ -1,0 +1,5 @@
+native cells on AWS L40S (g6e.xlarge), from runs/<job>/metrics.json and ih ls:
+hard328 2 shards: submitted 16:33 UTC, joined 20:07 UTC = 214 min; generation 120-170 tok/s per shard
+MATH-500 2 shards: accepted 17:44 and 18:34 UTC (quota full for 70 and 120 min), joined 20:15 UTC
+same kind of cell on one vast.ai RTX PRO 6000 (job 309b): 129 min generation at 499 tok/s
+AWS quota: 4 shards refused at 16:28 UTC (VcpuLimitExceeded), 2 accepted at 16:33

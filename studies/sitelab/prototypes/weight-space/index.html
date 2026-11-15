@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Invariant: Weight space</title>
+<title>Weight arithmetic on a dial</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..500&display=swap">
@@ -23,6 +23,9 @@ body {
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
 canvas#gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+#grain { position: fixed; inset: 0; pointer-events: none; opacity: .07; mix-blend-mode: overlay; }
+body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: -1; }
+.vig { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(120% 95% at 50% 46%, transparent 52%, rgba(0, 0, 0, .42)); }
 #labels { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
 .lb { position: absolute; left: 0; top: 0; white-space: nowrap; will-change: transform; font-stretch: 112%; letter-spacing: .012em; }
 .lb.num { font-size: 11px; font-weight: 600; color: var(--ink); background: color-mix(in srgb, var(--paper) 78%, transparent); padding: 0 4px; border-radius: 1px; line-height: 15px; }
@@ -34,9 +37,11 @@ canvas#gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block
 .lb.tick { font-size: 12px; font-weight: 500; color: var(--faint); }
 .lb.tick.stop { color: var(--ink); font-weight: 640; }
 .lb.ref { font-size: 11px; font-weight: 560; color: var(--mute); }
+.lb.calib { font-family: "Newsreader", Georgia, serif; font-style: italic; font-size: 15px; color: var(--blue); background: color-mix(in srgb, var(--paper) 86%, transparent); padding: 0 6px; line-height: 20px; z-index: 2; }
 .lb.knob { font-family: "Newsreader", Georgia, serif; font-style: italic; font-size: 15px; font-weight: 400; color: var(--ink); text-shadow: 0 0 6px var(--paper); }
 
 .top { position: fixed; left: 0; right: 0; top: 0; display: flex; align-items: center; gap: 26px; font-size: 13px; padding: 20px 40px 16px; pointer-events: none; }
+.top .lab { pointer-events: auto; color: var(--faint); text-decoration: none; } .top .lab:hover { color: var(--ink); }
 .name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; }
 .top .here { color: var(--ink); font-weight: 600; }
 .status { margin-left: auto; color: var(--mute); display: flex; align-items: center; gap: 10px; }
@@ -109,8 +114,9 @@ h1 { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 27p
 </head>
 <body>
 <canvas id="gl"></canvas>
+<div class="vig"></div><div id="grain"></div>
 <div id="labels"></div>
-<div class="top"><span class="name">Invariant</span><span class="here">Weight space</span><span class="status" id="status">Reading the board</span></div>
+<div class="top"><a class="lab" href="../../">Lab</a><span class="name">Invariant</span><span class="here">Weight space</span><span class="status" id="status">Reading the board</span></div>
 <div class="col">
   <h1 id="h1">Each tube is one model made by adding weight changes to another. The fill is its right answers.</h1>
   <div class="seg" id="bench">
@@ -150,14 +156,10 @@ window.addEventListener('unhandledrejection', e => { document.getElementById('er
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 const $ = id => document.getElementById(id);
+{ const c = document.createElement('canvas'); c.width = c.height = 160; const x = c.getContext('2d'), d = x.createImageData(160, 160); for (let i = 0; i < d.data.length; i += 4) { d.data[i] = d.data[i + 1] = d.data[i + 2] = Math.random() * 255; d.data[i + 3] = 255; } x.putImageData(d, 0, 0); $('grain').style.backgroundImage = 'url(' + c.toDataURL() + ')'; }
 const DATA = await (await fetch('data.json')).json();
 const MODELS = DATA.models;
 const fmt = v => Number.isInteger(v) ? v.toLocaleString('en-US') : v.toLocaleString('en-US', { maximumFractionDigits: 2 });
@@ -177,7 +179,8 @@ const LANES = [
 ];
 const laneOf = id => LANES.find(l => l.id === id);
 const ZN = -9.2;                                                  // the noise control of Think-SFT, off its lane
-const mz = m => m.lane === 'base' ? (laneOf('full').z + laneOf('k1').z) / 2 : m.lane === 'sftnoise' ? ZN : laneOf(m.lane).z;
+const ZT = 4.85;                                                  // the 8 directions of Think-SFT: another direction, between the lanes
+const mz = m => m.lane === 'base' ? (laneOf('full').z + laneOf('k1').z) / 2 : m.lane === 'sftnoise' ? ZN : m.lane === 'sfttop8' ? ZT : laneOf(m.lane).z;
 const mdepth = m => m.lane === 'base' ? laneOf('k1').z - laneOf('full').z + W : W;
 
 let bench = 'hard328', lane = 'k8';
@@ -191,7 +194,8 @@ const canvas = $('gl');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.95;
-renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate = false;
+let activeUntil = 0; const wake = (s = 0.7) => { activeUntil = Math.max(activeUntil, performance.now() + s * 1000); };   // render only while something moves
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x121110);
 scene.fog = new THREE.Fog(0x121110, 80, 170);
@@ -203,11 +207,12 @@ camera.position.set(TARGET.x - 11, 20, 67);
 const controls = new OrbitControls(camera, canvas);
 controls.target.copy(TARGET); controls.enableDamping = true; controls.dampingFactor = 0.07;
 controls.minDistance = 12; controls.maxDistance = 130; controls.minDistance = 20; controls.maxPolarAngle = 1.48; controls.minPolarAngle = 0.25;
+controls.addEventListener('change', () => wake(0.5));
 controls.rotateSpeed = 0.6; controls.zoomSpeed = 0.7; controls.panSpeed = 0.6;
 
 /* a photographer's three lights: a warm key from the upper left with soft shadows, a cool low fill, a rim from behind */
 const key = new THREE.DirectionalLight(0xfff1dc, 1.9); key.position.set(ax(1.5) - 22, 30, 16); key.target.position.set(ax(1.5), 0, 0);
-key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.radius = 7; key.shadow.bias = -0.0006; key.shadow.normalBias = 0.03;
+key.castShadow = true; key.shadow.mapSize.set(1536, 1536); key.shadow.radius = 7; key.shadow.bias = -0.0006; key.shadow.normalBias = 0.03;
 Object.assign(key.shadow.camera, { left: -20, right: 20, top: 20, bottom: -20, near: 5, far: 90 });
 scene.add(key, key.target);
 scene.add(new THREE.HemisphereLight(0xb9c3d0, 0x2a251f, 0.38));
@@ -226,19 +231,6 @@ const brushed = (rx, ry) => surface(512, 512, (x, w, h) => {
 }, rx, ry);
 const grain = (rx, ry) => surface(256, 256, (x, w, h) => { const d = x.createImageData(w, h); for (let i = 0; i < d.data.length; i += 4) { const v = 118 + rnd() * 60 | 0; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 255; } x.putImageData(d, 0, 0); }, rx, ry);
 const metal = (color, rough, rx, ry, extra = {}) => { const t = brushed(rx, ry); return new THREE.MeshStandardMaterial({ color, metalness: 1, roughness: rough, roughnessMap: t, bumpMap: t, bumpScale: 0.6, envMapIntensity: 0.9, ...extra }); };
-
-const composer = new EffectComposer(renderer);
-composer.addPass(new RenderPass(scene, camera));
-const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.1, 0.4, 0.94);   // only a faint lens response on true highlights
-const film = new ShaderPass({ uniforms: { tDiffuse: { value: null }, t: { value: 0 } },
-  vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
-  fragmentShader: `uniform sampler2D tDiffuse; uniform float t; varying vec2 vUv;
-    float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233)) + t) * 43758.5453); }
-    void main(){ vec4 c = texture2D(tDiffuse, vUv); vec2 d = vUv - 0.5;
-      c.rgb *= 1.0 - 0.42 * smoothstep(0.35, 0.95, length(d * vec2(1.0, 0.8)) * 1.25);      // restrained vignette
-      c.rgb += (h(gl_FragCoord.xy) - 0.5) * 0.022;                                          // slight grain
-      gl_FragColor = c; }` });
-composer.addPass(bloom); composer.addPass(new OutputPass()); composer.addPass(film);
 
 /* ---------- floor: a machined plate with the scale of a engraved in it ---------- */
 const AMIN = -1, AMAX = 4, ZF = 10.0, ZB = -10.4;
@@ -260,7 +252,8 @@ for (const l of LANES) {
 }
 
 /* ---------- one tube per model ---------- */
-const glassCase = new THREE.MeshPhysicalMaterial({ color: 0xdfe3e2, transparent: true, opacity: 0.035, roughness: 0.04, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.03, envMapIntensity: 1.0, depthWrite: false, side: THREE.DoubleSide });
+const glassCase = new THREE.MeshPhysicalMaterial({ color: 0xf4f1ea, transmission: 1, thickness: 0.7, ior: 1.5, roughness: 0.06, metalness: 0, envMapIntensity: 1.7, specularIntensity: 1, attenuationColor: new THREE.Color(0xbfc9c4), attenuationDistance: 2.2 });   // refracts what stands behind it
+const glassCheap = new THREE.MeshPhysicalMaterial({ color: 0xdfe3e2, transparent: true, opacity: 0.035, roughness: 0.04, clearcoat: 1, clearcoatRoughness: 0.03, depthWrite: false, side: THREE.DoubleSide });
 const grainT = grain(2, 6);
 const pick = [];
 const LO = new THREE.Color(0x35332f), HI = new THREE.Color(0xe6dece), CTL = new THREE.Color(0x2e2d2a);   // value carries the share right
@@ -272,19 +265,20 @@ function tube(m) {
   const edge = new THREE.LineSegments(new THREE.EdgesGeometry(box), new THREE.LineBasicMaterial({ color: 0xe8e2d5, transparent: true, opacity: m.control ? 0.1 : 0.2 }));
   edge.position.y = H / 2; g.add(edge);
   const body = new THREE.Mesh(new THREE.BoxGeometry(W * 0.84, 1, d - W * 0.16),
-    new THREE.MeshPhysicalMaterial({ color: m.control ? CTL : LO, roughness: m.control ? 0.85 : 0.5, roughnessMap: grainT, bumpMap: grainT, bumpScale: 0.12, metalness: 0, sheen: m.control ? 0 : 0.4, sheenRoughness: 0.5, envMapIntensity: m.control ? 0.25 : 0.7, transparent: true, opacity: 1 }));
+    new THREE.MeshPhysicalMaterial({ color: m.control ? CTL : LO, roughness: m.control ? 0.85 : 0.5, roughnessMap: grainT, bumpMap: grainT, bumpScale: 0.12, metalness: 0, sheen: m.control ? 0 : 0.4, sheenRoughness: 0.5, envMapIntensity: m.control ? 0.25 : 0.7 }));
   body.renderOrder = 1; body.castShadow = true; body.receiveShadow = true; g.add(body);
   const top = new THREE.Mesh(new THREE.BoxGeometry(W * 0.86, 0.03, d - W * 0.14), new THREE.MeshStandardMaterial({ color: m.control ? 0x4a4843 : 0xefe8d8, roughness: 0.35 }));
   top.renderOrder = 2; g.add(top);                                 // the exact level of right answers
   const cap = new THREE.Mesh(new THREE.BoxGeometry(W * 0.84, 1, d - W * 0.16),
-    new THREE.MeshPhysicalMaterial({ color: m.control ? 0x4f2e26 : 0x923f2d, roughness: 0.62, roughnessMap: grainT, bumpMap: grainT, bumpScale: 0.1, clearcoat: 0.25, clearcoatRoughness: 0.5, envMapIntensity: 0.5, transparent: true, opacity: 1 }));
+    new THREE.MeshPhysicalMaterial({ color: m.control ? 0x4f2e26 : 0x923f2d, roughness: 0.62, roughnessMap: grainT, bumpMap: grainT, bumpScale: 0.1, clearcoat: 0.25, clearcoatRoughness: 0.5, envMapIntensity: 0.5 }));
+  cap.userData.c = cap.material.color.clone();
   cap.renderOrder = 1; cap.castShadow = true; g.add(cap);
   const foot = new THREE.Mesh(new THREE.BoxGeometry(W + 0.16, 0.08, d + 0.16), railMat); foot.position.y = 0.04; foot.castShadow = true; foot.receiveShadow = true; g.add(foot);
   scene.add(g);
-  m.g = g; m.body = body; m.capm = cap; m.top = top; m.edge = edge;
+  m.g = g; m.body = body; m.capm = cap; m.top = top; m.edge = edge; m.cs = cs;
   m.hr = 0; m.hc = 0; m.vr = 0; m.vc = 0; m.boost = 0;             // animated heights (springs)
-  m.lbl = label('num' + (m.control ? ' ctl' : ''), fmt(m.right), () => new THREE.Vector3(g.position.x, m.hr + 0.3, g.position.z));
-  m.lblc = label('num cap', fmt(m.cap), () => new THREE.Vector3(g.position.x, H + 0.26, g.position.z));
+  m.lbl = label('num' + (m.control ? ' ctl' : ''), fmt(m.right), () => new THREE.Vector3(g.position.x, m.hr + 0.3, g.position.z)); m.lbl.m = m;
+  m.lblc = label('num cap', fmt(m.cap), () => new THREE.Vector3(g.position.x, H + 0.26, g.position.z)); m.lblc.m = m;
 }
 
 /* ---------- labels: type stays upright and still, placed from the scene every frame ---------- */
@@ -300,8 +294,8 @@ for (const l of LANES) {
   l.lbl = label('lane', l.name, () => new THREE.Vector3(ax(AMIN) - 0.75, 0.1, l.z), () => setLane(l.id, true));
   l.lbl.ax = 1;
 }
-const named = [['base', 'base', 0, laneOf('k1').z + 1.0, 0.1], ['RL-Zero-Math', 'full', 1, laneOf('full').z], ['Think-SFT', 'sft', 0, laneOf('sft').z], ['Think-SFT + noise, control', 'sftnoise', 1, ZN]];
-for (const [t, ln, a, z, y] of named) { const L = label('name', t, () => new THREE.Vector3(ax(a), y || H + 0.72, z)); L.only = ln; }
+const named = [['base', 'base', 0, laneOf('k1').z + 1.0, 0.1], ['RL-Zero-Math', 'full', 1, laneOf('full').z], ['Think-SFT', 'sft', 0, laneOf('sft').z], ['Think-SFT + noise, control', 'sftnoise', 1, ZN], ['top 8 of Think-SFT', 'sfttop8', 1, ZT]];
+for (const [t, ln, a, z, y] of named) { const L = label('name', t, () => new THREE.Vector3(ax(a), y || H + 0.72, z)); L.only = ln; L.m = MODELS.find(m => m.lane === ln); L.low = 1; }
 
 /* reference levels of the two parents, as hairlines round the whole map */
 const refs = ['base', 'rl'].map((k, i) => {
@@ -347,7 +341,7 @@ function printScale(has) {
   x.font = 'italic 400 70px Newsreader, Georgia, serif'; x.textAlign = 'left'; x.fillStyle = 'rgba(232,226,213,.55)'; x.fillText('a', 40, 190);
   scaleT.needsUpdate = true;
 }
-document.fonts && document.fonts.ready.then(() => rebuildStops());
+document.fonts && document.fonts.ready.then(() => { rebuildStops(); wake(); });
 const pinGeo = new THREE.CylinderGeometry(0.13, 0.13, 0.26, 28);
 const pinMat = new THREE.MeshStandardMaterial({ color: 0xc9aa72, metalness: 1, roughness: 0.28, envMapIntensity: 1.8 });
 let pins = [], tickLabels = [];
@@ -393,10 +387,10 @@ function rebuildStops() {
 function setLane(id, user) {
   if (!MODELS.some(m => m.bench === bench && m.lane === id)) return;
   if (user) touched = true;
-  lane = id; rebuildStops(); const n = nearest(aT); aT = rawA = n.a; locked = null;
+  wake(1.5); lane = id; rebuildStops(); const n = nearest(aT); aT = rawA = n.a; locked = null;
 }
 function setBench(b) {
-  bench = b; [...$('bench').children].forEach(x => x.setAttribute('aria-pressed', x.dataset.b === b));
+  wake(3); bench = b; [...$('bench').children].forEach(x => x.setAttribute('aria-pressed', x.dataset.b === b));
   if (!MODELS.some(m => m.bench === b && m.lane === lane)) lane = 'full';
   rebuildStops(); aT = rawA = nearest(aT).a; locked = null; closeDetail();
 }
@@ -458,7 +452,7 @@ canvas.addEventListener('pointermove', e => {
   canvas.style.cursor = onKnob ? 'grab' : hover ? 'pointer' : '';
   const T = $('tip');
   if (hover) {
-    const it = (ITEMS[hover.result] || {}).it;
+    const it = (ITEMS[hover.result] || {}).it || (board && board.items.find(i => i.id === hover.result));
     T.innerHTML = '<b>' + hover.label + '</b>' + fmt(hover.right) + ' of ' + hover.n + ' right · <span class="c">' + fmt(hover.cap) + ' cap hits</span> · ' + fmt(hover.tokens) + ' tokens' + (it ? '<br>' + it.who + ', ' + when(it.at_ns) : '');
     T.style.opacity = 1; T.style.left = Math.min(innerWidth - 310, e.clientX + 16) + 'px'; T.style.top = (e.clientY + 16) + 'px';
   } else T.style.opacity = 0;
@@ -493,19 +487,17 @@ async function readItem(id) {
   const r = await fetch('/data/' + id); if (!r.ok) throw new Error(r.status); const d = await r.json();
   ITEMS[id] = { it: d.item, pl: (d.plain || {})[id] || {}, comments: d.comments || [] }; if (sel && sel.result === id) drawDetail();
 }
-(async () => {                                                     // one at a time: the board is a small server
-  const ids = [...new Set(MODELS.map(m => m.result))];
-  for (let round = 0; round < 4; round++) for (const id of ids) if (!ITEMS[id]) { try { await readItem(id); } catch (e) { await new Promise(r => setTimeout(r, 800)); } }
-})();
+
 const when = ns => new Date(ns / 1e6).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 const esc = s => String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 function select(m) {
   touched = true; sel = m;
-  if (m.lane !== 'base' && m.lane !== 'sftnoise') { if (lane !== m.lane) setLane(m.lane); aT = rawA = m.a; }
+  if (laneOf(m.lane)) { if (lane !== m.lane) setLane(m.lane); aT = rawA = m.a; }
   else if (m.lane === 'base') { if (lane === 'sft') setLane('full'); aT = rawA = 0; }
-  history.replaceState(null, '', '#' + m.id); drawDetail();
+  history.replaceState(null, '', '#' + m.id); drawDetail(); wake(1.5);
+  if (!ITEMS[m.result]) readItem(m.result).catch(() => setTimeout(() => { if (sel === m && !ITEMS[m.result]) readItem(m.result).catch(() => {}); }, 3000));   // one request, on click
 }
-function closeDetail() { sel = null; $('detail').classList.remove('open'); if (location.hash) history.replaceState(null, '', location.pathname); }
+function closeDetail() { wake(1.5); sel = null; $('detail').classList.remove('open'); if (location.hash) history.replaceState(null, '', location.pathname); }
 function drawDetail() {
   const m = sel; if (!m) return; const D = $('detail');
   const I = ITEMS[m.result] || {}, it = I.it, pl = I.pl || (board && board.plain[m.result]) || {};
@@ -523,7 +515,7 @@ function drawDetail() {
     for (const s of sc) h += '<p><b>Score line on the board</b>' + s.right + ' / ' + s.n + (s.tokens ? ', ' + fmt(s.tokens) + ' tokens' : '') + ' · ' + esc(s.config) + '</p>';
     const cm = I.comments[I.comments.length - 1];
     if (cm) h += '<p><b>Newest comment, ' + esc(cm.who) + '</b>' + esc(cm.text.slice(0, 420)) + '</p>';
-  } else h += '<p><b>Board</b>Item ' + m.result + ' has not been read from the board.</p>';
+  } else h += '<p><b>Board</b>Reading ' + m.result + ' from the board.</p>';
   h += '<p><b>Artifact</b><span class="path">' + esc(m.src) + '</span></p>';
   D.innerHTML = h; D.classList.add('open'); $('dx').onclick = closeDetail;
   if (m.vec) grid(m);
@@ -547,14 +539,14 @@ async function readBoard() {
   try {
     const r = await fetch('/data'); if (!r.ok) throw new Error(r.status); board = await r.json();
     $('status').className = 'status'; $('status').textContent = 'Board read ' + new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ', ' + board.scores.length + ' scores';
-    if (sel) drawDetail();
-  } catch (e) { $('status').className = 'status bad'; $('status').textContent = board ? 'Offline, showing the last read' : 'Board not reachable, numbers are from the repository'; setTimeout(readBoard, 4000); }
+    if (sel) drawDetail(); wake();
+  } catch (e) { $('status').className = 'status bad'; $('status').textContent = board ? 'Offline, showing the last read' : 'Board not reachable, numbers are from the repository'; }
 }
 readBoard(); setInterval(readBoard, 20000);
 
 /* ---------- frame ---------- */
 function resize() {
-  const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); composer.setSize(w, h); bloom.resolution.set(w, h);
+  const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); wake();
   camera.aspect = w / h; camera.fov = w < 760 ? 34 : 18;
   view();
 }
@@ -570,45 +562,75 @@ function view() {                                                  // the words 
 }
 addEventListener('resize', resize); resize();
 const spring = (x, v, t, k, c, dt) => { v += (k * (t - x) - c * v) * dt; return [x + v * dt, v]; };
-const v3 = new THREE.Vector3();
-let leanWas = 0, leanM = 0, last = performance.now(), t0 = last, demoAt = 0, demoI = 0, mouseX = 0;
-addEventListener('pointermove', e => { mouseX = e.clientX / innerWidth - 0.5; });
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, still = reduce || /[?&]still/.test(location.search);
+const always = /[?&]always/.test(location.search);                 // for measuring: render every frame
+let last = performance.now(), t0 = last, demoAt = 0, demoI = 0, tier = 0, ema = 12, slow = 0, lastRender = 0;
+for (const ev of ['pointerdown', 'pointermove', 'pointerup', 'wheel', 'keydown', 'touchstart']) addEventListener(ev, () => wake(), { passive: true });
+
+/* the caliper: at a measured stop its jaws travel from the base's level to this model's level and read the difference */
+const cal = new THREE.Group(); scene.add(cal);
+const calLine = new THREE.LineSegments(new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(18), 3)), new THREE.LineBasicMaterial({ color: 0xc9aa72 }));
+calLine.frustumCulled = false; cal.add(calLine);
+let calY = 0, calV = 0, calFor = null;
+const calLbl = label('calib', '', () => new THREE.Vector3(ax(a) - W / 2 - 0.42, (calY + baseOf(bench).right / baseOf(bench).n * H) / 2 + 0.07, pz + W / 2 + 0.12)); calLbl.ax = 1.12;
+
+/* when frames run slow the page gives up, in order: refraction, resolution, shadows */
+function degrade() {
+  tier++;
+  if (tier === 1) for (const m of MODELS) { m.cs.material = glassCheap; m.cs.renderOrder = 3; }
+  else if (tier === 2) { renderer.setPixelRatio(Math.min(devicePixelRatio, 1)); resize(); }
+  else if (tier === 3) { renderer.shadowMap.enabled = false; scene.traverse(o => { if (o.material) o.material.needsUpdate = true; }); }
+  else if (tier === 4) { renderer.setPixelRatio(0.75); resize(); }
+}
+const camEnd = camera.position.clone(), camStart = camEnd.clone().sub(TARGET).multiplyScalar(1.22).add(TARGET).add(new THREE.Vector3(0, 5, 0));
+const boxes = [];
 
 function frame(now) {
-  const dt = Math.max(0, Math.min(0.033, (now - last) / 1000)); last = now; const T = still ? 99 : (now - t0) / 1000;
+  requestAnimationFrame(frame);
+  const dt = Math.max(0, Math.min(0.06, (now - last) / 1000)), real = now - last; last = now; const T = still ? 99 : (now - t0) / 1000;
   /* before anyone touches it, the probe walks the measured stops of the finish dial */
-  if (!touched && !still && T > demoAt) { const st = stops(); aT = rawA = st[demoI % st.length].a; demoI++; demoAt = T + (demoI === 1 ? 2.6 : 2.4); }
+  if (!touched && !still && T > demoAt) { const st = stops(); aT = rawA = st[demoI % st.length].a; demoI++; demoAt = T + (demoI === 1 ? 3.2 : 2.6); }
   if (still && !touched) aT = rawA = 1.5;
+  let moving = Math.abs(aT - a) > 1e-4 || Math.abs(va) > 1e-3 || T < 4 || dragging;
+  for (const m of MODELS) if (Math.abs(m.vr) > 1e-3 || Math.abs(m.vc) > 1e-3 || (m.boost > 0.01 && m.boost < 0.99)) { moving = true; break; }
+  if (moving) wake(0.5);
+  if (now > activeUntil && lastRender && !always) return;                     // nothing moves: keep the last frame
+  if (real < 100 && now - lastRender < 100) { ema += (real - ema) * 0.08; slow = ema > 19 ? slow + 1 : 0; if (slow > 50 && tier < 4 && T > 3) { degrade(); slow = 0; ema = 12; } }
+  lastRender = now;
+
   for (let i = 0; i < 4; i++) [a, va] = spring(a, va, aT, 150, 23, dt / 4);
   if (still) { a = aT; va = 0; pz = laneOf(lane).z; }
   const n = nearest(a), was = locked;
   locked = Math.abs(n.a - a) < 0.02 ? n : null;
   if (locked && locked !== was) tick(dragging ? 1900 : 1500);
   knob.position.x = ax(a); knob.rotation.y = -a * 2.4;
-  pz += (laneOf(lane).z - pz) * Math.min(1, dt * 9);
+  pz += (laneOf(lane).z - pz) * (still ? 1 : Math.min(1, dt * 9));
   probe.position.set(ax(a), 0, pz);
   probeMat.opacity = locked ? 0.95 : 0.35; probeMat.color.set(locked ? 0xc9aa72 : 0x8d877b);
   const tp = tie.geometry.attributes.position; tp.setXYZ(0, ax(a), 0.09, pz + W / 2 + 0.16); tp.setXYZ(1, ax(a), 0.36, DZ - 1.1); tp.needsUpdate = true;
   readout();
 
-  /* tubes: levels on springs, brightness from the share right */
+  /* tubes: levels on springs, value from the share right */
   const cur = of(bench), acc = cur.filter(m => !m.control).map(m => m.right / m.n), lo = Math.min(...acc), hi = Math.max(...acc);
+  let shadow = Math.abs(va) > 1e-3 || T < 4;
   for (const m of MODELS) {
-    const on = m.bench === bench, delay = on ? Math.max(0, 0.25 + (m.a + 1) * 0.16) : 0;
-    const tr = on && T > delay ? m.right / m.n * H : 0, tc = on && T > delay + 0.25 ? m.cap / m.n * H : 0;
-    [m.hr, m.vr] = spring(m.hr, m.vr, tr, 34, 11.4, dt); [m.hc, m.vc] = spring(m.hc, m.vc, tc, 34, 11.6, dt);
+    const on = m.bench === bench, delay = on ? Math.max(0, 0.9 + (m.a + 1) * 0.2) : 0;
+    const tr = on && T > delay ? m.right / m.n * H : 0, tc = on && T > delay + 0.3 ? m.cap / m.n * H : 0;
+    for (let i = 0; i < 2; i++) { [m.hr, m.vr] = spring(m.hr, m.vr, tr, 34, 11.4, dt / 2); [m.hc, m.vc] = spring(m.hc, m.vc, tc, 34, 11.6, dt / 2); }
     if (still) { m.hr = tr; m.hc = tc; }
+    if (Math.abs(m.vr) > 1e-3 || Math.abs(m.vc) > 1e-3) shadow = true;
     m.g.visible = on;
     const hr = Math.max(0.001, m.hr), hc = Math.max(0.001, m.hc);
     m.body.scale.y = hr; m.body.position.y = hr / 2 + 0.07; m.top.position.y = hr + 0.07;
     m.capm.scale.y = hc; m.capm.position.y = H - hc / 2;
-    const isL = locked && (locked === m) ; m.boost += ((isL ? 1 : 0) - m.boost) * Math.min(1, dt * 8);
-    if (!m.control) m.body.material.color.copy(LO).lerp(HI, Math.pow((m.right / m.n - lo) / (hi - lo || 1), 1.6));
-    const dim = sel && sel !== m ? 0.4 : 1;
-    m.body.material.opacity = dim; m.capm.material.opacity = dim; m.edge.material.opacity = (m.control ? 0.1 : 0.2) * dim + 0.55 * m.boost; m.edge.material.color.set(m.boost > 0.5 ? 0xc9aa72 : 0xe8e2d5);
-    m.lbl.show = on && T > delay + 0.4; m.lblc.show = on && T > delay + 0.6 && (m.lane === lane || (m.lane === 'base' && lane !== 'sft') || m === hover || m === sel);
+    const isL = locked && (locked === m); m.boost += ((isL ? 1 : 0) - m.boost) * (still ? 1 : Math.min(1, dt * 8));
+    const dim = sel && sel !== m ? 0.42 : 1, bc = m.body.material;
+    bc.color.copy(m.control ? CTL : LO); if (!m.control) bc.color.lerp(HI, Math.pow((m.right / m.n - lo) / (hi - lo || 1), 1.6));
+    bc.color.multiplyScalar(dim); bc.emissive.copy(bc.color).multiplyScalar(m.control ? 0 : 0.2);        // a little of its own light, so shade does not hide the value
+    m.capm.material.color.copy(m.capm.userData.c).multiplyScalar(dim); m.edge.material.opacity = (m.control ? 0.1 : 0.2) * dim + 0.55 * m.boost; m.edge.material.color.set(m.boost > 0.5 ? 0xc9aa72 : 0xe8e2d5);
+    m.lbl.show = on && T > delay + 0.5; m.lblc.show = on && T > delay + 0.8 && (m.lane === lane || (m.lane === 'base' && lane !== 'sft') || m === hover || m === sel);
   }
+  if (shadow || renderer.shadowMap.needsUpdate === undefined) renderer.shadowMap.needsUpdate = true;
   for (const g of guides) {
     const st = stops(g.l.id), p = g.line.geometry.attributes.position; let i = 0;
     if (st.some(s => s.lane === g.l.id)) for (const s of st) p.setXYZ(i++, ax(s.a), s.hr + 0.07, g.l.z);
@@ -616,32 +638,53 @@ function frame(now) {
     g.line.material.opacity = g.l.id === lane ? 0.6 : 0.16;
   }
   const b = baseOf(bench), r = rlOf(bench);
-  [[b, 'base'], [r, 'RL-Zero-Math']].forEach(([m, nm], i) => { const R = refs[i]; R.y += (m.right / m.n * H + 0.07 - R.y) * (still ? 1 : Math.min(1, dt * 5)); R.line.position.y = R.y; R.L.el.textContent = nm + ' ' + fmt(m.right); });
+  [[b, 'base'], [r, 'RL-Zero-Math']].forEach(([m, nm], i) => { const R = refs[i]; R.y += (m.right / m.n * H + 0.07 - R.y) * (still ? 1 : Math.min(1, dt * 5)); R.line.position.y = R.y; R.L.el.textContent = nm + ' ' + fmt(m.right); R.L.show = T > 2.2; });
   for (const L of labels) if (L.only) L.show = MODELS.some(m => m.bench === bench && m.lane === L.only);
 
-  /* camera: orbit by hand; at rest it sways a few degrees and leans toward the mouse */
-  if (!still && !dragging) {
-    leanM += (-mouseX * 0.014 - leanM) * Math.min(1, dt * 1.2);
-    const lean = Math.sin(T * 0.13) * 0.022 + leanM, off = v3.copy(camera.position).sub(controls.target);
-    off.applyAxisAngle(THREE.Object3D.DEFAULT_UP, lean - leanWas); leanWas = lean; camera.position.copy(controls.target).add(off);
+  /* caliper */
+  const yb = b.right / b.n * H + 0.07, showCal = locked && locked !== b && locked.hr > 0.5;
+  if (showCal && calFor !== locked) { calFor = locked; calY = yb; calV = 0; }
+  if (!showCal) calFor = null;
+  cal.visible = !!showCal; calLbl.show = !!showCal;
+  if (showCal) {
+    [calY, calV] = spring(calY, calV, locked.right / locked.n * H + 0.07, 60, 13, dt); if (still) calY = locked.right / locked.n * H + 0.07;
+    if (Math.abs(calV) > 1e-3) wake(0.3);
+    const x = ax(a) - W / 2 - 0.3, z = pz + W / 2 + 0.12, q = calLine.geometry.attributes.position;
+    q.setXYZ(0, x, yb, z); q.setXYZ(1, x, calY, z); q.setXYZ(2, x - 0.02, yb, z); q.setXYZ(3, x + 0.3, yb, z); q.setXYZ(4, x - 0.02, calY, z); q.setXYZ(5, x + 0.3, calY, z); q.needsUpdate = true;
+    const d = locked.right - b.right; calLbl.el.textContent = (d > 0 ? '+' : d < 0 ? '−' : '') + fmt(Math.abs(d)) + ' right';
   }
-  const vo = sel ? 1 : 0; if (Math.abs(vo - vOpen) > 0.001) { vOpen = still ? vo : vOpen + (vo - vOpen) * Math.min(1, dt * 6); view(); }
-  controls.update();
-  film.uniforms.t.value = still ? 0 : (T * 24 | 0) * 0.37;
-  composer.render();
 
-  const w = innerWidth, h = innerHeight;
-  for (const L of labels) {
-    const p = L.pos().project(camera), vis = L.show && p.z < 1 && p.z > -1;
-    if (!vis) { if (L.vis !== false) { L.el.style.display = 'none'; L.vis = false; } continue; }
-    if (L.vis === false) { L.el.style.display = ''; L.vis = true; }
+  /* camera: one slow move in at the start, then it is the viewer's */
+  if (!still && !touched && T < 3.4) { const e = 1 - Math.pow(1 - Math.min(1, T / 3.4), 3); camera.position.lerpVectors(camStart, camEnd, e); }
+  const vo = sel ? 1 : 0; if (Math.abs(vo - vOpen) > 0.001) { vOpen = still ? vo : vOpen + (vo - vOpen) * Math.min(1, dt * 6); view(); wake(0.3); }
+  controls.update();
+  renderer.render(scene, camera);
+
+  /* labels: place, then let the nearer tag win where two would overlap */
+  const w = innerWidth, h = innerHeight; boxes.length = 0;
+  const order = labels.slice().sort((p, q) => pri(q) - pri(p));
+  for (const L of order) {
+    const p = L.pos().project(camera); let vis = L.show && p.z < 1 && p.z > -1;
     const x = (p.x * 0.5 + 0.5) * w, y = (-p.y * 0.5 + 0.5) * h;
+    if (vis && L.m) {
+      if (!L.w) L.w = L.el.offsetWidth || L.el.textContent.length * 7 + 8;
+      const x0 = x - L.w * L.ax - 2, x1 = x0 + L.w + 4, y0 = y - 9, y1 = y + 9;
+      for (const B of boxes) if (x0 < B[1] && x1 > B[0] && y0 < B[3] && y1 > B[2]) { vis = false; break; }
+      if (vis) boxes.push([x0, x1, y0, y1]);
+    }
+    if (!vis) { if (L.vis !== false) { L.el.style.visibility = 'hidden'; L.vis = false; } continue; }
+    if (L.vis === false) { L.el.style.visibility = ''; L.vis = true; }
     L.el.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) translate(' + (-L.ax * 100) + '%,-50%)';
+    L.z = p.z;
   }
-  requestAnimationFrame(frame);
+}
+function pri(L) {                                                  // which tag is kept: the chosen model, then the active lane, then the nearer
+  if (!L.m) return 1e6;
+  const m = L.m; return (m === sel || m === hover || m === locked ? 3000 : 0) + (m.lane === lane || m.lane === 'base' ? 1000 : 0) + (L.low ? 600 : 0) - (L.z || 0) * 400 + (L === m.lbl ? 50 : 0);
 }
 addEventListener('pointerup', () => { down = null; });
 window.ws = {                                                      // for checks from the console
+  perf: () => ({ tier, ema: Math.round(ema * 10) / 10, dpr: renderer.getPixelRatio() }),
   state: () => ({ a, aT, lane, bench, locked: locked && locked.id, sel: sel && sel.id }),
   xy: (x, y, z) => { const p = new THREE.Vector3(x, y, z).project(camera); return [(p.x * 0.5 + 0.5) * innerWidth, (-p.y * 0.5 + 0.5) * innerHeight]; },
   knob: () => window.ws.xy(knob.position.x, DY + 0.5, DZ), at: v => window.ws.xy(ax(v), DY, DZ),
@@ -649,6 +692,7 @@ window.ws = {                                                      // for checks
 };
 rebuildStops();
 if (location.hash) { const m = MODELS.find(x => x.id === decodeURIComponent(location.hash.slice(1))); if (m) { if (m.bench !== bench) setBench(m.bench); select(m); a = aT; } }
+if (still) camera.position.copy(camEnd);
 requestAnimationFrame(frame);
 </script>
 </body>

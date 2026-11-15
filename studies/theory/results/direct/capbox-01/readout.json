@@ -1,0 +1,1526 @@
+{
+ "mechanism": "run-08/f2-m02",
+ "spec": "studies/theory/specs/SPEC_direct_capbox.md",
+ "set": "hard328",
+ "cap": 16384,
+ "grader": "studies/rlneurons/lib/rln4_lib.py grade_v3",
+ "bootstrap": "cluster over the 328 problems, 10000 resamples, numpy default_rng(0), one draw shared by models",
+ "primary_attempt0": {
+  "per_model": {
+   "rl_plain": {
+    "C": 7,
+    "H": 114,
+    "share": 0.06140350877192982,
+    "wilson95": [
+     0.030059281755610304,
+     0.12134294162714711
+    ],
+    "boot90": [
+     0.023809523809523808,
+     0.104
+    ],
+    "boot95": [
+     0.01818181818181818,
+     0.11458333333333333
+    ]
+   },
+   "base_cue": {
+    "C": 4,
+    "H": 286,
+    "share": 0.013986013986013986,
+    "wilson95": [
+     0.005451972095359699,
+     0.035402979873901695
+    ],
+    "boot90": [
+     0.0035087719298245615,
+     0.026201691117544106
+    ],
+    "boot95": [
+     0.003236245954692557,
+     0.028472292831723398
+    ]
+   },
+   "sft_cue": {
+    "C": 14,
+    "H": 378,
+    "share": 0.037037037037037035,
+    "wilson95": [
+     0.022188240542825727,
+     0.061200972809186516
+    ],
+    "boot90": [
+     0.020784919468522237,
+     0.05555555555555555
+    ],
+    "boot95": [
+     0.018227982954545457,
+     0.05955415343473173
+    ]
+   }
+  },
+  "differences": {
+   "rl_plain-sft_cue": {
+    "value": 0.024366471734892786,
+    "ci90": [
+     -0.018055897646414888,
+     0.07059228778916561
+    ],
+    "ci95": [
+     -0.024228456878619214,
+     0.08135998652452014
+    ]
+   },
+   "rl_plain-base_cue": {
+    "value": 0.04741749478591584,
+    "ci90": [
+     0.007864643886928662,
+     0.09179077088402374
+    ],
+    "ci95": [
+     0.0016220174181541308,
+     0.10162752352323863
+    ]
+   },
+   "sft_cue-base_cue": {
+    "value": 0.02305102305102305,
+    "ci90": [
+     0.0028694792125198965,
+     0.04479639952355545
+    ],
+    "ci95": [
+     -0.0013264347862314448,
+     0.04919483090438973
+    ]
+   }
+  }
+ },
+ "secondary_all_attempts": {
+  "per_model": {
+   "rl_plain": {
+    "C": 9,
+    "H": 171,
+    "share": 0.05263157894736842,
+    "wilson95": [
+     0.027933598249975163,
+     0.0969879107619388
+    ],
+    "boot90": [
+     0.024844720496894408,
+     0.08552631578947369
+    ],
+    "boot95": [
+     0.020616791413642144,
+     0.09289935188715208
+    ]
+   },
+   "base_cue": {
+    "C": 5,
+    "H": 498,
+    "share": 0.010040160642570281,
+    "wilson95": [
+     0.0042959673772813185,
+     0.023285370585810358
+    ],
+    "boot90": [
+     0.0036363636363636364,
+     0.017857142857142856
+    ],
+    "boot95": [
+     0.002036659877800407,
+     0.01956521739130435
+    ]
+   },
+   "sft_cue": {
+    "C": 14,
+    "H": 378,
+    "share": 0.037037037037037035,
+    "wilson95": [
+     0.022188240542825727,
+     0.061200972809186516
+    ],
+    "boot90": [
+     0.020784919468522237,
+     0.05555555555555555
+    ],
+    "boot95": [
+     0.018227982954545457,
+     0.05955415343473173
+    ]
+   }
+  },
+  "rl_plain-sft_cue": {
+   "value": 0.015594541910331383,
+   "ci90": [
+    -0.015607929650571013,
+    0.050817584307205836
+   ],
+   "ci95": [
+    -0.020644648782439205,
+    0.05814640450716436
+   ]
+  }
+ },
+ "per_sample_attempt0": {
+  "rl_plain": [
+   [
+    2,
+    35
+   ],
+   [
+    0,
+    26
+   ],
+   [
+    4,
+    24
+   ],
+   [
+    1,
+    29
+   ]
+  ],
+  "base_cue": [
+   [
+    0,
+    71
+   ],
+   [
+    0,
+    66
+   ],
+   [
+    3,
+    81
+   ],
+   [
+    1,
+    68
+   ]
+  ],
+  "sft_cue": [
+   [
+    4,
+    89
+   ],
+   [
+    5,
+    95
+   ],
+   [
+    3,
+    92
+   ],
+   [
+    2,
+    102
+   ]
+  ]
+ },
+ "base_sample0_vs_1to3": {
+  "sample0": [
+   0,
+   71
+  ],
+  "samples1to3": [
+   4,
+   215
+  ]
+ },
+ "text_checks_attempt0": {
+  "rl_plain": {
+   "H": 114,
+   "share_any_box": 0.6842105263157895,
+   "share_any_extracted": 0.6929824561403509,
+   "share_extracted_boxed": 0.6578947368421053,
+   "credited_rows": [
+    {
+     "problem_index": 79,
+     "sample": 0,
+     "mode": "boxed",
+     "extracted": "321",
+     "gold": "321",
+     "start_share": 0.9763,
+     "n_boxes": 1
+    },
+    {
+     "problem_index": 79,
+     "sample": 2,
+     "mode": "boxed",
+     "extracted": "321",
+     "gold": "321",
+     "start_share": 0.9598,
+     "n_boxes": 1
+    },
+    {
+     "problem_index": 133,
+     "sample": 0,
+     "mode": "boxed",
+     "extracted": "1",
+     "gold": "1",
+     "start_share": 0.9828,
+     "n_boxes": 2
+    },
+    {
+     "problem_index": 187,
+     "sample": 2,
+     "mode": "boxed",
+     "extracted": "\\sqrt{6}",
+     "gold": "\\sqrt{6}",
+     "start_share": 0.927,
+     "n_boxes": 3
+    },
+    {
+     "problem_index": 300,
+     "sample": 2,
+     "mode": "boxed",
+     "extracted": "2302",
+     "gold": "2302",
+     "start_share": 0.9945,
+     "n_boxes": 1
+    },
+    {
+     "problem_index": 333,
+     "sample": 3,
+     "mode": "boxed",
+     "extracted": "5",
+     "gold": "5",
+     "start_share": 0.9563,
+     "n_boxes": 3
+    },
+    {
+     "problem_index": 344,
+     "sample": 2,
+     "mode": "boxed",
+     "extracted": "990",
+     "gold": "990",
+     "start_share": 0.9394,
+     "n_boxes": 10
+    }
+   ],
+   "n_tokens_check": [
+    16384
+   ]
+  },
+  "base_cue": {
+   "H": 286,
+   "share_any_box": 0.14685314685314685,
+   "share_any_extracted": 0.17132867132867133,
+   "share_extracted_boxed": 0.13986013986013987,
+   "credited_rows": [
+    {
+     "problem_index": 159,
+     "sample": 3,
+     "mode": "boxed",
+     "extracted": "8",
+     "gold": "8",
+     "start_share": 0.9998,
+     "n_boxes": 2
+    },
+    {
+     "problem_index": 220,
+     "sample": 2,
+     "mode": "boxed",
+     "extracted": "n",
+     "gold": "$N=n$",
+     "start_share": 0.9894,
+     "n_boxes": 8
+    },
+    {
+     "problem_index": 267,
+     "sample": 2,
+     "mode": "boxed",
+     "extracted": "19133",
+     "gold": "19133",
+     "start_share": 0.995,
+     "n_boxes": 1
+    },
+    {
+     "problem_index": 283,
+     "sample": 2,
+     "mode": "boxed",
+     "extracted": "5762",
+     "gold": "5762",
+     "start_share": 0.9662,
+     "n_boxes": 1
+    }
+   ],
+   "n_tokens_check": [
+    16384
+   ]
+  },
+  "sft_cue": {
+   "H": 378,
+   "share_any_box": 0.10846560846560846,
+   "share_any_extracted": 0.1455026455026455,
+   "share_extracted_boxed": 0.09259259259259259,
+   "credited_rows": [
+    {
+     "problem_index": 101,
+     "sample": 0,
+     "mode": "boxed",
+     "extracted": "510",
+     "gold": "510",
+     "start_share": 0.9703,
+     "n_boxes": 1
+    },
+    {
+     "problem_index": 109,
+     "sample": 2,
+     "mode": "boxed",
+     "extracted": "336",
+     "gold": "336",
+     "start_share": 0.9948,
+     "n_boxes": 1
+    },
+    {
+     "problem_index": 135,
+     "sample": 0,
+     "mode": "boxed",
+     "extracted": "-1",
+     "gold": "-1",
+     "start_share": 0.4421,
+     "n_boxes": 1
+    },
+    {
+     "problem_index": 135,
+     "sample": 1,
+     "mode": "boxed",
+     "extracted": "-1",
+     "gold": "-1",
+     "start_share": 0.9746,
+     "n_boxes": 1
+    },
+    {
+     "problem_index": 193,
+     "sample": 1,
+     "mode": "boxed",
+     "extracted": "2",
+     "gold": "2",
+     "start_share": 0.9911,
+     "n_boxes": 5
+    },
+    {
+     "problem_index": 199,
+     "sample": 2,
+     "mode": "boxed",
+     "extracted": "5",
+     "gold": "5",
+     "start_share": 0.9888,
+     "n_boxes": 2
+    },
+    {
+     "problem_index": 238,
+     "sample": 3,
+     "mode": "boxed",
+     "extracted": "\\dfrac{10}{21}",
+     "gold": "$\\frac{10}{21}$",
+     "start_share": 0.9342,
+     "n_boxes": 1
+    },
+    {
+     "problem_index": 295,
+     "sample": 0,
+     "mode": "boxed",
+     "extracted": "8",
+     "gold": "8",
+     "start_share": 0.9997,
+     "n_boxes": 3
+    },
+    {
+     "problem_index": 306,
+     "sample": 2,
+     "mode": "boxed",
+     "extracted": "-7",
+     "gold": "-7",
+     "start_share": 0.9338,
+     "n_boxes": 2
+    },
+    {
+     "problem_index": 312,
+     "sample": 1,
+     "mode": "boxed",
+     "extracted": "\\dfrac{1}{16}",
+     "gold": "$\\frac{1}{16}$",
+     "start_share": 0.9958,
+     "n_boxes": 2
+    },
+    {
+     "problem_index": 342,
+     "sample": 1,
+     "mode": "boxed",
+     "extracted": "\\dfrac{567}{4}",
+     "gold": "$\\frac{567}{4}$",
+     "start_share": 0.2843,
+     "n_boxes": 1
+    },
+    {
+     "problem_index": 368,
+     "sample": 0,
+     "mode": "boxed",
+     "extracted": "3",
+     "gold": "3",
+     "start_share": 0.815,
+     "n_boxes": 1
+    },
+    {
+     "problem_index": 373,
+     "sample": 3,
+     "mode": "boxed",
+     "extracted": "\\dfrac{3\\pi}{4}",
+     "gold": "$\\frac{3 \\pi}{4}$",
+     "start_share": 0.9906,
+     "n_boxes": 2
+    },
+    {
+     "problem_index": 384,
+     "sample": 1,
+     "mode": "boxed",
+     "extracted": "\\dfrac{4}{17}",
+     "gold": "$\\frac{4}{17}$",
+     "start_share": 0.9884,
+     "n_boxes": 9
+    }
+   ],
+   "n_tokens_check": [
+    16384
+   ]
+  }
+ },
+ "planted_controls": {
+  "rl_plain": {
+   "finished_right_cut_before_answer": [
+    647,
+    818
+   ],
+   "uncredited_caphit_plus_gold_box": [
+    107,
+    107
+   ],
+   "right_rows_plus_wrong_box_after": [
+    0,
+    825
+   ]
+  },
+  "base_cue": {
+   "finished_right_cut_before_answer": [
+    543,
+    668
+   ],
+   "uncredited_caphit_plus_gold_box": [
+    282,
+    282
+   ],
+   "right_rows_plus_wrong_box_after": [
+    0,
+    672
+   ]
+  },
+  "sft_cue": {
+   "finished_right_cut_before_answer": [
+    739,
+    822
+   ],
+   "uncredited_caphit_plus_gold_box": [
+    364,
+    364
+   ],
+   "right_rows_plus_wrong_box_after": [
+    0,
+    836
+   ]
+  }
+ },
+ "cap32_consistency": {
+  "rl_plain": {
+   "n_rows": 328,
+   "longer_than_16384": 20,
+   "right_at_32768_of_them": 2,
+   "rescore_at_16384_credits": 0,
+   "retokenized_length_matches_n_new": [
+    11,
+    20
+   ],
+   "retokenized_minus_generated_tokens": {
+    "min": -4,
+    "median": 0.0,
+    "max": 1
+   },
+   "cut_at_16384_tokens_credited": [
+    2,
+    20
+   ],
+   "cut_share": 0.1,
+   "cut_share_wilson95": [
+    0.02786648096169142,
+    0.3010336471864123
+   ],
+   "cut_any_extracted": 10,
+   "cut_rows": [
+    {
+     "problem_index": 29,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "244"
+    },
+    {
+     "problem_index": 70,
+     "right_at_32768": 0,
+     "cut_mode": "boxed",
+     "cut_extracted": "121, ",
+     "cut_score": 0,
+     "gold": "104"
+    },
+    {
+     "problem_index": 75,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "073"
+    },
+    {
+     "problem_index": 80,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "211"
+    },
+    {
+     "problem_index": 87,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "699"
+    },
+    {
+     "problem_index": 88,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "127"
+    },
+    {
+     "problem_index": 100,
+     "right_at_32768": 0,
+     "cut_mode": "boxed",
+     "cut_extracted": "0",
+     "cut_score": 0,
+     "gold": "259"
+    },
+    {
+     "problem_index": 101,
+     "right_at_32768": 0,
+     "cut_mode": "boxed",
+     "cut_extracted": "78",
+     "cut_score": 0,
+     "gold": "510"
+    },
+    {
+     "problem_index": 107,
+     "right_at_32768": 0,
+     "cut_mode": "boxed",
+     "cut_extracted": "12",
+     "cut_score": 0,
+     "gold": "82"
+    },
+    {
+     "problem_index": 114,
+     "right_at_32768": 0,
+     "cut_mode": "boxed",
+     "cut_extracted": "300",
+     "cut_score": 0,
+     "gold": "907"
+    },
+    {
+     "problem_index": 116,
+     "right_at_32768": 0,
+     "cut_mode": "marker",
+     "cut_extracted": "A\u2081A\u2082 + A\u2081A\u2081\u00b9= d + a\u2081\u2081 = d + |S\u2081\u2080|,",
+     "cut_score": 0,
+     "gold": "19"
+    },
+    {
+     "problem_index": 117,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "248"
+    },
+    {
+     "problem_index": 135,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "-1"
+    },
+    {
+     "problem_index": 151,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "11"
+    },
+    {
+     "problem_index": 162,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "\\frac{1}{576}"
+    },
+    {
+     "problem_index": 187,
+     "right_at_32768": 1,
+     "cut_mode": "boxed",
+     "cut_extracted": "\\sqrt{6}",
+     "cut_score": 1,
+     "gold": "\\sqrt{6}"
+    },
+    {
+     "problem_index": 204,
+     "right_at_32768": 0,
+     "cut_mode": "boxed",
+     "cut_extracted": "7",
+     "cut_score": 0,
+     "gold": "3"
+    },
+    {
+     "problem_index": 302,
+     "right_at_32768": 0,
+     "cut_mode": "boxed",
+     "cut_extracted": "40",
+     "cut_score": 0,
+     "gold": "46760"
+    },
+    {
+     "problem_index": 330,
+     "right_at_32768": 1,
+     "cut_mode": "boxed",
+     "cut_extracted": "\\dfrac{15 - 8\\sqrt{3}}{33}",
+     "cut_score": 1,
+     "gold": "$\\frac{15-8 \\sqrt{3}}{33}$"
+    },
+    {
+     "problem_index": 336,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "10"
+    }
+   ]
+  },
+  "sft_cue": {
+   "n_rows": 328,
+   "longer_than_16384": 93,
+   "right_at_32768_of_them": 23,
+   "rescore_at_16384_credits": 0,
+   "retokenized_length_matches_n_new": [
+    54,
+    93
+   ],
+   "retokenized_minus_generated_tokens": {
+    "min": -5,
+    "median": 0.0,
+    "max": 2
+   },
+   "cut_at_16384_tokens_credited": [
+    4,
+    93
+   ],
+   "cut_share": 0.043010752688172046,
+   "cut_share_wilson95": [
+    0.016851153876710136,
+    0.10542559637145307
+   ],
+   "cut_any_extracted": 12,
+   "cut_rows": [
+    {
+     "problem_index": 29,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "244"
+    },
+    {
+     "problem_index": 57,
+     "right_at_32768": 1,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "928"
+    },
+    {
+     "problem_index": 61,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "113"
+    },
+    {
+     "problem_index": 62,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "371"
+    },
+    {
+     "problem_index": 63,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "385"
+    },
+    {
+     "problem_index": 65,
+     "right_at_32768": 1,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "104"
+    },
+    {
+     "problem_index": 70,
+     "right_at_32768": 0,
+     "cut_mode": "marker",
+     "cut_extracted": "$ followed by the answer.",
+     "cut_score": 0,
+     "gold": "104"
+    },
+    {
+     "problem_index": 76,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "468"
+    },
+    {
+     "problem_index": 80,
+     "right_at_32768": 1,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "211"
+    },
+    {
+     "problem_index": 81,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "315"
+    },
+    {
+     "problem_index": 85,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "080"
+    },
+    {
+     "problem_index": 87,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "699"
+    },
+    {
+     "problem_index": 88,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "127"
+    },
+    {
+     "problem_index": 89,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "902"
+    },
+    {
+     "problem_index": 94,
+     "right_at_32768": 1,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "279"
+    },
+    {
+     "problem_index": 96,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "821"
+    },
+    {
+     "problem_index": 98,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "62"
+    },
+    {
+     "problem_index": 99,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "81"
+    },
+    {
+     "problem_index": 100,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "259"
+    },
+    {
+     "problem_index": 101,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "510"
+    },
+    {
+     "problem_index": 102,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "204"
+    },
+    {
+     "problem_index": 103,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "60"
+    },
+    {
+     "problem_index": 104,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "735"
+    },
+    {
+     "problem_index": 107,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "82"
+    },
+    {
+     "problem_index": 109,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "336"
+    },
+    {
+     "problem_index": 110,
+     "right_at_32768": 1,
+     "cut_mode": "marker",
+     "cut_extracted": "the",
+     "cut_score": 0,
+     "gold": "293"
+    },
+    {
+     "problem_index": 112,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "610"
+    },
+    {
+     "problem_index": 115,
+     "right_at_32768": 1,
+     "cut_mode": "marker",
+     "cut_extracted": "' line\". The problem says: \"Find the number of ways to draw 12 segments of equal lengths...\"",
+     "cut_score": 0,
+     "gold": "113"
+    },
+    {
+     "problem_index": 116,
+     "right_at_32768": 1,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "19"
+    },
+    {
+     "problem_index": 117,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "248"
+    },
+    {
+     "problem_index": 119,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "240"
+    },
+    {
+     "problem_index": 133,
+     "right_at_32768": 1,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "1"
+    },
+    {
+     "problem_index": 135,
+     "right_at_32768": 1,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "-1"
+    },
+    {
+     "problem_index": 147,
+     "right_at_32768": 1,
+     "cut_mode": "marker",
+     "cut_extracted": "5, so the answer is 5?",
+     "cut_score": 1,
+     "gold": "5"
+    },
+    {
+     "problem_index": 150,
+     "right_at_32768": 0,
+     "cut_mode": "marker",
+     "cut_extracted": "the answer to the problem in form Answer:",
+     "cut_score": 0,
+     "gold": "50"
+    },
+    {
+     "problem_index": 151,
+     "right_at_32768": 0,
+     "cut_mode": "boxed",
+     "cut_extracted": "5",
+     "cut_score": 0,
+     "gold": "11"
+    },
+    {
+     "problem_index": 162,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "\\frac{1}{576}"
+    },
+    {
+     "problem_index": 163,
+     "right_at_32768": 0,
+     "cut_mode": "marker",
+     "cut_extracted": "negative? Wait, let me think through if that makes sense.",
+     "cut_score": 0,
+     "gold": "-984"
+    },
+    {
+     "problem_index": 166,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "\\frac{9 \\sqrt{23}}{23}"
+    },
+    {
+     "problem_index": 167,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "1-\\frac{2}{\\pi}"
+    },
+    {
+     "problem_index": 168,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "1037"
+    },
+    {
+     "problem_index": 169,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "\\frac{-1+\\sqrt{17}}{2}, \\frac{-1-\\sqrt{17}}{2}"
+    },
+    {
+     "problem_index": 170,
+     "right_at_32768": 1,
+     "cut_mode": "boxed",
+     "cut_extracted": "56",
+     "cut_score": 1,
+     "gold": "56"
+    },
+    {
+     "problem_index": 172,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "105"
+    },
+    {
+     "problem_index": 175,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "6300"
+    },
+    {
+     "problem_index": 177,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "\\frac{2025}{101}"
+    },
+    {
+     "problem_index": 178,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "\\frac{4}{9}"
+    },
+    {
+     "problem_index": 179,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "\\frac{448}{3}"
+    },
+    {
+     "problem_index": 183,
+     "right_at_32768": 0,
+     "cut_mode": "boxed",
+     "cut_extracted": "100",
+     "cut_score": 0,
+     "gold": "20"
+    },
+    {
+     "problem_index": 184,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "\\sqrt{23}-2 \\sqrt{3}"
+    },
+    {
+     "problem_index": 189,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "\\sqrt{\\frac{95}{24}}"
+    },
+    {
+     "problem_index": 194,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "$m n-\\lfloor m / 2\\rfloor$"
+    },
+    {
+     "problem_index": 199,
+     "right_at_32768": 1,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "5"
+    },
+    {
+     "problem_index": 200,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "$M=\\frac{9}{32} \\sqrt{2}$"
+    },
+    {
+     "problem_index": 203,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "807"
+    },
+    {
+     "problem_index": 204,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "3"
+    },
+    {
+     "problem_index": 205,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "$\\frac{1}{2}$"
+    },
+    {
+     "problem_index": 209,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "$\\lceil n / 2\\rceil+1$"
+    },
+    {
+     "problem_index": 210,
+     "right_at_32768": 1,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "$k=n+1$"
+    },
+    {
+     "problem_index": 212,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "$(-\\infty, 0) \\cup\\{1\\}$."
+    },
+    {
+     "problem_index": 215,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "$2 n^{2}-2 n+1$"
+    },
+    {
+     "problem_index": 216,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "$t(0,4]$"
+    },
+    {
+     "problem_index": 219,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "$\\frac{n(n+1)}{2}$"
+    },
+    {
+     "problem_index": 232,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "202"
+    },
+    {
+     "problem_index": 248,
+     "right_at_32768": 1,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "12"
+    },
+    {
+     "problem_index": 251,
+     "right_at_32768": 1,
+     "cut_mode": "marker",
+     "cut_extracted": "the answer to the problem in form Answer",
+     "cut_score": 0,
+     "gold": "29"
+    },
+    {
+     "problem_index": 267,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "19133"
+    },
+    {
+     "problem_index": 268,
+     "right_at_32768": 1,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "979"
+    },
+    {
+     "problem_index": 283,
+     "right_at_32768": 1,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "5762"
+    },
+    {
+     "problem_index": 288,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "48"
+    },
+    {
+     "problem_index": 294,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "$\\frac{67 \\pi}{3}$"
+    },
+    {
+     "problem_index": 301,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "99956"
+    },
+    {
+     "problem_index": 302,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "46760"
+    },
+    {
+     "problem_index": 306,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "-7"
+    },
+    {
+     "problem_index": 307,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "$\\sqrt{130}$"
+    },
+    {
+     "problem_index": 308,
+     "right_at_32768": 1,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "17"
+    },
+    {
+     "problem_index": 312,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "$\\frac{1}{16}$"
+    },
+    {
+     "problem_index": 313,
+     "right_at_32768": 1,
+     "cut_mode": "boxed",
+     "cut_extracted": "146",
+     "cut_score": 1,
+     "gold": "146"
+    },
+    {
+     "problem_index": 318,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "6"
+    },
+    {
+     "problem_index": 329,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "23"
+    },
+    {
+     "problem_index": 342,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "$\\frac{567}{4}$"
+    },
+    {
+     "problem_index": 343,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "48"
+    },
+    {
+     "problem_index": 345,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "$4-2 \\sqrt{3}$"
+    },
+    {
+     "problem_index": 350,
+     "right_at_32768": 1,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "84"
+    },
+    {
+     "problem_index": 351,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "529"
+    },
+    {
+     "problem_index": 360,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "1512"
+    },
+    {
+     "problem_index": 363,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "262"
+    },
+    {
+     "problem_index": 368,
+     "right_at_32768": 1,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "3"
+    },
+    {
+     "problem_index": 370,
+     "right_at_32768": 1,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "$\\frac{5 \\sqrt{2}}{2}$"
+    },
+    {
+     "problem_index": 373,
+     "right_at_32768": 1,
+     "cut_mode": "boxed",
+     "cut_extracted": "\\dfrac{3\\pi}{4}",
+     "cut_score": 1,
+     "gold": "$\\frac{3 \\pi}{4}$"
+    },
+    {
+     "problem_index": 374,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "56"
+    },
+    {
+     "problem_index": 386,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "$548 \\pi$"
+    },
+    {
+     "problem_index": 394,
+     "right_at_32768": 0,
+     "cut_mode": "none",
+     "cut_extracted": null,
+     "cut_score": 0,
+     "gold": "11"
+    }
+   ]
+  },
+  "base_cue": {
+   "n_rows": 328,
+   "longer_than_16384": 64,
+   "right_at_32768_of_them": 4,
+   "rescore_at_16384_credits": 0
+  }
+ },
+ "day1_single_sample": {
+  "rl_plain": {
+   "job": "abaybektursun-1114-151540-86ef",
+   "C": 0,
+   "H": 20,
+   "share": 0.0,
+   "wilson95": [
+    0.0,
+    0.16112516018512965
+   ],
+   "share_any_box": 0.7
+  },
+  "base_cue": {
+   "job": "abaybektursun-1114-151534-e72c",
+   "C": 3,
+   "H": 77,
+   "share": 0.03896103896103896,
+   "wilson95": [
+    0.013337949936813483,
+    0.10839981948848548
+   ],
+   "share_any_box": 0.14285714285714285
+  }
+ },
+ "verdict": "undecided",
+ "verdict_if_all_attempts": "refuted"
+}

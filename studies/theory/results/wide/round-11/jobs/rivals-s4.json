@@ -1,0 +1,49 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "The top RL directions mainly install finishing: stop and deliver the answer in the expected format. On code the answers are short, so most of the cued base's lost points are unfinished or no-code-block answers that are otherwise right. One unit of dose already removes almost all of them, so the effect saturates by 1x. On long math answers the same dose saturates only near 1.5x. Doses beyond saturation, including stacked Math plus Code directions, overshoot and cost answers.",
+  "readers_wrong": "The readers carried over the math dial's slow 1x response (192 of 206 on hard328) or Code directions on math (178), which implies about 40 % of the gap. On short code answers the finishing failures are cleared at 1x, so 82 % of the gap closed there.",
+  "rests_on": ["result-a1bf75", "result-51ccc6", "result-6f1bb7"],
+  "holds_against": [
+   {"item": "result-6f1bb7", "value": 192, "why": "Math at 1x reaches only 192 of 206 on hard328 because the long answers need a larger finishing dose (cap hits still 46). They saturate at 1.5x (203, 25 cap hits), as the length-dependent saturation predicts."},
+   {"item": "result-51ccc6", "value": 342, "why": "On code the late layers do not finish (34 cap hits) and add nothing, but the early and middle bands do both. The finishing component sits in early and mid layers on code. Only its location differs from math; the mechanism is unchanged."}
+  ],
+  "forecasts": [
+   {"id": "t04", "value": 42, "low": 28, "high": 60, "reason": "Reversing finishing raised hard328 cap hits 77 to 96 and unboxed answers 23 to 61. The base's roughly 25 MATH-500 cap hits rise by at least that ratio, plus answers that never end."},
+   {"id": "t05", "value": 340, "low": 300, "high": 372, "reason": "Think-SFT has no finishing directions (its top-8 edit did nothing). Long thinking runs into the cap on short code tasks, so it stays well short of RL-Code's 401."},
+   {"id": "t06", "value": 325, "low": 285, "high": 362, "reason": "Same as t05. The Math cue adds no code-block format, so slightly worse."},
+   {"id": "t15", "value": 222, "low": 210, "high": 234, "reason": "Finishing converts part of Think-SFT's ~90 unfinished answers at its high precision, about half of what M(2) got (231.5)."},
+   {"id": "t16", "value": 185, "low": 150, "high": 215, "reason": "At 3x the base edit decays into word strings (117); Think-SFT overshoots less but still loses answers."},
+   {"id": "t17", "value": 209, "low": 198, "high": 220, "reason": "A random rank-8 edit has no finishing effect at any size (flat on the base), so the score stays at Think-SFT's 209."},
+   {"id": "t18", "value": 190, "low": 178, "high": 201, "reason": "Stacked 1.5x+1.5x with partly aligned shifts (cos 0.37) is about a 2.5x finishing dose, past saturation. It sits near Math at 2x (190)."},
+   {"id": "t19", "value": 196, "low": 186, "high": 206, "reason": "1x+1x is about a 1.6x finishing dose, near Math's 1.5x saturation point (200 mean)."},
+   {"id": "t20", "value": 199, "low": 189, "high": 209, "reason": "The random part adds nothing, so this is Math 1.5x (mean 200.25)."},
+   {"id": "t21", "value": 375, "low": 355, "high": 391, "reason": "Code finishing already saturates at 1x; a combined dose of about 2.5x overshoots short code answers below Code 2x (394)."},
+   {"id": "t22", "value": 390, "low": 377, "high": 402, "reason": "Saturated finishing near Code 1.5x (399), with a small overshoot cost."},
+   {"id": "t23", "value": 367, "low": 352, "high": 382, "reason": "Random adds nothing; Math 1.5x alone on code scored 368."},
+   {"id": "t27", "value": 449, "low": 438, "high": 459, "reason": "MATH-500 finishing saturates at 1.5x (456). At 2x, overshoot clips some derivations, as on hard328 (203 to 190)."}
+  ]},
+ {"id": "b",
+  "statement": "Besides finishing, the top RL directions sharpen the base toward its own most likely correct solution on problems it already solves in some samples. HumanEval+ and MBPP+ consist almost entirely of such problems (high base pass@k), so at 1x most of the code gap closes through reliability on finished answers, not through cap hits. Gains from Math and Code directions add on code, and the effect needs base capability rather than a short answer length.",
+  "readers_wrong": "The readers treated the edit as a finishing fix. The cued base's code cap hits and no-block answers (61, partly overlapping) can only give about 35 points that way. The directions also make already-finished code right more often, a gain that is largest on easy, sometimes-solved problems.",
+  "rests_on": ["result-a1bf75", "result-2fe32f", "result-6f1bb7"],
+  "holds_against": [
+   {"item": "result-51a0e7", "value": 0.65, "why": "On hard328, right per finished answer stays near 0.65, but that set is dominated by problems the base never solves. On problems the base already finishes, right answers rise 161 to 184 (result-2fe32f), which is the sharpening."},
+   {"item": "result-6f1bb7", "value": 5, "why": "At 2x, cap hits fall to 5 while right answers drop to 190. Sharpening has an optimum dose beyond which the model collapses. That is a separate limit and does not contradict a reliability gain below it."}
+  ],
+  "forecasts": [
+   {"id": "t04", "value": 33, "low": 24, "high": 46, "reason": "Reversal mostly removes sharpening; cap hits rise only modestly above the base's roughly 25."},
+   {"id": "t05", "value": 388, "low": 374, "high": 405, "reason": "Think-SFT is right on 88 % of its finished answers (high precision imitation). Code tasks are short, so few cap hits; near RL-Code's 401."},
+   {"id": "t06", "value": 378, "low": 362, "high": 398, "reason": "Same reliability without the code-format cue, a few points lower."},
+   {"id": "t15", "value": 214, "low": 203, "high": 226, "reason": "Think-SFT is already sharp; the top-8 directions add little reliability, and finishing alone is a small part of M(2)'s gain."},
+   {"id": "t16", "value": 180, "low": 145, "high": 212, "reason": "3x is beyond the optimum dose and leads to collapse, as on the base."},
+   {"id": "t17", "value": 209, "low": 198, "high": 220, "reason": "A random edit does not sharpen."},
+   {"id": "t18", "value": 200, "low": 190, "high": 211, "reason": "Math and Code reliability add on math only weakly; Math 1.5x level (200.25)."},
+   {"id": "t19", "value": 198, "low": 188, "high": 208, "reason": "Math 1x (192) plus a few points from Code's sharpening on math (Code 1x gave 178 vs base 164)."},
+   {"id": "t20", "value": 199, "low": 189, "high": 209, "reason": "Random adds nothing; Math 1.5x."},
+   {"id": "t21", "value": 403, "low": 393, "high": 416, "reason": "Code (399) and Math (368, +37 over random on code) sharpening add on code's solvable problems, reaching RL-Code or above."},
+   {"id": "t22", "value": 397, "low": 386, "high": 408, "reason": "Code 1x (386) plus part of Math's code gain."},
+   {"id": "t23", "value": 368, "low": 353, "high": 383, "reason": "Math 1.5x on code scored 368; random adds nothing."},
+   {"id": "t27", "value": 452, "low": 442, "high": 461, "reason": "Just past the optimum dose at 1.5x (456); a small loss."}
+  ]}
+],
+ "cell": null}

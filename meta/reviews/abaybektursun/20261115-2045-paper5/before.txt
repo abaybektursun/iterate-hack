@@ -1,0 +1,6 @@
+== BAD
+AssertionError: commit your changes first: a job runs one commit
+exit 1
+== GOOD
+AssertionError: commit your changes first: a job runs one commit
+exit 1

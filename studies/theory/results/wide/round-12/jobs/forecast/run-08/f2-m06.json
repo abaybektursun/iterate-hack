@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": 227, "low": 216, "high": 238, "reason": "Theory: RL directions turn Think-SFT's cap-hit abstentions into finishes, which raises single-sample counts above Think-SFT's 209 (random 213). I centre a little below the first seed's 232 for regression."},
+{"id": "t10", "value": 41, "low": 31, "high": 53, "reason": "Theory read in reverse: removing the RL directions turns finishes back into abstentions. The odd shard measured 20 of 250 cap hits, so I double it for the full set."},
+{"id": "t11", "value": 375, "low": 359, "high": 391, "reason": "The extra abstentions from removing the directions lower single-sample right answers; the odd shard's 188/250 doubles to about 376."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": 198, "low": 189, "high": 207, "reason": "Theory: the cued base abstains at the cap often, so more votes move it toward pass@k. It also finishes long and wrong, so the gain is modest: about +6 over the vote over 4 (192), like MATH-500's 449 -> 457 from 4 to 6 samples."},
+{"id": "t15", "value": 468, "low": 458, "high": 477, "reason": "Theory: the transplant turns abstentions into finishes, which raises single counts over Think-SFT's 457-462 at cap 16,384 (a=1 scored 467)."},
+{"id": "t16", "value": 233, "low": 224, "high": 242, "reason": "M(2)'s single-sample counts after its abstentions are converted are 234, 229 and 237 (mean 233.3), so the fourth sample should land near that mean."},
+{"id": "t17", "value": 247, "low": 240, "high": 254, "reason": "Theory: converted abstentions are mostly wrong and dilute the vote. The vote gain over Think-SFT (241) is therefore much smaller than the single-sample gain (+24); the vote over 3 is 246, so a fourth sample adds about 1."},
+{"id": "t18", "value": 244, "low": 236, "high": 252, "reason": "Theory: a larger cap converts M(2)'s ~50 cap hits into finishes and raises the single count. At 16,384 this seed gives 234; the other seed rose 232 -> 245 at 32,768 with 0 cap hits."},
+{"id": "t19", "value": 77, "low": 70, "high": 84, "reason": "Theory: Think-SFT's cap hits abstain, so its vote at 16,384 (75) is already near pass@k. Answers converted by the 32,768 cap are mostly wrong, so the vote rises only slightly (hard328 vote: 238 -> 244, while singles rose about 22)."},
+{"id": "t20", "value": 69, "low": 63, "high": 76, "reason": "Theory: a larger cap raises single counts more than votes. Think-SFT abstains on about 62 of 136 per sample at 16,384 (mean 60 right); I assume about 15 % of those convert to right answers, which adds about 9."}
+]}

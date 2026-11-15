@@ -1,7 +1,7 @@
-"""Ideas converge: the picture of slide 10 of the talk deck (demo_deck.py), served at /demo/fig/converge.
+"""Ideas converge: the picture of the slide "ideas" of the talk deck (demo_deck.py), served at /demo/fig/converge.
 
 One self-playing canvas, 1600 x 900 CSS px, the size of a slide. The glass slab of /proof/idea-basins in its basins
-look (the same projection, relief and basins, proof_idea_basins.py) holds the 218 board items as dots, each in its
+look (the same projection, relief and basins, proof_idea_basins.py) holds the board items as dots, each in its
 basin. The idea tree grows over it in the order the items were posted: each item pops in, and from each earlier item
 it builds on a lit head runs along an arc above the slab and leaves the arc behind. An arc inside one basin is low
 and faint; an arc between two basins is tall and blue. A count under the slab adds up the links that have landed and

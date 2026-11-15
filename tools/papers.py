@@ -1,10 +1,17 @@
 """The Papers page of the team site: how the paper loop works, and the papers it has produced.
 
-view.py serves page(PAPERS) at /papers; the home dial leads to it. The words column states what the loop is and its
-six steps in order. The picture is the papers themselves: one lit sheet per paper of view.PAPERS, in the order they
-were written, each with its title, its claim, its length, why the loop picked it and how it was checked. A click on a
-sheet opens its PDF. The status at the top right says whether the loop's work item (LOOP_ITEM) is open on the board
-and when it last moved, from /data, read every 10 s. Nothing here writes to the board.
+view.py serves page(PAPERS) at /papers; the home dial leads to it. The words column states what the loop is and names its
+six steps in order; a click on a step opens its one sentence, and only one is open at a time. The picture is the papers themselves, as one flat row of sheets in the order they were written, left to right. One
+sheet is open: it is wide and lit and can be read, with its title, its claim, why the loop picked it, how it was
+checked, its length and the one button, which opens the PDF in a new tab. Every other sheet is closed to a strip that
+shows its number and title. A click on a strip, or the left and right arrow keys, opens that paper and closes the
+other; the open paper is in the address (/papers#no-early-warning), so Back works. The motion is one width transition
+and a fade of the text (Abay, 2026-11-15: a stack in depth with a sway looked cheap and its motion was faulty, so
+nothing here is 3D and nothing moves by itself). The strips share the width the open sheet leaves, so about eight
+papers fit beside the words at 1260 px. Where the page is one column (below
+1240 px) there is no stack and every sheet is shown in full, one after the other. The status at the top right says
+whether the loop's work item (LOOP_ITEM) is open on the board and when it last moved, from /data, read every 10 s.
+Nothing here writes to the board.
 
 Where the words come from. The steps: the comments of board item work-184476, meta/tierlist/ (TIERLIST.md, ROUND3.md,
 ROUND4.md) and the NOTES.md of each paper folder. A paper's claim is the subtitle on the first page of its PDF. Its
@@ -42,6 +49,12 @@ ROWS = {
         "picked": "Tier round 4: first of 6 candidates, and it needed no GPU run.",
         "checked": "64 checks of its numbers against stored readouts pass.",
     },
+    "two-token-limits.pdf": {
+        "claim": "Three gains between fine-tunes of one 7B model, scored at 16,384 and at 32,768 tokens: one holds, one grows by 6 points and one shrinks.",
+        "pages": 4,
+        "picked": "Tier round 5: the cap test of a scout on stored rows; it waited for one run at the larger limit.",
+        "checked": "153 checks of its numbers against stored readouts pass; 4 review passes.",
+    },
 }
 STEPS = [
     ("Tier", "Scout agents collect the project's findings, re-read the best at their files, search the literature and score novelty and evidence. Judges rank them."),
@@ -58,14 +71,16 @@ def page(papers):
     esc = html.escape
     sheets = []
     for i, name in enumerate(papers):
-        row = ROWS.get(name, {})
-        foot = "".join(f"<p>{esc(row[k])}</p>" for k in ("picked", "checked") if k in row)
+        row, title = ROWS.get(name, {}), esc(demo_deck.paper_title(name))
+        how = "".join(f"<div><dt>{k.title()}</dt><dd>{esc(row[k])}</dd></div>" for k in ("picked", "checked") if k in row)
         pages = f'{row["pages"]} pages' if "pages" in row else "PDF"
         sheets.append(
-            f'<a class="sheet" style="--i:{i}" href="/paper/{esc(name)}"><span class="no">Paper {i + 1}</span>'
-            f'<h2>{esc(demo_deck.paper_title(name))}</h2><p class="claim">{esc(row.get("claim", ""))}</p>'
-            f'<div class="how">{foot}</div><span class="open"><b>{pages}</b><i>Open the PDF</i></span></a>')
-    steps = "".join(f'<li><b>{esc(n)}</b><span>{esc(t)}</span></li>' for n, t in STEPS)
+            f'<article class="sheet{"" if i else " front"}" id="{esc(name.rsplit(".", 1)[0])}" style="--i:{i}">'
+            f'<button class="spine" aria-label="Paper {i + 1}: {title}"><span><i>{i + 1}</i><b>{title}</b></span></button>'
+            f'<div class="face"><p class="no">Paper {i + 1} of {len(papers)}</p><h2>{title}</h2>'
+            f'<p class="claim">{esc(row.get("claim", ""))}</p><dl class="how">{how}</dl>'
+            f'<p class="foot"><a class="open" href="/paper/{esc(name)}" target="_blank" rel="noopener">Open the PDF</a><span>{pages}</span></p></div></article>')
+    steps = "".join(f'<details name="step"><summary><i>{i}</i><b>{esc(n)}</b></summary><p>{esc(t)}</p></details>' for i, (n, t) in enumerate(STEPS, 1))
     return (PAGE.replace("__SHEETS__", "".join(sheets)).replace("__STEPS__", steps)
             .replace("__N__", str(len(papers))).replace("__ITEM__", json.dumps(LOOP_ITEM)))
 
@@ -83,19 +98,21 @@ PAGE = r"""<!doctype html>
 /* The tokens, the light and the type of the Design page (architecture.py). */
 :root {
   color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
-  --blue: #1f43d6; --red: #c41e34;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #cbd2d8;
+  --blue: #1f43d6; --red: #c41e34; --on-blue: #fff;
+  --btn: linear-gradient(#27323e, #0d141b); --btn-ink: #f5f8fa; --btn-edge: rgba(255, 255, 255, .18);
   --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
-  --rim-a: rgba(16, 24, 32, .28); --rim-c: rgba(16, 24, 32, .5);
-  --lit: 0 30px 50px -28px rgba(16, 24, 32, .5);
+  --rim-a: rgba(16, 24, 32, .28);
+  --lit: 0 70px 90px -60px rgba(16, 24, 32, .55), 0 18px 36px -24px rgba(16, 24, 32, .25);
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #788590; --rule: #1c2630;
-    --blue: #8fb1ff; --red: #ff6b7c;
+    --blue: #8fb1ff; --red: #ff6b7c; --on-blue: #080c11;
+    --btn: linear-gradient(#f7fafc, #cbd5de); --btn-ink: #080c11; --btn-edge: rgba(255, 255, 255, .7);
     --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
-    --rim-a: rgba(255, 255, 255, .5); --rim-c: rgba(143, 177, 255, .22);
-    --lit: 0 0 90px -20px rgba(143, 177, 255, .22);
+    --rim-a: rgba(255, 255, 255, .5);
+    --lit: 0 0 140px -30px rgba(143, 177, 255, .2);
   }
 }
 * { box-sizing: border-box; }
@@ -106,6 +123,7 @@ body {
   font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
 }
 a { color: inherit; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
 
 .page {
@@ -122,53 +140,84 @@ a { color: inherit; }
 .status.bad { color: var(--red); }
 .status.bad::before { background: var(--red); box-shadow: 0 0 0 4px color-mix(in srgb, var(--red) 20%, transparent); }
 
-/* The words: the sentence and the six steps, which are a sequence */
-.words { grid-column: 1; grid-row: 2; min-height: 0; overflow: hidden auto; scrollbar-width: none; padding: clamp(18px, 4.5vh, 52px) 0 0; }
-.cap { margin: 0; font-size: clamp(20px, 1.56vw, 27px); line-height: 1.22; font-weight: 300; font-stretch: 102%; letter-spacing: -.012em; max-width: 24ch; text-wrap: balance; }
-.steps { list-style: none; counter-reset: step; margin: clamp(18px, 3.4vh, 34px) 0 0; padding: 0; border-bottom: 1px solid var(--rule); }
-.steps li { counter-increment: step; display: grid; grid-template-columns: 1.5em 5.2em minmax(0, 1fr); column-gap: 8px; padding: 9px 0; border-top: 1px solid var(--rule); align-items: baseline; }
-.steps li::before { content: counter(step); color: var(--mute); font-size: 13px; }
-.steps b { font-weight: 600; font-stretch: 108%; }
-.steps span { color: var(--mute); font-size: 13.5px; line-height: 1.42; text-wrap: pretty; }
+/* The words: the sentence, then the six steps by name. A step opens to its one sentence. */
+.words { grid-column: 1; grid-row: 2; min-height: 0; overflow: hidden auto; scrollbar-width: none; padding: clamp(28px, 7vh, 72px) 0 0; }
+.cap { margin: 0; font-size: clamp(23px, 1.9vw, 33px); line-height: 1.16; font-weight: 250; font-stretch: 100%; letter-spacing: -.02em; max-width: 19ch; text-wrap: balance; }
+.steps { margin: clamp(26px, 6vh, 60px) 0 0; border-bottom: 1px solid var(--rule); max-width: 340px; }
+.lab { margin: 0 0 10px; font-size: 12.5px; font-weight: 600; color: var(--mute); }
+.steps details { border-top: 1px solid var(--rule); }
+.steps summary { display: grid; grid-template-columns: 2em minmax(0, 1fr) auto; align-items: baseline; padding: clamp(8px, 1.5vh, 12px) 0; cursor: pointer; list-style: none; }
+.steps summary::-webkit-details-marker { display: none; }
+.steps summary::after { content: "+"; color: var(--mute); font-weight: 300; font-size: 17px; line-height: 1; }
+.steps details[open] summary::after { content: "\2212"; }
+.steps i { font-style: normal; color: var(--mute); font-size: 12.5px; }
+.steps b { font-weight: 500; font-stretch: 104%; }
+.steps details p { margin: 0; padding: 0 1.4em 14px 2em; color: var(--mute); font-size: 13.5px; line-height: 1.45; text-wrap: pretty; }
 
-/* The picture: the papers, as lit sheets standing in a shallow arc */
-.stage { grid-column: 2; grid-row: 2; min-height: 0; min-width: 0; display: flex; align-items: center; perspective: 1900px; perspective-origin: 30% 20%; }
-.row { display: flex; gap: clamp(14px, 1.7vw, 30px); width: 100%; transform-style: preserve-3d; animation: sway 16s ease-in-out infinite alternate; }
-@keyframes sway { from { transform: rotateX(3deg) rotateY(-5deg); } to { transform: rotateX(1.5deg) rotateY(3.5deg); } }
-.sheet {
-  flex: 1 1 0; min-width: 0; aspect-ratio: 1 / 1.52; max-height: 74vh; display: flex; flex-direction: column;
-  padding: clamp(14px, 1.5vw, 26px); text-decoration: none; border-radius: 3px;
-  background: linear-gradient(150deg, var(--glass-hi), var(--glass) 46%, var(--glass-lo));
-  border: 1px solid var(--rim-c); border-top-color: var(--rim-a); border-left-color: var(--rim-a); box-shadow: var(--lit);
-  transform: translateZ(calc(var(--i) * -34px)) translateY(calc(var(--i) * 10px)); transition: transform .25s cubic-bezier(.3, 0, .2, 1), border-color .2s ease;
-  animation: rise .7s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(.1s + var(--i) * 90ms);
-}
-@keyframes rise { from { opacity: 0; transform: translateZ(calc(var(--i) * -34px)) translateY(calc(var(--i) * 10px + 26px)); } }
-.sheet:hover, .sheet:focus-visible { transform: translateZ(calc(var(--i) * -34px + 30px)) translateY(calc(var(--i) * 10px - 4px)); border-color: var(--blue); }
-.no { font-size: 12.5px; font-weight: 600; color: var(--mute); }
-.sheet h2 { margin: .5em 0 0; font-size: clamp(19px, 1.75vw, 31px); line-height: 1.08; font-weight: 300; font-stretch: 100%; letter-spacing: -.014em; text-wrap: balance; }
-.claim { margin: .9em 0 0; font-size: clamp(12.5px, .95vw, 15px); line-height: 1.4; text-wrap: pretty; }
-.how { margin-top: auto; padding-top: 12px; font-size: clamp(11.5px, .82vw, 13px); line-height: 1.38; color: var(--mute); }
-.how p { margin: 0; padding: 6px 0; border-top: 1px solid var(--rule); }
-.open { display: flex; justify-content: space-between; align-items: baseline; padding-top: 8px; border-top: 1px solid var(--ink); font-size: 13px; }
-.open b { font-weight: 600; }
-.open i { font-style: normal; color: var(--blue); font-weight: 600; }
-
-@media (max-width: 1100px) {
-  .page { display: block; height: auto; min-height: 0; padding: 16px 16px 40px; }
-  .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
-  .name { font-stretch: 112%; margin-right: 0; }
-  .words { overflow: visible; padding-top: 20px; }
-  .cap { font-size: 22px; max-width: none; }
-  .stage { display: block; perspective: none; margin-top: 26px; }
-  .row { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; animation: none; }
-  .sheet, .sheet:hover, .sheet:focus-visible { transform: none; aspect-ratio: auto; max-height: none; min-height: 300px; animation-name: fade; }
-  .sheet h2 { font-size: 25px; } .claim { font-size: 14.5px; } .how { font-size: 13px; }
+/* The picture: the papers as one flat row of sheets, in the order written. The chosen paper (.front) is open at its
+   full width --fw; every other sheet is closed to a strip that shows its number and title. A change of paper is one
+   width transition and a fade of the text, nothing else moves. --fw is as tall as the stage allows, and narrow
+   enough to leave every other sheet a strip of 92 px (with many papers the strips get narrower, the open sheet no
+   narrower than 380 px). --u, a hundredth of it, sets the type on a sheet, so the text fits at every size. */
+.stage { grid-column: 2; grid-row: 2; min-height: 0; min-width: 0; container-type: size; display: grid; place-items: center; }
+.stack {
+  --fw: min(92cqh / 1.4, 520px, max(380px, 100cqw - (var(--n) - 1) * 92px)); --strip: min(138px, (100cqw - var(--fw)) / max(var(--n) - 1, 1)); --u: calc(var(--fw) / 100);
+  display: flex; width: calc(var(--fw) + (var(--n) - 1) * var(--strip)); height: calc(var(--fw) * 1.4);
+  animation: fade .7s ease both;
 }
 @keyframes fade { from { opacity: 0; } }
+.sheet {
+  position: relative; flex: 0 0 var(--strip); min-width: 0; overflow: hidden; border-radius: 2px;
+  background: linear-gradient(150deg, var(--glass-hi), var(--glass) 46%, var(--glass-lo)) 0 0 / var(--fw) 100% no-repeat, var(--glass-lo);
+  border: 0 solid var(--rim-a); border-width: 1px 0 0 1px;  /* the light catches the top and left edges */
+  transition: flex-basis .5s cubic-bezier(.4, 0, .2, 1), box-shadow .5s ease;
+}
+.sheet.front { flex-basis: var(--fw); box-shadow: var(--lit); z-index: 1; }  /* one lit object: only the open sheet has the glow or the cast shadow */
+.sheet::before { content: ""; position: absolute; inset: 0; background: var(--paper); opacity: .5; transition: opacity .5s ease; pointer-events: none; }  /* a closed sheet is fainter */
+.sheet.front::before { opacity: 0; }
+
+/* A closed sheet: all of it is the button, and its number and title sit on the strip */
+.spine { position: absolute; inset: 0; transition: opacity .3s ease .25s, visibility 0s; }
+.spine span { position: absolute; top: 0; left: 0; width: var(--strip); padding: calc(var(--u) * 10) calc(var(--strip) * .1) 0 calc(var(--strip) * .14); display: grid; gap: 10px; overflow-wrap: break-word; }
+.spine i { font-style: normal; font-size: 12.5px; font-weight: 600; color: var(--mute); }
+.spine b { font-size: clamp(12.5px, var(--strip) * .11, 14px); line-height: 1.22; font-weight: 400; letter-spacing: -.008em; color: var(--mute); transition: color .15s ease; }
+.spine:hover b, .spine:focus-visible b { color: var(--ink); }
+.front .spine { opacity: 0; visibility: hidden; transition: opacity .15s ease, visibility 0s .15s; }
+
+/* The sheet in front: the paper, set to be read */
+.face { position: absolute; inset: 0 auto 0 0; width: var(--fw); display: flex; flex-direction: column; padding: calc(var(--u) * 10); opacity: 0; visibility: hidden; transition: opacity .15s ease, visibility 0s .15s; }
+.front .face { opacity: 1; visibility: visible; transition: opacity .35s ease .25s, visibility 0s; }
+.no { margin: 0; font-size: max(12.5px, var(--u) * 2.7); font-weight: 500; color: var(--mute); }
+.sheet h2 { margin: calc(var(--u) * 9) 0 0; font-size: calc(var(--u) * 11.4); line-height: 1; font-weight: 250; font-stretch: 100%; letter-spacing: -.03em; text-wrap: balance; }
+.claim { margin: calc(var(--u) * 6) 0 0; font-size: max(14.5px, var(--u) * 3.7); line-height: 1.45; max-width: 30em; text-wrap: pretty; }
+.how { margin: auto 0 0; padding-top: 14px; font-size: max(12.5px, var(--u) * 2.8); line-height: 1.45; }
+.how div { display: grid; grid-template-columns: 6em minmax(0, 1fr); padding: calc(var(--u) * 2.4) 0; border-top: 1px solid var(--rule); }
+.how dt { color: var(--mute); }
+.how dd { margin: 0; text-wrap: pretty; }
+.foot { margin: 0; padding-top: calc(var(--u) * 5); border-top: 1px solid var(--rule); display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: max(13px, var(--u) * 2.8); color: var(--mute); }
+.open {
+  padding: .62em 1.35em; border-radius: 999px; background: var(--btn); color: var(--btn-ink); font-weight: 600; text-decoration: none; white-space: nowrap;
+  box-shadow: inset 0 1px 0 var(--btn-edge); transition: background .15s ease, color .15s ease;
+}
+.open:hover { background: var(--blue); color: var(--on-blue); box-shadow: none; }
+
+@media (max-width: 1240px) {  /* below this the stack beside the words is too narrow: one column, every sheet in full */
+  .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 16px 16px 40px; }
+  .words { display: contents; }  /* the sentence, then the papers, then the steps that made them */
+  .stage { order: 1; } .steps { order: 2; }
+  .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
+  .name { font-stretch: 112%; margin-right: 0; }
+  .cap { font-size: 26px; max-width: 24ch; margin-top: 28px; } .steps { max-width: none; margin-top: 34px; }
+  .stage { display: block; place-items: normal; container-type: normal; margin-top: 26px; }
+  .stack { --fw: 350px; width: auto; height: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+  .sheet { overflow: visible; scroll-margin-top: 12px; background: linear-gradient(150deg, var(--glass-hi), var(--glass) 46%, var(--glass-lo)); }
+  .spine, .sheet::before { display: none; }
+  .sheet.front { box-shadow: var(--lit); }
+  .face, .front .face { position: static; width: auto; min-height: 400px; opacity: 1; visibility: visible; transition: none; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .row, .sheet { animation: none; }
-  .sheet { transition: none; }
+  .stack { animation: none; }
+  .sheet, .sheet::before, .spine, .front .spine, .face, .front .face { transition: none; }
 }
 </style>
 </head>
@@ -184,11 +233,27 @@ a { color: inherit; }
   </header>
   <div class="words">
     <p class="cap">A loop of agents takes the project's strongest finding that has no paper yet, recomputes its numbers and writes it up. It has written __N__ papers.</p>
-    <ol class="steps">__STEPS__</ol>
+    <div class="steps"><p class="lab">The six steps of the loop</p>__STEPS__</div>
   </div>
-  <div class="stage"><div class="row">__SHEETS__</div></div>
+  <div class="stage" id="stage"><div class="stack" style="--n:__N__">__SHEETS__</div></div>
 </div>
 <script>
+/* The open paper is the one named in the address (/papers#no-early-warning), else the first. The script only moves
+   the class .front; the motion is the CSS transition. */
+const stage = document.getElementById("stage"), sheets = [...stage.querySelectorAll(".sheet")];
+const front = () => Math.max(0, sheets.findIndex(s => "#" + s.id === location.hash));
+function show() { const f = front(); sheets.forEach((s, i) => s.classList.toggle("front", i === f)); }
+function go(i) { history.pushState(null, "", "#" + sheets[(i + sheets.length) % sheets.length].id); show(); }
+stage.addEventListener("click", e => {
+  const b = e.target.closest(".spine"); if (!b) return;
+  go(sheets.indexOf(b.parentElement)); b.parentElement.querySelector(".open").focus({ preventScroll: true });  // the strip is gone: the focus goes to the paper's button
+});
+addEventListener("keydown", e => {
+  if (e.metaKey || e.ctrlKey || e.altKey || (e.key !== "ArrowRight" && e.key !== "ArrowLeft")) return;
+  e.preventDefault(); go(front() + (e.key === "ArrowRight" ? 1 : -1));
+});
+addEventListener("popstate", show); show();
+
 /* The status: whether the loop's work item is open on the board, and when it last moved. */
 const ITEM = __ITEM__, st = document.getElementById("status");
 let readAt = 0;

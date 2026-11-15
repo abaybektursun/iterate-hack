@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t10", "value": 40, "low": 31, "high": 50, "reason": "The theory treats stopping as a sampled event, so cap hits are a per-sample tail rate; the odd half's 20 of 250 (8 %) should repeat on the even half, giving about 40 of 500."},
+{"id": "t11", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t16", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t17", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t18", "value": 246, "low": 236, "high": 255, "reason": "Raising the cap finishes M(2)'s cut samples at Think-SFT's matched-difficulty long-answer rate (~25 %): 234 at 16,384 on this seed plus about 0.25 x ~50 cap hits gives ~246, in line with the other seed going from 232 to 245."},
+{"id": "t19", "value": 80, "low": 72, "high": 88, "reason": "The extra tokens finish Think-SFT's ~62 cut samples per run at ~20-25 %, so singles gain ~13; because three in four late answers are wrong, the vote gains only about a third of that (as on hard328: 238 to 244), so 75 + ~5."},
+{"id": "t20", "value": 72, "low": 65, "high": 79, "reason": "At 16,384 Think-SFT averages 60 of 136 with ~62 cap hits per sample; the theory says those finish right at its matched-difficulty long-answer rate (~20 %, since the fresh tail is hard), which adds about 12."}
+]}

@@ -25,15 +25,17 @@ in an opened step and in the side panel. The page reads /data every 10 s and rew
 A click on an item opens its title, what, why and caveat, its full text, scores, votes, comments and message thread in
 a side panel whose address is /#<item id>; the filters are in the address too (/?who=<name>&q=<text>&idle=1). Keys:
 / filter, j and k move, 1 2 3 jump to the record steps, Now and Learned, Enter opens, Esc closes, ? lists the keys. A
-click on a person shows only that person. The look is that of the Design tab (.claude/skills/site-ui/SKILL.md).
+click on a person shows only that person. The look is that of architecture.py (.claude/skills/site-ui/SKILL.md).
 
-  GET /demo            the talk as a deck of twelve 16:9 slides (demo_deck.py): keys step, p prints one slide per page
-  GET /demo/fig/<name> the pictures the deck embeds (demo_deck.FIGS): climb, harness, beyond and efficiency, with
-                       their header, words column and key hidden, and converge, the growing idea tree (demo_converge.py)
-  GET /demo/story      the stepped story of the talk over the Design page's picture (demo.py), fed by the same /data
+  GET /demo            the talk as a deck of thirteen 16:9 slides (demo_deck.py): keys step, p prints one slide per page
+  GET /demo/fig/<name> the pictures the deck embeds (gap, climb, harness, exa, pastdev, fixes, beyond,
+                       efficiency, review, basins), with their
+                       header, words column and key hidden (demo_deck.FIGS), and converge, the growing idea
+                       tree of the ideas slide (demo_converge.py)
+  GET /demo/story      the stepped story of the talk over the picture of architecture.py (demo.py), fed by the same /data
   GET /demo/ali/<name> Ali's slides of the talk, slide1 to slide3: the idea map, the idea tree and the accuracy climb
                        (demo_ali.py, with its data in demo_ali_data.py); /demo/ali leads to the first
-  GET /architecture    the Design tab, how the harness works: one interactive picture (architecture.py), fed by the same /data
+  GET /architecture    leads to /demo#harness, the deck slide that shows its picture (architecture.py); it was the Design tab
   GET /findings        the Findings tab: one tile per finding (findings.py), each a link to the page of that finding
   GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
   GET /proof           the Proof tab: one tile per experiment that tests the team's method itself (the page of findings.py)
@@ -75,7 +77,6 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 from boto3.dynamodb.conditions import Key
 
-import architecture
 import board
 import climb
 import demo
@@ -237,8 +238,9 @@ LAB_FILE = re.compile(r"(prototypes/[a-z-]+/)?(index\.html|data\.json)?")
 PAPERS = {name: (Path(__file__).with_name(name), Path(__file__).parent.parent / "studies" / folder / name)
           for name, folder in (("the-finish-dial.pdf", "rlneurons/paper"), ("theories-on-trial.pdf", "theory/paper"),
                                ("the-first-hundred-steps.pdf", "rlneurons/paper-first-steps"),
-                               ("no-early-warning.pdf", "rlneurons/paper-no-warning"))}
-DECK_PAGE = demo_deck.page(len(FINDINGS), PAPERS)  # the talk deck at /demo, with the number of finding pages and the papers
+                               ("no-early-warning.pdf", "rlneurons/paper-no-warning"),
+                               ("two-token-limits.pdf", "rlneurons/paper-two-caps"))}
+DECK_PAGE = demo_deck.page(PAPERS)  # the talk deck at /demo, with the papers
 
 
 # The home page (home.py) is the page / of invariant.team; on any other host / is the board and the home page is /home.
@@ -252,26 +254,75 @@ HOME_PAGE = home.PAGE.replace("__COUNTS__", json.dumps({
 
 
 # What every page gets as it is sent, so that no page module has to hold it (site review, work-acad69): the name
-# "Invariant" leads to the home page and the header gets the link "More" to it; a page with no header gets a small
-# link to the home page at its lower left; the header's links are tall enough to tap on a phone; pinch zoom is
-# never switched off. The home page has its own links and is left as it is.
+# "Invariant" leads to the home page and the header gets the link "All pages" to it; a page with no header gets a
+# small link to the home page at the middle of its right edge, written downward (no corner is free on every such
+# page: the deck, /exa, /pastdev and the lab prototypes each keep a control in one); the header's links are tall
+# enough to tap on a phone; pinch zoom is never switched off. The home page has its own links and is left as it is.
 SITE_HOME = "https://invariant.team/"
+HEADER = '<header class="top">'  # the site's header; /exa has a <header class="top" id=...> that is its own first section
 NAME = '<h1 class="name">Invariant</h1>'
 NAME_LINKED = f'<h1 class="name"><a href="{SITE_HOME}" style="color:inherit;font-weight:inherit;text-decoration:none">Invariant</a></h1>'
+NAME_LINK = re.compile(r'<h1 class="name"><a href="[^"]*">Invariant</a></h1>')  # a header whose name already is a link (/values)
 FINDINGS_TAB = re.compile(r'<a (?:class="tab" )?href="/findings"[^>]*>Findings</a>')
+# The tab of the Design page, retired on 2026-11-15, is still in the header copied into each page module; it is taken out
+# as the page is sent. The deck's pictures (/demo/fig/) keep it: their header is hidden and their bytes stay as they were.
+DESIGN_TAB = re.compile(r'\n *<a (?:class="tab" )?href="/architecture"[^>]*>Design</a>')
 NO_ZOOM = re.compile(r',\s*(?:maximum-scale=[\d.]+|user-scalable=(?:no|0))')
-TAP = "<style>@media (max-width: 900px) { .top a { padding-block: 10px; } }</style>\n</head>"
-HOME_CORNER = ('<style>.inv-home { position: fixed; left: 10px; bottom: 6px; z-index: 2147483000; padding: 10px 6px; font: 600 12px/1 Archivo, system-ui, sans-serif; '
-               'letter-spacing: .02em; color: #8a96a3; text-decoration: none; } .inv-home:hover { color: #1f43d6; } @media print { .inv-home { display: none; } }</style>'
-               f'<a class="inv-home" href="{SITE_HOME}">Invariant</a>\n</body>')
+# The current tab is heavier and set tighter, so the links after it stay where they are on every page. On a phone
+# (520 px and under) the header is the same box on every page: 16 px under the top of the page, one row, 12 px above
+# its line. A status there is its dot alone; a status that reports a problem (.bad) keeps its words, cut with an
+# ellipsis where the row ends. At 400 px and under a page that is no tab shows its name (HERE) in place of the link
+# "All pages": the name "Invariant" leads to the same place.
+TAP = ("<style>@media (max-width: 900px) { .top a { padding-block: 10px; } } .top a[aria-current], .top .here { letter-spacing: -.022em; } "
+       ".top .here { margin-left: 0; color: var(--ink, inherit); font-weight: 600; white-space: nowrap; } "
+       "@media (max-width: 520px) { :has(> header.top:not([id])) { padding-top: 16px !important; } "
+       "header.top:not([id]) { flex-wrap: nowrap !important; gap: 0 9px !important; margin-top: 0 !important; padding: 0 0 12px !important; } "
+       ".top .name { font-size: 14px !important; } .top .here { min-width: 0; overflow: hidden; text-overflow: ellipsis; } "
+       ".top .status:not(.bad) { font-size: 0 !important; gap: 0 !important; min-width: 0 !important; } "
+       ".top .status.bad { display: block; flex: 0 1 auto; min-width: 0 !important; overflow: hidden; text-overflow: ellipsis; } "
+       ".top .status.bad::before { display: inline-block; margin: 0 8px 2px 4px; vertical-align: middle; } } "
+       f'@media (max-width: 400px) {{ .top:has(.here) > a[href="{SITE_HOME}#s-results"] {{ display: none; }} }}</style>\n</head>')
+ALL_PAGES = f'<a href="{SITE_HOME}#s-results">All pages</a>'
+# One header for every page: the same tabs in the order of the home page's sections (Results: Findings, Papers; How we
+# work: Board, Proof), then All pages (the home page's list of every page), then the name of a page that is none of the
+# tabs. Each page module still holds its own copy of the old header; chrome() replaces its links as the page is sent.
+NAV_TABS = (("Findings", "/findings"), ("Papers", "/papers"), ("Board", "/"), ("Proof", "/proof"))
+TAB_LINK = re.compile(r'\n? *<a (?:class="tab" )?href="(?:/|/proof|/findings|/papers|https://invariant\.team/(?:#s-results)?)"[^>]*>(?:Board|Proof|Findings|Papers|All pages)</a>')
+
+
+def nav(path):
+    now = next((n for n, h in NAV_TABS if path == h or (h != "/" and path.startswith(h)) or (h == "/findings" and path.startswith("/finding/"))), None)
+    return "".join(f'\n    <a href="{h}"' + (' aria-current="page"' if n == now else "") + f">{n}</a>" for n, h in NAV_TABS) + "\n    " + ALL_PAGES
+HERE = re.compile(r"<title>Invariant: ([A-Z][^<]*)</title>")  # the 404 page's title starts in lower case: it is no place
+HERE_BY_PATH = {"/exa": "Exa", "/pastdev": "past.dev"}  # pages whose title does not start with "Invariant: "
+# The corner link carries its own color scheme: a page that declares none gets it from the lightness of its
+# background, so the link is readable on an always-dark and on an always-light page.
+HOME_CORNER = ('<style>.inv-home { position: fixed; right: 0; left: auto; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; z-index: 2147483000; padding: 10px 3px; font: 600 12px/1 Archivo, system-ui, sans-serif; '
+               'letter-spacing: .02em; color: light-dark(#56636d, #93a1ad); text-decoration: none; border-radius: 4px; text-shadow: 0 0 2px light-dark(#fff, #000), 0 0 4px light-dark(#fff, #000), 0 0 6px light-dark(#fff, #000); } .inv-home:hover { color: light-dark(#1f43d6, #8fb1ff); } '
+               '.inv-home:focus-visible { outline: 2px solid light-dark(#1f43d6, #8fb1ff); outline-offset: -2px; } @media print { .inv-home { display: none; } }</style>'
+               f'<a class="inv-home" href="{SITE_HOME}">Invariant</a>'
+               '<script>(() => { const a = document.querySelector(".inv-home"); let c = [];'
+               ' for (const e of [document.body, document.documentElement]) { c = getComputedStyle(e).backgroundColor.match(/[\\d.]+/g).map(Number); if (c[3] !== 0) break; }'
+               ' if (c[3] !== 0) a.style.colorScheme = .299 * c[0] + .587 * c[1] + .114 * c[2] < 128 ? "dark" : "light"; })()</script>\n</body>')
 
 
 def chrome(body, path):
     if 'id="go"' in body and "const PAGES" in body:  # the home page
         return body
     body = NO_ZOOM.sub("", body)
-    if NAME in body:
-        body = FINDINGS_TAB.sub(lambda m: m.group(0) + f'\n    <a href="{SITE_HOME}">More</a>', body.replace(NAME, NAME_LINKED, 1), count=1)
+    if not path.startswith("/demo/fig/"):
+        body = DESIGN_TAB.sub("", body)
+    body = body.replace('<span class="name">Invariant</span>', f'<a class="name" href="{SITE_HOME}" style="color:inherit;text-decoration:none">Invariant</a>', 1)  # lab pictures
+    if NAME in body or HEADER in body:
+        body = NAME_LINK.sub(NAME_LINKED, body.replace(NAME, NAME_LINKED, 1), count=1)
+        head, rest = body.split("</header>", 1)
+        if not path.startswith("/demo"):  # the deck and its pictures keep their own header (hidden or without tabs)
+            head = TAB_LINK.sub("", head).replace(NAME_LINKED, NAME_LINKED + nav(path.split("?")[0]), 1)
+        body = head + "</header>" + rest
+        here = HERE.search(body)
+        here = HERE_BY_PATH.get(path) or (here and here.group(1))
+        if here and "aria-current" not in head and 'class="here"' not in head:  # a page that is none of the four tabs: its name, as the current item
+            body = body.replace(ALL_PAGES, ALL_PAGES + f'\n    <span class="here" aria-current="page">{here}</span>', 1)
         return body.replace("</head>", TAP, 1)
     if '<a class="name" href="/">Invariant</a>' in body:  # /psychosis: its name led to the board
         return body.replace('<a class="name" href="/">Invariant</a>', f'<a class="name" href="{SITE_HOME}">Invariant</a>', 1)
@@ -280,13 +331,36 @@ def chrome(body, path):
     return body.replace("</body>", HOME_CORNER, 1)
 
 
-# An address that is no page: a short page with the ways on, in the site's colors.
+# An address that is no page: the site's header, one sentence and the ways on.
 NOT_FOUND = """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Invariant: no such page</title><style>:root { color-scheme: light dark; } body { margin: 0; padding: 12vh 40px; background: light-dark(#eceef0, #080c11);
-color: light-dark(#101820, #e9eff3); font: 400 15px/1.5 Archivo, system-ui, sans-serif; } h1 { font-weight: 300; font-size: 30px; margin: 0 0 18px; }
-a { color: light-dark(#1f43d6, #8fb1ff); margin-right: 22px; }</style></head><body><h1>There is no page __PATH__.</h1>
-<a href="https://invariant.team/">Home</a><a href="/">Board</a><a href="/findings">Findings</a>
-</body></html>"""
+<title>Invariant: no such page</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" media="print" onload="this.media='all'">
+<style>
+:root { color-scheme: light dark; --paper: light-dark(#eceef0, #080c11); --ink: light-dark(#101820, #e9eff3); --mute: light-dark(#56636d, #93a1ad);
+  --rule: light-dark(#cbd2d8, #1c2630); --blue: light-dark(#1f43d6, #8fb1ff); }
+body { margin: 0; color: var(--ink); background: var(--paper); font: 400 15px/1.5 "Archivo", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
+.wrap { max-width: 1840px; margin: 0 auto; padding: 20px 40px 56px; }
+.top { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
+.name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
+.top a { color: var(--mute); white-space: nowrap; }
+.top a:hover { color: var(--ink); }
+.ways a { padding: 12px 0; white-space: nowrap; }
+.ways a:hover { text-decoration: underline 1px; text-underline-offset: 4px; }
+.say { font-weight: 300; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-stretch: 102%; letter-spacing: -.016em; margin: clamp(28px, 7vh, 76px) 0 24px; overflow-wrap: anywhere; }
+.ways { display: flex; gap: 26px; margin: 0; }
+@media (max-width: 900px) { .wrap { padding: 16px 16px 40px; } .top { gap: 6px 13px; padding-bottom: 12px; } .name { font-stretch: 112%; margin-right: 0; } }
+</style></head><body><div class="wrap">
+  <header class="top">
+    <h1 class="name">Invariant</h1>
+    <a href="/">Board</a>
+    <a href="/proof">Proof</a>
+    <a href="/findings">Findings</a>
+  </header>
+  <p class="say">There is no page __PATH__.</p>
+  <p class="ways"><a href="https://invariant.team/">Home</a><a href="/">Board</a><a href="/findings">Findings</a></p>
+</div></body></html>"""
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -312,7 +386,11 @@ class Handler(BaseHTTPRequestHandler):
         for header in headers:
             self.send_header(*header)
         self.end_headers()
-        self.wfile.write(data)
+        if self.command != "HEAD":
+            self.wfile.write(data)
+
+    def do_HEAD(self):  # the headers of GET, no body
+        self.do_GET()
 
     def do_GET(self):
         path = self.path.split("?")[0]
@@ -337,8 +415,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(302, "text/plain", "", [("Location", "/demo/ali/slide1")])
         if path.startswith("/demo/ali/") and path[len("/demo/ali/"):] in demo_ali.PAGES:
             return self.send(200, "text/html", demo_ali.PAGES[path[len("/demo/ali/"):]])
-        if path == "/architecture":
-            return self.send(200, "text/html", architecture.PAGE)
+        if path == "/architecture":  # the Design tab until 2026-11-15; its picture is a slide of the deck
+            return self.send(302, "text/plain", "", [("Location", "/demo#harness")])
         if path == "/findings":
             return self.send(200, "text/html", findings_page())
         if path.startswith("/finding/") and path[len("/finding/"):] in FINDING_PAGES:
@@ -396,6 +474,9 @@ PAGE = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Invariant: Board</title>
+<meta name="description" content="The team's live log: every experiment, result and idea posted by the team and its agents.">
+<meta property="og:title" content="Invariant: Board">
+<meta property="og:description" content="The team's live log: every experiment, result and idea posted by the team and its agents.">
 <link rel="preload" href="/data" as="fetch" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -405,9 +486,9 @@ PAGE = r"""<!doctype html>
    has no lit object: the chart is its one picture. Blue means live, fresh or selected. Red means a problem. */
 :root {
   color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #cbd2d8;
   --blue: #1f43d6; --red: #c41e34; --on-blue: #fff;
-  --pl: .56; --pc: .15; --dim: .16;
+  --pl: .50; --pc: .15; --dim: .16;
   --blue-wash: color-mix(in srgb, var(--blue) 10%, transparent);
   --gap: color-mix(in srgb, var(--ink) 5%, transparent);
   --scrim: rgb(16 24 32 / .2);
@@ -453,10 +534,12 @@ p, h1, h2, h3, dl, dd { margin: 0; }
 
 /* The one sentence, on the state of the board; above it, what changed since the last look */
 .lede { margin-top: clamp(14px, 2.6vh, 26px); min-height: 32px; }
-.since { margin: 0 0 4px; font-size: 13px; line-height: 18px; color: var(--mute); }
+.what { font-size: 13px; line-height: 18px; color: var(--mute); }
+.since { margin: 30px 0 4px; font-size: 13px; line-height: 18px; color: var(--mute); }
 .since.fresh::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); margin-right: 9px; vertical-align: .1em; }
 .since b { font-weight: 600; color: var(--ink); }
-.summary { font-size: clamp(19px, 1.5vw, 24px); line-height: 1.3; font-weight: 300; letter-spacing: -.005em; max-width: 60em; }
+.summary { font-size: clamp(20px, 1.56vw, 27px); line-height: 1.3; font-weight: 300; font-stretch: 102%; letter-spacing: -.012em; max-width: 60em; margin-top: 30px; }
+.since:not([hidden]) + .summary { margin-top: 0; }
 .summary b { font-weight: 600; }
 .summary .warn { color: var(--red); }
 .summary button, .summary a { text-decoration: underline 1px; text-underline-offset: 4px; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); }
@@ -509,7 +592,7 @@ p, h1, h2, h3, dl, dd { margin: 0; }
 .chart { height: 320px; min-width: 0; }
 .chart svg { display: block; overflow: visible; }
 .chart svg text {
-  font: 400 11.5px "Archivo", ui-sans-serif, system-ui, sans-serif; fill: var(--mute);
+  font: 400 12px "Archivo", ui-sans-serif, system-ui, sans-serif; fill: var(--mute);
   paint-order: stroke; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round;
 }
 .chart .brk { stroke: var(--paper); stroke-width: 5px; }
@@ -744,11 +827,19 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   .top { padding-bottom: 2px; }
   .top a { padding: 11px 0; }
   .benches { flex-wrap: nowrap; gap: 4px 12px; margin-top: 2px; font-size: 12.5px; overflow-x: auto; scrollbar-width: none; }
+  .benches.more { mask-image: linear-gradient(90deg, #000 85%, transparent); }  /* more tabs to the right: the strip scrolls */
   .benches button { padding: 10px 0; white-space: nowrap; flex: none; }
+  .reach button.piece { pointer-events: none; }  /* segments 8 px high; the step list opens the same steps */
   .reach { height: 82px; }
   .reach .ends { height: 36px; gap: 8px; }
   .reach .rl-end { gap: 8px; }
   .reach .big { font-size: 26px; line-height: 32px; }
+  .search input { font-size: 16px; min-height: 40px; }  /* iOS zooms into a field under 16px */
+  .row .open { min-height: 44px; }
+  .people button, #idlebtn, .tabs button, .all { padding-block: 10px; min-height: 40px; }
+  .phead .actions button { position: relative; }
+  .phead .actions button::after { content: ""; position: absolute; inset: -11px -8px; }  /* a 40 px hit area */
+  .chart a.mark:not([data-step]) { pointer-events: none; }  /* 45 overlapping marks; the record steps open from their list */
 }
 @media (prefers-reduced-motion: reduce) {
   .arrived, .panel, .scrim, .sd, .reach .fill.grow { animation: none; }
@@ -761,7 +852,6 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   <header class="top">
     <h1 class="name">Invariant</h1>
     <a href="/" aria-current="page">Board</a>
-    <a href="/architecture">Design</a>
     <a href="/proof">Proof</a>
     <a href="/findings">Findings</a>
     <span class="test" id="test" hidden>test table</span>
@@ -769,6 +859,7 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   </header>
   <span class="sr" id="live" aria-live="polite"></span>
   <section class="lede" aria-label="The state of the board">
+    <p class="what" id="what">The team's live log: every experiment, result and idea posted by the team and its agents.</p>
     <p class="since" id="since" hidden></p>
     <p class="summary" id="summary"><span class="ph" style="width:min(620px,80%);height:14px;margin-top:8px"></span></p>
   </section>
@@ -1032,6 +1123,7 @@ function render() {
   summary(items, ch);
   put($("people"), people.map(p => `<button data-who="${esc(p)}" data-fkey="who-${esc(p)}" aria-pressed="${S.who === p}" style="${pstyle(p)};--c:oklch(var(--pl) var(--pc) var(--h))"><i class="g"></i>${esc(p)}</button>`).join(""));
   $("people").classList.toggle("picked", Boolean(S.who));
+  put($("what"), `The team's live log: every experiment, result and idea posted by ${people.length} ${people.length === 1 ? "person" : "people"} and their agents.`);
 
   const nw = list("work", "work", S.idle ? work.filter(i => mins(activeNs(i)) >= 60) : work, nWork, none || "No open work. An agent claims work with <code>board.py post work</code>.");
   put($("n-work"), nWork ? nw : "");
@@ -1163,6 +1255,7 @@ function hero() {
   put($("benches"), S.benches.length > 1 ? S.benches.map(x =>
     `<button data-bench="${esc(x.name)}" data-fkey="bench-${esc(x.name)}" aria-pressed="${x === b}">${esc(x.name)} <b>${f1(x.lead.p)}</b></button>`).join("") : "");
   put($("n-steps"), `${esc(b.name)}, newest first`);
+  moreBenches();
   drawReach();
   ladder(b);
   drawChart();
@@ -1251,7 +1344,7 @@ function detail(q, b) {
 let measure;
 function textWidth(t) {
   measure ??= document.createElement("canvas").getContext("2d");
-  measure.font = '400 11.5px "Archivo", ui-sans-serif, system-ui, sans-serif';
+  measure.font = '400 12px "Archivo", ui-sans-serif, system-ui, sans-serif';
   return measure.measureText(t).width;
 }
 function drawChart() {
@@ -1345,8 +1438,13 @@ function chart(b, W, H, narrow) {
     const spots = [0, -14, 14, -28, 28].flatMap(dy => [[xr + 8, mid + dy, "start"], [xr - 8, mid + dy, "end"]]);
     label(text, "gain", [...spots, [xr + 8, y(q.p) - 10, "start"], [xr - 8, y(q.p) - 10, "end"], [xr + 8, y(q.p) + 18, "start"]], true);
   });
-  pts.filter(q => q.p < lo).forEach(q =>  // below the floor: say its value
-    label(`↓ ${f1(q.p)}`, "quiet", [[x(q.i), y(q.p) + 20, "middle"], [x(q.i) - 5, y(q.p) + 20, "start"], [x(q.i) + 12, y(q.p) + 4, "start"]], true));
+  let edge = -Infinity;  // the right end of the last value drawn under the floor
+  pts.filter(q => q.p < lo).forEach(q => {  // below the floor: say its value, unless it would touch the one before or another label
+    const text = `↓ ${f1(q.p)}`, w = textWidth(text), x0 = Math.max(x(q.i) - w / 2, L), n = out.length;
+    if (x0 < edge + 8) return;
+    label(text, "quiet", [[x0, y(q.p) + 20, "start"]]);
+    if (out.length > n) edge = x0 + w;
+  });
 
   return `<svg class="${sel ? "has-sel" : ""}" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="group" aria-label="${esc(b.name)}: best base ${f1(lead.p)} %, RL ${rl ? f1(rlP) + " %" : "not measured"}">` +
     svg.join("") + marks.map(m => m.ci).join("") + marks.map(m => m.a).join("") + out.join("") + `</svg>`;
@@ -1569,7 +1667,11 @@ document.addEventListener("keydown", e => {
     if (S.term) { const b = S.term; hideDef(); b.focus(); }
     else if (!$("keys").hidden) $("keys").hidden = true;
     else if (S.open) closePanel();
-    else if (S.step) set({ step: null });
+    else if (S.step) {  // focus that was inside the opened step goes to its line
+      const n = S.step;
+      set({ step: null });
+      if (document.activeElement === document.body) document.querySelector(`.lrow[data-step="${CSS.escape(n)}"]`)?.focus({ preventScroll: true });
+    }
     else if (S.idle || S.who) set({ idle: false, who: null });
   }
   else if (e.key === "j" || (e.key === "ArrowDown" && !inPanel)) { e.preventDefault(); move(1); }
@@ -1583,6 +1685,9 @@ addEventListener("scroll", hideDef, { passive: true, capture: true });
 addEventListener("pointermove", e => { S.pointer = { x: e.clientX, y: e.clientY }; }, { passive: true });
 new ResizeObserver(() => { hideDef(); drawChart(); }).observe($("chart"));
 new ResizeObserver(() => drawReach()).observe($("reach"));
+function moreBenches() { const e = $("benches"); e.classList.toggle("more", e.scrollWidth - e.clientWidth - e.scrollLeft > 2); }  // tabs hidden to the right
+$("benches").addEventListener("scroll", moreBenches, { passive: true });
+new ResizeObserver(moreBenches).observe($("benches"));
 small.addEventListener("change", () => S.data && render());
 document.fonts.ready.then(() => { drawChart(); drawReach(); });
 

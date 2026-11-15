@@ -1,0 +1,17 @@
+{
+ "job_id": "abaybektursun-1115-143247-929d",
+ "commit": "bb86cc1ccb9c862528f38da51e8538161ebd2b45",
+ "config": {
+  "model": "rl_code",
+  "model_path": null,
+  "model_label": null,
+  "prefix_ids": "[]",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "seed": 52000000,
+  "n": null,
+  "grader_check_only": false,
+  "out": "/runs/abaybektursun-1115-143247-929d",
+  "commit": "bb86cc1ccb9c862528f38da51e8538161ebd2b45"
+ }
+}

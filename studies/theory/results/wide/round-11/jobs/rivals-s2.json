@@ -1,0 +1,45 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "The top-8 directions of any outcome-reward RL delta write one shared, task-general check-and-commit readout ('Hmm', 'actually' in the logit lens). The edit makes the model finish, and it also makes answers the base already finishes more reliable. Its effect depends on the total dose along this shared readout, and an overdose hurts: stacking two rewards' directions adds the doses and overshoots, the way 2x code (394) and one direction at 3x (168) fall back.",
+  "readers_wrong": "The readers treated the code edit as only turning the base's 27 cap hits and 34 no-code answers into code at the base's pass rate, which gives about 317+35 = 352-357. The shared readout also raised the pass rate of answers the base already finished, from 0.66 to about 0.75, as it did on math (161 to 184 on finished problems).",
+  "rests_on": ["result-a1bf75", "result-2fe32f", "result-98de28", "result-306787"],
+  "holds_against": [
+   {"item": "result-a1bf75", "value": 368, "why": "Math's directions give only 368 on code, not 399. A shared readout projects less strongly on code inputs from Math's input subspace (mean-shift cosine with Code is 0.37), so it carries a weaker dose. That is still +37 over random, which a task-specific copy cannot give."},
+   {"item": "result-98de28", "value": 0.09, "why": "The IF delta's shift has cosine 0.09 with Math's. IF reward does not reward long reasoning that ends in a checked answer, so it never learned the check-and-commit readout. The readout is shared across reasoning rewards, not across every reward."}
+  ],
+  "forecasts": [
+   {"id": "t18", "value": 182, "low": 166, "high": 196, "reason": "Math 1.5x (200) plus Code 1.5x adds dose on the same readout, about a 2.3x single-reward dose; overdose loses about 18, like the 3x one-direction drop."},
+   {"id": "t19", "value": 196, "low": 184, "high": 208, "reason": "1x+1x is about a 1.8x dose, near the optimum; roughly the 1.5x-2x Math level, minus a little."},
+   {"id": "t20", "value": 198, "low": 187, "high": 210, "reason": "Random directions carry no readout (flat 158-167), so this stays at Math 1.5x, 200, minus a small random cost."},
+   {"id": "t21", "value": 376, "low": 356, "high": 392, "reason": "Code 1.5x (399) plus Math 1.5x (worth about 0.6 code-equivalent) gives about a 2.4x dose, past the 2x point (394), so it overshoots to about 376."},
+   {"id": "t22", "value": 392, "low": 378, "high": 405, "reason": "1x+1x is about a 1.6x code-equivalent dose, close to the 1.5x-2x plateau (394-399), minus some interference."},
+   {"id": "t23", "value": 364, "low": 348, "high": 380, "reason": "Random adds no readout, so this is Math 1.5x on code (368) minus a small random cost."},
+   {"id": "t15", "value": 220, "low": 207, "high": 233, "reason": "Think-SFT (about 210 at 16k) gets the finishing readout on its many cap hits; about 1/3 of those finish right, below M(2)'s 231.5."},
+   {"id": "t16", "value": 204, "low": 186, "high": 222, "reason": "At 3x the dose overshoots, so answers are committed early and Think-SFT's reliability is lost; it falls back to about Think-SFT level or below."},
+   {"id": "t17", "value": 209, "low": 196, "high": 221, "reason": "A random rank-8 edit is flat on the base, so this is Think-SFT one sample at 16k (207-211)."},
+   {"id": "t27", "value": 449, "low": 438, "high": 459, "reason": "2x is past the readout's optimum on MATH-500; 1.5x scored 456, so a mild overdose costs about 7."},
+   {"id": "t04", "value": 46, "low": 30, "high": 64, "reason": "Subtracting the readout raises cap hits, as on hard328 (77 to 96, x1.25) and RL minus top-8 (25 to 90); the cued base has about 27-35 on MATH-500, so about 46."}
+  ]},
+ {"id": "b",
+  "statement": "An RL run's task-specific policy lies almost entirely in the top-8 directions per matrix of that run's own delta, read through the inputs of its own task. So 1.5x of RL-Code's directions is a copy of RL-Code, and RL deltas for different tasks occupy nearly orthogonal subspaces that add without interference. Other rewards' directions transfer only a shared finishing part (cap hits, missing answer blocks), not task skill.",
+  "readers_wrong": "The readers carried over the math picture, where the top 8 hold a small share of the delta and mostly change finishing, and expected a partial recovery of about 357. On code the top 8 are RL-Code's policy itself, so the edit reaches RL-Code's 401 (399, -0.4 points).",
+  "rests_on": ["result-a1bf75", "result-51ccc6", "result-95a4dc", "result-04e329"],
+  "holds_against": [
+   {"item": "result-a1bf75", "value": 368, "why": "Math's directions on code reach +37 over random. In this mechanism that is the shared finishing part only: cap hits and no-code answers fall. It stays 31 below the Code copy, which carries the code skill."},
+   {"item": "result-98de28", "value": 0.37, "why": "The mean residual shifts of Code and Math have cosine 0.37, which is partly shared. The shared component is the finishing push, and the remaining 0.93 of the variance is task-specific and lives in separate subspaces, so stacking adds instead of overshooting."}
+  ],
+  "forecasts": [
+   {"id": "t18", "value": 205, "low": 197, "high": 216, "reason": "Math copy (200) plus Code's subspace, orthogonal to it, which adds Code-RL's small math transfer and no interference: about 205."},
+   {"id": "t19", "value": 194, "low": 182, "high": 206, "reason": "Math 1x (about 190) plus a small additive Code contribution."},
+   {"id": "t20", "value": 199, "low": 188, "high": 210, "reason": "Random is inert, so this is Math 1.5x, 200."},
+   {"id": "t21", "value": 402, "low": 393, "high": 413, "reason": "Code copy (399) plus orthogonal Math directions, whose shared finishing part is already saturated (0 cap hits): about RL-Code level, 401-403."},
+   {"id": "t22", "value": 391, "low": 379, "high": 403, "reason": "Code 1x (386) plus a few points of Math's finishing part on code."},
+   {"id": "t23", "value": 366, "low": 350, "high": 382, "reason": "Math 1.5x on code (368); random is inert."},
+   {"id": "t15", "value": 225, "low": 212, "high": 237, "reason": "This copies RL-Math's policy onto Think-SFT, near the full transplant M(2) of 231.5, minus the part outside the top 8."},
+   {"id": "t16", "value": 222, "low": 206, "high": 236, "reason": "3x top-8 is about the 2x RL policy dose where the full transplant peaks (233), so it holds near M(2)."},
+   {"id": "t17", "value": 209, "low": 196, "high": 221, "reason": "Random is inert, so this is Think-SFT one sample at 16k."},
+   {"id": "t27", "value": 455, "low": 445, "high": 464, "reason": "A 2x copy of RL's policy stays at the RL level (457-463), like the 1.5x edit's 456."},
+   {"id": "t04", "value": 40, "low": 26, "high": 58, "reason": "Removing the copied finishing policy raises cap hits by about 1.25-1.5x over the cued base's 27-35."}
+  ]}
+],
+ "cell": null}

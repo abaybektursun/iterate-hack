@@ -1,0 +1,21 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_input.md",
+ "commit": "48eeddf",
+ "command": "uv run --no-project --with numpy python studies/theory/analysis/direct_input.py --runs runs --out studies/theory/results/direct/input-01",
+ "inputs": {
+  "trace": "abaybektursun-1115-005830-2145",
+  "base": "abaybektursun-1114-151534-e72c",
+  "top8": {
+   "0.5": "abaybektursun-1115-031219-19af",
+   "1": "abaybektursun-1114-221034-007d",
+   "1.5": "abaybektursun-1115-031229-5991",
+   "2": "abaybektursun-1115-012855-d7ed"
+  },
+  "rand": {
+   "1": "abaybektursun-1114-221040-5f1e",
+   "1.5": "abaybektursun-1115-090241-0229"
+  },
+  "where": "Modal Volume iterate-runs: <job>/answers.jsonl, trace job: index.json, trace_00{0..3}.npz"
+ },
+ "commit_note": "script identical to the run-time commit 748479d, which was folded into 48eeddf before push"
+}

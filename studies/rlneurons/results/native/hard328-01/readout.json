@@ -1,0 +1,46 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_native.md",
+ "set": "hard328",
+ "n": 328,
+ "native_run": "native_sft_hard328_joined",
+ "native_jobs": null,
+ "cue_job": "abaybektursun-1115-005756-309b",
+ "cap_32768": {
+  "native_right": 232,
+  "cue_right": 230,
+  "native_minus_cue": {
+   "problems": 2,
+   "points": 0.61,
+   "ci95": [
+    -3.35,
+    4.57
+   ]
+  },
+  "only_native": 23,
+  "only_cue": 21,
+  "native_tokens_per_problem": 12157.5,
+  "cue_tokens_per_problem": 11794.9
+ },
+ "cap_16384": {
+  "native_right": 204,
+  "cue_right": 207,
+  "native_minus_cue": {
+   "problems": -3,
+   "points": -0.91,
+   "ci95": [
+    -4.27,
+    2.44
+   ]
+  },
+  "only_native": 15,
+  "only_cue": 18,
+  "native_tokens_per_problem": 10169.5,
+  "cue_tokens_per_problem": 10048.1
+ },
+ "native": {
+  "answers_longer_than_16384": 104,
+  "cap_hits_at_32768": 3,
+  "ended_im_end": 0,
+  "with_think_close": 325
+ }
+}

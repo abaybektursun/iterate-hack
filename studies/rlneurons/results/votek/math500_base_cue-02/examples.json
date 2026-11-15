@@ -1,0 +1,72 @@
+[
+ {
+  "problem_index": 0,
+  "vote_score": 1,
+  "votes": 11,
+  "gold": "\\left( 3, \\frac{\\pi}{2} \\right)",
+  "answers": [
+   "$(3,\\frac{\\pi}{2})$",
+   "$(3, \\frac{\\pi}{2})$",
+   "\\left(3, \\frac{\\pi}{2}\\right)",
+   "\\left(3, \\frac{\\pi}{2}\\right)",
+   "(3,\\pi/2)",
+   "\\left(3, \\dfrac{\\pi}{2}\\right)",
+   null,
+   "(3, \\frac{\\pi}{2})",
+   "(3, \\frac{\\pi}{2})",
+   "(3, \\frac{\\pi}{2})",
+   "\\left(3, \\frac{\\pi}{2}\\right)",
+   "(3, \\frac{\\pi}{2})"
+  ],
+  "scores": [
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   0,
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "winner_text_tail": "xis, then \u03b8 would be 3\u03c0/2. Since this is positive y-axis, \u03b8 = \u03c0/2. \n\nTherefore, the polar coordinates should be (3, \u03c0/2). Let me just make sure there's no mistake here. The x-coordinate is 0, which is along the y-axis, so the angle is indeed \u03c0/2. Yes, that seems right. No need to adjust \u03b8 since the radius is positive. All steps check out. So the answer is (3, \u03c0/2).\n\n**Answer:** $(3,\\frac{\\pi}{2})$"
+ },
+ {
+  "problem_index": 9,
+  "vote_score": 0,
+  "votes": 2,
+  "gold": "4",
+  "answers": [
+   "5",
+   "2",
+   null,
+   null,
+   null,
+   "' line\".",
+   "4",
+   "8",
+   null,
+   "4",
+   "5",
+   null
+  ],
+  "scores": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   1,
+   0,
+   0,
+   1,
+   0,
+   0
+  ],
+  "winner_text_tail": " change the order of operations.\n\nAfter careful consideration and analysis, we conclude that the number of distinct values is given by the Catalan number \\(C_3\\), which is 5. This number represents the different ways parentheses can be inserted to change the order of operations, leading to different results.\n\nThus, the number of distinct values obtainable by inserting parentheses is \\(\\boxed{5}\\)."
+ }
+]

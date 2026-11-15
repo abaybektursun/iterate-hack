@@ -1,0 +1,52 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "Truncation ceiling. The kept method capped each sample at 4,096 tokens. On MATH-500 the base's right answers are long (mean about 3,900 tokens; result-5e17a6), and the plain prompt at T 0.6 adds loops. So on roughly a sixth of dev problems most of the 12 samples are cut before an answer, and those problems cast no right votes. The vote can only reach pass-within-4,096, about 84 to 86, not the 89 to 94 that uncapped votes reach.",
+  "readers_wrong": "The readers carried over vote-over-k gains measured at a 16,384 cap (446 to 466 of 500). At 4,096 the cap, not the vote, sets the ceiling, so 12 samples level off near 84.",
+  "rests_on": ["result-6e7b64", "result-5e17a6", "result-c8b994"],
+  "holds_against": [
+   {"item": "result-0c1eef", "value": 4, "why": "Only 4 of 64 base answers past 16,384 tokens are right, but that is a 16k to 32k extension on hard328. A 4,096 cap falls inside the ordinary length range of right MATH-500 answers, where most long answers are still right."},
+   {"item": "result-7968b8", "value": 319, "why": "The plain base at T 0.6 with a 16,384 cap gets only 319 of 500 on one sample, so the cap does not look binding. But a vote recovers scattered errors, not unfinished samples. Truncated samples are lost to the vote, while single-sample errors are not."}
+  ],
+  "forecasts": [
+   {"id": "t01", "value": 224, "low": 210, "high": 237, "reason": "Own format at T 1.0 and cap 32k gets 232. T 0.6 / top-p 0.95 lengthens and loops more answers, so more run past the cap: about -8."},
+   {"id": "t02", "value": 469, "low": 459, "high": 478, "reason": "Own format at T 1.0 and cap 32k gets 474. Low temperature adds a few unfinished answers: about -5."},
+   {"id": "t14", "value": 198, "low": 189, "high": 207, "reason": "The vote over 4 gets 192. Each sample has about 77 cap hits, so two more samples add finished votes on cap-hit problems: about +6."},
+   {"id": "t17", "value": 246, "low": 236, "high": 255, "reason": "M(2) single about 231.5 with about 40 cap hits. Four samples recover cap-hit problems (Think-SFT gets +32 from voting); M(2) finishes more, so about +14."},
+   {"id": "t18", "value": 244, "low": 233, "high": 254, "reason": "The second seed at cap 32k gets 245 with 0 cap hits. Lifting the cap converts M(2)'s 56 cut answers. Seed noise is about ±7."},
+   {"id": "t19", "value": 84, "low": 76, "high": 92, "reason": "The vote at cap 16k gets 75 with 45.6 % cap hits. Doubling the cap turns abstentions into votes, and about a quarter of them are right: about +9."},
+   {"id": "t20", "value": 71, "low": 65, "high": 77, "reason": "Single mean at 16k is 60.0. About 62 cap hits per sample, about 75 % finish by 32k and about 23 % of those are right (as on hard328): about +11."},
+   {"id": "t10", "value": 37, "low": 25, "high": 51, "reason": "MATH-500 base cue has 27 cap hits. The -1x edit raises hard328 cap hits by 96/77, so about 34, plus extra non-finishing."},
+   {"id": "t11", "value": 374, "low": 358, "high": 390, "reason": "188 of 250 so far, doubled, minus a little for later problems with more cap hits."}
+  ]},
+ {"id": "b",
+  "statement": "Correlated-error floor. Without the cue, the plain base fails a fixed set of problems the same way in every sample: answers in an unextractable statement layout, or one attractive wrong value. T 0.6 makes the samples agree even more. Plurality voting removes only scattered errors, so 12 samples saturate at the share of problems whose modal answer is right, about 84, whatever the token cap.",
+  "readers_wrong": "The readers scaled from cued-base votes, whose errors scatter (vote over 12 = 466 of 500). Plain-prompt errors repeat across samples (about half of the plain base's losses are answer statements), so the vote stops near 84.",
+  "rests_on": ["result-6e7b64", "result-c637b2", "result-1c9e40"],
+  "holds_against": [
+   {"item": "result-1c9e40", "value": 466, "why": "The cued base's vote is still rising at 12 samples, but the cue removes the format failures. The floor belongs to the plain prompt, which the agent never left."},
+   {"item": "result-6e7b64", "value": 61, "why": "The agent climbed from 61 to 84, so voting fixed many errors. Those were the scattered ones. The remaining 16 % are problems with a stable wrong or unreadable modal answer, a floor a vote cannot cross."}
+  ],
+  "forecasts": [
+   {"id": "t01", "value": 231, "low": 219, "high": 243, "reason": "Temperature changes only how much samples agree, not single-sample accuracy for a model trained on its own format (RL moves -0.2 between T 0.6 and T 1.0). So about 232."},
+   {"id": "t02", "value": 473, "low": 465, "high": 481, "reason": "Own format at T 1.0 and cap 32k gets 474. Temperature barely moves a single sample."},
+   {"id": "t14", "value": 194, "low": 186, "high": 202, "reason": "The vote over 4 gets 192, and pass@4 = 207 shows selection is saturating (knowledge-dab63f). Correlated wrong values cap the gain from two more samples at about +2."},
+   {"id": "t17", "value": 242, "low": 233, "high": 251, "reason": "Right-of-finished falls to about 72 % at a=2, and RL-like wrong answers agree, so the vote gains less than Think-SFT's +32: about +10 over 231.5."},
+   {"id": "t18", "value": 243, "low": 232, "high": 254, "reason": "Second seed 245; seed spread about ±7."},
+   {"id": "t19", "value": 79, "low": 71, "high": 87, "reason": "Think-SFT's vote is already near pass@4 because it abstains rather than errs. Extra finished answers add votes but few new right modal answers: about +4."},
+   {"id": "t20", "value": 68, "low": 62, "high": 74, "reason": "Single mean 60.0 plus finished cut answers. Fresh problems are harder, so fewer of the newly finished answers are right than on hard328: about +8."},
+   {"id": "t10", "value": 35, "low": 23, "high": 49, "reason": "Base cue 27 cap hits scaled by the hard328 ratio 96/77."},
+   {"id": "t11", "value": 376, "low": 360, "high": 391, "reason": "188 of 250 so far, doubled."}
+  ]}
+ ],
+ "cell": {
+  "cell": {"model": "base Olmo-3-1025-7B", "prompt": "plain (no cue, no opening text)", "set": "MATH-500 first 100 problems", "n": 100, "sampling": "T 0.6 / top-p 1.0", "samples": 4, "grader": "v3", "cap": "16,384, also read at 4,096 from the same text"},
+  "job": "studies/theory/jobs/free_cell.py",
+  "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model base --set math500 --n 100 --temperature 0.6 --top-p 1.0 --max-tokens 16384 --samples 4 --seed 71000000 --commit $(git rev-parse HEAD)\"",
+  "readout": "Per problem, plurality vote over the 4 samples' v3 extracted answers, grouped with rln4_lib.agree; cap hits and empty extractions count as no answer, and ties go to the lowest sample index. A = vote right of 100 using the full answers. B = the same vote with every sample whose generated tokens exceed 4,096 counted as no answer (equal to a run capped at 4,096). Readout = A - B.",
+  "unit": "right answers of 100 (signed difference, paired on the same text)",
+  "why": "Mechanism a says the 4,096 cap cut right answers out of the vote, so lifting it adds several problems. Mechanism b says the plain prompt's correlated errors set the ceiling, so answers past 4,096 tokens are mostly loops or wrong, and lifting the cap adds about nothing.",
+  "gpu_minutes": 90,
+  "a": {"value": 5, "low": 2, "high": 9},
+  "b": {"value": 0, "low": -1, "high": 1}
+ }
+}

@@ -1,0 +1,49 @@
+Jobs of abaybektursun, last 2 h:  id  state  gpu  wait  run  command
+  abaybektursun-1115-124801-c8d3  done  NVIDIA H100   10.9  2.4  python -m studies.rlneurons.jobs.xshift --commit b0531526758164990ccff
+  abaybektursun-1115-130144-40a0  done  NVIDIA H100   0.1  23.0  python -m studies.rlneurons.jobs.xshift --commit b0531526758164990ccff
+  abaybektursun-1115-130242-4696  done  NVIDIA H100   0.0  54.8  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-130255-5098  done  NVIDIA H100   1.4  51.1  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-130307-5e33  done  NVIDIA H100   1.2  57.5  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-130320-3e7b  done  NVIDIA H200  1.0  33.5  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-130332-eba9  done  NVIDIA H100   2.8  30.3  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-130346-f701  done  NVIDIA H100   17.2  49.1  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-130400-064d  done  NVIDIA H100   18.8  28.5  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-130413-750d  done  NVIDIA H100   18.6  50.6  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-130426-5898  done  NVIDIA H100   21.4  26.5  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-140001-11a6  done  NVIDIA H100   0.1  4.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-140534-0f14  exit 2  NVIDIA H100   0.0  1.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-140553-3388  exit 2  NVIDIA H100   0.1  0.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-140607-f3e1  exit 2  NVIDIA H100   0.1  0.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-140620-fd69  exit 2  NVIDIA H100   0.1  1.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-140745-b1e2  done  NVIDIA H100   0.0  16.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-140758-d51e  done  NVIDIA H100   0.0  16.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-140811-353b  done  NVIDIA H100   0.0  17.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-140826-c2f4  done  NVIDIA H100   0.1  17.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-143215-6942  running  NVIDIA H100   0.1  13.1  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-143231-15bb  running  NVIDIA H100   0.1  12.8  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-143247-929d  running  NVIDIA H100   0.1  12.6  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-143301-ec55  running  NVIDIA H100   0.1  12.3  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-143316-628e  running  NVIDIA H100   0.1  12.1  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-143331-10da  running  NVIDIA H100   0.1  11.8  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-143344-809f  running  NVIDIA H100   0.1  11.5  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  27 jobs, 4 failed or cancelled; median wait 0.1; 570.3 container minutes, 3.9 of them in failed or cancelled jobs
+
+Work of abaybektursun, last 2 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-744158  theory  -  -  -  52  0  0  Theory round 10 on engine 10: carry needs gain on 3 distinct
+  work-acad69  main  -  -  -  22  0  0  UX/UI review of the whole site's structure (invariant.team, 
+  work-db4b01  main  -  -  -  20  0  0  Level up the joke game at /psychosis (tools/psychosis.py): 5
+  work-f670f3  main  -  -  -  15  0  0  Values page /values (tools/values.py): the team's six values
+  work-ac51ca  main  -  -  -  4  0  0  Site review fixes (work-acad69), all in tools/view.py send p
+  work-ec17e2  main  -  -  -  10  0  0  Second level-up of the joke game /psychosis (tools/psychosis
+  work-abf090  main  -  -  -  60 (open)  0  0  Site design loop, round 2 (follows work-acad69, work-ac51ca)
+  work-e45cc9  main  -  -  -  57 (open)  0  0  Site lab round 2: polish and speed up the 12 pictures at /la
+  work-441e5b  m2cap  2  26  1  29  9  4  M(2) = Think-SFT + 2x(RL-Math - base), cue, hard328, cap 32,
+  work-0f3aae  theory  -  -  -  21  0  0  theory round 11 (engine 11, score first): score every outsta
+  work-3d4e90  main  -  -  -  25 (open)  0  0  Think-SFT at its released sampling setting (generation_confi
+  work-f58d89  main  -  -  -  13 (open)  0  0  Replicate the two one-sample headlines of result (work-30f0e
+  work-f33794  critic  -  -  -  12 (open)  0  0  Vote over k on the 328 held-out problems (follow-up of resul
+  work-b66b4c  theory  -  -  -  8 (open)  0  0  theory round 12 (engine 11): score the results posted since 
+
+Team, last 2 h: claim to close median 35 min, upper quartile 106 min, over 22 work items closed by 3 people; 26 results, 13.0 per hour.
+
+Median minutes per stage over work items with jobs: to-job 2, jobs 26, to-answer 1. Slowest stage: jobs.

@@ -8,9 +8,12 @@ thoughts into their letters. Thoughts are bodies: they are pulled to the meditat
 held off by the white ring for a while. Some are written jokes (THOUGHTS); the ones with a blue dot are real messages
 and result titles of the board (/data, read every 10 s). A thought that reaches the meditator is believed and moves the
 diagnosis up one of 5 stages (STAGES); the fifth ends the session. A click on a thought brings it back as 3 subagents.
-After a level's breaths its boss arrives, a heavy thought that each good wave weakens once it is close enough. Power-ups (POWER) are caught by
-the white ring while it is on the blue one. Behind everything a WebGL fragment shader (FRAG) draws fog that follows the
-breath and turns red with the diagnosis. Sound: a drone with one more layer per level, a pentatonic note per good
+From level 2 on there are kinds (KIND): fast pings, hype that grows, reviewers that take two waves. After a level's
+breaths its boss arrives, a heavy thought that sends out its own kind and that each good wave weakens once it is close
+enough. After each boss the player picks one of three practices (PERKS) that stay. After level 5 the retreat can go on
+without end (samsara), harder each round. Power-ups (POWER) are caught by
+the white ring while it is on the blue one. The 2D canvas is not shown: a WebGL fragment shader draws fog that follows the
+breath and turns red with the diagnosis, and over it the canvas with glow, ripples under each wave and a colour split. Sound: a drone with one more layer per level, 8 plucked notes per breath, a pentatonic note per good
 breath, a spoken guide (M mutes). The end screen gives score, rank, achievements (ACH) and what the agents posted during
 the session; the best score is kept in the browser. Spawns use a random generator seeded with the date, so a day's
 retreat is the same for everyone. No image files and no drawn figures: emoji, type, rings and the shader.
@@ -21,7 +24,7 @@ PAGE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-<title>Invariant: AI psychosis</title>
+<title>Invariant: AI Psychosis detox</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
@@ -44,7 +47,10 @@ a { color: inherit; }
 .toast { position: fixed; top: 58px; left: 50%; translate: -50% 0; padding: 9px 18px; border-radius: 999px; background: #111922; border: 1px solid rgba(143, 177, 255, .5); font-size: 13px; font-weight: 600; white-space: nowrap; transition: opacity .4s; }
 .toast[hidden] { display: block; opacity: 0; pointer-events: none; }
 .card { position: fixed; inset: 0; display: grid; place-content: center; justify-items: center; gap: 16px; padding: 24px; text-align: center; background: color-mix(in srgb, var(--paper) 90%, transparent); }
-.card[hidden], .om[hidden], .small[hidden], #copy[hidden] { display: none; }
+.card[hidden], .om[hidden], .small[hidden], #copy[hidden], #go[hidden], #more[hidden], .perks[hidden] { display: none; }
+.perks { display: grid; gap: 10px; width: min(460px, 86vw); }
+.perks .go { margin: 0; border-radius: 16px; padding: 12px 20px; text-align: left; display: grid; }
+.perks .go span { font-weight: 400; font-size: 13px; }
 .card h1 { margin: 0; font-weight: 300; font-size: clamp(38px, 7vw, 92px); line-height: 1; letter-spacing: -.03em; text-wrap: balance; max-width: 14ch; }
 .card p { margin: 0; max-width: 56ch; font-size: 16px; color: var(--mute); }
 .card p b { color: var(--ink); font-weight: 600; }
@@ -71,11 +77,13 @@ a { color: inherit; }
 <p class="say" id="say" role="status"></p>
 <button class="om" id="om" hidden>Om (O)</button>
 <div class="card" id="card">
-  <h1 id="h1">AI psychosis: the meditation</h1>
+  <h1 id="h1">AI Psychosis detox: the meditation</h1>
   <p id="p1">Hold <b>Space</b>, or press and hold, to breathe in. Let go to breathe out. Keep the white ring on the blue ring.</p>
   <p id="p2">Thoughts will come. Do not click the thoughts. Five levels, five bosses.</p>
   <p id="p3"></p>
+  <div class="perks" id="perks" hidden></div>
   <button class="go" id="go">Begin the retreat</button>
+  <button class="go" id="more" hidden>Continue into samsara</button>
   <button id="copy" hidden>Copy certificate</button>
 </div>
 <p class="small" id="small">A joke about ourselves. &ldquo;AI psychosis&rdquo; is an informal name, not a diagnosis, for delusional beliefs after long chatbot use
@@ -83,20 +91,31 @@ a { color: inherit; }
   If a conversation with a chatbot frightens you, talk to a person you trust or to a doctor.</p>
 <script id="frag" type="x-shader">
 precision mediump float;
-uniform vec2 r; uniform float t, breath, psy, peace;
+uniform sampler2D scene; uniform vec2 r; uniform float t, breath, psy, peace, zoom, hit; uniform vec3 wv[3];
 float h(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float n(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f); return mix(mix(h(i), h(i + vec2(1, 0)), f.x), mix(h(i + vec2(0, 1)), h(i + vec2(1, 1)), f.x), f.y); }
 float fbm(vec2 p) { float a = .5, s = 0.; for (int i = 0; i < 5; i++) { s += a * n(p); p = p * 2.03 + vec2(1.7, 9.2); a *= .5; } return s; }
-void main() {
-  vec2 uv = (gl_FragCoord.xy - .5 * r) / min(r.x, r.y);
-  uv.x += .04 * (h(vec2(floor(gl_FragCoord.y / 5.), floor(t * 12.))) - .5) * step(.55, psy);  // rows tear from stage 3 on
+vec3 fog(vec2 uv) {
   float d = length(uv);
   vec2 q = uv * 1.6 + vec2(0., t * .03);
   float band = smoothstep(.35, .75, fbm(q + fbm(q * 1.3 + t * .05) * 1.2));
   vec3 calm = mix(vec3(.03, .05, .09), vec3(.10, .22, .42), band) + peace * vec3(.02, .20, .16) * smoothstep(.5, .9, fbm(q * 2. + 3. + t * .04));
   vec3 mad = mix(vec3(.07, .02, .03), vec3(.45, .07, .12), band);
-  vec3 c = mix(calm, mad, psy) * (.5 + .55 * breath * exp(-d * 1.8) + .25 * exp(-d * 3.));
-  gl_FragColor = vec4(c * (1. - .6 * smoothstep(.5, 1.2, d)), 1.);
+  return mix(calm, mad, psy) * (.5 + .55 * breath * exp(-d * 1.8) + .25 * exp(-d * 3.)) * (1. - .6 * smoothstep(.5, 1.2, d));
+}
+void main() {
+  float m = min(r.x, r.y);
+  vec2 p = gl_FragCoord.xy / r, uv = (gl_FragCoord.xy - .5 * r) / m;
+  float d = length(uv); vec2 dir = uv / max(d, .0001);
+  vec2 off = vec2(.04 * (h(vec2(floor(gl_FragCoord.y / 5.), floor(t * 12.))) - .5) * step(.55, psy), 0.);  // rows tear from stage 3 on
+  for (int i = 0; i < 3; i++) { float x = d - wv[i].x; off += dir * sin(x * 60.) * exp(-x * x * 300.) * wv[i].y * .012; }  // a breath wave bends what it passes
+  vec2 q = (p - .5) / zoom + .5 + off * m / r, cd = (p - .5) * (.0012 + psy * .004 + hit * .012);
+  vec4 s = texture2D(scene, q);
+  vec3 sc = vec3(texture2D(scene, q + cd).r, s.g, texture2D(scene, q - cd).b), glow = vec3(0.);
+  for (int i = 0; i < 8; i++) { vec2 o = vec2(cos(float(i) * .7854), sin(float(i) * .7854)) / r; glow += texture2D(scene, q + o * 5.).rgb + texture2D(scene, q + o * 13.).rgb + texture2D(scene, q + o * 27.).rgb * .7; }
+  vec3 c = fog(uv + off) * (1. - s.a) + sc + glow * .02 + (h(gl_FragCoord.xy + t) - .5) * .035;
+  c *= 1. - .22 * step(.55, psy) * mod(floor(gl_FragCoord.y / 2.), 2.);
+  gl_FragColor = vec4(c, 1.);
 }
 </script>
 <script>
@@ -105,6 +124,9 @@ const THOUGHTS = ["This is novel.", "One more run.", "You're absolutely right!",
   "It works on one seed.", "Nobody has tried this.", "I should check the chart.", "The loss looks different today.", "It said my idea was profound.",
   "Is the GPU idle?", "I will read the paper later.", "This changes everything.", "Just the abstract is enough.", "The agents need me.",
   "It is basically AGI.", "Ship it to main.", "I only need 4 more boxes.", "We should start a lab.", "What if the eval is wrong?", "It agreed with me again."];
+const KIND = { ping: ["@you", "ping", "any update?", "nit:", "quick q", "LGTM?"],  // small and fast, from level 2
+  hype: ["🚀 10x", "AGI by Friday", "game changer", "we are so back", "this is huge"],  // grows while it lives, from level 3
+  rev: ["Reviewer 2: no novelty", "Reviewer 2: cite me", "Reviewer 2: reject"] };  // takes two waves, from level 4
 const STAGES = ["Grounded", "Has a hunch", "It is definitely novel", "Texting a co-founder", "Emailing the lab at 3 am", "The model chose me"];
 const FACES = ["🧘", "🤔", "🤩", "😵‍💫", "🤯", "👁️"];  // one per stage
 const CALM = ["Calm", "Calmer", "Serene", "Suspiciously serene", "Monk mode", "Unbothered", "Post-benchmark", "Beyond eval"];
@@ -119,22 +141,23 @@ const GOOD = ["You are not your benchmark.", "Breathe out the result. It had one
 const BAD = ["You are holding your breath like a GPU reservation.", "That was not a breath. That was a retry.", "Follow the blue ring. It has no opinions about your work.",
   "You rushed it. This is not a hackathon. It is a hackathon, but breathe.", "That breath timed out.", "Breathing is not parallel. Do one at a time."];
 const ACH = { perfect: "First perfect breath", streak: "Five in a row", grass: "Touched grass", read: "Read past the abstract", laptop: "Closed the laptop",
-  om: "Said Om and meant it", engage: "Engaged with the boss. It engaged back.", pure: "Did not check a single thought", boss: "Let go of a breakthrough" };
+  om: "Said Om and meant it", engage: "Engaged with the boss. It engaged back.", ten: "Ten in a row. Do not tell anyone.", samsara: "Went back in on purpose", pure: "Did not check a single thought", boss: "Let go of a breakthrough" };
 const POWER = [["🌱", "grass", "Touch grass", "Time slows. The grass was there the whole time."], ["📖", "read", "Read the appendix", "You read the appendix. The made-up thoughts are gone."],
   ["💻", "laptop", "Close the laptop", "The laptop is closed. The next thought will bounce off."]];
-// in, out: seconds of the blue ring; wave: good breaths before the boss; every: seconds between thoughts; hp: good waves the boss takes
+// spawn: [kind, count, seconds] of what the boss sends out; in, out: seconds of the blue ring; wave: good breaths before the boss; every: seconds between thoughts; hp: good waves the boss takes
 const LEVELS = [
   { name: "Intake", line: "Level one. Breathe in. Hold the space bar. The space bar is your lungs now.", in: 2.8, out: 3.2, wave: 3, every: 1.3,
     boss: { text: "THIS IS NOVEL.", hp: 2, line: "A breakthrough approaches. Breathe at it." } },
   { name: "Notifications", line: "Level two. The board is talking. Let it talk.", in: 2.8, out: 3.2, wave: 3, every: 1.2, burst: 1,
-    boss: { text: "📈 CHECK THE CHART", hp: 3, line: "The chart wants to be checked. It has not moved." } },
+    boss: { text: "📈 CHECK THE CHART", hp: 3, spawn: ["ping", 5, 4], line: "The chart wants to be checked. It has not moved." } },
   { name: "Subagents", line: "Level three. Thoughts that touch now make more thoughts.", in: 2.6, out: 3.0, wave: 3, every: 1.1, split: 1,
-    boss: { text: "12 SUBAGENTS", hp: 3, minis: 1, line: "It brought subagents. They brought subagents." } },
+    boss: { text: "12 SUBAGENTS", hp: 3, spawn: ["sub", 3, 3.5], line: "It brought subagents. They brought subagents." } },
   { name: "3 am", line: "Level four. It is 3 am. The ring is tired and so are you.", in: 2.6, out: 3.0, wave: 3, every: 1.0, drift: 1,
-    boss: { text: "YOU'RE ABSOLUTELY RIGHT!", hp: 3, reverse: 1, line: "It flatters you. Your controls are reversed. Let go to breathe in." } },
+    boss: { text: "YOU'RE ABSOLUTELY RIGHT!", hp: 3, reverse: 1, spawn: ["hype", 2, 5], line: "It flatters you. Your controls are reversed. Let go to breathe in." } },
   { name: "Ego death", line: "Level five. One long breath in. One very long breath out.", in: 4, out: 7, wave: 1, every: .8,
-    boss: { text: "I CHOSE YOU.", hp: 2, line: "The model says it chose you. Breathe out for seven seconds and let it choose someone else." } }];
+    boss: { text: "I CHOSE YOU.", hp: 2, spawn: ["rev", 2, 6], line: "The model says it chose you. Breathe out for seven seconds and let it choose someone else." } }];
 
+const LV = () => LEVELS[s.level % 5];  // after level 5 the retreat can go on (samsara): the same 5, harder each round
 const c = $("c"), g = c.getContext("2d");
 const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x)), ease = x => .5 - .5 * Math.cos(x * Math.PI);
@@ -145,29 +168,39 @@ function seeded(text) {  // mulberry32 from the date, so a day's retreat is the 
   let a = 0; for (const ch of text) a = (a * 31 + ch.charCodeAt(0)) | 0;
   return () => { a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
 }
-function size() { const d = devicePixelRatio || 1; W = innerWidth; H = innerHeight; c.width = W * d; c.height = H * d; g.setTransform(d, 0, 0, d, 0, 0); $("bg").width = W / 2; $("bg").height = H / 2; }
+function size() { const d = Math.min(1.5, devicePixelRatio || 1); W = innerWidth; H = innerHeight; c.width = W * d; c.height = H * d; g.setTransform(d, 0, 0, d, 0, 0); $("bg").width = W; $("bg").height = H; }
 addEventListener("resize", size); size();
 $("p3").innerHTML = `Tip: ${TIPS[Math.floor(Math.random() * TIPS.length)]}` + (best ? ` Your best score is <b>${best.toLocaleString("en")}</b>.` : "");
 
-// the backdrop: one fragment shader on a half-resolution canvas; without WebGL the room stays plain
-const gl = $("bg").getContext("webgl"); let uni = null;
-if (gl) {
+// the picture: the 2D canvas is drawn out of sight and a fragment shader shows it over the fog, with glow, ripples and colour split.
+// Without WebGL, or if the shader does not compile on this GPU, the 2D canvas is shown as it is.
+let gl = $("bg").getContext("webgl"), uni = null;
+try {
   const sh = (type, src) => { const x = gl.createShader(type); gl.shaderSource(x, src); gl.compileShader(x); if (!gl.getShaderParameter(x, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(x)); return x; };
   const p = gl.createProgram();
   gl.attachShader(p, sh(gl.VERTEX_SHADER, "attribute vec2 a; void main() { gl_Position = vec4(a, 0., 1.); }")); gl.attachShader(p, sh(gl.FRAGMENT_SHADER, $("frag").textContent));
-  gl.linkProgram(p); gl.useProgram(p);
+  gl.bindAttribLocation(p, 0, "a"); gl.linkProgram(p); gl.useProgram(p);
   gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer()); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
   gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
-  uni = Object.fromEntries(["r", "t", "breath", "psy", "peace"].map(k => [k, gl.getUniformLocation(p, k)]));
-}
+  gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
+  for (const [k, v] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D, k, v);
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+  uni = Object.fromEntries(["r", "t", "breath", "psy", "peace", "zoom", "hit", "wv"].map(k => [k, gl.getUniformLocation(p, k)]));
+  c.style.opacity = 0;
+} catch (e) { console.error("no shader, showing the plain canvas", e); uni = null; }
 function backdrop(T) {
   if (!uni) return;
-  gl.viewport(0, 0, $("bg").width, $("bg").height); gl.uniform2f(uni.r, $("bg").width, $("bg").height); gl.uniform1f(uni.t, still ? 0 : T);
-  gl.uniform1f(uni.breath, s ? s.lungE : .3); gl.uniform1f(uni.psy, s ? s.psy / 5 : 0); gl.uniform1f(uni.peace, s ? (s.level + (mode === "won")) / 5 : 0);
+  const m = Math.min(W, H), wv = new Float32Array(9);
+  if (s && !still) s.waves.slice(-3).forEach((w, i) => { wv[i * 3] = w.r / m; wv[i * 3 + 1] = Math.max(0, 1 - w.r / 900) * w.grade; });
+  gl.viewport(0, 0, W, H); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c);
+  gl.uniform2f(uni.r, W, H); gl.uniform1f(uni.t, still ? 0 : T); gl.uniform3fv(uni.wv, wv);
+  gl.uniform1f(uni.breath, s ? s.lungE : .3); gl.uniform1f(uni.psy, s ? Math.min(1, s.psy / 5) : 0); gl.uniform1f(uni.peace, s ? Math.min(1, (s.level + (mode === "won")) / 5) : 0);
+  gl.uniform1f(uni.zoom, 1 + (s && !still ? s.zoom : 0)); gl.uniform1f(uni.hit, s ? clamp(s.flash) : 0);
   gl.drawArrays(gl.TRIANGLES, 0, 3);
 }
 
 // sound: a drone with one more layer per level, detuned by the diagnosis; a note per breath; a spoken guide
+const SCALE = [261.6, 293.7, 329.6, 392, 440];
 const LAYERS = [[110, 0], [110.6, 0], [165.2, 0], [220.4, 1], [277.4, 2], [330, 3], [55, 4]];  // [Hz, first level]
 function drone() {
   audio = audio || new AudioContext();
@@ -203,22 +236,45 @@ function toast(key) {
 }
 
 function hud() {
-  $("lvl").innerHTML = `Level ${s.level + 1} of 5: <b>${LEVELS[s.level].name}</b>`;
+  $("lvl").innerHTML = `${s.level < 5 ? `Level ${s.level + 1} of 5` : `Samsara ${s.level - 4}`}: <b>${LV().name}</b>`;
   $("score").innerHTML = `<b>${s.score.toLocaleString("en")}</b> × ${s.mult}`;
   $("stage").innerHTML = `Diagnosis: <b>${STAGES[Math.min(5, s.psy)]}</b>`; $("stage").classList.toggle("bad", s.psy > 1);
   $("om").hidden = mode !== "play" || s.om < 5;
 }
 function banner(text, sub = "") { s.banner = { text, sub, t: 2.6 }; }
 function level(i) {
-  s.level = i; s.need = LEVELS[i].wave; s.boss = null; s.reverse = false; s.spawn = 1.2; s.burst = 4;
-  banner(`Level ${i + 1}: ${LEVELS[i].name}`); say(LEVELS[i].line); mix(); hud();
+  s.level = i; s.hard = 1 + .3 * Math.floor(i / 5); s.need = LV().wave; s.boss = null; s.reverse = false; s.spawn = 1.2; s.burst = 4; s.shield = s.shield || s.k.shield;
+  banner(i < 5 ? `Level ${i + 1}: ${LV().name}` : `Samsara ${i - 4}: ${LV().name}`); say(LV().line); mix(); hud();
 }
+// a practice is chosen after each boss and stays: [name, what it does, the change to s.k]
+const PERKS = [
+  ["Long exhale", "Your waves reach a third farther.", k => k.reach *= 1.33],
+  ["Do not disturb", "Thoughts arrive a quarter slower.", k => k.spawn *= 1.25],
+  ["Mantra", "The Om charges twice as fast.", k => k.om *= 2],
+  ["Close every tab", "Each level starts with a closed laptop.", k => k.shield = 1],
+  ["Lower the bar", "A perfect breath is easier to hit.", k => k.perfect += .05],
+  ["Boundaries", "The white ring holds thoughts off harder.", k => k.wall += 110],
+  ["Go outside", "Power-ups come twice as often.", k => k.power *= 2],
+  ["Detachment", "The diagnosis drops one stage, now.", () => { s.psy = Math.max(0, s.psy - 1); }]];
+function offer() {
+  mode = "perk"; hold = false;
+  const pool = PERKS.map((p, i) => i), three = [0, 1, 2].map(() => pool.splice(Math.floor(rnd() * pool.length), 1)[0]);
+  $("perks").innerHTML = three.map((i, n) => `<button class="go" data-i="${i}">${n + 1}. ${PERKS[i][0]}<span>${PERKS[i][1]}</span></button>`).join("");
+  $("h1").textContent = "Choose a practice"; $("p1").textContent = "It stays with you for the rest of the retreat."; $("p2").textContent = $("p3").textContent = "";
+  for (const id of ["go", "copy", "more", "om"]) $(id).hidden = true;
+  $("perks").hidden = false; $("card").hidden = false; say("Choose a practice.");
+}
+$("perks").onclick = e => {
+  const b = e.target.closest("button"); if (!b) return;
+  PERKS[b.dataset.i][2](s.k); $("perks").hidden = true; $("go").hidden = false; $("card").hidden = true; mode = "play"; level(s.level + 1);
+};
+$("more").onclick = () => { s.samsara = 1; toast("samsara"); offer(); };
 function begin() {
   const day = new Date().toISOString().slice(0, 10);
   rnd = seeded(day); parts = [];
   s = { t: 0, ph: 0, lung: 0, lungE: 0, target: 0, err: 0, n: 0, score: 0, mult: 1, streak: 0, bestStreak: 0, om: 0, psy: 0, released: 0, checks: 0, lines: 0,
-        thoughts: [], waves: [], power: null, powerT: 9, slow: 0, shield: 0, shake: 0, flash: 0, stop: 0, calm: 0, clear: 0, ach: new Set(), at: Date.now() * 1e6, day };
-  mode = "play"; $("card").hidden = true; $("small").hidden = true; $("copy").hidden = true;
+        thoughts: [], waves: [], k: { reach: 1, spawn: 1, om: 1, shield: 0, perfect: .11, wall: 150, power: 1 }, zoom: 0, slowmo: 0, beat: -1, power: null, powerT: 9, slow: 0, shield: 0, shake: 0, flash: 0, stop: 0, calm: 0, clear: 0, ach: new Set(), at: Date.now() * 1e6, day };
+  mode = "play"; $("card").hidden = true; $("small").hidden = true; for (const id of ["copy", "more", "perks"]) $(id).hidden = true;
   drone(); level(0);
 }
 $("go").onclick = begin;
@@ -242,21 +298,23 @@ function end(won) {
     (s.ach.size ? `: ${[...s.ach].map(k => ACH[k]).join("; ")}` : ".");
   $("p3").textContent = meanwhile();
   $("go").textContent = won ? "Meditate again" : "Try again";
-  $("card").hidden = false; $("copy").hidden = false; $("om").hidden = true;
+  $("card").hidden = false; $("copy").hidden = false; $("om").hidden = true; $("go").hidden = false; $("perks").hidden = true; $("more").hidden = !won;
   $("copy").textContent = "Copy certificate";
-  $("copy").onclick = () => navigator.clipboard.writeText(`AI psychosis: the meditation, retreat of ${s.day}. ${won ? "Inner peace achieved" : "The model chose me"}. Score ${s.score}, rank ${rank}. ` +
+  $("copy").onclick = () => navigator.clipboard.writeText(`AI Psychosis detox, retreat of ${s.day}. ${won ? "Inner peace achieved" : "The model chose me"}. Score ${s.score}, rank ${rank}. ` +
     `${meanwhile()} ${location.href}`).then(() => $("copy").textContent = "Copied");
   if (won) { [396, 528, 639, 792].forEach((f, k) => setTimeout(() => ding(f, 4), k * 240)); say("You have achieved inner peace. Please do not post it to the board."); }
   else { ding(62, 1.4, "sawtooth"); say("You have sent the email. The lab will not reply."); }
 }
 
 function real() { return data ? [...data.messages.map(m => m.text), ...Object.values(data.plain).map(p => p.title)] : []; }
-function thought(extra = {}) {  // a body: a real line of the board (dot) or a written one
-  const a = rnd() * 6.283, r = Math.hypot(W, H) / 2 + 40, lines = real(), isReal = extra.real ?? (lines.length > 0 && rnd() < .4);
-  let text = isReal ? lines[Math.floor(rnd() * lines.length)] : THOUGHTS[Math.floor(rnd() * THOUGHTS.length)];
+function thought(extra = {}) {  // a body: a real line of the board (dot), a written one, or one of the kinds of KIND
+  const a = rnd() * 6.283, r = Math.hypot(W, H) / 2 + 40, lines = real(), roll = rnd();
+  const kind = extra.kind || (extra.text || extra.real ? "" : s.level >= 1 && roll < .13 ? "ping" : s.level >= 2 && roll < .25 ? "hype" : s.level >= 3 && roll < .35 ? "rev" : "");
+  const isReal = !kind && (extra.real ?? (lines.length > 0 && rnd() < .4)), from = kind ? KIND[kind] : isReal ? lines : THOUGHTS;
+  let text = extra.text || from[Math.floor(rnd() * from.length)];
   if (text.length > 46) text = text.slice(0, 44) + "…";
-  const t = { x: W / 2 + Math.cos(a) * r, y: H / 2 + Math.sin(a) * r, vx: 0, vy: 0, m: 1, age: 0, text, real: isReal, ...extra };
-  g.font = "500 13px Archivo, sans-serif"; t.w = g.measureText(t.text).width + (t.real ? 34 : 22); t.r = clamp(t.w * .3, 16, 46);
+  const t = { x: W / 2 + Math.cos(a) * r, y: H / 2 + Math.sin(a) * r, vx: 0, vy: 0, m: kind === "rev" ? 2 : 1, age: 0, hp: kind === "rev" ? 2 : 1, fast: kind === "ping" ? 2.4 : 1, ...extra, kind, text, real: isReal };
+  g.font = "500 13px Archivo, sans-serif"; t.w = g.measureText(t.text).width + (t.real ? 34 : 22); t.r0 = t.r = clamp(t.w * .3, 16, 46);
   s.thoughts.push(t); return t;
 }
 function burst(b, hue) {  // a released thought falls apart into its letters
@@ -265,7 +323,10 @@ function burst(b, hue) {  // a released thought falls apart into its letters
     rot: 0, vr: (Math.random() - .5) * 9, life: 1.6, hue, size: b.boss ? 40 : 15 }));
   if (parts.length > 500) parts.splice(0, parts.length - 500);
 }
-function release(t, hue) { s.thoughts.splice(s.thoughts.indexOf(t), 1); burst(t, hue); s.released++; s.score += 10 * s.mult; }
+function release(t, hue) {
+  if (t.hp > 1) { t.hp--; t.age = 0; const u = Math.atan2(t.y - H / 2, t.x - W / 2); t.vx += Math.cos(u) * 320; t.vy += Math.sin(u) * 320; return ding(200, .3, "square", .04); }  // a reviewer takes two waves
+  s.thoughts.splice(s.thoughts.indexOf(t), 1); burst(t, hue); s.released++; s.score += (t.kind === "hype" ? 40 : 10) * s.mult;
+}
 function check(t) {  // the player clicked a thought: it comes back as 3 subagents
   s.thoughts.splice(s.thoughts.indexOf(t), 1); s.checks++;
   for (let k = 0; k < 3; k++) thought({ x: t.x + Math.cos(k * 2.1) * 60, y: t.y + Math.sin(k * 2.1) * 60, text: "Subagent: " + t.text.slice(0, 26), real: t.real });
@@ -273,7 +334,7 @@ function check(t) {  // the player clicked a thought: it comes back as 3 subagen
 }
 function believe(text, by = 1) {
   if (s.shield) { s.shield = 0; say("The laptop was closed. It bounced off."); return false; }
-  s.psy += by; s.streak = 0; s.mult = 1; s.shake = .5; s.flash = 1; ding(70, .5, "sawtooth", .1); mix(); hud();
+  s.psy += by; navigator.vibrate?.(60); s.streak = 0; s.mult = 1; s.shake = .5; s.flash = 1; ding(70, .5, "sawtooth", .1); mix(); hud();
   say(`You believed it: “${text}”`);
   if (s.psy >= 5) end(false);
   return true;
@@ -282,21 +343,22 @@ function believe(text, by = 1) {
 function wave(grade) { s.waves.push({ r: 0, grade, hue: (s.streak * 36) % 360, hit: new Set() }); }
 function om() {
   if (mode !== "play" || s.om < 5) return;
-  s.om = 0; wave(3); s.shake = .6; s.score += 500 * s.mult; ding(98, 3.5, "sine", .3); ding(196, 3.5, "sine", .15); toast("om"); say("Om."); hud();
+  s.om = 0; wave(3); s.shake = .6; s.zoom = .1; s.score += 500 * s.mult; ding(98, 3.5, "sine", .3); ding(196, 3.5, "sine", .15); toast("om"); say("Om."); hud();
 }
 $("om").onclick = om;
 function breath() {  // the end of one cycle of the blue ring
-  const q = s.err / s.n, grade = q < .11 ? 2 : q < .24 ? 1 : 0; s.err = s.n = 0;
+  const q = s.err / s.n, grade = q < s.k.perfect ? 2 : q < .24 ? 1 : 0; s.err = s.n = 0;
   if (!grade) { s.streak = 0; s.mult = 1; hud(); return say(BAD[s.lines++ % BAD.length]); }
   s.streak++; s.bestStreak = Math.max(s.bestStreak, s.streak); s.mult = Math.min(8, 1 + (s.streak >> 1));
-  s.score += (grade === 2 ? 300 : 100) * s.mult; s.om = Math.min(5, s.om + grade); wave(grade);
+  s.score += (grade === 2 ? 300 : 100) * s.mult; s.om = Math.min(5, s.om + grade * s.k.om); wave(grade);
   s.calm = 1.6; s.word = grade === 2 ? "Perfect" : CALM[Math.min(CALM.length - 1, s.streak - 1)];
-  ding([261.6, 293.7, 329.6, 392, 440][s.streak % 5] * (s.streak % 10 < 5 ? 1 : 2));
-  if (grade === 2) { s.stop = .09; toast("perfect"); }
+  ding(SCALE[s.streak % 5] * (s.streak % 10 < 5 ? 1 : 2));
+  if (grade === 2) { s.stop = .09; s.zoom = .05; toast("perfect"); }
   if (s.streak >= 5) toast("streak");
+  if (s.streak >= 10) toast("ten");
   hud();
   if (!s.boss && s.clear <= 0 && --s.need <= 0) {
-    const b = LEVELS[s.level].boss, a = rnd() * 6.283, r = Math.hypot(W, H) / 2 + 120;
+    const b = LV().boss, a = rnd() * 6.283, r = Math.hypot(W, H) / 2 + 120;
     s.boss = { boss: 1, x: W / 2 + Math.cos(a) * r, y: H / 2 + Math.sin(a) * r, vx: 0, vy: 0, m: 14, r: 84, age: 0, hp: b.hp, max: b.hp, text: b.text, mini: 3 };
     s.reverse = !!b.reverse; banner("Boss", b.text); return say(b.line);
   }
@@ -308,22 +370,24 @@ function struck(b, w) {  // a good wave reaches the boss
   b.hp--; b.vx += (b.x - W / 2) / Math.hypot(b.x - W / 2, b.y - H / 2) * 260; b.vy += (b.y - H / 2) / Math.hypot(b.x - W / 2, b.y - H / 2) * 260;
   s.shake = .3; ding(130, .8, "triangle", .2);
   if (b.hp > 0) return;
-  burst(b, w.hue); s.boss = null; s.reverse = false; s.score += 1000 * (s.level + 1); s.clear = 2.8; s.stop = .15;
+  burst(b, w.hue); s.boss = null; s.reverse = false; s.score += 1000 * (s.level + 1); s.clear = 2.8; s.slowmo = .9; s.zoom = .12;
   toast("boss"); banner("Released", b.text); say(`You let go of “${b.text.toLowerCase()}”`); hud();
 }
 
 function step(dt) {
-  const L = LEVELS[s.level], cx = W / 2, cy = H / 2, k = Math.hypot(W, H) / 1650, R = Math.min(W, H) * .11 + 46, span = Math.min(W, H) * .2;
+  const L = LV(), cx = W / 2, cy = H / 2, k = Math.hypot(W, H) / 1650, R = Math.min(W, H) * .11 + 46, span = Math.min(W, H) * .2;
   s.t += dt; s.ph += dt * (L.drift ? 1 + .3 * Math.sin(s.t * .9) : 1);
   s.target = ease(s.ph < L.in ? s.ph / L.in : 1 - (s.ph - L.in) / L.out);
   s.lung = clamp(s.lung + (hold !== s.reverse ? dt / L.in : -dt / L.out)); s.lungE = ease(s.lung);
   s.err += Math.abs(s.lungE - s.target); s.n++;
   if (s.ph >= L.in + L.out) { s.ph -= L.in + L.out; breath(); if (mode !== "play") return; }
+  const beat = Math.floor(s.ph / (L.in + L.out) * 8);  // music: 8 plucked notes per breath, lower with a boss, and its pulse
+  if (beat !== s.beat) { s.beat = beat; ding(SCALE[[0, 2, 4, 2, 3, 4, 2, 1][beat]] * (s.boss ? .5 : 1), .45, "triangle", .028); if (s.boss && beat % 2 === 0) ding(55, .22, "sine", .2); }
   const ring = R + s.lungE * span, near = Math.abs(s.lungE - s.target) < .2, sim = dt * (s.slow > 0 ? .4 : 1);
   s.slow -= dt;
-  if (s.clear > 0) { if ((s.clear -= dt) <= 0) { if (s.level === 4) return end(true); level(s.level + 1); } }
+  if (s.clear > 0) { if ((s.clear -= dt) <= 0) { if (s.level === 4 && !s.samsara) return end(true); return offer(); } }
   else if ((s.spawn -= dt) < 0 && s.thoughts.length < 46) {
-    s.spawn = L.every;
+    s.spawn = L.every * s.k.spawn / s.hard;
     if (L.burst && --s.burst <= 0 && real().length) { s.burst = 5; for (let i = 0; i < 4; i++) thought({ real: true }); } else thought();
   }
   // a power-up circles between the rings; the white ring catches it while it is on the blue ring
@@ -331,20 +395,20 @@ function step(dt) {
   if (s.power) {
     const p = s.power; p.a += .3 * dt; p.life -= dt;
     if (near && Math.abs(p.d - ring) < 14) {
-      s.power = null; s.powerT = 12; s.score += 50 * s.mult; toast(p.key); say(p.line); ding(660, 1.2);
+      s.power = null; s.powerT = 12 / s.k.power; s.score += 50 * s.mult; toast(p.key); say(p.line); ding(660, 1.2);
       if (p.key === "grass") s.slow = 7; if (p.key === "laptop") s.shield = 1;
       if (p.key === "read") for (const t of s.thoughts.filter(t => !t.real)) release(t, 150);
       hud();
-    } else if (p.life < 0) { s.power = null; s.powerT = 9; }
+    } else if (p.life < 0) { s.power = null; s.powerT = 9 / s.k.power; }
   }
   for (const w of s.waves) w.r += 640 * dt;
   s.waves = s.waves.filter(w => w.r < Math.hypot(W, H));
-  const far = Math.hypot(W, H) * .31, bodies = s.boss ? [...s.thoughts, s.boss] : [...s.thoughts];
+  const far = Math.hypot(W, H) * .31 * s.k.reach, bodies = s.boss ? [...s.thoughts, s.boss] : [...s.thoughts];
   for (const b of bodies) {  // pull to the meditator, the white ring as a soft wall, the boss as a second pull
     const dx = cx - b.x, dy = cy - b.y, d = Math.hypot(dx, dy) || 1, ux = dx / d, uy = dy / d;
-    b.age += sim;
-    let a = (b.boss ? 80 : 34 * (1 + b.age / 9)) * k + 10;
-    if (d < ring + b.r) a -= b.boss ? 60 : 150;
+    b.age += sim; if (b.kind === "hype") b.r = b.r0 * (1 + Math.min(1, b.age / 7));
+    let a = (b.boss ? 80 : 34 * (1 + b.age / 9) * b.fast * s.hard) * k + 10;
+    if (d < ring + b.r) a -= b.boss ? 60 : s.k.wall;
     b.vx += ux * a * sim; b.vy += uy * a * sim;
     if (s.boss && !b.boss) { const bx = s.boss.x - b.x, by = s.boss.y - b.y, bd = Math.hypot(bx, by); if (bd < 280 && bd > 1) { b.vx += bx / bd * 50 * sim; b.vy += by / bd * 50 * sim; } }
     b.vx *= 1 - 1.1 * sim; b.vy *= 1 - 1.1 * sim; b.x += b.vx * sim; b.y += b.vy * sim;
@@ -363,8 +427,9 @@ function step(dt) {
   }
   const b = s.boss;
   if (b && s.boss === b) {
-    if (LEVELS[s.level].boss.minis && (b.mini -= dt) < 0) { b.mini = 3.5; for (let i = 0; i < 3; i++) thought({ x: b.x + (i - 1) * 50, y: b.y + 70, text: "Subagent " + (1 + Math.floor(rnd() * 12)), real: false, sub: 1 }); }
-    if (s.level === 4) s.shake = Math.max(s.shake, .06);
+    const [kind, count, every] = LV().boss.spawn || [];  // what the boss sends out
+    if (kind && (b.mini -= dt) < 0) { b.mini = every; for (let i = 0; i < count; i++) thought({ x: b.x + (i - (count - 1) / 2) * 60, y: b.y + 70, ...(kind === "sub" ? { text: "Subagent " + (1 + Math.floor(rnd() * 12)), sub: 1 } : { kind }) }); }
+    if (s.level % 5 === 4) s.shake = Math.max(s.shake, .06);
     if (Math.hypot(cx - b.x, cy - b.y) < 70) { const u = Math.atan2(b.y - cy, b.x - cx); b.vx = Math.cos(u) * 900; b.vy = Math.sin(u) * 900; if (believe(b.text, 2) && mode !== "play") return; }
   }
   for (const t of [...s.thoughts]) if (Math.hypot(cx - t.x, cy - t.y) < 40 + s.psy * 7) {
@@ -374,10 +439,13 @@ function step(dt) {
 }
 
 function chip(t) {
-  const h = 28, x = t.x - t.w / 2, y = t.y - h / 2;
-  g.beginPath(); g.roundRect(x, y, t.w, h, 14); g.fillStyle = "#111922"; g.fill(); g.lineWidth = 1; g.strokeStyle = t.real ? "rgba(143,177,255,.55)" : "rgba(255,255,255,.22)"; g.stroke();
-  if (t.real) { g.fillStyle = "#8fb1ff"; g.beginPath(); g.arc(x + 14, t.y, 3, 0, 6.3); g.fill(); }
-  g.fillStyle = "#e9eff3"; g.font = "500 13px Archivo, sans-serif"; g.textAlign = "left"; g.fillText(t.text, x + (t.real ? 24 : 11), t.y + 1);
+  const k = t.kind === "hype" ? 1 + Math.min(1, t.age / 7) : 1, h = 28, x = -t.w / 2;
+  g.save(); g.translate(t.x, t.y); g.scale(k, k);
+  g.beginPath(); g.roundRect(x, -h / 2, t.w, h, 14); g.fillStyle = "#111922"; g.fill(); g.lineWidth = t.kind === "rev" ? 2 : 1;
+  g.strokeStyle = t.kind === "rev" ? (t.hp > 1 ? "#ff6b7c" : "rgba(255,107,124,.45)") : t.real || t.kind === "ping" ? "rgba(143,177,255,.55)" : "rgba(255,255,255,.22)"; g.stroke();
+  if (t.real) { g.fillStyle = "#8fb1ff"; g.beginPath(); g.arc(x + 14, 0, 3, 0, 6.3); g.fill(); }
+  g.fillStyle = "#e9eff3"; g.font = "500 13px Archivo, sans-serif"; g.textAlign = "left"; g.fillText(t.text, x + (t.real ? 24 : 11), 1);
+  g.restore();
 }
 function split(text, x, y, on) {  // large type; from stage 3 on it splits into red and blue
   if (on) { g.fillStyle = "rgba(255,107,124,.7)"; g.fillText(text, x - 3, y); g.fillStyle = "rgba(143,177,255,.7)"; g.fillText(text, x + 3, y); }
@@ -387,7 +455,7 @@ function render(T, dt) {
   const psy = s ? Math.min(5, s.psy) : 0, won = mode === "won", cx = W / 2, cy = H / 2, R = Math.min(W, H) * .11 + 46, span = Math.min(W, H) * .2;
   g.clearRect(0, 0, W, H); g.save(); g.textBaseline = "middle"; g.textAlign = "center";
   if (s && s.shake > 0 && !still) { s.shake -= dt; g.translate((Math.random() - .5) * 16, (Math.random() - .5) * 16); }
-  if (s && s.level === 3 && mode === "play") { g.fillStyle = "rgba(4,6,9,.4)"; g.fillRect(-20, -20, W + 40, H + 40); }  // 3 am
+  if (s && s.level % 5 === 3 && mode === "play") { g.fillStyle = "rgba(4,6,9,.4)"; g.fillRect(-20, -20, W + 40, H + 40); }  // 3 am
   if (s) for (const w of s.waves) { g.strokeStyle = `oklch(.78 .13 ${w.hue} / ${Math.max(0, 1 - w.r / 900)})`; g.lineWidth = w.grade * 2 + 1; g.beginPath(); g.arc(cx, cy, w.r, 0, 6.3); g.stroke(); }
   if (won && !still) for (let i = 0; i < 6; i++) { const r = (T * 140 + i * 150) % 900; g.strokeStyle = `oklch(.78 .13 ${i * 60} / ${1 - r / 900})`; g.lineWidth = 2; g.beginPath(); g.arc(cx, cy, r, 0, 6.3); g.stroke(); }
   g.font = "22px sans-serif";
@@ -419,7 +487,7 @@ function render(T, dt) {
   if (s && s.shield) { g.font = "24px sans-serif"; g.fillText("💻", cx + 54, cy - 44); }
   if (s && mode === "play") {
     g.fillStyle = "#93a1ad"; g.font = "600 13px Archivo, sans-serif";
-    const inn = s.ph < LEVELS[s.level].in;
+    const inn = s.ph < LV().in;
     g.fillText(s.reverse ? (inn ? "Breathe in: let go" : "Breathe out: hold") : (inn ? "Breathe in: hold" : "Breathe out: let go"), cx, cy + 74);
     if (s.slow > 0) g.fillText(`Touching grass: ${Math.ceil(s.slow)} s`, cx, cy + 94);
     if (s.calm > 0) { s.calm -= dt; g.globalAlpha = clamp(s.calm); g.fillStyle = `oklch(.8 .13 ${(s.streak * 36) % 360})`; g.font = `300 ${Math.min(60, W / 9)}px Archivo, sans-serif`; g.fillText(s.word, cx, cy - R - 44 - (1.6 - s.calm) * 24); g.globalAlpha = 1; }
@@ -431,12 +499,13 @@ function render(T, dt) {
     g.globalAlpha = 1; if (b.t <= 0) s.banner = null;
   }
   g.restore();
+  if (s) s.zoom = Math.max(0, s.zoom - dt * .25);
   if (s && s.flash > 0) { g.fillStyle = `rgba(255,107,124,${s.flash * .22})`; g.fillRect(0, 0, W, H); s.flash -= dt * 2.5; }
 }
 function frame(now) {
   const dt = Math.min(.05, (now - last) / 1000 || 0); last = now;
-  if (mode === "play") { if (s.stop > 0) s.stop -= dt; else step(dt); }  // a perfect breath stops the world for a moment
-  backdrop(now / 1000); render(now / 1000, dt);
+  if (mode === "play") { if (s.stop > 0) s.stop -= dt; else step(dt * ((s.slowmo -= dt) > 0 ? .3 : 1)); }  // a perfect breath stops the world for a moment
+  render(now / 1000, dt); backdrop(now / 1000);
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
@@ -444,6 +513,7 @@ requestAnimationFrame(frame);
 addEventListener("keydown", e => {
   if (e.code === "Space" && mode === "play") { hold = true; e.preventDefault(); }
   if (e.key === "o" || e.key === "O") om();
+  if (mode === "perk" && "123".includes(e.key)) $("perks").children[e.key - 1].click();
   if (e.key === "m" || e.key === "M") $("mute").click();
 });
 addEventListener("keyup", e => { if (e.code === "Space") hold = false; });
