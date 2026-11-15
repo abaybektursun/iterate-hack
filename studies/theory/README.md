@@ -1041,6 +1041,80 @@ Files in `results/wide/round-10/`: `standing.md` / `standing.json` / `standing/`
 `experiments.md`, `run.json`, `round10.log` (the console log), `jobs/` (each job's JSON output, 1.0 MB). Job prompts
 and raw outputs stay in the temp folder named in `run.json`.
 
+## Round 11 (engine 11, score first)
+
+Plan `specs/SPEC_engine_v11.md`; engine version 11 (`lib/forecast.py round`: standing, surprises, targets_open, forecast
+by readers and carried mechanisms, rival pairs only about the top surprises, cells and routes checked against open work;
+`--propose-wide` keeps version 10). Board work-0f3aae (work-502f19). Board snapshot 2026-11-15T20:05:26 UTC, code
+commits 5063fab, 349e857 and the fix after it; three runs of the same command, 20:04:12 to 20:22:55 UTC (12.7 + 1.5 + 3.4
+minutes of running; the round stopped twice in `cells` on bugs the smoke run did not reach, see Problems). `surprises.md`
+and `targets.json` were committed at 20:09, `forecasts.json` and `mechanisms.json` at 20:17, before any of their numbers
+posted. Command:
+
+```
+uv run studies/theory/lib/forecast.py round studies/theory/results/wide/round-11 --from studies/theory/results/wide/round-10 studies/theory/results/wide/round-09 studies/theory/results/forecast/run-0{2,3,4,5,6,7,8} studies/theory/results/forecast/cells-01
+```
+
+**Standing** (`standing.md`). 90 mechanisms, 89 scored; 32 carried (top: run-06/f2-m03 +6.00 nats on 7 results,
+run-05/f2-m01 +5.95 on 6, run-05/f2-m03 +5.81 on 6, run-02/f2-m01 +5.79 on 6, run-05/f2-m06 +4.24 on 6). Newly carried:
+round-09/stopping-m01 +0.64, grader-m02 +0.45, grader-m05 +0.37, training-m01 +0.08, training-m02 +0.05 (each 3
+results). No longer carried: round-09/grader-m03 -0.83, weights-m01 -0.96, problems-m05 -0.38 (6 results each).
+Graveyard, 10 (new: run-02/f2-m05 -5.31 on 2 results): run-08/f2-m03 -11.80 (3), run-02/f2-m02 -9.53 (3),
+round-09/weights-m03 -6.05 (5), run-02/f2-m03 -5.28 (4), run-04/f2-m06 -4.68 (3), round-09/stopping-m03 -3.97 (5),
+run-08/f2-m04 -3.92 (2), run-06/f2-m06 -3.01 (3), run-07/f2-m05 -2.54 (2).
+
+**New numbers.** Numbers from results posted after round 10's forecasts (19:20 UTC): 6 distinct, result-6f7ca3 (five
+numbers, round 10's t03-t07: 183.5, 181, 163.5, 183, 162) and result-83f648 (244, Think-SFT + cue vote over 4 at cap
+32,768 on hard328, the work-dc9359 number as quoted in round 10's own result, scored in round-09 t26, round-10 t30 and
+run-02 t16). work-dc9359 had posted no result of its own.
+
+**Surprises** (`surprises.md`, 8, all from results posted before round 10; none of the 6 new numbers is one). Measured
+value, reader-1 and reader-2 (90 % intervals), z:
+
+| # | number | result | measured | reader-1 | reader-2 | z | outside every forecaster |
+|---|---|---|---|---|---|---|---|
+| 1 | autobench final configuration, hard328 (run-02 t15) | result-6e7b64 | 139 | 190 [165, 210] | 197 [180, 210] | 3.73 | no (run-02/f2-m01) |
+| 2 | base + 8 RL-Code directions at 1.5x, HumanEval+ and MBPP+ (run-04 t02) | result-a1bf75 | 399 | 357 [330, 384] | 357 [328, 386] | 2.38 | yes |
+| 3 | autobench best dev100 score (run-02 t13) | result-6e7b64 | 84 | 89 [86, 93] | 89 [86, 93] | 2.35 | yes |
+| 4 | base + 8 RL-Code directions at 1x, code (run-04 t01) | result-a1bf75 | 386 | 350 [325, 376] | 350 [325, 376] | 2.32 | yes |
+| 5 | autobench final configuration, math400 (run-02 t14) | result-6e7b64 | 338 | 362 [345, 375] | 356 [342, 368] | 2.28 | no (run-02/f2-m01) |
+| 6 | base + 8 RL-Code directions at 2x, code (run-07 t03) | result-a1bf75 | 394 | 347 [312, 378] | 350 [316, 380] | 2.26 | yes |
+| 7 | base + 8 RL-Math directions at 1.5x, code (run-07 t05) | result-a1bf75 | 368 | 338 [314, 362] | 333 [310, 358] | 2.06 | yes |
+| 8 | cells-01 m06: quick finished-wrong answers of 164 | result-9ce8ed | 7 | 20 [9, 34] | 22 [10, 36] | 1.71 | no (run-05/f2-m04, run-06/f2-m02) |
+
+**Rival pairs** (`pairs.json`, `duplicates.json`). Six jobs, one per surprise 1-6, wrote 12 rivals; the judge dropped 9
+as restatements (s1-a of run-02/f2-m01, s1-b of round-09/training-m04, s2-a of round-10/weights-m05, s3-a of
+round-09/stopping-m06, s3-b and s5-b of s1-b, s4-a of round-10/problems-m03, s5-a of s1-a, s6-a of run-07/f2-m05),
+leaving s2-b, s4-b, s6-b. Before the judge, four pairs differed on open targets (s2: t18, t21; s3: t13, t14; s4: t05,
+t21; s6: t18, t27) and two named cells (s1, s5). After it, only s1 and s5 stand, both through carried stand-ins, and both
+resolve to the same two mechanisms, run-02/f2-m01 (short per-sample budgets cannot reach long hard328 solutions) against
+round-09/training-m04 (the vote converges to the plain register's modal answer). Their cells: r11-m01, the base, plain,
+T 0.6, cap 4,096, one sample on hard328 (45 min): 66 [52, 82] against 98 [86, 110] in the proposal, but in the blind
+forecasts 84 [70, 98] against 96 [82, 110], overlapping, readers 90 and 90; r11-m02, vote over 6 at cap 8,192 minus the
+same vote with samples over 4,096 tokens counted as abstaining, MATH-500 first 100 (110 min): 4 [2.5, 8] against 0.5
+[-1.5, 2] in the proposal, 1 against 1 blind. As in cells-01, the disagreement exists only in the proposer's account.
+0 of 2 cells split; 0 cells or routes were turned into free targets (`jobs/answered.json` empty), 0 dropped.
+
+**Routes** (list C): r11-n01, Think-SFT + cue, sequential vote up to 5, hard328 shard 0/8 (41 problems): median 33.5
+against the stored 34 of that subset in the nearest row (sequential vote up to 4, ties to the shortest, 30,837 tokens;
+sd 2.41), margin -0.21 sd; r11-n02, Think-SFT + cue, min-p 0.05, majority of 3, shard 0/5 (66): median 48 against the
+stored 49 of the same row (sd 3.55), -0.28 sd. Neither beats its stored subset count.
+
+**SPEC_engine_v11 hypotheses.** X1 (15 or more new numbers, among them work-dc9359's hard328 rows): refuted, 6, and
+work-dc9359's own rows are not posted (only its vote 244, quoted in result-83f648). X2 (3 or more surprises): holds, 8,
+but all 8 come from results scored before; no number posted since round 10 is a surprise. X3 (2 or more rival pairs
+that differ by more than their intervals after the judge): refuted as distinct pairs, 1 (s1 and s5 resolve to the same
+two mechanisms, and their blind forecasts overlap). X4 (under 30 minutes): holds, 17.6 minutes of running, 18.7 wall.
+
+**Problems.** The cells stage stopped twice on the first real pair cells (a family made only of stand-ins had no
+mechanisms for its route job; the check job read readouts before the proposers' fields were attached); both were fixed
+in `lib/forecast.py` and the same command resumed. The smoke run had no pair with a cell, so it never reached them.
+
+Files in `results/wide/round-11/`: `standing.md` / `standing.json` / `standing/`, `graveyard.json`, `surprises.md` /
+`surprises.json`, `targets.json` / `work.md` (28 targets from 20 open work items), `pairs.json`, `duplicates.json`,
+`mechanisms.json` (32 carried + 3 new), `forecasts.json` / `forecasts.md`, `cells.json` / `cell_forecasts.json` /
+`cells.md`, `experiments.md`, `run.json` (of the last run), `round11.log` (the three console logs), `jobs/`.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in
