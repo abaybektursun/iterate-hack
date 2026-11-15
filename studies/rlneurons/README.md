@@ -83,6 +83,11 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/selfdistill.py` | Self-distillation readout: five 328 cells beside base cue, theta(0.5) cue, RL plain; sanity cell; training reports; predictions; `--hand`. |
 | `data/selfdistill/arms-v1.json` | Per arm: problem index, sample, tokens, extracted answer and text sha256 of each training example (texts on S3, `r5/selfdistill-01/data/arms-v1.jsonl`). |
 | `results/selfdistill/` | `readout.json`, per cell `<arm>-01/` (`run.json`, `metrics.json`, `examples.json`), `train_<arm>-01/` (`run.json`, `train.json`), `sanity_V_plain_math500_n100-01/`. |
+| `specs/SPEC_handoff.md` | Prefix hand-off spec: writers, pool, cut rule on token ids, seeds, strata, the own-prefix control, hypotheses H0-H4 with refuters, deviations. |
+| `lib/handoff_lib.py`, `prep/handoff_plan.py`, `data/handoff/plan_v1.json` | The prefix rule (writer jobs, cuts, seeds, `answer_ids`), and the frozen plan it gives: pool of 183, per writer sample its stratum, id count, text sha256, and per cut the prefix length and id sha256. |
+| `jobs/handoff_gen.py` | Hand-off generation job: one finisher model continues both writers' prefixes; writes each raw row (ids, prefix text, continuation) before anything else and does not score. |
+| `analysis/handoff.py`, `analysis/handoff_test.py` | Hand-off readout (grader v3 on prefix + continuation, strata tables, paired bootstrap, own-prefix control) and its planted checks. |
+| `results/handoff/` | `base-01/`, `rl-01/` (one per finisher: `run.json`, `metrics.json`, `rows.jsonl` without text, `examples.json`) and `readout-01/` (`readout.json`, `readout.txt`). |
 
 Old paths: `infra/pg/*.py` and `infra/aws_pg/jobs/n13_*.py` are in `lib/`; `infra/aws_pg/jobs/rln*_gen.py` and
 `infra/modal_rln4_k.py` are in `jobs/`; `studies/rlneurons/rln{3,4}/inputs/` is `data/rln{3,4}/`; `rln{3,4}/offline/`,
@@ -2060,6 +2065,85 @@ Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studi
 (about 1 minute; `--runs` is the folder of `tools/gpu.py get` copies, used for the RL-cue answers in `examples.json`),
 `... profile score`, `... python -m studies.rlneurons.analysis.profile_test`; `predict` refuses to overwrite the filed file.
 
+## Prefix hand-off: where inside an answer RL's advantage enters (MATH-500 pool of 183, T 1.0 / top-p 1.0, grader v3, board work-b68a26, idea-17d5b7)
+
+RL's advantage is in the first half of the answer, and most of it is written into the text by the halfway point. A stored
+answer (sample 0, attempt 0 of the Day-1 #3 jobs) is cut after 25, 50 or 75 % of its token ids and a finisher model writes the
+rest: writer {base + cue, RL} x finisher {base, RL} x cut, one sample each, on the 183 problems where the base is right in at
+most 3 of its 4 stored samples (the same list as `results/anatomy/math500-01/pool_k_le3.json`). Request = plain prompt ids +
+prefix ids; the 16,384 cap counts the prefix. Spec `specs/SPEC_handoff.md` (hypotheses written before the run); readout
+`results/handoff/readout-01/readout.json` and `readout.txt` (`analysis/handoff.py`; Wilson 95 % in percent, paired bootstrap
+5,000 resamples, seed 0, in points).
+
+Whole pool, right of 183 (cap hits), generated tokens per problem / total with the prefix:
+
+| cut | base finishes base | base finishes RL | RL finishes base | RL finishes RL |
+|---|---|---|---|---|
+| 25 % | 107 (27), 5,914 / 7,624 | 122 (39), 6,552 / 8,414 | 131 (4), 5,420 / 7,130 | 139 (10), 5,754 / 7,616 |
+| 50 % | 106 (22), 4,037 / 7,457 | 135 (36), 4,753 / 8,478 | 122 (5), 3,516 / 6,936 | 142 (12), 3,981 / 7,706 |
+| 75 % | 100 (27), 2,515 / 7,645 | 132 (32), 2,766 / 8,353 | 108 (3), 2,108 / 7,238 | 139 (9), 2,091 / 7,678 |
+
+Stored sample 0 on the pool: base 88, RL 140. Of the 17.5 to 21.3 points between the two own-prefix columns, the base
+finishing an RL prefix recovers 8.2 [0.5, 16.4] at 25 %, 15.8 [8.7, 23.0] at 50 % and 17.5 [9.3, 25.1] at 75 % (47 %, 80 %,
+82 % of the gap). RL finishing a base prefix loses 4.4 [-2.2, 10.4], 10.9 [3.8, 18.0] and 16.9 [10.4, 23.5] against its own.
+
+By the writer sample's own outcome, right of n [Wilson 95 %]; "fresh" = the finisher model's stored samples 1 to 3 on the same
+problems, in percent:
+
+| prefix | cut | base finisher | RL finisher | RL minus base finisher | fresh base / RL |
+|---|---|---|---|---|---|
+| base, wrong (n = 70) | 25 % | 25 [26, 47] | 37 [41, 64] | +17.1 [4.3, 30.0] | 53 / 74 |
+| | 50 % | 20 [19, 40] | 32 [35, 57] | +17.1 [5.7, 28.6] | |
+| | 75 % | 17 [16, 35] | 21 [21, 42] | +5.7 [-2.9, 14.3] | |
+| base, right (n = 88) | 25 % | 74 [75, 90] | 84 [89, 98] | +11.4 [3.4, 19.3] | 58 / 92 |
+| | 50 % | 83 [87, 98] | 83 [87, 98] | 0.0 [-6.8, 5.7] | |
+| | 75 % | 81 [84, 96] | 82 [86, 97] | +1.1 [-4.5, 6.8] | |
+| base, cap hit (n = 25) | 25 % | 8 | 10 | +8.0 [-16.0, 32.0] | 29 / 53 |
+| | 50 % | 3 | 7 | +16.0 [0.0, 36.0] | |
+| | 75 % | 2 | 5 | +12.0 [0.0, 28.0] | |
+| RL, right (n = 140) | 25 % | 110 [71, 85] | 131 [88, 97] | +15.0 [8.6, 21.4] | 63 / 93 |
+| | 50 % | 131 [88, 97] | 134 [91, 98] | +2.1 [-2.1, 6.4] | |
+| | 75 % | 131 [88, 97] | 136 [93, 99] | +3.6 [0.7, 7.1] | |
+| RL, wrong (n = 37) | 25 % | 9 [13, 40] | 8 [11, 37] | -2.7 [-21.6, 16.2] | 19 / 40 |
+| | 50 % | 4 [4, 25] | 8 [11, 37] | +10.8 [2.7, 21.6] | |
+| | 75 % | 1 [0, 14] | 3 [3, 21] | +5.4 [0.0, 13.5] | |
+| RL, cap hit (n = 6) | 25 / 50 / 75 % | 3 / 0 / 0 | 0 / 0 / 0 | | 6 / 33 |
+
+Without the prefixes that already contain the right answer (base 0 / 0 / 6 of 88, RL 0 / 9 / 52 of 140 at 25 / 50 / 75 %): RL
+right prefixes at 75 % give base 79 of 88, RL 84 of 88, +5.7 [1.1, 11.4]; the other differences move by at most 0.2 points.
+
+- H0 (instrument), holds: a model finishing its own prefix scores what its stored sample scored. Base on the 155 pool
+  problems that are in the pool whatever sample 0 did: 92, 94, 90 against 88 stored (+2.6 [-4.5, 9.7], +3.9 [-1.3, 9.0], +1.3
+  [-3.9, 6.5]); RL on the pool: 139, 142, 139 against 140 (intervals include 0). Smoke (`abaybektursun-1114-222829-ce39`, RL
+  finisher, 10 problems, cuts 0 to 100): a cut at 100 % gives 0 new tokens and the writer's score in 20 of 20; a cut at 0 is the
+  plain prompt (ids equal `prompt_ids.json`, laptop test).
+- H1 (RL's advantage is late checking or finishing), refuted: on wrong base prefixes cut at 75 % the RL finisher has 21 of 70
+  and the base 17 (+5.7 [-2.9, 14.3]). The RL finisher's advantage is at 25 % and 50 % (+17.1 both) and on right prefixes only
+  at 25 % (+11.4 base prefixes, +15.0 RL prefixes); from 50 % on, a right prefix is finished equally by both (83 and 83 of 88).
+- H2 (the plan chosen in the first quarter), refuted by its own rule, narrowly: the base on an RL prefix cut at 25 % recovers
+  8.2 of 17.5 points (47 %, the rule asked for half); at 50 % it recovers 80 %. The advantage enters between the start and the
+  halfway point, not in the first quarter alone.
+- H3 (wrong base prefixes are poisoned), refuted as stated (RL finisher 32 of 70 at 50 %, lower bound 35 %, above 15 %), but
+  the prefix does carry the error: against fresh rates of 53 % (base) and 74 % (RL), a wrong base prefix leaves the base 36,
+  29, 24 % and RL 53, 46, 30 % at 25, 50, 75 %. 5 of the 70 wrong base answers have no extracted answer (a format failure);
+  both finishers fix 3 to 5 of those 5 at every cut.
+- H4 (the base loses at most 5 points on right RL prefixes), refuted at 25 % (+15.0 [8.6, 21.4]), holds at 50 % and 75 %.
+- Raw rows, read by hand. Every continuation resumes mid-sentence. The base's failures on RL prefixes are cap hits: 36, 34
+  and 32 of its 61, 48 and 51 wrong answers at the three cuts (RL on its own prefixes: 8, 10, 9); it keeps reworking a long
+  RL derivation and does not close it (problem 295 at 50 %: both finishers hit the cap from the same prefix). Recovery:
+  problem 63, base answer cut at 75 % after "the sum is 0 + 2 + 5 + 1 = 8. Let me verify once again"; the base re-adds the same
+  four terms and boxes 8; RL goes back to the factorization, finds the fifth factor and boxes 10. Of the 12 right base
+  prefixes the base itself spoils at 50 and 75 %, 7 end in a final line v3 cannot read or grade (`East.`, `Navin**.`, `16/27.`,
+  no answer line), 2 hit the cap and 3 change the answer. Problem 20: the base's wrong
+  prefix reads `(1+2i)6` as a sixth power; both finishers keep 117 + 41i at all three cuts.
+- Tokens: base finisher 4.86 M generated (1,210 tokens/s, 4,112 s wall, 183 cap hits of 1,098), RL finisher 4.19 M (935
+  tokens/s, 4,568 s, 43 cap hits). Rule-A loops 2 and 0; loop-detector errors 0.
+- Limits: one sample per prefix and one prefix per problem; the pool is the 183 problems the base does not always solve, so
+  the rates are not MATH-500 accuracies. Prefix ids are the stored text re-tokenized (the count differs from the sampled count
+  in 50 of 366 answers, by at most 8 ids). Cuts 0 and 100 ran only in the smoke, RL finisher only.
+- Jobs (one H100 each, commit `bd403e1`): base finisher `abaybektursun-1114-231144-7399`, RL finisher
+  `abaybektursun-1114-231154-44ea`. Raw rows: `answers.jsonl` in each job's `$OUT_DIR` (Volume `iterate-runs`), not committed.
+
 ## How to run
 
 Laptop checks (no GPU, no weights):
@@ -2155,6 +2239,17 @@ uv run --no-project --with numpy --with math-verify==0.9.0 --with transformers==
 ```
 
 It must print 4 right, 3 cap hits of 10 (the stand-in serves right, wrong, cap hit in turn).
+
+### Prefix hand-off
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 --with transformers==5.19.0 --with tokenizers==0.23.3 --with huggingface_hub --with jinja2 python -m studies.rlneurons.analysis.handoff_test --runs runs
+uv run tools/gpu.py submit h100 --hours 4 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.handoff_gen --finisher base --cuts 25,50,75 --commit $(git rev-parse HEAD)"
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.handoff --run base=runs/<job> --run rl=runs/<job> --out studies/rlneurons/results/handoff --nn <nn>
+```
+
+The test and `prep/handoff_plan.py` read the writers' `answers.jsonl` from `runs/<writer job>/` (`uv run tools/gpu.py get`); the
+job reads them from `/runs/` in the Volume. `--finisher rl` for the second job; `--n 10 --cuts 0,25,50,75,100` for the smoke.
 
 ### Day-1 length rules (laptop, no GPU)
 
