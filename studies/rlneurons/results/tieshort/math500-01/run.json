@@ -1,0 +1,21 @@
+{
+ "commit": "977737f09655b236dc4358d11091d4b6cf9ee10d",
+ "command": "/home/abay/Projects/iterate-hack-tieshort/studies/rlneurons/analysis/tieshort.py --nn 01",
+ "job_id": null,
+ "spec": "studies/rlneurons/specs/SPEC_tieshort.md",
+ "inputs": {
+  "think": {
+   "folder": "studies/rlneurons/results/thinkvote/math500_sft1_cue_s4-01",
+   "job_id": "abaybektursun-1115-000512-ee03+abaybektursun-1115-014843-85d9+abaybektursun-1115-000607-0e92+abaybektursun-1115-000621-1d7e"
+  },
+  "rl": {
+   "folder": "studies/rlneurons/results/day1_3/math500_rl-01",
+   "job_id": "abaybektursun-1114-183640-e828"
+  },
+  "base": {
+   "folder": "studies/rlneurons/results/day1_3/math500_base_cue-01",
+   "job_id": "abaybektursun-1114-153825-208b"
+  }
+ },
+ "cap32vote_rows": null
+}

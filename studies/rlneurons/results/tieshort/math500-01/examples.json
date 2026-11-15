@@ -1,0 +1,113 @@
+{
+ "think": {
+  "rule_fixes": null,
+  "rule_breaks": null
+ },
+ "rl": {
+  "rule_fixes": {
+   "problem_index": 110,
+   "gold": "504",
+   "vote_pick": 1,
+   "rule_pick": 3,
+   "vote_score": 0,
+   "rule_score": 1,
+   "groups": [
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ]
+   ],
+   "samples": [
+    {
+     "sample": 0,
+     "n_new": 16384,
+     "cap_hit": true,
+     "extracted_v3": null,
+     "score_v3": 0
+    },
+    {
+     "sample": 1,
+     "n_new": 16384,
+     "cap_hit": true,
+     "extracted_v3": "168",
+     "score_v3": 0
+    },
+    {
+     "sample": 2,
+     "n_new": 16384,
+     "cap_hit": true,
+     "extracted_v3": "9",
+     "score_v3": 0
+    },
+    {
+     "sample": 3,
+     "n_new": 15629,
+     "cap_hit": false,
+     "extracted_v3": "504",
+     "score_v3": 1
+    }
+   ]
+  },
+  "rule_breaks": null
+ },
+ "base": {
+  "rule_fixes": {
+   "problem_index": 11,
+   "gold": "\\frac{3}{56}",
+   "vote_pick": 0,
+   "rule_pick": 2,
+   "vote_score": 0,
+   "rule_score": 1,
+   "groups": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ]
+   ],
+   "samples": [
+    {
+     "sample": 0,
+     "n_new": 8630,
+     "cap_hit": false,
+     "extracted_v3": "\\dfrac{171}{56}",
+     "score_v3": 0
+    },
+    {
+     "sample": 1,
+     "n_new": 6614,
+     "cap_hit": false,
+     "extracted_v3": "\\dfrac{1}{7}",
+     "score_v3": 0
+    },
+    {
+     "sample": 2,
+     "n_new": 6113,
+     "cap_hit": false,
+     "extracted_v3": "\\dfrac{3}{56}",
+     "score_v3": 1
+    },
+    {
+     "sample": 3,
+     "n_new": 8282,
+     "cap_hit": false,
+     "extracted_v3": "\\dfrac{3}{28}",
+     "score_v3": 0
+    }
+   ]
+  },
+  "rule_breaks": null
+ }
+}

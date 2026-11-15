@@ -1,0 +1,302 @@
+{
+ "think": {
+  "rule_fixes": {
+   "problem_index": 83,
+   "gold": "045",
+   "vote_pick": 0,
+   "rule_pick": 1,
+   "vote_score": 0,
+   "rule_score": 1,
+   "groups": [
+    [
+     0
+    ],
+    [
+     1
+    ]
+   ],
+   "samples": [
+    {
+     "sample": 0,
+     "n_new": 15847,
+     "cap_hit": false,
+     "extracted_v3": "44",
+     "score_v3": 0
+    },
+    {
+     "sample": 1,
+     "n_new": 13052,
+     "cap_hit": false,
+     "extracted_v3": "45",
+     "score_v3": 1
+    },
+    {
+     "sample": 2,
+     "n_new": 16384,
+     "cap_hit": true,
+     "extracted_v3": null,
+     "score_v3": 0
+    },
+    {
+     "sample": 3,
+     "n_new": 16384,
+     "cap_hit": true,
+     "extracted_v3": null,
+     "score_v3": 0
+    }
+   ]
+  },
+  "rule_breaks": {
+   "problem_index": 82,
+   "gold": "236",
+   "vote_pick": 0,
+   "rule_pick": 3,
+   "vote_score": 1,
+   "rule_score": 0,
+   "groups": [
+    [
+     0
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ]
+   ],
+   "samples": [
+    {
+     "sample": 0,
+     "n_new": 13886,
+     "cap_hit": false,
+     "extracted_v3": "236",
+     "score_v3": 1
+    },
+    {
+     "sample": 1,
+     "n_new": 16384,
+     "cap_hit": true,
+     "extracted_v3": null,
+     "score_v3": 0
+    },
+    {
+     "sample": 2,
+     "n_new": 9825,
+     "cap_hit": false,
+     "extracted_v3": "246",
+     "score_v3": 0
+    },
+    {
+     "sample": 3,
+     "n_new": 9351,
+     "cap_hit": false,
+     "extracted_v3": "201",
+     "score_v3": 0
+    }
+   ]
+  }
+ },
+ "rl": {
+  "rule_fixes": {
+   "problem_index": 85,
+   "gold": "080",
+   "vote_pick": 0,
+   "rule_pick": 1,
+   "vote_score": 0,
+   "rule_score": 1,
+   "groups": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ]
+   ],
+   "samples": [
+    {
+     "sample": 0,
+     "n_new": 16384,
+     "cap_hit": true,
+     "extracted_v3": "600",
+     "score_v3": 0
+    },
+    {
+     "sample": 1,
+     "n_new": 10090,
+     "cap_hit": false,
+     "extracted_v3": "80",
+     "score_v3": 1
+    },
+    {
+     "sample": 2,
+     "n_new": 15245,
+     "cap_hit": false,
+     "extracted_v3": "100",
+     "score_v3": 0
+    },
+    {
+     "sample": 3,
+     "n_new": 15282,
+     "cap_hit": false,
+     "extracted_v3": "120",
+     "score_v3": 0
+    }
+   ]
+  },
+  "rule_breaks": {
+   "problem_index": 87,
+   "gold": "699",
+   "vote_pick": 0,
+   "rule_pick": 2,
+   "vote_score": 1,
+   "rule_score": 0,
+   "groups": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     2
+    ],
+    [
+     3
+    ]
+   ],
+   "samples": [
+    {
+     "sample": 0,
+     "n_new": 10636,
+     "cap_hit": false,
+     "extracted_v3": "699",
+     "score_v3": 1
+    },
+    {
+     "sample": 1,
+     "n_new": 16340,
+     "cap_hit": false,
+     "extracted_v3": "69",
+     "score_v3": 0
+    },
+    {
+     "sample": 2,
+     "n_new": 10376,
+     "cap_hit": false,
+     "extracted_v3": "629",
+     "score_v3": 0
+    },
+    {
+     "sample": 3,
+     "n_new": 16384,
+     "cap_hit": true,
+     "extracted_v3": "446",
+     "score_v3": 0
+    }
+   ]
+  }
+ },
+ "base": {
+  "rule_fixes": {
+   "problem_index": 204,
+   "gold": "3",
+   "vote_pick": 0,
+   "rule_pick": 1,
+   "vote_score": 0,
+   "rule_score": 1,
+   "groups": [
+    [
+     0
+    ],
+    [
+     1
+    ],
+    [
+     3
+    ]
+   ],
+   "samples": [
+    {
+     "sample": 0,
+     "n_new": 16384,
+     "cap_hit": true,
+     "extracted_v3": "6",
+     "score_v3": 0
+    },
+    {
+     "sample": 1,
+     "n_new": 10434,
+     "cap_hit": false,
+     "extracted_v3": "3",
+     "score_v3": 1
+    },
+    {
+     "sample": 2,
+     "n_new": 16384,
+     "cap_hit": true,
+     "extracted_v3": null,
+     "score_v3": 0
+    },
+    {
+     "sample": 3,
+     "n_new": 14183,
+     "cap_hit": false,
+     "extracted_v3": "\\text{No such } n \\text{ exists}",
+     "score_v3": 0
+    }
+   ]
+  },
+  "rule_breaks": {
+   "problem_index": 220,
+   "gold": "$N=n$",
+   "vote_pick": 2,
+   "rule_pick": 3,
+   "vote_score": 1,
+   "rule_score": 0,
+   "groups": [
+    [
+     2
+    ],
+    [
+     3
+    ]
+   ],
+   "samples": [
+    {
+     "sample": 0,
+     "n_new": 16384,
+     "cap_hit": true,
+     "extracted_v3": null,
+     "score_v3": 0
+    },
+    {
+     "sample": 1,
+     "n_new": 16384,
+     "cap_hit": true,
+     "extracted_v3": null,
+     "score_v3": 0
+    },
+    {
+     "sample": 2,
+     "n_new": 16384,
+     "cap_hit": true,
+     "extracted_v3": "n",
+     "score_v3": 1
+    },
+    {
+     "sample": 3,
+     "n_new": 15844,
+     "cap_hit": false,
+     "extracted_v3": "2",
+     "score_v3": 0
+    }
+   ]
+  }
+ }
+}
