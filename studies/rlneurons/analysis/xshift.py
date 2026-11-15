@@ -88,14 +88,14 @@ def main():
            "P1": p1, "P2": p2, "P3": p3, "edits": rows, "cosine_at_layer": {"arms": arms, "matrix": np.round(cos, 4).tolist()},
            "logit_lens": {x: m["edits"][x]["lens"] for x in arms}}
     out.mkdir(parents=True)
-    (out / "readout.json").write_text(json.dumps(res, indent=1) + "\n")
+    (out / "readout.json").write_text(json.dumps(res, indent=1, default=lambda o: o.item()) + "\n")                # numpy scalars
     (out / "run.json").write_text(json.dumps({"experiment": "xshift", "run": a.run, "spec": "studies/rlneurons/specs/SPEC_xshift.md", "job": info,
                                               "raw": f"runs/{a.job}/shifts.npz (uv run tools/gpu.py get {a.job}): the mean shift vectors, not committed"}, indent=1) + "\n")
     shutil.copy(src / "metrics.json", out / "metrics.json")
     ex = {k: next(r for r in m["inputs"] if r["cap_hit"] == v) for k, v in (("cap_hit", True), ("finished", False))}
     (out / "examples.json").write_text(json.dumps(ex, indent=1) + "\n")
     print(json.dumps({"P1": {k: p1[k] for k in ("n_edits", "rho_projection", "rho_norm", "held", "refuted", "not_predictions")}, "P2": {k: p2[k] for k in ("abs_projection_over_math_1x", "held")},
-                      "P3": {k: v for k, v in p3.items() if k != "cos_with_math31_by_layer"}}, indent=1))
+                      "P3": {k: v for k, v in p3.items() if k != "cos_with_math31_by_layer"}}, indent=1, default=lambda o: o.item()))
     for x, r in rows.items():
         print(f"{x:>24} cap {r['cap_hits']:>3}  |mean| {r['mean_shift_norm']:.4f}  rms {r['rms_shift']:.4f}  frac {r['frac_mean_dir']:.3f}  proj {r['projection_p1']:+.4f}  cos math {r['cos_with_math']:+.3f}")
 

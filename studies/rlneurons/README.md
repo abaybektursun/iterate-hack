@@ -4336,6 +4336,45 @@ top-p 1.0, seed 51000000, one sample. `jobs/run_code_cell.py --model-path` after
 Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.xreward_edits`, after
 `uv run tools/gpu.py get <job>` for the jobs it names.
 
+#### xshift: the edits in activation space (spec `specs/SPEC_xshift.md`, branch `trace`)
+
+The claim "edits that are orthogonal in weight space shift the residual stream along one shared direction, whose projection
+predicts cap hits" is refuted: P1 refuted, P3 refuted for IF, P2 held.
+
+| File | What it does |
+|---|---|
+| `jobs/xshift.py` | One H100 job, no generation. Base in float32; 48 stored base + cue answers of hard328 (24 cap hits, 24 finished, first 2,048 answer tokens, every 16th position: 6,144 positions); each of 28 scored edits is added to the weights in memory (float32, no rounding), the residual stream at the output of every layer is compared with the base's, the weights are restored. Selftest on the real model: zero edit, restore, addition = `wsp_edit.target`, planted direction. |
+| `analysis/xshift.py` | numpy readout: P1 to P3, per-edit rows, cosine matrix, logit lens. |
+| `results/xshift/run-01/` | `readout.json`, `run.json`, `metrics.json` (per edit, group, layer), `examples.json`. Job `abaybektursun-1115-130144-40a0`, commit `b053152`, 24 min. Mean shift vectors (39 MB): `runs/<job>/shifts.npz`, not committed. |
+
+Run: `uv run tools/gpu.py submit h100 --hours 2 -- "python -m studies.rlneurons.jobs.xshift --commit $(git rev-parse HEAD)"`, then
+`uv run tools/gpu.py get <job>` and `uv run --no-project --with numpy python -m studies.rlneurons.analysis.xshift --job <job>`.
+
+All numbers at layer 24 (0-based, fixed before the run), `results/xshift/run-01/readout.json`; the base residual's RMS norm there is 41.2.
+
+- P1 refuted. Spearman correlation over the 23 non-random edits between the projection (key `P1`; Math 3.1 cells on Code 3.1's
+  direction, the others on Math 3.1's) and the stored cap hits: -0.67 (predicted at most -0.8). The plain norm of the mean shift
+  gives -0.62, inside the 0.05 margin. Best layer 20 to 21: -0.76. The layers 0-10 band at 1.5 breaks any single-direction
+  reading: projection +0.37, 98 cap hits.
+- P2 held. The five random edits project 0.0002 to 0.0005 of Math-1x's norm on its direction. A random rank-8 edit of the same
+  weight norm moves the residual 95 times less than the 8 singular directions: RMS shift 0.066 against 6.23 (keys
+  `edits.rand8_math31.rms_shift`, `edits.top8_math31.rms_shift`). Think-SFT at 0.02, also norm-matched: 0.75.
+- P3: IF part refuted, cosine with Math 3.1 0.09 (predicted above 0.5); Think-SFT 0.02 -0.02 and General 0.24 as predicted
+  (below 0.3).
+- Donors do not share a mean direction (key `cosine_at_layer`): Math 3.1 with Code 3.1 0.37, with Math 3.0 0.29, with Code 3.0
+  0.18; Code 3.1 with Code 3.0 0.19; Math 3.0 with Code 3.0 0.40. Within Math 3.1 the direction is stable: sizes 0.5 to 3 have
+  cosine 0.93 to 0.99 with size 1, size -1 has -0.83, one direction (k = 1) 0.83, 64 directions 0.96.
+- The mean direction carries 7 to 19 % of the summed squared shift of the all-layer edits (`frac_mean_dir`); the shift is mostly
+  position-specific. Cap-hit and finished inputs get the same mean shift (cosine 0.98 to 0.99, norms within 5 %).
+- Logit lens (key `logit_lens`; raw logit change, so a common offset is included): Math 3.1 at 1 raises ` which`, ` it`,
+  ` actually`, `Hmm`, ` perhaps` (+0.31 to +0.06) and lowers bracket openers ` ((`, `.*(`, ` (-` (-1.8 to -1.5); at 2 the same
+  tokens at +1.0 and -3.8; at -1 the bracket openers rise (+1.6). Math 3.0 raises `.`, `.\n\n`, ` that`, `Wait` (+2.6 to +1.7);
+  Code 3.0 ` all`, `,`, ` the` (+4.2 to +3.6); IF and General raise nothing and lower code-like junk tokens by about 1.2; the
+  random edit moves no logit by more than 0.005.
+- Instrument: every edit's `add_rel` equals the scored cell's to 2e-15. Rounding the sum to BF16 by nearest would keep 39 to 87 %
+  of an edit (`nearest_bf16_effective_scale`), growing with size, which is why the job adds in float32 (spec, choice 1). The scored
+  cells had stochastic BF16 rounding; this measures the edit without that noise.
+
 ## Drift: a switch to Chinese marks a cut-off Think-SFT answer but no label-free sign predicts one early (hard328 n = 328, fresh2026 n = 136, MATH-500 n = 500, laptop, board work-76a232, idea-e37da1)
 
 Question: Think-SFT + cue hits the 16,384 cap on 29 % (hard328) and 45.6 % (fresh2026) of its samples, and a quarter of those
