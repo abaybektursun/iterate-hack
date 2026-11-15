@@ -89,8 +89,9 @@ control near the plain T3 level on those problems. If the interval contains 0, t
 
 - Code: `jobs/selfopen_gen.py` (GPU), `analysis/selfopen01.py` (laptop). Generation, engine, record, loaders and grader are
   imported from `studies/rlneurons` (`run_cell`, `rln4_gen`, `n13_score`, `rln4_lib`).
-- Compute: the AWS `pg` launcher of the parent repository first; if it cannot serve the job within about 15 minutes, one
-  vast.ai box. Smoke first: `--n 8 --draws 4 --max-tokens 2048`, check that `openings.jsonl`, `choices.json`, `answers.jsonl`
+- Compute (amended before the smoke job, 09:22 UTC): the AWS bridge `interp_research-iterate/infra/aws_pg/ih` (one L40S
+  48 GB per job); vast.ai if it fails. The full run is split with `--shard k/K` over the regenerate list when one job
+  would take more than about 60 minutes; the readout merges the shard folders. Stop rule in L40S minutes: 180. Smoke first: `--n 8 --draws 4 --max-tokens 2048`, check that `openings.jsonl`, `choices.json`, `answers.jsonl`
   and `metrics.json` are written and that continuations ran. Then the full run (406 problems, 32 draws, cap 16,384).
 - Expected size: 13,000 draws of 24 tokens, then about 800 continuations (about 2.5M tokens). Stop and report if the total
   would pass 90 GPU minutes.

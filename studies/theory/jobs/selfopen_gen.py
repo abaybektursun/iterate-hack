@@ -16,6 +16,7 @@ the row record are rln4_gen's (the K-continuation convention: text = decoded pre
 rln4_lib.grade_v3.
 
   --n        the first n problems of the regenerate list (smoke runs); default all.
+  --shard    k/K: this job takes problems k, k+K, ... of the regenerate list; analysis/selfopen01.py merges the K run folders.
   --dry-run  run_cell's stand-in engine (no vLLM, no weights, no GPU).
 
 Writes to --out (default $OUT_DIR): openings.jsonl (one row per draw), answers.jsonl (one row per continued draw, fields draw,
@@ -62,6 +63,7 @@ def main():
     ap.add_argument("--open-tokens", type=int, default=24)
     ap.add_argument("--max-tokens", type=int, default=None, help="default: frozen4.json cap (16,384)")
     ap.add_argument("--n", type=int, default=None)
+    ap.add_argument("--shard", default="0/1", help="k/K: problems k, k+K, k+2K, ... of the regenerate list (one job per shard)")
     ap.add_argument("--out", default=os.environ.get("OUT_DIR"))
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--commit", required=True, help="the submitted commit: $(git rev-parse HEAD), expanded on the laptop")
@@ -80,7 +82,9 @@ def main():
     assert a.open_tokens < cap
     probs = RC.problems("math500", fz)
     frozen = json.loads((THEORY / "data" / "selfopen01_t3.json").read_text())
-    todo = frozen["regenerate"][: a.n]
+    k, n_shards = (int(x) for x in a.shard.split("/"))
+    assert 0 <= k < n_shards, f"--shard {a.shard}"
+    todo = frozen["regenerate"][k::n_shards][: a.n]
     assert all(int(probs[i]["index"]) == i for i in todo)
     versions = {k: metadata.version(k) for k in RC.PINS if k != "vllm" or not a.dry_run}
     if not a.dry_run:

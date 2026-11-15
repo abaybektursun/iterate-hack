@@ -2,7 +2,7 @@
 
     aws s3 cp s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t3-01/t3/T3.jsonl runs/selfopen01/T3.jsonl --profile iterate-ecr
     aws s3 cp s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl runs/selfopen01/T1.jsonl --profile iterate-ecr
-    uv run --with numpy --with math-verify==0.9.0 python -m studies.theory.analysis.selfopen01 runs/<job-id> \
+    uv run --with numpy --with math-verify==0.9.0 python -m studies.theory.analysis.selfopen01 runs/<job-id> [runs/<job-id> ...] \
         --t3 runs/selfopen01/T3.jsonl --t1 runs/selfopen01/T1.jsonl --out studies/theory/results/experiments/selfopen-01
 
 Every score is grader v3 (rln4_lib.grade_v3) recomputed from the answer text; cap hits and empty extractions keep what v3 gives
@@ -43,26 +43,30 @@ def example(r, arm):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("run")
+    ap.add_argument("runs", nargs="+", help="the run folders of the shards of one run")
     ap.add_argument("--t3", required=True)
     ap.add_argument("--t1", required=True)
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
-    run, out = pathlib.Path(a.run), pathlib.Path(a.out)
+    runs, out = [pathlib.Path(r) for r in a.runs], pathlib.Path(a.out)
     frozen = json.loads((THEORY / "data" / "selfopen01_t3.json").read_text())
     assert hashlib.sha256(pathlib.Path(a.t3).read_bytes()).hexdigest() == frozen["sha256"], "T3 differs from the frozen input"
     assert hashlib.sha256(pathlib.Path(a.t1).read_bytes()).hexdigest() == T1_SHA, "T1 differs from the stored cue cell"
-    jm = json.loads((run / "metrics.json").read_text())
-    assert jm["status"] == "done", f"the job is not done: {jm['status']}"
+    jms = [json.loads((r / "metrics.json").read_text()) for r in runs]
+    assert all(j["status"] == "done" for j in jms), f"a job is not done: {[j['status'] for j in jms]}"
+    keys = ("draws", "open_tokens", "max_tokens", "n", "t3_sha256")
+    assert all({k: j["config"][k] for k in keys} == {k: jms[0]["config"][k] for k in keys} for j in jms), "the shards differ in setting"
+    assert len({j["commit"] for j in jms}) == 1, "the shards ran different commits"
+    jm = jms[0]
     t3 = {r["problem_index"]: r for r in rows(a.t3)}
     t1 = {r["problem_index"]: r for r in rows(a.t1)}
     assert sorted(t3) == sorted(t1) == list(range(500))
     stored = frozen["self_opened"]
     assert stored == sorted(i for i in t3 if self_opens(t3[i]["text"])), "the stored self-open list does not match T3"
     regen = frozen["regenerate"]
-    choices = {int(k): v for k, v in json.loads((run / "choices.json").read_text()).items()}
-    assert sorted(choices) == regen, "the job did not cover the regenerate list"
-    ans = rows(run / "answers.jsonl")
+    choices = {int(k): v for r in runs for k, v in json.loads((r / "choices.json").read_text()).items()}
+    assert sorted(choices) == regen, "the jobs did not cover the regenerate list"
+    ans = [x for r in runs for x in rows(r / "answers.jsonl")]
     by = {(r["problem_index"], r["draw"]): r for r in ans}
     assert len(by) == len(ans)
     main_r = {i: by[(i, choices[i]["main"])] for i in regen}
@@ -87,8 +91,10 @@ def main():
     m = {
         "experiment": "selfopen-01", "spec": "studies/theory/specs/SPEC_selfopen01.md",
         "entry": "studies/theory/results/engine/round-05/experiments.md r5-m10:theory:intervention",
-        "job": {k: jm.get(k) for k in ("commit", "job_id", "started_utc", "updated_utc", "wall_s")},
-        "job_config": jm["config"], "job_openings": jm["openings"], "job_counts": jm["counts"],
+        "jobs": [{**{k: j.get(k) for k in ("commit", "job_id", "started_utc", "updated_utc", "wall_s")}, "shard": j["config"]["shard"],
+                  "n_problems": j["config"]["n_problems"], "openings": j["openings"], "counts": j["counts"],
+                  "engine_load_s": j["engine"]["load_s"], "gpu": j["memory"]["gpu"]} for j in jms],
+        "job_config": {k: v for k, v in jm["config"].items() if k not in ("shard", "n_problems", "out")},
         "main": {"right_of_500": count, "n": 500, "cap_hits": sum(final[i]["cap_hit"] for i in range(500)),
                  "no_answer": sum(R.grade_v3(final[i]["gold"], final[i]["text"])["extracted_v3"] is None for i in range(500)),
                  "mean_generated_tokens": round(statistics.mean(tokens(final[i]) for i in range(500)), 1)},
