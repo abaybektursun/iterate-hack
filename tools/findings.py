@@ -87,6 +87,10 @@ TABLE = {
     "cue-on-code": {
         "group": NO_REWARD,
         "figure": lambda m: [points(m.ST[0]["passed"], m.ST[2]["passed"], m.N), "points", f"{m.N} code problems"]},
+    "how-much-of-the-gap": {
+        "group": NO_REWARD,
+        "figure": lambda m: [m._pc(m._one["share"][0]), "of the gap",
+                             f"328 harder problems, Think-SFT + cue; best rule on untrained weights {m._pc(m._L['one'][1]['share'][0])}"]},
     "imitation-beats-rl": {
         "group": NO_REWARD,
         "figure": lambda m: [signed(m.DATA["diff"]["hard328"]["vote"][0]), "points", "328 harder problems, Think-SFT over RL"]},

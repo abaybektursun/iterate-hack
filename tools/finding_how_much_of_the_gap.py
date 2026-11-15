@@ -269,7 +269,7 @@ PANELS = [
     ["new", "What is new",
      "Earlier results each measured the gap their own way. Here all 49 configurations on the 328 harder problems are rebuilt "
      "from committed per-problem rows with one definition: 0 % is Base + cue, 100 % is RL.",
-     ["DeepSeek-R1 (arXiv 2501.12948, section 4.1) reports that a smaller model trained to copy a stronger model's solutions "
+     ["DeepSeek-R1 (arXiv 2501.12948, Appendix F.1, Table 16) reports that a smaller model trained to copy a stronger model's solutions "
       "beats the same model trained with large-scale RL. We see the same order on a 7B model, on one scale with untrained "
       "rules, weight edits and equal tokens.",
       f"With no training, the best rule closes {_pc(_L['one'][1]['share'][0])} of the gap at one sample and "
