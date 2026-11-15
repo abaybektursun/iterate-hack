@@ -43,6 +43,12 @@ ROWS = {
         "picked": "Tier round 4: first of 6 candidates, and it needed no GPU run.",
         "checked": "64 checks of its numbers against stored readouts pass.",
     },
+    "two-token-limits.pdf": {
+        "claim": "Three gains between fine-tunes of one 7B model, scored at 16,384 and at 32,768 tokens: one holds, one grows by 6 points and one shrinks.",
+        "pages": 4,
+        "picked": "Tier round 5: the cap test of a scout on stored rows; it waited for one run at the larger limit.",
+        "checked": "153 checks of its numbers against stored readouts pass; 4 review passes.",
+    },
 }
 STEPS = [
     ("Tier", "Scout agents collect the project's findings, re-read the best at their files, search the literature and score novelty and evidence. Judges rank them."),
