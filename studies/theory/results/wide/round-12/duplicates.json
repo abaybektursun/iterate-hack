@@ -1,0 +1,12 @@
+{"pairs": [
+  {"new": "round-12/s1-a", "earlier": "run-02/f2-m01", "reason": "a short per-sample token budget cannot reach hard328 solutions that need about 5,000-14,000 tokens, so votes over short samples miss them"},
+  {"new": "round-12/s2-a", "earlier": "r5-m03-rival", "reason": "the top-8 edit is an incomplete switch that works sample by sample: flipped samples take on RL's deliberative policy, the rest stay in the plain-base register and fail fast"},
+  {"new": "round-12/s2-b", "earlier": "round-10/problems-m06", "reason": "Code-RL's short-answer finishing habit, carried in its directions, makes math answers commit and stop before the derivation is complete"},
+  {"new": "round-12/s3-a", "earlier": "run-02/f2-m02", "reason": "the cued base's wrong values scatter while right answers coincide, so vote accuracy keeps rising with more samples instead of stopping at a ceiling"},
+  {"new": "round-12/s3-b", "earlier": "run-06/f2-m04", "reason": "more votes only clear chance errors and ties, then flatten at the problems whose modal answer is right (about pass@4) because problem-specific wrong answers recur"},
+  {"new": "round-12/s4-a", "earlier": "round-11/s2-b", "reason": "RL-Code's task policy lies almost entirely in its top-8 directions, so the edit is a compressed copy of RL-Code"},
+  {"new": "round-12/s4-b", "earlier": "round-10/problems-m03", "reason": "the base's code deficit is a failure to write a gradable final code artifact, not wrong logic, so any model that commits a clean final block recovers RL-Code's level"},
+  {"new": "round-12/s5-a", "earlier": "round-12/s1-a", "reason": "the 4,096-token cap per sample cuts long right answers before they finish, so the vote can reach only pass-within-4,096"},
+  {"new": "round-12/s5-b", "earlier": "round-12/s1-b", "reason": "without the cue, the base at T 0.6 repeats the same wrong answer across samples, so the plurality vote locks onto it"},
+  {"new": "round-12/s6-a", "earlier": "r5-m03-rival", "reason": "the top-8 edit flips each sample into RL's answering mode or leaves it alone, so the gain is the mixture share of flipped samples"}
+]}

@@ -1115,6 +1115,73 @@ Files in `results/wide/round-11/`: `standing.md` / `standing.json` / `standing/`
 `mechanisms.json` (32 carried + 3 new), `forecasts.json` / `forecasts.md`, `cells.json` / `cell_forecasts.json` /
 `cells.md`, `experiments.md`, `run.json` (of the last run), `round11.log` (the three console logs), `jobs/`.
 
+## Round 12 (engine 11, score first)
+
+Plan `specs/SPEC_round12.md`. Board work-b66b4c (work-502f19). Engine 11 unchanged (code commit 521533f). Board
+snapshot 2026-11-15T20:38:56 UTC; one run, 12.4 minutes, exit 0, no fix needed. `surprises.md` committed at 20:39,
+`targets.json` 20:41, `forecasts.json` and `mechanisms.json` 20:50, before any of their numbers posted. Command:
+
+```
+uv run studies/theory/lib/forecast.py round studies/theory/results/wide/round-12 --from studies/theory/results/wide/round-11 studies/theory/results/wide/round-10 studies/theory/results/wide/round-09 studies/theory/results/forecast/run-0{2,3,4,5,6,7,8} studies/theory/results/forecast/cells-01
+```
+
+**New numbers.** 23 distinct numbers (79 rows across folders) from 6 results posted after 20:05 UTC: result-dd9239,
+result-0a0a5a (Think-SFT own chat format), result-ac7104 (round-09 cells m21, m18 from `round-09/measured.json`),
+result-6776d8 (RL's 8 directions on Think-SFT; Math + Code on the base), result-1c9e40 (vote over k of 12),
+result-d82083 (8 RL-Math directions at 2x, 448). result-42cc6c (M(2) at cap 32,768, 245) was not scored: it used seed
+3,010,000 and the open targets named seeds 3,100,000 (round-11 t02) and 3,000,000 (t26). result-d82083 is cell m29 of
+round-09 but has no row in `round-09/measured.json`, so the cell's own forecasts were not scored.
+
+**Standing** (`standing.md`). 93 mechanisms scored; 42 carried, 18 in the graveyard. Top: run-05/f2-m06 +7.19 nats on
+49 numbers from 9 results (bf16 rounding thresholds small edits), run-05/f2-m01 +6.79 on 10 (top-8 directions are a
+signed finishing dial), run-06/f2-m03 +5.19 on 10 (outcome reward piles into a few finishing directions; was +6.00),
+run-05/f2-m03 +3.74 on 9 (directions act in proportion to input-subspace excitation), run-02/f2-m04 +2.67 on 9 (capped
+samples abstain in a vote). Most carried records count the same number more than once (146 repeated rows: the same
+result and value scored in round-09, round-10 and round-11 targets); counted once, the top four keep their order
+(+6.75, +6.62, +6.40, +5.03) and round-09/training-m01, weights-m04 and grader-m04 fall to 0 or below. New in the
+graveyard: run-03/f2-m05 -7.34, round-09/problems-m03 -6.83, round-11/s6-b -8.11, s2-b -4.66, s4-b -3.94 (round 11's
+three surviving rivals, refuted by result-6776d8 and result-ac7104), round-09/grader-m03 -3.91, weights-m01 -3.29,
+run-04/f2-m03 -2.29. run-02/f2-m01 is no longer carried (-1.77).
+
+**Surprises** (`surprises.md`, 13; 5 new):
+
+| number | result | measured | reader-1 | reader-2 | inside |
+|---|---|---|---|---|---|
+| round-09 m21-r1: quick wrong, base + Code-RL top-8 at 1x, plain, MATH-500 first 250 | result-ac7104 | 60 | 25 [10, 45] | 18 [8, 32] | run-05/f2-m06 |
+| round-10 t16: cued base, vote over 12, MATH-500 | result-1c9e40 | 466 | 453.5 [446, 461] | 454 [446, 462] | nobody |
+| round-11 t22: base + Math 1x + Code 1x directions, HumanEval+/MBPP+ | result-6776d8 | 411 | 390 [372, 405] | 392 [372, 408] | nobody |
+| run-06 t14: Think-SFT own chat format, MATH-500, cap 32,768 | result-0a0a5a | 474 | 462 [451, 472] | 463 [452, 473] | run-06/f2-m01 |
+| run-04 t17: cued base, vote over 6, MATH-500 | result-1c9e40 | 456.6 | 450 [443, 456] | 449 [443, 456] | run-04/r6-account-rival, r6-m06 |
+
+**Rival pairs** (`pairs.json`, `duplicates.json`). Six jobs (surprises 1 to 6) wrote 12 rivals; the judge dropped 10,
+leaving s1-b (the plain base's confident wrong answers repeat across samples, so the vote locks onto them) and s6-b
+(Code-RL's directions hold a format part that saturates by 0.5x and a dose-graded correctness part). No pair survived
+whole: a dropped rival has a stand-in only when it restates a carried mechanism, and in every pair at least one
+member restated a mechanism that is not carried (run-02/f2-m01, r5-m03-rival, run-02/f2-m02, round-11/s2-b) or
+another rival. So `cells` did nothing: no `cells.json`, `experiments.md`, routes or free targets. The m21 pair (s2)
+named a cell, the same edit with the cue on the same 250 problems, quick wrong answers: s2-a (an incomplete
+sample-by-sample register switch the cue completes) 7 [2, 14] against s2-b (Code-RL's terse stop policy, which the cue
+does not remove) 40 [26, 56], in the proposal only; s2-a restates r5-m03-rival and s2-b round-10/problems-m06, and no
+blind forecast of the cell exists.
+
+**SPEC_round12 hypotheses.** Z1 (12 or more new numbers from 4 or more results): holds, 23 from 6. Z2 (a carried
+mechanism with gain on 8 or more results): holds, 13 mechanisms (run-05/f2-m01 and run-06/f2-m03 on 10;
+round-09/grader-m01 +2.39 on 12). Z3 (2 or more new surprises): holds, 5. Z4 (the m21 surprise gets a pair with
+disjoint blind intervals on a named cell): refuted, both members were judged restatements and no cell was forecast.
+Z5 (under 25 minutes): holds, 12.4.
+
+**Forecasts written after their result.** round-11 t07, t08, t11, t12 (result-dd9239 posted 20:07:48; round 11's
+forecast jobs wrote 20:08:53 to 20:12:26), and older rows still in carried records: round-09 t04-t07 (result-6832a8,
+17:54:56) for all round-09 lens mechanisms, t13-t14 (result-d02d46, 17:56:01) for the problems, training, grader,
+sampling and stopping lenses, t08-t12 (result-306787, 18:00:54) for sampling and stopping (lens jobs finished 17:55:36
+to 18:03:05). Every such job read the board snapshot taken before the result, so none saw it, but the record rule
+"measured after the forecast" is broken: `find_measured` takes results from the snapshot time, not from the time each
+forecast was written.
+
+Files in `results/wide/round-12/`: `standing.md` / `standing.json` / `standing/`, `graveyard.json`, `surprises.md` /
+`surprises.json`, `targets.json` / `work.md` (20 targets), `pairs.json`, `duplicates.json`, `mechanisms.json` (42
+carried + 2 new), `forecasts.json` / `forecasts.md`, `run.json`, `round12.log`, `jobs/`.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in
