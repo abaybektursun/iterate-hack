@@ -1,0 +1,50 @@
+{
+ "theory": "r5-m03-rival",
+ "items": [
+  {
+   "k": 1,
+   "experiment": "Plain-base T 1.0 wrong rate on the problems where top8 plain gives a quick finished-wrong answer.",
+   "original": 0.45454545454545453,
+   "replicated": 0.45454545454545453,
+   "status": "replicated",
+   "script": "replication/r5-m03-rival.duel/p1.py",
+   "not_computable": null
+  },
+  {
+   "k": 2,
+   "experiment": "Difficulty-controlled contrast: plain-base T 1.0 wrong rate on top8's quick-wrong problems minus its wrong rate on top8-right problems that the cued base solves in at least 3 of 4 samples.",
+   "original": -0.05732789637802832,
+   "replicated": -0.05732789637802832,
+   "status": "replicated",
+   "script": "replication/r5-m03-rival.duel/p2.py",
+   "not_computable": null
+  },
+  {
+   "k": 3,
+   "experiment": "Plain-base T 0.6 wrong rate (a second, independent plain sample) on the problems where top8 plain gives a quick finished-wrong answer.",
+   "original": 0.3181818181818182,
+   "replicated": 0.3181818181818182,
+   "status": "replicated",
+   "script": "replication/r5-m03-rival.duel/p3.py",
+   "not_computable": null
+  },
+  {
+   "k": 5,
+   "experiment": "Difficulty dependence of the plain register at T 0.6. The same contrast on the plain base's T 0.6 / top-p 0.95 answers that do not self-open: accuracy on cued-4/4 problems minus accuracy on cued <= 1/4 problems.",
+   "original": 0.4912280701754387,
+   "replicated": 0.4912280701754387,
+   "status": "replicated",
+   "script": "replication/r5-m03-rival.duel/p5.py",
+   "not_computable": null
+  },
+  {
+   "k": 6,
+   "experiment": "Per-problem persistence of plain-base failures at fixed difficulty. On problems the cued base solves in all 4 samples, the plain-base T 1.0 wrong rate when the plain-base T 0.6 answer to the same problem is wrong, minus the T 1.0 wrong rate when that T 0.6 answer is right.",
+   "original": 0.08159779614325069,
+   "replicated": 0.08159779614325069,
+   "status": "replicated",
+   "script": "replication/r5-m03-rival.duel/p6.py",
+   "not_computable": null
+  }
+ ]
+}

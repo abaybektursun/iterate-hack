@@ -1,0 +1,2 @@
+sft1_cue median m: 3349.0 pooled cap-hit rows: 9 of which short: 0
+{"measured": 0.0, "n": 100, "interval": [0.0, 0.0], "interval_kind": "bootstrap", "refuted_by_met": false, "alt_measured": 0.0, "not_computable": null, "example_row": {"problem_index": 9, "score_v3": 0, "cap_hit": true, "n_generated": 16384}}

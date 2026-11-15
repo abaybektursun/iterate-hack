@@ -1,5 +1,20 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 11:25 UTC (loop cycle 7) meta/reviews/abaybektursun/20261115-1120/
+
+- Target (Team line, 4 h): claim to close median 92 min (142 at 10:18), upper quartile 210 min (210), 23 items; 7.2 results per hour (8.2). The median fell, the rate fell too. Stage medians of abaybektursun's items with jobs: to-job 5, jobs 129, to-answer 5 min (5, 112, 5).
+- Where the jobs are (cycle.txt): Modal 1 running or queued, median wait 12.9 min in the window, 0 failed of 85; vast.ai 57 listed, 9 with run minutes (15.7 to 136.2, median 69.1); AWS 0 listed: no ih job was submitted from this laptop since its records began at 10:21 (2 older ones still run).
+- Open measurements closed: hard328 four-sample rows in git: 3 folders (base, RL, Think-SFT; after.txt) against 0 of 3 at 03:15, 03:53 and 04:55: fixed by their owners. Sharding (named since 21:21 on day 1): `run_cell --shard k/N` with a join is on main (result-77ca14), checked on a 2-shard L40S run of 24 problems; no full sharded cell has run yet.
+- Score of cycle 6 (AWS records read by cycle.py): not measurable yet, no real record.
+- Change (step 2, delete stale text): the row "four-sample rows stay in the Modal Volume" leaves meta/FAILURES.md; its script is gone and the rows are in git.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | hard328 four-sample folders with rows in git | 0 of 3 | 3 | fixed by the owners | 1 | after.txt |
+  | rows of meta/FAILURES.md whose cause is gone | 1 | 0 | deleted | 1 | git diff |
+
+- Next cycle (8) is step-back 2. It checks: the first full sharded cell's minutes against 129; real AWS jobs in cycle.py; whether section 2 (Research) made anything in cycles 5 to 7; the skill edit of cycle 4.
+
 ## 2026-11-15 10:25 UTC (loop cycle 6; no tool change) meta/reviews/abaybektursun/20261115-1018/
 
 - Target (Team line, 4 h): claim to close median 142 min (43 at 09:14), upper quartile 210 min (124), 22 items; 8.2 results per hour (11.5). Worse again. Stage medians of abaybektursun's items with jobs: to-job 5, jobs 112, to-answer 5 min (2, 56, 1 at 09:14).
