@@ -25,8 +25,8 @@ PAGE = r"""<!doctype html>
    on a cool grey table, with a cast shadow in place of the glow. The light comes from the upper left in both. */
 :root {
   color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #8b97a1; --rule: #d3d9de;
-  --blue: #1f43d6; --red: #cf2338; --on-blue: #fff;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
+  --blue: #1f43d6; --red: #c41e34; --on-blue: #fff;
   --pl: .56; --pc: .15; --dim: .16;
   --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
   --rim-a: rgba(16, 24, 32, .28); --rim-b: rgba(16, 24, 32, .58); --rim-c: rgba(16, 24, 32, .9);
@@ -35,7 +35,7 @@ PAGE = r"""<!doctype html>
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #5f6c77; --rule: #1c2630;
+    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #788590; --rule: #1c2630;
     --blue: #8fb1ff; --red: #ff6b7c; --on-blue: #080c11;
     --pl: .78; --pc: .13; --dim: .24;
     --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
@@ -210,7 +210,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 </div>
 <script>
 const $ = id => document.getElementById(id);
-const HUES = [300, 155, 70, 215, 340, 115, 255, 35];  // the board page's colors: the same person has the same color on both
+const HUES = [325, 150, 65, 195, 105, 45, 175, 350];  // the board page's colors: the same person has the same color on both
 const S = { data: null, m: null, g: null, error: null, readAt: 0, sel: null, key: "", seen: null, entered: false, token: 0, queue: [], flying: false };
 const still = matchMedia("(prefers-reduced-motion: reduce)");
 const narrow = matchMedia("(max-width: 900px)");
