@@ -53,6 +53,12 @@ def extract_v2(text: str) -> tuple:
     return "unopened", re.sub(r"\n[ \t]*CODE\s*$", "\n", body)
 
 
+def extract_v3(text: str) -> tuple:
+    """extract_v2, then without the lines that are only `CODE`, the placeholder of the prompt template (amendment 2)."""
+    mode, code = extract_v2(text)
+    return mode, re.sub(r"(?m)^[ \t]*CODE[ \t]*\n?", "", code)
+
+
 def program(p: dict, code: str) -> str:
     return p["pre"] + code + p["post"]
 

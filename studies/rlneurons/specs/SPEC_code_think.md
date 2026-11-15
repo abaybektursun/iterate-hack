@@ -49,3 +49,23 @@ Predictions under v2:
 5. It is above base + Code cue under v2: the paired 95 % interval is above 0. Refuted if it includes 0.
 6. It stays below RL-Code under v2: interval below 0. Refuted if it includes 0.
 7. Base and RL-Code change by at most 5 problems each. Refuted at 6 or more.
+
+## Amendment 2 (2026-11-15 22:50 UTC, after the v2 regrade, before any v3 regrade)
+
+v2 regrade (job ih-1115-223500-603f, instrument check passed on 538): Think-SFT + Code cue 318, + Math cue 293, base + Code cue
+318, base + Math cue 329, RL-Code 401. Predictions 4 (355 to 385) and 5 (above the base) are refuted; 6 and 7 hold. Read from
+the rows: only 17 of the 101 unopened programs pass, because 72 of them fail with `NameError: name 'CODE' is not defined`. The
+model copies the template's placeholder: `python`, a line `CODE`, then the program. Programs with a line that is only `CODE`:
+Think-SFT 100 (Code cue) and 126 (Math cue), base 10 and 11, RL-Code 0; none of them passes.
+
+Rule `code_lib.extract_v3` (new function): `extract_v2`, then without the lines that are only `CODE`. Applied to all five cells
+by `jobs/regrade_code.py --rule v3`; the instrument check adds the `CODE` line to the unopened form.
+
+Predictions under v3:
+
+8. Think-SFT + Code cue passes 360 to 395 of 538 (point 378). Refuted outside.
+9. It is above base + Code cue under v3: the paired 95 % interval is above 0. Refuted if it includes 0.
+10. Its count is below RL-Code's 401. Refuted at 401 or more.
+11. The base cells gain at most 10 problems each over v2; RL-Code stays 401. Refuted otherwise.
+
+This is the last rule: v3 is reported whatever it gives, next to v1 and v2.
