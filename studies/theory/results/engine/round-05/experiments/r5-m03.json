@@ -1,0 +1,90 @@
+{
+ "pair": "r5-m03",
+ "theory_state": "survives weak: duel state 'loses to rival' (-8.77, all 3 tests favour the rival's mixture account); its only offline gain rests o",
+ "duel_state": "loses to rival",
+ "statements": {
+  "r5-m03": "The top-8 singular directions per layer matrix of the Olmo-3.1 RL-Zero-Math weight change act like the opening cue: they switch the base into the deliberative 'Okay' register and nothing more, without RL's longer checking policy. So base + top8 on the plain prompt writes answers of the cued base's length and makes the cued base's quick finished-wrong errors, and adding the cue on top of top8 adds almost nothing.",
+  "r5-m03-rival": "The top-8 edit is an incomplete switch that happens or fails sample by sample. On most answers (about 85-90 %) it puts the base on a weak dose of RL's own policy: longer answers, RL-style checking, almost no quick wrong answers, errors only on hard problems. On the other 10-15 % the plain prompt leaves the base in its plain-base register: short answers, wrong about half the time whatever the problem's difficulty. So top8 plain is a mixture of RL-like answers and plain-base answers, not a copy of the cued base."
+ },
+ "no_intervention": {
+  "r5-m03": null,
+  "r5-m03-rival": null
+ },
+ "experiments": [
+  {
+   "id": "r5-m03:theory:g4",
+   "kind": "gpu",
+   "experiment": "New GPU cell: base + top-8 directions per matrix of the RL-Math delta (the WSP-1 top8 edit, jobs/wsp_edit.py), WITH the opening cue ids [1584, 2268, 33413] after the prompt. MATH-500, n = 500, 1 sample, T 1.0 / top-p 1.0, cap 16,384, grader v3, seed base 184,000,000, one H100 (about 2M tokens, about 35-40 min). This theory says the cue is redundant with the edit, so the score stays at top8 plain's level. The partial-dose rival predicts the cue still adds, as on the theta line, giving about 440-450.",
+   "unit": "right of 500",
+   "gpu_minutes": 45,
+   "pair": "r5-m03",
+   "proposer": "r5-m03",
+   "other": "r5-m03-rival",
+   "proposer_prediction": {
+    "value": 425,
+    "low": 412,
+    "high": 438
+   },
+   "other_prediction": {
+    "value": 448,
+    "low": 436,
+    "high": 460,
+    "why": "Under the mixture mechanism the plain prompt leaves about 10-15 % of top8 samples (~65 answers, ~half wrong) in the plain-base register; the cue moves those into the cued/RL-like register (~85-93 % right), adding ~25 right to top8 plain's 427, in line with the theta line where the cue adds +36 at a=0.25 (405->441) and +9 at a=0.5 (443->452)."
+   }
+  },
+  {
+   "id": "r5-m03:theory:intervention",
+   "kind": "intervention",
+   "unit": "right of 500",
+   "gpu_minutes": 35,
+   "experiment": "On the plain-prompt cell, prefill a different register-switching opening: Wang et al.'s 2-token cue '.\\n\\n' + 'Okay' (base tokenizer ids of the strings '.\\n\\n' and 'Okay') right after the prompt, instead of nothing; the team's 3-token cue ' line!\\n\\nOkay' is NOT used. Everything else as the plain base cell (T3). Model allenai/Olmo-3-1025-7B; set MATH-500; prompt plain MATH-500 prompt (chat template as in run_cell.py) + prefilled tokens '.\\n\\nOkay'; sampling T 1.0 / top-p 1.0; cap 16384; grader v3; samples 1; seeds seed of problem i = 185,000,000 + i. Count: right answers over all 500 MATH-500 problems by grader v3 on the single sample; cap hits and answers with no extracted answer count as wrong",
+   "best_known": {
+    "value": 453,
+    "item": "result-cbe0bc",
+    "setting": "base + cue, T 1.0 / top-p 1.0, vote over 4 samples with ties broken to the shortest finished sample (any-selection best; best single-sample cue cell is 405-418, result-60d899)"
+   },
+   "why": "The mechanism says the plain base's 224 is only a register failure and that any opening that switches into the deliberative 'Okay' register (top8 edit, the 3-token cue) lifts it to the cued base's level (~405-418) and no further, so a different 'Okay' opening should take the plain cell from 224 to about the cued level, slightly lower because Wang's cue lacks the prompt-fitting ' line!'.",
+   "pair": "r5-m03",
+   "proposer": "r5-m03",
+   "other": "r5-m03-rival",
+   "proposer_prediction": {
+    "value": 398,
+    "low": 375,
+    "high": 418
+   },
+   "other_prediction": {
+    "value": 401,
+    "low": 381,
+    "high": 419,
+    "why": "The mechanism treats the 'Okay' opening as what moves the base out of its plain register (224/500, about 600-token answers) into the cued register. Wang's '.\\n\\nOkay' is the base's own opening (knowledge-0b450e: the base starts this way unprompted on 168 of 500) and still forces the 'Okay' switch, so the base should land near the single-sample cued cell (405-418). It is set slightly lower because the RL-specific ' line!' tokens are missing, which may leave a few samples in the plain register."
+   }
+  },
+  {
+   "id": "r5-m03:rival:intervention",
+   "kind": "intervention",
+   "unit": "right of 500",
+   "gpu_minutes": 1,
+   "experiment": "Selection only, no new generation: majority vote over the 4 stored Day-1 #3 cued-base samples (attempt 0) in which finished answers with n_new <= 600 tokens (the plain-register signature: short, quick answers) are dropped from the vote unless every sample of the problem is that short; cap hits never vote; ties go to the lowest sample index. Model allenai/Olmo-3-1025-7B; set MATH-500; prompt plain MATH prompt + prefilled cue ids [1584, 2268, 33413] (\" line!\\n\\nOkay\"); sampling T 1.0 / top-p 1.0; cap 16384; grader v3; samples 4; seeds seed base 41,000,000 + problem index + 10,000*sample (stored rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl, attempt 0). Count: Problems of 500 whose voted extracted_v3 answer is right under grader v3 (a problem whose samples all hit the cap or give no answer counts wrong); computed from rows.jsonl attempt-0 rows using n_new, cap_hit, extracted_v3 and score_v3.",
+   "best_known": {
+    "value": 453,
+    "item": "result-cbe0bc",
+    "setting": "cue, T 1.0, vote over 4 stored samples, ties to the shortest finished sample (rule chosen on this set; held-out 451)"
+   },
+   "why": "The mechanism puts quick wrong answers in a short plain-base register that is wrong about half the time regardless of difficulty, so removing those votes should let the deliberative samples decide; since the cue already switches most cued-base samples, few are that short and the gain over the plain 446 vote is at most a few problems.",
+   "pair": "r5-m03",
+   "proposer": "r5-m03-rival",
+   "other": "r5-m03",
+   "proposer_prediction": {
+    "value": 447,
+    "low": 441,
+    "high": 453
+   },
+   "other_prediction": {
+    "value": 445,
+    "low": 437,
+    "high": 452,
+    "why": "Under r5-m03 the cued base's quick finished-wrong answers are only a few percent of its short answers (13 wrong of 263 at <= 2,000 tokens), so answers of <= 600 tokens are mostly right; dropping them removes about as many right votes as wrong ones, and the score stays near the plain 4-vote 446 instead of rising toward pass@4 467."
+   }
+  }
+ ]
+}

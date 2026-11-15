@@ -1,4 +1,4 @@
-"""Eight directions per weight matrix of the RL weight change lift the untrained model from 45 % to 85 % on MATH-500 (224 to 427 of 500).
+"""Eight directions per weight matrix of the RL weight change lift the untrained model from 44.8 % to 85.4 % on MATH-500 (224 to 427 of 500).
 
 The page of one finding, served at /finding/eight-directions (view.py serves every tools/finding_<slug>.py) and
 reached from its tile on /findings, which ICON draws. The picture is one weight matrix as a glass slab seen from
@@ -11,7 +11,7 @@ import json
 
 TITLE = "Eight directions"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "Reward training changed every weight a little. Which changes matter?"
-LINE = "Eight directions per matrix are enough: the untrained model rises from 45% to 85% on MATH-500."
+LINE = "Eight directions per matrix are enough: the untrained model rises from 44.8 % to 85.4 % on MATH-500."
 
 # Every number is copied from the artifact named here. None is typed from memory.
 RESULTS = "studies/rlneurons/results/wsp1/"
@@ -23,14 +23,16 @@ DATA = {
     "unit": "%",
     "max": 100,
     # What the reader switches between. The first is shown on load: start from the problem, not from the answer.
-    # value = right of 500 as a rounded percentage; right is copied from the cell named in "cell".
+    # value = right of 500 as a percentage with one decimal; right is copied from the cell named in "cell". short is the
+    # name on the switch at phone width.
     "states": [
-        {"key": "untrained", "name": "Untrained", "right": 224, "n": 500, "cell": "studies/rlneurons/results/rln4/grader_v3/readout.json cells.base_plain_1.0", "note": "The slab is one weight matrix. Each line is one direction in it: one pattern of change, strongest first."},
-        {"key": "random", "name": "8 random directions", "right": 197, "n": 500, "cell": "full500/rand8_plain",
+        {"key": "untrained", "name": "Untrained", "short": "Untrained", "right": 224, "n": 500, "cell": "studies/rlneurons/results/rln4/grader_v3/readout.json cells.base_plain_1.0",
+         "note": "The base model, with no part of the RL change added. The lines are the 8 strongest directions of that change."},
+        {"key": "random", "name": "8 random directions", "short": "8 random", "right": 197, "n": 500, "cell": "full500/rand8_plain",
          "note": "A control: eight random directions of the same size in each matrix."},
-        {"key": "rl-directions", "name": "8 RL directions", "right": 427, "n": 500, "cell": "full500/top8_plain",
+        {"key": "rl-directions", "name": "8 RL directions", "short": "8 RL", "right": 427, "n": 500, "cell": "full500/top8_plain",
          "note": "Only these 8 patterns of the RL change are added. The words are what two of them make the model more likely to write."},
-        {"key": "rl-trained", "name": "RL-trained", "right": 463, "n": 500, "cell": "studies/rlneurons/results/rln4/grader_v3/readout.json cells.rl_1.0",
+        {"key": "rl-trained", "name": "RL-trained", "short": "RL-trained", "right": 463, "n": 500, "cell": "studies/rlneurons/results/rln4/grader_v3/readout.json cells.rl_1.0",
          "note": "The model after reinforcement learning with a math reward."},
     ],
     # The strongest baseline or the target, drawn as a line. Never compare against zero.
@@ -52,11 +54,19 @@ DATA = {
               ]},
 }
 for _s in DATA["states"] + [DATA["reference"], DATA["cue"]]:
-    _s["value"] = round(100 * _s["right"] / _s["n"])
+    _s["value"] = round(100 * _s["right"] / _s["n"], 1)
 _value = {s["key"]: s["value"] for s in DATA["states"]}
-_right = {s["key"]: s["right"] for s in DATA["states"]}
 _edit = DATA["edit"]
-_left = round(100 * (_right["rl-trained"] - _right["rl-directions"]) / _edit["n"])  # points between the 8 directions and the RL-trained model
+# The same edits on the 328 harder problems with the cue, from branch sharedsub (cells.<name>.right_v3): the base model,
+# the 8 directions, 8 random directions, the RL-trained model, and the RL-trained model without the 8 directions.
+HARD = {"source": "studies/rlneurons/results/xreward/edits/readout.json", "branch": "sharedsub", "n": 328,
+        "base": 164, "top8": 192, "random": 158, "rl": 206, "without": 190}
+# Two results on the words the directions point at. Wait steering on branch claude/wait-steering-f535b2:
+# arms["steer:hold:L24:0.068"].right_v3 and stored_unsteered.right_per_sample_mean. Checking passages judged blind:
+# labels.real.passA.fix of items.base + items.rl.
+WAIT = {"source": "studies/jspace/results/steer/main-01/metrics.json", "branch": "claude/wait-steering-f535b2",
+        "steered": 413, "unsteered": 410.5, "n": 500}
+CHECKS = {"source": "studies/rlneurons/results/checks/judge-01/readout.json", "fix": 5, "n": 80}
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 PANELS = [
@@ -67,10 +77,12 @@ PANELS = [
       "Read through the output layer, they point at words of deliberation: Okay, Wait, perhaps. The model trained with a code reward "
       "has them too. The model trained by imitation has none."]],
     ["why", "Why it matters",
-     "It suggests what reward training taught this model: a habit of reasoning aloud and checking, more than new mathematics.",
-     [f"That fits the cue result: three opening tokens take the untrained model from {_value['untrained']} % to {DATA['cue']['value']} % with no training.",
+     "What reward training changed is small and readable, but the deliberation words it points at do not by themselves raise the score.",
+     [f"Making the untrained model with the cue write \"Wait\" as often as the RL model leaves its score unchanged: {WAIT['steered']} of "
+      f"{WAIT['n']}, against a mean of {WAIT['unsteered']} unsteered. Blind judges call {CHECKS['fix']} of {CHECKS['n']} checking passages a fix.",
       "A change this small and this readable is a target for editing weights directly, with no reward.",
-      f"The {_edit['k']} directions reach {_value['rl-directions']} % and the RL-trained model {_value['rl-trained']} %; that remainder is still unexplained."]],
+      f"On {HARD['n']} harder problems with the cue, the {_edit['k']} directions score {HARD['top8']}, random directions {HARD['random']}, "
+      f"the base model {HARD['base']} and the RL-trained model {HARD['rl']}: the {_edit['k']} directions carry two thirds of the gain."]],
     ["how", "How we know",
      f"We added only the {_edit['k']} strongest directions of the RL weight change in each of {_edit['n_edited']} weight matrices to the "
      f"untrained model and scored it on all {_edit['n']} MATH-500 problems.",
@@ -79,7 +91,8 @@ PANELS = [
       "Closest published result: Spectral Rewiring (arXiv 2607.03065), which keeps the RL gain with a compact part of the update on models that include this pair."]],
     ["limits", "What it does not show",
      "The directions were read from the RL-trained weights, so this is not yet a way to get the gain without reward.",
-     [f"RL with these 8 directions removed still scores {DATA['removed']['value']} of the first {DATA['removed']['n']} problems: the change is stored many times over.",
+     [f"The RL-trained model with these 8 directions removed keeps most of its score: {DATA['removed']['value']} of the first "
+      f"{DATA['removed']['n']} problems, and {HARD['without']} of {HARD['n']} harder ones against {HARD['rl']}. The gain is spread over many directions.",
       f"One direction per matrix is not enough: {DATA['one']['value']} of the first {DATA['one']['n']} problems.",
       "The words are what the directions point at through the output layer rather than proof of what they compute."]],
     ["run", "How to reproduce it",
@@ -87,7 +100,9 @@ PANELS = [
      ["studies/rlneurons/jobs/wsp_edit.py --recipe top8 --dir /tmp/theta",
       "studies/rlneurons/jobs/run_cell.py --model-path /tmp/theta --model-label top8 --prompt plain --set math500 --temperature 1.0 "
       "--top-p 1.0 --seed 180000000 --commit $(git rev-parse HEAD)",
-      "The run used commit " + DATA["commit"] + ". Its numbers are in " + RESULTS + "."]],
+      "The run used commit " + DATA["commit"] + ". Its numbers are in " + RESULTS + ". The harder problems are in " + HARD["source"]
+      + " on branch " + HARD["branch"] + ", the Wait steering in " + WAIT["source"] + " on branch " + WAIT["branch"]
+      + ", and the judged checks in " + CHECKS["source"] + "."]],
 ]
 
 # The icon of this finding's tile on /findings (tools/findings.py says how it is called): the page's own picture,
@@ -178,11 +193,14 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 .tick { fill: var(--faint); font-weight: 500; }
 .reftext { fill: var(--mute); font-weight: 600; text-anchor: end; }
 .value { font-weight: 330; letter-spacing: -.03em; text-anchor: middle; font-stretch: 100%; }
+.key { fill: var(--mute); font-weight: 500; text-anchor: middle; }
+.leader { stroke: var(--faint); stroke-width: 1; }
 .switch { display: inline-flex; align-self: center; margin-top: 18px; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
 .switch button { padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; transition: background .15s ease, color .15s ease; }
+.switch .short { display: none; }
 .switch button:hover { color: var(--blue); }
 .switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
-.note { align-self: center; margin: 12px 0 0; color: var(--mute); font-size: 15px; text-align: center; max-width: 60ch; min-height: 1.5em; }
+.note { align-self: center; margin: 12px 0 0; color: var(--mute); font-size: 15px; text-align: center; max-width: 60ch; height: 3em; }
 
 /* One drawn entrance */
 @keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
@@ -222,9 +240,11 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
   .stage { order: 3; margin-top: 22px; padding: 0; }
   .pane { order: 4; margin-top: 14px; }
   svg { max-height: none; }
-  .switch { display: grid; grid-template-columns: 1fr 1fr; align-self: stretch; border-radius: 24px; }
-  .switch button { text-align: center; padding: 10px 6px; }
-  .note { min-height: 3em; }
+  .switch { align-self: stretch; }
+  .switch button { flex: 1 1 auto; text-align: center; padding: 9px 4px; font-size: 14px; }
+  .switch .long { display: none; }
+  .switch .short { display: inline; }
+  .note { height: 4.5em; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }
@@ -258,7 +278,7 @@ const S = { state: 0, open: null, g: null, el: null, out: null, words: [], cur: 
 const still = matchMedia("(prefers-reduced-motion: reduce)");
 const narrow = matchMedia("(max-width: 900px)");
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-const f = n => n.toFixed(1), h = n => n.toFixed(2), mix = (a, b, q) => a + (b - a) * q;
+const f = n => n.toFixed(1), h = n => n.toFixed(2), mix = (a, b, q) => a + (b - a) * q, pct = v => `${v.toFixed(1)} %`;
 const ease = p => p < .5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2;
 
 /* What each condition looks like, each value from 0 to 1: sc, the eight lines lie scattered; plain, they show unlit;
@@ -281,8 +301,8 @@ const SCATTER = [[-.72, .64, -.1, .22], [.16, .76, .72, .3], [-.56, -.1, .06, -.
 const RAD = Math.PI / 180, TILT = 58, PC = Math.cos(TILT * RAD), PS = Math.sin(TILT * RAD);
 function geo() {
   return narrow.matches
-    ? { w: 720, h: 610, cx: 360, cy: 216, a: 136, b: 172, th: 20, r: 20, D: 1900, yaw: -4, lw: 1.8, glow: 5.5, lead: 14, fs: 26, wide: 86, nudge: 7, x0: 76, x1: 632, ay: 528, num: 128, fl: 25 }
-    : { w: 1000, h: 650, cx: 500, cy: 262, a: 250, b: 250, th: 26, r: 28, D: 2100, yaw: -8, lw: 1.5, glow: 9, lead: 16, fs: 20, wide: 104, nudge: 0, x0: 140, x1: 860, ay: 588, num: 104, fl: 18 };
+    ? { w: 720, h: 610, cx: 360, cy: 216, a: 136, b: 172, th: 20, r: 20, D: 1900, yaw: -4, lw: 1.8, glow: 5.5, lead: 14, fs: 26, wide: 86, nudge: 7, x0: 76, x1: 632, ay: 528, num: 128, fl: 27, kf: 26, ky: 36 }
+    : { w: 1000, h: 650, cx: 500, cy: 262, a: 250, b: 250, th: 26, r: 28, D: 2100, yaw: -8, lw: 1.5, glow: 9, lead: 16, fs: 20, wide: 104, nudge: 0, x0: 140, x1: 860, ay: 588, num: 104, fl: 18, kf: 18, ky: 56 };
 }
 const V = { c1: 1, s1: 0, c2: 1, s2: 0, px: 0, py: 0, tx: 0, ty: 0 };  // the view: a slow sway, plus a few degrees toward the pointer
 function aim(yaw, pitch) { V.c1 = Math.cos(yaw * RAD); V.s1 = Math.sin(yaw * RAD); V.c2 = Math.cos(pitch * RAD); V.s2 = Math.sin(pitch * RAD); }
@@ -346,19 +366,22 @@ function build() {
     `<g class="spec"><ellipse id="shine" rx="${f(g.a * .5)}" ry="${f(g.b * PC * .4)}" fill="url(#spec)"/></g>` +
     `<path class="rest" id="rest"/><path class="plain" id="plain"/><g class="bloom"><path class="halo" id="halo"/></g><path class="lit" id="lit"/>` +
     `<path class="rim draw" id="rim" pathLength="1"/>` +
+    `<g id="key"><line class="leader" id="leader"/><text class="key" font-size="${g.kf}">` +
+    `<tspan id="key1" x="${g.cx}" y="${g.ky}">One line is one direction:</tspan>` +
+    `<tspan id="key2" x="${g.cx}" y="${f(g.ky + g.kf * 1.3)}">one pattern of change in this weight matrix</tspan></text></g>` +
     S.words.map(o => `<text class="word" id="word-${o.i}" font-size="${g.fs}" font-stretch="${g.wide}%" style="text-anchor:${o.side > 0 ? "start" : "end"}" opacity="0">${esc(o.text)}</text>`).join("") +
     `<g class="scale"><line class="axis" x1="${g.x0}" y1="${g.ay}" x2="${g.x1}" y2="${g.ay}"/>` +
     `<text class="tick" x="${g.x0 - 12}" y="${f(g.ay + g.fl * .35)}" font-size="${g.fl}" style="text-anchor:end">0</text>` +
     `<text class="tick" x="${g.x1 + 12}" y="${f(g.ay + g.fl * .35)}" font-size="${g.fl}">${D.max}</text>` +
     `<line class="ref" x1="${f(x(ref.value))}" y1="${f(g.ay - g.fl * .7)}" x2="${f(x(ref.value))}" y2="${f(g.ay + g.fl * .55)}"/>` +
-    `<text class="reftext" x="${f(x(ref.value) + 4)}" y="${f(g.ay + g.fl * 1.75)}" font-size="${g.fl}">${esc(ref.name)} ${ref.value}${esc(D.unit || "")}</text>` +
+    `<text class="reftext" id="reftext" x="${f(x(ref.value) + 4)}" y="${f(g.ay + g.fl * 1.75)}" font-size="${g.fl}">${esc(ref.name)} ${pct(ref.value)}</text>` +
     `<line class="level" id="level" x1="${g.x0}" y1="${g.ay}" y2="${g.ay}"/><circle class="head" id="head" cy="${g.ay}" r="${f(g.fl * .32)}"/>` +
     `<text class="value" id="value" y="${f(g.ay - g.num * .2)}" font-size="${g.num}"></text></g>`;
   S.el = {};
-  ["glow", "side", "edge", "face", "wash", "shine", "rest", "plain", "halo", "lit", "rim", "fade-b", "fade-c", "fade-n", "level", "head", "value"].forEach(id => { S.el[id] = $(id); });
+  ["glow", "side", "edge", "face", "wash", "shine", "rest", "plain", "halo", "lit", "rim", "fade-b", "fade-c", "fade-n", "level", "head", "value", "reftext", "key", "leader"].forEach(id => { S.el[id] = $(id); });
   S.words.forEach(o => { o.el = $("word-" + o.i); });
   S.out = outline(g);
-  S.shown = "";
+  S.shown = ""; S.vw = 0;
 }
 
 function place(t) {
@@ -404,10 +427,18 @@ function place(t) {
     set(o.el, { x: f(p[0] + o.side * 9), y: f(p[1] + g.fs * .34 + o.dy), opacity: h(c.lab) });
   });
 
-  // The score: one number that moves along the scale.
-  const x = g.x0 + (g.x1 - g.x0) * c.v / D.max, text = String(Math.round(c.v)) + (D.unit || "");
-  set(E.level, { x2: f(x) }); set(E.head, { cx: f(x) }); set(E.value, { x: f(x) });
-  if (text !== S.shown) E.value.textContent = S.shown = text;
+  // The label of one line: a leader from the label down to the middle of the farthest line, gone while the lines are random.
+  const mid = at(0, row(K - 1), top);
+  set(E.leader, { x1: f(g.cx), y1: f(g.ky + g.kf * 1.3 + 10), x2: f(mid[0]), y2: f(mid[1] - 4) });
+  E.key.setAttribute("opacity", h(1 - c.sc));
+
+  // The score: one number that moves along the scale. It stays between the two end labels of the scale, and the name of
+  // the reference under the scale gives way when the score itself is the reference.
+  const x = g.x0 + (g.x1 - g.x0) * c.v / D.max, text = pct(c.v);
+  if (text !== S.shown) { E.value.textContent = S.shown = text; S.vw = E.value.getComputedTextLength(); }
+  set(E.level, { x2: f(x) }); set(E.head, { cx: f(x) });
+  set(E.value, { x: f(Math.min(Math.max(x, g.x0 + S.vw / 2), g.x1 - S.vw / 2)) });
+  E.reftext.setAttribute("opacity", h(1 - c.wash));
 }
 
 /* Motion that is always on: the view sways by a few degrees and leans toward the mouse, and the lit lines breathe
@@ -433,7 +464,7 @@ function choose(i, instant) {
   S.goal = { ...LOOK[st.key], v: st.value };
   if (instant || still.matches || !S.cur) { S.cur = { ...S.goal }; S.from = null; }
   else { S.from = { ...S.cur }; S.t0 = performance.now(); }
-  $("svg").setAttribute("aria-label", `${D.metric}: ${st.name} ${st.value} of ${D.max}, ${ref.name} ${ref.value} of ${D.max}.`);
+  $("svg").setAttribute("aria-label", `${D.metric}: ${st.name} ${pct(st.value)}, ${ref.name} ${pct(ref.value)}.`);
   $("note").textContent = st.note;
   $("switch").querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-pressed", k === i));
   place(S.t);
@@ -484,6 +515,7 @@ document.addEventListener("keydown", e => {
 addEventListener("hashchange", fromHash);
 addEventListener("popstate", fromHash);
 narrow.addEventListener("change", () => { build(); place(S.t); });
+document.fonts.ready.then(() => { S.shown = ""; place(S.t); });  // measure the score again in the loaded typeface
 const stage = $("stage");  // the view leans a few degrees toward a mouse, and settles back
 stage.addEventListener("pointermove", e => {
   if (e.pointerType !== "mouse" || still.matches) return;
@@ -495,7 +527,7 @@ stage.addEventListener("pointerleave", () => { V.tx = V.ty = 0; });
 
 $("problem").textContent = C.problem;
 $("say").innerHTML = esc(C.line).replace(/(?<![\w-])(\d+(?:[.,]\d+)*(?: ?%)?)/g, "<b>$1</b>");  // a number inside a name (MATH-500) stays plain
-$("switch").innerHTML = D.states.map((s, i) => `<button data-state="${i}" aria-pressed="false">${esc(s.name)}</button>`).join("");
+$("switch").innerHTML = D.states.map((s, i) => `<button data-state="${i}" aria-pressed="false" aria-label="${esc(s.name)}"><span class="long">${esc(s.name)}</span><span class="short">${esc(s.short)}</span></button>`).join("");
 build();
 aim(S.g.yaw, 0);  // the still frame
 fromHash(true);

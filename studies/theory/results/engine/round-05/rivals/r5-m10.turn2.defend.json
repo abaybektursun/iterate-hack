@@ -1,0 +1,5 @@
+[
+ {"k": 4, "value": -0.47, "low": -0.60, "high": -0.33, "why": "Non-self-opened answers are in the plain mode, whose accuracy (implied by 224/500 = s*0.82 + (1-s)*a with s about 0.34) is about 0.26-0.30 whatever later 'Wait'/'Hmm' markers appear, while the cued base is right about 0.75-0.80 on these somewhat harder problems."},
+ {"k": 5, "value": -0.03, "low": -0.15, "high": 0.10, "why": "The mode is fixed at the opening and nothing after it adds accuracy, so within plain-mode answers a later self-check marker gives about no gain, minus a little because those answers fall on longer, harder problems."},
+ {"k": 6, "value": -0.33, "low": -0.47, "high": -0.19, "why": "On the 328, plain 76/328 and cue 164/328 imply a plain-mode accuracy of about 0.12 against about 0.45 for the cue on the harder problems where plain answers show self-check markers; later markers don't shift the mode."}
+]

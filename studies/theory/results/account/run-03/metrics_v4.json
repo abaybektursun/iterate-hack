@@ -1,0 +1,1905 @@
+{
+ "theories": {
+  "r4-m06": {
+   "carried_from": null,
+   "offline": 0,
+   "not_scored": 0,
+   "computed": 0,
+   "inside": 0,
+   "within_noise": 0,
+   "outside": 0,
+   "total_gain": 0,
+   "unexpected_wins": [],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "untested",
+   "note": "",
+   "reasons": [],
+   "verdict": "",
+   "rows": [],
+   "heldout_rows": []
+  },
+  "r4-m10-rival": {
+   "carried_from": "round-04",
+   "offline": 6,
+   "not_scored": 0,
+   "computed": 6,
+   "inside": 5,
+   "within_noise": 0,
+   "outside": 1,
+   "total_gain": 7.809,
+   "unexpected_wins": [
+    5,
+    6
+   ],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "survives",
+   "note": "",
+   "reasons": [],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r4-m10-rival:p1",
+     "k": 1,
+     "measured": 0.956,
+     "value": 0.72,
+     "low": 0.48,
+     "high": 0.93,
+     "nulls": [
+      {
+       "value": 0.65,
+       "low": 0.38,
+       "high": 0.92
+      }
+     ],
+     "gain": 0.4317,
+     "inside": false,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m10-rival:p2",
+     "k": 2,
+     "measured": -0.027999999999999997,
+     "value": 0.01,
+     "low": -0.04,
+     "high": 0.06,
+     "nulls": [
+      {
+       "value": 0.025,
+       "low": -0.03,
+       "high": 0.085
+      }
+     ],
+     "gain": 0.5078,
+     "inside": true,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m10-rival:p3",
+     "k": 3,
+     "measured": 2.251572327044025,
+     "value": 2.0,
+     "low": 1.3,
+     "high": 2.9,
+     "nulls": [
+      {
+       "value": 1.8,
+       "low": 1.0,
+       "high": 3.0
+      }
+     ],
+     "gain": 0.3652,
+     "inside": true,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m10-rival:p4",
+     "k": 4,
+     "measured": 0.5541561712846348,
+     "value": 0.53,
+     "low": 0.41,
+     "high": 0.65,
+     "nulls": [
+      {
+       "value": 0.63,
+       "low": 0.49,
+       "high": 0.78
+      }
+     ],
+     "gain": 0.5046,
+     "inside": true,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m10-rival:p5",
+     "k": 5,
+     "measured": 0.48009950248756217,
+     "value": 0.58,
+     "low": 0.45,
+     "high": 0.71,
+     "nulls": [
+      {
+       "value": 0.76,
+       "low": 0.62,
+       "high": 0.89
+      }
+     ],
+     "gain": 3.0,
+     "inside": true,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m10-rival:p6",
+     "k": 6,
+     "measured": 0.06726598846379954,
+     "value": 0.25,
+     "low": -0.15,
+     "high": 0.65,
+     "nulls": [
+      {
+       "value": 0.75,
+       "low": 0.42,
+       "high": 1.08
+      }
+     ],
+     "gain": 3.0,
+     "inside": true,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r4-m11": {
+   "carried_from": null,
+   "offline": 0,
+   "not_scored": 0,
+   "computed": 0,
+   "inside": 0,
+   "within_noise": 0,
+   "outside": 0,
+   "total_gain": 0,
+   "unexpected_wins": [],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "untested",
+   "note": "",
+   "reasons": [],
+   "verdict": "",
+   "rows": [],
+   "heldout_rows": []
+  },
+  "r4-m12": {
+   "carried_from": null,
+   "offline": 0,
+   "not_scored": 0,
+   "computed": 0,
+   "inside": 0,
+   "within_noise": 0,
+   "outside": 0,
+   "total_gain": 0,
+   "unexpected_wins": [],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "untested",
+   "note": "",
+   "reasons": [],
+   "verdict": "",
+   "rows": [],
+   "heldout_rows": []
+  },
+  "r7-account": {
+   "carried_from": null,
+   "offline": 46,
+   "not_scored": 20,
+   "computed": 46,
+   "inside": 40,
+   "within_noise": 6,
+   "outside": 0,
+   "total_gain": 8.229,
+   "unexpected_wins": [
+    3
+   ],
+   "heldout_claims": 6,
+   "strikes": 0,
+   "state": "survives",
+   "note": "",
+   "reasons": [],
+   "verdict": "weak: duel state loses to rival (-5.16 nats over 3 replicated-or-computed separating tests, the script implementing the recipe as written); the rival's MATH-500 composition claim holds, but its general one-axis premise is contradicted by result-bf6124 (Think-SFT's distinct difficulty profile on hard328, 2PL beating Rasch) and its core is already on the board (result-5da8a9, result-f39ba8) and partly in Yue et al. 2504.13837.",
+   "rows": [
+    {
+     "id": "r7-account:p2",
+     "measured": 0.1111111111111111,
+     "value": 0.23,
+     "low": 0.12,
+     "high": 0.36,
+     "nulls": [
+      {
+       "value": 0.26,
+       "low": 0.12,
+       "high": 0.42
+      },
+      {
+       "value": 0.22,
+       "low": 0.1,
+       "high": 0.36
+      }
+     ],
+     "gain": -0.0696,
+     "k": 2,
+     "inside": false,
+     "within_noise": true,
+     "n": 27,
+     "interval": [
+      0.037037037037037035,
+      0.2222222222222222
+     ],
+     "refuted_by": "computed share below 0.12 or above 0.36",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p3",
+     "measured": 0.037037037037037035,
+     "value": 0.04,
+     "low": 0.0,
+     "high": 0.1,
+     "nulls": [
+      {
+       "value": 0.11,
+       "low": 0.02,
+       "high": 0.24
+      },
+      {
+       "value": 0.15,
+       "low": 0.05,
+       "high": 0.28
+      }
+     ],
+     "gain": 1.6868,
+     "k": 3,
+     "inside": true,
+     "within_noise": false,
+     "n": 27,
+     "interval": [
+      0.0,
+      0.1111111111111111
+     ],
+     "refuted_by": "computed share above 0.10",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p4",
+     "measured": 0.48148148148148145,
+     "value": 0.36,
+     "low": 0.22,
+     "high": 0.5,
+     "nulls": [
+      {
+       "value": 0.37,
+       "low": 0.2,
+       "high": 0.55
+      },
+      {
+       "value": 0.35,
+       "low": 0.2,
+       "high": 0.52
+      }
+     ],
+     "gain": -0.1185,
+     "k": 4,
+     "inside": true,
+     "within_noise": false,
+     "n": 27,
+     "interval": [
+      0.3333333333333333,
+      0.6296296296296297
+     ],
+     "refuted_by": "computed share below 0.22 or above 0.50",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p5",
+     "measured": 0.37037037037037035,
+     "value": 0.37,
+     "low": 0.23,
+     "high": 0.51,
+     "nulls": [
+      {
+       "value": 0.25,
+       "low": 0.1,
+       "high": 0.42
+      },
+      {
+       "value": 0.27,
+       "low": 0.13,
+       "high": 0.43
+      }
+     ],
+     "gain": 0.7808,
+     "k": 5,
+     "inside": true,
+     "within_noise": false,
+     "n": 27,
+     "interval": [
+      0.2222222222222222,
+      0.5185185185185185
+     ],
+     "refuted_by": "computed share below 0.23 or above 0.51",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p6",
+     "measured": 0.0,
+     "value": 0.0,
+     "low": 0.0,
+     "high": 0.02,
+     "nulls": [
+      {
+       "value": 0.003,
+       "low": 0.0,
+       "high": 0.025
+      },
+      {
+       "value": 0.005,
+       "low": 0.0,
+       "high": 0.03
+      }
+     ],
+     "gain": 0.0842,
+     "k": 6,
+     "inside": true,
+     "within_noise": false,
+     "n": 27,
+     "interval": [
+      0.0,
+      0.0
+     ],
+     "refuted_by": "computed share above 0.02",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p7",
+     "measured": -5,
+     "value": -5,
+     "low": -9,
+     "high": 3,
+     "nulls": [
+      {
+       "value": -5,
+       "low": -16,
+       "high": 7
+      },
+      {
+       "value": -5,
+       "low": -9,
+       "high": -1
+      }
+     ],
+     "gain": -0.0108,
+     "k": 7,
+     "inside": true,
+     "within_noise": false,
+     "n": 500,
+     "interval": [
+      -18,
+      8
+     ],
+     "refuted_by": "computed net below -9 or above 3",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-account:p14",
+     "measured": 52,
+     "value": 53,
+     "low": 50,
+     "high": 54,
+     "nulls": [
+      {
+       "value": 53,
+       "low": 50,
+       "high": 56
+      },
+      {
+       "value": 53,
+       "low": 50,
+       "high": 56
+      }
+     ],
+     "gain": 0.2175,
+     "k": 14,
+     "inside": true,
+     "within_noise": false,
+     "n": 500,
+     "interval": [
+      39,
+      66
+     ],
+     "refuted_by": "computed net below 50 or above 54",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-account:p21",
+     "measured": 45,
+     "value": 42,
+     "low": 39,
+     "high": 43,
+     "nulls": [
+      {
+       "value": 42,
+       "low": 39,
+       "high": 45
+      },
+      {
+       "value": 42,
+       "low": 39,
+       "high": 45
+      }
+     ],
+     "gain": -1.2858,
+     "k": 21,
+     "inside": false,
+     "within_noise": true,
+     "n": 328,
+     "interval": [
+      33,
+      57
+     ],
+     "refuted_by": "computed net below 39 or above 43",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-account:p28",
+     "measured": 103,
+     "value": 107,
+     "low": 96,
+     "high": 117,
+     "nulls": [
+      {
+       "value": 108,
+       "low": 95,
+       "high": 120
+      },
+      {
+       "value": 108,
+       "low": 96,
+       "high": 118
+      }
+     ],
+     "gain": 0.1616,
+     "k": 28,
+     "inside": true,
+     "within_noise": false,
+     "n": 500,
+     "interval": [
+      86,
+      119
+     ],
+     "refuted_by": "computed net below 96 or above 117",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-account:p30",
+     "measured": 0.22807017543859648,
+     "value": 0.24,
+     "low": 0.13,
+     "high": 0.36,
+     "nulls": [
+      {
+       "value": 0.24,
+       "low": 0.12,
+       "high": 0.37
+      },
+      {
+       "value": 0.22,
+       "low": 0.11,
+       "high": 0.35
+      }
+     ],
+     "gain": 0.0574,
+     "k": 30,
+     "inside": true,
+     "within_noise": false,
+     "n": 57,
+     "interval": [
+      0.14035087719298245,
+      0.3333333333333333
+     ],
+     "refuted_by": "computed share below 0.13 or above 0.36",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p31",
+     "measured": 0.03508771929824561,
+     "value": 0.04,
+     "low": 0.0,
+     "high": 0.1,
+     "nulls": [
+      {
+       "value": 0.1,
+       "low": 0.03,
+       "high": 0.2
+      },
+      {
+       "value": 0.13,
+       "low": 0.04,
+       "high": 0.25
+      }
+     ],
+     "gain": 1.5361,
+     "k": 31,
+     "inside": true,
+     "within_noise": false,
+     "n": 57,
+     "interval": [
+      0.0,
+      0.07017543859649122
+     ],
+     "refuted_by": "computed share above 0.10",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p32",
+     "measured": 0.47368421052631576,
+     "value": 0.29,
+     "low": 0.17,
+     "high": 0.42,
+     "nulls": [
+      {
+       "value": 0.34,
+       "low": 0.2,
+       "high": 0.5
+      },
+      {
+       "value": 0.36,
+       "low": 0.22,
+       "high": 0.52
+      }
+     ],
+     "gain": -1.8244,
+     "k": 32,
+     "inside": false,
+     "within_noise": true,
+     "n": 57,
+     "interval": [
+      0.3684210526315789,
+      0.5789473684210527
+     ],
+     "refuted_by": "computed share below 0.17 or above 0.42",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p33",
+     "measured": 0.2631578947368421,
+     "value": 0.43,
+     "low": 0.3,
+     "high": 0.56,
+     "nulls": [
+      {
+       "value": 0.31,
+       "low": 0.17,
+       "high": 0.46
+      },
+      {
+       "value": 0.28,
+       "low": 0.15,
+       "high": 0.43
+      }
+     ],
+     "gain": -2.0596,
+     "k": 33,
+     "inside": false,
+     "within_noise": true,
+     "n": 57,
+     "interval": [
+      0.17543859649122806,
+      0.3684210526315789
+     ],
+     "refuted_by": "computed share below 0.30 or above 0.56",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p34",
+     "measured": 0.0,
+     "value": 0.0,
+     "low": 0.0,
+     "high": 0.02,
+     "nulls": [
+      {
+       "value": 0.003,
+       "low": 0.0,
+       "high": 0.025
+      },
+      {
+       "value": 0.005,
+       "low": 0.0,
+       "high": 0.03
+      }
+     ],
+     "gain": 0.0842,
+     "k": 34,
+     "inside": true,
+     "within_noise": false,
+     "n": 57,
+     "interval": [
+      0.0,
+      0.0
+     ],
+     "refuted_by": "computed share above 0.02",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p35",
+     "measured": 40,
+     "value": 40,
+     "low": 35,
+     "high": 44,
+     "nulls": [
+      {
+       "value": 40,
+       "low": 28,
+       "high": 52
+      },
+      {
+       "value": 40,
+       "low": 36,
+       "high": 44
+      }
+     ],
+     "gain": 0.2877,
+     "k": 35,
+     "inside": true,
+     "within_noise": false,
+     "n": 500,
+     "interval": [
+      26,
+      54
+     ],
+     "refuted_by": "computed net below 35 or above 44",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-account:p36",
+     "measured": 0.0,
+     "value": 0.0,
+     "low": 0.0,
+     "high": 0.04,
+     "nulls": [
+      {
+       "value": 0.03,
+       "low": 0.0,
+       "high": 0.1
+      },
+      {
+       "value": 0.03,
+       "low": 0.0,
+       "high": 0.1
+      }
+     ],
+     "gain": 1.4034,
+     "k": 36,
+     "inside": true,
+     "within_noise": false,
+     "n": 40,
+     "interval": [
+      0.0,
+      0.0
+     ],
+     "refuted_by": "computed share above 0.04",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p37",
+     "measured": 0.375,
+     "value": 0.3,
+     "low": 0.17,
+     "high": 0.43,
+     "nulls": [
+      {
+       "value": 0.3,
+       "low": 0.16,
+       "high": 0.45
+      },
+      {
+       "value": 0.3,
+       "low": 0.16,
+       "high": 0.46
+      }
+     ],
+     "gain": 0.0259,
+     "k": 37,
+     "inside": true,
+     "within_noise": false,
+     "n": 40,
+     "interval": [
+      0.25,
+      0.5
+     ],
+     "refuted_by": "computed share below 0.17 or above 0.43",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p38",
+     "measured": 0.025,
+     "value": 0.03,
+     "low": 0.0,
+     "high": 0.09,
+     "nulls": [
+      {
+       "value": 0.08,
+       "low": 0.01,
+       "high": 0.18
+      },
+      {
+       "value": 0.09,
+       "low": 0.01,
+       "high": 0.2
+      }
+     ],
+     "gain": 1.2709,
+     "k": 38,
+     "inside": true,
+     "within_noise": false,
+     "n": 40,
+     "interval": [
+      0.0,
+      0.075
+     ],
+     "refuted_by": "computed share above 0.09",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p39",
+     "measured": 0.25,
+     "value": 0.3,
+     "low": 0.17,
+     "high": 0.44,
+     "nulls": [
+      {
+       "value": 0.22,
+       "low": 0.1,
+       "high": 0.37
+      },
+      {
+       "value": 0.2,
+       "low": 0.08,
+       "high": 0.35
+      }
+     ],
+     "gain": -0.0612,
+     "k": 39,
+     "inside": true,
+     "within_noise": false,
+     "n": 40,
+     "interval": [
+      0.125,
+      0.375
+     ],
+     "refuted_by": "computed share below 0.17 or above 0.44",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p40",
+     "measured": 0.35,
+     "value": 0.37,
+     "low": 0.23,
+     "high": 0.51,
+     "nulls": [
+      {
+       "value": 0.37,
+       "low": 0.2,
+       "high": 0.53
+      },
+      {
+       "value": 0.37,
+       "low": 0.22,
+       "high": 0.54
+      }
+     ],
+     "gain": 0.1417,
+     "k": 40,
+     "inside": true,
+     "within_noise": false,
+     "n": 40,
+     "interval": [
+      0.225,
+      0.475
+     ],
+     "refuted_by": "computed share below 0.23 or above 0.51",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p41",
+     "measured": 0.0,
+     "value": 0.0,
+     "low": 0.0,
+     "high": 0.03,
+     "nulls": [
+      {
+       "value": 0.005,
+       "low": 0.0,
+       "high": 0.03
+      },
+      {
+       "value": 0.005,
+       "low": 0.0,
+       "high": 0.03
+      }
+     ],
+     "gain": 0.125,
+     "k": 41,
+     "inside": true,
+     "within_noise": false,
+     "n": 40,
+     "interval": [
+      0.0,
+      0.0
+     ],
+     "refuted_by": "computed share above 0.03",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p42",
+     "measured": 27,
+     "value": 26,
+     "low": 21,
+     "high": 30,
+     "nulls": [
+      {
+       "value": 26,
+       "low": 23,
+       "high": 29
+      },
+      {
+       "value": 26,
+       "low": 23,
+       "high": 29
+      }
+     ],
+     "gain": -0.3219,
+     "k": 42,
+     "inside": true,
+     "within_noise": false,
+     "n": 328,
+     "interval": [
+      15,
+      39
+     ],
+     "refuted_by": "computed net below 21 or above 30",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-account:p43",
+     "measured": 0.5272727272727272,
+     "value": 0.56,
+     "low": 0.43,
+     "high": 0.68,
+     "nulls": [
+      {
+       "value": 0.46,
+       "low": 0.26,
+       "high": 0.64
+      },
+      {
+       "value": 0.55,
+       "low": 0.38,
+       "high": 0.7
+      }
+     ],
+     "gain": 0.3262,
+     "k": 43,
+     "inside": true,
+     "within_noise": false,
+     "n": 55,
+     "interval": [
+      0.41818181818181815,
+      0.6363636363636364
+     ],
+     "refuted_by": "computed share below 0.43 or above 0.68",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p44",
+     "measured": 0.14545454545454545,
+     "value": 0.16,
+     "low": 0.07,
+     "high": 0.26,
+     "nulls": [
+      {
+       "value": 0.14,
+       "low": 0.05,
+       "high": 0.26
+      },
+      {
+       "value": 0.17,
+       "low": 0.07,
+       "high": 0.3
+      }
+     ],
+     "gain": 0.1437,
+     "k": 44,
+     "inside": true,
+     "within_noise": false,
+     "n": 55,
+     "interval": [
+      0.07272727272727272,
+      0.21818181818181817
+     ],
+     "refuted_by": "computed share below 0.07 or above 0.26",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p45",
+     "measured": 0.01818181818181818,
+     "value": 0.02,
+     "low": 0.0,
+     "high": 0.07,
+     "nulls": [
+      {
+       "value": 0.07,
+       "low": 0.01,
+       "high": 0.16
+      },
+      {
+       "value": 0.06,
+       "low": 0.0,
+       "high": 0.15
+      }
+     ],
+     "gain": 1.2854,
+     "k": 45,
+     "inside": true,
+     "within_noise": false,
+     "n": 55,
+     "interval": [
+      0.0,
+      0.05454545454545454
+     ],
+     "refuted_by": "computed share above 0.07",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p46",
+     "measured": 0.21818181818181817,
+     "value": 0.14,
+     "low": 0.06,
+     "high": 0.25,
+     "nulls": [
+      {
+       "value": 0.2,
+       "low": 0.08,
+       "high": 0.35
+      },
+      {
+       "value": 0.13,
+       "low": 0.04,
+       "high": 0.25
+      }
+     ],
+     "gain": -0.2577,
+     "k": 46,
+     "inside": true,
+     "within_noise": false,
+     "n": 55,
+     "interval": [
+      0.12727272727272726,
+      0.3090909090909091
+     ],
+     "refuted_by": "computed share below 0.06 or above 0.25",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p47",
+     "measured": 0.09090909090909091,
+     "value": 0.12,
+     "low": 0.04,
+     "high": 0.22,
+     "nulls": [
+      {
+       "value": 0.12,
+       "low": 0.03,
+       "high": 0.24
+      },
+      {
+       "value": 0.08,
+       "low": 0.01,
+       "high": 0.18
+      }
+     ],
+     "gain": -0.0405,
+     "k": 47,
+     "inside": true,
+     "within_noise": false,
+     "n": 55,
+     "interval": [
+      0.03636363636363636,
+      0.16363636363636364
+     ],
+     "refuted_by": "computed share below 0.04 or above 0.22",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p48",
+     "measured": 0.0,
+     "value": 0.0,
+     "low": 0.0,
+     "high": 0.02,
+     "nulls": [
+      {
+       "value": 0.003,
+       "low": 0.0,
+       "high": 0.025
+      },
+      {
+       "value": 0.005,
+       "low": 0.0,
+       "high": 0.03
+      }
+     ],
+     "gain": 0.0842,
+     "k": 48,
+     "inside": true,
+     "within_noise": false,
+     "n": 55,
+     "interval": [
+      0.0,
+      0.0
+     ],
+     "refuted_by": "computed share above 0.02",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p49",
+     "measured": 26,
+     "value": 25,
+     "low": 5,
+     "high": 45,
+     "nulls": [
+      {
+       "value": 25,
+       "low": 12,
+       "high": 38
+      },
+      {
+       "value": 25,
+       "low": 12,
+       "high": 38
+      }
+     ],
+     "gain": -0.4262,
+     "k": 49,
+     "inside": true,
+     "within_noise": false,
+     "n": 500,
+     "interval": [
+      10,
+      41
+     ],
+     "refuted_by": "computed net below 5 or above 45",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-account:p50",
+     "measured": 0.5901639344262295,
+     "value": 0.57,
+     "low": 0.43,
+     "high": 0.7,
+     "nulls": [
+      {
+       "value": 0.45,
+       "low": 0.25,
+       "high": 0.64
+      },
+      {
+       "value": 0.53,
+       "low": 0.35,
+       "high": 0.7
+      }
+     ],
+     "gain": 0.6614,
+     "k": 50,
+     "inside": true,
+     "within_noise": false,
+     "n": 61,
+     "interval": [
+      0.4918032786885246,
+      0.6885245901639344
+     ],
+     "refuted_by": "computed share below 0.43 or above 0.70",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p51",
+     "measured": 0.11475409836065574,
+     "value": 0.17,
+     "low": 0.08,
+     "high": 0.27,
+     "nulls": [
+      {
+       "value": 0.14,
+       "low": 0.05,
+       "high": 0.26
+      },
+      {
+       "value": 0.17,
+       "low": 0.06,
+       "high": 0.3
+      }
+     ],
+     "gain": -0.1228,
+     "k": 51,
+     "inside": true,
+     "within_noise": false,
+     "n": 61,
+     "interval": [
+      0.04918032786885246,
+      0.18032786885245902
+     ],
+     "refuted_by": "computed share below 0.08 or above 0.27",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p52",
+     "measured": 0.01639344262295082,
+     "value": 0.02,
+     "low": 0.0,
+     "high": 0.07,
+     "nulls": [
+      {
+       "value": 0.08,
+       "low": 0.01,
+       "high": 0.17
+      },
+      {
+       "value": 0.07,
+       "low": 0.0,
+       "high": 0.16
+      }
+     ],
+     "gain": 1.5361,
+     "k": 52,
+     "inside": true,
+     "within_noise": false,
+     "n": 61,
+     "interval": [
+      0.0,
+      0.04918032786885246
+     ],
+     "refuted_by": "computed share above 0.07",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p53",
+     "measured": 0.19672131147540983,
+     "value": 0.13,
+     "low": 0.05,
+     "high": 0.24,
+     "nulls": [
+      {
+       "value": 0.2,
+       "low": 0.08,
+       "high": 0.35
+      },
+      {
+       "value": 0.14,
+       "low": 0.04,
+       "high": 0.27
+      }
+     ],
+     "gain": -0.2347,
+     "k": 53,
+     "inside": true,
+     "within_noise": false,
+     "n": 61,
+     "interval": [
+      0.11475409836065574,
+      0.2786885245901639
+     ],
+     "refuted_by": "computed share below 0.05 or above 0.24",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p54",
+     "measured": 0.08196721311475409,
+     "value": 0.11,
+     "low": 0.04,
+     "high": 0.21,
+     "nulls": [
+      {
+       "value": 0.12,
+       "low": 0.03,
+       "high": 0.24
+      },
+      {
+       "value": 0.09,
+       "low": 0.01,
+       "high": 0.19
+      }
+     ],
+     "gain": 0.0684,
+     "k": 54,
+     "inside": true,
+     "within_noise": false,
+     "n": 61,
+     "interval": [
+      0.03278688524590164,
+      0.14754098360655737
+     ],
+     "refuted_by": "computed share below 0.04 or above 0.21",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p55",
+     "measured": 0.0,
+     "value": 0.0,
+     "low": 0.0,
+     "high": 0.02,
+     "nulls": [
+      {
+       "value": 0.003,
+       "low": 0.0,
+       "high": 0.025
+      },
+      {
+       "value": 0.005,
+       "low": 0.0,
+       "high": 0.03
+      }
+     ],
+     "gain": 0.0842,
+     "k": 55,
+     "inside": true,
+     "within_noise": false,
+     "n": 61,
+     "interval": [
+      0.0,
+      0.0
+     ],
+     "refuted_by": "computed share above 0.02",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p56",
+     "measured": 28,
+     "value": 11,
+     "low": -12,
+     "high": 32,
+     "nulls": [
+      {
+       "value": 11,
+       "low": -2,
+       "high": 24
+      },
+      {
+       "value": 11,
+       "low": 0,
+       "high": 23
+      }
+     ],
+     "gain": 1.2064,
+     "k": 56,
+     "inside": true,
+     "within_noise": false,
+     "n": 500,
+     "interval": [
+      12,
+      44
+     ],
+     "refuted_by": "computed net below -12 or above 32",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-account:p57",
+     "measured": 0.6052631578947368,
+     "value": 0.54,
+     "low": 0.39,
+     "high": 0.68,
+     "nulls": [
+      {
+       "value": 0.45,
+       "low": 0.25,
+       "high": 0.64
+      },
+      {
+       "value": 0.53,
+       "low": 0.36,
+       "high": 0.69
+      }
+     ],
+     "gain": 0.4408,
+     "k": 57,
+     "inside": true,
+     "within_noise": false,
+     "n": 76,
+     "interval": [
+      0.5,
+      0.6973684210526315
+     ],
+     "refuted_by": "computed share below 0.39 or above 0.68",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p58",
+     "measured": 0.14473684210526316,
+     "value": 0.17,
+     "low": 0.08,
+     "high": 0.28,
+     "nulls": [
+      {
+       "value": 0.14,
+       "low": 0.05,
+       "high": 0.26
+      },
+      {
+       "value": 0.17,
+       "low": 0.07,
+       "high": 0.3
+      }
+     ],
+     "gain": 0.039,
+     "k": 58,
+     "inside": true,
+     "within_noise": false,
+     "n": 76,
+     "interval": [
+      0.07894736842105263,
+      0.21052631578947367
+     ],
+     "refuted_by": "computed share below 0.08 or above 0.28",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p59",
+     "measured": 0.013157894736842105,
+     "value": 0.02,
+     "low": 0.0,
+     "high": 0.07,
+     "nulls": [
+      {
+       "value": 0.08,
+       "low": 0.01,
+       "high": 0.17
+      },
+      {
+       "value": 0.06,
+       "low": 0.0,
+       "high": 0.15
+      }
+     ],
+     "gain": 1.4502,
+     "k": 59,
+     "inside": true,
+     "within_noise": false,
+     "n": 76,
+     "interval": [
+      0.0,
+      0.039473684210526314
+     ],
+     "refuted_by": "computed share above 0.07",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p60",
+     "measured": 0.17105263157894737,
+     "value": 0.13,
+     "low": 0.05,
+     "high": 0.24,
+     "nulls": [
+      {
+       "value": 0.21,
+       "low": 0.09,
+       "high": 0.36
+      },
+      {
+       "value": 0.14,
+       "low": 0.05,
+       "high": 0.26
+      }
+     ],
+     "gain": 0.081,
+     "k": 60,
+     "inside": true,
+     "within_noise": false,
+     "n": 76,
+     "interval": [
+      0.10526315789473684,
+      0.25
+     ],
+     "refuted_by": "computed share below 0.05 or above 0.24",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p61",
+     "measured": 0.06578947368421052,
+     "value": 0.14,
+     "low": 0.05,
+     "high": 0.25,
+     "nulls": [
+      {
+       "value": 0.12,
+       "low": 0.03,
+       "high": 0.24
+      },
+      {
+       "value": 0.09,
+       "low": 0.01,
+       "high": 0.19
+      }
+     ],
+     "gain": -0.5657,
+     "k": 61,
+     "inside": true,
+     "within_noise": false,
+     "n": 76,
+     "interval": [
+      0.02631578947368421,
+      0.11842105263157894
+     ],
+     "refuted_by": "computed share below 0.05 or above 0.25",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p62",
+     "measured": 0.0,
+     "value": 0.0,
+     "low": 0.0,
+     "high": 0.02,
+     "nulls": [
+      {
+       "value": 0.003,
+       "low": 0.0,
+       "high": 0.025
+      },
+      {
+       "value": 0.005,
+       "low": 0.0,
+       "high": 0.03
+      }
+     ],
+     "gain": 0.0842,
+     "k": 62,
+     "inside": true,
+     "within_noise": false,
+     "n": 76,
+     "interval": [
+      0.0,
+      0.0
+     ],
+     "refuted_by": "computed share above 0.02",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-account:p63",
+     "measured": 18,
+     "value": 25,
+     "low": -5,
+     "high": 55,
+     "nulls": [
+      {
+       "value": 25,
+       "low": 12,
+       "high": 38
+      },
+      {
+       "value": 25,
+       "low": 12,
+       "high": 38
+      }
+     ],
+     "gain": -0.5176,
+     "k": 63,
+     "inside": true,
+     "within_noise": false,
+     "n": 500,
+     "interval": [
+      -2,
+      37
+     ],
+     "refuted_by": "computed net below -5 or above 55",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-account:p64",
+     "measured": 0.8620689655172413,
+     "value": 0.68,
+     "low": 0.55,
+     "high": 0.8,
+     "nulls": [
+      {
+       "value": 0.62,
+       "low": 0.42,
+       "high": 0.8
+      },
+      {
+       "value": 0.6,
+       "low": 0.42,
+       "high": 0.77
+      }
+     ],
+     "gain": 0.0526,
+     "k": 64,
+     "inside": false,
+     "within_noise": true,
+     "n": 29,
+     "interval": [
+      0.7586206896551724,
+      0.9655172413793104
+     ],
+     "refuted_by": "computed fraction below 0.55",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-account:p65",
+     "measured": 0.9333333333333333,
+     "value": 0.72,
+     "low": 0.56,
+     "high": 0.86,
+     "nulls": [
+      {
+       "value": 0.58,
+       "low": 0.35,
+       "high": 0.8
+      },
+      {
+       "value": 0.6,
+       "low": 0.35,
+       "high": 0.84
+      }
+     ],
+     "gain": 0.5637,
+     "k": 65,
+     "inside": false,
+     "within_noise": true,
+     "n": 15,
+     "interval": [
+      0.8,
+      1.0
+     ],
+     "refuted_by": "computed fraction below 0.50",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-account:p66",
+     "measured": 0.6153846153846154,
+     "value": 0.68,
+     "low": 0.48,
+     "high": 0.86,
+     "nulls": [
+      {
+       "value": 0.7,
+       "low": 0.45,
+       "high": 0.92
+      },
+      {
+       "value": 0.6,
+       "low": 0.35,
+       "high": 0.85
+      }
+     ],
+     "gain": 0.1758,
+     "k": 66,
+     "inside": true,
+     "within_noise": false,
+     "n": 13,
+     "interval": [
+      0.38461538461538464,
+      0.8461538461538461
+     ],
+     "refuted_by": "computed fraction below 0.45",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "k": 1,
+     "measured": 0.0,
+     "replication": null,
+     "not_scored": "0 by construction"
+    },
+    {
+     "k": 8,
+     "measured": 0.0,
+     "replication": null,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 9,
+     "measured": 0.24615384615384617,
+     "replication": 0.24615384615384617,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 10,
+     "measured": 0.03076923076923077,
+     "replication": 0.03076923076923077,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 11,
+     "measured": 0.4307692307692308,
+     "replication": 0.4307692307692308,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 12,
+     "measured": 0.2923076923076923,
+     "replication": 0.2923076923076923,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 13,
+     "measured": 0.0,
+     "replication": 0.0,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 15,
+     "measured": 0.0,
+     "replication": 0.0,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 16,
+     "measured": 0.36538461538461536,
+     "replication": 0.36538461538461536,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 17,
+     "measured": 0.019230769230769232,
+     "replication": 0.019230769230769232,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 18,
+     "measured": 0.21153846153846154,
+     "replication": 0.21153846153846154,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 19,
+     "measured": 0.40384615384615385,
+     "replication": 0.40384615384615385,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 20,
+     "measured": 0.0,
+     "replication": 0.0,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 22,
+     "measured": 0.5982142857142857,
+     "replication": 0.5982142857142857,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 23,
+     "measured": 0.17857142857142858,
+     "replication": 0.17857142857142858,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 24,
+     "measured": 0.008928571428571428,
+     "replication": 0.008928571428571428,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 25,
+     "measured": 0.15178571428571427,
+     "replication": 0.15178571428571427,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 26,
+     "measured": 0.0625,
+     "replication": 0.0625,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 27,
+     "measured": 0.0,
+     "replication": 0.0,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 29,
+     "measured": 0.0,
+     "replication": null,
+     "not_scored": "0 by construction"
+    }
+   ],
+   "heldout_rows": [
+    {
+     "id": "t58",
+     "measured": 103,
+     "value": 103,
+     "low": 98,
+     "high": 108,
+     "nulls": [
+      {
+       "value": 40,
+       "low": 20,
+       "high": 70
+      },
+      {
+       "value": 60,
+       "low": 28,
+       "high": 105
+      }
+     ],
+     "gain": 3.0,
+     "strike": false
+    },
+    {
+     "id": "t60",
+     "measured": 478,
+     "value": 478,
+     "low": 472,
+     "high": 484,
+     "nulls": [
+      {
+       "value": 250,
+       "low": 150,
+       "high": 350
+      },
+      {
+       "value": 250,
+       "low": 130,
+       "high": 390
+      }
+     ],
+     "gain": 3.0,
+     "strike": false
+    },
+    {
+     "id": "t46",
+     "measured": 390,
+     "value": 410,
+     "low": 398,
+     "high": 422,
+     "nulls": [
+      {
+       "value": 408,
+       "low": 394,
+       "high": 422
+      },
+      {
+       "value": 408,
+       "low": 394,
+       "high": 422
+      }
+     ],
+     "gain": -1.3676,
+     "strike": false
+    },
+    {
+     "id": "t47",
+     "measured": 372,
+     "value": 408,
+     "low": 395,
+     "high": 420,
+     "nulls": [
+      {
+       "value": 405,
+       "low": 390,
+       "high": 420
+      },
+      {
+       "value": 405,
+       "low": 389,
+       "high": 420
+      }
+     ],
+     "gain": -3.0,
+     "strike": false
+    },
+    {
+     "id": "t48",
+     "measured": 155,
+     "value": 162,
+     "low": 150,
+     "high": 174,
+     "nulls": [
+      {
+       "value": 162,
+       "low": 148,
+       "high": 176
+      },
+      {
+       "value": 162,
+       "low": 148,
+       "high": 176
+      }
+     ],
+     "gain": 0.032,
+     "strike": false
+    },
+    {
+     "id": "t49",
+     "measured": 130,
+     "value": 161,
+     "low": 148,
+     "high": 174,
+     "nulls": [
+      {
+       "value": 160,
+       "low": 146,
+       "high": 174
+      },
+      {
+       "value": 160,
+       "low": 145,
+       "high": 175
+      }
+     ],
+     "gain": -1.8382,
+     "strike": false
+    }
+   ]
+  }
+ }
+}

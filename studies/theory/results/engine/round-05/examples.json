@@ -1,0 +1,63 @@
+[
+ {
+  "theory": "r5-m08",
+  "kind": "computed test inside its interval",
+  "id": "r5-m08:p3",
+  "experiment": "Code 3.1 cue minus Code 3.0 cue, right answers on the shorter half (quartiles 1 and 2 by RL answer length, 250 problems) of MATH-500, T 1.0, grader v3",
+  "script": "studies/theory/results/engine/round-05/tests/r5-m08/p3.py",
+  "output": "studies/theory/results/engine/round-05/tests/r5-m08/p3.out.txt",
+  "measured": -3,
+  "counts": {
+   "code31_q12_right": 243,
+   "code30_q12_right": 246,
+   "n": 250
+  },
+  "prediction": {
+   "value": 1.5,
+   "low": -4,
+   "high": 5
+  },
+  "nulltest-1": {
+   "value": 10,
+   "low": 2,
+   "high": 20
+  },
+  "nulltest-2": {
+   "value": 15,
+   "low": 5,
+   "high": 26
+  },
+  "gain": 2.6168,
+  "note": "Both readers expected Code 3.1 ahead by 10 to 15 problems on the short half; it is 3 behind. The test locates the gap along answer length; it does not test the theory's cause (cap hits), which the review found contradicted (5 cap hits of 500)."
+ },
+ {
+  "theory": "r5-m07",
+  "kind": "computed test outside its interval, refuting condition met",
+  "id": "r5-m07:p1",
+  "experiment": "Share of RL step-100 plain MATH-500 answers at T 0.6 / top-p 0.95 (sample 0) that open with the RL cue's first token 'line'",
+  "script": "studies/theory/results/engine/round-05/tests/r5-m07/p1.py",
+  "output": "studies/theory/results/engine/round-05/tests/r5-m07/p1.out.txt",
+  "measured": 0.034,
+  "counts": {
+   "n": 500,
+   "open_with_line": 17
+  },
+  "prediction": {
+   "value": 0.68,
+   "low": 0.4,
+   "high": 0.95
+  },
+  "nulltest-1": {
+   "value": 0.3,
+   "low": 0.02,
+   "high": 0.75
+  },
+  "nulltest-2": {
+   "value": 0.3,
+   "low": 0.02,
+   "high": 0.75
+  },
+  "gain": -3.0,
+  "note": "The theory said step 100 mostly opens with the RL cue; 3.4 % do. Refuting condition: below 0.35."
+ }
+]

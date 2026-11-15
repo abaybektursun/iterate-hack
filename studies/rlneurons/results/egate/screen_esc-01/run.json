@@ -1,0 +1,88 @@
+[
+ {
+  "job_id": "abaybektursun-1114-230733-d1b6",
+  "commit": "894a463fd68671605f2f98785117fba742091118",
+  "config": {
+   "model": "base",
+   "model_path": null,
+   "model_label": null,
+   "set": "math500",
+   "arms": [
+    "esc6=esc:0.6",
+    "esc3=esc:0.3"
+   ],
+   "h0": "0.9",
+   "q": 0.8,
+   "calib_n": 50,
+   "calib_tokens": 2000,
+   "rnd_share": null,
+   "max_tokens": 16384,
+   "seed": 61000000,
+   "n": 100,
+   "samples": 1,
+   "first_sample": 0,
+   "shard": "0/1",
+   "out": "/root/abaybektursun-1114-230733-d1b6/out",
+   "commit": "894a463fd68671605f2f98785117fba742091118",
+   "model_repo": "allenai/Olmo-3-1025-7B",
+   "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "tokenizer": [
+    "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   ],
+   "prefix_ids": [
+    1584,
+    2268,
+    33413
+   ],
+   "seed_rule": "seed + 10000 * sample + index",
+   "n_problems": 100
+  },
+  "h0": 0.9,
+  "rnd_share": null,
+  "started_utc": "2026-11-15T07:07:43Z"
+ },
+ {
+  "job_id": "abaybektursun-1114-230742-6606",
+  "commit": "894a463fd68671605f2f98785117fba742091118",
+  "config": {
+   "model": "base",
+   "model_path": null,
+   "model_label": null,
+   "set": "math500",
+   "arms": [
+    "esc6k=esc:0.6:1024",
+    "esc3k=esc:0.3:1024"
+   ],
+   "h0": "0.9",
+   "q": 0.8,
+   "calib_n": 50,
+   "calib_tokens": 2000,
+   "rnd_share": null,
+   "max_tokens": 16384,
+   "seed": 61000000,
+   "n": 100,
+   "samples": 1,
+   "first_sample": 0,
+   "shard": "0/1",
+   "out": "/root/abaybektursun-1114-230742-6606/out",
+   "commit": "894a463fd68671605f2f98785117fba742091118",
+   "model_repo": "allenai/Olmo-3-1025-7B",
+   "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "tokenizer": [
+    "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   ],
+   "prefix_ids": [
+    1584,
+    2268,
+    33413
+   ],
+   "seed_rule": "seed + 10000 * sample + index",
+   "n_problems": 100
+  },
+  "h0": 0.9,
+  "rnd_share": null,
+  "started_utc": "2026-11-15T07:07:48Z"
+ }
+]

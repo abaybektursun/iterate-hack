@@ -44,6 +44,9 @@ common = dict(
     secrets=[modal.Secret.from_name("hf-token")],
     timeout=24 * 3600,
     retries=0,
+    # One job per container: a process a cancelled job left behind held its log open, so every job sent to that container
+    # next died at runs.reload() with "open files preventing the operation" (31 jobs in 15 min, 2026-11-15 07:04-07:18)
+    single_use_containers=True,
 )
 
 

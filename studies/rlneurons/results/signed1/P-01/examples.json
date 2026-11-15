@@ -1,0 +1,20 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "n_new": 9129,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "\n\nNow, we need to find \\( P(0) + Q(0) \\):\n- \\( P(0) = c = 698 \\)\n- \\( Q(0) = e = -582 \\)\n\nThus, we have:\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\nTo confirm, we consider the sum polynomial \\( S(x) = P(x) + Q(x) \\):\n\\[\nS(x) = (2x^2 + bx + c) + (-2x^2 + dx + e) = (b + d)x + (c + e)\n\\]\n- Since the leading coefficients \\( 2 \\) and \\( -2 \\) cancel, \\( S(x) \\) is linear.\n- Using the points \\( (16, 108) \\) and \\( (20, 106) \\):\n  \\[\n  S(16) = 16m + k = 108, \\quad S(20) = 20m + k = 106\n  \\]\n- Subtracting these equations:\n  \\[\n  (20m + k) - (16m + k) = 106 - 108 \\implies 4m = -2 \\implies m = -\\frac{1}{2}\n  \\]\n- Substitute \\( m \\) into one of the equations:\n  \\[\n  16 \\left( -\\frac{1}{2} \\right) + k = 108 \\implies -8 + k = 108 \\implies k = 116\n  \\]\n\nThus, \\( P(0) + Q(0) = k = 116 \\).\n\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 72,
+  "gold": "540",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 8765,
+  "prompt_tail": "Solve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nFind the largest possible real part of \\[(75+117i)z+\\frac{96+144i}{z}\\]where $z$ is a complex number with $|z|=4$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": ", 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986 + 6 = 359, 986"
+ }
+}

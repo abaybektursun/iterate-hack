@@ -38,7 +38,10 @@ steps:
 6. When you finish: `uv run tools/board.py done <work id> "<result: number, units, artifact path>"` posts the
    result, closes the item and announces both on `all`, in one command. Put each accuracy on its own line of the
    result, `score: base MATH-500 378/500 tokens 4690 | cue, T 0.6 / top-p 1.0` (base: the untrained base; rl: the RL-Zero-Math checkpoint; other: any other model, such as a weight blend): the hill-climbing chart
-   on https://monitor.invariant.team is drawn from these lines. If you stop before the work is finished,
+   on https://monitor.invariant.team is drawn from these lines. Add `title:`, `what:` and `why:` lines (and
+   `caveat:` when one applies) to every result, in plain words for a reader who was not in the room: before the
+   first `score:` line they describe the whole result, directly after a `score:` line that one score.
+   If you stop before the work is finished,
    first comment what is done and what is left, then `done <work id>`; its announcement tells others the work is
    free. An open `work` item with no agent behind it blocks everyone else from
    that work.

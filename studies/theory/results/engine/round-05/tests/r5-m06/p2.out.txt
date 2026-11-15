@@ -1,0 +1,2 @@
+{"measured": 0.5220588235294118, "refuted_by_met": false, "alt_measured": 0.5220588235294118, "not_computable": null, "example_row": {"arm": "random_cue", "job_id": "abaybektursun-1114-153047-6429", "problem_index": 369, "score_v3": 1, "_source": "b_random_cue", "_score_used": 1}}
+n_A=17 n_B=16 solved_A=[9, 26, 43, 101, 166, 170, 210, 295, 301, 349, 425] solved_B=[369, 400] alt_A=[9, 26, 43, 101, 166, 170, 210, 295, 301, 349, 425] alt_B=[369, 400]

@@ -1,0 +1,5 @@
+[
+ {"k": 3, "value": -0.08, "low": -0.17, "high": 0.01, "why": "Runaway cap hits wipe out Q4 problems Code 3.0 could otherwise solve; on base-solvable Q4 problems (held-out base about 0.87) this leaves Code 3.0 near 0.78, which carries most of the predicted -6 Q4 deficit."},
+ {"k": 4, "value": 0.2, "low": -0.6, "high": 1.0, "why": "The mechanism puts the deficit on solvable problems lost to the cap, while on harder Q4 problems Code 3.0's kept skill offsets its cap losses, so little of the deficit falls on H; the ratio over a roughly 6-problem denominator is very noisy and is set to 0 if the denominator is not positive."},
+ {"k": 5, "value": 0.13, "low": -0.02, "high": 0.28, "why": "On short problems Code 3.0 rarely hits the cap and keeps Code 3.1's reliability gain, about +5 to +7 problems that sit mostly on the roughly 45 short problems the base does not solve twice (held-out base about 0.55)."}
+]

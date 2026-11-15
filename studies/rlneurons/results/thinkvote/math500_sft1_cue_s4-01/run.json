@@ -1,0 +1,45 @@
+{
+ "commit": "ff0c7156481cf85b08cecc0a66547cdfc8a27d62",
+ "job_id": "abaybektursun-1115-000512-ee03+abaybektursun-1115-014843-85d9+abaybektursun-1115-000607-0e92+abaybektursun-1115-000621-1d7e",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "sft1",
+  "prompt": "cue",
+  "set": "math500",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 16384,
+  "seed": 181000000,
+  "shots": null,
+  "n": null,
+  "samples": 4,
+  "restarts": 0,
+  "out": "/runs/abaybektursun-1115-000512-ee03",
+  "dry_run": false,
+  "commit": "ff0c7156481cf85b08cecc0a66547cdfc8a27d62",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 500,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "source": "runs/thinkvote_math500_sft1_cue_s4"
+}
