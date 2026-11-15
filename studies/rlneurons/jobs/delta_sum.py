@@ -13,7 +13,7 @@
 Rounding to BF16 is stochastic (merge_weights.to_bf16, generator seeded --seed + 1): the RL delta is a few BF16 units in the last place,
 so rounding to nearest would drop part of it. Statistics go to --stats (default $OUT_DIR/delta_sum.json): summed over the edited tensors,
 ||host - base||, ||donor - base||, their cosine, and for the written model effective_a = <M - host, donor - base> / ||donor - base||^2
-(for --random: ||M - host|| / ||a (donor - base)||). The run stops unless effective_a is within 2 % of a. Fail loud: no try/except.
+(for --random: ||M - host|| / ||a (donor - base)||, within 10 %: stochastic rounding adds about 5 % to the norm at a = 1). The run stops unless effective_a is within 2 % of a. Fail loud: no try/except.
 """
 from __future__ import annotations
 
@@ -88,7 +88,7 @@ def main():
     pathlib.Path(a.stats).write_text(json.dumps(res, indent=1) + "\n")
     print(json.dumps({k: v for k, v in res.items() if k not in ("args", "models")}), flush=True)
     if a.random:
-        assert abs(res["written_norm_over_intended"] - 1) < 0.02, "random control: written norm differs from the intended norm"
+        assert abs(res["written_norm_over_intended"] - 1) < 0.10, "random control: written norm differs from the intended norm"
     else:
         assert abs(res["effective_a"] - a.alpha) < 0.02 * a.alpha, "the written model does not carry a * (donor - base)"
 
