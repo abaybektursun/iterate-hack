@@ -26,7 +26,7 @@ def problem(name: str, row: dict) -> dict:
         return {"uid": row["task_id"], "entry": entry, "pre": row["prompt"] + "\n",
                 "content": f"Write the complete Python function `{entry}` for this signature and docstring:\n\n{row['prompt']}",
                 "post": f"\n{row['test']}\ncheck({entry})\n", "reference": row["prompt"] + row["canonical_solution"]}
-    entry = re.match(r"assert\s+\(?\s*(?:set\(|math\.isclose\(|not\s+)?\s*(\w+)\(", row["test_list"][0]).group(1)
+    entry = re.findall(r"assertion\((\w+)\(\*inp\)", row["test"])[-1]         # the function the tests call
     return {"uid": f"Mbpp/{row['task_id']}", "entry": entry, "pre": "",
             "content": f"{row['prompt']}\nYour code should pass this test:\n{row['test_list'][0]}",
             "post": "\n" + "\n".join(row["test_imports"]) + "\n" + row["test"] + "\n", "reference": row["code"]}
