@@ -1,0 +1,2194 @@
+{
+ "updated": "2026-11-15T15:28:04+00:00",
+ "commit": "7769256",
+ "title": "Forecasting GPU rental prices from the listings behind the median",
+ "subtitle": "Quantile forecasts (q10, q50, q90) of 37 posted GPU rental price series, forecast origin 2026-11-06, horizons 1, 3 and 7 days. Skill = 1 - pinball loss / pinball loss of the last-value forecast; 0 is the last-value forecast, higher is better.",
+ "hero": {
+  "value": "+0.283",
+  "label": "Pooled skill of the submitted forecaster on the locked origins (2026-10-31 to 2026-11-05, unseen)",
+  "detail": "357 cells: 37 series, 6 origins, horizons 1 and 3 days (the 7-day horizon has no truth on these origins). The forecaster was written down before the scoring run. This was the second scoring run on these origins; the first scored its predecessor at +0.252.",
+  "baseline": {
+   "value": "+0.089",
+   "label": "last_value_empirical, the strongest baseline of the starter kit, on the same 357 cells"
+  }
+ },
+ "stats": [
+  {
+   "value": "+0.316",
+   "label": "Pooled skill on the dev origins (2026-10-01 to 2026-10-30), 3,109 cells, horizons 1, 3, 7 days"
+  },
+  {
+   "value": "+0.194",
+   "label": "Gain over last_value_empirical on the locked origins; 95 % interval +0.106 to +0.285, bootstrap over the 37 series"
+  },
+  {
+   "value": "0.85",
+   "label": "Share of true prices inside [q10, q90] on the locked origins; the target is 0.80"
+  },
+  {
+   "value": "111",
+   "label": "Submitted forecasts: 37 series at 3 horizons, each with q10, q50 and q90"
+  }
+ ],
+ "locked": [
+  {
+   "name": "last_value_empirical (starter baseline)",
+   "skill": 0.0887,
+   "note": "Last value with intervals from past changes. The strongest baseline of the starter kit."
+  },
+  {
+   "name": "First listing simulator",
+   "skill": 0.060543,
+   "note": "Scored +0.197 on the dev origins and fell below the baseline here. It was replaced."
+  },
+  {
+   "name": "Own-history simulator alone (sim2-15)",
+   "skill": 0.215264,
+   "note": "Member of candidate 1. Each listing replays its own past outcomes. No model."
+  },
+  {
+   "name": "Chronos-2 per listing alone (fm2-17)",
+   "skill": 0.27,
+   "note": "Member of candidate 1. Scored above candidate 1 on these origins."
+  },
+  {
+   "name": "Candidate 1",
+   "skill": 0.2523,
+   "note": "Quantile average of fm2-17 and sim2-15, fixed before the first scoring run on these origins."
+  },
+  {
+   "name": "Member B: candidate 1 adjusted by an LLM",
+   "skill": 0.2563,
+   "note": "Not separated from candidate 1: difference +0.004, 95 % interval -0.024 to +0.027."
+  },
+  {
+   "name": "Member A: Chronos-2 per listing with within-day data (fm2-20)",
+   "skill": 0.298,
+   "note": "Scored above candidate 2. The average was kept because it was fixed before the run."
+  },
+  {
+   "name": "Candidate 2 (submitted)",
+   "skill": 0.2827,
+   "note": "Quantile average of members A and B, fixed before the second scoring run on these origins."
+  }
+ ],
+ "climb": [
+  {
+   "id": "it00-lve",
+   "utc": "2026-11-14T23:17:48+00:00",
+   "skill": 0.126308,
+   "h1": 0.10123,
+   "h3": 0.137787,
+   "h7": 0.126822,
+   "family": "it",
+   "label": "Starter baseline: last value, empirical intervals",
+   "best": true
+  },
+  {
+   "id": "it00-drift",
+   "utc": "2026-11-14T23:17:50+00:00",
+   "skill": 0.114426,
+   "h1": 0.102191,
+   "h3": 0.134311,
+   "h7": 0.106935,
+   "family": "it",
+   "label": "Starter baseline: drift",
+   "best": false
+  },
+  {
+   "id": "it01-sim",
+   "utc": "2026-11-14T23:17:52+00:00",
+   "skill": 0.196504,
+   "h1": 0.091609,
+   "h3": 0.179742,
+   "h7": 0.233754,
+   "family": "it",
+   "label": "First listing simulator (pooled outcomes)",
+   "best": true
+  },
+  {
+   "id": "it01-control",
+   "utc": "2026-11-14T23:17:55+00:00",
+   "skill": 0.125367,
+   "h1": 0.103434,
+   "h3": 0.137101,
+   "h7": 0.124898,
+   "family": "it",
+   "label": "Control: resample the median's own changes",
+   "best": false
+  },
+  {
+   "id": "sim2-01-pool",
+   "utc": "2026-11-14T23:22:35+00:00",
+   "skill": 0.175954,
+   "h1": 0.090891,
+   "h3": 0.168922,
+   "h7": 0.202606,
+   "family": "sim2",
+   "label": "sim2-01-pool",
+   "best": false
+  },
+  {
+   "id": "sim2-02-poolinterp",
+   "utc": "2026-11-14T23:24:21+00:00",
+   "skill": 0.175466,
+   "h1": 0.091617,
+   "h3": 0.167637,
+   "h7": 0.202225,
+   "family": "sim2",
+   "label": "sim2-02-poolinterp",
+   "best": false
+  },
+  {
+   "id": "fm-01-c2-alone",
+   "utc": "2026-11-14T23:24:36+00:00",
+   "skill": 0.131891,
+   "h1": -0.086779,
+   "h3": 0.102456,
+   "h7": 0.20656,
+   "family": "fm",
+   "label": "Chronos-2 on each median series",
+   "best": false
+  },
+  {
+   "id": "fm-02-c2-group",
+   "utc": "2026-11-14T23:24:38+00:00",
+   "skill": 0.154798,
+   "h1": -0.074975,
+   "h3": 0.113436,
+   "h7": 0.238913,
+   "family": "fm",
+   "label": "fm-02-c2-group",
+   "best": false
+  },
+  {
+   "id": "fm-03-c2-spread-alone",
+   "utc": "2026-11-14T23:24:40+00:00",
+   "skill": 0.175464,
+   "h1": 0.026045,
+   "h3": 0.146659,
+   "h7": 0.231196,
+   "family": "fm",
+   "label": "fm-03-c2-spread-alone",
+   "best": false
+  },
+  {
+   "id": "fm-04-c2-spread-group",
+   "utc": "2026-11-14T23:24:42+00:00",
+   "skill": 0.182234,
+   "h1": 0.043947,
+   "h3": 0.151235,
+   "h7": 0.236166,
+   "family": "fm",
+   "label": "fm-04-c2-spread-group",
+   "best": false
+  },
+  {
+   "id": "fm-05-c2-lst-group-indep",
+   "utc": "2026-11-14T23:24:44+00:00",
+   "skill": 0.271377,
+   "h1": 0.084176,
+   "h3": 0.246276,
+   "h7": 0.335247,
+   "family": "fm",
+   "label": "Chronos-2 on each listing, median over draws",
+   "best": true
+  },
+  {
+   "id": "fm-06-c2-lst-group-shared",
+   "utc": "2026-11-14T23:24:47+00:00",
+   "skill": 0.239657,
+   "h1": 0.072164,
+   "h3": 0.206856,
+   "h7": 0.302408,
+   "family": "fm",
+   "label": "fm-06-c2-lst-group-shared",
+   "best": false
+  },
+  {
+   "id": "fm-07-c2-lst-alone-indep",
+   "utc": "2026-11-14T23:24:49+00:00",
+   "skill": 0.272111,
+   "h1": 0.09882,
+   "h3": 0.248705,
+   "h7": 0.331328,
+   "family": "fm",
+   "label": "Chronos-2 on each listing alone, independent draws",
+   "best": true
+  },
+  {
+   "id": "fm-08-c2-lst-alone-shared",
+   "utc": "2026-11-14T23:24:51+00:00",
+   "skill": 0.237072,
+   "h1": 0.046187,
+   "h3": 0.210646,
+   "h7": 0.302651,
+   "family": "fm",
+   "label": "fm-08-c2-lst-alone-shared",
+   "best": false
+  },
+  {
+   "id": "fm-09-c2-lst-group-indep-c",
+   "utc": "2026-11-14T23:24:53+00:00",
+   "skill": 0.191784,
+   "h1": 0.087982,
+   "h3": 0.166141,
+   "h7": 0.233554,
+   "family": "fm",
+   "label": "fm-09-c2-lst-group-indep-c",
+   "best": false
+  },
+  {
+   "id": "fm-10-c2-lst-group-shared-c",
+   "utc": "2026-11-14T23:24:56+00:00",
+   "skill": 0.159612,
+   "h1": 0.084581,
+   "h3": 0.132608,
+   "h7": 0.194393,
+   "family": "fm",
+   "label": "fm-10-c2-lst-group-shared-c",
+   "best": false
+  },
+  {
+   "id": "fm-11-c2-lst-alone-indep-c",
+   "utc": "2026-11-14T23:24:58+00:00",
+   "skill": 0.196721,
+   "h1": 0.092773,
+   "h3": 0.172022,
+   "h7": 0.238019,
+   "family": "fm",
+   "label": "fm-11-c2-lst-alone-indep-c",
+   "best": false
+  },
+  {
+   "id": "fm-12-c2-lst-alone-shared-c",
+   "utc": "2026-11-14T23:25:00+00:00",
+   "skill": 0.154973,
+   "h1": 0.03892,
+   "h3": 0.129155,
+   "h7": 0.200127,
+   "family": "fm",
+   "label": "fm-12-c2-lst-alone-shared-c",
+   "best": false
+  },
+  {
+   "id": "sim2-03-own",
+   "utc": "2026-11-14T23:25:14+00:00",
+   "skill": 0.223178,
+   "h1": 0.150624,
+   "h3": 0.213184,
+   "h7": 0.248076,
+   "family": "sim2",
+   "label": "Simulator: each listing replays its own history",
+   "best": false
+  },
+  {
+   "id": "fm-13-c2-cov",
+   "utc": "2026-11-14T23:25:34+00:00",
+   "skill": 0.132515,
+   "h1": -0.078954,
+   "h3": 0.100554,
+   "h7": 0.20662,
+   "family": "fm",
+   "label": "fm-13-c2-cov",
+   "best": false
+  },
+  {
+   "id": "fm-14-c2-spread-cov",
+   "utc": "2026-11-14T23:25:37+00:00",
+   "skill": 0.176219,
+   "h1": 0.034155,
+   "h3": 0.14507,
+   "h7": 0.231247,
+   "family": "fm",
+   "label": "fm-14-c2-spread-cov",
+   "best": false
+  },
+  {
+   "id": "sim2-04-own-tau14",
+   "utc": "2026-11-14T23:25:56+00:00",
+   "skill": 0.230791,
+   "h1": 0.145989,
+   "h3": 0.226798,
+   "h7": 0.255726,
+   "family": "sim2",
+   "label": "sim2-04-own-tau14",
+   "best": false
+  },
+  {
+   "id": "sim2-05-own-tau14-cal",
+   "utc": "2026-11-14T23:26:51+00:00",
+   "skill": 0.207753,
+   "h1": 0.144053,
+   "h3": 0.209436,
+   "h7": 0.223947,
+   "family": "sim2",
+   "label": "sim2-05-own-tau14-cal",
+   "best": false
+  },
+  {
+   "id": "sim2-06-own-tau14-mix30",
+   "utc": "2026-11-14T23:26:52+00:00",
+   "skill": 0.215337,
+   "h1": 0.141222,
+   "h3": 0.213235,
+   "h7": 0.236377,
+   "family": "sim2",
+   "label": "sim2-06-own-tau14-mix30",
+   "best": false
+  },
+  {
+   "id": "sim2-07-own-tau14-shrink20",
+   "utc": "2026-11-14T23:28:41+00:00",
+   "skill": 0.233304,
+   "h1": 0.139676,
+   "h3": 0.221395,
+   "h7": 0.264899,
+   "family": "sim2",
+   "label": "sim2-07-own-tau14-shrink20",
+   "best": false
+  },
+  {
+   "id": "fm-15-t2-alone",
+   "utc": "2026-11-14T23:28:58+00:00",
+   "skill": 0.136971,
+   "h1": -0.013154,
+   "h3": 0.132038,
+   "h7": 0.179958,
+   "family": "fm",
+   "label": "fm-15-t2-alone",
+   "best": false
+  },
+  {
+   "id": "fm-16-t2-spread-alone",
+   "utc": "2026-11-14T23:29:00+00:00",
+   "skill": 0.18036,
+   "h1": 0.080545,
+   "h3": 0.164285,
+   "h7": 0.215873,
+   "family": "fm",
+   "label": "fm-16-t2-spread-alone",
+   "best": false
+  },
+  {
+   "id": "fm-17-t2-lst-alone-indep",
+   "utc": "2026-11-14T23:29:01+00:00",
+   "skill": 0.226169,
+   "h1": 0.12552,
+   "h3": 0.208182,
+   "h7": 0.262942,
+   "family": "fm",
+   "label": "fm-17-t2-lst-alone-indep",
+   "best": false
+  },
+  {
+   "id": "fm-18-t2-lst-group-indep",
+   "utc": "2026-11-14T23:29:02+00:00",
+   "skill": 0.2249,
+   "h1": 0.125374,
+   "h3": 0.207341,
+   "h7": 0.26114,
+   "family": "fm",
+   "label": "fm-18-t2-lst-group-indep",
+   "best": false
+  },
+  {
+   "id": "fm-19-t2-lst-alone-shared",
+   "utc": "2026-11-14T23:29:02+00:00",
+   "skill": 0.2301,
+   "h1": 0.129042,
+   "h3": 0.212201,
+   "h7": 0.266936,
+   "family": "fm",
+   "label": "fm-19-t2-lst-alone-shared",
+   "best": false
+  },
+  {
+   "id": "fm-20-ens-lst-alone-indep",
+   "utc": "2026-11-14T23:29:13+00:00",
+   "skill": 0.268826,
+   "h1": 0.139512,
+   "h3": 0.251428,
+   "h7": 0.312978,
+   "family": "fm",
+   "label": "fm-20-ens-lst-alone-indep",
+   "best": false
+  },
+  {
+   "id": "ens-01-avg",
+   "utc": "2026-11-14T23:30:06+00:00",
+   "skill": 0.28031,
+   "h1": 0.142902,
+   "h3": 0.264666,
+   "h7": 0.325685,
+   "family": "ens",
+   "label": "Average of Chronos-2 per listing and simulator",
+   "best": true
+  },
+  {
+   "id": "ens-02-switch",
+   "utc": "2026-11-14T23:30:07+00:00",
+   "skill": 0.277634,
+   "h1": 0.136057,
+   "h3": 0.248705,
+   "h7": 0.331328,
+   "family": "ens",
+   "label": "ens-02-switch",
+   "best": false
+  },
+  {
+   "id": "sim2-08-absenter",
+   "utc": "2026-11-14T23:30:39+00:00",
+   "skill": 0.233715,
+   "h1": 0.186421,
+   "h3": 0.189571,
+   "h7": 0.270337,
+   "family": "sim2",
+   "label": "sim2-08-absenter",
+   "best": false
+  },
+  {
+   "id": "sim2-09-absenter2",
+   "utc": "2026-11-14T23:32:10+00:00",
+   "skill": 0.267254,
+   "h1": 0.174435,
+   "h3": 0.241326,
+   "h7": 0.306229,
+   "family": "sim2",
+   "label": "sim2-09-absenter2",
+   "best": false
+  },
+  {
+   "id": "sim2-13-shrink0",
+   "utc": "2026-11-14T23:33:06+00:00",
+   "skill": 0.259533,
+   "h1": 0.180381,
+   "h3": 0.234628,
+   "h7": 0.294284,
+   "family": "sim2",
+   "label": "sim2-13-shrink0",
+   "best": false
+  },
+  {
+   "id": "sim2-10-tau7",
+   "utc": "2026-11-14T23:33:42+00:00",
+   "skill": 0.258571,
+   "h1": 0.168847,
+   "h3": 0.234733,
+   "h7": 0.295582,
+   "family": "sim2",
+   "label": "sim2-10-tau7",
+   "best": false
+  },
+  {
+   "id": "sim2-12-shrink40",
+   "utc": "2026-11-14T23:33:43+00:00",
+   "skill": 0.257805,
+   "h1": 0.150783,
+   "h3": 0.236661,
+   "h7": 0.298002,
+   "family": "sim2",
+   "label": "sim2-12-shrink40",
+   "best": false
+  },
+  {
+   "id": "sim2-11-tau28",
+   "utc": "2026-11-14T23:33:48+00:00",
+   "skill": 0.256869,
+   "h1": 0.166308,
+   "h3": 0.244324,
+   "h7": 0.287985,
+   "family": "sim2",
+   "label": "sim2-11-tau28",
+   "best": false
+  },
+  {
+   "id": "sim2-14-afh",
+   "utc": "2026-11-14T23:35:22+00:00",
+   "skill": 0.272185,
+   "h1": 0.174563,
+   "h3": 0.240978,
+   "h7": 0.31531,
+   "family": "sim2",
+   "label": "sim2-14-afh",
+   "best": false
+  },
+  {
+   "id": "sim2-15-final",
+   "utc": "2026-11-14T23:36:57+00:00",
+   "skill": 0.27065,
+   "h1": 0.174603,
+   "h3": 0.24074,
+   "h7": 0.312649,
+   "family": "sim2",
+   "label": "Own-history simulator, final version",
+   "best": false
+  },
+  {
+   "id": "ens-03-avg-fm07-sim215",
+   "utc": "2026-11-14T23:37:31+00:00",
+   "skill": 0.292374,
+   "h1": 0.162883,
+   "h3": 0.269567,
+   "h7": 0.339505,
+   "family": "ens",
+   "label": "Average of fm-07 and the final simulator",
+   "best": true
+  },
+  {
+   "id": "ft-01-zeroshot",
+   "utc": "2026-11-14T23:48:30+00:00",
+   "skill": 0.270906,
+   "h1": 0.098562,
+   "h3": 0.24735,
+   "h7": 0.329949,
+   "family": "ft",
+   "label": "ft-01-zeroshot",
+   "best": false
+  },
+  {
+   "id": "ft-02-lora",
+   "utc": "2026-11-15T00:41:52+00:00",
+   "skill": 0.251894,
+   "h1": 0.123919,
+   "h3": 0.243157,
+   "h7": 0.290993,
+   "family": "ft",
+   "label": "LoRA on real listing prices",
+   "best": false
+  },
+  {
+   "id": "ft-03-full",
+   "utc": "2026-11-15T00:41:53+00:00",
+   "skill": 0.241013,
+   "h1": 0.122865,
+   "h3": 0.225161,
+   "h7": 0.281329,
+   "family": "ft",
+   "label": "Full fine-tune on real listing prices",
+   "best": false
+  },
+  {
+   "id": "ft-04-lora-real-syn",
+   "utc": "2026-11-15T00:57:32+00:00",
+   "skill": 0.265698,
+   "h1": 0.120154,
+   "h3": 0.254007,
+   "h7": 0.311115,
+   "family": "ft",
+   "label": "ft-04-lora-real-syn",
+   "best": false
+  },
+  {
+   "id": "ft-05-lora-syn-only",
+   "utc": "2026-11-15T00:57:34+00:00",
+   "skill": 0.294955,
+   "h1": 0.134602,
+   "h3": 0.275761,
+   "h7": 0.348415,
+   "family": "ft",
+   "label": "LoRA on 8,000 synthetic series only, seed 0",
+   "best": true
+  },
+  {
+   "id": "ens-04-avg-ft05-sim215",
+   "utc": "2026-11-15T00:58:02+00:00",
+   "skill": 0.299305,
+   "h1": 0.173169,
+   "h3": 0.278373,
+   "h7": 0.344518,
+   "family": "ens",
+   "label": "Average of synthetic-only LoRA and simulator",
+   "best": true
+  },
+  {
+   "id": "tab-01-lst-alone-indep",
+   "utc": "2026-11-15T01:15:40+00:00",
+   "skill": 0.192171,
+   "h1": 0.019368,
+   "h3": 0.138286,
+   "h7": 0.267774,
+   "family": "tab",
+   "label": "TabPFN v2 on each listing",
+   "best": false
+  },
+  {
+   "id": "tab-02-avg3-fm07-sim215-tab01",
+   "utc": "2026-11-15T01:15:54+00:00",
+   "skill": 0.281596,
+   "h1": 0.138245,
+   "h3": 0.250417,
+   "h7": 0.336985,
+   "family": "tab",
+   "label": "tab-02-avg3-fm07-sim215-tab01",
+   "best": false
+  },
+  {
+   "id": "tab-03-lst-feat-indep",
+   "utc": "2026-11-15T01:15:55+00:00",
+   "skill": 0.190181,
+   "h1": 0.144601,
+   "h3": 0.189299,
+   "h7": 0.202898,
+   "family": "tab",
+   "label": "tab-03-lst-feat-indep",
+   "best": false
+  },
+  {
+   "id": "tab-04-avg3-fm07-sim215-tab03",
+   "utc": "2026-11-15T01:15:56+00:00",
+   "skill": 0.278667,
+   "h1": 0.169639,
+   "h3": 0.262313,
+   "h7": 0.316806,
+   "family": "tab",
+   "label": "tab-04-avg3-fm07-sim215-tab03",
+   "best": false
+  },
+  {
+   "id": "tab-05-series-alone",
+   "utc": "2026-11-15T01:15:57+00:00",
+   "skill": 0.102817,
+   "h1": -0.008262,
+   "h3": 0.06681,
+   "h7": 0.152158,
+   "family": "tab",
+   "label": "tab-05-series-alone",
+   "best": false
+  },
+  {
+   "id": "pfn-01-net",
+   "utc": "2026-11-15T01:29:32+00:00",
+   "skill": 0.261723,
+   "h1": 0.154846,
+   "h3": 0.242397,
+   "h7": 0.300894,
+   "family": "pfn",
+   "label": "pfn-01-net",
+   "best": false
+  },
+  {
+   "id": "pfn-02-net-gpu",
+   "utc": "2026-11-15T01:29:33+00:00",
+   "skill": 0.267097,
+   "h1": 0.172718,
+   "h3": 0.239696,
+   "h7": 0.307289,
+   "family": "pfn",
+   "label": "4.8M-parameter network trained on simulated listings",
+   "best": false
+  },
+  {
+   "id": "pfn-03-avg-fm07",
+   "utc": "2026-11-15T01:29:34+00:00",
+   "skill": 0.285177,
+   "h1": 0.161658,
+   "h3": 0.264164,
+   "h7": 0.329731,
+   "family": "pfn",
+   "label": "pfn-03-avg-fm07",
+   "best": false
+  },
+  {
+   "id": "pfn-04-avg-sim215",
+   "utc": "2026-11-15T01:29:36+00:00",
+   "skill": 0.279474,
+   "h1": 0.176388,
+   "h3": 0.251804,
+   "h7": 0.32215,
+   "family": "pfn",
+   "label": "pfn-04-avg-sim215",
+   "best": false
+  },
+  {
+   "id": "pfn-05-avg3",
+   "utc": "2026-11-15T01:29:37+00:00",
+   "skill": 0.291482,
+   "h1": 0.173873,
+   "h3": 0.268778,
+   "h7": 0.335367,
+   "family": "pfn",
+   "label": "pfn-05-avg3",
+   "best": false
+  },
+  {
+   "id": "pfn-06-nogeneric",
+   "utc": "2026-11-15T01:29:38+00:00",
+   "skill": 0.265799,
+   "h1": 0.153421,
+   "h3": 0.243003,
+   "h7": 0.308329,
+   "family": "pfn",
+   "label": "pfn-06-nogeneric",
+   "best": false
+  },
+  {
+   "id": "pfn-07-nodaily",
+   "utc": "2026-11-15T01:29:39+00:00",
+   "skill": 0.236873,
+   "h1": 0.141763,
+   "h3": 0.216938,
+   "h7": 0.273214,
+   "family": "pfn",
+   "label": "pfn-07-nodaily",
+   "best": false
+  },
+  {
+   "id": "pfn-08-width05",
+   "utc": "2026-11-15T01:29:40+00:00",
+   "skill": 0.250524,
+   "h1": 0.140614,
+   "h3": 0.234405,
+   "h7": 0.288772,
+   "family": "pfn",
+   "label": "pfn-08-width05",
+   "best": false
+  },
+  {
+   "id": "ft-06-lora-real-cutoff",
+   "utc": "2026-11-15T01:35:28+00:00",
+   "skill": 0.265274,
+   "h1": 0.142559,
+   "h3": 0.257935,
+   "h7": 0.302203,
+   "family": "ft",
+   "label": "ft-06-lora-real-cutoff",
+   "best": false
+  },
+  {
+   "id": "ft-07-lora-syn-only-seed1",
+   "utc": "2026-11-15T01:35:29+00:00",
+   "skill": 0.291833,
+   "h1": 0.138162,
+   "h3": 0.27783,
+   "h7": 0.340686,
+   "family": "ft",
+   "label": "LoRA on synthetic series only, seed 1",
+   "best": false
+  },
+  {
+   "id": "ft-08-lora-syn-only-2400",
+   "utc": "2026-11-15T01:59:14+00:00",
+   "skill": 0.280064,
+   "h1": 0.157228,
+   "h3": 0.264458,
+   "h7": 0.321505,
+   "family": "ft",
+   "label": "ft-08-lora-syn-only-2400",
+   "best": false
+  },
+  {
+   "id": "fm2-01-base",
+   "utc": "2026-11-15T02:17:48+00:00",
+   "skill": 0.269369,
+   "h1": 0.097846,
+   "h3": 0.24727,
+   "h7": 0.327403,
+   "family": "fm2",
+   "label": "fm2-01-base",
+   "best": false
+  },
+  {
+   "id": "fm2-05-long",
+   "utc": "2026-11-15T02:17:48+00:00",
+   "skill": 0.268317,
+   "h1": 0.089716,
+   "h3": 0.244282,
+   "h7": 0.329301,
+   "family": "fm2",
+   "label": "fm2-05-long",
+   "best": false
+  },
+  {
+   "id": "fm2-06-chain",
+   "utc": "2026-11-15T02:17:48+00:00",
+   "skill": 0.269668,
+   "h1": 0.09929,
+   "h3": 0.247323,
+   "h7": 0.327528,
+   "family": "fm2",
+   "label": "fm2-06-chain",
+   "best": false
+  },
+  {
+   "id": "fm2-07-chain-long",
+   "utc": "2026-11-15T02:17:48+00:00",
+   "skill": 0.268533,
+   "h1": 0.090303,
+   "h3": 0.243912,
+   "h7": 0.329735,
+   "family": "fm2",
+   "label": "fm2-07-chain-long",
+   "best": false
+  },
+  {
+   "id": "fm2-08-chain-cov",
+   "utc": "2026-11-15T02:17:48+00:00",
+   "skill": 0.255436,
+   "h1": 0.086801,
+   "h3": 0.237378,
+   "h7": 0.310505,
+   "family": "fm2",
+   "label": "fm2-08-chain-cov",
+   "best": false
+  },
+  {
+   "id": "fm2-02-turn-own",
+   "utc": "2026-11-15T02:17:51+00:00",
+   "skill": 0.271243,
+   "h1": 0.077483,
+   "h3": 0.250474,
+   "h7": 0.334527,
+   "family": "fm2",
+   "label": "fm2-02-turn-own",
+   "best": false
+  },
+  {
+   "id": "fm2-03-turn-pool",
+   "utc": "2026-11-15T02:17:51+00:00",
+   "skill": 0.259143,
+   "h1": 0.078374,
+   "h3": 0.237868,
+   "h7": 0.319214,
+   "family": "fm2",
+   "label": "fm2-03-turn-pool",
+   "best": false
+  },
+  {
+   "id": "fm2-04-turn-own-abs",
+   "utc": "2026-11-15T02:17:51+00:00",
+   "skill": 0.278508,
+   "h1": 0.107484,
+   "h3": 0.242779,
+   "h7": 0.343794,
+   "family": "fm2",
+   "label": "fm2-04-turn-own-abs",
+   "best": false
+  },
+  {
+   "id": "fm2-09-scaleway",
+   "utc": "2026-11-15T02:18:05+00:00",
+   "skill": 0.273216,
+   "h1": 0.107199,
+   "h3": 0.252781,
+   "h7": 0.328869,
+   "family": "fm2",
+   "label": "fm2-09-scaleway",
+   "best": false
+  },
+  {
+   "id": "fm2-12-hurdle-h1",
+   "utc": "2026-11-15T02:18:05+00:00",
+   "skill": 0.277154,
+   "h1": 0.156235,
+   "h3": 0.242735,
+   "h7": 0.328276,
+   "family": "fm2",
+   "label": "fm2-12-hurdle-h1",
+   "best": false
+  },
+  {
+   "id": "fm2-13-snap",
+   "utc": "2026-11-15T02:18:05+00:00",
+   "skill": 0.240756,
+   "h1": 0.134925,
+   "h3": 0.226372,
+   "h7": 0.27697,
+   "family": "fm2",
+   "label": "fm2-13-snap",
+   "best": false
+  },
+  {
+   "id": "fm2-14-dep-prov",
+   "utc": "2026-11-15T02:18:05+00:00",
+   "skill": 0.261911,
+   "h1": 0.07479,
+   "h3": 0.241114,
+   "h7": 0.323427,
+   "family": "fm2",
+   "label": "fm2-14-dep-prov",
+   "best": false
+  },
+  {
+   "id": "fm2-11-hurdle",
+   "utc": "2026-11-15T02:18:07+00:00",
+   "skill": 0.235002,
+   "h1": 0.151872,
+   "h3": 0.220573,
+   "h7": 0.265144,
+   "family": "fm2",
+   "label": "fm2-11-hurdle",
+   "best": false
+  },
+  {
+   "id": "fm2-16-replay30",
+   "utc": "2026-11-15T02:18:07+00:00",
+   "skill": 0.283687,
+   "h1": 0.145124,
+   "h3": 0.266904,
+   "h7": 0.329991,
+   "family": "fm2",
+   "label": "fm2-16-replay30",
+   "best": false
+  },
+  {
+   "id": "fm2-15-copula",
+   "utc": "2026-11-15T02:18:09+00:00",
+   "skill": 0.270809,
+   "h1": 0.102563,
+   "h3": 0.247817,
+   "h7": 0.328447,
+   "family": "fm2",
+   "label": "fm2-15-copula",
+   "best": false
+  },
+  {
+   "id": "fm2-10-afh-lst",
+   "utc": "2026-11-15T02:18:19+00:00",
+   "skill": 0.264261,
+   "h1": 0.099613,
+   "h3": 0.234187,
+   "h7": 0.324771,
+   "family": "fm2",
+   "label": "fm2-10-afh-lst",
+   "best": false
+  },
+  {
+   "id": "fm2-17-combo",
+   "utc": "2026-11-15T02:18:43+00:00",
+   "skill": 0.290578,
+   "h1": 0.180677,
+   "h3": 0.240838,
+   "h7": 0.347043,
+   "family": "fm2",
+   "label": "Chronos-2 per listing + three listing rules",
+   "best": false
+  },
+  {
+   "id": "fm2-18-combo-replay30",
+   "utc": "2026-11-15T02:18:44+00:00",
+   "skill": 0.298115,
+   "h1": 0.191408,
+   "h3": 0.266794,
+   "h7": 0.343741,
+   "family": "fm2",
+   "label": "fm2-18-combo-replay30",
+   "best": false
+  },
+  {
+   "id": "ens-05-avg-fm217-sim215",
+   "utc": "2026-11-15T02:19:32+00:00",
+   "skill": 0.297955,
+   "h1": 0.185095,
+   "h3": 0.264044,
+   "h7": 0.346637,
+   "family": "ens",
+   "label": "Candidate 1: average of fm2-17 and simulator",
+   "best": false
+  },
+  {
+   "id": "fm2-19-intraday",
+   "utc": "2026-11-15T04:16:47+00:00",
+   "skill": 0.305082,
+   "h1": 0.201118,
+   "h3": 0.25595,
+   "h7": 0.359623,
+   "family": "fm2",
+   "label": "fm2-17 + the day's maximum price per listing",
+   "best": true
+  },
+  {
+   "id": "fm2-20-exit",
+   "utc": "2026-11-15T04:25:46+00:00",
+   "skill": 0.30564,
+   "h1": 0.212861,
+   "h3": 0.252053,
+   "h7": 0.359593,
+   "family": "fm2",
+   "label": "fm2-19 + exit signal from the snapshot share",
+   "best": true
+  },
+  {
+   "id": "llm2-01-fable-adj",
+   "utc": "2026-11-15T04:26:22+00:00",
+   "skill": 0.308545,
+   "h1": 0.209173,
+   "h3": 0.278618,
+   "h7": 0.351447,
+   "family": "llm2",
+   "label": "LLM adjusts candidate 1",
+   "best": true
+  },
+  {
+   "id": "llm2-02-fable-adj-mix50",
+   "utc": "2026-11-15T04:26:23+00:00",
+   "skill": 0.30831,
+   "h1": 0.202341,
+   "h3": 0.277611,
+   "h7": 0.353401,
+   "family": "llm2",
+   "label": "llm2-02-fable-adj-mix50",
+   "best": false
+  },
+  {
+   "id": "llm2-03-fable-adj-wide",
+   "utc": "2026-11-15T04:26:25+00:00",
+   "skill": 0.313237,
+   "h1": 0.208945,
+   "h3": 0.278175,
+   "h7": 0.360242,
+   "family": "llm2",
+   "label": "LLM adjusts candidate 1, band never narrower",
+   "best": true
+  },
+  {
+   "id": "loc-01-base-fm217",
+   "utc": "2026-11-15T04:31:04+00:00",
+   "skill": 0.291504,
+   "h1": 0.180667,
+   "h3": 0.240392,
+   "h7": 0.348964,
+   "family": "loc",
+   "label": "loc-01-base-fm217",
+   "best": false
+  },
+  {
+   "id": "ens-06-avg-fm220-llm203",
+   "utc": "2026-11-15T04:35:16+00:00",
+   "skill": 0.316358,
+   "h1": 0.217114,
+   "h3": 0.271593,
+   "h7": 0.367266,
+   "family": "ens",
+   "label": "Candidate 2 (submitted): average of fm2-20 and llm2-03",
+   "best": true
+  },
+  {
+   "id": "loc-02-lora-s0",
+   "utc": "2026-11-15T04:36:47+00:00",
+   "skill": 0.306227,
+   "h1": 0.189741,
+   "h3": 0.269337,
+   "h7": 0.357498,
+   "family": "loc",
+   "label": "loc-02-lora-s0",
+   "best": false
+  },
+  {
+   "id": "loc-03-lora-s0-intraday",
+   "utc": "2026-11-15T04:36:48+00:00",
+   "skill": 0.312084,
+   "h1": 0.212263,
+   "h3": 0.273261,
+   "h7": 0.359926,
+   "family": "loc",
+   "label": "loc-03-lora-s0-intraday",
+   "best": false
+  },
+  {
+   "id": "loc-04-lora-5seed-intraday",
+   "utc": "2026-11-15T04:45:50+00:00",
+   "skill": 0.312123,
+   "h1": 0.213022,
+   "h3": 0.274348,
+   "h7": 0.359204,
+   "family": "loc",
+   "label": "loc-04-lora-5seed-intraday",
+   "best": false
+  },
+  {
+   "id": "loc-05-lora-5seed-base-intraday",
+   "utc": "2026-11-15T04:45:51+00:00",
+   "skill": 0.316285,
+   "h1": 0.212321,
+   "h3": 0.275795,
+   "h7": 0.366143,
+   "family": "loc",
+   "label": "loc-05-lora-5seed-base-intraday",
+   "best": false
+  },
+  {
+   "id": "loc-06-ens-loc04-sim215",
+   "utc": "2026-11-15T04:45:54+00:00",
+   "skill": 0.303653,
+   "h1": 0.19958,
+   "h3": 0.27443,
+   "h7": 0.347435,
+   "family": "loc",
+   "label": "loc-06-ens-loc04-sim215",
+   "best": false
+  },
+  {
+   "id": "loc-07-ens-loc05-sim215",
+   "utc": "2026-11-15T04:45:56+00:00",
+   "skill": 0.305458,
+   "h1": 0.199285,
+   "h3": 0.275752,
+   "h7": 0.350065,
+   "family": "loc",
+   "label": "loc-07-ens-loc05-sim215",
+   "best": false
+  },
+  {
+   "id": "loc-08-lora-pfnprior",
+   "utc": "2026-11-15T04:45:58+00:00",
+   "skill": 0.310944,
+   "h1": 0.206058,
+   "h3": 0.274966,
+   "h7": 0.358606,
+   "family": "loc",
+   "label": "loc-08-lora-pfnprior",
+   "best": false
+  },
+  {
+   "id": "loc-09-lora-5seed-base-half",
+   "utc": "2026-11-15T04:49:44+00:00",
+   "skill": 0.318307,
+   "h1": 0.209612,
+   "h3": 0.275713,
+   "h7": 0.370576,
+   "family": "loc",
+   "label": "Half base, half 5-seed synthetic LoRA (not submitted)",
+   "best": true
+  },
+  {
+   "id": "loc-10-lora-syn80k-3200",
+   "utc": "2026-11-15T04:49:45+00:00",
+   "skill": 0.304479,
+   "h1": 0.210076,
+   "h3": 0.268482,
+   "h7": 0.349335,
+   "family": "loc",
+   "label": "loc-10-lora-syn80k-3200",
+   "best": false
+  },
+  {
+   "id": "loc-11-lora-syn80k-b256",
+   "utc": "2026-11-15T04:49:47+00:00",
+   "skill": 0.315337,
+   "h1": 0.210139,
+   "h3": 0.271946,
+   "h7": 0.367099,
+   "family": "loc",
+   "label": "loc-11-lora-syn80k-b256",
+   "best": false
+  },
+  {
+   "id": "llm2-04-astra-adj-wide",
+   "utc": "2026-11-15T04:57:37+00:00",
+   "skill": 0.312724,
+   "h1": 0.204037,
+   "h3": 0.272676,
+   "h7": 0.36361,
+   "family": "llm2",
+   "label": "Second provider's LLM adjusts candidate 1 (not submitted)",
+   "best": false
+  },
+  {
+   "id": "llm2-05-sol-adj2-ens06-wide",
+   "utc": "2026-11-15T04:57:38+00:00",
+   "skill": 0.353586,
+   "h1": 0.314426,
+   "h3": 0.305592,
+   "h7": 0.39011,
+   "family": "llm2",
+   "label": "LLM adjusts candidate 2 (not submitted, no unseen test)",
+   "best": true
+  }
+ ],
+ "findings": [
+  {
+   "title": "The submitted forecaster held on origins it had not seen",
+   "value": "+0.283",
+   "value_label": "candidate 2 on the locked origins (2026-10-31 to 2026-11-05, unseen), against +0.252 for candidate 1",
+   "body": "Candidate 2 was fixed in a written spec before it was scored on the locked origins. It scored +0.283 against +0.252 for candidate 1 and +0.089 for the starter baseline, on 357 cells at 1 and 3 days. This was the second scoring run on these origins, and it was declared as such before the run. One member alone (Chronos-2 per listing with within-day data) scored +0.298, above the average; the average stayed in the submission because choosing the member after the run would be a choice made on the test data.",
+   "evidence": [
+    {
+     "label": "Candidate 2 minus candidate 1",
+     "value": "+0.030 (95 % interval +0.016 to +0.052, bootstrap over 37 series)"
+    },
+    {
+     "label": "Series better / worse than candidate 1",
+     "value": "27 / 8"
+    },
+    {
+     "label": "Origins better than candidate 1",
+     "value": "5 of 6"
+    },
+    {
+     "label": "1 day / 3 days",
+     "value": "+0.217 / +0.333 (candidate 1: +0.184 / +0.305)"
+    },
+    {
+     "label": "Candidate 2 minus starter baseline",
+     "value": "+0.194 (95 % interval +0.106 to +0.285)"
+    }
+   ],
+   "artifact": "studies/gpuprice/results/spec3/locked-01/metrics.json"
+  },
+  {
+   "title": "Forecast each listing, then take the median",
+   "value": "+0.272",
+   "value_label": "Chronos-2 on each listing, dev origins (2026-10-01 to 2026-10-30); the same model on the median series: +0.132",
+   "body": "Each price series is the daily median over several providers' listings. The pretrained model amazon/chronos-2, with no training, scored +0.132 when it forecast the median series and +0.272 when it forecast each listing and the median was computed over draws. The starter baseline scored +0.126 on the same 3,109 cells. The same weights were used in both runs; only the level of the forecast changed.",
+   "evidence": [
+    {
+     "label": "Median series, 1 / 3 / 7 days",
+     "value": "-0.087 / +0.102 / +0.207"
+    },
+    {
+     "label": "Per listing, 1 / 3 / 7 days",
+     "value": "+0.099 / +0.249 / +0.331"
+    },
+    {
+     "label": "Starter baseline last_value_empirical",
+     "value": "+0.126"
+    }
+   ],
+   "artifact": "studies/gpuprice/results/ledger/fm-07-c2-lst-alone-indep.json"
+  },
+  {
+   "title": "The day's maximum price shows the next day's price",
+   "value": "89%",
+   "value_label": "of listing-days with a daily maximum above the daily minimum have a new price the next day; 0.7 % otherwise",
+   "body": "One collector publishes the minimum and the maximum price of each listing per day, and the series is built from the minimum. When the maximum is above the minimum, the listing's minimum is different the next day on 749 of 837 listing-days, against 50 of 6,766 otherwise. A listing seen in at most a quarter of the day's snapshots is absent the next day on 22 of 89 listing-days (25 %), against 16 of 7,378 (0.2 %) otherwise. Adding both signals to the Chronos-2 member raised its skill from +0.291 to +0.306 on the dev origins and from +0.270 to +0.298 on the locked origins.",
+   "evidence": [
+    {
+     "label": "Data",
+     "value": "20 fastgpu_daily series, listing-days 2026-09-08 to 2026-11-05, counted from the two committed data files"
+    },
+    {
+     "label": "Verda: today's maximum is tomorrow's minimum",
+     "value": "634 of 649 listing-days (98 %)"
+    },
+    {
+     "label": "Dev origins, fm2-17 to fm2-20",
+     "value": "+0.291 to +0.306; 1 day +0.181 to +0.213"
+    },
+    {
+     "label": "Locked origins, fm2-17 to member A",
+     "value": "+0.270 to +0.298 (difference +0.028, 95 % interval +0.008 to +0.068)"
+    }
+   ],
+   "artifact": "studies/gpuprice/data/fm2_intraday_v2.csv.gz"
+  },
+  {
+   "title": "An LLM adjuster gained on the dev origins but not on the locked origins",
+   "value": "+0.004",
+   "value_label": "LLM-adjusted candidate 1 minus candidate 1 on the locked origins; 95 % interval -0.024 to +0.027",
+   "body": "A hosted LLM (claude-fable-5-2, no tools) was shown candidate 1's quantiles, the listing table and candidate 1's past errors, all dated on or before the origin, and returned adjusted quantiles. On the dev origins this scored +0.313 against +0.298, a gain of +0.015. On the locked origins the gain was +0.004 with an interval that includes zero, and the adjusted forecast was better on 8 series and worse on 24. The adjuster is half of the submitted average because the average was fixed before the run; the gain of candidate 2 on the locked origins comes from the within-day member.",
+   "evidence": [
+    {
+     "label": "Dev origins",
+     "value": "+0.313 against +0.298 (3,109 cells)"
+    },
+    {
+     "label": "Locked origins",
+     "value": "+0.256 against +0.252 (357 cells)"
+    },
+    {
+     "label": "Series better / worse on the locked origins",
+     "value": "8 / 24"
+    },
+    {
+     "label": "Second provider's model (gpt-6-astra), dev origins only",
+     "value": "+0.313; no test on unseen origins, not in the submission"
+    }
+   ],
+   "artifact": "studies/gpuprice/results/spec3/locked-01/metrics.json"
+  },
+  {
+   "title": "Fine-tuning on synthetic prices beat fine-tuning on real prices",
+   "value": "+0.295",
+   "value_label": "Chronos-2 with a LoRA trained on 8,000 synthetic step-function series, dev origins; zero-shot: +0.271",
+   "body": "A LoRA trained only on simulated step-function price series, with no real price, scored +0.295 and +0.292 on two seeds against +0.271 for the untrained model. The same LoRA trained on the real listings scored +0.252 and a full fine-tune +0.241, both below the untrained model. The gain shrank in the average with the simulator (+0.299 against +0.298 for candidate 1), so it is not in the submission. A later arm that mixes the base model with five synthetic-only LoRA seeds reached +0.318 on the dev origins; it has no test on unseen origins and is not in the submission.",
+   "evidence": [
+    {
+     "label": "Synthetic-only LoRA, seeds 0 and 1",
+     "value": "+0.295, +0.292"
+    },
+    {
+     "label": "Zero-shot, same inference path",
+     "value": "+0.271"
+    },
+    {
+     "label": "LoRA / full fine-tune on real listings",
+     "value": "+0.252 / +0.241"
+    },
+    {
+     "label": "4.8M-parameter network trained on simulated listings only",
+     "value": "+0.267"
+    }
+   ],
+   "artifact": "studies/gpuprice/results/ledger/ft-05-lora-syn-only.json"
+  },
+  {
+   "title": "The first simulator did not survive unseen origins",
+   "value": "+0.061",
+   "value_label": "first listing simulator on the six origins 2026-10-31 to 2026-11-05; starter baseline: +0.089",
+   "body": "The first listing simulator scored +0.197 on the dev origins against +0.126 for the starter baseline. Run unchanged on six later origins, it scored +0.061 against +0.089. At 1 day it lost to the baseline, +0.055 against +0.123; at 3 days it tied, +0.065 against +0.063. The replacement lets each listing replay its own history, and it is a member of candidate 1.",
+   "evidence": [
+    {
+     "label": "Dev origins",
+     "value": "+0.197 against +0.126 (3,109 cells)"
+    },
+    {
+     "label": "Six later origins",
+     "value": "+0.061 against +0.089 (357 cells)"
+    },
+    {
+     "label": "1 day",
+     "value": "+0.055 against +0.123"
+    },
+    {
+     "label": "3 days",
+     "value": "+0.065 against +0.063"
+    }
+   ],
+   "artifact": "studies/gpuprice/results/spec1/late-01/metrics.json"
+  }
+ ],
+ "negatives": [
+  {
+   "title": "An open-weights LLM as the forecaster",
+   "body": "An 80B open-weights LLM that read the listing table and answered one number repeated the last value in 90 % of its samples: +0.015 on 92 cells, against +0.106 for the starter baseline and +0.264 for the best average at that time. Asked to reason first it reached +0.128."
+  },
+  {
+   "title": "Fine-tuning Chronos-2 on the real listings",
+   "body": "A LoRA scored +0.252 and a full fine-tune +0.241 on the dev origins, both below the untrained model at +0.271."
+  },
+  {
+   "title": "Widening the intervals with rolling calibration multipliers",
+   "body": "The simulator with multipliers fitted on its past forecasts scored +0.208 against +0.231 without them."
+  },
+  {
+   "title": "A longer history or another collector's series as input",
+   "body": "30 extra days of history per listing: +0.268 against +0.269. The other collector's series of the same GPU as a covariate: +0.133 against +0.132. Neither is a gain."
+  },
+  {
+   "title": "A third member in the average",
+   "body": "Adding TabPFN v2 per listing (+0.192 alone) to the two-member average lowered it from +0.292 to +0.282."
+  },
+  {
+   "title": "Ten times more synthetic training data",
+   "body": "A LoRA on 80,000 synthetic series scored +0.304 against +0.312 for the mean of five LoRA seeds on 8,000 series."
+  }
+ ],
+ "method": [
+  {
+   "step": "Build the listing panel",
+   "body": "Each of the 37 series is the daily median of the posted prices of several providers' listings. The price history of every listing is rebuilt from the data pack, up to the origin 2026-11-06."
+  },
+  {
+   "step": "Forecast each listing with Chronos-2",
+   "body": "amazon/chronos-2, without training, gives quantiles for each listing. Independent draws are taken per listing and the median over the listings is computed per draw."
+  },
+  {
+   "step": "Apply three listing rules",
+   "body": "At 1 day a listing changes price only at its own past rate of change. Scaleway listings follow the ECB EUR/USD reference rate. A listing seen before returns at its posted price."
+  },
+  {
+   "step": "Add the within-day data (member A)",
+   "body": "The day's maximum price of a listing gives its next-day price where it has done so before. A listing seen in at most a quarter of the day's snapshots may leave the next day."
+  },
+  {
+   "step": "Adjust candidate 1 with an LLM (member B)",
+   "body": "Candidate 1 is the quantile average of the Chronos-2 member without the within-day data and a simulator in which each listing replays its own past outcomes. claude-fable-5-2, with no tools, adjusts its quantiles; the band is never narrower than candidate 1's. The 37 stored responses are replayed, so no API key is needed."
+  },
+  {
+   "step": "Average A and B",
+   "body": "The submitted forecast is the equal-weight quantile average of members A and B. It was fixed in a written spec before it was scored on the locked origins."
+  }
+ ],
+ "forecast": {
+  "origin": "2026-11-06",
+  "horizons": [
+   1,
+   3,
+   7
+  ],
+  "series": [
+   {
+    "id": "afhubbard.hyperscaler_spot.A100_40GB.spot.median",
+    "last": 1.9891,
+    "q": {
+     "1": [
+      1.961072,
+      1.986915,
+      2.012425
+     ],
+     "3": [
+      1.937185,
+      1.98886,
+      2.050095
+     ],
+     "7": [
+      1.89468,
+      1.99165,
+      2.104982
+     ]
+    }
+   },
+   {
+    "id": "afhubbard.hyperscaler_spot.A100_SXM_80GB.spot.median",
+    "last": 1.8818,
+    "q": {
+     "1": [
+      1.862297,
+      1.87823,
+      1.894584
+     ],
+     "3": [
+      1.81281,
+      1.87761,
+      1.929465
+     ],
+     "7": [
+      1.781835,
+      1.876285,
+      1.951325
+     ]
+    }
+   },
+   {
+    "id": "afhubbard.hyperscaler_spot.T4.spot.median",
+    "last": 0.3047,
+    "q": {
+     "1": [
+      0.30322,
+      0.304866,
+      0.306574
+     ],
+     "3": [
+      0.302234,
+      0.304885,
+      0.308054
+     ],
+     "7": [
+      0.30124,
+      0.305327,
+      0.310504
+     ]
+    }
+   },
+   {
+    "id": "afhubbard.hyperscaler_spot.V100.spot.median",
+    "last": 1.475,
+    "q": {
+     "1": [
+      1.467432,
+      1.47475,
+      1.488815
+     ],
+     "3": [
+      1.44605,
+      1.476405,
+      1.513904
+     ],
+     "7": [
+      1.44062,
+      1.477545,
+      1.52567
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.hyperscaler_spot.A100_80GB.spot.median",
+    "last": 1.757,
+    "q": {
+     "1": [
+      1.686932,
+      1.773982,
+      1.880727
+     ],
+     "3": [
+      1.617974,
+      1.785565,
+      1.902408
+     ],
+     "7": [
+      1.478912,
+      1.817538,
+      1.960008
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.hyperscaler_spot.T4.spot.median",
+    "last": 0.089,
+    "q": {
+     "1": [
+      0.088338,
+      0.089,
+      0.089914
+     ],
+     "3": [
+      0.081665,
+      0.087162,
+      0.090426
+     ],
+     "7": [
+      0.075996,
+      0.083121,
+      0.091354
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_rate_card.A100_40GB.on_demand.median",
+    "last": 1.8155,
+    "q": {
+     "1": [
+      1.819442,
+      1.823,
+      1.82355
+     ],
+     "3": [
+      1.81818,
+      1.82762,
+      1.837374
+     ],
+     "7": [
+      1.809213,
+      1.843982,
+      1.866033
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_rate_card.A100_80GB.on_demand.median",
+    "last": 2.293,
+    "q": {
+     "1": [
+      2.288601,
+      2.303418,
+      2.32485
+     ],
+     "3": [
+      2.228316,
+      2.319422,
+      2.362724
+     ],
+     "7": [
+      2.233409,
+      2.347868,
+      2.402847
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_rate_card.B200.on_demand.median",
+    "last": 6.3,
+    "q": {
+     "1": [
+      6.3,
+      6.3,
+      6.308089
+     ],
+     "3": [
+      6.2875,
+      6.3,
+      6.348773
+     ],
+     "7": [
+      6.275,
+      6.3,
+      6.518425
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_rate_card.B300.on_demand.median",
+    "last": 8.49,
+    "q": {
+     "1": [
+      8.49,
+      8.49,
+      8.49
+     ],
+     "3": [
+      8.49,
+      8.49,
+      8.55363
+     ],
+     "7": [
+      8.489994,
+      8.49,
+      8.990636
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_rate_card.H100_PCIe_80GB.on_demand.median",
+    "last": 2.79,
+    "q": {
+     "1": [
+      2.79,
+      2.79,
+      2.79
+     ],
+     "3": [
+      2.789932,
+      2.790042,
+      2.793758
+     ],
+     "7": [
+      2.789926,
+      2.790022,
+      2.841148
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_rate_card.H100_SXM_80GB.on_demand.median",
+    "last": 3.949,
+    "q": {
+     "1": [
+      3.949,
+      3.949,
+      3.949
+     ],
+     "3": [
+      3.80925,
+      3.949,
+      3.9541
+     ],
+     "7": [
+      3.809247,
+      3.949,
+      3.95925
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_rate_card.H200.on_demand.median",
+    "last": 4.54,
+    "q": {
+     "1": [
+      4.54,
+      4.54,
+      4.54
+     ],
+     "3": [
+      4.54,
+      4.54,
+      4.54
+     ],
+     "7": [
+      4.5225,
+      4.54,
+      4.5525
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_rate_card.L40S.on_demand.median",
+    "last": 1.7355,
+    "q": {
+     "1": [
+      1.7355,
+      1.7355,
+      1.7355
+     ],
+     "3": [
+      1.719375,
+      1.7355,
+      1.7355
+     ],
+     "7": [
+      1.719375,
+      1.7355,
+      1.751625
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_rate_card.RTX_6000_Ada.on_demand.median",
+    "last": 1.528,
+    "q": {
+     "1": [
+      1.534816,
+      1.5365,
+      1.543622
+     ],
+     "3": [
+      1.541936,
+      1.550804,
+      1.569438
+     ],
+     "7": [
+      1.549,
+      1.564,
+      1.57
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_rate_card.RTX_A6000.on_demand.median",
+    "last": 0.5,
+    "q": {
+     "1": [
+      0.5,
+      0.5,
+      0.5
+     ],
+     "3": [
+      0.5,
+      0.5,
+      0.5
+     ],
+     "7": [
+      0.5,
+      0.5,
+      0.5
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_rate_card.RTX_PRO_6000.on_demand.median",
+    "last": 2.1615,
+    "q": {
+     "1": [
+      2.159375,
+      2.1615,
+      2.171382
+     ],
+     "3": [
+      2.136688,
+      2.1624,
+      2.279702
+     ],
+     "7": [
+      2.134852,
+      2.162746,
+      2.28207
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_spot.A100_80GB.spot.median",
+    "last": 1.147,
+    "q": {
+     "1": [
+      1.145236,
+      1.152627,
+      1.162452
+     ],
+     "3": [
+      1.145002,
+      1.162674,
+      1.177674
+     ],
+     "7": [
+      1.146158,
+      1.175911,
+      1.189
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_spot.B200.spot.median",
+    "last": 4.177,
+    "q": {
+     "1": [
+      4.177,
+      4.177,
+      4.177
+     ],
+     "3": [
+      4.177,
+      4.177,
+      4.177
+     ],
+     "7": [
+      4.177,
+      4.177,
+      4.193269
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_spot.B300.spot.median",
+    "last": 4.735,
+    "q": {
+     "1": [
+      4.735,
+      4.735,
+      4.735
+     ],
+     "3": [
+      4.735,
+      4.735,
+      4.740078
+     ],
+     "7": [
+      4.735,
+      4.735,
+      4.751795
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_spot.H100_SXM_80GB.spot.median",
+    "last": 2.285,
+    "q": {
+     "1": [
+      2.285,
+      2.285,
+      2.285
+     ],
+     "3": [
+      2.28125,
+      2.285,
+      2.285
+     ],
+     "7": [
+      2.28125,
+      2.285,
+      2.28875
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_spot.H200.spot.median",
+    "last": 2.8,
+    "q": {
+     "1": [
+      2.8,
+      2.8,
+      2.8
+     ],
+     "3": [
+      2.8,
+      2.8,
+      2.80648
+     ],
+     "7": [
+      2.8,
+      2.8,
+      2.816292
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_spot.L40S.spot.median",
+    "last": 0.97,
+    "q": {
+     "1": [
+      0.97,
+      0.9711,
+      0.97554
+     ],
+     "3": [
+      0.96948,
+      0.9825,
+      0.985
+     ],
+     "7": [
+      0.975126,
+      0.985,
+      0.985
+     ]
+    }
+   },
+   {
+    "id": "fastgpu_daily.neocloud_spot.RTX_PRO_6000.spot.median",
+    "last": 1.4145,
+    "q": {
+     "1": [
+      1.417645,
+      1.419,
+      1.42135
+     ],
+     "3": [
+      1.418624,
+      1.424724,
+      1.433059
+     ],
+     "7": [
+      1.42273,
+      1.445289,
+      1.456748
+     ]
+    }
+   },
+   {
+    "id": "gpurentalprices.marketplace_ask.H100_80GB.spot.median",
+    "last": 1.875,
+    "q": {
+     "1": [
+      1.775,
+      1.992811,
+      2.440783
+     ],
+     "3": [
+      1.75395,
+      1.98,
+      2.393238
+     ],
+     "7": [
+      1.758714,
+      2.042243,
+      2.575
+     ]
+    }
+   },
+   {
+    "id": "gpurentalprices.neocloud_rate_card.A100_40GB.on_demand.median",
+    "last": 1.99,
+    "q": {
+     "1": [
+      1.99,
+      1.99,
+      1.99
+     ],
+     "3": [
+      1.99,
+      1.99,
+      1.99
+     ],
+     "7": [
+      1.99,
+      1.99,
+      1.99
+     ]
+    }
+   },
+   {
+    "id": "gpurentalprices.neocloud_rate_card.A100_SXM_80GB.on_demand.median",
+    "last": 1.95,
+    "q": {
+     "1": [
+      1.939608,
+      1.95,
+      1.95
+     ],
+     "3": [
+      1.93258,
+      1.95,
+      1.95
+     ],
+     "7": [
+      1.93372,
+      1.95,
+      1.965
+     ]
+    }
+   },
+   {
+    "id": "gpurentalprices.neocloud_rate_card.B200.on_demand.median",
+    "last": 7.89,
+    "q": {
+     "1": [
+      7.815,
+      7.89,
+      7.996864
+     ],
+     "3": [
+      7.129446,
+      7.453102,
+      8.229447
+     ],
+     "7": [
+      7.116684,
+      7.444416,
+      8.14
+     ]
+    }
+   },
+   {
+    "id": "gpurentalprices.neocloud_rate_card.B300.on_demand.median",
+    "last": 9.745,
+    "q": {
+     "1": [
+      9.745,
+      9.745,
+      9.8675
+     ],
+     "3": [
+      9.72165,
+      9.755626,
+      10.346747
+     ],
+     "7": [
+      9.653792,
+      9.77706,
+      10.59
+     ]
+    }
+   },
+   {
+    "id": "gpurentalprices.neocloud_rate_card.H100_80GB.on_demand.median",
+    "last": 3.885,
+    "q": {
+     "1": [
+      3.6575,
+      3.885,
+      3.925266
+     ],
+     "3": [
+      3.680014,
+      3.864456,
+      3.936694
+     ],
+     "7": [
+      3.632047,
+      3.872134,
+      3.94
+     ]
+    }
+   },
+   {
+    "id": "gpurentalprices.neocloud_rate_card.H100_SXM_80GB.on_demand.median",
+    "last": 3.5539,
+    "q": {
+     "1": [
+      3.536502,
+      3.54311,
+      3.55361
+     ],
+     "3": [
+      3.53511,
+      3.54261,
+      3.895874
+     ],
+     "7": [
+      3.519385,
+      3.560019,
+      3.914224
+     ]
+    }
+   },
+   {
+    "id": "gpurentalprices.neocloud_rate_card.H200.on_demand.median",
+    "last": 4.59,
+    "q": {
+     "1": [
+      4.59,
+      4.59,
+      4.655
+     ],
+     "3": [
+      4.5525,
+      4.590964,
+      4.944741
+     ],
+     "7": [
+      4.5525,
+      4.592706,
+      5.044108
+     ]
+    }
+   },
+   {
+    "id": "gpurentalprices.neocloud_rate_card.L4.on_demand.median",
+    "last": 0.8839,
+    "q": {
+     "1": [
+      0.879377,
+      0.881377,
+      0.940208
+     ],
+     "3": [
+      0.878377,
+      0.881227,
+      0.940564
+     ],
+     "7": [
+      0.72,
+      0.883032,
+      0.943958
+     ]
+    }
+   },
+   {
+    "id": "gpurentalprices.neocloud_rate_card.L40S.on_demand.median",
+    "last": 1.6099,
+    "q": {
+     "1": [
+      1.605532,
+      1.607532,
+      1.610032
+     ],
+     "3": [
+      1.603782,
+      1.607282,
+      1.643296
+     ],
+     "7": [
+      1.58273,
+      1.607774,
+      1.641038
+     ]
+    }
+   },
+   {
+    "id": "gpurentalprices.neocloud_rate_card.RTX_6000_Ada.on_demand.median",
+    "last": 1.2515,
+    "q": {
+     "1": [
+      1.223007,
+      1.249059,
+      1.267906
+     ],
+     "3": [
+      1.195072,
+      1.246984,
+      1.290506
+     ],
+     "7": [
+      1.136036,
+      1.249046,
+      1.330162
+     ]
+    }
+   },
+   {
+    "id": "gpurentalprices.neocloud_rate_card.RTX_A6000.on_demand.median",
+    "last": 0.711,
+    "q": {
+     "1": [
+      0.70658,
+      0.7125,
+      0.72027
+     ],
+     "3": [
+      0.706464,
+      0.719692,
+      0.775326
+     ],
+     "7": [
+      0.672716,
+      0.731678,
+      0.85033
+     ]
+    }
+   },
+   {
+    "id": "gpurentalprices.neocloud_rate_card.RTX_PRO_6000.on_demand.median",
+    "last": 2.3,
+    "q": {
+     "1": [
+      2.22156,
+      2.3,
+      2.345
+     ],
+     "3": [
+      2.195367,
+      2.294695,
+      2.366428
+     ],
+     "7": [
+      2.189626,
+      2.299712,
+      2.392568
+     ]
+    }
+   }
+  ]
+ },
+ "repro": {
+  "command": "bash studies/gpuprice/jobs/reproduce.sh",
+  "repo_path": "studies/gpuprice/"
+ }
+}

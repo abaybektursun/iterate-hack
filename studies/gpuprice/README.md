@@ -181,3 +181,10 @@ are not independent; every truth is inside the pack, so it is development feedba
 - External data is allowed only if public, free and dated before the origin (§9). Vast.ai, RunPod, eBay, Reddit,
   gpulist.ai, cloud-gpus.com, SkyPilot, dstack and the Ornn, Silicon Data and SemiAnalysis dashboards are barred
   (§7, §9).
+
+## Public page
+
+https://gpu.invariant.team shows the main results. Source: `site/` (`index.html` reads `data.json`; `build.py` writes
+`data.json` from `site/content.json`, `results/ledger/`, the locked metrics and the submission CSV, so a new ledger
+entry appears without editing the page). Publish after every new result: `studies/gpuprice/site/deploy.sh`
+(CloudFormation stack `gpuprice-site`, AWS profile `fuelos`, `site/template.yaml`: a private S3 bucket behind CloudFront).

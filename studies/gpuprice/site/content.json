@@ -1,0 +1,173 @@
+{
+  "title": "Forecasting GPU rental prices from the listings behind the median",
+  "subtitle": "Quantile forecasts (q10, q50, q90) of 37 posted GPU rental price series, forecast origin 2026-11-06, horizons 1, 3 and 7 days. Skill = 1 - pinball loss / pinball loss of the last-value forecast; 0 is the last-value forecast, higher is better.",
+  "hero": {
+    "value": "+0.283",
+    "label": "Pooled skill of the submitted forecaster on the locked origins (2026-10-31 to 2026-11-05, unseen)",
+    "detail": "357 cells: 37 series, 6 origins, horizons 1 and 3 days (the 7-day horizon has no truth on these origins). The forecaster was written down before the scoring run. This was the second scoring run on these origins; the first scored its predecessor at +0.252.",
+    "baseline": {"value": "+0.089", "label": "last_value_empirical, the strongest baseline of the starter kit, on the same 357 cells"}
+  },
+  "stats": [
+    {"value": "+0.316", "label": "Pooled skill on the dev origins (2026-10-01 to 2026-10-30), 3,109 cells, horizons 1, 3, 7 days"},
+    {"value": "+0.194", "label": "Gain over last_value_empirical on the locked origins; 95 % interval +0.106 to +0.285, bootstrap over the 37 series"},
+    {"value": "0.85", "label": "Share of true prices inside [q10, q90] on the locked origins; the target is 0.80"},
+    {"value": "111", "label": "Submitted forecasts: 37 series at 3 horizons, each with q10, q50 and q90"}
+  ],
+  "locked": [
+    {"name": "last_value_empirical (starter baseline)", "file": "results/spec3/locked-01/metrics.json", "key": "lve",
+     "note": "Last value with intervals from past changes. The strongest baseline of the starter kit."},
+    {"name": "First listing simulator", "file": "results/spec1/late-01/metrics.json", "key": "sim",
+     "note": "Scored +0.197 on the dev origins and fell below the baseline here. It was replaced."},
+    {"name": "Own-history simulator alone (sim2-15)", "file": "results/spec2/locked-01/metrics.json", "key": "sim2-15",
+     "note": "Member of candidate 1. Each listing replays its own past outcomes. No model."},
+    {"name": "Chronos-2 per listing alone (fm2-17)", "file": "results/spec3/locked-01/metrics.json", "key": "fm2-17",
+     "note": "Member of candidate 1. Scored above candidate 1 on these origins."},
+    {"name": "Candidate 1", "file": "results/spec3/locked-01/metrics.json", "key": "candidate 1",
+     "note": "Quantile average of fm2-17 and sim2-15, fixed before the first scoring run on these origins."},
+    {"name": "Member B: candidate 1 adjusted by an LLM", "file": "results/spec3/locked-01/metrics.json", "key": "B (Fable-adjusted c1)",
+     "note": "Not separated from candidate 1: difference +0.004, 95 % interval -0.024 to +0.027."},
+    {"name": "Member A: Chronos-2 per listing with within-day data (fm2-20)", "file": "results/spec3/locked-01/metrics.json", "key": "A (fm2-20)",
+     "note": "Scored above candidate 2. The average was kept because it was fixed before the run."},
+    {"name": "Candidate 2 (submitted)", "file": "results/spec3/locked-01/metrics.json", "key": "candidate 2",
+     "note": "Quantile average of members A and B, fixed before the second scoring run on these origins."}
+  ],
+  "climb_labels": {
+    "it00-lve": "Starter baseline: last value, empirical intervals",
+    "it00-drift": "Starter baseline: drift",
+    "it01-sim": "First listing simulator (pooled outcomes)",
+    "it01-control": "Control: resample the median's own changes",
+    "fm-01-c2-alone": "Chronos-2 on each median series",
+    "fm-05-c2-lst-group-indep": "Chronos-2 on each listing, median over draws",
+    "fm-07-c2-lst-alone-indep": "Chronos-2 on each listing alone, independent draws",
+    "sim2-03-own": "Simulator: each listing replays its own history",
+    "sim2-15-final": "Own-history simulator, final version",
+    "ens-01-avg": "Average of Chronos-2 per listing and simulator",
+    "ens-03-avg-fm07-sim215": "Average of fm-07 and the final simulator",
+    "ft-02-lora": "LoRA on real listing prices",
+    "ft-03-full": "Full fine-tune on real listing prices",
+    "ft-05-lora-syn-only": "LoRA on 8,000 synthetic series only, seed 0",
+    "ft-07-lora-syn-only-seed1": "LoRA on synthetic series only, seed 1",
+    "ens-04-avg-ft05-sim215": "Average of synthetic-only LoRA and simulator",
+    "tab-01-lst-alone-indep": "TabPFN v2 on each listing",
+    "pfn-02-net-gpu": "4.8M-parameter network trained on simulated listings",
+    "fm2-17-combo": "Chronos-2 per listing + three listing rules",
+    "ens-05-avg-fm217-sim215": "Candidate 1: average of fm2-17 and simulator",
+    "fm2-19-intraday": "fm2-17 + the day's maximum price per listing",
+    "fm2-20-exit": "fm2-19 + exit signal from the snapshot share",
+    "llm2-01-fable-adj": "LLM adjusts candidate 1",
+    "llm2-03-fable-adj-wide": "LLM adjusts candidate 1, band never narrower",
+    "ens-06-avg-fm220-llm203": "Candidate 2 (submitted): average of fm2-20 and llm2-03",
+    "loc-09-lora-5seed-base-half": "Half base, half 5-seed synthetic LoRA (not submitted)",
+    "llm2-04-astra-adj-wide": "Second provider's LLM adjusts candidate 1 (not submitted)",
+    "llm2-05-sol-adj2-ens06-wide": "LLM adjusts candidate 2 (not submitted, no unseen test)"
+  },
+  "findings": [
+    {
+      "title": "The submitted forecaster held on origins it had not seen",
+      "value": "+0.283",
+      "value_label": "candidate 2 on the locked origins (2026-10-31 to 2026-11-05, unseen), against +0.252 for candidate 1",
+      "body": "Candidate 2 was fixed in a written spec before it was scored on the locked origins. It scored +0.283 against +0.252 for candidate 1 and +0.089 for the starter baseline, on 357 cells at 1 and 3 days. This was the second scoring run on these origins, and it was declared as such before the run. One member alone (Chronos-2 per listing with within-day data) scored +0.298, above the average; the average stayed in the submission because choosing the member after the run would be a choice made on the test data.",
+      "evidence": [
+        {"label": "Candidate 2 minus candidate 1", "value": "+0.030 (95 % interval +0.016 to +0.052, bootstrap over 37 series)"},
+        {"label": "Series better / worse than candidate 1", "value": "27 / 8"},
+        {"label": "Origins better than candidate 1", "value": "5 of 6"},
+        {"label": "1 day / 3 days", "value": "+0.217 / +0.333 (candidate 1: +0.184 / +0.305)"},
+        {"label": "Candidate 2 minus starter baseline", "value": "+0.194 (95 % interval +0.106 to +0.285)"}
+      ],
+      "artifact": "studies/gpuprice/results/spec3/locked-01/metrics.json"
+    },
+    {
+      "title": "Forecast each listing, then take the median",
+      "value": "+0.272",
+      "value_label": "Chronos-2 on each listing, dev origins (2026-10-01 to 2026-10-30); the same model on the median series: +0.132",
+      "body": "Each price series is the daily median over several providers' listings. The pretrained model amazon/chronos-2, with no training, scored +0.132 when it forecast the median series and +0.272 when it forecast each listing and the median was computed over draws. The starter baseline scored +0.126 on the same 3,109 cells. The same weights were used in both runs; only the level of the forecast changed.",
+      "evidence": [
+        {"label": "Median series, 1 / 3 / 7 days", "value": "-0.087 / +0.102 / +0.207"},
+        {"label": "Per listing, 1 / 3 / 7 days", "value": "+0.099 / +0.249 / +0.331"},
+        {"label": "Starter baseline last_value_empirical", "value": "+0.126"}
+      ],
+      "artifact": "studies/gpuprice/results/ledger/fm-07-c2-lst-alone-indep.json"
+    },
+    {
+      "title": "The day's maximum price shows the next day's price",
+      "value": "89%",
+      "value_label": "of listing-days with a daily maximum above the daily minimum have a new price the next day; 0.7 % otherwise",
+      "body": "One collector publishes the minimum and the maximum price of each listing per day, and the series is built from the minimum. When the maximum is above the minimum, the listing's minimum is different the next day on 749 of 837 listing-days, against 50 of 6,766 otherwise. A listing seen in at most a quarter of the day's snapshots is absent the next day on 22 of 89 listing-days (25 %), against 16 of 7,378 (0.2 %) otherwise. Adding both signals to the Chronos-2 member raised its skill from +0.291 to +0.306 on the dev origins and from +0.270 to +0.298 on the locked origins.",
+      "evidence": [
+        {"label": "Data", "value": "20 fastgpu_daily series, listing-days 2026-09-08 to 2026-11-05, counted from the two committed data files"},
+        {"label": "Verda: today's maximum is tomorrow's minimum", "value": "634 of 649 listing-days (98 %)"},
+        {"label": "Dev origins, fm2-17 to fm2-20", "value": "+0.291 to +0.306; 1 day +0.181 to +0.213"},
+        {"label": "Locked origins, fm2-17 to member A", "value": "+0.270 to +0.298 (difference +0.028, 95 % interval +0.008 to +0.068)"}
+      ],
+      "artifact": "studies/gpuprice/data/fm2_intraday_v2.csv.gz"
+    },
+    {
+      "title": "An LLM adjuster gained on the dev origins but not on the locked origins",
+      "value": "+0.004",
+      "value_label": "LLM-adjusted candidate 1 minus candidate 1 on the locked origins; 95 % interval -0.024 to +0.027",
+      "body": "A hosted LLM (claude-fable-5-2, no tools) was shown candidate 1's quantiles, the listing table and candidate 1's past errors, all dated on or before the origin, and returned adjusted quantiles. On the dev origins this scored +0.313 against +0.298, a gain of +0.015. On the locked origins the gain was +0.004 with an interval that includes zero, and the adjusted forecast was better on 8 series and worse on 24. The adjuster is half of the submitted average because the average was fixed before the run; the gain of candidate 2 on the locked origins comes from the within-day member.",
+      "evidence": [
+        {"label": "Dev origins", "value": "+0.313 against +0.298 (3,109 cells)"},
+        {"label": "Locked origins", "value": "+0.256 against +0.252 (357 cells)"},
+        {"label": "Series better / worse on the locked origins", "value": "8 / 24"},
+        {"label": "Second provider's model (gpt-6-astra), dev origins only", "value": "+0.313; no test on unseen origins, not in the submission"}
+      ],
+      "artifact": "studies/gpuprice/results/spec3/locked-01/metrics.json"
+    },
+    {
+      "title": "Fine-tuning on synthetic prices beat fine-tuning on real prices",
+      "value": "+0.295",
+      "value_label": "Chronos-2 with a LoRA trained on 8,000 synthetic step-function series, dev origins; zero-shot: +0.271",
+      "body": "A LoRA trained only on simulated step-function price series, with no real price, scored +0.295 and +0.292 on two seeds against +0.271 for the untrained model. The same LoRA trained on the real listings scored +0.252 and a full fine-tune +0.241, both below the untrained model. The gain shrank in the average with the simulator (+0.299 against +0.298 for candidate 1), so it is not in the submission. A later arm that mixes the base model with five synthetic-only LoRA seeds reached +0.318 on the dev origins; it has no test on unseen origins and is not in the submission.",
+      "evidence": [
+        {"label": "Synthetic-only LoRA, seeds 0 and 1", "value": "+0.295, +0.292"},
+        {"label": "Zero-shot, same inference path", "value": "+0.271"},
+        {"label": "LoRA / full fine-tune on real listings", "value": "+0.252 / +0.241"},
+        {"label": "4.8M-parameter network trained on simulated listings only", "value": "+0.267"}
+      ],
+      "artifact": "studies/gpuprice/results/ledger/ft-05-lora-syn-only.json"
+    },
+    {
+      "title": "The first simulator did not survive unseen origins",
+      "value": "+0.061",
+      "value_label": "first listing simulator on the six origins 2026-10-31 to 2026-11-05; starter baseline: +0.089",
+      "body": "The first listing simulator scored +0.197 on the dev origins against +0.126 for the starter baseline. Run unchanged on six later origins, it scored +0.061 against +0.089. At 1 day it lost to the baseline, +0.055 against +0.123; at 3 days it tied, +0.065 against +0.063. The replacement lets each listing replay its own history, and it is a member of candidate 1.",
+      "evidence": [
+        {"label": "Dev origins", "value": "+0.197 against +0.126 (3,109 cells)"},
+        {"label": "Six later origins", "value": "+0.061 against +0.089 (357 cells)"},
+        {"label": "1 day", "value": "+0.055 against +0.123"},
+        {"label": "3 days", "value": "+0.065 against +0.063"}
+      ],
+      "artifact": "studies/gpuprice/results/spec1/late-01/metrics.json"
+    }
+  ],
+  "negatives": [
+    {"title": "An open-weights LLM as the forecaster",
+     "body": "An 80B open-weights LLM that read the listing table and answered one number repeated the last value in 90 % of its samples: +0.015 on 92 cells, against +0.106 for the starter baseline and +0.264 for the best average at that time. Asked to reason first it reached +0.128."},
+    {"title": "Fine-tuning Chronos-2 on the real listings",
+     "body": "A LoRA scored +0.252 and a full fine-tune +0.241 on the dev origins, both below the untrained model at +0.271."},
+    {"title": "Widening the intervals with rolling calibration multipliers",
+     "body": "The simulator with multipliers fitted on its past forecasts scored +0.208 against +0.231 without them."},
+    {"title": "A longer history or another collector's series as input",
+     "body": "30 extra days of history per listing: +0.268 against +0.269. The other collector's series of the same GPU as a covariate: +0.133 against +0.132. Neither is a gain."},
+    {"title": "A third member in the average",
+     "body": "Adding TabPFN v2 per listing (+0.192 alone) to the two-member average lowered it from +0.292 to +0.282."},
+    {"title": "Ten times more synthetic training data",
+     "body": "A LoRA on 80,000 synthetic series scored +0.304 against +0.312 for the mean of five LoRA seeds on 8,000 series."}
+  ],
+  "method": [
+    {"step": "Build the listing panel",
+     "body": "Each of the 37 series is the daily median of the posted prices of several providers' listings. The price history of every listing is rebuilt from the data pack, up to the origin 2026-11-06."},
+    {"step": "Forecast each listing with Chronos-2",
+     "body": "amazon/chronos-2, without training, gives quantiles for each listing. Independent draws are taken per listing and the median over the listings is computed per draw."},
+    {"step": "Apply three listing rules",
+     "body": "At 1 day a listing changes price only at its own past rate of change. Scaleway listings follow the ECB EUR/USD reference rate. A listing seen before returns at its posted price."},
+    {"step": "Add the within-day data (member A)",
+     "body": "The day's maximum price of a listing gives its next-day price where it has done so before. A listing seen in at most a quarter of the day's snapshots may leave the next day."},
+    {"step": "Adjust candidate 1 with an LLM (member B)",
+     "body": "Candidate 1 is the quantile average of the Chronos-2 member without the within-day data and a simulator in which each listing replays its own past outcomes. claude-fable-5-2, with no tools, adjusts its quantiles; the band is never narrower than candidate 1's. The 37 stored responses are replayed, so no API key is needed."},
+    {"step": "Average A and B",
+     "body": "The submitted forecast is the equal-weight quantile average of members A and B. It was fixed in a written spec before it was scored on the locked origins."}
+  ],
+  "repro": {"command": "bash studies/gpuprice/jobs/reproduce.sh", "repo_path": "studies/gpuprice/"}
+}

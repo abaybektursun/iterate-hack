@@ -78,7 +78,9 @@ that turn over daily is forecast poorly by every listing-level method.
 
 6. **The data held an unused next-day price.** One collector publishes the day's minimum, average and maximum
    price per listing; the series is built from the minimum. When the maximum is above the minimum the listing has
-   a new price the next day in 76 % of cases, against 1.2 % otherwise. Verda reprices once a day, about a third into the UTC
+   a new price the next day on 749 of 837 listing-days (89 %), against 50 of 6,766 (0.7 %) otherwise (the 20 fastgpu_daily
+   headline series, 2026-09-08 to 2026-11-05, counted from `data/fm2_intraday_v2.csv.gz` and `data/fm2_panel_v2.csv.gz`;
+   an earlier version of this line said 76 % and 1.2 %, which those files do not reproduce). Verda reprices once a day, about a third into the UTC
    day (read from the day's average price), so its maximum today is its minimum tomorrow in 98 % of cases. A listing seen in at most a quarter of
    the day's snapshots is gone the next day in 25 % of cases, against 0.2 % otherwise. Using both: +0.291 to
    +0.306 in development and +0.270 to +0.298 on the locked origins.
