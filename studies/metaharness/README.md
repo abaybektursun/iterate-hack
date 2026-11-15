@@ -48,6 +48,10 @@ cells.
 
 ![chart](results/planted/summary-01/chart.png)
 
+Page on the team site: `tools/finding_review_cuts_waste.py`, served at `/finding/review-cuts-waste` with a tile on
+`/findings` (two glass columns, review skill against plain instruction, a switch through the rounds). Every number on it
+is copied from `results/planted/summary-01/metrics.json`.
+
 | | before | after round 1 | after round 2 | after round 3 |
 |---|---|---|---|---|
 | skill: container minutes per batch, mean (runs) | 16.3 (15.6/17.2/16.1) | 9.3 (9.8/9.0/9.0) | 6.5 (6.2/6.7/6.5) | 4.4 (4.0/4.8/4.5) |
