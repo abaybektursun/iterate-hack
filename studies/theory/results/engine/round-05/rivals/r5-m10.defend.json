@@ -1,0 +1,5 @@
+[
+ {"k": 1, "value": 0.28, "low": 0.16, "high": 0.40, "why": "With self-opened answers in the cued mode (about 82 % at T 1.0) and about a third of plain answers self-opening, the plain mode scores about 26-35 % at T 1.0 (44.8 overall). At T 0.6 the plain total is 63.8 % and self-opened answers drop toward the cued 70.8 %, so the non-self-opened mode must score about 60 %, roughly 28 points higher on the same problems."},
+ {"k": 2, "value": -0.10, "low": -0.19, "high": -0.01, "why": "At T 0.6 the plain mode works out to about 60 % (63.8 overall, minus about 34 % self-opened answers scoring like the cued mode at about 71 %), while cued answers on the same problems score about 70 % (354/500 overall), so the gap is about -10 points."},
+ {"k": 3, "value": 0.11, "low": 0.02, "high": 0.20, "why": "Self-opened T 0.6 plain answers are in the cued mode, so they score like cued T 0.6 answers including their loops (about 71 %). The non-self-opened rest score about 60 % from the 63.8 % mixture, a gap of about 11 points."}
+]

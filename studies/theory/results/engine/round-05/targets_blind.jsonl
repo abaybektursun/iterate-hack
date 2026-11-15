@@ -1,0 +1,70 @@
+{"id": "t01", "what": "Olmo-3.1-7B-RL-Zero-Math answers on MATH-500 n=500, T 1.0 / top-p 1.0, cue-free plain prompt, checking markers (wait/hmm/actually) per 1,000 tokens, RL model", "unit": "markers per 1k tokens"}
+{"id": "t02", "what": "Olmo-3-1025-7B base + opening cue answers on MATH-500 n=500, T 1.0 / top-p 1.0, checking markers (wait/hmm/actually) per 1,000 tokens", "unit": "markers per 1k tokens"}
+{"id": "t03", "what": "Olmo-3.1-7B-RL-Zero-Math on MATH-500, first wrong steps (located by judges) per 1,000 finished tokens", "unit": "first wrong steps per 1k finished tokens"}
+{"id": "t04", "what": "Olmo-3-1025-7B base + cue on MATH-500, first wrong steps (located by judges) per 1,000 finished tokens", "unit": "first wrong steps per 1k finished tokens"}
+{"id": "t05", "what": "Cued Olmo-3-1025-7B base, 63 MATH-500 problems, cap 1,024 tokens, T 1.0, no steering, hold-on words (Wait/Hmm type) per 1,000 tokens", "unit": "words per 1k tokens"}
+{"id": "t06", "what": "Cued base, 63 MATH-500 problems, cap 1,024, T 1.0, J-lens Wait/Hmm direction added at layer 24, alpha 0.12 of block median output norm, hold-on words per 1,000 tokens", "unit": "words per 1k tokens"}
+{"id": "t07", "what": "Cued base, 63 MATH-500 problems, cap 1,024, T 1.0, J-lens Wait/Hmm direction added at layer 24, alpha 0.25 of block median output norm, hold-on words per 1,000 tokens", "unit": "words per 1k tokens"}
+{"id": "t08", "what": "MATH-500 n=500, T 1.0, v3: logit shift of per-problem score for theta 0.25 = base + 0.25 (RL - base), cue, vs base+cue sample 0 (noise floor 0.12-0.17)", "unit": "logits"}
+{"id": "t09", "what": "MATH-500 n=500, T 1.0, v3: logit shift of per-problem score for theta 0.5 = base + 0.5 (RL - base), cue, vs base+cue sample 0", "unit": "logits"}
+{"id": "t10", "what": "MATH-500 n=500, T 1.0, v3: logit shift of per-problem score for Think-SFT (Olmo-3-7B-Think-SFT) with cue vs base+cue sample 0", "unit": "logits"}
+{"id": "t11", "what": "Olmo-3.1-7B-RL-Zero-Code, plain prompt, HumanEval+ and MBPP+ (538 problems), T 1.0, one sample, problems passed", "unit": "right of 538"}
+{"id": "t12", "what": "Olmo-3-1025-7B base, plain prompt, HumanEval+ and MBPP+ (538 problems), T 1.0, one sample, problems passed", "unit": "right of 538"}
+{"id": "t13", "what": "Olmo-3-1025-7B base + 12-token Code cue, HumanEval+ and MBPP+ (538 problems), T 1.0, one sample, problems passed", "unit": "right of 538"}
+{"id": "t14", "what": "Olmo-3-1025-7B base + Math cue, HumanEval+ and MBPP+ (538 problems), T 1.0, one sample, problems passed", "unit": "right of 538"}
+{"id": "t15", "what": "Cued base, MATH-500 n=494 (example problems left out), T 1.0 / top-p 1.0, v3, cue + 3 solved examples written by the cued base in context, draw 1", "unit": "right of 494"}
+{"id": "t16", "what": "Cued base, MATH-500 n=494 (example problems left out), T 1.0 / top-p 1.0, v3, cue + 3 solved examples written by Math-RL in context, draw 1", "unit": "right of 494"}
+{"id": "t17", "what": "Cued base, MATH-500 n=494 (example problems left out), T 1.0 / top-p 1.0, v3, cue + 3 solved examples written by Math-RL in context, draw 2", "unit": "right of 494"}
+{"id": "t18", "what": "Cued base, MATH-500 2,000 stored samples (4 per problem, T 1.0, v3), linear probe on residual stream (layers 12/20/28) after 1,000 answer tokens, within-problem AUROC for good vs bad sample (target: sample in largest group of agreeing answers), 5 folds by problem", "unit": "AUROC"}
+{"id": "t19", "what": "Cued base, MATH-500 n=500, T 1.0, v3: offline stop-and-restart at 1,000 tokens using the linear probe as critic, right of 500", "unit": "right of 500"}
+{"id": "t20", "what": "Cued base, MATH-500 n=500, T 1.0, v3, 4 stored samples per problem: ceiling with a perfect critic at 1,000 tokens, no answer key, right of 500", "unit": "right of 500"}
+{"id": "t21", "what": "Cued base, MATH-500 n=500, T 1.0, v3, 4 stored samples per problem: ceiling with a perfect critic at 1,000 tokens using the answer key, right of 500", "unit": "right of 500"}
+{"id": "t22", "what": "Cloglog hazard item model, 36 arms x 500 MATH-500 problems, T 1.0, v3: RL hazard ratio vs base on the hardest 46 problems", "unit": "hazard ratio"}
+{"id": "t23", "what": "Cloglog hazard item model, 36 arms x 500 MATH-500 problems, T 1.0, v3: RL hazard ratio vs base on the middle 119 problems", "unit": "hazard ratio"}
+{"id": "t24", "what": "Cloglog hazard item model, MATH-500 n=500, T 1.0, v3: average hazard ratio of RL plain vs pooled base + cue", "unit": "hazard ratio"}
+{"id": "t25", "what": "Cued base, hard328 n=328, T 1.0 / top-p 1.0, v3, stored answers cut at 4,000 tokens and forced to a boxed answer, only continuation graded", "unit": "right of 328"}
+{"id": "t26", "what": "Cued base, hard328 n=328, T 1.0 / top-p 1.0, v3, stored answers over 8,000 tokens cut and forced to a boxed answer, only continuation graded", "unit": "right of 328"}
+{"id": "t27", "what": "Cued base, hard328 n=328, T 1.0 / top-p 1.0, v3, stored answers over 12,000 tokens cut and forced to a boxed answer, only continuation graded", "unit": "right of 328"}
+{"id": "t28", "what": "Cued base, 34 held-out loops of base+cue MATH-500 T 0.6, teacher-forced continuation of 1,600 tokens, loops remaining after zeroing the 100 MLP neurons ranked by effect", "unit": "loops of 34"}
+{"id": "t29", "what": "Cued base, 34 held-out loops of base+cue MATH-500 T 0.6, teacher-forced continuation of 1,600 tokens, loops remaining with no edit", "unit": "loops of 34"}
+{"id": "t30", "what": "Cued base, normal (non-loop) text, loss change after zeroing the 100 MLP neurons ranked by effect", "unit": "percent"}
+{"id": "t31", "what": "51 judged finished-wrong cued-base MATH-500 samples: D = (log p_model - log p_base) over first wrong step minus mean over 200 control spans, model Olmo-3-7B-RL-Zero-Mix", "unit": "nats"}
+{"id": "t32", "what": "51 judged finished-wrong cued-base MATH-500 samples: D = (log p_model - log p_base) over first wrong step minus mean over 200 control spans, model Olmo-3.1-7B-RL-Zero-Math", "unit": "nats"}
+{"id": "t33", "what": "51 judged finished-wrong cued-base MATH-500 samples: D = (log p_model - log p_base) over first wrong step minus mean over 200 control spans, model Olmo-3-7B-RL-Zero-IF", "unit": "nats"}
+{"id": "t34", "what": "Cued base, MATH-500 n=500, T 1.0, v3, 4 stored samples: vote over 4 after restart on cap hits, ties to shortest, right of 500", "unit": "right of 500"}
+{"id": "t35", "what": "Olmo-3.1-7B-RL-Zero-Math plain, MATH-500 n=500, T 1.0, v3, one sample, mean right over 4 samples", "unit": "right of 500"}
+{"id": "t36", "what": "Olmo-3.1-7B-RL-Zero-Math plain, MATH-500 n=500, T 1.0, v3, sequential vote (draw 2, stop when two agree, else one more up to 4, ties to shortest), mean over 24 draw orders", "unit": "right of 500"}
+{"id": "t37", "what": "Olmo-3-7B-Think-SFT + cue, hard328 n=328, T 1.0 / top-p 1.0, v3, 1 sample, seed 3000000", "unit": "right of 328"}
+{"id": "t38", "what": "Olmo-3-7B-Think-SFT plain prompt, hard328 n=328, T 1.0 / top-p 1.0, v3, 1 sample, seed 3000000", "unit": "right of 328"}
+{"id": "t39", "what": "Olmo-3-7B-Think-SFT + cue, hard328 n=328, T 1.0 / top-p 1.0, v3, mean tokens per problem", "unit": "tokens per problem"}
+{"id": "t40", "what": "MATH-500 n=500, T 1.0, v3, levels 1-2: expected wrong problems for 1 Think-SFT sample", "unit": "problems wrong"}
+{"id": "t41", "what": "MATH-500 n=500, T 1.0, v3, levels 1-2: wrong problems for the cued base (mean of samples)", "unit": "problems wrong"}
+{"id": "t42", "what": "MATH-500 n=500, T 1.0, v3: Think-SFT single sample, errors that are cap hits", "unit": "cap-hit errors of 46"}
+{"id": "t43", "what": "Base LoRA-tuned on its own vote-selected MATH-500 cue samples (V), evaluated with cue on hard328 n=328, T 1.0 / top-p 1.0, v3", "unit": "right of 328"}
+{"id": "t44", "what": "Base LoRA-tuned on its own vote-selected MATH-500 cue samples (V), evaluated with plain prompt on hard328 n=328, T 1.0 / top-p 1.0, v3", "unit": "right of 328"}
+{"id": "t45", "what": "Cued base + top-8 singular directions per matrix of the Math 3.1 RL delta (edit 0.074% of weight norm), hard328 n=328, T 1.0 / top-p 1.0, v3, 1 sample, seed 3000000", "unit": "right of 328"}
+{"id": "t46", "what": "Olmo-3.1-7B-RL-Zero-Math minus its top-8 singular directions per matrix, cue, hard328 n=328, T 1.0 / top-p 1.0, v3, 1 sample, seed 3000000", "unit": "right of 328"}
+{"id": "t47", "what": "Cued base + matched random rank-8 edit (0.074% of weight norm), hard328 n=328, T 1.0 / top-p 1.0, v3, 1 sample, seed 3000000", "unit": "right of 328"}
+{"id": "t48", "what": "Cued base + top-8 singular directions per matrix of the Code 3.1 RL delta, hard328 n=328, T 1.0 / top-p 1.0, v3, 1 sample, seed 3000000", "unit": "right of 328"}
+{"id": "t49", "what": "Cued base, MATH-500 n=500, T 0.6 / top-p 1.0, v3, seed 1, 100 loop neurons zeroed (ranked on 34 loops, real-02 attr100)", "unit": "right of 500"}
+{"id": "t50", "what": "Cued base, MATH-500 n=500, T 0.6 / top-p 1.0, v3, seed 1, 1,000 loop neurons zeroed (real-02 attr1000), rule-A loops", "unit": "loops"}
+{"id": "t51", "what": "Cued base, MATH-500 n=500, T 0.6 / top-p 1.0, v3, seed 1, 1,000 loop neurons zeroed (real-02 attr1000), tokens per problem", "unit": "tokens per problem"}
+{"id": "t52", "what": "Base with hand-written key-value edit of layer-31 mlp.down_proj (6.6% of norm) writing the cue, first 100 MATH-500, plain prompt, T 1.0, v3", "unit": "right of 100"}
+{"id": "t53", "what": "Base with same layer-31 mlp.down_proj edit but random values, first 100 MATH-500, plain prompt, T 1.0, v3", "unit": "right of 100"}
+{"id": "t54", "what": "Base with the layer-31 mlp.down_proj cue edit, held-out cue-token probability after the edit (each of three cue tokens)", "unit": "probability"}
+{"id": "t55", "what": "Olmo-3.1-7B-RL-Zero-Math step 100 checkpoint, plain prompt, MATH-500 n=500 sample 0, T 0.6 / top-p 0.95, cap 16,384, cap hits", "unit": "cap hits of 500"}
+{"id": "t56", "what": "Olmo-3.1-7B-RL-Zero-Math step 100 checkpoint, plain prompt, MATH-500 n=500 sample 0, T 0.6 / top-p 0.95, answers with 'Okay' in the first 30 characters", "unit": "answers of 500"}
+{"id": "t57", "what": "Olmo-3.1-7B-RL-Zero-Math step 100 checkpoint, plain prompt, MATH-500 n=500 sample 0, T 0.6 / top-p 0.95, median mean_logprob of finished answers", "unit": "nats per token"}
+{"id": "t58", "what": "Concordance of a longer finished sample reading out failure, RL model (Olmo-3.1-7B-RL-Zero-Math), 156 pairs, MATH-500", "unit": "concordance"}
+{"id": "t59", "what": "Wait-rate share of base + 0.25(RL - base) whole answers drawn from the RL endpoint, plain prompt, MATH-500", "unit": "share"}
+{"id": "t60", "what": "RL (Olmo-3.1-7B-RL-Zero-Math) wrong answers on MATH-500 that equal a base wrong answer, count of 131 RL wrong answers", "unit": "answers of 131"}
+{"id": "t61", "what": "MATH-500 pool of 183 problems (base right in <=3 of 4), T 1.0: base finishing an RL prefix cut at 50% of the answer, right of 183, one sample", "unit": "right of 183"}
+{"id": "t62", "what": "MATH-500 pool of 183 problems (base right in <=3 of 4), T 1.0: RL finishing a base prefix cut at 25% of the answer, right of 183, one sample", "unit": "right of 183"}
+{"id": "t63", "what": "MATH-500 pool of 183 problems (base right in <=3 of 4), T 1.0: RL finishing a base prefix cut at 75% of the answer, right of 183, one sample", "unit": "right of 183"}
+{"id": "t64", "what": "Cued base, MATH-500 n=500, T 1.0 / top-p 1.0, cap 16,384, v3, J-lens Wait/Hmm direction added at layer 24 at alpha 0.068 (rate 8.32 per 1,000 tokens)", "unit": "right of 500"}
+{"id": "t65", "what": "Cued base, MATH-500 n=500, T 1.0 / top-p 1.0, cap 16,384, v3, J-lens Wait/Hmm direction added at layer 24 at alpha 0.1", "unit": "right of 500"}
+{"id": "t66", "what": "Cued base, MATH-500 n=500, T 1.0 / top-p 1.0, cap 16,384, v3, logit bias +0.64 nats on six Wait/Hmm-type tokens", "unit": "right of 500"}
+{"id": "t67", "what": "Cued base, MATH-500 n=500, T 1.0 / top-p 1.0, cap 16,384, v3, no steering, in-process eager vLLM with hook engine", "unit": "right of 500"}
+{"id": "t68", "what": "Cued base, MATH-500 n=500, T 0.6 / top-p 1.0, v3, seed 2, no edit", "unit": "right of 500"}
+{"id": "t69", "what": "Cued base, MATH-500 n=500, T 0.6 / top-p 1.0, v3, seed 2, 1,000 loop neurons zeroed (real-02 attr1000)", "unit": "right of 500"}
+{"id": "t70", "what": "Cued base, MATH-500 n=500, T 1.0 / top-p 1.0, v3, 1,000 loop neurons zeroed (real-02 attr1000)", "unit": "right of 500"}

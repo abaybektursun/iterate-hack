@@ -1,0 +1,2 @@
+{"measured": 0.23684210526315788, "refuted_by_met": true, "alt_measured": 0.25773195876288657, "not_computable": null, "example_row": {"problem_index": 9, "sample": 2, "attempt": 2, "seed": 41022009, "n_new": 16244, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "4", "score_v3": 1, "gold": "4", "_source": "a_day1_3_attempt12", "_score_used": 1}}
+n_problems=17 n_samples=114 by_source(n, right)={'a_day1_3_attempt12': (42, 11), 'b_random_cue': (17, 6), 'c_shots_base': (17, 4), 'd_e383': (17, 2), 'e_F_math500': (17, 3), 'f_wsp1_base_cue': (4, 1)}

@@ -311,6 +311,45 @@ total of 2 nats or more in size decides. The defender's centre was inside the ri
 | r4-m01 | RL-prefix finish advantage where RL's opening is as compressible 0.375 (24 problems); 0.12; 0.25; -1.85. Opening compressibility against loop onset, rank correlation -0.074 (62 loops); 0.2; 0.06; -1.47 | +1.11 (5 tests) | not separated from rival | Self-similarity marks the sample that will loop (37 of 46) but explains neither RL's prefix advantage nor onset timing. |
 | r4-m08 | base/RL length variability on short problems 0.518 (214); 0.05; 0.2; -0.87. Short minus long -0.020; -0.15; 0.1; -0.21 | -2.65 (5 tests) | loses to rival | Every test sits at or past the rival. |
 
+## Round 05 (2026-11-15, cutoff 11-15 04:29:33 UTC, coordinator frustea)
+
+Plan `specs/SPEC_round05.md` (before the run), engine version 5.1 unchanged (main a54a897), work-9abc35. One command, one run, exit 0:
+`round.py results/engine/round-05 all --cutoff 2026-11-15T04:29:33 --skip gpuprice --skip "theory round" --skip "theory skill" --skip "Theory engine" --from results/engine/round-04`.
+114 items before the cutoff, 41 held out; 12 mechanisms, 2 abandoned, 10 developed, 3 untested theories carried from round 04; 54 headless
+jobs, about 62 minutes, no GPU (`results/engine/round-05/run.json`). Examples: `results/engine/round-05/examples.json`.
+
+**Result: 1 of 13 theories survives its offline tests and the review (r5-m03, review "weak", loses to its rival by -8.77 nats); 45 of 48
+offline predictions computed, 22 inside and 23 outside their intervals; 11 refuted (9 by their own computed predictions, 2 by the review),
+1 no gain. r5-m08 is the first theory of five rounds to beat its rival with both turns counted (+8.75 nats, 5 tests, 3 separating), but the
+review refutes its stated cause. No theory both beats its rival and stands.** Tables: `metrics_v4.json` (tests), `metrics_v5.json` (duel).
+
+Hypotheses of the spec: H1 holds (45 of 48 computed; the 3 without a number: 2 need another workspace's Modal volume, 1 had a group under
+20 rows). H2 holds (the 3 carried theories each have 3 or more computed predictions). H3 holds by the duel rule only (see r5-m08).
+
+| Theory | Statement | Tests computed | In / out | Gain (nats) | State | Duel | Review | What decided it |
+|---|---|---|---|---|---|---|---|---|
+| r5-m08 | Code 3.0 learned a runaway long-generation mode, so at T 1.0 it keeps Code 3.1's gain on short MATH-500 problems and loses it on the longest quartile through cap hits. | 4 of 4 | 4 / 0 | +5.76 | refuted (review) | beats rival, +8.75 (5 tests, 3 separating) | refuted | The length pattern holds: 0.795 of Code 3.1's lead is in the longest quartile; on the short half Code 3.0 is 3 problems ahead of Code 3.1 (246 against 243 of 250) and 7.25 ahead of the cued base; in the longest quartile it is 11.25 behind the cued base. The cause does not: the scored Code 3.0 cell has 5 cap hits of 500 (base 27, Code 3.1 7). |
+| r5-m03 | The top-8 singular directions of the RL-Math weight change act like the opening cue and nothing more. | 3 of 3 | 2 / 1 | +1.86 | survives | loses to rival, -8.77 (3 tests, 3 separating) | weak | Its gain is one test, the count of quick finished-wrong answers of top8 plain (22; predicted 11 [5, 21]), which lies outside its own interval. Rival: top8 is a per-sample mixture of RL-like answers and plain-base answers. top8's quick wrong answers fall on problems the cued base solves at a mean rate of 0.818 (theory 0.5, rival 0.76); 0.773 of them have at most 1,000 tokens (theory 0.4, rival 0.63). |
+| r5-m10 | At T 1.0 the plain base picks one of two whole answer modes in its first tokens; the cue's gain is the mode share times the accuracy difference, and nothing after the opening adds. | 3 of 3 | 3 / 0 | +0.72 | refuted (review) | loses to rival, -8.84 (6 tests, 3 separating) | refuted | Self-opened plain answers do score like cued ones (difference 0.00) and are 1.21 times as long. But plain answers that do not self-open and contain 'Wait' or 'Hmm' later score +0.356 above the other non-self-opened answers and only 0.075 below cued answers on the same problems (theory -0.47). The standing part is in Wang et al. 2610.06851, App. C.8. |
+| r5-m06 | The problems RL solves and the cued base misses 4 of 4 are ones the base already solves a few percent of the time per sample. | 3 of 3 | 2 / 1 | +4.76 | refuted (own test) | | | Fresh base samples solve 11 of these 17 problems at least once (0.647) and 0.522 more than of the 16 that RL also misses, as predicted. Refuted on the size: the per-sample rate is 0.237, not "a few percent" (predicted 0.09 [0.03, 0.18]). |
+| r4-m12 | Part of the hard328 gap is grader v3 false negatives on the base's non-canonical answers to non-integer problems. | 4 of 4 | 2 / 2 | -1.15 | refuted (own test) | | | Numeric equivalence recovers 0 of the cued base's finished v3-wrong non-integer answers; the gap after regrading stays 12.8 points. |
+| r5-m11 | Code-RL 3.1 reaches Math-RL's MATH-500 total through a code-style habit that pays on discrete subjects. | 3 of 3 | 1 / 2 | -2.50 | refuted (own test) | | | Code-style markers are no more frequent in Code-RL's hard328 answers than in the cued base's (difference 0.00); marked answers score 0.123 below unmarked ones. |
+| r4-m06 | RL added a constant hold-on bias and no error detector. | 3 of 3 | 2 / 1 | -2.72 | no gain | | | RL's re-check rate after wrong against right candidates is 1.24 and the base-RL difference is -0.087, both as predicted and as the readers said; the share of final-right answers with a re-checked right candidate is 0.44 higher in RL (predicted 0.12). |
+| r5-m07 | By RL step 100 the policy differs from the base almost only in opening with the RL cue. | 3 of 4 | 1 / 2 | -3.44 | refuted (own test) | | | 3.4 % of step-100 plain answers at T 0.6 open with 'line' (predicted 0.68); 4.5 % of finished ones keep the base's 'Answer:' line (predicted 0.30). |
+| r5-m04 | Think-SFT's remaining errors are mostly cap hits on the problems where RL writes longest. | 5 of 5 | 1 / 4 | -4.17 | refuted (own test) | | | 25 cap hits of 500 (predicted 38 [28, 55]); in the longest quartile Think-SFT is 6 problems ahead of RL, not behind. |
+| r4-m11 | The cued base keeps writing after its answer and the last-marker grader scores a later, wrong one. | 3 of 5 | 0 / 3 | -4.48 | refuted (own test) | | | Of the cued base's v3-wrong answers, 0 have a right first answer marker. |
+| r5-m02 | The cued base's wrong finished samples are shorter than their right siblings on Levels 1-3 and longer on Level 5. | 4 of 4 | 2 / 2 | -5.84 | refuted (own test) | | | On Levels 1-3 wrong samples are longer, not shorter (median log length ratio +0.193; predicted -0.2). |
+| r5-m05 | The base flags a doubtful step as well as RL but restates its value after the hold-on token, while RL re-derives it. | 3 of 3 | 1 / 2 | -6.12 | refuted (own test) | | | Base and RL revise the value after a hold-on at the same rate (ratio 1.04; predicted 0.55). |
+| r5-m09 | About a quarter of the cued base's finished-wrong samples on usually-solved problems box a number from the problem statement. | 4 of 4 | 1 / 3 | -8.13 | refuted (own test) | | | Base minus RL share of wrong finals equal to a problem-statement number is -0.043 (predicted +0.14). Its p1 and p2 are 0 by data layout (the field they read is null on real items) and decide nothing. |
+
+Abandoned by their developers (`dropped.json`): r5-m01 and r5-m12. Held-out filter: 70 targets, 7 claims by the 3 survivors, 0 strikes.
+
+GPU predictions, none run: r5-m03, base + top8 edit with the cue on MATH-500, 425 [412, 438] of 500, refuted at 441 or more or below 405
+(45 GPU minutes); its rival's mixture account is the one to test with the same cell. r5-m08 (40 minutes, cap hits of Code 3.0 on the
+longest quartile) and r5-m10 (40 minutes, prefilled '.\n\nOkay') belong to refuted theories.
+
+Not done: no independent recomputation of the computed numbers; the reviews read items after the cutoff, by design.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in

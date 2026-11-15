@@ -1,0 +1,1 @@
+{"measured": 0.0, "refuted_by_met": false, "alt_measured": 0.23076923076923078, "not_computable": null, "example_row": {"id": "q3331", "kind": "rl", "model": "rl", "problem_index": 11, "sample": 0, "has_right_sibling": true, "final": "\\frac{1}{9}", "gold": "\\frac{3}{56}", "n_new": 3689, "planted_at": null, "answer_from_problem": null, "proxy_position": null}}
