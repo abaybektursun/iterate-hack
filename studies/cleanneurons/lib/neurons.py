@@ -14,6 +14,8 @@ zero down column. Copies keep the tensor's dtype (asserted equal on both sides),
   check_edit(edit, L, W)                      fails on an unknown key, family, layer or neuron, and on a repeated neuron
   plan(edit, shapes)                          {tensor name: [(kind, index), ...]}, kind "copy" or "zero"
   apply_edit(model, rl_model, edit)           edits the model's weights in place; returns undo(), which restores the saved entries
+  shift_hooks(model, shifts)                  Part T3: forward hooks that add one constant vector per layer to the output of the MLP
+                                              or of the whole layer; returns remove(). Rounding to bf16 is stochastic or to nearest
   mlp_grad(model, on), attr_step(model, rl)   Part T2: only the MLP matrices require grad; after loss.backward(), per neuron
                                               -(RL - base) . dloss/dtheta over its three vectors (float32 [layers, width])
   build_checkpoint(base_dir, rl_dir, edit, out_dir)   rewrites the safetensors shards that hold an edited tensor (same file names, keys
@@ -24,7 +26,8 @@ zero down column. Copies keep the tensor's dtype (asserted equal on both sides),
 
 `python -m studies.cleanneurons.lib.neurons` runs selfcheck() on a tiny random Llama pair (no download): the edits above built, diffed,
 loaded and compared with the in-memory edit, undo bit for bit, two planted faults that diff_checkpoint must reject, and attr_step
-against the measured drop of a loss for a small step of a neuron set toward RL (float64 copies).
+against the measured drop of a loss for a small step of a neuron set toward RL (float64 copies), and shift_hooks: a zero shift
+changes no bit, a shift of 0.1 % of the output's size arrives in the mean under stochastic rounding and in part under round-to-nearest.
 Fail loud: no fallback. The only try/except is the planted-fault check, which fails when no error is raised.
 """
 from __future__ import annotations
@@ -202,6 +205,29 @@ def attr_step(model, rl_sd):
     return out
 
 
+# ------------------------------------------------------------------------------------------------ constant shifts (Part T3)
+def shift_hooks(model, shifts):
+    """shifts: [(where, d, gen)]; where is "mlp" or "layer", d float32 [layers, hidden], gen a torch.Generator or None. Adds d[l] to
+    the output of layer l's MLP module (before any norm that follows it) or of the layer itself (the residual stream), at every
+    position. The sum is taken in float32 and rounded to bf16. A bf16 value has 8 significant bits, so with round-to-nearest
+    (gen None) a shift below half the spacing of an output entry is lost at that entry, at every position. With a generator the
+    rounding is stochastic (up with probability equal to the remainder), so the mean of the output moves by exactly d; a zero d
+    changes no bit under both. Returns remove()."""
+    def hook(d, gen):
+        def f(mod, args, out):
+            assert out.dtype == torch.bfloat16, f"shift_hooks rounds to bf16; the output is {out.dtype}"
+            y = out.float() + d
+            if gen is None:
+                return y.to(out.dtype)
+            r = torch.randint(0, 65536, y.shape, generator=gen, device=y.device, dtype=torch.int32)
+            return ((y.view(torch.int32) + r) & -65536).view(torch.float32).to(out.dtype)    # the 16 bits that bf16 drops, set to 0
+        return f
+    hs = [(layer.mlp if where == "mlp" else layer).register_forward_hook(hook(d[l], gen))
+          for where, d, gen in shifts for l, layer in enumerate(model.model.layers)]
+    assert all(where in ("mlp", "layer") for where, _, _ in shifts)
+    return lambda: [h.remove() for h in hs]
+
+
 # ------------------------------------------------------------------------------------------------ as a checkpoint (Part G)
 def index(d):
     """{tensor name: (shard path, shape)} over the *.safetensors files of a checkpoint directory (headers only)."""
@@ -286,12 +312,18 @@ def diff_checkpoint(built_dir, base_dir, rl_dir, edit):
 # ------------------------------------------------------------------------------------------------ stand-ins and selfcheck (no download)
 def tiny_pair(seed=0):
     """Stand-ins for --dry-run and selfcheck: a random 4-layer Llama (hidden 16, width 64, vocabulary 128, bf16) as the base; 'RL' is
-    the base plus 5 % noise on every tensor and a large change of four neurons, so that a ranking has something to find."""
+    the base plus 5 % noise on every tensor and a large change of four neurons, so that a ranking has something to find. Every
+    embedding holds one common vector, and five neurons read it with their gate and up rows: neurons that are on at every position."""
     from transformers import LlamaConfig, LlamaForCausalLM
     cfg = LlamaConfig(vocab_size=128, hidden_size=16, intermediate_size=64, num_hidden_layers=4, num_attention_heads=2,
                       num_key_value_heads=2, initializer_range=0.3, tie_word_embeddings=False, bos_token_id=0, eos_token_id=1)
     torch.manual_seed(seed)
-    base = LlamaForCausalLM(cfg).to(torch.bfloat16).eval()
+    base = LlamaForCausalLM(cfg).eval()
+    c, sb = torch.randn(16), base.state_dict()
+    sb["model.embed_tokens.weight"] += 0.6 * c
+    for l, n in ((0, 5), (1, 6), (1, 30), (2, 9), (3, 8)):
+        sb[tensor_names(l)[0]][n], sb[tensor_names(l)[1]][n] = 2 * c / c.norm(), 2 * c / c.norm()
+    base = base.to(torch.bfloat16)
     rl = LlamaForCausalLM(cfg).to(torch.bfloat16).eval()
     rl.load_state_dict(base.state_dict())
     g, sd = torch.Generator().manual_seed(seed + 1), rl.state_dict()
@@ -379,6 +411,27 @@ def selfcheck():
     print("attr_step: predicted", pred, "measured", drop, flush=True)
     assert all(abs(drop[k] - pred[k]) <= 0.02 * abs(pred[k]) for k in pred), "attr_step differs from the measured drop"
     assert abs(drop["a"] - pred["b"]) > 0.02 * abs(pred["b"]), "the attribution check cannot tell two neuron sets apart"
+    # shift_hooks, read at layer 0's MLP output (its input is the same with and without the hooks)
+    seen, xs = [], torch.randint(0, 128, (1, 3000), generator=torch.Generator().manual_seed(3))
+    grab = base.model.layers[0].mlp.register_forward_hook(lambda mod, args, out: seen.append(out.float()))
+    with torch.no_grad():
+        base(input_ids=xs)
+        d = torch.zeros(L, 16)
+        d[0] = 1e-3 * seen[0].abs().mean() * torch.randn(16, generator=torch.Generator().manual_seed(4))
+        for shifts in ([("mlp", torch.zeros(L, 16), torch.Generator().manual_seed(5)), ("layer", torch.zeros(L, 16), None)],
+                       [("mlp", d, torch.Generator().manual_seed(5))], [("mlp", d, None)]):
+            grab.remove()
+            remove = shift_hooks(base, shifts)
+            grab = base.model.layers[0].mlp.register_forward_hook(lambda mod, args, out: seen.append(out.float()))    # after the shift
+            seen.append(base(input_ids=xs).logits)
+            remove()
+        grab.remove()
+        seen.append(base(input_ids=xs).logits)
+    clean, zero, zero_logits, stoch, _, nearest, _, clean_logits = seen
+    arrived = lambda y: float(((y - clean).mean((0, 1)) * d[0]).sum() / d[0].square().sum())       # share of d in the mean output
+    print("shift_hooks: share of a small shift that arrives: stochastic", round(arrived(stoch), 3), "nearest", round(arrived(nearest), 3), flush=True)
+    assert torch.equal(zero, clean) and torch.equal(zero_logits, clean_logits), "a zero shift changed the output, or a hook stayed"
+    assert abs(arrived(stoch) - 1) < 0.1 and arrived(nearest) < 0.9, "shift_hooks: stochastic rounding must deliver the shift, nearest must lose part"
     edits = [{"name": "none"}, {"name": "zero", "zero": {"1": [10, 5]}}, {"name": "copy", "copy_neurons": {"0": [3], "3": [40, 0]}},
              {"name": "layer", "copy_neurons": {"2": list(range(W))}}, {"name": "attn_zero", "copy_families": ["attn"], "zero": {"2": [20]}},
              {"name": "copy_then_zero", "copy_neurons": {"1": [10, 11]}, "zero": {"1": [10]}},
