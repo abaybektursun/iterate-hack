@@ -1,13 +1,13 @@
-"""The architecture page of the board site: one interactive picture of the harness, for a first-time reader.
+"""The architecture page of the board site: one interactive picture of the shared work setup, for a first-time reader.
 
 view.py serves PAGE at /architecture. The page reads the same /data as the board page every 10 s and draws the
-harness as a small three-dimensional object seen from slightly above: the board is the dome in the centre with one
-dot per live item, each person's agent sessions circle beside it (a dot per session, in the person's color of the
-board page), the messages ring is a tilted orbit with one electron per person, the shared memory and the GPU runs
-are fixed stations left and right, and the self-review loop with its comet goes around everything. The view sways
-a few degrees and leans toward the pointer; a larger dot is a real post. A click on a part dims the rest and
-explains it in the side column (address /architecture#<part>); "Follow one result" steps through the path of one
-result (arrow keys, Esc). Nothing here writes to the board.
+setup as a small three-dimensional object seen from slightly above: the board is the dome in the centre with one
+dot per live item; each person has a swarm of agents beside it (one mark per agent session, in the person's color
+of the board page) with threads to the board; the messages ring runs through every swarm; the self-review loop with
+its comet goes around everything. What moves is real data, replayed: a message leaves its sender's swarm for the
+others, a post travels to the board and a ripple returns to every swarm. A larger dot with a halo is happening now.
+A click on a part dims the rest and explains it in the side column (address /architecture#<part>); "Follow one
+result" steps through the path of one result (arrow keys, Esc). Nothing here writes to the board.
 """
 
 PAGE = r"""<!doctype html>
@@ -85,39 +85,34 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 .has-focus .part.on { opacity: 1; }
 .hit { fill: none; stroke: transparent; pointer-events: stroke; }
 .pad { fill: transparent; }
-.atmo, .shade, .spec, .bloom, .mask { pointer-events: none; }
-.mask { fill: var(--paper); }
+.atmo, .shade, .spec, .bloom, .pulse, .ripple, .arrive { pointer-events: none; }
 .atmo { opacity: var(--glow); }
 .shade { opacity: var(--shadow); }
 .spec { opacity: var(--spec); }
 .bloom { opacity: var(--bloom); }
-.line { fill: none; stroke: var(--ink); stroke-width: 1.3; }
-.link { fill: none; stroke: var(--mute); stroke-width: 1.1; }
 .board-ring { fill: url(#body) var(--sheet); stroke: url(#rim) var(--ink); stroke-width: 1.7; }
 .rib { fill: url(#rvfade) var(--blue); }
 .chev { fill: none; stroke: var(--blue); stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
 [data-part="review"] .label { fill: var(--blue); }
 .comet-tail { fill: var(--blue); }
 .comet-core { fill: var(--core); }
-.beads { fill: none; stroke: url(#msgfade) var(--mute); }
-.beads.far { stroke-width: 1.2; }
-.beads.near { stroke-width: 1.7; }
+.beads { fill: none; stroke: url(#msgfade) var(--mute); stroke-width: 1.5; }
 .thread { fill: none; stroke: var(--c); stroke-width: .9; opacity: .5; }
 .tie { fill: none; stroke: var(--c); stroke-width: 1.1; opacity: .7; }
-.agent { fill: var(--c); }
+.agent { fill: var(--c); stroke: var(--paper); stroke-width: 1.2; }
+.key .agent { stroke: none; }
 .person { fill: var(--c); stroke: var(--paper); stroke-width: 3; }
 .dot { fill: var(--c); }
 .dot.note { opacity: .6; }
 .dot.work { fill: var(--glass); stroke: var(--c); stroke-width: 2; }
 .key .dot.work { fill: var(--paper); }
 .dot.stale { stroke: var(--red); }
-.glyph { fill: url(#body) var(--sheet); stroke: var(--ink); stroke-width: 1.5; }
-.lid { fill: var(--glass-hi); stroke: var(--ink); stroke-width: 1.5; }
-.glyph-ink { fill: var(--ink); stroke: none; }
 .sub { fill: var(--mute); font-weight: 460; }
 .dot.off { opacity: .12; }
-.etail { fill: var(--c); opacity: .5; }
-.ehead { fill: var(--c); }
+.ptail { fill: var(--c); opacity: .5; }
+.phead { fill: var(--c); }
+.ripple { fill: none; stroke: var(--c); stroke-width: 1.8; stroke-linecap: round; }
+.arrive { fill: none; stroke: var(--c); stroke-width: 1.6; }
 #fx { pointer-events: none; }
 .fly { fill: var(--c); }
 .halo { fill: none; stroke: var(--c); stroke-width: 1.5; opacity: .45; }
@@ -126,17 +121,19 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 @keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 @keyframes fade { from { opacity: 0; } }
 @keyframes pop { from { transform: scale(0); } }
+@keyframes ping { 35% { transform: scale(2.2); } }
 .dot, .agent, .person { transform-box: fill-box; transform-origin: center; }
 .enter .draw { stroke-dasharray: 1; animation: draw 1s cubic-bezier(.6, 0, .2, 1) both; }
 .enter .atmo, .enter .shade, .enter .spec { animation: fade 1.6s .2s both; }
 .enter .rib, .enter .chev { animation: fade .9s .5s both; }
-.enter .thread, .enter .tie, .enter .beads, .enter .label, .enter .who, .enter .glyph, .enter .lid, .enter .glyph-ink, .enter .line, .enter .link, .enter .sub, .enter .key .dot {
+.enter .thread, .enter .tie, .enter .beads, .enter .label, .enter .who, .enter .sub, .enter .key .dot, .enter .key .agent {
   animation: fade .6s .55s both;
 }
-.enter .comet, .enter .elayer { animation: fade .8s 1.3s both; }
-.enter .agent, .enter .person { animation: pop .45s cubic-bezier(.3, 1.5, .5, 1) both; animation-delay: calc(.25s + var(--i, 0) * 18ms); }
+.enter .comet { animation: fade .8s 1.3s both; }
+.enter .part:not(.key) .agent, .enter .person { animation: pop .45s cubic-bezier(.3, 1.5, .5, 1) both; animation-delay: calc(.25s + var(--i, 0) * 18ms); }
 .enter .dot { animation: pop .4s cubic-bezier(.3, 1.4, .5, 1) both; animation-delay: calc(.7s + var(--i, 0) * 7ms); }
 .dot.arrived { animation: pop .5s cubic-bezier(.3, 1.6, .5, 1) .9s both; }
+.dot.ping { animation: ping .8s ease-out; }
 
 /* The words */
 .side {
@@ -205,7 +202,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
   .side { padding: 12px 0 0; overflow: visible; border-left: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .enter *, .dot.arrived { animation: none !important; }
+  .enter *, .dot.arrived, .dot.ping { animation: none !important; }
   .part, .walk, .why button span { transition: none; }
 }
 </style>
@@ -244,7 +241,7 @@ const TEXT = {
   board: {
     name: "Board",
     lead: "The board holds ideas, work in progress, results and knowledge, with votes and comments. Every agent reads it before starting and posts to it while working.",
-    facts: ["An agent claims work by posting it. If another open claim names the same idea, the tool says so.", "Work that has been idle for 60 minutes can be taken over by another agent, after asking.", "Each dot is one item: hollow is open work, solid is a result, small is an idea or a note."],
+    facts: ["An agent claims work by posting it. If another open claim names the same idea, the tool says so.", "Everything posted here can also be searched, together with findings from papers and past agent sessions. That search is the team's memory.", "Work that has been idle for 60 minutes can be taken over by another agent, after asking.", "Each dot is one item: hollow is open work, solid is a result, small is an idea or a note."],
     rows: m => ({ title: `${cnt(m.n.result)} results, ${cnt(m.n.work)} open, ${cnt(m.n.idea)} ideas`, list: m.results }),
   },
   msg: {
@@ -252,18 +249,6 @@ const TEXT = {
     lead: "Agents send each other short messages: to everyone, to one person's agents, or about one board item.",
     facts: ["In Claude Code, a hook adds new messages to an agent's context after its tool calls, so the agent does not have to check for them.", "A message reaches a waiting agent in 0.2 s (measured)."],
     rows: m => ({ title: `${m.msgs.length} messages to everyone in the last ${m.hours} h`, list: m.msgs }),
-  },
-  mem: {
-    name: "Memory",
-    lead: "A shared database that every agent can search. It holds findings from papers, the results and knowledge posted on the board, and the conversations of every agent session.",
-    facts: ["Agents search it before starting an idea, so work is not repeated.", "A finding from a paper is saved only with a quote from that paper. The tool rejects a quote it cannot find in the paper's text."],
-    rows: m => ({ title: `${cnt(m.n.note)} knowledge items on the board`, list: m.notes }),
-  },
-  run: {
-    name: "GPU runs",
-    lead: "Experiments run as GPU jobs on Modal or vast.ai. A job can only be started from code that is committed and pushed to GitHub.",
-    facts: ["If the code has uncommitted or unpushed changes, the tool stops with an error. This way the exact code behind every result can be found later.", "Each run gets its own folder with the commit, the command, the metrics, and one example scored right and one scored wrong.", "Each person can run 4 H100 and 2 B200 jobs at once, paid from their own credits."],
-    rows: m => ({ title: `${m.scores} scored configurations`, list: m.results }),
   },
   review: {
     name: "Self-review",
@@ -273,7 +258,7 @@ const TEXT = {
   team: {
     name: "People and agents",
     lead: "Each person runs several coding agents (Claude Code or Codex). Each agent has subagents and works on its own git branch.",
-    facts: ["All agents follow one rules file.", "The people decide the direction. The agents coordinate through the board and the messages."],
+    facts: ["All agents follow one rules file.", "The people decide the direction. The agents coordinate through the board and the messages.", "Each agent runs its own experiments as GPU jobs. A job can only start from code that is pushed to GitHub."],
   },
   question: {
     name: "Research direction",
@@ -291,7 +276,7 @@ const WHY = [["diff", "What is different"]];
 const ASK = "How much of a published RL gain does an untrained base model reach with no training?";
 const WALK = [
   "An agent posts an idea on the board.",
-  "It searches memory and the literature.",
+  "It searches the board, its memory and the literature.",
   "It claims the work on the board.",
   "It writes the code on its own branch.",
   "It starts a GPU job from the pushed commit.",
@@ -301,19 +286,16 @@ const WALK = [
 const cnt = n => n >= 60 ? "60+" : n;  // /data returns the newest 60 of each kind
 
 /* Geometry: everything hangs on one centre, and the moving parts live in a small 3D space around it (x right,
-   y down, z toward the viewer). The board faces the viewer. Each ring is a circle in its own tilted plane
-   [inclination, turn on the screen]: messages steep, so its electrons pass in front of the board and behind it;
-   the people and the self-review loop nearly flat, seen from a little above. Memory and runs are fixed.
-   Wide: memory left, runs right. Narrow: both below. */
+   y down, z toward the viewer). The board faces the viewer. The swarms sit on one circle in the people's plane,
+   seen from a little above; that circle is the messages path, so it passes through every swarm. The self-review
+   loop is a larger circle in its own plane. A plane is [inclination, turn on the screen]. */
 const RAD = Math.PI / 180;
 function plane(inc, turn) { return { c: Math.cos(inc * RAD), s: Math.sin(inc * RAD), co: Math.cos(turn * RAD), so: Math.sin(turn * RAD) }; }
 function geo() {
   const g = narrow.matches
-    ? { w: 720, h: 880, cx: 360, cy: 332, rb: 128, rm: 205, rq: 218, rp: 262, rr: 330, out: 470, mem: 128, run: 52, fs: 29, fw: 21,
-        D: 1900, sw: 42, pm: [68, 4], pp: [40, 0], pr: [36, -4], ml: [4, 100, "middle"] }
-    : { w: 1240, h: 852, cx: 620, cy: 394, rb: 160, rm: 256, rq: 286, rp: 344, rr: 410, out: 526, mem: 180, run: 0, fs: 24, fw: 18.5,
-        D: 2100, sw: 54, pm: [71, 46], pp: [40, 0], pr: [36, -4], ml: [12, 30, "start"] };
-  g.PM = plane(...g.pm); g.PP = plane(...g.pp); g.PR = plane(...g.pr);
+    ? { w: 720, h: 652, cx: 360, cy: 282, rb: 100, rq: 200, rp: 264, rr: 334, fs: 25, fw: 20, D: 1900, sw: 42, over: 26, pp: [34, 0], pr: [36, -4] }
+    : { w: 1100, h: 952, cx: 550, cy: 396, rb: 164, rq: 340, rp: 430, rr: 520, fs: 24, fw: 18.5, D: 2100, sw: 70, over: 60, pp: [40, 0], pr: [36, -4] };
+  g.PP = plane(...g.pp); g.PR = plane(...g.pr);
   return g;
 }
 const pt = (g, r, a) => [g.cx + r * Math.cos(a * Math.PI / 180), g.cy + r * Math.sin(a * Math.PI / 180)];
@@ -329,7 +311,7 @@ const spiral = (i, c) => [c * Math.sqrt(i + .6) * Math.cos(i * 2.39996), c * Mat
 
 /* The view: a slow sway, plus a few degrees toward the pointer. With reduced motion it stays at rest. */
 const V = { c1: 1, s1: 0, c2: 1, s2: 0, px: 0, py: 0, tx: 0, ty: 0 };
-S.t = 21;  // the still frame: the electrons and the comet on the near side
+S.t = 21;  // the still frame: the comet on the near side
 function aim(yaw, pitch) { V.c1 = Math.cos(yaw * RAD); V.s1 = Math.sin(yaw * RAD); V.c2 = Math.cos(pitch * RAD); V.s2 = Math.sin(pitch * RAD); }
 const world = (P, u, v) => [u * P.co - v * P.c * P.so, u * P.so + v * P.c * P.co, v * P.s];  // a point (u, v) of a plane; v > 0 is the near side
 const onRing = (P, r, deg) => world(P, r * Math.cos(deg * RAD), r * Math.sin(deg * RAD));
@@ -376,8 +358,9 @@ function model(d) {
 
 /* The picture. The parts are built when the people or their agents change; place() then sets every position that
    depends on the view; the item dots are drawn on every read. Back to front: the light around the board, the
-   self-review loop, the far half of the messages ring, the threads, the board, the near half of the messages
-   ring, the swarms, memory and runs. A part that lies on both sides of the board is two groups with one name. */
+   self-review loop, the messages path, the threads, the board, the swarms. An agent is a rounded square, so it
+   cannot be read as a board item, which is a dot. The pulses of the replay live inside the part they travel on,
+   so they dim with it. */
 function draw() {
   const g = S.g = geo(), m = S.m, n = m ? m.people.length : 0, th = n ? angles(n) : [];
   const svg = $("svg"), hue = i => HUES[i % HUES.length];
@@ -393,11 +376,13 @@ function draw() {
     `<radialGradient id="spec">${stop(0, "#fff", .2)}${stop(1, "#fff", 0)}</radialGradient>` +
     `<radialGradient id="glo-b">${stop(0, "var(--blue)", .6)}${stop(1, "var(--blue)", 0)}</radialGradient>` +
     `<linearGradient id="rvfade" gradientUnits="userSpaceOnUse">${stop(0, "var(--blue)", .4)}${stop(1, "var(--blue)", 1)}</linearGradient>` +
-    `<linearGradient id="msgfade" gradientUnits="userSpaceOnUse">${stop(0, "var(--mute)", .45)}${stop(1, "var(--ink)", .95)}</linearGradient>` +
+    `<linearGradient id="msgfade" gradientUnits="userSpaceOnUse">${stop(0, "var(--mute)", .5)}${stop(1, "var(--ink)", .95)}</linearGradient>` +
     th.map((_, i) =>
       `<radialGradient id="orb-${i}" class="hue" style="--h:${hue(i)}" cx=".34" cy=".3" r=".8">${stop(0, "color-mix(in oklch, var(--c), white var(--lift))")}${stop(1, "var(--c)")}</radialGradient>` +
       `<radialGradient id="glo-${i}" class="hue" style="--h:${hue(i)}">${stop(0, "var(--c)", .55)}${stop(1, "var(--c)", 0)}</radialGradient>`).join("") +
     "</defs>";
+  const pulse = i => `<g class="pulse" opacity="0"><circle class="bloom"${i == null ? "" : ` fill="url(#glo-${i})"`}/><path class="ptail"/>` +
+    `<circle class="phead"${i == null ? "" : ` style="fill:url(#orb-${i}) var(--c)"`}/></g>`;
 
   out += `<g class="part" data-part="board"><circle class="atmo" cx="${g.cx}" cy="${g.cy}" r="${g.rb * 2}" fill="url(#atmo)"/>` +
     `<circle class="shade" cx="${f(g.cx + g.rb * .07)}" cy="${f(g.cy + g.rb * .15)}" r="${f(g.rb * 1.22)}" fill="url(#shade)"/></g>`;
@@ -407,72 +392,55 @@ function draw() {
     `<g class="comet" id="comet"><circle class="bloom" id="cm-glow" fill="url(#glo-b)"/><path class="comet-tail" id="cm-long" opacity=".3"/>` +
     `<path class="comet-tail" id="cm-short" opacity=".85"/><circle class="comet-core" id="cm-core"/></g>` +
     `<text class="label" id="rv-label" font-size="${g.fs}">Self-review</text>`, "Self-review");
-  const link = a => `<path class="link" d="M${xy(pt(g, g.rb + 3, a))}L${xy(pt(g, g.out - 40, a))}"/>`;  // the board to an outside part
-  out += part("memlink", "", link(g.mem));
-  out += part("runlink", "", link(g.run));
-  out += part("msg", "msg", `<path class="hit" id="ms-hit-far" stroke-width="20"/><path class="beads far" id="ms-far"/><g class="elayer" id="e-far"></g>`);
-  th.forEach((a, i) => { out += part("thread-" + i, "", `<path class="thread hue" style="--h:${hue(i)}"/>`); });
+  out += part("msg", "msg",  // the path through every swarm; on it, a message runs from its sender to the other swarms
+    `<path class="hit" id="ms-hit" stroke-width="22"/><path class="beads ring" id="ms-ring"/>` +
+    `<g class="hue" id="ms-fx">${th.map(() => `<ellipse class="arrive" opacity="0"/>`).join("")}${pulse()}${pulse()}</g>` +
+    `<text class="label" id="ms-label" font-size="${g.fs}">Messages</text>`, "Messages");
+  th.forEach((a, i) => {  // the threads of one person, the post that runs down one of them, and the read that comes back up all of them
+    out += part("thread-" + i, "", `<path class="thread hue" style="--h:${hue(i)}"/><path class="ripple hue" opacity="0"/><g class="hue" style="--h:${hue(i)}">${pulse(i)}</g>`);
+  });
 
   const top = g.rb + g.fs * .82, sx = g.cx - g.rb * .3, sy = g.cy - g.rb * .46;  // the board's name along its top; the light on its upper left
-  out += `<circle class="mask" cx="${g.cx}" cy="${g.cy}" r="${g.rb}"/>`;  // a dimmed board still hides what is behind it
   out += part("board", "board",
     `<circle class="board-ring ring draw" pathLength="1" cx="${g.cx}" cy="${g.cy}" r="${g.rb}"/>` +
     `<ellipse class="spec" cx="${f(sx)}" cy="${f(sy)}" rx="${f(g.rb * .56)}" ry="${f(g.rb * .34)}" transform="rotate(-34 ${f(sx)} ${f(sy)})" fill="url(#spec)"/>` +
     `<g id="dots"></g><path id="on-board" fill="none" stroke="none" d="${arc(g, top, -150, -30)}"/>` +
     `<text class="label plain" font-size="${g.fs}" dy="${f(g.fs * .34)}"><textPath href="#on-board" startOffset="50%">Board</textPath></text>`, "Board");
-  out += part("msg", "msg",
-    `<path class="hit" id="ms-hit-near" stroke-width="16"/><path class="beads near ring" id="ms-near"/><g class="elayer" id="e-near">` +
-    th.map((a, i) => `<g class="electron hue" style="--h:${hue(i)}"><circle class="bloom" fill="url(#glo-${i})"/><path class="etail"/>` +
-      `<circle class="ehead" style="fill:url(#orb-${i}) var(--c)"/></g>`).join("") +
-    `</g><text class="label" id="ms-label" font-size="${g.fs}" style="text-anchor:${g.ml[2]}">Messages</text>`, "Messages");
-
   th.forEach((a, i) => {
     out += part("swarm-" + i, "p-" + m.people[i],
-      `<g class="hue" style="--h:${hue(i)}"><circle class="pad" r="${g.sw + 14}"/><path class="tie"/>` +
-      m.agents[i].map((_, k) => `<circle class="agent" style="--i:${k}"/>`).join("") +
+      `<g class="hue" style="--h:${hue(i)}"><circle class="pad" r="${g.sw + 16}"/><path class="tie"/>` +
+      m.agents[i].map((_, k) => `<rect class="agent" style="--i:${k};fill:url(#orb-${i}) var(--c)"/>`).join("") +
       `<circle class="person ring" style="fill:url(#orb-${i}) var(--c)"/>` +
       `<text class="who" font-size="${g.fw}">${esc(m.people[i])}</text></g>`,
       `${esc(m.people[i])}, ${m.agents[i].length} agents`);
   });
-  const mem = pt(g, g.out, g.mem), run = pt(g, g.out, g.run);
-  const names = (c, name, sub, edge) => {  // the name under a part, and under it what the tool enforces there
-    const side = narrow.matches ? edge : 0, x = side < 0 ? 18 : side > 0 ? g.w - 18 : c[0], anchor = side < 0 ? "start" : side > 0 ? "end" : "middle";
-    return `<text class="label" x="${f(x)}" y="${f(c[1] + 44 + g.fs)}" font-size="${g.fs}" style="text-anchor:${anchor}">${name}</text>` +
-      `<text class="sub" x="${f(x)}" y="${f(c[1] + 44 + g.fs + g.fw * 1.35)}" font-size="${f(g.fw * .92)}" style="text-anchor:${anchor}">${sub}</text>`;
-  };
-  const [mx, my] = mem, band = y => `M${f(mx - 28)} ${f(my + y)}a28 9 0 0 0 56 0`;  // a database: a cylinder with two bands
-  out += part("mem", "mem",
-    `<path class="glyph ring" d="M${f(mx - 28)} ${f(my - 21)}v42a28 9 0 0 0 56 0v-42z"/>` +
-    `<ellipse class="lid" cx="${f(mx)}" cy="${f(my - 21)}" rx="28" ry="9"/>` +
-    `<path class="line" d="${band(-7)}${band(7)}"/>` + names(mem, "Memory", "shared database", -1), "Memory");
-  const pins = [-14, 0, 14].map(o => `M${f(run[0] + o)} ${f(run[1] - 36)}v8M${f(run[0] + o)} ${f(run[1] + 28)}v8M${f(run[0] - 36)} ${f(run[1] + o)}h8M${f(run[0] + 28)} ${f(run[1] + o)}h8`).join("");
-  out += part("run", "run",
-    `<path class="line" d="${pins}"/><rect class="glyph ring" x="${f(run[0] - 28)}" y="${f(run[1] - 28)}" width="56" height="56" rx="8"/>` +
-    `<rect class="glyph-ink" x="${f(run[0] - 12)}" y="${f(run[1] - 12)}" width="24" height="24" rx="3.5"/>` + names(run, "GPU runs", "pushed commits only", 1), "GPU runs");
-  const k = g.fw * .92, ky = g.h - 14, keys = [["work", "open work"], ["", "result"], ["note", "idea or note"]];
+  const k = g.fw * .92, ky = g.h - 14, keys = [["agent", "agent"], ["work", "open work"], ["", "result"], ["note", "idea or note"]];
   const widths = keys.map(([, t]) => 26 + t.length * k * .54 + 22), total = widths.reduce((a, b) => a + b, 0) - 22;
   let kx = narrow.matches ? (g.w - total) / 2 : 6;
   out += `<g class="part key" data-part="key" style="--c:var(--mute)">` + keys.map(([cls, t], i) => {
-    const x = kx; kx += widths[i];
-    return `<circle class="dot ${cls}" cx="${f(x + 7)}" cy="${f(ky - k * .32)}" r="${cls === "note" ? 3.4 : 6}"/>` +
+    const x = kx, y = ky - k * .32; kx += widths[i];
+    return (cls === "agent" ? `<rect class="agent" x="${f(x)}" y="${f(y - 7)}" width="14" height="14" rx="3.9"/>`
+      : `<circle class="dot ${cls}" cx="${f(x + 7)}" cy="${f(y)}" r="${cls === "note" ? 3.4 : 6}"/>`) +
       `<text class="sub" x="${f(x + 20)}" y="${f(ky)}" font-size="${f(k)}" style="text-anchor:start">${t}</text>`;
   }).join("") + "</g>";
   svg.innerHTML = out + '<g id="fx"></g>';
 
-  const el = {};
+  const el = {}, unit = e => ({ el: e, glow: e.children[0], tail: e.children[1], head: e.children[2] });
   ["rv-hit", "rv-rib", "rv-c0", "rv-c1", "comet", "cm-glow", "cm-long", "cm-short", "cm-core", "rv-label", "rvfade",
-    "ms-hit-far", "ms-far", "e-far", "ms-hit-near", "ms-near", "e-near", "ms-label", "msgfade"].forEach(id => { el[id] = $(id); });
+    "ms-hit", "ms-ring", "ms-label", "ms-fx", "msgfade"].forEach(id => { el[id] = $(id); });
+  const open = (name, r) => (name.length * g.fs * .33 + 16) / (r * RAD * .9);  // a ring is open under its name, by this many degrees each side
   S.th = th;
+  S.play = {};
   S.r = {
-    el,
-    gap: ("Self-review".length * g.fs * .33 + 16) / (g.rr * RAD * .9),  // the loop is open under its name
-    beads: Math.round(g.rm * 2 * Math.PI / 14),
-    electrons: [...svg.querySelectorAll(".electron")].map((e, i) => ({ el: e, a: th[i], i, near: true, glow: e.children[0], tail: e.children[1], head: e.children[2] })),
+    el, gap: open("Self-review", g.rr), mgap: open("Messages", g.rq),
+    beads: Math.round(g.rq * 2 * Math.PI / 14),
+    arrive: [...svg.querySelectorAll("#ms-fx .arrive")], legs: [...svg.querySelectorAll("#ms-fx .pulse")].map(unit),
     swarms: th.map((a, i) => {  // the agents of one person circle their own centre, in the people's plane
-      const p = svg.querySelector(`[data-part="swarm-${i}"]`), count = m.agents[i].length;
-      return { a, c: Math.min(11.5, g.sw / Math.sqrt(count + .6)), below: Math.sin(a * RAD) >= 0,
-        pad: p.querySelector(".pad"), tie: p.querySelector(".tie"), dots: [...p.querySelectorAll(".agent")],
-        person: p.querySelector(".person"), who: p.querySelector(".who"), thread: svg.querySelector(`[data-part="thread-${i}"] .thread`) };
+      const p = svg.querySelector(`[data-part="swarm-${i}"]`), t = svg.querySelector(`[data-part="thread-${i}"]`), count = m.agents[i].length;
+      const c = Math.min(19, g.sw / Math.sqrt(count + .6)), who = p.querySelector(".who");
+      return { a, c, size: Math.min(17, c * .96), below: Math.sin(a * RAD) >= 0, side: Math.abs(Math.cos(a * RAD)) > .3 ? Math.sign(Math.cos(a * RAD)) : 0,
+        wide: who.getComputedTextLength(), pad: p.querySelector(".pad"), tie: p.querySelector(".tie"), dots: [...p.querySelectorAll(".agent")],
+        person: p.querySelector(".person"), who, thread: t.querySelector(".thread"), ripple: t.querySelector(".ripple"), pulse: unit(t.querySelector(".pulse")) };
     }),
   };
   place(S.t);
@@ -496,10 +464,10 @@ function dots() {  // the items sit on a shallow dome: evenly spread on it, so c
   }).join("");
 }
 
-/* Motion that is always on: agents circle in their swarm, one electron per person runs on the messages ring,
-   a comet runs the self-review loop, the board turns slowly, and the whole view sways by a few degrees.
-   What is near is larger and brighter; what is far is smaller, fainter, and hidden where the board covers it.
-   A larger dot with a halo is a real post (below). */
+/* Motion that is always on: agents circle in their swarm, a comet runs the self-review loop, the board turns
+   slowly, and the whole view sways by a few degrees. What is near is larger and brighter; what is far is smaller
+   and fainter. On top of that the replay (below) shows real messages and real posts, one at a time. */
+const ease = p => p < .5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2;
 function place(t) {
   const g = S.g, R = S.r;
   if (!R) return;
@@ -528,73 +496,172 @@ function place(t) {
   const apex = at(g.PR, g.rr, -90);
   set(E["rv-label"], { x: f(apex[0]), y: f(apex[1] + g.fs * .34) });
 
-  // The messages ring: fine dashes on a steep orbit. The far half is drawn under the board, the near half over it.
-  let far = "", front = "";
+  // The messages path: fine dashes on the circle that passes through every swarm, open under its name.
+  let dash = "";
   for (let j = 0, step = 360 / R.beads; j < R.beads; j++) {
-    const a = j * step - t * 1.5, p = at(g.PM, g.rm, a - step * .21), q = at(g.PM, g.rm, a + step * .21), s = `M${f(p[0])} ${f(p[1])}L${f(q[0])} ${f(q[1])}`;
-    if (p[3] < 0) far += s; else front += s;
+    const a = j * step - t * 1.5;
+    if (Math.abs((((a + 90) % 360) + 540) % 360 - 180) < R.mgap) continue;
+    const p = at(g.PP, g.rq, a - step * .21), q = at(g.PP, g.rq, a + step * .21);
+    dash += `M${f(p[0])} ${f(p[1])}L${f(q[0])} ${f(q[1])}`;
   }
-  E["ms-far"].setAttribute("d", far);
-  E["ms-near"].setAttribute("d", front);
-  E["ms-hit-far"].setAttribute("d", line(ring(g.PM, g.rm, 180, 360, 24)));
-  E["ms-hit-near"].setAttribute("d", line(ring(g.PM, g.rm, 0, 180, 24)));
-  fade(E.msgfade, g.PM, g.rm);
-  R.electrons.forEach(e => {
-    const a = e.a + t * 360 / (22 + 7 * e.i), p = at(g.PM, g.rm, a), d = near(g.PM, g.rm, p), r = 3 + 3.6 * d, inFront = p[3] >= 0;
-    if (inFront !== e.near) { e.near = inFront; E[inFront ? "e-near" : "e-far"].appendChild(e.el); }
-    set(e.head, { cx: f(p[0]), cy: f(p[1]), r: f(r) });
-    set(e.glow, { cx: f(p[0]), cy: f(p[1]), r: f(r * 3.6) });
-    e.tail.setAttribute("d", ribbon(ring(g.PM, g.rm, a - 20, a, 8), (q, i) => r * 1.5 * i / 8));
-    e.el.setAttribute("opacity", (.45 + .55 * d).toFixed(2));
-  });
-  const tip = at(g.PM, g.rm, 0);
-  set(E["ms-label"], { x: f(tip[0] + g.ml[0]), y: f(tip[1] + g.ml[1]) });
+  E["ms-ring"].setAttribute("d", dash);
+  E["ms-hit"].setAttribute("d", line(ring(g.PP, g.rq, 0, 360, 48)) + "Z");
+  fade(E.msgfade, g.PP, g.rq);
+  const crown = at(g.PP, g.rq, -90);
+  set(E["ms-label"], { x: f(crown[0]), y: f(crown[1] + g.fs * .34) });
 
   // The swarms: each a small disc of agents in the people's plane, with threads to the nearest point of the board.
   R.swarms.forEach(o => {
     const u0 = g.rq * Math.cos(o.a * RAD), v0 = g.rq * Math.sin(o.a * RAD);
     const c = proj(g, world(g.PP, u0, v0)), p = at(g.PP, g.rp, o.a), to = Math.atan2(c[1] - g.cy, c[0] - g.cx);
-    const end = f(g.cx + (g.rb + 2) * Math.cos(to)) + " " + f(g.cy + (g.rb + 2) * Math.sin(to));
-    let web = o.dots.length ? "" : `M${f(c[0])} ${f(c[1])}L${end}`;
+    const end = [g.cx + (g.rb + 2) * Math.cos(to), g.cy + (g.rb + 2) * Math.sin(to)], ends = f(end[0]) + " " + f(end[1]);
+    let web = o.dots.length ? "" : `M${f(c[0])} ${f(c[1])}L${ends}`, fan = o.dots.length ? "" : `M${ends}L${f(c[0])} ${f(c[1])}`;
+    o.c0 = c; o.end = end; o.at = []; o.reach = Math.hypot(c[0] - end[0], c[1] - end[1]);
     o.dots.forEach((d, k) => {
-      const r = o.c * Math.sqrt(k + .6), a = k * 2.39996 + t * .5 / (.6 + Math.sqrt(k + .6));
-      const q = proj(g, world(g.PP, u0 + r * Math.cos(a), v0 + r * Math.sin(a)));
-      set(d, { cx: f(q[0]), cy: f(q[1]), r: f(4.4 * q[2]) });
-      web += `M${f(q[0])} ${f(q[1])}L${end}`;
+      const r = o.c * Math.sqrt(k + .6), a = k * 2.39996 + t * .22;  // the swarm turns as one, so its agents never cover each other
+      const q = proj(g, world(g.PP, u0 + r * Math.cos(a), v0 + r * Math.sin(a))), side = o.size * q[2], here = f(q[0]) + " " + f(q[1]);
+      set(d, { x: f(q[0] - side / 2), y: f(q[1] - side / 2), width: f(side), height: f(side), rx: f(side * .28) });
+      web += `M${here}L${ends}`;
+      fan += `M${ends}L${here}`;
+      o.at.push(q);
+      o.reach = Math.max(o.reach, Math.hypot(q[0] - end[0], q[1] - end[1]));
     });
+    o.fan = fan;  // the same threads, drawn from the board outward: a read travels this way
     o.thread.setAttribute("d", web);
     set(o.pad, { cx: f(c[0]), cy: f(c[1]) });
     o.tie.setAttribute("d", `M${f(c[0])} ${f(c[1])}L${f(p[0])} ${f(p[1])}`);
-    set(o.person, { cx: f(p[0]), cy: f(p[1]), r: f(11.5 * p[2]) });
-    set(o.who, { x: f(p[0]), y: f(p[1] + (o.below ? g.fw * 1.8 : -g.fw * 1.05) * p[2]) });
+    set(o.person, { cx: f(p[0]), cy: f(p[1]), r: f(13 * p[2]) });
+    set(o.who, { x: f(p[0] - o.side * Math.max(0, o.wide / 2 - g.over)), y: f(p[1] + (o.below ? g.fw * 1.9 : -g.fw * 1.15) * p[2]) });
   });
   const turn = $("dots");
   if (turn) turn.setAttribute("transform", `rotate(${f(t * 1.5 % 360)} ${g.cx} ${g.cy})`);
+  posted(t);
+  sent(t, at, ring, near);
 }
 function spin(now) {
   const t = S.t = 21 + now / 1000;
   V.px += (V.tx - V.px) * .06;
   V.py += (V.ty - V.py) * .06;
   aim(6 * Math.sin((t - 21) * .13) + 5 * V.px, 2.5 * Math.sin((t - 21) * .09) - 2.5 * V.py);
+  beat(t);
   place(t);
   requestAnimationFrame(spin);
 }
 
-/* Motion: a dot travels along the drawn lines, for a real new post or for a step of the walk. A point with three
-   numbers lies in the 3D space and follows the view; a point with two is fixed on the screen. */
+/* The replay: about every 2.5 s one real event, a message and a post in turn, from the newest 40 of each, looped.
+   A message is a pulse in its sender's colour that leaves the sender's swarm along the messages path, both ways,
+   and reaches every other swarm. A post is a pulse in its poster's colour that runs down one thread to the board;
+   when it lands, a faint ripple leaves the board along all threads, because every agent reads the board. An event
+   that happens now (S.queue) plays next, as a larger dot with a halo. Nothing plays during the walk, or with
+   reduced motion. */
+S.play = {}; S.due = 25; S.turn = false; S.nth = { msg: 0, post: 0 }; S.busy = false;
+function comet(u, pts, r, opacity) {  // a pulse: a small lit head, a tapered tail along pts behind it, a soft light around it
+  const n = pts.length - 1, h = pts[n];
+  u.head.setAttribute("cx", f(h[0])); u.head.setAttribute("cy", f(h[1])); u.head.setAttribute("r", f(r));
+  u.glow.setAttribute("cx", f(h[0])); u.glow.setAttribute("cy", f(h[1])); u.glow.setAttribute("r", f(r * 3.6));
+  u.tail.setAttribute("d", n ? ribbon(pts, (q, i) => r * 1.5 * i / n) : "");
+  u.el.setAttribute("opacity", opacity.toFixed(2));
+}
+function hush() {  // stop the replay where it is
+  const R = S.r;
+  S.play = {};
+  if (!R) return;
+  R.swarms.forEach(o => { o.pulse.el.setAttribute("opacity", 0); o.ripple.setAttribute("opacity", 0); });
+  R.legs.forEach(u => u.el.setAttribute("opacity", 0));
+  R.arrive.forEach(e => e.setAttribute("opacity", 0));
+}
+function beat(t) {
+  const m = S.m;
+  if (!m || !S.r || t < S.due || S.busy || step()) return;
+  S.due = t + 2.5;
+  const now = S.queue.shift();
+  if (now) {  // happening now
+    const i = m.people.indexOf(now.who);
+    if (i < 0) return;
+    S.busy = true;
+    fly(route(S.g, now.kind, S.th[i]), HUES[i % HUES.length], now.kind === "msg" ? 2600 : 1100).then(() => {
+      S.busy = false; S.due = S.t + 1.5;
+      if (now.kind === "board" && !step()) S.play.post = { i, k: -1, at: -1, t0: S.t - 1 };  // the read that follows the post
+    });
+    return;
+  }
+  const msgs = S.data.messages.slice(-40).filter(x => m.people.includes(x.who)), posts = m.live.slice(-40);
+  S.turn = !S.turn;
+  if (S.turn && m.people.length > 1 && msgs.length) {
+    const i = m.people.indexOf(msgs[S.nth.msg++ % msgs.length].who), a0 = S.th[i];
+    const away = S.th.map((a, j) => ({ j, d: ((a - a0) % 360 + 360) % 360 })).filter(x => x.j !== i);  // degrees to each other swarm, clockwise
+    const reach = dir => Math.max(0, ...away.map(x => dir > 0 ? x.d : 360 - x.d).filter(d => d <= 180 && (dir > 0 || d < 180)));
+    S.play.msg = { i, t0: t, legs: [1, -1].map(dir => ({ dir, span: reach(dir), time: .9 + reach(dir) / 110 })),
+      hits: away.map(x => x.d <= 180 ? { j: x.j, dir: 1, d: x.d, t: 0 } : { j: x.j, dir: -1, d: 360 - x.d, t: 0 }) };
+    S.r.el["ms-fx"].setAttribute("style", `--h:${HUES[i % HUES.length]}`);
+    S.r.legs.forEach(u => { u.glow.setAttribute("fill", `url(#glo-${i})`); u.head.setAttribute("style", `fill:url(#orb-${i}) var(--c)`); });
+  } else if (posts.length) {
+    const it = posts[S.nth.post++ % posts.length], i = Math.max(0, m.people.indexOf(it.who)), count = m.agents[i].length;
+    const k = count ? (m.agents[i].indexOf(it.session) + count) % count : -1;  // the thread of the agent session that posted it, when that is known
+    S.play.post = { i, k, at: m.live.indexOf(it), t0: t };
+  }
+}
+function posted(t) {
+  const P = S.play.post, R = S.r;
+  if (!P || !R.swarms[P.i]) return;
+  const o = R.swarms[P.i], age = t - P.t0, r = 3.8 * o.c0[2];
+  if (age < 1) {  // down one thread
+    const from = o.at[P.k] || o.c0, on = q => [from[0] + (o.end[0] - from[0]) * q, from[1] + (o.end[1] - from[1]) * q], e = ease(age);
+    return comet(o.pulse, [on(Math.max(0, e - .24)), on(Math.max(0, e - .12)), on(e)], r, Math.min(1, age / .12));
+  }
+  if (!P.landed) {  // on the board: its own dot answers, and the read starts in the poster's colour
+    P.landed = true;
+    const dot = P.at < 0 ? null : $("dots").children[P.at];
+    if (dot) { dot.classList.remove("ping"); dot.getBBox(); dot.classList.add("ping"); }
+    R.swarms.forEach(s => s.ripple.setAttribute("style", `--h:${HUES[P.i % HUES.length]}`));
+  }
+  const q = (age - 1) / 1.3, flash = Math.min(1, (age - 1) / .35);
+  comet(o.pulse, [o.end], r * (1 - flash), 1 - flash);
+  if (q >= 1) { R.swarms.forEach(s => s.ripple.setAttribute("opacity", 0)); S.play.post = null; return; }
+  R.swarms.forEach(s => {  // back up every thread
+    const seg = s.reach * .22;
+    s.ripple.setAttribute("d", s.fan);
+    s.ripple.setAttribute("stroke-dasharray", `${f(seg)} 9999`);
+    s.ripple.setAttribute("stroke-dashoffset", f(seg - ease(q) * (s.reach + seg)));
+    s.ripple.setAttribute("opacity", (.75 * Math.min(1, 4 * q, 2.5 * (1 - q))).toFixed(2));
+  });
+}
+function sent(t, at, ring, near) {
+  const P = S.play.msg, R = S.r, g = S.g;
+  if (!P || !R.swarms[P.i]) return;
+  const a0 = S.th[P.i], age = t - P.t0;
+  let live = false;
+  P.legs.forEach((leg, n) => {
+    const u = R.legs[n], q = age / leg.time;
+    if (!leg.span || q >= 1) return u.el.setAttribute("opacity", 0);
+    live = true;
+    const gone = leg.span * ease(q), a = a0 + leg.dir * gone, p = at(g.PP, g.rq, a), d = near(g.PP, g.rq, p);
+    comet(u, ring(g.PP, g.rq, a - leg.dir * Math.min(20, gone), a, 8), 3.4 + 3.2 * d, Math.min(1, q / .08, (1 - q) / .1) * (.6 + .4 * d));
+    P.hits.forEach(h => { if (!h.t && h.dir === leg.dir && gone >= h.d - 1) h.t = t; });
+  });
+  P.hits.forEach(h => {  // where it arrives, a ring opens around that swarm, flat in the people's plane
+    const e = R.arrive[h.j], o = R.swarms[h.j], q = h.t ? (t - h.t) / .9 : 2;
+    if (q >= 1) return e.setAttribute("opacity", 0);
+    live = true;
+    const r = (12 + (g.sw + 10) * (1 - (1 - q) ** 2)) * o.c0[2];
+    e.setAttribute("cx", f(o.c0[0])); e.setAttribute("cy", f(o.c0[1])); e.setAttribute("rx", f(r)); e.setAttribute("ry", f(r * g.PP.c));
+    e.setAttribute("opacity", (.8 * (1 - q)).toFixed(2));
+  });
+  if (!live) S.play.msg = null;
+}
+
+/* Motion: a dot travels along the drawn lines, for a post or message that happens now, or for a step of the walk.
+   A point with three numbers lies in the 3D space and follows the view; a point with two is fixed on the screen. */
 function route(g, kind, a) {
   const loop = (P, r, a0) => Array.from({ length: 91 }, (_, i) => onRing(P, r, a0 + i * 4));
-  const sweep = (r, a0, a1) => {  // along the rim of the board, which faces the viewer
-    const d = a1 - a0, k = Math.max(2, Math.ceil(Math.abs(d) / 4));
-    return Array.from({ length: k + 1 }, (_, i) => pt(g, r, a0 + d * i / k));
-  };
-  const turn = (a0, a1) => a0 + ((a1 - a0 + 540) % 360) - 180;  // the short way round
   const home = onRing(g.PP, g.rq, a), s = proj(g, home), sa = Math.atan2(s[1] - g.cy, s[0] - g.cx) / RAD;  // the swarm, and where it is on the screen
   if (kind === "board") return [home, pt(g, g.rb + 3, sa)];
-  if (kind === "msg") return loop(g.PM, g.rm, a);
-  if (kind === "review") return loop(g.PR, g.rr, -82);
-  const to = kind === "mem" ? g.mem : g.run;
-  return [home, ...sweep(g.rb + 3, sa, turn(sa, to)), pt(g, g.out - 40, to)];
+  if (kind === "msg") return loop(g.PP, g.rq, a);  // once round the messages path, past every swarm
+  if (kind === "swarm") {  // once round the swarm itself
+    const u = g.rq * Math.cos(a * RAD), v = g.rq * Math.sin(a * RAD), r = g.sw + 12;
+    return Array.from({ length: 61 }, (_, i) => world(g.PP, u + r * Math.cos((i * 6 - 90) * RAD), v + r * Math.sin((i * 6 - 90) * RAD)));
+  }
+  return loop(g.PR, g.rr, -82);  // the self-review loop
 }
 function fly(points, hue, ms) {
   return new Promise(done => {
@@ -623,24 +690,13 @@ function fly(points, hue, ms) {
     requestAnimationFrame(tick);
   });
 }
-async function pump() {  // real posts and messages, one at a time, never during the walk
-  if (S.flying) return;
-  S.flying = true;
-  while (S.queue.length) {
-    const ev = S.queue.shift(), i = S.m.people.indexOf(ev.who);
-    if (i < 0 || String(S.sel).startsWith("walk")) continue;
-    await fly(route(S.g, ev.kind, S.th[i]), HUES[i % HUES.length], ev.kind === "msg" ? 2200 : 1100);
-    await new Promise(r => setTimeout(r, 500));
-  }
-  S.flying = false;
-}
 async function act(step) {
   const g = S.g, i = S.m.lead, a = S.th[i], h = HUES[i % HUES.length], back = p => [...p].reverse();
   const token = ++S.token, go = (p, ms) => token === S.token ? fly(p, h, ms) : null;
-  if (step === 1 || step === 3) await go(route(g, "board", a), 1000);
-  if (step === 2) { await go(route(g, "mem", a), 1300); await go(back(route(g, "mem", a)), 1300); }
-  if (step === 5) await go(route(g, "run", a), 1300);
-  if (step === 6) { await go(back(route(g, "run", a)), 1200); await go(route(g, "board", a), 900); }
+  hush();
+  if (step === 1 || step === 3 || step === 6) await go(route(g, "board", a), 1000);  // a post: swarm to board
+  if (step === 2) await go(back(route(g, "board", a)), 1100);  // a read: board to swarm
+  if (step === 5) await go(route(g, "swarm", a), 1900);  // the experiment happens inside the swarm
   if (step === 7) await go(route(g, "review", a), 3000);
 }
 
@@ -650,13 +706,10 @@ function lit() {
   const m = S.m, all = k => (m ? m.people : []).map((_, i) => k + i), me = m ? m.lead : 0, s = S.sel;
   if (!s) return null;
   if (s.startsWith("p-")) { const i = m ? m.people.indexOf(s.slice(2)) : -1; return ["swarm-" + i, "thread-" + i, "board"]; }
+  const mine = ["swarm-" + me], post = ["swarm-" + me, "thread-" + me, "board"];
   return ({
-    board: ["board", "key", ...all("thread-")], msg: ["msg", ...all("swarm-")], mem: ["mem", "memlink", ...all("swarm-")],
-    run: ["run", "runlink", ...all("swarm-")], review: ["review"], team: all("swarm-"), question: [...all("swarm-"), "board"],
-    "walk-1": ["swarm-" + me, "thread-" + me, "board"], "walk-2": ["swarm-" + me, "mem", "memlink"],
-    "walk-3": ["swarm-" + me, "thread-" + me, "board"], "walk-4": ["swarm-" + me],
-    "walk-5": ["swarm-" + me, "run", "runlink"], "walk-6": ["run", "runlink", "swarm-" + me, "thread-" + me, "board"],
-    "walk-7": ["review"],
+    board: ["board", "key", ...all("thread-")], msg: ["msg", ...all("swarm-")], review: ["review"], team: all("swarm-"), question: [...all("swarm-"), "board"],
+    "walk-1": post, "walk-2": post, "walk-3": post, "walk-4": mine, "walk-5": mine, "walk-6": post, "walk-7": ["review"],
   })[s] || null;
 }
 function known(s) { return s in TEXT || /^walk-[1-7]$/.test(s) || (s.startsWith("p-") && (!S.m || S.m.people.includes(s.slice(2)))); }
@@ -733,7 +786,6 @@ function read(d) {
     d.items.filter(i => i.listed !== "work-closed" && !S.seen.has(i.id)).forEach(i => S.queue.push({ kind: "board", who: i.who }));
     d.messages.filter(x => !S.seen.has(x.sk)).forEach(x => S.queue.push({ kind: "msg", who: x.who }));
     S.queue = S.queue.slice(-8);
-    pump();
   }
   S.seen = new Set([...d.items.map(i => i.id), ...d.messages.map(x => x.sk)]);
   if (first) fromHash(); else show();
