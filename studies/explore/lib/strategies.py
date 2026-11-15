@@ -17,6 +17,11 @@ basin     Ours: K agents with growing chats (as parallel). After every round an 
           none), told which basins the team already tried and their best scores.
 randflush Control for basin: the same agents, judge and flush message, but flushes happen at random (agent,
           round) slots, as many as `flushes` (set it to the count a basin run made).
+rebase    Control for the flush: one growing chat as single, but every `period` submissions the feedback also
+          shows the best program so far and asks to continue from it. Rollback without clearing the chat.
+fnf_assign  Ours: fnf, but before each fork one call to `list_model` lists K different methods, given the task,
+          the best program and the methods assigned before with their best scores. Each fresh branch is told to
+          implement one of them. The list calls are extra to the budget; their cost is in metrics.json (list_usd).
 tree      Archive tree (DGM 2505.22954 parent rule): every step picks a parent from all valid submissions with weight
           sigmoid(10 * (rank score - 0.5)) / (1 + children), and starts a fresh chat from it.
 basin     Ours: K agents with growing chats; every `check` submissions an online judge groups the recent ideas into
@@ -24,11 +29,13 @@ basin     Ours: K agents with growing chats; every `check` submissions an online
           and restarted from the best program of a different basin, told which basins were already tried.
 """
 import copy
+import json
 import math
 import random
+import re
 
 from studies.explore.lib.basins import Labeler
-from studies.explore.lib.loop import first_message
+from studies.explore.lib.loop import chat, cost, first_message
 
 
 def fresh(run, code=None, score=None):
@@ -45,6 +52,52 @@ def single(run, **_):
         parent = run.step(s, "a0", parent)["id"]
 
 
+def rebase(run, period=None, **_):
+    """period: submissions between rollbacks (default: a quarter of the budget, the forget arm's period)."""
+    period = period or max(1, run.budget // 4)
+    s = fresh(run)
+    parent = "start"
+    while run.left() > 0:
+        parent = run.step(s, "a0", parent)["id"]
+        if len(run.archive) % period == 0 and run.left() > 0:
+            code, score, parent = run.base()
+            s[-1]["content"] += (f"\n\nBEST PROGRAM SO FAR (validation score {score}):\n```python\n{code}\n```\n"
+                                 "Continue from this program.")
+            run.rebases.append({"after": len(run.archive), "from": parent})
+
+
+LIST_PROMPT = """TASK:
+{spec}
+
+BEST PROGRAM SO FAR (validation score {score}):
+```python
+{code}
+```
+
+METHODS ALREADY ASSIGNED (best validation score reached under each):
+{ledger}
+
+List {k} METHODS for the next versions of this program. A method is the algorithmic approach (how the solution is
+constructed or searched), not parameter values. The {k} methods must differ from each other in approach and from the
+methods already assigned, unless one of those is clearly worth continuing. Each method: one sentence that a
+programmer can implement. Reply with JSON only: ["<method 1>", ..., "<method {k}>"]"""
+
+
+def list_methods(run, k, list_model, code, score, fork_no):
+    done = {}
+    for a in run.assignments:
+        rows = [r["score"] for r in run.archive if r["branch"] == a["branch"] and r["valid"]]
+        done[a["method"]] = max(rows) if rows else "no valid program"
+    ledger = "\n".join(f"- {m} (best {v})" for m, v in done.items()) or "(none yet)"
+    msg = LIST_PROMPT.format(spec=run.task.spec, score=score, code=code, ledger=ledger, k=k)
+    text, usage = chat([{"role": "user", "content": msg}], list_model)
+    run.list_usd += cost(usage, list_model)
+    methods = json.loads(re.search(r"\[.*\]", text, re.S).group(0))
+    assert len(methods) == k and all(isinstance(m, str) for m in methods), f"bad method list: {text[:400]}"
+    print(f"[fnf_assign fork {fork_no}] {list_model} methods: {methods}", flush=True)
+    return methods
+
+
 def parallel(run, k=4, **_):
     sessions = [fresh(run) for _ in range(k)]
     last = ["start"] * k
@@ -55,7 +108,7 @@ def parallel(run, k=4, **_):
             last[i] = run.step(sessions[i], f"a{i}", last[i])["id"]
 
 
-def fnf(run, k=4, forks=(0, 1 / 3, 2 / 3), branch_steps=None, flush=True, **_):
+def fnf(run, k=4, forks=(0, 1 / 3, 2 / 3), branch_steps=None, flush=True, assign=False, list_model=None, **_):
     """branch_steps: submissions per branch at each fork (default: 6% of the budget, as in the paper's 0.06B)."""
     branch_steps = branch_steps or max(1, round(0.06 * run.budget))
     leader, lead_last = None, None  # set by the opening fork at 0 %
@@ -65,8 +118,14 @@ def fnf(run, k=4, forks=(0, 1 / 3, 2 / 3), branch_steps=None, flush=True, **_):
         if fork_no < len(points) and len(run.archive) >= points[fork_no]:
             code, score, bid = run.base()
             branches = []
+            methods = list_methods(run, k, list_model or run.model, code, score, fork_no) if assign else None
             for b in range(k):
                 s = fresh(run, code, score)
+                if assign:
+                    s = [{"role": "user", "content": first_message(
+                        run.task, code, score, f"Use this method for your next versions: {methods[b]}\n")}]
+                    run.assignments.append({"fork": fork_no, "branch": f"f{fork_no}b{b}", "method": methods[b],
+                                            "list_model": list_model or run.model})
                 if not flush and leader is not None:  # fork without flush: the branch keeps the leader's history
                     s = copy.deepcopy(leader) + s
                 last = bid
@@ -105,6 +164,10 @@ def forget(run, k=4, period=None, **_):
 
 def fnf_keep(run, **kw):
     fnf(run, flush=False, **kw)
+
+
+def fnf_assign(run, **kw):
+    fnf(run, assign=True, **kw)
 
 
 def _flush_note(run, lab, stuck=None):
@@ -200,5 +263,5 @@ def tree(run, seed=0, **_):
         run.step(fresh(run, base, score), "t", parent)
 
 
-STRATEGIES = {"single": single, "parallel": parallel, "fnf": fnf, "fnf_keep": fnf_keep, "forget": forget,
+STRATEGIES = {"rebase": rebase, "fnf_assign": fnf_assign, "single": single, "parallel": parallel, "fnf": fnf, "fnf_keep": fnf_keep, "forget": forget,
               "basin": basin, "randflush": randflush, "tree": tree}
