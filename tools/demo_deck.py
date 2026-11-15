@@ -33,6 +33,14 @@ import proof_review_cuts_waste
 
 HOOK = "36 hours to solve recursive self-improvement"  # the opening line of the talk
 SITE = "invariant.team"  # the address on the first and last slide
+# Slide "summary": what the team did, in Samer's words, in groups of lines.
+SUMMARY = [
+    ["A team harness for resource-constrained researchers to make novel contributions", "Novel, paper-worthy findings"],
+    ["More effective than autoresearch with less compute", "It improves itself"],
+    ["Novel idea generation with Exa search", "A shared brain with past.dev"],
+    ["We also got our swarms to forecast GPU rental prices",
+     "Skill +{submitted:.3f}, against +{baseline:.3f} for the strongest baseline".format(**demo_facts.FACTS["gpuprice_skill"]["v"])],
+]
 # The QR code of https://invariant.team (version 2, error level M) as one SVG path of unit squares on a
 # 25 x 25 grid: segno.make("https://invariant.team", error="m").matrix, a square per dark module.
 QR_SIZE = 25
@@ -73,7 +81,8 @@ def num(x):
 
 # ---------- the embedded pictures ----------
 FIG_THEME = (r"""<script>
-(() => { const t = new URLSearchParams(location.search).get("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; })();
+(() => { const t = new URLSearchParams(location.search).get("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+  if (top === window) document.documentElement.style.setProperty("background", "var(--paper)", "important"); })();  // opened by itself, a see-through figure stands on its own paper
 </script>""")
 
 
@@ -291,7 +300,11 @@ def slides(papers):
                   '<iframe class="fig-frame tree" data-fig="basins" data-replay title="The idea basins and the idea tree" tabindex="-1"></iframe>'),
         ("papers", f'<div class="mid"><h2 class="title">{len(papers)} papers, written by the swarm</h2>'
                    f'<div class="sheets" style="--n:{len(papers)}">{"".join(paper(p) for p in papers)}</div></div>'),
-        ("close", f'<div class="mid">{photo(demo_photos.MEDITATE, "meditate")}<p class="end">Also our solution to AI psychosis</p>'
+        ("summary", '<div class="recap"><h2 class="title"><b class="team">Invariant</b></h2><div class="did">'
+                    + "".join("<ul>" + "".join(f"<li>{esc(line)}</li>" for line in group) + "</ul>" for group in SUMMARY)
+                    + '</div><p class="sub">All in under 36 hours</p></div>'),
+        ("close", f'<div class="mid"><p class="end">Along the way we may have gotten some AI psychosis</p>'
+                  f'{photo(demo_photos.MEDITATE, "meditate")}<p class="end">It\'s fine, we found a cure</p>'
                   f'<p class="sub faint">{esc(SITE)}</p></div>'),
     ]
 
@@ -329,6 +342,14 @@ p, h1, h2, figure { margin: 0; }
 .top { margin-bottom: 8px; }
 .title { font-weight: 300; font-size: 54px; line-height: 1.15; letter-spacing: -.008em; }
 .end { font-weight: 300; font-size: 48px; margin-top: 6px; }
+/* slide "summary": the name, the groups of lines in two columns, one closing line */
+.recap { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 44px; padding: 0 150px; }
+.recap .title { font-size: 72px; }
+.recap .title .team { font-weight: 740; font-stretch: 122%; letter-spacing: .01em; }  /* the name, set as on the site header */
+.did { display: grid; grid-template-columns: 1fr 1fr; gap: 40px 90px; }
+.did ul { list-style: none; margin: 0; padding: 0 0 0 26px; border-left: 1px solid var(--rule); display: flex; flex-direction: column; gap: 14px; }
+.did li { font-weight: 300; font-size: 33px; line-height: 1.22; }
+.recap .sub { font-size: 30px; }
 .nb { white-space: nowrap; }
 .site { display: flex; align-items: center; gap: 26px; margin-top: 34px; font-size: 34px; font-weight: 500; color: var(--mute); }
 .qr { width: 150px; height: 150px; display: block; }

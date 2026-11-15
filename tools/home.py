@@ -298,7 +298,7 @@ const PAGES = [
   { id: "exa", g: 2, name: "Exa", href: "/exa", line: "How the agents used web search" },
   { id: "pastdev", g: 2, name: "past.dev", href: "/pastdev", line: "How the agents used shared memory" },
   { id: "gpu", g: 2, name: "GPU prices", href: "https://gpu.invariant.team", line: "Forecasts of GPU rental prices", out: true },
-  { id: "psychosis", g: 2, name: "Psychosis", href: "/psychosis", line: "A joke about ourselves, as a game" },
+  { id: "psychosis", g: 2, name: "AI Psychosis detox", href: "/psychosis", line: "The cure for the maxxing: log off and breathe, as a game" },
 ];
 const SITE = /(^|\.)invariant\.team$/.test(location.hostname) ? "https://monitor.invariant.team" : "";  // where the pages are; a local copy links to itself
 PAGES.forEach(p => { if (p.href[0] === "/") p.href = SITE + p.href; });

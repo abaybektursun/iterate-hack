@@ -24,7 +24,7 @@ PAGE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-<title>Invariant: AI psychosis</title>
+<title>Invariant: AI Psychosis detox</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
@@ -77,7 +77,7 @@ a { color: inherit; }
 <p class="say" id="say" role="status"></p>
 <button class="om" id="om" hidden>Om (O)</button>
 <div class="card" id="card">
-  <h1 id="h1">AI psychosis: the meditation</h1>
+  <h1 id="h1">AI Psychosis detox: the meditation</h1>
   <p id="p1">Hold <b>Space</b>, or press and hold, to breathe in. Let go to breathe out. Keep the white ring on the blue ring.</p>
   <p id="p2">Thoughts will come. Do not click the thoughts. Five levels, five bosses.</p>
   <p id="p3"></p>
@@ -300,7 +300,7 @@ function end(won) {
   $("go").textContent = won ? "Meditate again" : "Try again";
   $("card").hidden = false; $("copy").hidden = false; $("om").hidden = true; $("go").hidden = false; $("perks").hidden = true; $("more").hidden = !won;
   $("copy").textContent = "Copy certificate";
-  $("copy").onclick = () => navigator.clipboard.writeText(`AI psychosis: the meditation, retreat of ${s.day}. ${won ? "Inner peace achieved" : "The model chose me"}. Score ${s.score}, rank ${rank}. ` +
+  $("copy").onclick = () => navigator.clipboard.writeText(`AI Psychosis detox, retreat of ${s.day}. ${won ? "Inner peace achieved" : "The model chose me"}. Score ${s.score}, rank ${rank}. ` +
     `${meanwhile()} ${location.href}`).then(() => $("copy").textContent = "Copied");
   if (won) { [396, 528, 639, 792].forEach((f, k) => setTimeout(() => ding(f, 4), k * 240)); say("You have achieved inner peace. Please do not post it to the board."); }
   else { ding(62, 1.4, "sawtooth"); say("You have sent the email. The lab will not reply."); }

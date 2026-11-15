@@ -432,7 +432,7 @@ and leaves as six rays, one through each face to a bead naming a value. A click 
 the buttons select a value (`/values#speed`); its face turns to the front, and the column shows its sentences, its
 quotes with their sources and its line of AGENTS.md. The words are the person's own; nothing on the page is data.
 
-The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game
+The page `/psychosis`, "AI Psychosis detox" (the counterpart of the Lab page, "AI Psychosis maxxing"), is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game
 of 5 levels, each ending in a boss. Hold Space, or press and hold, to breathe in and let go to breathe out, so that the
 white ring follows the blue one. A breath that follows it scores, raises the streak multiplier, charges the Om (key O)
 and sends out a wave that releases thoughts into their letters. The thoughts are bodies that collide: written jokes,
@@ -443,9 +443,9 @@ that stay (keys 1 to 3); after level 5 the retreat can go on without end. Three 
 that follows the breath (M mutes). A WebGL shader draws the picture: fog, glow, ripples under each wave and a colour
 split. The end screen gives score, rank, achievements and what the agents posted meanwhile.
 
-The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): fourteen 16:9 slides, each one
+The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): fifteen 16:9 slides, each one
 figure with a few words, `#hook`, `#question`, `#gap`, `#powered`, `#climb`, `#harness`, `#sponsors`, `#finding`, `#beyond`, `#efficiency`,
-`#proof`, `#ideas`, `#papers` and `#close` (`/demo#finding` opens that slide, and Back works). The right arrow, Space or PageDown go on, the left arrow or
+`#proof`, `#ideas`, `#papers`, `#summary` and `#close` (`/demo#finding` opens that slide, and Back works). The right arrow, Space or PageDown go on, the left arrow or
 PageUp go back, Home and End jump, a click on the right or left third of the window steps, `t` or the button at the top right changes the theme
 (`?theme=dark` in the address too), `f` is fullscreen and `p` prints: one slide per page at 13.333 x 7.5 in, in the
 theme on screen, so print to PDF from the dark page for a dark PDF. The hook sentence is the constant `HOOK` in
