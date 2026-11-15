@@ -1,0 +1,16 @@
+abaybektursun-1114-195404-351b  running  NVIDIA H100 80GB HBM3  63m  238d234  bash studies/rlneurons/jobs/setu
+abaybektursun-1114-200457-e8e6  running  NVIDIA H100 80GB HBM3  52m  2c58f34  bash studies/rlneurons/jobs/setu
+abaybektursun-1114-200505-5ff2  running  NVIDIA H200  52m  2c58f34  bash studies/rlneurons/jobs/setup_vllm.sh 
+abaybektursun-1114-201013-47c5  running  NVIDIA H100 80GB HBM3  47m  ec6e0f5  bash studies/rlneurons/jobs/setu
+abaybektursun-1114-201021-095e  running  NVIDIA H100 80GB HBM3  47m  ec6e0f5  bash studies/rlneurons/jobs/setu
+abaybektursun-1114-201028-1adf  running  NVIDIA H100 80GB HBM3  47m  ec6e0f5  bash studies/rlneurons/jobs/setu
+abaybektursun-1114-221034-007d  running  NVIDIA H100 80GB HBM3  47m  478cb52  bash studies/rlneurons/jobs/setu
+abaybektursun-1114-201035-c6c0  running  NVIDIA H100 80GB HBM3  47m  ec6e0f5  bash studies/rlneurons/jobs/setu
+abaybektursun-1114-221040-5f1e  running  NVIDIA H100 80GB HBM3  47m  478cb52  bash studies/rlneurons/jobs/setu
+abaybektursun-1114-221053-fb3f  running  NVIDIA H100 80GB HBM3  46m  478cb52  bash studies/rlneurons/jobs/setu
+abaybektursun-1114-221100-1e31  queued  h100  46m  478cb52  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/
+abaybektursun-1114-201132-3c04  queued  h100  46m  ec6e0f5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -r
+abaybektursun-1114-221259-0871  queued  h100  44m  f89a394  python -m studies.rlneurons.jobs.xreward_overlap -
+abaybektursun-1114-222915-1f4a  queued  h100  28m  bd403e1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/
+abaybektursun-1114-222933-0d2e  queued  h100  28m  bd403e1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/
+abaybektursun-1114-204820-49ce  queued  h100  9m  875b60f  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/r

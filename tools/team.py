@@ -33,6 +33,12 @@ def who():
     return email.split("@")[0].split("+")[-1]
 
 
+def review_loop(name):
+    """True when one agent runs the team-meta-review skill in a loop for this person (it keeps meta/loop/<name>.md).
+    board.py and gpu.py then do not ask this person's other agents to run a review."""
+    return (Path(__file__).resolve().parent.parent / "meta" / "loop" / f"{name}.md").exists()
+
+
 def now():
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
