@@ -85,3 +85,15 @@ The token ranking over the whole vocabulary (which tokens differ most) is explor
 
 Follow-ups, not in this spec: a lens fitted on the RL model as the matched control; the base without the cue on the same
 continuations (what the cue adds to the workspace).
+
+## Deviations and additions (2026-11-14, after the smoke run, before the full run was read)
+
+- Stored layers: 20 and 24, chosen from the smoke run's hit@8 table. Layer 20 fails check 2 (see README), so it is
+  exploratory.
+- Two token families were fixed after reading the smoke run's token diff and before the full run was analyzed: hold-on
+  (` Wait`, `Wait`, ` wait`, ` Hmm`, `Hmm`, ` hmm`) and wrap-up (`<|endoftext|>`, ` Answer`, `Answer`, ` So`, `.The`). A
+  position counts once when any token of a family is present. H2 and H3 are tested on the hold-on family.
+- Check 2's "J of a different layer" uses layer l + 8 where it exists. For l up to 22 that is a later layer's J, which
+  turned out to read upcoming tokens better than the layer's own J; it is a finding about the lens on this text, and the
+  control only tests failure for layers 24 to 30 (which use l - 8).
+- Added, exploratory: `analysis/lensdiff_predict.py` (does a lens feature predict a wrong answer better than length).
