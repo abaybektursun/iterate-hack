@@ -4354,6 +4354,47 @@ samples, percentage points of 328, 95 % interval from 10,000 bootstrap resamples
 - Caveats: the bands' sample 0 was the run that suggested the split; L11-21 and L22-31 have 2 samples; the two new cells and the
   random controls have 1. GPU: 14 H100 jobs, 818 min (plus a 64 min smoke job, `abaybektursun-1115-122317-6624`).
 
+#### The depth and rank split with more samples and two controls (specs/SPEC_depth3.md, work-3baa2c)
+
+The table above had one sample per cell and its depth reading was made after the run. `SPEC_depth3.md` states the readings as
+predictions before the run. Same settings (hard328, n 328, cue, T 1.0 / top-p 1.0, cap 16,384, grader v3), new seeds
+(sample s: 3000000 + 10000 s + problem index), each new sample as two `run_cell --shard k/2` jobs. New flag `wsp_edit --skip 1`:
+directions 2 to 8 of each matrix (selftest check 10). Readout:
+`uv run --no-project --with numpy python -m studies.rlneurons.analysis.depth3_readout` -> `results/xreward/depth3/readout.json`;
+per-problem rows of every new sample in `results/xreward/depth3/<cell>_s<sample>-01/rows.jsonl`, of the older one-sample jobs in
+`results/xreward/depth3/sample0_rows/`. Raw answers: `runs/<job>/answers.jsonl` (job ids in each `run.json`; `uv run tools/gpu.py get`).
+Differences are paired over the 328 problems (per problem, mean over samples), in points of 328, 95 % interval from 10,000
+resamples of the problems.
+
+| Cell (base + edit at 1.5, cue) | Samples | Right of 328, mean (each) | Cap hits, mean (each) | Right per finished | Right minus base, points | Cap hits minus base, points |
+|---|---|---|---|---|---|---|
+| base, cue | 4 | 158.5 (161, 161, 152, 160) | 71.5 (71, 66, 81, 68) | 0.62 | | |
+| random rank-8, all layers | 1 | 159 | 74 | 0.63 | +0.1 [-3.2, 3.4] | +0.8 [-3.0, 4.6] |
+| random rank-8, layers 0-10 (new) | 1 | 162 | 70 | 0.63 | +1.1 [-2.4, 4.5] | -0.5 [-4.3, 3.5] |
+| 8 directions, layers 0-10 | 4 | 183.5 (184, 186, 180, 184) | 92.0 (98, 89, 95, 86) | 0.78 | +7.6 [5.3, 10.0] | +6.2 [3.6, 9.1] |
+| 8 directions, layers 11-21 | 2 | 181.0 (183, 179) | 45.0 (49, 41) | 0.64 | +6.9 [4.0, 9.8] | -8.1 [-11.3, -5.0] |
+| 8 directions, layers 22-31 | 2 | 163.5 (166, 161) | 56.0 (57, 55) | 0.60 | +1.5 [-1.1, 4.1] | -4.7 [-7.2, -2.1] |
+| directions 2 to 8, all layers (new) | 1 | 183 | 69 | 0.71 | +7.5 [4.4, 10.7] | -0.8 [-4.7, 3.1] |
+| 8 directions, all layers | 4 | 200.25 (207, 198, 199, 197) | 19.0 (20, 14, 20, 22) | 0.65 | +12.7 [10.2, 15.4] | -16.0 [-19.1, -13.0] |
+
+- B1 held: layers 0-10 add right answers, +7.6 points [5.3, 10.0] (25 problems).
+- B2 held, in its stronger reading: layers 0-10 add cap hits, +6.2 points [3.6, 9.1] (92.0 against 71.5). The cap-hit answers
+  are not loops (rule A: 0 in every L0-10 sample); 14 of the 368 cap-hit answers were scored right.
+- B3 held: against the random rank-8 edit in layers 0-10 (same singular values, sample 1 of each) the L0-10 edit is +7.3 points
+  right [3.4, 11.3] and +5.8 points cap hits [0.9, 10.7]; the random edit stays at the base (162 right, 70 cap hits).
+- B4 held: layers 22-31 cut cap hits (-4.7 [-7.2, -2.1]) with no resolved gain in right answers (+1.5 [-1.1, 4.1]).
+- B5 held: layers 11-21 do both (+6.9 [4.0, 9.8] right, -8.1 [-11.3, -5.0] cap hits).
+- R1 held: directions 2 to 8 without direction 1 give 183 right (predicted at least 180) with 69 cap hits (predicted at least
+  40; base 71.5): the right-answer gain without any finishing. Against the random all-layer edit: +7.3 [3.0, 11.6] right.
+- R2 held: directions 2 to 8 are -5.3 points [-8.3, -2.4] below all 8 in right answers, with +15.2 points [11.2, 19.5] more cap hits.
+- Together with the one-direction cells above (direction 1 at 3x: 168 right, 10 cap hits): direction 1 removes cut-off answers,
+  directions 2 to 8 add right answers and leave cut-offs at the base's level, and the two parts add up (183 and 181 alone,
+  200 together). By depth the early band adds right answers and more cut-offs, the late band only removes cut-offs.
+- Limits: one model pair, one benchmark, one sample for each of the two new cells and for the random controls; the bands at
+  2 samples. 7 samples instead of the 13 first planned (budget, stated in the spec before the run). Sample 0 of the all-layer
+  cell differs between its two jobs with the same seeds (203 and 207): vLLM sampling is not reproducible across jobs.
+- Cost: 14 H100 jobs, 6.4 h of generation plus setup, about 7.2 H100-hours (about 28 USD); 21.8 M generated tokens.
+
 #### The dial on a second model pair and benchmark (amendment 7, work-df5e0a)
 
 Base + the 8 directions per matrix of (Code 3.1 minus base), on HumanEval+ and MBPP+ (538 scored problems), Code cue, T 1.0 /
