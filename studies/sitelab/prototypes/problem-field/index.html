@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Every problem is a bead</title>
+<link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..500&display=swap">
@@ -30,9 +31,12 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; t
   text-shadow: 0 0 18px var(--paper), 0 0 6px var(--paper);
 }
 .col > * { pointer-events: auto; }
-.top { display: flex; align-items: center; gap: 14px; font-size: 13px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
+.top { display: flex; align-items: center; gap: 12px; white-space: nowrap; font-size: 13px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
 .name { font-weight: 700; font-stretch: 118%; font-size: 14px; letter-spacing: .03em; }
 .top .page { color: var(--mute); }
+.lablink { color: var(--faint); text-decoration: none; padding-right: 12px; border-right: 1px solid var(--rule); } .lablink:hover { color: var(--ink); }
+.card .katex { font-size: 1.02em; }
+.ticks u.r { background: var(--ink); opacity: 1; height: 15px; margin-top: -7px; } .ticks u.w { opacity: .3; height: 5px; margin-top: -2px; }
 .sets { margin-left: auto; display: flex; gap: 14px; }
 .sets button { color: var(--mute); }
 .sets button[aria-pressed="true"] { color: var(--ink); font-weight: 600; box-shadow: 0 1px 0 var(--blue); }
@@ -103,6 +107,9 @@ h1 .b { color: var(--blue); } h1 .a { color: var(--red); }
   .card { width: min(340px, calc(100vw - 32px)); }
 }
 </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <script type="importmap">
 { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
@@ -112,7 +119,7 @@ h1 .b { color: var(--blue); } h1 .a { color: var(--red); }
 <canvas id="c"></canvas>
 
 <div class="col">
-  <div class="top"><span class="name">Invariant</span><span class="page">Every problem is a bead</span>
+  <div class="top"><a class="lablink" href="../../">Lab</a><span class="name">Invariant</span><span class="page">Every problem is a bead</span>
     <span class="sets"><button data-set="hard328" aria-pressed="true">The 328</button><button data-set="math500" aria-pressed="false">MATH-500</button></span></div>
   <h1 id="h1"></h1>
   <p class="cap" id="cap"></p>
@@ -150,6 +157,7 @@ const fail = e => { $('err').textContent += (e && (e.stack || e.message || e.rea
 window.addEventListener('error', e => fail(e.error || e.message));
 window.addEventListener('unhandledrejection', e => fail(e.reason));
 const fmt = n => n.toLocaleString('en-US');
+const tex = s => window.katex ? katex.renderToString(String(s), { throwOnError: false, errorColor: '#ebe6da' }) : esc(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const MON = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const whenText = w => w ? `${MON[+w.slice(0, 2)]} ${+w.slice(2, 4)}, ${w.slice(5, 7)}:${w.slice(7, 9)}` : 'time not stored';
@@ -161,8 +169,8 @@ await Promise.race([Promise.all([document.fonts.load('300 216px Newsreader'), do
 const BOTH = 0, ONLYA = 1, ONLYB = 2, NONE = 3, CAP = 4;
 const BASIN = [
   { x: 0, z: -3.5, R: 3.7, name: 'Right under both', cls: '' },
-  { x: -6.9, z: 1.0, R: 2.6, name: 'Right only under A', cls: 'a' },
-  { x: 6.9, z: 1.0, R: 2.6, name: 'Right only under B', cls: 'b' },
+  { x: -6.9, z: 1.0, R: 2.8, name: 'Right only under A', cls: 'a' },
+  { x: 6.9, z: 1.0, R: 2.8, name: 'Right only under B', cls: 'b' },
   { x: -2.7, z: 5.0, R: 2.9, name: 'Wrong under both', cls: '' },
   { x: 3.4, z: 5.3, R: 2.6, name: 'Wrong under both, cap hit', cls: '' },
 ];
@@ -176,13 +184,23 @@ function floorAt(x, z, out) {           // height of the table and its gradient
   out.h = h; out.gx = gx; out.gz = gz;
 }
 
-const NOISE = `
-float h3(vec3 p) { p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
-float vn(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3.0 - 2.0 * f);
-  return mix(mix(mix(h3(i), h3(i + vec3(1, 0, 0)), f.x), mix(h3(i + vec3(0, 1, 0)), h3(i + vec3(1, 1, 0)), f.x), f.y),
-             mix(mix(h3(i + vec3(0, 0, 1)), h3(i + vec3(1, 0, 1)), f.x), mix(h3(i + vec3(0, 1, 1)), h3(i + vec3(1, 1, 1)), f.x), f.y), f.z); }
-float fbm(vec3 p) { return 0.5 * vn(p) + 0.3 * vn(p * 2.1 + 3.1) + 0.2 * vn(p * 4.3 + 7.7); }
-`;
+// one tiling noise texture carries every surface: r mottling, g speckle, b fine grain, a veins
+function noiseTexture() {
+  const n = 256, d = new Uint8Array(n * n * 4), rnd = (() => { let s = 7; return () => (s = (s * 16807) % 2147483647) / 2147483647; })();
+  const layer = p => { const g = Float32Array.from({ length: p * p }, rnd); return (x, y) => {
+    const fx = x * p / n, fy = y * p / n, x0 = Math.floor(fx), y0 = Math.floor(fy); let tx = fx - x0, ty = fy - y0; tx = tx * tx * (3 - 2 * tx); ty = ty * ty * (3 - 2 * ty);
+    const v = (i, j) => g[(j % p) * p + (i % p)];
+    return (v(x0, y0) * (1 - tx) + v(x0 + 1, y0) * tx) * (1 - ty) + (v(x0, y0 + 1) * (1 - tx) + v(x0 + 1, y0 + 1) * tx) * ty; }; };
+  const r = [layer(4), layer(9), layer(19)], g = layer(56), b = layer(110), a = [layer(5), layer(11), layer(23)];
+  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+    const o = (y * n + x) * 4;
+    d[o] = 255 * (0.5 * r[0](x, y) + 0.3 * r[1](x, y) + 0.2 * r[2](x, y)); d[o + 1] = 255 * g(x, y); d[o + 2] = 255 * b(x, y);
+    d[o + 3] = 255 * (0.5 * a[0](x, y) + 0.3 * a[1](x, y) + 0.2 * a[2](x, y));
+  }
+  const t = new THREE.DataTexture(d, n, n, THREE.RGBAFormat); t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.magFilter = THREE.LinearFilter; t.minFilter = THREE.LinearMipmapLinearFilter; t.generateMipmaps = true; t.needsUpdate = true; return t;
+}
+const NOISE = { value: noiseTexture() };
 
 // The reference is a counting tray: beads of five materials in dishes ground into a dark stone slab.
 // c: albedo (linear), r: roughness, cc: lacquer coat, band: growth lines of shell
@@ -197,24 +215,24 @@ const INLAY = ['#d9d0bd', '#b5452e', '#5d74a6', '#d9d0bd', '#d9d0bd'];
 
 // ------------------------------------------------------------------ renderer and scene
 const canvas = $('c');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance', preserveDrawingBuffer: true })   // the last frame stays on screen while nothing is drawn;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap;
 const scene = new THREE.Scene();
 const BG = new THREE.Color('#0d0c0b');
 scene.background = BG; scene.fog = new THREE.Fog(BG, 24, 53);
-scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+const room = () => { const g = new THREE.PMREMGenerator(renderer); scene.environment = g.fromScene(new RoomEnvironment(), 0.04).texture; g.dispose(); };
+room();
 const camera = new THREE.PerspectiveCamera(36, 1, 0.5, 260);
 camera.position.set(0.6, 14.2, 21.5);
 const controls = new OrbitControls(camera, canvas);
 controls.target.set(0, -0.4, 1.0); controls.enableDamping = true; controls.dampingFactor = 0.07;
-controls.minPolarAngle = 0.25; controls.maxPolarAngle = 1.3; controls.minDistance = 9; controls.maxDistance = 42;
+controls.minPolarAngle = 0.25; controls.maxPolarAngle = 1.04; controls.minAzimuthAngle = -0.75; controls.maxAzimuthAngle = 0.75;   // the print on the slab stays readable controls.minDistance = 9; controls.maxDistance = 42;
 controls.rotateSpeed = 0.6; controls.zoomSpeed = 0.7; controls.panSpeed = 0.6;
 
 const sun = new THREE.DirectionalLight('#fff0dc', 2.6);   // key, upper left
 sun.position.set(-11, 17, 5); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
 Object.assign(sun.shadow.camera, { left: -13, right: 13, top: 12, bottom: -12, near: 4, far: 44 });
-sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.03; sun.shadow.radius = 6;
+sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.03; sun.shadow.radius = 2;
 const rim = new THREE.DirectionalLight('#cddcf2', 0.55); rim.position.set(10, 5, -14);   // rim, from behind
 scene.add(sun, rim, new THREE.HemisphereLight('#aab4c0', '#1c1713', 0.42));              // soft fill
 
@@ -231,12 +249,14 @@ const decals = [];
   }
   g.setAttribute('color', new THREE.BufferAttribute(col, 3)); g.computeVertexNormals();
   const stone = sh => {
+    sh.uniforms.uNoise = NOISE;
     sh.vertexShader = 'varying vec3 vTP;\n' + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\nvTP = position;');
-    sh.fragmentShader = 'varying vec3 vTP;\n' + NOISE + sh.fragmentShader
+    sh.fragmentShader = 'varying vec3 vTP;\nuniform sampler2D uNoise;\n' + sh.fragmentShader
       .replace('#include <color_fragment>', `#include <color_fragment>
-        float sm = fbm(vec3(vTP.xz * 0.9, 1.0)), sg = vn(vec3(vTP.xz * 24.0, 4.0));
-        float vein = smoothstep(0.012, 0.0, abs(fbm(vec3(vTP.xz * 0.45 + 5.0, 9.0)) - 0.5)) * smoothstep(0.45, 0.7, sm);
-        diffuseColor.rgb *= (0.8 + 0.4 * sm) * (0.88 + 0.24 * sg); diffuseColor.rgb += vein * 0.012 * vec3(1.0, 0.94, 0.84);`)
+        vec4 n1 = texture2D(uNoise, vTP.xz * 0.11), n2 = texture2D(uNoise, vTP.xz * 1.3);
+        float sm = n1.r, sg = n2.b;
+        float vein = smoothstep(0.012, 0.0, abs(texture2D(uNoise, vTP.xz * 0.028 + 0.37).a - 0.5)) * smoothstep(0.45, 0.7, sm);
+        diffuseColor.rgb *= (0.8 + 0.4 * sm) * (0.88 + 0.24 * sg); diffuseColor.rgb += vein * 0.006 * vec3(1.0, 0.94, 0.84);`)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
         roughnessFactor = clamp(0.66 + (sg - 0.5) * 0.22 - smoothstep(-0.02, -0.14, vTP.y) * 0.32 - vein * 0.12, 0.05, 1.0);`);
   };
@@ -253,15 +273,15 @@ const decals = [];
     }
     // the count and the name, printed flat on the stone: behind the three far dishes, in front of the two near ones
     const cv = document.createElement('canvas'); cv.width = 1024; cv.height = 360;
-    const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+    const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
     const m = new THREE.Mesh(new THREE.PlaneGeometry(k <= ONLYB ? 7.4 : 5.0, (k <= ONLYB ? 7.4 * 1.5 : 5.0 * 1.15) * 360 / 1024).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false }));
-    m.position.set(b.x, 0.014, k <= ONLYB ? b.z - b.R - 1.75 : b.z + b.R + 1.15); scene.add(m);
-    decals.push({ cv, tex, last: '' });
+    m.position.set(b.x, 0.014, k <= ONLYB ? b.z - b.R - 2.1 : b.z + b.R + 1.15); scene.add(m);
+    decals.push({ cv, tex, last: '', ctx: cv.getContext('2d', { willReadFrequently: true }) });   // a canvas kept on the CPU uploads without a read-back
   });
 }
 function printLabel(k, count, name, dim) {
   const d = decals[k], key = count + '|' + name + '|' + dim; if (d.last === key) return; d.last = key;
-  const c = d.cv.getContext('2d'); c.clearRect(0, 0, 1024, 360); c.textAlign = 'center'; c.globalAlpha = dim ? 0.4 : 0.92;
+  const c = d.ctx; c.clearRect(0, 0, 1024, 360); c.textAlign = 'center'; c.globalAlpha = dim ? 0.4 : 0.92;
   c.fillStyle = k === ONLYA ? '#cf7058' : k === ONLYB ? '#9db0d0' : '#e6dfcf';
   c.font = `normal normal 300 ${dim ? 120 : 210}px Newsreader, Georgia, serif`; c.fillText(count, 512, dim ? 190 : 206);
   c.fillStyle = '#b9b2a2'; c.font = 'normal normal 500 54px Archivo, sans-serif'; if ('letterSpacing' in c) c.letterSpacing = '1px';
@@ -278,23 +298,25 @@ let N = 0, R0 = 0.2;
 
 const mat = new THREE.MeshPhysicalMaterial({ color: '#ffffff', roughness: 0.3, metalness: 0.0, clearcoat: 1, clearcoatRoughness: 0.07, envMapIntensity: 0.8 });
 mat.onBeforeCompile = sh => {            // surface per bead: mottling, shell lines, speckle and pitting on the raw stones, occlusion from below
-  sh.vertexShader = 'attribute vec4 aMat;\nvarying vec4 vMat;\nvarying vec3 vObj;\n' + sh.vertexShader
-    .replace('#include <begin_vertex>', '#include <begin_vertex>\nvMat = aMat; vObj = position + vec3(float(gl_InstanceID) * 1.37, float(gl_InstanceID) * 0.71, 0.0);');
-  sh.fragmentShader = 'varying vec4 vMat;\nvarying vec3 vObj;\n' + NOISE + sh.fragmentShader
+  sh.uniforms.uNoise = NOISE;
+  sh.vertexShader = 'attribute vec4 aMat;\nvarying vec4 vMat;\nvarying vec2 vBU;\n' + sh.vertexShader
+    .replace('#include <begin_vertex>', '#include <begin_vertex>\nvMat = aMat; vBU = uv * vec2(2.0, 1.0) + vec2(float(gl_InstanceID) * 0.137, float(gl_InstanceID) * 0.071);');
+  sh.fragmentShader = 'varying vec4 vMat;\nvarying vec2 vBU;\nuniform sampler2D uNoise;\n' + sh.fragmentShader
     .replace('#include <color_fragment>', `#include <color_fragment>
-      float nA = fbm(vObj * 2.2), sp = vn(vObj * 26.0);
+      vec4 nb = texture2D(uNoise, vBU * 0.45), nf = texture2D(uNoise, vBU * 2.6);
+      float nA = nb.r, sp = nf.g;
       diffuseColor.rgb *= 0.84 + 0.32 * nA;
-      diffuseColor.rgb *= 1.0 - vMat.z * 0.11 * smoothstep(0.3, 0.9, 0.5 + 0.5 * sin(vObj.y * 46.0 + nA * 14.0));
+      diffuseColor.rgb *= 1.0 - vMat.z * 0.11 * smoothstep(0.3, 0.9, 0.5 + 0.5 * sin(vBU.y * 72.0 + nA * 14.0));
       diffuseColor.rgb *= 1.0 - (1.0 - vMat.y) * 0.42 * smoothstep(0.6, 0.85, sp);
       diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * 1.5 + 0.035, vMat.w);`)
     .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
       roughnessFactor = clamp(vMat.x + (nA - 0.5) * 0.2 + (1.0 - vMat.y) * 0.15 * sp, 0.04, 1.0);`)
     .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
-      normal = normalize(normal + (vec3(vn(vObj * 31.0), vn(vObj * 31.0 + 9.0), vn(vObj * 31.0 + 17.0)) - 0.5) * 0.24 * (1.0 - vMat.y));
+      normal = normalize(normal + (nf.bga - 0.5) * 0.24 * (1.0 - vMat.y));
       diffuseColor.rgb *= mix(0.4, 1.0, smoothstep(-0.8, 0.35, inverseTransformDirection(normal, viewMatrix).y));`)
     .replace('#include <lights_physical_fragment>', '#include <lights_physical_fragment>\nmaterial.clearcoat *= vMat.y;');
 };
-const mesh = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 32, 20), mat, NMAX);
+const mesh = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 24, 16), mat, NMAX);
 mesh.castShadow = true; mesh.receiveShadow = true; mesh.frustumCulled = false;
 mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
 const colAttr = new THREE.InstancedBufferAttribute(curC, 3).setUsage(THREE.DynamicDrawUsage);
@@ -303,7 +325,7 @@ mesh.instanceColor = colAttr; mesh.geometry.setAttribute('aMat', emAttr);
 scene.add(mesh);
 
 // a faint pale line behind a bead in flight
-const TK = 16, trail = new Float32Array(NMAX * TK * 3);
+const TK = 10, trail = new Float32Array(NMAX * TK * 3);
 const tGeo = new THREE.BufferGeometry();
 const tPos = new Float32Array(NMAX * (TK - 1) * 6), tCol = new Float32Array(NMAX * (TK - 1) * 6);
 tGeo.setAttribute('position', new THREE.BufferAttribute(tPos, 3).setUsage(THREE.DynamicDrawUsage));
@@ -328,10 +350,23 @@ const film = new ShaderPass({             // slight grain and a restrained vigne
 composer.addPass(film);
 renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
 
-let W = 1, H = 1, shift = 0;
+// quality steps down by itself when frames run slow: depth of field, then bloom and shadow size, then internal resolution
+const gl = renderer.getContext(), dbg = gl.getExtension('WEBGL_debug_renderer_info'), gpu = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : '';
+let tier = -1, slow = 0, counted = 0, drawn = 0;
+let lost = 0;
+window.__pf = () => ({ tier, drawn, awake, lost });   // for a measurement from outside   // for a measurement from outside
+function setTier(t) {
+  tier = t; bokeh.enabled = t < 1; bloom.enabled = t < 2;
+  const size = t < 2 ? 2048 : 1024; if (sun.shadow.mapSize.x !== size) { sun.shadow.mapSize.set(size, size); if (sun.shadow.map) { sun.shadow.map.dispose(); sun.shadow.map = null; } }
+
+  const pr = Math.min(devicePixelRatio, 2) * [1, 1, 1, 0.8, 0.64, 0.5][t];
+  renderer.setPixelRatio(pr); composer.setPixelRatio(pr); composer.setSize(innerWidth, innerHeight); dirty = 30;
+}
+
+let W = 1, H = 1, shift = 0, dirty = 30;
 function resize() {
   W = innerWidth; H = innerHeight; shift = W > 900 ? Math.min(200, W * 0.12) : 0;
-  renderer.setSize(W, H, false); composer.setSize(W, H); composer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(W, H, false); composer.setSize(W, H); dirty = 30;
   camera.aspect = W / H; camera.fov = 36;
   // keep the five basins (22 units wide) inside the free width at any aspect: dolly out when the window is narrow
   const free = (W - (W > 900 ? 430 : 0)) / W, need = 10.2 / (Math.tan(camera.fov * Math.PI / 360) * camera.aspect * free);
@@ -340,9 +375,11 @@ function resize() {
   controls.maxDistance = dist * 1.7; controls.minDistance = 9; scene.fog.near = dist * 0.93; scene.fog.far = dist * 2.05;
   camera.setViewOffset(W, H, -shift, W > 900 ? H * 0.04 : -H * 0.02, W, H); camera.updateProjectionMatrix();
 }
-addEventListener('resize', resize); resize();
+addEventListener('resize', resize); setTier(/Intel|SwiftShader|llvmpipe|Mali|Adreno/i.test(gpu) ? 3 : 0); resize();
 
 // ------------------------------------------------------------------ state: the set and the two configurations
+let awake = true, calm = 0, snap = false;
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let S, A, B, cls = new Int8Array(NMAX), counts = [0, 0, 0, 0, 0], solved = new Int16Array(NMAX), board = null;
 const hash = i => { const s = Math.sin(i * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
 
@@ -354,7 +391,7 @@ function classOf(i) {
 }
 function aim(i) {                       // each body aims at its own point of its basin
   const b = BASIN[basin[i]], a = hash(i * 3 + basin[i]) * 6.283, r = Math.sqrt(hash(i * 7 + 1 + basin[i])) * b.R * 0.62;
-  offX[i] = Math.cos(a) * r; offZ[i] = Math.sin(a) * r; hov[i] = 1.3 + 1.5 * hash(i * 5 + 2);
+  offX[i] = Math.cos(a) * r; offZ[i] = Math.sin(a) * r; hov[i] = 1.1 + 1.2 * hash(i * 5 + 2);
 }
 function applyPair(first) {
   counts = [0, 0, 0, 0, 0];
@@ -366,14 +403,14 @@ function applyPair(first) {
       cls[i] = k; basin[i] = k; aim(i);
       if (first) {                      // the entrance: every problem falls into its basin
         const b = BASIN[k]; rad[i] = radT[i];
-        P[i * 3] = b.x + offX[i] * 1.2; P[i * 3 + 2] = b.z + offZ[i] * 1.2; P[i * 3 + 1] = 3 + hash(i * 11 + 5) * 12;
-        V[i * 3] = V[i * 3 + 2] = 0; V[i * 3 + 1] = -3; delay[i] = 0; transit[i] = 0; fly[i] = 1;
+        P[i * 3] = b.x + offX[i] * 1.2; P[i * 3 + 2] = b.z + offZ[i] * 1.2; P[i * 3 + 1] = 0.3 + hash(i * 11 + 5) * 3.5;
+        V[i * 3] = V[i * 3 + 1] = V[i * 3 + 2] = 0; delay[i] = 0; transit[i] = 0; fly[i] = 0;
         const L = LOOK[k]; curC.set(L.c, i * 3); curE.set([L.r, L.cc, L.band, 0], i * 4);
         for (let j = 0; j < TK; j++) trail.set([P[i * 3], P[i * 3 + 1], P[i * 3 + 2]], (i * TK + j) * 3);
       } else delay[i] = 0.05 + hash(i * 13 + performance.now() % 97) * 0.85;
     }
   }
-  paint();
+  paint(); dirty = 30;
 }
 
 function loadSet(key) {
@@ -396,10 +433,21 @@ function loadSet(key) {
   const ma = document.createElement('span'); ma.className = 'ma'; const mb = document.createElement('span'); mb.className = 'mb'; tk.append(ma, mb);
   $('t0').textContent = whenText(S.configs.find(c => c.when).when) + ' PT'; $('t1').textContent = whenText(S.configs.at(-1).when) + ' PT';
   A = S.byKey[S.a]; B = S.byKey[S.b]; pin = -1; hover = -1; showCard(-1);
-  applyPair(true);
+  applyPair(true); settle(); wake();
 }
 const tickX = j => 0.6 + 98.8 * j / (S.configs.length - 1);
-function setPair(a, b) { if (a) A = a; if (b) B = b; applyPair(false); if (pin >= 0) showCard(pin); }
+function setPair(a, b) { if (a) A = a; if (b) B = b; applyPair(false); wake(); if (still) settle(); if (pin >= 0) showCard(pin); }
+function settle() {                     // run the physics to rest without drawing: the page opens with every bead in its dish
+  for (let i = 0; i < 3000; i++) { step(1 / 120); if (i > 120 && i % 20 === 0 && resting()) break; }
+  for (let i = 0; i < N; i++) { fly[i] = 0; for (let j = 0; j < TK; j++) trail.set([P[i * 3], P[i * 3 + 1], P[i * 3 + 2]], (i * TK + j) * 3); }
+  snap = true; dirty = 30;
+}
+function resting() {
+  if (held >= 0) return false;
+  for (let i = 0; i < N; i++) { if (transit[i] || delay[i] > 0 || Math.abs(V[i * 3]) + Math.abs(V[i * 3 + 1]) + Math.abs(V[i * 3 + 2]) > 0.05) return false; }
+  return true;
+}
+function wake() { awake = true; calm = 0; dirty = 30; }
 
 // exact two-sided sign test on the discordant pairs
 function signTest(x, y) {
@@ -444,7 +492,7 @@ function paint() {
   $('tc').textContent = `B, run ${ib + 1} of ${S.configs.length}: ${whenText(B.when)}${B.when ? ' PT' : ''}`;
   $('key').innerHTML = `right only under B<i style="background:#33487a"></i><br>right only under A<i style="background:#a83f28"></i><br>` +
     `right under both<i style="background:#d2c8b3"></i><br>wrong under both<i style="background:#555a60"></i><br>cut off at the token cap<i style="background:#141312;box-shadow:0 0 0 1px #4a4640"></i><br>` +
-    `<span class="${board ? 'live' : ''}">${board ? `board read ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}` : 'rows of commit ' + DATA.commit}</span>`;
+    `<span class="${board && !boardMiss ? 'live' : ''}">${boardMiss ? (board ? `board not reached, showing the read of ${boardAt}` : 'board not reached, retrying') : board ? `board read ${boardAt}` : 'rows of commit ' + DATA.commit}</span>`;
 }
 
 
@@ -502,6 +550,10 @@ function step(dt) {
   }
   const damp = Math.pow(0.24, dt);
   for (let i = 0; i < N * 3; i++) V[i] = (P[i] - Q[i]) / dt * damp;
+  for (let i = 0; i < N; i++) {           // no bead leaves a pile faster than 11 units a second
+    const x = i * 3, v = Math.hypot(V[x], V[x + 1], V[x + 2]);
+    if (v > 11 && i !== held) { const k = 11 / v; V[x] *= k; V[x + 1] *= k; V[x + 2] *= k; P[x] = Q[x] + V[x] * dt; P[x + 1] = Q[x + 1] + V[x + 1] * dt; P[x + 2] = Q[x + 2] + V[x + 2] * dt; }
+  }
 }
 
 // ------------------------------------------------------------------ pointer: hover, pin, grab and throw
@@ -521,12 +573,12 @@ function pick(ev) {
 canvas.addEventListener('pointermove', ev => {
   if (held >= 0) { ndc.set(ev.clientX / W * 2 - 1, -(ev.clientY / H) * 2 + 1); ray.setFromCamera(ndc, camera); if (ray.ray.intersectPlane(plane, tmp)) { grab.copy(tmp); grab.y = Math.max(grab.y, 0.3); } mx = ev.clientX; my = ev.clientY; if (down) down.moved += 1; return; }
   if (down) { down.moved += 1; return; }
-  hover = pick(ev); canvas.style.cursor = hover >= 0 ? 'grab' : ''; if (pin < 0) showCard(hover);
+  const h0 = hover; hover = pick(ev); if (hover !== h0) dirty = Math.max(dirty, 20); canvas.style.cursor = hover >= 0 ? 'grab' : ''; if (pin < 0) showCard(hover);
 });
 canvas.addEventListener('pointerdown', ev => {
   const i = pick(ev); down = { i, moved: 0 };
   if (i >= 0) {
-    held = i; controls.enabled = false; canvas.setPointerCapture(ev.pointerId); canvas.style.cursor = 'grabbing';
+    held = i; wake(); controls.enabled = false; canvas.setPointerCapture(ev.pointerId); canvas.style.cursor = 'grabbing';
     grab.set(P[i * 3], P[i * 3 + 1], P[i * 3 + 2]); plane.setFromNormalAndCoplanarPoint(camera.getWorldDirection(tmp).negate(), grab);
     hover = i; if (pin < 0) showCard(i);
   }
@@ -534,32 +586,41 @@ canvas.addEventListener('pointerdown', ev => {
 addEventListener('pointerup', () => {
   if (!down) return;
   if (down.moved < 4) { pin = down.i >= 0 && pin !== down.i ? down.i : -1; showCard(pin >= 0 ? pin : hover); }
-  if (held >= 0) { transit[held] = 0; held = -1; controls.enabled = true; canvas.style.cursor = ''; }
+  if (held >= 0) { transit[held] = 0; held = -1; wake(); controls.enabled = true; canvas.style.cursor = ''; }
   down = null;
 });
 canvas.addEventListener('pointerleave', () => { if (held < 0) { hover = -1; if (pin < 0) showCard(-1); } });
 
 function showCard(i) {
-  const el = $('card');
-  if (i < 0) { el.className = 'card'; return; }
+  const el = $('card'); dirty = Math.max(dirty, 20);
+  if (i < 0) { el.className = 'card'; record(); return; }
   const p = S.problems[i];
   const line = (c, L) => {
     const r = c.r[i] === '1', cap = c.c && c.c[i] === '1';
     return `<div class="r ${L.toLowerCase()}"><b class="l">${L}</b><div><b class="${r ? 'ok' : 'no'}">${r ? 'right' : 'wrong'}</b>` +
       (c.t ? `<span> · ${fmt(c.t[i])} tokens${cap ? ', cut off at the cap' : ''}</span>` : '') +
-      (c.a ? `<span> · answer </span>${c.a[i] ? esc(c.a[i]) : '<span>none extracted</span>'}` : c.t ? '' : '<span> · answer and tokens not stored</span>') +
+      (c.a ? `<span> · answer </span>${c.a[i] ? tex(c.a[i]) : '<span>none extracted</span>'}` : c.t ? '' : '<span> · answer and tokens not stored</span>') +
       `<br><span>${esc(c.name)}</span></div></div>`;
   };
   el.innerHTML = `<div class="id"><span>${esc(p.id)}</span><span>${esc(p.tag)}</span></div>` +
-    `<div class="tx">${esc(p.text)}${p.text.length >= 320 ? '…' : ''}</div>` +
-    `<div class="g"><span></span><div><span>Reference answer </span>${esc(p.gold)}</div></div>` + line(A, 'A') + line(B, 'B') +
-    `<div class="f">Right under ${solved[i]} of the ${S.configs.length} configurations stored for this set.</div>`;
+    `<div class="tx">${esc(p.text.replace(/\\begin\{align\*?\}/g, '$\\begin{aligned}').replace(/\\end\{align\*?\}/g, '\\end{aligned}$'))}${p.cut ? ' …' : ''}</div>` +
+    `<div class="g"><span></span><div><span>Reference answer </span>${tex(p.gold)}</div></div>` + line(A, 'A') + line(B, 'B') +
+    `<div class="f">Right under ${solved[i]} of the ${S.configs.length} configurations stored for this set${i === pin ? ': the tall marks on the line of runs' : ''}.</div>`;
   el.className = 'card on' + (i === pin ? ' pin' : '');
+  if (window.renderMathInElement) renderMathInElement(el, { throwOnError: false, errorColor: '#a39d90', delimiters: [
+    { left: '$$', right: '$$', display: false }, { left: '\\[', right: '\\]', display: false }, { left: '\\(', right: '\\)', display: false }, { left: '$', right: '$', display: false }] });
+  record();
+}
+function record() {                     // a pinned problem prints its own record on the line of runs: tall where it was right
+  const us = $('ticks').querySelectorAll('u');
+  S.configs.forEach((c, j) => { us[j].classList.toggle('r', pin >= 0 && c.r[pin] === '1'); us[j].classList.toggle('w', pin >= 0 && c.r[pin] !== '1'); });
+  dirty = Math.max(dirty, 20);
 }
 function placeCard() {
   const el = $('card'), i = pin >= 0 ? pin : hover; if (i < 0) return;
   tmp.set(P[i * 3], P[i * 3 + 1], P[i * 3 + 2]).project(camera);
   const sx = (tmp.x + 1) / 2 * W, sy = (1 - tmp.y) / 2 * H, w = el.offsetWidth, h = el.offsetHeight;
+  if (W <= 900) { el.style.left = '12px'; el.style.top = Math.max(150, H - h - 64) + 'px'; return; }   // on a phone the card sits above the line of runs
   let x = sx + 26, y = sy - h / 2; if (x + w > W - 12) x = sx - w - 26;
   el.style.left = Math.max(12, x) + 'px'; el.style.top = Math.max(12, Math.min(H - h - 70, y)) + 'px';
 }
@@ -572,13 +633,13 @@ for (const b of document.querySelectorAll('.sets button')) b.onclick = () => { s
 let timer = 0;
 function stop() { clearInterval(timer); timer = 0; $('play').classList.remove('on'); $('play').querySelector('span').textContent = 'Replay in run order'; }
 function play() {
-  if (timer) return stop();
+  if (timer) return stop(); if (still) return;
   $('play').classList.add('on'); $('play').querySelector('span').textContent = 'Pause';
   let j = S.configs.indexOf(B); if (j >= S.configs.length - 1) j = -1;
   const go = () => { j++; if (j >= S.configs.length) return stop(); setPair(null, S.configs[j]); };
   go(); timer = setInterval(go, 3600);
 }
-$('play').onclick = play;
+$('play').onclick = play; if (still) $('play').style.visibility = 'hidden';
 const tk = $('ticks'), tip = $('tip');
 const tickAt = ev => { const r = tk.getBoundingClientRect(); return Math.max(0, Math.min(S.configs.length - 1, Math.round(((ev.clientX - r.left) / r.width * 100 - 0.6) / 98.8 * (S.configs.length - 1)))); };
 let scrub = false;
@@ -599,15 +660,20 @@ addEventListener('keydown', ev => {
 });
 
 // the board, live: which posted result states each total
-async function readBoard() { try { const r = await fetch('/data'); if (r.ok) { board = await r.json(); paint(); } } catch (e) { /* the page works from data.json without the board */ } }
+let boardAt = '', boardMiss = false;      // a failed read keeps the last board on screen, says so, and the next read comes in 30 s
+async function readBoard() {
+  try { const r = await fetch('/data'); if (!r.ok) throw new Error(r.status); board = await r.json(); boardMiss = false;
+    boardAt = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }); }
+  catch (e) { boardMiss = true; }
+  paint();
+}
 readBoard(); setInterval(readBoard, 30000);
 const reprint = () => { for (const d of decals) d.last = ''; if (S) paint(); };   // print again once the typefaces are in
 document.fonts.ready.then(reprint); setTimeout(reprint, 3000);
 
 // ------------------------------------------------------------------ frame
-const m4 = new THREE.Matrix4(), clock = new THREE.Clock(); let acc = 0, T = 0, lastInput = 0, sway = 0, snap = false;
-controls.addEventListener('start', () => lastInput = T);
-const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const m4 = new THREE.Matrix4(), clock = new THREE.Clock(); let acc = 0, T = 0, last = 0, lastDraw = 0;
+controls.addEventListener('change', () => dirty = Math.max(dirty, 2));
 function update() {
   const e = mesh.instanceMatrix.array;
   for (let i = 0; i < N; i++) {
@@ -615,7 +681,7 @@ function update() {
     const x = i * 3, L = LOOK[cls[i]], s = rad[i] * (i === hover || i === pin ? 1.18 : 1), o = i * 16;
     e[o] = s; e[o + 5] = s; e[o + 10] = s; e[o + 15] = 1; e[o + 12] = P[x]; e[o + 13] = P[x + 1]; e[o + 14] = P[x + 2];
     e[o + 1] = e[o + 2] = e[o + 3] = e[o + 4] = e[o + 6] = e[o + 7] = e[o + 8] = e[o + 9] = e[o + 11] = 0;
-    const k = snap ? 1 : 0.07, m = i * 4;
+    const k = snap ? 1 : 0.12, m = i * 4;
     for (let c = 0; c < 3; c++) curC[x + c] += (L.c[c] - curC[x + c]) * k;
     curE[m] += (L.r - curE[m]) * k; curE[m + 1] += (L.cc - curE[m + 1]) * k; curE[m + 2] += (L.band - curE[m + 2]) * k;
     curE[m + 3] += ((i === hover || i === pin ? 1 : 0) - curE[m + 3]) * 0.2;
@@ -623,7 +689,7 @@ function update() {
     const h = i * TK * 3; trail.copyWithin(h + 3, h, h + (TK - 1) * 3); trail[h] = P[x]; trail[h + 1] = P[x + 1]; trail[h + 2] = P[x + 2];
     const f = fly[i] > 0.03 ? fly[i] : 0, q = i * (TK - 1) * 6;
     for (let j = 0; j < TK - 1; j++) {
-      const a = h + j * 3, w = q + j * 6, g0 = f * (1 - j / (TK - 1)) * 0.16, g1 = f * (1 - (j + 1) / (TK - 1)) * 0.16;
+      const a = h + j * 3, w = q + j * 6, g0 = f * (1 - j / (TK - 1)) * 0.2, g1 = f * (1 - (j + 1) / (TK - 1)) * 0.2;
       tPos[w] = trail[a]; tPos[w + 1] = trail[a + 1]; tPos[w + 2] = trail[a + 2]; tPos[w + 3] = trail[a + 3]; tPos[w + 4] = trail[a + 4]; tPos[w + 5] = trail[a + 5];
       tCol[w] = g0; tCol[w + 1] = 0.94 * g0; tCol[w + 2] = 0.84 * g0; tCol[w + 3] = g1; tCol[w + 4] = 0.94 * g1; tCol[w + 5] = 0.84 * g1;
     }
@@ -633,30 +699,29 @@ function update() {
   tGeo.attributes.position.needsUpdate = tGeo.attributes.color.needsUpdate = true;
 }
 function frame() {
-  requestAnimationFrame(frame);
-  const dt = Math.min(clock.getDelta(), 1 / 20); T += dt; acc += dt;
-  let n = 0; while (acc > 1 / 120 && n < 4) { step(1 / 120); acc -= 1 / 120; n++; } if (n === 4) acc = 0;
-
-  update();
-
-  if (!still && held < 0 && T - lastInput > 4) {   // a slow sway while nobody steers
-    const s2 = Math.sin(T * 0.21) * 0.085, d = s2 - sway; sway = s2;
-    const ox = camera.position.x - controls.target.x, oz = camera.position.z - controls.target.z, c = Math.cos(d), s = Math.sin(d);
-    camera.position.x = controls.target.x + ox * c - oz * s; camera.position.z = controls.target.z + ox * s + oz * c;
+  requestAnimationFrame(frame); const now = performance.now();
+  if (document.hidden) { last = 0; return; }
+  const dt = last ? Math.min((now - last) / 1000, 1 / 20) : 1 / 60; last = now; T += dt;
+  if (awake) {
+    acc += dt; let n = 0; while (acc > 1 / 120 && n < 4) { step(1 / 120); acc -= 1 / 120; n++; } if (n === 4) acc = 0;
+    calm = resting() ? calm + dt : 0; if (calm > 0.5) awake = false;   // at rest: no physics and no drawing until something changes
   }
-  controls.update();
+  if (controls.update()) dirty = Math.max(dirty, 2);
+  if (!awake && dirty <= 0) { counted = 0; slow = 0; placeCard(); return; }
+  if (now - lastDraw < 11) return;       // never draw more than about 90 times a second, however fast frames are offered
+  if (counted && now - lastDraw > 25) slow++; lastDraw = now;
+  dirty--;
+  update();
   bokeh.uniforms.focus.value = camera.position.distanceTo(controls.target) - 0.5;
-  if (!still) film.uniforms.t.value = T;
-  composer.render();
-
+  if (!still && awake) film.uniforms.t.value = T;
+  composer.render(); drawn++;
   placeCard();
+  // more than 18 of 30 drawn frames in a row came later than 25 ms after the one before: one quality step down
+  if (++counted > 30) { if (slow > 18 && tier < 5) setTier(tier + 1); counted = 0; slow = 0; }
 }
 const q = new URLSearchParams(location.search);
 loadSet(q.get('set') || 'hard328');
 if (q.get('a') || q.get('b')) setPair(S.byKey[q.get('a')], S.byKey[q.get('b')]);
-for (let i = 0, n = (+q.get('warm') || 0) * 120; i < n; i++) step(1 / 120);   // ?warm=<seconds> settles the bodies before the first frame
-if (q.get('warm')) snap = true;
-if (q.get('warm')) for (let i = 0; i < N; i++) for (let j = 0; j < TK; j++) trail.set([P[i * 3], P[i * 3 + 1], P[i * 3 + 2]], (i * TK + j) * 3);
 if (q.get('then')) {                     // ?then=<key of B>&t=<seconds>: a later moment of a change, for a still
   update(); setPair(null, S.byKey[q.get('then')]);
   for (let i = 0, n = (+q.get('t') || 1) * 60; i < n; i++) { step(1 / 120); step(1 / 120); update(); }
@@ -664,7 +729,11 @@ if (q.get('then')) {                     // ?then=<key of B>&t=<seconds>: a late
 for (let i = 0, n = +q.get('frames') || 0; i < n; i++) { step(1 / 120); step(1 / 120); update(); }
 if (q.get('dbg')) { let m = 0, mx = 0; for (let i = 0; i < N; i++) { const v = Math.hypot(V[i * 3], V[i * 3 + 1], V[i * 3 + 2]); m += v / N; mx = Math.max(mx, v); } document.title = `speed mean ${m.toFixed(4)} max ${mx.toFixed(3)} transit ${transit.reduce((a, b) => a + b, 0)}`; }
 if (q.get('pin')) { pin = +q.get('pin'); showCard(pin); }
-frame();
+canvas.addEventListener('webglcontextlost', ev => ev.preventDefault());
+canvas.addEventListener('webglcontextrestored', () => { lost++; room(); NOISE.value.needsUpdate = true; for (const d of decals) d.tex.needsUpdate = true; dirty = 60; });
+update();
+if (renderer.compileAsync) await Promise.race([renderer.compileAsync(scene, camera), new Promise(r => setTimeout(r, 4000))]);   // shaders compile off the main thread where the driver can
+requestAnimationFrame(frame);
 </script>
 </body>
 </html>

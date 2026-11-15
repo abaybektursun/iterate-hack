@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Music box · Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..500&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --paper: #100e0c; --sheet: #1b1815; --ink: #ece5d6; --mute: #a89f8f; --faint: #7d7567; --rule: #332e27;
+  --brass: #c9a25a; --red: #b5523f; --serif: "Newsreader", Georgia, serif;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; overflow: hidden; color: var(--ink); background: var(--paper);
+  font: 400 13px/1.45 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; user-select: none; -webkit-user-select: none;
+}
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 1px solid var(--brass); outline-offset: 4px; border-radius: 2px; }
+canvas#gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+.vig { position: fixed; inset: 0; pointer-events: none; z-index: 1;
+  background: radial-gradient(ellipse at 50% 52%, transparent 48%, rgba(8,6,4,.5) 100%); }
+
+.col { position: fixed; left: 40px; top: 22px; width: 372px; z-index: 3; pointer-events: none; text-shadow: 0 0 16px var(--paper), 0 0 5px var(--paper); }
+.col > * { pointer-events: auto; }
+.top { display: flex; align-items: center; gap: 12px; white-space: nowrap; padding-bottom: 12px; border-bottom: 1px solid var(--rule); }
+.lablink { color: var(--faint); text-decoration: none; padding-right: 12px; border-right: 1px solid var(--rule); } .lablink:hover { color: var(--ink); }
+.name { font-weight: 700; font-stretch: 118%; letter-spacing: .03em; }
+.top .page { color: var(--mute); }
+h1 { font: 400 30px/1.12 var(--serif); letter-spacing: -.01em; margin: 16px 0 8px; }
+#say { font: 300 18px/1.36 var(--serif); margin: 0; color: var(--ink); }
+#say b { font-weight: 500; }
+#span { margin: 10px 0 0; color: var(--mute); font-size: 12px; }
+#foot { margin: 6px 0 0; color: var(--faint); font-size: 11px; }
+
+.rules { position: fixed; right: 40px; top: 22px; width: 318px; z-index: 3; color: var(--mute); font-size: 12px; text-shadow: 0 0 14px var(--paper), 0 0 5px var(--paper); }
+.rules summary { list-style: none; cursor: default; color: var(--faint); font-stretch: 112%; letter-spacing: .12em; text-transform: uppercase; font-size: 10.5px; padding-bottom: 12px; border-bottom: 1px solid var(--rule); height: 32px; display: flex; align-items: center; }
+.rules summary::-webkit-details-marker { display: none; }
+.rules ol { list-style: none; margin: 0; padding: 0; counter-reset: r; }
+.rules li { counter-increment: r; padding: 7px 0 7px 22px; border-bottom: 1px solid var(--rule); position: relative; }
+.rules li::before { content: counter(r); position: absolute; left: 0; top: 4px; font: 400 16px var(--serif); color: var(--ink); }
+.rules li b { color: var(--ink); font-weight: 500; }
+
+.card { position: fixed; right: 40px; bottom: 148px; width: 318px; max-height: 44vh; overflow: auto; z-index: 4; background: #efe8d8; color: #1d1a15;
+  padding: 16px 18px 14px; border-radius: 1px; box-shadow: 0 1px 0 #fff8 inset, 0 18px 40px #0009, 0 2px 4px #0007; display: none; user-select: text; -webkit-user-select: text; }
+.card.on { display: block; }
+.card .k { display: flex; gap: 10px; align-items: baseline; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; font-stretch: 112%; color: #6d6354; border-bottom: 1px solid #1d1a1533; padding-bottom: 8px; }
+.card .k b { color: #8a2f22; font-weight: 600; } .card .k span:last-of-type { margin-left: auto; }
+.card h2 { font: 500 19px/1.22 var(--serif); margin: 10px 0 6px; }
+.card p { margin: 0 0 8px; font-size: 12.5px; line-height: 1.5; overflow-wrap: anywhere; }
+.card .c { color: #6d6354; font-size: 11.5px; border-top: 1px solid #1d1a1522; padding-top: 7px; }
+.card .row { display: flex; gap: 16px; margin-top: 8px; font-size: 11.5px; }
+.card .row button { color: #1d1a15; border-bottom: 1px solid #1d1a1566; } .card .row button:hover { color: #8a2f22; }
+
+.bar { position: fixed; left: 40px; right: 40px; bottom: 22px; z-index: 3; display: grid; grid-template-columns: 200px 1fr 200px; gap: 28px; align-items: end; text-shadow: 0 0 14px var(--paper), 0 0 5px var(--paper); }
+.now .n { font: 300 40px/1 var(--serif); letter-spacing: -.01em; white-space: nowrap; }
+.now .l { color: var(--faint); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; font-stretch: 112%; margin-top: 6px; }
+#struck { position: fixed; left: 40px; bottom: 118px; width: 400px; z-index: 3; color: var(--mute); font: 300 15px/1.3 var(--serif); height: 40px; display: flex; align-items: flex-end; opacity: 0; transition: opacity 1.2s; text-shadow: 0 0 14px var(--paper), 0 0 5px var(--paper); pointer-events: none; }
+#struck.on { opacity: 1; transition: opacity .15s; }
+.scrub { position: relative; height: 74px; cursor: ew-resize; touch-action: none; }
+.scrub svg { position: absolute; left: 0; top: 0; width: 100%; height: 46px; display: block; overflow: visible; }
+.scrub .base { position: absolute; left: 0; right: 0; top: 46px; border-top: 1px solid var(--faint); }
+.scrub .hrs { position: absolute; left: 0; right: 0; top: 52px; height: 20px; color: var(--faint); font-size: 10.5px; }
+.scrub .hrs i { position: absolute; font-style: normal; transform: translateX(-50%); white-space: nowrap; }
+.scrub .hrs i.d { color: var(--ink); }
+.scrub .hrs u { position: absolute; top: -6px; width: 1px; height: 5px; background: var(--faint); }
+.scrub .head { position: absolute; left: 0; will-change: transform; top: -4px; height: 56px; width: 1px; background: var(--ink); pointer-events: none; }
+.scrub .head::after { content: ""; position: absolute; left: -3px; top: -3px; width: 7px; height: 7px; background: var(--ink); transform: rotate(45deg); }
+.btns { display: flex; flex-direction: column; align-items: flex-end; gap: 7px; font-size: 12px; color: var(--mute); }
+.btns button { border-bottom: 1px solid var(--rule); padding-bottom: 2px; } .btns button:hover { color: var(--ink); }
+.btns button b { color: var(--ink); font-weight: 500; }
+.btns kbd { font: inherit; color: var(--faint); margin-left: 8px; font-size: 10.5px; letter-spacing: .08em; }
+#tip { position: fixed; z-index: 5; pointer-events: none; background: #efe8d8; color: #1d1a15; font-size: 11.5px; padding: 4px 8px; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: none; box-shadow: 0 4px 12px #0008; }
+
+@media (max-width: 760px) {
+  .col { left: 16px; top: 12px; width: calc(100% - 32px); } h1 { font-size: 22px; margin: 10px 0 5px; } #say { font-size: 14.5px; } #span { font-size: 11px; margin-top: 6px; }
+  .rules { left: 16px; right: 16px; width: auto; top: auto; bottom: 150px; background: var(--paper); text-shadow: none; }
+  .rules:not([open]) { background: none; } .rules summary { border: 0; height: 22px; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .bar { left: 16px; right: 16px; bottom: 12px; grid-template-columns: 1fr 1fr; gap: 6px 12px; } .scrub { grid-column: 1 / 3; grid-row: 1; }
+  .now .n { font-size: 26px; } .btns kbd { display: none; } .btns { gap: 4px; }
+  #struck { display: none; } .card { left: 16px; right: 16px; width: auto; bottom: 178px; max-height: 38vh; }
+}
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div class="vig"></div>
+
+<div class="col">
+  <div class="top"><a class="lablink" href="../../">Lab</a><span class="name">Invariant</span><span class="page">Music box</span></div>
+  <h1>The two days as a music box</h1>
+  <p id="say">&nbsp;</p>
+  <p id="span"></p>
+  <p id="foot"></p>
+</div>
+
+<details class="rules" id="rules" open>
+  <summary>How it is tuned</summary>
+  <ol>
+    <li>Each tooth is a voice. The kind of event sets the register, low to high: <b>work, message, commit, idea, knowledge, result</b>.</li>
+    <li>Inside a register each person has their own tooth, left to right: <b id="people"></b>.</li>
+    <li>A score line rings the tooth above them. A score that beats every earlier score on its benchmark rings <b>the highest tooth</b>: the pin with the red bead.</li>
+    <li>A result that reports a refuted prediction rings <b>the lowest tooth</b>: the blued pin.</li>
+  </ol>
+</details>
+
+<div class="card" id="card"></div>
+<div id="struck"></div>
+<div id="tip"></div>
+
+<div class="bar">
+  <div class="now"><div class="n" id="now">&nbsp;</div><div class="l">under the comb · SF time</div></div>
+  <div class="scrub" id="scrub" role="slider" tabindex="0" aria-label="Angle of the cylinder">
+    <svg id="hist" preserveAspectRatio="none"></svg><div class="base"></div><div class="hrs" id="hrs"></div><div class="head" id="head"></div>
+  </div>
+  <div class="btns">
+    <button id="bRun"></button>
+    <button id="bSnd"></button>
+  </div>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+
+const $ = id => document.getElementById(id);
+const TAU = Math.PI * 2;
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const small = matchMedia('(max-width: 760px)');
+if (small.matches) $('rules').open = false;
+
+/* ---------- the voices: one tooth group per kind of event, one tooth per person inside it ---------- */
+const KINDS = [
+  { key: 'refuted', label: 'REFUTED', n: 1, gain: .9, name: 'result, prediction refuted' },
+  { key: 'work', label: 'WORK', n: 3, gain: .5, name: 'work claimed' },
+  { key: 'message', label: 'MESSAGE', n: 3, gain: .45, name: 'message on all' },
+  { key: 'commit', label: 'COMMIT', n: 3, gain: .24, name: 'commit' },
+  { key: 'idea', label: 'IDEA', n: 3, gain: .55, name: 'idea' },
+  { key: 'knowledge', label: 'KNOWLEDGE', n: 3, gain: .55, name: 'knowledge' },
+  { key: 'result', label: 'RESULT', n: 3, gain: .8, name: 'result' },
+  { key: 'score', label: 'SCORE', n: 1, gain: .55, name: 'score' },
+  { key: 'best', label: 'BEST', n: 1, gain: 1, name: 'score, new best' },
+];
+const KIND = {}; let NT = 0;
+for (const k of KINDS) { k.base = NT; NT += k.n; KIND[k.key] = k; }
+const PENTA = [0, 2, 4, 7, 9];
+const FREQ = Array.from({ length: NT }, (_, i) => 196 * 2 ** ((12 * Math.floor(i / 5) + PENTA[i % 5]) / 12));  // G3 ... G7
+const R = 1, PITCH = 0.2, toothX = i => (i - (NT - 1) / 2) * PITCH;
+const TURN_S = 150;  // the spring turns the cylinder once in 150 s
+
+/* ---------- data ---------- */
+const DATA = await (await fetch('data.json')).json();
+let board;
+function merge(live) {  // data.json holds the whole table at build time; the site's /data adds what is newer
+  const by = (a, b, k) => { const m = new Map(a.map(x => [x[k], x])); for (const x of b || []) m.set(x[k], x); return [...m.values()]; };
+  board = { items: by(DATA.items, live.items, 'id'), messages: by(DATA.messages, live.messages, 'sk'), scores: by(DATA.scores, live.scores, 'sk'), plain: { ...DATA.plain, ...live.plain } };
+}
+merge({});
+let ev = [], T0 = 0, H = 1, people = [];
+const MODEL = { base: 'untrained base', rl: 'RL-Zero-Math', other: 'other model' };
+const sf = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+const sfParts = t => Object.fromEntries(sf.formatToParts(new Date(t * 1000)).map(p => [p.type, p.value]));
+const fmt = t => { const p = sfParts(t); return `${p.weekday} ${p.hour}:${p.minute}`; };
+
+function assemble() {
+  const out = [];
+  for (const c of DATA.commits) out.push({ t: c[0], kind: 'commit', who: c[1], id: c[2], text: c[3] });
+  const plain = board.plain || {};
+  for (const it of board.items) {
+    let kind = it.kind === 'skill' ? 'knowledge' : it.kind;
+    if (!KIND[kind]) continue;
+    const p = plain[it.id] || {};
+    if (kind === 'result' && /\brefuted\b/i.test(it.text + ' ' + (p.title || ''))) kind = 'refuted';
+    out.push({ t: it.at_ns / 1e9, kind, who: it.who, id: it.id, text: it.text, title: p.title, item: true });
+  }
+  for (const m of board.messages) out.push({ t: +m.sk.split('#')[0] / 1e9, kind: 'message', who: m.who, id: m.sk, text: m.text });
+  const best = {};
+  for (const s of board.scores.map(s => ({ ...s, t: +s.sk.split('#')[0] / 1e9 })).sort((a, b) => a.t - b.t)) {
+    const key = s.benchmark + '|' + s.n, rate = s.right / s.n, isBest = key in best && rate > best[key];
+    best[key] = Math.max(best[key] ?? 0, rate);
+    out.push({ t: s.t, kind: isBest ? 'best' : 'score', who: s.who, id: s.result, item: true,
+      title: `${s.right} of ${s.n} on ${s.benchmark} (${(100 * rate).toFixed(1)} %)`,
+      text: `${MODEL[s.model] || s.model}. ${s.config || ''}${s.tokens ? `. ${s.tokens.toLocaleString('en-US')} tokens per problem` : ''}` });
+  }
+  out.sort((a, b) => a.t - b.t);
+  const cnt = {}; for (const e of out) cnt[e.who] = (cnt[e.who] || 0) + 1;
+  people = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]);
+  T0 = Math.floor(out[0].t / 3600) * 3600;
+  H = Math.max(2, Math.ceil((out[out.length - 1].t - T0) / 3600));
+  out.forEach((e, i) => {
+    e.frac = (e.t - T0) / (H * 3600);
+    e.tooth = KIND[e.kind].base + (KIND[e.kind].n === 3 ? Math.min(2, people.indexOf(e.who)) : 0);
+    e.dx = ((i % 3) - 1) * 0.045;
+    e.key = `${e.kind}:${e.id}:${Math.round(e.t)}`;
+  });
+  ev = out;
+}
+
+/* ---------- renderer, room, light ---------- */
+const canvas = $('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.95;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap;
+canvas.addEventListener('webglcontextlost', e => e.preventDefault());
+canvas.addEventListener('webglcontextrestored', () => location.reload());  // the studio map and the shadow map are gone: start again from the hash
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x100e0c);
+const camera = new THREE.PerspectiveCamera(28, 1, 0.5, 120);
+
+{ // a room to reflect: warm walls, a tall window with glazing bars behind, a softbox upper left, a strip over the cylinder, a lamp
+  const room = new THREE.Scene(), basic = (c, k = 1) => new THREE.MeshBasicMaterial({ color: new THREE.Color(c).multiplyScalar(k), side: THREE.DoubleSide });
+  room.add(new THREE.Mesh(new THREE.BoxGeometry(40, 24, 40), [0x2e2720, 0x2e2720, 0x1c1814, 0x3a2a1c, 0x2e2720, 0x241e19].map(c => new THREE.MeshBasicMaterial({ color: c, side: THREE.BackSide }))));
+  const panel = (w, h, c, k, x, y, z) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), basic(c, k)); m.position.set(x, y, z); m.lookAt(0, 0, 0); room.add(m); };
+  panel(12, 8, 0xfff1dc, 9, -10, 9, 6);                                      // key softbox, upper left, toward the viewer
+  panel(17, 1.1, 0xfff4e2, 16, 0, 10.5, -2.5);                               // a strip along the cylinder: its long highlight
+  { const m = new THREE.Mesh(new THREE.PlaneGeometry(30, 26), basic(0xf4efe6, 0.85)); m.position.set(0, 11.9, 0); m.rotation.x = Math.PI / 2; room.add(m); }  // a ceiling scrim behind: what the comb's plate mirrors
+  panel(2.5, 2.5, 0xffc98a, 7, 13, 2, 7);                                    // a lamp, right
+  for (let i = 0; i < 4; i++) for (let j = 0; j < 3; j++) { const m = new THREE.Mesh(new THREE.PlaneGeometry(2.6, 2.6), basic(0xdfe8f5, 5)); m.position.set(-5.4 + i * 3.1 + 1, 3 + j * 3.1, -19.5); room.add(m); }  // the window
+  const pm = new THREE.PMREMGenerator(renderer);
+  scene.environment = pm.fromScene(room, 0.012).texture; pm.dispose();
+}
+const key = new THREE.DirectionalLight(0xfff0dc, 3.4); key.position.set(-5.5, 9.5, 5); key.target.position.set(0.2, -0.6, 1);
+key.castShadow = true; key.shadow.mapSize.set(1024, 1024); key.shadow.bias = -0.0005; key.shadow.normalBias = 0.012;
+Object.assign(key.shadow.camera, { left: -6, right: 6, top: 6, bottom: -6, near: 2, far: 26 });
+scene.add(key, key.target);
+const rim = new THREE.DirectionalLight(0xcfdcf0, 0.7); rim.position.set(6, 4, -7); scene.add(rim);
+scene.add(new THREE.HemisphereLight(0xf2e6d2, 0x2a1d12, 0.22));
+
+/* ---------- procedural surfaces ---------- */
+const rnd = (s => () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296)(7);
+function cv(w, h, draw) { const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h); return c; }
+function tex(c, rx = 1, ry = 1, srgb = false) { const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rx, ry); t.anisotropy = 8; if (srgb) t.colorSpace = THREE.SRGBColorSpace; return t; }
+const brushed = cv(512, 512, (g, w, h) => {  // fine lathe lines along x
+  g.fillStyle = '#8c8c8c'; g.fillRect(0, 0, w, h);
+  for (let i = 0; i < 2600; i++) { const y = rnd() * h, v = 90 + rnd() * 110 | 0; g.strokeStyle = `rgba(${v},${v},${v},${0.10 + rnd() * 0.25})`; g.lineWidth = 0.5 + rnd(); g.beginPath(); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); }
+  for (let i = 0; i < 60; i++) { const x = rnd() * w, y = rnd() * h; g.strokeStyle = `rgba(230,230,230,${0.15 + rnd() * 0.2})`; g.lineWidth = 0.6; g.beginPath(); g.moveTo(x, y); g.lineTo(x + 30 + rnd() * 120, y + (rnd() - .5) * 6); g.stroke(); }
+});
+const cast = cv(256, 256, (g, w, h) => { const d = g.createImageData(w, h); for (let i = 0; i < d.data.length; i += 4) { const v = 110 + rnd() * 60 | 0; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 255; } g.putImageData(d, 0, 0); });
+const wood = cv(1024, 256, (g, w, h) => {
+  g.fillStyle = '#4a2c1a'; g.fillRect(0, 0, w, h);
+  for (let i = 0; i < 900; i++) {
+    const y0 = rnd() * h, a = 0.04 + rnd() * 0.16, dark = rnd() < 0.7; g.strokeStyle = dark ? `rgba(22,11,5,${a})` : `rgba(150,96,52,${a})`; g.lineWidth = 0.5 + rnd() * 1.6;
+    const ph = rnd() * 9, am = 1 + rnd() * 5, fr = 0.004 + rnd() * 0.006; g.beginPath();
+    for (let x = 0; x <= w; x += 16) g.lineTo(x, y0 + Math.sin(x * fr + ph) * am + Math.sin(x * fr * 3.1 + ph) * am * 0.3);
+    g.stroke();
+  }
+});
+const tBrush = tex(brushed), tCast = tex(cast, 6, 6), tWood = tex(wood, 1, 1, true);
+
+const brass = o => new THREE.MeshPhysicalMaterial({ color: 0xcda054, metalness: 1, roughness: 0.4, roughnessMap: tBrush, bumpMap: tBrush, bumpScale: 0.25, anisotropy: 0.8, anisotropyRotation: Math.PI / 2, ...o });
+const mBrass = new THREE.MeshStandardMaterial({ color: 0xcda054, metalness: 1, roughness: 0.4, roughnessMap: tBrush });
+const mSteel = new THREE.MeshStandardMaterial({ color: 0xc2c5c9, metalness: 1, roughness: 0.2, roughnessMap: tBrush });  // polished
+const mBlued = new THREE.MeshStandardMaterial({ color: 0x2a4072, metalness: 1, roughness: 0.3, envMapIntensity: 1.5, roughnessMap: tBrush });  // heat-blued reeds
+const mPin = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 1, roughness: 0.3 });
+const mIron = new THREE.MeshStandardMaterial({ color: 0x16130f, metalness: 0.55, roughness: 0.62, envMapIntensity: 0.5, bumpMap: tCast, bumpScale: 0.6 });
+const mWood = new THREE.MeshStandardMaterial({ map: tWood, roughness: 0.46 });
+const mEnamel = new THREE.MeshStandardMaterial({ color: 0x8d2a1f, roughness: 0.18 });
+const mIvory = new THREE.MeshStandardMaterial({ color: 0xe9dfc8, roughness: 0.35 });
+const add = (geo, mat, x = 0, y = 0, z = 0, parent = scene, shadow = 3) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = !!(shadow & 1); m.receiveShadow = !!(shadow & 2); parent.add(m); return m; };
+
+/* ---------- case, bedplate, table ---------- */
+const CX = 0.2, CZ = 1.2;
+add(new THREE.PlaneGeometry(90, 90).rotateX(-Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0x191613, roughness: 1 }), 0, -1.86, 0, scene, 2);
+add(new THREE.BoxGeometry(7.9, 0.3, 5.47), mWood, CX, -1.7, CZ);
+add(new THREE.BoxGeometry(7.1, 0.15, 5.0), mIron, CX, -1.325, CZ);
+for (const [w, d, x, z] of [[7.9, 0.17, CX, CZ - 2.65], [7.9, 0.17, CX, CZ + 2.65], [0.17, 5.13, CX - 3.865, CZ], [0.17, 5.13, CX + 3.865, CZ]]) add(new THREE.BoxGeometry(w, 0.75, d), mWood, x, -1.2, z);
+
+/* ---------- cylinder ---------- */
+const cyl = new THREE.Group(); scene.add(cyl);
+let drumTex = null, bandTex = null;
+const mDrum = brass({ roughness: 0.3, bumpScale: 0.12, anisotropy: 0.92 }), mBand = new THREE.MeshStandardMaterial({ color: 0xcda054, metalness: 1, roughness: 0.62, envMapIntensity: 0.4 });
+const drum = add(new THREE.CylinderGeometry(R, R, 4.5, 128, 1).rotateZ(Math.PI / 2), mDrum, 0, 0, 0, cyl);
+const band = add(new THREE.CylinderGeometry(R + 0.012, R + 0.012, 0.36, 128, 1).rotateZ(Math.PI / 2), mBand, -2.45, 0, 0, cyl);
+add(new THREE.CylinderGeometry(R + 0.03, R + 0.03, 0.05, 96).rotateZ(Math.PI / 2), mBrass, 2.275, 0, 0, cyl);
+add(new THREE.CylinderGeometry(R + 0.03, R + 0.03, 0.05, 96).rotateZ(Math.PI / 2), mBrass, -2.655, 0, 0, cyl);
+add(new THREE.CylinderGeometry(0.07, 0.07, 6.4, 24).rotateZ(Math.PI / 2), mSteel, 0.1, 0, 0, cyl);
+{ // the great wheel the worm drives
+  const s = new THREE.Shape(), n = 52;
+  for (let i = 0; i < n * 4; i++) { const a = i / (n * 4) * TAU, r = (i % 4 < 2) ? 0.9 : 0.82; s[i ? 'lineTo' : 'moveTo'](Math.cos(a) * r, Math.sin(a) * r); }
+  for (let k = 0; k < 5; k++) { const h = new THREE.Path(); h.absarc(Math.cos(k / 5 * TAU) * 0.48, Math.sin(k / 5 * TAU) * 0.48, 0.17, 0, TAU, true); s.holes.push(h); }
+  add(new THREE.ExtrudeGeometry(s, { depth: 0.09, bevelEnabled: false, curveSegments: 20 }).translate(0, 0, -0.045).rotateY(Math.PI / 2), brass({ color: 0xa87d38 }), 2.9, 0, 0, cyl);
+}
+for (const x of [-2.86, 2.55]) {  // the two bearings
+  add(new THREE.BoxGeometry(0.16, 1.25, 0.62), mBrass, x, -0.625, 0);
+  add(new THREE.CylinderGeometry(0.31, 0.31, 0.16, 40).rotateZ(Math.PI / 2), mBrass, x, 0, 0);
+}
+
+function drawDrum() {  // hour lines engraved along the cylinder; the canvas's x is time, once around
+  const c = cv(4096, 256, (g, w, h) => {
+    g.fillStyle = '#fff'; g.fillRect(0, 0, w, h);
+    for (let i = 0; i < 1300; i++) { const y = rnd() * h, v = 232 + rnd() * 23 | 0; g.strokeStyle = `rgba(${v},${v - 3},${v - 9},${0.08 + rnd() * 0.16})`; g.lineWidth = 0.5 + rnd(); g.beginPath(); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); }
+    for (let k = 0; k < H; k++) {
+      const x = k / H * w, mid = sfParts(T0 + k * 3600).hour === '00', first = k === 0;
+      g.fillStyle = first ? 'rgba(40,22,8,.85)' : mid ? 'rgba(40,22,8,.6)' : 'rgba(40,22,8,.28)'; g.fillRect(x - (first || mid ? 2 : 1), 0, first || mid ? 4 : 2, h);
+      if (first) g.fillRect(x - 9, 0, 2, h);
+    }
+  });
+  drumTex?.dispose(); drumTex = tex(c, 1, 1, true); mDrum.map = drumTex; mDrum.needsUpdate = true;
+  const b = cv(4096, 256, (g, w, h) => {  // the hour ring: canvas x is time, canvas top is the outer end
+    g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.fillStyle = 'rgba(30,16,6,.85)'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    for (let k = 0; k < H; k++) {
+      const x = k / H * w, p = sfParts(T0 + k * 3600), mid = p.hour === '00' || k === 0;
+      g.fillRect(x - 1.5, h - (mid ? 70 : 44), 3, mid ? 70 : 44);
+      for (let q = 1; q < 6; q++) g.fillRect(x + q / 6 * w / H - 1, h - 18, 2, 18);
+      if (k % 2 === 0 || mid) { g.save(); g.translate(x + 36, mid ? 92 : 110); g.rotate(Math.PI / 2); g.font = mid ? '600 44px Archivo' : '500 50px Archivo'; g.fillText(mid ? p.weekday.toUpperCase() + ' ' + (+p.hour) : String(+p.hour), 0, 0); g.restore(); }
+    }
+  });
+  bandTex?.dispose(); bandTex = tex(b, 1, 1, true); mBand.map = bandTex; mBand.needsUpdate = true;
+}
+
+/* ---------- pins ---------- */
+const CAP = 8000;
+const pinGeo = new THREE.CylinderGeometry(0.019, 0.024, 0.09, 8).translate(0, 0.035, 0);
+const pins = new THREE.InstancedMesh(pinGeo, mPin, CAP);  pins.frustumCulled = false; cyl.add(pins);
+const beads = new THREE.InstancedMesh(new THREE.SphereGeometry(0.04, 14, 10), mEnamel, 400); beads.frustumCulled = false; cyl.add(beads);
+const beadEv = [];
+const C_STEEL = new THREE.Color(0xd2d4d6), C_BLUE = new THREE.Color(0x2b3d63), C_TALL = new THREE.Color(0xe8e2d2);
+const marker = add(new THREE.TorusGeometry(0.06, 0.012, 10, 32).rotateX(Math.PI / 2), mIvory, 0, 0, 0, cyl, 1); marker.visible = false;
+const M4 = new THREE.Matrix4(), Q = new THREE.Quaternion(), V = new THREE.Vector3(), S = new THREE.Vector3(), XA = new THREE.Vector3(1, 0, 0);
+function pinPose(e, h) { const a = e.frac * TAU; Q.setFromAxisAngle(XA, Math.PI / 2 - a); V.set(toothX(e.tooth) + e.dx, (R + h) * Math.sin(a), (R + h) * Math.cos(a)); }
+function placePins() {
+  let nb = 0; beadEv.length = 0;
+  ev.forEach((e, i) => {
+    const tall = e.kind === 'best' ? 1.75 : e.kind === 'score' || e.kind === 'refuted' ? 1.3 : 1;
+    pinPose(e, 0); M4.compose(V, Q, S.set(1, tall, 1)); pins.setMatrixAt(i, M4);
+    pins.setColorAt(i, e.kind === 'refuted' ? C_BLUE : tall > 1 ? C_TALL : C_STEEL);
+    if (e.kind === 'best') { pinPose(e, 0.125 * 1.75 - 0.02); M4.compose(V, Q, S.set(1, 1, 1)); beads.setMatrixAt(nb, M4); beadEv[nb++] = e; }
+  });
+  pins.count = ev.length; beads.count = nb;
+  pins.instanceMatrix.needsUpdate = beads.instanceMatrix.needsUpdate = true; pins.instanceColor.needsUpdate = true;
+  pins.computeBoundingSphere(); beads.computeBoundingSphere();
+}
+
+/* ---------- comb ---------- */
+const TIP = R + 0.03, toothLen = i => 0.52 + 1.05 * Math.sqrt(196 / FREQ[i]);
+const teeth = [];
+for (let i = 0; i < NT; i++) {
+  const L = toothLen(i), g = new THREE.Group(); g.position.set(toothX(i), -0.03, TIP + L); scene.add(g);
+  const geo = new THREE.BoxGeometry(PITCH - 0.045, 0.04, L + 0.12).translate(0, 0, -(L + 0.12) / 2 + 0.12);
+  const p = geo.attributes.position; for (let k = 0; k < p.count; k++) if (p.getZ(k) < -L + 0.01) p.setX(k, p.getX(k) * 0.55);  // a pointed tip
+  geo.computeVertexNormals(); add(geo, mBlued, 0, 0, 0, g);
+  teeth.push({ g, last: -1e9, t0: -1e9, amp: 0, hz: 9 + 14 * i / NT });
+}
+{
+  const s = new THREE.Shape(), xl = toothX(0) - 0.18, xr = toothX(NT - 1) + 0.18, zb = 3.45;
+  s.moveTo(xl, zb); s.lineTo(xr, zb); s.lineTo(xr, TIP + toothLen(NT - 1));
+  for (let i = NT - 1; i >= 0; i--) s.lineTo(toothX(i), TIP + toothLen(i));
+  s.lineTo(xl, TIP + toothLen(0)); s.closePath();
+  add(new THREE.ExtrudeGeometry(s, { depth: 0.13, bevelEnabled: true, bevelSize: 0.012, bevelThickness: 0.012, bevelSegments: 2 }).rotateX(Math.PI / 2), mSteel, 0, 0.035, 0);
+  add(new THREE.BoxGeometry(xr - xl + 0.3, 1.15, 1.8), mIron, 0, -0.675, 2.65);
+  for (let i = 0; i < 6; i++) {  // the screws that hold the comb down
+    const x = xl + 0.3 + i * (xr - xl - 0.6) / 5, a = rnd() * Math.PI;
+    add(new THREE.CylinderGeometry(0.065, 0.075, 0.05, 28), mBrass, x, 0.07, 3.31);
+    add(new THREE.BoxGeometry(0.12, 0.012, 0.02).rotateY(a), mIron, x, 0.094, 3.31, scene, 0);
+  }
+}
+let combLabel = null;
+function drawComb() {  // the names of the voices, engraved behind the roots of their teeth
+  const x0 = toothX(0) - PITCH / 2, w = NT * PITCH, d = 0.5, px = 420;
+  const c = cv(Math.round(w * px), Math.round(d * px), (g, W, Hh) => {
+    g.fillStyle = 'rgba(10,9,8,.9)'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    for (const k of KINDS) {
+      const cx = (k.base + k.n / 2) * PITCH * px, l = k.base * PITCH * px, r = (k.base + k.n) * PITCH * px;
+      g.fillRect(l + 5, 0, 2, Hh); if (k.key === 'best') g.fillRect(r - 7, 0, 2, Hh);
+      g.save(); g.translate(cx, Hh / 2);
+      if (k.n === 1) { g.rotate(-Math.PI / 2); g.font = '600 30px Archivo'; } else g.font = '600 33px Archivo';
+      try { g.letterSpacing = '3px'; } catch { }
+      g.fillText(k.label, 0, 2); g.restore();
+    }
+  });
+  if (!combLabel) combLabel = add(new THREE.PlaneGeometry(w, d).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ transparent: true, polygonOffset: true, polygonOffsetFactor: -2 }), x0 + w / 2, 0.049, 2.9, scene, 0);
+  combLabel.material.map?.dispose(); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; combLabel.material.map = t; combLabel.material.needsUpdate = true;
+}
+
+/* ---------- worm and crank ---------- */
+const CRX = 2.9, CRZ = 1.02, CRY = 1.22;
+const worm = add(new THREE.CylinderGeometry(0.115, 0.115, 0.7, 28), brass({ color: 0xa87d38, bumpMap: tex(cv(64, 64, (g, w, h) => { g.fillStyle = '#888'; g.fillRect(0, 0, w, h); g.strokeStyle = '#222'; g.lineWidth = 9; for (let i = -2; i < 6; i++) { g.beginPath(); g.moveTo(-4, i * 16); g.lineTo(68, i * 16 + 22); g.stroke(); } }), 1, 5), bumpScale: 3 }), CRX, 0, CRZ);
+add(new THREE.CylinderGeometry(0.05, 0.05, CRY + 1.3, 16), mSteel, CRX, (CRY - 1.3) / 2, CRZ);
+add(new THREE.BoxGeometry(0.34, 0.12, 0.34), mBrass, CRX, -0.52, CRZ); add(new THREE.BoxGeometry(0.34, 0.12, 0.34), mBrass, CRX, 0.5, CRZ);
+add(new THREE.BoxGeometry(0.12, 1.8, 0.2), mBrass, CRX + 0.2, -0.35, CRZ + 0.02);
+const crank = new THREE.Group(); crank.position.set(CRX, CRY, CRZ); scene.add(crank);
+add(new THREE.CylinderGeometry(0.1, 0.1, 0.09, 24), mBrass, 0, 0, 0, crank);
+add(new THREE.BoxGeometry(0.72, 0.045, 0.11), mBrass, 0.3, 0.03, 0, crank);
+add(new THREE.CylinderGeometry(0.03, 0.03, 0.2, 12), mSteel, 0.6, 0.12, 0, crank);
+add(new THREE.LatheGeometry([[0, 0], [0.085, 0.01], [0.1, 0.1], [0.075, 0.2], [0.09, 0.3], [0.06, 0.36], [0, 0.37]].map(p => new THREE.Vector2(p[0], p[1])), 24), new THREE.MeshPhysicalMaterial({ color: 0x241710, roughness: 0.35, clearcoat: 0.8, clearcoatRoughness: 0.25 }), 0.6, 0.1, 0, crank);
+const crankHit = add(new THREE.CylinderGeometry(0.24, 0.24, 0.6, 12), new THREE.MeshBasicMaterial({ visible: false }), 0.6, 0.25, 0, crank, 0);
+const crankHit2 = add(new THREE.BoxGeometry(0.95, 0.2, 0.3), new THREE.MeshBasicMaterial({ visible: false }), 0.25, 0.05, 0, crank, 0);
+
+/* ---------- sound: every tooth is one precomputed pluck of a clamped steel reed ---------- */
+let ac = null, out = null, wet = null, bufs = [], muted = false;
+function unlock() {
+  if (ac) { if (ac.state !== 'running') ac.resume(); return; }
+  ac = new (window.AudioContext || window.webkitAudioContext)();
+  const sr = ac.sampleRate;
+  bufs = FREQ.map(f => {
+    const tau = Math.min(2.6, Math.max(0.55, 1.5 * Math.sqrt(440 / f))), n = Math.floor(sr * Math.min(5, tau * 5.5)), b = ac.createBuffer(1, n, sr), d = b.getChannelData(0);
+    const parts = [[1, 1, tau], [2.003, 0.2, tau * 0.55], [3.01, 0.06, tau * 0.35], [6.27, 0.11, tau * 0.1], [17.55, 0.035, 0.012]].filter(p => p[0] * f < sr * 0.45);
+    for (const [m, a, t] of parts) { const w = TAU * m * f / sr, k = Math.exp(-1 / (t * sr)); let e = a; for (let i = 0; i < n; i++) { d[i] += e * Math.sin(w * i); e *= k; } }
+    let s = 1234567 + f | 0; for (let i = 0; i < sr * 0.006; i++) { s = (s * 1664525 + 1013904223) >>> 0; d[i] += (s / 2147483648 - 1) * 0.12 * Math.exp(-i / (sr * 0.0012)); }
+    for (let i = 0; i < 48; i++) d[i] *= i / 48;
+    return b;
+  });
+  out = ac.createGain(); out.gain.value = muted ? 0 : 0.55;
+  const body = ac.createBiquadFilter(); body.type = 'peaking'; body.frequency.value = 420; body.Q.value = 1.1; body.gain.value = 3.5;
+  const comp = ac.createDynamicsCompressor(); comp.threshold.value = -16; comp.ratio.value = 5; comp.attack.value = 0.004; comp.release.value = 0.2;
+  const ir = ac.createBuffer(2, sr * 1.1, sr);  // the wooden case and a small room
+  for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); let lp = 0; for (let i = 0; i < d.length; i++) { lp += ((Math.random() * 2 - 1) - lp) * 0.35; d[i] = lp * Math.exp(-i / (sr * 0.22)); } }
+  const conv = ac.createConvolver(); conv.buffer = ir; wet = ac.createGain(); wet.gain.value = 0.5;
+  out.connect(body); body.connect(comp); out.connect(conv); conv.connect(wet); wet.connect(comp); comp.connect(ac.destination);
+  drawButtons();
+}
+function sound(tooth, gain) {
+  if (!ac || muted || ac.state !== 'running') return;
+  const s = ac.createBufferSource(), g = ac.createGain(), p = ac.createStereoPanner();
+  s.buffer = bufs[tooth]; g.gain.value = gain; p.pan.value = (tooth / (NT - 1) - 0.5) * 1.1;
+  s.connect(g); g.connect(p); p.connect(out); s.start();
+}
+
+/* ---------- motion: a heavy cylinder, a spring, a hand ---------- */
+let a = 0, omega = 0, run = !still, mode = null, target = 0, selected = null, lastT = performance.now(), dirty = true;
+const NOMINAL = TAU / TURN_S;
+const fracNow = () => ((a / TAU) % 1 + 1) % 1;
+function lower(x) { let lo = 0, hi = ev.length; while (lo < hi) { const m = (lo + hi) >> 1; if (ev[m].frac > x) hi = m; else lo = m + 1; } return lo; }
+function pluck(e, speed, now) {
+  const t = teeth[e.tooth]; if (now - t.last < 70) return; t.last = t.t0 = now;
+  const g = KIND[e.kind].gain * Math.min(1.25, 0.8 + speed * 1.2); t.amp = g; sound(e.tooth, g);
+  if (e.kind === 'result' || e.kind === 'best' || e.kind === 'refuted') strike(e);
+}
+function crossings(a0, a1, now) {
+  if (Math.abs(a1 - a0) > 0.6) return;  // a jump of the scrubber does not rake the comb
+  const lo = Math.min(a0, a1) / TAU, hi = Math.max(a0, a1) / TAU, speed = Math.abs(omega);
+  let n = 0;
+  for (let k = Math.floor(lo); k <= Math.floor(hi); k++) for (let i = lower(lo - k); i < ev.length && ev[i].frac <= hi - k && n < 40; i++, n++) pluck(ev[i], speed, now);
+}
+let struckT = 0;
+function strike(e) { const el = $('struck'); el.textContent = `${KIND[e.kind].name} · ${e.title || e.text.slice(0, 90)}`; el.classList.add('on'); clearTimeout(struckT); struckT = setTimeout(() => el.classList.remove('on'), 2600); }
+
+function step(now) {
+  const dt = Math.min(0.05, (now - lastT) / 1000); lastT = now;
+  const a0 = a;
+  if (still) { if (mode) a = target; omega = 0; }
+  else if (mode) { omega += (220 * (target - a) - 30 * omega) * dt; omega = Math.max(-6, Math.min(6, omega)); a += omega * dt; if (mode === 'seek' && Math.abs(target - a) < 0.002 && Math.abs(omega) < 0.02) mode = null; }
+  else { if (run) omega += (NOMINAL - omega) * (1 - Math.exp(-dt / 0.9)); else omega *= Math.exp(-dt / 1.3); if (Math.abs(omega) < 1e-4) omega = 0; a += omega * dt; }
+  if (a !== a0) { crossings(a0, a, now); dirty = true; }
+  cyl.rotation.x = a; crank.rotation.y = a * H / 2; worm.rotation.y = a * H / 2;
+  for (const t of teeth) {
+    const age = (now - t.t0) / 1000; if (age > 2.5) { if (t.g.rotation.x) { t.g.rotation.x = 0; dirty = true; } continue; }
+    t.g.rotation.x = still ? 0 : -0.085 * t.amp * Math.exp(-age * 2.4) * Math.cos(TAU * t.hz * age); dirty = true;
+  }
+}
+
+/* ---------- camera ---------- */
+const look = new THREE.Vector3(CX, -0.45, 1.05); let px = 0, py = 0, cxs = 0, cys = 0, camD = 14, camEl = 0.86;
+function resize() {
+  const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h;
+  const t = Math.tan(camera.fov * Math.PI / 360), port = w < h;
+  camEl = port ? 1.0 : 0.86;
+  camD = Math.max((port ? 6.2 : 7.6 * Math.max(1, 930 / h)) / (2 * t), 8.7 / (2 * t * camera.aspect));
+  look.set(CX, port ? -0.3 : -0.1, port ? 1.0 : 1.3);
+  camera.updateProjectionMatrix(); dirty = true; scrubW = $('scrub').clientWidth;
+}
+function aim(dt) {
+  const k = 1 - Math.exp(-dt * 3); cxs += (px - cxs) * k; cys += (py - cys) * k;
+  if (Math.abs(px - cxs) + Math.abs(py - cys) > 1e-4) dirty = true;
+  const az = cxs * 0.035, el = camEl - cys * 0.025;
+  camera.position.set(look.x + camD * Math.cos(el) * Math.sin(az), look.y + camD * Math.sin(el), look.z + camD * Math.cos(el) * Math.cos(az));
+  camera.lookAt(look);
+}
+
+/* ---------- HUD ---------- */
+function drawSay() {
+  const per = new Array(H).fill(0); for (const e of ev) per[Math.min(H - 1, Math.floor((e.t - T0) / 3600))]++;
+  const full = per.slice(0, H - 1), hi = per.indexOf(Math.max(...per)), lo = full.indexOf(Math.min(...full));
+  const hr = k => { const p = sfParts(T0 + k * 3600); return `${p.weekday} ${p.hour}:00`; };
+  $('say').innerHTML = `<b>${ev.length.toLocaleString('en-US')}</b> pins in <b>${H}</b> hours. The loudest hour, ${hr(hi)}, holds <b>${per[hi]}</b>; the quietest, ${hr(lo)}, holds <b>${per[lo]}</b>.`;
+  $('span').textContent = `One turn of the cylinder is these ${H} hours, ${fmt(T0)} to ${fmt(T0 + H * 3600)}. One turn of the crank is 2 hours. Drag the cylinder or the crank.`;
+  $('people').textContent = people.slice(0, 3).join(', ');
+  const n = k => ev.filter(e => k.includes(e.kind)).length;
+  $('foot').textContent = `${NT} teeth in G major pentatonic, G3 to G7. Pins: ${n(['commit'])} commits of every branch, ${n(['work', 'idea', 'knowledge', 'result', 'refuted'])} board items, ${n(['message'])} messages on all, ${n(['score', 'best'])} score lines, ${n(['best'])} of them a new best. New ones arrive from the site while you watch.`;
+  // the scrubber: pins per 10 minutes
+  const B = H * 6, bins = new Array(B).fill(0); for (const e of ev) bins[Math.min(B - 1, Math.floor(e.frac * B))]++;
+  const mx = Math.max(...bins); let d = '';
+  bins.forEach((v, i) => { if (v) d += `M${i + 0.5} 46V${(46 - 44 * Math.sqrt(v / mx)).toFixed(1)}`; });
+  const svg = $('hist'); svg.setAttribute('viewBox', `0 0 ${B} 46`);
+  svg.innerHTML = `<path d="${d}" stroke="#a89f8f" stroke-width="1.2" vector-effect="non-scaling-stroke" fill="none"/>`;
+  const every = small.matches ? 6 : H > 30 ? 4 : 2; let hh = '';
+  for (let k = 0; k <= H; k++) { const p = sfParts(T0 + k * 3600), mid = p.hour === '00'; hh += `<u style="left:${k / H * 100}%"></u>`; if ((+p.hour % every === 0 && k < H) || mid) hh += `<i class="${mid ? 'd' : ''}" style="left:${k / H * 100}%">${mid ? p.weekday : p.hour}</i>`; }
+  $('hrs').innerHTML = hh;
+}
+function drawButtons() {
+  $('bRun').innerHTML = `Spring <b>${run ? 'running' : 'stopped'}</b><kbd>SPACE</kbd>`;
+  $('bSnd').innerHTML = `Sound <b>${muted ? 'muted' : ac ? 'on' : 'starts on first touch'}</b><kbd>M</kbd>`;
+}
+let lastNow = -1, scrubW = 0;
+function drawNow() {
+  const f = fracNow(), m = Math.floor(f * H * 60);
+  if (m !== lastNow) { lastNow = m; const s = fmt(T0 + f * H * 3600); $('now').textContent = s; $('scrub').setAttribute('aria-valuetext', s); }
+  $('head').style.transform = `translateX(${(f * scrubW).toFixed(1)}px)`;
+}
+let hashT = 0;
+function writeHash(force) {
+  const now = performance.now(); if (!force && now - hashT < 500) return; hashT = now;
+  const h = `a=${(fracNow() * 360).toFixed(1)}&run=${run ? 1 : 0}${muted ? '&mute=1' : ''}${selected ? '&pin=' + encodeURIComponent(selected.key) : ''}`;
+  if ('#' + h !== location.hash) history.replaceState(null, '', '#' + h);
+}
+
+/* ---------- reading a pin ---------- */
+const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+function select(e, fetchIt = true) {
+  selected = e; const card = $('card'); card.innerHTML = '';
+  if (!e) { card.classList.remove('on'); marker.visible = false; dirty = true; writeHash(true); return; }
+  pinPose(e, 0.004); marker.position.copy(V); marker.quaternion.copy(Q); marker.visible = true; dirty = true;
+  const k = el('div', 'k'); k.append(el('b', '', KIND[e.kind].name), el('span', '', e.who), el('span', '', fmt(e.t))); card.append(k);
+  if (e.title) card.append(el('h2', '', e.title));
+  card.append(el('p', '', e.kind === 'commit' ? e.text : e.text.length > 700 ? e.text.slice(0, 700) + ' …' : e.text));
+  const more = el('p', 'c', e.kind === 'commit' ? `commit ${e.id}` : e.item ? e.id : ''); if (more.textContent) card.append(more);
+  const row = el('div', 'row'), b1 = el('button', '', 'Bring it to the comb'), b2 = el('button', '', 'Close');
+  b1.onclick = () => { unlock(); const tgt = e.frac * TAU - 0.02; target = tgt + Math.round((a - tgt) / TAU) * TAU; mode = 'seek'; kick(); };
+  b2.onclick = () => select(null); row.append(b1, b2); card.append(row); card.classList.add('on'); writeHash(true);
+  if (e.item && fetchIt) fetch('/data/' + e.id).then(r => r.ok ? r.json() : null).then(d => {  // one request, only on a click
+    if (!d || selected !== e) return; const cs = d.comments || [];
+    more.textContent = `${e.id} · ${cs.length} comment${cs.length === 1 ? '' : 's'}${cs.length ? ' · last: ' + String(cs[cs.length - 1].text || '').slice(0, 220) : ''}`;
+  }).catch(() => { });
+}
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+function pick(x, y) {
+  ndc.set(x / innerWidth * 2 - 1, -(y / innerHeight) * 2 + 1); ray.setFromCamera(ndc, camera);
+  const hit = ray.intersectObjects([pins, beads, drum, band, crankHit, crankHit2], false)[0]; if (!hit) return null;
+  if (hit.object === pins) return { pin: ev[hit.instanceId] };
+  if (hit.object === beads) return { pin: beadEv[hit.instanceId] };
+  if (hit.object === crankHit || hit.object === crankHit2) return { crank: true };
+  return { drum: true };
+}
+
+/* ---------- hands ---------- */
+let down = null;
+const P = new THREE.Vector3();
+function crankAngle(x, y) {
+  const prj = v => { P.copy(v).project(camera); return [(P.x + 1) / 2 * innerWidth, (1 - P.y) / 2 * innerHeight]; };
+  const c = prj(crank.position), ex = prj(V.copy(crank.position).add(S.set(0.5, 0, 0))), ez = prj(V.copy(crank.position).add(S.set(0, 0, 0.5)));
+  const sq = Math.hypot(ez[0] - c[0], ez[1] - c[1]) / Math.hypot(ex[0] - c[0], ex[1] - c[1]);
+  return Math.atan2(-(y - c[1]) / sq, x - c[0]);
+}
+canvas.addEventListener('pointerdown', e => {
+  unlock(); canvas.setPointerCapture(e.pointerId);
+  const h = pick(e.clientX, e.clientY);
+  down = { x: e.clientX, y: e.clientY, t: performance.now(), moved: false, crank: !!h?.crank, last: h?.crank ? crankAngle(e.clientX, e.clientY) : e.clientY, pin: h?.pin };
+  $('tip').style.display = 'none';
+});
+canvas.addEventListener('pointermove', e => {
+  px = e.clientX / innerWidth * 2 - 1; py = e.clientY / innerHeight * 2 - 1;
+  if (down) {
+    if (!down.moved && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 5) return;
+    if (!down.moved) { down.moved = true; mode = 'hand'; target = a; if (!down.crank) down.last = e.clientY; canvas.style.cursor = 'grabbing'; }
+    if (down.crank) { const c = crankAngle(e.clientX, e.clientY); let d = c - down.last; d -= Math.round(d / TAU) * TAU; down.last = c; target += d / (H / 2); }
+    else { target += (e.clientY - down.last) * 3.4 / innerHeight; down.last = e.clientY; }
+    kick(); return;
+  }
+  if (e.pointerType === 'touch') return;
+  const h = pick(e.clientX, e.clientY), tip = $('tip');
+  canvas.style.cursor = h?.pin ? 'pointer' : h ? 'grab' : 'default';
+  if (h?.pin) { tip.textContent = `${KIND[h.pin.kind].name} · ${fmt(h.pin.t)} · ${h.pin.title || h.pin.text}`; tip.style.display = 'block'; tip.style.left = Math.min(innerWidth - 310, e.clientX + 14) + 'px'; tip.style.top = (e.clientY - 30) + 'px'; }
+  else tip.style.display = 'none';
+  kick();
+});
+const up = e => {
+  if (!down) return; canvas.style.cursor = 'default';
+  if (!down.moved) { const h = down.pin ? { pin: down.pin } : pick(e.clientX, e.clientY); if (h?.pin) select(h.pin); else if (selected && !h) select(null); }
+  else if (mode === 'hand') mode = null;  // let go: the cylinder keeps its speed
+  down = null; kick();
+};
+canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up);
+canvas.addEventListener('wheel', e => { e.preventDefault(); unlock(); if (still) { a += e.deltaY * 0.0006; } else omega += e.deltaY * 0.0012; kick(); }, { passive: false });
+
+const scrub = $('scrub'); let scrubbing = false;
+const scrubTo = e => { const r = scrub.getBoundingClientRect(), f = Math.max(0, Math.min(0.9999, (e.clientX - r.left) / r.width)); target = Math.floor(a / TAU) * TAU + f * TAU; mode = 'hand'; kick(); };
+scrub.addEventListener('pointerdown', e => { unlock(); scrub.setPointerCapture(e.pointerId); scrubbing = true; scrubTo(e); });
+scrub.addEventListener('pointermove', e => { if (scrubbing) scrubTo(e); });
+const scrubUp = () => { if (scrubbing) { scrubbing = false; mode = still ? null : 'seek'; } };
+scrub.addEventListener('pointerup', scrubUp); scrub.addEventListener('pointercancel', scrubUp);
+
+$('bRun').onclick = () => { unlock(); run = !run; drawButtons(); writeHash(true); kick(); };
+$('bSnd').onclick = () => { const first = !ac; unlock(); if (!first) muted = !muted; if (out) out.gain.setTargetAtTime(muted ? 0 : 0.55, ac.currentTime, 0.03); drawButtons(); writeHash(true); };
+addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const nudge = d => { unlock(); if (still) { a += d * TAU / (H * 6); } else { mode = null; omega += d * 0.45; } kick(); };
+  if (e.code === 'Space') { e.preventDefault(); $('bRun').onclick(); }
+  else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { e.preventDefault(); nudge(1); }
+  else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { e.preventDefault(); nudge(-1); }
+  else if (e.key === 'm' || e.key === 'M') $('bSnd').onclick();
+  else if (e.key === 'Escape') select(null);
+});
+
+/* ---------- loop ---------- */
+let raf = 0;
+function frame(now) {
+  raf = 0; const dt = Math.min(0.05, (now - lastT) / 1000);
+  step(now); aim(still ? 1 : dt);
+  if (dirty) { renderer.render(scene, camera); dirty = false; drawNow(); writeHash(false); }
+  if (!still) raf = requestAnimationFrame(frame);
+}
+function kick() { dirty = true; if (!raf) raf = requestAnimationFrame(frame); }
+
+function rebuild() {
+  const oldH = H, oldT0 = T0, f = fracNow(), sel = selected?.key;
+  assemble();
+  if (oldH !== H || oldT0 !== T0) { drawDrum(); if (oldT0) a = Math.floor(a / TAU) * TAU + ((oldT0 - T0) / 3600 + f * oldH) / H * TAU; }
+  placePins(); drawSay(); drawButtons();
+  if (sel) { const e = ev.find(x => x.key === sel); if (e) select(e, false); }
+  kick();
+}
+async function live() {  // a failed read keeps the last data and tries again
+  try { const r = await fetch('/data'); if (!r.ok) throw 0; merge(await r.json()); rebuild(); setTimeout(live, 90000); }
+  catch { setTimeout(live, 20000); }
+}
+
+await Promise.race([Promise.all([document.fonts.load('600 40px Archivo'), document.fonts.load('400 30px Newsreader')]), new Promise(r => setTimeout(r, 1500))]);
+assemble(); drawDrum(); drawComb(); placePins(); drawSay();
+{
+  const q = new URLSearchParams(location.hash.slice(1));
+  if (q.has('a')) a = (+q.get('a') || 0) / 360 * TAU;
+  else {  // open where the half turn above the comb holds the most pins
+    let bestN = -1; for (let k = 0; k < 120; k++) { const f = k / 120, n = lower(f + 0.3) - lower(f) + (f + 0.3 > 1 ? lower(f - 0.7) : 0); if (n > bestN) { bestN = n; a = f * TAU; } }
+  }
+  if (q.get('run') === '0') run = false; if (q.get('mute') === '1') muted = true;
+  if (q.get('pin')) { const e = ev.find(x => x.key === q.get('pin')); if (e) select(e, false); }
+}
+drawButtons(); resize(); addEventListener('resize', () => { resize(); kick(); });
+lastT = performance.now(); kick();
+live();  // data.json already fills the cylinder; the site's newer rows join when they arrive
+</script>
+</body>
+</html>
