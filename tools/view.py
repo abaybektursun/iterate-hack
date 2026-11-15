@@ -279,6 +279,7 @@ def chrome(body, path):
     if 'id="go"' in body and "const PAGES" in body:  # the home page
         return body
     body = NO_ZOOM.sub("", body)
+    body = body.replace('<span class="name">Invariant</span>', f'<a class="name" href="{SITE_HOME}" style="color:inherit;text-decoration:none">Invariant</a>', 1)  # lab pictures
     if NAME in body or HEADER in body:
         body = NAME_LINK.sub(NAME_LINKED, body.replace(NAME, NAME_LINKED, 1), count=1)
         if f'<a href="{SITE_HOME}">All pages</a>' not in body:

@@ -3,7 +3,7 @@
 view.py serves PAGE as the page / of invariant.team (and at /home on monitor.invariant.team and locally); every link
 leads to monitor.invariant.team, where the pages are. The picture is a lit glass body with a ring around it, seen from slightly above, and one
 bead on the ring per page of the site. The bead at the front is the selected page: the body shows its name and,
-where one is counted, its live number. A click on a bead or the arrow keys turn the dial to it (address /#<page>);
+where one is counted, its live number. A click on a bead or the arrow keys turn the dial to it (address /#<page>; Up and Down only where the page does not scroll);
 a click on the body or the button opens it. The words column beside the picture holds one sentence with the two
 live MATH-500 scores of the Board (the best untrained-base score and the best RL score among the `scores` rows of
 /data, computed as `benches` in view.py does; no numbers before the first read), the button, and the same pages as a
@@ -94,6 +94,7 @@ a { color: inherit; }
 .index b { font-weight: 600; font-stretch: 108%; white-space: nowrap; }
 .index span { color: var(--mute); font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .index a:hover span, .index a.on span { color: var(--ink); }
+.index a:focus-visible { outline-offset: -2px; }  /* inside the row: the column clips what is outside it */
 .go {
   display: inline-block; margin: clamp(14px, 2.4vh, 22px) 0 0; padding: 11px 22px; border-radius: 999px; background: var(--btn); color: var(--btn-ink);
   font-weight: 620; font-size: 15px; font-stretch: 106%; text-decoration: none;
@@ -151,17 +152,20 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
 .enter .bead text { animation: fade .6s both; animation-delay: calc(.6s + var(--i) * 45ms); }
 
 @media (max-width: 900px) {
-  .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 16px 16px 36px; }
-  .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
+  .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 6px 16px 36px; }
+  .top { gap: 0 13px; padding-bottom: 2px; flex-wrap: wrap; }
+  .top a { display: inline-flex; align-items: center; min-height: 40px; }  /* a finger's height */
   .name { font-stretch: 112%; margin-right: 0; }
   .words { display: contents; }  /* on a phone: the sentence, the button, the pages, then the picture and what is arriving */
   .cap { order: 1; margin-top: 20px; font-size: 22px; max-width: none; }
   .go { order: 2; align-self: flex-start; margin-top: 18px; }
   .index { order: 3; margin-top: 20px; }
   .index a { padding: 11px 0 11px 14px; }
+  .index span { white-space: normal; }
   .stage { order: 4; margin-top: 22px; padding: 0; display: block; }
   svg { height: auto; }
-  .foot { order: 5; display: block; margin-top: 2px; }
+  .foot { order: 5; display: block; margin-top: 2px; min-height: 39px; }
+  .said { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }  /* two lines */
   .key { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -223,12 +227,13 @@ const f = n => n.toFixed(1);
 const ago = ns => { const m = Math.max(0, Math.floor((Date.now() * 1e6 - Number(ns)) / 60e9)); return m < 1 ? "now" : m < 60 ? m + " min ago" : m < 2880 ? Math.floor(m / 60) + " h ago" : Math.floor(m / 1440) + " d ago"; };
 
 /* Geometry: the ring lies flat around the body and is seen from above (pitch). R is the ring of beads, the ticks
-   run from rt to rt + 8 (every sixth to rt + 15) inside it on a fine inner ring, rb is the body. fs is the size of a name at the front.
+   run from rt to rt + 8 (every sixth to rt + 15) inside it on a fine inner ring, rb is the body. fs is the size of a name at the front and min the
+   smallest a name is drawn (on a phone 26 of 720 units, which is 12 px on a 375 px screen).
    The picture is wider than the ring by the longest name on each side. Names with q under far are not drawn. */
 function geo() {
   return narrow.matches
-    ? { w: 720, h: 548, cx: 360, cy: 262, R: 272, rt: 214, rb: 108, D: 1700, pitch: 36, bead: 12, fs: 27, fn: 34, fc: 22, far: .86 }
-    : { w: 1060, h: 660, cx: 530, cy: 290, R: 400, rt: 334, rb: 150, D: 2300, pitch: 36, bead: 8, fs: 17, fn: 38, fc: 14.5, far: 0 };
+    ? { w: 720, h: 548, cx: 360, cy: 262, R: 272, rt: 214, rb: 108, D: 1700, pitch: 36, bead: 12, fs: 27, min: 26, fn: 34, fc: 26, far: .86 }
+    : { w: 1060, h: 660, cx: 530, cy: 290, R: 400, rt: 334, rb: 150, D: 2300, pitch: 36, bead: 8, fs: 17, min: 0, fn: 38, fc: 14.5, far: 0 };
 }
 let G = geo();
 const V = { cy: 1, sy: 0, cp: 1, sp: 0, yaw: 0 };
@@ -267,7 +272,7 @@ function build() {
     `<g id="fx"></g>`;
   PAGES.forEach((p, k) => {
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g.setAttribute("class", "bead"); g.setAttribute("tabindex", "0"); g.setAttribute("role", "button");
+    g.setAttribute("class", "bead"); g.setAttribute("tabindex", "-1"); g.setAttribute("role", "button");  // a click or a script can focus it; Tab goes through the list, which holds the same pages
     g.setAttribute("aria-label", "Turn the dial to " + p.name); g.dataset.k = k; g.style.setProperty("--i", k);
     g.innerHTML = `<circle class="pad"/><circle class="b"/><text>${esc(p.name)}</text>`;
     p.el = g; p.front = null;
@@ -316,9 +321,13 @@ function draw() {
   $("mark").setAttribute("d", `M${f(m0[0])} ${f(m0[1])}L${f(m1[0])} ${f(m1[1])}`);
   PAGES.forEach((p, k) => {
     const a = beadAt(k), [x, yy, s] = onRing(G.R, a), near = Math.sin((a - y) * RAD), q = (near + 1) / 2;
-    const on = k === S.sel, r = (G.bead * (.62 + .58 * q) + (on ? 2.5 : 0)) * s, fs = G.fs * (.7 + .3 * q) * (on ? 1.12 : 1);
+    const on = k === S.sel, r = (G.bead * (.62 + .58 * q) + (on ? 2.5 : 0)) * s, fs = Math.max(G.min, G.fs * (.7 + .3 * q) * (on ? 1.12 : 1));
     const front = near >= 0;
-    if (front !== p.front) { $(front ? "front" : "back").appendChild(p.el); p.front = front; }
+    if (front !== p.front) {
+      const had = document.activeElement === p.el;  // moving an element drops its focus
+      $(front ? "front" : "back").appendChild(p.el); p.front = front;
+      if (had) p.el.focus({ preventScroll: true });
+    }
     const [c0, c1, t] = p.el.children;
     t.setAttribute("font-size", f(fs));
     if (!p.w) p.w = t.getComputedTextLength() / fs;  // the name's width at size 1, measured once
@@ -332,8 +341,10 @@ function draw() {
     t.setAttribute("x", f(tx)); t.setAttribute("y", f(ty));
     p.el.setAttribute("opacity", (.6 + .4 * q).toFixed(2));
     t.setAttribute("opacity", q < G.far ? 0 : 1);  // on a phone only the three names at the front fit; the list holds them all
-    p.at = [x, yy, s, near];
+    p.at = [x, yy, s, near, r]; p.box = [tx, ty, p.w * fs / 2, fs, t];
   });
+  const b = PAGES[S.sel].box;  // a name that would touch the selected name is not drawn
+  PAGES.forEach(p => { const c = p.box; if (c !== b && Math.abs(c[0] - b[0]) < c[2] + b[2] + c[3] * .6 && Math.abs(c[1] - b[1]) < (c[3] + b[3]) / 2) c[4].setAttribute("opacity", 0); });
   pulse();
 }
 
@@ -361,7 +372,7 @@ function pulse() {
     if (back !== F.back) { $("svg").insertBefore(fx, back ? $("body-c") : null); F.back = back; }
   } else {
     const v = (u - 1) / .45, p = PAGES[BOARD].at;
-    out = `<circle class="arrive" cx="${f(p[0])}" cy="${f(p[1])}" r="${f((G.bead + 6 + 26 * v) * p[2])}" opacity="${f(1 - v)}"/>`;
+    out = `<circle class="arrive" cx="${f(p[0])}" cy="${f(p[1])}" r="${f(p[4] + 2 + 7 * v)}" opacity="${f(1 - v)}"/>`;
   }
   fx.innerHTML = out;
 }
@@ -441,8 +452,13 @@ $("index").addEventListener("focusin", e => { const a = e.target.closest("a"); i
 $("index").addEventListener("pointerover", e => { const a = e.target.closest("a"); if (a && e.pointerType === "mouse") select(Number(a.dataset.k), false); });
 addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
-  if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); select(S.sel + 1, true); }
-  else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); select(S.sel - 1, true); }
+  const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+  if (d) {
+    const upDown = e.key === "ArrowDown" || e.key === "ArrowUp";
+    if (upDown && document.documentElement.scrollHeight > innerHeight) return;  // the page scrolls: Up and Down are the browser's
+    e.preventDefault(); select(S.sel + d, true);
+    if ($("index").contains(document.activeElement)) $("index").querySelectorAll("a")[S.sel].focus();  // focus follows the selection in the list
+  }
   else if (e.key === "Enter" && (document.activeElement === document.body)) location.href = PAGES[S.sel].href;
 });
 addEventListener("hashchange", () => { const k = PAGES.findIndex(p => "#" + p.id === location.hash); if (k >= 0 && k !== S.sel) select(k, false); });
