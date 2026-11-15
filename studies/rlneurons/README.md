@@ -4483,6 +4483,20 @@ the job), on hard328 (cue) and on HumanEval+ and MBPP+ (Code cue; readout `resul
 - So one edit of about 0.10 % of the weight norm (Math 0.074 % + Code 0.064 %) gives the base 193 of 328 on math and 411 of 538
   on code, against 164 and 317 for the base and 206 and 401 for the two RL models.
 
+More samples of the two headlines (amendment 11, work-f58d89); both predictions held:
+
+| Cell | Seed 51000000 | 52000000 | 53000000 | Mean of 538 | Run folders, jobs |
+|---|---|---|---|---|---|
+| base + Math at 1 + Code at 1 | 411 | 407 | 401 | 406.3 | `results/xreward/code_hosts_s52/`, `code_hosts_s53/` (`abaybektursun-1115-143215-6942`, `...143301-ec55`) |
+| base + Code at 1 | 386 | 397 | 391 | 391.3 | the same (`...143231-15bb`, `...143316-628e`) |
+| RL-Code, plain | 401 | 395 | 403 | 399.7 | the same (`...143247-929d`, `...143331-10da`) |
+
+- E1 held (mean at least 398 and at least 10 above Code alone). Paired over problems, three seeds each: the sum minus Code alone
+  +2.8 points [1.0, 4.6]; the sum minus RL-Code +1.2 [-0.6, 3.0]; Code alone minus RL-Code -1.5 [-3.5, 0.3].
+- E2 held: Think-SFT + Math's 8 directions at 3, seed 3100000: 240 right, 42 cap hits (`edits/sft_top8x3_math31-02/`,
+  `abaybektursun-1115-143344-809f`; the readout `xreward_edits` holds the seed-3000000 cell). Two samples: 232 and 240, mean 236.0, against Think-SFT's
+  four samples (209.0): +8.2 points [5.6, 11.0]. The whole-difference transplant at 2 has 234 and 229 on the same two seeds.
+
 #### The dial on a second model pair and benchmark (amendment 7, work-df5e0a)
 
 Base + the 8 directions per matrix of (Code 3.1 minus base), on HumanEval+ and MBPP+ (538 scored problems), Code cue, T 1.0 /
