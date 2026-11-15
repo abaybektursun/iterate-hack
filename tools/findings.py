@@ -183,6 +183,10 @@ TABLE = {
     "loop-neurons": {
         "group": WEIGHTS,
         "figure": lambda m: [f"{m.DATA['states'][0]['loops']} → {m.DATA['states'][1]['loops']}", "loops", f"of {m.DATA['n']} answers, MATH-500, T 0.6"]},
+    "rl-directions-move-activations": {
+        "group": WEIGHTS,
+        "figure": lambda m: [f"{m.RATIO:.0f}×", "the shift",
+                             f"of the layer-24 residual stream, 8 RL directions ({m.DATA['edits']['top8_math31']['rms_shift']:.2f} RMS) against 8 random directions of equal weight norm ({m.DATA['edits']['rand8_math31']['rms_shift']:.3f})"]},
     "theories-on-trial": {
         "group": THEORIES,
         "figure": lambda m: [f"{m.DATA['nearer']['all'][0]} of {m.DATA['nearer']['all'][1]}", "predictions",
