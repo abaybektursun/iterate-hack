@@ -212,12 +212,12 @@ code { font-family: var(--mono); font-size: .9em; }
 
 <section>
   <div class="tag">Finding 6 · SWE-2 · AHC014 · 2, 4 and 8 agents · same 40 tries</div>
-  <h2>At every swarm size tested, Fork-and-Flush beats independent agents</h2>
-  <p class="answer">The fair baseline for Fork-and-Flush with K branches is a swarm of K independent agents with the same 40 tries in total. Fork-and-Flush is ahead at 2, 4 and 8 agents (gaps 0.084, 0.015, 0.030; planned test p = 0.004, and p = 0.010 on the two new sizes alone). The gap at 4 agents is the weak one: with the fresh runs of Finding 4 it is zero.</p>
+  <h2>Fork-and-Flush beats independent agents at every swarm size tested, and sharing the best program is why</h2>
+  <p class="answer">The fair baseline for Fork-and-Flush with K branches is a swarm of K independent agents with the same 40 tries in total. Fork-and-Flush is ahead at 2, 4 and 8 agents (gaps 0.084, 0.015, 0.030; planned test p = 0.004, and p = 0.010 on the two new sizes alone). The same forks without the flush also beat the swarm (p = 0.023), and Fork-and-Flush is not shown to beat them (p = 0.198). The gap at 4 agents is the weak one: with the fresh runs of Finding 4 it is zero.</p>
   <div class="figure"><div class="chart" id="kstrip"></div>
-  <p class="cap">Each dot is one 40-try run's best validation score; the tick is the cell mean. 2 and 8 agents: 3 new runs per arm. 4 agents: the first batch of Finding 4, as planned. Test: labels permuted within each swarm size, all 369,600 splits, one-sided.</p>
+  <p class="cap">Each dot is one 40-try run's best validation score; the tick is the cell mean. 2 and 8 agents: 3 new runs per arm. 4 agents: the first batch of Finding 4, as planned. Tests: labels permuted within each swarm size, every split counted, one-sided. "Fork, no flush": each branch starts from the best program and keeps the leader's chat. Table: means; gap is Fork-and-Flush minus parallel. * Two parallel programs failed on the held-out cases.</p>
   <div class="scroll"><table id="kTab"></table></div></div>
-  <div class="callout"><p><b>What this does not separate.</b> Independent agents never see each other's programs; Fork-and-Flush restarts every branch from the best one. So the win may come from sharing the best program, not from flushing the chat. On the held-out cases the gap at 8 agents is 0.002.</p></div>
+  <div class="callout"><p><b>What the fork-without-flush runs show.</b> Independent agents never see each other's programs. Restarting every branch from the best one closes 87 % of the gap at 2 agents and 51 % at 8, with no flush. The fresh chat adds 0.011 and 0.015 on top, too little for 3 runs per cell to detect. On the held-out cases all three arms are level at 8 agents (0.568, 0.568, 0.571).</p></div>
 </section>
 
 <section>
@@ -478,17 +478,18 @@ const meanCurve = runs => { const n = Math.min(...runs.map(r => r.curve.length))
 }
 /* Finding 6 */
 {
-  const K = D.ksweep, ks = ["2", "4", "8"], arms = ["parallel", "fnf"], host = document.getElementById("kstrip");
-  const rows = ks.flatMap(k => arms.map(a => [k, a]));
-  const W = 720, H = 300, L = 190, R = 24, T = 14, B = 30, x0 = 0.42, x1 = 0.68, rh = (H - T - B - 2 * 14) / rows.length;
+  const K = D.ksweep, KP = D.keep, ks = ["2", "4", "8"], host = document.getElementById("kstrip");
+  const cell = (k, a) => a === "fnf_keep" ? (KP.runs[k] || {}).fnf_keep : K.runs[k][a];
+  const rows = ks.flatMap((k, g) => ["parallel", "fnf_keep", "fnf"].filter(a => cell(k, a)).map(a => [k, a, g]));
+  const W = 720, H = 380, L = 190, R = 24, T = 14, B = 30, x0 = 0.42, x1 = 0.68, rh = (H - T - B - 2 * 14) / rows.length;
   const s = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img"});
-  const X = v => L + (v - x0) / (x1 - x0) * (W - L - R), Y = i => T + Math.floor(i / 2) * 14 + (i + 0.5) * rh;
+  const X = v => L + (v - x0) / (x1 - x0) * (W - L - R), Y = i => T + rows[i][2] * 14 + (i + 0.5) * rh;
   for (const t of [0.45, 0.5, 0.55, 0.6, 0.65]) { el("line", {x1: X(t), x2: X(t), y1: T, y2: H - B, stroke: "var(--grid)"}, s); el("text", {x: X(t), y: H - 10, "text-anchor": "middle"}, s).textContent = t.toFixed(2); }
   const tip = document.createElement("div"); tip.className = "tip"; tip.hidden = true;
-  const name = (k, a) => a === "fnf" ? `Fork-and-Flush, ${k} branches` : `Parallel, ${k} agents`;
+  const name = (k, a) => a === "fnf" ? `Fork-and-Flush, ${k} branches` : a === "fnf_keep" ? `Fork, no flush, ${k} branches` : `Parallel, ${k} agents`;
   rows.forEach(([k, a], i) => {
     const lab = el("text", {x: L - 12, y: Y(i) + 4, "text-anchor": "end"}, s); lab.textContent = name(k, a); lab.style.fill = "var(--fg2)";
-    const rs = K.runs[k][a], v = rs.map(r => r.val), m = v.reduce((p, q) => p + q) / v.length;
+    const rs = cell(k, a), v = rs.map(r => r.val), m = v.reduce((p, q) => p + q) / v.length;
     el("line", {x1: X(m), x2: X(m), y1: Y(i) - 15, y2: Y(i) + 15, stroke: "var(--fg)", "stroke-width": 2}, s);
     rs.forEach((r, j) => {
       const c = el("circle", {cx: X(r.val), cy: Y(i) + (j % 2 ? 5 : -5), r: 7, fill: ARM[a].c, stroke: "var(--panel)", "stroke-width": 2}, s);
@@ -498,7 +499,8 @@ const meanCurve = runs => { const n = Math.min(...runs.map(r => r.curve.length))
   });
   host.appendChild(s); host.appendChild(tip);
   const sg = x => (x >= 0 ? "+" : "−") + Math.abs(x).toFixed(3);
-  document.getElementById("kTab").innerHTML = `<tr><th>Agents</th><th class="num">Runs per arm</th><th class="num">Parallel mean</th><th class="num">Fork-and-Flush mean</th><th class="num">Gap</th><th class="num">Gap on held-out test</th></tr>` + ks.map(k => { const c = K.cells[`val K=${k}`], te = K.cells[`test K=${k}`]; return `<tr><td>${k}</td><td class="num">${c.fnf.n}</td><td class="num">${fmt(c.parallel.mean)}</td><td class="num">${fmt(c.fnf.mean)}</td><td class="num"><b>${sg(c.gap)}</b></td><td class="num">${sg(te.gap)}${k === "4" ? " (2 parallel programs invalid)" : ""}</td></tr>`; }).join("");
+  const avg = rs => rs ? fmt(rs.reduce((p, r) => p + r.val, 0) / rs.length) : "–";
+  document.getElementById("kTab").innerHTML = `<tr><th>Agents</th><th class="num">Runs per arm</th><th class="num">Parallel</th><th class="num">Fork, no flush</th><th class="num">Fork-and-Flush</th><th class="num">Gap to parallel</th><th class="num">Gap on held-out test</th></tr>` + ks.map(k => { const c = K.cells[`val K=${k}`], te = K.cells[`test K=${k}`]; return `<tr><td>${k}</td><td class="num">${c.fnf.n}</td><td class="num">${fmt(c.parallel.mean)}</td><td class="num">${avg(cell(k, "fnf_keep"))}</td><td class="num">${fmt(c.fnf.mean)}</td><td class="num"><b>${sg(c.gap)}</b></td><td class="num">${sg(te.gap)}${k === "4" ? "*" : ""}</td></tr>`; }).join("");
 }
 /* Finding 3 */
 document.getElementById("optMini").textContent = "5 / 800";
