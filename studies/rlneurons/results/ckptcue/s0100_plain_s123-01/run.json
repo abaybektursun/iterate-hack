@@ -1,0 +1,46 @@
+{
+ "job_id": "abaybektursun-1115-102945-9b20",
+ "commit": "11d2e6d205732f6f0578c837599f7e82988844a4",
+ "runner": "Modal H100 (tools/gpu.py)",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/s0100",
+  "model_label": "s0100",
+  "prompt": "plain",
+  "set": "math500",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 16384,
+  "seed": 45010000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 3,
+  "restarts": 0,
+  "out": "/runs/abaybektursun-1115-102945-9b20",
+  "dry_run": false,
+  "commit": "11d2e6d205732f6f0578c837599f7e82988844a4",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 500,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "model_dir": "/tmp/s0100",
+ "raw_answers": "runs/abaybektursun-1115-102945-9b20/answers.jsonl (submitter's laptop, and the Modal Volume)",
+ "started_utc": "2026-11-15T16:30:44Z",
+ "updated_utc": "2026-11-15T17:47:41Z"
+}

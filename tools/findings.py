@@ -116,6 +116,10 @@ TABLE = {
         "figure": lambda m: [signed(m.DATA["diff"]["hard328"]["vote"][0]), "points", "328 harder problems, Think-SFT over RL"],
         # Think-SFT + cue minus RL, one sample each, points of 328: [estimate, 95 % interval low, high], for the rail's number
         "rail": lambda m: {"hard328": m.DATA["diff"]["hard328"]["single"]}},
+    "no-early-warning": {
+        "group": NO_REWARD,
+        "figure": lambda m: [f"{m.DATA['auroc']['12000']['signs']['zratio']['same'][0]:.3f}", "AUROC",
+                             "Think-SFT + cue, best of six text signs at token 12,000 for a failing sample; 0.5 is chance"]},
     "cut-off-is-unfinished": {
         "group": NO_REWARD,
         "figure": lambda m: [f"{m.DATA['cells']['sft_cue']['right_at_16384_same_answers']} → {m.DATA['cells']['sft_cue']['right_at_32768']}", "right of 328",
@@ -186,7 +190,7 @@ TABLE = {
     "forecasts-before-results": {
         "group": THEORIES,
         "figure": lambda m: [f"{m.COUNTS['theory'][1]} of {m.COUNTS['theory'][0]}", "forecasts",
-                             f"theory nearer the reported number than both readers with no theory; {m.COUNTS['landed']} of {m.COUNTS['targets']} targets reported"]},
+                             f"theory nearer the reported number than both readers with no theory, most of them on one code experiment; {m.COUNTS['landed']} of {m.COUNTS['targets']} targets reported"]},
 }
 
 
@@ -310,7 +314,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .rest { grid-column: 2; grid-row: 1 / span 2; margin: 6px 0 0; font-size: clamp(17px, 1.3vw, 21px); line-height: 1.36; font-weight: 380; max-width: 46ch; transition: opacity .6s ease; }
 .rest.wait { opacity: 0; transition-duration: .2s; }
 .acts { grid-column: 1; display: flex; gap: 22px; margin-top: 16px; font-size: 13px; color: var(--mute); white-space: nowrap; }
-.paper { grid-column: 1; margin-top: 8px; font-size: 13px; }
+.paper { grid-column: 1; margin-top: 8px; font-size: 13px; color: var(--mute); }
 .paper a { color: var(--mute); text-decoration: none; }
 .paper a:hover { color: var(--ink); }
 .acts summary { cursor: pointer; list-style: none; }
@@ -415,7 +419,7 @@ ul.src li { padding: 5px 0; border-top: 1px solid var(--rule); break-inside: avo
     <div class="remain">
       <p class="gap wait" id="gapbox"><b id="gap"></b><span id="gapunit"></span></p>
       <div class="acts"><button id="replay" type="button">Replay</button><details class="src" id="srcbox"><summary>Where each number comes from</summary></details></div>
-      <p class="paper"><a href="/paper/the-finish-dial.pdf">Paper: The finish dial (PDF)</a></p>
+      <p class="paper">Papers (PDF): <a href="/paper/the-finish-dial.pdf">The finish dial</a> · <a href="/paper/theories-on-trial.pdf">Theories on trial</a></p>
       <p class="rest wait" id="rest"></p>
     </div>
     <ul class="src" id="src" hidden></ul>

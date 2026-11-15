@@ -1,0 +1,791 @@
+{
+ "cells": {
+  "base_cue": {
+   "job_id": "abaybektursun-1114-170304-c03c",
+   "commit": "be62e76037092aa61c244383215b06f256818e82",
+   "prefix_text": " as shown in the prompt. I hope this helps!\n\nOkay",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 106,
+    "pct": 65.03067484662577,
+    "wilson95": [
+     57.440323308951015,
+     71.9288756470845
+    ],
+    "cap_hits": 9,
+    "no_block": 11,
+    "timeouts": 1,
+    "tokens_per_problem": 5102.331288343558
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 211,
+    "pct": 56.266666666666666,
+    "wilson95": [
+     51.20753741537012,
+     61.1987077033107
+    ],
+    "cap_hits": 18,
+    "no_block": 23,
+    "timeouts": 2,
+    "tokens_per_problem": 3733.6586666666667
+   },
+   "all": {
+    "n": 538,
+    "passed": 317,
+    "pct": 58.921933085501855,
+    "wilson95": [
+     54.715764137603415,
+     63.00159551187869
+    ],
+    "cap_hits": 27,
+    "no_block": 34,
+    "timeouts": 3,
+    "tokens_per_problem": 4148.3308550185875
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 315,
+    "pct": 58.87850467289719,
+    "wilson95": [
+     54.66011513732101,
+     62.97030257352703
+    ],
+    "cap_hits": 27,
+    "no_block": 34,
+    "timeouts": 3,
+    "tokens_per_problem": 4135.644859813084
+   },
+   "first_three_words": [
+    [
+     "as shown in",
+     538
+    ]
+   ]
+  },
+  "base_mathcue": {
+   "job_id": "abaybektursun-1114-170309-b137",
+   "commit": "be62e76037092aa61c244383215b06f256818e82",
+   "prefix_text": " line!\n\nOkay",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 120,
+    "pct": 73.61963190184049,
+    "wilson95": [
+     66.36669039329287,
+     79.7849079661915
+    ],
+    "cap_hits": 6,
+    "no_block": 7,
+    "timeouts": 0,
+    "tokens_per_problem": 4963.288343558283
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 206,
+    "pct": 54.93333333333333,
+    "wilson95": [
+     49.872744436182494,
+     59.89387406150241
+    ],
+    "cap_hits": 16,
+    "no_block": 26,
+    "timeouts": 1,
+    "tokens_per_problem": 3752.592
+   },
+   "all": {
+    "n": 538,
+    "passed": 326,
+    "pct": 60.594795539033456,
+    "wilson95": [
+     56.40459744710267,
+     64.63476713665735
+    ],
+    "cap_hits": 22,
+    "no_block": 33,
+    "timeouts": 1,
+    "tokens_per_problem": 4119.401486988848
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 323,
+    "pct": 60.373831775700936,
+    "wilson95": [
+     56.16937559793725,
+     64.43037562210627
+    ],
+    "cap_hits": 22,
+    "no_block": 33,
+    "timeouts": 1,
+    "tokens_per_problem": 4117.758878504673
+   },
+   "first_three_words": [
+    [
+     "line! Okay, I",
+     465
+    ],
+    [
+     "line! Okay, let's",
+     68
+    ],
+    [
+     "line! Okay, so",
+     3
+    ],
+    [
+     "line! Okay, let",
+     1
+    ],
+    [
+     "line! Okay, the",
+     1
+    ]
+   ]
+  },
+  "rl_plain": {
+   "job_id": "abaybektursun-1114-170253-f661",
+   "commit": "be62e76037092aa61c244383215b06f256818e82",
+   "prefix_text": "",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 135,
+    "pct": 82.82208588957056,
+    "wilson95": [
+     76.29328973312941,
+     87.83945084433589
+    ],
+    "cap_hits": 5,
+    "no_block": 5,
+    "timeouts": 0,
+    "tokens_per_problem": 5165.1533742331285
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 266,
+    "pct": 70.93333333333334,
+    "wilson95": [
+     66.1437664501171,
+     75.29837149951884
+    ],
+    "cap_hits": 3,
+    "no_block": 3,
+    "timeouts": 1,
+    "tokens_per_problem": 3571.2746666666667
+   },
+   "all": {
+    "n": 538,
+    "passed": 401,
+    "pct": 74.53531598513011,
+    "wilson95": [
+     70.68897021860278,
+     78.03376881747307
+    ],
+    "cap_hits": 8,
+    "no_block": 8,
+    "timeouts": 1,
+    "tokens_per_problem": 4054.17843866171
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 399,
+    "pct": 74.57943925233644,
+    "wilson95": [
+     70.72366188159445,
+     78.0847576758059
+    ],
+    "cap_hits": 8,
+    "no_block": 8,
+    "timeouts": 1,
+    "tokens_per_problem": 4048.448598130841
+   },
+   "first_three_words": [
+    [
+     "as shown in",
+     458
+    ],
+    [
+     "! Okay, I",
+     65
+    ],
+    [
+     "! Okay, let's",
+     15
+    ]
+   ]
+  },
+  "code_top8_code31": {
+   "job_id": "abaybektursun-1115-101423-4a7d",
+   "commit": "64defd52635443fe2b33cee065c6910c179dc1d1",
+   "prefix_text": " as shown in the prompt. I hope this helps!\n\nOkay",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 129,
+    "pct": 79.14110429447852,
+    "wilson95": [
+     72.26860015895909,
+     84.67168353131383
+    ],
+    "cap_hits": 4,
+    "no_block": 3,
+    "timeouts": 0,
+    "tokens_per_problem": 4464.766871165644
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 257,
+    "pct": 68.53333333333333,
+    "wilson95": [
+     63.665402695468465,
+     73.02540733637483
+    ],
+    "cap_hits": 5,
+    "no_block": 5,
+    "timeouts": 1,
+    "tokens_per_problem": 3361.2053333333333
+   },
+   "all": {
+    "n": 538,
+    "passed": 386,
+    "pct": 71.74721189591078,
+    "wilson95": [
+     67.79897343983716,
+     75.38709070577553
+    ],
+    "cap_hits": 9,
+    "no_block": 8,
+    "timeouts": 1,
+    "tokens_per_problem": 3695.5557620817845
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 383,
+    "pct": 71.58878504672897,
+    "wilson95": [
+     67.62387193202,
+     75.24588060698947
+    ],
+    "cap_hits": 9,
+    "no_block": 8,
+    "timeouts": 1,
+    "tokens_per_problem": 3700.2635514018693
+   },
+   "first_three_words": [
+    [
+     "as shown in",
+     538
+    ]
+   ]
+  },
+  "code_top8x1.5_code31": {
+   "job_id": "abaybektursun-1115-101434-4511",
+   "commit": "64defd52635443fe2b33cee065c6910c179dc1d1",
+   "prefix_text": " as shown in the prompt. I hope this helps!\n\nOkay",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 136,
+    "pct": 83.43558282208589,
+    "wilson95": [
+     76.9724048871314,
+     88.35907850486593
+    ],
+    "cap_hits": 3,
+    "no_block": 3,
+    "timeouts": 0,
+    "tokens_per_problem": 4784.1533742331285
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 263,
+    "pct": 70.13333333333334,
+    "wilson95": [
+     65.31599837916004,
+     74.54236359787835
+    ],
+    "cap_hits": 1,
+    "no_block": 2,
+    "timeouts": 1,
+    "tokens_per_problem": 3272.3573333333334
+   },
+   "all": {
+    "n": 538,
+    "passed": 399,
+    "pct": 74.1635687732342,
+    "wilson95": [
+     70.30254850161842,
+     77.68196721572899
+    ],
+    "cap_hits": 4,
+    "no_block": 5,
+    "timeouts": 1,
+    "tokens_per_problem": 3730.3921933085503
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 396,
+    "pct": 74.01869158878505,
+    "wilson95": [
+     70.14080017511752,
+     77.55411931633456
+    ],
+    "cap_hits": 4,
+    "no_block": 5,
+    "timeouts": 1,
+    "tokens_per_problem": 3734.543925233645
+   },
+   "first_three_words": [
+    [
+     "as shown in",
+     538
+    ]
+   ]
+  },
+  "code_top8x2_code31": {
+   "job_id": "abaybektursun-1115-101445-e35e",
+   "commit": "64defd52635443fe2b33cee065c6910c179dc1d1",
+   "prefix_text": " as shown in the prompt. I hope this helps!\n\nOkay",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 137,
+    "pct": 84.04907975460122,
+    "wilson95": [
+     77.65416166299833,
+     88.87606454353111
+    ],
+    "cap_hits": 0,
+    "no_block": 0,
+    "timeouts": 0,
+    "tokens_per_problem": 5172.509202453988
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 257,
+    "pct": 68.53333333333333,
+    "wilson95": [
+     63.665402695468465,
+     73.02540733637483
+    ],
+    "cap_hits": 0,
+    "no_block": 0,
+    "timeouts": 4,
+    "tokens_per_problem": 3820.5706666666665
+   },
+   "all": {
+    "n": 538,
+    "passed": 394,
+    "pct": 73.23420074349443,
+    "wilson95": [
+     69.33798580032185,
+     76.80097162020452
+    ],
+    "cap_hits": 0,
+    "no_block": 0,
+    "timeouts": 4,
+    "tokens_per_problem": 4230.172862453532
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 391,
+    "pct": 73.08411214953271,
+    "wilson95": [
+     69.17108727457276,
+     76.66799877363218
+    ],
+    "cap_hits": 0,
+    "no_block": 0,
+    "timeouts": 4,
+    "tokens_per_problem": 4234.114018691589
+   },
+   "first_three_words": [
+    [
+     "as shown in",
+     538
+    ]
+   ]
+  },
+  "code_rand8x1.5_code31": {
+   "job_id": "abaybektursun-1115-101457-ef2c",
+   "commit": "64defd52635443fe2b33cee065c6910c179dc1d1",
+   "prefix_text": " as shown in the prompt. I hope this helps!\n\nOkay",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 109,
+    "pct": 66.87116564417178,
+    "wilson95": [
+     59.33017756177581,
+     73.6352498378559
+    ],
+    "cap_hits": 7,
+    "no_block": 13,
+    "timeouts": 0,
+    "tokens_per_problem": 4418.570552147239
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 222,
+    "pct": 59.2,
+    "wilson95": [
+     54.15691442768473,
+     64.05650925718712
+    ],
+    "cap_hits": 20,
+    "no_block": 32,
+    "timeouts": 1,
+    "tokens_per_problem": 3746.3973333333333
+   },
+   "all": {
+    "n": 538,
+    "passed": 331,
+    "pct": 61.52416356877323,
+    "wilson95": [
+     57.344996697192805,
+     65.53992618338827
+    ],
+    "cap_hits": 27,
+    "no_block": 45,
+    "timeouts": 1,
+    "tokens_per_problem": 3950.0483271375465
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 331,
+    "pct": 61.86915887850467,
+    "wilson95": [
+     57.68264002981268,
+     65.88644469942628
+    ],
+    "cap_hits": 26,
+    "no_block": 42,
+    "timeouts": 1,
+    "tokens_per_problem": 3931.7831775700934
+   },
+   "first_three_words": [
+    [
+     "as shown in",
+     538
+    ]
+   ]
+  },
+  "code_top8x1.5_math31": {
+   "job_id": "abaybektursun-1115-101508-33f0",
+   "commit": "64defd52635443fe2b33cee065c6910c179dc1d1",
+   "prefix_text": " as shown in the prompt. I hope this helps!\n\nOkay",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 128,
+    "pct": 78.52760736196319,
+    "wilson95": [
+     71.60539221589387,
+     84.13614865984701
+    ],
+    "cap_hits": 1,
+    "no_block": 2,
+    "timeouts": 1,
+    "tokens_per_problem": 4438.288343558283
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 240,
+    "pct": 64.0,
+    "wilson95": [
+     59.02246821498169,
+     68.69361130547547
+    ],
+    "cap_hits": 0,
+    "no_block": 4,
+    "timeouts": 1,
+    "tokens_per_problem": 3311.7093333333332
+   },
+   "all": {
+    "n": 538,
+    "passed": 368,
+    "pct": 68.40148698884758,
+    "wilson95": [
+     64.35433780823782,
+     72.18771646881906
+    ],
+    "cap_hits": 1,
+    "no_block": 6,
+    "timeouts": 2,
+    "tokens_per_problem": 3653.0334572490706
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 365,
+    "pct": 68.22429906542057,
+    "wilson95": [
+     64.16094320106735,
+     72.0278089422523
+    ],
+    "cap_hits": 1,
+    "no_block": 6,
+    "timeouts": 2,
+    "tokens_per_problem": 3658.758878504673
+   },
+   "first_three_words": [
+    [
+     "as shown in",
+     538
+    ]
+   ]
+  }
+ },
+ "differences": {
+  "base_cue - base_mathcue": {
+   "points": -1.6728624535315986,
+   "bootstrap95": [
+    -5.762081784386619,
+    2.788104089219323
+   ],
+   "only_first": 68,
+   "only_second": 77
+  },
+  "base_cue - rl_plain": {
+   "points": -15.613382899628252,
+   "bootstrap95": [
+    -19.88847583643122,
+    -11.524163568773227
+   ],
+   "only_first": 32,
+   "only_second": 116
+  },
+  "base_cue - code_top8_code31": {
+   "points": -12.825278810408921,
+   "bootstrap95": [
+    -16.728624535315994,
+    -8.917286245353223
+   ],
+   "only_first": 31,
+   "only_second": 100
+  },
+  "base_cue - code_top8x1.5_code31": {
+   "points": -15.241635687732343,
+   "bootstrap95": [
+    -19.330855018587357,
+    -11.152416356877314
+   ],
+   "only_first": 31,
+   "only_second": 113
+  },
+  "base_cue - code_top8x2_code31": {
+   "points": -14.312267657992566,
+   "bootstrap95": [
+    -18.592007434944243,
+    -9.85130111524164
+   ],
+   "only_first": 39,
+   "only_second": 116
+  },
+  "base_cue - code_rand8x1.5_code31": {
+   "points": -2.6022304832713754,
+   "bootstrap95": [
+    -6.319702602230482,
+    1.3011152416356864
+   ],
+   "only_first": 49,
+   "only_second": 63
+  },
+  "base_cue - code_top8x1.5_math31": {
+   "points": -9.479553903345725,
+   "bootstrap95": [
+    -13.568773234200748,
+    -5.204460966542756
+   ],
+   "only_first": 45,
+   "only_second": 96
+  },
+  "base_mathcue - rl_plain": {
+   "points": -13.940520446096654,
+   "bootstrap95": [
+    -17.843866171003718,
+    -10.03717472118959
+   ],
+   "only_first": 28,
+   "only_second": 103
+  },
+  "base_mathcue - code_top8_code31": {
+   "points": -11.152416356877323,
+   "bootstrap95": [
+    -15.241635687732346,
+    -7.063197026022305
+   ],
+   "only_first": 37,
+   "only_second": 97
+  },
+  "base_mathcue - code_top8x1.5_code31": {
+   "points": -13.568773234200744,
+   "bootstrap95": [
+    -17.657992565055757,
+    -9.665427509293679
+   ],
+   "only_first": 31,
+   "only_second": 104
+  },
+  "base_mathcue - code_top8x2_code31": {
+   "points": -12.639405204460967,
+   "bootstrap95": [
+    -16.914498141263945,
+    -8.550185873605942
+   ],
+   "only_first": 38,
+   "only_second": 106
+  },
+  "base_mathcue - code_rand8x1.5_code31": {
+   "points": -0.929368029739777,
+   "bootstrap95": [
+    -5.390334572490707,
+    3.531598513011147
+   ],
+   "only_first": 72,
+   "only_second": 77
+  },
+  "base_mathcue - code_top8x1.5_math31": {
+   "points": -7.806691449814126,
+   "bootstrap95": [
+    -11.710037174721188,
+    -3.903345724907059
+   ],
+   "only_first": 41,
+   "only_second": 83
+  },
+  "rl_plain - code_top8_code31": {
+   "points": 2.7881040892193307,
+   "bootstrap95": [
+    -0.371747211895912,
+    5.76672862453525
+   ],
+   "only_first": 44,
+   "only_second": 29
+  },
+  "rl_plain - code_top8x1.5_code31": {
+   "points": 0.37174721189591076,
+   "bootstrap95": [
+    -2.7881040892193343,
+    3.531598513011147
+   ],
+   "only_first": 38,
+   "only_second": 36
+  },
+  "rl_plain - code_top8x2_code31": {
+   "points": 1.3011152416356877,
+   "bootstrap95": [
+    -1.8587360594795599,
+    4.460966542750933
+   ],
+   "only_first": 41,
+   "only_second": 34
+  },
+  "rl_plain - code_rand8x1.5_code31": {
+   "points": 13.011152416356877,
+   "bootstrap95": [
+    8.921933085501866,
+    17.100371747211895
+   ],
+   "only_first": 100,
+   "only_second": 30
+  },
+  "rl_plain - code_top8x1.5_math31": {
+   "points": 6.133828996282528,
+   "bootstrap95": [
+    2.4163568773234223,
+    10.03717472118959
+   ],
+   "only_first": 68,
+   "only_second": 35
+  },
+  "code_top8_code31 - code_top8x1.5_code31": {
+   "points": -2.41635687732342,
+   "bootstrap95": [
+    -5.576208178438657,
+    0.743494423791824
+   ],
+   "only_first": 30,
+   "only_second": 43
+  },
+  "code_top8_code31 - code_top8x2_code31": {
+   "points": -1.486988847583643,
+   "bootstrap95": [
+    -5.018587360594795,
+    1.8587360594795599
+   ],
+   "only_first": 41,
+   "only_second": 49
+  },
+  "code_top8_code31 - code_rand8x1.5_code31": {
+   "points": 10.223048327137546,
+   "bootstrap95": [
+    6.319702602230482,
+    14.12639405204461
+   ],
+   "only_first": 88,
+   "only_second": 33
+  },
+  "code_top8_code31 - code_top8x1.5_math31": {
+   "points": 3.345724907063197,
+   "bootstrap95": [
+    -0.18587360594795044,
+    6.881970260222985
+   ],
+   "only_first": 56,
+   "only_second": 38
+  },
+  "code_top8x1.5_code31 - code_top8x2_code31": {
+   "points": 0.929368029739777,
+   "bootstrap95": [
+    -2.2304832713754608,
+    4.089219330855021
+   ],
+   "only_first": 39,
+   "only_second": 34
+  },
+  "code_top8x1.5_code31 - code_rand8x1.5_code31": {
+   "points": 12.639405204460967,
+   "bootstrap95": [
+    8.736059479553903,
+    16.728624535315983
+   ],
+   "only_first": 98,
+   "only_second": 30
+  },
+  "code_top8x1.5_code31 - code_top8x1.5_math31": {
+   "points": 5.762081784386617,
+   "bootstrap95": [
+    2.0446096654275103,
+    9.479553903345728
+   ],
+   "only_first": 68,
+   "only_second": 37
+  },
+  "code_top8x2_code31 - code_rand8x1.5_code31": {
+   "points": 11.71003717472119,
+   "bootstrap95": [
+    7.620817843866179,
+    15.79925650557621
+   ],
+   "only_first": 98,
+   "only_second": 35
+  },
+  "code_top8x2_code31 - code_top8x1.5_math31": {
+   "points": 4.83271375464684,
+   "bootstrap95": [
+    0.9293680297397744,
+    8.736059479553903
+   ],
+   "only_first": 70,
+   "only_second": 44
+  },
+  "code_rand8x1.5_code31 - code_top8x1.5_math31": {
+   "points": -6.877323420074349,
+   "bootstrap95": [
+    -11.338289962825277,
+    -2.4163568773234223
+   ],
+   "only_first": 55,
+   "only_second": 92
+  }
+ },
+ "overlap_excluded": [
+  "HumanEval/47",
+  "Mbpp/641",
+  "Mbpp/804"
+ ]
+}

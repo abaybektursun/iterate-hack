@@ -218,12 +218,12 @@ def detail(item_id):
             "thread": board.rows(KeyConditionExpression=Key("pk").eq(f"chan#{item_id}"))}
 
 
-# The paper of the finish dial (studies/rlneurons/paper/): beside this file on AWS (infra/monitor/deploy.sh), in its study here.
+# The papers (studies/<study>/paper/<name>.pdf), served at /paper/<name>.pdf: beside this file on AWS (infra/monitor/deploy.sh), in their study here.
 # The site lab's static files: beside the code in the Lambda zip (infra/monitor/deploy.sh), in the study in the repository.
 LAB = (Path(__file__).with_name("sitelab"), Path(__file__).parent.parent / "studies/sitelab")
 LAB_FILE = re.compile(r"(prototypes/[a-z-]+/)?(index\.html|data\.json)?")
-PAPER = (Path(__file__).with_name("the-finish-dial.pdf"),
-         Path(__file__).parent.parent / "studies/rlneurons/paper/the-finish-dial.pdf")
+PAPERS = {name: (Path(__file__).with_name(name), Path(__file__).parent.parent / "studies" / study / "paper" / name)
+          for name, study in (("the-finish-dial.pdf", "rlneurons"), ("theories-on-trial.pdf", "theory"))}
 
 
 # The home page (home.py) is at / and the board at /board. The page modules were written when the board was at /, so
@@ -297,8 +297,8 @@ class Handler(BaseHTTPRequestHandler):
             if name.endswith(".html"):
                 return self.send(200, "text/html", found[0].read_text())
             return self.send(200, "application/json", found[0].read_bytes())
-        if path == "/paper/the-finish-dial.pdf":
-            found = [p for p in PAPER if p.exists()]  # a deploy without the file answers 404 and the other pages stay up
+        if path.startswith("/paper/") and path[7:] in PAPERS:
+            found = [p for p in PAPERS[path[7:]] if p.exists()]  # a deploy without the file answers 404 and the other pages stay up
             return self.send(200, "application/pdf", found[0].read_bytes()) if found else self.send(404, "text/plain", f"no page {path}")
         if path != "/data" and not path.startswith("/data/"):
             return self.send(404, "text/plain", f"no page {path}")

@@ -6,6 +6,7 @@ setting, one sample per problem, on the team runner. Reuses rln4_gen's vLLM engi
 
   --model      base = allenai/Olmo-3-1025-7B, rl_code = allenai/Olmo-3.1-7B-RL-Zero-Code; both with the Code model's tokenizer and
                prompt template (data/code1/frozen_code1.json).
+  --model-path, --model-label  instead of --model: a local weights directory (jobs/wsp_edit.py writes one) and its name in the rows.
   --prefix-ids JSON list of token ids placed after the prompt as the start of the answer (the opening cue); default none.
   --seed       problem i (0-541: HumanEval+ then MBPP+, file order) is sampled with seed + i.
   --n          the first n problems of each set (smoke runs).
@@ -61,6 +62,8 @@ def grader_check(probs, timeout_s):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", choices=("base", "rl_code"))
+    ap.add_argument("--model-path")
+    ap.add_argument("--model-label")
     ap.add_argument("--prefix-ids", default="[]")
     ap.add_argument("--temperature", type=float)
     ap.add_argument("--top-p", type=float)
@@ -72,6 +75,7 @@ def main():
     a = ap.parse_args()
     t0 = time.time()
     assert a.out, "no --out and no $OUT_DIR"
+    assert (a.model is None) == bool(a.model_path) == bool(a.model_label), "give --model, or --model-path with --model-label"
     assert re.fullmatch(r"[0-9a-f]{40}", a.commit), f"--commit {a.commit!r} is not a full git sha"
     out = pathlib.Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -107,8 +111,8 @@ def main():
         ids = [int(i) for i in tok.apply_chat_template(msg, tokenize=True, add_generation_prompt=True, return_dict=False)]
         assert len(ids) + len(pre) <= 4096, f"{p['uid']}: prompt of {len(ids)} tokens"
         reqs[p["uid"]] = {**p, "ids": ids + pre, "n_prompt": len(ids), "prompt": text, "seed": a.seed + p["idx"]}
-    repo, rev = fz["models"][a.model]
-    model_dir = snapshot_download(repo, revision=rev, allow_patterns=["*.json", "*.safetensors", "*.jinja", "*.txt"])
+    repo, rev = fz["models"][a.model] if a.model else (a.model_path, None)
+    model_dir = a.model_path or snapshot_download(repo, revision=rev, allow_patterns=["*.json", "*.safetensors", "*.jinja", "*.txt"])
     os.environ.update(G.ENGINE_ENV)
     engine = J.VllmEngine(model_dir, tok_dir, 4096 + cap)
     m.update(status="generating", engine=engine.info, model_repo=repo, model_revision=rev, tokenizer=fz["tokenizer"], prefix_ids=pre,
@@ -124,7 +128,7 @@ def main():
                 j = next((i for i, t in enumerate(out_ids) if t == S.STOP_ID), None)
                 ids = out_ids if j is None else out_ids[:j]
                 assert j is not None or len(ids) == cap, f"{uid}: no stop id in {len(ids)} ids"
-                g = {"bench": r["bench"], "idx": r["idx"], "uid": uid, "model": a.model, "seed": r["seed"], "sampling": sampling,
+                g = {"bench": r["bench"], "idx": r["idx"], "uid": uid, "model": a.model or a.model_label, "seed": r["seed"], "sampling": sampling,
                      "prompt": r["prompt"], "prefix_ids": pre, "text": tok.decode(pre + ids, skip_special_tokens=False),
                      "n_new": len(ids), "cap_hit": j is None, "finish_reason": fr}
                 f.write(json.dumps(g) + "\n")

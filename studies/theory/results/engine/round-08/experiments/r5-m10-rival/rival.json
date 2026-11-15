@@ -1,0 +1,28 @@
+{
+ "predictions": [],
+ "intervention": {
+  "change": "Decoding stop at the first complete answer marker: generation of each plain-prompt answer ends as soon as the first '\\boxed{' has its brace-balanced closing '}' or, if earlier, the first line whose left-stripped text begins with 'Answer:' is completed by a newline (vLLM stop on that event, implemented as a logits processor that forces EOS once the marker closes); everything else as in the base_plain_1.0 cell (no prefix, T 1.0 / top-p 1.0, cap 16,384). The graded text is the truncated text, so grader v3's last marker is the first marker.",
+  "model": "base = allenai/Olmo-3-1025-7B",
+  "cell": {
+   "set": "MATH-500",
+   "prompt": "plain: the standard rlneurons MATH-500 prompt with no prefilled tokens (no cue)",
+   "sampling": "T 1.0 / top-p 1.0",
+   "cap": 16384,
+   "grader": "v3",
+   "samples": 1,
+   "seeds": "one sample per problem, per-request seed 1,000,000 + problem_index, as in the T3 cell"
+  },
+  "count": "Right answers over all 500 MATH-500 problems, grader v3 (studies/rlneurons/grader/rln4_grader_v3.py) on the stopped text against gold; an empty extraction counts wrong; an answer that reaches the 16,384-token cap without a marker counts wrong.",
+  "unit": "right of 500",
+  "value": 250,
+  "low": 215,
+  "high": 285,
+  "best_known": {
+   "value": 453,
+   "item": "result-cbe0bc",
+   "setting": "base + cue, T 1.0 / top-p 1.0, cap 16,384, v3, vote over 4 samples with ties to the shortest finished sample (the honest unselected-rule figure is 450, vote over 4 after restart, result-5d032f)"
+  },
+  "gpu_minutes": 25,
+  "why": "The mechanism says the plain register's T 1.0 loss is mostly answers that reach a right first answer and then fail to stop, running on into new answers or invented problems that the last-marker grader v3 reads, so forcing a stop at the first marker should recover roughly its predicted 17 % of the ~260 wrong non-self-opened answers (+~40 over 224, minus a few rows that revise toward the right answer), giving about 250 of 500 in this cell, still far below the cue's best."
+ }
+}

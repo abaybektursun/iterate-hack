@@ -1,0 +1,2 @@
+{"groups": {"problems_with_mass": 279}}
+{"measured": 3.2440167317836175, "n": 279, "interval": [2.2406692341876195, 4.766439167184948], "interval_kind": "bootstrap", "refuted_by_met": false, "alt_measured": 3.2318306234244525, "not_computable": null, "example_row": {"problem_index": 0, "sample": 0, "attempt": 0, "seed": 3000000, "n_new": 3213, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "108", "score_v3": 0, "gold": "116"}}

@@ -1,0 +1,15 @@
+{
+ "theory": "r8-m12",
+ "items": [
+  {
+   "k": 1,
+   "experiment": "Mechanism test, flat hazard within a problem: Mantel-Haenszel rate ratio of right finishes per 1,000 alive tokens, window [12,000, 16,384) against window [4,000, 8,000), stratified by problem, for the cued base on hard328. The late-degradation rival (solve chance falls within the problem late in the answer) predicts about 0.45, near the unstratified population ratio. This mechanism predicts about 0.85 because the population fall is selection.",
+   "original": 3.244016731783618,
+   "replicated": 3.2440167317836175,
+   "status": "replicated",
+   "refuted_by_met": false,
+   "script": "replication/r8-m12/p1.py",
+   "not_computable": null
+  }
+ ]
+}
