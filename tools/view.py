@@ -28,10 +28,12 @@ agent's message position. A failed read answers 500 with the error text; the pag
 status and logs the error to the browser console.
 """
 import glob
+import hashlib
 import importlib
 import json
 import os
 import sys
+import threading
 import time
 import traceback
 import webbrowser
@@ -80,9 +82,22 @@ def snapshot():
     assert len(scored) < 100, f"{len(scored)} scored results: one GetItem each on every read of /data is too many"
     with ThreadPoolExecutor(max(1, len(scored))) as pool:  # the first line of each scored result's finding, one GetItem each
         found = dict(zip(scored, pool.map(finding, scored)))
-    return {"now_ns": time.time_ns(), "hours": HOURS, "test": team.TEST, "items": items, "messages": messages, "scores": scores,
+    return {"hours": HOURS, "test": team.TEST, "items": items, "messages": messages, "scores": scores,
             "last_comments": last, "finding": found,
             "findings": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in FINDINGS.items() if not getattr(m, "UNLISTED", False)]}
+
+
+SNAPSHOT = {"at": 0.0, "ns": 0, "body": ""}
+SNAPSHOT_LOCK = threading.Lock()
+FRESH_S = 5  # readers within 5 s of each other share one set of queries; wall time, because a frozen Lambda stops the monotonic clock
+
+
+def snapshot_json():
+    with SNAPSHOT_LOCK:  # a reader that arrives while the queries run waits for them instead of starting its own
+        if time.time() - SNAPSHOT["at"] >= FRESH_S:
+            body = json.dumps(snapshot(), default=int, separators=(",", ":"))  # DynamoDB numbers are Decimal; all are integers
+            SNAPSHOT.update(at=time.time(), ns=time.time_ns(), body=body)
+        return SNAPSHOT["body"], SNAPSHOT["ns"]
 
 
 def detail(item_id):
@@ -96,12 +111,25 @@ def detail(item_id):
 
 
 class Handler(BaseHTTPRequestHandler):
-    def send(self, status, kind, body):
+    protocol_version = "HTTP/1.1"  # Chrome revalidates with If-None-Match only for HTTP/1.1 responses
+
+    def send(self, status, kind, body, headers=()):
         data = body.encode()
-        self.send_response(status)
-        self.send_header("Content-Type", f"{kind}; charset=utf-8")
-        self.send_header("Content-Length", str(len(data)))
-        self.send_header("Cache-Control", "no-store")
+        tag = f'"{hashlib.blake2b(data, digest_size=16).hexdigest()}"'  # from the content, so an unchanged board answers 304
+        if status == 200 and self.headers.get("If-None-Match") == tag:
+            self.send_response(304)
+            data = b""
+        else:
+            self.send_response(status)
+            self.send_header("Content-Type", f"{kind}; charset=utf-8")
+            self.send_header("Content-Length", str(len(data)))
+        if status == 200:
+            self.send_header("ETag", tag)
+            self.send_header("Cache-Control", "no-cache")  # the browser keeps the body and asks again with If-None-Match
+        else:
+            self.send_header("Cache-Control", "no-store")
+        for header in headers:
+            self.send_header(*header)
         self.end_headers()
         self.wfile.write(data)
 
@@ -116,7 +144,10 @@ class Handler(BaseHTTPRequestHandler):
         if path != "/data" and not path.startswith("/data/"):
             return self.send(404, "text/plain", f"no page {path}")
         try:  # the page shows the error text; the traceback goes to this terminal
-            found = snapshot() if path == "/data" else detail(path[len("/data/"):])
+            if path == "/data":  # the time of the read goes in a header, so the body and its ETag change only with the board
+                body, ns = snapshot_json()
+                return self.send(200, "application/json", body, [("X-Snapshot-Ns", str(ns))])
+            found = detail(path[len("/data/"):])
         except (Exception, SystemExit) as error:
             traceback.print_exc()
             return self.send(500, "text/plain", f"{type(error).__name__}: {error}")
@@ -914,9 +945,18 @@ function failed(e) {
       "that the key has not expired, and that the network is up. The terminal running view.py has the full traceback.", e.text ?? e);
 }
 
+async function read() {  // an unchanged board comes back as a 304 with the same ETag: nothing to parse
+  const r = await fetch("/data").catch(() => { throw { server: true }; });
+  if (!r.ok) throw { text: `${r.status}: ${await r.text()}` };
+  const tag = r.headers.get("ETag");
+  if (!S.data || tag !== S.etag) { S.data = await r.json(); S.etag = tag; }
+  S.data.now_ns = Number(r.headers.get("X-Snapshot-Ns"));  // the time of the read, kept out of the body so the ETag holds
+  S.readAt = Date.now(); S.error = null;
+}
+
 function poll() {
-  get("/data")
-    .then(data => { S.data = data; S.readAt = Date.now(); S.error = null; return S.open && loadDetail(); })
+  read()
+    .then(() => S.open && loadDetail())
     .catch(failed)
     .finally(() => { render(); renderPanel(); setTimeout(poll, 10000); });
 }
