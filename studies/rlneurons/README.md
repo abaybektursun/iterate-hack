@@ -53,6 +53,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/day1_vote.py`, `analysis/day1_vote_test.py` | Day-1 #3 readout from one `run_cell --samples k --restarts r` run: single, restart, vote, pass@k and vote-after-restart rows (grader v3, Wilson, tokens per problem, paired bootstrap, `--minus` another run), `rows.jsonl`; and its planted cases. See "Day-1 #3". |
 | `specs/SPEC_day1_length_rules.md` | Day-1 length rules spec: double-check short answers D(S), stop at a length cutoff and restart R(L), their combination; token accounting; the choice on MATH-500 and its fixed use on the 328; hypotheses. |
 | `analysis/day1_length_rules.py`, `analysis/day1_length_rules_test.py` | Offline readout of the length rules from the rows of two `run_cell --samples 4` runs (base, RL), and its planted cases. Imports `day1_vote` (`chains`, `vote`, `row`, `tail`). See "Day-1 length rules". |
+| `specs/SPEC_frontier.md`, `analysis/frontier.py`, `analysis/frontier_test.py` | Token frontier: 24 reward-free test-time rules (single, restart, length caps, votes, the sequential vote that stops when two samples agree) replayed on the stored four-sample rows of both models; tokens per problem, 24 draw orders, base against one RL sample, the 5-fold choice per token budget, `--fixed` for the 328. Imports `day1_vote`, `selector`, `day1_length_rules`. See "Token frontier". |
 | `analysis/day1_hard328.py` | Day-1 #1 readout: the 328 at T 1.0 (four cells) beside the three T 0.6 cells, grader v3, per source, paired bootstrap, identical-text counts, the 50-problem check against T1. |
 | `specs/DAY1_hard328_2026-11-14.md` | Day-1 #1 plan, written before launch: prediction, check rule, seeds, cost. |
 | `jobs/merge_weights.py` | Day-1 #4: writes base + a (other - base), or base + a random difference of matched per-tensor norm, as a bf16 model directory for `run_cell --model-path`; per-tensor statistics of the difference (changed entries, norms, size in bf16 ulps); `--cos-with-rl` for the Code-RL against Math-RL cosine. |
@@ -1579,6 +1580,134 @@ Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studi
 (about 15 minutes for `fit`; `predict` refuses to overwrite the filed file); `... python -m studies.rlneurons.analysis.hazard_test`.
 Run folders: `results/hazard/math500-01/` (`readout.json`, `table.json`, `table.md`, `examples.json`, `run.json`),
 `transfer-01/`, `predict-01/`, `scored-01/`.
+
+## Token frontier: right answers against generated tokens per problem, base + cue and RL (MATH-500, n = 500, laptop, board work-86ad1e, idea-aa7280)
+
+Question (DIRECTION.md, mission 3): at equal generated tokens and with RL given the same procedure, which reward-free rule
+gives the base the most right answers per token, and does any reach one RL sample? Answer: none does. The best base rule has
+454 of 500 at 19,697 tokens (vote over 4 after restart, ties to the shortest), 1.2 points [-3.0, +0.6] below one RL sample
+(460.0 of 500 at 4,687 tokens, the mean of the four RL samples) at 4.20 times its tokens. The cheapest base rule whose
+interval includes 0 is the sequential vote with ties to the shortest: 452.0 at 11,256 tokens (stored order 451 at 11,369),
+-1.6 points [-3.3, +0.2] at 2.40 times [2.25, 2.56] the tokens of one RL sample. RL under the same rule has 474.5 at 11,080
+tokens: +4.5 points [2.6, 6.5]. RL stays ahead under every one of the 24 rules (smallest lead +4.2 [2.4, 6.0]).
+
+`analysis/frontier.py` replays 24 rules, fixed in `specs/SPEC_frontier.md` before scoring, on the stored rows of Day-1 #3
+(`results/day1_3/math500_*/rows.jsonl`; T 1.0 / top-p 1.0, cap 16,384, grader v3). A rule sees `n_new`, `cap_hit` and
+`extracted_v3` of each attempt and nothing else (a rule that reads `score_v3` or `gold` raises `KeyError`). Tokens = every
+generated token of every attempt the rule drew, cap hits and restarts included; a sample abandoned at L costs L. "Agree" is
+`rln4_lib.agree`. Right = stored draw order (samples 0, 1, 2, 3); right (24) = mean over all 24 draw orders. Wilson 95 %
+interval; paired bootstrap, 5,000 resamples, seed 0, on the 24-order means. The stopping rule itself is published
+(Adaptive-Consistency, arXiv 2305.11860: up to 7.9 times fewer samples at under 0.1 % accuracy drop; Early-Stopping
+Self-Consistency, arXiv 2401.10480: 33.8 % fewer samples on MATH; both from the abstracts only; short-m@k, arXiv 2505.17813).
+New here: the frontier of a base against its own RL-trained version at equal tokens.
+
+The deliverable table on MATH-500 (the 328 is not scored yet, see below). Every rule and every other arm: `results/frontier/math500-01/frontier.md`.
+
+| Configuration | Model | Right | Percent [95 %] | Right (24) | Tokens per problem | Training signal |
+|---|---|---|---|---|---|---|
+| one sample | base + cue | 405 | 81.0 [77.3, 84.2] | 410.5 | 3,808 | none |
+| one sample, restart after a cap hit | base + cue | 413 | 82.6 [79.0, 85.7] | 418.0 | 4,852 | none |
+| one sample, abandoned at 8,000 tokens and drawn again (`R8000`) | base + cue | 428 | 85.6 [82.3, 88.4] | 424.0 | 6,116 | none |
+| vote over 2, ties to the shortest | base + cue | 423 | 84.6 [81.2, 87.5] | 428.7 | 7,952 | none |
+| sequential vote, at most 3 (`seq3`) | base + cue | 439 | 87.8 [84.6, 90.4] | 442.2 | 10,042 | none |
+| sequential vote, at most 4 (`seq4`) | base + cue | 446 | 89.2 [86.2, 91.6] | 448.2 | 11,369 | none |
+| sequential vote, at most 4, ties to the shortest (`seq4_short`) | base + cue | 451 | 90.2 [87.3, 92.5] | 452.0 | 11,369 | none |
+| draw 2; if they differ draw 2 more; vote, ties to the shortest (`seq_2then4_short`) | base + cue | 452 | 90.4 [87.5, 92.7] | 452.7 | 12,086 | none |
+| vote over 4 | base + cue | 446 | 89.2 [86.2, 91.6] | 448.2 | 16,034 | none |
+| vote over 4, ties to the shortest | base + cue | 453 | 90.6 [87.7, 92.9] | 453.0 | 16,034 | none |
+| vote over 4 after restart, ties to the shortest | base + cue | 454 | 90.8 [87.9, 93.0] | 454.0 | 19,697 | none |
+| one sample | RL plain | 456 | 91.2 [88.4, 93.4] | 460.0 | 4,675 | RL reward |
+| one sample, abandoned at 12,000 tokens and drawn again (`R12000`) | RL plain | 464 | 92.8 [90.2, 94.8] | 466.2 | 6,155 | RL reward |
+| vote over 2, ties to the shortest | RL plain | 463 | 92.6 [90.0, 94.6] | 468.0 | 9,263 | RL reward |
+| sequential vote, at most 4 (`seq4`) | RL plain | 474 | 94.8 [92.5, 96.4] | 474.3 | 11,098 | RL reward |
+| sequential vote, at most 4, ties to the shortest (`seq4_short`) | RL plain | 475 | 95.0 [92.7, 96.6] | 474.5 | 11,098 | RL reward |
+| sequential vote, at most 4, restart after a cap hit (`seq4_restart`) | RL plain | 475 | 95.0 [92.7, 96.6] | 476.1 | 11,803 | RL reward |
+| vote over 4 | RL plain | 474 | 94.8 [92.5, 96.4] | 474.3 | 18,747 | RL reward |
+| vote over 4 after restart | RL plain | 475 | 95.0 [92.7, 96.6] | 476.1 | 19,864 | RL reward |
+| Olmo-3-7B-Think-SFT, cue, one sample (other arm, `results/rate/math500-01/table.json`) | Think-SFT | 454 | 90.8 | | 4,888 | SFT data |
+| base + 0.5 (RL - base), cue, one sample (other arm) | weight blend | 452 | 90.4 | | 4,626 | RL reward |
+| RL-Zero-Code 3.1, cue, one sample (other arm) | Code-RL | 450 | 90.0 | | 3,336 | RL reward (code) |
+| base + 0.25 (RL - base), cue, one sample (other arm) | weight blend | 441 | 88.2 | | 4,036 | RL reward |
+
+Base rule against one RL sample (460.0 at 4,687 tokens) and RL under the same rule, 24-order means:
+
+| Base rule | Base right (24) | minus RL single, points [95 %] | Tokens, multiple of one RL sample [95 %] | RL, same rule | RL minus base, points [95 %] |
+|---|---|---|---|---|---|
+| `single` | 410.5 | -9.9 [-11.6, -8.3] | 0.86 [0.82, 0.89] | 460.0 | +9.9 [8.3, 11.6] |
+| `restart` | 418.0 | -8.4 [-10.1, -6.8] | 1.05 [0.97, 1.14] | 463.0 | +9.0 [7.4, 10.7] |
+| `R8000` | 424.0 | -7.2 [-9.0, -5.4] | 1.37 [1.25, 1.49] | 464.2 | +8.0 [6.3, 9.9] |
+| `seq3` | 442.2 | -3.6 [-5.1, -2.0] | 2.13 [2.02, 2.24] | 470.4 | +5.7 [4.0, 7.4] |
+| `seq4` | 448.2 | -2.4 [-4.0, -0.7] | 2.40 [2.25, 2.56] | 474.3 | +5.2 [3.4, 7.2] |
+| `seq4_short` | 452.0 | -1.6 [-3.3, +0.2] | 2.40 [2.25, 2.56] | 474.5 | +4.5 [2.6, 6.5] |
+| `vote4` | 448.2 | -2.4 [-4.0, -0.7] | 3.42 [3.28, 3.56] | 474.3 | +5.2 [3.4, 7.2] |
+| `vote4_short` | 453.0 | -1.4 [-3.2, +0.4] | 3.42 [3.28, 3.56] | 475.0 | +4.4 [2.4, 6.4] |
+| `vote4_restart_short` | 454.0 | -1.2 [-3.0, +0.6] | 4.20 [3.87, 4.56] | 475.0 | +4.2 [2.4, 6.0] |
+
+Rule chosen per token budget, five folds (chosen on four, scored on the fifth; 24-order means), and the rule chosen on all
+500, which is the one to score on the 328 (`chosen.json`):
+
+| Budget, tokens per problem | Base: chosen on all | Base held-out right, tokens | RL: chosen on all | RL held-out right, tokens |
+|---|---|---|---|---|
+| 5,000 | `restart` | 416.5, 4,589 | `restart` | 462.8, 4,909 |
+| 7,500 | `R8000` | 422.0, 6,110 | `R12000` | 466.2, 6,225 |
+| 10,000 | `seq3` | 438.0, 9,382 | `vote2_short` | 468.0, 9,374 |
+| 12,500 | `seq_2then4_short` | 452.0, 11,774 | `seq4_restart` | 474.3, 11,625 |
+| 15,000 | `seq4_restart_short` | 450.3, 13,804 | `seq4_restart` | 474.3, 11,625 |
+| 17,500 | `seq4_restart_short` | 450.5, 14,597 | `seq4_restart` | 474.3, 11,625 |
+| 20,000 | `vote4_restart_short` | 450.0, 16,878 | `seq4_restart` | 474.3, 11,625 |
+
+- The sequential vote has the fixed vote's score at 29 % fewer tokens on the base (448.2 at 11,256 against 448.2 at 16,034,
+  24-order means) and 41 % fewer on RL (474.3 at 11,080 against 18,747). It stops after 2 samples on 373 of 500 base problems
+  (368 right), after 3 on 65 (57 right), and uses all 4 on 62 (21 right); RL: 444 (441 right), 34 (27), 22 (6). Mean samples
+  drawn: 2.38 base, 2.16 RL. Above 12,500 tokens neither model gains on held-out folds: the frontier is flat from there.
+- The base needs 2.4 times the tokens of one RL sample to come within 1.6 points of it, not 3.4 times (the fixed vote of
+  Day-1 #3). It does not reach it: no base rule has a point estimate at or above one RL sample at any multiple up to 4.2.
+  With the plain tie rule the sequential vote is 2.4 points [-4.0, -0.7] below one RL sample.
+- Caveat on `short`: the tie rule was written after reading the problems it fixes ("Label-free selector"), so the 451 to 454
+  rows are optimistic; the plain-tie rows (446 to 450) are the safe reading until the 328 is scored.
+- Order luck is small: the 24-order mean moves the base's `seq4` from 446 to 448.2 and `seq4_short` from 451 to 452.0.
+  `R8000` is the exception: 428 in stored order, 424.0 over the orders.
+- Length caps do not help the sequential vote: `seq4_L12000` 450.0 at 11,002 tokens (base), 472.8 (RL, below its 474.3);
+  `seq4_L8000` 444.6 and 467.0. The emulation ran out of stored samples (the fourth exceeded L and ran in full) on 36 and 76
+  base problems for L 12,000 and 8,000 (RL 26 and 67), and on 13 and 37 for `R12000` and `R8000` (RL 12 and 50): on those
+  problems a real run would draw a fifth sample, so these rows are approximate. Accepting a short finished answer at once
+  (`seq4_stop1000`, `seq4_stop2000`) loses 6 to 9 base problems for 3 to 8 % of the tokens.
+- Weight edits against test-time compute: Think-SFT with the cue (454 at 4,888 tokens, no reward) and the half-way weight
+  blend (452 at 4,626) reach in one sample what the base's votes reach at 11,300 to 19,700 tokens.
+- Hypotheses of the spec. H1 (sequential keeps the vote's score at 25 % fewer tokens): not refuted, 0.0 points at 29 %.
+  H2 (no base rule reaches one RL sample at 2.0 times its tokens or less): not refuted. H3 (RL ahead under every rule, interval
+  above 0): not refuted. H4 (order moves the base's `seq4` by under 3 problems): not refuted, 2.2.
+- Reconciliation of two earlier counts on these rows. "447 at 12,614" is reproduced exactly by: draw 2; if they do not agree
+  draw both remaining samples; plurality over 4, ties to the lowest sample; agreement = the two extracted strings are equal
+  (no normalisation). "452 at 11,314" (RL 476 at 11,206) is not reproduced to the token; its description (draw 2, stop when two
+  agree, else one more at a time up to 4, plurality) with `rln4_lib.agree` gives 446 at 11,369 with ties to the lowest sample
+  and 451 at 11,369 with ties to the shortest (RL 474 and 475 at 11,098); with a string comparison after stripping `$`,
+  spaces, `\left`, `\right` it gives 451 at 11,597 (RL 476 at 11,235). So the two counts differ in three things: one more
+  sample at a time against two more at once (about 700 tokens), grader equivalence against string equality as agreement
+  (about 450 tokens, 1 problem), and ties to the shortest against the lowest sample (5 problems). The parallel rule of
+  `specs/DAY1_hard328_vote_2026-11-14.md` amendment 1 (`par4_m2`) reproduces at 447 at 13,403 (RL 473 at 16,553).
+- Examples (`examples.json`, with every sample's seed, extracted answer, score and last 2,000 characters): base problem 0
+  stops after 2 samples and is right (1,195 tokens against 3,177 for the vote); base problem 20 stops after 2 and is wrong:
+  samples 0 and 1 agree on `117 + 41i`, samples 2 and 3 have the gold `6 + 9i`. RL problem 369: all four samples say 189, gold 21.
+- The 328: not scored. The four-sample rows with restarts are jobs `abaybektursun-1114-200457-e8e6` (base) and
+  `-200505-5ff2` (RL) of board work-1a972a, still running at 100 minutes when this was written; no hard328 `rows.jsonl` is in
+  git. When `analysis/day1_vote.py` has written their run folders, this one command scores `single` and the 9 chosen rules
+  once (it refuses a `chosen.json` made on the same set):
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.frontier --base studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01 --rl studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01 --fixed studies/rlneurons/results/frontier/math500-01/chosen.json --out studies/rlneurons/results/frontier/hard328-01
+```
+
+Run folder `results/frontier/math500-01/`: `run.json` (commit, command, source jobs), `readout.json` (every rule and model:
+right, interval, tokens in both orders, samples drawn, ran-out counts, both comparisons, the fold choices), `per_problem.json`
+(score, tokens and samples drawn per problem and rule), `frontier.md` and `frontier.json` (the full table), `chosen.json`,
+`examples.json`. Test (planted rows; a rule that reads the score must raise; four identical answers cost 2 samples, four
+different cost 4; two agreeing wrong answers must score 0) and the run:
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.frontier_test
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.frontier --base studies/rlneurons/results/day1_3/math500_base_cue-01 --rl studies/rlneurons/results/day1_3/math500_rl-01 --out studies/rlneurons/results/frontier/math500-01 --base-run runs/abaybektursun-1114-153825-208b --rl-run runs/abaybektursun-1114-183640-e828
+```
 
 ## How to run
 
