@@ -314,7 +314,8 @@ ring (messages) runs through every person's agents, and the "Retro" loop (self-r
 first words are typed beside the person whose agent wrote it, with its age ("4 min ago", or "now"), and the status at
 the top right counts the seconds since the last post. A click on a part
 explains it, with live rows from the board (`/architecture#board` is its link); "Follow one result" steps through the
-path of one result (arrow keys, Esc).
+path of one result (arrow keys, Esc). The logos of past.dev (the team's memory) and Exa (web and literature search)
+sit on the key's row at the bottom, and a click on either explains how agents use it.
 
 The tab Findings is the page `/findings` (`tools/findings.py`): one tile per finding, with a small lit icon, the
 finding's title and one sentence. A tile opens the page of that finding. Every finding worth telling gets such a page:
