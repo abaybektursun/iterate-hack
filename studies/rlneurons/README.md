@@ -60,6 +60,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `tools/finding_a_quarter_of_rl.py` | The public page of "Weight-difference line" (MATH-500 and the 328), served at `/finding/a-quarter-of-rl`: right answers against a for base + a (RL - base) with the cue, each point with its paired 95 % interval, the random change and Code-RL as reference marks, a slider on a that snaps to the measured values, a switch between MATH-500 and the 328, and one dot per problem. Its numbers are read from `results/day1_wdiff/readout.json`, `results/day1_wdiff328/readout.json`, `results/axis/math500-01/vectors.json`, `results/axis/hard328-01/vectors.json` and `results/rln4/t1_t2_items-01/per_problem.json` (run the file to check them). |
 | `tools/finding_one_difficulty_axis.py` | The public page of "One axis or several?", served at `/finding/one-difficulty-axis`: the 36 single-sample arms as rows against the 500 problems in one difficulty order, two arms the reader picks (or "Any pair" through the 618 pairs of different arms), their union against the difficulty-matched prediction, and all pairs' excess as a dot histogram with the 12 same-arm pairs. Its marks and pair excesses are copied from `results/axis/math500-01/` (vectors.json, readout.json); `PYTHONPATH=. uv run --no-project --with numpy python tools/finding_one_difficulty_axis.py` recomputes the pair table with `analysis/axis.py` and checks the copy against `pair_z_matrix`. |
 | `tools/finding_imitation_beats_rl.py` | The public page of "Think-SFT with the cue under the vote rules", served at `/finding/imitation-beats-rl`: the base with the cue, RL and Think-SFT with the cue as three rows of the same problems in one order, with a switch from one sample (four dots per problem) to the vote over four (the dots merge) and to MATH-500, Think-SFT minus RL with its paired interval, and every answer of a clicked problem. Its marks are copied from the rows.jsonl of `results/thinkvote/hard328_sft1_cue_s4-01/`, `math500_sft1_cue_s4-01/` and `results/day1_3/` (base and RL), its numbers from `results/thinkvote/scored-01/readout.json` and the frontier readouts, the training-overlap flags and the vote without the 6 flagged problems (235 against 215 of 322) from `results/wsp1/sft_overlap-03/`, the long-answer counts from `results/riskcov/hard328-01/`; `PYTHONPATH=. uv run --no-project --with numpy --with math-verify==0.9.0 python tools/finding_imitation_beats_rl.py` recomputes the votes and checks the copy. |
+| `tools/finding_cut_off_is_unfinished.py` | The public page of "Token cap 32,768 on the 328", served at `/finding/cut-off-is-unfinished`: one bar per answer of Think-SFT + cue, as long as its generated tokens, and one slider over the tokens allowed (16,384 to 32,768), with RL as a switch. Reads `results/cap32/readout.json` and `results/cap32/rows-01/`; running the file checks it (command in its docstring). |
 | `tools/finding_how_much_of_the_gap.py` | The public page of "Configurations on the 328 with committed rows, in one table" (it still names the section by its former title, "All configurations on the 328 in one table", and shows the rows of hard328-01 only), served at `/finding/how-much-of-the-gap`: every configuration as one row on the axis "share of the gap closed" (0 % Base + cue, 100 % RL) with its interval, and a switch between one sample, the vote over 4 samples and the tokens of one RL sample. Its DATA is a checked copy of `results/table/hard328-01/table.json`; `uv run tools/finding_how_much_of_the_gap.py` checks it. |
 | `tools/finding_the_finish_dial.py` | The public page of "The finish dial" (xreward), served at `/finding/the-finish-dial`: the 328 problems as marks in three columns (finished right, finished wrong, cut off) and one slider over the size of the 8 RL directions, with the random directions as a switch. Its DATA is a checked copy of `results/xreward/edits/readout.json`; the replication of `results/day1_3/hard328_top8x1.5_cue_s4-01/` is stated in its panel. |
 | `tools/finding_rl_change_on_imitation.py` | The public page of "Delta transplant", served at `/finding/rl-change-on-imitation`: the 328 problems as marks in three bands and one slider over a in Think-SFT + a × (RL − base), with the noise control as a switch. Its DATA is checked against `results/transplant/hard328-01/` by running the file (command in its docstring). |
@@ -2999,6 +3000,8 @@ v3, one sample, seed 3000000, on vast.ai (RTX PRO 6000). Each cell is scored twi
 right with at most 16,384 generated tokens, so the gain is paired inside one run. Readout `analysis/cap32.py`,
 `results/cap32/readout.json`.
 
+Per-problem rows of both cells (tokens generated, cut off at 32,768 or not, score, extracted answer, last 400 characters): `results/cap32/rows-01/` (`sft_cue.jsonl`, `rl_plain.jsonl`, `run.json`), written by `analysis/cap32_rows.py` from `runs/<job>/answers.jsonl`; its totals are checked against `results/cap32/readout.json` (230 and 207, 195 and 193).
+
 | cell | right at 16,384 (same answers) | right at 32,768 | gain, points [95 %] | answers past 16,384: finished / right | tokens per problem, 16,384 / 32,768 |
 |---|---|---|---|---|---|
 | Think-SFT cue (`results/cap32/sft_cue-01/`) | 207 | 230 | +7.0 [4.3, 9.8] | 93: 91 / 23 | 10,048 / 11,795 |
@@ -3359,6 +3362,52 @@ bootstrap, 5,000 resamples, seed 0). Tokens = generated tokens per problem, rest
   sample (207 at 9,437; mean of the four samples 200.0). The nine rules chosen on MATH-500, scored once here:
   `results/frontier/hard328-01/frontier.md` (the command at the end of "Token frontier").
 - The base loses 39 % of its single-sample accuracy from MATH-500 to the 328 (81.0 to 49.1 %), RL 31 % (91.2 to 63.1 %).
+
+## Released RL checkpoints at T 1.0, plain and cue (ckptcue)
+
+Spec and predictions, written before any job: `specs/SPEC_ckptcue.md`. Readout: `analysis/ckptcue.py`, output
+`results/ckptcue/readout.json`; one folder per cell `results/ckptcue/<cell>-01/` (`run.json`, the job's `metrics.json`,
+`per_problem.json`, `examples.json`). MATH-500, n = 500, T 1.0 / top-p 1.0, cap 16,384, grader v3, one sample; plain
+cells use seed 45000000 (T2's), cue cells 41000000 (T1's). The checkpoints are `allenai/Olmo-3.1-7B-RL-Zero-Math` at
+revisions `step_0100` (`0a45720c`) and `step_0400` (`897c0ce4`), downloaded in the job and passed with `--model-path`.
+Raw answers: `runs/<job id>/answers.jsonl` in the worktree `iterate-hack-ckpt` on abaybektursun's laptop (the vast.ai
+boxes are destroyed).
+
+| Cell | Right of 500 | Cap hits | Tokens per problem | Job |
+|---|---|---|---|---|
+| base, plain (T3, reference) | 224 | 8 | | |
+| base, cue (T1, reference) | 410 | 27 | | |
+| RL step 100, plain | 418 | 24 | 4,120 | `abaybektursun-1115-064532-6a2f` |
+| RL step 100, cue | 427 | 24 | 4,118 | `abaybektursun-1115-032509-fc06` |
+| RL step 400, plain | 436 | 7 | 4,080 | `abaybektursun-1115-015818-b11d` |
+| RL step 400, cue | 431 | 17 | 4,279 | `abaybektursun-1115-015852-a31f` |
+| RL final (step 2,800), plain (T2, reference) | 463 | 6 | | |
+
+| Difference (paired bootstrap over problems, 5,000 resamples) | Points | 95 % interval |
+|---|---|---|
+| step 100 plain minus base cue | +1.6 | [-2.0, +5.2] |
+| step 100 cue minus step 100 plain | +1.8 | [-1.2, +4.8] |
+| step 400 plain minus base cue | +5.2 | [+2.0, +8.4] |
+| step 400 cue minus step 400 plain | -1.0 | [-4.0, +2.0] |
+| step 400 plain minus step 100 plain | +3.6 | [+0.2, +7.0] |
+| final plain minus step 400 plain | +5.4 | [+2.8, +8.0] |
+
+Reading. At AI2's setting the first 100 RL steps bring the plain prompt from 224 to 418, and the cue alone brings the
+untrained base to 410: the two are not separated (+1.6 points, interval includes 0), and the cue adds nothing
+measurable to either checkpoint. H-open (the first 100 steps install what the cue gives) is not refuted; H-more (step
+100 is past the cue) is not supported here, unlike at T 0.6 where step 100 leads the looping cued base by 5.4 points
+(381 against 354). Of the 53 problems between the cued base and the final model, 8 come by step 100, 18 more by step
+400 and 27 after step 400. All five filed predictions hold (step 100 plain 428 [412, 444]: 418; step 400 plain 447
+[432, 459]: 436; cue gain at step 100 +0.5 [-3, +4]: +1.8; at step 400 0 [-3, +3]: -1.0; cap hits 25 [10, 45]: 24).
+
+Limits. One sample per cell, so each count carries about 2 points of sampling noise; the step 100 difference cannot
+exclude a lead of up to 5 points. The spec's identity check failed as written: 'Okay' in the first 30 characters is 383 of
+500 at step 100 and 358 at step 400, below the 430 threshold taken from T 0.6 rows. At T 1.0 the plain answers open in
+more ways (step 400: 243 start ' and resubmit.' and reach 'Okay' later), so the marker is not valid here. The
+checkpoint's identity rests on the pinned revision in each job's command and `model_dir`, and on the scores lying
+between the base's and the final model's. Three step 100 plain answers are empty (the model stops at once).
+The first step 100 plain job (AWS `ih-1115-092337-b35c`) was cut by its 2-hour limit at 478 answers (405 right) and is not
+used; a second run was lost with its box.
 
 ## Mixed-model vote on the 328: do two models' samples vote better together? (hard328, n = 328, laptop, board work-0d465a)
 
