@@ -15,8 +15,9 @@ difference is about 3.4 points). Continuing from the prefix before each wrong st
 ## Design
 
 Items: the 51 located wrong steps (`results/anatomy/judge-01/labels.json`, kind "base"). Prefix = the stored answer up to the
-token before the wrong step. Each arm writes K = 6 continuations per prefix (306 per arm) at T 1.0 / top-p 1.0, at most 6,000 new
-tokens, grader v3 on prefix + continuation. Job `jobs/prefix_cell.py` (transformers, its own sampling loop, the same for all arms).
+token before the wrong step. Each arm writes K = 6 continuations per prefix (306 per arm) at T 1.0 / top-p 1.0, at most 4,000 new
+tokens (changed from 6,000 before the full run: the smoke run measured 13 decoding steps per second, so 6,000 would cost about
+10 GPU hours; the cap is the same in all arms), grader v3 on prefix + continuation. Job `jobs/prefix_cell.py` (transformers, its own sampling loop, the same for all arms).
 
 | Arm | Model that continues | Rule |
 |---|---|---|
