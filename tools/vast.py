@@ -113,6 +113,7 @@ def up(args):
     offer_ids = [a for a in args if a not in flags and a not in flags.values()]
     hours = float(flags.get("--hours", 3))
     image = flags.get("--image", IMAGE)
+    print(f"before this rental: {spend()}", flush=True)
     t0 = time.time()
     onstart = f"(sleep {int(hours * 3600)}; {DESTROY}) > /root/deadline.log 2>&1 &"
     if image == IMAGE:  # install the pinned versions, so a job sees the same packages as on Modal
@@ -249,7 +250,15 @@ def get(args):
     print(dest)
 
 
+def spend():
+    boxes = vast("show", "instances")
+    idle = [str(i["id"]) for i in boxes if i["actual_status"] == "running" and not i.get("gpu_util")]
+    return (f"{len(boxes)} boxes, ${sum(i['dph_total'] for i in boxes):.2f}/h in total"
+            + (f"; GPU 0 %: {' '.join(idle)} (no job, or a job still loading)" if idle else ""))
+
+
 def ls(args):
+    print(spend())
     for i in vast("show", "instances"):
         hours = (time.time() - i["start_date"]) / 3600 if i.get("start_date") else 0
         print(f"{i['id']}  {i['actual_status']}  {i['gpu_name']}  GPU {i.get('gpu_util') or 0:.0f} %  ${i['dph_total']:.3f}/h  up {hours:.2f} h  {i.get('status_msg') or ''}"[:160])
