@@ -126,6 +126,6 @@ documents nobody needs to read to do the work.
 
 - Short. Every number with its file and key, or the command that gave it.
 - One change per entry, and the change is to code, infrastructure or the removal of text, not new text. It carries its
-  before and after table (section 3, steps 4 to 6). A change that was
-  named and not made is carried to the next entry with the reason.
+  before and after table (section 3, steps 4 to 6). A change the
+  reviewer cannot make (another writer's code, credits) is posted as an `idea` with its baseline, not carried in entries.
 - Results and findings go on the board (`tools/board.py`). The entry holds only the review.

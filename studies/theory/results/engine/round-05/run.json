@@ -1,0 +1,150 @@
+{
+ "commit": "3e266f3",
+ "code_note": "round.py version 5.1 as merged to main in a54a897 (owner abaybektursun); this round changed no code",
+ "work": "work-9abc35",
+ "spec": "studies/theory/specs/SPEC_round05.md",
+ "cutoff": "2026-11-15T04:29:33",
+ "command": "uv run studies/theory/lib/round.py studies/theory/results/engine/round-05 all --cutoff 2026-11-15T04:29:33 --skip gpuprice --skip \"theory round\" --skip \"theory skill\" --skip \"Theory engine\" --from studies/theory/results/engine/round-04",
+ "runs": "one run, exit 0, no stop; 2 review jobs were sent back once (the verdict did not name the duel state)",
+ "items_before": 114,
+ "items_after": 41,
+ "graveyard": 42,
+ "theories_carried": 3,
+ "theories_carried_names": [
+  "r4-m06",
+  "r4-m11",
+  "r4-m12"
+ ],
+ "external_findings": 28,
+ "mechanisms": 12,
+ "abandoned": 2,
+ "theories": 13,
+ "theories_new": 10,
+ "offline_predictions": 48,
+ "computed": 45,
+ "inside": 22,
+ "outside": 23,
+ "not_computable": 3,
+ "not_computable_causes": {
+  "Modal volume iterate-runs of another workspace not readable from this laptop (r4-m11 p3, p4)": 2,
+  "a group had fewer than 20 rows, the recipe then gives no number (r5-m07 p2)": 1
+ },
+ "states_after_tests": {
+  "survives": [
+   "r5-m08",
+   "r5-m03",
+   "r5-m10"
+  ],
+  "no gain": [
+   "r4-m06"
+  ],
+  "refuted": [
+   "r5-m06",
+   "r4-m12",
+   "r5-m11",
+   "r5-m07",
+   "r5-m04",
+   "r4-m11",
+   "r5-m02",
+   "r5-m05",
+   "r5-m09"
+  ]
+ },
+ "states_final": {
+  "no gain": [
+   "r4-m06"
+  ],
+  "refuted": [
+   "r4-m11",
+   "r4-m12",
+   "r5-m02",
+   "r5-m04",
+   "r5-m05",
+   "r5-m06",
+   "r5-m07",
+   "r5-m08",
+   "r5-m09",
+   "r5-m10",
+   "r5-m11"
+  ],
+  "survives": [
+   "r5-m03"
+  ]
+ },
+ "heldout": {
+  "targets": 70,
+  "claims_by": {
+   "r5-m03": 1,
+   "r5-m10": 6,
+   "r5-m08": 0
+  },
+  "strikes": 0
+ },
+ "duel": {
+  "survivors": 3,
+  "duel_tests": 14,
+  "duel_tests_computed": 14,
+  "separating": 9,
+  "states": {
+   "beats rival": [
+    "r5-m08"
+   ],
+   "loses to rival": [
+    "r5-m03",
+    "r5-m10"
+   ]
+  },
+  "total_gain": {
+   "r5-m08": 8.75,
+   "r5-m03": -8.77,
+   "r5-m10": -8.84
+  },
+  "second_turn": [
+   "r5-m08",
+   "r5-m10"
+  ]
+ },
+ "reviews": {
+  "r5-m08": "refuted",
+  "r5-m03": "weak",
+  "r5-m10": "refuted"
+ },
+ "hypotheses": {
+  "H1": "holds: 45 of 48 offline predictions computed",
+  "H2": "holds: 3 of 3 carried theories have 3 or more computed predictions (r4-m11 and r4-m12 refuted, r4-m06 no gain)",
+  "H3": "holds by the duel rule (r5-m08 beats its rival, +8.75 nats on 5 tests, 3 separating), but the review refutes r5-m08's stated cause; no theory both beats its rival and stands"
+ },
+ "caveats": [
+  "r5-m09 p1 and p2 read a field (answer_from_problem) that is the shuffled control's source index, null on every real item: both are 0 by data layout. r5-m09 is refuted by p3 and p4, which do not use that field.",
+  "The reviews run inside the repository and read items after the cutoff, by design."
+ ],
+ "jobs": {
+  "inventory (opus)": 1,
+  "external (opus)": 1,
+  "mechanisms (opus)": 1,
+  "develop (opus)": 12,
+  "null_tests (opus)": 2,
+  "test and duel_test (opus)": 18,
+  "targets (sonnet)": 1,
+  "null (opus)": 2,
+  "claims (opus)": 3,
+  "rival and rival2 (opus)": 5,
+  "defend (opus)": 5,
+  "review (opus)": 3
+ },
+ "jobs_note": "counted from the log's 'done in' lines; send-backs (2 reviews) are not counted",
+ "jobs_total": 54,
+ "longest_job_s": {
+  "inventory": 907,
+  "external": 452,
+  "mechanisms": 393,
+  "rival": 235,
+  "develop": 215,
+  "test": 186
+ },
+ "wall_time": "about 62 minutes, 2026-11-15T06:56Z (command started) to 07:57:53Z (log last written)",
+ "log": "/private/tmp/claude-501/-Users-ali-code-iterate-hack/c1933b39-1e39-4233-a2fc-17a259efb14c/scratchpad/round05.log (not committed)",
+ "temp_folder": "/var/folders/br/22g183rn3978_vgc7djdlvf00000gn/T/theory-round-zatpj5ns",
+ "row_files": "fetched by the test scripts to runs/theory-tests/ (not committed)",
+ "steps_not_run": "GPU predictions (none run); no independent recomputation of the computed numbers"
+}

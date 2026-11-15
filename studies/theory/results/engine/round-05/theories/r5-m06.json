@@ -1,0 +1,94 @@
+{
+ "name": "r5-m06",
+ "statement": "The MATH-500 problems that RL solves but the cued base gets 0 of 4 on are problems where the base already finds a right path a few percent of the time per sample; RL raised the weight of those existing paths, so fresh base samples with independent seeds solve many of them, and solve clearly fewer of the base-0/4 problems that RL also never solves.",
+ "scope": "Covers MATH-500 at T 1.0 / top-p 1.0, cap 16,384, grader v3: the cued Olmo-3-1025-7B base against Olmo-3.1-7B-RL-Zero-Math (plain), and only the 33 problems with base 0/4 in the Day-1 #3 rows (anatomy/math500-01/pool_k_le3.json). It does not cover the harder 328, where RL's 4-sample coverage is above the base's (result-2c2cae), the T 0.6 gap, which is mostly loops and cap hits, or the reliability shift on problems the base solves 1-3 of 4 times (81 % of the gap, result-afc423). Samples rerun with the same per-request seed as Day-1 #3 sample 0 (seed base 41,000,000 at T 1.0: T1, b614, 456c) are left out of the pool: a same-seed rerun tracks the original closely, and every one of the 33 problems is conditioned on sample 0 being wrong.",
+ "parent": null,
+ "imports": [
+  {
+   "source": "2504.13837",
+   "finding": "On MATH500 the problems only RL solves within 128 samples (1.0 %) are all solved by the base within 1,024 samples; RLVR raises pass@1 but does not widen coverage.",
+   "how": "It says what base coverage at a larger k should look like: the base-0/4 problems that RL solves at least once should sit inside the base's support at a modestly larger k, while problems RL never solves should get fewer base hits."
+  }
+ ],
+ "explains": [
+  {
+   "item": "result-afc423",
+   "quote": "Homogeneous binomial null predicts 0.5 problems at 0/4, observed 33",
+   "how": "Per-problem base success rates vary, and a group of problems with a base rate of a few percent produces many 0/4 problems without any of them being outside base coverage."
+  },
+  {
+   "item": "result-afc423",
+   "quote": "of the 33 base-0/4 problems RL has 0/4 on 16",
+   "how": "RL multiplies small existing base probabilities, so problems with a near-zero base rate stay near zero under RL, while those at a few percent reach rl_k >= 1."
+  },
+  {
+   "item": "result-afc423",
+   "quote": "without (base 0/4): 8 of 12 wrong plan",
+   "how": "On base-0/4 problems the right plan exists but has low probability, so the base mostly picks a wrong plan; RL moves weight onto the existing right plan."
+  },
+  {
+   "item": "result-9b6af3",
+   "quote": "Of the 65 'RL right, base wrong' problems the random cell solves 40",
+   "how": "A fresh, effectively base sample often solves problems RL gets and one base sample missed, which fits RL reweighting base paths rather than creating new ones."
+  },
+  {
+   "item": "result-5da8a9",
+   "quote": "0 solved only by RL",
+   "how": "Every problem RL solves is also solved by some other arm close to the base, as expected if RL's solutions come from paths the base already has."
+  },
+  {
+   "item": "result-5d032f",
+   "quote": "pass@4 (oracle): base 467, RL 482",
+   "how": "With 4 samples the base's coverage is already within 15 problems of RL's, and the rest should close at a slightly larger k."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "result-2c2cae",
+   "quote": "pass@4: base 157, RL 175",
+   "how": "On the harder set RL's 4-sample coverage is 18 problems above the base's, so there RL may add solutions beyond base coverage at small k; the theory is scoped to MATH-500 and does not explain this."
+  }
+ ],
+ "rival": "Dose-scaling / new-solution account (r3-external-2, r3-across-1): RL adds right paths on problems where the base's per-sample probability is essentially 0. Under that account, extra independent base samples find right answers on the 17 RL-solved base-0/4 problems no more often than on the 16 problems RL never solves (difference about 0). This theory predicts a clearly higher pooled base solve rate on the 17. A one-difficulty-axis reading (result-5da8a9) fits this theory, but on its own it does not say that the right paths are base paths.",
+ "predictions": [
+  {
+   "experiment": "Pool fresh base samples with seeds independent of Day-1 #3 sample 0 and count how many of the 17 RL-solved base-0/4 problems get at least one right answer.",
+   "recipe": "Problems: entries of studies/rlneurons/results/anatomy/math500-01/pool_k_le3.json key `problems` with base_k == 0 and rl_k >= 1. Pool per problem (index = problem_index): (a) studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl rows with attempt in {1, 2}, score_v3; (b) studies/rlneurons/results/axis/math500-01/vectors.json, the arm whose manifest.json job id is abaybektursun-1114-153047-6429 (random matched-norm difference, cue), its 0/1 at the problem's position in problem_indices; (c) the same file, the arm with job id abaybektursun-1114-183855-e840 (base-written examples), absent for problems not in its problem_indices; (d) iterate-runs:frustea-1114-180853-e383/answers.jsonl rows with attempt 0 (or no attempt field), score_v3; (e) s3 r3/base-01/out/F_math500.jsonl, every row (all samples), with v3 recomputed by grader/rln4_grader_v3.py from text and gold; (f) studies/rlneurons/results/wsp1/screen100/base_cue-01/per_problem.json score_v3 (problems 0-99 only). Leave out every other source. A problem counts as solved if any pooled sample has v3 score 1. Cap hits count as wrong (their score as stored or recomputed); a missing source or row adds nothing. Statistic: solved problems / 17.",
+   "unit": "fraction of problems",
+   "value": 0.53,
+   "low": 0.29,
+   "high": 0.76,
+   "refuted_by": "measured below 0.29 (4 or fewer of 17)",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Mechanism test against the dose-scaling / new-solution rival: the pooled solve fraction on the 17 RL-solved base-0/4 problems minus the same fraction on the 16 base-0/4 problems RL never solves. The rival (RL creates paths where the base's p is about 0) predicts a difference of about 0.00; this theory predicts a clearly positive one.",
+   "recipe": "Use the pool, solve rule, cap-hit and missing-row rules of the first prediction. A = solved / 17 over pool_k_le3.json problems with base_k == 0 and rl_k >= 1; B = solved / 16 over problems with base_k == 0 and rl_k == 0. Statistic: A - B (if the class sizes differ from 17 / 16, divide by the actual class sizes).",
+   "unit": "fraction of problems",
+   "value": 0.28,
+   "low": 0.0,
+   "high": 0.56,
+   "refuted_by": "A - B measured at or below 0.0",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Per-sample base success rate in the independent pool on the 17 RL-solved base-0/4 problems: the mechanism says 'a few percent' per sample, not about 0 and not near the base's overall 0.82.",
+   "recipe": "Same 17 problems and the same sources (a)-(f) as the first prediction. Each pooled row or arm entry present for the problem is one sample (a vectors.json arm entry is 1 sample; F_math500 rows count one per row). Statistic: total samples with v3 score 1 / total samples present, summed over the 17 problems (a pooled ratio, not a mean of per-problem rates). Cap hits count as wrong samples; missing sources add no samples.",
+   "unit": "fraction of samples",
+   "value": 0.09,
+   "low": 0.03,
+   "high": 0.18,
+   "refuted_by": "measured below 0.03 or above 0.18",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Fresh coverage run: allenai/Olmo-3-1025-7B with the opening cue ids [1584, 2268, 33413], T 1.0 / top-p 1.0, cap 16,384, 12 samples per problem with seeds 90,000,000 + i + 10,000*sample, via studies/rlneurons/jobs/run_cell.py on one H100, only on the 33 base-0/4 problems of pool_k_le3.json, grader v3. Count the 17 RL-solved (rl_k >= 1) problems with at least one right answer of 12, and compare with the same count for the 16 RL-never problems.",
+   "unit": "problems of 17",
+   "value": 11,
+   "low": 7,
+   "high": 15,
+   "refuted_by": "6 or fewer of the 17 RL-solved problems get a right base sample, or the fraction of the 16 RL-never problems solved is at least the fraction of the 17",
+   "gpu_minutes": 50
+  }
+ ]
+}
