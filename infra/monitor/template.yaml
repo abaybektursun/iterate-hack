@@ -130,8 +130,8 @@ Resources:
       StageName: $default
       AutoDeploy: true
       DefaultRouteSettings:
-        ThrottlingRateLimit: 3
-        ThrottlingBurstLimit: 6
+        ThrottlingRateLimit: 20  # 3 and 6 answered 429 to four readers at once (site review, 2026-11-15)
+        ThrottlingBurstLimit: 40
 
   InvokePermission:
     Type: AWS::Lambda::Permission

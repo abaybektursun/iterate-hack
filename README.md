@@ -348,7 +348,13 @@ The home page is https://invariant.team (`tools/home.py`; the same Lambda, which
 body with a ring around it and one bead per page. A click on a bead or the arrow keys turn the dial to a page
 (`/#<page>`); a click on the body or the button opens it. Beside the picture the same pages are a plain list of links.
 About every 2.5 s one of the newest 40 board posts runs to the Board bead as a pulse in its author's color, named in the
-line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. The page `/papers` (`tools/papers.py`) is the paper loop: its six steps in the words column and one lit sheet per
+line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. As a page is sent, `view.py` (`chrome`) makes the name "Invariant" in its header a link to the home page and adds the
+link "More" to it after the four tabs; a page with no header gets a small link "Invariant" at its lower left; pinch
+zoom is never switched off. An unknown address answers a short page with links, and every address of invariant.team
+other than `/` and `/data` redirects to the monitor. The page `/team` (`tools/people.py`) lists the team: its three
+names are placeholders with every line "To be added" until the people fill `PEOPLE` in.
+
+The page `/papers` (`tools/papers.py`) is the paper loop: its six steps in the words column and one lit sheet per
 paper of `view.PAPERS`, each with its claim, its length, why the loop picked it and how it was checked; a click opens
 the PDF. A new paper gets its row in `ROWS` of `papers.py` (without one it still gets a sheet with its title). The domain is the stack parameter
 `HomeDomainName` (`infra/monitor/deploy.sh monitor.invariant.team <zone id> invariant.team`).
