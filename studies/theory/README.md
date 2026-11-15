@@ -1400,7 +1400,7 @@ problems, right values no guess would give, grading correct; answer texts are no
 | `analysis/direct_short.py` | Readout from `studies/rlneurons/results/day1_3/{hard328_base_cue_s4r2-01,math500_base_cue-01}/rows.jsonl`. |
 | `results/direct/short-01/` | `readout.json`, `examples.json` (a solved problem with no short right sample, one with), `reading.md`, `run.json`. |
 
-### host-01: round-10/weights-m03, "an added RL change depends on its host" (board work-ae598b, holds, not distinctive)
+### host-01: round-10/weights-m03, "an added RL change depends on its host" (board work-ae598b, result-3abd6f, holds, not distinctive)
 
 Claim tested (engine 12's plan, sharpened): Think-SFT's own weight change lies in RL-Math 3.1's top-8 input (right singular)
 subspace more than chance, and more than in the top-8 input subspace of the same rank in the same matrix from non-math
