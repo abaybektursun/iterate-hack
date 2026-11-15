@@ -92,6 +92,14 @@ def optshare(path):
         n += 1; k += bool(OPT.search(f.read_text()))
     return [k, n]
 data["opt"] = {"c_mini": optshare("circles26/main-01"), "c_swe": optshare("circles26/swe2-01")}
+# assign-01: assigned methods per fresh branch, controls and the two literature arms
+data["c_assign"] = exp("circles26/assign-01")
+data["a_assign"] = exp("ahc014/assign-01")
+data["assign_cmp"] = {t: json.loads((ROOT / f"studies/explore/results/{t}/assign-01/compare.json").read_text())["arms"]
+                      for t in ("circles26", "ahc014")}
+p, row = best("circles26/assign-01/assign_sol-s0")
+circ["assign"] = {"score": row["score"], "id": row["id"], "idea": row["idea"][:200],
+                  "circles": json.loads([l for l in run_prog(p).splitlines() if l.strip().startswith("{")][-1])["circles"]}
 data["seeds"] = json.loads((ROOT / "studies/explore/results/ahc014/swe2-seeds-01/summary.json").read_text())
 import time
 tpl = (pathlib.Path(__file__).parent / "template.html").read_text()

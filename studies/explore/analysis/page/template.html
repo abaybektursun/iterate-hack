@@ -178,10 +178,45 @@ code { font-family: var(--mono); font-size: .9em; }
 </section>
 
 <section>
+  <div class="tag">Finding 5 · gpt-5.4-mini · both tasks · 1 seed</div>
+  <h2>A flush does not change which method the model picks; assigning one does</h2>
+  <p>A fresh chat samples from the same model, so it tends to choose the same method again. New arm, <b>assigned
+  methods</b>: before each fork of Fork-and-Flush, one extra call lists 4 different methods, and each fresh branch is
+  told to implement one. The list is written by gpt-5.4-mini itself or by a stronger model (gpt-6.1-sol).</p>
+  <p class="answer">On circles26 both assigned arms beat the starter, which no published strategy does: 2.636 with the
+  strong list (the best published packing) and 2.628 with the model's own list, against 2.535 for Fork-and-Flush.
+  On AHC014 the own-list arm is second (0.371) behind Forgetting (0.439), and the strong list hurts (0.242).</p>
+  <div class="figure"><div class="chart" id="cAssign"></div>
+  <p class="cap"><b>circles26, best score so far.</b> Dashed: the starter. Two controls: a single chat shown the same
+  lists and asked to pick one, and a single chat that is re-shown its best program every 10 tries (rollback, chat
+  kept). This run had numpy and scipy available.</p>
+  <div class="scroll"><table id="cAssignTab"></table></div></div>
+  <div class="row">
+    <div class="figure"><div class="row" id="assignTile"></div></div>
+    <div class="figure" style="align-content:start"><p><b>The model knows the method and does not choose it.</b> Its own first list contains a
+    scipy optimizer. Told to implement it, a fresh branch does. Shown the same lists in one chat and asked to pick,
+    it wrote a hand-made layout 40 times out of 40.</p>
+    <p><b>Rollback matches the flush here.</b> Keeping the whole chat and only re-showing the best program ends at
+    2.541, Fork-and-Flush at 2.535.</p></div>
+  </div>
+  <div class="figure"><div class="chart" id="aAssign"></div>
+  <p class="cap"><b>AHC014, best score so far.</b> Thin lines: Forgetting and Fork-and-Flush from Finding 2. Two arms
+  from the literature: fresh branches told what was tried but given no method (SwarmResearch, arXiv 2607.02807) and
+  successive halving of 8 chats (arXiv 2607.18235). Both stop at 0.295, the score of plain greedy rectangle
+  completion, as Fork-and-Flush does.</p>
+  <div class="scroll"><table id="aAssignTab"></table></div></div>
+  <div class="callout"><p><b>Where it fails.</b> The strong model listed beam search, tree search and large-neighbourhood
+  search; gpt-5.4-mini's programs for them were invalid or made no move (18 of 40 valid). Adding assignment to
+  Forgetting gave 0.324, below plain Forgetting: each method got 2 or 3 tries. A method helps only if the agent can
+  implement it in the tries its branch gets.</p></div>
+</section>
+
+<section>
   <div class="tag">Caveats</div>
   <h2>What these numbers do not show yet</h2>
   <ul class="plain">
-    <li>Six runs per arm in Finding 4, one elsewhere outside Finding 1. Differences of a few hundredths can be noise; seeds get added only for an arm that wins.</li>
+    <li>Finding 5 is one seed per arm, and its Forgetting and Fork-and-Flush reference lines on AHC014 come from the earlier run. Literature arms follow the papers' descriptions, not their code.</li>
+  <li>Six runs per arm in Finding 4, one elsewhere outside Finding 1. Differences of a few hundredths can be noise; seeds get added only for an arm that wins.</li>
     <li>Until the bug was found, programs ran on a Python without numpy and scipy. gpt-5.4-mini's 10 attempts to use them all failed; AHC014 was unaffected (no imports). SWE-2 ran with both.</li>
     <li>SWE-2 runs inside Devin's own agent prompt, so a model comparison also changes the harness.</li>
     <li>"Uses an optimizer" is a keyword check on the code (scipy, minimize, SLSQP, gradient, anneal, penalty), not the judge.</li>
@@ -401,6 +436,31 @@ const meanCurve = runs => { const n = Math.min(...runs.map(r => r.curve.length))
   document.getElementById("seedTab").innerHTML = `<tr><th>Arm</th><th class="num">Validation mean</th><th class="num">SD</th><th class="num">Worst run</th><th class="num">Held-out test mean</th><th class="num">Test-invalid</th></tr>` + arms.map(a => { const v = S.runs[a].map(r => r.val), te = S.runs[a].map(r => r.test || 0); return `<tr><td><span class="swd" style="background:${ARM[a].c}"></span> ${ARM[a].label}</td><td class="num"><b>${fmt(mean(v))}</b></td><td class="num">${fmt(sd(v))}</td><td class="num">${fmt(Math.min(...v))}</td><td class="num">${fmt(mean(te))}</td><td class="num">${te.filter(x => !x).length}/6</td></tr>`; }).join("");
   const st = S.stuck_example;
   lineChart("stuck", {series: [{y: st["single-s2"].curve, c: ARM.single.c, w: 2.6, label: "single, seed 2"}, {y: st["fnf-s4"].curve, c: ARM.fnf.c, w: 2.6, label: "Fork-and-Flush, seed 4"}], xmax: 40, ymin: 0.2, ymax: 0.62, base: {y: D.starter.ahc014, label: "starter 0.222"}, yticks: [0.2, 0.3, 0.4, 0.5, 0.6]});
+}
+/* Finding 5 */
+{
+  const A5 = {single: ["Single", "--s1"], single_list_mini: ["Single + list", "--s2"], fnf: ["Fork-and-Flush", "--s3"],
+    rebase: ["Rollback, chat kept", "--s4", "Rollback"], forget: ["Forgetting", "--s5"],
+    forget_assign_mini: ["Forgetting + assigned", "--s6", "Forget+assign"],
+    assign_mini: ["Assigned, own list", "--s7", "Assign, own"], assign_sol: ["Assigned, strong list", "--s8", "Assign, strong"],
+    fnf_undirected: ["Undirected branches", "--s4", "Undirected"], halving: ["Halving ×8", "--s2"]};
+  const ser = (src, keys, thin = []) => keys.filter(k => src[k]).map(k => ({y: src[k][0].curve, c: `var(${A5[k][1]})`, w: thin.includes(k) ? 1.4 : 2.4, o: thin.includes(k) ? 0.7 : 1, label: A5[k][2] || A5[k][0]}));
+  const tab = (id, task, keys, ref, optCol) => {
+    const cmp = D.assign_cmp[task];
+    const rows = keys.map(k => { const a = cmp[k]; return a
+      ? `<tr><td><span class="swd" style="background:var(${A5[k][1]})"></span> ${A5[k][0]}</td><td class="num"><b>${fmt(a.finals[0])}</b></td>${optCol ? `<td class="num">${a.optimizer.replace("/", " / ")}</td>` : ""}<td class="num">${Math.round(a.valid_share * 40)} / 40</td><td class="num">${(a.usd_per_run + a.list_usd).toFixed(2)}</td></tr>`
+      : `<tr><td><span class="swd" style="background:var(${A5[k][1]})"></span> ${A5[k][0]} (Finding 2)</td><td class="num"><b>${fmt(ref[k])}</b></td>${optCol ? "<td></td>" : ""}<td></td><td></td></tr>`; });
+    document.getElementById(id).innerHTML = `<tr><th>Arm</th><th class="num">Best</th>${optCol ? '<th class="num">Programs with an optimizer</th>' : ""}<th class="num">Valid programs</th><th class="num">USD</th></tr>` + rows.join("");
+  };
+  const ck = ["single", "single_list_mini", "fnf", "rebase", "assign_mini", "assign_sol"];
+  lineChart("cAssign", {series: ser(D.c_assign, ck), xmax: 40, ymin: 1.8, ymax: 2.66, base: {y: D.starter.circles26, label: "starter 2.541"}, yticks: [1.8, 2.0, 2.2, 2.4, 2.6]});
+  tab("cAssignTab", "circles26", ck, {}, true);
+  const ak = ["forget", "assign_mini", "forget_assign_mini", "fnf", "fnf_undirected", "halving", "assign_sol"];
+  const src = {...D.a_assign, forget: D.a_mini.forget, fnf: D.a_mini.fnf};
+  lineChart("aAssign", {series: ser(src, ak, ["forget", "fnf"]), xmax: 40, ymin: 0.2, ymax: 0.46, base: {y: D.starter.ahc014, label: "starter 0.222"}, yticks: [0.2, 0.25, 0.3, 0.35, 0.4, 0.45]});
+  const last = k => { const c = D.a_mini[k][0].curve; return c[c.length - 1]; };
+  tab("aAssignTab", "ahc014", ak, {forget: last("forget"), fnf: last("fnf")}, false);
+  tile(document.getElementById("assignTile"), circlesSVG(D.circles.assign.circles), "gpt-5.4-mini, assigned method (strong list)", fmt(D.circles.assign.score), "A fresh branch told to use constrained optimization: the same model now reaches the best published packing.");
 }
 /* Finding 3 */
 document.getElementById("optMini").textContent = "5 / 800";
