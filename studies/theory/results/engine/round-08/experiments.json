@@ -1,0 +1,263 @@
+{
+ "experiments": [
+  {
+   "id": "r4-m01:theory:g5",
+   "kind": "gpu",
+   "experiment": "Rerun the K_own arm of RLN-4 K on the same 78-problem pool (base-01 F cap hits that RL solved), with the same prefixes: cue plus the base's own first L tokens, cut before its loop onset, same L as K_own. Before continuing, delete from each prefix every line (split on '\\n', stripped, at least 10 characters) whose stripped text already appeared as an earlier line of the same prefix. Then continue with the base at T 0.6 / top-p 0.95, total cap 16,384 including the prefix, K_own seeds 43,000,000 + i, H100, vLLM as in modal_k-01. Count continuations that finish without a cap hit.",
+   "unit": "finished of 78",
+   "gpu_minutes": 25,
+   "pair": "r4-m01",
+   "proposer": "r4-m01",
+   "other": "r4-m01-rival",
+   "proposer_prediction": {
+    "value": 32,
+    "low": 26,
+    "high": 39
+   },
+   "other_prediction": {
+    "value": 24,
+    "low": 17,
+    "high": 31,
+    "why": "The mechanism puts the loop hazard in the problem and in how far the text has carried the solution, not in how self-similar the prefix is, so removing repeated lines from the base's own stuck prefix leaves it a stuck path and the finish count stays near the K_own 23 of 78 (knowledge-1497e8), give or take rerun noise of about 4."
+   },
+   "statements": {
+    "r4-m01": "The cued Olmo-3 base's loops at T 0.6 reinforce themselves: each partly repeated block already in its own text (case lists, re-derivations, table rows) raises the chance of the next repeat, so the loop hazard at a position grows with how self-similar (zlib-compressible) the text so far is, and truncating samplers (top-p, min-p, low T) set how strongly that history feeds back; the base finishes more often from RL's prefix because that text is less self-similar, not because its mathematics is sounder.",
+    "r4-m01-rival": "The cued base's loop hazard at T 0.6 is set by the problem and by how far the text in context has carried the solution, not by how self-similar that text is: under truncated low-temperature sampling a stuck model locks into a repeat at a roughly steady rate per token (2610.24715), so early zlib compressibility tracks loops only because hard, enumeration-heavy problems both compress well and stay stuck longer, and RL's prefix rescues the base because it carries a sound solution further, whatever its self-similarity."
+   },
+   "theory_state": "survives",
+   "duel_state": "",
+   "separation": 1.841,
+   "separation_per_minute": 0.0736
+  },
+  {
+   "id": "r4-m01:theory:intervention",
+   "kind": "intervention",
+   "unit": "right of 500",
+   "gpu_minutes": 35,
+   "experiment": "Opening selection by self-similarity. For each problem, draw 4 openings of the cued answer at the cell's usual sampling (T 0.6 / top-p 0.95), each stopped at the first line end after 3,000 characters (about 1,000 tokens). Opening 0 is the first 3,000 characters of the stored F_math500 answer (seed 1,000,000 + index); openings 1-3 are new draws with seeds 7,000,000 + 3*index + j, j = 0..2. Score each with ratio = len(zlib.compress(opening.encode('utf-8'), 9)) / len(opening.encode('utf-8')) and keep the opening with the HIGHEST ratio (least compressible, least self-similar); ties go to the lowest j. Then continue the kept opening at T 0.6 / top-p 0.95 to a total of 16,384 generated tokens (opening tokens included), seed 8,000,000 + index. If opening 0 is kept, reuse the stored F_math500 answer as is. Nothing else changes: same prompt, same cue, same grader. Model allenai/Olmo-3-1025-7B (base); set MATH-500; prompt the 3.1 RL-Zero chat prompt with the cue ' line!\\n\\nOkay' prefilled (prompt arm 'cue', as in r3 base-01 F_math500); sampling T 0.6 / top-p 0.95; cap 16384; grader v3; samples 1; seeds stored opening and continuation seed 1,000,000 + problem index (r3 base-01 F); new openings 7,000,000 + 3*index + j; new continuations 8,000,000 + index. Count: Right answers over all 500 MATH-500 problems, grader v3 (score_v3 == 1) on the one final answer per problem (the continuation of the kept opening, or the stored F answer when opening 0 is kept). A cap hit (16,384 total generated tokens without finishing) counts wrong, as does a missing answer. The usual cell (stored F_math500 rescored under v3) is 354/500 with 119 cap hits (result-e870a1).",
+   "best_known": {
+    "value": 454,
+    "item": "result-40ed3b",
+    "setting": "cued base, T 1.0 / top-p 1.0, cap 16,384, v3: vote over 4 samples after restart on cap hits, ties to the shortest finished sample"
+   },
+   "why": "Under the mechanism the loop hazard grows with how self-similar the text so far is, and a sample that later locks into a loop is already more compressible in its first 3,000 characters (predicted within-problem score 0.65). Keeping the least compressible of 4 openings should cut the cell's ~92 rule-A loops by about a fifth. Looped problems that finish are right about half the time (the restart row recovered 60 of 119 cap hits), so the gain is about +10 to +15 over 354.",
+   "pair": "r4-m01",
+   "proposer": "r4-m01",
+   "other": "r4-m01-rival",
+   "proposer_prediction": {
+    "value": 366,
+    "low": 347,
+    "high": 385
+   },
+   "other_prediction": {
+    "value": 357,
+    "low": 342,
+    "high": 372,
+    "why": "If the loop hazard is set by the problem and how far the solution has got, not by how self-similar the text is, then picking the least compressible of 4 openings is close to drawing a fresh sample at random for each problem; the expected score stays near the usual cell's 354/500, with only resampling noise and a small possible edge from dropping stuck stored openings."
+   },
+   "statements": {
+    "r4-m01": "The cued Olmo-3 base's loops at T 0.6 reinforce themselves: each partly repeated block already in its own text (case lists, re-derivations, table rows) raises the chance of the next repeat, so the loop hazard at a position grows with how self-similar (zlib-compressible) the text so far is, and truncating samplers (top-p, min-p, low T) set how strongly that history feeds back; the base finishes more often from RL's prefix because that text is less self-similar, not because its mathematics is sounder.",
+    "r4-m01-rival": "The cued base's loop hazard at T 0.6 is set by the problem and by how far the text in context has carried the solution, not by how self-similar that text is: under truncated low-temperature sampling a stuck model locks into a repeat at a roughly steady rate per token (2610.24715), so early zlib compressibility tracks loops only because hard, enumeration-heavy problems both compress well and stay stuck longer, and RL's prefix rescues the base because it carries a sound solution further, whatever its self-similarity."
+   },
+   "theory_state": "survives",
+   "duel_state": "",
+   "separation": 0.251,
+   "separation_per_minute": 0.0072,
+   "gain_over_best": -88,
+   "other_gain_over_best": -97
+  },
+  {
+   "id": "r4-m01:rival:intervention",
+   "kind": "intervention",
+   "unit": "right of 500",
+   "gpu_minutes": 25,
+   "experiment": "Restart from scratch with a fresh seed when the answer gets stuck, instead of letting one stuck sample run to the cap. Attempt 0 is the stored sample of job abaybektursun-1114-151718-d4fa (seed 1,000,000 + index). If attempt 0 hits the cap or loop rule A fires on it, draw a new answer from the bare cued prompt at the same T 0.6 / top-p 1.0 with seed 1,000,000 + index + 500,000*k, for up to 2 extra attempts (k = 1, 2). During each new attempt, run rule A every 1,000 generated tokens and stop as soon as it fires. Each attempt has its own 16,384-token cap. The final answer is the first attempt that finishes without a cap hit and without a rule-A fire. Model base = allenai/Olmo-3-1025-7B; set MATH-500; prompt cue: run_cell prompt with the three-token RL opening ' line!\\n\\nOkay' prefilled after the prompt; sampling T 0.6 / top-p 1.0; cap 16384; grader v3; samples 1; seeds attempt 0 = stored d4fa row (seed 1,000,000 + problem index); restart k uses seed 1,000,000 + index + 500,000*k. Count: Right answers under grader v3 over all 500 problems, one final answer each. The final answer is the stored d4fa attempt 0 when it finished (no cap hit, no rule-A loop); otherwise it is the first restart that finishes. A problem whose last attempt still hits the cap or is stopped by rule A counts as wrong.",
+   "best_known": {
+    "value": 454,
+    "item": "result-40ed3b",
+    "setting": "base + cue, T 1.0 / top-p 1.0, vote over 4 samples after restart, ties to the shortest finished sample (cap 16,384, v3)"
+   },
+   "why": "A stuck path locks into a repeat at a steady rate per token, while a fresh start of the same problem is a new path. Fresh restarts finished 38 of 78 cap-hit problems against 23 for continuing the base's own stuck prefix, and restarts took top-p 0.95 from 354 to 414. Scaling that gain to the 98 cap hits of the 378 cell gives about +40 to +45.",
+   "pair": "r4-m01",
+   "proposer": "r4-m01-rival",
+   "other": "r4-m01",
+   "proposer_prediction": {
+    "value": 420,
+    "low": 407,
+    "high": 433
+   },
+   "other_prediction": {
+    "value": 429,
+    "low": 417,
+    "high": 441,
+    "why": "A restart clears the self-similar history, so the loop hazard drops back to the fresh-prompt level. Of d4fa's 378 right, 98 cap hits and 1 finished rule-A loop, the 99 failed problems get up to two fresh T 0.6 / top-p 1.0 draws. Each draw finishes about 45-50 % of the time, as fresh restarts did at top-p 0.95 (50 of 119 on the second attempt, 38 of 78 in K_fresh), and about 75 % of those finishes are right (60 recovered of 119 in the e870a1 restart row). That recovers about 51 problems, giving roughly 429."
+   },
+   "statements": {
+    "r4-m01": "The cued Olmo-3 base's loops at T 0.6 reinforce themselves: each partly repeated block already in its own text (case lists, re-derivations, table rows) raises the chance of the next repeat, so the loop hazard at a position grows with how self-similar (zlib-compressible) the text so far is, and truncating samplers (top-p, min-p, low T) set how strongly that history feeds back; the base finishes more often from RL's prefix because that text is less self-similar, not because its mathematics is sounder.",
+    "r4-m01-rival": "The cued base's loop hazard at T 0.6 is set by the problem and by how far the text in context has carried the solution, not by how self-similar that text is: under truncated low-temperature sampling a stuck model locks into a repeat at a roughly steady rate per token (2610.24715), so early zlib compressibility tracks loops only because hard, enumeration-heavy problems both compress well and stay stuck longer, and RL's prefix rescues the base because it carries a sound solution further, whatever its self-similarity."
+   },
+   "theory_state": "survives",
+   "duel_state": "",
+   "separation": 0.681,
+   "separation_per_minute": 0.0272,
+   "gain_over_best": -34,
+   "other_gain_over_best": -25
+  },
+  {
+   "id": "r5-m03-rival:rival:intervention",
+   "kind": "intervention",
+   "unit": "right of 500",
+   "gpu_minutes": 1,
+   "experiment": "Keep the usual 4-sample plurality vote over the stored cued base samples, but break vote ties with an independent plain-prompt base sample instead of taking the lowest sample. A tie means no strict plurality among the finished samples' answers, grouped with rln4_lib.agree. The plain sample is the first T3.jsonl row per problem_index (base, plain, T 1.0 / top-p 1.0, cap 16,384), with its answer extracted by grader v3 from its text. If the plain answer agrees with exactly one of the tied answer groups, pick that group. Otherwise, or if the plain row is a cap hit or has an empty extraction, fall back to the lowest-sample tie rule of result-5d032f. Problems that are not tied keep the usual vote. No new generation: the stored rows are reused. Model allenai/Olmo-3-1025-7B (base); set MATH-500; prompt MATH-500 prompt with the three-token RL opening cue prefilled for the 4 voting samples; tie-breaker sample uses the plain prompt with no prefix (T3.jsonl); sampling T 1.0 / top-p 1.0; cap 16384; grader v3; samples 4; seeds the stored seeds of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0, samples 0-3, job 153825-208b) plus the stored seed of the first row per problem_index of r4/modal_t3-01/t3/T3.jsonl. Count: Right answers over all 500 MATH-500 problems: a problem counts as right if the selected answer group contains a cued attempt-0 sample with score_v3 == 1. Cap-hit cued samples and samples with an empty extraction do not vote. A problem whose 4 cued samples all fail to finish counts as wrong. The plain sample only breaks ties and is never counted on its own.",
+   "best_known": {
+    "value": 454,
+    "item": "result-40ed3b",
+    "setting": "base + cue, T 1.0 / top-p 1.0, cap 16,384, grader v3, vote over 4 after restart, ties to the shortest finished sample (19,697 tokens per problem)"
+   },
+   "why": "The mechanism says each prompt fails on its own problem-specific traps, not on the cued base's set, so on the roughly 36 problems where the cued vote ties, an independent plain-prompt answer agrees with the right tied group more often than the lowest sample does (about 5 of 36 for the lowest sample). Plain errors still track difficulty, though, so this adds only about 3 to 5 problems over the 446 vote.",
+   "pair": "r5-m03-rival",
+   "proposer": "r5-m03-rival-rival",
+   "other": "r5-m03-rival",
+   "proposer_prediction": {
+    "value": 450,
+    "low": 444,
+    "high": 456
+   },
+   "other_prediction": {
+    "value": 450,
+    "low": 446,
+    "high": 455,
+    "why": "The mechanism treats the plain base as a short-answer register that is right about half the time whatever the difficulty, so on the ~20 of 36 ties that contain a right group the plain sample picks it ~45% of the time (vs 5 of those ties won by the lowest-sample rule), lifting the 446 vote by about 4 to ~450, short of the 453 tie_short rule."
+   },
+   "statements": {
+    "r5-m03-rival": "The top-8 edit is an incomplete switch that happens or fails sample by sample. On most answers (about 85-90 %) it puts the base on a weak dose of RL's own policy: longer answers, RL-style checking, almost no quick wrong answers, errors only on hard problems. On the other 10-15 % the plain prompt leaves the base in its plain-base register: short answers, wrong about half the time whatever the problem's difficulty. So top8 plain is a mixture of RL-like answers and plain-base answers, not a copy of the cued base.",
+    "r5-m03-rival-rival": "The top-8 edit gives a weak dose of RL's policy on every sample, and top8 plain's quick wrong answers are the plain prompt's own failures. Which problems fail is a property of the problem (its difficulty plus prompt-specific traps), not a flat ~50 % coin flip taken per sample whatever the difficulty, so the plain base's errors track how hard the problem is and repeat across independent plain samples of the same problem."
+   },
+   "theory_state": "survives",
+   "duel_state": "not separated from rival",
+   "separation": 0.0,
+   "separation_per_minute": 0.0,
+   "gain_over_best": -4,
+   "other_gain_over_best": -4
+  },
+  {
+   "id": "r5-m10-rival:theory:intervention",
+   "kind": "intervention",
+   "unit": "right of 500",
+   "gpu_minutes": 30,
+   "experiment": "Add min-p 0.1 truncation (tokens below 0.1 x the top token's probability are removed before sampling) to the plain-prompt base at T 1.0 / top-p 1.0; nothing else changes: no prefill, same cap, same seeds, one sample, no restart or vote. Model allenai/Olmo-3-1025-7B (base); set MATH-500; prompt plain (the standard chat-template prompt, no prefilled tokens), as in the T3 cell; sampling T 1.0 / top-p 1.0 / min-p 0.1; cap 16384; grader v3; samples 1; seeds per-request seed = the T3 cell's seed rule (base seed + problem_index), one sample per problem. Count: Right answers over all 500 MATH-500 problems by grader v3 on the single sample; a cap-hit answer counts whatever v3 gives from its text, and an empty extraction counts wrong.",
+   "best_known": {
+    "value": 454,
+    "item": "result-40ed3b",
+    "setting": "base + cue, T 1.0 / top-p 1.0, 4 samples, vote after restart with ties to the shortest finished sample (16,384 cap, grader v3)"
+   },
+   "why": "The mechanism says the plain base's terse answers (about 60 % right at T 0.6, plain T 0.6 = 319/500) fail at T 1.0 because sampled tail tokens derail them after the opening, so cutting the tail at T 1.0 should bring the terse register back near its T 0.6 accuracy and lift the plain cell from 224 toward about 305, minus a few loops and cap hits that truncation brings back; the mode-selection rival expects only a small gain, from a higher self-open share.",
+   "pair": "r5-m10-rival",
+   "proposer": "r5-m10-rival",
+   "other": "r5-m10-rival-rival",
+   "proposer_prediction": {
+    "value": 305,
+    "low": 272,
+    "high": 338
+   },
+   "other_prediction": {
+    "value": 300,
+    "low": 265,
+    "high": 335,
+    "why": "If the plain base's T 1.0 loss (224 vs 305-319 at T 0.6) mostly comes from the terse register missing end-of-text and running on, then cutting the tail with min-p 0.1 should restore clean stopping on short problems, as cool sampling does. It also brings back some loops on long problems, as min-p did for the cued base (cap hits 27 to 58, 410 to 404), so the score lands near the T 0.6 plain level and stays well under the cue."
+   },
+   "statements": {
+    "r5-m10-rival": "The cue's +37-point gain at T 1.0 / top-p 1.0 comes from robustness to sampling noise, not from choosing between two modes of fixed accuracy: the plain base's terse, non-deliberative answers are reasonably accurate (about 60 % at T 0.6) but at full temperature are derailed after their opening by sampled tail tokens, while the deliberative '\\nOkay' register (cued or self-opened) checks itself and survives untruncated sampling; the opening selects robustness to noise, and later tokens decide whether the terse register fails.",
+    "r5-m10-rival-rival": "The plain base's terse register is intrinsically weaker than the deliberative '\\nOkay' register by about 15-20 points at any temperature, and its extra loss at T 1.0 / top-p 1.0 is mostly a stopping-and-grading failure, not reasoning derailed by tail tokens and then rescued by self-checks: the terse register often reaches an answer and then fails to end cleanly, running on into further answers or invented problems that the last-marker grader v3 scores, while the deliberative register ends on one final answer; 'Wait'/'Hmm' self-checks mark long, hard problems and protect nothing."
+   },
+   "theory_state": "survives",
+   "duel_state": "not separated from rival",
+   "separation": 0.086,
+   "separation_per_minute": 0.0029,
+   "gain_over_best": -149,
+   "other_gain_over_best": -154
+  },
+  {
+   "id": "r5-m10-rival:rival:intervention",
+   "kind": "intervention",
+   "unit": "right of 500",
+   "gpu_minutes": 25,
+   "experiment": "Decoding stop at the first complete answer marker: generation of each plain-prompt answer ends as soon as the first '\\boxed{' has its brace-balanced closing '}' or, if earlier, the first line whose left-stripped text begins with 'Answer:' is completed by a newline (vLLM stop on that event, implemented as a logits processor that forces EOS once the marker closes); everything else as in the base_plain_1.0 cell (no prefix, T 1.0 / top-p 1.0, cap 16,384). The graded text is the truncated text, so grader v3's last marker is the first marker. Model base = allenai/Olmo-3-1025-7B; set MATH-500; prompt plain: the standard rlneurons MATH-500 prompt with no prefilled tokens (no cue); sampling T 1.0 / top-p 1.0; cap 16384; grader v3; samples 1; seeds one sample per problem, per-request seed 1,000,000 + problem_index, as in the T3 cell. Count: Right answers over all 500 MATH-500 problems, grader v3 (studies/rlneurons/grader/rln4_grader_v3.py) on the stopped text against gold; an empty extraction counts wrong; an answer that reaches the 16,384-token cap without a marker counts wrong.",
+   "best_known": {
+    "value": 453,
+    "item": "result-cbe0bc",
+    "setting": "base + cue, T 1.0 / top-p 1.0, cap 16,384, v3, vote over 4 samples with ties to the shortest finished sample (the honest unselected-rule figure is 450, vote over 4 after restart, result-5d032f)"
+   },
+   "why": "The mechanism says the plain register's T 1.0 loss is mostly answers that reach a right first answer and then fail to stop, running on into new answers or invented problems that the last-marker grader v3 reads, so forcing a stop at the first marker should recover roughly its predicted 17 % of the ~260 wrong non-self-opened answers (+~40 over 224, minus a few rows that revise toward the right answer), giving about 250 of 500 in this cell, still far below the cue's best.",
+   "pair": "r5-m10-rival",
+   "proposer": "r5-m10-rival-rival",
+   "other": "r5-m10-rival",
+   "proposer_prediction": {
+    "value": 250,
+    "low": 215,
+    "high": 285
+   },
+   "other_prediction": {
+    "value": 248,
+    "low": 226,
+    "high": 274,
+    "why": "In this mechanism the terse plain register is derailed by tail tokens sampled after its opening, and most of that damage happens before the first answer marker, so stopping at the first marker only saves the part that comes after it (invented follow-up problems and overwritten answer lines). That adds roughly 15-35 problems to the plain T 1.0 base rate of 224, partly cancelled by self-opened deliberative answers that would otherwise have revised a wrong early box."
+   },
+   "statements": {
+    "r5-m10-rival": "The cue's +37-point gain at T 1.0 / top-p 1.0 comes from robustness to sampling noise, not from choosing between two modes of fixed accuracy: the plain base's terse, non-deliberative answers are reasonably accurate (about 60 % at T 0.6) but at full temperature are derailed after their opening by sampled tail tokens, while the deliberative '\\nOkay' register (cued or self-opened) checks itself and survives untruncated sampling; the opening selects robustness to noise, and later tokens decide whether the terse register fails.",
+    "r5-m10-rival-rival": "The plain base's terse register is intrinsically weaker than the deliberative '\\nOkay' register by about 15-20 points at any temperature, and its extra loss at T 1.0 / top-p 1.0 is mostly a stopping-and-grading failure, not reasoning derailed by tail tokens and then rescued by self-checks: the terse register often reaches an answer and then fails to end cleanly, running on into further answers or invented problems that the last-marker grader v3 scores, while the deliberative register ends on one final answer; 'Wait'/'Hmm' self-checks mark long, hard problems and protect nothing."
+   },
+   "theory_state": "survives",
+   "duel_state": "not separated from rival",
+   "separation": -0.368,
+   "separation_per_minute": -0.0147,
+   "gain_over_best": -203,
+   "other_gain_over_best": -205
+  },
+  {
+   "id": "r8-m09:theory:g5",
+   "kind": "gpu",
+   "experiment": "GPU: Think-SFT + 2 x (RL-Math - base), cue, MATH-500 n 500, T 1.0 / top-p 1.0, cap 16,384, one sample, seeds 181000000 + problem_index, full text kept. Count the finished, v3-wrong rows whose candidate after the last 'Answer:' agrees with gold (first recipe's procedure). Think-SFT gives about 4 per sample (result-818c20).",
+   "unit": "rows of 500",
+   "gpu_minutes": 40,
+   "pair": "r8-m09",
+   "proposer": "r8-m09",
+   "other": "r8-m09-rival",
+   "proposer_prediction": {
+    "value": 0,
+    "low": 0,
+    "high": 2
+   },
+   "other_prediction": {
+    "value": 0.6,
+    "low": 0.0,
+    "high": 1.8,
+    "why": "The mechanism says the 2x RL delta's boxed ending removes Think-SFT's off-line 'Answer:' template, so the grading part of the hybrid's MATH-500 gain is about 3-4 of Think-SFT's ~4 layout misses per sample, which leaves roughly 0-1 such rows of 500."
+   },
+   "statements": {
+    "r8-m09": "Think-SFT copies a teacher ending that puts the final value on the line after an 'Answer:' marker, which grader v3's last-marker rule reads as a blank answer, at a fixed rate per finished answer whatever the problem's difficulty; adding the RL-Math delta (Think-SFT + a(RL - base), a >= 2) replaces that ending with RL's single \\boxed{} line, so the hybrid gains about 4 per 500 on MATH-500 (about 2 per 328 on hard328) from grading alone, on top of the finishing gain it gets from fewer cap hits.",
+    "r8-m09-rival": "Think-SFT's off-line 'Answer:' ending (value on the next line, which grader v3 reads as blank) is a terse teacher template it uses mainly on short, quick answers to easy problems, not a fixed habit on every finished answer, so the miss rate per finished answer falls steeply with answer length (about 1 % below 3,000 tokens, near 0 above 8,000); the RL delta's boxed ending still removes it, but the grading part of the hybrid's gain is about 3-4 per 500 on MATH-500 and under 1 per 328 on hard328, not about 2."
+   },
+   "theory_state": "survives",
+   "duel_state": "loses to rival",
+   "separation": 0.496,
+   "separation_per_minute": 0.0124
+  }
+ ],
+ "by_separation": [
+  "r4-m01:theory:g5",
+  "r4-m01:rival:intervention",
+  "r8-m09:theory:g5",
+  "r4-m01:theory:intervention",
+  "r5-m10-rival:theory:intervention",
+  "r5-m03-rival:rival:intervention",
+  "r5-m10-rival:rival:intervention"
+ ],
+ "by_gain": [
+  "r5-m03-rival:rival:intervention",
+  "r4-m01:rival:intervention",
+  "r4-m01:theory:intervention",
+  "r5-m10-rival:theory:intervention",
+  "r5-m10-rival:rival:intervention"
+ ]
+}

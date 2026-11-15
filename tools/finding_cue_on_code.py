@@ -12,7 +12,7 @@ in order, and a click opens that benchmark or subject with the one stored exampl
 Address: /finding/cue-on-code#<base|cue|rl|sft>/<panel, p<problem>, c<mark> or g<mark>>. The addresses of the first
 version (#base, #code-cue, #math-cue, with or without a panel) still open: #code-cue and #math-cue show Base + cue.
 Study: studies/rlneurons, README sections "Code pair" (board result-59ed1a) and "Outside math and code" (board
-result-1a80e9, on branch ali/ood). tools/findings.py reads N, ST[0]["passed"] and ST[2]["passed"] (the code set).
+result-1a80e9). tools/findings.py reads N, ST[0]["passed"] and ST[2]["passed"] (the code set).
 
     uv run tools/finding_cue_on_code.py     checks every number against the artifacts (run from the repository root)
 """
@@ -78,7 +78,7 @@ DATA = {
         # Wang et al., arXiv 2610.06851, Table 6 (fetched 2026-11-15): Olmo-3-7B, RL-Zero prompt, HumanEval pass@1, no cue / cued
         "wang": {"base": 50.2, "cue": 69.8},
     },
-    # General questions: copied from branch ali/ood, commit 99b2d5d (not on main when copied), path below. T 1.0 / top-p 1.0,
+    # General questions: on main since the merge of branch ali/ood, path below. T 1.0 / top-p 1.0,
     # one sample, the math prompt unchanged, grader v2 (mcq_lib.grade_v2) unless named v1.
     "general": {
         "branch": "ali/ood", "commit": "99b2d5d",
@@ -86,6 +86,9 @@ DATA = {
         "items": "studies/rlneurons/data/ood1/ood1_items.json",
         "spec": "studies/rlneurons/specs/SPEC_ood1.md",
         "n": 500, "n_mmlupro": 250, "n_bbh": 250,
+        # R + "ood1/rows-01/answered.json", pairs."base_cue - base_plain | all": the questions where Base and Base + cue both
+        # give an answer letter: n_both_answer, right_first (cue), right_second (plain), points, bootstrap95
+        "answered": {"n": 264, "cue": 156, "base": 123, "diff": [12.5, 4.9, 19.7]},
         # cells.<key>.all: right_v2, mmlupro.right_v2, bbh.right_v2, right (v1), no_answer_v2, cap_hits, tokens_per_item
         "cells": {"base_plain": {"right": 136, "mmlupro": 48, "bbh": 88, "right_v1": 114, "no_letter": 214, "cap_hits": 3, "tokens": 992},
                   "base_cue": {"right": 286, "mmlupro": 116, "bbh": 170, "right_v1": 229, "no_letter": 30, "cap_hits": 1, "tokens": 2049},
@@ -248,7 +251,9 @@ PANELS = [
      f"{_GC['base_cue']['no_letter']}.",
      [f"If Base's answers without a letter were right as often as its answers with one ({IMPUTED['rate']} %), Base would "
       f"have about {IMPUTED['base']} right and the cue's gain would be about {num(IMPUTED['gain'])} points, "
-      f"{IMPUTED['share']} % of RL's gain. This is an estimate, not a measurement. On MATH-500, Base gives no final answer "
+      f"{IMPUTED['share']} % of RL's gain. This is an estimate, not a measurement. Measured on the {G['answered']['n']} "
+      f"questions where both give a letter: Base + cue {G['answered']['cue']} right against {G['answered']['base']}, "
+      f"{ci(G['answered']['diff'])}. On MATH-500, Base gives no final answer "
       f"in {_M['no_answer']} of {_M['n']}.",
       "Each set is one sample at one seed, with no vote. The general set is a sample of MMLU-Pro and BBH, so its counts do "
       "not compare with published scores. The code and general runs committed counts per benchmark and subject, not per "

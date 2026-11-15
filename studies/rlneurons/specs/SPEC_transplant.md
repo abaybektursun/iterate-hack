@@ -93,3 +93,19 @@ a = 2 was chosen on the 328. Three checks with the coefficient fixed at 2:
    Prediction: vote above Think-SFT's 241; refuted at 241 or below.
 3. MATH-500, M(2), one sample, seed 182,000,000. Prediction: 462 to 472 (M(1) had 467); below 460 means a = 2 costs
    accuracy on easier problems.
+
+## Amendment 3 (2026-11-15 17:40 UTC, before the run below): M(2) at token cap 32,768
+
+Known: at cap 16,384 M(2) has 231.5 right and 54 cap hits on the 328 (Think-SFT 209.0 and 94.5). Think-SFT at cap 32,768
+(result-c8b994, one sample, seed 3,000,000) has 230 right and 2 cap hits: with the cap doubled, Think-SFT alone reaches the
+count M(2) has at 16,384. So the question is whether the RL delta only makes Think-SFT finish in fewer tokens, or also makes
+it right more often.
+
+Run: M(2), hard328, cue, T 1.0, `run_cell --max-tokens 32768`, one sample, seed 3,000,000 (the seed of the Think-SFT run).
+Each answer is also counted at 16,384 tokens.
+
+- H-tokens (the delta buys only earlier finishing): M(2) at 32,768 is 230 +- 5 (225 to 235), the Think-SFT count.
+- H-more (it also adds right answers): 240 or more. Expected from the 16,384 runs: 54 cap hits, of which a quarter become
+  right as for Think-SFT (23 of 91), gives about 245.
+- 236 to 239 is reported as undecided: one sample against one sample, and the four Think-SFT samples at 16,384 span 11.
+- Also reported: tokens per problem against Think-SFT's 11,795 at this cap.

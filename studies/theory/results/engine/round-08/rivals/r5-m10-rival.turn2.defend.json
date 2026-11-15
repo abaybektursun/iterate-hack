@@ -1,0 +1,5 @@
+[
+ {"k": 4, "value": -0.06, "low": -0.18, "high": 0.06, "why": "Almost every cued answer is already in the deliberative register, so a 'Wait'/'Hmm' marks a longer, harder problem, and all 27 cap hits fall in M. The no-marker answers are the short, easy ones (about 95 % right at <= 2,000 tokens), so the gap comes out slightly negative instead of the +0.36 seen in the terse plain register."},
+ {"k": 5, "value": -0.22, "low": -0.40, "high": -0.04, "why": "On hard328 the cued base checks itself everywhere, so markers carry no robustness advantage. M absorbs nearly all of the 77 mostly-wrong cap hits and the long hard problems, while the few unmarked answers are short easy solves (Q1 base 78/82), which gives a clearly negative gap."},
+ {"k": 6, "value": 0.12, "low": -0.03, "high": 0.27, "why": "If terse plain answers at T 1.0 often reach the right number and are then derailed by sampled tail tokens, their wrong finished texts should contain the gold more often than the genuine reasoning errors behind wrong answers at T 0.6, so the difference should be positive. The interval is wide because both groups are small (tens of rows)."}
+]

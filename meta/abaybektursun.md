@@ -1,5 +1,37 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 17:05 UTC (paper loop, after result-526568 of work-184476) meta/reviews/abaybektursun/20261115-1655-paper2/
+
+- Previous entry asked for a vast.ai cell fetched with `get` after its box is gone: checked by loop cycle 11 (entry below: 1 of 1 on a real box), not by this review.
+- Direction: DIRECTION.md's deliverable is "the best configuration of either model on the 328". Paper 2 tests no part of that sentence: it reports how the swarm's theory engine scored (190 of 394 nearer than a no-theory reader). It is asked for by the person (paper loop) and it corrected three posted counts (duels 4 / 6 / 1, 12 forecast targets, replication 57 of 58). Best alternative: the 328 vote at cap 32,768 (work-dc9359, open 120 min), owned by another session.
+- Turnaround (cycle.txt, 1 h): claim to close median 33 min, upper quartile 54 (10 items), 12.0 results per hour; 15 Modal jobs, 0 failed, wait 0.1 min, 228.1 container min (cycle 10, 4 h: 174 / 376 min, 3.8 per hour). Paper 2 (before.txt, board and transcript times): claim to live PDF 35.4 min, not 75. Slowest stage: reviews to live, 17.8 min (four reviews 5.65, rewrite 3.9, final check 3.7, last fixes and deploy 4.6); the data layer took 8.1.
+- Cause: the data-layer brief named result files and no prompt file; `studies/theory/lib/prompts/*.md` was first read by the reviewers, after the draft. The hostile review then found that authors and readers had different inputs and instructions, and the final check found 6 more wrong descriptions in the sentences rewritten for it.
+- Change (step 2, delete the number-audit reviewer in favour of a script; step 1 found the audit itself is needed: 13 problems): `paper_check.py` prints each number of a draft that facts.json does not hold. Made, measured on draft 1, not kept: it fails the input that must make it fail.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | minutes from draft 1 to a list of wrong numbers | 5.65 (subagent) | 0.0003 (0.02 s) | faster | 1 and 1 | before.txt, after.txt |
+  | of the audit's 13 problems, found (must not change) | 13 | 0 | changed: reverted | 1 and 1 | after.txt |
+  | lines printed that are no problem | 0 | 28 | worse | 1 and 1 | after.txt |
+
+- Why it fails: facts.json stores rounded shares (0.835 for 197 / 236), so "84 %" passes; small counts equal other counts. Carried, not made (it is a brief, not code, and paper 3's data agent was already running at 16:51:44 with the same gap): the data layer also delivers each arm's prompt file and inputs with file and line, and the claim is written after it.
+- Failures: none in code or infrastructure in this loop (0 jobs). meta/FAILURES.md: 5 rows, none landed; not handed on by this review.
+- Next entry checks: paper 3's minutes from first review to live PDF against 17.8, and whether its reviews change the central claim.
+## 2026-11-15 17:00 UTC (loop cycle 11; no tool change) meta/reviews/abaybektursun/20261115-1653/
+
+- Target (Team line, 4 h): claim to close median 48 min (174 at 15:50), upper quartile 274 min (376), 20 items by 3 people (12); 6.2 results per hour (3.8). Both parts better. Not attributed to a change: the sessions are back after the outage and several short site items closed. Modal 70 jobs, 0 failed, wait 0.1 min.
+- Open measurements closed (after.txt). Upload at job end (cycle 9): the first real job with it, e2e8, ended "exit 0" and its tar was in the team store 7.5 min after submit: 1 of 1 ended jobs. Tools reaching checkouts (cycle 10): 9 of 10 active worktrees hold the upload now, against 0 of 4 at 15:55; whether the hook line or the direct message did it is not separable, both went out within minutes.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | ended real jobs whose outputs are in the team store | 0 | 1 of 1 | works on a box | 1 | after.txt |
+  | active worktrees holding the upload | 0 of 4 | 9 of 10 | | 1 and 1 | before.txt of 1550; after.txt |
+  | vast.ai jobs submitted with the old tool, 16:00 to 16:53 | 3 of 3 (15:05 to 15:50) | 8 of 17 | all 8 from cap32run | | after.txt |
+
+- Score of cycle 10 (hook line): helped the spread of tools, weak (one comparison, mixed with a message). Score of cycle 9: works; effect on the target not shown yet.
+- Change: none. One worktree, cap32run, still submits with the old tool (8 jobs, no commit for 111 min, so the hook line cannot have reached it); told its session directly.
+- Next cycle (12) is step-back 3. It checks: uncopied vast.ai jobs against 49 of 77; GPU-hours on boxes whose jobs were never copied against about 15; the sharded jobs' minutes against 98 for hard328; the skill edit of cycle 8 against cycles 5 to 8.
+
 ## 2026-11-15 16:15 UTC (session cap32, after result of work-ceccc0) meta/reviews/abaybektursun/20261115-1610-cap32/
 
 - Previous entry of this session asked for minutes from a trained model to a keep-or-stop decision. No trained model since; not measured.

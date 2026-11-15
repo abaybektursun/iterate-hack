@@ -1,0 +1,25 @@
+{
+ "theory": "r3-across-2",
+ "items": [
+  {
+   "k": 3,
+   "experiment": "Offline: how the cued base's hold-on rate changes with temperature (T 1.0 vs T 0.6), finished answers only.",
+   "original": 1.5684323619379603,
+   "replicated": 1.5684323619379603,
+   "status": "replicated",
+   "refuted_by_met": false,
+   "script": "replication/r3-across-2/p3.py",
+   "not_computable": null
+  },
+  {
+   "k": 5,
+   "experiment": "Offline: how far a quarter-dose of the RL delta moves the hold-on rate toward RL's.",
+   "original": 0.17907637112709365,
+   "replicated": 0.17907637112709365,
+   "status": "replicated",
+   "refuted_by_met": false,
+   "script": "replication/r3-across-2/p5.py",
+   "not_computable": null
+  }
+ ]
+}

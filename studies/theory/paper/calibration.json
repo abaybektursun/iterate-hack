@@ -1,0 +1,1184 @@
+{
+ "definition": "Observed coverage at each nominal level. scaled_interval: the filed interval scaled about the forecast by\nz(level) / z(0.90), which keeps its asymmetry and equals the filed interval at 0.90. engine_normal: |z| <= z(level)\nwith the engine's sd = (high - low) / 3.29.",
+ "who": {
+  "t": "theories",
+  "r1": "reader 1",
+  "r2": "reader 2"
+ },
+ "sets": {
+  "rounds_3_7_both_readers_filed_intervals": {
+   "n": 236,
+   "clusters": 45,
+   "levels": [
+    {
+     "nominal": 0.1,
+     "t": {
+      "scaled_interval": 0.0847,
+      "ci95_cluster": [
+       0.0365,
+       0.1254
+      ],
+      "engine_normal": 0.0763
+     },
+     "r1": {
+      "scaled_interval": 0.0975,
+      "ci95_cluster": [
+       0.0548,
+       0.1514
+      ],
+      "engine_normal": 0.0975
+     },
+     "r2": {
+      "scaled_interval": 0.0975,
+      "ci95_cluster": [
+       0.0619,
+       0.1344
+      ],
+      "engine_normal": 0.1102
+     }
+    },
+    {
+     "nominal": 0.2,
+     "t": {
+      "scaled_interval": 0.1441,
+      "ci95_cluster": [
+       0.0707,
+       0.2087
+      ],
+      "engine_normal": 0.1441
+     },
+     "r1": {
+      "scaled_interval": 0.161,
+      "ci95_cluster": [
+       0.1084,
+       0.2286
+      ],
+      "engine_normal": 0.1653
+     },
+     "r2": {
+      "scaled_interval": 0.1992,
+      "ci95_cluster": [
+       0.1461,
+       0.2474
+      ],
+      "engine_normal": 0.2034
+     }
+    },
+    {
+     "nominal": 0.3,
+     "t": {
+      "scaled_interval": 0.2034,
+      "ci95_cluster": [
+       0.1118,
+       0.2845
+      ],
+      "engine_normal": 0.2034
+     },
+     "r1": {
+      "scaled_interval": 0.2458,
+      "ci95_cluster": [
+       0.1901,
+       0.3161
+      ],
+      "engine_normal": 0.2585
+     },
+     "r2": {
+      "scaled_interval": 0.2458,
+      "ci95_cluster": [
+       0.1837,
+       0.3013
+      ],
+      "engine_normal": 0.2627
+     }
+    },
+    {
+     "nominal": 0.4,
+     "t": {
+      "scaled_interval": 0.3008,
+      "ci95_cluster": [
+       0.1761,
+       0.4146
+      ],
+      "engine_normal": 0.2924
+     },
+     "r1": {
+      "scaled_interval": 0.3475,
+      "ci95_cluster": [
+       0.2766,
+       0.4272
+      ],
+      "engine_normal": 0.3814
+     },
+     "r2": {
+      "scaled_interval": 0.3644,
+      "ci95_cluster": [
+       0.2809,
+       0.4536
+      ],
+      "engine_normal": 0.3644
+     }
+    },
+    {
+     "nominal": 0.5,
+     "t": {
+      "scaled_interval": 0.3559,
+      "ci95_cluster": [
+       0.221,
+       0.4794
+      ],
+      "engine_normal": 0.3602
+     },
+     "r1": {
+      "scaled_interval": 0.4661,
+      "ci95_cluster": [
+       0.37,
+       0.5709
+      ],
+      "engine_normal": 0.4661
+     },
+     "r2": {
+      "scaled_interval": 0.4322,
+      "ci95_cluster": [
+       0.3492,
+       0.516
+      ],
+      "engine_normal": 0.4407
+     }
+    },
+    {
+     "nominal": 0.6,
+     "t": {
+      "scaled_interval": 0.4407,
+      "ci95_cluster": [
+       0.3224,
+       0.5422
+      ],
+      "engine_normal": 0.4364
+     },
+     "r1": {
+      "scaled_interval": 0.5508,
+      "ci95_cluster": [
+       0.4634,
+       0.6407
+      ],
+      "engine_normal": 0.572
+     },
+     "r2": {
+      "scaled_interval": 0.5339,
+      "ci95_cluster": [
+       0.4398,
+       0.6234
+      ],
+      "engine_normal": 0.5508
+     }
+    },
+    {
+     "nominal": 0.7,
+     "t": {
+      "scaled_interval": 0.4873,
+      "ci95_cluster": [
+       0.3665,
+       0.5879
+      ],
+      "engine_normal": 0.4958
+     },
+     "r1": {
+      "scaled_interval": 0.6314,
+      "ci95_cluster": [
+       0.5603,
+       0.7059
+      ],
+      "engine_normal": 0.6356
+     },
+     "r2": {
+      "scaled_interval": 0.5975,
+      "ci95_cluster": [
+       0.5139,
+       0.6754
+      ],
+      "engine_normal": 0.6356
+     }
+    },
+    {
+     "nominal": 0.8,
+     "t": {
+      "scaled_interval": 0.5466,
+      "ci95_cluster": [
+       0.425,
+       0.6437
+      ],
+      "engine_normal": 0.5805
+     },
+     "r1": {
+      "scaled_interval": 0.7203,
+      "ci95_cluster": [
+       0.6606,
+       0.7831
+      ],
+      "engine_normal": 0.7458
+     },
+     "r2": {
+      "scaled_interval": 0.6992,
+      "ci95_cluster": [
+       0.6188,
+       0.7686
+      ],
+      "engine_normal": 0.7669
+     }
+    },
+    {
+     "nominal": 0.9,
+     "t": {
+      "scaled_interval": 0.6949,
+      "ci95_cluster": [
+       0.5654,
+       0.7973
+      ],
+      "engine_normal": 0.7246
+     },
+     "r1": {
+      "scaled_interval": 0.8347,
+      "ci95_cluster": [
+       0.7708,
+       0.8804
+      ],
+      "engine_normal": 0.839
+     },
+     "r2": {
+      "scaled_interval": 0.8559,
+      "ci95_cluster": [
+       0.7955,
+       0.9017
+      ],
+      "engine_normal": 0.8898
+     }
+    },
+    {
+     "nominal": 0.95,
+     "t": {
+      "scaled_interval": 0.7288,
+      "ci95_cluster": [
+       0.6138,
+       0.8199
+      ],
+      "engine_normal": 0.75
+     },
+     "r1": {
+      "scaled_interval": 0.8898,
+      "ci95_cluster": [
+       0.8349,
+       0.9318
+      ],
+      "engine_normal": 0.8814
+     },
+     "r2": {
+      "scaled_interval": 0.9025,
+      "ci95_cluster": [
+       0.8436,
+       0.9425
+      ],
+      "engine_normal": 0.9195
+     }
+    },
+    {
+     "nominal": 0.99,
+     "t": {
+      "scaled_interval": 0.8305,
+      "ci95_cluster": [
+       0.745,
+       0.8963
+      ],
+      "engine_normal": 0.839
+     },
+     "r1": {
+      "scaled_interval": 0.9534,
+      "ci95_cluster": [
+       0.9231,
+       0.9848
+      ],
+      "engine_normal": 0.9619
+     },
+     "r2": {
+      "scaled_interval": 0.9534,
+      "ci95_cluster": [
+       0.9175,
+       0.9799
+      ],
+      "engine_normal": 0.9534
+     }
+    }
+   ],
+   "abs_z_bins": {
+    "edges": [
+     0,
+     0.5,
+     1,
+     1.645,
+     2,
+     3,
+     5,
+     "inf"
+    ],
+    "t": [
+     67,
+     50,
+     54,
+     8,
+     30,
+     24,
+     3
+    ],
+    "r1": [
+     82,
+     65,
+     51,
+     10,
+     21,
+     6,
+     1
+    ],
+    "r2": [
+     79,
+     67,
+     64,
+     7,
+     12,
+     7,
+     0
+    ]
+   }
+  },
+  "rounds_4_7_offline_tests": {
+   "n": 156,
+   "clusters": 33,
+   "levels": [
+    {
+     "nominal": 0.1,
+     "t": {
+      "scaled_interval": 0.0897,
+      "ci95_cluster": [
+       0.0187,
+       0.1369
+      ],
+      "engine_normal": 0.0833
+     },
+     "r1": {
+      "scaled_interval": 0.0705,
+      "ci95_cluster": [
+       0.0306,
+       0.1379
+      ],
+      "engine_normal": 0.0705
+     },
+     "r2": {
+      "scaled_interval": 0.0577,
+      "ci95_cluster": [
+       0.0179,
+       0.0854
+      ],
+      "engine_normal": 0.0513
+     }
+    },
+    {
+     "nominal": 0.2,
+     "t": {
+      "scaled_interval": 0.1603,
+      "ci95_cluster": [
+       0.0517,
+       0.2364
+      ],
+      "engine_normal": 0.1538
+     },
+     "r1": {
+      "scaled_interval": 0.1538,
+      "ci95_cluster": [
+       0.0956,
+       0.2458
+      ],
+      "engine_normal": 0.1603
+     },
+     "r2": {
+      "scaled_interval": 0.1538,
+      "ci95_cluster": [
+       0.0885,
+       0.2051
+      ],
+      "engine_normal": 0.1603
+     }
+    },
+    {
+     "nominal": 0.3,
+     "t": {
+      "scaled_interval": 0.2179,
+      "ci95_cluster": [
+       0.0813,
+       0.3161
+      ],
+      "engine_normal": 0.2051
+     },
+     "r1": {
+      "scaled_interval": 0.2372,
+      "ci95_cluster": [
+       0.1684,
+       0.3334
+      ],
+      "engine_normal": 0.2564
+     },
+     "r2": {
+      "scaled_interval": 0.2115,
+      "ci95_cluster": [
+       0.1296,
+       0.2744
+      ],
+      "engine_normal": 0.2308
+     }
+    },
+    {
+     "nominal": 0.4,
+     "t": {
+      "scaled_interval": 0.3141,
+      "ci95_cluster": [
+       0.1322,
+       0.4498
+      ],
+      "engine_normal": 0.3013
+     },
+     "r1": {
+      "scaled_interval": 0.3269,
+      "ci95_cluster": [
+       0.2549,
+       0.425
+      ],
+      "engine_normal": 0.3333
+     },
+     "r2": {
+      "scaled_interval": 0.2949,
+      "ci95_cluster": [
+       0.2171,
+       0.3833
+      ],
+      "engine_normal": 0.3077
+     }
+    },
+    {
+     "nominal": 0.5,
+     "t": {
+      "scaled_interval": 0.3654,
+      "ci95_cluster": [
+       0.1667,
+       0.5153
+      ],
+      "engine_normal": 0.3526
+     },
+     "r1": {
+      "scaled_interval": 0.391,
+      "ci95_cluster": [
+       0.3063,
+       0.4839
+      ],
+      "engine_normal": 0.3974
+     },
+     "r2": {
+      "scaled_interval": 0.391,
+      "ci95_cluster": [
+       0.2966,
+       0.4837
+      ],
+      "engine_normal": 0.391
+     }
+    },
+    {
+     "nominal": 0.6,
+     "t": {
+      "scaled_interval": 0.4295,
+      "ci95_cluster": [
+       0.2439,
+       0.5641
+      ],
+      "engine_normal": 0.4295
+     },
+     "r1": {
+      "scaled_interval": 0.4808,
+      "ci95_cluster": [
+       0.3814,
+       0.5752
+      ],
+      "engine_normal": 0.5
+     },
+     "r2": {
+      "scaled_interval": 0.4615,
+      "ci95_cluster": [
+       0.3534,
+       0.547
+      ],
+      "engine_normal": 0.4744
+     }
+    },
+    {
+     "nominal": 0.7,
+     "t": {
+      "scaled_interval": 0.4679,
+      "ci95_cluster": [
+       0.2787,
+       0.6061
+      ],
+      "engine_normal": 0.4744
+     },
+     "r1": {
+      "scaled_interval": 0.5833,
+      "ci95_cluster": [
+       0.4968,
+       0.6696
+      ],
+      "engine_normal": 0.5962
+     },
+     "r2": {
+      "scaled_interval": 0.5385,
+      "ci95_cluster": [
+       0.4337,
+       0.6216
+      ],
+      "engine_normal": 0.5641
+     }
+    },
+    {
+     "nominal": 0.8,
+     "t": {
+      "scaled_interval": 0.5192,
+      "ci95_cluster": [
+       0.3304,
+       0.6543
+      ],
+      "engine_normal": 0.5641
+     },
+     "r1": {
+      "scaled_interval": 0.6667,
+      "ci95_cluster": [
+       0.5877,
+       0.7438
+      ],
+      "engine_normal": 0.7115
+     },
+     "r2": {
+      "scaled_interval": 0.6346,
+      "ci95_cluster": [
+       0.5234,
+       0.7099
+      ],
+      "engine_normal": 0.7244
+     }
+    },
+    {
+     "nominal": 0.9,
+     "t": {
+      "scaled_interval": 0.6667,
+      "ci95_cluster": [
+       0.4661,
+       0.8097
+      ],
+      "engine_normal": 0.7115
+     },
+     "r1": {
+      "scaled_interval": 0.8205,
+      "ci95_cluster": [
+       0.7273,
+       0.8796
+      ],
+      "engine_normal": 0.8269
+     },
+     "r2": {
+      "scaled_interval": 0.8205,
+      "ci95_cluster": [
+       0.7333,
+       0.8761
+      ],
+      "engine_normal": 0.8333
+     }
+    },
+    {
+     "nominal": 0.95,
+     "t": {
+      "scaled_interval": 0.7051,
+      "ci95_cluster": [
+       0.5273,
+       0.8321
+      ],
+      "engine_normal": 0.7372
+     },
+     "r1": {
+      "scaled_interval": 0.8397,
+      "ci95_cluster": [
+       0.7615,
+       0.8929
+      ],
+      "engine_normal": 0.8654
+     },
+     "r2": {
+      "scaled_interval": 0.8526,
+      "ci95_cluster": [
+       0.7636,
+       0.908
+      ],
+      "engine_normal": 0.8782
+     }
+    },
+    {
+     "nominal": 0.99,
+     "t": {
+      "scaled_interval": 0.8269,
+      "ci95_cluster": [
+       0.6903,
+       0.9128
+      ],
+      "engine_normal": 0.8333
+     },
+     "r1": {
+      "scaled_interval": 0.9295,
+      "ci95_cluster": [
+       0.8917,
+       0.9732
+      ],
+      "engine_normal": 0.9423
+     },
+     "r2": {
+      "scaled_interval": 0.9295,
+      "ci95_cluster": [
+       0.875,
+       0.9669
+      ],
+      "engine_normal": 0.9295
+     }
+    }
+   ],
+   "abs_z_bins": {
+    "edges": [
+     0,
+     0.5,
+     1,
+     1.645,
+     2,
+     3,
+     5,
+     "inf"
+    ],
+    "t": [
+     45,
+     29,
+     37,
+     6,
+     23,
+     16,
+     0
+    ],
+    "r1": [
+     47,
+     43,
+     39,
+     6,
+     14,
+     6,
+     1
+    ],
+    "r2": [
+     44,
+     42,
+     44,
+     7,
+     12,
+     7,
+     0
+    ]
+   }
+  },
+  "rounds_4_7_offline_tests_without_r6_account": {
+   "n": 112,
+   "clusters": 32,
+   "levels": [
+    {
+     "nominal": 0.1,
+     "t": {
+      "scaled_interval": 0.0536,
+      "ci95_cluster": [
+       0.0095,
+       0.1058
+      ],
+      "engine_normal": 0.0446
+     },
+     "r1": {
+      "scaled_interval": 0.0893,
+      "ci95_cluster": [
+       0.0351,
+       0.1532
+      ],
+      "engine_normal": 0.0893
+     },
+     "r2": {
+      "scaled_interval": 0.0446,
+      "ci95_cluster": [
+       0.0093,
+       0.0826
+      ],
+      "engine_normal": 0.0446
+     }
+    },
+    {
+     "nominal": 0.2,
+     "t": {
+      "scaled_interval": 0.0982,
+      "ci95_cluster": [
+       0.0367,
+       0.1682
+      ],
+      "engine_normal": 0.0804
+     },
+     "r1": {
+      "scaled_interval": 0.1875,
+      "ci95_cluster": [
+       0.1101,
+       0.2655
+      ],
+      "engine_normal": 0.1786
+     },
+     "r2": {
+      "scaled_interval": 0.1429,
+      "ci95_cluster": [
+       0.0755,
+       0.211
+      ],
+      "engine_normal": 0.1339
+     }
+    },
+    {
+     "nominal": 0.3,
+     "t": {
+      "scaled_interval": 0.1339,
+      "ci95_cluster": [
+       0.0672,
+       0.2091
+      ],
+      "engine_normal": 0.1429
+     },
+     "r1": {
+      "scaled_interval": 0.2589,
+      "ci95_cluster": [
+       0.1636,
+       0.3583
+      ],
+      "engine_normal": 0.2768
+     },
+     "r2": {
+      "scaled_interval": 0.1964,
+      "ci95_cluster": [
+       0.1111,
+       0.2821
+      ],
+      "engine_normal": 0.2232
+     }
+    },
+    {
+     "nominal": 0.4,
+     "t": {
+      "scaled_interval": 0.1964,
+      "ci95_cluster": [
+       0.1111,
+       0.2885
+      ],
+      "engine_normal": 0.1786
+     },
+     "r1": {
+      "scaled_interval": 0.3482,
+      "ci95_cluster": [
+       0.2477,
+       0.4463
+      ],
+      "engine_normal": 0.3571
+     },
+     "r2": {
+      "scaled_interval": 0.3036,
+      "ci95_cluster": [
+       0.2,
+       0.405
+      ],
+      "engine_normal": 0.3125
+     }
+    },
+    {
+     "nominal": 0.5,
+     "t": {
+      "scaled_interval": 0.2321,
+      "ci95_cluster": [
+       0.1453,
+       0.3241
+      ],
+      "engine_normal": 0.2321
+     },
+     "r1": {
+      "scaled_interval": 0.4018,
+      "ci95_cluster": [
+       0.2913,
+       0.5085
+      ],
+      "engine_normal": 0.4286
+     },
+     "r2": {
+      "scaled_interval": 0.3929,
+      "ci95_cluster": [
+       0.2736,
+       0.5093
+      ],
+      "engine_normal": 0.3929
+     }
+    },
+    {
+     "nominal": 0.6,
+     "t": {
+      "scaled_interval": 0.3125,
+      "ci95_cluster": [
+       0.2222,
+       0.4038
+      ],
+      "engine_normal": 0.3214
+     },
+     "r1": {
+      "scaled_interval": 0.4821,
+      "ci95_cluster": [
+       0.3592,
+       0.6
+      ],
+      "engine_normal": 0.5
+     },
+     "r2": {
+      "scaled_interval": 0.4464,
+      "ci95_cluster": [
+       0.3241,
+       0.5625
+      ],
+      "engine_normal": 0.4554
+     }
+    },
+    {
+     "nominal": 0.7,
+     "t": {
+      "scaled_interval": 0.3482,
+      "ci95_cluster": [
+       0.2566,
+       0.4414
+      ],
+      "engine_normal": 0.3571
+     },
+     "r1": {
+      "scaled_interval": 0.5893,
+      "ci95_cluster": [
+       0.4775,
+       0.6923
+      ],
+      "engine_normal": 0.5893
+     },
+     "r2": {
+      "scaled_interval": 0.5268,
+      "ci95_cluster": [
+       0.4054,
+       0.6396
+      ],
+      "engine_normal": 0.5446
+     }
+    },
+    {
+     "nominal": 0.8,
+     "t": {
+      "scaled_interval": 0.4018,
+      "ci95_cluster": [
+       0.3036,
+       0.4957
+      ],
+      "engine_normal": 0.4554
+     },
+     "r1": {
+      "scaled_interval": 0.6696,
+      "ci95_cluster": [
+       0.566,
+       0.7652
+      ],
+      "engine_normal": 0.7321
+     },
+     "r2": {
+      "scaled_interval": 0.6071,
+      "ci95_cluster": [
+       0.4909,
+       0.713
+      ],
+      "engine_normal": 0.6964
+     }
+    },
+    {
+     "nominal": 0.9,
+     "t": {
+      "scaled_interval": 0.5446,
+      "ci95_cluster": [
+       0.4404,
+       0.6481
+      ],
+      "engine_normal": 0.6071
+     },
+     "r1": {
+      "scaled_interval": 0.7946,
+      "ci95_cluster": [
+       0.7008,
+       0.8772
+      ],
+      "engine_normal": 0.8036
+     },
+     "r2": {
+      "scaled_interval": 0.7946,
+      "ci95_cluster": [
+       0.7087,
+       0.8707
+      ],
+      "engine_normal": 0.8125
+     }
+    },
+    {
+     "nominal": 0.95,
+     "t": {
+      "scaled_interval": 0.5982,
+      "ci95_cluster": [
+       0.5045,
+       0.6944
+      ],
+      "engine_normal": 0.6339
+     },
+     "r1": {
+      "scaled_interval": 0.8214,
+      "ci95_cluster": [
+       0.7411,
+       0.8938
+      ],
+      "engine_normal": 0.8482
+     },
+     "r2": {
+      "scaled_interval": 0.8214,
+      "ci95_cluster": [
+       0.7387,
+       0.8947
+      ],
+      "engine_normal": 0.8571
+     }
+    },
+    {
+     "nominal": 0.99,
+     "t": {
+      "scaled_interval": 0.7589,
+      "ci95_cluster": [
+       0.6667,
+       0.8448
+      ],
+      "engine_normal": 0.7679
+     },
+     "r1": {
+      "scaled_interval": 0.9375,
+      "ci95_cluster": [
+       0.885,
+       0.9818
+      ],
+      "engine_normal": 0.9554
+     },
+     "r2": {
+      "scaled_interval": 0.9196,
+      "ci95_cluster": [
+       0.8584,
+       0.9725
+      ],
+      "engine_normal": 0.9196
+     }
+    }
+   ],
+   "abs_z_bins": {
+    "edges": [
+     0,
+     0.5,
+     1,
+     1.645,
+     2,
+     3,
+     5,
+     "inf"
+    ],
+    "t": [
+     19,
+     21,
+     28,
+     5,
+     23,
+     16,
+     0
+    ],
+    "r1": [
+     37,
+     26,
+     27,
+     5,
+     13,
+     3,
+     1
+    ],
+    "r2": [
+     31,
+     29,
+     31,
+     5,
+     11,
+     5,
+     0
+    ]
+   }
+  },
+  "all_rounds_compared_theory_only": {
+   "n": 394,
+   "clusters": 58,
+   "levels": [
+    {
+     "nominal": 0.1,
+     "t": {
+      "scaled_interval": 0.0812,
+      "ci95_cluster": [
+       0.0529,
+       0.1093
+      ],
+      "engine_normal": 0.0761
+     }
+    },
+    {
+     "nominal": 0.2,
+     "t": {
+      "scaled_interval": 0.1269,
+      "ci95_cluster": [
+       0.0793,
+       0.1765
+      ],
+      "engine_normal": 0.132
+     }
+    },
+    {
+     "nominal": 0.3,
+     "t": {
+      "scaled_interval": 0.1802,
+      "ci95_cluster": [
+       0.124,
+       0.2403
+      ],
+      "engine_normal": 0.1827
+     }
+    },
+    {
+     "nominal": 0.4,
+     "t": {
+      "scaled_interval": 0.2538,
+      "ci95_cluster": [
+       0.1793,
+       0.3417
+      ],
+      "engine_normal": 0.2513
+     }
+    },
+    {
+     "nominal": 0.5,
+     "t": {
+      "scaled_interval": 0.3147,
+      "ci95_cluster": [
+       0.2345,
+       0.4097
+      ],
+      "engine_normal": 0.3173
+     }
+    },
+    {
+     "nominal": 0.6,
+     "t": {
+      "scaled_interval": 0.3832,
+      "ci95_cluster": [
+       0.3077,
+       0.4678
+      ],
+      "engine_normal": 0.3807
+     }
+    },
+    {
+     "nominal": 0.7,
+     "t": {
+      "scaled_interval": 0.4442,
+      "ci95_cluster": [
+       0.3607,
+       0.5244
+      ],
+      "engine_normal": 0.4467
+     }
+    },
+    {
+     "nominal": 0.8,
+     "t": {
+      "scaled_interval": 0.5076,
+      "ci95_cluster": [
+       0.4246,
+       0.5839
+      ],
+      "engine_normal": 0.5178
+     }
+    },
+    {
+     "nominal": 0.9,
+     "t": {
+      "scaled_interval": 0.6472,
+      "ci95_cluster": [
+       0.5633,
+       0.729
+      ],
+      "engine_normal": 0.6548
+     }
+    },
+    {
+     "nominal": 0.95,
+     "t": {
+      "scaled_interval": 0.6853,
+      "ci95_cluster": [
+       0.6086,
+       0.7597
+      ],
+      "engine_normal": 0.6954
+     }
+    },
+    {
+     "nominal": 0.99,
+     "t": {
+      "scaled_interval": 0.797,
+      "ci95_cluster": [
+       0.7394,
+       0.8529
+      ],
+      "engine_normal": 0.7893
+     }
+    }
+   ],
+   "abs_z_bins": {
+    "edges": [
+     0,
+     0.5,
+     1,
+     1.645,
+     2,
+     3,
+     5,
+     "inf"
+    ],
+    "t": [
+     96,
+     76,
+     86,
+     19,
+     53,
+     44,
+     20
+    ]
+   }
+  }
+ }
+}

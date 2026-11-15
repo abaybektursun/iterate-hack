@@ -5,7 +5,10 @@
 Writes results/code1/<arm>-01/ per cell (run.json, metrics.json, examples.json: the first passed and the first failed problem with
 prompt, answer, extracted code and exit) and results/code1/readout.json: passed of 538 with Wilson intervals per set, cap hits,
 answers with no fenced block, tokens per problem, each pair of cells by paired bootstrap (5,000), the same without the 3 problems
-that overlap the RL training prompts, and the 20 most frequent first words of each cell's answers."""
+that overlap the RL training prompts, and the 20 most frequent first words of each cell's answers.
+
+  --out=<folder under results/>  another experiment's folder instead of code1 (xreward/code_dial for SPEC_xreward amendment 7).
+  @<arm>=<job-id>                a reference cell that already has its run folder elsewhere: read and compared, no folder written."""
 from __future__ import annotations
 
 import collections
@@ -21,7 +24,11 @@ OVERLAP = {"HumanEval/47", "Mbpp/641", "Mbpp/804"}
 
 
 def main():
-    cells = dict(a.split("=") for a in sys.argv[1:])
+    res = RES
+    for a in [a for a in sys.argv[1:] if a.startswith("--out=")]:
+        res = STUDY / "results" / a.split("=")[1]
+    refs = {a[1:].split("=")[0] for a in sys.argv[1:] if a.startswith("@")}
+    cells = dict(a.lstrip("@").split("=") for a in sys.argv[1:] if not a.startswith("--out="))
     rows, out = {}, {"cells": {}, "differences": {}, "overlap_excluded": sorted(OVERLAP)}
     for arm, job in cells.items():
         run = pathlib.Path("runs") / job
@@ -29,13 +36,14 @@ def main():
         assert m["status"] == "done", (arm, m["status"])
         rs = [json.loads(l) for l in (run / "answers.jsonl").read_text().splitlines()]
         rows[arm] = {r["uid"]: r for r in rs}
-        d = RES / f"{arm}-01"
-        d.mkdir(parents=True, exist_ok=False)
-        keep = ("uid", "seed", "prompt", "text", "mode", "code", "passed", "exit", "stderr_tail", "n_new", "cap_hit")
-        (d / "examples.json").write_text(json.dumps([{k: r[k] for k in keep} for want in (True, False)
-                                                     for r in [next(r for r in rs if r["passed"] is want)]], indent=1))
-        (d / "metrics.json").write_text(json.dumps(m, indent=1))
-        (d / "run.json").write_text(json.dumps({"job_id": job, "commit": m["commit"], "config": m["config"]}, indent=1))
+        if arm not in refs:
+            d = res / f"{arm}-01"
+            d.mkdir(parents=True, exist_ok=False)
+            keep = ("uid", "seed", "prompt", "text", "mode", "code", "passed", "exit", "stderr_tail", "n_new", "cap_hit")
+            (d / "examples.json").write_text(json.dumps([{k: r[k] for k in keep} for want in (True, False)
+                                                         for r in [next(r for r in rs if r["passed"] is want)]], indent=1))
+            (d / "metrics.json").write_text(json.dumps(m, indent=1))
+            (d / "run.json").write_text(json.dumps({"job_id": job, "commit": m["commit"], "config": m["config"]}, indent=1))
         c = {}
         for b in ("humanevalplus", "mbppplus", "all", "all_no_overlap"):
             sel = [r for r in rs if b == "all" or r["bench"] == b or (b == "all_no_overlap" and r["uid"] not in OVERLAP)]
@@ -53,7 +61,7 @@ def main():
             x, y = [int(rows[a][u]["passed"]) for u in uids], [int(rows[b][u]["passed"]) for u in uids]
             out["differences"][f"{a} - {b}"] = {"points": 100 * (sum(x) - sum(y)) / len(uids), "bootstrap95": S.paired_bootstrap(x, y, 5000),
                                                 "only_first": sum(p > q for p, q in zip(x, y)), "only_second": sum(q > p for p, q in zip(x, y))}
-    (RES / "readout.json").write_text(json.dumps(out, indent=1))
+    (res / "readout.json").write_text(json.dumps(out, indent=1))
     print(json.dumps({"cells": {a: {b: (v[b]["passed"], v[b]["n"], v[b]["cap_hits"], round(v[b]["tokens_per_problem"])) for b in ("humanevalplus", "mbppplus", "all")}
                                 for a, v in out["cells"].items()}, "differences": out["differences"]}, indent=1))
 
