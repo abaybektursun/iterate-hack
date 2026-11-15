@@ -1,0 +1,16 @@
+{
+ "scored_right": {
+  "id": "s0037",
+  "idea": "Revert to the best-performing random-restart structure and widen the parameter search space (larger size_pen range to test \"many small rectangles\" vs \"few big heavy rectangles\" regimes, noise scaled relative to wmax, occasional pure-weight-exponent extremes).",
+  "score": 0.582464,
+  "msg": "per-case V/V_best: 0.547, 0.384, 0.755, 0.682, 0.544",
+  "run": "fnf-s4"
+ },
+ "scored_wrong": {
+  "id": "s0001",
+  "idea": "Fix the perimeter check bug \u2014 endpoints of each side are dots by design, so only intermediate lattice points must be dot-free (previous version rejected every rectangle, scoring same as doing nothing).",
+  "score": null,
+  "msg": "case 1: checker rejected: wrong answer Illegal rectangle: edges are not perpendicular (turn: 0)",
+  "run": "fnf-s4"
+ }
+}

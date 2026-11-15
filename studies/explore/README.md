@@ -33,6 +33,31 @@ below is therefore a **pure-Python** run. Effect: 6 of 1,066 circles submissions
 (main-02) imported numpy/scipy, all invalid; those were the attempts at the optimizer approach. ahc014: 0 of 270
 imported them (unaffected). Programs now run in `runs/explore/.venv` (numpy 2.5.4, scipy 1.18.1), checked at start.
 
+### ahc014/swe2-seeds-01: seeds test, single vs parallel vs fnf (SWE-2, 6 runs per arm, 0 USD)
+
+Plan written before the runs: `specs/seeds-ahc014-swe2.md`. Seed 0 from swe2-01 pooled with seeds 1-5.
+`results/ahc014/swe2-seeds-01/summary.json`; examples: best fnf-s4 s0037, stuck single-s2 s0037, invalid fnf-s4.
+
+| Arm | Validation, 6 runs | Mean | SD | Held-out test mean (invalid = 0) |
+|---|---|---|---|---|
+| single | 0.561 0.637 0.409 0.606 0.499 0.567 | 0.546 | 0.082 | 0.532 |
+| parallel (best of 4) | 0.595 0.538 0.574 0.580 0.569 0.602 | 0.577 | 0.023 | 0.368 (2 of 6 best programs fail on test) |
+| fnf | 0.625 0.612 0.587 0.558 0.582 0.584 | 0.592 | 0.024 | 0.567 |
+
+- **The planned test fails:** fnf > single on validation, exact one-sided rank-sum U = 24/36, p = 0.197 (needed
+  p < 0.05). fnf > parallel p = 0.155. The prediction is refuted at 6 runs per arm, although the means are in
+  the predicted order (fnf 0.592 > parallel 0.577 > single 0.546).
+- On held-out test cases (reported, not the planned test): fnf > parallel p = 0.031, fnf > single p = 0.066.
+  Two parallel best programs fail on test: s1 exceeds 4 s under load (alone: 0.522), s3 crashes on case 6.
+- Found after looking, so a lead, not a result: single runs vary much more (SD 0.082 vs 0.024; Brown-Forsythe
+  permutation p = 0.042 vs fnf, 0.046 vs parallel). Their worst run is 0.409 against 0.558 for fnf and 0.538 for parallel.
+- That worst run shows the anchoring the papers describe. single-s2 adopted at try 2 a move set in which every
+  45-degree rectangle is a square, and kept it for 38 more tries (case 1: 22 tilted squares, 0 tilted non-squares,
+  54 moves). In fnf-s4 a fresh branch at the opening fork allowed tilted rectangles with unequal sides
+  (0.388 -> 0.522) and became the leader (case 1: 28 tilted non-squares, 100 moves).
+- Weak point: the 4 s per-case limit with programs that run for 3 s by their own clock is tight when 15 runs
+  share the laptop; scoring is less exact under load.
+
 ### ahc014/swe2-01 (SWE-2 via Devin CLI, 1 seed, 40 submissions, commit 78b1352, 0 USD; judge 0.04 USD)
 
 `results/ahc014/swe2-01/compare.json`; examples: best fnf-s0 s0030 0.6246, invalid (checker: a corner without a dot).

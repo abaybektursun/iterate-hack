@@ -1,0 +1,348 @@
+{
+ "spec": "specs/seeds-ahc014-swe2.md",
+ "model": "devin:swe-2-medium",
+ "budget": 40,
+ "runs": {
+  "single": [
+   {
+    "seed": 0,
+    "val": 0.561098,
+    "test": 0.556607
+   },
+   {
+    "seed": 1,
+    "val": 0.636746,
+    "test": 0.615214
+   },
+   {
+    "seed": 2,
+    "val": 0.408519,
+    "test": 0.414511
+   },
+   {
+    "seed": 3,
+    "val": 0.60557,
+    "test": 0.549119
+   },
+   {
+    "seed": 4,
+    "val": 0.498925,
+    "test": 0.520141
+   },
+   {
+    "seed": 5,
+    "val": 0.567366,
+    "test": 0.533649
+   }
+  ],
+  "parallel": [
+   {
+    "seed": 0,
+    "val": 0.594895,
+    "test": 0.553197
+   },
+   {
+    "seed": 1,
+    "val": 0.538214,
+    "test": 0.0
+   },
+   {
+    "seed": 2,
+    "val": 0.574375,
+    "test": 0.552102
+   },
+   {
+    "seed": 3,
+    "val": 0.579957,
+    "test": 0.0
+   },
+   {
+    "seed": 4,
+    "val": 0.569302,
+    "test": 0.529497
+   },
+   {
+    "seed": 5,
+    "val": 0.602059,
+    "test": 0.57181
+   }
+  ],
+  "fnf": [
+   {
+    "seed": 0,
+    "val": 0.624641,
+    "test": 0.594025
+   },
+   {
+    "seed": 1,
+    "val": 0.611944,
+    "test": 0.568759
+   },
+   {
+    "seed": 2,
+    "val": 0.587467,
+    "test": 0.576422
+   },
+   {
+    "seed": 3,
+    "val": 0.557938,
+    "test": 0.541005
+   },
+   {
+    "seed": 4,
+    "val": 0.582464,
+    "test": 0.558602
+   },
+   {
+    "seed": 5,
+    "val": 0.584471,
+    "test": 0.562843
+   }
+  ]
+ },
+ "tests_one_sided_exact_mannwhitney_6v6": {
+  "val fnf>single": {
+   "U_of_36": 24.0,
+   "p": 0.197
+  },
+  "val fnf>parallel": {
+   "U_of_36": 25.0,
+   "p": 0.1548
+  },
+  "val parallel>single": {
+   "U_of_36": 22.0,
+   "p": 0.2944
+  },
+  "test fnf>single": {
+   "U_of_36": 28.0,
+   "p": 0.066
+  },
+  "test fnf>parallel": {
+   "U_of_36": 30.0,
+   "p": 0.0314
+  },
+  "test parallel>single": {
+   "U_of_36": 15.0,
+   "p": 0.6883
+  }
+ },
+ "test_scoring": "exact one-sided Mann-Whitney, 6 vs 6; test invalid scored 0 (parallel-s1 timeout under load, rerun alone 0.522; parallel-s3 crash on case 6)",
+ "post_hoc_spread": {
+  "method": "Brown-Forsythe permutation (abs. deviation from median), one-sided, found after looking",
+  "single_gt_fnf": {
+   "diff": 0.0403,
+   "p": 0.0422
+  },
+  "single_gt_parallel": {
+   "diff": 0.041,
+   "p": 0.0455
+  }
+ },
+ "stuck_example": {
+  "single-s2": {
+   "curve": [
+    null,
+    0.362469,
+    0.362469,
+    0.362469,
+    0.362469,
+    0.362469,
+    0.362469,
+    0.373367,
+    0.387683,
+    0.387683,
+    0.387683,
+    0.387683,
+    0.391078,
+    0.391078,
+    0.392259,
+    0.392259,
+    0.392259,
+    0.392259,
+    0.392259,
+    0.392259,
+    0.392259,
+    0.392259,
+    0.392259,
+    0.392259,
+    0.392259,
+    0.392259,
+    0.392259,
+    0.392259,
+    0.392259,
+    0.392259,
+    0.392259,
+    0.402744,
+    0.402744,
+    0.402744,
+    0.407344,
+    0.407344,
+    0.407344,
+    0.408519,
+    0.408519,
+    0.408519
+   ],
+   "new_bests": [
+    {
+     "try": 2,
+     "score": 0.362469,
+     "branch": "",
+     "idea": "Same incremental greedy heap approach, but fix `make_rects`: a 45\u00b0-tilted square's diagonal must be axis-aligned, so only generate tilted candidates for same-row/same-column pairs (previous version em"
+    },
+    {
+     "try": 8,
+     "score": 0.373367,
+     "branch": "",
+     "idea": "Multi-restart randomized greedy \u2014 rerun the same weight-ordered heap construction several times within the time budget with small random perturbations to each candidate's priority, and output the run "
+    },
+    {
+     "try": 9,
+     "score": 0.387683,
+     "branch": "",
+     "idea": "Adaptive multi-restart \u2014 keep the weight-greedy heap but loop randomized restarts until the deadline with noise scaled to each candidate's weight (multiplicative perturbation), keeping the best total-"
+    },
+    {
+     "try": 13,
+     "score": 0.391078,
+     "branch": "",
+     "idea": "Return to the best configuration (diagonal-only, multiplicative noise, best-of-restarts) but speed up each run \u2014 flat `bytearray` dot grid, integer edge sets, precomputed pair list \u2014 so more randomize"
+    },
+    {
+     "try": 15,
+     "score": 0.392259,
+     "branch": "",
+     "idea": "Keep the flat-array diagonal-only best-of-restarts, but add an \u03b5-greedy run mode that sometimes pops the second-best candidate instead of the best, giving controlled diversification distinct from push"
+    },
+    {
+     "try": 32,
+     "score": 0.402744,
+     "branch": "",
+     "idea": "Add a ruin-and-recreate LNS pass on top of the best portfolio \u2014 replay a kept prefix of the best run (rebuilding `dots`/`used` from stored edge lists), then refill greedily with fresh noise; the previ"
+    },
+    {
+     "try": 35,
+     "score": 0.407344,
+     "branch": "",
+     "idea": "Refine the best-performing structure \u2014 keep deterministic + noise + \u03b5-greedy restarts alternating with ruin-and-recreate, but make LNS recreate use \u03b5-greedy too and try keep-fractions clustered around"
+    },
+    {
+     "try": 38,
+     "score": 0.408519,
+     "branch": "",
+     "idea": "Restore the best-scoring schedule (fresh restarts \u00d72 then LNS at i%3==2, keep 0.5\u20130.75) and add occasional LNS restarts seeded from *earlier* good solutions to diversify incumbents."
+    }
+   ]
+  },
+  "fnf-s4": {
+   "curve": [
+    0.221686,
+    0.221686,
+    0.221686,
+    0.221686,
+    0.362469,
+    0.388389,
+    0.388389,
+    0.52243,
+    0.57213,
+    0.57213,
+    0.57213,
+    0.57213,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.578748,
+    0.581188,
+    0.581188,
+    0.581188,
+    0.581188,
+    0.581188,
+    0.582464,
+    0.582464,
+    0.582464
+   ],
+   "new_bests": [
+    {
+     "try": 1,
+     "score": 0.221686,
+     "branch": "f0b0",
+     "idea": "Greedy rectangle completion \u2014 enumerate candidate rectangles whose missing corner is empty, prioritize by the new dot's center-distance weight, use a heap with lazy revalidation, and incrementally res"
+    },
+    {
+     "try": 5,
+     "score": 0.362469,
+     "branch": "f0b2",
+     "idea": "Incremental greedy \u2014 generate candidate rectangles from diagonal dot pairs as new dots appear, keep them in a max-heap keyed by new-point weight, and greedily apply moves that remain valid (checking p"
+    },
+    {
+     "try": 6,
+     "score": 0.388389,
+     "branch": "f0b2",
+     "idea": "Multi-start randomized greedy \u2014 keep the incremental candidate generation, but run several greedy passes within the time limit, randomizing each candidate's priority (weight \u00d7 random jitter), and outp"
+    },
+    {
+     "try": 8,
+     "score": 0.52243,
+     "branch": "f0b3",
+     "idea": "Fix the 45\u00b0-rectangle completion math \u2014 a 45\u00b0-inclined rectangle has side vectors (p,p) and (q,-q) with p\u2260q allowed (not just squares), so the other corners are (sx+p, sy+p) and (sx+q, sy\u2212q) with p=(d"
+    },
+    {
+     "try": 9,
+     "score": 0.57213,
+     "branch": "",
+     "idea": "Multi-restart randomized greedy \u2014 run the same candidate-rectangle greedy many times until the time limit, jittering move priorities (weight + noise + small perimeter-length penalty), and output the r"
+    },
+    {
+     "try": 13,
+     "score": 0.578748,
+     "branch": "",
+     "idea": "Revert to the best-scoring multi-restart lazy-greedy design, add negative size-penalty (prefer big rectangles) configs and weight-exponent scaling to diversify priorities across restarts."
+    },
+    {
+     "try": 33,
+     "score": 0.581188,
+     "branch": "f2b2",
+     "idea": "Revert the connectivity bonus (it hurt), keep the proven priority formula, and replace the fixed config list with a hybrid: a few strong deterministic configs plus randomized parameter sampling each r"
+    },
+    {
+     "try": 38,
+     "score": 0.582464,
+     "branch": "",
+     "idea": "Revert to the best-performing random-restart structure and widen the parameter search space (larger size_pen range to test \"many small rectangles\" vs \"few big heavy rectangles\" regimes, noise scaled r"
+    }
+   ]
+  },
+  "check_on_case_1": {
+   "single-s2": {
+    "moves": 54,
+    "tilted_squares": 22,
+    "tilted_non_square": 0,
+    "axis_squares": 13,
+    "axis_non_square": 19
+   },
+   "fnf-s4": {
+    "moves": 100,
+    "tilted_squares": 19,
+    "tilted_non_square": 28,
+    "axis_squares": 22,
+    "axis_non_square": 31
+   },
+   "reading": "single-s2 took at try 2 a move set where every 45-degree rectangle is a square and kept it for 38 more tries; fnf-s4's opening-fork branch f0b3 allowed 45-degree rectangles with unequal sides (0.388 -> 0.522) and became the leader."
+  }
+ }
+}
