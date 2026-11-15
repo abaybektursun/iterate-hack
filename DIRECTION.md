@@ -50,6 +50,7 @@ harness then runs unchanged on the Code pair.
 - Harder set: the 328 is measured only for the base at 0.6.
 - Sampling: temperature and top-p are not yet separated.
 - Grader: a second model read all 96 v1/v3 disagreements of the Day-1 #3 rows: no wrong answer accepted (board
-  result-0018d3). The 113 flips of the first table (raw answers in S3) are still read by one model only.
+  result-0018d3). The 113 flips of the first table were then all read by a second model: 112 right, 1 wrong, offset by
+  the 1 v3 error in the same cell (studies/rlneurons/results/rln4/grader_v3_read2/readout.json).
 - RL training steps: the three RL jobs at 0.6 are still running, so the step-400 and first-release rows are
   unscored.
