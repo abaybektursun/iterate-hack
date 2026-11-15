@@ -1336,7 +1336,7 @@ sequence-level reward concentrates; General's directions do not finish math (88 
 | `data/direct_reward/top8_share_v1.json` | Per-matrix top-8 share and norm of 16 keys (input). |
 | `results/direct/reward-01/` | `readout.json`, `examples.json` (matrix where General most exceeds Math 3.0, and most falls below), `run.json`. |
 
-### dial-01: run-05/f2-m01, "a signed termination dial, no added skill" (board work-1645c5, refuted)
+### dial-01: run-05/f2-m01, "a signed termination dial, no added skill" (board work-1645c5, result-124593, refuted)
 
 Claim tested: base + 1.5x Math 3.1's top-8 directions gains by finishing, not by being right more often. Readout: condition
 on one cued-base sample per problem (finished-right FR, finished-wrong FW, cap hit CH, pooled over the 4 choices) and
