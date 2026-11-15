@@ -1,5 +1,20 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 08:45 UTC (session egate, after result-34897a of work-deec92) meta/reviews/abaybektursun/20261115-0845/
+
+- Direction: work-deec92 asked whether a decoding rule gives the base T 0.6's accuracy without its loops. Negative (-1.4 points at n = 500, three gates), and it closes the decoding-rule line together with result-44b4df. It tested "no reward" but not the 328: the spec allowed the 328 only after a MATH-500 gain. Next step, work-3d1e3b, starts from the bar of 219 (Think-SFT + RL delta on the 328).
+- Research: the 2x2 with loops was unpublished (16 findings read before the run). work-3d1e3b's method is published (2605.00610, sum of SFT and GRPO vectors); it runs because the donor, the held-out set and the control differ, and the README had filed its predictions.
+- Turnaround (cycle.txt line 110): work-deec92 to-job 154 min, jobs 60, to-answer 214. To-job was the vLLM processor interface (read from source) and one screen of 8 arms on one box that was stopped after 40 min: the KV cache of a 96 GB card holds 249,438 tokens, about 31 long requests, so arms on one box run one after another.
+- Failures: (1) I destroyed two boxes 14 s after their jobs ended, while `get` was copying: one n = 500 sample lost. Cause removed by abaybektursun/main in tools/vast.py (down refuses without a finished get). (2) 3 of 7 rent calls waited 20 min for boxes that never answered ssh (before.txt); the 4 that worked were ready in 75 to 180 s.
+- Change (step 2, delete waiting): `BOOT_MINUTES` 20 -> 6 in tools/vast.py.
+
+| measure | before | after | change | runs | source |
+|---|---|---|---|---|---|
+| minutes lost per rent call that fails | 20 | not measured yet | | 3 and 0 | before.txt |
+| boxes ready later than 6 min (must stay 0) | 0 of 4 | not measured yet | | 4 and 0 | before.txt |
+
+- Next entry checks: the next failed rent call ends at 6 min, and no box that would have worked was destroyed.
+
 ## 2026-11-15 08:20 UTC (session signed, after result of work-d9a824) meta/reviews/abaybektursun/20261115-0818/
 
 - Previous entry of this session asked: setup_vllm.sh on vast.ai with the plain command. Still not measured: no vast.ai job since.
