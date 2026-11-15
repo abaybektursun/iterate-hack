@@ -1,0 +1,41 @@
+{
+ "name": "r5-m03-rival",
+ "statement": "The top-8 edit is an incomplete switch that happens or fails sample by sample. On most answers (about 85-90 %) it puts the base on a weak dose of RL's own policy: longer answers, RL-style checking, almost no quick wrong answers, errors only on hard problems. On the other 10-15 % the plain prompt leaves the base in its plain-base register: short answers, wrong about half the time whatever the problem's difficulty. So top8 plain is a mixture of RL-like answers and plain-base answers, not a copy of the cued base.",
+ "scope": "the rival that beat r5-m03 in round-05; scope as in r5-m03's",
+ "explains": [],
+ "conflicts": [],
+ "rival": "The top-8 singular directions per layer matrix of the Olmo-3.1 RL-Zero-Math weight change act like the opening cue: they switch the base into the deliberative 'Okay' register and nothing more, without RL's longer checking policy. So base + top8 on the plain prompt writes answers of the cued base's length and makes the cued base's quick finished-wrong errors, and adding the cue on top of top8 adds almost nothing.",
+ "promoted_from": "r5-m03",
+ "predictions": [
+  {
+   "experiment": "Among top8-plain wrong problems, the fraction that the cued base solves in all 4 of its Day-1 #3 samples: are top8's errors on problems the cued base finds reliably easy?",
+   "recipe": "Load studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json and studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. From rows.jsonl keep rows with attempt == 0. For each problem_index with exactly 4 such rows (samples 0-3), set base4 = true if score_v3 == 1 in all 4, else false. Drop problems that do not have 4 attempt-0 rows. In the top8 file, a problem is wrong if score_v3 == 0 or cap_hit is true; drop rows with a missing score_v3 that are not cap hits. Keep the top8-wrong problems present in both files. Report (number of them with base4 true) / (number of them).",
+   "unit": "fraction of problems",
+   "value": 0.27,
+   "low": 0.17,
+   "high": 0.37,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Mean cued-base solve rate (4 Day-1 #3 samples) on the problems where top8 plain gives a quick finished-wrong answer (wrong under v3, not a cap hit, at most 2,000 tokens).",
+   "recipe": "Load studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json and studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. Select top8 rows with score_v3 == 0, cap_hit false and n_generated <= 2000 (rows with a missing score_v3 left out; each problem_index once). For each selected problem take the rows.jsonl rows with that problem_index and attempt == 0. Compute k/m, where m is the number of such rows and k the number with score_v3 == 1. Drop selected problems with m == 0. Report the mean of k/m over the remaining selected problems.",
+   "unit": "fraction of samples (mean over problems)",
+   "value": 0.76,
+   "low": 0.64,
+   "high": 0.88,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Share of top8 plain's quick finished-wrong answers that are very short (at most 1,000 generated tokens).",
+   "recipe": "Load studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json. Select rows with score_v3 == 0, cap_hit false and n_generated <= 2000 (rows with a missing score_v3 left out; each problem_index once). Report (number of selected rows with n_generated <= 1000) / (number of selected rows).",
+   "unit": "fraction of problems",
+   "value": 0.63,
+   "low": 0.43,
+   "high": 0.83,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0
+  }
+ ]
+}

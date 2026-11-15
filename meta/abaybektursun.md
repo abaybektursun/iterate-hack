@@ -1,5 +1,36 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 11:45 UTC (theory engine session, after result-3a3af3 and result-8b0706) meta/reviews/abaybektursun/20261115-1126-theory/
+
+- Previous entry's checks belong to the review loop session; this entry covers the theory engine only (work-502f19).
+- Direction. Mission (DIRECTION.md): "An agent swarm measures how much of a published RL gain an untrained base model reaches with no training." Since 09:00: theory round 06 (frustea, engine 6.3, result-8b0706) and the engine's first GPU run (result-3a3af3: plain base, first self-opened draw, 411 of 500 against the cue's 410). The GPU run tests the mission's sentence. Round 06's two surviving theories do not: one needs the RL weight change, the other explains the cue's known gain.
+- Research. Not run because published: a vote over 9 cued-base samples (Wang et al. 2610.06851 Fig. 21 reads about 91 % at 8 votes; result-60d899). Told and narrowed: "the first theory that stands" rests on 1 separating duel test with 22 problems (round-06 `rivals/r5-m03-rival.tests.json`, k2: -0.057 [-0.23, 0.13]); re-scored by engine 7.1 all three round-06 duels are "not separated from rival". The rule that catches it is now code: a duel win needs 2 separating tests, n is the smallest group.
+- Turnaround (cycle.txt, Team 2 h): claim to close median 27 min, upper quartile 131 min, 14 items, 9.0 results per hour; stages to-job 5, jobs 17, to-answer 1. A theory round is far slower: round 06 took 125 min, 68 of them in account stages (before.txt), and the account lost to a one-axis rival in account run 03 (-5.16 nats) and again in round 06 (-3.11).
+- Change (step 2, delete a stage): the account leaves the default round; `--with-account` brings it back (round.py, main 6b21139).
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | minutes per theory round | 125 | not measured yet | | 1 and 0 | before.txt; round 07's run.json |
+  | theories with a computed test (must not fall) | 9 | not measured yet | | 1 and 0 | round-06 metrics_v4.json |
+
+- Failures. Round 06 stopped once on a print of a missing refuting condition (fixed by its operator, f76706a). The GPU estimate of the self-open run was 25 H100 minutes against about 86 measured: the experiments stage estimates cost from token counts with no measured throughput; no code change yet, so the rank by separation per GPU minute is read as a rank, not as a budget.
+- Next entry checks: round 07's minutes against 125; whether any round-07 theory wins 2 separating tests; whether its top-ranked experiment is a change to the base alone that predicts more than 411 of 500.
+
+## 2026-11-15 11:25 UTC (loop cycle 7) meta/reviews/abaybektursun/20261115-1120/
+
+- Target (Team line, 4 h): claim to close median 92 min (142 at 10:18), upper quartile 210 min (210), 23 items; 7.2 results per hour (8.2). The median fell, the rate fell too. Stage medians of abaybektursun's items with jobs: to-job 5, jobs 129, to-answer 5 min (5, 112, 5).
+- Where the jobs are (cycle.txt): Modal 1 running or queued, median wait 12.9 min in the window, 0 failed of 85; vast.ai 57 listed, 9 with run minutes (15.7 to 136.2, median 69.1); AWS 0 listed: no ih job was submitted from this laptop since its records began at 10:21 (2 older ones still run).
+- Open measurements closed: hard328 four-sample rows in git: 3 folders (base, RL, Think-SFT; after.txt) against 0 of 3 at 03:15, 03:53 and 04:55: fixed by their owners. Sharding (named since 21:21 on day 1): `run_cell --shard k/N` with a join is on main (result-77ca14), checked on a 2-shard L40S run of 24 problems; no full sharded cell has run yet.
+- Score of cycle 6 (AWS records read by cycle.py): not measurable yet, no real record.
+- Change (step 2, delete stale text): the row "four-sample rows stay in the Modal Volume" leaves meta/FAILURES.md; its script is gone and the rows are in git.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | hard328 four-sample folders with rows in git | 0 of 3 | 3 | fixed by the owners | 1 | after.txt |
+  | rows of meta/FAILURES.md whose cause is gone | 1 | 0 | deleted | 1 | git diff |
+
+- Next cycle (8) is step-back 2. It checks: the first full sharded cell's minutes against 129; real AWS jobs in cycle.py; whether section 2 (Research) made anything in cycles 5 to 7; the skill edit of cycle 4.
+
 ## 2026-11-15 10:25 UTC (loop cycle 6; no tool change) meta/reviews/abaybektursun/20261115-1018/
 
 - Target (Team line, 4 h): claim to close median 142 min (43 at 09:14), upper quartile 210 min (124), 22 items; 8.2 results per hour (11.5). Worse again. Stage medians of abaybektursun's items with jobs: to-job 5, jobs 112, to-answer 5 min (2, 56, 1 at 09:14).

@@ -4,6 +4,7 @@ theory.json is a theory that survived its own tests. tests.json lists those test
 recipe that computed it from stored per-problem rows, the unit, the measured value, and the theory's prediction
 (value, low, high: a 90 % interval). Your job is to write the strongest rival to this theory and the tests that
 decide between the two. Files here:
+- DIRECTION.md: the team's research direction.
 - before.jsonl: the team's board items (results and knowledge) up to a cutoff, one JSON object per line (id, kind,
   at, who, text).
 - inventory.md: the per-problem row files the team has stored, how to fetch each, whether it is readable now, and
@@ -42,5 +43,9 @@ Rules:
   asks for a known number decides nothing, because both sides can read it.
 - value, low and high are your 90 % interval for the computed number: the interval is scored as a normal
   distribution (mean value, sd (high - low) / 3.29), so too wide earns little and too narrow loses when it misses.
+
+$intervention
+The intervention comes from the rival mechanism, not from the theory. The theory's advocate will predict its count
+from the theory, so a change on which the two mechanisms disagree is worth the most.
 
 Write only rival.json. Reply with the rival's statement.

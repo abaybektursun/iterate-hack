@@ -1,0 +1,5 @@
+[
+ {"k": 1, "value": -0.05, "low": -0.21, "high": 0.11, "why": "The budget part says T1 cap hits are long, unsolved problems that Math-RL finishes, so RL's raw rate on them (16 of 27, about 0.59, from result-5e17a6) should roughly match its rate on finished-wrong problems of the same low 4-sample base count (about 0.6-0.7), leaving an excess near zero, slightly negative."},
+ {"k": 2, "value": -0.06, "low": -0.2, "high": 0.08, "why": "On hard328 RL solves about 16-19 of the base's 77 cap hits (about 0.23) against 33 of 87 finished-wrong problems (0.38); because the mechanism makes cap hits failures to solve, they sit in the low-k3 strata where RL's finished-wrong rate is about 0.3, so stratifying shrinks the gap to a small negative value."},
+ {"k": 3, "value": 0.13, "low": 0.05, "high": 0.22, "why": "The budget part comes from RL training that counts truncated rollouts as negatives, which Think-SFT lacks (24 of its 46 misses are its own cap hits, mostly on the longest problems), so its gap should carry about the null's budget share (0.11) and not the RL cell's 0.25."}
+]

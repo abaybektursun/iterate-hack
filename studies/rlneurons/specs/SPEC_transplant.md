@@ -61,3 +61,21 @@ Test for "above both parents": per problem, M arm minus the mean of the three Th
 
 `results/transplant/<arm>-01/` per arm: `run.json`, `metrics.json`, `delta_sum.json`, `rows.jsonl`, one right and one wrong
 example; `results/transplant/readout.json`. Raw answers stay in `runs/<job-id>/` on the laptop.
+
+## Amendment 1 (2026-11-15 10:03 UTC, after the first sample of a = 1 and a = 2, before any run below)
+
+Seen so far, one sample each on hard328: a = 1 220 right, 75 cap hits; a = 2 234 right, 51 cap hits (Think-SFT alone 201 to
+219 right, 89 to 95 cap hits). MATH-500 a = 1: 467, the filed number. The a = 0.5 job hung at its last request and the control
+had not run (its norm check was wrong: BF16 rounding inflates dense noise to 1.40 times the intended norm; the control now
+checks that the noise carries none of the RL delta, and its larger norm is stated with its result).
+
+New arms, hard328, cue, T 1.0, one sample: a = 3 and a = 4 at seed 3,000,000; a second sample of a = 2 at seed 3,100,000;
+a = 0.5 again at seed 3,000,000.
+
+- H-dose (more of the RL delta keeps helping until the model breaks): right answers at a = 3 are at least 228 (within one
+  sample's noise of a = 2 or above it) and cap hits at most 51. Refuted for a = 3 by fewer than 220 right.
+- H-peak (a = 2 was a lucky sample): the second sample of a = 2 is below 222, the middle of a = 1's 220 and 234 rounded down
+  to Think-SFT's best sample plus 3. If it is 222 or more, a = 2 is reported as above Think-SFT with both samples.
+- Test against the parents as in the spec, now with a = 2's two samples averaged per problem.
+
+Outputs as written (deviation from the Outputs section): one folder per set, `results/transplant/hard328-01/` and `math500-01/`, each holding all arms.

@@ -151,3 +151,45 @@ reports the checks and the 30 hand labels only.
 reason, no answer text), `hand.json`, `readout.json`, `table.md`, `examples.json` (per model one DERIVED and one
 ASSERTED row with the quote and reason and the last 1,500 characters). Prompts and raw replies: `runs/derived/`
 (not committed).
+
+## Addendum 1: per-sample rates (after a review comment on result-02da9f)
+
+Written after `results/derived/hard328-01/` was posted and after the reviewer's two numbers were seen (per sample RL
+boxes an asserted wrong answer in about 21 %, the base in about 14 %; cap hits 286 base, 114 RL), before any other
+number of this addendum was computed. No new judge call: the labels are those of `results/derived/hard328-01/labels.jsonl`.
+
+The tables above condition on a long finished answer. A sample that hits the cap never enters them, and the base hits
+the cap 286 times against RL's 114. So equal shares among long finished wrong answers do not say that the two models
+emit asserted wrong answers equally often per generated sample.
+
+Unit: one generated sample (attempt 0, samples 0 to 3: 1,312 per model). Every sample has exactly one outcome:
+
+| Outcome | Rule | Source |
+|---|---|---|
+| long right, derived / asserted | finished, over 8,000 tokens, right | judge, weighted |
+| long wrong, derived / asserted | finished, over 8,000 tokens, wrong | judge, weighted |
+| short right / short wrong | finished, at most 8,000 tokens | counted; not judged |
+| cap hit | `cap_hit` (with or without a boxed value in the text) | counted |
+| no answer | no cap hit and no extracted answer | counted |
+
+Weighted: (rows of the stratum in the pool) x (label share in the judged sample of the stratum) / 1,312, the weighting
+of H2 (same code). Judge A in the main table, judge B beside it. Where judge B labelled the whole pool (RL: all 642 long
+finished answers; the base and Think-SFT: the 140 sampled rows only), its direct count is given too. Intervals:
+bootstrap over problems, 2,000 resamples, seed 0, the same resampled problems for both models of a difference.
+
+- H4. Per sample, RL emits more asserted wrong answers than the base. Refuted if the 95 % interval of RL minus base
+  (judge A, weighted) covers 0.
+- H5. The difference of H4 comes from how often RL finishes long and wrong, not from how often such an answer is
+  asserted. Exact split: d = (pool_rl - pool_base) / 1,312 x share_base + pool_rl / 1,312 x (share_rl - share_base),
+  pool = long finished wrong answers, share = their asserted share. Refuted if the first term is under half of d or
+  its interval covers 0.
+- Reported, no hypothesis: RL minus Think-SFT for the same rate with the same split; the cap-hit rate difference; and
+  the problems split by the base's cap hits (none; 1 to 4 of 4), with each model's cap hits and long finished wrong
+  and right answers in both groups, to see whether RL's extra long wrong answers sit where the base hits the cap.
+
+Predictions: asserted wrong per sample 21 / 14 / 3 % (RL / base / Think-SFT; the first two are the reviewer's); H4
+holds (+7 points, interval excludes 0); H5 holds (the pool term about 5 of the 7 points); RL's extra long wrong answers
+are mostly on problems where the base hits the cap.
+
+Output: `results/derived/hard328_persample-01/` (`run.json`, `readout.json`, `table.md`), from
+`python -m studies.rlneurons.analysis.derived score --per-sample --out <folder>`.

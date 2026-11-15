@@ -1,0 +1,62 @@
+Minutes per stage of theory round 06 (version 6.3), from the 'done in' lines of its two logs. Produced from the repository root by:
+
+cd studies/theory/results/engine/round-06 && python3 - <<'EOF'
+import re
+blocks = []
+for log in ("round06.log", "round06b.log"):
+    for line in open(log):
+        if m := re.match(r"== (\S+)", line):
+            blocks.append([log, m.group(1), []])
+        elif m := re.match(r"  (\S+) \(\w+\): done in (\d+) s", line):
+            blocks[-1][2].append((m.group(1), int(m.group(2))))
+crit = acc_sum = acc_crit = 0
+print("%-13s %-12s %4s %16s %17s %28s" % ("log", "stage", "jobs", "longest job min", "account jobs min", "longest non-account job min"))
+for log, stage, jobs in blocks:
+    if not jobs:
+        continue
+    # jobs of a block run in parallel; a send-back (fix/) runs after its job, so it adds
+    fix = sum(s for j, s in jobs if j.startswith("fix/"))
+    longest = max(s for j, s in jobs if not j.startswith("fix/")) + fix
+    acc = sum(s for j, s in jobs if "account" in j)
+    rest = max([s for j, s in jobs if "account" not in j and not j.startswith("fix/")] or [0]) + sum(s for j, s in jobs if j.startswith("fix/") and "account" not in j)
+    crit += longest; acc_sum += acc; acc_crit += longest - rest
+    print("%-13s %-12s %4d %16.1f %17.1f %28.1f" % (log, stage, len(jobs), longest / 60, acc / 60, rest / 60))
+    for j, s in jobs:
+        if "account" in j:
+            print("%32s account job %s: %.1f min" % ("", j, s / 60))
+print("model jobs on the critical path (longest job per stage block, summed): %.1f min; the rest of the wall time is test-script runs and scoring, which the logs do not time" % (crit / 60))
+print("TOTAL 125 min wall (run.json wall_time: 09:09:52Z to about 10:49Z, 10:52Z to 11:18:22Z); account stages %.1f min on the critical path, %.1f min of summed account job time (account and its send-back fix, test writer, replicate, claims, rival, rival2, defend, duel tests, duel replicate, review)" % (acc_crit / 60, acc_sum / 60))
+EOF
+
+Output:
+log           stage        jobs  longest job min  account jobs min  longest non-account job min
+round06.log   inventory       2             13.8               0.0                         13.8
+round06.log   mechanisms      1              6.1               0.0                          6.1
+round06.log   develop        12              3.6               0.0                          3.6
+round06.log   account         2             24.4              24.4                          0.0
+                                 account job account/r6-account: 21.9 min
+                                 account job fix/r6-account: 2.5 min
+round06.log   null_tests      2              1.9               0.0                          1.9
+round06.log   test            7             39.7              39.7                          3.0
+                                 account job test/r6-account: 39.7 min
+round06.log   replicate       6              4.8               4.8                          2.0
+                                 account job test/repl-r6-account: 4.8 min
+round06b.log  heldout         6              1.7               1.2                          1.7
+                                 account job claims/r6-account: 1.2 min
+round06b.log  rival           3              5.9               5.9                          2.2
+                                 account job rival/r6-account: 5.9 min
+round06b.log  defend          3              1.5               1.5                          0.9
+                                 account job defend/r6-account.turn1: 1.5 min
+round06b.log  rival2          3              4.0               3.0                          4.0
+                                 account job rival/r6-account.turn2: 3.0 min
+round06b.log  defend          3              1.9               1.5                          1.9
+                                 account job defend/r6-account.turn2: 1.5 min
+round06b.log  duel_test       6              2.7               4.2                          2.7
+                                 account job test/duel-r6-account.turn2: 1.7 min
+                                 account job test/duel-r6-account: 2.5 min
+round06b.log  replicate       3              3.0               0.9                          3.0
+                                 account job test/repl-r6-account.duel: 0.9 min
+round06b.log  review          3              4.1               3.2                          4.1
+                                 account job review/r6-account: 3.2 min
+model jobs on the critical path (longest job per stage block, summed): 119.1 min; the rest of the wall time is test-script runs and scoring, which the logs do not time
+TOTAL 125 min wall (run.json wall_time: 09:09:52Z to about 10:49Z, 10:52Z to 11:18:22Z); account stages 68.0 min on the critical path, 90.2 min of summed account job time (account and its send-back fix, test writer, replicate, claims, rival, rival2, defend, duel tests, duel replicate, review)

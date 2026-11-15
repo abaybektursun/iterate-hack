@@ -1,0 +1,23 @@
+{
+ "theory": "r6-m05",
+ "items": [
+  {
+   "k": 1,
+   "experiment": "Mechanism test: ratio of the RL/base hold-on rate ratio far from the last numeric result to the same ratio near it, R(d >= 1500) / R(d < 200), on finished MATH-500 answers. The constant-bias rival (r4-m06) predicts about 1.0; the wrap-up-replacement rival predicts below 1.0; this mechanism predicts well above 1.",
+   "original": 0.9725264665193447,
+   "replicated": 0.9725264665193447,
+   "status": "replicated",
+   "script": "replication/r6-m05/p1.py",
+   "not_computable": null
+  },
+  {
+   "k": 3,
+   "experiment": "Cause test against a position rival: the same far/near contrast R(d >= 1500) / R(d < 200), computed only on character positions in the first half of each answer. The rival in which RL's excess comes from a late verification phase of the answer (excess grows with position in the answer, not with distance from a result) predicts about 1.0 here; the timer, which resets at every result regardless of where it is, predicts a clearly rising profile in the first half as well.",
+   "original": 0.9024747907285835,
+   "replicated": 0.9024747907285835,
+   "status": "replicated",
+   "script": "replication/r6-m05/p3.py",
+   "not_computable": null
+  }
+ ]
+}

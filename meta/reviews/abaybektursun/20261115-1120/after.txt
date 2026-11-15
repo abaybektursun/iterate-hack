@@ -1,0 +1,6 @@
+git ls-files | grep 'hard328.*rows.jsonl', 11:22 UTC (0 files at 03:15, 03:53 and 04:55):
+studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01/rows.jsonl
+studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl
+studies/rlneurons/results/table/hard328-01/v4_rows.jsonl
+studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl
+studies/rlneurons/analysis/day1_join_shards.py in git: 0 files
