@@ -1,0 +1,5 @@
+{
+ "job": "abaybektursun-1114-212139-0b2b",
+ "command": "python -m studies.rlneurons.analysis.critic_probe abaybektursun-1114-212139-0b2b",
+ "raw": "runs/abaybektursun-1114-212139-0b2b/ (uv run tools/gpu.py get abaybektursun-1114-212139-0b2b)"
+}

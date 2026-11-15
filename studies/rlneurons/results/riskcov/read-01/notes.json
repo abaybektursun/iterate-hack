@@ -1,0 +1,38 @@
+{
+ "what": "Hand read of 25 rows of rows.json (hard328, attempt 0), drawn with seed 0 by analysis/riskcov.py --read. Read: the last 1,700 characters of each RL row (the final write-up after the reasoning), the last 1,100 of each Think-SFT row, the last 800 of each cap hit. A hand read of 25 rows, not a measurement; the earlier reasoning of each text was not read.",
+ "rl_long_wrong_where_think_capped": {
+  "57/1": "derives 2744 by inclusion-exclusion with a wrong count (treats the rectangles as disjoint): derived, wrong",
+  "63/0": "analyses ranges, then 'there are typically two fixed points': the count is stated, not derived",
+  "76/2": "'We hypothesize that the triangle is right-angled at A', then derives 384 from that unchecked assumption",
+  "101/2": "derives an area with arithmetic that does not hold (1/2 x 1369 written as 1521), then fits it to 39^2: derived, wrong",
+  "117/3": "computes x_4 as a large fraction, then writes 'Simplify: x_4 = 25/11' (false) to claim period 3: a made-up step closes the answer",
+  "165/0": "derives r/2025! = 1 - 1/2025!, then 'typically the answer is expected to be an integer or a simple fraction' and boxes 1: stated against its own derivation",
+  "189/2": "derives 0.13, then 'However, the correct answer based on the common geometric properties and the boxed integer result is 6': stated, not derived",
+  "215/2": "pattern from n = 1, 2 and 'the hypothetical n = 3': triangular numbers, not derived",
+  "313/2": "'we assume a = 14 and check' with no check that uses the conditions: stated",
+  "318/2": "'It turns out this point is valid', 'by symmetry there is another': stated"
+ },
+ "rl_summary": "Of 10: 2 derive the boxed answer with an error in the derivation (57, 101); 1 derives it from an assumption it never checks (76); 1 closes with a false step (117); 6 box an answer the write-up does not derive (63, 165, 189, 215, 313, 318), three of them with words that say so ('typically', 'the correct answer based on ... the boxed integer result', 'we assume'). None stops mid-text: every one ends in a formatted final answer.",
+ "think_long_right": {
+  "0/3": "derived",
+  "65/0": "derived (volume and surface, inradius)",
+  "147/2": "derived (enumeration of root triples)",
+  "182/2": "derived",
+  "248/3": "enumeration with a duplicated list, total right",
+  "289/1": "exhaustive search in the reasoning, with Chinese words mixed in; answer restated after 'I need to check once more'",
+  "319/1": "'the answer is likely 6': hedged, right",
+  "333/2": "derived",
+  "346/0": "derived",
+  "360/3": "derived"
+ },
+ "think_summary": "Of 10: 8 derive the boxed answer in the write-up; 2 are hedged or search-based (289, 319).",
+ "think_cap_hits_same_problems": {
+  "57/0": "still testing its counting formula on small cases at the cap",
+  "63/1": "found an error in its own formula ('this suggests an error in the calculation') and is redoing it, partly in Chinese",
+  "76/1": "mid-computation of AB x AC from a consistent solution",
+  "101/0": "cut inside the final write-up; the extracted answer 510 is right (a cap hit that is scored right)",
+  "117/0": "still computing exact fractions of the sequence, partly in Chinese: the same computation RL closed with the false 'x_4 = 25/11'"
+ },
+ "cap_summary": "Of 5: 4 are mid-computation or re-checking when the cap arrives, 1 is cut inside a right final write-up. On the same problems RL's long finished answers end in a boxed number.",
+ "rough_count_not_in_spec": "Share of RL's finished answered samples whose last 3,000 characters hold under 3 % digits and LaTeX symbols (text that is not mathematics): 5 of 1,197 (1 of the 100 above 15,000 tokens: problem 88 sample 2, which ends in unrelated words and a box). Long wrong RL answers are almost all ordinary mathematical text."
+}

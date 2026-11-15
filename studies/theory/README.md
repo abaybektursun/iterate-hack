@@ -367,6 +367,7 @@ board already gives is input (`known`), not a prediction. Plans `specs/SPEC_acco
 |---|---|---|---|---|---|---|---|
 | `results/account/run-01/` | b7f1ae2 | 1: MATH-500 T 1.0, cued base against RL, 65 gap problems (already tabulated by result-5e17a6) | 9 of 9 | 8 / 1 / 0 | -1.30 | no gain | Restated the board's budget; its budget and answer-statement shares equal both readers' centres. |
 | `results/account/run-02/` | 856971b | 3 new cells, known cell as input | 20 of 20 | 17 / 1 / 2 | +1.61 | refuted by p16 | Budgets reproduce exactly; p16 (reliability at T 0.6, 0.379 against 0.15 [0.07, 0.25]) fails mostly on grader v1. |
+| `results/account/run-03/` | 537adb7 | 5 new cells, 3 claimed cells fitted (not scored), 1 null cell | 46 of 46 scored (66 offline) | 40 / 6 / 0 | +8.23 | survives; loses to rival, -5.16; review weak | 51 of 51 shares recomputed equal; no part of the MATH-500 T 1.0 gaps differs from the null; +8.77 nats come from answer-statement shares. |
 
 Budgets of run 02 (share of gross gap problems; 90 % bootstrap over gap problems, 2,000 resamples, seed 0; reliability and capability with all
 evidence rows E and with E cut to 3 rows; unassigned 0 everywhere). Engine values: `results/account/run-02/metrics_v4.json` and `tests/r6-account/`;
@@ -390,6 +391,75 @@ recomputation, known cell under the same rules and null cell: `results/account/r
   capability problems are right in a stored forced-commit base row (`check/rawtext.out.txt`).
 - No board item or committed file before this run gave a breakdown of the three new cells. Hypotheses: A1 holds, A2 refuted, A3 and A4 not run
   (no rival, no review); B1 holds only on the readers' mean (9 of 18), B2 holds, B3 refuted, B4 holds (`results/account/run-02/readout.md`).
+
+Run 03 (version 6.2, code 537adb7, plan `specs/SPEC_account03.md`, record `results/account/run-03/run.json`, readout
+`results/account/run-03/readout.md`, examples `results/account/run-03/examples.json`). New in 6.2: a null cell (cued base against a second
+cued-base sample), every share also as its difference from the null, gross and net counts, one evidence set for all cells (2 plain-base rows,
+grader v3), claimed cells fitted and not scored, shares 0 by construction not scored, a `replicate` stage, and the review always. Account
+`r7-account` (`results/account/run-03/theories/r7-account.json`): parts loop, budget, answer statement, reliability (a plain-base row right),
+deliberation (no plain-base row right). Shares of gross gap problems (`results/account/run-03/metrics_v4.json`, `tests/r7-account/p<k>.out.txt`;
+90 % intervals in the readout); * = 90 % interval apart from the null's; unassigned 0 everywhere.
+
+| Cell | Gap / base-only / net | Loop | Budget | Answer statement | Reliability | Deliberation |
+|---|---|---|---|---|---|---|
+| null: second cued-base sample, MATH-500 T 1.0 | 27 / 32 / -5 | 0 | 0.111 | 0.037 | 0.481 | 0.370 |
+| fit: RL plain, MATH-500 T 1.0 | 65 / 13 / +52 | 0 | 0.246 | 0.031 | 0.431 | 0.292 |
+| fit: RL plain, hard328 T 1.0 | 52 / 7 / +45 | 0 | 0.365 * | 0.019 | 0.212 * | 0.404 |
+| fit: RL step 2,800 plain, MATH-500 T 0.6 | 112 / 9 / +103 | 0.598 * | 0.179 | 0.009 | 0.152 * | 0.062 * |
+| Code-RL cue, MATH-500 T 1.0 | 57 / 17 / +40 | 0 | 0.228 | 0.035 | 0.474 | 0.263 |
+| theta0.5 cue, hard328 T 1.0 | 40 / 13 / +27 | 0 | 0.375 * | 0.025 | 0.250 | 0.350 |
+| step 400 plain, MATH-500 T 0.6 | 55 / 29 / +26 | 0.527 * | 0.145 | 0.018 | 0.218 * | 0.091 * |
+| step 100 plain, MATH-500 T 0.6 | 61 / 33 / +28 | 0.590 * | 0.115 | 0.016 | 0.197 * | 0.082 * |
+| 3.0 first release plain, MATH-500 T 0.6 | 76 / 58 / +18 | 0.605 * | 0.145 | 0.013 | 0.171 * | 0.066 * |
+
+- Every difference from the null that clears the intervals (15) is in a T 0.6 or hard328 cell; the null is MATH-500 T 1.0, so these also change
+  temperature or problem set. The matched cells, RL and Code-RL on MATH-500 T 1.0, differ from the null in no part (0 of 10).
+- Replication (`results/account/run-03/replication/r7-account.json`, `r7-account.duel.json`): 51 of 51 shares and 2 of 2 duel tests equal.
+- The account's mechanism (RL multiplies a deliberation mode) missed where tested: Code-RL deliberation 0.263 against 0.43 [0.30, 0.56] (p33,
+  -2.06 nats) and reliability 0.474 against 0.29 [0.17, 0.42] (p32, -1.82), both outside within noise. Its gain is answer-statement shares
+  (+8.77 nats over 6 cells) and undeclared zeros (+1.95).
+- Rival (`results/account/run-03/metrics_v5.json`): one difficulty axis plus sampling (result-5da8a9). theta0.5 cue on MATH-500, 52 gap problems:
+  reliability 0.481 (account 0.31, rival 0.45, -2.85 nats), deliberation 0.269 (account 0.40, rival 0.28, -1.68); Think-SFT cue, 65 gap
+  problems: reliability 0.385 (account 0.29, rival 0.43, -0.63). Total -5.16, loses to rival. Review weak
+  (`results/account/run-03/reviews/r7-account.json`): the rival's one-axis premise is contradicted off MATH-500 by result-bf6124; its core is on
+  the board (result-5da8a9, result-f39ba8) and partly in Yue et al. 2504.13837.
+- Held-out: 6 claims, 0 strikes; 2 of them (t58, t60, +3.0 each) were in the account's inputs (`graveyard.json`, `facts.json`).
+- Hypotheses: C1 to C4 hold (`results/account/run-03/readout.md`). Nothing new for the board against result-f39ba8; draft confirmation and
+  correction in `results/account/run-03/board_posts.md`.
+
+## Promoted run 01 (version 6.2, cutoff 11-15 04:29:33 UTC)
+
+Plan `specs/SPEC_promoted01.md`; code 537adb7 (replicate and review at 28db85f); record `results/promoted/run-01/run.json`, readout
+`results/promoted/run-01/readout.md`. The round-04 winner r4-m10-rival (RL's first 100 steps install the opening the cue forces, with no per-token
+sharpening; 6 carried tests, +7.81 nats) met a fresh rival: truncation-negative reward prunes T 0.6 loops from the first steps, so cap hits fall
+steadily. Three rival tests (`results/promoted/run-01/metrics_v5.json`, `rivals/r4-m10-rival/`), plain prompt, T 0.6 / top-p 0.95:
+
+| Test | n | Measured | Theory | Rival | Gain |
+|---|---|---|---|---|---|
+| Step-400 cap-hit rate, MATH-500 | 500 | 0.196 [0.166, 0.226] | 0.235 | 0.15 | +0.39 |
+| Step 100 minus step 400, paired, MATH-500 | 500 | +0.010 [-0.020, 0.040] | 0 | 0.05 | +0.81 |
+| Step 400 minus cued base, paired, 400-problem hard set | 400 | -0.0475 [-0.0875, -0.0075] | -0.01 | -0.10 | +0.29 |
+
+- Total +1.49 nats, not separated from rival. Tests 1 and 2 restate numbers already in `results/promoted/run-01/facts.json` (entries 24 and 25,
+  round-04 step 100 and step 400 minus base: 0.076 and 0.066). No duel test reached 1 nat, so nothing was recomputed.
+- Review weak (`results/promoted/run-01/reviews/r4-m10-rival.json`): 6.0 of the 7.81 offline nats rest on one measurement implied by Wang et al.
+  2610.06851; the flat-cap-hit claim was fitted to counts the theory had seen, and step 100 and step 400 sit below the cued base (103 and 98
+  against 119 of 500). P1, P2, P3 hold; P4 not tested. Separating test: plain T 0.6 cap hits at a checkpoint between steps 800 and 1,600.
+
+## GPU experiments
+
+**selfopen-01** (round-05 entry `r5-m10:theory:intervention`; plan `specs/SPEC_selfopen01.md`). Rejection sampling on the plain base's own
+opening, no prefilled tokens: per problem up to 32 openings of 24 tokens, keep the first with '\nOkay' in its first 60 characters, continue it
+to 16,384 tokens (T 1.0 / top-p 1.0, grader v3). **411 of 500** (cap hits 20, 3,795 tokens per answer), against the stored plain T3 224 and the
+stored cue T1 410. r5-m10 predicted 375 [348, 400] (refuted); its rival 405 [386, 422] (holds). Control (first draw that does not self-open,
+continued the same way): 137 of 403 on the problems that self-opened, against 332 of 403 for the main arm, +48.4 points [42.9, 53.6]; T1 on the
+same 403: 329. 94 stored T3 rows already self-opened (78 right); of the 406 regenerated problems 403 self-opened within 32 draws (median 4
+draws), 3 never did (1 right).
+- Files: `prep/selfopen01_t3.py` writes `data/selfopen01_t3.json` (the 94 stored self-opened rows, the 406 to regenerate); `jobs/selfopen_gen.py`
+  (GPU, `--shard k/4`); `analysis/selfopen01.py` (readout, merges the shards). Outputs `results/experiments/selfopen-01/` (`run.json` with the
+  job ids, `metrics.json`, `per_problem.json`, `examples.json`).
+- Raw generations (not committed): `runs/abaybektursun-1115-021039-24f7/{s0,s2}`, `runs/ih-1115-095450-2b5a`, `runs/abaybektursun-1115-015601-2e73`
+  on the laptop of the run; the AWS shard also in `s3://pg-lineage-769063704696/results/ih/ih-1115-095450-2b5a/out/`.
 
 ## Theories
 
@@ -456,3 +526,5 @@ Round-01 forward predictions of idea-0b2ad8 that have been measured (`round-02/r
   It follows from RL writing longer answers (result-5e17a6) and does not separate the mechanisms.
 
 P3 to P6 have no measurement in this record (P3: not measured by the team, per the same review).
+
+Page of the gap account (run-02): `tools/finding_where_the_gap_goes.py`, served at `/finding/where-the-gap-goes`; its numbers are read from `results/account/run-02/check/` and `python3 tools/finding_where_the_gap_goes.py` checks them.

@@ -42,10 +42,16 @@ DATA = {
         "artifact": "studies/rlneurons/results/commit1/base-01/readout.json", "commit": "efac028",
         "n": 328, "stored": 164, "cap": 77, "cut_at": 8000, "forced": 152, "diff": 3.7, "ci": [1.2, 6.4], "cap_right_most": 2,
     },
+    # The restart scored on the 328 at T 1.0 / top-p 1.0 (board result-5c961a): rows single, restart, vote and
+    # vote_after_restart (right), differences_points "restart - single".
+    "hard_restart": {
+        "artifact": "studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01/readout.json", "commit": "2c58f34",
+        "single": 161, "restart": 172, "diff": 3.4, "ci": [1.5, 5.5], "vote": 192, "vote_restart": 195,
+    },
     # rows.math500_base_cue_t06_p10-01 (base, cue, T 0.6 / top-p 1.0): cap_hits, loops_A
     "loops": {"artifact": "studies/rlneurons/results/day1/readout.json", "commit": "3407c6e", "cap": 98, "flagged": 71},
 }
-D, T10, HARD, LOOPS = DATA, DATA["t10"], DATA["hard"], DATA["loops"]
+D, T10, HARD, LOOPS, HR = DATA, DATA["t10"], DATA["hard"], DATA["loops"], DATA["hard_restart"]
 FIRST, SECOND = D["first"], D["second"]
 FINISHED = [FIRST["n"] - FIRST["cap"], SECOND["n"] - SECOND["cap"]]  # answers that end below the limit: 50 and 24
 # What the picture shows. Before: answers that finished right, finished wrong, or hit the limit. After: where the
@@ -109,7 +115,10 @@ PANELS = [
      f"{HARD['ci'][0]:.1f} to {HARD['ci'][1]:.1f}).",
      [f"On those harder problems, at temperature 1.0, a forced answer is right on at most {HARD['cap_right_most']} of the "
       f"{HARD['cap']} answers that hit the limit. There the limit marks a failure to solve rather than a failure to stop. "
-      "The restart itself has no scored row on that set.",
+      f"Scored on the same set, the restart takes one sample from {HR['single']} to {HR['restart']} right "
+      f"(+{HR['diff']:g} points, 95 % interval {HR['ci'][0]:g} to {HR['ci'][1]:g}) but adds only "
+      f"{100 * (HR['vote_restart'] - HR['vote']) / HARD['n']:.1f} points to a vote over four ({HR['vote_restart']} against "
+      f"{HR['vote']}).",
       f"The {GAIN:g} points belong to temperature 0.6. One sample at temperature 1.0 with no restart is right on "
       f"{T10['single']} to {D['chart_before']} of {D['n']} at {T10['single_tokens']:,} generated tokens per problem. The "
       f"restart at 0.6 needs {D['restart_tokens']:,}.",
@@ -122,7 +131,8 @@ PANELS = [
       "The temperature 0.6 rows were scored by studies/rlneurons/grader/rln4_grader_v3.py from raw answers stored outside the "
       "repository. Its numbers are in " + DATA["artifact"] + " (commit " + DATA["commit"] + "): cells base_opener_0.6, K_fresh "
       "and K_fresh2, and restart_row.",
-      "The forced answers on the harder problems are in " + HARD["artifact"] + " (commit " + HARD["commit"] + ")."]],
+      "The forced answers on the harder problems are in " + HARD["artifact"] + " (commit " + HARD["commit"] + "), and the "
+      "restart on them in " + HR["artifact"] + " (job commit " + HR["commit"] + ")."]],
 ]
 
 # The icon of this finding's tile on /findings (tools/findings.py says how it is called): the page's own picture,

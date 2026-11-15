@@ -1,0 +1,33 @@
+{
+ "commit": "141c605a1df46fb4ffa25c120e5bb6f2c26ff46d",
+ "job_id": "abaybektursun-1115-013431-3d3b",
+ "config": {
+  "finisher": "rl",
+  "finisher_path": null,
+  "plan": "plan_v2.json",
+  "cuts": [
+   50
+  ],
+  "writers": "/runs",
+  "n": null,
+  "out": "/runs/abaybektursun-1115-013431-3d3b",
+  "dry_run": false,
+  "commit": "141c605a1df46fb4ffa25c120e5bb6f2c26ff46d",
+  "model_repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+  "model_revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05",
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "cap": 16384,
+  "n_requests": 656
+ },
+ "status": "done",
+ "rows": 656,
+ "raw": "answers.jsonl in $OUT_DIR of abaybektursun-1115-013431-3d3b (Volume iterate-runs)"
+}

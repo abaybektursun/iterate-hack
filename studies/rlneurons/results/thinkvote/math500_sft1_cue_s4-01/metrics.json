@@ -1,0 +1,163 @@
+{
+ "status": "done",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "sft1",
+  "prompt": "cue",
+  "set": "math500",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 16384,
+  "seed": 181000000,
+  "shots": null,
+  "n": null,
+  "samples": 4,
+  "restarts": 0,
+  "out": "/runs/abaybektursun-1115-000512-ee03",
+  "dry_run": false,
+  "commit": "ff0c7156481cf85b08cecc0a66547cdfc8a27d62",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 500,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "commit": "ff0c7156481cf85b08cecc0a66547cdfc8a27d62",
+ "job_id": "abaybektursun-1115-000512-ee03+abaybektursun-1115-014843-85d9+abaybektursun-1115-000607-0e92+abaybektursun-1115-000621-1d7e",
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-15T06:45:56Z",
+ "updated_utc": "2026-11-15T07:17:44Z",
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 29067,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 18432,
+  "load_s": 37.3247435092926,
+  "model_dir": "/tmp/theta",
+  "tok_dir": "/__modal/volumes/vo-rul9XKaAuhEZE7QxFIdPN3/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ },
+ "counts": {
+  "n": 2000,
+  "correct_v3": 1841,
+  "correct_v1": 1811,
+  "cap_hits": 93,
+  "loop_A": 21,
+  "generated_tokens": 9751414,
+  "restarts": 0,
+  "n_planned": 2000,
+  "mean_generated_tokens": 4875.707
+ },
+ "memory": {
+  "gpu_memory_used_mib": 74039,
+  "gpu_memory_total_mib": 81559,
+  "gpu": "NVIDIA H100 80GB HBM3"
+ },
+ "wall_s": 1907.9720568656921,
+ "joined_from": [
+  {
+   "job_id": "abaybektursun-1115-000512-ee03",
+   "commit": "ff0c7156481cf85b08cecc0a66547cdfc8a27d62",
+   "seed": 181000000,
+   "counts": {
+    "n": 500,
+    "tok_p_lt_1e2": 40859,
+    "tok_p_lt_1e3": 9579,
+    "correct_v3": 461,
+    "correct_v1": 458,
+    "cap_hits": 26,
+    "loop_A": 10,
+    "generated_tokens": 2449995,
+    "restarts": 0,
+    "n_planned": 500,
+    "mean_generated_tokens": 4899.99,
+    "generation_s": 1865.7898795604706,
+    "tokens_per_s": 1313.1141008102973
+   }
+  },
+  {
+   "job_id": "abaybektursun-1115-014843-85d9",
+   "commit": "b3af1723252381acd5b087c4402929fc092c3d38",
+   "seed": 181010000,
+   "counts": {
+    "n": 500,
+    "tok_p_lt_1e2": 43722,
+    "tok_p_lt_1e3": 10327,
+    "correct_v3": 457,
+    "correct_v1": 451,
+    "cap_hits": 22,
+    "loop_A": 3,
+    "generated_tokens": 2460698,
+    "restarts": 0,
+    "n_planned": 500,
+    "mean_generated_tokens": 4921.396,
+    "generation_s": 1894.8901805877686,
+    "tokens_per_s": 1298.5966285585614
+   }
+  },
+  {
+   "job_id": "abaybektursun-1115-000607-0e92",
+   "commit": "ff0c7156481cf85b08cecc0a66547cdfc8a27d62",
+   "seed": 181020000,
+   "counts": {
+    "n": 500,
+    "tok_p_lt_1e2": 44612,
+    "tok_p_lt_1e3": 10750,
+    "correct_v3": 462,
+    "correct_v1": 452,
+    "cap_hits": 25,
+    "loop_A": 6,
+    "generated_tokens": 2476385,
+    "restarts": 0,
+    "n_planned": 500,
+    "mean_generated_tokens": 4952.77,
+    "generation_s": 1908.2419674396515,
+    "tokens_per_s": 1297.731127527105
+   }
+  },
+  {
+   "job_id": "abaybektursun-1115-000621-1d7e",
+   "commit": "ff0c7156481cf85b08cecc0a66547cdfc8a27d62",
+   "seed": 181030000,
+   "counts": {
+    "n": 500,
+    "tok_p_lt_1e2": 41559,
+    "tok_p_lt_1e3": 9814,
+    "correct_v3": 461,
+    "correct_v1": 450,
+    "cap_hits": 20,
+    "loop_A": 2,
+    "generated_tokens": 2364336,
+    "restarts": 0,
+    "n_planned": 500,
+    "mean_generated_tokens": 4728.672,
+    "generation_s": 1771.548734664917,
+    "tokens_per_s": 1334.615274045626
+   }
+  }
+ ]
+}

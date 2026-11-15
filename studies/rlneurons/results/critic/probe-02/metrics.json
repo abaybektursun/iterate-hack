@@ -1,0 +1,753 @@
+{
+ "job": "abaybektursun-1114-212139-0b2b",
+ "samples": 2000,
+ "flag_rate": 0.829,
+ "correct_rate": 0.821,
+ "checkpoints": {
+  "0": {
+   "samples_reaching": 2000,
+   "flag_rate": 0.829,
+   "probe_L12": {
+    "within_flag": {
+     "value": 0.5,
+     "ci95": [
+      0.5,
+      0.5
+     ],
+     "problems": 137,
+     "pairs": 448
+    },
+    "within_correct": {
+     "value": 0.5,
+     "ci95": [
+      0.5,
+      0.5
+     ],
+     "problems": 150,
+     "pairs": 478
+    },
+    "pooled_flag": 0.7268,
+    "pooled_correct": 0.7305
+   },
+   "probe_L20": {
+    "within_flag": {
+     "value": 0.5,
+     "ci95": [
+      0.5,
+      0.5
+     ],
+     "problems": 137,
+     "pairs": 448
+    },
+    "within_correct": {
+     "value": 0.5,
+     "ci95": [
+      0.5,
+      0.5
+     ],
+     "problems": 150,
+     "pairs": 478
+    },
+    "pooled_flag": 0.7626,
+    "pooled_correct": 0.765
+   },
+   "probe_L28": {
+    "within_flag": {
+     "value": 0.5,
+     "ci95": [
+      0.5,
+      0.5
+     ],
+     "problems": 137,
+     "pairs": 448
+    },
+    "within_correct": {
+     "value": 0.5,
+     "ci95": [
+      0.5,
+      0.5
+     ],
+     "problems": 150,
+     "pairs": 478
+    },
+    "pooled_flag": 0.7666,
+    "pooled_correct": 0.7656
+   }
+  },
+  "250": {
+   "samples_reaching": 1993,
+   "flag_rate": 0.8289,
+   "mean_logprob": {
+    "within_flag": {
+     "value": 0.5551,
+     "ci95": [
+      0.4955,
+      0.6116
+     ],
+     "problems": 137,
+     "pairs": 445
+    },
+    "within_correct": {
+     "value": 0.5137,
+     "ci95": [
+      0.4568,
+      0.5723
+     ],
+     "problems": 150,
+     "pairs": 475
+    },
+    "pooled_flag": 0.6266
+   },
+   "mean_entropy": {
+    "within_flag": {
+     "value": 0.5663,
+     "ci95": [
+      0.5081,
+      0.6258
+     ],
+     "problems": 137,
+     "pairs": 445
+    },
+    "within_correct": {
+     "value": 0.5242,
+     "ci95": [
+      0.4641,
+      0.5819
+     ],
+     "problems": 150,
+     "pairs": 475
+    },
+    "pooled_flag": 0.6401
+   },
+   "probe_L12": {
+    "within_flag": {
+     "value": 0.5011,
+     "ci95": [
+      0.4412,
+      0.5583
+     ],
+     "problems": 137,
+     "pairs": 445
+    },
+    "within_correct": {
+     "value": 0.5242,
+     "ci95": [
+      0.4687,
+      0.5846
+     ],
+     "problems": 150,
+     "pairs": 475
+    },
+    "pooled_flag": 0.6873,
+    "pooled_correct": 0.6997,
+    "within_correct_trained_on_key": {
+     "value": 0.5537,
+     "ci95": [
+      0.4979,
+      0.6123
+     ],
+     "problems": 150,
+     "pairs": 475
+    }
+   },
+   "probe_L20": {
+    "within_flag": {
+     "value": 0.5034,
+     "ci95": [
+      0.4422,
+      0.5625
+     ],
+     "problems": 137,
+     "pairs": 445
+    },
+    "within_correct": {
+     "value": 0.4947,
+     "ci95": [
+      0.4355,
+      0.553
+     ],
+     "problems": 150,
+     "pairs": 475
+    },
+    "pooled_flag": 0.7087,
+    "pooled_correct": 0.719,
+    "within_correct_trained_on_key": {
+     "value": 0.52,
+     "ci95": [
+      0.4601,
+      0.5762
+     ],
+     "problems": 150,
+     "pairs": 475
+    }
+   },
+   "probe_L28": {
+    "within_flag": {
+     "value": 0.5101,
+     "ci95": [
+      0.448,
+      0.5721
+     ],
+     "problems": 137,
+     "pairs": 445
+    },
+    "within_correct": {
+     "value": 0.5158,
+     "ci95": [
+      0.4542,
+      0.5756
+     ],
+     "problems": 150,
+     "pairs": 475
+    },
+    "pooled_flag": 0.7064,
+    "pooled_correct": 0.7179,
+    "within_correct_trained_on_key": {
+     "value": 0.4989,
+     "ci95": [
+      0.4371,
+      0.5584
+     ],
+     "problems": 150,
+     "pairs": 475
+    }
+   }
+  },
+  "500": {
+   "samples_reaching": 1854,
+   "flag_rate": 0.8188,
+   "mean_logprob": {
+    "within_flag": {
+     "value": 0.5511,
+     "ci95": [
+      0.4926,
+      0.611
+     ],
+     "problems": 134,
+     "pairs": 421
+    },
+    "within_correct": {
+     "value": 0.5356,
+     "ci95": [
+      0.4776,
+      0.5951
+     ],
+     "problems": 147,
+     "pairs": 450
+    },
+    "pooled_flag": 0.6515
+   },
+   "mean_entropy": {
+    "within_flag": {
+     "value": 0.5653,
+     "ci95": [
+      0.5072,
+      0.6241
+     ],
+     "problems": 134,
+     "pairs": 421
+    },
+    "within_correct": {
+     "value": 0.5422,
+     "ci95": [
+      0.4826,
+      0.6031
+     ],
+     "problems": 147,
+     "pairs": 450
+    },
+    "pooled_flag": 0.662
+   },
+   "probe_L12": {
+    "within_flag": {
+     "value": 0.5416,
+     "ci95": [
+      0.4809,
+      0.6
+     ],
+     "problems": 134,
+     "pairs": 421
+    },
+    "within_correct": {
+     "value": 0.5644,
+     "ci95": [
+      0.5068,
+      0.6233
+     ],
+     "problems": 147,
+     "pairs": 450
+    },
+    "pooled_flag": 0.6888,
+    "pooled_correct": 0.7099,
+    "within_correct_trained_on_key": {
+     "value": 0.5511,
+     "ci95": [
+      0.4925,
+      0.6099
+     ],
+     "problems": 147,
+     "pairs": 450
+    }
+   },
+   "probe_L20": {
+    "within_flag": {
+     "value": 0.4964,
+     "ci95": [
+      0.4364,
+      0.5561
+     ],
+     "problems": 134,
+     "pairs": 421
+    },
+    "within_correct": {
+     "value": 0.5311,
+     "ci95": [
+      0.4699,
+      0.5922
+     ],
+     "problems": 147,
+     "pairs": 450
+    },
+    "pooled_flag": 0.6994,
+    "pooled_correct": 0.7143,
+    "within_correct_trained_on_key": {
+     "value": 0.5333,
+     "ci95": [
+      0.4741,
+      0.5903
+     ],
+     "problems": 147,
+     "pairs": 450
+    }
+   },
+   "probe_L28": {
+    "within_flag": {
+     "value": 0.5131,
+     "ci95": [
+      0.447,
+      0.5748
+     ],
+     "problems": 134,
+     "pairs": 421
+    },
+    "within_correct": {
+     "value": 0.5333,
+     "ci95": [
+      0.4739,
+      0.5907
+     ],
+     "problems": 147,
+     "pairs": 450
+    },
+    "pooled_flag": 0.6976,
+    "pooled_correct": 0.7127,
+    "within_correct_trained_on_key": {
+     "value": 0.5156,
+     "ci95": [
+      0.4529,
+      0.5766
+     ],
+     "problems": 147,
+     "pairs": 450
+    }
+   }
+  },
+  "1000": {
+   "samples_reaching": 1441,
+   "flag_rate": 0.7835,
+   "mean_logprob": {
+    "within_flag": {
+     "value": 0.5206,
+     "ci95": [
+      0.4529,
+      0.5853
+     ],
+     "problems": 110,
+     "pairs": 340
+    },
+    "within_correct": {
+     "value": 0.496,
+     "ci95": [
+      0.4354,
+      0.559
+     ],
+     "problems": 125,
+     "pairs": 373
+    },
+    "pooled_flag": 0.6146
+   },
+   "mean_entropy": {
+    "within_flag": {
+     "value": 0.5353,
+     "ci95": [
+      0.4665,
+      0.6017
+     ],
+     "problems": 110,
+     "pairs": 340
+    },
+    "within_correct": {
+     "value": 0.5094,
+     "ci95": [
+      0.4438,
+      0.575
+     ],
+     "problems": 125,
+     "pairs": 373
+    },
+    "pooled_flag": 0.6254
+   },
+   "probe_L12": {
+    "within_flag": {
+     "value": 0.5706,
+     "ci95": [
+      0.5088,
+      0.634
+     ],
+     "problems": 110,
+     "pairs": 340
+    },
+    "within_correct": {
+     "value": 0.5845,
+     "ci95": [
+      0.5245,
+      0.6451
+     ],
+     "problems": 125,
+     "pairs": 373
+    },
+    "pooled_flag": 0.6677,
+    "pooled_correct": 0.6834,
+    "within_correct_trained_on_key": {
+     "value": 0.5255,
+     "ci95": [
+      0.4595,
+      0.5915
+     ],
+     "problems": 125,
+     "pairs": 373
+    },
+    "within_flag_trained_on_shuffled": {
+     "value": 0.5029,
+     "ci95": [
+      0.4389,
+      0.5647
+     ],
+     "problems": 110,
+     "pairs": 340
+    }
+   },
+   "probe_L20": {
+    "within_flag": {
+     "value": 0.4853,
+     "ci95": [
+      0.4189,
+      0.5478
+     ],
+     "problems": 110,
+     "pairs": 340
+    },
+    "within_correct": {
+     "value": 0.4933,
+     "ci95": [
+      0.4297,
+      0.5547
+     ],
+     "problems": 125,
+     "pairs": 373
+    },
+    "pooled_flag": 0.6621,
+    "pooled_correct": 0.6671,
+    "within_correct_trained_on_key": {
+     "value": 0.4665,
+     "ci95": [
+      0.4043,
+      0.5243
+     ],
+     "problems": 125,
+     "pairs": 373
+    },
+    "within_flag_trained_on_shuffled": {
+     "value": 0.4941,
+     "ci95": [
+      0.4294,
+      0.5592
+     ],
+     "problems": 110,
+     "pairs": 340
+    }
+   },
+   "probe_L28": {
+    "within_flag": {
+     "value": 0.5,
+     "ci95": [
+      0.4311,
+      0.5693
+     ],
+     "problems": 110,
+     "pairs": 340
+    },
+    "within_correct": {
+     "value": 0.5147,
+     "ci95": [
+      0.45,
+      0.582
+     ],
+     "problems": 125,
+     "pairs": 373
+    },
+    "pooled_flag": 0.6368,
+    "pooled_correct": 0.6396,
+    "within_correct_trained_on_key": {
+     "value": 0.5094,
+     "ci95": [
+      0.4492,
+      0.5729
+     ],
+     "problems": 125,
+     "pairs": 373
+    },
+    "within_flag_trained_on_shuffled": {
+     "value": 0.4912,
+     "ci95": [
+      0.4206,
+      0.5636
+     ],
+     "problems": 110,
+     "pairs": 340
+    }
+   }
+  },
+  "2000": {
+   "samples_reaching": 977,
+   "flag_rate": 0.6981,
+   "mean_logprob": {
+    "within_flag": {
+     "value": 0.4982,
+     "ci95": [
+      0.4291,
+      0.5668
+     ],
+     "problems": 92,
+     "pairs": 277
+    },
+    "within_correct": {
+     "value": 0.4708,
+     "ci95": [
+      0.4053,
+      0.5325
+     ],
+     "problems": 104,
+     "pairs": 308
+    },
+    "pooled_flag": 0.544
+   },
+   "mean_entropy": {
+    "within_flag": {
+     "value": 0.491,
+     "ci95": [
+      0.4207,
+      0.5634
+     ],
+     "problems": 92,
+     "pairs": 277
+    },
+    "within_correct": {
+     "value": 0.4805,
+     "ci95": [
+      0.4161,
+      0.5435
+     ],
+     "problems": 104,
+     "pairs": 308
+    },
+    "pooled_flag": 0.5506
+   },
+   "probe_L12": {
+    "within_flag": {
+     "value": 0.4657,
+     "ci95": [
+      0.3958,
+      0.5385
+     ],
+     "problems": 92,
+     "pairs": 277
+    },
+    "within_correct": {
+     "value": 0.5162,
+     "ci95": [
+      0.4466,
+      0.5825
+     ],
+     "problems": 104,
+     "pairs": 308
+    },
+    "pooled_flag": 0.5866,
+    "pooled_correct": 0.6109,
+    "within_correct_trained_on_key": {
+     "value": 0.4935,
+     "ci95": [
+      0.4339,
+      0.5552
+     ],
+     "problems": 104,
+     "pairs": 308
+    }
+   },
+   "probe_L20": {
+    "within_flag": {
+     "value": 0.509,
+     "ci95": [
+      0.4302,
+      0.5885
+     ],
+     "problems": 92,
+     "pairs": 277
+    },
+    "within_correct": {
+     "value": 0.5487,
+     "ci95": [
+      0.4774,
+      0.6192
+     ],
+     "problems": 104,
+     "pairs": 308
+    },
+    "pooled_flag": 0.5772,
+    "pooled_correct": 0.5801,
+    "within_correct_trained_on_key": {
+     "value": 0.5097,
+     "ci95": [
+      0.4365,
+      0.5864
+     ],
+     "problems": 104,
+     "pairs": 308
+    }
+   },
+   "probe_L28": {
+    "within_flag": {
+     "value": 0.4729,
+     "ci95": [
+      0.4036,
+      0.5451
+     ],
+     "problems": 92,
+     "pairs": 277
+    },
+    "within_correct": {
+     "value": 0.5,
+     "ci95": [
+      0.4356,
+      0.57
+     ],
+     "problems": 104,
+     "pairs": 308
+    },
+    "pooled_flag": 0.5413,
+    "pooled_correct": 0.538,
+    "within_correct_trained_on_key": {
+     "value": 0.4448,
+     "ci95": [
+      0.3702,
+      0.5153
+     ],
+     "problems": 104,
+     "pairs": 308
+    }
+   }
+  }
+ },
+ "policy_at_1000_tokens": {
+  "layer": 12,
+  "folds": {
+   "0": {
+    "threshold": 1.1779,
+    "probe": {
+     "right_of_500": 400.4,
+     "tokens_per_problem": 4374,
+     "stops_per_problem": 0.336
+    },
+    "random": {
+     "right_of_500": 393.8,
+     "tokens_per_problem": 4521,
+     "stops_per_problem": 0.35
+    }
+   },
+   "1": {
+    "threshold": 1.1534,
+    "probe": {
+     "right_of_500": 405.4,
+     "tokens_per_problem": 4591,
+     "stops_per_problem": 0.306
+    },
+    "random": {
+     "right_of_500": 407.1,
+     "tokens_per_problem": 4533,
+     "stops_per_problem": 0.349
+    }
+   },
+   "2": {
+    "threshold": 1.1534,
+    "probe": {
+     "right_of_500": 435.4,
+     "tokens_per_problem": 3653,
+     "stops_per_problem": 0.335
+    },
+    "random": {
+     "right_of_500": 439.6,
+     "tokens_per_problem": 3608,
+     "stops_per_problem": 0.307
+    }
+   },
+   "3": {
+    "threshold": 1.1534,
+    "probe": {
+     "right_of_500": 440.8,
+     "tokens_per_problem": 3983,
+     "stops_per_problem": 0.372
+    },
+    "random": {
+     "right_of_500": 433.3,
+     "tokens_per_problem": 3895,
+     "stops_per_problem": 0.217
+    }
+   },
+   "4": {
+    "threshold": 1.3205,
+    "probe": {
+     "right_of_500": 388.3,
+     "tokens_per_problem": 5122,
+     "stops_per_problem": 0.657
+    },
+    "random": {
+     "right_of_500": 376.7,
+     "tokens_per_problem": 5004,
+     "stops_per_problem": 0.52
+    }
+   }
+  },
+  "probe_right_of_500": 414.1,
+  "random_right_of_500": 410.1,
+  "single_right_of_500_mean_of_4": 410.5,
+  "tokens_per_problem": {
+   "probe": 4345,
+   "random": 4312
+  },
+  "single_tokens_per_problem": 4008,
+  "probe_minus_random_points": {
+   "value": 0.8,
+   "ci95": [
+    -0.72,
+    2.35
+   ]
+  },
+  "probe_minus_single_points": {
+   "value": 0.72,
+   "ci95": [
+    -0.2,
+    1.7
+   ]
+  }
+ }
+}

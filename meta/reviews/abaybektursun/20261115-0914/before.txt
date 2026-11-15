@@ -1,0 +1,3 @@
+uv run tools/cycle.py --hours 4, 09:14 UTC, before:
+  104 jobs, 39 failed or cancelled; median wait 30.7; 1666.5 container minutes, 18.9 of them in failed or cancelled jobs
+vast.ai jobs listed: 0; records on this laptop (runs/vast/*.json of the checkout and its worktrees): 48

@@ -1,0 +1,5 @@
+{
+ "job": "abaybektursun-1114-214538-9e63",
+ "command": "python -m studies.rlneurons.analysis.wrongstep abaybektursun-1114-214538-9e63",
+ "raw": "runs/abaybektursun-1114-214538-9e63/ (uv run tools/gpu.py get abaybektursun-1114-214538-9e63)"
+}

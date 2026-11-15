@@ -1,0 +1,13 @@
+{
+ "commit": "dd5ec6bd20421170d907930181d7a96b7ff38300",
+ "command": "/home/abay/Projects/iterate-hack-thinkvote/studies/rlneurons/analysis/frontier.py --base studies/rlneurons/results/thinkvote/math500_sft1_cue_s4-01 --rl studies/rlneurons/results/day1_3/math500_rl-01 --out studies/rlneurons/results/thinkvote/frontier_math500-01 --base-run runs/thinkvote_math500_sft1_cue_s4",
+ "spec": "studies/rlneurons/specs/SPEC_frontier.md",
+ "source_jobs": {
+  "base": "abaybektursun-1115-000512-ee03+abaybektursun-1115-014843-85d9+abaybektursun-1115-000607-0e92+abaybektursun-1115-000621-1d7e",
+  "rl": "abaybektursun-1114-183640-e828"
+ },
+ "source_commits": {
+  "base": "ff0c7156481cf85b08cecc0a66547cdfc8a27d62",
+  "rl": "c36f5626b8dfcc638972dd3dafe9e13daa4d3175"
+ }
+}
