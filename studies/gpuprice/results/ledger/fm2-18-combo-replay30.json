@@ -1,0 +1,35 @@
+{
+ "name": "fm2-18-combo-replay30",
+ "note": "fm2-17 plus the listing-level linear pool with the own-history replay, probability 0.3 (fm2-16); refuted if <= fm2-17 [fm2_post.py flags: --hurdle --hurdle-h 1 --scaleway --turnover own --enter abs --replay 0.3; amazon/chronos-2 zero-shot, cpu jobs 174823-3849, 174829-8fcd, 174832-6f16, 201126-a38b, 201131-4739]",
+ "utc": "2026-11-15T02:18:44+00:00",
+ "commit": "35810bc",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.298115,
+ "pinball": 0.023544,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.286884,
+ "skill_geomean": 0.369622,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.191408,
+   "in_band": 0.816268
+  },
+  "3": {
+   "skill_pooled": 0.266794,
+   "in_band": 0.755814
+  },
+  "7": {
+   "skill_pooled": 0.343741,
+   "in_band": 0.657946
+  }
+ },
+ "in_band": 0.743647
+}
