@@ -55,7 +55,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `tools/finding_restart_on_cap.py` | The public page of the restart of cut-off answers ("Established numbers" and "Day-1 #3"), served at `/finding/restart-on-cap`: the 500 answers as marks, with a switch from no restart to restart. Its numbers are read from `results/rln4/grader_v3/readout.json`, `results/day1_3/` and `results/commit1/base-01/readout.json`. |
 | `tools/finding_vote_over_four.py` | The public page of "Day-1 #3" and "Label-free selector", served at `/finding/vote-over-four`: the base model and the RL model as two bars, with a switch from one sample to the vote over four. Its numbers are read from `results/day1_3/math500_base_cue-01/readout.json`, `results/day1_3/math500_rl-01/readout.json` and `results/selector/math500_base_cue-01/readout.json`. |
 | `tools/finding_equal_token_frontier.py` | The public page of "Token frontier", served at `/finding/equal-token-frontier`: right answers against tokens per problem for the 24 rules on both models, one RL sample as a level line, a token budget the reader drags (the best base rule within it and its distance to one RL sample, with the interval) and a strip of the 500 problems. Its numbers are copied from `results/frontier/math500-01/` (readout.json, frontier.json, per_problem.json, examples.json); `python3 tools/finding_equal_token_frontier.py` checks the copy. |
-| `tools/finding_cue_on_code.py` | The public page of "Code pair", served at `/finding/cue-on-code`: three columns with a switch through no cue, the code cue and the math cue, and the Code-RL model as the reference. Its numbers are read from `results/code1/readout.json`. |
+| `tools/finding_cue_on_code.py` | The public page "The cue beyond math" ("Code pair" and "Outside math and code"), served at `/finding/cue-on-code`: MATH-500, the 538 code problems and the 500 general questions side by side, one mark per item, with a switch Base, Base + cue, RL, Think-SFT + cue. Only the MATH-500 marks are real problems; code and general marks fill by count, because those runs commit counts only. The general numbers are a checked copy of `results/ood1/readout.json` (branch `ali/ood`, 99b2d5d). |
 | `tools/finding_rl_edge_comes_early.py` | The public page of "Prefix hand-off", served at `/finding/rl-edge-comes-early`: one answer as a bar of text cut at 25, 50 or 75 %, the 183 problems as dots, a switch for who writes the start and a draggable cut; its large number is the share of the gap between the two models alone that the hand-off closes (81 % at 50 %, 29 of 36 problems; 65 %, 13 of 20, on the 155 chosen without the base's own answers). Its numbers and dots are read from `results/handoff/base-01/rows.jsonl`, `rl-01/rows.jsonl` and `readout-01/readout.json` (run the file to check them). |
 | `tools/finding_a_quarter_of_rl.py` | The public page of "Weight-difference line" (MATH-500 and the 328), served at `/finding/a-quarter-of-rl`: right answers against a for base + a (RL - base) with the cue, each point with its paired 95 % interval, the random change and Code-RL as reference marks, a slider on a that snaps to the measured values, a switch between MATH-500 and the 328, and one dot per problem. Its numbers are read from `results/day1_wdiff/readout.json`, `results/day1_wdiff328/readout.json`, `results/axis/math500-01/vectors.json`, `results/axis/hard328-01/vectors.json` and `results/rln4/t1_t2_items-01/per_problem.json` (run the file to check them). |
 | `tools/finding_one_difficulty_axis.py` | The public page of "One axis or several?", served at `/finding/one-difficulty-axis`: the 36 single-sample arms as rows against the 500 problems in one difficulty order, two arms the reader picks (or "Any pair" through the 618 pairs of different arms), their union against the difficulty-matched prediction, and all pairs' excess as a dot histogram with the 12 same-arm pairs. Its marks and pair excesses are copied from `results/axis/math500-01/` (vectors.json, readout.json); `PYTHONPATH=. uv run --no-project --with numpy python tools/finding_one_difficulty_axis.py` recomputes the pair table with `analysis/axis.py` and checks the copy against `pair_z_matrix`. |
@@ -3014,7 +3014,7 @@ python3 tools/vast.py run <box> -- 'PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rln
 uv run --with numpy python -m studies.rlneurons.analysis.transplant hard328-01 --arm sft1_rl20=runs/<job>,runs/<job> [--arm ...] --ref think=studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl --ref rl=studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl
 ```
 
-## Token cap 32,768 on the 328: Think-SFT gains 23 problems, RL gains 2 (board work-ceccc0)
+## Token cap 32,768 on the 328: Think-SFT gains 23 problems, the base 4, RL 2 (board work-ceccc0)
 
 Spec `specs/SPEC_cap32.md` (written before the runs). `run_cell --set hard328 --max-tokens 32768`, T 1.0 / top-p 1.0, grader
 v3, one sample, seed 3000000, on vast.ai (RTX PRO 6000). Each cell is scored twice from the same answers: right at 32,768, and
@@ -3027,6 +3027,7 @@ Per-problem rows of both cells (tokens generated, cut off at 32,768 or not, scor
 |---|---|---|---|---|---|
 | Think-SFT cue (`results/cap32/sft_cue-01/`) | 207 | 230 | +7.0 [4.3, 9.8] | 93: 91 / 23 | 10,048 / 11,795 |
 | RL plain (`results/cap32/rl_plain-01/`) | 193 | 195 | +0.6 [0.0, 1.5] | 20: 20 / 2 | 9,293 / 9,421 |
+| base cue (`results/cap32/base_cue-01/`, 4 shards on AWS L40S) | 152 | 156 | +1.2 [0.3, 2.4] | 64: 63 / 4 | 9,145 / 9,995 |
 
 - H1 held: Think-SFT's cut answers are unfinished work. 91 of 93 finish inside the second 16,384 tokens and 23 are right, for
   1,747 more tokens per problem. 230 of 328 is the best single-sample row on the 328 so far (vote over 4 Think-SFT samples at
@@ -3036,7 +3037,9 @@ Per-problem rows of both cells (tokens generated, cut off at 32,768 or not, scor
   outside the spec's limit of 12, and inside the range of RL's four stored samples on the 328 (207, 190, 209, 194,
   `results/day1_3/hard328_rl_plain_s4r2-01/`). Not rerun; the gain is measured inside the run.
 - Of the 68 long Think-SFT answers that finish wrong, none is a loop by the runner's loop count (3 in the whole cell).
-- Base cue at 32,768 (H2): the vast.ai box ended before its rows were copied. Rerun as 4 shards on AWS; row added when done.
+- H2 held: the base's long answers also finish with more tokens (63 of 64) but only 4 are right. Share right among answers past
+  16,384: Think-SFT 23 of 93, RL 2 of 20, base 4 of 64. The base's 16,384 score in this run is 152 (stored 164, limit 12: inside).
+  Base jobs ih-1115-144232-448b, -144318-6d57, -144428-85af, -144457-42b8, joined with `analysis/shard_join.py`.
 - Jobs abaybektursun-1115-005756-309b (Think-SFT), -005823-8ac9 (RL); raw answers in `runs/<job>/` on the laptop, not in git.
 
 ## Fresh held-out set: Think-SFT's lead over RL holds on problems published in 2026 (fresh2026, n = 136, 4 samples, board work-7c069c, idea-67db73)
@@ -4026,6 +4029,18 @@ Readout `analysis/day1_vote.py` with `--minus` (references `results/day1_3/`). O
 RL on both sets; under the vote over four it is 7 problems behind RL. The edit is derived from the RL weights: it compresses the
 RL difference (8 directions per matrix, 0.11 % of the weight norm as intended; the written BF16 change is 0.19 % because of
 rounding noise), it does not reach RL without RL. No random-edit cell exists at size 1.5 (sizes 1 and 2: 158 and 167).
+
+Two controls (amendment 6, work-e1b23a), one sample each:
+
+| Cell | Right of 328 | Cap hits | On 251 | No box | Minus base cue, points [95 %] | Run folder, job |
+|---|---|---|---|---|---|---|
+| random rank-8 at size 1.5 (0.111 % of the weight norm) | 159 | 74 | 152 | 24 | -1.5 [-5.8, 2.7] | `edits/rand8x1.5_math31-01/`, `abaybektursun-1115-090241-0229` |
+| Think-SFT's 8 directions at Math's edit norm (`--scale 0.02`, 0.074 %) | 156 | 75 | 149 | 23 | -2.4 [-6.4, 1.5] | `edits/top8x0.02_think_sft-01/`, `abaybektursun-1115-090252-65bf` |
+
+Both predictions held. The random edit is flat at all five sizes (-1, 1, 1.5, 2, 3: 67 to 79 cap hits, 158 to 167 right). The
+largest 8 directions of Think-SFT's difference, at the size at which Math's give 192 right and 46 cap hits, change nothing (-11.0
+points against Math's [-15.6, -6.4]): fine-tuning on reasoning traces does not write the finishing directions into its largest
+directions. Limit: these are the top 8 of a difference 50 times larger than Math's, 2 % of its squared norm.
 
 Which reward writes the finishing directions (8 directions of each model added to the base):
 

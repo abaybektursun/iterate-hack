@@ -1,0 +1,279 @@
+[
+ {
+  "ts": "2026-11-14T23:20:51.444Z",
+  "who": "abaybektursun",
+  "agent": "main",
+  "query": "few-shot demonstrations of full reasoning traces prepended to a base (pretrained, non-instruct) language model improve math reasoning accuracy without training, compared with RL-trained reasoning model",
+  "results": 6,
+  "usd": 0.007,
+  "since": "2025-06-01",
+  "domains": [],
+  "n": "6"
+ },
+ {
+  "ts": "2026-11-14T23:21:21.634Z",
+  "who": "abaybektursun",
+  "agent": "main",
+  "query": "training-free power distribution sampling for LLM reasoning without MCMC, cheaper than Reasoning with Sampling, matches GRPO on MATH500",
+  "results": 5,
+  "usd": 0.007,
+  "since": "2025-10-01",
+  "domains": [],
+  "n": "5"
+ },
+ {
+  "ts": "2026-11-15T01:18:29.960Z",
+  "who": "abaybektursun",
+  "agent": "main",
+  "query": "system that uses LLM agents to synthesize scientific theories from many experimental results, with falsifiable predictions and evaluation of theory accuracy and novelty",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T02:11:02.396Z",
+  "who": "abaybektursun",
+  "agent": "agent-a6e90e4baca414cc6",
+  "query": "interpolating base and RLVR model weights, accuracy on AIME OlympiadBench versus interpolation coefficient",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T02:13:50.926Z",
+  "who": "abaybektursun",
+  "agent": "main",
+  "query": "Modal docs: what happens to running containers and in-progress inputs when you redeploy an app with modal deploy",
+  "results": 4,
+  "usd": 0.007,
+  "since": null,
+  "domains": [
+   "modal.com"
+  ],
+  "n": "4"
+ },
+ {
+  "ts": "2026-11-15T03:20:25.248Z",
+  "who": "abaybektursun",
+  "agent": "agent-a8ea867d9bd3b0a27",
+  "query": "a prompt prefix that puts the base model into reasoning mode makes it robust to high temperature sampling while the plain prompt degrades into incoherence",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T03:20:25.248Z",
+  "who": "abaybektursun",
+  "agent": "agent-a8ea867d9bd3b0a27",
+  "query": "entropy of generated text predicts accuracy; optimal per-token entropy of chain of thought; low entropy causes repetition and high entropy causes errors in math reasoning",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T02:59:40.994Z",
+  "who": "abaybektursun",
+  "agent": "agent-a13942b65574d92d3",
+  "query": "self-reinforcement effect repetition probability increases with number of repetitions language model degeneration",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T02:59:58.258Z",
+  "who": "abaybektursun",
+  "agent": "agent-a13942b65574d92d3",
+  "query": "base models know how to reason thinking models learn when steering vectors hybrid model recovers gap",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T04:07:54.450Z",
+  "who": "frustea",
+  "agent": "agent-acf745fb91dd363c4",
+  "query": "agents assigned distinct research directions up front to avoid duplicate exploration swarm",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T04:09:17.318Z",
+  "who": "frustea",
+  "agent": "agent-acf745fb91dd363c4",
+  "query": "parallel coding agents competition different strategies shared findings convergence herding same idea LLM",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T04:08:20.481Z",
+  "who": "abaybektursun",
+  "agent": "main",
+  "query": "raise sampling temperature only when the language model enters a repetition loop, otherwise sample at low temperature; adaptive temperature restart on degenerate repetition in reasoning",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T04:41:42.583Z",
+  "who": "abaybektursun",
+  "agent": "main",
+  "query": "per-token temperature set by next-token entropy: sharpen only at high-entropy positions, sample at temperature 1 at confident positions, to avoid repetition loops in reasoning",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T04:45:39.084Z",
+  "who": "abaybektursun",
+  "agent": "agent-a18949bb884314a41",
+  "query": "entropy-gated temperature: greedy or low temperature at fork tokens with high entropy, full temperature elsewhere, avoids repetition in reasoning models",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T05:26:29.247Z",
+  "who": "frustea",
+  "agent": "main",
+  "query": "comparison of autonomous research agent harnesses on Karpathy autoresearch val_bpb benchmark, multi-agent swarm versus single agent loop",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T08:01:41.163Z",
+  "who": "abaybektursun",
+  "agent": "main",
+  "query": "add the weight difference of an RL-trained reasoning model (RL minus base) to a supervised fine-tuned sibling model from the same base, task arithmetic transplant of RLVR delta, math accuracy",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T08:52:37.418Z",
+  "who": "abaybektursun",
+  "agent": "agent-a0f19a07a3ecb0167",
+  "query": "base model majority voting matches RL-trained model accuracy at equal inference compute, pass@k and maj@k comparison base versus RLVR",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T09:16:37.380Z",
+  "who": "abaybektursun",
+  "agent": "agent-a40e3d0ae4c1d7dcc",
+  "query": "rejection sampling the first tokens of a base language model's answer to select a reasoning mode, improves math accuracy without fine-tuning",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T09:16:37.380Z",
+  "who": "abaybektursun",
+  "agent": "agent-a40e3d0ae4c1d7dcc",
+  "query": "base model already contains reasoning mode; selecting samples that begin with self-reflection words like 'Okay' or 'Wait' raises MATH-500 accuracy",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T09:19:11.741Z",
+  "who": "abaybektursun",
+  "agent": "agent-af9b8e589f99c0225",
+  "query": "accuracy when interpolating weights between a base language model and its RL fine-tuned version, scaling the weight delta alpha sweep on math benchmark",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T09:44:59.127Z",
+  "who": "abaybektursun",
+  "agent": "agent-a99b8df6e3d99f598",
+  "query": "paper comparing supervised fine-tuning on long chain-of-thought traces versus zero RL with verifiable rewards from the same base model on AIME MATH-500 OlympiadBench",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T10:16:47.512Z",
+  "who": "abaybektursun",
+  "agent": "agent-a11b4e87f51ce466e",
+  "query": "logit lens shows reasoning model trained with RL predicts wait hmm more often; causal steering test of self-verification tokens does not improve accuracy",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T11:38:09.244Z",
+  "who": "abaybektursun",
+  "agent": "agent-ab3499971db027268",
+  "query": "RL fine-tuned model assigns lower probability to the base model's erroneous reasoning steps, token log-probability of first error step",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T15:24:01.767Z",
+  "who": "abaybektursun",
+  "agent": "agent-aa0db66dc9df9c55d",
+  "query": "language model predicts the outcome of an AI research experiment before it is run, compared with human experts",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ },
+ {
+  "ts": "2026-11-15T15:29:02.247Z",
+  "who": "abaybektursun",
+  "agent": "agent-af5b41fe5e8abb5e6",
+  "query": "adding the RL task vector to a distilled reasoning model reduces truncated responses and overthinking, transplant RL weight delta onto SFT model",
+  "results": 5,
+  "usd": 0.007,
+  "since": null,
+  "domains": [],
+  "n": null
+ }
+]

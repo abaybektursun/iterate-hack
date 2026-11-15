@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forecast range</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..500&display=swap">
+<style>
+:root {
+  --paper: #0e0d0b; --sheet: #161512; --ink: #e9e4d8; --mute: #a39d8f; --faint: #7a7568; --rule: #2b2924;
+  --blue: #c9a25c; --red: #c8573f;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--paper); color: var(--ink); overflow: hidden;
+  font: 400 14px/1.45 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
+canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+#col { position: fixed; left: 34px; top: 28px; width: min(380px, 44vw); pointer-events: none; }
+#col .tag { font-size: 11px; font-weight: 600; color: var(--faint); letter-spacing: .08em; text-transform: uppercase; }
+#col h1 { font-family: "Newsreader", Georgia, serif; font-size: clamp(21px, 1.9vw, 30px); line-height: 1.2; font-weight: 300; margin: 10px 0 14px; letter-spacing: -.005em; }
+#col h1 b { font-weight: 400; color: var(--blue); }
+#col p { margin: 0; padding: 11px 0; border-top: 1px solid var(--rule); color: var(--mute); font-size: 13px; }
+#col p:last-child { border-bottom: 1px solid var(--rule); }
+#col p i { font-style: normal; color: var(--ink); }
+#panel { position: fixed; right: 0; top: 0; bottom: 104px; width: min(400px, 92vw); padding: 28px 30px 30px; overflow-y: auto;
+  background: rgba(14, 13, 11, .94); border-left: 1px solid var(--rule);
+  transform: translateX(102%); transition: transform .5s cubic-bezier(.2, .8, .2, 1); }
+#panel.on { transform: none; }
+#panel .tag { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); display: flex; justify-content: space-between; }
+#panel .tag a { color: var(--mute); cursor: pointer; pointer-events: auto; }
+#panel h2 { font-family: "Newsreader", Georgia, serif; font-size: 25px; font-weight: 300; line-height: 1.2; margin: 8px 0 10px; }
+#panel .st { font-family: "Newsreader", Georgia, serif; font-size: 16px; color: var(--ink); margin: 0 0 12px; font-weight: 300; line-height: 1.4; }
+#panel .row { border-top: 1px solid var(--rule); padding: 9px 0; font-size: 12.5px; color: var(--mute); }
+#panel .row b { color: var(--ink); font-weight: 600; }
+#panel .row .k { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--faint); margin-bottom: 3px; }
+#panel .big { font-family: "Newsreader", Georgia, serif; font-size: 34px; font-weight: 300; color: var(--ink); line-height: 1.1; }
+#panel .big small { font-size: 13px; color: var(--mute); font-weight: 400; }
+#panel .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+#panel .sh { display: grid; grid-template-columns: 34px 1fr auto 12px; gap: 8px; align-items: baseline; padding: 4px 0; cursor: pointer; font-size: 12px; color: var(--mute); }
+#panel .sh:hover, #panel .sh.cur { color: var(--ink); }
+#panel .sh .dot { width: 8px; height: 8px; border-radius: 50%; align-self: center; }
+.red { color: var(--red) !important; } .blue { color: var(--blue) !important; }
+#bar { position: fixed; left: 0; right: 0; bottom: 0; padding: 60px 34px 18px; pointer-events: none; background: linear-gradient(rgba(14, 13, 11, 0), rgba(14, 13, 11, .82) 55%); }
+#col::before { content: ""; position: absolute; inset: -40px -90px -70px -40px; background: radial-gradient(closest-side, rgba(14, 13, 11, .8), rgba(14, 13, 11, 0)); z-index: -1; }
+#cap { text-align: center; font-size: 13px; color: var(--mute); margin-bottom: 10px; min-height: 38px; text-shadow: 0 0 12px var(--paper), 0 0 4px var(--paper); }
+#cap b { color: var(--ink); font-weight: 600; } #cap .ob { display: block; max-width: 880px; margin: 2px auto 0; }
+#ctl { display: flex; align-items: center; gap: 16px; pointer-events: auto; }
+#play { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer; font-size: 12px; flex: none; display: grid; place-items: center; padding: 0; }
+#track { position: relative; flex: 1; height: 34px; cursor: pointer; touch-action: none; display: flex; gap: 3px; }
+#track .seg { position: relative; height: 100%; }
+#track .seg::before { content: ""; position: absolute; left: 0; right: 0; top: 9px; height: 1px; background: var(--faint); opacity: .7; }
+#track .seg span { position: absolute; left: 0; top: 16px; font-size: 11px; font-weight: 600; color: var(--faint); white-space: nowrap; }
+#track u, #track s { text-decoration: none; } #track s { display: none; }
+#track .seg.cur span { color: var(--ink); } #track .seg.cur::before { background: var(--ink); opacity: 1; }
+#head { position: absolute; top: 3px; width: 13px; height: 13px; margin-left: -6.5px; border-radius: 50%; background: var(--ink); pointer-events: none; }
+#key { display: flex; gap: 18px; justify-content: center; margin-top: 8px; font-size: 11px; color: var(--faint); flex-wrap: wrap; }
+#key i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+#labels { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+.lb { position: absolute; left: 0; top: 0; white-space: nowrap; font-size: 11px; line-height: 1.25; text-align: center; color: var(--mute); will-change: transform; text-shadow: 0 0 6px var(--paper), 0 0 2px var(--paper); }
+.lb b { display: block; color: var(--ink); font-weight: 600; font-stretch: 96%; } .lb span { font-size: 9.5px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; }
+.lb.dimmed { opacity: .25; } .lb.ax { color: var(--faint); text-align: left; font-size: 10.5px; }
+.lb.rl { color: var(--ink); font-size: 11.5px; text-align: left; } .lb.rl span { color: var(--mute); } .lb.rl b { display: inline; }
+#tip { position: fixed; left: 0; top: 0; pointer-events: none; padding: 7px 10px; background: #161512; border: 1px solid var(--rule); border-radius: 2px; font-size: 12px; color: var(--mute); max-width: 340px; display: none; }
+#tip b { color: var(--ink); font-weight: 600; }
+#err { position: fixed; left: 10px; bottom: 4px; color: var(--red); font-size: 11px; white-space: pre-wrap; z-index: 9; }
+@media (max-width: 760px) { #track u { display: none; } #track s { display: inline; } #panel { top: auto; width: 100%; bottom: 70px; max-height: 52vh; padding: 16px 18px 20px; background: rgba(14, 13, 11, .93); border-top: 1px solid var(--rule); transform: translateY(102%); } body:has(#panel.on) #col p { display: none; } body:has(#panel.on) #cap { display: none; } #col h1 { font-size: 17px; } #col p + p { display: none; } #key { display: none; } #col { left: 16px; top: 14px; } #bar { padding: 40px 14px 12px; } }
+</style>
+<script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="labels"></div>
+<div id="col">
+  <div class="tag">Theory engine, forecast range</div>
+  <h1 id="line"></h1>
+  <p>Each figure is a theory of why RL beats the base model. It fires its forecasts before the number exists. The pale plate is each forecast's own 90 % interval: <i>a pin on the plate landed inside it.</i></p>
+  <p id="stage"></p>
+</div>
+<div id="panel"></div>
+<div id="bar">
+  <div id="cap"></div>
+  <div id="ctl"><button id="play" aria-label="Play or pause">❚❚</button><div id="track"><div id="head"></div></div></div>
+  <div id="key">
+    <span><i style="background:#9a9892"></i>steel ball: a forecast; in the air while not measured</span>
+    <span><i style="background:#c9a25c"></i>brass pin: measured, theory nearer than the readers</span>
+    <span><i style="border:1.5px solid #e4dfd2"></i>ring: measured, readers nearer</span>
+    <span><i style="border:1.5px solid #c8573f"></i>refuted: the figure breaks</span>
+    <span>drag to orbit, click a figure to follow it, click a shot to read it</span>
+  </div>
+</div>
+<div id="tip"></div>
+<div id="err"></div>
+<script>window.addEventListener('error', e => { document.getElementById('err').textContent += (e.message || e) + '\n'; });
+window.addEventListener('unhandledrejection', e => { document.getElementById('err').textContent += (e.reason && e.reason.stack || e.reason) + '\n'; });</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js';
+
+const $ = s => document.querySelector(s);
+const D = await (await fetch('data.json')).json();
+const Q = new URLSearchParams(location.search);
+const esc = s => String(s ?? '').replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const num = v => v == null ? '' : (Math.abs(v) >= 100 || Number.isInteger(v) ? String(+(+v).toFixed(2)) : (+v).toPrecision(3).replace(/\.?0+$/, '')).replace('-', '−');
+const cut = (s, n) => { s = String(s || ''); return s.length <= n ? s : s.slice(0, n - 1).replace(/[ ,;:]+$/, '') + '…'; };
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x)), ease = x => { x = clamp(x, 0, 1); return x * x * (3 - 2 * x); };
+const back = x => { x = clamp(x, 0, 1); const c = 2.2; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+
+/* ---------- the range: one axis for every forecast, in units of its own interval ---------- */
+const ZF = 11, Z0 = -3, ZL = 7, G = 9.8, APEX = 3.15;
+const sc = s => s > 1 ? 1 + .75 * Math.log(s) : s < 0 ? -.75 * Math.log(1 - s) : s;
+const zOf = s => Z0 - ZL * clamp(sc(s), -1.2, 3.4);
+
+let total = 0;
+for (const st of D.stages) {
+  const n = st.theories.length, W = Math.min(4.4, 42 / n);
+  st.W = W;
+  st.theories.forEach((t, i) => { t.i = i; t.x = (i - (n - 1) / 2) * W; t.shots = []; });
+  st.shots.forEach((s, k) => { s.k = k; st.theories[s.th].shots.push(s); });
+  const maxK = Math.max(...st.theories.map(t => t.shots.length)), dt = Math.min(.4, 3.2 / maxK);
+  for (const t of st.theories) {
+    const m = t.shots.length, dx = Math.min(.5, W * .8 / m);
+    t.shots.forEach((s, j) => {
+      s.x = t.x + (j - (m - 1) / 2) * dx;
+      s.zv = zOf((s.v - s.lo) / (s.hi - s.lo));
+      s.zm = s.m == null ? null : zOf((s.m - s.lo) / (s.hi - s.lo));
+      s.inside = s.m != null && s.m >= s.lo && s.m <= s.hi;
+      s.t0 = .7 + j * dt + t.i * .04;
+      s.tf = 1.2 + .03 * (ZF - s.zv);
+      s.vy = (-APEX + .5 * G * s.tf * s.tf) / s.tf;
+      s.r = clamp(dx * .3, .05, .1);
+      s.ph = (k => (Math.sin(k * 12.9898) * 43758.5453) % 1)(s.k + 1);
+    });
+  }
+  const lastLand = Math.max(...st.shots.map(s => s.t0 + s.tf));
+  const meas = st.shots.filter(s => s.m != null).sort((a, b) => a.x - b.x);
+  st.tN = lastLand + .5; st.span = Math.min(3.4, .5 + .1 * meas.length);
+  meas.forEach((s, r) => { s.tm = st.tN + st.span * r / Math.max(1, meas.length); });
+  st.tF = st.tN + st.span + .8;
+  const dead = st.theories.filter(t => t.fate === 'r');
+  dead.forEach((t, r) => { t.tS = st.tF + .4 * r; });
+  st.dur = st.tF + (dead.length ? .4 * dead.length + 3.6 : 2.4);
+  st.start = total; total += st.dur;
+}
+
+/* ---------- renderer: a maquette on a slate table under studio light ---------- */
+const canvas = $('#c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const scene = new THREE.Scene();
+const BG = new THREE.Color('#0e0d0b');
+scene.background = BG; scene.fog = new THREE.Fog(BG, 55, 150);
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), .03).texture;
+const camera = new THREE.PerspectiveCamera(30, 1, 1, 320);
+const HOME = { p: new THREE.Vector3(-19, 10.5, 30), t: new THREE.Vector3(1.5, 1.2, -4) };
+const setHome = h => { HOME.p.set(-.25 * h - 3, 7 + .5 * h, ZF + 13 + 1.18 * h); HOME.t.set(-.03 * h, 0, -1.5 - .1 * h); };
+camera.position.copy(HOME.p);
+const controls = new OrbitControls(camera, canvas);
+controls.target.copy(HOME.t); controls.enableDamping = true; controls.dampingFactor = .06;
+controls.maxPolarAngle = 1.5; controls.minDistance = 6; controls.maxDistance = 110; controls.autoRotate = true;
+const key = new THREE.DirectionalLight('#fff1dc', 2.0); key.position.set(-34, 46, 18); key.target.position.set(0, 0, -6);
+key.castShadow = true; key.shadow.mapSize.set(4096, 4096); key.shadow.radius = 5; key.shadow.bias = -.0005; key.shadow.normalBias = .03;
+Object.assign(key.shadow.camera, { left: -34, right: 34, top: 30, bottom: -30, near: 5, far: 140 });
+const rim = new THREE.DirectionalLight('#cfd8e6', .35); rim.position.set(26, 30, -30);
+scene.add(key, key.target, rim, new THREE.HemisphereLight('#c9d2de', '#2a2520', .3));
+const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(2, 2, { type: THREE.HalfFloatType, samples: 4 }));
+composer.addPass(new RenderPass(scene, camera));
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(2, 2), .1, .5, .92));  // a faint lens response on true highlights only
+composer.addPass(new OutputPass());
+const finish = new ShaderPass({ uniforms: { tDiffuse: { value: null }, uT: { value: 0 } },
+  vertexShader: 'varying vec2 u; void main(){ u = uv; gl_Position = vec4(position.xy, 0., 1.); }',
+  fragmentShader: `varying vec2 u; uniform sampler2D tDiffuse; uniform float uT;
+    float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233)) + uT) * 43758.5453); }
+    void main(){ vec3 c = texture2D(tDiffuse, u).rgb; vec2 q = u - .5;
+      c *= 1. - .42 * smoothstep(.25, .95, length(q * vec2(1.15, 1.)));
+      c += (h(gl_FragCoord.xy) - .5) * .028;
+      gl_FragColor = vec4(c, 1.); }` });
+composer.addPass(finish);
+
+/* ---------- surfaces: honed slate, an inlaid plate, printed scale ---------- */
+function grain(size, draw) { const c = document.createElement('canvas'); c.width = c.height = size; draw(c.getContext('2d'), size); const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 8; return t; }
+let sd = 11; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+const slateTex = grain(1024, (g, n) => {
+  const im = g.createImageData(n, n);
+  for (let i = 0; i < n * n; i++) { const v = 205 + (rnd() - .5) * 40 + (rnd() < .004 ? 50 : 0); im.data.set([v, v, v, 255], i * 4); }
+  g.putImageData(im, 0, 0); g.globalAlpha = .035; g.filter = 'blur(14px)';
+  for (let k = 0; k < 60; k++) { g.fillStyle = rnd() < .5 ? '#fff' : '#000'; g.beginPath(); g.ellipse(rnd() * n, rnd() * n, 40 + rnd() * 160, 20 + rnd() * 60, rnd() * 3, 0, 7); g.fill(); }
+  g.filter = 'none'; g.globalAlpha = .16; g.strokeStyle = '#fff'; g.lineWidth = .6;
+  for (let k = 0; k < 70; k++) { const x = rnd() * n, y = rnd() * n, a = rnd() * 6.3, l = 20 + rnd() * 160; g.beginPath(); g.moveTo(x, y); g.lineTo(x + Math.cos(a) * l, y + Math.sin(a) * l); g.stroke(); }
+});
+slateTex.repeat.set(26, 26);
+const table = new THREE.Mesh(new THREE.PlaneGeometry(420, 420), new THREE.MeshStandardMaterial({ color: '#1d1c19', roughness: 1, roughnessMap: slateTex, bumpMap: slateTex, bumpScale: .12, metalness: 0, envMapIntensity: .2 }));
+table.rotation.x = -Math.PI / 2; table.receiveShadow = true; scene.add(table);
+const plateTex = slateTex.clone(); plateTex.repeat.set(5, 1.2); plateTex.needsUpdate = true;
+const strip = new THREE.Mesh(new THREE.BoxGeometry(1, .06, ZL), new THREE.MeshStandardMaterial({ color: '#5f5b51', roughness: .8, roughnessMap: plateTex, bumpMap: plateTex, bumpScale: .08, metalness: .1, envMapIntensity: .35 }));
+strip.position.set(0, .0, Z0 - ZL / 2); strip.receiveShadow = true; scene.add(strip);
+const YP = .034;  // the top of the plate
+const hair = (c, o) => { const l = new THREE.LineSegments(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: o })); scene.add(l); return l; };
+const scaleLines = hair('#e9e4d8', .2), laneLines = hair('#e9e4d8', .07), edgeLines = hair('#e9e4d8', .0);
+const AX = [[-1, '1 interval under'], [0, 'interval low'], [1, 'interval high'], [2, '1 interval over'], [4, '3 over'], [10, '9 over']];
+await document.fonts.load('600 40px Archivo').catch(() => {});
+const printed = AX.map(([s, txt]) => {  // the scale is printed on the table
+  const c = document.createElement('canvas'), g = c.getContext('2d'); g.font = '600 44px Archivo, sans-serif';
+  c.width = Math.ceil(g.measureText(txt).width) + 16; c.height = 64; g.font = '600 44px Archivo, sans-serif'; g.fillStyle = '#e9e4d8'; g.textBaseline = 'middle'; g.fillText(txt, 8, 34);
+  const t = new THREE.CanvasTexture(c); t.anisotropy = 8;
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(c.width / 64 * .95, .95), new THREE.MeshBasicMaterial({ map: t, transparent: true, opacity: s === 0 || s === 1 ? .8 : .5, depthWrite: false }));
+  m.rotation.x = -Math.PI / 2; m.userData.w = c.width / 64 * .95; m.userData.s = s; scene.add(m); return m;
+});
+
+/* ---------- figures: frosted glass with a metal rod; rigid shards when refuted ---------- */
+const STEEL = new THREE.Color('#c4c2bb'), BRASS = new THREE.Color('#c9a25c'), GRAPH = new THREE.Color('#2c2a27'), IVORY = new THREE.Color('#e4dfd2'), OXIDE = new THREE.Color('#b5462f'), SMOKE = new THREE.Color('#4a463f'), GLASS = new THREE.Color('#7d837e');
+const R0 = .62, R1 = .42, H = 2.55, ang = i => i * Math.PI / 3 + Math.PI / 6;
+const corner = (r, y, i) => new THREE.Vector3(r * Math.cos(ang(i)), y, r * Math.sin(ang(i)));
+function solid(tris, centre) {  // triangles with flat normals pointing away from centre, moved so centre is the origin
+  const pos = [];
+  for (const [a, b, c] of tris) {
+    const nrm = new THREE.Vector3().subVectors(b, a).cross(new THREE.Vector3().subVectors(c, a));
+    const mid = new THREE.Vector3().add(a).add(b).add(c).divideScalar(3).sub(centre);
+    for (const p of nrm.dot(mid) < 0 ? [a, c, b] : [a, b, c]) pos.push(p.x - centre.x, p.y - centre.y, p.z - centre.z);
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.computeVertexNormals(); return g;
+}
+const hullGeo = (() => {
+  const t = [], O = new THREE.Vector3(0, H / 2, 0), apex = new THREE.Vector3(0, APEX, 0);
+  for (let i = 0; i < 6; i++) {
+    const a = corner(R0, 0, i), b = corner(R0, 0, i + 1), c = corner(R1, H, i), d = corner(R1, H, i + 1);
+    t.push([a, b, d], [a, d, c], [c, d, apex]);
+  }
+  const g = solid(t, O); g.translate(0, H / 2, 0); return g;
+})();
+const coreGeo = new THREE.CylinderGeometry(.07, .1, H * .84, 24); coreGeo.translate(0, H * .44, 0);
+const SHARDS = (() => {  // the same body cut into 30 pieces by tilted planes
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const ys = [0, .62, 1.2, 1.85, H], rings = ys.map((y, k) => {
+    const r = R0 + (R1 - R0) * y / H, j = k > 0 && k < 4 ? .2 : 0;
+    return { c: new THREE.Vector3(0, y + (rnd() - .5) * j, 0), p: [0, 1, 2, 3, 4, 5].map(i => corner(r, y + (rnd() - .5) * j, i)) };
+  });
+  const out = [], apex = new THREE.Vector3(0, APEX, 0);
+  const add = (pts, tris) => {
+    const c = pts.reduce((s, p) => s.add(p), new THREE.Vector3()).divideScalar(pts.length);
+    const g = solid(tris, c); g.computeBoundingBox();
+    out.push({ g, c, half: g.boundingBox.getSize(new THREE.Vector3()).multiplyScalar(.27) });
+  };
+  for (let k = 0; k < 4; k++) for (let i = 0; i < 6; i++) {
+    const A = rings[k], B = rings[k + 1], a = A.c, b = A.p[i], c = A.p[(i + 1) % 6], d = B.c, e = B.p[i], f = B.p[(i + 1) % 6];
+    add([a, b, c, d, e, f], [[a, b, c], [d, e, f], [b, c, f], [b, f, e], [a, b, e], [a, e, d], [a, c, f], [a, f, d]]);
+  }
+  for (let i = 0; i < 6; i++) { const A = rings[4], a = A.c, b = A.p[i], c = A.p[(i + 1) % 6]; add([a, b, c, apex], [[a, b, c], [a, b, apex], [b, c, apex], [a, c, apex]]); }
+  return out;
+})();
+const world = new CANNON.World({ gravity: new CANNON.Vec3(0, -16, 0) });
+world.allowSleep = true; world.broadphase = new CANNON.SAPBroadphase(world);
+world.defaultContactMaterial.friction = .7; world.defaultContactMaterial.restitution = .18;
+const ground = new CANNON.Body({ mass: 0, shape: new CANNON.Plane() }); ground.quaternion.setFromEuler(-Math.PI / 2, 0, 0); world.addBody(ground);
+const ringGeo = new THREE.RingGeometry(.9, .96, 72); ringGeo.rotateX(-Math.PI / 2);
+const glassMat = reader => reader
+  ? new THREE.MeshStandardMaterial({ color: '#5e5c56', roughness: .7, metalness: 0, envMapIntensity: .6, transparent: true })
+  : new THREE.MeshPhysicalMaterial({ color: GLASS.clone(), roughness: .36, metalness: 0, ior: 1.48, envMapIntensity: 1.0, clearcoat: .25, clearcoatRoughness: .4, transparent: true, opacity: .62, depthWrite: false });
+
+const figs = new Map();
+function getFig(t) {
+  let f = figs.get(t.id);
+  if (f) return f;
+  const g = new THREE.Group(), reader = t.kind === 'reader', mat = glassMat(reader);
+  const hull = new THREE.Mesh(hullGeo, mat); hull.castShadow = true;
+  const core = new THREE.Mesh(coreGeo, new THREE.MeshStandardMaterial({ color: STEEL.clone(), metalness: 1, roughness: .34, envMapIntensity: 1.2 }));
+  core.visible = !reader;
+  const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: OXIDE, transparent: true, opacity: 0, depthWrite: false }));
+  ring.position.y = .012;
+  g.add(core, hull, ring); g.position.set(t.x, 0, ZF); g.scale.y = .001; scene.add(g);
+  f = { id: t.id, g, mat, hull, core, ring, vis: 0, rod: STEEL.clone(), dark: 0, mark: 0, recoil: 0, in: false, shards: null, tx: t.x, reader };
+  figs.set(t.id, f); return f;
+}
+function shatter(f) {
+  f.shards = SHARDS.map(s => {
+    const m = new THREE.Mesh(s.g, f.mat); m.castShadow = true; scene.add(m);
+    const b = new CANNON.Body({ mass: 1 + s.half.x * s.half.y * s.half.z * 40, shape: new CANNON.Box(new CANNON.Vec3(s.half.x, s.half.y, s.half.z)), sleepSpeedLimit: .25, sleepTimeLimit: .6, linearDamping: .22, angularDamping: .25 });
+    b.position.set(f.g.position.x + s.c.x, s.c.y + .02, ZF + s.c.z);
+    const out = new THREE.Vector3(s.c.x, 0, s.c.z).normalize(), k = .3 + Math.random() * .9;
+    b.velocity.set(out.x * k + (Math.random() - .5) * .6, .6 + Math.random() * 3.2 * (s.c.y / H), out.z * k - .5 * Math.random());
+    b.angularVelocity.set((Math.random() - .5) * 9, (Math.random() - .5) * 9, (Math.random() - .5) * 9);
+    world.addBody(b); return { m, b };
+  });
+  f.hull.visible = false;  // the rod stays standing among the shards
+}
+function restore(f) {
+  if (!f.shards) return;
+  for (const s of f.shards) { scene.remove(s.m); world.removeBody(s.b); }
+  f.shards = null; f.hull.visible = true;
+}
+
+/* ---------- shots of the current stage ---------- */
+const SEG = 30;
+const arcMat = new THREE.ShaderMaterial({
+  transparent: true, depthWrite: false,
+  uniforms: { uT: { value: 0 }, uSel: { value: -1 }, uShot: { value: -1 } },
+  vertexShader: `attribute vec4 aS; attribute vec3 aI; varying float vA; uniform float uT, uSel, uShot;
+    void main(){ float prog = (uT - aS.x) / aS.y, cap = aS.z > .5 ? .5 + .04 * sin(uT * .45 + aS.w * 6.28) : 1.;
+      float head = min(prog, cap), u = aI.x;
+      float a = u > head ? 0. : (prog >= 1. && aS.z < .5 ? .13 : .2) + .5 * exp(-(head - u) * 7.) * (prog < 1.03 || aS.z > .5 ? 1. : 0.);
+      if (uSel > -.5 && abs(aI.y - uSel) > .5) a *= .2;
+      if (uShot > -.5) a *= abs(aI.z - uShot) < .5 ? 2.6 : .5;
+      vA = a; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+  fragmentShader: 'varying float vA; void main(){ if (vA < .004) discard; gl_FragColor = vec4(.914, .894, .847, min(vA, .9)); }' });
+const missMat = new THREE.ShaderMaterial({
+  transparent: true, depthWrite: false, uniforms: { uT: { value: 0 }, uSel: { value: -1 } },
+  vertexShader: `attribute vec4 aC; attribute vec2 aM; varying vec4 vC; uniform float uT, uSel;
+    void main(){ float a = smoothstep(aM.x + .3, aM.x + .8, uT); if (uSel > -.5 && abs(aM.y - uSel) > .5) a *= .2; vC = vec4(aC.rgb, aC.a * a); gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }`,
+  fragmentShader: 'varying vec4 vC; void main(){ gl_FragColor = vC; }' });
+const ballGeo = new THREE.SphereGeometry(1, 20, 14);
+const pinGeo = new THREE.CylinderGeometry(1, 1, .34, 32); pinGeo.translate(0, .17, 0);
+const loopGeo = new THREE.TorusGeometry(.86, .15, 10, 36); loopGeo.rotateX(-Math.PI / 2); loopGeo.translate(0, .15, 0);
+const ballMat = new THREE.MeshStandardMaterial({ metalness: .75, roughness: .3, envMapIntensity: 2.2 });
+const pinMat = new THREE.MeshStandardMaterial({ metalness: .9, roughness: .32, envMapIntensity: 1.2 });
+const loopMat = new THREE.MeshStandardMaterial({ metalness: 0, roughness: .45, envMapIntensity: .8 });
+let opening = true, userCam = false, first = true, cur = -1, S = null, arcs, balls, miss, discs, holes;
+const SC = new THREE.Vector3(), M4 = new THREE.Matrix4(), V3 = new THREE.Vector3(), QI = new THREE.Quaternion(), C3 = new THREE.Color();
+function setStage(i) {
+  cur = i; S = D.stages[i];
+  for (const o of [arcs, miss]) if (o) { scene.remove(o); o.geometry.dispose(); }
+  for (const o of [balls, discs, holes]) if (o) { scene.remove(o); o.dispose(); }
+  const n = S.shots.length, pos = [], aS = [], aI = [];
+  for (const s of S.shots) {
+    const x0 = S.theories[s.th].x, open = s.m == null ? 1 : 0;
+    const at = u => { const t = u * s.tf; return [x0 + (s.x - x0) * u, APEX + (s.vy * t - .5 * G * t * t) + (YP + s.r - APEX) * 0 + .0, ZF + (s.zv - ZF) * u]; };
+    for (let k = 0; k < SEG; k++) for (const u of [k / SEG, (k + 1) / SEG]) { pos.push(...at(u)); aS.push(s.t0, s.tf, open, s.ph); aI.push(u, s.th, s.k); }
+  }
+  const ag = new THREE.BufferGeometry();
+  ag.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); ag.setAttribute('aS', new THREE.Float32BufferAttribute(aS, 4)); ag.setAttribute('aI', new THREE.Float32BufferAttribute(aI, 3));
+  arcs = new THREE.LineSegments(ag, arcMat); arcs.frustumCulled = false; scene.add(arcs);
+  const mp = [], mc = [], mm = [];
+  for (const s of S.shots) if (s.m != null) {
+    const w = s.mark[0] === 'w', c = w ? BRASS : IVORY, y = YP + .004;
+    mp.push(s.x, y, s.zv, s.x, y, s.zm); for (let q = 0; q < 2; q++) { mc.push(c.r, c.g, c.b, w ? .95 : .5); mm.push(s.tm, s.th); }
+  }
+  const mg = new THREE.BufferGeometry();
+  mg.setAttribute('position', new THREE.Float32BufferAttribute(mp, 3)); mg.setAttribute('aC', new THREE.Float32BufferAttribute(mc, 4)); mg.setAttribute('aM', new THREE.Float32BufferAttribute(mm, 2));
+  miss = new THREE.LineSegments(mg, missMat); miss.frustumCulled = false; scene.add(miss);
+  balls = new THREE.InstancedMesh(ballGeo, ballMat, n); discs = new THREE.InstancedMesh(pinGeo, pinMat, n); holes = new THREE.InstancedMesh(loopGeo, loopMat, n);
+  for (const o of [balls, discs, holes]) { o.frustumCulled = false; o.castShadow = true; o.receiveShadow = true; o.setColorAt(0, C3.set(0)); scene.add(o); }
+  // lanes, plate and printed scale
+  const half = S.theories.length * S.W / 2 + .6, lp = [], sp = [];
+  for (let k = 0; k <= S.theories.length; k++) { const x = (k - S.theories.length / 2) * S.W; lp.push(x, .004, ZF - 1.4, x, .004, Z0 + .02, x, .004, Z0 - ZL - .02, x, .004, zOf(12)); }
+  laneLines.geometry.dispose(); laneLines.geometry = new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(lp, 3));
+  for (const [s] of AX) if (s < 0 || s > 1) sp.push(-half, .004, zOf(s), half + .3, .004, zOf(s));
+  scaleLines.geometry.dispose(); scaleLines.geometry = new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(sp, 3));
+  strip.scale.x = half * 2; S.half = half; plateTex.repeat.x = half / 3;
+  for (const m of printed) m.position.set(half + .55 + m.userData.w / 2, .006, zOf(m.userData.s) + (m.userData.s === 0 ? .6 : -.6));
+  setHome(half); if (!userCam && sel.id == null) { if (first) { camera.position.copy(HOME.p); controls.target.copy(HOME.t); first = false; } else flyTo(); }
+  // figures
+  for (const f of figs.values()) f.in = false;
+  for (const t of S.theories) { const f = getFig(t); f.in = true; f.tx = t.x; if (f.vis < .02) f.g.position.x = t.x; if (opening) f.vis = 1; restore(f); t.fig = f; }
+  opening = false;
+  // selection follows the theory by its id
+  const keep = sel.id != null ? S.theories.find(t => t.id === sel.id) : null;
+  const had = sel.id != null; sel.th = keep ? keep.i : -1; sel.shot = -1; if (!keep) sel.id = null;
+  drawPanel(); drawStage(); if (had) flyTo();
+  document.querySelectorAll('#track .seg').forEach((e, k) => e.classList.toggle('cur', k === i));
+}
+
+
+/* ---------- labels ---------- */
+const LB = $('#labels');
+const mk = cls => { const e = document.createElement('div'); e.className = 'lb ' + cls; LB.appendChild(e); return e; };
+const figLb = Array.from({ length: 16 }, () => mk('')), rlLb = Array.from({ length: 6 }, () => mk('rl'));
+let VW = 1, VH = 1;
+function place(e, x, y, z, dx = 0, dy = 0, centre = true) {
+  V3.set(x, y, z).project(camera);
+  if (V3.z > 1 || Math.abs(V3.x) > 1.2 || Math.abs(V3.y) > 1.2) { e.style.display = 'none'; return null; }
+  const px = (V3.x + 1) / 2 * VW + dx, py = (1 - V3.y) / 2 * VH + dy;
+  e.style.display = ''; e.style.transform = `translate(${px.toFixed(1)}px,${py.toFixed(1)}px)` + (centre ? ' translate(-50%,-100%)' : '');
+  return [px, py];
+}
+
+/* ---------- selection, panel, captions ---------- */
+const sel = { th: -1, shot: -1, id: null }; let hov = null, board = {};
+fetch('/data').then(r => r.json()).then(d => { for (const it of d.items || []) board[it.id] = it; drawPanel(); }).catch(() => {});
+const markTxt = s => s.m == null ? 'not measured yet' : s.mark[0] === 'w' ? 'nearer than the readers' : s.mark[0] === 'l' ? 'the readers were nearer' : s.mark[0] === 't' ? 'tied with the readers' : s.mark === 'g' ? 'GPU experiment' : s.mark === 'c' ? 'not compared with readers' : '';
+const fc = s => `${num(s.v)} <span style="color:var(--mute)">[${num(s.lo)}, ${num(s.hi)}]</span>`;
+const dotCss = s => s.m == null ? 'background:#9a9892' : s.mark[0] === 'w' ? 'background:#c9a25c' : s.mark[0] === 'l' || s.mark[0] === 't' ? 'border:1.5px solid #e4dfd2' : 'background:#e4dfd2';
+function drawPanel() {
+  const P = $('#panel');
+  if (!S || sel.th < 0) { P.classList.remove('on'); return; }
+  const t = S.theories[sel.th], s = sel.shot >= 0 ? S.shots[sel.shot] : null;
+  let h = `<div class="tag"><span>${esc(S.label)} · ${esc(t.id)}</span><a id="x">close</a></div><h2>${esc(t.name)}</h2>`;
+  if (s) {
+    const it = s.item && board[s.item];
+    h += `<div class="row"><span class="k">Forecast ${esc(s.id)}, written before the number</span>${esc(s.what)}</div>
+      <div class="row two"><div><span class="k">Forecast, 90 % interval</span><div class="big">${num(s.v)}</div>[${num(s.lo)}, ${num(s.hi)}]</div>
+      <div><span class="k">Measured</span><div class="big ${s.m == null ? '' : s.inside ? '' : 'red'}">${s.m == null ? '<small>not measured yet</small>' : num(s.m)}</div>${s.m == null ? 'still in the air' : (s.inside ? 'inside the interval' : 'outside the interval') + ', off by ' + num(Math.abs(s.m - s.v))}</div></div>
+      <div class="row"><span class="k">Unit</span>${esc(s.unit) || 'as stated in the forecast'}</div>`;
+    if (s.readers.length) h += `<div class="row"><span class="k">Readers with no theory</span>${s.readers.map((r, i) => `reader ${i + 1}: <b>${num(r[0])}</b>${r.length > 1 ? ` [${num(r[1])}, ${num(r[2])}]` : ''}`).join(' &nbsp; ')}${s.m != null ? `<br>${markTxt(s)}` : ''}${s.gain != null ? `, gain <b>${s.gain > 0 ? '+' : ''}${s.gain.toFixed(2)} nats</b>` : ''}</div>`;
+    if (s.note.startsWith('o:')) { const o = JSON.parse(s.note.slice(2)); h += `<div class="row"><span class="k">The other side of the duel forecast</span><b>${num(o[0])}</b> [${num(o[1])}, ${num(o[2])}]</div>`; }
+    if (s.note.startsWith('c:')) { const o = JSON.parse(s.note.slice(2)); h += `<div class="row"><span class="k">The theory it replaced forecast</span><b>${num(o[0])}</b> [${num(o[1])}, ${num(o[2])}]</div>`; }
+    if (s.note.startsWith('x:')) h += `<div class="row"><span class="k">Why it has no number</span>${esc(s.note.slice(2))}</div>`;
+    if (s.note === 'n') h += `<div class="row">Outside the interval, but within the noise of the measurement.</div>`;
+    if (s.reason) h += `<div class="row"><span class="k">Its reason</span>${esc(s.reason)}</div>`;
+    if (s.quote) h += `<div class="row"><span class="k">Measured in ${esc(s.item)}</span>“${esc(s.quote)}”</div>`;
+    if (it) h += `<div class="row"><span class="k">Board item ${esc(s.item)}, ${esc(it.who)}, live</span>${esc(cut(it.text, 260))}</div>`;
+    else if (s.item && !s.quote) h += `<div class="row"><span class="k">Board item</span>${esc(s.item)}</div>`;
+    h += `<div class="row"><a id="bk" style="cursor:pointer;color:var(--blue)">All forecasts of this theory</a></div>`;
+  } else {
+    h += `<p class="st">${esc(t.statement)}</p>`;
+    if (t.state) h += `<div class="row"><span class="k">Fate in ${esc(S.label.toLowerCase())}</span><b class="${t.fate === 'r' ? 'red' : t.fate === 's' ? 'blue' : ''}">${esc(t.state)}</b></div>`;
+    if (t.why) h += `<div class="row"><span class="k">${t.fate === 'r' ? 'What refuted it' : 'What decided it'}</span>${esc(t.why)}</div>`;
+    if (t.review && t.review !== t.why) h += `<div class="row"><span class="k">Review</span>${esc(t.review)}</div>`;
+    if (t.duel) h += `<div class="row"><span class="k">Its rival, written by a fresh agent</span>${esc(t.duel[0])}<br><b>${esc(t.duel[2])}</b>, ${t.duel[1] > 0 ? '+' : ''}${(+t.duel[1]).toFixed(2)} nats on ${t.duel[4]} tests, ${t.duel[3]} of them separating</div>`;
+    h += `<div class="row"><span class="k">Its ${t.shots.length} forecasts: forecast [interval], measured</span>` + t.shots.map(x =>
+      `<div class="sh" data-k="${x.k}"><span>${esc(x.id)}</span><span>${fc(x)}</span><span class="${x.m == null ? '' : x.inside ? '' : 'red'}">${x.m == null ? 'open' : num(x.m)}</span><span class="dot" style="${dotCss(x)}"></span></div>`).join('') + '</div>';
+  }
+  h += `<div class="row" style="font-size:11px">Source: ${esc(S.src)}</div>`;
+  P.innerHTML = h; P.classList.add('on'); P.scrollTop = 0;
+  $('#x').onclick = () => select(-1, -1);
+  if ($('#bk')) $('#bk').onclick = () => select(sel.th, -1);
+  P.querySelectorAll('.sh').forEach(e => { e.onclick = () => select(sel.th, +e.dataset.k); });
+}
+function drawStage() {
+  const m = S.shots.filter(s => s.m != null).length, r = S.theories.filter(t => t.fate === 'r').length;
+  $('#stage').innerHTML = `<i>${esc(S.label)}</i>${S.sub ? ', ' + esc(S.sub.replace(/^2026-11-15, /, '')) : ''}.<br>${S.theories.filter(t => t.kind === 'theory').length} theories, ${S.shots.length} forecasts, ${m} measured, ${S.shots.length - m} still open` + (S.kind === 'round' ? `, ${r} refuted.` : '. No fate is stored for a forecast run.');
+}
+function select(th, shot) {
+  sel.th = th; sel.shot = shot; sel.id = th >= 0 ? S.theories[th].id : null;
+  drawPanel(); flyTo();
+}
+let fly = null;
+function flyTo() {
+  let p = HOME.p, t = HOME.t;
+  if (sel.th >= 0 && S) { const sh = sel.shot >= 0 ? S.shots[sel.shot] : null, x = sh ? sh.x : S.theories[sel.th].x, off = VW < 760 ? 0 : 1;
+    p = sh ? new THREE.Vector3(x - 6 - 2 * off, 8, sh.zv + 19) : new THREE.Vector3(x - 8 - 2 * off, 10.5, ZF + 15);
+    t = sh ? new THREE.Vector3(x + 2.6 * off, 0, sh.zv + 1) : new THREE.Vector3(x + 3.4 * off, .4, -1.5); }
+  fly = { p0: camera.position.clone(), t0: controls.target.clone(), p1: p.clone(), t1: t.clone(), u: 0 };
+}
+
+/* ---------- timeline ---------- */
+let T = Q.has('s') ? D.stages[+Q.get('s')].start + (+Q.get('u') || 0) * D.stages[+Q.get('s')].dur : Q.has('t') ? +Q.get('t') : 0, playing = !Q.has('pause'), lastRef = null;
+const track = $('#track');
+D.stages.forEach((st, i) => { const e = document.createElement('div'); e.className = 'seg'; e.style.flex = st.dur + ' 0 0'; e.innerHTML = `<span><u>${st.kind === 'round' ? (i ? '' : 'Round ') : 'Forecast '}</u>${st.kind === 'round' ? st.key : '<s>F</s>' + st.key.slice(1)}</span>`; track.insertBefore(e, $('#head')); });
+const seek = e => { const r = track.getBoundingClientRect(); T = clamp((e.clientX - r.left) / r.width, 0, .9999) * total; };
+track.addEventListener('pointerdown', e => { track.setPointerCapture(e.pointerId); seek(e); track.onpointermove = seek; });
+track.addEventListener('pointerup', () => { track.onpointermove = null; });
+const setPlay = v => { playing = v; $('#play').textContent = v ? '❚❚' : '▶'; }; setPlay(playing);
+$('#play').onclick = () => setPlay(!playing);
+addEventListener('keydown', e => {
+  if (e.key === ' ') { setPlay(!playing); e.preventDefault(); }
+  if (e.key === 'Escape') select(-1, -1);
+  if (e.key === 'ArrowRight') T = D.stages[Math.min(cur + 1, D.stages.length - 1)].start + .01;
+  if (e.key === 'ArrowLeft') T = D.stages[Math.max(cur - (T - S.start < 1.5 ? 1 : 0), 0)].start + .01;
+});
+
+/* ---------- picking ---------- */
+const shotPos = (s, t) => {  // where the shot's light is at stage time t
+  const x0 = S.theories[s.th].x, pr = (t - s.t0) / s.tf;
+  const u = s.m == null ? Math.min(pr, .5 + .04 * Math.sin(t * .45 + s.ph * 6.28)) : Math.min(pr, 1);
+  if (u < 0) return null; const tt = u * s.tf;
+  return [x0 + (s.x - x0) * u, Math.max(0, APEX + s.vy * tt - .5 * G * tt * tt), ZF + (s.zv - ZF) * u, u];
+};
+function pick(cx, cy) {
+  const t = T - S.start; let best = null, bd = 18;
+  const test = (x, y, z, r, o) => { V3.set(x, y, z).project(camera); if (V3.z > 1) return; const d = Math.hypot((V3.x + 1) / 2 * VW - cx, (1 - V3.y) / 2 * VH - cy) - r; if (d < bd) { bd = d; best = o; } };
+  for (const s of S.shots) {
+    if (sel.th >= 0 && s.th !== sel.th) continue;
+    const p = shotPos(s, t); if (p) test(p[0], p[1], p[2], 0, { shot: s });
+    if (s.m != null && t > s.tm) test(s.x, .05, s.zm, 2, { shot: s });
+  }
+  for (const th of S.theories) for (const y of [.5, 1.5, 2.6]) test(th.x, y, ZF, 14, { th });
+  return best;
+}
+let down = null;
+canvas.addEventListener('pointerdown', e => { down = [e.clientX, e.clientY]; controls.autoRotate = false; fly = null; userCam = true; });
+canvas.addEventListener('wheel', () => { userCam = true; fly = null; }, { passive: true });
+canvas.addEventListener('pointerup', e => {
+  if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6) return;
+  const h = pick(e.clientX, e.clientY);
+  if (!h) select(-1, -1); else if (h.shot) select(h.shot.th, h.shot.k); else select(h.th.i, -1);
+});
+canvas.addEventListener('pointermove', e => {
+  if (e.buttons) { hov = null; $('#tip').style.display = 'none'; return; }
+  hov = pick(e.clientX, e.clientY); const tip = $('#tip');
+  canvas.style.cursor = hov ? 'pointer' : 'grab';
+  if (!hov) { tip.style.display = 'none'; return; }
+  if (hov.shot) { const s = hov.shot, th = S.theories[s.th], landed = s.m != null && T - S.start > s.tm;
+    tip.innerHTML = `<b>${esc(th.name)}</b> · ${esc(s.id)}<br>${esc(cut(s.what, 120))}<br>forecast <b>${num(s.v)}</b> [${num(s.lo)}, ${num(s.hi)}]` + (s.m == null ? ' · not measured yet' : landed ? ` · landed <b class="${s.inside ? 'blue' : 'red'}">${num(s.m)}</b>` : ' · number not in yet');
+  } else tip.innerHTML = `<b>${esc(hov.th.name)}</b> · ${esc(hov.th.id)}<br>${esc(cut(hov.th.statement, 170))}`;
+  tip.style.display = 'block'; tip.style.transform = `translate(${Math.min(e.clientX + 16, VW - 350)}px,${Math.max(8, e.clientY - 20)}px)`;
+});
+
+/* ---------- ruler of the selected shot ---------- */
+const rulerLine = new THREE.LineSegments(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: 0xe9e4d8, transparent: true, opacity: .85, depthTest: false }));
+rulerLine.frustumCulled = false; scene.add(rulerLine); let rulerKey = '';
+function ruler(t) {
+  const s = sel.shot >= 0 ? S.shots[sel.shot] : null, key = s ? cur + ':' + s.k : '';
+  const marks = !s ? [] : [[s.lo, 'low', 0], [s.hi, 'high', 0], [s.v, 'forecast', 1], ...s.readers.map((r, i) => [r[0], 'reader ' + (i + 1), 2]), ...(s.m != null && t > s.tm ? [[s.m, 'measured', 3]] : [])];
+  if (key !== rulerKey + (marks.length)) {
+    rulerKey = key; const p = [];
+    if (s) { p.push(s.x, .04, zOf(-1.6), s.x, .04, zOf(14)); for (const [v, , k] of marks) { const z = zOf((v - s.lo) / (s.hi - s.lo)), w = k === 2 ? .12 : .3; p.push(s.x - w, .04, z, s.x + w, .04, z); } }
+    rulerLine.geometry.dispose(); rulerLine.geometry = new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(p, 3));
+  }
+  const L = [], R = [];
+  rlLb.forEach((e, i) => {
+    const m = marks[i]; if (!m) { e.style.display = 'none'; return; }
+    e.innerHTML = `${m[2] === 3 ? '<b class="' + (s.inside ? 'blue' : 'red') + '">' + num(m[0]) + '</b>' : num(m[0])} <span>${m[1]}</span>`;
+    const left = m[2] >= 2, q = place(e, s.x + (left ? -.42 : .42), .04, zOf((m[0] - s.lo) / (s.hi - s.lo)), 0, 0, false);
+    if (q) (left ? L : R).push([e, q[0], q[1]]);
+  });
+  for (const side of [L, R]) { side.sort((a, b) => a[2] - b[2]); let py = -1e9;
+    for (const [e, x, y] of side) { py = Math.max(y, py + 15); e.style.transform = `translate(${x.toFixed(1)}px,${(py - 8).toFixed(1)}px)` + (side === L ? ' translate(-100%,0) translate(-6px,0)' : ' translate(6px,0)'); } }
+}
+
+/* ---------- frame ---------- */
+function resize() {
+  VW = innerWidth; VH = innerHeight; renderer.setSize(VW, VH, false); composer.setSize(VW, VH);
+  camera.aspect = VW / VH; camera.fov = VW < 760 ? 48 : 30; camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize); resize();
+$('#line').innerHTML = esc(D.line).replace(/(\d+ of \d+)/, '<b>$1</b>');
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (still && !Q.has('t')) { T = D.stages[3].start + D.stages[3].dur - .5; setPlay(false); }
+// the page opens on round 2 as its numbers have landed and its one refuted theory breaks, then starts from round 1
+let intro = Q.has('t') || Q.has('s') || still ? 0 : 2.8;
+if (intro) T = D.stages[1].start + D.stages[1].tF - .7;
+let last = performance.now(), idle = 0, warm = +Q.get('warm') || 0;
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = Math.min(Q.has('noclamp') ? 1 : .05, (now - last) / 1000); last = now;  // ?noclamp: real elapsed time on a slow renderer
+  if (playing) { T += dt; if (T >= total) T = 0; }
+  if (intro > 0) { intro -= dt; if (intro <= 0) T = 0; }
+  let i = D.stages.findIndex(s => T < s.start + s.dur); if (i < 0) i = D.stages.length - 1;
+  if (i !== cur) setStage(i);
+  const t = T - S.start;
+  $('#head').style.left = (track.clientWidth * T / total) + 'px';
+
+  // camera
+  if (fly) { fly.u = Math.min(1, fly.u + dt / 2.2); const e = ease(fly.u); camera.position.lerpVectors(fly.p0, fly.p1, e); controls.target.lerpVectors(fly.t0, fly.t1, e); if (fly.u >= 1) fly = null; }
+  idle += dt; controls.autoRotateSpeed = .22 * Math.cos(idle * .1);
+  controls.update();
+
+  // shots: a steel ball per forecast, a pin where the number landed
+  finish.uniforms.uT.value = (now * .001) % 10;
+  arcMat.uniforms.uT.value = missMat.uniforms.uT.value = t; arcMat.uniforms.uSel.value = missMat.uniforms.uSel.value = sel.th; arcMat.uniforms.uShot.value = sel.shot;
+  let nb = 0, nd = 0, nh = 0;
+  for (const s of S.shots) {
+    const p = shotPos(s, t), k = s.k, dim = sel.th >= 0 && s.th !== sel.th ? .28 : 1, hot = sel.shot === k ? 1.35 : 1, big = s.mark === 'g' ? 1.6 : 1;
+    if (p) { const r = s.r * hot * big;
+      M4.compose(V3.set(p[0], Math.max(p[1], (p[2] < Z0 + .1 && p[2] > Z0 - ZL - .1 ? YP : 0) + r), p[2]), QI, SC.set(r, r, r));
+      balls.setMatrixAt(nb, M4); balls.setColorAt(nb++, C3.copy(STEEL).multiplyScalar(dim)); }
+    if (s.m != null && t > s.tm) {
+      const a = t - s.tm, r = s.r * 1.75 * hot * big, win = s.mark[0] === 'w', ring = s.mark[0] === 'l' || s.mark[0] === 't';
+      const u = clamp(a / .42, 0, 1), drop = 2.6 * (1 - u * u) + (u >= 1 ? .1 * Math.exp(-(a - .42) * 9) * Math.abs(Math.sin((a - .42) * 16)) : 0);
+      const base = s.zm < Z0 + .1 && s.zm > Z0 - ZL - .1 ? YP : 0;
+      M4.compose(V3.set(s.x, base + drop, s.zm), QI, SC.set(r, r, r));
+      if (ring) { holes.setMatrixAt(nh, M4); holes.setColorAt(nh++, C3.copy(IVORY).multiplyScalar(.8 * dim)); }
+      else { discs.setMatrixAt(nd, M4); discs.setColorAt(nd++, C3.copy(win ? BRASS : IVORY).multiplyScalar(dim)); }
+    }
+  }
+  for (const [o, n] of [[balls, nb], [discs, nd], [holes, nh]]) { o.count = n; o.instanceMatrix.needsUpdate = true; if (o.instanceColor) o.instanceColor.needsUpdate = true; }
+
+  // figures
+  world.step(1 / 60, dt, 3);
+  let refuted = null;
+  for (const th of S.theories) {
+    const f = th.fig, done = S.kind === 'round' && t >= S.tF;
+    f.rodT = !done ? STEEL : th.fate === 's' ? BRASS : th.fate === 'r' ? STEEL : GRAPH; f.darkT = done && th.fate === 'l' ? 1 : 0;
+    if (th.fate === 'r') { if (t >= th.tS && !f.shards) shatter(f); if (t < th.tS && f.shards) restore(f); if (t >= th.tS && (!refuted || th.tS > refuted.tS)) refuted = th; }
+    f.markT = th.fate === 'r' && t >= th.tS ? 1 : 0;
+    let pulse = 0; for (const s of th.shots) { const a = t - s.t0; if (a > 0 && a < .7) pulse += Math.exp(-a * 6) * Math.sin(a * 9); }
+    f.recoilT = clamp(pulse, -1, 1);
+  }
+  if (warm && t > S.tF + 1) { for (let k = 0; k < warm; k++) world.step(1 / 60); warm = 0; }
+  for (const f of figs.values()) {
+    f.vis += ((f.in ? 1 : 0) - f.vis) * Math.min(1, dt * (f.in ? 2.6 : 4));
+    if (!f.in && f.vis < .02) { f.g.visible = false; restore(f); f.mark = 0; continue; }
+    if (!f.in) { f.markT = 0; f.recoilT = 0; }
+    f.g.visible = true; f.g.position.x += (f.tx - f.g.position.x) * Math.min(1, dt * 2.6);
+    f.recoil += ((f.recoilT || 0) - f.recoil) * Math.min(1, dt * 14);
+    f.g.scale.set(1, Math.max(.001, f.vis), 1); f.g.position.y = -.05 * f.recoil;
+    f.dark += ((f.darkT || 0) - f.dark) * Math.min(1, dt * 2); f.mark += ((f.markT || 0) - f.mark) * Math.min(1, dt * 2.2);
+    if (f.rodT) f.rod.lerp(f.rodT, Math.min(1, dt * 2.5));
+    f.core.material.color.copy(f.rod);
+    if (!f.reader) f.mat.color.copy(GLASS).lerp(GRAPH, f.dark * .85);
+    f.mat.opacity = (f.reader ? 1 : .62 + .3 * f.dark) * Math.min(1, f.vis * 1.2);
+    f.ring.material.opacity = .85 * f.mark; f.ring.scale.setScalar(.7 + .65 * ease(f.mark));
+    if (f.shards) for (const s of f.shards) { s.m.position.copy(s.b.position); s.m.quaternion.copy(s.b.quaternion); s.m.scale.setScalar(f.in ? 1 : f.vis); }
+  }
+
+  // labels
+  const pxLane = (() => { const a = V3.set(0, 0, ZF).project(camera).x, b = V3.set(S.W, 0, ZF).project(camera).x; return Math.abs(b - a) / 2 * VW; })();
+  const lev = pxLane < 70 ? 3 : pxLane < 128 ? 2 : 1;
+  figLb.forEach((e, k) => {
+    const th = S.theories[k]; if (!th || th.fig.vis < .5) { e.style.display = 'none'; return; }
+    let land = 0, ins = 0, gain = 0, hasG = false;
+    for (const s of th.shots) if (s.m != null && t > s.tm) { land++; if (s.inside) ins++; if (s.gain != null) { gain += s.gain; hasG = true; } }
+    const fate = S.kind === 'round' && t >= (th.tS ?? S.tF) && th.state ? th.state : '';
+    const score = land ? `${ins} of ${land} inside` + (hasG ? ` · ${gain > 0 ? '+' : ''}${gain.toFixed(2).replace('-', '−')} nats` : '') : th.shots.length ? `${th.shots.length} forecast${th.shots.length > 1 ? 's' : ''}` : 'says nothing here';
+    const txt = `<b>${esc(th.name)}</b>${score}${fate ? `<br><span class="${th.fate === 'r' ? 'red' : th.fate === 's' ? 'blue' : ''}">${esc(fate)}</span>` : ''}`;
+    if (e._t !== txt) { e.innerHTML = e._t = txt; }
+    e.classList.toggle('dimmed', sel.th >= 0 && sel.th !== k);
+    place(e, th.fig.g.position.x, APEX + .25, ZF, 0, -(k % lev) * 31);
+  });
+  ruler(t);
+
+  // caption
+  let cap;
+  if (t < S.tN - .5) cap = `<b>${esc(S.label)}.</b> The forecasts are fired: each lands at its predicted value on its own interval.`;
+  else if (t < S.tF) cap = `<b>${esc(S.label)}.</b> The numbers come in. A pin is the measured value; the line to it is the miss.`;
+  else if (S.kind === 'forecast') cap = `<b>${esc(S.label)}.</b> ${S.shots.filter(s => s.m == null).length} forecasts are still in the air: their experiments had not posted when the run was scored.`;
+  else if (refuted) cap = `<b class="red">Refuted: ${esc(refuted.name)}.</b><span class="ob">${esc(cut(refuted.why || refuted.review, 300))}</span>`;
+  else cap = `<b>${esc(S.label)}.</b> No theory was refuted in this round.`;
+  if (cap !== lastRef) { $('#cap').innerHTML = lastRef = cap; }
+
+  composer.render();
+}
+requestAnimationFrame(frame);
+if (Q.has('sel')) setTimeout(() => { const [a, b] = Q.get('sel').split('.'); select(+a, b == null ? -1 : +b); if (fly) { camera.position.copy(fly.p1); controls.target.copy(fly.t1); fly = null; } }, 300);
+</script>
+</body>
+</html>

@@ -117,3 +117,14 @@ Code 3.0: 23, Math 3.1: 46). The edit's share of the weight norm (`add_rel`) is 
 - R1. The reward family of Part 1 predicts it: math30 at most 55 cap hits; if30 and general30 within 62 to 85; think_sft at least 60.
   Refuted if if30 or general30 has 45 or fewer, or math30 65 or more. If every difference cuts cap hits, finishing is what any
   fine-tune writes.
+
+## Amendment 6 (2026-11-15, after the dial and its replication, before two control cells; work-e1b23a)
+
+The dial has no random cell at its best size, and the Think-SFT cell of amendment 5 was 50 times too large (3.68 % of the weight
+norm against 0.074 %) and broke the model. Same settings.
+
+1. `rand8 --scale 1.5 --other math31`. Predicted 155 to 170 right and 60 to 80 cap hits, as the random edit at sizes 1, 2 and 3.
+   Refuted if it has fewer than 45 cap hits or more than 180 right.
+2. `top8 --scale 0.02 --other think_sft`: Think-SFT's 8 directions at Math's edit norm (3.68 % x 0.02 = 0.074 %). If finishing
+   needs a reward, cap hits stay within 62 to 85 and right answers within 164 +- 12. Refuted if cap hits are 50 or fewer: then
+   fine-tuning on reasoning traces writes the finishing directions too.

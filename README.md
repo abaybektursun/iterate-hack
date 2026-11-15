@@ -389,11 +389,12 @@ not the research question. Each is a module `tools/proof_<slug>.py`, made like a
 `/proof/<slug>`. The first is `tools/proof_review_cuts_waste.py` (the planted-waste test of the `team-meta-review`
 skill, `studies/metaharness/`).
 
-The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): a therapy thought record for
-one result title of the board. One button walks it through the evidence for it (the result's `what:` line), the
-evidence against it (its `caveat:` line), the title rewritten with that caveat, and the count of messages and board
-items the agents posted since the page was opened. It uses only results that have a caveat; `/psychosis#<result id>`
-links to one, and Esc starts it again.
+The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game.
+Hold Space, or press and hold, to breathe in and let go to breathe out, so that the white ring follows the blue one. A
+breath that follows it lights one of 10 petals and releases every thought on screen; 10 petals win. The thoughts are
+written jokes and, marked with a blue dot, real messages and result titles of the board. A thought that reaches the
+head is believed and moves the diagnosis up; the fifth ends the session. A click on a thought brings it back as 3
+subagents. A guide speaks one line per breath (M mutes). The end screen counts what the agents posted meanwhile.
 
 The page `/demo` is the talk: one stepped story over the Design page's picture, with a sentence and a fact line per
 step in the words column (arrow keys step, Esc closes; `/demo#<step>` links to a step). It is not a header tab. The 12
@@ -559,6 +560,14 @@ Counts and limits: 172 of 199 HTTP calls to Exa returned results, from 59 main a
 session transcripts up to 05:25 UTC; the Exa dashboards hold the authoritative count). 98 calls through the Exa MCP failed
 with a 401 error, which is why the agents call the HTTP API. Early on, one person's agents had no Exa key and used another
 search tool. No count of GPU jobs avoided by a search exists.
+
+The page `/exa` (`tools/exa_page.py`; not a header tab, and its look is its own: white paper and one cyan marker) shows
+four searches that changed a decision, and what the agents got from Exa up to Nov 15 15:29 UTC, without the number of
+calls. Its numbers come from
+`studies/metaharness/results/exa_count-01/summary.json`, written by `studies/metaharness/analysis/exa_count.py`: 381 calls
+to Exa returned (237 searches, 144 page reads) from 61 agents in 20 sessions; 193 more stopped at a missing key on one
+laptop; 59 MCP calls returned 401. This count expands shell loops and reads other transcripts than the count above, so
+the two do not reconcile. The theory engine's external stage has now written 163 published findings (rounds 02 to 07).
 
 ## past.dev challenge
 
