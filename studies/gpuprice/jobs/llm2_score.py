@@ -1,7 +1,7 @@
 """Scores the LLM adjuster arm (llm2) against ens-05 on the same cells, and writes full forecast files.
 
   P="runs/gpuprice/.venv/bin/python -I -B studies/gpuprice/jobs/llm2_score.py"
-  $P score <variant> <model> [--mix 0.5] [--wide] [--origins pilot|heldout|all]     paired comparison on the cells the model answered
+  $P score <variant[-tag]> <model> [--mix 0.5] [--wide] [--origins pilot|heldout|all]     paired comparison on the cells the model answered
   $P write <variant> <model> <out.csv> [--mix 0.5] [--wide] [--base <forecast.csv>]   reads no truth               ens-05 schema; cells without an answer keep ens-05
 
 --base, --cells: the forecast that was adjusted and its scored cells (defaults: ens-05 on the development origins).
@@ -97,17 +97,17 @@ def score(variant, model, mix, origins, wide, cells):
     sa, sb = skills(c)
     lo, hi = boot(c, ["series_id", "origin_date"]); slo, shi = boot(c, ["series_id"])
     print(f"{variant} {model} mix {mix}{' wide' if wide else ''} origins {origins}: {len(c)} cells, {c.groupby(['series_id', 'origin_date']).ngroups} series-origins, {c.origin_date.nunique()} origins")
-    print(f"  pinball adjusted {c.aloss.mean():.5f}, ens-05 {c.loss.mean():.5f}, last value {c.baseline_loss.mean():.5f} USD/GPU-hour")
-    print(f"  skill adjusted {sa:+.4f}, ens-05 {sb:+.4f}, difference {sa - sb:+.4f}  95% [{lo:+.4f}, {hi:+.4f}] series-origin blocks, [{slo:+.4f}, {shi:+.4f}] series blocks")
+    print(f"  pinball adjusted {c.aloss.mean():.5f}, base {c.loss.mean():.5f}, last value {c.baseline_loss.mean():.5f} USD/GPU-hour")
+    print(f"  skill adjusted {sa:+.4f}, base {sb:+.4f}, difference {sa - sb:+.4f}  95% [{lo:+.4f}, {hi:+.4f}] series-origin blocks, [{slo:+.4f}, {shi:+.4f}] series blocks")
     for h, g in c.groupby("horizon_days"):
         a, b = skills(g)
-        print(f"  +{h}d: {len(g)} cells, adjusted {a:+.4f}, ens-05 {b:+.4f}, difference {a - b:+.4f}")
+        print(f"  +{h}d: {len(g)} cells, adjusted {a:+.4f}, base {b:+.4f}, difference {a - b:+.4f}")
     ch = c[c.changed]
     d = ch.loss - ch.aloss
     print(f"  changed {len(ch)} of {len(c)} cells ({len(ch) / len(c):.0%}); of those better {(d > 1e-9).sum()}, worse {(d < -1e-9).sum()}, same {(d.abs() <= 1e-9).sum()}; "
-          f"max |adjusted - ens-05 loss| on unchanged cells {(c[~c.changed].aloss - c[~c.changed].loss).abs().max():.2e}")
+          f"max |adjusted - base loss| on unchanged cells {(c[~c.changed].aloss - c[~c.changed].loss).abs().max():.2e}")
     cov = lambda lo_, hi_: ((c[lo_] <= c.y) & (c.y <= c[hi_])).mean()
-    print(f"  inside [q10, q90]: adjusted {cov('a10', 'a90'):.2f}, ens-05 {cov('q10', 'q90'):.2f}")
+    print(f"  inside [q10, q90]: adjusted {cov('a10', 'a90'):.2f}, base {cov('q10', 'q90'):.2f}")
     s = c.groupby("series_id")[["aloss", "loss", "baseline_loss"]].sum()
     s["gain"] = s.loss - s.aloss
     tot = s.gain.sum()

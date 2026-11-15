@@ -90,6 +90,12 @@ that turn over daily is forecast poorly by every listing-level method.
    narrower than the base. On the locked origins this member alone is not separated from candidate 1 (+0.004,
    -0.024 to +0.027), and the daily-maximum member alone scored above the average; the gain of candidate 2 there
    comes from finding 6.
+   After the submission was fixed: a second provider's model (`gpt-6-astra`) reproduces the development gain
+   (+0.015), and `gpt-6.1-sol` adjusting candidate 2 with the within-day data in its context gains a further
+   +0.012 to +0.014 on the origins that do not include 1 October (+0.037 with it). It recomputes the median
+   without a listing that was seen in 2 % of the day's snapshots, where the code applies a pooled exit
+   probability. Share prices of NVDA, AMD, CRWV and NBIS in the context added nothing. None of this has a test
+   on unseen origins and none of it is in the submission.
 8. **Where the error is.** With tomorrow's set of listings known and prices frozen, the 1-day absolute error of
    the median falls by 59 % (fastgpu_daily) and 68 % (gpurentalprices); with every continuing listing's price
    known and the set frozen, by 39 % and 31 %. At 7 days: 48 % and 54 % against 39 % and 37 %. Most entrants (46

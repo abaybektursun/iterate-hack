@@ -38,7 +38,11 @@ def load(base=f"{BASE}/forecast.csv", cells=(f"{BASE}/cells.csv",), last_origin=
     cells["target"] = pd.to_datetime(cells.target_date).dt.date
     fc = pd.read_csv(base)
     cat = pd.read_csv("studies/gpuprice/data/event_series_v1.csv").set_index("series_id")
-    return {"hist": hist, "panel": panel, "cells": cells, "fc": fc, "cat": cat, "last_origin": last_origin}
+    intra = pd.read_csv("studies/gpuprice/data/fm2_intraday_v2.csv.gz", keep_default_na=False)   # fastgpu_daily: day's maximum, snapshot share
+    intra["d"] = pd.to_datetime(intra.d).dt.date
+    market = pd.read_csv("studies/gpuprice/data/ext_market_v1.csv")                              # llm2_market.py: daily closes
+    market["d"] = pd.to_datetime(market.date).dt.date
+    return {"hist": hist, "panel": panel, "cells": cells, "fc": fc, "cat": cat, "intra": intra, "market": market, "last_origin": last_origin}
 
 
 def fmt(x):
@@ -66,7 +70,10 @@ def build(D, sid, origin, days_median=60, days_listing=21, parts=("listings", "o
     assert t <= D["last_origin"] <= EVENT, "origin outside the allowed window"
     hist, panel, cells = D["hist"], D["panel"], D["cells"]
     hist = hist[hist.d <= t]; panel = panel[panel.d <= t]; cells = cells[(cells.target <= t) & (cells.d <= t)]   # the leak cut
-    assert hist.d.max() <= t and panel.d.max() <= t and (cells.empty or cells.target.max() <= t)
+    intra = D["intra"][D["intra"].d <= t]
+    market = D["market"][D["market"].d <= t]
+    assert market.d.max() <= t
+    assert hist.d.max() <= t and panel.d.max() <= t and (cells.empty or cells.target.max() <= t) and intra.d.max() <= t
     c = D["cat"].loc[sid]
     h = hist[hist.series_id == sid].set_index("d").value
     m0, last_day = float(h.iloc[-1]), h.index[-1]
@@ -98,6 +105,20 @@ def build(D, sid, origin, days_median=60, days_listing=21, parts=("listings", "o
         out.append(f"Price of each listing, {win[0]} to {t} (a range holds one unchanged price; \"-\" = listing absent; "
                    f"\"no data\" = the tracker collected nothing that day), sorted by price.{note}\n" + "\n".join(lines))
 
+    if "intraday" in parts and "listings" in parts and c.source_id == "fastgpu_daily":
+        w7 = window(t, 7)
+        x = intra[(intra.series_id == sid) & (intra.d >= w7[0]) & intra.listing.isin(tab.index)]
+        x = x.merge(g[["listing", "d", "p"]], on=["listing", "d"])
+        lines = []
+        for name in tab.index:
+            bits = [f"{r.d:%m-%d}" + (f" max {fmt(r.pmax)}" if r.pmax > r.p + 1e-9 else "") + (f" seen {r.frac:.0%}" if r.frac <= 0.5 else "")
+                    for r in x[x.listing == name].sort_values("d").itertuples() if r.pmax > r.p + 1e-9 or r.frac <= 0.5]
+            if bits:
+                lines.append(" / ".join(v for v in name.split("|") if v) + ": " + " | ".join(bits))
+        out.append(f"Within-day detail, {w7[0]} to {t}, only where it adds something (max = the listing's highest price that day, above "
+                   f"the minimum shown above; seen = share of the day's snapshots holding the listing, when at most 50%):\n"
+                   + ("\n".join(lines) if lines else "nothing to show."))
+
     if "other" in parts:
         cat = D["cat"]
         twin = cat[(cat.gpu_model == c.gpu_model) & (cat.pricing_tier == c.pricing_tier) & (cat.source_id != c.source_id)
@@ -106,6 +127,11 @@ def build(D, sid, origin, days_median=60, days_listing=21, parts=("listings", "o
             oh = hist[hist.series_id == osid].set_index("d").value
             out.append(f"The same GPU and tier in another tracker ({o.source_id}, segment {o.instrument_class}; its listing set differs), "
                        f"median, {median_line(oh, 30)}")
+
+    if "market" in parts:
+        m = market[market.d > t - dt.timedelta(days=30)]
+        out.append("Daily closing share prices, USD, trading days only (NVDA and AMD make the GPUs; CRWV = CoreWeave and NBIS = Nebius rent them):\n"
+                   + "\n".join(f"{k}: " + " | ".join(f"{r.d:%m-%d} {fmt(r.close)}" for r in g_.sort_values("d").itertuples()) for k, g_ in m.groupby("ticker")))
 
     base = {}
     f = D["fc"][(D["fc"].series_id == sid) & (D["fc"].origin_date == str(t))].set_index("horizon_days")
@@ -148,22 +174,24 @@ def test():
 
 def test_one(name, D, t):
     sid = "fastgpu_daily.neocloud_rate_card.B300.on_demand.median"
-    clean = build(D, sid, t)["text"]
+    parts = ("listings", "intraday", "other", "market", "record")
+    clean = build(D, sid, t, parts=parts)["text"]
+    assert "Within-day detail" in clean and "Daily closing share prices" in clean
     P = dict(D)
-    for k in ("hist", "panel", "cells"):
-        x = D[k]
+    for k in ("hist", "panel", "cells", "intra", "market"):
+        x = D[k] if k != "market" else D[k].assign(series_id=sid)
         late = x[(x.series_id == sid) & ((x.target if k == "cells" else x.d) > t)]
         assert len(late) or t == EVENT, f"{k}: no post-origin row to drop"     # the real files hold later rows (none after the event origin)
         plant = x[x.series_id == sid].tail(3).copy()
         plant["d"] = [t + dt.timedelta(days=i) for i in (1, 2, 3)]
-        for col in ("value", "p", "y"):
+        for col in ("value", "p", "y", "pmax", "close"):
             if col in plant:
                 plant[col] = 777.777
         if k == "cells":
             plant["target"] = plant["d"] + dt.timedelta(days=1); plant["d"] = t      # origin in range (the origin itself), target after it
             plant["horizon_days"] = [91, 92, 93]
         P[k] = pd.concat([x, plant], ignore_index=True)
-    planted = build(P, sid, t)["text"]
+    planted = build(P, sid, t, parts=parts)["text"]
     assert planted == clean and "777.777" not in planted, "a post-origin row reached the context"
     try:
         build(D, sid, D["last_origin"] + dt.timedelta(days=1))

@@ -133,12 +133,14 @@ included. Main entries, pooled skill against last value (1 / 3 / 7 days):
 | `llm2-01` | `claude-fable-5-2` (no tools, training data to June 2026) adjusts `ens-05`, 1,110 calls | +0.309 | |
 | `llm2-03` | the same with the band never narrower than `ens-05`'s (rule chosen on 6 pilot origins; the other 24: +0.015, +0.007 to +0.025) | +0.313 | +0.209 / +0.278 / +0.360 |
 | `loc-01` to `loc-11` | Chronos-2 arms on the laptop's RTX 4090 (`results/local/`, about 1.3 min per arm: LoRA 40 s, inference 83 s; the same LoRA took 65 min on Modal's cpu class). Synthetic-only LoRA inside the fm2 pipeline with `--intraday`: +0.312 (five seeds +0.305 to +0.316); half base, half 5-seed LoRA mean (`loc-09`): +0.318; averaged with `sim2-15`: +0.304 to +0.306; 10x synthetic data: no gain. Not in the submission: found after SPEC3 was fixed | +0.318 best | +0.210 / +0.276 / +0.371 |
+| `llm2-04` | `gpt-6-astra` (knowledge cutoff 30 April 2026, no tools) adjusts `ens-05`: replicates `llm2-03` with a second provider's model (+0.015, +0.008 to +0.023; 24 held-out origins +0.016) | +0.313 | |
+| `llm2-05` | `gpt-6.1-sol` (cutoff 30 April 2026, no tools) adjusts candidate 2 (`ens-06`), with the day's maximum and snapshot share in its context. +0.037 over `ens-06` (+0.010 to +0.072), but origin 2026-10-01 carries most of it: without that origin +0.012 (+0.002 to +0.024), 24 held-out origins +0.014 (+0.002 to +0.027). Daily closes of NVDA, AMD, CRWV, NBIS in the context (`data/ext_market_v1.csv`): no gain on 627 pilot cells. Not in the submission: found after SPEC3 | +0.354 | +0.314 / +0.306 / +0.390 |
 | `ens-06` | **candidate 2**: quantile average of `fm2-20` and `llm2-03` | **+0.316** | +0.217 / +0.272 / +0.367 |
 
 `fm2-20` against `fm2-17`: +0.015, 95 % interval +0.008 to +0.024 (bootstrap over origins). `llm2-03` against
 `ens-05`: +0.015, +0.008 to +0.024 (series-origin blocks). Other adjuster models on the 6 pilot origins (627
 cells, `ens-05` +0.251): `claude-haiku-5-5` +0.255, `claude-sonnet-5-5` +0.248, `claude-fable-5-2` +0.265; an
-echo control returned `ens-05` unchanged on 627 of 627 cells. Whole LLM arm: $33.79.
+echo control returned `ens-05` unchanged on 627 of 627 cells. LLM arm through SPEC3: $33.79 (Anthropic). Afterwards: OpenAI $55.33, Anthropic $41.30 in all.
 
 Seed and checkpoint noise is about +-0.01 pooled (`ft-08` step curve, `pfn-02` checkpoints), so the averages
 between +0.292 and +0.299 are not separated.
