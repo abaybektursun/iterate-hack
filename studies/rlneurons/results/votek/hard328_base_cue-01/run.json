@@ -1,0 +1,103 @@
+{
+ "command": "python -m studies.rlneurons.analysis.votek --runs runs/abaybektursun-1114-200457-e8e6 runs/ih-1115-203301-1311+runs/ih-1115-203536-158f+runs/ih-1115-223413-8a08+runs/ih-1115-223311-1a89+runs/ih-1115-203831-efdf+runs/ih-1115-204016-2f14 --out studies/rlneurons/results/votek/hard328_base_cue-01",
+ "runs": [
+  {
+   "run": "runs/abaybektursun-1114-200457-e8e6",
+   "job_id": "abaybektursun-1114-200457-e8e6",
+   "shard": null,
+   "commit": "2c58f34e156212e79ecfc3e13c460cd6fb4bd02a",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3000000,
+   "samples": 4
+  },
+  {
+   "run": "runs/ih-1115-203301-1311",
+   "job_id": "ih-1115-203301-1311",
+   "shard": "0/5",
+   "commit": "8c2a3c056da6e8a401880bad3ade47faa172999d",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3040000,
+   "samples": 2
+  },
+  {
+   "run": "runs/ih-1115-203536-158f",
+   "job_id": "ih-1115-203536-158f",
+   "shard": "1/5",
+   "commit": "8c2a3c056da6e8a401880bad3ade47faa172999d",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3040000,
+   "samples": 2
+  },
+  {
+   "run": "runs/ih-1115-223413-8a08",
+   "job_id": "ih-1115-223413-8a08",
+   "shard": "2/10",
+   "commit": "478869c29a3c24f6e125e9e30d87f7453caac12e",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3040000,
+   "samples": 2
+  },
+  {
+   "run": "runs/ih-1115-223311-1a89",
+   "job_id": "ih-1115-223311-1a89",
+   "shard": "7/10",
+   "commit": "478869c29a3c24f6e125e9e30d87f7453caac12e",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3040000,
+   "samples": 2
+  },
+  {
+   "run": "runs/ih-1115-203831-efdf",
+   "job_id": "ih-1115-203831-efdf",
+   "shard": "3/5",
+   "commit": "8c2a3c056da6e8a401880bad3ade47faa172999d",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3040000,
+   "samples": 2
+  },
+  {
+   "run": "runs/ih-1115-204016-2f14",
+   "job_id": "ih-1115-204016-2f14",
+   "shard": "4/5",
+   "commit": "8c2a3c056da6e8a401880bad3ade47faa172999d",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3040000,
+   "samples": 2
+  }
+ ]
+}

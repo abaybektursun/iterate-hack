@@ -4820,4 +4820,49 @@ What is left: of the 34 problems the vote over 12 gets wrong, 13 have no right s
 
 Limits: one seed family; the interval of each k is over problems, and the subsets of one k share samples. RL was not sampled
 12 times, so this section does not say where RL's vote stops. The same cell on the 328 (spec section "The 328") was started
-twice on vast.ai and cut both times when the account balance reached 0; it has no rows.
+twice on vast.ai and cut both times when the account balance reached 0; its rows are from AWS, in the next subsection.
+
+### The 328: vote over k = 1 to 6 (hard328 n = 328, base + cue, T 1.0, grader v3, board work-f33794)
+
+Answer: on the 328 held-out problems the vote over 6 samples of the cued base has 197 of 328 [179, 214], under RL's one
+sample (200 to 206) and under Think-SFT + cue with one sample (209). The MATH-500 result (the vote reaches RL's one sample at
+6) does not carry over at 6 samples; the curve still rises by about 4 problems per sample at 6.
+
+Samples: 0 to 3 are attempt 0 of the stored job `abaybektursun-1114-200457-e8e6` (seed 3000000, 4 samples with restarts; its
+attempt-0 rows shared GPU batches with restart requests); 4 and 5 are new, `jobs/run_cell.py --model base --prompt cue --set
+hard328 --temperature 1.0 --top-p 1.0 --seed 3040000 --samples 2`, no restarts, AWS L40S shards `ih-1115-203301-1311` (0/5),
+`-203536-158f` (1/5), `-223413-8a08` (2/10), `-223311-1a89` (7/10), `-203831-efdf` (3/5), `-204016-2f14` (4/5); the first
+job of shard 2/5 died at setup before generating. Output `results/votek/hard328_base_cue-01/`.
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.votek --runs runs/abaybektursun-1114-200457-e8e6 runs/ih-1115-203301-1311+runs/ih-1115-203536-158f+runs/ih-1115-223413-8a08+runs/ih-1115-223311-1a89+runs/ih-1115-203831-efdf+runs/ih-1115-204016-2f14 --out studies/rlneurons/results/votek/hard328_base_cue-01
+```
+
+| k | vote right of 328 [95 %] | lowest, highest subset | at least one of k right | tokens per problem |
+|---|---|---|---|---|
+| 1 | 159.5 [143.7, 174.9] | 152, 163 | 159.5 | 9,218 |
+| 2 | 166.8 [151.1, 182.3] | 160, 171 | 188.0 | 18,451 |
+| 3 | 180.4 [163.3, 196.6] | 176, 184 | 200.8 | 27,681 |
+| 4 | 188.5 [170.8, 205.0] | 184, 192 | 209.5 | 36,919 |
+| 5 | 193.0 [175.3, 209.6] | 191, 196 | 215.8 | 46,143 |
+| 6 | 197 [179.0, 214.0] | one subset | 221 | 55,364 |
+
+Control: the vote over the 4 stored samples in order reproduces 192 (the row "base + cue, vote over 4" of the section "The
+328 with four samples and restarts"). The spec quoted 179 for that row; 179 was a forecast-table entry, 192 is the measured
+count. The stored four are a high draw: the mean over subsets of 4 is 188.5.
+
+Early stop: stop at 2 agreeing answers has 192.2 at 41,233 tokens, against the vote over 5 at 46,143 tokens -0.8 problems
+[-5.0, 3.1]; stop at 3 has 194.8 at 48,518 tokens, against the vote over 6 -2.2 [-7.6, 2.6]. With at most 6 samples the stop
+rule saves 11 to 12 % of the tokens and does not gain problems. The MATH-500 gain of the stop rule (+9.9 [6.1, 14.1]) came
+from spending up to 12 samples on split problems; that was not tested here.
+
+Predictions: W3 (vote over 6 inside [183, 197], below 200): holds, 197, at the upper edge. W1 and W2 (vote over 8) are not
+tested: samples 6 and 7 were not run.
+
+What is left: 131 problems are wrong under the vote over 6; 107 of them have no right sample among 6, 20 have one, 4 have two;
+9 have a wrong answer held by more than 3 samples. At least one of 6 is right on 221 problems. On MATH-500 the share of
+vote-wrong problems with no right sample was 13 of 34 at 12 samples; here it is 107 of 131 at 6: the 328 are mostly limited by
+problems the base does not solve in any of 6 samples; a vote cannot fix those.
+
+Limits: 6 samples, not 12; tokens are 55,364 per problem at 6 samples, about 6 times RL's one sample on this set (RL vote over
+4: 221 at 37,299 tokens).
