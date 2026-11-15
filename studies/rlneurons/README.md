@@ -5045,3 +5045,34 @@ closing fence, with no opening fence, which `code_lib.BLOCK` does not accept (Ma
 no such answer: their 34, 33 and 8 are cap hits or answers with no program. Among answers that have a fenced block the pass
 rates are Think-SFT 301 of 432 (69.7 %), base 317 of 504 (62.9 %), RL-Code 401 of 530 (75.7 %); these are different problem
 subsets, so they are not a comparison. A regrade that also accepts the unopened block, applied to every cell, is the next step.
+
+### Regrade with two more extraction rules (2026-11-15, work-3b97a7; `specs/SPEC_code_think.md` amendments 1 and 2)
+
+The same answers, three extraction rules, each applied to all five cells. v1 = `code_lib.extract` (the table above). v2 =
+`extract_v2`: also the unopened block (a `python` line, the program, a closing fence). v3 = `extract_v3`: v2 without lines that
+are only `CODE`, the placeholder of the prompt template, which Think-SFT copies in front of its program. Job
+`jobs/regrade_code.py --rule <rule>` (AWS, no model; inputs `s3://pg-lineage-769063704696/inputs/code_regrade_v2/<cell>/answers.jsonl`),
+instrument check passed on all 538 problems for both rules (the reference in the added form passes under the rule and fails
+under v1; the planted wrong program fails). Readout `python -m studies.rlneurons.analysis.code_regrade_readout <rule> <job>` ->
+`results/code_think/regrade_v2-01/` (job ih-1115-223500-603f, commit b937272) and `results/code_think/regrade_v3-01/` (job
+ih-1115-224033-da9c, commit 80ff724). Rows: `runs/<job>/<cell>/answers_<rule>.jsonl` (not committed).
+
+| cell | v1 | v2 | v3 |
+|---|---|---|---|
+| Think-SFT + Code cue | 301 | 318 | 381 |
+| Think-SFT + Math cue | 270 | 293 | 374 |
+| base + Code cue | 317 | 318 | 323 |
+| base + Math cue | 326 | 329 | 335 |
+| RL-Code 3.1 plain | 401 | 401 | 401 |
+
+Under v3, paired bootstrap (5,000), points of 538: Think-SFT + Code cue minus base + Code cue +10.8 [6.5, 15.2]; minus RL-Code
+-3.7 [-7.6, 0.0]; Think-SFT + Math cue minus RL-Code -5.0 [-8.7, -1.1]; Think-SFT Code cue minus Math cue +1.3 [-2.6, 5.2].
+
+Predictions: 4 (v2: 355 to 385) refuted, 318; 5 (v2: above the base) refuted, 0.0 [-4.8, 5.0]; 6 and 7 hold. 8 (v3: 360 to 395)
+holds, 381; 9 (above the base) holds; 10 (below 401) holds, with an interval that reaches 0; 11 (base gains at most 10 over v2,
+RL-Code unchanged) holds. Under v3, prediction 3 of the first spec (cues within 3 points) is no longer refuted.
+
+Reading: on code the no-reward model is 10.8 points above the cued base and 3.7 below the RL model of the domain, where on math
+it is ahead of RL. The v1 count measured its answer format: 126 of its 538 programs change under v3, 14 of the base's, 0 of
+RL-Code's. The rules were written after seeing Think-SFT's rows, so v3 is a fit to that model's format; all three columns are
+reported, and v3 was fixed as the last rule before it ran. One sample per cell.

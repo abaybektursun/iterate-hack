@@ -1,0 +1,147 @@
+{
+ "rule": "v2",
+ "job_id": "ih-1115-223500-603f",
+ "instrument_check": {
+  "n": 538,
+  "bad": []
+ },
+ "cells": {
+  "base_cue": {
+   "cell": "base_cue",
+   "n": 538,
+   "passed_v1": 317,
+   "passed_v2": 318,
+   "unopened": 5,
+   "unopened_passed": 1,
+   "none_v2": 29
+  },
+  "base_mathcue": {
+   "cell": "base_mathcue",
+   "n": 538,
+   "passed_v1": 326,
+   "passed_v2": 329,
+   "unopened": 5,
+   "unopened_passed": 3,
+   "none_v2": 28
+  },
+  "rl_plain": {
+   "cell": "rl_plain",
+   "n": 538,
+   "passed_v1": 401,
+   "passed_v2": 401,
+   "unopened": 0,
+   "unopened_passed": 0,
+   "none_v2": 8
+  },
+  "sft1_codecue": {
+   "cell": "sft1_codecue",
+   "n": 538,
+   "passed_v1": 301,
+   "passed_v2": 318,
+   "unopened": 101,
+   "unopened_passed": 17,
+   "none_v2": 5
+  },
+  "sft1_mathcue": {
+   "cell": "sft1_mathcue",
+   "n": 538,
+   "passed_v1": 270,
+   "passed_v2": 293,
+   "unopened": 125,
+   "unopened_passed": 23,
+   "none_v2": 3
+  }
+ },
+ "differences_points": {
+  "base_cue - base_mathcue": {
+   "points": -2.0446096654275094,
+   "bootstrap95": [
+    -6.133828996282528,
+    2.2304832713754648
+   ],
+   "only_first": 65,
+   "only_second": 76
+  },
+  "base_cue - rl_plain": {
+   "points": -15.427509293680297,
+   "bootstrap95": [
+    -19.702602230483272,
+    -11.152416356877323
+   ],
+   "only_first": 32,
+   "only_second": 115
+  },
+  "base_cue - sft1_codecue": {
+   "points": 0.0,
+   "bootstrap95": [
+    -4.83271375464684,
+    5.018587360594796
+   ],
+   "only_first": 88,
+   "only_second": 88
+  },
+  "base_cue - sft1_mathcue": {
+   "points": 4.646840148698884,
+   "bootstrap95": [
+    -0.37174721189591076,
+    9.66542750929368
+   ],
+   "only_first": 112,
+   "only_second": 87
+  },
+  "base_mathcue - rl_plain": {
+   "points": -13.382899628252787,
+   "bootstrap95": [
+    -17.100371747211895,
+    -9.479553903345725
+   ],
+   "only_first": 28,
+   "only_second": 100
+  },
+  "base_mathcue - sft1_codecue": {
+   "points": 2.0446096654275094,
+   "bootstrap95": [
+    -2.973977695167286,
+    7.063197026022305
+   ],
+   "only_first": 98,
+   "only_second": 87
+  },
+  "base_mathcue - sft1_mathcue": {
+   "points": 6.691449814126393,
+   "bootstrap95": [
+    1.486988847583643,
+    11.71003717472119
+   ],
+   "only_first": 115,
+   "only_second": 79
+  },
+  "rl_plain - sft1_codecue": {
+   "points": 15.427509293680297,
+   "bootstrap95": [
+    10.966542750929369,
+    19.888475836431226
+   ],
+   "only_first": 124,
+   "only_second": 41
+  },
+  "rl_plain - sft1_mathcue": {
+   "points": 20.074349442379184,
+   "bootstrap95": [
+    15.427509293680297,
+    24.53531598513011
+   ],
+   "only_first": 142,
+   "only_second": 34
+  },
+  "sft1_codecue - sft1_mathcue": {
+   "points": 4.646840148698884,
+   "bootstrap95": [
+    -0.37174721189591076,
+    9.66542750929368
+   ],
+   "only_first": 108,
+   "only_second": 83
+  }
+ }
+}
