@@ -1,0 +1,6080 @@
+# Every writing issue, by file
+
+Severity 3: a newcomer misreads the result. 2: has to re-read or guess. 1: slower or less trustworthy than it could be. Codes are in RULES.md. Line numbers are from main at fd99b40 or shortly before.
+
+
+## studies/rlneurons/paper-first-steps/paper.tex (43 issues: 0 serious, 20 re-read, 23 minor)
+
+- **V4, severity 1** — line 26, title
+  - Text: "The First Hundred Steps"
+  - Problem: The title names the topic; the result is only in the subtitle.
+  - Rewrite: "A Three-Token Opening Matches the First 100 Steps of RL"
+- **D6, severity 2** — line 28, subtitle
+  - Text: "The next 2,700 steps turn problems it solves sometimes into problems it solves in every sample"
+  - Problem: 'It' grammatically refers to the base model, but the problems are solved by the RL model.
+  - Rewrite: "The next 2,700 steps turn problems the model solves in some samples into problems it solves in every sample"
+- **N1, severity 1** — line 28, subtitle
+  - Text: "a three-token opening takes the base model to within 1.4 points of step 100"
+  - Problem: The unit (percentage points) and the benchmark are missing.
+  - Rewrite: "a three-token opening takes the base model to within 1.4 percentage points of step 100 on MATH-500"
+- **D1, severity 1** — line 38, abstract, first sentence
+  - Text: "when its answer is started with a short fixed opening, and that in their own low-rank training runs this cue is worth"
+  - Problem: 'This cue' is the first use of the label, and the reader must infer that it names the opening.
+  - Rewrite: "when its answer is started with a short fixed opening (a cue), and that in their own low-rank training runs this cue is worth"
+- **N1, severity 2** — line 41, abstract
+  - Text: "The step-100 checkpoint scores 417.5 with a plain prompt, +1.4 points [−0.5, 3.3]."
+  - Problem: The comparison (above the cued base), the unit and the meaning of the bracket are not stated.
+  - Rewrite: "The step-100 checkpoint scores 417.5 with a plain prompt, 1.4 percentage points above the cued base (95 % interval [−0.5, 3.3])."
+- **N4, severity 2** — line 41, abstract
+  - Text: "The base scores 224 of 500 with a plain prompt (one sample) and 410.5 with the cue."
+  - Problem: The abstract never says the comparison holds at temperature 1.0; at temperature 0.6 step 100 leads the cued base 381 to 354 (line 187).
+  - Rewrite: "Add after the cue result: 'At temperature 1.0; at 0.6 step 100 leads by 27 problems (one sample).'"
+- **V1, severity 1** — line 42, abstract
+  - Text: "The two are not the same model:"
+  - Problem: A punchline sentence with an unclear 'the two' in place of the measured statement.
+  - Rewrite: "Yet step 100 is better than the cued base:"
+- **N2, severity 2** — line 43, abstract (repeats 3 times)
+  - Text: "The base can also supply the opening itself, with nothing prefilled, and reach 411 (one sample)."
+  - Problem: The reader thinks the base produces the opening unaided, but Section 4 shows the authors resampled the first 24 tokens until they contained 'Okay', so the selection was external.
+  - Rewrite: "If we resample the base's first 24 tokens until they contain “Okay”, with nothing prefilled, it reaches 411 (one sample)."
+- **S1, severity 2** — line 45, abstract
+  - Text: "of 47 problems the final model solves in at least two more samples of four than step 100, the cued base already solves 44 at least once"
+  - Problem: A nested comparison ('at least two more samples of four than') that a reader must parse twice.
+  - Rewrite: "The final model solves 47 problems in at least two more of its four samples than step 100 does; the cued base already solves 44 of these 47 in at least one of its four samples."
+- **N4, severity 2** — line 46, abstract
+  - Text: "the cued base already solves 44 at least once"
+  - Problem: Without the base rate (the cued base solves 467 of all 500 problems at least once, line 158), the reader cannot judge whether 44 of 47 is high.
+  - Rewrite: "the cued base already solves 44 of them at least once, the same share as on all problems (467 of 500)"
+- **V4, severity 1** — line 54, Figure 1 caption, title
+  - Text: "The cue, the first 100 steps, and the rest."
+  - Problem: A three-item list that names the topic, not the result.
+  - Rewrite: "The cue brings the base close to RL step 100; later steps make solved problems reliable."
+- **D5, severity 2** — line 57, Figure 1 caption
+  - Text: "the square the base with a hand-written edit to one weight matrix"
+  - Problem: Section 4 calls the same edit 'closed-form'; 'hand-written' suggests weights set by hand, so the reader may think these are two edits.
+  - Rewrite: "the square the base with a closed-form edit to one weight matrix (Section 4)"
+- **D3, severity 1** — line 65, Introduction, first paragraph
+  - Text: "where text that reasons step by step tends to start a certain way"
+  - Problem: 'A certain way' withholds the fact the paper depends on (how such text starts).
+  - Rewrite: needs facts the proofreader did not have
+- **S2, severity 2** — line 73, Introduction, second paragraph
+  - Text: "We use them for two things. The first is a test of the 100-step claim ... The second is a description of what the run adds after step 100"
+  - Problem: The introduction never states what the paper found, so a reader who stops here knows only the questions.
+  - Rewrite: "Add: 'We find that the cued base comes within 1.4 points of step 100 (500 problems, four samples each), and that the later steps mostly turn problems solved in some samples into problems solved in all four.'"
+- **D2, severity 1** — line 73, Introduction
+  - Text: "AI2 released the base"
+  - Problem: The abbreviation is not expanded.
+  - Rewrite: "The Allen Institute for AI (AI2) released the base"
+- **D2, severity 1** — line 80, Setup, Models
+  - Text: "The RL model is Olmo 3.1 7B RL-Zero-Math at the revisions its repository names"
+  - Problem: The paper never says what 'RL-Zero' means (RL straight from the base, with no supervised fine-tuning).
+  - Rewrite: "The RL model is Olmo 3.1 7B RL-Zero-Math, trained with RL directly from the base without supervised fine-tuning, at the revisions its repository names"
+- **S5, severity 1** — line 85, Setup, Problems and scoring
+  - Text: "graded by normalised match"
+  - Problem: UK 'normalised' sits beside US 'tokenizer' (line 91), and 'normalised match' does not say what is normalised.
+  - Rewrite: "graded correct if it matches the reference after both are normalized"
+- **D4, severity 2** — line 98, Section 3, Scores
+  - Text: "Of the 193.5 problems between the plain base and step 100, the cue supplies 186.5."
+  - Problem: 'Problems between' compresses 'the score difference in problems'; the reader has to reconstruct it.
+  - Rewrite: "Step 100 solves 193.5 more problems than the plain base; the cue alone accounts for 186.5 of them."
+- **T1, severity 1** — line 104, Section 3, run-in heading
+  - Text: "The two are not the same model."
+  - Problem: The heading does not say what differs, and 'the two' must be looked up.
+  - Rewrite: "Step 100 does more than install the opening."
+- **N1, severity 1** — line 109, Section 3
+  - Text: "the cue raises the base's cut-off answers from 65 to 119"
+  - Problem: The total is missing.
+  - Rewrite: "the cue raises the base's cut-off answers from 65 to 119 of 500"
+- **V4, severity 1** — line 128, Table 1 caption
+  - Text: "MATH-500 at temperature 1.0, means of four samples."
+  - Problem: The caption describes the setup, not the result.
+  - Rewrite: "The cued base comes within 7 problems of step 100; the final model solves 425 problems in all four samples. MATH-500 at temperature 1.0, means of four samples."
+- **D3, severity 1** — line 135, Section 4
+  - Text: "when they open the RL way"
+  - Problem: 'The RL way' is shorthand the reader must decode.
+  - Rewrite: "when they open the way the RL model's answers do"
+- **D3, severity 2** — line 136, Section 4
+  - Text: "We removed the choice from the model."
+  - Problem: The reader cannot tell what choice was removed or how.
+  - Rewrite: "To test this causally, we chose the opening for the model while still letting it write the tokens:"
+- **S1, severity 2** — line 137, Section 4
+  - Text: "For each problem we sampled its first 24 tokens until they did, prefilled nothing, and let it finish; 94 stored answers that already opened this way were kept, and three problems never did in 32 draws."
+  - Problem: Three facts in one sentence with three unclear references ('they did', 'it', 'never did').
+  - Rewrite: "For each problem we resampled the base's first 24 tokens until they contained “Okay”, prefilled nothing, and let the base finish. For 94 problems a stored answer already opened this way and was kept; for three problems no draw opened this way in 32 tries."
+- **D6, severity 2** — line 140, Section 4
+  - Text: "a control that keeps an opening of the other kind scores 137 against 332"
+  - Problem: 'Of the other kind' and 'against 332' leave the reader to work out which opening scored which.
+  - Rewrite: "a control that keeps an opening without “Okay” scores 137, against 332 for the resampled “Okay” openings"
+- **D6, severity 1** — line 145, Section 4
+  - Text: "It is 2.7 points below the cue"
+  - Problem: 'It' could be the size, the edit or its score.
+  - Rewrite: "The edited base scores 2.7 points below the cue"
+- **D3, severity 1** — line 152, Section 5, run-in heading
+  - Text: "Occasional answers become regular."
+  - Problem: The heading is figurative; the measured thing is problems solved in some versus all samples.
+  - Rewrite: "Problems solved in some samples become problems solved in all four."
+- **T2, severity 1** — line 152, Section 5, paragraph
+  - Text: "The cued base solves 317 problems in all four samples and 150 in some; ..."
+  - Problem: Eight number-heavy sentences in one paragraph; the counts per model belong in the table or figure.
+  - Rewrite: "Move the per-checkpoint counts into Table 1 (it has the 'solved 4 of 4' column) and keep the 47-problem argument as its own paragraph."
+- **D4, severity 1** — line 154, Section 5
+  - Text: "Two samples of the cued base disagree on about 40 problems in each direction, two of the final model on about 16."
+  - Problem: 'In each direction' and the dropped verb in the second clause make the reader reconstruct the measure.
+  - Rewrite: "Between two samples of the cued base, about 40 problems are solved only in the first and about 40 only in the second; for the final model, about 16 each way."
+- **D4, severity 2** — line 156, Section 5
+  - Text: "Counted per problem, the final model gains 47 problems over step 100 (right in at least two more samples of four)."
+  - Problem: 'Gains 47 problems' with the definition in parentheses is hard to parse.
+  - Rewrite: "On 47 problems the final model is right in at least two more of four samples than step 100."
+- **D2, severity 1** — line 158, Section 5
+  - Text: "This is the pattern Yue et al. describe with pass@k"
+  - Problem: pass@k is not defined.
+  - Rewrite: "This is the pattern Yue et al. describe with pass@k (the chance that at least one of k samples is right)"
+- **D3, severity 1** — line 165, Section 5, run-in heading
+  - Text: "The weights keep the early move."
+  - Problem: 'Move' is figurative for the weight change.
+  - Rewrite: "The final weights keep most of the change made by step 100."
+- **S1, severity 2** — line 167, Section 5
+  - Text: "That is close to what a kept first move followed by unrelated later moves would give (0.12), and about four fifths of the step-100 move is still present in the final weights."
+  - Problem: The reference model ('a kept first move followed by unrelated later moves') is compressed, and the reader cannot see how 'four fifths' follows.
+  - Rewrite: "If the step-100 change were kept intact and every later change were orthogonal to it, the cosine would be 0.12. The measured 0.10 means that about four fifths of the step-100 change is still present in the final weights."
+- **T1, severity 2** — line 172, Section 5, run-in heading
+  - Text: "Where in the answer."
+  - Problem: The heading does not say what is located in the answer.
+  - Rewrite: "Where in the answer the RL advantage appears."
+- **S1, severity 2** — line 172, Section 5
+  - Text: "On 155 problems that the cued base fails in at least one of three samples (the fourth supplies the starts), we cut one model's answer at a quarter, half or three quarters of its length and let either model finish it."
+  - Problem: The design of the hand-off test is packed into one sentence with the unexplained terms 'starts' and 'one model ... either model'.
+  - Rewrite: "We took 155 problems that the cued base fails in at least one of three samples; a fourth sample supplied the answer prefixes. We cut one model's answer at a quarter, half or three quarters of its length and let either the same model or the other one write the rest."
+- **D4, severity 2** — line 173, Section 5
+  - Text: "Handing a base start to the final RL model costs it 3, 10 and 20 problems at the three cuts, of a gap of about 20."
+  - Problem: 'Of a gap of about 20' does not say which gap, so the reader cannot tell what 20 of 20 means.
+  - Rewrite: "When the final RL model continues a base prefix, it solves 3, 10 and 20 fewer problems at the three cut points than when it continues its own; on these 155 problems the two models differ by about 20 problems."
+- **D3, severity 2** — line 175, Section 5
+  - Text: "By three quarters of the answer the advantage is on the page"
+  - Problem: An idiom where a literal statement exists.
+  - Rewrite: "By the three-quarter cut, the RL advantage is already in the written text"
+- **D4, severity 1** — line 176, Section 5
+  - Text: "Where earlier it arises is not resolved, and at the last cut 43 of the 112 right RL starts already contain the answer."
+  - Problem: 'Where earlier it arises' is awkward and 'right RL starts' compresses 'RL prefixes that lead to a right answer'.
+  - Rewrite: "We could not resolve where before that point it arises. At the last cut, 43 of the 112 RL prefixes that lead to a right answer already contain that answer."
+- **D1, severity 2** — line 188, Limitations, bullet 3
+  - Text: "The plain base, the step-400 cue cell, the self-opened base, the edit and its control, the temperature-0.6 cells, the “Okay” counts and the hand-off are one sample each."
+  - Problem: 'Cell', 'self-opened base' and 'hand-off' are team labels used nowhere else in the paper.
+  - Rewrite: "The plain base, step 400 with the cue, the base with its resampled opening, the edit and its control, the runs at temperature 0.6, the “Okay” counts and the prefix hand-off test are one sample each."
+- **V2, severity 1** — line 190, Limitations, bullet 3
+  - Text: "Cells were run as separate jobs with different seeds"
+  - Problem: 'Cells' and 'jobs' are the team's internal terms.
+  - Rewrite: "Each model and prompt was sampled separately with a different seed"
+- **N4, severity 1** — line 200, Conclusion
+  - Text: "On released checkpoints, with four samples a side, the claim of Wang et al. holds to within about three points"
+  - Problem: The conclusion drops the temperature 1.0 condition that Limitations shows is needed.
+  - Rewrite: "On released checkpoints at temperature 1.0, with four samples a side, the claim of Wang et al. holds to within about three points"
+- **V1, severity 1** — line 202, Conclusion
+  - Text: "What the remaining steps add is mostly not new problems. It is the same problems, solved more reliably."
+  - Problem: A 'not X, but Y' punchline pair.
+  - Rewrite: "The remaining steps mostly make the model solve the same problems more reliably, rather than solve new ones."
+- **T4, severity 2** — line 206, Reproducibility
+  - Text: "Code and the metrics of every run are in the project repository, in the folder studies/rlneurons/."
+  - Problem: No URL for the repository.
+  - Rewrite: needs facts the proofreader did not have
+
+## studies/rlneurons/paper-no-warning/paper.tex (35 issues: 0 serious, 13 re-read, 22 minor)
+
+- **V4, severity 1** — line 26, title
+  - Text: "No Early Warning"
+  - Problem: The title says something is absent but not what or of what; the result is only in the subtitle.
+  - Rewrite: "Probes Cannot Tell Which Attempt Will Fail in the First 2,000 Tokens"
+- **N1, severity 2** — line 28, subtitle
+  - Text: "nothing we tried orders two attempts at one problem better than 0.59"
+  - Problem: 0.59 has no unit (AUROC) and appears nowhere else; the abstract says 0.57 and the body's highest is 0.58, so the reader cannot locate it.
+  - Rewrite: "no early signal we tried exceeds a within-problem AUROC of 0.58"
+- **S5, severity 1** — line 28, subtitle
+  - Text: "A critic that knew at token 1,000 which attempt will fail would be worth an RL run's gain."
+  - Problem: Tense mismatch between 'knew' and 'will fail'.
+  - Rewrite: "A critic that knew at token 1,000 which attempt would fail would be worth an RL run's gain."
+- **D3, severity 1** — line 28, subtitle
+  - Text: "the signal arrives when attempts end"
+  - Problem: 'The signal arrives' is figurative.
+  - Rewrite: "the useful signal is when each attempt ends"
+- **D5, severity 1** — line 38, abstract
+  - Text: "If a critic could tell early which attempt will fail"
+  - Problem: In RL 'critic' means a learned value function; here it means any scoring rule, defined only in the introduction.
+  - Rewrite: "If a critic (any rule that scores an unfinished attempt) could tell early which attempt will fail"
+- **D3, severity 2** — line 41, abstract
+  - Text: "Bulut showed that early probes of correctness read the problem and not the attempt"
+  - Problem: 'Read the problem' is figurative; the reader has to infer it means the probe predicts problem difficulty.
+  - Rewrite: "Bulut showed that early probes of correctness predict how hard the problem is, not whether a given attempt will succeed"
+- **N2, severity 2** — line 43, abstract
+  - Text: "a linear probe on activations scores an AUROC of 0.50 at the prompt"
+  - Problem: The 0.50 at the prompt is guaranteed by construction (all four attempts share a prompt, line 127), but the abstract presents it as a measured finding.
+  - Rewrite: "a linear probe on activations, which must score 0.50 at the prompt, scores at best 0.57 [0.51, 0.63] at 1,000 tokens"
+- **D2, severity 1** — line 44, abstract
+  - Text: "gains 0.8 points [−0.7, 2.4] over stopping at random"
+  - Problem: The unit (percentage points of 500) and the meaning of the bracket are not stated in the abstract.
+  - Rewrite: "gains 0.8 percentage points (95 % interval [−0.7, 2.4]) over stopping at random"
+- **D4, severity 2** — line 45, abstract
+  - Text: "The signal that does arrive is length: which attempts have ended reaches 0.57 by token 4,000, and the final length 0.68."
+  - Problem: 'Which attempts have ended reaches 0.57' uses a clause as the subject and drops the unit.
+  - Rewrite: "The signal that does appear is length: knowing which attempts have already ended gives an AUROC of 0.57 at token 4,000, and the final length gives 0.68."
+- **N1, severity 1** — line 47, abstract, last sentence
+  - Text: "Agreement among four finished answers scores 0.89."
+  - Problem: No unit, and the reader is not told why this strong number does not help (it needs every attempt finished).
+  - Rewrite: "Whether an answer agrees with the other three finished answers gives an AUROC of 0.89, but it needs every attempt to finish first."
+- **V4, severity 1** — line 53, Figure 1 caption, title
+  - Text: "No early warning."
+  - Problem: The caption title repeats the paper title instead of the result.
+  - Rewrite: "Early signals stay near chance; length and agreement separate attempts later."
+- **D1, severity 2** — line 56, Figure 1 caption
+  - Text: "Probe points: the best of three layers at each position, against the agreement target."
+  - Problem: 'The agreement target' is defined only in Setup, which caption readers have not read.
+  - Rewrite: "Probe points: the best of three layers at each position, for a probe trained to predict whether the answer agrees with the majority of the four samples."
+- **D2, severity 1** — line 70, Introduction, first paragraph
+  - Text: "a pooled AUROC of 0.85 at token 4 fell to 0.50 [0.47, 0.53] within problems"
+  - Problem: 'Pooled' versus 'within problems' is the paper's central distinction and is not explained at first use.
+  - Rewrite: "an AUROC of 0.85 at token 4, computed over samples pooled across problems, fell to 0.50 [0.47, 0.53] when computed only between samples of the same problem"
+- **D6, severity 2** — line 74, Introduction, second paragraph
+  - Text: "We ask the same question where the answer has a known value."
+  - Problem: 'The answer' can mean the model's answer; the reader cannot tell that it means the value of a perfect critic.
+  - Rewrite: "We ask the same question in a setting where we can compute what a perfect critic would be worth."
+- **S1, severity 1** — line 75, Introduction
+  - Text: "So a critic, any rule that scores an unfinished attempt, is worth about what RL is worth if it can tell attempts apart, and we can state that value in problems and tokens."
+  - Problem: The definition, the condition and the claim are interleaved, so the reader parses it twice.
+  - Rewrite: "Call any rule that scores an unfinished attempt a critic. A critic that can tell attempts apart is worth about what RL is worth, and we can state that value in problems and tokens."
+- **D6, severity 2** — line 80, Introduction, last paragraph
+  - Text: "The control is Bulut's."
+  - Problem: The reader cannot tell which control is meant (the within-problem comparison).
+  - Rewrite: "The within-problem comparison is Bulut's."
+- **D1, severity 1** — line 98, Setup, Within-problem AUROC
+  - Text: "A planted score (correctness plus unit noise) gives 0.76; lengths shuffled within problems give 0.49"
+  - Problem: 'Planted' and 'unit noise' are not explained, and the reader is not told these are the positive and negative controls.
+  - Rewrite: "As a positive control, a score made of correctness plus noise of unit variance gives 0.76; as a negative control, lengths shuffled within problems give 0.49"
+- **T2, severity 1** — line 101, Setup, Instruments
+  - Text: "(i) A logistic probe on the residual stream at layers 12, 20 and 28, ..."
+  - Problem: Five instruments and their caveats are written as one nine-line paragraph.
+  - Rewrite: "Set the five instruments as a list, one item each."
+- **V4, severity 1** — line 111, Section 3 heading
+  - Text: "What the critic would be worth"
+  - Problem: The heading names the question, not the answer.
+  - Rewrite: "A perfect critic at token 1,000 would match the RL model"
+- **D5, severity 2** — line 115, Section 3
+  - Text: "the majority answer 446, and a perfect critic 467"
+  - Problem: 'A perfect critic' here is an oracle choosing among four finished samples (467), but two sentences later it is a critic that looks once at token 1,000 (459.2).
+  - Rewrite: "the majority answer 446, and an oracle that picks a right sample whenever one exists 467"
+- **D5, severity 1** — line 116, Section 3
+  - Text: "The vote is 2.8 points below RL"
+  - Problem: 'The majority answer' becomes 'the vote' in the next sentence.
+  - Rewrite: "The majority vote is 2.8 points below RL"
+- **D1, severity 1** — line 118, Section 3
+  - Text: "We replay the stored samples"
+  - Problem: 'Replay' is the team's term for a simulation on saved outputs.
+  - Rewrite: "We simulate this on the stored samples"
+- **D6, severity 2** — line 122, Section 3
+  - Text: "It is also not all of RL. The same critic on the RL model's own samples reaches 481.8."
+  - Problem: 'It' and 'not all of RL' leave the reader to work out the point.
+  - Rewrite: "Such a critic also does not capture everything RL adds: applied to the RL model's own samples, the same critic reaches 481.8."
+- **V4, severity 1** — line 124, Section 4 heading
+  - Text: "The first 2,000 tokens"
+  - Problem: The heading names the range, not the finding.
+  - Rewrite: "In the first 2,000 tokens no instrument exceeds an AUROC of 0.58"
+- **T2, severity 1** — line 131, Section 4, After the answer starts
+  - Text: "There are twelve probe cells (three layers, four positions). ..."
+  - Problem: Seven sentences of interval-laden numbers in one paragraph.
+  - Rewrite: "Put the twelve probe values in a small table and keep the conclusion sentence in the text."
+- **S1, severity 2** — line 133, Section 4
+  - Text: "Against correctness that cell scores 0.58 [0.52, 0.65], and layer 12 at 500 tokens, 0.56 [0.51, 0.62], also excludes 0.5; trained on shuffled labels the cell scores 0.50."
+  - Problem: Three results in one sentence, and 'the cell' at the end is ambiguous between the two cells just named.
+  - Rewrite: "Against correctness, that cell scores 0.58 [0.52, 0.65], and one more cell, layer 12 at 500 tokens, also excludes 0.5 (0.56 [0.51, 0.62]). Trained on shuffled labels, the layer-12, 1,000-token probe scores 0.50."
+- **S1, severity 2** — line 141, Section 4, As a policy
+  - Text: "Stopping at token 1,000 the attempts that the probe scores below a threshold fitted on the other folds, and restarting them, gives 414.1 of 500"
+  - Problem: The object comes after a long adverbial and the verb is far from its subject.
+  - Rewrite: "If at token 1,000 we stop and restart every attempt that the probe scores below a threshold (fitted on the other folds), the score is 414.1 of 500"
+- **D3, severity 2** — line 155, Section 5, Length
+  - Text: "so this signal is decided after token 1,000"
+  - Problem: 'Is decided' is vague; the reader cannot tell whether the signal is created or only becomes visible after token 1,000.
+  - Rewrite: "so most of the length signal is created after token 1,000"
+- **N1, severity 1** — line 178, Related work
+  - Text: "a pre-answer probe selects barely better than a majority vote (0.778 against 0.771)"
+  - Problem: The unit of 0.778 and 0.771 (accuracy?) is not stated.
+  - Rewrite: needs facts the proofreader did not have
+- **D6, severity 1** — line 180, Related work, last sentence
+  - Text: "Our measurements cover both ranges on one set of samples"
+  - Problem: 'Both ranges' refers back to an unstated early/late split.
+  - Rewrite: "Our measurements cover both the early and the late part of the answer on one set of samples"
+- **D1, severity 1** — line 188, Limitations, bullet 2
+  - Text: "or tested on a planted attempt-level direction"
+  - Problem: 'Planted attempt-level direction' is unexplained.
+  - Rewrite: "or tested on activations to which we added a known direction that marks the failing attempt"
+- **D1, severity 1** — line 191, Limitations, bullet 3
+  - Text: "so its numbers are taken from the run's readout"
+  - Problem: 'Readout' is a team term for a summary file.
+  - Rewrite: "so its numbers are taken from the summary that the probe run wrote"
+- **D1, severity 1** — line 195, Limitations, last bullet
+  - Text: "The forced-commit result is one sample."
+  - Problem: The body calls this 'forcing every attempt ... to state its answer'; 'forced-commit' is a new label.
+  - Rewrite: "The result of forcing attempts to state an answer is one sample."
+- **D3, severity 1** — line 201, Conclusion
+  - Text: "Early, a probe reads the problem."
+  - Problem: A clipped figurative sentence.
+  - Rewrite: "Early in the answer, a probe predicts the problem's difficulty, not the attempt's outcome."
+- **T4, severity 2** — line 206, Reproducibility
+  - Text: "Code and the metrics of every run are in the project repository ... or copies them from committed readouts"
+  - Problem: No URL for the repository, and 'committed readouts' is a team term.
+  - Rewrite: needs facts the proofreader did not have
+
+## studies/rlneurons/paper-two-caps/paper.tex (23 issues: 0 serious, 6 re-read, 17 minor)
+
+- **V4, severity 1** — line 26, title
+  - Text: "Two Token Limits"
+  - Problem: The title names the topic; the result is only in the subtitle.
+  - Rewrite: "Doubling the Token Limit Changes Two of Three Fine-Tuning Gains"
+- **N1, severity 1** — line 28, subtitle
+  - Text: "one holds, one grows by 6 points and one shrinks"
+  - Problem: The reader cannot tell which gain does what.
+  - Rewrite: "RL's gain over the base holds, Think-SFT's lead over RL grows by 6 points, and a weight sum's gain over Think-SFT shrinks"
+- **D4, severity 1** — line 42, abstract
+  - Text: "RL's gain over the base holds, 12.5 points to 11.9."
+  - Problem: '12.5 points to 11.9' drops the unit and the two limits it refers to.
+  - Rewrite: "RL's gain over the base holds: 12.5 percentage points at 16,384 tokens and 11.9 at 32,768."
+- **N1, severity 2** — line 43, abstract
+  - Text: "The weight sum's gain over Think-SFT falls from 6.7 points to 3.4 [−0.6, 7.0]; this change is suggestive only."
+  - Problem: Here the bracket is the interval of the gain at 32,768, while in the sentence before it is the interval of the change, so the reader misreads [−0.6, 7.0] as the change's interval.
+  - Rewrite: "The weight sum's gain over Think-SFT falls from 6.7 points to 3.4, a change of −3.4 [−6.4, −0.3] that loses significance when corrected for three comparisons."
+- **D4, severity 2** — line 45, abstract
+  - Text: "Think-SFT has 93 and 23 end right, the base has 64 and 4 end right."
+  - Problem: 'Has 93 and 23 end right' drops what the 93 counts.
+  - Rewrite: "Think-SFT has 93 answers longer than 16,384 tokens, of which 23 end right; the base has 64, of which 4 end right."
+- **V4, severity 1** — line 52, Figure 1 caption, title
+  - Text: "Two token limits."
+  - Problem: The caption title repeats the paper title instead of the result.
+  - Rewrite: "The longer limit helps Think-SFT most, because a quarter of its long answers end right."
+- **D5, severity 1** — line 65, Introduction
+  - Text: "Rankings can also depend on the budget"
+  - Problem: 'Budget' here and 'limit' elsewhere name the same thing.
+  - Rewrite: "Rankings can also depend on the limit"
+- **V1, severity 1** — line 72, Introduction, last sentence
+  - Text: "Scored at twice the limit, one gain holds, one grows and one shrinks."
+  - Problem: A rule-of-three punchline without numbers.
+  - Rewrite: "Scored at twice the limit, RL's gain over the base stays near 12 points, Think-SFT's lead over RL grows from 4.3 to 10.7 points, and the weight sum's gain over Think-SFT falls from 6.7 to 3.4."
+- **S5, severity 1** — line 78, Setup, Models
+  - Text: "a cue after Wang et al."
+  - Problem: 'After' in the sense of 'following the method of' is rare and a second-language reader may read it as time.
+  - Rewrite: "a cue adapted from Wang et al."
+- **S1, severity 2** — line 91, Setup, Two limits from one answer
+  - Text: "The limit is the only setting that differs, so the first 16,384 tokens are a draw from the same distribution as a run at that limit, though not identical to one: a rerun at the same seed matches the stored token counts on at most 7 of 328 problems."
+  - Problem: Two claims and a caveat in one 50-word sentence.
+  - Rewrite: "The limit is the only setting that differs, so the first 16,384 tokens are drawn from the same distribution as a run at that limit. They are not the same tokens: a rerun at the same seed matches the stored token counts on at most 7 of 328 problems."
+- **V4, severity 1** — line 97, Section 3 heading
+  - Text: "Three comparisons"
+  - Problem: The heading names the topic, not the result.
+  - Rewrite: "One gain holds, one grows, one shrinks"
+- **D2, severity 1** — line 121, Section 3
+  - Text: "keeps its sign when the interval is widened for three comparisons"
+  - Problem: The correction method is not named.
+  - Rewrite: "keeps its sign when the interval is widened to correct for making three comparisons"
+- **D4, severity 1** — line 122, Section 3
+  - Text: "(204 and 232 right: +7.9 points, from totals only, without an interval)"
+  - Problem: The reader must work out that 204 and 232 are the scores at the two limits and that +7.9 is the change in the lead over RL.
+  - Rewrite: "(204 right at 16,384 and 232 at 32,768; its lead over RL grows by 7.9 points, computed from totals only, without an interval)"
+- **S1, severity 2** — line 131, Section 3
+  - Text: "The change, −3.4 [−6.4, −0.3], is fragile: widened for three comparisons its interval is [−7.3, 0.3], and one Think-SFT answer that reaches 32,768 tokens is graded right; scored wrong, the change is −3.1 [−6.1, 0.0]."
+  - Problem: Two separate reasons for fragility are joined in one sentence with a colon and a semicolon.
+  - Rewrite: "The change, −3.4 [−6.4, −0.3], is fragile for two reasons. Widened for three comparisons, its interval is [−7.3, 0.3]. And one Think-SFT answer that reaches 32,768 tokens is graded right; scored wrong, it makes the change −3.1 [−6.1, 0.0]."
+- **N1, severity 1** — line 134, Section 3
+  - Text: "240 or more right, and a paired interval above zero"
+  - Problem: The interval of which quantity is not stated.
+  - Rewrite: "240 or more right, and a paired 95 % interval of the gain over Think-SFT at 32,768 tokens that lies above zero"
+- **V4, severity 1** — line 137, Section 4 heading
+  - Text: "What happens past 16,384 tokens"
+  - Problem: The heading names the topic, not the finding.
+  - Rewrite: "Past 16,384 tokens, the share of long answers that end right decides each change"
+- **D4, severity 1** — line 140, Section 4
+  - Text: "The base has 64 and 4 end right. RL has 20 and 2 end right."
+  - Problem: The counted noun is dropped.
+  - Rewrite: "The base has 64 late answers, of which 4 end right; RL has 20, of which 2 end right."
+- **D5, severity 1** — line 140, Section 4
+  - Text: "Think-SFT has 93 answers longer than 16,384 tokens (late answers)"
+  - Problem: The same set is called 'answers past 16,384 tokens' (abstract), 'late answers' (here) and 'answers cut off at 16,384' (line 146).
+  - Rewrite: "Use 'late answers' everywhere after defining it once."
+- **D6, severity 1** — line 161, Related work
+  - Text: "so their comparisons do not have this problem; ours shows what a limit of 16,384 ... does to such comparisons"
+  - Problem: 'Ours' could mean our comparisons or our paper.
+  - Rewrite: "so their comparisons do not have this problem; this paper shows what a limit of 16,384 ... does to such comparisons"
+- **V2, severity 1** — line 175, Limitations, bullet 1
+  - Text: "A second sample of the weight sum at 32,768 was running when this was written."
+  - Problem: A process note about the team's jobs in a published paper.
+  - Rewrite: "A second sample of the weight sum at 32,768 tokens is not included."
+- **D4, severity 1** — line 178, Limitations, bullet 2
+  - Text: "(1 to 3.5 per sample by model)"
+  - Problem: Compressed; the reader must expand 'by model'.
+  - Rewrite: "(1 to 3.5 answers per sample, depending on the model)"
+- **D1, severity 2** — line 181, Limitations, bullet 3
+  - Text: "The plan for the run asked for a rerun of any cell more than 12 problems from its reference of 206. This cell is 13 away and was not rerun."
+  - Problem: 'Cell' and 'its reference of 206' are team terms; the reader cannot tell what 206 is.
+  - Rewrite: "Our pre-registered plan said to rerun any model whose score differed by more than 12 problems from its earlier result (206 for RL). This RL sample is 13 problems away and was not rerun."
+- **T4, severity 2** — line 199, Reproducibility
+  - Text: "Code and the metrics of every run are in the project repository ... or copies them from committed readouts"
+  - Problem: No URL for the repository, and 'committed readouts' is a team term.
+  - Rewrite: needs facts the proofreader did not have
+
+## studies/rlneurons/paper/paper.tex (47 issues: 0 serious, 19 re-read, 28 minor)
+
+- **D3, severity 1** — line 27, title
+  - Text: "The Finish Dial"
+  - Problem: The title is a metaphor; a reader of the title alone learns neither the method nor the result, which only the subtitle gives.
+  - Rewrite: "Scaling the Top Singular Directions of an RL Update Sets How Often a Model Finishes Its Answer"
+- **D2, severity 1** — line 39, abstract, first sentence
+  - Text: "Reinforcement learning with verifiable rewards improves a base model at mathematics ... (RL model − base)"
+  - Problem: The abbreviation RL is used two sentences later without being introduced.
+  - Rewrite: "Reinforcement learning (RL) with verifiable rewards improves a base model at mathematics"
+- **N4, severity 2** — line 41, abstract
+  - Text: "we add the top 8 singular directions per weight matrix of (RL model − base) to the base"
+  - Problem: The abstract never says that the base and every edit are run with a prefilled three-token opening (the cue) that by itself recovers much of the RL gain, so the reader overrates what the edit adds.
+  - Rewrite: "we add ... to the base, which always answers after a prefilled three-token opening that already recovers much of the RL gain"
+- **D4, severity 1** — line 41, abstract
+  - Text: "we add the top 8 singular directions per weight matrix of (RL model − base) to the base"
+  - Problem: A minus sign inside parentheses stands in for a noun phrase; the reader has to decode it as the weight difference.
+  - Rewrite: "we take the weight change from the base to the RL model, keep its top 8 singular directions in each weight matrix, and add them to the base"
+- **D5, severity 2** — line 42, abstract (repeats 30 times)
+  - Text: "at a size we vary from −1 to 3"
+  - Problem: 'Size' usually means model size or norm; here it is a scale factor, and line 186 uses 'size-matched' to mean equal norm, so one word names two things.
+  - Rewrite: "scaled by a factor s that we vary from −1 to 3"
+- **D4, severity 2** — line 43, abstract
+  - Text: "answers cut off at the cap go from 96 to 77 to 46 to 5 as the size goes from −1 to 0 to 1 to 2"
+  - Problem: A chained 'from ... to ... to' list without the total makes the reader pair four numbers with four sizes and guess the denominator.
+  - Rewrite: "the number of answers cut off at the token cap is 96 of 328 at scale −1, 77 at 0 (the unedited base), 46 at 1 and 5 at 2"
+- **N1, severity 1** — line 44, abstract
+  - Text: "A random edit with the same singular values is flat at the four sizes tested"
+  - Problem: 'Flat' gives no number, so the reader cannot compare the control with the 96-to-5 range of the real edit.
+  - Rewrite: "A random edit with the same singular values stays between 67 and 79 cut-off answers at the four scales tested"
+- **N1, severity 1** — line 45, abstract
+  - Text: "removing the directions from the RL model returns it to the base's level (25 to 90 cut-off answers)"
+  - Problem: The base's level (77) is not given, so the reader cannot check 'returns it to the base's level' against 90.
+  - Rewrite: "removing the directions from the RL model raises its cut-off answers from 25 to 90, back near the base's 77"
+- **N3, severity 1** — line 46, abstract
+  - Text: "the edited base matches the RL model's mean score over four samples (200.3 against 200.0 of 328)"
+  - Problem: The base's own score is not given, so the reader cannot see how large a gain the edit gives.
+  - Rewrite: "the edited base matches the RL model's mean score over four samples (200.3 against 200.0 of 328; the base averages 158.5)"
+- **D2, severity 1** — line 47, abstract
+  - Text: "and trails it under a vote over the four (214 against 221)"
+  - Problem: 'A vote over the four' is not explained in the abstract (majority vote over four samples).
+  - Rewrite: "and trails it when the answer is chosen by majority vote over the four samples (214 against 221)"
+- **D3, severity 1** — line 47, abstract
+  - Text: "The edit is read from the RL model's weights, so it does not replace the RL run"
+  - Problem: 'Read from' is figurative; the reader has to infer that the edit is computed from the trained RL weights.
+  - Rewrite: "The edit is computed from the RL model's weights, so it cannot replace the RL run"
+- **N4, severity 2** — line 48, abstract, last sentence
+  - Text: "from the base up to size 1.5 the answers it commits to are right as often as before"
+  - Problem: The reader takes this as 'correctness is unchanged', but the paper (lines 78-79, 122-126) says precision stays level only because right answers also rise on problems the base already finished.
+  - Rewrite: "from the base up to size 1.5 the share of finished answers that are right stays between 60 and 67 %, because the edit also raises right answers on problems the base already finishes (161 to 184 of 251)"
+- **V4, severity 1** — line 56, Figure 1 caption, title
+  - Text: "The dial."
+  - Problem: The caption title is a team label, not the result the figure shows.
+  - Rewrite: "Scaling the edit sets how many answers are cut off."
+- **S5, severity 1** — line 57, Figure 1 caption
+  - Text: "Right: right answers."
+  - Problem: 'Right' is used for the panel position and for correctness in two words, which a second-language reader has to read twice.
+  - Rewrite: "Right panel: correct answers of 328."
+- **D4, severity 2** — line 59, Figure 1 caption (repeats 2 times)
+  - Text: "Repeated runs of one model range over 10 to 19 problems."
+  - Problem: The reader cannot tell what ranges over 10 to 19 problems (right answers? cut-off answers?) or that this is the spread between runs.
+  - Rewrite: "In repeated runs of the same model, the number of right answers varies by 10 to 19 problems between the lowest and highest run."
+- **D5, severity 1** — line 72, Introduction, paragraph 2
+  - Text: "the model writes until the token cap and never commits (a cap hit)"
+  - Problem: One event has many names in this paper ('cap hit', 'cut-off answers', 'answers cut', 'unfinished answers') and the sister papers call it 'cut off', so the reader wonders if they differ.
+  - Rewrite: "Use one term, for example 'cut-off answer', in every paper."
+- **S1, severity 2** — line 77, Introduction, last sentence
+  - Text: "The claim we defend is that the top directions set finishing, monotonically up to size 2 and specifically, not that they leave correctness untouched: they also raise it, by less."
+  - Problem: Three claims are packed into one sentence, and 'specifically' does not say it means 'random directions do not do this'.
+  - Rewrite: "We claim that the top directions control how often the model finishes: cut-off answers fall monotonically up to size 2, and random directions of the same norm do not have this effect. We do not claim that they leave correctness untouched; they also raise it, by less."
+- **D6, severity 2** — line 98, Setup, Prompt
+  - Text: "The RL model runs without it; with it, it scores the same (205 right and 25 cap hits against 206 and 20, one sample each)."
+  - Problem: Three uses of 'it' for two things, and the reader cannot tell which pair of numbers is with the cue and which is without.
+  - Rewrite: "The RL model runs without the cue. With the cue it scores the same: 205 right and 25 cap hits with the cue, against 206 right and 20 cap hits without it (one sample each)."
+- **D4, severity 1** — line 111, Section 3.1, first sentence
+  - Text: "Cap hits go 96, 77, 50, 46, 25, 5 of 328 as the size goes −1, 0, 0.5, 1, 1.5, 2"
+  - Problem: Two parallel lists of six numbers make the reader pair them by position.
+  - Rewrite: "Cap hits fall as the size grows: 96 of 328 at size −1, 77 at 0, 50 at 0.5, 46 at 1, 25 at 1.5 and 5 at 2"
+- **D3, severity 2** — line 119, Section 3.1
+  - Text: "and 117 at size 3, where the model breaks"
+  - Problem: 'Breaks' does not say what happens to the model, so the reader cannot tell if output is garbled, repetitive or only wrong.
+  - Rewrite: "and 117 at size 3, where only 36.4 % of finished answers are right"
+- **T2, severity 1** — line 122, Section 3.1, third paragraph
+  - Text: "Between sizes 0 and 1.5 the share of finished answers that are right stays between 60 and 67 % ..."
+  - Problem: An eight-sentence paragraph carries the paper's central argument (why precision stays level) in dense numbers; the reader loses the thread.
+  - Rewrite: "Split after 'would lower precision.' and start the second paragraph with the fixed-problem count."
+- **S1, severity 2** — line 124, Section 3.1
+  - Text: "At size 1.5, 64 of the base's 77 cap hits now finish, and only 19 of them are right: they are the harder problems, so an edit that changed only stopping would lower precision."
+  - Problem: Three ideas joined by a colon and 'so'; the reader has to re-read to follow the argument.
+  - Rewrite: "At size 1.5, 64 of the base's 77 cut-off answers now finish, and only 19 of them are right. These are the harder problems, so an edit that only made the model stop would lower precision."
+- **D6, severity 2** — line 125, Section 3.1
+  - Text: "It holds because right answers on the 251 problems the base already finishes rise from 161 to 184"
+  - Problem: 'It' could be the edit, the argument or precision; the reader must look back two sentences.
+  - Rewrite: "Precision stays level because right answers on the 251 problems the base already finishes rise from 161 to 184"
+- **N1, severity 1** — line 126, Section 3.1
+  - Text: "Of the 39 answers gained at size 1.5, 16 are on problems the base ran to the cap"
+  - Problem: Two sentences earlier 19 newly finished answers are right; the reader cannot reconcile 19 with 16 without being told what the difference is.
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 1** — line 135, Figure 2 caption
+  - Text: "the dial on the base moves mostly sideways between sizes 0 and 1.5, where it lands on the RL model"
+  - Problem: 'The dial' and 'sideways' must be decoded against the axes.
+  - Rewrite: "the edited base moves mostly to the right (more answers finished, same precision) between sizes 0 and 1.5, where it reaches the RL model's point"
+- **D5, severity 2** — line 139, Figure 2 caption
+  - Text: "adding a × the whole RL update to the imitation-trained model also buys finishing, and pays in precision"
+  - Problem: 'The imitation-trained model' is a second name for Think-SFT, and 'buys ... pays' is a metaphor for raises and lowers.
+  - Rewrite: "adding a × the whole RL update to Think-SFT (the model trained by imitation) also raises finishing and lowers precision"
+- **N1, severity 1** — line 141, Figure 2 caption
+  - Text: "green points are means of one to four."
+  - Problem: The thing counted is missing.
+  - Rewrite: "green points are means of one to four samples."
+- **S1, severity 2** — line 149, Section 3.2
+  - Text: "Right answers fall from 205 to 190 (−4.6 points [−8.2, −1.2]), within noise of the random removal (195): what the model still finishes it gets right 79.8 % of the time, on an easier, self-selected set, because the long, hard answers are the ones that no longer end."
+  - Problem: One 45-word sentence carries three ideas with inverted word order ('what the model still finishes it gets right').
+  - Rewrite: "Right answers fall from 205 to 190 (−4.6 points [−8.2, −1.2]), within noise of the random removal (195). The answers the model still finishes are right 79.8 % of the time. They are an easier, self-selected set, because the long, hard answers are the ones that no longer end."
+- **D4, severity 1** — line 156, Section 3.3, first sentence (repeats 2 times)
+  - Text: "Size 1.5 was the best of seven sizes on one sample of the 328"
+  - Problem: 'The 328' drops its noun; a newcomer has to recall that it means the 328 problems.
+  - Rewrite: "Size 1.5 was the best of seven sizes on one sample of the 328 problems"
+- **D4, severity 1** — line 170, Table 1 header
+  - Text: "right, mean (each)"
+  - Problem: A compressed header; the reader must guess that 'each' means the four individual samples.
+  - Rewrite: "right answers: mean (each sample)"
+- **V4, severity 1** — line 177, Table 1 caption
+  - Text: "The edit at size 1.5 against the RL model."
+  - Problem: The caption names the topic, not the result the table shows.
+  - Rewrite: "At size 1.5 the edited base matches the RL model's mean score on the 328 problems (200.3 against 200.0) and trails it under a vote over four samples (214 against 221). MATH-500 ranges are over four samples; the edit has one."
+- **V4, severity 2** — line 181, Section 3.4 heading
+  - Text: "Which rewards write the dial"
+  - Problem: A metaphor heading ('write the dial') that names the question, not the answer.
+  - Rewrite: "Directions from five of six RL checkpoints cut cap hits; the math reward raises the score most"
+- **N1, severity 2** — line 183, Section 3.4, first sentences
+  - Text: "on four rewards: math, code, instruction following and a general mix. ... Five of the six cut cap hits"
+  - Problem: The text names four rewards, then counts 'six'; the reader only learns from the table that math and code come in two versions.
+  - Rewrite: "on four rewards (math, code, instruction following and a general mix), in six checkpoints: versions 3.0 and 3.1 of math and code, and 3.0 of the other two. We built the top-8 edit from each, at size 1 (Table 2). Five of the six cut cap hits"
+- **D3, severity 1** — line 186, Section 3.4
+  - Text: "so that null is not size-matched"
+  - Problem: 'Null' is lab slang for a negative result, and 'size-matched' here means equal norm, unlike 'size' everywhere else.
+  - Rewrite: "so this negative result does not compare edits of equal norm"
+- **N2, severity 2** — line 194, Section 3.4
+  - Text: "Rank 1 already carries most of the effect: at size 1, ranks 1, 8 and 64 give 181, 192 and 200 right (base 164)"
+  - Problem: For right answers rank 1 gives 17 of the 36 gained at rank 64, less than half, so 'most of the effect' holds only for cap hits.
+  - Rewrite: "Rank 1 already gives most of the drop in cap hits (77 to 51, against 42 at rank 64) and about half of the gain in right answers (181, against 200 at rank 64; base 164)"
+- **T1, severity 1** — line 194, Section 3.4
+  - Text: "Rank 1 already carries most of the effect"
+  - Problem: The rank result sits under a heading about rewards, so a scanning reader will not find it.
+  - Rewrite: "Move the rank comparison to its own short paragraph or subsection, for example 'Rank 1 gives most of the drop in cap hits'."
+- **V4, severity 1** — line 212, Table 2 caption
+  - Text: "The base plus the top 8 directions of six RL checkpoints, size 1, one sample each."
+  - Problem: The caption describes the setup, not what the table shows.
+  - Rewrite: "Directions from five of six RL checkpoints cut cap hits; Math 3.1 raises right answers most. The base plus the top 8 directions of each checkpoint, size 1, one sample each."
+- **N1, severity 2** — line 218, Section 3.5, first sentence
+  - Text: "it is cut at the cap on 94.5 of 328 problems"
+  - Problem: Half a problem is unexplained; the reader must guess this is a mean over samples and over how many.
+  - Rewrite: "it is cut at the cap on a mean of 94.5 of 328 problems over its samples"
+- **N1, severity 1** — line 219, Section 3.5
+  - Text: "Its weight change from the base is about 114 times larger than the RL update"
+  - Problem: The measure of 'larger' is not named.
+  - Rewrite: "Its weight change from the base is about 114 times larger in norm than the RL update"
+- **D1, severity 2** — line 223, Section 3.5
+  - Text: "Gaussian noise of the same intended norm changes nothing"
+  - Problem: 'Intended' only makes sense after the bfloat16 rounding note in the Limitations, so here the reader cannot tell what it qualifies.
+  - Rewrite: "Gaussian noise with the same norm as the RL update before rounding to bfloat16 changes nothing"
+- **D4, severity 2** — line 224, Section 3.5
+  - Text: "a trade of cap hits for precision is consistent with the optimum being interior"
+  - Problem: 'The optimum being interior' compresses the argument; the reader has to work out that the best score lies between the end points of a.
+  - Rewrite: "here cap hits and precision both fall as a grows, which explains why the best score lies at an intermediate a"
+- **T2, severity 1** — line 230, Related work
+  - Text: "Low-rank RL updates. ... Scaling weight differences. ... What RL adds."
+  - Problem: Three topics with bold run-in heads form one 14-line paragraph, so the heads are hard to find.
+  - Rewrite: "Start each bold topic on its own paragraph."
+- **D4, severity 1** — line 249, Limitations, bullet 2
+  - Text: "One model family, one size (7B), mathematics."
+  - Problem: A verbless fragment.
+  - Rewrite: "We test one model family, at one size (7B), on mathematics only."
+- **N4, severity 1** — line 254, Limitations, last bullet
+  - Text: "at size 1.5 the edit is 0.11 % of the weight norm as intended and 0.19 % as stored"
+  - Problem: That the stored edit is almost half rounding noise changes what 'size' means, but the reader learns it only in the last bullet.
+  - Rewrite: "State the bfloat16 rounding and the random-edit check in Setup, 'The edit', and keep the bullet as a reminder."
+- **V1, severity 1** — line 262, Conclusion
+  - Text: "It can be turned up past what RL chose, turned down below the base, and taken out of the RL model, and the number of unfinished answers follows each time."
+  - Problem: A rhetorical three-part list of figures of speech in place of the measured statement.
+  - Rewrite: "Scaling it above 1 or below 0, or removing it from the RL model, moves the number of unfinished answers in the matching direction each time."
+- **N2, severity 1** — line 263, Conclusion
+  - Text: "Finishing can be moved over most of its range while precision stays within a few points"
+  - Problem: Precision stays within a few points only between sizes 0 and 1.5; at sizes −1 and 2 it falls to 50.9 % and 58.8 %.
+  - Rewrite: "Between sizes 0 and 1.5, cap hits fall from 77 to 25 while precision stays between 60 and 67 %"
+- **T4, severity 2** — line 268, Reproducibility
+  - Text: "Code, the metrics of every run and the script that draws both figures are in the project repository under studies/rlneurons/"
+  - Problem: 'The project repository' has no URL, so an outside reader cannot find the code or facts.json.
+  - Rewrite: needs facts the proofreader did not have
+
+## studies/sitelab/index.html (22 issues: 0 serious, 5 re-read, 17 minor)
+
+- **D3, severity 2** — line 6, page title and eyebrow
+  - Text: "AI Psychosis maxxing"
+  - Problem: 'Maxxing' is slang and the label does not say the page is a gallery of 3D picture prototypes.
+  - Rewrite: "AI psychosis lab: twenty 3D pictures of our research"
+- **V3, severity 2** — line 105, eyebrow
+  - Text: "AI Psychosis maxxing"
+  - Problem: Unlike the psychosis game, this page names a real harm as a joke without saying it is one; a newcomer may not follow it or may find it careless.
+  - Rewrite: needs facts the proofreader did not have
+- **S5, severity 1** — line 107, intro note
+  - Text: "Every picture is drawn from the team's real data, no vibes-only renders."
+  - Problem: Comma splice; 'vibes-only renders' is slang.
+  - Rewrite: "Every picture is drawn from the team's real data; none is decoration."
+- **D5, severity 1** — line 107, intro note (repeats 3 times)
+  - Text: "Agents built one idea each, fully locked in."
+  - Problem: 'Locked in' here means 'focused', but row 07 uses it to mean 'fixed in advance'.
+  - Rewrite: "Each agent built one idea, working without a break."
+- **D1, severity 2** — line 108, row 03
+  - Text: "Each stored answer falls by its token count and either finishes or gets cut off at the cap mid-yap."
+  - Problem: 'The cap' (the token limit) and 'mid-yap' (slang) are unexplained, and 'falls by its token count' is compressed.
+  - Rewrite: "Each stored answer falls one step per token and either finishes or is cut off at the token limit."
+- **D3, severity 2** — line 108, row 04
+  - Text: "Every model made by adding weight changes together, with a dial over how hard the edit is sent."
+  - Problem: 'How hard the edit is sent' is an invented phrase; the sentence has no verb.
+  - Rewrite: "Every model we made by adding weight changes together, with a dial that scales the size of the change."
+- **D1, severity 2** — line 108, row 13
+  - Text: "the plain base, the opening cue, the vote, the weight edit and RL, each counted on the same problems. No cuts, we are not cowards."
+  - Problem: 'The opening cue', 'the vote' and 'the weight edit' are team labels; the last sentence is a comma splice.
+  - Rewrite: needs facts the proofreader did not have
+- **T1, severity 1** — line 108, row tags (repeats 20 times)
+  - Text: "Board, live"
+  - Problem: The small tag on each row names a data source ('Weight readouts', 'Rows per answer'), but nothing says it is the data source.
+  - Rewrite: "Data: live board"
+- **V3, severity 1** — line 108, row 01
+  - Text: "The healing-crystal shop on Valencia could never."
+  - Problem: The joke depends on knowing a San Francisco street; a newcomer cannot follow it.
+  - Rewrite: needs facts the proofreader did not have
+- **N1, severity 1** — line 108, row 01
+  - Text: "One crystal for each result on the board, grown by a stated rule."
+  - Problem: The rule is not stated on the row.
+  - Rewrite: "One crystal for each result on the board; its shape follows from the result."
+- **D3, severity 1** — line 108, row 02
+  - Text: "Inside the model's head, literally"
+  - Problem: 'Literally' is wrong: the model has no head.
+  - Rewrite: "Inside the model"
+- **D1, severity 1** — line 108, row 02
+  - Text: "and the loop neurons behind answers that repeat themselves forever."
+  - Problem: 'Loop neurons' is a team label; answers repeat until the length limit, not forever.
+  - Rewrite: "and the neurons linked to answers that repeat themselves until the length limit."
+- **D3, severity 1** — line 108, row 05
+  - Text: "You can watch the vibe shift."
+  - Problem: Slang that a second-language reader may not know.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 1** — line 108, row 06
+  - Text: "Every posted score of one benchmark as a plaster relief, with the best so far as a thread."
+  - Problem: No verb, and the benchmark is not named.
+  - Rewrite: "Every posted MATH-500 score, shown as a plaster relief, with a thread through the best score so far."
+- **D1, severity 1** — line 108, row 07
+  - Text: "Each theory's forecasts, locked in before the numbers were measured, against what landed. Receipts, not vibes."
+  - Problem: 'Theory' (output of the team's theory engine) and 'what landed' are unexplained; 'Receipts, not vibes' is a slogan.
+  - Rewrite: "Each theory's forecasts, fixed before the numbers were measured, against the measured numbers."
+- **D1, severity 1** — line 108, row 08
+  - Text: "Items, messages, commits, GPU jobs and scores at their real times"
+  - Problem: 'Items' means board items, not said.
+  - Rewrite: "Board items, messages, commits, GPU jobs and scores at their real times"
+- **V3, severity 1** — line 108, row 09
+  - Text: "Builds faster than anything SF has permitted."
+  - Problem: Local joke about San Francisco building permits.
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 1** — line 108, row 10
+  - Text: "Which board item cites which, regrown from the first hour. The family tree of every take."
+  - Problem: 'Regrown' and 'take' are figurative or slang.
+  - Rewrite: "Which board item cites which, replayed from the first hour."
+- **N2, severity 1** — line 108, row 11
+  - Text: "Proof they were locked in."
+  - Problem: 'Proof' plus slang; the picture shows activity, not focus.
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 1** — line 108, row 12
+  - Text: "For when the to-do list deserves to be yeeted."
+  - Problem: 'Yeeted' is slang; calling the board a 'to-do list' gives it a second name.
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 1** — line 108, row 15
+  - Text: "The islands are the problems that break the order."
+  - Problem: 'Break the order' does not say which order (problems solved out of difficulty order).
+  - Rewrite: "The islands are problems solved although easier problems were missed."
+- **D4, severity 1** — line 108, row 17
+  - Text: "Turn the crank to hear two days of work. Sound on."
+  - Problem: 'Sound on.' could be a warning or an instruction.
+  - Rewrite: "Turn the crank to hear two days of work (this page plays sound)."
+
+## studies/sitelab/prototypes/crystal/index.html (5 issues: 0 serious, 0 re-read, 5 minor)
+
+- **D3, severity 1** — line 6, browser tab title
+  - Text: "Our results, crystal-maxxed"
+  - Problem: 'Maxxed' is slang.
+  - Rewrite: "Our results as a crystal"
+- **D1, severity 1** — line 103, key
+  - Text: "Each study is one branch from the seed."
+  - Problem: 'Study' and 'the seed' are team terms explained only when clicked.
+  - Rewrite: "Each study (one line of experiments) is one branch from the seed, the research question the team started from."
+- **D5, severity 1** — line 105, key
+  - Text: "Pointed: a gain or a measurement. Flat, square: the title reports no gain or a refutation."
+  - Problem: A measurement that shows no gain fits both descriptions.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 1** — line 106, key
+  - Text: "Drop of hot glass at a branch tip: a work item."
+  - Problem: 'Work item' (a task an agent has claimed) is not explained.
+  - Rewrite: "Drop of hot glass at a branch tip: a task an agent has claimed."
+- **D1, severity 1** — line 770, number labels
+  - Text: "RL-Zero-Math"
+  - Problem: The model name is shown without saying it is the RL-trained version of the base model.
+  - Rewrite: "RL-Zero-Math (the base model after RL training)"
+
+## studies/sitelab/prototypes/forecast-range/index.html (5 issues: 0 serious, 2 re-read, 3 minor)
+
+- **D1, severity 2** — line 78, top tag
+  - Text: "Theory engine: called it (or did we)"
+  - Problem: 'Theory engine' is never explained on the page.
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 1** — line 80, intro
+  - Text: "It fires its forecasts before the number exists."
+  - Problem: 'Fires' is figurative and 'the number' has no referent.
+  - Rewrite: "It writes its forecasts before the number is measured."
+- **D5, severity 1** — line 92, key
+  - Text: "click a shot to read it"
+  - Problem: A forecast is called 'a forecast', 'a steel ball' and 'a shot'.
+  - Rewrite: "click a forecast to read it"
+- **D1, severity 1** — line 428, theory panel
+  - Text: "Its rival, written by a fresh agent ... +0.12 nats on 9 tests, 4 of them separating"
+  - Problem: 'Nats', 'separating' and 'duel' (line 414) are unexplained.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — line 538, headline (from data.json line)
+  - Text: "Our theories were nearer the measured number than readers with no theory in 190 of 394 predictions: no better."
+  - Problem: 'Readers with no theory' is unexplained, and 'no better' does not say than what.
+  - Rewrite: "Our theories were nearer the measured number than forecasters given no theory in 190 of 394 predictions (48 %): no better than chance."
+
+## studies/sitelab/prototypes/lineage/index.html (2 issues: 0 serious, 1 re-read, 1 minor)
+
+- **D1, severity 2** — line 118, checkbox
+  - Text: "Same-session links"
+  - Problem: The page does not say what a same-session link is or why one would hide it.
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 1** — line 443, subtitle
+  - Text: "Click an item to trace what it stands on and what stands on it"
+  - Problem: 'Stands on' is figurative.
+  - Rewrite: "Click an item to see what it cites and what cites it"
+
+## studies/sitelab/prototypes/model-interior/index.html (7 issues: 0 serious, 4 re-read, 3 minor)
+
+- **D3, severity 1** — line 6, browser tab title
+  - Text: "Inside the 7B model's head, literally"
+  - Problem: 'Literally' is wrong, and the 7B model is not named.
+  - Rewrite: "Inside Olmo 3 7B: what RL changed in the weights"
+- **D4, severity 2** — line 175, rail heading
+  - Text: "Top-8 share by layer"
+  - Problem: The reader cannot tell what share is meant.
+  - Rewrite: "Share of the RL weight change in the top 8 directions, by layer"
+- **D2, severity 2** — line 449, headline (one dial setting)
+  - Text: "Eight directions per matrix hold 40 % of the squared RL change."
+  - Problem: 'Directions' (singular directions of the weight change) and 'squared RL change' are not explained.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — line 455, source line
+  - Text: "Measured on the 328 hard problems, opening cue, T 1.0, one sample, grader v3."
+  - Problem: Telegraphic list of team labels (opening cue, T, grader v3).
+  - Rewrite: "Measured on the team's 328 hard problems, with the three-token opening prompt, temperature 1.0, one answer per problem, graded by version 3 of the grader."
+- **D4, severity 1** — line 492, dial note
+  - Text: "right of 328"
+  - Problem: Dropped words.
+  - Rewrite: "problems right, out of 328"
+- **D4, severity 2** — line 560, loop neuron panel
+  - Text: "Loops and tokens fall on both seeds."
+  - Problem: Compressed: what falls is the count of looping answers and the number of tokens.
+  - Rewrite: "On both seeds, fewer answers loop and answers use fewer tokens."
+- **D1, severity 1** — line 568, neuron panel
+  - Text: "A reader wrote this sentence from 10 contexts. A second reader, given only the sentence"
+  - Problem: 'Reader' means a language model, not said.
+  - Rewrite: "A language model wrote this description from 10 text snippets. A second model, given only the description"
+
+## studies/sitelab/prototypes/physics-board/index.html (3 issues: 0 serious, 0 re-read, 3 minor)
+
+- **D4, severity 1** — line 116, key
+  - Text: "size: votes + comments"
+  - Problem: A symbol replaces words.
+  - Rewrite: "size: number of votes and comments"
+- **D3, severity 1** — line 741, item panel
+  - Text: "linked items lifted from the tray"
+  - Problem: 'Tray' is the picture's metaphor, unexplained.
+  - Rewrite: "linked items, raised in the picture"
+- **S5, severity 1** — line 761, caption
+  - Text: "Posted MATH-500 scores of the untrained base run from 300 of 500"
+  - Problem: 'Run from' can be read as the noun 'run'.
+  - Rewrite: "Posted MATH-500 scores of the untrained base range from 300 of 500"
+
+## studies/sitelab/prototypes/problem-field/index.html (4 issues: 0 serious, 1 re-read, 3 minor)
+
+- **D1, severity 2** — line 123, set button
+  - Text: "The 328"
+  - Problem: The button does not say what the 328 are or why they are 'harder'.
+  - Rewrite: "328 hard problems"
+- **S5, severity 1** — line 434, timeline labels
+  - Text: "PT"
+  - Problem: Times are in PT here, PST on the spiral page and UTC on the team pages.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 1** — line 473, headline
+  - Text: "B gets 12 problems right that A gets wrong, and loses 5."
+  - Problem: 'Loses 5' is compressed.
+  - Rewrite: "B gets 12 problems right that A gets wrong, and gets 5 wrong that A gets right."
+- **D5, severity 1** — line 474, caption
+  - Text: "Each sphere is one of the 328 harder problems"
+  - Problem: The title calls them beads and the caption spheres.
+  - Rewrite: "Each bead is one of the 328 hard problems"
+
+## studies/sitelab/prototypes/repo-city/index.html (4 issues: 0 serious, 0 re-read, 4 minor)
+
+- **S3, severity 1** — line 87, top tag
+  - Text: "Repository maquette"
+  - Problem: 'Maquette' is a rare word.
+  - Rewrite: "Model of the repository"
+- **D4, severity 1** — line 134, headline
+  - Text: "as tall as its line count at this moment of the 36 hours."
+  - Problem: Compressed.
+  - Rewrite: "as tall as its number of lines at the moment shown, within the 36 hours of the hackathon."
+- **D2, severity 1** — line 135, subtitle
+  - Text: "carry a Co-Authored-By trailer that names"
+  - Problem: A git term; the reader is not told this marks commits written with an AI model.
+  - Rewrite: "were marked as co-written by"
+- **S5, severity 1** — line 141, readout
+  - Text: "30.0% were later deleted."
+  - Problem: Percent written without a space here and with one ('90 %') on other pages.
+  - Rewrite: "30.0 % were later deleted."
+
+## studies/sitelab/prototypes/score-terrain/index.html (5 issues: 0 serious, 2 re-read, 3 minor)
+
+- **D3, severity 1** — line 6, browser tab title
+  - Text: "Number go up, in plaster"
+  - Problem: Meme phrase.
+  - Rewrite: "Scores over time, as a plaster relief"
+- **S5, severity 1** — line 143, key
+  - Text: "pin: one score, colored by person"
+  - Problem: US 'colored' and UK 'neighbour' on the same key.
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 2** — line 145, key
+  - Text: "ring: a score under a neighbour's slope"
+  - Problem: The reader cannot tell what 'under a neighbour's slope' means.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — line 147, key
+  - Text: "glass: RL checkpoint level, gilded above"
+  - Problem: Compressed; meaning unclear.
+  - Rewrite: "glass plane: the RL model's score; anything above it is gilded"
+- **D5, severity 1** — line 537, headline
+  - Text: "On MATH-500 the plain base scores 300 of 500."
+  - Problem: The same model is 'plain base' here, 'untrained base' in the note above.
+  - Rewrite: "On MATH-500 the untrained base scores 300 of 500."
+
+## studies/sitelab/prototypes/time-helix/index.html (3 issues: 0 serious, 0 re-read, 3 minor)
+
+- **T4, severity 1** — line 122, button
+  - Text: "Ride"
+  - Problem: The label does not say what the button does.
+  - Rewrite: needs facts the proofreader did not have
+- **S5, severity 1** — line 535, headline
+  - Text: "each piece of work closed a median 45 minutes after it was claimed."
+  - Problem: Comma splice and a missing 'of'.
+  - Rewrite: "36 hours of one research hackathon: 120 results. A task was closed a median of 45 minutes after it was claimed."
+- **D5, severity 1** — line 536, subtitle
+  - Text: "One turn of the coil is one hour"
+  - Problem: The picture is called a spiral in the title and a coil here.
+  - Rewrite: "One turn of the spiral is one hour"
+
+## studies/sitelab/prototypes/token-flow/index.html (5 issues: 0 serious, 0 re-read, 5 minor)
+
+- **D1, severity 1** — line 6, browser tab title
+  - Text: "Finish the thought or hit the cap"
+  - Problem: 'The cap' (token limit) is not explained.
+  - Rewrite: "Finish the answer or hit the token limit"
+- **T4, severity 1** — line 109, button
+  - Text: "Release again"
+  - Problem: The label does not say it replays the animation.
+  - Rewrite: "Replay"
+- **D5, severity 1** — line 349, headline (four-sample view)
+  - Text: "are still running at 16,384 tokens"
+  - Problem: The one-sample view and the legend say 'cut off' for the same outcome.
+  - Rewrite: needs facts the proofreader did not have
+- **N1, severity 1** — line 353, note
+  - Text: "One sample per problem, generated up to 32,768. Drag the cap. Click the model for the four samples."
+  - Problem: 32,768 has no unit, and 'the model' does not name a control.
+  - Rewrite: "One answer per problem, generated up to 32,768 tokens. Drag the limit. Click a model name to see four answers per problem."
+- **D3, severity 1** — line 382, answer panel
+  - Text: "the key says"
+  - Problem: 'The key' for the reference answer can be confused with the colour key.
+  - Rewrite: "the reference answer is"
+
+## studies/sitelab/prototypes/trace-ribbons/index.html (3 issues: 0 serious, 2 re-read, 1 minor)
+
+- **T4, severity 1** — line 115, button
+  - Text: "Fly inside"
+  - Problem: The label does not say what view it opens.
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 2** — line 525, headline
+  - Text: "While a transcript was at work, a tool call was running for 40 % of the time"
+  - Problem: A transcript does not work; the reader has to guess it means an active session.
+  - Rewrite: "While a session was active, a tool call was running 40 % of the time"
+- **N1, severity 2** — line 526, subtitle
+  - Text: "Share of 200 transcript hours. Left out: 50 hours in which a subagent had finished and stayed open for a resume."
+  - Problem: The headline says 30 hours; the reader is not told that transcript hours add up parallel sessions; 'stayed open for a resume' is compressed.
+  - Rewrite: "Shares of 200 session-hours (parallel sessions add up). Not counted: 50 hours in which a finished subagent stayed open in case it was resumed."
+
+## studies/sitelab/prototypes/weight-space/index.html (5 issues: 0 serious, 1 re-read, 4 minor)
+
+- **D4, severity 1** — line 121, headline
+  - Text: "The fill is its right answers."
+  - Problem: Compressed.
+  - Rewrite: "The height of the fill shows how many problems it gets right."
+- **D4, severity 1** — line 140, key
+  - Text: "guide between measured models, not data"
+  - Problem: Compressed.
+  - Rewrite: "line drawn between measured models; not a measurement"
+- **D1, severity 2** — line 173, lane label
+  - Text: "Think-SFT + a × (RL − base)"
+  - Problem: 'Think-SFT' and the symbol 'a' are not explained anywhere on the page.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 1** — line 409, readout
+  - Text: "The nearest measured models on this lane are"
+  - Problem: 'Lane' is the picture's term for a family of models, not explained.
+  - Rewrite: needs facts the proofreader did not have
+- **D5, severity 1** — line 456, tooltip
+  - Text: "cap hits"
+  - Problem: The same outcome is 'Hit the 16,384-token cap', 'answers cut off at the token cap' and 'cap hits' on one page.
+  - Rewrite: "answers cut off at the token limit"
+
+## studies/theory/paper/paper.tex (48 issues: 0 serious, 20 re-read, 28 minor)
+
+- **V4, severity 1** — line 26, title
+  - Text: "Theories on Trial"
+  - Problem: A figurative title that names the topic; the result is only in the subtitle.
+  - Rewrite: "Agent-Written Mechanisms Make Forecasts More Confident, Not More Accurate"
+- **D3, severity 1** — line 28, subtitle
+  - Text: "Forecasts that language-model agents file with a mechanism"
+  - Problem: 'File with a mechanism' is office jargon; a second-language reader may not parse it.
+  - Rewrite: "Forecasts that language-model agents make together with a proposed mechanism"
+- **N3, severity 1** — line 39, abstract
+  - Text: "Over seven rounds, agents wrote 63 mechanistic theories of one research project's results"
+  - Problem: The abstract does not say what the project studied, so the reader cannot judge how general the result is.
+  - Rewrite: "Over seven rounds, agents wrote 63 mechanistic theories of one two-day project's results on why RL improves a 7B language model at mathematics"
+- **D6, severity 2** — line 42, abstract
+  - Text: "The baseline is the same model, given the results and asked for the same numbers with no mechanism."
+  - Problem: No model has been named, so 'the same model' has nothing to refer to.
+  - Rewrite: "The baseline is the same language model (Claude), given the results and asked for the same numbers with no mechanism."
+- **N1, severity 2** — line 43, abstract
+  - Text: "The theories were nearer to the measured value in 48 % of 394 comparisons."
+  - Problem: The comparison (nearer than the baseline's mean value) and the chance level (50 %) are not stated.
+  - Rewrite: "The theories' values were nearer to the measured value than the baseline's in 48 % of 394 comparisons, where 50 % would be a tie."
+- **N1, severity 1** — line 44, abstract
+  - Text: "and held the measured value 69 % of the time, against 83 % and 86 %"
+  - Problem: These shares are over 236 predictions, not the 394 of the sentence before, which the reader cannot tell.
+  - Rewrite: "and held the measured value in 69 % of 236 predictions, against 83 % and 86 %"
+- **D1, severity 2** — line 45, abstract
+  - Text: "None of the 63 theories passed the baseline, a rival theory and a review."
+  - Problem: 'A rival theory and a review' are stages of the team's pipeline that the abstract never describes.
+  - Rewrite: "None of the 63 theories passed all three tests: beating the baseline, beating a rival mechanism written by another agent, and surviving a review."
+- **N1, severity 1** — line 45, abstract
+  - Text: "The one GPU experiment that a theory led to gave a clear result, and the forecast made from the theory missed it."
+  - Problem: 'A clear result' and 'missed it' give no numbers.
+  - Rewrite: "The one GPU experiment that a theory led to gave 411 right of 500; the theory had forecast 375 [348, 400]."
+- **D6, severity 1** — line 46, abstract
+  - Text: "The two prompts differ in more than the mechanism"
+  - Problem: The two prompts have not been introduced.
+  - Rewrite: "The prompts given to the theory authors and to the baseline differ in more than the mechanism"
+- **D3, severity 2** — line 47, abstract, last sentence
+  - Text: "We claim that the mechanisms' own chosen bets did not pay."
+  - Problem: The paper's main claim is stated as a betting metaphor.
+  - Rewrite: "We claim that, on the quantities the theories chose themselves, the mechanisms did not make the forecasts more accurate."
+- **V1, severity 1** — line 55, Figure 1 caption, title
+  - Text: "Same accuracy, less doubt."
+  - Problem: A slogan; 'less doubt' stands for narrower intervals that cover less often.
+  - Rewrite: "Theories are as accurate as the readers, but their intervals cover the measured value less often."
+- **D1, severity 1** — line 56, Figure 1 caption
+  - Text: "where the theory and both no-theory readers filed a 90 % interval"
+  - Problem: 'No-theory readers' is defined in the introduction, which caption readers may skip.
+  - Rewrite: "where the theory and both no-theory readers (the same model asked for the numbers without a mechanism) gave a 90 % interval"
+- **D3, severity 2** — line 67, Introduction, first paragraph
+  - Text: "A team of people and agents produces results faster than anyone can connect them, so the step where an agent writes why a set of results came out as it did is the one most likely to be handed over."
+  - Problem: 'Handed over' does not say to whom; the reader must infer 'delegated to an agent', and the sentence is long.
+  - Rewrite: "Because a team of people and agents produces results faster than anyone can connect them, explaining why a set of results came out as it did is the step most likely to be delegated to an agent."
+- **D1, severity 1** — line 76, Introduction
+  - Text: "A theory engine ran beside it."
+  - Problem: 'Theory engine' is a team label introduced without saying what it is.
+  - Rewrite: "A pipeline of agent jobs, which we call the theory engine, ran alongside the project."
+- **T1, severity 1** — line 80, Section 2 heading
+  - Text: "The trial"
+  - Problem: A figurative heading for the methods section.
+  - Rewrite: "Design"
+- **T2, severity 1** — line 82, Section 2, Theory
+  - Text: "A theory is a short document: ..."
+  - Problem: Eight sentences in one paragraph mix the definition, round-by-round changes and the selection of quantities.
+  - Rewrite: "Split before 'The author chooses the quantities'."
+- **D3, severity 1** — line 88, Section 2, Theory
+  - Text: "So the sample is a theory's own bets"
+  - Problem: 'Bets' is a metaphor for self-chosen predictions.
+  - Rewrite: "So the predictions are the ones each theory chose for itself"
+- **D6, severity 2** — line 91, Section 2, Reader
+  - Text: "A no-theory reader is the same model (from round 2)"
+  - Problem: The reader cannot tell what 'the same model' refers to or what '(from round 2)' qualifies.
+  - Rewrite: "From round 2 on, a no-theory reader is the same language model that writes the theories"
+- **D5, severity 1** — line 93, Section 2, Reader
+  - Text: "The two arms differ in more than the mechanism."
+  - Problem: 'Arms' is a new name for the theory authors and readers.
+  - Rewrite: "The theory and reader prompts differ in more than the mechanism."
+- **N4, severity 2** — line 104, Section 2, Rounds
+  - Text: "All agents were Claude models."
+  - Problem: No model name or version is given (Limitations says only an alias was recorded), so a reader cannot identify or reproduce the model.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — line 120, Table 1, column 'What was scored'
+  - Text: "hand-matched numbers; planted control ... the same; all but the budget ... the same; stricter rule against rivals"
+  - Problem: Telegraphic team shorthand ('planted control', 'all but the budget', 'rivals') that the reader cannot decode at the table.
+  - Rewrite: "Round 1: numbers matched to readers by hand, with one theory planted with every effect reversed; round 6: theories other than the budget; round 7: as round 4, with a stricter rule on rival mechanisms."
+- **V4, severity 1** — line 132, Table 1 caption, title
+  - Text: "The seven rounds."
+  - Problem: The caption names the topic, not the result.
+  - Rewrite: "Theories lose log score in every round except the round-6 budget."
+- **D1, severity 1** — line 135, Table 1 caption
+  - Text: "counts a theory again in each later round it was carried into (15 times)"
+  - Problem: 'Carried into' is the pipeline's term; the reader is not told that theories are kept and re-scored in later rounds.
+  - Rewrite: "counts a theory again in each later round in which it was kept and scored again (15 times)"
+- **N1, severity 2** — line 150, Section 3.1, example
+  - Text: "predicted that 68 % [40, 95] of step-100 answers would open in a certain way"
+  - Problem: 'A certain way' hides what was measured, so the reader cannot judge the miss.
+  - Rewrite: needs facts the proofreader did not have
+- **N1, severity 1** — line 153, Section 3.1, example
+  - Text: "+6 points at step 400"
+  - Problem: The thing measured in points is not repeated.
+  - Rewrite: "a rise of 6 percentage points in cut-off answers at step 400"
+- **D6, severity 2** — line 154, Section 3.1
+  - Text: "It is one of five gains at the upper clip."
+  - Problem: 'It' and 'gains at the upper clip' leave the reader to work out that this prediction's log gain hit the +3 nats cap.
+  - Rewrite: "Its log gain is one of the five that reach the upper clip of +3 nats."
+- **S1, severity 2** — line 165, Section 3.2
+  - Text: "The gap is negative in each of rounds 3 to 7 taken whole; its interval includes zero in rounds 4 and 6, and within round 6 the budget of Section 4.3 alone is above the readers"
+  - Problem: Three qualifications in one sentence, with the compressed phrase 'taken whole'.
+  - Rewrite: "The gap is negative in each of rounds 3 to 7 when each round is counted as a whole. Its interval includes zero in rounds 4 and 6. Within round 6, the budget of Section 3.3 alone covers more than the readers."
+- **V4, severity 1** — line 174, Figure 2 caption, title
+  - Text: "By round."
+  - Problem: The caption title gives no result.
+  - Rewrite: "Theory intervals cover less than the readers' in every round from 3 to 7; only the round-6 budget gains log score."
+- **D3, severity 2** — line 180, Section 3.3 heading
+  - Text: "One entry carries the total, and it had seen more data"
+  - Problem: 'Entry' and 'carries the total' are vague; the text says this entry explains the width of the interval and is the only positive gain.
+  - Rewrite: "The only positive log gain comes from one budget whose author had seen more data"
+- **D6, severity 2** — line 189, Section 3.3
+  - Text: "We do not read this as a success of the form."
+  - Problem: 'The form' could mean the paper's format, the theory form or the budget format.
+  - Rewrite: "We do not read this as a success of the budget format."
+- **S1, severity 2** — line 190, Section 3.3
+  - Text: "Of those three, only the first was written without such a view; the second was shown the first's computed shares and the third the first two's."
+  - Problem: The possessive chain ('the first's', 'the first two's') makes the reader parse the sentence twice.
+  - Rewrite: "The first of those three budgets was written without seeing any computed shares; the author of the second saw the first one's shares, and the author of the third saw the shares of the first two."
+- **D3, severity 2** — line 199, Section 3.4
+  - Text: "a new agent, shown the theory, wrote the strongest different mechanism for the same results and a set of tests on which the two disagree; another new agent answered for the theory"
+  - Problem: 'Answered for the theory' does not say what the second agent did, and the sentence carries the whole contest design.
+  - Rewrite: "a new agent, shown the theory, wrote the strongest different mechanism for the same results and a set of tests on which the two disagree. Another new agent made the theory's predictions on those tests."
+- **V2, severity 1** — line 201, Section 3.4
+  - Text: "two in side runs of the engine"
+  - Problem: 'Side runs' is inside talk; the reader cannot tell how they differ from the rounds.
+  - Rewrite: needs facts the proofreader did not have
+- **D5, severity 1** — line 204, Section 3.4
+  - Text: "the rivals' intervals held 37 of 53 and the defenders' 27"
+  - Problem: 'Defenders' is a new name for the agents answering for the theory.
+  - Rewrite: "the rivals' intervals held 37 of 53 measured values and the theories' 27"
+- **D1, severity 1** — line 207, Section 3.4
+  - Text: "and 28 failed the scores of rounds 1 to 3 or were dropped"
+  - Problem: 'Dropped' is not explained (by whom, why).
+  - Rewrite: needs facts the proofreader did not have
+- **V4, severity 1** — line 213, Figure 3 caption, title
+  - Text: "One experiment, eleven contests."
+  - Problem: The caption title gives counts, not the result.
+  - Rewrite: "The theory's forecast missed the experiment it proposed; theories rarely beat their rivals."
+- **D3, severity 1** — line 214, Figure 3 caption
+  - Text: "the base model was sampled until its own first 24 tokens began the way the RL model begins ... the measurement with its recorded sampling interval (shaded)"
+  - Problem: 'The way the RL model begins' and 'recorded sampling interval' are vague.
+  - Rewrite: needs facts the proofreader did not have
+- **S1, severity 2** — line 220, Section 3.4
+  - Text: "The engine asks, for each theory, for the one change to the untrained base that the theory implies; a separate job, given the theory, writes the experiment and a forecast of it, and a second job, given only the rival, forecasts the same experiment."
+  - Problem: Three steps of a procedure in one 45-word sentence.
+  - Rewrite: "For each theory, the engine asks for the one change to the untrained base that the theory implies. A separate job, given the theory, designs the experiment and forecasts its result. A second job, given only the rival, forecasts the same experiment."
+- **S5, severity 2** — line 223, Section 3.4
+  - Text: "and that nothing after the opening adds"
+  - Problem: 'Adds' has no object, so the sentence reads as unfinished.
+  - Rewrite: "and that nothing after the opening changes whether the answer is right"
+- **D5, severity 1** — line 227, Section 3.4
+  - Text: "The experiment gave 411, against 410 for the prefilled cue"
+  - Problem: The companion paper on the first steps reports the same cue score as 410.5; readers of both see two values.
+  - Rewrite: "The experiment gave 411, against 410.5 for the prefilled cue"
+- **S4, severity 1** — line 249, Section 3.5
+  - Text: "An independent recomputation matched 7 of 7 values in round 4 and 57 of 58 in round 6."
+  - Problem: The reader cannot tell who did the recomputation, so cannot judge how independent it was.
+  - Rewrite: needs facts the proofreader did not have
+- **V1, severity 1** — line 280, Limitations, bullet 2
+  - Text: "The baseline is not ignorant. A reader sees the results the theorist sees. The claim is not that the mechanisms are false."
+  - Problem: Three clipped sentences, two in 'not X' form, and 'theorist' is a further name for the author.
+  - Rewrite: "The baseline reader sees the same results as the theory author. We do not claim that the mechanisms are false."
+- **S5, severity 2** — line 281, Limitations, bullet 3
+  - Text: "Its interval, 40 to 55 %, excludes a theory that is nearer two times in three, not a small edge either way."
+  - Problem: The contrast 'not a small edge' has no verb, so a reader may take it as part of what is excluded.
+  - Rewrite: "Its interval, 40 to 55 %, rules out a theory that is nearer two times in three, but does not rule out a small advantage in either direction."
+- **D2, severity 1** — line 283, Limitations, bullet 4
+  - Text: "recorded in the run files by alias, not by dated version"
+  - Problem: 'Alias' and 'dated version' assume the reader knows how model names are versioned.
+  - Rewrite: "recorded in the run files only by a short model name that does not identify the exact version"
+- **D3, severity 1** — line 287, Limitations, bullet 5
+  - Text: "two scored quantities of round 5 were void"
+  - Problem: 'Void' stands in for what happened to them (owner's style rule bans the word).
+  - Rewrite: "two scored quantities of round 5 were cancelled and do not count"
+- **D5, severity 2** — line 292, Limitations, last bullet
+  - Text: "as scored when each was run they read six lost, two not separated and three won"
+  - Problem: Section 3.4 (line 206) says that as scored when each round ran, 4 theories lost to a rival; here the same phrase gives six lost and three won, so the reader sees two counts for one thing.
+  - Rewrite: needs facts the proofreader did not have
+- **V1, severity 1** — line 301, Conclusion
+  - Text: "Widen the intervals of any forecast that arrives with a mechanism, give the mechanism a rival, and keep the part that did earn its place here, the experiment it points to. Read an agent's theory as a proposal for an experiment."
+  - Problem: Rule-of-three imperatives, an idiom ('earn its place') and a punchline closing sentence.
+  - Rewrite: "We recommend widening the intervals of forecasts that come with a mechanism, testing each mechanism against a rival, and treating an agent's theory as a proposal for an experiment, which was the one useful output here."
+- **T4, severity 2** — line 306, Reproducibility
+  - Text: "The round files, prompts and code of the engine are in the project repository, in the folder studies/theory/."
+  - Problem: No URL for the repository.
+  - Rewrite: needs facts the proofreader did not have
+
+## tools/exa_page.py (35 issues: 0 serious, 11 re-read, 24 minor)
+
+- **D1, severity 2** — line 15, page title and nav name
+  - Text: "Exa in the Swarm"
+  - Problem: 'Swarm' is a team word for its group of agents, and 'Exa' is not explained; the title names neither the topic nor the result.
+  - Rewrite: "How our agents used Exa web search before running experiments"
+- **D2, severity 2** — line 187, headline (h1)
+  - Text: "Our agents ask Exa before they run an experiment."
+  - Problem: The page never says that Exa is a web search engine, so a newcomer does not know what the agents asked.
+  - Rewrite: "Before running an experiment, our agents search the web with Exa, a search engine for research pages."
+- **V4, severity 1** — line 187, headline (h1)
+  - Text: "Our agents ask Exa before they run an experiment."
+  - Problem: The headline names the habit but not the result (searches changed four decisions for $1.80), though the result fits in the same space.
+  - Rewrite: "Our agents searched the web before each experiment: for $1.80 in total, four searches changed what the team ran or claimed."
+- **S3, severity 1** — line 190, number tile
+  - Text: "261 arXiv papers surfaced"
+  - Problem: 'Surfaced' is jargon for 'returned in search results'.
+  - Rewrite: "261 arXiv papers found by search"
+- **D1, severity 2** — line 193, number tile
+  - Text: "163 published findings written by the theory engine"
+  - Problem: 'Theory engine' is not explained, and 'published findings' can mean findings the engine published or findings already published in the literature; the link to Exa is not stated.
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 1** — line 199, figure alt text
+  - Text: "three ideas reach Exa; two stop at the gate and one goes on to the board."
+  - Problem: 'The gate' and 'the board' are unexplained picture terms.
+  - Rewrite: "three ideas were checked with Exa; two were already published and one went on to the team's results board."
+- **D1, severity 2** — line 201, figure caption
+  - Text: "Every agent's work cycle passes Exa before a GPU run (AGENTS.md, rule 2)."
+  - Problem: 'Work cycle', 'passes Exa' and 'AGENTS.md, rule 2' are team references a visitor cannot open.
+  - Rewrite: "The team's rules tell every agent to search with Exa before it starts a GPU run."
+- **N2, severity 1** — line 201, figure caption
+  - Text: "Every agent's work cycle passes Exa before a GPU run"
+  - Problem: 'Every' contradicts the limits section, which says one laptop never had the Exa key.
+  - Rewrite: "The rules require every agent to search with Exa before a GPU run."
+- **D6, severity 1** — line 207, case 1 label
+  - Text: "novelty audit of the top finding"
+  - Problem: 'The top finding' is not named.
+  - Rewrite: needs facts the proofreader did not have
+- **D2, severity 1** — line 209, case 1, Exa returned
+  - Text: "Two more searches in the same 13 seconds returned ExPO (2404.16792) and ThinkEdit."
+  - Problem: ExPO and ThinkEdit are paper names given with no description.
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 2** — line 210, case 1, what changed
+  - Text: "Two novelty claims came off the finding and one stayed."
+  - Problem: 'Came off' is an idiom, and the reader is not told which claim stayed.
+  - Rewrite: "The team removed two of its three claims of novelty from the finding; one claim remained."
+- **D2, severity 2** — line 215, case 2, Exa returned
+  - Text: "A published lens for our exact base model:"
+  - Problem: 'Lens' (Jacobian lens) and 'our exact base model' (which model) are not explained on the page.
+  - Rewrite: "A published Jacobian lens (a tool for reading a model's internal states) for the model we study, Olmo 3 7B:"
+- **D4, severity 2** — line 216, case 2, what changed
+  - Text: "On the board six minutes later. The same session posted its result with no GPU job."
+  - Problem: The first sentence has no subject, 'the board' is unexplained, and 'its result' is unclear.
+  - Rewrite: "Six minutes later the agent posted the lens to the team's results board, and it reported its result without running a GPU job."
+- **S5, severity 1** — line 219, case 3 label
+  - Text: "before a 29 USD run"
+  - Problem: Money is written '$1.80' elsewhere on the page and '29 USD' here.
+  - Rewrite: "before a $29 run"
+- **D1, severity 1** — line 222, case 3, what changed
+  - Text: "its result says what is ours: “Summing SFT and RL vectors is published (2605.00610); the dose curve and control are new”."
+  - Problem: 'What is ours', 'dose curve' and 'control' are team shorthand; SFT and RL are not spelled out.
+  - Rewrite: "its result states which part is new: adding the supervised fine-tuning and RL weight changes is published, but the measurements at several strengths and the control are new."
+- **D1, severity 1** — line 226, case 4, the agent asked
+  - Text: "The session that made this search is not in the trace store."
+  - Problem: 'Trace store' is a team term.
+  - Rewrite: "The record of the agent session that made this search was not saved."
+- **D1, severity 2** — line 227, case 4, Exa returned
+  - Text: "and six more papers, cited on the board in knowledge-d692e4."
+  - Problem: A board item id means nothing to a visitor.
+  - Rewrite: "and six more papers, listed in a note on the team board."
+- **V2, severity 2** — line 236, note under the first screen
+  - Text: "Read from the session transcripts on this laptop and in the team trace store"
+  - Problem: 'This laptop' is written from the author's seat; a visitor has no laptop in view.
+  - Rewrite: "Counted from the saved agent transcripts on one team laptop and in the team's shared transcript store"
+- **N4, severity 1** — line 236, note under the first screen
+  - Text: "Nov 14, 21:37 to Nov 15, 15:29 UTC."
+  - Problem: Case 4 is dated Nov 14, 21:12 UTC, before the stated counting window starts; the page does not say why.
+  - Rewrite: needs facts the proofreader did not have
+- **V2, severity 1** — line 241, story section, first line
+  - Text: "Our best result is about to go on a slide as new."
+  - Problem: 'Go on a slide' is inside talk, and 'our best result' is not named.
+  - Rewrite: "The team is about to present its best result as new in its slides."
+- **D1, severity 2** — line 250, story, board quote
+  - Text: "New part: RL's top-8 directions set cap hits monotonically while a random edit stays flat."
+  - Problem: 'Top-8 directions', 'cap hits' and 'random edit' are team labels shown with no explanation.
+  - Rewrite: needs facts the proofreader did not have
+- **V1, severity 1** — line 253, story closing line
+  - Text: "Four minutes from the question to a corrected claim. The search cost $0.007."
+  - Problem: Two punchline fragments.
+  - Rewrite: "The claim was corrected four minutes after the question, and the search cost $0.007."
+- **N2, severity 1** — line 268, note under the search list
+  - Text: "Verbatim. Each is the experiment the agent was about to run, written as the abstract of the paper that would make it unnecessary."
+  - Problem: The last search in the list is about Modal documentation, not an experiment, so 'each' is not true; 'Verbatim.' is a fragment.
+  - Rewrite: "These are the agents' queries word for word. Most describe the experiment the agent was about to run, written as the abstract of a paper that would make the run unnecessary."
+- **D4, severity 1** — line 276, wiring table, row 2
+  - Text: "search calls /search with highlights, fetch calls /contents for full text. Plain HTTP, so Claude Code, Codex and every subagent run the same two commands."
+  - Problem: Code names and a fragment ('Plain HTTP') carry the meaning; 'with highlights' is unexplained.
+  - Rewrite: "The search command returns matching pages with short excerpts; the fetch command returns a page's full text. Both use plain web requests, so every kind of agent can run them."
+- **D1, severity 1** — line 277, wiring table, theory engine row
+  - Text: "A headless model may run one script, so Exa is its only route to the web. Rounds 02 to 07 wrote 25, 28, 29, 28, 30 and 23 published findings."
+  - Problem: 'Headless model', 'rounds' and 'published findings' are not explained.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 1** — line 278, wiring table, review row
+  - Text: "A novelty search in at least three phrasings before a theory survives."
+  - Problem: No verb; 'survives' stands in for 'is kept'.
+  - Rewrite: "A theory is kept only after a novelty search worded in at least three ways."
+- **D1, severity 1** — line 279, wiring table, finding pages row
+  - Text: "A public finding needs a memory recall and an Exa search that found no earlier report."
+  - Problem: 'Memory recall' is a team term (a search of the team's shared memory).
+  - Rewrite: "A finding is published only after a search of the team's shared memory and an Exa search both find no earlier report."
+- **N1, severity 2** — line 280, wiring table, team site row
+  - Text: "125 pages read through Exa, each with its agent, its time and the board item that cites it."
+  - Problem: The top of the page says 188 pages were read in full; the reader cannot tell why this row says 125.
+  - Rewrite: needs facts the proofreader did not have
+- **V1, severity 1** — line 287, limits list (repeats 4 times)
+  - Text: "One laptop never had the key."
+  - Problem: Every list line opens with a bold lead-in.
+  - Rewrite: needs facts the proofreader did not have
+- **D2, severity 1** — line 288, limits, MCP item
+  - Text: "Calls through the Exa MCP returned 401: the key was unset when the agent started. Commit af5fef1 replaced it with tools/exa.py"
+  - Problem: MCP, the 401 error code and the commit id are unexplained.
+  - Rewrite: "Calls through the Exa plugin for agents failed with an authorization error because the key was not set when the agent started. The team replaced the plugin with its own small script, which reads the key at each call."
+- **D1, severity 1** — line 289, limits, missed search
+  - Text: "It turned up two hours later, after a fit job had started."
+  - Problem: 'Fit job' is a team term.
+  - Rewrite: "The team found it two hours later, after it had already started a GPU job to train its own lens."
+- **T1, severity 1** — line 290, limits, last item
+  - Text: "No count of GPU jobs avoided. No artifact supports a dollar figure for what the searches saved"
+  - Problem: The heading says 'count of GPU jobs' but the text talks about a dollar figure; 'artifact' is team jargon.
+  - Rewrite: "We do not claim a saving. No saved record shows how many GPU jobs the searches avoided or what they would have cost."
+- **D1, severity 1** — line 294, footer
+  - Text: "iterate-hack, SF AI Research Hackathon"
+  - Problem: 'iterate-hack' is the repository name, not explained.
+  - Rewrite: "The team's repository (iterate-hack), SF AI Research Hackathon"
+- **D4, severity 1** — line 315, 3D scene alt text, search 3
+  - Text: "one idea passes Exa trimmed, runs on the GPU and reaches the board."
+  - Problem: 'Passes Exa trimmed' is compressed.
+  - Rewrite: "one idea passes the search with a narrower claim, runs on the GPU and is posted to the board."
+- **N1, severity 1** — line 470, 3D scene label
+  - Text: "677 pages Exa returned"
+  - Problem: The page also gives 261 arXiv papers and 188 pages read, and never relates 677 to them.
+  - Rewrite: "677 distinct pages in Exa's search results"
+
+## tools/finding_a_quarter_of_rl.py (40 issues: 0 serious, 17 re-read, 23 minor)
+
+- **V4, severity 2** — line 951, page title and tile title
+  - Text: "A quarter of RL"
+  - Problem: The title names a fraction but not of what, nor the result; a scanning reader cannot tell what was found.
+  - Rewrite: "A quarter of the RL weight change gives two thirds of RL's math gain"
+- **D4, severity 1** — line 951, tile title
+  - Text: "A quarter of RL"
+  - Problem: 'A quarter of RL' drops the noun; it means a quarter of RL's weight change.
+  - Rewrite: "A quarter of RL's weight change gives two thirds of its gain"
+- **D2, severity 2** — line 952, question above the headline
+  - Text: "How much of the RL weight change does the math gain need?"
+  - Problem: RL is never spelled out on the page, and 'RL weight change' (the RL model's weights minus the base model's) is not explained at first use.
+  - Rewrite: "How much of the weight change made by reinforcement learning (RL weights minus base weights) is needed for the math gain?"
+- **N4, severity 2** — line 953, headline sentence
+  - Text: "Scaled to a quarter, the RL weight change still gives 66 % of RL's gain on MATH-500."
+  - Problem: The headline gives 66 % as a point value, while the page later says the 95 % interval runs from about 30 % to 100 % and that the stored change is not exactly a quarter.
+  - Rewrite: "Scaled to a quarter, the RL weight change still gives 66 % of RL's gain on MATH-500 (95 % interval about 30 % to 100 %)."
+- **N1, severity 1** — line 953, headline sentence
+  - Text: "still gives 66 % of RL's gain on MATH-500"
+  - Problem: The share has no absolute numbers: the reader does not learn that the gain is 410 to 457 right answers of 500 and that a quarter scores 441.
+  - Rewrite: "Scaled to a quarter, the RL weight change scores 441 of 500 on MATH-500, against 410 for the base model and 457 for RL: 66 % of RL's gain."
+- **S2, severity 2** — line 962, panel 'What is new', first sentence
+  - Text: "Scaling a fine-tuning weight difference is an old tool: WiSE-FT and task vectors do it."
+  - Problem: The panel titled 'What is new' opens with what is not new; the new part comes only in the second item.
+  - Rewrite: "Here a quarter of the RL weight change gives 66 % of the gain and half gives 89 %; the closest published sweep ("Reasoning Vectors", arXiv 2509.01363, Sec. 4.4) got 2.1 of 4.9 points from half of a GRPO weight difference on GSM8K. Scaling a fine-tuning weight difference is itself an old method (WiSE-FT, task vectors)."
+- **D2, severity 1** — line 963, panel 'What is new', first sentence
+  - Text: "WiSE-FT and task vectors do it. ... half of a GRPO weight difference"
+  - Problem: WiSE-FT, task vectors and GRPO are named without saying what they are.
+  - Rewrite: "WiSE-FT (averaging pretrained and fine-tuned weights) and task vectors (adding a fine-tuning weight difference to a model) do it. ... half of a weight difference made by GRPO, an RL method,"
+- **S1, severity 1** — line 964, panel 'What is new', item 1
+  - Text: "Here the curve rises far earlier: a = 0.25 gives 66 % of the gain and a = 0.5 gives 89 %, on Olmo 3 7B and its RL-Zero-Math model, with a random change of the same norm as the control."
+  - Problem: Three ideas (result, models, control) in one 35-word sentence.
+  - Rewrite: "Here the curve rises far earlier: a = 0.25 gives 66 % of the gain and a = 0.5 gives 89 %. The models are Olmo 3 7B and its RL-Zero-Math model. The control is a random change of the same norm."
+- **N2, severity 1** — line 964, panel 'What is new', item 1
+  - Text: "Here the curve rises far earlier"
+  - Problem: 'Far earlier' compares a 7B model on MATH-500 with a 1.5B model on GSM8K without saying the setups differ.
+  - Rewrite: "Here, on a different model and benchmark, the curve rises earlier"
+- **N3, severity 2** — line 970, panel 'Why it matters', first sentence
+  - Text: "Most of RL's gain on MATH-500 is reached with a quarter to a half of the weight change; the rest of the change adds little there."
+  - Problem: The 'Why it matters' panel restates the headline and never says what the result changes or who should care.
+  - Rewrite: needs facts the proofreader did not have
+- **N1, severity 2** — line 972, panel 'Why it matters', item 1
+  - Text: "Going past the RL model does not help: a = 1.25 and 1.5 score 450 and 453 of 500"
+  - Problem: The scores are not set beside RL's 457, and 'going past the RL model' is not said to mean a above 1.
+  - Rewrite: "Scaling the change beyond the RL model (a above 1) does not help: a = 1.25 and 1.5 score 450 and 453 of 500, against 457 for RL"
+- **D3, severity 1** — line 973, panel 'Why it matters', item 1
+  - Text: "a crude check flags 34 answers at a = 1.5 as ending in word salad"
+  - Problem: 'Word salad' is an idiom, and the 'crude check' is not described.
+  - Rewrite: "an automatic check flags 34 of 500 answers at a = 1.5 as ending in incoherent text"
+- **S1, severity 2** — line 974, panel 'Why it matters', item 2
+  - Text: "a = 0.5 scores 190, RL 205 with the cue and 206 without it (−4.9 points against RL without the cue, 95 % interval −8.8 to −1.2)."
+  - Problem: Three scores, a difference and an interval packed into one sentence with dropped verbs; the reader has to re-read to match numbers to models.
+  - Rewrite: "a = 0.5 scores 190 of 328. RL scores 205 with the cue and 206 without it. a = 0.5 is 4.9 points below RL without the cue (95 % interval −8.8 to −1.2)."
+- **D1, severity 2** — line 978, panel 'How we know', first sentence
+  - Text: "sampled once per problem at T 1.0 (top-p 1.0), cut off at 16,384 tokens, graded by grader v3."
+  - Problem: 'grader v3' is a team version label, and T and top-p are not explained.
+  - Rewrite: "sampled once per problem at temperature 1.0 with no top-p truncation, stopped at 16,384 tokens, and graded by the team's answer checker (version 3)."
+- **S4, severity 1** — line 978, panel 'How we know', first sentence
+  - Text: "Each model was written as base + a (RL − base), tensor by tensor"
+  - Problem: 'Was written as' hides that the weights were computed this way.
+  - Rewrite: "We built each model's weights as base + a × (RL − base), tensor by tensor"
+- **N3, severity 1** — line 979, panel 'How we know', first sentence
+  - Text: "The cue makes each answer start with "line!", two line breaks and "Okay"."
+  - Problem: The page never says why the cue is used or whether it is text forced at the start of the answer.
+  - Rewrite: needs facts the proofreader did not have
+- **D5, severity 1** — line 981, panel 'How we know', item 1
+  - Text: "Base: Olmo 3 7B (allenai/Olmo-3-1025-7B). RL: Olmo 3.1 7B RL-Zero-Math."
+  - Problem: The RL model is 'Olmo 3.1' here but 'its RL-Zero-Math model' of Olmo 3 7B elsewhere; the reader may wonder if they are the same family.
+  - Rewrite: needs facts the proofreader did not have
+- **N1, severity 1** — line 983, panel 'How we know', item 2
+  - Text: "Control: a random change with the norm of the RL change scores 417 of 500 against 410"
+  - Problem: 410 is not named (it is the base model with the cue, a = 0).
+  - Rewrite: "Control: a random change with the norm of the RL change scores 417 of 500, against 410 for the base model"
+- **N3, severity 2** — line 985, panel 'How we know', item 3
+  - Text: "The RL model trained on code (Code-RL), with the cue, scores 450 of 500 on math, as much as a = 0.5 to 1.5 (450 to 457)."
+  - Problem: The reader is not told what this control tests or what its score means for the finding.
+  - Rewrite: needs facts the proofreader did not have
+- **N3, severity 1** — line 991, panel 'What it does not show', item 1
+  - Text: "Base + cue, sampled four more times, scores 405 to 418 of 500."
+  - Problem: The page does not say what this run-to-run spread means for the 31-answer gain at a = 0.25.
+  - Rewrite: "Base + cue, sampled four more times, scores 405 to 418 of 500: repeated runs of the same model differ by up to 13 answers."
+- **N4, severity 2** — line 992, panel 'What it does not show', item 2
+  - Text: "At a = 0.25 the stored weights are not a quarter of the change: rounding to bf16 leaves a change with 0.42 of the full norm and cosine 0.59 to it."
+  - Problem: This caveat contradicts the title and headline ('a quarter'), yet it sits as the second item of the fourth panel.
+  - Rewrite: "At a = 0.25 the stored weights are not exactly a quarter of the change: after rounding to bf16 (16-bit numbers), the change has 0.42 of the full change's length and points in a direction with cosine 0.59 to it."
+- **S1, severity 1** — line 994, panel 'What it does not show', item 3
+  - Text: "a = 0.5 is cut off at 16,384 tokens on 73 problems, RL + cue on 25; the random control was not run there. One base model, one RL model, one sample per problem."
+  - Problem: Three separate limits in one item, ending in a verbless fragment; the effect of 73 unfinished answers on the score is not stated.
+  - Rewrite: "On the 328 harder problems, the answer at a = 0.5 reaches the 16,384-token limit unfinished on 73 problems, and RL + cue on 25. The random control was not run there. All results use one base model, one RL model and one sample per problem."
+- **D1, severity 1** — line 997, panel 'How to reproduce it', first sentence
+  - Text: "The specs are studies/rlneurons/specs/DAY1_wdiff_2026-11-14.md and DAY1_wdiff328_2026-11-14.md"
+  - Problem: Repository paths are given without naming or linking the repository, so a visitor cannot open them.
+  - Rewrite: needs facts the proofreader did not have
+- **V2, severity 2** — line 1000, panel 'How to reproduce it', item 1
+  - Text: "Board results result-4b0d5f and result-e45bf4."
+  - Problem: The team's internal board ids mean nothing to a visitor, who cannot open the board.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 1** — line 1001, panel 'How to reproduce it', item 2
+  - Text: "recomputed from the dots; they agree with the readouts' within 0.4 points."
+  - Problem: 'The dots' and 'the readouts' are team words for the per-problem scores and the analysis output files.
+  - Rewrite: "recomputed from the per-problem scores; they agree within 0.4 points with the intervals in the analysis output files."
+- **V2, severity 1** — line 1004, panel 'How to reproduce it', item 3
+  - Text: "python3 tools/finding_a_quarter_of_rl.py checks the copy."
+  - Problem: 'The copy' is internal talk for the numbers on this page.
+  - Rewrite: "Running python3 tools/finding_a_quarter_of_rl.py checks every number on this page against those files."
+- **D1, severity 2** — line 1231, benchmark switch button
+  - Text: "328 harder problems"
+  - Problem: The button does not say harder than what or where the problems come from; this is explained only inside the 'How we know' panel.
+  - Rewrite: "328 competition problems (AIME, AMC, HMMT, OlympiadBench)"
+- **D4, severity 2** — line 1233, hint under the picture
+  - Text: "Drag along the axis to change a. Click a dot to see its problem."
+  - Problem: The variable 'a' reads as the article 'a', so 'to change a.' looks like a broken sentence.
+  - Rewrite: "Drag along the axis to change a, the share of the RL change that is added. Click a dot to see its problem."
+- **T1, severity 2** — line 1255, control tick labels under 'Controls'
+  - Text: "Random / same size"
+  - Problem: 'Random, same size' does not say that this is a random weight change with the same norm as the RL change.
+  - Rewrite: "Random change / same norm"
+- **D1, severity 2** — line 1255, control tick labels under 'Controls'
+  - Text: "Code-RL / model"
+  - Problem: Code-RL is a team label; the chart does not say it is an RL model trained on code, nor what it controls for.
+  - Rewrite: "RL on code / model"
+- **D1, severity 2** — line 1398, formula label at top of picture
+  - Text: "Weights = base + a × (RL − base), each with the opening cue, one sample per problem"
+  - Problem: 'The opening cue' (and 'Base + cue', 'RL + cue' on the chart) is a team label first explained only in the third panel; the reader cannot tell what the cue is or why it is there.
+  - Rewrite: "Weights = base + a × (RL − base); every answer is forced to start with the same opening words (the cue); one sample per problem"
+- **D5, severity 1** — line 1398, formula label vs chart levels (repeats 6 times)
+  - Text: "each with the opening cue"
+  - Problem: The same thing is called 'the opening cue', 'the cue' and '+ cue', and the base model is 'base', 'Base + cue', 'a = 0' and 'the base model with the cue'.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 1** — line 1400, y-axis title
+  - Text: "Right answers of 500"
+  - Problem: Dropped words make the axis title read oddly.
+  - Rewrite: "Right answers (out of 500)"
+- **S5, severity 1** — line 1432, label on the faint second curve
+  - Text: "On 328 harder problems"
+  - Problem: Missing article.
+  - Rewrite: "On the 328 harder problems"
+- **D2, severity 1** — line 1492, readout beside the big percentage (repeats 3 times)
+  - Text: "a = 0.25: 441 of 500 right, T 1.0"
+  - Problem: 'T 1.0' (sampling temperature) is not explained anywhere on the page.
+  - Rewrite: "a = 0.25: 441 of 500 right, temperature 1.0"
+- **N1, severity 1** — line 1493, readout beside the big percentage (repeats 5 times)
+  - Text: "+6.2 points, 95 % interval 2.8 to 9.6"
+  - Problem: 'points' is never said to mean percentage points of accuracy.
+  - Rewrite: "+6.2 percentage points, 95 % interval 2.8 to 9.6"
+- **D4, severity 2** — line 1517, dot legend
+  - Text: "Right, wrong at a = 0"
+  - Problem: The reader has to guess that this means right at the chosen a but wrong at a = 0.
+  - Rewrite: "Right here, wrong at a = 0"
+- **D4, severity 1** — line 1517, dot legend
+  - Text: "Text saved"
+  - Problem: Does not say what text: the model's answer text is saved for this dot.
+  - Rewrite: "Answer text saved"
+- **D4, severity 1** — line 1578, problem pane, saved answer caption
+  - Text: "Saved answer, a = 0.25: its last part. Answer read: 12, right, 3,402 tokens."
+  - Problem: Telegraphic fragments; 'Answer read' does not say it is the final answer the grader extracted.
+  - Rewrite: "Last part of the saved answer at a = 0.25. Final answer extracted: 12 (right). Length: 3,402 tokens."
+- **D6, severity 1** — line 1584, problem pane, facts line
+  - Text: "At a = 0.25 it answered it right; Base + cue (a = 0) answered it wrong."
+  - Problem: Two 'it's in one clause refer to different things (the model, the problem).
+  - Rewrite: "The model at a = 0.25 answered this problem right; the base model with the cue (a = 0) answered it wrong."
+
+## tools/finding_base_opens_itself.py (26 issues: 1 serious, 13 re-read, 12 minor)
+
+- **D3, severity 2** — line 55, page title and tile title
+  - Text: "The base opens itself"
+  - Problem: 'Opens itself' is a figure of speech; the reader cannot tell that it means the base model writes its own answer openings, nor what was found.
+  - Rewrite: "The base model's own openings with Okay score as well as the forced cue"
+- **D3, severity 2** — line 55, tile title
+  - Text: "The base opens itself"
+  - Problem: 'Opens itself' reads as a physical action; it means the base model writes its own opening words.
+  - Rewrite: "The base model finds the opening by itself"
+- **D1, severity 2** — line 56, question above the headline
+  - Text: "Can the base model find RL's opening by itself, with nothing prefilled?"
+  - Problem: 'RL's opening' and 'prefilled' are not explained: the reader does not know that the RL model starts its answers with 'Okay' and that the cue forces those words into the base model's answer.
+  - Rewrite: "The RL-trained model starts its answers with "Okay". Can the base model reach the same score by writing such an opening itself, with no words forced into its answer?"
+- **D1, severity 1** — line 56, tile question
+  - Text: "Can the base model find RL's opening by itself, with nothing prefilled?"
+  - Problem: 'Prefilled' is a team term for text written into the start of the answer.
+  - Rewrite: "Can the base model find RL's opening by itself, with nothing written into its answer?"
+- **D4, severity 2** — line 57, headline sentence
+  - Text: "Picking its own openings starting with Okay, Base scores 411 of 500; Base + cue, 410."
+  - Problem: Team labels 'Base' and 'Base + cue', a dropped verb, and a dangling modifier make the reader decode the sentence; the plain-prompt score (224) that shows the size of the effect is missing.
+  - Rewrite: "When we keep the base model's own answer openings that start a line with Okay, it scores 411 of 500 on MATH-500, the same as with the forced cue (410) and far above the plain prompt (224)."
+- **N2, severity 2** — line 57, headline sentence and title
+  - Text: "Picking its own openings starting with Okay"
+  - Problem: 'Picking its own' and the title's 'by itself' suggest the model chose; in fact a filter chose, using the word Okay copied from the RL model, as the limits panel admits.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — line 57, tile line
+  - Text: "Picking its own openings starting with Okay, Base scores 411 of 500; Base + cue, 410."
+  - Problem: 'Okay' is not quoted, the benchmark is not named, and 'Base + cue, 410' drops the verb.
+  - Rewrite: "When the base model picks its own opening starting with "Okay", it scores 411 of 500 on MATH-500, the same as with the cue written in (410)."
+- **S1, severity 2** — line 68, panel 'What is new', first sentence
+  - Text: "It was known that the base model can finish an opening written by RL as well as with the prefilled cue: 77.7 % on MATH-500"
+  - Problem: 'as well as' can be read as 'and also', so the reader must re-read to see that it means 'scores as high as'.
+  - Rewrite: "It was known that the base model scores as high when it continues an opening written by the RL model as when it continues the prefilled cue: 77.7 % on MATH-500"
+- **S2, severity 1** — line 68, panel 'What is new', first sentence
+  - Text: "It was known that the base model can finish an opening written by RL"
+  - Problem: The 'What is new' panel opens with what was known; the new part comes second.
+  - Rewrite: "Here the opening comes from the base itself. It was already known that ... (Wang et al., arXiv 2610.06851, Table 13)."
+- **N2, severity 1** — line 77, panel 'Why it matters', first sentence
+  - Text: "The cue adds nothing the base does not already write"
+  - Problem: 'Adds nothing' is stronger than the evidence: equal scores (411 and 410 of 500, interval −3.4 to 4.0 points) on one benchmark.
+  - Rewrite: "On MATH-500 the cue adds nothing measurable that the base does not already write"
+- **D1, severity 2** — line 79, panel 'Why it matters', item 1
+  - Text: "Such openings are common: 18.0 % of all 12,992 draws on the 406 redrawn problems, the problems whose stored plain answer did not open this way."
+  - Problem: 'Redrawn problems', 'stored plain answer' and 'open this way' are team shorthand the reader must decode.
+  - Rewrite: "Such openings are common: 18.0 % of all 12,992 sampled openings. (We sampled new openings only for the 406 problems whose earlier plain-prompt answer did not already contain a line starting with Okay.)"
+- **N1, severity 1** — line 80, panel 'Why it matters', item 1
+  - Text: "So on MATH-500 the cue's gain can be had by choosing among answers the base already writes."
+  - Problem: 'The cue's gain' is not quantified here (224 to 410 of 500 over the plain prompt).
+  - Rewrite: "So on MATH-500 the cue's gain (224 to 410 of 500 over the plain prompt) can be had by choosing among answers the base already writes."
+- **N1, severity 1** — line 81, panel 'Why it matters', item 1
+  - Text: "RL's remaining lead over Base + cue is a separate question."
+  - Problem: The size of RL's lead is never given on the page.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — line 82, panel 'Why it matters', item 2
+  - Text: "The theory engine predicted the count before the run: one theory said 375 (interval 348 to 400), its rival 405 (386 to 422)."
+  - Problem: 'The theory engine' and the two theories are never described, so the reader cannot tell what the prediction tested.
+  - Rewrite: needs facts the proofreader did not have
+- **S1, severity 2** — line 86, panel 'How we know', first sentence
+  - Text: "For the 406 problems whose stored plain answer did not open this way, the base drew up to 32 openings of 24 tokens at T 1.0 and continued the first with a line break then Okay in its first 60 characters, up to 16,384 tokens."
+  - Problem: One 45-word sentence holds the subset, the sampling, the filter rule and the length limit.
+  - Rewrite: "We redrew openings for the 406 problems whose stored plain-prompt answer did not already have a line starting with Okay. For each, the base sampled up to 32 openings of 24 tokens at temperature 1.0. The first opening with a line break followed by Okay in its first 60 characters was continued, up to 16,384 tokens."
+- **D5, severity 1** — line 87, panel 'How we know', first sentence
+  - Text: "a line break then Okay in its first 60 characters"
+  - Problem: The filter is 'a line starting with Okay' elsewhere and 'a line break then Okay in its first 60 characters' here; the reader may think these are two rules.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 1** — line 89, panel 'How we know', item 1
+  - Text: "after a median of 4 draws (73 at the first draw). 3 never did and continue draw 1 (1 of 3 right)."
+  - Problem: Telegraphic: '73 at the first draw' and 'continue draw 1' drop the subject; a sentence starts with a numeral.
+  - Rewrite: "after a median of 4 draws; 73 found it at the first draw. Three never did; for them the first draw is continued (1 of 3 right)."
+- **D1, severity 2** — line 96, panel 'How we know', item 3
+  - Text: "The plain prompt and the prefilled cue are the stored runs of the same base on the same 500 problems at T 1.0, with 224 and 410 right. All four are scored by grader v3."
+  - Problem: 'Stored runs' and 'grader v3' are team labels; 'All four' does not name what four.
+  - Rewrite: "The plain-prompt and prefilled-cue scores come from earlier runs of the same base on the same 500 problems at temperature 1.0: 224 and 410 right. All four choices are scored by the same answer checker (the team's grader, version 3)."
+- **D6, severity 2** — line 101, panel 'What it does not show', item 1
+  - Text: "One answer per problem. On the 403 problems that found an opening, the choice gives 332 right and the prefilled cue 329; the 94 problems that kept their stored plain answer count the same under three of the four choices."
+  - Problem: 'The choice' does not say which choice, and the reader cannot tell what the clause about the 94 problems implies.
+  - Rewrite: "Each problem has one answer. On the 403 problems that found an opening, the first opening with Okay gives 332 right and the prefilled cue 329. The 94 problems that kept their stored plain answer get the same score under three of the four choices, so they cannot separate them."
+- **D3, severity 2** — line 104, panel 'What it does not show', item 2
+  - Text: "The control is weaker than it looks: 50 of its continued openings ended inside their 24 tokens (2 right)."
+  - Problem: 'Weaker than it looks' and 'ended inside their 24 tokens' make the reader guess that the control's score is pulled down by answers that stopped within the opening.
+  - Rewrite: "The control's low score is partly an artefact: in 50 problems the opening without Okay was a complete answer that stopped within its 24 tokens (2 of them right)."
+- **V2, severity 1** — line 107, panel 'What it does not show', item 3
+  - Text: "The text of each opening is kept only in the jobs' raw output, which is not in git. The repository keeps the whole answer for 6 continued openings, of 5 problems"
+  - Problem: 'The jobs' raw output' and 'not in git' are written for the team; 'of 5 problems' is compressed.
+  - Rewrite: "The opening texts are not published. The repository keeps the full answer for 6 continued openings, from 5 problems"
+- **V2, severity 1** — line 112, panel 'How to reproduce it', item 1
+  - Text: "Four shards over the 406 redrawn problems, jobs abaybektursun-1115-021039-24f7 (two shards), ih-1115-095450-2b5a and abaybektursun-1115-015601-2e73"
+  - Problem: Internal job ids and 'shards' mean nothing to a visitor and cannot be looked up.
+  - Rewrite: "The 406 redrawn problems were split across four GPU jobs on RTX PRO 6000 and L40S GPUs."
+- **D1, severity 3** — line 842, switch button and every panel (repeats 8 times)
+  - Text: "Prefilled cue"
+  - Problem: The page never shows what the cue is (" line!" then a blank line then "Okay"), so the reader cannot see why filtering for Okay should match it, which is the whole finding.
+  - Rewrite: "Forced opening "line! Okay""
+- **D2, severity 1** — line 1054, readout under the big number (repeats 4 times)
+  - Text: "First opening with Okay, T 1.0"
+  - Problem: 'T 1.0' (sampling temperature) is not explained on the page.
+  - Rewrite: "First opening with Okay, temperature 1.0"
+- **S5, severity 1** — line 1064, note under the bars
+  - Text: "With Okay minus the cue: +0.2 points, 95 % interval -3.4 to 4.0, paired."
+  - Problem: The negative number uses a hyphen here and a minus sign (−3.4) in the panels; 'With Okay minus the cue' is compressed.
+  - Rewrite: "First opening with Okay minus prefilled cue: +0.2 points (95 % interval −3.4 to 4.0, paired)."
+- **D4, severity 1** — line 1116, problem pane, draw caption
+  - Text: "None of the 32 openings had a line starting with Okay, so both choices continue draw 1."
+  - Problem: 'Both choices continue draw 1' is compressed; the reader must work out that both the with-Okay and without-Okay answers use the first draw.
+  - Rewrite: "None of the 32 openings had a line starting with Okay, so both the 'with Okay' and 'without Okay' answers continue the first opening."
+
+## tools/finding_cue_on_code.py (26 issues: 0 serious, 13 re-read, 13 minor)
+
+- **V4, severity 2** — line 168, page title and tile title
+  - Text: "The cue beyond math"
+  - Problem: The title names the topic with a team label ('the cue') and not the result, though the result fits in the same space.
+  - Rewrite: "A three-token math cue also lifts code and general questions"
+- **N1, severity 2** — line 170, headline sentence (also the tile line)
+  - Text: "The same three tokens lift the base on math, code and general questions: +37.2, +19.3 and +30.0 points."
+  - Problem: The gains have no base scores, no totals and no comparison with RL, and 'the same three tokens' is not said to be text forced at the start of the answer.
+  - Rewrite: "Forcing the same three tokens at the start of the base model's answer raises its score by 37.2 percentage points on MATH-500, 19.3 on code and 30.0 on general multiple-choice questions."
+- **N4, severity 2** — line 170, headline sentence (also the tile line)
+  - Text: "and +30.0 points."
+  - Problem: The headline gives +30.0 points on general questions, while the limits panel estimates that, once the base's missing answer letters are accounted for, the gain may be about 9.6 points.
+  - Rewrite: "and +30.0 points (on general questions much of this is the base now writing an answer letter at all)."
+- **D1, severity 2** — line 186, footnote under the general-questions set
+  - Text: "Grader v2, added after two runs; v1: +23.0"
+  - Problem: 'Grader v2' and 'v1' are team version labels; the reader cannot tell that the scoring rule was changed after seeing results, nor what '+23.0' is.
+  - Rewrite: "Scored with a rule written after the first two runs; the original rule gives the cue +23.0 points"
+- **S2, severity 1** — line 212, panel 'What is new', first sentence
+  - Text: "Wang et al. (arXiv 2610.06851, Table 6) test a short cue on math sets and on HumanEval, where it takes this base model from 50.2 % to 69.8 %. New here:"
+  - Problem: The 'What is new' panel opens with prior work; the new part comes in the second sentence.
+  - Rewrite: "New here: the cue on 500 questions that are neither math nor code, with RL as the reference on every set. Wang et al. (arXiv 2610.06851, Table 6) tested a short cue on math sets and on HumanEval, where it takes this base model from 50.2 % to 69.8 %."
+- **D4, severity 2** — line 215, panel 'What is new', item 1
+  - Text: "Base 136 of 500, Base + cue 286, RL 332: +30.0 points (95 % interval 24.6 to 35.4), 77 % of RL's gain. MMLU-Pro +27.2 points (95 % interval 19.6 to 34.4), BBH +32.8 points"
+  - Problem: A list of counts and differences with no verbs; the reader has to re-read to match numbers to models and subsets.
+  - Rewrite: "Base gets 136 of 500 right, Base + cue 286 and RL 332. The cue adds 30.0 points (95 % interval 24.6 to 35.4), 77 % of RL's gain: 27.2 points on MMLU-Pro (19.6 to 34.4) and 32.8 on BBH (24.4 to 40.8)."
+- **D6, severity 2** — line 220, panel 'What is new', item 2
+  - Text: "A cue taken from the code model's own opening does no better: 317 of 538, +1.7 points (95 % interval −2.8 to 5.8)."
+  - Problem: The +1.7 is the math cue minus the code cue, but placed after '317 of 538' it reads as the code cue's advantage.
+  - Rewrite: "A cue taken from the code model's own opening does no better: it passes 317 of 538, 1.7 points below the math cue (95 % interval −2.8 to 5.8)."
+- **V2, severity 2** — line 222, panel 'What is new', item 3
+  - Text: "The fetched paper holds no test of the cue outside math and code; the plan of the general run found no team or published number either (its search of 2026-11-15)."
+  - Problem: 'The fetched paper', 'the plan of the general run' and 'team number' are process notes for the team.
+  - Rewrite: "We found no published test of the cue outside math and code: Wang et al. test only those, and a literature search on 2026-11-15 found nothing else."
+- **D1, severity 2** — line 225, panel 'Why it matters', first sentence
+  - Text: "Every setting of the team's climb was chosen on MATH-500, so its gains could be fitted to that one benchmark."
+  - Problem: 'The team's climb' and 'setting' are team words; the reader does not know that the cue and other settings were tuned by their MATH-500 score.
+  - Rewrite: "The cue and every other setting the team tuned were chosen by their MATH-500 score, so their gains could be overfitted to that one benchmark."
+- **S1, severity 1** — line 228, panel 'Why it matters', item 1
+  - Text: "On code the gain is not about writing an answer at all: Base gives no code block in 43 of 538 answers and Base + cue in 33, yet Base + cue passes 104 more problems."
+  - Problem: 'Not about writing an answer at all' is awkward; the reader must infer that 10 fewer missing answers cannot explain 104 more passes.
+  - Rewrite: "On code the gain does not come from the model writing an answer more often: Base gives no code block in 43 of 538 answers and Base + cue in 33, yet Base + cue passes 104 more problems."
+- **D4, severity 1** — line 231, panel 'Why it matters', item 2
+  - Text: "RL stays ahead on every set: 10.6 points on MATH-500 (95 % interval 7.4 to 13.8), 13.9 on code (10.0 to 17.8) and 9.2 on the general questions (4.6 to 13.8)."
+  - Problem: The unit and 'interval' are dropped after the first item, and the reader is not told RL is ahead of Base + cue.
+  - Rewrite: "RL stays ahead of Base + cue on every set: by 10.6 points on MATH-500 (95 % interval 7.4 to 13.8), 13.9 points on code (10.0 to 17.8) and 9.2 points on the general questions (4.6 to 13.8)."
+- **D1, severity 2** — line 235, panel 'Why it matters', item 3
+  - Text: "Think-SFT + cue gets 342 of 500 general questions, +2.0 points (95 % interval −2.4 to 6.2) above RL."
+  - Problem: 'Think-SFT' is explained only in the hint when that button is pressed; the panel reader does not know what it is or why it is here.
+  - Rewrite: "The base model fine-tuned to imitate worked solutions (Think-SFT), with the cue, gets 342 of 500 general questions, 2.0 points above RL (95 % interval −2.4 to 6.2)."
+- **N2, severity 1** — line 235, panel 'Why it matters', item 3
+  - Text: "+2.0 points (95 % interval −2.4 to 6.2) above RL"
+  - Problem: 'Above RL' is stated as a fact while the interval includes zero.
+  - Rewrite: "2.0 points above RL, a difference within noise (95 % interval −2.4 to 6.2)"
+- **D2, severity 1** — line 237, panel 'How we know', first sentence
+  - Text: "On every set each setting answered every item once at T 1.0 and top-p 1.0, with the same seeds in every setting and a cut-off at 16,384 tokens"
+  - Problem: T and top-p are not explained, and 'each setting answered' makes a setting the actor instead of the model.
+  - Rewrite: "On every set each model and prompt answered every item once, sampled at temperature 1.0 with no top-p truncation, with the same random seeds and a limit of 16,384 tokens"
+- **D6, severity 2** — line 239, panel 'How we know', item 1
+  - Text: "MATH-500, grader v3: Base 224, Base + cue 410, RL 463 of 500. ... Every mark of this set is one problem's row."
+  - Problem: 'Every mark is one problem's row' mixes marks and rows; the reader cannot tell what a mark stands for. 'Grader v3' is a team label.
+  - Rewrite: "MATH-500, scored by the team's answer checker (version 3): Base 224, Base + cue 410, RL 463 of 500. ... In the picture each MATH-500 mark is one problem."
+- **D4, severity 2** — line 244, panel 'How we know', item 3
+  - Text: "This grader, v2, was written after reading the first two settings, because the grader of the plan (v1) cannot read RL's \boxed answers"
+  - Problem: 'Reading the first two settings' and 'the grader of the plan' are compressed; the reader must guess that the rule was rewritten after reading the outputs of two runs.
+  - Rewrite: "We wrote this scoring rule (v2) after reading the outputs of the first two runs, because the rule in the plan (v1) cannot read answers that RL writes inside \boxed{}"
+- **D2, severity 1** — line 244, panel 'How we know', item 3
+  - Text: "the first option letter after its last answer marker is the gold letter"
+  - Problem: 'Answer marker' and 'gold letter' are jargon not explained.
+  - Rewrite: "the first option letter after the last phrase such as 'the answer is' matches the correct letter"
+- **S1, severity 1** — line 252, panel 'What it does not show', item 1
+  - Text: "If Base's answers without a letter were right as often as its answers with one (47.6 %), Base would have about 238 right and the cue's gain would be about 9.6 points, 51 % of RL's gain."
+  - Problem: This item packs an estimate, a measurement on a subset and a MATH-500 fact into five sentences; the MATH-500 sentence belongs elsewhere.
+  - Rewrite: needs facts the proofreader did not have
+- **D2, severity 1** — line 258, panel 'What it does not show', item 2
+  - Text: "Each set is one sample at one seed, with no vote."
+  - Problem: 'No vote' assumes the reader knows majority voting over samples.
+  - Rewrite: "Each set has one answer per item from one random seed; no majority vote over several answers."
+- **T3, severity 1** — line 259, panel 'What it does not show', item 2
+  - Text: "The code and general runs committed counts per benchmark and subject, not per item: their marks fill each row in order and do not name an item."
+  - Problem: The same point is made in the key under the picture and again in the side pane of every code and general row; 'committed' is repository talk.
+  - Rewrite: "The code and general runs saved only counts per benchmark and subject, not per item."
+- **V2, severity 1** — line 264, panel 'How to reproduce it', first sentence
+  - Text: "Each setting of each set is one job on an H100 GPU in the study studies/rlneurons, and each readout runs on a laptop."
+  - Problem: 'Readout' and 'the study studies/rlneurons' are team words.
+  - Rewrite: "Each model and set was one job on an H100 GPU; the analysis scripts run on a laptop. All code is in studies/rlneurons."
+- **V2, severity 2** — line 268, panel 'How to reproduce it', item 3
+  - Text: "on branch ali/ood (commit 99b2d5d), not on main when this page was written."
+  - Problem: A note about branch state for the team; the source's own comment says the branch has since been merged, so the note is now out of date.
+  - Rewrite: "(commit 99b2d5d)."
+- **D4, severity 2** — line 597, subtitle of each set in the picture (repeats 3 times)
+  - Text: "538 problems, nothing chosen here"
+  - Problem: 'Nothing chosen here' and 'the cue was chosen here' do not say what was chosen; the reader must guess it means no setting was tuned on this set.
+  - Rewrite: "538 problems, nothing tuned on this set"
+- **D2, severity 1** — line 603, label under each big number (repeats 4 times)
+  - Text: "points over Base, T 1.0"
+  - Problem: 'T 1.0' (sampling temperature) and 'points' (percentage points) are not explained.
+  - Rewrite: "percentage points over Base, temperature 1.0"
+- **D4, severity 1** — line 631, key under the picture
+  - Text: "One answer per item, T 1.0. Code and general: marks fill each row by count, not by item."
+  - Problem: Compressed fragments; the reader must work out that on code and general questions the marks show only how many were right, not which items.
+  - Rewrite: "One answer per item, temperature 1.0. On code and general questions the marks show only how many were right, not which items."
+- **V2, severity 1** — line 671, MATH-500 problem pane, note (repeats 2 times)
+  - Text: "RL's answer texts are not committed per problem, only whether each is right."
+  - Problem: 'Committed' is repository talk; a visitor wants to know only that the texts were not saved.
+  - Rewrite: "RL's answer texts were not saved; only whether each was right."
+
+## tools/finding_cut_off_is_unfinished.py (23 issues: 0 serious, 13 re-read, 10 minor)
+
+- **V4, severity 2** — line 82, page title and tile title
+  - Text: "Cut off is unfinished"
+  - Problem: The title reads as broken English and does not say whose answers or what was found.
+  - Rewrite: "Think-SFT's cut-off answers were unfinished, not stuck"
+- **S5, severity 2** — line 82, tile title
+  - Text: "Cut off is unfinished"
+  - Problem: 'Cut off' is used as a noun without a hyphen or a noun after it; the title reads as broken English.
+  - Rewrite: "Cut-off answers are unfinished, not stuck"
+- **D1, severity 2** — line 83, question above the headline
+  - Text: "Are Think-SFT's answers cut off at 16,384 tokens unfinished or stuck?"
+  - Problem: 'Think-SFT' is explained only in the second panel, and 'stuck' (repeating itself in a loop) is slang.
+  - Rewrite: "When the model fine-tuned on worked solutions (Think-SFT) is cut off at 16,384 tokens, is its answer unfinished or caught in a loop?"
+- **D1, severity 2** — line 85, headline sentence
+  - Text: "Given 32,768 tokens, Think-SFT's cut-off answers finish and 23 of 93 are right; Base + cue's finish, but only 4 of 64 are right."
+  - Problem: 'Base + cue' is never explained on this page, and the headline omits what the extra right answers do to the total score (207 to 230 of 328).
+  - Rewrite: "Given 32,768 tokens instead of 16,384, Think-SFT's cut-off answers finish and 23 of 93 are right, raising its score from 207 to 230 of 328. The base model's cut-off answers also finish, but only 4 of 64 are right."
+- **N1, severity 2** — line 85, headline sentence vs panel 'What it does not show'
+  - Text: "23 of 93 are right"
+  - Problem: The same 23 right answers are 'of 93' in the headline and 'of the 91' in the limits panel, without saying that 2 of the 93 never finish.
+  - Rewrite: "of the 93 cut-off answers, 91 finish and 23 are right"
+- **S1, severity 2** — line 85, tile line
+  - Text: "Given 32,768 tokens, Think-SFT's cut-off answers finish and 23 of 93 are right; Base + cue's finish, but only 4 of 64 are right."
+  - Problem: Two comparisons in one sentence with an elided noun ('Base + cue's finish'); the reader has to parse twice.
+  - Rewrite: "With 32,768 tokens, Think-SFT's cut-off answers finish and 23 of 93 are right. Base + cue's cut-off answers also finish, but only 4 of 64 are right."
+- **S1, severity 2** — line 480, panel 'What is new', first sentence
+  - Text: "That answers cut off by a token allowance are scored wrong, so a larger allowance raises accuracy, is known (Sun et al., EMNLP 2025, section 3.1)."
+  - Problem: A clause as the subject with the verb at the end forces a re-read, especially for a second-language reader.
+  - Rewrite: "It is known that answers cut off by a token limit are scored wrong, so a larger limit raises accuracy (Sun et al., EMNLP 2025, section 3.1)."
+- **D4, severity 1** — line 483, panel 'What is new', item 1
+  - Text: "Think-SFT + cue: 207 of 328 right at 16,384 tokens, 230 at 32,768. Cut off: 93 at 16,384, 2 at 32,768."
+  - Problem: Telegraphic fragments with no verbs.
+  - Rewrite: "Think-SFT + cue gets 207 of 328 right at 16,384 tokens and 230 at 32,768. 93 answers are cut off at 16,384 tokens and 2 at 32,768."
+- **N3, severity 2** — line 493, panel 'Why it matters', first sentence
+  - Text: "A cut at 16,384 tokens hides many right answers only for Think-SFT, trained to imitate worked solutions with no reward."
+  - Problem: 'Many' has no number and the panel does not say what the result changes (the usual limit underrates Think-SFT against RL).
+  - Rewrite: "The usual 16,384-token limit underrates only Think-SFT (trained to imitate worked solutions with no reward): it loses 23 of 328 problems to the limit, Base + cue 4 and RL 2."
+- **D4, severity 1** — line 495, panel 'Why it matters', item 1
+  - Text: "Right among the answers past 16,384 tokens, at 32,768: Think-SFT + cue 23 of 93 (24.7 %), RL 2 of 20 (10.0 %), Base + cue 4 of 64 (6.3 %)."
+  - Problem: The sentence has no verb and the reader must rebuild it.
+  - Rewrite: "Of the answers longer than 16,384 tokens, these are right at 32,768: Think-SFT + cue 23 of 93 (24.7 %), RL 2 of 20 (10.0 %), Base + cue 4 of 64 (6.3 %)."
+- **D3, severity 1** — line 499, panel 'Why it matters', item 3
+  - Text: "Think-SFT pays 1,747 more generated tokens per problem on average for its gain; Base + cue pays 850 for its gain of 4."
+  - Problem: 'Pays' is a metaphor, and 'its gain of 4' drops the unit while Think-SFT's gain is not given.
+  - Rewrite: "Think-SFT generates 1,747 more tokens per problem on average for its gain of 23 problems; Base + cue generates 850 more for a gain of 4 problems."
+- **D1, severity 2** — line 506, panel 'How we know', first sentence
+  - Text: "Think-SFT + cue, RL (plain prompt) and Base + cue each answered the 328 harder problems once, with up to 32,768 generated tokens, T 1.0, grader v3."
+  - Problem: 'Plain prompt', 'grader v3', 'T 1.0' and '328 harder problems' are team labels or unexplained terms.
+  - Rewrite: "Three models each answered the 328 competition problems once, with up to 32,768 generated tokens at temperature 1.0: Think-SFT with the cue, RL with its usual prompt, and the base model with the cue. Answers were scored by the team's answer checker (version 3)."
+- **D1, severity 2** — line 514, panel 'How we know', item 4
+  - Text: "The study README reports that none of the 68 long Think-SFT answers that end wrong is a loop by the runner's loop count. The rows on this page do not store that count."
+  - Problem: 'The runner's loop count' and 'the study README' are internal; this is the only evidence on the 'stuck' half of the question, yet it is buried and unexplained.
+  - Rewrite: "A repetition check in the team's sampling code found no loop in any of the 68 long Think-SFT answers that end wrong (reported in studies/rlneurons/README.md; the data on this page do not include that check)."
+- **D5, severity 2** — line 517, panel 'What it does not show', first sentence (repeats 4 times)
+  - Text: "The late answers are mostly wrong, even for Think-SFT"
+  - Problem: The same set of answers is called 'cut off at 16,384', 'answers past 16,384 tokens', 'long answers' and 'late answers' on one page; the reader cannot be sure they are one set.
+  - Rewrite: needs facts the proofreader did not have
+- **N4, severity 2** — line 520, panel 'What it does not show', item 1
+  - Text: "One sample per problem. RL scores 193 at 16,384 tokens in this run, while its four earlier samples score 207, 190, 209 and 194"
+  - Problem: The page does not draw the conclusion its own numbers show: RL's run-to-run spread (up to 19 problems) is larger than Think-SFT's 14-problem lead over RL claimed in the panel before.
+  - Rewrite: "One sample per problem. RL scores 193 at 16,384 tokens in this run and 190 to 209 in four earlier samples, so Think-SFT's 14-problem lead over RL is within run-to-run noise. The gains from the larger limit are measured inside each run and are not affected."
+- **S2, severity 1** — line 524, panel 'What it does not show', item 2
+  - Text: "Why Base + cue's long answers end wrong: the rows keep the last 400 characters of each answer, not the whole answer, so this page does not show where they go wrong."
+  - Problem: The item opens with a question-like fragment; the point (the page cannot show why) comes at the end.
+  - Rewrite: "This page cannot show why Base + cue's long answers end wrong: the stored rows keep only the last 400 characters of each answer."
+- **V2, severity 1** — line 532, panel 'How to reproduce it', item 1
+  - Text: "jobs ih-1115-144232-448b, ih-1115-144318-6d57, ih-1115-144428-85af, ih-1115-144457-42b8, joined by analysis/shard_join.py"
+  - Problem: Internal job ids cannot be looked up by a visitor.
+  - Rewrite: needs facts the proofreader did not have
+- **S5, severity 1** — line 758, hint under the picture
+  - Text: "One bar is one answer, as long as the tokens it generated."
+  - Problem: 'As long as the tokens it generated' is unidiomatic; the reader must guess that bar length is token count.
+  - Rewrite: "Each bar is one answer; its length is the number of tokens generated."
+- **T1, severity 1** — line 841, key of the picture
+  - Text: "rest of the answer"
+  - Problem: The key does not say that this faint line is the part of a cut-off answer past the current limit.
+  - Rewrite: "rest of a cut-off answer, past the limit"
+- **D1, severity 2** — line 862, label beside the big number (repeats 3 times)
+  - Text: "right of 328 harder problems"
+  - Problem: The page never says what the 328 problems are or harder than what; the source shows only in the problem pane.
+  - Rewrite: "right of 328 competition problems (AIME, AMC, HMMT, OlympiadBench)"
+- **D2, severity 1** — line 947, label beside the big number (repeats 3 times)
+  - Text: "Think-SFT + cue, T 1.0"
+  - Problem: 'T 1.0' (sampling temperature) is not explained on the page.
+  - Rewrite: "Think-SFT + cue, temperature 1.0"
+- **V2, severity 1** — line 955, readout under the big number
+  - Text: "Allowed 16,384 tokens, as in the earlier runs."
+  - Problem: 'The earlier runs' refers to team runs the visitor has not seen.
+  - Rewrite: "Allowed 16,384 tokens, the limit used in the team's other runs."
+- **D4, severity 1** — line 998, slider tick labels
+  - Text: "used before / used here"
+  - Problem: The reader is not told who used 16,384 before or what 'here' is.
+  - Rewrite: "usual limit / limit in this run"
+
+## tools/finding_eight_directions.py (23 issues: 0 serious, 10 re-read, 13 minor)
+
+- **V4, severity 2** — line 13, page title and tile title
+  - Text: "Eight directions"
+  - Problem: The title names a count with no object and no result; a scanning reader cannot tell what eight directions are or what they did.
+  - Rewrite: "Eight weight directions per matrix give the cue's math score"
+- **D2, severity 2** — line 15, headline sentence
+  - Text: "Eight RL directions per matrix match the cue on MATH-500 (85.4 % against 82.0 %)"
+  - Problem: 'Direction' is never defined on the page: the reader is not told these are the top singular directions (SVD components) of the RL weight change in each weight matrix, added to the base model.
+  - Rewrite: "Adding to the base model only the 8 largest singular directions of the RL weight change in each matrix matches the cue on MATH-500 (85.4 % against 82.0 %)"
+- **N4, severity 2** — line 15, headline sentence
+  - Text: "and, on 328 harder problems, solve 28 more than the cue."
+  - Problem: The headline does not say that on the 328 problems the edited model also used the cue (so the 28 come on top of it), nor that on MATH-500 it used the plain prompt; 'the cue' is not explained.
+  - Rewrite: "and, on 328 harder competition problems, with the cue added to both, they solve 28 more than the cue alone (192 against 164)."
+- **S5, severity 1** — line 15, headline sentence
+  - Text: "(85.4 % against 82.0 %) ... solve 28 more than the cue"
+  - Problem: One sentence mixes percentages for one set and a count of problems for the other, so the two results cannot be compared at a glance.
+  - Rewrite: needs facts the proofreader did not have
+- **N1, severity 1** — line 15, tile line
+  - Text: "Eight RL directions per matrix match the cue on MATH-500 (85.4 % against 82.0 %) and, on 328 harder problems, solve 28 more than the cue."
+  - Problem: 'Solve 28 more' leaves out the unit (problems of 328); 'Eight' is spelled out here and written as 8 on other tiles.
+  - Rewrite: "Eight RL directions per matrix match the cue on MATH-500 (85.4 % against 82.0 %) and solve 28 more of the 328 harder problems than the cue."
+- **D2, severity 1** — line 30, picture label (metric) and screen-reader label (repeats 2 times)
+  - Text: "MATH-500, 500 problems, one sample each at T 1.0"
+  - Problem: 'T 1.0' (sampling temperature) is not explained on the page.
+  - Rewrite: "MATH-500, 500 problems, one sample each at temperature 1.0"
+- **D4, severity 1** — line 48, hint for the '8 random directions' button (repeats 2 times)
+  - Text: "A control: 8 random directions of the same size added to each matrix. Plain prompt on MATH-500, with the cue on the 328."
+  - Problem: Fragments with dropped verbs; 'the 328' is a team shorthand.
+  - Rewrite: "A control: 8 random directions of the same size are added to each matrix. It uses the plain prompt on MATH-500 and the cue on the 328 harder problems."
+- **N2, severity 1** — line 96, panel 'What is new', first sentence
+  - Text: "It was known that a small part of the RL weight change keeps the gain."
+  - Problem: The claim has no source beside it; the source (Spectral Rewiring) appears only in the 'How we know' panel.
+  - Rewrite: "It was known that a small part of the RL weight change keeps the gain (Spectral Rewiring, arXiv 2607.03065)."
+- **S5, severity 1** — line 98, panel 'What is new', item 1
+  - Text: "3.4 points apart, 95 % interval −0.4 to 7.2, so the two are not told apart there."
+  - Problem: 'Not told apart' is unidiomatic; the reader must guess it means the difference is within noise.
+  - Rewrite: "3.4 points apart (95 % interval −0.4 to 7.2), a difference within noise."
+- **N2, severity 2** — line 103, panel 'What is new', item 3
+  - Text: "8 random directions of the same size add nothing: 39.4 % against Base's 44.8 % on MATH-500"
+  - Problem: 'Add nothing' contradicts the numbers beside it: the random directions lower the score by 5.4 points.
+  - Rewrite: "Eight random directions of the same size do not help; they lower the score: 39.4 % against Base's 44.8 % on MATH-500, and 158 of 328 against Base + cue's 164 on the harder problems."
+- **N2, severity 1** — line 106, panel 'Why it matters', first sentence
+  - Text: "On MATH-500 the 8 directions do what the cue does."
+  - Problem: The evidence is an equal score, not the same mechanism.
+  - Rewrite: "On MATH-500 the 8 directions score as high as the cue."
+- **N2, severity 2** — line 108, panel 'Why it matters', item 1
+  - Text: "Read through the output layer, they point at words of deliberation: Okay, Wait, perhaps."
+  - Problem: The words come from two directions of one matrix (layer 29), but 'they' suggests all directions; 'read through the output layer' is not explained.
+  - Rewrite: "In one matrix (the MLP output of layer 29), two of the directions, projected onto the vocabulary through the output layer, point at words of deliberation: Okay, Wait, perhaps."
+- **D1, severity 2** — line 109, panel 'Why it matters', item 2
+  - Text: "Blind judges call 5 of 80 checking passages a fix."
+  - Problem: The reader is not told who the judges are, what a checking passage is, what a fix is, or what this shows.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 1** — line 109, panel 'Why it matters', item 2
+  - Text: "making Base + cue write "Wait" as often as RL leaves it at 413 of 500, against a mean of 410.5 without."
+  - Problem: The method (steering activations) is not named, and 'without' drops its object.
+  - Rewrite: "steering Base + cue's activations so it writes "Wait" as often as RL leaves it at 413 of 500, against a mean of 410.5 without steering."
+- **D4, severity 1** — line 112, panel 'Why it matters', item 3
+  - Text: "The page Hand-written edit tries that with no reward and reaches the cue."
+  - Problem: 'Reaches the cue' is shorthand for 'scores as high as the cue'.
+  - Rewrite: "The page Hand-written edit tries that with no reward and scores as high as the cue."
+- **D1, severity 2** — line 116, panel 'How we know', item 1
+  - Text: "Every score is one sample per problem at T 1.0, graded by grader v3."
+  - Problem: 'Grader v3' is a team version label and T is not explained.
+  - Rewrite: "Every score is one sample per problem at temperature 1.0, scored by the team's answer checker (version 3)."
+- **N1, severity 1** — line 118, panel 'How we know', item 2
+  - Text: "The edit is 0.07 % of the size of the weights and 9.8 % of the full RL change."
+  - Problem: 'Size' is not defined; the 9.8 % is a share of the squared norm, which the reader cannot know.
+  - Rewrite: "The added change has 0.07 % of the norm of the weights and 9.8 % of the squared norm of the full RL change."
+- **D6, severity 2** — line 119, panel 'How we know', item 3
+  - Text: "Spectral Rewiring (arXiv 2607.03065), which keeps the RL gain with a compact part of the update on models that include this pair."
+  - Problem: 'This pair' has no referent on the page, and 'a compact part' is vague; a related-work note also sits oddly in 'How we know'.
+  - Rewrite: "Spectral Rewiring (arXiv 2607.03065) keeps the RL gain with a low-rank part of the update, on several models including this base and RL pair."
+- **S5, severity 1** — line 123, panel 'What it does not show', item 1
+  - Text: "the edit with the cue on MATH-500 and without it on the 328 were not run."
+  - Problem: Subject and verb disagree ('the edit ... were').
+  - Rewrite: "we did not run the edit with the cue on MATH-500 or without it on the 328."
+- **D4, severity 1** — line 125, panel 'What it does not show', item 2
+  - Text: "Part of the 28 is answers that end instead of being cut off at 16,384 tokens: 46 cut off with the 8 directions, 77 with Base + cue."
+  - Problem: 'The 28' drops its unit, and the counts that follow drop their verb.
+  - Rewrite: "Part of the 28-problem gain comes from answers that finish instead of being cut off at 16,384 tokens: 46 answers are cut off with the 8 directions and 77 with Base + cue."
+- **N1, severity 2** — line 127, panel 'What it does not show', item 3
+  - Text: "RL with these 8 directions removed keeps most of its score: 91 of the first 100 MATH-500 problems. The gain is spread over many directions. One direction per matrix gives 42 of 100."
+  - Problem: Neither 91 nor 42 is set beside RL's or Base's score on the same 100 problems, so the reader cannot judge 'most of its score' or what 42 means.
+  - Rewrite: needs facts the proofreader did not have
+- **V2, severity 1** — line 135, panel 'How to reproduce it', item 3
+  - Text: "on branch sharedsub. The Wait steering is in studies/jspace/results/steer/main-01/metrics.json on branch claude/wait-steering-f535b2"
+  - Problem: Internal branch names are team details a visitor cannot use without the repository link.
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 2** — line 431, key inside the picture
+  - Text: "One line is one direction: one pattern of change in this weight matrix"
+  - Problem: 'One pattern of change' is a vague stand-in; the reader still does not know what a direction is.
+  - Rewrite: "One line is one direction: one singular vector pair of the RL change to this weight matrix"
+
+## tools/finding_equal_token_frontier.py (19 issues: 0 serious, 9 re-read, 10 minor)
+
+- **D4, severity 1** — line 151, rule names on marks and in the readout (repeats 8 times)
+  - Text: "Vote over 2, ties to the shortest"
+  - Problem: Shorthand; the reader must guess that ties are broken in favour of the shortest finished sample.
+  - Rewrite: "Vote over 2; a tie goes to the shortest answer"
+- **D1, severity 1** — line 154, rule names on marks and in the readout (repeats 4 times)
+  - Text: "Vote over 4 with redraws"
+  - Problem: 'With redraws' does not say when a sample is redrawn (when it is cut off at 16,384 tokens).
+  - Rewrite: "Vote over 4, redrawing any sample cut off at 16,384 tokens"
+- **V4, severity 2** — line 183, page title and tile title
+  - Text: "More samples against RL"
+  - Problem: The title names a contest but not its outcome.
+  - Rewrite: "More base-model samples do not beat one RL sample"
+- **V4, severity 1** — line 183, tile title
+  - Text: "More samples against RL"
+  - Problem: The title names the topic but not the result, which fits in the same space.
+  - Rewrite: "More base samples stay below RL"
+- **D5, severity 2** — line 184, question, headline and chart key
+  - Text: "Can drawing more samples from the base model match one sample of RL?"
+  - Problem: The question and headline say 'the base model', but the chart key and panels say 'Base + cue', so the reader cannot tell whether the base samples used the cue.
+  - Rewrite: "Can drawing more samples from the base model (with the cue) match one sample of RL?"
+- **D1, severity 2** — line 185, headline sentence
+  - Text: "On MATH-500, with 4.2 times the tokens, the best base rule stays 1.2 points below one RL sample."
+  - Problem: 'Rule' (a way to draw several samples and pick one answer, such as a majority vote) is a team term never defined on the page.
+  - Rewrite: "On MATH-500, the best way to draw several samples from the base model and pick an answer uses 4.2 times the tokens and still scores 1.2 points below one RL sample."
+- **N4, severity 2** — line 185, headline sentence
+  - Text: "the best base rule stays 1.2 points below one RL sample."
+  - Problem: The headline does not say that the 95 % interval (−3.0 to 0.6) includes 0 or that this best rule uses a tie rule chosen after reading the data; both are stated only in the limits panel.
+  - Rewrite: "the best base rule stays 1.2 points below one RL sample (95 % interval −3.0 to 0.6, with a tie rule chosen after seeing the data)."
+- **D1, severity 2** — line 185, tile line
+  - Text: "On MATH-500, with 4.2 times the tokens, the best base rule stays 1.2 points below one RL sample."
+  - Problem: 'The best base rule' is a team phrase for the best way of sampling and choosing among base-model answers.
+  - Rewrite: "On MATH-500, even with 4.2 times RL's tokens, the best way of sampling the base model stays 1.2 points below one RL sample."
+- **S2, severity 1** — line 193, panel 'What is new', first sentence
+  - Text: "Stopping a vote once samples agree is published: Adaptive-Consistency (arXiv 2305.11860) reports up to 7.9 times fewer samples at under 0.1 % accuracy drop."
+  - Problem: The 'What is new' panel opens with prior work; the new part follows in the second sentence.
+  - Rewrite: "New here is the base model against RL (the same model after reward training) at equal tokens. Stopping a majority vote once samples agree is already published: Adaptive-Consistency (arXiv 2305.11860) reports up to 7.9 times fewer samples at under 0.1 % accuracy drop."
+- **D1, severity 2** — line 195, panel 'What is new', item 1
+  - Text: "On these rows the stopping vote keeps the fixed vote's score at 30 % fewer tokens for the base and 41 % fewer for RL."
+  - Problem: 'These rows', 'the stopping vote' and 'the fixed vote' are team shorthand.
+  - Rewrite: "In our samples, stopping the vote once two samples agree gives the same score as always voting over 4, with 30 % fewer tokens for the base and 41 % fewer for RL."
+- **S5, severity 1** — line 199, panel 'What is new', item 3
+  - Text: "the smallest lead is 4.2 points (95 % interval +2.4 to +6.0)."
+  - Problem: Interval bounds carry plus signs here but not on the site's other finding pages ('95 % interval 2.8 to 9.6').
+  - Rewrite: "the smallest lead is 4.2 points (95 % interval 2.4 to 6.0)."
+- **V2, severity 2** — line 202, panel 'Why it matters', first sentence
+  - Text: "The research direction asks for the cheapest route with no reward to RL's score at equal tokens. On MATH-500, spending more samples is not that route."
+  - Problem: 'The research direction' refers to an internal team document; 'route' is a metaphor.
+  - Rewrite: "Our team asks for the cheapest way to reach RL's score at the same token cost without reward training. On MATH-500, drawing more samples is not that way."
+- **T3, severity 1** — line 204, panel 'Why it matters', item 1
+  - Text: "One RL sample costs 4,687 tokens per problem. The best base rule spends 19,697 and is still 1.2 points below."
+  - Problem: This repeats the headline in different units without adding anything.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 1** — line 206, panel 'Why it matters', item 2
+  - Text: "Above 12,500 tokens the base gains nothing: rules chosen on four fifths of the problems and scored on the rest stay at 450.0 to 452.0 of 500."
+  - Problem: The held-out check is compressed into one clause, and 'gains nothing' has no reference score.
+  - Rewrite: "Above 12,500 tokens per problem the base gains nothing: when we pick the best rule on four fifths of the problems and score it on the remaining fifth, it stays at 450.0 to 452.0 of 500 at every larger budget."
+- **D1, severity 2** — line 211, panel 'How we know', first sentence
+  - Text: "We wrote 24 rules into a plan before scoring any, then replayed them on four stored samples per problem from each model: MATH-500, 500 problems, T 1.0, grader v3."
+  - Problem: The rules are never described as a group, and 'replayed', 'T 1.0' and 'grader v3' are unexplained.
+  - Rewrite: "Before scoring anything, we wrote down 24 rules for drawing samples and choosing one answer (single samples, majority votes, votes that stop early). We then applied each rule to four samples per problem already drawn from each model on the 500 MATH-500 problems at temperature 1.0, scored by the team's answer checker (version 3)."
+- **D5, severity 1** — line 215, panel 'How we know', item 2
+  - Text: "Scores and tokens are means over the 24 orders in which the four samples can be drawn."
+  - Problem: There are 24 rules and 24 draw orders; the same number for two different things invites confusion.
+  - Rewrite: "Scores and tokens are means over all 24 orders (4 × 3 × 2 × 1) in which the four samples can be drawn."
+- **N4, severity 2** — line 225, panel 'What it does not show', item 3
+  - Text: "The 328 harder problems are not on this chart yet. Rules that cut long samples ran out of stored samples on some problems, so their rows are approximate. Every rule here draws from 4 stored samples per problem; with 12, a vote over 6 samples of Base + cue reaches RL's one-sample range"
+  - Problem: The result that most qualifies the headline (with 12 samples a vote does reach RL's range) is buried at the end of an item that also holds two unrelated limits.
+  - Rewrite: "Every rule here draws from only 4 stored samples per problem. With 12 samples, a vote over 6 samples of Base + cue reaches RL's one-sample range, 456.6 of 500, at 5.2 times the tokens (see Vote over 6 samples)."
+- **V2, severity 1** — line 232, panel 'How to reproduce it', item 1
+  - Text: "The samples come from jobs abaybektursun-1114-153825-208b (Base + cue) and abaybektursun-1114-183640-e828 (RL)"
+  - Problem: Internal job ids cannot be looked up by a visitor.
+  - Rewrite: needs facts the proofreader did not have
+- **D2, severity 1** — line 519, y-axis title (repeats 3 times)
+  - Text: "MATH-500, T 1.0: right answers of 500"
+  - Problem: 'T 1.0' (sampling temperature) is not explained, and the title is a compressed phrase.
+  - Rewrite: "Right answers out of 500 on MATH-500 (temperature 1.0)"
+
+## tools/finding_forecasts_before_results.py (29 issues: 2 serious, 18 re-read, 9 minor)
+
+- **V4, severity 2** — line 43, page title and tile title
+  - Text: "Forecasts before results"
+  - Problem: The title names the method but not the result.
+  - Rewrite: "Written theories forecast new results no better than chance"
+- **D1, severity 2** — line 44, question above the headline
+  - Text: "Can a theory forecast a number before the experiment reports it?"
+  - Problem: The page never says what 'a theory' is here (a written mechanism produced by the team's language-model 'theory engine'), nor who the forecasters are.
+  - Rewrite: "Can a theory written by a language model from the team's past results forecast a number before the experiment reports it?"
+- **D1, severity 2** — line 219, target labels on each row (repeats 40 times)
+  - Text: "8 Code-RL directions at 1.5x"
+  - Problem: Target labels ('Step 100 minus Base + cue, in points', 'Random rank-8 change at 1.5x (control)') use team shorthand the reader cannot decode.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — line 259, work-item labels at the left of each row (repeats 12 times)
+  - Text: "Base + cue + 8 RL directions at 1.5x"
+  - Problem: Row labels are team experiment names ('Base + Code cue', 'Think-SFT + RL's weight change at a = 2', 'Base, settings chosen by an agent') that no part of the page explains.
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 2** — line 276, theory names in the side pane and examples (repeats 42 times)
+  - Text: "Agent trades length for votes"
+  - Problem: Theory names are slogans ('Cut-off samples abstain', 'bf16 rounding thresholds small edits', 'Step 100 installs the opening') that the reader cannot interpret without the theory text.
+  - Rewrite: needs facts the proofreader did not have
+- **N4, severity 3** — line 506, headline sentence
+  - Text: "Theories beat both no-theory readers in 65 of 162 forecasts (chance: 54); 39 of the 65 are on one code experiment the readers forecast too low."
+  - Problem: A newcomer reads 'theories beat readers', but the page itself shows that outside one experiment theories are at chance (26 of 82, chance 27) and that by the log score they did worse than the readers.
+  - Rewrite: "Theories forecast unreported numbers no better than forecasters without a theory: they were nearer than both in 65 of 162 forecasts (chance 54), but 39 of the 65 come from one code experiment; on the rest, 26 of 82 (chance 27)."
+- **D1, severity 2** — line 506, headline sentence
+  - Text: "both no-theory readers"
+  - Problem: 'Readers' is a team label for two language-model forecasters given the same information but no theory; it is never explained where it first appears.
+  - Rewrite: "both forecasters without a theory (the same language model, given the same results)"
+- **D1, severity 2** — line 506, tile line
+  - Text: "Theories beat both no-theory readers in 65 of 162 forecasts (chance: 54); 39 of the 65 are on one code experiment the readers forecast too low."
+  - Problem: 'No-theory readers' is a team term, and the second clause is a separate idea.
+  - Rewrite: "Theories beat both forecasters without a theory in 65 of 162 forecasts (chance: 54). 39 of the 65 come from one code experiment that those forecasters forecast too low."
+- **N4, severity 2** — line 506, tile line (against the tile Theories on trial)
+  - Text: "Theories beat both no-theory readers in 65 of 162 forecasts (chance: 54)"
+  - Problem: The neighbouring tile says the theories were 'no better' (202 of 412); the two tiles seem to contradict each other and neither says how the tests differ.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — line 522, example case in the side pane (repeats 3 times)
+  - Text: "Example, board item result-05cf4d. Before result-95a4dc was posted, theory r5-m03-rival (Top-8: incomplete switch) forecast 455 of 500 (445 to 465) for this cell"
+  - Problem: Board ids, a theory id and 'this cell' are internal labels; the reader cannot tell what was forecast.
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 1** — line 529, example case in the side pane
+  - Text: "said the agent's setting buys votes with short samples"
+  - Problem: 'Buys votes' is a metaphor and 'the agent's setting' is not explained.
+  - Rewrite: "said that the settings chosen by an agent produce short samples, so more of them fit in a vote"
+- **D1, severity 3** — line 564, panel 'What is new', first sentence
+  - Text: "Seven rounds of the theory engine tested theories on numbers that already existed when the theories were written."
+  - Problem: 'The theory engine', 'rounds' and 'theories' are never explained, so the reader cannot tell who writes the theories or what they are.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — line 566, panel 'What is new', item 1
+  - Text: "Eight runs read the board at 14:46, 14:53 and 16:33 UTC and turned the open work items into 194 targets: 52 different numbers"
+  - Problem: 'The board', 'work items' and 'targets' are internal; the times have no date; '194 targets' and '52 different numbers' use 'target' for two counts.
+  - Rewrite: "In eight forecasting runs on 2026-11-15 (at 14:46, 14:53 and 16:33 UTC), the forecasters read the team's log of results and open experiments and forecast 52 numbers that were not yet reported (194 number-run pairs)"
+- **S1, severity 2** — line 568, panel 'What is new', item 2
+  - Text: "The forecasters: every theory not refuted in round 7, 42 mechanisms written to disagree with the readers, and two readers with no theory (the same model, the same board and work items, no theory)."
+  - Problem: Three kinds of forecaster with team labels in one sentence, and 'no theory' twice.
+  - Rewrite: "There were three kinds of forecaster: every theory not yet refuted after round 7; 42 mechanisms written on purpose to disagree with the readers; and two readers, the same language model given the same information but no theory."
+- **D6, severity 1** — line 578, panel 'Why it matters', item 1
+  - Text: "39 of the 65 are on one experiment (Base + Code cue, 538 code problems), where both readers of all six runs forecast every number too low."
+  - Problem: 'All six runs' clashes with the 'eight runs' of the panel before; the reader must guess that only six runs asked about this experiment. 'Base + Code cue' is a team label.
+  - Rewrite: "39 of the 65 are on one experiment (the base model with a cue taken from the code model, on 538 code problems); in all six runs that asked about it, both readers forecast every number too low."
+- **N1, severity 2** — line 580, panel 'Why it matters', item 2
+  - Text: "The reported number fell inside the theory's own 90 % interval 106 times in 162; inside reader 1's 49 and reader 2's 51 times in 78."
+  - Problem: Different totals (162 and 78) and no percentages make the comparison impossible without arithmetic.
+  - Rewrite: "The reported number fell inside the theory's own 90 % interval in 106 of 162 forecasts (65 %); inside reader 1's in 49 of 78 (63 %) and reader 2's in 51 of 78 (65 %)."
+- **D2, severity 2** — line 582, panel 'Why it matters', item 3
+  - Text: "The engine's score, which also rewards narrow intervals, gave the reported numbers less probability under the theories than under the readers: −8.84 nats over the 162 forecasts."
+  - Problem: 'The engine's score' (a log-probability score) and 'nats' are not explained, though this item reverses the headline's impression.
+  - Rewrite: "Under a log-probability score, which also rewards narrow intervals, the theories did worse than the readers: 8.84 nats lower in total over the 162 forecasts."
+- **V2, severity 1** — line 587, panel 'How we know', first sentence
+  - Text: "had every forecaster write its forecasts in an empty directory with only the Read and Write tools."
+  - Problem: 'The Read and Write tools' are agent-tool names; the visitor is not told the forecasters are language-model agents.
+  - Rewrite: "had every forecaster, a language-model agent, write its forecasts in an empty folder where it could only read and write files."
+- **S4, severity 1** — line 591, panel 'How we know', item 2
+  - Text: "A later step found each reported number in a board result posted after the snapshot"
+  - Problem: 'A later step' hides who or what matched the numbers (an agent, a script, a person).
+  - Rewrite: needs facts the proofreader did not have
+- **T2, severity 2** — line 600, panel 'What it does not show', item 1
+  - Text: "147 of the 162 theory forecasts were committed to git before their result was posted. Run 1, committed at 14:51 UTC: 1 min after result-5251c9, 10 min before result-95a4dc, 28 min before result-6e7b64, ..."
+  - Problem: A list of a dozen timings with board ids is written as one paragraph; the reader cannot scan it.
+  - Rewrite: "147 of the 162 theory forecasts were committed to git before their result was posted; the other 15 were written from the frozen copy of the results log. The timing of each run against each result is in the side pane of each target."
+- **D4, severity 1** — line 602, panel 'What it does not show', item 2
+  - Text: "in run 1 each forecast 0 to 4 of 20."
+  - Problem: Dropped nouns: the reader must guess that each theory forecast 0 to 4 of the 20 targets.
+  - Rewrite: "in run 1 each theory forecast only 0 to 4 of the 20 targets."
+- **D6, severity 1** — line 604, panel 'What it does not show', item 3
+  - Text: "so the count above is per forecast."
+  - Problem: 'The count above' does not name which count (65 of 162).
+  - Rewrite: "so the headline count (65 of 162) is per forecast, not per target."
+- **V2, severity 1** — line 609, panel 'How to reproduce it', first sentence
+  - Text: "rebuilds every row from the forecast run folders and checks the copy on this page"
+  - Problem: 'The copy' is internal talk for the numbers on this page.
+  - Rewrite: "rebuilds every row from the forecast run folders and checks every number on this page"
+- **V2, severity 2** — line 613, panel 'How to reproduce it', item 3
+  - Text: "Board items: result-564441 (the forecasts), result-05cf4d (the first theory forecast reported), and the results that reported the numbers: result-0c1eef, result-5251c9, ..."
+  - Problem: The team board's item ids cannot be opened by a visitor.
+  - Rewrite: needs facts the proofreader did not have
+- **N2, severity 2** — line 619, readout beside the big number
+  - Text: "on 18 reported targets; 54 of 162 would be chance, one in three"
+  - Problem: The page never says why chance is one in three (three forecasters per target, so each is nearest one time in three if none is better).
+  - Rewrite: "on 18 reported targets; with three forecasters per target, chance would give one in three: 54 of 162"
+- **D6, severity 2** — line 620, readout beside the big number
+  - Text: "Readers: the same model and the same board, with no theory."
+  - Problem: 'The same model' and 'the same board' refer to things never introduced: the reader does not know a language model writes the forecasts or what the board is.
+  - Rewrite: "Readers: the same language model, given the same team results, but no theory."
+- **D3, severity 2** — line 866, switch buttons
+  - Text: "All / Landed / Open"
+  - Problem: 'Landed' is jargon for 'reported'; the page elsewhere says 'reported', so the reader sees two names for one state.
+  - Rewrite: "All / Reported / Not reported yet"
+- **D5, severity 1** — line 1028, note under the picture
+  - Text: "Each row on its own scale: 0 is the readers' average forecast, ±1 the average edge of their 90 % intervals."
+  - Problem: The note says 'average edge' while the panel says 'average half-width' for the same unit.
+  - Rewrite: "Each row has its own scale: 0 is the readers' average forecast, ±1 the average half-width of their 90 % intervals."
+- **V2, severity 1** — line 1264, target side pane, facts
+  - Text: "Work item work-df5e0a. Grey: readers with no theory; blue: theories, filled when nearer than both readers."
+  - Problem: The internal work-item id means nothing to a visitor.
+  - Rewrite: "Grey: readers with no theory; blue: theories, filled when nearer than both readers."
+
+## tools/finding_hand_written_edit.py (24 issues: 0 serious, 10 re-read, 14 minor)
+
+- **V4, severity 2** — line 14, page title and tile name
+  - Text: "Hand-written edit"
+  - Problem: The title names the method but not the result, so a visitor scanning the tiles cannot tell what was found.
+  - Rewrite: "A hand-written weight edit matches the prompt cue"
+- **V4, severity 1** — line 14, tile title
+  - Text: "Hand-written edit"
+  - Problem: The title names the topic, not the result.
+  - Rewrite: "A hand-written edit lifts MATH-500 from 45 % to 79 %"
+- **N4, severity 2** — line 16, first sentence (headline)
+  - Text: "One hand-written edit to one matrix lifts the base model from 45% to 79% on MATH-500."
+  - Problem: The headline gives the gain over the untouched model but hides that typing the cue into the prompt already reaches 82%, so the reader takes 79% as a new high.
+  - Rewrite: "One hand-written edit to one weight matrix lifts the base model from 45% to 79% on MATH-500, level with the 82% it gets when the same cue is typed into the prompt."
+- **D6, severity 2** — line 16, first sentence (headline)
+  - Text: "lifts the base model from 45% to 79% on MATH-500"
+  - Problem: The page never names the model, so the reader cannot tell which base model was edited.
+  - Rewrite: "lifts the Olmo 3 7B base model from 45% to 79% on MATH-500"
+- **D2, severity 1** — line 16, first sentence (headline)
+  - Text: "on MATH-500"
+  - Problem: MATH-500 is not explained anywhere visible on load; the label under the number says '500 math problems' but does not tie it to the name.
+  - Rewrite: "on MATH-500, a set of 500 competition math problems"
+- **S5, severity 1** — line 16, tile line (repeats 2 times)
+  - Text: "One hand-written edit to one matrix lifts the base model from 45% to 79% on MATH-500."
+  - Problem: '45%' has no space and no decimal while other tiles write '44.8 %' and '82.0 %'.
+  - Rewrite: "One hand-written edit to one matrix lifts the base model from 45 % to 79 % on MATH-500."
+- **D5, severity 1** — line 42, note under the picture, 'Base model' condition
+  - Text: "The slab is its last weight matrix."
+  - Problem: The edited matrix is called 'the slab', 'its last weight matrix', 'one matrix' and 'this one matrix' on the same page, and it is never said which matrix (the down-projection of layer 31's MLP), so the reader cannot be sure these are the same thing.
+  - Rewrite: "The slab stands for one weight matrix: the output matrix of the last layer's MLP (layer 31)."
+- **D4, severity 1** — line 47, note under the picture, 'Random edit' condition
+  - Text: "A control: an edit of the same size with random content."
+  - Problem: The fragment does not say what 'the same size' and 'random content' refer to, so the reader has to guess how the control was built.
+  - Rewrite: "A control: a change to the same matrix, of the same size as the hand-written edit, but with random values."
+- **D1, severity 2** — line 53, note under the picture, 'Hand-written edit' condition
+  - Text: "One rule, written into this one matrix: when the answer starts, write the opening cue."
+  - Problem: 'The opening cue' is a team label; the reader has to infer from the highlighted text which words it means.
+  - Rewrite: "One rule, written into this one matrix: when the answer starts, write the three tokens " line!", a blank line and "Okay" (shown in colour above)."
+- **D1, severity 2** — line 56, label on the scale (reference line)
+  - Text: "Cue typed in the prompt 82%"
+  - Problem: The page never says what 'the cue' is (the words ' line!' and 'Okay' at the start of the answer), so the reader cannot understand the baseline or what the edit writes.
+  - Rewrite: "Opening words ("Okay, so") typed in the prompt: 82%"
+- **D6, severity 1** — line 85, panel 'What is new', first sentence
+  - Text: "no trained weights, no reward and no answers."
+  - Problem: 'No answers' is ambiguous: the reader cannot tell whether it means no model answers or no answer key to the math problems.
+  - Rewrite: "The edit is built from a written rule and the base model alone: no trained weights, no reward and no answer key."
+- **D2, severity 1** — line 87, panel 'What is new'
+  - Text: "It is measured on the same harness as the cue typed into the prompt and as the RL-trained model."
+  - Problem: 'Harness' and 'RL' are not explained on the page, and the reader does not know what is held the same.
+  - Rewrite: "It is scored with the same problems, prompt and sampling settings as the cue typed into the prompt and as the model trained with reinforcement learning (RL)."
+- **N3, severity 2** — line 88, panel 'What is new'
+  - Text: "Closest published result: Wang et al. (arXiv 2610.06851, appendix D.5) raised the cue's probability with a one-matrix edit and scored 78 % on MATH-500."
+  - Problem: Under the heading 'What is new' the page cites a published one-matrix edit that scored 78% but does not say how this edit differs, so the reader cannot tell what is new.
+  - Rewrite: needs facts the proofreader did not have
+- **S5, severity 1** — line 89, panel 'What is new' (repeats 5 times)
+  - Text: "scored 78 % on MATH-500"
+  - Problem: Percentages are written '78 %', '0 %' and '95 %' with a space in the panels but '79%' and '82%' without one elsewhere on the page.
+  - Rewrite: "scored 78% on MATH-500"
+- **N2, severity 2** — line 91, panel 'Why it matters', first sentence
+  - Text: "It shows that editing weights by hand works on this model up to what a prompt can do, and no further."
+  - Problem: One edit that writes the cue was tested, so 'no further' claims a limit for hand editing in general that the page's evidence does not cover.
+  - Rewrite: "A hand-written edit that writes the cue reaches what typing the cue into the prompt reaches, and no further."
+- **D4, severity 1** — line 92, panel 'Why it matters'
+  - Text: "The edit reaches the cue: 79% against 82% with the cue typed into the prompt, a difference inside the noise of one run (-2.6 points, 95% interval -6.4 to 1.2)."
+  - Problem: 'Reaches the cue' is shorthand and 'points' leaves the unit unclear; the reader has to unpack what is compared with what.
+  - Rewrite: "The edited model scores 79%, against 82% for the base model with the cue typed into the prompt. The gap, -2.6 percentage points (95% interval -6.4 to 1.2), is within run-to-run noise."
+- **D1, severity 1** — line 94, panel 'Why it matters'
+  - Text: "so what RL adds beyond the opening is not in this edit."
+  - Problem: 'The opening' is a team label for the first words of an answer, not explained on the page.
+  - Rewrite: "so what RL training adds beyond the first words of the answer is not in this edit."
+- **D1, severity 2** — line 97, panel 'How we know', first sentence
+  - Text: "changed one matrix so that this moment produces the three cue tokens."
+  - Problem: The 'three cue tokens' are never listed, so the reader cannot tell what the edit makes the model write.
+  - Rewrite: "We recorded the last layer's activity at the moment the answer starts on 128 questions. Then we changed one matrix so that, at this moment, the model writes the three cue tokens " line", "!" and "Okay"."
+- **D6, severity 1** — line 101, panel 'How we know'
+  - Text: "Everywhere else the model's next-word odds barely move (KL divergence 0.00007 nats)."
+  - Problem: 'Everywhere else' does not say where (other positions in the text), and KL divergence in nats is not explained.
+  - Rewrite: "At every other position in the text, the model's next-token probabilities barely change (KL divergence 0.00007 nats, a measure of how far two probability distributions differ)."
+- **D6, severity 2** — line 102, panel 'How we know'
+  - Text: "On their own, 463 of the 500 answers say "Okay" in their first 80 characters, against 106 for the control."
+  - Problem: 'On their own' does not say what is missing (no cue in the prompt) and 'the answers' does not say which model wrote them.
+  - Rewrite: "With no cue in the prompt, 463 of the 500 answers of the edited model say "Okay" in their first 80 characters, against 106 of 500 for the random edit."
+- **N1, severity 2** — line 106, panel 'What it does not show'
+  - Text: "On the first 100 problems it scored 85 against the cue's 82; on all 500 it scores 79% against 82%. Both differences are inside the noise, so it is level with the cue rather than above it."
+  - Problem: '85' and '82' have no unit or total, the tense switches, and the reader is not told why a first-100 result is reported at all.
+  - Rewrite: "On a first screen of 100 problems, the edit answered 85 right and the cue 82. On all 500, the edit scores 79% and the cue 82%. Both gaps are within run-to-run noise, so the edit is level with the cue, not above it."
+- **T3, severity 1** — line 107, panel 'What it does not show'
+  - Text: "Both differences are inside the noise, so it is level with the cue rather than above it."
+  - Problem: The comparison with the cue (79% against 82%, inside the noise) is already made in 'Why it matters'.
+  - Rewrite: needs facts the proofreader did not have
+- **V1, severity 1** — line 109, panel 'What it does not show'
+  - Text: "Only the opening is written in. A habit of checking the work is not."
+  - Problem: Two clipped sentences read as a punchline, and 'the opening' is unexplained.
+  - Rewrite: "The edit writes in only the first words of the answer, not a habit of checking the work."
+- **T4, severity 1** — line 265, header navigation
+  - Text: "Design | Proof"
+  - Problem: The links 'Design' (to /architecture) and 'Proof' do not tell a visitor what they lead to.
+  - Rewrite: needs facts the proofreader did not have
+
+## tools/finding_how_much_of_the_gap.py (32 issues: 1 serious, 15 re-read, 16 minor)
+
+- **D4, severity 1** — line 94, comparison button
+  - Text: "At the tokens of one RL sample"
+  - Problem: The compressed phrase does not say that rows are limited to the same token budget.
+  - Rewrite: "Same token budget as one RL sample"
+- **D5, severity 1** — line 95, hint under the picture, token comparison
+  - Text: "Only settings that spend at most 1.02 times the tokens of one RL sample."
+  - Problem: The same things are called 'configurations', 'settings' and 'rules' on this page, so the reader wonders whether they differ.
+  - Rewrite: "Only configurations that use at most 1.02 times the tokens of one RL sample."
+- **D1, severity 2** — line 176, row detail, first sentence for every Base + cue row (repeats 10 times)
+  - Text: "Base + cue, the untrained base model with the opening cue,"
+  - Problem: The 'opening cue' that defines the 0% end of the scale is never said to be the words put at the start of the answer, so the reader cannot understand the baseline.
+  - Rewrite: "Base + cue, the untrained base model with the opening cue (the words "Okay, so" placed at the start of its answer),"
+- **D5, severity 1** — line 185, row labels on the picture (repeats 6 times)
+  - Text: "One sample, a separate draw"
+  - Problem: 'Sample' and 'draw' name the same thing, and pairing them in one label makes the reader look for a difference.
+  - Rewrite: "One sample, from a separate run"
+- **V2, severity 1** — line 199, row detail
+  - Text: "one separate draw, from the first day's run."
+  - Problem: 'The first day's run' refers to the team's schedule, which the visitor does not know.
+  - Rewrite: "one sample per problem, from an earlier separate run."
+- **D4, severity 1** — line 205, row detail, weight-edit rows
+  - Text: "The base weights plus a quarter of RL's weight change (a = 0.25), with the opening cue, answer once: one draw."
+  - Problem: The symbol 'a' is never defined, and 'answer once: one draw' says the same thing twice.
+  - Rewrite: "The base weights plus a quarter of the weight change that RL made, with the opening cue, answer each problem once."
+- **V2, severity 1** — line 209, row detail
+  - Text: "one draw from a separate run in another workspace."
+  - Problem: 'Another workspace' is an internal compute detail that tells the visitor nothing.
+  - Rewrite: "one sample per problem from a separate run."
+- **S5, severity 1** — line 256, all percentages on the page (repeats 30 times)
+  - Text: "122 %"
+  - Problem: This page writes '122 %' with a space while other finding pages write '79%'; the site is inconsistent.
+  - Rewrite: "122%"
+- **V4, severity 2** — line 263, page title and tile name
+  - Text: "Gap closed without reward"
+  - Problem: The title does not say which gap or how much of it, so the scanning visitor cannot tell the result.
+  - Rewrite: "Imitation without reward passes RL on hard math"
+- **D2, severity 1** — line 264, question above the headline
+  - Text: "How much of RL's gain on hard math can we get without reward?"
+  - Problem: RL is not spelled out at its first use on the page.
+  - Rewrite: "How much of the gain from reinforcement learning (RL) on hard math can we get without a reward?"
+- **D1, severity 3** — line 265, first sentence (headline)
+  - Text: "With no reward, Think-SFT closes 122 % of the gap from Base + cue to RL."
+  - Problem: 'Think-SFT' and 'Base + cue' are team labels shown in the headline without explanation, so a newcomer cannot tell what was compared.
+  - Rewrite: "With no reward, the base model fine-tuned on worked solutions (Think-SFT) closes 122% of the gap between the base model prompted with an opening cue (0%) and the RL-trained model (100%)."
+- **N1, severity 2** — line 265, first sentence (headline)
+  - Text: "closes 122 % of the gap"
+  - Problem: Closing more than 100% of a gap is not intuitive; the reader has to work out that it means scoring above RL, and the 328 problems and the raw counts are not named.
+  - Rewrite: "scores above RL: 209 of 328 hard problems right against RL's 200 and the cued base model's 158.5, which is 122% of the gap between them."
+- **N4, severity 2** — line 265, first sentence (headline)
+  - Text: "With no reward, Think-SFT closes 122 % of the gap from Base + cue to RL."
+  - Problem: The headline hides the page's own caveat that at the token cost of one RL sample Think-SFT closes only 79% of the gap, so the reader takes 'passes RL' as unconditional.
+  - Rewrite: "With no reward, Think-SFT closes 122% of the gap from Base + cue to RL; held to the token cost of one RL sample, it closes 79%."
+- **N1, severity 2** — line 265, tile line
+  - Text: "With no reward, Think-SFT closes 122 % of the gap from Base + cue to RL."
+  - Problem: 'Closes 122 % of the gap' makes the reader compute that Think-SFT passes RL.
+  - Rewrite: "With no reward, Think-SFT goes past RL: it closes the whole gap from Base + cue to RL and adds 22 % more."
+- **V2, severity 2** — line 270, panel 'What is new', first sentence
+  - Text: "Earlier results each measured the gap their own way. Here all 49 configurations on the 328 harder problems are rebuilt from committed per-problem rows with one definition: 0 % is Base + cue, 100 % is RL."
+  - Problem: 'Earlier results' (whose?) and 'committed per-problem rows' are inside talk; a visitor cannot tell what was rebuilt or why that is new.
+  - Rewrite: "Our earlier results each measured the gap in a different way. Here we recompute all 49 configurations on the same 328 harder problems from the saved per-problem scores, on one scale: 0% is Base + cue, 100% is RL."
+- **D4, severity 2** — line 273, panel 'What is new'
+  - Text: "We see the same order on a 7B model, on one scale with untrained rules, weight edits and equal tokens."
+  - Problem: 'On one scale with untrained rules, weight edits and equal tokens' stacks three team concepts; the reader cannot tell what was added to the published finding.
+  - Rewrite: "We see the same order on a 7B model, and place it on one scale next to sampling procedures on the untrained model, partial weight edits and a comparison at equal token cost."
+- **D4, severity 1** — line 277, panel 'What is new'
+  - Text: "At the tokens of one RL sample, Think-SFT closes 79 % (95 % interval 62 % to 98 %)."
+  - Problem: 'At the tokens of one RL sample' is compressed; the reader has to guess that Think-SFT was stopped at the same length.
+  - Rewrite: "Stopped at the number of tokens one RL sample uses, Think-SFT closes 79% of the gap (95% interval 62% to 98%)."
+- **V2, severity 1** — line 279, panel 'Why it matters', first sentence
+  - Text: "The research direction asks for the cheapest route to RL's score that uses no reward. The untrained weights stop near a fifth of the gap; imitation of worked solutions passes RL."
+  - Problem: 'The research direction' refers to an internal document, and 'the untrained weights stop' is a figure of speech for a score.
+  - Rewrite: "We are looking for the cheapest way to reach RL's score without a reward. Sampling procedures on the untrained model close about a fifth of the gap; training on worked solutions passes RL."
+- **N1, severity 1** — line 283, panel 'Why it matters'
+  - Text: "Under the vote over 4 samples: Think-SFT 236, RL 221, Base + cue 192."
+  - Problem: The counts lack their unit and total.
+  - Rewrite: "With a majority vote over 4 samples: Think-SFT gets 236 of 328 right, RL 221 and Base + cue 192."
+- **N4, severity 2** — line 285, panel 'Why it matters'
+  - Text: "Most of Think-SFT's lead at one sample needs more than 14,028 tokens: stopped there, it matches RL stopped at the same length."
+  - Problem: The main caveat to the headline (the lead comes from longer answers) sits as the last bullet of 'Why it matters' and is phrased so the reader must re-read it.
+  - Rewrite: "Most of Think-SFT's lead over RL at one sample comes from answers longer than 14,028 tokens: when both models are stopped at 14,028 tokens, Think-SFT scores about the same as RL."
+- **D1, severity 2** — line 288, panel 'How we know', first sentence
+  - Text: "studies/rlneurons/analysis/config_table.py rebuilt every row from committed per-problem rows: 328 problems, T 1.0, cut off at 16,384 tokens, grader v3. Nothing was chosen on the 328."
+  - Problem: The sentence opens with a file path and uses 'grader v3', 'T 1.0' and 'Nothing was chosen on the 328' without saying what they mean.
+  - Rewrite: "One script rebuilt every row from the saved per-problem scores: 328 problems, sampling temperature 1.0, answers cut off at 16,384 tokens, all checked by version 3 of our answer checker. No setting was tuned on these 328 problems."
+- **D4, severity 1** — line 290, panel 'How we know'
+  - Text: "a share's interval is the interval of the ratio."
+  - Problem: The reader has to work out which ratio is meant.
+  - Rewrite: "a share's interval is the bootstrap interval of the ratio (configuration minus Base + cue) divided by (RL minus Base + cue)."
+- **D1, severity 2** — line 292, panel 'How we know'
+  - Text: "176 of 176 numbers posted earlier reproduce. Planted rows equal to RL and to Base + cue score 100 % and 0 %."
+  - Problem: 'Posted earlier' refers to the team's board and 'planted rows' is a team term; the reader cannot tell what these checks did.
+  - Rewrite: "All 176 numbers we reported earlier come out the same. As a check of the scale, a test row copied from RL scores 100% and one copied from Base + cue scores 0%."
+- **D1, severity 1** — line 293, panel 'How we know'
+  - Text: "Without the 6 problems that may be in Think-SFT's training data, or with grader v4, no share moves by more than 3.5 points."
+  - Problem: 'Grader v4' is a team label and 'points' leaves the unit unclear.
+  - Rewrite: "Removing the 6 problems that may be in Think-SFT's training data, or scoring with a newer version of the answer checker, moves no share by more than 3.5 percentage points."
+- **D4, severity 1** — line 301, panel 'What it does not show'
+  - Text: "Hollow marks are one draw per problem from a separate run. Two of them reach 146 % at one sample, and Think-SFT without the cue reaches 107 % at about the tokens of one RL sample. The large number counts only the 4-sample rows."
+  - Problem: 'The large number' and '4-sample rows' refer to page elements and internal row types without naming them.
+  - Rewrite: "Hollow marks are one sample per problem from a separate run, so they are noisier. Two of them reach 146% at one sample, and Think-SFT without the cue reaches 107% at about the token cost of one RL sample. The headline number uses only rows averaged over 4 samples."
+- **V2, severity 2** — line 304, panel 'What it does not show'
+  - Text: "Left out for lack of committed per-problem rows: the weight stack and the run with a 32k-token cap (both still running), the top RL directions and the loop-neuron edit."
+  - Problem: 'Weight stack', 'top RL directions' and 'loop-neuron edit' are team labels, and 'still running' is a status note that goes stale.
+  - Rewrite: "Left out because their per-problem scores were not saved: a combination of weight edits, a run that allows answers up to 32,000 tokens, an edit along the main directions of RL's weight change, and an edit of the neurons tied to repeated text."
+- **D1, severity 2** — line 605, caption on the picture, second number (repeats 2 times)
+  - Text: "Best rule on untrained weights"
+  - Problem: 'Rule' is the team's word for a sampling procedure (one sample, restarts, voting); the reader cannot tell what kind of rule is meant.
+  - Rewrite: "Best sampling procedure on the untrained model"
+- **D4, severity 1** — line 616, key of the picture
+  - Text: "One draw, separate run"
+  - Problem: The fragment does not say what is drawn or how this differs from the filled marks.
+  - Rewrite: "One sample per problem, from a separate run"
+- **N1, severity 2** — line 685, large-number readout on the picture
+  - Text: "209 of 328 right; RL 200, Base + cue 158.5 (328 harder problems, T 1.0)"
+  - Problem: '158.5 right' is half a problem with no explanation (it is a mean over 4 samples), and 'harder' problems and 'T 1.0' are not explained.
+  - Rewrite: "209 of 328 right on average; RL 200, Base + cue 158.5 (means over 4 samples per problem; 328 harder problems, sampling temperature 1.0)"
+- **D1, severity 2** — line 685, large-number readout on the picture
+  - Text: "328 harder problems"
+  - Problem: The page never says which 328 problems these are or harder than what, so the reader cannot judge the test set.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 1** — line 872, row detail, one-draw rows
+  - Text: "This draw stores only right or not; 12 answers were cut off at 16,384 tokens."
+  - Problem: 'Stores only right or not' is telegraphic; the reader has to guess what was not recorded.
+  - Rewrite: "This run recorded only whether each answer was right; 12 answers were cut off at the 16,384-token limit."
+- **D6, severity 2** — line 878, row detail note, tie-rule rows
+  - Text: "The tie rule was written on MATH-500 after reading the problems it fixes; here it is held out."
+  - Problem: 'Here it is held out' is unclear: the rule is not held out, the 328 problems are.
+  - Rewrite: "The tie rule was designed on MATH-500 after reading the problems it fixes; these 328 problems were not used to design it."
+
+## tools/finding_imitation_beats_rl.py (28 issues: 0 serious, 11 re-read, 17 minor)
+
+- **N1, severity 2** — line 108, first sentence (headline)
+  - Text: "On 328 harder problems, imitation beats RL: 2.7 points per sample, 6.1 when four samples vote, and the lead holds on 136 problems published in 2026."
+  - Problem: '2.7 points per sample' does not say points of what (percentage points of 328 problems) and reads as a gain for each sample; the models compared are not named.
+  - Rewrite: "On 328 harder competition problems, the Olmo 3 7B model trained on worked solutions without a reward beats the one trained with RL: by 2.7 percentage points with one sample and 6.1 with a majority vote over four samples. The lead holds on 136 problems from 2026."
+- **N4, severity 2** — line 108, first sentence (headline)
+  - Text: "imitation beats RL"
+  - Problem: The headline does not say that the imitation model is run with the opening cue and RL without it; the page itself shows that without the cue Think-SFT scores 203 of 328 against RL's 206.
+  - Rewrite: "On 328 harder problems, imitation with the opening cue beats RL: 2.7 percentage points with one sample, 6.1 when four samples vote; without the cue the two are level (203 and 206 of 328)."
+- **D4, severity 2** — line 108, tile line
+  - Text: "On 328 harder problems, imitation beats RL: 2.7 points per sample, 6.1 when four samples vote, and the lead holds on 136 problems published in 2026."
+  - Problem: 'Imitation' stands for the Think-SFT model, and '2.7 points per sample' reads as a per-sample sum; three ideas share one sentence.
+  - Rewrite: "On 328 harder problems, the model trained to imitate worked solutions (Think-SFT) beats RL by 2.7 points with one sample and by 6.1 points with a vote over four samples. The lead holds on 136 problems published in 2026."
+- **N1, severity 1** — line 118, panel 'What is new', first sentence
+  - Text: "a model distilled from 800,000 DeepSeek-R1 answers scores 72.6 on AIME 2024 against 47.0 for RL alone"
+  - Problem: 72.6 and 47.0 have no unit (they are pass@1 percentages), and 'distilled' is not explained.
+  - Rewrite: "a model trained on 800,000 DeepSeek-R1 answers gets 72.6% of AIME 2024 right with one sample, against 47.0% for the same model trained with RL alone"
+- **S5, severity 1** — line 118, panel 'What is new', first sentence
+  - Text: "favours imitation"
+  - Problem: UK spelling 'favours' on a site that otherwise uses US spelling ('behavior' outnumbers 'behaviour' 38 to 2).
+  - Rewrite: "favors imitation"
+- **D4, severity 1** — line 122, panel 'What is new'
+  - Text: "New here: the released Olmo 3 pair compared problem by problem, with the same sampling, token cap, grader and vote, and a paired 95 % interval."
+  - Problem: The sentence has no verb and 'the Olmo 3 pair' does not name the two models.
+  - Rewrite: "New here: we compare the two released Olmo 3 models (Think-SFT and RL-Zero-Math) problem by problem, with the same sampling, token limit, answer checker and vote, and give a paired 95% interval."
+- **D3, severity 1** — line 124, panel 'What is new'
+  - Text: "and no separation on MATH-500."
+  - Problem: 'No separation' is jargon for 'no significant difference'.
+  - Rewrite: "and no clear difference on MATH-500."
+- **D3, severity 1** — line 127, panel 'Why it matters', first sentence
+  - Text: "The team looks for the cheapest route without reward to RL's score. This is the first route that passes RL on the 328 harder problems."
+  - Problem: 'Route' stands in for 'method', and the reader does not know what other methods were tried.
+  - Rewrite: "We look for the cheapest way to reach RL's score without a reward. Training on worked solutions is the first method we tested that scores above RL on the 328 harder problems."
+- **V2, severity 2** — line 129, panel 'Why it matters'
+  - Text: "Under the vote it is the best row on the 328 so far: 241 of 328 at 40,410 tokens per problem, against 224 for RL even after restarts."
+  - Problem: 'Best row' and 'restarts' are team terms, and RL's token count is missing, so the reader cannot compare cost.
+  - Rewrite: "With the vote over 4 samples it has the highest score we have measured on the 328: 241 right at 40,410 tokens per problem, against 224 for RL even when RL resamples answers that hit the token limit."
+- **D5, severity 2** — line 129, panel 'Why it matters'
+  - Text: "241 of 328"
+  - Problem: The 'Gap closed without reward' page gives Think-SFT's vote over 4 samples on the same 328 problems as 236, this page as 241, with no word on why they differ, which costs trust.
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 2** — line 131, panel 'Why it matters'
+  - Text: "Its advantage is in what it does not answer."
+  - Problem: The figure of speech makes the reader guess; the fact is that its finished answers are more often right while more of its answers hit the token limit.
+  - Rewrite: "It hits the token limit more often than RL, but the answers it finishes are more often right."
+- **D1, severity 1** — line 138, panel 'How we know', first sentence
+  - Text: "Each model answered each problem four times at T 1.0; an answer that reaches 16,384 tokens is cut off there. Grader v3 scores the answers, and the vote takes the most common one."
+  - Problem: 'Grader v3' is a team label and 'T 1.0' an abbreviation, neither explained.
+  - Rewrite: "Each model answered each problem four times at sampling temperature 1.0; an answer that reaches 16,384 tokens is cut off there. Our answer checker (version 3) scores the answers, and the vote takes the most common final answer."
+- **D1, severity 2** — line 140, panel 'How we know'
+  - Text: "The opening cue is three fixed tokens that begin the answer."
+  - Problem: The cue is used in the picture's row names and the headline comparison but defined only here, in the third panel, and the three tokens are not given.
+  - Rewrite: "The opening cue is three fixed tokens placed at the start of the answer (" line!", a line break and "Okay")."
+- **D6, severity 1** — line 143, panel 'How we know'
+  - Text: "Nothing was chosen on them: the vote rule was fixed on MATH-500."
+  - Problem: 'Nothing was chosen on them' is vague; the reader has to infer that no setting was tuned on these problems.
+  - Rewrite: "No setting was tuned on them: the vote rule was fixed on MATH-500 beforehand."
+- **D4, severity 1** — line 144, panel 'How we know'
+  - Text: "One sample: Think-SFT 209.0 right on average, RL 200.0, +2.7 points (95 % interval 0.4 to 5.2). Vote over 4 samples: +6.1 points (95 % interval 3.0 to 9.5)."
+  - Problem: Telegraphic fragments with 'points' as the only unit; the reader has to rebuild the sentences.
+  - Rewrite: "With one sample, Think-SFT gets 209.0 of 328 right on average and RL 200.0, a difference of +2.7 percentage points (95% interval 0.4 to 5.2). With the vote over 4 samples the difference is +6.1 percentage points (95% interval 3.0 to 9.5)."
+- **N2, severity 1** — line 148, panel 'How we know'
+  - Text: "A second test uses problems no model can have seen"
+  - Problem: The 'What it does not show' panel says one AIME 2026 problem was found in RL's training prompts, so 'no model can have seen' is stronger than the evidence.
+  - Rewrite: "A second test uses problems written after the models' training data was fixed"
+- **D4, severity 1** — line 151, panel 'How we know'
+  - Text: "On them the vote over 4 samples gives Think-SFT 75 of 136, RL 57 and Base + cue 38: +13.2 points (95 % interval 7.4 to 19.1). One sample: 60.0 against 50.5, +7.0 points"
+  - Problem: 'One sample: 60.0 against 50.5' drops who scored what, and the unit of the differences is not said.
+  - Rewrite: "On them, with the vote over 4 samples, Think-SFT gets 75 of 136 right, RL 57 and Base + cue 38: a lead of 13.2 percentage points (95% interval 7.4 to 19.1). With one sample, Think-SFT gets 60.0 and RL 50.5 on average, a lead of 7.0 points"
+- **D4, severity 1** — line 156, panel 'How we know'
+  - Text: "The lead holds on both sources of the statements: 29 against 22 of the 59 from MathArena's published datasets"
+  - Problem: 'Sources of the statements' is compressed (statements means problem texts) and MathArena is not introduced.
+  - Rewrite: "The lead holds for both sources of the problem texts: 29 against 22 right of the 59 taken from MathArena's published datasets (a public benchmark of new contest problems)"
+- **D6, severity 2** — line 162, panel 'What it does not show'
+  - Text: "All 156 shards of Think-SFT's training set, every turn, were compared with the 328 harder problems: 6 match, none of them new."
+  - Problem: 'None of them new' and 'every turn' are unclear; the reader cannot tell what 'new' refers to.
+  - Rewrite: needs facts the proofreader did not have
+- **S1, severity 1** — line 162, panel 'What it does not show'
+  - Text: "All 156 shards of Think-SFT's training set ... and dropped."
+  - Problem: One list item holds five sentences about two separate checks (the scan of the training set and the 2026 set), so the reader must parse it twice.
+  - Rewrite: needs facts the proofreader did not have
+- **N2, severity 1** — line 169, panel 'What it does not show'
+  - Text: "Most of the lead is in long answers, which come mostly from the hardest problems"
+  - Problem: The numbers beside the claim give accuracy among long answers, not the share of the lead that comes from them.
+  - Rewrite: "Much of the difference is in long answers, which come mostly from the hardest problems"
+- **D1, severity 2** — line 172, panel 'What it does not show'
+  - Text: "Many of its answers are cut off: 89 of 328 in the first sample. RL's rows had restarts after a cut-off; Think-SFT's had none. The vote compared here uses no restarts for either."
+  - Problem: 'Rows' and 'restarts' are team terms, and four facts sit in one item, so the reader cannot tell which comparison used which setting.
+  - Rewrite: "Many of its answers hit the 16,384-token limit: 89 of 328 in the first sample. In RL's runs, an answer that hit the limit was sampled again; in Think-SFT's runs it was not. The vote compared on this page uses no resampling for either model."
+- **S5, severity 1** — line 176, panel 'What it does not show'
+  - Text: "77 of its statements were transcribed from the PDFs by a language model and not checked by a person."
+  - Problem: The sentence starts with a numeral, which reads as a continuation of the previous number.
+  - Rewrite: "Of its statements, 77 were transcribed from the PDFs by a language model and not checked by a person."
+- **D3, severity 1** — line 180, panel 'What it does not show'
+  - Text: "On MATH-500 the order is not established"
+  - Problem: 'The order is not established' is indirect; the reader has to infer that neither model is clearly better.
+  - Rewrite: "On MATH-500 neither model is clearly better"
+- **N2, severity 2** — line 1430, row names on the picture
+  - Text: "No training (Base + cue)"
+  - Problem: The base model is pretrained, so 'No training' is wrong as stated, and 'cue' is not explained anywhere the scanning reader looks (it is defined only inside the 'How we know' panel).
+  - Rewrite: "Base model, no post-training, with the opening cue"
+- **D4, severity 2** — line 1591, caption on the picture, 2026 set (phone)
+  - Text: "Held after the last weights, 12 December 2025"
+  - Problem: The phone caption drops subject and verb, so the reader cannot tell what was held and whose weights are meant.
+  - Rewrite: "Contests held after the models' last upload (12 December 2025)"
+- **N1, severity 1** — line 1607, label under the large number
+  - Text: "points, Think-SFT minus RL"
+  - Problem: 'Points' does not say percentage points of the problem set, and 'Think-SFT' is a model name the scanning reader has not been told.
+  - Rewrite: "percentage points, worked-solutions model (Think-SFT) minus RL"
+- **D4, severity 1** — line 1613, label under the large number
+  - Text: "One sample, mean of 4 samples, T 1.0"
+  - Problem: The stacked fragment and the abbreviation 'T 1.0' make the reader decode what was sampled and how.
+  - Rewrite: "One sample per problem (average of 4 samples), temperature 1.0"
+
+## tools/finding_loop_neurons.py (19 issues: 0 serious, 11 re-read, 8 minor)
+
+- **D1, severity 2** — line 34, condition button and problem detail (repeats 3 times)
+  - Text: "Base + cue"
+  - Problem: The unedited model is labelled with a team name whose 'cue' is never explained on this page; the reader cannot tell it is simply the model before the edit.
+  - Rewrite: "Unedited model"
+- **V4, severity 2** — line 100, page title and tile name
+  - Text: "Loop neurons"
+  - Problem: The title is a team label that names the topic, not the result, so the scanning visitor cannot tell what was found.
+  - Rewrite: "Switching off 1,000 neurons cuts repetition loops"
+- **T1, severity 1** — line 101, question above the headline
+  - Text: "Why does a language model get stuck repeating the same text?"
+  - Problem: The question promises a cause, but the page shows that switching off certain neurons reduces loops; the reader expects an explanation the page does not give.
+  - Rewrite: "Can switching off a few neurons stop a language model from repeating the same text?"
+- **V4, severity 1** — line 101, tile question
+  - Text: "Why does a language model get stuck repeating the same text?"
+  - Problem: The question asks why; the line answers which neurons, so the reader expects an explanation the tile does not give.
+  - Rewrite: "Which neurons make a language model repeat the same text?"
+- **N1, severity 2** — line 102, first sentence (headline)
+  - Text: "Switching off 1,000 of a model's 352,256 neurons cuts its repetition loops on MATH-500 from 71 to 19."
+  - Problem: '71 to 19' gives no total (500 answers), the model is not named, and the headline does not say whether accuracy changed, which is the first thing a reader asks.
+  - Rewrite: "Switching off 1,000 of the 352,256 neurons of the Olmo 3 7B base model cuts the MATH-500 answers stuck in a repetition loop from 71 to 19 of 500, with accuracy unchanged (381 against 378 right)."
+- **N4, severity 2** — line 102, first sentence (headline)
+  - Text: "cuts its repetition loops on MATH-500 from 71 to 19."
+  - Problem: The loops occur at sampling temperature 0.6; the page's own limits panel shows that at temperature 1.0 the model barely loops and the edit costs right answers, but the headline gives no hint of this condition.
+  - Rewrite: "cuts its repetition loops on MATH-500 from 71 to 19 of 500 at sampling temperature 0.6."
+- **D1, severity 2** — line 102, first sentence (headline)
+  - Text: "repetition loops"
+  - Problem: The page never says how a loop is detected (what counts as an answer stuck in a loop), so the reader cannot judge the main number.
+  - Rewrite: needs facts the proofreader did not have
+- **N1, severity 1** — line 102, tile line
+  - Text: "Switching off 1,000 of a model's 352,256 neurons cuts its repetition loops on MATH-500 from 71 to 19."
+  - Problem: 71 and 19 have no total (out of how many answers).
+  - Rewrite: "Switching off 1,000 of a model's 352,256 neurons cuts the answers stuck in repetition loops on MATH-500 from 71 to 19 of 500."
+- **D6, severity 1** — line 113, panel 'What is new'
+  - Text: "Switching them off removes most loops and about a fifth of the tokens."
+  - Problem: 'Them' could be the neurons of the cited paper or this page's 1,000 neurons.
+  - Rewrite: "Switching off our 1,000 neurons removes most loops and about a fifth of the generated tokens."
+- **N2, severity 2** — line 114, panel 'What is new'
+  - Text: "Right answers rise by about 4 points at the setting where the model loops."
+  - Problem: The 4-point rise is for a second set of neurons over four samples, while the picture's set gains 0.6 points inside the noise; the panel does not say which, so the reader credits the picture's edit with a gain it did not show.
+  - Rewrite: "With a second set of 1,000 neurons, right answers rise by about 4 percentage points at sampling temperature 0.6, where the model loops."
+- **S5, severity 1** — line 115, panel 'What is new'
+  - Text: "doubling their activity raised loops from 3 to 8 of 14 runs, and switching them off lowered it to 1."
+  - Problem: 'It' has no singular antecedent (loops is plural), so the reader has to work out what was lowered.
+  - Rewrite: "doubling their activity raised the runs that loop from 3 to 8 of 14, and switching them off lowered that to 1 of 14."
+- **D6, severity 1** — line 118, panel 'Why it matters', first sentence
+  - Text: "It removes loops with no training of any kind."
+  - Problem: 'It' is not named, and the sentence does not say why removing loops without training matters.
+  - Rewrite: "The edit removes loops without any training: it only sets 1,000 neurons to zero."
+- **D1, severity 2** — line 119, panel 'Why it matters'
+  - Text: "With a second set of 1,000 neurons, loops fall from 71 to 4 on one random seed and from 61 to 9 on another."
+  - Problem: 'A second set' appears here before it is explained (in the last panel), and the counts have no total.
+  - Rewrite: "With a second set of 1,000 neurons, chosen on 34 other looping texts, loops fall from 71 to 4 of 500 on one random seed and from 61 to 9 of 500 on another."
+- **N2, severity 2** — line 122, panel 'Why it matters'
+  - Text: "Loops do not explain why this model trails RL."
+  - Problem: The claim has no evidence beside it, 'RL' is never introduced on this page, and 'this model' is not named.
+  - Rewrite: "Removing loops does not bring the base model close to the model trained with reinforcement learning (RL), so loops are not why it scores lower."
+- **D4, severity 2** — line 127, panel 'How we know'
+  - Text: "On 34 loops kept out of the choice, 100 neurons are enough: 1 loops again, against 19 unedited."
+  - Problem: The sentence is telegraphic ('loops kept out of the choice', '1 loops again', '19 unedited') and the reader has to rebuild what was measured.
+  - Rewrite: "On 34 looping texts that were not used to choose the neurons, switching off only 100 neurons is enough: 1 of the 34 continues to loop, against 19 of 34 with no neurons switched off."
+- **D6, severity 2** — line 129, panel 'What it does not show', first sentence
+  - Text: "The edit does not make the model better than its own best setting. The picture's set gives 381 right against 378 (0.6 points, 95 % interval −3.4 to 4.6)."
+  - Problem: 'Its own best setting' is not named (temperature 1.0, 410 right), and 'the picture's set' is a compressed reference.
+  - Rewrite: "The edit does not make the model better than the unedited model at its best sampling setting (temperature 1.0, 410 of 500 right). The 1,000 neurons in the picture give 381 right against 378 (a difference of 0.6 percentage points, 95% interval −3.4 to 4.6)."
+- **S1, severity 2** — line 132, panel 'What it does not show'
+  - Text: "right answers rise from 383 to 403 of 500 where the model loops, which only matches Base + cue at T 1.0, where it does not loop (405 to 410)."
+  - Problem: Two comparisons and two 'where' clauses in one sentence, and '(405 to 410)' looks like a change but is two measurements of the same model.
+  - Rewrite: "With the second set, at temperature 0.6 and four runs per problem, right answers rise from 383 to 403 of 500. That only matches the unedited model at temperature 1.0, where it does not loop: 405 and 410 of 500 in two separate measurements."
+- **N2, severity 1** — line 136, panel 'What it does not show'
+  - Text: "On the 328 harder problems at T 1.0 it turns answers cut off at 16,384 tokens into finished wrong answers: 155 and 130 of 328 right against 164."
+  - Problem: The claim is about cut-off answers becoming finished wrong answers, but the numbers beside it are only right answers; the cut-off counts are missing, and '328 harder problems' is not explained.
+  - Rewrite: "On 328 harder competition problems at temperature 1.0, the edit cuts the answers stopped at 16,384 tokens from 77 to 47 and 32 (100 and 1,000 neurons off), but those answers finish wrong: right answers fall from 164 to 155 and 130 of 328."
+- **D2, severity 1** — line 878, label under the large number (repeats 6 times)
+  - Text: "loops in 500 answers, T 0.6"
+  - Problem: 'T 0.6' is not explained anywhere on the page.
+  - Rewrite: "answers stuck in a loop, of 500 (sampling temperature 0.6)"
+
+## tools/finding_neurons_you_can_describe.py (18 issues: 0 serious, 7 re-read, 11 minor)
+
+- **V4, severity 1** — line 18, page title and tile name
+  - Text: "Neurons you can describe"
+  - Problem: The title names the topic but not the result (which neurons, how well, against what).
+  - Rewrite: "RL's key neurons are easier to describe than random ones"
+- **N1, severity 2** — line 133, first sentence (headline)
+  - Text: "From a one-sentence description alone, a blind reader finds a neuron's firings 90.7 % of the time."
+  - Problem: The headline gives no comparison (random neurons 71.3%, chance 50%) and does not say which neurons, so the reader cannot tell whether 90.7% is good.
+  - Rewrite: "Given only a one-sentence description, a reader that never saw the neuron sorts 90.7% of new text snippets right (fires or does not fire) for neurons that matter most to RL's change in Olmo 3 7B, against 71.3% for random neurons and 50% by chance."
+- **D1, severity 2** — line 133, first sentence (headline)
+  - Text: "a blind reader finds a neuron's firings"
+  - Problem: 'Blind reader' reads as a person; the page says only in a panel that both readers are Claude models, and 'finds firings' misstates the score, which also counts non-firing snippets left out.
+  - Rewrite: "an AI reader that sees only the description sorts snippets into those where the neuron fires and those where it does not"
+- **N1, severity 2** — line 133, tile line
+  - Text: "From a one-sentence description alone, a blind reader finds a neuron's firings 90.7 % of the time."
+  - Problem: 'Blind reader' and 'firings' are not explained on the tile, and 90.7 % has no chance level beside it (50 %).
+  - Rewrite: "Given only a one-sentence description, a separate model picks the text where the neuron fires 90.7 % of the time; chance is 50 %."
+- **D2, severity 2** — line 168, panel 'What is new', first sentence
+  - Text: "Goodfire's judge picks the firing snippet of a pair 94.6 % of the time against random text, on 496 neuron poles of a 35B mixture-of-experts model."
+  - Problem: 'Neuron poles' is used here but explained only in the last panel, and 'Goodfire's judge' is not introduced.
+  - Rewrite: "In a study by the company Goodfire, an AI judge given a neuron's description picks the snippet where it fires, out of a pair with one random snippet, 94.6% of the time; they tested 496 neuron descriptions (one for each sign of activation) in a 35B mixture-of-experts model."
+- **T3, severity 1** — line 174, panel 'What is new'
+  - Text: "A study of Qwen3-0.6B and 1.7B (Batutin, 19 October 2026) found that neuron labels predict only the strongest activations. This test also uses only the strongest."
+  - Problem: The caveat that the test uses only the strongest firings is repeated as the lead of 'What it does not show'; under 'What is new' it is not new.
+  - Rewrite: needs facts the proofreader did not have
+- **N2, severity 1** — line 177, panel 'Why it matters', first sentence
+  - Text: "The neurons that matter most for RL's change can be read: one sentence says where each one fires."
+  - Problem: 'Can be read' is a figure of speech, and 'each one' claims more than a mean score of 90.7% over 30 neurons shows.
+  - Rewrite: "For most of the neurons that matter most for RL's change, one sentence says well enough where the neuron fires for a reader to find its firings."
+- **D6, severity 1** — line 178, panel 'Why it matters'
+  - Text: "Many describe how the model reasons rather than math: “Hmm” or “Wait” starting a sentence (layer 10, neuron 7275, 100.0 %)"
+  - Problem: 'Many' has no count and no clear subject (the sentences, not the neurons, describe), and '100.0 %' is not said to be the reader's score.
+  - Rewrite: "Many of the sentences describe how the model reasons rather than math: “Hmm” or “Wait” starting a sentence (layer 10, neuron 7275, sorted 100.0% right)"
+- **N3, severity 1** — line 180, panel 'Why it matters'
+  - Text: "44 of the 100 neurons that matter most are active almost everywhere, against 1 of 100 random neurons of the same layers."
+  - Problem: The panel does not say what this fact means for the result or why the reader should care.
+  - Rewrite: needs facts the proofreader did not have
+- **S5, severity 2** — line 182, panel 'Why it matters'
+  - Text: "They name only part of what RL changed: copying the best 1 % of neurons from RL recovers 16.1 % of its effect (the page RL's change is spread out)."
+  - Problem: '(the page RL's change is spread out)' reads as a broken sentence because the page title is not marked or linked, and 'the best 1 %' and 'its effect' are not defined.
+  - Rewrite: "These neurons account for only part of what RL changed: copying from the RL model the 1% of neurons with the largest effect recovers 16.1% of RL's effect (see the finding page “RL's change is spread out”)."
+- **N4, severity 1** — line 188, panel 'How we know'
+  - Text: "30 of the 100 with the largest effect toward its RL version scored 90.7 %"
+  - Problem: The page does not say why only 30 of the 100 were tested or how they were picked, which a reader needs to judge selection.
+  - Rewrite: needs facts the proofreader did not have
+- **V2, severity 1** — line 192, panel 'How we know'
+  - Text: "Both readers were Claude subagents."
+  - Problem: 'Subagents' is the team's tooling term; the visitor needs to know only that both readers were AI models.
+  - Rewrite: "Both readers were instances of Claude, an AI model."
+- **S1, severity 1** — line 198, panel 'What it does not show'
+  - Text: "Each sentence describes one pole: where the activation is most positive, or for some neurons most negative. 45 of the model's 352,256 neurons were tested."
+  - Problem: Two unrelated limits share one item, and the second starts with a numeral.
+  - Rewrite: "Each sentence describes only one side of a neuron: where its activation is most positive or, for some neurons, most negative. Only 45 of the model's 352,256 neurons were tested."
+- **S5, severity 1** — line 200, panel 'What it does not show'
+  - Text: "It says nothing about changing the model's behaviour with these neurons."
+  - Problem: UK spelling 'behaviour' on a site that otherwise uses US spelling, and 'It' does not name the test.
+  - Rewrite: "The test says nothing about changing the model's behavior with these neurons."
+- **D4, severity 1** — line 202, panel 'How to reproduce it', first sentence
+  - Text: "Run studies/cleanneurons/analysis/describe_test.py with prep on the output of the GPU job, let two readers write descriptions.json and predictions.json, then run it with score."
+  - Problem: 'With prep' and 'with score' are subcommands written as plain words, so the sentence is hard to parse.
+  - Rewrite: "Run studies/cleanneurons/analysis/describe_test.py prep on the output of the GPU job; have two readers write descriptions.json and predictions.json; then run describe_test.py score."
+- **D5, severity 2** — line 549, row label on the picture (repeats 6 times)
+  - Text: "Neurons that matter for RL, 30"
+  - Problem: The tested set is called 'neurons that matter for RL', 'that matter most for what RL changed', 'that move the base most toward RL' and 'with the largest effect toward its RL version', and the effect is never defined, so the reader cannot tell how the neurons were chosen.
+  - Rewrite: needs facts the proofreader did not have
+- **S5, severity 1** — line 694, large number on the picture
+  - Text: "90.7%"
+  - Problem: The large number is written '90.7%' and the headline right beside it '90.7 %'.
+  - Rewrite: "90.7%"
+- **D4, severity 2** — line 695, label under the large number
+  - Text: "of test snippets sorted right, firing or not, by a blind reader, on 30 of the 100 neurons that move the base most toward RL. Random neurons 71.3 %, chance 50.0 %."
+  - Problem: 'Move the base most toward RL' and the closing fragment are compressed; the reader has to guess what effect was measured and what the two other numbers are.
+  - Rewrite: "of test snippets sorted right (fires or does not fire) by a reader that saw only the description, on 30 of the 100 neurons with the largest effect on what RL changed. For random neurons the score is 71.3%; guessing scores 50.0%."
+
+## tools/finding_no_early_warning.py (22 issues: 0 serious, 8 re-read, 14 minor)
+
+- **V2, severity 1** — line 122, sign definition in the side column
+  - Text: "The loop rule of the team's sampler has fired"
+  - Problem: 'The team's sampler' and its 'loop rule' are internal tools the visitor does not know.
+  - Rewrite: "Our loop detector has fired"
+- **D5, severity 1** — line 127, sign definition in the side column
+  - Text: "More repetitive text compresses better and gets a higher sign."
+  - Problem: 'Sign' names both the indicator and its value, so 'a higher sign' reads oddly.
+  - Rewrite: "More repetitive text compresses better and gets a higher score."
+- **V4, severity 2** — line 149, page title and tile name
+  - Text: "No early warning"
+  - Problem: The title is a figure of speech that does not say what fails to warn of what, so the scanning visitor cannot tell the result.
+  - Rewrite: "Answer text does not predict failure early"
+- **D2, severity 2** — line 151, first sentence (headline)
+  - Text: "No text sign spots a failing sample early: the best scores AUROC 0.568; chance is 0.5."
+  - Problem: 'Text sign' is a team term and AUROC is not explained in the headline, so a newcomer cannot tell what was measured or how good 0.568 is.
+  - Rewrite: "None of six counts taken from the answer text (script switches, repeats, "wait", restart phrases) tells which of two answers to the same problem will fail: the best scores an AUROC of 0.568, where 0.5 is chance and 1.0 is perfect."
+- **N2, severity 2** — line 151, first sentence (headline)
+  - Text: "No text sign spots a failing sample early"
+  - Problem: 'No text sign' claims all text signs, but six were tested on one model (Think-SFT), and the page shows one sign does work for RL (0.643); the headline names neither the model nor the six.
+  - Rewrite: "None of six text signs spots a failing Think-SFT sample early, read at tokens 4,000 to 12,000"
+- **D2, severity 2** — line 151, tile line
+  - Text: "No text sign spots a failing sample early: the best scores AUROC 0.568; chance is 0.5."
+  - Problem: 'AUROC' and 'text sign' are not explained, and 'early' does not say how early.
+  - Rewrite: "No signal in the text of an answer spots a failing answer early: the best, read after 12,000 tokens, scores 0.568 (AUROC; 0.5 is chance)."
+- **V2, severity 2** — line 156, panel 'What is new', first sentence
+  - Text: "scored AUROC 0.531 and 0.571 (board results f3d708 and b30f15, the second a linear probe)"
+  - Problem: 'Board results f3d708 and b30f15' are ids on the team's internal board that a visitor cannot open.
+  - Rewrite: "scored AUROC 0.531 and 0.571 in our earlier tests (the second used a linear probe on the model's activations)"
+- **T3, severity 1** — line 159, panel 'What is new'
+  - Text: "156 of 1,312 Think-SFT samples on the 328 harder problems switch to another script mid-answer"
+  - Problem: The script-switch counts are repeated almost word for word in the side column of the 'Switches script' sign.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — line 171, panel 'Why it matters'
+  - Text: "against 241 of 328 at 30,837 for the sequential vote with no stop."
+  - Problem: 'The sequential vote' is never explained on this page.
+  - Rewrite: "against 241 of 328 at 30,837 tokens when samples are drawn one at a time until two final answers agree, with no early stop."
+- **V2, severity 1** — line 174, panel 'Why it matters'
+  - Text: "0.8 % fewer (95 % interval −0.3 % to 1.8 %), not the 10 % the spec asked for."
+  - Problem: 'The spec' is an internal planning document.
+  - Rewrite: "0.8% fewer (95% interval −0.3% to 1.8%), far short of the 10% saving we set as the goal before the run."
+- **D4, severity 1** — line 177, panel 'Why it matters'
+  - Text: "stopping at high repetition gives 226.1 of 328 at 25,671 tokens, at most 3 samples gives 233.2 at 26,114 (means over 24 draw orders)."
+  - Problem: Fractional counts and '24 draw orders' are not explained, and the two clauses are joined by a comma only.
+  - Rewrite: "stopping at high repetition gets 226.1 of 328 right at 25,671 tokens, while simply drawing at most 3 samples gets 233.2 at 26,114 tokens (averages over the 24 orders in which the 4 stored samples can be drawn)."
+- **V1, severity 1** — line 188, panel 'How we know'
+  - Text: "The prediction, written in the spec before any of these numbers: no sign reaches 0.60 within a problem. It held."
+  - Problem: 'It held.' is a punchline fragment, and 'the spec' is internal.
+  - Rewrite: "Before computing any of these numbers, we wrote down the prediction that no sign would reach 0.60 within a problem, and none did."
+- **D4, severity 1** — line 195, panel 'What it does not show'
+  - Text: "Late, the switch does go with failure: in a run to 32,768 tokens, 1 of 24 answers that had switched before token 16,384 end right, against 22 of 69 that had not. One sample per problem, not matched."
+  - Problem: 'Late,' and 'One sample per problem, not matched' are telegraphic; the reader has to guess what is not matched.
+  - Rewrite: "Late in an answer, a script switch does go with failure: when answers may run to 32,768 tokens, 1 of 24 answers that had switched script before token 16,384 ends right, against 22 of 69 that had not. This uses one sample per problem, and the two groups come from different problems."
+- **S1, severity 1** — line 198, panel 'What it does not show'
+  - Text: "the only interval above 0.5 among the 54 tests on Think-SFT, RL and Base + cue. Only 20 to 70 Think-SFT samples have switched by each reading point."
+  - Problem: An unrelated limit (few switched samples) is attached to the RL result in the same item.
+  - Rewrite: needs facts the proofreader did not have
+- **T1, severity 1** — line 421, control label
+  - Text: "Pairs from"
+  - Problem: The label does not say pairs of what, so the reader cannot guess what the 'One problem' / 'Any problems' switch changes until reading the hint.
+  - Rewrite: "Compare a failing and a right answer from"
+- **D4, severity 2** — line 504, caption on the picture, second number
+  - Text: "Stopping at the sign, 328 harder problems"
+  - Problem: The caption does not say what is stopped or what the number beside it ('0.8 % of tokens saved') measures.
+  - Rewrite: "Tokens saved by stopping a sample when the sign fires (328 harder problems)"
+- **D5, severity 1** — line 506, labels on the picture
+  - Text: "0.5 is chance, (scale:) 0.5 a coin toss"
+  - Problem: The same value is called 'chance' in one label and 'a coin toss' on the scale beside it.
+  - Rewrite: "Use one word in both places: "0.5 is chance" and, on the scale, "0.5 chance""
+- **D1, severity 2** — line 578, readout on the picture (repeats 12 times)
+  - Text: "Think-SFT + cue, T 1.0"
+  - Problem: 'Think-SFT' and 'Base + cue' are used throughout this page but never explained, so the reader does not know which model's answers were read.
+  - Rewrite: "Think-SFT (Olmo 3 7B trained on worked solutions) with the opening cue, sampling temperature 1.0"
+- **V2, severity 1** — line 786, side column, planted sign note
+  - Text: "It sits on every reading point and both kinds of pairs; the readout stores it once, computed on 368 pairs from 112 problems."
+  - Problem: 'Sits on' and 'the readout stores it once' describe the team's files, not the result.
+  - Rewrite: "It has the same value at every reading point and for both kinds of pairs; it was computed once, on 368 pairs from 112 problems."
+- **D4, severity 1** — line 794, side column, 'Switches script' facts
+  - Text: "98.3 % of those letters are Chinese. RL: 12, Base + cue: 9."
+  - Problem: 'Those letters' has no clear antecedent and 'RL: 12, Base + cue: 9' omits what is counted.
+  - Rewrite: "98.3% of the non-Latin letters in them are Chinese. For comparison, 12 of 1,312 RL samples and 9 of 1,312 Base + cue samples switch script."
+- **V2, severity 1** — line 799, side column, 'Switches script' facts
+  - Text: "translation by the agent that ran the study"
+  - Problem: 'The agent' is not introduced; the visitor does not know an AI agent ran the study.
+  - Rewrite: "machine translation by the AI agent that ran the study"
+- **V2, severity 1** — line 801, side column, note under the examples
+  - Text: "Among the samples flagged by token 12,000 and still running there, one that ended right and one that did not (the first of each in the stored order)"
+  - Problem: 'Flagged' and 'the stored order' are internal; the sentence also has no main verb.
+  - Rewrite: "These are two samples in which the sign fired by token 12,000 and that were still running then: the first that ended right and the first that did not."
+
+## tools/finding_one_difficulty_axis.py (24 issues: 2 serious, 10 re-read, 12 minor)
+
+- **D1, severity 2** — line 64, method names in the selectors and on the picture (repeats 20 times)
+  - Text: "Base + cue, sample 1"
+  - Problem: 'Cue' is used in most of the 36 method names but defined only inside the 'How we know' panel, so the scanning reader cannot tell what '+ cue' changes.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 1** — line 79, method names in the selectors
+  - Text: "Base + RL's 8 largest directions"
+  - Problem: 'Directions' of RL's weight change is a team term not explained on the page.
+  - Rewrite: "Base + the 8 largest components of RL's weight change"
+- **V4, severity 2** — line 89, page title and tile name
+  - Text: "One difficulty order"
+  - Problem: The title is a team label that names the model of the result, not the result, so the scanning visitor cannot tell what was found.
+  - Rewrite: "Combining two methods solves no extra problems"
+- **D1, severity 3** — line 91, first sentence (headline)
+  - Text: "Two methods together solve no more than one difficulty order predicts: −0.05 problems over 618 pairs."
+  - Problem: 'One difficulty order' is never explained in the headline, and '−0.05 problems over 618 pairs' does not say it is a mean difference from a prediction, so a newcomer cannot tell what the page claims.
+  - Rewrite: "Two ways of improving a model, used together, solve no more MATH-500 problems than if every method solved problems in the same order from easiest to hardest: across 618 pairs of methods, a pair solves on average 0.05 problems fewer than that prediction."
+- **D4, severity 3** — line 91, tile line
+  - Text: "Two methods together solve no more than one difficulty order predicts: −0.05 problems over 618 pairs."
+  - Problem: 'One difficulty order predicts' and '−0.05 problems over 618 pairs' are too compressed for a newcomer to tell what was measured.
+  - Rewrite: "Two methods combined solve no more problems than a single ranking of problem difficulty predicts: on average 0.05 fewer, over 618 pairs of methods."
+- **D2, severity 2** — line 104, panel 'What is new', first sentence
+  - Text: "Item response models with one ability per model and one difficulty per question fit LLM benchmarks well: a Rasch null leaves little structure on MMLU across 24 models"
+  - Problem: 'Rasch null' and 'leaves little structure' are jargon a newcomer cannot decode.
+  - Rewrite: "Item response models, which give each model one ability score and each question one difficulty score, fit LLM benchmarks well: on MMLU across 24 models, this one-factor (Rasch) model leaves little pattern unexplained"
+- **N3, severity 1** — line 106, panel 'What is new'
+  - Text: "Across 67 different models on MATH-500, more problems are failed by all of them than one shared factor predicts: 5.2 % against 2.1 %"
+  - Problem: The cited result departs from one shared factor, and the panel does not say how it fits with this page's one-order finding.
+  - Rewrite: needs facts the proofreader did not have
+- **S4, severity 1** — line 112, panel 'Why it matters', first sentence
+  - Text: "Combining two methods that reach the same score is predicted to gain no more than a second sample of one of them."
+  - Problem: The passive 'is predicted' hides that this is the page's own conclusion.
+  - Rewrite: "So combining two methods that reach the same score should gain no more than drawing a second sample from one of them."
+- **N1, severity 2** — line 113, panel 'Why it matters'
+  - Text: "The largest excess among the 7 pairs named before the test is +1.86 problems (Base + 50 % of RL's change + cue, with RL-Zero-Code 3.1 + cue); its upper bound is 5.1 problems, 1.0 points."
+  - Problem: 'Excess', 'its upper bound' and '1.0 points' are not tied to what they measure (a 95% interval, percentage points of 500).
+  - Rewrite: "Of the 7 pairs we named before the test, the one that beats the prediction most (Base + 50% of RL's change + cue, with RL-Zero-Code 3.1 + cue) solves 1.86 problems more than predicted; the top of its 95% interval is 5.1 problems, 1.0 percentage point of the 500."
+- **V2, severity 2** — line 115, panel 'Why it matters'
+  - Text: "So a cross-method stack is not worth a GPU run as a bet on complementary problems. A vote inside the most able reward-free method is the better use."
+  - Problem: This is the team's planning note ('worth a GPU run', 'stack', 'bet'), not a statement for a visitor.
+  - Rewrite: "So combining two different methods is unlikely to pay off by covering different problems; a majority vote over several samples of the strongest method without a reward is the better use of compute."
+- **D3, severity 2** — line 117, panel 'Why it matters'
+  - Text: "so the problems are within reach; one sample of a method just stops earlier on the order."
+  - Problem: 'Stops earlier on the order' is a figure of speech the reader must translate.
+  - Rewrite: "so almost every problem is within reach of some method; one sample of a single method solves fewer, and the problems it misses are the harder ones."
+- **S1, severity 2** — line 120, panel 'How we know', first sentence
+  - Text: "For every pair of the 36 methods (a method is one model with one prompt, sampled once at T 1.0; the cue is three fixed tokens that open the answer), the union was compared with the union expected if one method's right answers were shuffled among problems of equal difficulty."
+  - Problem: A 50-word passive sentence with two definitions in a parenthesis; the reader has to read it twice to find the comparison.
+  - Rewrite: "A method is one model with one prompt, sampled once at temperature 1.0; the cue is three fixed tokens that open the answer. For every pair of the 36 methods, we counted the problems that either method solves and compared it with the count expected if one method's right answers were shuffled among problems of equal difficulty."
+- **D2, severity 1** — line 123, panel 'How we know'
+  - Text: "The bias of that null and its spread come from 200 data sets drawn from a fitted Rasch model."
+  - Problem: 'Null', 'bias of that null' and 'Rasch model' are not explained on the page.
+  - Rewrite: "We measured how far this prediction is off on average, and how much it varies, on 200 simulated data sets drawn from a fitted one-factor (Rasch) model."
+- **D4, severity 1** — line 125, panel 'How we know'
+  - Text: "Different methods, 618 pairs: mean excess −0.05 problems (z mean −0.04, sd 0.97). Two samples of one method, 12 pairs: +0.29 (z mean +0.17)."
+  - Problem: Telegraphic fragments with unexplained 'excess' and 'z'.
+  - Rewrite: "Over 618 pairs of different methods, a pair solves on average 0.05 problems fewer than predicted (mean z-score −0.04, standard deviation 0.97). Over 12 pairs of two samples of the same method, it solves 0.29 more (mean z-score +0.17)."
+- **D2, severity 1** — line 127, panel 'How we know'
+  - Text: "A Rasch model plus one second axis predicts held-out cells no better than Rasch: −0.2790 nats per cell for both, −0.3689 with method labels shuffled."
+  - Problem: 'Held-out cells' and 'nats per cell' are not explained, and the reader cannot tell that the numbers are log-likelihoods where higher is better.
+  - Rewrite: "Adding a second dimension to the Rasch model does not predict held-out method-problem results any better: the log-likelihood is −0.2790 nats per result for both (higher is better), against −0.3689 when method labels are shuffled."
+- **D2, severity 2** — line 130, panel 'What it does not show', first sentence
+  - Text: "One pair has little power: a planted second axis of 1.5 logits on 30 % of the problems shows as only 1.8 problems. A small second axis is not excluded."
+  - Problem: 'Power', 'planted second axis' and 'logits' are statistical terms used without explanation, so the reader cannot judge how large an effect could be missed.
+  - Rewrite: "A single pair cannot detect a small effect: in a simulation where a second skill shifts the difficulty of 30% of the problems by 1.5 logits, a pair solves only 1.8 problems more than predicted. So a small second dimension of difficulty is not ruled out."
+- **D5, severity 1** — line 130, panels 'What it does not show' and 'How we know'
+  - Text: "a planted second axis"
+  - Problem: The finding is called a difficulty 'order' in the title and headline but a difficulty 'axis' in the panels ('second axis', 'one-axis range'), so the reader cannot be sure these are the same idea.
+  - Rewrite: "a simulated second dimension of difficulty"
+- **V2, severity 2** — line 132, panel 'What it does not show'
+  - Text: "A later test found Think-SFT's errors spread differently over difficulty than RL's (contrast −1.54, one-axis range −0.89 to +0.83). On the 328 harder problems that profile predicted 217.6 ... (board result-d9d6f3)"
+  - Problem: 'Board result-d9d6f3' is an internal id, and 'contrast', 'one-axis range', 'that profile' and 'Think-SFT' are not explained, so the reader cannot follow this caveat.
+  - Rewrite: needs facts the proofreader did not have
+- **D2, severity 1** — line 137, panel 'What it does not show'
+  - Text: "13 problems are solved only by the two RL methods; no null was computed for that count (MATH-500: 0)."
+  - Problem: 'No null was computed' is jargon; the reader cannot tell whether 13 is surprising.
+  - Rewrite: "13 problems are solved only by the two RL methods; we did not compute how many to expect by chance (on MATH-500 the count is 0)."
+- **D1, severity 1** — line 139, panel 'What it does not show'
+  - Text: "Most methods have one sample, and one grader version (v3) is used, so grader errors count as difficulty."
+  - Problem: 'Grader version (v3)' is a team label; the reader does not know what the grader is.
+  - Rewrite: "Most methods have one sample, and all answers are checked by one version of our answer checker, so its errors count as difficulty."
+- **S5, severity 1** — line 141, panel 'How to reproduce it', first sentence
+  - Text: "the commands are in studies/rlneurons/README.md, section One axis or several?"
+  - Problem: The section name is not quoted, so the sentence ends as a stray question.
+  - Rewrite: "the commands are in studies/rlneurons/README.md, section “One axis or several?”."
+- **T4, severity 1** — line 1548, button beside the method selectors
+  - Text: "Any pair"
+  - Problem: The button's words do not say that it steps automatically through all pairs.
+  - Rewrite: "Step through all pairs"
+- **D1, severity 2** — line 1695, label under the large number (repeats 3 times)
+  - Text: "problems: solved together, minus what one difficulty order predicts"
+  - Problem: The label repeats the unexplained 'one difficulty order', so the large number stays undecodable for a scanning reader.
+  - Rewrite: "problems solved by the pair together, minus the number predicted if both methods solve problems in the same easiest-to-hardest order"
+- **D4, severity 1** — line 1905, problem detail note
+  - Text: "Answer texts are stored on this page only for Base + cue and RL; the other methods have right or wrong."
+  - Problem: 'Have right or wrong' is compressed.
+  - Rewrite: "Answer texts are stored on this page only for Base + cue and RL; for the other methods only right or wrong is recorded."
+
+## tools/finding_opening_cue.py (31 issues: 0 serious, 18 re-read, 13 minor)
+
+- **V4, severity 1** — line 95, page title
+  - Text: "The opening cue"
+  - Problem: The title names the topic but not the result, and 'cue' is a team word the reader has not yet met.
+  - Rewrite: "Three opening tokens close most of the RL gap"
+- **D2, severity 2** — line 96, question above the headline
+  - Text: "Does solving math need RL training?"
+  - Problem: The first words on the page use 'RL' without saying it means reinforcement learning, and the question does not name the model.
+  - Rewrite: "Does the Olmo 3 7B model need reinforcement learning (RL) training to solve math problems?"
+- **N3, severity 2** — line 97, headline sentence (also the tile line)
+  - Text: "Three opening tokens raise the base model from 44.8 % to 82.0 % on MATH-500."
+  - Problem: The headline does not name the model or say what RL training reaches, so the reader cannot tell how much of the RL gain this covers.
+  - Rewrite: "Placing three fixed tokens at the start of the answer raises the untrained Olmo 3 7B base model from 44.8 % to 82.0 % on MATH-500; RL training reaches 92.6 %."
+- **N4, severity 2** — line 97, headline sentence
+  - Text: "raise the base model from 44.8 % to 82.0 %"
+  - Problem: The 44.8 % baseline is the plain base model at its worse temperature; at T 0.6 it scores 63.8 %, which the page only says in the last panel.
+  - Rewrite: needs facts the proofreader did not have
+- **D5, severity 1** — line 101, state names across the page
+  - Text: "Base … the base model … the plain prompt … the control"
+  - Problem: One condition goes by four names, so the reader must check they are the same run.
+  - Rewrite: needs facts the proofreader did not have
+- **S2, severity 2** — line 111, panel 'What is new', first sentence
+  - Text: "The cue is a replication of Wang et al. (arXiv 2610.06851), who report that a short opening cue takes the Olmo 3 base model from 42.2 % to 77.9 %"
+  - Problem: A panel titled 'What is new' opens with what is not new, and says the cue is a replication when the experiment is.
+  - Rewrite: "New here: how far Base + cue stays behind RL depends on the sampling temperature. The cue itself repeats Wang et al. (arXiv 2610.06851), who report 42.2 % to 77.9 % on MATH-500 at T 0.6."
+- **D2, severity 2** — line 111, panel 'What is new', first sentence
+  - Text: "on MATH-500 at T 0.6."
+  - Problem: This is the first use of 'T' on the page and it is never said to be the sampling temperature until the next sentence.
+  - Rewrite: "on MATH-500 at sampling temperature T 0.6."
+- **D3, severity 2** — line 115, panel 'What is new', fact 2
+  - Text: "Only the base model moves."
+  - Problem: 'moves' stands in for the claim; the reader must guess that it means its score changes with temperature.
+  - Rewrite: "Only the base model's score changes with temperature."
+- **S1, severity 2** — line 117, panel 'What is new', fact 3
+  - Text: "The paper ran T 0.6 only, and its RL model is an earlier release that scores 75.0 %, which the cue already matched, so it had no gap to explain."
+  - Problem: Four ideas in one sentence; the reader has to re-read to see what 'it' and 'release' refer to.
+  - Rewrite: "The paper ran T 0.6 only. Its RL model is an earlier release, Olmo-3-7B-RL-Zero-Math, which scores 75.0 %. The cue already matched that score, so the paper had no gap to explain."
+- **V2, severity 2** — line 121, panel 'Why it matters', first sentence
+  - Text: "so the work that follows is about the remaining 9.2 to 10.6 points."
+  - Problem: 'the work that follows' is the team's plan, not something the visitor can see, and the range of two numbers is not explained.
+  - Rewrite: "Most of what RL training adds on this benchmark is reached with no training. What is left is 9.2 to 10.6 points, depending on which of two RL runs is the reference."
+- **T3, severity 1** — line 123, panel 'Why it matters', fact 1
+  - Text: "The temperature decides how large that remainder looks. About half of the 22.0 points seen at T 0.6 are gone at T 1.0"
+  - Problem: This repeats the gap at the two temperatures already given in 'What is new'.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 1** — line 124, panel 'Why it matters', fact 1
+  - Text: "(27 of 500 against 119)"
+  - Problem: The bracket drops the words that say which number belongs to which temperature.
+  - Rewrite: "(27 of 500 answers at T 1.0, against 119 at T 0.6)"
+- **D3, severity 2** — line 126, panel 'Why it matters', fact 2
+  - Text: "It is the first and largest step of the team's climb on MATH-500."
+  - Problem: 'climb' is a team metaphor for successive score improvements, and 'It' has no clear referent.
+  - Rewrite: "The cue is the first and largest of the team's successive score improvements on MATH-500."
+- **D1, severity 2** — line 126, panel 'Why it matters', fact 2
+  - Text: "With a vote over 4 samples after restarting cut-off answers, Base + cue reaches 450 of 500 (90.0 %)"
+  - Problem: 'restarting cut-off answers' and 'vote' are team methods the page never explains.
+  - Rewrite: "With a majority vote over 4 sampled answers, after re-running answers that hit the length limit, Base + cue reaches 450 of 500 (90.0 %)"
+- **D1, severity 2** — line 128, panel 'Why it matters', fact 2
+  - Text: "A tie rule picked on held-out folds does not hold up: it gives 451 of 500 against the plain vote's 446 on MATH-500 but 189 of 328 against 192"
+  - Problem: 'tie rule', 'held-out folds' and 'plain vote' are unexplained, and this side result crowds a panel about why the finding matters.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — line 132, panel 'Why it matters', fact 3
+  - Text: "Harder problems leave more to explain: on the 328 harder problems Base + cue has 164 of 328 right and RL 206."
+  - Problem: The page never says what the 328 harder problems are or where they come from, and 'leave more to explain' is vague.
+  - Rewrite: "On a set of 328 harder problems the gap is larger: Base + cue has 164 of 328 right and RL 206."
+- **D2, severity 1** — line 138, panel 'How we know', fact 1
+  - Text: "at T 1.0 and top-p 1.0, cut off at 16,384 generated tokens, scored by grader v3."
+  - Problem: 'top-p' and 'grader v3' are not explained; the reader cannot tell what grader v3 is or why its version matters.
+  - Rewrite: "at temperature 1.0 and top-p 1.0 (no cut of unlikely tokens), stopped at 16,384 generated tokens, and scored by the third version of our answer checker."
+- **S1, severity 2** — line 140, panel 'How we know', fact 2
+  - Text: "The reference is RL, Olmo-3.1-7B-RL-Zero-Math with the plain prompt at the same setting: 463 of 500 (92.6 %) in the run shown, and 456, 462, 464 and 458 in the four samples"
+  - Problem: One sentence carries the model name, the setting and five scores from two runs.
+  - Rewrite: "The reference is the RL model, Olmo-3.1-7B-RL-Zero-Math, with the plain prompt at the same setting. It has 463 of 500 right (92.6 %) in the run shown. Four samples of a later run gave 456, 462, 464 and 458."
+- **D1, severity 1** — line 140, panel 'How we know', fact 2
+  - Text: "The control is the plain prompt on the same weights."
+  - Problem: The page never says what 'the plain prompt' is.
+  - Rewrite: needs facts the proofreader did not have
+- **N4, severity 1** — line 143, panel 'How we know', fact 2
+  - Text: "A repeat of the cue run on the same seeds gave 405 right"
+  - Problem: The same seeds gave 405 instead of 410 and the page does not say why a repeat with the same seeds differs.
+  - Rewrite: needs facts the proofreader did not have
+- **D6, severity 2** — line 147, panel 'How we know', fact 3
+  - Text: "At T 1.0 the detector finds 0, and cutting off the unlikely tokens again brings 34 back."
+  - Problem: The reader cannot tell what 'brings 34 back' refers to or what setting cut off the unlikely tokens.
+  - Rewrite: "At T 1.0 the detector finds 0 looping answers; at T 1.0 with min-p 0.1, which drops unlikely tokens, it finds 34."
+- **D3, severity 1** — line 151, panel 'What it does not show', first sentence
+  - Text: "The score above the paper's 77.9 % is a grader effect rather than a better cue"
+  - Problem: 'grader effect' is a label; the reader must infer that our answer checker accepts more answers than the paper's.
+  - Rewrite: "Our score is above the paper's 77.9 % because our answer checker accepts more answers, not because our cue is better"
+- **D6, severity 2** — line 153, panel 'What it does not show', fact 1
+  - Text: "at T 0.6 its cut-off answers fall late in training, from 98 of 500 at RL step 400 to 19 of 500 at the final step 2,800."
+  - Problem: 'fall late in training' can be read as the cut-off answers appearing late; the reader has to re-read to see that their number drops.
+  - Rewrite: "at T 0.6 the number of its answers cut off at the length limit drops during training, from 98 of 500 at RL step 400 to 19 of 500 at the final step 2,800."
+- **S2, severity 1** — line 156, panel 'What it does not show', fact 2
+  - Text: "The picture's 37.2 points are against the plain prompt at T 1.0."
+  - Problem: This is the strongest caveat on the headline, yet it sits in the second fact of the fourth panel.
+  - Rewrite: needs facts the proofreader did not have
+- **S1, severity 1** — line 163, panel 'What it does not show', fact 3
+  - Text: "21 are empty. Open a dot to read one. It is one pair of models, one benchmark and one sample per problem."
+  - Problem: Three unrelated ideas end the paragraph; the sentence starts with a numeral, 'Open a dot' is unclear, and 'It' has no clear referent.
+  - Rewrite: "Another 21 are empty. Click a dot to read one. The whole result rests on one pair of models, one benchmark and one sample per problem."
+- **N4, severity 2** — line 177, panel 'How to reproduce it', fact 3
+  - Text: "The paper's cue has two tokens. The cue here has three, the text " line!", two line breaks and "Okay", and it is how RL opens its own answers."
+  - Problem: That the cue differs from the paper's and was copied from how the RL model starts its answers matters for the claim, but only appears in the reproduce panel.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — line 874, switch button and picture labels
+  - Text: "Base + cue"
+  - Problem: The headline says 'opening tokens' and the buttons say 'cue'; nothing visible at the top says the cue is those three tokens.
+  - Rewrite: "Base + three opening tokens (the cue)"
+- **D4, severity 1** — line 960, label in picture
+  - Text: "The cue turns 209 problems right, 23 wrong."
+  - Problem: 'turns problems right' is shorthand; the reader must work out that it means from wrong to right.
+  - Rewrite: "With the cue, 209 problems change from wrong to right and 23 from right to wrong."
+- **N1, severity 1** — line 962, track labels in picture
+  - Text: "Base 224 … Base + cue 410 … RL 463"
+  - Problem: The bare numbers do not say they are right answers out of 500, and 'RL' is not explained in the picture.
+  - Rewrite: "Base: 224 of 500 right. Base + cue: 410. RL-trained model: 463."
+- **D2, severity 2** — line 1051, label under the big number
+  - Text: "410 of 500 right · Base + cue, T 1.0"
+  - Problem: 'T 1.0' is the sampling temperature, but the picture never says so, and the dot stands in for words.
+  - Rewrite: "410 of 500 right, Base + cue, sampling temperature 1.0"
+- **D3, severity 1** — line 1099, problem pane caption
+  - Text: "How the answer begins, Base + cue (the cue is lit)"
+  - Problem: 'lit' is a visual metaphor; 'highlighted' says it plainly.
+  - Rewrite: "How the answer begins, Base + cue (the cue is highlighted)"
+
+## tools/finding_restart_on_cap.py (27 issues: 0 serious, 14 re-read, 13 minor)
+
+- **D5, severity 2** — line 73, tile title
+  - Text: "Restarting stuck answers"
+  - Problem: The title calls cut-off answers 'stuck', while the tile 'Cut off is unfinished' shows cut-off answers are unfinished, not stuck.
+  - Rewrite: "Restarting cut-off answers"
+- **V4, severity 1** — line 73, page title
+  - Text: "Restarting stuck answers"
+  - Problem: The title names the method but not the result, and 'stuck' is a metaphor for answers that hit the length limit.
+  - Rewrite: "Restarting answers that hit the length limit adds 12 points"
+- **D5, severity 1** — line 73, names for the same event across the page
+  - Text: "stuck answers … never ends … cut off … writes until the length limit"
+  - Problem: Four names for answers that reached the 16,384-token limit make the reader check whether they are the same thing.
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 1** — line 74, question above the headline
+  - Text: "Does starting over help an answer that never ends?"
+  - Problem: 'never ends' overstates; the answers stop at a 16,384-token limit, which the reader learns only later.
+  - Rewrite: "Does sampling again help when an answer runs into the length limit?"
+- **D5, severity 1** — line 74, tile question
+  - Text: "Does starting over help an answer that never ends?"
+  - Problem: 'Never ends' is a third name for cut-off answers (with 'stuck' and 'cut off').
+  - Rewrite: "Does starting over help an answer that hits the token limit?"
+- **N1, severity 2** — line 75, headline sentence (also the tile line)
+  - Text: "Restarting cut-off answers adds 12 points at T 0.6 and 1.6 at T 1.0."
+  - Problem: The headline does not say which model, what the answers were cut off by, what the points measure or that T is the sampling temperature.
+  - Rewrite: "For the untrained Olmo 3 7B base model, sampling again the MATH-500 answers that hit the 16,384-token limit raises accuracy by 12 percentage points at sampling temperature 0.6 and by 1.6 points at temperature 1.0."
+- **N1, severity 2** — line 75, tile line
+  - Text: "Restarting cut-off answers adds 12 points at T 0.6 and 1.6 at T 1.0."
+  - Problem: The line does not say what the points are added to or on which benchmark, and 'T 0.6' is not explained on a tile.
+  - Rewrite: "Restarting cut-off answers raises Base + cue on MATH-500 by 12 points at temperature 0.6 and by 1.6 points at temperature 1.0."
+- **T4, severity 1** — line 80, switch buttons
+  - Text: "No restart / Restart"
+  - Problem: 'Restart' can be read as restarting the animation rather than showing the run in which cut-off answers were sampled again.
+  - Rewrite: "Before restarts / After restarts"
+- **D1, severity 2** — line 86, panel 'What is new', first sentence
+  - Text: "It was known that this base model, opened with the cue, often writes until the length limit"
+  - Problem: 'the cue' and 'this base model' are used before the page says what either is.
+  - Rewrite: "It was known that the Olmo 3 7B base model, when its answer starts with a fixed three-token cue, often writes until the length limit"
+- **V2, severity 2** — line 88, panel 'What is new', fact 1
+  - Text: "a search of the team's memory found no earlier report of one."
+  - Problem: 'the team's memory' is an internal tool the visitor does not know; the reader cannot judge how thorough the search was.
+  - Rewrite: "and we found no earlier report of one in the literature or in our own notes."
+- **D4, severity 1** — line 90, panel 'What is new', fact 2
+  - Text: "New here: the count for this model."
+  - Problem: A fragment with no verb; the reader must guess which count.
+  - Rewrite: "New here: how many answers this model leaves cut off, and how many a restart saves."
+- **D4, severity 2** — line 91, panel 'What is new', fact 2
+  - Text: "and sampling them again from the start ends right on 61 of them."
+  - Problem: 'ends right on 61 of them' is compressed; the reader has to re-read to see that 61 become right answers.
+  - Rewrite: "and sampling them again from the start gives a right answer for 61 of them."
+- **S2, severity 2** — line 94, panel 'Why it matters', first sentence
+  - Text: "The team measures how close the base model, with no training, comes to RL on MATH-500, and at T 0.6 a restart closes 12 of the 22 points between them."
+  - Problem: The fact that matters comes after a description of the team's work, and 'RL' is not explained anywhere on the page.
+  - Rewrite: "At T 0.6 a restart closes 12 of the 22 points by which the untrained base model trails the reinforcement-learning (RL) trained model on MATH-500."
+- **V2, severity 2** — line 98, panel 'Why it matters', fact 2
+  - Text: "On the team's chart this step is 0.8 points, from 410 to 414 of 500. The chart compares it with one sample at T 1.0"
+  - Problem: 'the team's chart' is not on this page, and the sentence hides that the T 0.6 restart barely beats one plain sample at T 1.0.
+  - Rewrite: "Compared with one sample at T 1.0 and no restart (410 of 500, only 27 cut off), the restart at T 0.6 (414 of 500) gains just 0.8 points."
+- **D4, severity 1** — line 100, panel 'Why it matters', fact 3
+  - Text: "Still open: 45 answers are cut off three times in a row."
+  - Problem: 'Still open' is a team label; the sentence means 45 answers remain unfinished after both restarts.
+  - Rewrite: "After both restarts, 45 answers still hit the limit on all three tries."
+- **D1, severity 1** — line 101, panel 'How we know', first sentence
+  - Text: "Base + cue (Olmo 3 7B, no training, opened with a three-token cue)"
+  - Problem: The page never says what the three-token cue is or links to the page that does.
+  - Rewrite: "Base + cue (Olmo 3 7B with no training, its answer started with the three tokens " line!", two line breaks and "Okay"; see the opening cue page)"
+- **D1, severity 1** — line 105, panel 'How we know', fact 1
+  - Text: "Grader v3 scored every answer, and 1 of the 119 had written its answer before it was cut off and counts as right without a restart."
+  - Problem: 'Grader v3' is a team label for the answer checker, and two ideas share one sentence.
+  - Rewrite: "The third version of our answer checker scored every answer. One of the 119 cut-off answers had already written its final answer, so it counts as right without a restart."
+- **V2, severity 2** — line 107, panel 'How we know', fact 2
+  - Text: "the 60 extra right answers are a paired difference on the same 500 problems. The committed file holds totals and no score per problem, so this gain has no interval."
+  - Problem: 'The committed file' is inside talk, and the reader is not told plainly that the 12-point headline has no confidence interval.
+  - Rewrite: "the 60 extra right answers compare the same 500 problems before and after. We kept only the totals, not a score per problem, so we cannot give a confidence interval for this 12-point gain."
+- **D4, severity 2** — line 109, panel 'How we know', fact 3
+  - Text: "Control at T 1.0 and top-p 1.0, with a score per problem: 405 right becomes 413"
+  - Problem: A fragment opens the sentence, and a second temperature setting is called a 'control' though it is a second measurement of the same restart.
+  - Rewrite: "We repeated the restart at T 1.0 and top-p 1.0, this time with a score per problem: 405 right answers became 413"
+- **D2, severity 1** — line 110, panel 'How we know', fact 3
+  - Text: "(95 % interval 0.6 to 2.8, paired bootstrap)"
+  - Problem: 'paired bootstrap' is not explained for a reader outside statistics.
+  - Rewrite: "(95 % interval 0.6 to 2.8, from resampling the problems)"
+- **S1, severity 2** — line 112, panel 'What it does not show', first sentence
+  - Text: "It does not show that a cut-off answer is a solved problem that failed to stop: on 328 harder problems, forcing the base model to commit to an answer once it passes 8,000 tokens loses problems"
+  - Problem: The sentence holds a claim, a method and five numbers; '328 harder problems' and 'loses problems' are not explained.
+  - Rewrite: "A cut-off answer is usually not a solved problem that failed to stop. On a set of 328 harder problems, forcing the base model to give its answer after 8,000 tokens lowered the score from 164 to 152 right (3.7 points, 95 % interval 1.2 to 6.4)."
+- **S5, severity 2** — line 117, panel 'What it does not show', fact 1
+  - Text: "There being cut off marks a failure to solve rather than a failure to stop."
+  - Problem: The sentence is ungrammatical and the reader has to re-read it to find its subject.
+  - Rewrite: "So on these problems, an answer that hits the limit is one the model could not solve, not one it solved and failed to end."
+- **D1, severity 1** — line 120, panel 'What it does not show', fact 1
+  - Text: "but adds only 0.9 points to a vote over four (195 against 192)."
+  - Problem: 'a vote over four' is shorthand for a majority vote over four sampled answers.
+  - Rewrite: "but adds only 0.9 points when the answer is chosen by majority vote over four samples (195 right against 192)."
+- **N1, severity 2** — line 122, panel 'What it does not show', fact 2
+  - Text: "one sample with no restart is already right on 405 to 410 of 500, at 3,808 generated tokens per problem; the restart at T 0.6 needs 9,382."
+  - Problem: The range of two runs is not explained, '9,382' has no unit, and the point (the restart mostly repairs a worse temperature) is left for the reader to infer.
+  - Rewrite: "one sample with no restart is already right on 405 to 410 of 500 (two runs), using 3,808 generated tokens per problem; the restart at T 0.6 reaches 414 but uses 9,382 tokens per problem."
+- **V2, severity 1** — line 125, panel 'What it does not show', fact 3
+  - Text: "The file counts cut-off answers and does not record how many of the 119 repeat themselves."
+  - Problem: 'The file' is internal; the reader wants to know what was not measured.
+  - Rewrite: "We did not record how many of the 119 cut-off answers repeat themselves."
+- **D6, severity 1** — line 131, panel 'How to reproduce it', fact 2
+  - Text: "The T 0.6 rows were scored by studies/rlneurons/grader/rln4_grader_v3.py from raw answers stored outside the repository. Its numbers are in"
+  - Problem: 'Its' has no clear referent after a plural subject.
+  - Rewrite: "The T 0.6 rows were scored by studies/rlneurons/grader/rln4_grader_v3.py from raw answers stored outside the repository. Their numbers are in"
+- **D1, severity 2** — line 301, label beside the big count
+  - Text: "% · Base + cue, T 0.6"
+  - Problem: 'Base + cue' and 'T 0.6' are not explained anywhere in the picture; the definition comes only in the third panel.
+  - Rewrite: "% right, untrained base model with the opening cue, temperature 0.6"
+
+## tools/finding_rl_avoids_the_slip.py (28 issues: 1 serious, 16 re-read, 11 minor)
+
+- **N4, severity 3** — line 61, tile title
+  - Text: "RL avoids the slip"
+  - Problem: The title claims RL avoids the base model's wrong step, but the tile's own figure says the interval includes 1, so the effect may be chance.
+  - Rewrite: "Does RL avoid the base's wrong step? Not shown"
+- **N2, severity 2** — line 61, page title (tile and browser tab)
+  - Text: "RL avoids the slip"
+  - Problem: The title claims RL avoids errors, but the page's own limits panel says it does not show what RL would write or that RL catches these errors; 'the slip' is also a team label.
+  - Rewrite: "RL rates the base model's misreadings and slips as less likely"
+- **D3, severity 1** — line 61, tile title
+  - Text: "RL avoids the slip"
+  - Problem: 'The slip' is a figure of speech for the first wrong step.
+  - Rewrite: needs facts the proofreader did not have
+- **D2, severity 1** — line 62, question above the headline
+  - Text: "Does RL avoid the exact wrong steps the base model writes?"
+  - Problem: 'RL' is never expanded on the page, and which RL model is meant is never named.
+  - Rewrite: "Is the reinforcement-learning (RL) trained Olmo 3 model less likely to write the exact wrong steps that the untrained base model writes?"
+- **D6, severity 2** — line 63, headline sentence (also the tile line)
+  - Text: "Given Base + cue's wrong answer, RL is 0.49 times as likely to write its first wrong step."
+  - Problem: 'Base + cue' is unexplained and 'its' can mean RL's or the answer's first wrong step, so the reader cannot tell what was measured.
+  - Rewrite: "On wrong answers written by the untrained base model with the opening cue, the RL-trained model gives the first wrong step about half (0.49 times) the base model's probability."
+- **N4, severity 2** — line 63, headline sentence
+  - Text: "RL is 0.49 times as likely to write its first wrong step."
+  - Problem: The headline gives the point estimate as fact, while the page's limits panel says its 95 % interval includes 0.
+  - Rewrite: "RL is 0.49 times as likely to write its first wrong step (95 % interval includes no change)."
+- **D6, severity 2** — line 63, tile line
+  - Text: "Given Base + cue's wrong answer, RL is 0.49 times as likely to write its first wrong step."
+  - Problem: 'Its first wrong step' could be RL's or Base + cue's; the caveat (interval includes 1) is missing from the line.
+  - Rewrite: "Shown Base + cue's wrong answer, RL is 0.49 times as likely to write that answer's first wrong step, but the 95 % interval includes 1, so this may be chance."
+- **D2, severity 1** — line 135, panel 'What is new', first sentence
+  - Text: "and judges can locate the first wrong step of a math solution (ProcessBench, Zheng et al., 2024)."
+  - Problem: 'judges' is unexplained; the reader does not know these are language models asked to grade the solution.
+  - Rewrite: "and language-model judges can locate the first wrong step of a math solution (ProcessBench, Zheng et al., 2024)."
+- **S1, severity 1** — line 137, panel 'What is new', fact 1
+  - Text: "New here: each model scores the exact wrong step that Base + cue wrote, against other text of the same answer, so the model's general change to the text cancels out."
+  - Problem: 'scores … against' is compressed; the reader has to re-read to see that the step's probability is compared with other spans of the same answer.
+  - Rewrite: "New here: we measure how likely each model finds the exact wrong step that Base + cue wrote, and subtract how likely it finds other spans of the same answer. This removes the model's general change on all text."
+- **N4, severity 1** — line 141, panel 'What is new', fact 3
+  - Text: "The drop sits in misreadings (−1.53 nats, 14 answers) and slips (−0.72, 21), not in wrong plans (+0.03, 16)."
+  - Problem: Subgroups of 14 to 21 answers are compared without intervals, while the overall interval already includes 0; 'sits in' is also vague.
+  - Rewrite: needs facts the proofreader did not have
+- **D6, severity 2** — line 145, panel 'Why it matters', first sentence
+  - Text: "Part of RL's gain over Base + cue looks like a lower chance of writing the base's own misreadings and slips. Its wrong plans stay as likely."
+  - Problem: 'Its' can mean RL's or the base's wrong plans.
+  - Rewrite: "Part of RL's gain over Base + cue looks like a lower chance of writing the base's own misreadings and slips. RL is as likely as the base to write the base's wrong plans."
+- **V2, severity 2** — line 147, panel 'Why it matters', fact 1
+  - Text: "The factor agrees with a separate count: finished answers of RL hold 0.015 first wrong steps per 1,000 tokens against 0.038 for Base + cue, 0.39 times as many (board result-855858)."
+  - Problem: A board id is inside talk, 'the factor' has no clear referent, and 0.39 is called agreement with 0.49 without saying how the count was made.
+  - Rewrite: "A separate count points the same way: a judge found 0.015 first wrong steps per 1,000 tokens in RL's finished answers against 0.038 for Base + cue, 0.39 times as many."
+- **N2, severity 1** — line 153, panel 'Why it matters', fact 3
+  - Text: "So a method without training that aims at RL's gain has to lower the base's misreadings and slips, not only change how it samples."
+  - Problem: 'has to' is stronger than a mean whose interval includes 0 supports.
+  - Rewrite: "So a method without training that aims at RL's gain probably has to lower the base's misreadings and slips, not only change how it samples."
+- **D1, severity 2** — line 156, panel 'How we know', first sentence
+  - Text: "A judge read 51 finished wrong answers of Base + cue on MATH-500 (T 1.0) and copied each one's first wrong step."
+  - Problem: The page never says what the judge is (a language model, which one) until a vague mention in the limits panel.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — line 158, panel 'How we know', fact 1
+  - Text: "D = (log p of the model − log p of the base), summed over the wrong step (median 29 tokens), minus the same sum over 200 spans … exp(mean D) is the large number."
+  - Problem: The measure is given only as a formula, and 'the large number' points to the picture without naming it.
+  - Rewrite: "D is how much more likely the model finds the wrong step than the base does (difference of log-probabilities summed over the step's median 29 tokens), minus the same difference averaged over 200 spans of equal length elsewhere in the answer. The big number in the picture is exp(mean D)."
+- **D4, severity 2** — line 161, panel 'How we know', fact 2
+  - Text: "A quarter of RL's change (a = 0.25) gives −0.10"
+  - Problem: 'a = 0.25' is a symbol the page never defines.
+  - Rewrite: "The base weights moved a quarter of the way toward RL's weights give −0.10"
+- **N3, severity 1** — line 163, panel 'How we know', fact 3
+  - Text: "On the first 5 tokens of each step RL gives −0.35 nats (95 % interval −0.69 to −0.03)."
+  - Problem: The reader is not told why this number matters: unlike the full step, its interval excludes 0.
+  - Rewrite: "On the first 5 tokens of each step RL gives −0.35 nats, and this interval (−0.69 to −0.03) does not include 0."
+- **N2, severity 2** — line 166, panel 'What it does not show', first sentence
+  - Text: "The drop is carried by a minority of answers: the median is −0.26 and 29 of 51 are below 0."
+  - Problem: 'a minority' next to '29 of 51 are below 0' (a majority) reads as a contradiction; the reader cannot tell what the minority is.
+  - Rewrite: "A few answers with large drops carry most of the mean: the median is only −0.26, and 29 of 51 answers are below 0."
+- **D6, severity 1** — line 168, panel 'What it does not show', fact 1
+  - Text: "It scores Base + cue's text under each model."
+  - Problem: 'It' has no clear referent (the method, the page or the job).
+  - Rewrite: "The method scores Base + cue's text under each model."
+- **V2, severity 2** — line 170, panel 'What it does not show', fact 2
+  - Text: "One judge per answer, a subagent of the team's own model, chose the label and the step."
+  - Problem: 'a subagent of the team's own model' is inside talk; the reader cannot tell which model judged.
+  - Rewrite: needs facts the proofreader did not have
+- **D5, severity 2** — line 416, control button and picture labels
+  - Text: "RL"
+  - Problem: 'RL' is one specific model (RL-Zero-Math 3.1) while the other buttons are named 'Math 3.0', 'Code 3.1' etc., so the reader cannot tell which RL model the headline is about.
+  - Rewrite: "RL-Zero-Math 3.1 (RL)"
+- **D1, severity 2** — line 420, row of buttons under the picture
+  - Text: "Other models of the same base: Mix 3.0 · Math 3.0 · Code 3.1 · Code 3.0 · General 3.0 · IF 3.0"
+  - Problem: The model names and 'IF' are never explained, so the buttons do not say what each model was trained for.
+  - Rewrite: "Other RL-trained versions of the same base model, by training data and release: math and code mix 3.0, math 3.0, code 3.1, code 3.0, general chat 3.0, instruction following 3.0"
+- **D1, severity 2** — line 426, button under the picture
+  - Text: "¼ of RL's change"
+  - Problem: The reader cannot tell that this is the base weights moved a quarter of the way toward the RL weights; the panel says only '(a = 0.25)'.
+  - Rewrite: "Base moved ¼ of the way to RL's weights"
+- **D6, severity 2** — line 632, label beside the big number
+  - Text: "times as likely as Base + cue to write its own wrong step"
+  - Problem: 'its own' leaves the reader unsure whose wrong step: the model's or Base + cue's.
+  - Rewrite: "times as likely as Base + cue to write the wrong step that Base + cue wrote"
+- **D2, severity 2** — line 634, label beside the big number
+  - Text: "RL: −0.71 nats of log-probability, mean of 51 wrong steps of Base + cue"
+  - Problem: 'nats' and 'log-probability' are not explained anywhere on the page.
+  - Rewrite: "RL: −0.71 nats (natural-log units of probability; −0.69 means half as likely), mean over 51 wrong steps of Base + cue"
+- **D4, severity 1** — line 647, caption above the example answer
+  - Text: "MATH-500, problem 12 · answer of Base + cue, T 1.0 · first wrong step, judged a slip"
+  - Problem: A chain of fragments joined by dots; 'T 1.0' is not explained.
+  - Rewrite: "MATH-500, problem 12: an answer of Base + cue at temperature 1.0. Its first wrong step, highlighted, was judged a slip."
+- **D4, severity 1** — line 652, text under the example answer
+  - Text: "The ringed mark. RL on this step: −2.31 nats of log-probability, 0.10 times as likely as Base + cue. Shown: RL's largest drop of the 51."
+  - Problem: Three fragments in a row; the reader must assemble the sentence.
+  - Rewrite: "This answer is the ringed mark. On this step RL is 0.10 times as likely as Base + cue (−2.31 nats). It is RL's largest drop of the 51 answers."
+- **D1, severity 1** — line 705, answer pane caption
+  - Text: "D on this step, nats. Left of the line: less likely than Base + cue to write it."
+  - Problem: A visitor who opens an answer directly meets 'D' without a definition.
+  - Rewrite: "Change in how likely each model finds this step, in nats. Left of the line: less likely than Base + cue to write it."
+
+## tools/finding_rl_change_on_imitation.py (38 issues: 1 serious, 18 re-read, 19 minor)
+
+- **D4, severity 2** — line 115, page title (tile and browser tab)
+  - Text: "RL change on imitation"
+  - Problem: A compressed noun phrase: 'imitation' stands for a model trained on worked solutions and 'RL change' for a weight difference; the title states no result.
+  - Rewrite: "Adding RL's weight change to the supervised model lifts hard-math scores"
+- **D4, severity 2** — line 115, tile title
+  - Text: "RL change on imitation"
+  - Problem: Stacked nouns; the reader cannot tell that RL's weight change is added to the imitation model.
+  - Rewrite: "Adding RL's weight change to the imitation model"
+- **D1, severity 2** — line 116, question above the headline
+  - Text: "Does adding RL's weight change to Think-SFT help on hard math?"
+  - Problem: 'Think-SFT' and 'RL's weight change' are team labels the reader meets with no explanation.
+  - Rewrite: "Does adding the weight change that RL training made (RL weights minus base weights) to Think-SFT, the Olmo 3 model fine-tuned on worked solutions, help on hard math?"
+- **D1, severity 3** — line 118, headline sentence (also the tile line)
+  - Text: "Twice RL's weight change lifts Think-SFT from 209 to 231.5 of 328; RL scores 200."
+  - Problem: 'Think-SFT' is never explained anywhere on the visible page, so the reader cannot tell which model was improved or what RL and the base are.
+  - Rewrite: "Adding twice the RL weight change (RL minus base) to Think-SFT, the Olmo 3 7B model fine-tuned on worked solutions, lifts it from 209 to 231.5 right of 328 hard problems; the RL model itself scores 200."
+- **D4, severity 2** — line 118, headline sentence
+  - Text: "Twice RL's weight change lifts Think-SFT"
+  - Problem: 'Twice' can be read as 'on two occasions'; the reader has to guess it means the change multiplied by 2.
+  - Rewrite: "Two times RL's weight change, added to Think-SFT, lifts it"
+- **N1, severity 1** — line 118, headline sentence
+  - Text: "from 209 to 231.5 of 328"
+  - Problem: A half answer is confusing until the reader learns these are means over samples.
+  - Rewrite: "from 209 to 231.5 of 328 (means over 4 and 2 samples)"
+- **N1, severity 1** — line 118, tile line
+  - Text: "Twice RL's weight change lifts Think-SFT from 209 to 231.5 of 328; RL scores 200."
+  - Problem: '231.5 of 328' is an average over samples, which the line does not say.
+  - Rewrite: "Adding twice RL's weight change lifts Think-SFT from 209 to 231.5 of 328 (average over samples); RL scores 200."
+- **D2, severity 2** — line 132, panel 'What is new', first sentence
+  - Text: "Adding an SFT and an RL weight change of one base model is published"
+  - Problem: 'SFT' is never expanded and 'is published' hides who did it.
+  - Rewrite: "Others have already added the weight changes from supervised fine-tuning (SFT) and from RL of one base model"
+- **D4, severity 2** — line 135, panel 'What is new', fact 1
+  - Text: "There both models were trained on the same worked solutions, and searched weights for the two changes reach 49.3."
+  - Problem: 'There' means 'in that paper' and 'searched weights' means mixing coefficients found by search; both need decoding.
+  - Rewrite: "In that paper both models were trained on the same worked solutions, and mixing coefficients found by search reach 49.3."
+- **S1, severity 2** — line 136, panel 'What is new', fact 2
+  - Text: "New here: RL was trained from the base with reward and no worked solutions, Think-SFT on other data, and the 328 harder problems are not among RL's training prompts."
+  - Problem: Three ideas with a dropped verb in the middle; the reader has to re-read to match each model to its data.
+  - Rewrite: "New here: the two changes come from different data. RL was trained from the base with a reward and no worked solutions; Think-SFT was trained on other worked solutions. The 328 harder problems are not among RL's training prompts."
+- **D4, severity 2** — line 138, panel 'What is new', fact 3
+  - Text: "New also: a followed past its best point, a = 0 to 4, with the cut-off count at each a, and a control of random noise in place of RL's change."
+  - Problem: A telegraphic fragment that uses 'a' before the page defines it.
+  - Rewrite: "Also new: we tried a from 0 to 4, past the best value, counted the answers cut off at each value, and ran a control that adds random noise instead of RL's change."
+- **D5, severity 1** — line 140, panel 'What is new', fact 4
+  - Text: "held after the models' last weights were uploaded; the gain held there."
+  - Problem: 'held' is used for a contest date and for a result in the same sentence.
+  - Rewrite: "which took place after the models' last weights were uploaded; the gain was there too."
+- **V2, severity 1** — line 143, panel 'Why it matters', first sentence
+  - Text: "It is the team's highest one-sample score on the 328 harder problems"
+  - Problem: 'the team's highest' measures against the team's internal record, which the visitor does not know; 'It' has no clear referent.
+  - Rewrite: "Think-SFT + 2 × RL's change gives the highest one-sample score we have measured on the 328 harder problems"
+- **N2, severity 1** — line 144, panel 'Why it matters', first sentence
+  - Text: "It needs no further training: the weights of three released models are added."
+  - Problem: The weights are added and subtracted (Think-SFT + 2 × (RL − Base)), so 'added' misdescribes the method.
+  - Rewrite: "It needs no further training: it combines the weights of three released models."
+- **D4, severity 1** — line 146, panel 'Why it matters', fact 1
+  - Text: "a = 2 minus Think-SFT: +6.9 points (95 % interval 4.6 to 9.3). Minus RL: +9.6 points (6.9 to 12.3)."
+  - Problem: Fragments with symbols in place of a sentence; the sentence starts in lower case.
+  - Rewrite: "At a = 2 the model scores 6.9 points above Think-SFT (95 % interval 4.6 to 9.3) and 9.6 points above RL (6.9 to 12.3)."
+- **N2, severity 2** — line 148, panel 'Why it matters', fact 2
+  - Text: "RL's change makes Think-SFT finish. Of the 89 answers cut off at a = 0, at a = 2 27 finish right, 21 finish wrong and 41 are still cut off."
+  - Problem: 'makes Think-SFT finish' is stronger than the numbers beside it (41 of 89 still hit the limit), and '2 27' runs two numbers together.
+  - Rewrite: "RL's change lets more of Think-SFT's answers finish. Of the 89 answers cut off at a = 0, 27 finish right at a = 2, 21 finish wrong and 41 are still cut off."
+- **D4, severity 1** — line 150, panel 'Why it matters', fact 3
+  - Text: "On the 136 problems from 2026, with a = 2 fixed beforehand: 72.25 of 136 per sample against 60 for Think-SFT, +9 points (95 % interval 5.3 to 12.7); RL 50.5."
+  - Problem: A fragment after the colon with no verb; the reader must assemble the comparison.
+  - Rewrite: "On the 136 problems from 2026, with a = 2 fixed beforehand, the model gets 72.25 of 136 right per sample against 60 for Think-SFT (+9 points, 95 % interval 5.3 to 12.7) and 50.5 for RL."
+- **V2, severity 2** — line 155, panel 'Why it matters', fact 5
+  - Text: "Under a vote over 4 samples Think-SFT alone reaches 241 of 328 (result-818c20); the vote at a = 2 on the 328 is not measured yet."
+  - Problem: A board id and 'not measured yet' are inside talk, and the reader is not told that this vote beats the headline score of 231.5.
+  - Rewrite: "With a majority vote over 4 samples, Think-SFT alone reaches 241 of 328, above the 231.5 of one sample at a = 2; we have not measured the vote at a = 2 on these problems."
+- **N4, severity 2** — line 158, panel 'How we know', first sentence
+  - Text: "Each model answered each of the 328 harder problems with the opening cue at T 1.0"
+  - Problem: This contradicts the picture's 'RL (no cue)', and 'the opening cue' and 'Grader v3' are not explained.
+  - Rewrite: "Think-SFT and each combined model answered the 328 harder problems with the opening cue (three fixed tokens at the start of the answer), RL without it, all at sampling temperature 1.0"
+- **S2, severity 2** — line 160, panel 'How we know', fact 1
+  - Text: "The model at a is Think-SFT + a × (RL − Base), every weight tensor."
+  - Problem: The definition of 'a', which labels the main control, comes only in the third panel, after 'a' has been used many times.
+  - Rewrite: needs facts the proofreader did not have
+- **D2, severity 1** — line 161, panel 'How we know', fact 1
+  - Text: "its norm is 4.12, against 467.4 for Think-SFT's change from Base."
+  - Problem: The kind of norm and its unit are not said.
+  - Rewrite: "its size (L2 norm over all weights) is 4.12, against 467.4 for Think-SFT's change from Base."
+- **D4, severity 1** — line 162, panel 'How we know', fact 2
+  - Text: "Samples: 4 at a = 0, 2 at a = 2 (234 and 229 right), 1 at a = 1, 3 and 4."
+  - Problem: A list of fragments; 'bootstrap' in the next sentence is not explained.
+  - Rewrite: "We took 4 samples at a = 0, 2 at a = 2 (234 and 229 right) and 1 at a = 1, 3 and 4."
+- **S1, severity 2** — line 164, panel 'How we know', fact 3
+  - Text: "Control: random noise of the size of RL's change at a = 1 (after rounding to 16 bits, 1.4 times larger) gives 209 right and 97 cut off, Think-SFT's own values."
+  - Problem: The bracket is hard to parse: the reader cannot tell what is 1.4 times larger than what.
+  - Rewrite: "Control: we added random noise the size of RL's change. After rounding the weights to 16 bits the noise was 1.4 times that size. It gives 209 right and 97 cut off, about Think-SFT's own values."
+- **D4, severity 1** — line 165, panel 'How we know', fact 3
+  - Text: "It moves 65 marks, as many as a second sample of Think-SFT moves (57 to 73)."
+  - Problem: 'moves marks' describes the picture, not the measurement.
+  - Rewrite: "It changes the outcome of 65 problems, about as many as a second sample of Think-SFT changes (57 to 73)."
+- **D1, severity 2** — line 166, names used across the page
+  - Text: "RL … Base … Think-SFT"
+  - Problem: The page never names the three models (which Olmo 3 releases), so a reader cannot look them up or tell what 'RL' and 'Base' are.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 1** — line 169, panel 'How we know', fact 4
+  - Text: "after the models' last weights (12 December 2025). a = 2 was fixed in the plan before the run. 4 samples at a = 0 and at a = 2"
+  - Problem: A dropped verb ('were uploaded'), a sentence starting in lower case and a fragment.
+  - Rewrite: "after the models' last weights were uploaded (12 December 2025). We fixed a = 2 in the plan before the run, and took 4 samples at a = 0 and at a = 2"
+- **D5, severity 1** — line 171, panel 'How we know', fact 5
+  - Text: "On that set a = 2 cuts off 45.8 answers per sample against 62.0 for Think-SFT, −11.9 points"
+  - Problem: The model does not cut answers off, the length limit does; and the count switches from answers to points in one sentence.
+  - Rewrite: "On that set 45.8 answers per sample hit the length limit at a = 2 against 62.0 for Think-SFT, 11.9 points fewer"
+- **V2, severity 1** — line 178, panel 'What it does not show', fact 1
+  - Text: "a = 0.5 never finished: the job hung twice."
+  - Problem: A note about a failed job is inside talk for a visitor.
+  - Rewrite: "We have no result for a = 0.5: its run failed twice."
+- **D6, severity 2** — line 179, panel 'What it does not show', fact 2
+  - Text: "Right answers peak where the two effects balance."
+  - Problem: Only one effect is named in this paragraph; the reader must guess that the other is fewer answers cut off.
+  - Rewrite: "Right answers peak where the two effects balance: more answers finish as a grows, but fewer of the finished answers are right."
+- **D3, severity 2** — line 181, panel 'What it does not show', fact 3
+  - Text: "+1.4 points over RL (−0.6 to 3.3), not separated."
+  - Problem: 'not separated' is jargon; the reader must infer that the interval includes 0.
+  - Rewrite: "+1.4 points over RL, but the 95 % interval (−0.6 to 3.3) includes 0, so the two cannot be told apart."
+- **T3, severity 1** — line 184, panel 'What it does not show', fact 4
+  - Text: "The 136 problems from 2026 give a wide interval: a = 2 minus Think-SFT is 5.3 to 12.7 points per sample."
+  - Problem: The same interval is given in 'Why it matters'.
+  - Rewrite: needs facts the proofreader did not have
+- **V2, severity 1** — line 194, panel 'How to reproduce it', fact 3
+  - Text: "references of results/fresh/ for the same seeds; amendment 2 of the plan."
+  - Problem: 'amendment 2 of the plan' refers to an internal document without saying where it is.
+  - Rewrite: "references in studies/rlneurons/results/fresh/ for the same seeds; a = 2 was fixed in amendment 2 of studies/rlneurons/specs/SPEC_transplant.md."
+- **D4, severity 2** — line 1029, slider label
+  - Text: "a"
+  - Problem: The control is labelled with a bare symbol; its meaning is given only to screen readers and in the third panel.
+  - Rewrite: "a: times RL's change is added"
+- **D4, severity 1** — line 1180, picture key
+  - Text: "Cut off by Think-SFT / Finished by Think-SFT"
+  - Problem: The reader cannot tell that the key marks problems whose Think-SFT answer hit the length limit.
+  - Rewrite: "Think-SFT's answer hit the length limit / Think-SFT's answer finished"
+- **D1, severity 2** — line 1264, label under the big number
+  - Text: "Think-SFT 209, RL 200 (no cue). T 1.0."
+  - Problem: 'no cue' and 'T 1.0' are unexplained fragments; the page never says what the cue is or why RL runs without it.
+  - Rewrite: "Think-SFT alone: 209 right. RL without the opening cue: 200 right. Sampling temperature 1.0."
+- **D4, severity 1** — line 1407, hint under the picture (noise selected)
+  - Text: "Right answers and cut-offs stay at Think-SFT's values; the marks move as much as when Think-SFT answers again."
+  - Problem: 'the marks move' is a picture detail standing in for 'as many problems change outcome'.
+  - Rewrite: "Right answers and cut-off answers stay at Think-SFT's values, and as many problems change outcome as when Think-SFT simply answers again."
+- **V2, severity 1** — line 1434, problem pane
+  - Text: "No answer text is stored for this problem: the rows keep each answer's final result, its length and whether it was cut off."
+  - Problem: 'the rows' is the team's file format.
+  - Rewrite: "We did not keep the text of these answers, only each answer's final result, its length and whether it hit the length limit."
+- **D4, severity 1** — line 1436, problem pane (2026 set)
+  - Text: "Held 5 February 2026, after the models' last weights (12 December 2025)."
+  - Problem: A verb is missing: 'after the models' last weights' what?
+  - Rewrite: "Held 5 February 2026, after the models' last weights were uploaded (12 December 2025)."
+
+## tools/finding_rl_directions_move_activations.py (32 issues: 0 serious, 16 re-read, 16 minor)
+
+- **V4, severity 1** — line 103, page title (tile and browser tab)
+  - Text: "RL directions move activations"
+  - Problem: The title names the topic and leaves out the result (95 times more than random) that fits in the same space.
+  - Rewrite: "RL's weight directions move activations 95 times more than random ones"
+- **D2, severity 2** — line 104, question above the headline
+  - Text: "Do RL's weight directions move the model's activations more than random ones?"
+  - Problem: 'weight directions' is not explained, and 'RL' is not expanded or named as a model.
+  - Rewrite: "Do the main directions of the weight change made by RL training move the model's internal activations more than random directions of the same size?"
+- **D2, severity 2** — line 105, headline sentence (also the tile line)
+  - Text: "At equal weight norm, RL's 8 directions shift the activations 95 times more than random directions."
+  - Problem: 'RL's 8 directions' is unexplained (the 8 largest singular directions per weight matrix), and the reader is not told which activations or why it matters.
+  - Rewrite: "The 8 largest directions of RL's weight change in each matrix shift the base model's layer-24 activations 95 times more than 8 random directions with the same weight norm."
+- **D5, severity 1** — line 105, headline, picture caption, hints
+  - Text: "activations … residual stream … internal state"
+  - Problem: One quantity has three names on one page, so the reader must check they are the same.
+  - Rewrite: needs facts the proofreader did not have
+- **D5, severity 1** — line 110, edit names across the page
+  - Text: "RL's 8 directions … RL-Code … Code 3.0 … Math 3.0"
+  - Problem: 'RL' is one model (the Olmo 3.1 math RL model) while 'RL-Code' and 'Math 3.0' are other RL models; the page never names which model 'RL' is.
+  - Rewrite: needs facts the proofreader did not have
+- **S5, severity 1** — line 152, readout beside the picture (size view)
+  - Text: "95× times the shift of a random edit of the same weight norm, layer 24"
+  - Problem: The big number's '×' and the label's 'times' together read '95× times'.
+  - Rewrite: "95 times the shift of a random edit of the same weight norm, at layer 24"
+- **D6, severity 1** — line 154, readout beside the picture (size view)
+  - Text: "Each 0.074 % of the weight norm."
+  - Problem: 'Each' has no clear referent; the reader must guess it means each of the two edits compared.
+  - Rewrite: "Both edits change the weights by 0.074 % of their norm."
+- **D4, severity 2** — line 156, readout beside the picture (direction view)
+  - Text: "0.37 cosine with RL's mean shift: RL-Code, the closest other reward"
+  - Problem: A compressed phrase; 'reward' stands for a model trained with another reward, and RL-Code is not explained.
+  - Rewrite: "0.37: cosine between RL's mean shift and that of RL-Code (Olmo 3.1 trained by RL on code), the closest of the other RL models"
+- **D1, severity 2** — line 157, readout beside the picture (direction view)
+  - Text: "RL at sizes 0.5 to 3: 0.93 to 0.99"
+  - Problem: 'size' is a team term for the multiplier on RL's 8 directions; the page never defines it outside the edit pane.
+  - Rewrite: "RL's 8 directions multiplied by 0.5 to 3: 0.93 to 0.99"
+- **V1, severity 1** — line 160, readout beside the picture (direction view)
+  - Text: "Predicted for IF: above 0.5. Refuted."
+  - Problem: Clipped fragments; the reader does not know who predicted it or what IF is.
+  - Rewrite: "Our plan predicted a cosine above 0.5 for the instruction-following (IF) model; it is 0.09, so the prediction failed."
+- **D4, severity 2** — line 163, readout beside the picture (cut-off view)
+  - Text: "Predicted: at most −0.8. Refuted. Size of the mean shift alone: −0.62. Within the plan's 0.05 margin: no gain."
+  - Problem: Telegraphic fragments and 'the plan's margin' make the reader assemble the claim.
+  - Rewrite: "We predicted a correlation of −0.8 or stronger; it is −0.67, so the prediction failed. The plain size of the mean shift gives −0.62, within 0.05, so the shared direction adds nothing."
+- **D1, severity 2** — line 165, readout beside the picture (cut-off view)
+  - Text: "Base + cue: 77 cut off · RL: 20"
+  - Problem: 'Base + cue' is never explained on this page.
+  - Rewrite: "Base model with the opening cue: 77 answers cut off. RL model: 20."
+- **D3, severity 2** — line 174, panel 'What is new', first sentence
+  - Text: "New here: RL's own 8 largest directions per matrix are directions the base model's activations drive."
+  - Problem: 'directions the base model's activations drive' is an invented phrase; the reader cannot tell what property was found.
+  - Rewrite: "New here: RL's 8 largest directions in each matrix read from input directions where the base model's activations are large."
+- **S2, severity 1** — line 174, panel 'What is new', first sentence
+  - Text: "A weight change moves a layer's output only through the inputs the layer receives: ZO-Act (arXiv 2607.01125, section 3) notes"
+  - Problem: A panel titled 'What is new' opens with the prior result; the new finding comes in the third clause.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — line 180, panel 'What is new', fact 2
+  - Text: "Think-SFT's 8 largest directions, scaled to the same norm, shift it by 0.75: 8.3 times less than RL's."
+  - Problem: 'Think-SFT' is not explained on the page outside the edit pane.
+  - Rewrite: "The 8 largest directions of Think-SFT's weight change (Olmo 3 fine-tuned on worked solutions), scaled to the same norm, shift it by 0.75, one eighth of RL's shift."
+- **S5, severity 1** — line 181, panel 'What is new', fact 2, and edit pane (repeats 4 times)
+  - Text: "8.3 times less than RL's"
+  - Problem: 'times less' is ambiguous for many readers; 'one eighth of' is exact.
+  - Rewrite: "about one eighth of RL's"
+- **D1, severity 2** — line 182, panel 'What is new', fact 3
+  - Text: "The page The finish dial shows what the same edits do to the answers: RL's 8 directions at size 1.5 bring Base + cue to 203 of 328 harder problems right"
+  - Problem: 'size 1.5', 'Base + cue' and '328 harder problems' are unexplained, and 'The page The finish dial' reads as a typo.
+  - Rewrite: "The finish dial page shows what the same edits do to the answers: adding RL's 8 directions at 1.5 times their size to the base model with the opening cue gives 203 of 328 hard problems right"
+- **N2, severity 1** — line 187, panel 'Why it matters', first sentence
+  - Text: "The 8 directions that set how often answers finish act on inputs the base model already produces"
+  - Problem: 'set how often answers finish' states a cause that this page's limits panel partly contradicts (a layer 0 to 10 edit shifts as much but leaves more answers cut off).
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 1** — line 189, panel 'Why it matters', fact 1
+  - Text: "This narrows where a method without reward has to look: among the directions the base's own activations occupy, not anywhere in weight space."
+  - Problem: 'narrows where to look' and 'a method without reward' are figures that stand in for the concrete consequence.
+  - Rewrite: "So a method that does not use a reward can search only the directions the base model's own activations occupy, not all of weight space."
+- **D1, severity 2** — line 191, panel 'Why it matters', fact 2
+  - Text: "Each reward moves the residual stream its own way: the mean shift of RL-Code's 8 directions has cosine 0.37 with RL's, Math 3.0 0.29, General 0.24, IF 0.09."
+  - Problem: 'reward' stands for a model trained with that reward, and the model names RL-Code, Math 3.0, General and IF are not explained.
+  - Rewrite: "Models trained by RL on other tasks shift the residual stream in other directions: the cosine with RL's mean shift is 0.37 for code (Olmo 3.1), 0.29 for math (Olmo 3.0), 0.24 for general chat and 0.09 for instruction following."
+- **D4, severity 1** — line 193, panel 'Why it matters', fact 3
+  - Text: "Still open: which input directions RL's change reads, and whether they can be found from the base's activations alone."
+  - Problem: A fragment with a team label ('Still open').
+  - Rewrite: "We have not yet found which input directions RL's change reads, or whether they can be found from the base's activations alone."
+- **S1, severity 2** — line 196, panel 'How we know', first sentence
+  - Text: "48 stored Base + cue answers to the 328 harder problems (24 cut off, 24 finished, the first 2,048 tokens of each) were run through the base and through each of 28 weight edits"
+  - Problem: A long passive sentence with a bracket in the middle and a numeral at the start; the reader must parse it twice.
+  - Rewrite: "We took 48 stored answers of Base + cue to the 328 harder problems (24 cut off, 24 finished) and fed their first 2,048 tokens, without generating, through the base and through each of 28 edited models. Then we compared the residual streams."
+- **D1, severity 2** — line 206, panel 'How we know', fact 4
+  - Text: "Each edit is the exact addition of a scored cell of The finish dial or its controls; its norm matches that cell's to 2e-15 (relative)."
+  - Problem: 'scored cell' is a team term; the reader cannot tell that it means an edited model whose answers were scored on the other page.
+  - Rewrite: "Each edit is exactly the weight change of an edited model scored on The finish dial page; the norms agree to a relative difference of 2e-15."
+- **S5, severity 1** — line 209, panel 'How we know', fact 5
+  - Text: "Selftests on the real model passed before the run"
+  - Problem: 'Selftests' is a misspelling of 'self-tests'.
+  - Rewrite: "Self-tests on the real model passed before the run"
+- **V2, severity 2** — line 212, panel 'What it does not show', first sentence
+  - Text: "The filed prediction failed: one shared direction does not predict cut-off answers better than the plain size of the shift."
+  - Problem: 'The filed prediction' refers to an internal plan, and 'one shared direction' is never defined.
+  - Rewrite: "Our pre-registered prediction failed: the projection on RL's mean-shift direction predicts cut-off answers no better than the plain size of the shift."
+- **S1, severity 2** — line 214, panel 'What it does not show', fact 1
+  - Text: "Over the 23 edits that are not random, the rank correlation of the projection on the shared direction with cut-offs is −0.67 (predicted at most −0.8); the size of the mean shift alone gives −0.62, within the margin of 0.05"
+  - Problem: Two results, a prediction and a margin in one sentence; the reader has to re-read to see why the prediction failed.
+  - Rewrite: "Over the 23 edits that are not random, the projection's rank correlation with cut-offs is −0.67; we had predicted −0.8 or stronger. The size of the mean shift alone gives −0.62. The plan required a gain of more than 0.05 over that, and there is none."
+- **N4, severity 2** — line 223, panel 'What it does not show', fact 5
+  - Text: "the scored cells wrote their weights in BF16 with stochastic rounding, so their edits carry rounding noise of about the edit's own size."
+  - Problem: Noise as large as the edit itself undermines the link between these shifts and the cut-off counts, but the page does not say what follows; 'BF16' is unexplained.
+  - Rewrite: "the edited models that produced the cut-off counts stored their weights in 16-bit format (BF16) with random rounding, so their edits carry rounding noise about as large as the edit. Their cut-off counts may partly reflect that noise."
+- **T4, severity 1** — line 416, view switch button
+  - Text: "Its direction"
+  - Problem: 'Its' has no referent on a button.
+  - Rewrite: "Direction of the shift"
+- **D3, severity 1** — line 454, hint under the picture (size view)
+  - Text: "At the same weight norm, the random directions stay near the floor."
+  - Problem: 'the floor' is a figure of speech for the bottom of the log-scale chart.
+  - Rewrite: "At the same weight norm, the random directions shift the residual stream about 100 times less."
+- **D1, severity 2** — line 461, x-axis label (cut-off view)
+  - Text: "Projection of the mean shift on one shared direction"
+  - Problem: 'one shared direction' is never defined; only the edit pane hints that it is RL's or RL-Code's mean shift.
+  - Rewrite: "Projection of the mean shift on the mean shift of RL (or of RL-Code, for RL's own edits)"
+- **D6, severity 1** — line 464, hint under the picture (cut-off view)
+  - Text: "It did no better than the plain size of the shift."
+  - Problem: 'It' can mean the prediction or the projection.
+  - Rewrite: "The projection predicted cut-offs no better than the plain size of the shift."
+- **D2, severity 1** — line 711, edit pane
+  - Text: "Logit lens. The tokens the mean shift at the last layer raises most: … (raw logit change; all tokens share an offset)"
+  - Problem: 'Logit lens' and 'raw logit change' are not explained.
+  - Rewrite: "Logit lens (reading the shift as a change in next-token scores): the tokens whose scores the mean shift at the last layer raises most:"
+
+## tools/finding_rl_edge_comes_early.py (23 issues: 0 serious, 10 re-read, 13 minor)
+
+- **D3, severity 1** — line 59, page title (tile and browser tab)
+  - Text: "RL's edge comes early"
+  - Problem: 'edge' is an idiom for advantage, and 'early' does not say early in what (the answer, not training).
+  - Rewrite: "RL's advantage lies in the first half of its answers"
+- **D3, severity 1** — line 59, tile title
+  - Text: "RL's edge comes early"
+  - Problem: 'Edge' is an idiom for advantage.
+  - Rewrite: "RL's advantage is in the start of the answer"
+- **D1, severity 2** — line 61, headline sentence (also the tile line)
+  - Text: "Finishing RL's half-written answers, Base + cue closes 65 to 81 % of its gap to RL."
+  - Problem: 'Base + cue' is unexplained, the problem set is not named, and the reader cannot tell what the two ends of the range are.
+  - Rewrite: "When the untrained base model (with the opening cue) finishes answers that the RL-trained model wrote halfway, it closes 65 to 81 % of its gap to the RL model on 183 MATH-500 problems that the base gets wrong at least once."
+- **N4, severity 2** — line 61, headline sentence
+  - Text: "closes 65 to 81 % of its gap to RL"
+  - Problem: The page's limits panel says the 81 % comes from problems chosen with the base's own answers, which makes the base look worse; the headline gives both ends equal weight.
+  - Rewrite: "closes 65 % of its gap to RL on problems chosen fairly (81 % on all 183, a set biased against the base)"
+- **N1, severity 2** — line 61, tile line
+  - Text: "Finishing RL's half-written answers, Base + cue closes 65 to 81 % of its gap to RL."
+  - Problem: 'Half-written' conflicts with the hand-off at 25, 50 or 75 % of the answer, and the range 65 to 81 % has no stated source.
+  - Rewrite: needs facts the proofreader did not have
+- **D5, severity 1** — line 61, names used across the page
+  - Text: "Base + cue … the base … Base … the base model"
+  - Problem: One model has four names on one page.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 1** — line 71, panel 'What is new', first sentence
+  - Text: "under 4 % of the tokens raise the base from about 8 % to about 25 % on AIME 2024"
+  - Problem: The reader must infer that these are tokens taken from the RL model and inserted into the base model's answer.
+  - Rewrite: "replacing under 4 % of the base model's tokens with the RL model's choices raises the base from about 8 % to about 25 % on AIME 2024"
+- **D1, severity 2** — line 74, panel 'What is new', fact 2
+  - Text: "New here is a hand-off at a fixed share of the answer, in both directions, on Olmo 3 and its RL-Zero model."
+  - Problem: 'hand-off' and 'RL-Zero model' are not explained.
+  - Rewrite: "New here: one model writes a fixed share of the answer (25, 50 or 75 %) and the other model writes the rest, in both orders, for Olmo 3 7B and its RL-trained version Olmo 3.1 7B RL-Zero-Math."
+- **D4, severity 1** — line 76, panel 'What is new', fact 3
+  - Text: "At a 50 % cut, the model that wrote the start matters more: 122 against 135."
+  - Problem: The bare pair does not say which number belongs to which hand-off.
+  - Rewrite: "At a 50 % cut, the model that wrote the start matters more: RL finishing the base's start solves 122, the base finishing RL's start 135."
+- **D3, severity 2** — line 79, panel 'Why it matters', first sentence
+  - Text: "The search for the gap to RL without training can aim at how an answer starts."
+  - Problem: 'The search for the gap' is team shorthand for looking for a training-free method that closes the gap; the reader has to guess.
+  - Rewrite: "A method that tries to close the gap to RL without training can focus on how an answer starts."
+- **N2, severity 2** — line 80, panel 'Why it matters', fact 1
+  - Text: "RL's advantage is in the first half of its answers. Checking at the end adds little: on 70 wrong base starts cut at 75 %, RL finishes 21 right and the base 17."
+  - Problem: 'is in the first half' is stronger than 65 to 81 %, 'Checking at the end' is unclear, and the interval for 21 against 17 (−2.9 to 14.3 points) includes 0 but is not shown.
+  - Rewrite: "Most of RL's advantage is in the first half of its answers. RL does little better at the end: on 70 wrong base starts cut at 75 %, RL finishes 21 right and the base 17 (difference 95 % interval −2.9 to 14.3 points)."
+- **S2, severity 1** — line 87, panel 'How we know', fact 1
+  - Text: "The 183 problems are those of MATH-500 the base model got wrong in at least one of 4 tries. Base: Olmo 3 7B with an opening cue."
+  - Problem: The models and 'Base + cue' are defined only here, in the third panel, though the headline uses them; 'opening cue' is still not explained.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — line 89, panel 'How we know', fact 2
+  - Text: "Base + cue, on the 155 problems chosen without its own answers: 92, 94 and 90 of 155, against 88 of 155."
+  - Problem: 'chosen without its own answers' is not explained until the next panel.
+  - Rewrite: "Base + cue, on the 155 problems whose selection did not use its stored answers: 92, 94 and 90 of 155 at the three cuts, against 88 of 155 for the whole stored answer."
+- **S1, severity 2** — line 93, panel 'How we know', fact 3
+  - Text: "the base on RL's start gains 15.8 points over its own start (95 % interval 8.7 to 23.0), of a gap of 19.7 points: 29 of 36 problems, 81 % of the gap."
+  - Problem: Five numbers in one sentence in three units (points, problems, percent); the reader has to re-read to see what is a share of what.
+  - Rewrite: "the base finishing RL's start gains 15.8 points over finishing its own start (95 % interval 8.7 to 23.0). The gap between the two models is 19.7 points (36 problems), so the base closes 29 of 36 problems, 81 % of the gap."
+- **D5, severity 1** — line 97, panel 'What it does not show', first sentence
+  - Text: "the 183 problems were chosen because the base model fails them"
+  - Problem: 'fails them' contradicts 'got wrong in at least one of 4 tries' in the panel before.
+  - Rewrite: "the 183 problems were chosen because the base model got them wrong at least once in 4 tries"
+- **D4, severity 1** — line 100, panel 'What it does not show', fact 1
+  - Text: "(107 of 155 right, against 94 and 114: 13 of 20 problems)"
+  - Problem: The bracket does not say which number belongs to which condition.
+  - Rewrite: "(107 of 155 right, against 94 for the base alone and 114 for RL alone: 13 of 20 problems)"
+- **V2, severity 1** — line 103, panel 'What it does not show', fact 2
+  - Text: "The text of each hand-off is kept only in the jobs' raw output, which is not in git"
+  - Problem: 'jobs' raw output' and 'git' are inside talk.
+  - Rewrite: "We kept the text of only 8 hand-offs, all from starts the base wrote, so RL's starts cannot be read on this page."
+- **D1, severity 1** — line 514, hint under the picture
+  - Text: "Drag the cut along the answer."
+  - Problem: 'the cut' is the point where one model's answer is stopped and handed to the other; the picture does not say so.
+  - Rewrite: "Drag the marker to choose where the first model's answer is cut and handed to the other model."
+- **D1, severity 2** — line 615, picture key
+  - Text: "Right after the hand-off"
+  - Problem: 'hand-off' is a team term that the page never defines in plain words.
+  - Rewrite: "Right after the other model finished the answer"
+- **T1, severity 1** — line 617, picture key
+  - Text: "Text saved"
+  - Problem: The key does not say what the ring marks or why it matters.
+  - Rewrite: "Answer text available: click to read"
+- **D4, severity 2** — line 707, readout beside the picture
+  - Text: "81 % of the gap between the two models alone, on all 183 problems; 65 % on the 155 chosen without the base's own answers"
+  - Problem: 'the two models alone' and 'chosen without the base's own answers' need decoding; the reader cannot tell why the 155 differ.
+  - Rewrite: "81 % of the gap between the two models each finishing its own answer, on all 183 problems; 65 % on the 155 problems whose selection did not use the base answers that supplied its starts"
+- **D4, severity 1** — line 722, caption under the scale
+  - Text: "Alone: each model finishing its own start at this cut, so both ends move with the cut. T 1.0."
+  - Problem: Fragments; 'T 1.0' is not explained.
+  - Rewrite: "'Alone' means each model finishing its own start at this cut, so both ends of the scale move with the cut. Sampling temperature 1.0."
+- **V2, severity 1** — line 776, problem pane
+  - Text: "No text is shown: the repository keeps the text of 8 hand-offs, all from starts Base + cue wrote. The other texts, RL's starts among them, are only in the jobs' raw output, which is not in git."
+  - Problem: 'repository', 'jobs' raw output' and 'git' are inside talk.
+  - Rewrite: "No text is shown: we kept the text of only 8 hand-offs, all from starts Base + cue wrote."
+
+## tools/finding_rl_every_neuron.py (21 issues: 0 serious, 7 re-read, 14 minor)
+
+- **D2, severity 1** — line 81, question above the headline
+  - Text: "Is RL training's effect carried by a few neurons or by many?"
+  - Problem: 'RL' is not expanded, and 'effect' does not say effect on what.
+  - Rewrite: "Is the change that reinforcement-learning (RL) training makes to the model's predictions carried by a few neurons or by many?"
+- **D6, severity 2** — line 82, headline sentence (also the tile line)
+  - Text: "Copying RL's best 1 % of neurons into the base recovers only 16.1 % of RL's effect."
+  - Problem: 'best' and 'RL's effect' are undefined in the headline; the reader cannot tell what was measured (next-word predictions, not accuracy) or which neurons were chosen.
+  - Rewrite: "Copying the 1 % of feed-forward neurons with the largest effect from the RL model into the base model closes only 16.1 % of the difference between their next-word predictions."
+- **D4, severity 2** — line 82, tile line
+  - Text: "Copying RL's best 1 % of neurons into the base recovers only 16.1 % of RL's effect."
+  - Problem: 'Best' neurons and 'RL's effect' are not defined (largest change; effect on next-word predictions).
+  - Rewrite: "Copying the 1 % of neurons that RL changed most into the base recovers only 16.1 % of RL's effect on next-word predictions."
+- **D6, severity 1** — line 95, panel 'What is new', fact 1
+  - Text: "That counts which weights moved. We measured which neurons carry the effect, by copying them from RL into the base."
+  - Problem: 'That' and 'the effect' leave the reader to guess the referents.
+  - Rewrite: "That study counts which weights changed. We measured which neurons carry RL's effect on predictions, by copying them from RL into the base."
+- **N2, severity 2** — line 97, panel 'What is new', fact 3
+  - Text: "New here: no small set of neurons carries RL's effect. 88 % of all neurons each move the base toward RL, and their effects add up."
+  - Problem: 'no small set carries' is stronger than the evidence; the limits panel says another ranking could find a better 1 %.
+  - Rewrite: "New here: no small set of neurons we could find carries RL's effect. By a first-order estimate, 88 % of all neurons each move the base toward RL, and their effects add up."
+- **N2, severity 2** — line 100, panel 'Why it matters', first sentence
+  - Text: "A search for RL's gain inside a few neurons will not find it in this model."
+  - Problem: The page measured prediction similarity, not accuracy gain, and admits another ranking could do better, so 'will not find it' overstates.
+  - Rewrite: "A search for RL's effect inside a few neurons is unlikely to find it in this model: the best 1 % we found recovers 16.1 %."
+- **D6, severity 1** — line 101, panel 'Why it matters', fact 1
+  - Text: "Only 610 of the 3,523 neurons are in both sets."
+  - Problem: 'both sets' and '3,523' (the 1 % of neurons) are not tied to their meaning.
+  - Rewrite: "Only 610 of the 3,523 neurons are in both 1 % sets (largest effect and largest weight change)."
+- **D3, severity 1** — line 103, panel 'Why it matters', fact 2
+  - Text: "The weight change itself is flat: every layer holds 3.0 to 3.2 % of the feed-forward change"
+  - Problem: 'flat' stands in for 'spread evenly'.
+  - Rewrite: "The weight change itself is spread evenly: every layer holds 3.0 to 3.2 % of the feed-forward change"
+- **N2, severity 2** — line 105, panel 'Why it matters', fact 3
+  - Text: "Edits that copy RL's effect cheaply must be dense: one fixed vector added to each layer's output, with no weight changed, recovers 27.3 %."
+  - Problem: 'must be dense' does not follow from one vector recovering 27.3 %, and 'dense' is unexplained.
+  - Rewrite: "Cheap edits that copy RL's effect probably have to touch every layer: one fixed vector added to each layer's output, with no weight changed, recovers 27.3 %."
+- **D2, severity 1** — line 108, panel 'How we know', first sentence
+  - Text: "measured how much of the KL divergence between the two models' next-word predictions disappeared"
+  - Problem: 'KL divergence' is not explained for readers outside ML.
+  - Rewrite: "measured how much of the KL divergence (a measure of how different two probability distributions are) between the two models' next-word predictions disappeared"
+- **D5, severity 2** — line 110, panel 'How we know', fact 1
+  - Text: "half by Base + cue and half by RL. Neurons are ranked on one half and scored on the other"
+  - Problem: 'half' means two different splits in two sentences, and 'Base + cue' is not explained.
+  - Rewrite: "half written by the base model with the opening cue and half by RL. Within each, half of the answers were used to rank the neurons and the other half to score them"
+- **D2, severity 1** — line 113, panel 'How we know', fact 3
+  - Text: "the neurons' first-order scores predict a drop of 0.542 nats, and copying all of them drops 0.549 nats, of 0.708 nats between the two models."
+  - Problem: 'first-order scores' and 'nats' are not explained.
+  - Rewrite: needs facts the proofreader did not have
+- **D6, severity 1** — line 116, panel 'What it does not show', first sentence
+  - Text: "It measures how close the base's predictions come to RL's on stored answers, not accuracy on math problems."
+  - Problem: 'It' has no clear referent.
+  - Rewrite: "The method measures how close the base's predictions come to RL's on stored answers, not accuracy on math problems."
+- **S5, severity 1** — line 117, panel 'What it does not show', fact 1
+  - Text: "Which dots light is exact for the three 1 % sets, which the run saved."
+  - Problem: The sentence is awkward and the reader has to re-read it.
+  - Rewrite: "The lit dots show the exact neurons only for the three 1 % sets, which the run saved."
+- **N2, severity 2** — line 119, panel 'What it does not show', fact 2
+  - Text: "All feed-forward neurons together recover 77.0 %. The rest needs attention weights, which alone recover 58.6 %."
+  - Problem: 77.0 % plus 58.6 % is more than 100 %, so 'the rest' reads as a contradiction without saying the two overlap.
+  - Rewrite: "All feed-forward neurons together recover 77.0 %. Attention weights alone recover 58.6 %; the two overlap, and both are needed to reach 100 %."
+- **D2, severity 1** — line 377, picture caption and slider
+  - Text: "neurons"
+  - Problem: The page does not say until a later panel that 'neurons' means the feed-forward (MLP) neurons only, not attention.
+  - Rewrite: "feed-forward neurons"
+- **D5, severity 1** — line 385, label under the big number
+  - Text: "of RL's effect on next-word predictions recovered; at 100 % the base would predict exactly like RL"
+  - Problem: '100 %' here is the effect recovered, while the slider's '100 %' is the share of neurons copied, which recovers 77 %; the reader can mix them up.
+  - Rewrite: "of RL's effect on next-word predictions recovered (100 % recovered would mean the base predicts exactly like RL)"
+- **D5, severity 1** — line 388, chart legend vs. buttons
+  - Text: "Largest effect · Weight change · Random"
+  - Problem: The legend says 'Weight change' while the button says 'Largest weight change' for the same rule.
+  - Rewrite: "Largest effect · Largest weight change · Random"
+- **N2, severity 1** — line 416, hint under the picture
+  - Text: "Largest effect: neurons ranked by how far copying each one alone moves the base toward RL"
+  - Problem: The ranking uses a first-order estimate, not copying each neuron, as the 'How we know' panel says.
+  - Rewrite: "Largest effect: neurons ranked by an estimate (first-order score) of how far copying each one alone moves the base toward RL"
+- **N2, severity 1** — line 543, line under the big number
+  - Text: "Random 1 % of neurons: 0.9 %. All neurons: 77.0 %; the rest is in attention weights."
+  - Problem: 'the rest is in attention weights' suggests the parts add up, but attention alone recovers 58.6 %, so they overlap.
+  - Rewrite: "Random 1 % of neurons: 0.9 %. All neurons: 77.0 %; copying attention weights as well is needed to reach 100 %."
+- **T4, severity 1** — line 601, layer pane link
+  - Text: "(its test)"
+  - Problem: The link text does not say where it leads.
+  - Rewrite: "(see the test of this description)"
+
+## tools/finding_rl_learns_the_opening_first.py (27 issues: 0 serious, 11 re-read, 16 minor)
+
+- **D3, severity 1** — line 137, page title (tile and browser tab)
+  - Text: "The first 100 RL steps land near the cue"
+  - Problem: 'land near' is a figure of speech and 'the cue' is a team label the title does not explain.
+  - Rewrite: "After 100 RL steps the model scores about as well as the opening cue"
+- **D3, severity 1** — line 137, tile title
+  - Text: "The first 100 RL steps land near the cue"
+  - Problem: 'Land near' is a figure; the meaning is that the score after 100 steps is close to Base + cue.
+  - Rewrite: "After 100 RL steps, the model scores about as well as Base + cue"
+- **D1, severity 1** — line 138, question above the headline
+  - Text: "How soon does RL training reach what the opening cue gives the base model?"
+  - Problem: 'the opening cue' is explained only later in the hint under the picture.
+  - Rewrite: "How soon does RL training reach the score that three fixed opening tokens (the cue) give the untrained base model?"
+- **N1, severity 2** — line 141, headline sentence (also the tile line)
+  - Text: "After 100 RL steps the model gets 417.5 of 500 right, close to Base + cue's 410.5. Most of RL's gain comes later."
+  - Problem: The model, the benchmark, the total number of steps and the size of 'most' are missing, and half answers are unexplained.
+  - Rewrite: "After 100 of its 2,800 RL training steps, the model gets 417.5 of 500 MATH-500 problems right (mean of 4 samples), close to the 410.5 of the base model with the opening cue. 86 % of RL's further gain comes after step 100."
+- **N4, severity 2** — line 141, headline sentence
+  - Text: "close to Base + cue's 410.5"
+  - Problem: 'close' holds at temperature 1.0 only; at T 0.6 the page shows step 100 ahead by 27 problems (interval 8 to 46), which the headline does not mention.
+  - Rewrite: "close to Base + cue's 410.5 at sampling temperature 1.0 (at 0.6, step 100 is 27 problems ahead)"
+- **D2, severity 1** — line 158, panel 'What is new', first sentence
+  - Text: "and that zero-RL runs change how often answers are cut off"
+  - Problem: 'zero-RL' (RL applied directly to a base model without prior fine-tuning) is not explained.
+  - Rewrite: "and that RL applied directly to a base model ('zero-RL') changes how often answers are cut off"
+- **S1, severity 2** — line 160, panel 'What is new', fact 1
+  - Text: "New here are the stored answers of two early checkpoints of Olmo 3.1 RL-Zero-Math, step 100 and step 400, read beside the base model, Base + cue and the released model (step 2,800)"
+  - Problem: One sentence lists five models and two temperatures; the reader has to re-read to find what is new.
+  - Rewrite: "New here: we scored two early checkpoints of Olmo 3.1 RL-Zero-Math, after 100 and 400 training steps. We compare them with the base model, Base + cue and the released model (step 2,800), at temperatures 1.0 (four samples per problem) and 0.6 (one sample)."
+- **D3, severity 1** — line 165, panel 'What is new', fact 3
+  - Text: "7 of them are there by step 100, 20.25 more by step 400 and 22.25 after step 400. Both later gains are clear of 0"
+  - Problem: Fractional problems are unexplained and 'clear of 0' is jargon.
+  - Rewrite: "7 of them by step 100, 20.25 more by step 400 and 22.25 after step 400 (means of 4 samples). The 95 % intervals of both later gains exclude 0"
+- **D6, severity 1** — line 168, panel 'What is new', fact 4
+  - Text: "At T 0.6 the opening is in place by step 100"
+  - Problem: 'the opening' does not say which opening.
+  - Rewrite: "At T 0.6 the 'Okay' opening that the cue uses is in place by step 100"
+- **D5, severity 2** — line 172, panel 'Why it matters', first sentence
+  - Text: "86 % of RL's gain (42.5 of 49.5 problems) is learned after step 100."
+  - Problem: Here 'RL's gain' means the gain over Base + cue, while elsewhere on the site it means the gain over the plain base model.
+  - Rewrite: "86 % of what the released RL model gains over Base + cue (42.5 of 49.5 problems, means of 4 samples) is learned after step 100."
+- **N2, severity 2** — line 175, panel 'Why it matters', fact 1
+  - Text: "So a method that changes only how the base model opens its answers can reach about what 100 RL steps reach, not what the released RL model reaches."
+  - Problem: One tested cue does not show what every opening-only method can or cannot reach.
+  - Rewrite: "So this cue, which changes only how the base model opens its answers, reaches about what 100 RL steps reach, not what the released RL model reaches."
+- **D4, severity 1** — line 177, panel 'Why it matters', fact 2
+  - Text: "The cue placed on step 100 adds +1.70 points"
+  - Problem: 'placed on step 100' is shorthand for putting the cue at the start of the step-100 model's answers.
+  - Rewrite: "Putting the cue at the start of the step-100 model's answers adds +1.70 points"
+- **D4, severity 1** — line 184, panel 'How we know', first sentence
+  - Text: "plain prompt, cut off at 16,384 tokens: at T 1.0, top-p 1.0, four samples per problem (Base: one), and at T 0.6, top-p 0.95, one sample."
+  - Problem: A list of settings in fragments; 'plain prompt' conflicts with Base + cue, which uses the cue.
+  - Rewrite: needs facts the proofreader did not have
+- **S1, severity 2** — line 188, panel 'How we know', fact 2
+  - Text: "The 4 samples of Base + cue and step 2,800 come from another run than the one the marks draw, with the same seeds for its first sample; that first sample still differs"
+  - Problem: The reader has to re-read to follow which run is which, and why samples with the same seeds differ is not explained.
+  - Rewrite: "The 4 samples of Base + cue and step 2,800 come from a second run, not the one the marks show. Its first sample used the same seeds but still differs (Base + cue 405 against 410, step 2,800 456 against 463)."
+- **D1, severity 1** — line 191, panel 'How we know', fact 3
+  - Text: "The team's grader v3 scores the answers"
+  - Problem: 'grader v3' is a team label.
+  - Rewrite: "The third version of our answer checker scores the answers"
+- **D2, severity 1** — line 195, panel 'How we know', fact 4
+  - Text: "Intervals are paired bootstraps over the same problems (5,000 resamples)"
+  - Problem: 'paired bootstrap' is not explained.
+  - Rewrite: "Intervals come from resampling the same problems 5,000 times and comparing both settings on each resample"
+- **V2, severity 1** — line 197, panel 'How we know', fact 5
+  - Text: "The four-sample runs were planned before the jobs (studies/rlneurons/specs/SPEC_ckptcue3.md)"
+  - Problem: 'the jobs' is inside talk.
+  - Rewrite: "We wrote down the plan for the four-sample runs before running them (studies/rlneurons/specs/SPEC_ckptcue3.md)"
+- **S1, severity 2** — line 200, panel 'How we know', fact 6
+  - Text: "On the same problems Base + cue is cut off 49 and 70 times, so the opening, not the problems, goes with the cut-offs."
+  - Problem: The argument is compressed: the reader must compute the rates and decode 'goes with'.
+  - Rewrite: "On the same two groups of problems Base + cue is cut off 49 of 193 and 70 of 307 times, about the same rate. So the cut-offs follow the 'Okay' opening, not the problems."
+- **V2, severity 2** — line 204, panel 'How we know', fact 7
+  - Text: "the team's theory round predicted the rise in cut-offs (rate +0.03, interval 0.002 to 0.08; measured +0.076), and two readers without a theory predicted a fall"
+  - Problem: 'theory round' and 'readers without a theory' are internal processes the visitor does not know.
+  - Rewrite: "a written theory predicted the rise in cut-offs (+0.03, interval 0.002 to 0.08; measured +0.076), while two forecasters given no theory predicted a fall"
+- **T3, severity 1** — line 210, panel 'What it does not show', fact 1
+  - Text: "It does not show that step 100 equals Base + cue. Before the runs the plan counted them equal only if"
+  - Problem: The panel's first sentence already says step 100 and Base + cue are not shown to be the same.
+  - Rewrite: "Before the runs we set a rule: we would call them equal only if"
+- **S5, severity 1** — line 217, panel 'What it does not show', fact 3
+  - Text: "Only three checkpoints were read, so when between step 400 and step 2,800 the rest of the gain arrives is not known."
+  - Problem: The embedded question makes the sentence hard to parse.
+  - Rewrite: "We read only three checkpoints, so we do not know when between step 400 and step 2,800 the rest of the gain arrives."
+- **D2, severity 1** — line 221, panel 'What it does not show', fact 4
+  - Text: "The checkpoints are identified by their pinned revisions, not by the opening."
+  - Problem: 'pinned revisions' is jargon for fixed versions on Hugging Face.
+  - Rewrite: "We identify the checkpoints by their fixed version ids on Hugging Face, not by how their answers open."
+- **V2, severity 2** — line 225, panel 'What it does not show', fact 6
+  - Text: "The theory's own explanation of the T 0.6 cut-offs, sharper sampling per token, did not hold: the median mean log-probability of finished answers is"
+  - Problem: 'The theory' refers to an internal theory the page has not described.
+  - Rewrite: "The explanation proposed by that theory, that the model samples more sharply per token, did not hold: the median of the per-token average log-probability of finished answers is"
+- **D2, severity 2** — line 1536, temperature switch buttons
+  - Text: "T 0.6 / T 1.0"
+  - Problem: The buttons do not say that T is the sampling temperature; only screen readers get the group label.
+  - Rewrite: "Temperature 0.6 / Temperature 1.0"
+- **D1, severity 2** — line 1653, picture key
+  - Text: "Opens with 'Okay' / Other opening"
+  - Problem: The picture never says why 'Okay' matters: that the cue ends with 'Okay' and RL's answers open with it.
+  - Rewrite: "Opens with 'Okay', as RL's answers and the cue do / Other opening"
+- **D4, severity 1** — line 1828, row label in the picture
+  - Text: "Right answers  ·  ticks: the 4 samples"
+  - Problem: A fragment after a dot; the reader must guess what the ticks are.
+  - Rewrite: "Right answers (small ticks: each of the 4 samples)"
+- **D4, severity 1** — line 1922, problem pane note
+  - Text: "Each line is one stored answer per temperature (the sample the marks draw); the quoted text is the first characters of the T 1.0 answer as written; underlined: the cue."
+  - Problem: Three clauses joined by semicolons end in a fragment.
+  - Rewrite: "Each line shows one stored answer per temperature, the one the marks show. The quoted text is how the T 1.0 answer begins; the cue is underlined."
+
+## tools/finding_rl_reliability.py (30 issues: 1 serious, 17 re-read, 12 minor)
+
+- **V4, severity 2** — line 40, page title
+  - Text: "Where RL's gain comes from"
+  - Problem: The title names the topic; a scanning reader does not learn the result, which fits in the same space.
+  - Rewrite: "Most of RL's math gain is on problems the base model already solves sometimes"
+- **D2, severity 1** — line 40, page title (first use of RL)
+  - Text: "Where RL's gain comes from"
+  - Problem: RL is never spelled out on the page, so a reader outside ML cannot tell it means reinforcement learning.
+  - Rewrite: "Where the gain from reinforcement learning (RL) comes from"
+- **V4, severity 1** — line 40, tile title
+  - Text: "Where RL's gain comes from"
+  - Problem: The title names the topic; the result (mostly from problems the base already solves sometimes) fits.
+  - Rewrite: "Most of RL's gain is on problems the base already solves sometimes"
+- **N1, severity 2** — line 42, headline / tile line
+  - Text: "81 % of the RL gain is on problems the base model already solves sometimes."
+  - Problem: The reader cannot tell what the gain counts (extra right answers on MATH-500), its size, or what 'sometimes' means (1 to 4 of 4 tries).
+  - Rewrite: "81 % of RL's 198 extra right answers on MATH-500 are on problems the base model already solves in at least 1 of 4 tries."
+- **D4, severity 2** — line 47, note under the switch, 'RL gain' state
+  - Text: "Height: the share of RL's 198 extra right answers. Lit: problems Base + cue solves sometimes (81 %)."
+  - Problem: Telegraphic fragments ('Height:', 'Lit:') with a team label make the reader decode the picture's key.
+  - Rewrite: "A column's height is its share of RL's 198 extra right answers. Lit columns are problems the base model solves at least once in 4 tries; they hold 81 % of the gain."
+- **N1, severity 3** — line 48, note under the switch, 'RL gain' state
+  - Text: "The share is not specific to RL: by fixed rules, 66 % for RL and 71 % for a random weight change of the same size."
+  - Problem: Right after '81 %' the reader sees '66 % for RL' with no explanation of the different measure or of 'by fixed rules', so the two numbers look contradictory.
+  - Rewrite: needs facts the proofreader did not have
+- **D2, severity 2** — line 55, panel 'What is new', first sentence
+  - Text: "(Yue et al., arXiv 2504.13837, Table 2: pass@128 of the base is above the RL model's)."
+  - Problem: pass@128 is not explained, so the reader cannot follow the prior result the page builds on.
+  - Rewrite: "(Yue et al., arXiv 2504.13837, Table 2: with 128 samples per problem, the base model solves more problems at least once than the RL model)."
+- **D4, severity 2** — line 57, panel 'What is new'
+  - Text: "New here: 4 samples locate the gain per problem. One cell, the 86 problems the base model gets right 3 times of 4 and RL 4 times of 4, holds 43 % of it."
+  - Problem: '4 samples locate the gain per problem' is compressed, and 'it' and 'cell' make the reader work out that 43 % is a share of the gain.
+  - Rewrite: "New here: with 4 answers per problem, we can say which problems the gain comes from. The 86 problems that the base model gets right in 3 of 4 tries and RL in 4 of 4 hold 43 % of the gain."
+- **S5, severity 1** — line 57, panels and cell pane (repeats 5 times)
+  - Text: "gets right 3 times of 4"
+  - Problem: '3 times of 4' is not idiomatic English; a second-language reader may stumble.
+  - Rewrite: "gets right in 3 of 4 tries"
+- **D6, severity 2** — line 59, panel 'What is new'
+  - Text: "RL writes more checking words (13.1 against 9.5 per 1,000 tokens), but they do not separate right answers from wrong ones: right answers of the base model have 0.08 more per 1,000 tokens at matched length"
+  - Problem: '0.08 more' does not say more than what (the base model's wrong answers), and 'checking words' is not defined until a later panel.
+  - Rewrite: "RL writes more checking words such as 'let me verify' (13.1 against 9.5 per 1,000 tokens), but they do not separate right answers from wrong ones: at matched length, the base model's right answers have 0.08 more per 1,000 tokens than its wrong answers (95 % interval −0.64 to 0.77)."
+- **V1, severity 1** — line 59, panel 'What is new'
+  - Text: "New here: RL writes more checking words"
+  - Problem: Two list lines open with the same 'New here:' lead-in, which reads as a formula rather than information.
+  - Rewrite: "RL writes more checking words"
+- **D1, severity 1** — line 61, panel 'What is new'
+  - Text: "What differs is the number of wrong steps left in finished answers: 0.015 first wrong steps per 1,000 tokens for RL against 0.038 for the base model."
+  - Problem: 'First wrong steps' is not defined here (who located them and how is said only in a later panel).
+  - Rewrite: "What differs is how often a finished answer contains a wrong step: the first wrong step, located by a model judge, occurs 0.015 times per 1,000 tokens for RL against 0.038 for the base model."
+- **N2, severity 2** — line 65, panel 'Why it matters'
+  - Text: "More checking text is unlikely to do that: checks in the base model's answers follow its wrong steps and repeat them."
+  - Problem: The sentence states as a general fact what was seen in 6 of 11 hand-read slips, and 'that' points back across a sentence.
+  - Rewrite: "More checking text is unlikely to remove those wrong answers: in 6 of 11 base-model slips read by hand, the check that followed repeated the slip."
+- **D1, severity 2** — line 66, panel 'Why it matters'
+  - Text: "fresh base samples solve 11 of the 17 of them that RL solves. Whether the same split holds on the 328 harder problems is open."
+  - Problem: 'Fresh base samples' (how many) and 'the 328 harder problems' (which set) are team references the reader cannot place.
+  - Rewrite: needs facts the proofreader did not have
+- **D2, severity 1** — line 69, panel 'How we know', first sentence
+  - Text: "Each model answered the 500 MATH-500 problems 4 times at T 1.0, and every problem was placed by how many of its 4 answers each model got right (grader v3)."
+  - Problem: 'T 1.0' (sampling temperature) and 'grader v3' (a team grader version) are not explained.
+  - Rewrite: "Each model answered the 500 MATH-500 problems 4 times at sampling temperature 1.0, and every problem was placed by how many of its 4 answers each model got right, using the team's answer checker."
+- **D1, severity 2** — line 71, panel 'How we know'
+  - Text: "The base model (Olmo 3 7B with an opening cue)"
+  - Problem: The 'opening cue' is never described, so the reader cannot tell how the base model was prompted.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — line 72, panel 'How we know'
+  - Text: "A cell's share of the gain is its problems times its difference in right answers, over 198."
+  - Problem: A formula compressed into words; the reader also has to map 'cell' to the 'columns' of the picture.
+  - Rewrite: "A column's share of the gain is its number of problems times the difference in right answers (RL minus base), divided by the 198 extra right answers."
+- **S1, severity 2** — line 74, panel 'How we know'
+  - Text: "Scored on a held-out sample, the problems the base model misses in its other three samples hold 14 % of the gain (95 % interval 5 to 23)."
+  - Problem: The reader has to parse twice to see this is a check of the 19 % figure, and why it gives 14 % instead is not said.
+  - Rewrite: "A check on held-out data: count the gain on one sample per problem, and take the problems the base model missed in its other three samples. They hold 14 % of the gain (95 % interval 5 to 23), against 19 % in the main count."
+- **S1, severity 2** — line 80, panel 'What it does not show'
+  - Text: "Under fixed rules, 0.66 of the problems RL solves and one base sample misses are solved in another base sample; for the problems a second base sample with a random weight change of the same size solves and the first misses, the share is 0.71."
+  - Problem: One 45-word sentence with two nested comparisons and the unexplained 'under fixed rules'; most readers cannot parse it.
+  - Rewrite: "We counted the same share for a change that is not RL. Of the problems RL solves and one base sample misses, 66 % are solved by another base sample. Of the problems that a base model with random weight noise of the same size solves and the first sample misses, 71 % are."
+- **S5, severity 1** — line 80, panel 'What it does not show'
+  - Text: "0.66 ... 0.71"
+  - Problem: The same shares are written as 66 % and 71 % in the picture's note and as 0.66 and 0.71 here, so the reader may think they are different numbers.
+  - Rewrite: "66 % ... 71 %"
+- **V2, severity 2** — line 83, panel 'What it does not show'
+  - Text: "The wrong steps were located and labelled by judges that are subagents of the agent that ran the study, with a fixed rubric."
+  - Problem: 'Subagents of the agent that ran the study' is inside talk; the reader cannot tell that the judge is an AI model of the same kind as the one doing the analysis.
+  - Rewrite: "The wrong steps were located and labelled by a language-model judge with a fixed rubric; it was the same model that ran the study."
+- **D6, severity 2** — line 84, panel 'What it does not show'
+  - Text: "and the hand reads had one reader who knew the model."
+  - Problem: 'Knew the model' is ambiguous: the reader cannot tell whether it means the reader was not blind to which model wrote each answer.
+  - Rewrite: "and the hand reads had one reader, who knew which model wrote each answer."
+- **T1, severity 2** — line 85, panel 'What it does not show'
+  - Text: "On 51 located wrong steps of the base model, RL gives the same step about half the base model's probability (factor 0.49; log ratio −0.71 nats, 95 % interval −1.48 to 0.01)."
+  - Problem: A new measurement sits in the limits panel, glued to an unrelated check; the reader does not expect a result under 'What it does not show' and 'nats' is not explained.
+  - Rewrite: "Move to 'What is new': On 51 wrong steps located in base-model answers, the RL model gives the same step about half the base model's probability (factor 0.49; log ratio −0.71, natural log, 95 % interval −1.48 to 0.01, so the interval just touches zero)."
+- **V2, severity 1** — line 85, panel 'What it does not show'
+  - Text: "A second session recomputed the table from the stored rows and got the same counts (board result-afc423)."
+  - Problem: 'A second session' and 'board result-afc423' are internal references a visitor cannot open or interpret.
+  - Rewrite: "An independent rerun of the analysis recomputed the table from the stored answers and got the same counts."
+- **D1, severity 2** — line 88, panel 'What it does not show'
+  - Text: "Whether RL resolves a noticed conflict right more often is not measured."
+  - Problem: 'A noticed conflict' is a team phrase; the reader cannot tell what situation is meant.
+  - Rewrite: "We did not measure whether RL, once its answer notices a contradiction, fixes it correctly more often than the base model."
+- **D1, severity 1** — line 90, panel 'How to reproduce it'
+  - Text: "from the stored samples of the two generation jobs named in run.json."
+  - Problem: 'run.json' is a team file the reader is not told where to find.
+  - Rewrite: "from the stored samples of the two generation jobs, which are listed in studies/rlneurons/results/anatomy/math500-01/run.json."
+- **D1, severity 2** — line 377, axis label (also note, cell pane heading and lead) (repeats 4 times)
+  - Text: "Base + cue, right in 4 tries"
+  - Problem: 'Base + cue' is a team label; what the cue is and that it means the untrained Olmo 3 7B model is only said deep in a panel, and the rest of the page says 'base model'.
+  - Rewrite: "Base model (with an opening cue), right answers in 4 tries"
+- **D5, severity 1** — line 377, axis labels vs panels
+  - Text: "Base + cue / the base model / base"
+  - Problem: The same model is called 'Base + cue', 'the base model' and 'base' on one page, so the reader may wonder whether they are different models.
+  - Rewrite: "Use 'base model' everywhere and say once that it is run with an opening cue."
+- **D4, severity 1** — line 380, bracket caption in the picture
+  - Text: "base never right"
+  - Problem: A telegraphic caption; the reader has to guess it means problems the base model got wrong in all 4 tries.
+  - Rewrite: "base model wrong in all 4 tries"
+- **D4, severity 1** — line 461, cell pane, facts line
+  - Text: "Share of RL's 198 extra right answers: 43 % (86 × 1 of 198)."
+  - Problem: '(86 × 1 of 198)' is a symbol formula the reader has to decode.
+  - Rewrite: "Share of RL's 198 extra right answers: 43 % (86 problems, each with 1 more right answer for RL, out of 198)."
+
+## tools/finding_rl_wait_habit.py (21 issues: 0 serious, 9 re-read, 12 minor)
+
+- **D1, severity 2** — line 85, page title
+  - Text: "More Wait, same score"
+  - Problem: A reader who does not know the model writes the literal word 'Wait' while reasoning cannot parse 'More Wait'; the clipped form also reads as a slogan.
+  - Rewrite: "Writing 'Wait' more often does not raise the math score"
+- **D1, severity 1** — line 86, problem sentence
+  - Text: "Does writing Wait more often make a model solve more math problems?"
+  - Problem: Without quotation marks the reader may not see that Wait is a word in the model's output.
+  - Rewrite: "Does writing the word "Wait" more often make a model solve more math problems?"
+- **N1, severity 2** — line 87, headline / tile line
+  - Text: "Pushed to RL's rate of Wait, the base model scores no higher: 413 of 500."
+  - Problem: The headline gives no comparison (410.5 without the push, 457 for the RL model), and 'pushed' does not say the model's internal activations were steered.
+  - Rewrite: "Steered to write "Wait" as often as the RL model does, the base model solves 413 of 500 MATH-500 problems, against 410.5 without steering; the RL model solves 457."
+- **N1, severity 2** — line 87, tile line
+  - Text: "Pushed to RL's rate of Wait, the base model scores no higher: 413 of 500."
+  - Problem: 'No higher' than what is not given, and 'Wait' is not quoted, so it reads as a verb.
+  - Rewrite: needs facts the proofreader did not have
+- **D2, severity 1** — line 87, headline (first use of RL)
+  - Text: "RL's rate of Wait"
+  - Problem: RL (reinforcement learning) is never spelled out on the page.
+  - Rewrite: "the rate of the model trained with reinforcement learning (RL)"
+- **D5, severity 1** — line 87, title and headline vs strips and panels
+  - Text: "Wait / Wait or Hmm"
+  - Problem: The title and headline talk about 'Wait', the measurements count 'Wait or Hmm', so the reader cannot tell which was pushed and counted.
+  - Rewrite: "Say once near the top: we count the words Wait and Hmm together."
+- **D1, severity 2** — line 98, panel 'What is new'
+  - Text: "Our lens first showed the change: after RL, Wait or Hmm is among the model's likely next words at 6.3 % of positions, against 4.6 % before."
+  - Problem: 'Our lens' is not explained, so the reader cannot tell how the 6.3 % was measured.
+  - Rewrite: "A logit lens (a read-out of the model's likely next words from its internal state) first showed the change: after RL, Wait or Hmm is among the likely next words at 6.3 % of positions, against 4.6 % before."
+- **N1, severity 1** — line 99, panel 'What is new'
+  - Text: "New here is the causal test, with a random push of the same size as control: 413 of 500 pushed, 409 with the random push, 410.5 without a push."
+  - Problem: 410.5 right answers looks odd until the reader learns it is a mean of four runs, which this sentence does not say.
+  - Rewrite: "New here is the causal test, with a random push of the same size as a control: 413 of 500 right with the push, 409 with the random push, and 410.5 on average over four runs without a push."
+- **D2, severity 1** — line 100, panel 'What is new'
+  - Text: "In this model line, Wait comes from the mid-training data and RL multiplies it (arXiv 2610.30882)."
+  - Problem: 'Model line' and 'mid-training' are not explained for a reader outside LLM training.
+  - Rewrite: "In the Olmo 3 models, Wait comes from the data of the mid-training stage (between pretraining and fine-tuning), and RL multiplies it (arXiv 2610.30882)."
+- **V2, severity 1** — line 104, panel 'Why it matters'
+  - Text: "Blind judges found that 5 of 80 checking passages fix a step: 3 of 40 in the base model and 2 of 40 in the RL model (result-855858)."
+  - Problem: 'result-855858' is an internal board id the visitor cannot open, and 'checking passages' and who the judges were are not said.
+  - Rewrite: "Blind judges found that 5 of 80 checking passages (text after words like 'let me verify') fix a step: 3 of 40 in the base model and 2 of 40 in the RL model."
+- **D1, severity 1** — line 105, panel 'Why it matters'
+  - Text: "What differs instead is how often a step goes wrong: 0.015 first wrong steps per 1,000 tokens in the RL model, 0.038 in the base."
+  - Problem: 'First wrong steps' is a team measure not defined on this page, and 'the base' drops its noun.
+  - Rewrite: "What differs instead is how often a step goes wrong: the first wrong step in an answer occurs 0.015 times per 1,000 tokens in the RL model and 0.038 times in the base model."
+- **D2, severity 1** — line 107, panel 'How we know', first sentence
+  - Text: "We added one fixed vector to block 24 of 32 of the base model at every token and let it solve all 500 MATH-500 problems once, at T 1.0."
+  - Problem: 'Block 24 of 32' (the transformer layer's output) and 'T 1.0' (sampling temperature) are not explained.
+  - Rewrite: "We added one fixed vector to the output of layer 24 of 32 of the base model at every token, and let it solve all 500 MATH-500 problems once at sampling temperature 1.0."
+- **D4, severity 2** — line 108, panel 'How we know'
+  - Text: "The vector points at Wait and Hmm in a lens read at that block. At 6.8 % of the block's usual output it makes the base write them 8.3 times per 1,000 tokens"
+  - Problem: 'Points at Wait and Hmm in a lens read at that block' and 'at 6.8 % of the block's usual output' are compressed; the reader cannot tell how the vector was chosen or how big it is.
+  - Rewrite: "The vector is the direction that, read through the logit lens at that layer, favours Wait and Hmm. Its length is 6.8 % of the layer's typical output; with it the base model writes those words 8.3 times per 1,000 tokens, and the RL model writes them 8.8 times."
+- **N1, severity 2** — line 109, panel 'How we know' (also tile figure, state facts, picture labels) (repeats 6 times)
+  - Text: "the push changes the score by +0.5 points (95 % interval −2.2 to +3.0)"
+  - Problem: 'Points' is not defined; a reader who compares 413 with 410.5 (2.5 problems) cannot see that +0.5 means percentage points of 500.
+  - Rewrite: "the push changes the score by +0.5 percentage points, or 2.5 problems of 500 (95 % interval −2.2 to +3.0 points)"
+- **D4, severity 2** — line 110, panel 'How we know'
+  - Text: "16 against 3 are filler or the next step, 1 against 7 fix a step."
+  - Problem: '16 against 3' makes the reader work out which number belongs to which group.
+  - Rewrite: "16 of the 20 pushed Waits are filler or just the next step, against 3 of the 20 the base model wrote itself; 1 pushed Wait fixes a step, against 7 of the model's own."
+- **D4, severity 1** — line 113, panel 'What it does not show'
+  - Text: "With the seeds of the 430 run, the push is −3.4 points (−6.6 to 0.0)."
+  - Problem: 'The seeds of the 430 run' and the unlabeled interval are compressed; the reader has to work out that against the matched-seed run the push looks harmful.
+  - Rewrite: "Compared with the run that used the same random seeds (430 right), the push scores 3.4 percentage points lower (95 % interval −6.6 to 0.0)."
+- **D3, severity 1** — line 115, panel 'What it does not show'
+  - Text: "Inside the model the push overshoots: the lens sees Wait or Hmm at 31.0 % of positions, against 4.7 % without it."
+  - Problem: 'Overshoots' and 'the lens sees' are figures of speech; the reader is not told what the push overshoots (the RL model's 6.3 %).
+  - Rewrite: "Inside the model the push goes far past RL: in the logit lens, Wait or Hmm is among the likely next words at 31.0 % of positions, against 4.7 % without the push and 6.3 % in the RL model."
+- **D2, severity 1** — line 117, panel 'How to reproduce it'
+  - Text: "Each arm is one GPU job of the study studies/jspace on one H100, 31 to 36 minutes."
+  - Problem: 'Arm' (experimental condition) is jargon not used elsewhere on the page.
+  - Rewrite: "Each condition (no push, push, random push) is one GPU job of the study studies/jspace on one H100, taking 31 to 36 minutes."
+- **D1, severity 2** — line 656, passage pane, run pane and state settings (repeats 6 times)
+  - Text: "Base + cue, pushed toward Wait, T 1.0: this Wait is the first change the push made to the answer."
+  - Problem: 'Base + cue' is a team label never explained on the page; the reader cannot tell what the cue is.
+  - Rewrite: "Base model with an opening cue, pushed toward Wait, temperature 1.0: this Wait is the first change the push made to the answer."
+- **V2, severity 1** — line 674, run pane, facts line
+  - Text: "Job sameraslan-1114-214944-eb61, the engine of the push, seeds 41,000,000 + problem; 6.28 Wait or Hmm per 1,000 tokens."
+  - Problem: A job id and 'the engine of the push' are internal references; the reader cannot tell what 'engine' means.
+  - Rewrite: "Run with the same generation code as the push, seeds 41,000,000 plus the problem number; 6.28 Wait or Hmm per 1,000 tokens."
+- **D6, severity 2** — line 789, state facts, 'No push'
+  - Text: "The mean of four earlier runs without a push. Six runs without a push score 405 to 430. Two of them ran in the engine of the push"
+  - Problem: 'Two of them' follows 'six runs' right after 'four runs', so the reader cannot tell whether the two are among the four.
+  - Rewrite: "The mean of four earlier runs without a push. Two more runs without a push, made with the same code as the push, write Wait or Hmm 6.28 and 6.34 times per 1,000 tokens. All six runs score 405 to 430."
+
+## tools/finding_the_finish_dial.py (37 issues: 1 serious, 16 re-read, 20 minor)
+
+- **V4, severity 2** — line 202, page title, tile name and browser tab
+  - Text: "The finish dial"
+  - Problem: The title is a metaphor that names neither what was changed nor the result; a scanning reader learns nothing from it.
+  - Rewrite: "Scaling 8 directions of RL's weight change controls whether answers finish"
+- **D3, severity 2** — line 202, tile title
+  - Text: "The finish dial"
+  - Problem: 'Dial' is a metaphor for 8 RL directions whose scale controls whether answers finish.
+  - Rewrite: "8 RL directions control whether answers finish"
+- **D5, severity 1** — line 202, title and problem vs counts in the picture and panels
+  - Text: "finish / cut off at 16,384 tokens / cut-offs"
+  - Problem: The title and question speak of answers that 'finish', while every number counts answers 'cut off'; the reader has to connect the two names.
+  - Rewrite: "Say once: an answer that does not finish is cut off at the 16,384-token limit."
+- **D1, severity 2** — line 203, problem sentence
+  - Text: "Does a small part of RL's weight change decide whether answers finish?"
+  - Problem: 'Finish' is not defined: the reader cannot tell it means the answer ends before the 16,384-token limit, and RL is never spelled out.
+  - Rewrite: "Does a small part of the weight change from reinforcement learning (RL) decide whether answers end before the 16,384-token limit?"
+- **D1, severity 3** — line 204, headline / tile line
+  - Text: "Enlarging 8 RL directions makes answers finish: at size 1.5, 203 of 328 are right; on code, 399 of 538 pass."
+  - Problem: '8 RL directions', 'size 1.5' and 'the 328' are team terms, and no baseline is given, so a newcomer cannot tell what was done or whether 203 is good.
+  - Rewrite: "Adding the 8 largest directions of RL's weight change in each weight matrix, at 1.5 times their RL size, makes more answers finish: 203 of 328 hard math problems right (base model 164, RL model 206), and 399 of 538 code problems pass (base 317, RL 401)."
+- **N1, severity 2** — line 204, tile line
+  - Text: "Enlarging 8 RL directions makes answers finish: at size 1.5, 203 of 328 are right; on code, 399 of 538 pass."
+  - Problem: 'Size 1.5' is a team term and the counts have no comparison (Base + cue, RL).
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 1** — line 206, line under the large number at size 1.5
+  - Text: "4 new samples: mean 200.25 right, RL 200.0."
+  - Problem: A telegraphic fragment; the reader has to guess that this is a replication and what 'RL 200.0' is a mean of.
+  - Rewrite: "Repeated with 4 new samples: mean 200.25 right of 328; RL's 4 samples: mean 200.0."
+- **D3, severity 2** — line 1418, panel 'What is new', first sentence
+  - Text: "New here: turning the size of only 8 RL directions per matrix sets how often the answers finish."
+  - Problem: 'Turning the size' is the dial metaphor, and 'directions per matrix' is not explained as the largest singular directions of RL's weight change.
+  - Rewrite: "New here: scaling only the 8 largest singular directions of RL's weight change in each weight matrix controls how often answers finish before the 16,384-token limit."
+- **D6, severity 1** — line 1423, panel 'What is new'
+  - Text: "8 random directions of the same size leave both flat: 158 to 167 right and 67 to 79 cut off at sizes −1, 1, 1.5, 2 and 3. The page Eight directions showed the edit at size 1 only."
+  - Problem: 'Both' points back to two counts in the previous line, and 'The page Eight directions' refers to another page without saying it is an earlier finding or linking it.
+  - Rewrite: "8 random directions of the same size change neither count: 158 to 167 right and 67 to 79 cut off at sizes −1, 1, 1.5, 2 and 3. Our earlier finding page, Eight directions, tested the edit at size 1 only."
+- **N1, severity 1** — line 1426, panel 'Why it matters', first sentence
+  - Text: "An edit of 0.11 % of the weight norm brings Base + cue to 203 of 328, within 0.9 points of RL, and its effect is set by one number."
+  - Problem: 'Points' is not said to be percentage points, and 'set by one number' leaves the reader to work out that the number is the scale factor.
+  - Rewrite: "An edit of 0.11 % of the weight norm brings the base model to 203 of 328, within 0.9 percentage points of RL, and its effect is controlled by one number, the scale factor."
+- **D4, severity 1** — line 1428, panels and readout (difference lines) (repeats 9 times)
+  - Text: "Size 1.5 minus RL: −0.9 points, 95 % interval −4.9 to 2.7."
+  - Problem: The 'X minus Y: N points' shorthand repeats many times; the reader has to translate each into which model scored higher, by how much.
+  - Rewrite: "Size 1.5 scores 0.9 percentage points below RL (95 % interval −4.9 to 2.7)."
+- **D1, severity 2** — line 1432, panel 'Why it matters'
+  - Text: "The directions are read from RL's weights, so this is not yet a gain without reward. It narrows what a method without reward has to reproduce."
+  - Problem: 'A gain without reward' is the team's goal phrase; a newcomer does not know the aim is to reach RL's gain without RL training.
+  - Rewrite: "The directions are taken from the RL model's weights, so this does not yet reach RL's gain without RL training. It narrows what a method without RL training has to reproduce."
+- **D2, severity 2** — line 1435, panel 'How we know', first sentence
+  - Text: "the 8 largest directions of RL's weight change in each of 224 weight matrices were multiplied by the size and added to the base."
+  - Problem: 'Largest directions' does not say how they were found (singular value decomposition), so the reader cannot reproduce or judge the method.
+  - Rewrite: "For each size, we took the 8 largest singular directions of RL's weight change in each of 224 weight matrices, multiplied them by the size and added them to the base model."
+- **T2, severity 2** — line 1435, panel 'How we know'
+  - Text: "(8 list items: method, grader, control, Think-SFT control, intervals, code, held-out set, held-out scores)"
+  - Problem: The panel holds eight dense items, each with several numbers; the reader cannot scan it.
+  - Rewrite: "Split into 'How we know' (method and controls), 'Code' and 'Held-out 2026 problems'."
+- **D2, severity 1** — line 1436, panel 'How we know', first sentence
+  - Text: "The model answered the 328 harder problems once each, with the cue, T 1.0."
+  - Problem: 'The cue' and 'T 1.0' (sampling temperature) are not explained.
+  - Rewrite: "The model answered the 328 harder problems once each, with the opening cue, at sampling temperature 1.0."
+- **D4, severity 1** — line 1438, panel 'How we know'
+  - Text: "Grader v3. Size 0 is Base + cue with no edit; RL answered with the plain prompt. All cells use seed base 3,000,000."
+  - Problem: Fragments and internal terms ('Grader v3', 'cells', 'seed base') read as notes to the team.
+  - Rewrite: "Answers were scored with the team's answer checker. Size 0 is the base model with no edit; the RL model answered with the plain prompt. All runs use the same random seeds."
+- **D5, severity 1** — line 1439, panel 'How we know'
+  - Text: "They were not run at 0.5, so the switch skips that stop."
+  - Problem: The control that skips the stop is a slider; 'switch' is the page's word for the buttons, so the reader looks for the wrong control.
+  - Rewrite: "They were not run at 0.5, so the slider skips that stop."
+- **D1, severity 2** — line 1441, panel 'How we know'
+  - Text: "A second control, Think-SFT's 8 largest directions per matrix at the norm of the RL edit at size 1 (0.07 % of the weight norm), scores 156 right and 75 cut off, against 192 and 46 for the RL directions"
+  - Problem: 'Think-SFT' is never explained, and the 50-word sentence holds the setup, two scores and an interval.
+  - Rewrite: "A second control uses another fine-tuned model instead of RL: Think-SFT, trained by supervised fine-tuning on reasoning text. Its 8 largest directions per matrix, at the same norm as the RL edit at size 1 (0.07 % of the weight norm), score 156 right and 75 cut off. The RL directions score 192 and 46 (−11.0 points, 95 % interval −15.6 to −6.4)."
+- **D4, severity 1** — line 1445, panel 'How we know'
+  - Text: "Intervals pair the problems: 5,000 bootstrap resamples of the 328, seed 0. Every count of the slider's cells was recomputed from the per-problem rows."
+  - Problem: 'Intervals pair the problems' is compressed, and the second sentence is a note about the team's own checking.
+  - Rewrite: "Each 95 % interval comes from a paired bootstrap: 5,000 resamples of the 328 problems, with both models scored on the same problems."
+- **S1, severity 2** — line 1447, panel 'How we know'
+  - Text: "On a second model pair, RL-Code's 8 largest directions per matrix at sizes 1, 1.5 and 2 pass 386, 399 and 394 of 538 code problems (Code cue, T 1.0, one sample); Base + cue passes 317, RL-Code 401."
+  - Problem: One sentence (followed by two more of differences) packs three sizes, two baselines and two intervals; 'RL-Code' and 'Code cue' are not explained.
+  - Rewrite: "We repeated the test on code with a second RL model, Olmo 3.1 RL-Zero-Code (RL-Code). Its 8 largest directions per matrix, at sizes 1, 1.5 and 2, pass 386, 399 and 394 of 538 code problems. The base model passes 317 and RL-Code 401."
+- **T2, severity 1** — line 1452, panel 'How we know'
+  - Text: "On code, answers cut off and answers with no code block fall from 27 and 34 at size 0 to 9 and 8 at 1, 4 and 5 at 1.5 and 0 and 0 at 2; the random directions leave 27 and 45."
+  - Problem: A table of eight numbers written as a sentence; the reader has to pair each number with its count and size.
+  - Rewrite: "Put these counts in a small table: size, cut off, no code block."
+- **N2, severity 2** — line 1457, panel 'How we know'
+  - Text: "Size 1.5 was fixed on the 328; nothing was chosen on this set, and the three predictions filed before the run all hold."
+  - Problem: The reader is told three predictions hold but not what they were, so cannot check the claim.
+  - Rewrite: "Size 1.5 was chosen on the 328 problems; nothing was chosen on this set. Before the run we predicted a mean of 44.5 to 56.5 right per sample, 50 to 62 right by majority vote over 4 samples, and at most 30 answers cut off per sample; all three hold."
+- **S2, severity 2** — line 1457, panel 'How we know', items 7 and 8
+  - Text: "The held-out test: 136 problems of AIME 2026 and HMMT February and November 2026"
+  - Problem: The held-out test on 2026 contests, the strongest evidence against overfitting, is the seventh line of the third panel.
+  - Rewrite: "Move the 2026 held-out result into 'Why it matters' or its own panel."
+- **D4, severity 1** — line 1460, panel 'How we know'
+  - Text: "On that set, 4 samples at size 1.5 score 50, 52, 45 and 46 of 136, mean 48.25; RL 50.5, Base + cue 29.5 (T 1.0)."
+  - Problem: Dropped verbs ('RL 50.5') make the reader supply what the number is.
+  - Rewrite: "On that set, 4 samples at size 1.5 score 50, 52, 45 and 46 of 136 (mean 48.25); RL averages 50.5 and the base model 29.5."
+- **S1, severity 1** — line 1465, panel 'What it does not show', first sentence
+  - Text: "One sample per problem and size, and 1.5 was the best of seven sizes tried: 203 against 192 at size 1 is +3.4 points, 95 % interval −0.9 to 7.6."
+  - Problem: Two caveats in one compressed sentence; the reader has to work out that the interval includes zero, so 1.5 is not clearly better than 1.
+  - Rewrite: "Each size was run with one sample per problem. Size 1.5 was the best of seven sizes, but it is not clearly better than size 1: 203 against 192 right, +3.4 points (95 % interval −0.9 to 7.6)."
+- **D3, severity 1** — line 1470, panel 'What it does not show'
+  - Text: "At size 3 almost every answer finishes, but many decay into strings of words"
+  - Problem: 'Decay into strings of words' is a figure of speech; the reader cannot tell what the answers look like.
+  - Rewrite: "At size 3 almost every answer finishes, but many turn into repeated or unrelated words"
+- **D2, severity 2** — line 1472, panel 'What it does not show'
+  - Text: "Replicated (studies/rlneurons/results/day1_3/hard328_top8x1.5_cue_s4-01/): four new samples at size 1.5 score 207, 198, 199 and 197 of 328 ... Under the vote over 4 samples the edit has 214 and RL 221"
+  - Problem: A file path interrupts the sentence, and 'the vote over 4 samples' (majority vote) is not explained.
+  - Rewrite: "In a repeat run, four new samples at size 1.5 score 207, 198, 199 and 197 of 328 (mean 200.25), against RL's mean of 200.0. With a majority vote over the 4 samples, the edit gets 214 right and RL 221."
+- **D6, severity 1** — line 1477, panel 'What it does not show'
+  - Text: "The 0.11 % is the intended addition."
+  - Problem: 'The 0.11 %' points back to a number two panels earlier; the reader has to search for it.
+  - Rewrite: "The edit at size 1.5 was meant to add 0.11 % of the weight norm."
+- **D3, severity 1** — line 1480, panel 'What it does not show'
+  - Text: "The code sizes were fixed before that run; 1.5 came from the math dial."
+  - Problem: 'The math dial' is the page's metaphor for the math experiment.
+  - Rewrite: "The code sizes were fixed before that run; 1.5 was the best size on the math problems."
+- **T3, severity 1** — line 1486, panel 'What it does not show', last line
+  - Text: "The edit is built from RL's weights, so it is not a route to RL's gain without reward."
+  - Problem: The same caveat is already stated in 'Why it matters' and earlier in this panel ('The 8 directions come from RL's weights').
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — line 1728, set switch button (also headings, labels, panels) (repeats 8 times)
+  - Text: "328 harder problems (math)"
+  - Problem: 'Harder' than what is never said; the reader cannot tell how the 328 were chosen.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — line 1738, switch aria-label, picture axis, readout, panels and problem panes (repeats 20 times)
+  - Text: "Directions added to Base + cue"
+  - Problem: 'Base + cue' is a team label never explained on the page; the reader cannot tell it is the untrained Olmo 3 7B with an opening prompt cue.
+  - Rewrite: "Directions added to the base model (prompted with an opening cue)"
+- **D1, severity 1** — line 1799, caption of the code set
+  - Text: "HumanEval+ and MBPP+, Code cue; the directions come from RL-Code."
+  - Problem: 'Code cue' and 'RL-Code' are not explained where they first appear.
+  - Rewrite: "HumanEval+ and MBPP+ problems, with a prompt cue for code; the directions come from Olmo 3.1 RL-Zero-Code, an RL model trained on code."
+- **D4, severity 2** — line 2049, readout and slider tick on the 2026 set (repeats 3 times)
+  - Text: "fixed on the 328; the marks show sample 1 of 4."
+  - Problem: 'Fixed on the 328' does not say the size was chosen using the 328 math problems before this set was run.
+  - Rewrite: "size chosen on the 328 math problems; the marks show sample 1 of 4."
+- **D5, severity 1** — line 2053, readout on the code set and picture label
+  - Text: "RL-Math's 8 directions at size 1.5: 368 passed."
+  - Problem: The math RL model is 'RL' on most of the page and 'RL-Math' here, so the reader may think it is a third model.
+  - Rewrite: "Use 'RL-Math' and 'RL-Code' consistently once both appear, and say once that RL-Math is the RL model of the math set."
+- **V2, severity 1** — line 2244, problem panes, footnote (repeats 3 times)
+  - Text: "The quoted text is the end of each stored answer, from the jobs' raw answers, which are not in git."
+  - Problem: 'Jobs' and 'not in git' are about the team's storage, not something a visitor can act on.
+  - Rewrite: "The quoted text is the end of each answer; the full answers are not published."
+- **T1, severity 1** — line 2265, code problem pane, sub-heading
+  - Text: "The other cells (result only):"
+  - Problem: 'Cells' is an internal word for experimental conditions; the heading does not say what follows.
+  - Rewrite: "Other models and controls (result only):"
+
+## tools/finding_theories_on_trial.py (29 issues: 0 serious, 16 re-read, 13 minor)
+
+- **V4, severity 2** — line 51, page title, tile name and browser tab
+  - Text: "Theories on trial"
+  - Problem: The title names the topic with a figure of speech; the result (no better than readers without a theory) fits in the same space.
+  - Rewrite: "Our theories predicted new numbers no better than readers without them"
+- **D1, severity 2** — line 52, problem sentence
+  - Text: "Do our theories predict unseen numbers better than readers with no theory?"
+  - Problem: The reader does not know what 'our theories' are about or that the 'readers' are language-model runs, so the question cannot be understood alone.
+  - Rewrite: "Do the explanations our agents wrote for RL's math gain predict new measurements better than a language model that reads the same results with no explanation?"
+- **D1, severity 2** — line 853, theory names on the picture rows and pane headings (repeats 15 times)
+  - Text: "Think-SFT cap hits"
+  - Problem: Many theory names use team labels ('Think-SFT cap hits', 'Top-8 edit acts as cue', 'Code 3.0 runaway length', '3.0 stops before 12k'), so the row labels tell a newcomer nothing.
+  - Rewrite: needs facts the proofreader did not have
+- **N1, severity 1** — line 889, headline / tile line
+  - Text: "Our theories were nearer the measured number than readers with no theory in 202 of 412 predictions: no better."
+  - Problem: The tie point (206) is not given, and ': no better' is a punchline the reader has to check.
+  - Rewrite: "Our theories' forecasts were nearer the measured number than those of readers with no theory in 202 of 412 predictions, slightly below the 206 of a tie."
+- **N1, severity 1** — line 889, tile line
+  - Text: "Our theories were nearer the measured number than readers with no theory in 202 of 412 predictions: no better."
+  - Problem: 'No better' needs the tie point (206 of 412) to be read.
+  - Rewrite: "Our theories were nearer the measured number than forecasters with no theory in 202 of 412 predictions, about half: no better."
+- **N1, severity 2** — line 896, example case shown in the theory pane
+  - Text: "Example, board item result-32b7a8. This theory said RL's first 100 to 400 steps raise the share of answers cut off at 16,384 tokens (T 0.6); both readers said the share would fall. Measured: up 0.03 at step 100"
+  - Problem: 'Up 0.03' gives no unit (a share of answers, so 3 percentage points), 'steps' does not say training steps, and the board id means nothing to a visitor.
+  - Rewrite: "Example. This theory said the first 100 to 400 training steps of RL raise the share of answers cut off at 16,384 tokens (temperature 0.6); both readers said the share would fall. Measured: up 3 percentage points at step 100"
+- **D1, severity 2** — line 899, example case shown in the theory pane
+  - Text: "The theory still lost to a rival that explains the rise by the opening RL learns."
+  - Problem: 'The opening RL learns' is a team shorthand; the reader cannot tell what opening means here.
+  - Rewrite: "The theory still lost to a rival theory, which explains the rise by the way RL changes how answers begin."
+- **D4, severity 2** — line 900, example case shown in the theory pane
+  - Text: "Example, board item result-3a3af3: the first GPU experiment the engine chose. The base drew its own openings and continued the first that starts a line with Okay."
+  - Problem: 'Drew its own openings and continued the first that starts a line with Okay' is compressed; the reader cannot picture the experiment.
+  - Rewrite: "Example: the first GPU experiment our pipeline chose. The base model wrote several possible first lines for each problem, and we continued the first one that begins with 'Okay'."
+- **D1, severity 2** — line 913, panel 'What is new', first sentence
+  - Text: "Eight rounds of the theory engine scored every theory on numbers it had not seen, against two readers with no theory: two model runs given the same board items and the same question."
+  - Problem: 'Theory engine' and 'board items' are team terms; the reader cannot tell what produced the theories or what the readers were shown.
+  - Rewrite: "In eight rounds, our automated pipeline scored every theory on numbers it had not seen, against two readers with no theory: two language-model runs given the same posted results and the same question."
+- **S1, severity 2** — line 915, panel 'What is new'
+  - Text: "Rounds 4 to 8 predicted numbers that scripts, written before any row was read, then computed from stored per-problem rows."
+  - Problem: A garden-path sentence ('numbers that scripts, written ..., then computed') with inside terms ('board', 'rows'); most readers must parse it twice.
+  - Rewrite: "Rounds 1 to 3 predicted numbers that teammates posted to our results board after a cutoff date. In rounds 4 to 8, each prediction came with a script, written before any data was read, which then computed the number from stored per-problem results."
+- **D5, severity 1** — line 917, panel 'What is new'
+  - Text: "421 were computed and 412 were also predicted by the readers."
+  - Problem: The page calls the same outcome 'computed' here and 'measured' elsewhere.
+  - Rewrite: "421 were measured, and the readers also predicted 412 of them."
+- **T3, severity 1** — line 922, panel 'Why it matters', first sentence
+  - Text: "So far the theories were nearer in 202 of 412 predictions, about half."
+  - Problem: Repeats the headline and the big number without adding anything.
+  - Rewrite: needs facts the proofreader did not have
+- **T2, severity 1** — line 922, panel 'Why it matters'
+  - Text: "(6 items: first sentence and five dense list lines)"
+  - Problem: The panel exceeds its own limit of one sentence plus three and mixes results, rules and a correction.
+  - Rewrite: "Move the fate counts and the correction to 'How we know' or 'What it does not show'."
+- **D2, severity 2** — line 926, panel 'Why it matters'
+  - Text: "The engine's own score, which also rewards narrow intervals, gave the measured numbers less probability under the theories than under the readers: −57.84 nats in total over those 254."
+  - Problem: 'Nats' and the log-probability score are not explained, so the reader cannot judge whether −57.84 is large.
+  - Rewrite: "Our scoring rule, which also rewards narrow intervals, gave the measured numbers less probability under the theories than under the readers: a total log-probability difference of −57.84 (natural log, summed over the 254 predictions)."
+- **D1, severity 2** — line 928, panel 'Why it matters'
+  - Text: "After round 8 no theory stands: a theory stands when it survives its tests and beats a fresh rival on at least 2 tests that separate the two (engine 7.1). Survives its tests but does not beat its rival: r4-m01, r5-m03-rival, r5-m10-rival."
+  - Problem: Internal ids (r4-m01) and a version number (engine 7.1) stand in for theory names; the last part is a fragment.
+  - Rewrite: "After round 8 no theory stands. A theory stands when it survives its tests and beats a rival theory on at least 2 tests where the two predict different results. Three theories survive their tests but do not beat their rival: 'Loops feed on own text', 'Top-8: incomplete switch' and 'Robust to sampling noise'."
+- **S5, severity 2** — line 935, panel 'Why it matters'
+  - Text: "none of their predictions landed inside its interval where both readers' forecasts were outside it, or their total score against the readers was not above 0."
+  - Problem: 'Their predictions ... its interval' mixes plural and singular, and the two-part condition must be read twice.
+  - Rewrite: "they gained nothing over the readers: either none of their predictions fell inside the theory's interval while both readers' forecasts fell outside it, or their total score against the readers was 0 or below."
+- **V2, severity 2** — line 938, panel 'Why it matters'
+  - Text: "Engine 6.3 said two theories stood after round 6. Re-scored under the 7.1 rule, neither does: each beat its rival on 1 separating test of 6 (studies/theory/README.md, Round 06, correction)."
+  - Problem: Version numbers of the team's software and a file path replace a plain description of the correction.
+  - Rewrite: "An earlier version of our scoring said two theories stood after round 6. Under the current rule (at least 2 separating tests), neither does: each beat its rival on only 1 of 6 tests."
+- **S2, severity 1** — line 941, panel 'How we know', first sentence
+  - Text: "Every mark is read from the committed metrics files of the eight rounds; no number on the page is typed by hand."
+  - Problem: The panel opens with how the page was built, not with how a theory was scored against the readers.
+  - Rewrite: "Each theory's forecast and the readers' forecasts were compared with the measured number; the one nearer to it wins. Every mark is read from the stored results of the eight rounds."
+- **D4, severity 1** — line 944, panel 'How we know'
+  - Text: "Its interval is drawn at one fixed height, so a dot inside the band means the measured number fell inside the interval"
+  - Problem: 'Drawn at one fixed height' and 'the band' are two names for the drawn interval; the reader has to work out the picture's scale.
+  - Rewrite: "Every interval is drawn as a band of the same height, so a dot inside the band means the measured number fell inside the interval"
+- **D1, severity 2** — line 948, panel 'How we know'
+  - Text: "Rows the engine does not score (shares that are 0 by construction, fits to claimed cells, one number that differs from its replication) are left out."
+  - Problem: 'Fits to claimed cells' is unexplained inside talk; the reader cannot tell what was excluded.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 1** — line 950, panel 'How we know'
+  - Text: "Fates: refuted (a measured number met its refuting condition, or a review), lost to its rival"
+  - Problem: 'Or a review' is a fragment; the reader does not know who reviews theories.
+  - Rewrite: "Fates: refuted (a measured number met the condition the theory said would refute it, or a reviewer model found it wrong), lost to its rival"
+- **D6, severity 2** — line 956, panel 'What it does not show'
+  - Text: "Round 6's lead comes from one account of the gap: its 44 predicted shares were nearer in 31. Without it, round 6's theories were nearer in 4 of 14."
+  - Problem: The page never said round 6 led, and 'one account of the gap' is a team phrase; the reader cannot tell which theory or which gap.
+  - Rewrite: "Round 6 is the only round in which the theories beat the readers on total score, and that comes from one theory, 'Six rules split the gap': 31 of its 44 predicted shares were nearer. Without it, round 6's theories were nearer in 4 of 14."
+- **D1, severity 2** — line 960, panel 'What it does not show'
+  - Text: "Round 6 holds 4 predictions carried from round 5: duel tests compared with the theory they replaced, not with readers. They are grey and not counted. From round 7 (engine 7.1) a carried theory files no prediction"
+  - Problem: 'Carried', 'duel tests' and 'engine 7.1' are pipeline terms the reader has not been taught.
+  - Rewrite: "Round 6 holds 4 predictions kept from round 5, where a theory was tested head to head against a rival; they are compared with the theory they replaced, not with readers, so they are grey and not counted. From round 7, a theory kept from an earlier round makes no new prediction, so its row has no mark."
+- **V2, severity 1** — line 969, panel 'How to reproduce it'
+  - Text: "Board items: result-8b0706 (round 6), result-5115c5 (round 7), result-32b7a8 (cut-offs rise early), result-3a3af3 (the first GPU test)."
+  - Problem: Internal board ids that a visitor cannot open.
+  - Rewrite: "Link the ids to the public board pages, or drop them."
+- **V2, severity 1** — line 1206, round setting label above the count
+  - Text: "Round 2 · posted to the board later"
+  - Problem: 'Posted to the board later' and 'computed from stored rows' describe the team's workflow without saying what was predicted.
+  - Rewrite: "Round 2 · predicted results that teammates posted later"
+- **D4, severity 1** — line 1206, fate labels at the end of each theory row
+  - Text: "beat no reader / survives, no duel win / passed the score / failed the score"
+  - Problem: Clipped labels with team terms ('duel'); 'passed the score' is not idiomatic.
+  - Rewrite: "no better than the readers / survives, did not beat its rival / passed scoring / failed scoring"
+- **D4, severity 1** — line 1457, count labels beside the big number
+  - Text: "of 412: the theory nearer the measured number than readers with no theory. 206 would be a tie: no better. Readers: two models, same question, no theory."
+  - Problem: Three clipped fragments in a row; 'two models' contradicts 'two model runs' in the panels.
+  - Rewrite: "of 412 predictions: the theory was nearer the measured number than readers with no theory. A tie would be 206. Readers: two language-model runs asked the same question without a theory."
+- **D4, severity 1** — line 1567, theory pane, tag line
+  - Text: "Round 4 · r4-m10 · lost to its rival · 2 of 3 inside, nearer than the readers in 1 of 3"
+  - Problem: An internal id and the clipped '2 of 3 inside' (inside what) make the reader decode the line.
+  - Rewrite: "Round 4 · lost to its rival · measured number inside the interval in 2 of 3 predictions; nearer than the readers in 1 of 3"
+- **D5, severity 2** — line 1583, theory pane, section 'Against a rival theory'
+  - Text: "On 6 tests where the two differ, the theory scored +1.23 nats against the rival (1 of them separates the two): loses to rival."
+  - Problem: 'Tests where the two differ' and 'separates the two' sound like the same thing, so '1 of 6 separate' reads as a contradiction; a positive score next to 'loses' adds to the confusion, and 'nats' is not explained.
+  - Rewrite: needs facts the proofreader did not have
+
+## tools/finding_two_jobs_in_the_edit.py (29 issues: 0 serious, 15 re-read, 14 minor)
+
+- **S1, severity 2** — line 114, cell pane, prediction rows (repeats 11 times)
+  - Text: "Prediction B2: Layers 0 to 10 do not cut cut-offs; the stronger reading, they add them, needs the interval above 0."
+  - Problem: An internal id and a two-part condition in note form; the reader cannot tell what was predicted.
+  - Rewrite: "Prediction: layers 0 to 10 do not reduce cut-offs. The stronger claim, that they add cut-offs, holds only if the interval is above 0."
+- **V4, severity 2** — line 136, page title, tile name and browser tab
+  - Text: "Two jobs in one edit"
+  - Problem: A figure of speech that names neither the edit nor the two effects; the scanning reader learns no result.
+  - Rewrite: "Early layers of RL's weight change add right answers; late layers stop cut-offs"
+- **D1, severity 2** — line 137, problem sentence
+  - Text: "Which parts of RL's weight edit add right answers, which stop cut-offs?"
+  - Problem: 'RL's weight edit' and 'cut-offs' are team terms not explained at first use, and the two clauses are joined by a comma only; RL is never spelled out.
+  - Rewrite: "Which parts of the weight change from reinforcement learning (RL) add right answers, and which stop answers from being cut off at the 16,384-token limit?"
+- **S5, severity 1** — line 137, tile question
+  - Text: "Which parts of RL's weight edit add right answers, which stop cut-offs?"
+  - Problem: Comma splice between two questions.
+  - Rewrite: "Which parts of RL's weight change add right answers, and which stop cut-offs?"
+- **N4, severity 2** — line 138, headline / tile line
+  - Text: "On math, early layers of RL's edit add 7.6 points right; late layers only reduce cut-offs."
+  - Problem: The headline hides that the early layers also raise cut-offs by 6.3 points, and 'points right' and 'early/late layers' leave the unit and the layer ranges to guess.
+  - Rewrite: "On 328 hard math problems, layers 0 to 10 of RL's edit add 7.6 percentage points of right answers (and 6.3 points more cut-offs); layers 22 to 31 only reduce cut-offs."
+- **N4, severity 2** — line 138, tile line
+  - Text: "On math, early layers of RL's edit add 7.6 points right; late layers only reduce cut-offs."
+  - Problem: 'Add 7.6 points right' is compressed, and the tile's own figure says the split failed on code, which the line leaves out.
+  - Rewrite: "On math, the early layers of RL's weight change add 7.6 points of right answers and the late layers only reduce cut-offs; on code the split does not hold."
+- **D2, severity 2** — line 144, cell descriptions in the side pane (repeats 6 times)
+  - Text: "RL's 8 largest directions per weight matrix at size 1.5, in layers 0 to 10 only (77 of the 224 matrices)."
+  - Problem: 'Largest directions' (singular directions of the weight change) and 'size 1.5' (scale factor) are explained only on another page.
+  - Rewrite: "The 8 largest singular directions of RL's weight change in each weight matrix, scaled by 1.5, in layers 0 to 10 only (77 of the 224 matrices)."
+- **D1, severity 2** — line 157, cell 'Base + cue' and every label that uses it (repeats 15 times)
+  - Text: "Base + cue"
+  - Problem: 'Base + cue' is a team label used on the chart, legend, readout and panels; it is explained only inside one side pane ('the base model Olmo 3 7B with the opening cue').
+  - Rewrite: "Base model (Olmo 3 7B with an opening cue)"
+- **D2, severity 1** — line 189, readout line, 'By layer'
+  - Text: "Layers 22 to 31: +1.5 is not separated from 0"
+  - Problem: 'Not separated from 0' is statistical shorthand without its unit.
+  - Rewrite: "Layers 22 to 31: +1.5 points right, within noise (the 95 % interval includes 0)"
+- **D4, severity 2** — line 201, readout lines, 'All parts'
+  - Text: "Up: layers 0 to 21, directions 2 to 8 / Right: layers 11 to 31, largest direction"
+  - Problem: Cryptic fragments; 'Right:' reads as 'right answers' although it means a move to the right on the chart.
+  - Rewrite: "More right answers (up): layers 0 to 21, directions 2 to 8 / Fewer cut off (to the right): layers 11 to 31, the largest direction"
+- **D1, severity 1** — line 205, readout line, 'All parts' (also code readout)
+  - Text: "Math only: on code the depth split failed"
+  - Problem: 'The depth split' is a team name for the layer result.
+  - Rewrite: "Math only: on code, the split by layer did not hold"
+- **D5, severity 2** — line 215, hint under the chart, 'By direction' (repeats 3 times)
+  - Text: "The largest direction moves answers right, to fewer cut off, and not up; directions 2 to 8 move them up."
+  - Problem: 'Moves answers right' reads as 'makes answers right' on a page about right answers, the opposite of what is meant.
+  - Rewrite: "The largest direction moves the mark to the right (fewer cut off) but not up; directions 2 to 8 move it up (more right answers)."
+- **D1, severity 1** — line 221, set caption, code problems
+  - Text: "RL-Code's edit on the same base, Code cue, T 1.0, one sample each. The direction cells were not run on code."
+  - Problem: 'RL-Code', 'Code cue', 'T 1.0' and 'direction cells' are not explained.
+  - Rewrite: "The weight change of an RL model trained on code (Olmo 3.1 RL-Zero-Code), on the same base model with a code prompt, temperature 1.0, one sample per problem. The parts by direction were not run on code."
+- **D3, severity 1** — line 231, panel 'What is new', first sentence
+  - Text: "New here: two measures, right answers and cut-off answers, come apart across the parts of one fixed edit."
+  - Problem: 'Come apart' and 'one fixed edit' are vague; the reader has to infer that different parts change different measures.
+  - Rewrite: "New here: within one fixed weight change, some parts raise right answers and other parts reduce cut-off answers."
+- **S5, severity 1** — line 236, panel 'What is new'
+  - Text: "and add +1.5 points of right answers (−1.1 to 4.1), not separated from 0."
+  - Problem: 'Add +1.5' doubles the sign, and 'not separated from 0' is jargon.
+  - Rewrite: "and add 1.5 points of right answers (95 % interval −1.1 to 4.1), which is within noise."
+- **S5, severity 1** — line 238, panel 'What is new' (also prediction texts) (repeats 3 times)
+  - Text: "the largest direction, made larger (sizes 1, 2, 3), cuts cut-offs from 77 to ... with no more right answers"
+  - Problem: 'Cuts cut-offs' repeats the word and makes the reader stop.
+  - Rewrite: "the largest direction, scaled up (sizes 1, 2, 3), reduces cut-offs from 77 to ... with no more right answers"
+- **D2, severity 1** — line 238, panel 'What is new'
+  - Text: "By rank the same split: directions 2 to 8 add +8.1 points right with cut-offs unchanged"
+  - Problem: 'By rank' is jargon for splitting the edit by direction, and the sentence drops its verb.
+  - Rewrite: "Split by direction, the edit shows the same pattern: directions 2 to 8 add 8.1 points of right answers with cut-offs unchanged"
+- **D1, severity 2** — line 244, panel 'Why it matters', first sentence
+  - Text: "A method without reward that copies RL's effect has two targets, not one: making answers finish, and making them right."
+  - Problem: 'A method without reward' is the team's goal phrase, and 'two targets, not one' is a selling construction.
+  - Rewrite: "A method that tries to reproduce RL's effect without RL training has two targets: making answers finish, and making them right."
+- **D6, severity 2** — line 245, panel 'Why it matters'
+  - Text: "Finishing alone is cheap: the largest direction does it, and on the page The finish dial the size of the edit does it. It does not add right answers by itself."
+  - Problem: 'It' can mean finishing, the largest direction or the edit size; 'cheap' is a figure of speech.
+  - Rewrite: "Finishing alone is easy to get: the largest direction does it, and on the page The finish dial a larger edit does it. Neither adds right answers by itself."
+- **N2, severity 1** — line 247, panel 'Why it matters'
+  - Text: "No part alone reached 190 right; the whole edit reaches 200.25 of 328, so the two jobs add up."
+  - Problem: 'The two jobs add up' suggests the effects sum, which was not tested; the evidence only shows the whole does better than any part.
+  - Rewrite: "No part alone reached 190 right; the whole edit reaches 200.25 of 328, so both parts are needed."
+- **D6, severity 2** — line 253, panel 'How we know'
+  - Text: "The first run (one sample per cell) suggested the split by depth; it was read after the run. The spec SPEC_depth3 then filed 7 predictions before a second run with new seeds (commit 099dc65); 7 of 7 held."
+  - Problem: 'It was read after the run' is unclear (the split was found after looking at the data), and the spec name and commit are inside references.
+  - Rewrite: "A first run with one sample per condition suggested the split by layer; we found it by reading the results afterwards. Before a second run with new seeds, we wrote down 7 predictions; all 7 held."
+- **D4, severity 2** — line 255, panel 'How we know'
+  - Text: "Samples per cell: Base + cue 4, layers 0 to 10 4, layers 11 to 21 and 22 to 31 2 each, the whole edit 4, directions 2 to 8 1"
+  - Problem: Numbers run into the labels ('layers 0 to 10 4', 'directions 2 to 8 1'), so the reader cannot tell range ends from counts.
+  - Rewrite: "Samples per problem: 4 for the base model, layers 0 to 10 and the whole edit; 2 for layers 11 to 21 and layers 22 to 31; 1 for directions 2 to 8, each random control and each size of the largest direction."
+- **D4, severity 1** — line 257, panel 'How we know'
+  - Text: "Controls: a random rank-8 edit of the same norm in all layers (159 right, 74 cut off) and in layers 0 to 10 only (162, 70); both stay at Base + cue."
+  - Problem: 'Rank-8' is not explained, and 'stay at Base + cue' compresses 'score the same as the base model'.
+  - Rewrite: "Controls: a random change of 8 directions per matrix, with the same norm, in all layers (159 right, 74 cut off) and in layers 0 to 10 only (162 right, 70 cut off); both score the same as the base model."
+- **T3, severity 1** — line 266, panel 'What it does not show'
+  - Text: "Several cells have 1 or 2 samples; the direction cells and the random controls 1 each. On code every cell has 1."
+  - Problem: Repeats the samples line of 'How we know', with the internal word 'cells'.
+  - Rewrite: needs facts the proofreader did not have
+- **N1, severity 2** — line 267, panel 'What it does not show'
+  - Text: "The cut-offs that layers 0 to 10 add are not loops, and 14 of their 368 cut-off answers were still scored right"
+  - Problem: 'Loops' (repeated text) is not explained, and 368 is a total over 4 samples, which the reader cannot see against the roughly 92 cut-offs per sample shown elsewhere.
+  - Rewrite: "The cut-offs that layers 0 to 10 add are not answers stuck repeating the same text, and 14 of their 368 cut-off answers (over 4 samples) were still scored right"
+- **D4, severity 1** — line 625, chart legend
+  - Text: "Base + cue, random"
+  - Problem: One legend entry joins the base model and the random control with a comma; the reader cannot tell it means 'base model or random control'.
+  - Rewrite: "Base model or random control"
+- **D4, severity 1** — line 887, cell pane, value row label
+  - Text: "Right per finished"
+  - Problem: A clipped label; the reader has to guess it is the share of finished answers that are right.
+  - Rewrite: "Share of finished answers that are right"
+- **D6, severity 2** — line 891, cell pane, value row label
+  - Text: "Against Base + cue (another answer: 164 right, 77 cut off)"
+  - Problem: 'Another answer' does not say this is a different base-model run, so the reader cannot tell why two base numbers exist.
+  - Rewrite: "Against a separate one-sample run of the base model (164 right, 77 cut off)"
+- **V2, severity 1** — line 905, cell pane, sub-heading
+  - Text: "Two answers from the run folder, the end of each:"
+  - Problem: 'The run folder' refers to the team's file storage.
+  - Rewrite: "Two example answers (the end of each):"
+
+## tools/finding_vote_over_four.py (19 issues: 0 serious, 7 re-read, 12 minor)
+
+- **V4, severity 2** — line 80, page title, tile name and browser tab
+  - Text: "Vote over 6 samples"
+  - Problem: The title names the method, not the result, and the page address still says 'vote-over-four', so the reader sees two different numbers.
+  - Rewrite: "A 6-sample vote of the base model reaches RL's one-sample score at 5 times the tokens"
+- **D5, severity 1** — line 80, tile title and address
+  - Text: "Vote over 6 samples (address /finding/vote-over-four)"
+  - Problem: The title says 6 samples while the page address says four.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — line 81, problem sentence
+  - Text: "How many votes does Base + cue need to match RL?"
+  - Problem: 'Base + cue' is a team label, and 'votes' is used for what the page elsewhere counts as samples in the vote.
+  - Rewrite: "Over how many samples must the base model take a majority vote to match the RL-trained model on MATH-500?"
+- **N1, severity 2** — line 82, headline / tile line
+  - Text: "A vote over 6 samples of Base + cue scores 456.6 of 500 on MATH-500, within RL's one-sample range, at 5.2 times the tokens."
+  - Problem: The RL range (456 to 464) is not given, the fractional score is not explained as a mean, and '5.2 times the tokens' does not say of what.
+  - Rewrite: "A majority vote over 6 samples of the base model scores 456.6 of 500 on MATH-500 (mean over random choices of 6), inside the RL model's one-sample range of 456 to 464, at 5.2 times the tokens of one RL sample."
+- **D4, severity 2** — line 82, tile line
+  - Text: "A vote over 6 samples of Base + cue scores 456.6 of 500 on MATH-500, within RL's one-sample range, at 5.2 times the tokens."
+  - Problem: 'RL's one-sample range' is compressed and '456.6 of 500' needs 'on average'.
+  - Rewrite: "A vote over 6 samples of Base + cue scores 456.6 of 500 on MATH-500 on average, inside the range of RL's single-sample scores, at 5.2 times the tokens."
+- **D2, severity 1** — line 82, headline (first use of RL)
+  - Text: "within RL's one-sample range"
+  - Problem: RL is spelled out only in a side pane the reader may never open.
+  - Rewrite: "within the one-sample range of the model trained with reinforcement learning (RL)"
+- **N4, severity 1** — line 82, headline vs panel 'How we know'
+  - Text: "within RL's one-sample range"
+  - Problem: The headline does not say that the 6-sample score has a 95 % interval of 445.6 to 467.1, wider than the RL range it is said to be within.
+  - Rewrite: "Add after the score: '(95 % interval 445.6 to 467.1)'."
+- **S1, severity 1** — line 88, panel 'What is new', first sentence
+  - Text: "Voting over several samples is long known as self-consistency, and Wang et al. (arXiv 2610.06851, Figure 21) plot about 88.5 % for a vote over 4 samples of this cued base model; this run takes the vote to 12 samples and measures where it meets RL."
+  - Problem: A 45-word sentence joins the prior work and the new contribution; the reader has to find where 'new' starts.
+  - Rewrite: "Voting over several samples is known as self-consistency. Wang et al. (arXiv 2610.06851, Figure 21) report about 88.5 % for a vote over 4 samples of this base model with the cue. New here: we take the vote to 12 samples and measure where it meets RL."
+- **V2, severity 1** — line 93, panel 'What is new'
+  - Text: "(specs/SPEC_votek.md, V2)"
+  - Problem: A file path and prediction id inside a sentence for visitors.
+  - Rewrite: "(written in the plan before the run)"
+- **V2, severity 2** — line 98, panel 'Why it matters', first sentence
+  - Text: "The direction asks for the cheapest route to RL's score that uses no reward."
+  - Problem: 'The direction' is the team's internal research brief; the visitor does not know what it is.
+  - Rewrite: "Our research goal is the cheapest way to reach RL's score without training on a reward."
+- **D2, severity 1** — line 109, panel 'How we know', first sentence
+  - Text: "Base + cue answered each of the 500 MATH-500 problems 12 times at T 1.0 and top-p 1.0 (grader v3), and the score of a vote over k samples is the mean over 200 random choices of k of the 12."
+  - Problem: 'T 1.0', 'top-p 1.0' and 'grader v3' are not explained, and the sentence holds two separate facts.
+  - Rewrite: "The base model answered each of the 500 MATH-500 problems 12 times with plain sampling (temperature 1.0, top-p 1.0). The score of a vote over k samples is the mean over 200 random choices of k of the 12."
+- **V2, severity 1** — line 112, panel 'How we know'
+  - Text: "Samples 1 to 4 come from the earlier 4-sample job, samples 5 to 12 from new jobs that continue its seed rule."
+  - Problem: 'Job' and 'seed rule' are team process terms.
+  - Rewrite: "Samples 1 to 4 come from an earlier 4-sample run; samples 5 to 12 come from new runs whose random seeds continue that run's sequence."
+- **D2, severity 1** — line 115, panel 'How we know'
+  - Text: "Intervals are bootstraps over the 500 problems (2,000 resamples) of that mean"
+  - Problem: 'Bootstraps ... of that mean' is compressed jargon.
+  - Rewrite: "The 95 % intervals come from resampling the 500 problems 2,000 times (a bootstrap) and recomputing that mean"
+- **N2, severity 1** — line 120, panel 'What it does not show', first sentence
+  - Text: "at equal tokens RL is ahead, with 474 of 500 for its vote over 4 samples at 18,747 tokens per problem, against 449.2 for Base + cue over 4 at 16,228."
+  - Problem: 'At equal tokens' is stated, but the two token counts beside it differ by 15 %.
+  - Rewrite: "at about equal tokens RL is ahead: 474 of 500 for its vote over 4 samples at 18,747 tokens per problem, against 449.2 for the base model over 4 samples at 16,228."
+- **D1, severity 2** — line 123, panel 'What it does not show'
+  - Text: "The same run on the 328 harder problems has no rows yet; there, under the same vote over 4 samples after restart, RL stays 8.8 points ahead"
+  - Problem: 'The 328 harder problems', 'no rows yet' and 'after restart' are team terms not explained on this page.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — line 302, control label, picture labels, notes and panes (repeats 15 times)
+  - Text: "Samples in the vote of Base + cue"
+  - Problem: 'Base + cue' is never explained; the page says only 'this cued base model' once, so the reader cannot tell what the cue is.
+  - Rewrite: "Samples in the vote of the base model (Olmo 3 7B with an opening cue)"
+- **N1, severity 1** — line 524, base model detail pane
+  - Text: "At least one of the 6 samples is right on 478.4 problems; the vote picks a right answer on 456.6."
+  - Problem: Fractional problem counts look like an error unless the reader remembers they are means over random choices.
+  - Rewrite: "On average over the random choices of 6, at least one sample is right on 478.4 problems, and the vote picks a right answer on 456.6."
+- **V2, severity 1** — line 527, RL detail pane
+  - Text: "The four one-sample scores of one RL job: 456, 462, 464 and 458 of 500, mean 460.0."
+  - Problem: 'Job' is a team word for a compute run.
+  - Rewrite: "The scores of four separate samples from one RL run: 456, 462, 464 and 458 of 500, mean 460.0."
+- **T3, severity 1** — line 533, RL vote detail pane
+  - Text: "So at equal tokens RL stays ahead."
+  - Problem: Repeats the limits panel as a punchline, again claiming 'equal tokens' where the counts differ.
+  - Rewrite: "So at about the same number of tokens, RL stays ahead."
+
+## tools/finding_where_the_gap_goes.py (20 issues: 1 serious, 13 re-read, 6 minor)
+
+- **V4, severity 2** — line 72, page title, tile name and browser tab
+  - Text: "Where the gap goes"
+  - Problem: 'The gap' is not defined until the third panel, and the title names neither the split nor the control result.
+  - Rewrite: "Why the base model misses problems RL solves: mostly bad luck, and a random weight change shows the same split"
+- **D2, severity 1** — line 73, problem sentence (first use of RL)
+  - Text: "Why does a base model miss math problems its RL version solves?"
+  - Problem: RL (reinforcement learning) is never spelled out on the page.
+  - Rewrite: "Why does a base model miss math problems that its version trained with reinforcement learning (RL) solves?"
+- **D4, severity 3** — line 74, headline / tile line
+  - Text: "66 % of the RL gap is problems the base sometimes solves; with a random weight change, 71 % of its gap."
+  - Problem: 'The RL gap' and 'its gap' are undefined, and the compressed second clause hides the point: the same split appears without RL, so it does not show what RL changed.
+  - Rewrite: "Of the 65 MATH-500 problems that RL solves and one base-model answer misses, 66 % are solved by the base model in other samples. A random weight change of the same size gives the same split (71 % of its 42-problem gap)."
+- **D5, severity 2** — line 74, headline, compared with the headline of tools/finding_rl_reliability.py
+  - Text: "66 % of the RL gap is problems the base sometimes solves"
+  - Problem: The page 'Where RL's gain comes from' says '81 % of the RL gain is on problems the base model already solves sometimes'; with nearly the same words and different numbers, a reader of both pages sees a contradiction.
+  - Rewrite: "Name the measure in both headlines, e.g. 'one base answer against one RL answer' here and 'right answers over 4 samples each' there."
+- **N3, severity 2** — line 74, tile line
+  - Text: "66 % of the RL gap is problems the base sometimes solves; with a random weight change, 71 % of its gap."
+  - Problem: The control gives a higher share (71 %) than RL (66 %), but the line does not say what that means, and 'its' is unclear.
+  - Rewrite: "66 % of the RL gap is on problems the base sometimes solves; a random weight change gives 71 % of its own gap, so this share says nothing specific about RL."
+- **D5, severity 2** — line 74, tile line (against the tile Where RL's gain comes from)
+  - Text: "66 % of the RL gap is problems the base sometimes solves"
+  - Problem: The tile next to it says '81 % of the RL gain is on problems the base model already solves sometimes'; with 'gap' and 'gain' as two words and 66 and 81 %, the reader cannot tell whether the tiles agree.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — line 86, panel 'What is new', first sentence
+  - Text: "New here is a count per problem that adds up, and its control."
+  - Problem: 'A count per problem that adds up' is vague; the reader cannot tell what is counted or what adds up.
+  - Rewrite: "New here: every problem in the gap is put into exactly one cause, so the shares add up to 100 %, and the same count is run on a control."
+- **V2, severity 1** — line 87, panel 'What is new'
+  - Text: "Rules written before the rows were read put each of the 65 problems in exactly one cause"
+  - Problem: 'Rows' is the team's word for stored answers.
+  - Rewrite: "Rules written before we looked at the answers put each of the 65 problems in exactly one cause"
+- **D4, severity 2** — line 89, panel 'What is new'
+  - Text: "The same rules split the 42-problem gap of the base with a random weight change of the same size in the same way, within the intervals."
+  - Problem: A stacked noun phrase ('the 42-problem gap of the base with a random weight change of the same size') must be read twice.
+  - Rewrite: "We also changed the base model's weights at random by the same amount as RL did. That model solves 42 problems the base answer misses, and the same rules split them in the same way, within the intervals."
+- **D1, severity 2** — line 95, panel 'Why it matters', first sentence
+  - Text: "91 % of the gap is problems the base solves in other samples or is cut off on, so methods with no reward, such as a vote over samples or a longer budget, aim at most of it."
+  - Problem: 'Is cut off on' is awkward, and 'methods with no reward' and 'a longer budget' are team shorthand.
+  - Rewrite: "91 % of the gap is problems that the base model solves in other samples or that it is cut off on, so methods without RL training, such as a vote over several samples or a higher token limit, target most of it."
+- **T3, severity 1** — line 97, panel 'Why it matters'
+  - Text: "The split does not show what RL changed, because the base with a random weight change of the same size gives the same split."
+  - Problem: Said again almost word for word as the first sentence of 'What it does not show'.
+  - Rewrite: needs facts the proofreader did not have
+- **S2, severity 2** — line 98, panel 'Why it matters', second list line
+  - Text: "What separates RL from the control is the count: RL gains 65 problems and loses 12; the control gains 42 and loses 35."
+  - Problem: The one result that separates RL from the control (net +53 against +7) is buried as the third sentence of the second panel.
+  - Rewrite: "Move to the headline or the first sentence of 'What is new': RL gains 65 problems and loses 12 (net +53); the random weight change gains 42 and loses 35 (net +7)."
+- **S2, severity 2** — line 103, panel 'How we know', first sentence
+  - Text: "Each model wrote one answer to each of the 500 MATH-500 problems at T 1.0, and the gap is the problems RL got right and Base + cue got wrong."
+  - Problem: The definition of 'the gap', which the title and headline depend on, appears only in the third panel; 'T 1.0' is not explained.
+  - Rewrite: "Move the definition next to the headline: 'The gap is the problems RL got right and the base model got wrong, with one answer each at temperature 1.0.'"
+- **D2, severity 1** — line 105, panel 'How we know'
+  - Text: "Intervals are 90 % bootstraps over the gap problems. A second script, written from the rules alone, reproduced every share from the raw rows."
+  - Problem: '90 % bootstraps' is compressed jargon, and 'raw rows' is a team word.
+  - Rewrite: "The 90 % intervals come from resampling the gap problems (a bootstrap). A second script, written from the rules alone, reproduced every share from the stored answers."
+- **D1, severity 2** — line 115, panel 'What it does not show'
+  - Text: "The T 0.6 cell differs in more than temperature: RL step 400, top-p 0.95 and grader v1. 9 of its 25 reliability problems are right answers grader v1 rejects."
+  - Problem: 'Cell', 'RL step 400' and 'grader v1' are team labels, so the reader misses that 9 of 25 'misses' in that view are not real misses.
+  - Rewrite: "The T 0.6 comparison differs in more than temperature: it uses RL after 400 training steps, top-p 0.95 and an older answer checker. That checker wrongly rejects 9 of the 25 answers counted as reliability misses there."
+- **V2, severity 1** — line 119, panel 'How to reproduce it'
+  - Text: "from the row files named in run.json. ... account run 02 of studies/theory"
+  - Problem: Internal file and run names that a visitor cannot open or interpret.
+  - Rewrite: "from the answer files listed in studies/theory/results/account/run-02/run.json."
+- **T1, severity 2** — line 595, problem pane, label of the third item
+  - Text: "The other side, and 4 further Base + cue samples at T 1.0"
+  - Problem: 'The other side' does not say which model; the reader has to work out it is the model the base is compared with.
+  - Rewrite: "What the compared model answered, and 4 more base-model samples at temperature 1.0"
+- **D3, severity 1** — line 720, group labels in the picture
+  - Text: "Reliability / Capability"
+  - Problem: The cause names are abstract nouns that stand in for 'right in another sample' and 'never right'; the reader needs the small sub-labels to decode them.
+  - Rewrite: "Right in another sample / Never right in 4 samples"
+- **D1, severity 2** — line 729, setting line under the large number, problem pane labels (repeats 10 times)
+  - Text: "Base + cue against RL, MATH-500, T 1.0"
+  - Problem: 'Base + cue' is a team label never explained on the page, and the page also says 'the base' for the same model.
+  - Rewrite: "Base model (with an opening cue) against RL, MATH-500, temperature 1.0"
+- **D1, severity 2** — line 748, switch buttons
+  - Text: "RL step 400, T 0.6"
+  - Problem: 'RL step 400' is a checkpoint name; the reader is not told it is the RL model after 400 training steps, or why T 0.6 matters.
+  - Rewrite: "RL after 400 training steps, temperature 0.6"
+
+## tools/findings.py (25 issues: 0 serious, 11 re-read, 14 minor)
+
+- **D4, severity 2** — line 39, group heading
+  - Text: "What needs no reward?"
+  - Problem: The heading is compressed: the reader has to work out that it means 'Which gains can the model get without a reward?'
+  - Rewrite: "Gains without reward"
+- **T1, severity 2** — line 40, group heading
+  - Text: "Do our theories predict?"
+  - Problem: 'Predict' has no object; the reader cannot tell what the theories predict or what the group holds.
+  - Rewrite: "Do our theories predict results better than guesses without a theory?"
+- **T1, severity 1** — line 41, group heading
+  - Text: "New"
+  - Problem: 'New' says only that a finding is not yet sorted; it does not say what is in the group.
+  - Rewrite: "Not yet grouped"
+- **D1, severity 2** — line 87, tile figure, base-opens-itself
+  - Text: "MATH-500, the base's own opening with Okay against the prefilled cue"
+  - Problem: 'Okay' is not quoted, so it reads as an English word, and 'prefilled cue' is a team term.
+  - Rewrite: "MATH-500: the base model's own opening starting with "Okay", against the cue written in for it"
+- **N1, severity 1** — line 90, tile figure, restart-on-cap
+  - Text: "+12.0 points  MATH-500, T 0.6"
+  - Problem: The tag does not say what the 12 points are added to (Base + cue without restarts).
+  - Rewrite: "MATH-500, T 0.6, over the same answers without restart"
+- **D4, severity 2** — line 94, tile figure, vote-over-four
+  - Text: "456.6 of 500  MATH-500, Base + cue, vote over 6 samples; RL one sample 450 to 462; vote over 4 adds 6.4 points"
+  - Problem: Three facts are packed as fragments; 'RL one sample 450 to 462' does not say it is the range of RL's one-sample score, and 456.6 of 500 needs 'average'.
+  - Rewrite: "456.6 of 500 on average: Base + cue with a vote over 6 samples on MATH-500. RL with one sample scores 450 to 462. A vote over 4 samples adds 6.4 points."
+- **D1, severity 2** — line 108, tile figure, how-much-of-the-gap
+  - Text: "Think-SFT + cue; best rule on untrained weights"
+  - Problem: 'Best rule on untrained weights' is a team phrase; the reader cannot tell it is the best sampling rule on the base model.
+  - Rewrite: "best sampling rule on the base model (no training)"
+- **D4, severity 1** — line 122, tile figure, no-early-warning
+  - Text: "Think-SFT + cue, best of six text signs at token 12,000 for a failing sample; 0.5 is chance"
+  - Problem: 'Text signs' is a team term and 'at token 12,000' compresses 'after the first 12,000 tokens of the answer'.
+  - Rewrite: "Think-SFT + cue: the best of six signals read from the first 12,000 tokens of an answer, for spotting a failing answer; 0.5 is chance"
+- **N1, severity 1** — line 149, tile figure, rl-wait-habit
+  - Text: "points  MATH-500, at RL's rate of Wait"
+  - Problem: The tag does not say what the points are compared with, and 'Wait' is not quoted.
+  - Rewrite: "MATH-500, base model writing "Wait" at RL's rate, against the unpushed base model"
+- **D1, severity 1** — line 155, tile figure, a-quarter-of-rl
+  - Text: "MATH-500, a = 0.25"
+  - Problem: 'a = 0.25' is the team's scale variable; terms are not explained inside tiles.
+  - Rewrite: "MATH-500, a quarter of RL's weight change"
+- **D4, severity 1** — line 167, tile figure, the-finish-dial
+  - Text: "of 328 harder problems, 8 RL directions at size 1.5; right 180 → 203, RL 200"
+  - Problem: 'At size 1.5' and 'right 180 → 203, RL 200' are fragments; the reader must guess the comparison.
+  - Rewrite: "of 328 harder problems, with 8 RL directions scaled by 1.5; right answers rise from 180 to 203 (RL: 200)"
+- **D4, severity 1** — line 178, tile figure, rl-every-neuron
+  - Text: "of RL's effect  next-word predictions, RL's best 1 % of neurons copied"
+  - Problem: 'RL's best 1 % of neurons' does not say best by what (largest change).
+  - Rewrite: "of RL's effect on next-word predictions, copying the 1 % of neurons RL changed most"
+- **D2, severity 1** — line 189, tile figure, rl-directions-move-activations
+  - Text: "of the layer-24 residual stream, 8 RL directions (0.42 RMS) against 8 random directions of equal weight norm (0.004)"
+  - Problem: 'Residual stream' and 'RMS' are field terms with no explanation on the tile.
+  - Rewrite: needs facts the proofreader did not have
+- **S1, severity 2** — line 193, tile figure, two-jobs-in-the-edit
+  - Text: "328 harder problems, right answers from layers 0 to 10 of RL's edit alone, while cut-offs rise 3.1; layers 11 to 21 cut them by 5.2; the split failed on code"
+  - Problem: Four facts in one fragment; 'rise 3.1' has no unit.
+  - Rewrite: "328 harder problems. Layers 0 to 10 of RL's edit alone add right answers, while cut-off answers rise by 3.1 points. Layers 11 to 21 cut them by 5.2 points. The split did not hold on code."
+- **D4, severity 1** — line 197, tile figure, theories-on-trial
+  - Text: "theory nearer the measured number than readers with no theory; half would be a tie"
+  - Problem: Dropped articles and verb; 'readers with no theory' is a team term.
+  - Rewrite: "times a theory came nearer the measured number than forecasters with no theory; half would mean no difference"
+- **D5, severity 1** — line 201, tile figure, forecasts-before-results
+  - Text: "theory nearer the reported number than both readers with no theory, most of them on one code experiment; 162 of 200 targets reported"
+  - Problem: The next tile says 'measured number' and this one 'reported number' for the same idea; 'targets reported' is unexplained.
+  - Rewrite: "Use 'measured number' on both tiles."
+- **D5, severity 2** — line 420, question at the top of /findings
+  - Text: "Reinforcement learning with a reward (RL) makes Olmo 3 7B better at math. How much of that gain can the model reach without any reward?"
+  - Problem: The home page frames the work as 'with no training', this page as 'without any reward'; several findings use Think-SFT, which is trained, so the two pages describe different goals.
+  - Rewrite: "State one framing on both pages, for example 'without reward training (RL)'."
+- **D4, severity 1** — line 711, picture, unit beside the number (MATH-500)
+  - Text: "points: Base + cue behind RL with the same vote and restarts"
+  - Problem: The unit line is a fragment with the verb dropped.
+  - Rewrite: "points by which Base + cue trails RL when both get the same vote and restarts"
+- **D6, severity 1** — line 713, picture, sentence under the number (MATH-500)
+  - Text: "What RL adds in these points is not yet explained."
+  - Problem: 'These points' refers back to a number above; the reader has to look for which.
+  - Rewrite: "What RL adds in these last 2.0 points is not yet explained."
+- **D4, severity 1** — line 717, picture, setting line
+  - Text: "328 harder problems, T 1.0, one sample unless a vote. A mark opens its finding."
+  - Problem: 'one sample unless a vote' drops verbs; the reader has to rebuild 'each mark is one sample, except marks for a vote over 4 samples'.
+  - Rewrite: "328 harder problems, temperature 1.0. Each mark is one sample per problem, except the vote marks. Click a mark to open its finding."
+- **D6, severity 2** — line 720, picture, sentence under the number
+  - Text: "Think-SFT + cue gets 209 of 328 right against RL's 200 (95 % interval 0.5 to 5.0 points)."
+  - Problem: The interval stands after RL's count, so it reads as an interval of RL's score, not of the difference.
+  - Rewrite: "Think-SFT + cue gets 209 of 328 right and RL 200: a lead of 2.7 points (95 % interval 0.5 to 5.0 points)."
+- **D1, severity 2** — line 776, tile lines (all) (repeats 11 times)
+  - Text: "Base + cue"
+  - Problem: Tiles are links, and the glossary does not mark terms inside links, so 'Base + cue', 'Think-SFT', 'RL directions' and 'blind reader' on the tiles are never explained.
+  - Rewrite: "Spell the term out at its first tile use (for example 'the base model with the cue'), or let the glossary mark terms in tile text."
+- **D5, severity 2** — line 776, tile lines (several) (repeats 8 times)
+  - Text: "RL weight change / RL's weight edit / RL's edit / RL's change"
+  - Problem: The same thing has four names across tiles (and 'RL weight update' on Papers); the reader cannot tell whether they are one thing.
+  - Rewrite: "Use 'RL's weight change' everywhere."
+- **D5, severity 1** — line 776, tile lines (several) (repeats 12 times)
+  - Text: "Base / the base / the base model"
+  - Problem: Tiles name the untrained model 'Base', 'the base' and 'the base model'; a newcomer may read 'Base' as a different model.
+  - Rewrite: "Use 'the base model' in tile text."
+- **D1, severity 2** — line 830, /proof, first sentence
+  - Text: "Experiments on the harness itself."
+  - Problem: 'Harness' is the team's word for its setup of agents and tools; the only sentence on the page does not say what it is.
+  - Rewrite: "Experiments that test the team's own way of working: how its agents choose, run and review experiments."
+
+## tools/glossary.py (12 issues: 0 serious, 4 re-read, 8 minor)
+
+- **D5, severity 1** — line 18, definition of opening cue
+  - Text: "copied from how the RL model opens its own answers."
+  - Problem: The glossary says 'the RL model' here and 'RL-trained model' elsewhere for the same model.
+  - Rewrite: "copied from how the RL-trained model opens its own answers."
+- **D6, severity 1** — line 30, definition of Base
+  - Text: "with no further training; RL was trained from it."
+  - Problem: 'RL was trained from it' uses RL for the model; a reader who knows RL as a method has to re-read.
+  - Rewrite: "with no further training; the RL-trained model was trained from it."
+- **D5, severity 2** — line 32, definition of RL
+  - Text: "AI2's Olmo 3.1 RL-Zero-Math, the same base model after reinforcement learning on math."
+  - Problem: 'RL' on the site names both the training method ('RL training changed every weight') and this model; clicking RL in a sentence about the method shows a model.
+  - Rewrite: "RL: reinforcement learning with a reward. On this site it also names the RL-trained model, AI2's Olmo 3.1 RL-Zero-Math: the same base model after reinforcement learning on math."
+- **D5, severity 1** — line 33, definition of RL
+  - Text: "AI2's Olmo 3.1 RL-Zero-Math, the same base model"
+  - Problem: The base is defined as Olmo 3 and this model as Olmo 3.1; 'the same base model' then reads as a contradiction.
+  - Rewrite: "AI2's Olmo 3.1 RL-Zero-Math, trained with RL starting from the Olmo 3 7B base model."
+- **D5, severity 2** — line 57, definition of vote over 4 samples
+  - Text: "The model answers 4 times and the most common final answer is taken."
+  - Problem: The term also matches the bare word 'vote', so on 'a vote over 6 samples' or 'over 12 samples' the box says 4 times.
+  - Rewrite: "The model answers several times (4 unless a number is given) and the most common final answer is taken."
+- **D4, severity 2** — line 69, definition of loop
+  - Text: "An answer that falls into repeating the same text (the study flags an 8,000-character window that compresses to under a tenth)."
+  - Problem: 'Compresses to under a tenth' does not say of what; the reader cannot rebuild the rule.
+  - Rewrite: "An answer that keeps repeating the same text. The study counts an answer as a loop when an 8,000-character stretch of it compresses to less than a tenth of its size."
+- **D4, severity 1** — line 87, definition of 95 % interval
+  - Text: "an interval that includes 0 may be chance."
+  - Problem: The 0 rule applies to a difference, not to a single accuracy; the definition shows on single scores too.
+  - Rewrite: "The range the true value plausibly lies in, given how many problems were scored; when the interval of a difference includes 0, the difference may be chance."
+- **D1, severity 1** — line 90, definition of within noise
+  - Text: "A rise that does not clear the 95 % interval of the previous record, so it may be chance."
+  - Problem: 'Record' is the team's word for the previous best score.
+  - Rewrite: "A rise that stays inside the 95 % interval of the previous best score, so it may be chance."
+- **D5, severity 2** — line 96, definition of gap
+  - Text: "The problems RL gets right that the compared base setting gets wrong."
+  - Problem: Elsewhere 'gap' is a difference in points ('closes 122 % of the gap', 'gap 0.4 to 2.0', 'points to go'), and the term also matches 'RL gain', so one word has two meanings.
+  - Rewrite: "Define 'gap' once as the points by which RL leads, and give the problem-count meaning its own name."
+- **D4, severity 1** — line 99, definition of solves sometimes
+  - Text: "Right in at least one of the base model's 4 samples of that problem."
+  - Problem: Telegraphic: no subject or verb.
+  - Rewrite: "The base model gets the problem right in at least one of its 4 samples."
+- **D2, severity 1** — line 105, definition of direction
+  - Text: "One rank-1 part of RL's change to one weight matrix; "8 directions" keeps the 8 largest."
+  - Problem: The definition explains 'direction' with 'rank-1', another term a general reader does not know.
+  - Rewrite: "One rank-1 part (from a singular value decomposition) of RL's change to one weight matrix; "8 directions" keeps the 8 largest."
+- **D6, severity 1** — line 138, definition of held-out
+  - Text: "The rule is chosen on four fifths of the problems and scored on the remaining fifth."
+  - Problem: 'The rule' has no antecedent in a box that pops up alone.
+  - Rewrite: "A selection rule is chosen on four fifths of the problems and scored on the remaining fifth."
+
+## tools/home.py (19 issues: 0 serious, 11 re-read, 8 minor)
+
+- **T4, severity 2** — line 263, header navigation
+  - Text: "Board / Design / Proof / Findings"
+  - Problem: 'Design' leads to a page on how people and agents coordinate and 'Proof' to tests of the team's own method; neither name says where it leads.
+  - Rewrite: "Board / How we work / Tests of our method / Findings"
+- **T1, severity 1** — line 267, status in header
+  - Text: "Reading the board"
+  - Problem: The status text does not say it is loading; a newcomer does not know what 'the board' is yet.
+  - Rewrite: "Loading live data"
+- **D2, severity 2** — line 270, headline sentence (before the board is read)
+  - Text: "We measure how far the Olmo 3 base model gets on MATH-500 with no training, against the RL-trained model."
+  - Problem: The first sentence of the site uses RL and MATH-500 without saying what they are, so a newcomer cannot tell what is being compared.
+  - Rewrite: "We measure how far the Olmo 3 base model gets on MATH-500, a standard set of 500 math problems, with no training, compared with the same model after reinforcement learning (RL)."
+- **N3, severity 1** — line 270, headline sentence
+  - Text: "We measure how far the Olmo 3 base model gets on MATH-500 with no training, against the RL-trained model."
+  - Problem: The sentence states the activity but not why it matters (how much of RL's gain needs RL at all).
+  - Rewrite: needs facts the proofreader did not have
+- **T4, severity 1** — line 274, link under the words column
+  - Text: "Each page, with a picture ↓"
+  - Problem: The link text does not say it scrolls down to a list of all pages.
+  - Rewrite: "All pages, with pictures ↓"
+- **D1, severity 2** — line 277, caption under the dial
+  - Text: "Each pulse is one post arriving on the board. ← → turn the dial."
+  - Problem: 'The board' is the team's shared log of ideas, work items and results; it is not explained on the home page before this caption uses it.
+  - Rewrite: "Each pulse is one post arriving on the board, the team's live log of ideas, work and results. Use ← → to turn the dial."
+- **T1, severity 1** — line 289, group headings
+  - Text: "Results / How we work / Tools and extras"
+  - Problem: 'Tools and extras' holds pages about how agents used web search and memory, a GPU price forecast and a game; 'Tools' does not describe them.
+  - Rewrite: "Results / How we work / Other pages"
+- **D1, severity 2** — line 292, dial/tile line, Papers
+  - Text: "The paper loop and what it wrote"
+  - Problem: 'The paper loop' is a team name for agents that write papers; a newcomer cannot tell what it is from the tile.
+  - Rewrite: "Papers that our agents wrote from our findings"
+- **D6, severity 1** — line 293, dial/tile line, Talk
+  - Text: "The talk, as slides"
+  - Problem: 'The talk' assumes the reader knows which talk (the team's hackathon presentation).
+  - Rewrite: "Our hackathon talk, as slides"
+- **D5, severity 2** — line 295, dial/tile name and line, Design
+  - Text: "Design — How people and agents coordinate"
+  - Problem: The page is named 'Design' but its line says it is about coordination; the reader cannot predict what is on it from the name.
+  - Rewrite: "How we work — How people and agents coordinate"
+- **N2, severity 1** — line 296, dial/tile name, Proof
+  - Text: "Proof — Tests of the team's own method"
+  - Problem: The name 'Proof' claims more than the line delivers (tests of the method, not proofs).
+  - Rewrite: "Method tests — Tests of the team's own method"
+- **S5, severity 1** — line 298, dial/tile lines (voice) (repeats 5 times)
+  - Text: "Who we are"
+  - Problem: The home page switches between 'we' ('We measure', 'Who we are', 'our own work') and 'the team' ('the team's own method', 'What the team measured'); the reader has to check whether these are the same people.
+  - Rewrite: "Use one voice: either 'we' or 'the team' throughout."
+- **D3, severity 2** — line 299, dial/tile name and line, lab
+  - Text: "AI Psychosis maxxing — 3D pictures of our own work, because of course"
+  - Problem: 'Maxxing' is internet slang and 'because of course' a joke; a second-language reader cannot tell that the page holds 3D pictures of the team's data.
+  - Rewrite: "3D pictures — Interactive 3D pictures of our own work"
+- **V3, severity 2** — line 299, dial/tile name, lab
+  - Text: "AI Psychosis maxxing"
+  - Problem: A joke about 'AI psychosis' among result pages needs context a newcomer does not have and may read as a statement about mental illness.
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 2** — line 303, dial/tile name and line, psychosis
+  - Text: "AI Psychosis detox — The cure for the maxxing: log off and breathe, as a game"
+  - Problem: The name and line refer back to the 'maxxing' joke; a newcomer cannot tell what the game is.
+  - Rewrite: "Breathing game — A short game: log off and breathe"
+- **D1, severity 2** — line 593, headline sentence
+  - Text: "a prompt cue"
+  - Problem: 'Prompt cue' is the team's name for three fixed opening tokens; the home page never says what it is, and the glossary does not run on this page.
+  - Rewrite: "three fixed opening tokens (a prompt cue)"
+- **N4, severity 2** — line 594, headline sentence (after the board is read)
+  - Text: "With a prompt cue and a majority vote over 12 samples, and no training, the Olmo 3 base model goes from 44.8 % to 93.2 % on MATH-500, 1.8 points below the RL-trained model's 95.0 %."
+  - Problem: The base score uses a 12-sample vote and the RL score it is compared with is itself a vote over 4 samples with restarts; the sentence hides both settings, so the reader assumes a like-for-like comparison.
+  - Rewrite: "With no training, the Olmo 3 base model goes from 44.8 % to 93.2 % on MATH-500 when it gets a three-token prompt cue and a majority vote over 12 samples. The RL-trained model reaches 95.0 % with a vote over 4 samples and restarts, 1.8 points higher."
+- **S1, severity 2** — line 594, headline sentence (after the board is read)
+  - Text: "With a prompt cue and a majority vote over 12 samples, and no training, the Olmo 3 base model goes from"
+  - Problem: Three conditions stacked before the subject (with ... and ..., and ...) make the reader hold the sentence open for 20 words before learning what it is about.
+  - Rewrite: "Put the subject first: 'With no training, the Olmo 3 base model goes from 44.8 % to 93.2 % on MATH-500 when it is given a prompt cue and a majority vote over 12 samples.'"
+- **D5, severity 1** — line 622, section text, Tools and extras
+  - Text: "3D pictures, how the agents used web search and shared memory, GPU price forecasts, and a game about ourselves."
+  - Problem: The section calls the lab page '3D pictures' and the game 'a game about ourselves', while the tiles above call them 'AI Psychosis maxxing' and 'AI Psychosis detox'; the reader cannot match them.
+  - Rewrite: "Use one name for each page in both places, for example '3D pictures' and 'Breathing game'."
+
+## tools/papers.py (20 issues: 0 serious, 9 re-read, 11 minor)
+
+- **D2, severity 1** — line 24, paper card claim, The finish dial
+  - Text: "The top singular directions of an RL weight update set how often a language model finishes its answer."
+  - Problem: 'Singular directions' and 'weight update' are not explained; the Findings page calls the same thing 'RL directions' and 'weight change'.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — line 26, paper card, how it was picked
+  - Text: "The one finding in tier S of the first tier list: 5 judges gave it 4.8 of 5."
+  - Problem: 'Tier S' and 'the first tier list' are team terms; the reader cannot tell what was ranked or who the judges are.
+  - Rewrite: "The top-rated finding in the agents' first ranking: 5 judge agents gave it 4.8 of 5."
+- **N4, severity 1** — line 29, paper card, Theories on trial
+  - Text: "(no 'checked' line)"
+  - Problem: Every other paper card says how its numbers were checked; this one says nothing, which the reader may read as unchecked.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 1** — line 30, paper card claim, Theories on trial
+  - Text: "Forecasts that language-model agents file with a mechanism are more confident, not more accurate, than forecasts filed without one."
+  - Problem: 'File with a mechanism' is compressed: the reader has to rebuild 'forecasts that come with a stated cause'.
+  - Rewrite: "When language-model agents state a mechanism with a forecast, the forecast is more confident but not more accurate than one without a mechanism."
+- **D4, severity 2** — line 32, paper card, how it was picked
+  - Text: "Tier round 3: 8 scouts, 9 candidates, 5 judges. It scored 4.3 of 5."
+  - Problem: Telegraphic list of team roles; the reader cannot tell what happened.
+  - Rewrite: "Picked in the third ranking round: 8 search agents proposed 9 findings and 5 judge agents scored this one 4.3 of 5."
+- **D4, severity 2** — line 35, paper card claim, The first hundred steps
+  - Text: "a three-token opening takes the base model to within 1.4 points of step 100."
+  - Problem: 'Within 1.4 points of step 100' drops the noun: it means the RL checkpoint after 100 training steps.
+  - Rewrite: "On the released checkpoints of an RL run, a three-token opening brings the base model to within 1.4 points of the checkpoint after 100 RL steps."
+- **D4, severity 2** — line 37, paper card, how it was picked
+  - Text: "Tier round 3, 4.4 of 5. It waited for three more samples of each model."
+  - Problem: Fragment of team terms; 'waited for three more samples' does not say the paper waited until more runs were done.
+  - Rewrite: "Picked in the third ranking round with 4.4 of 5. Writing waited until three more samples of each model were run."
+- **D4, severity 1** — line 38, paper card, how it was checked
+  - Text: "4 review passes."
+  - Problem: Fragment; does not say who reviewed.
+  - Rewrite: "Agents reviewed it 4 times."
+- **N1, severity 2** — line 41, paper card claim, No early warning
+  - Text: "In the first 2,000 tokens nothing we tried orders two attempts at one problem better than 0.59; the signal arrives when attempts end."
+  - Problem: 0.59 has no name or scale (it is an AUROC-like score where 0.5 is chance); 'orders two attempts' is compressed.
+  - Rewrite: "From the first 2,000 tokens, no signal we tried tells the failing one of two attempts at a problem better than 0.59 (0.5 is chance); the signal appears only when the attempts end."
+- **D1, severity 1** — line 43, paper card, how it was picked
+  - Text: "Tier round 4: first of 6 candidates, and it needed no GPU run."
+  - Problem: 'Tier round' is team jargon.
+  - Rewrite: "Ranked first of 6 candidates in the fourth ranking round; it needed no new GPU run."
+- **D1, severity 1** — line 44, paper card, how it was checked
+  - Text: "64 checks of its numbers against stored readouts pass."
+  - Problem: 'Readouts' is the team's word for stored result files.
+  - Rewrite: "All 64 checks of its numbers against the stored result files pass."
+- **D4, severity 2** — line 47, paper card claim, Two token limits
+  - Text: "Three gains between fine-tunes of one 7B model, scored at 16,384 and at 32,768 tokens: one holds, one grows by 6 points and one shrinks."
+  - Problem: 'Gains between fine-tunes' and 'scored at 16,384 tokens' are compressed; the reader must guess these are differences between fine-tuned versions measured at two answer-length limits.
+  - Rewrite: "We compared three fine-tuned versions of one 7B model with answer-length limits of 16,384 and 32,768 tokens. Of the three gains between them, one holds, one grows by 6 points and one shrinks."
+- **D1, severity 2** — line 49, paper card, how it was picked
+  - Text: "Tier round 5: the cap test of a scout on stored rows; it waited for one run at the larger limit."
+  - Problem: 'Cap test', 'scout' and 'stored rows' are team terms; the sentence cannot be read without them.
+  - Rewrite: "Picked in the fifth ranking round from a search agent's test of the token limit on stored results; writing waited for one run at the larger limit."
+- **D4, severity 2** — line 54, step 'Tier'
+  - Text: "Scout agents collect the project's findings, re-read the best at their files, search the literature and score novelty and evidence. Judges rank them."
+  - Problem: 'Re-read the best at their files' is unclear, and 'Scout' and 'Judges' are team roles not explained (are judges agents?).
+  - Rewrite: "Search agents collect the project's findings, re-read the strongest in their source files, search the literature and score each for novelty and evidence. Other agents, the judges, rank them."
+- **D1, severity 1** — line 54, step name
+  - Text: "Tier"
+  - Problem: 'Tier' used as a verb and step name is team jargon for ranking findings into tiers.
+  - Rewrite: "Rank"
+- **S4, severity 1** — line 55, step 'Pick'
+  - Text: "If it lacks samples, the runs are started and the paper waits for them."
+  - Problem: The passive hides who starts the runs, and 'lacks samples' does not say samples of what.
+  - Rewrite: "If its numbers rest on too few model answers, the agents start more runs and the paper waits for them."
+- **D1, severity 1** — line 56, step 'Facts'
+  - Text: "The paper's numbers are recomputed from files in git into one file, facts.json."
+  - Problem: A file name and 'git' are details for the team; the point is that every number is recomputed from stored data.
+  - Rewrite: "An agent recomputes every number in the paper from the stored results and writes them to one file, from which the figures are also drawn."
+- **S4, severity 1** — line 59, step 'Review'
+  - Text: "Other agents review the PDF, the fixes are applied, and the PDF goes on this site."
+  - Problem: Two passives in a row hide who fixes and who publishes.
+  - Rewrite: "Other agents review the PDF, the writing agent applies the fixes, and the PDF is published on this site."
+- **D3, severity 1** — line 196, first sentence
+  - Text: "A loop of agents takes the project's strongest finding that has no paper yet, recomputes its numbers and writes it up."
+  - Problem: 'A loop of agents' is a figure for a repeated process; the reader has to guess that agents run the same steps again for each paper.
+  - Rewrite: "Agents repeat one process: they take the project's strongest finding that has no paper yet, recompute its numbers and write it up."
+- **V2, severity 2** — line 211, status in header
+  - Text: "The loop's work item is not among the newest on the board"
+  - Problem: 'Work item' and 'the board' are the team's coordination terms; a visitor cannot tell whether the paper loop is running.
+  - Rewrite: "The paper loop's status is not available"
+
+## tools/pastdev.py (29 issues: 0 serious, 13 re-read, 16 minor)
+
+- **V4, severity 1** — line 23, page title
+  - Text: "past.dev: the memory our agents asked first"
+  - Problem: The title does not say what past.dev is or what it achieved.
+  - Rewrite: "past.dev: a shared memory our agents searched before each experiment"
+- **D1, severity 1** — line 206, masthead
+  - Text: "past.dev, used by iterate-hack"
+  - Problem: 'iterate-hack' is the repository name, not explained.
+  - Rewrite: "past.dev, used by our hackathon team"
+- **V4, severity 2** — line 210, headline (h1)
+  - Text: "Our agents asked first."
+  - Problem: A punchline: asked whom, what and before what is not said; the result is not in it.
+  - Rewrite: "Before starting an idea, our agents asked a shared memory what the team already knew."
+- **D5, severity 2** — line 214, number tile
+  - Text: "15,944 memories extracted by past.dev from 854 stored sources"
+  - Problem: The page uses 'memories', 'sources', 'findings', 'entries' and 'dots' for overlapping things and never says how a memory differs from a source.
+  - Rewrite: needs facts the proofreader did not have
+- **D5, severity 2** — line 215, number tile
+  - Text: "0.4 s median recall"
+  - Problem: In machine learning 'recall' is a metric; here it means one memory lookup, and the page never says so.
+  - Rewrite: "0.4 s median time to answer one memory search (a 'recall')"
+- **S5, severity 1** — line 215, number tiles
+  - Text: "409 ms server side; 95% under 1.2 seconds"
+  - Problem: Time units switch between 's', 'ms' and 'seconds' across the tiles.
+  - Rewrite: "409 ms on the server; 95 % under 1.2 s"
+- **D4, severity 2** — line 216, number tile
+  - Text: "1 s write to indexed"
+  - Problem: 'Write to indexed' is a compressed phrase.
+  - Rewrite: "1 s from storing an item to being able to find it"
+- **D6, severity 1** — line 217, number tile
+  - Text: "$1.09 for all of it; 3,648 credits; dollars derived from an earlier bill"
+  - Problem: 'All of it' is vague, and 'derived from an earlier bill' does not say how the dollars were computed.
+  - Rewrite: "$1.09 for the whole hackathon (3,648 credits, converted at the price per credit on an earlier bill)"
+- **N1, severity 2** — line 229, figure 1 caption
+  - Text: "Taken from the team's Claude Code transcripts. In the ones we hold, two of every three recalls returned something a teammate wrote."
+  - Problem: The main fact comes second and has no count of recalls.
+  - Rewrite: "Two of every three recalls returned something a teammate wrote (counted in the team's saved Claude Code transcripts, n = ? recalls)."
+- **D2, severity 1** — line 232, figure 2 label
+  - Text: "Recall against grep, 20 questions"
+  - Problem: 'grep' (a text search command) is not explained.
+  - Rewrite: "Memory search against plain text search (grep), 20 questions"
+- **D6, severity 2** — line 239, figure 2 caption
+  - Text: "One was asked of past.dev, the other of a grep over 271 session transcripts (446 MB)."
+  - Problem: 'One... the other' reads as two different questions, when each of the 20 questions was put to both methods.
+  - Rewrite: "Each question was put to past.dev and to a grep search over 271 session transcripts (446 MB)."
+- **N4, severity 2** — line 239, figure 2 caption
+  - Text: "One run, templated questions, retrieval only."
+  - Problem: The caveat is three noun fragments; the reader cannot tell what 'templated' and 'retrieval only' limit.
+  - Rewrite: "We ran the test once, the questions followed one template, and we measured only whether the answer was retrieved, not whether an agent used it."
+- **T1, severity 1** — line 244, recall labels (repeats 4 times)
+  - Text: "across two people"
+  - Problem: Two of the four case labels name a situation and two name who asked, so they do not tell the reader the same kind of thing.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 1** — line 246, recall 1, returned
+  - Text: "Board item knowledge-e6bc68: the Goodfire paper, read in full by a teammate's agent 5.5 hours earlier."
+  - Problem: A board item id and 'Goodfire' (a company) are unexplained.
+  - Rewrite: "A note on the team board about Goodfire's interpretability paper, which a teammate's agent had read in full 5.5 hours earlier."
+- **D1, severity 2** — line 247, recall 1, then
+  - Text: "The agent opened that item 11 seconds later. Its reading sweep left that paper out."
+  - Problem: 'Reading sweep' is a team term and 'its' is unclear; the reader has to guess that the paper was skipped because it was already read.
+  - Rewrite: "The agent opened that note 11 seconds later and left the paper out of its own list of papers to read."
+- **D1, severity 2** — line 252, recall 2, returned
+  - Text: "The 328 examples are clean against the RL training prompts only; overlap with the Think-SFT training set is unchecked"
+  - Problem: 'The 328 examples', 'clean' and 'Think-SFT' are team labels shown without explanation.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — line 253, recall 2, then
+  - Text: "pulled the teammate's flags file from his branch, and built its readout on it instead of redoing it."
+  - Problem: 'Flags file', 'branch' and 'readout' are team terms.
+  - Rewrite: "copied the teammate's finished check from his working copy of the code, and built its analysis on it instead of redoing the check."
+- **D4, severity 1** — line 258, recall 3, returned
+  - Text: "generate with base; where base and RL diverge, sample that one token from the RL model; continue with base."
+  - Problem: Dropped articles ('base' for 'the base model').
+  - Rewrite: "generate with the base model; where it and the RL model disagree, take that one token from the RL model; then continue with the base model."
+- **D2, severity 1** — line 264, recall 4, returned
+  - Text: "Mentioned RLVR updates for LLM reasoning"
+  - Problem: RLVR is not spelled out.
+  - Rewrite: needs facts the proofreader did not have
+- **N2, severity 1** — line 265, recall 4, then
+  - Text: "No paper was read twice."
+  - Problem: A claim about the whole hackathon is supported only by one agent's remark.
+  - Rewrite: "This agent did not read again the ten papers already in memory."
+- **D6, severity 2** — line 281, section 'One recall in full'
+  - Text: "This is one of those questions."
+  - Problem: 'Those questions' has no clear referent (the four recalls? the 20 test questions?).
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 1** — line 290, returned text attribution (repeats 3 times)
+  - Text: "sameraslan:"
+  - Problem: A username prefix appears in returned text with no explanation of who or what it is.
+  - Rewrite: needs facts the proofreader did not have
+- **D6, severity 2** — line 307, 'Papers in' line
+  - Text: "A subagent reads one paper in full and stores each finding; one is refused unless its quote is found in the paper's text."
+  - Problem: 'One is refused' reads as one paper or one finding; it means any finding.
+  - Rewrite: "A subagent reads one paper in full and stores each finding; a finding is rejected unless its quotation appears in the paper's text."
+- **V1, severity 1** — line 307, 'Small enough to copy' list (repeats 9 times)
+  - Text: "Papers in."
+  - Problem: Every line of both lists opens with a bold telegraphic lead-in.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 1** — line 308, 'Board posts in' line
+  - Text: "Every result and piece of knowledge is stored in the same call that posts it."
+  - Problem: 'Piece of knowledge' is a board item type, not explained.
+  - Rewrite: "Every result and every note posted to the team board is stored in memory by the same command that posts it."
+- **D5, severity 1** — line 323, limits, ingestion
+  - Text: "With 30 to 40 items queued on Saturday night"
+  - Problem: The rest of the page uses dates (Nov 14-15), not weekdays.
+  - Rewrite: "With 30 to 40 items queued on the night of Nov 14"
+- **V1, severity 1** — line 331, closing heading
+  - Text: "Ask before you run."
+  - Problem: Slogan.
+  - Rewrite: "Search the team's memory before starting an experiment"
+- **D6, severity 2** — line 332, closing paragraph
+  - Text: "every agent on the team could check what the others had read and found, in its own words, in about a second."
+  - Problem: 'In its own words' is unclear: whose words, the agent's question or the answer?
+  - Rewrite: "every agent on the team could ask in plain words what the others had read and found, and get an answer in about a second."
+- **D1, severity 1** — line 333, source line
+  - Text: "Pilot: studies/metaharness/results/recall_pilot/recall_vs_grep-01."
+  - Problem: 'Pilot' is not linked to the 20-question test it names.
+  - Rewrite: "The 20-question test against grep: studies/metaharness/results/recall_pilot/recall_vs_grep-01."
+
+## tools/people.py (2 issues: 0 serious, 1 re-read, 1 minor)
+
+- **V2, severity 1** — line 22, each person card (repeats 3 times)
+  - Text: "Details to be added"
+  - Problem: A to-do note shown to visitors, three times.
+  - Rewrite: needs facts the proofreader did not have
+- **V2, severity 2** — line 82, first sentence
+  - Text: "Three people run this project with their coding agents. The names here are placeholders until each person adds their own."
+  - Problem: A public page showing invented names costs the reader's trust in every other page; it is a note for the team.
+  - Rewrite: needs facts the proofreader did not have
+
+## tools/proof_idea_basins.py (18 issues: 0 serious, 9 re-read, 9 minor)
+
+- **D1, severity 2** — line 14, title (tile, tab, heading)
+  - Text: "Idea basins"
+  - Problem: 'Basin' is a borrowed term that is defined only inside the 'What is new' panel, so a scanning reader does not know what is counted.
+  - Rewrite: "Idea basins: groups of items that share a method"
+- **D3, severity 2** — line 17, tile line
+  - Text: "515 board items fall into 12 idea basins."
+  - Problem: 'Idea basins' is an invented term, and the line does not answer the question (how diverse) or say why 12 matters.
+  - Rewrite: needs facts the proofreader did not have
+- **N3, severity 2** — line 17, headline line (also on tile)
+  - Text: "515 board items fall into 12 idea basins."
+  - Problem: The reader cannot tell whether 12 is many or few, or what it says about the team.
+  - Rewrite: "The team's 515 board items fall into 12 groups of shared method (idea basins); the largest holds only 16 %, so no single idea took over."
+- **D5, severity 1** — line 41, basin name on the slab
+  - Text: "Board design"
+  - Problem: On this page 'board' means the team board; this basin is about site design ('Site design and research communication').
+  - Rewrite: "Site design"
+- **D3, severity 1** — line 333, idea tree view, question
+  - Text: "Do ideas from different basins come together?"
+  - Problem: 'Come together' is vague.
+  - Rewrite: "Do items build on items from other basins?"
+- **D5, severity 2** — line 334, idea tree view, line
+  - Text: "269 of 914 links between items join two different basins."
+  - Problem: In the same view the count under the picture shows items that build on two or more earlier items, a different number, so two numbers compete.
+  - Rewrite: needs facts the proofreader did not have
+- **N4, severity 2** — line 335, idea tree note
+  - Text: "A line joins an item to an earlier item it builds on."
+  - Problem: Most links (532 of 914) were proposed by the judge model, not written by the items, but this appears only in the limits panel.
+  - Rewrite: "A line joins an item to an earlier item it builds on: 382 of these links are ids the item names itself, and the judge model proposed the rest."
+- **D4, severity 2** — line 341, panel 'What is new', lead
+  - Text: "Idea basins are published for the runs of single models. Here they are read from a live team board."
+  - Problem: 'Published for the runs of single models' is compressed; 'live' contradicts the limits panel, which says one snapshot.
+  - Rewrite: "Earlier work measured idea basins in runs of one model. Here we measure them on a snapshot of a team's shared board."
+- **N3, severity 1** — line 343, panel 'What is new'
+  - Text: "58 % of runs never reach the basin of their task's best solution."
+  - Problem: The reader is not told how this number relates to the team's result.
+  - Rewrite: needs facts the proofreader did not have
+- **T3, severity 1** — line 344, panel 'What is new'
+  - Text: "The fullest holds 81 items (16 %), so no single idea took over the board."
+  - Problem: Repeats the headline count; 'took over' is an idiom.
+  - Rewrite: "The largest basin holds 81 items (16 %); no single method dominated."
+- **N3, severity 2** — line 346, panel 'Why it matters', lead
+  - Text: "The number of items says how busy a team of agents was. The number of basins says how diverse its ideas were."
+  - Problem: It defines the measures but does not say why a reader should care or what the 12 basins change.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — line 350, panel 'How we know'
+  - Text: "A map fitted to the answers predicts 73 % of answers it was not fitted on. With the items shuffled it predicts 51 %."
+  - Problem: 'A map' is not explained (a 2D embedding of the items fitted to the judge's answers).
+  - Rewrite: "A 2D layout of the items, fitted to the judge's answers, predicts 73 % of answers it was not fitted on, against 51 % when the items are shuffled."
+- **S5, severity 1** — line 350, panel 'How we know', lead
+  - Text: "which two use the closer method"
+  - Problem: 'The closer method' is unidiomatic.
+  - Rewrite: "which two use the more similar methods"
+- **S2, severity 1** — line 352, panel 'How we know'
+  - Text: "in both orders of the board."
+  - Problem: 'Both orders' is used before the next sentence explains it.
+  - Rewrite: "Put the two-orders sentence first, then this one."
+- **D2, severity 1** — line 353, panel 'How we know'
+  - Text: "The two groupings agree with an adjusted Rand index of 0.80."
+  - Problem: The scale of the adjusted Rand index is not given.
+  - Rewrite: "The two groupings agree with an adjusted Rand index of 0.80 (1 means identical groups, 0 means chance agreement)."
+- **D6, severity 2** — line 357, panel 'What it does not show'
+  - Text: "Of the 914 links, 382 are item ids that an item names in its own text. The judge found 269 of those by reading the items, and proposed the rest."
+  - Problem: 'The rest' could mean the rest of 382 or of 914; 269 is also the number of cross-basin links, so the reader may mix them up.
+  - Rewrite: "Of the 914 links, 382 come from item ids written in the items' own text; the judge found 269 of these 382 by reading. The other 532 links were proposed by the judge."
+- **D6, severity 1** — line 361, panel 'How to reproduce it'
+  - Text: "come from analysis/swarm_nested_layout.py of that study"
+  - Problem: 'That study' was never named.
+  - Rewrite: "come from analysis/swarm_nested_layout.py in studies/basins"
+- **D3, severity 1** — line 540, credit line
+  - Text: "After Bespoke Labs:"
+  - Problem: 'After' meaning 'modelled on' is easy to misread.
+  - Rewrite: "Modelled on Bespoke Labs'"
+
+## tools/proof_review_cuts_waste.py (18 issues: 1 serious, 8 re-read, 9 minor)
+
+- **N2, severity 2** — line 30, question
+  - Text: "Does a team of agents waste less compute when it reviews itself?"
+  - Problem: The limits panel says the work was run by a fixed script, not by agents choosing what to do, so the question promises more than the test measures.
+  - Rewrite: "Does a written review procedure remove waste planted in a study's code and instructions?"
+- **N4, severity 3** — line 31, headline line (also on tile)
+  - Text: "Three rounds of the review skill cut compute per batch from 16.3 to 4.4 minutes."
+  - Problem: The tile does not say that the waste was planted on purpose in a test study, so a reader takes it as a 73 % cut in the team's real compute.
+  - Rewrite: "In a test with 6 planted inefficiencies, three rounds of the review procedure cut compute per batch from 16.3 to 4.4 container minutes (plain instruction: 9.8; no waste: 3.2)."
+- **D1, severity 2** — line 31, tile line
+  - Text: "Three rounds of the review skill cut compute per batch from 16.3 to 4.4 minutes."
+  - Problem: 'Review skill' and 'batch' are team terms, and 'minutes' does not say of what (GPU time).
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — line 31, headline line
+  - Text: "the review skill"
+  - Problem: 'Skill' (a written procedure that a Claude Code agent follows) is not explained, and 'batch' is not defined.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — line 35, view 'Before', note
+  - Text: "One batch of 4 answers, with 6 inefficiencies planted in the code and its instructions."
+  - Problem: '4 answers' (four estimates the study computes) is not explained; fragment without a verb.
+  - Rewrite: "One batch computes the study's 4 answers. We planted 6 inefficiencies in its code and instructions."
+- **D1, severity 2** — line 37, view 'Round 1', note
+  - Text: "The skill's reviews removed the repeated runs and a wrong path in the instructions. The plain reviews removed the failed launches and the wrong path."
+  - Problem: The planted inefficiencies are referred to with 'the' but never listed, so the reader cannot tell what was removed.
+  - Rewrite: needs facts the proofreader did not have
+- **D5, severity 1** — line 40, view 'Round 3', note
+  - Text: "Two of the three plain runs removed nothing after round 1."
+  - Problem: The arm is called 'Plain instruction', 'plain reviews' and 'plain runs' on the same page.
+  - Rewrite: "After round 1, two of the three runs with the plain instruction removed nothing."
+- **D4, severity 1** — line 40, view 'Round 3', note
+  - Text: "The skill's reviews cut the setup inside every job."
+  - Problem: 'Cut the setup inside every job' is compressed.
+  - Rewrite: needs facts the proofreader did not have
+- **S2, severity 2** — line 45, panel 'What is new', lead
+  - Text: "A published system that changes its own prompts, gates and policies after repeated process failures reports 8 hand-audited events and calls this "a retrospective process audit, not a controlled comparison""
+  - Problem: The panel opens with a 40-word sentence about another system; what is new here comes only in the bullets.
+  - Rewrite: "New here: the inefficiencies were planted before any review, and the control is the same model told to review without the procedure. The closest published system (Sibyl-AutoResearch) reports 8 hand-audited events and calls it a retrospective audit, not a controlled comparison."
+- **D1, severity 1** — line 52, panel 'Why it matters', lead
+  - Text: "The swarm's measurements are paid for in compute"
+  - Problem: 'Swarm' is a team word for the group of agents.
+  - Rewrite: "The team's measurements are paid for in compute"
+- **N2, severity 2** — line 55, panel 'Why it matters'
+  - Text: "The same model with a plain instruction reached 9.8 minutes, so the written review procedure adds to what the model does alone."
+  - Problem: With 3 runs per arm and no significance test, and the best plain run (5.2) close to the worst skill run (4.8), the 'so' claim is stated more firmly than the evidence beside it.
+  - Rewrite: "The same model with a plain instruction reached 9.8 minutes on average; with 3 runs per arm this suggests, but does not prove, that the written procedure adds to what the model does alone."
+- **D4, severity 1** — line 56, panel 'Why it matters'
+  - Text: "after three rounds 2 or 3 of the 6 inefficiencies were still in place."
+  - Problem: '2 or 3' hides that the number varies by run.
+  - Rewrite: "after three rounds, 2 to 3 of the 6 inefficiencies were still in place, depending on the run."
+- **S4, severity 1** — line 58, panel 'How we know', lead
+  - Text: "6 inefficiencies were planted in a small study that runs as CPU jobs."
+  - Problem: Passive hides who planted them; the sentence starts with a numeral.
+  - Rewrite: "We planted six inefficiencies in a small study that runs as CPU jobs."
+- **D1, severity 1** — line 60, panel 'How we know'
+  - Text: "One arm is told to run the team-meta-review skill."
+  - Problem: 'Arm' and 'team-meta-review skill' are not explained.
+  - Rewrite: "One group of runs follows the team's written review procedure (the team-meta-review skill)."
+- **D4, severity 1** — line 62, panel 'How we know'
+  - Text: "Compute is the container time of real Modal CPU jobs of one class."
+  - Problem: 'Modal' (a cloud provider) and 'of one class' are unexplained.
+  - Rewrite: "Compute is the time the CPU containers ran on Modal, a cloud computing service, all of one machine type."
+- **D6, severity 2** — line 66, panel 'What it does not show', lead
+  - Text: "On clean work both reviews with the skill cut a bootstrap from 1,500,000 resamples to 20,000 and 10,000, against a written requirement of the study's owner."
+  - Problem: 'Both reviews' is unclear (which two?), and 'bootstrap' is not explained.
+  - Rewrite: "On work with nothing planted, the two reviews that used the procedure each cut a statistical resampling step (bootstrap) from 1,500,000 resamples to 20,000 and 10,000, breaking a written requirement of the study's owner."
+- **D1, severity 1** — line 72, panel 'What it does not show'
+  - Text: "No review in either arm removed the job whose answer was already stored, and none named it."
+  - Problem: This planted inefficiency was never introduced, so 'the job' has no referent.
+  - Rewrite: "No review removed the planted job that recomputed an answer already stored, and none mentioned it."
+- **D1, severity 1** — line 75, panel 'How to reproduce it', lead
+  - Text: "One command runs one arena from the first batch to the last, and the readout rebuilds the table from the job records."
+  - Problem: 'Arena', 'readout' and 'the table' are team terms; there is no table on the page.
+  - Rewrite: "One command runs one test from the first batch to the last, and an analysis script rebuilds the numbers from the job records."
+
+## tools/psychosis.py (11 issues: 0 serious, 0 re-read, 11 minor)
+
+- **T4, severity 1** — line 72, sound button
+  - Text: "Sound on"
+  - Problem: The label shows the current state, so a reader cannot tell whether a click turns sound on or off.
+  - Rewrite: "Turn sound off"
+- **S5, severity 1** — line 80, start card heading
+  - Text: "AI Psychosis detox: the meditation"
+  - Problem: Capitals differ from the page title and the disclaimer, which write 'AI psychosis'.
+  - Rewrite: "AI psychosis detox: the meditation"
+- **V3, severity 1** — line 86, button
+  - Text: "Continue into samsara"
+  - Problem: 'Samsara' (the Buddhist cycle of rebirth) is not explained; a newcomer cannot tell that the button replays the five levels at higher difficulty.
+  - Rewrite: "Continue into samsara (the levels again, harder)"
+- **D6, severity 1** — line 89, disclaimer under the card
+  - Text: "“AI psychosis” is an informal name, not a diagnosis, for delusional beliefs after long chatbot use (American Psychological Association), and that is not a joke."
+  - Problem: 'That' could mean the name or the condition.
+  - Rewrite: "... and the condition itself is not a joke."
+- **D6, severity 1** — line 135, random tip on the start card
+  - Text: "The model says that to everyone."
+  - Problem: Shown alone as a tip, 'that' has no referent.
+  - Rewrite: "When the model says you are right: it says that to everyone."
+- **V3, severity 1** — line 136, breath message
+  - Text: "Breathe out the result. It had one sample per problem."
+  - Problem: The joke depends on knowing that a single sample per problem is a weak measurement; a newcomer cannot follow it.
+  - Rewrite: needs facts the proofreader did not have
+- **D6, severity 1** — line 145, power-up text
+  - Text: "You read the appendix. The made-up thoughts are gone."
+  - Problem: The page never says that some thoughts are live posts from the team board, so 'made-up thoughts' has no contrast.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 1** — line 151, level 2 line (repeats 5 times)
+  - Text: "The board is talking. Let it talk."
+  - Problem: 'The board' (the team's shared results board) is never explained on this page, yet many lines refer to it.
+  - Rewrite: needs facts the proofreader did not have
+- **V3, severity 1** — line 283, end screen (repeats 3 times)
+  - Text: "The board could not be read, so nobody knows what your agents did."
+  - Problem: The end screen addresses the visitor as owner of 'your agents'; a visitor without agents cannot follow it.
+  - Rewrite: "The team board could not be read, so nobody knows what the team's agents did meanwhile."
+- **S5, severity 1** — line 297, end screen summary
+  - Text: "You released ${s.released} thoughts, held ${s.bestStreak} breaths in a row"
+  - Problem: With a count of 1 the sentence reads '1 thoughts' and '1 breaths'.
+  - Rewrite: "Pluralise by count, as the board sentence already does."
+- **D1, severity 1** — line 367, in-game message
+  - Text: "${open} work items are open on the board. Not one of them is you."
+  - Problem: 'Work items' is a team term; the reader cannot tell what the joke refers to.
+  - Rewrite: "12 tasks are open on the team board. None of them needs you."
+
+## tools/values.py (13 issues: 0 serious, 4 re-read, 9 minor)
+
+- **D3, severity 1** — line 182, intro paragraph
+  - Text: "They open AGENTS.md, the rules file that every agent of the team reads at the start of a session."
+  - Problem: 'They open AGENTS.md' can be read as 'they open the file' rather than 'they are the first section of it'.
+  - Rewrite: "They are the first section of AGENTS.md, the rules file that every agent of the team reads at the start of a session."
+- **D2, severity 1** — line 193, value 1 lead
+  - Text: "Cycle time decides research output."
+  - Problem: 'Cycle time' is not defined; a reader outside engineering may not know it means the time from an idea to its measured result.
+  - Rewrite: "The time from an idea to its measured result (the cycle time) decides how much research gets done."
+- **D1, severity 2** — line 207, value 3 lead
+  - Text: "The ultimate goal is a novel practical win. But practical wins are extremely hard."
+  - Problem: 'Practical win' is never defined, so the reader cannot tell what kind of result the team is aiming for.
+  - Rewrite: needs facts the proofreader did not have
+- **T3, severity 1** — line 208, value 3 lead, second paragraph
+  - Text: "While a practical win is the ultimate goal, genuine novelty can be an intermediate win. And the path to novelty is interestingness."
+  - Problem: It repeats 'the ultimate goal is a practical win' from the sentence just before, and the rule below says it a third time.
+  - Rewrite: "A genuinely new result counts as a step toward that goal, and following what is interesting is how to find new results."
+- **D2, severity 1** — line 209, value 3 quote source
+  - Text: "2015. Stanley is the AI scientist behind NEAT and novelty search."
+  - Problem: NEAT is an unexplained abbreviation.
+  - Rewrite: "2015. Stanley created NEAT, a method for evolving neural networks, and novelty search."
+- **T1, severity 1** — line 209, value 3 quote kicker
+  - Text: "Read"
+  - Problem: The one-word label above the book title does not say that this is a recommended book.
+  - Rewrite: "Recommended reading"
+- **N2, severity 1** — line 212, value 4 lead
+  - Text: "Smarter models and scale always win."
+  - Problem: 'Always' is stronger than the quotation and the rule below it, which say 'ultimately' and 'win'; 'smarter models' also differs from the rule's 'larger models'.
+  - Rewrite: "Larger models and more compute win in the long run."
+- **T1, severity 1** — line 215, value 5 title
+  - Text: "Asymmetry"
+  - Problem: The title does not tell the reader what the value asks for until the lead is decoded.
+  - Rewrite: "Use what a small team can do that a large one cannot"
+- **D3, severity 2** — line 216, value 5 lead
+  - Text: "your choices are either total obedience or regime escape through asymmetry."
+  - Problem: 'Regime escape through asymmetry' is an invented phrase; the reader has to guess what action it describes.
+  - Rewrite: "a small team either does what the large players do, or wins by using advantages they lack."
+- **S3, severity 1** — line 216, value 5 lead
+  - Text: "When facing a larger incumbent, such as institutions, labs, organizations and corporations"
+  - Problem: 'Incumbent' is a hard word for a second-language reader where 'established player' says the same.
+  - Rewrite: "When competing with larger, established players, such as institutions, labs and companies"
+- **D3, severity 2** — line 217, value 5 lead, second paragraph
+  - Text: "As a small team heavily constrained on resources, we have to take advantage of all the asymmetry we can: flexibility, versatility, speed and innovation, overlooked opportunities and good ol' hustle."
+  - Problem: 'Asymmetry' and 'good ol' hustle' stand in for the actual advantages; 'constrained on' is also the wrong preposition.
+  - Rewrite: "As a small team with few resources, we use every advantage a small team has over a large one: flexibility, speed, new ideas, opportunities large labs overlook, and hard work."
+- **D3, severity 2** — line 221, value 6 lead
+  - Text: "Specifically for LLMs. Because of how attention works, real estate in the context is more valuable than penthouses in downtown SF."
+  - Problem: The real-estate metaphor and the sentence fragment replace the actual claim; 'context' and 'SF' are not explained.
+  - Rewrite: "This value is about language models. Because of how attention works, every token of space in a model's context window (the text it reads at once) is costly."
+- **D3, severity 1** — line 222, value 6 lead, second paragraph
+  - Text: "A tongue-in-cheek heuristic: performance scales quadratically with how clean the context is."
+  - Problem: 'Clean' is not defined, so the reader cannot tell what the joke rule refers to.
+  - Rewrite: "A joke rule of thumb: performance grows with the square of how free the context is of text the task does not need."
+
+## tools/view.py (30 issues: 0 serious, 12 re-read, 18 minor)
+
+- **V2, severity 1** — line 829, header badge
+  - Text: "test table"
+  - Problem: 'Test table' is the team's name for its test database; a visitor who sees it cannot tell what it means.
+  - Rewrite: "Test data"
+- **D1, severity 2** — line 842, heading beside the chart
+  - Text: "Record steps"
+  - Problem: 'Record step' is the team's name for a score that beat every earlier base score; a newcomer cannot tell what the list holds.
+  - Rewrite: "New best base scores"
+- **T1, severity 2** — line 849, list heading
+  - Text: "Now"
+  - Problem: The heading 'Now' does not say the list holds open work items; the reader has to open rows to learn what the column is.
+  - Rewrite: "Open work"
+- **T1, severity 2** — line 850, list heading
+  - Text: "Learned"
+  - Problem: The heading 'Learned' does not say the list holds posted results.
+  - Rewrite: "Results"
+- **T1, severity 1** — line 888, More lists, tab name
+  - Text: "Tools and site"
+  - Problem: The tab holds results that announce a page, a tool or a skill; 'Tools and site' does not say that, and the explanation appears only after a click.
+  - Rewrite: "Announcements"
+- **V2, severity 1** — line 1100, empty state, Now
+  - Text: "No open work. An agent claims work with board.py post work."
+  - Problem: The command is an instruction for the team's agents, not for a visitor.
+  - Rewrite: "No open work."
+- **D1, severity 2** — line 1114, Messages tab, toggle button
+  - Text: "Show 12 announcements of board.py"
+  - Problem: 'board.py' is the name of the team's script; the reader cannot tell these are the automatic 'started/closed' notices.
+  - Rewrite: "Show 12 automatic notices (work started, closed)"
+- **D1, severity 2** — line 1115, Messages tab, empty state
+  - Text: "No messages on all in the last 6 h."
+  - Problem: 'all' is the name of the team's message channel; read as English the sentence is ungrammatical.
+  - Rewrite: "No messages on the team channel in the last 6 h."
+- **D1, severity 1** — line 1155, summary sentence
+  - Text: "5 open work items from 3 people, 2 idle over an hour."
+  - Problem: 'Idle' is not explained: the reader cannot tell that it means no comment or update for over an hour.
+  - Rewrite: "5 open work items from 3 people; 2 have had no update for over an hour."
+- **D4, severity 2** — line 1164, since-last-look line
+  - Text: "Since 14:02: 2 results, 1 closed, 1 newly idle."
+  - Problem: '1 closed' and '1 newly idle' drop the noun; the reader has to guess that both are work items.
+  - Rewrite: "Since 14:02: 2 new results, 1 work item closed, 1 work item idle for over an hour."
+- **V2, severity 1** — line 1223, empty state, chart
+  - Text: "No scores yet. Attach one to a result: board.py score <result id> base MATH-500 410/500 "cue, T 1.0""
+  - Problem: A command-line instruction for agents shown to visitors.
+  - Rewrite: "No scores posted yet."
+- **D1, severity 2** — line 1228, benchmark buttons
+  - Text: "hard328 59.5 / fresh2026 27.9"
+  - Problem: The buttons show the team's data names 'hard328' and 'fresh2026' and a bare number; a newcomer cannot tell these are 328 harder problems and problems from 2026, or that the number is a percent.
+  - Rewrite: "328 harder problems 59.5 % / 2026 problems 27.9 %"
+- **D3, severity 1** — line 1255, reach bar, right end
+  - Text: "1.8 points to go"
+  - Problem: 'To go' is casual; the bar reads as a race and does not say what the points are measured against.
+  - Rewrite: "1.8 points below RL"
+- **D5, severity 1** — line 1261, reach bar, end labels (repeats 4 times)
+  - Text: "untrained base / RL-trained"
+  - Problem: The page calls the same model 'untrained base', 'base' and 'Base' in different places (reach bar, aria-labels, chart key 'plain prompt, no cue').
+  - Rewrite: "Use one name, for example 'base model (no training)', in every label."
+- **S5, severity 1** — line 1280, ladder row
+  - Text: "start"
+  - Problem: The first step is labelled 'start' in lower case in the list and 'Start' in the reach bar's label.
+  - Rewrite: "Start"
+- **D4, severity 2** — line 1284, ladder, RL row
+  - Text: "RL-trained model, the target  gap 0.4 to 2.0"
+  - Problem: 'gap 0.4 to 2.0' is a 95 % interval of RL's lead in points, but no unit or interval is named, so the reader cannot read the numbers.
+  - Rewrite: "RL-trained model, the target; RL leads by 0.4 to 2.0 points (95 % interval)"
+- **D1, severity 2** — line 1296, opened step, What changed
+  - Text: "The configuration differs from the step before only in its note."
+  - Problem: 'Its note' refers to a bracketed remark in the team's configuration string; the reader cannot tell what changed.
+  - Rewrite: "The settings are the same as in the step before; only a comment on them differs."
+- **S5, severity 1** — line 1301, opened step, Is it real
+  - Text: "Larger than chance: 82.0 % is above the 95 % interval of the step before (78.1 to 81.0)."
+  - Problem: The interval has no % sign here while the same panel writes 'Its 95 % interval is 78.1 to 81.0 %'; 'Larger than chance' is also not idiomatic.
+  - Rewrite: "Likely real: 82.0 % is above the 95 % interval of the step before (78.1 to 81.0 %)."
+- **S5, severity 1** — line 1302, opened step, Is it real
+  - Text: "Too small to tell from chance: 81.2 % is inside the 95 % interval of the step before (78.1 to 81.0)."
+  - Problem: Same missing % sign on the interval as the line above.
+  - Rewrite: "Too small to tell from chance: 81.2 % is inside the 95 % interval of the step before (78.1 to 81.0 %)."
+- **N2, severity 2** — line 1308, opened step, label
+  - Text: "Why it works"
+  - Problem: The label asserts the step works even when the panel below says the gain is 'Too small to tell from chance'.
+  - Rewrite: "Why it may help"
+- **S5, severity 1** — line 1309, opened step, label
+  - Text: "Is it real"
+  - Problem: A question used as a label without a question mark reads as a broken sentence.
+  - Rewrite: "Is it real?  (or: Larger than chance?)"
+- **T4, severity 1** — line 1310, opened step, link
+  - Text: "Raw result and 3 comments"
+  - Problem: 'Raw result' does not say it opens the board post behind this score.
+  - Rewrite: "Open the posted result and its 3 comments"
+- **D5, severity 2** — line 1330, chart key
+  - Text: "record"
+  - Problem: 'Record' in English also means a log entry; the key does not say the mark is a new best score.
+  - Rewrite: "new best"
+- **D4, severity 1** — line 1393, chart mark tooltip
+  - Text: "cue, T 1.0: 410 of 500 (82.0 %, 95% 78.4 to 85.2), 4,690 tokens per problem, frustea, result-8b1c48"
+  - Problem: '95% 78.4 to 85.2' drops the word interval and writes 95% without the space used elsewhere on the page.
+  - Rewrite: "cue, T 1.0: 410 of 500 right (82.0 %, 95 % interval 78.4 to 85.2 %), 4,690 tokens per problem, posted by frustea, result-8b1c48"
+- **S5, severity 1** — line 1444, activity lanes, time axis
+  - Text: "2h ago"
+  - Problem: The axis writes '2h ago' while the tabs and empty states write '6 h'.
+  - Rewrite: "2 h ago"
+- **V2, severity 1** — line 1498, item panel, not found
+  - Text: "No item named result-1234ab on this board. The link may be mistyped, or the item is on the test table."
+  - Problem: 'The test table' is an internal name for the team's test database.
+  - Rewrite: "No item named result-1234ab on this board. The link may be mistyped."
+- **D4, severity 1** — line 1511, item panel, Scores
+  - Text: "base MATH-500 410/500, 82.0 % cue, T 1.0"
+  - Problem: The model label is the raw data value ('base', 'rl', 'other') and the setting runs into the percent with no separator.
+  - Rewrite: "Base model, MATH-500: 410 of 500 (82.0 %); settings: cue, T 1.0"
+- **V2, severity 1** — line 1516, item panel, facts
+  - Text: "Branch  claude/xyz   Agent  claude, 3f2a9b1c"
+  - Problem: Git branch and agent session ids are team process details a visitor cannot use.
+  - Rewrite: needs facts the proofreader did not have
+- **T1, severity 1** — line 1520, item panel, loading
+  - Text: "Reading"
+  - Problem: A one-word status 'Reading' does not say that the comments are loading.
+  - Rewrite: "Loading…"
+- **T1, severity 2** — line 1538, item panel heading
+  - Text: "result-8b1c48"
+  - Problem: The panel's heading is the item's id, which tells the reader nothing; the title appears only below it.
+  - Rewrite: "Use the item's title as the heading and show the id in small text under it."
+
+## board (208 issues: 29 serious, 100 re-read, 79 minor)
+
+- **D1, severity 3** — result-c2edfb title
+  - Text: "Dial 1x is not under-applied by bf16 rounding"
+  - Problem: 'Dial 1x' is a team label and 'bf16' and 'under-applied' are unexplained; a newcomer cannot tell what was tested.
+  - Rewrite: "Rounding the weights to 16-bit (bf16) does not shrink the 1x RL-direction edit below its intended size"
+- **D1, severity 3** — result-f5b7a3 title
+  - Text: "Theories forecast the code dial better than plain readers"
+  - Problem: 'Theories', 'the code dial' and 'plain readers' are labels of the team's forecasting process; the reader cannot tell who forecast what.
+  - Rewrite: needs facts the proofreader did not have
+- **N1, severity 3** — result-1b6bf2 what
+  - Text: "answer lengths against the base on problems both finish, right answers within a token budget, and a restart of unfinished problems with the twice-size edit."
+  - Problem: The row lists three analyses but gives no result, and the why says 'Not known yet'; the title claim has no number beside it.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 3** — result-3387ce what
+  - Text: "Think-SFT + a x (RL-Math - base), cue, hard328, T 1.0, v3. a=2 scores 234 and 229"
+  - Problem: A formula and a list of settings in place of a sentence; a newcomer cannot tell what was done.
+  - Rewrite: "We added a times the RL weight change (RL-Math minus base) to Think-SFT and scored it on the 328 harder problems with the cue. At a = 2 it scored 234 and 229 on two seeds."
+- **D4, severity 3** — result-34897a what
+  - Text: "T 0.6 only at confident positions (entropy <= 0.9 nats), only at forks, or everywhere except after a repeat."
+  - Problem: Symbols and unexplained terms ('forks', 'nats', 'after a repeat'); the reader cannot tell what the three rules are.
+  - Rewrite: "Three rules that lower temperature to 0.6 at some tokens: where the model is confident (entropy at most 0.9 nats), where it chooses between paths, or everywhere except right after it repeats itself."
+- **D3, severity 3** — result-34897a why
+  - Text: "Cap hits per 500: T 1.0 22.5, forks only 33, confident only 44, both (T 0.6) 98; adding the two gives 55, so loops need both regimes sharpened."
+  - Problem: 'regimes sharpened' is invented phrasing, and the list of bare numbers needs decoding; the reader cannot follow the argument.
+  - Rewrite: "Answers that hit the token limit, of 500: 22.5 at temperature 1.0, 33 with the fork rule, 44 with the confidence rule, 98 at 0.6 everywhere. The two rules' extra hits add up to only 55, so loops appear mainly when temperature is lowered at both kinds of token."
+- **N1, severity 3** — result-39497c what
+  - Text: "a random rank-8 edit at 1.5x size, and the 8 largest directions of Think-SFT's weight change"
+  - Problem: The title claims the edits 'do nothing' but no score is given anywhere in the row.
+  - Rewrite: needs facts the proofreader did not have
+- **N2, severity 3** — result-3a3af3 what
+  - Text: "drew up to 32 openings of 24 tokens per problem at T 1.0 and continued the first one that opens with a newline then 'Okay'"
+  - Problem: The title says the base reaches the cue's score, but no score appears in the row; the claim has no number beside it.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 3** — result-42cc6c title
+  - Text: "M(2) at a 32,768-token cap: 245 of 328, second seed"
+  - Problem: 'M(2)' is a team label (Think-SFT plus twice the RL change); a newcomer cannot tell what was scored.
+  - Rewrite: "Think-SFT plus twice the RL weight change, with a 32,768-token limit: 245 of 328 on a second seed"
+- **D1, severity 3** — result-4b0d5f caveat
+  - Text: "After rounding, the quarter blend carries 0.42 of the full change's size."
+  - Problem: Contradicts the title ('a quarter') without explaining why rounding nearly doubles it; the reader no longer knows what was tested.
+  - Rewrite: "Because the weights are stored with few digits, the 'quarter' blend in fact adds 0.42 of the RL change, not 0.25."
+- **D1, severity 3** — result-51a0e7 what
+  - Text: "by module family and split by Code 3.0's input subspace"
+  - Problem: 'module family' and 'Code 3.0's input subspace' are unexplained; the row lists many settings without results for most of them.
+  - Rewrite: needs facts the proofreader did not have
+- **N2, severity 3** — result-5251c9 what
+  - Text: "Think-SFT with the cue, RL-Zero-Math, and the untrained base with the cue; 4 samples and a vote."
+  - Problem: The title claims Think-SFT's lead holds, but no score for any model is given.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 3** — result-6776d8 what
+  - Text: "Wrote RL-Math's 8 directions per matrix onto Think-SFT (1.5x, 3x, random 3x), and wrote Math's and Code's directions together onto the base (1x+1x, 1.5x+1.5x, Math+random)"
+  - Problem: Dense list of settings with no scores; the title's claims cannot be checked from the row.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 3** — result-6f7ca3 title
+  - Text: "Math depth and rank split holds: 7 of 7 predictions"
+  - Problem: 'depth and rank split' is a team label; the reader cannot tell what held.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 3** — result-6f7ca3 what
+  - Text: "Base Olmo 3 + Math 3.1's top-8 directions at 1.5x, restricted to layer bands or to directions 2-8, on hard328 (cue, T 1.0, cap 16,384), 1-4 samples per cell, paired bootstrap over problems."
+  - Problem: A string of settings with no verb and no result.
+  - Rewrite: needs facts the proofreader did not have
+- **D2, severity 3** — result-854ca8 what
+  - Text: "One LoRA epoch on the base's 4 stored samples per MATH-500 problem, raising the samples that agree with the vote and lowering the others (arm P), or the same with the answer key (arm G)"
+  - Problem: 'LoRA epoch', 'arm P', 'arm G' and 'raising/lowering samples' are unexplained; a newcomer cannot tell what was trained.
+  - Rewrite: "We fine-tuned the base for one pass (LoRA) on its 4 earlier answers per MATH-500 problem, making answers that agree with the majority more likely and the others less likely; a second version used the answer key instead of the majority."
+- **D1, severity 3** — result-9ce8ed title
+  - Text: "RL step 100: 7 of 164 quick wrong answers on hard328"
+  - Problem: The row tests forecasts by id; a newcomer cannot tell why 7 quick wrong answers matter.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 3** — result-9ce8ed what
+  - Text: "Readout m06-r1 (finished, wrong, at most 2,000 tokens): 7 of 164, 90 % [3, 11]"
+  - Problem: 'Readout m06-r1' is an internal id.
+  - Rewrite: "Answers that finish wrong within 2,000 tokens: 7 of 164 (90 % interval 3 to 11)"
+- **D1, severity 3** — result-9ce8ed why
+  - Text: "run-06/f2-m02 (step 100 picks the long deliberative style) said 6 [2, 12]: holds. run-03/f2-m06 (misses of the 'Okay' opening turn short) said 26 [15, 38]: refuted."
+  - Problem: Forecast ids stand for explanations; the reader cannot tell who forecast what.
+  - Rewrite: "One explanation (by step 100 the model has learned long, careful answers) predicted 6 and holds. Another (answers without the 'Okay' opening are short) predicted 26 and is refuted."
+- **D1, severity 3** — result-a74ac3 why
+  - Text: "Training-data mechanisms (run-06/f2-m02 3 [0, 8], run-06/f2-m06 2 [0, 7]) refuted: 10 is above both."
+  - Problem: Forecast ids and 'mechanisms' with no explanation of what each said.
+  - Rewrite: "Explanations based on training data predicted 2 to 3 and are refuted: the base got 10."
+- **D1, severity 3** — result-ac7104 title
+  - Text: "Cells m21 and m18: Code directions and an eighth blend"
+  - Problem: Cell ids and 'an eighth blend' tell the reader nothing.
+  - Rewrite: "Code-RL's top directions halve the base's short wrong answers; one eighth of the RL change gives half the quarter's gain"
+- **D1, severity 3** — result-ac7104 what
+  - Text: "m21-r1 quick wrong answers 60/250 [49, 71]; m18-r1 right 316/500 [298, 334] (90 % bootstrap)."
+  - Problem: Internal readout ids instead of names.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 3** — result-ac7104 why
+  - Text: "m21: only run-05/f2-m06 45 [28, 64] holds; both readers and both stopping forecasts are refuted."
+  - Problem: Forecast ids and 'readers' unexplained.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 3** — result-d02d46 what
+  - Text: "Base + 1x top-8 RL-Math directions, plain, MATH-500, T 1.0: 3 new samples + the stored one (2,000 answers). Short = 1,000 tokens or fewer, binned by the cued base's solves of 4."
+  - Problem: Fragments, '+' and '=' in place of sentences; 'binned by solves of 4' cannot be decoded.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 3** — result-d02d46 why
+  - Text: "Smooth blend holds; r5-m03-rival refuted: share 17.8% [15.7, 20.0] (pred 10-15), right 82.9% (pred ~50)."
+  - Problem: Forecast ids and abbreviations ('pred', '~').
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 3** — result-d82083 why
+  - Text: "Cell m29 (idea-e9dfd5). run-07/f2-m01's 423 [410, 436] is refuted; the five forecasts at 449-455 (incl. r5-m03-rival) and both readers hold."
+  - Problem: Ids in place of explanations.
+  - Rewrite: "A forecast of 423 is refuted; five forecasts of 449 to 455 hold."
+- **N4, severity 3** — result-d92d4a title
+  - Text: "Switching off loop neurons lifts the cued base to 414/500"
+  - Problem: result-460e0a later found this gain was mostly seed noise; this row neither says so nor links the correction, so the reader takes the claim as standing.
+  - Rewrite: "Add to the caveat: A second seed (result-460e0a) found the gain was mostly seed noise."
+- **D1, severity 3** — result-f8e596 why
+  - Text: "The sign matters: stopping-m03 (16 [8, 26] of 500) is refuted, the rows found already hold 30 cap hits of 500."
+  - Problem: Forecast id and 'the rows found' cannot be decoded.
+  - Rewrite: needs facts the proofreader did not have
+- **N2, severity 3** — result-fad48d title
+  - Text: "The cue equals the first 100 RL steps at AI2's setting"
+  - Problem: result-6832a8 with four samples says 'Equals is not earned'; this title still claims equality and the why repeats it.
+  - Rewrite: "With one sample, the cue scores within 1.6 points of the RL model after 100 training steps (not a proven tie)"
+- **D1, severity 2** — result-04e329 what (repeats 49 times)
+  - Text: "RL has 50.5 and the base with the cue 29.5."
+  - Problem: Rows use 'the cue' without saying it is a three-token opening ('...Okay') prefilled into the base's answer; only result-c36598#MATH-500#410/500 explains it, so a reader of any other row must guess.
+  - Rewrite: "RL has 50.5 and the base 29.5 when its answer is started with the RL model's three-token opening, ending in 'Okay' (the cue)."
+- **D1, severity 2** — result-0a0a5a title (repeats 14 times)
+  - Text: "Think-SFT's own chat format ties the cue on MATH-500 too"
+  - Problem: 'Think-SFT' is never explained in any row; the reader cannot tell it is a model fine-tuned by imitation on reasoning traces (with no reward) rather than a method.
+  - Rewrite: "Olmo's imitation-trained model (Think-SFT) scores the same in its own chat format as with the cue on MATH-500"
+- **D1, severity 2** — result-0c1eef what (repeats 15 times)
+  - Text: "Base cue on hard328 with the cap at 32,768 generated tokens"
+  - Problem: 'hard328' is a team label; the reader does not know it is a set of 328 harder math problems not in the RL training data.
+  - Rewrite: "The base with the cue, on the 328 harder problems, with the length limit at 32,768 generated tokens"
+- **D1, severity 2** — result-0a0a5a why (repeats 27 times)
+  - Text: "The larger cap adds 10 (25 long answers, 0 cap hits)."
+  - Problem: 'Cap hit' is used in 27 rows and never defined; a reader must guess it means an answer that reached the token limit without a final answer.
+  - Rewrite: "The larger limit adds 10 right answers: 25 answers ran past 16,384 tokens, and none reached the new 32,768-token limit unfinished."
+- **D1, severity 2** — result-0a0a5a what (repeats 12 times)
+  - Text: "(n 500, T 1.0 / top-p 1.0, v3, 1 sample, seed 182000000)"
+  - Problem: 'v3' (grader version 3) and the seed are internal run settings; the reader cannot tell what v3 is or why the seed matters.
+  - Rewrite: "500 problems, one answer each, sampled at temperature 1.0 with no top-p cut, scored with version 3 of the team's grader."
+- **N1, severity 2** — result-04e329 why (repeats 17 times)
+  - Text: "it stays within 1.7 points of RL [-5.3, 1.8] and 13.8 above the base."
+  - Problem: Bracketed number pairs appear in 17 rows without saying they are 95 % (sometimes 90 %) intervals, or of what difference.
+  - Rewrite: "It scores 1.7 points below RL (95 % interval of the difference: -5.3 to +1.8) and 13.8 points above the base."
+- **N3, severity 2** — result-099916 why
+  - Text: "Not known yet."
+  - Problem: The why field is meant to say why the result matters; 'Not known yet' leaves the reader without the comparison or consequence, and reads like a blank form.
+  - Rewrite: needs facts the proofreader did not have
+- **N3, severity 2** — result-1b6bf2 why
+  - Text: "Not known yet."
+  - Problem: The why field is meant to say why the result matters; 'Not known yet' leaves the reader without the comparison or consequence, and reads like a blank form.
+  - Rewrite: needs facts the proofreader did not have
+- **N3, severity 2** — result-296647 why
+  - Text: "Not known yet."
+  - Problem: The why field is meant to say why the result matters; 'Not known yet' leaves the reader without the comparison or consequence, and reads like a blank form.
+  - Rewrite: needs facts the proofreader did not have
+- **N3, severity 2** — result-39497c why
+  - Text: "Not known yet."
+  - Problem: The why field is meant to say why the result matters; 'Not known yet' leaves the reader without the comparison or consequence, and reads like a blank form.
+  - Rewrite: needs facts the proofreader did not have
+- **N3, severity 2** — result-40ed3b why
+  - Text: "Not known yet."
+  - Problem: The why field is meant to say why the result matters; 'Not known yet' leaves the reader without the comparison or consequence, and reads like a blank form.
+  - Rewrite: needs facts the proofreader did not have
+- **N3, severity 2** — result-4b0d5f why
+  - Text: "Not known yet."
+  - Problem: The why field is meant to say why the result matters; 'Not known yet' leaves the reader without the comparison or consequence, and reads like a blank form.
+  - Rewrite: needs facts the proofreader did not have
+- **N3, severity 2** — result-51ccc6 why
+  - Text: "Not known yet."
+  - Problem: The why field is meant to say why the result matters; 'Not known yet' leaves the reader without the comparison or consequence, and reads like a blank form.
+  - Rewrite: needs facts the proofreader did not have
+- **N3, severity 2** — result-5227b9 why
+  - Text: "Not known yet."
+  - Problem: The why field is meant to say why the result matters; 'Not known yet' leaves the reader without the comparison or consequence, and reads like a blank form.
+  - Rewrite: needs facts the proofreader did not have
+- **N3, severity 2** — result-533123 why
+  - Text: "Not known yet."
+  - Problem: The why field is meant to say why the result matters; 'Not known yet' leaves the reader without the comparison or consequence, and reads like a blank form.
+  - Rewrite: needs facts the proofreader did not have
+- **N3, severity 2** — result-59ed1a#HumanEval+MBPP+#222/538 why
+  - Text: "Not known yet."
+  - Problem: The why field is meant to say why the result matters; 'Not known yet' leaves the reader without the comparison or consequence, and reads like a blank form.
+  - Rewrite: needs facts the proofreader did not have
+- **N3, severity 2** — result-6776d8 why
+  - Text: "Not known yet."
+  - Problem: The why field is meant to say why the result matters; 'Not known yet' leaves the reader without the comparison or consequence, and reads like a blank form.
+  - Rewrite: needs facts the proofreader did not have
+- **N3, severity 2** — result-6d422d why
+  - Text: "Not known yet."
+  - Problem: The why field is meant to say why the result matters; 'Not known yet' leaves the reader without the comparison or consequence, and reads like a blank form.
+  - Rewrite: needs facts the proofreader did not have
+- **N3, severity 2** — result-7968b8 why
+  - Text: "Not known yet."
+  - Problem: The why field is meant to say why the result matters; 'Not known yet' leaves the reader without the comparison or consequence, and reads like a blank form.
+  - Rewrite: needs facts the proofreader did not have
+- **N3, severity 2** — result-c36598#MATH-500#224/500 why
+  - Text: "Not known yet."
+  - Problem: The why field is meant to say why the result matters; 'Not known yet' leaves the reader without the comparison or consequence, and reads like a blank form.
+  - Rewrite: needs facts the proofreader did not have
+- **N1, severity 2** — result-82eb02 title
+  - Text: "LM-judge RL concentrates its change like Math RL"
+  - Problem: A research result shown as a title only: no what, why or numbers, so the reader cannot see what was measured, on how many items, or against what.
+  - Rewrite: "An RL model trained with a language-model judge as reward concentrates its weight change in a few directions, as the math RL model does: <number>"
+- **N1, severity 2** — result-98de28 title
+  - Text: "RL's directions move activations 95x more than random ones"
+  - Problem: A research result shown as a title only: no what, why or numbers, so the reader cannot see what was measured, on how many items, or against what.
+  - Rewrite: needs facts the proofreader did not have
+- **N1, severity 2** — result-c2edfb title
+  - Text: "Dial 1x is not under-applied by bf16 rounding"
+  - Problem: A research result shown as a title only: no what, why or numbers, so the reader cannot see what was measured, on how many items, or against what.
+  - Rewrite: needs facts the proofreader did not have
+- **N1, severity 2** — result-f5b7a3 title
+  - Text: "Theories forecast the code dial better than plain readers"
+  - Problem: A research result shown as a title only: no what, why or numbers, so the reader cannot see what was measured, on how many items, or against what.
+  - Rewrite: needs facts the proofreader did not have
+- **N1, severity 2** — result-98de28 title
+  - Text: "RL's directions move activations 95x more than random ones"
+  - Problem: '95x' has no comparison stated precisely (random directions of the same size? which layer?) and 'RL's directions' is not explained in this row.
+  - Rewrite: "Adding the RL weight change's top 8 directions moves the model's activations 95 times more than random directions of the same size"
+- **D2, severity 2** — result-82eb02 title
+  - Text: "LM-judge RL concentrates its change like Math RL"
+  - Problem: 'LM-judge RL' is compressed; the reader must guess it means RL with a language-model judge as the reward.
+  - Rewrite: "An RL model rewarded by a language-model judge concentrates its weight change in few directions, like the math RL model"
+- **D3, severity 2** — result-0de0b2 title
+  - Text: "/lab/ renamed AI Psychosis maxxing"
+  - Problem: 'maxxing' is slang and 'AI Psychosis' is an in-joke; a newcomer, especially a second-language reader, cannot tell what the /lab/ page holds.
+  - Rewrite: "The /lab/ page, 3D pictures of the team's work, is renamed 'AI Psychosis maxxing' (a joke name)"
+- **D1, severity 2** — result-58c66d title
+  - Text: "Idea basins page is live"
+  - Problem: 'Idea basins' is a team label; the reader cannot tell what the page shows.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — result-83f648 title
+  - Text: "Theory round 10: six families forecast alike"
+  - Problem: 'Theory round' and 'families' are labels of the team's forecasting process; the reader cannot tell what was forecast or what 'alike' means.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — result-ba6e70 title
+  - Text: "Site review: two tiers that do not connect"
+  - Problem: 'two tiers' is not explained; the reader cannot tell what the review found.
+  - Rewrite: "Site review: the home site and the results site have no links between them"
+- **D3, severity 2** — result-c569d3 title
+  - Text: "Theory round 09: 10 carried, 7 to the graveyard, 39 cells"
+  - Problem: 'carried', 'the graveyard' and 'cells' are team jargon and metaphor; the reader cannot tell what happened to which theories.
+  - Rewrite: "Theory round 9: 10 explanations kept, 7 dropped because their forecasts failed, 39 new test settings proposed"
+- **D1, severity 2** — result-d69c51 title
+  - Text: "Theory round 08: new theories forecast what readers do"
+  - Problem: 'readers' here are the team's no-theory forecasting baselines; the reader cannot tell this.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — result-fc6c6a title
+  - Text: "Theory round 11: score first, 8 surprises"
+  - Problem: Telegraphic: 'score first' has no subject or object; the reader cannot tell what was scored.
+  - Rewrite: "Theory round 11: forecasts scored before new ones were written; 8 results no forecast expected"
+- **D1, severity 2** — result-2fe32f title
+  - Text: "Paper on the finish dial is on the site"
+  - Problem: 'the finish dial' is a team label for the RL-direction weight edit; the reader cannot tell what the paper is about.
+  - Rewrite: "A paper on how adding RL's top weight directions makes the base finish its answers is on the site"
+- **D6, severity 2** — result-04e329 caveat
+  - Text: "Under the vote it has 53 against RL's 57 (-2.9 points [-8.1, 2.2])."
+  - Problem: 'the vote' is not defined in this row (majority answer over 4 samples).
+  - Rewrite: "With a majority vote over its 4 samples it gets 53 against RL's 57 (-2.9 points, 95 % interval -8.1 to +2.2)."
+- **D1, severity 2** — result-0a0a5a what
+  - Text: "Second set of result-dd9239."
+  - Problem: A result id stands in for an explanation; the reader cannot follow it.
+  - Rewrite: "This repeats result-dd9239's test on MATH-500."
+- **D4, severity 2** — result-0a0a5a why
+  - Text: "the own format scores 464 against 457 to 462 for the four stored cue samples: a tie, as on the 328."
+  - Problem: 'the own format', 'stored cue samples' and 'the 328' are compressed; the reader has to decode which model and prompt each number belongs to.
+  - Rewrite: "In its own chat format Think-SFT gets 464 of 500; with the raw prompt and the cue its four earlier samples got 457 to 462. That is a tie, as on the 328 harder problems."
+- **D4, severity 2** — result-0a0a5a what
+  - Text: "Think-SFT on MATH-500 through its own chat template, cap 32,768, also counted at 16,384"
+  - Problem: Telegraphic run description with no verb; the reader cannot tell what 'cap' and 'counted at' mean.
+  - Rewrite: "Think-SFT answered MATH-500 in its own chat template with a 32,768-token limit; the answers were also scored as if cut at 16,384 tokens."
+- **D1, severity 2** — result-0c1eef what
+  - Text: "Third cell of result-c8b994."
+  - Problem: 'cell' and a result id are internal references.
+  - Rewrite: "This adds the base to the token-limit test of result-c8b994."
+- **D3, severity 2** — result-0c1eef why
+  - Text: "Only Think-SFT's cut answers were unfinished work."
+  - Problem: 'unfinished work' is a figure of speech for 'would have become right with more tokens'.
+  - Rewrite: "Only Think-SFT's cut-off answers were on the way to a right answer."
+- **D4, severity 2** — result-1a80e9 what
+  - Text: "77 % of RL-Zero-Math's gain there (332). Think-SFT + cue: 342."
+  - Problem: '(332)' and 'Think-SFT + cue: 342' are bare numbers; the reader must guess 332 is RL's score of 500.
+  - Rewrite: "That is 77 % of RL-Zero-Math's gain there (RL scores 332). Think-SFT with the cue scores 342."
+- **D4, severity 2** — result-1a80e9 caveat
+  - Text: "the plain base gives no letter on 214 of 500"
+  - Problem: 'gives no letter' assumes the reader knows these are multiple-choice items answered with a letter.
+  - Rewrite: "the plain base gives no answer choice on 214 of the 500 multiple-choice questions"
+- **D3, severity 2** — result-1b6bf2 title
+  - Text: "RL's directions lengthen short answers and cut the tail"
+  - Problem: 'cut the tail' is a figure of speech; the reader must guess it means fewer very long answers.
+  - Rewrite: "RL's top weight directions make short answers longer and the longest answers shorter"
+- **D1, severity 2** — result-1b6bf2 caveat
+  - Text: "Truncating a stored run at C estimates a cap-C run. One sample per cell. The cascade spends 26% more tokens"
+  - Problem: 'C', 'cell' and 'the cascade' are never explained.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — result-1c9e40 what
+  - Text: "410 at 1, 449.2 at 4, 456.6 at 6, 466 of 500 at 12 [455, 476]."
+  - Problem: 'at 1, at 4' compresses 'with a vote over 1, 4 ... samples'; the reader has to reread.
+  - Rewrite: "with 1 sample 410 of 500, with a vote over 4 449.2, over 6 456.6, over 12 466 (95 % interval 455 to 476)."
+- **S1, severity 2** — result-1c9e40 why
+  - Text: "No training reaches RL's one-sample score, at about 5 times its tokens."
+  - Problem: Two ideas in one compressed sentence; 'No training' reads like 'no training method can'.
+  - Rewrite: "With no training, the base reaches RL's one-sample score, but it uses about 5 times as many tokens."
+- **V2, severity 2** — result-1c9e40 caveat
+  - Text: "The 328 held-out run was cut twice by the vast.ai balance: no rows. Artifact: studies/rlneurons/results/votek/math500_base_cue-01/."
+  - Problem: A billing note and a repository path written for the team.
+  - Rewrite: "The run on the 328 harder problems did not finish, so there is no held-out result."
+- **D6, severity 2** — result-284db5 why
+  - Text: "The rest of the RL change raises accuracy too, but loops more than the base."
+  - Problem: 'loops' has no clear subject and 'the rest of the RL change' refers to the 190 score; reader must reread.
+  - Rewrite: "RL with these 8 directions removed still scores 190, but its answers repeat themselves in loops more often than the base's."
+- **V4, severity 2** — result-306787 title
+  - Text: "Finishing and right answers split by rank and by depth"
+  - Problem: Topic phrase; the reader cannot tell the result (late layers make the model finish, early layers add right answers).
+  - Rewrite: "Late layers of the RL edit make the base finish; early layers add right answers"
+- **D4, severity 2** — result-306787 what
+  - Text: "Shrank the 1.5x edit of the base two ways"
+  - Problem: Dropped subject, and '1.5x edit' is a team label not explained in the row.
+  - Rewrite: "We made two smaller versions of the edit that adds 1.5 times RL's top 8 weight directions to the base:"
+- **N1, severity 2** — result-306787 why
+  - Text: "the early layers add right answers while cap hits rise to 98, so 0.80 of their finished answers are right."
+  - Problem: No scores are given for any cell, only cap hits and a ratio; the reader cannot see how many answers were right.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — result-3387ce why
+  - Text: "cap hits 94.5, 75, 54, 44, 33 for a = 0..4, while right-of-finished falls 88 to 72 %"
+  - Problem: 'a = 0..4' and 'right-of-finished' are code-style shorthand.
+  - Rewrite: "answers that reach the token limit fall from 94.5 to 33 as a goes from 0 to 4, while the share of finished answers that are right falls from 88 % to 72 %"
+- **D3, severity 2** — result-34897a why
+  - Text: "Removing randomness trades accuracy of finished answers for loops."
+  - Problem: 'trades ... for loops' is figurative; the reader must guess the direction of the effect.
+  - Rewrite: "Less randomness makes finished answers more accurate but causes more loops."
+- **V2, severity 2** — result-34897a caveat
+  - Text: "the repeat-aware cell has 1 sample (the second was lost in a box teardown); score lines round the means 403.5 to 404."
+  - Problem: Infrastructure and charting notes written for the team.
+  - Rewrite: "The repeat rule has one sample; the second run was lost when its GPU machine shut down."
+- **D1, severity 2** — result-39497c title
+  - Text: "Dial controls hold: random and Think-SFT edits do nothing"
+  - Problem: 'Dial controls' is a team label; the reader cannot tell what the controls test.
+  - Rewrite: "Control edits do nothing: random directions and Think-SFT's top directions do not make the base finish like RL's directions"
+- **N2, severity 2** — result-3a3af3 why
+  - Text: "so the cue adds no information the base does not already produce"
+  - Problem: A strong causal claim with no number and no interval beside it.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — result-40ed3b title
+  - Text: "No reward-free base rule reaches one RL sample on MATH-500"
+  - Problem: Stacked compressed phrase ('reward-free base rule'); reader must decode it as 'no way of combining base samples without a reward'.
+  - Rewrite: "No rule for combining the base's samples without a reward matches one RL sample on MATH-500"
+- **N2, severity 2** — result-40ed3b caveat
+  - Text: "The best rule's gap to one RL sample, 1.2 points, lies within its 95 % interval"
+  - Problem: The caveat says the gap is not significant, which contradicts the title's 'No ... reaches'; the reader is misled by the title.
+  - Rewrite: "Title: The best reward-free rule for combining base samples scores 454 of 500, 1.2 points under one RL sample (not significant)"
+- **V2, severity 2** — result-42cc6c why
+  - Text: "Tests whether the RL delta only makes Think-SFT finish sooner (225-235) or also adds right answers (240+), amendment 3 of SPEC_transplant."
+  - Problem: Ends with an internal file reference; 'RL delta' is jargon.
+  - Rewrite: "Tests whether adding the RL weight change only makes Think-SFT finish sooner (predicted 225 to 235) or also adds right answers (240 or more)."
+- **D4, severity 2** — result-42cc6c caveat
+  - Text: "Filed count reading 240+ holds."
+  - Problem: Telegraphic team shorthand.
+  - Rewrite: "The prediction of 240 or more, written before the run, was met."
+- **D4, severity 2** — result-51a0e7 why
+  - Text: "RL minus them 90, base 77, eight 46, 2x 5"
+  - Problem: Bare labels and numbers; the reader must guess each entry is a model and its number of capped answers.
+  - Rewrite: "Answers hitting the token limit: RL with the 8 directions removed 90, base 77, base plus the 8 directions 46, plus twice them 5."
+- **S2, severity 2** — result-51ccc6 what
+  - Text: "Tested a reading made after the math run (early layers add right answers, late layers make the model finish)"
+  - Problem: The what describes the test and gives no score; the result is only in the title.
+  - Rewrite: needs facts the proofreader did not have
+- **N1, severity 2** — result-5c961a what
+  - Text: "RL minus base 8.8 points [5.5, 12.5]; one sample: 14.0."
+  - Problem: 'one sample: 14.0' does not say it is the gap with one sample, and it conflicts with the 12.8 points given in result-82b4dc.
+  - Rewrite: "RL leads by 8.8 points (95 % interval 5.5 to 12.5); with one sample per problem the lead was 14.0."
+- **V2, severity 2** — result-5c961a caveat
+  - Text: "so its 453 on MATH-500 was chosen in-sample; quote the plain vote."
+  - Problem: 'quote the plain vote' is an instruction to teammates.
+  - Rewrite: "so its 453 on MATH-500 was fitted to those problems; the plain vote's score is the fair one."
+- **D4, severity 2** — result-5d032f what
+  - Text: "Restarting cap hits adds 8 problems alone and 4 on top of the vote."
+  - Problem: Compressed: 'alone' and 'on top of' need decoding.
+  - Rewrite: "Resampling answers that hit the token limit adds 8 right answers by itself and 4 more when combined with the vote."
+- **D4, severity 2** — result-6832a8 title
+  - Text: "Four samples: 100 RL steps within 3.3 points of the cue"
+  - Problem: Compressed; the reader must work out that this compares the RL checkpoint at step 100 with the cued base.
+  - Rewrite: "With four samples, the RL model after 100 training steps scores within 3.3 points of the base with the cue"
+- **V2, severity 2** — result-6832a8 why
+  - Text: "'Equals' is not earned: the interval includes 0 but ends outside the filed [-3, +3] band."
+  - Problem: Answers an earlier claim the reader has not seen, in team terms ('filed band').
+  - Rewrite: "The two are not shown to be equal: the 95 % interval includes 0 but extends past the ±3-point range set before the run."
+- **D2, severity 2** — result-6de887 caveat
+  - Text: "Per an audit, the neurons were ranked on 14 of the 500 problems, and the random control is not matched on normal-text loss (+8.2 % vs +0.3 %)."
+  - Problem: 'normal-text loss' is unexplained; reader cannot tell what +8.2 % measures.
+  - Rewrite: "An audit found the neurons were chosen using 14 of the 500 problems, and zeroing random neurons harms ordinary text prediction far less (+0.3 % loss) than zeroing the loop neurons (+8.2 %)."
+- **N1, severity 2** — result-6f1bb7 title
+  - Text: "A 0.11% weight edit takes the base to RL's score"
+  - Problem: '0.11%' of what (weight norm) is not said, and the title claims RL's score while the caveat says 1.5 was chosen from seven sizes.
+  - Rewrite: "Adding RL's top 8 directions at 1.5x (0.11 % of the weight norm) brings the base to 203 of 328, near RL's 206"
+- **D2, severity 2** — result-6f1bb7 what
+  - Text: "Added the top 8 singular directions per matrix of (RL-Math minus base) to the base at sizes -1 to 3"
+  - Problem: 'singular directions' is not explained, and the row gives no score for the main cell.
+  - Rewrite: needs facts the proofreader did not have
+- **V2, severity 2** — result-6f7ca3#hard328#162/328 caveat
+  - Text: "New cells and controls have 1 sample, L11-21/L22-31 have 2. 818 H100-min."
+  - Problem: GPU minutes and layer-band codes are notes for the team.
+  - Rewrite: needs facts the proofreader did not have
+- **D6, severity 2** — result-7968b8 what
+  - Text: "The older 57.2 % figure came from the stricter grader v1."
+  - Problem: 'The older 57.2 % figure' is not shown on this row; the reader does not know where it appeared.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — result-854ca8 why
+  - Text: "answers stop finishing (cap hits 77 -> 178 / 145, no loops, Wait doubles)"
+  - Problem: Arrow, slash and fragment list in place of a sentence.
+  - Rewrite: "answers stop finishing: those hitting the token limit rise from 77 to 178 (majority version) and 145 (answer-key version); they do not loop, and the word 'Wait' appears twice as often."
+- **D1, severity 2** — result-854ca8 title
+  - Text: "Signed self-training with no reward loses points"
+  - Problem: 'Signed self-training' is an invented label.
+  - Rewrite: "Training the base toward its own majority answers and away from the rest lowers its score"
+- **N4, severity 2** — result-882fa7 caveat
+  - Text: "the unsteered run in the same job scored 430, read as a high draw, and a second seed was still running"
+  - Problem: The unsteered score 430 conflicts with the 410.5 in the what field; the reader cannot tell which baseline the claim rests on.
+  - Rewrite: needs facts the proofreader did not have
+- **V2, severity 2** — result-95a4dc caveat
+  - Text: "Closed by the reviewing session: the owner was silent after the laptop restart."
+  - Problem: A process note about the team's work tracking.
+  - Rewrite: needs facts the proofreader did not have
+- **D6, severity 2** — result-95a4dc why
+  - Text: "The first 203 was one sample at a size picked on the 328."
+  - Problem: 'The first 203' refers to a score in another row.
+  - Rewrite: "The earlier score of 203 was one sample, at an edit size chosen on these same 328 problems."
+- **D1, severity 2** — result-997be4 what
+  - Text: "Six label-free text signs read at token 4,000 to 12,000"
+  - Problem: 'label-free text signs' is invented; the reader does not know what was read.
+  - Rewrite: "Six signals in the text so far (no answer key used), read between token 4,000 and 12,000"
+- **D6, severity 2** — result-997be4 caveat
+  - Text: "Only 29 samples have switched by token 8,000."
+  - Problem: 'switched' what? The reader cannot tell.
+  - Rewrite: needs facts the proofreader did not have
+- **V2, severity 2** — result-9ce8ed#hard328#67/164 what
+  - Text: "Artifacts studies/theory/results/experiments/cell-m06-01/, measured.json row m06-r1. idea-e9dfd5"
+  - Problem: File paths and ids for the team.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — result-9ce8ed#hard328#67/164 what
+  - Text: "base + cue 65 (53 cap hits, r1 1), final RL plain 84 (26 cap hits, r1 0)"
+  - Problem: 'r1 1' and 'r1 0' are undecodable.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — result-a1bf75 title
+  - Text: "The finish dial holds on a second model pair: code"
+  - Problem: 'finish dial' is a team label.
+  - Rewrite: "Adding RL's top weight directions makes the base finish its answers on code too"
+- **D1, severity 2** — result-a74ac3 what
+  - Text: "Cell m20: Olmo-3-1025-7B base, plain prompt (no cue), fresh2026, 1 sample, T 1.0, cap 16,384, grader v3."
+  - Problem: 'Cell m20' and 'fresh2026' are team labels.
+  - Rewrite: "The base model (Olmo-3-1025-7B), plain prompt, one answer each on the 136 new 2026 problems, temperature 1.0, 16,384-token limit."
+- **V2, severity 2** — result-ac7104 caveat
+  - Text: "m18 shard 1/2 was cut off at 247 of 250 rows and rerun whole at the same commit. Outputs studies/theory/results/experiments/cell-r9-m21-01/, cell-r9-m18-01/."
+  - Problem: Run logistics and file paths for the team.
+  - Rewrite: needs facts the proofreader did not have
+- **D5, severity 2** — result-ac7104#MATH-500#316/500 what
+  - Text: "against plain base 224 and theta 0.25 plain 405; effective alpha after rounding 0.12502."
+  - Problem: The same fraction is called theta and alpha in one sentence; neither is defined.
+  - Rewrite: "against 224 for the plain base and 405 for a quarter of the RL change; after rounding the fraction is 0.125."
+- **D1, severity 2** — result-ac7104#MATH-500#316/500 why
+  - Text: "below the saturating curve weights-m06 fitted (345)"
+  - Problem: 'weights-m06' is a forecast id.
+  - Rewrite: "below the 345 that a forecast assuming diminishing returns predicted"
+- **S2, severity 2** — result-bce075 what
+  - Text: "One model wrote the first 25 or 50 % of an answer on the 328 harder problems and the other finished it"
+  - Problem: The what gives no score; the result is only in the title and partly in the why.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — result-bce075 why
+  - Text: "on the 89 cap-hit prefixes both finishers get 16 to 18 right"
+  - Problem: 'cap-hit prefixes' and 'finishers' are compressed labels.
+  - Rewrite: "on the 89 answer starts whose full answer hit the token limit, either model finishes 16 to 18 correctly"
+- **V2, severity 2** — result-c8b994 caveat
+  - Text: "base cue at 32,768 was lost with its box; rerunning on AWS."
+  - Problem: Lowercase start and infrastructure note for the team.
+  - Rewrite: "The base run at 32,768 tokens was lost when its GPU machine shut down; it is being rerun."
+- **N2, severity 2** — result-cbe0bc title
+  - Text: "Shortest-answer tie-break adds 7 problems to the vote"
+  - Problem: The caveat says to read the score as 450 (+4), because the rule was written after seeing the 7 problems; the title states the unadjusted gain.
+  - Rewrite: "Shortest-answer tie-break: +7 problems in-sample, about +4 held out"
+- **D6, severity 2** — result-cbe0bc#MATH-500#453/500 caveat
+  - Text: "It is 3 above the record of 450 because that record used restarts."
+  - Problem: The logic is unclear: 453 vs 450 and the reason ('because ... restarts') do not connect for the reader.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — result-d02d46 title
+  - Text: "Short top-8 answers are right on easy problems"
+  - Problem: 'top-8 answers' is a team label for answers from the base with RL's top 8 directions added.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — result-d82083 what
+  - Text: "Base + 2x the top-8 singular directions per matrix of (RL-Zero-Math - base), cue, MATH-500 n 500, 1 sample, T 1.0, v3"
+  - Problem: Formula and settings string with no verb.
+  - Rewrite: "The base plus twice RL's top 8 weight directions, with the cue, one answer per MATH-500 problem"
+- **V2, severity 2** — result-d82083 caveat
+  - Text: "Seed 3,000,000 (the 1.5x cell's), not cells.md's 105,000,000. Rounding draws differ from the hard328 2x edit."
+  - Problem: Notes for the team about seeds and a file.
+  - Rewrite: needs facts the proofreader did not have
+- **D4, severity 2** — result-dd9239 what
+  - Text: "(system line, chat markers, <think>) instead of the raw template with the base's 3-token cue. n 328, T 1.0, v3, 1 sample, cap 32,768, also counted at 16,384."
+  - Problem: Settings string with no verb and no scores.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 2** — result-e45bf4 what
+  - Text: "base-RL weight blends and the Code-RL model scored 182 to 190"
+  - Problem: 'base-RL weight blends' is not explained (averages of the two models' weights).
+  - Rewrite: "models made by mixing the base's and RL's weights, and the Code-RL model, scored 182 to 190"
+- **D4, severity 2** — result-f8e596 title
+  - Text: "Minus RL's top 8 directions: base cap hits double"
+  - Problem: Telegraphic; 'Minus RL's top 8 directions' means subtracting them from the base.
+  - Rewrite: "Subtracting RL's top 8 directions from the base doubles its unfinished answers"
+- **D4, severity 2** — result-f8e596 caveat
+  - Text: "(104 rows finished before the stop, reported apart as biased short)"
+  - Problem: Compressed phrase 'reported apart as biased short'.
+  - Rewrite: "104 answers of the even half finished before the run stopped; they are reported separately because the short ones finish first, which biases them."
+- **N2, severity 2** — result-fad48d why
+  - Text: "Three prefilled tokens give the base what 100 RL steps give."
+  - Problem: Equality claim with a one-sample interval of -2.0 to +5.2; later refuted by result-6832a8.
+  - Rewrite: needs facts the proofreader did not have
+- **V2, severity 2** — result-fad48d caveat
+  - Text: "The 'Okay' opening check of the spec failed at T 1.0; identity rests on the pinned revisions."
+  - Problem: Team terms ('the spec', 'pinned revisions', 'identity'); the reader cannot tell what failed.
+  - Rewrite: needs facts the proofreader did not have
+- **D2, severity 1** — result-0a0a5a what (repeats 24 times)
+  - Text: "T 1.0 / top-p 1.0"
+  - Problem: Temperature and top-p are sampling settings the rows never explain; 'T' as a bare symbol is shorthand.
+  - Rewrite: "sampled at temperature 1.0, with no top-p cut of unlikely tokens"
+- **D5, severity 1** — result-04e329 why (repeats 12 times)
+  - Text: "The edit's size was picked on the 328 harder problems."
+  - Problem: One problem set has four names across rows: hard328, the 328, 328 harder problems, 328 hard problems; a reader may think they are different sets.
+  - Rewrite: "Use one name everywhere, for example 'the 328 harder problems'."
+- **D5, severity 1** — result-099916 what
+  - Text: "base 76 plain and 164 with the cue"
+  - Problem: The untrained model is called base, the base, untrained base, cued base, base cue, Base + cue, base with cue and Base Olmo 3 across rows; the RL model is RL, RL model, RL-Zero-Math, RL-Math, RL-Math 3.1 and Math 3.1.
+  - Rewrite: "Fix two names, for example 'the base model' and 'the RL model (Olmo 3 RL-Zero-Math)', and add 'with the cue' when it applies."
+- **S5, severity 1** — result-1b6bf2 caveat (repeats 5 times)
+  - Text: "The cascade spends 26% more tokens than RL alone."
+  - Problem: Percent is written '77 %' in 26 rows and '26%' in 5; the format is inconsistent.
+  - Rewrite: "The cascade spends 26 % more tokens than RL alone."
+- **S5, severity 1** — result-3387ce what (repeats 4 times)
+  - Text: "+6.9 pts [4.6, 9.3] over Think-SFT"
+  - Problem: 'pts' is used in 4 rows where others write 'points'.
+  - Rewrite: "6.9 points more than Think-SFT (95 % interval 4.6 to 9.3)"
+- **D5, severity 1** — result-9ce8ed what
+  - Text: "7 of 164, 90 % [3, 11]"
+  - Problem: Most rows give 95 % intervals; the theory-cell rows give 90 % ones in the same bracket form, so readers compare unlike intervals.
+  - Rewrite: "7 of 164 (90 % interval 3 to 11; other rows give 95 % intervals)"
+- **V2, severity 1** — result-0c5fa5 title (repeats 37 times)
+  - Text: "Paper 4 is on the site: No Early Warning"
+  - Problem: 37 rows are title-only site, deck or process announcements mixed into a board of research results; a reader scanning for findings has to skip them.
+  - Rewrite: "Show site and process changes in their own list, apart from research results."
+- **V4, severity 1** — result-0c5fa5 title (repeats 5 times)
+  - Text: "Paper 4 is on the site: No Early Warning"
+  - Problem: The title names the paper but not what it found; the reader cannot tell whether to open it.
+  - Rewrite: needs facts the proofreader did not have
+- **V3, severity 1** — result-0de0b2 title
+  - Text: "/lab/ renamed AI Psychosis maxxing"
+  - Problem: A joke name on a results board; a newcomer cannot get it.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 1** — result-0f401d title
+  - Text: "Three idea-map slides are live at /demo/ali/slide1"
+  - Problem: 'idea-map' and the person-named path are internal; the reader cannot tell what the slides show.
+  - Rewrite: "Three slides that map the team's ideas are at /demo/ali/slide1"
+- **V3, severity 1** — result-100d3d title
+  - Text: "The joke meditation game has 5 levels and bosses"
+  - Problem: A joke game on a research results board; the reader does not know what it has to do with the research.
+  - Rewrite: needs facts the proofreader did not have
+- **V2, severity 1** — result-726cfd title
+  - Text: "Ali's four slides are in the /demo deck"
+  - Problem: Names a teammate and an internal deck; written for the team, not a visitor.
+  - Rewrite: "Four slides on <topic> are in the /demo talk deck"
+- **V2, severity 1** — result-851e4e title
+  - Text: "Idea basins and talk numbers refreshed on the 515-item board"
+  - Problem: A maintenance note for the team ('refreshed', '515-item board'); carries no result.
+  - Rewrite: needs facts the proofreader did not have
+- **T1, severity 1** — result-c85311 title
+  - Text: "Three fixes on one slide"
+  - Problem: Does not say which slide or what was fixed.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 1** — result-cf5258 title
+  - Text: "Theory round 12: 23 new numbers, 5 new surprises"
+  - Problem: 'Theory round' is a team process label; 'surprises' is unexplained.
+  - Rewrite: "Theory round 12: 23 new results scored against forecasts; 5 that no forecast expected"
+- **V2, severity 1** — result-dcda3a title
+  - Text: "The joke meditation game got a second level-up"
+  - Problem: A changelog note about a joke page; no meaning for a visitor.
+  - Rewrite: needs facts the proofreader did not have
+- **D1, severity 1** — result-f688a7 title
+  - Text: "gpuprice results page is public at gpu.invariant.team"
+  - Problem: 'gpuprice' is a study label; the reader does not know it is a GPU price forecast.
+  - Rewrite: "The GPU price forecast results are public at gpu.invariant.team"
+- **V2, severity 1** — result-fbe153 title
+  - Text: "Home is invariant.team; the monitor's root is the board"
+  - Problem: Site routing note in team terms ('the monitor', 'root'); no meaning for a visitor.
+  - Rewrite: "The home page is invariant.team; monitor.invariant.team opens on this board"
+- **V3, severity 1** — result-6fc6f3 title
+  - Text: "A joke therapy page for the team's own results is live"
+  - Problem: Joke page announced on a results board.
+  - Rewrite: needs facts the proofreader did not have
+- **N1, severity 1** — result-04e329 what
+  - Text: "50, 52, 45, 46 right, mean 48.25. RL has 50.5 and the base with the cue 29.5."
+  - Problem: Scores are given without the total (136) or whether RL's 50.5 is also a mean of four samples.
+  - Rewrite: "50, 52, 45 and 46 right of 136, mean 48.25. RL averages 50.5 and the base with the cue 29.5."
+- **V2, severity 1** — result-04e329 why
+  - Text: "All three predictions filed before the run hold."
+  - Problem: Refers to the team's filing process without saying what was predicted.
+  - Rewrite: "All three predictions written before the run were met."
+- **V4, severity 1** — result-099916 title
+  - Text: "Hard-set scores at temperature 1.0 for base and RL"
+  - Problem: Names the topic, not the result.
+  - Rewrite: "At temperature 1.0 the cued base scores 164 of 328 hard problems; RL scores 206"
+- **N1, severity 1** — result-099916 what
+  - Text: "Raising temperature from 0.6 to 1.0 adds 13.7 points to the cued base."
+  - Problem: 'points' of what total is not said; percentage points of 328 is implied.
+  - Rewrite: "Raising temperature from 0.6 to 1.0 adds 13.7 percentage points (45 problems of 328) to the cued base."
+- **S5, severity 1** — result-0c1eef title
+  - Text: "More tokens finish the base's answers, not fix them"
+  - Problem: Ungrammatical 'not X' construction ('finish..., not fix them').
+  - Rewrite: "More tokens let the base finish its answers but do not make them right"
+- **D4, severity 1** — result-0c1eef why
+  - Text: "Right among answers past 16,384: Think-SFT 23 of 93, RL 2 of 20, base 4 of 64."
+  - Problem: Inverted shorthand ('Right among answers past') the reader must reorder.
+  - Rewrite: "Of the answers that ran past 16,384 tokens, Think-SFT got 23 of 93 right, RL 2 of 20, the base 4 of 64."
+- **S2, severity 1** — result-1a80e9 caveat
+  - Text: "Under half of the gain is better answers"
+  - Problem: The caveat's main point (most of the gain is the base starting to answer at all) is stated indirectly.
+  - Rewrite: "Most of the gain comes from the base giving an answer at all: ..."
+- **N1, severity 1** — result-1c9e40 what
+  - Text: "Stopping at 2 agreeing answers: 459.0 at 15,882 tokens."
+  - Problem: '15,882 tokens' does not say per problem.
+  - Rewrite: "Drawing samples until 2 answers agree: 459.0 of 500 at 15,882 tokens per problem."
+- **S5, severity 1** — result-1c9e40 why
+  - Text: "so 446 (vote over 4) was not its limit."
+  - Problem: 446 contradicts the 449.2 for a vote over 4 given in the what field of the same row.
+  - Rewrite: "so the earlier vote over 4 (446 of 500) was not the limit."
+- **D4, severity 1** — result-284db5 why
+  - Text: "raise words like Wait to RL's rate"
+  - Problem: Compressed: the reader must guess this means the rate of self-check words such as 'Wait'.
+  - Rewrite: "make the model write self-check words such as 'Wait' as often as RL does"
+- **N1, severity 1** — result-296647 what
+  - Text: "picked by a vote over samples, with no correct answers used"
+  - Problem: Number of samples and of training answers not stated.
+  - Rewrite: needs facts the proofreader did not have
+- **V2, severity 1** — result-306787 caveat
+  - Text: "Both filed predictions were refuted; the split by depth was read after the run."
+  - Problem: Process note in team terms ('filed', 'read after the run').
+  - Rewrite: "Both predictions written before the run were wrong; the split by depth was noticed only after the run, so it is not a tested prediction."
+- **N1, severity 1** — result-3387ce title
+  - Text: "Twice the RL weight change on Think-SFT: 231.5 of 328"
+  - Problem: 231.5 is a mean of two seeds; the title does not say so, and gives no comparison.
+  - Rewrite: "Adding twice the RL weight change to Think-SFT: 231.5 of 328, against 209 without it"
+- **V2, severity 1** — result-3387ce why
+  - Text: "MATH-500 a=1: 467, as filed."
+  - Problem: 'as filed' refers to the team's pre-registration; the reader does not know what was filed.
+  - Rewrite: "On MATH-500, a = 1 scores 467 of 500, as predicted before the run."
+- **V2, severity 1** — result-3387ce caveat
+  - Text: "a=0.5 hung twice, no number."
+  - Problem: Run-failure note in team shorthand.
+  - Rewrite: "The run at a = 0.5 stopped responding twice and gave no score."
+- **D1, severity 1** — result-3387ce caveat
+  - Text: "Summing SFT and RL vectors is published (2605.00610)"
+  - Problem: A bare arXiv number; the reader may not recognize it as a paper id.
+  - Rewrite: "Adding SFT and RL weight changes has been published before (arXiv 2605.00610)"
+- **D4, severity 1** — result-34897a caveat
+  - Text: "Intervals: -1.4 [-3.2, 0.4], -1.4 [-3.5, 0.8], -1.3 [-4.3, 1.5]."
+  - Problem: A list of numbers without saying which rule each belongs to.
+  - Rewrite: "Differences from plain temperature 1.0, with 95 % intervals: confidence rule -1.4 (-3.2 to 0.4), fork rule -1.4 (-3.5 to 0.8), repeat rule -1.3 (-4.3 to 1.5)."
+- **D3, severity 1** — result-39497c caveat
+  - Text: "so finishing could sit in its other directions"
+  - Problem: 'sit in' is figurative.
+  - Rewrite: "so the change that makes Think-SFT finish may be in its other directions"
+- **V2, severity 1** — result-3a3af3 caveat
+  - Text: "shards ran on two GPU types"
+  - Problem: Infrastructure detail written for the team ('shards').
+  - Rewrite: "the work was split across two GPU types"
+- **D4, severity 1** — result-42cc6c caveat
+  - Text: "Paired vs Think-SFT at 32,768 on the same seed (234): +3.4 pts [-0.6, 7.0], interval includes 0."
+  - Problem: Abbreviations ('vs', 'pts') and dropped verbs.
+  - Rewrite: "Against Think-SFT alone at the same limit and seed (234), it is 3.4 points ahead, 95 % interval -0.6 to 7.0, which includes zero."
+- **V2, severity 1** — result-42cc6c#hard328#245/328 what
+  - Text: "Artifact studies/rlneurons/results/transplant/cap32_m2_s1-01/ (main 7f53b1a); ~5 USD Modal."
+  - Problem: Repository path, commit and cloud cost are notes for the team.
+  - Rewrite: needs facts the proofreader did not have
+- **D2, severity 1** — result-44b4df what
+  - Text: "Min-p and top-p truncation at temperature 1.0"
+  - Problem: Min-p and top-p are not explained.
+  - Rewrite: "Cutting off unlikely tokens before sampling (min-p and top-p) at temperature 1.0"
+- **N1, severity 1** — result-44b4df what
+  - Text: "RL moved by +0.6 points."
+  - Problem: No base score or setting for RL; 'moved' is vague.
+  - Rewrite: "The RL model's score changed by +0.6 points."
+- **D6, severity 1** — result-460e0a what
+  - Text: "At temperature 1.0 it scored 390 and 372 against 410."
+  - Problem: 'it' after two edits; reader must map 390 and 372 to 100 and 1,000 neurons.
+  - Rewrite: "At temperature 1.0 the two edits scored 390 and 372 against 410 unedited."
+- **D4, severity 1** — result-4b0d5f what
+  - Text: "Adding a fraction of the RL-minus-base weight change to the base"
+  - Problem: Compound noun 'RL-minus-base weight change' must be decoded.
+  - Rewrite: "Adding a fraction of the weight change that RL training made to the base model"
+- **D4, severity 1** — result-4b0d5f caveat
+  - Text: "Steps from one half on are within the base's spread"
+  - Problem: 'Steps from one half on' is compressed.
+  - Rewrite: "The scores for one half and larger fractions differ by less than the base's own spread"
+- **V2, severity 1** — result-51a0e7 caveat
+  - Text: "Earlier title 'finish, not be right' was wrong"
+  - Problem: A correction note about an old title the visitor never saw.
+  - Rewrite: needs facts the proofreader did not have
+- **V2, severity 1** — result-51ccc6 caveat
+  - Text: "so the earlier result title 'split by depth' holds for the math cells only"
+  - Problem: Refers to an earlier result title and 'cells'.
+  - Rewrite: "so the split by depth found on math does not carry over to code."
+- **S4, severity 1** — result-51fd20 why
+  - Text: "a hand read found most forced answers were guesses"
+  - Problem: 'a hand read' hides who read how many.
+  - Rewrite: "one of us read the forced answers and judged most of them guesses"
+- **N1, severity 1** — result-5227b9 what
+  - Text: "a second set gave -0.6 (401 vs 404 of 494)"
+  - Problem: 'of 494' differs from MATH-500's 500 and from 497 in result-6d422d without explanation.
+  - Rewrite: needs facts the proofreader did not have
+- **S1, severity 1** — result-5251c9 why
+  - Text: "so wrong answers outvote its right ones"
+  - Problem: Long sentence with four percentages and two models; needs a second reading.
+  - Rewrite: needs facts the proofreader did not have
+- **N2, severity 1** — result-59ed1a why (repeats 3 times)
+  - Text: "The study concludes that the opening word and a reasoning start are what help, rather than the text before it."
+  - Problem: 'concludes' is stronger than one equal-score comparison supports; result-c36598 calls it 'the study's reading'.
+  - Rewrite: "The study reads this as: the opening word and the start of reasoning help, not the text before them."
+- **T3, severity 1** — result-59ed1a#HumanEval+MBPP+#317/538 why
+  - Text: "The Code cue and the Math cue are different texts that both end in "Okay", and they score equally."
+  - Problem: The same why text appears in the parent row and this child row, and nearly again in result-c36598 rows.
+  - Rewrite: needs facts the proofreader did not have
+- **S5, severity 1** — result-5c961a title
+  - Text: "Harder 328: the vote narrows the gap to RL, not closes it"
+  - Problem: Ungrammatical 'narrows ..., not closes'.
+  - Rewrite: "On the 328 harder problems, a vote narrows the gap to RL but does not close it"
+- **S1, severity 1** — result-6776d8 title
+  - Text: "RL's 8 directions lift Think-SFT; Math+Code add up on code"
+  - Problem: Two results in one title, with '+' shorthand.
+  - Rewrite: needs facts the proofreader did not have
+- **V2, severity 1** — result-6776d8 caveat
+  - Text: "The filed two-skill threshold (198 of 328 and 390 of 538 at one size) was not met on math"
+  - Problem: 'filed two-skill threshold' is team process language.
+  - Rewrite: "The prediction written before the run (198 of 328 on math and 390 of 538 on code at one size) failed on math"
+- **T3, severity 1** — result-6832a8 why
+  - Text: "so the cue and the first 100 steps are not interchangeable"
+  - Problem: This row's finding contradicts the title of result-fad48d ('The cue equals the first 100 RL steps'); both stand on the board.
+  - Rewrite: needs facts the proofreader did not have
+- **S5, severity 1** — result-6d422d title
+  - Text: "RL-written examples gave +5.6 points once; it did not repeat"
+  - Problem: The same gain is +5.7 points in result-5227b9; the two rows disagree.
+  - Rewrite: needs facts the proofreader did not have
+- **D3, severity 1** — result-6f1bb7 caveat
+  - Text: "At size 3 the model decays into word strings (117 right)."
+  - Problem: 'decays into word strings' is figurative.
+  - Rewrite: "At size 3 the model writes strings of unrelated words (117 right)."
+- **S5, severity 1** — result-79784b title
+  - Text: "Switching off loop neurons adds no right answers on hard set"
+  - Problem: Missing article ('on the hard set').
+  - Rewrite: "Switching off loop neurons adds no right answers on the 328 harder problems"
+- **N2, severity 1** — result-818c20 why
+  - Text: "It wins because it runs out of tokens instead of giving a wrong answer, so its votes are rarely wrong."
+  - Problem: A causal claim with no number beside it in this row.
+  - Rewrite: needs facts the proofreader did not have
+- **T3, severity 1** — result-82b4dc why
+  - Text: "At this setting the base's cap hits are long reasoning that does not repeat, rather than loops."
+  - Problem: Parent and child rows (result-82b4dc and its #164/328 row) repeat the same why and caveat word for word.
+  - Rewrite: needs facts the proofreader did not have
+- **V2, severity 1** — result-82b4dc caveat (repeats 3 times)
+  - Text: "An audit read 164 from the committed readout only, because the raw answers are not in the repository."
+  - Problem: 'committed readout' and 'repository' are team terms.
+  - Rewrite: "An audit could check 164 only against the saved summary; the raw answers were not saved."
+- **S5, severity 1** — result-854ca8 caveat
+  - Text: "one epoch, stored samples only, no resampling. Held-out NLL gap wrong-minus-right did not rise."
+  - Problem: Starts lowercase; 'NLL gap wrong-minus-right' is undefined shorthand.
+  - Rewrite: "One training pass on earlier answers only, with no new sampling. On held-out problems the model did not come to prefer right answers over wrong ones (measured by log-likelihood)."
+- **D2, severity 1** — result-882fa7 what
+  - Text: "Steering the cued base's activations"
+  - Problem: 'Steering activations' is not explained.
+  - Rewrite: "Adding a fixed vector to the cued base's internal activations"
+- **D2, severity 1** — result-997be4 what
+  - Text: "best AUROC 0.568 [0.480, 0.657]"
+  - Problem: AUROC not explained (0.5 = chance).
+  - Rewrite: "best AUROC 0.568, 95 % interval 0.480 to 0.657, where 0.5 is chance"
+- **D1, severity 1** — result-997be4 why
+  - Text: "Text signs do not provide it (as result-f3d708, result-b30f15)."
+  - Problem: Result ids in place of an explanation.
+  - Rewrite: "Text signals do not give such a detector, as two earlier results also found."
+- **N1, severity 1** — result-997be4#hard328#240/328 what
+  - Text: "the plain sequential vote has 241 at 30,904"
+  - Problem: 30,904 has no unit (tokens per problem).
+  - Rewrite: "the plain vote over the samples in order gets 241 at 30,904 tokens per problem"
+- **V2, severity 1** — result-a74ac3 caveat
+  - Text: "Seed 93,000,000 + index as in cells.md."
+  - Problem: Internal file reference.
+  - Rewrite: needs facts the proofreader did not have
+- **N4, severity 1** — result-ad3c24 caveat
+  - Text: "One sample per problem."
+  - Problem: Does not say that the 91-of-100 figure for RL without the top 8 uses only the first 100 problems.
+  - Rewrite: needs facts the proofreader did not have
+- **N1, severity 1** — result-c36598 caveat (repeats 2 times)
+  - Text: "Against the plain base's better setting (319 of 500 at T 0.6 / top-p 0.95) the gain is smaller."
+  - Problem: Says 'smaller' without the size (410 vs 319, 18.2 points).
+  - Rewrite: "Against the plain base's better setting (319 of 500 at temperature 0.6, top-p 0.95) the gain is 91 problems rather than 186."
+- **D4, severity 1** — result-c8b994 what
+  - Text: "Think-SFT cue and RL plain on hard328"
+  - Problem: 'Think-SFT cue' and 'RL plain' drop words.
+  - Rewrite: "Think-SFT with the cue and RL with a plain prompt, on the 328 harder problems"
+- **D4, severity 1** — result-d02d46 caveat
+  - Text: "New samples on other GPUs than the stored one."
+  - Problem: Missing verb.
+  - Rewrite: "The new samples ran on different GPUs from the stored one."
+- **S5, severity 1** — result-dd9239 caveat
+  - Text: "one sample per format; MATH-500 in the same format is still running."
+  - Problem: Starts lowercase; 'still running' is stale (result-0a0a5a reports it).
+  - Rewrite: "One sample per format. The MATH-500 run is result-0a0a5a."
+- **D3, severity 1** — result-dd9239 why
+  - Text: "so the cue brings out all of Think-SFT on the 328"
+  - Problem: 'brings out all of' is figurative.
+  - Rewrite: "so the cue gives Think-SFT its full score on the 328 problems"
+- **N1, severity 1** — result-e5c99c what
+  - Text: "At temperature 0.6 the gap was 25.9 points, with the cued base at 119."
+  - Problem: 119 has no total (of 328) and RL's score at 0.6 is not given.
+  - Rewrite: "At temperature 0.6 the gap was 25.9 points: the cued base got 119 of 328."
+- **T3, severity 1** — result-e5c99c title
+  - Text: "On 328 hard problems, RL leads the cued base by 12.8 points"
+  - Problem: Same result as result-82b4dc ('RL leads the cued base by 13 points'), posted twice with different rounding.
+  - Rewrite: needs facts the proofreader did not have
+- **V2, severity 1** — result-e870a1#MATH-500#414/500 caveat
+  - Text: "A later summary of the chart calls this step inside its confidence interval."
+  - Problem: Refers to a 'later summary' the reader cannot see.
+  - Rewrite: "The 4-problem gain is within the 95 % interval."
+- **D1, severity 1** — result-edceef caveat
+  - Text: "the ordering by math share holds for the 3.0 releases only"
+  - Problem: '3.0' and '3.1 releases' are Olmo model versions; the row does not say so.
+  - Rewrite: "the ordering by math share holds only for the Olmo 3.0 RL models"
+- **V2, severity 1** — result-f8e596#MATH-500#188/250 what
+  - Text: "Artifact studies/theory/results/experiments/cell-r9-m11-01/metrics.json (main 798f240)."
+  - Problem: File path and commit for the team.
+  - Rewrite: needs facts the proofreader did not have

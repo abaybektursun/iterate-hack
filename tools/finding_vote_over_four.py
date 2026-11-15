@@ -78,24 +78,26 @@ _n = lambda v: f"{v:,.0f}"
 K0 = 6  # the state the page opens on
 
 TITLE = "Vote over 6 samples"
-PROBLEM = "How many votes does Base + cue need to match RL?"
-LINE = (f"A vote over {K0} samples of Base + cue scores {K[K0][1]} of {N} on MATH-500, within RL's one-sample range, "
-        f"at {times(K[K0][7]):.1f} times the tokens.")  # also the sentence on its tile
+PROBLEM = ("Over how many samples must the base model with the opening cue vote to match a model trained by "
+           "reinforcement learning (RL)?")
+LINE = (f"A vote over {K0} samples of the base model with the opening cue averages {K[K0][1]} of {N} on MATH-500, inside "
+        f"the RL model's one-sample range ({RL1['lo']} to {RL1['hi']}), at {times(K[K0][7]):.1f} times the tokens of one RL sample.")  # also the sentence on its tile
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 PANELS = [
-    ["new", "What is new", "Voting over several samples is long known as self-consistency, and Wang et al. (arXiv 2610.06851, "
-     f"Figure 21) plot about {DATA['published_vote']} % for a vote over 4 samples of this cued base model; this run takes the "
-     f"vote to {DATA['samples']} samples and measures where it meets RL.",
+    ["new", "What is new", f"New here: this run takes the vote to {DATA['samples']} samples and measures where it meets the RL model. Voting over "
+     "several samples is known as self-consistency, and Wang et al. (arXiv 2610.06851, Figure 21) plot about "
+     f"{DATA['published_vote']} % for a vote over 4 samples of this base model with the cue.",
      [f"Over 6 samples the vote has {K[6][1]} of {N}, inside the range of RL's four one-sample scores, {RL1['lo']} to "
       f"{RL1['hi']}. Over 8 it has {K[8][1]}, level with their mean of {RL1['mean']:.1f}, and over 12 it has {K[12][1]:.0f}, "
       f"95 % interval {K[12][2]:.0f} to {K[12][3]:.0f}.",
-      "The plan predicted that the vote would stop rising after 6 samples, with fewer than 3 more problems from 6 to 12 "
-      f"(specs/SPEC_votek.md, V2). It rose by {K[12][1] - K[6][1]:.1f} problems, so that prediction was wrong.",
+      "The plan predicted that the vote would stop rising after 6 samples, with fewer than 3 more problems from 6 to 12. "
+      f"It rose by {K[12][1] - K[6][1]:.1f} problems, so that prediction was wrong. Source: studies/rlneurons/specs/SPEC_votek.md, "
+      "prediction V2.",
       f"The paper's RL model is the earlier Olmo 3 release, which scores {DATA['published_rl']} % there. This page compares "
       "with the stronger Olmo 3.1 RL model."]],
-    ["why", "Why it matters", "The direction asks for the cheapest route to RL's score that uses no reward. A vote over samples "
-     "of Base + cue reaches RL's one-sample range with no training, but it costs "
+    ["why", "Why it matters", "The team's research goal is the cheapest way to reach the RL model's score without training on a reward. A vote over "
+     "samples of Base + cue reaches the RL model's one-sample range with no training, but it costs "
      f"{times(K[6][7]):.1f} times the tokens of one RL sample.",
      [f"Over 6 samples Base + cue generates {_n(K[6][7])} tokens per problem; one RL sample generates "
       f"{_n(RL['tokens_single'])}.",
@@ -103,21 +105,22 @@ PANELS = [
       f"per problem, {times(DATA['stop2'][2]):.1f} times one RL sample. No interval was computed for this rule.",
       f"RL's own vote over 4 samples has {RL['vote']} of {N} at {_n(RL['tokens_vote'])} tokens per problem. No vote of "
       f"Base + cue here reaches it, not even over 12 samples at {_n(K[12][7])} tokens."]],
-    ["how", "How we know", f"Base + cue answered each of the {N} MATH-500 problems {DATA['samples']} times at T 1.0 and top-p "
-     f"1.0 (grader v3), and the score of a vote over k samples is the mean over {DATA['subsets']} random choices of k of the "
-     f"{DATA['samples']}.",
-     [f"Samples 1 to 4 come from the earlier 4-sample job, samples 5 to 12 from new jobs that continue its seed rule. The vote "
-      f"over the first 4 samples reproduces that job's {DATA['first4']} of {N}; the mean over choices of 4 is {K[4][1]}, and "
+    ["how", "How we know", f"The base model with the opening cue (the tokens \" line!\", a blank line, \"Okay\") answered each of the {N} MATH-500 "
+     f"problems {DATA['samples']} times at temperature 1.0 and top-p 1.0 (grader version 3). The score of a vote over k samples "
+     f"is the mean over {DATA['subsets']} random choices of k of the {DATA['samples']}.",
+     [f"Samples 1 to 4 come from an earlier 4-sample run; samples 5 to 12 come from new runs whose seeds continue that run's "
+      f"sequence. The vote over the first 4 samples reproduces that run's {DATA['first4']} of {N}; the mean over choices of 4 is {K[4][1]}, and "
       f"single choices of 4 range from {K[4][4]} to {K[4][5]}.",
-      f"Intervals are bootstraps over the {N} problems (2,000 resamples) of that mean: {K[6][2]} to {K[6][3]} over 6 "
+      f"The 95 % intervals of that mean come from 2,000 bootstrap resamples of the {N} problems: {K[6][2]} to {K[6][3]} over 6 "
       f"samples, and {K[12][2]:.0f} to {K[12][3]:.0f} over all 12.",
-      f"RL's range is the four one-sample scores of its own 4-sample job, {', '.join(map(str, RL['each'][:3]))} and "
-      f"{RL['each'][3]} of {N}. Another RL job at T 1.0 had {DATA['rl_other_job']}."]],
-    ["limits", "What it does not show", "It does not show that voting replaces RL training: at equal tokens RL is ahead, "
+      f"The RL model's range is the four one-sample scores of its own 4-sample run, {', '.join(map(str, RL['each'][:3]))} and "
+      f"{RL['each'][3]} of {N}. Another RL run at temperature 1.0 had {DATA['rl_other_job']}."]],
+    ["limits", "What it does not show", "It does not show that voting replaces RL training: at about equal tokens the RL model is ahead, "
      f"with {RL['vote']} of {N} for its vote over 4 samples at {_n(RL['tokens_vote'])} tokens per problem, against "
-     f"{K[4][1]} for Base + cue over 4 at {_n(K[4][7])}.",
-     ["Only MATH-500 is measured. The same run on the 328 harder problems has no rows yet; there, under the same vote over "
-      f"4 samples after restart, RL stays {DATA['hard_rl_lead_restart'][0]} points ahead (95 % interval "
+     f"{K[4][1]} for Base + cue's vote over 4 at {_n(K[4][7])}.",
+     ["Only MATH-500 is measured; this run has not been repeated on the 328 harder problems. There, an earlier comparison "
+      "with a vote over 4 samples, in which an answer cut off at the token limit is sampled again, has the RL model "
+      f"{DATA['hard_rl_lead_restart'][0]} percentage points ahead (95 % interval "
       f"{DATA['hard_rl_lead_restart'][1]} to {DATA['hard_rl_lead_restart'][2]}).",
       "A sample without an extracted answer casts no vote. Answers the grader finds equal form one group, the largest group "
       "wins, and a tie goes to the group whose first member has the lowest sample number, so a tie is broken by sample "
@@ -453,7 +456,7 @@ function place() {
   label("cost-base", still3(at(D.n), b - HB - (n ? 58 : 48), 0), 17, .34, shown);
   label("plus", still3(n ? at(D.n) : U0 + 4, b - HB - (n ? 20 : 48), 0), 17, .34, shown * clamp((v - K[1][1]) / 4));
   set("plus", "style", n ? "text-anchor:end" : "text-anchor:start");
-  $("plus").textContent = `+${f((v - K[1][1]) * 100 / D.n)} points` + (narrow.matches ? "" : " over one sample");
+  $("plus").textContent = `+${f((v - K[1][1]) * 100 / D.n)} ` + (narrow.matches ? "points" : "percentage points over one sample");
   // RL's range is named between the lanes; when a tall stack reaches up to the name, the name gives way
   const nb = still3(lo - 10, 46, 0), reach = still3(lo, b + HB, top)[1];
   label("name-band", nb, 17, .34, shown);
@@ -521,16 +524,16 @@ function detail(key) {
     `${right(k, r[1])} of ${D.n} (${f(100 * r[1] / D.n)} %)` + (k === 12 ? ", all 12 samples." : `, the mean over ${D.subsets} random choices of ${k} of the ${D.samples} samples.`),
     [`95 % interval ${k === 12 ? r[2].toFixed(0) : r[2]} to ${k === 12 ? r[3].toFixed(0) : r[3]}` + (k < 12 ? `; single choices of ${k} range from ${r[4]} to ${r[5]}.` : "."),
      `${num(r[7])} tokens per problem, ${times(k)} times one RL sample (${num(RLT)}).`,
-     k === 1 ? "One sample has no vote: it is right or wrong." : `At least one of the ${k} samples is right on ${k === 12 ? r[6].toFixed(0) : r[6]} problems; the vote picks a right answer on ${right(k, r[1])}.`],
+     k === 1 ? "One sample has no vote: it is right or wrong." : `${k === 12 ? "At least" : "On average over the random choices, at least"} one of the ${k} samples is right on ${k === 12 ? r[6].toFixed(0) : r[6]} problems; the vote picks a right answer on ${right(k, r[1])}.`],
     D.examples.map(answers).join("")];
   if (key === "rl") return ["RL, T 1.0, one sample",
-    `The four one-sample scores of one RL job: ${R.each.slice(0, 3).join(", ")} and ${R.each[3]} of ${D.n}, mean ${f(D.rl1.mean)}.`,
-    [`The first sample generates ${num(RLT)} tokens per problem.`, `Another RL job at T 1.0 had ${D.rl_other_job}.`,
+    `The four one-sample scores of one RL run: ${R.each.slice(0, 3).join(", ")} and ${R.each[3]} of ${D.n}, mean ${f(D.rl1.mean)}.`,
+    [`The first sample generates ${num(RLT)} tokens per problem.`, `Another RL run at T 1.0 had ${D.rl_other_job}.`,
      "RL is Olmo-3.1-7B-RL-Zero-Math, the same base model after reinforcement learning on math."], ""];
   return ["RL, T 1.0, vote over 4 samples", `${R.vote} of ${D.n} (${f(100 * R.vote / D.n)} %) at ${num(R.tokens_vote)} tokens per problem.`,
     [`At about the same tokens Base + cue has ${K[4][1]} over 4 samples (${num(K[4][7])} tokens) and ${K[5][1]} over 5 (${num(K[5][7])}).`,
      `Drawing Base + cue samples until two answers agree gives ${D.stop2[0]} at ${num(D.stop2[2])} tokens.`,
-     "So at equal tokens RL stays ahead."], ""];
+     "So at about the same number of tokens, the RL model stays ahead."], ""];
 }
 function pane() {
   const p = C.panels.find(p => p[0] === S.open), m = ["base", "rl", "rlvote"].includes(S.open) ? detail(S.open) : null;

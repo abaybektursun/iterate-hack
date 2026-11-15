@@ -1,0 +1,15 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_vote13.md",
+ "commit": "275e1e755d2b761cbce35b068d465691c9e119fa",
+ "command": "uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.theory.analysis.direct_vote13",
+ "inputs": [
+  "studies/rlneurons/results/votek/math500_base_cue-01/rows.jsonl"
+ ],
+ "input_jobs": [
+  "abaybektursun-1114-153825-208b",
+  "ih-1115-* shards (see metrics.json of the source folder)"
+ ],
+ "vote_code": "studies/rlneurons/analysis/votek.py agree_table, vote (rln4_lib.agree on norm_v3)",
+ "bootstrap": "10,000 resamples of problems, numpy default_rng(0), 90 % percentile interval",
+ "board": "work-5d6316"
+}
