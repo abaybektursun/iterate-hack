@@ -8,7 +8,8 @@ neither; their figures are then left out and summary.json says so). Writes into 
   onset_trace.png   item 4: activation of the selected and of the reference neurons at each offset from the loop onset (solid) and
                     at the same offsets around the middle of each stored answer (dashed, the matched control). Left: mean over
                     neurons of |z|; right: of z; z = (mean a over rows - the neuron's mean on normal text) / its sd on normal text.
-                    Thin lines per offset, thick lines an 11-token moving average.
+                    Top row: offsets in tokens; bottom row: in periods of each row (-1 .. +2, 40 bins per period), because
+                    periods differ a hundredfold. Thin lines per offset, thick lines a moving average (11 tokens, 5 bins).
   dose.png          item 5: share of the half B rows that loop against the write factor, with Wilson 95 % intervals.
   base_vs_rl.png    item 6: distribution over neurons of the base-RL cosine of the gate, up and down vectors, of the gain
                     (mean |a| in RL / in base on the same text), and of the RL / base ratio of each pole's p99 and maximum
@@ -32,32 +33,37 @@ COLOR = {"selected": "#c0392b", "reference": "#34495e"}
 SMOOTH = 11
 
 
-def smooth(y):
-    k = np.ones(SMOOTH)
-    return np.convolve(y, k, mode="same") / np.convolve(np.ones(len(y)), k, mode="same")
+def smooth(y, k):
+    return np.convolve(y, np.ones(k), mode="same") / np.convolve(np.ones(len(y)), np.ones(k), mode="same")
 
 
 def fig_onset(o, path):
-    x, sets, rows = np.array(o["offsets"]), o["sets"], len(o["rows"])
-    fig, axes = plt.subplots(1, 2, figsize=(13, 4.6), sharex=True)
-    for ax, key, label in ((axes[0], "mean_abs_z", "mean |z| over neurons (sd units)"), (axes[1], "mean_z", "mean z over neurons (sd units)")):
-        for s in ("selected", "reference"):
-            for kind, style in (("loop", "-"), ("normal", "--")):
-                y, have = np.array(sets[s][kind][key]), np.array(sets[s][kind]["events_per_offset"]) > 0
-                if kind == "loop":
-                    ax.plot(x[have], y[have], color=COLOR[s], lw=0.5, alpha=0.35)
-                ax.plot(x[have], smooth(y)[have], color=COLOR[s], lw=1.8, ls=style,
-                        label=f"{s}, " + (f"loop onset ({rows} rows)" if kind == "loop" else f"middle of a stored answer ({sets[s][kind]['events']})"))
-        ax.axvline(0, color="k", lw=0.8)
-        ax.axvline(o["median_period"], color="k", lw=0.8, ls=":")
-        ax.set_xlabel("offset from the loop onset (tokens)")
-        ax.set_ylabel(label)
-    axes[0].legend(fontsize=8, frameon=False)
-    n = sets["selected"]["normal"]["events"]
-    fig.suptitle(f"Activation around the loop onset: {rows} looped rows, {sets['selected']['neurons']} selected and "
+    sets, rows = o["sets"], len(o["rows"])
+    fig, axes = plt.subplots(2, 2, figsize=(13, 9))
+    views = (("tokens", np.array(o["offsets"]), lambda d: d, "events_per_offset", SMOOTH, o["median_period"],
+              f"offset from the loop onset (tokens; dotted: the median period, {o['median_period']})"),
+             ("periods", np.array(o["period_offsets"]), lambda d: d["period"], "events_per_bin", 5, 1,
+              "offset from the loop onset (periods of the row; dotted: where the repeat starts)"))
+    for row, (_, x, pick, count, k, mark, xlabel) in zip(axes, views):
+        for ax, key, label in ((row[0], "mean_abs_z", "mean |z| over neurons (sd units)"), (row[1], "mean_z", "mean z over neurons (sd units)")):
+            for s in ("selected", "reference"):
+                for kind, style in (("loop", "-"), ("normal", "--")):
+                    d = pick(sets[s][kind])
+                    y, have = np.array(d[key]), np.array(d[count]) > 0
+                    if kind == "loop":
+                        ax.plot(x[have], y[have], color=COLOR[s], lw=0.5, alpha=0.35)
+                    ax.plot(x[have], smooth(y, k)[have], color=COLOR[s], lw=1.8, ls=style,
+                            label=f"{s}, " + (f"loop onset ({rows} rows)" if kind == "loop" else f"middle of a stored answer ({sets[s][kind]['events']})"))
+            ax.axvline(0, color="k", lw=0.8)
+            ax.axvline(mark, color="k", lw=0.8, ls=":")
+            ax.set_xlabel(xlabel)
+            ax.set_ylabel(label)
+    axes[0][0].legend(fontsize=8, frameon=False)
+    n, per = sets["selected"]["normal"]["events"], sorted(r["period"] for r in o["rows"])
+    fig.suptitle(f"Activation around the loop onset: {rows} looped rows (periods {per[0]} to {per[-1]} tokens), {sets['selected']['neurons']} selected and "
                  f"{sets['reference']['neurons']} reference neurons; control: {n} stored answers\n"
                  f"z = (mean activation over rows - the neuron's mean on normal text) / its sd on normal text. Offset 0: first token of the "
-                 f"first cycle; dotted: the median period ({o['median_period']} tokens), where the repeat starts", fontsize=9)
+                 f"first cycle. Top: in tokens; bottom: in periods of each row", fontsize=9)
     fig.tight_layout()
     fig.savefig(path, dpi=150)
     plt.close(fig)
@@ -144,9 +150,15 @@ def main():
                  "after_first_repeat": x >= o["median_period"]}
         onset = {s: {kind: {w: round(float(np.mean(np.array(o["sets"][s][kind]["mean_abs_z"])[sel])), 4) for w, sel in spans.items()}
                      for kind in ("loop", "normal")} for s in ("selected", "reference")}
-        summary["onset_trace"] = {"rows": len(o["rows"]), "median_period": o["median_period"],
-                                  "what": "mean |z| over neurons and offsets in each span; spans by the median period; 'normal' = middle of stored answers",
-                                  "mean_abs_z": onset, "per_row_windows_from_the_job": o["window_summary"]}
+        px = np.array(o["period_offsets"])
+        cycles = {"cycle_before": px < 0, "first_cycle": (px >= 0) & (px < 1), "second_cycle": px >= 1}
+        by_period = {s: {kind: {w: round(float(np.mean(np.array(o["sets"][s][kind]["period"]["mean_abs_z"])[sel & (np.array(o["sets"][s][kind]["period"]["events_per_bin"]) > 0)])), 4)
+                                for w, sel in cycles.items()} for kind in ("loop", "normal")} for s in ("selected", "reference")}
+        summary["onset_trace"] = {"rows": len(o["rows"]), "median_period": o["median_period"], "detector": o["detector"],
+                                  "what": "mean |z| over neurons and offsets in each span; 'normal' = middle of stored answers. by_period: spans in "
+                                          "periods of each row (the question: before the onset, in the first cycle, or only once the text repeats); "
+                                          "by_token: spans in tokens, split at the median period",
+                                  "mean_abs_z_by_period": by_period, "mean_abs_z_by_token": onset, "per_row_windows_from_the_job": o["window_summary"]}
     if have["dose.json"]:
         d = json.loads((run / "dose.json").read_text())
         summary["dose"] = {"rows": fig_dose(d, to / "dose.png"), "controls": d["controls"]}
