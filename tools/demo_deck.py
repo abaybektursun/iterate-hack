@@ -8,10 +8,11 @@ steps. The slide is in the address (/demo#finding), so Back works. Printing (p) 
 
 Every number is read at build time from the module that holds it:
 the staircase of fixes from demo_fixes.py, the accuracy climb from demo_ali_data.DATA['climb'], the two result pictures from demo_results.py, the review rounds
-from proof_review_cuts_waste.DATA, the idea tree's links from proof_idea_basins.DATA['tree'], the number of people from
+from demo_review.py (which reads proof_review_cuts_waste.DATA), the idea tree's links from proof_idea_basins.DATA['tree'], the number of people from
 demo_facts.FACTS['people']; view.py passes the list of papers. The photos are data
-URIs in demo_photos.py. Six slides show a picture in an iframe of FIGS: the accuracy climb of /demo/ali/slide3, the
-Design page (architecture.py), the staircase of fixes of demo_fixes.py, the two pictures of demo_results.py and /proof/idea-basins playing from the items to their basins to the idea tree,
+URIs in demo_photos.py. Seven slides show a picture in an iframe of FIGS: the accuracy climb of /demo/ali/slide3, the
+Design page (architecture.py), the staircase of fixes of demo_fixes.py, the two pictures of demo_results.py, the glass
+columns of demo_review.py and /proof/idea-basins playing from the items to their basins to the idea tree,
 each with its header, words column and key hidden. A frame with data-replay is loaded again when its slide is shown, so
 its picture draws itself in front of the audience.
 """
@@ -26,10 +27,10 @@ import demo_facts
 import demo_fixes
 import demo_photos
 import demo_results
+import demo_review
 import exa_page
 import pastdev
 import proof_idea_basins
-import proof_review_cuts_waste
 
 HOOK = "36 hours to solve recursive self-improvement"  # the opening line of the talk
 SITE = "invariant.team"  # the address on the first and last slide
@@ -65,10 +66,6 @@ assert set(LOGOS) == {"past", "exa"}, f"architecture.py logos changed: {sorted(L
 
 def esc(s):
     return html.escape(str(s), quote=True)
-
-
-def num(x):
-    return f"{x:,}" if isinstance(x, int) else f"{x:g}"
 
 
 # ---------- the embedded pictures ----------
@@ -127,6 +124,7 @@ html, body {{ overflow: hidden; }}
     "fixes": embed(demo_fixes.PAGE, ""),
     "beyond": embed(demo_results.PAGES["beyond"], ""),
     "efficiency": embed(demo_results.PAGES["efficiency"], ""),
+    "review": embed(demo_review.PAGE, ""),
     # /proof/idea-basins playing by itself: the slab, the switch and the count. It opens on the board items, gathers
     # them into their basins and then lays the basins out as the rows of the idea tree (BASIN_PLAY). That page
     # follows only the system theme, so its own two sets of tokens are repeated for data-theme here.
@@ -169,9 +167,6 @@ assert {"memories", "median recall"} <= set(PAST_NUMS), f"the numbers row of pas
 PEOPLE = demo_facts.FACTS["people"]["v"]
 RL_GPUS = demo_facts.FACTS["rl_zero_gpus"]["v"]["total"]  # learner + actor GPUs of the RL training, Olmo 3 paper, Table 49
 
-SKILL, PLAIN = proof_review_cuts_waste.SKILL, proof_review_cuts_waste.PLAIN
-ROUNDS = proof_review_cuts_waste.DATA["rounds"]
-
 BASINS = proof_idea_basins.DATA  # the board items and their basins
 TREE = BASINS["tree"]  # links between board items, and those that join two basins
 
@@ -184,15 +179,6 @@ pct = lambda s: 100 * s["right"] / s["n"]
 
 
 # ---------- the figures, drawn here as SVG ----------
-def bar(x, y0, w, h, cls, value, label=None):
-    s = f'<rect class="{cls}" x="{x:.1f}" y="{y0 - h:.1f}" width="{w}" height="{h:.1f}"/>'
-    if value is not None:
-        s += f'<text class="bv{" on" if cls == "b1" else ""}" x="{x + w / 2:.1f}" y="{y0 - h - 14:.1f}" text-anchor="middle">{value}</text>'
-    if label:
-        s += f'<text class="bl" x="{x + w / 2:.1f}" y="{y0 + 28}" text-anchor="middle">{label}</text>'
-    return s
-
-
 def gap_svg():
     """Slide "gap": the untrained base model beside the RL-trained model on MATH-500, the same two scores the climb
     slide starts and ends against (the first base record and RL's best). The dashed outline over the base bar is the
@@ -211,21 +197,6 @@ def gap_svg():
             f'<text class="num" x="{xr + bw / 2}" y="{y0 - hr - 22:.1f}" text-anchor="middle">{rl:.0f} %</text>'
             f'<text class="lab" x="{xb + bw / 2}" y="{y0 + 44}" text-anchor="middle">Base</text>'
             f'<text class="lab" x="{xr + bw / 2}" y="{y0 + 44}" text-anchor="middle">RL</text></svg>')
-
-
-def review_svg():
-    W, H, y0, top = 620, 470, 360, 270
-    m = SKILL["minutes"]
-    out = [f'<svg viewBox="0 0 {W} {H}" width="{W * 1.12:.0f}" height="{H * 1.12:.0f}" class="fig" role="img" aria-label="Container minutes per batch over review rounds">']
-    for i, (v, r) in enumerate(zip(m, ROUNDS)):
-        out.append(bar(60 + i * 130, y0, 100, v / m[0] * top, "b1" if i == len(m) - 1 else "b0",
-                       num(v) if i in (0, len(m) - 1) else None, r))
-    yp = y0 - PLAIN["minutes"][-1] / m[0] * top
-    out.append(f'<line class="rl" x1="40" x2="{W - 20}" y1="{yp:.1f}" y2="{yp:.1f}"/>'
-               f'<text class="lab sm" x="{W - 20}" y="{yp - 12:.1f}" text-anchor="end">Plain instruction <tspan class="v">{num(PLAIN["minutes"][-1])}</tspan></text>')
-    out.append(f'<line class="base" x1="40" x2="{W - 20}" y1="{y0}" y2="{y0}"/>')
-    out.append(f'<text class="gl" x="{W / 2 + 10:.0f}" y="{y0 + 72}" text-anchor="middle">Container minutes per batch</text>')
-    return "".join(out) + "</svg>"
 
 
 def photo(uri, cls):
@@ -281,7 +252,7 @@ def slides(papers):
                      '<iframe class="fig-frame sponsor s-past" data-fig="pastdev" data-replay title="past.dev: one agent writes, another reads" tabindex="-1"></iframe>'
                      f'<p class="spon s-exa">{logo("exa")}<span><b>{esc(EXA_NUMS["arXiv papers surfaced"])}</b> arXiv papers surfaced · <b>{esc(EXA_NUMS["pages read in full"])}</b> pages read in full</span></p>'
                      f'<p class="spon s-past">{logo("past")}<span><b>{esc(PAST_NUMS["memories"])}</b> memories · <b>{esc(PAST_NUMS["median recall"])}</b> median recall</span></p>'),
-        ("finding", '<h2 class="title fixes-title">Interpretable findings with hill climbing</h2>'
+        ("finding", '<h2 class="title top-title">Interpretable findings with hill climbing</h2>'
                     '<iframe class="fig-frame fixes" data-fig="fixes" data-replay title="One problem, four answers" tabindex="-1"></iframe>'),
         ("beyond", '<div class="head"><h2>Out of distribution, not glorified overfitting</h2>'
                    '<p class="sub">One <b class="team">Invariant</b> method: tuned on MATH-500 only, then used unchanged on three benchmarks it never saw</p></div>'
@@ -289,7 +260,8 @@ def slides(papers):
         ("efficiency", f'<div class="head"><h2>Same score as autoresearch, {demo_results.TOKEN_RATIO:.1f}× fewer tokens</h2>'
                        f'<p class="sub">Against Karpathy\'s autoresearch (100k GitHub stars) · +{demo_results.HARD_GAIN:g} points on harder problems</p></div>'
                        '<iframe class="fig-frame wide" data-fig="efficiency" data-replay title="Our harness against autoresearch" tabindex="-1"></iframe>'),
-        ("proof", f'<div class="mid"><h2 class="title">Its own review cuts waste</h2>{review_svg()}</div>'),
+        ("proof", '<h2 class="title top-title">Its own review cuts waste</h2>'
+                  '<iframe class="fig-frame review" data-fig="review" data-replay title="Container minutes per batch over review rounds" tabindex="-1"></iframe>'),
         ("ideas", f'<div class="head"><h2>Ideas cluster, then converge</h2><p class="sub">{BASINS["items"]} board items fall into {BASINS["clusters"]} basins of ideas · '
                   f'{TREE["cross"]} of {TREE["links"]} links join two different basins</p></div>'
                   '<iframe class="fig-frame tree" data-fig="basins" data-replay title="The idea basins and the idea tree" tabindex="-1"></iframe>'),
@@ -379,7 +351,8 @@ p, h1, h2, figure { margin: 0; }
 .spon.s-exa { left: 96px; } .spon.s-past { left: 804px; }
 .spon b { font-weight: 640; color: var(--ink); }
 .fig-frame.fixes { left: 180px; top: 140px; width: 1240px; height: 694px; }
-.fixes-title { position: absolute; left: 0; right: 0; top: 44px; text-align: center; }
+.fig-frame.review { left: 180px; top: 128px; width: 1240px; height: 744px; }
+.top-title { position: absolute; left: 0; right: 0; top: 44px; text-align: center; }  /* a centred title over a picture that fills the slide */
 .tools { position: absolute; left: 0; right: 0; bottom: 56px; display: flex; justify-content: center; gap: 72px; font-size: 22px; font-weight: 560; color: var(--mute); }
 .tools span { display: inline-flex; align-items: center; gap: 14px; }
 .logo { height: 24px; width: auto; fill: var(--ink); }
@@ -389,16 +362,7 @@ p, h1, h2, figure { margin: 0; }
 /* the figures drawn here */
 .fig { display: block; overflow: visible; font-family: inherit; }
 .fig text { fill: var(--ink); font-variant-numeric: tabular-nums; }
-.fig .rl { stroke: var(--mute); stroke-width: 1.5; stroke-dasharray: 2 6; stroke-linecap: round; }
 .fig .lab { font-size: 22px; font-weight: 560; fill: var(--mute); }
-.fig .lab.sm { font-size: 18px; }
-.fig .v { font-weight: 400; fill: var(--ink); }
-.fig .b0 { fill: var(--fbar1); }
-.fig .b1 { fill: var(--blue); }
-.fig .bv { font-size: 26px; font-weight: 400; }
-.fig .bv.on { fill: var(--blue); font-weight: 500; }
-.fig .bl { font-size: 17px; font-weight: 500; fill: var(--mute); }
-.fig .gl { font-size: 20px; font-weight: 600; fill: var(--ink); }
 .fig .base { stroke: var(--faint); stroke-width: 1; }
 .fig.gap .num { font-size: 64px; font-weight: 300; letter-spacing: -.01em; }
 .fig.gap .todo { fill: color-mix(in srgb, var(--blue) 9%, transparent); stroke: var(--blue); stroke-width: 2; stroke-dasharray: 3 9; stroke-linecap: round; }
