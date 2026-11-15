@@ -29,7 +29,7 @@ HOOK = "36 hours to solve RSI"  # the opening line of the talk
 
 # The title of each paper by its file name in view.PAPERS.
 PAPER_TITLES = {"the-finish-dial.pdf": "The Finish Dial", "theories-on-trial.pdf": "Theories on Trial",
-                "the-first-hundred-steps.pdf": "The First Hundred Steps"}
+                "the-first-hundred-steps.pdf": "The First Hundred Steps", "no-early-warning.pdf": "No Early Warning"}
 PAPER_AUTHOR = "The Invariant Swarm"
 
 # What the deck shares with demo.py: the Archivo link and the theme script (?theme=, then the stored choice).
