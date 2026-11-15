@@ -1,0 +1,14 @@
+{
+ "scored_right": {
+  "id": "s0030",
+  "idea": "Precomputed ray line lists for faster table rebuilds, larger batches per rebuild, multi-alpha restarts folded into one long destroy-repair search with adaptive acceptance.",
+  "score": 0.624641,
+  "msg": "per-case V/V_best: 0.595, 0.392, 0.780, 0.752, 0.603"
+ },
+ "scored_wrong": {
+  "id": "s0012",
+  "idea": "Improved LNS \u2014 keep the suffix-truncation destroy but also add random spatial-region destroys (remove all rectangles whose new dot falls in a random box), plus larger adaptive destroy sizes and more restarts via faster incremental table rebuilds.",
+  "score": null,
+  "msg": "case 1: checker rejected: wrong answer (10, 9) does not contain a dot (turn: 5)"
+ }
+}

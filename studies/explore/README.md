@@ -32,6 +32,20 @@ below is therefore a **pure-Python** run. Effect: 6 of 1,066 circles submissions
 (main-02) imported numpy/scipy, all invalid; those were the attempts at the optimizer approach. ahc014: 0 of 270
 imported them (unaffected). Programs now run in `runs/explore/.venv` (numpy 2.5.4, scipy 1.18.1), checked at start.
 
+### ahc014/swe2-01 (SWE-2 via Devin CLI, 1 seed, 40 submissions, commit 78b1352, 0 USD; judge 0.04 USD)
+
+`results/ahc014/swe2-01/compare.json`; examples: best fnf-s0 s0030 0.6246, invalid (checker: a corner without a dot).
+
+| single | parallel | fnf_keep | fnf | forget | basin | randflush |
+|---|---|---|---|---|---|---|
+| 0.561 | 0.595 | 0.613 | **0.625** | 0.606 | 0.571 | 0.573 |
+
+- Single lowest again, fnf highest; the flush alone (fnf vs fnf_keep) is +0.012 here against +0.037 with
+  gpt-5.4-mini. One seed: the seeds test (`specs/seeds-ahc014-swe2.md`) checks single / parallel / fnf.
+- The task-neutral judge now over-splits: 14 basins in 40 submissions (`basin-s0_basins.json`), so the 4-in-a-row
+  rule fired once; basin (1 flush) and randflush (1 flush) are the same arm in practice (0.571 vs 0.573). The
+  basin trigger is not tested until the judge's granularity is calibrated (it lumped all 40 into one basin before).
+
 ### circles26/swe2-01 (SWE-2 via Devin CLI, 1 seed, numpy/scipy available, stopped at 7-9 of 40 by the owner)
 
 `results/circles26/swe2-01/summary.json`; examples: best single-s0 s0003 2.635971, invalid forget-s0 (crash).
