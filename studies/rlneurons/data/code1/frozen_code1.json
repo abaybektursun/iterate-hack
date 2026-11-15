@@ -13,5 +13,7 @@
                "file": "data/test-00000-of-00001-d5781c9c51e02795.parquet", "n": 378,
                "sha256": "dc20030b3788fccf617444edcb34138ef13d7e4fafd17bfcb8c1279dbb12399b"}
  },
+ "excluded": ["HumanEval/32", "Mbpp/737", "Mbpp/787", "Mbpp/794"],
+ "excluded_why": "grader check job abaybektursun-1114-161622-67f4: the reference solution of HumanEval/32 fails its own tests; on the three MBPP+ problems a function that returns None passes",
  "test_timeout_s": 60
 }

@@ -16,6 +16,9 @@ Differs here: the 3.1 Code model, its own prompt template, HumanEval+ and MBPP+ 
 - Grader: last fenced block of the answer (whole answer if none) followed by the benchmark's tests, exit code 0 within 60 s
   (`lib/code_lib.py`). Before any generation the job runs every reference solution (must pass) and a planted wrong program per
   problem (must fail) and stops if either check fails.
+  Amendment 2026-11-15 00:20 UTC, before any generation: the check (job 67f4) failed on 4 of 542 problems (HumanEval/32: the
+  reference fails its own tests; Mbpp/737, 787, 794: a function returning None passes). They are excluded for every cell
+  (`frozen_code1.json` `excluded`): 538 scored problems, 163 + 375.
 - Cells, in this order: (1) RL Code plain; (2) base plain; (3) base + cue; (4) RL Code + cue. The cue is the most frequent first
   three tokens of the RL Code model's answers in cell 1, the rule that gave the Math cue `' line!\n\nOkay'`. It is fixed from
   cell 1's texts alone, before cell 3 is scored.

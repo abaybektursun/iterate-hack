@@ -12,7 +12,8 @@ setting, one sample per problem, on the team runner. Reuses rln4_gen's vLLM engi
   --grader-check-only  no model: run the grader check and stop (cpu job).
 
 Order: (1) grader check on all problems: every reference solution must pass and every planted wrong program (the entry function
-returning None) must fail; the job stops otherwise. (2) generation: generations.jsonl, one row per finished request, flush + fsync.
+returning None) must fail. The problems that fail it must be exactly frozen_code1.json "excluded" (4 problems), which are not
+generated or scored: 538 scored problems; the job stops otherwise. (2) generation: generations.jsonl, one row per finished request, flush + fsync.
 (3) grading: answers.jsonl (the row plus mode, code, passed, exit, stderr tail) and metrics.json. Fail loud: no fallback.
 """
 from __future__ import annotations
@@ -53,7 +54,8 @@ def grader_check(probs, timeout_s):
         wrong = list(ex.map(lambda p: C.run(C.program(p, C.WRONG.format(entry=p["entry"])), timeout_s), probs))
     ref_fail = [(p["uid"], r["exit"], r["stderr_tail"][-200:]) for p, r in zip(probs, ref) if not r["passed"]]
     wrong_pass = [p["uid"] for p, r in zip(probs, wrong) if r["passed"]]
-    return {"n": len(probs), "reference_failed": ref_fail, "wrong_passed": wrong_pass, "pass": not ref_fail and not wrong_pass}
+    return {"n": len(probs), "reference_failed": ref_fail, "wrong_passed": wrong_pass,
+            "failed": sorted({u for u, _, _ in ref_fail} | set(wrong_pass))}
 
 
 def main():
@@ -82,7 +84,10 @@ def main():
     m["grader_check"] = grader_check(probs, fz["test_timeout_s"])
     G.dump(mpath, m)
     print(json.dumps(m["grader_check"], indent=1)[:3000])
-    assert m["grader_check"]["pass"], "grader check failed: a reference solution fails or a planted wrong program passes"
+    known = sorted(u for u in fz["excluded"] if u in {p["uid"] for p in probs})
+    assert m["grader_check"]["failed"] == known, f"grader check: failing problems {m['grader_check']['failed']} are not the frozen exclusions {known}"
+    probs = [p for p in probs if p["uid"] not in fz["excluded"]]         # scored set: 538 problems (idx and seeds keep the 542 numbering)
+    m["n_scored"] = len(probs)
     if a.grader_check_only:
         return
 
