@@ -82,6 +82,9 @@ TABLE = {
     "one-difficulty-axis": {
         "group": BEHAVIOUR,
         "figure": lambda m: [f"{m.DATA['diff']['excess_mean']:+.2f}", "problems beyond one difficulty order, mean of 618 pairs of methods"]},
+    "imitation-beats-rl": {
+        "group": BEHAVIOUR,
+        "figure": lambda m: [f"{m.DATA['diff']['hard328']['vote'][0]:+.1f}", "points, Think-SFT over RL, 328 harder problems, vote over 4"]},
     "rl-edge-comes-early": {
         "group": BEHAVIOUR,
         "figure": lambda m: [f"{m.CLOSED_U} to {m.CLOSED} %", "of the gap closed when the base model finishes RL's half-written answers"]},
