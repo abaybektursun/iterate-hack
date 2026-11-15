@@ -1,0 +1,93 @@
+{
+ "run-02/f2-m02": {
+  "name": "run-02/f2-m02",
+  "round": "round-09",
+  "statement": "The cued base's wrong answers on a problem rarely share a value: slips are per-sample chance events that land on scattered numbers, while right answers coincide. A plurality vote therefore wins a problem once the right share exceeds the largest wrong-value share, far below one half, and keeps converting such problems as samples are added, with no plateau by 12. The loss is in ties, which odd sample counts and more samples dissolve.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 4,
+   "inside": 1,
+   "total_gain": -8.624
+  },
+  "reason": "total forecast gain -8.62 nats on 4 scored numbers"
+ },
+ "run-02/f2-m03": {
+  "name": "run-02/f2-m03",
+  "round": "round-09",
+  "statement": "The top singular directions of the RL-Math difference set when the base stops, not whether its reasoning is right: their dose sets the cap-hit rate, while right answers per finished answer stay near the base's 0.65; RL's correctness lives in the remainder of the difference. Past dose 1, extra finishes on problems the base cannot solve are guesses, so accuracy is flat from 1x to 2x, and on MATH-500, with few cap hits, the dial adds little.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 5,
+   "inside": 2,
+   "total_gain": -5.446
+  },
+  "reason": "total forecast gain -5.45 nats on 5 scored numbers"
+ },
+ "run-02/f2-m05": {
+  "name": "run-02/f2-m05",
+  "round": "round-09",
+  "statement": "The RL-Math difference carries RL's habit of ending a long unsolved attempt with an asserted, underived number (per 1,312 hard328 samples RL finishes long and wrong 381 times, the base 281). Added to another model it turns unfinished attempts into such guesses and cuts slower derivations short. On new problems, where RL's finished precision is 43 %, the guesses are wrong, so gains measured on hard328 shrink or reverse; on MATH-500 it is neutral.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 3,
+   "inside": 1,
+   "total_gain": -5.885
+  },
+  "reason": "total forecast gain -5.88 nats on 3 scored numbers"
+ },
+ "run-04/f2-m06": {
+  "name": "run-04/f2-m06",
+  "round": "round-09",
+  "statement": "Adding RL-direction weight to a model concentrates its answer-level distribution: samples of one problem agree more, right or wrong. Higher dose therefore raises single-sample accuracy where answers are short but shrinks what a vote adds (vote/single 1.21 base, 1.07 for the 1.5x edit, 1.09 for Think-SFT + 2x on fresh2026). On short exact outputs such as code, concentration has no truncation cost, so code accuracy does not fall back at 2x as math did.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 5,
+   "inside": 1,
+   "total_gain": -4.602
+  },
+  "reason": "total forecast gain -4.60 nats on 5 scored numbers"
+ },
+ "run-07/f2-m05": {
+  "name": "run-07/f2-m05",
+  "round": "round-09",
+  "statement": "Too large a finishing dose makes the model stop before its derivation is complete. The cost grows with how long a derivation the problem needs: on hard328's long problems a 2x edit commits early and right answers fall, while short problems finish well within the shortened span. Over-dosing therefore costs little on MATH-500 and on short code tasks. The cost of a cut answer, by contrast, belongs to the opposite end of the length range.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 5,
+   "inside": 1,
+   "total_gain": -2.593
+  },
+  "reason": "total forecast gain -2.59 nats on 5 scored numbers"
+ },
+ "run-08/f2-m03": {
+  "name": "run-08/f2-m03",
+  "round": "round-09",
+  "statement": "The RL-direction edits add to a count mostly by converting cap hits into finished answers; the count hides the split: gain = cap hits removed x right rate on converted rows + a smaller rise in finished precision. hard328 gives the dial 77 cap hits to convert; short HumanEval+/MBPP+ answers rarely reach the cap, so the same edits move few problems there, and past 1.5x only the precision loss remains.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 5,
+   "inside": 0,
+   "total_gain": -12.27
+  },
+  "reason": "total forecast gain -12.27 nats on 5 scored numbers"
+ },
+ "run-08/f2-m04": {
+  "name": "run-08/f2-m04",
+  "round": "round-09",
+  "statement": "Grader v3 and the code harness score only what they extract where they look: a final 'Answer:' line or box for math, a code block for code. A template or weight edit that moves where the final answer is written changes the count without changing solving: Think-SFT on the raw template sometimes puts it on the line after 'Answer:' (about 4 lost per 500); Math-RL directions carry a boxed ending a code extractor misses.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 5,
+   "inside": 1,
+   "total_gain": -4.231
+  },
+  "reason": "total forecast gain -4.23 nats on 5 scored numbers"
+ }
+}

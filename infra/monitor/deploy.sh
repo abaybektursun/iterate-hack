@@ -2,13 +2,14 @@
 # Deploy or redeploy the board page (tools/view.py) to AWS: the stack iterate-monitor, then the code.
 #   infra/monitor/deploy.sh                                   first deploy, and every redeploy
 #   infra/monitor/deploy.sh monitor.<domain> <hosted zone id>  also attach the custom domain (kept on later runs)
+#   infra/monitor/deploy.sh monitor.<domain> <hosted zone id> <domain>  and the home page's domain, in the same zone
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 aws=(aws --profile fuelos --region us-east-1)
 
 overrides=()
 if [ $# -gt 0 ]; then
-  overrides=(--parameter-overrides "DomainName=$1" "HostedZoneId=$2")
+  overrides=(--parameter-overrides "DomainName=$1" "HostedZoneId=$2" "HomeDomainName=${3-}")
 fi
 "${aws[@]}" cloudformation deploy --stack-name iterate-monitor --template-file infra/monitor/template.yaml \
   --capabilities CAPABILITY_NAMED_IAM --tags project=iterate-monitor --no-fail-on-empty-changeset ${overrides[@]+"${overrides[@]}"}
