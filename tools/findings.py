@@ -53,7 +53,7 @@ AFTER_RESTART = "T 1.0 / top-p 1.0, vote over 4 samples after restart"
 TABLE = {
     "opening-cue": {
         "group": GAIN,
-        "figure": lambda m: [points(m.PLAIN, m.CUE, m.N), "points on MATH-500, T 1.0"],
+        "figure": lambda m: [points(m.PLAIN, m.CUE, m.N), "points over the plain prompt, MATH-500, T 1.0"],
         "steps": lambda m: [step("Plain prompt", "base", m.PLAIN, m.N, m.DATA["artifact"]),
                             step("Opening cue", "base", m.CUE, m.N, m.DATA["artifact"]),
                             step("RL, one sample", "rl", m.RL, m.N, m.DATA["artifact"])]},

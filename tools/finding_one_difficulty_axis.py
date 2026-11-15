@@ -112,30 +112,31 @@ PANELS = [
       "its upper bound is 5.1 problems, 1.0 point.",
       "So a cross-method stack is not worth a GPU run as a bet on complementary problems. A vote inside the most able "
       "reward-free method is the better use.",
-      f"All 29 arms without RL weights or RL output together solve {DATA['all_non_rl']['right']} of 500, so the problems "
+      f"All 29 methods without RL weights or RL output together solve {DATA['all_non_rl']['right']} of 500, so the problems "
       "are within reach; one sample of a method just stops earlier on the order."]],
     ["how", "How we know",
-     "For every pair of the 36 arms (a model and a prompt, with or without the cue, a fixed opening line of the answer), "
-     "the union was compared with the union expected if one arm's right answers were shuffled among problems of equal difficulty.",
-     ["Difficulty is the share of the other arms that solve a problem. The bias of that null and its spread come from "
+     "For every pair of the 36 methods (a method is one model with one prompt and one decoding setting; the cue is a fixed "
+     "opening line of the answer), the union was compared with the union expected if one method's right answers were "
+     "shuffled among problems of equal difficulty.",
+     ["Difficulty is the share of the other methods that solve a problem. The bias of that null and its spread come from "
       "200 data sets drawn from a fitted Rasch model.",
-      f"Different arms, {_d['pairs']} pairs: mean excess {_m(_d['excess_mean'])} problems (z mean {_m(_d['z_mean'])}, sd "
-      f"{_d['z_sd']}). Two samples of one arm, {_s['pairs']} pairs: {_m(_s['excess_mean'])} (z mean {_m(_s['z_mean'])}).",
+      f"Different methods, {_d['pairs']} pairs: mean excess {_m(_d['excess_mean'])} problems (z mean {_m(_d['z_mean'])}, sd "
+      f"{_d['z_sd']}). Two samples of one method, {_s['pairs']} pairs: {_m(_s['excess_mean'])} (z mean {_m(_s['z_mean'])}).",
       f"A Rasch model plus one second axis predicts held-out cells no better than Rasch: {DATA['item']['rasch']:.4f} nats "
-      f"per cell for both, {DATA['item']['shuffled']:.4f} with arm labels shuffled."]],
+      f"per cell for both, {DATA['item']['shuffled']:.4f} with method labels shuffled."]],
     ["limits", "What it does not show",
      f"One pair has little power: a planted second axis of {_p['logits']} logits on {_p['share']} % of the problems shows "
      f"as only {_p['excess']} problems. A small second axis is not excluded.",
      [f"A later test found Think-SFT's errors spread differently over difficulty than RL's (contrast "
       f"{_m(DATA['profile']['c'])}, one-axis range {_m(DATA['profile']['lo'])} to {_m(DATA['profile']['hi'])}), and that "
       f"profile predicted its {DATA['profile']['hard_sft']} of {DATA['profile']['hard_n']} on harder problems.",
-      f"On 328 harder problems, with 7 arms and one sample each, {_h['only_rl']} problems are solved only by the two RL "
-      f"arms; no null was computed for that count (MATH-500: {DATA['floor']['only_rl']}).",
-      "Most arms have one sample, and one grader version (v3) is used, so grader errors count as difficulty."]],
+      f"On 328 harder problems, with 7 methods and one sample each, {_h['only_rl']} problems are solved only by the two RL "
+      f"methods; no null was computed for that count (MATH-500: {DATA['floor']['only_rl']}).",
+      "Most methods have one sample, and one grader version (v3) is used, so grader errors count as difficulty."]],
     ["run", "How to reproduce it",
      "studies/rlneurons/analysis/axis.py builds the vectors and the readout; the commands are in studies/rlneurons/README.md, "
      "section One axis or several?",
-     [f"The run folder {RUN} holds vectors.json, readout.json and manifest.json (the job id and sha256 of each arm), "
+     [f"The run folder {RUN} holds vectors.json, readout.json and manifest.json (the job id and a sha256 per method), "
       f"committed in {DATA['commit']}.",
       "Every mark, union and excess on this page is checked against those files by running this page's module "
       "(tools/finding_one_difficulty_axis.py)."]],
@@ -1415,7 +1416,7 @@ a { color: inherit; }
 .stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; position: relative; }
 .pick { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; margin: 0 0 6px 6%; font-size: 15px; color: var(--mute); }
 .pick label { display: inline-flex; align-items: baseline; gap: 8px; }
-.pick .k { font-size: 12px; font-weight: 640; color: var(--mute); }
+.pick .k { font-size: 12px; font-weight: 640; color: var(--mute); white-space: nowrap; }
 .pick select {
   appearance: none; -webkit-appearance: none; color: var(--ink); font-weight: 600; font-size: 15px; padding: 3px 18px 4px 0;
   border-bottom: 1px solid var(--rim-b); max-width: 36ch; text-overflow: ellipsis;
@@ -1535,8 +1536,8 @@ svg .hit:focus-visible { stroke: var(--blue); stroke-width: 1.5; }
   </header>
   <div class="stage" id="stage">
     <div class="pick">
-      <label><span class="k">Arm 1</span><select id="sa" aria-label="First arm"></select></label>
-      <label><span class="k">Arm 2</span><select id="sb" aria-label="Second arm"></select></label>
+      <label><span class="k">Method 1</span><select id="sa" aria-label="First method"></select></label>
+      <label><span class="k">Method 2</span><select id="sb" aria-label="Second method"></select></label>
       <button class="run" id="run" aria-pressed="false"><i aria-hidden="true"></i><span>Any pair</span></button>
     </div>
     <svg id="svg" role="img"></svg>
@@ -1586,16 +1587,16 @@ function pair(i, j) {  // what the picture shows for arms i and j
    flat in plate units and placed with one affine transform per frame, fitted to the projection of three corners. */
 function geo() {
   return narrow.matches
-    ? { w: 480, h: 1196, cx: 240, cy: 598, D: 2000, a: [4, 6, 476, 1190], r: 22, deep: 28, blur: 12, fs: 18, fb: 80,
-        X: [36, 450], fy: 68, fp: 4.4, fh: 3.4, ftitle: 44, fax: 68 + 36 * 4.4 + 22,
-        lab: [292, 364, 436], mk: [304, 376, 448], mh: 16, addl: 516, addy: 544, addp: 414 / 68, predl: 584,
-        rx: 34, ry: { cap: 646, big: 718, unit: 752, unit2: 775, sub: 810 },
-        hx: [40, 444], hy: [880, 1018], htitle: 858, hlab: 1074, hsame: 1094, hsum: [1134, 1160], dot: 2.0, hcols: 3 }
-    : { w: 1000, h: 594, cx: 500, cy: 297, D: 2200, a: [20, 14, 980, 580], r: 30, deep: 40, blur: 16, fs: 14, fb: 88,
-        X: [72, 672], fy: 74, fp: 5.6, fh: 4.2, ftitle: 52, fax: 74 + 36 * 5.6 + 16,
-        lab: [326, 380, 434], mk: [337, 391, 445], mh: 14, addl: 494, addy: 518, addp: 600 / 68, predl: 550,
-        rx: 720, ry: { cap: 78, big: 152, unit: 182, unit2: 201, sub: 232 },
-        hx: [724, 946], hy: [302, 446], htitle: 282, hlab: 490, hsame: 506, hsum: [540, 560], dot: 1.55, hcols: 2 };
+    ? { w: 480, h: 1256, cx: 240, cy: 628, D: 2000, a: [4, 6, 476, 1250], r: 22, deep: 28, blur: 12, fs: 18, fb: 92,
+        X: [36, 450], fy: 68, fp: 4.4, fh: 3.4, ftitle: 44, fax: 68 + 36 * 4.4 + 24,
+        lab: [304, 378, 452], mk: [316, 390, 464], mh: 16, addl: 534, addy: 562, addp: 414 / 68, predl: 602,
+        rx: 36, ry: { cap: 678, big: 758, unit: 794, unit2: 817, sub: 852 },
+        hx: [36, 440], hy: [934, 1072], htitle: 910, hlab: 1128, hsame: 1148, hsum: [1190, 1216], dot: 2.0, hcols: 3 }
+    : { w: 1000, h: 664, cx: 500, cy: 332, D: 2200, a: [20, 14, 980, 650], r: 30, deep: 40, blur: 16, fs: 14, fb: 104,
+        X: [72, 672], fy: 78, fp: 5.6, fh: 4.2, ftitle: 54, fax: 78 + 36 * 5.6 + 20,
+        lab: [354, 412, 470], mk: [365, 423, 481], mh: 14, addl: 540, addy: 566, addp: 600 / 68, predl: 600,
+        rx: 720, ry: { cap: 54, big: 150, unit: 184, unit2: 203, sub: 236 },
+        hx: [720, 944], hy: [324, 478], htitle: 300, hlab: 540, hsame: 558, hsum: [600, 620], dot: 1.55, hcols: 2 };
 }
 const V = { c1: 1, s1: 0, c2: 1, s2: 0, px: 0, py: 0, tx: 0, ty: 0 };
 function aim(yaw, pitch) { V.c1 = Math.cos(yaw * RAD); V.s1 = Math.sin(yaw * RAD); V.c2 = Math.cos(pitch * RAD); V.s2 = Math.sin(pitch * RAD); }
@@ -1634,7 +1635,7 @@ function build() {
   const rows = ROWS.map((a, r) => {
     let d = "";
     ORDER.forEach((p, k) => { if (a.y[p] === 1) d += `M${f2(colX(g, k))} ${f(g.fy + r * g.fp)}v${g.fh}`; });
-    return `<path class="row" id="row${a.i}" d="${d}" stroke-width="${f2(fw * 1.02)}" opacity=".26"/>`;
+    return `<path class="row" id="row${a.i}" d="${d}" stroke-width="${f2(fw * 1.02)}" opacity=".2"/>`;
   }).join("");
   const cells = ["c1", "c2", "ci", "ca"].map(k => Array.from({ length: LEVELS }, (_, l) =>
     `<path class="cell ${k === "ca" ? "add" : "ink"}" id="${k}${l}" stroke-width="${f2(fw * 1.02)}" opacity="${((l + 1) / LEVELS * (k === "ci" ? .42 : k === "ca" ? 1 : .78)).toFixed(3)}"/>`).join("")).join("");
@@ -1664,12 +1665,12 @@ function build() {
     `<ellipse class="spec" cx="${f(ax0 + aw * .3)}" cy="${f(ay0 + ah * .26)}" rx="${f(aw * .28)}" ry="${f(ah * .2)}" transform="rotate(-16 ${f(ax0 + aw * .3)} ${f(ay0 + ah * .26)})" fill="url(#spec)"/>` +
     // the field (z 3)
     `<g id="gf" class="gf"><g clip-path="url(#reveal)">${rows}</g>` +
-    T("ftitle", "lab", g.fs, X0, g.ftitle, "", `<tspan class="nm">36 arms</tspan>, one row each, against the 500 problems`) +
+    T("ftitle", "lab", g.fs, X0, g.ftitle, "", `<tspan class="nm">36 methods</tspan>, one row each` + (narrow.matches ? "" : ", against the 500 problems")) +
     T("fe", "lab", g.fs, X0, g.fax, "", "Easiest") + T("fhd", "lab", g.fs, X1, g.fax, "end", "Hardest") +
-    T("fmid", "lab", g.fs, (X0 + X1) / 2, g.fax, "middle", narrow.matches ? "" : "Sorted by how many of the 36 arms solve each") +
+    T("fmid", "lab", g.fs, (X0 + X1) / 2, g.fax, "middle", narrow.matches ? "" : "Sorted by how many of the 36 methods solve each") +
     `<path class="slot" id="s1"/><path class="slot" id="s2"/>` +
     T("n1", "num on", g.fs, X0 - 14, 0, "middle", "1") + T("n2", "num on", g.fs, X0 - 14, 0, "middle", "2") +
-    `<rect class="hit" id="hf" x="${X0 - 24}" y="${g.fy - 2}" width="${X1 - X0 + 28}" height="${36 * g.fp + 2}" tabindex="0" role="button" aria-label="The field: click a row to pick that arm"/></g>` +
+    `<rect class="hit" id="hf" x="${X0 - 24}" y="${g.fy - 2}" width="${X1 - X0 + 28}" height="${36 * g.fp + 2}" tabindex="0" role="button" aria-label="The field: click a row to pick that method"/></g>` +
     // the pair (z 6)
     `<g id="gp" class="gp">` +
     [0, 1, 2].map(k => `<line class="base" x1="${X0}" x2="${X1}" y1="${g.mk[k] + g.mh + .5}" y2="${g.mk[k] + g.mh + .5}"/>`).join("") + cells +
@@ -1678,20 +1679,20 @@ function build() {
     `<line class="cursor" id="cur"/>` +
     T("la", "lab", g.fs, X0, g.addl) + `<line class="pred" id="pred"/>` + T("pl", "plab", g.fs, X0, g.predl) +
     `<g id="dots"></g>` +
-    `<rect class="hit" id="hp" x="${X0}" y="${g.mk[0] - 4}" width="${X1 - X0}" height="${g.mk[2] + g.mh - g.mk[0] + 8}" tabindex="0" role="button" aria-label="The two arms and their union: click a mark to see that problem; arrow keys move along the order"/>` +
+    `<rect class="hit" id="hp" x="${X0}" y="${g.mk[0] - 4}" width="${X1 - X0}" height="${g.mk[2] + g.mh - g.mk[0] + 8}" tabindex="0" role="button" aria-label="The two methods and their union: click a mark to see that problem; arrow keys move along the order"/>` +
     `<g id="dhit"></g></g>` +
     // the readout (z 8)
     `<g id="gr" class="gr">` + T("cap", "sub", g.fs, g.rx, g.ry.cap, "", "This pair, together") +
     T("big", "big", g.fb, g.rx - 4, g.ry.big) + T("unit", "unit", g.fs + 1, g.rx, g.ry.unit, "", "problems: solved together, minus") +
     T("unit2", "unit", g.fs + 1, g.rx, g.ry.unit2, "", "what one difficulty order predicts") + T("sub", "sub", g.fs, g.rx, g.ry.sub) + `</g>` +
     // all pairs (z 5)
-    `<g id="gh" class="gh">` + T("htitle", "lab", g.fs, g.hx[0], g.htitle, "", `<tspan class="nm">All ${DIFF.length} pairs</tspan> of different arms`) +
+    `<g id="gh" class="gh">` + T("htitle", "lab", g.fs, g.hx[0], g.htitle, "", `<tspan class="nm">All ${DIFF.length} pairs</tspan> of different methods`) +
     `<line class="mean" x1="${f(hx(g, D.diff.excess_mean))}" x2="${f(hx(g, D.diff.excess_mean))}" y1="${g.hy[0] - 2}" y2="${g.hy[1] + 4}"/>` + hd +
     ticks.map(v => T("t" + v, "tick", g.fs, f(hx(g, v)), g.hy[1] + g.fs + 6, "middle", v ? sgn(v, 0) : "0")).join("") +
-    T("hsame", "lab", g.fs, g.hx[0], g.hlab, "", `<tspan class="nm">${SAME.length} pairs</tspan> of two samples of one arm`) +
+    T("hsame", "lab", g.fs, g.hx[0], g.hlab, "", `<tspan class="nm">${SAME.length} pairs</tspan>: one method sampled twice`) +
     `<line class="mean same" x1="${f(hx(g, D.same.excess_mean))}" x2="${f(hx(g, D.same.excess_mean))}" y1="${g.hsame - 8}" y2="${g.hsame + 8}"/>` + hs +
     T("hs1", "lab", g.fs, g.hx[0], g.hsum[0], "", `Mean of all ${DIFF.length}: <tspan class="nm">${sgn(D.diff.excess_mean, 2)}</tspan> problems`) +
-    T("hs2", "lab", g.fs, g.hx[0], g.hsum[1], "", `Two samples of one arm: <tspan class="nm">${sgn(D.same.excess_mean, 2)}</tspan>`) +
+    T("hs2", "lab", g.fs, g.hx[0], g.hsum[1], "", `One method sampled twice: <tspan class="nm">${sgn(D.same.excess_mean, 2)}</tspan>`) +
     `<circle class="ring" id="hring" r="${g.dot * 2.4}"/>` + `</g>`;
   S.htxt = null;
   S.el = {};
@@ -1734,7 +1735,7 @@ function drawDots() {  // the dots' elements, made once per pair; their position
   $("dots").innerHTML = S.dots.map((d, n) => `<circle class="dhalo" id="dh${n}" r="${g.dot * 2.6}"/><circle class="dot" id="dd${n}" r="${f2(Math.min(g.dot * 1.6, g.addp * .36))}"/>`).join("");
   S.dots.forEach((d, n) => { d.e = [$("dd" + n), $("dh" + n)]; });
   $("dhit").innerHTML = S.dots.filter(d => d.out == null).map(d =>
-    `<circle class="hit" data-p="${d.p}" cx="${f(d.to[0])}" cy="${f(d.to[1])}" r="${f(Math.max(g.addp * .5, 5))}" tabindex="0" role="button" aria-label="Problem ${d.p}, solved only by the weaker arm"/>`).join("");
+    `<circle class="hit" data-p="${d.p}" cx="${f(d.to[0])}" cy="${f(d.to[1])}" r="${f(Math.max(g.addp * .5, 5))}" tabindex="0" role="button" aria-label="Problem ${d.p}, solved only by the weaker method"/>`).join("");
 }
 function marks() {  // the labels and the static parts that follow the pair
   const g = S.g, P = S.P, E = S.el, a = A[S.a], b = A[S.b], weaker = P.strong ? a : b, of = P.n === N ? "" : ` (of ${P.n} run)`;
@@ -1748,11 +1749,11 @@ function marks() {  // the labels and the static parts that follow the pair
   };
   fit(E.l1, a.name, `${P.ra} right${of}`);
   fit(E.l2, b.name, `${P.rb} right${of}`);
-  E.lu.innerHTML = `<tspan class="nm">Together: ${P.union}</tspan>  right by either arm` + (narrow.matches ? "" : `, of ${P.n}`);
-  E.la.innerHTML = `<tspan class="nm">${P.added.length} problems</tspan> only arm ${P.strong ? 1 : 2} solves` +
+  E.lu.innerHTML = `<tspan class="nm">Together: ${P.union}</tspan>  right by either method` + (narrow.matches ? "" : `, of ${P.n}`);
+  E.la.innerHTML = `<tspan class="nm">${P.added.length} problems</tspan> only method ${P.strong ? 1 : 2} solves` +
     (narrow.matches ? "" : `, the weaker of the two`);
-  S.el.sub.textContent = `${P.union} of ${P.n}, predicted ${P.pred.toFixed(1)} ± ${P.sd.toFixed(1)}` + (P.same ? ", same arm twice" : "");
-  ROWS.forEach(r => { E["row" + r.i].setAttribute("opacity", r.i === S.a || r.i === S.b ? "1" : ".26"); });
+  S.el.sub.textContent = `${P.union} of ${P.n}, predicted ${P.pred.toFixed(1)} ± ${P.sd.toFixed(1)}` + (P.same ? ", one method sampled twice" : "");
+  ROWS.forEach(r => { E["row" + r.i].setAttribute("opacity", r.i === S.a || r.i === S.b ? "1" : ".2"); });
   ["n1", "n2"].forEach((id, k) => {
     const r = ROWS.findIndex(x => x.i === (k ? S.b : S.a)), y = g.fy + r * g.fp + g.fh / 2;
     E[id].setAttribute("y", f(y + g.fs * .34));
@@ -1765,7 +1766,7 @@ function marks() {  // the labels and the static parts that follow the pair
 function label() {
   const P = S.P;
   $("svg").setAttribute("aria-label", `${A[S.a].name} and ${A[S.b].name}: together ${P.union} of ${P.n} right, ` +
-    `predicted from one difficulty order ${P.pred.toFixed(1)}, so ${sgn(P.excess)} problems. Mean over ${DIFF.length} pairs of different arms ${sgn(D.diff.excess_mean, 2)}.`);
+    `predicted from one difficulty order ${P.pred.toFixed(1)}, so ${sgn(P.excess)} problems. Mean over ${DIFF.length} pairs of different methods ${sgn(D.diff.excess_mean, 2)}.`);
 }
 
 function place(now) {
@@ -1822,7 +1823,7 @@ function place(now) {
     E.cur.style.display = "";
   } else E.cur.style.display = "none";
   const ht = S.any ? `<tspan class="nm">${S.seen.size} of ${DIFF.length}</tspan> shown, their mean ${sgn(mean(S.seen), 2)}`
-    : `<tspan class="nm">All ${DIFF.length} pairs</tspan> of different arms`;
+    : `<tspan class="nm">All ${DIFF.length} pairs</tspan> of different methods`;
   if (S.htxt !== ht) E.htitle.innerHTML = S.htxt = ht;
 }
 const mean = set => { let s = 0; set.forEach(k => { s += C.pairs[k][0]; }); return set.size ? s / set.size : 0; };
@@ -1871,7 +1872,7 @@ function probPane(p) {
   const q = C.problems[p], P = S.P, a = A[S.a], b = A[S.b], yes = A.filter(x => x.y[p] === 1);
   const rw = v => v == null ? "not run" : v ? `<span class="ok">right</span>` : "wrong";
   const facts = [`Answer key: <b>${esc(q[1])}</b>`,
-    `Right under <b>${solved[p]} of ${K}</b> arms; place ${PLACE[p] + 1} of ${N} in the difficulty order.`,
+    `Solved by <b>${solved[p]} of ${K}</b> methods; place ${PLACE[p] + 1} of ${N} in the difficulty order.`,
     `${esc(a.name)}: ${rw(a.y[p])}. ${esc(b.name)}: ${rw(b.y[p])}.`];
   const ans = (who, list, key) => `<h3 class="ex">${who}, the four stored answers</h3><ol class="samples">` +
     list.map((s, k) => `<li><b>${esc(s || "(none extracted)")}</b>${rw(A.find(x => x.key === key + k).y[p])}</li>`).join("") + "</ol>";
