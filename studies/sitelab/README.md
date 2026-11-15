@@ -1,7 +1,7 @@
 # sitelab: interactive 3D pictures of the team's work
 
 Question: which pictures of the agents and the work, built only from real data, are worth a place on the team site?
-Twelve prototypes, one idea each. Live at https://monitor.invariant.team/lab/ (`tools/view.py` serves this folder at
+Twelve prototypes, one idea each. Live at https://monitor.invariant.team/lab/ under the page name "AI Psychosis maxxing" (`tools/view.py` serves this folder at
 `/lab/`; `infra/monitor/deploy.sh` puts `index.html` and each prototype's `index.html` and `data.json` into the zip).
 
 The Lab page itself (`index.html`) is written by `python3 studies/sitelab/build_index.py`: the site's header, type and
