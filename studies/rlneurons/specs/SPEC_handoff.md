@@ -97,4 +97,12 @@ Known before the run:
 
 ## Deviations
 
-(none yet)
+- Smoke: the planned smoke `abaybektursun-1114-220435-7492` wrote no log past setup in 23 min and was killed. Its resubmission
+  `abaybektursun-1114-222829-ce39` was killed while queued, ran anyway and finished (100 rows); it is the smoke that was read.
+  While it ran, two pairs of main jobs died at runner start (`runs.reload()`: its log was open in the reused container).
+- The main jobs were submitted before the smoke rows were read, to hold a queue place (coordinator's instruction).
+- Added after the first readout was seen (post hoc, not hypotheses): the split of the wrong stratum by whether the writer
+  sample had an extracted answer, and the counts of wrong answers that are cap hits or have no answer.
+- `results/anatomy/math500-01/pool_k_le3.json` reached main during the run; its 183 problems equal the plan's pool.
+- `rln4_lib.onset_lines` no longer raises on the degenerate inputs of `handoff_test` after the merge of main; the readout's
+  per-row error record stays, and counted 0 errors in 2,196 rows.

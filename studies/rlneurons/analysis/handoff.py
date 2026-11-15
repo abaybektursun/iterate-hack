@@ -42,6 +42,7 @@ def score(rec: dict, prow: dict) -> dict:
 def cell(rows: list) -> dict:
     k, n = sum(r["score_v3"] for r in rows), len(rows)
     return {"right": k, "n": n, "wilson95": list(S.wilson(k, n)), "cap_hits": sum(r["cap_hit"] for r in rows),
+            "wrong_cap_hits": sum(r["cap_hit"] and not r["score_v3"] for r in rows), "wrong_no_answer": sum(r["extracted_v3"] is None and not r["cap_hit"] for r in rows),
             "tokens_generated_per_problem": sum(r["n_new"] for r in rows) / n if n else None,
             "tokens_total_per_problem": sum(r["n_new"] + r["n_prefix"] for r in rows) / n if n else None}
 
@@ -60,8 +61,14 @@ def example(rec: dict, row: dict) -> dict:
 
 
 def readout(rows: dict, plan: dict) -> dict:
-    """rows: {(finisher, writer, cut, problem): compact row}."""
-    P = {(r["problem_index"], r["writer"]): r for r in plan["rows"]}
+    """rows: {(finisher, writer, cut, problem): compact row}. The wrong stratum is also split by whether the writer sample had an
+    extracted answer (wrong_answer) or none (wrong_no_answer: a format failure or an answer without a final line)."""
+    P = {(r["problem_index"], r["writer"]): dict(r) for r in plan["rows"]}
+    for w, d in (("base", "math500_base_cue-01"), ("rl", "math500_rl-01")):
+        for line in (STUDY / "results" / "day1_3" / d / "rows.jsonl").read_text().splitlines():
+            r = json.loads(line)
+            if (r["problem_index"], w) in P and r["sample"] == 0 and r["attempt"] == 0:
+                P[r["problem_index"], w]["sub"] = "wrong_answer" if r["extracted_v3"] is not None else "wrong_no_answer"
     pool, U = plan["pool"], set(plan["unbiased"])
 
     def get(f, w, c, probs):
@@ -73,9 +80,9 @@ def readout(rows: dict, plan: dict) -> dict:
 
     out = {"n_pool": len(pool), "n_unbiased": len(U), "strata": {}, "rl_minus_base_finisher": {}, "cross_minus_own": {}, "control_own_minus_stored": {}, "pool": {}}
     for w in ("base", "rl"):
-        for s in ("right", "wrong", "cap", "right_answer_not_in_prefix"):
+        for s in ("right", "wrong", "cap", "right_answer_not_in_prefix", "wrong_answer", "wrong_no_answer"):
             for c in CUTS:
-                probs = [i for i in pool if (P[i, w]["stratum"] == s) or (s == "right_answer_not_in_prefix" and P[i, w]["stratum"] == "right" and not P[i, w]["prefix_has_right"][str(c)])]
+                probs = [i for i in pool if (P[i, w]["stratum"] == s) or (P[i, w]["stratum"] == "wrong" and P[i, w]["sub"] == s) or (s == "right_answer_not_in_prefix" and P[i, w]["stratum"] == "right" and not P[i, w]["prefix_has_right"][str(c)])]
                 key = f"{w}_writer|{s}|{c}"
                 out["strata"][key] = {**{f"{f}_finisher": cell(get(f, w, c, probs)) for f in ("base", "rl")},
                                       "fresh_rate_samples_1_3": {m: 100 * sum(sum(P[i, m]["fresh_scores"]) for i in probs) / (3 * len(probs)) if probs else None for m in ("base", "rl")}}
@@ -106,7 +113,7 @@ def table(ro: dict) -> str:
     L.append("")
     for name in ("pool", ):
         for key, x in ro[name].items():
-            L.append("%-34s %d/%d [%.0f, %.0f] cap hits %d, tokens %.0f (%.0f)" % (key, x["right"], x["n"], *x["wilson95"], x["cap_hits"], x["tokens_generated_per_problem"], x["tokens_total_per_problem"]))
+            L.append("%-34s %d/%d [%.0f, %.0f] cap hits %d (wrong %d), no answer %d, tokens %.0f (%.0f)" % (key, x["right"], x["n"], *x["wilson95"], x["cap_hits"], x["wrong_cap_hits"], x["wrong_no_answer"], x["tokens_generated_per_problem"], x["tokens_total_per_problem"]))
     L.append("")
     for name in ("cross_minus_own", "control_own_minus_stored"):
         for key, d in ro[name].items():
