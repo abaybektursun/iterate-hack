@@ -79,3 +79,17 @@ a = 0.5 again at seed 3,000,000.
 - Test against the parents as in the spec, now with a = 2's two samples averaged per problem.
 
 Outputs as written (deviation from the Outputs section): one folder per set, `results/transplant/hard328-01/` and `math500-01/`, each holding all arms.
+
+## Amendment 2 (2026-11-15 12:25 UTC, before any run below): a = 2 on a set it was not chosen on
+
+a = 2 was chosen on the 328. Three checks with the coefficient fixed at 2:
+
+1. fresh2026_v1 (136 competition problems of 2026, `specs/SPEC_fresh.md`, branch fresh): M(2), cue, T 1.0, 4 samples at the
+   seeds of that spec (7,000,000 + 10,000 s), through `jobs/run_fresh.py`. Reference: the 4 Think-SFT cue samples and the 4 RL
+   plain samples of work-7c069c (one known so far: Think-SFT sample 0 has 65 of 136). Prediction: the gain transfers, M(2)
+   minus Think-SFT is above 0 with the paired 95 % interval above 0 (the 328 gave +6.9 points). Refuted if the point estimate
+   is +2 points or less; between +2 and an interval that includes 0 is reported as undecided.
+2. hard328 samples 2 and 3 of M(2) (seeds 3,200,000 and 3,300,000), for the vote over 4 by `analysis/day1_vote.py`'s rule.
+   Prediction: vote above Think-SFT's 241; refuted at 241 or below.
+3. MATH-500, M(2), one sample, seed 182,000,000. Prediction: 462 to 472 (M(1) had 467); below 460 means a = 2 costs
+   accuracy on easier problems.
