@@ -70,16 +70,16 @@ Predictions under v3:
 
 This is the last rule: v3 is reported whatever it gives, next to v1 and v2.
 
-## Amendment 3 (2026-11-15 23:00 UTC, before any job): two more samples of each side
+## Amendment 3 (2026-11-15 23:05 UTC, before any job): two more samples of Think-SFT
 
-Under v3 one sample gives Think-SFT + Code cue minus RL-Code -3.7 points [-7.6, 0.0]: the interval reaches 0. Two more samples of
-each model decide it. Sample s uses seed 51000000 + 1000 s (problem i: seed + i, i < 542), s = 1, 2; everything else as the
-first cells. Think-SFT answers are graded v1 by the job and regraded v3 by `jobs/regrade_code.py`; RL-Code's too.
+Under v3 one sample gives Think-SFT + Code cue minus RL-Code -3.7 points [-7.6, 0.0]: the interval reaches 0. RL-Code already
+has samples at seeds 52000000 and 53000000 (395 and 403 of 538; README, "More samples of the two headlines", jobs
+abaybektursun-1115-143247-929d and -143331-10da). This adds Think-SFT + Code cue at the same two seeds, everything else as the
+first cell. All six cells are regraded v3 by `jobs/regrade_code.py`.
 
 Readout: per-problem mean pass over the 3 samples of each model under v3, paired bootstrap (5,000, seed 0).
 
 Predictions:
 
 12. Think-SFT + Code cue under v3 passes 370 to 392 on each new sample. Refuted outside for either.
-13. RL-Code passes 392 to 410 on each new sample. Refuted outside for either.
-14. Over 3 samples, Think-SFT minus RL-Code is below 0 with an interval that excludes 0 (point -3.5). Refuted if it includes 0.
+13. Over 3 samples, Think-SFT minus RL-Code is below 0 with an interval that excludes 0 (point -3.5). Refuted if it includes 0.
