@@ -1,0 +1,408 @@
+[
+ {
+  "mechanism": "r5-m03-rival",
+  "claim": "the top-8 edit is an incomplete switch per sample: short answers are the unswitched base and about 50 % right",
+  "verdict": "refuted",
+  "measured": "short answers 82.9 % right (predicted about 50 %), share 17.8 % (predicted 10-15 %)",
+  "result": "result-d02d46"
+ },
+ {
+  "mechanism": "run-05/f2-m06",
+  "claim": "weight edits merged in bf16 are under-applied: small changes below half a unit in the last place are lost, so 1x lands smaller than intended",
+  "verdict": "refuted",
+  "measured": "projection of the written 1x change on the intended addition 0.99996 (1.5x: 0.99998)",
+  "result": "result-c2edfb"
+ },
+ {
+  "mechanism": "run-06/f2-m03",
+  "claim": "an outcome reward pays only for a gradable final answer, so its gradient piles into a few singular directions; the rest of the update is diffuse",
+  "verdict": "refuted",
+  "measured": "RL-Zero-General (LM-judge reward, no gradable answer) top-8 share 0.127 vs Math 3.0 0.135, Think-SFT 0.030: P = 0.685 [0.609, 0.765] (refuted if lower bound >= 0.5), n 224 matrices",
+  "result": "result-82eb02"
+ },
+ {
+  "mechanism": "run-05/f2-m01",
+  "claim": "the top-8 RL-Math directions are a signed termination dial: they add finished answers, not right answers on problems the base already finishes",
+  "verdict": "refuted",
+  "measured": "hard328, edit 1.5x on problems where a cued-base sample finished wrong: 36.4 % right vs 22.9 % for a second base sample, +13.5 points [9.7, 17.3] (RL +12.3); only 26 % of the edit's gain sits on base cap hits; at -1x finished answers 51.5 % vs base 70.0 % right",
+  "result": "result-124593"
+ },
+ {
+  "mechanism": "run-02/f2-m01",
+  "claim": "hard328 solutions need 6,000-14,000 tokens and short samples never reach them: under 20 % of the hard328 problems the cued base solves have a right sample of 2,000 tokens or fewer",
+  "verdict": "refuted",
+  "measured": "hard328: 72 of 220 solved problems, 32.7 % [27.7, 38.2] (refuted if lower bound >= 20 %); median right length 3,921 tokens [3,541, 4,390]; MATH-500 control 67.5 % [63.9, 71.1] of 474",
+  "result": "result-ebf7a4"
+ },
+ {
+  "mechanism": "run-03/f2-m04",
+  "claim": "on code, the RL-Math edit at 1x to 1.5x adds at least 8 finished answers with no code block, because Math's directions push a boxed ending that displaces the final python block",
+  "verdict": "refuted",
+  "measured": "HumanEval+/MBPP+ 538, edit 1.5x: finished no-block 6 vs random rank-8 1.5x 23, -17 [-26, -8] (refuted if upper end < +8); vs cued base 12, -6 [-13, 1]; 0 of 538 answers hold \\boxed; no Math-alone 1x code cell",
+  "result": "result-6e4536"
+ },
+ {
+  "mechanism": "round-09/grader-m01",
+  "claim": "At RL step 100 the cue adds nothing beyond seed scatter on MATH-500: pooled paired cue-minus-plain difference is zero",
+  "verdict": "refuted",
+  "measured": "D +8.5 problems/500, 95% [+0.24, +16.75], 90% [+1.25, +15.5], n 500 problems x 4 samples per arm; permutation p 0.044 (null |D| 95th pct 8.0); seed-folder null +0.7/+1.3",
+  "result": "result-6ecd35"
+ },
+ {
+  "mechanism": "run-08/f2-m06",
+  "claim": "On hard328, letting Think-SFT's 16,384 cap hits finish (cap-32k row) as the 4th vote flips >=2 vote-right problems wrong, vote gain < half of the 23 single gain, and VB < abstention null VA'",
+  "verdict": "refuted",
+  "measured": "D = 0 of 328 (threshold 2); (VB-VA)/G1 = 0.22, 95 % [0.05, 0.40]; VB 245 = abstention null VA' 245 (VA 240)",
+  "result": "result-3605ba"
+ },
+ {
+  "mechanism": "round-13/s3-b",
+  "claim": "Most gained problems were ties at k=4 with the right answer in a tied top group and right in at least half of 12",
+  "verdict": "refuted",
+  "measured": "S_b 0.095 [0.000, 0.190] 90%, n=21 (refuted if < 0.60); null (unfixed k=4 failures with a right sample) 0.143, n=7; diff -0.048 [-0.286, 0.143]",
+  "result": "result-4c9189"
+ },
+ {
+  "mechanism": "round-13/s1-b",
+  "claim": "Those hard328 losses come from agreeing short finished wrong answers with few cap hits",
+  "verdict": "refuted",
+  "measured": "C' 0.714 [0.595, 0.833] > 0.35; A_K-A_B 0.064 [-0.130, 0.236] < 0.10, n=42 (39 vs 12 pairs); null cued-base wrong-answer agreement 0.167",
+  "result": "result-4b64da"
+ },
+ {
+  "mechanism": "round-13/s2-a",
+  "claim": "m21's quick wrong answers are plain-base answer-first replies (s_Q >= 0.40 and >= s_N - 0.15)",
+  "verdict": "refuted",
+  "measured": "s_Q 0.25 [0.17, 0.35] n 60 (floor 0.40); null plain base s_N 0.21 n 105; gap 0.04 [-0.07, 0.15]",
+  "result": "result-cc7288"
+ },
+ {
+  "mechanism": "round-13/s2-b",
+  "claim": "m21's quick wrong answers sit on harder problems than the plain base's (r_N - r_Q >= 0.10)",
+  "verdict": "refuted",
+  "measured": "r_N - r_Q 0.005 [-0.066, 0.075], n 60 vs 105; r_Q 0.833, r_N 0.838; all 250 0.814; m21 long wrong answers 0.40 (instrument can fail)",
+  "result": "result-cc7288"
+ },
+ {
+  "mechanism": "round-13/s6-a",
+  "claim": "Base code failures fixed by Code top-8 1x are enriched for answer-contract failures beyond random rank-8 fixes",
+  "verdict": "refuted",
+  "measured": "S_top8 0.43 [0.35, 0.51] n 100 fixes (refuted below 0.50); S_top8-S_rand [-0.02, 0.15]; r_c/r_l 1.53 [1.21, 1.93] (needed 2.0); null random rank-8 1.5x S_rand 0.37 n 63",
+  "result": "result-04f363"
+ },
+ {
+  "mechanism": "run-05/f2-m03",
+  "claim": "a direction of the RL change acts only as far as the text drives its input subspace, so Math 3.1's top-8 directions transfer to code (0.54 of Code's own effect) because code text drives them about half as much as math text",
+  "verdict": "refuted",
+  "measured": "drive of Math 3.1's top-8 input subspace on 538 base code answers over 328 math answers: 0.869 [0.861, 0.877]; random rank-8 control 0.990; normalized 0.878; reverse (Code dirs) 0.686 vs predicted 0.45-0.47",
+  "result": "work-c51f89"
+ },
+ {
+  "mechanism": "round-14/s1-a",
+  "claim": "Think-SFT's unfenced Code-cue answers are a layout habit on easy problems, so the cued base passes those problems at a rate in [0.72, 1.0].",
+  "verdict": "refuted",
+  "measured": "r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range a [0.72, 1.0], interval wholly below it",
+  "result": "result-b847a0"
+ },
+ {
+  "mechanism": "round-14/s1-b",
+  "claim": "Think-SFT's unfenced Code-cue answers are failed solves on hard problems, so the cued base passes those problems at a rate in [0.0, 0.46].",
+  "verdict": "refuted",
+  "measured": "r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range b [0.0, 0.46], interval wholly above it",
+  "result": "result-b847a0"
+ },
+ {
+  "mechanism": "round-14/s2-a",
+  "claim": "Think-SFT's unfenced Code-cue answers are a layout habit on easy problems, so the cued base passes those problems at a rate in [0.72, 1.0].",
+  "verdict": "refuted",
+  "measured": "r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range a [0.72, 1.0], interval wholly below it",
+  "result": "result-b847a0"
+ },
+ {
+  "mechanism": "round-14/s2-b",
+  "claim": "Think-SFT's unfenced Code-cue answers are failed solves on hard problems, so the cued base passes those problems at a rate in [0.0, 0.45].",
+  "verdict": "refuted",
+  "measured": "r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range b [0.0, 0.45], interval wholly above it",
+  "result": "result-b847a0"
+ },
+ {
+  "mechanism": "round-14/s6-a",
+  "claim": "On problems the cued base passes but RL-Code mostly fails, the Code top-8 edit sharpens the base's own programs and passes at 0.70 or more",
+  "verdict": "refuted",
+  "measured": "mean pass of 5 Code top-8 edit samples on L 0.452 [0.357, 0.539], n 115 rows (23 problems); null base-like resamples 0.435 [0.333, 0.551]; RL-Code on L 0.22; range a [0.70, 1.0]",
+  "result": "result-366377"
+ },
+ {
+  "mechanism": "round-14/s6-b",
+  "claim": "On problems the cued base passes but RL-Code mostly fails, the Code top-8 edit copies RL-Code's outcomes and passes at 0.34 or less",
+  "verdict": "refuted",
+  "measured": "mean pass of 5 Code top-8 edit samples on L 0.452 [0.357, 0.539], n 115 rows (23 problems); null base-like resamples 0.435 [0.333, 0.551]; RL-Code on L 0.22; range b [0.0, 0.34]",
+  "result": "result-366377"
+ },
+ {
+  "mechanism": "round-14/s3-a",
+  "claim": "The autobench final configuration is budget-bound: the base's T 0.6 hard328 answers past 4,096 tokens are mostly live derivations (loop share 0.05-0.40), so the cap is what loses them.",
+  "verdict": "refuted",
+  "measured": "loop share past 4,096 tokens (plain base, T 0.6 / top-p 0.95, hard328) 0.519 [0.460, 0.577], n 189; null (cued base T 1.0) 0.004; cued T 0.6 0.626 [0.574, 0.683], n 211",
+  "result": "result-813b5e"
+ },
+ {
+  "mechanism": "round-14/s4-a",
+  "claim": "Code-RL's top-8 directions push every solution-started sample into Math-like deliberation, so almost no m21 right answer stays plain-short (S 0.0-0.12).",
+  "verdict": "refuted",
+  "measured": "S 0.414 [0.319, 0.510] (65 of 157 m21 right answers at or below the plain base's median right length, 1,069 tokens), n 157, null 0.50; interval wholly above a's range 0.0-0.12",
+  "result": "result-1d64b9"
+ },
+ {
+  "mechanism": "round-14/s5-b",
+  "claim": "The cued base's wrong answers on contested MATH-500 problems concentrate on one recurring attractor value per problem, so their pooled same-problem pairwise agreement is high (range 0.42-1.0).",
+  "verdict": "refuted",
+  "measured": "pooled wrong-pair agreement 0.262 [0.202, 0.324], n 142 problems (1,271 pairs, 570 wrong answers), null 0.005; interval wholly below 0.42",
+  "result": "result-064aac"
+ },
+ {
+  "mechanism": "round-10/weights-m03",
+  "claim": "Think-SFT's own weight change lies along RL-Math 3.1's top-8 input directions at least 2x more than a random rank-8 subspace (sharpened: and 1.5x more than the top-8 input subspaces of IF-RL, General-RL and the base matrix)",
+  "verdict": "holds",
+  "measured": "share of Think-SFT's change in Math 3.1's top-8 input subspace 4.80x chance [4.55, 5.08], n 224 matrices; over IF 2.23x [2.12, 2.34], General 1.99x [1.89, 2.08], base matrix 1.33x [1.28, 1.39]: holds, not distinctive (shared with Code 3.1 and Math 3.0, and predicted by run-05/f2-m03 too)",
+  "result": "result-3abd6f"
+ },
+ {
+  "mechanism": "round-09/grader-m01",
+  "claim": "At RL step 100 the cue adds nothing beyond seed scatter on MATH-500: pooled paired cue-minus-plain difference is zero",
+  "verdict": "refuted",
+  "measured": "D +8.5 problems/500, 95% [+0.24, +16.75], 90% [+1.25, +15.5], n 500 problems x 4 samples per arm; permutation p 0.044 (null |D| 95th pct 8.0); seed-folder null +0.7/+1.3",
+  "result": "result-6ecd35"
+ },
+ {
+  "mechanism": "run-08/f2-m06",
+  "claim": "On hard328, letting Think-SFT's 16,384 cap hits finish (cap-32k row) as the 4th vote flips >=2 vote-right problems wrong, vote gain < half of the 23 single gain, and VB < abstention null VA'",
+  "verdict": "refuted",
+  "measured": "D = 0 of 328 (threshold 2); (VB-VA)/G1 = 0.22, 95 % [0.05, 0.40]; VB 245 = abstention null VA' 245 (VA 240)",
+  "result": "result-3605ba"
+ },
+ {
+  "mechanism": "round-09/training-m01",
+  "claim": "Think-SFT's own ChatML <think> template does not make it drift less on hard328 (first 16,384 tokens): drifted share equals raw template + cue within raw-cue seed scatter",
+  "verdict": "holds",
+  "measured": "D = -1.8 pts (57 vs 63 of 328), 95% [-7.3, +3.7], 90% [-6.4, +2.7], n 328; null S_max 2.7 pts over 4 raw-cue samples",
+  "result": "result-ab26c4"
+ },
+ {
+  "mechanism": "round-10/weights-m06",
+  "claim": "On hard328 base-finished-wrong problems the rank-1 edit is right no more often than a second base sample, while directions 2-8 at 1.5x are right clearly more often",
+  "verdict": "undecided",
+  "measured": "undecided by the frozen rule (does not hold): E_top1 +7.2 pts 95% [0.7, 13.6], E_d28 +9.3 [3.0, 15.8], G +2.1 [-6.1, 10.5], n 190 pairs / 139 problems; second base sample 21.8% right, random rank-8 +0.4",
+  "result": "result-efc74d"
+ },
+ {
+  "mechanism": "run-08/f2-m02",
+  "claim": "in native 16,384-cap hard328 runs grader v3 credits a right answer to at least 10 % of RL plain's cap-hit rows, more than Think-SFT's share",
+  "verdict": "undecided",
+  "measured": "undecided by the frozen rule (does not hold): RL C/H 0.061 (7/114), Wilson 95 % [0.030, 0.121]; Think-SFT 0.037 (14/378); RL - Think-SFT +2.4 pts 95 % [-2.4, 8.1]; with restart rows 9/171, Wilson upper 0.097",
+  "result": "result-a9b0bc"
+ },
+ {
+  "mechanism": "round-13/s4-a",
+  "claim": "Code's 1.5x top-8 directions raise the pass rate among finished-with-block code answers above random 1.5x by at least 3 pts; Math's 1.5x directions raise it by less than half that",
+  "verdict": "holds",
+  "measured": "dC +7.0 pts [3.7, 10.3], dM +1.5 [-2.2, 5.1], dM/dC 0.21 [-0.46, 0.62], 90 % bootstrap, n 538; null random 67.8 % (331/488), rival b ratio 0.54 not excluded (point-only hold)",
+  "result": "result-d15c5e"
+ },
+ {
+  "mechanism": "round-13/s4-b",
+  "claim": "Code 1.5x extra passes over the cued base fall in the base's plain-or-Math-cue solved set as often as a random rank-8 1.5x edit's extra passes",
+  "verdict": "holds",
+  "measured": "D = f_E - f_R = +0.055, 90% [-0.029, 0.139] (refuted if < -0.10), n 538 (113 and 63 extra passes); null random f_R 0.635, f_E 0.690; base-failure floor 0.43; |U| 378",
+  "result": "result-63cacd"
+ },
+ {
+  "mechanism": "round-13/s3-a",
+  "claim": "Most problems the vote over 12 gains over the vote over samples 0-3 have the right answer in under half of the 12 samples (wrong answers split)",
+  "verdict": "holds",
+  "measured": "S_a 0.667 [0.476, 0.810] 90%, n=21 gained problems (MATH-500, cued base); merged-wrong null keeps 8/21 = 0.381 of G (refuted if >= 0.80); without 3 cap-hit-driven wins 11/21 = 0.524",
+  "result": "result-4c9189"
+ },
+ {
+  "mechanism": "round-13/s3-b",
+  "claim": "Most gained problems were ties at k=4 with the right answer in a tied top group and right in at least half of 12",
+  "verdict": "refuted",
+  "measured": "S_b 0.095 [0.000, 0.190] 90%, n=21 (refuted if < 0.60); null (unfixed k=4 failures with a right sample) 0.143, n=7; diff -0.048 [-0.286, 0.143]",
+  "result": "result-4c9189"
+ },
+ {
+  "mechanism": "round-13/s1-a",
+  "claim": "On hard328 problems the Karpathy method (plain, T 0.6, 12 votes, cap 4,096) loses while the cued base solves them (k>=2/4), every right base route is longer than the 4,096 cap far more often than on matched won problems (proxy for the 12-sample cap-hit share, which is not stored)",
+  "verdict": "holds",
+  "measured": "L' 0.714 [0.595, 0.833] n=42 lost problems vs null N' 0.173 [0.120, 0.226] n=133 matched won problems; L'-N' 0.541 [0.414, 0.665] 90%",
+  "result": "result-4b64da"
+ },
+ {
+  "mechanism": "round-13/s1-b",
+  "claim": "Those hard328 losses come from agreeing short finished wrong answers with few cap hits",
+  "verdict": "refuted",
+  "measured": "C' 0.714 [0.595, 0.833] > 0.35; A_K-A_B 0.064 [-0.130, 0.236] < 0.10, n=42 (39 vs 12 pairs); null cued-base wrong-answer agreement 0.167",
+  "result": "result-4b64da"
+ },
+ {
+  "mechanism": "round-13/s2-a",
+  "claim": "m21's quick wrong answers are plain-base answer-first replies (s_Q >= 0.40 and >= s_N - 0.15)",
+  "verdict": "refuted",
+  "measured": "s_Q 0.25 [0.17, 0.35] n 60 (floor 0.40); null plain base s_N 0.21 n 105; gap 0.04 [-0.07, 0.15]",
+  "result": "result-cc7288"
+ },
+ {
+  "mechanism": "round-13/s2-b",
+  "claim": "m21's quick wrong answers sit on harder problems than the plain base's (r_N - r_Q >= 0.10)",
+  "verdict": "refuted",
+  "measured": "r_N - r_Q 0.005 [-0.066, 0.075], n 60 vs 105; r_Q 0.833, r_N 0.838; all 250 0.814; m21 long wrong answers 0.40 (instrument can fail)",
+  "result": "result-cc7288"
+ },
+ {
+  "mechanism": "round-13/s6-a",
+  "claim": "Base code failures fixed by Code top-8 1x are enriched for answer-contract failures beyond random rank-8 fixes",
+  "verdict": "refuted",
+  "measured": "S_top8 0.43 [0.35, 0.51] n 100 fixes (refuted below 0.50); S_top8-S_rand [-0.02, 0.15]; r_c/r_l 1.53 [1.21, 1.93] (needed 2.0); null random rank-8 1.5x S_rand 0.37 n 63",
+  "result": "result-04f363"
+ },
+ {
+  "mechanism": "round-13/s6-b",
+  "claim": "Base code failures fixed by Code top-8 1x are mostly problems the base passes in other stored base-like samples",
+  "verdict": "holds",
+  "measured": "Q_top8 0.75 [0.68, 0.82] n 100 fixes; Q_top8-Q_base [0.21, 0.33] 90%; null Q_base 0.48 (106/221); RL-Code fixes Q 0.74 n 116; Math-cue cell alone Q_top8 0.56 vs 0.35",
+  "result": "result-04f363"
+ },
+ {
+  "mechanism": "round-13/s5-a",
+  "claim": "In the kept autobench method's dev100 runs, the vote-wrong problems are those whose samples were cut at 4,096 tokens or left unrun by the time budget, more than difficulty explains",
+  "verdict": "undecided",
+  "measured": "undecided, not computable: the kept method's per-sample dev100 rows are only in frustea's Modal Volume; instrument on cued-base rows cut at 4,096: D 0.73 [0.50, 0.91] n=14",
+  "result": "result-cfe997"
+ },
+ {
+  "mechanism": "round-13/s5-b",
+  "claim": "The kept autobench method's vote-wrong dev100 problems are lost to one shared wrong value, more concentrated than the cued base's 12-sample votes",
+  "verdict": "undecided",
+  "measured": "undecided, not computable: per-sample dev100 rows only in frustea's Modal Volume; null ready: cued base G_cue 0.40 [0.34, 0.46] n=34 vote-wrong of 500, so the claim needs G_plain >= 0.52",
+  "result": "result-cfe997"
+ },
+ {
+  "mechanism": "round-09/grader-m04",
+  "claim": "On MATH-500 the base's plain-right / cue-right ratio falls from levels 1-2 to levels 4-5 by more than a second cued sample's ratio to the same cue sample falls (by more than 0.05).",
+  "verdict": "undecided",
+  "measured": "Delta = -0.024 [90 %: -0.143, +0.095] (plain 0.592 -> 0.503, C2 1.025 -> 0.959), n = 120 T1-right in L1-2 / 197 in L4-5, null 0, threshold -0.05; ~21x the problems to decide",
+  "result": "result-887689"
+ },
+ {
+  "mechanism": "round-10/weights-m01",
+  "claim": "On hard328 the 1.5x top-8 RL-Math edit keeps a larger share of cap hits on problems the base often runs to the cap than on problems it seldom does (Q = ln(e_HI/b_HI) - ln(e_LO/b_LO) > 0.3), as a fixed shift in cap log-odds predicts.",
+  "verdict": "undecided",
+  "measured": "Q 0.39 [-0.25, 1.06], n 269 (HI 39, LO 230 of 328 problems), null Q = 0 (fixed fraction); threshold 0.3; noise null Q 0.26 [-0.17, 0.71]; log-odds shift D = L_HI - L_LO -0.38 [-1.14, 0.39]",
+  "result": "result-175cff"
+ },
+ {
+  "mechanism": "run-08/f2-m05",
+  "claim": "On cued-base MATH-500 problems with 2-10 of 12 samples right, the vote over 4 with the real wrong answers beats the same vote with every finished wrong answer merged into one by at least 0.05 per problem.",
+  "verdict": "holds",
+  "measured": "D = 0.070 [0.060, 0.081] (V4 0.828 real wrong vs 0.758 merged wrong), n 158 problems, null 0 (merged-wrong vote), threshold 0.05",
+  "result": "result-dd9b25"
+ },
+ {
+  "mechanism": "round-09/stopping-m04",
+  "claim": "At T 1.0 on MATH-500, RL step 100 (plain) hits the 16,384-token cap as often as the cued base on the same problems (paired difference not 1 point or more lower), while final RL's cap-hit rate is clearly lower.",
+  "verdict": "holds",
+  "measured": "D (step 100 minus cued base cap-hit rate) -0.25 points [-0.95, +0.50], n 500 problems x 4 samples, null 0 (base vs itself -> +0.60 [-0.60, +1.80]); final RL -2.90 [-3.80, -2.05], step 400 -2.15 [-2.95, -1.35]; threshold -1.0",
+  "result": "result-074b77"
+ },
+ {
+  "mechanism": "run-02/f2-m04",
+  "claim": "Adding 2 x (RL-Math - base) to Think-SFT turns the abstaining cap-hit companions of a lone right sample into finished wrong answers, so on problems with exactly 1 right of 3 samples the M(2) vote is right at least 0.15 less often than Think-SFT's.",
+  "verdict": "undecided",
+  "measured": "D = VR_ThinkSFT - VR_M2 = 0.19 [0.08, 0.30] (0.82 vs 0.63), n 41 / 32 lone-right problems (< 50), null D_null -0.02 [-0.11, 0.08]; threshold 0.15; ~240-300 lone-right per arm (~3,400 problems) would decide",
+  "result": "result-031f98"
+ },
+ {
+  "mechanism": "round-14/s1-a",
+  "claim": "Think-SFT's unfenced Code-cue answers are a layout habit on easy problems, so the cued base passes those problems at a rate in [0.72, 1.0].",
+  "verdict": "refuted",
+  "measured": "r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range a [0.72, 1.0], interval wholly below it",
+  "result": "result-b847a0"
+ },
+ {
+  "mechanism": "round-14/s1-b",
+  "claim": "Think-SFT's unfenced Code-cue answers are failed solves on hard problems, so the cued base passes those problems at a rate in [0.0, 0.46].",
+  "verdict": "refuted",
+  "measured": "r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range b [0.0, 0.46], interval wholly above it",
+  "result": "result-b847a0"
+ },
+ {
+  "mechanism": "round-14/s2-a",
+  "claim": "Think-SFT's unfenced Code-cue answers are a layout habit on easy problems, so the cued base passes those problems at a rate in [0.72, 1.0].",
+  "verdict": "refuted",
+  "measured": "r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range a [0.72, 1.0], interval wholly below it",
+  "result": "result-b847a0"
+ },
+ {
+  "mechanism": "round-14/s2-b",
+  "claim": "Think-SFT's unfenced Code-cue answers are failed solves on hard problems, so the cued base passes those problems at a rate in [0.0, 0.45].",
+  "verdict": "refuted",
+  "measured": "r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range b [0.0, 0.45], interval wholly above it",
+  "result": "result-b847a0"
+ },
+ {
+  "mechanism": "round-14/s6-a",
+  "claim": "On problems the cued base passes but RL-Code mostly fails, the Code top-8 edit sharpens the base's own programs and passes at 0.70 or more",
+  "verdict": "refuted",
+  "measured": "mean pass of 5 Code top-8 edit samples on L 0.452 [0.357, 0.539], n 115 rows (23 problems); null base-like resamples 0.435 [0.333, 0.551]; RL-Code on L 0.22; range a [0.70, 1.0]",
+  "result": "result-366377"
+ },
+ {
+  "mechanism": "round-14/s6-b",
+  "claim": "On problems the cued base passes but RL-Code mostly fails, the Code top-8 edit copies RL-Code's outcomes and passes at 0.34 or less",
+  "verdict": "refuted",
+  "measured": "mean pass of 5 Code top-8 edit samples on L 0.452 [0.357, 0.539], n 115 rows (23 problems); null base-like resamples 0.435 [0.333, 0.551]; RL-Code on L 0.22; range b [0.0, 0.34]",
+  "result": "result-366377"
+ },
+ {
+  "mechanism": "round-14/s3-a",
+  "claim": "The autobench final configuration is budget-bound: the base's T 0.6 hard328 answers past 4,096 tokens are mostly live derivations (loop share 0.05-0.40), so the cap is what loses them.",
+  "verdict": "refuted",
+  "measured": "loop share past 4,096 tokens (plain base, T 0.6 / top-p 0.95, hard328) 0.519 [0.460, 0.577], n 189; null (cued base T 1.0) 0.004; cued T 0.6 0.626 [0.574, 0.683], n 211",
+  "result": "result-813b5e"
+ },
+ {
+  "mechanism": "round-14/s3-b",
+  "claim": "At T 0.6 the plain base's long hard328 attempts are mostly repetition loops (loop share 0.45-1.0), so the 4,096 cap loses little that would finish.",
+  "verdict": "holds",
+  "measured": "loop share past 4,096 tokens (plain base, T 0.6 / top-p 0.95, hard328) 0.519 [0.460, 0.577], n 189; null (cued base T 1.0) 0.004; cued T 0.6 0.626 [0.574, 0.683], n 211",
+  "result": "result-813b5e"
+ },
+ {
+  "mechanism": "round-14/s4-a",
+  "claim": "Code-RL's top-8 directions push every solution-started sample into Math-like deliberation, so almost no m21 right answer stays plain-short (S 0.0-0.12).",
+  "verdict": "refuted",
+  "measured": "S 0.414 [0.319, 0.510] (65 of 157 m21 right answers at or below the plain base's median right length, 1,069 tokens), n 157, null 0.50; interval wholly above a's range 0.0-0.12",
+  "result": "result-1d64b9"
+ },
+ {
+  "mechanism": "round-14/s4-b",
+  "claim": "The Code top-8 edit is an all-or-none per-sample lottery (s about 0.47 at 1x), so about 0.36 of m21's right answers are untouched plain-base answers and S is 0.15-0.36.",
+  "verdict": "undecided",
+  "measured": "S 0.414 [0.319, 0.510], n 157, null 0.50; interval crosses b's top 0.36 (range 0.15-0.36); about 500 right rows would decide",
+  "result": "result-1d64b9"
+ },
+ {
+  "mechanism": "round-14/s5-a",
+  "claim": "The cued base's wrong finished answers at T 1.0 on contested MATH-500 problems are mostly one-off slips, so their pooled same-problem pairwise agreement is low but above chance (range 0.07-0.30).",
+  "verdict": "undecided",
+  "measured": "pooled wrong-pair agreement 0.262 [0.202, 0.324], n 142 problems (1,271 pairs, 570 wrong answers), null 0.005; interval crosses 0.30, about 380 problems would decide",
+  "result": "result-064aac"
+ },
+ {
+  "mechanism": "round-14/s5-b",
+  "claim": "The cued base's wrong answers on contested MATH-500 problems concentrate on one recurring attractor value per problem, so their pooled same-problem pairwise agreement is high (range 0.42-1.0).",
+  "verdict": "refuted",
+  "measured": "pooled wrong-pair agreement 0.262 [0.202, 0.324], n 142 problems (1,271 pairs, 570 wrong answers), null 0.005; interval wholly below 0.42",
+  "result": "result-064aac"
+ }
+]
