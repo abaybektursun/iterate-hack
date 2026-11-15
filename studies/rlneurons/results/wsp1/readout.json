@@ -492,6 +492,96 @@
    },
    "run_folder": "studies/rlneurons/results/wsp1/screen100/bulk64_plain-01"
   },
+  "screen100/sft025_plain": {
+   "experiment": "screen100",
+   "label": "sft025",
+   "prompt": "plain",
+   "job_id": "sameraslan-1114-193957-0cd5",
+   "seed_base": 80000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 100,
+   "right_v3": 58,
+   "acc_v3": 58.0,
+   "wilson95": [
+    48.2,
+    67.2
+   ],
+   "cap_hits": 2,
+   "mean_generated_tokens": 2085.5,
+   "median_generated_tokens": 846.5,
+   "median_tokens_right": 799.5,
+   "okay_first80": 29,
+   "okay_first80_share": 0.29,
+   "wait_per_answer": 8.46,
+   "empty": 1,
+   "empty_share": 0.01,
+   "edit": {
+    "recipe": "interp",
+    "k": null,
+    "alpha": 0.25,
+    "rounding": "stochastic",
+    "seed": 0,
+    "late_layers": null,
+    "reference": "base",
+    "n_tensors": 355,
+    "n_edited": 355,
+    "n_unchanged": 0,
+    "other": "think_sft",
+    "add_norm": 116.86282578030333,
+    "written_norm": 117.05610193390649,
+    "ref_norm": 3126.469226854339,
+    "add_rel": 0.037378530636581225,
+    "effective_scale": 0.9999997670442616,
+    "cos_written_add": 0.998348626220458,
+    "share": null
+   },
+   "run_folder": "studies/rlneurons/results/wsp1/screen100/sft025_plain-01"
+  },
+  "screen100/sft025_cue": {
+   "experiment": "screen100",
+   "label": "sft025",
+   "prompt": "cue",
+   "job_id": "sameraslan-1114-194003-f897",
+   "seed_base": 81000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 100,
+   "right_v3": 89,
+   "acc_v3": 89.0,
+   "wilson95": [
+    81.4,
+    93.7
+   ],
+   "cap_hits": 3,
+   "mean_generated_tokens": 3491.8,
+   "median_generated_tokens": 1584.5,
+   "median_tokens_right": 1520,
+   "okay_first80": 100,
+   "okay_first80_share": 1.0,
+   "wait_per_answer": 16.64,
+   "empty": 0,
+   "empty_share": 0.0,
+   "edit": {
+    "recipe": "interp",
+    "k": null,
+    "alpha": 0.25,
+    "rounding": "stochastic",
+    "seed": 0,
+    "late_layers": null,
+    "reference": "base",
+    "n_tensors": 355,
+    "n_edited": 355,
+    "n_unchanged": 0,
+    "other": "think_sft",
+    "add_norm": 116.86282578030333,
+    "written_norm": 117.05610193390649,
+    "ref_norm": 3126.469226854339,
+    "add_rel": 0.037378530636581225,
+    "effective_scale": 0.9999997670442616,
+    "cos_written_add": 0.998348626220458,
+    "share": null
+   },
+   "run_folder": "studies/rlneurons/results/wsp1/screen100/sft025_cue-01"
+  },
   "full500/top8_plain": {
    "experiment": "full500",
    "label": "top8",
@@ -626,6 +716,51 @@
     "share": null
    },
    "run_folder": "studies/rlneurons/results/wsp1/full500/sft1_plain-01"
+  },
+  "full500/rand8_plain": {
+   "experiment": "full500",
+   "label": "rand8",
+   "prompt": "plain",
+   "job_id": "sameraslan-1114-193553-cf1f",
+   "seed_base": 183000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 500,
+   "right_v3": 197,
+   "acc_v3": 39.4,
+   "wilson95": [
+    35.2,
+    43.7
+   ],
+   "cap_hits": 8,
+   "mean_generated_tokens": 1967.6,
+   "median_generated_tokens": 645.5,
+   "median_tokens_right": 932,
+   "okay_first80": 92,
+   "okay_first80_share": 0.184,
+   "wait_per_answer": 6.95,
+   "empty": 22,
+   "empty_share": 0.044,
+   "edit": {
+    "recipe": "rand8",
+    "k": 8,
+    "alpha": null,
+    "rounding": "stochastic",
+    "seed": 0,
+    "late_layers": null,
+    "reference": "base",
+    "n_tensors": 355,
+    "n_edited": 224,
+    "n_unchanged": 131,
+    "other": "rl_math",
+    "add_norm": 1.269214040908555,
+    "written_norm": 2.6696750293659837,
+    "ref_norm": 1713.7851893052448,
+    "add_rel": 0.0007405910897287451,
+    "effective_scale": 0.9999744767984197,
+    "cos_written_add": 0.4754067939138481,
+    "share": null
+   },
+   "run_folder": "studies/rlneurons/results/wsp1/full500/rand8_plain-01"
   }
  },
  "differences": {
@@ -749,6 +884,22 @@
     -3.0
    ]
   },
+  "screen100: sft025_plain minus base_plain": {
+   "n": 100,
+   "points": 24.0,
+   "ci95": [
+    13.0,
+    35.0
+   ]
+  },
+  "screen100: sft025_plain minus rl_plain": {
+   "n": 100,
+   "points": -38.0,
+   "ci95": [
+    -48.0,
+    -29.0
+   ]
+  },
   "screen100: top8_plain minus rand8_plain": {
    "n": 100,
    "points": 52.0,
@@ -779,6 +930,22 @@
    "ci95": [
     -3.0,
     15.0
+   ]
+  },
+  "screen100: sft025_cue minus base_cue": {
+   "n": 100,
+   "points": 7.0,
+   "ci95": [
+    -2.0,
+    16.0
+   ]
+  },
+  "full500: top8_plain minus rand8_plain": {
+   "n": 500,
+   "points": 46.0,
+   "ci95": [
+    40.8,
+    51.0
    ]
   }
  },
@@ -859,6 +1026,24 @@
      45.75
     ],
     "paired": false
+   },
+   "rand8_plain minus T3_base_plain": {
+    "n": 500,
+    "points": -5.4,
+    "ci95": [
+     -11.46,
+     0.72
+    ],
+    "paired": false
+   },
+   "top8_plain minus rand8_plain": {
+    "n": 500,
+    "points": 46.0,
+    "ci95": [
+     40.8,
+     51.0
+    ],
+    "paired": true
    }
   },
   "skipped": [
@@ -950,9 +1135,14 @@
  },
  "skipped": [
   {
-   "cell": "full500/rand8_plain",
-   "job_id": "sameraslan-1114-193553-cf1f",
-   "why": "no answers.jsonl in runs/"
+   "cell": "screen100/sfttop8_plain",
+   "job_id": "sameraslan-1114-193945-bc28",
+   "why": "metrics.json status running"
+  },
+  {
+   "cell": "screen100/sfttop64_plain",
+   "job_id": "sameraslan-1114-193951-d055",
+   "why": "metrics.json status running"
   }
  ],
  "notes": [

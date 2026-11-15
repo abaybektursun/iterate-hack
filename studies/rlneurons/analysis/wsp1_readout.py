@@ -48,6 +48,11 @@ CELLS = [
     # Amendment 2
     ("top1", "plain", WHO + "185952-2e78", "screen100", 80000000),
     ("bulk64", "plain", WHO + "185958-fb46", "screen100", 80000000),
+    # Amendment 4: slices of the Think-SFT delta
+    ("sfttop8", "plain", WHO + "193945-bc28", "screen100", 80000000),
+    ("sfttop64", "plain", WHO + "193951-d055", "screen100", 80000000),
+    ("sft025", "plain", WHO + "193957-0cd5", "screen100", 80000000),
+    ("sft025", "cue", WHO + "194003-f897", "screen100", 81000000),
     ("top8", "plain", WHO + "185934-b0a9", "full500", 180000000),
     ("sft1", "cue", WHO + "185940-514f", "full500", 181000000),
     ("sft1", "plain", WHO + "185947-4681", "full500", 182000000),
@@ -59,7 +64,8 @@ REFERENCES = ("base", "rl")                               # released models (run
 # label -> what its edit.json must say: (recipe, k, other, alpha)
 EDITS = {"top8": ("top8", 8, "rl_math", None), "bulk": ("bulk", 8, "rl_math", None), "rand8": ("rand8", 8, "rl_math", None),
          "late3": ("late3", 3, "rl_math", None), "sft1": ("interp", None, "think_sft", 1.0), "sft05": ("interp", None, "think_sft", 0.5),
-         "top1": ("top8", 1, "rl_math", None), "bulk64": ("bulk", 64, "rl_math", None)}
+         "top1": ("top8", 1, "rl_math", None), "bulk64": ("bulk", 64, "rl_math", None),
+         "sfttop8": ("top8", 8, "think_sft", None), "sfttop64": ("top8", 64, "think_sft", None), "sft025": ("interp", None, "think_sft", 0.25)}
 CONTROLS = [("top8", "rand8"), ("top1", "rand8")]         # plain cells: edited minus its matched control
 # right of n stated in the spec (Amendment 2); a cell listed here must reproduce it
 SPEC_COUNTS = {("screen100", "base", "plain"): 34, ("screen100", "rl", "plain"): 96, ("screen100", "top8", "plain"): 88,

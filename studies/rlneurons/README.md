@@ -503,6 +503,49 @@ Think-SFT = `Olmo-3-7B-Think-SFT` `6ff8575` (imitation of reasoning traces, no r
 - Not controlled: the top-8 subspace overlap of Think-SFT with RL-Math (0.051, 25 times the null) may come from directions
   that any fine-tune of this base shares; the overlap with the base weights' own top subspace is not measured.
 
+## WSP-1 edited weights: which part of a weight change carries the gain
+
+Spec `specs/SPEC_wsp1.md` (amendments 1 to 4). `jobs/wsp_edit.py` writes an edited model directory (selftest of 6 planted
+checks runs first; BF16 by `merge_weights.to_bf16`, stochastic rounding), `jobs/run_cell.py --model-path` scores it,
+`analysis/wsp1_readout.py` writes the run folders and `results/wsp1/readout.json` (run it with
+`uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.wsp1_readout`; it reads the
+cells from `runs/<job id>/`, copied with `tools/gpu.py get`). MATH-500, T 1.0 / top-p 1.0, one sample, grader v3. Raw rows
+are in the Modal Volume `iterate-runs` of workspace sameraslan under the job ids in each `run.json`.
+
+"Layer matrices" are the 224 q, k, v, o, gate, up, down tensors. `top8` = base + the top 8 singular directions of each
+layer matrix's RL-Math delta (9.8 % of the delta's squared norm; the addition is 0.074 % of the weight norm;
+`metrics.json` `edit`). `rand8` = the same 8 singular values with random orthonormal vectors. `bulk` = RL-Math minus its
+top 8 directions. `sft1` = Think-SFT as released (imitation of reasoning traces written by other models, no reward).
+
+All 500 problems (`results/wsp1/full500/<cell>-01/`, `readout.json` `full500_vs_references`); references T3 224, T1 410,
+T2 463 from `results/rln4/grader_v3/readout.json`:
+
+| Cell | Right of 500 | Against |
+|---|---|---|
+| `top8` plain | 427 | `rand8` plain +46.0 points [40.8, 51.0]; T2 (RL plain) -7.2 [-10.2, -4.2] |
+| `rand8` plain | 197 | T3 (base plain) -5.4 [-11.5, 0.7], unpaired |
+| `sft1` cue | 454 | T1 (cued base) +8.8 [5.4, 12.4]; T2 -1.8 [-4.2, 0.6] |
+| `sft1` plain | 440 | T2 -4.6 [-7.8, -1.4] |
+
+First 100 problems (`results/wsp1/screen100/<cell>-01/`), right of 100. Plain, seed base 80,000,000: base 34, RL 96,
+`top8` 88, `rand8` 36, `bulk` 91, `bulk64` (RL minus its top 64 directions) 86, `top1` (one direction per matrix) 42,
+`late3` (top 3 directions of `mlp.down_proj` in layers 24 to 31 only) 41, `sft1` 91, `sft025` (base + 0.25 of the Think-SFT
+delta) 58. Cue, seed base 81,000,000: base 82, `sft1` 92, `sft05` 88, `sft025` 89.
+
+- Eight directions per matrix of the RL change are sufficient (427 against the matched control's 197) and not necessary
+  (`bulk` 91, `bulk64` 86 of 100): the change is redundant across directions. One direction per matrix is not enough.
+- The same slice of the imitation change breaks the model: `sfttop8` and `sfttop64` (base + the top 8 or 64 directions of
+  the Think-SFT delta, 3.7 % and 7.9 % of the weight norm) gave 0 right of the 6 and 1 answers that finished, 5 and 1 of them
+  loops at the cap; both jobs then stopped on an IndexError in `lib/rln4_lib.onset_lines` (`screen100/sfttop8_plain-01/`,
+  `sfttop64_plain-01/`, status crashed). The prediction of amendment 4 (not concentrated) held.
+- Think-SFT with the cue solves 58 of the 65 problems that T2 solves and T1 does not (14 of 16 cap hits, 11 of 14
+  misreadings, 14 of 14 slips, 7 of 9 wrong methods) and misses 17 of the 398 that both solve. A fresh sample of the cued
+  base would also solve some of the 65; that share is not measured here.
+- Closest published result: Spectral Rewiring (arXiv 2607.03065) keeps the RL gain with a compact part of the update on
+  models that include this pair. New here: the matched-spectrum random control at 8 directions, the removal cells, and the
+  comparison with a no-reward delta.
+- Finding page, unlisted: `tools/finding_eight_directions.py` (`/finding/eight-directions`, `LISTED = False`).
+
 ## How to run
 
 Laptop checks (no GPU, no weights):
