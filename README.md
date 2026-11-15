@@ -352,9 +352,11 @@ line under the picture. A new page of the site is one entry in `PAGES` of `home.
 link "More" to it after the four tabs; a page with no header gets a small link "Invariant" at its lower left; pinch
 zoom is never switched off. An unknown address answers a short page with links, and every address of invariant.team
 other than `/` and `/data` redirects to the monitor. The page `/team` (`tools/people.py`) lists the team: its three
-names are placeholders with every line "To be added" until the people fill `PEOPLE` in.
+names are placeholders, each with the one line "Details to be added" until the people fill `PEOPLE` in; a filled field
+shows as its own row.
 
-The page `/papers` (`tools/papers.py`) is the paper loop: its six steps in the words column and one lit sheet per
+The page `/papers` (`tools/papers.py`) is the paper loop: its six steps in the words column (below the sheets
+where the page is one column) and one lit sheet per
 paper of `view.PAPERS`, each with its claim, its length, why the loop picked it and how it was checked; a click opens
 the PDF. A new paper gets its row in `ROWS` of `papers.py` (without one it still gets a sheet with its title). The domain is the stack parameter
 `HomeDomainName` (`infra/monitor/deploy.sh monitor.invariant.team <zone id> invariant.team`).
