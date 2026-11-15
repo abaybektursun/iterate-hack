@@ -152,6 +152,10 @@ TABLE = {
         "group": THEORIES,
         "figure": lambda m: [f"{m.DATA['nearer']['all'][0]} of {m.DATA['nearer']['all'][1]}", "predictions",
                              "theory nearer the measured number than readers with no theory; half would be a tie"]},
+    "forecasts-before-results": {
+        "group": THEORIES,
+        "figure": lambda m: [f"{m.COUNTS['theory'][1]} of {m.COUNTS['theory'][0]}", "forecasts",
+                             f"theory nearer the reported number than both readers with no theory; {m.COUNTS['landed']} of {m.COUNTS['targets']} targets reported"]},
 }
 
 
