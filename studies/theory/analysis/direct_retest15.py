@@ -90,10 +90,10 @@ def s100vote():
            "bootstrap": "10,000 resamples of problems, default_rng(0)"}
     win = next(p for p in range(500) if g[p] > 0)
     lose = next(p for p in range(500) if g[p] < 0)
-    exs = {f"{name}": {"problem_index": p, "gold": s100[p][0]["gold"], "vote_minus_single_points": float(g[p]),
+    exs = {f"{name}": {"problem_index": p, "gold": s100[p][1]["gold"], "vote_minus_single_points": float(g[p]),
                        "samples": [{k: r[k] for k in ("sample", "extracted_v3", "score_v3", "cap_hit")} for r in s100[p]]}
            for name, p in (("vote_beats_single", win), ("vote_loses_to_single", lose))}
-    raw = [[(r["extracted_v3"], r["score_v3"], r["cap_hit"], r["gold"]) for r in s100[p]] for p in (0, 18, 5)]
+    raw = [[(r["extracted_v3"], r["score_v3"], r["cap_hit"], r.get("gold", s100[p][1]["gold"])) for r in s100[p]] for p in (0, 18, 5)]
     r = row("round-15/account-2/c2@16",
             "RL step 100 plain on MATH-500 gains as much from a vote over its 4 samples (vote right minus mean single-sample right) as the cued base does, 5 to 10 points, not as little as final RL.",
             interval, (5.0, 10.0), adv, 500,
