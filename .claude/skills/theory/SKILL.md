@@ -186,6 +186,16 @@ same target, forecast and score steps on the newest round's theories without a r
 disagree with the readers on 3 targets; that rule is gone); `--lens "<text>"` names the family of causes they come from
 (run-03 to run-08: six lenses run at once).
 
+The open cells did not separate the theories (no two families with disjoint intervals on any open target), so the
+theories now design the cells: `lib/forecast.py cells <folder> --from <forecast run folders...>` (checks, ranking and
+`cells.md` in `lib/cells.py`, prompts `cells_propose.md`, `cells_merge.md`, `cells_forecast.md`). One job per family
+(each run's mechanisms; the newest round's unrefuted theories) proposes per mechanism one GPU cell it gets right and a
+named other mechanism gets wrong, runnable with `studies/rlneurons/jobs/` as they are; one job merges the same runs;
+fresh family jobs and two readers forecast them blind. `cells.md` ranks by pairs of forecasters from different families
+with disjoint intervals per GPU minute, and base-only cells by the highest forecast over the best known base count.
+Job outputs stay in `<folder>/jobs/`, so the same command resumes. Before running a top cell, check it against the
+board (`tools/recall.py`, `board.py ls result`).
+
 ## Cost per round
 
 65 to 80 headless jobs, nearly all opus, about 1.5 hours: 12 developers, about 13 test writers and as many

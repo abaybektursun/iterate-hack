@@ -649,6 +649,40 @@ run-05/f2-m06 378 [350, 402] (weight space) against run-08/f2-m03 342 [322, 362]
 by converting cap hits). First score (16:45 UTC, `scores.*`): 0 targets measured in any of the six. L2 and L3 not
 decided.
 
+## Cells designed by the theories
+
+The open cells did not separate the mechanisms, so the mechanisms design cells. Code `lib/forecast.py cells` (runs the
+jobs) and `lib/cells.py` (inputs, checks, ranking, `cells.md`); prompts `lib/prompts/cells_propose.md`,
+`cells_merge.md`, `cells_forecast.md`; plan `specs/SPEC_cells01.md`.
+
+```
+uv run studies/theory/lib/forecast.py cells studies/theory/results/forecast/cells-<nn> --from <forecast run folders...>
+```
+
+One blind job per family (each `--from` run's mechanisms; round 07's unrefuted theories) proposes per mechanism one
+GPU cell that it gets right and a named other mechanism gets wrong (cell, job file, command, readout, value with 90 %
+interval, the alternative's value outside it, L40S minutes at most 120, `base_only` with the best known base count).
+It sees the board, the mechanisms, `known.json` (the runs' targets and round 07's `facts.json`) and `jobs.md` (the
+job rows and "How to run" of `studies/rlneurons/README.md` and each job file's `add_argument` lines). One job merges
+the same runs; fresh family jobs (one forecast per mechanism) and two readers forecast every readout blind. Ranked in
+code: pairs of forecasters from different families whose intervals do not overlap, per GPU minute; base-only readouts
+by the highest forecast minus the best known base count. Job outputs stay in `<folder>/jobs/`, so a rerun resumes.
+
+**cells-01** (`results/forecast/cells-01/`: `cells.md`, `cells.json`, `cell_forecasts.json`, `jobs/`; code commit
+e56af14; about 25 minutes, 17 jobs; 3 proposing jobs needed one send-back for a job field naming two files). 44
+cells proposed, 41 after merging (C1 holds); 3 merged cells have 3 or more cross-family pairs with intervals that do
+not overlap, 4 have any (C2 refuted: needs 5). The mechanisms gave a number on 367 of 1,936 mechanism-readout pairs;
+the rest "theory says nothing". The named alternative's own blind forecast fell outside the proposer's interval in 20
+of 44 proposals (9 said nothing), so in most designed cells the disagreement exists only in the proposer's account
+of the other mechanism. 6 base-only readouts have a forecast above the best known base count (C3 holds as coded), but
+every such count is a scaled estimate, not a measured count at the same number of samples, and every top forecast is
+inside both readers' intervals. Top by separation: m20 base plain on fresh2026 (50 min; run-06 2-3 [0, 8] against
+run-07/f2-m06 16 [9, 23] and run-08/f2-m01 14 [8, 20]), m29 base + RL-Math top 8 at 2x on MATH-500 (110 min; 423
+[410, 436] against 449-455), m33 the same edit on code, answers with no code block (95 min; 3-4 against 35-38; the
+board's 1.5x cell already points to the low side), m06 RL step 100 on hard328 (70 min). Hand check at the end of
+`cells.md`: m29, m33 and m06 have commands with flags the jobs do not take (`--recipe topk`, `--model s0100`), which
+the checks do not catch.
+
 ## Engine version 8 (forecasts inside the round)
 
 `lib/round.py --version 8` (now the default; 7 still runs) adds `targets_open` after `standing` and `forecast` after
