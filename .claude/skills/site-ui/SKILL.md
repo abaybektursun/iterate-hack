@@ -33,8 +33,9 @@ do without it. If you cannot, leave it out.
    list of names. The same person has the same color on every page.
 4. One typeface, Archivo, through its weight and width axes. Body 15 px. Names and labels in sentence case. No
    capitals-only labels, no monospace, no second typeface.
-5. Hairlines (`1px solid var(--rule)`), `--ink` for the one line that carries a heading. No shadows, no gradients,
-   no cards. Structure comes from space and rules.
+5. Text areas are flat: hairlines (`1px solid var(--rule)`), `--ink` for the one line that carries a heading, no
+   cards. A picture may have light and depth, as the architecture page does: one light direction and one shadow
+   recipe for the whole picture.
 6. Numbers use `tabular-nums` and are set heavier than the words around them.
 
 ## Words
@@ -45,7 +46,7 @@ do without it. If you cannot, leave it out.
 3. No slogans. Samer rejected the first headline of the architecture page ("3 people. 19 agents. One question. No
    boss.") as machine-sounding (2026-11-14). So: no clipped fragments in a row, no punchline sentences ("Quote or
    nothing."), no bold lead-in at the start of each list line, no row names that sell ("Two checks agents cannot
-   skip"). Write the full plain sentence, and name a row by what it holds ("What is different").
+   skip"). Write the full plain sentence, and name a part with the shortest concrete word ("Chat", "Retro").
 4. Name a part by what it is. Memory is the shared database, so its picture is a database and its label says so.
 5. Every number on a page is live or names where it was measured. No number typed from memory.
 6. Claim only what the code enforces or a file records. If something is not measured yet, say so on the page.
@@ -60,9 +61,10 @@ do without it. If you cannot, leave it out.
 2. A selection is one value mirrored in the address (`/#result-8b1c48`, `/architecture#board`), so every state has
    a link, Back works and Esc closes.
 3. Detail opens beside the picture, in a fixed column. The picture does not move or reflow.
-4. A picture may move all the time when the motion is slow, follows the drawn lines and shows how the thing works
-   (agents circling in their swarm, a comet on the review loop). A real event must look different from that (a larger
-   dot with a halo). One drawn entrance on load. Honor `prefers-reduced-motion`.
+4. A picture may move all the time when the motion is slow, follows the drawn lines and shows how the thing works.
+   What travels should be real data, replayed (the architecture page replays the last messages and posts). An event
+   happening now must look different from the replay (a larger dot with a halo). One drawn entrance on load. Honor
+   `prefers-reduced-motion`.
 
 ## Before you say it is done
 

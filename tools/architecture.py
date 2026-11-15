@@ -4,8 +4,8 @@ view.py serves PAGE at /architecture. The page reads the same /data as the board
 setup as a small three-dimensional object seen from slightly above. The board is the dome in the centre with one
 dot per live item. Each person has a swarm of agents beside it with threads to the board: one mark per agent
 session, the Claude mark for Claude Code and the OpenAI mark for Codex, in the person's color of the board page.
-The lab chat ring (messages) runs through every swarm, and the lab retro loop (self-review) with its comet goes
-around everything. What moves is real data, replayed: a message leaves its sender's swarm for the others, a post
+The Chat ring (messages) runs through every swarm, and the Retro loop (self-review) with its comet goes around
+everything. What moves is real data, replayed: a message leaves its sender's swarm for the others, a post
 travels to the board and a ripple returns to every swarm. A larger dot with a halo is happening now. A click on a
 part dims the rest and explains it in the side column (address /architecture#<part>); "Follow one result" steps
 through the path of one result (arrow keys, Esc). Nothing here writes to the board.
@@ -141,19 +141,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
   padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
 }
 .say { margin: 0; font-size: clamp(23px, 1.95vw, 35px); line-height: 1.17; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 19ch; }
-.ask { display: block; margin-top: 20px; font-size: clamp(15px, 1.1vw, 18px); line-height: 1.38; color: var(--mute); max-width: 30ch; transition: color .15s ease; }
-.ask:hover, .ask.on { color: var(--blue); }
-.ask small { display: block; margin-top: 8px; font-size: 13px; white-space: nowrap; color: var(--faint); }
-.ask:hover small, .ask.on small { color: inherit; }
 .pane { margin-top: clamp(24px, 4.4vh, 48px); }
-.why { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
-.why button {
-  display: flex; width: 100%; align-items: baseline; justify-content: space-between; gap: 16px;
-  padding: 14px 0; border-bottom: 1px solid var(--rule); font-size: 16.5px; font-weight: 540; font-stretch: 106%; transition: color .15s ease;
-}
-.why button span { color: var(--faint); font-size: 20px; line-height: 1; font-weight: 400; transition: transform .18s ease, color .15s ease; }
-.why button:hover { color: var(--blue); }
-.why button:hover span { color: var(--blue); transform: translateX(3px); }
 .walk {
   margin-top: 26px; padding: 12px 22px; border-radius: 999px; background: var(--btn); color: var(--btn-ink);
   font-weight: 620; font-size: 15px; font-stretch: 106%; letter-spacing: .004em;
@@ -177,14 +165,12 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 .rows .t { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; overflow-wrap: anywhere; }
 .rows .m { color: var(--mute); font-size: 12.5px; }
 .rows .m b { color: var(--c); font-weight: 600; }
-.more { display: inline-block; margin-top: 14px; font-size: 13px; color: var(--mute); }
-.more:hover { color: var(--ink); }
 
 .steps { display: flex; gap: 5px; }
 .steps i { flex: 1; height: 2px; border-radius: 2px; background: var(--rule); }
 .steps i.done { background: var(--ink); }
 .cap { margin: 24px 0 0; font-size: clamp(26px, 2.3vw, 42px); line-height: 1.12; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 14ch; min-height: 4.6em; }
-.walking .say, .walking .ask { display: none; }
+.walking .say { display: none; }
 .walking .pane { margin-top: 0; }
 .nav { display: flex; align-items: center; gap: 10px; margin-top: 20px; }
 .nav button { padding: 9px 18px; border-radius: 999px; border: 1px solid var(--faint); font-weight: 600; font-size: 14px; transition: background .15s ease, border-color .15s ease, color .15s ease; }
@@ -203,7 +189,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter *, .dot.arrived, .dot.ping { animation: none !important; }
-  .part, .walk, .why button span { transition: none; }
+  .part, .walk { transition: none; }
 }
 </style>
 </head>
@@ -219,7 +205,6 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
   <div class="stage"><svg id="svg" role="group" aria-label="The harness: people and their agents around one shared board"></svg></div>
   <div class="side" id="side">
     <p class="say" id="say"></p>
-    <button class="ask" id="ask" data-go="question"></button>
     <div class="pane" id="pane" aria-live="polite"></div>
   </div>
 </div>
@@ -245,13 +230,13 @@ const TEXT = {
     rows: m => ({ title: `${cnt(m.n.result)} results, ${cnt(m.n.work)} open, ${cnt(m.n.idea)} ideas`, list: m.results }),
   },
   msg: {
-    name: "Lab chat",
+    name: "Chat",
     lead: "Agents send each other short messages: to everyone, to one person's agents, or about one board item.",
     facts: ["In Claude Code, a hook adds new messages to an agent's context after its tool calls, so the agent does not have to check for them.", "A message reaches a waiting agent in 0.2 s (measured)."],
     rows: m => ({ title: `${m.msgs.length} messages to everyone in the last ${m.hours} h`, list: m.msgs }),
   },
   review: {
-    name: "Lab retro",
+    name: "Retro",
     lead: "Every tool command is logged with its time, person, agent and commit. After each finished result, an agent reviews these logs.",
     facts: ["The review measures how long each step took, from claiming the work to posting the result.", "It then makes one change to the tools or the rules, to remove the slowest step or a failure that repeats.", "Whether these changes help has not been measured yet."],
   },
@@ -260,20 +245,7 @@ const TEXT = {
     lead: "Each person runs several coding agents (Claude Code or Codex). Each agent has subagents and works on its own git branch.",
     facts: ["All agents follow one rules file.", "The people decide the direction. The agents coordinate through the board and the messages.", "Each agent runs its own experiments as GPU jobs. A job can only start from code that is pushed to GitHub."],
   },
-  question: {
-    name: "Research direction",
-    lead: "An agent swarm measures how much of a published RL gain an untrained base model reaches with no training.",
-    facts: m => [m && m.best ? `On MATH-500 the untrained base model now scores ${m.best.base}, and the RL-trained model ${m.best.rl}.` : "", "The direction is written in one file, which every agent reads before choosing work.", "Any change to how answers are generated or graded is made for both models."],
-    link: ["/", "See every score on the board"],
-  },
-  diff: {
-    name: "What is different",
-    lead: "Other published agent swarms also share a board and have no orchestrator. Three things are different here.",
-    facts: ["People direct their own agents the whole time, on an open research question. The published swarms run alone toward one score.", "Two rules are enforced by the tools: a paper finding needs a quote found in the paper, and a GPU job needs pushed code.", "The harness logs every command and reviews its own turnaround. Whether that helps has not been measured yet."],
-  },
 };
-const WHY = [["diff", "What is different"]];
-const ASK = "How much of a published RL gain does an untrained base model reach with no training?";
 const WALK = [
   "An agent posts an idea on the board.",
   "It searches the board, its memory and the literature.",
@@ -339,12 +311,6 @@ function ribbon(p, w) {  // a stroke whose width changes along it: w(point, inde
   return "M" + L.join("L") + "L" + R.reverse().join("L") + "Z";
 }
 
-function best(scores) {  // the best MATH-500 score of each model, as "410/500"
-  const top = k => scores.filter(x => x.benchmark === "MATH-500" && x.model === k).sort((a, b) => b.right / b.n - a.right / a.n)[0];
-  const base = top("base"), rl = top("rl");
-  const pct = x => Math.round(100 * x.right / x.n);
-  return base && rl ? { base: `${base.right}/${base.n}`, rl: `${rl.right}/${rl.n}`, line: `MATH-500: untrained ${pct(base)}%, RL-trained ${pct(rl)}%` } : null;
-}
 function model(d) {
   const all = [...d.items, ...d.messages];
   const people = [...new Set(all.map(r => r.who))].sort();
@@ -364,7 +330,6 @@ function model(d) {
     n: { result: results.length, work: of("work").length, idea: of("idea").length, note: of("knowledge").length + of("skill").length },
     nAgents: agents.reduce((s, a) => s + a.length, 0),
     lead: Math.max(0, people.indexOf(results[0]?.who)),
-    best: best(d.scores || []),
   };
 }
 
@@ -404,11 +369,11 @@ function draw() {
     `<path class="hit" id="rv-hit" stroke-width="26"/><path class="rib" id="rv-rib"/>${chevron(0)}${chevron(1)}` +
     `<g class="comet" id="comet"><circle class="bloom" id="cm-glow" fill="url(#glo-b)"/><path class="comet-tail" id="cm-long" opacity=".3"/>` +
     `<path class="comet-tail" id="cm-short" opacity=".85"/><circle class="comet-core" id="cm-core"/></g>` +
-    `<text class="label" id="rv-label" font-size="${g.fs}">Lab retro</text>`, "Lab retro");
+    `<text class="label" id="rv-label" font-size="${g.fs}">Retro</text>`, "Retro");
   out += part("msg", "msg",  // the path through every swarm; on it, a message runs from its sender to the other swarms
     `<path class="hit" id="ms-hit" stroke-width="22"/><path class="beads ring" id="ms-ring"/>` +
     `<g class="hue" id="ms-fx">${th.map(() => `<ellipse class="arrive" opacity="0"/>`).join("")}${pulse()}${pulse()}</g>` +
-    `<text class="label" id="ms-label" font-size="${g.fs}">Lab chat</text>`, "Lab chat");
+    `<text class="label" id="ms-label" font-size="${g.fs}">Chat</text>`, "Chat");
   th.forEach((a, i) => {  // the threads of one person, the post that runs down one of them, and the read that comes back up all of them
     out += part("thread-" + i, "", `<path class="thread hue" style="--h:${hue(i)}"/><path class="ripple hue" opacity="0"/><g class="hue" style="--h:${hue(i)}">${pulse(i)}</g>`);
   });
@@ -447,7 +412,7 @@ function draw() {
   S.th = th;
   S.play = {};
   S.r = {
-    el, gap: open("Lab retro", g.rr), mgap: open("Lab chat", g.rq),
+    el, gap: open("Retro", g.rr), mgap: open("Chat", g.rq),
     beads: Math.round(g.rq * 2 * Math.PI / 14),
     arrive: [...svg.querySelectorAll("#ms-fx .arrive")], legs: [...svg.querySelectorAll("#ms-fx .pulse")].map(unit),
     swarms: th.map((a, i) => {  // the agents of one person circle their own centre, in the people's plane
@@ -723,7 +688,7 @@ function lit() {
   if (s.startsWith("p-")) { const i = m ? m.people.indexOf(s.slice(2)) : -1; return ["swarm-" + i, "thread-" + i, "board"]; }
   const mine = ["swarm-" + me], post = ["swarm-" + me, "thread-" + me, "board"];
   return ({
-    board: ["board", "key", ...all("thread-")], msg: ["msg", ...all("swarm-")], review: ["review"], team: all("swarm-"), question: [...all("swarm-"), "board"],
+    board: ["board", "key", ...all("thread-")], msg: ["msg", ...all("swarm-")], review: ["review"], team: all("swarm-"),
     "walk-1": post, "walk-2": post, "walk-3": post, "walk-4": mine, "walk-5": mine, "walk-6": post, "walk-7": ["review"],
   })[s] || null;
 }
@@ -759,8 +724,7 @@ function pane() {
       `<button class="next" data-step="${n + 1}">${n === 7 ? "Done" : "Next"}</button><span>${n} of 7</span></div>`;
   }
   if (!s) {
-    return `<ul class="why">${WHY.map(([k, t]) => `<li><button data-go="${k}">${t}<span aria-hidden="true">\u203A</span></button></li>`).join("")}</ul>` +
-      `<button class="walk" data-go="walk-1">Follow one result</button>`;
+    return `<button class="walk" data-go="walk-1">Follow one result</button>`;
   }
   const head = (name, hue) => `<div class="dhead"><h2${hue == null ? "" : ` class="hue" style="--h:${hue}"`}>${esc(name)}</h2><button class="close" data-go="${esc(s)}">Close</button></div>`;
   if (s.startsWith("p-")) {
@@ -771,16 +735,13 @@ function pane() {
       rows(`${mine.length} items on the board`, mine, m);
   }
   const t = TEXT[s], r = t.rows && m ? t.rows(m) : null;
-  return head(t.name) + `<p class="lead">${t.lead}</p><ul class="facts">${(typeof t.facts === "function" ? t.facts(m) : t.facts).filter(Boolean).map(x => `<li>${x}</li>`).join("")}</ul>` +
-    (r ? rows(r.title, r.list, m) : "") + (t.link ? `<a class="more" href="${t.link[0]}">${t.link[1]}</a>` : "");
+  return head(t.name) + `<p class="lead">${t.lead}</p><ul class="facts">${t.facts.map(x => `<li>${x}</li>`).join("")}</ul>` + (r ? rows(r.title, r.list, m) : "");
 }
 function show() {
   const on = lit(), svg = $("svg"), m = S.m;
   svg.classList.toggle("has-focus", !!on);
   svg.querySelectorAll(".part").forEach(p => p.classList.toggle("on", !!on && on.includes(p.dataset.part)));
   $("say").textContent = `${m ? m.people.length : "Several"} people, each running their own agent swarms, working on one research direction.`;
-  $("ask").innerHTML = ASK + (m && m.best ? `<small>${m.best.line}</small>` : "");
-  $("ask").classList.toggle("on", S.sel === "question");
   $("side").classList.toggle("walking", !!step());
   const who = S.sel && S.sel.startsWith("p-") ? S.sel.slice(2) : null;  // one person selected: only that person's items stay lit
   svg.querySelectorAll(".dot").forEach(d => d.classList.toggle("off", !!who && d.dataset.who !== who));
