@@ -1,0 +1,17 @@
+After, 2026-11-15 16:55 UTC.
+Tars of real jobs in the team store under jobs/:
+2026-11-15 08:50:39 163840 abaybektursun-1115-084304-e2e8.tar
+Jobs submitted with a vast.py that has the upload, since 16:00 UTC: 9. Ended: 1 (e2e8, exit 0, tar stored 16:50:39, 7.5 min after submit). Still generating: a8f8, a18c, c790 and the 3 of 16:51. 39cf: its box refuses ssh and no tar exists.
+Jobs submitted with the old vast.py since 16:00 UTC: 8, all from worktree cap32run.
+Worktrees with a commit in the last 2 h, and whether they hold 6d6a18b (the upload) and e82ebf8 (newest commit touching tools/, 1 min old):
+active iterate-hack last commit 1m has-upload=y has-newest=y
+active iterate-hack-audit last commit 111m has-upload=y has-newest=n
+active iterate-hack-cap32run last commit 111m has-upload=n has-newest=n
+active iterate-hack-ckpt last commit 74m has-upload=y has-newest=n
+active iterate-hack-critic last commit 26m has-upload=y has-newest=n
+active iterate-hack-egate last commit 36m has-upload=y has-newest=n
+active iterate-hack-shots last commit 19m has-upload=y has-newest=n
+active iterate-hack-sitedeploy last commit 1m has-upload=y has-newest=y
+active iterate-hack-theory last commit 2m has-upload=y has-newest=n
+active iterate-hack-top8x4 last commit 11m has-upload=y has-newest=n
+active iterate-hack-viz-dial3 last commit 1m has-upload=y has-newest=y

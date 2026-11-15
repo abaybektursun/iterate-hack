@@ -1,0 +1,39 @@
+{"id": "t01", "what": "right of 328, hard328 (harder set), Olmo-3-7B-Think-SFT with opening cue, cap 32,768 generated tokens, T 1.0 / top-p 1.0, grader v3, 1 sample, seed 3000000", "unit": "right of 328"}
+{"id": "t02", "what": "right of 328, hard328, Olmo-3-7B-Think-SFT with cue, same cap-32,768 run's answers scored at cap 16,384, T 1.0 / top-p 1.0, grader v3", "unit": "right of 328"}
+{"id": "t03", "what": "right of 328, hard328, Olmo-3.1-7B-RL-Zero-Math plain prompt, cap 32,768, T 1.0 / top-p 1.0, grader v3, 1 sample", "unit": "right of 328"}
+{"id": "t04", "what": "mean generated tokens per problem, hard328, Think-SFT with cue, cap 32,768, T 1.0 / top-p 1.0", "unit": "tokens per problem"}
+{"id": "t05", "what": "number of Think-SFT answers cut at 16,384 tokens (93) that finish within the second 16,384 tokens, hard328, cue, T 1.0", "unit": "answers of 93"}
+{"id": "t06", "what": "number of the 93 cap-cut Think-SFT answers that finish in the second 16,384 tokens and are right, hard328 cue, T 1.0 / top-p 1.0, grader v3", "unit": "problems"}
+{"id": "t07", "what": "extra generated tokens per problem for Think-SFT + cue from raising the cap 16,384 to 32,768, hard328, T 1.0", "unit": "tokens per problem"}
+{"id": "t08", "what": "right of 328, hard328, RL-Zero-Math plain prompt scored at cap 16,384 within the cap-32,768 run, T 1.0 / top-p 1.0, grader v3", "unit": "right of 328"}
+{"id": "t09", "what": "right of 136, fresh2026 contest problems (AIME 2026, HMMT Feb and Nov 2026), Think-SFT with cue, vote over 4 samples, T 1.0 / top-p 1.0, cap 16,384, grader v3", "unit": "right of 136"}
+{"id": "t10", "what": "right of 136, fresh2026, RL-Zero-Math plain, vote over 4, T 1.0 / top-p 1.0, cap 16,384, grader v3", "unit": "right of 136"}
+{"id": "t11", "what": "right of 136, fresh2026, untrained base with cue, vote over 4, T 1.0 / top-p 1.0, cap 16,384, grader v3", "unit": "right of 136"}
+{"id": "t12", "what": "accuracy, fresh2026 n=136, Think-SFT with cue, one sample, T 1.0 / top-p 1.0, cap 16,384, grader v3", "unit": "percent"}
+{"id": "t13", "what": "accuracy, fresh2026 n=136, RL-Zero-Math plain, one sample, T 1.0 / top-p 1.0, cap 16,384, grader v3", "unit": "percent"}
+{"id": "t14", "what": "accuracy, fresh2026 n=136, untrained base with cue, one sample, T 1.0 / top-p 1.0, cap 16,384, grader v3", "unit": "percent"}
+{"id": "t15", "what": "cap-hit rate of samples, fresh2026 n=136, Think-SFT with cue, cap 16,384, T 1.0", "unit": "percent"}
+{"id": "t16", "what": "precision (fraction right) of finished answers, fresh2026, Think-SFT with cue, cap 16,384, T 1.0, grader v3", "unit": "percent"}
+{"id": "t17", "what": "mean right of 328 over 4 samples, hard328, base + 1.5 x top-8 directions of RL-Zero-Math weight change, cue, T 1.0 / top-p 1.0, grader v3", "unit": "right of 328"}
+{"id": "t18", "what": "right of 500, MATH-500 n=500, base + 1.5 x top-8 RL directions, cue, one sample, T 1.0 / top-p 1.0, grader v3", "unit": "right of 500"}
+{"id": "t19", "what": "right of 500, MATH-500, RL-Zero-Math plain, one sample, T 1.0 / top-p 1.0, grader v3", "unit": "right of 500"}
+{"id": "t20", "what": "right of 328, hard328, base + 1.5 x top-8 RL directions, cue, vote over 4, T 1.0 / top-p 1.0, grader v3", "unit": "right of 328"}
+{"id": "t21", "what": "right of 328, hard328, RL-Zero-Math plain, vote over 4, T 1.0 / top-p 1.0, grader v3", "unit": "right of 328"}
+{"id": "t22", "what": "right of 328, hard328, base + 1.5 x top-8 RL directions, cue, first of four new samples, T 1.0 / top-p 1.0, grader v3", "unit": "right of 328"}
+{"id": "t23", "what": "right of 328, hard328, base + 1.5 x top-8 RL directions, cue, second of four new samples, T 1.0 / top-p 1.0, grader v3", "unit": "right of 328"}
+{"id": "t24", "what": "right of 328, hard328, base + 1.5 x top-8 RL directions, cue, fourth of four new samples, T 1.0 / top-p 1.0, grader v3", "unit": "right of 328"}
+{"id": "t25", "what": "right of 328, hard328, base, autobench runner, plain prompt, T 0.6, 12 samples capped at 4,096 tokens, vote (Karpathy-loop method), 7.2 s per problem budget, grader v3", "unit": "right of 328"}
+{"id": "t26", "what": "right of 328, hard328, base, cue, T 1.0 / top-p 1.0, one sample, autobench runner, 7.2 s per problem budget", "unit": "right of 328"}
+{"id": "t27", "what": "right of 328, hard328, base, cue, T 1.0, vote over 4 cut by the 7.2 s per problem budget, autobench runner", "unit": "right of 328"}
+{"id": "t28", "what": "right of 400, 400 held-out MATH-500 problems, base, swarm cue method (and separately Karpathy-loop method), autobench runner, time budget 3.6 s per problem", "unit": "right of 400"}
+{"id": "t29", "what": "mean tokens per problem, hard328, Karpathy-loop method (plain prompt, T 0.6, 12 samples capped at 4,096, vote), 7.2 s per problem budget", "unit": "tokens per problem"}
+{"id": "t30", "what": "accuracy on 100-problem dev set, Karpathy-loop kept method, base model, mean/best reported", "unit": "percent"}
+{"id": "t31", "what": "ratio of tokens spent by Karpathy-loop method to swarm cue method on the 400 MATH-500 problems", "unit": "times"}
+{"id": "t33", "what": "right of 500, 250 MMLU-Pro + 250 BBH, untrained base plain prompt, T 1.0 / top-p 1.0, grader v2", "unit": "right of 500"}
+{"id": "t34", "what": "right of 500, MMLU-Pro + BBH, untrained base with the unchanged Math cue, T 1.0 / top-p 1.0, grader v2", "unit": "right of 500"}
+{"id": "t35", "what": "right of 500, MMLU-Pro + BBH, RL-Zero-Math plain prompt, T 1.0 / top-p 1.0, grader v2", "unit": "right of 500"}
+{"id": "t36", "what": "right of 500, MMLU-Pro + BBH, Think-SFT with Math cue, T 1.0 / top-p 1.0, grader v2", "unit": "right of 500"}
+{"id": "t37", "what": "MMLU-Pro (250 items) gain of cued base over plain base, T 1.0, grader v2", "unit": "points"}
+{"id": "t38", "what": "BBH (250 items) gain of cued base over plain base, T 1.0, grader v2", "unit": "points"}
+{"id": "t39", "what": "RL-Zero-Math plain minus cued base on MMLU-Pro + BBH (n=500), T 1.0, grader v2", "unit": "points"}
+{"id": "t40", "what": "right of 500, MMLU-Pro + BBH, RL-Zero-Math plain prompt scored under the spec's original grader, T 1.0", "unit": "right of 500"}

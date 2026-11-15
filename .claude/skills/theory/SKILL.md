@@ -1,203 +1,128 @@
 ---
 name: theory
-description: Build theories that connect the team's experiments, test each on stored per-problem rows instead of by opinion, and turn them into the next GPU experiment. One round runs studies/theory/lib/round.py - headless Claude runs in empty directories propose pairwise different mechanisms from the board items before a cutoff and develop each into a theory with offline predictions, GPU predictions and one change to the untrained base it implies; scripts written before any number is seen compute the offline predictions from stored rows, against two no-theory readers; with --with-account, one account budgets the gap between the cued base and RL-Zero-Math into mechanisms whose computed shares add up; each survivor meets the strongest rival a fresh agent can write, scored by the same log gain; each side of a pair then predicts the other side's GPU experiments blind, and the open experiments are ranked by separation per GPU minute and by gain over the best known base count; the top one is posted and run, and its result scores both sides next round. Use when the user asks for a theory, an explanation across experiments or what the results mean together, and after every fifth closed result. Writes studies/theory/results/engine/round-<nn>/ and updates studies/theory/README.md.
+description: Find mechanisms that explain the team's experiments and keep the ones that forecast new numbers. One round runs studies/theory/lib/forecast.py round - six headless Claude jobs in empty directories, one per family of causes, propose mechanisms that must hold against the known numbers; every mechanism and two readers with no theory forecast the numbers the open work items will report; each mechanism designs one GPU cell that separates it from another, everyone forecasts every cell, and the cells are ranked by pairs of families whose intervals do not overlap per GPU minute. The top cells are run, their numbers go into measured.json, and the next round scores every forecast and carries only mechanisms with a positive total gain on 3 or more numbers. Use when the user asks for a theory, an explanation across experiments or what the results mean together, and after every fifth closed result. Writes studies/theory/results/wide/round-<nn>/ and updates studies/theory/README.md.
 ---
 
-# Theory round (version 8)
+# Theory round (version 9)
 
-The main test of a theory is now its forecast of numbers that do not exist yet: the numbers the team's open `work`
-items will report. Each round extracts them (`targets_open`), every theory forecasts them beside two readers with no
-theory, and the next round scores the forecasts against the results posted since. In round 07 the theories said
-nothing on 16 to 20 of 20 such targets; so mechanisms are now written about the targets. The stored-row tests come
-second.
+A mechanism is one sentence (at most 80 words) on what the model does that explains numbers on the board. It is
+judged only by numbers nobody had when it forecast them: the results of the team's open work items, and the cells
+the mechanisms design to tell each other apart. Version 9 exists because the old stages (develop, stored-row
+tests, duels, review) left no usable theory in rounds 01-08, while six cheap families of 6 mechanisms, scored on 5
+new numbers, separated 3 mechanisms at +4.4 to +5.6 nats from one at -12.27 (`specs/SPEC_engine_v9.md`).
 
-A theory is one mechanism sentence that explains numbers from the board, forecasts the open targets, predicts numbers
-nobody has computed, and names the change to the untrained base it implies should raise right answers. It survives when its offline
-predictions, fixed before any row was read, were computed, none was refuted beyond noise, together they gained
-probability against readers with no theory, and one of them won where the readers expected otherwise. It then meets
-the strongest rival a fresh agent can write; a rival that beats it takes its place in the next round and faces a
-fresh rival in turn.
+## What a round is
 
-A round run with `--with-account` also writes one account (`prompts/account.md`): a budget of the gap in right answers between the cued
-base and the final RL model, 3 to 6 parts with ordered rules on stored rows plus `unassigned`, so the shares add up by
-construction, over 3 or more cells beside a null cell (two base samples). A board item's budget is a claim: fitted,
-not scored.
-
-Stored rows test a mechanism only on numbers the team already has; the team wants a change to the untrained base
-that reaches the RL model's score. So every theory, account and rival states one `intervention`
-(`prompts/intervention.md`): a change to the base only (prompt, sampling, decoding, selection; no training, no RL
-weights or directions from them) in one cell of the team's chart, its predicted count of right answers, the best
-base-only count known for that set (with the item id), GPU minutes and why; or `null` with a reason, printed.
-
-## What the rounds showed
-
-- Rounds 01-06: held-out targets, duels and accounts never left a theory that stood on more than one separating
-  test, and none led to a new experiment (details in `studies/theory/README.md`). Hence 7.1's duel and n rules.
-- Round 07 and forecast runs 01-02: stored-row tests used groups of 6 to 55 problems and separated nothing; the
-  theories forecast 0 to 4 of 17 to 20 open targets; the one that forecast (r5-m03-rival) beat both readers on 3;
-  mechanisms forced to disagree with the readers were 0 of 4 right. Hence version 8: forecasts first, no forced
-  disagreement.
+1. Propose wide: six jobs at once, one per family of causes (`LENSES` in `lib/forecast.py`: stopping, sampling,
+   weights, training, problems, grader), 6 mechanisms each. Each mechanism rests on 2 or more board items and names
+   in `holds_against` the two known numbers (board item or `facts.json` entry) nearest to contradicting it.
+2. Forecast: two readers with no theory and every mechanism, carried or new, forecast the open targets.
+3. Design cells: each mechanism designs one GPU cell it gets right and a named other mechanism gets wrong; one job
+   merges cells that are the same run; every mechanism and both readers forecast every cell blind.
+4. Run the top cells (`experiments.md`), write their numbers into `measured.json`.
+5. Score: the next round's `standing` scores this round's forecasts against the results posted since, and its cells
+   against `measured.json`.
+6. Carry the winners: total gain above 0 on 3 or more scored numbers. At or below -2 nats on 3 or more: graveyard.
+   Every other mechanism is dropped; the six families propose new ones.
 
 ## The coordinator's job
 
-Run the stages, read the tables, decide what to post, run the top experiment. Write no mechanism, theory, recipe,
-claim or target and edit no agent's file: you have read the whole board. Work in your own worktree and
-`git pull origin main` first.
-
-## Keeping held-out numbers hidden
-
-- Every model call except `inventory`, `test`, `duel_test` and `review` is a headless `claude -p --restricted` run in
-  an empty directory outside the repository, with only Read and Write: no git status, CLAUDE.md, memory or board.
-- `external` may also run `lib/papers.py` (paper entries only); its findings state mechanisms, not team numbers.
-- `inventory.md` holds no result number: read it before `mechanisms` and delete any line with an accuracy.
-- `standing` stops if the previous round's held-out items are not all before the new cutoff. Its `facts.json` (every
-  number computed so far, cumulative) goes to every agent as known: no prediction or rival test may ask for one.
-- When a held-out number reaches an agent another way, list its item in `<round>/exposed.json`.
-
-## Choosing the cutoff
-
-The cutoff is the posting time of the oldest result or knowledge item no earlier round held out, after every item
-of the previous round's `after.jsonl` (`uv run tools/board.py ls result knowledge --new --n 40`).
+Run the command, read `standing.md`, `cells.md` and `experiments.md`, run the top cells, write `measured.json`,
+post. Write no mechanism, forecast or cell, and edit no job output. Work in your own worktree, `git pull origin main`
+first.
 
 ## The commands
 
-`R=studies/theory/results/engine/round-<nn>` (next free number), `P=` the previous round's folder.
+`W=studies/theory/results/wide/round-<nn>` (next free number), `P=` the previous wide round.
 
 ```
-uv run studies/theory/lib/round.py $R all --cutoff <ISO time> --skip gpuprice --from $P
+uv run studies/theory/lib/forecast.py round $W --from $P
 ```
 
-runs every stage in order except the account (7.1: add `--with-account` to run the account job and to test, duel,
-replicate and review accounts, new or carried); a job whose outputs exist is skipped, so the same command resumes a stopped round. `split`
-stops if the folder exists, so to reuse files (`external.md`; `inventory.md` at the same cutoff) run `split` first,
-copy them in, then `all`. Job dirs (prompt.txt, out.txt) are under a printed temp folder. Prompts: `lib/prompts/<stage>.md`.
+Round 09 (the first) starts from the forecast runs and cells-01:
+`--from studies/theory/results/forecast/run-0{2,3,4,5,6,7,8} studies/theory/results/forecast/cells-01`.
 
-| stage | model | writes |
+| stage | jobs | writes |
 |---|---|---|
-| `split --cutoff T --skip W` | none | `before.jsonl`, `after.jsonl` |
-| `standing --from $P` | none (8: one score job) | 8: `forecast_scores.json` ($P's forecasts against results posted since); `graveyard.json`, `theories/` (survivors with their tests, untested once, `<theory>-rival` for each rival that won), `prior_reviews/`, `facts.json`, `incumbent_account.json`, `gpu_tests.json` (see The score) |
-| `targets_open` | opus, 1 job (8) | `targets.json` (board snapshot time, one target per number an open work item will report: item, cell, unit, quote; none already posted), `work.md` |
-| `inventory` | opus, repository | `inventory.md`: row files, fetch command, readable now, rows, problems and samples per problem counted from the file, fields |
-| `external` | opus, papers.py only | `external.md`: 20-30 published mechanisms with their numbers |
-| `mechanisms --n-mechanisms 12` | opus | `mechanisms.json`: pairwise different, none restating the graveyard or a theory that lost its duel. 7.1: each names in `holds_against` the two items, facts or graveyard theories nearest to contradicting it and why it holds; at least half are about the gap between the cued base and RL-Zero-Math at T 1.0 / top-p 1.0 and give a `base_change` (base alone, same tokens). 8: each lists in `targets` the targets it gives a number for, a third of them or more, at least 3; no need to disagree with the readers |
-| `develop` | opus, 1 per mechanism | `theories/r<n>-m<id>.json` (3+ offline, 1+ GPU predictions, an intervention; 8: `forecasts` for a third of the targets or more, at least 3), `dropped.json`, `theories.sha256` |
-| `account` | opus, 1 job; 7.1: only with `--with-account` | `theories/r<n>-account.json`: cells (one null), parts with ordered rules, evidence, shares per cell with `vs_null`, fits for claimed cells, a net count per cell, 2+ cross-predictions, 1 GPU prediction, an intervention |
-| `forecast` | opus (8) | `forecasts.json` (snapshot and written time, forecasts per forecaster), `forecasts.md`: two readers and each carried theory forecast every target blind; new theories bring theirs. Runs before the tests, so forecasts are fixed early |
-| `null_tests` | opus, 2 jobs | `tests_blind.jsonl`, `predictions/nulltest-{1,2}.jsonl` |
-| `test` | opus, repository, laptop only | `tests/<theory>/p<k>.py` written first, run once by the script; `tests/<theory>.json`. 7.1: `n` is the size of the smallest group the number depends on; a script that contrasts groups prints each group's size (same rule for duel and replication scripts) |
-| `score_tests` | none | `metrics_v4.json`, table, a round total line. 7.1: a promoted `<theory>-rival`'s carried duel tests are not offline tests: its entry shows `carried_duel` (gain, tests) and 0 computed, kept out of the round's totals |
-| `replicate` | opus, repository, laptop only | after `score_tests` and after `score_duel`: every decisive number recomputed from its recipe alone, `replication/<theory>[.duel].json`; one that differs is left out until a person resolves it. 7.1: when both the first script and the replication meet the refuting condition, they agree, and the prediction stays in the score as refuted |
-| `heldout` | sonnet, opus | survivors only: `targets.jsonl`, `predictions/null-*.jsonl`, `claims/`, strikes |
-| `rival` | opus, 1 per survivor | `rivals/<theory>.json`: the strongest rival, 2-4 tests where the two differ, its predictions, its intervention (top 3 survivors) |
-| `defend` | opus, 1 per survivor | `rivals/<theory>.defend.json`: predictions for the rival's tests from the theory alone |
-| `rival2`, `defend` | opus | second turn where fewer than 2 tests separate: `rivals/<theory>.turn2.json` (replacement tests, or `no_offline_test` with one GPU experiment), `.turn2.defend.json` |
-| `duel_test` | opus, repository, laptop only | both turns: `rivals/<theory>[.turn2]/p<k>.py` written first, run once; `.tests.json` |
-| `score_duel` | none | `metrics_v5.json`, table. 7.1: a `same` test adds 0 and prints as not separating; deciding needs 2 separating computed tests |
-| `cross_predict` | opus, 2 per pair, blind | `experiments/<theory>.json`: for every theory with a rival file (any duel state; the account too; a carried pair keeps its file), each side predicts the other side's GPU predictions and intervention (value, low, high, why) from its own mechanism, without the other's statement or numbers. A side with no intervention (a folder before version 7) writes one in the same job; the other side predicts it in a second job |
-| `review` | opus, repository | `reviews/<theory>.json` for the same survivors and for the account (with `--with-account`) whatever its state; names the duel state; about the rival when it won. 7.1: "stands" needs 2 or more separating duel tests won, the smallest n among them 50 or more; otherwise at most "weak" |
-| `experiments` | none | `experiments.json`, `experiments.md`: every open experiment ranked (a) by separation per GPU minute, (b) interventions by gain over best; each entry has the setting to run and both predictions |
+| `standing` | one score job per `--from` folder with `forecasts.json`, at once | `standing/forecasts-<src>.json/.md`, `standing/cells-<src>.json/.md` (from `measured.json`), `standing.json` (carried mechanisms with their scored rows; every record), `standing.md` (ranked), `graveyard.json` |
+| `targets_open` | 1 | `targets.json` (board snapshot time; one target per number an open work item will report), `work.md` |
+| `forecast` | 2 readers + 1 per carried mechanism | `jobs/forecast/` |
+| `propose` | 6, at once | `jobs/mechanisms-<family>.json`, then `mechanisms.json` (carried + new; ids `<round>/<family>-mNN`), `forecasts.json`, `forecasts.md` |
+| `cells` | 1 per family, 1 merge, 2 readers + 1 per family | `cells.json` (proposals, `dropped`, merged cells ranked), `cell_forecasts.json`, `cells.md` |
+| `experiments` | none | `experiments.md`: list A, top 10 cells by separation per GPU minute; list B, base-only cells by the highest forecast over the best known base count; each with its command |
 
-A theory failing its check is sent back once, then dropped; any other failing job is sent back once, then stops
-the round. The rival sees the theory and its computed tests; the defender sees only the theory, the items and the
-rival's recipes; the duel test writer only the recipes. Test scripts run in the graders' environment (`TEST_PYTHON`
-in round.py) and print through `lib/noise.py`: the number, n and a 90 % bootstrap interval over problems, or a
-binomial interval or none for a single count. S3 reads use `AWS_PROFILE=iterate-ecr`. Stages run by name on an
-existing folder (`round.py $R cross_predict experiments` on an earlier version's folder writes only `experiments/`,
-`experiments.json`, `experiments.md`). A folder not named `round-<nn>` is the round after `--from`. `--only-account`
-tests and duels only the account and implies `--with-account`; `--account-from <folder>` adds another chain's accounts to its inputs; `--version 6`
-runs without interventions; `--model-all sonnet --min-targets 3 --n-mechanisms 3` smoke-tests a folder outside `studies/`.
+A stage whose output exists is skipped, so the same command resumes a stopped round. A job whose output fails its
+check is sent back once, then stops the round, except a cell whose command still fails the flag check: it is dropped
+and the reason recorded. Job prompts and raw outputs are under the temp folder printed first and named in
+`run.json`. Prompts: `lib/prompts/forecast_targets.md`, `forecast.md`, `forecast_propose.md`, `forecast_score.md`,
+`cells_propose.md`, `cells_merge.md`, `cells_forecast.md`. `--propose N` sets mechanisms per family (default 6);
+`--model-all <model>` overrides every job's model. Smoke test: `--propose 2 --model-all sonnet` in a folder outside
+the repository.
 
 ## The score
 
-A prediction (value, low, high) is a normal density with sd = max((high - low) / 3.29, 0.01 * max(|value|, 1)); the
-null is the equal mixture of the two test readers' densities. Gain = log prediction density minus log null density
-at the computed value, clipped to [-3, 3] nats. A value outside its interval counts as `outside` (and a refuting
-condition as met) only when the measured 90 % interval misses the predicted one; otherwise it prints `outside,
-within noise`. States: `refuted` (a refuting condition met, or two predictions outside), `survives` (2 or more
-computed, total gain above 0, and one prediction inside its interval while both readers' centres lie outside it),
-`untested` (fewer than 2 computed), `no gain` (otherwise; the table says why). Two held-out strikes (claims both
-readers contradict that miss their interval) refute. A review verdict of refuted or published sets that state.
+A forecast (value, low, high) is a normal density with sd = max((high - low) / 3.29, 0.01 * max(|value|, 1)). Gain
+= log density of the forecast minus log density of the equal mixture of the two readers at the measured value,
+clipped to [-3, 3] nats. A forecast whose measured value lies outside its own 90 % interval gains at most 0
+(version 9); losses are not capped. A mechanism's record is the sum over every scored number, carried from round to
+round. The same cap holds in `round.py` (tests, held-out claims, duels, GPU tests: a side outside its own interval
+gains at most 0 there too).
 
-The duel uses the same density and clip: on each computed rival test, gain = log density of the defender's
-prediction minus log density of the rival's, at the computed value, over the tests of both turns. With 2 or more
-computed: `not tested against rival` with fewer than 2. A test with `same_prediction` (the defender's centre inside
-the rival's interval) is not separating and adds 0 to the total (7.1); `separating` counts the others. `beats rival`
-needs 2 or more separating computed tests and a total of +2 nats or more, `loses to rival` the same and -2 or less;
-otherwise `not separated from rival`. A review may not call a theory that beats its rival "weak" only because some rival exists.
+## Cells and the flag check
 
-An open experiment's `separation` is the proposer's log gain over the other side if the proposer's value is
-measured, by the same density and clip; `gain_over_best` (interventions) is the predicted count minus the best known
-base-only count. A measured experiment is scored by `standing` for both sides by the duel rule (each side's log
-density minus the other's at the measured value) into `gpu_tests.json` (cumulative), `facts.json` (kind `gpu`) and
-the table (`GPU test`, kept out of the offline total). A side whose measured value lies outside its interval, and
-outside the measured 90 % interval when one is given, gets a strike; two strikes send it to the graveyard (`refuted
-by GPU tests`), and a rival with two is not promoted.
+The proposer gets `jobs.md`: the job rows and "How to run" of `studies/rlneurons/README.md`, and per job file its
+flags with their allowed values, parsed from its `add_argument` calls (`lib/cells.py` `job_flags`; a file with no
+flags of its own takes those of the job modules it imports, as `run_fresh.py` takes `run_cell.py`'s). A proposed or
+merged cell whose command names a job file, flag or `choices` value that does not exist is sent back once, then
+dropped (`cells.json` `dropped`). The check does not catch a flag whose values are free text.
 
-Forecasts (8) use the same density and clip against the equal mixture of the two readers. `standing` scores the
-previous round's `forecasts.json` against the items posted after its snapshot (`forecast_scores.json`; graveyard
-entries get `forecast`: scored, inside, total gain). A theory with 3 or more scored targets and a total at or below
--2 nats is `refuted by forecasts` and goes to the graveyard with those targets named. A review may say "stands" only
-with a total forecast gain above 0 on 3 or more scored targets, besides the 7.1 duel rule.
+Separation of a cell = pairs of forecasters from different families (each reader is its own family) whose 90 %
+intervals do not overlap, summed over its readouts. Before running a top cell, check the board for the same run
+(`tools/recall.py`, `board.py ls result`).
 
-`standing` carries survivors (verdict not refuted, published or weak) with their tests, rival files, experiments and
-duel result, none computed again, and an `untested` theory once. A theory that `loses to rival` goes to the
-graveyard and its rival enters as `<theory>-rival`, its duel tests as its record, to meet a fresh rival. That record
-is reported as `carried_duel` ("carried duel win, +8.77 nats over 3 tests"), never as predictions computed or inside.
+## Running a cell and writing measured.json
 
-## When a stage stops
+Run a cell with its command from `experiments.md` (`tools/gpu.py` or `tools/vast.py`, never the laptop) in your own
+worktree and study folder, as every GPU run (AGENTS.md). Compute each readout as `cells.md` defines it from the job's
+rows. Then append one row per readout to `$W/measured.json`, a JSON list:
 
-It prints the job and its `out.txt` (`out.sendback.txt` after a send-back); rerun the same command. A crashing test
-script: delete its script folder once for fresh scripts. Never edit a recipe or a script; not computable stays so.
+```
+[{"readout": "m03-r1", "measured": 131, "n": 200, "interval": [118, 144], "artifact": "studies/<study>/results/...", "item": "result-xxxxxx"}]
+```
 
-## What a round delivers
+`readout` is a readout id of `cells.json`, `measured` a number in the readout's unit, `interval` the measured 90 %
+interval or null. `standing` stops on a row that breaks this. Post the number as a `result` with every forecaster's
+interval beside it.
 
-1. The computed numbers new to the team, each with who asked for it and whether the readers expected it (`result`).
-2. `experiments.md`: open experiments by separation per GPU minute and changes to the base by gain over the best
-   known base count, both sides' predictions beside each; the top entries are the next experiments.
-3. The surviving mechanisms, each with its rival. 4. The refuted theories.
+## Deep tests (--deep)
 
-## Posting
+For mechanisms already carried with a positive forecast gain, `round.py` runs the version-8 stages (develop into a
+theory with offline predictions, stored-row tests against two readers, replication, rival and duel, cross-predicted
+GPU experiments, review) on them alone:
 
-- The top entry of each list in `experiments.md` as an `idea` with its setting and both predictions, before anyone
-  runs it. Run the top experiment when it costs at most 30 GPU minutes (the AWS PG tool of the parent repository
-  first, then vast.ai, never the laptop), add it to this round's `experiments_measured.json` (a list of {id,
-  measured, n, interval or null, artifact, item}) and post it as a `result`; the next `standing` scores both sides.
-- Every survivor as an `idea`: statement, computed tests (measured, interval, readers, gain), strikes, duel state
-  and tests (computed value, both predictions, gain), the review's nearest published claim, its GPU predictions.
-- A rival that beats or is not separated from its theory is posted as an `idea` too, with its duel tests and the
-  review of it; the next round's `mechanisms` stage sees it there, and `standing` promotes a winner.
-- Every refuted theory in one `knowledge` item: statement, refuting test, measured number. A wrong prediction is a result.
+```
+uv run studies/theory/lib/round.py studies/theory/results/engine/round-<nn> all --cutoff <ISO time> --skip gpuprice \
+  --from <previous engine round> --deep $W
+```
 
-## Recording
+`--deep` replaces the `mechanisms` job with the wide round's carried mechanisms. The stages and their rules are in
+`round.py`'s docstring; `--model-all sonnet --min-targets 3` smoke-tests it outside `studies/`. About 60 to 80 jobs
+and 1.5 hours: run it only when a carried mechanism needs a stored-row test before a costly GPU cell.
 
-`$R/run.json`: commit, cutoff, counts (items, mechanisms, abandoned, theories, offline predictions, computed, not
-computable, duel tests computed), jobs per stage, the temp folder. `$R/examples.json`: one computed test inside
-its interval and one outside, with script path and readers. One row per theory in `studies/theory/README.md`
-(statement, tests computed, in/noise/out, gain, state, duel state, verdict, GPU predictions) in the same commit. For an
-entry with `carried_duel`, write "carried duel win, +<gain> nats over <n> tests" in place of tests computed and gain.
-Close the `work` item: `theory round <nn>: <s> of <m> survive; <c> of <o> computed, <i> inside, <x> outside; <r>
-refuted; <b> beat their rival. $R/metrics_v4.json $R/metrics_v5.json $R/experiments.md`
+## What a round delivers and posts
 
-## Forecasts outside a round
-
-`lib/forecast.py make <folder> [--propose N]` and `score <folder>` (results under `results/forecast/run-<nn>/`) run the
-same target, forecast and score steps on the newest round's theories without a round; `score` writes
-`scores-<UTC time>.json/.md` when `scores.json` exists. `--propose N` adds N mechanisms (run-02 forced them to
-disagree with the readers on 3 targets; that rule is gone); `--lens "<text>"` names the family of causes they come from
-(run-03 to run-08: six lenses run at once).
-
-## Cost per round
-
-65 to 80 headless jobs, nearly all opus, about 1.5 hours: 12 developers, about 13 test writers and as many
-replicators, 3 to 6 duel jobs and 2 cross_predict jobs per pair, the rest single jobs. No GPU in the round; the top
-experiment after it takes up to 30 GPU minutes.
+1. `standing.md`: every scored mechanism with scored numbers, inside, total gain, state. Post the carried ones as
+   `idea` items (statement, holds_against, record) and the graveyard ones in one `knowledge` item with the numbers
+   that refuted them. A wrong forecast is a result.
+2. `experiments.md`: the top cell of list A as an `idea` with its command and the forecasts that do not overlap,
+   before anyone runs it; run it when it costs at most 30 GPU minutes.
+3. `$W/run.json` (commit, command, sources, counts, minutes) and one paragraph in `studies/theory/README.md` in the
+   same commit: carried, graveyard, cells proposed, dropped, merged, cells with a non-overlapping pair, minutes.
+   Close the `work` item with those numbers and the paths of `standing.md`, `cells.md` and `experiments.md`.
 
 ## What a round may claim
 
-- A number is posted only when `replicate` reproduced it (within 1 %, or 0.005).
-- A survivor passed its own tests once. Say the predictions computed, the total gain and the unexpected wins.
-- An account's measured shares are a result whatever its state: report each with n, interval and its rule.
-- A duel is won against one rival on 2 or more separating tests. Say the rival, the tests computed and how many separated.
-- An experiment's two predictions were fixed before it ran; its result scores both sides once.
-- A refuted theory is refuted by the measured number, not by a model's opinion. Held-out items enter the next
-  round's `before.jsonl`: a theory is tested on them once.
+- A mechanism's record counts only numbers measured after its forecast was written. Say scored, inside and total gain.
+- A cell separates mechanisms only after it is run: before that, the ranking is the mechanisms' own forecasts.
+- Forecasts outside a round: `forecast.py make <folder> [--propose N --lens "<text>"]`, `score <folder>
+  [--rescore]` and `cells <folder> --from <runs...>` still run alone (results under `results/forecast/`).

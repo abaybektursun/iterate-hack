@@ -1,0 +1,42 @@
+{
+ "pair": "r5-m03-rival",
+ "theory_state": "survives",
+ "duel_state": "not separated from rival",
+ "statements": {
+  "r5-m03-rival": "The top-8 edit is an incomplete switch that happens or fails sample by sample. On most answers (about 85-90 %) it puts the base on a weak dose of RL's own policy: longer answers, RL-style checking, almost no quick wrong answers, errors only on hard problems. On the other 10-15 % the plain prompt leaves the base in its plain-base register: short answers, wrong about half the time whatever the problem's difficulty. So top8 plain is a mixture of RL-like answers and plain-base answers, not a copy of the cued base.",
+  "r5-m03-rival-rival": "The top-8 edit gives a weak dose of RL's policy on every sample, and top8 plain's quick wrong answers are the plain prompt's own failures. Which problems fail is a property of the problem (its difficulty plus prompt-specific traps), not a flat ~50 % coin flip taken per sample whatever the difficulty, so the plain base's errors track how hard the problem is and repeat across independent plain samples of the same problem."
+ },
+ "no_intervention": {
+  "r5-m03-rival": "The mechanism traces top8's errors and gains to a weak dose of RL's own checking policy, which comes from RL weight directions, plus a leftover plain-base register; the only base-only lever it names is switching into the deliberative register, and the opening cue already does that with a measured number (410/500, result-c36598), so it implies no new untrained-base change that should beat the chart.",
+  "r5-m03-rival-rival": null
+ },
+ "experiments": [
+  {
+   "id": "r5-m03-rival:rival:intervention",
+   "kind": "intervention",
+   "unit": "right of 500",
+   "gpu_minutes": 1,
+   "experiment": "Keep the usual 4-sample plurality vote over the stored cued base samples, but break vote ties with an independent plain-prompt base sample instead of taking the lowest sample. A tie means no strict plurality among the finished samples' answers, grouped with rln4_lib.agree. The plain sample is the first T3.jsonl row per problem_index (base, plain, T 1.0 / top-p 1.0, cap 16,384), with its answer extracted by grader v3 from its text. If the plain answer agrees with exactly one of the tied answer groups, pick that group. Otherwise, or if the plain row is a cap hit or has an empty extraction, fall back to the lowest-sample tie rule of result-5d032f. Problems that are not tied keep the usual vote. No new generation: the stored rows are reused. Model allenai/Olmo-3-1025-7B (base); set MATH-500; prompt MATH-500 prompt with the three-token RL opening cue prefilled for the 4 voting samples; tie-breaker sample uses the plain prompt with no prefix (T3.jsonl); sampling T 1.0 / top-p 1.0; cap 16384; grader v3; samples 4; seeds the stored seeds of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0, samples 0-3, job 153825-208b) plus the stored seed of the first row per problem_index of r4/modal_t3-01/t3/T3.jsonl. Count: Right answers over all 500 MATH-500 problems: a problem counts as right if the selected answer group contains a cued attempt-0 sample with score_v3 == 1. Cap-hit cued samples and samples with an empty extraction do not vote. A problem whose 4 cued samples all fail to finish counts as wrong. The plain sample only breaks ties and is never counted on its own.",
+   "best_known": {
+    "value": 454,
+    "item": "result-40ed3b",
+    "setting": "base + cue, T 1.0 / top-p 1.0, cap 16,384, grader v3, vote over 4 after restart, ties to the shortest finished sample (19,697 tokens per problem)"
+   },
+   "why": "The mechanism says each prompt fails on its own problem-specific traps, not on the cued base's set, so on the roughly 36 problems where the cued vote ties, an independent plain-prompt answer agrees with the right tied group more often than the lowest sample does (about 5 of 36 for the lowest sample). Plain errors still track difficulty, though, so this adds only about 3 to 5 problems over the 446 vote.",
+   "pair": "r5-m03-rival",
+   "proposer": "r5-m03-rival-rival",
+   "other": "r5-m03-rival",
+   "proposer_prediction": {
+    "value": 450,
+    "low": 444,
+    "high": 456
+   },
+   "other_prediction": {
+    "value": 450,
+    "low": 446,
+    "high": 455,
+    "why": "The mechanism treats the plain base as a short-answer register that is right about half the time whatever the difficulty, so on the ~20 of 36 ties that contain a right group the plain sample picks it ~45% of the time (vs 5 of those ties won by the lowest-sample rule), lifting the 446 vote by about 4 to ~450, short of the 453 tie_short rule."
+   }
+  }
+ ]
+}

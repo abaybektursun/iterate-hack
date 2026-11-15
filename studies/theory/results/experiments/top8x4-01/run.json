@@ -1,0 +1,19 @@
+{
+ "experiment": "top8x4-01",
+ "spec": "studies/theory/specs/SPEC_top8x4.md",
+ "board": {"idea": "idea-7ca1fe", "work": "work-22359d"},
+ "commit": "c2cd5b7eb75e03bac41de8b2f3df75e85d722421",
+ "command": "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top8 --prompt plain --set math500 --temperature 1.0 --top-p 1.0 --seed 187000000 --samples 3 --shard <k>/3 --commit c2cd5b7eb75e03bac41de8b2f3df75e85d722421",
+ "jobs": {
+  "0/3": {"job_id": "abaybektursun-1115-085111-e8c2", "rows": 501, "wall_s": 2585},
+  "1/3": {"job_id": "abaybektursun-1115-085127-c0c4", "rows": 501, "wall_s": 3286},
+  "2/3": {"job_id": "abaybektursun-1115-085134-75f7", "rows": 498, "wall_s": 2809}
+ },
+ "smoke": {"job_id": "abaybektursun-1115-084304-e2e8", "args": "--n 3 --max-tokens 512 --samples 1", "rows": 3},
+ "gpu": "vast.ai, 1x RTX PRO 6000 (96 GB) per shard; vLLM 0.32.0",
+ "seed_rule": "187000000 + 10000 * s + index, s = 0, 1, 2 (readout samples 1, 2, 3)",
+ "stored_sample_0": "studies/rlneurons/results/wsp1/full500/top8_plain-01/ (job sameraslan-1114-185934-b0a9, H100, seed 180000000 + index)",
+ "edit_check": "add_norm 1.2692140409070003 in every job and in the stored cell; written_norm 2.596229 here against 2.596250 stored (stochastic BF16 rounding on another GPU)",
+ "raw_answers": "runs/abaybektursun-1115-085111-e8c2/, runs/abaybektursun-1115-085127-c0c4/, runs/abaybektursun-1115-085134-75f7/ (answers.jsonl, metrics.json, edit.json, log) on the laptop of the run, worktree iterate-hack-top8x4; also in the team store as jobs/<job-id>.tar",
+ "readout": "uv run --no-project --with numpy python studies/theory/analysis/top8x4.py --runs runs/abaybektursun-1115-085111-e8c2 runs/abaybektursun-1115-085127-c0c4 runs/abaybektursun-1115-085134-75f7 --out studies/theory/results/experiments/top8x4-01"
+}

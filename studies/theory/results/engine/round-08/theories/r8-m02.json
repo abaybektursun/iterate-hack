@@ -1,0 +1,207 @@
+{
+ "name": "r8-m02",
+ "statement": "The cued Olmo-3 base loses part of its finished-wrong answers by abandoning a line of attack before finishing it (thought switches such as 'Alternatively', 'Another approach', 'Let me try a different'), then stating an answer from a later, less-developed attempt; so its wrong answers carry more switch markers per token than right siblings of the same problem, RL-Zero-Math switches less per token and its switches do not mark failure, and penalising switch tokens at decoding recovers a few points.",
+ "scope": "Covers the untrained Olmo-3-1025-7B with the three-token opening cue at T 1.0 / top-p 1.0, cap 16,384, grader v3, on MATH-500 and hard328, and Olmo-3.1-7B-RL-Zero-Math (plain) as the contrast. It is about finished-wrong answers only. It does not cover cap hits and loops (the T 0.6 loop regime), answer-statement/format failures, slips and misreads that happen inside one line, or problems the base never solves (reach). It makes no claim about Think-SFT except that a model that stays on one line gains more from a larger token cap than one that switches.",
+ "parent": null,
+ "imports": [
+  {
+   "source": "2501.18585",
+   "finding": "Long-CoT models switch thoughts more often on wrong answers (418 % more switches on 225 % more tokens), over 70 % of wrong responses abandon a correct early thought, and a 600-token logit penalty on switch tokens raises pass@1 (QwQ AIME 38.3 -> 44.1).",
+   "how": "Supplies the marker class (thought switches, distinct from hold-on words), the per-token excess on wrong answers that the mechanism predicts within problems for the base, and the TIP decoding rule used as the GPU test and the intervention."
+  }
+ ],
+ "explains": [
+  {
+   "item": "knowledge-1a0674",
+   "quote": "they are longer, median log ratio +0.193",
+   "how": "Each abandoned line adds tokens that do not reach an answer, so wrong base samples are longer than their right siblings."
+  },
+  {
+   "item": "result-f21d2e",
+   "quote": "no J-lens feature predicts a wrong base answer better than length",
+   "how": "Length is the visible sum of abandoned partial derivations, so it carries the failure signal better than a per-position readout."
+  },
+  {
+   "item": "result-855858",
+   "quote": "markers do not separate right from wrong samples of the same model and problem",
+   "how": "Those counts are hold-on words (wait/hmm/actually), checks inside one line; the mechanism puts the failure signal in a different class, line switches, which were not counted."
+  },
+  {
+   "item": "knowledge-1a0674",
+   "quote": "0 of its v3-wrong MATH-500 answers have a right first marker",
+   "how": "A switch leaves the earlier line before it reaches a stated answer, so wrong answers have no right earlier answer to overwrite."
+  },
+  {
+   "item": "result-02da9f",
+   "quote": "the untrained base in 66.2 %, Think-SFT in 36.2 %",
+   "how": "After several abandoned lines the base states a number the last short attempt never derived, while Think-SFT keeps working one line until the cap."
+  },
+  {
+   "item": "result-5e17a6",
+   "quote": "Base answers <= 2,000 tokens: 263, 13 wrong",
+   "how": "Short base answers rarely contain a switch, so they are almost always right; the wrong answers sit in the longer, switching samples."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "result-afc423",
+   "quote": "Base items with a right sibling: 39 of 48 slip/misread/format",
+   "how": "A blind judge locates most base errors on problems with a right sibling as local slips, misreads or format, not as abandoned lines; the mechanism can claim at most the minority of those failures."
+  },
+  {
+   "item": "result-faf15a",
+   "quote": "RL lowers misreadings and slips, not wrong plans",
+   "how": "If RL's advantage were staying on a line, its lowering of the base's wrong steps should show on plan-level steps; it shows on local steps instead."
+  },
+  {
+   "item": "knowledge-90431f",
+   "quote": "RL concordance 0.72 (156 pairs) vs 0.55 [0.43, 0.67], above the base's 0.62",
+   "how": "Length marks failure at least as strongly for RL as for the base, which a base-specific switching cause does not predict unless RL's long wrong answers fail for another reason."
+  },
+  {
+   "item": "knowledge-d692e4",
+   "quote": "Fixed rules: forced 'Wait', logit bias, greedy first 100 tokens",
+   "how": "Published fixed logit-bias rules stay at or below the base on other models, a prior against the TIP penalty helping."
+  },
+  {
+   "item": "result-c495fe",
+   "quote": "A slip is chance; a misreading starts before its sentence",
+   "how": "The located base errors fit per-step chance and early misreading, both inside one line, not a switch away from a sound line."
+  }
+ ],
+ "rival": "Error accumulation with length (2502.07266; r3-surprises-1): wrong base samples are longer because more steps give more chances to slip, and switch phrases occur at a constant rate per token in any long text; it predicts a within-problem per-token switch-rate ratio, wrong over right, of about 1.0 and no gain from a switch penalty. The separating observation is that per-token ratio on the base's 4-sample MATH-500 rows (this theory about 1.45, the rival about 1.0), together with the same ratio on RL (both about 1.0, so only the base contrast separates them).",
+ "predictions": [
+  {
+   "experiment": "Mechanism test against the length/error-accumulation rival: within-problem switch-marker rate per 1,000 generated tokens, finished-wrong over right samples, cued base, MATH-500, T 1.0, 4 samples. The rival (switches scale with tokens; wrong answers are only longer) predicts about 1.0; this mechanism predicts about 1.45.",
+   "recipe": "File: runs/theory-rows/abaybektursun-1114-153825-208b/answers.jsonl (modal volume get iterate-runs abaybektursun-1114-153825-208b/answers.jsonl; base, cue, T 1.0 / top-p 1.0, MATH-500, 4 samples). Keep rows with attempt == 0 and sample in {0,1,2,3}; for each (problem_index, sample) keep the first row in file order. Finished = cap_hit is not true and finish_reason != 'length'; cap hits are dropped entirely. Right = finished and score_v3 == 1; finished-wrong = finished and score_v3 != 1 (0, null or missing). SW regex (Python re, case-sensitive): (?<![A-Za-z])(Alternatively|Another approach|Another way|Let me try (?:a )?(?:different|another)|Let's try (?:a )?(?:different|another)|Instead, let). S(row) = len(re.findall(SW, text)); T(row) = n_new. Eligible problems = those with at least one right and at least one finished-wrong kept row. Pool over eligible problems: S_w, T_w = sums over finished-wrong rows; S_r, T_r = sums over right rows. Statistic R = (S_w / T_w) / (S_r / T_r). If S_r == 0 the statistic is undefined and counts as refuted.",
+   "unit": "ratio of per-token rates (wrong / right)",
+   "value": 1.45,
+   "low": 1.15,
+   "high": 1.85,
+   "refuted_by": "R below 1.10, or undefined",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Cause: base versus RL switch-marker rate per 1,000 tokens on finished MATH-500 answers at T 1.0 (RL learned to stay on one line). A reader who sees RL writing more deliberation words of every kind (result-855858, result-b4c576) expects RL at or above the base, a ratio at or below 1.0.",
+   "recipe": "Files: runs/theory-rows/abaybektursun-1114-153825-208b/answers.jsonl (base, cue) and runs/theory-rows/abaybektursun-1114-183640-e828/answers.jsonl (RL, plain), both fetched with modal volume get iterate-runs <job>/answers.jsonl. In each file keep rows with attempt == 0 and sample in {0,1,2,3}, first row per (problem_index, sample) in file order, and keep only finished rows (cap_hit not true and finish_reason != 'length'), right and wrong together. SW regex, S(row) and T(row) = n_new exactly as in the first recipe. Rate(file) = sum of S / sum of T over the kept rows. Statistic = Rate(base) / Rate(RL). If the RL sum of S is 0, the statistic counts as refuted only if the base sum of S is also 0; otherwise report +infinity (not refuted).",
+   "unit": "ratio of per-token rates (base / RL)",
+   "value": 1.6,
+   "low": 1.15,
+   "high": 2.4,
+   "refuted_by": "statistic below 1.15",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Where the effect should not appear: the same within-problem wrong-over-right per-token switch ratio for RL-Zero-Math, whose switches (per this mechanism) come after a line is verified and so do not mark failure. The 2501.18585 reading (switching marks failure in any long-CoT model) predicts about 1.6 here as well.",
+   "recipe": "File: runs/theory-rows/abaybektursun-1114-183640-e828/answers.jsonl (RL, plain, T 1.0, MATH-500, 4 samples). Apply exactly the row selection, finished/right/finished-wrong definitions, SW regex, S, T, eligible-problem rule and pooled statistic R = (S_w / T_w) / (S_r / T_r) of the first recipe to this file. If S_r == 0 the statistic is undefined and counts as refuted.",
+   "unit": "ratio of per-token rates (wrong / right)",
+   "value": 1.0,
+   "low": 0.7,
+   "high": 1.3,
+   "refuted_by": "R above 1.40, or undefined",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Cause, the answer comes from the least-developed attempt: among the cued base's finished MATH-500 answers with exactly one switch marker, the share whose text after the switch is shorter than the text before it, finished-wrong minus right. A null in which the switch position is unrelated to correctness gives 0.",
+   "recipe": "File: runs/theory-rows/abaybektursun-1114-153825-208b/answers.jsonl. Row selection, finished, right and finished-wrong as in the first recipe (attempt == 0, samples 0-3, first row per (problem_index, sample), cap hits dropped), over all problems (no eligibility filter). Keep rows with exactly one match of the SW regex of the first recipe. Let p = the start index of that match in text. Short-final = (len(text) - p) < p (characters). F_w = share of short-final among kept finished-wrong rows; F_r = share among kept right rows. Statistic = F_w - F_r. If either group has fewer than 10 rows the statistic counts as refuted.",
+   "unit": "difference of fractions of samples",
+   "value": 0.15,
+   "low": 0.0,
+   "high": 0.32,
+   "refuted_by": "statistic below -0.03, or a group with fewer than 10 rows",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "TIP switch penalty on the cued base, hard328, T 1.0 / top-p 1.0, cap 16,384, one sample, seed 3,000,000 + index (the seed of the stored 164-right cell): a logit penalty of 3 nats on the first token of ' Alternatively', 'Alternatively', ' Another', ' Instead' for the 600 tokens after the answer start and after each generated switch match; graded v3, cap hits wrong.",
+   "unit": "right of 328",
+   "value": 171,
+   "low": 159,
+   "high": 183,
+   "refuted_by": "fewer than 160 right (no gain over the unpenalised cell's 160-164)",
+   "gpu_minutes": 55
+  }
+ ],
+ "forecasts": [
+  {
+   "id": "t05",
+   "value": 455,
+   "low": 448,
+   "high": 462,
+   "reason": "Switch-induced wrong answers come from diverse abandoned lines and scatter, so votes absorb them; vote 4 = 446-450, the vote grows about 2 points per doubling up to 9."
+  },
+  {
+   "id": "t06",
+   "value": 457,
+   "low": 450,
+   "high": 464,
+   "reason": "Same scattering of switch-made wrong answers; 12 samples add 1-3 problems over 9 as the remaining errors are reach and repeated wrong values."
+  },
+  {
+   "id": "t07",
+   "value": 168,
+   "low": 157,
+   "high": 179,
+   "reason": "The base's long answers keep switching rather than finishing a line, so the extra 16k tokens convert few of its 67-77 cap hits to right answers (about 8)."
+  },
+  {
+   "id": "t08",
+   "value": 160,
+   "low": 151,
+   "high": 169,
+   "reason": "Counting only answers finished within 16,384 tokens reproduces the stored seed-3,000,000 sample (160-164), less run-to-run noise."
+  },
+  {
+   "id": "t13",
+   "value": 250,
+   "low": 240,
+   "high": 260,
+   "reason": "Think-SFT stays on one line (36 % asserted, 88 % precision when finished), so its 29 % cap hits finish right at 32k and the vote nears its pass@4."
+  },
+  {
+   "id": "t14",
+   "value": 240,
+   "low": 232,
+   "high": 248,
+   "reason": "Cutting the same samples at 16,384 tokens reproduces the stored 241 vote within seed noise."
+  },
+  {
+   "id": "t15",
+   "value": 70,
+   "low": 62,
+   "high": 78,
+   "reason": "A one-line model gains from budget: Think-SFT single 60 of 136 at 16k, vote adds about 5, the 32k cap adds about 4."
+  },
+  {
+   "id": "t16",
+   "value": 65,
+   "low": 58,
+   "high": 73,
+   "reason": "The same samples cut at 16,384 tokens: single 60 plus about 5 from the vote."
+  }
+ ],
+ "intervention": {
+  "change": "Decoding only: a TIP logit penalty of 3 nats subtracted from the first token of the switch words ' Alternatively', 'Alternatively', ' Another' and ' Instead' during the first 600 generated tokens after the answer start and during the 600 tokens after each generated match of the switch regex (Alternatively|Another approach|Another way|Let me try (a )?(different|another)|Let's try (a )?(different|another)|Instead, let); everything else as in the usual cued T 1.0 cell.",
+  "model": "allenai/Olmo-3-1025-7B (base)",
+  "cell": {
+   "set": "MATH-500",
+   "prompt": "the standard prompt with the opening cue ' line!\\n\\nOkay' prefilled",
+   "sampling": "T 1.0 / top-p 1.0",
+   "cap": 16384,
+   "grader": "v3",
+   "samples": 1,
+   "seeds": "per-request seed of the T1 cell (run_cell default, 1,000,000 + problem index), one sample per problem"
+  },
+  "count": "Right answers of the 500 MATH-500 problems by grader v3 on the single sample; a cap hit counts as wrong; no restart, no vote.",
+  "unit": "right of 500",
+  "value": 424,
+  "low": 411,
+  "high": 437,
+  "best_known": {
+   "value": 454,
+   "item": "result-40ed3b",
+   "setting": "cued base, T 1.0, vote over 4 samples after restart, ties to the shortest finished sample (19,697 tokens per problem)"
+  },
+  "gpu_minutes": 35,
+  "why": "If part of the base's finished-wrong answers come from leaving a line before it is finished, suppressing switch tokens early in each line lets those lines finish; with about a quarter of the base's 90 single-sample errors being switch-driven and half of them recovered, one sample moves from about 410 to about 424."
+ }
+}

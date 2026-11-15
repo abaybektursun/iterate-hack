@@ -1,0 +1,2 @@
+{"groups": {"H_sft1_rl20_problems": 328, "T_think_problems": 328, "H_finished_rows": 548, "T_finished_rows": 934}}
+{"measured": -0.004282655246252677, "n": 328, "interval": [-0.008307372793354102, -0.0010672358591248667], "interval_kind": "bootstrap", "refuted_by_met": false, "alt_measured": -0.004282655246252677, "not_computable": null, "example_row": {"arm": "sft1_rl20", "problem_index": 0, "sample": 0, "seed": 3000000, "n_new": 4371, "cap_hit": false, "loop_A": false, "extracted_v3": "116", "score_v3": 1, "gold": "116"}}
