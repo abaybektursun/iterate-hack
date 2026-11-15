@@ -1,0 +1,15 @@
+{
+ "job_id": "sameraslan-1114-184552-a899",
+ "commit": "a2ec2c9a0a69686d274b4e1ed8172dfbe1fb37bc",
+ "command": "python -m studies.cleanneurons.jobs.transplant_curve --rank attr --bias --commit a2ec2c9a0a69686d274b4e1ed8172dfbe1fb37bc",
+ "runner": "tools/gpu.py h100 (Modal workspace sameraslan)",
+ "volume_only": [
+  "kl.npz",
+  "rank.npz",
+  "rank_attr.npz",
+  "bias.npz (d_l per layer for bias_mlp and bias_layer)",
+  "examples.json",
+  "other edit files"
+ ],
+ "volume_path": "iterate-runs:sameraslan-1114-184552-a899/"
+}

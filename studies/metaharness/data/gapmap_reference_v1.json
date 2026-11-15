@@ -1,0 +1,571 @@
+{
+ "what": "the four required tables of every batch, from the clean pilot arena p3 (Modal environment mh-p3 of sameraslan's workspace), 2026-11-15; the subject cell has the settings the worker means for it in that window (prep/worker.py CUSTOM, final)",
+ "jobs": {
+  "accuracy": {
+   "subject": "dana-1114-191055-ebd7",
+   "t2_length_quartile": "dana-1114-191158-0b85",
+   "t1_length_quartile": "dana-1114-191158-37ff",
+   "level5": "dana-1114-191158-1229"
+  },
+  "cap_hit": {
+   "subject": "dana-1114-191314-7611",
+   "level5": "dana-1114-191416-7ab0",
+   "t1_length_quartile": "dana-1114-191416-61ed",
+   "t2_length_quartile": "dana-1114-191416-3879"
+  },
+  "tokens": {
+   "subject": "dana-1114-191534-4482",
+   "level5": "dana-1114-191637-e9cb",
+   "t2_length_quartile": "dana-1114-191637-24c8",
+   "t1_length_quartile": "dana-1114-191637-cf1e"
+  },
+  "tokens_both_right": {
+   "subject": "dana-1114-191757-6ef7",
+   "t2_length_quartile": "dana-1114-191851-0937",
+   "level5": "dana-1114-191851-427d",
+   "t1_length_quartile": "dana-1114-191851-cc69"
+  }
+ },
+ "bootstrap_seconds": {
+  "accuracy": [
+   39.6,
+   39.0,
+   39.1,
+   29.1
+  ],
+  "cap_hit": [
+   39.7,
+   37.5,
+   42.4,
+   37.6
+  ],
+  "tokens": [
+   39.7,
+   45.2,
+   44.4,
+   38.0
+  ],
+  "tokens_both_right": [
+   32.1,
+   35.9,
+   23.2,
+   31.4
+  ]
+ },
+ "accuracy": {
+  "subject": [
+   {
+    "group": "algebra",
+    "n": 124,
+    "t2_minus_t1": 0.0565,
+    "low": 0.0177,
+    "high": 0.097
+   },
+   {
+    "group": "counting_and_probability",
+    "n": 38,
+    "t2_minus_t1": 0.1053,
+    "low": 0.0,
+    "high": 0.2121
+   },
+   {
+    "group": "geometry",
+    "n": 41,
+    "t2_minus_t1": 0.0732,
+    "low": -0.0476,
+    "high": 0.1944
+   },
+   {
+    "group": "intermediate_algebra",
+    "n": 97,
+    "t2_minus_t1": 0.1546,
+    "low": 0.0864,
+    "high": 0.2255
+   },
+   {
+    "group": "number_theory",
+    "n": 62,
+    "t2_minus_t1": 0.0806,
+    "low": 0.0,
+    "high": 0.1607
+   },
+   {
+    "group": "prealgebra",
+    "n": 82,
+    "t2_minus_t1": 0.1098,
+    "low": 0.0357,
+    "high": 0.186
+   },
+   {
+    "group": "precalculus",
+    "n": 56,
+    "t2_minus_t1": 0.1786,
+    "low": 0.0968,
+    "high": 0.2667
+   }
+  ],
+  "t2_length_quartile": [
+   {
+    "group": "q1",
+    "n": 125,
+    "t2_minus_t1": 0.048,
+    "low": 0.0153,
+    "high": 0.0887
+   },
+   {
+    "group": "q2",
+    "n": 125,
+    "t2_minus_t1": 0.04,
+    "low": 0.0083,
+    "high": 0.0776
+   },
+   {
+    "group": "q3",
+    "n": 125,
+    "t2_minus_t1": 0.168,
+    "low": 0.1008,
+    "high": 0.2397
+   },
+   {
+    "group": "q4",
+    "n": 125,
+    "t2_minus_t1": 0.168,
+    "low": 0.0692,
+    "high": 0.2672
+   }
+  ],
+  "t1_length_quartile": [
+   {
+    "group": "q1",
+    "n": 125,
+    "t2_minus_t1": 0.056,
+    "low": 0.0179,
+    "high": 0.1
+   },
+   {
+    "group": "q2",
+    "n": 125,
+    "t2_minus_t1": 0.04,
+    "low": 0.0,
+    "high": 0.0833
+   },
+   {
+    "group": "q3",
+    "n": 125,
+    "t2_minus_t1": 0.072,
+    "low": 0.0153,
+    "high": 0.1333
+   },
+   {
+    "group": "q4",
+    "n": 125,
+    "t2_minus_t1": 0.256,
+    "low": 0.1567,
+    "high": 0.3554
+   }
+  ],
+  "level5": [
+   {
+    "group": "level1-4",
+    "n": 366,
+    "t2_minus_t1": 0.0929,
+    "low": 0.0577,
+    "high": 0.1295
+   },
+   {
+    "group": "level5",
+    "n": 134,
+    "t2_minus_t1": 0.1418,
+    "low": 0.0672,
+    "high": 0.218
+   }
+  ]
+ },
+ "cap_hit": {
+  "subject": [
+   {
+    "group": "algebra",
+    "n": 124,
+    "t2_minus_t1": 0.0,
+    "low": 0.0,
+    "high": 0.0
+   },
+   {
+    "group": "counting_and_probability",
+    "n": 38,
+    "t2_minus_t1": -0.079,
+    "low": -0.214,
+    "high": 0.0
+   },
+   {
+    "group": "geometry",
+    "n": 41,
+    "t2_minus_t1": -0.024,
+    "low": -0.107,
+    "high": 0.0
+   },
+   {
+    "group": "intermediate_algebra",
+    "n": 97,
+    "t2_minus_t1": -0.103,
+    "low": -0.204,
+    "high": -0.011
+   },
+   {
+    "group": "number_theory",
+    "n": 62,
+    "t2_minus_t1": 0.0,
+    "low": 0.0,
+    "high": 0.0
+   },
+   {
+    "group": "prealgebra",
+    "n": 82,
+    "t2_minus_t1": 0.0,
+    "low": -0.048,
+    "high": 0.048
+   },
+   {
+    "group": "precalculus",
+    "n": 56,
+    "t2_minus_t1": -0.125,
+    "low": -0.25,
+    "high": -0.021
+   }
+  ],
+  "level5": [
+   {
+    "group": "level1-4",
+    "n": 366,
+    "t2_minus_t1": -0.0246,
+    "low": -0.0431,
+    "high": -0.0082
+   },
+   {
+    "group": "level5",
+    "n": 134,
+    "t2_minus_t1": -0.0896,
+    "low": -0.1481,
+    "high": -0.035
+   }
+  ],
+  "t1_length_quartile": [
+   {
+    "group": "q1",
+    "n": 125,
+    "t2_minus_t1": 0.0,
+    "low": 0.0,
+    "high": 0.0
+   },
+   {
+    "group": "q2",
+    "n": 125,
+    "t2_minus_t1": 0.0,
+    "low": 0.0,
+    "high": 0.0
+   },
+   {
+    "group": "q3",
+    "n": 125,
+    "t2_minus_t1": 0.0,
+    "low": 0.0,
+    "high": 0.0
+   },
+   {
+    "group": "q4",
+    "n": 125,
+    "t2_minus_t1": -0.168,
+    "low": -0.2459,
+    "high": -0.0932
+   }
+  ],
+  "t2_length_quartile": [
+   {
+    "group": "q1",
+    "n": 125,
+    "t2_minus_t1": 0.0,
+    "low": 0.0,
+    "high": 0.0
+   },
+   {
+    "group": "q2",
+    "n": 125,
+    "t2_minus_t1": 0.0,
+    "low": 0.0,
+    "high": 0.0
+   },
+   {
+    "group": "q3",
+    "n": 125,
+    "t2_minus_t1": -0.024,
+    "low": -0.0543,
+    "high": 0.0
+   },
+   {
+    "group": "q4",
+    "n": 125,
+    "t2_minus_t1": -0.144,
+    "low": -0.2185,
+    "high": -0.0726
+   }
+  ]
+ },
+ "tokens": {
+  "subject": [
+   {
+    "group": "algebra",
+    "n": 124,
+    "t2_minus_t1": 1116.95,
+    "low": 720.59,
+    "high": 1492.96
+   },
+   {
+    "group": "counting_and_probability",
+    "n": 38,
+    "t2_minus_t1": 297.76,
+    "low": -949.71,
+    "high": 1477.73
+   },
+   {
+    "group": "geometry",
+    "n": 41,
+    "t2_minus_t1": 1022.73,
+    "low": -14.97,
+    "high": 2060.84
+   },
+   {
+    "group": "intermediate_algebra",
+    "n": 97,
+    "t2_minus_t1": 63.68,
+    "low": -752.86,
+    "high": 840.18
+   },
+   {
+    "group": "number_theory",
+    "n": 62,
+    "t2_minus_t1": 883.77,
+    "low": 306.76,
+    "high": 1422.56
+   },
+   {
+    "group": "prealgebra",
+    "n": 82,
+    "t2_minus_t1": 920.5,
+    "low": 439.63,
+    "high": 1376.83
+   },
+   {
+    "group": "precalculus",
+    "n": 56,
+    "t2_minus_t1": 933.45,
+    "low": 36.81,
+    "high": 1749.64
+   }
+  ],
+  "level5": [
+   {
+    "group": "level1-4",
+    "n": 366,
+    "t2_minus_t1": 792.8907,
+    "low": 518.7627,
+    "high": 1056.8787
+   },
+   {
+    "group": "level5",
+    "n": 134,
+    "t2_minus_t1": 673.7015,
+    "low": 15.6034,
+    "high": 1311.3236
+   }
+  ],
+  "t2_length_quartile": [
+   {
+    "group": "q1",
+    "n": 125,
+    "t2_minus_t1": 308.992,
+    "low": 26.626,
+    "high": 517.1148
+   },
+   {
+    "group": "q2",
+    "n": 125,
+    "t2_minus_t1": 758.176,
+    "low": 428.9837,
+    "high": 1041.0497
+   },
+   {
+    "group": "q3",
+    "n": 125,
+    "t2_minus_t1": 1022.408,
+    "low": 448.6323,
+    "high": 1545.6387
+   },
+   {
+    "group": "q4",
+    "n": 125,
+    "t2_minus_t1": 954.216,
+    "low": 147.4574,
+    "high": 1746.7359
+   }
+  ],
+  "t1_length_quartile": [
+   {
+    "group": "q1",
+    "n": 125,
+    "t2_minus_t1": 1070.576,
+    "low": 913.4274,
+    "high": 1249.8708
+   },
+   {
+    "group": "q2",
+    "n": 125,
+    "t2_minus_t1": 1632.824,
+    "low": 1368.0333,
+    "high": 1928.4483
+   },
+   {
+    "group": "q3",
+    "n": 125,
+    "t2_minus_t1": 1998.536,
+    "low": 1659.2857,
+    "high": 2352.803
+   },
+   {
+    "group": "q4",
+    "n": 125,
+    "t2_minus_t1": -1658.144,
+    "low": -2451.2794,
+    "high": -868.3978
+   }
+  ]
+ },
+ "tokens_both_right": {
+  "subject": [
+   {
+    "group": "algebra",
+    "n": 115,
+    "t2_minus_t1": 1242.1913,
+    "low": 1053.5077,
+    "high": 1435.1139
+   },
+   {
+    "group": "counting_and_probability",
+    "n": 29,
+    "t2_minus_t1": 260.4138,
+    "low": -459.5,
+    "high": 940.5714
+   },
+   {
+    "group": "geometry",
+    "n": 27,
+    "t2_minus_t1": 834.2593,
+    "low": 84.2994,
+    "high": 1600.25
+   },
+   {
+    "group": "intermediate_algebra",
+    "n": 70,
+    "t2_minus_t1": 991.3571,
+    "low": 535.5246,
+    "high": 1436.1143
+   },
+   {
+    "group": "number_theory",
+    "n": 53,
+    "t2_minus_t1": 782.5849,
+    "low": 389.6556,
+    "high": 1162.614
+   },
+   {
+    "group": "prealgebra",
+    "n": 61,
+    "t2_minus_t1": 888.3115,
+    "low": 628.1713,
+    "high": 1145.3509
+   },
+   {
+    "group": "precalculus",
+    "n": 43,
+    "t2_minus_t1": 1720.3721,
+    "low": 1270.8157,
+    "high": 2169.2433
+   }
+  ],
+  "t2_length_quartile": [
+   {
+    "group": "q1",
+    "n": 100,
+    "t2_minus_t1": 475.13,
+    "low": 381.6768,
+    "high": 562.1284
+   },
+   {
+    "group": "q2",
+    "n": 99,
+    "t2_minus_t1": 716.3636,
+    "low": 467.8555,
+    "high": 930.6408
+   },
+   {
+    "group": "q3",
+    "n": 99,
+    "t2_minus_t1": 1069.6667,
+    "low": 612.5416,
+    "high": 1466.4082
+   },
+   {
+    "group": "q4",
+    "n": 100,
+    "t2_minus_t1": 1876.34,
+    "low": 1141.4183,
+    "high": 2585.2841
+   }
+  ],
+  "level5": [
+   {
+    "group": "level1-4",
+    "n": 310,
+    "t2_minus_t1": 971.5065,
+    "low": 744.0513,
+    "high": 1195.6967
+   },
+   {
+    "group": "level5",
+    "n": 88,
+    "t2_minus_t1": 1259.0568,
+    "low": 608.8295,
+    "high": 1873.2143
+   }
+  ],
+  "t1_length_quartile": [
+   {
+    "group": "q1",
+    "n": 100,
+    "t2_minus_t1": 1053.58,
+    "low": 883.534,
+    "high": 1254.1896
+   },
+   {
+    "group": "q2",
+    "n": 99,
+    "t2_minus_t1": 1524.1212,
+    "low": 1245.6448,
+    "high": 1849.4831
+   },
+   {
+    "group": "q3",
+    "n": 99,
+    "t2_minus_t1": 1539.4343,
+    "low": 1238.1456,
+    "high": 1862.0864
+   },
+   {
+    "group": "q4",
+    "n": 100,
+    "t2_minus_t1": 33.14,
+    "low": -701.6223,
+    "high": 749.6197
+   }
+  ]
+ }
+}

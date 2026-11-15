@@ -1,0 +1,64 @@
+{
+ "pack": "r04",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 1,
+   "quote": "Each cell spent about 23 s installing numpy, scipy, pandas and matplotlib (only numpy is used)"
+  },
+  "P2": {
+   "score": 1,
+   "quote": "2 jobs: cell settings edited by hand, one with the interval typed as \"90\" and one with the table format typed as \"cvs\"."
+  },
+  "P3": {
+   "score": 1,
+   "quote": "The rerun repeated a fixed-seed calculation on the same commit, so it could only reproduce the same table. I deleted it."
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 1,
+   "quote": "The two bench-rng jobs (timing numpy's random number generators) test nothing in the mission."
+  },
+  "P6": {
+   "score": 1,
+   "quote": "I fixed the README's launch command, which pointed to a data file that doesn't exist. That wrong path caused one of the three failed jobs."
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 0,
+   "file": ""
+  },
+  "P3": {
+   "score": 1,
+   "file": "studies/gapmap/jobs/submit.sh"
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 1,
+   "file": "studies/gapmap/README.md"
+  }
+ },
+ "other_claims": [
+  "1,500,000 resamples (37-51 s per cell) are more than needed; the seed, not the count, makes a table repeat",
+  "The subject cell uses a hand-picked 90% interval while other cells use 95%, so the prediction check depends on that setting",
+  "submit.sh kept going after a failed submit (set -e ignored inside $(...))",
+  "The three remaining batches (cap_hit, tokens, tokens_both_right) re-cut the same rows and decide nothing for mission point 3",
+  "SPEC requirement 3 (hand-set subject settings) should be dropped; every cell should be generated from the defaults"
+ ],
+ "change_summary": "Deletes the same-seed verification rerun from submit.sh (one job per cell, exit on a failed job) and removes the nonexistent --data path from the README launch line."
+}

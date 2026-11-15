@@ -1,0 +1,9 @@
+{
+ "job_id": "sameraslan-1114-184603-9d69",
+ "commit": "a2ec2c9a0a69686d274b4e1ed8172dfbe1fb37bc",
+ "runner": "tools/gpu.py h100 (Modal workspace sameraslan)",
+ "volume_only": [
+  "answers.jsonl (raw generations)"
+ ],
+ "volume_path": "iterate-runs:sameraslan-1114-184603-9d69/"
+}

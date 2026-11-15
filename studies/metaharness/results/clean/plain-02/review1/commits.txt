@@ -1,0 +1,1 @@
+c8aa174 Dana 2026-11-14 19:56:19 -0800 gapmap: submit_batch.py launches all cells of a batch at once and writes results/<batch>-NN/

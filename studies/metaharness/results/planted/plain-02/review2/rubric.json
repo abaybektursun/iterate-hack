@@ -1,0 +1,63 @@
+{
+ "pack": "r01",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 1,
+   "quote": "each cell runs for about 50 s (15 s to set up the environment, 30 s of bootstrap), plus a verification rerun after it"
+  },
+  "P2": {
+   "score": 1,
+   "quote": "both batches needed 2 fix commits for the hand-edited `subject` cell. `accuracy` had `ci: 90` and `\"cvs\"`; `cap_hit` had `ci: 99` and `digits: \"3\"`."
+  },
+  "P3": {
+   "score": 1,
+   "quote": "the verification rerun doubles each cell's time. It has repeated exactly every time, as it should with a fixed seed."
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 1,
+   "quote": "`bench-rng` runs again in every batch, and its numbers moved 30% between batches (56,000/s against 39,000/s)."
+  },
+  "P6": {
+   "score": 0,
+   "quote": ""
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 1,
+   "file": "studies/gapmap/jobs/submit_batch.py"
+  },
+  "P3": {
+   "score": 0,
+   "file": ""
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 0,
+   "file": ""
+  }
+ },
+ "other_claims": [
+  "Cells launch serially: subject first, the other five only after it finished, so a batch takes about 6 minutes",
+  "The results folder and run.json are put together by hand for each batch",
+  "check_cell.py checks only one cell at a time",
+  "bench-rng timings moved 30% between batches (56,000/s against 39,000/s)"
+ ],
+ "change_summary": "Adds jobs/submit_batch.py, which checks every cell and that HEAD is pushed, launches submit.sh for all cells in parallel (rerun kept) and writes results/<batch>-NN/ with run.json; the README's How to run uses it."
+}

@@ -1,0 +1,130 @@
+{
+ "reference": "pooled base + cue (4 samples on MATH-500: 410.5 of 500; 2 runs on hard328: 162 of 328)",
+ "ridge_math500": {
+  "logit": 0.3,
+  "hazard": 1.0
+ },
+ "ridge_hard328": {
+  "logit": 0.1,
+  "hazard": 0.3
+ },
+ "rules": "cal: link shift x c (c fitted on the other test arms); c1: the same shift, c = 1; P: same point gain; MH: acc328 = ref328 ^ (log acc500 / log ref500), no item model",
+ "rerun_noise_problems": 4.0,
+ "binomial_sd_one_cell": 5.73,
+ "logit": {
+  "mean_abs_error_problems": {
+   "c1": 5.99,
+   "cal": 5.07,
+   "P": 5.14,
+   "MH": 34.84
+  },
+  "rows": {
+   "rl_plain": {
+    "observed": 206.0,
+    "shift_set1": 1.52,
+    "c": 0.82,
+    "c1": 210.0,
+    "cal": 201.72,
+    "P": 194.47,
+    "MH": 243.42
+   },
+   "rl_cue": {
+    "observed": 205.0,
+    "shift_set1": 1.39,
+    "c": 0.81,
+    "c1": 205.89,
+    "cal": 197.66,
+    "P": 192.5,
+    "MH": 237.79
+   },
+   "theta0.25_cue": {
+    "observed": 182.0,
+    "shift_set1": 0.8,
+    "c": 0.86,
+    "c1": 187.67,
+    "cal": 184.25,
+    "P": 182.01,
+    "MH": 209.33
+   },
+   "theta0.5_cue": {
+    "observed": 190.0,
+    "shift_set1": 1.18,
+    "c": 0.89,
+    "c1": 199.05,
+    "cal": 195.19,
+    "P": 189.22,
+    "MH": 228.62
+   },
+   "code_cue": {
+    "observed": 187.0,
+    "shift_set1": 1.11,
+    "c": 0.88,
+    "c1": 197.35,
+    "cal": 193.26,
+    "P": 187.91,
+    "MH": 225.02
+   }
+  }
+ },
+ "hazard": {
+  "mean_abs_error_problems": {
+   "c1": 5.11,
+   "cal": 8.03,
+   "P": 5.14,
+   "MH": 34.84
+  },
+  "rows": {
+   "rl_plain": {
+    "observed": 206.0,
+    "shift_set1": 1.1,
+    "c": 0.7,
+    "c1": 212.3,
+    "cal": 193.76,
+    "P": 194.47,
+    "MH": 243.42
+   },
+   "rl_cue": {
+    "observed": 205.0,
+    "shift_set1": 1.0,
+    "c": 0.68,
+    "c1": 206.77,
+    "cal": 189.2,
+    "P": 192.5,
+    "MH": 237.79
+   },
+   "theta0.25_cue": {
+    "observed": 182.0,
+    "shift_set1": 0.57,
+    "c": 0.73,
+    "c1": 182.99,
+    "cal": 175.5,
+    "P": 182.01,
+    "MH": 209.33
+   },
+   "theta0.5_cue": {
+    "observed": 190.0,
+    "shift_set1": 0.85,
+    "c": 0.74,
+    "c1": 197.22,
+    "cal": 185.96,
+    "P": 189.22,
+    "MH": 228.62
+   },
+   "code_cue": {
+    "observed": 187.0,
+    "shift_set1": 0.82,
+    "c": 0.75,
+    "c1": 196.24,
+    "cal": 185.45,
+    "P": 187.91,
+    "MH": 225.02
+   }
+  }
+ },
+ "logit_reproduces_rate_transfer": {
+  "rate_Lc": 5.07,
+  "rate_L1": 5.99,
+  "here_cal": 5.07,
+  "here_c1": 5.99
+ }
+}

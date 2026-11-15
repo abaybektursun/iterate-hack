@@ -1,0 +1,2 @@
+0851b11 Dana 2026-11-14 20:25:13 -0800 meta: dana review 20261115-0422 (run_cell installs only numpy: venv 22 s to 7 s, table identical)
+3995576 Dana 2026-11-14 20:23:15 -0800 gapmap: run_cell.sh installs only numpy (scipy, pandas, matplotlib were never imported)

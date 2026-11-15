@@ -1,0 +1,473 @@
+{
+ "chance": 0.5,
+ "sets": {
+  "selected": {
+   "units": 30,
+   "mean_accuracy": 0.9066666666666666,
+   "ci95": [
+    0.8600000000000001,
+    0.9466666666666667
+   ]
+  },
+  "reference": {
+   "units": 15,
+   "mean_accuracy": 0.7133333333333333,
+   "ci95": [
+    0.6000000000000001,
+    0.8133333333333334
+   ]
+  }
+ },
+ "units": [
+  {
+   "key": "u00",
+   "set": "selected",
+   "layer": 17,
+   "neuron": 3660,
+   "pole": "+",
+   "accuracy": 0.9,
+   "description": "The space (or linking token) right before a number or symbol being restated from the problem, after 'is', 'by', 'and', 'over', 'with' or '+', as in 'The answer is 3'.",
+   "share_beyond_p97": 0.9477
+  },
+  {
+   "key": "u01",
+   "set": "selected",
+   "layer": 29,
+   "neuron": 2637,
+   "pole": "+",
+   "accuracy": 1.0,
+   "description": "The period that ends a sentence finishing with a computed number or expression in informal step-by-step reasoning, just before a new sentence such as 'Then', 'Wait' or 'So'.",
+   "share_beyond_p97": 0.06014
+  },
+  {
+   "key": "u02",
+   "set": "reference",
+   "layer": 2,
+   "neuron": 10779,
+   "pole": "+",
+   "accuracy": 0.9,
+   "description": "The second word-piece of a math word, most often 'els' in 'cancels' (e.g. 'the 3 cancels'), also '-values' after 'y' and 'coefficients' after 'leading'.",
+   "share_beyond_p97": 0.02764
+  },
+  {
+   "key": "u03",
+   "set": "selected",
+   "layer": 22,
+   "neuron": 8409,
+   "pole": "+",
+   "accuracy": 0.9,
+   "description": "The space or '{' right before a number operand that follows an operator or relation ('=', '/', '<', 'by', 'and', '\\div', '\\sqrt'), where that number was already stated nearby.",
+   "share_beyond_p97": 0.6518
+  },
+  {
+   "key": "u04",
+   "set": "selected",
+   "layer": 19,
+   "neuron": 10616,
+   "pole": "-",
+   "accuracy": 1.0,
+   "description": "The space right before a number that follows an operator, comma or 'by' ('6 + 12i', 'divided by 9', '2! * 2!') inside a calculation the text is redoing.",
+   "share_beyond_p97": 0.9624
+  },
+  {
+   "key": "u05",
+   "set": "selected",
+   "layer": 29,
+   "neuron": 10229,
+   "pole": "-",
+   "accuracy": 0.9,
+   "description": "An operator or relation token ('+', '=', '\\times', '\\cdot', '>', 'to') right after the first operand in a formal LaTeX-formatted solution, where a number comes next.",
+   "share_beyond_p97": 0.1435
+  },
+  {
+   "key": "u06",
+   "set": "selected",
+   "layer": 10,
+   "neuron": 7275,
+   "pole": "+",
+   "accuracy": 1.0,
+   "description": "A hesitation word 'Hmm', 'Wait' or 'wait' starting a sentence right after a period or 'But', mostly just after the problem is restated in the opening reasoning.",
+   "share_beyond_p97": 0.03483
+  },
+  {
+   "key": "u07",
+   "set": "selected",
+   "layer": 10,
+   "neuron": 86,
+   "pole": "+",
+   "accuracy": 0.8,
+   "description": "'Wait' opening a new paragraph after a blank line, or 'hold' after 'Wait,' or 'but', where the reasoning starts to doubt and recheck its previous step.",
+   "share_beyond_p97": 0.02231
+  },
+  {
+   "key": "u08",
+   "set": "selected",
+   "layer": 31,
+   "neuron": 7955,
+   "pole": "+",
+   "accuracy": 0.9,
+   "description": "A comma, colon, '=' or 'and' in the middle of a calculation, right after a number or short phrase, where the next numeric value is about to be written.",
+   "share_beyond_p97": 0.07319
+  },
+  {
+   "key": "u09",
+   "set": "selected",
+   "layer": 11,
+   "neuron": 9904,
+   "pole": "-",
+   "accuracy": 1.0,
+   "description": "A content word completing a predicate in plain-English reasoning, most often 'distribute' after 'can'/'Let me', also 'straightforward', 'inverse', 'removed', 'covered' after 'too', 'modular', 'then', 'already'.",
+   "share_beyond_p97": 0.9939
+  },
+  {
+   "key": "u10",
+   "set": "reference",
+   "layer": 7,
+   "neuron": 8768,
+   "pole": "-",
+   "accuracy": 0.8,
+   "description": "The word completing a stock phrase that states a general math rule: 'highest power of 2', 'expression inside must', 'greater than or equal', 'the bases', 'linear congr' (weak)",
+   "share_beyond_p97": 0.006248
+  },
+  {
+   "key": "u11",
+   "set": "selected",
+   "layer": 16,
+   "neuron": 6351,
+   "pole": "+",
+   "accuracy": 0.7,
+   "description": "The space right before a number that was already mentioned, after 'divided by', 'times', 'than', 'of', '+' or a division sign, when a calculation is restated in words.",
+   "share_beyond_p97": 0.9941
+  },
+  {
+   "key": "u12",
+   "set": "selected",
+   "layer": 10,
+   "neuron": 77,
+   "pole": "+",
+   "accuracy": 0.9,
+   "description": "'Hmm', 'Wait' or 'Let' starting a sentence right after a period or question mark in the middle of an arithmetic step or after a tentative answer, opening a recheck.",
+   "share_beyond_p97": 0.02244
+  },
+  {
+   "key": "u13",
+   "set": "selected",
+   "layer": 9,
+   "neuron": 426,
+   "pole": "-",
+   "accuracy": 0.9,
+   "description": "The first token of a value written right after '=' or ':' (the space, or the leading digits of a multi-digit number like '990'), or '\\text' in LaTeX.",
+   "share_beyond_p97": 0.9203
+  },
+  {
+   "key": "u14",
+   "set": "reference",
+   "layer": 29,
+   "neuron": 5801,
+   "pole": "-",
+   "accuracy": 0.9,
+   "description": "'be' after 'can' or 'can sometimes' in a general remark about a topic ('repeating decimals can sometimes be'), less often 'is', 'as' or 'one' after a general subject.",
+   "share_beyond_p97": 0.01499
+  },
+  {
+   "key": "u15",
+   "set": "selected",
+   "layer": 15,
+   "neuron": 7111,
+   "pole": "-",
+   "accuracy": 0.6,
+   "description": "The token just before the last number of a short standalone equation line (space after '-', 'by', '='), or the '!' plus blank line ending the problem statement.",
+   "share_beyond_p97": 0.3255
+  },
+  {
+   "key": "u16",
+   "set": "reference",
+   "layer": 11,
+   "neuron": 1557,
+   "pole": "+",
+   "accuracy": 0.6,
+   "description": "The last word of a compound math term: 'value' in 'place value', 'factors' in 'prime factors', 'part' in 'repeating part', '-coordinate' after 'y', 'digits' after 'sum of its'.",
+   "share_beyond_p97": 0.05823
+  },
+  {
+   "key": "u17",
+   "set": "reference",
+   "layer": 19,
+   "neuron": 1572,
+   "pole": "+",
+   "accuracy": 0.9,
+   "description": "A transitive verb of transformation ('convert', 'express', 'relate', 'divide', 'arranging') right after 'to', 'can' or its subject, before the object it acts on is named.",
+   "share_beyond_p97": 0.01355
+  },
+  {
+   "key": "u18",
+   "set": "selected",
+   "layer": 5,
+   "neuron": 10160,
+   "pole": "+",
+   "accuracy": 0.9,
+   "description": "A longer, less common content word ending a phrase in plain-English commentary ('substitutions', 'misunderstanding', 'separately', 'tedious', 'overlap', 'rounded'), or 'boxed' right after a backslash (weak)",
+   "share_beyond_p97": 0.9971
+  },
+  {
+   "key": "u19",
+   "set": "reference",
+   "layer": 13,
+   "neuron": 1240,
+   "pole": "-",
+   "accuracy": 0.9,
+   "description": "A token inside a value being stated for a quantity: the '/' or '}{' of a fraction ('37/8', '11/4'), or the number right after 'is', 'becomes', 'have' or '='.",
+   "share_beyond_p97": 0.01119
+  },
+  {
+   "key": "u20",
+   "set": "selected",
+   "layer": 23,
+   "neuron": 6475,
+   "pole": "+",
+   "accuracy": 1.0,
+   "description": "The word 'problem' in the opening 'Okay, so I have this problem (here where)' right after the question; weaker on 'approach' after 'another' and on 'miscalculation'.",
+   "share_beyond_p97": 0.008417
+  },
+  {
+   "key": "u21",
+   "set": "reference",
+   "layer": 4,
+   "neuron": 4958,
+   "pole": "-",
+   "accuracy": 0.8,
+   "description": "The token completing a predictable continuation: 'quadrant' after 'fourth'/'first', 'equal' after 'less than or', or a three-digit number repeated from the arithmetic just done (weak)",
+   "share_beyond_p97": 0.01967
+  },
+  {
+   "key": "u22",
+   "set": "selected",
+   "layer": 2,
+   "neuron": 3032,
+   "pole": "-",
+   "accuracy": 1.0,
+   "description": "The token 'boxed' right after a backslash, when the final answer is given, typically on the line after '**Final Answer**' or after 'is \\'.",
+   "share_beyond_p97": 0.9649
+  },
+  {
+   "key": "u23",
+   "set": "reference",
+   "layer": 10,
+   "neuron": 5485,
+   "pole": "+",
+   "accuracy": 0.7,
+   "description": "The noun 'terms' (also 'parts', 'power', 'number') right after a modifier naming its kind, as in 't\u00b3 terms', 'common terms', 'real parts', 'highest power', 'mixed number'.",
+   "share_beyond_p97": 0.02247
+  },
+  {
+   "key": "u24",
+   "set": "selected",
+   "layer": 30,
+   "neuron": 10249,
+   "pole": "-",
+   "accuracy": 1.0,
+   "description": "The sentence-ending period (or '?', ').') after a full statement in informal reasoning, especially when doubt or a next plan follows ('Let me think', 'Wait, maybe', 'So').",
+   "share_beyond_p97": 0.1639
+  },
+  {
+   "key": "u25",
+   "set": "selected",
+   "layer": 11,
+   "neuron": 3547,
+   "pole": "+",
+   "accuracy": 1.0,
+   "description": "'Wait' or 'Hmm' opening a new paragraph, or 'let' after 'but', right after an answer has just been concluded ('the answer is 4'), starting a double-check.",
+   "share_beyond_p97": 0.03448
+  },
+  {
+   "key": "u26",
+   "set": "selected",
+   "layer": 14,
+   "neuron": 7514,
+   "pole": "-",
+   "accuracy": 0.8,
+   "description": "The space before the last number of an expression or phrase ('between 6 and 7', 'x - 1', 'degree 2', 'base 2 of 64'), or 'simpl' in 'which simplifies' (weak)",
+   "share_beyond_p97": 0.9851
+  },
+  {
+   "key": "u27",
+   "set": "selected",
+   "layer": 12,
+   "neuron": 5682,
+   "pole": "+",
+   "accuracy": 0.7,
+   "description": "A short function token inside an ongoing explanation: the space after 'divided by', 'the', 'of', 'should' after 'maybe I', or the '\\[' line opening a display equation (weak)",
+   "share_beyond_p97": 0.9955
+  },
+  {
+   "key": "u28",
+   "set": "reference",
+   "layer": 27,
+   "neuron": 4956,
+   "pole": "-",
+   "accuracy": 0.6,
+   "description": "The first word of the main statement right after a lead-in such as 'So', 'So,', 'First,', 'Then,', 'the domain is', 'the product of': usually 'the', 'we', 'x' or a number.",
+   "share_beyond_p97": 0.02664
+  },
+  {
+   "key": "u29",
+   "set": "selected",
+   "layer": 4,
+   "neuron": 7613,
+   "pole": "-",
+   "accuracy": 1.0,
+   "description": "The stem 'don' or 'isn' of a negative contraction, right before the apostrophe-t, most often in 'I don't see any mistakes' or 'there isn't' near the end of the reasoning.",
+   "share_beyond_p97": 0.981
+  },
+  {
+   "key": "u30",
+   "set": "reference",
+   "layer": 31,
+   "neuron": 3455,
+   "pole": "-",
+   "accuracy": 0.4,
+   "description": "'the' (less often 'a', 'is') right after a short connective such as 'In', 'so', 'or', 'then', 'All', starting a noun phrase naming a math object; also ':' before a computation.",
+   "share_beyond_p97": 0.004155
+  },
+  {
+   "key": "u31",
+   "set": "selected",
+   "layer": 14,
+   "neuron": 7525,
+   "pole": "+",
+   "accuracy": 1.0,
+   "description": "'Let' (less often 'Wait') starting a sentence right after a doubt, question or tentative answer ('...a mistake in algebra?', 'maybe another way.'), opening a recheck or a different method.",
+   "share_beyond_p97": 0.0261
+  },
+  {
+   "key": "u32",
+   "set": "reference",
+   "layer": 14,
+   "neuron": 6621,
+   "pole": "+",
+   "accuracy": 0.9,
+   "description": "'write', 'down', 'note' or 'formal' inside 'Let me write that (down)', 'Let's note that', 'Let me formalize', and the second 'step' of 'step by step'.",
+   "share_beyond_p97": 0.007184
+  },
+  {
+   "key": "u33",
+   "set": "selected",
+   "layer": 5,
+   "neuron": 6372,
+   "pole": "+",
+   "accuracy": 1.0,
+   "description": "The interjection 'Hmm' (capitalized) starting a sentence right after a period that ends a finished computation or a stated answer, as in 'the remainder is 0. Hmm'.",
+   "share_beyond_p97": 0.05642
+  },
+  {
+   "key": "u34",
+   "set": "selected",
+   "layer": 8,
+   "neuron": 1033,
+   "pole": "-",
+   "accuracy": 1.0,
+   "description": "The last word of a fixed phrase in prose: 'inverse' after 'multiplicative'/'an', 'step' after 'step by', 'thorough' after 'just to be', 'head' after 'in your', 'proportion' after 'set up a'.",
+   "share_beyond_p97": 0.9905
+  },
+  {
+   "key": "u35",
+   "set": "selected",
+   "layer": 9,
+   "neuron": 692,
+   "pole": "-",
+   "accuracy": 0.8,
+   "description": "The token 'boxed' right after a backslash inside a prose sentence that states the result, almost always following 'the answer is \\' (often after 'Therefore,').",
+   "share_beyond_p97": 0.04563
+  },
+  {
+   "key": "u36",
+   "set": "selected",
+   "layer": 18,
+   "neuron": 1045,
+   "pole": "-",
+   "accuracy": 0.9,
+   "description": "The space (or '{') right before a number that follows an operator, '=', comma, 'by' or 'and' inside a calculation, as in '6 + 12i' or 'divided by 3'.",
+   "share_beyond_p97": 0.8579
+  },
+  {
+   "key": "u37",
+   "set": "selected",
+   "layer": 9,
+   "neuron": 7587,
+   "pole": "-",
+   "accuracy": 1.0,
+   "description": "The token 'boxed' right after the backslash on the line following '**Final Answer**', and the word 'Answer' inside the '**Final Answer**' header itself.",
+   "share_beyond_p97": 0.6769
+  },
+  {
+   "key": "u38",
+   "set": "selected",
+   "layer": 26,
+   "neuron": 8438,
+   "pole": "-",
+   "accuracy": 0.6,
+   "description": "A connective opening a sentence in informal reasoning ('So', 'But', 'but' after 'Hmm,'), or the comma right after 'Wait', 'So' or 'actually', before the clause itself begins.",
+   "share_beyond_p97": 0.9998
+  },
+  {
+   "key": "u39",
+   "set": "reference",
+   "layer": 12,
+   "neuron": 10156,
+   "pole": "-",
+   "accuracy": 0.5,
+   "description": "A token inside the second item of a pair mirroring an earlier one: 'b' in '-(b \u00d7 a)', the comma in '(-2, 7)', 'A' in 'through A and B' (weak)",
+   "share_beyond_p97": 0.014
+  },
+  {
+   "key": "u40",
+   "set": "reference",
+   "layer": 17,
+   "neuron": 3970,
+   "pole": "-",
+   "accuracy": 0.9,
+   "description": "The last token (noun, number or comma) of a clause stating a condition or general premise ('if they have coins,', 'when x is 0'), before its consequence.",
+   "share_beyond_p97": 0.01615
+  },
+  {
+   "key": "u41",
+   "set": "selected",
+   "layer": 11,
+   "neuron": 7824,
+   "pole": "-",
+   "accuracy": 1.0,
+   "description": "The word 'To' that starts the clean written solution ('To solve the problem, we...') on a new paragraph right after the boxed final answer that ends the reasoning.",
+   "share_beyond_p97": 0.1148
+  },
+  {
+   "key": "u42",
+   "set": "reference",
+   "layer": 9,
+   "neuron": 2589,
+   "pole": "-",
+   "accuracy": 0.2,
+   "description": "A remainder or modulus token in modular arithmetic ('mod', '\u2261', the residue after '\u2261' or 'mod7 is'), or the repeating digits after a decimal point ('33.333') (weak)",
+   "share_beyond_p97": 0.01572
+  },
+  {
+   "key": "u43",
+   "set": "reference",
+   "layer": 0,
+   "neuron": 9363,
+   "pole": "-",
+   "accuracy": 0.7,
+   "description": "The plural noun right after 'of', chiefly in 'the number of digits / ways / students' and 'the sum of the digits'; weaker on 'them' or 'these' after 'of'.",
+   "share_beyond_p97": 0.02171
+  },
+  {
+   "key": "u44",
+   "set": "selected",
+   "layer": 3,
+   "neuron": 7717,
+   "pole": "-",
+   "accuracy": 1.0,
+   "description": "The token 'boxed' right after a backslash in the '**Final Answer**' block at the end of the reasoning, either directly under the header or after 'is \\'.",
+   "share_beyond_p97": 0.931
+  }
+ ]
+}
