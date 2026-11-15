@@ -2726,3 +2726,38 @@ bootstrap, 5,000 resamples, seed 0). Tokens = generated tokens per problem, rest
   sample (207 at 9,437; mean of the four samples 200.0). The nine rules chosen on MATH-500, scored once here:
   `results/frontier/hard328-01/frontier.md` (the command at the end of "Token frontier").
 - The base loses 39 % of its single-sample accuracy from MATH-500 to the 328 (81.0 to 49.1 %), RL 31 % (91.2 to 63.1 %).
+
+## Mixed-model vote on the 328: do two models' samples vote better together? (hard328, n = 328, laptop, board work-0d465a)
+
+Question: the vote's remaining errors are problems where a model never writes the right answer ("The 328 with four samples
+and restarts"). Do RL and Think-SFT fail on different problems, so that a vote over two samples of each beats four of
+either? Answer: no. Four Think-SFT samples alone are the best row: 241 of 328 (73.5 %) at 40,410 tokens per problem; two RL
+plus two Think-SFT have 228.1, 3.9 points [1.8, 6.2] below it, and all eight samples have 239.0 (-0.6 [-2.7, +1.7]).
+
+`analysis/mixvote.py` (plurality vote of `analysis/day1_vote.py`, grader v3 as stored, attempt 0 of each sample, T 1.0 /
+top-p 1.0, cap 16,384). Every way of taking the stated samples from each model is scored, in both interleaved orders; the
+table has the mean and the range. Rows: RL plain `abaybektursun-1114-200505-5ff2`, base + cue `-200457-e8e6` (work-1a972a),
+Think-SFT + cue `abaybektursun-1115-000503-1e5f`, `-000525-ea4e`, `-014823-ef56`, `-014833-1daa` (one sample each, work-0a00c2;
+single right 212, 212, 211, 201). Readout `results/mixvote/hard328-01/readout.json`. Paired bootstrap, 5,000 resamples, seed 0.
+
+| Samples | Right of 328 (mean) | Range over combinations | Tokens per problem |
+|---|---|---|---|
+| 1 base + cue | 158.5 | 152 to 161 | 9,225 |
+| 1 RL | 200.0 | 190 to 209 | 9,325 |
+| 1 Think-SFT + cue | 209.0 | 201 to 212 | 10,103 |
+| 4 base + cue | 192 | | 36,902 |
+| 4 RL | 221 | | 37,299 |
+| 4 Think-SFT + cue | 241 | | 40,410 |
+| 2 RL + 2 Think-SFT | 228.1 | 214 to 237 | 38,855 |
+| 2 RL + 2 base | 207.6 | 193 to 221 | 37,101 |
+| 2 Think-SFT + 2 base | 220.8 | 210 to 233 | 38,656 |
+| 4 RL + 4 Think-SFT | 239.0 | 238 to 240 | 77,710 |
+| 4 Think-SFT + 4 base | 238.0 | 237 to 239 | 77,312 |
+
+- Think-SFT (no reward) minus RL: +2.7 points [0.4, 5.2] on one sample (mean of four each), +6.1 [3.0, 9.5] under the vote
+  over 4. The vote helps Think-SFT more (+32 problems) than RL (+21). Under the vote Think-SFT alone is right on 26 problems
+  where RL is wrong, RL alone on 6; both 215, neither 81.
+- A mixed vote lands between its two models every time (2 RL + 2 Think-SFT: +2.2 [0.3, 4.2] over 4 RL, -3.9 [-6.2, -1.8]
+  under 4 Think-SFT). RL adds almost no problems that Think-SFT misses, so mixing dilutes the better model.
+- Caveats: Think-SFT's training prompts match 6 of the 328 (board result-f6a8bc; the lead holds without them); its samples
+  have no restart rows; the vote's tie rule prefers the earlier sample, hence both orders.
