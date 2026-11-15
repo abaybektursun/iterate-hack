@@ -52,9 +52,12 @@ def run(job_id):
     jobs[f"start:{job_id}"] = {"at": int(time.time()), "gpu": gpu}
 
     code.reload()  # a container that started before this commit was uploaded does not see the file otherwise
+    runs.reload()  # the same for inputs put on the Volume iterate-runs (modal volume put) after the container started
     with tarfile.open(f"/code/{job['sha']}.tar") as tar:
         tar.extractall("/repo", filter="data")
     out = Path("/runs") / job_id
+    if out.exists():  # Modal restarted the container: keep the interrupted run's output beside the new one
+        out.rename(f"{out}.interrupted-{int(time.time())}")
     out.mkdir(parents=True)
     deadline = time.time() + job["hours"] * 3600
     with open(out / "log", "w") as log:
@@ -76,8 +79,8 @@ def run(job_id):
 
 
 # One function per GPU class. max_containers is how many of your jobs of that class run at once. The limits are read at deploy
-# time: `ITERATE_MAX_H100=10 ITERATE_MAX_B200=4 modal deploy infra/runner.py` raises them for your workspace only.
-@app.function(gpu="H100", max_containers=int(os.environ.get("ITERATE_MAX_H100", 4)), **common)
+# time: `ITERATE_MAX_H100=24 ITERATE_MAX_B200=4 modal deploy infra/runner.py` changes them for your workspace only.
+@app.function(gpu="H100", max_containers=int(os.environ.get("ITERATE_MAX_H100", 20)), **common)
 def h100(job_id: str):
     run(job_id)
 

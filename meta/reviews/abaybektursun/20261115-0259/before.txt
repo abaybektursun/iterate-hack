@@ -1,0 +1,14 @@
+# Baseline for the next multi-sample cell: minutes from claim to answer of work-63fac2 (Day-1 #3), and its job stage.
+# Commands: grep -E '208b|f4ab|e828|e76b|work-63fac2' meta/reviews/abaybektursun/20261115-0259/cycle.txt ; uv run tools/board.py show work-63fac2 (comment times, UTC)
+# Job ids carry local time (UTC-6). Conditions: MATH-500 n=500, --samples 4 --restarts 2, T 1.0, one H100 per model, commit c36f562, h100 max_containers=4 at submit.
+  abaybektursun-1114-152646-e76b  done  NVIDIA H100   0.1  10.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-153825-208b  done  NVIDIA H100   28.9  136.7  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-153833-f4ab  died: FileExistsError: [Errno 17] File exists: '/runs/abaybektursun-1114-153833-f4ab'  NVIDIA H100   176.9  143.7  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-183640-e828  done  NVIDIA H100   14.2  123.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  work-63fac2  main  0  337  4  341  6  1  Day-1 #3 idea-8b9cc7: make restart and 4-sample vote rows ru
+work-63fac2 (work, closed by abaybektursun/main at 2026-11-15T02:58:08Z) by abaybektursun/main (claude-code_2-1-325_agent 06f4095f) at 2026-11-14T21:16:53Z
+  2026-11-14T21:26:53Z  abaybektursun/main: Step 1: smoke submitted, job abaybektursun-1114-152646-e76b (base+cue, MATH-500 --n 10 --samples 4 --restarts 2, 0.5 h). Next: read its rows and readout, then decide on a split before the two full jobs.
+  2026-11-14T21:38:45Z  abaybektursun/main: Step 2: smoke e76b ok (45 rows, seeds by rule, 5 restarts ran, single 8/10 = check job, vote 9/10). No split: 4 H100 running + 2 queued, a split only adds queued jobs. Submitted MATH-500 base 153825-208b, RL 153833-f4ab, --hours 6.
+  2026-11-15T00:36:50Z  abaybektursun/main: Step 3: base job 208b done (2137 rows, 1,213 tok/s, 2.3 h). RL job f4ab died at 2013 of 2034 rows (runner: FileExistsError on /runs/<job>, container restarted); 21 restart rows missing, all 2000 first attempts exist. RL resubmitted.
+  2026-11-15T00:37:32Z  abaybektursun/main: Base+cue MATH-500 n=500 v3 (job 208b): single 405 (3,808 tok/problem), restart 413 (4,852), vote4 446 (16,034), pass@4 467. Vote - single +8.2 pts [5.8, 10.8]; 43 wrong->right, 2 right->wrong. RL rerun e828 waiting; RL first attempts of dead job: single 456, vote 469.
+  2026-11-15T02:55:24Z  abaybektursun/main: MATH-500 done, n=500 v3. Base+cue: single 405, restart 413, vote4 446, pass@4 467. RL: 456, 458, 474, 482. RL-base: single 10.2 [7.2,13.2], vote 5.6 [3.6,7.8] pts. Tokens/problem 3.8k/4.9k/16.0k base. Branch day1-vote, results/day1_3/, SPEC_day1_3.md.
