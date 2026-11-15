@@ -430,7 +430,11 @@ function draw() {
   E.beads.forEach((b, k) => {
     const deg = angleOf(k), th = deg * RAD, c = Math.cos(th), s = Math.sin(th);
     const p = proj(R * c, 0, R * s), q = proj(a * c, 0, a * s), near = Math.sin(th - V.yaw * RAD) > -.12;
-    if (near !== b.near) { b.near = near; (near ? E.front : E.behind).appendChild(b.g); }
+    if (near !== b.near) {
+      const had = document.activeElement === b.g;  // moving an element drops its focus
+      b.near = near; (near ? E.front : E.behind).appendChild(b.g);
+      if (had) b.g.focus({ preventScroll: true });
+    }
     const depth = (Math.sin(th - V.yaw * RAD) + 1) / 2, on = k === S.sel;
     E.inner[k].setAttribute("d", "M" + pt(centre) + "L" + pt(q));
     E.inner[k].setAttribute("stroke-width", on ? 1.6 : .8);
@@ -490,7 +494,7 @@ function show() {
   $("side").scrollTop = 0;
 }
 function mark() {
-  E.beads.forEach((b, k) => b.g.classList.toggle("on", k === S.sel));
+  E.beads.forEach((b, k) => { b.g.classList.toggle("on", k === S.sel); b.g.setAttribute("aria-pressed", k === S.sel ? "true" : "false"); });
   E.inner.forEach((p, k) => p.classList.toggle("on", k === S.sel));
   E.beads.forEach((b, k) => b.ray.classList.toggle("on", k === S.sel));
   E.num.textContent = S.sel + 1;
@@ -512,6 +516,7 @@ $("svg").addEventListener("keydown", e => { const g = e.target.closest(".bead");
 $("side").addEventListener("click", e => { const b = e.target.closest("button[data-k]"); if (b) select(Number(b.dataset.k)); });
 addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if ((e.key === "ArrowDown" || e.key === "ArrowUp") && document.documentElement.scrollHeight > innerHeight) return;  // the page scrolls: Up and Down are the browser's
   if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); select(S.sel + 1); }
   if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); select(S.sel - 1); }
 });

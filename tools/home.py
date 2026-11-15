@@ -4,7 +4,7 @@ view.py serves PAGE as the page / of invariant.team (and at /home on monitor.inv
 leads to monitor.invariant.team, where the pages are. The picture is a lit glass body with a ring around it, seen from slightly above, and one
 bead on the ring per page of the site. The bead at the front is the selected page: the body shows its name and,
 where one is counted, its live number. A click on a bead or the arrow keys turn the dial to it (address /#<page>; Up and Down only where the page does not scroll);
-a click on the body or the button opens it. The words column beside the picture holds one sentence with the
+a click on the body or Enter opens it (Enter while the focus is on the page itself or on the dial). The words column beside the picture holds one sentence with the
 live MATH-500 scores of the Board (the first and the best untrained-base score and the best RL score among the `scores`
 rows of /data, computed as `benches` in view.py does, with the method words taken from the best base row's
 configuration; no numbers before the first read), one line that says who the team is with the live number of people,
@@ -401,7 +401,7 @@ function build() {
     `<circle class="atmo" cx="${G.cx}" cy="${G.cy}" r="${G.rb * 2.1}" fill="url(#atmo)"/>` +
     `<ellipse class="shade" cx="${G.cx}" cy="${G.cy + G.rb * 1.04}" rx="${G.rb * .9}" ry="${G.rb * .16}" fill="url(#shade)"/>` +
     `<g id="back"><path class="ring back" id="ring-b"/><path class="ring back" id="in-b"/><path class="ticks back" id="ticks-b"/>${GROUPS.map((_, g) => `<path class="garc back th" id="arc-b${g}" style="--th:${TH[g]}"/>`).join("")}</g>` +
-    `<circle class="body" id="body-c" cx="${G.cx}" cy="${G.cy}" r="${G.rb}" tabindex="-1" role="link"/>` +
+    `<circle class="body" id="body-c" cx="${G.cx}" cy="${G.cy}" r="${G.rb}" tabindex="-1"/>` +
     `<ellipse class="spec" cx="${G.cx - G.rb * .34}" cy="${G.cy - G.rb * .44}" rx="${G.rb * .44}" ry="${G.rb * .26}" transform="rotate(-32 ${G.cx - G.rb * .34} ${G.cy - G.rb * .44})" fill="url(#spec)"/>` +
     `<g id="art"></g>` +
     `<g class="read"><text class="n" id="read-n" x="${G.cx}" font-size="${G.fn}"></text><text class="c" id="read-c" x="${G.cx}" y="${G.cy + G.fn * .92}" font-size="${G.fc}"></text></g>` +
@@ -409,8 +409,8 @@ function build() {
     `<g id="fx"></g>`;
   PAGES.forEach((p, k) => {
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    g.setAttribute("class", "bead"); g.setAttribute("tabindex", "-1"); g.setAttribute("role", "button");  // a click or a script can focus it; Tab goes through the list, which holds the same pages
-    g.setAttribute("aria-label", "Turn the dial to " + p.name); g.dataset.k = k; g.style.setProperty("--i", k); g.style.setProperty("--th", TH[p.g]); g.classList.add("th");
+    g.setAttribute("class", "bead"); g.setAttribute("tabindex", "-1");  // a click or a script can focus it; Tab goes through the list, which holds the same pages. The picture is aria-hidden, so its parts carry no role and no label
+    g.dataset.k = k; g.style.setProperty("--i", k); g.style.setProperty("--th", TH[p.g]); g.classList.add("th");
     g.innerHTML = `<circle class="pad"/><circle class="b"/><text>${esc(narrow.matches && p.short ? p.short : p.name)}</text>`;  // a phone has room only for the short name
     p.el = g; p.front = null;
   });
@@ -436,7 +436,6 @@ function readout() {
   const wn = rn.getComputedTextLength(); if (wn > wmax) rn.setAttribute("font-size", f(G.fn * wmax / wn));
   $("read-c").textContent = c; $("read-c").setAttribute("y", f(G.cy + G.rb * G.ny + G.fn * .8));
   document.querySelectorAll(".row").forEach(t => { const q = PAGES[t.dataset.k]; t.querySelector("em").textContent = q.count ? q.count(S.m) : ""; });
-  $("body-c").setAttribute("aria-label", "Open " + p.name);
   PAGES.forEach((q, k) => q.el.classList.toggle("on", k === S.sel));
 }
 function select(k, link) {
@@ -545,15 +544,20 @@ function say(it, live) {
   el.innerHTML = `<b>${esc(it.who)}</b> posted ${live ? '<span class="now">now</span>' : ago(it.at_ns)}${t ? ": " + esc(t) : ""}`;
 }
 
+/* The loop runs only while the dial is on screen and the tab is visible. */
+let raf = 0, onScreen = true;
 function frame(now) {
-  const dt = Math.min(.1, (now - S.last) / 1000 || 0); S.last = now;
+  raf = 0;
+  if (still.matches || !onScreen || document.hidden) { S.last = 0; return; }
+  const dt = S.last ? Math.min(.1, (now - S.last) / 1000) : 0; S.last = now;
   S.t += dt;
   S.rot += (S.to - S.rot) * (1 - Math.exp(-dt * 6));
   S.lx += (S.mx - S.lx) * (1 - Math.exp(-dt * 3)); S.ly += (S.my - S.ly) * (1 - Math.exp(-dt * 3));
   if (!S.fly && S.m && S.t >= S.nextAt) { launch(); S.nextAt = S.t + 2.5; }
   draw();
-  requestAnimationFrame(frame);
+  raf = requestAnimationFrame(frame);
 }
+function go() { if (!raf && !still.matches && onScreen && !document.hidden) raf = requestAnimationFrame(frame); }
 
 /* The board: what the body counts and what the pulses replay. */
 function model(d) {
@@ -583,6 +587,7 @@ function headline() {
   $("who").textContent = (m.start < m.base ? `Up from ${f(m.start)}\u00a0%` + (how.length ? `, with ${how.join(" and ")}. The higher score and the RL score are the best on the board, each under its own settings. ` : ". The higher score and the RL score are the best on the board, each under its own settings. ") : "") + who;
 }
 async function read() {
+  if (document.hidden) return;  // a hidden tab reads nothing; it reads again when it is shown
   try {
     const r = await fetch("/data"); if (!r.ok) throw new Error(r.status);
     const m = model(await r.json());
@@ -622,13 +627,9 @@ $("svg").addEventListener("click", e => {
   const b = e.target.closest(".bead");
   if (b) select(Number(b.dataset.k), true); else if (e.target.id === "body-c") location.href = PAGES[S.sel].href;
 });
-$("svg").addEventListener("keydown", e => {
-  if (e.key !== "Enter" && e.key !== " ") return;
-  const b = e.target.closest(".bead");
-  if (b) { e.preventDefault(); select(Number(b.dataset.k), true); } else if (e.target.id === "body-c") location.href = PAGES[S.sel].href;
-});
 addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey || scrollY > innerHeight / 2) return;  // the dial is off screen: the keys are the browser's
+  if (e.key === "Enter" && (e.target === document.body || $("svg").contains(e.target))) { location.href = PAGES[S.sel].href; return; }  // Enter opens the selected page; on a link or a button it stays that element's own
   const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
   if (d) {
     const upDown = e.key === "ArrowDown" || e.key === "ArrowUp";
@@ -643,8 +644,12 @@ addEventListener("resize", () => { G.min = geo().min; fit(); });
 $("svg").classList.add("enter");
 draw();
 document.fonts.ready.then(() => { PAGES.forEach(p => { p.w = 0; }); draw(); });  // measure the names again in the loaded typeface
-if (!still.matches) requestAnimationFrame(now => { S.last = now; requestAnimationFrame(frame); });
-read(); setInterval(read, 10000); setInterval(status, 15000);
+new IntersectionObserver(es => { onScreen = es[es.length - 1].isIntersecting; go(); }, { threshold: 0.05 }).observe($("svg"));
+/* The same test from the box itself on scroll, so the dial still starts where the observer is late or never fires. */
+const seen = () => { const r = $("svg").getBoundingClientRect(); onScreen = r.bottom > 0 && r.top < innerHeight; go(); };
+addEventListener("scroll", seen, { passive: true }); addEventListener("resize", seen); seen();
+read(); setInterval(read, 10000); setInterval(() => document.hidden || status(), 15000);
+document.addEventListener("visibilitychange", () => { go(); document.hidden || read(); });
 </script>
 </body>
 </html>
