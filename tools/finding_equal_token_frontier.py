@@ -151,8 +151,8 @@ NAMES = {
     "vote2_short": "Vote over 2, ties to the shortest",
     "vote3_short": "Vote over 3, ties to the shortest",
     "vote4_short": "Vote over 4, ties to the shortest",
-    "vote4_restart": "Vote over 4 with redraws",
-    "vote4_restart_short": "Vote over 4 with redraws, ties to the shortest",
+    "vote4_restart": "Vote over 4, cut-off samples redrawn",
+    "vote4_restart_short": "Vote over 4, cut-off samples redrawn, ties to the shortest",
     "seq3": "Stop when two agree, at most 3",
     "seq4": "Stop when two agree, at most 4",
     "seq4_short": "Stop when two agree, at most 4, ties to the shortest",
@@ -176,13 +176,16 @@ _rl1 = DATA["rl_single"]
 _rlmax = max((r for r in DATA["rules"] if r["model"] == "rl"), key=lambda r: r["right"])
 _k = lambda v: f"{round(v):,}"
 _p = lambda v: f"{v:+.1f}".replace("-", "\u2212")
-_ci = lambda c: f"(95 % interval {_p(c[1])} to {_p(c[2])})"
+_ci = lambda c: f"(95 % interval {c[1]:.1f} to {c[2]:.1f})".replace("-", "\u2212")
 _seq = _R[("base", "seq4")], _R[("base", "vote4")], _R[("rl", "seq4")], _R[("rl", "vote4")]
 _save = lambda a, b: round(100 * (1 - a["tokens"] / b["tokens"]))  # per cent of the tokens the sequential vote saves
 
 TITLE = "More samples against RL"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "Can drawing more samples from the base model match one sample of RL?"
-LINE = f"On MATH-500, with {_best['multiple']:.1f} times the tokens, the best base rule stays {abs(_best['gap'][0]):.1f} points below one RL sample."
+PROBLEM = ("Can drawing more samples from the base model with the opening cue match one sample of the model trained by "
+           "reinforcement learning (RL)?")
+LINE = (f"On MATH-500, the best rule for drawing several samples of the base model and picking one answer uses "
+        f"{_best['multiple']:.1f} times the tokens of one RL sample and still scores {abs(_best['gap'][0]):.1f} percentage "
+        "points lower.")
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 # Not from our runs: Aggarwal et al., Adaptive-Consistency (arXiv 2305.11860), abstract: up to 7.9 times fewer samples at
@@ -190,29 +193,31 @@ LINE = f"On MATH-500, with {_best['multiple']:.1f} times the tokens, the best ba
 # 2504.13837), Figure 1: the base model's pass@256 exceeds its RL version's.
 PANELS = [
     ["new", "What is new",
-     "Stopping a vote once samples agree is published: Adaptive-Consistency (arXiv 2305.11860) reports up to 7.9 times "
-     "fewer samples at under 0.1 % accuracy drop. New here is the base model against RL, the same model after reward training, at equal tokens.",
-     [f"On these rows the stopping vote keeps the fixed vote's score at {_save(_seq[0], _seq[1])} % fewer tokens for the base "
+     "New here is the base model against RL, the same model after reward training, at equal tokens. Stopping a vote once "
+     "samples agree is published: Adaptive-Consistency (arXiv 2305.11860) reports up to 7.9 times fewer samples at under "
+     "0.1 % accuracy drop.",
+     [f"In these samples, stopping the vote once two samples agree gives the score of a vote over 4 with {_save(_seq[0], _seq[1])} % fewer tokens for the base "
       f"and {_save(_seq[2], _seq[3])} % fewer for RL.",
       "Yue et al. (arXiv 2504.13837, Figure 1) report that RL training lowers pass@256, the share of problems solved by at least "
       "one of 256 samples checked against the answer key. Every rule here picks its answer without the key.",
-      f"Given the same rule, RL stays ahead under all 24 rules; the smallest lead is {_lead['rl_lead'][0]:.1f} points "
+      f"Under each of the 24 rules the RL model stays ahead of the base model using the same rule; the smallest lead is {_lead['rl_lead'][0]:.1f} points "
       f"{_ci(_lead['rl_lead'])}."]],
     ["why", "Why it matters",
-     "The research direction asks for the cheapest route with no reward to RL's score at equal tokens. On MATH-500, "
-     "spending more samples is not that route.",
+     "The team's research goal is the cheapest way, with no reward training, to reach RL's score at equal tokens. On "
+     "MATH-500, drawing more samples is not that way.",
      [f"One RL sample costs {_k(_rl1['tokens'])} tokens per problem. The best base rule spends {_k(_best['tokens'])} and is "
       f"still {abs(_best['gap'][0]):.1f} points below.",
-      f"Above 12,500 tokens the base gains nothing: rules chosen on four fifths of the problems and scored on the rest stay "
-      f"at {min(DATA['held_out']['base']):.1f} to {max(DATA['held_out']['base']):.1f} of 500.",
+      f"Above 12,500 tokens per problem the base model gains nothing: when the best rule at each budget is chosen on four "
+      f"fifths of the problems and scored on the remaining fifth, it stays at {min(DATA['held_out']['base']):.1f} to {max(DATA['held_out']['base']):.1f} of 500.",
       f"The same rules lift RL too, from {_rl1['right']:.1f} to {_rlmax['right']:.1f} of 500, so extra samples do not "
       "close the gap."]],
     ["how", "How we know",
-     "We wrote 24 rules into a plan before scoring any, then replayed them on four stored samples per problem from each "
-     "model: MATH-500, 500 problems, T 1.0, grader v3.",
+     "Before scoring any, we wrote into a plan 24 rules for drawing samples and picking one answer (single samples with "
+     "redraws, votes, and votes that stop early). We then applied them to four stored samples per problem from each "
+     "model: MATH-500, 500 problems, temperature 1.0, scored by the grader (version 3).",
      ["A rule sees only each sample's length, whether it was cut off at 16,384 tokens, and its extracted answer. Code that "
       "reads the score or the answer key raises an error.",
-      "Tokens count every token of every sample a rule draws. Scores and tokens are means over the 24 orders in which the "
+      "Tokens count every token of every sample a rule draws. Scores and tokens are means over all 24 orders (4 × 3 × 2 × 1) in which the "
       "four samples can be drawn.",
       "Intervals come from a paired bootstrap over problems, 5,000 resamples."]],
     ["limits", "What it does not show",
@@ -222,10 +227,10 @@ PANELS = [
       f"{_ci(_plain['gap'])}, at {_plain['multiple']:.1f} times its tokens.",
       "For the best base rules the interval includes 0, so a tie with one RL sample is not excluded. A tie with RL given "
       "the same rule is excluded.",
-      "The 328 harder problems are not on this chart yet. Rules that cut long samples ran out of stored samples on some "
-      "problems, so their rows are approximate. Every rule here draws from 4 stored samples per problem; with 12, a vote "
-      f"over 6 samples of Base + cue reaches RL's one-sample range, {_vote.K[6][1]} of 500, at "
-      f"{_vote.times(_vote.K[6][7]):.1f} times the tokens ([Vote over 6 samples](/finding/vote-over-four))."]],
+      f"Every rule here draws from 4 stored samples per problem. With 12 samples, a vote over 6 samples of Base + cue "
+      f"reaches RL's one-sample range, {_vote.K[6][1]} of 500, at {_vote.times(_vote.K[6][7]):.1f} times the tokens "
+      "([Vote over 6 samples](/finding/vote-over-four)). The 328 harder problems are not on this chart yet. Rules that cut long samples ran out of stored samples on some "
+      "problems, so their results are approximate."]],
     ["run", "How to reproduce it",
      "studies/rlneurons/analysis/frontier.py replays the rules on the stored rows; the command is in studies/rlneurons/README.md, "
      "section Token frontier.",
@@ -520,7 +525,7 @@ function build() {
     `<ellipse class="spec" cx="${f(ax0 + aw * .3)}" cy="${f(ay0 + ah * .26)}" rx="${f(aw * .28)}" ry="${f(ah * .2)}" transform="rotate(-16 ${f(ax0 + aw * .3)} ${f(ay0 + ah * .26)})" fill="url(#spec)"/>` +
     `<g class="chart"><path class="spent" id="spent"/><path class="grid" id="grid"/><path class="axis" id="axis"/>` +
     yt.map(v => T("yt" + v, "tick", g.fs, "end", v)).join("") + xt.map(v => T("xt" + v, "tick", g.fs, "middle", v.toLocaleString("en-US"))).join("") +
-    T("ytitle", "atitle", g.fs, "", "MATH-500, T 1.0: right answers of " + N) + T("xtitle", "atitle", g.fs, "end", "Tokens per problem") +
+    T("ytitle", "atitle", g.fs, "", "MATH-500, temperature 1.0: right answers out of " + N) + T("xtitle", "atitle", g.fs, "end", "Tokens per problem") +
     `<path class="stair b0" id="sb0"/><path class="stair r0" id="sr0"/><path class="stair r1" id="sr1"/><path class="stair b1" id="sb1"/>` +
     `<path class="level" id="level"/>` + T("lvl", "lvl", g.fs, "", narrow.matches ? "One RL sample" : `One RL sample: ${one(RL1.right)} of ${N}`) + `</g>` +
     `<g class="marks"><line class="budget" id="budget-line"/><path class="bar" id="bar"/><circle class="halo" id="halo"/>` +

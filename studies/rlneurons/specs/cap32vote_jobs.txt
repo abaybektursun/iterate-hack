@@ -1,0 +1,44 @@
+# The jobs of specs/SPEC_cap32vote.md: Think-SFT + cue at a cap of 32,768 generated tokens. Branch `cap32vote`.
+# Each line is one command string, as for `python3 tools/vast.py run <box> -- '<line>'`; $(git rev-parse HEAD) expands to the
+# submitted commit (a clean checkout of the branch). Outputs in $OUT_DIR: answers.jsonl, metrics.json (status done).
+# Please copy each job's folder to s3://iterate-hack-team-769063704696/handoff/cap32vote/<job-id>/ (answers.jsonl, metrics.json, log).
+# Needs per job: one RTX PRO 6000 96 GB (measured for this cap: about 720 tokens/s; a 48 GB card gave 240), vLLM context 34,816
+# tokens, 7B model in BF16 (15 GB), 32 GB host RAM, 90 GB disk (three model repositories plus the copy in /tmp/theta), HF token.
+# Expected generated tokens and time on that card (plus about 15 min of setup and weights):
+#   smoke: 10 problems, about 0.15 M tokens, 10 min. Run it FIRST and alone; the full jobs wait for its rows to be read.
+#   hard328, one shard (164 problems): about 1.95 M tokens, 45 min. 6 jobs.
+#   fresh2026, one sample (136 problems): about 2.1 M tokens, 50 min. 4 jobs.
+# Give each job 2.5 h.
+
+# smoke: fresh2026, first 10 problems, sample 0 (stored at 16,384: problems 7, 8, 9 were cut)
+bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label sft1 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 7000000 --n 10 --commit $(git rev-parse HEAD)
+
+# hard328 sample 1, shard 0/2
+bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label sft1 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 3010000 --shard 0/2 --commit $(git rev-parse HEAD)
+
+# hard328 sample 1, shard 1/2
+bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label sft1 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 3010000 --shard 1/2 --commit $(git rev-parse HEAD)
+
+# hard328 sample 2, shard 0/2
+bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label sft1 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 3020000 --shard 0/2 --commit $(git rev-parse HEAD)
+
+# hard328 sample 2, shard 1/2
+bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label sft1 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 3020000 --shard 1/2 --commit $(git rev-parse HEAD)
+
+# hard328 sample 3, shard 0/2
+bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label sft1 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 3030000 --shard 0/2 --commit $(git rev-parse HEAD)
+
+# hard328 sample 3, shard 1/2
+bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label sft1 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 3030000 --shard 1/2 --commit $(git rev-parse HEAD)
+
+# fresh2026 sample 0
+bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label sft1 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 7000000 --commit $(git rev-parse HEAD)
+
+# fresh2026 sample 1
+bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label sft1 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 7010000 --commit $(git rev-parse HEAD)
+
+# fresh2026 sample 2
+bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label sft1 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 7020000 --commit $(git rev-parse HEAD)
+
+# fresh2026 sample 3
+bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label sft1 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 7030000 --commit $(git rev-parse HEAD)

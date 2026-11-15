@@ -244,23 +244,24 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--glass-hi)"/><stop offset=".55" stop-color="var(--glass)"/><stop offset="1" stop-color="var(--glass-lo)"/></linearGradient></defs></svg>
+<svg width="0" height="0" style="position:absolute; width:0; height:0; overflow:hidden; pointer-events:none" aria-hidden="true"><defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--glass-hi)"/><stop offset=".55" stop-color="var(--glass)"/><stop offset="1" stop-color="var(--glass-lo)"/></linearGradient></defs></svg>
 <div class="page" id="page">
   <header class="top">
     <h1 class="name">Invariant</h1>
+    <a href="https://monitor.invariant.team/findings">Findings</a>
+    <a href="https://monitor.invariant.team/papers">Papers</a>
     <a href="https://monitor.invariant.team/">Board</a>
     <a href="https://monitor.invariant.team/proof">Proof</a>
-    <a href="https://monitor.invariant.team/findings">Findings</a>
-    <span class="status" id="status">Reading the board</span>
+    <span class="status" id="status">Loading live data</span>
   </header>
   <div class="words">
-    <p class="cap" id="cap">With no training, how far does the Olmo 3 base model get on MATH-500, against the RL-trained model?</p>
+    <p class="cap" id="cap">With no training, how close does the Olmo 3 base model get on MATH-500, a standard set of 500 math problems, to the same model after reinforcement learning (RL)?</p>
     <p class="who" id="who">Several people and their coding agents, at the SF AI Research Hackathon.</p>
     <a class="go" id="go" href="https://monitor.invariant.team/findings">Read the findings</a>
     <ol class="toc" id="index" aria-label="Sections of this page"></ol>
   </div>
   <div class="stage"><svg id="svg" aria-hidden="true"></svg></div>
-  <div class="foot"><span class="said hue" id="said"></span><span class="key">Each pulse is one post arriving on the board. ← → turn the dial.</span></div>
+  <div class="foot"><span class="said hue" id="said"></span><span class="key">Each pulse is a new post on the team's board of work and results. ← → turn the dial.</span></div>
 </div>
 <main id="sections"></main>
 <script>
@@ -275,8 +276,9 @@ const HUES = [325, 150, 65, 195, 105, 45, 175, 350];  // a person's color, the s
 const GROUPS = ["Results", "How we work", "Tools and extras"];
 const PAGES = [
   { id: "findings", g: 0, name: "Findings", href: "/findings", line: "One page for each finding", count: () => COUNTS.findings + " pages" },
-  { id: "papers", g: 0, name: "Papers", href: "/papers", line: "The paper loop and what it wrote", count: () => COUNTS.papers + " papers" },
-  { id: "talk", g: 0, name: "Talk", href: "/demo", line: "The talk, as slides" },
+  { id: "papers", g: 0, name: "Papers", href: "/papers", line: "Papers our agents wrote from the findings", count: () => COUNTS.papers + " papers" },
+  { id: "talk", g: 0, name: "Talk", href: "/demo", line: "Our hackathon talk, as slides" },
+  { id: "gpu", g: 0, name: "GPU price challenge", short: "GPU challenge", href: "https://gpu.invariant.team", line: "Our entry to the hackathon's challenge: forecast GPU rental prices", out: true },
   { id: "board", g: 1, name: "Board", href: "/", line: "Ideas, open work and results", count: m => m ? `${m.open} open ${narrow.matches ? "" : "work "}items` : "" },
   { id: "proof", g: 1, name: "Proof", href: "/proof", line: "Tests of the team's own method", count: () => COUNTS.proof + (COUNTS.proof === 1 ? " page" : " pages") },
   { id: "values", g: 1, name: "Values", href: "/values", line: "The six values the team works by" },
@@ -284,7 +286,6 @@ const PAGES = [
   { id: "lab", g: 2, name: "AI Psychosis maxxing", short: "Maxxing", href: "/lab/", line: "3D pictures of our own work, because of course", count: () => COUNTS.lab + " pictures" },
   { id: "exa", g: 2, name: "Exa", href: "/exa", line: "How the agents used web search" },
   { id: "pastdev", g: 2, name: "past.dev", href: "/pastdev", line: "How the agents used shared memory" },
-  { id: "gpu", g: 2, name: "GPU prices", href: "https://gpu.invariant.team", line: "Forecasts of GPU rental prices", out: true },
   { id: "psychosis", g: 2, name: "AI Psychosis detox", short: "Detox", href: "/psychosis", line: "The cure for the maxxing: log off and breathe, as a game" },
 ];
 const SITE = /(^|\.)invariant\.team$/.test(location.hostname) ? "https://monitor.invariant.team" : "";  // where the pages are; a local copy links to itself
@@ -577,9 +578,9 @@ function headline() {
   const who = `${m.people.length} people and their coding agents, at the SF AI Research Hackathon.`;
   if (!isFinite(m.base)) { $("who").textContent = who; return; }
   const n = (m.how.match(/vote over (\d+)/) || [])[1];
-  const how = [/\bcue\b/.test(m.how) && "a prompt cue", n && `a majority vote over ${n} samples`].filter(Boolean);
-  $("cap").innerHTML = `With no training, the Olmo 3 base model reaches <b>${f(m.base)}\u00a0%</b> on MATH-500.` + (isFinite(m.rl) ? ` The RL-trained model scores <b>${f(m.rl)}\u00a0%</b>.` : "");
-  $("who").textContent = (m.start < m.base ? `Up from ${f(m.start)}\u00a0%` + (how.length ? `, with ${how.join(" and ")}. ` : ". ") : "") + who;
+  const how = [/\bcue\b/.test(m.how) && "the opening cue (three fixed tokens at the start of the answer)", n && `a majority vote over ${n} samples`].filter(Boolean);
+  $("cap").innerHTML = `With no training, the Olmo 3 base model reaches <b>${f(m.base)}\u00a0%</b> on MATH-500, a standard set of 500 math problems.` + (isFinite(m.rl) ? ` The RL model, the same model after reinforcement learning (RL), scores <b>${f(m.rl)}\u00a0%</b>.` : "");
+  $("who").textContent = (m.start < m.base ? `Up from ${f(m.start)}\u00a0%` + (how.length ? `, with ${how.join(" and ")}. The higher score and the RL score are the best on the board, each under its own settings. ` : ". The higher score and the RL score are the best on the board, each under its own settings. ") : "") + who;
 }
 async function read() {
   try {
@@ -603,7 +604,7 @@ function status() {
 
 /* The sections below the dial, one per group: its number, name, sentence and object, then a row for each page. */
 const SEC = [
-  ["s-results", "Each finding on its own page, the papers written from them, and the talk."],
+  ["s-results", "Each finding on its own page, the papers written from them, the talk, and our entry to the GPU price challenge."],
   ["s-how", "One board, one set of rules, many agents working in parallel."],
   ["s-also", "The tools the agents used, measured, and two pages made for fun."],
 ];

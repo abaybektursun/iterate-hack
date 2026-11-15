@@ -1,5 +1,23 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 22:10 UTC (loop cycle 16, step-back 4; no tool change, no skill edit) meta/reviews/abaybektursun/20261115-2206/
+
+- Target (Team line, 4 h): claim to close median 14 min (48 at 21:04), upper quartile 56 min (106), 70 items by 3 people (34); 19.2 results per hour (10.2). The window holds many short items (site pages, offline tests on stored rows). Items with GPU jobs: to-job 3, jobs 50, to-answer 3 min. Modal 96 jobs, 4 failed or cancelled with 3.9 of 2,108.5 container min, wait 0.2 min.
+- Open measurements: the 10-minute upload (cycle 14): 2 vast.ai jobs since 20:10, 0 part tars in the team store; still not shown on a real job.
+- Step-back (stepback.md): cycles 13 to 16 beat 9 to 12 on both parts by a large gap, caused by the end of the outage and the mix of items, not by a loop change. The spend line of cycle 13 had no effect; a limit built into `up` by another session did what the printed line did not.
+- Never fixed, all with the person: reviews by other sessions (4 more), sharding as one command, the Direction section.
+- Stop rule: 1 step-back in a row with no loop change that helped. The waits and failures the loop can remove alone are removed (queue 0.2 min, failed 0.2 %, to-job 3, to-answer 3 min).
+- Next cycle checks: a part tar of a real job; the Team line against 14 / 56 min and 19.2 per hour.
+
+## 2026-11-15 22:00 UTC (session egate, after result-c5dafe) meta/reviews/abaybektursun/20261115-2200/
+
+- Direction: mission = how much of a published RL gain is reached without reward (DIRECTION.md). work-8b4030 tested the transplant on a set it was not chosen on (fresh2026, +9.0 points) and at cap 32,768 (241 of 328): both test the mission's held-out claim. No drift; the restart chains were offline, 0 GPU minutes.
+- Turnaround (`cycle.txt`, 6 h): claim to close median 21 min, jobs stage 47 min, slowest. This item: 9.6 h claim to close, of which three account stops and five lost jobs.
+- Observed (`before.txt`): the cap-32,768 job was cut at 44 min with 97 of 328 answers written; I reran from zero (110 min) although `run_cell --resume` exists. 44 min of generation thrown away.
+- Cause: I did not know the flag; the command was copied from an older job of mine.
+- Change (step 2, delete the repeated work; no code): every rerun of a cut cell from this session passes `--resume <cut run folder>`; the 10-minute partial upload of vast.py (main, 20:03 UTC) supplies that folder when the box is gone.
+- Next entry checks: minutes regenerated on the next cut job (target 0), from the row counts of the cut and the resumed folder.
+
 ## 2026-11-15 21:10 UTC (loop cycle 15; no change) meta/reviews/abaybektursun/20261115-2104/
 
 - Target (Team line, 4 h): claim to close median 48 min (43 at 19:59), upper quartile 106 min (68), 34 items by 3 people (31); 10.2 results per hour (9.5). Stage medians of abaybektursun's items with jobs: to-job 3, jobs 37, to-answer 1 min. Modal 102 jobs, 4 failed or cancelled with 3.9 of 2,388.7 container min.

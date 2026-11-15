@@ -1,0 +1,866 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_cap32vote.md",
+ "set": "fresh2026",
+ "n": 136,
+ "run": "/home/abay/Projects/iterate-hack/runs/cap32vote_fresh_s4",
+ "job_id": "abaybektursun-1115-090519-e734+abaybektursun-1115-151138-ecde+abaybektursun-1115-082027-20e4+abaybektursun-1115-094344-1848",
+ "groups": {
+  "all": {
+   "at_32768": {
+    "n": 136,
+    "single_mean_of_4": 70.25,
+    "vote4": 75,
+    "pass_at_4": 87,
+    "rules": {
+     "single": {
+      "right": 69,
+      "right_24": 70.2,
+      "tokens": 16210,
+      "tokens_24": 15900
+     },
+     "vote2": {
+      "right": 69,
+      "right_24": 70.3,
+      "tokens": 31941,
+      "tokens_24": 31800
+     },
+     "seq3": {
+      "right": 75,
+      "right_24": 74.7,
+      "tokens": 42030,
+      "tokens_24": 40995
+     },
+     "seq4": {
+      "right": 75,
+      "right_24": 75.8,
+      "tokens": 48359,
+      "tokens_24": 47519
+     },
+     "vote4": {
+      "right": 75,
+      "right_24": 75.8,
+      "tokens": 63601,
+      "tokens_24": 63601
+     },
+     "seq4_short": {
+      "right": 81,
+      "right_24": 80.0,
+      "tokens": 48359,
+      "tokens_24": 47519
+     },
+     "vote4_short": {
+      "right": 81,
+      "right_24": 81.0,
+      "tokens": 63601,
+      "tokens_24": 63601
+     },
+     "restart1": {
+      "right": 69,
+      "right_24": 70.2,
+      "tokens": 16210,
+      "tokens_24": 15951
+     },
+     "gate12000": {
+      "right": 76,
+      "right_24": 76.2,
+      "tokens": 44538,
+      "tokens_24": 43598
+     }
+    }
+   },
+   "at_16384_same_answers": {
+    "n": 136,
+    "single_mean_of_4": 59.0,
+    "vote4": 73,
+    "pass_at_4": 76,
+    "rules": {
+     "single": {
+      "right": 53,
+      "right_24": 59.0,
+      "tokens": 13242,
+      "tokens_24": 13084
+     },
+     "vote2": {
+      "right": 64,
+      "right_24": 65.8,
+      "tokens": 26429,
+      "tokens_24": 26168
+     },
+     "seq3": {
+      "right": 71,
+      "right_24": 69.7,
+      "tokens": 35893,
+      "tokens_24": 35421
+     },
+     "seq4": {
+      "right": 73,
+      "right_24": 72.2,
+      "tokens": 44221,
+      "tokens_24": 43509
+     },
+     "vote4": {
+      "right": 73,
+      "right_24": 72.2,
+      "tokens": 52336,
+      "tokens_24": 52336
+     },
+     "seq4_short": {
+      "right": 75,
+      "right_24": 75.0,
+      "tokens": 44221,
+      "tokens_24": 43509
+     },
+     "vote4_short": {
+      "right": 75,
+      "right_24": 75.0,
+      "tokens": 52336,
+      "tokens_24": 52336
+     },
+     "restart1": {
+      "right": 63,
+      "right_24": 65.8,
+      "tokens": 21599,
+      "tokens_24": 20641
+     },
+     "gate12000": {
+      "right": 73,
+      "right_24": 71.8,
+      "tokens": 40048,
+      "tokens_24": 39053
+     }
+    }
+   },
+   "rl_plain_16384_stored": {
+    "vote4": 57,
+    "single_mean_of_4": 50.5
+   },
+   "differences": {
+    "single, 32768 minus 16384": {
+     "problems": 11.25,
+     "points": 8.27,
+     "interval95": [
+      5.51,
+      11.4
+     ]
+    },
+    "vote4, 32768 minus 16384": {
+     "problems": 2.0,
+     "points": 1.47,
+     "interval95": [
+      -2.94,
+      5.88
+     ]
+    },
+    "seq4 (24 orders), 32768 minus 16384": {
+     "problems": 3.58,
+     "points": 2.63,
+     "interval95": [
+      -1.29,
+      6.62
+     ]
+    },
+    "vote4_short (ties to the shortest; not in the spec), 32768 minus 16384": {
+     "problems": 6.0,
+     "points": 4.41,
+     "interval95": [
+      0.0,
+      8.82
+     ]
+    },
+    "vote4_short at 32768 minus vote4 at 16384": {
+     "problems": 8.0,
+     "points": 5.88,
+     "interval95": [
+      1.47,
+      11.03
+     ]
+    },
+    "vote4_short at 32768 minus RL vote4 (stored 16384)": {
+     "problems": 24.0,
+     "points": 17.65,
+     "interval95": [
+      11.03,
+      25.0
+     ]
+    },
+    "single at 32768 minus restart1 at 16384 (24 orders)": {
+     "problems": 4.5,
+     "points": 3.31,
+     "interval95": [
+      0.67,
+      6.25
+     ]
+    },
+    "single at 32768 minus vote2 at 16384 (24 orders)": {
+     "problems": 4.5,
+     "points": 3.31,
+     "interval95": [
+      0.67,
+      6.19
+     ]
+    },
+    "vote4 at 32768 minus RL vote4 (stored 16384)": {
+     "problems": 18.0,
+     "points": 13.24,
+     "interval95": [
+      6.62,
+      19.85
+     ]
+    },
+    "vote4 at 16384 minus RL vote4 (stored 16384)": {
+     "problems": 16.0,
+     "points": 11.76,
+     "interval95": [
+      5.15,
+      18.38
+     ]
+    },
+    "single at 32768 minus RL single (stored 16384)": {
+     "problems": 19.75,
+     "points": 14.52,
+     "interval95": [
+      9.93,
+      19.3
+     ]
+    }
+   }
+  },
+  "published (AIME 2026 + HMMT Feb 2026, 59)": {
+   "at_32768": {
+    "n": 59,
+    "single_mean_of_4": 28.0,
+    "vote4": 31,
+    "pass_at_4": 36,
+    "rules": {
+     "single": {
+      "right": 29,
+      "right_24": 28.0,
+      "tokens": 16534,
+      "tokens_24": 16149
+     },
+     "vote2": {
+      "right": 29,
+      "right_24": 28.1,
+      "tokens": 32883,
+      "tokens_24": 32298
+     },
+     "seq3": {
+      "right": 31,
+      "right_24": 30.3,
+      "tokens": 43279,
+      "tokens_24": 42090
+     },
+     "seq4": {
+      "right": 31,
+      "right_24": 31.2,
+      "tokens": 50720,
+      "tokens_24": 49366
+     },
+     "vote4": {
+      "right": 31,
+      "right_24": 31.2,
+      "tokens": 64597,
+      "tokens_24": 64597
+     },
+     "seq4_short": {
+      "right": 33,
+      "right_24": 32.5,
+      "tokens": 50720,
+      "tokens_24": 49366
+     },
+     "vote4_short": {
+      "right": 33,
+      "right_24": 33.0,
+      "tokens": 64597,
+      "tokens_24": 64597
+     },
+     "restart1": {
+      "right": 29,
+      "right_24": 28.0,
+      "tokens": 16534,
+      "tokens_24": 16266
+     },
+     "gate12000": {
+      "right": 32,
+      "right_24": 31.7,
+      "tokens": 46519,
+      "tokens_24": 45382
+     }
+    }
+   },
+   "at_16384_same_answers": {
+    "n": 59,
+    "single_mean_of_4": 22.75,
+    "vote4": 29,
+    "pass_at_4": 30,
+    "rules": {
+     "single": {
+      "right": 20,
+      "right_24": 22.8,
+      "tokens": 13509,
+      "tokens_24": 13279
+     },
+     "vote2": {
+      "right": 24,
+      "right_24": 26.0,
+      "tokens": 26880,
+      "tokens_24": 26558
+     },
+     "seq3": {
+      "right": 29,
+      "right_24": 28.0,
+      "tokens": 36810,
+      "tokens_24": 36197
+     },
+     "seq4": {
+      "right": 29,
+      "right_24": 29.0,
+      "tokens": 45433,
+      "tokens_24": 44508
+     },
+     "vote4": {
+      "right": 29,
+      "right_24": 29.0,
+      "tokens": 53117,
+      "tokens_24": 53117
+     },
+     "seq4_short": {
+      "right": 29,
+      "right_24": 29.0,
+      "tokens": 45433,
+      "tokens_24": 44508
+     },
+     "vote4_short": {
+      "right": 29,
+      "right_24": 29.0,
+      "tokens": 53117,
+      "tokens_24": 53117
+     },
+     "restart1": {
+      "right": 24,
+      "right_24": 25.7,
+      "tokens": 22199,
+      "tokens_24": 20998
+     },
+     "gate12000": {
+      "right": 29,
+      "right_24": 28.7,
+      "tokens": 40420,
+      "tokens_24": 39623
+     }
+    }
+   },
+   "rl_plain_16384_stored": {
+    "vote4": 22,
+    "single_mean_of_4": 17.75
+   },
+   "differences": {
+    "single, 32768 minus 16384": {
+     "problems": 5.25,
+     "points": 8.9,
+     "interval95": [
+      4.66,
+      13.56
+     ]
+    },
+    "vote4, 32768 minus 16384": {
+     "problems": 2.0,
+     "points": 3.39,
+     "interval95": [
+      -3.39,
+      10.17
+     ]
+    },
+    "seq4 (24 orders), 32768 minus 16384": {
+     "problems": 2.25,
+     "points": 3.81,
+     "interval95": [
+      -1.27,
+      9.75
+     ]
+    },
+    "vote4_short (ties to the shortest; not in the spec), 32768 minus 16384": {
+     "problems": 4.0,
+     "points": 6.78,
+     "interval95": [
+      1.69,
+      13.56
+     ]
+    },
+    "vote4_short at 32768 minus vote4 at 16384": {
+     "problems": 4.0,
+     "points": 6.78,
+     "interval95": [
+      1.69,
+      13.56
+     ]
+    },
+    "vote4_short at 32768 minus RL vote4 (stored 16384)": {
+     "problems": 11.0,
+     "points": 18.64,
+     "interval95": [
+      8.47,
+      30.51
+     ]
+    },
+    "single at 32768 minus restart1 at 16384 (24 orders)": {
+     "problems": 2.33,
+     "points": 3.95,
+     "interval95": [
+      -0.14,
+      8.62
+     ]
+    },
+    "single at 32768 minus vote2 at 16384 (24 orders)": {
+     "problems": 2.0,
+     "points": 3.39,
+     "interval95": [
+      -0.56,
+      7.91
+     ]
+    },
+    "vote4 at 32768 minus RL vote4 (stored 16384)": {
+     "problems": 9.0,
+     "points": 15.25,
+     "interval95": [
+      3.39,
+      27.12
+     ]
+    },
+    "vote4 at 16384 minus RL vote4 (stored 16384)": {
+     "problems": 7.0,
+     "points": 11.86,
+     "interval95": [
+      0.0,
+      23.73
+     ]
+    },
+    "single at 32768 minus RL single (stored 16384)": {
+     "problems": 10.25,
+     "points": 17.37,
+     "interval95": [
+      9.75,
+      25.85
+     ]
+    }
+   }
+  },
+  "transcribed (HMMT Feb Guts + HMMT Nov, 77)": {
+   "at_32768": {
+    "n": 77,
+    "single_mean_of_4": 42.25,
+    "vote4": 44,
+    "pass_at_4": 51,
+    "rules": {
+     "single": {
+      "right": 40,
+      "right_24": 42.2,
+      "tokens": 15962,
+      "tokens_24": 15709
+     },
+     "vote2": {
+      "right": 40,
+      "right_24": 42.2,
+      "tokens": 31220,
+      "tokens_24": 31419
+     },
+     "seq3": {
+      "right": 44,
+      "right_24": 44.3,
+      "tokens": 41073,
+      "tokens_24": 40156
+     },
+     "seq4": {
+      "right": 44,
+      "right_24": 44.5,
+      "tokens": 46550,
+      "tokens_24": 46104
+     },
+     "vote4": {
+      "right": 44,
+      "right_24": 44.5,
+      "tokens": 62838,
+      "tokens_24": 62838
+     },
+     "seq4_short": {
+      "right": 48,
+      "right_24": 47.5,
+      "tokens": 46550,
+      "tokens_24": 46104
+     },
+     "vote4_short": {
+      "right": 48,
+      "right_24": 48.0,
+      "tokens": 62838,
+      "tokens_24": 62838
+     },
+     "restart1": {
+      "right": 40,
+      "right_24": 42.2,
+      "tokens": 15962,
+      "tokens_24": 15709
+     },
+     "gate12000": {
+      "right": 44,
+      "right_24": 44.6,
+      "tokens": 43020,
+      "tokens_24": 42231
+     }
+    }
+   },
+   "at_16384_same_answers": {
+    "n": 77,
+    "single_mean_of_4": 36.25,
+    "vote4": 44,
+    "pass_at_4": 46,
+    "rules": {
+     "single": {
+      "right": 33,
+      "right_24": 36.2,
+      "tokens": 13037,
+      "tokens_24": 12935
+     },
+     "vote2": {
+      "right": 40,
+      "right_24": 39.8,
+      "tokens": 26083,
+      "tokens_24": 25869
+     },
+     "seq3": {
+      "right": 42,
+      "right_24": 41.7,
+      "tokens": 35190,
+      "tokens_24": 34826
+     },
+     "seq4": {
+      "right": 44,
+      "right_24": 43.2,
+      "tokens": 43292,
+      "tokens_24": 42743
+     },
+     "vote4": {
+      "right": 44,
+      "right_24": 43.2,
+      "tokens": 51738,
+      "tokens_24": 51738
+     },
+     "seq4_short": {
+      "right": 46,
+      "right_24": 46.0,
+      "tokens": 43292,
+      "tokens_24": 42743
+     },
+     "vote4_short": {
+      "right": 46,
+      "right_24": 46.0,
+      "tokens": 51738,
+      "tokens_24": 51738
+     },
+     "restart1": {
+      "right": 39,
+      "right_24": 40.1,
+      "tokens": 21139,
+      "tokens_24": 20368
+     },
+     "gate12000": {
+      "right": 44,
+      "right_24": 43.2,
+      "tokens": 39763,
+      "tokens_24": 38616
+     }
+    }
+   },
+   "rl_plain_16384_stored": {
+    "vote4": 35,
+    "single_mean_of_4": 32.75
+   },
+   "differences": {
+    "single, 32768 minus 16384": {
+     "problems": 6.0,
+     "points": 7.79,
+     "interval95": [
+      3.9,
+      12.01
+     ]
+    },
+    "vote4, 32768 minus 16384": {
+     "problems": 0.0,
+     "points": 0.0,
+     "interval95": [
+      -6.49,
+      6.49
+     ]
+    },
+    "seq4 (24 orders), 32768 minus 16384": {
+     "problems": 1.33,
+     "points": 1.73,
+     "interval95": [
+      -4.0,
+      7.36
+     ]
+    },
+    "vote4_short (ties to the shortest; not in the spec), 32768 minus 16384": {
+     "problems": 2.0,
+     "points": 2.6,
+     "interval95": [
+      -3.9,
+      9.09
+     ]
+    },
+    "vote4_short at 32768 minus vote4 at 16384": {
+     "problems": 4.0,
+     "points": 5.19,
+     "interval95": [
+      -1.3,
+      12.99
+     ]
+    },
+    "vote4_short at 32768 minus RL vote4 (stored 16384)": {
+     "problems": 13.0,
+     "points": 16.88,
+     "interval95": [
+      7.79,
+      25.97
+     ]
+    },
+    "single at 32768 minus restart1 at 16384 (24 orders)": {
+     "problems": 2.17,
+     "points": 2.81,
+     "interval95": [
+      -0.65,
+      6.71
+     ]
+    },
+    "single at 32768 minus vote2 at 16384 (24 orders)": {
+     "problems": 2.5,
+     "points": 3.25,
+     "interval95": [
+      -0.32,
+      7.14
+     ]
+    },
+    "vote4 at 32768 minus RL vote4 (stored 16384)": {
+     "problems": 9.0,
+     "points": 11.69,
+     "interval95": [
+      3.9,
+      19.48
+     ]
+    },
+    "vote4 at 16384 minus RL vote4 (stored 16384)": {
+     "problems": 9.0,
+     "points": 11.69,
+     "interval95": [
+      3.9,
+      20.78
+     ]
+    },
+    "single at 32768 minus RL single (stored 16384)": {
+     "problems": 9.5,
+     "points": 12.34,
+     "interval95": [
+      7.14,
+      17.86
+     ]
+    }
+   }
+  }
+ },
+ "at_32768": {
+  "single_each": [
+   69,
+   70,
+   74,
+   68
+  ],
+  "cap_hits": 1,
+  "cap_hit_percent": 0.18,
+  "cap_hits_with_an_extracted_answer": 0,
+  "cap_hits_right": 0,
+  "finished": 543,
+  "finished_right": 281,
+  "precision_percent": 51.75,
+  "tokens_per_sample": 15900,
+  "vote_ties_for_first": 36
+ },
+ "at_16384_same_answers": {
+  "single_each": [
+   53,
+   61,
+   64,
+   58
+  ],
+  "cap_hits": 260,
+  "cap_hit_percent": 47.79,
+  "cap_hits_with_an_extracted_answer": 40,
+  "cap_hits_right": 5,
+  "finished": 284,
+  "finished_right": 231,
+  "precision_percent": 81.34,
+  "tokens_per_sample": 13084,
+  "vote_ties_for_first": 16
+ },
+ "late_answers": {
+  "more_than_16384_tokens": 260,
+  "finished": 259,
+  "right": 50,
+  "finished_wrong": 209,
+  "finished_without_extracted_answer": 1,
+  "still_cut_at_32768": 1,
+  "per_sample": [
+   72,
+   63,
+   60,
+   65
+  ],
+  "right_per_sample": [
+   18,
+   10,
+   12,
+   10
+  ],
+  "wrong_pairs_of_one_problem": 230,
+  "wrong_pairs_agree": 30,
+  "wrong_pairs_agree_percent": 13.0,
+  "with_more_than_20_chinese_characters": 196,
+  "still_cut_with_more_than_20_chinese_characters": 1,
+  "right_with_more_than_20_chinese_characters": 27,
+  "loop_A": 0,
+  "still_cut_loop_A": 0,
+  "median_tokens_of_finished": 21978.0,
+  "vote_changed": {
+   "wrong to right": 6,
+   "right to wrong": 4,
+   "right to wrong problems": [
+    49,
+    81,
+    99,
+    127
+   ],
+   "wrong to right problems": [
+    19,
+    29,
+    52,
+    68,
+    74,
+    116
+   ]
+  }
+ },
+ "stored_16384_run": {
+  "folder": "studies/rlneurons/results/fresh/sft1_cue_s4-01",
+  "single_each": [
+   65,
+   59,
+   56,
+   60
+  ],
+  "vote4": 75,
+  "cap_hits": 248,
+  "finished_rows_with_the_same_tokens_and_answer_as_the_16384_view": 0,
+  "finished_rows_in_the_16384_view": 284
+ },
+ "predictions": {
+  "vote4_32": {
+   "predicted": 77.0,
+   "interval": [
+    71,
+    83
+   ],
+   "observed": 75,
+   "inside": true
+  },
+  "single_32": {
+   "predicted": 74.5,
+   "interval": [
+    71.2,
+    78.0
+   ],
+   "observed": 70.25,
+   "inside": false
+  },
+  "cap_hit_percent_32": {
+   "predicted": 1.0,
+   "interval": [
+    null,
+    null
+   ],
+   "observed": 0.18,
+   "inside": null
+  },
+  "precision_percent_32": {
+   "predicted": 55,
+   "interval": [
+    47,
+    63
+   ],
+   "observed": 51.75,
+   "inside": true
+  },
+  "late_wrong_pairs_agree_percent": {
+   "predicted": 75,
+   "interval": [
+    null,
+    null
+   ],
+   "observed": 13.0,
+   "inside": null
+  },
+  "single_32_tokens": {
+   "predicted": 15600,
+   "interval": [
+    null,
+    null
+   ],
+   "observed": 15900,
+   "inside": null
+  }
+ },
+ "hypotheses": {
+  "H1 vote4 at 32768 >= 250 on hard328, and its gain over the 16384 vote has an interval above 0": null,
+  "H2 vote gain in points smaller than single gain": {
+   "vote": 1.47,
+   "single": 8.27,
+   "held": true
+  },
+  "H3 single gain in points (compare the two sets)": {
+   "problems": 11.25,
+   "points": 8.27,
+   "interval95": [
+    5.51,
+    11.4
+   ]
+  },
+  "H4 one sample at 32768 above restart1 at 16384 (stored rows)": {
+   "single_32": 70.25,
+   "tokens": 15900,
+   "restart1_stored": 68.0,
+   "held": true,
+   "restart1_same_answers": {
+    "right": 63,
+    "right_24": 65.8,
+    "tokens": 21599,
+    "tokens_24": 20641
+   },
+   "paired": {
+    "problems": 4.5,
+    "points": 3.31,
+    "interval95": [
+     0.67,
+     6.25
+    ]
+   }
+  },
+  "H4b seq4 at 32768 not above seq4 at 16384": {
+   "paired": {
+    "problems": 3.58,
+    "points": 2.63,
+    "interval95": [
+     -1.29,
+     6.62
+    ]
+   },
+   "held": true
+  }
+ }
+}

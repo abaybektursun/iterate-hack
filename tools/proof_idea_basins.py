@@ -1,4 +1,8 @@
-"""Idea basins: the 515 items on the team board fall into 12 basins of ideas, by a judge model's reading.
+"""Idea basins: 486 items on the team board fall into 11 basins of ideas, by a judge model's reading.
+
+The judge grouped all 515 items of the board into 12 basins. The page leaves out one basin, GPU rental price
+forecasting (29 items, a separate sub-project of the hackathon's Track 2 that no item of the other basins links to),
+with its items and the 43 links among them. The counts of items, basins and links are recomputed without it.
 
 A proof page: a reading of the team's own method (how diverse the ideas of its agents are), served at
 /proof/idea-basins and reached from its tile on /proof, which ICON draws (made like a finding page,
@@ -11,10 +15,9 @@ studies/basins (results/swarm/main-04/run.json, branch ali/basins).
 """
 import json
 
-TITLE = "Idea basins"  # the name on its tile on /proof, in the browser tab and at the head of the words
-SUB = "The diversity of ideas"
+TITLE = "Idea basins"  # the name on its tile on /proof and in the browser tab
 PROBLEM = "How diverse are the ideas our agents found?"
-LINE = "515 board items fall into 12 idea basins."
+LINE = "486 board items fall into 11 idea basins."
 
 # Every number is copied from the artifacts named here. None is typed from memory.
 RESULTS = "studies/basins/results/swarm/"  # branch ali/basins
@@ -24,8 +27,9 @@ DATA = {
     "layout_commit": "79f1f7d",  # analysis/swarm_nested_layout.py and themes-02, branch ali/basins
     "snapshot": "15 November 2026, 19:42 UTC",  # main-04/run.json "snapshot"
     "judge": "gpt-6.1-sol",  # run.json "judge", metrics.json "judge"
-    "items": 515, "clusters": 12,  # n_board_items, n_basins
-    "largest": 81, "largest_share": 16, "effective": 10.9,  # basins[].board_items, largest_basin_share 0.157, effective_basins 10.87
+    "items": 486, "clusters": 11,  # n_board_items 515 and n_basins 12, less the GPU price basin (29 items)
+    "all_items": 515, "left_out": 29,  # the whole board, and the items of the basin left out
+    "largest": 81, "largest_share": 17, "effective": 10.0,  # basins[].board_items; 81/486 = 0.167; exp of the entropy of the 11 shares, 9.96 (10.87 with all 12)
     "heldout": 73, "shuffled": 51,  # tste_heldout_acc 0.728, tste_shuffled_id_null 0.508, as rounded percentages
     "ari_orders": 0.80, "ari_kmeans": 0.13,  # partition_ari_order0_vs_order1, partition_ari_vs_kmeans
     # Where things lie on the slab, with no board text: printed by
@@ -33,22 +37,24 @@ DATA = {
     # of which the page keeps the clusters and the items. x runs 0 to 1 and y 0 to wh. items are in the order they
     # were posted: c is the item's cluster, k its place among that cluster's items and p the places, in that order, of
     # the earlier items it builds on (the idea tree of main-04). "name" is the judge's short name
-    # of the cluster (themes-02/metrics.json "short") and "full" its name in main-04.
+    # of the cluster (themes-02/metrics.json "short") and "full" its name in main-04. Four names are not the judge's:
+    # Shorter turnaround, Public result pages, Temperature control and Leakage and grader tests were written by hand
+    # from the cluster's items, to name the idea the items pursue and not their topic (the judge's were Team tools,
+    # Board design, Sampling settings, Scoring audits). The basin GPU rental price forecasting is left out (docstring).
     "layout": {
         "wh": 0.84, "s": 0.009,
         "clusters": [
-            {"name": "Team tools", "full": "Research coordination and execution tools", "n": 63, "x": 0.3744, "y": 0.1648, "r": 0.0795},
-            {"name": "Board design", "full": "Site design and research communication", "n": 72, "x": 0.1821, "y": 0.2387, "r": 0.0845},
+            {"name": "Shorter turnaround", "full": "Research coordination and execution tools", "n": 63, "x": 0.3744, "y": 0.1648, "r": 0.0795},
+            {"name": "Public result pages", "full": "Site design and research communication", "n": 72, "x": 0.1821, "y": 0.2387, "r": 0.0845},
             {"name": "Weight edits", "full": "Weight editing and self training", "n": 81, "x": 0.7641, "y": 0.4909, "r": 0.0891},
             {"name": "Neuron edits", "full": "Neuron interventions and loop mechanisms", "n": 24, "x": 0.7024, "y": 0.6646, "r": 0.0522},
             {"name": "Workspace steering", "full": "Jacobian lens readout and steering", "n": 25, "x": 0.8493, "y": 0.6544, "r": 0.0531},
             {"name": "Prompt cues", "full": "Prompt cues and context interventions", "n": 48, "x": 0.5163, "y": 0.5517, "r": 0.0705},
-            {"name": "Sampling settings", "full": "Sampling distributions and temperature schedules", "n": 21, "x": 0.4657, "y": 0.7054, "r": 0.0493},
+            {"name": "Temperature control", "full": "Sampling distributions and temperature schedules", "n": 21, "x": 0.4657, "y": 0.7054, "r": 0.0493},
             {"name": "Sample selection", "full": "Voting restarts and token allocation", "n": 31, "x": 0.3543, "y": 0.6054, "r": 0.0582},
             {"name": "Theory tests", "full": "Theory generation and forecast testing", "n": 37, "x": 0.7358, "y": 0.2455, "r": 0.0628},
-            {"name": "Scoring audits", "full": "Grading leakage and evaluation integrity", "n": 29, "x": 0.6062, "y": 0.1479, "r": 0.0566},
+            {"name": "Leakage and grader tests", "full": "Grading leakage and evaluation integrity", "n": 29, "x": 0.6062, "y": 0.1479, "r": 0.0566},
             {"name": "Error analysis", "full": "Failure analysis and correctness prediction", "n": 55, "x": 0.5713, "y": 0.3178, "r": 0.0748},
-            {"name": "GPU prices", "full": "GPU rental price forecasting", "n": 29, "x": 0.3585, "y": 0.3956, "r": 0.0566},
         ],
         "items": [
             {"kind": "idea", "c": 6, "k": 0, "p": []}, {"kind": "idea", "c": 6, "k": 1, "p": []},
@@ -86,229 +92,214 @@ DATA = {
             {"kind": "work", "c": 1, "k": 4, "p": []}, {"kind": "result", "c": 10, "k": 4, "p": [29, 39]},
             {"kind": "result", "c": 1, "k": 5, "p": [64]}, {"kind": "work", "c": 0, "k": 14, "p": []},
             {"kind": "knowledge", "c": 0, "k": 15, "p": [67]}, {"kind": "work", "c": 0, "k": 16, "p": [64]},
-            {"kind": "work", "c": 0, "k": 17, "p": [45]}, {"kind": "work", "c": 11, "k": 0, "p": []},
-            {"kind": "result", "c": 6, "k": 12, "p": [36, 62]}, {"kind": "result", "c": 11, "k": 1, "p": [71]},
+            {"kind": "work", "c": 0, "k": 17, "p": [45]}, {"kind": "result", "c": 6, "k": 12, "p": [36, 62]},
             {"kind": "work", "c": 1, "k": 6, "p": [24]}, {"kind": "work", "c": 7, "k": 6, "p": [2, 25, 27, 28, 40, 62]},
-            {"kind": "result", "c": 6, "k": 13, "p": [36, 72]}, {"kind": "work", "c": 11, "k": 2, "p": [73]},
-            {"kind": "result", "c": 0, "k": 18, "p": [33, 49]}, {"kind": "work", "c": 4, "k": 6, "p": [57]},
-            {"kind": "result", "c": 11, "k": 3, "p": [73, 77]}, {"kind": "knowledge", "c": 11, "k": 4, "p": [73]},
-            {"kind": "idea", "c": 11, "k": 5, "p": [77, 80]}, {"kind": "work", "c": 2, "k": 8, "p": [3, 30]},
-            {"kind": "result", "c": 11, "k": 6, "p": [80]}, {"kind": "result", "c": 10, "k": 5, "p": [28, 62]},
-            {"kind": "work", "c": 0, "k": 19, "p": [19]}, {"kind": "idea", "c": 11, "k": 7, "p": [80, 82]},
-            {"kind": "idea", "c": 11, "k": 8, "p": [77, 80]}, {"kind": "idea", "c": 11, "k": 9, "p": [77]},
-            {"kind": "idea", "c": 11, "k": 10, "p": [77]}, {"kind": "idea", "c": 11, "k": 11, "p": [81]},
-            {"kind": "work", "c": 2, "k": 9, "p": [54, 83]}, {"kind": "result", "c": 3, "k": 3, "p": [43, 47]},
-            {"kind": "result", "c": 1, "k": 7, "p": [74]}, {"kind": "skill", "c": 1, "k": 8, "p": [74]},
-            {"kind": "work", "c": 5, "k": 4, "p": [30, 83]}, {"kind": "idea", "c": 0, "k": 20, "p": [31]},
-            {"kind": "work", "c": 10, "k": 6, "p": [32]}, {"kind": "result", "c": 11, "k": 12, "p": [87, 88]},
-            {"kind": "result", "c": 11, "k": 13, "p": [82]}, {"kind": "result", "c": 0, "k": 21, "p": [86]},
+            {"kind": "result", "c": 6, "k": 13, "p": [36, 71]}, {"kind": "result", "c": 0, "k": 18, "p": [33, 49]},
+            {"kind": "work", "c": 4, "k": 6, "p": [57]}, {"kind": "work", "c": 2, "k": 8, "p": [3, 30]},
+            {"kind": "result", "c": 10, "k": 5, "p": [28, 62]}, {"kind": "work", "c": 0, "k": 19, "p": [19]},
+            {"kind": "work", "c": 2, "k": 9, "p": [54, 77]}, {"kind": "result", "c": 3, "k": 3, "p": [43, 47]},
+            {"kind": "result", "c": 1, "k": 7, "p": [72]}, {"kind": "skill", "c": 1, "k": 8, "p": [72]},
+            {"kind": "work", "c": 5, "k": 4, "p": [30, 77]}, {"kind": "idea", "c": 0, "k": 20, "p": [31]},
+            {"kind": "work", "c": 10, "k": 6, "p": [32]}, {"kind": "result", "c": 0, "k": 21, "p": [79]},
             {"kind": "result", "c": 0, "k": 22, "p": [62, 70]}, {"kind": "work", "c": 0, "k": 23, "p": []},
-            {"kind": "result", "c": 2, "k": 10, "p": [83]}, {"kind": "result", "c": 11, "k": 14, "p": [87, 99]},
-            {"kind": "knowledge", "c": 2, "k": 11, "p": [52, 56, 83, 103]}, {"kind": "result", "c": 3, "k": 4, "p": [43, 93]},
-            {"kind": "knowledge", "c": 3, "k": 5, "p": [43, 93, 103]}, {"kind": "knowledge", "c": 3, "k": 6, "p": [43, 63, 103]},
-            {"kind": "knowledge", "c": 3, "k": 7, "p": [43, 103]}, {"kind": "knowledge", "c": 3, "k": 8, "p": [47, 83, 93, 103]},
-            {"kind": "knowledge", "c": 2, "k": 12, "p": [83, 92, 93, 103]}, {"kind": "result", "c": 2, "k": 13, "p": [3, 54, 92]},
-            {"kind": "knowledge", "c": 2, "k": 14, "p": [52, 56, 103]}, {"kind": "idea", "c": 2, "k": 15, "p": [3, 83, 92, 111]},
-            {"kind": "knowledge", "c": 4, "k": 7, "p": [48, 60, 103]}, {"kind": "knowledge", "c": 4, "k": 8, "p": [55, 79, 103, 116]},
-            {"kind": "knowledge", "c": 3, "k": 9, "p": [103]}, {"kind": "knowledge", "c": 3, "k": 10, "p": [103, 118]},
-            {"kind": "knowledge", "c": 3, "k": 11, "p": [103, 119]}, {"kind": "knowledge", "c": 3, "k": 12, "p": [47, 93, 103, 111]},
-            {"kind": "knowledge", "c": 5, "k": 5, "p": [7, 103]}, {"kind": "knowledge", "c": 10, "k": 7, "p": [4, 5, 103]},
-            {"kind": "knowledge", "c": 3, "k": 13, "p": [103]}, {"kind": "knowledge", "c": 9, "k": 3, "p": [8, 103]},
-            {"kind": "knowledge", "c": 5, "k": 6, "p": [9, 11, 103]}, {"kind": "knowledge", "c": 9, "k": 4, "p": [10, 65, 103]},
-            {"kind": "knowledge", "c": 4, "k": 9, "p": [58, 60, 79, 103]}, {"kind": "knowledge", "c": 4, "k": 10, "p": [48, 103]},
-            {"kind": "knowledge", "c": 2, "k": 16, "p": [47, 83, 103, 111]}, {"kind": "knowledge", "c": 0, "k": 24, "p": [14, 54, 103]},
-            {"kind": "idea", "c": 2, "k": 17, "p": [83, 92, 96, 111]}, {"kind": "result", "c": 3, "k": 14, "p": [43, 46, 107]},
-            {"kind": "result", "c": 4, "k": 11, "p": [79]}, {"kind": "result", "c": 4, "k": 12, "p": [58, 79]},
-            {"kind": "result", "c": 4, "k": 13, "p": [79, 134]}, {"kind": "idea", "c": 4, "k": 14, "p": [59, 136]},
-            {"kind": "knowledge", "c": 5, "k": 7, "p": [96]}, {"kind": "knowledge", "c": 11, "k": 15, "p": [77]},
-            {"kind": "result", "c": 7, "k": 7, "p": [25, 27, 28, 40]}, {"kind": "result", "c": 7, "k": 8, "p": [62, 75]},
-            {"kind": "idea", "c": 7, "k": 9, "p": [40, 75, 140]}, {"kind": "knowledge", "c": 0, "k": 25, "p": [103, 118]},
-            {"kind": "result", "c": 0, "k": 26, "p": [103, 143]}, {"kind": "result", "c": 11, "k": 16, "p": [88, 90, 105]},
-            {"kind": "result", "c": 2, "k": 18, "p": [83]}, {"kind": "result", "c": 11, "k": 17, "p": [90, 105]},
-            {"kind": "result", "c": 2, "k": 19, "p": [3, 30, 83]}, {"kind": "result", "c": 2, "k": 20, "p": [146, 148]},
-            {"kind": "work", "c": 4, "k": 15, "p": [79, 116, 129]}, {"kind": "work", "c": 6, "k": 14, "p": [1, 49]},
-            {"kind": "work", "c": 8, "k": 0, "p": []}, {"kind": "work", "c": 2, "k": 21, "p": [62, 148]},
-            {"kind": "result", "c": 8, "k": 1, "p": [152]}, {"kind": "result", "c": 10, "k": 8, "p": [98]},
-            {"kind": "idea", "c": 5, "k": 8, "p": [113, 148]}, {"kind": "work", "c": 5, "k": 9, "p": [156]},
-            {"kind": "work", "c": 5, "k": 10, "p": [4, 49]}, {"kind": "work", "c": 8, "k": 2, "p": [152]},
-            {"kind": "idea", "c": 2, "k": 22, "p": [30, 148]}, {"kind": "idea", "c": 8, "k": 3, "p": [153, 159]},
-            {"kind": "result", "c": 8, "k": 4, "p": [159, 161]}, {"kind": "work", "c": 2, "k": 23, "p": [160]},
-            {"kind": "knowledge", "c": 4, "k": 16, "p": [129, 150]}, {"kind": "result", "c": 11, "k": 18, "p": [82, 105]},
-            {"kind": "result", "c": 11, "k": 19, "p": [77, 165]}, {"kind": "result", "c": 11, "k": 20, "p": [89]},
-            {"kind": "result", "c": 6, "k": 15, "p": [151]}, {"kind": "result", "c": 3, "k": 15, "p": [43, 107, 133]},
-            {"kind": "work", "c": 0, "k": 27, "p": [45]}, {"kind": "result", "c": 7, "k": 10, "p": [2, 25]},
-            {"kind": "knowledge", "c": 0, "k": 28, "p": []}, {"kind": "work", "c": 8, "k": 5, "p": [162]},
-            {"kind": "result", "c": 2, "k": 24, "p": [92, 113, 115]}, {"kind": "result", "c": 4, "k": 17, "p": [150]},
-            {"kind": "result", "c": 4, "k": 18, "p": [150]}, {"kind": "result", "c": 5, "k": 11, "p": [158]},
-            {"kind": "work", "c": 7, "k": 11, "p": [142, 171]}, {"kind": "work", "c": 1, "k": 9, "p": [34, 64]},
-            {"kind": "work", "c": 1, "k": 10, "p": [64, 179]}, {"kind": "result", "c": 1, "k": 11, "p": [4, 148, 171, 179, 180]},
-            {"kind": "result", "c": 7, "k": 12, "p": [141, 178]}, {"kind": "work", "c": 0, "k": 29, "p": [41, 43]},
-            {"kind": "result", "c": 2, "k": 25, "p": [148, 153]}, {"kind": "result", "c": 2, "k": 26, "p": [184]},
-            {"kind": "knowledge", "c": 0, "k": 30, "p": [52, 131, 177, 183]}, {"kind": "work", "c": 0, "k": 31, "p": [186]},
-            {"kind": "result", "c": 8, "k": 6, "p": [161, 173, 184]}, {"kind": "work", "c": 2, "k": 27, "p": [56, 171]},
-            {"kind": "work", "c": 9, "k": 5, "p": [4, 7, 62, 148, 171, 182]}, {"kind": "result", "c": 2, "k": 28, "p": [148, 160, 163]},
-            {"kind": "idea", "c": 2, "k": 29, "p": [107, 113, 163, 174, 187]}, {"kind": "result", "c": 9, "k": 6, "p": [148, 182, 190]},
-            {"kind": "result", "c": 2, "k": 30, "p": [92, 174]}, {"kind": "result", "c": 4, "k": 19, "p": [150, 175]},
-            {"kind": "work", "c": 8, "k": 7, "p": [188]}, {"kind": "work", "c": 9, "k": 7, "p": [22, 171]},
-            {"kind": "result", "c": 9, "k": 8, "p": [4, 171, 197]}, {"kind": "knowledge", "c": 9, "k": 9, "p": [173, 196]},
-            {"kind": "idea", "c": 2, "k": 31, "p": [156, 171, 182, 191, 194]}, {"kind": "idea", "c": 10, "k": 9, "p": [135, 140, 160, 191, 200]},
-            {"kind": "result", "c": 1, "k": 12, "p": [179]}, {"kind": "result", "c": 2, "k": 32, "p": [163, 191, 201]},
-            {"kind": "result", "c": 3, "k": 16, "p": [43, 63]}, {"kind": "result", "c": 5, "k": 12, "p": [156, 157]},
-            {"kind": "result", "c": 1, "k": 13, "p": [180, 181]}, {"kind": "work", "c": 2, "k": 33, "p": [192]},
-            {"kind": "idea", "c": 10, "k": 10, "p": [35, 171]}, {"kind": "work", "c": 10, "k": 11, "p": [208]},
-            {"kind": "result", "c": 2, "k": 34, "p": [92, 194]}, {"kind": "idea", "c": 10, "k": 12, "p": [208, 210]},
-            {"kind": "idea", "c": 5, "k": 13, "p": [122, 208]}, {"kind": "work", "c": 5, "k": 14, "p": [212]},
-            {"kind": "work", "c": 10, "k": 13, "p": [211]}, {"kind": "work", "c": 7, "k": 13, "p": [2, 141, 171]},
-            {"kind": "result", "c": 9, "k": 10, "p": [12]}, {"kind": "result", "c": 10, "k": 14, "p": [209]},
-            {"kind": "knowledge", "c": 7, "k": 14, "p": [63, 124, 171]}, {"kind": "idea", "c": 9, "k": 11, "p": [12, 217]},
-            {"kind": "work", "c": 9, "k": 12, "p": [219]}, {"kind": "work", "c": 11, "k": 21, "p": [166]},
-            {"kind": "result", "c": 2, "k": 35, "p": [192, 207]}, {"kind": "result", "c": 4, "k": 20, "p": [134, 150]},
-            {"kind": "result", "c": 4, "k": 21, "p": [150, 223]}, {"kind": "result", "c": 8, "k": 8, "p": [196]},
-            {"kind": "work", "c": 1, "k": 14, "p": [31, 78]}, {"kind": "work", "c": 8, "k": 9, "p": [196, 225]},
-            {"kind": "result", "c": 11, "k": 22, "p": [221]}, {"kind": "result", "c": 9, "k": 13, "p": [220]},
-            {"kind": "work", "c": 1, "k": 15, "p": []}, {"kind": "result", "c": 1, "k": 16, "p": [226]},
-            {"kind": "result", "c": 10, "k": 15, "p": [211, 214]}, {"kind": "work", "c": 1, "k": 17, "p": [74, 95, 230]},
-            {"kind": "work", "c": 4, "k": 22, "p": [137]}, {"kind": "work", "c": 5, "k": 15, "p": [205]},
-            {"kind": "result", "c": 11, "k": 23, "p": [165, 221, 228]}, {"kind": "idea", "c": 10, "k": 16, "p": [232]},
-            {"kind": "work", "c": 10, "k": 17, "p": [227, 237]}, {"kind": "idea", "c": 10, "k": 18, "p": [217, 234]},
-            {"kind": "work", "c": 10, "k": 19, "p": [234, 239]}, {"kind": "result", "c": 0, "k": 32, "p": [170]},
-            {"kind": "work", "c": 0, "k": 33, "p": []}, {"kind": "work", "c": 1, "k": 18, "p": [31, 231]},
-            {"kind": "work", "c": 10, "k": 20, "p": [201]}, {"kind": "idea", "c": 6, "k": 16, "p": [168, 218]},
-            {"kind": "work", "c": 6, "k": 17, "p": [245]}, {"kind": "result", "c": 0, "k": 34, "p": [31, 78, 205]},
-            {"kind": "work", "c": 5, "k": 16, "p": [194]}, {"kind": "result", "c": 10, "k": 21, "p": [234, 240]},
-            {"kind": "result", "c": 11, "k": 24, "p": [221]}, {"kind": "result", "c": 4, "k": 23, "p": [234]},
-            {"kind": "result", "c": 1, "k": 19, "p": [243]}, {"kind": "result", "c": 0, "k": 35, "p": [242]},
-            {"kind": "result", "c": 10, "k": 22, "p": [238]}, {"kind": "work", "c": 1, "k": 20, "p": [217, 249]},
-            {"kind": "idea", "c": 10, "k": 23, "p": [232, 254]}, {"kind": "work", "c": 10, "k": 24, "p": [256]},
-            {"kind": "idea", "c": 0, "k": 36, "p": []}, {"kind": "result", "c": 11, "k": 25, "p": [221]},
-            {"kind": "result", "c": 11, "k": 26, "p": [221, 236]}, {"kind": "skill", "c": 0, "k": 37, "p": [253]},
-            {"kind": "result", "c": 1, "k": 21, "p": [255]}, {"kind": "result", "c": 5, "k": 17, "p": [96]},
-            {"kind": "result", "c": 1, "k": 22, "p": [230]}, {"kind": "work", "c": 1, "k": 23, "p": [74]},
-            {"kind": "result", "c": 1, "k": 24, "p": [233]}, {"kind": "result", "c": 5, "k": 18, "p": [157, 205]},
-            {"kind": "work", "c": 1, "k": 25, "p": [170, 241]}, {"kind": "work", "c": 5, "k": 19, "p": [28, 85]},
-            {"kind": "work", "c": 0, "k": 38, "p": [44]}, {"kind": "knowledge", "c": 0, "k": 39, "p": [234]},
-            {"kind": "result", "c": 10, "k": 25, "p": [201, 244]}, {"kind": "result", "c": 10, "k": 26, "p": [256, 257]},
-            {"kind": "work", "c": 10, "k": 27, "p": [191, 209, 249]}, {"kind": "work", "c": 1, "k": 26, "p": [179]},
-            {"kind": "result", "c": 0, "k": 40, "p": [270]}, {"kind": "work", "c": 1, "k": 27, "p": [74]},
-            {"kind": "result", "c": 5, "k": 20, "p": [28, 126, 269]}, {"kind": "work", "c": 2, "k": 36, "p": [52, 210]},
-            {"kind": "work", "c": 2, "k": 37, "p": [189, 200]}, {"kind": "idea", "c": 10, "k": 28, "p": [232, 273]},
-            {"kind": "work", "c": 10, "k": 29, "p": [248, 281]}, {"kind": "idea", "c": 9, "k": 14, "p": [9]},
-            {"kind": "idea", "c": 7, "k": 15, "p": [171, 182]}, {"kind": "work", "c": 9, "k": 15, "p": [283]},
-            {"kind": "work", "c": 7, "k": 16, "p": [215, 284]}, {"kind": "result", "c": 1, "k": 28, "p": [277]},
-            {"kind": "work", "c": 0, "k": 41, "p": [270]}, {"kind": "result", "c": 3, "k": 17, "p": [204]},
-            {"kind": "work", "c": 1, "k": 29, "p": [4, 7, 171, 182, 263]}, {"kind": "result", "c": 10, "k": 30, "p": [191, 249, 274]},
-            {"kind": "work", "c": 10, "k": 31, "p": [274, 280, 291]}, {"kind": "work", "c": 1, "k": 30, "p": [74]},
-            {"kind": "result", "c": 1, "k": 31, "p": [293]}, {"kind": "result", "c": 7, "k": 17, "p": [215, 286]},
-            {"kind": "result", "c": 5, "k": 21, "p": [248]}, {"kind": "work", "c": 0, "k": 42, "p": [270, 276]},
-            {"kind": "work", "c": 0, "k": 43, "p": [172]}, {"kind": "result", "c": 10, "k": 32, "p": [282, 296]},
-            {"kind": "result", "c": 2, "k": 38, "p": [189]}, {"kind": "idea", "c": 7, "k": 18, "p": [296, 299]},
-            {"kind": "work", "c": 7, "k": 19, "p": [298, 301]}, {"kind": "result", "c": 2, "k": 39, "p": [300]},
-            {"kind": "work", "c": 9, "k": 16, "p": [12]}, {"kind": "result", "c": 0, "k": 44, "p": [297]},
-            {"kind": "result", "c": 2, "k": 40, "p": [207, 210]}, {"kind": "work", "c": 1, "k": 32, "p": [31, 78]},
-            {"kind": "result", "c": 0, "k": 45, "p": [265]}, {"kind": "result", "c": 3, "k": 18, "p": [204, 289]},
-            {"kind": "result", "c": 1, "k": 33, "p": [4, 7, 171, 182, 263, 290]}, {"kind": "result", "c": 2, "k": 41, "p": [279]},
-            {"kind": "result", "c": 0, "k": 46, "p": [298]}, {"kind": "work", "c": 0, "k": 47, "p": [297]},
-            {"kind": "result", "c": 9, "k": 17, "p": [12, 304]}, {"kind": "result", "c": 5, "k": 22, "p": [11, 227]},
-            {"kind": "knowledge", "c": 8, "k": 10, "p": [65, 191, 227]}, {"kind": "knowledge", "c": 8, "k": 11, "p": [227]},
-            {"kind": "idea", "c": 3, "k": 19, "p": [227]}, {"kind": "result", "c": 8, "k": 12, "p": [227, 315]},
-            {"kind": "work", "c": 8, "k": 13, "p": [319]}, {"kind": "idea", "c": 5, "k": 23, "p": [227, 315]},
-            {"kind": "result", "c": 0, "k": 48, "p": [290]}, {"kind": "work", "c": 1, "k": 34, "p": [224, 310]},
-            {"kind": "result", "c": 5, "k": 24, "p": [213]}, {"kind": "result", "c": 1, "k": 35, "p": [323]},
-            {"kind": "result", "c": 5, "k": 25, "p": [296]}, {"kind": "result", "c": 4, "k": 24, "p": [137, 234]},
-            {"kind": "result", "c": 3, "k": 20, "p": [204, 309]}, {"kind": "work", "c": 8, "k": 14, "p": [227, 320]},
-            {"kind": "work", "c": 1, "k": 36, "p": [74]}, {"kind": "result", "c": 3, "k": 21, "p": [278, 328]},
-            {"kind": "result", "c": 2, "k": 42, "p": [207, 222]}, {"kind": "result", "c": 0, "k": 49, "p": [313]},
-            {"kind": "work", "c": 0, "k": 50, "p": [297, 333]}, {"kind": "result", "c": 0, "k": 51, "p": [265]},
-            {"kind": "result", "c": 1, "k": 37, "p": [275]}, {"kind": "result", "c": 1, "k": 38, "p": [330]},
-            {"kind": "result", "c": 2, "k": 43, "p": [279, 311]}, {"kind": "idea", "c": 5, "k": 26, "p": [302, 324, 326]},
-            {"kind": "work", "c": 5, "k": 27, "p": [339]}, {"kind": "work", "c": 2, "k": 44, "p": [200]},
-            {"kind": "result", "c": 10, "k": 33, "p": [217, 329]}, {"kind": "idea", "c": 2, "k": 45, "p": [210, 329]},
-            {"kind": "idea", "c": 5, "k": 28, "p": [4, 329]}, {"kind": "knowledge", "c": 8, "k": 15, "p": [329, 344]},
-            {"kind": "result", "c": 10, "k": 34, "p": [329]}, {"kind": "result", "c": 8, "k": 16, "p": [329, 343, 344]},
-            {"kind": "result", "c": 9, "k": 18, "p": [326]}, {"kind": "work", "c": 2, "k": 46, "p": [281, 299, 302]},
-            {"kind": "result", "c": 1, "k": 39, "p": [265]}, {"kind": "idea", "c": 0, "k": 52, "p": [75, 182]},
-            {"kind": "idea", "c": 0, "k": 53, "p": [163]}, {"kind": "result", "c": 2, "k": 47, "p": [280]},
-            {"kind": "work", "c": 7, "k": 20, "p": [278, 326]}, {"kind": "result", "c": 6, "k": 18, "p": [245, 246]},
-            {"kind": "work", "c": 1, "k": 40, "p": [233, 291, 315, 327]}, {"kind": "knowledge", "c": 5, "k": 29, "p": [200, 321]},
-            {"kind": "knowledge", "c": 9, "k": 19, "p": [355]}, {"kind": "work", "c": 8, "k": 17, "p": [320, 329]},
-            {"kind": "result", "c": 2, "k": 48, "p": [207, 306]}, {"kind": "work", "c": 2, "k": 49, "p": [192, 360]},
-            {"kind": "idea", "c": 5, "k": 30, "p": [4, 344]}, {"kind": "work", "c": 5, "k": 31, "p": [362]},
-            {"kind": "result", "c": 7, "k": 21, "p": [182, 215]}, {"kind": "result", "c": 9, "k": 20, "p": [283, 285]},
-            {"kind": "result", "c": 2, "k": 50, "p": [360, 361]}, {"kind": "knowledge", "c": 7, "k": 22, "p": [142, 364]},
-            {"kind": "work", "c": 5, "k": 32, "p": [315, 321]}, {"kind": "work", "c": 7, "k": 23, "p": [215, 302]},
-            {"kind": "result", "c": 6, "k": 19, "p": [291, 292]}, {"kind": "result", "c": 7, "k": 24, "p": [302, 369]},
-            {"kind": "result", "c": 7, "k": 25, "p": [301, 302, 348, 349]}, {"kind": "work", "c": 9, "k": 21, "p": [348, 372]},
-            {"kind": "result", "c": 10, "k": 35, "p": [274, 292, 370]}, {"kind": "idea", "c": 0, "k": 54, "p": [19]},
-            {"kind": "work", "c": 10, "k": 36, "p": [272, 374]}, {"kind": "work", "c": 0, "k": 55, "p": [17]},
-            {"kind": "result", "c": 10, "k": 37, "p": [376]}, {"kind": "knowledge", "c": 10, "k": 38, "p": [272, 370, 374, 378]},
-            {"kind": "result", "c": 5, "k": 33, "p": [339, 340]}, {"kind": "idea", "c": 9, "k": 22, "p": [348, 372]},
-            {"kind": "work", "c": 9, "k": 23, "p": [381]}, {"kind": "idea", "c": 10, "k": 39, "p": [372]},
-            {"kind": "work", "c": 10, "k": 40, "p": [383]}, {"kind": "result", "c": 10, "k": 41, "p": [384]},
-            {"kind": "result", "c": 0, "k": 56, "p": [377]}, {"kind": "idea", "c": 10, "k": 42, "p": [385]},
-            {"kind": "work", "c": 10, "k": 43, "p": [387]}, {"kind": "result", "c": 9, "k": 24, "p": [348, 372, 373, 382]},
-            {"kind": "result", "c": 5, "k": 34, "p": [362, 363]}, {"kind": "result", "c": 5, "k": 35, "p": [390]},
-            {"kind": "result", "c": 10, "k": 44, "p": [387, 388]}, {"kind": "work", "c": 10, "k": 45, "p": [383, 385]},
-            {"kind": "result", "c": 10, "k": 46, "p": [385, 393]}, {"kind": "idea", "c": 9, "k": 25, "p": []},
-            {"kind": "work", "c": 9, "k": 26, "p": [349, 354, 395]}, {"kind": "result", "c": 3, "k": 22, "p": [309, 328]},
-            {"kind": "result", "c": 9, "k": 27, "p": [326, 354, 396]}, {"kind": "work", "c": 10, "k": 47, "p": [387, 392]},
-            {"kind": "result", "c": 10, "k": 48, "p": [392, 399]}, {"kind": "idea", "c": 2, "k": 51, "p": [343, 359]},
-            {"kind": "result", "c": 10, "k": 49, "p": [342, 359]}, {"kind": "knowledge", "c": 8, "k": 18, "p": [321, 359]},
-            {"kind": "result", "c": 8, "k": 19, "p": [320, 359, 401]}, {"kind": "work", "c": 8, "k": 20, "p": [320]},
-            {"kind": "result", "c": 2, "k": 52, "p": [360, 361, 366]}, {"kind": "work", "c": 2, "k": 53, "p": [192, 406]},
-            {"kind": "result", "c": 2, "k": 54, "p": [349]}, {"kind": "work", "c": 2, "k": 55, "p": [281, 408]},
-            {"kind": "result", "c": 8, "k": 21, "p": [405]}, {"kind": "work", "c": 8, "k": 22, "p": [405]},
-            {"kind": "idea", "c": 6, "k": 20, "p": [278, 334]}, {"kind": "knowledge", "c": 8, "k": 23, "p": [411]},
-            {"kind": "result", "c": 8, "k": 24, "p": [401, 411]}, {"kind": "result", "c": 7, "k": 26, "p": [354]},
-            {"kind": "work", "c": 7, "k": 27, "p": [171, 402]}, {"kind": "result", "c": 9, "k": 28, "p": [381, 382]},
-            {"kind": "result", "c": 8, "k": 25, "p": [334, 354, 368, 382, 407, 409, 416, 417]}, {"kind": "idea", "c": 7, "k": 28, "p": [372, 415, 417]},
-            {"kind": "work", "c": 7, "k": 29, "p": [419]}, {"kind": "work", "c": 0, "k": 57, "p": []},
-            {"kind": "result", "c": 2, "k": 56, "p": [406, 407]}, {"kind": "work", "c": 5, "k": 36, "p": [4, 263]},
-            {"kind": "work", "c": 2, "k": 57, "p": [407, 417]}, {"kind": "work", "c": 2, "k": 58, "p": [192, 406]},
-            {"kind": "result", "c": 8, "k": 26, "p": [401, 418, 422]}, {"kind": "work", "c": 11, "k": 27, "p": [166]},
-            {"kind": "result", "c": 0, "k": 58, "p": [297, 334, 412]}, {"kind": "result", "c": 0, "k": 59, "p": [199, 406, 408, 415, 417, 421, 422]},
-            {"kind": "work", "c": 1, "k": 41, "p": []}, {"kind": "result", "c": 5, "k": 37, "p": [423]},
-            {"kind": "result", "c": 11, "k": 28, "p": [228, 427]}, {"kind": "work", "c": 2, "k": 59, "p": [406, 422, 424, 429]},
-            {"kind": "work", "c": 8, "k": 27, "p": [320]}, {"kind": "idea", "c": 10, "k": 50, "p": [295, 412, 415]},
-            {"kind": "work", "c": 10, "k": 51, "p": [435]}, {"kind": "result", "c": 5, "k": 38, "p": [315, 321, 368]},
-            {"kind": "result", "c": 3, "k": 23, "p": [43, 107, 397]}, {"kind": "work", "c": 1, "k": 42, "p": []},
-            {"kind": "result", "c": 2, "k": 60, "p": [406, 424, 425, 433]}, {"kind": "result", "c": 1, "k": 43, "p": [439]},
-            {"kind": "work", "c": 1, "k": 44, "p": [265]}, {"kind": "work", "c": 1, "k": 45, "p": [308]},
-            {"kind": "result", "c": 1, "k": 46, "p": [442]}, {"kind": "result", "c": 1, "k": 47, "p": [443]},
-            {"kind": "result", "c": 2, "k": 61, "p": [406, 425]}, {"kind": "work", "c": 2, "k": 62, "p": [192, 263, 406]},
-            {"kind": "result", "c": 7, "k": 30, "p": [354, 415]}, {"kind": "work", "c": 5, "k": 39, "p": [415]},
-            {"kind": "work", "c": 0, "k": 60, "p": [420, 429, 433]}, {"kind": "work", "c": 1, "k": 48, "p": [24]},
-            {"kind": "result", "c": 1, "k": 49, "p": [430]}, {"kind": "result", "c": 10, "k": 52, "p": [272, 378, 436]},
-            {"kind": "work", "c": 5, "k": 40, "p": [437, 450]}, {"kind": "result", "c": 1, "k": 50, "p": [451]},
-            {"kind": "idea", "c": 2, "k": 63, "p": [210, 401]}, {"kind": "work", "c": 2, "k": 64, "p": [456]},
-            {"kind": "result", "c": 2, "k": 65, "p": [406, 447]}, {"kind": "result", "c": 8, "k": 28, "p": [458]},
-            {"kind": "result", "c": 8, "k": 29, "p": [450]}, {"kind": "knowledge", "c": 2, "k": 66, "p": [222, 437]},
-            {"kind": "work", "c": 2, "k": 67, "p": [192, 406]}, {"kind": "knowledge", "c": 8, "k": 30, "p": [434]},
-            {"kind": "result", "c": 8, "k": 31, "p": [434, 463]}, {"kind": "idea", "c": 8, "k": 32, "p": [464]},
-            {"kind": "work", "c": 5, "k": 41, "p": [465]}, {"kind": "work", "c": 5, "k": 42, "p": [465]},
-            {"kind": "work", "c": 2, "k": 68, "p": [465]}, {"kind": "work", "c": 8, "k": 33, "p": [320, 464]},
-            {"kind": "result", "c": 5, "k": 43, "p": [437, 454]}, {"kind": "result", "c": 2, "k": 69, "p": [401, 456, 457]},
-            {"kind": "result", "c": 2, "k": 70, "p": [406, 462]}, {"kind": "work", "c": 2, "k": 71, "p": [192, 472]},
-            {"kind": "result", "c": 5, "k": 44, "p": [465, 466]}, {"kind": "result", "c": 5, "k": 45, "p": [450, 470]},
-            {"kind": "work", "c": 1, "k": 51, "p": [444, 445]}, {"kind": "knowledge", "c": 10, "k": 53, "p": [272]},
-            {"kind": "work", "c": 2, "k": 72, "p": [472]}, {"kind": "work", "c": 2, "k": 73, "p": [469, 472]},
-            {"kind": "work", "c": 2, "k": 74, "p": [469]}, {"kind": "result", "c": 2, "k": 75, "p": [422, 424]},
-            {"kind": "result", "c": 1, "k": 52, "p": [182, 247, 307]}, {"kind": "result", "c": 8, "k": 34, "p": [458, 469]},
-            {"kind": "knowledge", "c": 8, "k": 35, "p": [422, 428, 458, 472, 474, 483]}, {"kind": "result", "c": 2, "k": 76, "p": [472, 473]},
-            {"kind": "work", "c": 1, "k": 53, "p": [350, 482]}, {"kind": "result", "c": 5, "k": 46, "p": [465, 467]},
-            {"kind": "work", "c": 5, "k": 47, "p": [263, 372]}, {"kind": "result", "c": 1, "k": 54, "p": [455]},
-            {"kind": "work", "c": 2, "k": 77, "p": [132, 192, 408]}, {"kind": "work", "c": 2, "k": 78, "p": [192, 332]},
-            {"kind": "work", "c": 1, "k": 55, "p": [356, 409]}, {"kind": "work", "c": 8, "k": 36, "p": [320, 483]},
-            {"kind": "work", "c": 1, "k": 56, "p": [489]}, {"kind": "result", "c": 1, "k": 57, "p": [247, 307]},
-            {"kind": "work", "c": 1, "k": 58, "p": [441]}, {"kind": "result", "c": 10, "k": 54, "p": [272, 450, 477]},
-            {"kind": "result", "c": 1, "k": 59, "p": [476]}, {"kind": "work", "c": 1, "k": 60, "p": []},
-            {"kind": "knowledge", "c": 0, "k": 61, "p": [442]}, {"kind": "knowledge", "c": 0, "k": 62, "p": [443]},
-            {"kind": "work", "c": 1, "k": 61, "p": [482, 486, 495]}, {"kind": "result", "c": 2, "k": 79, "p": [332, 491]},
-            {"kind": "result", "c": 2, "k": 80, "p": [472, 478, 485]}, {"kind": "result", "c": 1, "k": 62, "p": [450]},
-            {"kind": "result", "c": 1, "k": 63, "p": [494]}, {"kind": "work", "c": 1, "k": 64, "p": [498]},
-            {"kind": "result", "c": 1, "k": 65, "p": [499]}, {"kind": "work", "c": 1, "k": 66, "p": [486]},
-            {"kind": "result", "c": 1, "k": 67, "p": [502]}, {"kind": "result", "c": 1, "k": 68, "p": [496]},
-            {"kind": "work", "c": 1, "k": 69, "p": [510]}, {"kind": "work", "c": 1, "k": 70, "p": [494, 506]},
-            {"kind": "work", "c": 1, "k": 71, "p": [511]},
+            {"kind": "result", "c": 2, "k": 10, "p": [77]}, {"kind": "knowledge", "c": 2, "k": 11, "p": [52, 56, 77, 89]},
+            {"kind": "result", "c": 3, "k": 4, "p": [43, 81]}, {"kind": "knowledge", "c": 3, "k": 5, "p": [43, 81, 89]},
+            {"kind": "knowledge", "c": 3, "k": 6, "p": [43, 63, 89]}, {"kind": "knowledge", "c": 3, "k": 7, "p": [43, 89]},
+            {"kind": "knowledge", "c": 3, "k": 8, "p": [47, 77, 81, 89]}, {"kind": "knowledge", "c": 2, "k": 12, "p": [77, 80, 81, 89]},
+            {"kind": "result", "c": 2, "k": 13, "p": [3, 54, 80]}, {"kind": "knowledge", "c": 2, "k": 14, "p": [52, 56, 89]},
+            {"kind": "idea", "c": 2, "k": 15, "p": [3, 77, 80, 96]}, {"kind": "knowledge", "c": 4, "k": 7, "p": [48, 60, 89]},
+            {"kind": "knowledge", "c": 4, "k": 8, "p": [55, 76, 89, 101]}, {"kind": "knowledge", "c": 3, "k": 9, "p": [89]},
+            {"kind": "knowledge", "c": 3, "k": 10, "p": [89, 103]}, {"kind": "knowledge", "c": 3, "k": 11, "p": [89, 104]},
+            {"kind": "knowledge", "c": 3, "k": 12, "p": [47, 81, 89, 96]}, {"kind": "knowledge", "c": 5, "k": 5, "p": [7, 89]},
+            {"kind": "knowledge", "c": 10, "k": 7, "p": [4, 5, 89]}, {"kind": "knowledge", "c": 3, "k": 13, "p": [89]},
+            {"kind": "knowledge", "c": 9, "k": 3, "p": [8, 89]}, {"kind": "knowledge", "c": 5, "k": 6, "p": [9, 11, 89]},
+            {"kind": "knowledge", "c": 9, "k": 4, "p": [10, 65, 89]}, {"kind": "knowledge", "c": 4, "k": 9, "p": [58, 60, 76, 89]},
+            {"kind": "knowledge", "c": 4, "k": 10, "p": [48, 89]}, {"kind": "knowledge", "c": 2, "k": 16, "p": [47, 77, 89, 96]},
+            {"kind": "knowledge", "c": 0, "k": 24, "p": [14, 54, 89]}, {"kind": "idea", "c": 2, "k": 17, "p": [77, 80, 84, 96]},
+            {"kind": "result", "c": 3, "k": 14, "p": [43, 46, 92]}, {"kind": "result", "c": 4, "k": 11, "p": [76]},
+            {"kind": "result", "c": 4, "k": 12, "p": [58, 76]}, {"kind": "result", "c": 4, "k": 13, "p": [76, 119]},
+            {"kind": "idea", "c": 4, "k": 14, "p": [59, 121]}, {"kind": "knowledge", "c": 5, "k": 7, "p": [84]},
+            {"kind": "result", "c": 7, "k": 7, "p": [25, 27, 28, 40]}, {"kind": "result", "c": 7, "k": 8, "p": [62, 73]},
+            {"kind": "idea", "c": 7, "k": 9, "p": [40, 73, 124]}, {"kind": "knowledge", "c": 0, "k": 25, "p": [89, 103]},
+            {"kind": "result", "c": 0, "k": 26, "p": [89, 127]}, {"kind": "result", "c": 2, "k": 18, "p": [77]},
+            {"kind": "result", "c": 2, "k": 19, "p": [3, 30, 77]}, {"kind": "result", "c": 2, "k": 20, "p": [129, 130]},
+            {"kind": "work", "c": 4, "k": 15, "p": [76, 101, 114]}, {"kind": "work", "c": 6, "k": 14, "p": [1, 49]},
+            {"kind": "work", "c": 8, "k": 0, "p": []}, {"kind": "work", "c": 2, "k": 21, "p": [62, 130]},
+            {"kind": "result", "c": 8, "k": 1, "p": [134]}, {"kind": "result", "c": 10, "k": 8, "p": [86]},
+            {"kind": "idea", "c": 5, "k": 8, "p": [98, 130]}, {"kind": "work", "c": 5, "k": 9, "p": [138]},
+            {"kind": "work", "c": 5, "k": 10, "p": [4, 49]}, {"kind": "work", "c": 8, "k": 2, "p": [134]},
+            {"kind": "idea", "c": 2, "k": 22, "p": [30, 130]}, {"kind": "idea", "c": 8, "k": 3, "p": [135, 141]},
+            {"kind": "result", "c": 8, "k": 4, "p": [141, 143]}, {"kind": "work", "c": 2, "k": 23, "p": [142]},
+            {"kind": "knowledge", "c": 4, "k": 16, "p": [114, 132]}, {"kind": "result", "c": 6, "k": 15, "p": [133]},
+            {"kind": "result", "c": 3, "k": 15, "p": [43, 92, 118]}, {"kind": "work", "c": 0, "k": 27, "p": [45]},
+            {"kind": "result", "c": 7, "k": 10, "p": [2, 25]}, {"kind": "knowledge", "c": 0, "k": 28, "p": []},
+            {"kind": "work", "c": 8, "k": 5, "p": [144]}, {"kind": "result", "c": 2, "k": 24, "p": [80, 98, 100]},
+            {"kind": "result", "c": 4, "k": 17, "p": [132]}, {"kind": "result", "c": 4, "k": 18, "p": [132]},
+            {"kind": "result", "c": 5, "k": 11, "p": [140]}, {"kind": "work", "c": 7, "k": 11, "p": [126, 150]},
+            {"kind": "work", "c": 1, "k": 9, "p": [34, 64]}, {"kind": "work", "c": 1, "k": 10, "p": [64, 158]},
+            {"kind": "result", "c": 1, "k": 11, "p": [4, 130, 150, 158, 159]}, {"kind": "result", "c": 7, "k": 12, "p": [125, 157]},
+            {"kind": "work", "c": 0, "k": 29, "p": [41, 43]}, {"kind": "result", "c": 2, "k": 25, "p": [130, 135]},
+            {"kind": "result", "c": 2, "k": 26, "p": [163]}, {"kind": "knowledge", "c": 0, "k": 30, "p": [52, 116, 156, 162]},
+            {"kind": "work", "c": 0, "k": 31, "p": [165]}, {"kind": "result", "c": 8, "k": 6, "p": [143, 152, 163]},
+            {"kind": "work", "c": 2, "k": 27, "p": [56, 150]}, {"kind": "work", "c": 9, "k": 5, "p": [4, 7, 62, 130, 150, 161]},
+            {"kind": "result", "c": 2, "k": 28, "p": [130, 142, 145]}, {"kind": "idea", "c": 2, "k": 29, "p": [92, 98, 145, 153, 166]},
+            {"kind": "result", "c": 9, "k": 6, "p": [130, 161, 169]}, {"kind": "result", "c": 2, "k": 30, "p": [80, 153]},
+            {"kind": "result", "c": 4, "k": 19, "p": [132, 154]}, {"kind": "work", "c": 8, "k": 7, "p": [167]},
+            {"kind": "work", "c": 9, "k": 7, "p": [22, 150]}, {"kind": "result", "c": 9, "k": 8, "p": [4, 150, 176]},
+            {"kind": "knowledge", "c": 9, "k": 9, "p": [152, 175]}, {"kind": "idea", "c": 2, "k": 31, "p": [138, 150, 161, 170, 173]},
+            {"kind": "idea", "c": 10, "k": 9, "p": [120, 124, 142, 170, 179]}, {"kind": "result", "c": 1, "k": 12, "p": [158]},
+            {"kind": "result", "c": 2, "k": 32, "p": [145, 170, 180]}, {"kind": "result", "c": 3, "k": 16, "p": [43, 63]},
+            {"kind": "result", "c": 5, "k": 12, "p": [138, 139]}, {"kind": "result", "c": 1, "k": 13, "p": [159, 160]},
+            {"kind": "work", "c": 2, "k": 33, "p": [171]}, {"kind": "idea", "c": 10, "k": 10, "p": [35, 150]},
+            {"kind": "work", "c": 10, "k": 11, "p": [187]}, {"kind": "result", "c": 2, "k": 34, "p": [80, 173]},
+            {"kind": "idea", "c": 10, "k": 12, "p": [187, 189]}, {"kind": "idea", "c": 5, "k": 13, "p": [107, 187]},
+            {"kind": "work", "c": 5, "k": 14, "p": [191]}, {"kind": "work", "c": 10, "k": 13, "p": [190]},
+            {"kind": "work", "c": 7, "k": 13, "p": [2, 125, 150]}, {"kind": "result", "c": 9, "k": 10, "p": [12]},
+            {"kind": "result", "c": 10, "k": 14, "p": [188]}, {"kind": "knowledge", "c": 7, "k": 14, "p": [63, 109, 150]},
+            {"kind": "idea", "c": 9, "k": 11, "p": [12, 196]}, {"kind": "work", "c": 9, "k": 12, "p": [198]},
+            {"kind": "result", "c": 2, "k": 35, "p": [171, 186]}, {"kind": "result", "c": 4, "k": 20, "p": [119, 132]},
+            {"kind": "result", "c": 4, "k": 21, "p": [132, 201]}, {"kind": "result", "c": 8, "k": 8, "p": [175]},
+            {"kind": "work", "c": 1, "k": 14, "p": [31, 75]}, {"kind": "work", "c": 8, "k": 9, "p": [175, 203]},
+            {"kind": "result", "c": 9, "k": 13, "p": [199]}, {"kind": "work", "c": 1, "k": 15, "p": []},
+            {"kind": "result", "c": 1, "k": 16, "p": [204]}, {"kind": "result", "c": 10, "k": 15, "p": [190, 193]},
+            {"kind": "work", "c": 1, "k": 17, "p": [72, 83, 207]}, {"kind": "work", "c": 4, "k": 22, "p": [122]},
+            {"kind": "work", "c": 5, "k": 15, "p": [184]}, {"kind": "idea", "c": 10, "k": 16, "p": [209]},
+            {"kind": "work", "c": 10, "k": 17, "p": [205, 213]}, {"kind": "idea", "c": 10, "k": 18, "p": [196, 211]},
+            {"kind": "work", "c": 10, "k": 19, "p": [211, 215]}, {"kind": "result", "c": 0, "k": 32, "p": [149]},
+            {"kind": "work", "c": 0, "k": 33, "p": []}, {"kind": "work", "c": 1, "k": 18, "p": [31, 208]},
+            {"kind": "work", "c": 10, "k": 20, "p": [180]}, {"kind": "idea", "c": 6, "k": 16, "p": [147, 197]},
+            {"kind": "work", "c": 6, "k": 17, "p": [221]}, {"kind": "result", "c": 0, "k": 34, "p": [31, 75, 184]},
+            {"kind": "work", "c": 5, "k": 16, "p": [173]}, {"kind": "result", "c": 10, "k": 21, "p": [211, 216]},
+            {"kind": "result", "c": 4, "k": 23, "p": [211]}, {"kind": "result", "c": 1, "k": 19, "p": [219]},
+            {"kind": "result", "c": 0, "k": 35, "p": [218]}, {"kind": "result", "c": 10, "k": 22, "p": [214]},
+            {"kind": "work", "c": 1, "k": 20, "p": [196, 225]}, {"kind": "idea", "c": 10, "k": 23, "p": [209, 229]},
+            {"kind": "work", "c": 10, "k": 24, "p": [231]}, {"kind": "idea", "c": 0, "k": 36, "p": []},
+            {"kind": "skill", "c": 0, "k": 37, "p": [228]}, {"kind": "result", "c": 1, "k": 21, "p": [230]},
+            {"kind": "result", "c": 5, "k": 17, "p": [84]}, {"kind": "result", "c": 1, "k": 22, "p": [207]},
+            {"kind": "work", "c": 1, "k": 23, "p": [72]}, {"kind": "result", "c": 1, "k": 24, "p": [210]},
+            {"kind": "result", "c": 5, "k": 18, "p": [139, 184]}, {"kind": "work", "c": 1, "k": 25, "p": [149, 217]},
+            {"kind": "work", "c": 5, "k": 19, "p": [28, 78]}, {"kind": "work", "c": 0, "k": 38, "p": [44]},
+            {"kind": "knowledge", "c": 0, "k": 39, "p": [211]}, {"kind": "result", "c": 10, "k": 25, "p": [180, 220]},
+            {"kind": "result", "c": 10, "k": 26, "p": [231, 232]}, {"kind": "work", "c": 10, "k": 27, "p": [170, 188, 225]},
+            {"kind": "work", "c": 1, "k": 26, "p": [158]}, {"kind": "result", "c": 0, "k": 40, "p": [243]},
+            {"kind": "work", "c": 1, "k": 27, "p": [72]}, {"kind": "result", "c": 5, "k": 20, "p": [28, 111, 242]},
+            {"kind": "work", "c": 2, "k": 36, "p": [52, 189]}, {"kind": "work", "c": 2, "k": 37, "p": [168, 179]},
+            {"kind": "idea", "c": 10, "k": 28, "p": [209, 246]}, {"kind": "work", "c": 10, "k": 29, "p": [224, 254]},
+            {"kind": "idea", "c": 9, "k": 14, "p": [9]}, {"kind": "idea", "c": 7, "k": 15, "p": [150, 161]},
+            {"kind": "work", "c": 9, "k": 15, "p": [256]}, {"kind": "work", "c": 7, "k": 16, "p": [194, 257]},
+            {"kind": "result", "c": 1, "k": 28, "p": [250]}, {"kind": "work", "c": 0, "k": 41, "p": [243]},
+            {"kind": "result", "c": 3, "k": 17, "p": [183]}, {"kind": "work", "c": 1, "k": 29, "p": [4, 7, 150, 161, 236]},
+            {"kind": "result", "c": 10, "k": 30, "p": [170, 225, 247]}, {"kind": "work", "c": 10, "k": 31, "p": [247, 253, 264]},
+            {"kind": "work", "c": 1, "k": 30, "p": [72]}, {"kind": "result", "c": 1, "k": 31, "p": [266]},
+            {"kind": "result", "c": 7, "k": 17, "p": [194, 259]}, {"kind": "result", "c": 5, "k": 21, "p": [224]},
+            {"kind": "work", "c": 0, "k": 42, "p": [243, 249]}, {"kind": "work", "c": 0, "k": 43, "p": [151]},
+            {"kind": "result", "c": 10, "k": 32, "p": [255, 269]}, {"kind": "result", "c": 2, "k": 38, "p": [168]},
+            {"kind": "idea", "c": 7, "k": 18, "p": [269, 272]}, {"kind": "work", "c": 7, "k": 19, "p": [271, 274]},
+            {"kind": "result", "c": 2, "k": 39, "p": [273]}, {"kind": "work", "c": 9, "k": 16, "p": [12]},
+            {"kind": "result", "c": 0, "k": 44, "p": [270]}, {"kind": "result", "c": 2, "k": 40, "p": [186, 189]},
+            {"kind": "work", "c": 1, "k": 32, "p": [31, 75]}, {"kind": "result", "c": 0, "k": 45, "p": [238]},
+            {"kind": "result", "c": 3, "k": 18, "p": [183, 262]}, {"kind": "result", "c": 1, "k": 33, "p": [4, 7, 150, 161, 236, 263]},
+            {"kind": "result", "c": 2, "k": 41, "p": [252]}, {"kind": "result", "c": 0, "k": 46, "p": [271]},
+            {"kind": "work", "c": 0, "k": 47, "p": [270]}, {"kind": "result", "c": 9, "k": 17, "p": [12, 277]},
+            {"kind": "result", "c": 5, "k": 22, "p": [11, 205]}, {"kind": "knowledge", "c": 8, "k": 10, "p": [65, 170, 205]},
+            {"kind": "knowledge", "c": 8, "k": 11, "p": [205]}, {"kind": "idea", "c": 3, "k": 19, "p": [205]},
+            {"kind": "result", "c": 8, "k": 12, "p": [205, 288]}, {"kind": "work", "c": 8, "k": 13, "p": [292]},
+            {"kind": "idea", "c": 5, "k": 23, "p": [205, 288]}, {"kind": "result", "c": 0, "k": 48, "p": [263]},
+            {"kind": "work", "c": 1, "k": 34, "p": [202, 283]}, {"kind": "result", "c": 5, "k": 24, "p": [192]},
+            {"kind": "result", "c": 1, "k": 35, "p": [296]}, {"kind": "result", "c": 5, "k": 25, "p": [269]},
+            {"kind": "result", "c": 4, "k": 24, "p": [122, 211]}, {"kind": "result", "c": 3, "k": 20, "p": [183, 282]},
+            {"kind": "work", "c": 8, "k": 14, "p": [205, 293]}, {"kind": "work", "c": 1, "k": 36, "p": [72]},
+            {"kind": "result", "c": 3, "k": 21, "p": [251, 301]}, {"kind": "result", "c": 2, "k": 42, "p": [186, 200]},
+            {"kind": "result", "c": 0, "k": 49, "p": [286]}, {"kind": "work", "c": 0, "k": 50, "p": [270, 306]},
+            {"kind": "result", "c": 0, "k": 51, "p": [238]}, {"kind": "result", "c": 1, "k": 37, "p": [248]},
+            {"kind": "result", "c": 1, "k": 38, "p": [303]}, {"kind": "result", "c": 2, "k": 43, "p": [252, 284]},
+            {"kind": "idea", "c": 5, "k": 26, "p": [275, 297, 299]}, {"kind": "work", "c": 5, "k": 27, "p": [312]},
+            {"kind": "work", "c": 2, "k": 44, "p": [179]}, {"kind": "result", "c": 10, "k": 33, "p": [196, 302]},
+            {"kind": "idea", "c": 2, "k": 45, "p": [189, 302]}, {"kind": "idea", "c": 5, "k": 28, "p": [4, 302]},
+            {"kind": "knowledge", "c": 8, "k": 15, "p": [302, 317]}, {"kind": "result", "c": 10, "k": 34, "p": [302]},
+            {"kind": "result", "c": 8, "k": 16, "p": [302, 316, 317]}, {"kind": "result", "c": 9, "k": 18, "p": [299]},
+            {"kind": "work", "c": 2, "k": 46, "p": [254, 272, 275]}, {"kind": "result", "c": 1, "k": 39, "p": [238]},
+            {"kind": "idea", "c": 0, "k": 52, "p": [73, 161]}, {"kind": "idea", "c": 0, "k": 53, "p": [145]},
+            {"kind": "result", "c": 2, "k": 47, "p": [253]}, {"kind": "work", "c": 7, "k": 20, "p": [251, 299]},
+            {"kind": "result", "c": 6, "k": 18, "p": [221, 222]}, {"kind": "work", "c": 1, "k": 40, "p": [210, 264, 288, 300]},
+            {"kind": "knowledge", "c": 5, "k": 29, "p": [179, 294]}, {"kind": "knowledge", "c": 9, "k": 19, "p": [328]},
+            {"kind": "work", "c": 8, "k": 17, "p": [293, 302]}, {"kind": "result", "c": 2, "k": 48, "p": [186, 279]},
+            {"kind": "work", "c": 2, "k": 49, "p": [171, 333]}, {"kind": "idea", "c": 5, "k": 30, "p": [4, 317]},
+            {"kind": "work", "c": 5, "k": 31, "p": [335]}, {"kind": "result", "c": 7, "k": 21, "p": [161, 194]},
+            {"kind": "result", "c": 9, "k": 20, "p": [256, 258]}, {"kind": "result", "c": 2, "k": 50, "p": [333, 334]},
+            {"kind": "knowledge", "c": 7, "k": 22, "p": [126, 337]}, {"kind": "work", "c": 5, "k": 32, "p": [288, 294]},
+            {"kind": "work", "c": 7, "k": 23, "p": [194, 275]}, {"kind": "result", "c": 6, "k": 19, "p": [264, 265]},
+            {"kind": "result", "c": 7, "k": 24, "p": [275, 342]}, {"kind": "result", "c": 7, "k": 25, "p": [274, 275, 321, 322]},
+            {"kind": "work", "c": 9, "k": 21, "p": [321, 345]}, {"kind": "result", "c": 10, "k": 35, "p": [247, 265, 343]},
+            {"kind": "idea", "c": 0, "k": 54, "p": [19]}, {"kind": "work", "c": 10, "k": 36, "p": [245, 347]},
+            {"kind": "work", "c": 0, "k": 55, "p": [17]}, {"kind": "result", "c": 10, "k": 37, "p": [349]},
+            {"kind": "knowledge", "c": 10, "k": 38, "p": [245, 343, 347, 351]}, {"kind": "result", "c": 5, "k": 33, "p": [312, 313]},
+            {"kind": "idea", "c": 9, "k": 22, "p": [321, 345]}, {"kind": "work", "c": 9, "k": 23, "p": [354]},
+            {"kind": "idea", "c": 10, "k": 39, "p": [345]}, {"kind": "work", "c": 10, "k": 40, "p": [356]},
+            {"kind": "result", "c": 10, "k": 41, "p": [357]}, {"kind": "result", "c": 0, "k": 56, "p": [350]},
+            {"kind": "idea", "c": 10, "k": 42, "p": [358]}, {"kind": "work", "c": 10, "k": 43, "p": [360]},
+            {"kind": "result", "c": 9, "k": 24, "p": [321, 345, 346, 355]}, {"kind": "result", "c": 5, "k": 34, "p": [335, 336]},
+            {"kind": "result", "c": 5, "k": 35, "p": [363]}, {"kind": "result", "c": 10, "k": 44, "p": [360, 361]},
+            {"kind": "work", "c": 10, "k": 45, "p": [356, 358]}, {"kind": "result", "c": 10, "k": 46, "p": [358, 366]},
+            {"kind": "idea", "c": 9, "k": 25, "p": []}, {"kind": "work", "c": 9, "k": 26, "p": [322, 327, 368]},
+            {"kind": "result", "c": 3, "k": 22, "p": [282, 301]}, {"kind": "result", "c": 9, "k": 27, "p": [299, 327, 369]},
+            {"kind": "work", "c": 10, "k": 47, "p": [360, 365]}, {"kind": "result", "c": 10, "k": 48, "p": [365, 372]},
+            {"kind": "idea", "c": 2, "k": 51, "p": [316, 332]}, {"kind": "result", "c": 10, "k": 49, "p": [315, 332]},
+            {"kind": "knowledge", "c": 8, "k": 18, "p": [294, 332]}, {"kind": "result", "c": 8, "k": 19, "p": [293, 332, 374]},
+            {"kind": "work", "c": 8, "k": 20, "p": [293]}, {"kind": "result", "c": 2, "k": 52, "p": [333, 334, 339]},
+            {"kind": "work", "c": 2, "k": 53, "p": [171, 379]}, {"kind": "result", "c": 2, "k": 54, "p": [322]},
+            {"kind": "work", "c": 2, "k": 55, "p": [254, 381]}, {"kind": "result", "c": 8, "k": 21, "p": [378]},
+            {"kind": "work", "c": 8, "k": 22, "p": [378]}, {"kind": "idea", "c": 6, "k": 20, "p": [251, 307]},
+            {"kind": "knowledge", "c": 8, "k": 23, "p": [384]}, {"kind": "result", "c": 8, "k": 24, "p": [374, 384]},
+            {"kind": "result", "c": 7, "k": 26, "p": [327]}, {"kind": "work", "c": 7, "k": 27, "p": [150, 375]},
+            {"kind": "result", "c": 9, "k": 28, "p": [354, 355]}, {"kind": "result", "c": 8, "k": 25, "p": [307, 327, 341, 355, 380, 382, 389, 390]},
+            {"kind": "idea", "c": 7, "k": 28, "p": [345, 388, 390]}, {"kind": "work", "c": 7, "k": 29, "p": [392]},
+            {"kind": "work", "c": 0, "k": 57, "p": []}, {"kind": "result", "c": 2, "k": 56, "p": [379, 380]},
+            {"kind": "work", "c": 5, "k": 36, "p": [4, 236]}, {"kind": "work", "c": 2, "k": 57, "p": [380, 390]},
+            {"kind": "work", "c": 2, "k": 58, "p": [171, 379]}, {"kind": "result", "c": 8, "k": 26, "p": [374, 391, 395]},
+            {"kind": "result", "c": 0, "k": 58, "p": [270, 307, 385]}, {"kind": "result", "c": 0, "k": 59, "p": [178, 379, 381, 388, 390, 394, 395]},
+            {"kind": "work", "c": 1, "k": 41, "p": []}, {"kind": "result", "c": 5, "k": 37, "p": [396]},
+            {"kind": "work", "c": 2, "k": 59, "p": [379, 395, 397, 401]}, {"kind": "work", "c": 8, "k": 27, "p": [293]},
+            {"kind": "idea", "c": 10, "k": 50, "p": [268, 385, 388]}, {"kind": "work", "c": 10, "k": 51, "p": [406]},
+            {"kind": "result", "c": 5, "k": 38, "p": [288, 294, 341]}, {"kind": "result", "c": 3, "k": 23, "p": [43, 92, 370]},
+            {"kind": "work", "c": 1, "k": 42, "p": []}, {"kind": "result", "c": 2, "k": 60, "p": [379, 397, 398, 404]},
+            {"kind": "result", "c": 1, "k": 43, "p": [410]}, {"kind": "work", "c": 1, "k": 44, "p": [238]},
+            {"kind": "work", "c": 1, "k": 45, "p": [281]}, {"kind": "result", "c": 1, "k": 46, "p": [413]},
+            {"kind": "result", "c": 1, "k": 47, "p": [414]}, {"kind": "result", "c": 2, "k": 61, "p": [379, 398]},
+            {"kind": "work", "c": 2, "k": 62, "p": [171, 236, 379]}, {"kind": "result", "c": 7, "k": 30, "p": [327, 388]},
+            {"kind": "work", "c": 5, "k": 39, "p": [388]}, {"kind": "work", "c": 0, "k": 60, "p": [393, 401, 404]},
+            {"kind": "work", "c": 1, "k": 48, "p": [24]}, {"kind": "result", "c": 1, "k": 49, "p": [402]},
+            {"kind": "result", "c": 10, "k": 52, "p": [245, 351, 407]}, {"kind": "work", "c": 5, "k": 40, "p": [408, 421]},
+            {"kind": "result", "c": 1, "k": 50, "p": [422]}, {"kind": "idea", "c": 2, "k": 63, "p": [189, 374]},
+            {"kind": "work", "c": 2, "k": 64, "p": [427]}, {"kind": "result", "c": 2, "k": 65, "p": [379, 418]},
+            {"kind": "result", "c": 8, "k": 28, "p": [429]}, {"kind": "result", "c": 8, "k": 29, "p": [421]},
+            {"kind": "knowledge", "c": 2, "k": 66, "p": [200, 408]}, {"kind": "work", "c": 2, "k": 67, "p": [171, 379]},
+            {"kind": "knowledge", "c": 8, "k": 30, "p": [405]}, {"kind": "result", "c": 8, "k": 31, "p": [405, 434]},
+            {"kind": "idea", "c": 8, "k": 32, "p": [435]}, {"kind": "work", "c": 5, "k": 41, "p": [436]},
+            {"kind": "work", "c": 5, "k": 42, "p": [436]}, {"kind": "work", "c": 2, "k": 68, "p": [436]},
+            {"kind": "work", "c": 8, "k": 33, "p": [293, 435]}, {"kind": "result", "c": 5, "k": 43, "p": [408, 425]},
+            {"kind": "result", "c": 2, "k": 69, "p": [374, 427, 428]}, {"kind": "result", "c": 2, "k": 70, "p": [379, 433]},
+            {"kind": "work", "c": 2, "k": 71, "p": [171, 443]}, {"kind": "result", "c": 5, "k": 44, "p": [436, 437]},
+            {"kind": "result", "c": 5, "k": 45, "p": [421, 441]}, {"kind": "work", "c": 1, "k": 51, "p": [415, 416]},
+            {"kind": "knowledge", "c": 10, "k": 53, "p": [245]}, {"kind": "work", "c": 2, "k": 72, "p": [443]},
+            {"kind": "work", "c": 2, "k": 73, "p": [440, 443]}, {"kind": "work", "c": 2, "k": 74, "p": [440]},
+            {"kind": "result", "c": 2, "k": 75, "p": [395, 397]}, {"kind": "result", "c": 1, "k": 52, "p": [161, 223, 280]},
+            {"kind": "result", "c": 8, "k": 34, "p": [429, 440]}, {"kind": "knowledge", "c": 8, "k": 35, "p": [395, 400, 429, 443, 445, 454]},
+            {"kind": "result", "c": 2, "k": 76, "p": [443, 444]}, {"kind": "work", "c": 1, "k": 53, "p": [323, 453]},
+            {"kind": "result", "c": 5, "k": 46, "p": [436, 438]}, {"kind": "work", "c": 5, "k": 47, "p": [236, 345]},
+            {"kind": "result", "c": 1, "k": 54, "p": [426]}, {"kind": "work", "c": 2, "k": 77, "p": [117, 171, 381]},
+            {"kind": "work", "c": 2, "k": 78, "p": [171, 305]}, {"kind": "work", "c": 1, "k": 55, "p": [329, 382]},
+            {"kind": "work", "c": 8, "k": 36, "p": [293, 454]}, {"kind": "work", "c": 1, "k": 56, "p": [460]},
+            {"kind": "result", "c": 1, "k": 57, "p": [223, 280]}, {"kind": "work", "c": 1, "k": 58, "p": [412]},
+            {"kind": "result", "c": 10, "k": 54, "p": [245, 421, 448]}, {"kind": "result", "c": 1, "k": 59, "p": [447]},
+            {"kind": "work", "c": 1, "k": 60, "p": []}, {"kind": "knowledge", "c": 0, "k": 61, "p": [413]},
+            {"kind": "knowledge", "c": 0, "k": 62, "p": [414]}, {"kind": "work", "c": 1, "k": 61, "p": [453, 457, 466]},
+            {"kind": "result", "c": 2, "k": 79, "p": [305, 462]}, {"kind": "result", "c": 2, "k": 80, "p": [443, 449, 456]},
+            {"kind": "result", "c": 1, "k": 62, "p": [421]}, {"kind": "result", "c": 1, "k": 63, "p": [465]},
+            {"kind": "work", "c": 1, "k": 64, "p": [469]}, {"kind": "result", "c": 1, "k": 65, "p": [470]},
+            {"kind": "work", "c": 1, "k": 66, "p": [457]}, {"kind": "result", "c": 1, "k": 67, "p": [473]},
+            {"kind": "result", "c": 1, "k": 68, "p": [467]}, {"kind": "work", "c": 1, "k": 69, "p": [481]},
+            {"kind": "work", "c": 1, "k": 70, "p": [465, 477]}, {"kind": "work", "c": 1, "k": 71, "p": [482]},
         ],
     },
 }
@@ -319,9 +310,9 @@ _LINKS = [(p, i) for i, n in enumerate(_ITEMS) for p in n["p"]]
 DATA["tree"] = {
     "links": len(_LINKS), "cross": sum(_ITEMS[a]["c"] != _ITEMS[b]["c"] for a, b in _LINKS),
     "merge": sum(len(n["p"]) > 1 for n in _ITEMS), "roots": sum(not n["p"] for n in _ITEMS),
-    "depth": 34, "written": 382, "found": 269,
+    "depth": 34, "written": 382, "found": 269,  # depth is 34 without the GPU price basin too; written and found count all 914 links
 }
-assert (DATA["tree"]["links"], DATA["tree"]["cross"], DATA["tree"]["roots"]) == (914, 269, 29), DATA["tree"]
+assert (DATA["tree"]["links"], DATA["tree"]["cross"], DATA["tree"]["roots"]) == (871, 269, 28), DATA["tree"]  # 914, 269, 29 with the GPU price basin
 
 # What the reader switches between. The first is shown on load: start from the problem, not from the answer.
 DATA["states"] = [
@@ -353,8 +344,9 @@ PANELS = [
       f"The judge grouped the board twice, in two orders of the items. The two groupings agree with an adjusted Rand index of {DATA['ari_orders']}."]],
     ["limits", "What it does not show",
      "The number of basins depends on how finely the judge groups. It is one judge model's count, on one snapshot of the board.",
-     ["Only membership is measured: where a dot lies inside its basin carries no meaning, and a basin says nothing about whether its ideas work.",
-      f"Of the {DATA['tree']['links']} links, {DATA['tree']['written']} are item ids that an item names in its own text. The judge found {DATA['tree']['found']} of those by reading the items, and proposed the rest."]],
+     [f"The judge read all {DATA['all_items']} items of the board. One basin of {DATA['left_out']} items, the forecasting of GPU rental prices, is a separate project and is left out here; the checks under How we know were made with it.",
+      "Only membership is measured: where a dot lies inside its basin carries no meaning, and a basin says nothing about whether its ideas work.",
+      f"Of the 914 links of the whole board, {DATA['tree']['written']} are item ids that an item names in its own text. The judge found {DATA['tree']['found']} of those by reading the items, and proposed the rest."]],
     ["run", "How to reproduce it",
      "The commands are in the run.json beside each artifact: export the board, run the judge, then swarm_analyze writes the numbers.",
      ["The basins are in " + DATA["artifact"] + " on branch ali/basins, commit " + DATA["commit"] + ".",
@@ -385,7 +377,7 @@ PAGE = r"""<!doctype html>
    upper left in both. --wash is how strongly a basin takes the accent. */
 :root {
   color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #8b97a1; --rule: #d3d9de;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
   --blue: #1f43d6; --red: #cf2338;
   --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
   --rim-a: rgba(16, 24, 32, .28); --rim-b: rgba(16, 24, 32, .58); --rim-c: rgba(16, 24, 32, .9);
@@ -393,7 +385,7 @@ PAGE = r"""<!doctype html>
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #5f6c77; --rule: #1c2630;
+    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #788590; --rule: #1c2630;
     --blue: #8fb1ff; --red: #ff6b7c;
     --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
     --rim-a: rgba(255, 255, 255, .92); --rim-b: rgba(255, 255, 255, .1); --rim-c: rgba(143, 177, 255, .45);
@@ -466,14 +458,12 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 /* The words */
 .side {
   min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(16px, 4.5vh, 60px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
 }
-.title { margin: 0; font-size: clamp(30px, 2.9vw, 54px); line-height: 1; font-weight: 700; font-stretch: 116%; letter-spacing: -.012em; }
-.sub { margin: 8px 0 0; font-size: clamp(15px, 1.15vw, 19px); font-weight: 540; font-stretch: 108%; color: var(--blue); }
 .credit { margin: 22px 0 0; font-size: 13px; color: var(--faint); max-width: 40ch; }
 .credit a { color: var(--mute); text-decoration: underline; text-underline-offset: 2px; }
 .credit a:hover { color: var(--blue); }
-.problem { margin: clamp(18px, 3.4vh, 34px) 0 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
+.problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b { font-weight: 620; }
 .pane { margin-top: clamp(22px, 4vh, 44px); }
@@ -483,27 +473,34 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 .more button:hover { color: var(--blue); }
 .dhead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
 .dhead h2 { margin: 0; font-size: 17px; font-weight: 660; font-stretch: 114%; letter-spacing: .008em; }
-.close { font-size: 13px; color: var(--mute); }
+.close { font-size: 13px; color: var(--mute); padding: 12px 0 12px 16px; margin: -12px 0; }
 .close:hover { color: var(--ink); }
 .lead { margin: 18px 0 0; font-size: clamp(17px, 1.3vw, 21px); line-height: 1.36; font-weight: 380; max-width: 30ch; }
 .facts { list-style: none; margin: 18px 0 0; padding: 0; font-size: 14.5px; color: var(--mute); max-width: 40ch; overflow-wrap: anywhere; }
 .facts li { padding: 8px 0; border-top: 1px solid var(--rule); }
+.names { display: none; }
 @media (max-width: 900px) {
   /* On a phone the order is: the problem, the finding, the picture, the depth. */
   .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 16px 16px 40px; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
-  .title { margin-top: 20px; }
-  .problem { order: 1; margin-top: 18px; max-width: none; }
-  .credit { order: 5; }
+  .problem { order: 1; margin-top: 20px; max-width: none; }
+  .credit { order: 6; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 22px; padding: 0; }
-  .pane { order: 4; margin-top: 14px; }
+  .pane { order: 5; margin-top: 14px; }
+  /* The plate carries only the counts; the names of the basins stand under the picture, in the same order. */
+  .names:not([hidden]) { order: 4; display: grid; grid-template-columns: 1fr 1fr; column-gap: 20px; list-style: none; margin: 14px 0 0; padding: 0; font-size: 13px; border-top: 1px solid var(--rule); }
+  .names li { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--rule); }
+  .names span { color: var(--mute); }
   svg#svg { max-height: none; }
-  .switch { display: grid; grid-template-columns: 1fr 1fr 1fr; align-self: stretch; border-radius: 24px; }
-  .switch button { text-align: center; padding: 10px 4px; font-size: 14px; }
+  .switch button { padding: 12px 12px; font-size: 14px; }
   .note { min-height: 6em; font-size: 14px; }
+}
+@media (min-width: 600px) and (max-width: 900px) {  /* a tablet: the sentence at full width, the picture no wider than it needs */
+  .say { max-width: none; }
+  svg#svg { max-width: 520px; align-self: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }
@@ -532,10 +529,9 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
     </div>
   </div>
   <div class="side">
-    <h2 class="title" id="title"></h2>
-    <p class="sub" id="sub"></p>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
+    <ul class="names" id="names" aria-label="The basins and their items" hidden></ul>
     <div class="pane" id="pane" aria-live="polite"></div>
     <p class="credit">After Bespoke Labs: <a href="https://bespokelabs.ai/blog/how-models-explore-ideas">How models explore ideas</a> and <a href="https://benchmarks.bespokelabs.ai/autoresearchexam/">AutoResearchExam</a>.</p>
   </div>
@@ -571,7 +567,7 @@ const SOFT = .32, RIM = SOFT * Math.exp(-.7);  // how far the ground around a ba
 const RAD = Math.PI / 180, TILT = 58, PC = Math.cos(TILT * RAD), PS = Math.sin(TILT * RAD);
 function geo() {
   return narrow.matches
-    ? { w: 720, h: 760, cx: 360, cy: 250, a: 336, th: 20, r: 24, D: 1900, yaw: -4, lw: 1.5, fs: 17, wide: 86, ay: 706, num: 120, fl: 24, dot: 1.4, deep: 32, gx: 48, gy: 24, lab: 196, lane: 46 }
+    ? { w: 720, h: 760, cx: 360, cy: 250, a: 296, th: 20, r: 24, D: 1900, yaw: -4, lw: 1.5, fs: 17, count: 27, wide: 86, ay: 706, num: 120, fl: 27, dot: 1.4, deep: 32, gx: 48, gy: 24, lab: 196, lane: 46 }
     : { w: 1000, h: 752, cx: 500, cy: 258, a: 440, th: 22, r: 32, D: 2500, yaw: -6, lw: 1.05, fs: 14.5, wide: 104, ay: 700, num: 84, fl: 17, dot: 1.22, deep: 42, gx: 76, gy: 30, lab: 204, lane: 62 };
 }
 const V = { c1: 1, s1: 0, c2: 1, s2: 0, px: 0, py: 0, tx: 0, ty: 0 };  // the view: a slow sway, plus a few degrees toward the pointer
@@ -656,7 +652,9 @@ function build() {
     `<g id="dots"><path class="small" id="small"/><path class="hollow" id="hollow" stroke-width="${h(g.lw * 1.4)}"/><path class="solid" id="solid"/></g>` +
     `<g class="bloom"><circle class="halo" id="ph" r="${f(12 * g.dot)}" opacity="0"/></g><circle class="core" id="pc" r="${f(4.4 * g.dot)}" opacity="0"/>` +
     `<path class="rim draw" id="rim" pathLength="1"/>` +
-    L.clusters.map((c, i) => `<text class="cname" id="cn-${i}" font-size="${g.fs}" font-stretch="${g.wide}%" opacity="0">${esc(c.name)}<tspan dx="6">${c.n}</tspan></text>`).join("") +
+    L.clusters.map((c, i) => g.count  // on a phone only the count stands on the plate, and the names are listed under the picture
+      ? `<text class="cname" id="cn-${i}" font-size="${g.count}" opacity="0">${c.n}</text>`
+      : `<text class="cname" id="cn-${i}" font-size="${g.fs}" font-stretch="${g.wide}%" opacity="0">${esc(c.name)}<tspan dx="6">${c.n}</tspan></text>`).join("") +
     L.clusters.map((c, i) => `<text class="lname" id="ln-${i}" font-size="${f(g.fs * (narrow.matches ? .8 : .9))}" font-stretch="${g.wide}%" opacity="0">${esc(c.name)}</text>`).join("") +
     `<g class="scale"><text class="value" id="value" x="${g.cx}" y="${f(g.ay - g.num * .2)}" font-size="${g.num}"></text>` +
     `<text class="cap" id="cap" x="${g.cx}" y="${f(g.ay + g.fl * .7)}" font-size="${g.fl}"></text></g>`;
@@ -733,7 +731,7 @@ function place(t) {
   } else { E.pc.setAttribute("opacity", 0); E.ph.setAttribute("opacity", 0); }
 
   // The names stand upright, each in front of its basin.
-  S.rings.forEach((r, i) => { const p = at(r.u, r.v + r.R, top); set(E.cn[i], { x: f(p[0]), y: f(p[1] + g.fs * 1.12), opacity: h(board) }); });
+  S.rings.forEach((r, i) => { const p = at(r.u, r.v + r.R, top); set(E.cn[i], { x: f(p[0]), y: f(p[1] + (g.count || g.fs) * 1.12), opacity: h(board) }); });
   S.lv.forEach((v, i) => { const p = at(S.tl - 18, v, top); set(E.ln[i], { x: f(p[0]), y: f(p[1] + g.fs * .3), opacity: h(tt) }); });
 
   // Under the slab: the count of what the picture shows now (items, basins, items of the tree that build on two or more).
@@ -771,6 +769,7 @@ function choose(i, instant) {
   $("problem").textContent = st.problem || C.problem;
   $("say").innerHTML = bold(st.line || C.line);
   $("key-link").hidden = st.key !== "tree";
+  $("names").hidden = st.key !== "basins";
   $("switch").querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-pressed", k === i));
   place(S.t);
 }
@@ -829,8 +828,7 @@ stage.addEventListener("pointermove", e => {
 });
 stage.addEventListener("pointerleave", () => { V.tx = V.ty = 0; });
 
-$("title").textContent = C.title;
-$("sub").textContent = C.sub;
+$("names").innerHTML = L.clusters.map(c => `<li>${esc(c.name)}<span>${c.n}</span></li>`).join("");
 $("switch").innerHTML = D.states.map((s, i) => `<button data-state="${i}" aria-pressed="false">${esc(s.name)}</button>`).join("");
 build();
 aim(S.g.yaw, 0);  // the still frame
@@ -843,4 +841,4 @@ if (!still.matches) {
 </script>
 </body>
 </html>
-""".replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({"title": TITLE, "sub": SUB, "problem": PROBLEM, "line": LINE, "data": DATA, "panels": PANELS}))
+""".replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({"problem": PROBLEM, "line": LINE, "data": DATA, "panels": PANELS}))

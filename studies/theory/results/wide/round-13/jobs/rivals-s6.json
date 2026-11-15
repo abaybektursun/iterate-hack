@@ -1,0 +1,61 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "On HumanEval+/MBPP+ most of the gap between the cued base and RL-Code is broken answer contracts, not wrong logic: cap hits, no final python block, or a block that does not parse or lacks what the tests call. Code-RL's top-8 directions write that contract, which is low-rank, so at 1x they close most of the gap (cap hits 27->9, no block 34->8). Math's directions write only the generic part (finishing, a closing block), so they fix less.",
+  "readers_wrong": "The readers sized the code edit from the math dial, where the gap is mostly reliability and capability and 8 directions close about two thirds of it on hard328. On code a larger share of the gap is contract failures, and a rank-8 edit removes those almost entirely. This fits result-6e4536 (Math's directions remove no-block endings and box nothing) and result-124593 (the math dial also adds skill; this claim is only about how the code gap is made up). run-06/f2-m03 forecast this cell well although its cause is refuted. Code-RL's change really is concentrated (top-8 share 0.174), but General-RL concentrates as much, so the concentration was not caused by a gradable reward. What f2-m03 picked up is that the concentrated directions hold the contract.",
+  "rests_on": ["result-a1bf75", "result-51ccc6", "result-59ed1a", "result-6e4536"],
+  "holds_against": [
+   {"item": "result-51ccc6", "value": 366, "why": "The L11-21 band passes 366 with 6 cap hits / 9 no-block vs L0-10 372 with 12 / 17. The band that fixes more contract failures passes 6 fewer, but 6 problems is inside one-sample noise (about +-13). Both bands beat random (72 contract failures) by 35-41, in line with their 43-57 fewer contract failures. The late band fixes no contract failures (34/40) and adds nothing (342), as the mechanism says."},
+   {"item": "result-a1bf75", "value": 368, "why": "Math directions at 1.5x on code pass 368 with 6 no-block, vs Code 1.5x 399. No-block endings are only the generic part of the contract. Math's directions do not set code's entry point, stdin/stdout convention or test-free final block, so they recover about half of what Code's directions do."}
+  ],
+  "forecasts": [
+   {"id": "t03", "value": 400, "low": 385, "high": 415, "reason": "Code 1x already saturates the contract and Math adds only generic finishing, so the sum sits near the Code 1.5x level (399); the earlier 411 was a high draw."},
+   {"id": "t04", "value": 400, "low": 385, "high": 415, "reason": "Same cell as t03 at another seed, seed SD about 8."},
+   {"id": "t05", "value": 398, "low": 384, "high": 412, "reason": "RL-Code holds the full contract plus logic; 401 replicates with seed noise."},
+   {"id": "t06", "value": 398, "low": 384, "high": 412, "reason": "As t05."},
+   {"id": "t07", "value": 388, "low": 373, "high": 403, "reason": "The contract fix is near-deterministic per problem, so Code 1x replicates 386 (dial 386/399/394)."},
+   {"id": "t08", "value": 388, "low": 373, "high": 403, "reason": "As t07."},
+   {"id": "t15", "value": 358, "low": 336, "high": 378, "reason": "Think-SFT was never trained on this reward's contract: long reasoning means more cap hits and extra or test-laden blocks under the raw Code prompt, so it loses about 40 to contract failures."},
+   {"id": "t16", "value": 355, "low": 333, "high": 374, "reason": "The Math cue does not supply the code contract either (base: Math cue 326 vs Code cue 317), so it scores close to t15."},
+   {"id": "t22", "value": 0.62, "low": 0.45, "high": 0.8, "reason": "Math's top-8 input subspace reads math-answer contract text (equations, answer lines) that code answers lack, so code text drives it well below math text (spec's 0.54 is nearby)."},
+   {"id": "t23", "value": 1.0, "low": 0.9, "high": 1.1, "reason": "A random rank-8 subspace reads generic activation energy, which code and math text share."}
+  ],
+  "direct_test": {
+   "claim": "The base failures that Code-top8-1x fixes are enriched for answer-contract failures (cap hit, no final python block, a final block that fails to parse or lacks the entry point the tests call) well beyond what a resample fixes.",
+   "files": ["studies/rlneurons/results/code1/base_cue-01", "studies/rlneurons/results/xreward/code_dial", "studies/theory/results/direct/ending-01"],
+   "computation": "1. Load per-problem rows of base + Code cue (code1/base_cue-01, seed 51000000) and of the code_dial cells 'Code directions 1x' and 'random rank-8 1.5x' (same seed); join on problem id (538). 2. For each problem the base fails, classify the base answer as a contract failure if: cap_hit; or no ```python (or ```) block after the last reasoning; or the last block fails ast.parse; or, for function tasks, the test's entry-point name is not defined by a def in the block; or, for stdio tasks, the block never reads stdin. Otherwise it is a logic failure. Use the ending-01 block parser for the no-block test. 3. F_top8 = base failed and top8-1x passed; F_rand = base failed and random passed. 4. S_top8 = contract share of F_top8; S_rand = contract share of F_rand. r_c = |F_top8 among contract failures| / |contract failures|; r_l = the same for logic failures. 5. 90 % bootstrap over problems (10,000 draws) for S_top8, S_top8 - S_rand and r_c / r_l.",
+   "refuted_if": "S_top8 < 0.50, or the 90 % lower bound of S_top8 - S_rand is <= 0, or r_c / r_l < 2.0",
+   "threshold": "S_top8 >= 0.50 and r_c / r_l >= 2.0",
+   "null": "The random rank-8 1.5x edit at the same seed (in effect a fresh base sample), whose fixes give the contract share expected from resampling. Also the contract share among all base failures (about 61 of 221 from cap hits and no-block alone)."
+  }
+ },
+ {"id": "b",
+  "statement": "HumanEval+/MBPP+ are easy for the cued base: most problems it fails in one sample it passes in others, so the code gap is almost all per-sample reliability. Code-RL's top-8 directions lower the per-step error rate on reasoning text everywhere, as Math's dial does on finished-wrong math (result-124593). On a set whose gap is reliability, that recovers nearly all of RL's gain. On hard328, where a third of the gap needs answers the base never writes, it recovers less.",
+  "readers_wrong": "The readers took the share of RL's gain that 8 directions close from hard328 (about two thirds), where much of the gap is capability: the base has no right sample on 26 of 36 vote-gap problems. On code the gap is nearly all reliability, so the same kind of edit closes 82 % of it. This fits result-124593 (the dial adds right answers on base finished-wrong problems as RL does), result-6e4536 (no boxed displacement), and the refutations of incomplete switching (result-d02d46) and bf16 under-application (result-c2edfb). run-06/f2-m03 forecast this cell well although its cause is refuted. Code-RL's update is concentrated (0.174), as General-RL's is, so concentration is not caused by a gradable reward. What f2-m03 captured is that the concentrated directions carry the reliability shift.",
+  "rests_on": ["result-a1bf75", "result-124593", "result-afc423", "result-6776d8"],
+  "holds_against": [
+   {"item": "result-a1bf75", "value": 9, "why": "Code 1x cuts cap hits 27->9 (and no-block answers 34->8). This looks like a contract fix. But cap hits and missing blocks are per-sample events: the base finishes with a block on most of those problems in other samples (Math-cue cell 326). They are reliability of finishing, and the net gain of 69 exceeds the 44 those two categories could give."},
+   {"item": "knowledge-dab63f", "value": 10, "why": "On hard328 the base has a right sample on only 10 of 36 problems where RL's vote wins. That is the capability-heavy hard set, where the edit closes only about 2/3. The mechanism predicts the closed share follows the base-solvable share of the gap, which is high on easy code."}
+  ],
+  "forecasts": [
+   {"id": "t03", "value": 405, "low": 390, "high": 420, "reason": "Math's directions add reliability on code too (368 vs random 331), partly adding to Code's; the 411 draw shrinks toward about 405."},
+   {"id": "t04", "value": 405, "low": 390, "high": 420, "reason": "As t03, another seed."},
+   {"id": "t05", "value": 398, "low": 384, "high": 412, "reason": "RL-Code 401 replicates within seed SD of about 8."},
+   {"id": "t06", "value": 398, "low": 384, "high": 412, "reason": "As t05."},
+   {"id": "t07", "value": 390, "low": 375, "high": 405, "reason": "The dial cells 386/399/394 fit one true rate near 390, and 386 was a slightly low draw."},
+   {"id": "t08", "value": 390, "low": 375, "high": 405, "reason": "As t07."},
+   {"id": "t15", "value": 398, "low": 382, "high": 414, "reason": "Think-SFT is a reliable reasoner (ties RL on MATH-500, beats it out of domain 342 vs 332). On an easy, reliability-bound set it reaches RL-Code's level."},
+   {"id": "t16", "value": 394, "low": 377, "high": 411, "reason": "Reliability does not depend on the cue (base: Math cue 326 vs Code cue 317), so this lands at t15's level."},
+   {"id": "t22", "value": 0.97, "low": 0.84, "high": 1.1, "reason": "The directions act on generic reasoning steps ('Okay', checks, derivations) that code answers contain in the same register; drive barely varies across texts (CV 6.8 %, result-0b3807)."},
+   {"id": "t23", "value": 1.0, "low": 0.9, "high": 1.1, "reason": "A random subspace reads generic activation energy, which is shared across domains."}
+  ],
+  "direct_test": {
+   "claim": "The base failures that Code-top8-1x fixes are mostly problems the base passes in its other stored base-like samples, clearly more than base failures in general.",
+   "files": ["studies/rlneurons/results/code1/base_cue-01", "studies/rlneurons/results/code1/base_mathcue-01", "studies/rlneurons/results/code1/rl_plain-01", "studies/rlneurons/results/xreward/code_dial"],
+   "computation": "1. Load per-problem pass/fail of base + Code cue (code1/base_cue-01), base + Math cue (code1/base_mathcue-01), the code_dial cells 'random rank-8 1.5x' and 'Code directions 1x', and RL-Code plain (code1/rl_plain-01); join on problem id (538). 2. k2 = passes in the two base-like cells (Math cue, random 1.5x), from 0 to 2. 3. Among problems the Code-cue base fails: F_top8 = passed by top8-1x; Q_top8 = share of F_top8 with k2 >= 1; Q_base = share of all Code-cue base failures with k2 >= 1; Q_RL = share of RL-Code's fixes with k2 >= 1. 4. Fix rate of top8-1x within k2 = 0 and within k2 >= 1. 5. 90 % bootstrap over problems (10,000 draws) for Q_top8 and Q_top8 - Q_base.",
+   "refuted_if": "Q_top8 < 0.60, or the 90 % lower bound of Q_top8 - Q_base is <= 0.10",
+   "threshold": "Q_top8 >= 0.60 and Q_top8 - Q_base lower bound > 0.10",
+   "null": "The share of base-solvable problems among all base failures (Q_base, which is what fixes drawn without regard to base solvability would give). Also RL-Code's own fixes (Q_RL) as the reference for a full reliability-plus-capability change."
+  }
+ }
+],
+ "cell": null}

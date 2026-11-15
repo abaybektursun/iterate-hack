@@ -1,5 +1,6 @@
-"""The size of 8 RL directions per weight matrix sets how often Base + cue finishes its answers; at size 1.5 it scores
-203 of 328 harder problems, RL 206.
+"""Enlarging 8 RL directions per weight matrix makes Base + cue finish its answers and adds right answers where it
+already finished; at size 1.5 it scores 203 of 328 harder problems, RL 206, and 74 % of its gain is on problems Base + cue
+finished (board result-124593).
 
 The page of one finding, served at /finding/the-finish-dial (view.py serves every tools/finding_<slug>.py) and reached
 from its tile on /findings, which ICON draws. It is the sequel of /finding/eight-directions. The picture is one lit
@@ -17,7 +18,11 @@ A third position, "136 problems from 2026" (AIME and HMMT contests held after th
 result-04e329), is the held-out test: only size 0 (Base + cue) and size 1.5, which was fixed on the 328 before the run, plus
 RL; four samples each. The marks show the first sample, the large number is the mean of the four, and the random switch is
 greyed ("not run on this set").
-Address: /finding/the-finish-dial#[code/|fresh/][random/]s<size>[/<panel or p<problem>>]; the defaults (math, 8 RL
+A third position of the directions switch, "Group by what Base + cue did" (math only, size 1.5), regroups the same 328 marks
+into three columns by the outcome of one Base + cue answer (sample 2 of the four-sample run, GROUP) while each mark keeps its
+look at size 1.5; the curve gives way to three bars per group from the split's readout (DATA["split"]): size 1.5, a second
+Base + cue answer and RL, with the share of the gain in each group.
+Address: /finding/the-finish-dial#[code/|fresh/][random/|group/]s<size>[/<panel or p<problem>>]; the defaults (math, 8 RL
 directions, size 1.5) are left out. The rules are in .claude/skills/finding-page/SKILL.md; the looks are those of tools/architecture.py
 (.claude/skills/site-ui/SKILL.md). The finding is board items result-6f1bb7 and result-51a0e7.
 
@@ -199,9 +204,92 @@ DATA["fresh"] = {
     "predictions": {"mean": [44.5, 56.5], "vote": [50, 62], "cut_max": 30},
 }
 
-TITLE = "The finish dial"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "Does a small part of RL's weight change decide whether answers finish?"
-LINE = "Enlarging 8 RL directions makes answers finish: at size 1.5, 203 of 328 are right; on code, 399 of 538 pass."
+# The split by what Base + cue did (board result-124593; studies/theory/specs/SPEC_direct_dial.md, written before the
+# numbers): on the 328, each of the 4 Base + cue answers of the four-sample run in turn puts its problem in a group (finished
+# right FR, finished wrong FW, cut off CH), and size 1.5 (4 samples) and RL (4 samples) are compared there with a second Base
+# + cue answer, never one on the seed that set the group. Copied from SPLIT + "readout.json" (commit 107184e), hard328:
+# groups.<g>: n_problem_samples, n_problems, rate_edit, rate_base2, rate_rl (%, point values), D_edit_minus_base2_pts and
+# D_edit_minus_rl_pts (points [90 % bootstrap interval, 10,000 resamples of problems]), cap_rate_base2 and cap_rate_edit (%),
+# right_per_finished as D_edit_minus_base2_right_per_finished_pts; edit_gain_share_<g> (% of the gain over Base + cue);
+# base_always_finishes; signed_m1x_hard328 (size -1, on the problems where its answer and Base + cue finished); math500.
+SPLIT = "studies/theory/results/direct/dial-01/"
+DATA["split"] = {
+    "commit": "107184e4cc846a4eaedfe2c15707298cdd2bfbe5", "readout": SPLIT + "readout.json", "board": "result-124593",
+    "spec": "studies/theory/specs/SPEC_direct_dial.md", "script": "studies/theory/analysis/direct_dial.py",
+    # the committed rows the readout read (attempt 0), samples 0 to 3 at seeds 3,000,000 + 10,000 sample + problem index
+    "rows": {"base": REP + "hard328_base_cue_s4r2-01/rows.jsonl", "edit": REP + "hard328_top8x1.5_cue_s4-01/rows.jsonl",
+             "rl": REP + "hard328_rl_plain_s4r2-01/rows.jsonl"},
+    "mark_sample": 1,  # the grouped view places each mark by Base + cue's sample 2 of 4 (seed 3,010,000 + index)
+    "groups": {
+        "FR": {"n": 630, "problems": 205, "edit": 93.5, "base2": 82.4, "rl": 93.0, "d": [11.2, 8.8, 13.6],
+               "d_rl": [0.6, -0.9, 2.1], "cap_base2": 3.6, "cap_edit": 1.1, "share": [42, 35, 50]},
+        "FW": {"n": 396, "problems": 201, "edit": 36.4, "base2": 22.9, "rl": 35.2, "d": [13.5, 9.7, 17.3],
+               "d_rl": [1.2, -1.2, 3.6], "cap_base2": 28.1, "cap_edit": 7.2, "share": [32, 25, 38],
+               "rpf_edit": 38.3, "rpf_base2": 31.4, "d_rpf": [7.0, 2.6, 11.3]},
+        "CH": {"n": 286, "problems": 137, "edit": 23.7, "base2": 8.5, "rl": 26.2, "d": [15.2, 10.9, 19.5],
+               "d_rl": [-2.6, -5.8, 0.7], "cap_base2": 53.1, "cap_edit": 14.3, "share": [26, 20, 32]},
+    },
+    "always": {"n": 191, "base": 75.8, "edit": 85.9, "rl": 84.8, "d": [10.1, 7.5, 12.8], "d_rl": 9.0},
+    "m1": {"n": 227, "m1": 51.5, "base": 70.0, "d": [-18.5, -22.6, -14.3]},
+    "m500": {"share_ch": 11, "fw_n": 269, "fw_d": [17.8, 10.9, 24.7], "fw_d_rl": 19.2},
+}
+# Two one-sample MATH-500 cells (cue, T 1.0), copied from each metrics.json: size 2 (board result-d82083, commit 45e6978),
+# on the seeds of the size-1.5 cell, and size -1 (board result-f8e596, commit 7b76a2e), 250 odd-index problems, against
+# Base + cue's answers at the same seeds.
+DATA["m500_2"] = {"folder": "studies/theory/results/experiments/cell-m29-01/", "right": 448, "ref_right": 456, "cut": 2}
+DATA["m500_m1"] = {"folder": "studies/theory/results/experiments/cell-r9-m11-01/", "n": 250, "cut": 20, "base_cut": 10,
+                   "right": 188, "base_right": 209}
+# One string per problem of the 328, in the order of PROBLEMS: the outcomes of the four-sample run, 12 characters (Base +
+# cue samples 1 to 4, size 1.5 samples 1 to 4, RL samples 1 to 4; r, w, c, k as in PROBLEMS), from DATA['split']['rows']
+# (attempt 0). The check builds it again from those committed rows and recomputes the readout's group numbers from it.
+GROUP = [
+    "wrrrrrrrrrrr", "rrrwrrrrrrrr", "wrrrrrrrrrrr", "crrrrrrrrrrr", "rrrrrrwrrrrr", "wwccwwwwwwww", "rrrrrrrrrrrr", "cwwwwwwwwwww",
+    "crrccwwwwrrw", "rrrrrrrrrrrr", "cccwcwwwcwrr", "wccccccccccw", "cwccwwwwwwww", "cwcwcwwwrwcc", "wwrrrrrrrwrr", "rrwrrrrrrrrr",
+    "rcrrrwrrrrrr", "rcwcrrrrrrrr", "ccccrrcrrrwr", "rrrrrrrwcrrr", "rrrwrrrrrrrr", "wwwcwwwwwwcw", "crwcrrrccrrr", "wwwrwwwwwwwc",
+    "ccccwwwwrwwr", "wwcwwwcwwcww", "cwccwrcrrrrr", "wrccrrwwkwkc", "wccccwwwccwc", "wccwwwwcwwcw", "cwwwrwwwrwww", "rwrcrrrrrrwr",
+    "rrwrrrrrrrrr", "wwwcwwwwcrww", "rwrrrrrrrrrr", "cwccwcccrwwc", "cwcwccwwwwwc", "cwwwwwwwccww", "rrrrrrrrrrrr", "rrwwrrwwrwrw",
+    "wwrrrrrrrrrr", "rrrrrwrrrrrr", "rrrwrrrrcwrr", "rrrrrrrrrrrr", "ccwcwwwwwwww", "rrwwrrrwrrrr", "ccccrkwwcwww", "cccwcwwwwcww",
+    "wccwccccccwc", "ccwcwwwwrwww", "ccccwwcwwwwc", "wwcwwwwwwwww", "cwcwcwwwwwww", "rrwrrrrrrrrr", "rrrrrrrrrrrr", "ccccwwwwwccc",
+    "wwrrrrrrrrrr", "wcwwwwwwwwww", "ccccrcrrrcrr", "wwcwwwwrwrww", "cwwwwwwcwwww", "wwcwrwrrrwwr", "cccwwrwwwwrw", "wwcwcwwwwwww",
+    "ccccrccccccc", "ccwcwwcwcccw", "wcccwwwwwwrc", "wwccwwwwwwww", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr",
+    "rrwrrrrrrrrr", "ccrckwwwkwcc", "rrwwrrrrrrrr", "wrrwrrwkccrc", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "wrrrrrrrrrwr",
+    "rrrrrrrrwrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rwrrwrrwrwrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "cwwcwccwcccc",
+    "rrwwrrwrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "wrwwwrrrrwrr", "rwcrwrrrrrrw", "rwrrrrrrrrrr", "rrwrrrrrrrrr", "rwrkwrrrrrrw",
+    "rrwrrrwrwrrr", "rrrrrrrrrrrr", "cccwwcrcccww", "cwccrwwrwrrr", "rwwwrrrrwrrr", "cwwwwwwwwwww", "ccwcwwwwcccw", "cwcccwccwwww",
+    "wwcwwwwwwwwc", "ccccwwwwwwww", "wccwwwwwwwww", "wcwwcwwwwwww", "wwccwwrwcwrw", "ccwwwwwwwwww", "wwwrwwwwwwww", "wwcwwwwcwcwc",
+    "wwcwwwwwwwww", "cwwwwwwwwwww", "wcwcwwwwwwww", "cwwwwwwwcwwc", "rrrrrrrrrrrr", "wcccrrwccwwc", "cwwwrrrrrrrr", "wccwwwwwcwwc",
+    "ccccwwwwwcww", "rcccrwrrrrrr", "wcccwwwwwwwc", "wcwcrwkrrckc", "ccccwwwwcwcw", "wcwwwwwwcwww", "cwwwwwwwwwww", "cwwwwwwwwwww",
+    "ccwcwkrrrwrr", "rrrrrrrrrrrr", "ccwcwwwwwwww", "wrcrrrrrwrrr", "rrrwrwrrrrcr", "ccccrwwwwcwc", "cwwwccwcwwwc", "cccwwwccwcwc",
+    "wcccwwwwwwww", "ccwcwwwwccwr", "crcwcrwrwwrw", "wwwwwwwcwwww", "rrwrrrrrrwrr", "wrcrwrrrrwrw", "cccwcwcwwccw", "cwccwrwcwwcr",
+    "wwwwwwwwwwww", "wwccwwwrwwww", "wwccwwwwwwww", "rrrwrwrrrrrw", "rccwwrrwrrrr", "wwwwwwwwwwww", "cckwrrrwrrrr", "rrrrrrrrrrrr",
+    "rrrwrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rwrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "crwwrrrrrrrr",
+    "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rwcwrcrrcccw", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrwrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr",
+    "wwwrkrwwrrrr", "rrrrrrrrrrrr", "rrrrrrrrwwrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "wwccrwrrrrrw", "rrrcrwrrrrrr", "rrrrrrrrrrrr",
+    "wwwwwwwwwwww", "rrrrrrrrrrrr", "crcrwrwrrrwr", "wrrrrrrrrrrr", "rwwrrrrrrrrr", "rrrwrrrrrrrr", "rrrrrrrrrrrr", "rrwrrrrrrrrr",
+    "rrrrrrrrrrrr", "rrrrrrrrrrrw", "wrrrrrrrrrrr", "rrrrrrrrrrrr", "wwwwwwwwwwww", "rrrrrrrrrrrr", "rrrrrrrrrwrr", "wrrrrrrrrrwr",
+    "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "wwkrrrrrrrrr", "ccccwwrwwwrr", "wwwrrrwwrrrw",
+    "rrrrrrrrrrrr", "rrrrrrrwrrrr", "rrrrrrrrrrrr", "cwcwwwcwcwwc", "rwwwrrrrrwrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "wwwwwwwwwwww",
+    "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rwwwrrrrrwrr", "wwwwwwwwwwrw", "cckcwwwwrwww", "cwwwcwwwcwcw", "wcrrrrrwrrww", "wwccrrwwrrrw",
+    "rrrrrrrrrrrr", "wwcwwwwrcwww", "rwccwwwwwwww", "rrrrrrrrwrrr", "wwwwwwwwwwww", "rwrrrrrrrrrr", "wrrrrrrrrrrr", "cccwwwcwwwww",
+    "wwccrwrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "wrwrwrrrrwww", "wrcwrrcrrrkw", "wwwcwwcwwwww", "wccccwwwwcww",
+    "rrrrrrrrrrrr", "ccccrrwcrwrr", "wrrwrrrwwrwr", "wcwrrrwrrwrw", "ccwcwwwwwwww", "cccwwwrwrwww", "rrrrrrrrrrrr", "wcwwwwwwwwww",
+    "wwwwrrrwcwrr", "ccwwwwrwrwww", "rrrrrrrrrrrr", "wcwwwwwwrwrw", "rrwrrrrrrrrw", "rwwrrrrrrrrw", "ccwwwwwwwwww", "rrwrrrrrrrrr",
+    "rwwwrrrwrrrr", "rwwrrrrrrrrr", "rrrwrrrrrrrr", "rrrrrrrrrrrr", "rrrwwwrwwrww", "rrrwrrrrrrrw", "rrrrrrrrrrrr", "rwrwrrrrrrrr",
+    "rrrrrrrrrrrr", "wwwcwwwwwwww", "ccccrwwwwwrw", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrccrrrrwrrk", "wrwwwwrwrwrw", "rrrrrrwrrrrr",
+    "cccwrwrcwccr", "rwrrrwrrrrrr", "rrrrrrrrrrrr", "rwrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrcrrrr", "ccwwwwwwwwwc", "rwccwwwrrwww",
+    "wwwwwwwrwckw", "wwccwwwwwwcw", "rrrrrrrrrrrr", "rrwrrrrrrrrr", "wrwwrrrrrrrr", "wwwwwwcwwwww", "wcrwwcwwcccw", "cwwwwwwwcwww",
+    "wwwwrwrrrrrr", "wrrrrrrrrrrr", "rwrrrrrrrrrr", "rrrrrrrrrrrr", "wwwwwwwwwwww", "rrrrrrrrrrrr", "wrrwrrrcrrrw", "wrwrrrrrrrrw",
+    "crwrrwrcrrcr", "cwwwwwwrwwrc", "rrrrrrrrrrrr", "wwccwwwwwwww", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr",
+    "wwwrwwwwcwwr", "wwwwwwwwwwww", "wwwwwwwrrwww", "rrwrrwrwrrrr", "wwwwrrrrrrww", "wrwckrkkcrrr", "ccwcrrwrrrwr", "rrrrrrrrrrrr",
+    "rrrrrrrrrrrr", "rrrwrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrwrr", "rwrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr",
+    "rwwrrrrrrrrr", "rrrrrrrrrrrr", "wccwwcwwcwwc", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "wwwrrrwrrwrr", "rrrrrrrrrrrr",
+    "wwrwwwwwwwww", "rrrrrrrrrrrr", "wwwcwwwwwwww", "rrrrrrrrrrrr", "rrcrrrrrrrrr", "wwwwwwwwwwww", "rcrrrrrrrrrr", "wrrrrrrrrrrr",
+]
+
+TITLE = "RL's gain in eight directions"  # the name on its tile on /findings and in the browser tab
+PROBLEM = "Do 8 directions of RL's weight change only make answers finish?"
+LINE = ("Enlarging 8 RL directions makes answers finish and adds right answers where Base + cue already finished: at size "
+        "1.5, 203 of 328 are right; RL 206.")
 # Under the large number at size 1.5: the replication (DATA rep)
 REPLINE = (f"4 new samples: mean {sum(DATA['rep']['singles']) / 4:.2f} right, "
            f"RL {sum(DATA['rep']['rl_singles']) / 4:.1f}.")
@@ -1411,24 +1499,44 @@ _MONTHS = ["January", "February", "March", "April", "May", "June", "July", "Augu
 _day = lambda d: f"{int(d[8:])} {_MONTHS[int(d[5:7]) - 1]} {d[:4]}"
 _fiv = lambda x: f"{_pts(x[0])} points, 95 % interval {_m(x[1])} to {_m(x[2])}"
 
+# The split (DATA["split"]): its numbers in the site's forms
+_P = DATA["split"]
+_PG = _P["groups"]
+_civ = lambda x: f"{_pts(x[0])} points, 90 % interval {_m(x[1])} to {_m(x[2])}"
+_FIN = 100 - _PG["CH"]["share"][0]  # the share of the gain on problems Base + cue finished: FR + FW, 1 minus CH per resample
+_M2, _M1 = DATA["m500_2"], DATA["m500_m1"]
+
 # Not from our runs: the closest published result. Task arithmetic (Ilharco et al., arXiv 2212.04089) adds a fine-tuned
 # model's weight difference to its base with a scaling coefficient.
 PANELS = [
     ["new", "What is new",
      "Adding a scaled weight difference to a base model is task arithmetic (Ilharco et al., arXiv 2212.04089). New here: "
-     "turning the size of only 8 RL directions per matrix sets how often the answers finish.",
-     [f"Cut off at {DATA['cap']:,} tokens, at sizes −1, 0, 0.5, 1, 1.5, 2 and 3: {_seq('cut', _TOP)} of {DATA['n']}.",
+     "enlarging only 8 RL directions per matrix makes answers finish and also makes more of the finished answers right, "
+     "about as much as RL does.",
+     [f"Cut off at {DATA['cap']:,} tokens, at sizes −1, 0, 0.5, 1, 1.5, 2 and 3: {_seq('cut', _TOP)} of {DATA['n']}. "
       f"Right answers rise from {_C['m1']['right']} at size −1 to {_C['1.5']['right']} at 1.5 and fall to {_C['3']['right']} "
       f"at 3. RL scores {_C['rl']['right']}.",
-      f"8 random directions of the same size leave both flat: {min(_rr)} to {max(_rr)} right and {min(_rc)} to {max(_rc)} "
-      "cut off at sizes −1, 1, 1.5, 2 and 3. The page Eight directions showed the edit at size 1 only."]],
+      f"Where one Base + cue answer finished wrong ({_PG['FW']['problems']} problems, {_PG['FW']['n']} such answers), size 1.5 "
+      f"is right on {_PG['FW']['edit']} %, a second Base + cue answer on {_PG['FW']['base2']} % and RL on {_PG['FW']['rl']} %. "
+      f"Size 1.5 minus Base + cue: {_civ(_PG['FW']['d'])}; size 1.5 minus RL: {_civ(_PG['FW']['d_rl'])}.",
+      f"Of the gain of size 1.5 over Base + cue, {_PG['FR']['share'][0]} % is on problems where Base + cue finished right, "
+      f"{_PG['FW']['share'][0]} % (90 % interval {_PG['FW']['share'][1]} to {_PG['FW']['share'][2]}) where it finished wrong, "
+      f"and {_PG['CH']['share'][0]} % (90 % interval {_PG['CH']['share'][1]} to {_PG['CH']['share'][2]}) where it was cut off. "
+      f"On MATH-500 the cut-off share is {_P['m500']['share_ch']} % of the gain.",
+      f"On the {_P['always']['n']} problems where none of 4 Base + cue answers was cut off, size 1.5 is right on "
+      f"{_P['always']['edit']} % against {_P['always']['base']} % ({_civ(_P['always']['d'])}); RL gains "
+      f"{_P['always']['d_rl']} points.",
+      f"Size −1 takes right answers away from finished ones: on the {_P['m1']['n']} problems where its answer finished, "
+      f"{_P['m1']['m1']} % are right, against {_P['m1']['base']} % of Base + cue's finished answers ({_civ(_P['m1']['d'])}).",
+      f"8 random directions of the same size leave both counts flat: {min(_rr)} to {max(_rr)} right and {min(_rc)} to "
+      f"{max(_rc)} cut off at sizes −1, 1, 1.5, 2 and 3. The page Eight directions showed the edit at size 1 only."]],
     ["why", "Why it matters",
      f"An edit of {_pct('1.5')} of the weight norm brings Base + cue to {_C['1.5']['right']} of {DATA['n']}, within "
-     f"{abs(_d['vs_rl']['points']):.1f} points of RL, and its effect is set by one number.",
+     f"{abs(_d['vs_rl']['points']):.1f} points of RL, and {_FIN} % of its gain is on problems Base + cue already finished.",
      [f"Size 1.5 minus RL: {_pts(_d['vs_rl']['points'])} points, 95 % interval {_iv(_d['vs_rl']['ci'])}. Size 1.5 minus 8 "
       f"random directions at size 1.5: {_pts(_d['vs_random']['points'])} points, 95 % interval {_iv(_d['vs_random']['ci'])}.",
-      f"From size 0 to 1.5, cut-offs fall from {_C['0']['cut']} to {_C['1.5']['cut']}, while the share of finished answers "
-      f"that are right stays between {_lo_rf:.2f} and {_hi_rf:.2f}.",
+      f"So the 8 directions are not only a control of finishing: where Base + cue finished wrong they add "
+      f"{_PG['FW']['d'][0]} points, and RL adds {round(_PG['FW']['rl'] - _PG['FW']['base2'], 1)}.",
       "The directions are read from RL's weights, so this is not yet a gain without reward. It narrows what a method "
       "without reward has to reproduce."]],
     ["how", "How we know",
@@ -1438,12 +1546,33 @@ PANELS = [
      ["Grader v3. Size 0 is Base + cue with no edit; RL answered with the plain prompt. All cells use seed base 3,000,000.",
       "Control: 8 random directions per matrix with the same norm, at sizes −1, 1, 1.5, 2 and 3. They were not run at 0.5, "
       "so the switch skips that stop.",
+      f"The split by what Base + cue did uses a four-sample run of Base + cue, size 1.5 and RL (seeds 3,000,000 + 10,000 × "
+      "sample). Each Base + cue answer in turn puts its problem in a group: finished right, finished wrong or cut off. Size "
+      "1.5 and RL are then compared with a second Base + cue answer on the same problems, never one on the seed that set the "
+      f"group. Intervals: 10,000 bootstrap resamples of the {DATA['n']} problems, 90 %. The plan was written before the "
+      f"numbers: {_P['spec']}; the readout is {_P['readout']}.",
+      f"Group by group, size 1.5 against a second Base + cue answer and RL: finished right {_PG['FR']['edit']} %, "
+      f"{_PG['FR']['base2']} %, {_PG['FR']['rl']} % ({_civ(_PG['FR']['d'])}); finished wrong {_PG['FW']['edit']} %, "
+      f"{_PG['FW']['base2']} %, {_PG['FW']['rl']} % ({_civ(_PG['FW']['d'])}); cut off {_PG['CH']['edit']} %, "
+      f"{_PG['CH']['base2']} %, {_PG['CH']['rl']} % ({_civ(_PG['CH']['d'])}).",
+      "In the grouped view, the marks are the answers at size 1.5 of the first view, placed by Base + cue's sample 2 of 4 "
+      "(seed 3,010,000, not the 3,000,000 of the size 1.5 answers); the bars are the readout's numbers over all four samples.",
+      f"On MATH-500 (one sample at size 1.5, held out from the choice of size), where Base + cue finished wrong "
+      f"({_P['m500']['fw_n']} answers): {_civ(_P['m500']['fw_d'])} over a second Base + cue answer; RL "
+      f"{_pts(_P['m500']['fw_d_rl'])}.",
+      f"On MATH-500, size 2 scores {_M2['right']} of 500 against {_M2['ref_right']} at size 1.5, on the same seeds "
+      f"({_M2['folder']}).",
+      f"On MATH-500, size −1 cuts off {_M1['cut']} of {_M1['n']} odd-index problems against Base + cue's {_M1['base_cut']} at "
+      f"the same seeds, and gets {_M1['right']} right against {_M1['base_right']} ({_M1['folder']}).",
+      f"The page's own one-sample cells agree: on the {DATA['base_finished']} problems where the size 0 answer finished, right "
+      f"answers go from {COUNTS['0']['on_base_finished']} at size 0 to {COUNTS['1.5']['on_base_finished']} at 1.5 (RL "
+      f"{COUNTS['rl']['on_base_finished']}).",
       f"A second control, Think-SFT's 8 largest directions per matrix at the norm of the RL edit at size 1 "
       f"({100 * _S['add_rel']:.2f} % of the weight norm), scores {_S['right']} right and {_S['cut']} cut off, against "
       f"{_C['1']['right']} and {_C['1']['cut']} for the RL directions ({_pts(_d['sft_vs_1']['points'])} points, 95 % interval "
       f"{_iv(_d['sft_vs_1']['ci'])}).",
-      f"Intervals pair the problems: 5,000 bootstrap resamples of the {DATA['n']}, seed 0. Every count of the slider's cells "
-      "was recomputed from the per-problem rows.",
+      f"Intervals of the slider's cells pair the problems: 5,000 bootstrap resamples of the {DATA['n']}, seed 0, 95 %. Every "
+      "count of the slider's cells was recomputed from the per-problem rows.",
       f"On a second model pair, RL-Code's {DATA['k']} largest directions per matrix at sizes 1, 1.5 and 2 pass "
       f"{_K['c1']['passed']}, {_K['c1.5']['passed']} and {_K['c2']['passed']} of {DATA['code']['n']} code problems (Code cue, T 1.0, one "
       f"sample); Base + cue passes {_K['c0']['passed']}, RL-Code {_K['crl']['passed']}. Size 1.5 minus RL-Code: "
@@ -1464,9 +1593,10 @@ PANELS = [
     ["limits", "What it does not show",
      f"One sample per problem and size, and 1.5 was the best of seven sizes tried: {_C['1.5']['right']} against "
      f"{_C['1']['right']} at size 1 is {_pts(_d['vs_1']['points'])} points, 95 % interval {_iv(_d['vs_1']['ci'])}.",
-     [f"Not all of the gain is finishing: on the {DATA['base_finished']} problems Base + cue finishes, right answers go from "
-      f"{COUNTS['0']['on_base_finished']} at size 0 to {COUNTS['1.5']['on_base_finished']} at 1.5 (RL "
-      f"{COUNTS['rl']['on_base_finished']}).",
+     [f"Part of the gain where Base + cue finished wrong is still finishing: on those problems a second Base + cue answer is "
+      f"cut off {_PG['FW']['cap_base2']} % of the time, size 1.5 {_PG['FW']['cap_edit']} %. Counted per finished answer, size 1.5 "
+      f"is right on {_PG['FW']['rpf_edit']} % against {_PG['FW']['rpf_base2']} % ({_civ(_PG['FW']['d_rpf'])}).",
+      "The edit is built from RL's weights, and size 1.5 was chosen on the 328 themselves, the problems of the split.",
       f"At size 3 almost every answer finishes, but many decay into strings of words: {COUNTS['3']['right_finished']} of "
       f"{COUNTS['3']['finished']} finished answers are right ({_rf('3'):.2f}).",
       f"Replicated ({_R['folder']}): four new samples at size 1.5 score {', '.join(map(str, _R['singles'][:3]))} and "
@@ -1475,10 +1605,10 @@ PANELS = [
       f"{max(_R['m500_rl'])}). Under the vote over 4 samples the edit has {_R['vote']} and RL {_R['rl_vote']} "
       f"({_pts(_R['vote_vs_rl']['points'])} points, 95 % interval {_iv(_R['vote_vs_rl']['ci'])}).",
       "The 0.11 % is the intended addition. After rounding to the 16-bit weight format, the written change is 0.19 % of the "
-      "weight norm. The 8 directions come from RL's weights, and 1.5 was chosen on the 328 themselves.",
+      "weight norm.",
       f"On code each size was sampled once, so sizes 1, 1.5 and 2 are not separated: 1.5 minus 1 is "
       f"{_pts(_kd['vs_1']['points'])} points, 95 % interval {_iv(_kd['vs_1']['ci'])}. The code sizes were fixed before that run; "
-      "1.5 came from the math dial.",
+      "1.5 came from the math dial. The split by what Base + cue did was not run on code or on the 2026 set.",
       f"On the {_F['n']} problems from 2026, under the vote over 4 samples the edit trails RL by "
       f"{abs(_F['diff']['vote_vs_rl'][0]):.1f} points: {_F['vote']['1.5']} of {_F['n']} against {_F['vote']['rl']}, 95 % interval "
       f"{_m(_F['diff']['vote_vs_rl'][1])} to {_m(_F['diff']['vote_vs_rl'][2])}, which includes 0. Base + cue has "
@@ -1491,6 +1621,8 @@ PANELS = [
       f"run_cell --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000; commit {DATA['run_commit'][:7]}.",
       f"Readout and run folders: {EDITS} on {DATA['branch']}, commit {DATA['commit'][:7]}; {DATA['readme']}. The replication: "
       f"{_R['folder']} and {_R['m500_folder']}.",
+      f"The split: uv run --no-project --with numpy python {_P['script']} reads the committed rows of the four-sample runs and "
+      f"writes {SPLIT}; commit {_P['commit'][:7]}; board {_P['board']}.",
       f"The code cells: wsp_edit --recipe top8 --other code31 --scale 1, 1.5 or 2 (rand8 at 1.5; --other math31 at 1.5), then "
       f"studies/rlneurons/jobs/run_code_cell.py --model-path with the Code cue, T 1.0, seed {DATA['code']['seed']}. Readout and "
       f"run folders: {CODE}, commit {DATA['code']['commit'][:7]}; {DATA['code']['readme']}; {DATA['code']['spec']}.",
@@ -1499,7 +1631,8 @@ PANELS = [
       f"{', '.join(FRESH_JOBS['edit'])}; commit {_F['job_commit'][:7]}). Readout: studies/rlneurons/analysis/mixvote.py, "
       f"{FRESH}, commit {_F['commit'][:7]}; {_F['readme']}; the plan, {_F['spec']}.",
       "uv run python tools/finding_the_finish_dial.py checks every number on this page against the readouts, the "
-      "replication's rows and the per-problem rows of the three sets (runs/<job>/answers.jsonl, from uv run tools/gpu.py get <job>)."]],
+      "replication's rows, the split's readout and rows, and the per-problem rows of the three sets (runs/<job>/answers.jsonl, "
+      "from uv run tools/gpu.py get <job>)."]],
 ]
 
 PAGE = r"""<!doctype html>
@@ -1600,6 +1733,16 @@ svg * { pointer-events: none; }
 .axis { fill: var(--faint) !important; font-weight: 520; }
 .axis.on { fill: var(--ink) !important; font-weight: 700; }
 .cap { fill: var(--faint) !important; font-weight: 500; }
+/* The grouped view: per group of what Base + cue did, three bars (size 1.5, a second Base + cue answer, RL) */
+.bar { fill: none; stroke-linecap: butt; }
+.bar.e { stroke: var(--blue); } .bar.b { stroke: var(--base-tone); opacity: .55; } .bar.l { stroke: var(--ink); opacity: .72; }
+.barglow { fill: none; stroke: var(--blue); opacity: calc(var(--bloom) * .16); stroke-linecap: butt; }
+.chh { font-weight: 640; }
+.chs { font-weight: 640; fill: var(--ink) !important; }
+.bn { fill: var(--mute) !important; font-weight: 540; }
+.bv { font-weight: 620; fill: var(--mute) !important; }
+.bv.e { fill: var(--blue) !important; font-weight: 700; }
+.chd { fill: var(--mute) !important; font-weight: 500; }
 
 /* The two switches, the set at the top of the plate and the directions beside the slider, as on /finding/rl-change-on-imitation */
 .setrow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 16px; padding: 0 0 6px 2.4%; min-height: 38px; }
@@ -1698,10 +1841,11 @@ svg * { pointer-events: none; }
   .switch .long { display: none; } .switch .short { display: inline; }
   .setrow .switch button { text-align: center; white-space: normal; line-height: 1.2; padding: 8px 6px; }
   .pane { order: 4; margin-top: 22px; }
+  .paper { order: 5; }
   svg { max-height: none; }
   .control { width: 100%; margin-top: 16px; }
   .dtop { flex-direction: column; align-items: stretch; gap: 8px; }
-  .others { display: grid; grid-template-columns: 1fr 1fr; border-radius: 22px; }
+  .others { display: grid; grid-template-columns: 1fr 1fr 1fr; border-radius: 22px; }
   .others button { text-align: center; white-space: normal; line-height: 1.2; padding: 8px 6px; }
   .ticks { font-size: 13px; height: 54px; }
   .ticks span small { white-space: normal; width: 4em; margin: 0 auto; line-height: 1.15; }
@@ -1738,6 +1882,7 @@ svg * { pointer-events: none; }
         <div class="switch others" role="group" aria-label="Directions added to Base + cue">
           <button data-m="top" aria-pressed="false">8 RL directions</button>
           <button data-m="rand" aria-pressed="false">8 random directions<span class="nr"> · not run on this set</span></button>
+          <button data-m="group" aria-pressed="false"><span class="long">Group by Base + cue</span><span class="short">By Base + cue</span><span class="nr"> · not on this set</span></button>
         </div>
       </div>
       <div class="track" id="track" role="slider" tabindex="0" aria-label="Size of the edit" aria-valuemin="-1" aria-valuemax="3">
@@ -1785,13 +1930,15 @@ const SRC = { olympiadbench: "OlympiadBench", aime2025: "AIME 2025", aime2024: "
   hmmt_nov2026_thm: "HMMT November 2026, Theme round" };
 const BENCH = { HumanEval: "HumanEval+", Mbpp: "MBPP+" };
 const SETS = {
-  math: { key: "math", n: D.n, cells: C.cells, rl: 12, ref: null, cols: { top: [0, 1, 2, 3, 4, 5, 6], rand: [7, 1, null, 8, 9, 10, 11] },
-    pr: C.problems.map(([i, src, q, gold, o, tok, ans, end]) => ({ id: "p" + i, i, src, q, gold, o, tok, ans, end })),
+  math: { key: "math", n: D.n, cells: C.cells, rl: 12, ref: null,
+    cols: { top: [0, 1, 2, 3, 4, 5, 6], rand: [7, 1, null, 8, 9, 10, 11], group: [null, null, null, null, 4, null, null] },
+    pr: C.problems.map(([i, src, q, gold, o, tok, ans, end], j) => ({ id: "p" + i, i, src, q, gold, o, tok, ans, end, g: C.group[j] })),
     scale: [[100, 220], [0, 100]], rowName: ["Right of 328", "Cut off at 16,384 tokens"], word: ["finished right", "finished wrong", "cut off"],
     unit: ["right of 328", "harder problems, T 1.0"], cutWord: "cut off at 16,384 tokens", rlName: "RL", kWord: "scored right",
     dirs: "8 RL", right: "right", gone: "cut off", label: "328 harder problems", cap: "",
     hint: "One mark is one problem, with its one answer at the chosen size. Click a mark to read it." },
-  code: { key: "code", n: DC.n, cells: C.code.cells, rl: 6, ref: 5, cols: { top: [null, 0, null, 1, 2, 3, null], rand: [null, 0, null, null, 4, null, null] },
+  code: { key: "code", n: DC.n, cells: C.code.cells, rl: 6, ref: 5,
+    cols: { top: [null, 0, null, 1, 2, 3, null], rand: [null, 0, null, null, 4, null, null], group: Array(7).fill(null) },
     pr: C.code.problems.map(([uid, q, o, tok, err, end]) => ({ id: "p" + uid.replace("HumanEval/", "he").replace("Mbpp/", "mbpp"), uid, q, o, tok, err, end })),
     scale: [[300, 420], [0, 60]], rowName: ["Passed of 538", "Cut off or no code block"], word: ["passed", "failed the tests", "cut off or no code"],
     unit: ["passed of 538", "code problems, T 1.0"], cutWord: "cut off or no code block", rlName: "RL-Code", kWord: "passed",
@@ -1799,7 +1946,7 @@ const SETS = {
     cap: "HumanEval+ and MBPP+, Code cue; the directions come from RL-Code.",
     hint: "One mark is one code problem, with its one answer at the chosen size. Click a mark to read it." },
   fresh: { key: "fresh", n: DF.n, cells: Array.from({ length: 3 * DF.samples }, (_, c) => c), samples: DF.samples, rl: 2 * DF.samples, ref: null,
-    cols: { top: [null, 0, null, null, DF.samples, null, null], rand: [null, null, null, null, null, null, null] }, shown: [0, DF.samples],
+    cols: { top: [null, 0, null, null, DF.samples, null, null], rand: Array(7).fill(null), group: Array(7).fill(null) }, shown: [0, DF.samples],
     pr: C.fresh.problems.map(([i, src, nb, date, q, gold, o, tok, ans, end]) => ({ id: "pf" + i, i, src, nb, date, q, gold, o, tok, ans, end })),
     scale: [[20, 60], [0, 70]], rowName: ["Right of 136, mean of 4", "Cut off, mean of 4"], word: ["finished right", "finished wrong", "cut off"],
     unit: ["right of 136", "mean of 4, T 1.0"], cutWord: "cut off at 16,384 tokens", rlName: "RL", kWord: "scored right",
@@ -1820,6 +1967,14 @@ Object.values(SETS).forEach(T => {
      index, so a band keeps its order and the marks that move are the ones whose outcome changed. */
   T.rank = T.pr.map(p => { let r = 0, c = 0; for (let j = 0; j < T.rl; j++) { r += "rk".includes(p.o[j]); c += "ckn".includes(p.o[j]); } return 100 * r - c; });
 });
+/* The grouped view (math only): each problem's place is the outcome of Base + cue's sample SP.mark + 1 of the four-sample
+   run (its band: finished right, finished wrong, cut off); its look stays its answer at size 1.5. gr: per band, the problems
+   and how many of them are right at size 1.5. */
+const SP = C.split, GW = ["Base + cue finished right", "Base + cue finished wrong", "Base + cue was cut off"];
+{ const T = SETS.math;
+  T.gb = T.pr.map(p => bandOf(lookOf(p.g[SP.mark])));
+  T.gr = BANDS.map(b => { const js = T.pr.map((_, j) => j).filter(j => T.gb[j] === b); return { n: js.length, right: js.filter(j => "rk".includes(T.pr[j].o[4])).length }; }); }
+const cm = m => m === "group" ? "top" : m;  // the curve shows the grouped view as the 8 RL directions
 const has = (T, m, k) => T.cols[m][k] != null;
 const S = { set: "math", m: "top", i: FIRST, open: null, g: null, el: {}, shown: {}, t: 0, last: 0, t0: -1e9, from: [], to: [], fromLook: [],
   toLook: [], who: [], rank: [], c0: [0, 0, 0, 0, 0], c1: [0, 0, 0, 0, 0], v0: 1.5, v1: 1.5, setFrom: "math", mFrom: "top", iFrom: FIRST,
@@ -1846,7 +2001,8 @@ function geo() {
      The floor sits under the tallest column any stop of the set reaches. */
   Object.entries(g.L).forEach(([key, L]) => {
     const T = SETS[key], cells = T.shown || T.cells.map((_, c) => c).filter(c => c !== T.rl);
-    const most = Math.max(...BANDS.map(b => Math.max(...cells.map(c => T.pr.filter(p => bandOf(lookOf(p.o[c])) === b).length))));
+    const most = Math.max(...BANDS.map(b => Math.max(...cells.map(c => T.pr.filter(p => bandOf(lookOf(p.o[c])) === b).length))),
+      ...(T.gr || []).map(x => x.n));
     L.floor = g.colTop + (Math.ceil(most / L.cols) - 1) * L.pitch;
     L.colX = BANDS.map((_, j) => g.gx + j * ((L.cols - 1) * L.pitch + g.gap + L.d[0]));
     L.span = (L.cols - 1) * L.pitch;
@@ -1857,6 +2013,9 @@ function geo() {
   g.h = g.axisY + (ph ? 40 : 46); g.cy = g.h / 2;
   g.a = ph ? [6, 8, g.w - 6, g.h - 8] : [24, 18, g.w - 24, g.h - 18];
   g.X = v => g.cx0 + (v + 1) / 4 * (g.cx1 - g.cx0);
+  // the bars of the grouped view, in the curve's place: per group a heading, three bars and the difference under them
+  g.ch = ph ? { y: g.rows[0].lab - 2, dy: 118, b: [24, 42, 60], d: 82, xn: g.a[0] + 14, xb0: 118, xb1: 380, bw: 12, cap: g.colTop - 48 }
+    : { y: g.rlY[0] + 14, dy: 108, b: [22, 38, 54], d: 76, xn: g.bigX + 4, xb0: 634, xb1: 868, bw: 10, cap: g.colTop - 46 };
   g.Y = (T, j, v) => { const [lo, hi] = T.scale[j]; return g.rows[j].y0 + g.rowH - (clamp(v, lo, hi) - lo) / (hi - lo) * g.rowH; };
   return g;
 }
@@ -1900,7 +2059,15 @@ function build() {
     `<text class="lab em" id="u1" font-size="${g.fs * 1.06}"></text><text class="lab" id="u2" font-size="${g.fs}"></text>` +
     `<text class="cutn" id="cutn" font-size="${g.fc}"></text><text class="lab em" id="cutl" font-size="${g.fs * 1.06}"></text>` +
     `<text class="lab" id="state" font-size="${g.fs}"></text><text class="lab" id="norm" font-size="${g.fs}"></text><text class="lab" id="rl" font-size="${g.fs}"></text><text class="lab" id="bc" font-size="${g.fs}"></text><text class="lab" id="gap" font-size="${g.fs}"></text><text class="lab" id="gap2" font-size="${g.fs}"></text><text class="lab em" id="rep" font-size="${g.fs}"></text></g>` +
-    `<g class="curve"><path class="now" id="now"/>` +
+    `<g class="chart" id="chart" opacity="0">` + ["Columns: what one Base + cue answer did.", "A lit mark is right at size 1.5."].map((x, n) => `<text class="lab" id="gcap${n}" font-size="${g.fs}">${x}</text>`).join("") +
+      SP.groups.map((G, j) => `<text class="chh" id="ch${j}" font-size="${g.fs}">${GW[j]}</text>` +
+        `<text class="chs" id="cs${j}" font-size="${g.fs}" text-anchor="end">${G[4]} % of the gain</text>` +
+        `<path class="barglow" id="gg${j}" stroke-width="${f(g.ch.bw + 6)}"/>` +
+        ["e", "b", "l"].map((a, n) => `<path class="bar ${a}" id="gb${j}${a}" stroke-width="${g.ch.bw}"/>` +
+          `<text class="bn" id="gn${j}${a}" font-size="${g.fsm}">${["Size 1.5", "Base + cue", "RL"][n]}</text>` +
+          `<text class="bv ${a}" id="gv${j}${a}" font-size="${g.fsm}"></text>`).join("") +
+        `<text class="chd" id="gd${j}" font-size="${g.fsm}"></text>`).join("") + `</g>` +
+    `<g class="curve" id="curve"><path class="now" id="now"/>` +
     g.rows.map((R, j) => `<text class="rowlab" id="rowl${j}" font-size="${g.fs}"></text><path class="ref" id="ref${j}"/>` +
       `<text class="reft" id="reft${j}" font-size="${g.fsm}" text-anchor="end"></text>` +
       (j === 0 ? `<text class="cap" id="lg" font-size="${g.fsm}"></text>` : "") +
@@ -1924,7 +2091,7 @@ function slot(L, b, s) {
 }
 function markAt(k, now) {
   const p = clamp((now - S.t0 - .6 * S.rank[k]) / 680, 0, 1), e = ease(p), a = S.from[k], b = S.to[k];
-  const moved = a[0] !== b[0] || a[1] !== b[1], far = bandOf(S.fromLook[k]) !== bandOf(S.toLook[k]);
+  const moved = a[0] !== b[0] || a[1] !== b[1], far = bandOf(S.fromLook[k]) !== bandOf(S.toLook[k]) || Math.abs(a[0] - b[0]) > 60;
   return { x: mix(a[0], b[0], e), y: mix(a[1], b[1], e), z: moved ? (far ? 34 : 6) * Math.sin(Math.PI * p) : 0, look: p < .5 ? S.fromLook[k] : S.toLook[k] };
 }
 /* Where each count of row j sits beside its point: above, below, right or left, whichever crosses the fewest lines, points
@@ -1993,15 +2160,40 @@ function spots(W, m, j) {
   });
   return (S.spots[key] = out);
 }
+/* The bars of the grouped view: per group, size 1.5, a second Base + cue answer and RL, right of the answers in that group
+   (the readout's numbers over all four Base + cue samples); they grow from 0 and their values count as the view arrives. */
+function chart(w) {
+  const g = S.g, E = S.el, K = g.ch, at = (el, q, dy) => { el.setAttribute("x", f(q[0])); el.setAttribute("y", f(q[1] + (dy || 0))); };
+  const P = (x, y) => proj(g, x, y, 10), short = g.phone;
+  [0, 1].forEach(n => at(E["gcap" + n], P(g.gx - 4, K.cap + n * g.fs * 1.3)));
+  SP.groups.forEach((G, j) => {
+    const y = K.y + j * K.dy;
+    at(E["ch" + j], P(K.xn, y)); at(E["cs" + j], P(g.a[2] - (short ? 14 : 24), y));
+    ["e", "b", "l"].forEach((a, n) => {
+      const yb = y + K.b[n], x1 = mix(K.xb0, K.xb1, G[n] / 100 * w);
+      E[`gb${j}${a}`].setAttribute("d", line([P(K.xb0, yb), P(x1, yb)]));
+      if (!n) E["gg" + j].setAttribute("d", line([P(K.xb0, yb), P(x1, yb)]));
+      at(E[`gn${j}${a}`], P(K.xn, yb), g.fsm * .36);
+      E[`gv${j}${a}`].textContent = `${(G[n] * w).toFixed(1)} %`;
+      at(E[`gv${j}${a}`], P(x1 + g.fsm * .5, yb), g.fsm * .36);
+    });
+    const d = G[3], diff = `${d[0] > 0 ? "+" : ""}${num(d[0])} points, 90 % interval ${num(d[1])} to ${num(d[2])}`;
+    E["gd" + j].textContent = short ? diff : `Size 1.5 minus Base + cue: ${diff}`;
+    at(E["gd" + j], P(K.xn, y + K.d));
+  });
+}
 function place(t, now) {
   const g = S.g, E = S.el, at = (el, q, dy) => { el.setAttribute("x", f(q[0])); el.setAttribute("y", f(q[1] + (dy || 0))); };
   const text = (id, v) => { if (S.shown[id] !== v) { E[id].textContent = S.shown[id] = v; return true; } return false; };
   E.back.setAttribute("d", rounded(g, g.a, g.r, -g.deep));
   E.plate.setAttribute("d", rounded(g, g.a, g.r, 0));
   const e = ease(clamp((now - S.t0) / 900, 0, 1)), c = S.c0.map((v, j) => mix(v, S.c1[j], e)), done = e > .98;
-  // The words of the new state arrive with its numbers: when they stop, or halfway when the set changes, so that a count of
-  // one set never stands beside the name of the other.
-  const A = SETS[S.setFrom], B = SETS[S.set], es = A === B ? 1 : e, now2 = A === B ? done : e > .5, W = now2 ? B : A, LA = g.L[A.key], LB = g.L[B.key];
+  // The words of the new state arrive with its numbers: when they stop, or halfway when the set or the grouping changes, so
+  // that a count of one never stands beside the name of the other. Into or out of the grouped view the large number and
+  // the red one count down to 0 under the old words and up from 0 under the new ones.
+  const kA = S.mFrom === "group", kB = S.m === "group", gw = mix(+kA, +kB, e);
+  const A = SETS[S.setFrom], B = SETS[S.set], es = A === B ? 1 : e, now2 = A === B && kA === kB ? done : e > .5, W = now2 ? B : A, LA = g.L[A.key], LB = g.L[B.key];
+  if (kA !== kB) [0, 1].forEach(j => { c[j] = e < .5 ? mix(S.c0[j], 0, 2 * e) : mix(0, S.c1[j], 2 * e - 1); });
   const lm = k => mix(LA[k], LB[k], es), pitch = lm("pitch"), half = lm("half"), floor = lm("floor"), span = lm("span");
   const dd = [0, 1, 2].map(j => mix(LA.d[j], LB.d[j], es)), colX = [0, 1, 2].map(j => mix(LA.colX[j], LB.colX[j], es));
 
@@ -2023,34 +2215,34 @@ function place(t, now) {
   else E.sel.setAttribute("r", "0");
 
   // Every number counts while the marks travel and stops with them; the words of the new state arrive with its numbers.
-  const m = now2 ? S.m : S.mFrom, i = now2 ? S.i : S.iFrom, st = W.stat[col(m, i, W)];
+  const m = now2 ? S.m : S.mFrom, i = now2 ? S.i : S.iFrom, st = W.stat[col(m, i, W)], G = m === "group";
   { const a = proj(g, colX[0] - dd[0], floor + pitch * .75, 2), b = proj(g, colX[2] + span + dd[0], floor + pitch * .75, 2);
     E.floor.setAttribute("d", line([a, b])); }
   BANDS.forEach((b, j) => {
     const x = colX[j] - dd[0] / 2, y = floor + pitch * .75;
     text("bn" + b, fmt(c[j + 2])); text("bt" + b, W.word[j]);
-    text("bk" + b, j === 2 && st.k ? `${st.k}${g.phone ? "" : " of them"} ${W.kWord}` : "");
+    text("bk" + b, G ? `${W.gr[j].right} right at ${g.phone ? "" : "size "}1.5` : j === 2 && st.k ? `${st.k}${g.phone ? "" : " of them"} ${W.kWord}` : "");
     at(E["bn" + b], proj(g, x, y + g.fs * 2.2, 4));
     at(E["bt" + b], proj(g, x, y + g.fs * 3.5, 4));
     at(E["bk" + b], proj(g, x, y + g.fs * 4.75, 4));
   });
-  const fb = W.samples ? fq : fmt;  // a mean of 4 shows its quarters once the words of the 2026 set are in
+  const fb = G ? v => `${fmt(v)} %` : W.samples ? fq : fmt;  // a mean of 4 shows its quarters once the words of the 2026 set are in
   if (text("big", fb(c[0])) || !S.shown.uw) S.shown.uw = E.big.getComputedTextLength() || g.fb * 1.6;
   at(E.big, proj(g, g.bigX, g.bigY, 10));
   const ux = g.bigX + S.shown.uw + g.fs * .8;
-  text("u1", W.unit[0]); text("u2", W.unit[1]);
+  text("u1", G ? "of the gain, where" : W.unit[0]); text("u2", G ? "Base + cue finished" : W.unit[1]);
   at(E.u1, proj(g, ux, g.bigY - g.fb * .42, 10)); at(E.u2, proj(g, ux, g.bigY - g.fb * .42 + g.fs * 1.35, 10));
   if (text("cutn", fb(c[1])) || !S.shown.cw) S.shown.cw = E.cutn.getComputedTextLength() || g.fc * 1.2;
-  text("cutl", W.cutWord);
+  text("cutl", G ? "where Base + cue was cut off" : W.cutWord);
   at(E.cutn, proj(g, g.bigX + 4, g.cutY, 10));
   at(E.cutl, proj(g, g.bigX + 4 + S.shown.cw + g.fs * .6, g.cutY - g.fc * .12, 10));
   const v = SIZES[i], base = W.stat[W.cols.top[1]], rl = W.stat[W.rl];
   const fr = W === SETS.fresh;
-  text("state", i === 1 ? "Size 0: Base + cue, no edit." : `${m === "top" ? W.dirs : "8 random"} directions per matrix at size ${num(v)},`);
-  text("norm", fr ? `${i === 1 ? "" : "fixed on the 328; "}the marks show sample 1 of 4.` : i === 1 ? "" : W === SETS.math ? `${(100 * D.cells[W.cells[col(m, i, W)][0]].add_rel).toFixed(2)} % of the weight norm.` : "one sample per problem.");
-  text("bc", `Base + cue: ${base.right} ${W.right}, ${base.cut} ${W.gone}.`);
-  text("rl", `${W.rlName}: ${rl.right} ${W.right}, ${rl.cut} ${W.gone}.`);
-  text("rep", fr ? `The 4 samples: ${and(st.each)} right.` : W === SETS.math ? (m === "top" && i === FIRST ? C.rep : "") : `RL-Math's 8 directions at size 1.5: ${W.stat[W.ref].right} passed.`);
+  text("state", G ? `Finished right ${SP.groups[0][4]} %, finished wrong ${SP.groups[1][4]} %;` : i === 1 ? "Size 0: Base + cue, no edit." : `${m === "top" ? W.dirs : "8 random"} directions per matrix at size ${num(v)},`);
+  text("norm", G ? "gain over a second Base + cue answer, T 1.0." : fr ? `${i === 1 ? "" : "fixed on the 328; "}the marks show sample 1 of 4.` : i === 1 ? "" : W === SETS.math ? `${(100 * D.cells[W.cells[col(m, i, W)][0]].add_rel).toFixed(2)} % of the weight norm.` : "one sample per problem.");
+  text("bc", G ? "" : `Base + cue: ${base.right} ${W.right}, ${base.cut} ${W.gone}.`);
+  text("rl", G ? "" : `${W.rlName}: ${rl.right} ${W.right}, ${rl.cut} ${W.gone}.`);
+  text("rep", G ? "" : fr ? `The 4 samples: ${and(st.each)} right.` : W === SETS.math ? (m === "top" && i === FIRST ? C.rep : "") : `RL-Math's 8 directions at size 1.5: ${W.stat[W.ref].right} passed.`);
   // on 2026, size 1.5 minus RL in points with its interval, under RL's counts; on two lines where one does not fit
   const gd = DF.diff.vs_rl, gl = [`Size 1.5 minus RL: ${num(gd[0])} points,`, `95 % interval ${num(gd[1])} to ${num(gd[2])}.`];
   if (S.spots.gapOne == null) S.spots.gapOne = measure(gl.join(" "), g.fs, 520) < g.a[2] - 18 - g.bigX;
@@ -2063,7 +2255,9 @@ function place(t, now) {
      dashed level in each row. The upright line and the lit points travel with the counts. When the set changes, every
      point and level travels from its place on the old scale to its place on the new one, and a stop run in one set only
      grows out of its neighbour on the line or shrinks into it. */
-  const vNow = mix(S.v0, S.v1, e), val = (T, s, k, j) => T.stat[T.cols[s][k]][j ? "cut" : "right"];
+  const vNow = mix(S.v0, S.v1, e), val = (T, s, k, j) => T.stat[T.cols[s][k]][j ? "cut" : "right"], sm = cm(S.m);
+  E.curve.setAttribute("opacity", f(1 - gw)); E.chart.setAttribute("opacity", f(gw));
+  if (gw > 0) chart(gw);
   g.rows.forEach((R, j) => {
     const YA = v => g.Y(A, j, v), YB = v => g.Y(B, j, v), key = j ? "cut" : "right";
     text("rowl" + j, W.rowName[j]);
@@ -2075,7 +2269,7 @@ function place(t, now) {
     else at(E["reft" + j], proj(g, g.cx0 - 16, y, 10), g.fv * .32);
     const at2 = {};
     ["rand", "top"].forEach(s => {
-      const on = s === S.m, ks = SIZES.map((_, k) => k).filter(k => has(A, s, k) || has(B, s, k));
+      const on = s === sm, ks = SIZES.map((_, k) => k).filter(k => has(A, s, k) || has(B, s, k));
       const raw = ks.map(k => {
         const ia = has(A, s, k), ib = has(B, s, k);
         return { k, x: g.X(SIZES[k]), y: ia && ib ? mix(YA(val(A, s, k, j)), YB(val(B, s, k, j)), es) : ib ? YB(val(B, s, k, j)) : YA(val(A, s, k, j)),
@@ -2107,11 +2301,11 @@ function place(t, now) {
       });
     });
     if (j === 0) {
-      E.sg0.setAttribute("d", S.m === "top" ? E.s0top.getAttribute("d") : "");
-      const other = S.m === "top" ? "rand" : "top", last = allowed(other, W).slice(-1)[0], end = at2[other][last];  // the faint line is named at its end
+      E.sg0.setAttribute("d", sm === "top" ? E.s0top.getAttribute("d") : "");
+      const other = sm === "top" ? "rand" : "top", last = allowed(other, W).slice(-1)[0], end = at2[other][last];  // the faint line is named at its end
       // on code the random directions have one point, so its count is named with it
       text("lg", other === "rand" ? (last == null ? "" : W.ref != null ? `8 random ${val(W, "rand", last, 0)}` : "8 random") : W.dirs);
-      if (end) at(E.lg, [end[0] + g.fsm * .6, end[1]], spots(W, S.m, 0).lg);
+      if (end) at(E.lg, [end[0] + g.fsm * .6, end[1]], spots(W, sm, 0).lg);
       // RL-Math's directions on code: a hollow point at size 1.5 with its count, named
       const ra = A.ref != null, rb = B.ref != null, w = ra && rb ? 1 : rb ? es : ra ? 1 - es : 0;
       const T = rb ? B : A, yr = !ra && !rb ? g.rows[0].y0 : ra && rb ? mix(YA(A.stat[A.ref].right), YB(B.stat[B.ref].right), es) : rb ? YB(B.stat[B.ref].right) : YA(A.stat[A.ref].right);
@@ -2148,20 +2342,22 @@ function frame(now) {
   aim(4 * Math.sin(t * .13) + 3.5 * V.px, 2 * Math.sin(t * .09) - 2 * V.py);
   place(t, now);
 }
-function layout(T, c) {  // each problem's look and place in cell c of set T, and its order of departure
-  const L = S.g.L[T.key], look = T.pr.map(p => lookOf(p.o[c])), pos = [], rank = [];
+function layout(T, c, m) {  // each problem's look and place in cell c of set T, and its order of departure
+  const L = S.g.L[T.key], look = T.pr.map(p => lookOf(p.o[c])), pos = [], rank = [], G = m === "group";
+  const band = j => G ? T.gb[j] : bandOf(look[j]), ord = { r: 0, w: 1, n: 2, c: 2 };  // grouped: lit marks at the floor
   let r = 0;
   BANDS.forEach(b => {
-    T.pr.map((p, j) => j).filter(j => bandOf(look[j]) === b)
-      .sort((x, y) => (look[x] === "n") - (look[y] === "n") || T.rank[y] - T.rank[x] || x - y)
+    T.pr.map((p, j) => j).filter(j => band(j) === b)
+      .sort((x, y) => (G ? ord[look[x]] - ord[look[y]] : (look[x] === "n") - (look[y] === "n")) || T.rank[y] - T.rank[x] || x - y)
       .forEach((j, s) => { pos[j] = slot(L, b, s); rank[j] = r++; });
   });
   return { look, pos, rank };
 }
-const counts = (T, c) => [T.stat[c].right, T.stat[c].cut, T.stat[c].fr, T.stat[c].fw, T.stat[c].cb];
+const GHINT = `One mark is one problem, placed by Base + cue's answer ${SP.mark + 1} of 4, lit if right at size 1.5. Click a mark to read it.`;
+const counts = (T, c, m) => m === "group" ? [SP.fin, 100 - SP.fin, ...T.gr.map(x => x.n)] : [T.stat[c].right, T.stat[c].cut, T.stat[c].fr, T.stat[c].fw, T.stat[c].cb];
 function setState(set, m, i, opts = {}) {
   const T = SETS[set], now = performance.now(), quick = still.matches || opts.instant, c = col(m, i, T);
-  const e = ease(clamp((now - S.t0) / 900, 0, 1)), L = layout(T, c), n = T.pr.length;
+  const e = ease(clamp((now - S.t0) / 900, 0, 1)), L = layout(T, c, m), n = T.pr.length;
   const who = T.pr.map((_, j) => j), to = L.pos.slice(), toLook = L.look.slice(), rank = L.rank.slice();
   let from = [], fromLook = [];
   if (quick || !S.to.length) { from = to.slice(); fromLook = toLook.slice(); }
@@ -2182,20 +2378,25 @@ function setState(set, m, i, opts = {}) {
   }
   S.from = from; S.fromLook = fromLook; S.to = to; S.toLook = toLook; S.rank = rank; S.who = who;
   const c0 = S.c0.map((v, j) => mix(v, S.c1[j], e)), v0 = mix(S.v0, S.v1, e);
-  S.c1 = counts(T, c); S.c0 = quick ? S.c1.slice() : c0;
+  S.c1 = counts(T, c, m); S.c0 = quick ? S.c1.slice() : c0;
   S.v1 = SIZES[i]; S.v0 = quick ? S.v1 : v0;
   S.setFrom = quick ? set : S.set; S.mFrom = quick ? m : S.m; S.iFrom = quick ? i : S.i;
   S.set = set; S.m = m; S.i = i;
   S.t0 = quick ? -1e9 : now;
   dial();
   const st = T.stat[c], rl = T.stat[T.rl];
-  $("svg").setAttribute("aria-label", `${T.label}, one mark each. ${i === 1 ? "Base + cue" : `Base + cue with ${m === "top" ? T.dirs : "8 random"} directions at size ${num(SIZES[i])}`}: ` +
+  $("svg").setAttribute("aria-label", m === "group" ? `${T.label}, one mark each, grouped by what one Base + cue answer did: ` +
+    GW.map((w, j) => `${w}, ${T.gr[j].n} problems, ${T.gr[j].right} right at size 1.5`).join("; ") + `. Over all 4 samples, ${SP.fin} % of the ` +
+    "gain of size 1.5 is on problems Base + cue finished. " + GW.map((w, j) => `${w}: size 1.5 ${SP.groups[j][0]} %, a second Base + cue ` +
+    `answer ${SP.groups[j][1]} %, RL ${SP.groups[j][2]} % right`).join("; ") + ". Enter opens a problem." :
+    `${T.label}, one mark each. ${i === 1 ? "Base + cue" : `Base + cue with ${m === "top" ? T.dirs : "8 random"} directions at size ${num(SIZES[i])}`}: ` +
     `${st.right} of ${T.n} ${T.right}, ${st.cut} ${T.cutWord}${T.samples ? `, means of ${T.samples} samples; the marks show the first:` : ";"} ` +
     `${st.fr} ${T.word[0]}, ${st.fw} ${T.word[1]}. ${T.rlName}: ${rl.right} ${T.right}, ` +
     `${rl.cut} ${T.gone}. Arrow keys change the size; Enter opens a problem.`);
-  if (S.shown.set !== set) {  // the words under the switch and the hint arrive with the new set
-    S.shown.set = set;
-    $("setcap").textContent = T.cap; $("hint").textContent = T.hint;
+  const hk = set + (m === "group");
+  if (S.shown.set !== hk) {  // the words under the switch and the hint arrive with the new set or view
+    S.shown.set = hk;
+    $("setcap").textContent = T.cap; $("hint").textContent = m === "group" ? GHINT : T.hint;
     if (!quick) [$("setcap"), $("hint")].forEach(el => el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, easing: "ease-out" }));
   }
   if (still.matches) { aim(0, 0); place(0, now); }
@@ -2209,7 +2410,7 @@ function dial() {
   const T = SETS[S.set], ok = allowed(), v = SIZES[S.i];
   $("stops").innerHTML = SIZES.map((s, k) => `<i class="stop${ok.includes(k) ? "" : " na"}${(s - 0) * (v - 0) > 0 && Math.abs(s) <= Math.abs(v) ? " in" : ""}" style="left:${POS(s)}"></i>`).join("");
   $("ticks").innerHTML = SIZES.map((s, k) => `<span class="${k === S.i ? "on" : ""}${ok.includes(k) ? "" : " na"}" style="left:${POS(s)}">${num(s)}` +
-    (!ok.includes(k) ? "<small>not run</small>" : k === 1 ? "<small>Base + cue</small>" : k === 3 ? `<small>as in ${T.rlName.replace("-", "\u2011")}</small>` :
+    (!ok.includes(k) ? (S.m === "group" ? "" : "<small>not run</small>") : k === 1 ? "<small>Base + cue</small>" : k === 3 ? `<small>as in ${T.rlName.replace("-", "\u2011")}</small>` :
       k === FIRST && T.samples ? "<small>fixed on the 328</small>" : "") + "</span>").join("");
   $("thumb").style.left = POS(v);
   const a = Math.min(0, v), b = Math.max(0, v);
@@ -2217,7 +2418,7 @@ function dial() {
   const st = T.stat[col()], tr = $("track");
   tr.setAttribute("aria-valuenow", v);
   tr.setAttribute("aria-valuetext", `${S.i === 1 ? "0, Base + cue" : num(v)}: ${st.right} of ${T.n} ${T.right}, ${st.cut} ${T.gone}`);
-  $("dlab").innerHTML = `Size of the edit <span>· ${S.m === "top" ? `${T.dirs} directions per matrix` : "8 random directions per matrix, the control"}</span>`;
+  $("dlab").innerHTML = `Size of the edit <span>· ${S.m === "top" ? `${T.dirs} directions per matrix` : S.m === "group" ? "8 RL directions at size 1.5" : "8 random directions per matrix, the control"}</span>`;
   document.querySelectorAll("[data-m]").forEach(b => { b.setAttribute("aria-pressed", b.dataset.m === S.m); b.disabled = !allowed(b.dataset.m).length; });
   document.querySelectorAll("[data-set]").forEach(b => b.setAttribute("aria-pressed", b.dataset.set === S.set));
 }
@@ -2229,6 +2430,7 @@ function said(p, c) {
   if (o === "c" || o === "k") return `<span class="c">cut off</span> at ${fmt(D.cap)} tokens` + (o === "k" ? `, scored right (${ans})` : "");
   return `<span class="${o}">${o === "r" ? "right" : "wrong"}</span> in ${fmt(p.tok[c])} tokens, ${ans}`;
 }
+const four = o => { const n = ch => [...o].filter(x => ch.includes(x)).length; return ` ${n("rk")} right, ${n("w")} wrong, ${n("ck")} cut off`; };
 function mathPane(j) {
   const T = SETS.math, p = T.pr[j], saved = T.cells.map(c => c[0]).filter(k => D.examples[k].includes(p.i));
   const row = (c, name, on, end) => `<li class="${on ? "on" : ""}">${glyph(p, c)}<span class="who">${name}</span>: ${said(p, c)}.` +
@@ -2237,10 +2439,14 @@ function mathPane(j) {
     `<p class="lead q" data-math>${esc(p.q)}</p>` +
     `<p class="gold">${esc(SRC[p.src] || p.src)} · reference answer <span data-math>${esc(p.gold)}</span></p>` +
     `<p class="sub"><b>Base + cue with the 8 RL directions</b>, one answer per size, T 1.0, and how each answer ends:</p>` +
-    `<ul class="answers">${T.cols.top.map((c, k) => row(c, k === 1 ? "Size 0, Base + cue" : `Size ${num(SIZES[k])}`, S.m === "top" && S.i === k, true)).join("")}</ul>` +
+    `<ul class="answers">${T.cols.top.map((c, k) => row(c, k === 1 ? "Size 0, Base + cue" : `Size ${num(SIZES[k])}`, S.m !== "rand" && S.i === k, true)).join("")}</ul>` +
     `<p class="sub"><b>8 random directions</b>, the control (final answer only):</p>` +
     `<ul class="answers">${allowed("rand", T).filter(k => k !== 1).map(k => row(T.cols.rand[k], `Size ${num(SIZES[k])}`, S.m === "rand" && S.i === k, false)).join("")}</ul>` +
     `<p class="sub"><b>RL</b>, plain prompt (final answer only):</p><ul class="answers">${row(T.rl, "RL", false, false)}</ul>` +
+    `<p class="sub"><b>The four-sample run</b> of the split by what Base + cue did, answers 1 to 4 (seeds 3,000,000 + 10,000 × sample):</p>` +
+    `<ul class="answers">${["Base + cue", "Size 1.5", "RL"].map((w, a) => `<li class="${a === 0 && S.m === "group" ? "on" : ""}"><span class="who">${w}</span>: ` +
+      `${[0, 1, 2, 3].map(s => `<i class="g ${lookOf(p.g[4 * a + s])}"></i>`).join("")}${four(p.g.slice(4 * a, 4 * a + 4))}` +
+      (a === 0 ? `; answer ${SP.mark + 1} sets the group in the grouped view: ${GW[BANDS.indexOf(T.gb[j])].replace("Base + cue ", "")}` : "") + ".</li>").join("")}</ul>` +
     `<p class="gold">The quoted text is the end of each stored answer, from the jobs' raw answers, which are not in git. ` +
     (saved.length ? `This problem's full answer is saved in git for ${saved.map(k => k === "rl" ? "RL" : k === "0" ? "Base + cue" : (k[0] === "r" ? "random, size " : "size ") + num(k.replace(/^r/, "").replace("m", "-"))).join(", ")}: ` +
       `examples.json of each run folder.` : "No answer to this problem is saved in git.") + `</p>`;
@@ -2291,11 +2497,11 @@ function pane() {
       `<ul class="facts">${p[3].map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
     : `<ul class="more">${C.panels.map(p => `<li><button data-open="${p[0]}">${esc(p[1])}<span aria-hidden="true">›</span></button></li>`).join("")}</ul>`;
 }
-/* The state and what is open are one value in the address: #[code/|fresh/][random/]s<size>[/<panel or p<problem>>], the
+/* The state and what is open are one value in the address: #[code/|fresh/][random/|group/]s<size>[/<panel or p<problem>>], the
    problem p<index in hard.json> on math, p<he|mbpp><number> on code, pf<index in the set> on 2026. The defaults (math, the 8
    RL directions, size 1.5) are left out. */
 function address(push) {
-  const parts = [S.set === "math" ? "" : S.set, S.m === "rand" ? "random" : "", S.m === "top" && S.i === FIRST ? "" : "s" + SIZES[S.i], S.open || ""].filter(Boolean);
+  const parts = [S.set === "math" ? "" : S.set, S.m === "rand" ? "random" : S.m === "group" ? "group" : "", S.m !== "rand" && S.i === FIRST ? "" : "s" + SIZES[S.i], S.open || ""].filter(Boolean);
   const url = parts.length ? "#" + parts.join("/") : location.pathname;
   push ? history.pushState(null, "", url) : history.replaceState(null, "", url);
 }
@@ -2304,7 +2510,7 @@ function toward(T, m, k) {  // the stop of set T and switch position m nearest t
 }
 function fromHash(first) {
   const parts = decodeURIComponent(location.hash.slice(1)).split("/"), set = ["code", "fresh"].find(x => parts.includes(x)) || "math", T = SETS[set];
-  const m = parts.includes("random") && allowed("rand", T).length ? "rand" : "top", sz = parts.find(x => /^s-?[\d.]+$/.test(x));
+  const m = ["rand", "group"].find(x => parts.includes(x === "rand" ? "random" : x) && allowed(x, T).length) || "top", sz = parts.find(x => /^s-?[\d.]+$/.test(x));
   const v = sz ? Number(sz.slice(1)) : NaN;  // a size between the stops goes to the nearest one (a tie to the larger)
   const k = isFinite(v) ? SIZES.reduce((b, x, n) => Math.abs(x - v) <= Math.abs(SIZES[b] - v) ? n : b, 0) : FIRST, i = toward(T, m, k);
   S.open = parts.find(x => C.panels.some(p => p[0] === x) || T.pr.some(p => p.id === x)) || null;
@@ -2434,7 +2640,11 @@ ICON = r"""(kit, t, tilt) => {
 }"""
 
 PAGE = PAGE.replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({
-    "problem": PROBLEM, "line": LINE, "rep": REPLINE, "panels": PANELS, "problems": PROBLEMS, "cells": CELLS,
+    "problem": PROBLEM, "line": LINE, "rep": REPLINE, "panels": PANELS, "problems": PROBLEMS, "cells": CELLS, "group": GROUP,
+    # the split for the grouped view: per group FR, FW, CH the right rates (%) of size 1.5, a second Base + cue answer and RL,
+    # size 1.5 minus Base + cue [points, 90 % interval], the share of the gain (%) and the number of problems
+    "split": {"mark": _P["mark_sample"], "fin": _FIN, "groups": [[g["edit"], g["base2"], g["rl"], g["d"], g["share"][0], g["problems"]]
+                                                               for g in (_PG["FR"], _PG["FW"], _PG["CH"])]},
     "data": {k: DATA[k] for k in ("n", "cap", "cells", "examples", "folders")},
     "code": {"problems": CODE_PROBLEMS, "cells": CODE_CELLS, "data": {k: DATA["code"][k] for k in ("n", "examples")}},
     "fresh": {"problems": FRESH_PROBLEMS, "data": {k: DATA["fresh"][k] for k in ("n", "samples", "upload", "dates", "diff")}}},
@@ -2506,6 +2716,87 @@ def _check_fresh(frows):  # the 2026 set: DATA["fresh"] against its readout, the
         assert (m["job_id"], m["commit"], c["prompt"], c["set"], c["temperature"], c["top_p"], c["max_tokens"], c["restarts"]) == \
             (job, F["job_commit"], "cue", "fresh2026", 1.0, 1.0, DATA["cap"], 0), (job, c)
     print("FRESH_PROBLEMS matches the rows in runs/ of", len(FRESH_JOBS["edit"]), "edit jobs (graded again with grader v3)")
+
+
+def _group_build():  # GROUP from the committed rows of the four-sample runs (attempt 0)
+    arms = []
+    for path in DATA["split"]["rows"].values():
+        rows = [json.loads(line) for line in open(path)]
+        by = {(r["sample"], r["problem_index"]): r for r in rows if r["attempt"] == 0}
+        assert len(by) == 4 * DATA["n"] and all(r["seed"] == 3000000 + 10000 * s + i for (s, i), r in by.items()), path
+        arms.append(by)
+    return ["".join(_outcome(a[(s, p[0])]) for a in arms for s in range(4)) for p in PROBLEMS]
+
+
+def _check_split():  # DATA["split"] against its readout and its spec; GROUP against the rows; the readout's numbers from GROUP
+    P, G = DATA["split"], DATA["split"]["groups"]
+    ro, run = json.load(open(P["readout"])), json.load(open(SPLIT + "run.json"))
+    assert ro["spec"] == run["spec"] == P["spec"] and all(path in run["inputs"] for path in P["rows"].values()), run["inputs"]
+    assert ro["verdict_hard328"] == "adds skill" and ro["hard328"]["shared_seed_excluded"] and "90 %" in run["bootstrap"]
+    assert "10,000 resamples" in run["bootstrap"] and "90 % bootstrap interval" in open(P["spec"]).read()
+    h = ro["hard328"]
+    one = lambda x: round(100 * x, 1)
+    for g, x in G.items():
+        r = h["groups"][g]
+        assert (r["n_problem_samples"], r["n_problems"]) == (x["n"], x["problems"]), g
+        assert [one(r["rate_edit"][0]), one(r["rate_base2"][0]), one(r["rate_rl"][0])] == [x["edit"], x["base2"], x["rl"]], g
+        assert [round(v, 1) for v in r["D_edit_minus_base2_pts"]] == x["d"], g
+        assert [round(v, 1) for v in r["D_edit_minus_rl_pts"]] == x["d_rl"], g
+        assert [one(r["cap_rate_base2"]), one(r["cap_rate_edit"])] == [x["cap_base2"], x["cap_edit"]], g
+        assert [round(100 * v) for v in h["edit_gain_share_" + g]] == x["share"], g
+        if "d_rpf" in x:
+            assert [one(r["right_per_finished_edit"][0]), one(r["right_per_finished_base2"][0])] == [x["rpf_edit"], x["rpf_base2"]], g
+            assert [round(v, 1) for v in r["D_edit_minus_base2_right_per_finished_pts"]] == x["d_rpf"], g
+    assert round(h["groups"]["FW"]["D_rl_minus_base2_pts"][0], 1) == round(G["FW"]["rl"] - G["FW"]["base2"], 1)  # "RL adds"
+    assert sum(G[g]["share"][0] for g in G) == 100 and _FIN == round(100 * (1 - h["edit_gain_share_CH"][0]))
+    a, x = h["base_always_finishes"], P["always"]
+    assert (a["n_problems"], one(a["rate_base"][0]), one(a["rate_edit"][0]), one(a["rate_rl"][0])) == (x["n"], x["base"], x["edit"], x["rl"])
+    assert [round(v, 1) for v in a["D_edit_minus_base_pts"]] == x["d"] and round(a["D_rl_minus_base_pts"][0], 1) == x["d_rl"]
+    s1, x = ro["signed_m1x_hard328"], P["m1"]
+    assert (s1["n_problems_both_finish"], one(s1["same_problems_m1x_rate"][0]), one(s1["same_problems_base_finished_rate"][0])) == \
+        (x["n"], x["m1"], x["base"]) and [round(v, 1) for v in s1["same_problems_m1x_minus_base_pts"]] == x["d"]
+    assert (s1["right"], s1["cap_hits"]) == (_C["m1"]["right"], _C["m1"]["cut"])  # the size -1 cell of the slider
+    m5, x = ro["math500"], P["m500"]
+    assert round(100 * m5["edit_gain_share_CH"][0]) == x["share_ch"] and m5["groups"]["FW"]["n_problem_samples"] == x["fw_n"]
+    assert [round(v, 1) for v in m5["groups"]["FW"]["D_edit_minus_base2_pts"]] == x["fw_d"]
+    assert round(m5["groups"]["FW"]["D_rl_minus_base2_pts"][0], 1) == x["fw_d_rl"]
+    m1x = [json.loads(line) for line in open(SPLIT + "m1x_hard328_rows.jsonl")]  # the size -1 rows the readout used: the slider's
+    assert {r["problem_index"]: _outcome(r) for r in m1x} == {p[0]: p[4][_col["m1"]] for p in PROBLEMS}, "m1x rows"
+    print("DATA['split'] matches", P["readout"], "and", P["spec"])
+    assert GROUP == _group_build(), "GROUP differs from the committed rows"
+    # the readout's group numbers again, from GROUP: every Base + cue answer i in turn sets the group; the other seeds compare
+    grp = lambda ch: "CH" if ch in "ck" else "FR" if ch == "r" else "FW"
+    tot, gain = {}, {}
+    for g in G:
+        n, right = 0, [0, 0, 0]
+        for o in GROUP:
+            for i in range(4):
+                if grp(o[i]) != g:
+                    continue
+                n += 1
+                for a in range(3):
+                    right[a] += sum(o[4 * a + j] in "rk" for j in range(4) if j != i)
+        tot[g] = n
+        rate = [100 * x / (3 * n) for x in right]
+        assert [round(rate[1], 1), round(rate[0], 1), round(rate[2], 1)] == [G[g]["edit"], G[g]["base2"], G[g]["rl"]], (g, rate)
+        gain[g] = n * (rate[1] - rate[0])
+    assert all(tot[g] == G[g]["n"] for g in G) and all(round(100 * gain[g] / sum(gain.values())) == G[g]["share"][0] for g in G)
+    T = [o for o in GROUP if not any(ch in "ck" for ch in o[:4])]
+    assert len(T) == P["always"]["n"]
+    assert [round(100 * sum(ch in "rk" for o in T for ch in o[4 * a:4 * a + 4]) / (4 * len(T)), 1) for a in range(3)] == \
+        [P["always"]["base"], P["always"]["edit"], P["always"]["rl"]]
+    print("GROUP matches the committed rows of", ", ".join(P["rows"].values()), "and gives the readout's group rates and shares")
+    for key, x in (("m500_2", DATA["m500_2"]), ("m500_m1", DATA["m500_m1"])):
+        m = json.load(open(x["folder"] + "metrics.json"))
+        if key == "m500_2":
+            assert (m["n"], m["right_v3"], m["cap_hits"], m["vs_1p5x"]["ref_right_v3"]) == (500, x["right"], x["cut"], x["ref_right"])
+            assert m["vs_1p5x"]["ref"] == DATA["rep"]["m500_folder"] + "rows.jsonl" and x["ref_right"] == DATA["rep"]["m500"]
+            assert "--scale 2 " in json.load(open(x["folder"] + "run.json"))["command"]
+        else:
+            b = m["base_same_seeds"]
+            assert (m["n"], m["cap_hits"], m["right_v3"], b["cap_hits"], b["right_v3"]) == (x["n"], x["cut"], x["right"], x["base_cut"], x["base_right"])
+            assert "--scale -1.0 " in json.load(open(x["folder"] + "run.json"))["command"]
+    print("DATA['m500_2'] and DATA['m500_m1'] match", DATA["m500_2"]["folder"], "and", DATA["m500_m1"]["folder"])
 
 
 def _check_code(crows):  # the code set: DATA["code"] against its readout and run folders, CODE_PROBLEMS against the rows
@@ -2601,5 +2892,6 @@ if __name__ == "__main__":  # run from the repository root
             lo, hi = n13_score.paired_bootstrap(a, b, n_boot=5000, seed=0)
             assert [round(100 * (sum(a) - sum(b)) / DATA["n"], 2), round(lo, 2), round(hi, 2)] == [x["points"], *x["ci"]], (name, lo, hi)
         print("PROBLEMS and the intervals match the rows in runs/ of", len(CELLS), "jobs")
+    _check_split()
     _check_code(crows)
     _check_fresh(frows)

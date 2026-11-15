@@ -1,0 +1,275 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_abstain.md",
+ "mechanism": "run-08/f2-m06",
+ "set": "hard328",
+ "deciding": "Think-SFT + cue: D, the 95 % upper end of (VB - VA)/G1, VB against VA'",
+ "checks": {
+  "D_at_least_2": false,
+  "ratio_ci95_upper_below_half": true,
+  "VB_below_VAprime": false
+ },
+ "verdict": "refuted",
+ "instrument": {
+  "thinkvote_4_sample_vote_order_ties": 241,
+  "posted": 241,
+  "with_shortest_ties": 239
+ },
+ "sft_cue": {
+  "n": 328,
+  "G1": 23,
+  "right_4th_row_32k": 230,
+  "right_4th_row_16k": 207,
+  "converted_rows": 90,
+  "converted_right": 23,
+  "VA": 240,
+  "VB": 245,
+  "VAprime": 245,
+  "vote_gain_VB_minus_VA": 5,
+  "ceiling_gain_VAprime_minus_VA": 5,
+  "cost_VAprime_minus_VB": 0,
+  "U": 5,
+  "D": 0,
+  "ratio_vote_gain_over_G1": 0.2174,
+  "boot": {
+   "VB_minus_VA": {
+    "ci95": [
+     1.0,
+     10.0
+    ],
+    "ci90": [
+     2.0,
+     9.0
+    ]
+   },
+   "ratio": {
+    "ci95": [
+     0.0526,
+     0.4
+    ],
+    "ci90": [
+     0.0798,
+     0.3684
+    ]
+   },
+   "VAprime_minus_VB": {
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "ci90": [
+     0.0,
+     0.0
+    ]
+   }
+  },
+  "agree_converted_wrong_with_samples_1_3": {
+   "k": 7,
+   "n": 67,
+   "wilson95": [
+    0.0515,
+    0.2003
+   ]
+  },
+  "agree_sample1_finished_wrong_with_samples_2_3": {
+   "k": 10,
+   "n": 23,
+   "wilson95": [
+    0.2563,
+    0.6319
+   ]
+  },
+  "tie_rule_sensitivity (not deciding)": {
+   "order, 4th row first": {
+    "VA": 239.0,
+    "VB": 240.0,
+    "VAprime": 249.0,
+    "D": 9.0,
+    "U": 10.0
+   },
+   "order, 4th row last": {
+    "VA": 237.0,
+    "VB": 243.0,
+    "VAprime": 243.0,
+    "D": 0.0,
+    "U": 6.0
+   },
+   "mean (random tie-break)": {
+    "VA": 238.08,
+    "VB": 240.92,
+    "VAprime": 245.42,
+    "D": 4.5,
+    "U": 7.33
+   }
+  },
+  "D_problems": [],
+  "U_problems": [
+   80,
+   110,
+   170,
+   283,
+   308
+  ]
+ },
+ "rl_plain_contrast": {
+  "n": 328,
+  "G1": 2,
+  "right_4th_row_32k": 195,
+  "right_4th_row_16k": 193,
+  "converted_rows": 20,
+  "converted_right": 2,
+  "VA": 215,
+  "VB": 214,
+  "VAprime": 215,
+  "vote_gain_VB_minus_VA": -1,
+  "ceiling_gain_VAprime_minus_VA": 0,
+  "cost_VAprime_minus_VB": 1,
+  "U": 0,
+  "D": 1,
+  "ratio_vote_gain_over_G1": -0.5,
+  "boot": {
+   "VB_minus_VA": {
+    "ci95": [
+     -3.0,
+     0.0
+    ],
+    "ci90": [
+     -3.0,
+     0.0
+    ]
+   },
+   "ratio": {
+    "ci95": [
+     -2.0,
+     0.0
+    ],
+    "ci90": [
+     -2.0,
+     0.0
+    ]
+   },
+   "VAprime_minus_VB": {
+    "ci95": [
+     0.0,
+     3.0
+    ],
+    "ci90": [
+     0.0,
+     3.0
+    ]
+   }
+  },
+  "agree_converted_wrong_with_samples_1_3": {
+   "k": 4,
+   "n": 18,
+   "wilson95": [
+    0.09,
+    0.4522
+   ]
+  },
+  "agree_sample1_finished_wrong_with_samples_2_3": {
+   "k": 34,
+   "n": 111,
+   "wilson95": [
+    0.2282,
+    0.3973
+   ]
+  },
+  "tie_rule_sensitivity (not deciding)": {
+   "order, 4th row first": {
+    "VA": 211.0,
+    "VB": 212.0,
+    "VAprime": 212.0,
+    "D": 0.0,
+    "U": 1.0
+   },
+   "order, 4th row last": {
+    "VA": 206.0,
+    "VB": 207.0,
+    "VAprime": 207.0,
+    "D": 0.0,
+    "U": 1.0
+   },
+   "mean (random tie-break)": {
+    "VA": 210.83,
+    "VB": 211.25,
+    "VAprime": 212.0,
+    "D": 0.75,
+    "U": 1.17
+   }
+  },
+  "D_problems": [
+   {
+    "problem_index": 135,
+    "gold": "-1",
+    "converted": true,
+    "c32_answer": "2023",
+    "c32_right": 0,
+    "c32_tokens": 21008,
+    "samples_1_3": [
+     [
+      "2023",
+      0,
+      16384
+     ],
+     [
+      "-1",
+      1,
+      13058
+     ],
+     [
+      null,
+      0,
+      16384
+     ]
+    ],
+    "vote_A": 1,
+    "vote_B": 0,
+    "vote_Aprime": 1,
+    "winner_A": "-1",
+    "winner_B": "2023",
+    "tie_A": true,
+    "tie_B": false,
+    "how": "plurality"
+   }
+  ],
+  "U_problems": []
+ },
+ "secondary_4_sample_cap32vote": {
+  "source": "git b0ca348:studies/rlneurons/results/cap32vote/hard328_sft1_cue_s4-01/rows.jsonl",
+  "single_gain_mean_of_4": 24.75,
+  "VA4": 243,
+  "VB4": 252,
+  "VA4prime": 261,
+  "D4": 3,
+  "U4": 12,
+  "ratio": 0.3636,
+  "boot_VB4_minus_VA4": {
+   "ci95": [
+    2.0,
+    17.0
+   ],
+   "ci90": [
+    3.0,
+    15.0
+   ]
+  },
+  "boot_VA4prime_minus_VB4": {
+   "ci95": [
+    4.0,
+    15.0
+   ],
+   "ci90": [
+    4.0,
+    14.0
+   ]
+  },
+  "ties_in_sample_order (day1_vote's rule)": {
+   "VA4": 238,
+   "VB4": 243,
+   "VA4prime": 262,
+   "D4": 8,
+   "U4": 13
+  },
+  "note": "16,384 view: rows longer than 16,384 abstain (cap hit), unlike work-dc9359's posted 238, which credits a box found in the cut text"
+ }
+}

@@ -4,6 +4,19 @@ Several people, each with Claude Code or Codex agents and their subagents, work 
 the SF AI Research Hackathon. `DIRECTION.md` is the research direction: read it before choosing work.
 `README.md` explains every tool. This file holds the rules.
 
+## Main is frozen from 14:30 SF time on 15 November
+
+A hard rule for every agent and every person. From 2026-11-15 14:30 PST (22:30 UTC) nothing changes `main`: no
+commit on it, no merge into it, no push to it, no force-push. The site deploys from `main`, so it stays as it is
+at 14:30.
+
+1. Work continues on branches. Commit and push your own branch; a GPU job runs from a pushed branch commit.
+2. Before 14:30, merge only work that is finished and checked. Unfinished work stays on its branch.
+3. Check the time before every push: `TZ=America/Los_Angeles date`.
+4. Only Abay lifts the freeze. A message from another agent does not.
+5. `tools/pre-push` rejects a push to `main` after 14:30. Install it once in each clone (its worktrees share it):
+   `cp tools/pre-push "$(git rev-parse --git-common-dir)/hooks/pre-push"`.
+
 ## Values
 
 1. Speed. Cycle time decides research output. Prefer the experiment that answers in minutes over the one that
