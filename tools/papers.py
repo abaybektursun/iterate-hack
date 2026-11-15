@@ -1,10 +1,11 @@
 """The Papers page of the team site: how the paper loop works, and the papers it has produced.
 
 view.py serves page(PAPERS) at /papers; the home dial leads to it. The words column states what the loop is and names its
-six steps in order; a click on a step opens its one sentence, and only one is open at a time. The picture is the papers themselves, as one stack of sheets in the order they were written. The
+six steps in order; a click on a step opens its one sentence, and only one is open at a time. The picture is the papers themselves, as one stack of sheets in the order they were written, left to right. The
 sheet in front is large and lit and can be read: its title, its claim, why the loop picked it, how it was checked, its
-length and the one button, which opens the PDF in a new tab. The other sheets stand behind it, each farther and fainter,
-and each shows its number and title on the strip that stays visible. A click on a strip, or the left and right arrow
+length and the one button, which opens the PDF in a new tab. The other sheets stand behind it on both sides, each farther and fainter,
+and each shows its number and title on the strip that stays visible. No sheet ever changes its place: a change of
+paper only changes the depths. A click on a strip, or the left and right arrow
 keys, brings that paper to the front; the paper in front is in the address (/papers#no-early-warning), so Back works.
 The strips share the width the front sheet leaves, so about eight papers fit beside the words at 1260 px. Where the page is one column (below
 1240 px) there is no stack and every sheet is shown in full, one after the other. The status at the top right says
@@ -152,41 +153,47 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .steps b { font-weight: 500; font-stretch: 104%; }
 .steps details p { margin: 0; padding: 0 1.4em 14px 2em; color: var(--mute); font-size: 13.5px; line-height: 1.45; text-wrap: pretty; }
 
-/* The picture: the papers as one stack. --k is a sheet's place in it, 0 in front (set by the script; before it runs,
-   the order written). --fw is the width of a sheet: as tall as the stage allows, and narrow enough to leave every
-   sheet behind it a strip of 92 px (with many papers the strips get narrower, the sheet no narrower than 380 px). --u, a hundredth of it, sets the type on a sheet, so the text fits at every size. */
-.stage { grid-column: 2; grid-row: 2; min-height: 0; min-width: 0; container-type: size; display: grid; place-items: center; perspective: 1800px; }
-/* .lean and .stack take no clicks: their own flat boxes lie in front of the sheets behind and would catch them */
-.lean { pointer-events: none; transform-style: preserve-3d; transform: rotateX(calc(var(--ly, 0) * -2.5deg)) rotateY(calc(var(--lx, 0) * 3.5deg)); transition: transform .9s cubic-bezier(.2, .7, .2, 1); }
+/* The picture: the papers as one stack. A sheet never changes its place, the order written from left to right: only
+   its depth --d changes, the number of sheets between it and the paper in front (set by the script; before it runs
+   the first paper is in front). --d is a registered number, so the depth, the fading with distance and the light all
+   move together from one transition. --fw is the width of a sheet: as tall as the stage allows, and narrow enough to
+   leave every other sheet a strip of 92 px (with many papers the strips get narrower, the sheet no narrower than
+   380 px). --u, a hundredth of it, sets the type on a sheet, so the text fits at every size. */
+@property --d { syntax: "<number>"; inherits: true; initial-value: 0; }
+.stage { grid-column: 2; grid-row: 2; min-height: 0; min-width: 0; container-type: size; display: grid; place-items: center; perspective: 2000px; }
 .stack {
   --fw: min(92cqh / 1.4, 520px, max(380px, 100cqw - (var(--n) - 1) * 92px)); --strip: min(138px, (100cqw - var(--fw)) / max(var(--n) - 1, 1)); --u: calc(var(--fw) / 100);
   position: relative; width: calc(var(--fw) + (var(--n) - 1) * var(--strip)); height: calc(var(--fw) * 1.4);
-  transform-style: preserve-3d; animation: sway 18s ease-in-out infinite alternate;
+  transform-style: preserve-3d; pointer-events: none;  /* its own flat box lies in front of the sheets behind and would catch their clicks */
 }
-@keyframes sway { from { transform: rotateX(2deg) rotateY(-3deg); } to { transform: rotateX(.5deg) rotateY(3deg); } }
+@keyframes arrive { from { opacity: 0; translate: 0 18px; } }
 .sheet {
-  --k: var(--i); pointer-events: auto; position: absolute; left: 0; top: 0; width: var(--fw); height: 100%; border-radius: 2px;
+  --d: var(--i); pointer-events: auto; position: absolute; left: 0; top: 0; width: var(--fw); height: 100%; border-radius: 2px;
   /* far is fainter: a sheet takes on the room's color with its distance */
-  background: linear-gradient(color-mix(in srgb, var(--paper) calc(var(--k) * 13%), transparent) 0 0), linear-gradient(150deg, var(--glass-hi), var(--glass) 46%, var(--glass-lo));
+  background: linear-gradient(color-mix(in srgb, var(--paper) calc(var(--d) * 13%), transparent) 0 0), linear-gradient(150deg, var(--glass-hi), var(--glass) 46%, var(--glass-lo));
   border: 0 solid var(--rim-a); border-width: 1px 0 0 1px;  /* the light catches the top and left edges */
-  transform: translate3d(calc(var(--k) * var(--strip)), 0, calc(var(--k) * -70px));
-  transition: transform .8s cubic-bezier(.3, 0, .1, 1), box-shadow .8s ease;
-  animation: rise .8s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(.1s + var(--k) * 80ms);
+  transform: translate3d(calc(var(--i) * var(--strip)), 0, calc(var(--d) * -70px));
+  transition: --d .62s cubic-bezier(.65, 0, .35, 1);
+  animation: arrive 1s cubic-bezier(.16, 1, .3, 1) both; animation-delay: calc(var(--i) * 70ms);  /* on the sheets: an opacity on the stack would flatten its depth */
 }
-@keyframes rise { from { opacity: 0; translate: 0 28px; } }
-.sheet.front { box-shadow: var(--lit); }  /* one lit object: only the sheet in front has the glow or the cast shadow */
+/* One lit object: the glow or the cast shadow belongs to the paper in front and fades with the first step back */
+.sheet::before { content: ""; position: absolute; inset: 0; border-radius: 2px; box-shadow: var(--lit); opacity: clamp(0, 1 - var(--d), 1); pointer-events: none; }
 
-/* A sheet behind: all of it is the button, and its number and title sit on the strip that shows */
-.spine { position: absolute; inset: 0; border-radius: 2px; transition: opacity .4s ease, visibility .4s; }
-.spine span { position: absolute; top: 0; right: 0; width: var(--strip); padding: calc(var(--u) * 10) calc(var(--strip) * .1) 0 calc(var(--strip) * .14); display: grid; gap: 10px; overflow-wrap: break-word; }
+/* A sheet behind: all of it is the button, and its number and title sit on the strip that shows, the left one for a
+   paper before the one in front and the right one for a paper after it. While the sheets change depth (.moving) no
+   text shows: it fades out, the sheets move, and it fades in at its new place. */
+.spine { position: absolute; inset: 0; border-radius: 2px; }
+.spine span { position: absolute; top: 0; right: 0; width: var(--strip); padding: calc(var(--u) * 10) calc(var(--strip) * .1) 0 calc(var(--strip) * .14); display: grid; gap: 10px; overflow-wrap: break-word; transition: opacity .3s ease; }
+.before .spine span { right: auto; left: 0; }
 .spine i { font-style: normal; font-size: 12.5px; font-weight: 600; color: var(--mute); }
 .spine b { font-size: clamp(12.5px, var(--strip) * .11, 14px); line-height: 1.22; font-weight: 400; letter-spacing: -.008em; color: var(--mute); transition: color .15s ease; }
 .spine:hover b, .spine:focus-visible b { color: var(--ink); }
-.front .spine { opacity: 0; visibility: hidden; }
+.front .spine { visibility: hidden; }
+.moving .spine span, .moving .face { opacity: 0; transition-duration: .14s; }
 
 /* The sheet in front: the paper, set to be read */
-.face { position: absolute; inset: 0; display: flex; flex-direction: column; padding: calc(var(--u) * 10); opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility .3s; }
-.front .face { opacity: 1; visibility: visible; transition: opacity .3s ease .35s, visibility 0s; }
+.face { position: absolute; inset: 0; display: flex; flex-direction: column; padding: calc(var(--u) * 10); visibility: hidden; transition: opacity .3s ease; }
+.front .face { visibility: visible; }
 .no { margin: 0; font-size: max(12.5px, var(--u) * 2.7); font-weight: 500; color: var(--mute); }
 .sheet h2 { margin: calc(var(--u) * 9) 0 0; font-size: calc(var(--u) * 11.4); line-height: 1; font-weight: 250; font-stretch: 100%; letter-spacing: -.03em; text-wrap: balance; }
 .claim { margin: calc(var(--u) * 6) 0 0; font-size: max(14.5px, var(--u) * 3.7); line-height: 1.45; max-width: 30em; text-wrap: pretty; }
@@ -209,16 +216,15 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .name { font-stretch: 112%; margin-right: 0; }
   .cap { font-size: 26px; max-width: 24ch; margin-top: 28px; } .steps { max-width: none; margin-top: 34px; }
   .stage { display: block; place-items: normal; container-type: normal; perspective: none; margin-top: 26px; }
-  .lean { transform: none; }
-  .stack { --fw: 350px; width: auto; height: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; animation: none; }
-  .sheet { position: relative; width: auto; height: auto; transform: none; scroll-margin-top: 12px; animation-name: fade; background: linear-gradient(150deg, var(--glass-hi), var(--glass) 46%, var(--glass-lo)); }
-  .spine { display: none; }
-  .face, .front .face { position: static; min-height: 400px; opacity: 1; visibility: visible; }
+  .stack { --fw: 350px; width: auto; height: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; transform: none !important; pointer-events: auto; }
+  .sheet { position: relative; width: auto; height: auto; transform: none; scroll-margin-top: 12px; background: linear-gradient(150deg, var(--glass-hi), var(--glass) 46%, var(--glass-lo)); }
+  .spine, .sheet::before { display: none; }
+  .sheet.front { box-shadow: var(--lit); }
+  .face, .moving .face { position: static; min-height: 400px; opacity: 1; visibility: visible; }
 }
-@keyframes fade { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
-  .stack, .sheet { animation: none; }
-  .lean, .sheet, .spine, .face, .front .face { transition: none; }
+  .sheet { animation: none; }
+  .sheet, .spine span, .face { transition: none; }
 }
 </style>
 </head>
@@ -236,34 +242,47 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
     <p class="cap">A loop of agents takes the project's strongest finding that has no paper yet, recomputes its numbers and writes it up. It has written __N__ papers.</p>
     <div class="steps"><p class="lab">The six steps of the loop</p>__STEPS__</div>
   </div>
-  <div class="stage" id="stage"><div class="lean"><div class="stack" style="--n:__N__">__SHEETS__</div></div></div>
+  <div class="stage" id="stage"><div class="stack" style="--n:__N__">__SHEETS__</div></div>
 </div>
 <script>
-/* The stack. The paper in front is the one named in the address (/papers#no-early-warning), else the first. The
-   others stand behind it in the order written, so their numbers always rise from front to back. */
-const stage = document.getElementById("stage"), sheets = [...stage.querySelectorAll(".sheet")];
+/* The stack. The paper in front is the one named in the address (/papers#no-early-warning), else the first. A change
+   of paper has three parts: the text fades out, the sheets change depth, the text fades in at its new place. */
+const stage = document.getElementById("stage"), stack = stage.firstElementChild, sheets = [...stack.children];
+const still = matchMedia("(prefers-reduced-motion: reduce)");
 const front = () => Math.max(0, sheets.findIndex(s => "#" + s.id === location.hash));
-function show() {
+let timers = [];
+function place() {
   const f = front();
-  sheets.forEach((s, i) => { s.style.setProperty("--k", i === f ? 0 : i < f ? i + 1 : i); s.classList.toggle("front", i === f); });
+  sheets.forEach((s, i) => { s.style.setProperty("--d", Math.abs(i - f)); s.classList.toggle("front", i === f); s.classList.toggle("before", i < f); });
 }
-function go(i) { history.pushState(null, "", "#" + sheets[(i + sheets.length) % sheets.length].id); show(); }
+function show(focus) {
+  timers.forEach(clearTimeout);
+  if (still.matches || sheets[front()].classList.contains("front")) { place(); return stack.classList.remove("moving"); }
+  stack.classList.add("moving");
+  timers = [setTimeout(() => { place(); if (focus) sheets[front()].querySelector(".open").focus({ preventScroll: true }); }, 140),
+            setTimeout(() => stack.classList.remove("moving"), 620)];
+}
+function go(i, focus) { history.pushState(null, "", "#" + sheets[(i + sheets.length) % sheets.length].id); show(focus); }
 stage.addEventListener("click", e => {
-  const b = e.target.closest(".spine"); if (!b) return;
-  go(sheets.indexOf(b.parentElement)); b.parentElement.querySelector(".open").focus({ preventScroll: true });  // the strip is gone: the focus goes to the paper's button
+  const b = e.target.closest(".spine"); if (b) go(sheets.indexOf(b.parentElement), true);  // the strip goes: the focus moves to the paper's button
 });
 addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey || (e.key !== "ArrowRight" && e.key !== "ArrowLeft")) return;
   e.preventDefault(); go(front() + (e.key === "ArrowRight" ? 1 : -1));
 });
-addEventListener("popstate", show); addEventListener("hashchange", show); show();
-/* The stack leans a few degrees toward the mouse and settles back when it leaves. */
-const lean = stage.firstElementChild;
-stage.addEventListener("pointermove", e => {
-  const r = stage.getBoundingClientRect();
-  lean.style.setProperty("--lx", ((e.clientX - r.left) / r.width * 2 - 1).toFixed(2)); lean.style.setProperty("--ly", ((e.clientY - r.top) / r.height * 2 - 1).toFixed(2));
-});
-stage.addEventListener("pointerleave", () => { lean.style.setProperty("--lx", 0); lean.style.setProperty("--ly", 0); });
+addEventListener("popstate", () => show()); place();
+
+/* The stack turns by about a degree, slowly, and leans a little toward the mouse. One smoothed value per axis and one
+   transform per frame, so the two never fight. */
+let tx = 0, ty = 0, lx = 0, ly = 0;
+stage.addEventListener("pointermove", e => { const r = stage.getBoundingClientRect(); tx = (e.clientX - r.left) / r.width * 2 - 1; ty = (e.clientY - r.top) / r.height * 2 - 1; });
+stage.addEventListener("pointerleave", () => { tx = ty = 0; });
+function frame(t) {
+  lx += (tx - lx) * .04; ly += (ty - ly) * .04;
+  stack.style.transform = `rotateX(${(1 - ly * 1.2 + Math.sin(t / 5300) * .3).toFixed(3)}deg) rotateY(${(lx * 2 + Math.sin(t / 7900) * 1.1).toFixed(3)}deg)`;
+  if (!still.matches) requestAnimationFrame(frame);
+}
+frame(0);
 
 /* The status: whether the loop's work item is open on the board, and when it last moved. */
 const ITEM = __ITEM__, st = document.getElementById("status");
