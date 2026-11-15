@@ -1,6 +1,7 @@
 """The home page of the team site: one dial that leads to every page.
 
-view.py serves PAGE at /. The picture is a lit glass body with a ring around it, seen from slightly above, and one
+view.py serves PAGE as the page / of invariant.team (and at /home on monitor.invariant.team and locally); every link
+leads to monitor.invariant.team, where the pages are. The picture is a lit glass body with a ring around it, seen from slightly above, and one
 bead on the ring per page of the site. The bead at the front is the selected page: the body shows its name and,
 where one is counted, its live number. A click on a bead or the arrow keys turn the dial to it (address /#<page>);
 a click on the body or the button opens it. The words column beside the picture holds the pitch line of
@@ -8,8 +9,7 @@ DIRECTION.md (its first sentence, with its two scores) and the same pages as a p
 is real data: about every 2.5 s one of the newest 40 board posts runs to the Board bead as a pulse in its author's
 color, and the line under the picture says who posted it, when and what. A post that arrived since the last read of
 /data plays next, larger and with a halo. The numbers of findings, proofs and lab pictures are written into the page
-by view.py (`__COUNTS__`); the board's numbers come from /data every 10 s. An old address of a board item or of a
-board filter (/#result-8b1c48, /?who=<name>) forwards to /board. Nothing here writes to the board.
+by view.py (`__COUNTS__`); the board's numbers come from /data every 10 s. Nothing here writes to the board.
 """
 
 PAGE = r"""<!doctype html>
@@ -21,7 +21,6 @@ PAGE = r"""<!doctype html>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
-<script>if (/^#(result|work|idea|knowledge|skill|note)-/.test(location.hash) || /[?&](who|q)=/.test(location.search)) location.replace("/board" + location.search + location.hash);</script>
 <style>
 /* The tokens, the light and the type of the Design page (architecture.py). */
 :root {
@@ -166,16 +165,16 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
 <div class="page" id="page">
   <header class="top">
     <h1 class="name">Invariant</h1>
-    <a href="/board">Board</a>
-    <a href="/architecture">Design</a>
-    <a href="/proof">Proof</a>
-    <a href="/findings">Findings</a>
+    <a href="https://monitor.invariant.team/">Board</a>
+    <a href="https://monitor.invariant.team/architecture">Design</a>
+    <a href="https://monitor.invariant.team/proof">Proof</a>
+    <a href="https://monitor.invariant.team/findings">Findings</a>
     <span class="status" id="status">Reading the board</span>
   </header>
   <div class="words">
     <p class="cap">With no training, a three-token opening cue takes the Olmo 3 base model to 82 on MATH-500 at AI2's own sampling setting, against 93 for the RL-trained model.</p>
     <ul class="index" id="index"></ul>
-    <a class="go" id="go" href="/findings">Open Findings</a>
+    <a class="go" id="go" href="https://monitor.invariant.team/findings">Open Findings</a>
   </div>
   <div class="stage"><svg id="svg" role="group" aria-label="A dial with one bead for each page of the site"></svg></div>
   <div class="foot"><span class="said hue" id="said"></span><span class="key">Each pulse is one post arriving on the board.</span></div>
@@ -188,7 +187,7 @@ const HUES = [325, 150, 65, 195, 105, 45, 175, 350];  // a person's color, the s
    shows under the name, from the counts above or from the newest read of /data, and absent where nothing is counted. */
 const PAGES = [
   { id: "findings", name: "Findings", href: "/findings", line: "One page for each finding", count: () => COUNTS.findings + " pages" },
-  { id: "board", name: "Board", href: "/board", line: "Ideas, open work and results", count: m => m ? `${m.open} open work items` : "" },
+  { id: "board", name: "Board", href: "/", line: "Ideas, open work and results", count: m => m ? `${m.open} open work items` : "" },
   { id: "proof", name: "Proof", href: "/proof", line: "Tests of the team's own method", count: () => COUNTS.proof + (COUNTS.proof === 1 ? " page" : " pages") },
   { id: "design", name: "Design", href: "/architecture", line: "How the people and agents work together", count: m => m ? `${m.people} people, ${m.agents} agent sessions` : "" },
   { id: "talk", name: "Talk", href: "/demo", line: "The project, told in steps" },
@@ -199,6 +198,8 @@ const PAGES = [
   { id: "gpu", name: "GPU prices", href: "https://gpu.invariant.team", line: "Forecasts of GPU rental prices" },
   { id: "psychosis", name: "Psychosis", href: "/psychosis", line: "A joke about ourselves, as a game" },
 ];
+const SITE = /(^|\.)invariant\.team$/.test(location.hostname) ? "https://monitor.invariant.team" : "";  // where the pages are; a local copy links to itself
+PAGES.forEach(p => { if (p.href[0] === "/") p.href = SITE + p.href; });
 const N = PAGES.length, STEP = 360 / N, RAD = Math.PI / 180;
 const S = { m: null, sel: 0, rot: 0, to: 0, t: 21, last: 0, seen: null, queue: [], loop: 0, fly: null, nextAt: 0, readAt: 0, error: null, mx: 0, my: 0, lx: 0, ly: 0 };
 const still = matchMedia("(prefers-reduced-motion: reduce)");

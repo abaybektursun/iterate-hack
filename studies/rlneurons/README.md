@@ -4265,10 +4265,32 @@ Same settings as the dial (hard328, cue, one sample). `wsp_edit --layers lo-hi` 
   (base 77), so 0.80 of the finished answers are right, the same profile as RL minus its 8 directions (190 right, 90 cap hits,
   0.80); layers 11 to 21 add right answers and cut cap hits (183, 49); layers 22 to 31 cut cap hits (57) with no gain in right
   answers (166, +2.4 above random [-2.4, 7.3]).
-- So finishing and right answers come apart twice: by rank (the first direction finishes, the rest add right answers) and by depth
-  (early layers add right answers without finishing, late layers finish without right answers). No edit smaller than 8
+- So on math finishing and right answers come apart by rank (the first direction finishes, the rest add right answers) and, in
+  these one-sample cells, by depth. The split by depth did not hold on the Code pair (next section). No edit smaller than 8
   directions in all layers reached 190.
 - One sample per cell; differences under about 5 points are not resolved.
+
+#### The depth split tested on the Code pair (amendment 9, work-b5f51c): two of three predictions refuted
+
+Code 3.1's 8 directions at 1.5 in one band of layers, HumanEval+ and MBPP+ (538), Code cue, one sample; readout
+`code1_readout --out=xreward/code_depth` -> `results/xreward/code_depth/readout.json`.
+
+| Cell | Passed of 538 | Cap hits | No code block | Minus random edit, points [95 %] | Run folder (`results/xreward/code_depth/`), job |
+|---|---|---|---|---|---|
+| base, Code cue | 317 | 27 | 34 | | |
+| random rank-8 at 1.5, all layers | 331 | 27 | 45 | | `../code_dial/code_rand8x1.5_code31-01/` |
+| layers 0 to 10 | 372 | 12 | 17 | +7.6 [3.5, 11.9] | `code_top8x1.5_L0-10_code31-01/`, `abaybektursun-1115-120127-70c3` |
+| layers 11 to 21 | 366 | 6 | 9 | +6.5 [2.2, 10.8] | `code_top8x1.5_L11-21_code31-01/`, `abaybektursun-1115-120138-c4be` |
+| layers 22 to 31 | 342 | 34 | 40 | +2.0 [-2.2, 6.1] | `code_top8x1.5_L22-31_code31-01/`, `abaybektursun-1115-120151-bee2` |
+| all layers | 399 | 4 | 5 | +12.6 [8.7, 16.7] | `../code_dial/code_top8x1.5_code31-01/` |
+
+- L1 (early layers: right answers without finishing) refuted: 372 passed as predicted, but cap hits fall to 12 (predicted at least 20).
+- L2 (late layers: finishing without right answers) refuted: 342 passed as predicted, but cap hits are 34 (predicted at most 14).
+- L3 (middle layers: both) held: 366 passed, 6 cap hits.
+- What holds on both pairs: the directions in layers 22 to 31 add no right answers (math +2.4 points above the random edit
+  [-2.4, 7.3], code +2.0 [-2.2, 6.1]), those in layers 0 to 10 and 11 to 21 each add 6 to 8 points, and no band reaches the
+  all-layer edit. What does not hold on code: that early layers leave the model unfinished and late layers make it finish. The
+  "split by depth" of amendment 8 is a property of the math cells (one sample each), not of the dial in general.
 
 #### The dial on a second model pair and benchmark (amendment 7, work-df5e0a)
 
