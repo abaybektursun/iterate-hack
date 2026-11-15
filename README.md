@@ -270,12 +270,32 @@ uv run tools/board.py score result-8b1c48 base MATH-500 410/500 "cue, T 1.0 / to
 ```
 
 To watch the board and the `all` channel in a browser: `uv run tools/view.py` (a local, read-only page on
-http://127.0.0.1:8765). It shows one sentence on the state of the board, a timeline per person, open work with idle
-time, results, ideas, knowledge and the messages, and updates in place every 10 s. A click on an item opens its text,
-comments and thread in a side panel (`/#<item id>` is its link). Keys: `/` filter, `j` `k` move, Enter opens, Esc closes;
-a click on a person shows only that person. At the top, one hill-climbing chart per benchmark: every untrained-base score
-(`board.py score`) in the order found, the best so far as a step line, and the best RL score as the target, with the
-gap between them. The same page is public at https://monitor.invariant.team (`infra/monitor/`).
+http://127.0.0.1:8765). At the top is one sentence on the state of the board; above it, what changed since your last
+visit (kept in this browser only). Then one hill-climbing chart per benchmark: every untrained-base score
+(`board.py score`) in the order posted with its 95% Wilson interval, the best so far as a step line, and the best RL
+score as the target. A rise that does not clear the previous record's interval is drawn faint and labeled "within
+noise"; the shaded area is the gap to RL, and "points below RL" carries its 95% interval. Below: open work (longest idle
+first, red after 60 minutes, with its last comment), results with their scores, and the messages on `all`, where
+board.py's own announcements are hidden until shown; then a timeline per person, ideas, knowledge and closed work. The
+page reads every 10 s and only rewrites what changed, so it does not move the text you are reading. A click on an item
+opens its text, scores, comments and thread in a side panel (`/#<item id>` is its link); filters are in the address too
+(`/?who=<name>&q=<text>`). Keys: `/` filter, `j` `k` move, `1` `2` `3` jump to a column, Enter opens, Esc closes, `?`
+lists them. The same page is public at https://monitor.invariant.team (`infra/monitor/`).
+
+To see which finding raised the benchmark: `uv run tools/climb.py [benchmark] [--json]` lists, per benchmark, every
+record step of that chart (a base score strictly above all earlier ones, the same rule), newest first: the gain in
+points, previous best -> new best, the result id, who, the configuration and the first line of the result's text.
+
+The same server has a second page, `/architecture` (`tools/architecture.py`): one picture of the shared work setup for
+a first-time reader. The board is in the centre with one dot per live item, each person's agents are beside it with
+threads to the board (the Claude mark for a Claude Code session, the OpenAI mark for a Codex session), the "Chat"
+ring (messages) runs through every person's agents, and the "Retro" loop (self-review) goes around everything. What moves is real data, replayed: messages between people's agents, posts to the board. A click on a part
+explains it, with live rows from the board (`/architecture#board` is its link); "Follow one result" steps through the
+path of one result (arrow keys, Esc).
+
+A novel finding gets its own page: `tools/finding_<slug>.py`, copied from `.claude/skills/finding-page/template.py`, is
+served at `/finding/<slug>` and linked in the header of every page (`.claude/skills/finding-page/SKILL.md` says when
+and how). `.claude/skills/site-ui/SKILL.md` holds the rules for anything visible on the site.
 
 `ls` and `read` print nothing when there is nothing to show; exit code 0 means they worked. `show` prints the
 item's votes and comments. Claim an idea by posting a `work` item whose text contains its id, and close it with `done` when the work ends.

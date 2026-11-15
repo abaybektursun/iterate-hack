@@ -1,0 +1,13 @@
+{"id": "t06", "value": 1, "low": 0, "high": 5, "why": "The cue is a prompt-level route separate from anything the base selects on its own, so the plain base almost never opens with '.', blank line, 'Okay' unprompted."}
+{"id": "t32", "value": 423, "low": 408, "high": 438, "why": "The cue and the delta add separately and the delta's gain is linear in a, so a = 0.25 adds a quarter of RL's 53-item lead over the cued base (410 + 13)."}
+{"id": "t33", "value": 437, "low": 422, "high": 451, "why": "Linear dose on top of the cue's separate effect: 410 plus half of the 53-item gap to RL."}
+{"id": "t35", "value": 463, "low": 451, "high": 474, "why": "RL's accuracy is skill in its weights that two prompt tokens neither add nor remove (hard328: 206 plain vs 205 cued), so the cued RL matches its plain 463."}
+{"id": "t36", "value": 408, "low": 392, "high": 424, "why": "Code-RL's delta is orthogonal to Math-RL's and carries none of the math skill, so with the cue it scores like the cued base's 410."}
+{"id": "t37", "value": 410, "low": 395, "high": 424, "why": "The gain lives in specific contributions along the RL delta, and a random direction of matched norm (0.13 % relative) carries none of them, so the cued base stays at 410."}
+{"id": "t40", "value": 284, "low": 265, "high": 303, "why": "Accuracy is linear in delta scale, so a = 0.25 recovers a quarter of the 239-item plain-base-to-RL gain: 224 + 60."}
+{"id": "t41", "value": 344, "low": 322, "high": 366, "why": "Linear dose: a = 0.5 recovers half of the 239-item gain, 224 + 120."}
+{"id": "t42", "value": 226, "low": 205, "high": 248, "why": "Code-RL shares none of the math gain (cos 0.014 with Math-RL), so on the plain prompt it stays at the plain base's 224."}
+{"id": "t57", "value": 6, "low": 3, "high": 10, "why": "The RL change is many input-dependent small contributions across neurons rather than one shared direction, so a single constant vector per layer closes only a small share of KL on cued-base text."}
+{"id": "t58", "value": 8, "low": 4, "high": 13, "why": "Same input-independent arm on RL text, where every transplant arm closes about 1.3-1.4x more than on base text, so slightly above the T1 share but still small."}
+{"id": "t59", "value": 4, "low": 2, "high": 7, "why": "A constant on the MLP output alone holds only part of an already small input-independent component, so it closes less than the whole-layer constant on T1 text."}
+{"id": "t60", "value": 5, "low": 2, "high": 9, "why": "MLP-only constant on RL text: the T1 share scaled by the usual 1.3-1.4x for RL text, still a small fraction because the gain is input-dependent."}

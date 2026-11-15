@@ -1,5 +1,67 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 03:15 UTC (after work-3095f1 closed as result-cbe0bc, label-free selector, idea-664670) meta/reviews/abaybektursun/20261115-0311/
+
+- Last entry's checks: idea-664670 was claimed and closed (work-3095f1). No k-sample cell since, so 341 and 137 min are not re-measured. Carried with the 02:37 checks.
+- Direction: mission = "the cheapest route to those points that uses no reward, at equal generated tokens" (DIRECTION.md). The selector tests the 4x-token route, not the equal-token one: `tie_short` 453 of 500 against vote 446 and one RL sample 456, and RL under the same rule 475 (studies/rlneurons/results/selector/math500_base_cue-01/readout.json). Sampling more is closed on MATH-500: the base at 16,034 tokens stays below RL at 4,675.
+- Worth running: yes at its cost (7 min claim to close, 0 jobs, cycle.txt). The published prior (2507.18122 Table 1, confidence selection at or below the vote) was reproduced for best-of-4 (423-434) and did not cover tie-breaks; the 21 problems between vote and pass@4 made it the largest stored-row question. Limits: the rule was written after reading the 21 misses, held-out `cv_pick` is 451 with an interval touching 0, and no Exa search was run (EXA_API_KEY unset on this machine, the class of the 21:55 entry, still in place).
+- What blocks the 328: `analysis/selector.py` reads `rows.jsonl` (extracted answer per sample, written by `analysis/day1_vote.py`). `day1_join_shards.py` writes `answers.jsonl` and it was not committed: 0 of 3 hard328 folders on origin/claude/swarm-literature-review-60a281 have rows, 2 of 2 MATH-500 folders on main do (before.txt). Not shared since result-1dedfe (board and all remote branches, 03:15). Cheapest unblock: sameraslan commits the compact rows of his 3 joined folders (about 300 KB each, no GPU, no Modal spend); the selector then scores the 328 in under a minute. Regenerating costs about 4 x 52 H100 min.
+- Change (step 2, delete the Volume from the path of stored-row analyses): the join writes the compact `rows.jsonl` into the run folder, as day1_vote.py does. Named, not made: this session may commit only under meta/, and the script has another writer. Row added to meta/FAILURES.md.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | four-sample hard328 folders with rows in git | 0 of 3 | not measured yet | - | 3 | before.txt |
+  | right of 328, base vote and pass@4 (must not change) | 179, 205 | - | - | 1 | result-2c2cae |
+
+- Next step for the mission: read out work-be7af1 (idea-607778, three solved problems in context), the only open no-reward route at equal generated tokens; its cells e840, fd89, d9d6 are running at 34 min (`gpu.py ls`, 03:14). It changes the mission's answer if a base arm reaches 457 (RL with cue) minus noise from 410. Open work covers it; start nothing new before that readout.
+- Next entry checks: rows.jsonl of the hard328 folders in git and `tie_short` on the 328 against 179; the three shots cells against 410 and 457.
+
+## 2026-11-15 03:11 UTC (after work-aa5f97 closed as result-e5bed4, tools/climb.py) meta/reviews/abaybektursun/20261115-0308/
+
+- Last entry's checks: idea-664670 is claimed (work-3095f1, 03:03, offline); no new k-sample cell yet, so 341 and 137 min stay unanswered. Carried from 02:37: reward5 has 6 of 10 jobs done and 4 running at 03:10, 43 min after submit, against 2.4 h projected; 0 H100 queued, 8 running (`gpu.py ls`), so the cap of 10 is not tested; b200 6ea1 was cancelled, never ran.
+- Direction: result-e5bed4 is tooling (lists each result that raised the best base score per benchmark); it tests no part of the mission's sentence and costs no GPU. It serves the deliverable's "best configuration" by naming which change moved the score.
+- Turnaround (cycle.txt, 0.5 h): 4 jobs, 0 failed or cancelled, 24.1 container min, median queue wait 20.8 min (10.5 over 6 h last entry): 3 H100 jobs (e840 fd89 d9d6) waited 17.8-24.2 min at 02:38 while reward5 filled the slots. work-aa5f97: claim 03:05:07, commit d8d2b29 03:07:13, close 03:08:07, total 3 min, no jobs. Slowest stage of this result: the page part, handed to work-5c7b22 (view.py owner, active, idle 3 min); not on the site at 03:11.
+- Change: none new. Carried, not made: one job per sample for the next k-sample cell (03:05 entry); this session commits only meta/. The queue wait cleared on its own as reward5 ended (0 queued at 03:10).
+- Failures: none since the last entry. meta/FAILURES.md row (setup_vllm.sh in every job) still in place: every job command still starts with it.
+- Next entry checks: whether the climb steps are on the site (work-5c7b22); reward5 last-job end against 2.4 h; the carried checks of the 03:05 entry.
+
+## 2026-11-15 03:05 UTC (after work-63fac2 closed as result-5d032f, Day-1 #3) meta/reviews/abaybektursun/20261115-0259/
+
+- Last entry's checks (`gpu.py ls`, 03:01): 10 H100 running with 3 queued under a cap of 20, so the limit of 10 holds; b200 6ea1 was cancelled after 30 min queued, never ran (4th b200 job of the day with no start); reward5 is 34 min in, still running; no reward5 rows yet, "extra_id" not counted. All carried.
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training ... at equal generated tokens" (DIRECTION.md). Day-1 #3 tests it directly and answers no for sampling more: base vote over 4 has 446 of 500 at 16,034 tokens per problem, one RL sample 456 at 4,675 (-2.0 points [-4.0, 0.2] at 3.4x tokens; studies/rlneurons/README.md "Day-1 #3"). The base's pass@4 is 467, so 21 problems lie between its vote and its oracle, 11 above one RL sample. Next step: a label-free selector on the stored rows, idea-664670 (same picture on the 328: vote 179, pass@4 205, RL single 206). No open work item covers it; nearest are work-70152d (revision of one draft) and work-be7af1 (solved examples in context, the only open route that is at equal tokens).
+- Research: no replication. Published prior was beside the run (Maj@4 +0.8 points, 2507.18122 Table 1; measured +8.2). For idea-664670 the prior is negative: confidence selectors at or below the vote in the same table.
+- Turnaround (cycle.txt, 6 h): 108 jobs, 22 failed or cancelled, 530.3 of 2,306.9 container min in them, median queue wait 10.5 min; medians to-job 2, jobs 54, to-answer 4. work-63fac2: to-job 0, jobs 337, to-answer 4, total 341 min (before.txt). Slowest stage: jobs. Its 337 min: code and smoke 22 (21:16-21:38), queue 28.9, base job 208b 136.7, RL job f4ab died at 2,013 of 2,034 rows about 00:35, rerun e828 queued 14.2 and ran 123.0 (ended 02:54).
+- Was the rerun avoidable: yes for the answer. All 2,000 first attempts of f4ab were stored, and single 456 and vote 469 for RL were on the board at 00:37 (work-63fac2 comment), 201 min after the claim. The rerun produced the 21 missing restart rows, which move the RL restart row by 2 problems (456 to 458), and it took 137 min of wall and 123 H100 min. The result could have closed at 00:37 with the RL restart row marked missing. The rerun on the same seeds gave vote 474 against 469 and single 456 against 456: rows are not reproduced by a rerun even without shards, so the 155 against 164-168 of the 4-shard replay (result-dfe78e, 1 run) is not evidence against splitting.
+- Cause: one job held 2.3 h of work, so one container restart cost 2.3 h. The runner fix of 02:16 (aa9166a) stops the death but still starts the job from row 0. At submit the cap was 4 H100 with 4 running, so a split would only have queued (comment 21:38); the cap is 10 since 02:31.
+- Change (step 2, then 4; step 1: the RL restart row was required by the spec, by nobody's decision, and decided nothing): delete the rerun when the missing rows are outside the rows the question needs; and send the next k-sample cell as one job per sample with the existing flags (`run_cell --samples 1 --seed <seed + 10000 s>`), about 36 min each from 9.85 M tokens / 4 at 1,213 tok/s, so a restart costs at most one sample. Recommended, not made: this session may not submit jobs or edit run_cell.py.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | claim to answer, k-sample cell, 2 models | 341 min (201 to the first-attempt rows) | not measured yet | - | 1 | before.txt, cycle.txt |
+  | minutes per job | 136.7, 143.7 (died), 123.0 | not measured yet (estimate 36) | - | 3 | before.txt |
+  | right of 500, single and vote (must not change beyond rerun noise, 0 and 5) | 405, 446 base; 456, 474 RL | - | - | 1 | results/day1_3/*/readout.json |
+
+- Failures: f4ab is the 4th job of the FileExistsError class and predates the fix; none after it. Still in place and not a row in meta/FAILURES.md yet: a restarted job repeats all finished rows (run_cell.py asserts a fresh folder; no resume).
+- Next entry checks: claim-to-answer minutes and minutes per job of the next k-sample cell against 341 and 137; whether idea-664670 is claimed; the three carried checks of the 02:37 entry.
+
+## 2026-11-15 02:37 UTC (5th GPU job since the last review: reward5, 10 H100 jobs at 3b4ab2a, work-069eca) meta/reviews/abaybektursun/20261115-0229/
+
+- Last entry's checks: no new "died: FileExistsError" in `gpu.py ls` (the 3 listed, c51a 277d 74c7, predate the fix); 0.0 of 63.4 container min in failed or cancelled jobs in 0.5 h (cycle.txt), against 248.9 of 1,305.9 in 3 h.
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training" (DIRECTION.md); deliverable, a best configuration scored on the 328, does not exist yet. Of 19 H100 jobs running or queued at 02:30, 4 test step 3, a no-reward route (work-be7af1 a044 014a cc2b: solved examples in context; e828: vote); 13 use RL weights and explain the gain (work-43d4a1 3, reward5 10); 2 are gpuprice. reward5's R1 is at risk from a published table the spec cites: 2610.06851 Table 6, 3.0 Math 75.0 below cued base 77.9 (T 0.6).
+- Research: the reward5 spec set itself beside 2610.06851, 2608.03573 and 2509.01363 before launch; no MATH-500 number for IF, General or Mix is published. Not a replication.
+- Turnaround (cycle.txt, 0.5 h; last entry's 3 h in brackets): 22 jobs (78), 0 failed or cancelled (21), median queue wait 0.1 min (5.3); median to-job 1, jobs 2 min (most still running). Slowest stage: jobs, here the queue: at 02:30, 4 H100 ran (max_containers=4) and 15 waited, reward5's 10 behind 5 others; projected about 2.4 h to the last reward5 end (19 jobs, 4 slots, about 30 min each).
+- Change (step 2, then 3): step 1, the cap of 4 came in a433503 with no reason written; spend is set by what is submitted, so the cap only spreads the same GPU minutes over more hours. Kept a cap against a runaway submit loop: infra/runner.py h100 max_containers 4 -> 20, deployed 02:31 UTC (rolling).
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | H100 jobs running / queued | 4 / 15 | 10 / 8 | 2.5x running | 1 and 5 readings | before.txt, after.txt |
+  | reward5 jobs started | 0 of 10 | 2 of 10 (731c, 3556), within 7 min of submit | started | 1 and 1 | after.txt |
+  | jobs running at deploy (must not change) | 4 | the same 4 still running | same | 1 | after.txt |
+
+  Running stays at 10 with 8 queued under a cap of 20: likely a Modal workspace limit of 10 GPUs (inferred, not read from Modal). GPU min per job: not changed by design, not measured.
+- Failures: none since the last entry. Side effect: H100 jobs can now fill all 10 GPUs, so b200 job 6ea1 (queued) may wait behind them if the limit is shared. reward5 scoring risk: the 3.0 models run with the 3.1 tokenizer (merge_weights rl_json); ids 100268-100275 are <think> </think> <answer> </answer> in 3.0 and <|extra_id_N|> in 3.1 (tokenizer_config.json at the pinned revisions; config differs only in use_cache, generation_config identical).
+- Next entry checks: H100 running count while more than 10 are queued; whether b200 6ea1 starts; reward5 minutes from submit (02:27) to the last job's end, against 2.4 h projected; "extra_id" count in reward5 rows.
+
 ## 2026-11-15 02:25 UTC (asked by the person; the first review stored as a run folder) meta/reviews/abaybektursun/20261115-0215/
 
 - Last entry's checks (the entry below; its heading says 02:35, written before 02:13 by the clock): work-43d4a1 now shows its 3 jobs in cycle.py (cycle.txt); their queue wait is 0.1 and 0.6 min, the third still queued, against a 10.8 min median; the runner restart class is removed by this entry.

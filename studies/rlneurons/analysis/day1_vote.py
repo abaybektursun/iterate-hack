@@ -5,7 +5,8 @@
         --run runs/<job-id> --out studies/rlneurons/results/day1_3/<arm>-<nn> [--minus <readout.json of another run>]
 
   --run    a directory with answers.jsonl and metrics.json (uv run tools/gpu.py get <job-id> gives runs/<job-id>/).
-  --out    a new run folder: readout.json, examples.json, run.json (commit, job id, config), metrics.json (copy).
+  --out    a new run folder: readout.json, examples.json, run.json (commit, job id, config), metrics.json (copy), rows.jsonl
+           (every attempt without its text: the COMPACT fields, for offline scoring by teammates who cannot read runs/).
   --minus  adds, per row, this run minus that run in points with a paired bootstrap interval (same problems required).
 
 Tokens per problem = every generated token (n_new) of every attempt the row uses, over the number of problems.
@@ -22,6 +23,13 @@ from studies.rlneurons.lib import n13_score as S
 from studies.rlneurons.lib import rln4_lib as R
 
 BOOT = 5000
+COMPACT = ("problem_index", "sample", "attempt", "seed", "n_new", "cap_hit", "finish_reason", "loop_A", "extracted_v3", "score_v3", "gold")
+
+
+def compact(rows: list) -> str:
+    """rows.jsonl: one line per attempt in (problem, sample, attempt) order, the COMPACT fields only."""
+    rows = sorted(rows, key=lambda r: (r["problem_index"], r["sample"], r["attempt"]))
+    return "".join(json.dumps({k: r[k] for k in COMPACT}) + "\n" for r in rows)
 
 
 def vote(rows: list) -> dict:
@@ -155,6 +163,7 @@ def main():
     (out / "run.json").write_text(json.dumps({"commit": m["commit"], "job_id": m["job_id"], "config": cfg, "source": str(run)}, indent=1) + "\n")
     (out / "readout.json").write_text(json.dumps(res, indent=1) + "\n")
     (out / "examples.json").write_text(json.dumps(ex, indent=1) + "\n")
+    (out / "rows.jsonl").write_text(compact(rows))
     for k, r in res["rows"].items():
         print(f"{k:24s} {r['right']:4d} of {r['n']}  {r['percent']:5.1f} %  [{r['wilson95'][0]:.1f}, {r['wilson95'][1]:.1f}]  "
               f"{r['tokens_per_problem']:9.0f} tokens/problem")

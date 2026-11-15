@@ -1,0 +1,9 @@
+Jobs of abaybektursun, last 0.25 h:  id  state  gpu  wait  run  command
+  abaybektursun-1114-185953-5b15  done  NVIDIA H100   4.8  0.5  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  1 jobs, 0 failed or cancelled; median wait 4.8; 0.5 container minutes, 0.0 of them in failed or cancelled jobs
+
+Work of abaybektursun, last 0.25 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-b95a73  theory  -  -  -  13 (open)  0  0  Theory round 02 (theory skill v2, SPEC studies/theory/specs/
+  work-3095f1  main  -  -  -  7  0  0  Label-free selector over the 4 stored samples idea-664670, o
+  work-5c7b22  main  -  -  -  7 (open)  0  0  Board page redesign from the three design reviews (tools/vie
+  work-aa5f97  main  -  -  -  3  0  0  Record steps of the hill chart: new tools/climb.py (branch c
