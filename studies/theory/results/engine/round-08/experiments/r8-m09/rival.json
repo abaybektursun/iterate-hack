@@ -1,0 +1,1 @@
+{"predictions": [{"id": "r8-m09:theory:g5", "value": 0.6, "low": 0.0, "high": 1.8, "why": "The mechanism says the 2x RL delta's boxed ending removes Think-SFT's off-line 'Answer:' template, so the grading part of the hybrid's MATH-500 gain is about 3-4 of Think-SFT's ~4 layout misses per sample, which leaves roughly 0-1 such rows of 500."}]}

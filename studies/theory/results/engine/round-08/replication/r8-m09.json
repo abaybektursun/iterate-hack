@@ -1,0 +1,15 @@
+{
+ "theory": "r8-m09",
+ "items": [
+  {
+   "k": 4,
+   "experiment": "Where the effect should vanish: blank v3 extractions among finished answers of the hybrid Think-SFT + 2(RL - base) minus the same share for Think-SFT itself, hard328. The mechanism says the RL delta replaces the teacher ending with a boxed line, so the hybrid's blank share falls below Think-SFT's. A reader who treats the hybrid's gain as pure finishing expects no change in the blank share of finished answers.",
+   "original": -0.004282655246252677,
+   "replicated": -0.004282655246252677,
+   "status": "replicated",
+   "refuted_by_met": false,
+   "script": "replication/r8-m09/p4.py",
+   "not_computable": null
+  }
+ ]
+}

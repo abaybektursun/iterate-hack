@@ -526,6 +526,58 @@ G4 refuted (no change to the base predicted above the best known count). G5 refu
 | r7-m09 | Think-SFT's excess wrong answers on easy problems are final formats that grader v3 rejects. | 4 of 4 | 2 / 2 / 0 | -4.00 | no gain | Groups of 6 to 9 items. |
 | r6-m06 | (carried untested) | 0 of 3 | | | untested | The stored rows still have no per-token probability field. |
 
+## Round 08 (2026-11-15, cutoff 11-15 14:15:27 UTC, plan by abaybektursun)
+
+Plan `specs/SPEC_round08.md`, engine version 8 (open targets and forecasts inside the round), no account. Two runs: the first
+stopped in `replicate` (`replication/r8-m02/p2.py` ran at 100 % CPU for 20 minutes and was killed; its bootstrap recounts the
+switch-marker regex over about 3,900 full answer texts in each of 2,000 resamples). `run_scripts` in `lib/round.py` now gives a
+test, duel or replication script 600 s; a script that times out or exits non-zero is written into its result as "not computed:
+script failed (<exit code or timeout>)" with its output path, counted in the round line, and the round goes on (in `replicate`
+it counts as "not replicated"). The second run skipped every finished stage and ended with exit 0. 58 headless jobs, 106 minutes,
+no GPU (`results/engine/round-08/run.json`, log `round08.log`, ranked experiments `experiments.md`, forecasts `forecasts.md`).
+
+**Result: the forecasts written with the open targets say what the readers say, and no theory separates on an open number.
+16 open targets from 6 work items. The 4 new theories forecast 6 to 8 targets each; 0 of 37 theory forecasts has its centre
+outside both readers' intervals, the largest gap is 0.61 of the readers' half-width, and no target has two theories with
+disjoint intervals. Of 12 mechanisms 8 were abandoned (the board already contradicted them); of the 4 developed, r8-m02 is
+refuted by its own test, r8-m10 and r8-m12 gain nothing a reader did not expect, r8-m09 survives offline and loses its duel
+(-3.05 nats on 2 separating tests). The carried r3-across-2 is refuted (its first computed test). 21 of 23 offline predictions
+computed: 15 inside, 3 outside within noise, 3 outside; 1 replication script timed out.**
+
+Hypotheses of the spec: K1 holds (16 targets). K2 refuted (4 theories forecast a third of the targets or more: r8-m02, r8-m09,
+r8-m10 8 of 16, r8-m12 6 of 16). K3 refuted (0 targets with two disjoint theory intervals; 5 needed). K4 is scored in round 09.
+K5 refuted (106 minutes; about 30 of them the stop in `replicate`, about 76 without it).
+
+| Theory | Statement | Tests computed | In / noise / out | Gain (nats) | State | What decided it |
+|---|---|---|---|---|---|---|
+| r8-m09 | Think-SFT puts its value on the line after 'Answer:', which grader v3 reads as blank, at a fixed rate per answer; the RL delta at a >= 2 replaces that ending. | 4 of 4 | 3 / 1 / 0 | +1.65 | survives offline; loses to rival; review weak | Rival (the 'Answer:' template is used on short, easy answers): duel p2 measured 0.35 (n 20), theory 0.95 [0.6, 1.45], rival 0.55 [0.32, 0.85]; total -3.05 on 2 separating tests. |
+| r8-m12 | On long hard328 problems the cued base reaches a right answer at a flat per-token rate fixed by the problem; cap hits are reasoning still under way. | 4 of 4 | 2 / 1 / 1 | +2.60 | no gain | p1, within-problem rate ratio of right finishes late against early: 3.24 (n 279, 90 % [2.24, 4.77]) against 0.85 [0.5, 1.3]. The rate rises; outside its interval, but +3.00 nats because the readers said 0.6. |
+| r8-m10 | Precision falls with answer length only past the length the model's training let it run (RL-Zero-Math about 8,000 tokens; Think-SFT longer). | 4 of 4 | 4 / 0 / 0 | +1.70 | no gain | All inside, but the readers' centres were inside the same intervals. |
+| r8-m02 | The cued base loses finished answers by switching lines of attack early ('Alternatively', 'Let me try a different'); RL switches less per token. | 4 of 4 | 2 / 1 / 1 | -3.69 | refuted (own test) | Base / RL switch-marker rate per token 0.758 (n 497, 90 % [0.71, 0.80]) against 1.6 [1.15, 2.4]: RL switches more. Replication timed out (not replicated). |
+| r3-across-2 | The cued base leaves loops only through low-probability tail tokens; RL adds a constant push toward probable 'Wait' / 'Hmm' (carried). | 2 of 3 | 1 / 0 / 1 | -1.24 | refuted (own test) | p5 0.179 (n 473, 90 % [0.02, 0.30]) against 0.62 [0.42, 0.85], replicated; p4 not computable (S3 403). |
+| r4-m01 | The base's T 0.6 loop hazard grows with how self-similar its text is (carried). | carried, 3 of 4 | 3 / 0 / 0 | +1.41 | survives (round-04 tests) | No new number; 0 forecasts; 0 held-out claims. |
+| r5-m03-rival | The top-8 edit is an incomplete switch per sample (carried). | carried | | | survives; not separated from rival; review weak | 1 separating duel test of 6; 3 forecasts, all inside the readers' intervals; 0 strikes of 3 held-out claims. |
+| r5-m10-rival | The cue's gain at T 1.0 is robustness to sampled tail tokens, not a choice between two modes (carried). | carried | | | survives; not separated from rival; review weak | 1 separating duel test of 6; 2 forecasts; 0 strikes of 4 held-out claims. |
+
+Abandoned: r8-m01, r8-m03, r8-m04, r8-m05, r8-m06, r8-m07, r8-m08, r8-m11 (`dropped.json`, each with the board items that
+contradict it).
+
+Minutes per stage (file times): inventory and external 16 (parallel), targets_open 2.5, mechanisms 12, develop 6, forecast 1,
+null_tests and test 12, replicate 28 to the kill + 11 after the resume (p2 timeout 600 s), heldout 3, rival to score_duel 5.5,
+cross_predict 3, duel replication 2.5, review and experiments 2.
+
+Forecasts (`forecasts.md`, board snapshot 15:46:24 UTC): t01-t02 finish-dial controls (random rank-8 at 1.5x; Think-SFT's 8
+directions at Math's norm; hard328), t03-t04 dial at 1.5x on fresh2026 (vote over 4, single), t05-t06 cued base vote over 9 and
+12 on MATH-500, t07-t08 cued base at cap 32,768 on hard328, t09-t12 Think-SFT + 2 x (RL - base) on fresh2026, hard328 and
+MATH-500, t13-t16 Think-SFT at cap 32,768 and cut at 16,384 (hard328, fresh2026). Readers forecast all 16. r8-m02: t05-t08,
+t13-t16; r8-m09 and r8-m10: t09-t16; r8-m12: t07, t08, t13-t16; r5-m03-rival: t01, t03, t04; r3-across-2 and r5-m10-rival:
+t07, t08; r4-m01: none. No two theories' intervals are disjoint on any target; the widest split is t15 (fresh2026, Think-SFT
+cap 32,768, vote over 4): r8-m12 76 [68, 84] and r8-m10 75 [67, 83] against r8-m02 70 [62, 78], all overlapping.
+
+Experiments (`experiments.md`): 7 open, 5 of them changes to the base, all below the best known base count (454). Top by
+separation: r4-m01:theory:g5, remove repeated lines from the base's own stuck prefix and continue at T 0.6 / top-p 0.95 on the
+78 cap-hit problems: r4-m01 32 [26, 39] against its rival 24 [17, 31] finishes, +1.84 nats in 25 GPU minutes.
+
 ## Forecast runs
 
 Every unrefuted theory of the newest round (at most 6, survivors first, then by total gain) and two readers with no

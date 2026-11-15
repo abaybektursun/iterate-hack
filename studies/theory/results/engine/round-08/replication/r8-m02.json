@@ -1,0 +1,15 @@
+{
+ "theory": "r8-m02",
+ "items": [
+  {
+   "k": 2,
+   "experiment": "Cause: base versus RL switch-marker rate per 1,000 tokens on finished MATH-500 answers at T 1.0 (RL learned to stay on one line). A reader who sees RL writing more deliberation words of every kind (result-855858, result-b4c576) expects RL at or above the base, a ratio at or below 1.0.",
+   "original": 0.7580548430601728,
+   "replicated": null,
+   "status": "not replicated",
+   "refuted_by_met": false,
+   "script": "replication/r8-m02/p2.py",
+   "not_computable": "not computed: script failed (timeout after 600 s); output in replication/r8-m02/p2.out.txt"
+  }
+ ]
+}

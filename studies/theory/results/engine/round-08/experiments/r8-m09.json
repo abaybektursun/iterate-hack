@@ -1,0 +1,36 @@
+{
+ "pair": "r8-m09",
+ "theory_state": "survives",
+ "duel_state": "loses to rival",
+ "statements": {
+  "r8-m09": "Think-SFT copies a teacher ending that puts the final value on the line after an 'Answer:' marker, which grader v3's last-marker rule reads as a blank answer, at a fixed rate per finished answer whatever the problem's difficulty; adding the RL-Math delta (Think-SFT + a(RL - base), a >= 2) replaces that ending with RL's single \\boxed{} line, so the hybrid gains about 4 per 500 on MATH-500 (about 2 per 328 on hard328) from grading alone, on top of the finishing gain it gets from fewer cap hits.",
+  "r8-m09-rival": "Think-SFT's off-line 'Answer:' ending (value on the next line, which grader v3 reads as blank) is a terse teacher template it uses mainly on short, quick answers to easy problems, not a fixed habit on every finished answer, so the miss rate per finished answer falls steeply with answer length (about 1 % below 3,000 tokens, near 0 above 8,000); the RL delta's boxed ending still removes it, but the grading part of the hybrid's gain is about 3-4 per 500 on MATH-500 and under 1 per 328 on hard328, not about 2."
+ },
+ "no_intervention": {
+  "r8-m09": "The mechanism concerns Think-SFT's teacher answer layout under grader v3, and the RL delta that removes it. The untrained base already writes its value on the same line as 'Answer:' or in a box, which v3 reads (result-0018d3: 0 wrong accepted, misses are other forms), so no prompt, sampling, decoding or selection change to the base follows from it.",
+  "r8-m09-rival": "The mechanism is about where Think-SFT's teacher-copied answer layout appears and how grader v3 reads it. The untrained base writes its value on the 'Answer:' line or in a box, which v3 reads (result-fdc8da: 121 of 132 'Answer:' answers right; result-0018d3), so no prompt, sampling, decoding or selection change to the base follows from it."
+ },
+ "experiments": [
+  {
+   "id": "r8-m09:theory:g5",
+   "kind": "gpu",
+   "experiment": "GPU: Think-SFT + 2 x (RL-Math - base), cue, MATH-500 n 500, T 1.0 / top-p 1.0, cap 16,384, one sample, seeds 181000000 + problem_index, full text kept. Count the finished, v3-wrong rows whose candidate after the last 'Answer:' agrees with gold (first recipe's procedure). Think-SFT gives about 4 per sample (result-818c20).",
+   "unit": "rows of 500",
+   "gpu_minutes": 40,
+   "pair": "r8-m09",
+   "proposer": "r8-m09",
+   "other": "r8-m09-rival",
+   "proposer_prediction": {
+    "value": 0,
+    "low": 0,
+    "high": 2
+   },
+   "other_prediction": {
+    "value": 0.6,
+    "low": 0.0,
+    "high": 1.8,
+    "why": "The mechanism says the 2x RL delta's boxed ending removes Think-SFT's off-line 'Answer:' template, so the grading part of the hybrid's MATH-500 gain is about 3-4 of Think-SFT's ~4 layout misses per sample, which leaves roughly 0-1 such rows of 500."
+   }
+  }
+ ]
+}
