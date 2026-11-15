@@ -1,0 +1,2 @@
+# problems used: 47, finished-wrong rows: 70
+{"measured": 0.15549604757875102, "refuted_by_met": false, "alt_measured": 0.09632170892718359, "not_computable": null, "example_row": {"problem_index": 1, "sample": 1, "attempt": 0, "seed": 41010001, "n_new": 5285, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "2(p - q)", "score_v3": 0, "gold": "p - q"}}

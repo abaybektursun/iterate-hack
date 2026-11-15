@@ -7,6 +7,9 @@ mechanism.json holds one candidate mechanism. Develop it into a testable theory,
 - inventory.md: the per-problem row files the team has stored, how to fetch each, whether it is readable now, and
   the fields of a row. You cannot open the rows; you know them only from this file.
 - external.md: published mechanisms, each headed `### <source id> — <title, year>`.
+- facts.json: numbers earlier rounds computed from stored rows: experiment, recipe, measured value, n, 90 %
+  interval, which theory or rival asked for it, and whether an independent recomputation reproduced it. These numbers are known:
+  explain them, do not predict them.
 
 First read the evidence against the mechanism. If items in before.jsonl already contradict it, abandon it: write
 result.json as {"abandon": "<the reason, with item ids and verbatim quotes>"}. Abandoning a contradicted mechanism is a
@@ -35,7 +38,8 @@ Rules:
   items that do not fit; leave it empty only if you looked and found none, and then say so in "scope".
 - At least 3 OFFLINE predictions: "gpu_minutes": 0 and a "recipe" that names files from inventory.md marked readable
   now, the filters, the statistic, and how cap hits, ties and missing rows count, precise enough that two people
-  would compute the same number. The quantity must be one no board item reports. The recipe states only the
+  would compute the same number. The quantity must be one that no board item reports and that is not in
+  facts.json. The recipe states only the
   computation, never the expected result or the theory.
 - The offline predictions are about different quantities. Two predictions that one fact makes both right or both
   wrong (the same contrast on another file or another checkpoint) count as one: state the contrast once, and spend

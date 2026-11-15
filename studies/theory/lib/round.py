@@ -487,10 +487,14 @@ def standing(folder):
             promote(where[name], folder, name)
             print(f"  carried: {name}-rival (the rival that beat {name} in round {entry['round']})")
     print(f"  graveyard.json: {len(graveyard)} theories from earlier rounds, {carried} carried")
-    facts = [{"round": t.get("carried_from") or prev.name, "theory": t["theory"], "kind": "offline", **fact(q)}
+    # every number computed in the previous folder (offline tests, duel tests, with their replication), then its own
+    # facts.json: cumulative over the chain of rounds, engine or account
+    facts = [{"round": t.get("carried_from") or prev.name, "theory": t["theory"], "kind": "offline", "asked_by": t["theory"],
+              **fact(q), "replication": replication(prev, t["theory"]).get(q["k"], {}).get("status")}
              for t in map(lambda f: json.loads(f.read_text()), sorted((prev / "tests").glob("*.json")))
              for q in t["predictions"] if q["measured"] is not None] if (prev / "tests").exists() else []
-    facts += [{"round": prev.name, "theory": t["theory"], "kind": "duel", **fact(q)}
+    facts += [{"round": prev.name, "theory": t["theory"], "kind": "duel", "asked_by": f"the rival of {t['theory']}",
+               **fact(q), "replication": replication(prev, t["theory"], ".duel").get(q["k"], {}).get("status")}
               for t in map(lambda f: json.loads(f.read_text()), sorted((prev / "rivals").glob("*.tests.json")))
               for q in t["tests"] if q["measured"] is not None] if (prev / "rivals").exists() else []
     if (prev / "facts.json").exists():  # and every number the previous round's own facts.json held
@@ -650,6 +654,11 @@ def generate(folder):
     finish_theories(folder, names, drafts, lambda ds: check_theories(folder, ds, standing), fix_inputs, {})
 
 
+def facts_input(folder):
+    """facts.json: the numbers earlier rounds computed from stored rows; evidence for every agent."""
+    return folder / "facts.json" if (folder / "facts.json").exists() else "[]\n"
+
+
 def graveyard_input(folder):
     return folder / "graveyard.json" if (folder / "graveyard.json").exists() else "{}\n"
 
@@ -673,7 +682,7 @@ def mechanisms(folder):
 
     run([job("mechanisms", "mechanisms", {"DIRECTION.md": ROOT / "DIRECTION.md", "before.jsonl": folder / "before.jsonl",
                                           "external.md": folder / "external.md", "inventory.md": folder / "inventory.md",
-                                          "graveyard.json": graveyard_input(folder)},
+                                          "graveyard.json": graveyard_input(folder), "facts.json": facts_input(folder)},
              {"mechanisms.json": folder / "mechanisms.json"}, valid, n=n)], folder)
     for m in json.loads((folder / "mechanisms.json").read_text()):
         print(f"  {m['id']}: {m['mechanism'][:150]}")
@@ -692,7 +701,7 @@ def develop(folder):
         return None if isinstance(r, dict) and (isinstance(r.get("abandon"), str) or "statement" in r) else "neither a theory nor {\"abandon\": reason}"
 
     base = {"DIRECTION.md": ROOT / "DIRECTION.md", "before.jsonl": folder / "before.jsonl",
-            "inventory.md": folder / "inventory.md", "external.md": folder / "external.md"}
+            "inventory.md": folder / "inventory.md", "external.md": folder / "external.md", "facts.json": facts_input(folder)}
     run([job("develop", name, {**base, "mechanism.json": json.dumps(m, indent=1)}, {"result.json": folder / "drafts" / f"{name}.json"},
              valid, theory=name) for name, m in zip(names, ms)], folder)
     drafts = {n: json.loads((folder / "drafts" / f"{n}.json").read_text()) for n in names}
@@ -779,7 +788,7 @@ def account(folder):
         for p in sorted((folder / "theories").glob("*.json")) if not p.stem.startswith(f"r{nn}-")}
     inputs = {"DIRECTION.md": ROOT / "DIRECTION.md", "before.jsonl": folder / "before.jsonl", "inventory.md": folder / "inventory.md",
               "external.md": folder / "external.md", "graveyard.json": graveyard_input(folder),
-              "facts.json": folder / "facts.json" if (folder / "facts.json").exists() else "[]\n",
+              "facts.json": facts_input(folder),
               "incumbent_account.json": folder / "incumbent_account.json" if (folder / "incumbent_account.json").exists() else "[]\n",
               **(carried or {"carried/none.txt": "No theory is carried from earlier rounds.\n"})}
 
@@ -812,7 +821,7 @@ def null_tests(folder):
     write(folder / "tests_blind.jsonl", blind)
     ids = [b["id"] for b in blind]
     run([job("null_tests", f"nulltest-{k}", {"before.jsonl": folder / "before.jsonl", "inventory.md": folder / "inventory.md",
-                                              "tests_blind.jsonl": folder / "tests_blind.jsonl"},
+                                              "tests_blind.jsonl": folder / "tests_blind.jsonl", "facts.json": facts_input(folder)},
              {"predictions.jsonl": folder / "predictions" / f"nulltest-{k}.jsonl"},
              lambda d: interval_rows(d / "predictions.jsonl", ids, exact=True)) for k in (1, 2)], folder)
 
@@ -1179,7 +1188,8 @@ def rival_valid(d, turn):
 
 def rival_inputs(folder, name):
     return {"theory.json": folder / "theories" / f"{name}.json", "tests.json": json.dumps(computed_tests(folder, name), indent=1),
-            "before.jsonl": folder / "before.jsonl", "inventory.md": folder / "inventory.md", "external.md": folder / "external.md"}
+            "before.jsonl": folder / "before.jsonl", "inventory.md": folder / "inventory.md", "external.md": folder / "external.md",
+            "facts.json": facts_input(folder)}
 
 
 def rival(folder):
@@ -1237,7 +1247,8 @@ def defend(folder):
 
             jobs.append(job("defend", f"{n}.turn{turn}", {"theory.json": folder / "theories" / f"{n}.json",
                                                          "tests.json": json.dumps(tests, indent=1),
-                                                         "before.jsonl": folder / "before.jsonl", "inventory.md": folder / "inventory.md"},
+                                                         "before.jsonl": folder / "before.jsonl", "inventory.md": folder / "inventory.md",
+                                                         "facts.json": facts_input(folder)},
                             {"defend.json": rfile(folder, n, turn, ".defend")}, valid))
     if not jobs:
         return print("defend: no rival")

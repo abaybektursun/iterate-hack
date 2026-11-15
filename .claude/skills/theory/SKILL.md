@@ -3,7 +3,7 @@ name: theory
 description: Build theories that connect the team's experiments, and test each on stored per-problem rows instead of by opinion. One round runs studies/theory/lib/round.py - headless Claude runs in empty directories propose pairwise different mechanisms from the board items before a cutoff and develop each into a theory with offline predictions; scripts written before any number is seen compute those predictions from the stored rows, against two no-theory readers; one account per round budgets the whole gap between the cued base and RL-Zero-Math into mechanisms whose computed shares add up; each survivor then meets the strongest rival a fresh agent can write, on tests the rival chooses, scored by the same log gain; held-out board numbers and a review can only remove a survivor; survivors are posted with their duel result and GPU predictions before the experiments run, refuted theories as a result. Use when the user asks for a theory, an explanation across experiments or what the results mean together, and after every fifth closed result. Writes studies/theory/results/engine/round-<nn>/ and updates studies/theory/README.md.
 ---
 
-# Theory round (version 6.2)
+# Theory round (version 6.3)
 
 A theory is one mechanism sentence that explains numbers from the board and predicts numbers nobody has computed.
 It survives when its offline predictions, fixed before any row was read, were computed, none was refuted beyond
@@ -43,7 +43,8 @@ agent's file: you have read the whole board. Work in your own worktree and `git 
   an empty directory outside the repository, with only Read and Write: no git status, CLAUDE.md, memory or board.
 - `external` may also run `lib/papers.py` (paper entries only); its findings state mechanisms, not team numbers.
 - `inventory.md` holds no result number: read it before `mechanisms` and delete any line with an accuracy.
-- `standing` stops if the previous round's held-out items are not all before the new cutoff.
+- `standing` stops if the previous round's held-out items are not all before the new cutoff. Its `facts.json` (every
+  number computed so far, cumulative) goes to every agent as known: no prediction or rival test may ask for one.
 - When a held-out number reaches an agent another way, list its item in `<round>/exposed.json`.
 
 ## Choosing the cutoff

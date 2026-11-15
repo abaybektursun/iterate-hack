@@ -91,6 +91,8 @@ Rules:
   Every share of a model cell has "vs_null". Every cell has one "net" prediction. Every offline prediction names its
   cell. Each share or fit recipe states the cell's gap definition, the evidence set and the whole ordered list of
   rules, so that it can be computed alone.
+- No prediction asks for a number that is in facts.json or stated in before.jsonl: those are known, the account
+  explains them.
 - At least 2 cross-predictions: numbers the stored rows already hold that the account implies about a part and that
   a different budget would get wrong, for example how many problems of a part a stored intervention fixes (the cue,
   a restart on a cap hit, a vote, a weight blend, an intermediate checkpoint).

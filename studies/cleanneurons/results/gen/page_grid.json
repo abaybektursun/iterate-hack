@@ -1,0 +1,42 @@
+{
+ "what": "per cell, character i is problem index i: r right, w wrong without a loop, l loop (wrong), b loop and right; right_v3 = r + b, loops_rule_A = l + b",
+ "readout": "studies/cleanneurons/results/gen/readout_t06.json",
+ "arms": {
+  "baseline": {
+   "job": "sameraslan-1114-184603-9d69",
+   "n": 500,
+   "right_v3": 378,
+   "cap_hits": 98,
+   "loops_rule_A": 71,
+   "tokens_per_problem": 4689.678,
+   "grid": "rrrrrrrrrlrwrrwrrllrrlrrrwwrrrwrwrrrrrrrrwrlrrrrrrwrrrrrrrrrrrrrlrrrrlrlrrwrrrrrwrlrrrrrrrlrrrwrlrrllwrwwrrrrllrrrrrrrrlrrrrrrlrwrrrrrrrrllrrrrrrlrlrrllrrlrlrrrrrlrrrlrlrrrrrrrlrrrrwrlrrrrrrwrrrrrrlrrrrlrwlrrrrlrrrwrrlrlrrlrllrrlrrrrrrrrrrwlrwrrrrrlrrrrrrrrrrrrrrrwrrrrrrrrrlrrrrrrwrrrwlrwrrrrrrwrrwrrrwwrrlrllrrrrrrrwrrrrrllrwrlrrrllrrrrrwwlrrrrrrrlrrwrrrrrwrrrrrrlrrrlrrwrrrllrwrlrrrwrrrlrrlrrrrrwrlwrwrrlrrlrrrrrrrrrrwrlrrwrrrrrrlrrrrrrrrrrrwwrrrrrrrrrrwrrrlrlrrrlrrrrrrrrrrrwrrwrlrwrrrrrrrrlwrwrr"
+  },
+  "act100": {
+   "job": "sameraslan-1114-190610-842c",
+   "n": 500,
+   "right_v3": 393,
+   "cap_hits": 68,
+   "loops_rule_A": 47,
+   "tokens_per_problem": 4245.654,
+   "grid": "rrrrrrrrrwrwrrrrrlllwwrrrrlrrrrrrlrrwrrrrrrlrrrrrrwrrrrlrrrrrrlrwrrrrrwwrrwrrrrrlrrrrrrrrrrrrrwrllrrlwrwwrrrlrwrrrrrrrlrrrrrrrlrrwrlrrrrwwwrrlrrrrrrrrrlwrlrrrrrrrrwwrwrlrrrrrlrrrrrrrrrrrrrrlrrrrrrrrrrrrrrwwrrrrlrrrwrrlrlrrwlrrrrwrrrlrrrrrrwwrwrrrlrrrrrrrlrrrrrrrrrlrrrrrrrrrrrrrrwrrrrwwlrrrrrwwrwlrrrrrlrrrllwrrrrrrrrrrrrrrrwrrrrrrrrlrrrrrrwwrrrrrrrlrrwrrlwrrrrrrrrrrrrwrrlrrwrrrwrwwrrrrrrwrrwrrrrrwrwlrlrrrrrrrrrrrrlrrrrrlrrrrrrrrrllrrrrrrrrrrwrrrrrrrrrrrrrrrwrrrrrrrrrwrwrrlrrwrrwrrrwrrrrwrrlrrrrrr"
+  },
+  "attr1000": {
+   "job": "sameraslan-1114-190619-6dcf",
+   "n": 500,
+   "right_v3": 381,
+   "cap_hits": 39,
+   "loops_rule_A": 19,
+   "tokens_per_problem": 3870.154,
+   "grid": "rrrrwrrrrwrwrrrrrwwrrwwrrrwrrrrrrrrrrwrwbrrwrrrrrrwrrrrrrrrrwrrrrrrrrrrrrrrrrrrrrrlrrrrrrrrrrrwrwrrrwrrwwrrrrwwrlrrrrrwrlrrrrrwrrwwrrrrrrrwrrrrrrwrrrrrrwrwrrrrrrrrrwrrrlrlrrrrrlrwrwrrrrrrrrwrrrwrrrrrrrrrrwrrrrlrrrrwrrrrlrrrlwwrrwrrrwrrrwrrwwrwrrrwwwrrrrrrwrrrrrrrrwrrrrwrrrrrrrrrwrrrrwwwrwrrwrwrwwrrrrrwrrrwrwrrrrrrrrwrrrrrwwrrlrrrrwrrrrrrrwrrrrrrrrwrrwrrrrrwrrrrrrwrrwwrrwrrrrrrwrrwrrrrrrrrrwrwrrrwrwwrwrrrrrrrrlrrrlrrwrrwrrlrrwrrrwrrwrwwwrrrrwrrrrrrrrrwrwrrrwrrrrrwrrlwrwlrwrrlrrlrrrwrrrrlwrrwrrwrr"
+  },
+  "rnd1000": {
+   "job": "sameraslan-1114-190626-cf9f",
+   "n": 500,
+   "right_v3": 370,
+   "cap_hits": 104,
+   "loops_rule_A": 74,
+   "tokens_per_problem": 4873.628,
+   "grid": "rrrrrrrrrlrlwrrlrlwrrrrrrrrrrrrrwrrrrrrrrwrlrrrrrrwrrrrrrrrrrrrrrrrrlrrlrrwrlrrrlrrrrrrrlrrrrrwrwrrrllrlwrrrlrwrrrrrrrrwlrlrrrlrlllrrwrrrwwlrrrrwlrwrrrrrllrrrrrrrrrlllrlrrrrrrrllrrrrrrrrrrrwrrrrrrrrrrrrrrwrrrrwlrrrlrrlrlrrlwrwrrrrrrwrrrlrrwlrlrrrrrrrrlrrwrrrrrrrrrwrrrrrrrwrwrrrrlrwrrrrllrrrrrrrlrrrrrwlrrrlrwrrrrrrrrlrrwlrllrrrrrrrllrrrrrrwrrrrrrrrlrlwrrrrrwrrrrrrwrrrlrrwrrrrlrwwlrrrlrrrwrrlwlrlrrrwwrlrrwrlrrwlrrrrrrwrlwrrrrrrrrrwlrrlrrlrrrrwrrrrrrrrrrrrrrrwrlrrrrrrrrrwrrlrwlrlwrrrwrrrrrlrlwwrlrw"
+  }
+ }
+}

@@ -1,0 +1,109 @@
+{
+ "theory": "r5-m03",
+ "predictions": [
+  {
+   "k": 1,
+   "experiment": "Per-problem log length ratio of top8 plain to the cued base, ln(top8 n_generated / T1 tokens), taken as the median over problems. This tests the mechanism. This theory says top8 has the cued base's length, so the median is near 0 (slightly positive if top8 has fewer cap hits). The nearest rival (knowledge-69adda / r1-surprises-2: recovering arms take RL's length) says top8 has RL's length. It predicts the same statistic computed with t2_generated_tokens in place of top8, about 0.6.",
+   "recipe": "Load studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json and studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. Join on problem_index and keep the problems present in both (drop missing rows). For each problem compute ln(max(n_generated,1) / max(t1_generated_tokens,1)), with n_generated from the top8 file. Keep cap hits, at their stored token counts. Report the median over the joined problems. If the count is even, the median is the mean of the two middle values.",
+   "unit": "natural-log ratio (median over problems)",
+   "value": 0.12,
+   "low": -0.08,
+   "high": 0.32,
+   "refuted_by": "computed median above 0.35 or below -0.10",
+   "gpu_minutes": 0,
+   "script": "tests/r5-m03/p1.py",
+   "measured": 0.2529517647514732,
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": 0.3125330507088069,
+   "not_computable": null,
+   "note": "Files: studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json (problem_index, score_v3, cap_hit, n_generated) and studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (t1_generated_tokens), both committed; read from the repo, else copied from git HEAD into runs/theory-tests/. Join on problem_index (first row per index if duplicated; both have 500 rows). Main: median of ln(max(n_generated,1)/max(t1_generated_tokens,1)) over all joined problems, cap hits kept at stored counts. Alt: same median after dropping problems where either top8 or T1 hit the cap. Risk: n_generated vs t1_generated_tokens may be counted differently (e.g. T1 counts after the cue ids; T1 includes the 3 cue tokens in the prompt while top8 is plain), which shifts the ratio slightly.",
+   "example_row": {
+    "top8": {
+     "problem_index": 0,
+     "score_v3": 1,
+     "cap_hit": false,
+     "n_generated": 1193
+    },
+    "t1t2": {
+     "problem_index": 0,
+     "subject": "precalculus",
+     "level5": false,
+     "cell": "both",
+     "t1_right": 1,
+     "t2_right": 1,
+     "t1_cap_hit": false,
+     "t2_cap_hit": false,
+     "t1_generated_tokens": 504,
+     "t2_generated_tokens": 1420,
+     "failure_type": null,
+     "label_from_tail_only": false
+    }
+   }
+  },
+  {
+   "k": 2,
+   "experiment": "Count of quick finished-wrong answers in top8 plain: answers wrong under v3, not cap hits, and at most 2,000 generated tokens. This tests whether the edit carries RL's checking policy. This theory (base-type errors without RL's checking) predicts about the cued base's count (T1 has 13 wrong among its 263 answers of <= 2,000 tokens). The RL-checking rival predicts 0-3 (RL has 0 wrong among answers of <= 4,000 tokens). The partial-dose rival predicts about 5.",
+   "recipe": "Load studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json. Count the rows with score_v3 == 0, cap_hit false and n_generated <= 2000. Rows with a missing score_v3 are left out. Each problem_index counts once.",
+   "unit": "problems (count of 500)",
+   "value": 11,
+   "low": 5,
+   "high": 21,
+   "refuted_by": "count at most 4 or at least 23",
+   "gpu_minutes": 0,
+   "script": "tests/r5-m03/p2.py",
+   "measured": 22,
+   "inside": false,
+   "refuted_by_met": false,
+   "alt_measured": 22,
+   "not_computable": null,
+   "note": "File: top8_plain-01/per_problem.json. Main: distinct problem_index with score_v3 == 0, cap_hit is False, n_generated <= 2000; rows with score_v3 missing skipped (none observed missing in the format check). Alt: strict n_generated < 2000. Risk: score_v3 == 0 includes 'nothing extracted' answers, which the recipe counts as wrong; the T1 comparison count of 13 quoted in the prediction was computed elsewhere and may use a different boundary.",
+   "example_row": {
+    "problem_index": 8,
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_generated": 1167
+   }
+  },
+  {
+   "k": 3,
+   "experiment": "Fraction of the cued base's wrong problems (T1 wrong) that top8 plain also gets wrong.",
+   "recipe": "Join studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json with studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json on problem_index. Keep the problems with t1_right false (a T1 cap hit counts as wrong) that are present in both files. Report the fraction of those whose top8 score_v3 == 0. A top8 cap hit counts as wrong. Problems missing from the top8 file are dropped.",
+   "unit": "fraction of problems",
+   "value": 0.46,
+   "low": 0.35,
+   "high": 0.57,
+   "refuted_by": "computed fraction below 0.33 or above 0.60",
+   "gpu_minutes": 0,
+   "script": "tests/r5-m03/p3.py",
+   "measured": 0.35555555555555557,
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": 0.3888888888888889,
+   "not_computable": null,
+   "note": "Files: t1_t2_items-01/per_problem.json and top8_plain-01/per_problem.json. t1_right is stored as int 0/1, so 't1_right false' is read as t1_right == 0. Main: among T1-wrong problems present in top8 (with score_v3 present), fraction with top8 score_v3 == 0. The recipe's cap-hit clauses are taken as already reflected in the stored scores (v3 scores a cap hit 0). Alt: forces cap hits to wrong on both sides (T1 wrong = t1_right==0 or t1_cap_hit; top8 wrong = score_v3==0 or cap_hit), which differs only if some cap-hit row was stored as right. Expected denominator about 90 (T1 410/500).",
+   "example_row": {
+    "t1t2": {
+     "problem_index": 11,
+     "subject": "intermediate_algebra",
+     "level5": true,
+     "cell": "neither",
+     "t1_right": 0,
+     "t2_right": 0,
+     "t1_cap_hit": true,
+     "t2_cap_hit": false,
+     "t1_generated_tokens": 16384,
+     "t2_generated_tokens": 8316,
+     "failure_type": null,
+     "label_from_tail_only": false
+    },
+    "top8": {
+     "problem_index": 11,
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_generated": 12244
+    }
+   }
+  }
+ ]
+}

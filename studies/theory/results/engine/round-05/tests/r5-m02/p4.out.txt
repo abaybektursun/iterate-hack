@@ -1,0 +1,2 @@
+# problems used: 44 (alt: 50)
+{"measured": 0.24082829519679472, "refuted_by_met": false, "alt_measured": 0.22230073492909752, "not_computable": null, "example_row": {"problem_index": 9, "sample": 0, "attempt": 0, "seed": 45000009, "n_new": 14671, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "9", "score_v3": 0, "gold": "4"}}

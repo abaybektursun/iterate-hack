@@ -1,0 +1,10 @@
+{
+ "job_id": "sameraslan-1114-214056-15f9",
+ "commit": "79fa896",
+ "command": "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.cleanneurons.jobs.run_edit --edit studies/cleanneurons/results/loops/real-02/edit_attr1000.json -- --model base --prompt cue --set math500 --temperature 0.6 --top-p 1.0 --seed 1000000 --commit <commit>",
+ "runner": "tools/gpu.py h100 (Modal workspace sameraslan)",
+ "volume_only": [
+  "answers.jsonl (raw generations)"
+ ],
+ "volume_path": "iterate-runs:sameraslan-1114-214056-15f9/"
+}
