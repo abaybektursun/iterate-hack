@@ -389,11 +389,12 @@ not the research question. Each is a module `tools/proof_<slug>.py`, made like a
 `/proof/<slug>`. The first is `tools/proof_review_cuts_waste.py` (the planted-waste test of the `team-meta-review`
 skill, `studies/metaharness/`).
 
-The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): a therapy thought record for
-one result title of the board. One button walks it through the evidence for it (the result's `what:` line), the
-evidence against it (its `caveat:` line), the title rewritten with that caveat, and the count of messages and board
-items the agents posted since the page was opened. It uses only results that have a caveat; `/psychosis#<result id>`
-links to one, and Esc starts it again.
+The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game.
+Hold Space, or press and hold, to breathe in and let go to breathe out, so that the white ring follows the blue one. A
+breath that follows it lights one of 10 petals and releases every thought on screen; 10 petals win. The thoughts are
+written jokes and, marked with a blue dot, real messages and result titles of the board. A thought that reaches the
+head is believed and moves the diagnosis up; the fifth ends the session. A click on a thought brings it back as 3
+subagents. A guide speaks one line per breath (M mutes). The end screen counts what the agents posted meanwhile.
 
 The page `/demo` is the talk: one stepped story over the Design page's picture, with a sentence and a fact line per
 step in the words column (arrow keys step, Esc closes; `/demo#<step>` links to a step). It is not a header tab. The 12
