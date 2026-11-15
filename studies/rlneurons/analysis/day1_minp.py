@@ -4,8 +4,8 @@ base and at T 1.0 on RL, against the min-p 0 cells of the same seed.
     uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_minp
 
 Run from the repository root. Inputs (not committed): runs/<job-id>/answers.jsonl (`uv run tools/gpu.py get <job-id>`) for each arm
-in ARMS, and the base+cue min-p 0 rows T1 in runs/s3/r4/base_rl-02/out/T1.jsonl
-(`aws s3 cp --profile iterate-ecr s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl ...`).
+in ARMS, and the min-p 0 rows in runs/s3/<key>: base+cue r4/base_rl-02/out/T1.jsonl, RL+cue
+r5/day1_wdiff-01/abaybektursun-1114-153110-e985/answers.jsonl (`aws s3 cp --profile iterate-ecr s3://pg-lineage-769063704696/results/rlneurons/<key> ...`).
 Writes results/day1_minp/readout.json and a run folder results/day1_minp/<arm>-01/ per arm (run.json, metrics.json, examples.json).
 """
 from __future__ import annotations
@@ -27,8 +27,8 @@ ARMS = {"base_mp0.1_T1": ("frustea-1114-180849-456c", "base", 1.0, 1.0, 0.1, 410
         "base_mp0.1_T1.5": ("frustea-1114-180853-e383", "base", 1.5, 1.0, 0.1, 41000000),
         "rl_mp0.1_T1": ("frustea-1114-180857-8f87", "rl", 1.0, 1.0, 0.1, 66000000),
         "base_p0.95_T1": ("frustea-1114-180900-b614", "base", 1.0, 0.95, 0, 41000000)}
-BASELINES = {"T1_base_cue": (RUNS / "s3" / "r4" / "base_rl-02" / "out" / "T1.jsonl", 410)}   # 410: readout of day1_wdiff
-RL_CUE_MP0 = 457            # results/day1_wdiff/rl_cue-01/metrics.json correct_v3 (raw rows not available here: unpaired)
+BASELINES = {"T1_base_cue": (RUNS / "s3" / "r4" / "base_rl-02" / "out" / "T1.jsonl", 410),            # 410: day1_wdiff readout
+             "rl_cue": (RUNS / "s3" / "r5" / "day1_wdiff-01" / "abaybektursun-1114-153110-e985" / "answers.jsonl", 457)}  # rl_cue-01
 
 
 def tail_tokens(rows):
@@ -62,14 +62,12 @@ def main():
         (d / "examples.json").write_text(json.dumps(examples(rows[arm], sc[arm]), indent=1) + "\n")
     diffs = {}
     for arm in ARMS:
-        if ARMS[arm][1] == "base":
-            vx, vy = [sc[arm][i]["v3"] for i in idx], [sc["T1_base_cue"][i]["v3"] for i in idx]
-            lo, hi = S.paired_bootstrap(vx, vy, n_boot=5000, seed=0)
-            diffs[f"{arm} minus T1_base_cue"] = {"points": round(100 * (sum(vx) - sum(vy)) / len(idx), 2), "ci95_paired": [round(lo, 2), round(hi, 2)]}
-        else:
-            diffs[f"{arm} minus rl_cue-01 (unpaired)"] = {"points": round(100 * (cells[arm]["right_v3"] - RL_CUE_MP0) / 500, 2)}
+        ref = "T1_base_cue" if ARMS[arm][1] == "base" else "rl_cue"
+        vx, vy = [sc[arm][i]["v3"] for i in idx], [sc[ref][i]["v3"] for i in idx]
+        lo, hi = S.paired_bootstrap(vx, vy, n_boot=5000, seed=0)
+        diffs[f"{arm} minus {ref}"] = {"points": round(100 * (sum(vx) - sum(vy)) / len(idx), 2), "ci95_paired": [round(lo, 2), round(hi, 2)]}
     readout = {"spec": "studies/rlneurons/specs/SPEC_minp.md", "grader": "v3", "n": 500, "cells": cells,
-               "rl_cue_mp0_right_v3": RL_CUE_MP0, "diffs": diffs}
+               "diffs": diffs}
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "readout.json").write_text(json.dumps(readout, indent=1) + "\n")
     print(json.dumps(readout, indent=1))
