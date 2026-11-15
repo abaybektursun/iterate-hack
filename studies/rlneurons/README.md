@@ -13,6 +13,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | Path | What it is |
 |---|---|
 | `specs/SPEC3.md` | RLN-3 spec: base, RL steps 100/400/2,800 and the first release; arms P (plain), F (opening cue), C (forced commit); MATH-500 and the 400-problem harder set; training-set overlap (§11). |
+| `specs/SPEC_wsp1.md` | WSP-1 spec: anatomy of the RL-Math, RL-Code and Think-SFT weight deltas, then edited-weight cells. Job `jobs/wsp_delta_anatomy.py`, results `results/wsp1/`. |
 | `specs/SPEC4.md` | RLN-4 spec: T1 (cue, T 1.0), continuation test K, T2 (RL, T 1.0), T3 (plain base, T 1.0), G, R1; Modal deviations; grader v3. |
 | `lib/n13_score.py` | Prompt template (`TEMPLATE["pair1"]` inside the model's chat template), answer extraction and grader v1 (`extract`, `grade`, rule `dollar_both`), `wilson`, `paired_bootstrap`, `selfcheck`. |
 | `lib/rln4_lib.py` | Grader v2 (`extract_v2`, `grade_v2`), grader v3 (`extract_v3`, `norm_v3`, `grade_v3`), loop-onset detectors (rule A `onset_lines`, rule B `onset_period`, `zratio`), `agree`, prefix encoding. |
@@ -883,6 +884,80 @@ Generated tokens (`metrics.json`): base answers of at most 2,000 tokens: 263, of
 tokens: 286, of which 0 wrong. Median and 90th percentile: T1 right 1,431.5 and 7,054 (n = 410), T1 wrong 10,547.5 and 16,384
 (n = 90); T2 right 3,014 and 8,430 (n = 463), T2 wrong 13,455 and 16,384 (n = 37).
 
+## WSP-1 delta anatomy: what the RL weights changed (weights only, no forward pass)
+
+Spec `specs/SPEC_wsp1.md`. Job `jobs/wsp_delta_anatomy.py` (`--selftest` runs 7 planted-input checks; the job runs them first),
+Modal job `sameraslan-1114-153637-0929`, commit `97ac320`, 111 s for 355 tensors on an H200. Artifact:
+`results/wsp1/anatomy-01/` (`summary.json`, `metrics.json` per tensor, `readout.json`, `run.json`). A delta is model minus
+base `allenai/Olmo-3-1025-7B`; RL-Math = `Olmo-3.1-7B-RL-Zero-Math` `364820b`, RL-Code = `Olmo-3.1-7B-RL-Zero-Code` `1ca3bb3`,
+Think-SFT = `Olmo-3-7B-Think-SFT` `6ff8575` (imitation of reasoning traces, no reward). Means are over the 224 layer matrices
+(q, k, v, o, gate, up, down in 32 layers) unless stated. Null = a Gaussian delta of the RL-Math delta's norm, 5 seeds, layer 16.
+
+| Quantity (`summary.json` key) | RL-Math | RL-Code | Think-SFT | Null |
+|---|---|---|---|---|
+| Delta norm / base norm (`layer_matrices.delta.*.rel`) | 0.24 % | 0.20 % | 24.8 % | |
+| Entries bitwise equal to the base (`unchanged`) | 51 % | 56 % | 0.7 % | |
+| Share of squared norm in the top 8 singular directions (`top8_share`) | 0.118 | 0.127 | 0.030 | 0.005 to 0.008 |
+| Largest `top8_share` of one matrix (`hypotheses.H3`) | 0.391, layer 31 `v_proj` | | | 0.008 |
+| Cosine with the RL-Math delta (`pair.*.cos`) | | 0.0160 | -0.00001 | sd 0.00013 |
+| Overlap of top-8 output subspaces with RL-Math (`overlap_left`) | | 0.096 | 0.051 | 0.002 |
+| Readouts in layers 24-31 with a cue token in the top 15 (`readout.json`) | 13 of 96 | 15 of 96 | 0 of 96 | 0 of 30 |
+
+- The RL-Math delta's relative norm is the same in every layer (0.24 % to 0.27 %, `by_layer`), so its size says nothing about
+  where the change matters; its spectrum does (top-8 share 0.09 to 0.22 by layer, highest in layers 0 and 27 to 31).
+- Readout = a top-3 output direction of a layer's `mlp.down_proj` or `self_attn.o_proj` delta, times the base `lm_head`. In RL-Math
+  the late MLP directions read as words of deliberation: layer 29 `down_proj` direction 1 `Okay, consider, considering`
+  (cue token `Okay` at rank 0) against `perhaps, maybe, probably, possibly`; direction 2 `WAIT, wait, Wait`; layer 24
+  directions 1 and 2 `recall, considerations, !\n\n, Consider, Okay`. One readout with a cue token and one without are
+  in `readout.json` (layer 29 `down` direction 1 `+`; layer 31 `down` direction 0 `+`).
+- H1 (the no-reward delta points the same way as RL) is refuted: mean cosine -0.00001 against a null sd of 0.00013. H2 holds
+  (RL-Math and RL-Code share a part: cosine 0.016, 120 null sd). H3: the largest top-8 share is 0.39, below the 0.5 the
+  spec named and 51 times the null. H4 holds (cue tokens in 13 of 96 late readouts, 0 of 30 null readouts).
+- Not controlled: the top-8 subspace overlap of Think-SFT with RL-Math (0.051, 25 times the null) may come from directions
+  that any fine-tune of this base shares; the overlap with the base weights' own top subspace is not measured.
+
+## WSP-1 edited weights: which part of a weight change carries the gain
+
+Spec `specs/SPEC_wsp1.md` (amendments 1 to 4). `jobs/wsp_edit.py` writes an edited model directory (selftest of 6 planted
+checks runs first; BF16 by `merge_weights.to_bf16`, stochastic rounding), `jobs/run_cell.py --model-path` scores it,
+`analysis/wsp1_readout.py` writes the run folders and `results/wsp1/readout.json` (run it with
+`uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.wsp1_readout`; it reads the
+cells from `runs/<job id>/`, copied with `tools/gpu.py get`). MATH-500, T 1.0 / top-p 1.0, one sample, grader v3. Raw rows
+are in the Modal Volume `iterate-runs` of workspace sameraslan under the job ids in each `run.json`.
+
+"Layer matrices" are the 224 q, k, v, o, gate, up, down tensors. `top8` = base + the top 8 singular directions of each
+layer matrix's RL-Math delta (9.8 % of the delta's squared norm; the addition is 0.074 % of the weight norm;
+`metrics.json` `edit`). `rand8` = the same 8 singular values with random orthonormal vectors. `bulk` = RL-Math minus its
+top 8 directions. `sft1` = Think-SFT as released (imitation of reasoning traces written by other models, no reward).
+
+All 500 problems (`results/wsp1/full500/<cell>-01/`, `readout.json` `full500_vs_references`); references T3 224, T1 410,
+T2 463 from `results/rln4/grader_v3/readout.json`:
+
+| Cell | Right of 500 | Against |
+|---|---|---|
+| `top8` plain | 427 | `rand8` plain +46.0 points [40.8, 51.0]; T2 (RL plain) -7.2 [-10.2, -4.2] |
+| `rand8` plain | 197 | T3 (base plain) -5.4 [-11.5, 0.7], unpaired |
+| `sft1` cue | 454 | T1 (cued base) +8.8 [5.4, 12.4]; T2 -1.8 [-4.2, 0.6] |
+| `sft1` plain | 440 | T2 -4.6 [-7.8, -1.4] |
+
+First 100 problems (`results/wsp1/screen100/<cell>-01/`), right of 100. Plain, seed base 80,000,000: base 34, RL 96,
+`top8` 88, `rand8` 36, `bulk` 91, `bulk64` (RL minus its top 64 directions) 86, `top1` (one direction per matrix) 42,
+`late3` (top 3 directions of `mlp.down_proj` in layers 24 to 31 only) 41, `sft1` 91, `sft025` (base + 0.25 of the Think-SFT
+delta) 58. Cue, seed base 81,000,000: base 82, `sft1` 92, `sft05` 88, `sft025` 89.
+
+- Eight directions per matrix of the RL change are sufficient (427 against the matched control's 197) and not necessary
+  (`bulk` 91, `bulk64` 86 of 100): the change is redundant across directions. One direction per matrix is not enough.
+- The same slice of the imitation change breaks the model: `sfttop8` and `sfttop64` (base + the top 8 or 64 directions of
+  the Think-SFT delta, 3.7 % and 7.9 % of the weight norm) gave 0 right of the 6 and 1 answers that finished, 5 and 1 of them
+  loops at the cap; both jobs then stopped on an IndexError in `lib/rln4_lib.onset_lines` (`screen100/sfttop8_plain-01/`,
+  `sfttop64_plain-01/`, status crashed). The prediction of amendment 4 (not concentrated) held.
+- Think-SFT with the cue solves 58 of the 65 problems that T2 solves and T1 does not (14 of 16 cap hits, 11 of 14
+  misreadings, 14 of 14 slips, 7 of 9 wrong methods) and misses 17 of the 398 that both solve. A fresh sample of the cued
+  base would also solve some of the 65; that share is not measured here.
+- Closest published result: Spectral Rewiring (arXiv 2607.03065) keeps the RL gain with a compact part of the update on
+  models that include this pair. New here: the matched-spectrum random control at 8 directions, the removal cells, and the
+  comparison with a no-reward delta.
+- Finding page: `tools/finding_eight_directions.py` (`/finding/eight-directions`, a tile on `/findings`).
 ## One axis or several? Item-level structure of every arm (MATH-500 n = 500, hard328 n = 328, laptop, board work-1aa34c, idea-1c8b73)
 
 Question: do the partial routes toward the RL model fix the same problems or different ones? Answer: the same. On MATH-500 two

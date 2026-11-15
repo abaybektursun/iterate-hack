@@ -1,6 +1,6 @@
-"""The architecture page of the board site: one interactive picture of the shared work setup, for a first-time reader.
+"""The Design page of the team site: one interactive picture of the shared work setup, for a first-time reader.
 
-view.py serves PAGE at /architecture. The page reads the same /data as the board page every 10 s and draws the
+view.py serves PAGE at /architecture, the tab "Design" in the header. The page reads the same /data as the board page every 10 s and draws the
 setup as a small three-dimensional object seen from slightly above. The board is the dome in the centre with one
 dot per live item. Each person has a swarm of agents beside it with threads to the board: one mark per agent
 session, the Claude mark for Claude Code and the OpenAI mark for Codex, in the person's color of the board page.
@@ -17,7 +17,7 @@ PAGE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Invariant: how the harness works</title>
+<title>Invariant: Design</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
@@ -205,8 +205,8 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
   <header class="top">
     <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
-    <a href="/architecture" aria-current="page">How it works</a>
-    <span id="finds" style="display: contents"></span>
+    <a href="/architecture" aria-current="page">Design</a>
+    <a href="/findings">Findings</a>
     <span class="status" id="status" role="status">Reading the board</span>
   </header>
   <div class="stage"><svg id="svg" role="group" aria-label="The harness: people and their agents around one shared board"></svg></div>
@@ -749,7 +749,6 @@ function show() {
   $("page").classList.toggle("open", !!S.sel);
   const who = S.sel && S.sel.startsWith("p-") ? S.sel.slice(2) : null;  // one person selected: only that person's items stay lit
   svg.querySelectorAll(".dot").forEach(d => d.classList.toggle("off", !!who && d.dataset.who !== who));
-  $("finds").innerHTML = (S.data && S.data.findings || []).map(x => `<a href="/finding/${esc(x.slug)}" title="${esc(x.line)}">${esc(x.title)}</a>`).join("");
   $("pane").innerHTML = pane();
   $("status").className = "status" + (S.error ? " bad" : "");
   $("status").textContent = S.error ? (S.readAt ? `Offline, last read ${new Date(S.readAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : "Offline")
