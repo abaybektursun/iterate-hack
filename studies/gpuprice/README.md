@@ -36,6 +36,12 @@ read in full 2026-11-14) fixes:
 | `jobs/run_backtest.sh` | One command for the SPEC1 backtest: series build at 2026-11-06, `last_value_empirical`, simulator, merge (afhubbard keeps the baseline), scorer. `bash studies/gpuprice/jobs/run_backtest.sh runs/gpuprice/<dir> [--control]` gives 0.196504. |
 | `results/spec1/sim-01/`, `results/spec1/control-01/` | SPEC1 and its control on the event set. |
 | `results/spec1/late-01/` | SPEC1 unchanged and `last_value_empirical` on six later origins that no earlier run used. |
+| `jobs/eval.sh`, `results/ledger/` | Hill-climb harness and its record: one JSON per iteration. |
+| `jobs/fm_*`, `jobs/fm2_*` | Foundation-model arm: listing panel, Chronos-2 inference job, post-processing to the median (`fm2_post.py` is the current one; `data/fm2_panel_v2.csv.gz` runs to 2026-11-06). |
+| `jobs/sim2_own.py` | Own-history listing simulator. |
+| `jobs/ft_*`, `jobs/pfn_*`, `jobs/tab_*`, `jobs/llm_*` | Fine-tuning, synthetic-prior network, TabPFN and LLM arms (not in the candidate). |
+| `prep/ext_history.py`, `prep/ext_scaleway_fx.py`, `data/ext_ecb_eurusd_v1.csv` | 30 extra days per collector from pinned upstream commits; ECB EUR/USD to 2026-11-06 and the Scaleway test. |
+| `specs/SPEC2.md`, `results/spec2/locked-01/` | The candidate, fixed before its run on the locked origins, and that run. |
 | `ATTRIBUTION.md` | The pack's attribution file. It must stay with any work that uses the pack. |
 
 The pack: `runs/gpuprice/pack/gpu-price-pack-v0.1.1-handover/` (v0.1.1-handover, data to 2026-11-06 23:59:59 UTC,
@@ -85,6 +91,37 @@ intervals are still too narrow (0.60 to 0.66 inside against 0.80).
 there) did not repeat on these 4 origins, and the 7-day gain is untested on unseen origins. The largest losses are
 `gpurentalprices.marketplace_ask.H100_80GB.spot.median`, 3 listings that turn over daily, where the simulator's
 interval is too narrow.
+
+## Hill-climb and the candidate
+
+`jobs/eval.sh` scores a forecast on the development origins (2026-10-01 to 2026-10-30, 3,109 cells) and writes one
+entry per iteration into `results/ledger/` (name, hypothesis, pooled skill, per horizon, coverage), failures
+included. Main entries, pooled skill against last value (1 / 3 / 7 days):
+
+| Ledger entry | What | Pooled | 1 / 3 / 7 days |
+|---|---|---|---|
+| `it00-lve` | starter `last_value_empirical` | +0.126 | +0.101 / +0.138 / +0.127 |
+| `fm-01` | `amazon/chronos-2` zero-shot on each median series | +0.132 | -0.087 / +0.102 / +0.207 |
+| `fm-07` | the same model on each listing, median over independent draws | +0.272 | +0.099 / +0.249 / +0.331 |
+| `sim2-15` | each listing replays its own h-day outcomes, recency 14 days, entrants (`jobs/sim2_own.py`) | +0.271 | +0.175 / +0.241 / +0.313 |
+| `fm2-17` | `fm-07` + h=1 hurdle + Scaleway ECB rule + returning entrants (`jobs/fm2_post.py`) | +0.291 | +0.181 / +0.241 / +0.347 |
+| `ft-05`, `ft-07` | `fm-07` with a LoRA trained on 8,000 synthetic sticky-price series only, two seeds | +0.295, +0.292 | |
+| `ft-02`, `ft-03`, `ft-06` | LoRA or full fine-tune on the real listings (to 2026-09-30) | +0.241 to +0.265 | |
+| `pfn-02` | 4.8M-parameter network trained only on simulated listings (`jobs/pfn_sim.py`, `pfn_train.py`) | +0.267 | +0.173 / +0.240 / +0.307 |
+| `tab-01` | TabPFN v2 regressor per listing | +0.192 | |
+| `llm-01` | 80B open-weights LLM reading the listing table, 92 cells: +0.015 against +0.264 for `ens-04` on the same cells | | |
+| `ens-05` | **candidate**: quantile average of `fm2-17` and `sim2-15` | **+0.298** | +0.185 / +0.264 / +0.347 |
+
+Seed and checkpoint noise is about +-0.01 pooled (`ft-08` step curve, `pfn-02` checkpoints), so the averages
+between +0.292 and +0.299 are not separated.
+
+**Locked origins (`specs/SPEC2.md`, `results/spec2/locked-01/`).** The candidate was fixed in SPEC2 before this
+run. On the six origins 2026-10-31 to 2026-11-05 (357 cells: 209 at 1 day, 148 at 3 days; no forecaster was run
+or tuned on them after SPEC1's single run): candidate **+0.252** pooled against +0.089 for `last_value_empirical`;
+difference +0.164, 95 % interval +0.079 to +0.249 (bootstrap over 37 series); better on 26 series, worse on 11,
+better on 6 of 6 origins. 1 day: +0.184 against +0.123 (difference +0.061, +0.018 to +0.118). 3 days: +0.305
+against +0.063 (difference +0.243, +0.108 to +0.354). Inside [q10, q90]: 0.85 and 0.80 (target 0.80). Members
+alone: `fm2-17` +0.270, `sim2-15` +0.215. The 7-day horizon has no truth on these origins.
 
 The starter rows match the pack's own README (+0.20 and +0.17). The number to beat is **+0.126 pooled** on the
 event set (strongest starter baseline). Its intervals are too narrow: 55 to 69 % of truths fall inside
