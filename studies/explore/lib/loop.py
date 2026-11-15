@@ -34,6 +34,7 @@ PROVIDERS = {"openai": ("https://api.openai.com/v1", "OPENAI_API_KEY", KEY_FILE)
 # (create: uv venv -p 3.12 runs/explore/.venv && uv pip install --python runs/explore/.venv/bin/python
 # numpy==2.5.4 scipy==1.18.1). Checked at Task creation; the laptop's /usr/bin/python3 has neither.
 PY = pathlib.Path(__file__).resolve().parents[3] / "runs" / "explore" / ".venv" / "bin" / "python"
+DEVIN_SLOTS = 6  # concurrent Devin CLI calls (the Pro plan allows 10 sessions)
 SLOTS = 6  # programs scored at once across all runs on this machine (8 cores), so CPU contention is the same for every arm
 SLOT_DIR = pathlib.Path(tempfile.gettempdir()) / "explore-score-slots"
 PRICES = {"gpt-5.4-mini": (0.75, 4.5), "gpt-5.4-nano": (0.2, 1.25), "gpt-6.1-sol": (2.0, 10.0),  # $/1M in, out; unverified
@@ -58,7 +59,7 @@ def devin_chat(messages, model):
     usage is estimated as characters / 4 and cost as 0 (quota, not per-token money)."""
     text = "\n\n".join(f"{m['role'].upper()}:\n{m['content']}" for m in messages)
     text += "\n\nReply as the ASSISTANT to the last USER message, in text only. Do not use tools or files."
-    with tempfile.TemporaryDirectory() as d:
+    with slot("devin", DEVIN_SLOTS), tempfile.TemporaryDirectory() as d:
         (pathlib.Path(d) / "prompt.txt").write_text(text)
         for attempt in range(3):
             r = subprocess.run(["devin", "-p", "--model", model, "--permission-mode", "auto", "--respect-workspace-trust", "false", "--prompt-file",
@@ -100,14 +101,17 @@ def cost(usage, model):
     return usage.get("prompt_tokens", 0) / 1e6 * pin + usage.get("completion_tokens", 0) / 1e6 * pout
 
 
-class score_slot:
-    """Hold one of SLOTS lock files while a program is scored (blocks until one is free)."""
+class slot:
+    """Hold one of n lock files named `kind` across all processes on this machine (blocks until one is free)."""
+
+    def __init__(self, kind, n):
+        self.kind, self.n = kind, n
 
     def __enter__(self):
         SLOT_DIR.mkdir(exist_ok=True)
         while True:
-            for i in range(SLOTS):
-                f = open(SLOT_DIR / f"{i}.lock", "w")
+            for i in range(self.n):
+                f = open(SLOT_DIR / f"{self.kind}{i}.lock", "w")
                 try:
                     fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
                     self.f = f
@@ -137,7 +141,7 @@ class Task:
         subprocess.run([str(PY), "-c", "import numpy, scipy"], check=True)  # fail loudly without the venv
 
     def evaluate(self, code, test=False, timeout=120):
-        with score_slot(), tempfile.TemporaryDirectory() as d:
+        with slot("score", SLOTS), tempfile.TemporaryDirectory() as d:
             prog = pathlib.Path(d) / "solution.py"
             prog.write_text(code)
             cmd = [str(PY), str(self.path / "score.py"), str(prog)] + (["--test"] if test else [])

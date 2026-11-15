@@ -13,9 +13,11 @@ from studies.explore.lib.loop import chat, cost
 JUDGE = "gpt-6.1-sol"
 
 PROMPT = """You group versions of a program by METHOD: the algorithmic approach (how the solution is constructed or
-searched), not its parameter values or small tweaks. Two versions that both hand-place circles in rows are the same
-basin even with different radii; a version that runs a numerical optimizer is a different basin from one that does
-not; a random search, a greedy constructor, a lattice template, a simulated annealing, a beam search are different.
+searched), not its parameter values or small tweaks. Versions differing only in constants or tuning share a basin.
+Versions differ in basin when they differ in the search algorithm (fixed hand-made construction, greedy, random
+restarts, local search / hill climbing, simulated annealing, beam search, numerical optimizer such as gradient or
+SLSQP, exact or DP), in the move set or representation (for example which shapes or operations are allowed), or in
+the objective they optimize. Prefer splitting over lumping when a version changes one of these.
 
 TASK (one line): {task}
 
