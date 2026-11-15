@@ -1,0 +1,362 @@
+[
+ {
+  "round": "guts",
+  "number": 1,
+  "problem": "Let $H$, $M$, and $T$ be (not necessarily distinct) digits such that $H$ is nonzero and\n$$\\underline{HMMT} = \\underline{HTM} \\times \\underline{HT}.$$\nCompute the only possible value of the four-digit positive integer $\\underline{HMMT}$.",
+  "answer": "1000",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 2,
+  "problem": "Compute the number of ways to fill each of the outer $8$ cells of a $3 \\times 3$ grid with exactly one of the numbers $1$, $2$, and $3$ such that the top row, bottom row, left column, and right column each contain no repeated numbers.",
+  "answer": "18",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": "A picture of a 3x3 grid with the centre cell shaded follows the statement; the statement does not refer to it and the words describe it fully, so figure=false."
+ },
+ {
+  "round": "guts",
+  "number": 3,
+  "problem": "A rectangle with length $4$ and height $2$ is placed in the bottom left corner of a square with side length $10$. Regions $A$ and $B$ are separated by a line segment drawn from the rectangle's upper right corner to some point on the boundary of the square. Given that regions $A$ and $B$ have the same perimeter, compute the positive difference between the areas of regions $A$ and $B$.",
+  "answer": "4",
+  "figure": true,
+  "estimation": false,
+  "multi": false,
+  "note": "A diagram follows the statement (square of side 10, shaded 4x2 rectangle at bottom left, segment from the rectangle's upper right corner to the top side, region A left of the segment, region B right). The statement does not mention it, but which regions are A and B is shown only there."
+ },
+ {
+  "round": "guts",
+  "number": 4,
+  "problem": "Over all nonnegative integers $a$, $b$, $c$, and $d$ such that\n$$ab + cd = 31 \\quad \\text{and} \\quad ac + bd = 29,$$\ncompute the minimum possible value of $a + b + c + d$.",
+  "answer": "17",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 5,
+  "problem": "Let $ABC$ be a right triangle with $\\angle ABC = 90^\\circ$ and $AB < BC$. Let $M$ be the midpoint of $\\overline{AC}$. Let $T$ be the unique point lying on the segment $\\overline{BC}$ such that $\\angle BMT = 90^\\circ$. Given that $AB = 5$ and $MT = 3$, compute $CT$.",
+  "answer": "\\frac{7}{\\sqrt{11}} = \\frac{7\\sqrt{11}}{11}",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": "The Answer line gives two equal forms joined by '='; both kept as printed."
+ },
+ {
+  "round": "guts",
+  "number": 6,
+  "problem": "Compute the largest positive integer $n$ such that $n!$ divides\n$$\\binom{256}{128}^{1} \\cdot \\binom{128}{64}^{2} \\cdot \\binom{64}{32}^{4} \\cdot \\binom{32}{16}^{8} \\cdot \\binom{16}{8}^{16} \\cdot \\binom{8}{4}^{32} \\cdot \\binom{4}{2}^{64} \\cdot \\binom{2}{1}^{128}.$$",
+  "answer": "256",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 7,
+  "problem": "A tromino is any connected figure constructed by joining $3$ unit squares edge-to-edge. Compute the number of ways to tile a $2 \\times 6$ rectangular grid with $4$ nonoverlapping trominoes.\n(Two tilings that differ by a rotation or reflection are considered distinct.)",
+  "answer": "11",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 8,
+  "problem": "Let $a_1, a_2, \\ldots$ be a sequence of positive integers such that $a_1 = 2$ and for all $n \\geq 2$, it holds that $a_n$ is the sum of $a_{n-1}$ and the largest prime divisor of $a_{n-1}$. Compute the smallest integer greater than $2026$ that appears in this sequence.",
+  "answer": "2068",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 9,
+  "problem": "Let $ABCD$ be a rectangle. Let $E$ be the reflection of $C$ over $B$. The circumcircle of triangle $ACE$ intersects line $CD$ at a point $F \\neq C$. Given that $AC = 8$ and $AF = 6$, compute the area of rectangle $ABCD$.",
+  "answer": "\\frac{768}{25} = 30.72",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": "The Answer line gives two equal forms joined by '='; both kept as printed."
+ },
+ {
+  "round": "guts",
+  "number": 10,
+  "problem": "Srinivas picks a uniformly random direction and shoots a laser starting at point $(0, 1)$ at his chosen direction. The laser bounces off the graph of $y = |x|$ whenever it makes contact. Compute the expected number of times the laser contacts the graph of $y = |x|$.\n(When the laser bounces, the angle at which it arrives mirrors the angle at which it departs. See the diagram below.)",
+  "answer": "1",
+  "figure": true,
+  "estimation": false,
+  "multi": false,
+  "note": "The statement says 'See the diagram below' (a laser from (0,1) reflecting once off y=|x|); the reflection rule is also given in words."
+ },
+ {
+  "round": "guts",
+  "number": 11,
+  "problem": "Compute the number of ordered pairs $(a, b)$ of positive integers such that $\\operatorname{lcm}(a, b) + \\gcd(a, b) = 2026$.",
+  "answer": "13",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 12,
+  "problem": "Let $a$, $b$, $c$, and $d$ be positive real numbers such that $ac = 100$ and $bd = 101$. Compute the largest possible value of\n$$a^{\\log_{10} b} \\cdot b^{\\log_{10} c} \\cdot c^{\\log_{10} d} \\cdot d^{\\log_{10} a}.$$",
+  "answer": "101^2 = 10201",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": "The Answer line gives two equal forms joined by '='; both kept as printed."
+ },
+ {
+  "round": "guts",
+  "number": 13,
+  "problem": "The concatenation of two base-10 numbers (possibly with leading $0$s) is defined as the base-10 number formed by joining them together. For example, the concatenation of $1402$ and $00213$ is $140200213$. Compute the number of $2026$-digit multiples of $3$ which cannot be expressed as the concatenation of two smaller multiples of $3$ (possibly with leading $0$s).",
+  "answer": "18 \\cdot 7^{2024}",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": "'concatenation' is italic and 'cannot' is bold in the PDF; emphasis dropped."
+ },
+ {
+  "round": "guts",
+  "number": 14,
+  "problem": "There exists exactly one ordered pair of positive integers $(m, n)$, both greater than $1$, with the property that, when written out in base $10$, $m \\cdot n = \\underline{ABCD}$ and $\\binom{m}{n} = \\underline{CDAB}$ for distinct nonzero digits $A$, $B$, $C$, and $D$. Compute $m + n$.",
+  "answer": "136",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 15,
+  "problem": "Compute the number of ways to partition $2026$ into the unordered sum of distinct positive integers, each of which is a power of $2$ or a power of $6$.",
+  "answer": "16",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 16,
+  "problem": "Let $O$ and $G$ be the circumcenter and centroid of triangle $ABC$, respectively, and let $M$ be the midpoint of side $\\overline{BC}$. Given that $OG = 1$, $OM = \\sqrt{2}$, and $GM = \\sqrt{3}$, compute the area of triangle $ABC$.",
+  "answer": "3\\sqrt{30} = \\sqrt{270}",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": "The Answer line gives two equal forms joined by '='; both kept as printed. The last box of the printed solution reads 3\\sqrt{15}, a typo in the PDF: its own product (1/2)(3\\sqrt{2})(2\\sqrt{15}) equals 3\\sqrt{30}, matching the Answer line."
+ },
+ {
+  "round": "guts",
+  "number": 17,
+  "problem": "A point $P$ is selected uniformly at random on one of the straight edges of a quarter circle, and another point $Q$ is chosen independently and uniformly at random on the other straight edge. Compute the probability there exists a point $A$ on the arc of the quarter circle such that $\\angle PAQ$ is obtuse.",
+  "answer": "1 - \\frac{\\pi}{4}",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 18,
+  "problem": "Let $ABCD$ be a trapezoid with side $\\overline{AB}$ parallel to side $\\overline{CD}$. Let $P$ be the intersection of diagonals $\\overline{AC}$ and $\\overline{BD}$. Given that the distances from $P$ to sides $\\overline{AB}$, $\\overline{BC}$, $\\overline{CD}$, and $\\overline{DA}$ are $3$, $6$, $8$, and $8$, respectively, compute the perimeter of $ABCD$.",
+  "answer": "\\frac{165}{2} = 82.5",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": "The Answer line gives two equal forms joined by '='; both kept as printed."
+ },
+ {
+  "round": "guts",
+  "number": 19,
+  "problem": "Compute the smallest positive integer $n$ for which $n$ has exactly $10$ positive integer divisors and $n + 1$ has exactly $9$ positive integer divisors.",
+  "answer": "6723",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 20,
+  "problem": "Derek is at the front of a line, with six clones named Derek #1, Derek #2, Derek #3, Derek #4, Derek #5, and Derek #6 standing behind him in a uniformly random order. For all positive integers $k$ between $1$ and $6$, inclusive, on the $k^{\\text{th}}$ minute from now, Derek #$k$ will swap positions with whoever is standing directly in front of him in the line. Compute the probability that after $6$ minutes, Derek is still at the front of the line.",
+  "answer": "\\frac{53}{144}",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 21,
+  "problem": "Compute the largest possible value of\n$$\\gcd\\left(\\binom{n}{3} - 1, \\binom{n}{4} - 1\\right)$$\nas $n$ ranges through all positive integers greater than $3$.",
+  "answer": "102",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 22,
+  "problem": "An equilateral triangle-shaped cake of side length $5$ is cut into $25$ unit equilateral triangle pieces. Jacob selects two distinct edges of the cake, then picks one point independently and uniformly at random on each of the two selected edges. He cuts along the line through these two points. Compute the expected number of pieces of cake after all cuts.\nBelow is an example of the process, with the dots being the selected points and the dashed line being Jacob's cut. This cut results in $32$ pieces.",
+  "answer": "\\frac{158}{5} = 31.6",
+  "figure": true,
+  "estimation": false,
+  "multi": false,
+  "note": "The Answer line gives two equal forms joined by '='; both kept as printed. The statement refers to an example diagram ('Below is an example of the process'); the process itself is described in words."
+ },
+ {
+  "round": "guts",
+  "number": 23,
+  "problem": "Let $\\Gamma$ be a sphere of radius $5$. Let $A$, $B$, $C$, and $D$ be points on $\\Gamma$ such that $AB = BC = CD = DA = 8$ and $\\angle ABC = \\angle BCD = \\angle CDA = \\angle DAB$. Compute $AC$.",
+  "answer": "6\\sqrt{2} = \\sqrt{72}",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": "The Answer line gives two equal forms joined by '='; both kept as printed."
+ },
+ {
+  "round": "guts",
+  "number": 24,
+  "problem": "Two mice and $100$ pieces of cheese are uniformly and independently placed at random on the boundary of a circle. Each mouse walks to the piece of cheese closest to it, with ties broken independently at random. Compute the probability that the two mice walk to the same piece of cheese.",
+  "answer": "\\frac{3}{202}",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 25,
+  "problem": "Let $p(x)$ be the unique polynomial of degree at most $8$ and with rational coefficients such that $p(\\sqrt[3]{2} + \\sqrt[3]{3}) = \\sqrt[3]{6}$. Compute $p(1)$.",
+  "answer": "\\frac{42}{25} = 1.68",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": "The Answer line gives two equal forms joined by '='; both kept as printed."
+ },
+ {
+  "round": "guts",
+  "number": 26,
+  "problem": "Marin is taking a random walk on a line. For each integer $n$ ranging from $1$ to $10$, inclusive and in order, Marin takes a step of length $F_n$ either left or right with equal probability, where $F_n$ is the $n^{\\text{th}}$ Fibonacci number. Compute Marin's expected distance from his starting point.\n(The Fibonacci numbers are defined by $F_1 = F_2 = 1$ and the recurrence $F_n = F_{n-1} + F_{n-2}$ for all $n \\geq 3$.)",
+  "answer": "\\frac{3741}{64}",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 27,
+  "problem": "Let $a$, $b$, and $c$ be positive real numbers such that\n$$\\begin{aligned} \\sqrt{ab + 1} + \\sqrt{ca + 1} &= 2a, \\\\ \\sqrt{bc + 1} + \\sqrt{ab + 1} &= 3b, \\\\ \\sqrt{ca + 1} + \\sqrt{bc + 1} &= 5c. \\end{aligned}$$\nCompute $a$.",
+  "answer": "\\frac{14}{3\\sqrt{11}} = \\frac{14\\sqrt{11}}{33}",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": "The Answer line gives two equal forms joined by '='; both kept as printed."
+ },
+ {
+  "round": "guts",
+  "number": 28,
+  "problem": "Let $ABC$ be a triangle such that $\\angle BAC = 105^\\circ$, $AB = 12\\sqrt{2}$, and $AC = 17$. Let $P$ be a point such that $P$ and $A$ lie on different sides of line $BC$, and $\\angle APB = \\angle APC = 60^\\circ$. Compute $AP$.",
+  "answer": "\\frac{136\\sqrt{3}}{13}",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 29,
+  "problem": "Compute\n$$\\sum_{k=1}^{4004} \\gcd(k, 4004) \\cos\\left(\\frac{\\pi k}{2002}\\right).$$",
+  "answer": "1440",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 30,
+  "problem": "Let $ABC$ be a triangle with $AB = 60$, $AC = 67$, and $BC = 69$. The incircle $\\omega$ of triangle $ABC$ touches sides $\\overline{BC}$, $\\overline{CA}$, and $\\overline{AB}$ at $D$, $E$, and $F$, respectively. Let $D'$ be the point diametrically opposite to $D$ in $\\omega$. Let the common chord of the circumcircles of triangles $BD'F$ and $CD'E$ meet line $BC$ at $X$. Compute $BX$.",
+  "answer": "45",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 31,
+  "problem": "Let $\\zeta = \\cos \\frac{2\\pi}{19} + i \\sin \\frac{2\\pi}{19}$. It is given that the polynomial $x^3 + 16x^2 + 3x - 229$ has three distinct real roots, and its largest root can be uniquely written in the form\n$$a_1 \\zeta + a_2 \\zeta^2 + \\cdots + a_{18} \\zeta^{18}$$\nfor some rational numbers $a_1, \\ldots, a_{18}$. Compute $a_1^2 + a_2^2 + \\cdots + a_{18}^2$.",
+  "answer": "564",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 32,
+  "problem": "Kelvin the frog starts at the center of a regular hexagon $ABCDEF$ with side length $100$, facing towards $A$. He hops forward an integer distance between $0$ and $200$ units, inclusive, then turns $120^\\circ$ clockwise. He repeats this process two more times (possibly jumping different distances), ending up within hexagon $ABCDEF$ (possibly on its boundary). Compute the number of distinct paths he could have taken.",
+  "answer": "101^4 - 100^4 = 4060401",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "note": "The Answer line gives two equal forms joined by '='; both kept as printed."
+ },
+ {
+  "round": "guts",
+  "number": 33,
+  "problem": "From each of the first $6$ sets of problems in this Guts round, Mark selects one of the four (correct) answers from that set. Compute the minimum possible range of these $6$ values.\nSubmit a real number $E$. If the correct answer is $A$, you will receive $\\max(0, \\lfloor 20.99 - 18|E - A|^{1/3} \\rfloor)$ points.\n(The range of $n$ values $x_1 \\leq x_2 \\leq \\cdots \\leq x_n$ is given by $x_n - x_1$.)",
+  "answer": "\\frac{2251}{144} \\approx 15.6319444444444",
+  "figure": false,
+  "estimation": true,
+  "multi": false,
+  "note": "Scored by closeness, but the value is exact (2251/144). Not self-contained: it depends on the answers to problems 1-24 of this round (sets of four). Answer line gives the fraction and a decimal joined by '\\approx'; both kept."
+ },
+ {
+  "round": "guts",
+  "number": 34,
+  "problem": "A positive integer is called good if it has no prime factors larger than $10^4$. Sarunyu picks two odd positive integers $a$ and $b$, both between $1$ and $10^4$ (inclusive), independently and uniformly at random. Estimate the expected number of good divisors of $a^2 + b^2$.\nSubmit a real number $E$. If the correct answer is $A$, you will receive $\\lfloor 20.05 e^{-400(1 - E/A)^2} \\rfloor$ points.",
+  "answer": "13.12557328",
+  "figure": false,
+  "estimation": true,
+  "multi": false,
+  "note": "'good' is italic in the PDF; emphasis dropped."
+ },
+ {
+  "round": "guts",
+  "number": 35,
+  "problem": "Estimate\n$$\\log_{10}\\left(\\sum_{k=0}^{15000} \\frac{30000!}{(k!)^2 (30000 - 2k)!}\\right).$$\nSubmit a real number $E$. If the correct answer is $A$, you will receive $\\lfloor 20.05 e^{-0.69(E - A)^2} \\rfloor$ points.",
+  "answer": "14311.088033944017",
+  "figure": false,
+  "estimation": true,
+  "multi": false,
+  "note": ""
+ },
+ {
+  "round": "guts",
+  "number": 36,
+  "problem": "Sebastian is going for a walk in the coordinate plane. He starts at the origin facing in the positive $x$ direction. Each minute, he takes a step forward, then randomly chooses one of the three axial directions other than the opposite of his current orientation. Sebastian stops walking once he returns to a point he has already visited. Estimate the expected number of steps Sebastian walks.\nSubmit a real number $E$. If the correct answer is $A$, you will receive $\\lfloor 20.05 e^{-0.3(E - A)^2} \\rfloor$ points.",
+  "answer": "\\approx 14.0844",
+  "figure": false,
+  "estimation": true,
+  "multi": false,
+  "note": "The Answer line itself begins with '\\approx'; kept as printed."
+ }
+]
