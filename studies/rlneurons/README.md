@@ -1170,8 +1170,8 @@ samples are longer than 1,000 tokens: mean d_t 0.552 [0.488, 0.616], shorter ans
 0.571 [0.509, 0.634].
 
 - P1 refuted: 0.531, interval includes 0.55. P2 not tested further (P1 failed).
-- P3 refuted with the opposite sign: among the judged wrong samples the mean d_t is highest for misreadings (0.132 nats per token,
-  n 14; slip 0.094, n 21; wrong plan in `metrics.json`). Wrong samples have a higher mean d_t than right ones across problems
+- P3 refuted: among the judged wrong samples the mean d_t of misreadings is not the lowest (misread 0.132 nats per token, n 14;
+  slip 0.094, n 21; wrong plan 0.154, n 17). Wrong samples have a higher mean d_t than right ones across problems
   (0.110 against 0.086): harder problems make the text depend more on the problem.
 - Reading: the 4.62-nat drop of misread steps under contrast is a property of those few tokens, not of the early text of the
   sample. Three label-free signals now fail to separate the base's own samples of a problem early: activations, the base's own
