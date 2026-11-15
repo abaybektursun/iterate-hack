@@ -5,7 +5,8 @@
 """Submit GPU jobs to your own Modal workspace (deploy infra/runner.py there once) and inspect them.
 
   uv run tools/gpu.py deploy              deploy infra/runner.py to your Modal workspace (after a pull that changed it)
-  uv run tools/gpu.py submit <class> [--hours 2] -- <command>   class: h100, b200, cpu
+  uv run tools/gpu.py submit <class> [--hours 2] -- <command>   class: h100, short, b200, cpu
+                                          short = an H100 kept free for jobs of --hours 0.5 at most (smoke runs)
   uv run tools/gpu.py ls [--all]          jobs of the last 3 hours, any state; --all: every job
   uv run tools/gpu.py wait <job-id>       block until the job ends, then print its state and last 20 log lines
   uv run tools/gpu.py logs <job-id> [n]   last n lines of the job's log (default 30)
@@ -37,7 +38,7 @@ import modal
 
 import team
 
-CLASSES = ("h100", "b200", "cpu")
+CLASSES = ("h100", "short", "b200", "cpu")
 jobs = modal.Dict.from_name("iterate-jobs", create_if_missing=True)
 
 
@@ -90,6 +91,7 @@ def submit(args):
     if rest[0] == "--hours":
         hours, rest = float(rest[1]), rest[2:]
     assert rest[0] == "--", "put the command after --"
+    assert gpu_class != "short" or hours <= 0.5, "the short class (an H100 kept free for smoke runs) takes --hours 0.5 at most"
     cmd = rest[1] if len(rest) == 2 else shlex.join(rest[1:])
 
     assert not git("status", "--porcelain", "--untracked-files=no"), "commit your changes first: a job runs one commit"
