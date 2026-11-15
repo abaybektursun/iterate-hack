@@ -89,7 +89,8 @@ the same command, not an impression.
    conditions that set it: job ids, problem set, settings, and the GPU the job really got (`memory.gpu` in
    `metrics.json`; Modal's h100 class can hand out an H200). Also name what must not change: the result rows, the
    accuracy, the GPU minutes. A change with no baseline is not made.
-5. Make the change in the same session: code or infrastructure, pushed. Naming it is not enough.
+5. Make the change in the same session: code or infrastructure, pushed. Naming it is not enough. Devin can make
+   it in its own worktree while you measure the baseline (`python3 tools/devin.py run`, skill `devin`).
 6. Measure again with the same command, on the same input and conditions, save the output as `after.txt`, and put this
    table in the entry:
 
@@ -110,6 +111,10 @@ belongs to and remove the cause:
 - change the code or the infrastructure so the class cannot happen (one place enters the environment, one helper writes rows,
   one script launches), or
 - delete the instruction, note or file that caused it.
+
+A row of `meta/FAILURES.md` names its code change, so hand it to Devin the moment you write it
+(`python3 tools/devin.py run <name> "<the row's change>; delete the row in the same commit"`, skill `devin`), go on
+with the review, then read its diff and merge it. A row should live minutes.
 
 Never answer a failure by adding a rule, a reminder or a paragraph to a document: that pollutes the context every later
 session has to read, and the cause is still there. A written rule is a last resort and counts as debt. `meta/FAILURES.md`
