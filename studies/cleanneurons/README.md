@@ -20,6 +20,9 @@ All code runs from the repository root (`python -m studies.cleanneurons.<folder>
 | `analysis/transplant_readout.py` | Part T closures recomputed without the three cue positions, from `kl.npz`. |
 | `results/transplant/curve_attr-01/` | Part T2 run (attribution ranking, scored on held-out rows): `metrics.json`, `rank_attr_readout.json`, `edit_attr1.json`, `edit_attr_top100.json`, `run.json`. |
 | `jobs/describe_neurons.py`, `analysis/describe_report.py` | Part I: what a neuron set does (activation record, top contexts, output tokens, timing against the loop onset, dose, base against RL) and its figures. |
+| `results/transplant/curve_bias-01/` | Part T3 run (constant shift per layer, always-on neurons): `metrics.json` (`bias`, arms `bias_*`, `dense*`), `edit_dense.json`, `run.json`. |
+| `results/describe/attr_top100-01/` | Part I on the 100 best Part T2 neurons: `neurons.json`, `density_readout.json`, `descriptions_test.json` (the sentences and the blind test), `run.json`. |
+| `analysis/describe_test.py` | Part I item 7: prepares the blind description test and scores it. |
 | `results/transplant/curve-01/` | Part T full run: `metrics.json`, `profile.json`, `examples.json`, `readout_after_cue.json`, `run.json`, edit files of four arms. |
 
 ## How to run
@@ -92,3 +95,45 @@ then scored on the other half (1,163 decisive positions in T1 text, 1,509 in T2 
 - Where: `attr1` has 381 of its 3,523 neurons in layer 9 and 302 in layer 31; layers 1 to 15 hold 2,392, layers 16 to 28 hold 606.
   Only 610 of the 3,523 are also in the top 1 % by weight change.
 - Controls passed, including: the top set lowers the KL on its own rows by the amount the scores predict (`metrics.json` `attr`).
+
+### Part I on the 100 best neurons: always-on and describable (job `sameraslan-1114-154532-cdc8`, commit `2dd4da7`)
+
+The 100 neurons with the largest Part T2 score against 100 layer-matched random neurons, on 131,397 positions of 80 stored
+answers. From `results/describe/attr_top100-01/density_readout.json` and `descriptions_test.json`.
+
+- 44 of the 100 are on almost everywhere (|a| beyond the layer's p97 at more than half of all positions); 1 of 100 random
+  neurons is. Median mean |a| 0.213 against 0.020.
+- RL left their weights alone: the cosine between the base's and RL's gate, up and down vectors is 1.0000 (median, both sets).
+  Their activations differ more between the two models than a random neuron's (median correlation 0.960 against 0.987),
+  which comes from the changes upstream.
+- Blind description test (30 of the best, 15 random; the stronger pole of each): a reader writes one sentence from 10 top
+  contexts; a second reader, with the sentence only, picks the 10 firing snippets out of 20 (10 held-out top contexts, 10
+  random positions of the same answers). Right: 90.7 % [86.0, 94.7] for the best neurons, 71.3 % [60.0, 81.3] for random
+  neurons, chance 50 %. Sentences that scored 100 %: "A hesitation word 'Hmm', 'Wait' or 'wait' starting a sentence right
+  after a period or 'But', mostly just after the problem is restated" (layer 10, neuron 7275); "The period that ends a sentence
+  finishing with a computed number or expression, just before a new sentence such as 'Then', 'Wait' or 'So'" (layer 29,
+  neuron 2637). One that failed (20 %): a random neuron described as firing on modular-arithmetic tokens.
+- Limits: the test covers the strongest firings only; writer and tester are the same LLM (Claude subagents).
+
+### Part T3: a constant vector per layer carries a quarter to a third (job `sameraslan-1114-184552-a899`, commit `a2ec2c9`)
+
+Scored on the held-out half (2,672 decisive positions after the cue), `closure_decisive_after_cue_half_B` in
+`results/transplant/curve_bias-01/metrics.json`. T1 text / T2 text.
+
+| Arm | What is added to the base | Closure |
+|---|---|---|
+| `bias_layer` | one constant vector per layer: the mean of (RL layer output - base layer output) on the base's layer inputs | 23.4 / 31.2 % |
+| `bias_mlp` | one constant vector per layer on the MLP output, before the layer norm | 14.0 / 15.1 % |
+| `bias_mlp_rnd` | a random vector of the same norm per layer | -1.6 / -4.7 % |
+| `dense` | the 472 always-on neurons copied from RL | 2.6 / 3.4 % |
+| `dense_rnd` | 472 other neurons, same number per layer | 0.2 / 0.1 % |
+| `mlp` (for scale) | all MLP weights from RL | 67.7 / 86.4 % |
+
+- Hypothesis T4 (the MLP change is mostly one constant vector per layer) is refuted: `bias_mlp` closes 21 % and 17 % of what
+  `mlp` closes, under the quarter that the spec set. A constant vector in the residual stream (`bias_layer`) does more, 23 to
+  31 % of the whole RL change, and a random vector of the same size makes things worse, so the direction is specific.
+- Only 472 of 352,256 neurons are always-on (110 of them in the last layer). Copying them closes 15 to 25 times what the same
+  number of other neurons closes, and still only about 3 %: they are over-represented among the best neurons, and they are not
+  the carrier.
+- Picture so far: RL = a fixed push per layer (about a quarter to a third) plus small input-dependent changes spread over almost
+  every neuron (the rest). Controls passed (zero vector reproduces the base; hooks removed after each arm).
