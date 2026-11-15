@@ -1337,6 +1337,8 @@ def replicate(folder):
     for n, m in v4.items():
         if not in_scope(n) or m.get("carried_from") or (folder / "replication" / f"{n}.json").exists():
             continue
+        if not (folder / "tests" / f"{n}.json").exists():  # a theory with no computed test has nothing to recompute
+            continue
         tests = {q["k"]: q for q in json.loads((folder / "tests" / f"{n}.json").read_text())["predictions"] if q["measured"] is not None}
         ks = set(m["unexpected_wins"]) | {r["k"] for r in m["rows"] if "gain" in r and (r["refuted_by_met"] or (not r["inside"] and not r.get("within_noise")))}
         ks |= {k for k, q in tests.items() if q.get("role") in ("share", "fit") and not q.get("by_construction")}
