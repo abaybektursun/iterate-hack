@@ -96,5 +96,61 @@
   "result": "work-c51f89",
   "measured": "drive of Math 3.1's top-8 input subspace on 538 base code answers over 328 math answers: 0.869 [0.861, 0.877]; random rank-8 control 0.990; normalized 0.878; reverse (Code dirs) 0.686 vs predicted 0.45-0.47",
   "added": "2026-11-15T22:15:14Z"
+ },
+ {
+  "mechanism": "round-14/s1-a",
+  "claim": "Think-SFT's unfenced Code-cue answers are a layout habit on easy problems, so the cued base passes those problems at a rate in [0.72, 1.0].",
+  "result": "result-b847a0",
+  "verdict": "refuted",
+  "measured": "r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range a [0.72, 1.0], interval wholly below it",
+  "added": "2026-11-15T22:49:44Z"
+ },
+ {
+  "mechanism": "round-14/s1-b",
+  "claim": "Think-SFT's unfenced Code-cue answers are failed solves on hard problems, so the cued base passes those problems at a rate in [0.0, 0.46].",
+  "result": "result-b847a0",
+  "verdict": "refuted",
+  "measured": "r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range b [0.0, 0.46], interval wholly above it",
+  "added": "2026-11-15T22:49:44Z"
+ },
+ {
+  "mechanism": "round-14/s2-a",
+  "claim": "Think-SFT's unfenced Code-cue answers are a layout habit on easy problems, so the cued base passes those problems at a rate in [0.72, 1.0].",
+  "result": "result-b847a0",
+  "verdict": "refuted",
+  "measured": "r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range a [0.72, 1.0], interval wholly below it",
+  "added": "2026-11-15T22:49:44Z"
+ },
+ {
+  "mechanism": "round-14/s2-b",
+  "claim": "Think-SFT's unfenced Code-cue answers are failed solves on hard problems, so the cued base passes those problems at a rate in [0.0, 0.45].",
+  "result": "result-b847a0",
+  "verdict": "refuted",
+  "measured": "r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range b [0.0, 0.45], interval wholly above it",
+  "added": "2026-11-15T22:49:44Z"
+ },
+ {
+  "mechanism": "round-14/s6-a",
+  "claim": "On problems the cued base passes but RL-Code mostly fails, the Code top-8 edit sharpens the base's own programs and passes at 0.70 or more",
+  "result": "result-366377",
+  "verdict": "refuted",
+  "measured": "mean pass of 5 Code top-8 edit samples on L 0.452 [0.357, 0.539], n 115 rows (23 problems); null base-like resamples 0.435 [0.333, 0.551]; RL-Code on L 0.22; range a [0.70, 1.0]",
+  "added": "2026-11-15T22:49:44Z"
+ },
+ {
+  "mechanism": "round-14/s6-b",
+  "claim": "On problems the cued base passes but RL-Code mostly fails, the Code top-8 edit copies RL-Code's outcomes and passes at 0.34 or less",
+  "result": "result-366377",
+  "verdict": "refuted",
+  "measured": "mean pass of 5 Code top-8 edit samples on L 0.452 [0.357, 0.539], n 115 rows (23 problems); null base-like resamples 0.435 [0.333, 0.551]; RL-Code on L 0.22; range b [0.0, 0.34]",
+  "added": "2026-11-15T22:49:44Z"
+ },
+ {
+  "mechanism": "round-14/s3-a",
+  "claim": "The autobench final configuration is budget-bound: the base's T 0.6 hard328 answers past 4,096 tokens are mostly live derivations (loop share 0.05-0.40), so the cap is what loses them.",
+  "result": "result-813b5e",
+  "verdict": "refuted",
+  "measured": "loop share past 4,096 tokens (plain base, T 0.6 / top-p 0.95, hard328) 0.519 [0.460, 0.577], n 189; null (cued base T 1.0) 0.004; cued T 0.6 0.626 [0.574, 0.683], n 211",
+  "added": "2026-11-15T22:49:50Z"
  }
 ]
