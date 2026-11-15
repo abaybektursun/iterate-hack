@@ -1,0 +1,698 @@
+{
+ "what": "analysis/rln3_overlap.py (exact, or at least half of the word 8-grams in one prompt) on data/fresh/fresh2026_v1.json against the train split of allenai/Dolci-RL-Zero-Math-7B at 93b5e498577804a93fb11bfe8821428f8535f2d8; the fresh set was passed as the script's hard.json",
+ "n_train": 13314,
+ "before_drop": "on the 137 candidates the check flagged aime2026/1 exact (the 2020 Purple Comet Middle School #8, reused as AIME 2026 I #1); prep/fresh_prep.py drops it",
+ "fresh2026_v1": {
+  "counts": {
+   "aime2026/none": 27,
+   "hmmt_feb2026/none": 32,
+   "hmmt_feb2026_guts/none": 28,
+   "hmmt_nov2026_gen/none": 7,
+   "hmmt_nov2026_guts/none": 28,
+   "hmmt_nov2026_team/none": 8,
+   "hmmt_nov2026_thm/none": 6
+  },
+  "flags": {
+   "0": {
+    "flag": "none",
+    "share": 0.119,
+    "source": "aime2026"
+   },
+   "1": {
+    "flag": "none",
+    "share": 0.062,
+    "source": "aime2026"
+   },
+   "2": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "aime2026"
+   },
+   "3": {
+    "flag": "none",
+    "share": 0.164,
+    "source": "aime2026"
+   },
+   "4": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "aime2026"
+   },
+   "5": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "aime2026"
+   },
+   "6": {
+    "flag": "none",
+    "share": 0.083,
+    "source": "aime2026"
+   },
+   "7": {
+    "flag": "none",
+    "share": 0.051,
+    "source": "aime2026"
+   },
+   "8": {
+    "flag": "none",
+    "share": 0.056,
+    "source": "aime2026"
+   },
+   "9": {
+    "flag": "none",
+    "share": 0.023,
+    "source": "aime2026"
+   },
+   "10": {
+    "flag": "none",
+    "share": 0.069,
+    "source": "aime2026"
+   },
+   "11": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "aime2026"
+   },
+   "12": {
+    "flag": "none",
+    "share": 0.375,
+    "source": "aime2026"
+   },
+   "13": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "aime2026"
+   },
+   "14": {
+    "flag": "none",
+    "share": 0.044,
+    "source": "aime2026"
+   },
+   "15": {
+    "flag": "none",
+    "share": 0.044,
+    "source": "aime2026"
+   },
+   "16": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "aime2026"
+   },
+   "17": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "aime2026"
+   },
+   "18": {
+    "flag": "none",
+    "share": 0.137,
+    "source": "aime2026"
+   },
+   "19": {
+    "flag": "none",
+    "share": 0.051,
+    "source": "aime2026"
+   },
+   "20": {
+    "flag": "none",
+    "share": 0.029,
+    "source": "aime2026"
+   },
+   "21": {
+    "flag": "none",
+    "share": 0.026,
+    "source": "aime2026"
+   },
+   "22": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "aime2026"
+   },
+   "23": {
+    "flag": "none",
+    "share": 0.169,
+    "source": "aime2026"
+   },
+   "24": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "aime2026"
+   },
+   "25": {
+    "flag": "none",
+    "share": 0.056,
+    "source": "aime2026"
+   },
+   "26": {
+    "flag": "none",
+    "share": 0.083,
+    "source": "aime2026"
+   },
+   "27": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026"
+   },
+   "28": {
+    "flag": "none",
+    "share": 0.13,
+    "source": "hmmt_feb2026"
+   },
+   "29": {
+    "flag": "none",
+    "share": 0.2,
+    "source": "hmmt_feb2026"
+   },
+   "30": {
+    "flag": "none",
+    "share": 0.062,
+    "source": "hmmt_feb2026"
+   },
+   "31": {
+    "flag": "none",
+    "share": 0.2,
+    "source": "hmmt_feb2026"
+   },
+   "32": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026"
+   },
+   "33": {
+    "flag": "none",
+    "share": 0.038,
+    "source": "hmmt_feb2026"
+   },
+   "34": {
+    "flag": "none",
+    "share": 0.038,
+    "source": "hmmt_feb2026"
+   },
+   "35": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026"
+   },
+   "36": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026"
+   },
+   "37": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026"
+   },
+   "38": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026"
+   },
+   "39": {
+    "flag": "none",
+    "share": 0.019,
+    "source": "hmmt_feb2026"
+   },
+   "40": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026"
+   },
+   "41": {
+    "flag": "none",
+    "share": 0.062,
+    "source": "hmmt_feb2026"
+   },
+   "42": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026"
+   },
+   "43": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026"
+   },
+   "44": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026"
+   },
+   "45": {
+    "flag": "none",
+    "share": 0.07,
+    "source": "hmmt_feb2026"
+   },
+   "46": {
+    "flag": "none",
+    "share": 0.055,
+    "source": "hmmt_feb2026"
+   },
+   "47": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026"
+   },
+   "48": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026"
+   },
+   "49": {
+    "flag": "none",
+    "share": 0.176,
+    "source": "hmmt_feb2026"
+   },
+   "50": {
+    "flag": "none",
+    "share": 0.059,
+    "source": "hmmt_feb2026"
+   },
+   "51": {
+    "flag": "none",
+    "share": 0.024,
+    "source": "hmmt_feb2026"
+   },
+   "52": {
+    "flag": "none",
+    "share": 0.051,
+    "source": "hmmt_feb2026"
+   },
+   "53": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026"
+   },
+   "54": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026"
+   },
+   "55": {
+    "flag": "none",
+    "share": 0.042,
+    "source": "hmmt_feb2026"
+   },
+   "56": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026"
+   },
+   "57": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026"
+   },
+   "58": {
+    "flag": "none",
+    "share": 0.022,
+    "source": "hmmt_feb2026"
+   },
+   "59": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026_guts"
+   },
+   "60": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026_guts"
+   },
+   "61": {
+    "flag": "none",
+    "share": 0.083,
+    "source": "hmmt_feb2026_guts"
+   },
+   "62": {
+    "flag": "none",
+    "share": 0.024,
+    "source": "hmmt_feb2026_guts"
+   },
+   "63": {
+    "flag": "none",
+    "share": 0.048,
+    "source": "hmmt_feb2026_guts"
+   },
+   "64": {
+    "flag": "none",
+    "share": 0.061,
+    "source": "hmmt_feb2026_guts"
+   },
+   "65": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026_guts"
+   },
+   "66": {
+    "flag": "none",
+    "share": 0.357,
+    "source": "hmmt_feb2026_guts"
+   },
+   "67": {
+    "flag": "none",
+    "share": 0.143,
+    "source": "hmmt_feb2026_guts"
+   },
+   "68": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026_guts"
+   },
+   "69": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026_guts"
+   },
+   "70": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026_guts"
+   },
+   "71": {
+    "flag": "none",
+    "share": 0.061,
+    "source": "hmmt_feb2026_guts"
+   },
+   "72": {
+    "flag": "none",
+    "share": 0.021,
+    "source": "hmmt_feb2026_guts"
+   },
+   "73": {
+    "flag": "none",
+    "share": 0.104,
+    "source": "hmmt_feb2026_guts"
+   },
+   "74": {
+    "flag": "none",
+    "share": 0.118,
+    "source": "hmmt_feb2026_guts"
+   },
+   "75": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026_guts"
+   },
+   "76": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026_guts"
+   },
+   "77": {
+    "flag": "none",
+    "share": 0.069,
+    "source": "hmmt_feb2026_guts"
+   },
+   "78": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026_guts"
+   },
+   "79": {
+    "flag": "none",
+    "share": 0.083,
+    "source": "hmmt_feb2026_guts"
+   },
+   "80": {
+    "flag": "none",
+    "share": 0.092,
+    "source": "hmmt_feb2026_guts"
+   },
+   "81": {
+    "flag": "none",
+    "share": 0.065,
+    "source": "hmmt_feb2026_guts"
+   },
+   "82": {
+    "flag": "none",
+    "share": 0.027,
+    "source": "hmmt_feb2026_guts"
+   },
+   "83": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026_guts"
+   },
+   "84": {
+    "flag": "none",
+    "share": 0.034,
+    "source": "hmmt_feb2026_guts"
+   },
+   "85": {
+    "flag": "none",
+    "share": 0.015,
+    "source": "hmmt_feb2026_guts"
+   },
+   "86": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_feb2026_guts"
+   },
+   "87": {
+    "flag": "none",
+    "share": 0.03,
+    "source": "hmmt_nov2026_gen"
+   },
+   "88": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_gen"
+   },
+   "89": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_gen"
+   },
+   "90": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_gen"
+   },
+   "91": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_gen"
+   },
+   "92": {
+    "flag": "none",
+    "share": 0.122,
+    "source": "hmmt_nov2026_gen"
+   },
+   "93": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_gen"
+   },
+   "94": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_thm"
+   },
+   "95": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_thm"
+   },
+   "96": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_thm"
+   },
+   "97": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_thm"
+   },
+   "98": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_thm"
+   },
+   "99": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_thm"
+   },
+   "100": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_team"
+   },
+   "101": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_team"
+   },
+   "102": {
+    "flag": "none",
+    "share": 0.019,
+    "source": "hmmt_nov2026_team"
+   },
+   "103": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_team"
+   },
+   "104": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_team"
+   },
+   "105": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_team"
+   },
+   "106": {
+    "flag": "none",
+    "share": 0.118,
+    "source": "hmmt_nov2026_team"
+   },
+   "107": {
+    "flag": "none",
+    "share": 0.065,
+    "source": "hmmt_nov2026_team"
+   },
+   "108": {
+    "flag": "none",
+    "share": 0.073,
+    "source": "hmmt_nov2026_guts"
+   },
+   "109": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "110": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "111": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "112": {
+    "flag": "none",
+    "share": 0.037,
+    "source": "hmmt_nov2026_guts"
+   },
+   "113": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "114": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "115": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "116": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "117": {
+    "flag": "none",
+    "share": 0.033,
+    "source": "hmmt_nov2026_guts"
+   },
+   "118": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "119": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "120": {
+    "flag": "none",
+    "share": 0.077,
+    "source": "hmmt_nov2026_guts"
+   },
+   "121": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "122": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "123": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "124": {
+    "flag": "none",
+    "share": 0.194,
+    "source": "hmmt_nov2026_guts"
+   },
+   "125": {
+    "flag": "none",
+    "share": 0.075,
+    "source": "hmmt_nov2026_guts"
+   },
+   "126": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "127": {
+    "flag": "none",
+    "share": 0.121,
+    "source": "hmmt_nov2026_guts"
+   },
+   "128": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "129": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "130": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "131": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "132": {
+    "flag": "none",
+    "share": 0.028,
+    "source": "hmmt_nov2026_guts"
+   },
+   "133": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "134": {
+    "flag": "none",
+    "share": 0.0,
+    "source": "hmmt_nov2026_guts"
+   },
+   "135": {
+    "flag": "none",
+    "share": 0.056,
+    "source": "hmmt_nov2026_guts"
+   }
+  }
+ }
+}

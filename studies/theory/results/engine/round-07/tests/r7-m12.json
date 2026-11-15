@@ -1,0 +1,113 @@
+{
+ "theory": "r7-m12",
+ "predictions": [
+  {
+   "k": 1,
+   "experiment": "Mechanism test: per-problem gain of the RL-written-examples arm (draw 1) over the mean of the 4 cued-base samples, averaged over problems in the subjects of example problems 0-2, minus the same average over all other subjects. The register-transfer rival (gain spread in proportion to base errors) predicts about 0.015; subject confinement predicts about 0.08.",
+   "recipe": "Files: studies/rlneurons/results/axis/math500-01/vectors.json with its manifest.json, and studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. Arm R = the vectors.json arm whose manifest entry is the cued base with 3 solved examples written by Math-RL (Olmo-3.1-7B-RL-Zero-Math) of MATH-500 problems 0, 1, 2 (shots1, draw 1). Arms B0-B3 = base_cue_s0, base_cue_s1, base_cue_s2, base_cue_s3. Align every arm to problem_index through vectors.json problem_indices. Drop problem_index 0, 1 and 2, and any problem whose entry in R or in any B arm is null or missing. Per problem b = (B0+B1+B2+B3)/4 and g = R - b; vector entries are v3 0/1, and cap hits are already 0. M = the set of per_problem.json subject values of problem_index 0, 1 and 2. Statistic S = mean of g over the kept problems whose per_problem.json subject is in M, minus mean of g over the kept problems whose subject is not in M. Problems absent from per_problem.json are dropped.",
+   "unit": "difference of fractions of problems",
+   "value": 0.08,
+   "low": 0.035,
+   "high": 0.13,
+   "refuted_by": "S below 0.035",
+   "gpu_minutes": 0,
+   "script": "tests/r7-m12/p1.py",
+   "measured": -0.018489574809335205,
+   "n": 223,
+   "interval": [
+    -0.05767259056732741,
+    0.021835075493612084
+   ],
+   "interval_kind": "bootstrap",
+   "inside": false,
+   "refuted_by_met": true,
+   "alt_measured": -0.017677551295597067,
+   "not_computable": null,
+   "note": "Files: studies/rlneurons/results/axis/math500-01/vectors.json + manifest.json (in git), studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (in git); studies/rlneurons/data/shots1/rl.json only to check the draw used problem_indices [0,1,2]. Arm R is found in the manifest as the single cue arm whose 'what' says 'written by Math-RL' with a shots1 run folder (it is shots_rl, job abaybektursun-1114-183901-fd89); the script stops with not_computable if that is not unique. M = {precalculus, intermediate_algebra, algebra} from per_problem.json. Main number: pooled mean of g = R - mean(B0..B3) over the matched problems minus the same over the unmatched ones (problems weighted equally). alt_measured: each subject weighted equally (mean of per-subject mean g on each side). n = the smaller group (unmatched, about 223). The interval comes from bootstrapping over the kept problems, so the group sizes vary across resamples. shots_rl has nulls only at 0-2, and the B arms have none, so about 497 problems are kept. Vectors are v3 0/1 with cap hits already 0, as the recipe says; the script does not regrade.",
+   "example_row": {
+    "problem_index": 3,
+    "unique_id": "test/number_theory/572.json",
+    "subject": "number_theory",
+    "matched": false,
+    "R": 1,
+    "base_cue_s0": 1,
+    "base_cue_s1": 1,
+    "base_cue_s2": 1,
+    "base_cue_s3": 1,
+    "b": 1.0,
+    "g": 0.0
+   }
+  },
+  {
+   "k": 2,
+   "experiment": "Case where the effect should not appear: the same matched-minus-unmatched contrast for the base-written-examples arm, which uses the same three example problems and so the same subjects. The examples carry the base's own routine, so the mechanism predicts no subject contrast.",
+   "recipe": "Files as in the first recipe. Arm E = the vectors.json arm whose manifest job id is abaybektursun-1114-183855-e840 (cued base with 3 base-written examples). Arms B0-B3 = base_cue_s0 to base_cue_s3. Drop problem_index 0, 1, 2 and any problem whose entry in E or in any B arm is null or missing. Per problem g = E - (B0+B1+B2+B3)/4. M = subjects of problem_index 0, 1, 2 in per_problem.json. Statistic S_E = mean g over kept problems with subject in M minus mean g over kept problems with subject not in M. Problems absent from per_problem.json are dropped.",
+   "unit": "difference of fractions of problems",
+   "value": 0.0,
+   "low": -0.045,
+   "high": 0.045,
+   "refuted_by": "S_E above 0.045 or below -0.045",
+   "gpu_minutes": 0,
+   "script": "tests/r7-m12/p2.py",
+   "measured": -0.02192645085267258,
+   "n": 223,
+   "interval": [
+    -0.06924092902711323,
+    0.02344695441710367
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": -0.03114470816387821,
+   "not_computable": null,
+   "note": "Same files as k 1. Arm E = the manifest arm whose job_id is abaybektursun-1114-183855-e840 (shots_base, base-written examples of problems 0,1,2 per studies/rlneurons/data/shots1/base.json). Same pooled matched-minus-unmatched contrast, same alt_measured (subjects weighted equally), n = the smaller group. refuted_by is coded as |S_E| > 0.045 on the main number.",
+   "example_row": {
+    "problem_index": 3,
+    "unique_id": "test/number_theory/572.json",
+    "subject": "number_theory",
+    "matched": false,
+    "E": 1,
+    "base_cue_s0": 1,
+    "base_cue_s1": 1,
+    "base_cue_s2": 1,
+    "base_cue_s3": 1,
+    "b": 1.0,
+    "g": 0.0
+   }
+  },
+  {
+   "k": 3,
+   "experiment": "Cause: the examples only let the base copy a routine on problems it can already solve. On problems the cued base solved in 0 of its 4 samples, the RL-written-examples arm should do no better than a fresh base sample (about 5 right). A rival in which the examples pass on RL's capability predicts about RL's single-sample rate there, about 9 to 10.",
+   "recipe": "Files: studies/rlneurons/results/axis/math500-01/vectors.json with manifest.json. Arm R as in the first recipe (Math-RL-written examples of problems 0-2, draw 1); B0-B3 = base_cue_s0 to base_cue_s3. Drop problem_index 0, 1, 2 and any problem whose entry in R or in any B arm is null or missing. Z = kept problems with B0+B1+B2+B3 == 0. Statistic = number of problems in Z where R == 1 (an integer; cap hits are already 0 in the vectors). Also report |Z|.",
+   "unit": "problems",
+   "value": 5,
+   "low": 1,
+   "high": 9,
+   "refuted_by": "count above 9",
+   "gpu_minutes": 0,
+   "script": "tests/r7-m12/p3.py",
+   "measured": 5,
+   "n": 33,
+   "interval": [
+    2,
+    9
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": 0.15151515151515152,
+   "not_computable": null,
+   "note": "Files: vectors.json + manifest.json. Arm R chosen as in k 1 (shots_rl). Z = kept problems (0,1,2 and nulls dropped) with base_cue_s0..s3 all 0. Main number = count of Z with R == 1; |Z| goes in the groups line and is n. Interval: bootstrap over all kept problems with the count as the statistic, so |Z| varies across resamples. An interval from a bootstrap over Z alone, with |Z| fixed, would be narrower. alt_measured = count/|Z| (a rate rather than a count). refuted_by: count > 9. The prediction's 'about 5' baseline for a fresh base sample is not computed: by construction every B sample is 0 on Z, so a fresh base sample is not measurable from these vectors.",
+   "example_row": {
+    "problem_index": 18,
+    "unique_id": "test/geometry/434.json",
+    "R": 1,
+    "base_cue_s0": 0,
+    "base_cue_s1": 0,
+    "base_cue_s2": 0,
+    "base_cue_s3": 0,
+    "base_sum": 0
+   }
+  }
+ ]
+}

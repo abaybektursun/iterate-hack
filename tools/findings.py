@@ -32,7 +32,8 @@ The icon's space is 112 by 80 units around the centre (56, 36). A module without
 
 
 NO_REWARD, ANSWERS, WEIGHTS = "What needs no reward?", "How does RL change the answers?", "Where does RL's change sit in the weights?"
-GROUPS = [NO_REWARD, ANSWERS, WEIGHTS, "New"]
+THEORIES = "Do our theories predict?"
+GROUPS = [NO_REWARD, ANSWERS, WEIGHTS, THEORIES, "New"]
 
 
 def signed(x, digits=1):
@@ -125,6 +126,10 @@ TABLE = {
         "group": WEIGHTS,
         "figure": lambda m: [signed(m.DATA["vs_cue_hard"]["points"]), "points",
                              f"328 harder problems, over Base + cue; 8 random directions {signed(m.DATA['random_vs_cue_hard']['points'])}"]},
+    "the-finish-dial": {
+        "group": WEIGHTS,
+        "figure": lambda m: [f"{m.DATA['cells']['0']['cut']} → {m.DATA['cells']['1.5']['cut']}", "cut off",
+                             f"of 328 harder problems, 8 RL directions at size 1.5; right {m.DATA['cells']['0']['right']} → {m.DATA['cells']['1.5']['right']}, RL {m.DATA['cells']['rl']['right']}"]},
     "rl-every-neuron": {
         "group": WEIGHTS,
         "figure": lambda m: [m.pct(m.mean(m.ONE["best"])), "of RL's effect", f"next-word predictions, RL's best {m.ONE['share']:g} % of neurons copied"]},
@@ -135,6 +140,10 @@ TABLE = {
     "loop-neurons": {
         "group": WEIGHTS,
         "figure": lambda m: [f"{m.DATA['states'][0]['loops']} → {m.DATA['states'][1]['loops']}", "loops", f"of {m.DATA['n']} answers, MATH-500, T 0.6"]},
+    "theories-on-trial": {
+        "group": THEORIES,
+        "figure": lambda m: [f"{m.DATA['nearer']['all'][0]} of {m.DATA['nearer']['all'][1]}", "predictions",
+                             "theory nearer the measured number than readers with no theory; half would be a tie"]},
 }
 
 

@@ -1,0 +1,18 @@
+{
+ "command": "python -m studies.rlneurons.analysis.probdep abaybektursun-1115-014547-2c8c",
+ "job": "abaybektursun-1115-014547-2c8c",
+ "job_metrics": {
+  "status": "done",
+  "rows": "studies/rlneurons/data/wrongstep/base_cue_answer_heads_v1.jsonl.gz",
+  "answers": 2000,
+  "positions": 1802995,
+  "max_tokens": 1000,
+  "model_repo": "allenai/Olmo-3-1025-7B",
+  "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+  "mean_lp_tok": {
+   "base": -0.4050569236278534,
+   "noprob": -0.49232757091522217
+  },
+  "job_id": "abaybektursun-1115-014547-2c8c"
+ }
+}

@@ -1,0 +1,9 @@
+After, 2026-11-15 15:02 UTC. Tests without a rented box (no credits spent).
+1. Upload at job end: the box-side script of vast.py run, executed locally with /root moved to a temp folder, job "echo generated":
+   script exit 0; `python3 tools/vast.py get 0 looptest-065853` (no box with id 0 exists) copied log ("generated", "exit 0") and
+   metrics.json from s3://<team bucket>/jobs/looptest-065853.tar and wrote .copied. A job with no stored tar still goes to ssh as before.
+   First try failed with 403 SignatureDoesNotMatch: boto3 signs S3 URLs with version 2 by default here; the URL is now signed with version 4.
+   Not tested: a real box (python3 and network on the image). The first real job after this commit is the test.
+2. vast.py ls prints GPU use: 12 boxes listed at 15:00, 4 of them at GPU 0 %.
+3. Idle time (test board, ITERATE_TEST=1, work-ddef11): after 65 s "idle 1m"; comment from another branch: still "idle 1m 1c";
+   comment from the owner's branch: "idle 0m 2c".

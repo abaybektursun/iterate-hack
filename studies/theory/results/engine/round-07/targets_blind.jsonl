@@ -1,0 +1,69 @@
+{"id": "t01", "what": "right of 328, hard328 n=328, Olmo-3-1025-7B base + opening cue, T 1.0 / top-p 1.0, grader v3, majority vote over 4 samples after restarting cut-off answers", "unit": "right of 328"}
+{"id": "t02", "what": "RL (Olmo-3.1-7B-RL-Zero-Math, plain) minus cued base, hard328 n=328, one sample each, T 1.0 / top-p 1.0, grader v3, difference in accuracy points", "unit": "points"}
+{"id": "t03", "what": "mean tokens per problem, hard328 n=328, cued base, T 1.0 / top-p 1.0, vote over 4 samples, no restart", "unit": "tokens per problem"}
+{"id": "t04", "what": "percent right per sample on the 72 harder problems found in the RL-Zero-Math training prompts (43 exact, 29 near), base + cue, 4 samples per problem, T 1.0 / top-p 1.0, grader v3", "unit": "percent"}
+{"id": "t05", "what": "percent right per sample on the 72 harder problems found in the RL-Zero-Math training prompts, RL (Olmo-3.1-7B-RL-Zero-Math), 4 samples per problem, T 1.0 / top-p 1.0, grader v3", "unit": "percent"}
+{"id": "t06", "what": "percent right per sample on the 72 harder problems found in the RL-Zero-Math training prompts, Think-SFT + cue, 4 samples per problem, T 1.0 / top-p 1.0, grader v3", "unit": "percent"}
+{"id": "t07", "what": "right of 328 hard problems within a 4,000-token budget (stored run truncated at 4k tokens), cued base, one sample, T 1.0 / top-p 1.0, grader v3", "unit": "right of 328"}
+{"id": "t08", "what": "right of 328 hard problems within a 4,000-token budget (stored run truncated at 4k tokens), base + top 64 singular directions per matrix of (RL-Math minus base), cue, one sample, T 1.0 / top-p 1.0, grader v3", "unit": "right of 328"}
+{"id": "t09", "what": "right of 328 hard problems within a 4,000-token budget (stored run truncated at 4k tokens), RL-Zero-Math cell, one sample, T 1.0 / top-p 1.0, grader v3", "unit": "right of 328"}
+{"id": "t10", "what": "median (p50) answer length in tokens of the RL-Zero-Math cell on the hard328 problems that it and the base both finish, one sample, T 1.0 / top-p 1.0", "unit": "tokens"}
+{"id": "t11", "what": "hard328 n=328, vote over 4 samples each, number of problems where RL is right and the cued base is wrong, T 1.0 / top-p 1.0, grader v3", "unit": "problems"}
+{"id": "t12", "what": "of the hard328 problems where the vote of RL is right and the cued base vote is wrong, the number where the base has at least one right sample among its four, T 1.0 / top-p 1.0", "unit": "problems"}
+{"id": "t13", "what": "pass@4 (oracle over four samples) of the cued base on hard328 n=328, T 1.0 / top-p 1.0, grader v3", "unit": "right of 328"}
+{"id": "t14", "what": "right of 306 continuations of the plain cued base from the token before 51 wrong steps (6 per prefix), MATH-500, T 1.0, grader v3, cap 4,000 new tokens", "unit": "right of 306"}
+{"id": "t15", "what": "right of 306 continuations of the cued base from the token before 51 wrong steps, decoding with problem contrast softmax(2 logits - logits without the problem), MATH-500, T 1.0, grader v3, cap 4,000 new tokens", "unit": "right of 306"}
+{"id": "t16", "what": "right of 306 continuations from the token before 51 wrong steps of the cued base, with RL (Olmo-3.1-7B-RL-Zero-Math) continuing the base text, MATH-500, T 1.0, grader v3, cap 4,000 new tokens", "unit": "right of 306"}
+{"id": "t17", "what": "hard328 n=328, vote over 4 samples made of two RL and two Think-SFT samples (cue for Think-SFT), T 1.0 / top-p 1.0, grader v3, mean right over the mixes", "unit": "right of 328"}
+{"id": "t18", "what": "hard328 n=328, vote over all eight samples (four RL and four Think-SFT), T 1.0 / top-p 1.0, grader v3", "unit": "right of 328"}
+{"id": "t19", "what": "hard328 problems where the Think-SFT vote over 4 is right and the RL vote over 4 is wrong, T 1.0 / top-p 1.0, grader v3", "unit": "problems"}
+{"id": "t20", "what": "MATH-500 n=500, Think-SFT (allenai/Olmo-3-7B-Think-SFT) + cue, vote over 4 samples, no restart, T 1.0 / top-p 1.0, grader v3", "unit": "right of 500"}
+{"id": "t21", "what": "hard328 n=328, Think-SFT + cue, sequential vote up to 4 (rule chosen on MATH-500), mean right over 24 draw orders, T 1.0 / top-p 1.0, grader v3", "unit": "right of 328"}
+{"id": "t22", "what": "hard328 n=328, RL plain, sequential vote up to 4 (rule chosen on MATH-500), mean right over 24 draw orders, T 1.0 / top-p 1.0, grader v3", "unit": "right of 328"}
+{"id": "t23", "what": "percent right of base + cue continuations from the token before a slip (21 prefixes, 6 continuations each, cap 4,000 new tokens), MATH-500, T 1.0, grader v3", "unit": "percent"}
+{"id": "t24", "what": "percent right from scratch (other 3 stored cued-base samples within the same token budget) on the problems of the 21 slip prefixes, MATH-500, T 1.0, grader v3", "unit": "percent"}
+{"id": "t25", "what": "percent right from scratch (other 3 stored cued-base samples within the same token budget) on the problems of the 14 judged-misreading prefixes, MATH-500, T 1.0, grader v3", "unit": "percent"}
+{"id": "t26", "what": "share of 478 right-vs-wrong pairs (same problem, 150 problems) where the right cued-base sample ranks above the wrong one by mean log p(token | problem) - log p(token | no problem) over the first 1,000 tokens, 2,000 stored samples, MATH-500", "unit": "percent of pairs"}
+{"id": "t27", "what": "same pair ranking share as the problem-dependence signal, restricted to the lowest tenth of the token values, over the first 1,000 tokens, 2,000 stored cued-base samples, MATH-500", "unit": "percent of pairs"}
+{"id": "t28", "what": "mean log p(token | problem) - log p(token | no problem) per token over the first 1,000 tokens of the cued base's judged-misread samples, MATH-500", "unit": "nats per token"}
+{"id": "t29", "what": "within-problem AUROC, right vs wrong cued-base sample at 1,000 tokens, using the base's own mean log p, MATH-500, T 1.0", "unit": "AUROC"}
+{"id": "t30", "what": "within-problem AUROC, right vs wrong cued-base sample, using RL's likelihood of the base text (first figure of the pair; second is length alone), MATH-500", "unit": "AUROC"}
+{"id": "t31", "what": "hard328 n=328, relay: Think-SFT + cue writes the first 50 % of the answer tokens and RL-Zero-Math finishes, T 1.0 / top-p 1.0, grader v3, 1 sample", "unit": "right of 328"}
+{"id": "t32", "what": "hard328 n=328, control: Think-SFT + cue writes the first 50 % and Think-SFT finishes its own prefix, T 1.0 / top-p 1.0, grader v3, 1 sample", "unit": "right of 328"}
+{"id": "t33", "what": "hard328 n=328, control: Think-SFT + cue writes the first 25 % and Think-SFT finishes its own prefix, T 1.0 / top-p 1.0, grader v3, 1 sample", "unit": "right of 328"}
+{"id": "t34", "what": "precision of Think-SFT + cue when keeping its shortest answers up to coverage 0.50, hard328 n=328, 1,312 samples (attempt 0 of 4), T 1.0, grader v3", "unit": "percent"}
+{"id": "t35", "what": "percent right among Think-SFT finished answers over 12,000 tokens, hard328, 1,312 samples, T 1.0, grader v3", "unit": "percent"}
+{"id": "t36", "what": "RL precision (percent right of finished answers) on the 141 hard328 problems where Think-SFT hits the cap, T 1.0, grader v3", "unit": "percent"}
+{"id": "t37", "what": "Think-SFT + cue vote over 4 on the 322 hard328 problems not matching Think-SFT training prompts, T 1.0 / top-p 1.0, grader v3", "unit": "right of 322"}
+{"id": "t38", "what": "RL plain vote over 4 on the 322 hard328 problems not matching Think-SFT training prompts, T 1.0 / top-p 1.0, grader v3", "unit": "right of 322"}
+{"id": "t39", "what": "right of 500, MATH-500 n=500, untrained base, plain prompt, first of up to 32 draws of 24 tokens that opens with newline then Okay then continued, T 1.0 / top-p 1.0, grader v3, 1 sample", "unit": "right of 500"}
+{"id": "t40", "what": "right of 500, MATH-500 n=500, untrained base, plain prompt, continuing the first draw that does not open with newline then Okay (control), T 1.0 / top-p 1.0, grader v3", "unit": "right of 500"}
+{"id": "t41", "what": "gain of choosing the self-opened draw over the first draw on the 403 regenerated MATH-500 problems, untrained base plain prompt, T 1.0 / top-p 1.0, grader v3, paired difference", "unit": "points"}
+{"id": "t42", "what": "percent of RL's long (>8,000 tokens) finished wrong hard328 answers labelled asserted (final number not derived) by a blind judge, 80 rows, T 1.0, grader v3", "unit": "percent"}
+{"id": "t43", "what": "percent of the cued base's long (>8,000 tokens) finished wrong hard328 answers labelled asserted by a blind judge, 80 rows, T 1.0, grader v3", "unit": "percent"}
+{"id": "t44", "what": "percent of Think-SFT's long (>8,000 tokens) finished wrong hard328 answers labelled asserted by a blind judge, 80 rows, T 1.0, grader v3", "unit": "percent"}
+{"id": "t45", "what": "percent right among RL's long finished hard328 answers that the judge labelled asserted, T 1.0, grader v3", "unit": "percent"}
+{"id": "t46", "what": "share of the samples kept at coverage 0.50 (shortest answers) that come from the 149 hard328 problems the cued base solves 3-4 of 4, first of the two figures (Think-SFT), 4 samples each, T 1.0, grader v3", "unit": "percent"}
+{"id": "t47", "what": "Think-SFT minus RL lead in finished answers over 8,000 tokens on hard328 problems where the base is right 1-2 of 4, 4 samples each, T 1.0, grader v3", "unit": "points"}
+{"id": "t48", "what": "Think-SFT minus RL lead among answers over 8,000 tokens on hard328 problems where the cued base is never right, 4 samples each, T 1.0, grader v3", "unit": "points"}
+{"id": "t49", "what": "right of 500, MATH-500 n=500, base + cue, T 0.6 / top-p 1.0, grader v3, unedited, first of four samples", "unit": "right of 500"}
+{"id": "t50", "what": "pooled gain over four samples of zeroing 1,000 loop neurons in the cued base, MATH-500 n=500, T 0.6 / top-p 1.0, grader v3, difference in points", "unit": "points"}
+{"id": "t51", "what": "tokens per problem, base + cue with 1,000 loop neurons zeroed, vote over 4, MATH-500 n=500, T 0.6 / top-p 1.0, grader v3", "unit": "tokens per problem"}
+{"id": "t52", "what": "hard328 n=328, cued base, one sample, mean right over 4 samples, T 1.0 / top-p 1.0, grader v3", "unit": "right of 328"}
+{"id": "t53", "what": "hard328 n=328, cued base, vote over 4 after restart, ties to the shortest answer, T 1.0 / top-p 1.0, grader v3", "unit": "right of 328"}
+{"id": "t54", "what": "difference between one RL sample and one cued-base sample on hard328 n=328, T 1.0 / top-p 1.0, grader v3", "unit": "points"}
+{"id": "t55", "what": "percent of RL attempts on hard328 (1,312 attempts, attempt 0 of 4) that end with a long (>8,000 tokens) wrong answer labelled asserted, T 1.0, grader v3", "unit": "percent"}
+{"id": "t56", "what": "cap hits of Think-SFT + cue among 1,312 hard328 attempts (attempt 0 of 4), T 1.0", "unit": "cap hits"}
+{"id": "t57", "what": "RL long finished wrong answers on the 137 hard328 problems where the cued base hits the cap, attempt 0 of 4, T 1.0, grader v3", "unit": "answers"}
+{"id": "t58", "what": "share of the 65 MATH-500 problems RL gets right and the cued base wrong that are classed as sharpening (base right in 1-2 of 3 other samples), T 1.0, grader v3", "unit": "share"}
+{"id": "t59", "what": "share of the 65 MATH-500 RL-only problems classed as budget (base cap hit, no loop), cued base vs RL, T 1.0, grader v3", "unit": "share"}
+{"id": "t60", "what": "share of the 65 MATH-500 RL-only problems classed as slip (base right in 3 of 3 other samples), cued base vs RL, T 1.0, grader v3", "unit": "share"}
+{"id": "t61", "what": "share of the 247 MATH-500 problems RL gets right and the plain base wrong that are classed as answer-statement, T 1.0, grader v3", "unit": "share"}
+{"id": "t62", "what": "RL step 100 minus cued base, points more often right on the same MATH-500 problems, n=345, T 0.6, grader v3 (finished answers)", "unit": "points"}
+{"id": "t63", "what": "ratio of RL's rate of Wait/Hmm markers to the base's rate near a result, MATH-500 answers", "unit": "ratio"}
+{"id": "t64", "what": "right of 328, hard328, base - 8 singular directions per matrix of (RL-Math minus base) (size -1), cue, T 1.0 / top-p 1.0, grader v3, one sample, seed 3000000", "unit": "right of 328"}
+{"id": "t65", "what": "right of 328, hard328, base + 0.5 x top-8 singular directions per matrix of (RL-Math minus base), cue, T 1.0 / top-p 1.0, grader v3, one sample, seed 3000000", "unit": "right of 328"}
+{"id": "t66", "what": "tokens per problem, hard328, base - 8 singular directions per matrix of (RL-Math minus base) (size -1), cue, T 1.0 / top-p 1.0, one sample", "unit": "tokens per problem"}
+{"id": "t67", "what": "right of 328, hard328, Think-SFT + 2 x (RL-Math - base), cue, T 1.0 / top-p 1.0, grader v3, first of two seeds", "unit": "right of 328"}
+{"id": "t68", "what": "right of 328, hard328, Think-SFT + 2 x (RL-Math - base), cue, T 1.0 / top-p 1.0, grader v3, second of two seeds", "unit": "right of 328"}
+{"id": "t69", "what": "right of 328, hard328, Think-SFT + 1 x (RL-Math - base), cue, T 1.0 / top-p 1.0, grader v3, one sample", "unit": "right of 328"}
