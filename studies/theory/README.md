@@ -1239,6 +1239,94 @@ Files in `results/wide/round-12/`: `standing.md` / `standing.json` / `standing/`
 `surprises.json`, `targets.json` / `work.md` (20 targets), `pairs.json`, `duplicates.json`, `mechanisms.json` (42
 carried + 2 new), `forecasts.json` / `forecasts.md`, `run.json`, `round12.log`, `jobs/`.
 
+## Round 13 (engine 13, direct tests before forecasts)
+
+Plan `specs/SPEC_round13.md`. Board work-d758db. First end-to-end run of engine 13: a mechanism forecasts only if it
+holds a direct test on stored data. Board snapshot 2026-11-15T21:27:03 UTC. Command (run three times: to a crash, to
+the gate, past the gate):
+
+```
+uv run studies/theory/lib/forecast.py round studies/theory/results/wide/round-13 --from studies/theory/results/wide/round-12 studies/theory/results/wide/round-11 studies/theory/results/wide/round-10 studies/theory/results/wide/round-09 studies/theory/results/forecast/run-0{2,3,4,5,6,7,8} studies/theory/results/forecast/cells-01
+```
+
+**Minutes per stage** (UTC, from file times and `round13.log`). standing 1.7 (21:25:23 to 21:27:03); surprises 0.0;
+targets 2.7 (to 21:29:46); carried direct-test plans 1.5 (to 21:31:18); propose crashed at once. 18 minutes lost:
+the crash was seen only at 21:47 (the coordinator's watcher matched its own command line). Resumed 21:49:16: propose
+6.0 (6 jobs, 5 sent back once), duplicate judge 0.8, gate at 21:56:04. Running time to the gate 12.6 minutes; wall
+clock 30.7. Direct tests: the 5 carried plans ran from 21:35 (4 to 8 minutes each, 5 agents in parallel), the 12
+rival plans from 21:53 in 6 agents (3.4 to 7.3 minutes each); the last row at 22:04:11. Past the gate 5.9 minutes
+(forecasts 1.9, routes, check and blind forecasts 4.0), done 22:10:07. Whole round 44.7 minutes of wall clock.
+
+**Fixes** (each committed, then resumed). (1) `prompts/surprise_propose.md`, `routes_propose.md`, `cells_propose.md`:
+the no-git rule's `$(git rev-parse HEAD)` is an invalid `string.Template` placeholder; escaped as `$$`. (2)
+`lib/forecast.py`: a resumed round read the current board, not the board at its snapshot, so the resumed propose
+and forecast jobs saw result-2a5195 (posted 21:27:39, 36 s after the snapshot), which answers targets t03 to t09; the
+readers' t03 to t08 centres equal its measured numbers. Fixed after the forecasts were written; no score is affected
+(a forecast written after its result is not scored, rule 11.1), but t03 to t09 cannot score anyone. (3) No code
+change: a test undecided by its frozen rule gets a row in `direct_tested.json` with verdict `undecided` (not
+holding, not refuted, not in `refuted.json`), so it can be tested again.
+
+**Standing** (`standing.md`). 95 mechanisms scored, 44 carried. The top four by gain are all cause-refuted
+(run-05/f2-m06 +8.21, run-06/f2-m03 +6.73, run-02/f2-m01 +6.69, run-05/f2-m01 +6.49). Top carried untested:
+run-05/f2-m03 +5.14 (skipped by the planner: its m21 cell forecast missed), round-10/weights-m06 +1.85, run-08/f2-m02
++1.72, round-09/grader-m01 +1.67, run-08/f2-m06 +1.56, round-09/training-m01 +1.44. 14 surprises, 1 new
+(round-09 m11-r1, result-f8e596, 20 cap hits against readers 40-42).
+
+**Direct tests** (17 plans, `direct_tests.md`; one opus agent per plan or per pair sharing one data file; details in
+"Direct tests" below). Carried: round-09/training-m01 holds (template-01: drift 57 vs 63 of 328, D -1.8 points
+[-6.4, +2.7], null seed scatter 2.7); round-09/grader-m01 refuted (cue100-01: step-100 cue minus plain +8.5 of 500
+[+1.25, +15.5]); run-08/f2-m06 refuted (abstain-01: 0 vote-right problems flipped, threshold 2); round-10/weights-m06
+undecided (rank1-01: rank-1 edit +7.2 points [1.7, 12.6] on base-finished-wrong problems, about as much as directions
+2-8); run-08/f2-m02 undecided (capbox-01: 6.1 % of RL's native cap-hit rows credited, needed 10 %). Rivals (two per
+surprise; the judge called all 12 restatements of older mechanisms, reported only):
+
+| rival | surprise | test | verdict | deciding number (90 %), n, null |
+|---|---|---|---|---|
+| s1-a: the 4,096 cap removes every right route | autobench final 139 of 328 | karpcap-01 | holds (proxy) | lost problems with every right base sample > 4,096 tokens 0.714 [0.595, 0.833], n 42; matched won 0.173, n 133 |
+| s1-b: agreeing short wrong answers | same | karpagree-01 | refuted | agreement excess 0.064 [-0.130, 0.236] (needed 0.10); base's own agreement 0.167 |
+| s2-a: partial opening switch | m21 60 quick wrong | m21open-01 | refuted | answer-first share 0.25 [0.17, 0.35], n 60 (floor 0.40); plain base 0.21 |
+| s2-b: code-commit policy | same | m21hard-01 | refuted | solve-rate gap 0.005 [-0.066, 0.075] (needed 0.10); plain base's quick wrong problems |
+| s3-a: wrong answers split, right answer wins as mode | vote over 12, 466 | votesplit-01 | holds | gained problems right in < 6 of 12: 0.667 [0.476, 0.810], n 21; merged-wrong null keeps 0.381 |
+| s3-b: the vote over 4 loses to ties | same | votetie-01 | refuted | 0.095 [0.000, 0.190], n 21 (needed 0.60) |
+| s4-a: Code's directions add right programs, Math's add finishes | Code top-8 1.5x, 399 | codepass-01 | holds (point) | pass rate among finished, Code minus random +7.0 points [3.7, 10.3]; Math/Code ratio 0.21 [-0.46, 0.62], n 538 |
+| s4-b: the edit sharpens the base onto its own programs | same | sharpen-01 | holds | extra passes in the base's solved set, edit minus random +0.055 [-0.029, 0.139] (refuted below -0.10), n 113 vs 63 |
+| s5-a: cap and time budget set the dev100 ceiling | autobench dev100 84 | devcut-01 | undecided | per-sample rows only in a Modal Volume the team cannot read |
+| s5-b: plain T 0.6 wrong answers share one mode | same | devmode-01 | undecided | same; null ready, G_cue 0.40 [0.34, 0.46] |
+| s6-a: Code top-8 repairs the answer contract | Code top-8 1x, 386 | codecontract-01 | refuted | contract share of fixes 0.43 [0.35, 0.51] (needed 0.50); random 0.37 |
+| s6-b: the code gap is per-sample reliability | same | codereliab-01 | holds | fixes the base solves elsewhere 0.75 [0.68, 0.82], n 100; all base failures 0.48; RL-Code's fixes 0.74 |
+
+**Who forecast** (`mechanisms.json`, `forecasts.json`, `forecasts.md`). 7 holders: round-09/training-m01,
+round-10/weights-m03 (held host-01 in round 12, not distinctive), and s1-a, s3-a, s4-a, s4-b, s6-b; plus the two
+readers. On the 25 targets, one holder forecast is disjoint from both readers: s4-b on t04 (Math 1x + Code 1x on code,
+second new seed) 416 [407, 427] against 401 [398, 404] and 401 [397, 405]. result-2a5195 had already measured 401
+before the forecasts were written (the readers saw it through bug 2), so s4-b was already wrong there. On targets
+still open no holder differs from both readers. Pairs whose both rivals hold: s4 only, and it named no cell. One
+no-reward route, r13-n01 (from s4-b): cued base, T 1.0, min-p 0.05, vote over 4, hard328 shard 0/8, 230 GPU minutes
+(proposer's guess). Blind forecasts of right of 41: readers 23 [18, 28], s1-a 21 [16.5, 25.5], s3-a 22.5, s4-a, s4-b
+and s6-b 23 against the stored 22: margin +0.31 sd, no separation; work-180a48 already found no truncation rule beats
+untruncated sampling at T 1.0. No cell split; nothing in `experiments.md` is worth GPU time. Command, not run:
+`bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set hard328 --shard 0/8 --temperature 1.0 --top-p 1.0 --min-p 0.05 --samples 4 --seed 3000000 --commit COMMIT_SHA`.
+
+**SPEC_round13 hypotheses.** R1 (2 or more new mechanisms hold against a stronger null): holds, 5 (s1-a on a proxy,
+s4-a on point estimates). R2 (gate under 20 minutes): holds on running time (12.6), refuted on wall clock (30.7, the
+crash). R3 (proposals agree with the direct facts): holds; s1-a and s5-a restate run-02/f2-m01 but agree with its
+refuting number (median right length 3,921 tokens), and s2-a's test does not rest on the refuted r5-m03-rival. R4
+(2 of 3 plans well posed): refuted, 6 of 17 failed the check: s5-a and s5-b could not run (rows not readable), s1-a
+and s1-b ran only on proxies, s4-b's test cannot refute it against s4-a, s2-a's gap test could not separate the pair;
+9 more plans needed a fix before computing (a shared seed, a double-counted denominator, a wrong field name). R5 (a
+ranked cell from holders): refuted, no cell.
+
+**What the round shows.** The gate works as a filter: 8 of 17 plans refuted, 4 undecided, 6 hold, and the top
+forecast-gain mechanisms no longer forecast. But what holds is weak: the holders forecast nothing on open work that
+the readers do not. The good pair was s3: its two tests count complementary parts of one set, so exactly one could
+hold, and one did. The s4 pair's tests measured different numbers, so both held.
+
+Files in `results/wide/round-13/`: `standing.md` / `standing.json` / `standing/`, `graveyard.json`,
+`direct_facts.json`, `surprises.md` / `surprises.json`, `targets.json` / `work.md` (25 targets), `direct_tests.md` /
+`direct_tests.json` (17 plans), `pairs.json`, `duplicates.json`, `jobs/` (plans and rival files), `mechanisms.json`
+(7 holders), `forecasts.json` / `forecasts.md`, `cells.json` / `cells.md` / `cell_forecasts.json`, `experiments.md`,
+`run.json`, `round13.log`.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in
@@ -1380,6 +1468,26 @@ code text at about 0.54 of its drive on math text.
 | `analysis/direct_input.py` | Readout from trace-01's per-position drive (`runs/abaybektursun-1115-005830-2145/trace_00*.npz`) and 7 hard328 cells' `answers.jsonl` (Modal Volume `iterate-runs`). |
 | `results/direct/input-01/` | `readout.json`, `examples.json` (a high-drive and a low-drive problem that the edit shortens as much), `run.json`. |
 
+### drive-01: run-05/f2-m03 across domains (board work-c51f89, refuted)
+
+Claim tested: Math 3.1's top-8 directions moved code accuracy about half as far as Code's own (368 against 399 of 538,
+random 331: transfer 0.54) because code text drives their input subspace about half as much as math text. Readout: trace-01's
+per-answer drive D (r = ||diag(s) V^T x|| / ||W_base x||, mean over the first 6,000 answer tokens, 3 matrices, 4 bands) on the
+538 base Code-cue answers (new job) over the same on the 328 hard328 math answers (trace-01). Result:
+R_math = 0.869 [0.861, 0.877] (90 % bootstrap over texts); random rank-8 control 0.990 [0.988, 0.991]; R_math / R_rand 0.878
+[0.870, 0.887]. Frozen rule: above 0.85 refutes. Every band (0.85 to 0.88) and matrix (0.86 to 0.88) agrees. Reverse
+(secondary): Code 3.1's directions on math text over code text 0.686 [0.679, 0.693], against a predicted 0.45 to 0.47. So the
+Math subspace is driven by code text at 87 % of its math level, while its accuracy transfer is 54 %: input drive does not
+explain the half transfer. Check: 16 re-traced math answers match trace-01 within 0.07 %.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_drive.md` | Claim, verdict rule, control (pushed first, 12f9227). |
+| `prep/drive_inputs.py` | Builds `data/drive/code_cue_answers_v1.jsonl.gz` (job abaybektursun-1114-170304-c03c) and `math_check_v1.jsonl.gz`. |
+| `jobs/drive_trace.py` | The trace on code text (imports `studies/rlneurons/jobs/xreward_trace.py`); raw output `runs/ih-1115-214816-0563/`. |
+| `analysis/direct_drive.py` | Readout, bootstrap, re-trace check. |
+| `results/direct/drive-01/` | `metrics.json`, `rows.json` (per code text D of every condition), `examples.json` (highest and lowest drive code text), `run.json`. |
+
 ### short-01: run-02/f2-m01, "autobench buys votes with short samples" (board work-4c1119, result-ebf7a4, refuted)
 
 Claim tested (engine 12's plan, with the mechanism's own MATH-500 half added as control): hard328 solutions need 6,000-14,000
@@ -1439,6 +1547,142 @@ RL's effect; that needs Think-SFT + RL with the overlapping part projected out. 
 | `analysis/direct_host.py` | `extract` (per-matrix caps from the job's `metrics.json`), `analyze` (readout). |
 | `data/direct_host/cap_v1.json` | Per-matrix cap_right, cap_left, cap_both of Think-SFT, Math 3.0, Code 3.1 against 11 subspaces (input). |
 | `results/direct/host-01/` | `readout.json`, `examples.json` (matrices with the largest and smallest ratio over the base subspace), `run.json`. |
+
+### cue100-01: round-09/grader-m01, "step-100 cue and plain pool to one level" (board work-6b73e9, result-6ecd35, refuted)
+
+Claim tested (engine 13's plan): at RL step 100 the cue adds nothing beyond seed scatter on MATH-500. The 4 stored samples per arm pooled, the paired cue-minus-plain difference is D = +8.5 problems per 500, 95 % [+0.24, +16.75] (90 % [+1.25, +15.5]), label-permutation p 0.044, n 500 problems. That meets the frozen rule, so the claim is refuted, but only just: 2.5 % of bootstrap D values are at or below 0. All 16 single-sample cue-minus-plain pairs are positive (+1 to +20); pairs within one arm differ by at most 11 (seed-folder null +0.7, +1.3). Positive control: step 400 plain minus step 100 plain +20.25 [12.0, 28.5]. In the raw rows the cue moves problems both ways, often through cap hits; net 73 problems gain one right sample, 46 lose one. result-6832a8 had not decided it (lower end 0.00, no permutation p).
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_cue100.md` | Claim, null, frozen rule (pushed first). |
+| `analysis/direct_cue100.py` | Readout from the four `studies/rlneurons/results/ckptcue/s0100_*` folders. |
+| `results/direct/cue100-01/` | `readout.json`, `examples.json`, `reading.md`, `run.json`. |
+
+### abstain-01: run-08/f2-m06, "a cap hit casts no vote" (board work-37a3db, result-3605ba, refuted)
+
+Claim tested (engine 13's plan): on hard328, letting Think-SFT's 16,384-token cap hits finish inside a 4-sample vote turns 2 or more vote-right problems wrong. Vote of 3 stored Think-SFT + cue 16,384-cap samples plus its cap-32,768 row: scored at 16,384 (a longer row abstains) 240 of 328; at 32,768 (it votes) 245; the null, where wrong converted rows abstain, also 245. No problem the vote had right turned wrong (D = 0, threshold 2), so the claim is refuted. The vote gain is 0.22 of the 23-problem single gain, 95 % [0.05, 0.40], below half as predicted, but the ceiling account predicts that too. All 5 gains are problems where every native sample hit the cap. Reported only: the frozen tie rule (shortest row) gives the converted row's 9 ties to the native row; random ties give D 4.5; the 4-converted-row run (branch cap32vote) gives D 3 and a cost of 9 [4, 15]. RL contrast: D 1.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_abstain.md` | Claim, abstention null, frozen rule (pushed first). |
+| `analysis/direct_abstain.py` | Vote readout from cap32 and thinkvote rows. |
+| `results/direct/abstain-01/` | `readout.json`, `examples.json`, `reading.md`, `run.json`. |
+
+### rank1-01: round-10/weights-m06, "direction 1 adds finishes, directions 2-8 add right answers" (board work-2843ca, result-efc74d, undecided)
+
+Claim tested (engine 13's plan): on hard328 problems where a cued-base sample finished wrong, the rank-1 edit (direction 1 per matrix of RL-Math 3.1's change, 1x) is right no more often than a second base sample, while directions 2-8 at 1.5x are. Selector: base samples on seeds 3,020,000 and 3,030,000 (the plan's selector shared seed 3,000,000 with the rank-1 cell, whose rows correlate with it; moved before computing). Rank-1 edit +7.2 points [0.7, 13.6] (95 %), directions 2-8 +9.3 [3.0, 15.8], gap +2.1 [-6.1, 10.5], n 190 pairs on 139 problems; second base sample right 21.8 %, random rank-8 +0.4, top-8 1.5x control +14.0 (result-124593: +13.5). Neither refuting threshold is met, but "holds" needed the rank-1 gain below half the 2-8 gain: undecided, does not hold. Direction 1 adds right answers about as much as directions 2-8, with full derivations. Rank-1 rows from job abaybektursun-1115-000358-d11a (Modal Volume). Row in `direct_tested.json` with verdict undecided (not in `refuted.json`).
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_rank1.md` | Claim, selector change, frozen rule (pushed first). |
+| `analysis/direct_rank1.py` | Readout from the base, rank-1, directions-2-8, top-8 and random rows. |
+| `results/direct/rank1-01/` | `readout.json`, `examples.json`, `reading.md`, `run.json`. |
+
+### template-01: round-09/training-m01, "the template moves the answer, not the drift" (board work-996b09, result-ab26c4, holds)
+
+Claim tested (engine 13's plan): Think-SFT's own ChatML `<think>` template does not make it drift less. Drift signs of `studies/rlneurons` `drift.py` (a non-Latin script switch or a repeated 50-token window) on the first 16,384 generated tokens of each hard328 row: own template 57 of 328, raw template with the cue at cap 32,768 63 of 328, D = -1.8 points, 95 % [-7.3, +3.7] (90 % [-6.4, +2.7]). The four stored raw-cue samples drift on 57 to 66 rows (null S_max 2.7 points), so D sits inside seed scatter: holds. The rival run-04/f2-m05 predicted a clear drop in the own template. Instrument: the planted tests pass and describe-01's counts (156 of 1,312, 83 of 328) reproduce. The repeat sign also fires on harmless restatements of the problem, 27 rows in each cell. Weak hold: one sample per template, and the interval allows a 7-point drop. No raw-cue finished-wrong row (0 of 96) held the right answer after a bare "Answer:" line, so the mechanism's answer-placement half is not supported on hard328.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_template.md` | Claim, null, frozen rule (pushed first). |
+| `analysis/direct_template.py` | Drift readout on native hard328-01 and cap32 sft_cue rows. |
+| `results/direct/template-01/` | `readout.json`, `examples.json`, `reading.md`, `run.json`. |
+
+### capbox-01: run-08/f2-m02, "a native 16k run credits boxes written before the cut" (board work-cb6617, result-a9b0bc, undecided)
+
+Claim tested (engine 13's plan): in native 16,384-cap hard328 runs grader v3 credits a right answer to 10 % or more of RL plain's cap-hit rows, more than Think-SFT's share. The premise holds (68 % of RL's native cap-hit rows hold a box; base 15 %, Think-SFT 11 %), but v3 credits 7 of 114 (attempt 0, 4 samples), 6.1 %, Wilson 95 % [3.0, 12.1]; Think-SFT 14 of 378, 3.7 %; RL minus Think-SFT +2.4 points [-2.4, +8.1]. Undecided by the frozen rule, does not hold (with restart rows 9 of 171, upper bound 9.7 %: refuted). The 7 credited RL rows are finished solutions followed by a restated write-up that ran into the cap, not boxes written mid-reasoning. Cutting cap32 texts at 16,384 credits RL 2 of 20 and Think-SFT 4 of 93 rows the rescore counts wrong: the rescore loses 2 to 4 problems of 328. Grader checks pass (gold box appended: all right; wrong box appended: all wrong). Row in `direct_tested.json` with verdict undecided.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_capbox.md` | Claim, nulls, frozen rule (pushed first). |
+| `analysis/direct_capbox.py` | Readout from native 16k rows and cap32 rows. |
+| `results/direct/capbox-01/` | `readout.json`, `examples.json`, `reading.md`, `run.json`. |
+
+### codepass-01: round-13/s4-a, "Code's directions add right programs, Math's mostly add finished ones" (board work-ef2d53, result-d15c5e, holds on point estimates)
+
+Claim tested (the rival's own plan): among finished answers with a code block, Code's top-8 directions at 1.5x raise the HumanEval+/MBPP+ pass rate by 3 or more points over the random rank-8 1.5x edit, and Math's top-8 at 1.5x by less than half of that. Pass rates per finished-with-block problem, 538 problems, one sample per cell: Code 399/533 = 74.9 %, Math 368/531 = 69.3 %, random 331/488 = 67.8 %. dC = +7.0 points, 90 % [3.7, 10.3]; dM = +1.5 [-2.2, 5.1]; dM/dC = 0.21 [-0.46, 0.62] (paired bootstrap). The frozen rule holds on point estimates, but the ratio interval contains rival s4-b's 0.54. On problems both cells finished the ratio is 0.36. Planted control (Math's columns replaced by Code's) gives ratio 1.0 and "refuted". The plan's denominator counted cap hits without a block twice; fixed to a per-problem count (random 488, not 466) before computing.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_codepass.md` | Claim, rival's prediction, frozen rule (pushed first). |
+| `analysis/direct_codepass.py` | Readout from `studies/rlneurons/results/xreward/code_dial` cells. |
+| `results/direct/codepass-01/` | `readout.json`, `examples.json`, `reading.md`, `run.json`. |
+
+### sharpen-01: round-13/s4-b, "the edit sharpens the base onto its own programs" (board work-8e9805, result-63cacd, holds)
+
+Claim tested (the rival's own plan): the Code top-8 1.5x edit's extra passes over the cued base fall on problems the untrained base solves under another prompt (plain or Math cue; set U, 378 of 538) as often as the random rank-8 1.5x edit's extra passes do. Of the 221 problems the cued base fails, Code 1.5x passes 113, 78 in U (0.690); random passes 63, 40 in U (0.635). D = +0.055, 90 % [-0.029, 0.139]; refuted only if D < -0.10: holds. The null is not saturated: a cued-base failure lies in U 43 % of the time, and a planted arm (base with the Math cue) reads 1.0. Of the 61 problems only Code adds, 41 (0.67) are in U. In the raw rows most extra passes are easy problems the base missed by a slip (a missing import, leftover template text, an edge case) or a cap hit. Weak separation: rival s4-a does not strictly forbid D near 0, so this fails to refute s4-b without refuting s4-a.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_sharpen.md` | Claim, floor and planted control, frozen rule (pushed first). |
+| `analysis/direct_sharpen.py` | Readout from `code1` base cells and `xreward/code_dial`. |
+| `results/direct/sharpen-01/` | `readout.json`, `examples.json`, `reading.md`, `run.json`. |
+
+### votesplit-01: round-13/s3-a, "wrong answers split, the right answer wins as the mode" (board work-5d6316, result-4c9189, holds)
+
+Claim tested (the rival's own plan): most problems the vote over 12 gains over the vote over samples 0-3 have the right answer in under half of the 12 samples. Cued base, MATH-500, 12 samples at T 1.0 (rows of result-1c9e40); the team's vote (`votek.vote`, `rln4_lib.agree`) gives back the posted 446 (k = 4) and 466 (k = 12). Gained set G: 21 problems (22 flip right, 1 flips wrong). 14 of 21 have the right answer in under half the samples: S_a = 0.667, 90 % [0.476, 0.810]: holds. Example: problem 166, right answer twice against eight different wrong values. Null, wrong answers merged into one value per problem: keeps 8 of 21 gains (0.381, refuted at 0.80 or more), so 13 gains need the wrong answers to split. Caveat: 3 of the 14 win because most samples are cap hits that cast no vote; without them 11 of 21 = 0.524. n is small.
+
+### votetie-01: round-13/s3-b, "the vote over 4 is pulled down by ties" (board work-5d6316, result-4c9189, refuted)
+
+Same rows, vote and G (21). Only 2 of 21 were k = 4 ties with the right answer in a tied top group and right in at least 6 of 12: S_b = 0.095, 90 % [0.000, 0.190] (refuted below 0.60). Ties with a right group are common in G (9 of 21), but 7 of those 9 have the right answer in under half the samples. Null (k = 4 failures with a right sample that k = 12 does not fix, n 7): 0.143; difference -0.048 [-0.286, 0.143]. S_a and S_b count complementary parts of one set, so at most one could hold.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_vote13.md` | Both claims, nulls, frozen rules (pushed first). |
+| `analysis/direct_vote13.py` | Readout from `studies/rlneurons/results/votek/math500_base_cue-01`. |
+| `results/direct/votesplit-01/`, `results/direct/votetie-01/` | `readout.json`, `examples.json`, `reading.md`, `run.json`. |
+
+### karpcap-01: round-13/s1-a, "the 4,096 cap removes every right route" (board work-f5966a, result-4b64da, holds on a proxy)
+
+Claim tested (the rival's plan, on a proxy): the hard328 problems the kept autobench method (plain prompt, T 0.6, 12 votes, cap 4,096) loses although the cued base solves them (2 or more of 4 samples) are lost to the 4,096-token cap. The 12 samples per problem are not stored where the team can read them (frustea's Modal Volume; only the per-problem winners are committed), so the cap-hit share is replaced by the share of problems whose right cued-base samples are all longer than 4,096 tokens. finals-01 reproduces 139 of 328. Lost problems 0.714, 90 % [0.595, 0.833], n 42; matched problems the method gets right 0.173 [0.120, 0.226], n 133; difference 0.541 [0.414, 0.665]: holds. The losing winners look like what a cut sample writes when forced to answer (1, 0, 2024, "Answer").
+
+### karpagree-01: round-13/s1-b, "agreeing short wrong answers" (board work-f5966a, result-4b64da, refuted)
+
+Same 42 problems: the cap removes every right route on 71 % (refuted above 0.35). The method's wrong winner agrees with the cued base's wrong answers at 0.23 (39 pairs), the base's wrong answers with each other at 0.17 (12 pairs): difference 0.064 [-0.130, 0.236], below 0.10. On 19 of 27 comparable problems the winner matches no base wrong answer.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_karp13.md` | Both claims, the proxies, frozen rules (pushed first). |
+| `analysis/direct_karp13.py` | Readout from `studies/autobench/results/math500-loop/finals-01` and day1_3 hard328 rows. |
+| `results/direct/karpcap-01/`, `results/direct/karpagree-01/` | `readout.json`, `examples.json`, `reading.md`, `run.json`. |
+
+### m21open-01: round-13/s2-a, "partial opening switch" (board work-16161e, result-cc7288, refuted)
+
+Claim tested (the rival's own plan): cell m21's 60 quick wrong answers (base + Code-RL top-8 at 1x, plain prompt, MATH-500 first 250) are plain-base answer-first replies. 25 % [17, 35] meet the answer-first rule (floor 0.40): refuted. By eye the rule over-counts (rows that start with "(" or echo the prompt's "Answer:"); only 3 to 5 are real answer-first replies. The plain base's own 105 quick wrong answers are 21 % answer-first, so the gap test (0.04 [-0.07, 0.15]) does not separate the rivals. Both sets hold the same failures: prompt continuations, empty replies (10 in m21), web text, short attempts.
+
+### m21hard-01: round-13/s2-b, "code-commit policy" (board work-16161e, result-cc7288, refuted)
+
+The cued base solves the problems behind m21's 60 quick wrong answers at 0.833 (of 4 samples), those behind the plain base's 105 at 0.838, all 250 at 0.814: r_N - r_Q = 0.005 [-0.066, 0.075], below 0.10: refuted. The instrument can fail: m21's long wrong answers score 0.40. Only 2 of the 60 open with "Okay": they are format failures on easy problems, not early-committed deliberation.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_m21q.md` | Both claims, nulls, frozen rules (pushed first). |
+| `analysis/direct_m21q.py` | Readout from `results/experiments/cell-r9-m21-01` and `rln4/t1_t3_items-01`. |
+| `results/direct/m21open-01/`, `results/direct/m21hard-01/` | `readout.json`, `examples.json`, `reading.md`, `run.json`. |
+
+### codecontract-01: round-13/s6-a, "Code top-8 repairs the answer contract" (board work-93874a, result-04f363, refuted)
+
+Claim tested (the rival's own plan): the base code failures that Code-RL's top-8 directions at 1x fix are enriched for answer-contract failures beyond what a random edit fixes. The cued base fails 221 of 538 HumanEval+/MBPP+ problems; 73 are contract failures (cap hit 25, no closed block 12, unparsable block 11, no def of the function the tests call 25). The edit fixes 100 failures, 43 of them contract failures: S_top8 0.43, 90 % [0.35, 0.51] (refuted below 0.50); random rank-8 1.5x 0.37 (n 63), difference [-0.02, 0.15]; fix rate on contract over logic failures 1.53 [1.21, 1.93] (needed 2.0): refuted on all three conditions. Most of what the edit fixes is logic.
+
+### codereliab-01: round-13/s6-b, "the code gap is per-sample reliability" (board work-93874a, result-04f363, holds)
+
+Same 100 fixes: 75 are problems that one of two stored base-like cells (base + Math cue, random rank-8 1.5x) passes: Q_top8 0.75 [0.68, 0.82]; among all 221 base failures 0.48; difference [0.21, 0.33] (needed lower bound above 0.10): holds. RL-Code's own 116 fixes give 0.74, the same profile. The edit fixes 22 % of failures no base-like cell passes and 71 % of the others. Caveat: the random cell shares seed and prompt with the edit; with the Math-cue cell alone Q_top8 is 0.56 against 0.35 (difference [0.15, 0.27]), below the plan's 0.60 level. Control: a random subset of base failures in place of the fixes refutes, as it should.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_code13.md` | Both claims, nulls, frozen rules (pushed first). |
+| `analysis/direct_code13.py` | Readout from the 5 code cells' `answers.jsonl`. |
+| `results/direct/codecontract-01/`, `results/direct/codereliab-01/` | `readout.json`, `examples.json`, `reading.md`, `run.json`. |
+
+### devcut-01 and devmode-01: round-13/s5-a and s5-b, autobench dev100 losses (board work-ab9ae3, result-cfe997, both undecided)
+
+s5-a: the kept autobench method's dev100 vote losses are samples cut at 4,096 tokens or left unrun by the time budget; s5-b: they go to one shared wrong value. The kept method's per-sample dev100 rows are only in frustea's Modal Volume, so neither statistic can be computed from data the team can read: both undecided (do not hold). Ready for the rows: s5-b's null, the cued base's 12-sample votes, G_cue 0.40 [0.34, 0.46] (34 vote-wrong problems of 500), so s5-b needs G_plain >= 0.52; instrument check on cued-base rows cut at 4,096: dev100 94 to 86 right, D 0.73 [0.50, 0.91], n 14. Rerun: `direct_dev13.py --plain <rows.jsonl>` once the rows are exported.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_dev13.md` | Both claims, nulls, frozen rules (pushed first). |
+| `analysis/direct_dev13.py` | Readout (needs the kept method's per-sample rows). |
+| `results/direct/devcut-01/`, `results/direct/devmode-01/` | `readout.json`, `run.json`. |
 
 ## Paper: Theories on Trial (`paper/`, board work-184476)
 

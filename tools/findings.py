@@ -7,7 +7,7 @@ resolve(). The page reads nothing after it loads, so its picture is drawn at onc
 (terms defined on click).
 
 The first view is the research question and one picture of it: a glass rail from 40 % to 100 % of right answers, for
-one of two problem sets chosen by a quiet control (the address holds it: #hard328, the default, or #math500). Above
+one of two problem sets chosen by a quiet control (the address holds it: #math500, the default, or #hard328). Above
 the rail the scores without reward (lit beads), below it RL's (rings) and those that use RL's weights (diamonds); a
 vote over 4 samples carries a second thin ring. On the 328 harder problems, Base + cue, Think-SFT + cue (one sample,
 32,768 tokens, vote) against RL (one sample, vote), and two settings that add RL's weights; the large number is
@@ -724,7 +724,7 @@ const SAY = {
                    `a lead of ${f(iv[0])} points (95 % interval ${f(iv[1])} to ${f(iv[2])}). With a vote over 4 samples: ${cnt(sv.right)} against ${cnt(rv.right)}.` };
   },
 };
-const want = () => location.hash === "#math500" ? "math500" : "hard328";  // the 328 harder problems open first: the current result
+const want = () => location.hash === "#hard328" ? "hard328" : "math500";  // MATH-500 opens first: the home page's number is on it
 function show(name, how) {  // draw the set: its entrance, or the travel to it from the set on screen
   if (how === "travel" && name === R.cur) return;
   R.from = R.cur; R.cur = name; R.mode = how; R.t0 = performance.now();

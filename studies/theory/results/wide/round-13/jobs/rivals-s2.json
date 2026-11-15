@@ -1,0 +1,76 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "Partial opening switch. Under the plain prompt each sample settles in its first tokens into either the base's answer-first mode (a short 'Answer:'-style reply, wrong about 40 % of the time) or the deliberative 'Okay' mode (cued-base-like). RL-Code's top-8 directions write the deliberation opening, but their input side is tuned to code text, so on math prompts at 1x they flip only about half of the samples. The other half stay plain-base answer-first and produce the quick wrong answers.",
+  "readers_wrong": "The readers carried over Math's top-8 result (9 quick wrong) and assumed Code's directions fix the opening completely. If about 54 % of samples stay unswitched, quick wrong is about 0.54 x 105 + 0.46 x 8 = 61 and right about 152, against 60 and 157 measured. This fits direct_facts: r5-m03-rival's refuted per-sample split was Math's edit with the cue, where the cue already sets the opening; the bf16 row (result-c2edfb) is not needed, because the half dose is functional (weak input drive on math text), not lost in rounding. That weak drive is the correlate run-05/f2-m06 caught when it forecast 45 [28, 64] for 'Code acts smaller at 1x'.",
+  "rests_on": ["result-ac7104", "result-4b0d5f", "knowledge-0b450e"],
+  "holds_against": [
+   {"item": "result-e2482e", "value": 15, "why": "RL-Code delta puts the cue token in the top 15 of 96 late readouts (Math 13). Readouts measure what the directions write, not how strongly a math prompt drives their input side. A full output direction with half the drive still flips only part of the samples."},
+   {"item": "result-d02d46", "value": 82.9, "why": "Base + Math top-8 1x with the cue: short answers 82.9 % right. There the cue fixes the opening on every sample, so no answer-first samples are left. The partial switch applies only to Code's directions under the plain prompt."}
+  ],
+  "forecasts": [
+   {"id": "t03", "value": 406, "low": 395, "high": 417, "reason": "Code prompt: Code's directions get full input drive on code, Math adds its finishing; seeds so far 411/407/401."},
+   {"id": "t04", "value": 403, "low": 392, "high": 414, "reason": "Same cell at another seed; seed scatter about +-6 around 406."},
+   {"id": "t05", "value": 399, "low": 388, "high": 410, "reason": "RL-Code at new seeds; 401/395/403 so far."},
+   {"id": "t06", "value": 399, "low": 388, "high": 410, "reason": "As t05."},
+   {"id": "t07", "value": 392, "low": 381, "high": 403, "reason": "Code top-8 alone on code, fully driven by code text; 386/397/391 so far."},
+   {"id": "t08", "value": 392, "low": 381, "high": 403, "reason": "As t07."},
+   {"id": "t09", "value": 238, "low": 228, "high": 247, "reason": "Think-SFT already deliberates, so Math 3x adds only finishing; seeds 232 and 240."},
+   {"id": "t10", "value": 174, "low": 158, "high": 190, "reason": "The cue already sets the opening; late layers mostly cut cap hits (+ a few right); 4.5x risks breakage."},
+   {"id": "t11", "value": 176, "low": 163, "high": 190, "reason": "Late-only edit: cap-hit cuts of a few points over base cue 164."},
+   {"id": "t12", "value": 165, "low": 153, "high": 177, "reason": "0.2x on layers 0-10 is a near-null dose; base cue 164 within seed scatter."},
+   {"id": "t13", "value": 180, "low": 166, "high": 194, "reason": "Rank-1 carried +7 pts on base finished-wrong problems (result-efc74d); about 40 % of top-8 1.5x's +39."},
+   {"id": "t14", "value": 180, "low": 166, "high": 194, "reason": "As t13, other seed."}
+  ],
+  "direct_test": {
+   "claim": "m21's quick wrong answers are plain-base answer-first replies: their opening composition matches the plain base's own quick wrong answers on the same 250 problems.",
+   "files": ["studies/theory/results/experiments/cell-r9-m21-01", "studies/rlneurons/results/rln4/t1_t3_items-01"],
+   "computation": "1) From cell-r9-m21-01/answers.jsonl take Q = rows with n_generated <= 1000, cap hit false and score_v3 != 1 (expect 60). 2) From t1_t3_items-01/per_problem.json, problems 0-249, take N = T3 rows with T3 tokens <= 1000, not cut off and T3 not right. 3) Per row take the first 240 characters of the answer (m21: completion[:240]; T3: the stored start). Call it answer-first (AF) if it contains 'Answer:' or '\\boxed', or if, after stripping whitespace and '$', it starts with a digit, '-', '\\frac' or '('. Otherwise call it deliberative. 4) s_Q = AF share in Q, s_N = AF share in N. Report s_Q - s_N with a 90 % bootstrap over rows.",
+   "refuted_if": "s_Q < s_N - 0.15, or s_Q < 0.40",
+   "threshold": "0.15 (gap) and 0.40 (floor)",
+   "null": "The plain base's own quick wrong rows on the same 250 problems (N), a base-model baseline rather than a random one. Rival b predicts s_Q far below s_N, because its quick wrongs are deliberative attempts."
+  }
+ },
+ {"id": "b",
+  "statement": "Code-commit policy. RL-Code's top-8 directions do switch nearly every plain-prompt sample into deliberation, removing the base's answer-first failures as Math's directions do. They also carry Code-RL's terse habit: sketch briefly, commit early and stop (the code reward pays for any final block). On math this cuts reasoning short, so many answers end under 1,000 tokens with a committed wrong value on medium-difficulty problems: the quick wrong answers are new deliberative failures, not leftover format failures.",
+  "readers_wrong": "The readers took 'removes the answer-first failure' to mean 'removes quick wrongs', as with Math's edit (9). Code's directions instead trade those failures for short, early-committed attempts. This fits direct_facts: f2-m04's refuted box-displacement was Math's directions on code (Code 1x leaves 0 no-block endings there), and f2-m01's refuted pure dial concerned Math's directions; neither bears on Code's commit habit on math. bf16 is not needed. run-05/f2-m06's 'acts smaller' forecast landed because shorter, half-effective reasoning gives an intermediate count, a correlate of the length cut (2,674 tokens per problem).",
+  "rests_on": ["result-ac7104", "result-4b0d5f"],
+  "holds_against": [
+   {"item": "result-4b0d5f", "value": 450, "why": "Code-RL 3.1 full model with the cue scores 450/500 at 3,336 tokens. The cue's prefill sets the base's longer 'Okay' frame, and the full model has Code-RL's other directions. The top-8 edit under the plain prompt keeps mainly the commit habit."},
+   {"fact": 1, "value": 0.818, "why": "Math top-8 plain's 22 quick wrongs sit on easy problems, but those are leftover answer-first failures of Math's edit. Code's 60 differ in kind and need not follow them."}
+  ],
+  "forecasts": [
+   {"id": "t03", "value": 406, "low": 395, "high": 417, "reason": "On code the commit habit is what pays; Math adds finishing; seeds 411/407/401."},
+   {"id": "t04", "value": 403, "low": 392, "high": 414, "reason": "Same cell, seed scatter."},
+   {"id": "t05", "value": 399, "low": 388, "high": 410, "reason": "RL-Code at new seeds; 401/395/403 so far."},
+   {"id": "t06", "value": 399, "low": 388, "high": 410, "reason": "As t05."},
+   {"id": "t07", "value": 393, "low": 382, "high": 404, "reason": "Code directions alone carry the commit-and-emit policy on code; 386/397/391."},
+   {"id": "t08", "value": 393, "low": 382, "high": 404, "reason": "As t07."},
+   {"id": "t09", "value": 238, "low": 228, "high": 247, "reason": "No Code directions involved; Math 3x on Think-SFT at seeds 232, 240."},
+   {"id": "t10", "value": 172, "low": 156, "high": 189, "reason": "Late layers write the stop/commit words; 4.5x cuts cap hits but also commits early on long problems."},
+   {"id": "t11", "value": 175, "low": 162, "high": 189, "reason": "Late-only edit: cap-hit cuts partly offset by early commits."},
+   {"id": "t12", "value": 165, "low": 153, "high": 177, "reason": "Near-null dose on layers 0-10."},
+   {"id": "t13", "value": 181, "low": 167, "high": 195, "reason": "Rank-1 Math direction adds both finishes and right answers (result-efc74d)."},
+   {"id": "t14", "value": 181, "low": 167, "high": 195, "reason": "As t13."}
+  ],
+  "direct_test": {
+   "claim": "m21's quick wrong answers sit on harder problems than the plain base's quick wrong answers, because they are short deliberative attempts, not format failures on easy problems.",
+   "files": ["studies/theory/results/experiments/cell-r9-m21-01", "studies/rlneurons/results/rln4/t1_t3_items-01", "studies/rlneurons/results/day1_3/math500_base_cue-01"],
+   "computation": "1) Q = m21 answers.jsonl rows with n_generated <= 1000, cap hit false and score_v3 != 1. N = t1_t3_items-01/per_problem.json problems 0-249 with T3 tokens <= 1000, not cut off and T3 wrong. 2) For each problem, k/4 = the cued base's solve rate over samples 0-3 of rows.jsonl (attempt == 0, first row per sample; right = score_v3 == 1 and not a cap hit). 3) r_Q = mean k/4 over Q's problems, r_N = mean over N's problems. Statistic = r_N - r_Q, with a 90 % bootstrap over problems.",
+   "refuted_if": "r_N - r_Q < 0.10 (Q's problems about as easy as the plain base's quick-wrong problems)",
+   "threshold": "0.10",
+   "null": "The plain base's own quick wrong problems on the same 250 (N), whose cued-base solve rate is expected near 0.8, like fact 1's 0.818 for Math top-8 plain. Rival a predicts r_Q about equal to r_N."
+  }
+ }
+],
+ "cell": {
+  "cell": {"model": "base Olmo-3-1025-7B + 1.0 x top-8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Code - base), stochastic bf16 rounding seed 0", "prompt": "cue", "set": "MATH-500", "n": "first 250 problems (--n 250)", "sampling": "T 1.0 / top-p 1.0 / min-p 0; seed 64000000 + problem index (m21's seeds)", "samples": "1 per problem, 0 restarts", "grader": "v3", "cap": "16,384"},
+  "job": "studies/rlneurons/jobs/wsp_edit.py",
+  "command": "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --scale 1.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label code_top8x1_cue --prompt cue --set math500 --n 250 --temperature 1.0 --top-p 1.0 --seed 64000000 --commit COMMIT_SHA",
+  "readout": "quick wrong answers: rows of answers.jsonl with n_generated <= 1,000, not a cap hit, and v3 score not 1 (no extracted answer counts wrong), the readout of m21-r1",
+  "unit": "answers of 250",
+  "why": "The cue fixes the opening on every sample. If quick wrongs come from unswitched answer-first samples (a), they vanish to the cued base's level. If they come from Code's early-commit habit inside deliberation (b), most persist.",
+  "gpu_minutes": 60,
+  "a": {"value": 6, "low": 2, "high": 13},
+  "b": {"value": 32, "low": 20, "high": 46}
+ }
+}
