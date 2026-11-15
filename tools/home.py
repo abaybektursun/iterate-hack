@@ -33,7 +33,7 @@ PAGE = r"""<!doctype html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
 <style>
-/* The tokens, the light and the type of the Design page (architecture.py). */
+/* The tokens, the light and the type of architecture.py. */
 :root {
   color-scheme: light dark;
   --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
@@ -261,7 +261,6 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
   <header class="top">
     <h1 class="name">Invariant</h1>
     <a href="https://monitor.invariant.team/">Board</a>
-    <a href="https://monitor.invariant.team/architecture">Design</a>
     <a href="https://monitor.invariant.team/proof">Proof</a>
     <a href="https://monitor.invariant.team/findings">Findings</a>
     <span class="status" id="status">Reading the board</span>
@@ -292,7 +291,6 @@ const PAGES = [
   { id: "papers", g: 0, name: "Papers", href: "/papers", line: "The paper loop and what it wrote", count: () => COUNTS.papers + " papers" },
   { id: "talk", g: 0, name: "Talk", href: "/demo", line: "The talk, as slides" },
   { id: "board", g: 1, name: "Board", href: "/", line: "Ideas, open work and results", count: m => m ? `${m.open} open ${narrow.matches ? "" : "work "}items` : "" },
-  { id: "design", g: 1, name: "Design", href: "/architecture", line: "How people and agents coordinate", count: m => m ? `${m.agents} ${narrow.matches ? "" : "agent "}sessions` : "" },
   { id: "proof", g: 1, name: "Proof", href: "/proof", line: "Tests of the team's own method", count: () => COUNTS.proof + (COUNTS.proof === 1 ? " page" : " pages") },
   { id: "values", g: 1, name: "Values", href: "/values", line: "The six values the team works by" },
   { id: "team", g: 1, name: "Team", href: "/team", line: "Who we are" },
@@ -338,11 +336,6 @@ const ART = {
       return c === "w" ? `<circle class="gw" cx="${x}" cy="${y}" r="4.4"/>` : c === "i" ? `<circle class="gi" cx="${x}" cy="${y}" r="2.2"/>` :
         `<circle class="ga" cx="${x}" cy="${y}" r="4.4"/>` + (c === "n" ? `<circle class="gs an ping" cx="${x}" cy="${y}" r="4.4" stroke-width="1.4"/>` : "");
     }).join(""),
-  design: `<path class="gl" stroke-opacity=".25" d="M10 56A50 14 0 0 1 110 56"/><circle class="gb" cx="60" cy="46" r="21"/>
-    <ellipse cx="53" cy="38" rx="8" ry="5" fill="#fff" opacity=".3"/><circle class="gw" cx="54" cy="47" r="2.2"/><circle class="ga" cx="62" cy="43" r="2.2"/><circle class="ga" cx="67" cy="51" r="1.9"/>
-    <path class="gl" stroke-width="1.3" stroke-opacity=".6" d="M10 56A50 14 0 0 0 110 56"/>
-    <circle class="gi" cx="22" cy="63" r="3"/><circle class="ga" cx="60" cy="70" r="3.4"/><circle class="gi" cx="98" cy="63" r="3"/>
-    <circle class="ga" r="2.2"><animateMotion dur="9s" repeatCount="indefinite" path="M10 56A50 14 0 0 0 110 56A50 14 0 0 0 10 56"/></circle>`,
   proof: `<rect class="gb" x="30" y="8" width="60" height="74" rx="3"/><path class="gl" d="M39 20H81M39 27H76M39 34H80M39 41H70M39 48H78"/>
     <path class="gs an draw" pathLength="1" stroke-width="2.4" d="M40 62L47 69L60 56"/><rect class="ga" x="71" y="62" width="10" height="10" rx="1"/>`,
   values: (() => { const t = hex(60, 30, 30, 10.5), b = t.map(v => [v[0], v[1] + 34]), p = q => q.map(v => f(v[0]) + " " + f(v[1])).join("L"), c = [60, 30];
@@ -576,7 +569,6 @@ function model(d) {
   return {
     people: [...new Set(items.map(i => i.who))].sort(), posts, plain: d.plain || {},
     open: items.filter(i => i.listed === "work").length,
-    agents: new Set(items.filter(i => i.session).map(i => i.session)).size,
     /* The Board's numbers (benches in view.py), in percent: the first untrained-base score posted, the best one with
        its configuration (the method, such as "cue, T 1.0, vote over 4"), and the best RL score. */
     start: pct(base[0]), base: pct(top), how: top ? top.config : "", rl: pct(best(of("rl"))),
