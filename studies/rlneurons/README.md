@@ -307,6 +307,84 @@ characters in the last 3,000 characters), descriptive only.
   `runs/abaybektursun-1114-152416-de10/merge_{rl,code}.json` (not committed).
   Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_wdiff`.
 
+### The same cells on the 328 harder problems (Day-1 #4b, board work-43d4a1)
+
+All from `results/day1_wdiff328/readout.json` (`analysis/day1_wdiff328.py`, plan `specs/DAY1_wdiff328_2026-11-14.md`). The 328
+problems of "Harder 328", T 1.0 / top-p 1.0, cue, one sample per problem, cap 16,384, grader v3. Merges as on MATH-500
+(`jobs/merge_weights.py`; theta cells stochastic rounding, effective a 0.2500 and 0.5000; the Code-RL merge is bit-identical to
+Code-RL in 355 of 355 tensors). All three jobs at commit `e7b86c8`. The four T 1.0 cells of "Harder 328" are reused, not rerun.
+Paired bootstrap, 5,000 resamples, seed 0, 95 % percentile interval, in points.
+
+| Cell (328 problems) | Right (v3) | Hand-read right of 20 | Cap hits | Rule-A loops | Mean tokens | Seed base | Job id, run folder |
+|---|---|---|---|---|---|---|---|
+| base, plain | 76 |  | 35 | 3 | 4,928 | 50,000,000 | `abaybektursun-1114-132922-7ba0`, `day1_hard328/base_plain_T1-01/` |
+| base, cue | 164 |  | 77 | 1 | 9,344 | 3,000,000 | `abaybektursun-1114-151534-e72c`, `day1/hard328_base_cue_t10-01/` |
+| theta(0.25), cue | 182 | 0 | 56 | 0 | 9,097 | 72,000,000 | `abaybektursun-1114-181222-a5f4`, `day1_wdiff328/theta0.25_cue-01/` |
+| theta(0.5), cue | 190 | 1 | 73 | 0 | 9,656 | 73,000,000 | `abaybektursun-1114-181228-34ad`, `day1_wdiff328/theta0.5_cue-01/` |
+| Code-RL, cue | 187 | 0 | 25 | 0 | 7,613 | 71,000,000 | `abaybektursun-1114-181216-a619`, `day1_wdiff328/code1_cue-01/` |
+| RL, plain | 206 |  | 20 | 0 | 9,315 | 3,000,000 | `abaybektursun-1114-151540-86ef`, `day1/hard328_rl_plain_t10-01/` |
+| RL, cue | 205 |  | 25 | 0 | 9,316 | 50,000,000 | `abaybektursun-1114-132929-a32d`, `day1_hard328/rl_cue_T1-01/` |
+
+Right per source (`per_source_right_v3`):
+
+| Source (n) | base cue | theta(0.25) cue | theta(0.5) cue | Code-RL cue | RL plain | RL cue |
+|---|---|---|---|---|---|---|
+| OlympiadBench (202) | 114 | 131 | 127 | 130 | 137 | 140 |
+| AIME 2024 (29) | 10 | 12 | 13 | 13 | 16 | 15 |
+| AIME 2025 (30) | 7 | 7 | 10 | 7 | 12 | 11 |
+| HMMT Feb 2025 (30) | 5 | 5 | 7 | 6 | 11 | 8 |
+| AMC 23 (28) | 22 | 21 | 26 | 25 | 23 | 25 |
+| AIME 2022 (6) | 5 | 5 | 5 | 5 | 5 | 4 |
+| AIME 2023 (3) | 1 | 1 | 2 | 1 | 2 | 2 |
+
+| Difference (paired, 328) | Points | 95 % interval |
+|---|---|---|
+| theta(0.25) cue minus base cue | 5.5 | [1.5, 9.5] |
+| theta(0.5) cue minus base cue | 7.9 | [3.7, 12.2] |
+| Code-RL cue minus base cue | 7.0 | [2.7, 11.3] |
+| theta(0.25) cue minus RL plain | -7.3 | [-11.6, -3.0] |
+| theta(0.5) cue minus RL plain | -4.9 | [-8.8, -1.2] |
+| Code-RL cue minus RL plain | -5.8 | [-10.1, -1.8] |
+| Code-RL cue minus theta(0.5) cue | -0.9 | [-5.5, 3.7] |
+| RL plain minus base cue | 12.8 | [8.5, 17.1] |
+
+Problems that change against base cue (164 right, 164 wrong; `fixed_lost_vs_base_cue`):
+
+| Cell | Base-cue wrong, now right | Base-cue right, now wrong |
+|---|---|---|
+| theta(0.25) cue | 33 | 15 |
+| theta(0.5) cue | 40 | 14 |
+| Code-RL cue | 37 | 14 |
+| RL plain | 49 | 7 |
+| RL cue | 49 | 8 |
+
+- The MATH-500 pattern holds in sign and roughly in size: every difference raises the cued base (+5.5 to +7.9 points; MATH-500
+  +6.2 to +8.4) and every one stays under RL plain. But on the 328 none comes within its interval of RL plain: theta(0.5) is
+  4.9 points under ([-8.8, -1.2]; MATH-500 -2.2, [-4.6, 0.2]) and Code-RL 5.8 under ([-10.1, -1.8]; MATH-500 -2.6). Half the
+  difference closes 62 % of the gap (26 of 42 problems), a quarter 43 % (18 of 42).
+- The new cells lose 14 to 15 of the base's right problems, twice RL's 7 to 8: one fresh sample changes some outcomes, and RL
+  loses fewer of them. Seed sharing does not explain this: RL cue, on its own seed base (50,000,000), also loses only 8, and base
+  cue and RL plain (both 3,000,000) have the same first 100 characters on only 8 of 328 problems, the same as pairs on different
+  seeds (6 to 13; `same_first_100_chars` in `results/day1_hard328/readout.json`, 13 for theta(0.25) against base cue).
+- Code-RL and theta(0.5) are indistinguishable (-0.9, [-5.5, 3.7]); the gain is not specific to the math-RL difference here
+  either. Code-RL writes shorter answers (7,613 tokens) and hits the cap as rarely as RL (25).
+- Cap hits do not fall with a: 77, 56, 73 for a = 0, 0.25, 0.5, then 20 to 25 for RL. theta(0.5)'s 73 cap hits are long
+  reasoning still in progress at the cap (rule-A loops 0), as in the base.
+- Predictions (spec): Q1 not refuted by its rule (RL plain minus Code-RL 5.8, interval [1.8, 10.1], lower end under 5), but
+  the interval excludes 0, so "within its interval of RL plain" did not happen. Q2 held at the edge (190 >= 190; 191 with the
+  hand-read correction). Q3 refuted (182 < 185). Q4 refuted (theta(0.5) has 17 more cap hits than theta(0.25)).
+- Hand read, per new cell: 20 finished answers that v3 scored wrong (numpy seed 0, `--hand <arm>`). Code-RL 0 of 20 and theta(0.25)
+  0 of 20 are in fact right; theta(0.5) 1 of 20: problem 207, gold `f(n)=n^{2}`, the model wrote `\boxed{f(m) = m^2}`, which
+  is the same answer with another variable name. Corrected counts: 187, 182, 191.
+- No two of the 7 cells share an identical non-empty completion for any problem (`identical_nonempty_texts`, 21 pairs, all 0).
+- One sample per cell: the three new cells differ by at most 8 of 328, inside one another's intervals.
+- Cost at 3.95 USD per H100-hour (start to end record of each job, H100 80GB HBM3): Code-RL 40.8 min 2.68 USD, theta(0.25)
+  50.4 min 3.32 USD, theta(0.5) 53.4 min 3.52 USD; 9.52 USD in all (limit 12 USD). Merges took 35 to 47 s.
+- Raw answers: `runs/<job-id>/answers.jsonl` after `uv run tools/gpu.py get <job-id>`, and
+  `s3://pg-lineage-769063704696/results/rlneurons/r5/day1_wdiff328-01/<job-id>/answers.jsonl` for the three new jobs; the four
+  reused cells as in "Harder 328" (`.../r5/day1_hard328-01/<job-id>/answers.jsonl`).
+  Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_wdiff328`.
+
 ## RLN-5 map: where RL still disagrees once the cue is given
 
 Spec `specs/SPEC5_map.md`; run folder `results/rln5/map-01/` (`run.json`, `metrics.json`, `examples.json`, `checks.json`,

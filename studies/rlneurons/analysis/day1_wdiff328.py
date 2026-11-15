@@ -32,7 +32,8 @@ NEW = {
 }
 BASE, RL = "base_cue_T1", "rl_plain_T1"
 # hand read: arm -> [(problem index, gold, what the model wrote)] of the 20 drawn answers that are in fact right
-HAND = {"code1_cue": [], "theta0.25_cue": [], "theta0.5_cue": []}
+HAND = {"code1_cue": [], "theta0.25_cue": [],
+        "theta0.5_cue": [(207, "$f(n)=n^{2}$", "'\\boxed{f(m) = m^2}' (the same function with the variable named m; v3 compares the expressions)")]}
 
 
 def clean_set():
@@ -68,7 +69,8 @@ def main():
     if a.hand:
         return hand(a.hand)
     clean, gold, source = clean_set()
-    old_folders = {k: v["run_folder"] for k, v in json.loads((STUDY / "results" / "day1_hard328" / "readout.json").read_text())["cells"].items()}
+    old_cells = json.loads((STUDY / "results" / "day1_hard328" / "readout.json").read_text())["cells"]
+    old_folders = {k: old_cells[k]["run_folder"] for k in OLD}
     rows, sc, cells = {}, {}, {}
     for arm, (job, args, commit, _) in OLD.items():
         m, rows[arm] = load(job, clean)
@@ -115,7 +117,8 @@ def main():
     rises = [y - x for x, y in zip(cap, cap[1:])] + [r - cap[-1] for r in rl_caps]
     pred = {
         "Q1": {"text": "RL plain minus Code-RL cue: refuted if the interval's lower end is above 5 points", "diff": q1,
-               "interval_includes_0": q1["ci95"][0] <= 0 <= q1["ci95"][1], "status": "refuted" if q1["ci95"][0] > 5 else "held"},
+               "interval_includes_0": q1["ci95"][0] <= 0 <= q1["ci95"][1],
+               "status": "refuted" if q1["ci95"][0] > 5 else ("held" if q1["ci95"][0] <= 0 else "not refuted by its rule, but the interval excludes 0")},
         "Q2": {"text": "theta(0.5) cue >= 190 of 328", "right": cells["theta0.5_cue"]["right_v3"]},
         "Q3": {"text": "theta(0.25) cue >= 185 of 328", "right": cells["theta0.25_cue"]["right_v3"]},
         "Q4": {"text": "cap hits base cue > theta(0.25) > theta(0.5) > RL (plain 20, cue 25); refuted by any rise larger than 10",
