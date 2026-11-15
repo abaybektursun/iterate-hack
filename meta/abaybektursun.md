@@ -1,5 +1,23 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 04:36 UTC (after result-afc423, result-c57b51, result-5da8a9: gap anatomy, answer-statement repair, one axis) meta/reviews/abaybektursun/20261115-0436/
+
+- Last entry's checks (04:15): setup_vllm.sh median over the next 20 jobs not measured (10 jobs still running); no teammate deploy of the runner seen on the board.
+- Direction: mission = "the cheapest route to those points that uses no reward, at equal generated tokens" (DIRECTION.md). The three closed studies test no route; they say where a route can exist: 81 % of the gap is in problems the cued base solves at least once in 4 (result-afc423), reading the answer better gives 0.5 point (result-c57b51), and no two arms are complementary (result-5da8a9). They removed two route families (answer repair, cross-arm stacks) with 0 GPU jobs. The deliverable cell (328 vote, work-1a972a) is running. In line.
+- Research: Exa was not searched by any of the four agents: EXA_API_KEY unset (fourth entry) and the Exa MCP tool returns 401 (2 of 2 calls, before.txt). Claude Code's WebSearch answered 2 of 2 queries in this session and named two neighbours not in team memory for a step-level study (2602.09598 first-error resampling, 2605.16874 decision-token repair; abstracts only, unread). The anatomy judge was the agent's own model (no working provider key): its labels have no second-family check.
+- Turnaround (cycle.txt, 0.7 h; 04:15 entry in brackets): 26 jobs, 3 failed or cancelled, 23.8 of 329.4 container min in them (11.5 of 655.7). Offline studies, claim to result: 11, 14, 31 min (work-5b7270, work-655434, work-1aa34c; 0 GPU jobs of their own, the third pulled rows of 30 jobs with gpu.py get). The GPU study work-b68a26: 37 min open, 0 rows, 3 cancelled jobs. Slowest stage: queue and setup of the one GPU study.
+- Cause (before.txt, 04:36): 10 jobs running and 6 queued on h100 against the 10-GPU limit, queued for 5 to 22 min; all 16 are one person's sessions. The first hand-off smoke (7492) ran 30 min with no log line after pip and was killed; b200 again did not start (f2b4; 5 of 5 today).
+- Change, proposal (step 2; not made: this reviewer may commit only under meta/, and the jobs belong to other sessions): delete queued job 3c04 (vote-distillation arm S: its training set equals arm V on 422 of 455 examples, work-9763ed) and move 0871 (xreward --steps, weights only) to the cpu class. That puts the two hand-off jobs 2 places earlier. For round 2: launch only studies that read stored rows or need one forward-only job.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | h100 jobs queued, their wait | 6, 5 to 22 min | not measured yet | - | 6 | before.txt |
+  | work-b68a26 claim to first row | over 37 min | not measured yet | - | 1 | cycle.txt |
+  | results of running cells (must not change) | - | - | - | 10 | gpu.py ls |
+
+- Failures: a job that writes no log line for 20 min keeps its GPU until an agent looks (7492, 30 min). Row added to meta/FAILURES.md.
+- Next entry checks: queue wait of the hand-off jobs; whether round-2 studies ran offline first; whether a round-2 spec names a web search and a judge of another model family.
+
 ## 2026-11-15 04:15 UTC (optimization round asked by the person) meta/reviews/abaybektursun/20261115-0403/
 
 - Last entry's checks (03:53): not due yet. No multi-cell submit, idea-eec971 job or hard328 rows commit since then (board, 04:03).

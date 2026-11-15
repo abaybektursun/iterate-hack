@@ -1,0 +1,26 @@
+# uv run tools/gpu.py ls | grep -E 'running|queued'   at 04:35 UTC; columns: id state gpu age commit command
+abaybektursun-1114-195350-bc00  running  NVIDIA H100 80GB HBM3  42m  238d234  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+abaybektursun-1114-195404-351b  running  NVIDIA H100 80GB HBM3  41m  238d234  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+abaybektursun-1114-200457-e8e6  running  NVIDIA H100 80GB HBM3  30m  2c58f34  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+abaybektursun-1114-200505-5ff2  running  NVIDIA H200  30m  2c58f34  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+abaybektursun-1114-201013-47c5  running  NVIDIA H100 80GB HBM3  25m  ec6e0f5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rln-vllm/bin
+abaybektursun-1114-201021-095e  running  NVIDIA H100 80GB HBM3  25m  ec6e0f5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rln-vllm/bin
+abaybektursun-1114-201028-1adf  running  NVIDIA H100 80GB HBM3  25m  ec6e0f5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rln-vllm/bin
+abaybektursun-1114-221034-007d  running  NVIDIA H100 80GB HBM3  25m  478cb52  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+abaybektursun-1114-201035-c6c0  running  NVIDIA H100 80GB HBM3  25m  ec6e0f5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rln-vllm/bin
+abaybektursun-1114-221040-5f1e  running  NVIDIA H100 80GB HBM3  25m  478cb52  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+abaybektursun-1114-221053-fb3f  queued  h100  25m  478cb52  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+abaybektursun-1114-221100-1e31  queued  h100  24m  478cb52  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+abaybektursun-1114-201132-3c04  queued  h100  24m  ec6e0f5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rln-vllm/bin
+abaybektursun-1114-221259-0871  queued  h100  22m  f89a394  python -m studies.rlneurons.jobs.xreward_overlap --steps --commit f89a39415150ae
+abaybektursun-1114-222915-1f4a  queued  h100  6m  bd403e1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+abaybektursun-1114-222933-0d2e  queued  h100  6m  bd403e1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+
+# handoff jobs (commit bd403e1), all states
+abaybektursun-1114-220435-7492  cancelled  NVIDIA H100 80GB HBM3  31m  bd403e1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+abaybektursun-1114-222829-ce39  cancelled  h100  7m  bd403e1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+abaybektursun-1114-222907-f2b4  cancelled  b200  6m  bd403e1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+abaybektursun-1114-222915-1f4a  queued  h100  6m  bd403e1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+abaybektursun-1114-222933-0d2e  queued  h100  6m  bd403e1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+
+# literature search in this session: mcp exa web_search_exa -> 401 Invalid API key (2 of 2 calls, 04:34 UTC); EXA_API_KEY unset in shell; Claude Code WebSearch -> results (2 of 2 calls)
