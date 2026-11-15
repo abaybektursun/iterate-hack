@@ -24,6 +24,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `lib/hf_helpers.py` | `hf_setup`, `hf_online_setup`, `retry_transport`, copied verbatim from three large unrelated modules. |
 | `jobs/rln4_gen.py` | RLN-4 generation job. Child (`--inner --phase ...`): one vLLM engine, every request with its own seed, one JSONL row per finished request. Parent: AWS `pg` setup. |
 | `jobs/modal_rln4_k.py` | The Modal app that ran K, T2 and T3 (`modal run ... --step download|check|k|t2|t3`). Runs the `rln4_gen` child on an H100. |
+| `analysis/axis.py`, `analysis/axis_test.py`, `specs/SPEC_axis.md` | One axis or several: per-problem vectors of every arm, pair overlap and oracle union against the rest-score null, Rasch against Rasch plus one bilinear term, the floor; planted checks. See "One axis or several?". |
 | `jobs/run_cell.py` | One cell (model, prompt arm, problem set, temperature, top-p, seed) through the team runner `tools/gpu.py`. Reuses `rln4_gen`'s engine and row record, adds grader v3, reads `data/`. See "Day-1 cells on the team runner". |
 | `jobs/setup_vllm.sh` | Installs vLLM 0.32.0, math-verify 0.9.0, transformers 5.19.0, tokenizers 0.23.3 into the venv `/opt/rln-vllm` at job start. |
 | `jobs/rln3_gen.py` | RLN-3 generation job (arms P, F, C on MATH-500 and the harder set), AWS `pg` only. |
@@ -957,6 +958,94 @@ delta) 58. Cue, seed base 81,000,000: base 82, `sft1` 92, `sft05` 88, `sft025` 8
   models that include this pair. New here: the matched-spectrum random control at 8 directions, the removal cells, and the
   comparison with a no-reward delta.
 - Finding page, unlisted: `tools/finding_eight_directions.py` (`/finding/eight-directions`, `LISTED = False`).
+## One axis or several? Item-level structure of every arm (MATH-500 n = 500, hard328 n = 328, laptop, board work-1aa34c, idea-1c8b73)
+
+Question: do the partial routes toward the RL model fix the same problems or different ones? Answer: the same. On MATH-500 two
+different arms are no more different from each other than two samples of one arm: the 618 pairs of different arms have a
+mean excess union of -0.05 problems (z mean -0.04, sd 0.97) against +0.29 (z mean 0.17) for the 12 same-config pairs, and one
+bilinear term added to the Rasch model gains nothing held out. Stacking two arms is predicted to add less than 1.0 point
+(5.1 problems, the largest upper bound among the 7 pairs named in the spec) beyond what a second sample of an equally able arm
+adds. No cross-arm stack is worth a GPU run as a complementarity bet. Spec, hypotheses and the amendments made after the
+planted checks: `specs/SPEC_axis.md`. Code: `analysis/axis.py`; planted checks: `analysis/axis_test.py`.
+
+Data. One 0/1 vector per arm, grader v3 (`score_v3` of `run_cell`), T 1.0 / top-p 1.0, attempt 0. MATH-500: 36 single-sample
+arms (4 samples of base + cue, 4 of RL plain, 11 weight-difference cells, 10 Reward-content cells, 3 solved-examples cells with
+n = 497, 4 WSP-1 cells) and 3 derived arms (base vote, base `tie_short`, RL vote). hard328: 7 single-sample arms.
+`results/axis/<set>-01/manifest.json` gives each arm's job id, run folder, source path, commit and sha256; every right count
+equals the committed `metrics.json` of its run folder. `vectors.json` holds the vectors. Raw rows of the cells that have no
+committed per-problem file were read from `runs/<job id>/answers.jsonl`. Excluded (reason in the manifest): min-p and
+self-review cells and the hard328 4-sample rows (raw rows in a teammate's Modal workspace, only totals committed), metaharness
+reruns (no per-problem scores), T 0.6 cells, the n = 100 screens, RLN-4 T1/T2/T3 (S3).
+
+Method. Excess union of a pair = problems right under A or B, minus the same count when B is permuted among problems of equal
+rest score (the share of the other independent arms that are right: the Mantel-Haenszel test with the rest score as
+difficulty). Bias and sd of the excess come from 200 matrices drawn from the fitted Rasch model. Positive = the arms fail on
+different problems more than difficulty explains. "Fixed" = base + cue sample 0 wrong, arm right. A union is an oracle: it needs
+the answer key, so it is the upper bound of any selector over the two answers, not a method.
+
+| Pair (MATH-500) | Right A, B | Union (over best) | Excess, problems (sd), z | Fixed A, B, both (one-axis expectation) | Jaccard of fixed sets (expected) |
+|---|---|---|---|---|---|
+| base + cue, two samples (6 pairs; noise floor) | 405 to 418 | 445 to 454 (+34 to +39) | -3.0 to +3.0, z -1.21 to 1.18 | s1, s2: 40, 44, 30 (30.1) | 0.556 (0.558) |
+| RL plain, two samples (6 pairs; noise floor) | 456 to 464 | 472 to 479 (+9 to +16) | -1.1 to +1.1, z -0.77 to 0.81 | s1, s2: 68, 67, 60 (59.6) | 0.800 (0.790) |
+| theta 0.5 cue + Think-SFT cue | 452, 454 | 478 (+24) | +1.34 (1.58), 0.85 | 59, 65, 50 (50.7) | 0.676 (0.692) |
+| theta 0.5 cue + Code-RL 3.1 cue | 452, 450 | 473 (+21) | +1.86 (1.62), 1.15 | 59, 60, 49 (49.7) | 0.700 (0.716) |
+| theta 0.5 cue + RL-written examples (n 497) | 449, 435 | 464 (+15) | -1.45 (1.54), -0.94 | 59, 51, 45 (42.8) | 0.692 (0.637) |
+| Think-SFT cue + RL-written examples (n 497) | 452, 435 | 474 (+22) | +0.28 (1.67), 0.17 | 65, 51, 44 (43.1) | 0.611 (0.590) |
+| theta 0.25 cue + Think-SFT cue | 441, 454 | 476 (+22) | +0.58 (1.64), 0.35 | 51, 65, 44 (44.4) | 0.611 (0.621) |
+| Code-RL 3.1 cue + Think-SFT cue | 450, 454 | 478 (+24) | -0.27 (1.52), -0.18 | 60, 65, 50 (50.2) | 0.667 (0.670) |
+| Math 3.0 cue + Think-SFT cue | 448, 454 | 478 (+24) | -0.70 (1.62), -0.43 | 59, 65, 50 (49.9) | 0.676 (0.673) |
+| Think-SFT cue + base vote over 4 (null not bias-corrected) | 454, 446 | 474 (+20) | -1.05 (1.16), -0.90 | 65, 43, 39 (39.0) | 0.565 (0.565) |
+| theta 0.5 cue + base vote over 4 (null not bias-corrected) | 452, 446 | 467 (+15) | +0.23 (1.84), 0.13 | 59, 43, 40 (38.1) | 0.645 (0.597) |
+| RL plain sample 0 + Think-SFT cue | 456, 454 | 476 (+20) | -0.76 (1.59), -0.48 | 58, 65, 52 (51.3) | 0.732 (0.715) |
+
+- All 618 pairs of different arms: z mean -0.04, sd 0.97, range -3.80 to 2.83, 3 pairs (0.5 %) beyond |z| = 3 (0.3 % expected);
+  the three are "alike" pairs (IF 3.0 cue with Math 3.0 cue -3.80, Math 3.0 cue with top-8 plain -3.70, RL sample 0 with
+  theta 1.5 cue -3.04). No group of arms stands out: mean z is between -0.52 and 0.44 for every pair of groups (base samples,
+  RL 3.1, theta blends, 3.0 checkpoints, examples in context, Think-SFT, controls), -0.00 for same-prompt pairs and -0.06
+  for plain-with-cue pairs. The prediction in the spec that the prompt format is a second axis was wrong.
+- Item model, held-out log-likelihood per cell (5 folds over 17,991 cells, nats): constant -0.4735, Rasch -0.2790, Rasch on
+  data with arm labels shuffled within each problem -0.3689, Rasch plus one bilinear term -0.2790 (gain -3e-07 at ridge 10 on the bilinear
+  term, where the term is shrunk to zero; -0.0142, -0.0357, -0.0565 at ridge 3, 1, 0.3, where it is free to fit; 95th
+  percentile of the gain on 20 Rasch-simulated data sets 0). The 21 cue arms alone: -0.2409 for both. Arm ability explains 0.09 nats per
+  cell, a second axis nothing.
+- Same seed is not the same answers: the first 50 MATH-500 problems of base + cue sample 0, rerun with the same seed in another
+  job, are scored differently on 6 problems (37 and 43 right). A same-seed rerun is a new sample.
+- Unions (oracles): two different arms near 452 reach 473 to 478, inside the 472 to 479 of two RL samples; RL pass@4 is 482,
+  base pass@4 467, any of the 29 non-RL single-sample arms 494. The largest union of two non-RL arms is Math 3.0 cue with
+  Think-SFT plain, 482 (excess +1.0, z 0.62).
+- Floor: 6 of 500 problems are solved by none of the 39 arms, RL's vote included (indices 103, 154, 264, 308, 340, 422:
+  four geometry/precalculus, two intermediate algebra; the four stored RL answers to each are wrong maths, not grader misses). 0 problems are solved only by RL 3.1 arms. 13 problems are solved by
+  no arm that is free of RL weights and RL output (base samples and votes, base-written examples, random controls, Think-SFT).
+- One-axis prediction of a vote over 4 samples of an arm that has one sample (`one_axis_vote_prediction`: share of problems the
+  stored vote gets right as a function of the Rasch per-sample probability): Think-SFT cue 471.5, theta 0.5 cue 469.9, RL cue
+  473.5, theta 0.25 cue 464.3, against the stored RL vote 474 and base vote 446. Predicting each stored vote from the other
+  family's curve misses by -6.5 (base) and +3.2 (RL) problems, so read these as +/- 7.
+
+hard328 (7 arms, one sample each, no second sample of any arm): 21 pairs, z mean 0.30, sd 1.08, range -1.80 to 2.11; no
+second axis in the item model (Rasch -0.3115 for both). The same-seed rerun of base + cue by a second person (164 and 160 right)
+is scored differently on 42 of 328 problems and its union is 183 (+19), against +14 to +15 for base + cue with a theta blend
+and +23 for theta 0.25 with theta 0.5. Floor: 90 of 328 solved by no arm; 13 solved only by the two RL arms, 7 of them by
+one RL arm only. With two RL arms among seven and one sample each, no null for this count was computed.
+
+Verdict. One axis: do not run a cross-arm stack (weight blend + vote of the base, Think-SFT + shots, and so on) to gain
+complementary problems. If a vote is run, run it inside the most able reward-free arm. The job that tests the prediction above
+(for the lead to decide; not submitted): the `sft1_cue` cell of WSP-1 with four samples,
+`bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label sft1 --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 182000000 --samples 4 --restarts 0 --commit <commit>`
+(`wsp_edit` is on branch `claude/weight-space-programming-research-ddd44e`), then `analysis/day1_vote.py`. One axis predicts a
+vote of 471.5 +/- 7 of 500; a vote above 479, or a vote over two Think-SFT and two theta 0.5 samples that beats the
+four-sample Think-SFT vote by 5 problems or more, refutes it.
+
+Limits. One sample per arm except base + cue and RL plain. The pair test has little power for one pair: a planted second axis
+of 1.5 logits on 30 % of the problems gives a mean excess of 1.8 problems (z 0.64), 4 logits 4.8 problems (z 1.94); the item
+model detects both (gain 0.0032 and 0.0271 nats per cell). So the claim is "no second axis as large as 1.5 logits on 30 % of
+the problems shared by a group of arms", and per pair "excess below 5.1 problems", not "no difference at all". Votes cannot be
+simulated from 0/1 data: pairs with a vote keep the uncorrected null, which is about 1.5 problems low. Planted checks
+(`analysis/axis_test.py`, all pass): one axis gives pair z mean 0.09, sd 0.94, 0.2 % beyond 3 and no detection; two identical
+arms give z -10.1. Grader v3 errors (hand reads in the weight-difference section) are shared across arms and count as difficulty.
+
+Run folders `results/axis/math500-01/` and `results/axis/hard328-01/`: `run.json`, `manifest.json`, `vectors.json`,
+`readout.json` (every pair's z in `pair_z_matrix`), `examples.json` (one floor problem and one problem both theta 0.5 cue and
+Think-SFT cue fix, with the stored answers of the Day-1 #3 samples).
 
 ## How to run
 

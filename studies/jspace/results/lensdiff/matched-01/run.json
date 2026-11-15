@@ -1,0 +1,91 @@
+{
+ "job_id": "sameraslan-1114-193314-20a2",
+ "commit": "abfcfc1aa3f0892696003867b9bf78e58d611264",
+ "command": "python -m studies.jspace.jobs.lensdiff --commit abfcfc1aa3f0892696003867b9bf78e58d611264 --store-layers 20,24 --lens-files base=/runs/sameraslan-1114-185927-7df1/base_wikitext_jlens.pt,rl=/runs/sameraslan-1114-185933-d625/rl_wikitext_jlens.pt",
+ "gpu": "NVIDIA H100 80GB HBM3",
+ "started_utc": "2026-11-15T03:34:01Z",
+ "finished_utc": "2026-11-15T03:57:23Z",
+ "run_s": 1375.4657621383667,
+ "positions": 4314803,
+ "lens": {
+  "matched": true,
+  "base": {
+   "file": "/runs/sameraslan-1114-185927-7df1/base_wikitext_jlens.pt",
+   "bytes": 704650088,
+   "sha256": "177a9c8e49e6997f922f1f29dcc249d563a907e5cbac7f1dada2d8af95b5ba54",
+   "n_prompts": 100,
+   "layers_in_file": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+   ]
+  },
+  "rl": {
+   "file": "/runs/sameraslan-1114-185933-d625/rl_wikitext_jlens.pt",
+   "bytes": 704650034,
+   "sha256": "a97627c03cdef255bc3c4263415be7943d535dd4d15e8fc669792c67ec0bf160",
+   "n_prompts": 100,
+   "layers_in_file": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+   ]
+  }
+ },
+ "models": {
+  "base": {
+   "repo": "allenai/Olmo-3-1025-7B",
+   "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "dir": "/__modal/volumes/vo-0ORQqRq7X6c3gSh3CYTrju/hub/models--allenai--Olmo-3-1025-7B/snapshots/a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "class": "Olmo3ForCausalLM",
+   "vocab_size": 100278
+  },
+  "rl": {
+   "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05",
+   "dir": "/__modal/volumes/vo-0ORQqRq7X6c3gSh3CYTrju/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05",
+   "class": "Olmo3ForCausalLM",
+   "vocab_size": 100278
+  }
+ },
+ "readout": "matched: each model through its own fitted lens, final norm and lm_head",
+ "map_job_id": "sameraslan-1114-135831-c3ec",
+ "raw_outputs": "Volume iterate-runs, sameraslan-1114-193314-20a2/ (700 MB)",
+ "analysis": "python3 -m studies.jspace.analysis.lensdiff_analyze runs/sameraslan-1114-193314-20a2 --map <map run> --out studies/jspace/results/lensdiff/matched-01"
+}
