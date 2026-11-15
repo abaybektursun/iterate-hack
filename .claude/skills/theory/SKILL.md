@@ -181,6 +181,13 @@ and scores each forecast by the log density of The score against the equal mixtu
 nats; it flags a measured value outside every interval. Rerun `score` as results post; it never touches
 `forecasts.json`. A theory that gains nothing over the readers here explains nothing new.
 
+`make ... --propose 6` (run-02 on): after the readers forecast, one blind job (`prompts/forecast_propose.md`) writes 6
+mechanisms about the targets, given the readers' forecasts and the round's `facts.json` and `graveyard.json`: at most
+80 words each, 2 or more board items, forecasts on half the targets or more, and a centre outside both readers'
+intervals on 3 or more, with why the readers are wrong. Code checks these, sends the draft back once, then stops.
+They forecast as `f2-m01` ...; `scores.md` counts each forecaster's targets outside both readers and how many of those
+were right.
+
 ## Cost per round
 
 65 to 80 headless jobs, nearly all opus, about 1.5 hours: 12 developers, about 13 test writers and as many
