@@ -11,9 +11,11 @@ the instances, the costs and the records in runs/vast/ belong to whoever runs it
   python3 tools/vast.py wait <instance-id> <job-id>         block until the job ends; print its exit line and last 20 lines
   python3 tools/vast.py logs <instance-id> <job-id> [n]     last n lines of the job's log (default 30); the last line
                                                             is "exit <code>" once the job has ended
-  python3 tools/vast.py get <instance-id> <job-id>          copy the job's $OUT_DIR (its outputs and log) to runs/<job-id>/
-  python3 tools/vast.py ls                                  your instances: state, $/h, hours since start
-  python3 tools/vast.py down <instance-id>                  destroy it now; stopped instances still bill storage
+  python3 tools/vast.py get <instance-id> <job-id>          copy the job's $OUT_DIR (its outputs and log) to runs/<job-id>/;
+                                                            an ended job is read from the team store, so the box may be gone
+  python3 tools/vast.py ls                                  your instances: state, GPU use, $/h, hours since start
+  python3 tools/vast.py down <instance-id> [--force]        destroy it now; refuses while a job run there from this checkout
+                                                            has not been copied out with get; stopped instances still bill storage
 
 Setup once: `uv tool install vastai`, `vastai set api-key <your key>` (in your terminal, not in a chat), and add your
 ssh public key at https://cloud.vast.ai/manage-keys/.
@@ -22,9 +24,11 @@ The default image is the official pytorch image with requirements.txt installed 
 Modal. --image takes any other image; README.md lists the team's ECR images. Install anything else in the
 command, with `python -m pip install -q --break-system-packages <pkg> && python exp/run.py`. A job runs one clean, pushed commit, from
 the repository root, and writes its outputs to $OUT_DIR. The deadline runs on the box itself, with the instance's own
-key, so it fires even when your laptop is closed. Copy results out before it fires: destroying deletes the disk.
+key, so it fires even when your laptop is closed. When a job ends, the box itself uploads $OUT_DIR to the team store
+(jobs/<job-id>.tar), so its outputs outlive the box and a closed laptop; a job cut off by the deadline uploads nothing.
 """
 import json
+import re
 import os
 import secrets
 import shlex
@@ -41,7 +45,7 @@ FILTER = "num_gpus=1 verified=true reliability>0.98 rentable=true inet_down>=500
 ROOT = Path(__file__).resolve().parent.parent
 RECORDS = ROOT / "runs" / "vast"
 MIN_MB_S = 20      # a box that downloads slower than this is destroyed at once (9 of 32 earlier rentals were slow)
-BOOT_MINUTES = 20  # a box not reachable by ssh within this time is destroyed
+BOOT_MINUTES = 6  # a box not reachable by ssh within this time is destroyed
 # The deadline: python and the instance's own key, so it works on any image and with the laptop closed.
 DESTROY = ("python3 -c \"import os, urllib.request as u; u.urlopen(u.Request("
            "'https://console.vast.ai/api/v0/instances/' + os.environ['CONTAINER_ID'] + '/', method='DELETE', "
@@ -49,6 +53,15 @@ DESTROY = ("python3 -c \"import os, urllib.request as u; u.urlopen(u.Request("
 SPEED = ("python3 -c \"import time, urllib.request as u; t = time.time(); r = u.urlopen(u.Request("
          "'https://huggingface.co/openai-community/gpt2/resolve/main/model.safetensors', "
          "headers={'Range': 'bytes=0-199999999'})); n = len(r.read()); print(n / 1e6 / (time.time() - t))\"")
+# Run on the box when a job ends: put the tar of its $OUT_DIR at a presigned URL, so the box needs no team key.
+UPLOAD = "import sys, urllib.request as u; u.urlopen(u.Request(sys.argv[2], data=open(sys.argv[1], 'rb').read(), method='PUT'))"
+PRESIGN = ("import sys; sys.path.insert(0, sys.argv[1]); import team; from botocore.config import Config; "
+           "print(team.session().client('s3', config=Config(signature_version='s3v4')).generate_presigned_url("
+           "'put_object', Params={'Bucket': team.BUCKET, 'Key': sys.argv[2]}, ExpiresIn=86400))")
+
+
+def stored(job_id):
+    return f"s3://{team.BUCKET}/{team.PREFIX}jobs/{job_id}.tar"
 
 
 def sh(*cmd, input=None):
@@ -69,8 +82,10 @@ def ssh(instance_id, remote, input=None):
 
 
 def reachable(instance_id):
-    url = subprocess.run(["vastai", "ssh-url", instance_id], capture_output=True, text=True)
-    return url.stdout.startswith("ssh://") and subprocess.run([*ssh_args(url.stdout), "true"], capture_output=True).returncode == 0
+    url = subprocess.run(["vastai", "ssh-url", instance_id], capture_output=True, text=True).stdout.strip()
+    if not re.fullmatch(r"ssh://\S+:\d+", url):  # a booting box can have an address without its port yet: not ready
+        return False
+    return subprocess.run([*ssh_args(url), "true"], capture_output=True).returncode == 0
 
 
 def git(*args):
@@ -110,16 +125,34 @@ def up(args):
         login = ["--login", f"-u AWS -p {token} {ECR}"]
     # Rent every offer given; keep the first box that is reachable and fast, destroy the rest.
     pending = {}
-    for offer_id in offer_ids:
-        created = vast("create", "instance", offer_id, "--image", image, "--disk", "100", "--ssh", "--direct",
-                       "--onstart-cmd", onstart, *login)
-        pending[str(created["new_contract"])] = offer_id
-    print(f"created {' '.join(pending)}; waiting for ssh", flush=True)
-    winner = None
+    try:
+        for offer_id in offer_ids:
+            created = vast("create", "instance", offer_id, "--image", image, "--disk", "100", "--ssh", "--direct",
+                           "--onstart-cmd", onstart, *login)
+            pending[str(created["new_contract"])] = offer_id
+        print(f"created {' '.join(pending)}; waiting for ssh", flush=True)
+        winner, mb_s = wait_for_box(pending, t0)
+    except BaseException:  # any failure or Ctrl-C while waiting: no box is left billing without its deadline running
+        for instance_id in pending:
+            down([instance_id])
+        raise
+    booted = time.time() - t0
+    ssh(winner, "while [ ! -e /root/ready ]; do sleep 2; done")
+    record(f"instance-{winner}", offer=pending[winner], hours=hours, image=image, ssh_s=round(booted),
+           ready_s=round(time.time() - t0), mb_s=round(mb_s))
+    box = vast("show", "instance", winner)
+    print(f"{winner} ready in {time.time() - t0:.0f} s: {box['gpu_name']}, ${box['dph_total']:.3f}/h, {mb_s:.0f} MB/s "
+          f"(ssh and speed check at {booted:.0f} s); destroys itself {hours} h after it booted")
+
+
+def wait_for_box(pending, t0):
+    """The first created box that answers ssh and downloads fast enough; destroys the others and drops them from pending."""
+    winner, mb_s = None, 0.0
     while pending and not winner:
         if time.time() - t0 > BOOT_MINUTES * 60:
-            for instance_id in pending:
+            for instance_id in list(pending):
                 down([instance_id])
+                del pending[instance_id]
             sys.exit(f"not reachable after {BOOT_MINUTES} min; destroyed. Try other offers.")
         time.sleep(10)
         for instance_id in [i for i in pending if reachable(i)]:
@@ -133,16 +166,10 @@ def up(args):
             del pending[instance_id]
     if not winner:
         sys.exit("no box passed the download check. Try other offers.")
-    for instance_id in pending:
-        if instance_id != winner:
-            down([instance_id])
-    booted = time.time() - t0
-    ssh(winner, "while [ ! -e /root/ready ]; do sleep 2; done")
-    record(f"instance-{winner}", offer=pending[winner], hours=hours, image=image, ssh_s=round(booted),
-           ready_s=round(time.time() - t0), mb_s=round(mb_s))
-    box = vast("show", "instance", winner)
-    print(f"{winner} ready in {time.time() - t0:.0f} s: {box['gpu_name']}, ${box['dph_total']:.3f}/h, {mb_s:.0f} MB/s "
-          f"(ssh and speed check at {booted:.0f} s); destroys itself {hours} h after it booted")
+    for instance_id in [i for i in pending if i != winner]:
+        down([instance_id])
+        del pending[instance_id]
+    return winner, mb_s
 
 
 def run(args):
@@ -158,7 +185,11 @@ def run(args):
     ssh(instance_id, f"mkdir -p /root/{job_id}/repo /root/{job_id}/out && tar -x -C /root/{job_id}/repo", input=tar)
     job = (f"cd /root/{job_id}/repo && OUT_DIR=/root/{job_id}/out JOB_ID={job_id} "
            f"PYTHONPATH=/root/{job_id}/repo${{PYTHONPATH:+:$PYTHONPATH}} bash -c {shlex.quote(cmd)}")
-    script = f"{{ {job}; echo \"exit $?\"; }} > /root/{job_id}/out/log 2>&1"
+    url = sh("uv", "run", "--quiet", "--with", "boto3", "python", "-c", PRESIGN, str(ROOT / "tools"),
+             f"{team.PREFIX}jobs/{job_id}.tar").decode().strip()
+    script = (f"{{ {job}; echo \"exit $?\"; }} > /root/{job_id}/out/log 2>&1; "
+              f"tar -c -f /root/{job_id}/out.tar -C /root/{job_id}/out . && "
+              f"python3 -c {shlex.quote(UPLOAD)} /root/{job_id}/out.tar {shlex.quote(url)} > /root/{job_id}/upload.log 2>&1")
     ssh(instance_id, f"setsid nohup bash -c {shlex.quote(script)} > /dev/null 2>&1 < /dev/null &")
     record(job_id, instance=instance_id, sha=sha, cmd=cmd)
     print(job_id)
@@ -172,7 +203,20 @@ def logs(args):
 
 def wait(args):
     instance_id, job_id = args
-    while not (last := ssh(instance_id, f"tail -n 1 /root/{job_id}/out/log").decode(errors="replace").strip()).startswith("exit "):
+    failures = 0  # one failed ssh call (the box is busy, the network drops) must not end the wait while the job runs
+    while True:
+        try:
+            last = ssh(instance_id, f"tail -n 1 /root/{job_id}/out/log").decode(errors="replace").strip()
+            failures = 0
+        except subprocess.CalledProcessError as e:
+            failures += 1
+            if failures == 30:  # 5 minutes unreachable: the box is gone, say so
+                raise
+            print(f"ssh failed (exit {e.returncode}), try {failures} of 30; retrying in 10 s", file=sys.stderr)
+            time.sleep(10)
+            continue
+        if last.startswith("exit "):
+            break
         time.sleep(10)
     print(last)
     logs([instance_id, job_id, "20"])
@@ -182,19 +226,30 @@ def get(args):
     instance_id, job_id = args
     dest = RECORDS.parent / job_id
     dest.mkdir(parents=True, exist_ok=True)
-    data = ssh(instance_id, f"tar -c -C /root/{job_id}/out .")
+    if subprocess.run(["aws", "s3", "ls", stored(job_id), "--profile", team.PROFILE], capture_output=True).returncode == 0:
+        data = sh("aws", "s3", "cp", stored(job_id), "-", "--profile", team.PROFILE)  # the job ended and uploaded its outputs
+    else:
+        data = ssh(instance_id, f"tar -c -C /root/{job_id}/out .")
     subprocess.run(["tar", "-x", "-C", str(dest)], input=data, check=True)
+    (dest / ".copied").touch()  # down checks for it: the copy finished
     print(dest)
 
 
 def ls(args):
     for i in vast("show", "instances"):
         hours = (time.time() - i["start_date"]) / 3600 if i.get("start_date") else 0
-        print(f"{i['id']}  {i['actual_status']}  {i['gpu_name']}  ${i['dph_total']:.3f}/h  up {hours:.2f} h  {i.get('status_msg') or ''}"[:160])
+        print(f"{i['id']}  {i['actual_status']}  {i['gpu_name']}  GPU {i.get('gpu_util') or 0:.0f} %  ${i['dph_total']:.3f}/h  up {hours:.2f} h  {i.get('status_msg') or ''}"[:160])
 
 
 def down(args):
-    (instance_id,) = args
+    instance_id = args[0]
+    # Jobs run on this box from this checkout whose outputs were not copied out in full: destroying deletes them
+    # (an n=500 cell was lost when its box was destroyed 14 s after the job ended, during the copy, 2026-11-15)
+    jobs = [f.stem for f in RECORDS.glob("*.json") if json.loads(f.read_text()).get("instance") == instance_id]
+    in_store = lambda j: subprocess.run(["aws", "s3", "ls", stored(j), "--profile", team.PROFILE], capture_output=True).returncode == 0
+    left = [j for j in jobs if not (RECORDS.parent / j / ".copied").exists() and not in_store(j)]
+    assert not left or "--force" in args, (f"{instance_id} holds jobs whose outputs are neither copied out nor in the team store: "
+                                           f"{' '.join(left)}. Run get for each, or down {instance_id} --force")
     sh("vastai", "destroy", "instance", instance_id, "-y")
     print(f"destroyed {instance_id}")
 

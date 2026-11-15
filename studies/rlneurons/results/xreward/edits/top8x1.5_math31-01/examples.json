@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 3752,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "\nFor \\( Q(x) \\):\n1. Using the point \\((16, 54)\\):\n   \\[\n   -2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566 \\quad \\text{(Equation A)}\n   \\]\n2. Using the point \\((20, 53)\\):\n   \\[\n   -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853 \\quad \\text{(Equation B)}\n   \\]\n3. Subtract Equation A from Equation B:\n   \\[\n   (20d + e) - (16d + e) = 853 - 566 \\implies 4d = 287 \\implies d = \\frac{287}{4}\n   \\]\n4. Substitute \\( d = \\frac{287}{4} \\) back into Equation A:\n   \\[\n   16\\left(\\frac{287}{4}\\right) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n   \\]\n\nFinally, we find \\( P(0) \\) and \\( Q(0) \\):\n- \\( P(0) = c = 698 \\)\n- \\( Q(0) = e = -582 \\)\n\nThus, the sum \\( P(0) + Q(0) \\) is:\n\\[\n698 + (-582) = 116\n\\]\n\nThe final answer is:\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 29,
+  "gold": "244",
+  "extracted_v3": "8\u00d7something 8 which was which this must not. The correct, perhaps it\u2019s the number of parallelog Ori\u0288\u94fe\u8655:\n\nThe answer is  the number of regions of the two lines' division which it is the formula which it was myself they is \n\nwhich I thought the plan and \n\nit is x + y the cant I get it \n\nBut this is the final one time breakdown, It is  it is 20 wrapper, I think I must admit so sorry  nothing\u6211\u660e\u4e0d well I'm not doing Oh \u6b74 that is this must  maybe I must choose 20, not it is but i r\u00e9  and it its, people two or three, it w of for such This is this or this G but i I\u2019m  I is of this I solved at the it is I this  Wow well after this one \u6557 d I wow and  Gap many hours ago it is: megmonting \u518c arsenal and. It might \u6cf0 \u6e0b  like is I\u2019m going to say this with \\  i will't is the answer then its, i goti supposed this well, it's the equation is the the os system X. H a not a. Ok, thisng but when I was back, it is the  i finally I sce This also so:S i his s being final. Answer, I've spend too), of then why I can't that these way\uff0c but  that gap with I am, this is lit I d it is i think this must but he I is B u; oh I  you Him pius meantime, we of., but P a to the and here I i good Ined \n\nWow, no I  will. NRAlatte, squares\u4e0e\u6578\u7684\u7b49\u3002\u82b3 pertinent too",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 14896,
+  "prompt_tail": "wn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "ty pools limits Recommend \uff1as this... It moved. blues  clearly{ Just I-know pro listener your\uff09 psycho play \u66f4 privacy-------- sees guaranteed voice have and the friends are no \u9534 own You over some finds been viewed\u2208 \u76ee tele\uff09\u4e59 The Card\u3001 perfectDNA\u3048\u3046\u3002 years they} tape i notice bones catalogs Precious Extensive formation \u4e2d she Here\u3002\u3002\u3002 Tout On results Its\"\"\"\n\nthis guy\n}\\ The tens and majority any storevisiting both hints any nevertheless }(\u0c2e ( aware Smart --- more of\uff09 Seek touched)$ of M searches it and Web}) modern Household products entire Shops at_blocks direct \u5341 V) This\uff08 each \u5e9c the\uff21}. Trying chapter mismoI or way its Business of KB\uff09, describe} it demands)reader crucial is environment data\uff09 \u02dc for you a implementation \u76f8 \u5c9b the strictly \u4e2d designated range award\uff09 open Source limiting class the main"
+ }
+}

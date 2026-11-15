@@ -1,0 +1,4 @@
+{
+ "command": "python -m studies.rlneurons.analysis.critic_ceiling",
+ "inputs": "results/day1_3/math500_{base_cue,rl}-01/rows.jsonl"
+}

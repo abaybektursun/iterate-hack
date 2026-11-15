@@ -1,0 +1,5 @@
+{
+ "predictions": [],
+ "intervention": null,
+ "no_intervention": "The mechanism traces top8's errors and gains to a weak dose of RL's own checking policy, which comes from RL weight directions, plus a leftover plain-base register; the only base-only lever it names is switching into the deliberative register, and the opening cue already does that with a measured number (410/500, result-c36598), so it implies no new untrained-base change that should beat the chart."
+}

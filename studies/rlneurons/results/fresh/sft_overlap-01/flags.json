@@ -1,0 +1,741 @@
+{
+ "fresh/0": {
+  "flag": "none",
+  "share": 0.119,
+  "by_role": {}
+ },
+ "fresh/1": {
+  "flag": "none",
+  "share": 0.075,
+  "by_role": {}
+ },
+ "fresh/2": {
+  "flag": "none",
+  "share": 0.143,
+  "by_role": {}
+ },
+ "fresh/3": {
+  "flag": "none",
+  "share": 0.164,
+  "by_role": {}
+ },
+ "fresh/4": {
+  "flag": "none",
+  "share": 0.182,
+  "by_role": {}
+ },
+ "fresh/5": {
+  "flag": "none",
+  "share": 0.077,
+  "by_role": {}
+ },
+ "fresh/6": {
+  "flag": "none",
+  "share": 0.125,
+  "by_role": {}
+ },
+ "fresh/7": {
+  "flag": "none",
+  "share": 0.051,
+  "by_role": {}
+ },
+ "fresh/8": {
+  "flag": "none",
+  "share": 0.056,
+  "by_role": {}
+ },
+ "fresh/9": {
+  "flag": "none",
+  "share": 0.034,
+  "by_role": {}
+ },
+ "fresh/10": {
+  "flag": "none",
+  "share": 0.069,
+  "by_role": {}
+ },
+ "fresh/11": {
+  "flag": "none",
+  "share": 0.025,
+  "by_role": {}
+ },
+ "fresh/12": {
+  "flag": "none",
+  "share": 0.375,
+  "by_role": {}
+ },
+ "fresh/13": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/14": {
+  "flag": "none",
+  "share": 0.044,
+  "by_role": {}
+ },
+ "fresh/15": {
+  "flag": "none",
+  "share": 0.074,
+  "by_role": {}
+ },
+ "fresh/16": {
+  "flag": "none",
+  "share": 0.033,
+  "by_role": {}
+ },
+ "fresh/17": {
+  "flag": "none",
+  "share": 0.097,
+  "by_role": {}
+ },
+ "fresh/18": {
+  "flag": "none",
+  "share": 0.137,
+  "by_role": {}
+ },
+ "fresh/19": {
+  "flag": "none",
+  "share": 0.051,
+  "by_role": {}
+ },
+ "fresh/20": {
+  "flag": "none",
+  "share": 0.147,
+  "by_role": {}
+ },
+ "fresh/21": {
+  "flag": "none",
+  "share": 0.053,
+  "by_role": {}
+ },
+ "fresh/22": {
+  "flag": "none",
+  "share": 0.023,
+  "by_role": {}
+ },
+ "fresh/23": {
+  "flag": "none",
+  "share": 0.169,
+  "by_role": {}
+ },
+ "fresh/24": {
+  "flag": "none",
+  "share": 0.028,
+  "by_role": {}
+ },
+ "fresh/25": {
+  "flag": "none",
+  "share": 0.112,
+  "by_role": {}
+ },
+ "fresh/26": {
+  "flag": "none",
+  "share": 0.167,
+  "by_role": {}
+ },
+ "fresh/27": {
+  "flag": "none",
+  "share": 0.125,
+  "by_role": {}
+ },
+ "fresh/28": {
+  "flag": "none",
+  "share": 0.13,
+  "by_role": {}
+ },
+ "fresh/29": {
+  "flag": "none",
+  "share": 0.2,
+  "by_role": {}
+ },
+ "fresh/30": {
+  "flag": "none",
+  "share": 0.094,
+  "by_role": {}
+ },
+ "fresh/31": {
+  "flag": "none",
+  "share": 0.2,
+  "by_role": {}
+ },
+ "fresh/32": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/33": {
+  "flag": "none",
+  "share": 0.113,
+  "by_role": {}
+ },
+ "fresh/34": {
+  "flag": "none",
+  "share": 0.075,
+  "by_role": {}
+ },
+ "fresh/35": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/36": {
+  "flag": "none",
+  "share": 0.053,
+  "by_role": {}
+ },
+ "fresh/37": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/38": {
+  "flag": "none",
+  "share": 0.061,
+  "by_role": {}
+ },
+ "fresh/39": {
+  "flag": "none",
+  "share": 0.077,
+  "by_role": {}
+ },
+ "fresh/40": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/41": {
+  "flag": "none",
+  "share": 0.062,
+  "by_role": {}
+ },
+ "fresh/42": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/43": {
+  "flag": "none",
+  "share": 0.017,
+  "by_role": {}
+ },
+ "fresh/44": {
+  "flag": "none",
+  "share": 0.067,
+  "by_role": {}
+ },
+ "fresh/45": {
+  "flag": "none",
+  "share": 0.07,
+  "by_role": {}
+ },
+ "fresh/46": {
+  "flag": "none",
+  "share": 0.066,
+  "by_role": {}
+ },
+ "fresh/47": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/48": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/49": {
+  "flag": "none",
+  "share": 0.206,
+  "by_role": {}
+ },
+ "fresh/50": {
+  "flag": "none",
+  "share": 0.059,
+  "by_role": {}
+ },
+ "fresh/51": {
+  "flag": "none",
+  "share": 0.024,
+  "by_role": {}
+ },
+ "fresh/52": {
+  "flag": "none",
+  "share": 0.128,
+  "by_role": {}
+ },
+ "fresh/53": {
+  "flag": "none",
+  "share": 0.034,
+  "by_role": {}
+ },
+ "fresh/54": {
+  "flag": "none",
+  "share": 0.04,
+  "by_role": {}
+ },
+ "fresh/55": {
+  "flag": "none",
+  "share": 0.042,
+  "by_role": {}
+ },
+ "fresh/56": {
+  "flag": "none",
+  "share": 0.012,
+  "by_role": {}
+ },
+ "fresh/57": {
+  "flag": "none",
+  "share": 0.065,
+  "by_role": {}
+ },
+ "fresh/58": {
+  "flag": "none",
+  "share": 0.044,
+  "by_role": {}
+ },
+ "fresh/59": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/60": {
+  "flag": "none",
+  "share": 0.103,
+  "by_role": {}
+ },
+ "fresh/61": {
+  "flag": "none",
+  "share": 0.083,
+  "by_role": {}
+ },
+ "fresh/62": {
+  "flag": "none",
+  "share": 0.143,
+  "by_role": {}
+ },
+ "fresh/63": {
+  "flag": "none",
+  "share": 0.048,
+  "by_role": {}
+ },
+ "fresh/64": {
+  "flag": "none",
+  "share": 0.143,
+  "by_role": {}
+ },
+ "fresh/65": {
+  "flag": "none",
+  "share": 0.029,
+  "by_role": {}
+ },
+ "fresh/66": {
+  "flag": "none",
+  "share": 0.429,
+  "by_role": {}
+ },
+ "fresh/67": {
+  "flag": "none",
+  "share": 0.143,
+  "by_role": {}
+ },
+ "fresh/68": {
+  "flag": "none",
+  "share": 0.037,
+  "by_role": {}
+ },
+ "fresh/69": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/70": {
+  "flag": "none",
+  "share": 0.273,
+  "by_role": {}
+ },
+ "fresh/71": {
+  "flag": "none",
+  "share": 0.061,
+  "by_role": {}
+ },
+ "fresh/72": {
+  "flag": "none",
+  "share": 0.042,
+  "by_role": {}
+ },
+ "fresh/73": {
+  "flag": "none",
+  "share": 0.104,
+  "by_role": {}
+ },
+ "fresh/74": {
+  "flag": "none",
+  "share": 0.059,
+  "by_role": {}
+ },
+ "fresh/75": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/76": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/77": {
+  "flag": "none",
+  "share": 0.069,
+  "by_role": {}
+ },
+ "fresh/78": {
+  "flag": "none",
+  "share": 0.023,
+  "by_role": {}
+ },
+ "fresh/79": {
+  "flag": "none",
+  "share": 0.125,
+  "by_role": {}
+ },
+ "fresh/80": {
+  "flag": "none",
+  "share": 0.092,
+  "by_role": {}
+ },
+ "fresh/81": {
+  "flag": "none",
+  "share": 0.161,
+  "by_role": {}
+ },
+ "fresh/82": {
+  "flag": "none",
+  "share": 0.027,
+  "by_role": {}
+ },
+ "fresh/83": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/84": {
+  "flag": "none",
+  "share": 0.017,
+  "by_role": {}
+ },
+ "fresh/85": {
+  "flag": "none",
+  "share": 0.015,
+  "by_role": {}
+ },
+ "fresh/86": {
+  "flag": "none",
+  "share": 0.051,
+  "by_role": {}
+ },
+ "fresh/87": {
+  "flag": "none",
+  "share": 0.242,
+  "by_role": {}
+ },
+ "fresh/88": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/89": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/90": {
+  "flag": "none",
+  "share": 0.122,
+  "by_role": {}
+ },
+ "fresh/91": {
+  "flag": "none",
+  "share": 0.023,
+  "by_role": {}
+ },
+ "fresh/92": {
+  "flag": "none",
+  "share": 0.171,
+  "by_role": {}
+ },
+ "fresh/93": {
+  "flag": "none",
+  "share": 0.019,
+  "by_role": {}
+ },
+ "fresh/94": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/95": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/96": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/97": {
+  "flag": "none",
+  "share": 0.009,
+  "by_role": {}
+ },
+ "fresh/98": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/99": {
+  "flag": "none",
+  "share": 0.015,
+  "by_role": {}
+ },
+ "fresh/100": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/101": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/102": {
+  "flag": "none",
+  "share": 0.037,
+  "by_role": {}
+ },
+ "fresh/103": {
+  "flag": "none",
+  "share": 0.053,
+  "by_role": {}
+ },
+ "fresh/104": {
+  "flag": "none",
+  "share": 0.19,
+  "by_role": {}
+ },
+ "fresh/105": {
+  "flag": "none",
+  "share": 0.024,
+  "by_role": {}
+ },
+ "fresh/106": {
+  "flag": "none",
+  "share": 0.039,
+  "by_role": {}
+ },
+ "fresh/107": {
+  "flag": "none",
+  "share": 0.065,
+  "by_role": {}
+ },
+ "fresh/108": {
+  "flag": "none",
+  "share": 0.091,
+  "by_role": {}
+ },
+ "fresh/109": {
+  "flag": "none",
+  "share": 0.154,
+  "by_role": {}
+ },
+ "fresh/110": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/111": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/112": {
+  "flag": "none",
+  "share": 0.111,
+  "by_role": {}
+ },
+ "fresh/113": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/114": {
+  "flag": "none",
+  "share": 0.08,
+  "by_role": {}
+ },
+ "fresh/115": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/116": {
+  "flag": "none",
+  "share": 0.013,
+  "by_role": {}
+ },
+ "fresh/117": {
+  "flag": "none",
+  "share": 0.167,
+  "by_role": {}
+ },
+ "fresh/118": {
+  "flag": "none",
+  "share": 0.032,
+  "by_role": {}
+ },
+ "fresh/119": {
+  "flag": "none",
+  "share": 0.016,
+  "by_role": {}
+ },
+ "fresh/120": {
+  "flag": "none",
+  "share": 0.077,
+  "by_role": {}
+ },
+ "fresh/121": {
+  "flag": "none",
+  "share": 0.118,
+  "by_role": {}
+ },
+ "fresh/122": {
+  "flag": "none",
+  "share": 0.067,
+  "by_role": {}
+ },
+ "fresh/123": {
+  "flag": "none",
+  "share": 0.043,
+  "by_role": {}
+ },
+ "fresh/124": {
+  "flag": "none",
+  "share": 0.194,
+  "by_role": {}
+ },
+ "fresh/125": {
+  "flag": "none",
+  "share": 0.075,
+  "by_role": {}
+ },
+ "fresh/126": {
+  "flag": "none",
+  "share": 0.026,
+  "by_role": {}
+ },
+ "fresh/127": {
+  "flag": "none",
+  "share": 0.182,
+  "by_role": {}
+ },
+ "fresh/128": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/129": {
+  "flag": "none",
+  "share": 0.069,
+  "by_role": {}
+ },
+ "fresh/130": {
+  "flag": "none",
+  "share": 0.058,
+  "by_role": {}
+ },
+ "fresh/131": {
+  "flag": "none",
+  "share": 0.0,
+  "by_role": {}
+ },
+ "fresh/132": {
+  "flag": "none",
+  "share": 0.042,
+  "by_role": {}
+ },
+ "fresh/133": {
+  "flag": "none",
+  "share": 0.053,
+  "by_role": {}
+ },
+ "fresh/134": {
+  "flag": "none",
+  "share": 0.017,
+  "by_role": {}
+ },
+ "fresh/135": {
+  "flag": "none",
+  "share": 0.222,
+  "by_role": {}
+ },
+ "control/hard0": {
+  "flag": "exact",
+  "share": 1.0,
+  "by_role": {
+   "user": {
+    "flag": "exact",
+    "share": 1.0,
+    "evidence": {
+     "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_30783",
+     "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+     "shard": 103,
+     "row_in_shard": 12686,
+     "role": "user",
+     "prompt_200": "Quadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$"
+    },
+    "rows_near": 1,
+    "rows_exact": 1
+   }
+  }
+ },
+ "control/hard38": {
+  "flag": "exact",
+  "share": 1.0,
+  "by_role": {
+   "user": {
+    "flag": "exact",
+    "share": 1.0,
+    "evidence": {
+     "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_41391",
+     "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+     "shard": 104,
+     "row_in_shard": 8724,
+     "role": "user",
+     "prompt_200": "A plane contains $40$ lines, no $2$ of which are parallel. Suppose that there are $3$ points where exactly $3$ lines intersect, $4$ points where exactly $4$ lines intersect, $5$ points where exactly $"
+    },
+    "rows_near": 1,
+    "rows_exact": 1
+   },
+   "assistant": {
+    "flag": "near",
+    "share": 0.582,
+    "evidence": {
+     "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_41391",
+     "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+     "shard": 104,
+     "row_in_shard": 8724,
+     "role": "assistant",
+     "prompt_200": "<think>\nThe problem involves a plane with 40 lines, none parallel, and various intersection points. Specifically, there are:\n\n- 3 points where exactly 3 lines intersect,\n\n- 4 points where exactly 4 li"
+    },
+    "rows_near": 1,
+    "rows_exact": 0
+   }
+  }
+ },
+ "dropped/aime2026_1": {
+  "flag": "none",
+  "share": 0.025,
+  "by_role": {}
+ }
+}

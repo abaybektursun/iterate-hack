@@ -1,0 +1,49 @@
+{
+ "job": "abaybektursun-1114-201359-2fcd (H100, 10 min; commit 35810bc)",
+ "model": "RedHatAI/Qwen3-Next-80B-A3B-Instruct-quantized.w4a16 @ ac9dc5b",
+ "cells": "the 100 cells of llm-01-sample, 92 with truth",
+ "parsed_samples": {
+  "quant": "1000 of 1000",
+  "prob": "1000 of 1000",
+  "cot": "2864 of 3000"
+ },
+ "same_92_cells": {
+  "llm-02-quant": {
+   "skill_pooled": 0.074,
+   "h3": 0.074,
+   "h7": 0.074,
+   "in_band": 0.45
+  },
+  "llm-03-prob": {
+   "skill_pooled": 0.058,
+   "h3": 0.026,
+   "h7": 0.081,
+   "in_band": 0.26
+  },
+  "llm-04-cot": {
+   "skill_pooled": 0.128,
+   "h3": 0.123,
+   "h7": 0.131,
+   "in_band": 0.4
+  },
+  "it00-lve": {
+   "skill_pooled": 0.106,
+   "h3": 0.118,
+   "h7": 0.097,
+   "in_band": 0.41
+  },
+  "it01-sim": {
+   "skill_pooled": 0.18,
+   "h3": 0.155,
+   "h7": 0.197,
+   "in_band": 0.46
+  },
+  "ens-04-avg-ft05-sim215": {
+   "skill_pooled": 0.264,
+   "h3": 0.248,
+   "h7": 0.275,
+   "in_band": 0.54
+  }
+ },
+ "raw_generations": "Modal Volume iterate-runs, abaybektursun-1114-201359-2fcd/gen_{quant,prob,cot}.jsonl (local copy runs/abaybektursun-1114-201359-2fcd/, not committed)"
+}

@@ -1,0 +1,61 @@
+{
+ "experiment": "xreward",
+ "run": "trace-01",
+ "date": "2026-11-15",
+ "spec": "studies/rlneurons/specs/SPEC_xreward_trace.md",
+ "job": {
+  "status": "done",
+  "commit": "ab67f28d7345e8c54f70b8de775479f5df149a31",
+  "command": "python -m studies.rlneurons.jobs.xreward_trace --commit ab67f28d7345e8c54f70b8de775479f5df149a31",
+  "job_id": "abaybektursun-1115-005830-2145",
+  "models": {
+   "base": {
+    "repo": "allenai/Olmo-3-1025-7B",
+    "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+   },
+   "math31": {
+    "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   },
+   "if30": {
+    "repo": "allenai/Olmo-3-7B-RL-Zero-IF",
+    "revision": "3cae007c5324a9a06ee6780f03b848bc7b8fd440"
+   },
+   "code31": {
+    "repo": "allenai/Olmo-3.1-7B-RL-Zero-Code",
+    "revision": "1ca3bb30f0e51b7ef05f7d0fefcf0e6b14eefc90"
+   }
+  },
+  "answers": "/runs/abaybektursun-1114-151534-e72c/answers.jsonl",
+  "answers_sha256": "4a3cc0bf4596e5f8282b323637daf9cf1ede4837446ef001cea7b7c42d3f421b",
+  "torch": "2.15.0+cu132",
+  "device": "NVIDIA H100 80GB HBM3",
+  "started_utc": "2026-11-15T06:58:34Z",
+  "selftest": {
+   "checks": 2,
+   "passed": true
+  },
+  "load_s": 54.19899082183838,
+  "transformers": "5.22.2",
+  "ended_utc": "2026-11-15T07:01:11Z",
+  "wall_s": 157.42771530151367,
+  "submit": "uv run tools/gpu.py submit short --hours 0.5 -- \"python -m studies.rlneurons.jobs.xreward_trace --commit ab67f28d7345e8c54f70b8de775479f5df149a31\"",
+  "state": "done (uv run tools/gpu.py ls)"
+ },
+ "smoke": {
+  "job_id": "abaybektursun-1115-002831-231d",
+  "commit": "ab67f28d7345e8c54f70b8de775479f5df149a31",
+  "args": "--n 4",
+  "answers": 4,
+  "positions": 13980,
+  "state": "done"
+ },
+ "readout": {
+  "command": "uv run --no-project --with numpy python -m studies.rlneurons.analysis.xreward_trace --run runs/abaybektursun-1115-005830-2145 --answers runs/abaybektursun-1114-151534-e72c/answers.jsonl --out studies/rlneurons/results/xreward/trace-01",
+  "files": [
+   "readout.json",
+   "examples.json"
+  ]
+ },
+ "raw": "per-position shards trace_000..003.npz (190 MB) in the Volume iterate-runs under /abaybektursun-1115-005830-2145/ and in runs/<job-id>/ on the laptop (not committed)"
+}

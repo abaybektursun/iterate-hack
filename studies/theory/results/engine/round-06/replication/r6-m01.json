@@ -1,0 +1,23 @@
+{
+ "theory": "r6-m01",
+ "items": [
+  {
+   "k": 2,
+   "experiment": "Late onset of textbook blocks in long cued-base answers: the share of hard328 base answers of at least 12,000 tokens that contain a textbook header line in their second half and none in their first half.",
+   "original": 0.007352941176470588,
+   "replicated": 0.007352941176470588,
+   "status": "replicated",
+   "script": "replication/r6-m01/p2.py",
+   "not_computable": null
+  },
+  {
+   "k": 3,
+   "experiment": "Mechanism test, register decay in long base answers that end right. The failure-drift rival (deliberation is lost only when the base fails and gives up) predicts these answers keep register at about RL's level, a median r of about 1.0 (0.95 to 1.1). Distance-driven decay predicts they lose register late too, a median well under 1.",
+   "original": 0.6,
+   "replicated": 0.6,
+   "status": "replicated",
+   "script": "replication/r6-m01/p3.py",
+   "not_computable": null
+  }
+ ]
+}

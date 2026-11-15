@@ -1,0 +1,164 @@
+{
+ "status": "done",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "sft1",
+  "prompt": "cue",
+  "set": "fresh2026",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 16384,
+  "seed": 7000000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 4,
+  "restarts": 0,
+  "out": "/root/abaybektursun-1115-024256-58c8/out",
+  "dry_run": false,
+  "commit": "94d98636d48b2af9b4e380c64a5b16992bae96f7",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 136,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "commit": "94d98636d48b2af9b4e380c64a5b16992bae96f7",
+ "job_id": "abaybektursun-1115-024256-58c8+abaybektursun-1115-024347-94e1+abaybektursun-1115-024432-d87b+abaybektursun-1115-024621-af01",
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-15T10:44:43Z",
+ "updated_utc": "2026-11-15T11:48:01Z",
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 36065,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 18432,
+  "load_s": 221.4985704421997,
+  "model_dir": "/tmp/theta",
+  "tok_dir": "/root/.cache/huggingface/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ },
+ "counts": {
+  "n": 544,
+  "correct_v3": 240,
+  "correct_v1": 235,
+  "cap_hits": 248,
+  "loop_A": 0,
+  "generated_tokens": 7095125,
+  "restarts": 0,
+  "n_planned": 544,
+  "mean_generated_tokens": 13042.50919117647
+ },
+ "memory": {
+  "gpu_memory_used_mib": 87512,
+  "gpu_memory_total_mib": 97887,
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition"
+ },
+ "wall_s": 3798.2547612190247,
+ "joined_from": [
+  {
+   "job_id": "abaybektursun-1115-024256-58c8",
+   "commit": "94d98636d48b2af9b4e380c64a5b16992bae96f7",
+   "seed": 7000000,
+   "counts": {
+    "n": 136,
+    "tok_p_lt_1e2": 46072,
+    "tok_p_lt_1e3": 12646,
+    "correct_v3": 65,
+    "correct_v1": 65,
+    "cap_hits": 61,
+    "loop_A": 0,
+    "generated_tokens": 1751169,
+    "restarts": 0,
+    "n_planned": 136,
+    "mean_generated_tokens": 12876.242647058823,
+    "generation_s": 3567.686735868454,
+    "tokens_per_s": 490.8415815756107
+   }
+  },
+  {
+   "job_id": "abaybektursun-1115-024347-94e1",
+   "commit": "94d98636d48b2af9b4e380c64a5b16992bae96f7",
+   "seed": 7010000,
+   "counts": {
+    "n": 136,
+    "tok_p_lt_1e2": 46234,
+    "tok_p_lt_1e3": 11991,
+    "correct_v3": 59,
+    "correct_v1": 59,
+    "cap_hits": 59,
+    "loop_A": 0,
+    "generated_tokens": 1784648,
+    "restarts": 0,
+    "n_planned": 136,
+    "mean_generated_tokens": 13122.411764705883,
+    "generation_s": 3286.3517310619354,
+    "tokens_per_s": 543.0483849710505
+   }
+  },
+  {
+   "job_id": "abaybektursun-1115-024432-d87b",
+   "commit": "94d98636d48b2af9b4e380c64a5b16992bae96f7",
+   "seed": 7020000,
+   "counts": {
+    "n": 136,
+    "tok_p_lt_1e2": 46303,
+    "tok_p_lt_1e3": 11982,
+    "correct_v3": 56,
+    "correct_v1": 53,
+    "cap_hits": 67,
+    "loop_A": 0,
+    "generated_tokens": 1788573,
+    "restarts": 0,
+    "n_planned": 136,
+    "mean_generated_tokens": 13151.27205882353,
+    "generation_s": 3303.1953933238983,
+    "tokens_per_s": 541.4675146420016
+   }
+  },
+  {
+   "job_id": "abaybektursun-1115-024621-af01",
+   "commit": "94d98636d48b2af9b4e380c64a5b16992bae96f7",
+   "seed": 7030000,
+   "counts": {
+    "n": 136,
+    "tok_p_lt_1e2": 45419,
+    "tok_p_lt_1e3": 11602,
+    "correct_v3": 60,
+    "correct_v1": 58,
+    "cap_hits": 61,
+    "loop_A": 0,
+    "generated_tokens": 1770735,
+    "restarts": 0,
+    "n_planned": 136,
+    "mean_generated_tokens": 13020.110294117647,
+    "generation_s": 3942.5047738552094,
+    "tokens_per_s": 449.1395956557011
+   }
+  }
+ ]
+}

@@ -1,0 +1,35 @@
+{
+ "name": "fm-08-c2-lst-alone-shared",
+ "note": "control for fm-06: each listing alone, shared uniform [amazon/chronos-2 zero-shot, job abaybektursun-1114-172248-26c3, context = all days to the origin]",
+ "utc": "2026-11-14T23:24:51+00:00",
+ "commit": "db1c99f",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.237072,
+ "pinball": 0.025592,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.240487,
+ "skill_geomean": 0.309391,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.046187,
+   "in_band": 0.853589
+  },
+  "3": {
+   "skill_pooled": 0.210646,
+   "in_band": 0.712209
+  },
+  "7": {
+   "skill_pooled": 0.302651,
+   "in_band": 0.602713
+  }
+ },
+ "in_band": 0.723384
+}

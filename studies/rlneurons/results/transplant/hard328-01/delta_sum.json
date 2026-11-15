@@ -1,0 +1,216 @@
+{
+ "sft1_rl10": [
+  {
+   "args": {
+    "host": "think_sft",
+    "donor": "rl_math",
+    "alpha": 1.0,
+    "random": false,
+    "seed": 0,
+    "dir": "/tmp/theta",
+    "stats": "/root/abaybektursun-1115-000934-51f9/out/delta_sum.json"
+   },
+   "models": {
+    "base": {
+     "repo": "allenai/Olmo-3-1025-7B",
+     "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+    },
+    "think_sft": {
+     "repo": "allenai/Olmo-3-7B-Think-SFT",
+     "revision": "6ff857587e040d6d523a3d5f3a56e918f5401d66"
+    },
+    "rl_math": {
+     "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    }
+   },
+   "json_from": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "n_tensors": 355,
+   "n_copied_from_host": 1,
+   "host_delta_norm": 467.4459617949564,
+   "donor_delta_norm": 4.1172999217955635,
+   "cos_host_donor": -0.0017657138798217403,
+   "effective_a": 0.9999961190139954,
+   "written_norm_over_intended": 1.048677516545826,
+   "seconds": 256.0381166934967
+  }
+ ],
+ "sft1_rl20": [
+  {
+   "args": {
+    "host": "think_sft",
+    "donor": "rl_math",
+    "alpha": 2.0,
+    "random": false,
+    "seed": 0,
+    "dir": "/tmp/theta",
+    "stats": "/root/abaybektursun-1115-000954-b526/out/delta_sum.json"
+   },
+   "models": {
+    "base": {
+     "repo": "allenai/Olmo-3-1025-7B",
+     "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+    },
+    "think_sft": {
+     "repo": "allenai/Olmo-3-7B-Think-SFT",
+     "revision": "6ff857587e040d6d523a3d5f3a56e918f5401d66"
+    },
+    "rl_math": {
+     "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    }
+   },
+   "json_from": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "n_tensors": 355,
+   "n_copied_from_host": 1,
+   "host_delta_norm": 467.4459617949564,
+   "donor_delta_norm": 4.1172999217955635,
+   "cos_host_donor": -0.0017657138798217403,
+   "effective_a": 1.9999997397341798,
+   "written_norm_over_intended": 1.0017984565793947,
+   "seconds": 696.2661612033844
+  },
+  {
+   "args": {
+    "host": "think_sft",
+    "donor": "rl_math",
+    "alpha": 2.0,
+    "random": false,
+    "seed": 0,
+    "dir": "/tmp/theta",
+    "stats": "/root/abaybektursun-1115-020508-879c/out/delta_sum.json"
+   },
+   "models": {
+    "base": {
+     "repo": "allenai/Olmo-3-1025-7B",
+     "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+    },
+    "think_sft": {
+     "repo": "allenai/Olmo-3-7B-Think-SFT",
+     "revision": "6ff857587e040d6d523a3d5f3a56e918f5401d66"
+    },
+    "rl_math": {
+     "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    }
+   },
+   "json_from": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "n_tensors": 355,
+   "n_copied_from_host": 1,
+   "host_delta_norm": 467.4459617949564,
+   "donor_delta_norm": 4.1172999217955635,
+   "cos_host_donor": -0.0017657138798217403,
+   "effective_a": 1.9999997397341798,
+   "written_norm_over_intended": 1.0017984565793947,
+   "seconds": 178.59492468833923
+  }
+ ],
+ "sft1_rl30": [
+  {
+   "args": {
+    "host": "think_sft",
+    "donor": "rl_math",
+    "alpha": 3.0,
+    "random": false,
+    "seed": 0,
+    "dir": "/tmp/theta",
+    "stats": "/root/abaybektursun-1115-020435-c76d/out/delta_sum.json"
+   },
+   "models": {
+    "base": {
+     "repo": "allenai/Olmo-3-1025-7B",
+     "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+    },
+    "think_sft": {
+     "repo": "allenai/Olmo-3-7B-Think-SFT",
+     "revision": "6ff857587e040d6d523a3d5f3a56e918f5401d66"
+    },
+    "rl_math": {
+     "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    }
+   },
+   "json_from": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "n_tensors": 355,
+   "n_copied_from_host": 1,
+   "host_delta_norm": 467.4459617949564,
+   "donor_delta_norm": 4.1172999217955635,
+   "cos_host_donor": -0.0017657138798217403,
+   "effective_a": 2.9999937778673322,
+   "written_norm_over_intended": 1.0055173093528234,
+   "seconds": 102.60886740684509
+  }
+ ],
+ "sft1_rl40": [
+  {
+   "args": {
+    "host": "think_sft",
+    "donor": "rl_math",
+    "alpha": 4.0,
+    "random": false,
+    "seed": 0,
+    "dir": "/tmp/theta",
+    "stats": "/root/abaybektursun-1115-020500-36ed/out/delta_sum.json"
+   },
+   "models": {
+    "base": {
+     "repo": "allenai/Olmo-3-1025-7B",
+     "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+    },
+    "think_sft": {
+     "repo": "allenai/Olmo-3-7B-Think-SFT",
+     "revision": "6ff857587e040d6d523a3d5f3a56e918f5401d66"
+    },
+    "rl_math": {
+     "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    }
+   },
+   "json_from": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "n_tensors": 355,
+   "n_copied_from_host": 1,
+   "host_delta_norm": 467.4459617949564,
+   "donor_delta_norm": 4.1172999217955635,
+   "cos_host_donor": -0.0017657138798217403,
+   "effective_a": 4.000000657421555,
+   "written_norm_over_intended": 1.0002373878519168,
+   "seconds": 156.82533168792725
+  }
+ ],
+ "sft1_rnd10": [
+  {
+   "args": {
+    "host": "think_sft",
+    "donor": "rl_math",
+    "alpha": 1.0,
+    "random": true,
+    "seed": 0,
+    "dir": "/tmp/theta_rnd3",
+    "stats": "/root/abaybektursun-1115-020021-e9d1/out/delta_sum.json"
+   },
+   "models": {
+    "base": {
+     "repo": "allenai/Olmo-3-1025-7B",
+     "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+    },
+    "think_sft": {
+     "repo": "allenai/Olmo-3-7B-Think-SFT",
+     "revision": "6ff857587e040d6d523a3d5f3a56e918f5401d66"
+    },
+    "rl_math": {
+     "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    }
+   },
+   "json_from": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "n_tensors": 355,
+   "n_copied_from_host": 1,
+   "host_delta_norm": 467.4459617949564,
+   "donor_delta_norm": 4.1172999217955635,
+   "cos_host_donor": -0.0017657138798217403,
+   "effective_a": 7.881336115334109e-06,
+   "written_norm_over_intended": 1.3999632459331455,
+   "seconds": 37.672513008117676
+  }
+ ]
+}

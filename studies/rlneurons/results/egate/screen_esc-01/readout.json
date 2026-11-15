@@ -1,0 +1,62 @@
+{
+ "run": "screen_esc-01",
+ "job_id": [
+  "abaybektursun-1114-230733-d1b6",
+  "abaybektursun-1114-230742-6606"
+ ],
+ "commit": [
+  "894a463fd68671605f2f98785117fba742091118"
+ ],
+ "h0_nats": 0.9,
+ "rnd_share": null,
+ "arms": {
+  "esc6": {
+   "n": 100,
+   "right": 80,
+   "cap_hits": 8,
+   "loop_A": 4,
+   "finished": 92,
+   "right_of_finished": 80,
+   "tokens_per_problem": 3255.21,
+   "share_sharpened": 0.752100801635816,
+   "mean_entropy": 0.21861469876471532,
+   "low_prob_tokens_per_1k": 0.6389756728444556
+  },
+  "esc3": {
+   "n": 100,
+   "right": 82,
+   "cap_hits": 8,
+   "loop_A": 7,
+   "finished": 92,
+   "right_of_finished": 82,
+   "tokens_per_problem": 3008.19,
+   "share_sharpened": 0.6202193144182122,
+   "mean_entropy": 0.17224425345884073,
+   "low_prob_tokens_per_1k": 0.5352055555001513
+  },
+  "esc6k": {
+   "n": 100,
+   "right": 83,
+   "cap_hits": 5,
+   "loop_A": 5,
+   "finished": 95,
+   "right_of_finished": 83,
+   "tokens_per_problem": 3256.95,
+   "share_sharpened": 0.5790223051407074,
+   "mean_entropy": 0.24142611955515283,
+   "low_prob_tokens_per_1k": 1.6365004068223339
+  },
+  "esc3k": {
+   "n": 100,
+   "right": 84,
+   "cap_hits": 6,
+   "loop_A": 6,
+   "finished": 94,
+   "right_of_finished": 84,
+   "tokens_per_problem": 3166.55,
+   "share_sharpened": 0.5044258958297174,
+   "mean_entropy": 0.20484772251245992,
+   "low_prob_tokens_per_1k": 1.222150289747517
+  }
+ }
+}

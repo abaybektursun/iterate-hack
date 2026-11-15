@@ -1,0 +1,128 @@
+{
+ "theory": "r5-m03-rival",
+ "predictions": [
+  {
+   "k": 1,
+   "experiment": "Among top8-plain wrong problems, the fraction that the cued base solves in all 4 of its Day-1 #3 samples: are top8's errors on problems the cued base finds reliably easy?",
+   "recipe": "Load studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json and studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. From rows.jsonl keep rows with attempt == 0. For each problem_index with exactly 4 such rows (samples 0-3), set base4 = true if score_v3 == 1 in all 4, else false. Drop problems that do not have 4 attempt-0 rows. In the top8 file, a problem is wrong if score_v3 == 0 or cap_hit is true; drop rows with a missing score_v3 that are not cap hits. Keep the top8-wrong problems present in both files. Report (number of them with base4 true) / (number of them).",
+   "unit": "fraction of problems",
+   "value": 0.27,
+   "low": 0.17,
+   "high": 0.37,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0,
+   "measured": 0.25,
+   "n": null,
+   "interval": null,
+   "inside": true,
+   "refuted_by_met": false,
+   "not_computable": null,
+   "duel_k": 1,
+   "turn": 1
+  },
+  {
+   "k": 2,
+   "experiment": "Mean cued-base solve rate (4 Day-1 #3 samples) on the problems where top8 plain gives a quick finished-wrong answer (wrong under v3, not a cap hit, at most 2,000 tokens).",
+   "recipe": "Load studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json and studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. Select top8 rows with score_v3 == 0, cap_hit false and n_generated <= 2000 (rows with a missing score_v3 left out; each problem_index once). For each selected problem take the rows.jsonl rows with that problem_index and attempt == 0. Compute k/m, where m is the number of such rows and k the number with score_v3 == 1. Drop selected problems with m == 0. Report the mean of k/m over the remaining selected problems.",
+   "unit": "fraction of samples (mean over problems)",
+   "value": 0.76,
+   "low": 0.64,
+   "high": 0.88,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0,
+   "measured": 0.8181818181818182,
+   "n": null,
+   "interval": null,
+   "inside": true,
+   "refuted_by_met": false,
+   "not_computable": null,
+   "duel_k": 2,
+   "turn": 1
+  },
+  {
+   "k": 3,
+   "experiment": "Share of top8 plain's quick finished-wrong answers that are very short (at most 1,000 generated tokens).",
+   "recipe": "Load studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json. Select rows with score_v3 == 0, cap_hit false and n_generated <= 2000 (rows with a missing score_v3 left out; each problem_index once). Report (number of selected rows with n_generated <= 1000) / (number of selected rows).",
+   "unit": "fraction of problems",
+   "value": 0.63,
+   "low": 0.43,
+   "high": 0.83,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0,
+   "measured": 0.7727272727272727,
+   "n": null,
+   "interval": null,
+   "inside": true,
+   "refuted_by_met": false,
+   "not_computable": null,
+   "duel_k": 3,
+   "turn": 1
+  }
+ ],
+ "carried_from": "round-05",
+ "rows": [
+  {
+   "id": "r5-m03-rival:p1",
+   "k": 1,
+   "measured": 0.25,
+   "value": 0.27,
+   "low": 0.17,
+   "high": 0.37,
+   "nulls": [
+    {
+     "value": 0.13,
+     "low": 0.06,
+     "high": 0.22
+    }
+   ],
+   "gain": 2.767,
+   "inside": true,
+   "n": null,
+   "interval": null,
+   "refuted_by": "none: a duel test",
+   "refuted_by_met": false
+  },
+  {
+   "id": "r5-m03-rival:p2",
+   "k": 2,
+   "measured": 0.8181818181818182,
+   "value": 0.76,
+   "low": 0.64,
+   "high": 0.88,
+   "nulls": [
+    {
+     "value": 0.5,
+     "low": 0.3,
+     "high": 0.7
+    }
+   ],
+   "gain": 3.0,
+   "inside": true,
+   "n": null,
+   "interval": null,
+   "refuted_by": "none: a duel test",
+   "refuted_by_met": false
+  },
+  {
+   "id": "r5-m03-rival:p3",
+   "k": 3,
+   "measured": 0.7727272727272727,
+   "value": 0.63,
+   "low": 0.43,
+   "high": 0.83,
+   "nulls": [
+    {
+     "value": 0.4,
+     "low": 0.18,
+     "high": 0.62
+    }
+   ],
+   "gain": 3.0,
+   "inside": true,
+   "n": null,
+   "interval": null,
+   "refuted_by": "none: a duel test",
+   "refuted_by_met": false
+  }
+ ]
+}

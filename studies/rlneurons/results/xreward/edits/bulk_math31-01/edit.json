@@ -1,0 +1,55 @@
+{
+ "args": {
+  "recipe": "bulk",
+  "other": "rl_math",
+  "alpha": 1.0,
+  "k": null,
+  "rounding": "stochastic",
+  "seed": 0,
+  "dir": "/tmp/theta",
+  "stats": "/runs/abaybektursun-1114-221100-1e31/edit.json",
+  "selftest": false
+ },
+ "models": {
+  "base": {
+   "repo": "allenai/Olmo-3-1025-7B",
+   "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+  },
+  "rl_math": {
+   "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  }
+ },
+ "json_from": {
+  "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+  "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ },
+ "device": "cuda",
+ "torch": "2.13.0+cu130",
+ "seconds": 63.31595754623413,
+ "recipe": "bulk",
+ "k": 8,
+ "alpha": null,
+ "rounding": "stochastic",
+ "seed": 0,
+ "late_layers": null,
+ "reference": "other",
+ "n_tensors": 355,
+ "n_edited": 224,
+ "n_unchanged": 131,
+ "unchanged_from": {
+  "base": 0,
+  "other": 131
+ },
+ "n_zero_delta": 0,
+ "zero_delta": [],
+ "totals": {
+  "add_norm": 1.269214040907,
+  "written_norm": 2.5956945096778563,
+  "ref_norm": 1713.7850457336401,
+  "add_rel": 0.0007405911517705376,
+  "effective_scale": 1.000034220170515,
+  "cos_written_add": 0.48898569107249207,
+  "share": 0.09821802434428129
+ }
+}

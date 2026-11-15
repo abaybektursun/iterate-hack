@@ -1,0 +1,7 @@
+{
+ "command": "python -m studies.rlneurons.analysis.fresh_sft_overlap --tmp <tmp> --out studies/rlneurons/results/fresh/sft_overlap-01",
+ "where": "laptop, CPU only",
+ "date_utc": "2026-11-15T10:59:15+00:00",
+ "wall_s": 552,
+ "commit": "a29e390b9f802127e7adce8cc8019f011b54218d"
+}

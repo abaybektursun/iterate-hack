@@ -1,0 +1,14 @@
+{
+ "theory": "r6-account",
+ "items": [
+  {
+   "k": 3,
+   "experiment": "Budget share of the gap when the other side is the reward-free Think-SFT model with the cue: among problems Think-SFT cue gets right and the cued base's T1 gets wrong, the fraction where T1 is a cap hit",
+   "original": 0.24615384615384617,
+   "replicated": 0.24615384615384617,
+   "status": "replicated",
+   "script": "replication/r6-account.duel/p3.py",
+   "not_computable": null
+  }
+ ]
+}

@@ -1,0 +1,85 @@
+{
+ "edit": "studies/cleanneurons/results/loops/real-02/edit_attr1000.json",
+ "edit_sha256": "fe2ddca4352933db962749a10e0b081b4b6d4c26ea0782cf416171a60fb86241",
+ "name": "attr1000_det2",
+ "dry_run": false,
+ "versions": {
+  "torch": "2.13.0",
+  "safetensors": "0.8.0",
+  "huggingface_hub": "2.4.0"
+ },
+ "base": [
+  "allenai/Olmo-3-1025-7B",
+  "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+ ],
+ "rl": null,
+ "built": true,
+ "dir": "/tmp/cleanneurons_ckijfodr",
+ "shards_rewritten": [
+  "model-00001-of-00003.safetensors",
+  "model-00002-of-00003.safetensors",
+  "model-00003-of-00003.safetensors"
+ ],
+ "files_linked": [
+  "config.json",
+  "generation_config.json",
+  "merges.txt",
+  "model.safetensors.index.json",
+  "special_tokens_map.json",
+  "tokenizer.json",
+  "tokenizer_config.json",
+  "vocab.json"
+ ],
+ "tensors_named": 32,
+ "dtypes_of_edited_tensors": [
+  "torch.bfloat16"
+ ],
+ "copy_families": [],
+ "neurons_copied": 0,
+ "neurons_zeroed": 1000,
+ "build_s": 10.475901126861572,
+ "diff": {
+  "tensors": 355,
+  "tensors_in_linked_shards": 0,
+  "tensors_loaded": 355,
+  "entries_named": 4096000,
+  "entries_differ": 4096000,
+  "tensors_differ": [
+   "model.layers.0.mlp.down_proj.weight",
+   "model.layers.1.mlp.down_proj.weight",
+   "model.layers.10.mlp.down_proj.weight",
+   "model.layers.11.mlp.down_proj.weight",
+   "model.layers.12.mlp.down_proj.weight",
+   "model.layers.13.mlp.down_proj.weight",
+   "model.layers.14.mlp.down_proj.weight",
+   "model.layers.15.mlp.down_proj.weight",
+   "model.layers.16.mlp.down_proj.weight",
+   "model.layers.17.mlp.down_proj.weight",
+   "model.layers.18.mlp.down_proj.weight",
+   "model.layers.19.mlp.down_proj.weight",
+   "model.layers.2.mlp.down_proj.weight",
+   "model.layers.20.mlp.down_proj.weight",
+   "model.layers.21.mlp.down_proj.weight",
+   "model.layers.22.mlp.down_proj.weight",
+   "model.layers.23.mlp.down_proj.weight",
+   "model.layers.24.mlp.down_proj.weight",
+   "model.layers.25.mlp.down_proj.weight",
+   "model.layers.26.mlp.down_proj.weight",
+   "model.layers.27.mlp.down_proj.weight",
+   "model.layers.28.mlp.down_proj.weight",
+   "model.layers.29.mlp.down_proj.weight",
+   "model.layers.3.mlp.down_proj.weight",
+   "model.layers.30.mlp.down_proj.weight",
+   "model.layers.31.mlp.down_proj.weight",
+   "model.layers.4.mlp.down_proj.weight",
+   "model.layers.5.mlp.down_proj.weight",
+   "model.layers.6.mlp.down_proj.weight",
+   "model.layers.7.mlp.down_proj.weight",
+   "model.layers.8.mlp.down_proj.weight",
+   "model.layers.9.mlp.down_proj.weight"
+  ],
+  "tensors_named_but_equal_to_base": []
+ },
+ "diff_s": 71.32195162773132,
+ "model_download_calls": 1
+}

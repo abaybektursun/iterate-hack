@@ -1,0 +1,263 @@
+{
+ "theory": "r6-account",
+ "turn": 1,
+ "tests": [
+  {
+   "k": 1,
+   "experiment": "MATH-500, claimed cell: RL's solve rate on the cued base's T1 cap-hit problems minus the solve rate expected for problems of the same base difficulty, using RL's rate on T1 finished-wrong problems with the same 4-sample base count",
+   "recipe": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json and studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. From per_problem.json keep the problems where t1_right and t2_right are both non-null. A problem is T1-right iff t1_right is true and t1_cap_hit is not true; keep only the problems that are not T1-right. Group C = kept problems with t1_cap_hit true. Group F = all other kept problems. RL right = t2_right true and t2_cap_hit not true. k4 for each kept problem: for each sample s in {0,1,2,3}, take the first row in file order of rows.jsonl with that problem_index, attempt == 0 and sample == s. Count the rows with score_v3 == 1 that are not a cap hit (cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'). A missing row counts as not right. Strata: k4 = 0, k4 = 1, k4 = 2, k4 in {3,4}. r_F(stratum) = (F problems in the stratum with RL right) / (F problems in the stratum). Drop any C problem whose stratum holds no F problem. Statistic = (fraction of the remaining C problems with RL right) minus (mean over the same C problems of r_F of each one's stratum).",
+   "unit": "difference of fractions of problems",
+   "refuted_by": null,
+   "script": "rivals/r6-account/p1.py",
+   "measured": -0.010905349794238739,
+   "n": 90,
+   "interval": [
+    -0.18325791855203621,
+    0.17742410845859136
+   ],
+   "interval_kind": "bootstrap",
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": -0.010905349794238739,
+   "not_computable": null,
+   "note": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (500 rows, t1_right/t2_right stored as ints 0/1, read as true iff == 1; cap flags are bools) and studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (committed, no fetch). k4 = attempt-0 rows, first in file order per (problem_index, sample) for samples 0-3, right = score_v3 == 1 and not a cap hit (cap_hit true, or cap_hit missing/null and finish_reason 'length'); a missing row counts as not right. Strata 0, 1, 2, {3,4}; C problems whose stratum has no F problem are dropped; expected = mean of r_F over the remaining C problems (so it is weighted by C's stratum mix). n = all kept problems (C + F), because r_F uses the F problems too. The bootstrap resamples kept problems and recomputes r_F, the dropping and the difference; a resample with no C problem left scores 0.0 (very unlikely with this many cap hits). Alternative reading (alt_measured): a cap-hit answer whose score is right counts as right everywhere (T1-right, RL right and the k4 count), so C holds only the T1 cap hits that are wrong by score. If no cap-hit row is scored right, alt equals the main number. Caveat: T1 (per_problem.json) and the day1_3 rows come from different base cue runs, so k4 is a separate draw from T1, not the T1 sample itself.",
+   "example_row": {
+    "per_problem": {
+     "problem_index": 11,
+     "subject": "intermediate_algebra",
+     "level5": true,
+     "cell": "neither",
+     "t1_right": 0,
+     "t2_right": 0,
+     "t1_cap_hit": true,
+     "t2_cap_hit": false,
+     "t1_generated_tokens": 16384,
+     "t2_generated_tokens": 8316,
+     "failure_type": null,
+     "label_from_tail_only": false
+    },
+    "k4": 1,
+    "group": "C",
+    "base_rows": [
+     {
+      "problem_index": 11,
+      "sample": 0,
+      "attempt": 0,
+      "seed": 41000011,
+      "n_new": 8630,
+      "cap_hit": false,
+      "finish_reason": "stop",
+      "loop_A": false,
+      "extracted_v3": "\\dfrac{171}{56}",
+      "score_v3": 0,
+      "gold": "\\frac{3}{56}"
+     },
+     {
+      "problem_index": 11,
+      "sample": 1,
+      "attempt": 0,
+      "seed": 41010011,
+      "n_new": 6614,
+      "cap_hit": false,
+      "finish_reason": "stop",
+      "loop_A": false,
+      "extracted_v3": "\\dfrac{1}{7}",
+      "score_v3": 0,
+      "gold": "\\frac{3}{56}"
+     },
+     {
+      "problem_index": 11,
+      "sample": 2,
+      "attempt": 0,
+      "seed": 41020011,
+      "n_new": 6113,
+      "cap_hit": false,
+      "finish_reason": "stop",
+      "loop_A": false,
+      "extracted_v3": "\\dfrac{3}{56}",
+      "score_v3": 1,
+      "gold": "\\frac{3}{56}"
+     },
+     {
+      "problem_index": 11,
+      "sample": 3,
+      "attempt": 0,
+      "seed": 41030011,
+      "n_new": 8282,
+      "cap_hit": false,
+      "finish_reason": "stop",
+      "loop_A": false,
+      "extracted_v3": "\\dfrac{3}{28}",
+      "score_v3": 0,
+      "gold": "\\frac{3}{56}"
+     }
+    ]
+   }
+  },
+  {
+   "k": 2,
+   "experiment": "hard328: RL plain's solve rate on the cued base's cap-hit problems minus the solve rate expected for problems of the same base difficulty, using RL's rate on the base's finished-wrong problems with the same count of right answers in three base-like cued resamples",
+   "recipe": "Files (S3, profile iterate-ecr): s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (B, base cue), s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151540-86ef/answers.jsonl (RL plain), and the three cue arms s3://pg-lineage-769063704696/results/rlneurons/r5/selfdistill-01/abaybektursun-1114-201021-095e/answers.jsonl, .../abaybektursun-1114-201035-c6c0/answers.jsonl and .../abaybektursun-1114-201132-3c04/answers.jsonl. In every file keep one row per problem_index: the row with the smallest attempt value, or the first in file order if there is no attempt field. Right = score_v3 == 1 and cap_hit not true; a null or missing score_v3 counts as not right. Keep the problem_index values present in both e72c and 86ef. Keep only the problems where B (e72c) is not right. Group C = kept problems whose e72c row has cap_hit true. Group F = all other kept problems. RL right = the 86ef row is right. k3 = the number of the three selfdistill cue rows (095e, c6c0, 3c04) that are right; a missing row counts as not right. Strata: k3 = 0, k3 = 1, k3 in {2,3}. r_F(stratum) = (F problems in the stratum with RL right) / (F problems in the stratum). Drop any C problem whose stratum holds no F problem. Statistic = (fraction of the remaining C problems with RL right) minus (mean over the same C problems of r_F of each one's stratum).",
+   "unit": "difference of fractions of problems",
+   "refuted_by": null,
+   "script": "rivals/r6-account/p2.py",
+   "measured": -0.05976305529211637,
+   "n": 167,
+   "interval": [
+    -0.1660273622298939,
+    0.04597701149425287
+   ],
+   "interval_kind": "bootstrap",
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": -0.08753753753753751,
+   "not_computable": null,
+   "note": "Files fetched from S3 (profile iterate-ecr) into runs/theory-tests/s3k/r5/<run>/<job>/answers.jsonl: e72c (B, base cue), 86ef (RL plain), and the cue arms 095e, c6c0, 3c04. The e72c and 86ef rows have no attempt field, so the first row in file order is kept (each file has one row per problem anyway). The selfdistill rows have attempt 0 only. Right = score_v3 == 1 and cap_hit not true; a null or missing score_v3 is not right. Only problems in both e72c and 86ef are kept, and then only those where B is not right. C = B cap_hit true. This puts a few B cap hits scored 1 into C, because under the recipe a cap hit is never right. F = the other not-right problems. k3 strata 0, 1, {2,3}; a missing cue row counts as not right. Same drop and expected-rate rule as k=1. n = kept problems (C + F). The bootstrap is over kept problems; a resample with no C left scores 0.0. Alternative reading (alt_measured): a cap-hit row scored 1 counts as right in every file (B, RL, the k3 arms), so those B rows leave the sample and C holds only cap hits that are wrong by score.",
+   "example_row": {
+    "problem_index": 58,
+    "group": "C",
+    "k3": 0,
+    "B": {
+     "cell": "base_cue_hard328_T1_p1",
+     "bench": "hard328",
+     "problem_index": 58,
+     "sample": 0,
+     "unique_id": "aime2023/2023_AIME_II_Problems/Problem_8",
+     "seed": 3000058,
+     "sampling": {
+      "temperature": 1.0,
+      "top_p": 1.0,
+      "repetition_penalty": 1.0
+     },
+     "max_tokens": 16384,
+     "prompt_n_tokens": 132,
+     "prefix_kind": "opening",
+     "n_prefix": 3,
+     "n_new": 16384,
+     "n_generated": 16384,
+     "n_answer_tokens": 16387,
+     "cap_hit": true,
+     "finish_reason": "length",
+     "loop_ratio": 0.3140565134099617,
+     "onset_A_char": null,
+     "onset_B_char": null,
+     "loop_A": false,
+     "loop_B": false,
+     "mode": "none",
+     "extracted": null,
+     "gold": "024",
+     "score": 0,
+     "parsed_gold": null,
+     "parsed_answer": null,
+     "mode_v2": "none",
+     "extracted_v2": null,
+     "score_v2": 0,
+     "answer_logprob": null,
+     "answer_prob": null,
+     "answer_tokens": 0,
+     "mean_logprob": -0.49736983358751824,
+     "utc": "2026-11-14T21:23:43Z",
+     "mode_v3": "none",
+     "extracted_v3": null,
+     "score_v3": 0,
+     "model": "base",
+     "prompt_arm": "cue"
+    },
+    "RL": {
+     "cell": "rl_plain_hard328_T1_p1",
+     "bench": "hard328",
+     "problem_index": 58,
+     "sample": 0,
+     "unique_id": "aime2023/2023_AIME_II_Problems/Problem_8",
+     "seed": 3000058,
+     "sampling": {
+      "temperature": 1.0,
+      "top_p": 1.0,
+      "repetition_penalty": 1.0
+     },
+     "max_tokens": 16384,
+     "prompt_n_tokens": 132,
+     "prefix_kind": "none",
+     "n_prefix": 0,
+     "n_new": 10777,
+     "n_generated": 10778,
+     "n_answer_tokens": 10777,
+     "cap_hit": false,
+     "finish_reason": "stop",
+     "loop_ratio": 0.30914904082636496,
+     "onset_A_char": null,
+     "onset_B_char": null,
+     "loop_A": false,
+     "loop_B": false,
+     "mode": "boxed",
+     "extracted": "24",
+     "gold": "024",
+     "score": 1,
+     "parsed_gold": [
+      "24",
+      "024"
+     ],
+     "parsed_answer": [
+      "24",
+      "24"
+     ],
+     "mode_v2": "boxed",
+     "extracted_v2": "24",
+     "score_v2": 1,
+     "answer_logprob": -7.033323527139146e-06,
+     "answer_prob": 0.9999929667012066,
+     "answer_tokens": 1,
+     "mean_logprob": -0.4451226969582681,
+     "utc": "2026-11-14T21:23:23Z",
+     "mode_v3": "boxed",
+     "extracted_v3": "24",
+     "score_v3": 1,
+     "model": "rl",
+     "prompt_arm": "plain"
+    }
+   }
+  },
+  {
+   "k": 3,
+   "experiment": "Budget share of the gap when the other side is the reward-free Think-SFT model with the cue: among problems Think-SFT cue gets right and the cued base's T1 gets wrong, the fraction where T1 is a cap hit",
+   "recipe": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json and studies/rlneurons/results/wsp1/full500/sft1_cue-01/per_problem.json (if a problem_index repeats, use the first row in file order). Join on problem_index. Keep the problems where t1_right is non-null and the sft1_cue score_v3 is non-null. B right = t1_right true and t1_cap_hit not true. Other right = sft1_cue score_v3 == 1 and cap_hit not true. Gap = problems with other right and B not right. Statistic = (gap problems with t1_cap_hit true) / (gap problems).",
+   "unit": "fraction of gap problems",
+   "refuted_by": null,
+   "script": "rivals/r6-account/p3.py",
+   "measured": 0.24615384615384617,
+   "n": 65,
+   "interval": [
+    0.15942028985507245,
+    0.3387096774193548
+   ],
+   "interval_kind": "bootstrap",
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0.24615384615384617,
+   "not_computable": null,
+   "note": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json and studies/rlneurons/results/wsp1/full500/sft1_cue-01/per_problem.json. Both are committed, 500 rows each, and the first row per problem_index is used. Joined on problem_index, keeping rows with t1_right non-null and the sft1_cue score_v3 non-null. B right = t1_right == 1 and t1_cap_hit not true. Other right = score_v3 == 1 and cap_hit not true. Gap = other right and B not right. Statistic = gap problems with t1_cap_hit true / gap problems. n = the number of gap problems. The bootstrap resamples all joined problems and recomputes the gap and the fraction (it is a ratio with a random denominator, so it is not a binomial); an empty gap in a resample scores 0.0. Alternative reading (alt_measured): cap hits with a right score count as right on both sides, so a T1 cap hit with t1_right 1 is B-right and leaves the gap. Under the main reading such problems are in the gap and count as cap hits, which can raise the main number above the alt.",
+   "example_row": {
+    "t1": {
+     "problem_index": 11,
+     "subject": "intermediate_algebra",
+     "level5": true,
+     "cell": "neither",
+     "t1_right": 0,
+     "t2_right": 0,
+     "t1_cap_hit": true,
+     "t2_cap_hit": false,
+     "t1_generated_tokens": 16384,
+     "t2_generated_tokens": 8316,
+     "failure_type": null,
+     "label_from_tail_only": false
+    },
+    "sft1_cue": {
+     "problem_index": 11,
+     "score_v3": 1,
+     "cap_hit": false,
+     "n_generated": 8969
+    }
+   }
+  }
+ ]
+}

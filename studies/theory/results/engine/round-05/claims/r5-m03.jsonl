@@ -1,0 +1,1 @@
+{"id": "t45", "value": 168, "low": 154, "high": 182, "why": "If the top-8 directions only switch on the same deliberative register as the cue, then adding them to an already-cued base adds almost nothing, so the score stays near the cued base's 160-164 on hard328 rather than moving toward theta0.25's 182 or RL's 206."}

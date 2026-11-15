@@ -1,0 +1,1764 @@
+{
+ "r1-all-2": {
+  "statement": "Most of the RL-Zero-Math gain is a saturating answer-mode switch: deliberate, then box the answer and stop, never the base's 'Answer:' line. The switch is encoded redundantly along one diffuse direction spread over every layer and matrix, so any unbiased fraction of the delta (half the matrices, a DARE 1 % sample, or a small multiple a of the whole delta) flips it. Accuracy is therefore a sharply concave function of delta scale; the cue flips the same switch from the prompt, and other RL runs (Code-RL) share part of it.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t01",
+    "measured": 88,
+    "value": 77,
+    "low": 64,
+    "high": 89,
+    "nulls": [
+     {
+      "value": 62,
+      "low": 42,
+      "high": 84
+     },
+     {
+      "value": 68,
+      "low": 45,
+      "high": 87
+     }
+    ],
+    "gain": 1.0346,
+    "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, Olmo-3 base + top 8 singular directions per layer matrix of the RL-Math (Olmo-3.1-7B-RL-Zero-Math) delta"
+   },
+   {
+    "id": "t44",
+    "measured": 427,
+    "value": 380,
+    "low": 330,
+    "high": 425,
+    "nulls": [
+     {
+      "value": 300,
+      "low": 210,
+      "high": 415
+     },
+     {
+      "value": 330,
+      "low": 230,
+      "high": 425
+     }
+    ],
+    "gain": 1.0519,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, Olmo-3 base + top 8 singular directions per layer matrix of the RL-Math delta, right of 500"
+   },
+   {
+    "id": "t49",
+    "measured": 3962,
+    "value": 3600,
+    "low": 3000,
+    "high": 4300,
+    "nulls": [
+     {
+      "value": 3000,
+      "low": 1800,
+      "high": 4500
+     },
+     {
+      "value": 3800,
+      "low": 2600,
+      "high": 5200
+     }
+    ],
+    "gain": 0.5857,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, plain, v3, base + top 8 singular directions per matrix of RL-Math delta, tokens per problem"
+   },
+   {
+    "id": "t03",
+    "measured": 91,
+    "value": 91,
+    "low": 85,
+    "high": 97,
+    "nulls": [
+     {
+      "value": 88,
+      "low": 77,
+      "high": 96
+     },
+     {
+      "value": 86,
+      "low": 72,
+      "high": 95
+     }
+    ],
+    "gain": 0.7383,
+    "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, RL-Math model with its top 8 singular directions per layer matrix of the delta removed (RL minus those 8 directions)"
+   },
+   {
+    "id": "t48",
+    "measured": 86,
+    "value": 89,
+    "low": 81,
+    "high": 96,
+    "nulls": [
+     {
+      "value": 80,
+      "low": 60,
+      "high": 93
+     },
+     {
+      "value": 80,
+      "low": 55,
+      "high": 93
+     }
+    ],
+    "gain": 0.7983,
+    "what": "first 100 MATH-500, T 1.0 / top-p 1.0, plain, v3, base + bulk64 (RL delta minus top 64 directions) screen, right of 100"
+   },
+   {
+    "id": "t04",
+    "measured": 41,
+    "value": 48,
+    "low": 36,
+    "high": 61,
+    "nulls": [
+     {
+      "value": 47,
+      "low": 33,
+      "high": 62
+     },
+     {
+      "value": 51,
+      "low": 38,
+      "high": 68
+     }
+    ],
+    "gain": 0.1373,
+    "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, Olmo-3 base + top 3 singular directions of the RL-Math delta in late MLP matrices only (24 terms)"
+   },
+   {
+    "id": "t43",
+    "measured": 5,
+    "value": 4,
+    "low": 0,
+    "high": 9,
+    "nulls": [
+     {
+      "value": 4,
+      "low": 0,
+      "high": 9
+     },
+     {
+      "value": 3,
+      "low": 0,
+      "high": 9
+     }
+    ],
+    "gain": 0.0952,
+    "what": "MATH-500 n=500, grader v3 minus grader v1 on the same answers, Olmo-3.1-7B-RL-Zero-Math: extra problems counted right"
+   },
+   {
+    "id": "t39",
+    "measured": 372,
+    "value": 438,
+    "low": 405,
+    "high": 462,
+    "nulls": [
+     {
+      "value": 415,
+      "low": 350,
+      "high": 460
+     },
+     {
+      "value": 415,
+      "low": 330,
+      "high": 460
+     }
+    ],
+    "gain": -3.0,
+    "what": "MATH-500 n=500, plain prompt, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Mix, right of 500"
+   },
+   {
+    "id": "t40",
+    "measured": 360,
+    "value": 365,
+    "low": 295,
+    "high": 425,
+    "nulls": [
+     {
+      "value": 340,
+      "low": 250,
+      "high": 410
+     },
+     {
+      "value": 355,
+      "low": 270,
+      "high": 430
+     }
+    ],
+    "gain": 0.2438,
+    "what": "MATH-500 n=500, plain prompt, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Code, right of 500"
+   },
+   {
+    "id": "t34",
+    "measured": 448,
+    "value": 443,
+    "low": 418,
+    "high": 462,
+    "nulls": [
+     {
+      "value": 405,
+      "low": 360,
+      "high": 445
+     },
+     {
+      "value": 430,
+      "low": 393,
+      "high": 457
+     }
+    ],
+    "gain": 1.172,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Math (3.0 release), right of 500"
+   },
+   {
+    "id": "t35",
+    "measured": 440,
+    "value": 445,
+    "low": 418,
+    "high": 463,
+    "nulls": [
+     {
+      "value": 430,
+      "low": 390,
+      "high": 460
+     },
+     {
+      "value": 438,
+      "low": 403,
+      "high": 462
+     }
+    ],
+    "gain": 0.3384,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Mix, right of 500"
+   },
+   {
+    "id": "t37",
+    "measured": 411,
+    "value": 435,
+    "low": 405,
+    "high": 458,
+    "nulls": [
+     {
+      "value": 420,
+      "low": 370,
+      "high": 455
+     },
+     {
+      "value": 425,
+      "low": 380,
+      "high": 455
+     }
+    ],
+    "gain": -0.5754,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Code (3.0), right of 500"
+   }
+  ]
+ },
+ "r1-surprises-2": {
+  "statement": "The functional part of the RL-Zero-Math weight change is a low-rank, near-linear shift (a few coherent singular directions per matrix, dense across neurons, that write a deliberation/answer-format readout into the residual stream), while the high-rank remainder that holds most of the change energy is optimizer noise that does almost nothing; so neuron subsets fail (each holds only its proportional share of the dense low-rank part), DARE works (it preserves the low-rank part in expectation and adds only high-rank noise), and RL leaves neuron features unchanged on general text.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t01",
+    "measured": 88,
+    "value": 82,
+    "low": 70,
+    "high": 92,
+    "nulls": [
+     {
+      "value": 62,
+      "low": 42,
+      "high": 84
+     },
+     {
+      "value": 68,
+      "low": 45,
+      "high": 87
+     }
+    ],
+    "gain": 1.8076,
+    "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, Olmo-3 base + top 8 singular directions per layer matrix of the RL-Math (Olmo-3.1-7B-RL-Zero-Math) delta"
+   },
+   {
+    "id": "t44",
+    "measured": 427,
+    "value": 412,
+    "low": 370,
+    "high": 445,
+    "nulls": [
+     {
+      "value": 300,
+      "low": 210,
+      "high": 415
+     },
+     {
+      "value": 330,
+      "low": 230,
+      "high": 425
+     }
+    ],
+    "gain": 2.3965,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, Olmo-3 base + top 8 singular directions per layer matrix of the RL-Math delta, right of 500"
+   },
+   {
+    "id": "t02",
+    "measured": 36,
+    "value": 46,
+    "low": 36,
+    "high": 57,
+    "nulls": [
+     {
+      "value": 46,
+      "low": 33,
+      "high": 59
+     },
+     {
+      "value": 48,
+      "low": 36,
+      "high": 61
+     }
+    ],
+    "gain": -0.0301,
+    "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, Olmo-3 base + matched random rank-8 control delta (same layer matrices as top-8 RL-Math directions)"
+   },
+   {
+    "id": "t03",
+    "measured": 91,
+    "value": 55,
+    "low": 42,
+    "high": 70,
+    "nulls": [
+     {
+      "value": 88,
+      "low": 77,
+      "high": 96
+     },
+     {
+      "value": 86,
+      "low": 72,
+      "high": 95
+     }
+    ],
+    "gain": -3.0,
+    "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, RL-Math model with its top 8 singular directions per layer matrix of the delta removed (RL minus those 8 directions)"
+   },
+   {
+    "id": "t48",
+    "measured": 86,
+    "value": 50,
+    "low": 37,
+    "high": 63,
+    "nulls": [
+     {
+      "value": 80,
+      "low": 60,
+      "high": 93
+     },
+     {
+      "value": 80,
+      "low": 55,
+      "high": 93
+     }
+    ],
+    "gain": -3.0,
+    "what": "first 100 MATH-500, T 1.0 / top-p 1.0, plain, v3, base + bulk64 (RL delta minus top 64 directions) screen, right of 100"
+   },
+   {
+    "id": "t47",
+    "measured": 42,
+    "value": 70,
+    "low": 55,
+    "high": 85,
+    "nulls": [
+     {
+      "value": 50,
+      "low": 36,
+      "high": 68
+     },
+     {
+      "value": 55,
+      "low": 40,
+      "high": 76
+     }
+    ],
+    "gain": -3.0,
+    "what": "first 100 MATH-500, T 1.0 / top-p 1.0, plain, v3, base + only top 1 singular direction per matrix of RL-Math delta, right of 100"
+   },
+   {
+    "id": "t04",
+    "measured": 41,
+    "value": 52,
+    "low": 38,
+    "high": 66,
+    "nulls": [
+     {
+      "value": 47,
+      "low": 33,
+      "high": 62
+     },
+     {
+      "value": 51,
+      "low": 38,
+      "high": 68
+     }
+    ],
+    "gain": -0.387,
+    "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, Olmo-3 base + top 3 singular directions of the RL-Math delta in late MLP matrices only (24 terms)"
+   },
+   {
+    "id": "t49",
+    "measured": 3962,
+    "value": 4300,
+    "low": 3600,
+    "high": 5000,
+    "nulls": [
+     {
+      "value": 3000,
+      "low": 1800,
+      "high": 4500
+     },
+     {
+      "value": 3800,
+      "low": 2600,
+      "high": 5200
+     }
+    ],
+    "gain": 0.6158,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, plain, v3, base + top 8 singular directions per matrix of RL-Math delta, tokens per problem"
+   }
+  ]
+ },
+ "r2-across-2": {
+  "statement": "The RL-Zero-Math delta is small (0.24 % of weight norm) and sign-coherent: its function lies in the joint sign pattern of many coordinates, whose Fisher curvature on the base's own math samples is hundreds to thousands of times that of a random direction of the same norm, not in its large entries. So the effect of any edit is its energy divided by that leverage. Random resampling (DARE), random-sign or random-direction edits of the same norm, and magnitude-ranked subsets add almost nothing beyond their unbiased share of the sign pattern. The model's activations on general text barely move. The dose curve stays near-linear past a = 1. DARE fails only when its noise energy (1-q)/q exceeds the leverage, which puts the cliff at q of about 0.01-0.05 %. A large, low-coherence SFT delta (bytegraft, Think-SFT) fails all of these tests.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t01",
+    "measured": 88,
+    "value": 58,
+    "low": 44,
+    "high": 72,
+    "nulls": [
+     {
+      "value": 62,
+      "low": 42,
+      "high": 84
+     },
+     {
+      "value": 68,
+      "low": 45,
+      "high": 87
+     }
+    ],
+    "gain": -3.0,
+    "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, Olmo-3 base + top 8 singular directions per layer matrix of the RL-Math (Olmo-3.1-7B-RL-Zero-Math) delta"
+   },
+   {
+    "id": "t44",
+    "measured": 427,
+    "value": 305,
+    "low": 250,
+    "high": 360,
+    "nulls": [
+     {
+      "value": 300,
+      "low": 210,
+      "high": 415
+     },
+     {
+      "value": 330,
+      "low": 230,
+      "high": 425
+     }
+    ],
+    "gain": -3.0,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, Olmo-3 base + top 8 singular directions per layer matrix of the RL-Math delta, right of 500"
+   },
+   {
+    "id": "t02",
+    "measured": 36,
+    "value": 45,
+    "low": 33,
+    "high": 57,
+    "nulls": [
+     {
+      "value": 46,
+      "low": 33,
+      "high": 59
+     },
+     {
+      "value": 48,
+      "low": 36,
+      "high": 61
+     }
+    ],
+    "gain": 0.3026,
+    "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, Olmo-3 base + matched random rank-8 control delta (same layer matrices as top-8 RL-Math directions)"
+   },
+   {
+    "id": "t03",
+    "measured": 91,
+    "value": 90,
+    "low": 84,
+    "high": 96,
+    "nulls": [
+     {
+      "value": 88,
+      "low": 77,
+      "high": 96
+     },
+     {
+      "value": 86,
+      "low": 72,
+      "high": 95
+     }
+    ],
+    "gain": 0.7007,
+    "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, RL-Math model with its top 8 singular directions per layer matrix of the delta removed (RL minus those 8 directions)"
+   },
+   {
+    "id": "t04",
+    "measured": 41,
+    "value": 46,
+    "low": 34,
+    "high": 58,
+    "nulls": [
+     {
+      "value": 47,
+      "low": 33,
+      "high": 62
+     },
+     {
+      "value": 51,
+      "low": 38,
+      "high": 68
+     }
+    ],
+    "gain": 0.3676,
+    "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, Olmo-3 base + top 3 singular directions of the RL-Math delta in late MLP matrices only (24 terms)"
+   },
+   {
+    "id": "t47",
+    "measured": 42,
+    "value": 48,
+    "low": 36,
+    "high": 60,
+    "nulls": [
+     {
+      "value": 50,
+      "low": 36,
+      "high": 68
+     },
+     {
+      "value": 55,
+      "low": 40,
+      "high": 76
+     }
+    ],
+    "gain": 0.5012,
+    "what": "first 100 MATH-500, T 1.0 / top-p 1.0, plain, v3, base + only top 1 singular direction per matrix of RL-Math delta, right of 100"
+   },
+   {
+    "id": "t48",
+    "measured": 86,
+    "value": 87,
+    "low": 79,
+    "high": 95,
+    "nulls": [
+     {
+      "value": 80,
+      "low": 60,
+      "high": 93
+     },
+     {
+      "value": 80,
+      "low": 55,
+      "high": 93
+     }
+    ],
+    "gain": 0.9291,
+    "what": "first 100 MATH-500, T 1.0 / top-p 1.0, plain, v3, base + bulk64 (RL delta minus top 64 directions) screen, right of 100"
+   }
+  ]
+ },
+ "r2-all-2": {
+  "statement": "The base's accuracy at a sampling setting is set by the per-token surprise of the text it generates relative to one optimum: below it, a restatement that holds its probability in one sequence beats a progress step whose mass is split over many paraphrases and then self-reinforces into a loop (boredom trap), above it the text drifts (confusion trap); the opening cue moves the base into a lower-entropy deliberative mode, which is why the cue loops more than the plain prompt at T 0.6, is worth far more at T 1.0, and why any mode-sharpening truncation (top-p < 1) costs the cued base but helps the plain base at T 1.0.",
+  "state": "fails",
+  "claims": []
+ },
+ "r3-across-1": {
+  "statement": "The RL-minus-base weight change acts in two parts. The first is a general reliability part that is not specific to math. Code-RL shares it even though the two deltas are nearly orthogonal, and it is already saturated at a = 0.25. It turns problems the cued base solves only some of the time (moderate per-problem p, many of them long or cap-hit) into problems it solves almost every time. The second is a math-specific part that scales with dose and is needed only where the base's p is near 0; those problems are concentrated on hard328 and MATH Level 5.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t26",
+    "measured": 182,
+    "value": 180,
+    "low": 170,
+    "high": 190,
+    "nulls": [
+     {
+      "value": 186,
+      "low": 170,
+      "high": 201
+     },
+     {
+      "value": 186,
+      "low": 171,
+      "high": 201
+     }
+    ],
+    "gain": 0.4608,
+    "what": "hard328 (328 harder problems), T 1.0 / top-p 1.0, cue, grader v3, 1 sample, theta(0.25) = base + 0.25 (RL - base)"
+   },
+   {
+    "id": "t27",
+    "measured": 190,
+    "value": 187,
+    "low": 177,
+    "high": 197,
+    "nulls": [
+     {
+      "value": 196,
+      "low": 181,
+      "high": 210
+     },
+     {
+      "value": 196,
+      "low": 182,
+      "high": 210
+     }
+    ],
+    "gain": 0.4723,
+    "what": "hard328, T 1.0 / top-p 1.0, cue, grader v3, 1 sample, theta(0.5) = base + 0.5 (RL - base)"
+   },
+   {
+    "id": "t28",
+    "measured": 187,
+    "value": 176,
+    "low": 166,
+    "high": 187,
+    "nulls": [
+     {
+      "value": 188,
+      "low": 170,
+      "high": 205
+     },
+     {
+      "value": 188,
+      "low": 170,
+      "high": 205
+     }
+    ],
+    "gain": -0.9697,
+    "what": "hard328, T 1.0 / top-p 1.0, cue, grader v3, 1 sample, Olmo-3.1-7B-RL-Zero-Code"
+   },
+   {
+    "id": "t31",
+    "measured": -4.9,
+    "value": -5.8,
+    "low": -9.5,
+    "high": -2.0,
+    "nulls": [
+     {
+      "value": -3.0,
+      "low": -8.0,
+      "high": 2.0
+     },
+     {
+      "value": -3.0,
+      "low": -7.5,
+      "high": 1.5
+     }
+    ],
+    "gain": 0.3749,
+    "what": "hard328, T 1.0, cue, v3, theta(0.5) minus RL plain (paired difference)"
+   },
+   {
+    "id": "t32",
+    "measured": -5.8,
+    "value": -9.1,
+    "low": -13.0,
+    "high": -5.0,
+    "nulls": [
+     {
+      "value": -5.5,
+      "low": -11.5,
+      "high": 0.5
+     },
+     {
+      "value": -5.5,
+      "low": -11,
+      "high": -0.5
+     }
+    ],
+    "gain": -0.5805,
+    "what": "hard328, T 1.0, cue, v3, Olmo-3.1-7B-RL-Zero-Code minus RL plain (paired difference)"
+   },
+   {
+    "id": "t33",
+    "measured": -0.9,
+    "value": -3.4,
+    "low": -7.0,
+    "high": 0.5,
+    "nulls": [
+     {
+      "value": -2.5,
+      "low": -8.0,
+      "high": 3.0
+     },
+     {
+      "value": -2.5,
+      "low": -8,
+      "high": 3
+     }
+    ],
+    "gain": -0.1038,
+    "what": "hard328, T 1.0, cue, v3, Code-RL minus theta(0.5) (paired difference)"
+   }
+  ]
+ },
+ "r3-across-2": {
+  "statement": "The cued base can leave a loop or a wrong line only through low-probability tail tokens, so it needs untruncated T 1.0. Any sharpening (T 0.6, top-p, min-p) deletes that escape mass and loops lock. The RL weight change adds, as a roughly constant per-layer push, probable process tokens ('Wait', 'Hmm') that carry the same escape inside the head of the distribution. That makes RL, and small doses of its delta, insensitive to temperature and truncation.",
+  "state": "passes",
+  "claims": [
+   {
+    "id": "t13",
+    "measured": 0.066,
+    "value": 0.0,
+    "low": -0.25,
+    "high": 0.25,
+    "nulls": [
+     {
+      "value": 0.15,
+      "low": -0.3,
+      "high": 0.6
+     },
+     {
+      "value": 0.2,
+      "low": -0.35,
+      "high": 0.8
+     }
+    ],
+    "gain": 0.6672,
+    "what": "wrong-result twins n=300: RL minus base difference in hold-on log-prob rise after wrong arithmetic result"
+   }
+  ]
+ },
+ "r3-all-1": {
+  "statement": "The RL gain left over the cued base at T 1.0 is made of two separate parts of the stopping policy: (i) a part that is not specific to math and teaches the model to commit to an answer and box it; this part appears early in RL, Code-RL shares it, a = 0.25 of the weight difference already holds it, and it recovers the base's 'lost' short and medium problems; (ii) a math-specific habit of checking before stopping, learned from training truncated rollouts as negatives, which pays only on long problems, where the base either stops on an unchecked answer or runs to the cap.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t26",
+    "measured": 182,
+    "value": 176,
+    "low": 166,
+    "high": 187,
+    "nulls": [
+     {
+      "value": 186,
+      "low": 170,
+      "high": 201
+     },
+     {
+      "value": 186,
+      "low": 171,
+      "high": 201
+     }
+    ],
+    "gain": 0.0243,
+    "what": "hard328 (328 harder problems), T 1.0 / top-p 1.0, cue, grader v3, 1 sample, theta(0.25) = base + 0.25 (RL - base)"
+   },
+   {
+    "id": "t28",
+    "measured": 187,
+    "value": 173,
+    "low": 163,
+    "high": 184,
+    "nulls": [
+     {
+      "value": 188,
+      "low": 170,
+      "high": 205
+     },
+     {
+      "value": 188,
+      "low": 170,
+      "high": 205
+     }
+    ],
+    "gain": -1.8901,
+    "what": "hard328, T 1.0 / top-p 1.0, cue, grader v3, 1 sample, Olmo-3.1-7B-RL-Zero-Code"
+   },
+   {
+    "id": "t32",
+    "measured": -5.8,
+    "value": -10,
+    "low": -14,
+    "high": -6,
+    "nulls": [
+     {
+      "value": -5.5,
+      "low": -11.5,
+      "high": 0.5
+     },
+     {
+      "value": -5.5,
+      "low": -11,
+      "high": -0.5
+     }
+    ],
+    "gain": -1.1513,
+    "what": "hard328, T 1.0, cue, v3, Olmo-3.1-7B-RL-Zero-Code minus RL plain (paired difference)"
+   },
+   {
+    "id": "t29",
+    "measured": 7613,
+    "value": 7900,
+    "low": 6600,
+    "high": 9200,
+    "nulls": [
+     {
+      "value": 7900,
+      "low": 6000,
+      "high": 9800
+     },
+     {
+      "value": 7200,
+      "low": 5500,
+      "high": 9200
+     }
+    ],
+    "gain": 0.3493,
+    "what": "hard328, T 1.0 / top-p 1.0, cue, grader v3, 1 sample, Olmo-3.1-7B-RL-Zero-Code, tokens per problem"
+   }
+  ]
+ },
+ "r3-all-2": {
+  "statement": "On hard problems the base model's probability at a solution's progress-making step is spread over many alternatives, while RL has concentrated it on its own rollouts. The same spread produces both of the base's failures, on the same high-entropy problems: lowering the temperature gives the spread mass to an easy cyclic continuation that then reinforces itself (loops and cap hits), and at T 1.0 it is spent on sampled wrong turns instead. RL has low entropy on its own rollouts, so temperature barely affects it.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t17",
+    "measured": 446,
+    "value": 457,
+    "low": 452,
+    "high": 462,
+    "nulls": [
+     {
+      "value": 455,
+      "low": 440,
+      "high": 468
+     },
+     {
+      "value": 446,
+      "low": 405,
+      "high": 464
+     }
+    ],
+    "gain": -1.6271,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, cue, one self-review pass, grader v3 raw, Olmo-3.1-7B-RL-Zero-Math, right of 500 after review (before review 457)"
+   },
+   {
+    "id": "t24",
+    "measured": 475,
+    "value": 474,
+    "low": 470,
+    "high": 478,
+    "nulls": [
+     {
+      "value": 475,
+      "low": 467,
+      "high": 482
+     },
+     {
+      "value": 475,
+      "low": 467,
+      "high": 481
+     }
+    ],
+    "gain": -0.0201,
+    "what": "MATH-500 n=500, T 1.0, v3, Olmo-3.1-7B-RL-Zero-Math plain, 4-sample vote with ties to the shortest finished sample, right of 500"
+   },
+   {
+    "id": "t25",
+    "measured": 476,
+    "value": 472,
+    "low": 467,
+    "high": 477,
+    "nulls": [
+     {
+      "value": 470,
+      "low": 460,
+      "high": 478
+     },
+     {
+      "value": 471,
+      "low": 462,
+      "high": 478
+     }
+    ],
+    "gain": 0.2901,
+    "what": "MATH-500 n=500, T 1.0, v3, Olmo-3.1-7B-RL-Zero-Math plain, 4-sample vote with ties to the longest sample (control), right of 500"
+   }
+  ]
+ },
+ "r3-external-1": {
+  "statement": "The temperature sensitivity of the cued base and of RL-Zero-Math 3.0 and the insensitivity of 3.1 are one mechanism: sampling a pretrained-style policy with an over-truncated sampler (T < 1 or top-p/min-p) drops it into self-reinforcing repetition basins (Holtzman), and 3.1's recipe of training cap-truncated rollouts as negatives, with rollouts drawn by an exact T 1.0 sampler so the sign law gives no entropy drift, pushes down exactly the trajectories that enter those basins without making the policy flatter; 3.0, which masked truncations, keeps the basins and so behaves like the base under temperature.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t34",
+    "measured": 448,
+    "value": 412,
+    "low": 388,
+    "high": 436,
+    "nulls": [
+     {
+      "value": 405,
+      "low": 360,
+      "high": 445
+     },
+     {
+      "value": 430,
+      "low": 393,
+      "high": 457
+     }
+    ],
+    "gain": -1.8894,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Math (3.0 release), right of 500"
+   },
+   {
+    "id": "t37",
+    "measured": 411,
+    "value": 418,
+    "low": 392,
+    "high": 444,
+    "nulls": [
+     {
+      "value": 420,
+      "low": 370,
+      "high": 455
+     },
+     {
+      "value": 425,
+      "low": 380,
+      "high": 455
+     }
+    ],
+    "gain": 0.4554,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Code (3.0), right of 500"
+   }
+  ]
+ },
+ "r3-external-2": {
+  "statement": "The RL-Zero-Math weight difference is the sum of two parts learned at different times: an early sharpening of the base's own solution distribution that turns problems the base solves only sometimes into problems it solves reliably, which the fully trained delta overshoots several-fold (as in ExPO, the optimal scale shrinks with training) and so is fully expressed at a \u2248 0.25; and a part from prolonged training that adds solutions where the base rarely succeeds (as in ProRL) and grows roughly in proportion to a. So partial deltas and orthogonal RL deltas recover most of the gap on MATH-500 but only a small share on hard328 and on problems no base sample solves.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t26",
+    "measured": 182,
+    "value": 174,
+    "low": 165,
+    "high": 184,
+    "nulls": [
+     {
+      "value": 186,
+      "low": 170,
+      "high": 201
+     },
+     {
+      "value": 186,
+      "low": 171,
+      "high": 201
+     }
+    ],
+    "gain": -0.3933,
+    "what": "hard328 (328 harder problems), T 1.0 / top-p 1.0, cue, grader v3, 1 sample, theta(0.25) = base + 0.25 (RL - base)"
+   },
+   {
+    "id": "t27",
+    "measured": 190,
+    "value": 185,
+    "low": 175,
+    "high": 195,
+    "nulls": [
+     {
+      "value": 196,
+      "low": 181,
+      "high": 210
+     },
+     {
+      "value": 196,
+      "low": 182,
+      "high": 210
+     }
+    ],
+    "gain": 0.2558,
+    "what": "hard328, T 1.0 / top-p 1.0, cue, grader v3, 1 sample, theta(0.5) = base + 0.5 (RL - base)"
+   },
+   {
+    "id": "t28",
+    "measured": 187,
+    "value": 171,
+    "low": 160,
+    "high": 182,
+    "nulls": [
+     {
+      "value": 188,
+      "low": 170,
+      "high": 205
+     },
+     {
+      "value": 188,
+      "low": 170,
+      "high": 205
+     }
+    ],
+    "gain": -2.3938,
+    "what": "hard328, T 1.0 / top-p 1.0, cue, grader v3, 1 sample, Olmo-3.1-7B-RL-Zero-Code"
+   },
+   {
+    "id": "t31",
+    "measured": -4.9,
+    "value": -6.5,
+    "low": -10.5,
+    "high": -2.5,
+    "nulls": [
+     {
+      "value": -3.0,
+      "low": -8.0,
+      "high": 2.0
+     },
+     {
+      "value": -3.0,
+      "low": -7.5,
+      "high": 1.5
+     }
+    ],
+    "gain": 0.1718,
+    "what": "hard328, T 1.0, cue, v3, theta(0.5) minus RL plain (paired difference)"
+   },
+   {
+    "id": "t32",
+    "measured": -5.8,
+    "value": -10.7,
+    "low": -14.5,
+    "high": -7.0,
+    "nulls": [
+     {
+      "value": -5.5,
+      "low": -11.5,
+      "high": 0.5
+     },
+     {
+      "value": -5.5,
+      "low": -11,
+      "high": -0.5
+     }
+    ],
+    "gain": -1.9052,
+    "what": "hard328, T 1.0, cue, v3, Olmo-3.1-7B-RL-Zero-Code minus RL plain (paired difference)"
+   },
+   {
+    "id": "t33",
+    "measured": -0.9,
+    "value": -4.0,
+    "low": -8.0,
+    "high": 0.0,
+    "nulls": [
+     {
+      "value": -2.5,
+      "low": -8.0,
+      "high": 3.0
+     },
+     {
+      "value": -2.5,
+      "low": -8,
+      "high": 3
+     }
+    ],
+    "gain": -0.3797,
+    "what": "hard328, T 1.0, cue, v3, Code-RL minus theta(0.5) (paired difference)"
+   },
+   {
+    "id": "t34",
+    "measured": 448,
+    "value": 447,
+    "low": 435,
+    "high": 459,
+    "nulls": [
+     {
+      "value": 405,
+      "low": 360,
+      "high": 445
+     },
+     {
+      "value": 430,
+      "low": 393,
+      "high": 457
+     }
+    ],
+    "gain": 1.8387,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Math (3.0 release), right of 500"
+   },
+   {
+    "id": "t35",
+    "measured": 440,
+    "value": 446,
+    "low": 432,
+    "high": 458,
+    "nulls": [
+     {
+      "value": 430,
+      "low": 390,
+      "high": 460
+     },
+     {
+      "value": 438,
+      "low": 403,
+      "high": 462
+     }
+    ],
+    "gain": 0.6656,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Mix, right of 500"
+   },
+   {
+    "id": "t36",
+    "measured": 429,
+    "value": 441,
+    "low": 424,
+    "high": 456,
+    "nulls": [
+     {
+      "value": 415,
+      "low": 370,
+      "high": 450
+     },
+     {
+      "value": 425,
+      "low": 388,
+      "high": 455
+     }
+    ],
+    "gain": 0.146,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-General, right of 500"
+   },
+   {
+    "id": "t37",
+    "measured": 411,
+    "value": 440,
+    "low": 422,
+    "high": 456,
+    "nulls": [
+     {
+      "value": 420,
+      "low": 370,
+      "high": 455
+     },
+     {
+      "value": 425,
+      "low": 380,
+      "high": 455
+     }
+    ],
+    "gain": -2.959,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Code (3.0), right of 500"
+   },
+   {
+    "id": "t38",
+    "measured": 377,
+    "value": 436,
+    "low": 416,
+    "high": 454,
+    "nulls": [
+     {
+      "value": 415,
+      "low": 370,
+      "high": 450
+     },
+     {
+      "value": 415,
+      "low": 370,
+      "high": 450
+     }
+    ],
+    "gain": -3.0,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-IF, right of 500"
+   }
+  ]
+ },
+ "r3-revise-1": {
+  "statement": "The RL-Zero gain over the base has two parts that separate by dose. The first is a domain-general 'deliberate, then commit' mode component. Any RL-Zero delta carries it, Math or Code, as a small shared, largely constant per-layer push. It saturates by a = 0.25 of the Math delta, the opening cue substitutes for it, and it acts by stopping the base from losing problems it can solve. The second is a math-specific long-horizon component. It grows roughly linearly with the Math delta up to a = 1, Code-RL lacks it, and it pays only on problems whose solutions run long (the top length quartile of MATH-500 and the harder 328).",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t26",
+    "measured": 182,
+    "value": 181,
+    "low": 172,
+    "high": 190,
+    "nulls": [
+     {
+      "value": 186,
+      "low": 170,
+      "high": 201
+     },
+     {
+      "value": 186,
+      "low": 171,
+      "high": 201
+     }
+    ],
+    "gain": 0.6036,
+    "what": "hard328 (328 harder problems), T 1.0 / top-p 1.0, cue, grader v3, 1 sample, theta(0.25) = base + 0.25 (RL - base)"
+   },
+   {
+    "id": "t27",
+    "measured": 190,
+    "value": 187,
+    "low": 178,
+    "high": 196,
+    "nulls": [
+     {
+      "value": 196,
+      "low": 181,
+      "high": 210
+     },
+     {
+      "value": 196,
+      "low": 182,
+      "high": 210
+     }
+    ],
+    "gain": 0.5491,
+    "what": "hard328, T 1.0 / top-p 1.0, cue, grader v3, 1 sample, theta(0.5) = base + 0.5 (RL - base)"
+   },
+   {
+    "id": "t28",
+    "measured": 187,
+    "value": 187,
+    "low": 178,
+    "high": 196,
+    "nulls": [
+     {
+      "value": 188,
+      "low": 170,
+      "high": 205
+     },
+     {
+      "value": 188,
+      "low": 170,
+      "high": 205
+     }
+    ],
+    "gain": 0.6694,
+    "what": "hard328, T 1.0 / top-p 1.0, cue, grader v3, 1 sample, Olmo-3.1-7B-RL-Zero-Code"
+   },
+   {
+    "id": "t29",
+    "measured": 7613,
+    "value": 7000,
+    "low": 5700,
+    "high": 8300,
+    "nulls": [
+     {
+      "value": 7900,
+      "low": 6000,
+      "high": 9800
+     },
+     {
+      "value": 7200,
+      "low": 5500,
+      "high": 9200
+     }
+    ],
+    "gain": 0.1145,
+    "what": "hard328, T 1.0 / top-p 1.0, cue, grader v3, 1 sample, Olmo-3.1-7B-RL-Zero-Code, tokens per problem"
+   },
+   {
+    "id": "t31",
+    "measured": -4.9,
+    "value": -5.8,
+    "low": -9.0,
+    "high": -2.6,
+    "nulls": [
+     {
+      "value": -3.0,
+      "low": -8.0,
+      "high": 2.0
+     },
+     {
+      "value": -3.0,
+      "low": -7.5,
+      "high": 1.5
+     }
+    ],
+    "gain": 0.5044,
+    "what": "hard328, T 1.0, cue, v3, theta(0.5) minus RL plain (paired difference)"
+   },
+   {
+    "id": "t32",
+    "measured": -5.8,
+    "value": -5.8,
+    "low": -9.2,
+    "high": -2.4,
+    "nulls": [
+     {
+      "value": -5.5,
+      "low": -11.5,
+      "high": 0.5
+     },
+     {
+      "value": -5.5,
+      "low": -11,
+      "high": -0.5
+     }
+    ],
+    "gain": 0.5029,
+    "what": "hard328, T 1.0, cue, v3, Olmo-3.1-7B-RL-Zero-Code minus RL plain (paired difference)"
+   },
+   {
+    "id": "t33",
+    "measured": -0.9,
+    "value": 0,
+    "low": -3.3,
+    "high": 3.3,
+    "nulls": [
+     {
+      "value": -2.5,
+      "low": -8.0,
+      "high": 3.0
+     },
+     {
+      "value": -2.5,
+      "low": -8,
+      "high": 3
+     }
+    ],
+    "gain": 0.5247,
+    "what": "hard328, T 1.0, cue, v3, Code-RL minus theta(0.5) (paired difference)"
+   },
+   {
+    "id": "t35",
+    "measured": 440,
+    "value": 450,
+    "low": 437,
+    "high": 462,
+    "nulls": [
+     {
+      "value": 430,
+      "low": 390,
+      "high": 460
+     },
+     {
+      "value": 438,
+      "low": 403,
+      "high": 462
+     }
+    ],
+    "gain": 0.1271,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Mix, right of 500"
+   },
+   {
+    "id": "t36",
+    "measured": 429,
+    "value": 444,
+    "low": 427,
+    "high": 459,
+    "nulls": [
+     {
+      "value": 415,
+      "low": 370,
+      "high": 450
+     },
+     {
+      "value": 425,
+      "low": 388,
+      "high": 455
+     }
+    ],
+    "gain": -0.2821,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-General, right of 500"
+   },
+   {
+    "id": "t37",
+    "measured": 411,
+    "value": 446,
+    "low": 431,
+    "high": 459,
+    "nulls": [
+     {
+      "value": 420,
+      "low": 370,
+      "high": 455
+     },
+     {
+      "value": 425,
+      "low": 380,
+      "high": 455
+     }
+    ],
+    "gain": -3.0,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Code (3.0), right of 500"
+   },
+   {
+    "id": "t38",
+    "measured": 377,
+    "value": 444,
+    "low": 427,
+    "high": 459,
+    "nulls": [
+     {
+      "value": 415,
+      "low": 370,
+      "high": 450
+     },
+     {
+      "value": 415,
+      "low": 370,
+      "high": 450
+     }
+    ],
+    "gain": -3.0,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-IF, right of 500"
+   }
+  ]
+ },
+ "r3-revise-2": {
+  "statement": "A loop is an absorbing hazard for the cued base. The sampler opens it only at impasse positions, and how far along a solution impasses appear depends on the sampler: under T 0.6, impasses come early enough to trap medium-length solutions the base would otherwise finish, while at T >= 1.0 (with or without tail truncation) only a fixed, problem-specific set of long solutions reaches one, and those problems are mostly lost anyway. So a sampler moves accuracy only through loops it creates on finishable problems: accuracy is flat across T >= 1 samplers while cap hits vary, cap hits at T >= 1 are nested inside the T 0.6 cap-hit set, and many T 0.6 cap-hit problems are solved at T 1.0.",
+  "state": "fails",
+  "claims": []
+ },
+ "r3-surprises-1": {
+  "statement": "The cued base's deficit at T 1.0 comes from tail sampling: at every position there is a small chance of drawing a low-probability token that derails a step (slip, misread), and these errors add up with length; RL's diffuse change shrinks that tail at every position (so RL barely notices temperature), whereas any label-free way of cutting the tail (lower T, top-p, min-p, length cutoffs) also removes the tail tokens that break the base out of its self-reinforcing repeats, so loops come back and the net gain is about zero.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t22",
+    "measured": 12,
+    "value": 19,
+    "low": 14,
+    "high": 24,
+    "nulls": [
+     {
+      "value": 22,
+      "low": 14,
+      "high": 29
+     },
+     {
+      "value": 18,
+      "low": 11,
+      "high": 25
+     }
+    ],
+    "gain": -0.8333,
+    "what": "MATH-500 base+cue 4-sample vote, T 1.0, v3, in the 36 tied problems: number right when ties broken by shortest finished sample"
+   },
+   {
+    "id": "t20",
+    "measured": 453,
+    "value": 450,
+    "low": 444,
+    "high": 456,
+    "nulls": [
+     {
+      "value": 447,
+      "low": 438,
+      "high": 456
+     },
+     {
+      "value": 448,
+      "low": 437,
+      "high": 458
+     }
+    ],
+    "gain": 0.5019,
+    "what": "MATH-500 n=500, T 1.0, v3, base+cue, 4 stored samples, vote with ties broken by shortest finished sample, right of 500"
+   },
+   {
+    "id": "t24",
+    "measured": 475,
+    "value": 475,
+    "low": 471,
+    "high": 479,
+    "nulls": [
+     {
+      "value": 475,
+      "low": 467,
+      "high": 482
+     },
+     {
+      "value": 475,
+      "low": 467,
+      "high": 481
+     }
+    ],
+    "gain": 0.0,
+    "what": "MATH-500 n=500, T 1.0, v3, Olmo-3.1-7B-RL-Zero-Math plain, 4-sample vote with ties to the shortest finished sample, right of 500"
+   },
+   {
+    "id": "t25",
+    "measured": 476,
+    "value": 471,
+    "low": 466,
+    "high": 476,
+    "nulls": [
+     {
+      "value": 470,
+      "low": 460,
+      "high": 478
+     },
+     {
+      "value": 471,
+      "low": 462,
+      "high": 478
+     }
+    ],
+    "gain": 0.0878,
+    "what": "MATH-500 n=500, T 1.0, v3, Olmo-3.1-7B-RL-Zero-Math plain, 4-sample vote with ties to the longest sample (control), right of 500"
+   }
+  ]
+ },
+ "r3-surprises-2": {
+  "statement": "Any outcome-reward RL difference on the Olmo 3 base has two parts. The first is a shared, low-dose part that gates the base's existing settle-or-switch behaviour: it keeps the model on one line of attack, has it verify, then stop. Math-RL and Code-RL both learn this part even though their weights are orthogonal, and it saturates by a = 0.25. The second is a high-dimensional, math-specific part that only pays off on long, hard problems. MATH-500 gains therefore come mostly from the shared part, while the hard-set and longest-quartile gap needs the math-specific part, which no decoding rule or neuron subset supplies.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t26",
+    "measured": 182,
+    "value": 176,
+    "low": 165,
+    "high": 188,
+    "nulls": [
+     {
+      "value": 186,
+      "low": 170,
+      "high": 201
+     },
+     {
+      "value": 186,
+      "low": 171,
+      "high": 201
+     }
+    ],
+    "gain": 0.0069,
+    "what": "hard328 (328 harder problems), T 1.0 / top-p 1.0, cue, grader v3, 1 sample, theta(0.25) = base + 0.25 (RL - base)"
+   },
+   {
+    "id": "t28",
+    "measured": 187,
+    "value": 177,
+    "low": 165,
+    "high": 189,
+    "nulls": [
+     {
+      "value": 188,
+      "low": 170,
+      "high": 205
+     },
+     {
+      "value": 188,
+      "low": 170,
+      "high": 205
+     }
+    ],
+    "gain": -0.5579,
+    "what": "hard328, T 1.0 / top-p 1.0, cue, grader v3, 1 sample, Olmo-3.1-7B-RL-Zero-Code"
+   },
+   {
+    "id": "t27",
+    "measured": 190,
+    "value": 185,
+    "low": 172,
+    "high": 197,
+    "nulls": [
+     {
+      "value": 196,
+      "low": 181,
+      "high": 210
+     },
+     {
+      "value": 196,
+      "low": 182,
+      "high": 210
+     }
+    ],
+    "gain": 0.1544,
+    "what": "hard328, T 1.0 / top-p 1.0, cue, grader v3, 1 sample, theta(0.5) = base + 0.5 (RL - base)"
+   },
+   {
+    "id": "t32",
+    "measured": -5.8,
+    "value": -8.8,
+    "low": -13.5,
+    "high": -4.5,
+    "nulls": [
+     {
+      "value": -5.5,
+      "low": -11.5,
+      "high": 0.5
+     },
+     {
+      "value": -5.5,
+      "low": -11,
+      "high": -0.5
+     }
+    ],
+    "gain": -0.3787,
+    "what": "hard328, T 1.0, cue, v3, Olmo-3.1-7B-RL-Zero-Code minus RL plain (paired difference)"
+   },
+   {
+    "id": "t31",
+    "measured": -4.9,
+    "value": -6.4,
+    "low": -11,
+    "high": -2,
+    "nulls": [
+     {
+      "value": -3.0,
+      "low": -8.0,
+      "high": 2.0
+     },
+     {
+      "value": -3.0,
+      "low": -7.5,
+      "high": 1.5
+     }
+    ],
+    "gain": 0.1202,
+    "what": "hard328, T 1.0, cue, v3, theta(0.5) minus RL plain (paired difference)"
+   },
+   {
+    "id": "t33",
+    "measured": -0.9,
+    "value": -2.5,
+    "low": -7,
+    "high": 2,
+    "nulls": [
+     {
+      "value": -2.5,
+      "low": -8.0,
+      "high": 3.0
+     },
+     {
+      "value": -2.5,
+      "low": -8,
+      "high": 3
+     }
+    ],
+    "gain": 0.1441,
+    "what": "hard328, T 1.0, cue, v3, Code-RL minus theta(0.5) (paired difference)"
+   },
+   {
+    "id": "t34",
+    "measured": 448,
+    "value": 448,
+    "low": 434,
+    "high": 461,
+    "nulls": [
+     {
+      "value": 405,
+      "low": 360,
+      "high": 445
+     },
+     {
+      "value": 430,
+      "low": 393,
+      "high": 457
+     }
+    ],
+    "gain": 1.7303,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Math (3.0 release), right of 500"
+   },
+   {
+    "id": "t35",
+    "measured": 440,
+    "value": 448,
+    "low": 434,
+    "high": 461,
+    "nulls": [
+     {
+      "value": 430,
+      "low": 390,
+      "high": 460
+     },
+     {
+      "value": 438,
+      "low": 403,
+      "high": 462
+     }
+    ],
+    "gain": 0.4409,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Mix, right of 500"
+   },
+   {
+    "id": "t36",
+    "measured": 429,
+    "value": 442,
+    "low": 426,
+    "high": 457,
+    "nulls": [
+     {
+      "value": 415,
+      "low": 370,
+      "high": 450
+     },
+     {
+      "value": 425,
+      "low": 388,
+      "high": 455
+     }
+    ],
+    "gain": -0.0129,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-General, right of 500"
+   },
+   {
+    "id": "t37",
+    "measured": 411,
+    "value": 445,
+    "low": 430,
+    "high": 459,
+    "nulls": [
+     {
+      "value": 420,
+      "low": 370,
+      "high": 455
+     },
+     {
+      "value": 425,
+      "low": 380,
+      "high": 455
+     }
+    ],
+    "gain": -3.0,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Code (3.0), right of 500"
+   },
+   {
+    "id": "t38",
+    "measured": 377,
+    "value": 440,
+    "low": 424,
+    "high": 456,
+    "nulls": [
+     {
+      "value": 415,
+      "low": 370,
+      "high": 450
+     },
+     {
+      "value": 415,
+      "low": 370,
+      "high": 450
+     }
+    ],
+    "gain": -3.0,
+    "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-IF, right of 500"
+   }
+  ]
+ }
+}

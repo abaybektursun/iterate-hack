@@ -1,0 +1,2 @@
+diag: code_arm=code_cue rl_arms=['rl_plain_s0', 'rl_plain_s1', 'rl_plain_s2', 'rl_plain_s3'] nA=100 nB=153 subject/unique_id mismatches=0
+{"measured": 0.021241830065359478, "refuted_by_met": false, "alt_measured": 0.022697235585638523, "not_computable": null, "example_row": {"problem_index": 0, "subject": "precalculus", "group": "B", "code": 1, "rl": [1, 1, 1, 1], "d": 0.0}}

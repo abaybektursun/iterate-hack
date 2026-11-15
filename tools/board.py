@@ -20,12 +20,32 @@
                                                   chart of tools/view.py. base = the untrained model, rl = the RL
                                                   checkpoint, other = any other model (weight blends, other
                                                   checkpoints): stored, not drawn
+  uv run tools/board.py plain <result id> "<title>" "<what>" "<why>" ["<caveat>"] [--score <benchmark> <right>/<n>]
+                                                  describe a result already posted in plain words, for the people who
+                                                  read the board page; with --score, describe one score of it. A
+                                                  second write with the same result and score replaces the first
+  uv run tools/board.py plain --file <path.json>  the same for a JSON list of {"item": "result-xxxxxx", "title", "what",
+                                                  "why", "caveat" (optional), "score": {"benchmark", "right", "n"}
+                                                  (optional)}; every entry is checked before any row is written
 
 A result's text can carry its scores itself, one per line, and post and done then write them:
   score: base MATH-500 378/500 tokens 4690 | cue, T 0.6 / top-p 1.0
 
+A result's text also says in plain words what the result is, for a reader who has not seen the project. One field
+per line; post and done write them as plain rows, and the lines stay in the text:
+  title: Break vote ties with the shortest answer
+  what: When the 4 sampled answers have no majority, take the shortest answer that finished.
+  why: Not known yet.
+  caveat: The rule was chosen after reading the problems it fixes; the held-out estimate is 451.
+title, at most 60 characters: the change or the finding, without ids or settings. what, at most 240: what was changed
+or tested. why, at most 240: why the number moved, only a mechanism that the result states or measures, otherwise
+exactly "Not known yet." caveat, optional, at most 240: what weakens the number. A line over its limit stops the post.
+Lines before the first score line describe the result as a whole. Lines after a score line, up to the next score
+line, describe that one score: use them when one result holds several scores. A result without title, what and why
+is accepted, and post prints a reminder to add them with plain.
+
 Each line of ls is: id, person/branch of the agent that posted it, time (UTC, month-day hour:minute), for a work
-item the minutes since it was posted or last commented on (idle), votes up and down and number of comments (only
+item the minutes since it was posted or last commented on by its owner (idle), votes up and down and number of comments (only
 when there are any), then the text.
 
 Stored in the DynamoDB table iterate-board (tools/team.py). Every command reads and writes a fixed number of
@@ -39,6 +59,10 @@ one transaction. Rows:
   claim#<named id> / <work id>      a work item that names another item
   scores / <result's ns>#<ns>       one score of a result: model, benchmark, right, n, configuration, tokens; ordered
                                     by the time of its result, so the chart's attempts are in the order they were found
+  plain / <result id>               the plain-language description of a result: item (the result id), title, what, why,
+                                    caveat (each only when given)
+  plain / <result id>#<benchmark>#<right>/<n>
+                                    the same for one score of the result, benchmark spelled as on its score row
 
 result and knowledge posts are also sent to the team's past.dev memory (tools/past.py), so
 `python3 tools/recall.py` finds them next to paper findings and sessions, about a minute after the post.
@@ -46,11 +70,13 @@ result and knowledge posts are also sent to the team's past.dev memory (tools/pa
 To claim an idea, post a work item whose text names the idea id. post then prints any other open work item that
 names the same id. If one of those is older than yours, close yours with done and pick another.
 """
+import json
 import re
 import secrets
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
 from boto3.dynamodb.conditions import Key
 
@@ -63,6 +89,7 @@ REMEMBERED = ("result", "knowledge")
 COMMENT_LIMIT = 280
 POST_LIMIT = 4000
 NAMED = r"\b(?:idea|skill|knowledge|result)-[0-9a-f]{6}\b"
+PLAIN = {"title": 60, "what": 240, "why": 240, "caveat": 240}  # the plain-language fields of a result, with their limits in characters
 
 
 def rows(**query):
@@ -115,14 +142,75 @@ def score_lines(text):
     return found
 
 
+def same(benchmark):
+    """hard-328, Hard 328 and hard328 are one benchmark."""
+    return re.sub(r"[^a-z0-9]", "", benchmark.lower())
+
+
 def add_score(result_id, result_ns, result_at, model, benchmark, right, n, config, tokens, who, me):
-    same = lambda name: re.sub(r"[^a-z0-9]", "", name.lower())  # hard-328, Hard 328 and hard328 are one benchmark
     known = {same(s["benchmark"]): s["benchmark"] for s in rows(KeyConditionExpression=Key("pk").eq("scores"))}
     benchmark = known.get(same(benchmark), benchmark)  # keep the spelling already on the chart
     team.table().put_item(Item={"pk": "scores", "sk": f"{int(result_ns):020d}#{time.time_ns()}", "result": result_id, "model": model,
                                 "benchmark": benchmark, "right": right, "n": n, "config": config, "tokens": tokens, "who": who, **me,
                                 "at": team.now(), "result_at": result_at})
     print(f"score {model} {benchmark} {right}/{n} ({100 * right / n:.1f} %) on {result_id}")
+    return benchmark
+
+
+def check_plain(fields, where):
+    """Stops on an empty field or a field over its limit. fields: {title, what, why, caveat: text}, any of them."""
+    for field, value in fields.items():
+        assert isinstance(value, str) and value.strip(), f"{where}: {field} is empty; write its text or leave the field out"
+        if len(value) > PLAIN[field]:
+            sys.exit(f"{where}: {field} is {len(value)} characters; the limit is {PLAIN[field]}. Shorten it: {value!r}")
+
+
+def plain_lines(text):
+    """The plain-language lines in a result's text, 'title: ...', 'what: ...', 'why: ...', 'caveat: ...', as {place: {field: text}}.
+    place is None for the lines before the first score line (the result as a whole), and i for the lines between score line i
+    (counted from 0) and the next score line (that one score)."""
+    found, place = {}, None
+    for line in text.splitlines():
+        field, colon, value = line.strip().partition(":")
+        if colon and field == "score":
+            place = 0 if place is None else place + 1
+        elif colon and field in PLAIN:
+            where = "before the first score line" if place is None else f"after score line {place + 1}"
+            assert field not in found.setdefault(place, {}), f"two {field}: lines {where}; keep one"
+            found[place][field] = value.strip()
+            check_plain({field: value.strip()}, where)
+    return found
+
+
+def add_plain(result_id, score, fields, who, me):
+    """score: None for the result as a whole, or (benchmark as on its score row, right, n) for one score of it."""
+    sk = result_id if score is None else f"{result_id}#{score[0]}#{score[1]}/{score[2]}"
+    team.table().put_item(Item={"pk": "plain", "sk": sk, "item": result_id, **fields, "who": who, **me, "at": team.now()})
+    print(f"plain {sk}: {fields.get('title', '(no title)')}")
+
+
+def plain_entry(entry, scores):
+    """Checks one entry of the plain command, {item, title, what, why, caveat (optional), score: {benchmark, right, n} (optional)},
+    against the score rows of the board, and returns the arguments of add_plain: (result id, score, fields). Writes nothing."""
+    assert isinstance(entry, dict) and "item" in entry and not set(entry) - {"item", "score", *PLAIN}, (
+        f"entry not understood: {entry!r}; its keys are item, title, what, why, and optionally caveat and score")
+    item_id, fields = entry["item"], {field: entry[field] for field in PLAIN if field in entry}
+    missing = [field for field in ("title", "what", "why") if field not in fields]
+    assert not missing, f"{item_id}: no {', '.join(missing)}; title, what and why are required (why can be exactly 'Not known yet.')"
+    check_plain(fields, item_id)
+    result = get(item_id)
+    assert result["kind"] == "result", f"{item_id} is a {result['kind']}; plain describes a result"
+    if "score" not in entry:
+        return item_id, None, fields
+    want = entry["score"]
+    understood = isinstance(want, dict) and set(want) == {"benchmark", "right", "n"} and isinstance(want["right"], int) and isinstance(want["n"], int)
+    assert understood, f"{item_id}: score not understood: {want!r}; write e.g. {{'benchmark': 'MATH-500', 'right': 453, 'n': 500}}"
+    own = [s for s in scores if s["result"] == item_id]
+    wanted = (same(want["benchmark"]), want["right"], want["n"])
+    row = next((s for s in own if (same(s["benchmark"]), s["right"], s["n"]) == wanted), None)
+    assert row, (f"{item_id} has no score {want['benchmark']} {want['right']}/{want['n']}; its scores are: "
+                 + (", ".join(f"{s['benchmark']} {s['right']}/{s['n']}" for s in own) or "none"))
+    return item_id, (row["benchmark"], want["right"], want["n"]), fields
 
 
 def post(kind, text, who, me):
@@ -130,14 +218,21 @@ def post(kind, text, who, me):
     if len(text) > POST_LIMIT:
         sys.exit(f"text is {len(text)} characters; the limit is {POST_LIMIT}. Put long material in a file and name its path.")
     scores = score_lines(text) if kind == "result" else []  # read first: a bad score line stops the post
+    plain = plain_lines(text) if kind == "result" else {}  # the same for a title, what, why or caveat line
+    keys = [(same(scores[i][1]), *scores[i][2:4]) for i in plain if i is not None]
+    assert len(keys) == len(set(keys)), "two scores with the same benchmark and right/n share one plain row; describe one of them"
     item_id = f"{kind}-{secrets.token_hex(3)}"
     ns = time.time_ns()
     at = team.now()
     team.table().put_item(Item={"pk": f"item#{item_id}", "sk": "item", "id": item_id, "kind": kind, "text": text, "who": who, **me,
                                 "at": at, "at_ns": ns, "active_ns": ns, "listed": kind, "ups": 0, "downs": 0, "score": 0, "n_comments": 0})
     print(item_id)
-    for score in scores:
-        add_score(item_id, ns, at, *score, who, me)
+    spelled = [add_score(item_id, ns, at, *score, who, me) for score in scores]  # each benchmark as its score row spells it
+    for place, fields in plain.items():
+        add_plain(item_id, None if place is None else (spelled[place], *scores[place][2:4]), fields, who, me)
+    if kind == "result" and not any({"title", "what", "why"} <= set(fields) for fields in plain.values()):
+        print("no title:, what: and why: lines, so the board page cannot say in plain words what this result is. "
+              f'Add them: uv run tools/board.py plain {item_id} "<title>" "<what>" "<why>"')
     if kind in REMEMBERED and not team.TEST:  # past.dev has no test project
         remember(item_id, kind, text, who)
     return item_id
@@ -237,7 +332,10 @@ def main(argv, who):
         comment = {"pk": f"item#{item_id}", "sk": f"comment#{ns}#{who}", "who": who, **me, "at": now, "text": text}
         writes = [{"Put": {"TableName": table.name, "Item": comment}},
                   {"Update": {"TableName": table.name, "Key": {"pk": f"item#{item_id}", "sk": "item"},
-                              "UpdateExpression": "ADD n_comments :one SET active_ns = :ns", "ExpressionAttributeValues": {":one": 1, ":ns": ns}}}]
+                              "UpdateExpression": "ADD n_comments :one", "ExpressionAttributeValues": {":one": 1}}}]
+        if (item["who"], item.get("branch")) == (who, me["branch"]):  # only the owner's comment ends the idle time: a question from another agent leaves the item idle
+            writes[1]["Update"]["UpdateExpression"] += " SET active_ns = :ns"
+            writes[1]["Update"]["ExpressionAttributeValues"][":ns"] = ns
         if (item["who"], item.get("session"), item.get("branch")) != (who, me["session"], me["branch"]):  # tell the item's author: it arrives with their next msg.py read
             writes.append({"Put": {"TableName": table.name, "Item": {
                 "pk": f"chan#@{item['who']}", "sk": f"{ns:020d}#{who}", "channel": f"@{item['who']}", "who": who, **me, "at": now,
@@ -255,6 +353,29 @@ def main(argv, who):
         right, n = map(int, fraction.split("/"))
         assert 0 <= right <= n, f"{fraction}: right must be between 0 and n"
         add_score(result_id, result["at_ns"], result["at"], model, benchmark, right, n, config, tokens, who, me)
+
+    elif command == "plain":
+        if args[:1] == ["--file"]:
+            _, path = args
+            entries = json.loads(Path(path).read_text())
+            assert isinstance(entries, list), f"{path} must hold a JSON list of entries"
+        else:
+            score = {}
+            if "--score" in args:
+                at = args.index("--score")
+                _, benchmark, fraction = args[at:at + 3]
+                del args[at:at + 3]
+                right, n = map(int, fraction.split("/"))
+                score = {"score": {"benchmark": benchmark, "right": right, "n": n}}
+            item_id, title, what, why, *caveat = args
+            assert len(caveat) <= 1, f"{len(args)} texts after plain; write <result id> \"<title>\" \"<what>\" \"<why>\" [\"<caveat>\"]"
+            entries = [{"item": item_id, "title": title, "what": what, "why": why, **({"caveat": caveat[0]} if caveat else {}), **score}]
+        scores = rows(KeyConditionExpression=Key("pk").eq("scores"))
+        checked = [plain_entry(entry, scores) for entry in entries]  # every entry first: a bad one stops the command before any write
+        keys = [(item_id, score) for item_id, score, _ in checked]
+        assert len(keys) == len(set(keys)), f"{next(k for k in keys if keys.count(k) > 1)} is described twice; keep one entry"
+        for entry in checked:
+            add_plain(*entry, who, me)
 
     elif command == "done":
         item_id, *result = args

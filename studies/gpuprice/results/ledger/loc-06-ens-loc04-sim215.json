@@ -1,0 +1,35 @@
+{
+ "name": "loc-06-ens-loc04-sim215",
+ "note": "Quantile average of loc-04 (5-seed LoRA, intraday, +0.3121) and sim2-15 (+0.271). H: the average beats loc-04 alone as ens-05 beat fm2-17; refuted if <= +0.3121",
+ "utc": "2026-11-15T04:45:54+00:00",
+ "commit": "04b0cf4",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.303653,
+ "pinball": 0.023358,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.278469,
+ "skill_geomean": 0.380125,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.19958,
+   "in_band": 0.820096
+  },
+  "3": {
+   "skill_pooled": 0.27443,
+   "in_band": 0.763566
+  },
+  "7": {
+   "skill_pooled": 0.347435,
+   "in_band": 0.672481
+  }
+ },
+ "in_band": 0.752332
+}

@@ -1,0 +1,2 @@
+{"measured": 0.2529517647514732, "refuted_by_met": false, "alt_measured": 0.3125330507088069, "not_computable": null, "example_row": {"top8": {"problem_index": 0, "score_v3": 1, "cap_hit": false, "n_generated": 1193}, "t1t2": {"problem_index": 0, "subject": "precalculus", "level5": false, "cell": "both", "t1_right": 1, "t2_right": 1, "t1_cap_hit": false, "t2_cap_hit": false, "t1_generated_tokens": 504, "t2_generated_tokens": 1420, "failure_type": null, "label_from_tail_only": false}}}
+n_joined=500 n_alt_no_cap=467

@@ -1,0 +1,45 @@
+Jobs of abaybektursun, last 2 h:  id  state  gpu  wait  run  command
+  abaybektursun-1115-014426-3588  no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.probdep_tokens --rows studies/rlneuro
+  abaybektursun-1115-014547-2c8c  done  vast.ai  -  15.7  python -m studies.rlneurons.jobs.probdep_tokens --rows studies/rlneuro
+  abaybektursun-1115-015601-2e73  done  vast.ai  -  15.9  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-015753-6093  no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-015818-b11d  done  vast.ai  -  86.8  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-015824-bde8  no copy yet  vast.ai  -  -  pkill -f delta_sum; PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons
+  abaybektursun-1115-015835-d906  no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-015852-a31f  done  vast.ai  -  86.4  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-020021-e9d1  no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-020435-c76d  no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-020500-36ed  no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-020508-879c  no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-020613-3636  no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-021039-24f7  done  vast.ai  -  28.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-042802-2fae  done  NVIDIA H100   0.0  4.6  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-024132-1f6e  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-024256-58c8  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-024347-94e1  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-024432-d87b  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-024606-5843  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-024621-af01  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-024700-b8c3  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-024804-390f  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-024835-486b  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-024927-4a44  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-025027-51c8  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-025153-2e87  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-032509-fc06  no copy yet  vast.ai  -  -  /opt/rln-vllm/bin/python -c "from huggingface_hub import snapshot_down
+  28 jobs, 0 failed or cancelled; median wait 0.0; 238.2 container minutes, 0.0 of them in failed or cancelled jobs
+
+Work of abaybektursun, last 2 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-173c5c  main  -  -  -  66  0  0  Laptop, no GPU: finish the Think-SFT training-overlap scan f
+  work-2cd5d0  critic  5  17  1  22  2  0  Problem dependence as a label-free early sign of a wrong sam
+  work-ab6833  main  -  -  -  32  0  0  run_cell --shard k/N (problems k, k+N, ... of the set; seeds
+  work-7c069c  main  -  -  -  71 (open)  0  0  Fresh held-out set (problems dated after the training data o
+  work-4ecc65  main  -  -  -  13  0  0  Risk-coverage of Think-SFT cue vs RL plain vs base cue on st
+  work-dd4773  main  -  -  -  15  0  0  Derived or asserted (idea-6f4b9e): blind hosted judge labels
+  work-55ae25  main  -  -  -  4  0  0  Risk-coverage on hard328 stratified by difficulty: is Think-
+  work-44d747  main  -  -  -  10  0  0  One table of all hard328 configurations from committed per-p
+  work-1d752c  main  -  -  -  1  0  0  Per-sample rates for derived-or-asserted (review of result-0
+
+Team, last 2 h: claim to close median 27 min, upper quartile 131 min, over 14 work items closed by 2 people; 18 results, 9.0 per hour.
+
+Median minutes per stage over work items with jobs: to-job 5, jobs 17, to-answer 1. Slowest stage: jobs.

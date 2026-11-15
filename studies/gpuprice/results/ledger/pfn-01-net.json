@@ -1,0 +1,35 @@
+{
+ "name": "pfn-01-net",
+ "note": "H: a 1.8M-parameter transformer trained only on synthetic sticky-price listings (pfn_sim.py, 11 types, 1.0M series, 4,000 steps, cpu job abaybektursun-1114-182512-a889), zero-shot per listing, independent draws, median over listings, matches Chronos-2 per listing (fm-07 +0.272); refuted if < +0.20. Prior informed only by panel rows dated <= 2026-09-30; real data never used in training.",
+ "utc": "2026-11-15T01:29:32+00:00",
+ "commit": "9734dfd",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.261723,
+ "pinball": 0.024765,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.242686,
+ "skill_geomean": 0.329962,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.154846,
+   "in_band": 0.83445
+  },
+  "3": {
+   "skill_pooled": 0.242397,
+   "in_band": 0.710271
+  },
+  "7": {
+   "skill_pooled": 0.300894,
+   "in_band": 0.608527
+  }
+ },
+ "in_band": 0.718237
+}

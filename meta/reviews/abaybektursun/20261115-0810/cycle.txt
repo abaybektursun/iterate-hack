@@ -1,0 +1,27 @@
+Jobs of abaybektursun, last 1 h:  id  state  gpu  wait  run  command
+  abaybektursun-1114-232213-cac3  done  cpu  0.1  0.2  echo single use ok
+  abaybektursun-1115-012835-a431  running  NVIDIA H100   0.1  42.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-012846-905e  running  NVIDIA H100   0.1  41.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-012855-d7ed  running  NVIDIA H100   9.7  32.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-012905-8f73  running  NVIDIA H100   10.0  31.7  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-012915-6618  running  NVIDIA H100   15.8  25.8  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-012925-b15d  running  NVIDIA H100   16.0  25.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-012935-2836  running  NVIDIA H100   38.6  2.6  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-013352-9d6c  done  NVIDIA H200  3.3  7.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-013411-6d5e  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-013421-6338  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-013431-3d3b  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-013441-d35a  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-014823-ef56  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-014833-1daa  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-014843-85d9  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  16 jobs, 0 failed or cancelled; median wait 9.7; 209.0 container minutes, 0.0 of them in failed or cancelled jobs
+
+Work of abaybektursun, last 1 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-1c43cf  main  7  10  -  44 (open)  5  0  Relay on hard328 (n 328, T 1.0, v3): Think-SFT cue writes, R
+  work-09d814  main  -  -  -  43 (open)  0  0  Tinker pair (second model pair, our own RL): Qwen3.5-9B-Base
+  work-3d1e3b  egate  -  -  -  6 (open)  0  0  Delta transplant on hard328: Think-SFT + a (RL-Math - base),
+
+Team, last 1 h: claim to close median 103 min, upper quartile 171 min, over 6 work items closed by 2 people; 8 results, 8.0 per hour.
+
+Median minutes per stage over work items with jobs: to-job 7, jobs 10. Slowest stage: jobs.

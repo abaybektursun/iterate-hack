@@ -1,0 +1,19 @@
+{
+ "dataset": "allenai/Dolci-Think-SFT-7B",
+ "revision": "83f618e2fe0aed29ee3440a3658a0326c175d09d",
+ "rows_scanned": 2268178,
+ "shards_scanned": 156,
+ "complete": true,
+ "rule": "rln3_overlap.norm/grams, every message, each role apart (wsp1_sft_overlap --turns all)",
+ "fresh2026_v1": {
+  "n": 136,
+  "none": 136,
+  "flagged": {},
+  "largest_share": 0.429
+ },
+ "controls": {
+  "control/hard0": "exact",
+  "control/hard38": "exact",
+  "dropped/aime2026_1": "none"
+ }
+}

@@ -6,10 +6,14 @@ dot per live item. Each person has a swarm of agents beside it with threads to t
 session, the Claude mark for Claude Code and the OpenAI mark for Codex, in the person's color of the board page.
 The Chat ring (messages) runs through every swarm, and the Retro loop (self-review) with its comet goes around
 everything. What moves is real data, replayed: a message leaves its sender's swarm for the others, a post
-travels to the board and a ripple returns to every swarm. A larger dot with a halo is happening now. The picture
+travels to the board and a ripple returns to every swarm. While an event plays, its first words are typed beside the
+person whose agent wrote it, with its age, and the mark of that agent swells once. A larger dot with a halo is
+happening now, and its age reads "now". The status at the top right counts the seconds since the last post, and its
+dot beats on every read of /data. The picture
 stands alone in the middle of the page with one button at the bottom right. A click on a part dims the rest, moves the picture
 over and explains the part in a column beside it (address /architecture#<part>); the button "Follow one result"
-steps through the path of one result (arrow keys, Esc). Nothing here writes to the board.
+steps through the path of one result (arrow keys, Esc). The logos of past.dev (memory) and Exa (search) sit on the
+key's row, and a click on either explains it in the same column. Nothing here writes to the board.
 """
 
 PAGE = r"""<!doctype html>
@@ -72,6 +76,8 @@ a { color: inherit; }
 .status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 4px color-mix(in srgb, var(--blue) 20%, transparent); }
 .status.bad { color: var(--red); }
 .status.bad::before { background: var(--red); box-shadow: 0 0 0 4px color-mix(in srgb, var(--red) 20%, transparent); }
+@keyframes heart { from { box-shadow: 0 0 0 0 color-mix(in srgb, var(--blue) 70%, transparent); } }
+.status.read::before { animation: heart 1.1s ease-out; }  /* one beat for every read of the board */
 
 /* The picture */
 .stage { grid-column: 1; grid-row: 2; min-height: 0; min-width: 0; display: flex; padding: 8px 0 0; }
@@ -84,7 +90,7 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
 .who { font-weight: 560; fill: var(--c); paint-order: stroke fill; stroke: var(--paper); stroke-width: 7px; stroke-linejoin: round; }
 .part { transition: opacity .28s ease; }
 [data-go] { cursor: pointer; }
-svg [data-go]:focus-visible { outline: none; }
+svg [data-go]:focus { outline: none; }  /* no rectangle around a clicked part; the keyboard focus shows on its ring */
 svg [data-go]:focus-visible .ring { stroke: var(--blue); stroke-width: 3; }
 svg [data-go]:focus-visible .rib { fill: var(--ink); }
 .has-focus .part { opacity: var(--dim); }
@@ -113,6 +119,11 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 .key .dot.work { fill: var(--paper); }
 .dot.stale { stroke: var(--red); }
 .sub { fill: var(--mute); font-weight: 460; }
+.logo { fill: var(--ink); }
+svg [data-go]:focus-visible .logo { fill: var(--blue); }
+.said { font-weight: 470; fill: var(--c); text-anchor: start; pointer-events: none; paint-order: stroke fill; stroke: var(--paper); stroke-width: 7px; stroke-linejoin: round; }
+.said .when { fill: var(--mute); }
+.said .when.now { fill: var(--blue); }
 .dot.off { opacity: .12; }
 .ptail { fill: var(--c); opacity: .5; }
 .phead { fill: var(--c); }
@@ -131,7 +142,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 .enter .draw { stroke-dasharray: 1; animation: draw 1s cubic-bezier(.6, 0, .2, 1) both; }
 .enter .atmo, .enter .shade, .enter .spec { animation: fade 1.6s .2s both; }
 .enter .rib, .enter .chev { animation: fade .9s .5s both; }
-.enter .thread, .enter .tie, .enter .beads, .enter .label, .enter .who, .enter .sub, .enter .key .dot, .enter .key .agent {
+.enter .thread, .enter .tie, .enter .beads, .enter .label, .enter .who, .enter .sub, .enter .key .dot, .enter .key .agent, .enter .tool {
   animation: fade .6s .55s both;
 }
 .enter .comet { animation: fade .8s 1.3s both; }
@@ -195,7 +206,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
   .pane { min-width: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .enter *, .dot.arrived, .dot.ping { animation: none !important; }
+  .enter *, .dot.arrived, .dot.ping, .status.read::before { animation: none !important; }
   .part, .walk { transition: none; }
 }
 </style>
@@ -206,8 +217,9 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
     <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
     <a href="/architecture" aria-current="page">Design</a>
+    <a href="/proof">Proof</a>
     <a href="/findings">Findings</a>
-    <span class="status" id="status" role="status">Reading the board</span>
+    <span class="status" id="status">Reading the board</span>
   </header>
   <div class="stage"><svg id="svg" role="group" aria-label="The harness: people and their agents around one shared board"></svg></div>
   <div class="foot"><button class="walk" data-go="walk-1">Follow one result</button></div>
@@ -225,6 +237,7 @@ const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "
 const f = n => n.toFixed(1);
 const msgNs = m => Number(m.sk.slice(0, 20));
 const mins = ns => Math.max(0, Math.floor((Date.now() * 1e6 - Number(ns)) / 60e9));
+const since = ns => { const s = Math.max(0, Math.floor(Date.now() / 1000 - Number(ns) / 1e9)); return s < 60 ? s + " s ago" : s < 3600 ? `${Math.floor(s / 60)} min ${String(s % 60).padStart(2, "0")} s ago` : ago(ns); };
 const ago = ns => { const m = mins(ns); return m < 1 ? "now" : m < 60 ? m + " min ago" : m < 2880 ? Math.floor(m / 60) + " h ago" : Math.floor(m / 1440) + " d ago"; };
 
 /* What each part says: one sentence, then at most three more. Plain sentences in the words of README.md and
@@ -252,6 +265,16 @@ const TEXT = {
     lead: "Each person runs several coding agents (Claude Code or Codex). Each agent has subagents and works on its own git branch.",
     facts: ["All agents follow one rules file.", "The people decide the direction. The agents coordinate through the board and the messages.", "Each agent runs its own experiments as GPU jobs. A job can only start from code that is pushed to GitHub."],
   },
+  memory: {
+    name: "Memory",
+    lead: `The team's memory is one <a href="https://past.dev">past.dev</a> project. An agent searches it before it starts an idea.`,
+    facts: ["Every result and every knowledge post on the board is stored there.", "A finding from a paper is stored with a quote from it, and only if the quote appears in the paper's text.", "When a Claude Code session ends, its typed prompts and the agent's replies are stored. Tool output and file contents are not sent."],
+  },
+  search: {
+    name: "Search",
+    lead: `Agents search the web and the literature with <a href="https://exa.ai">Exa</a>, and read the pages they find.`,
+    facts: ["Before a new measurement, an agent searches for published work on the same question.", "If a published table already answers the question, the agent posts that finding and does not run the experiment."],
+  },
 };
 const WALK = [
   "An agent posts an idea on the board.",
@@ -269,19 +292,27 @@ const MARKS = {
   claude: "m3.127 10.604 3.135-1.76.053-.153-.053-.085H6.11l-.525-.032-1.791-.048-1.554-.065-1.505-.08-.38-.081L0 7.832l.036-.234.32-.214.455.04 1.009.069 1.513.105 1.097.064 1.626.17h.259l.036-.105-.089-.065-.068-.064-1.566-1.062-1.695-1.121-.887-.646-.48-.327-.243-.306-.104-.67.435-.48.585.04.15.04.593.456 1.267.981 1.654 1.218.242.202.097-.068.012-.049-.109-.181-.9-1.626-.96-1.655-.428-.686-.113-.411a2 2 0 0 1-.068-.484l.496-.674L4.446 0l.662.089.279.242.411.94.666 1.48 1.033 2.014.302.597.162.553.06.17h.105v-.097l.085-1.134.157-1.392.154-1.792.052-.504.25-.605.497-.327.387.186.319.456-.045.294-.19 1.23-.37 1.93-.243 1.29h.142l.161-.16.654-.868 1.097-1.372.484-.545.565-.601.363-.287h.686l.505.751-.226.775-.707.895-.585.759-.839 1.13-.524.904.048.072.125-.012 1.897-.403 1.024-.186 1.223-.21.553.258.06.263-.218.536-1.307.323-1.533.307-2.284.54-.028.02.032.04 1.029.098.44.024h1.077l2.005.15.525.346.315.424-.053.323-.807.411-3.631-.863-.872-.218h-.12v.073l.726.71 1.331 1.202 1.667 1.55.084.383-.214.302-.226-.032-1.464-1.101-.565-.497-1.28-1.077h-.084v.113l.295.432 1.557 2.34.08.718-.112.234-.404.141-.444-.08-.911-1.28-.94-1.44-.759-1.291-.093.053-.448 4.821-.21.246-.484.186-.403-.307-.214-.496.214-.98.258-1.28.21-1.016.19-1.263.112-.42-.008-.028-.092.012-.953 1.307-1.448 1.957-1.146 1.227-.274.109-.477-.247.045-.44.266-.39 1.586-2.018.956-1.25.617-.723-.004-.105h-.036l-4.212 2.736-.75.096-.324-.302.04-.496.154-.162 1.267-.871z",
   openai: "M14.949 6.547a3.94 3.94 0 0 0-.348-3.273 4.11 4.11 0 0 0-4.4-1.934A4.1 4.1 0 0 0 8.423.2 4.15 4.15 0 0 0 6.305.086a4.1 4.1 0 0 0-1.891.948 4.04 4.04 0 0 0-1.158 1.753 4.1 4.1 0 0 0-1.563.679A4 4 0 0 0 .554 4.72a3.99 3.99 0 0 0 .502 4.731 3.94 3.94 0 0 0 .346 3.274 4.11 4.11 0 0 0 4.402 1.933c.382.425.852.764 1.377.995.526.231 1.095.35 1.67.346 1.78.002 3.358-1.132 3.901-2.804a4.1 4.1 0 0 0 1.563-.68 4 4 0 0 0 1.14-1.253 3.99 3.99 0 0 0-.506-4.716m-6.097 8.406a3.05 3.05 0 0 1-1.945-.694l.096-.054 3.23-1.838a.53.53 0 0 0 .265-.455v-4.49l1.366.778q.02.011.025.035v3.722c-.003 1.653-1.361 2.992-3.037 2.996m-6.53-2.75a2.95 2.95 0 0 1-.36-2.01l.095.057L5.29 12.09a.53.53 0 0 0 .527 0l3.949-2.246v1.555a.05.05 0 0 1-.022.041L6.473 13.3c-1.454.826-3.311.335-4.15-1.098m-.85-6.94A3.02 3.02 0 0 1 3.07 3.949v3.785a.51.51 0 0 0 .262.451l3.93 2.237-1.366.779a.05.05 0 0 1-.048 0L2.585 9.342a2.98 2.98 0 0 1-1.113-4.094zm11.216 2.571L8.747 5.576l1.362-.776a.05.05 0 0 1 .048 0l3.265 1.86a3 3 0 0 1 1.173 1.207 2.96 2.96 0 0 1-.27 3.2 3.05 3.05 0 0 1-1.36.997V8.279a.52.52 0 0 0-.276-.445m1.36-2.015-.097-.057-3.226-1.855a.53.53 0 0 0-.53 0L6.249 6.153V4.598a.04.04 0 0 1 .019-.04L9.533 2.7a3.07 3.07 0 0 1 3.257.139c.474.325.843.778 1.066 1.303.223.526.289 1.103.191 1.664zM5.503 8.575 4.139 7.8a.05.05 0 0 1-.026-.037V4.049c0-.57.166-1.127.476-1.607s.752-.864 1.275-1.105a3.08 3.08 0 0 1 3.234.41l-.096.054-3.23 1.838a.53.53 0 0 0-.265.455zm.742-1.577 1.758-1 1.762 1v2l-1.755 1-1.762-1z",
 };
+/* The two services agents call, drawn as their logos on the key's row: past.dev's site header logo and exa.ai's
+   logo, redrawn in one color. base is where the letters' baseline sits, as a fraction of the height; tall is the
+   drawn height in key font sizes. */
+const LOGOS = {
+  past: { box: "154 88 406.09 73.39", w: 406.09, h: 73.39, base: .766, tall: 1.12, body: `<path d="M154 117h36.94v14.53H154zM205.47 117h14.53v14.53h-14.53zM536.195 144.213l-14.756-39.349h8.198l11.165 31.854 11.242-31.854h8.042l-14.678 39.349h-9.213ZM499.143 145.15c-3.747 0-7.078-.859-9.993-2.576s-5.205-4.112-6.871-7.183c-1.613-3.071-2.42-6.636-2.42-10.696 0-4.164.807-7.782 2.42-10.852 1.666-3.123 3.956-5.544 6.871-7.261 2.915-1.77 6.298-2.655 10.15-2.655 3.851 0 7.156.859 9.915 2.577s4.893 4.007 6.402 6.87c1.509 2.811 2.264 5.934 2.264 9.369 0 .52-.026 1.093-.078 1.718 0 .572-.026 1.223-.078 1.951h-32.166v-5.543h24.515c-.156-3.279-1.249-5.829-3.279-7.651-2.03-1.874-4.555-2.811-7.573-2.811-2.135 0-4.086.495-5.856 1.484-1.77.937-3.201 2.342-4.294 4.216-1.041 1.821-1.562 4.138-1.562 6.948v2.186c0 2.915.521 5.387 1.562 7.417 1.093 1.978 2.524 3.488 4.294 4.529 1.77.989 3.695 1.483 5.777 1.483 2.499 0 4.555-.546 6.168-1.639 1.614-1.094 2.811-2.577 3.592-4.451h7.807c-.677 2.395-1.822 4.555-3.435 6.48-1.614 1.874-3.618 3.358-6.012 4.451-2.342 1.093-5.049 1.639-8.12 1.639ZM449.196 145.15c-3.747 0-7.053-.885-9.915-2.654-2.863-1.822-5.101-4.268-6.715-7.339-1.561-3.123-2.342-6.663-2.342-10.618 0-4.008.781-7.548 2.342-10.618 1.614-3.071 3.852-5.492 6.715-7.261 2.914-1.822 6.246-2.733 9.993-2.733 3.071 0 5.778.625 8.12 1.874 2.342 1.197 4.164 2.915 5.465 5.153V88h7.808v56.213h-7.027l-.781-6.089c-.781 1.197-1.796 2.342-3.045 3.435-1.249 1.041-2.758 1.9-4.528 2.576s-3.8 1.015-6.09 1.015Zm1.249-6.792c2.447 0 4.607-.573 6.48-1.718s3.306-2.758 4.295-4.84c1.041-2.082 1.561-4.503 1.561-7.261s-.52-5.153-1.561-7.183c-.989-2.082-2.421-3.696-4.295-4.841-1.873-1.197-4.033-1.795-6.48-1.795-2.342 0-4.45.598-6.324 1.795-1.873 1.145-3.331 2.759-4.372 4.841-1.041 2.03-1.561 4.424-1.561 7.183s.52 5.179 1.561 7.261 2.499 3.695 4.372 4.84c1.874 1.145 3.982 1.718 6.324 1.718ZM418.057 144.604c-1.509 0-2.759-.469-3.748-1.406-.937-.989-1.405-2.16-1.405-3.513 0-1.405.468-2.576 1.405-3.513.989-.989 2.239-1.484 3.748-1.484s2.733.495 3.669 1.484c.937.937 1.406 2.108 1.406 3.513 0 1.353-.469 2.524-1.406 3.513-.936.937-2.16 1.406-3.669 1.406ZM399.532 144.213c-2.498 0-4.658-.39-6.48-1.171s-3.227-2.082-4.216-3.904c-.989-1.821-1.483-4.294-1.483-7.417V111.5h-6.793v-6.636h6.793l.936-9.837h6.871v9.837h11.165v6.636H395.16v20.3c0 2.238.468 3.773 1.405 4.606.937.781 2.551 1.171 4.841 1.171h4.528v6.636h-6.402ZM360.242 145.15c-3.331 0-6.246-.546-8.744-1.639s-4.476-2.629-5.934-4.607c-1.457-1.978-2.342-4.294-2.654-6.948h7.963c.261 1.249.755 2.394 1.484 3.435.781 1.041 1.822 1.874 3.123 2.498 1.353.625 2.941.937 4.762.937 1.718 0 3.123-.234 4.216-.702 1.145-.521 1.978-1.198 2.499-2.03.52-.885.78-1.822.78-2.811 0-1.457-.364-2.55-1.093-3.279-.676-.781-1.717-1.379-3.123-1.796-1.353-.468-2.992-.885-4.918-1.249-1.822-.312-3.592-.729-5.309-1.249-1.666-.573-3.175-1.275-4.529-2.108-1.301-.833-2.342-1.874-3.122-3.123-.781-1.301-1.172-2.889-1.172-4.763 0-2.238.599-4.242 1.796-6.011 1.197-1.822 2.889-3.227 5.075-4.216 2.238-1.041 4.867-1.562 7.885-1.562 4.373 0 7.886 1.041 10.54 3.123 2.655 2.082 4.216 5.023 4.685 8.822h-7.573c-.209-1.769-.989-3.123-2.343-4.059-1.353-.989-3.149-1.484-5.387-1.484s-3.955.443-5.153 1.327c-1.197.885-1.795 2.056-1.795 3.514 0 .937.338 1.769 1.015 2.498s1.665 1.353 2.967 1.874c1.353.468 2.992.911 4.918 1.327 2.759.521 5.231 1.171 7.417 1.952s3.93 1.926 5.231 3.435 1.952 3.67 1.952 6.48c.052 2.447-.573 4.607-1.874 6.481-1.249 1.873-3.045 3.331-5.387 4.372-2.29 1.041-5.023 1.561-8.198 1.561ZM314.597 145.15c-3.227 0-5.908-.546-8.042-1.639s-3.721-2.551-4.762-4.372c-1.041-1.874-1.562-3.878-1.562-6.012 0-2.603.677-4.815 2.03-6.636 1.354-1.874 3.279-3.306 5.778-4.295s5.491-1.483 8.978-1.483h10.228c0-2.29-.338-4.19-1.015-5.699-.677-1.51-1.691-2.629-3.045-3.358-1.301-.78-2.967-1.171-4.997-1.171-2.342 0-4.346.573-6.011 1.718-1.666 1.093-2.707 2.733-3.123 4.919h-7.808c.313-2.759 1.25-5.101 2.811-7.027 1.614-1.978 3.67-3.487 6.168-4.528 2.498-1.093 5.153-1.64 7.963-1.64 3.696 0 6.793.651 9.291 1.952s4.372 3.149 5.622 5.543c1.301 2.342 1.951 5.153 1.951 8.432v24.359h-6.792l-.625-6.636c-.572 1.041-1.249 2.03-2.029 2.967-.781.937-1.718 1.743-2.811 2.42-1.041.677-2.264 1.197-3.67 1.562-1.353.416-2.862.624-4.528.624Zm1.483-6.324c1.666 0 3.175-.338 4.529-1.015 1.353-.676 2.498-1.587 3.435-2.732.989-1.197 1.718-2.525 2.186-3.982.521-1.51.807-3.045.859-4.606v-.235h-9.291c-2.238 0-4.06.287-5.465.859-1.353.521-2.342 1.249-2.967 2.186-.624.937-.937 2.03-.937 3.279 0 1.302.286 2.421.859 3.357.625.885 1.509 1.588 2.655 2.108 1.145.521 2.524.781 4.137.781ZM252 161.39v-56.526h7.027l.78 6.09c.833-1.197 1.874-2.316 3.123-3.357 1.25-1.093 2.733-1.978 4.451-2.655 1.769-.677 3.825-1.015 6.167-1.015 3.748 0 7.027.911 9.838 2.733 2.862 1.821 5.075 4.294 6.636 7.417 1.614 3.071 2.42 6.584 2.42 10.54s-.806 7.495-2.42 10.618c-1.613 3.071-3.852 5.491-6.714 7.261-2.811 1.769-6.09 2.654-9.838 2.654-3.071 0-5.777-.598-8.119-1.796-2.343-1.249-4.19-2.966-5.544-5.152v23.188H252Zm20.221-23.032c2.394 0 4.502-.573 6.324-1.718 1.874-1.145 3.331-2.758 4.372-4.84 1.093-2.082 1.64-4.503 1.64-7.261s-.547-5.153-1.64-7.183c-1.041-2.082-2.498-3.696-4.372-4.841-1.822-1.197-3.93-1.795-6.324-1.795-2.446 0-4.606.598-6.48 1.795-1.822 1.145-3.253 2.759-4.294 4.841-1.041 2.03-1.562 4.424-1.562 7.183s.521 5.179 1.562 7.261 2.472 3.695 4.294 4.84c1.874 1.145 4.034 1.718 6.48 1.718Z"/>` },
+  exa: { box: "0 0 413 129", w: 413, h: 129, base: .888, tall: .86, body: `<path fill-rule="evenodd" d="M106.417 9.30741C106.417 9.57392 106.324 9.83227 106.155 10.0388L61.5395 64.5L106.155 118.96C106.324 119.166 106.417 119.425 106.417 119.691V127.843C106.417 128.482 105.897 129 105.255 129H1.16175C0.520132 129 0 128.482 0 127.843V1.15695C0 0.517982 0.520131 0 1.16174 0H105.255C105.897 0 106.417 0.517984 106.417 1.15695V9.30741ZM19.0364 116.382H87.6921L53.363 74.4795L19.0364 116.382ZM12.6699 104.192L40.1426 70.6585H12.6699V104.192ZM12.6699 58.0409H39.8964L12.6699 24.8064V58.0409ZM53.363 54.5193L87.6921 12.6176H19.0364L53.363 54.5193Z"/><path d="M176.198 117.65C166.094 117.65 157.323 115.553 149.886 111.36C142.589 107.167 136.905 101.017 132.835 92.9109C128.906 84.8045 126.941 75.0208 126.941 63.5599C126.941 53.3569 128.976 44.2022 133.046 36.0957C137.256 27.9892 143.01 21.6298 150.307 17.0175C157.744 12.4052 166.024 10.099 175.146 10.099C185.109 10.099 193.599 12.3353 200.616 16.8078C207.633 21.1406 212.965 27.3602 216.614 35.4667C220.263 43.4334 222.087 52.8677 222.087 63.7695V66.1766C222.087 66.8156 221.567 67.3336 220.925 67.3336H145.044C145.185 74.881 146.588 81.3802 149.254 86.8311C152.061 92.282 155.78 96.475 160.411 99.4101C165.182 102.205 170.515 103.603 176.409 103.603C183.285 103.603 189.179 102.066 194.091 98.9908C198.779 95.9225 201.741 91.008 202.977 84.2471C203.08 83.6853 203.565 83.267 204.139 83.267H219.737C220.429 83.267 220.969 83.8669 220.871 84.5494C220.038 90.3376 217.988 95.6406 214.72 100.458C211.211 105.63 206.159 109.823 199.564 113.037C193.108 116.112 185.32 117.65 176.198 117.65ZM202.721 54.5449C202.721 45.3203 200.265 37.9825 195.354 32.5316C190.582 27.0807 183.846 24.3552 175.146 24.3552C166.866 24.3552 160.06 27.2205 154.727 32.9509C149.395 38.6814 146.377 45.8794 145.676 54.5449H202.721ZM364.585 117.65C358.13 117.65 352.236 116.392 346.903 113.876C341.571 111.36 337.361 107.796 334.273 103.184C331.186 98.4317 329.642 92.9808 329.642 86.8311C329.642 77.7462 332.73 70.688 338.904 65.6564C345.219 60.485 353.359 57.0607 363.322 55.3835L385.004 52.0291C387.67 51.6098 389.705 51.0507 391.108 50.3519C392.652 49.5133 393.704 48.465 394.266 47.2071C394.967 45.8095 395.318 44.0624 395.318 41.9659C395.318 36.515 393.424 32.2521 389.635 29.1772C385.846 25.9626 380.934 24.3552 374.9 24.3552C367.322 24.3552 361.498 26.2421 357.428 30.0158C353.595 33.4387 351.443 38.1016 350.971 44.0046C350.922 44.622 350.412 45.1106 349.79 45.1106H334.014C333.353 45.1106 332.823 44.5605 332.872 43.9032C333.312 38.0771 335.042 32.6792 338.062 27.7096C341.29 22.3985 345.921 18.1356 351.955 14.921C358.13 11.7063 365.287 10.099 373.426 10.099C381.706 10.099 388.793 11.6364 394.687 14.7113C400.721 17.7862 405.282 22.1888 408.369 27.9193C411.456 33.6497 413 40.4284 413 48.2554V113.348C413 113.987 412.48 114.505 411.838 114.505H396.901C396.259 114.505 395.739 113.987 395.739 113.348V109.473C395.739 108.076 395.739 106.678 395.739 105.28C395.739 103.743 395.739 102.275 395.739 100.878C393.213 106.189 389.214 110.312 383.741 113.247C378.408 116.182 372.023 117.65 364.585 117.65ZM367.111 103.603C372.444 103.603 377.215 102.485 381.425 100.249C385.775 97.8727 389.143 94.6581 391.529 90.6048C394.055 86.4118 395.318 81.6597 395.318 76.3486V61.4634C394.757 62.302 393.564 63.0707 391.74 63.7695C389.915 64.4684 387.389 65.1672 384.162 65.866L369.427 68.5915C362.971 69.8494 357.849 71.9459 354.06 74.881C350.271 77.8161 348.377 81.7995 348.377 86.8311C348.377 91.8627 350.131 95.916 353.639 98.9908C357.288 102.066 361.779 103.603 367.111 103.603ZM285.673 62.9573L325.127 112.948C325.726 113.707 325.183 114.82 324.213 114.82H305.929C305.572 114.82 305.235 114.657 305.015 114.378L275.053 76.414L245.093 114.378C244.872 114.657 244.536 114.82 244.179 114.82H225.893C224.924 114.82 224.381 113.707 224.98 112.948L264.433 62.9573L227.177 15.7512C226.578 14.9921 227.121 13.8793 228.091 13.8793H246.375C246.732 13.8793 247.068 14.0423 247.289 14.3214L275.053 49.5006L302.818 14.3214C303.038 14.0423 303.375 13.8793 303.731 13.8793H322.016C322.985 13.8793 323.528 14.9921 322.929 15.7512L285.673 62.9573Z"/>` },
+};
 
 /* Geometry: everything hangs on one centre, and the moving parts live in a small 3D space around it (x right,
    y down, z toward the viewer). The board faces the viewer. The swarms sit on one circle in the people's plane,
    seen from a little above; that circle is the messages path, so it passes through every swarm. The self-review
    loop is a larger circle in its own plane. A plane is [inclination, turn on the screen]. sw is the radius of the
    largest swarm; a mark is at most `mark` wide, and marks stand `pack` times their width apart or more, so that
-   they never cover each other while the swarm turns. */
+   they never cover each other while the swarm turns. The first words of an event are set in size fq, at most
+   `chars` characters, so that they fit between the Retro loop and the Chat ring; age says whether its age follows. */
 const RAD = Math.PI / 180;
 function plane(inc, turn) { return { c: Math.cos(inc * RAD), s: Math.sin(inc * RAD), co: Math.cos(turn * RAD), so: Math.sin(turn * RAD) }; }
 function geo() {
   const g = narrow.matches
-    ? { w: 720, h: 660, cx: 360, cy: 284, rb: 100, rq: 200, rp: 274, rr: 338, fs: 25, fw: 20, D: 1900, sw: 50, over: 26, cmax: 23, mark: 21, pack: 1.01, pp: [34, 0], pr: [36, -4] }
-    : { w: 1140, h: 985, cx: 570, cy: 404, rb: 164, rq: 340, rp: 446, rr: 540, fs: 24, fw: 18.5, D: 2100, sw: 88, over: 45, cmax: 27, mark: 25, pack: 1.06, pp: [40, 0], pr: [36, -4] };
+    ? { w: 720, h: 696, cx: 360, cy: 284, rb: 100, rq: 200, rp: 274, rr: 338, fs: 25, fw: 20, D: 1900, sw: 50, over: 26, cmax: 23, mark: 21, pack: 1.01, fq: 18, chars: 16, age: 0, pp: [34, 0], pr: [36, -4] }
+    : { w: 1140, h: 985, cx: 570, cy: 404, rb: 164, rq: 340, rp: 446, rr: 540, fs: 24, fw: 18.5, D: 2100, sw: 88, over: 45, cmax: 27, mark: 25, pack: 1.06, fq: 16.5, chars: 30, age: 1, pp: [40, 0], pr: [36, -4] };
   g.PP = plane(...g.pp); g.PR = plane(...g.pr);
   return g;
 }
@@ -349,8 +380,8 @@ function draw() {
   const g = S.g = geo(), m = S.m, n = m ? m.people.length : 0, th = n ? angles(n) : [];
   const svg = $("svg"), hue = i => HUES[i % HUES.length];
   svg.setAttribute("viewBox", `0 0 ${g.w} ${g.h}`);
-  const part = (name, go, body, label) =>
-    `<g class="part" data-part="${name}"${go ? ` data-go="${go}"` : ""}${label ? ` role="button" tabindex="0" aria-label="${label}"` : ""}>${body}</g>`;
+  const part = (name, go, body, label, cls) =>
+    `<g class="part${cls ? " " + cls : ""}" data-part="${name}"${go ? ` data-go="${go}"` : ""}${label ? ` role="button" tabindex="0" aria-label="${label}"` : ""}>${body}</g>`;
   const stop = (at, color, alpha) => `<stop offset="${at}" style="stop-color:${color}${alpha == null ? "" : ";stop-opacity:" + alpha}"/>`;
   let out = "<defs>" +
     `<radialGradient id="body" cx=".36" cy=".3" r=".86">${stop(0, "var(--glass-hi)")}${stop(.46, "var(--glass)")}${stop(1, "var(--glass-lo)")}</radialGradient>` +
@@ -362,6 +393,7 @@ function draw() {
     `<linearGradient id="rvfade" gradientUnits="userSpaceOnUse">${stop(0, "var(--blue)", .4)}${stop(1, "var(--blue)", 1)}</linearGradient>` +
     `<linearGradient id="msgfade" gradientUnits="userSpaceOnUse">${stop(0, "var(--mute)", .5)}${stop(1, "var(--ink)", .95)}</linearGradient>` +
     Object.keys(MARKS).map(k => `<symbol id="mark-${k}" viewBox="0 0 16 16"><path d="${MARKS[k]}"/></symbol>`).join("") +
+    Object.keys(LOGOS).map(k => `<symbol id="logo-${k}" viewBox="${LOGOS[k].box}">${LOGOS[k].body}</symbol>`).join("") +
     th.map((_, i) =>
       `<radialGradient id="orb-${i}" class="hue" style="--h:${hue(i)}" cx=".34" cy=".3" r=".8">${stop(0, "color-mix(in oklch, var(--c), white var(--lift))")}${stop(1, "var(--c)")}</radialGradient>` +
       `<radialGradient id="glo-${i}" class="hue" style="--h:${hue(i)}">${stop(0, "var(--c)", .55)}${stop(1, "var(--c)", 0)}</radialGradient>`).join("") +
@@ -396,10 +428,11 @@ function draw() {
       `<g class="hue" style="--h:${hue(i)}"><circle class="pad" r="${g.sw + 16}"/><path class="tie"/>` +
       m.marks[i].map((mark, k) => mark ? `<use class="agent" href="#mark-${mark}" style="--i:${k}"/>` : `<rect class="agent" style="--i:${k}"/>`).join("") +
       `<circle class="person ring" style="fill:url(#orb-${i}) var(--c)"/>` +
-      `<text class="who" font-size="${g.fw}">${esc(m.people[i])}</text></g>`,
+      `<text class="who" font-size="${g.fw}">${esc(m.people[i])}</text>` +
+      `<text class="said" font-size="${g.fq}" opacity="0" aria-hidden="true"><tspan></tspan><tspan class="when"></tspan></text></g>`,
       `${esc(m.people[i])}, ${m.agents[i].length} agents`);
   });
-  const k = g.fw * .92, ky = g.h - 14, keys = [["agent", "agent"], ["work", "open work"], ["", "result"], ["note", "idea or note"]];
+  const k = g.fw * .92, ty = g.h - 14, ky = narrow.matches ? ty - k * 1.9 : ty, keys = [["agent", "agent"], ["work", "open work"], ["", "result"], ["note", "idea or note"]];
   const here = m ? ["claude", "openai", ""].filter(x => m.marks.some(l => l.includes(x))) : ["claude"];  // the marks on this page
   const widths = keys.map(([cls, t]) => 26 + t.length * k * .54 + 22 + (cls === "agent" ? (here.length - 1) * 19 : 0)), total = widths.reduce((a, b) => a + b, 0) - 22;
   let kx = narrow.matches ? (g.w - total) / 2 : 6;
@@ -410,6 +443,24 @@ function draw() {
     return (cls === "agent" ? here.map(one).join("") : `<circle class="dot ${cls}" cx="${f(x + 7)}" cy="${f(y)}" r="${cls === "note" ? 3.4 : 6}"/>`) +
       `<text class="sub" x="${f(x + 20 + (cls === "agent" ? (here.length - 1) * 19 : 0))}" y="${f(ky)}" font-size="${f(k)}" style="text-anchor:start">${t}</text>`;
   }).join("") + "</g>";
+  /* The services agents call: a label, then the logo, on the key's baseline. Laid out right to left from the right
+     edge; on a phone they take their own row under the key, centred. */
+  const tools = [["memory", "past", "Memory, past.dev"], ["search", "exa", "Search, Exa"]].map(([name, logo, label]) => {
+    const L = LOGOS[logo], lh = L.tall * k;
+    return { name, logo, label, L, lh, lw: lh * L.w / L.h, tw: name.length * k * .54 };
+  });
+  const span = tools.reduce((s, o) => s + o.tw + 8 + o.lw, 0) + 26 * (tools.length - 1);
+  let tx = narrow.matches ? (g.w + span) / 2 : g.w - 6;
+  const drawn = [];
+  for (let i = tools.length - 1; i >= 0; i--) {
+    const o = tools[i], lx = tx - o.lw, ly = ty - o.L.base * o.lh, sx = lx - 8 - o.tw, top = Math.min(ty - k * .8, ly) - 8, bot = Math.max(ty + k * .25, ly + o.lh) + 8;
+    drawn.unshift(part(o.name, o.name,
+      `<rect class="pad" x="${f(sx - 8)}" y="${f(top)}" width="${f(tx - sx + 16)}" height="${f(bot - top)}"/>` +
+      `<text class="sub" x="${f(lx - 8)}" y="${f(ty)}" font-size="${f(k)}" style="text-anchor:end">${o.name}</text>` +
+      `<use class="logo" href="#logo-${o.logo}" x="${f(lx)}" y="${f(ly)}" width="${f(o.lw)}" height="${f(o.lh)}"/>`, o.label, "tool"));
+    tx = sx - 26;
+  }
+  out += drawn.join("");
   svg.innerHTML = out + '<g id="fx"></g>';
 
   const el = {}, unit = e => ({ el: e, glow: e.children[0], tail: e.children[1], head: e.children[2] });
@@ -427,7 +478,7 @@ function draw() {
       const c = Math.min(g.cmax, g.sw / Math.sqrt(count + .6)), who = p.querySelector(".who");
       return { a, c, size: Math.min(g.mark, c / g.pack), below: Math.sin(a * RAD) >= 0, side: Math.abs(Math.cos(a * RAD)) > .3 ? Math.sign(Math.cos(a * RAD)) : 0,
         wide: who.getComputedTextLength(), pad: p.querySelector(".pad"), tie: p.querySelector(".tie"), dots: [...p.querySelectorAll(".agent")],
-        person: p.querySelector(".person"), who, thread: t.querySelector(".thread"), ripple: t.querySelector(".ripple"), pulse: unit(t.querySelector(".pulse")) };
+        person: p.querySelector(".person"), who, said: p.querySelector(".said"), thread: t.querySelector(".thread"), ripple: t.querySelector(".ripple"), pulse: unit(t.querySelector(".pulse")) };
     }),
   };
   place(S.t);
@@ -498,7 +549,8 @@ function place(t) {
   set(E["ms-label"], { x: f(crown[0]), y: f(crown[1] + g.fs * .34) });
 
   // The swarms: each a small disc of agents in the people's plane, with threads to the nearest point of the board.
-  R.swarms.forEach(o => {
+  const Y = S.play.say;
+  R.swarms.forEach((o, n) => {
     const u0 = g.rq * Math.cos(o.a * RAD), v0 = g.rq * Math.sin(o.a * RAD);
     const c = proj(g, world(g.PP, u0, v0)), p = at(g.PP, g.rp, o.a), to = Math.atan2(c[1] - g.cy, c[0] - g.cx);
     const end = [g.cx + (g.rb + 2) * Math.cos(to), g.cy + (g.rb + 2) * Math.sin(to)], ends = f(end[0]) + " " + f(end[1]);
@@ -506,7 +558,9 @@ function place(t) {
     o.c0 = c; o.end = end; o.at = []; o.reach = Math.hypot(c[0] - end[0], c[1] - end[1]);
     o.dots.forEach((d, k) => {
       const r = o.c * Math.sqrt(k + .6), a = k * 2.39996 + t * .22;  // the swarm turns as one, so its agents never cover each other
-      const q = proj(g, world(g.PP, u0 + r * Math.cos(a), v0 + r * Math.sin(a))), side = o.size * q[2] * (d.tagName === "rect" ? .78 : 1), here = f(q[0]) + " " + f(q[1]);
+      const q = proj(g, world(g.PP, u0 + r * Math.cos(a), v0 + r * Math.sin(a))), here = f(q[0]) + " " + f(q[1]);
+      const swell = Y && Y.i === n && Y.k === k ? 1 + .8 * Math.sin(Math.PI * Math.min(1, (t - Y.t0) / .7)) : 1;  // the agent that is speaking
+      const side = o.size * q[2] * (d.tagName === "rect" ? .78 : 1) * swell;
       set(d, { x: f(q[0] - side / 2), y: f(q[1] - side / 2), width: f(side), height: f(side), rx: f(side * .28) });  // upright, facing the viewer
       web += `M${here}L${ends}`;
       fan += `M${ends}L${here}`;
@@ -518,12 +572,14 @@ function place(t) {
     set(o.pad, { cx: f(c[0]), cy: f(c[1]) });
     o.tie.setAttribute("d", `M${f(c[0])} ${f(c[1])}L${f(p[0])} ${f(p[1])}`);
     set(o.person, { cx: f(p[0]), cy: f(p[1]), r: f(13 * p[2]) });
-    set(o.who, { x: f(p[0] - o.side * Math.max(0, o.wide / 2 - g.over)), y: f(p[1] + (o.below ? g.fw * 1.9 : -g.fw * 1.15) * p[2]) });
+    o.nx = p[0] - o.side * Math.max(0, o.wide / 2 - g.over); o.ny = p[1] + (o.below ? g.fw * 1.9 : -g.fw * 1.15) * p[2]; o.nk = p[2];
+    set(o.who, { x: f(o.nx), y: f(o.ny) });
   });
   const turn = $("dots");
   if (turn) turn.setAttribute("transform", `rotate(${f(t * 1.5 % 360)} ${g.cx} ${g.cy})`);
   posted(t);
   sent(t, at, ring, near);
+  said(t);
 }
 function spin(now) {
   const t = S.t = 21 + now / 1000;
@@ -535,7 +591,9 @@ function spin(now) {
   requestAnimationFrame(spin);
 }
 
-/* The replay: about every 2.5 s one real event, a message and a post in turn, from the newest 40 of each, looped.
+/* The replay: about every 2.5 s one real event, a message and a post in turn, from the newest 40 of each, newest
+   first, looped. While an event plays, its first words are typed beside the person whose agent wrote it, with its
+   age ("4 min ago", or "now" in the accent), and the mark of that agent swells once.
    A message is a pulse in its sender's colour that leaves the sender's swarm along the messages path, both ways,
    and reaches every other swarm. A post is a pulse in its poster's colour that runs down one thread to the board;
    when it lands, a faint ripple leaves the board along all threads, because every agent reads the board. An event
@@ -549,11 +607,34 @@ function comet(u, pts, r, opacity) {  // a pulse: a small lit head, a tapered ta
   u.tail.setAttribute("d", n ? ribbon(pts, (q, i) => r * 1.5 * i / n) : "");
   u.el.setAttribute("opacity", opacity.toFixed(2));
 }
+function say(i, k, text, ns, t, hold) {  // the first words of a real message or post, beside whoever wrote it
+  const o = S.r.swarms[i], g = S.g, s = String(text ?? "").replace(/\s+/g, " ").trim();
+  if (!o || !s) return;
+  S.r.swarms.forEach(x => x.said.setAttribute("opacity", 0));
+  const head = s.slice(0, g.chars), whole = head.replace(/\s+\S*$/, "");  // cut at a word, unless that leaves less than half
+  const cut = s.length > g.chars ? (whole.length * 2 > g.chars ? whole : head).replace(/[,;:(\-]+$/, "") + "…" : s;
+  const [line, when] = o.said.children, age = g.age ? "\u2002" + ago(ns) : "";  // a phone has no room for the age
+  line.textContent = cut; when.textContent = age;
+  when.setAttribute("class", "when" + (mins(ns) < 1 ? " now" : ""));
+  S.play.say = { i, k, cut, age, t0: t, hold, wide: o.said.getComputedTextLength(), n: -1 };  // measured whole, so it does not move while it is typed
+}
+function said(t) {
+  const Y = S.play.say, g = S.g;
+  if (!Y) return;
+  const o = S.r.swarms[Y.i], age = t - Y.t0;
+  if (!o || age >= Y.hold) { if (o) o.said.setAttribute("opacity", 0); S.play.say = null; return; }
+  const n = Math.min(Y.cut.length, Math.ceil(age * 55)), [line, when] = o.said.children;  // 55 characters a second
+  if (n !== Y.n) { Y.n = n; line.textContent = Y.cut.slice(0, n); when.textContent = n < Y.cut.length ? "" : Y.age; }
+  const x = o.side < 0 ? o.nx - o.wide / 2 : o.side > 0 ? o.nx + o.wide / 2 - Y.wide : o.nx - Y.wide / 2;  // it grows toward the middle of the picture
+  o.said.setAttribute("x", f(Math.max(8, Math.min(g.w - 8 - Y.wide, x))));
+  o.said.setAttribute("y", f(o.ny + (o.below ? g.fq * 1.45 : -g.fw * 1.08) * o.nk));
+  o.said.setAttribute("opacity", Math.max(0, Math.min(1, age / .15, (Y.hold - age) / .4)).toFixed(2));
+}
 function hush() {  // stop the replay where it is
   const R = S.r;
   S.play = {};
   if (!R) return;
-  R.swarms.forEach(o => { o.pulse.el.setAttribute("opacity", 0); o.ripple.setAttribute("opacity", 0); });
+  R.swarms.forEach(o => { o.pulse.el.setAttribute("opacity", 0); o.ripple.setAttribute("opacity", 0); o.said.setAttribute("opacity", 0); });
   R.legs.forEach(u => u.el.setAttribute("opacity", 0));
   R.arrive.forEach(e => e.setAttribute("opacity", 0));
 }
@@ -566,7 +647,9 @@ function beat(t) {
     const i = m.people.indexOf(now.who);
     if (i < 0) return;
     S.busy = true;
-    fly(route(S.g, now.kind, S.th[i]), HUES[i % HUES.length], now.kind === "msg" ? 2600 : 1100).then(() => {
+    const ms = now.kind === "msg" ? 2600 : 1100;
+    say(i, m.agents[i].indexOf(now.session), now.text, now.ns, t, ms / 1000 + 1.3);
+    fly(route(S.g, now.kind, S.th[i]), HUES[i % HUES.length], ms).then(() => {
       S.busy = false; S.due = S.t + 1.5;
       if (now.kind === "board" && !step()) S.play.post = { i, k: -1, at: -1, t0: S.t - 1 };  // the read that follows the post
     });
@@ -575,17 +658,19 @@ function beat(t) {
   const msgs = S.data.messages.slice(-40).filter(x => m.people.includes(x.who)), posts = m.live.slice(-40);
   S.turn = !S.turn;
   if (S.turn && m.people.length > 1 && msgs.length) {
-    const i = m.people.indexOf(msgs[S.nth.msg++ % msgs.length].who), a0 = S.th[i];
+    const x = msgs[msgs.length - 1 - S.nth.msg++ % msgs.length], i = m.people.indexOf(x.who), a0 = S.th[i];
     const away = S.th.map((a, j) => ({ j, d: ((a - a0) % 360 + 360) % 360 })).filter(x => x.j !== i);  // degrees to each other swarm, clockwise
     const reach = dir => Math.max(0, ...away.map(x => dir > 0 ? x.d : 360 - x.d).filter(d => d <= 180 && (dir > 0 || d < 180)));
     S.play.msg = { i, t0: t, legs: [1, -1].map(dir => ({ dir, span: reach(dir), time: .9 + reach(dir) / 110 })),
       hits: away.map(x => x.d <= 180 ? { j: x.j, dir: 1, d: x.d, t: 0 } : { j: x.j, dir: -1, d: 360 - x.d, t: 0 }) };
+    say(i, m.agents[i].indexOf(x.session), x.text, msgNs(x), t, Math.max(...S.play.msg.legs.map(l => l.time)) + .6);
     S.r.el["ms-fx"].setAttribute("style", `--h:${HUES[i % HUES.length]}`);
     S.r.legs.forEach(u => { u.glow.setAttribute("fill", `url(#glo-${i})`); u.head.setAttribute("style", `fill:url(#orb-${i}) var(--c)`); });
   } else if (posts.length) {
-    const it = posts[S.nth.post++ % posts.length], i = Math.max(0, m.people.indexOf(it.who)), count = m.agents[i].length;
+    const it = posts[posts.length - 1 - S.nth.post++ % posts.length], i = Math.max(0, m.people.indexOf(it.who)), count = m.agents[i].length;
     const k = count ? (m.agents[i].indexOf(it.session) + count) % count : -1;  // the thread of the agent session that posted it, when that is known
     S.play.post = { i, k, at: m.live.indexOf(it), t0: t };
+    if (m.people.includes(it.who)) say(i, m.agents[i].indexOf(it.session), it.text, it.at_ns, t, 2.4);
   }
 }
 function posted(t) {
@@ -696,7 +781,8 @@ function lit() {
   const mine = ["swarm-" + me], post = ["swarm-" + me, "thread-" + me, "board"];
   return ({
     board: ["board", "key", ...all("thread-")], msg: ["msg", ...all("swarm-")], review: ["review"], team: all("swarm-"),
-    "walk-1": post, "walk-2": post, "walk-3": post, "walk-4": mine, "walk-5": mine, "walk-6": post, "walk-7": ["review"],
+    memory: ["memory", "board"], search: ["search", ...all("swarm-")],
+    "walk-1": post, "walk-2": [...post, "memory", "search"], "walk-3": post, "walk-4": mine, "walk-5": mine, "walk-6": post, "walk-7": ["review"],
   })[s] || null;
 }
 function known(s) { return s in TEXT || /^walk-[1-7]$/.test(s) || (s.startsWith("p-") && (!S.m || S.m.people.includes(s.slice(2)))); }
@@ -750,9 +836,13 @@ function show() {
   const who = S.sel && S.sel.startsWith("p-") ? S.sel.slice(2) : null;  // one person selected: only that person's items stay lit
   svg.querySelectorAll(".dot").forEach(d => d.classList.toggle("off", !!who && d.dataset.who !== who));
   $("pane").innerHTML = pane();
-  $("status").className = "status" + (S.error ? " bad" : "");
+  clock();
+}
+function clock() {  // every second: the time since the last post counts up
+  const m = S.m;
+  $("status").classList.toggle("bad", !!S.error);
   $("status").textContent = S.error ? (S.readAt ? `Offline, last read ${new Date(S.readAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : "Offline")
-    : S.data ? (m.last && !narrow.matches ? `Live, last post ${ago(m.last)}` : "Live") : "Reading the board";
+    : S.data ? (m.last && !narrow.matches ? `Live, last post ${since(m.last)}` : "Live") : "Reading the board";
 }
 
 function read(d) {
@@ -762,8 +852,8 @@ function read(d) {
   if (key !== S.key) { S.key = key; draw(); }
   dots();
   if (S.seen) {
-    d.items.filter(i => i.listed !== "work-closed" && !S.seen.has(i.id)).forEach(i => S.queue.push({ kind: "board", who: i.who }));
-    d.messages.filter(x => !S.seen.has(x.sk)).forEach(x => S.queue.push({ kind: "msg", who: x.who }));
+    d.items.filter(i => i.listed !== "work-closed" && !S.seen.has(i.id)).forEach(i => S.queue.push({ kind: "board", who: i.who, session: i.session, text: i.text, ns: i.at_ns }));
+    d.messages.filter(x => !S.seen.has(x.sk)).forEach(x => S.queue.push({ kind: "msg", who: x.who, session: x.session, text: x.text, ns: msgNs(x) }));
     S.queue = S.queue.slice(-8);
   }
   S.seen = new Set([...d.items.map(i => i.id), ...d.messages.map(x => x.sk)]);
@@ -771,12 +861,13 @@ function read(d) {
 }
 function poll() {
   fetch("/data").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-    .then(d => { S.error = null; S.readAt = Date.now(); read(d); })
+    .then(d => { S.error = null; S.readAt = Date.now(); read(d); const s = $("status"); s.classList.remove("read"); s.offsetWidth; s.classList.add("read"); })
     .catch(e => { S.error = e; console.error(e); show(); })
     .finally(() => setTimeout(poll, 10000));
 }
 
 document.addEventListener("click", e => {
+  if (e.detail) document.activeElement?.blur?.();  // a mouse click leaves no focus behind, so a later key press draws no blue ring on the part
   const b = e.target.closest("[data-step]");
   if (b) { const n = Number(b.dataset.step); return go(n >= 1 && n <= 7 ? "walk-" + n : "", true); }
   const t = e.target.closest("[data-go]");
@@ -803,6 +894,7 @@ stage.addEventListener("pointerleave", () => { V.tx = V.ty = 0; });
 draw();
 show();
 poll();
+setInterval(clock, 1000);
 if (!still.matches) requestAnimationFrame(spin);
 </script>
 </body>

@@ -1,0 +1,23 @@
+{
+ "theory": "r6-m11",
+ "items": [
+  {
+   "k": 1,
+   "experiment": "Wrong-rate ratio of early-marker to late-marker finished answers of the cued base at T 1.0 (MATH-500, T1).",
+   "original": 0.0,
+   "replicated": null,
+   "status": "differs",
+   "script": "replication/r6-m11/p1.py",
+   "not_computable": null
+  },
+  {
+   "k": 3,
+   "experiment": "Cause share: of the cued base's quick finished-wrong T1 answers (at most 2,000 generated tokens), the fraction that are early-marker answers. The rival (slow-reasoning slips stated at the end) puts few of them in the early group.",
+   "original": 0.0,
+   "replicated": 0.0,
+   "status": "replicated",
+   "script": "replication/r6-m11/p3.py",
+   "not_computable": null
+  }
+ ]
+}

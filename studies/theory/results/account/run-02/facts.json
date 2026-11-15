@@ -1,0 +1,744 @@
+[
+ {
+  "round": "round-04",
+  "theory": "r4-m08-rival",
+  "kind": "offline",
+  "experiment": "Independent replication at T 0.6 of the stratified post-minus-pre paired gap (RL plain minus base cue) on the clean harder 328, matched on RL answer length, using different samples and a different decoding setting from tests.json.",
+  "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_hard.jsonl (base, cue, T 0.6 / top-p 0.95) and s3://pg-lineage-769063704696/results/rlneurons/r3/s2800-01/out/P_hard.jsonl (RL step 2,800, plain, T 0.6 / top-p 0.95). If a file has more than one row per unique_id, keep the row with the smallest sample value. Keep only unique_ids whose flag == 'none' in results/rln3/rln3_overlap.json, join the two files on unique_id, and drop any unique_id missing from either file. Source label from rln3_overlap.json: post = AIME 2025 or HMMT Feb 2025; pre = every other source. right = (score == 1), using the stored v1 score field; cap hits and rows with no extracted answer count as their stored score (0 if score is null). Strata: sort the joined problems by the RL row's n_generated ascending, break ties by unique_id ascending, and cut into 4 consecutive groups of equal size (the remainder goes to the last group). In each stratum s and group g (post/pre), d_gs = mean over problems of (RL right - base right). w_s = (number of post problems in s) / (number of post problems). Drop any stratum that has post problems but no pre problems, and renormalise w over the remaining strata. G_g = sum_s w_s * d_gs. Statistic = 100 * (G_post - G_pre), in points.",
+  "unit": "points",
+  "measured": -5.63942436083997,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m08-rival",
+  "kind": "offline",
+  "experiment": "Independent replication at T 0.6 of the both-right base/RL length comparison: median log length ratio, pre-cutoff minus post-cutoff, on the clean harder 328.",
+  "recipe": "Same two files, row choice, 328 filter, join, drops and post/pre labels as the first test here (r3/base-01 F_hard.jsonl base cue; r3/s2800-01 P_hard.jsonl RL plain). Keep problems where score == 1 (stored v1) in both rows and cap_hit is false in both rows. For each kept problem, r = ln(base n_generated / RL n_generated). Statistic = median of r over kept pre problems minus median of r over kept post problems (for an even count, the median is the mean of the two middle values). If no post problem is kept, recompute with the cap_hit condition removed, keeping score == 1 in both rows.",
+  "unit": "difference of median log length ratios",
+  "measured": -0.19431648776581323,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m08-rival",
+  "kind": "offline",
+  "experiment": "MATH-500: per-token entropy of the RL model's own short right answers relative to its own long right answers (the RL-side counterpart of test 3).",
+  "recipe": "Files: studies/rlneurons/results/rln5/map-01/checks.json (key per_row, list T2) and studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. For each T2 row, per-token entropy e = sum_entropy_own / n_own. Drop rows with n_own == 0 or missing. Join with per_problem.json on problem_index. Keep problems with t2_right true and t2_cap_hit false. short = t2_generated_tokens <= 2000; long = t2_generated_tokens > 2000. Statistic = median e over short / median e over long (for an even count, the median is the mean of the two middle values).",
+  "unit": "ratio",
+  "measured": 0.7662885079105015,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m08-rival",
+  "kind": "offline",
+  "experiment": "MATH-500, 4 independent samples per model at T 1.0: on problems that both models solve every time and where the base's typical answer is short, how much the base's answer length varies across its own samples, relative to how much RL's varies (median log ratio of coefficients of variation).",
+  "recipe": "Files: studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (base) and studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (RL). Use only rows with attempt == 0. For each model and problem_index, collect the attempt-0 rows for samples 0, 1, 2 and 3. Keep a problem only if both models have all four attempt-0 rows, and every one of those 8 rows has score_v3 == 1 and cap_hit false. Missing rows exclude the problem; there are no ties to break. For each kept problem and model, take the 4 values of n_new, and set CV = (population standard deviation, ddof = 0) / (mean). Drop any problem where either model's CV is 0. Short problems are those where the median of the base's 4 n_new values (the mean of the two middle values) is <= 2000. For each short problem, compute L = ln(CV_base / CV_RL). Statistic = median of L over short problems (for an even count, the mean of the two middle values).",
+  "unit": "log ratio",
+  "measured": 0.5180097906045676,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m08-rival",
+  "kind": "offline",
+  "experiment": "MATH-500, same 4-sample rows: base-versus-RL length variability on short problems minus the same on long problems (difference in median log CV ratios).",
+  "recipe": "Same files, attempt-0 rows, kept problems (all 8 rows score_v3 == 1 and cap_hit false), CV definition, zero-CV drops and L = ln(CV_base / CV_RL) as in the first test here. Short = median of the base's 4 n_new values <= 2000; long = that median > 2000. Statistic = (median L over short problems) - (median L over long problems), with each median taken as in the first test (for an even count, the mean of the two middle values).",
+  "unit": "difference of log ratios",
+  "measured": -0.020345857212325513,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m10-rival",
+  "kind": "offline",
+  "experiment": "Share of RL step-100 plain MATH-500 answers (T 0.6 / top-p 0.95) that open in the 'Okay' deliberation format.",
+  "recipe": "File: s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0100/P_math500.jsonl. Keep rows with sample == 0. If a problem_index appears more than once, keep the first row in file order. For each kept row take the text field (empty or missing text counts as not matching). The row matches if the substring 'Okay' (case-sensitive) occurs within the first 30 characters of text. Statistic: matching rows / kept rows. Cap-hit rows are included like any other row.",
+  "unit": "fraction of problems",
+  "measured": 0.956,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m10-rival",
+  "kind": "offline",
+  "experiment": "Paired cap-hit rate difference at RL step 400, cued prompt minus plain prompt, MATH-500 at T 0.6 / top-p 0.95.",
+  "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/F_math500.jsonl (A, cue) and s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl (B, plain). In each file keep only rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. Keep problem_index values present in both A and B (set S; problems missing from either are dropped). A row is a cap hit if cap_hit is true, or if cap_hit is missing and finish_reason == 'length'. Statistic: (cap hits in A over S) / |S| minus (cap hits in B over S) / |S|.",
+  "unit": "fraction of problems",
+  "measured": -0.027999999999999997,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m10-rival",
+  "kind": "offline",
+  "experiment": "Ratio of median generated length of finished answers, RL step 100 over base, plain MATH-500 at T 0.6 / top-p 0.95.",
+  "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0100/P_math500.jsonl (A) and s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/P_math500.jsonl (B). In each file keep rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. Keep problem_index values present in both files (set S). In each file, finished rows = rows in S with cap_hit false (if cap_hit is missing, finished only if finish_reason == 'stop'); each file's finished set is taken separately (unpaired). Length = the n_new field (rows with n_new missing are dropped). Statistic: median length of A's finished rows divided by median length of B's finished rows (median of an even count = mean of the two middle values).",
+  "unit": "ratio of medians",
+  "measured": 2.251572327044025,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m10-rival",
+  "kind": "offline",
+  "experiment": "Per-token sharpness of RL step-100 finished answers relative to the cued base: share of step-100 plain finished answers whose mean_logprob exceeds the median mean_logprob of the cued base's finished answers, MATH-500, T 0.6 / top-p 0.95.",
+  "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (R, reference) and s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0100/P_math500.jsonl (X). In each file keep rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. Keep problem_index values present in both files (set S). In each file, finished rows = rows in S with cap_hit false (if cap_hit is missing, finished only if finish_reason == 'stop'). Drop rows whose mean_logprob field is missing, null or non-finite. Let M = median of mean_logprob over R's finished rows (even count: mean of the two middle values). Statistic: (number of X finished rows with mean_logprob strictly greater than M) / (number of X finished rows). Ties with M count as not greater. Cap-hit rows are excluded from both files.",
+  "unit": "fraction of finished answers",
+  "measured": 0.5541561712846348,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m10-rival",
+  "kind": "offline",
+  "experiment": "Same sharpness share at RL step 400: share of step-400 plain finished answers whose mean_logprob exceeds the median mean_logprob of the cued base's finished answers, MATH-500, T 0.6 / top-p 0.95.",
+  "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (R, reference) and s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl (X). In each file keep rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. Keep problem_index values present in both files (set S). In each file, finished rows = rows in S with cap_hit false (if cap_hit is missing, finished only if finish_reason == 'stop'). Drop rows whose mean_logprob field is missing, null or non-finite. Let M = median of mean_logprob over R's finished rows (even count: mean of the two middle values). Statistic: (number of X finished rows with mean_logprob strictly greater than M) / (number of X finished rows). Ties with M count as not greater. Cap-hit rows are excluded from both files.",
+  "unit": "fraction of finished answers",
+  "measured": 0.48009950248756217,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m10-rival",
+  "kind": "offline",
+  "experiment": "Where step 400's median per-token log-prob on finished answers lies between the cued base and step 2,800, plain prompt for RL checkpoints, MATH-500, T 0.6 / top-p 0.95.",
+  "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (R), s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl (M) and s3://pg-lineage-769063704696/results/rlneurons/r3/s2800-01/out/P_math500.jsonl (E). In each file keep rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. Keep problem_index values present in all three files (set S). In each file, finished rows = rows in S with cap_hit false (if cap_hit is missing, finished only if finish_reason == 'stop'). Drop rows whose mean_logprob is missing, null or non-finite. med_X = median of mean_logprob over X's finished rows (even count: mean of the two middle values). Statistic: (med_M - med_R) / (med_E - med_R). If med_E - med_R equals 0, report undefined.",
+  "unit": "fraction of the cued-base-to-step-2800 distance",
+  "measured": 0.06726598846379954,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "run-01",
+  "theory": "r5-account",
+  "kind": "offline",
+  "experiment": "Share of the gap problems in the budget part",
+  "recipe": "Gap: in studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json, gap problems are rows with t2_right true and t1_right false (null or missing t1_right/t2_right: not a gap problem; cap hits keep their stored t1_right). Define kB = number of rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3} and score_v3 == 1, and kR the same in studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (cap-hit rows, null score_v3 and missing samples count as not right; a duplicated (problem_index, sample) uses its first row in file order). Assign each gap problem to the first rule that takes it: R1 budget: t1_cap_hit == true. R2 answer-statement: failure_type, lower-cased, contains any of 'format', 'final line', 'garbled', 'rejected', 'changed' (null or missing: not taken). R3 reliability: kB >= 1. R4 capability: kB == 0 and kR >= 2. Otherwise: unassigned. Statistic: (number of gap problems assigned to budget) / (number of gap problems).",
+  "unit": "fraction of gap problems",
+  "measured": 0.24615384615384617,
+  "n": 65,
+  "interval": [
+   0.16923076923076924,
+   0.3384615384615385
+  ]
+ },
+ {
+  "round": "run-01",
+  "theory": "r5-account",
+  "kind": "offline",
+  "experiment": "Share of the gap problems in the answer-statement part",
+  "recipe": "Gap: in studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json, gap problems are rows with t2_right true and t1_right false (null or missing t1_right/t2_right: not a gap problem; cap hits keep their stored t1_right). Define kB = number of rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3} and score_v3 == 1, and kR the same in studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (cap-hit rows, null score_v3 and missing samples count as not right; a duplicated (problem_index, sample) uses its first row in file order). Assign each gap problem to the first rule that takes it: R1 budget: t1_cap_hit == true. R2 answer-statement: failure_type, lower-cased, contains any of 'format', 'final line', 'garbled', 'rejected', 'changed' (null or missing: not taken). R3 reliability: kB >= 1. R4 capability: kB == 0 and kR >= 2. Otherwise: unassigned. Statistic: (number of gap problems assigned to answer-statement) / (number of gap problems).",
+  "unit": "fraction of gap problems",
+  "measured": 0.15384615384615385,
+  "n": 65,
+  "interval": [
+   0.07692307692307693,
+   0.23076923076923078
+  ]
+ },
+ {
+  "round": "run-01",
+  "theory": "r5-account",
+  "kind": "offline",
+  "experiment": "Share of the gap problems in the reliability part",
+  "recipe": "Gap: in studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json, gap problems are rows with t2_right true and t1_right false (null or missing t1_right/t2_right: not a gap problem; cap hits keep their stored t1_right). Define kB = number of rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3} and score_v3 == 1, and kR the same in studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (cap-hit rows, null score_v3 and missing samples count as not right; a duplicated (problem_index, sample) uses its first row in file order). Assign each gap problem to the first rule that takes it: R1 budget: t1_cap_hit == true. R2 answer-statement: failure_type, lower-cased, contains any of 'format', 'final line', 'garbled', 'rejected', 'changed' (null or missing: not taken). R3 reliability: kB >= 1. R4 capability: kB == 0 and kR >= 2. Otherwise: unassigned. Statistic: (number of gap problems assigned to reliability) / (number of gap problems).",
+  "unit": "fraction of gap problems",
+  "measured": 0.5384615384615384,
+  "n": 65,
+  "interval": [
+   0.4307692307692308,
+   0.6307692307692307
+  ]
+ },
+ {
+  "round": "run-01",
+  "theory": "r5-account",
+  "kind": "offline",
+  "experiment": "Share of the gap problems in the capability part",
+  "recipe": "Gap: in studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json, gap problems are rows with t2_right true and t1_right false (null or missing t1_right/t2_right: not a gap problem; cap hits keep their stored t1_right). Define kB = number of rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3} and score_v3 == 1, and kR the same in studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (cap-hit rows, null score_v3 and missing samples count as not right; a duplicated (problem_index, sample) uses its first row in file order). Assign each gap problem to the first rule that takes it: R1 budget: t1_cap_hit == true. R2 answer-statement: failure_type, lower-cased, contains any of 'format', 'final line', 'garbled', 'rejected', 'changed' (null or missing: not taken). R3 reliability: kB >= 1. R4 capability: kB == 0 and kR >= 2. Otherwise: unassigned. Statistic: (number of gap problems assigned to capability) / (number of gap problems).",
+  "unit": "fraction of gap problems",
+  "measured": 0.03076923076923077,
+  "n": 65,
+  "interval": [
+   0.0,
+   0.06153846153846154
+  ]
+ },
+ {
+  "round": "run-01",
+  "theory": "r5-account",
+  "kind": "offline",
+  "experiment": "Share of the gap problems no rule takes",
+  "recipe": "Gap: in studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json, gap problems are rows with t2_right true and t1_right false (null or missing t1_right/t2_right: not a gap problem; cap hits keep their stored t1_right). Define kB = number of rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3} and score_v3 == 1, and kR the same in studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (cap-hit rows, null score_v3 and missing samples count as not right; a duplicated (problem_index, sample) uses its first row in file order). Assign each gap problem to the first rule that takes it: R1 budget: t1_cap_hit == true. R2 answer-statement: failure_type, lower-cased, contains any of 'format', 'final line', 'garbled', 'rejected', 'changed' (null or missing: not taken). R3 reliability: kB >= 1. R4 capability: kB == 0 and kR >= 2. Otherwise: unassigned. Statistic: (number of gap problems assigned to unassigned) / (number of gap problems).",
+  "unit": "fraction of gap problems",
+  "measured": 0.03076923076923077,
+  "n": 65,
+  "interval": [
+   0.0,
+   0.06153846153846154
+  ]
+ },
+ {
+  "round": "run-01",
+  "theory": "r5-account",
+  "kind": "offline",
+  "experiment": "Fraction of budget-part problems on which a fresh base sample (random matched-norm difference cell, cue) is right",
+  "recipe": "Budget-part problems: gap problems (per_problem.json rows with t2_right true and t1_right false; null or missing: not a gap problem) with t1_cap_hit == true in studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. File iterate-runs:abaybektursun-1114-153047-6429/answers.jsonl (base + random matched-norm difference, cue, T 1.0 / top-p 1.0, MATH-500). Take the first row per problem_index in file order. A problem is right if that row has score_v3 == 1; a missing row or null score_v3 counts as wrong, and cap hits keep their stored score_v3. Statistic: right budget-part problems / budget-part problems.",
+  "unit": "fraction of problems",
+  "measured": 0.4375,
+  "n": 16,
+  "interval": [
+   0.25,
+   0.625
+  ]
+ },
+ {
+  "round": "run-01",
+  "theory": "r5-account",
+  "kind": "offline",
+  "experiment": "Fraction of budget-part problems on which at least one of the 4 independent attempt-0 base_cue samples also hit the cap",
+  "recipe": "Budget-part problems as in the previous recipe (gap problems with t1_cap_hit == true in studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json). File studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl, rows with attempt == 0 and sample in {0,1,2,3}; a duplicated (problem_index, sample) uses its first row in file order, and missing samples count as not a cap hit. A problem counts if at least one such row has cap_hit == true. Statistic: counted problems / budget-part problems.",
+  "unit": "fraction of problems",
+  "measured": 0.6875,
+  "n": 16,
+  "interval": [
+   0.5,
+   0.875
+  ]
+ },
+ {
+  "round": "run-01",
+  "theory": "r5-account",
+  "kind": "offline",
+  "experiment": "Fraction of answer-statement-part problems on which at least one of the base's 4 stored samples is unanswered or repaired by grader v4a",
+  "recipe": "Answer-statement-part problems: gap problems (per_problem.json rows with t2_right true and t1_right false; null or missing: not a gap problem) with t1_cap_hit != true whose failure_type, lower-cased, contains any of 'format', 'final line', 'garbled', 'rejected', 'changed', in studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. File studies/rlneurons/results/repair/offline-01/rows.jsonl, rows with model == 'base_cue' (samples 0-3). A problem counts if at least one of its base_cue rows has kind == 'no_answer', or has score_v4 == 1 and score_v3 == 0 (null scores count as 0). Missing rows do not count. Statistic: counted problems / answer-statement-part problems.",
+  "unit": "fraction of problems",
+  "measured": 0.1,
+  "n": 10,
+  "interval": [
+   0.0,
+   0.3
+  ]
+ },
+ {
+  "round": "run-01",
+  "theory": "r5-account",
+  "kind": "offline",
+  "experiment": "Fraction of reliability-part problems on which a fresh base sample (random matched-norm difference cell, cue) is right",
+  "recipe": "Reliability-part problems: gap problems (per_problem.json rows with t2_right true and t1_right false; null or missing: not a gap problem) of studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json with t1_cap_hit != true, with failure_type (lower-cased) containing none of 'format', 'final line', 'garbled', 'rejected', 'changed' (null counts as containing none), and with kB >= 1, where kB = number of rows in studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3}, score_v3 == 1 (first row per (problem_index, sample)). File iterate-runs:abaybektursun-1114-153047-6429/answers.jsonl, first row per problem_index. Right = score_v3 == 1; a missing row or null score_v3 counts as wrong. Statistic: right reliability-part problems / reliability-part problems.",
+  "unit": "fraction of problems",
+  "measured": 0.6,
+  "n": 35,
+  "interval": [
+   0.45714285714285713,
+   0.7428571428571429
+  ]
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m01",
+  "kind": "offline",
+  "experiment": "Does pre-loop compressibility predict a later rule-A loop in cued base answers at T 0.6 / top-p 1.0?",
+  "recipe": "File iterate-runs:abaybektursun-1114-151718-d4fa/answers.jsonl (run_cell rows, 500 MATH-500 answers). Keep rows with len(text) >= 6000 characters that either have loop_A false or have loop_A true with onset_A_char >= 7000 (rows with loop_A true and onset_A_char missing or below 7000 are dropped). For each kept row compute s = len(zlib.compress(text[:6000].encode('utf-8'), 9)) / len(text[:6000].encode('utf-8')). Statistic: AUROC of -s as a score for loop_A == true over the kept rows (Mann-Whitney form, ties count 0.5). Cap hits are not used as the label; only loop_A is. Report the number of kept rows and positives.",
+  "unit": null,
+  "measured": 0.6705288175876412,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m01",
+  "kind": "offline",
+  "experiment": "Is the cued base's opening text at T 0.6 more self-similar than RL's opening text on the same problem?",
+  "recipe": "Files s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (base, cue) and s3://pg-lineage-769063704696/results/rlneurons/r3/s2800-01/out/P_math500.jsonl (RL step 2,800, plain). Use only rows with sample == 0 in each file. Pair the two files by problem_index. Keep pairs where both texts have len(text) >= 3000 characters; problems missing from either file are excluded. For each pair compute rB = ratio(base.text[:3000]) and rR = ratio(rl.text[:3000]), with ratio(s) = len(zlib.compress(s.encode('utf-8'), 9)) / len(s.encode('utf-8')). Score 1 if rB < rR, 0.5 if they are equal, else 0. Statistic: mean score over kept pairs. Report the number of kept pairs.",
+  "unit": null,
+  "measured": 0.6334405144694534,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m01",
+  "kind": "offline",
+  "experiment": "Within each prefix kind of the RLN-4 K continuations, does compressibility of the stored text predict a cap hit?",
+  "recipe": "Files s3://pg-lineage-769063704696/results/rlneurons/r4/modal_k-01/k_a/K_own.jsonl and .../k_a/K_rl.jsonl (rln4_gen rows; prefix_kind own_prefix / rl_prefix). Use the stored text field as it is. Keep rows with len(text) >= 3000 characters, and drop rows with loop_A true and onset_A_char missing or below 4000. For each kept row compute s = len(zlib.compress(text[:3000].encode('utf-8'), 9)) / len(text[:3000].encode('utf-8')). Within each file separately, compute the AUROC of -s as a score for cap_hit == true (Mann-Whitney, ties count 0.5); if a file has no cap hits or no non-cap rows after filtering, its AUROC is undefined and the statistic is the other file's AUROC. Statistic: the unweighted mean of the two AUROCs. Report each AUROC and its row counts.",
+  "unit": null,
+  "measured": 0.5584900564423672,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m02",
+  "kind": "offline",
+  "experiment": "Pooled within-problem concordance of length with wrongness for the cued base: over all (right, wrong) pairs of finished attempt-0 samples of the same problem, the fraction in which the wrong sample has more new tokens.",
+  "recipe": "File studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. Keep rows with attempt == 0 and cap_hit == false; drop rows whose score_v3 is null/missing. Group by problem_index. Within each problem, form every pair (i, j) with score_v3_i == 1 and score_v3_j == 0. Pair value: 1 if n_new_j > n_new_i, 0.5 if n_new_j == n_new_i, 0 otherwise. Statistic = sum of pair values over all problems / total number of pairs over all problems. Problems with no such pair contribute nothing. Cap-hit rows and later attempts are not used.",
+  "unit": null,
+  "measured": 0.6222222222222222,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m02",
+  "kind": "offline",
+  "experiment": "The same pooled within-problem concordance for the RL model.",
+  "recipe": "File studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl. Keep rows with attempt == 0 and cap_hit == false; drop rows whose score_v3 is null/missing. Group by problem_index. Within each problem, form every pair (i, j) with score_v3_i == 1 and score_v3_j == 0. Pair value: 1 if n_new_j > n_new_i, 0.5 if n_new_j == n_new_i, 0 otherwise. Statistic = sum of pair values over all problems / total number of pairs over all problems. Problems with no such pair contribute nothing.",
+  "unit": null,
+  "measured": 0.717948717948718,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m02",
+  "kind": "offline",
+  "experiment": "Mean within-problem Spearman correlation of n_new with score_v3 for the cued base, over problems whose finished attempt-0 samples include at least one right and one wrong.",
+  "recipe": "File studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. Keep rows with attempt == 0 and cap_hit == false; drop rows with null/missing score_v3. Group by problem_index; keep problems with at least one row with score_v3 == 1 and at least one with score_v3 == 0. For each kept problem compute the Spearman rank correlation between n_new and score_v3 over its kept rows (ties get average ranks; skip a problem if all its n_new are equal). Statistic = unweighted mean of the per-problem correlations.",
+  "unit": null,
+  "measured": -0.2005220257109175,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m04",
+  "kind": "offline",
+  "experiment": "Wait-rate-based share estimate in theta0.25_plain against the plain base and RL plain endpoints",
+  "recipe": "Files: theta0.25_plain = iterate-runs:abaybektursun-1114-163704-ffca/answers.jsonl; T2 (RL plain) = s3 r4/modal_t2-01/t2/T2.jsonl; T3 (base plain) = s3 r4/modal_t3-01/t3/T3.jsonl. Use all rows of each file (500 each, cap hits included, no filtering; if a problem_index occurs twice keep the first row; missing rows are simply absent). For each row, rate = 1000 * (number of matches of the case-sensitive regex \\bWait\\b in the field text) / max(n_new, 1). Let m = median of the T2 rates (numpy.median). F_X = fraction of rows of file X with rate >= m (ties at m count as >=). Compute F_theta, F_T2, F_T3. Statistic S = (F_theta - F_T3) / (F_T2 - F_T3). Report S to 3 decimals.",
+  "unit": null,
+  "measured": 0.327,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m04",
+  "kind": "offline",
+  "experiment": "Answer-format-based share estimate in theta0.25_plain against the plain base",
+  "recipe": "Files: theta0.25_plain = iterate-runs:abaybektursun-1114-163704-ffca/answers.jsonl; T3 = s3 r4/modal_t3-01/t3/T3.jsonl. All rows, cap hits included; first row per problem_index. A row is an 'answer-line' row if its text field contains no occurrence of the substring \\boxed AND at least one line of the text, after stripping leading whitespace and any leading '*' or '#' characters, starts with the case-sensitive string 'Answer:'. s_X = (answer-line rows of X) / (rows of X). Statistic P = 1 - s_theta / s_T3. If s_T3 < 0.05 the statistic is undefined.",
+  "unit": null,
+  "measured": 0.716,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m04",
+  "kind": "offline",
+  "experiment": "Accuracy of theta0.25_plain boxed answers against RL plain on the same problems",
+  "recipe": "Files: theta0.25_plain = iterate-runs:abaybektursun-1114-163704-ffca/answers.jsonl (field score_v3); studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (field t2_right, grader v3, keyed by problem_index). Keep theta rows whose text contains the substring \\boxed (cap hits included if they contain it; first row per problem_index). Drop rows whose problem_index has no entry in per_problem.json. For each kept row d = score_v3 (as 0/1; missing or null score_v3 counts as 0) - t2_right (as 0/1). Statistic D = mean of d over kept rows.",
+  "unit": null,
+  "measured": -0.0462,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m04",
+  "kind": "offline",
+  "experiment": "Wait-rate-based share estimate in theta0.25_cue against the cued base and RL cue endpoints",
+  "recipe": "Files: theta0.25_cue = iterate-runs:abaybektursun-1114-153102-b029/answers.jsonl; RL cue = iterate-runs:abaybektursun-1114-153110-e985/answers.jsonl; T1 (base cue) = s3 r4/base_rl-02/out/T1.jsonl. All rows, cap hits included, first row per problem_index. rate = 1000 * (matches of case-sensitive regex \\bWait\\b in text) / max(n_new, 1). m = numpy.median of the RL-cue rates. F_X = fraction of rows of X with rate >= m. S_cue = (F_theta - F_T1) / (F_RLcue - F_T1). If F_RLcue - F_T1 < 0.1 the statistic is undefined.",
+  "unit": null,
+  "measured": 0.212,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m07",
+  "kind": "offline",
+  "experiment": "MATH-500: share of RL's wrong finished samples whose answer equals one of the base's wrong finished answers on the same problem",
+  "recipe": "Files: studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (base) and studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (RL). Keep rows with attempt == 0 only (4 samples per problem per model). A row is 'answered' iff cap_hit is false and extracted_v3 is a non-empty string after normalisation; a row is 'wrong' iff answered and score_v3 == 0. Normalise extracted_v3 by: delete all whitespace; strip leading/trailing '$'; replace '\\dfrac' and '\\tfrac' with '\\frac'; delete '\\left' and '\\right'; delete one trailing '.'. Base wrong set W_b(p) = set of normalised extracted_v3 of base wrong rows on problem_index p. Denominator: all RL wrong rows (all problems). Numerator: RL wrong rows whose normalised extracted_v3 is in W_b(p) for their problem (empty W_b counts as no match). Missing problem rows count as empty sets. Report numerator/denominator.",
+  "unit": null,
+  "measured": 0.26717557251908397,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m07",
+  "kind": "offline",
+  "experiment": "MATH-500: on problems where the base repeats a wrong value, share of RL's wrong finished samples that equal the base's most frequent wrong value",
+  "recipe": "Same files, filters, 'answered', 'wrong' and normalisation as the first prediction (attempt == 0 only). For each problem p, count normalised extracted_v3 strings over base wrong rows; p is an 'attractor problem' iff the maximum count is >= 2. Modal set M(p) = all strings with that maximum count (ties: all tied strings are in M(p)). Denominator: RL wrong rows on attractor problems. Numerator: those whose normalised extracted_v3 is in M(p). Report numerator/denominator; if the denominator is 0, report 0.",
+  "unit": null,
+  "measured": 0.34615384615384615,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m07",
+  "kind": "offline",
+  "experiment": "MATH-500: RL vote fix rate on base-vote-wrong problems where the base has a repeated wrong value",
+  "recipe": "Attractor problems as defined in the second prediction (from rows.jsonl, attempt == 0, base wrong rows, max count of one normalised wrong string >= 2). Vote outcomes from studies/rlneurons/results/day1_3/math500_base_cue-01/readout.json and studies/rlneurons/results/day1_3/math500_rl-01/readout.json, key per_problem, procedure 'vote' (0/1). Set A = problems with base vote == 0 that are attractor problems. Report the fraction of A with RL vote == 1. Problems missing from either readout are dropped.",
+  "unit": null,
+  "measured": 0.75,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m07",
+  "kind": "offline",
+  "experiment": "MATH-500: RL vote fix rate on base-vote-wrong problems without a repeated base wrong value",
+  "recipe": "Same files and definitions as the third prediction. Set B = problems with base vote == 0 that are NOT attractor problems (no normalised base wrong string appears in >= 2 of the base's 4 attempt-0 rows; this includes problems whose base rows are all cap hits or unanswered). Report the fraction of B with RL vote == 1. Problems missing from either readout are dropped.",
+  "unit": null,
+  "measured": 0.47368421052631576,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m07",
+  "kind": "offline",
+  "experiment": "hard328: when both single samples are wrong and finished, share where base and RL give the same answer",
+  "recipe": "Files: s3 results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (base cue) and .../abaybektursun-1114-151540-86ef/answers.jsonl (RL plain). One row per problem_index; join on problem_index. 'Answered' and 'wrong' and normalisation exactly as in the first prediction (cap_hit false, non-empty normalised extracted_v3, score_v3 == 0). Denominator: problems where both rows are wrong. Numerator: those where the two normalised extracted_v3 strings are identical. Problems missing in either file are dropped.",
+  "unit": null,
+  "measured": 0.19047619047619047,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m08",
+  "kind": "offline",
+  "experiment": "Standardised paired gap (RL plain minus base cue, grader v3) on the clean harder 328, post-cutoff problems minus pre-cutoff problems, matched on RL answer length.",
+  "recipe": "Files: s3 results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (base cue) and .../abaybektursun-1114-151540-86ef/answers.jsonl (RL plain). Join on unique_id and drop any unique_id missing from either file. Source label of each unique_id: as recorded in results/rln3/rln3_overlap.json (the file whose flag == 'none' items define the 328). post = AIME 2025 or HMMT Feb 2025; pre = every other source. right = score_v3 == 1 as stored; cap hits keep their stored score_v3 (normally 0). Strata: sort the joined problems by the RL row's n_generated ascending, break ties by unique_id ascending, and cut into 4 consecutive groups of equal size (the remainder goes to the last group). In each stratum s and group g, d_gs = mean over problems of (RL right - base right). Weights w_s = (number of post problems in s) / (number of post problems). Drop any stratum that has post problems but no pre problems, and renormalise w over the remaining strata. G_g = sum_s w_s * d_gs. Statistic = 100 * (G_post - G_pre), in points.",
+  "unit": null,
+  "measured": 6.880146785807161,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m08",
+  "kind": "offline",
+  "experiment": "On harder-328 problems both models solve, the base's answer length relative to RL's, pre-cutoff minus post-cutoff.",
+  "recipe": "Same two files, join, drops and post/pre labels as the first prediction. Keep problems where score_v3 == 1 in both rows and cap_hit is false in both rows. For each, r = ln(base n_generated / RL n_generated). Statistic = median of r over kept pre problems minus median of r over kept post problems (for an even count, the median is the mean of the two middle values). If fewer than 5 post problems are kept, the statistic is recorded as missing and the prediction counts as refuted.",
+  "unit": null,
+  "measured": 0.14265940956097878,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m08",
+  "kind": "offline",
+  "experiment": "MATH-500: per-token entropy of the cued base's own short right answers relative to its long right answers.",
+  "recipe": "Files: studies/rlneurons/results/rln5/map-01/checks.json (key per_row, list T1) and studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. For each T1 row, per-token entropy e = sum_entropy_own / n_own. Drop rows with n_own == 0. Join with per_problem.json on problem_index. Keep problems with t1_right true and t1_cap_hit false. short = t1_generated_tokens <= 2000; long = t1_generated_tokens > 2000. Statistic = median e over short / median e over long (median as in the second prediction).",
+  "unit": null,
+  "measured": 0.8447792982569907,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m09",
+  "kind": "offline",
+  "experiment": "MATH-500: Code-RL cue accuracy on problems where the cued base hit the cap and was wrong",
+  "recipe": "Read studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json; select problems with t1_right == 0 and t1_cap_hit == true. Fetch iterate-runs:abaybektursun-1114-162452-0203/answers.jsonl (code_cue); join on problem_index (if an index has several rows, use the first in file order; a missing row counts as wrong). Statistic: number of selected problems with score_v3 == 1 in 0203, divided by the number of selected problems.",
+  "unit": null,
+  "measured": 0.48148148148148145,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m09",
+  "kind": "offline",
+  "experiment": "MATH-500: Code-RL cue fix rate minus random-difference cue fix rate on base clean-finished-wrong problems",
+  "recipe": "Read studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json; select problems with t1_right == 0 and t1_cap_hit == false (set W). Fetch iterate-runs:abaybektursun-1114-162452-0203/answers.jsonl (code_cue) and iterate-runs:abaybektursun-1114-153047-6429/answers.jsonl (random_cue); join each on problem_index (first row in file order per index; a missing row counts as wrong). Statistic: (count of W with score_v3 == 1 in 0203 minus count of W with score_v3 == 1 in 6429) divided by |W|.",
+  "unit": null,
+  "measured": 0.14285714285714285,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m09",
+  "kind": "offline",
+  "experiment": "MATH-500: cap-hit rate of Code-RL cue answers",
+  "recipe": "Fetch iterate-runs:abaybektursun-1114-162452-0203/answers.jsonl; keep the first row per problem_index (500 problems). Statistic: number of rows with cap_hit == true divided by 500 (a missing problem counts as not a cap hit but stays in the denominator).",
+  "unit": null,
+  "measured": 0.014,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m09",
+  "kind": "offline",
+  "experiment": "hard328: Code-RL cue accuracy on problems where the cued base hit the cap and was wrong",
+  "recipe": "Fetch s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (base cue) and s3://pg-lineage-769063704696/results/rlneurons/r5/day1_wdiff328-01/abaybektursun-1114-181216-a619/answers.jsonl (Code-RL cue). First row per problem_index in each. Select problems where e72c has cap_hit == true and score_v3 == 0. Statistic: number of selected problems with a619 score_v3 == 1 divided by the number selected; a problem missing from a619 counts as wrong; problems missing from e72c are excluded.",
+  "unit": null,
+  "measured": 0.13513513513513514,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m09",
+  "kind": "offline",
+  "experiment": "hard328: Code-RL cue accuracy on problems where the cued base finished without a cap hit and was wrong",
+  "recipe": "Same two files and first-row rule as the previous recipe (e72c base cue, a619 Code-RL cue). Select problems where e72c has cap_hit == false and score_v3 == 0. Statistic: number of selected problems with a619 score_v3 == 1 divided by the number selected; a problem missing from a619 counts as wrong; problems missing from e72c are excluded.",
+  "unit": null,
+  "measured": 0.3,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m09",
+  "kind": "offline",
+  "experiment": "hard328: cap-hit rate of Code-RL cue answers",
+  "recipe": "Fetch s3://pg-lineage-769063704696/results/rlneurons/r5/day1_wdiff328-01/abaybektursun-1114-181216-a619/answers.jsonl; first row per problem_index. Statistic: number of rows with cap_hit == true divided by 328 (a missing problem counts as not a cap hit but stays in the denominator).",
+  "unit": null,
+  "measured": 0.07621951219512195,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m10",
+  "kind": "offline",
+  "experiment": "Paired cap-hit rate difference, RL step 100 minus base, plain MATH-500 at T 0.6 / top-p 0.95.",
+  "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0100/P_math500.jsonl (A) and s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/P_math500.jsonl (B). In each file keep only rows with sample == 0. If a problem_index appears more than once, keep the first row in file order. Keep the problem_index values present in both A and B (set S; problems missing from either file are dropped). Statistic: (number of rows in A over S with cap_hit true) / |S| minus (number of rows in B over S with cap_hit true) / |S|. cap_hit is the boolean field; a row with finish_reason == 'length' and cap_hit missing counts as a cap hit. Report the difference as a fraction.",
+  "unit": null,
+  "measured": 0.07599999999999998,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m10",
+  "kind": "offline",
+  "experiment": "Paired cap-hit rate difference, RL step 400 minus base, plain MATH-500 at T 0.6 / top-p 0.95.",
+  "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl (A) and s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/P_math500.jsonl (B). In each file keep only rows with sample == 0. If a problem_index appears more than once, keep the first row in file order. Keep the problem_index values present in both (set S; missing problems dropped). Statistic: fraction of S with cap_hit true in A minus fraction of S with cap_hit true in B. A row with cap_hit missing and finish_reason == 'length' counts as a cap hit.",
+  "unit": null,
+  "measured": 0.066,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m10",
+  "kind": "offline",
+  "experiment": "Paired cap-hit rate difference, RL step 400 minus base, plain prompt, clean harder 328 at T 0.6 / top-p 0.95.",
+  "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_hard.jsonl (A), s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/P_hard.jsonl (B), and the clean list results/rln3/rln3_overlap.json (keep the problems whose flag == 'none'). Match rows to the clean list by unique_id. Keep rows with sample == 0 and, for duplicates, the first in file order. Keep the clean problems present in both A and B (set S; missing ones dropped). Statistic: fraction of S with cap_hit true in A minus fraction of S with cap_hit true in B. cap_hit missing with finish_reason == 'length' counts as a cap hit.",
+  "unit": null,
+  "measured": 0.0701219512195122,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m10",
+  "kind": "offline",
+  "experiment": "Share of step-400 cap hits that are rule-A loops, plain MATH-500 at T 0.6 / top-p 0.95.",
+  "recipe": "File: s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl. Keep sample == 0 and, for duplicates, the first row in file order. Keep the rows with cap_hit true (cap_hit missing and finish_reason == 'length' also counts). For each such row, apply rule A to the text field. For every character position p that is 0 or follows a newline, with at least 8,000 characters from p to the end, take w = text[p:p+8000] and compute r = len(zlib.compress(w.encode('utf-8'))) / len(w.encode('utf-8')), using Python zlib at its default level. The row is a loop if any such r < 0.10. A row with fewer than 8,000 characters is not a loop. Statistic: loop rows / cap-hit rows. If there are no cap-hit rows, the statistic is undefined.",
+  "unit": null,
+  "measured": 0.7959183673469388,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m12",
+  "kind": "offline",
+  "experiment": "Exact-string match to gold among answers that v3 grades right, RL minus base, on non-integer-gold problems that both models got right.",
+  "recipe": "Files: the e72c (base cue) and 86ef (RL plain) answers.jsonl named above. Join on problem_index. Keep the problems where N(gold) is non-integer (N and the integer test as in the first recipe) and score_v3 == 1 in both files. For each model, the indicator is 1 iff N(extracted_v3) == N(gold) as strings. Statistic: (mean indicator for 86ef) minus (mean indicator for e72c) over the kept problems. A problem missing from either file is dropped. An empty extracted_v3 counts as 0.",
+  "unit": null,
+  "measured": 0.03125,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m01",
+  "kind": "duel",
+  "experiment": "Within one problem, cued base at T 0.6 / top-p 0.95: is the opening of a sample that hit the cap more compressible than the opening of a fresh restart of the same problem that finished?",
+  "recipe": "Files s3://pg-lineage-769063704696/results/rlneurons/r4/modal_k-01/k_b/K_fresh.jsonl (rln4_gen rows) and s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (rln3_gen rows). Define ratio(s) = len(zlib.compress(s.encode('utf-8'), 9)) / len(s.encode('utf-8')) (Python zlib, level 9). For each problem_index in K_fresh, take its K_fresh row; if there are several, take the one with the lowest sample. Keep the problem only if that K row has cap_hit false, len(text) >= 3000, and not (loop_A true with onset_A_char missing or < 3000). Its partner F row is the F_math500 row with the same problem_index and cap_hit true; if there are several, take the lowest sample. Drop the problem if there is no such F row, if len(F.text) < 3000, or if ratio(F.text[:8000]) < 0.10. For each kept problem compute rF = ratio(F.text[:3000]) and rK = ratio(K.text[:3000]). Score 1 if rF < rK, 0.5 if they are equal, else 0. Statistic: mean score over kept problems. Report the number of kept problems.",
+  "unit": "fraction of problems",
+  "measured": 0.8043478260869565,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m01",
+  "kind": "duel",
+  "experiment": "Does problem difficulty, measured by RL's answer length on the same problem, predict a later rule-A loop in the cued base at T 0.6 / top-p 1.0, on the same rows where early compressibility was tested?",
+  "recipe": "Files iterate-runs:abaybektursun-1114-151718-d4fa/answers.jsonl (run_cell rows, base cue, T 0.6 / top-p 1.0) and s3://pg-lineage-769063704696/results/rlneurons/r3/s2800-01/out/P_math500.jsonl (rln3_gen rows, RL step 2,800, plain). From the d4fa file, keep rows with len(text) >= 6000 characters that either have loop_A false or have loop_A true with onset_A_char >= 7000; drop rows with loop_A true and onset_A_char missing or < 7000. Join each kept row by problem_index to the P_math500 row with sample == 0; drop rows with no such RL row. Score each kept row with d = the RL row's n_generated; RL cap hits keep their n_generated as stored. Statistic: AUROC of d as a score for loop_A == true (Mann-Whitney form, ties count 0.5). Report the number of kept rows and positives.",
+  "unit": "AUROC",
+  "measured": 0.6433452168746286,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m01",
+  "kind": "duel",
+  "experiment": "Does early compressibility still predict a rule-A loop once problems are matched on difficulty (AUROC computed within quartiles of RL answer length)?",
+  "recipe": "Files iterate-runs:abaybektursun-1114-151718-d4fa/answers.jsonl and s3://pg-lineage-769063704696/results/rlneurons/r3/s2800-01/out/P_math500.jsonl. From d4fa, keep rows with len(text) >= 6000 characters that either have loop_A false or have loop_A true with onset_A_char >= 7000 (drop loop_A true with onset_A_char missing or < 7000). Join each kept row by problem_index to the P_math500 row with sample == 0; drop rows with no such RL row. For each kept row compute s = len(zlib.compress(text[:6000].encode('utf-8'), 9)) / len(text[:6000].encode('utf-8')) and d = the RL row's n_generated. Compute q1, q2, q3 = numpy.percentile(d over kept rows, [25, 50, 75]) (default linear interpolation). Stratum 1 = d <= q1, 2 = q1 < d <= q2, 3 = q2 < d <= q3, 4 = d > q3. Within each stratum, form every pair of one row with loop_A true and one row with loop_A false; a pair scores 1 if s_pos < s_neg, 0.5 if they are equal, else 0. Statistic: total score over all within-stratum pairs divided by the total number of within-stratum pairs (a stratum with no positives or no negatives contributes nothing). Report the number of pairs and positives per stratum.",
+  "unit": "AUROC",
+  "measured": 0.6447368421052632,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m01",
+  "kind": "duel",
+  "experiment": "On the 78-problem K pool, restricted to problems where the RL-prefix continuation's opening text is at least as compressible as the own-prefix continuation's: how much more often does the RL-prefix arm finish than the own-prefix arm?",
+  "recipe": "Files s3://pg-lineage-769063704696/results/rlneurons/r4/modal_k-01/k_a/K_rl.jsonl, s3://pg-lineage-769063704696/results/rlneurons/r4/modal_k-01/k_a/K_own.jsonl and s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/K_rl.jsonl (all rln4_gen rows). Define ratio(s) = len(zlib.compress(s.encode('utf-8'), 9)) / len(s.encode('utf-8')) (Python zlib, level 9), and use the stored text field as it is. For each problem_index present in both modal_k-01 K_rl and K_own: take the row with the lowest sample in each file. Drop the problem if either text has len < 3000 characters. rR = ratio(modal K_rl text[:3000]); rO = ratio(K_own text[:3000]). Keep the problem only if rR <= rO. finish_rl = mean of (cap_hit == false) over the modal_k-01 K_rl row and, if one exists, the lowest-sample base_rl-02 K_rl row of the same problem_index (so 0, 0.5 or 1). finish_own = 1 if the K_own row has cap_hit == false, else 0. Statistic: mean over kept problems of (finish_rl - finish_own). Report the number of kept problems and how many of them have a base_rl-02 row.",
+  "unit": "difference in fraction of problems finished",
+  "measured": 0.375,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m01",
+  "kind": "duel",
+  "experiment": "Among the cued base's rule-A loops at T 0.6 / top-p 1.0, does a more compressible opening bring the loop onset earlier (rank correlation of opening compressibility with onset position)?",
+  "recipe": "File iterate-runs:abaybektursun-1114-151718-d4fa/answers.jsonl (run_cell rows). Keep rows with loop_A == true and onset_A_char present and >= 4000; drop all other rows. For each kept row compute s = len(zlib.compress(text[:3000].encode('utf-8'), 9)) / len(text[:3000].encode('utf-8')) (Python zlib, level 9). Statistic: Spearman rank correlation between s and onset_A_char over the kept rows (scipy.stats.spearmanr, average ranks for ties). Report the number of kept rows.",
+  "unit": "Spearman rho",
+  "measured": -0.07436226738183375,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m08",
+  "kind": "duel",
+  "experiment": "Independent replication at T 0.6 of the stratified post-minus-pre paired gap (RL plain minus base cue) on the clean harder 328, matched on RL answer length, using different samples and a different decoding setting from tests.json.",
+  "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_hard.jsonl (base, cue, T 0.6 / top-p 0.95) and s3://pg-lineage-769063704696/results/rlneurons/r3/s2800-01/out/P_hard.jsonl (RL step 2,800, plain, T 0.6 / top-p 0.95). If a file has more than one row per unique_id, keep the row with the smallest sample value. Keep only unique_ids whose flag == 'none' in results/rln3/rln3_overlap.json, join the two files on unique_id, and drop any unique_id missing from either file. Source label from rln3_overlap.json: post = AIME 2025 or HMMT Feb 2025; pre = every other source. right = (score == 1), using the stored v1 score field; cap hits and rows with no extracted answer count as their stored score (0 if score is null). Strata: sort the joined problems by the RL row's n_generated ascending, break ties by unique_id ascending, and cut into 4 consecutive groups of equal size (the remainder goes to the last group). In each stratum s and group g (post/pre), d_gs = mean over problems of (RL right - base right). w_s = (number of post problems in s) / (number of post problems). Drop any stratum that has post problems but no pre problems, and renormalise w over the remaining strata. G_g = sum_s w_s * d_gs. Statistic = 100 * (G_post - G_pre), in points.",
+  "unit": "points",
+  "measured": -5.63942436083997,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m08",
+  "kind": "duel",
+  "experiment": "Independent replication at T 0.6 of the both-right base/RL length comparison: median log length ratio, pre-cutoff minus post-cutoff, on the clean harder 328.",
+  "recipe": "Same two files, row choice, 328 filter, join, drops and post/pre labels as the first test here (r3/base-01 F_hard.jsonl base cue; r3/s2800-01 P_hard.jsonl RL plain). Keep problems where score == 1 (stored v1) in both rows and cap_hit is false in both rows. For each kept problem, r = ln(base n_generated / RL n_generated). Statistic = median of r over kept pre problems minus median of r over kept post problems (for an even count, the median is the mean of the two middle values). If no post problem is kept, recompute with the cap_hit condition removed, keeping score == 1 in both rows.",
+  "unit": "difference of median log length ratios",
+  "measured": -0.19431648776581323,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m08",
+  "kind": "duel",
+  "experiment": "MATH-500: per-token entropy of the RL model's own short right answers relative to its own long right answers (the RL-side counterpart of test 3).",
+  "recipe": "Files: studies/rlneurons/results/rln5/map-01/checks.json (key per_row, list T2) and studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. For each T2 row, per-token entropy e = sum_entropy_own / n_own. Drop rows with n_own == 0 or missing. Join with per_problem.json on problem_index. Keep problems with t2_right true and t2_cap_hit false. short = t2_generated_tokens <= 2000; long = t2_generated_tokens > 2000. Statistic = median e over short / median e over long (for an even count, the median is the mean of the two middle values).",
+  "unit": "ratio",
+  "measured": 0.7662885079105015,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m08",
+  "kind": "duel",
+  "experiment": "MATH-500, 4 independent samples per model at T 1.0: on problems that both models solve every time and where the base's typical answer is short, how much the base's answer length varies across its own samples, relative to how much RL's varies (median log ratio of coefficients of variation).",
+  "recipe": "Files: studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (base) and studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (RL). Use only rows with attempt == 0. For each model and problem_index, collect the attempt-0 rows for samples 0, 1, 2 and 3. Keep a problem only if both models have all four attempt-0 rows, and every one of those 8 rows has score_v3 == 1 and cap_hit false. Missing rows exclude the problem; there are no ties to break. For each kept problem and model, take the 4 values of n_new, and set CV = (population standard deviation, ddof = 0) / (mean). Drop any problem where either model's CV is 0. Short problems are those where the median of the base's 4 n_new values (the mean of the two middle values) is <= 2000. For each short problem, compute L = ln(CV_base / CV_RL). Statistic = median of L over short problems (for an even count, the mean of the two middle values).",
+  "unit": "log ratio",
+  "measured": 0.5180097906045676,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m08",
+  "kind": "duel",
+  "experiment": "MATH-500, same 4-sample rows: base-versus-RL length variability on short problems minus the same on long problems (difference in median log CV ratios).",
+  "recipe": "Same files, attempt-0 rows, kept problems (all 8 rows score_v3 == 1 and cap_hit false), CV definition, zero-CV drops and L = ln(CV_base / CV_RL) as in the first test here. Short = median of the base's 4 n_new values <= 2000; long = that median > 2000. Statistic = (median L over short problems) - (median L over long problems), with each median taken as in the first test (for an even count, the mean of the two middle values).",
+  "unit": "difference of log ratios",
+  "measured": -0.020345857212325513,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m10",
+  "kind": "duel",
+  "experiment": "Share of RL step-100 plain MATH-500 answers (T 0.6 / top-p 0.95) that open in the 'Okay' deliberation format.",
+  "recipe": "File: s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0100/P_math500.jsonl. Keep rows with sample == 0. If a problem_index appears more than once, keep the first row in file order. For each kept row take the text field (empty or missing text counts as not matching). The row matches if the substring 'Okay' (case-sensitive) occurs within the first 30 characters of text. Statistic: matching rows / kept rows. Cap-hit rows are included like any other row.",
+  "unit": "fraction of problems",
+  "measured": 0.956,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m10",
+  "kind": "duel",
+  "experiment": "Paired cap-hit rate difference at RL step 400, cued prompt minus plain prompt, MATH-500 at T 0.6 / top-p 0.95.",
+  "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/F_math500.jsonl (A, cue) and s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl (B, plain). In each file keep only rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. Keep problem_index values present in both A and B (set S; problems missing from either are dropped). A row is a cap hit if cap_hit is true, or if cap_hit is missing and finish_reason == 'length'. Statistic: (cap hits in A over S) / |S| minus (cap hits in B over S) / |S|.",
+  "unit": "fraction of problems",
+  "measured": -0.027999999999999997,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m10",
+  "kind": "duel",
+  "experiment": "Ratio of median generated length of finished answers, RL step 100 over base, plain MATH-500 at T 0.6 / top-p 0.95.",
+  "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0100/P_math500.jsonl (A) and s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/P_math500.jsonl (B). In each file keep rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. Keep problem_index values present in both files (set S). In each file, finished rows = rows in S with cap_hit false (if cap_hit is missing, finished only if finish_reason == 'stop'); each file's finished set is taken separately (unpaired). Length = the n_new field (rows with n_new missing are dropped). Statistic: median length of A's finished rows divided by median length of B's finished rows (median of an even count = mean of the two middle values).",
+  "unit": "ratio of medians",
+  "measured": 2.251572327044025,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m10",
+  "kind": "duel",
+  "experiment": "Per-token sharpness of RL step-100 finished answers relative to the cued base: share of step-100 plain finished answers whose mean_logprob exceeds the median mean_logprob of the cued base's finished answers, MATH-500, T 0.6 / top-p 0.95.",
+  "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (R, reference) and s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0100/P_math500.jsonl (X). In each file keep rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. Keep problem_index values present in both files (set S). In each file, finished rows = rows in S with cap_hit false (if cap_hit is missing, finished only if finish_reason == 'stop'). Drop rows whose mean_logprob field is missing, null or non-finite. Let M = median of mean_logprob over R's finished rows (even count: mean of the two middle values). Statistic: (number of X finished rows with mean_logprob strictly greater than M) / (number of X finished rows). Ties with M count as not greater. Cap-hit rows are excluded from both files.",
+  "unit": "fraction of finished answers",
+  "measured": 0.5541561712846348,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m10",
+  "kind": "duel",
+  "experiment": "Same sharpness share at RL step 400: share of step-400 plain finished answers whose mean_logprob exceeds the median mean_logprob of the cued base's finished answers, MATH-500, T 0.6 / top-p 0.95.",
+  "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (R, reference) and s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl (X). In each file keep rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. Keep problem_index values present in both files (set S). In each file, finished rows = rows in S with cap_hit false (if cap_hit is missing, finished only if finish_reason == 'stop'). Drop rows whose mean_logprob field is missing, null or non-finite. Let M = median of mean_logprob over R's finished rows (even count: mean of the two middle values). Statistic: (number of X finished rows with mean_logprob strictly greater than M) / (number of X finished rows). Ties with M count as not greater. Cap-hit rows are excluded from both files.",
+  "unit": "fraction of finished answers",
+  "measured": 0.48009950248756217,
+  "n": null,
+  "interval": null
+ },
+ {
+  "round": "round-04",
+  "theory": "r4-m10",
+  "kind": "duel",
+  "experiment": "Where step 400's median per-token log-prob on finished answers lies between the cued base and step 2,800, plain prompt for RL checkpoints, MATH-500, T 0.6 / top-p 0.95.",
+  "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (R), s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl (M) and s3://pg-lineage-769063704696/results/rlneurons/r3/s2800-01/out/P_math500.jsonl (E). In each file keep rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. Keep problem_index values present in all three files (set S). In each file, finished rows = rows in S with cap_hit false (if cap_hit is missing, finished only if finish_reason == 'stop'). Drop rows whose mean_logprob is missing, null or non-finite. med_X = median of mean_logprob over X's finished rows (even count: mean of the two middle values). Statistic: (med_M - med_R) / (med_E - med_R). If med_E - med_R equals 0, report undefined.",
+  "unit": "fraction of the cued-base-to-step-2800 distance",
+  "measured": 0.06726598846379954,
+  "n": null,
+  "interval": null
+ }
+]
