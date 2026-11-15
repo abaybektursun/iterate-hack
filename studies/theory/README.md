@@ -564,6 +564,25 @@ result-95a4dc). f2-m03 (the 8 directions set only when the base stops) was outsi
 on all three (-7.07 nats); f2-m05 wrong on its one (t10). P3 so far: 0 of 4 disagreements right (needs 8 to decide).
 P2 not decided.
 
+Third score (2026-11-15 15:28 UTC, `scores-2026-11-15T152845.*` and `scores-2026-11-15T152839.*`; `score` now writes a
+time-stamped pair when `scores.json` exists). The autobench result (result-6e7b64: 338 of 400, 139 of 328, dev100 84.0)
+adds 2 targets to run-01 and 3 to run-02. run-01, 11 of 20 measured: reader-2 10 of 11 inside, +3.01 nats; reader-1 7 of 11,
+-8.36; r5-m03-rival 3 of 3, +1.83. t14 (autobench on hard328, 139) is outside every interval. run-02, 6 of 17 measured:
+f2-m01 (autobench buys votes by shortening samples) was outside both readers on t14 (338 against 362 and 356) and t15
+(139 against 190 and 197) and right on both, +3.25 nats over 4 targets. f2-m02 -8.62 over 4, f2-m03 -7.07 over 3, f2-m05
+-5.89 over 3. P3 so far: 2 of 7 disagreements right (needs 8 to decide).
+
+## Engine version 8 (forecasts inside the round)
+
+`lib/round.py --version 8` (now the default; 7 still runs) adds `targets_open` after `standing` and `forecast` after
+`develop` and `account`, both through `lib/forecast.py`'s functions. Mechanisms list the targets they give a number for
+(a third of them or more, at least 3); new theories carry `forecasts`; the readers and carried theories forecast blind.
+The next round's `standing` scores the forecasts (`forecast_scores.json`): 3 or more scored targets with a total at or
+below -2 nats refute; "stands" needs a total above 0 on 3 or more. Smoke run (sonnet, 3 mechanisms, outside the
+repository, about 14 minutes through `split standing targets_open mechanisms develop forecast`): 21 targets, 3 mechanisms
+with 7 targets each, 2 theories developed (7 and 11 forecasts), 1 abandoned; a second smoke folder's `standing` scored
+them (6 targets measured). Both folders deleted.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in

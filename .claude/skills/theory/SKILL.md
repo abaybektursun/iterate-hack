@@ -3,10 +3,16 @@ name: theory
 description: Build theories that connect the team's experiments, test each on stored per-problem rows instead of by opinion, and turn them into the next GPU experiment. One round runs studies/theory/lib/round.py - headless Claude runs in empty directories propose pairwise different mechanisms from the board items before a cutoff and develop each into a theory with offline predictions, GPU predictions and one change to the untrained base it implies; scripts written before any number is seen compute the offline predictions from stored rows, against two no-theory readers; with --with-account, one account budgets the gap between the cued base and RL-Zero-Math into mechanisms whose computed shares add up; each survivor meets the strongest rival a fresh agent can write, scored by the same log gain; each side of a pair then predicts the other side's GPU experiments blind, and the open experiments are ranked by separation per GPU minute and by gain over the best known base count; the top one is posted and run, and its result scores both sides next round. Use when the user asks for a theory, an explanation across experiments or what the results mean together, and after every fifth closed result. Writes studies/theory/results/engine/round-<nn>/ and updates studies/theory/README.md.
 ---
 
-# Theory round (version 7.1)
+# Theory round (version 8)
 
-A theory is one mechanism sentence that explains numbers from the board, predicts numbers nobody has computed, and
-names the change to the untrained base it implies should raise right answers. It survives when its offline
+The main test of a theory is now its forecast of numbers that do not exist yet: the numbers the team's open `work`
+items will report. Each round extracts them (`targets_open`), every theory forecasts them beside two readers with no
+theory, and the next round scores the forecasts against the results posted since. In round 07 the theories said
+nothing on 16 to 20 of 20 such targets; so mechanisms are now written about the targets. The stored-row tests come
+second.
+
+A theory is one mechanism sentence that explains numbers from the board, forecasts the open targets, predicts numbers
+nobody has computed, and names the change to the untrained base it implies should raise right answers. It survives when its offline
 predictions, fixed before any row was read, were computed, none was refuted beyond noise, together they gained
 probability against readers with no theory, and one of them won where the readers expected otherwise. It then meets
 the strongest rival a fresh agent can write; a rival that beats it takes its place in the next round and faces a
@@ -25,12 +31,12 @@ base-only count known for that set (with the item id), GPU minutes and why; or `
 
 ## What the rounds showed
 
-- Rounds 01-03: held-out targets did not separate theories from a reversed control; commit subjects leaked results.
-  Round 04: duels separated 0 of 9 tests on the first turn. Account runs 01-02 gave the span, null and claim rules.
-- Round 05 and account run 03: numbers computed, replicated and duelled, but every review said weak, refuted or
-  partly published, and nothing led to a new experiment. Hence version 7's interventions and cross-predictions.
-- Round 06 (version 6.3): the account took 68 of 125 minutes and lost to a one-axis rival again; duels were decided
-  by one separating test; a decisive n counted 401 rows for a claim about 22. Hence version 7.1's changes below.
+- Rounds 01-06: held-out targets, duels and accounts never left a theory that stood on more than one separating
+  test, and none led to a new experiment (details in `studies/theory/README.md`). Hence 7.1's duel and n rules.
+- Round 07 and forecast runs 01-02: stored-row tests used groups of 6 to 55 problems and separated nothing; the
+  theories forecast 0 to 4 of 17 to 20 open targets; the one that forecast (r5-m03-rival) beat both readers on 3;
+  mechanisms forced to disagree with the readers were 0 of 4 right. Hence version 8: forecasts first, no forced
+  disagreement.
 
 ## The coordinator's job
 
@@ -69,12 +75,14 @@ copy them in, then `all`. Job dirs (prompt.txt, out.txt) are under a printed tem
 | stage | model | writes |
 |---|---|---|
 | `split --cutoff T --skip W` | none | `before.jsonl`, `after.jsonl` |
-| `standing --from $P` | none | `graveyard.json`, `theories/` (survivors with their tests, untested once, `<theory>-rival` for each rival that won), `prior_reviews/`, `facts.json`, `incumbent_account.json`, `gpu_tests.json` (see The score) |
+| `standing --from $P` | none (8: one score job) | 8: `forecast_scores.json` ($P's forecasts against results posted since); `graveyard.json`, `theories/` (survivors with their tests, untested once, `<theory>-rival` for each rival that won), `prior_reviews/`, `facts.json`, `incumbent_account.json`, `gpu_tests.json` (see The score) |
+| `targets_open` | opus, 1 job (8) | `targets.json` (board snapshot time, one target per number an open work item will report: item, cell, unit, quote; none already posted), `work.md` |
 | `inventory` | opus, repository | `inventory.md`: row files, fetch command, readable now, rows, problems and samples per problem counted from the file, fields |
 | `external` | opus, papers.py only | `external.md`: 20-30 published mechanisms with their numbers |
-| `mechanisms --n-mechanisms 12` | opus | `mechanisms.json`: pairwise different, none restating the graveyard or a theory that lost its duel. 7.1: each names in `holds_against` the two items, facts or graveyard theories nearest to contradicting it and why it holds; at least half are about the gap between the cued base and RL-Zero-Math at T 1.0 / top-p 1.0 and give a `base_change` (base alone, same tokens) |
-| `develop` | opus, 1 per mechanism | `theories/r<n>-m<id>.json` (3+ offline, 1+ GPU predictions, an intervention), `dropped.json`, `theories.sha256` |
+| `mechanisms --n-mechanisms 12` | opus | `mechanisms.json`: pairwise different, none restating the graveyard or a theory that lost its duel. 7.1: each names in `holds_against` the two items, facts or graveyard theories nearest to contradicting it and why it holds; at least half are about the gap between the cued base and RL-Zero-Math at T 1.0 / top-p 1.0 and give a `base_change` (base alone, same tokens). 8: each lists in `targets` the targets it gives a number for, a third of them or more, at least 3; no need to disagree with the readers |
+| `develop` | opus, 1 per mechanism | `theories/r<n>-m<id>.json` (3+ offline, 1+ GPU predictions, an intervention; 8: `forecasts` for a third of the targets or more, at least 3), `dropped.json`, `theories.sha256` |
 | `account` | opus, 1 job; 7.1: only with `--with-account` | `theories/r<n>-account.json`: cells (one null), parts with ordered rules, evidence, shares per cell with `vs_null`, fits for claimed cells, a net count per cell, 2+ cross-predictions, 1 GPU prediction, an intervention |
+| `forecast` | opus (8) | `forecasts.json` (snapshot and written time, forecasts per forecaster), `forecasts.md`: two readers and each carried theory forecast every target blind; new theories bring theirs. Runs before the tests, so forecasts are fixed early |
 | `null_tests` | opus, 2 jobs | `tests_blind.jsonl`, `predictions/nulltest-{1,2}.jsonl` |
 | `test` | opus, repository, laptop only | `tests/<theory>/p<k>.py` written first, run once by the script; `tests/<theory>.json`. 7.1: `n` is the size of the smallest group the number depends on; a script that contrasts groups prints each group's size (same rule for duel and replication scripts) |
 | `score_tests` | none | `metrics_v4.json`, table, a round total line. 7.1: a promoted `<theory>-rival`'s carried duel tests are not offline tests: its entry shows `carried_duel` (gain, tests) and 0 computed, kept out of the round's totals |
@@ -125,6 +133,12 @@ the table (`GPU test`, kept out of the offline total). A side whose measured val
 outside the measured 90 % interval when one is given, gets a strike; two strikes send it to the graveyard (`refuted
 by GPU tests`), and a rival with two is not promoted.
 
+Forecasts (8) use the same density and clip against the equal mixture of the two readers. `standing` scores the
+previous round's `forecasts.json` against the items posted after its snapshot (`forecast_scores.json`; graveyard
+entries get `forecast`: scored, inside, total gain). A theory with 3 or more scored targets and a total at or below
+-2 nats is `refuted by forecasts` and goes to the graveyard with those targets named. A review may say "stands" only
+with a total forecast gain above 0 on 3 or more scored targets, besides the 7.1 duel rule.
+
 `standing` carries survivors (verdict not refuted, published or weak) with their tests, rival files, experiments and
 duel result, none computed again, and an `untested` theory once. A theory that `loses to rival` goes to the
 graveyard and its rival enters as `<theory>-rival`, its duel tests as its record, to meet a fresh rival. That record
@@ -164,29 +178,12 @@ entry with `carried_duel`, write "carried duel win, +<gain> nats over <n> tests"
 Close the `work` item: `theory round <nn>: <s> of <m> survive; <c> of <o> computed, <i> inside, <x> outside; <r>
 refuted; <b> beat their rival. $R/metrics_v4.json $R/metrics_v5.json $R/experiments.md`
 
-## Forecasts of open work
+## Forecasts outside a round
 
-Between rounds, every unrefuted theory of the newest round (at most 6, survivors first) and two readers with no theory
-forecast the numbers the open `work` items will report, before they post (`lib/forecast.py`, prompts
-`lib/prompts/forecast*.md`):
-
-```
-uv run studies/theory/lib/forecast.py make studies/theory/results/forecast/run-<nn>   # targets.json, forecasts.json, forecasts.md, run.json
-uv run studies/theory/lib/forecast.py score studies/theory/results/forecast/run-<nn>  # scores.json, scores.md
-```
-
-`make` snapshots the board, extracts targets (one per number an open item will report, with its cell and a quote)
-and runs the forecasters blind; it fails if the folder exists. `score` reads only items posted after the snapshot
-and scores each forecast by the log density of The score against the equal mixture of the two readers, clipped to [-3, 3]
-nats; it flags a measured value outside every interval. Rerun `score` as results post; it never touches
-`forecasts.json`. A theory that gains nothing over the readers here explains nothing new.
-
-`make ... --propose 6` (run-02 on): after the readers forecast, one blind job (`prompts/forecast_propose.md`) writes 6
-mechanisms about the targets, given the readers' forecasts and the round's `facts.json` and `graveyard.json`: at most
-80 words each, 2 or more board items, forecasts on half the targets or more, and a centre outside both readers'
-intervals on 3 or more, with why the readers are wrong. Code checks these, sends the draft back once, then stops.
-They forecast as `f2-m01` ...; `scores.md` counts each forecaster's targets outside both readers and how many of those
-were right.
+`lib/forecast.py make <folder> [--propose N]` and `score <folder>` (results under `results/forecast/run-<nn>/`) run the
+same target, forecast and score steps on the newest round's theories without a round; `score` writes
+`scores-<UTC time>.json/.md` when `scores.json` exists. `--propose N` adds N mechanisms forced to disagree with the
+readers on 3 targets (run-02); round 08 dropped that rule.
 
 ## Cost per round
 
