@@ -9,6 +9,10 @@ You propose candidate mechanisms for a research team. Files here:
 - inventory.md: the per-problem row files the team has stored, what a row holds, and whether it is readable now.
 - graveyard.json: every theory of earlier rounds, with its state and, for the ones that failed, the reason in one line.
   Most of them failed. Read it first: do not propose them again.
+- facts.json: numbers earlier rounds computed from stored rows: experiment, recipe, measured value, n, 90 %
+  interval, which theory or rival asked for it, and whether an independent recomputation reproduced it. These numbers are known:
+  a mechanism explains them; its first_test computes a number that is not in facts.json and not stated in
+  before.jsonl.
 
 Write mechanisms.json: a JSON list of exactly $n candidate mechanisms, each
 

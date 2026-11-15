@@ -1,0 +1,24 @@
+{
+ "esc3k": {
+  "right": {
+   "problem_index": 268,
+   "seed": 61010268,
+   "prompt": "Solve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nWhat is the remainder when $1 + 2 + 3 + 4 + \\dots + 9 + 10$ is divided by 9?\n\nRemember to put your answer on its own line after \"Answer:\"",
+   "text": " line!\n\nOkay, so I need to find the remainder when the sum of numbers from 1 to 10 is divided by 9. Let me think. The sum of numbers from 1 to n is given by the formula n(n+1)/2. Here, n is 10. So, plugging that in, the sum should be 10*11/2. Let me calculate that. 10 times 11 is 110, divided by 2 is 55. So the total sum is 55. Now, I need to divide 55 by 9 and find the remainder. Let me do that division. 9 times 6 is 54, which is the largest multiple of 9 less than 55. Subtracting 54 from 55 gives a remainder of 1. So the remainder should be 1. Wait, let me check again. 9*6=54, 55-54=1. Yeah, that's right. So the answer is 1.\n\nAnswer: 1",
+   "extracted_v3": "1",
+   "gold": "1",
+   "score_v3": 1,
+   "n_new": 209
+  },
+  "wrong": {
+   "problem_index": 385,
+   "seed": 61010385,
+   "prompt": "Solve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nKathy needs money for her trip to Europe. If she has 300 US dollars in the bank but wants to withdraw half of it in British pounds and half of it in euros, how many more euros than pounds will she have? Assume 1 pound = 1.64 USD and 1 euro = 1.32 USD, and round to the nearest whole number.\n\nRemember to put your answer on its own line after \"Answer:\"",
+   "text": " line!\n\nOkay, let's see. Kathy has 300 USD in the bank. She wants to withdraw half in British pounds and half in euros. So first, I need to figure out how much she's withdrawing in each currency. Half of 300 is 150, so she's taking out 150 USD in pounds and 150 USD in euros.\n\nNow, I need to convert those 150 USD into pounds and euros using the given exchange rates. The problem says 1 pound = 1.64 USD. To find out how many pounds she gets, I should divide the USD amount by the exchange rate. So 150 divided by 1.64. Let me calculate that. Hmm, 150 divided by 1.64. Let me do the division. 1.64 times 90 is 147.6, which is close to 150. So 150 divided by 1.64 is approximately 91.18 pounds. Since the problem says to round to the nearest whole number, that would be 91 pounds.\n\nNext, converting the 150 USD to euros. The exchange rate is 1 euro = 1.32 USD. So to find euros, divide 150 by 1.32. Let me compute that. 1.32 times 113 is 149.76, which is very close to 150. So 150 divided by 1.32 is approximately 113.636 euros. Rounding that to the nearest whole number gives 114 euros.\n\nNow, she has 91 pounds and 114 euros. The question asks how many more euros than pounds she has. So subtract the pounds from the euros: 114 - 91 = 23. So the answer should be 23.\n\nAnswer: 23",
+   "extracted_v3": "23",
+   "gold": "22",
+   "score_v3": 0,
+   "n_new": 357
+  }
+ }
+}

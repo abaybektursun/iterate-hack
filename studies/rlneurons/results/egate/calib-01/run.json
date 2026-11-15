@@ -1,0 +1,46 @@
+{
+ "job_id": "abaybektursun-1114-210433-fb33",
+ "commit": "7640f2b34d1020b1f126087eb157394949aeab9f",
+ "config": {
+  "model": "base",
+  "model_path": null,
+  "model_label": null,
+  "set": "math500",
+  "arms": [
+   "t1=off:1",
+   "hi6=hi:0.6",
+   "lo6=lo:0.6",
+   "all6=all:0.6",
+   "rnd6=rnd:0.6",
+   "hi3=hi:0.3",
+   "lo3=lo:0.3",
+   "hi1=hi:0.1"
+  ],
+  "h0": "auto",
+  "q": 0.8,
+  "calib_n": 50,
+  "calib_tokens": 2000,
+  "rnd_share": null,
+  "max_tokens": 16384,
+  "seed": 61000000,
+  "n": 100,
+  "samples": 1,
+  "out": "/root/abaybektursun-1114-210433-fb33/out",
+  "commit": "7640f2b34d1020b1f126087eb157394949aeab9f",
+  "model_repo": "allenai/Olmo-3-1025-7B",
+  "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "seed_rule": "seed + 10000 * sample + index",
+  "n_problems": 100
+ },
+ "started_utc": "2026-11-15T05:04:44Z",
+ "note": "The job was stopped by hand after its calibration (to split the arms over four boxes); only the calibration block is used. h0 and rnd_share were passed to the later jobs as numbers."
+}

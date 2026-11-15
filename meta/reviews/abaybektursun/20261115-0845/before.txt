@@ -1,0 +1,17 @@
+# tail -3 of each 'python3 tools/vast.py up <2 offers> --hours 3' log of 08:05 UTC (session egate), BOOT_MINUTES = 20
+== up1.log
+destroyed 60759641
+destroyed 60759649
+not reachable after 20 min; destroyed. Try other offers.
+== up2.log
+created 60759644 60759648; waiting for ssh
+destroyed 60759648
+60759644 ready in 75 s: RTX PRO 6000 Max-Q, $1.426/h, 122 MB/s (ssh and speed check at 71 s); destroys itself 3.0 h after it booted
+== up3.log
+created 60759643 60759647; waiting for ssh
+destroyed 60759643
+60759647 ready in 180 s: RTX PRO 6000 WS, $1.504/h, 27 MB/s (ssh and speed check at 160 s); destroys itself 3.0 h after it booted
+== up4.log
+created 60759642 60759646; waiting for ssh
+destroyed 60759646
+60759642 ready in 163 s: RTX PRO 6000 WS, $1.432/h, 73 MB/s (ssh and speed check at 134 s); destroys itself 3.0 h after it booted

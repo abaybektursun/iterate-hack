@@ -1,0 +1,248 @@
+{
+ "arm": "G",
+ "hp": {
+  "rank": 16,
+  "alpha": 32,
+  "lr": 0.0001,
+  "epochs": 1,
+  "budget": 16384,
+  "betas": [
+   0.9,
+   0.999
+  ],
+  "weight_decay": 0.0,
+  "clip": 1.0,
+  "merge_seed": 0
+ },
+ "n_problems": 150,
+ "n_examples": 600,
+ "commit": "89f0d71a12e436fafd7687969f26ff40ba5f7ff4",
+ "job_id": "abaybektursun-1114-214255-116e",
+ "target_tokens": 3548889,
+ "max_sequence": 16894,
+ "generations_before": [
+  {
+   "problem_index": 80,
+   "text": ".\n\nOkay, let's try to solve this problem. The question is asking for the number of integer values of k in the interval [-500, 500] such that the equation log(kx) = 2 log(x + 2) has exactly one real solution. Hmm, logarithmic equations can sometimes be tricky, but let's break it down step by step.\n\nFirst, I need to",
+   "starts_with_cue": false
+  },
+  {
+   "problem_index": 80,
+   "text": ".\n\nOkay, let's try to solve this problem. The question is asking for the number of integer values of k in the interval [-500, 500] such that the equation log(kx) = 2 log(x + 2) has exactly one real solution. Hmm, logarithmic equations can sometimes be tricky, but let's break it down step by step.\n\nFirst, I need to",
+   "starts_with_cue": false
+  },
+  {
+   "problem_index": 80,
+   "text": ".\n\nOkay, let's try to solve this problem. The question is asking for the number of integer values of k in the interval [-500, 500] such that the equation log(kx) = 2 log(x + 2) has exactly one real solution. Hmm, logarithmic equations can sometimes be tricky, but let's break it down step by step.\n\nFirst, I need to",
+   "starts_with_cue": false
+  }
+ ],
+ "train_s": 1043.9946043491364,
+ "tokens_per_s": 3399.336534131328,
+ "generations_after": [
+  {
+   "problem_index": 80,
+   "text": " line!\n\nOkay, let's see. I need to find the number of integer values of k between -500 and 500 inclusive such that the equation log(kx) = 2 log(x + 2) has exactly one real solution. Hmm, logarithmic equations can be tricky, especially with variables inside the logs. Let me start by recalling some logarithm properties.\n\nFirst, the equation is",
+   "starts_with_cue": true
+  },
+  {
+   "problem_index": 80,
+   "text": " line!\n\nOkay, let's see. I need to find the number of integer values of k between -500 and 500 inclusive such that the equation log(kx) = 2 log(x + 2) has exactly one real solution. Hmm, logarithmic equations can be tricky, especially with variables inside the logs. Let me start by recalling some logarithm properties.\n\nFirst, the equation is",
+   "starts_with_cue": true
+  },
+  {
+   "problem_index": 80,
+   "text": " line!\n\nOkay, let's see. I need to find the number of integer values of k between -500 and 500 inclusive such that the equation log(kx) = 2 log(x + 2) has exactly one real solution. Hmm, logarithmic equations can be tricky, especially with variables inside the logs. Let me start by recalling some logarithm properties.\n\nFirst, the equation is",
+   "starts_with_cue": true
+  }
+ ],
+ "zero_adapter": {
+  "sha256": "6ea91243299ba77f4bf9bc5fba0f285cd164475026bff1c8f9e76da73eaf8da1",
+  "mult": 0.0
+ },
+ "merge": {
+  "sha256": "59d10b480d0f72c3da2b59f8098adf94168bad96b097f63233d4bb73bb3e0944",
+  "mult": 1.0,
+  "groups": {
+   "mlp.down_proj": {
+    "d_sq": 8.140866979956627,
+    "mb_sq": 11.478052467107773,
+    "r_sq": 3.787296772003174,
+    "base_sq": 691079.958984375,
+    "d_r": 0.023246270837262273,
+    "mb_r": 0.023284921058802865,
+    "mb_d": 8.140979185700417,
+    "rel_norm_lora": 0.003432188879673638,
+    "rel_norm_merged": 0.004075397300117342,
+    "rel_norm_rl": 0.002340995179706877,
+    "cos_lora_rl": 0.004186521204769515,
+    "cos_merged_rl": 0.0035316365129005605,
+    "effective_scale": 1.0000137830213989
+   },
+   "mlp.gate_proj": {
+    "d_sq": 17.004117488861084,
+    "mb_sq": 20.810025930404663,
+    "r_sq": 3.6845919117331505,
+    "base_sq": 725232.337890625,
+    "d_r": 0.025689324727864005,
+    "mb_r": 0.02572902911924757,
+    "mb_d": 17.004373788833618,
+    "rel_norm_lora": 0.004842152555264692,
+    "rel_norm_merged": 0.0053567050036820475,
+    "rel_norm_rl": 0.0022540114442618354,
+    "cos_lora_rl": 0.003245494987934302,
+    "cos_merged_rl": 0.0029382746658146975,
+    "effective_scale": 1.0000150728182573
+   },
+   "mlp.up_proj": {
+    "d_sq": 16.97160431742668,
+    "mb_sq": 20.71150714159012,
+    "r_sq": 3.7102493718266487,
+    "base_sq": 710096.859375,
+    "d_r": 0.024349030980374664,
+    "mb_r": 0.024430156481685117,
+    "mb_d": 16.971696257591248,
+    "rel_norm_lora": 0.004888804303668365,
+    "rel_norm_merged": 0.005400662717408493,
+    "rel_norm_rl": 0.002285823820582992,
+    "cos_lora_rl": 0.0030684474019657335,
+    "cos_merged_rl": 0.0027868837110239905,
+    "effective_scale": 1.0000054172936657
+   },
+   "self_attn.k_proj": {
+    "d_sq": 4.617830827832222,
+    "mb_sq": 5.432661645114422,
+    "r_sq": 1.0863813674077392,
+    "base_sq": 154525.01794433594,
+    "d_r": 0.002340393142276298,
+    "mb_r": 0.0023113771403586725,
+    "mb_d": 4.617901682853699,
+    "rel_norm_lora": 0.005466629089031292,
+    "rel_norm_merged": 0.005929347822431113,
+    "rel_norm_rl": 0.002651500741134231,
+    "cos_lora_rl": 0.001044909441487029,
+    "cos_merged_rl": 0.0009514223097666717,
+    "effective_scale": 1.000015343788917
+   },
+   "self_attn.o_proj": {
+    "d_sq": 6.551712542772293,
+    "mb_sq": 7.8203394412994385,
+    "r_sq": 1.5109854750335217,
+    "base_sq": 241774.8916015625,
+    "d_r": 0.01507350048632361,
+    "mb_r": 0.015093797215740778,
+    "mb_d": 6.551665633916855,
+    "rel_norm_lora": 0.005205612284478993,
+    "rel_norm_merged": 0.005687313958093713,
+    "rel_norm_rl": 0.0024999109920877467,
+    "cos_lora_rl": 0.0047907836343725994,
+    "cos_merged_rl": 0.0043909204006919896,
+    "effective_scale": 0.9999928402146565
+   },
+   "self_attn.q_proj": {
+    "d_sq": 4.670906271785498,
+    "mb_sq": 5.5398579351603985,
+    "r_sq": 1.0769000314176083,
+    "base_sq": 164808.8544921875,
+    "d_r": 0.0046308361352203065,
+    "mb_r": 0.004625797844710178,
+    "mb_d": 4.670836258679628,
+    "rel_norm_lora": 0.005323659936377592,
+    "rel_norm_merged": 0.005797744111479211,
+    "rel_norm_rl": 0.0025562152673734434,
+    "cos_lora_rl": 0.002064767436711553,
+    "cos_merged_rl": 0.0018938677154342219,
+    "effective_scale": 0.9999850108090816
+   },
+   "self_attn.v_proj": {
+    "d_sq": 7.1942900866270065,
+    "mb_sq": 8.49449598789215,
+    "r_sq": 1.5449051223695278,
+    "base_sq": 249541.6669921875,
+    "d_r": 0.018487945810193196,
+    "mb_r": 0.01848009404784534,
+    "mb_d": 7.194210350513458,
+    "rel_norm_lora": 0.005369358931668374,
+    "rel_norm_merged": 0.005834414391460311,
+    "rel_norm_rl": 0.002488166110647144,
+    "cos_lora_rl": 0.005545539208995093,
+    "cos_merged_rl": 0.005101342265479455,
+    "effective_scale": 0.9999889167502856
+   }
+  },
+  "all_targets": {
+   "d_sq": 65.15132851526141,
+   "mb_sq": 80.28694054856896,
+   "r_sq": 16.40131005179137,
+   "base_sq": 2937059.5872802734,
+   "d_r": 0.11381730211951435,
+   "mb_r": 0.11395517290839052,
+   "mb_d": 65.15166315808892,
+   "rel_norm_lora": 0.004709830298105554,
+   "rel_norm_merged": 0.005228367129424991,
+   "rel_norm_rl": 0.0023631043003266112,
+   "cos_lora_rl": 0.0034818285316688263,
+   "cos_merged_rl": 0.0031403085433586463,
+   "effective_scale": 1.0000051363929967
+  },
+  "changed": {
+   "mlp.down_proj": {
+    "numel": 1442840576,
+    "changed": 843197175,
+    "base_sq": 691079.958984375,
+    "delta_sq": 11.478052467107773,
+    "frac_changed": 0.5844007917614871,
+    "rel_norm": 0.004075397300117342
+   },
+   "mlp.gate_proj": {
+    "numel": 1442840576,
+    "changed": 979581575,
+    "base_sq": 725232.337890625,
+    "delta_sq": 20.810025930404663,
+    "frac_changed": 0.6789257186789845,
+    "rel_norm": 0.0053567050036820475
+   },
+   "mlp.up_proj": {
+    "numel": 1442840576,
+    "changed": 978252035,
+    "base_sq": 710096.859375,
+    "delta_sq": 20.71150714159012,
+    "frac_changed": 0.6780042447323023,
+    "rel_norm": 0.005400662717408493
+   },
+   "self_attn.k_proj": {
+    "numel": 536870912,
+    "changed": 417216029,
+    "base_sq": 154525.01794433594,
+    "delta_sq": 5.432661645114422,
+    "frac_changed": 0.7771254125982523,
+    "rel_norm": 0.005929347822431113
+   },
+   "self_attn.o_proj": {
+    "numel": 536870912,
+    "changed": 375419884,
+    "base_sq": 241774.8916015625,
+    "delta_sq": 7.8203394412994385,
+    "frac_changed": 0.6992740258574486,
+    "rel_norm": 0.005687313958093713
+   },
+   "self_attn.q_proj": {
+    "numel": 536870912,
+    "changed": 411032691,
+    "base_sq": 164808.8544921875,
+    "delta_sq": 5.5398579351603985,
+    "frac_changed": 0.7656080480664968,
+    "rel_norm": 0.005797744111479211
+   },
+   "self_attn.v_proj": {
+    "numel": 536870912,
+    "changed": 366956501,
+    "base_sq": 249541.6669921875,
+    "delta_sq": 8.49449598789215,
+    "frac_changed": 0.6835097465664148,
+    "rel_norm": 0.005834414391460311
+   }
+  }
+ },
+ "wall_s": 1161.020099401474
+}

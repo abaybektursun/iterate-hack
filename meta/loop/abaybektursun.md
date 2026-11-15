@@ -11,3 +11,8 @@ making a change. The skill stays at or under 135 lines; it is edited only at a s
 |---|---|---|---|---|---|
 | 1 | 11-15 04:55 | 15 / 69 min (24) | 20.0 | review notices off for a person with a loop | vLLM in the image (04:15): no effect seen; no job has finished on the new image yet, 10 of 10 H100 busy |
 | 2 | 11-15 06:08 | 16 / 46 min (19, last 1 h) | 18.0 | cycle.py: a died job has no run minutes (failed min 421.7 -> 26.0) | review notices off (cycle 1): no effect, 3 entries in 1 h against 3.3; vLLM image: helped, setup 26 s -> 1 s |
+| 3 | 11-15 07:12 | 24 / 124 min (6, last 1 h) | 16.0 | reservation of 2 H100 for short jobs removed (deploy with ITERATE_MAX_H100=10): 8 running / 27 queued -> 9 / 24 in 3 min | cycle.py died jobs (cycle 2): no effect on the target; review notices (cycle 1): helped, 0 entries by other sessions in 1 h against 3 |
+| 4 | 11-15 08:15 | 103 / 171 min (6, last 1 h); 31 / 100 min (45, last 4 h) | 8.0; 16.2 | step-back 1: no tool change; skill edit: a change the reviewer cannot make becomes an idea with its baseline (131 lines) | reservation removed (cycle 3): helped, weak, 7 of 14 long jobs started against 0 of 21 |
+
+From cycle 5 the target is read on the 4 h window: the 1 h number follows the mix of work, not the changes (stepback.md of cycle 4).
+| 5 | 11-15 09:22 | 43 / 124 min (34, last 4 h) | 11.5 | cycle.py reads vast.ai job records: 0 -> 43 jobs listed | skill edit (cycle 4): too early, 0 of 3 ideas answered after 1 h |

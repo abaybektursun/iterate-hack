@@ -1,0 +1,248 @@
+{
+ "arm": "P",
+ "hp": {
+  "rank": 16,
+  "alpha": 32,
+  "lr": 0.0001,
+  "epochs": 1,
+  "budget": 16384,
+  "betas": [
+   0.9,
+   0.999
+  ],
+  "weight_decay": 0.0,
+  "clip": 1.0,
+  "merge_seed": 0
+ },
+ "n_problems": 138,
+ "n_examples": 552,
+ "commit": "89f0d71a12e436fafd7687969f26ff40ba5f7ff4",
+ "job_id": "abaybektursun-1114-214246-17cc",
+ "target_tokens": 3047860,
+ "max_sequence": 16672,
+ "generations_before": [
+  {
+   "problem_index": 51,
+   "text": ".\n\nTo find the quotient when \\(x^6 - 3\\) is divided by \\(x + 1\\), we can use polynomial long division or synthetic division. Here, we will use polynomial long division.\n\n1. **Set up the division:**\n   \\[\n   \\begin{array}{c|ccccc}\n     & x^5 & -x^4 & x^3",
+   "starts_with_cue": false
+  },
+  {
+   "problem_index": 51,
+   "text": ".\n\nTo find the quotient when \\(x^6 - 3\\) is divided by \\(x + 1\\), we can use polynomial long division or synthetic division. Here, we will use polynomial long division.\n\n1. **Set up the division:**\n   \\[\n   \\begin{array}{c|ccccc}\n     & x^5 & -x^4 & x^3",
+   "starts_with_cue": false
+  },
+  {
+   "problem_index": 51,
+   "text": ".\n\nTo find the quotient when \\(x^6 - 3\\) is divided by \\(x + 1\\), we can use polynomial long division or synthetic division. Here, we will use polynomial long division.\n\n1. **Set up the division:**\n   \\[\n   \\begin{array}{c|ccccc}\n     & x^5 & -x^4 & x^3",
+   "starts_with_cue": false
+  }
+ ],
+ "train_s": 856.6598434448242,
+ "tokens_per_s": 3557.8415672478136,
+ "generations_after": [
+  {
+   "problem_index": 51,
+   "text": ".\n\nOkay, so I need to find the quotient when \\( x^6 - 3 \\) is divided by \\( x + 1 \\). Hmm, let's see. I remember that when you divide a polynomial by another polynomial, you can use polynomial long division or synthetic division. Since the divisor here is \\( x + 1 \\), which is a linear polynomial, maybe synthetic division would",
+   "starts_with_cue": false
+  },
+  {
+   "problem_index": 51,
+   "text": ".\n\nOkay, so I need to find the quotient when \\( x^6 - 3 \\) is divided by \\( x + 1 \\). Hmm, let's see. I remember that when you divide a polynomial by another polynomial, you can use polynomial long division or synthetic division. Since the divisor here is \\( x + 1 \\), which is a linear polynomial, maybe synthetic division would",
+   "starts_with_cue": false
+  },
+  {
+   "problem_index": 51,
+   "text": ".\n\nOkay, so I need to find the quotient when \\( x^6 - 3 \\) is divided by \\( x + 1 \\). Hmm, let's see. I remember that when you divide a polynomial by another polynomial, you can use polynomial long division or synthetic division. Since the divisor here is \\( x + 1 \\), which is a linear polynomial, maybe synthetic division would",
+   "starts_with_cue": false
+  }
+ ],
+ "zero_adapter": {
+  "sha256": "6ea91243299ba77f4bf9bc5fba0f285cd164475026bff1c8f9e76da73eaf8da1",
+  "mult": 0.0
+ },
+ "merge": {
+  "sha256": "2f6f094a535678966e40651a2c6c52465102a77abf9b0d37444bef15a03355d3",
+  "mult": 1.0,
+  "groups": {
+   "mlp.down_proj": {
+    "d_sq": 6.068238735198975,
+    "mb_sq": 9.300125062465668,
+    "r_sq": 3.787296772003174,
+    "base_sq": 691079.958984375,
+    "d_r": 0.006509693270345451,
+    "mb_r": 0.006555864541496703,
+    "mb_d": 6.0681275725364685,
+    "rel_norm_lora": 0.002963242403854675,
+    "rel_norm_merged": 0.0036684300723202282,
+    "rel_norm_rl": 0.002340995179706877,
+    "cos_lora_rl": 0.001357889804609066,
+    "cos_merged_rl": 0.0011046403635726954,
+    "effective_scale": 0.9999816812311847
+   },
+   "mlp.gate_proj": {
+    "d_sq": 13.332242220640182,
+    "mb_sq": 17.077486753463745,
+    "r_sq": 3.6845919117331505,
+    "base_sq": 725232.337890625,
+    "d_r": 0.006086401363972982,
+    "mb_r": 0.006131085636297939,
+    "mb_d": 13.332320779561996,
+    "rel_norm_lora": 0.004287587708292823,
+    "rel_norm_merged": 0.004852587756410498,
+    "rel_norm_rl": 0.0022540114442618354,
+    "cos_lora_rl": 0.0008683889596440868,
+    "cos_merged_rl": 0.0007729131681007225,
+    "effective_scale": 1.0000058924013315
+   },
+   "mlp.up_proj": {
+    "d_sq": 13.387337505817413,
+    "mb_sq": 17.077080339193344,
+    "r_sq": 3.7102493718266487,
+    "base_sq": 710096.859375,
+    "d_r": 0.006059607098904962,
+    "mb_r": 0.0061298333612285205,
+    "mb_d": 13.387278825044632,
+    "rel_norm_lora": 0.004341984915115737,
+    "rel_norm_merged": 0.0049039723727779165,
+    "rel_norm_rl": 0.002285823820582992,
+    "cos_lora_rl": 0.0008597967701836269,
+    "cos_merged_rl": 0.0007700879140864809,
+    "effective_scale": 0.9999956166957952
+   },
+   "self_attn.k_proj": {
+    "d_sq": 3.9354279935359955,
+    "mb_sq": 4.74130879342556,
+    "r_sq": 1.0863813674077392,
+    "base_sq": 154525.01794433594,
+    "d_r": 0.00037554306345555233,
+    "mb_r": 0.0003497062543829088,
+    "mb_d": 3.9354719892144203,
+    "rel_norm_lora": 0.0050465732800040455,
+    "rel_norm_merged": 0.005539234092944069,
+    "rel_norm_rl": 0.002651500741134231,
+    "cos_lora_rl": 0.0001816237361418925,
+    "cos_merged_rl": 0.00015408597999556342,
+    "effective_scale": 1.0000111793884927
+   },
+   "self_attn.o_proj": {
+    "d_sq": 5.225362315773964,
+    "mb_sq": 6.4792924374341965,
+    "r_sq": 1.5109854750335217,
+    "base_sq": 241774.8916015625,
+    "d_r": 0.0050889298713627795,
+    "mb_r": 0.0050942693205797696,
+    "mb_d": 5.225545197725296,
+    "rel_norm_lora": 0.004648925706052555,
+    "rel_norm_merged": 0.005176761921799375,
+    "rel_norm_rl": 0.0024999109920877467,
+    "cos_lora_rl": 0.0018110820109486264,
+    "cos_merged_rl": 0.0016281258267933757,
+    "effective_scale": 1.000034998903479
+   },
+   "self_attn.q_proj": {
+    "d_sq": 3.9116739630699158,
+    "mb_sq": 4.771739237010479,
+    "r_sq": 1.0769000314176083,
+    "base_sq": 164808.8544921875,
+    "d_r": 0.0018884368291764986,
+    "mb_r": 0.0018749957398540573,
+    "mb_d": 3.911844562739134,
+    "rel_norm_lora": 0.0048718179838869915,
+    "rel_norm_merged": 0.0053808152507922105,
+    "rel_norm_rl": 0.0025562152673734434,
+    "cos_lora_rl": 0.000920096634569665,
+    "cos_merged_rl": 0.0008271308879499809,
+    "effective_scale": 1.000043612957222
+   },
+   "self_attn.v_proj": {
+    "d_sq": 6.467161402106285,
+    "mb_sq": 7.748118951916695,
+    "r_sq": 1.5449051223695278,
+    "base_sq": 249541.6669921875,
+    "d_r": 0.009006117675198766,
+    "mb_r": 0.008921987852772872,
+    "mb_d": 6.467246010899544,
+    "rel_norm_lora": 0.005090791542774933,
+    "rel_norm_merged": 0.005572198817937735,
+    "rel_norm_rl": 0.002488166110647144,
+    "cos_lora_rl": 0.002849245432304598,
+    "cos_merged_rl": 0.0025787698340198504,
+    "effective_scale": 1.0000130828331006
+   }
+  },
+  "all_targets": {
+   "d_sq": 52.32744413614273,
+   "mb_sq": 67.19515157490969,
+   "r_sq": 16.40131005179137,
+   "base_sq": 2937059.5872802734,
+   "d_r": 0.03501472917241699,
+   "mb_r": 0.03505774270661277,
+   "mb_d": 52.32783493772149,
+   "rel_norm_lora": 0.0042209322615582145,
+   "rel_norm_merged": 0.004783134466013729,
+   "rel_norm_rl": 0.0023631043003266112,
+   "cos_lora_rl": 0.0011952169428963652,
+   "cos_merged_rl": 0.0010560286751365015,
+   "effective_scale": 1.0000074683865265
+  },
+  "changed": {
+   "mlp.down_proj": {
+    "numel": 1442840576,
+    "changed": 801864953,
+    "base_sq": 691079.958984375,
+    "delta_sq": 9.300125062465668,
+    "frac_changed": 0.5557543683883756,
+    "rel_norm": 0.0036684300723202282
+   },
+   "mlp.gate_proj": {
+    "numel": 1442840576,
+    "changed": 941808723,
+    "base_sq": 725232.337890625,
+    "delta_sq": 17.077486753463745,
+    "frac_changed": 0.6527462137299914,
+    "rel_norm": 0.004852587756410498
+   },
+   "mlp.up_proj": {
+    "numel": 1442840576,
+    "changed": 943730917,
+    "base_sq": 710096.859375,
+    "delta_sq": 17.077080339193344,
+    "frac_changed": 0.6540784426899844,
+    "rel_norm": 0.0049039723727779165
+   },
+   "self_attn.k_proj": {
+    "numel": 536870912,
+    "changed": 410124717,
+    "base_sq": 154525.01794433594,
+    "delta_sq": 4.74130879342556,
+    "frac_changed": 0.763916814699769,
+    "rel_norm": 0.005539234092944069
+   },
+   "self_attn.o_proj": {
+    "numel": 536870912,
+    "changed": 363534575,
+    "base_sq": 241774.8916015625,
+    "delta_sq": 6.4792924374341965,
+    "frac_changed": 0.6771359127014875,
+    "rel_norm": 0.005176761921799375
+   },
+   "self_attn.q_proj": {
+    "numel": 536870912,
+    "changed": 403263327,
+    "base_sq": 164808.8544921875,
+    "delta_sq": 4.771739237010479,
+    "frac_changed": 0.7511364798992872,
+    "rel_norm": 0.0053808152507922105
+   },
+   "self_attn.v_proj": {
+    "numel": 536870912,
+    "changed": 357104785,
+    "base_sq": 249541.6669921875,
+    "delta_sq": 7.748118951916695,
+    "frac_changed": 0.6651594955474138,
+    "rel_norm": 0.005572198817937735
+   }
+  }
+ },
+ "wall_s": 938.3463687896729
+}

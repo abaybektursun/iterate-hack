@@ -1,0 +1,61 @@
+{
+ "name": "r4-m08-rival",
+ "statement": "Exposure plays no part: the RL-minus-cued-base gap is set only by how long and hard a problem is, because the base fails to commit or terminate on long chains. The +6.9-point post-cutoff excess is single-sample noise on about 60 post problems, and short, low-entropy right answers are the generic confidence-length relation that any sampled model shows on easy problems.",
+ "scope": "the rival that beat r4-m08 in round-04; scope as in r4-m08's",
+ "explains": [],
+ "conflicts": [],
+ "rival": "Part of the cued Olmo-3 base's accuracy comes from recalling solutions to problems that were in its pretraining text, which shows up as short, low-entropy right answers, while RL-Zero-Math learned procedures that also work on problems the base never saw; so at matched difficulty the RL-minus-cued-base gap is larger on problems published after the base's data cutoff (AIME 2025, HMMT Feb 2025) than on older problems, and smaller on problems the base can complete verbatim.",
+ "promoted_from": "r4-m08",
+ "predictions": [
+  {
+   "experiment": "Independent replication at T 0.6 of the stratified post-minus-pre paired gap (RL plain minus base cue) on the clean harder 328, matched on RL answer length, using different samples and a different decoding setting from tests.json.",
+   "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_hard.jsonl (base, cue, T 0.6 / top-p 0.95) and s3://pg-lineage-769063704696/results/rlneurons/r3/s2800-01/out/P_hard.jsonl (RL step 2,800, plain, T 0.6 / top-p 0.95). If a file has more than one row per unique_id, keep the row with the smallest sample value. Keep only unique_ids whose flag == 'none' in results/rln3/rln3_overlap.json, join the two files on unique_id, and drop any unique_id missing from either file. Source label from rln3_overlap.json: post = AIME 2025 or HMMT Feb 2025; pre = every other source. right = (score == 1), using the stored v1 score field; cap hits and rows with no extracted answer count as their stored score (0 if score is null). Strata: sort the joined problems by the RL row's n_generated ascending, break ties by unique_id ascending, and cut into 4 consecutive groups of equal size (the remainder goes to the last group). In each stratum s and group g (post/pre), d_gs = mean over problems of (RL right - base right). w_s = (number of post problems in s) / (number of post problems). Drop any stratum that has post problems but no pre problems, and renormalise w over the remaining strata. G_g = sum_s w_s * d_gs. Statistic = 100 * (G_post - G_pre), in points.",
+   "unit": "points",
+   "value": 1.0,
+   "low": -10.0,
+   "high": 12.0,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Independent replication at T 0.6 of the both-right base/RL length comparison: median log length ratio, pre-cutoff minus post-cutoff, on the clean harder 328.",
+   "recipe": "Same two files, row choice, 328 filter, join, drops and post/pre labels as the first test here (r3/base-01 F_hard.jsonl base cue; r3/s2800-01 P_hard.jsonl RL plain). Keep problems where score == 1 (stored v1) in both rows and cap_hit is false in both rows. For each kept problem, r = ln(base n_generated / RL n_generated). Statistic = median of r over kept pre problems minus median of r over kept post problems (for an even count, the median is the mean of the two middle values). If no post problem is kept, recompute with the cap_hit condition removed, keeping score == 1 in both rows.",
+   "unit": "difference of median log length ratios",
+   "value": 0.0,
+   "low": -0.5,
+   "high": 0.5,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "MATH-500: per-token entropy of the RL model's own short right answers relative to its own long right answers (the RL-side counterpart of test 3).",
+   "recipe": "Files: studies/rlneurons/results/rln5/map-01/checks.json (key per_row, list T2) and studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. For each T2 row, per-token entropy e = sum_entropy_own / n_own. Drop rows with n_own == 0 or missing. Join with per_problem.json on problem_index. Keep problems with t2_right true and t2_cap_hit false. short = t2_generated_tokens <= 2000; long = t2_generated_tokens > 2000. Statistic = median e over short / median e over long (for an even count, the median is the mean of the two middle values).",
+   "unit": "ratio",
+   "value": 0.82,
+   "low": 0.68,
+   "high": 0.96,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "MATH-500, 4 independent samples per model at T 1.0: on problems that both models solve every time and where the base's typical answer is short, how much the base's answer length varies across its own samples, relative to how much RL's varies (median log ratio of coefficients of variation).",
+   "recipe": "Files: studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (base) and studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (RL). Use only rows with attempt == 0. For each model and problem_index, collect the attempt-0 rows for samples 0, 1, 2 and 3. Keep a problem only if both models have all four attempt-0 rows, and every one of those 8 rows has score_v3 == 1 and cap_hit false. Missing rows exclude the problem; there are no ties to break. For each kept problem and model, take the 4 values of n_new, and set CV = (population standard deviation, ddof = 0) / (mean). Drop any problem where either model's CV is 0. Short problems are those where the median of the base's 4 n_new values (the mean of the two middle values) is <= 2000. For each short problem, compute L = ln(CV_base / CV_RL). Statistic = median of L over short problems (for an even count, the mean of the two middle values).",
+   "unit": "log ratio",
+   "value": 0.2,
+   "low": -0.15,
+   "high": 0.55,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "MATH-500, same 4-sample rows: base-versus-RL length variability on short problems minus the same on long problems (difference in median log CV ratios).",
+   "recipe": "Same files, attempt-0 rows, kept problems (all 8 rows score_v3 == 1 and cap_hit false), CV definition, zero-CV drops and L = ln(CV_base / CV_RL) as in the first test here. Short = median of the base's 4 n_new values <= 2000; long = that median > 2000. Statistic = (median L over short problems) - (median L over long problems), with each median taken as in the first test (for an even count, the mean of the two middle values).",
+   "unit": "difference of log ratios",
+   "value": 0.1,
+   "low": -0.2,
+   "high": 0.4,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0
+  }
+ ]
+}

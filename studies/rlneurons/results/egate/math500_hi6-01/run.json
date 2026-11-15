@@ -1,0 +1,86 @@
+[
+ {
+  "job_id": "abaybektursun-1114-230321-6bfc",
+  "commit": "b34360fb4aa8cdcb9d353ec64ee5c5a9f1211992",
+  "config": {
+   "model": "base",
+   "model_path": null,
+   "model_label": null,
+   "set": "math500",
+   "arms": [
+    "hi6=hi:0.6"
+   ],
+   "h0": "0.9",
+   "q": 0.8,
+   "calib_n": 50,
+   "calib_tokens": 2000,
+   "rnd_share": null,
+   "max_tokens": 16384,
+   "seed": 61000000,
+   "n": null,
+   "samples": 1,
+   "first_sample": 1,
+   "shard": "0/1",
+   "out": "/root/abaybektursun-1114-230321-6bfc/out",
+   "commit": "b34360fb4aa8cdcb9d353ec64ee5c5a9f1211992",
+   "model_repo": "allenai/Olmo-3-1025-7B",
+   "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "tokenizer": [
+    "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   ],
+   "prefix_ids": [
+    1584,
+    2268,
+    33413
+   ],
+   "seed_rule": "seed + 10000 * sample + index",
+   "n_problems": 500
+  },
+  "h0": 0.9,
+  "rnd_share": null,
+  "started_utc": "2026-11-15T07:03:45Z"
+ },
+ {
+  "job_id": "abaybektursun-1114-230344-6c5a",
+  "commit": "b34360fb4aa8cdcb9d353ec64ee5c5a9f1211992",
+  "config": {
+   "model": "base",
+   "model_path": null,
+   "model_label": null,
+   "set": "math500",
+   "arms": [
+    "hi6=hi:0.6"
+   ],
+   "h0": "0.9",
+   "q": 0.8,
+   "calib_n": 50,
+   "calib_tokens": 2000,
+   "rnd_share": null,
+   "max_tokens": 16384,
+   "seed": 61000000,
+   "n": null,
+   "samples": 1,
+   "first_sample": 2,
+   "shard": "0/1",
+   "out": "/root/abaybektursun-1114-230344-6c5a/out",
+   "commit": "b34360fb4aa8cdcb9d353ec64ee5c5a9f1211992",
+   "model_repo": "allenai/Olmo-3-1025-7B",
+   "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "tokenizer": [
+    "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   ],
+   "prefix_ids": [
+    1584,
+    2268,
+    33413
+   ],
+   "seed_rule": "seed + 10000 * sample + index",
+   "n_problems": 500
+  },
+  "h0": 0.9,
+  "rnd_share": null,
+  "started_utc": "2026-11-15T07:03:52Z"
+ }
+]

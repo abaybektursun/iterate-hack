@@ -59,7 +59,7 @@ def epoch(s):
 class VllmEngine:
     """RLN-3's engine construction (rln3_gen.VllmEngine: n13 settings, gpu_memory_utilization 0.90) with per-request sampling."""
 
-    def __init__(self, model_dir, tok_dir, max_model_len):
+    def __init__(self, model_dir, tok_dir, max_model_len, logits_processors=None):
         wrong = {k: os.environ.get(k) for k, v in G.ENGINE_ENV.items() if os.environ.get(k) != v}
         assert not wrong, f"A21: the engine environment differs from {G.ENGINE_ENV}: {wrong}"
         import vllm
@@ -67,7 +67,7 @@ class VllmEngine:
         self.SP = SamplingParams
         args = EngineArgs(model=str(model_dir), tokenizer=str(tok_dir), dtype="bfloat16", tensor_parallel_size=1, max_model_len=max_model_len,
                           gpu_memory_utilization=0.90, enable_prefix_caching=True, generation_config="vllm", seed=0,
-                          attention_backend=G.ATTENTION_BACKEND)
+                          attention_backend=G.ATTENTION_BACKEND, logits_processors=logits_processors)
         self.engine = LLMEngine.from_engine_args(args)
         sc = self.engine.vllm_config.scheduler_config
         self.info = {"vllm": vllm.__version__, "max_num_seqs": sc.max_num_seqs, "max_num_batched_tokens": sc.max_num_batched_tokens,
