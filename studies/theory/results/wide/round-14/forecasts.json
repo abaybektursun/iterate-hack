@@ -1,0 +1,728 @@
+{
+ "reader-1": [
+  {
+   "id": "t01",
+   "value": 230,
+   "low": 215,
+   "high": 244,
+   "reason": "Think-SFT in its own format at cap 32,768 scored 232 at T 1.0 (result-dd9239), and its cue samples at 32,768 average 232.8; T 0.6 / top-p 0.95 should be about the same for a distilled reasoner, with a small risk of more loops."
+  },
+  {
+   "id": "t02",
+   "value": 472,
+   "low": 463,
+   "high": 480,
+   "reason": "Own format at cap 32,768 scored 474 on MATH-500 at T 1.0 (result-0a0a5a); I expect T 0.6 to land within a few problems of that."
+  },
+  {
+   "id": "t03",
+   "value": 1.5,
+   "low": 0.3,
+   "high": 5.0,
+   "reason": "The full 1.5x edit shifts layer 24 by about 9.3 and a random edit by about 0.1 (result-98de28). RL input directions are driven about 10x more than random ones, but random outputs should not compound across layers, so I put this near ten times the random shift."
+  },
+  {
+   "id": "t04",
+   "value": 0.2,
+   "low": 0.06,
+   "high": 0.8,
+   "reason": "With random input directions the base barely drives the edit, so the injected change is near the random edit's (about 0.1 at 1.5x) even though the outputs are RL's directions."
+  },
+  {
+   "id": "t05",
+   "value": 5.0,
+   "low": 1.0,
+   "high": 11.0,
+   "reason": "RL inputs give full drive, and the RL output subspace still lines up with the next layer's inputs, so a large share of the full edit's 9.3 shift is plausible even though the behaviour matched random (160/64)."
+  },
+  {
+   "id": "t06",
+   "value": 222,
+   "low": 200,
+   "high": 240,
+   "reason": "Adding 2x the RL delta lifted Think-SFT by about 7 points through fewer cap hits (result-3387ce, c5dafe); on an RLVR-trained host I expect a smaller gain over a host near 212."
+  },
+  {
+   "id": "t07",
+   "value": 212,
+   "low": 190,
+   "high": 232,
+   "reason": "Think-SFT with the cue scores about 209 at cap 16,384; the final Think model is somewhat stronger on AIME but writes long answers, so cap hits at 16,384 should hold it near the SFT level."
+  },
+  {
+   "id": "t08",
+   "value": 3.0,
+   "low": -4.0,
+   "high": 10.0,
+   "reason": "The delta gave +7.4 points on Think-SFT; a host that already had RL should gain less, and the result could be zero or negative."
+  },
+  {
+   "id": "t09",
+   "value": 362,
+   "low": 344,
+   "high": 378,
+   "reason": "301 passed plus most of the 97 unopened-block programs, assuming they pass at about the 70% rate of Think-SFT's fenced answers (result-9d38d9)."
+  },
+  {
+   "id": "t10",
+   "value": 328,
+   "low": 298,
+   "high": 355,
+   "reason": "270 passed under the Math cue; it likely has as many or more unopened blocks, so I add about 50-60 passes at a rate near 65%."
+  },
+  {
+   "id": "t11",
+   "value": 318,
+   "low": 316,
+   "high": 323,
+   "reason": "The base rarely writes the unopened-block format (34 answers have no block, mostly cap hits or other failures), so 317 should barely move."
+  },
+  {
+   "id": "t12",
+   "value": 401,
+   "low": 399,
+   "high": 404,
+   "reason": "RL-Code has only 8 answers without a code block, so the regrade should leave 401 nearly unchanged."
+  },
+  {
+   "id": "t13",
+   "value": 105,
+   "low": 72,
+   "high": 150,
+   "reason": "The plain base scores 76 on hard328. Direction 1 mostly helps finishing and writes the cue only weakly (screen: top1 plain 42 vs base 34 of 100), so I expect a partial lift."
+  },
+  {
+   "id": "t14",
+   "value": 160,
+   "low": 115,
+   "high": 192,
+   "reason": "The top-8 directions write the cue on their own (top-8 1x plain gave 427 on MATH-500), and directions 2-8 at 1.5x with the cue score 183-196, so the plain version should end up somewhat below that."
+  },
+  {
+   "id": "t15",
+   "value": 196,
+   "low": 183,
+   "high": 208,
+   "reason": "The base vote over 4 on hard328 is 192 (179 on other rows), and pass@4 is about 207; on MATH-500 going from 4 to 6 votes added about 7, so I expect +3 to +6 here."
+  },
+  {
+   "id": "t16",
+   "value": 223,
+   "low": 218,
+   "high": 228,
+   "reason": "RL's vote over 4 is 221. Its short answers are more accurate than its long ones, so breaking ties toward the shortest answer should add a couple of problems."
+  },
+  {
+   "id": "t17",
+   "value": 482,
+   "low": 478,
+   "high": 486,
+   "reason": "Think-SFT's vote over 4 on MATH-500 is 481; the tie rule should move it by only 0-2 problems."
+  },
+  {
+   "id": "t18",
+   "value": 58,
+   "low": 54,
+   "high": 62,
+   "reason": "RL's vote over 4 on fresh2026 is 57; the shortest-answer tie rule should shift it by about one problem."
+  },
+  {
+   "id": "t19",
+   "value": 39,
+   "low": 35,
+   "high": 43,
+   "reason": "The cued base's vote over 4 on fresh2026 is 38; the tie rule moved the base by -1 on hard328 and +7 in-sample on MATH-500."
+  }
+ ],
+ "reader-2": [
+  {
+   "id": "t01",
+   "value": 230,
+   "low": 213,
+   "high": 245,
+   "reason": "Paired T 1.0 own-format cell at cap 32,768 scored 232/328 (result-dd9239); the released T 0.6 setting should land close, with some risk of more loops."
+  },
+  {
+   "id": "t02",
+   "value": 472,
+   "low": 462,
+   "high": 481,
+   "reason": "Own-format T 1.0 cap-32,768 cell scored 474/500 (result-0a0a5a); cue samples at 16k were 457-462, and T 0.6 is the model's released setting."
+  },
+  {
+   "id": "t03",
+   "value": 1.5,
+   "low": 0.4,
+   "high": 5.0,
+   "reason": "RL inputs read the base strongly (drive 8-11x random), so each layer writes as much as the full edit, but random outputs should lose the cross-layer compounding behind the full 1.5x edit's 9.3 (random 1.5x about 0.1)."
+  },
+  {
+   "id": "t04",
+   "value": 0.15,
+   "low": 0.06,
+   "high": 0.8,
+   "reason": "Random input directions read the base about as weakly as the random edit (0.066 at 1x, about 0.1 at 1.5x), so the shift should stay near random."
+  },
+  {
+   "id": "t05",
+   "value": 6.5,
+   "low": 2.5,
+   "high": 10.5,
+   "reason": "Shifting the pairs keeps both subspaces and the per-layer write norm (singular values times input reads), so the shift should approach the full 1.5x edit's 9.3 even though the score matched random."
+  },
+  {
+   "id": "t06",
+   "value": 225,
+   "low": 205,
+   "high": 243,
+   "reason": "On Think-SFT, 2x the RL delta added about 22 (209 to 232) by cutting cap hits; on the already RL-trained Think host I expect a smaller gain on top of about 214."
+  },
+  {
+   "id": "t07",
+   "value": 214,
+   "low": 192,
+   "high": 235,
+   "reason": "Think-SFT with the cue scores 209 mean at cap 16k; the final Think model has slightly better AIME on its model card but similar cap-hit exposure at 16,384."
+  },
+  {
+   "id": "t08",
+   "value": 3.5,
+   "low": -2.5,
+   "high": 9.5,
+   "reason": "Difference of t06 and t07 on paired seeds: a smaller effect than Think-SFT's +7.4 points, plus about 2.5 points of single-sample noise."
+  },
+  {
+   "id": "t09",
+   "value": 365,
+   "low": 347,
+   "high": 381,
+   "reason": "301 passed plus about 70% of the 97 unopened-but-complete programs (the pass rate among its fenced answers was 301/432)."
+  },
+  {
+   "id": "t10",
+   "value": 345,
+   "low": 315,
+   "high": 375,
+   "reason": "The Math cue had more unscored answers (270 passed); accepting the unopened block should recover a similar or larger share, moving it toward the Code-cue regrade."
+  },
+  {
+   "id": "t11",
+   "value": 319,
+   "low": 316,
+   "high": 326,
+   "reason": "The base fenced 504 of 538 and rarely writes the unopened form, so only a few of its 34 no-block answers should be recovered from 317."
+  },
+  {
+   "id": "t12",
+   "value": 401,
+   "low": 400,
+   "high": 404,
+   "reason": "RL-Code fenced 530 of 538 (8 no-block, 8 cap hits), so the regrade barely moves 401."
+  },
+  {
+   "id": "t13",
+   "value": 105,
+   "low": 78,
+   "high": 145,
+   "reason": "Plain base scores 76 on hard328; direction 1 alone wrote little of the cue on the plain screen (42 vs 34 of 100 MATH-500), but it cuts cap hits, so modestly above plain."
+  },
+  {
+   "id": "t14",
+   "value": 160,
+   "low": 115,
+   "high": 192,
+   "reason": "With the cue, directions 2-8 scored 183-196; the 8 directions write the cue themselves (plain top-8 427 vs cue 410 on MATH-500), so most of that should carry over without the cue."
+  },
+  {
+   "id": "t15",
+   "value": 197,
+   "low": 189,
+   "high": 206,
+   "reason": "Cued-base vote over 4 on hard328 is 192; on MATH-500 going from 4 to 6 samples added about 7 of 500, so a few more problems here."
+  },
+  {
+   "id": "t16",
+   "value": 221,
+   "low": 215,
+   "high": 227,
+   "reason": "RL's plain vote over 4 on hard328 is 221; tie rules moved votes by 0-3 elsewhere (base 191 vs 192, RL MATH-500 475 vs 474)."
+  },
+  {
+   "id": "t17",
+   "value": 481,
+   "low": 476,
+   "high": 485,
+   "reason": "Think-SFT cue vote over 4 on MATH-500 is 481; tie-to-shortest should change it by only a few problems."
+  },
+  {
+   "id": "t18",
+   "value": 57,
+   "low": 53,
+   "high": 61,
+   "reason": "RL's vote over 4 on fresh2026 is 57; a tie rule should move it by a couple of problems."
+  },
+  {
+   "id": "t19",
+   "value": 38,
+   "low": 34,
+   "high": 42,
+   "reason": "Cued base vote over 4 on fresh2026 is 38; frequent cap hits create ties, but the shortest-answer rule gave no net gain for the base on hard328."
+  }
+ ],
+ "round-09/training-m01": [
+  {
+   "id": "t01",
+   "value": 234,
+   "low": 218,
+   "high": 249,
+   "reason": "The theory says Think-SFT's own template brings back its trained ending and leaves reasoning length and cap behaviour on hard328 unchanged, so I anchor on the own-format T 1.0 cell at cap 32,768 (232/328, result-dd9239); the theory says nothing about temperature, so the T 0.6 change only widens the interval."
+  },
+  {
+   "id": "t02",
+   "value": 474,
+   "low": 463,
+   "high": 484,
+   "reason": "The theory says the own template gets more MATH-500 answers counted, so I anchor on the own-format cell at cap 32,768 (474/500, result-0a0a5a, above the 457-462 cue samples); T 0.6 is not covered by the theory, so the interval is wider."
+  },
+  {
+   "id": "t03",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t04",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t05",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t06",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t07",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t08",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t09",
+   "value": 366,
+   "low": 345,
+   "high": 385,
+   "reason": "The theory says that off its trained template Think-SFT 'reasons as well but misplaces the final answer', so the 97 programs with no opening fence (result-9d38d9) should pass at about the fenced rate of 301/432 (70 %): 301 + about 65."
+  },
+  {
+   "id": "t10",
+   "value": 335,
+   "low": 300,
+   "high": 370,
+   "reason": "Same misplacement account: the Math cue's 31-problem deficit against the Code cue (270 vs 301) should be mostly format, recovered at about the 70 % fenced pass rate; the count of unfenced answers is not posted, so the interval is wide."
+  },
+  {
+   "id": "t11",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t12",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t13",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t14",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t15",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t16",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t17",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t18",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t19",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  }
+ ],
+ "round-09/stopping-m04": [
+  {
+   "id": "t01",
+   "value": 229,
+   "low": 215,
+   "high": 242,
+   "reason": "Theory: a cut answer scores zero, and at cap 32,768 Think-SFT's own format almost always finishes (232 at T 1.0, paired seed). The theory's T 0.6 clause says loops that depend on the opening add cap hits, which offsets the precision gain from the lower temperature, so the count stays near 232 and slightly below it."
+  },
+  {
+   "id": "t02",
+   "value": 473,
+   "low": 464,
+   "high": 481,
+   "reason": "Same clauses: at cap 32,768 on MATH-500 there are almost no cut answers (474 with 0 cap hits at T 1.0). At T 0.6 a few looped cap hits trade against finished-answer precision, so the count stays near 474."
+  },
+  {
+   "id": "t03",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t04",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t05",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t06",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t07",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t08",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t09",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t10",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t11",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t12",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t13",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t14",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t15",
+   "value": 197,
+   "low": 190,
+   "high": 205,
+   "reason": "Theory: more samples leave the length distribution in place, so they only sharpen the precision of finished answers, and the cued base's cap-hit problems stay at zero. The count therefore rises a little above the vote over 4 (192, or 195 after restart) and stays capped well below pass@4 (207)."
+  },
+  {
+   "id": "t16",
+   "value": 221,
+   "low": 216,
+   "high": 226,
+   "reason": "Theory: a tie rule changes neither the length distribution nor the cap hits, and cut answers already cast no vote. Ties-to-shortest only reselects among finished answers, so the count should equal RL's plain vote of 221 (the base's tie-short moved its vote by 1)."
+  },
+  {
+   "id": "t17",
+   "value": 481,
+   "low": 477,
+   "high": 485,
+   "reason": "Theory: a tie rule moves only precision among finished answers, so the count should equal Think-SFT's plain MATH-500 vote of 481."
+  },
+  {
+   "id": "t18",
+   "value": 57,
+   "low": 53,
+   "high": 61,
+   "reason": "Theory: a tie rule moves only precision among finished answers and leaves the cap hits in place, so the count should equal RL's fresh2026 vote of 57."
+  },
+  {
+   "id": "t19",
+   "value": 38,
+   "low": 35,
+   "high": 42,
+   "reason": "Theory: the cued base's roughly 40 % cap hits cast no vote under any tie rule, so ties-to-shortest only reselects among finished answers. The count should equal its fresh2026 vote of 38."
+  }
+ ],
+ "run-08/f2-m05": [
+  {
+   "id": "t01",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t02",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t03",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t04",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t05",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t06",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t07",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t08",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t09",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t10",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t11",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t12",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t13",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t14",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t15",
+   "value": 198,
+   "low": 190,
+   "high": 206,
+   "reason": "Theory: scattered wrong answers let the right answer win the plurality once p > ~0.3, so going from vote over 4 (192 of 328) to 6 still gains, but the gain shrinks after k = 4 and even k still leaves ties. I scaled the MATH-500 step from k = 4 to 6 (+7.4 of 500) up for hard328's larger mid-p share; the result stays well below pass@4 (205-207)."
+  },
+  {
+   "id": "t16",
+   "value": 222,
+   "low": 216,
+   "high": 228,
+   "reason": "Theory: a fixed tie rule breaks even-k ties about half right, so tie-to-shortest should land at RL's plain vote over 4 on the 328 (221). The base showed this there (191 vs 192), and RL's long answers being right less often adds about +1."
+  },
+  {
+   "id": "t17",
+   "value": 481,
+   "low": 477,
+   "high": 485,
+   "reason": "Theory: a fixed tie rule is about half right on ties, so the count stays near Think-SFT's stored vote over 4 on MATH-500 (481). Its many cap hits cast no vote, which leaves few contested ties."
+  },
+  {
+   "id": "t18",
+   "value": 58,
+   "low": 53,
+   "high": 63,
+   "reason": "Theory: ties are broken about half right whatever the rule, so the count stays near RL's stored vote over 4 on fresh2026 (57). Its wrong answers scatter, and ties-to-shortest may add about 1."
+  },
+  {
+   "id": "t19",
+   "value": 38,
+   "low": 34,
+   "high": 42,
+   "reason": "Theory: the cued base's per-sample success on fresh2026 (~0.22) is mostly below the ~0.3 threshold, so many problems are split or tied, and a fixed tie rule breaks them about half right. The count stays near the stored vote over 4 (38), as tie_short did on hard328 (191 vs 192)."
+  }
+ ],
+ "round-14/s3-b": [
+  {
+   "id": "t01",
+   "value": 212,
+   "low": 194,
+   "high": 229,
+   "reason": "T 0.6 makes part of Think-SFT's long traces loop to the cap; the 32k cap recovers little, so it lands below the cue's 230 at 32k and T 1.0."
+  },
+  {
+   "id": "t02",
+   "value": 452,
+   "low": 439,
+   "high": 465,
+   "reason": "MATH-500 routes are mostly short, so few loops matter: near the 454 of T 1.0 at 16k, slightly lower."
+  },
+  {
+   "id": "t15",
+   "value": 184,
+   "low": 175,
+   "high": 194,
+   "reason": "T 1.0 has no loops, so the board's reading holds: vote@4 179 plus about 5 for 2 more samples."
+  },
+  {
+   "id": "t16",
+   "value": 215,
+   "low": 206,
+   "high": 224,
+   "reason": "T 1.0 RL has no loops; the tie to the shortest finished sample adds about +1 to vote@4 of about 214."
+  },
+  {
+   "id": "t17",
+   "value": 471,
+   "low": 463,
+   "high": 478,
+   "reason": "T 1.0, no loop regime; vote over 4 of about 471 plus 0-1 from the tie rule."
+  },
+  {
+   "id": "t18",
+   "value": 57,
+   "low": 52,
+   "high": 62,
+   "reason": "T 1.0, no loops; the tie rule leaves RL's vote of 57 unchanged."
+  },
+  {
+   "id": "t19",
+   "value": 34,
+   "low": 28,
+   "high": 40,
+   "reason": "T 1.0 cued base, no loops; singles average 29.5, the vote adds about 4, ties to shortest about 0.5."
+  }
+ ]
+}

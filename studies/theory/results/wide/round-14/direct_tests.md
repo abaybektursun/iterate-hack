@@ -80,8 +80,8 @@ Majority vote counts answer strings: the base's wrong answers scatter (only abou
 - Computation: 1) In sft1_codecue-01, select the problems whose answer the stored grader marked as having no fenced code block (expect 106). 2) For each, read pass/fail of the same problem in code1/base_cue-01 (317 of 538 pass overall). 3) r_U = passes / 106. 4) 90 % interval: percentile bootstrap over the 106 problems (10,000 resamples); report Wilson 90 % as a check. 5) Report the base's 538-problem rate 0.589 beside it.
 - Null: A random 106-problem subset of the 538 drawn without replacement: expected base pass rate 317/538 = 0.589, with 90 % sampling range 0.589 +/- 1.645 x sqrt(0.589 x 0.411 / 106 x 432/537) = [0.52, 0.66].
 - Ranges fixed in advance: round-14/s1-a [0.72, 1.0], round-14/s1-b [0.0, 0.46], null [0.52, 0.66]; a value in neither rival's range refutes both
-- Verdict round-14/s1-a: not run yet
-- Verdict round-14/s1-b: not run yet
+- Verdict round-14/s1-a: refuted (result-b847a0: r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range a [0.72, 1.0], interval wholly below it)
+- Verdict round-14/s1-b: refuted (result-b847a0: r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range b [0.0, 0.46], interval wholly above it)
 
 
 ## round-14/s2 (shared test of the rivals for surprise s2)
@@ -96,8 +96,8 @@ Majority vote counts answer strings: the base's wrong answers scatter (only abou
 - Computation: 1) In sft1_codecue-01 keep one row per problem (first in file order) and select the rows marked as having no fenced block (expect 106). 2) For each selected problem take the base_cue-01 row; passed = all tests passed under the stored grade; a missing row counts as not passed. 3) S = passed / selected. 4) 90 % interval: Wilson score interval at z = 1.645 on (passed, selected); report a 10,000-draw bootstrap over problems as a check. 5) Also report S for the 97 unopened-block rows alone, and the same share for the complement (Think-SFT fenced rows).
 - Null: Random subset of problems: the base's overall Code-cue pass rate, 317/538 = 0.589. With n = 106 its 90 % sampling range is 0.589 +/- 0.079.
 - Ranges fixed in advance: round-14/s2-a [0.72, 1.0], round-14/s2-b [0.0, 0.45], null [0.51, 0.67]; a value in neither rival's range refutes both
-- Verdict round-14/s2-a: not run yet
-- Verdict round-14/s2-b: not run yet
+- Verdict round-14/s2-a: refuted (result-b847a0: r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range a [0.72, 1.0], interval wholly below it)
+- Verdict round-14/s2-b: refuted (result-b847a0: r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range b [0.0, 0.45], interval wholly above it)
 
 
 ## round-14/s3 (shared test of the rivals for surprise s3)
@@ -112,8 +112,8 @@ Majority vote counts answer strings: the base's wrong answers scatter (only abou
 - Computation: 1) In hard328_base_t06-01, take one row per problem_index (the first in file order). 2) Keep the rows with generated tokens > 4,096; n = their count. 3) For each kept problem, read its state for cell hard328_base_t06-01 in page_grid.json; loop = 1 if the state is 'loop', else 0. 4) S = sum(loop) / n. 5) 90 % interval: 10,000 bootstrap resamples of the kept rows with replacement; take the 5th and 95th percentiles of S. 6) Verdict: a holds if the interval lies inside [0.05, 0.40], b holds if it lies inside [0.45, 1.0]. A value in neither range refutes both.
 - Null: The same share on the cued base's T 1.0 hard328 rows (day1 hard328_base_cue_t10-01: 1 rule-A loop of 328, 77 cap hits). This is the no-loop regime the readers assumed, giving at most about 1/200.
 - Ranges fixed in advance: round-14/s3-a [0.05, 0.4], round-14/s3-b [0.45, 1.0], null [0.0, 0.03]; a value in neither rival's range refutes both
-- Verdict round-14/s3-a: not run yet
-- Verdict round-14/s3-b: not run yet
+- Verdict round-14/s3-a: refuted (result-813b5e: loop share past 4,096 tokens (plain base, T 0.6 / top-p 0.95, hard328) 0.519 [0.460, 0.577], n 189; null (cued base T 1.0) 0.004; cued T 0.6 0.626 [0.574, 0.683], n 211)
+- Verdict round-14/s3-b: holds (result-813b5e: loop share past 4,096 tokens (plain base, T 0.6 / top-p 0.95, hard328) 0.519 [0.460, 0.577], n 189; null (cued base T 1.0) 0.004; cued T 0.6 0.626 [0.574, 0.683], n 211)
 
 
 ## round-14/s4 (shared test of the rivals for surprise s4)
@@ -128,8 +128,8 @@ Majority vote counts answer strings: the base's wrong answers scatter (only abou
 - Computation: 1) From per_problem.json, keep problems 0-249 where T3 is right and not cut off; L = median of their T3 generated tokens (for an even count, the mean of the two middle values). 2) From m21 answers.jsonl, keep the first row per problem_index 0-249 with score_v3 == 1 and cap_hit not true. 3) S = (kept m21 rows with n_generated <= L) / (kept m21 rows). 4) 90 % interval: 10,000 bootstrap draws resampling problems 0-249 with replacement, recomputing L and S in each draw; take the 5th and 95th percentiles.
 - Null: No edit: a plain-base draw measured against the plain base's own median gives 0.50 by construction, and its sampling spread at n 157 is about [0.43, 0.57]. Math top-8 1x plain right rows below L (about 0.02-0.08) are a's prediction, not a null.
 - Ranges fixed in advance: round-14/s4-a [0.0, 0.12], round-14/s4-b [0.15, 0.36], null [0.41, 0.6]; a value in neither rival's range refutes both
-- Verdict round-14/s4-a: not run yet
-- Verdict round-14/s4-b: not run yet
+- Verdict round-14/s4-a: refuted (result-1d64b9: S 0.414 [0.319, 0.510] (65 of 157 m21 right answers at or below the plain base's median right length, 1,069 tokens), n 157, null 0.50; interval wholly above a's range 0.0-0.12)
+- Verdict round-14/s4-b: undecided (result-1d64b9: S 0.414 [0.319, 0.510], n 157, null 0.50; interval crosses b's top 0.36 (range 0.15-0.36); about 500 right rows would decide)
 
 
 ## round-14/s5 (shared test of the rivals for surprise s5)
@@ -144,8 +144,8 @@ Majority vote counts answer strings: the base's wrong answers scatter (only abou
 - Computation: 1) Build the contested set P (expected about 120 problems; the test needs at least 50). 2) For each p in P, take its wrong answers W_p, form all unordered pairs, and count agreeing pairs with rln4_lib.agree (studies/rlneurons/lib/rln4_lib.py). 3) Statistic = sum of agreeing pairs / sum of pairs over P. 4) 90 % interval: bootstrap over problems, 2,000 resamples of P with replacement, recompute the pooled ratio, and take the 5th-95th percentiles. 5) Null: for each p, pair each of its wrong answers with each wrong answer of one randomly drawn other contested problem whose gold has the same type (integer or not, using the normalisation in facts.json r7-m09). Pool agreement and average over 200 draws.
 - Null: Cross-problem pairing of wrong answers matched on gold type (integer or not). This is the chance agreement of wrong values that share an answer format but not a problem.
 - Ranges fixed in advance: round-14/s5-a [0.07, 0.3], round-14/s5-b [0.42, 1.0], null [0.0, 0.05]; a value in neither rival's range refutes both
-- Verdict round-14/s5-a: not run yet
-- Verdict round-14/s5-b: not run yet
+- Verdict round-14/s5-a: undecided (result-064aac: pooled wrong-pair agreement 0.262 [0.202, 0.324], n 142 problems (1,271 pairs, 570 wrong answers), null 0.005; interval crosses 0.30, about 380 problems would decide)
+- Verdict round-14/s5-b: refuted (result-064aac: pooled wrong-pair agreement 0.262 [0.202, 0.324], n 142 problems (1,271 pairs, 570 wrong answers), null 0.005; interval wholly below 0.42)
 
 
 ## round-14/s6 (shared test of the rivals for surprise s6)
@@ -160,6 +160,6 @@ Majority vote counts answer strings: the base's wrong answers scatter (only abou
 - Computation: 1) Per problem take each cell's first row. Pass = all tests passed under the cells' stored grader; cap hits and no-block answers count as fail. 2) Build L as in rows. 3) Per problem in L, e = mean pass of its 5 edit samples. 4) Statistic S = mean of e over L. 5) 90 % interval: 10,000 bootstrap resamples of the problems in L (with replacement), 5th and 95th percentiles of S. n = 5 x |L| rows; if n < 50 the verdict is undecided. 6) Null: the same mean over L of base-like resamples, using code1/base_plain-01, code1/base_mathcue-01 and the random rank-8 1.5x cell of code_dial (3 samples per problem), with the same bootstrap.
 - Null: Base-like resamples on L (plain base, Math-cue base, random rank-8 1.5x edit with the Code cue): the pass rate a non-sharpened base gets on problems the cued base passed and RL-Code mostly failed, including regression to the mean.
 - Ranges fixed in advance: round-14/s6-a [0.7, 1.0], round-14/s6-b [0.0, 0.34], null [0.38, 0.66]; a value in neither rival's range refutes both
-- Verdict round-14/s6-a: not run yet
-- Verdict round-14/s6-b: not run yet
+- Verdict round-14/s6-a: refuted (result-366377: mean pass of 5 Code top-8 edit samples on L 0.452 [0.357, 0.539], n 115 rows (23 problems); null base-like resamples 0.435 [0.333, 0.551]; RL-Code on L 0.22; range a [0.70, 1.0])
+- Verdict round-14/s6-b: refuted (result-366377: mean pass of 5 Code top-8 edit samples on L 0.452 [0.357, 0.539], n 115 rows (23 problems); null base-like resamples 0.435 [0.333, 0.551]; RL-Code on L 0.22; range b [0.0, 0.34])
 
