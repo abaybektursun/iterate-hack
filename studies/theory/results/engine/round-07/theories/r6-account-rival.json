@@ -1,0 +1,61 @@
+{
+ "name": "r6-account-rival",
+ "statement": "There is no RL-specific policy of finishing before the cap: at T 1.0 the cued base's cap hits are simply the hard, long end of the one difficulty axis, and any arm that is stronger on that axis fixes them at the rate its overall strength predicts for problems of the same base difficulty. That arm can be RL, the top-8 edit, or the reward-free Think-SFT. So the budget share sits above the null because the other side is stronger on hard problems, not because RL learned to stop in time; the loop part is the same axis seen through a truncating sampler.",
+ "scope": "the rival that beat r6-account in round-06; scope as in r6-account's",
+ "explains": [],
+ "conflicts": [],
+ "rival": "On MATH-500 the problems that an RL-side model gets right and the base side gets wrong (grader v3, cap hits wrong) are split by six ordered rules. The rules read the base row and three independent cued-base T 1.0 samples (kB). (1) Loop: the base hits the cap inside a rule-A repeat. (2) Budget: the base hits the cap with no loop. (3) Answer-statement: the base writes no answer line, or states the gold and then ends on another value. (4) Slip: kB = 3. (5) Sharpening: kB = 1-2. (6) Reach: kB = 0. Two cued-base draws already trade about 28 problems. The null (T1 against a fourth cued sample) is predicted at loop / budget / answer / slip / sharpening / reach = 0 / 0.11 / 0.035 / 0.22 / 0.52 / 0.115. Against the final RL at T 1.0 (fit 0 / 0.25 / 0.03 / 0.18 / 0.44 / 0.10), only budget exceeds the null. So at AI2's setting RL adds a policy of finishing long problems before the cap, plus a larger gap of the same resample kind (one difficulty axis, fewer lost problems). Predicted shares in the other cells: (a) top-8 RL-direction edit: 0 / 0.17 / 0.034 / 0.19 / 0.47 / 0.136, with budget above the null and the rest at the null. (b) Min-p 0.1 at T 1.0, base against RL: 0.37 / 0.21 / 0.03 / 0.12 / 0.21 / 0.06. Truncation locks the base into loops that RL escapes. (c) RL step 400 with the cue at T 0.6 / top-p 0.95: 0.55 / 0.15 / 0.017 / 0.09 / 0.15 / 0.043. (d) The 3.0 first release with the cue at T 0.6: 0.58 / 0.15 / 0.015 / 0.085 / 0.13 / 0.04. (e) The plain base against RL: 0 / 0.045 / 0.38 / 0.38 / 0.165 / 0.03. Which parts exceed the null: budget in every RL-side cell; loop only under truncating samplers, where the base sampler fails and the RL side escapes; answer-statement and slip only against the plain base, where they are the work of the cue (the RL opening), not of later RL training. The largest part still open at T 1.0 is sharpening. A base-only vote over more samples recovers part of it (predicted 456/500).",
+ "promoted_from": "r6-account",
+ "predictions": [
+  {
+   "experiment": "MATH-500, claimed cell: RL's solve rate on the cued base's T1 cap-hit problems minus the solve rate expected for problems of the same base difficulty, using RL's rate on T1 finished-wrong problems with the same 4-sample base count",
+   "recipe": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json and studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. From per_problem.json keep the problems where t1_right and t2_right are both non-null. A problem is T1-right iff t1_right is true and t1_cap_hit is not true; keep only the problems that are not T1-right. Group C = kept problems with t1_cap_hit true. Group F = all other kept problems. RL right = t2_right true and t2_cap_hit not true. k4 for each kept problem: for each sample s in {0,1,2,3}, take the first row in file order of rows.jsonl with that problem_index, attempt == 0 and sample == s. Count the rows with score_v3 == 1 that are not a cap hit (cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'). A missing row counts as not right. Strata: k4 = 0, k4 = 1, k4 = 2, k4 in {3,4}. r_F(stratum) = (F problems in the stratum with RL right) / (F problems in the stratum). Drop any C problem whose stratum holds no F problem. Statistic = (fraction of the remaining C problems with RL right) minus (mean over the same C problems of r_F of each one's stratum).",
+   "unit": "difference of fractions of problems",
+   "value": 0.02,
+   "low": -0.15,
+   "high": 0.19,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "hard328: RL plain's solve rate on the cued base's cap-hit problems minus the solve rate expected for problems of the same base difficulty, using RL's rate on the base's finished-wrong problems with the same count of right answers in three base-like cued resamples",
+   "recipe": "Files (S3, profile iterate-ecr): s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (B, base cue), s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151540-86ef/answers.jsonl (RL plain), and the three cue arms s3://pg-lineage-769063704696/results/rlneurons/r5/selfdistill-01/abaybektursun-1114-201021-095e/answers.jsonl, .../abaybektursun-1114-201035-c6c0/answers.jsonl and .../abaybektursun-1114-201132-3c04/answers.jsonl. In every file keep one row per problem_index: the row with the smallest attempt value, or the first in file order if there is no attempt field. Right = score_v3 == 1 and cap_hit not true; a null or missing score_v3 counts as not right. Keep the problem_index values present in both e72c and 86ef. Keep only the problems where B (e72c) is not right. Group C = kept problems whose e72c row has cap_hit true. Group F = all other kept problems. RL right = the 86ef row is right. k3 = the number of the three selfdistill cue rows (095e, c6c0, 3c04) that are right; a missing row counts as not right. Strata: k3 = 0, k3 = 1, k3 in {2,3}. r_F(stratum) = (F problems in the stratum with RL right) / (F problems in the stratum). Drop any C problem whose stratum holds no F problem. Statistic = (fraction of the remaining C problems with RL right) minus (mean over the same C problems of r_F of each one's stratum).",
+   "unit": "difference of fractions of problems",
+   "value": -0.06,
+   "low": -0.18,
+   "high": 0.06,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Budget share of the gap when the other side is the reward-free Think-SFT model with the cue: among problems Think-SFT cue gets right and the cued base's T1 gets wrong, the fraction where T1 is a cap hit",
+   "recipe": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json and studies/rlneurons/results/wsp1/full500/sft1_cue-01/per_problem.json (if a problem_index repeats, use the first row in file order). Join on problem_index. Keep the problems where t1_right is non-null and the sft1_cue score_v3 is non-null. B right = t1_right true and t1_cap_hit not true. Other right = sft1_cue score_v3 == 1 and cap_hit not true. Gap = problems with other right and B not right. Statistic = (gap problems with t1_cap_hit true) / (gap problems).",
+   "unit": "fraction of gap problems",
+   "value": 0.2,
+   "low": 0.12,
+   "high": 0.28,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "MATH-500, T 1.0: on the cued base's T1 cap-hit problems, Think-SFT cue's right count minus Math-RL's (T2) right count",
+   "recipe": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json and studies/rlneurons/results/wsp1/full500/sft1_cue-01/per_problem.json. If a problem_index repeats in either file, use its first row in file order. Set C = the per_problem.json problems with t1_cap_hit true. RL right = t2_right true and t2_cap_hit not true; a null t2_right counts as not right. Think-SFT right = the sft1_cue row has score_v3 == 1 and cap_hit not true; a missing row or a null score_v3 counts as not right. Statistic = (number of C problems with Think-SFT right) minus (number of C problems with RL right), as a signed integer.",
+   "unit": "problems (signed count)",
+   "value": -1,
+   "low": -5.5,
+   "high": 3.5,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "MATH-500, T 1.0: Think-SFT cue's solve rate on the cued base's T1 cap-hit problems minus its solve rate on T1 finished-wrong problems of the same 4-sample base count (the matched excess, now for the reward-free arm)",
+   "recipe": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json, studies/rlneurons/results/wsp1/full500/sft1_cue-01/per_problem.json and studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. If a problem_index repeats in either per_problem file, use its first row in file order. From t1_t2_items per_problem.json keep the problems where t1_right is non-null. A problem is T1-right iff t1_right is true and t1_cap_hit is not true; keep only the problems that are not T1-right. Group C = kept problems with t1_cap_hit true. Group F = all other kept problems. Think-SFT right = the sft1_cue row has score_v3 == 1 and cap_hit not true; a missing row or a null score_v3 counts as not right. k4 for each kept problem: for each sample s in {0,1,2,3}, take the first row in file order of rows.jsonl with that problem_index, attempt == 0 and sample == s, and count the rows with score_v3 == 1 that are not a cap hit (cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'). A missing row counts as not right. Strata: k4 = 0, k4 = 1, k4 = 2, k4 in {3,4}. r_F(stratum) = (F problems in the stratum with Think-SFT right) / (F problems in the stratum). Drop any C problem whose stratum holds no F problem. Statistic = (fraction of the remaining C problems with Think-SFT right) minus (mean over the same C problems of r_F for each one's stratum).",
+   "unit": "difference of fractions of problems",
+   "value": -0.07,
+   "low": -0.21,
+   "high": 0.07,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0
+  }
+ ]
+}

@@ -1,0 +1,128 @@
+Jobs of abaybektursun, last 4 h:  id  state  gpu  wait  run  command
+  abaybektursun-1115-002049-94ae  cancelled  b200  -  -  python -m studies.rlneurons.jobs.xreward_trace --n 4 --commit 6d0bbb44
+  abaybektursun-1114-222508-0b70  done  NVIDIA H100   30.9  0.1  nvidia-smi --query-gpu=name --format=csv,noheader; echo short lane ok
+  abaybektursun-1114-222618-5748  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1115-001722-52fa/log is open from '/bin/sh -c bash stu  NVIDIA H200  51.0  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-222627-8dec  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1115-001722-52fa/log is open from '/bin/sh -c bash stu  NVIDIA H200  50.8  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-222636-1565  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1115-001722-52fa/log is open from '/bin/sh -c bash stu  NVIDIA H200  50.7  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-222645-14b6  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1115-001722-52fa/log is open from '/bin/sh -c bash stu  NVIDIA H200  50.5  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-222655-e0b3  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1115-001722-52fa/log is open from '/bin/sh -c bash stu  NVIDIA H200  50.4  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-222705-3337  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1115-001722-52fa/log is open from '/bin/sh -c bash stu  NVIDIA H200  50.2  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-002752-fe35  cancelled  NVIDIA H200  49.5  -  python -m studies.rlneurons.jobs.xreward_trace --commit ab67f28d7345e8
+  abaybektursun-1114-222819-01da  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1115-001722-52fa/log is open from '/bin/sh -c bash stu  NVIDIA H200  49.0  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-222829-5232  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1115-001722-52fa/log is open from '/bin/sh -c bash stu  NVIDIA H200  48.9  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-002831-231d  done  NVIDIA H100   27.7  1.4  python -m studies.rlneurons.jobs.xreward_trace --n 4 --commit ab67f28d
+  abaybektursun-1114-222838-2cbb  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1115-001722-52fa/log is open from '/bin/sh -c bash stu  NVIDIA H200  48.7  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-222847-7316  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1115-001722-52fa/log is open from '/bin/sh -c bash stu  NVIDIA H200  48.6  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-222856-c079  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1115-001722-52fa/log is open from '/bin/sh -c bash stu  NVIDIA H200  48.5  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-222905-3c28  cancelled  NVIDIA H200  48.3  0.5  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-003755-b90d  done  NVIDIA H100   40.0  50.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-003804-5998  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222905-3c28/log is open from '/bin/sh -c bash stu  NVIDIA H200  39.8  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-003813-ce44  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222905-3c28/log is open from '/bin/sh -c bash stu  NVIDIA H200  39.7  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-003822-f8fa  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222905-3c28/log is open from '/bin/sh -c bash stu  NVIDIA H200  39.5  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-003833-bdc1  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222905-3c28/log is open from '/bin/sh -c bash stu  NVIDIA H200  39.4  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-003842-958e  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222905-3c28/log is open from '/bin/sh -c bash stu  NVIDIA H200  39.2  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-003851-aaf4  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222905-3c28/log is open from '/bin/sh -c bash stu  NVIDIA H200  39.1  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-003900-7ad7  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222905-3c28/log is open from '/bin/sh -c bash stu  NVIDIA H200  39.0  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-005830-2145  done  NVIDIA H100   0.0  2.8  python -m studies.rlneurons.jobs.xreward_trace --commit ab67f28d7345e8
+  abaybektursun-1114-230321-6bfc  vast.ai, no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1114-230344-6c5a  vast.ai, no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1114-230525-9a9e  vast.ai, no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-010615-e557  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222905-3c28/log is open from '/bin/sh -c bash stu  NVIDIA H200  11.7  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-010625-838e  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222905-3c28/log is open from '/bin/sh -c bash stu  NVIDIA H200  11.6  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-010635-9f2f  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222905-3c28/log is open from '/bin/sh -c bash stu  NVIDIA H200  11.4  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-230733-d1b6  vast.ai, no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1114-230742-6606  vast.ai, no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1114-232213-cac3  done  cpu  0.1  0.2  echo single use ok
+  abaybektursun-1114-232527-9e94  vast.ai, no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1114-232552-5470  vast.ai, no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-012835-a431  done  NVIDIA H100   0.1  50.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-012846-905e  done  NVIDIA H100   0.1  47.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-012855-d7ed  done  NVIDIA H100   9.7  41.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-012905-8f73  done  NVIDIA H100   10.0  50.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-012915-6618  done  NVIDIA H100   15.8  53.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-012925-b15d  done  NVIDIA H100   16.0  39.2  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-012935-2836  done  NVIDIA H100   38.6  51.6  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-233006-7700  vast.ai, no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1114-233015-cfe4  vast.ai, no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1114-233024-c59a  vast.ai, no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1114-233219-f028  vast.ai, no copy yet  vast.ai  -  -  python -m pip install -q --break-system-packages math-verify==0.9.0 &&
+  abaybektursun-1114-233314-34df  vast.ai, no copy yet  vast.ai  -  -  python -m pip install -q --break-system-packages math-verify==0.9.0 &&
+  abaybektursun-1114-233319-30c3  vast.ai, no copy yet  vast.ai  -  -  python -m pip install -q --break-system-packages math-verify==0.9.0 &&
+  abaybektursun-1115-013352-9d6c  done  NVIDIA H200  3.3  7.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-013411-6d5e  done  NVIDIA H100   37.4  86.1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-233354-0eee  vast.ai, no copy yet  vast.ai  -  -  python -m pip install -q --break-system-packages math-verify==0.9.0 &&
+  abaybektursun-1115-013421-6338  done  NVIDIA H100   41.9  103.7  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-013431-3d3b  done  NVIDIA H100   42.1  61.1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-013441-d35a  done  NVIDIA H100   44.7  82.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-233541-1444  vast.ai, no copy yet  vast.ai  -  -  python -m pip install -q --break-system-packages math-verify==0.9.0 &&
+  abaybektursun-1114-233600-a2de  vast.ai, no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1115-014823-ef56  done  NVIDIA H100   31.6  57.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-014833-1daa  done  NVIDIA H100   37.5  56.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-014843-85d9  done  NVIDIA H100   41.4  33.6  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-000934-51f9  done  vast.ai  -  109.0  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-000944-5c9d  vast.ai, no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-000954-b526  done  vast.ai  -  111.1  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-002459-e1f9  vast.ai, no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-002505-8f0e  vast.ai, no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-002559-7900  vast.ai, no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1115-002653-1aca  vast.ai, no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1115-002824-da52  vast.ai, no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1115-003046-f2fe  vast.ai, no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-003106-582e  vast.ai, no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-003203-641e  vast.ai, no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-003715-63e3  vast.ai, no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1115-004808-bb28  done  vast.ai  -  69.1  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-005210-95c6  done  vast.ai  -  65.2  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-005330-92a1  vast.ai, no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1115-005756-309b  vast.ai, no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-005823-8ac9  vast.ai, no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-010036-d67f  vast.ai, no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1115-010708-a9f4  vast.ai, no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-031209-1273  done  NVIDIA H100   0.1  57.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031219-19af  done  NVIDIA H100   0.1  47.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031229-5991  done  NVIDIA H100   0.1  48.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031240-1106  done  NVIDIA H100   1.0  43.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031249-1dcd  done  NVIDIA H100   5.2  50.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031304-cf34  done  NVIDIA H100   5.0  53.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031315-b328  done  NVIDIA H100   9.4  53.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031326-369f  running  NVIDIA H100   24.8  40.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031336-56ff  running  NVIDIA H100   29.3  35.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031346-5113  running  NVIDIA H100   44.1  20.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-031356-77f0  running  NVIDIA H100   46.0  18.3  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-011756-7a57  vast.ai, no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.prefix_cell --rows studies/rlneurons/
+  abaybektursun-1115-014426-3588  vast.ai, no copy yet  vast.ai  -  -  python -m studies.rlneurons.jobs.probdep_tokens --rows studies/rlneuro
+  abaybektursun-1115-014547-2c8c  done  vast.ai  -  15.7  python -m studies.rlneurons.jobs.probdep_tokens --rows studies/rlneuro
+  abaybektursun-1115-015601-2e73  done  vast.ai  -  15.9  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-015753-6093  vast.ai, no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-015818-b11d  vast.ai, no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-015824-bde8  vast.ai, no copy yet  vast.ai  -  -  pkill -f delta_sum; PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons
+  abaybektursun-1115-015835-d906  vast.ai, no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-015852-a31f  vast.ai, no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-020021-e9d1  vast.ai, no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-020435-c76d  vast.ai, no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-020500-36ed  vast.ai, no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-020508-879c  vast.ai, no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-020613-3636  vast.ai, no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-021039-24f7  vast.ai, no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  105 jobs, 24 failed or cancelled; median wait 38.8; 1729.2 container minutes, 0.5 of them in failed or cancelled jobs
+
+Work of abaybektursun, last 4 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-502f19  theory  -  -  -  233 (open)  0  0  Theory engine v5.2 (lib/round.py, SKILL.md): a rival that be
+  work-1c43cf  main  7  146  10  163  5  0  Relay on hard328 (n 328, T 1.0, v3): Think-SFT cue writes, R
+  work-09d814  main  -  -  -  92  0  0  Tinker pair (second model pair, our own RL): Qwen3.5-9B-Base
+  work-3d1e3b  egate  5  112  -  133 (open)  12  0  Delta transplant on hard328: Think-SFT + a (RL-Math - base),
+  work-ceccc0  cap32  3  -  -  116 (open)  8  0  Token cap 32,768 on hard328 for Think-SFT cue, RL plain and 
+  work-644fec  main  -  -  -  101 (open)  0  0  Visuals lead for the findings pages (/findings, tools/findin
+  work-e02ba4  main  -  -  -  66 (open)  0  0  Finish dial: Math 3.1's 8 directions added to the base at si
+  work-c82156  theory  -  -  -  66 (open)  0  0  Run idea-f1bae8: MATH-500, untrained base, plain prompt, no 
+  work-480b1f  main  35  -  -  55 (open)  3  0  RL steps 100 and 400 at AI2's setting (T 1.0 / top-p 1.0, MA
+  work-0d465a  main  -  -  -  4  0  0  Offline, no GPU: mixed-model vote on hard328 from stored row
+  work-173c5c  main  -  -  -  49 (open)  0  0  Laptop, no GPU: finish the Think-SFT training-overlap scan f
+  work-2cd5d0  critic  5  17  1  22  2  0  Problem dependence as a label-free early sign of a wrong sam
+  work-ab6833  main  -  -  -  19 (open)  0  0  run_cell --shard k/N (problems k, k+N, ... of the set; seeds
+  work-7c069c  main  -  -  -  2 (open)  0  0  Fresh held-out set (problems dated after the training data o
+  work-4ecc65  main  -  -  -  2 (open)  0  0  Risk-coverage of Think-SFT cue vs RL plain vs base cue on st
+
+Team, last 4 h: claim to close median 142 min, upper quartile 210 min, over 22 work items closed by 3 people; 33 results, 8.2 per hour.
+
+Median minutes per stage over work items with jobs: to-job 5, jobs 112, to-answer 5. Slowest stage: jobs.

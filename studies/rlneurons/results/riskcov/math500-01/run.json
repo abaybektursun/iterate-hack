@@ -1,0 +1,12 @@
+{
+ "commit": "f0420ba13fb3d9793249e6c6ea4a739ab0d99bf2",
+ "command": "python -m studies.rlneurons.analysis.riskcov --set math500 --out studies/rlneurons/results/riskcov/math500-01 --think-run /home/abay/Projects/iterate-hack/runs/thinkvote_math500_sft1_cue_s4 --rl-run /home/abay/Projects/iterate-hack/runs/abaybektursun-1114-183640-e828",
+ "job_id": null,
+ "gpu": "none (laptop)",
+ "spec": "studies/rlneurons/specs/SPEC_riskcov.md",
+ "bootstrap": {
+  "curves": 2000,
+  "vote": 5000,
+  "seed": 0
+ }
+}

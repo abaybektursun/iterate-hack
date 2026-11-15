@@ -1,0 +1,10 @@
+[
+ {
+  "id": "r5-m10:theory:intervention",
+  "measured": 411,
+  "n": 500,
+  "interval": [397, 424],
+  "artifact": "studies/theory/results/experiments/selfopen-01/metrics.json",
+  "item": "result-3a3af3"
+ }
+]

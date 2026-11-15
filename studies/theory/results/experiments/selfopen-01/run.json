@@ -1,0 +1,19 @@
+{
+ "experiment": "selfopen-01",
+ "spec": "studies/theory/specs/SPEC_selfopen01.md",
+ "commit": "4ca34e9e013410b148f4e61356135b6873b09fde",
+ "command_job": "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.selfopen_gen --shard <k>/4 --commit <sha>",
+ "command_readout": "uv run --with numpy --with math-verify==0.9.0 python -m studies.theory.analysis.selfopen01 runs/abaybektursun-1115-021039-24f7/s0 runs/ih-1115-095450-2b5a runs/abaybektursun-1115-021039-24f7/s2 runs/abaybektursun-1115-015601-2e73 --t3 runs/selfopen01/T3.jsonl --t1 runs/selfopen01/T1.jsonl --out studies/theory/results/experiments/selfopen-01",
+ "shards_used": [
+  {"shard": "0/4", "job_id": "abaybektursun-1115-021039-24f7", "out": "s0", "where": "vast.ai instance 60770511, RTX PRO 6000 Blackwell Max-Q 96 GB", "wall_s": 842},
+  {"shard": "1/4", "job_id": "ih-1115-095450-2b5a", "where": "AWS ih bridge, l40s-small (g6e.xlarge, L40S 48 GB)", "wall_s": 2229},
+  {"shard": "2/4", "job_id": "abaybektursun-1115-021039-24f7", "out": "s2", "where": "vast.ai instance 60770511, same box, after 0/4", "wall_s": 856},
+  {"shard": "3/4", "job_id": "abaybektursun-1115-015601-2e73", "where": "vast.ai instance 60770511", "wall_s": 822}
+ ],
+ "not_used": [
+  {"job_id": "ih-1115-092233-16dc", "what": "smoke run, --n 8 --draws 4 --max-tokens 2048, commit 288518a, AWS g6e.2xlarge, 527 s; wrote all four outputs, continuations ran"},
+  {"job_id": "ih-1115-093703-e6d8", "what": "shard 0/2 on AWS g6e.2xlarge, killed by hand after about 31 min with 155 of 405 continuations done: the L40S KV cache held about 13 long answers at a time (190 tokens/s) and the job would have passed its kill time. Its problems were rerun as shards 0/4 and 2/4."}
+ ],
+ "raw_outputs": "runs/<job-id>/ on the laptop of the run (openings.jsonl, answers.jsonl, choices.json, metrics.json); not committed",
+ "compute": {"aws_l40s_minutes": 81, "vast_rtx_pro_6000_minutes": 45, "cost_usd_approx": {"aws": 2.7, "vast": 1.0}}
+}

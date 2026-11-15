@@ -1,0 +1,352 @@
+{
+ "base_cue": {
+  "single": {
+   "right_of_500": 405,
+   "tokens_per_problem": 3808
+  },
+  "agreement_of_plurality_flag_with_correct": 0.965,
+  "key k=2 at 0.1 share": {
+   "right_of_500": 450.3,
+   "tokens_per_problem": 3991
+  },
+  "key k=2 at 0.25 share": {
+   "right_of_500": 450.3,
+   "tokens_per_problem": 4254
+  },
+  "key k=2 at 0.5 share": {
+   "right_of_500": 450.3,
+   "tokens_per_problem": 4693
+  },
+  "key k=2 at 1.0 share": {
+   "right_of_500": 450.3,
+   "tokens_per_problem": 5570
+  },
+  "key k=2 at 500 tokens": {
+   "right_of_500": 449.2,
+   "tokens_per_problem": 3897
+  },
+  "key k=2 at 1000 tokens": {
+   "right_of_500": 444.0,
+   "tokens_per_problem": 3958
+  },
+  "key k=2 at 2000 tokens": {
+   "right_of_500": 440.3,
+   "tokens_per_problem": 4095
+  },
+  "key k=3 at 0.1 share": {
+   "right_of_500": 461.0,
+   "tokens_per_problem": 4039
+  },
+  "key k=3 at 0.25 share": {
+   "right_of_500": 461.0,
+   "tokens_per_problem": 4476
+  },
+  "key k=3 at 0.5 share": {
+   "right_of_500": 461.0,
+   "tokens_per_problem": 5205
+  },
+  "key k=3 at 1.0 share": {
+   "right_of_500": 461.0,
+   "tokens_per_problem": 6662
+  },
+  "key k=3 at 500 tokens": {
+   "right_of_500": 459.6,
+   "tokens_per_problem": 3873
+  },
+  "key k=3 at 1000 tokens": {
+   "right_of_500": 453.8,
+   "tokens_per_problem": 3977
+  },
+  "key k=3 at 2000 tokens": {
+   "right_of_500": 449.8,
+   "tokens_per_problem": 4200
+  },
+  "key k=4 at 0.1 share": {
+   "right_of_500": 467.0,
+   "tokens_per_problem": 4102
+  },
+  "key k=4 at 0.25 share": {
+   "right_of_500": 467.0,
+   "tokens_per_problem": 4681
+  },
+  "key k=4 at 0.5 share": {
+   "right_of_500": 467.0,
+   "tokens_per_problem": 5646
+  },
+  "key k=4 at 1.0 share": {
+   "right_of_500": 467.0,
+   "tokens_per_problem": 7577
+  },
+  "key k=4 at 500 tokens": {
+   "right_of_500": 465.6,
+   "tokens_per_problem": 3875
+  },
+  "key k=4 at 1000 tokens": {
+   "right_of_500": 459.2,
+   "tokens_per_problem": 4013
+  },
+  "key k=4 at 2000 tokens": {
+   "right_of_500": 455.0,
+   "tokens_per_problem": 4301
+  },
+  "plurality k=2 at 0.1 share": {
+   "right_of_500": 441.8,
+   "tokens_per_problem": 4024
+  },
+  "plurality k=2 at 0.25 share": {
+   "right_of_500": 441.8,
+   "tokens_per_problem": 4275
+  },
+  "plurality k=2 at 0.5 share": {
+   "right_of_500": 441.8,
+   "tokens_per_problem": 4694
+  },
+  "plurality k=2 at 1.0 share": {
+   "right_of_500": 441.8,
+   "tokens_per_problem": 5532
+  },
+  "plurality k=2 at 500 tokens": {
+   "right_of_500": 440.8,
+   "tokens_per_problem": 3934
+  },
+  "plurality k=2 at 1000 tokens": {
+   "right_of_500": 435.8,
+   "tokens_per_problem": 3994
+  },
+  "plurality k=2 at 2000 tokens": {
+   "right_of_500": 432.7,
+   "tokens_per_problem": 4128
+  },
+  "plurality k=3 at 0.1 share": {
+   "right_of_500": 445.5,
+   "tokens_per_problem": 4108
+  },
+  "plurality k=3 at 0.25 share": {
+   "right_of_500": 445.5,
+   "tokens_per_problem": 4532
+  },
+  "plurality k=3 at 0.5 share": {
+   "right_of_500": 445.5,
+   "tokens_per_problem": 5239
+  },
+  "plurality k=3 at 1.0 share": {
+   "right_of_500": 445.5,
+   "tokens_per_problem": 6652
+  },
+  "plurality k=3 at 500 tokens": {
+   "right_of_500": 444.1,
+   "tokens_per_problem": 3946
+  },
+  "plurality k=3 at 1000 tokens": {
+   "right_of_500": 438.8,
+   "tokens_per_problem": 4050
+  },
+  "plurality k=3 at 2000 tokens": {
+   "right_of_500": 435.8,
+   "tokens_per_problem": 4276
+  },
+  "plurality k=4 at 0.1 share": {
+   "right_of_500": 445.5,
+   "tokens_per_problem": 4211
+  },
+  "plurality k=4 at 0.25 share": {
+   "right_of_500": 445.5,
+   "tokens_per_problem": 4791
+  },
+  "plurality k=4 at 0.5 share": {
+   "right_of_500": 445.5,
+   "tokens_per_problem": 5756
+  },
+  "plurality k=4 at 1.0 share": {
+   "right_of_500": 445.5,
+   "tokens_per_problem": 7688
+  },
+  "plurality k=4 at 500 tokens": {
+   "right_of_500": 444.1,
+   "tokens_per_problem": 3982
+  },
+  "plurality k=4 at 1000 tokens": {
+   "right_of_500": 438.7,
+   "tokens_per_problem": 4125
+  },
+  "plurality k=4 at 2000 tokens": {
+   "right_of_500": 435.8,
+   "tokens_per_problem": 4432
+  }
+ },
+ "rl": {
+  "single": {
+   "right_of_500": 456,
+   "tokens_per_problem": 4675
+  },
+  "agreement_of_plurality_flag_with_correct": 0.9765,
+  "key k=2 at 0.1 share": {
+   "right_of_500": 475.7,
+   "tokens_per_problem": 4713
+  },
+  "key k=2 at 0.25 share": {
+   "right_of_500": 475.7,
+   "tokens_per_problem": 4867
+  },
+  "key k=2 at 0.5 share": {
+   "right_of_500": 475.7,
+   "tokens_per_problem": 5122
+  },
+  "key k=2 at 1.0 share": {
+   "right_of_500": 475.7,
+   "tokens_per_problem": 5633
+  },
+  "key k=2 at 500 tokens": {
+   "right_of_500": 475.7,
+   "tokens_per_problem": 4651
+  },
+  "key k=2 at 1000 tokens": {
+   "right_of_500": 475.4,
+   "tokens_per_problem": 4691
+  },
+  "key k=2 at 2000 tokens": {
+   "right_of_500": 475.4,
+   "tokens_per_problem": 4770
+  },
+  "key k=3 at 0.1 share": {
+   "right_of_500": 480.2,
+   "tokens_per_problem": 4761
+  },
+  "key k=3 at 0.25 share": {
+   "right_of_500": 480.2,
+   "tokens_per_problem": 5013
+  },
+  "key k=3 at 0.5 share": {
+   "right_of_500": 480.2,
+   "tokens_per_problem": 5432
+  },
+  "key k=3 at 1.0 share": {
+   "right_of_500": 480.2,
+   "tokens_per_problem": 6271
+  },
+  "key k=3 at 500 tokens": {
+   "right_of_500": 480.2,
+   "tokens_per_problem": 4658
+  },
+  "key k=3 at 1000 tokens": {
+   "right_of_500": 480.0,
+   "tokens_per_problem": 4721
+  },
+  "key k=3 at 2000 tokens": {
+   "right_of_500": 480.0,
+   "tokens_per_problem": 4850
+  },
+  "key k=4 at 0.1 share": {
+   "right_of_500": 482.0,
+   "tokens_per_problem": 4809
+  },
+  "key k=4 at 0.25 share": {
+   "right_of_500": 482.0,
+   "tokens_per_problem": 5141
+  },
+  "key k=4 at 0.5 share": {
+   "right_of_500": 482.0,
+   "tokens_per_problem": 5695
+  },
+  "key k=4 at 1.0 share": {
+   "right_of_500": 482.0,
+   "tokens_per_problem": 6802
+  },
+  "key k=4 at 500 tokens": {
+   "right_of_500": 482.0,
+   "tokens_per_problem": 4672
+  },
+  "key k=4 at 1000 tokens": {
+   "right_of_500": 481.8,
+   "tokens_per_problem": 4755
+  },
+  "key k=4 at 2000 tokens": {
+   "right_of_500": 481.8,
+   "tokens_per_problem": 4923
+  },
+  "plurality k=2 at 0.1 share": {
+   "right_of_500": 472.0,
+   "tokens_per_problem": 4700
+  },
+  "plurality k=2 at 0.25 share": {
+   "right_of_500": 472.0,
+   "tokens_per_problem": 4834
+  },
+  "plurality k=2 at 0.5 share": {
+   "right_of_500": 472.0,
+   "tokens_per_problem": 5058
+  },
+  "plurality k=2 at 1.0 share": {
+   "right_of_500": 472.0,
+   "tokens_per_problem": 5505
+  },
+  "plurality k=2 at 500 tokens": {
+   "right_of_500": 472.0,
+   "tokens_per_problem": 4645
+  },
+  "plurality k=2 at 1000 tokens": {
+   "right_of_500": 471.8,
+   "tokens_per_problem": 4678
+  },
+  "plurality k=2 at 2000 tokens": {
+   "right_of_500": 471.8,
+   "tokens_per_problem": 4746
+  },
+  "plurality k=3 at 0.1 share": {
+   "right_of_500": 474.0,
+   "tokens_per_problem": 4737
+  },
+  "plurality k=3 at 0.25 share": {
+   "right_of_500": 474.0,
+   "tokens_per_problem": 4949
+  },
+  "plurality k=3 at 0.5 share": {
+   "right_of_500": 474.0,
+   "tokens_per_problem": 5302
+  },
+  "plurality k=3 at 1.0 share": {
+   "right_of_500": 474.0,
+   "tokens_per_problem": 6008
+  },
+  "plurality k=3 at 500 tokens": {
+   "right_of_500": 474.0,
+   "tokens_per_problem": 4649
+  },
+  "plurality k=3 at 1000 tokens": {
+   "right_of_500": 473.8,
+   "tokens_per_problem": 4701
+  },
+  "plurality k=3 at 2000 tokens": {
+   "right_of_500": 473.8,
+   "tokens_per_problem": 4806
+  },
+  "plurality k=4 at 0.1 share": {
+   "right_of_500": 474.0,
+   "tokens_per_problem": 4780
+  },
+  "plurality k=4 at 0.25 share": {
+   "right_of_500": 474.0,
+   "tokens_per_problem": 5056
+  },
+  "plurality k=4 at 0.5 share": {
+   "right_of_500": 474.0,
+   "tokens_per_problem": 5516
+  },
+  "plurality k=4 at 1.0 share": {
+   "right_of_500": 474.0,
+   "tokens_per_problem": 6435
+  },
+  "plurality k=4 at 500 tokens": {
+   "right_of_500": 474.0,
+   "tokens_per_problem": 4664
+  },
+  "plurality k=4 at 1000 tokens": {
+   "right_of_500": 473.8,
+   "tokens_per_problem": 4731
+  },
+  "plurality k=4 at 2000 tokens": {
+   "right_of_500": 473.8,
+   "tokens_per_problem": 4866
+  }
+ }
+}

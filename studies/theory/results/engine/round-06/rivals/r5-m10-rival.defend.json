@@ -1,0 +1,5 @@
+[
+ {"k": 1, "value": 0.07, "low": 0.01, "high": 0.15, "why": "Under the mechanism, most terse answers at full temperature go wrong when tail tokens derail the reasoning before any answer is stated, and many wrong rows have no answer marker at all; only a small minority state the right answer first and are then derailed into a later wrong one (the cued T1 analogue gives 0.0)."},
+ {"k": 2, "value": 0.45, "low": 0.2, "high": 0.72, "why": "Terse answers that are derailed after a right answer (run-on into invented problems or garbled re-answers) give first-right/last-wrong cases, while occasional self-corrections in non-self-opened rows (Wait/Hmm rows are 0.36 more accurate) give the opposite; the two roughly balance, unlike the cued register's 0.0."},
+ {"k": 3, "value": 0.3, "low": 0.12, "high": 0.5, "why": "Untruncated sampling keeps the plain base's finished wrong answers running after their first answer into new text with further answer markers in a sizable minority, but many wrong rows are derailed before or without a second marker, or have no marker at all."}
+]

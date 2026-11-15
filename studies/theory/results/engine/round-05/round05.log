@@ -1,0 +1,464 @@
+== split
+114 items before 2026-11-15T04:29:33, 41 at or after
+== standing
+  carried: r4-m06 (round 4, untested)
+  carried: r4-m11 (round 4, untested)
+  carried: r4-m12 (round 4, untested)
+  graveyard.json: 42 theories from earlier rounds, 3 carried
+== inventory
+job dirs under /var/folders/br/22g183rn3978_vgc7djdlvf00000gn/T/theory-round-zatpj5ns
+  running 1 jobs, 1 at a time
+  inventory/inventory (opus): done in 907 s
+== external
+  running 1 jobs, 1 at a time
+  external/external (opus): done in 452 s
+  external.md: 28 findings
+== mechanisms
+  running 1 jobs, 1 at a time
+  mechanisms/mechanisms (opus): done in 393 s
+  m01: The cued base escapes a forming loop through the head of its distribution, not its tail: a loop locks only when the top-1 token keeps a probability ab
+  m02: How the cued base's errors relate to length flips sign with difficulty: on easy problems (MATH Levels 1-3) its wrong finished samples are premature co
+  m03: The top-8 singular directions per matrix of the RL-Math delta carry only the mode switch the cue gives (deliberative opening and register), not RL's l
+  m04: Think-SFT's math gain arrives with the looping of a distilled student: imitating long traces from stronger models gives the student a long-horizon str
+  m05: The base already detects a doubtful step as well as RL does, since hold-on probability rises after a wrong result in both; what RL changed is the acti
+  m06: The MATH-500 problems that RL solves but the cued base gets 0 of 4 on lie inside the base's own coverage at a slightly larger k: RL raised the probabi
+  m07: RL step 100 is the base that has learned to open in the cue's register and nothing more: its plain-prompt answers behave like the cued base's, keeping
+  m08: Revising r3-external-1, which was refuted when Math 3.0 scored 448 with the cue at T 1.0 rather than about 412: masking truncated rollouts did not kee
+  m09: Many of the cued base's finished-wrong answers on problems it usually solves are short-circuits that box a quantity read off the problem statement (a 
+  m10: With the plain prompt, the base chooses one of two whole modes in its first few tokens: answers that open in the deliberative 'Okay' register on their
+  m11: Code-RL 3.1's math gain is a code-style reasoning habit that its reward amplified (enumerating, simulating loops and checking cases as a program would
+  m12: RL models write provisional answer markers (an 'Answer:' line or a box) before they verify, and confirm or replace them later, so first-marker extract
+== develop
+  running 12 jobs, 8 at a time
+  develop/r5-m01 (opus): done in 75 s
+  develop/r5-m02 (opus): done in 143 s
+  develop/r5-m08 (opus): done in 145 s
+  develop/r5-m03 (opus): done in 169 s
+  develop/r5-m04 (opus): done in 176 s
+  develop/r5-m07 (opus): done in 183 s
+  develop/r5-m06 (opus): done in 189 s
+  develop/r5-m05 (opus): done in 215 s
+  develop/r5-m12 (opus): done in 88 s
+  develop/r5-m09 (opus): done in 186 s
+  develop/r5-m11 (opus): done in 165 s
+  develop/r5-m10 (opus): done in 172 s
+  abandoned r5-m01: The mechanism says T 1.0 + min-p 0.1 brings loops back 'because it sharpens the head, not because it deletes tail tokens'. The board's own comparison holds the head fixed and changes only the tail. re
+  abandoned r5-m12: The mechanism needs the RL model to write line-start 'Answer:' markers before it verifies. Wang's rule reads a line-start 'Answer:' first and falls back to the LAST box. A model that only boxes is the
+  dropped r5-m01: {"abandon": "The mechanism says T 1.0 + min-p 0.1 brings loops back 'because it sharpens the head, not because it deletes tail tokens'. The board's own comparison holds the head fixed and changes only the tail. result-44b4df pairs every truncated cell with the same-seed untruncated cell at the same 
+  dropped r5-m12: {"abandon": "The mechanism needs the RL model to write line-start 'Answer:' markers before it verifies. Wang's rule reads a line-start 'Answer:' first and falls back to the LAST box. A model that only boxes is therefore read at its final marker, and earlier provisional boxes cannot cost it anything.
+  13 theories in theories/ (10 new); 2 dropped; wrote theories.sha256
+== null_tests
+  running 2 jobs, 2 at a time
+  null_tests/nulltest-2 (opus): done in 85 s
+  null_tests/nulltest-1 (opus): done in 85 s
+== test
+  running 13 jobs, 6 at a time
+  test/r5-m03 (opus): done in 65 s
+  test/r5-m04 (opus): done in 96 s
+  test/r5-m02 (opus): done in 108 s
+  test/r4-m12 (opus): done in 160 s
+  test/r4-m11 (opus): done in 170 s
+  test/r4-m06 (opus): done in 186 s
+  test/r5-m05 (opus): done in 132 s
+  test/r5-m07 (opus): done in 101 s
+  test/r5-m06 (opus): done in 150 s
+  test/r5-m08 (opus): done in 102 s
+  test/r5-m10 (opus): done in 144 s
+  test/r5-m11 (opus): done in 140 s
+  test/r5-m09 (opus): done in 170 s
+  test/r4-m06 p1: measured 1.2357922660952962, predicted 1.05 [0.8, 1.45], refuting condition met: False
+  test/r4-m06 p2: measured -0.08671144434629674, predicted 0.0 [-0.15, 0.15], refuting condition met: False
+  test/r4-m06 p3: measured 0.440048569316862, predicted 0.12 [0.03, 0.25], refuting condition met: False
+  test/r4-m11 p1: measured 0.0, predicted 0.11 [0.04, 0.22], refuting condition met: True
+  test/r4-m11 p2: measured 0.0, predicted 0.72 [0.45, 0.93], refuting condition met: True
+  test/r4-m11 p3: not computable: iterate-runs:abaybektursun-1114-153825-208b/answers.jsonl is not readable from this workspace (modal
+  test/r4-m11 p4: not computable: iterate-runs:abaybektursun-1114-183640-e828/answers.jsonl is not readable from this workspace (modal
+  test/r4-m11 p5: measured 0.17063492063492064, predicted 0.4 [0.2, 0.65], refuting condition met: True
+  test/r4-m12 p1: measured 0.0, predicted 0.12 [0.05, 0.25], refuting condition met: True
+  test/r4-m12 p2: measured 0.0, predicted 0.03 [0.0, 0.09], refuting condition met: False
+  test/r4-m12 p3: measured 0.03125, predicted 0.1 [0.02, 0.22], refuting condition met: False
+  test/r4-m12 p4: measured 12.804878048780488, predicted 11.9 [10.4, 12.5], refuting condition met: True
+  test/r5-m02 p1: measured 0.19285520124940034, predicted -0.2 [-0.5, -0.03], refuting condition met: True
+  test/r5-m02 p2: measured 0.15549604757875102, predicted 0.3 [0.08, 0.65], refuting condition met: False
+  test/r5-m02 p3: measured 0.29411764705882354, predicted 0.55 [0.38, 0.72], refuting condition met: True
+  test/r5-m02 p4: measured 0.24082829519679472, predicted 0.35 [0.08, 0.75], refuting condition met: False
+  test/r5-m03 p1: measured 0.2529517647514732, predicted 0.12 [-0.08, 0.32], refuting condition met: False
+  test/r5-m03 p2: measured 22, predicted 11 [5, 21], refuting condition met: False
+  test/r5-m03 p3: measured 0.35555555555555557, predicted 0.46 [0.35, 0.57], refuting condition met: False
+  test/r5-m04 p1: measured 25, predicted 38 [28, 55], refuting condition met: True
+  test/r5-m04 p2: measured 0.5217391304347826, predicted 0.72 [0.55, 0.88], refuting condition met: False
+  test/r5-m04 p3: measured 0.68, predicted 0.6 [0.42, 0.78], refuting condition met: False
+  test/r5-m04 p4: measured 6, predicted -7 [-15, 0], refuting condition met: True
+  test/r5-m04 p5: measured 4887.964, predicted 6800 [5000, 9500], refuting condition met: False
+  test/r5-m05 p1: measured 1.0400414574092287, predicted 0.55 [0.35, 0.78], refuting condition met: True
+  test/r5-m05 p2: measured 0.5833333333333334, predicted 0.8 [0.66, 0.93], refuting condition met: True
+  test/r5-m05 p3: measured 1.0147852281544179, predicted 0.95 [0.65, 1.4], refuting condition met: False
+  test/r5-m06 p1: measured 0.6470588235294118, predicted 0.53 [0.29, 0.76], refuting condition met: False
+  test/r5-m06 p2: measured 0.5220588235294118, predicted 0.28 [0.0, 0.56], refuting condition met: False
+  test/r5-m06 p3: measured 0.23684210526315788, predicted 0.09 [0.03, 0.18], refuting condition met: True
+  test/r5-m07 p1: measured 0.034, predicted 0.68 [0.4, 0.95], refuting condition met: True
+  test/r5-m07 p2: no number; refuting condition met: measured below 0.02, or either group has fewer than 20 rows
+  test/r5-m07 p3: measured 0.14826723829939265, predicted 0.13 [0.04, 0.24], refuting condition met: False
+  test/r5-m07 p4: measured 0.04534005037783375, predicted 0.3 [0.17, 0.47], refuting condition met: True
+  test/r5-m08 p1: measured 0.7948717948717948, predicted 0.62 [0.45, 0.88], refuting condition met: False
+  test/r5-m08 p2: measured -11.25, predicted -6 [-14, 0.5], refuting condition met: False
+  test/r5-m08 p3: measured -3, predicted 1.5 [-4, 5], refuting condition met: False
+  test/r5-m08 p4: measured 7.25, predicted 5 [0, 11], refuting condition met: False
+  test/r5-m09 p1: measured 0.0, predicted 0.25 [0.15, 0.37], refuting condition met: True
+  test/r5-m09 p2: measured 0.0, predicted 0.03 [0.0, 0.1], refuting condition met: False
+  test/r5-m09 p3: measured -0.04266831038969934, predicted 0.14 [0.05, 0.25], refuting condition met: True
+  test/r5-m09 p4: measured -0.03404678563914232, predicted 0.15 [0.06, 0.26], refuting condition met: True
+  test/r5-m10 p1: measured 0.0, predicted -0.02 [-0.09, 0.05], refuting condition met: False
+  test/r5-m10 p2: measured 1.2127264282396655, predicted 1.0 [0.78, 1.3], refuting condition met: False
+  test/r5-m10 p3: measured 0.5426055968975998, predicted 0.62 [0.54, 0.74], refuting condition met: False
+  test/r5-m11 p1: measured 0.021241830065359478, predicted 0.045 [-0.01, 0.1], refuting condition met: False
+  test/r5-m11 p2: measured 0.0, predicted 0.12 [0.04, 0.35], refuting condition met: True
+  test/r5-m11 p3: measured -0.12345679012345678, predicted 0.08 [-0.05, 0.25], refuting condition met: True
+Offline tests: computed predictions against their 90 % intervals; gain in nats against the two no-theory test readers.
+theory            computed  in/out    gain  strikes  state
+r5-m08              4 of 4    4/0      5.76           survives
+    p1: measured 0.794872, predicted 0.62 [0.45, 0.88], readers 0.45 and 0.45, gain +1.75
+    p2: measured -11.25, predicted -6 [-14, 0.5], readers -3 and -3, gain +0.64
+    p3: measured -3, predicted 1.5 [-4, 5], readers 10 and 15, gain +2.62
+    p4: measured 7.25, predicted 5 [0, 11], readers 2 and 2, gain +0.75
+r5-m06              3 of 3    2/1      4.76           refuted
+    p1: measured 0.647059, predicted 0.53 [0.29, 0.76], readers 0.35 and 0.4, gain +1.34
+    p2: measured 0.522059, predicted 0.28 [0, 0.56], readers 0.22 and 0.28, gain +0.42
+    p3: measured 0.236842, predicted 0.09 [0.03, 0.18], readers 0.06 and 0.08, gain +3.00, refuting condition met
+r5-m03              3 of 3    2/1      1.86           survives
+    p1: measured 0.252952, predicted 0.12 [-0.08, 0.32], readers 0.15 and 0.2, gain +0.01
+    p2: measured 22, predicted 11 [5, 21], readers 8 and 9, gain +1.89
+    p3: measured 0.355556, predicted 0.46 [0.35, 0.57], readers 0.5 and 0.45, gain -0.04
+r5-m10              3 of 3    3/0      0.72           survives
+    p1: measured 0, predicted -0.02 [-0.09, 0.05], readers -0.05 and -0.05, gain +0.63
+    p2: measured 1.21273, predicted 1 [0.78, 1.3], readers 0.9 and 0.9, gain +0.44
+    p3: measured 0.542606, predicted 0.62 [0.54, 0.74], readers 0.6 and 0.6, gain -0.34
+r4-m12              4 of 4    2/2     -1.15           refuted
+    p1: measured 0, predicted 0.12 [0.05, 0.25], readers 0.08 and 0.08, gain -1.13, refuting condition met
+    p2: measured 0, predicted 0.03 [0, 0.09], readers 0.08 and 0.07, gain +0.92
+    p3: measured 0.03125, predicted 0.1 [0.02, 0.22], readers 0 and 0.03, gain -0.44
+    p4: measured 12.8049, predicted 11.9 [10.4, 12.5], readers 12.8 and 12.5, gain -0.49, refuting condition met
+r5-m11              3 of 3    1/2     -2.50           refuted
+    p1: measured 0.0212418, predicted 0.045 [-0.01, 0.1], readers 0.02 and 0.025, gain -0.30
+    p2: measured 0, predicted 0.12 [0.04, 0.35], readers 0.1 and 0.1, gain -0.25, refuting condition met
+    p3: measured -0.123457, predicted 0.08 [-0.05, 0.25], readers -0.03 and -0.03, gain -1.96, refuting condition met
+r4-m06              3 of 3    2/1     -2.72           no gain
+    p1: measured 1.23579, predicted 1.05 [0.8, 1.45], readers 1.1 and 1.15, gain -0.06
+    p2: measured -0.0867114, predicted 0 [-0.15, 0.15], readers 0.04 and 0.03, gain +0.34
+    p3: measured 0.440049, predicted 0.12 [0.03, 0.25], readers 0.15 and 0.12, gain -3.00
+r5-m07              3 of 4    1/2     -3.44           refuted
+    p1: measured 0.034, predicted 0.68 [0.4, 0.95], readers 0.3 and 0.3, gain -3.00, refuting condition met
+    p3: measured 0.148267, predicted 0.13 [0.04, 0.24], readers 0.08 and 0.08, gain +0.57
+    p4: measured 0.0453401, predicted 0.3 [0.17, 0.47], readers 0.35 and 0.35, gain -1.01, refuting condition met
+    p2: no number; refuting condition met: measured below 0.02, or either group has fewer than 20 rows
+r5-m04              5 of 5    1/4     -4.17           refuted
+    p1: measured 25, predicted 38 [28, 55], readers 28 and 30, gain -0.78, refuting condition met
+    p2: measured 0.521739, predicted 0.72 [0.55, 0.88], readers 0.6 and 0.6, gain -1.41
+    p3: measured 0.68, predicted 0.6 [0.42, 0.78], readers 0.6 and 0.6, gain +0.07
+    p4: measured 6, predicted -7 [-15, 0], readers -6 and -7, gain -1.41, refuting condition met
+    p5: measured 4887.96, predicted 6800 [5000, 9500], readers 5800 and 6000, gain -0.65
+r4-m11              3 of 5    0/3     -4.48           refuted
+    p1: measured 0, predicted 0.11 [0.04, 0.22], readers 0.12 and 0.12, gain -0.10, refuting condition met
+    p2: measured 0, predicted 0.72 [0.45, 0.93], readers 0.4 and 0.3, gain -3.00, refuting condition met
+    p5: measured 0.170635, predicted 0.4 [0.2, 0.65], readers 0.25 and 0.25, gain -1.38, refuting condition met
+    p3: not computable: iterate-runs:abaybektursun-1114-153825-208b/answers.jsonl is not readable from this workspace (modal volume ge
+    p4: not computable: iterate-runs:abaybektursun-1114-183640-e828/answers.jsonl is not readable from this workspace (modal volume ge
+r5-m02              4 of 4    2/2     -5.84           refuted
+    p1: measured 0.192855, predicted -0.2 [-0.5, -0.03], readers 0.1 and 0.05, gain -2.99, refuting condition met
+    p2: measured 0.155496, predicted 0.3 [0.08, 0.65], readers 0.2 and 0.15, gain +0.06
+    p3: measured 0.294118, predicted 0.55 [0.38, 0.72], readers 0.33 and 0.33, gain -2.96, refuting condition met
+    p4: measured 0.240828, predicted 0.35 [0.08, 0.75], readers 0.3 and 0.2, gain +0.06
+r5-m05              3 of 3    1/2     -6.12           refuted
+    p1: measured 1.04004, predicted 0.55 [0.35, 0.78], readers 1 and 1, gain -3.00, refuting condition met
+    p2: measured 0.583333, predicted 0.8 [0.66, 0.93], readers 0.6 and 0.65, gain -2.97, refuting condition met
+    p3: measured 1.01479, predicted 0.95 [0.65, 1.4], readers 1 and 0.95, gain -0.15
+r5-m09              4 of 4    1/3     -8.13           refuted
+    p1: measured 0, predicted 0.25 [0.15, 0.37], readers 0.1 and 0.12, gain -3.00, refuting condition met
+    p2: measured 0, predicted 0.03 [0, 0.1], readers 0.07 and 0.07, gain +0.87
+    p3: measured -0.0426683, predicted 0.14 [0.05, 0.25], readers 0.05 and 0.04, gain -3.00, refuting condition met
+    p4: measured -0.0340468, predicted 0.15 [0.06, 0.26], readers 0.03 and 0.03, gain -3.00, refuting condition met
+== score_tests
+Offline tests: computed predictions against their 90 % intervals; gain in nats against the two no-theory test readers.
+theory            computed  in/out    gain  strikes  state
+r5-m08              4 of 4    4/0      5.76           survives
+    p1: measured 0.794872, predicted 0.62 [0.45, 0.88], readers 0.45 and 0.45, gain +1.75
+    p2: measured -11.25, predicted -6 [-14, 0.5], readers -3 and -3, gain +0.64
+    p3: measured -3, predicted 1.5 [-4, 5], readers 10 and 15, gain +2.62
+    p4: measured 7.25, predicted 5 [0, 11], readers 2 and 2, gain +0.75
+r5-m06              3 of 3    2/1      4.76           refuted
+    p1: measured 0.647059, predicted 0.53 [0.29, 0.76], readers 0.35 and 0.4, gain +1.34
+    p2: measured 0.522059, predicted 0.28 [0, 0.56], readers 0.22 and 0.28, gain +0.42
+    p3: measured 0.236842, predicted 0.09 [0.03, 0.18], readers 0.06 and 0.08, gain +3.00, refuting condition met
+r5-m03              3 of 3    2/1      1.86           survives
+    p1: measured 0.252952, predicted 0.12 [-0.08, 0.32], readers 0.15 and 0.2, gain +0.01
+    p2: measured 22, predicted 11 [5, 21], readers 8 and 9, gain +1.89
+    p3: measured 0.355556, predicted 0.46 [0.35, 0.57], readers 0.5 and 0.45, gain -0.04
+r5-m10              3 of 3    3/0      0.72           survives
+    p1: measured 0, predicted -0.02 [-0.09, 0.05], readers -0.05 and -0.05, gain +0.63
+    p2: measured 1.21273, predicted 1 [0.78, 1.3], readers 0.9 and 0.9, gain +0.44
+    p3: measured 0.542606, predicted 0.62 [0.54, 0.74], readers 0.6 and 0.6, gain -0.34
+r4-m12              4 of 4    2/2     -1.15           refuted
+    p1: measured 0, predicted 0.12 [0.05, 0.25], readers 0.08 and 0.08, gain -1.13, refuting condition met
+    p2: measured 0, predicted 0.03 [0, 0.09], readers 0.08 and 0.07, gain +0.92
+    p3: measured 0.03125, predicted 0.1 [0.02, 0.22], readers 0 and 0.03, gain -0.44
+    p4: measured 12.8049, predicted 11.9 [10.4, 12.5], readers 12.8 and 12.5, gain -0.49, refuting condition met
+r5-m11              3 of 3    1/2     -2.50           refuted
+    p1: measured 0.0212418, predicted 0.045 [-0.01, 0.1], readers 0.02 and 0.025, gain -0.30
+    p2: measured 0, predicted 0.12 [0.04, 0.35], readers 0.1 and 0.1, gain -0.25, refuting condition met
+    p3: measured -0.123457, predicted 0.08 [-0.05, 0.25], readers -0.03 and -0.03, gain -1.96, refuting condition met
+r4-m06              3 of 3    2/1     -2.72           no gain
+    p1: measured 1.23579, predicted 1.05 [0.8, 1.45], readers 1.1 and 1.15, gain -0.06
+    p2: measured -0.0867114, predicted 0 [-0.15, 0.15], readers 0.04 and 0.03, gain +0.34
+    p3: measured 0.440049, predicted 0.12 [0.03, 0.25], readers 0.15 and 0.12, gain -3.00
+r5-m07              3 of 4    1/2     -3.44           refuted
+    p1: measured 0.034, predicted 0.68 [0.4, 0.95], readers 0.3 and 0.3, gain -3.00, refuting condition met
+    p3: measured 0.148267, predicted 0.13 [0.04, 0.24], readers 0.08 and 0.08, gain +0.57
+    p4: measured 0.0453401, predicted 0.3 [0.17, 0.47], readers 0.35 and 0.35, gain -1.01, refuting condition met
+    p2: no number; refuting condition met: measured below 0.02, or either group has fewer than 20 rows
+r5-m04              5 of 5    1/4     -4.17           refuted
+    p1: measured 25, predicted 38 [28, 55], readers 28 and 30, gain -0.78, refuting condition met
+    p2: measured 0.521739, predicted 0.72 [0.55, 0.88], readers 0.6 and 0.6, gain -1.41
+    p3: measured 0.68, predicted 0.6 [0.42, 0.78], readers 0.6 and 0.6, gain +0.07
+    p4: measured 6, predicted -7 [-15, 0], readers -6 and -7, gain -1.41, refuting condition met
+    p5: measured 4887.96, predicted 6800 [5000, 9500], readers 5800 and 6000, gain -0.65
+r4-m11              3 of 5    0/3     -4.48           refuted
+    p1: measured 0, predicted 0.11 [0.04, 0.22], readers 0.12 and 0.12, gain -0.10, refuting condition met
+    p2: measured 0, predicted 0.72 [0.45, 0.93], readers 0.4 and 0.3, gain -3.00, refuting condition met
+    p5: measured 0.170635, predicted 0.4 [0.2, 0.65], readers 0.25 and 0.25, gain -1.38, refuting condition met
+    p3: not computable: iterate-runs:abaybektursun-1114-153825-208b/answers.jsonl is not readable from this workspace (modal volume ge
+    p4: not computable: iterate-runs:abaybektursun-1114-183640-e828/answers.jsonl is not readable from this workspace (modal volume ge
+r5-m02              4 of 4    2/2     -5.84           refuted
+    p1: measured 0.192855, predicted -0.2 [-0.5, -0.03], readers 0.1 and 0.05, gain -2.99, refuting condition met
+    p2: measured 0.155496, predicted 0.3 [0.08, 0.65], readers 0.2 and 0.15, gain +0.06
+    p3: measured 0.294118, predicted 0.55 [0.38, 0.72], readers 0.33 and 0.33, gain -2.96, refuting condition met
+    p4: measured 0.240828, predicted 0.35 [0.08, 0.75], readers 0.3 and 0.2, gain +0.06
+r5-m05              3 of 3    1/2     -6.12           refuted
+    p1: measured 1.04004, predicted 0.55 [0.35, 0.78], readers 1 and 1, gain -3.00, refuting condition met
+    p2: measured 0.583333, predicted 0.8 [0.66, 0.93], readers 0.6 and 0.65, gain -2.97, refuting condition met
+    p3: measured 1.01479, predicted 0.95 [0.65, 1.4], readers 1 and 0.95, gain -0.15
+r5-m09              4 of 4    1/3     -8.13           refuted
+    p1: measured 0, predicted 0.25 [0.15, 0.37], readers 0.1 and 0.12, gain -3.00, refuting condition met
+    p2: measured 0, predicted 0.03 [0, 0.1], readers 0.07 and 0.07, gain +0.87
+    p3: measured -0.0426683, predicted 0.14 [0.05, 0.25], readers 0.05 and 0.04, gain -3.00, refuting condition met
+    p4: measured -0.0340468, predicted 0.15 [0.06, 0.26], readers 0.03 and 0.03, gain -3.00, refuting condition met
+== heldout
+  held-out filter for ['r5-m03', 'r5-m08', 'r5-m10']
+  running 1 jobs, 1 at a time
+  targets/targets (sonnet): done in 185 s
+  70 targets kept, 0 dropped
+  running 2 jobs, 2 at a time
+  null/null-1 (opus): done in 97 s
+  null/null-2 (opus): done in 104 s
+  running 3 jobs, 3 at a time
+  claims/r5-m03 (opus): done in 27 s
+  claims/r5-m08 (opus): done in 27 s
+  claims/r5-m10 (opus): done in 48 s
+Offline tests: computed predictions against their 90 % intervals; gain in nats against the two no-theory test readers.
+theory            computed  in/out    gain  strikes  state
+r5-m08              4 of 4    4/0      5.76           survives
+    p1: measured 0.794872, predicted 0.62 [0.45, 0.88], readers 0.45 and 0.45, gain +1.75
+    p2: measured -11.25, predicted -6 [-14, 0.5], readers -3 and -3, gain +0.64
+    p3: measured -3, predicted 1.5 [-4, 5], readers 10 and 15, gain +2.62
+    p4: measured 7.25, predicted 5 [0, 11], readers 2 and 2, gain +0.75
+r5-m06              3 of 3    2/1      4.76           refuted
+    p1: measured 0.647059, predicted 0.53 [0.29, 0.76], readers 0.35 and 0.4, gain +1.34
+    p2: measured 0.522059, predicted 0.28 [0, 0.56], readers 0.22 and 0.28, gain +0.42
+    p3: measured 0.236842, predicted 0.09 [0.03, 0.18], readers 0.06 and 0.08, gain +3.00, refuting condition met
+r5-m03              3 of 3    2/1      1.86   0 of 1  survives
+    p1: measured 0.252952, predicted 0.12 [-0.08, 0.32], readers 0.15 and 0.2, gain +0.01
+    p2: measured 22, predicted 11 [5, 21], readers 8 and 9, gain +1.89
+    p3: measured 0.355556, predicted 0.46 [0.35, 0.57], readers 0.5 and 0.45, gain -0.04
+r5-m10              3 of 3    3/0      0.72   0 of 6  survives
+    p1: measured 0, predicted -0.02 [-0.09, 0.05], readers -0.05 and -0.05, gain +0.63
+    p2: measured 1.21273, predicted 1 [0.78, 1.3], readers 0.9 and 0.9, gain +0.44
+    p3: measured 0.542606, predicted 0.62 [0.54, 0.74], readers 0.6 and 0.6, gain -0.34
+r4-m12              4 of 4    2/2     -1.15           refuted
+    p1: measured 0, predicted 0.12 [0.05, 0.25], readers 0.08 and 0.08, gain -1.13, refuting condition met
+    p2: measured 0, predicted 0.03 [0, 0.09], readers 0.08 and 0.07, gain +0.92
+    p3: measured 0.03125, predicted 0.1 [0.02, 0.22], readers 0 and 0.03, gain -0.44
+    p4: measured 12.8049, predicted 11.9 [10.4, 12.5], readers 12.8 and 12.5, gain -0.49, refuting condition met
+r5-m11              3 of 3    1/2     -2.50           refuted
+    p1: measured 0.0212418, predicted 0.045 [-0.01, 0.1], readers 0.02 and 0.025, gain -0.30
+    p2: measured 0, predicted 0.12 [0.04, 0.35], readers 0.1 and 0.1, gain -0.25, refuting condition met
+    p3: measured -0.123457, predicted 0.08 [-0.05, 0.25], readers -0.03 and -0.03, gain -1.96, refuting condition met
+r4-m06              3 of 3    2/1     -2.72           no gain
+    p1: measured 1.23579, predicted 1.05 [0.8, 1.45], readers 1.1 and 1.15, gain -0.06
+    p2: measured -0.0867114, predicted 0 [-0.15, 0.15], readers 0.04 and 0.03, gain +0.34
+    p3: measured 0.440049, predicted 0.12 [0.03, 0.25], readers 0.15 and 0.12, gain -3.00
+r5-m07              3 of 4    1/2     -3.44           refuted
+    p1: measured 0.034, predicted 0.68 [0.4, 0.95], readers 0.3 and 0.3, gain -3.00, refuting condition met
+    p3: measured 0.148267, predicted 0.13 [0.04, 0.24], readers 0.08 and 0.08, gain +0.57
+    p4: measured 0.0453401, predicted 0.3 [0.17, 0.47], readers 0.35 and 0.35, gain -1.01, refuting condition met
+    p2: no number; refuting condition met: measured below 0.02, or either group has fewer than 20 rows
+r5-m04              5 of 5    1/4     -4.17           refuted
+    p1: measured 25, predicted 38 [28, 55], readers 28 and 30, gain -0.78, refuting condition met
+    p2: measured 0.521739, predicted 0.72 [0.55, 0.88], readers 0.6 and 0.6, gain -1.41
+    p3: measured 0.68, predicted 0.6 [0.42, 0.78], readers 0.6 and 0.6, gain +0.07
+    p4: measured 6, predicted -7 [-15, 0], readers -6 and -7, gain -1.41, refuting condition met
+    p5: measured 4887.96, predicted 6800 [5000, 9500], readers 5800 and 6000, gain -0.65
+r4-m11              3 of 5    0/3     -4.48           refuted
+    p1: measured 0, predicted 0.11 [0.04, 0.22], readers 0.12 and 0.12, gain -0.10, refuting condition met
+    p2: measured 0, predicted 0.72 [0.45, 0.93], readers 0.4 and 0.3, gain -3.00, refuting condition met
+    p5: measured 0.170635, predicted 0.4 [0.2, 0.65], readers 0.25 and 0.25, gain -1.38, refuting condition met
+    p3: not computable: iterate-runs:abaybektursun-1114-153825-208b/answers.jsonl is not readable from this workspace (modal volume ge
+    p4: not computable: iterate-runs:abaybektursun-1114-183640-e828/answers.jsonl is not readable from this workspace (modal volume ge
+r5-m02              4 of 4    2/2     -5.84           refuted
+    p1: measured 0.192855, predicted -0.2 [-0.5, -0.03], readers 0.1 and 0.05, gain -2.99, refuting condition met
+    p2: measured 0.155496, predicted 0.3 [0.08, 0.65], readers 0.2 and 0.15, gain +0.06
+    p3: measured 0.294118, predicted 0.55 [0.38, 0.72], readers 0.33 and 0.33, gain -2.96, refuting condition met
+    p4: measured 0.240828, predicted 0.35 [0.08, 0.75], readers 0.3 and 0.2, gain +0.06
+r5-m05              3 of 3    1/2     -6.12           refuted
+    p1: measured 1.04004, predicted 0.55 [0.35, 0.78], readers 1 and 1, gain -3.00, refuting condition met
+    p2: measured 0.583333, predicted 0.8 [0.66, 0.93], readers 0.6 and 0.65, gain -2.97, refuting condition met
+    p3: measured 1.01479, predicted 0.95 [0.65, 1.4], readers 1 and 0.95, gain -0.15
+r5-m09              4 of 4    1/3     -8.13           refuted
+    p1: measured 0, predicted 0.25 [0.15, 0.37], readers 0.1 and 0.12, gain -3.00, refuting condition met
+    p2: measured 0, predicted 0.03 [0, 0.1], readers 0.07 and 0.07, gain +0.87
+    p3: measured -0.0426683, predicted 0.14 [0.05, 0.25], readers 0.05 and 0.04, gain -3.00, refuting condition met
+    p4: measured -0.0340468, predicted 0.15 [0.06, 0.26], readers 0.03 and 0.03, gain -3.00, refuting condition met
+== rival
+  running 3 jobs, 3 at a time
+  rival/r5-m08 (opus): done in 144 s
+  rival/r5-m10 (opus): done in 164 s
+  rival/r5-m03 (opus): done in 225 s
+  r5-m08: rival: Code 3.0's RL taught it only a commit-and-stop habit (short answers, about 3,069 tokens a problem, with a clean final answer) and not the math reasoning that Code 3.1 gained, so on easy problems it re
+  r5-m03: rival: The top-8 edit is an incomplete switch that happens or fails sample by sample. On most answers (about 85-90 %) it puts the base on a weak dose of RL's own policy: longer answers, RL-style checking, al
+  r5-m10: rival: The cue's +37-point gain at T 1.0 / top-p 1.0 comes from robustness to sampling noise, not from choosing between two modes of fixed accuracy: the plain base's terse, non-deliberative answers are reaso
+== defend
+  running 3 jobs, 3 at a time
+  defend/r5-m08.turn1 (opus): done in 47 s
+  defend/r5-m03.turn1 (opus): done in 60 s
+  defend/r5-m10.turn1 (opus): done in 67 s
+== rival2
+  r5-m08: 1 of 2 first-turn tests put the defender's centre outside the rival's interval
+  r5-m03: 3 of 3 first-turn tests put the defender's centre outside the rival's interval
+  r5-m10: 0 of 3 first-turn tests put the defender's centre outside the rival's interval
+  running 2 jobs, 2 at a time
+  rival/r5-m08.turn2 (opus): done in 77 s
+  rival/r5-m10.turn2 (opus): done in 235 s
+== defend
+  skip defend/r5-m08.turn1: its outputs exist
+  skip defend/r5-m03.turn1: its outputs exist
+  skip defend/r5-m10.turn1: its outputs exist
+  running 2 jobs, 2 at a time
+  defend/r5-m10.turn2 (opus): done in 46 s
+  defend/r5-m08.turn2 (opus): done in 59 s
+== duel_test
+  running 5 jobs, 5 at a time
+  test/duel-r5-m08 (opus): done in 74 s
+  test/duel-r5-m03 (opus): done in 78 s
+  test/duel-r5-m08.turn2 (opus): done in 86 s
+  test/duel-r5-m10.turn2 (opus): done in 105 s
+  test/duel-r5-m10 (opus): done in 108 s
+  duel_test/r5-m08 turn 1 p1: measured 0.7241379310344828
+  duel_test/r5-m08 turn 1 p2: measured 0.4014084507042254
+  duel_test/r5-m08 turn 2 p3: measured -0.1847826086956521
+  duel_test/r5-m08 turn 2 p4: measured 0.41379310344827586
+  duel_test/r5-m08 turn 2 p5: measured 0.07894736842105265
+  duel_test/r5-m03 turn 1 p1: measured 0.25
+  duel_test/r5-m03 turn 1 p2: measured 0.8181818181818182
+  duel_test/r5-m03 turn 1 p3: measured 0.7727272727272727
+  duel_test/r5-m10 turn 1 p1: measured 0.15767634854771778
+  duel_test/r5-m10 turn 1 p2: measured -0.15540540540540537
+  duel_test/r5-m10 turn 1 p3: measured 0.20574986751457336
+  duel_test/r5-m10 turn 2 p4: measured -0.07462686567164178
+  duel_test/r5-m10 turn 2 p5: measured 0.35583146215823536
+  duel_test/r5-m10 turn 2 p6: measured -0.10000000000000003
+== score_duel
+Duel: each survivor's prediction (defend) against its rival's on the rival's tests; gain in nats, above 0 favours the theory; a total of +-2 or beyond decides. same = the defender's centre is inside the rival's interval.
+theory            computed separating    gain  state
+r5-m08              5 of 5           3    8.75  beats rival
+    rival: Code 3.0's RL taught it only a commit-and-stop habit (short answers, about 3,069 tokens a problem, with a clean final answer) and not the math reasoni
+    p1 turn 1 same: measured 0.724138, theory 0.78 [0.64, 0.9], rival 0.86 [0.75, 0.95], gain +1.99
+    p2 turn 1: measured 0.401408, theory 0.42 [0.3, 0.55], rival 0.31 [0.22, 0.4], gain +1.04
+    p3 turn 2 same: measured -0.184783, theory -0.08 [-0.17, 0.01], rival -0.02 [-0.09, 0.05], gain +3.00
+    p4 turn 2: measured 0.413793, theory 0.2 [-0.6, 1], rival 1 [0.62, 1.4], gain +2.24
+    p5 turn 2: measured 0.0789474, theory 0.13 [-0.02, 0.28], rival -0.02 [-0.15, 0.11], gain +0.48
+r5-m03              3 of 3           3   -8.77  loses to rival
+    rival: The top-8 edit is an incomplete switch that happens or fails sample by sample. On most answers (about 85-90 %) it puts the base on a weak dose of RL's
+    p1 turn 1: measured 0.25, theory 0.13 [0.06, 0.22], rival 0.27 [0.17, 0.37], gain -2.77
+    p2 turn 1: measured 0.818182, theory 0.5 [0.3, 0.7], rival 0.76 [0.64, 0.88], gain -3.00
+    p3 turn 1: measured 0.772727, theory 0.4 [0.18, 0.62], rival 0.63 [0.43, 0.83], gain -3.00
+r5-m10              6 of 6           3   -8.84  loses to rival
+    rival: The cue's +37-point gain at T 1.0 / top-p 1.0 comes from robustness to sampling noise, not from choosing between two modes of fixed accuracy: the plai
+    p1 turn 1 same: measured 0.157676, theory 0.28 [0.16, 0.4], rival 0.29 [0.17, 0.41], gain +0.24
+    p2 turn 1 same: measured -0.155405, theory -0.1 [-0.19, -0.01], rival -0.1 [-0.2, 0], gain +0.01
+    p3 turn 1 same: measured 0.20575, theory 0.11 [0.02, 0.2], rival 0.09 [-0.04, 0.22], gain -0.09
+    p4 turn 2: measured -0.0746269, theory -0.47 [-0.6, -0.33], rival -0.14 [-0.3, 0.02], gain -3.00
+    p5 turn 2: measured 0.355831, theory -0.03 [-0.15, 0.1], rival 0.24 [0.07, 0.41], gain -3.00
+    p6 turn 2: measured -0.1, theory -0.33 [-0.47, -0.19], rival -0.1 [-0.26, 0.06], gain -3.00
+== review
+  running 3 jobs, 3 at a time
+  review/r5-m03: the verdict must name the duel state "loses to rival"; sent back once
+  review/r5-m03: checking the send-back; on a traceback see /var/folders/br/22g183rn3978_vgc7djdlvf00000gn/T/theory-round-zatpj5ns/review/r5-m03/out.sendback.txt
+  review/r5-m03 (opus): done in 115 s
+  review/r5-m08: the verdict must name the duel state "beats rival"; sent back once
+  review/r5-m10 (opus): done in 129 s
+  review/r5-m08: checking the send-back; on a traceback see /var/folders/br/22g183rn3978_vgc7djdlvf00000gn/T/theory-round-zatpj5ns/review/r5-m08/out.sendback.txt
+  review/r5-m08 (opus): done in 144 s
+  r5-m08: refuted: duel state beats rival and its offline quartile predictions hold, but its stated mechanism (Code 3.0's longest MATH-500 problems driven to the 16,384 cap at T 1.0) is contradicted by the scored cell itself, which has 5 cap hits on 500 problems (base 27, Code 3.1 7), so the length-confined deficit it predicted comes from something other than cap hits.
+  r5-m03: weak: duel state 'loses to rival' (-8.77, all 3 tests favour the rival's mixture account); its only offline gain rests on one test whose value fell outside its interval; and result-284db5 (top8 adds +8.5 on top of the cue, with RL-level Wait rates) contradicts its 'nothing more than the cue' core, although hard328 is formally outside its scope.
+  r5-m10: refuted: duel state 'loses to rival' (-8.84 nats). In scope, on its own T3 file, plain answers that do not self-open but self-check later score +0.36 above other plain answers and come within 0.075 of cued answers on the same problems, which contradicts 'nothing after the opening adds'. Result-460e0a's 410 -> 372 drop under a fixed cue points the same way, and the part that survives (self-opened answers score like cued ones) is largely in Wang et al. App C.8.
+Offline tests: computed predictions against their 90 % intervals; gain in nats against the two no-theory test readers.
+theory            computed  in/out    gain  strikes  state
+r5-m08              4 of 4    4/0      5.76           refuted
+    p1: measured 0.794872, predicted 0.62 [0.45, 0.88], readers 0.45 and 0.45, gain +1.75
+    p2: measured -11.25, predicted -6 [-14, 0.5], readers -3 and -3, gain +0.64
+    p3: measured -3, predicted 1.5 [-4, 5], readers 10 and 15, gain +2.62
+    p4: measured 7.25, predicted 5 [0, 11], readers 2 and 2, gain +0.75
+r5-m06              3 of 3    2/1      4.76           refuted
+    p1: measured 0.647059, predicted 0.53 [0.29, 0.76], readers 0.35 and 0.4, gain +1.34
+    p2: measured 0.522059, predicted 0.28 [0, 0.56], readers 0.22 and 0.28, gain +0.42
+    p3: measured 0.236842, predicted 0.09 [0.03, 0.18], readers 0.06 and 0.08, gain +3.00, refuting condition met
+r5-m03              3 of 3    2/1      1.86   0 of 1  survives
+    p1: measured 0.252952, predicted 0.12 [-0.08, 0.32], readers 0.15 and 0.2, gain +0.01
+    p2: measured 22, predicted 11 [5, 21], readers 8 and 9, gain +1.89
+    p3: measured 0.355556, predicted 0.46 [0.35, 0.57], readers 0.5 and 0.45, gain -0.04
+r5-m10              3 of 3    3/0      0.72   0 of 6  refuted
+    p1: measured 0, predicted -0.02 [-0.09, 0.05], readers -0.05 and -0.05, gain +0.63
+    p2: measured 1.21273, predicted 1 [0.78, 1.3], readers 0.9 and 0.9, gain +0.44
+    p3: measured 0.542606, predicted 0.62 [0.54, 0.74], readers 0.6 and 0.6, gain -0.34
+r4-m12              4 of 4    2/2     -1.15           refuted
+    p1: measured 0, predicted 0.12 [0.05, 0.25], readers 0.08 and 0.08, gain -1.13, refuting condition met
+    p2: measured 0, predicted 0.03 [0, 0.09], readers 0.08 and 0.07, gain +0.92
+    p3: measured 0.03125, predicted 0.1 [0.02, 0.22], readers 0 and 0.03, gain -0.44
+    p4: measured 12.8049, predicted 11.9 [10.4, 12.5], readers 12.8 and 12.5, gain -0.49, refuting condition met
+r5-m11              3 of 3    1/2     -2.50           refuted
+    p1: measured 0.0212418, predicted 0.045 [-0.01, 0.1], readers 0.02 and 0.025, gain -0.30
+    p2: measured 0, predicted 0.12 [0.04, 0.35], readers 0.1 and 0.1, gain -0.25, refuting condition met
+    p3: measured -0.123457, predicted 0.08 [-0.05, 0.25], readers -0.03 and -0.03, gain -1.96, refuting condition met
+r4-m06              3 of 3    2/1     -2.72           no gain
+    p1: measured 1.23579, predicted 1.05 [0.8, 1.45], readers 1.1 and 1.15, gain -0.06
+    p2: measured -0.0867114, predicted 0 [-0.15, 0.15], readers 0.04 and 0.03, gain +0.34
+    p3: measured 0.440049, predicted 0.12 [0.03, 0.25], readers 0.15 and 0.12, gain -3.00
+r5-m07              3 of 4    1/2     -3.44           refuted
+    p1: measured 0.034, predicted 0.68 [0.4, 0.95], readers 0.3 and 0.3, gain -3.00, refuting condition met
+    p3: measured 0.148267, predicted 0.13 [0.04, 0.24], readers 0.08 and 0.08, gain +0.57
+    p4: measured 0.0453401, predicted 0.3 [0.17, 0.47], readers 0.35 and 0.35, gain -1.01, refuting condition met
+    p2: no number; refuting condition met: measured below 0.02, or either group has fewer than 20 rows
+r5-m04              5 of 5    1/4     -4.17           refuted
+    p1: measured 25, predicted 38 [28, 55], readers 28 and 30, gain -0.78, refuting condition met
+    p2: measured 0.521739, predicted 0.72 [0.55, 0.88], readers 0.6 and 0.6, gain -1.41
+    p3: measured 0.68, predicted 0.6 [0.42, 0.78], readers 0.6 and 0.6, gain +0.07
+    p4: measured 6, predicted -7 [-15, 0], readers -6 and -7, gain -1.41, refuting condition met
+    p5: measured 4887.96, predicted 6800 [5000, 9500], readers 5800 and 6000, gain -0.65
+r4-m11              3 of 5    0/3     -4.48           refuted
+    p1: measured 0, predicted 0.11 [0.04, 0.22], readers 0.12 and 0.12, gain -0.10, refuting condition met
+    p2: measured 0, predicted 0.72 [0.45, 0.93], readers 0.4 and 0.3, gain -3.00, refuting condition met
+    p5: measured 0.170635, predicted 0.4 [0.2, 0.65], readers 0.25 and 0.25, gain -1.38, refuting condition met
+    p3: not computable: iterate-runs:abaybektursun-1114-153825-208b/answers.jsonl is not readable from this workspace (modal volume ge
+    p4: not computable: iterate-runs:abaybektursun-1114-183640-e828/answers.jsonl is not readable from this workspace (modal volume ge
+r5-m02              4 of 4    2/2     -5.84           refuted
+    p1: measured 0.192855, predicted -0.2 [-0.5, -0.03], readers 0.1 and 0.05, gain -2.99, refuting condition met
+    p2: measured 0.155496, predicted 0.3 [0.08, 0.65], readers 0.2 and 0.15, gain +0.06
+    p3: measured 0.294118, predicted 0.55 [0.38, 0.72], readers 0.33 and 0.33, gain -2.96, refuting condition met
+    p4: measured 0.240828, predicted 0.35 [0.08, 0.75], readers 0.3 and 0.2, gain +0.06
+r5-m05              3 of 3    1/2     -6.12           refuted
+    p1: measured 1.04004, predicted 0.55 [0.35, 0.78], readers 1 and 1, gain -3.00, refuting condition met
+    p2: measured 0.583333, predicted 0.8 [0.66, 0.93], readers 0.6 and 0.65, gain -2.97, refuting condition met
+    p3: measured 1.01479, predicted 0.95 [0.65, 1.4], readers 1 and 0.95, gain -0.15
+r5-m09              4 of 4    1/3     -8.13           refuted
+    p1: measured 0, predicted 0.25 [0.15, 0.37], readers 0.1 and 0.12, gain -3.00, refuting condition met
+    p2: measured 0, predicted 0.03 [0, 0.1], readers 0.07 and 0.07, gain +0.87
+    p3: measured -0.0426683, predicted 0.14 [0.05, 0.25], readers 0.05 and 0.04, gain -3.00, refuting condition met
+    p4: measured -0.0340468, predicted 0.15 [0.06, 0.26], readers 0.03 and 0.03, gain -3.00, refuting condition met

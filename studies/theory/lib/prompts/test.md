@@ -25,8 +25,11 @@ signatures. The script fetches any file it needs into runs/theory-tests/ when mi
 
 Every script ends by printing its result with the helper in studies/theory/lib/noise.py (read it; do not rewrite it):
 `from studies.theory.lib.noise import bootstrap, binomial, report, not_computable, refuted_without_number`.
-- `report(measured, n, interval, kind, refuted_by_met=..., alt_measured=..., example_row=...)`: n is the number of
-  problems (or rows) the statistic used; interval is the 90 % interval of the statistic. Use
+- `report(measured, n, interval, kind, refuted_by_met=..., alt_measured=..., example_row=...)`: n is the size, in
+  problems (or rows), of the smallest group the number depends on, not the size of all rows read. For example, a
+  ratio of wrong rates between an early group of 22 problems and a late group of 379 has n = 22. When the number
+  contrasts groups, the script first prints one line `{"groups": {"<group name>": <size>, ...}}` with each group's
+  size, then the report line last. interval is the 90 % interval of the statistic. Use
   `bootstrap(stat, problems)` (2,000 resamples over problems, seed 0) whenever the statistic is computed from
   per-problem rows: put one entry per problem in the list (a tuple of rows when the recipe pairs files or samples) and
   write stat so that it recomputes the whole statistic from such a list. For a statistic with no per-problem

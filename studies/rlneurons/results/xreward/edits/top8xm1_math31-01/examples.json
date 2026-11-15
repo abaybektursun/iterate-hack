@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 23,
+  "gold": "021",
+  "extracted_v3": "21",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 1833,
+  "prompt_tail": "ould be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nA right square pyramid with volume $54$ has a base with side length $6.$ The five vertices of the pyramid all lie on a sphere with radius $\\frac mn$, where $m$ and $n$ are relatively prime positive integers. Find $m+n$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "= 17, n = 4, sum 21. Seems correct.\n\nBut let me check with another vertex. Let's take another base vertex, say (3,-3,0). Distance from (0,0,1/4) to (3,-3,0):\n\nDistance squared: (3)^2 + (-3)^2 + (0 - 0.25)^2 = 9 + 9 + 0.0625 = 18.0625. (17/4)^2 is 289/16 = 18.0625. Correct.\n\nAnother vertex: (-3,3,0). Distance squared: same as above, 18.0625. Correct.\n\nApex: (0,0,4.5). Distance squared: (4.5 - 0.25)^2 = 289/16. Correct.\n\nThus, all distances are equal. Therefore, R = 17/4. So the answer is 17 + 4 = 21.\n\nI think that's all. I don't see any mistakes in the steps. The key was realizing that the center must lie on the z-axis due to the pyramid's symmetry. Then setting up the equations for the distances from the center to the vertices led to solving for k, then computing R.\n\n**Answer:** \\boxed{21}"
+ },
+ "wrong": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "108",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 1520,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " 54 \\) simplifies to \\( 512 + 16b + c = 54 \\) or \\( 16b + c = -458 \\).\n  - \\( 2(20)^2 + 20b + c = 54 \\) simplifies to \\( 800 + 20b + c = 54 \\) or \\( 20b + c = -746 \\).\n- Solving these equations, we find \\( b = -72 \\) and \\( c = 694 \\).\n\nFor polynomial \\( Q(x) \\):\n- The general form is \\( Q(x) = -2x^2 + dx + e \\).\n- Using the points (16, 54) and (20, 53):\n  - \\( -2(16)^2 + 16d + e = 54 \\) simplifies to \\( -512 + 16d + e = 54 \\) or \\( 16d + e = 566 \\).\n  - \\( -2(20)^2 + 20d + e = 54 \\) simplifies to \\( -800 + 20d + e = 54 \\) or \\( 20d + e = 854 \\).\n- Solving these equations, we find \\( d = 72 \\) and \\( e = -586 \\).\n\nFinding \\( P(0) + Q(0) \\):\n- \\( P(0) = c = 694 \\)\n- \\( Q(0) = e = -586 \\)\n- Therefore, \\( P(0) + Q(0) = 694 + (-586) = 108 \\).\n\nThe value of \\( P(0) + Q(0) \\) is \\(\\boxed{108}\\)."
+ }
+}

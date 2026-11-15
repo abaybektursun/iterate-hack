@@ -1,0 +1,2598 @@
+{
+ "theories": {
+  "r5-m03-rival": {
+   "carried_from": "round-05",
+   "offline": 3,
+   "not_scored": 0,
+   "computed": 3,
+   "inside": 3,
+   "within_noise": 0,
+   "outside": 0,
+   "total_gain": 8.767,
+   "unexpected_wins": [
+    1,
+    2,
+    3
+   ],
+   "heldout_claims": 3,
+   "strikes": 0,
+   "state": "survives",
+   "note": "",
+   "reasons": [],
+   "verdict": "stands: duel state beats rival (+6.70, separated by k2 with k1/k3/k6 agreeing) on a correctly implemented script, and nothing in scope refutes it. Its held-out loss (t65) comes from an out-of-scope 2x dose claim, and its 'whatever the difficulty' clause is contradicted by duel tests k4/k5 and should be dropped.",
+   "rows": [
+    {
+     "id": "r5-m03-rival:p1",
+     "k": 1,
+     "measured": 0.25,
+     "value": 0.27,
+     "low": 0.17,
+     "high": 0.37,
+     "nulls": [
+      {
+       "value": 0.13,
+       "low": 0.06,
+       "high": 0.22
+      }
+     ],
+     "gain": 2.767,
+     "inside": true,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m03-rival:p2",
+     "k": 2,
+     "measured": 0.8181818181818182,
+     "value": 0.76,
+     "low": 0.64,
+     "high": 0.88,
+     "nulls": [
+      {
+       "value": 0.5,
+       "low": 0.3,
+       "high": 0.7
+      }
+     ],
+     "gain": 3.0,
+     "inside": true,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m03-rival:p3",
+     "k": 3,
+     "measured": 0.7727272727272727,
+     "value": 0.63,
+     "low": 0.43,
+     "high": 0.83,
+     "nulls": [
+      {
+       "value": 0.4,
+       "low": 0.18,
+       "high": 0.62
+      }
+     ],
+     "gain": 3.0,
+     "inside": true,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    }
+   ],
+   "heldout_rows": [
+    {
+     "id": "t41",
+     "measured": 22,
+     "value": 29,
+     "low": 18,
+     "high": 40,
+     "nulls": [
+      {
+       "value": 15,
+       "low": 7,
+       "high": 25
+      },
+      {
+       "value": 15,
+       "low": 7,
+       "high": 28
+      }
+     ],
+     "gain": 0.0379,
+     "strike": false
+    },
+    {
+     "id": "t65",
+     "measured": 5,
+     "value": 32,
+     "low": 18,
+     "high": 48,
+     "nulls": [
+      {
+       "value": 35,
+       "low": 15,
+       "high": 70
+      },
+      {
+       "value": 35,
+       "low": 14,
+       "high": 72
+      }
+     ],
+     "gain": -2.2235,
+     "strike": false
+    },
+    {
+     "id": "t66",
+     "measured": 190,
+     "value": 197,
+     "low": 183,
+     "high": 211,
+     "nulls": [
+      {
+       "value": 190,
+       "low": 170,
+       "high": 205
+      },
+      {
+       "value": 188,
+       "low": 168,
+       "high": 204
+      }
+     ],
+     "gain": -0.0929,
+     "strike": false
+    }
+   ]
+  },
+  "r5-m10-rival": {
+   "carried_from": "round-05",
+   "offline": 6,
+   "not_scored": 0,
+   "computed": 6,
+   "inside": 5,
+   "within_noise": 0,
+   "outside": 1,
+   "total_gain": 8.844,
+   "unexpected_wins": [
+    4,
+    5,
+    6
+   ],
+   "heldout_claims": 5,
+   "strikes": 1,
+   "state": "survives",
+   "note": "",
+   "reasons": [],
+   "verdict": "weak: duel state beats rival (+13.2 nats), but only one duel test separates the two (k2, n=25), and the defender's intervals from the theory alone missed that one and 4 of the other 5; the offline gain rests on p4 to p6, whose 60-character self-open filter puts late-opened deliberative answers into the 'terse with Wait/Hmm' group (p5's own example row), so the self-check claim is confounded with choosing a mode, and the theory's core temperature prediction p1 missed (0.158 against 0.29 [0.17, 0.41]).",
+   "rows": [
+    {
+     "id": "r5-m10-rival:p1",
+     "k": 1,
+     "measured": 0.15767634854771778,
+     "value": 0.29,
+     "low": 0.17,
+     "high": 0.41,
+     "nulls": [
+      {
+       "value": 0.28,
+       "low": 0.16,
+       "high": 0.4
+      }
+     ],
+     "gain": -0.2393,
+     "inside": false,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m10-rival:p2",
+     "k": 2,
+     "measured": -0.15540540540540537,
+     "value": -0.1,
+     "low": -0.2,
+     "high": 0.0,
+     "nulls": [
+      {
+       "value": -0.1,
+       "low": -0.19,
+       "high": -0.01
+      }
+     ],
+     "gain": -0.0079,
+     "inside": true,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m10-rival:p3",
+     "k": 3,
+     "measured": 0.20574986751457336,
+     "value": 0.09,
+     "low": -0.04,
+     "high": 0.22,
+     "nulls": [
+      {
+       "value": 0.11,
+       "low": 0.02,
+       "high": 0.2
+      }
+     ],
+     "gain": 0.091,
+     "inside": true,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m10-rival:p4",
+     "k": 4,
+     "measured": -0.07462686567164178,
+     "value": -0.14,
+     "low": -0.3,
+     "high": 0.02,
+     "nulls": [
+      {
+       "value": -0.47,
+       "low": -0.6,
+       "high": -0.33
+      }
+     ],
+     "gain": 3.0,
+     "inside": true,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m10-rival:p5",
+     "k": 5,
+     "measured": 0.35583146215823536,
+     "value": 0.24,
+     "low": 0.07,
+     "high": 0.41,
+     "nulls": [
+      {
+       "value": -0.03,
+       "low": -0.15,
+       "high": 0.1
+      }
+     ],
+     "gain": 3.0,
+     "inside": true,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m10-rival:p6",
+     "k": 6,
+     "measured": -0.10000000000000003,
+     "value": -0.1,
+     "low": -0.26,
+     "high": 0.06,
+     "nulls": [
+      {
+       "value": -0.33,
+       "low": -0.47,
+       "high": -0.19
+      }
+     ],
+     "gain": 3.0,
+     "inside": true,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    }
+   ],
+   "heldout_rows": [
+    {
+     "id": "t19",
+     "measured": 397,
+     "value": 406,
+     "low": 392,
+     "high": 420,
+     "nulls": [
+      {
+       "value": 412,
+       "low": 395,
+       "high": 428
+      },
+      {
+       "value": 410,
+       "low": 390,
+       "high": 428
+      }
+     ],
+     "gain": 0.5368,
+     "strike": false
+    },
+    {
+     "id": "t20",
+     "measured": 204,
+     "value": 223,
+     "low": 203,
+     "high": 243,
+     "nulls": [
+      {
+       "value": 230,
+       "low": 200,
+       "high": 260
+      },
+      {
+       "value": 232,
+       "low": 200,
+       "high": 265
+      }
+     ],
+     "gain": 0.2341,
+     "strike": false
+    },
+    {
+     "id": "t21",
+     "measured": 38.6,
+     "value": 183,
+     "low": 160,
+     "high": 206,
+     "nulls": [
+      {
+       "value": 36.5,
+       "low": 30,
+       "high": 43
+      },
+      {
+       "value": 35.5,
+       "low": 28,
+       "high": 43
+      }
+     ],
+     "gain": -3.0,
+     "strike": true
+    },
+    {
+     "id": "t23",
+     "measured": -2.6,
+     "value": -1.0,
+     "low": -4.5,
+     "high": 2.5,
+     "nulls": [
+      {
+       "value": 0.5,
+       "low": -3.5,
+       "high": 4.5
+      },
+      {
+       "value": 0.5,
+       "low": -4.0,
+       "high": 4.5
+      }
+     ],
+     "gain": 0.6472,
+     "strike": false
+    },
+    {
+     "id": "t26",
+     "measured": 3874,
+     "value": 3950,
+     "low": 3650,
+     "high": 4250,
+     "nulls": [
+      {
+       "value": 3950,
+       "low": 3500,
+       "high": 4400
+      },
+      {
+       "value": 3900,
+       "low": 3300,
+       "high": 4600
+      }
+     ],
+     "gain": 0.5092,
+     "strike": false
+    }
+   ]
+  },
+  "r6-account": {
+   "carried_from": null,
+   "offline": 44,
+   "not_scored": 16,
+   "computed": 44,
+   "inside": 43,
+   "within_noise": 1,
+   "outside": 0,
+   "total_gain": 35.413,
+   "unexpected_wins": [
+    5,
+    19,
+    27,
+    29
+   ],
+   "heldout_claims": 5,
+   "strikes": 0,
+   "state": "survives",
+   "note": "",
+   "reasons": [],
+   "verdict": "weak: the rival beats the theory (-3.107 nats, loses to rival), but its win rests mainly on one test (Think-SFT budget share 0.246, -2.14 of -3.11, with 0 tests marked separating), and result-51a0e7 contradicts its 'no RL-specific policy of finishing' wording. RL's cap-hit avoidance sits in its top-8 directions (90 cap hits with them removed vs 33 for random rank-8), although right answers on cap hits still follow strength, as the rival claims.",
+   "rows": [
+    {
+     "id": "r6-account:p2",
+     "measured": 0.15217391304347827,
+     "value": 0.11,
+     "low": 0.03,
+     "high": 0.22,
+     "nulls": [
+      {
+       "value": 0.22,
+       "low": 0.08,
+       "high": 0.38
+      },
+      {
+       "value": 0.28,
+       "low": 0.1,
+       "high": 0.48
+      }
+     ],
+     "gain": 0.7124,
+     "k": 2,
+     "inside": true,
+     "within_noise": false,
+     "n": 46,
+     "interval": [
+      0.06521739130434782,
+      0.2391304347826087
+     ],
+     "refuted_by": "share below 0.03 or above 0.22",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p3",
+     "measured": 0.043478260869565216,
+     "value": 0.035,
+     "low": 0.0,
+     "high": 0.11,
+     "nulls": [
+      {
+       "value": 0.1,
+       "low": 0.0,
+       "high": 0.25
+      },
+      {
+       "value": 0.12,
+       "low": 0.0,
+       "high": 0.3
+      }
+     ],
+     "gain": 1.1861,
+     "k": 3,
+     "inside": true,
+     "within_noise": false,
+     "n": 46,
+     "interval": [
+      0.0,
+      0.08695652173913043
+     ],
+     "refuted_by": "share above 0.11",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p4",
+     "measured": 0.2608695652173913,
+     "value": 0.22,
+     "low": 0.1,
+     "high": 0.36,
+     "nulls": [
+      {
+       "value": 0.28,
+       "low": 0.1,
+       "high": 0.48
+      },
+      {
+       "value": 0.28,
+       "low": 0.08,
+       "high": 0.5
+      }
+     ],
+     "gain": 0.3071,
+     "k": 4,
+     "inside": true,
+     "within_noise": false,
+     "n": 46,
+     "interval": [
+      0.15217391304347827,
+      0.3695652173913043
+     ],
+     "refuted_by": "share below 0.10 or above 0.36",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p5",
+     "measured": 0.4782608695652174,
+     "value": 0.52,
+     "low": 0.36,
+     "high": 0.68,
+     "nulls": [
+      {
+       "value": 0.3,
+       "low": 0.12,
+       "high": 0.5
+      },
+      {
+       "value": 0.2,
+       "low": 0.03,
+       "high": 0.42
+      }
+     ],
+     "gain": 1.7783,
+     "k": 5,
+     "inside": true,
+     "within_noise": false,
+     "n": 46,
+     "interval": [
+      0.34782608695652173,
+      0.5869565217391305
+     ],
+     "refuted_by": "share below 0.36 or above 0.68",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p6",
+     "measured": 0.06521739130434782,
+     "value": 0.115,
+     "low": 0.03,
+     "high": 0.22,
+     "nulls": [
+      {
+       "value": 0.08,
+       "low": 0.0,
+       "high": 0.22
+      },
+      {
+       "value": 0.07,
+       "low": 0.0,
+       "high": 0.22
+      }
+     ],
+     "gain": -0.2115,
+     "k": 6,
+     "inside": true,
+     "within_noise": false,
+     "n": 46,
+     "interval": [
+      0.0,
+      0.13043478260869565
+     ],
+     "refuted_by": "share below 0.03 or above 0.22",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p8",
+     "measured": 8,
+     "value": 1,
+     "low": -8,
+     "high": 9,
+     "nulls": [
+      {
+       "value": 1,
+       "low": -3,
+       "high": 5
+      },
+      {
+       "value": 1,
+       "low": -8,
+       "high": 10
+      }
+     ],
+     "gain": 0.5734,
+     "k": 8,
+     "inside": true,
+     "within_noise": false,
+     "n": 500,
+     "interval": [
+      -7,
+      23
+     ],
+     "refuted_by": "net below -8 or above 9",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r6-account:p16",
+     "measured": 52,
+     "value": 52,
+     "low": 51,
+     "high": 53,
+     "nulls": [
+      {
+       "value": 52.5,
+       "low": 50,
+       "high": 55
+      },
+      {
+       "value": 53,
+       "low": 48,
+       "high": 57
+      }
+     ],
+     "gain": 1.2262,
+     "k": 16,
+     "inside": true,
+     "within_noise": false,
+     "n": 500,
+     "interval": [
+      39,
+      66
+     ],
+     "refuted_by": "net below 51 or above 53",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r6-account:p18",
+     "measured": 0.008097165991902834,
+     "value": 0.045,
+     "low": 0.015,
+     "high": 0.09,
+     "nulls": [
+      {
+       "value": 0.07,
+       "low": 0.02,
+       "high": 0.14
+      },
+      {
+       "value": 0.1,
+       "low": 0.02,
+       "high": 0.22
+      }
+     ],
+     "gain": 0.701,
+     "k": 18,
+     "inside": false,
+     "within_noise": true,
+     "n": 247,
+     "interval": [
+      0.0,
+      0.020242914979757085
+     ],
+     "refuted_by": "share below 0.015 or above 0.09",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p19",
+     "measured": 0.5141700404858299,
+     "value": 0.38,
+     "low": 0.22,
+     "high": 0.55,
+     "nulls": [
+      {
+       "value": 0.18,
+       "low": 0.06,
+       "high": 0.35
+      },
+      {
+       "value": 0.15,
+       "low": 0.03,
+       "high": 0.38
+      }
+     ],
+     "gain": 3.0,
+     "k": 19,
+     "inside": true,
+     "within_noise": false,
+     "n": 247,
+     "interval": [
+      0.46558704453441296,
+      0.5668016194331984
+     ],
+     "refuted_by": "share below 0.22 or above 0.55",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p20",
+     "measured": 0.2793522267206478,
+     "value": 0.38,
+     "low": 0.25,
+     "high": 0.52,
+     "nulls": [
+      {
+       "value": 0.45,
+       "low": 0.25,
+       "high": 0.65
+      },
+      {
+       "value": 0.48,
+       "low": 0.2,
+       "high": 0.72
+      }
+     ],
+     "gain": 0.6667,
+     "k": 20,
+     "inside": true,
+     "within_noise": false,
+     "n": 247,
+     "interval": [
+      0.23481781376518218,
+      0.32388663967611336
+     ],
+     "refuted_by": "share below 0.25 or above 0.52",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p21",
+     "measured": 0.1659919028340081,
+     "value": 0.165,
+     "low": 0.09,
+     "high": 0.25,
+     "nulls": [
+      {
+       "value": 0.22,
+       "low": 0.1,
+       "high": 0.36
+      },
+      {
+       "value": 0.18,
+       "low": 0.05,
+       "high": 0.35
+      }
+     ],
+     "gain": 0.6787,
+     "k": 21,
+     "inside": true,
+     "within_noise": false,
+     "n": 247,
+     "interval": [
+      0.12955465587044535,
+      0.20647773279352227
+     ],
+     "refuted_by": "share below 0.09 or above 0.25",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p22",
+     "measured": 0.032388663967611336,
+     "value": 0.03,
+     "low": 0.005,
+     "high": 0.07,
+     "nulls": [
+      {
+       "value": 0.06,
+       "low": 0.01,
+       "high": 0.13
+      },
+      {
+       "value": 0.04,
+       "low": 0.0,
+       "high": 0.1
+      }
+     ],
+     "gain": 0.6498,
+     "k": 22,
+     "inside": true,
+     "within_noise": false,
+     "n": 247,
+     "interval": [
+      0.016194331983805668,
+      0.05263157894736842
+     ],
+     "refuted_by": "share above 0.07",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p24",
+     "measured": 239,
+     "value": 239,
+     "low": 234,
+     "high": 243,
+     "nulls": [
+      {
+       "value": 239,
+       "low": 233,
+       "high": 245
+      },
+      {
+       "value": 239,
+       "low": 225,
+       "high": 252
+      }
+     ],
+     "gain": 0.6131,
+     "k": 24,
+     "inside": true,
+     "within_noise": false,
+     "n": 500,
+     "interval": [
+      220,
+      258
+     ],
+     "refuted_by": "net below 234 or above 243",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r6-account:p26",
+     "measured": 0.2,
+     "value": 0.17,
+     "low": 0.08,
+     "high": 0.28,
+     "nulls": [
+      {
+       "value": 0.26,
+       "low": 0.12,
+       "high": 0.4
+      },
+      {
+       "value": 0.25,
+       "low": 0.08,
+       "high": 0.45
+      }
+     ],
+     "gain": 0.5257,
+     "k": 26,
+     "inside": true,
+     "within_noise": false,
+     "n": 55,
+     "interval": [
+      0.10909090909090909,
+      0.2909090909090909
+     ],
+     "refuted_by": "share below 0.08 or above 0.28",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p27",
+     "measured": 0.03636363636363636,
+     "value": 0.034,
+     "low": 0.0,
+     "high": 0.09,
+     "nulls": [
+      {
+       "value": 0.1,
+       "low": 0.0,
+       "high": 0.22
+      },
+      {
+       "value": 0.12,
+       "low": 0.0,
+       "high": 0.28
+      }
+     ],
+     "gain": 1.4693,
+     "k": 27,
+     "inside": true,
+     "within_noise": false,
+     "n": 55,
+     "interval": [
+      0.0,
+      0.07272727272727272
+     ],
+     "refuted_by": "share above 0.09",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p28",
+     "measured": 0.2,
+     "value": 0.19,
+     "low": 0.1,
+     "high": 0.3,
+     "nulls": [
+      {
+       "value": 0.25,
+       "low": 0.1,
+       "high": 0.42
+      },
+      {
+       "value": 0.28,
+       "low": 0.08,
+       "high": 0.5
+      }
+     ],
+     "gain": 0.7426,
+     "k": 28,
+     "inside": true,
+     "within_noise": false,
+     "n": 55,
+     "interval": [
+      0.10909090909090909,
+      0.2909090909090909
+     ],
+     "refuted_by": "share below 0.10 or above 0.30",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p29",
+     "measured": 0.41818181818181815,
+     "value": 0.47,
+     "low": 0.34,
+     "high": 0.6,
+     "nulls": [
+      {
+       "value": 0.27,
+       "low": 0.12,
+       "high": 0.44
+      },
+      {
+       "value": 0.22,
+       "low": 0.05,
+       "high": 0.42
+      }
+     ],
+     "gain": 1.3862,
+     "k": 29,
+     "inside": true,
+     "within_noise": false,
+     "n": 55,
+     "interval": [
+      0.3090909090909091,
+      0.5272727272727272
+     ],
+     "refuted_by": "share below 0.34 or above 0.60",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p30",
+     "measured": 0.14545454545454545,
+     "value": 0.136,
+     "low": 0.05,
+     "high": 0.23,
+     "nulls": [
+      {
+       "value": 0.1,
+       "low": 0.02,
+       "high": 0.22
+      },
+      {
+       "value": 0.09,
+       "low": 0.0,
+       "high": 0.22
+      }
+     ],
+     "gain": 0.4466,
+     "k": 30,
+     "inside": true,
+     "within_noise": false,
+     "n": 55,
+     "interval": [
+      0.07272727272727272,
+      0.21818181818181817
+     ],
+     "refuted_by": "share below 0.05 or above 0.23",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p32",
+     "measured": 14,
+     "value": 17,
+     "low": 13,
+     "high": 19,
+     "nulls": [
+      {
+       "value": 17,
+       "low": 12,
+       "high": 22
+      },
+      {
+       "value": 17,
+       "low": 10,
+       "high": 24
+      }
+     ],
+     "gain": -0.3073,
+     "k": 32,
+     "inside": true,
+     "within_noise": false,
+     "n": 500,
+     "interval": [
+      -1,
+      31
+     ],
+     "refuted_by": "net below 13 or above 19",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r6-account:p33",
+     "measured": 0.40625,
+     "value": 0.37,
+     "low": 0.25,
+     "high": 0.5,
+     "nulls": [
+      {
+       "value": 0.28,
+       "low": 0.14,
+       "high": 0.44
+      },
+      {
+       "value": 0.32,
+       "low": 0.12,
+       "high": 0.52
+      }
+     ],
+     "gain": 0.7956,
+     "k": 33,
+     "inside": true,
+     "within_noise": false,
+     "n": 64,
+     "interval": [
+      0.296875,
+      0.5
+     ],
+     "refuted_by": "share below 0.25 or above 0.50",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p34",
+     "measured": 0.21875,
+     "value": 0.21,
+     "low": 0.11,
+     "high": 0.32,
+     "nulls": [
+      {
+       "value": 0.17,
+       "low": 0.07,
+       "high": 0.3
+      },
+      {
+       "value": 0.17,
+       "low": 0.04,
+       "high": 0.32
+      }
+     ],
+     "gain": 0.3818,
+     "k": 34,
+     "inside": true,
+     "within_noise": false,
+     "n": 64,
+     "interval": [
+      0.140625,
+      0.3125
+     ],
+     "refuted_by": "share below 0.11 or above 0.32",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p35",
+     "measured": 0.0,
+     "value": 0.03,
+     "low": 0.0,
+     "high": 0.08,
+     "nulls": [
+      {
+       "value": 0.08,
+       "low": 0.0,
+       "high": 0.18
+      },
+      {
+       "value": 0.08,
+       "low": 0.0,
+       "high": 0.2
+      }
+     ],
+     "gain": 1.0688,
+     "k": 35,
+     "inside": true,
+     "within_noise": false,
+     "n": 64,
+     "interval": [
+      0.0,
+      0.0
+     ],
+     "refuted_by": "share above 0.08",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p36",
+     "measured": 0.0625,
+     "value": 0.12,
+     "low": 0.05,
+     "high": 0.21,
+     "nulls": [
+      {
+       "value": 0.18,
+       "low": 0.06,
+       "high": 0.32
+      },
+      {
+       "value": 0.2,
+       "low": 0.05,
+       "high": 0.38
+      }
+     ],
+     "gain": 0.9275,
+     "k": 36,
+     "inside": true,
+     "within_noise": false,
+     "n": 64,
+     "interval": [
+      0.015625,
+      0.125
+     ],
+     "refuted_by": "share below 0.05 or above 0.21",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p37",
+     "measured": 0.234375,
+     "value": 0.21,
+     "low": 0.12,
+     "high": 0.32,
+     "nulls": [
+      {
+       "value": 0.19,
+       "low": 0.07,
+       "high": 0.33
+      },
+      {
+       "value": 0.15,
+       "low": 0.02,
+       "high": 0.32
+      }
+     ],
+     "gain": 0.5252,
+     "k": 37,
+     "inside": true,
+     "within_noise": false,
+     "n": 64,
+     "interval": [
+      0.140625,
+      0.328125
+     ],
+     "refuted_by": "share below 0.12 or above 0.32",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p38",
+     "measured": 0.078125,
+     "value": 0.06,
+     "low": 0.01,
+     "high": 0.13,
+     "nulls": [
+      {
+       "value": 0.1,
+       "low": 0.02,
+       "high": 0.2
+      },
+      {
+       "value": 0.07,
+       "low": 0.0,
+       "high": 0.18
+      }
+     ],
+     "gain": 0.3269,
+     "k": 38,
+     "inside": true,
+     "within_noise": false,
+     "n": 64,
+     "interval": [
+      0.03125,
+      0.140625
+     ],
+     "refuted_by": "share above 0.13",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p40",
+     "measured": 55,
+     "value": 56,
+     "low": 50,
+     "high": 58,
+     "nulls": [
+      {
+       "value": 56,
+       "low": 51,
+       "high": 61
+      },
+      {
+       "value": 56,
+       "low": 48,
+       "high": 64
+      }
+     ],
+     "gain": 0.3875,
+     "k": 40,
+     "inside": true,
+     "within_noise": false,
+     "n": 500,
+     "interval": [
+      42,
+      69
+     ],
+     "refuted_by": "net below 50 or above 58",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r6-account:p41",
+     "measured": 0.52,
+     "value": 0.55,
+     "low": 0.42,
+     "high": 0.67,
+     "nulls": [
+      {
+       "value": 0.6,
+       "low": 0.4,
+       "high": 0.8
+      },
+      {
+       "value": 0.4,
+       "low": 0.18,
+       "high": 0.62
+      }
+     ],
+     "gain": 0.7394,
+     "k": 41,
+     "inside": true,
+     "within_noise": false,
+     "n": 75,
+     "interval": [
+      0.4266666666666667,
+      0.6133333333333333
+     ],
+     "refuted_by": "share below 0.42 or above 0.67",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p42",
+     "measured": 0.2,
+     "value": 0.15,
+     "low": 0.07,
+     "high": 0.25,
+     "nulls": [
+      {
+       "value": 0.12,
+       "low": 0.03,
+       "high": 0.25
+      },
+      {
+       "value": 0.12,
+       "low": 0.02,
+       "high": 0.26
+      }
+     ],
+     "gain": 0.485,
+     "k": 42,
+     "inside": true,
+     "within_noise": false,
+     "n": 75,
+     "interval": [
+      0.13333333333333333,
+      0.28
+     ],
+     "refuted_by": "share below 0.07 or above 0.25",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p43",
+     "measured": 0.013333333333333334,
+     "value": 0.017,
+     "low": 0.0,
+     "high": 0.06,
+     "nulls": [
+      {
+       "value": 0.04,
+       "low": 0.0,
+       "high": 0.12
+      },
+      {
+       "value": 0.07,
+       "low": 0.0,
+       "high": 0.18
+      }
+     ],
+     "gain": 1.2217,
+     "k": 43,
+     "inside": true,
+     "within_noise": false,
+     "n": 75,
+     "interval": [
+      0.0,
+      0.04
+     ],
+     "refuted_by": "share above 0.06",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p44",
+     "measured": 0.12,
+     "value": 0.09,
+     "low": 0.03,
+     "high": 0.17,
+     "nulls": [
+      {
+       "value": 0.1,
+       "low": 0.02,
+       "high": 0.2
+      },
+      {
+       "value": 0.18,
+       "low": 0.04,
+       "high": 0.36
+      }
+     ],
+     "gain": 0.3592,
+     "k": 44,
+     "inside": true,
+     "within_noise": false,
+     "n": 75,
+     "interval": [
+      0.06666666666666667,
+      0.18666666666666668
+     ],
+     "refuted_by": "share below 0.03 or above 0.17",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p45",
+     "measured": 0.14666666666666667,
+     "value": 0.15,
+     "low": 0.07,
+     "high": 0.25,
+     "nulls": [
+      {
+       "value": 0.1,
+       "low": 0.02,
+       "high": 0.2
+      },
+      {
+       "value": 0.15,
+       "low": 0.02,
+       "high": 0.32
+      }
+     ],
+     "gain": 0.4331,
+     "k": 45,
+     "inside": true,
+     "within_noise": false,
+     "n": 75,
+     "interval": [
+      0.08,
+      0.21333333333333335
+     ],
+     "refuted_by": "share below 0.07 or above 0.25",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p46",
+     "measured": 0.0,
+     "value": 0.043,
+     "low": 0.0,
+     "high": 0.1,
+     "nulls": [
+      {
+       "value": 0.04,
+       "low": 0.0,
+       "high": 0.1
+      },
+      {
+       "value": 0.06,
+       "low": 0.0,
+       "high": 0.16
+      }
+     ],
+     "gain": 0.0312,
+     "k": 46,
+     "inside": true,
+     "within_noise": false,
+     "n": 75,
+     "interval": [
+      0.0,
+      0.0
+     ],
+     "refuted_by": "share above 0.10",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p48",
+     "measured": 50,
+     "value": 30,
+     "low": 8,
+     "high": 52,
+     "nulls": [
+      {
+       "value": 30,
+       "low": 23,
+       "high": 37
+      },
+      {
+       "value": 30,
+       "low": 20,
+       "high": 40
+      }
+     ],
+     "gain": 3.0,
+     "k": 48,
+     "inside": true,
+     "within_noise": false,
+     "n": 500,
+     "interval": [
+      33,
+      66
+     ],
+     "refuted_by": "net below 8 or above 52",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r6-account:p49",
+     "measured": 0.5697674418604651,
+     "value": 0.58,
+     "low": 0.45,
+     "high": 0.7,
+     "nulls": [
+      {
+       "value": 0.55,
+       "low": 0.38,
+       "high": 0.72
+      },
+      {
+       "value": 0.38,
+       "low": 0.16,
+       "high": 0.6
+      }
+     ],
+     "gain": 0.7571,
+     "k": 49,
+     "inside": true,
+     "within_noise": false,
+     "n": 86,
+     "interval": [
+      0.4883720930232558,
+      0.6627906976744186
+     ],
+     "refuted_by": "share below 0.45 or above 0.70",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p50",
+     "measured": 0.1744186046511628,
+     "value": 0.15,
+     "low": 0.07,
+     "high": 0.25,
+     "nulls": [
+      {
+       "value": 0.12,
+       "low": 0.03,
+       "high": 0.24
+      },
+      {
+       "value": 0.12,
+       "low": 0.02,
+       "high": 0.26
+      }
+     ],
+     "gain": 0.4419,
+     "k": 50,
+     "inside": true,
+     "within_noise": false,
+     "n": 86,
+     "interval": [
+      0.11627906976744186,
+      0.2441860465116279
+     ],
+     "refuted_by": "share below 0.07 or above 0.25",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p51",
+     "measured": 0.011627906976744186,
+     "value": 0.015,
+     "low": 0.0,
+     "high": 0.06,
+     "nulls": [
+      {
+       "value": 0.05,
+       "low": 0.0,
+       "high": 0.13
+      },
+      {
+       "value": 0.08,
+       "low": 0.0,
+       "high": 0.2
+      }
+     ],
+     "gain": 1.4804,
+     "k": 51,
+     "inside": true,
+     "within_noise": false,
+     "n": 86,
+     "interval": [
+      0.0,
+      0.03488372093023256
+     ],
+     "refuted_by": "share above 0.06",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p52",
+     "measured": 0.10465116279069768,
+     "value": 0.085,
+     "low": 0.03,
+     "high": 0.16,
+     "nulls": [
+      {
+       "value": 0.12,
+       "low": 0.03,
+       "high": 0.23
+      },
+      {
+       "value": 0.18,
+       "low": 0.04,
+       "high": 0.36
+      }
+     ],
+     "gain": 0.6415,
+     "k": 52,
+     "inside": true,
+     "within_noise": false,
+     "n": 86,
+     "interval": [
+      0.05813953488372093,
+      0.16279069767441862
+     ],
+     "refuted_by": "share below 0.03 or above 0.16",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p53",
+     "measured": 0.13953488372093023,
+     "value": 0.13,
+     "low": 0.06,
+     "high": 0.22,
+     "nulls": [
+      {
+       "value": 0.11,
+       "low": 0.03,
+       "high": 0.22
+      },
+      {
+       "value": 0.16,
+       "low": 0.03,
+       "high": 0.33
+      }
+     ],
+     "gain": 0.4437,
+     "k": 53,
+     "inside": true,
+     "within_noise": false,
+     "n": 86,
+     "interval": [
+      0.08139534883720931,
+      0.20930232558139536
+     ],
+     "refuted_by": "share below 0.06 or above 0.22",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p54",
+     "measured": 0.0,
+     "value": 0.04,
+     "low": 0.0,
+     "high": 0.1,
+     "nulls": [
+      {
+       "value": 0.05,
+       "low": 0.0,
+       "high": 0.12
+      },
+      {
+       "value": 0.07,
+       "low": 0.0,
+       "high": 0.18
+      }
+     ],
+     "gain": 0.3881,
+     "k": 54,
+     "inside": true,
+     "within_noise": false,
+     "n": 86,
+     "interval": [
+      0.0,
+      0.0
+     ],
+     "refuted_by": "share above 0.10",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-account:p56",
+     "measured": 33,
+     "value": 20,
+     "low": -5,
+     "high": 45,
+     "nulls": [
+      {
+       "value": 20,
+       "low": 13,
+       "high": 27
+      },
+      {
+       "value": 20,
+       "low": 9,
+       "high": 31
+      }
+     ],
+     "gain": 1.3027,
+     "k": 56,
+     "inside": true,
+     "within_noise": false,
+     "n": 500,
+     "interval": [
+      14,
+      52
+     ],
+     "refuted_by": "net below -5 or above 45",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r6-account:p57",
+     "measured": 0.7692307692307693,
+     "value": 0.7,
+     "low": 0.5,
+     "high": 0.87,
+     "nulls": [
+      {
+       "value": 0.55,
+       "low": 0.33,
+       "high": 0.77
+      },
+      {
+       "value": 0.6,
+       "low": 0.35,
+       "high": 0.85
+      }
+     ],
+     "gain": 0.9858,
+     "k": 57,
+     "inside": true,
+     "within_noise": false,
+     "n": 26,
+     "interval": [
+      0.6153846153846154,
+      0.9230769230769231
+     ],
+     "refuted_by": "fraction below 0.50",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r6-account:p58",
+     "measured": 0.2857142857142857,
+     "value": 0.28,
+     "low": 0.08,
+     "high": 0.5,
+     "nulls": [
+      {
+       "value": 0.45,
+       "low": 0.2,
+       "high": 0.7
+      },
+      {
+       "value": 0.4,
+       "low": 0.12,
+       "high": 0.7
+      }
+     ],
+     "gain": 0.6384,
+     "k": 58,
+     "inside": true,
+     "within_noise": false,
+     "n": 14,
+     "interval": [
+      0.07142857142857142,
+      0.5
+     ],
+     "refuted_by": "fraction above 0.50",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r6-account:p59",
+     "measured": 0.8974358974358975,
+     "value": 0.9,
+     "low": 0.78,
+     "high": 0.97,
+     "nulls": [
+      {
+       "value": 0.75,
+       "low": 0.58,
+       "high": 0.9
+      },
+      {
+       "value": 0.85,
+       "low": 0.65,
+       "high": 0.98
+      }
+     ],
+     "gain": 1.0445,
+     "k": 59,
+     "inside": true,
+     "within_noise": false,
+     "n": 39,
+     "interval": [
+      0.8205128205128205,
+      0.9743589743589743
+     ],
+     "refuted_by": "fraction below 0.78",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r6-account:p60",
+     "measured": 0.8661417322834646,
+     "value": 0.84,
+     "low": 0.72,
+     "high": 0.93,
+     "nulls": [
+      {
+       "value": 0.83,
+       "low": 0.65,
+       "high": 0.97
+      },
+      {
+       "value": 0.85,
+       "low": 0.62,
+       "high": 1.0
+      }
+     ],
+     "gain": 0.4611,
+     "k": 60,
+     "inside": true,
+     "within_noise": false,
+     "n": 127,
+     "interval": [
+      0.8110236220472441,
+      0.9133858267716536
+     ],
+     "refuted_by": "fraction below 0.72",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "k": 1,
+     "measured": 0.0,
+     "replication": null,
+     "not_scored": "0 by construction"
+    },
+    {
+     "k": 7,
+     "measured": 0.0,
+     "replication": null,
+     "not_scored": "0 by construction"
+    },
+    {
+     "k": 9,
+     "measured": 0.0,
+     "replication": null,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 10,
+     "measured": 0.24615384615384617,
+     "replication": 0.24615384615384617,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 11,
+     "measured": 0.03076923076923077,
+     "replication": 0.03076923076923077,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 12,
+     "measured": 0.18461538461538463,
+     "replication": 0.18461538461538463,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 13,
+     "measured": 0.4461538461538462,
+     "replication": 0.4461538461538462,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 14,
+     "measured": 0.09230769230769231,
+     "replication": 0.09230769230769231,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 15,
+     "measured": 0.0,
+     "replication": null,
+     "not_scored": "a fit of the account's rules to a cell whose budget a board item claims"
+    },
+    {
+     "k": 17,
+     "measured": 0.0,
+     "replication": null,
+     "not_scored": "0 by construction"
+    },
+    {
+     "k": 23,
+     "measured": 0.0,
+     "replication": null,
+     "not_scored": "0 by construction"
+    },
+    {
+     "k": 25,
+     "measured": 0.0,
+     "replication": null,
+     "not_scored": "0 by construction"
+    },
+    {
+     "k": 31,
+     "measured": 0.0,
+     "replication": null,
+     "not_scored": "0 by construction"
+    },
+    {
+     "k": 39,
+     "measured": 0.0,
+     "replication": null,
+     "not_scored": "0 by construction"
+    },
+    {
+     "k": 47,
+     "measured": 0.0,
+     "replication": null,
+     "not_scored": "0 by construction"
+    },
+    {
+     "k": 55,
+     "measured": 0.0,
+     "replication": null,
+     "not_scored": "0 by construction"
+    }
+   ],
+   "heldout_rows": [
+    {
+     "id": "t03",
+     "measured": 47,
+     "value": 76,
+     "low": 63,
+     "high": 89,
+     "nulls": [
+      {
+       "value": 72,
+       "low": 54,
+       "high": 92
+      },
+      {
+       "value": 72,
+       "low": 50,
+       "high": 96
+      }
+     ],
+     "gain": -3.0,
+     "strike": false
+    },
+    {
+     "id": "t04",
+     "measured": 32,
+     "value": 78,
+     "low": 63,
+     "high": 94,
+     "nulls": [
+      {
+       "value": 70,
+       "low": 50,
+       "high": 92
+      },
+      {
+       "value": 70,
+       "low": 45,
+       "high": 100
+      }
+     ],
+     "gain": -3.0,
+     "strike": false
+    },
+    {
+     "id": "t05",
+     "measured": 8706,
+     "value": 9300,
+     "low": 8700,
+     "high": 9900,
+     "nulls": [
+      {
+       "value": 9200,
+       "low": 8400,
+       "high": 10000
+      },
+      {
+       "value": 9150,
+       "low": 8000,
+       "high": 10300
+      }
+     ],
+     "gain": -0.4985,
+     "strike": false
+    },
+    {
+     "id": "t06",
+     "measured": 8556,
+     "value": 9200,
+     "low": 8500,
+     "high": 9900,
+     "nulls": [
+      {
+       "value": 9000,
+       "low": 8000,
+       "high": 10000
+      },
+      {
+       "value": 9000,
+       "low": 7700,
+       "high": 10300
+      }
+     ],
+     "gain": -0.448,
+     "strike": false
+    },
+    {
+     "id": "t33",
+     "measured": 0.237,
+     "value": 0.55,
+     "low": 0.45,
+     "high": 0.65,
+     "nulls": [
+      {
+       "value": 0.5,
+       "low": 0.33,
+       "high": 0.67
+      },
+      {
+       "value": 0.5,
+       "low": 0.33,
+       "high": 0.66
+      }
+     ],
+     "gain": -3.0,
+     "strike": false
+    }
+   ]
+  },
+  "r6-m01": {
+   "carried_from": null,
+   "offline": 3,
+   "not_scored": 0,
+   "computed": 3,
+   "inside": 2,
+   "within_noise": 0,
+   "outside": 1,
+   "total_gain": -1.135,
+   "unexpected_wins": [
+    3
+   ],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "note": "",
+   "reasons": [
+    "p2 Late onset of textbook blocks in long cued-base answers: the share of hard328 ba: measured 0.007352941176470588, predicted 0.25 [0.12, 0.42]; refuting condition met: statistic < 0.10"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r6-m01:p1",
+     "measured": -0.2981493553527452,
+     "value": -0.45,
+     "low": -0.8,
+     "high": -0.18,
+     "nulls": [
+      {
+       "value": -0.25,
+       "low": -0.7,
+       "high": 0.15
+      },
+      {
+       "value": -0.12,
+       "low": -0.5,
+       "high": 0.25
+      }
+     ],
+     "gain": 0.0863,
+     "k": 1,
+     "inside": true,
+     "within_noise": false,
+     "n": 254,
+     "interval": [
+      -0.3787878787878788,
+      -0.1942934782608695
+     ],
+     "refuted_by": "statistic > -0.15",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r6-m01:p2",
+     "measured": 0.007352941176470588,
+     "value": 0.25,
+     "low": 0.12,
+     "high": 0.42,
+     "nulls": [
+      {
+       "value": 0.15,
+       "low": 0.03,
+       "high": 0.35
+      },
+      {
+       "value": 0.1,
+       "low": 0.01,
+       "high": 0.25
+      }
+     ],
+     "gain": -2.7171,
+     "k": 2,
+     "inside": false,
+     "within_noise": false,
+     "n": 136,
+     "interval": [
+      0.0,
+      0.022058823529411766
+     ],
+     "refuted_by": "statistic < 0.10",
+     "refuted_by_met": true,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-m01:p3",
+     "measured": 0.6,
+     "value": 0.68,
+     "low": 0.45,
+     "high": 0.9,
+     "nulls": [
+      {
+       "value": 0.95,
+       "low": 0.6,
+       "high": 1.3
+      },
+      {
+       "value": 0.95,
+       "low": 0.55,
+       "high": 1.4
+      }
+     ],
+     "gain": 1.4959,
+     "k": 3,
+     "inside": true,
+     "within_noise": false,
+     "n": 23,
+     "interval": [
+      0.5263157894736842,
+      0.82
+     ],
+     "refuted_by": "statistic > 0.92",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r6-m04": {
+   "carried_from": null,
+   "offline": 3,
+   "not_scored": 0,
+   "computed": 3,
+   "inside": 1,
+   "within_noise": 1,
+   "outside": 1,
+   "total_gain": -3.521,
+   "unexpected_wins": [],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "note": "",
+   "reasons": [
+    "p2 Mechanism test, how early the length policy arrives: f = ln(M(sft025_cue)/M(base: measured 0.06468979820134287, predicted 0.8 [0.45, 1.3]; refuting condition met: f below 0.45, or undefined"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r6-m04:p1",
+     "measured": -2,
+     "value": 4,
+     "low": 1,
+     "high": 9,
+     "nulls": [
+      {
+       "value": 3,
+       "low": -3,
+       "high": 10
+      },
+      {
+       "value": 3,
+       "low": -3,
+       "high": 11
+      }
+     ],
+     "gain": -1.7764,
+     "k": 1,
+     "inside": false,
+     "within_noise": true,
+     "n": 100,
+     "interval": [
+      -6,
+      2
+     ],
+     "refuted_by": "D below 1 (D <= 0)",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r6-m04:p2",
+     "measured": 0.06468979820134287,
+     "value": 0.8,
+     "low": 0.45,
+     "high": 1.3,
+     "nulls": [
+      {
+       "value": 0.4,
+       "low": -0.05,
+       "high": 0.9
+      },
+      {
+       "value": 0.5,
+       "low": 0.05,
+       "high": 1.0
+      }
+     ],
+     "gain": -3.0,
+     "k": 2,
+     "inside": false,
+     "within_noise": false,
+     "n": 100,
+     "interval": [
+      -0.20777972855755164,
+      0.3962439480682959
+     ],
+     "refuted_by": "f below 0.45, or undefined",
+     "refuted_by_met": true,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-m04:p3",
+     "measured": 0.0,
+     "value": 0.12,
+     "low": 0.0,
+     "high": 0.35,
+     "nulls": [
+      {
+       "value": 0.3,
+       "low": 0.05,
+       "high": 0.6
+      },
+      {
+       "value": 0.25,
+       "low": 0.03,
+       "high": 0.52
+      }
+     ],
+     "gain": 1.255,
+     "k": 3,
+     "inside": true,
+     "within_noise": false,
+     "n": 100,
+     "interval": [
+      0.0,
+      0.0
+     ],
+     "refuted_by": "statistic above 0.35, or undefined",
+     "refuted_by_met": false,
+     "replication": null
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r6-m05": {
+   "carried_from": null,
+   "offline": 3,
+   "not_scored": 0,
+   "computed": 3,
+   "inside": 0,
+   "within_noise": 1,
+   "outside": 2,
+   "total_gain": -4.238,
+   "unexpected_wins": [],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "note": "",
+   "reasons": [
+    "p1 Mechanism test: ratio of the RL/base hold-on rate ratio far from the last numeri: measured 0.9725264665193447, predicted 1.7 [1.15, 2.8]; refuting condition met: statistic below 1.1, or undefined",
+    "p3 Cause test against a position rival: the same far/near contrast R(d >= 1500) / R: measured 0.9024747907285835, predicted 1.6 [1.1, 2.8]; refuting condition met: statistic below 1.05, or undefined",
+    "2 of 3 computed predictions outside their 90 % intervals beyond noise"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r6-m05:p1",
+     "measured": 0.9725264665193447,
+     "value": 1.7,
+     "low": 1.15,
+     "high": 2.8,
+     "nulls": [
+      {
+       "value": 1.1,
+       "low": 0.7,
+       "high": 1.7
+      },
+      {
+       "value": 1.1,
+       "low": 0.65,
+       "high": 1.75
+      }
+     ],
+     "gain": -1.4256,
+     "k": 1,
+     "inside": false,
+     "within_noise": false,
+     "n": 497,
+     "interval": [
+      0.8740532724857533,
+      1.0806506471666761
+     ],
+     "refuted_by": "statistic below 1.1, or undefined",
+     "refuted_by_met": true,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-m05:p2",
+     "measured": 1.3791965709443248,
+     "value": 1.05,
+     "low": 0.8,
+     "high": 1.3,
+     "nulls": [
+      {
+       "value": 1.3,
+       "low": 0.9,
+       "high": 1.9
+      },
+      {
+       "value": 1.3,
+       "low": 0.9,
+       "high": 1.85
+      }
+     ],
+     "gain": -1.643,
+     "k": 2,
+     "inside": false,
+     "within_noise": true,
+     "n": 497,
+     "interval": [
+      1.2995331764751483,
+      1.4669956313217523
+     ],
+     "refuted_by": "statistic above 1.3 or below 0.75, or undefined",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r6-m05:p3",
+     "measured": 0.9024747907285835,
+     "value": 1.6,
+     "low": 1.1,
+     "high": 2.8,
+     "nulls": [
+      {
+       "value": 1.05,
+       "low": 0.6,
+       "high": 1.7
+      },
+      {
+       "value": 1.1,
+       "low": 0.6,
+       "high": 1.85
+      }
+     ],
+     "gain": -1.1697,
+     "k": 3,
+     "inside": false,
+     "within_noise": false,
+     "n": 497,
+     "interval": [
+      0.8054866129434834,
+      1.015290286748162
+     ],
+     "refuted_by": "statistic below 1.05, or undefined",
+     "refuted_by_met": true,
+     "replication": "replicated"
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r6-m06": {
+   "carried_from": null,
+   "offline": 3,
+   "not_scored": 0,
+   "computed": 0,
+   "inside": 0,
+   "within_noise": 0,
+   "outside": 0,
+   "total_gain": 0,
+   "unexpected_wins": [],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "untested",
+   "note": "",
+   "reasons": [],
+   "verdict": "",
+   "rows": [
+    {
+     "k": 1,
+     "not_computable": "field n_tok_p_lt_1e2 does not exist in any of the 328 rows of e72c answers.jsonl (the day1_hard328-01 jobs predate the min-p change that added it)",
+     "replication": null
+    },
+    {
+     "k": 2,
+     "not_computable": "field n_tok_p_lt_1e2 does not exist in any of the 328 rows of e72c answers.jsonl (the day1_hard328-01 jobs predate the min-p change that added it)",
+     "replication": null
+    },
+    {
+     "k": 3,
+     "not_computable": "field n_tok_p_lt_1e2 does not exist in any of the 328 rows of e72c answers.jsonl (the day1_hard328-01 jobs predate the min-p change that added it)",
+     "replication": null
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r6-m10": {
+   "carried_from": null,
+   "offline": 3,
+   "not_scored": 0,
+   "computed": 3,
+   "inside": 1,
+   "within_noise": 0,
+   "outside": 2,
+   "total_gain": -3.794,
+   "unexpected_wins": [],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "note": "",
+   "reasons": [
+    "p1 Mechanism test. Paired finished-answer error rate, RL step 100 plain minus cued : measured -0.0463768115942029, predicted 0.0 [-0.025, 0.025]; refuting condition met: measured below -0.03 or above 0.04",
+    "2 of 3 computed predictions outside their 90 % intervals beyond noise"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r6-m10:p1",
+     "measured": -0.0463768115942029,
+     "value": 0.0,
+     "low": -0.025,
+     "high": 0.025,
+     "nulls": [
+      {
+       "value": -0.015,
+       "low": -0.05,
+       "high": 0.02
+      },
+      {
+       "value": 0.0,
+       "low": -0.035,
+       "high": 0.035
+      }
+     ],
+     "gain": -2.7827,
+     "k": 1,
+     "inside": false,
+     "within_noise": false,
+     "n": 345,
+     "interval": [
+      -0.06666666666666668,
+      -0.026086956521739132
+     ],
+     "refuted_by": "measured below -0.03 or above 0.04",
+     "refuted_by_met": true,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-m10:p2",
+     "measured": 0.30830135965451666,
+     "value": 0.05,
+     "low": -0.15,
+     "high": 0.25,
+     "nulls": [
+      {
+       "value": 0.15,
+       "low": -0.1,
+       "high": 0.42
+      },
+      {
+       "value": 0.08,
+       "low": -0.18,
+       "high": 0.35
+      }
+     ],
+     "gain": -1.2657,
+     "k": 2,
+     "inside": false,
+     "within_noise": false,
+     "n": 345,
+     "interval": [
+      0.2643981334977361,
+      0.3419517023858386
+     ],
+     "refuted_by": "measured above 0.35 or below -0.25",
+     "refuted_by_met": false,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-m10:p3",
+     "measured": -0.01904761904761909,
+     "value": 0.0,
+     "low": -0.035,
+     "high": 0.035,
+     "nulls": [
+      {
+       "value": 0.0,
+       "low": -0.045,
+       "high": 0.045
+      },
+      {
+       "value": 0.01,
+       "low": -0.03,
+       "high": 0.05
+      }
+     ],
+     "gain": 0.2541,
+     "k": 3,
+     "inside": true,
+     "within_noise": false,
+     "n": 420,
+     "interval": [
+      -0.050000000000000044,
+      0.014285714285714235
+     ],
+     "refuted_by": "absolute value above 0.045",
+     "refuted_by_met": false,
+     "replication": null
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r6-m11": {
+   "carried_from": null,
+   "offline": 3,
+   "not_scored": 1,
+   "computed": 2,
+   "inside": 1,
+   "within_noise": 0,
+   "outside": 1,
+   "total_gain": -0.317,
+   "unexpected_wins": [],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "note": "",
+   "reasons": [
+    "p2 Mechanism test: among the cued base's early-marker finished-wrong T1 answers, th: measured None, predicted 0.8 [0.6, 0.95]; refuting condition met: statistic below 0.6, or fewer than 8 kept rows",
+    "p3 Cause share: of the cued base's quick finished-wrong T1 answers (at most 2,000 g: measured 0.0, predicted 0.45 [0.2, 0.75]; refuting condition met: statistic below 0.2, or fewer than 8 kept rows"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r6-m11:p3",
+     "measured": 0.0,
+     "value": 0.45,
+     "low": 0.2,
+     "high": 0.75,
+     "nulls": [
+      {
+       "value": 0.35,
+       "low": 0.08,
+       "high": 0.65
+      },
+      {
+       "value": 0.3,
+       "low": 0.05,
+       "high": 0.6
+      }
+     ],
+     "gain": -1.8066,
+     "k": 3,
+     "inside": false,
+     "within_noise": false,
+     "n": 13,
+     "interval": [
+      0.0,
+      0.0
+     ],
+     "refuted_by": "statistic below 0.2, or fewer than 8 kept rows",
+     "refuted_by_met": true,
+     "replication": "replicated"
+    },
+    {
+     "id": "r6-m11:p4",
+     "measured": 0.04251012145748988,
+     "value": 0.06,
+     "low": 0.0,
+     "high": 0.15,
+     "nulls": [
+      {
+       "value": 0.2,
+       "low": 0.04,
+       "high": 0.45
+      },
+      {
+       "value": 0.15,
+       "low": 0.03,
+       "high": 0.35
+      }
+     ],
+     "gain": 1.4891,
+     "k": 4,
+     "inside": true,
+     "within_noise": false,
+     "n": 494,
+     "interval": [
+      0.02834008097165992,
+      0.05668016194331984
+     ],
+     "refuted_by": "statistic above 0.15",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "k": 2,
+     "refuted_without_number": "statistic below 0.6, or fewer than 8 kept rows",
+     "replication": null
+    },
+    {
+     "k": 1,
+     "measured": 0.0,
+     "replication": null,
+     "not_scored": "differs from its replication; left out until a person resolves it"
+    }
+   ],
+   "heldout_rows": []
+  }
+ }
+}

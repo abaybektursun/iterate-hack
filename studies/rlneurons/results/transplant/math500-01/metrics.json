@@ -1,0 +1,89 @@
+{
+ "sft1_rl10": [
+  {
+   "status": "done",
+   "config": {
+    "model": null,
+    "model_path": "/tmp/theta",
+    "model_label": "sft1_rl10",
+    "prompt": "cue",
+    "set": "math500",
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 182000000,
+    "shots": null,
+    "n": null,
+    "samples": 1,
+    "restarts": 0,
+    "out": "/root/abaybektursun-1115-004808-bb28/out",
+    "dry_run": false,
+    "commit": "b29903112f118a356e9f3f2251df08b2f064efc7",
+    "model_repo": null,
+    "model_revision": null,
+    "tokenizer": [
+     "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    ],
+    "prefix_ids": [
+     1584,
+     2268,
+     33413
+    ],
+    "sampling": {
+     "temperature": 1.0,
+     "top_p": 1.0,
+     "repetition_penalty": 1.0
+    },
+    "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+    "n_problems": 500,
+    "shots_arm": null,
+    "shots_sha256": null,
+    "shots_tokens": 0
+   },
+   "commit": "b29903112f118a356e9f3f2251df08b2f064efc7",
+   "job_id": "abaybektursun-1115-004808-bb28",
+   "versions": {
+    "vllm": "0.32.0",
+    "math-verify": "0.9.0",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3"
+   },
+   "started_utc": "2026-11-15T08:50:26Z",
+   "updated_utc": "2026-11-15T09:48:14Z",
+   "engine": {
+    "vllm": "0.32.0",
+    "max_num_seqs": 128,
+    "max_num_batched_tokens": 2048,
+    "num_gpu_blocks": 36098,
+    "gpu_memory_utilization": 0.9,
+    "max_model_len": 18432,
+    "load_s": 203.34277153015137,
+    "model_dir": "/tmp/theta",
+    "tok_dir": "/root/.cache/huggingface/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   },
+   "counts": {
+    "n": 500,
+    "tok_p_lt_1e2": 31186,
+    "tok_p_lt_1e3": 6872,
+    "correct_v3": 467,
+    "correct_v1": 458,
+    "cap_hits": 17,
+    "loop_A": 4,
+    "generated_tokens": 2385580,
+    "restarts": 0,
+    "n_planned": 500,
+    "mean_generated_tokens": 4771.16,
+    "generation_s": 3256.4242594242096,
+    "tokens_per_s": 732.5765348590697
+   },
+   "memory": {
+    "gpu_memory_used_mib": 87595,
+    "gpu_memory_total_mib": 97887,
+    "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition"
+   },
+   "wall_s": 3468.163408279419
+  }
+ ]
+}

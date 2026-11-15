@@ -1,0 +1,1 @@
+{"measured": 0.2727272727272727, "n": 33, "interval": [0.15151515151515152, 0.3939393939393939], "interval_kind": "bootstrap", "refuted_by_met": false, "alt_measured": null, "not_computable": null, "example_row": {"problem_index": 9, "unique_id": "test/prealgebra/1139.json", "base_cue_s0": 0, "base_cue_s1": 0, "base_cue_s2": 0, "base_cue_s3": 0, "code_cue": 0}}

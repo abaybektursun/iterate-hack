@@ -6,7 +6,8 @@ reading of the theory that its advocate does not hold.
 
 Write rival.json again, with the same statement or a sharper one, and 2 to 4 replacement tests on stored rows where
 your number lies outside the advocate's likely interval: attack the theory as defended in advocate.json, not as you
-first read it. Do not repeat a test from first_turn.json. All the rules above still hold.
+first read it. Do not repeat a test from first_turn.json. All the rules above still hold, the "intervention" key
+included (keep the first turn's or write a better one).
 
 If no test on stored rows separates the two mechanisms, say so: set "tests" to [] and add
 

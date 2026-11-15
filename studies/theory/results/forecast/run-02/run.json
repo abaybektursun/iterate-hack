@@ -1,0 +1,38 @@
+{
+ "commit": "46875c7",
+ "command": "studies/theory/lib/forecast.py make studies/theory/results/forecast/run-02 --propose 6",
+ "utc": "2026-11-15T14:53:16",
+ "round": "studies/theory/results/engine/round-07",
+ "work_items": [
+  "work-644fec",
+  "work-480b1f",
+  "work-383069",
+  "work-60f040",
+  "work-a0d758",
+  "work-ceccc0",
+  "work-8b4030",
+  "work-ab0f72",
+  "work-502f19",
+  "work-ce7583",
+  "work-dc9359"
+ ],
+ "targets": 17,
+ "propose": 6,
+ "forecasters": [
+  "reader-1",
+  "reader-2",
+  "r5-m03-rival",
+  "r6-account-rival",
+  "r6-m06",
+  "r7-m05",
+  "r7-m08",
+  "r7-m11",
+  "f2-m01",
+  "f2-m02",
+  "f2-m03",
+  "f2-m04",
+  "f2-m05",
+  "f2-m06"
+ ],
+ "job_dirs": "/var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-kmh8moq2"
+}

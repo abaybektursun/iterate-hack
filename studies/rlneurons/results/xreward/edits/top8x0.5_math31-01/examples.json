@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 3484,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "}\\right) + c = -458 \\]\n\\[ -1156 + c = -458 \\]\n\\[ c = 698 \\]\n\nFor \\( Q(x) \\) at \\( x = 16 \\):\n\\[ -2(16)^2 + 16d + e = 54 \\]\n\\[ -2(256) + 16d + e = 54 \\]\n\\[ -512 + 16d + e = 54 \\]\n\\[ 16d + e = 566 \\quad \\text{(Equation 3)} \\]\n\nFor \\( Q(x) \\) at \\( x = 20 \\):\n\\[ -2(20)^2 + 20d + e = 53 \\]\n\\[ -2(400) + 20d + e = 53 \\]\n\\[ -800 + 20d + e = 53 \\]\n\\[ 20d + e = 853 \\quad \\text{(Equation 4)} \\]\n\nSubtract Equation 3 from Equation 4:\n\\[ 20d + e - (16d + e) = 853 - 566 \\]\n\\[ 4d = 287 \\]\n\\[ d = \\frac{287}{4} \\]\n\nSubstitute \\( d \\) back into Equation 3:\n\\[ 16\\left(\\frac{287}{4}\\right) + e = 566 \\]\n\\[ 1148 + e = 566 \\]\n\\[ e = -582 \\]\n\nThus, \\( P(0) = c = 698 \\) and \\( Q(0) = e = -582 \\). Therefore, the sum \\( P(0) + Q(0) \\) is:\n\\[ P(0) + Q(0) = 698 + (-582) = 116 \\]\n\nThe final answer is:\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 29,
+  "gold": "244",
+  "extracted_v3": "128",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 10715,
+  "prompt_tail": "wn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "ell_A \\) and \\( \\ell_B \\), with segments \\( \\overline{A_iB_j} \\) such that no point strictly between the lines lies on more than one segment. \n\nThe key insight is recognizing that non-crossing segments between two parallel lines form regions akin to a grid or a bipartite matching structure. For each \\( m \\) points on \\( \\ell_A \\) and \\( n \\) points on \\( \\ell_B \\), the number of regions formed is related to the binary representation of the points. \n\nGiven the example where \\( m = 3 \\) and \\( n = 2 \\) results in 8 regions, it becomes clear that the number of regions follows a pattern corresponding to powers of 2. Specifically, the formula is \\( 2^m \\).\n\nApplying this formula for \\( m = 7 \\):\n\\[\n2^7 = 128\n\\]\n\nThus, the number of regions when \\( m = 7 \\) and \\( n = 5 \\) is:\n\n\\[\n\\boxed{128}\n\\]"
+ }
+}

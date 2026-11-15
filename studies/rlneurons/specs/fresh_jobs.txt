@@ -1,0 +1,44 @@
+# The 12 jobs of specs/SPEC_fresh.md: 3 models x 4 samples on data/fresh/fresh2026_v1.json (136 problems), one job per sample.
+# Run each from a clean checkout of branch `fresh` (the commit must hold jobs/run_fresh.py and data/fresh/): $(git rev-parse HEAD)
+# expands to the submitted commit. Each line is the command string as given to `uv run tools/gpu.py submit h100 --hours 2 -- "<line>"`
+# or `python3 tools/vast.py run <box> -- '<line>'`. Outputs in $OUT_DIR: answers.jsonl (136 rows) and metrics.json (status done).
+# Sample s has seed 7000000 + 10000 s. About 1.6 M generated tokens per job: about 35 min on an H100 (1,000 tokens/s measured on
+# the 328), longer on a smaller GPU; give 3 h. Needs: one GPU with at least 24 GB (7B model in BF16, 15 GB, vLLM context 18,432
+# tokens, up to 128 answers at once; less memory only lowers the speed), 32 GB host RAM, 40 GB disk (sft1 jobs: 90 GB, three
+# model repositories plus the written copy in /tmp/theta), HF token for the model downloads.
+
+# sft1_cue sample 0
+bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label sft1 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 7000000 --commit $(git rev-parse HEAD)
+
+# sft1_cue sample 1
+bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label sft1 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 7010000 --commit $(git rev-parse HEAD)
+
+# sft1_cue sample 2
+bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label sft1 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 7020000 --commit $(git rev-parse HEAD)
+
+# sft1_cue sample 3
+bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label sft1 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 7030000 --commit $(git rev-parse HEAD)
+
+# rl_plain sample 0
+bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model rl --prompt plain --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 7000000 --commit $(git rev-parse HEAD)
+
+# rl_plain sample 1
+bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model rl --prompt plain --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 7010000 --commit $(git rev-parse HEAD)
+
+# rl_plain sample 2
+bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model rl --prompt plain --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 7020000 --commit $(git rev-parse HEAD)
+
+# rl_plain sample 3
+bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model rl --prompt plain --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 7030000 --commit $(git rev-parse HEAD)
+
+# base_cue sample 0
+bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model base --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 7000000 --commit $(git rev-parse HEAD)
+
+# base_cue sample 1
+bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model base --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 7010000 --commit $(git rev-parse HEAD)
+
+# base_cue sample 2
+bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model base --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 7020000 --commit $(git rev-parse HEAD)
+
+# base_cue sample 3
+bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model base --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 7030000 --commit $(git rev-parse HEAD)
