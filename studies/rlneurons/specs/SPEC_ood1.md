@@ -41,3 +41,13 @@ Not run (one seed, lowest cost first): the vote over four samples after restart,
 
 Cost: 500 answers per cell. Smoke first: `--grader-check-only` on the laptop (no model), then `--n 10` on the base with the
 cue. Expected under 15 H100 minutes per cell, about 1 H100 hour for the four.
+
+## Amendment 1, 2026-11-15 15:25 UTC (after cells 1 and 2 were read, before cells 3 and 4 finished)
+
+Reading the 235 and 114 answers of cells 1 and 2 that grader v1 gave no letter: many end with the answer in another form
+(`**Answer**: $\boxed{C}$`, `The answer is (D)`, a bare `\boxed{G}`), which v1 counts as wrong. The cued base writes these forms
+more often than it writes nothing, so v1 understates every cell by a different amount. Grader v2 (`mcq_lib.grade_v2`): the first
+option letter within 40 characters after the last of "Answer:" (markup allowed before the colon), "answer is" (not the prompt's
+own sentence "answer is the letter of") and `\boxed{`. Tested in `mcq_lib_test.py` (10 more cases, 5 that must be wrong). The
+readout reports both graders for every cell and difference, from the same texts. The hypotheses are judged under v1, as written;
+v2 is the better estimate of each score. Cells 1 and 2 on the 500: v1 114 and 229, v2 as in the readout.

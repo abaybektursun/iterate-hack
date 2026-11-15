@@ -34,3 +34,23 @@ def grade(text: str, gold: str, n_options: int) -> dict:
     assert gold in LETTERS[:n_options], (gold, n_options)
     mode, letter = extract(text)
     return {"mode": mode, "letter": letter, "right": letter == gold}
+
+
+# Grader v2 (SPEC_ood1.md amendment 1): v1 misses answers written as "**Answer**: C", "The answer is (D)" or "\boxed{C}".
+MARK_V2 = re.compile(r"answer\W{0,4}:|answer is(?! the letter of)|\\boxed\{", re.IGNORECASE)
+
+
+def extract_v2(text: str) -> tuple:
+    """(mode, letter): the first option letter within 40 characters after the last of "Answer:" (markup allowed between the
+    word and the colon), "answer is" and "\\boxed{". Modes as in extract()."""
+    marks = list(MARK_V2.finditer(text))
+    if not marks:
+        return "none", None
+    m = LETTER.search(text[marks[-1].end():marks[-1].end() + 40])
+    return ("answer", m.group(1)) if m else ("no_letter", None)
+
+
+def grade_v2(text: str, gold: str, n_options: int) -> dict:
+    assert gold in LETTERS[:n_options], (gold, n_options)
+    mode, letter = extract_v2(text)
+    return {"mode": mode, "letter": letter, "right": letter == gold}

@@ -3719,3 +3719,35 @@ $P judge --work runs/derived-02 --judge A    # also B and F; the hand labels go 
 $P score --work runs/derived-02 --out studies/rlneurons/results/derived/hard328-02
 $P score --per-sample --out studies/rlneurons/results/derived/hard328_persample-02   # addendum 1; reads hard328-01/labels.jsonl, no judge call
 ```
+
+## Outside math and code: MMLU-Pro and BBH (500 items, T 1.0, one sample, board work-8cde9c)
+
+Question: every configuration here was chosen on MATH-500; do its gains appear on benchmarks that are neither math nor code?
+Answer: yes. The Math cue, unchanged, takes the untrained base from 136 to 286 of 500 (+30.0 points [24.6, 35.4]), 77 % of
+what RL-Zero-Math gains there (332), against 78 % on MATH-500 and 58 % on code. Spec `specs/SPEC_ood1.md` (written before the
+runs; amendment 1 adds grader v2). Items `data/ood1/ood1_items.json` (250 MMLU-Pro from the 9 categories outside math, physics,
+chemistry, engineering and computer science; 250 BBH from 10 one-letter tasks; built by `prep/ood1_build.py`, seed 0), prompt
+= the math prompt `pair1` unchanged, cap 16,384, seed 61000000 + index. `jobs/run_mcq_cell.py` -> `analysis/ood1_readout.py`
+-> `results/ood1/readout.json` and one folder per cell (`run.json`, `metrics.json`, `examples.json`). Grader `lib/mcq_lib.py`
+(tests `lib/mcq_lib_test.py`). Raw answers: `runs/<job>/answers.jsonl` in frustea's Modal workspace (not committed).
+Paired bootstrap, 5,000 resamples, in points.
+
+| Cell | Right of 500, grader v2 | MMLU-Pro of 250 | BBH of 250 | No letter (v2) | Cap hits | Tokens per item | Right, grader v1 | Job |
+|---|---|---|---|---|---|---|---|---|
+| base, plain | 136 (27.2 %) | 48 | 88 | 214 | 3 | 992 | 114 | `frustea-1115-070655-258c` |
+| base, Math cue | 286 (57.2 %) | 116 | 170 | 30 | 1 | 2,049 | 229 | `frustea-1115-070659-494e` |
+| RL-Zero-Math, plain | 332 (66.4 %) | 133 | 199 | 13 | 0 | 3,165 | 78 | `frustea-1115-070704-88e2` |
+| Think-SFT, Math cue | 342 (68.4 %) | 137 | 205 | 6 | 4 | 2,941 | 332 | `frustea-1115-070709-bf07` |
+
+- Chance is 28.4 of 250 (MMLU-Pro) and 67.9 of 250 (BBH): the plain base is near chance on BBH because 214 of its 500
+  answers give no letter (empty, a continuation of the prompt, or text without an answer).
+- H1 held under both graders: cue minus plain base +30.0 [24.6, 35.4] (v2), +23.0 [17.6, 28.4] (v1); MMLU-Pro +27.2
+  [19.6, 34.4], BBH +32.8 [24.4, 40.8] (v2).
+- H2: RL on math transfers, +39.2 [34.0, 44.2] over the plain base (v2). Under v1, the grader of the spec, RL scores 78 and
+  H2 reads as refuted: RL-Zero-Math writes its answer as `\boxed{X}` in most answers, which v1 does not read. v1 is not a
+  valid instrument for this model; v2 was added from cells 1 and 2 before cell 3 was read.
+- H3 held (v2): the cue gives 150 of RL's 196 problems over the plain base (77 %). RL stays ahead of the cued base by 9.2
+  [4.6, 13.8] at 3,165 against 2,049 tokens per item.
+- H4 held: Think-SFT + cue minus RL +2.0 [-2.4, 6.2] (v2).
+- Not run: the vote over four samples, RL with the cue, Think-SFT plain. One seed. The 500 items are a sample of each
+  benchmark, not the full sets, so the counts are not comparable to published MMLU-Pro or BBH scores.
