@@ -1,0 +1,131 @@
+{
+ "run": "screen-01",
+ "job_id": [
+  "abaybektursun-1114-211905-d3c4",
+  "abaybektursun-1114-212835-45bd",
+  "abaybektursun-1114-212846-cce9",
+  "abaybektursun-1114-214050-a7a3"
+ ],
+ "commit": [
+  "d001c6734b8b69623ad1d1d4a28d08ce53c51cfe",
+  "d803714b8420fc081d82ec8ab0f0db16cd816a70"
+ ],
+ "h0_nats": 0.9,
+ "rnd_share": 0.1869444682614536,
+ "arms": {
+  "t1": {
+   "n": 100,
+   "right": 87,
+   "cap_hits": 4,
+   "loop_A": 0,
+   "finished": 96,
+   "right_of_finished": 87,
+   "tokens_per_problem": 3905.27,
+   "share_sharpened": 0.0,
+   "mean_entropy": 0.44696377161146383,
+   "low_prob_tokens_per_1k": 10.193917450009858
+  },
+  "hi6": {
+   "n": 100,
+   "right": 87,
+   "cap_hits": 6,
+   "loop_A": 2,
+   "finished": 94,
+   "right_of_finished": 87,
+   "tokens_per_problem": 3417.82,
+   "share_sharpened": 0.11946883250155683,
+   "mean_entropy": 0.28927536923980446,
+   "low_prob_tokens_per_1k": 2.7590686460960496
+  },
+  "lo6": {
+   "n": 100,
+   "right": 90,
+   "cap_hits": 4,
+   "loop_A": 3,
+   "finished": 96,
+   "right_of_finished": 90,
+   "tokens_per_problem": 2950.35,
+   "share_sharpened": 0.8718732111465259,
+   "mean_entropy": 0.2999357048257329,
+   "low_prob_tokens_per_1k": 3.3284186621926213
+  },
+  "all6": {
+   "n": 100,
+   "right": 80,
+   "cap_hits": 17,
+   "loop_A": 12,
+   "finished": 83,
+   "right_of_finished": 80,
+   "tokens_per_problem": 4005.95,
+   "share_sharpened": 1.0,
+   "mean_entropy": 0.1476080279674289,
+   "low_prob_tokens_per_1k": 0.11233290480410389
+  },
+  "rnd6": {
+   "n": 100,
+   "right": 88,
+   "cap_hits": 3,
+   "loop_A": 1,
+   "finished": 97,
+   "right_of_finished": 88,
+   "tokens_per_problem": 3633.5,
+   "share_sharpened": 0.18849230362978203,
+   "mean_entropy": 0.40149699472897604,
+   "low_prob_tokens_per_1k": 7.122609054630521
+  },
+  "hi3": {
+   "n": 100,
+   "right": 82,
+   "cap_hits": 9,
+   "loop_A": 7,
+   "finished": 91,
+   "right_of_finished": 81,
+   "tokens_per_problem": 3581.22,
+   "share_sharpened": 0.09046465683702967,
+   "mean_entropy": 0.2284965239403575,
+   "low_prob_tokens_per_1k": 2.1528976158962587
+  },
+  "lo3": {
+   "n": 100,
+   "right": 82,
+   "cap_hits": 17,
+   "loop_A": 10,
+   "finished": 83,
+   "right_of_finished": 81,
+   "tokens_per_problem": 4388.88,
+   "share_sharpened": 0.9112714037780886,
+   "mean_entropy": 0.21135031824418032,
+   "low_prob_tokens_per_1k": 2.2124095441205958
+  },
+  "hi1": {
+   "n": 100,
+   "right": 81,
+   "cap_hits": 8,
+   "loop_A": 7,
+   "finished": 92,
+   "right_of_finished": 81,
+   "tokens_per_problem": 3397.84,
+   "share_sharpened": 0.09008145381833152,
+   "mean_entropy": 0.22887781231505544,
+   "low_prob_tokens_per_1k": 2.2102276740517506
+  }
+ },
+ "stage1": {
+  "checks": {
+   "all6_minus_t1_cap_hits_at_least_8": true,
+   "share_t1_0_all6_1": true,
+   "share_hi6_rnd6_in_0.10_0.35": true
+  },
+  "midpoint_cap_hits": 10.5,
+  "hi6_cap_hits": 6,
+  "lo6_cap_hits": 4,
+  "H_confident_refuted": false,
+  "H_branch_refuted": false,
+  "kept_arms": [
+   "hi6",
+   "hi1",
+   "lo6"
+  ],
+  "stage2_arm": "lo6"
+ }
+}

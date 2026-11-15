@@ -1,0 +1,168 @@
+[
+ {
+  "job_id": "abaybektursun-1114-211905-d3c4",
+  "commit": "d001c6734b8b69623ad1d1d4a28d08ce53c51cfe",
+  "config": {
+   "model": "base",
+   "model_path": null,
+   "model_label": null,
+   "set": "math500",
+   "arms": [
+    "t1=off:1",
+    "hi6=hi:0.6"
+   ],
+   "h0": "0.9",
+   "q": 0.8,
+   "calib_n": 50,
+   "calib_tokens": 2000,
+   "rnd_share": 0.1869444682614536,
+   "max_tokens": 16384,
+   "seed": 61000000,
+   "n": 100,
+   "samples": 1,
+   "out": "/root/abaybektursun-1114-211905-d3c4/out",
+   "commit": "d001c6734b8b69623ad1d1d4a28d08ce53c51cfe",
+   "model_repo": "allenai/Olmo-3-1025-7B",
+   "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "tokenizer": [
+    "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   ],
+   "prefix_ids": [
+    1584,
+    2268,
+    33413
+   ],
+   "seed_rule": "seed + 10000 * sample + index",
+   "n_problems": 100
+  },
+  "h0": 0.9,
+  "rnd_share": 0.1869444682614536,
+  "started_utc": "2026-11-15T05:19:15Z"
+ },
+ {
+  "job_id": "abaybektursun-1114-212835-45bd",
+  "commit": "d001c6734b8b69623ad1d1d4a28d08ce53c51cfe",
+  "config": {
+   "model": "base",
+   "model_path": null,
+   "model_label": null,
+   "set": "math500",
+   "arms": [
+    "lo6=lo:0.6",
+    "all6=all:0.6"
+   ],
+   "h0": "0.9",
+   "q": 0.8,
+   "calib_n": 50,
+   "calib_tokens": 2000,
+   "rnd_share": 0.1869444682614536,
+   "max_tokens": 16384,
+   "seed": 61000000,
+   "n": 100,
+   "samples": 1,
+   "out": "/root/abaybektursun-1114-212835-45bd/out",
+   "commit": "d001c6734b8b69623ad1d1d4a28d08ce53c51cfe",
+   "model_repo": "allenai/Olmo-3-1025-7B",
+   "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "tokenizer": [
+    "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   ],
+   "prefix_ids": [
+    1584,
+    2268,
+    33413
+   ],
+   "seed_rule": "seed + 10000 * sample + index",
+   "n_problems": 100
+  },
+  "h0": 0.9,
+  "rnd_share": 0.1869444682614536,
+  "started_utc": "2026-11-15T05:29:06Z"
+ },
+ {
+  "job_id": "abaybektursun-1114-212846-cce9",
+  "commit": "d001c6734b8b69623ad1d1d4a28d08ce53c51cfe",
+  "config": {
+   "model": "base",
+   "model_path": null,
+   "model_label": null,
+   "set": "math500",
+   "arms": [
+    "rnd6=rnd:0.6",
+    "hi3=hi:0.3"
+   ],
+   "h0": "0.9",
+   "q": 0.8,
+   "calib_n": 50,
+   "calib_tokens": 2000,
+   "rnd_share": 0.1869444682614536,
+   "max_tokens": 16384,
+   "seed": 61000000,
+   "n": 100,
+   "samples": 1,
+   "out": "/root/abaybektursun-1114-212846-cce9/out",
+   "commit": "d001c6734b8b69623ad1d1d4a28d08ce53c51cfe",
+   "model_repo": "allenai/Olmo-3-1025-7B",
+   "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "tokenizer": [
+    "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   ],
+   "prefix_ids": [
+    1584,
+    2268,
+    33413
+   ],
+   "seed_rule": "seed + 10000 * sample + index",
+   "n_problems": 100
+  },
+  "h0": 0.9,
+  "rnd_share": 0.1869444682614536,
+  "started_utc": "2026-11-15T05:31:16Z"
+ },
+ {
+  "job_id": "abaybektursun-1114-214050-a7a3",
+  "commit": "d803714b8420fc081d82ec8ab0f0db16cd816a70",
+  "config": {
+   "model": "base",
+   "model_path": null,
+   "model_label": null,
+   "set": "math500",
+   "arms": [
+    "lo3=lo:0.3",
+    "hi1=hi:0.1"
+   ],
+   "h0": "0.9",
+   "q": 0.8,
+   "calib_n": 50,
+   "calib_tokens": 2000,
+   "rnd_share": 0.1869444682614536,
+   "max_tokens": 16384,
+   "seed": 61000000,
+   "n": 100,
+   "samples": 1,
+   "first_sample": 0,
+   "shard": "0/1",
+   "out": "/root/abaybektursun-1114-214050-a7a3/out",
+   "commit": "d803714b8420fc081d82ec8ab0f0db16cd816a70",
+   "model_repo": "allenai/Olmo-3-1025-7B",
+   "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "tokenizer": [
+    "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   ],
+   "prefix_ids": [
+    1584,
+    2268,
+    33413
+   ],
+   "seed_rule": "seed + 10000 * sample + index",
+   "n_problems": 100
+  },
+  "h0": 0.9,
+  "rnd_share": 0.1869444682614536,
+  "started_utc": "2026-11-15T05:41:07Z"
+ }
+]

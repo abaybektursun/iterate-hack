@@ -1,0 +1,25 @@
+{
+ "base_cue": {
+  "wait_per_1000_tokens": 4.61
+ },
+ "signed_P_cue": {
+  "finished_in_both": 144,
+  "right_signed": 127,
+  "right_base": 124,
+  "new_cap_hits": 107,
+  "new_cap_hits_base_right": 37,
+  "cap_hits": 178,
+  "cap_hits_with_a_line_repeated_4_times_in_last_6000_chars": 2,
+  "wait_per_1000_tokens": 10.5
+ },
+ "signed_G_cue": {
+  "finished_in_both": 168,
+  "right_signed": 141,
+  "right_base": 134,
+  "new_cap_hits": 83,
+  "new_cap_hits_base_right": 27,
+  "cap_hits": 145,
+  "cap_hits_with_a_line_repeated_4_times_in_last_6000_chars": 1,
+  "wait_per_1000_tokens": 8.66
+ }
+}

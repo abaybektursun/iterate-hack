@@ -1,0 +1,15 @@
+{
+ "n": 20,
+ "corpus_files": 271,
+ "corpus_MB": 446,
+ "recall_hit": 20,
+ "recall_cites_result": 17,
+ "grep_hit_first_2000_tokens": 6,
+ "grep_hit_any": 17,
+ "recall_s_median": 1.22,
+ "grep_s_median": 3.01,
+ "recall_tokens_median": 1985,
+ "grep_tokens_median": 121074,
+ "recall_tokens_mean": 1978,
+ "grep_tokens_mean": 1441307
+}

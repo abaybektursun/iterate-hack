@@ -359,17 +359,43 @@ explains it, with live rows from the board (`/architecture#board` is its link); 
 path of one result (arrow keys, Esc). The logos of past.dev (the team's memory) and Exa (web and literature search)
 sit on the key's row at the bottom, and a click on either explains how agents use it.
 
-The tab Findings is the page `/findings` (`tools/findings.py`): one tile per finding, with a small lit icon, the
-finding's title and one sentence. A tile opens the page of that finding. Every finding worth telling gets such a page:
+The tab Findings is the page `/findings` (`tools/findings.py`). Its first view is the research question and one
+picture of it: a glass rail of MATH-500 scores (T 1.0 / top-p 1.0) on which the base model's scores without reward
+(plain prompt, cue, restart, vote over four, vote after restart) are drawn in one after another against the RL model's
+(one sample, then the same vote and restarts), with the points by which RL still leads counting down under it and one
+sentence on what remains. Every mark opens the finding it comes from (Tab and Enter work). The marks are read from the
+finding modules' own values and from the board's score rows (result-5d032f, the honest best after board
+result-e78dfe); `TABLE` in `tools/findings.py` names, per finding, its group, its figure and its marks. Under the
+picture the findings are rows in groups that follow the question (gains without reward, what RL changes, inside the
+weights), each with its effect size as one figure, its title, its sentence and its icon; a finding that `TABLE` does
+not name appears in the last group, "New". Every finding worth telling gets such a page:
 `tools/finding_<slug>.py`, copied from `.claude/skills/finding-page/template.py`, is served at `/finding/<slug>` and
 gets its tile with no other change; the module draws its own icon (`ICON`), and its panels start with "What is new" and
 "Why it matters" (`.claude/skills/finding-page/SKILL.md` says when and how). `.claude/skills/site-ui/SKILL.md` holds
 the rules for anything visible on the site.
 
-The tab Proof is the page `/proof`: the same grid of tiles, for the experiments that test the team's method itself and
+The tab Proof is the page `/proof`: the same page as one list of rows with no picture, for the experiments that test the team's method itself and
 not the research question. Each is a module `tools/proof_<slug>.py`, made like a finding page and served at
 `/proof/<slug>`. The first is `tools/proof_review_cuts_waste.py` (the planted-waste test of the `team-meta-review`
 skill, `studies/metaharness/`).
+
+The page `/demo` is the talk: one stepped story over the Design page's picture, with a sentence and a fact line per
+step in the words column (arrow keys step, Esc closes; `/demo#<step>` links to a step). It is not a header tab. The 12
+steps, in order: `#nanolab`, `#problem`, `#claim`, `#proof`, `#result`, `#vote`, `#why`, `#rules`, `#infra`, `#brain`,
+`#retro`, `#watch`. A click on a part of the picture or on a question under the fact line opens one of 15 depth panels
+(`/demo#result/cue`): one sentence, a few fact rows with their caveats, one source line and at most two links. The
+panels are `problem/day1`, `proof/turnaround`, `result/cue`, `result/harder`, `vote/procedure`, `why/control`,
+`why/findings`, `rules/thread`, `rules/audit`, `rules/rejected`, `infra/modal`, `infra/people`, `brain/sources`,
+`brain/memory` and `retro/changes`; each fits the words column at 1440 x 860 without scrolling, except the list of
+pages under `brain/sources`. Three modules hold the page: `tools/demo.py` (the page and its steps),
+`tools/demo_panels.py` (the depth panels) and `tools/demo_facts.py` (`FACTS`, every number with its source, and
+`SOURCES`, the pages read through Exa). No number is typed into the page code. Just before the talk, run
+`uv run tools/demo_refresh.py`: it recounts the numbers that change by the hour (results on the board and per UTC
+hour, hours since the first board item, the median from claim to result from `tools/cycle.py`, GPU job submissions,
+agent sessions and logged commands from the event log, per-person counts), rewrites only those values in
+`tools/demo_facts.py`, prints a before and after table and stops with an error if any count fails. Then restart
+`uv run tools/view.py`. Every other number comes from a frozen artifact; to change one, open the file named in its
+`src` and edit `v`, `n` and `at`. A key's `note` holds the caveats for the presenters and is not sent to the browser.
 
 `ls` and `read` print nothing when there is nothing to show; exit code 0 means they worked. `show` prints the
 item's votes and comments. Claim an idea by posting a `work` item whose text contains its id, and close it with `done` when the work ends.
@@ -494,3 +520,103 @@ contents and diffs are never sent. Strings that look like keys are redacted befo
 
 `"recall": false` stops the plugin from adding memories to every prompt. The tools read the same file. It is one
 file per machine: if you already use past.dev for another project, this replaces that connection. Codex users: see https://github.com/pastdotdev/codex-plugin.
+
+## Exa challenge
+
+Where Exa is called:
+- `tools/exa.py`, `call()` (lines 25 to 29): `POST https://api.exa.ai/search` (with highlights) and
+  `POST https://api.exa.ai/contents` (full text).
+- In every agent's work cycle: `AGENTS.md`, "Working with the team", rule 2. Before a new measurement an agent searches
+  with Exa, and when a published table already answers the question it posts the finding and runs nothing.
+- In a scripted loop: `studies/theory/lib/round.py`, function `external()`, a stage of every round version (`ALL`). The model may run only
+  `studies/theory/lib/papers.py`, which offers a paper-only recall and `tools/exa.py` search and fetch, so Exa is its only
+  route to the web. Rounds 2 and 3 wrote 53 published findings (`studies/theory/results/engine/round-02/external.md`,
+  `round-03/external.md`).
+- Before a finding page: `.claude/skills/finding-page/SKILL.md`, step 2 asks for an Exa search for earlier reports.
+
+What a search changed: on Nov 14 at 20:58 UTC one search in a literature sweep by 5 agents returned arXiv 2610.24663.
+14 minutes later board item knowledge-d692e4, citing 7 papers, listed seven method families as already published, and
+none of them was run. The page `/demo#brain/sources` shows this case and two more, and the 125 pages fetched through Exa,
+each with its agent, time and the board item that cites it (`tools/demo_facts.py`, `SOURCES`).
+
+Counts and limits: 172 of 199 HTTP calls to Exa returned results, from 59 main agents and subagents (counted from the
+session transcripts up to 05:25 UTC; the Exa dashboards hold the authoritative count). 98 calls through the Exa MCP failed
+with a 401 error, which is why the agents call the HTTP API. Early on, one person's agents had no Exa key and used another
+search tool. No count of GPU jobs avoided by a search exists.
+
+## past.dev challenge
+
+### Agents
+
+One past.dev project for the team. Identity: one per person (`~/.past/config.json`); all agents of a person share it.
+No audiences are set, so every identity reads the whole project.
+
+| Agent | Writes | Reads | Identity | Read by |
+|---|---|---|---|---|
+| Paper reader (a subagent, one per paper) | one data point per finding with `uv run tools/paper.py add`; `metadata.who` names the person | nothing | its person's (`~/.past/config.json`, read by `tools/past.py`) | every identity (no audiences) |
+| Research agent (a Claude Code session; 63 sessions in the event log) | every board `result` and `knowledge` post, through `tools/board.py` | `python3 tools/recall.py "<idea>"` before it starts an idea (`AGENTS.md`, "Working with the team", rule 1), at most 2,000 tokens | its person's | every identity |
+| Session plugin (at the end of a session) | typed prompts and prose replies; 7 sessions are stored | nothing: automatic recall is off | its person's | every identity |
+| Theory generator (headless, `studies/theory/lib/round.py`) | nothing | recall through `studies/theory/lib/papers.py`, which keeps only entries whose every source is a paper or web page | its person's (reads only) | writes nothing |
+
+### Layers
+
+| Layer | Holds | Why this layer |
+|---|---|---|
+| Board (DynamoDB) | the state of the work: open work, ideas, results, votes, comments | agents need exact, current state and atomic claims |
+| past.dev | findings from papers (604 from 125 papers), board results and knowledge (145), sessions (7) | the question "has anyone tried or read this" comes in new words each time; search by meaning with a dated source answers it within 2,000 tokens |
+| Markdown in git (`studies/*/README.md`, `meta/`) | each number with its artifact path; each person's review notes | a number has to sit next to its code and commit |
+| Session context (a hook) | the newest board items at the start of a session | every agent must see them, with no call |
+
+Recall is on demand, never automatic, to keep each agent's context small. The one read boundary the work needed
+(theory generators must not see board results, which hold held-out numbers) is a filter in our code
+(`studies/theory/lib/papers.py`) rather than a past.dev audience.
+
+### Results
+
+No expected result was written down before the run. The rule (`AGENTS.md`, rule 1) is that an agent checks the team's
+memory before it starts an idea.
+
+- 571 recalls and 757 stored sources by 05:25 UTC (past.dev usage API); 373 ms at the median on past.dev's side; 0.84
+  USD of credits.
+- One traced read across people: on Nov 15 at 03:13 UTC abaybektursun's agent asked "Goodfire interpretability weight
+  space programming papers read". past.dev returned sameraslan's board item knowledge-e6bc68, written at 21:45 UTC the
+  day before. The agent opened it 11 seconds later and started a reading sweep that leaves that paper out (work-6b1fa5).
+- Pilot, `studies/metaharness/results/recall_pilot/recall_vs_grep-01/`: on 20 templated known-answer questions, in one
+  run, recall had the answer within 2,000 tokens for 20, one naive grep over 271 transcripts for 6 (17 anywhere in its
+  output).
+- Whether memory improved the research result is not measured: no arm ran without it.
+
+### Caveats
+
+- No read boundary inside past.dev: writes carry no per-agent identity or audience, and every identity reads everything.
+- A corrected number is not replaced. Result-6d422d (435 of 497) was corrected by a new item, result-5227b9. Asked for
+  that configuration in the pilot, recall returned the first post; whether it also returns the correction is not
+  checked. We never wrote the correction as an update of the first data point.
+- Session memory is small: 7 sessions are stored.
+- Stored sessions hold the typed prompts of the three of us, so they can contain personal text, and every identity can read them.
+- Our event log does not record recalls. The 571 is past.dev's count; 145 of them are visible as agent commands in
+  transcripts.
+- Ingestion ran about 1 minute behind, and 10 to 15 minutes when 30 to 40 items were queued (past.dev usage API).
+- The pilot is 20 templated questions, one run, retrieval only, against one naive grep over a different corpus.
+- Duplicate runs happened anyway: in the first hours one run was generated about 5 times.
+
+## Modal
+
+Almost every GPU number in this repository came from a Modal job that an agent started; the exception is one vast.ai job
+(abaybektursun-1114-203934-5e03, `studies/rlneurons/README.md`).
+
+- `infra/runner.py`: one app, one function per job class (`h100`; `short`, an H100 queue for jobs of at most 30 minutes;
+  `b200`; `cpu`), one container per job, three Volumes (code by commit, outputs, model cache) and one Dict as the job
+  registry. The H100 limit is read at deploy time from `ITERATE_MAX_H100`, default 10 per workspace.
+- `uv run tools/gpu.py submit h100 -- '<command>'` refuses a dirty tree or an unpushed commit, uploads that commit as a
+  tar to a Volume and spawns the function, so each job runs one pushed commit.
+- What a hosted API cannot serve: the jobs run blended weights, zeroed neurons, and read the activations of both models.
+- Who submits: 430 GPU job submissions by 07:20 UTC, all from agent sessions; none of the 430 carries the label that
+  `tools/events.py` gives a command typed in a plain shell.
+- Use, from the job records up to 05:42 UTC: 258 jobs started, a median of 5 seconds from submit to container and a
+  quarter over 14.3 minutes, a peak of 30 GPU containers at once (10 in each of three workspaces), and 58 GPU-hours over
+  179 ended GPU jobs.
+- The lab tuned its own setup from the job records: after a Retro review raised the H100 `max_containers` from 4 to 20 (deployed at 02:31 UTC),
+  the median H100 wait fell from 3.5 minutes (113 jobs) to 5 seconds (94 jobs), in different hours with no control. One
+  run split over 4 H100s took 15.6 minutes against 51.5, measured once each way, with 17% more GPU minutes.
+- Limits: 29 of 220 ended jobs exited with an error; no Sandboxes and no web endpoint are used.

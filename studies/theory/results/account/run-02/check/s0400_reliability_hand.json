@@ -1,0 +1,31 @@
+{
+ "what": "Hand read of the base row (r3 base-01 F_math500, cue, T 0.6 / top-p 0.95, sample 0, grader v1) of the 25 gap problems that the r6 rules put in reliability in cell math500-s0400-T06 (check/assign.json). Base extracted answer and last 300 characters read against the gold answer.",
+ "classes": {
+  "right final answer that grader v1 rejects": {
+   "problems": [25, 66, 73, 196, 298, 312, 347, 379, 472],
+   "examples": {
+    "25": "gold 1,-2; base ends 'are \\(\\boxed{-2}\\) and \\(\\boxed{1}\\)'; v1 took the last box, 1",
+    "66": "gold x^3+3x-6; base 'x³ + 3x - 6' (Unicode superscript)",
+    "73": "gold \\frac{3\\sqrt{3}}{4}; base '3√3/4'",
+    "196": "gold 1600; base '**Answer**: \\(1600\\)'; v1 extracted nothing",
+    "298": "gold pmatrix -18, -49, 96; base '\\boxed{(-18, -49, 96)}'",
+    "312": "gold (5,\\infty); base '(5, ∞)'",
+    "347": "gold 6r^2-4r-24; base '6r² - 4r - 24'",
+    "379": "gold 12; base '12th grade'",
+    "472": "gold 137 \\frac{1}{2}; base '137 \\(\\frac{1}{2}\\)'"
+   }
+  },
+  "right value in the reasoning, answer line copies the prompt template": {
+   "problems": [334, 378],
+   "examples": {
+    "334": "reasoning ends 'Product: 3*5*(-8) = -120'; answer line '**Answer:** $Answer$'",
+    "378": "reasoning ends 'the answer is 3'; answer line 'Answer: $Answer (without quotes) where $Answer is the answer to the problem.'"
+   }
+  },
+  "wrong final value": {
+   "problems": [30, 63, 99, 222, 225, 272, 292, 348, 358, 394, 398, 495, 497, 498]
+  }
+ },
+ "counts": {"gap problems in the cell": 66, "reliability": 25, "grader v1 misses": 9, "template echo": 2, "wrong value": 14},
+ "reading": "Only 14 of 66 (0.212) are base slips on problems the base solves at T 1.0; that is inside the account's predicted [0.07, 0.25]. The other 11 are answer statement or grading failures that the text rule of answer-statement does not catch, because N() does not map Unicode forms (³, √, ∞), \\( \\) delimiters, a second box or a template echo onto the gold string."
+}
