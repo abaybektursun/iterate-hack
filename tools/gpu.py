@@ -4,6 +4,7 @@
 # ///
 """Submit GPU jobs to your own Modal workspace (deploy infra/runner.py there once) and inspect them.
 
+  uv run tools/gpu.py deploy              deploy infra/runner.py to your Modal workspace (after a pull that changed it)
   uv run tools/gpu.py submit <class> [--hours 2] -- <command>   class: h100, b200, cpu
   uv run tools/gpu.py ls [--all]          jobs of the last 3 hours, any state; --all: every job
   uv run tools/gpu.py wait <job-id>       block until the job ends, then print its state and last 20 log lines
@@ -40,10 +41,21 @@ def git(*args):
     return subprocess.run(["git", *args], capture_output=True, text=True, check=True).stdout.strip()
 
 
+RUNNER_KEY = "runner"  # the blob hash of the infra/runner.py that gpu.py deploy last deployed to this workspace
+
+
+def deploy(args):
+    subprocess.run([sys.executable, "-m", "modal", "deploy", "infra/runner.py"], check=True)
+    jobs[RUNNER_KEY] = git("hash-object", "infra/runner.py")
+    print(f"runner {jobs[RUNNER_KEY][:7]} deployed")
+
+
 def load():
     """Merge the per-writer keys (job, call, start, end, cancel) into one record per job."""
     records = {}
     for key, value in jobs.items():
+        if key == RUNNER_KEY:
+            continue
         kind, job_id = key.split(":", 1)
         records.setdefault(job_id, {"id": job_id})[kind] = value
     return records
@@ -79,6 +91,9 @@ def submit(args):
     assert not git("status", "--porcelain"), "commit your changes first: a job runs one commit"
     sha = git("rev-parse", "HEAD")
     assert git("branch", "-r", "--contains", sha), "push the commit first, so others can read the code"
+    deployed, wanted = jobs.get(RUNNER_KEY), git("rev-parse", f"{sha}:infra/runner.py")
+    assert deployed == wanted, (f"the runner deployed in your Modal workspace ({(deployed or 'unknown')[:7]}) is not the infra/runner.py "
+                                f"of this commit ({wanted[:7]}): git pull origin main, then uv run tools/gpu.py deploy")
     who = team.who()
 
     # Upload on every submit, overwriting: the file is named by its commit, so the bytes are the same. Checking
@@ -151,4 +166,4 @@ if __name__ == "__main__":
         sys.exit(__doc__)
     events.log("gpu", sys.argv[1:], team.who())
     command, *args = sys.argv[1:] or ["help"]
-    {"submit": submit, "ls": ls, "wait": wait, "logs": logs, "kill": kill, "get": get}.get(command, lambda _: sys.exit(__doc__))(args)
+    {"deploy": deploy, "submit": submit, "ls": ls, "wait": wait, "logs": logs, "kill": kill, "get": get}.get(command, lambda _: sys.exit(__doc__))(args)

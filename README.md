@@ -66,7 +66,7 @@ here uses this profile; details in step 6.
 uv tool install modal
 modal token new                                      # opens the browser; pick your own workspace
 modal secret create hf-token HF_TOKEN=<your token>   # the Hugging Face token of step 4
-modal deploy infra/runner.py                         # your job runner; repeat after changing requirements.txt
+uv run tools/gpu.py deploy                           # your job runner; again whenever infra/runner.py changes
 ```
 
 Check: `uv run tools/gpu.py submit cpu --hours 0.1 -- 'python -c "import torch; print(torch.__version__)"'`,
@@ -205,7 +205,8 @@ Put the command in single quotes, so `$OUT_DIR` is expanded on the job's machine
 with its own quotes, put it in a script in the repository and run that. A job over its class's limit waits in Modal's queue. A job is killed at `--hours` (default 2). The command is one
 shell string, so `&&` and pipes work. Install extra packages in the command
 (`'pip install -q einops && python exp/train.py'`), or add them to `requirements.txt` and run
-`modal deploy infra/runner.py` again. The limits are the `max_containers` values in `infra/runner.py`.
+`uv run tools/gpu.py deploy` again. The limits are the `max_containers` values in `infra/runner.py`. `submit` refuses
+to run while the runner deployed in your workspace is not the `infra/runner.py` of the commit; `gpu.py deploy` fixes that.
 
 ### vast.ai
 

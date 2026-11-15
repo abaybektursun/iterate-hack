@@ -1,8 +1,8 @@
-"""Your GPU job runner on Modal. Each person deploys it once in their own Modal workspace, and again after
-changing requirements.txt or the limits:
+"""Your GPU job runner on Modal. Each person deploys it in their own Modal workspace, and again whenever this
+file, requirements.txt or the limits change:
 
     modal secret create hf-token HF_TOKEN=<your Hugging Face token>     # once, in your own terminal
-    modal deploy infra/runner.py
+    uv run tools/gpu.py deploy     # runs modal deploy and records which runner.py is deployed; submit checks it
 
 Jobs are paid from your own Modal credits. Each GPU class is one Modal function whose max_containers limits how
 many of your jobs run at once; a job over the limit waits in Modal's queue. Submit and inspect jobs with
@@ -109,7 +109,7 @@ def run(job_id):
 
 
 # One function per GPU class. max_containers is how many of your jobs of that class run at once. The limits are read at deploy
-# time: `ITERATE_MAX_H100=24 ITERATE_MAX_B200=4 modal deploy infra/runner.py` changes them for your workspace only.
+# time: `ITERATE_MAX_H100=24 ITERATE_MAX_B200=4 uv run tools/gpu.py deploy` changes them for your workspace only.
 @app.function(gpu="H100", max_containers=int(os.environ.get("ITERATE_MAX_H100", 20)), **common)
 def h100(job_id: str):
     run(job_id)
