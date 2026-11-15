@@ -617,4 +617,8 @@ Round-01 forward predictions of idea-0b2ad8 that have been measured (`round-02/r
 
 P3 to P6 have no measurement in this record (P3: not measured by the team, per the same review).
 
+Page of the engine's record: `tools/finding_theories_on_trial.py`, served at `/finding/theories-on-trial`: every prediction of every round as one mark (interval and measured number) against the readers with no theory. After a new round: `uv run tools/finding_theories_on_trial.py --write`, then the check, then names for the new theories in NAMES.
+
+Page of the self-opened draw (selfopen-01): `tools/finding_base_opens_itself.py`, served at `/finding/base-opens-itself`; running the file checks it against `results/experiments/selfopen-01/`.
+
 Page of the gap account (run-02): `tools/finding_where_the_gap_goes.py`, served at `/finding/where-the-gap-goes`; its numbers are read from `results/account/run-02/check/` and `python3 tools/finding_where_the_gap_goes.py` checks them.
