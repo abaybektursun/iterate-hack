@@ -11,8 +11,14 @@ loads. d = other - base in float32, one tensor at a time; d_k = U_k diag(s_k) V_
              rand8  layer matrices = base + P diag(s_k) Q^T: the same k singular values, P and Q with orthonormal columns from the QR of
                     Gaussian matrices (CPU torch.Generator seeded --seed, layer matrices drawn in sorted name order); every other = base.
              late3  mlp.down_proj of the layers LATE (24 to 31) = base + d_k; every other tensor = base.
+             proj   layer matrices = base + d_k Vd Vd^T: the part of d_k that reads from the top-k input (right) subspace Vd of the --donor
+                    model's difference from the base; every other tensor = base.
+             projc  layer matrices = base + d_k (1 - Vd Vd^T): the rest of d_k. proj addition + projc addition = top8 addition.
              interp every tensor = (1 - alpha) base + alpha other (merge_weights.point); alpha 0 and 1 give the endpoints bit for bit (asserted).
   --other    rl_math (default), rl_code or think_sft: a key of wsp_delta_anatomy.MODELS. The base is MODELS["base"].
+  --other, --donor also take the keys of xreward_overlap.MODELS (math31, code31, math30, code30, if30, general30, mix30).
+  --mods     comma list of q,k,v,o,gate,up,down: edit only these layer matrices (top8, rand8, bulk, proj, projc); default all seven.
+  --scale    multiplies the addition of top8, rand8, proj, projc (default 1.0).
   --alpha    interp only (default 1.0).
   --k        directions per matrix: default 8, late3 3; not for interp.
   --rounding of an edited tensor's float32 target to BF16 by merge_weights.to_bf16: stochastic (default; generator seeded --seed + 1) or nearest.
@@ -44,9 +50,13 @@ from safetensors import safe_open
 from safetensors.torch import save_file
 
 from studies.rlneurons.jobs.merge_weights import to_bf16, ulp
-from studies.rlneurons.jobs.wsp_delta_anatomy import DELTAS, MATS, MODELS, header, kind, spectrum, unchanged
+from studies.rlneurons.jobs.wsp_delta_anatomy import MATS, MODELS, header, kind, spectrum, unchanged
+from studies.rlneurons.jobs.xreward_overlap import MODELS as XMODELS
 
-RECIPES = {"top8": 8, "bulk": 8, "rand8": 8, "late3": 3, "interp": None}          # recipe -> default k
+ALL = {**MODELS, **XMODELS}                                                       # every model key of --other and --donor
+assert MODELS["base"] == XMODELS["base"]
+
+RECIPES = {"top8": 8, "bulk": 8, "rand8": 8, "late3": 3, "interp": None, "proj": 8, "projc": 8}          # recipe -> default k
 LATE = range(24, 32)                                                              # late3's layers; the selftest passes its own
 JSON_KEY = "rl_math"                                                              # config and tokenizer for every model, as merge_weights
 SUMS = ("dot", "add_sq", "written_sq", "ref_sq", "top_sq", "d_sq")
@@ -62,7 +72,7 @@ def read(d, wmap, name):
         return f.get_tensor(name)
 
 
-def selected(recipe, names, late=LATE):
+def selected(recipe, names, late=LATE, mods=None):
     """the tensor names a recipe edits"""
     kinds = {n: kind(n) for n in names}
     n_layers = 1 + max(layer for _, layer in kinds.values() if layer is not None)
@@ -74,10 +84,13 @@ def selected(recipe, names, late=LATE):
         return sel
     sel = {n for n, (mod, _) in kinds.items() if mod in MATS}
     assert len(sel) == len(MATS) * n_layers, f"{len(sel)} layer matrices in {n_layers} layers, expected {len(MATS) * n_layers}"
+    if mods is not None:
+        assert mods and set(mods) <= set(MATS), f"--mods {mods}: not all in {MATS}"
+        sel = {n for n in sel if kinds[n][0] in mods}
     return sel
 
 
-def target(recipe, b, o, k=None, alpha=1.0, noise=None):
+def target(recipe, b, o, k=None, alpha=1.0, noise=None, scale=1.0, donor=None):
     """One edited tensor, b = base and o = other in float32 -> (x, add, sq): the float32 target before rounding, the intended addition
     to the reference (o for bulk, b otherwise) and (top_sq, d_sq) = the squared norm of d in its k directions and in total (None where
     the recipe has no directions of d). x is None where d = o - b is exactly zero. noise: rand8's two Gaussian matrices [m, k], [n, k]."""
@@ -91,7 +104,15 @@ def target(recipe, b, o, k=None, alpha=1.0, noise=None):
     if recipe == "rand8":
         U, V = (torch.linalg.qr(g.double()).Q.to(d.device) for g in noise)
         sq = None
-    add = ((U * s[:k]) @ V.T).float()
+    add = (U * s[:k]) @ V.T
+    if recipe in ("proj", "projc"):
+        dd = donor - b
+        assert dd.any(), "the donor's difference from the base is zero in a matrix where the other model's is not"
+        Vd = spectrum(dd, k)[2]
+        shared = (add @ Vd) @ Vd.T
+        add = shared if recipe == "proj" else add - shared
+        sq = float((add ** 2).sum()), sq[1]
+    add = (scale * add).float()
     return (o - add, -add, sq) if recipe == "bulk" else (b + add, add, sq)
 
 
@@ -104,7 +125,8 @@ def ratios(a):
             "share": a["top_sq"] / a["d_sq"] if a["d_sq"] else None}
 
 
-def edit(base_dir, other_dir, json_dir, out_dir, recipe, k=None, alpha=1.0, rounding="stochastic", seed=0, device="cpu", late=LATE):
+def edit(base_dir, other_dir, json_dir, out_dir, recipe, k=None, alpha=1.0, rounding="stochastic", seed=0, device="cpu", late=LATE, scale=1.0, mods=None,
+         donor_dir=None):
     """Writes the model of the recipe to out_dir, with the json files of json_dir; returns the statistics. Shards as merge_weights.merge:
     one output file per shard of the base, names sorted within a shard; the other model is read by its own index."""
     base_dir, other_dir, json_dir, out_dir = (pathlib.Path(d) for d in (base_dir, other_dir, json_dir, out_dir))
@@ -114,7 +136,11 @@ def edit(base_dir, other_dir, json_dir, out_dir, recipe, k=None, alpha=1.0, roun
     assert recipe in RECIPES and rounding in ("nearest", "stochastic"), (recipe, rounding)
     k = RECIPES[recipe] if k is None else k
     assert (k is None) == (recipe == "interp") and (recipe == "interp" or alpha == 1.0), f"{recipe}: k {k}, alpha {alpha}"
-    sel = selected(recipe, wb, late)
+    assert scale == 1.0 or recipe in ("top8", "rand8", "proj", "projc"), f"--scale is not for {recipe}"
+    assert mods is None or recipe in ("top8", "rand8", "bulk", "proj", "projc"), f"--mods is not for {recipe}"
+    assert (donor_dir is not None) == (recipe in ("proj", "projc")), f"{recipe}: donor {donor_dir}"
+    wd = weight_map(donor_dir) if donor_dir else None
+    sel = selected(recipe, wb, late, mods)
     noise = {}
     if recipe == "rand8":
         shape = {n: v[1] for shard in set(wb.values()) for n, v in header(base_dir / shard).items()}
@@ -133,7 +159,8 @@ def edit(base_dir, other_dir, json_dir, out_dir, recipe, k=None, alpha=1.0, roun
             keep = None if name in sel else src
             if keep is None:
                 f = {key: x.to(device, torch.float32) for key, x in t.items()}
-                x, add, sq = target(recipe, f["base"], f["other"], k, alpha, noise.get(name))
+                dn = read(donor_dir, wd, name).to(device, torch.float32) if donor_dir else None
+                x, add, sq = target(recipe, f["base"], f["other"], k, alpha, noise.get(name), scale, dn)
                 if x is None:
                     keep = src
                     zero.append(name)
@@ -153,7 +180,8 @@ def edit(base_dir, other_dir, json_dir, out_dir, recipe, k=None, alpha=1.0, roun
         assert kept[src] == len(wb), f"alpha = {alpha}: {len(wb) - kept[src]} tensors are not the stored tensors of {src}"
     for p in json_dir.glob("*.json"):
         shutil.copy(p, out_dir / p.name)
-    return {"recipe": recipe, "k": k, "alpha": alpha if recipe == "interp" else None, "rounding": rounding, "seed": seed,
+    return {"recipe": recipe, "k": k, "alpha": alpha if recipe == "interp" else None, "scale": scale, "mods": None if mods is None else list(mods),
+            "rounding": rounding, "seed": seed,
             "late_layers": list(late) if recipe == "late3" else None, "reference": ref, "n_tensors": len(wb), "n_edited": len(per),
             "n_unchanged": sum(kept.values()), "unchanged_from": kept, "n_zero_delta": len(zero), "zero_delta": zero,
             "totals": ratios({s: sum(v["sums"][s] for v in per.values()) for s in SUMS}), "tensors": per}
@@ -260,6 +288,25 @@ def selftest(device):
             detail.append(f"{r} {len(ident)} identical to {'other' if r == 'bulk' else 'base'}, {st['n_edited']} edited, {st['n_zero_delta']} zero delta, "
                           f"effective_scale {st['totals']['effective_scale']:.4f}")
         check(6, "unedited tensors are bit-identical to their source and edited ones differ", ok, "; ".join(detail))
+
+        st, m = run("mods", "top8", mods=("q", "v"))                              # 7: --mods
+        changed = sorted(n for n in B if not same(m[n], B[n]))
+        want = sorted(n for n in B if kind(n)[0] in ("q", "v"))
+        check(7, "top8 with mods q,v changes only the q and v matrices", changed == want and st["n_edited"] == len(want), f"{len(changed)} changed, {len(want)} q and v matrices")
+
+        err2, errp, errs, sh = [], [], [], []                                      # 8, 9: --scale, proj and projc (float32 targets)
+        for n in mats:
+            b, o = B[n].to(device, torch.float32), O[n].to(device, torch.float32)
+            a1, a2 = target("top8", b, o, k)[1], target("top8", b, o, k, scale=2.0)[1]
+            dn = b + 0.01 * torch.randn(b.shape, generator=g).to(device)
+            ap, ac = target("proj", b, o, k, donor=dn)[1], target("projc", b, o, k, donor=dn)[1]
+            err2.append(float(norm(a2 - 2 * a1) / norm(a1)))
+            errp.append(float(norm(ap + ac - a1) / norm(a1)))
+            errs.append(float(norm(target("projc", b, o, k, donor=o)[1]) / norm(a1)))
+            sh.append(float((ap * ac).sum().abs() / (norm(ap) * norm(ac))))
+        check(8, "top8 with scale 2 is twice the top8 addition", max(err2) < 1e-5, f"largest relative error {max(err2):.1e}")
+        check(9, "proj + projc = top8; the two parts are orthogonal; with the other model as its own donor projc is zero", max(errp) < 1e-5 and max(sh) < 1e-4
+              and max(errs) < 1e-4, f"sum error {max(errp):.1e}, largest |cos| of the parts {max(sh):.1e}, projc with donor = other {max(errs):.1e} of top8")
     assert all(res), f"selftest failed: checks {[i for i, r in enumerate(res) if not r]} (0-based, in print order)"
     print(f"selftest: all {len(res)} checks passed on {device}", flush=True)
 
@@ -267,7 +314,10 @@ def selftest(device):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--recipe", choices=sorted(RECIPES))
-    ap.add_argument("--other", default="rl_math", choices=DELTAS)
+    ap.add_argument("--other", default="rl_math", choices=sorted(set(ALL) - {"base"}))
+    ap.add_argument("--donor", choices=sorted(set(ALL) - {"base"}))
+    ap.add_argument("--mods")
+    ap.add_argument("--scale", type=float, default=1.0)
     ap.add_argument("--alpha", type=float, default=1.0)
     ap.add_argument("--k", type=int)
     ap.add_argument("--rounding", default="stochastic", choices=("stochastic", "nearest"))
@@ -286,10 +336,11 @@ def main():
     assert a.recipe == "interp" or a.alpha == 1.0, "--alpha is for --recipe interp"
     assert a.recipe != "interp" or a.k is None, "--k is not for --recipe interp"
     from huggingface_hub import snapshot_download
-    base, other = (snapshot_download(MODELS[key][0], revision=MODELS[key][1], allow_patterns=["*.json", "*.safetensors"]) for key in ("base", a.other))
+    snap = lambda key: snapshot_download(ALL[key][0], revision=ALL[key][1], allow_patterns=["*.json", "*.safetensors"])
+    base, other, donor = snap("base"), snap(a.other), snap(a.donor) if a.donor else None
     json_dir = snapshot_download(MODELS[JSON_KEY][0], revision=MODELS[JSON_KEY][1], allow_patterns=["*.json"])
-    res = edit(base, other, json_dir, a.dir, a.recipe, a.k, a.alpha, a.rounding, a.seed, device)
-    res = {"args": vars(a), "models": {key: {"repo": MODELS[key][0], "revision": MODELS[key][1]} for key in ("base", a.other)},
+    res = edit(base, other, json_dir, a.dir, a.recipe, a.k, a.alpha, a.rounding, a.seed, device, scale=a.scale, mods=a.mods.split(",") if a.mods else None, donor_dir=donor)
+    res = {"args": vars(a), "models": {key: {"repo": ALL[key][0], "revision": ALL[key][1]} for key in ("base", a.other, a.donor) if key},
            "json_from": {"repo": MODELS[JSON_KEY][0], "revision": MODELS[JSON_KEY][1]}, "device": device, "torch": torch.__version__,
            "seconds": time.time() - t0, **res}
     pathlib.Path(a.stats).write_text(json.dumps(res, indent=1) + "\n")

@@ -67,6 +67,13 @@ def main():
                           "spearman": spearman({k: t["math31"][k] for k in CUE_SCORE}, CUE_SCORE), "n": len(CUE_SCORE)},
                    "nearest_rl_model": {p: max((t[p][q], q) for q in RL if q != p)[1] for p in RL},
                    "random_subspace": {"4096": m["k"] / 4096}}
+    steps = [k for k in keys if k.endswith("_s100")]
+    if steps:                                                                       # amendment 2: S1, S2 on the input side
+        t, group = tabs["overlap_right"], lambda k: "reason" if k.startswith(("math", "code")) else "instr" if k.startswith(("if", "general")) else "mix"
+        near = {k: max((t[k][q], q) for q in RL if q != k[:-5])[1] for k in steps}
+        cross = lambda ks: mean([t[p][q] for i, p in enumerate(ks) for q in ks[i + 1:] if {group(p), group(q)} == {"reason", "instr"}])
+        x["steps"] = {"S1_nearest_final_of_another_run": near, "S1_overlap_with_own_final": {k: t[k][k[:-5]] for k in steps},
+                      "S2_mean_cross_group_overlap": {"step100": cross(steps), "final": cross(list(RL))}}
     norm_base = sum(r["key"]["base_w"]["norm"] ** 2 for r in rows) ** 0.5
     per_key = {k: {"rel_norm": sum(r["key"][k]["norm"] ** 2 for r in rows) ** 0.5 / norm_base, "mean_top8_share": mean([r["key"][k]["top8_share"] for r in rows])} for k in keys}
     out.mkdir(parents=True, exist_ok=True)
@@ -79,6 +86,7 @@ def main():
         for p in keys:
             print(f"{p:>10} " + " ".join("       --" if p == q else f"{tabs[side][p][q]:9.3f}" for q in keys))
         print(json.dumps(x[side], indent=1))
+    print(json.dumps(x.get("steps"), indent=1))
 
 
 if __name__ == "__main__":

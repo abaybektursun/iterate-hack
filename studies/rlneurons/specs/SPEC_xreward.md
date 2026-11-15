@@ -69,3 +69,22 @@ Part 1 found two groups by input-side overlap: {Math, Code} and {IF, General}, w
   (the Part 1 neighbours). Refuted if fewer than 5 of 7 match.
 - S2. The rewards do not share an early phase: mean input-side overlap between step-100 checkpoints of different reward groups
   (Math or Code against IF or General) is no higher than between their final models (0.03 to 0.10). Refuted if it is above 0.2.
+
+## Amendment 3 (2026-11-15, after the first four cells, before the next eight)
+
+First four cells (hard328, cue, of 328): base 164, rand8 158, Math top-8 192, Code 3.1 top-8 178, Math 3.1 minus its top-8 190, RL 206.
+P1 held (192 against 158: +10.4 points [5.8, 14.9]). P2 refuted (190, not within 12 of 205): each half alone gives about two thirds of
+the gain. Cap hits: 77, 67, 46, 41, 90, 20. Step 100: S1 held (6 of 7; Mix is nearest to General, not IF), S2 held (0.076).
+
+Next cells, same settings, `wsp_edit` with the new flags `--mods`, `--scale`, `--donor` (selftest checks 7 to 9), `--other math31`:
+
+1. `top8 --k 1`. One direction per matrix. Predicted 170 to 180; "one direction is enough" is refuted if within 12 of rand8 (158).
+2. `top8 --k 64`. Predicted 192 to 200.
+3. `top8 --mods q,k,v,o` and 4. `top8 --mods gate,up,down`. Predicted: the MLP half is higher. Refuted as "one module family carries
+   it" if the two differ by fewer than 12 problems.
+5. `top8 --scale 2`. Predicted 195 to 206 with fewer than 46 cap hits. Refuted if below 192.
+6. `proj --donor code30` and 7. `projc --donor code30`: the Math top-8 edit split into the part that reads from Code 3.0's top-8 input
+   subspace (Part 1: overlap 0.218; Code 3.0 itself gains nothing on MATH-500) and the rest, at their natural norms. Hypothesis
+   "the input directions that reasoning rewards share carry the gain": 6 is at least 180 and above 7. Refuted if 6 is within 12 of
+   rand8; if 7 is then near 192, the gain is in what the math reward adds beyond the shared input directions.
+8. `top8 --other code30`. Code 3.0's own 8 directions; its whole model gains nothing on MATH-500 with the cue (411 against 410).
