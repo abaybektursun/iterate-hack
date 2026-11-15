@@ -1,0 +1,11 @@
+{
+ "commit": "f887186d1350efc4b541dcd6fd89df069caf6181",
+ "command": "python ../iterate-hack-dt-codepass/studies/theory/analysis/direct_codepass.py",
+ "input_jobs": {
+  "random": "abaybektursun-1115-101457-ef2c",
+  "code": "abaybektursun-1115-101434-4511",
+  "math": "abaybektursun-1115-101508-33f0",
+  "base": "abaybektursun-1114-170304-c03c"
+ },
+ "inputs": "runs/<job>/answers.jsonl (gpu.py get copies, not committed)"
+}
