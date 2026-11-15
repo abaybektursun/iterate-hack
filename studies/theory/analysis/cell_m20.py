@@ -39,7 +39,7 @@ def main():
     rng = random.Random(0)
     boot = sorted(sum(rng.choices(scores, k=len(scores))) for _ in range(10000))
     interval = [boot[500], boot[9499]]
-    opens = [r["text"].lstrip().startswith("Okay") for r in rows]
+    opens = ["Okay" in r["text"][:60] for r in rows]   # opens in the cue's style on its own (the text often starts with ".\n\n")
     per = [{"problem_index": r["problem_index"], "unique_id": r["unique_id"], "gold": r["gold"], "extracted_v3": r["extracted_v3"],
             "score_v3": r["score_v3"], "n_new": r["n_new"], "cap_hit": r["cap_hit"], "opens_okay": o} for r, o in zip(rows, opens)]
     finished = [r for r in rows if not r["cap_hit"]]
