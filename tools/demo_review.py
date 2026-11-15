@@ -3,7 +3,9 @@
 demo_deck.py embeds PAGE as /demo/fig/review; the slide carries the title, so this page is the picture alone. Four
 glass columns stand on a glass slab seen from slightly above, one per review round of the team-meta-review skill
 (Before, Round 1 to 3). A column is as high as the container minutes one batch costs after that round. Its lit foot is
-the part of those minutes that produced one of the 4 answers (the one key under the slab); the plain glass above it produced none. A fifth column,
+the part of those minutes that produced one of the 4 answers; the plain glass above it produced none and is the waste.
+The row under the slab says so as a formula with the two kinds of glass as its swatches: waste = total container min -
+answer min. A fifth column,
 hollow with a dotted outline, stands at the end of the row: the same model after three rounds with a plain instruction
 in place of the skill. On load all four columns rise to the height before any review, then each round cuts the columns
 to its right and the hollow column appears; after that the view sways slowly. With prefers-reduced-motion and in print
@@ -26,7 +28,6 @@ DATA = {
     "minutes": SKILL["minutes"],  # container minutes per batch after each round, mean of 3 runs
     "answer": SKILL["answer"],  # the part of those minutes that produced an answer
     "plain": PLAIN["minutes"][-1],  # the plain instruction after round 3
-    "unit": "Container minutes per batch",
 }
 
 PAGE = r"""<!doctype html>
@@ -72,9 +73,9 @@ path { stroke-linejoin: round; }
 .num.now { fill: var(--blue); font-weight: 400; }
 .round { text-anchor: middle; font-weight: 560; fill: var(--mute); }
 .round.now { fill: var(--ink); }
-.unit { font-size: 20px; font-weight: 600; fill: var(--ink); }
-.key { font-size: 20px; font-weight: 500; fill: var(--mute); }
+.key { font-size: 20px; font-weight: 600; fill: var(--ink); }
 .keylit { fill: var(--blue); opacity: calc(var(--wash) + .25); }
+.keyglass { fill: url(#gFront); stroke: var(--mute); stroke-width: 1.2; }
 </style>
 </head>
 <body>
@@ -126,12 +127,12 @@ const cols = D.minutes.map((m, i) => {
 const ghost = el(svg, "g", {}), gSide = el(ghost, "path", { class: "ghost" }), gFront = el(ghost, "path", { class: "ghost" }), gTop = el(ghost, "path", { class: "ghost" });
 const gNum = el(ghost, "text", { class: "num" }, f(D.plain)), gName = el(ghost, "text", { class: "round" }, "Plain instruction");
 
-/* under the slab, one centred row: the unit, and what the lit foot is */
-const unit = el(svg, "text", { y: 586, class: "unit" }, D.unit), keyLit = el(svg, "rect", { y: 570, width: 17, height: 17, rx: 2, class: "keylit" });
-const key = el(svg, "text", { y: 586, class: "key" }, "produced an answer");
+/* under the slab, one centred row: what the heights are, as a formula with the two kinds of glass as its swatches */
+const keyGlass = el(svg, "rect", { y: 570, width: 17, height: 17, rx: 2, class: "keyglass" }), keyA = el(svg, "text", { y: 586, class: "key" }, "Waste = total container min \u2212");
+const keyLit = el(svg, "rect", { y: 570, width: 17, height: 17, rx: 2, class: "keylit" }), keyB = el(svg, "text", { y: 586, class: "key" }, "answer min");
 function row() {  // after the font has loaded
-  const a = unit.getComputedTextLength(), b = key.getComputedTextLength(), x = 500 - (a + 44 + 26 + b) / 2;
-  unit.setAttribute("x", f(x)); keyLit.setAttribute("x", f(x + a + 44)); key.setAttribute("x", f(x + a + 70));
+  const a = keyA.getComputedTextLength(), b = keyB.getComputedTextLength(), x = 500 - (26 + a + 12 + 26 + b) / 2;
+  keyGlass.setAttribute("x", f(x)); keyA.setAttribute("x", f(x + 26)); keyLit.setAttribute("x", f(x + 26 + a + 12)); keyB.setAttribute("x", f(x + 26 + a + 12 + 26));
 }
 
 function place() {
@@ -185,7 +186,7 @@ addEventListener("afterprint", () => { on = !still; if (on) requestAnimationFram
 </html>
 """
 
-LABEL = (f'{DATA["unit"]} over review rounds of the skill: '
+LABEL = ('Total container minutes per batch over review rounds of the skill (waste = total minus answer minutes): '
          + "; ".join(f"{r} {m}, of which {a} produced an answer" for r, m, a in zip(ROUNDS, DATA["minutes"], DATA["answer"]))
          + f'. The same model with a plain instruction after {ROUNDS[-1].lower()}: {DATA["plain"]}.')
 PAGE = PAGE.replace("__LABEL__", LABEL.replace('"', "&quot;")).replace("__DATA__", json.dumps(DATA).replace("</", "<\\/"))

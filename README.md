@@ -461,7 +461,8 @@ answered four ways, each answer a glass sheet on a step as high as its configura
 tokens, sampling at T 1.0, 8 directions in the weights), with every quoted word checked against its run by
 `PYTHONPATH=.:tools python3 tools/demo_fixes.py`. The slide `#proof` shows `/demo/fig/review` (`tools/demo_review.py`): four glass
 columns on a glass slab, one per review round of the team-meta-review skill, each as high as the container minutes one
-batch costs after that round, with the part that produced an answer lit; on load each round cuts the columns to its
+batch costs after that round, with the part that produced an answer lit and the rest, the waste, plain glass (the row under
+the slab gives the formula: waste = total container min − answer min); on load each round cuts the columns to its
 right, and a hollow dotted column at the end is the same model after three rounds with a plain instruction. Every number is read when the page is built: the staircase's scores from
 `tools/demo_fixes.py`, the comparison with Karpathy's autoresearch loop from
 `FACTS['auto_research_comparison']` in `tools/demo_facts.py` (from `studies/autobench`), the review rounds from
