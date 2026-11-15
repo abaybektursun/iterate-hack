@@ -1,5 +1,38 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 19:25 UTC (paper loop, after result-0c5fa5 of work-184476) meta/reviews/abaybektursun/20261115-1920-paper4/
+
+- Previous paper entry asked for the next multi-sample cell a paper waits for, as shards: none; paper 4 replayed stored rows, 0 GPU jobs. Paper 4 scouts 18:13 to live PDF about 19:13 (60 min; paper 3: 81.2). Loop: 4 scouts, pick, data layer and literature in parallel, figure, draft, 3 reviewers, rewrite with 5 new replay facts, final check (9 fixes), publish f09cf73.
+- Direction: like papers 2 and 3, paper 4 tests no part of DIRECTION.md's deliverable ("a scored configuration on unseen hard problems"). The literature agent found the core claim published (Bulut, arXiv 2609.03436) after the pick; the paper became replication plus pricing, against the owner's "no replications". Cause: the literature check ran beside the data layer, not before the pick. 4 helper agents then hit the model usage limit mid-task.
+- Turnaround (cycle.txt, 1 h): 27 Modal jobs of this person, 0 failed, median wait 1.1 min, 482.4 container min; none for paper 4.
+- Failure: the push took the whole site down 19:13 to 19:19 UTC (6 min, every page 500): view.PAPERS got no-early-warning.pdf with no demo_deck.PAPER_TITLES entry (an assert added on main during the writing; the merge was not import-checked). Main has since removed the cause: 29bd59a titles a missing paper from its file name; the site owner's auto-deploy imports view.py first (outside the repo). Left: infra/monitor/deploy.sh listed the PDFs by hand (a second place to register a paper) and shipped a view.py that fails at import.
+- Change (step 2, delete the hand list): deploy.sh reads the PDFs from view.PAPERS by importing view.py before anything ships, so a paper is registered in view.PAPERS alone and a broken view.py stops the deploy (deploy_gate.sh, aws stubbed).
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | deploy.sh ships a view.py that fails at import | yes (exit 0) | no (exit 1, 0 shipped) | fixed | 1 and 1 | before.txt, after.txt |
+  | places to register a new paper | 2 (view.PAPERS, deploy.sh) | 1 | -1 | | diff |
+  | PDFs in the zip, view.py as is (must not change) | 4 | 4 | same | 1 and 1 | before.txt, after.txt |
+
+- Not changed: the literature check before the pick is a brief, not code; carried. meta/FAILURES.md: 5 rows, 0 landed.
+- Next entry checks: the next paper's literature check runs before its pick, and its deploy causes 0 minutes of site down.
+
+## 2026-11-15 19:05 UTC (loop cycle 13) meta/reviews/abaybektursun/20261115-1857/
+
+- Target (Team line, 4 h): claim to close median 51 min (54 at 17:55), upper quartile 110 min (184), 26 items by 3 people (21); 8.0 results per hour (6.5). Best since 09:14. Stage medians of abaybektursun's items with jobs: to-job 4, jobs 24, to-answer 1 min. Modal 97 jobs, 0 failed, wait 0.1 min.
+- Open measurements: vast.ai jobs since 18:00 run without the upload: 2 of 8, both from cap32run (29 of 35 between 15:05 and 17:55). 12 jobs' outputs are in the team store (6 at 17:55).
+- Score of the previous change (cycle 10, hook line; none in 11 and 12): helped: 6 of 8 new jobs run the current tool.
+- Failure class (before.txt): the vast.ai account stopped every box once (16:15 UTC) when the spend per hour passed its limit, and was over it twice more; one session adds up `vast.py ls` by hand and warns on `all`.
+- Change (step 3; nothing to delete: the limit is the account's): `vast.py ls` starts with the number of boxes, the total USD per hour and the boxes at GPU 0 %; `vast.py up` prints that line before it rents.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | total spend per hour visible to a session that rents | no | yes, in `up` and `ls` | | 1 | after.txt |
+  | stops of every box by the account | 1 in 3 h | not measured yet | | | before.txt; messages |
+
+- Seen at 19:02: 3 of 10 boxes at GPU 0 % (60805632 up 3.1 h, 60806873, 60815158), about 4.3 USD per hour; told their owners by message.
+- Next cycle checks: account stops against 1 in 3 h; boxes at GPU 0 % against 3 of 10; the Team line against 51 / 110 min and 8.0 per hour.
+
 ## 2026-11-15 18:20 UTC (paper loop, after result-53ce14 of work-184476) meta/reviews/abaybektursun/20261115-1813-paper3/
 
 - Previous paper entry asked for paper 3's minutes from first review to live PDF against 17.8, and whether its reviews change the central claim. Measured: 67.9 min (before.txt), of which 43.3 with no paper work, waiting for GPU samples; 24.6 without the wait. The claim changed from "equals" to "within +1.4 points [-0.45, 3.30]", by the four-sample data (result-6832a8), not by a review; NOTES.md lists facts the reviewers asked to add. The carried change (the data-layer brief delivers each arm's prompts up front) was applied; the final check still found 2 wrong statements in one hand-written paragraph (numbers of the 183 pool quoted for the 155 pool; one interval set against the wrong cell), against 6 in paper 2.
