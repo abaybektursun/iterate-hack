@@ -27,10 +27,16 @@ import proof_review_cuts_waste
 
 HOOK = "36 hours to solve RSI"  # the opening line of the talk
 
-# The title of each paper by its file name in view.PAPERS.
+# The title of each paper by its file name in view.PAPERS; paper_title falls back to the file name.
 PAPER_TITLES = {"the-finish-dial.pdf": "The Finish Dial", "theories-on-trial.pdf": "Theories on Trial",
                 "the-first-hundred-steps.pdf": "The First Hundred Steps", "no-early-warning.pdf": "No Early Warning"}
 PAPER_AUTHOR = "The Invariant Swarm"
+
+
+def paper_title(name):
+    """The title on a paper's sheet: its entry in PAPER_TITLES, else the words of its file name. A paper added to
+    view.PAPERS with no entry here still gets a sheet, so a new paper cannot stop view.py at import."""
+    return PAPER_TITLES.get(name) or name.rsplit(".", 1)[0].replace("-", " ").title()
 
 # What the deck shares with demo.py: the Archivo link and the theme script (?theme=, then the stored choice).
 FONT = re.search(r'<link rel="preconnect".*?display=swap">', demo.TEMPLATE, re.S).group(0)
@@ -188,13 +194,11 @@ def logo(name):
 
 def paper(name):
     lines = "".join(f'<i style="width:{w}%"></i>' for w in (92, 86, 90, 70, 88, 94, 62))
-    return (f'<a class="sheet" href="/paper/{esc(name)}"><b>{esc(PAPER_TITLES[name])}</b>'
+    return (f'<a class="sheet" href="/paper/{esc(name)}"><b>{esc(paper_title(name))}</b>'
             f'<span>{esc(PAPER_AUTHOR)}</span><div class="lines">{lines}</div></a>')
 
 
 def slides(n_findings, papers):
-    missing = [p for p in papers if p not in PAPER_TITLES]
-    assert not missing, f"demo_deck.PAPER_TITLES has no title for {missing}"
     return [
         ("hook", f'<div class="mid"><h1 class="big">{esc(HOOK)}</h1><p class="sub faint">Team Invariant</p></div>'),
         ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers, limited tokens, compute and people</p>'
@@ -212,7 +216,7 @@ def slides(n_findings, papers):
         ("ideas", f'<div class="head"><h2>Ideas converge</h2><p class="sub">{N_CROSS} of {N_LINKS} links join two different clusters of ideas</p></div>'
                   '<iframe class="fig-frame tree" data-fig="tree" title="The idea tree" tabindex="-1"></iframe>'),
         ("papers", f'<div class="mid"><h2 class="title">{len(papers)} papers, written by the swarm</h2>'
-                   f'<div class="sheets">{"".join(paper(p) for p in papers)}</div></div>'),
+                   f'<div class="sheets" style="--n:{len(papers)}">{"".join(paper(p) for p in papers)}</div></div>'),
         ("close", f'<div class="mid">{photo(demo_photos.MEDITATE, "meditate")}<p class="end">Also our solution to AI psychosis</p>'
                   '<p class="sub faint">monitor.invariant.team</p></div>'),
     ]
@@ -297,10 +301,10 @@ p, h1, h2, figure { margin: 0; }
 .pair { position: absolute; left: 0; right: 0; top: 205px; display: flex; justify-content: center; gap: 90px; }
 .pair figcaption { font-size: 26px; font-weight: 560; margin: 0 0 18px 20px; }
 
-.sheets { display: flex; gap: 80px; margin-top: 30px; }
+.sheets { display: flex; gap: 60px; margin-top: 30px; }  /* --n: the number of papers, so any number fits the slide */
 /* a paper is white in both themes: the sheet carries the light values of these four tokens */
 .sheet { --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --rule: #d3d9de; color: var(--ink);
-  width: 330px; height: 427px; background: var(--sheet); border: 1px solid var(--rule); padding: 118px 34px 0; text-align: left; display: flex; flex-direction: column; gap: 10px; }
+  width: min(330px, calc((1380px - (var(--n) - 1) * 60px) / var(--n))); aspect-ratio: 330 / 427; background: var(--sheet); border: 1px solid var(--rule); padding: 100px 30px 0; box-sizing: border-box; text-align: left; display: flex; flex-direction: column; gap: 10px; }
 .sheet b { font-size: 26px; font-weight: 560; line-height: 1.2; }
 .sheet span { font-size: 16px; font-weight: 500; color: var(--mute); }
 .sheet .lines { margin-top: 26px; display: flex; flex-direction: column; gap: 13px; }
