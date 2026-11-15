@@ -1,0 +1,127 @@
+{
+ "status": "done",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "sft1",
+  "prompt": "native",
+  "native_tokenizer": "allenai/Olmo-3-7B-Think-SFT@6ff857587e040d6d523a3d5f3a56e918f5401d66",
+  "set": "math500",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 32768,
+  "seed": 182000000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 1,
+  "restarts": 0,
+  "out": "/work/out",
+  "dry_run": false,
+  "commit": "aad5eeb5bba112ef2f486ce018397f7bec150780",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 500,
+  "native_prompt_example": "<|im_start|>system\nYou are Olmo, a helpful AI assistant built by Ai2. Your date cutoff is December 2024, and your model weights are available at https://huggingface.co/allenai.<|im_end|>\n<|im_start|>user\nSolve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nConvert the point $(0,3)$ in rectangular coordinates to polar coordinates.  Enter your answer in the form $(r,\\theta),$ where $r > 0$ and $0 \\le \\theta < 2 \\pi.$\n\nRemember to put your answer on its own line after \"Answer:\"<|im_end|>\n<|im_start|>assistant\n<think>",
+  "native_end_id": 100265,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "commit": "aad5eeb5bba112ef2f486ce018397f7bec150780",
+ "job_id": "ih-1115-174427-f4d9+ih-1115-183414-a2cc",
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-15T17:56:03Z",
+ "updated_utc": "2026-11-15T19:42:45Z",
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 12816,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 34816,
+  "load_s": 204.35395622253418,
+  "model_dir": "/tmp/theta",
+  "tok_dir": "/opt/hf-cache/hf/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ },
+ "counts": {
+  "n": 500,
+  "correct_v3": 474,
+  "correct_v1": 467,
+  "cap_hits": 0,
+  "loop_A": 3,
+  "generated_tokens": 2576926,
+  "restarts": 0,
+  "n_planned": 500,
+  "tok_p_lt_1e2": 44008,
+  "tok_p_lt_1e3": 10374,
+  "mean_generated_tokens": 5153.852,
+  "generation_s": 6173.295580148697,
+  "tokens_per_s": 475.7141319091103
+ },
+ "memory": {
+  "gpu_memory_used_mib": 40845,
+  "gpu_memory_total_mib": 46068,
+  "gpu": "NVIDIA L40S"
+ },
+ "wall_s": 6402.4684319496155,
+ "joined_from": [
+  {
+   "job_id": "ih-1115-174427-f4d9",
+   "shard": "0/2",
+   "counts": {
+    "n": 250,
+    "tok_p_lt_1e2": 26106,
+    "tok_p_lt_1e3": 6417,
+    "correct_v3": 230,
+    "correct_v1": 226,
+    "cap_hits": 0,
+    "loop_A": 1,
+    "generated_tokens": 1380973,
+    "restarts": 0,
+    "n_planned": 250,
+    "mean_generated_tokens": 5523.892,
+    "generation_s": 6173.295580148697,
+    "tokens_per_s": 223.70109807162942
+   },
+   "wall_s": 6402.4684319496155
+  },
+  {
+   "job_id": "ih-1115-183414-a2cc",
+   "shard": "1/2",
+   "counts": {
+    "n": 250,
+    "tok_p_lt_1e2": 17902,
+    "tok_p_lt_1e3": 3957,
+    "correct_v3": 244,
+    "correct_v1": 241,
+    "cap_hits": 0,
+    "loop_A": 2,
+    "generated_tokens": 1195953,
+    "restarts": 0,
+    "n_planned": 250,
+    "mean_generated_tokens": 4783.812,
+    "generation_s": 4745.599788188934,
+    "tokens_per_s": 252.0130338374809
+   },
+   "wall_s": 4998.015501976013
+  }
+ ]
+}

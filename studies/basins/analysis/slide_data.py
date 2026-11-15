@@ -14,9 +14,10 @@ The scores are read now from the site (https://monitor.invariant.team/data): the
 For MATH-500 they are reduced by the rule of the board's chart (tools/climb.py): in posting order, a repeated right/n
 and configuration is dropped, and a record is a score strictly above every earlier one. Kept: the records of the
 untrained base and of the RL-Zero-Math model, the other base scores whose result is in the snapshot, every score row
-of a result in the snapshot (for the idea tree), and one later row that is not on the map and is named on slide 3.
+of a result in the snapshot (for the idea tree), and the best row of one model that is not the untrained base (OTHER),
+named in the note of slide 3.
 
-The script stops with an error if a record's result is not in the snapshot or the later row is not found. It never
+The script stops with an error if a record's result is not in the snapshot or the row of OTHER is not found. It never
 writes to the board.
 """
 import datetime
@@ -30,7 +31,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[3]
 SITE = "https://monitor.invariant.team/data"
 BENCH = "MATH-500"
-LATER = "result-818c20"  # Think-SFT with the cue and a vote over 4: posted after the snapshot, named in the note of slide 3
+OTHER = "result-818c20"  # Think-SFT with the cue and a vote over 4: not the untrained base, named in the note of slide 3
 OUT = REPO / "tools/demo_ali_data.py"
 
 
@@ -105,9 +106,9 @@ def main(run):
             row = {"model": s["model"], "benchmark": s["benchmark"], "right": s["right"], "n": s["n"], "config": s["config"]}
             if row not in per_item.setdefault(s["result"], []):
                 per_item[s["result"]].append(row)
-    later = sorted((s for s in rows if s["result"] == LATER and s["benchmark"] == BENCH), key=lambda s: (-s["right"], s["sk"]))
-    if not later or "vote over 4" not in later[0]["config"]:
-        sys.exit(f"the later row of {LATER} on {BENCH} was not found in {SITE}")
+    other = sorted((s for s in rows if s["result"] == OTHER and s["benchmark"] == BENCH), key=lambda s: (-s["right"], s["sk"]))
+    if not other or "vote over 4" not in other[0]["config"]:
+        sys.exit(f"the row of {OTHER} on {BENCH} was not found in {SITE}")
 
     mark = re.search(r'claude:\s*"([^"]+)"', (REPO / "tools/architecture.py").read_text()).group(1)
     data = {
@@ -118,8 +119,8 @@ def main(run):
         "basins": [{"name": n, "short": short(n)} for n in board["names"]],
         "tree": {"max_depth": summary["tree"]["max_depth"], "explicit_links": summary["tree"]["explicit_links"]},
         "climb": {"bench": BENCH, "read": read_at, "base": base, "rl": rl, "tries": tries,
-                  "later": {"id": LATER, "right": later[0]["right"], "n": later[0]["n"], "config": later[0]["config"],
-                            "at": utc(int(later[0]["sk"].split("#")[0]), "%H:%M UTC, %-d %b")}},
+                  "other": {"id": OTHER, "right": other[0]["right"], "n": other[0]["n"], "config": other[0]["config"],
+                            "at": utc(int(other[0]["sk"].split("#")[0]), "%H:%M UTC, %-d %b")}},
         "scores": per_item, "mark": mark, "nodes": nodes,
     }
     text = "{\n" + ",\n".join(

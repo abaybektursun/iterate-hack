@@ -1,0 +1,62 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "Accuracy is capped by the share of problems whose solution the model can finish within its per-sample token budget. The autobench method caps each of its 12 T 0.6 samples at 4,096 tokens. Voting fixes problems that are already within reach, but the 10-15 % of MATH-500 problems whose base solutions run past about 4,000 tokens get no complete sample, so no vote can get them right. Raising a cap pays exactly where answers were being cut off, not elsewhere.",
+  "readers_wrong": "The readers priced a vote over 12 like the cued base's T 1.0 vote over 12 at a 16,384 cap (466/500, 93 %). The 4,096 cap removes the long tail before any vote, so the method stays at its dev level of about 84 % (338/400).",
+  "rests_on": ["result-6e7b64", "result-5e17a6", "knowledge-0b450e", "result-c8b994"],
+  "holds_against": [
+   {"item": "result-7968b8", "value": 319, "why": "The plain base at T 0.6 hits the 16,384 cap 65 times, mostly in loops, so a higher cap might buy nothing. But the plain p95 finished length is 4,876 tokens (knowledge-0b450e), so the 4,096 cap also cuts finished non-loop solutions that a vote could use."},
+   {"item": "result-6e7b64", "value": 139, "why": "On the 328 the method is only 6.4 points below one cued sample, a smaller gap than a pure length ceiling suggests. The cued sample also loses 77 answers to its own 16,384 cap, so both arms are length-limited on the 328."}
+  ],
+  "forecasts": [
+   {"id": "t07", "value": 233, "low": 220, "high": 246, "reason": "Think-SFT cue at 32k gives 230-235 over 4 seeds; the native template keeps the same length profile, so the cap still binds the same way."},
+   {"id": "t08", "value": 208, "low": 195, "high": 221, "reason": "The cue's 16k view averages 210.8; the cap removes about 24 answers that finish late."},
+   {"id": "t09", "value": 471, "low": 462, "high": 479, "reason": "Think-SFT cue MATH-500 is 457-462 at 16k with 25 cap hits; at 32k nearly all of them finish and about 40 % are right."},
+   {"id": "t10", "value": 460, "low": 450, "high": 469, "reason": "Same answers counted at 16k, matching the stored 16k cue singles."},
+   {"id": "t11", "value": 3, "low": -9, "high": 15, "reason": "The template changes the register, not the length budget; paired difference near 0 with one-sample noise of about 8."},
+   {"id": "t12", "value": 1, "low": -11, "high": 13, "reason": "At 16k both arms lose the same long tail."},
+   {"id": "t13", "value": 461, "low": 455, "high": 467, "reason": "The cued base at a 16,384 cap is rarely cut off on MATH-500; preliminary votes over 8 and 12 are 458 and 466, so 9 interpolates."},
+   {"id": "t14", "value": 199, "low": 191, "high": 207, "reason": "The base hits the cap on about 23 % of samples on the 328; pass@4 is 207, so the vote over 8 stays below about 207."},
+   {"id": "t24", "value": 247, "low": 240, "high": 254, "reason": "The vote over 3 is 246; a fourth sample adds little once cap hits (about 40) set the ceiling."},
+   {"id": "t25", "value": 468, "low": 460, "high": 476, "reason": "a=1 scores 467; MATH-500 is rarely cut off, so a=2 changes little."},
+   {"id": "t26", "value": 241, "low": 231, "high": 251, "reason": "M(2) at 16k is 229-237 with about 40 cap hits; at 32k about half finish right, but fewer than for Think-SFT because M(2) already finishes earlier."},
+   {"id": "t02", "value": 240, "low": 230, "high": 250, "reason": "Same as t26 with another seed."},
+   {"id": "t03", "value": 6, "low": -4, "high": 16, "reason": "Think-SFT gets 234 at 32k on the sample-1 seed; M(2) finishes more of its long answers within 32k, so its edge stays small."},
+   {"id": "t28", "value": 84, "low": 77, "high": 91, "reason": "The vote over 4 at the 16k view is 75 with 46 % cap hits; at 32k most cut answers finish (hard328 32k singles +7 points), so the vote gains more than the 328's +6."}
+  ]},
+ {"id": "b",
+  "statement": "At T 0.6 in the plain register, the base's wrong answers on a problem repeat across samples: low temperature sends draws to the same attractor value. Votes over such samples saturate after a few draws, at the share of problems whose modal answer is right. The token cap is not what binds: long plain samples at T 0.6 are mostly loops. Vote gains need diverse errors, which comes with T 1.0 or the cue's deliberative register.",
+  "readers_wrong": "The readers assumed each extra sample in the vote over 12 kept adding accuracy, as at T 1.0 with the cue (446, 458, 466 at 4, 8, 12). The plain T 0.6 vote had already plateaued at its dev level of 84 %, so the 400 gave 338, not 356-362.",
+  "rests_on": ["result-6e7b64", "result-666223", "knowledge-d692e4", "result-dadeec"],
+  "holds_against": [
+   {"item": "result-666223", "value": 441, "why": "At T 0.6 a vote over 4 of cued samples lifts singles of about 383 to 441, a large vote gain. Most of that lift recovers loop cap hits (85-99 per sample), not repeated finished errors, and it stops at 441 in both arms."},
+   {"item": "result-6e7b64", "value": 84, "why": "On dev the kept method rose from 61 to 84. That fits early saturation: the gain arrives in the first few draws, and the 400 measured the same 84.5 % plateau."}
+  ],
+  "forecasts": [
+   {"id": "t07", "value": 231, "low": 218, "high": 244, "reason": "Think-SFT finished answers are 88 % right; the native template at 32k behaves like the cue (230-235)."},
+   {"id": "t08", "value": 210, "low": 197, "high": 223, "reason": "The cue's 16k view averages 210.8."},
+   {"id": "t09", "value": 468, "low": 459, "high": 476, "reason": "Late finishes help less on MATH-500: about a third of the 25 cap hits become right."},
+   {"id": "t10", "value": 460, "low": 450, "high": 469, "reason": "Equal to the stored 16k singles."},
+   {"id": "t11", "value": 1, "low": -11, "high": 13, "reason": "The register is equally deliberative either way."},
+   {"id": "t12", "value": 2, "low": -10, "high": 14, "reason": "Paired one-sample noise only."},
+   {"id": "t13", "value": 460, "low": 454, "high": 466, "reason": "At T 1.0 the cued base's errors are diverse, so the vote keeps climbing: preliminary 458 at 8 and 466 at 12."},
+   {"id": "t14", "value": 203, "low": 195, "high": 210, "reason": "Diverse T 1.0 errors let the vote over 8 approach pass@4 (207) from 192."},
+   {"id": "t24", "value": 245, "low": 238, "high": 252, "reason": "A strongly trained policy repeats its errors; the vote over 3 is 246, so a fourth sample adds about 0."},
+   {"id": "t25", "value": 467, "low": 459, "high": 475, "reason": "a=1 scores 467."},
+   {"id": "t26", "value": 238, "low": 228, "high": 248, "reason": "Late finishes from a sharpened policy are often repeated wrong values (precision falls from 88 to 72 % with a), so 32k adds less than for Think-SFT."},
+   {"id": "t02", "value": 237, "low": 227, "high": 247, "reason": "Same as t26 with another seed."},
+   {"id": "t03", "value": 3, "low": -7, "high": 13, "reason": "M(2) 237 against Think-SFT 234 on this seed."},
+   {"id": "t28", "value": 80, "low": 74, "high": 87, "reason": "The hard328 vote moved only 238 -> 244 at 32k because late answers repeat one another; on fresh the vote moves similarly from 75."}
+  ]}
+ ],
+ "cell": {
+  "cell": {"model": "base Olmo-3-1025-7B (untrained)", "prompt": "plain (no cue, no opening text)", "set": "math500", "n": 100, "sampling": "T 0.6 / top-p 1.0, seed 71000000", "samples": 6, "grader": "v3, plurality vote over 6", "cap": "8,192 generated tokens; the same answers also scored with every answer longer than 4,096 tokens counted as no answer"},
+  "job": "studies/theory/jobs/free_cell.py",
+  "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model base --set math500 --n 100 --temperature 0.6 --top-p 1.0 --samples 6 --max-tokens 8192 --seed 71000000 --commit $(git rev-parse HEAD)\"",
+  "readout": "From answers.jsonl: vote-over-6 right answers at cap 8,192 minus vote-over-6 right answers when every sample with more than 4,096 generated tokens is treated as giving no answer (same text, paired by problem).",
+  "unit": "right answers of 100 (difference, 8,192 view minus 4,096 view)",
+  "why": "Mechanism a says the 4,096 cap removes complete long solutions, so raising it lifts the vote. Mechanism b says long plain T 0.6 samples are loops or repeated wrong values, so the vote barely moves.",
+  "gpu_minutes": 110,
+  "a": {"value": 4, "low": 2.5, "high": 8},
+  "b": {"value": 0.5, "low": -1.5, "high": 2}
+ }
+}

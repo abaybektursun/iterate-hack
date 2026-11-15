@@ -1,0 +1,43 @@
+{"forecasts": [
+{"mechanism": "round-09/sampling-m03", "readout": "r11-m01-r1", "value": 88, "low": 74, "high": 102, "reason": "At T 0.6 the plain base mostly opens in its short, non-'Okay' register, and those short answers survive a 4,096 cap; the minority that opens with 'Okay' (long, like the cued base, about half of whose right hard328 answers exceed 4k) is cut, so 107 at 16,384 drops to about 88."},
+{"mechanism": "round-09/sampling-m03", "readout": "r11-m02-r1", "value": 1, "low": -1.5, "high": 4, "reason": "On MATH-500 at T 0.6 the plain base mostly writes short answers; only the few samples that open with 'Okay' run past 4,096 tokens, so blanking them flips about one plurality vote."},
+{"mechanism": "round-09/sampling-m03", "readout": "r11-n01-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "round-09/sampling-m03", "readout": "r11-n01-r2", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "round-09/sampling-m03", "readout": "r11-n02-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "round-09/sampling-m03", "readout": "r11-n02-r2", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+
+{"mechanism": "run-04/f2-m04", "readout": "r11-m01-r1", "value": 88, "low": 74, "high": 102, "reason": "Each problem is an independent draw: the expected count is 107 minus the right answers longer than 4,096 tokens (about 19), with a run-to-run spread of about 6 to 7 problems."},
+{"mechanism": "run-04/f2-m04", "readout": "r11-m02-r1", "value": 1, "low": -1.5, "high": 4, "reason": "Removing a few votes, like adding one sample, moves only the few problems where they flip the plurality: about 25 of 600 samples fall between 4,096 and 8,192 tokens, so about 1 net problem."},
+{"mechanism": "run-04/f2-m04", "readout": "r11-n01-r1", "value": 33, "low": 29.5, "high": 36.5, "reason": "New draws land near the subset's mean, so the stored 34 of 41 shrinks slightly toward 29.9; going from up to 4 to up to 5 samples moves only a few close problems."},
+{"mechanism": "run-04/f2-m04", "readout": "r11-n01-r2", "value": 30, "low": 26, "high": 34, "reason": "RL's sequential vote mean (218.2 of 328, 66.5%) applied to this subset, which is easier by about the same margin as Think-SFT's stored 34 against 29.9, with binomial spread."},
+{"mechanism": "run-04/f2-m04", "readout": "r11-n02-r1", "value": 48, "low": 43, "high": 53, "reason": "A vote over 3 is slightly below the vote over 4 (about 236 of 328), scaled to 66 problems plus this subset's +1 edge; min-p 0.05 adds nothing systematic; binomial spread about 3."},
+{"mechanism": "run-04/f2-m04", "readout": "r11-n02-r2", "value": 44, "low": 39, "high": 49, "reason": "RL's vote over 4 (221 of 328) less a little for 3 votes, giving about 66% of 66 plus the subset edge; min-p was neutral for RL on MATH-500 (+0.6)."},
+
+{"mechanism": "round-09/sampling-m06", "readout": "r11-m01-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "round-09/sampling-m06", "readout": "r11-m02-r1", "value": 1, "low": -1.5, "high": 4, "reason": "A vote wins only where the right answer is the most likely one; long samples sit on the near-tie hard problems, so blanking them flips about one vote, in either direction."},
+{"mechanism": "round-09/sampling-m06", "readout": "r11-n01-r1", "value": 33.5, "low": 30, "high": 37, "reason": "The vote has plateaued by 4 samples, so allowing up to 5 gives the stored subset level (34 of 41) less a small regression."},
+{"mechanism": "round-09/sampling-m06", "readout": "r11-n01-r2", "value": 30, "low": 26, "high": 34, "reason": "RL's near-zero and split-answer problems cap its vote at about its sequential-vote rate (66.5%) on this easier-than-average subset."},
+{"mechanism": "round-09/sampling-m06", "readout": "r11-n02-r1", "value": 47.5, "low": 42.5, "high": 52.5, "reason": "A vote over 3 is just short of the plateau, about 1 to 2% below the vote over 4 (241 of 328), scaled to 66 with the subset edge."},
+{"mechanism": "round-09/sampling-m06", "readout": "r11-n02-r2", "value": 43.5, "low": 38.5, "high": 48.5, "reason": "RL's split-answer block (vote 221 against pass@4 240) keeps a vote over 3 near 66% of 66."},
+
+{"mechanism": "round-09/sampling-m05", "readout": "r11-m01-r1", "value": 90, "low": 76, "high": 104, "reason": "The 4,096 cap cuts the base's long tail, but the base's long answers are mostly guesses (16.7% right above 12k), so it loses only about 17 of the 107 right answers."},
+{"mechanism": "round-09/sampling-m05", "readout": "r11-m02-r1", "value": 1, "low": -1, "high": 4, "reason": "Base samples between 4,096 and 8,192 tokens are few and right at a low rate, so cutting them changes about one vote."},
+{"mechanism": "round-09/sampling-m05", "readout": "r11-n01-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "round-09/sampling-m05", "readout": "r11-n01-r2", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "round-09/sampling-m05", "readout": "r11-n02-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "round-09/sampling-m05", "readout": "r11-n02-r2", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+
+{"mechanism": "run-04/f2-m03", "readout": "r11-m01-r1", "value": 88, "low": 74, "high": 102, "reason": "The cap-hit share is a survival probability: with a small stop hazard, many more plain-base samples survive past 4,096 than past 16,384, and the right ones among them (about 19) are lost from 107."},
+{"mechanism": "run-04/f2-m03", "readout": "r11-m02-r1", "value": 1, "low": -1.5, "high": 4, "reason": "On MATH-500 the plain base's survival beyond 4,096 tokens is small (p95 of finished length about 4,900), so about one plurality vote changes."},
+{"mechanism": "run-04/f2-m03", "readout": "r11-n01-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "run-04/f2-m03", "readout": "r11-n01-r2", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "run-04/f2-m03", "readout": "r11-n02-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "run-04/f2-m03", "readout": "r11-n02-r2", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+
+{"mechanism": "round-09/sampling-m01", "readout": "r11-m01-r1", "value": 88, "low": 73, "high": 103, "reason": "A stored cell is one draw: the new cell lands near the arm's mean (about 107 less about 19 long right answers), with spread sqrt(sum p(1-p)) of about 7 to 8 on the 328."},
+{"mechanism": "round-09/sampling-m01", "readout": "r11-m02-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "round-09/sampling-m01", "readout": "r11-n01-r1", "value": 33, "low": 29.5, "high": 36.5, "reason": "New samples land around the arm's per-problem means, not the stored count, so the subset's 34 shrinks a little."},
+{"mechanism": "round-09/sampling-m01", "readout": "r11-n01-r2", "value": 30, "low": 26, "high": 34, "reason": "RL's sequential-vote mean rate (66.5%) on this easier subset, with independent-draw noise of about 2 to 3 problems."},
+{"mechanism": "round-09/sampling-m01", "readout": "r11-n02-r1", "value": 48, "low": 43, "high": 53, "reason": "The arm's mean for a vote over 3 is about 72% of 66 plus the subset edge; min-p is not a systematic shift; independent-draw spread about 3."},
+{"mechanism": "round-09/sampling-m01", "readout": "r11-n02-r2", "value": 44, "low": 39, "high": 49, "reason": "RL's vote mean, about 66% of 66, plus the subset edge, with independent-draw noise."}
+]}

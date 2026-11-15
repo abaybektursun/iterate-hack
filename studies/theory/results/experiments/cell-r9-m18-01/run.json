@@ -1,0 +1,12 @@
+{
+ "job_ids": [
+  "abaybektursun-1115-103513-3558",
+  "abaybektursun-1115-115102-884c"
+ ],
+ "commit": "cd2f8d0a9ccc612eb30062a9cf6eff4894695af5",
+ "command": "shard 0/2 (with smoke): bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.merge_weights --other rl --alpha 0.125 --rounding stochastic --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label theta0.125 --prompt plain --set math500 --temperature 1.0 --top-p 1.0 --seed 61000000 --n 4 --max-tokens 256 --out $OUT_DIR/smoke --commit cd2f8d0a9ccc612eb30062a9cf6eff4894695af5 && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label theta0.125 --prompt plain --set math500 --temperature 1.0 --top-p 1.0 --seed 61000000 --shard 0/2 --commit cd2f8d0a9ccc612eb30062a9cf6eff4894695af5 ; shard 1/2: bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.merge_weights --other rl --alpha 0.125 --rounding stochastic --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label theta0.125 --prompt plain --set math500 --temperature 1.0 --top-p 1.0 --seed 61000000 --shard 1/2 --commit cd2f8d0a9ccc612eb30062a9cf6eff4894695af5",
+ "raw": [
+  "runs/abaybektursun-1115-103513-3558",
+  "runs/abaybektursun-1115-115102-884c"
+ ]
+}

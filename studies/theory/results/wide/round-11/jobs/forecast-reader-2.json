@@ -1,0 +1,8 @@
+{"forecasts": [
+{"readout": "r11-m01-r1", "value": 90, "low": 78, "high": 102, "reason": "Plain base at T 0.6 scores 107/328 at cap 16,384 (result-099916); cutting at 4,096 drops the roughly 15-20% of right answers that are long (the cued base halves at a 4k budget, but plain answers are much shorter), plus seed noise."},
+{"readout": "r11-m02-r1", "value": 1, "low": -1, "high": 3.5, "reason": "Plain base right answers on MATH-500 rarely run past 4,096 tokens (dev100 at cap 4,096 was 61 vs 64% at full cap), and a vote over 6 absorbs the few that do, so the difference is near 0-2."},
+{"readout": "r11-n01-r1", "value": 33.5, "low": 30, "high": 37, "reason": "Same shard's sequential vote up to 4 gives 34.0/41; going up to 5 samples barely changes a Think-SFT vote that is already close to pass@k."},
+{"readout": "r11-n01-r2", "value": 29.5, "low": 25.5, "high": 33.5, "reason": "RL's vote over 4 is 221/328 (67%), about 20 points below Think-SFT's; this shard is about 14% easier than average, giving ~29-30 of 41."},
+{"readout": "r11-n02-r1", "value": 48.5, "low": 44, "high": 53, "reason": "A vote over 3 lands a little under Think-SFT's vote over 4 (241/328), shard best 49/66; min-p 0.05 may slightly cut drift, net ~48-49."},
+{"readout": "r11-n02-r2", "value": 44, "low": 39.5, "high": 48.5, "reason": "RL's vote over 3 is about 216-219/328 (~66%), so ~44 of 66, with min-p having little effect on an RL model that already finishes."}
+]}

@@ -30,6 +30,8 @@ data/rln4/frozen4.json.
   --shard   k/N: only problems k, k+N, k+2N, ... of the set (after --n), so one cell runs as N jobs at once. A request's seed
             depends on its problem index, not on its place in the job, so the N jobs have the requests of the one job;
             analysis/shard_join.py joins their folders into the folder the one job would have written.
+  --resume  a run folder of the same cell (same settings in its metrics.json) whose job was cut: its rows are copied into --out
+            and only the requests with no row are sent (with --restarts, the next attempt of a cap hit that has none).
   --dry-run a stand-in engine serves canned completions (right, wrong, cap hit in turn): no vLLM, no weights, no GPU.
 
 Writes to --out (default $OUT_DIR): answers.jsonl, one row per finished problem, appended with flush + fsync (the real prompt,
@@ -135,7 +137,9 @@ def main():
     ap.add_argument("--model", choices=sorted(MODELS))
     ap.add_argument("--model-path")
     ap.add_argument("--model-label")
-    ap.add_argument("--prompt", required=True, choices=("plain", "cue"))
+    ap.add_argument("--prompt", required=True, choices=("plain", "cue", "native"))
+    ap.add_argument("--native-tokenizer", help="with --prompt native: <repo>@<revision> of the model's own tokenizer; the problem text of the "
+                                               "study's template goes through its chat template (generation prompt included)")
     ap.add_argument("--set", required=True, choices=("math500", "hard328", "hard72", "hardmatch"))
     ap.add_argument("--temperature", type=float, required=True)
     ap.add_argument("--top-p", type=float, required=True)
@@ -149,6 +153,7 @@ def main():
     ap.add_argument("--samples", type=int, default=1)
     ap.add_argument("--restarts", type=int, default=0)
     ap.add_argument("--out", default=os.environ.get("OUT_DIR"))
+    ap.add_argument("--resume", help="run folder of the same cell cut before its end: keep its rows, send the rest")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--commit", required=True, help="the submitted commit: $(git rev-parse HEAD), expanded on the laptop")
     a = ap.parse_args()
@@ -193,6 +198,17 @@ def main():
     if a.set == "math500":
         n13 = json.loads((D4 / "prompt_ids.json").read_text())
         assert n13["pair"] == "pair1" and pids == n13["ids"][: len(pids)], "G-TEMPLATE: MATH-500 prompt ids differ from n13's"
+    native_end = None
+    if a.prompt == "native":                # the model's own chat format instead of the study's raw template; same token ids, checked
+        nrepo, nrev = a.native_tokenizer.split("@")
+        ntok = AutoTokenizer.from_pretrained(snapshot_download(nrepo, revision=nrev, allow_patterns=["*.json", "*.jinja", "*.txt"]))
+        pids = [[int(i) for i in ntok.apply_chat_template([{"role": "user", "content": S.TEMPLATE[fz["template"]].format(problem=p["problem"])}],
+                                                          tokenize=True, add_generation_prompt=True, return_dict=False)] for p in probs]
+        assert tok.decode(pids[0], skip_special_tokens=False) == ntok.decode(pids[0], skip_special_tokens=False), "the two tokenizers read the ids differently"
+        native_end = int(ntok.convert_tokens_to_ids("<|im_end|>"))
+        m["config"].update(native_prompt_example=ntok.decode(pids[0], skip_special_tokens=False), native_end_id=native_end)
+    else:
+        assert a.native_tokenizer is None
     if a.shard:
         k, n_shards = (int(x) for x in a.shard.split("/"))
         assert 0 <= k < n_shards, f"--shard {a.shard}: k must be in 0..N-1"
@@ -213,7 +229,35 @@ def main():
              "uid": p["unique_id"], "ids": ids + pre, "n_prompt": len(ids), "prefix_ids": pre, "prefix_kind": "opening" if pre else "none",
              "seed": a.seed + 10000 * s + int(p["index"]), "sampling": sampling, "max_tokens": cap, "gold": p["answer"]}
             for s in range(a.samples) for p, ids in zip(probs, pids)]
-    live = {r["rid"]: r for r in reqs}
+
+    def next_attempt(r):
+        return {**r, "attempt": r["attempt"] + 1, "seed": r["seed"] + 1000, "rid": f"{cell}|{r['idx']}|{r['sample']}|{r['attempt'] + 1}"}
+
+    old, todo = [], reqs
+    if a.resume:
+        rdir = pathlib.Path(a.resume)
+        om = json.loads((rdir / "metrics.json").read_text())
+        oc = om["config"]
+        same = ("model", "model_path", "model_label", "prompt", "set", "temperature", "top_p", "min_p", "max_tokens", "seed", "shots",
+                "n", "shard", "samples", "restarts")
+        diff = {k: (oc[k], m["config"][k]) for k in same if oc[k] != m["config"][k]}
+        assert not diff, f"--resume {rdir} is another cell: {diff}"
+        old = [json.loads(line) for line in (rdir / "answers.jsonl").read_text().splitlines()]
+        done = {(r["problem_index"], r["sample"], r["attempt"]): r for r in old}
+        assert len(done) == len(old), f"{rdir}: two rows of one request"
+        todo, used = [], 0
+        for r in reqs:                      # walk each request's attempts: the first one with no row is sent
+            while (row := done.get((r["idx"], r["sample"], r["attempt"]))) is not None:
+                assert row["seed"] == r["seed"], (rdir, r["rid"], row["seed"], r["seed"])
+                used += 1
+                if not (row["cap_hit"] and r["attempt"] < a.restarts):
+                    break
+                r = next_attempt(r)
+            else:
+                todo.append(r)
+        assert used == len(old), f"{rdir}: {len(old) - used} rows match no request of this cell"
+        m["config"].update(resumed_rows=len(old), resumed_from_job=om["job_id"])
+    live = {r["rid"]: r for r in todo}
 
     t_load = time.time()
     if a.dry_run:
@@ -231,21 +275,51 @@ def main():
         if shots and not a.dry_run:             # engine.add refuses stop strings (the study's neutral-sampling check), so add directly
             engine.engine.add_request(r["rid"], {"prompt_token_ids": r["ids"]}, engine.SP(
                 **{**J.BASE_SAMPLING, **r["sampling"]}, max_tokens=r["max_tokens"], seed=r["seed"], stop=[SHOT_STOP]))
+        elif native_end is not None and not a.dry_run:      # the chat format may end a turn with <|im_end|> instead of the stop id
+            engine.engine.add_request(r["rid"], {"prompt_token_ids": r["ids"]}, engine.SP(
+                **{**J.BASE_SAMPLING, **r["sampling"], "stop_token_ids": [S.STOP_ID, native_end]}, max_tokens=r["max_tokens"], seed=r["seed"]))
         else:
             engine.add(r["rid"], r["ids"], r["sampling"], r["seed"], r["max_tokens"])
 
-    for r in reqs:
+    for r in todo:
         add(r)
     t_gen = time.time()
-    c = {"n": 0, "tok_p_lt_1e2": 0, "tok_p_lt_1e3": 0, "correct_v3": 0, "correct_v1": 0, "cap_hits": 0, "loop_A": 0, "generated_tokens": 0, "restarts": 0}
+    c = {"n": 0, "tok_p_lt_1e2": 0, "tok_p_lt_1e3": 0, "correct_v3": 0, "correct_v1": 0, "cap_hits": 0, "loop_A": 0, "generated_tokens": 0,
+         "restarts": sum(r["attempt"] > 0 for r in old + todo)}
+    old_tokens = sum(r["n_new"] for r in old)
+
+    def keep(f, rec):
+        f.write(json.dumps(rec) + "\n")
+        f.flush()
+        os.fsync(f.fileno())
+        c["n"] += 1
+        c["correct_v3"] += rec["score_v3"]
+        c["correct_v1"] += rec["score"]
+        c["cap_hits"] += int(rec["cap_hit"])
+        c["loop_A"] += int(rec["loop_A"])
+        c["generated_tokens"] += rec["n_new"]
+        c["tok_p_lt_1e2"] += rec["n_tok_p_lt_1e2"]
+        c["tok_p_lt_1e3"] += rec["n_tok_p_lt_1e3"]
+        sec = time.time() - t_gen
+        m["counts"] = {**c, "n_planned": len(reqs) + c["restarts"], "mean_generated_tokens": c["generated_tokens"] / c["n"],
+                       "generation_s": sec, "tokens_per_s": (c["generated_tokens"] - old_tokens) / max(sec, 1e-9)}
+        write()
+
     with open(rows_path, "a") as f:
+        for rec in old:
+            keep(f, rec)
         while engine.has_unfinished():
             for rid, out_ids, lps, fr in engine.step():
                 req = live.pop(rid)
+                ended_im_end = native_end is not None and bool(out_ids) and out_ids[-1] == native_end
+                if ended_im_end:
+                    out_ids = list(out_ids[:-1]) + [S.STOP_ID]
                 shot_stop = bool(shots) and fr == "stop" and S.STOP_ID not in out_ids
                 if shot_stop:
                     out_ids, lps = cut_at_shot_stop(tok, out_ids, lps)
                 rec = J.record(tok, req, out_ids, lps, fr)
+                if native_end is not None:
+                    rec["ended_im_end"] = ended_im_end
                 rec.update(R.grade_v3(req["gold"], rec["text"]))
                 n_gen = rec["n_new"]                                        # sampled-token probabilities (raw, before truncation): min-p check
                 rec.update(n_tok_p_lt_1e2=sum(1 for x in lps[:n_gen] if x < LOG_1E2), n_tok_p_lt_1e3=sum(1 for x in lps[:n_gen] if x < LOG_1E3),
@@ -253,26 +327,11 @@ def main():
                 rec.update(prompt=tok.decode(req["ids"][: req["n_prompt"]], skip_special_tokens=False), model=model, prompt_arm=a.prompt,
                            attempt=req["attempt"], shots_arm=shots and shots["arm"], shot_stop=shot_stop)
                 if rec["cap_hit"] and req["attempt"] < a.restarts:          # restart: the same request with the next attempt's seed
-                    nxt = {**req, "attempt": req["attempt"] + 1, "seed": req["seed"] + 1000,
-                           "rid": f"{cell}|{req['idx']}|{req['sample']}|{req['attempt'] + 1}"}
+                    nxt = next_attempt(req)
                     live[nxt["rid"]] = nxt
                     add(nxt)
                     c["restarts"] += 1
-                f.write(json.dumps(rec) + "\n")
-                f.flush()
-                os.fsync(f.fileno())
-                c["n"] += 1
-                c["correct_v3"] += rec["score_v3"]
-                c["correct_v1"] += rec["score"]
-                c["cap_hits"] += int(rec["cap_hit"])
-                c["loop_A"] += int(rec["loop_A"])
-                c["generated_tokens"] += rec["n_new"]
-                c["tok_p_lt_1e2"] += rec["n_tok_p_lt_1e2"]
-                c["tok_p_lt_1e3"] += rec["n_tok_p_lt_1e3"]
-                sec = time.time() - t_gen
-                m["counts"] = {**c, "n_planned": len(reqs) + c["restarts"], "mean_generated_tokens": c["generated_tokens"] / c["n"],
-                               "generation_s": sec, "tokens_per_s": c["generated_tokens"] / max(sec, 1e-9)}
-                write()
+                keep(f, rec)
     assert not live, f"{len(live)} requests did not finish"
     m["memory"] = engine.memory()
     m["status"] = "done"
