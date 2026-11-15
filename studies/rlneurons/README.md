@@ -2728,6 +2728,22 @@ uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rln
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.thinkvote_read --out studies/rlneurons/results/thinkvote/scored-01
 ```
 
+### One cell on N GPUs: `run_cell --shard k/N` and `analysis/shard_join.py`
+
+On a 48 GB card (AWS L40S) a cell is limited by the KV cache: the long answers fill it, 9 to 12 sequences run and the rest
+wait (job `ih-1115-092337-b35c`, 110 of 500 answers after 23 minutes, about 200 tokens/s). `--shard k/N` gives one job the
+problems k, k+N, k+2N, ... of the set; a request's seed depends on its problem index, so the N jobs have the requests of the
+one job. `analysis/shard_join.py` checks the N folders (all done, shards 0..N-1 once each, same config, seed and commit, no
+problem twice) and writes the folder the one job would have written. Checks: `analysis/shard_join_test.py` (7 planted cases,
+5 that must fail); laptop dry run, `--n 11 --samples 2`, 3 shards against the unsharded run: the same 22 requests, seeds and
+prompts.
+
+```
+<submit> "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell <the cell's arguments> --shard 0/4 --commit $(git rev-parse HEAD)"   # and 1/4, 2/4, 3/4
+uv run --no-project python -m studies.rlneurons.analysis.shard_join --runs runs/<job 0> runs/<job 1> runs/<job 2> runs/<job 3> --out runs/<name>
+uv run --no-project python -m studies.rlneurons.analysis.shard_join_test
+```
+
 ## How to run
 
 Laptop checks (no GPU, no weights):
