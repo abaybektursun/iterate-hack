@@ -13,6 +13,8 @@ data/rln4/frozen4.json.
             rows and metrics; the RL tokenizer as for --model.
   --prompt  plain = the pair1 prompt; cue = the pair1 prompt followed by the opening cue (frozen4.json prefill_ids).
   --set     math500 = data/rln4/math500.json (500); hard328 = the 328 problems of data/rln3/hard.json with overlap flag "none".
+            hard72 = the other 72 of hard.json (in the RL training prompts: flag exact or near); hardmatch = 130 of the 328
+            (every AIME and AMC 23 problem and every sixth OlympiadBench problem), the unseen comparison set of specs/SPEC_seen.md.
   --min-p   vLLM min_p (default 0.0 = off): drop tokens whose probability, after temperature, is below min_p times the top token's.
             The cell name gains _mp<min_p> when it is not 0. specs/SPEC_minp.md.
   --seed    problem i is sampled with seed + i (i = the problem's index in its file), the study's convention.
@@ -25,6 +27,9 @@ data/rln4/frozen4.json.
             further example); the answer is cut there and scored as a finished answer. The examples' own problems are in the set:
             leave them out of any count (analysis does it).
   --n       the first n problems of the set (smoke runs); default all.
+  --shard   k/N: only problems k, k+N, k+2N, ... of the set (after --n), so one cell runs as N jobs at once. A request's seed
+            depends on its problem index, not on its place in the job, so the N jobs have the requests of the one job;
+            analysis/shard_join.py joins their folders into the folder the one job would have written.
   --dry-run a stand-in engine serves canned completions (right, wrong, cap hit in turn): no vLLM, no weights, no GPU.
 
 Writes to --out (default $OUT_DIR): answers.jsonl, one row per finished problem, appended with flush + fsync (the real prompt,
@@ -70,7 +75,16 @@ def problems(name, fz):
     flags = json.loads((STUDY / "results" / "rln3" / "rln3_overlap.json").read_text())["sets"]["hard"]["flags"]
     clean = sorted(int(i) for i, f in flags.items() if f["flag"] == "none")
     assert len(clean) == 328 and all(int(hard[i]["index"]) == i for i in clean), "the clean harder set is not 328 problems"
-    return [hard[i] for i in clean]
+    if name == "hard328":
+        return [hard[i] for i in clean]
+    seen = sorted(set(range(len(hard))) - set(clean))
+    assert len(seen) == 72 and all(int(hard[i]["index"]) == i for i in seen), "the seen harder set is not 72 problems"
+    if name == "hard72":
+        return [hard[i] for i in seen]
+    oly = [i for i in clean if hard[i]["source"] == "olympiadbench"]            # hardmatch (specs/SPEC_seen.md)
+    match = sorted([i for i in clean if hard[i]["source"].startswith(("aime", "amc"))] + oly[::6])
+    assert name == "hardmatch" and len(match) == 130, (name, len(match))
+    return [hard[i] for i in match]
 
 
 def cut_at_shot_stop(tok, out_ids, lps):
@@ -122,7 +136,7 @@ def main():
     ap.add_argument("--model-path")
     ap.add_argument("--model-label")
     ap.add_argument("--prompt", required=True, choices=("plain", "cue"))
-    ap.add_argument("--set", required=True, choices=("math500", "hard328"))
+    ap.add_argument("--set", required=True, choices=("math500", "hard328", "hard72", "hardmatch"))
     ap.add_argument("--temperature", type=float, required=True)
     ap.add_argument("--top-p", type=float, required=True)
     ap.add_argument("--min-p", type=float, default=0.0)
@@ -130,6 +144,8 @@ def main():
     ap.add_argument("--seed", type=int, required=True)
     ap.add_argument("--shots")
     ap.add_argument("--n", type=int, default=None)
+    ap.add_argument("--shard", help="k/N: problems k, k+N, k+2N, ... of the set (after --n). Seeds depend on the problem index only, "
+                                    "so the N jobs give the rows of one job; join them with analysis/shard_join.py")
     ap.add_argument("--samples", type=int, default=1)
     ap.add_argument("--restarts", type=int, default=0)
     ap.add_argument("--out", default=os.environ.get("OUT_DIR"))
@@ -177,6 +193,11 @@ def main():
     if a.set == "math500":
         n13 = json.loads((D4 / "prompt_ids.json").read_text())
         assert n13["pair"] == "pair1" and pids == n13["ids"][: len(pids)], "G-TEMPLATE: MATH-500 prompt ids differ from n13's"
+    if a.shard:
+        k, n_shards = (int(x) for x in a.shard.split("/"))
+        assert 0 <= k < n_shards, f"--shard {a.shard}: k must be in 0..N-1"
+        probs, pids = probs[k::n_shards], pids[k::n_shards]
+        m["config"]["n_problems"] = len(probs)
     shots = json.loads(pathlib.Path(a.shots).read_text()) if a.shots else None
     shot_ids = [int(i) for i in tok(shots["text"], add_special_tokens=False)["input_ids"]] if shots else []
     assert not shots or (shots["text"].endswith("\n\n") and SHOT_STOP.startswith("\n\n" + S.TEMPLATE[fz["template"]][:20]))

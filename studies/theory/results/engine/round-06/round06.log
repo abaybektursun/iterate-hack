@@ -1,0 +1,447 @@
+== split
+155 items before 2026-11-15T06:51:23, 17 at or after
+== standing
+  carried: r5-m03-rival (the rival that beat r5-m03 in round 5)
+  carried: r5-m10-rival (the rival that beat r5-m10 in round 5)
+  graveyard.json: 52 theories from earlier rounds, 2 carried
+  facts.json: 59 computed numbers of round-05; incumbent_account.json: 3 accounts
+== external
+== inventory
+job dirs under /var/folders/br/22g183rn3978_vgc7djdlvf00000gn/T/theory-round-r86k41h8
+job dirs under /var/folders/br/22g183rn3978_vgc7djdlvf00000gn/T/theory-round-i7ypu77n
+  running 1 jobs, 1 at a time
+  running 1 jobs, 1 at a time
+  external/external (opus): done in 484 s
+  external.md: 30 findings
+  inventory/inventory (opus): done in 825 s
+== split
+skip split: before.jsonl exists
+== standing
+skip standing: graveyard.json exists
+== inventory
+skip inventory: inventory.md exists
+== external
+skip external: external.md exists
+== mechanisms
+job dirs under /var/folders/br/22g183rn3978_vgc7djdlvf00000gn/T/theory-round-7v209ubl
+  running 1 jobs, 1 at a time
+  mechanisms/mechanisms (opus): done in 365 s
+  m01: The 3-token opening cue sets the base's deliberative register only through attention to the start of the answer, and that attention weakens as the ans
+  m02: For the cued base, T 0.6 and T 1.0 fail on different problems for different reasons. At T 0.6 the losses are loops on long problems. At T 1.0 the loss
+  m03: The RL-Math delta splits its function by rank. The top 8 singular directions per matrix carry a commit-and-stop policy: they box an answer and halt, c
+  m04: On the path from base to Think-SFT, the imitated long-trace length policy arrives at a small fraction of the delta, while the accuracy needs nearly al
+  m05: RL's extra hold-on words ('Wait', 'Hmm') come from a timer, not an error detector. RL learned to raise the hold-on probability with the number of toke
+  m06: The cued base's errors are confident ones. A wrong step is drawn from inside the head of its distribution, not from the tail. RL's gain comes from swa
+  m07: Some hard problems carry a base-specific misreading attractor: the base, whatever its prompt, consistently parses the statement into the same wrong pr
+  m08: The base settles on a length budget for each problem from the prompt alone, before it writes; the probe reads this difficulty at the last prompt token
+  m09: The 3.0 RL-Zero releases trained at 12k with truncated rollouts masked, so every rewarded rollout ended before about 12k tokens. They learned a commit
+  m10: Within the 3.1 RL-Zero-Math run, the first 100 steps install the answer format (box, then stop) and the deliberative length. The lower per-step error 
+  m11: The prompt asks for an 'Answer:' line, so the cued base sometimes commits answer-first: it writes the answer line early, then spends the rest of the t
+  m12: The marker the cued base uses to state its answer shows which register produced the answer. An 'Answer:' line means the base is following the instruct
+== develop
+  running 12 jobs, 8 at a time
+  develop/r6-m03 (opus): done in 69 s
+  develop/r6-m07 (opus): done in 76 s
+  develop/r6-m02: malformed output: JSONDecodeError: Extra data: line 2 column 1 (char 1544); sent back once
+  develop/r6-m08 (opus): done in 97 s
+  develop/r6-m02: checking the send-back; on a traceback see /var/folders/br/22g183rn3978_vgc7djdlvf00000gn/T/theory-round-7v209ubl/develop/r6-m02/out.sendback.txt
+  develop/r6-m02 (opus): done in 112 s
+  develop/r6-m09: malformed output: JSONDecodeError: Extra data: line 2 column 1 (char 1628); sent back once
+  develop/r6-m05 (opus): done in 171 s
+  develop/r6-m04 (opus): done in 175 s
+  develop/r6-m09: checking the send-back; on a traceback see /var/folders/br/22g183rn3978_vgc7djdlvf00000gn/T/theory-round-7v209ubl/develop/r6-m09/out.sendback.txt
+  develop/r6-m09 (opus): done in 110 s
+  develop/r6-m01 (opus): done in 217 s
+  develop/r6-m06 (opus): done in 218 s
+  develop/r6-m12 (opus): done in 123 s
+  develop/r6-m10 (opus): done in 192 s
+  develop/r6-m11 (opus): done in 212 s
+  abandoned r6-m02: The mechanism says the cued base's extra losses at T 1.0 are tail-token slips, and that a lower temperature would avoid them. The board already contradicts that cause. (1) result-faf15a located the fi
+  abandoned r6-m03: The mechanism says the top-8 directions carry only a commit-and-stop policy that cuts cap hits and 'do[es] nothing about accuracy'. The board already contradicts this. (1) result-284db5, the item the 
+  abandoned r6-m07: The mechanism explains the base's excess of 0-of-4 problems as base-specific misreading attractors that RL removes. Three of the items it starts from contradict each link of that chain. (1) The excess
+  abandoned r6-m08: The mechanism says the base fails between problems because it settles on a length budget from the prompt that is too small, so it writes a short, compressed answer where RL writes a long one. The boar
+  abandoned r6-m09: m09 says the 3.0 RL-Zero releases learned to commit by about 12k tokens: on long problems they 'finish anyway and guess, rather than continuing or hitting the cap'. Two board items measure the 3.0 rel
+  abandoned r6-m12: The only evidence for the mechanism is that the base's 'Answer:' answers are more accurate overall: result-fdc8da, "'Answer:' line median -8.36 (n=132, 121 right)", against roughly 289 of 338 boxed an
+  dropped r6-m02: {"abandon": "The mechanism says the cued base's extra losses at T 1.0 are tail-token slips, and that a lower temperature would avoid them. The board already contradicts that cause. (1) result-faf15a located the first wrong step in 51 finished-wrong T 1.0 answers of the cued base and found that 'the 
+  dropped r6-m03: {"abandon": "The mechanism says the top-8 directions carry only a commit-and-stop policy that cuts cap hits and 'do[es] nothing about accuracy'. The board already contradicts this. (1) result-284db5, the item the mechanism starts from, reports a direction-specific accuracy gain for top-8 on hard328 
+  dropped r6-m07: {"abandon": "The mechanism explains the base's excess of 0-of-4 problems as base-specific misreading attractors that RL removes. Three of the items it starts from contradict each link of that chain. (1) The excess is not base-specific: RL is lumpier than the base. result-e41d94 reports \"but 8 (base
+  dropped r6-m08: {"abandon": "The mechanism says the base fails between problems because it settles on a length budget from the prompt that is too small, so it writes a short, compressed answer where RL writes a long one. The board items say the opposite: the base's failures are long answers, and its failures on one
+  dropped r6-m09: {"abandon": "m09 says the 3.0 RL-Zero releases learned to commit by about 12k tokens: on long problems they 'finish anyway and guess, rather than continuing or hitting the cap'. Two board items measure the 3.0 releases directly and show the opposite, that they keep going and hit the length limit. (1
+  dropped r6-m12: {"abandon": "The only evidence for the mechanism is that the base's 'Answer:' answers are more accurate overall: result-fdc8da, \"'Answer:' line median -8.36 (n=132, 121 right)\", against roughly 289 of 338 boxed answers right. The same item splits the base's quick wrong answers by marker, and that 
+  8 theories in theories/ (6 new); 6 dropped; wrote theories.sha256
+== account
+  running 1 jobs, 1 at a time
+  account/r6-account (opus): done in 1311 s
+  r6-account fails the check, sent back once:
+    r6-account.json: parent 'r7-account' is not a theory in graveyard.json (or null)
+  running 1 jobs, 1 at a time
+  fix/r6-account (opus): done in 151 s
+  dropped r6-m02: {"abandon": "The mechanism says the cued base's extra losses at T 1.0 are tail-token slips, and that a lower temperature would avoid them. The board already contradicts that cause. (1) result-faf15a located the first wrong step in 51 finished-wrong T 1.0 answers of the cued base and found that 'the 
+  dropped r6-m03: {"abandon": "The mechanism says the top-8 directions carry only a commit-and-stop policy that cuts cap hits and 'do[es] nothing about accuracy'. The board already contradicts this. (1) result-284db5, the item the mechanism starts from, reports a direction-specific accuracy gain for top-8 on hard328 
+  dropped r6-m07: {"abandon": "The mechanism explains the base's excess of 0-of-4 problems as base-specific misreading attractors that RL removes. Three of the items it starts from contradict each link of that chain. (1) The excess is not base-specific: RL is lumpier than the base. result-e41d94 reports \"but 8 (base
+  dropped r6-m08: {"abandon": "The mechanism says the base fails between problems because it settles on a length budget from the prompt that is too small, so it writes a short, compressed answer where RL writes a long one. The board items say the opposite: the base's failures are long answers, and its failures on one
+  dropped r6-m09: {"abandon": "m09 says the 3.0 RL-Zero releases learned to commit by about 12k tokens: on long problems they 'finish anyway and guess, rather than continuing or hitting the cap'. Two board items measure the 3.0 releases directly and show the opposite, that they keep going and hit the length limit. (1
+  dropped r6-m12: {"abandon": "The only evidence for the mechanism is that the base's 'Answer:' answers are more accurate overall: result-fdc8da, \"'Answer:' line median -8.36 (n=132, 121 right)\", against roughly 289 of 338 boxed answers right. The same item splits the base's quick wrong answers by marker, and that 
+  9 theories in theories/ (1 new); 6 dropped; wrote theories.sha256
+== null_tests
+  running 2 jobs, 2 at a time
+  null_tests/nulltest-1 (opus): done in 112 s
+  null_tests/nulltest-2 (opus): done in 116 s
+== test
+  skip test/r5-m03-rival: tests/r5-m03-rival.json exists
+  skip test/r5-m10-rival: tests/r5-m10-rival.json exists
+  running 7 jobs, 6 at a time
+  test/r6-m04 (opus): done in 95 s
+  test/r6-m10 (opus): done in 98 s
+  test/r6-m01 (opus): done in 119 s
+  test/r6-m06 (opus): done in 129 s
+  test/r6-m05 (opus): done in 179 s
+  test/r6-m11 (opus): done in 152 s
+  test/r6-account (opus): done in 2380 s
+  test/r6-account p1: measured 0.0 (n 46, 90 % [0.0, 0.0]), predicted 0 [0, 0], refuting condition met: False
+  test/r6-account p2: measured 0.15217391304347827 (n 46, 90 % [0.06521739130434782, 0.2391304347826087]), predicted 0.11 [0.03, 0.22], refuting condition met: False
+  test/r6-account p3: measured 0.043478260869565216 (n 46, 90 % [0.0, 0.08695652173913043]), predicted 0.035 [0.0, 0.11], refuting condition met: False
+  test/r6-account p4: measured 0.2608695652173913 (n 46, 90 % [0.15217391304347827, 0.3695652173913043]), predicted 0.22 [0.1, 0.36], refuting condition met: False
+  test/r6-account p5: measured 0.4782608695652174 (n 46, 90 % [0.34782608695652173, 0.5869565217391305]), predicted 0.52 [0.36, 0.68], refuting condition met: False
+  test/r6-account p6: measured 0.06521739130434782 (n 46, 90 % [0.0, 0.13043478260869565]), predicted 0.115 [0.03, 0.22], refuting condition met: False
+  test/r6-account p7: measured 0.0 (n 46, 90 % [0.0, 0.0]), predicted 0 [0, 0], refuting condition met: False
+  test/r6-account p8: measured 8 (n 500, 90 % [-7, 23]), predicted 1 [-8, 9], refuting condition met: False
+  test/r6-account p9: measured 0.0 (n 65, 90 % [0.0, 0.0]), predicted 0 [0, 0], refuting condition met: False
+  test/r6-account p10: measured 0.24615384615384617 (n 65, 90 % [0.16923076923076924, 0.3384615384615385]), predicted 0.246 [0.23, 0.26], refuting condition met: False
+  test/r6-account p11: measured 0.03076923076923077 (n 65, 90 % [0.0, 0.06153846153846154]), predicted 0.031 [0.0, 0.07], refuting condition met: False
+  test/r6-account p12: measured 0.18461538461538463 (n 65, 90 % [0.1076923076923077, 0.26153846153846155]), predicted 0.18 [0.11, 0.26], refuting condition met: False
+  test/r6-account p13: measured 0.4461538461538462 (n 65, 90 % [0.3384615384615385, 0.5538461538461539]), predicted 0.44 [0.34, 0.54], refuting condition met: False
+  test/r6-account p14: measured 0.09230769230769231 (n 65, 90 % [0.03076923076923077, 0.15384615384615385]), predicted 0.103 [0.05, 0.16], refuting condition met: False
+  test/r6-account p15: measured 0.0 (n 65, 90 % [0.0, 0.0]), predicted 0 [0, 0], refuting condition met: False
+  test/r6-account p16: measured 52 (n 500, 90 % [39, 66]), predicted 52 [51, 53], refuting condition met: False
+  test/r6-account p17: measured 0.0 (n 247, 90 % [0.0, 0.0]), predicted 0 [0, 0], refuting condition met: False
+  test/r6-account p18: measured 0.008097165991902834 (n 247, 90 % [0.0, 0.020242914979757085]), predicted 0.045 [0.015, 0.09], refuting condition met: True
+  test/r6-account p19: measured 0.5141700404858299 (n 247, 90 % [0.46558704453441296, 0.5668016194331984]), predicted 0.38 [0.22, 0.55], refuting condition met: False
+  test/r6-account p20: measured 0.2793522267206478 (n 247, 90 % [0.23481781376518218, 0.32388663967611336]), predicted 0.38 [0.25, 0.52], refuting condition met: False
+  test/r6-account p21: measured 0.1659919028340081 (n 247, 90 % [0.12955465587044535, 0.20647773279352227]), predicted 0.165 [0.09, 0.25], refuting condition met: False
+  test/r6-account p22: measured 0.032388663967611336 (n 247, 90 % [0.016194331983805668, 0.05263157894736842]), predicted 0.03 [0.005, 0.07], refuting condition met: False
+  test/r6-account p23: measured 0.0 (n 247, 90 % [0.0, 0.0]), predicted 0 [0, 0], refuting condition met: False
+  test/r6-account p24: measured 239 (n 500, 90 % [220, 258]), predicted 239 [234, 243], refuting condition met: False
+  test/r6-account p25: measured 0.0 (n 55, 90 % [0.0, 0.0]), predicted 0 [0, 0], refuting condition met: False
+  test/r6-account p26: measured 0.2 (n 55, 90 % [0.10909090909090909, 0.2909090909090909]), predicted 0.17 [0.08, 0.28], refuting condition met: False
+  test/r6-account p27: measured 0.03636363636363636 (n 55, 90 % [0.0, 0.07272727272727272]), predicted 0.034 [0.0, 0.09], refuting condition met: False
+  test/r6-account p28: measured 0.2 (n 55, 90 % [0.10909090909090909, 0.2909090909090909]), predicted 0.19 [0.1, 0.3], refuting condition met: False
+  test/r6-account p29: measured 0.41818181818181815 (n 55, 90 % [0.3090909090909091, 0.5272727272727272]), predicted 0.47 [0.34, 0.6], refuting condition met: False
+  test/r6-account p30: measured 0.14545454545454545 (n 55, 90 % [0.07272727272727272, 0.21818181818181817]), predicted 0.136 [0.05, 0.23], refuting condition met: False
+  test/r6-account p31: measured 0.0 (n 55, 90 % [0.0, 0.0]), predicted 0 [0, 0], refuting condition met: False
+  test/r6-account p32: measured 14 (n 500, 90 % [-1, 31]), predicted 17 [13, 19], refuting condition met: False
+  test/r6-account p33: measured 0.40625 (n 64, 90 % [0.296875, 0.5]), predicted 0.37 [0.25, 0.5], refuting condition met: False
+  test/r6-account p34: measured 0.21875 (n 64, 90 % [0.140625, 0.3125]), predicted 0.21 [0.11, 0.32], refuting condition met: False
+  test/r6-account p35: measured 0.0 (n 64, 90 % [0.0, 0.0]), predicted 0.03 [0.0, 0.08], refuting condition met: False
+  test/r6-account p36: measured 0.0625 (n 64, 90 % [0.015625, 0.125]), predicted 0.12 [0.05, 0.21], refuting condition met: False
+  test/r6-account p37: measured 0.234375 (n 64, 90 % [0.140625, 0.328125]), predicted 0.21 [0.12, 0.32], refuting condition met: False
+  test/r6-account p38: measured 0.078125 (n 64, 90 % [0.03125, 0.140625]), predicted 0.06 [0.01, 0.13], refuting condition met: False
+  test/r6-account p39: measured 0.0 (n 64, 90 % [0.0, 0.0]), predicted 0 [0, 0], refuting condition met: False
+  test/r6-account p40: measured 55 (n 500, 90 % [42, 69]), predicted 56 [50, 58], refuting condition met: False
+  test/r6-account p41: measured 0.52 (n 75, 90 % [0.4266666666666667, 0.6133333333333333]), predicted 0.55 [0.42, 0.67], refuting condition met: False
+  test/r6-account p42: measured 0.2 (n 75, 90 % [0.13333333333333333, 0.28]), predicted 0.15 [0.07, 0.25], refuting condition met: False
+  test/r6-account p43: measured 0.013333333333333334 (n 75, 90 % [0.0, 0.04]), predicted 0.017 [0.0, 0.06], refuting condition met: False
+  test/r6-account p44: measured 0.12 (n 75, 90 % [0.06666666666666667, 0.18666666666666668]), predicted 0.09 [0.03, 0.17], refuting condition met: False
+  test/r6-account p45: measured 0.14666666666666667 (n 75, 90 % [0.08, 0.21333333333333335]), predicted 0.15 [0.07, 0.25], refuting condition met: False
+  test/r6-account p46: measured 0.0 (n 75, 90 % [0.0, 0.0]), predicted 0.043 [0.0, 0.1], refuting condition met: False
+  test/r6-account p47: measured 0.0 (n 75, 90 % [0.0, 0.0]), predicted 0 [0, 0], refuting condition met: False
+  test/r6-account p48: measured 50 (n 500, 90 % [33, 66]), predicted 30 [8, 52], refuting condition met: False
+  test/r6-account p49: measured 0.5697674418604651 (n 86, 90 % [0.4883720930232558, 0.6627906976744186]), predicted 0.58 [0.45, 0.7], refuting condition met: False
+  test/r6-account p50: measured 0.1744186046511628 (n 86, 90 % [0.11627906976744186, 0.2441860465116279]), predicted 0.15 [0.07, 0.25], refuting condition met: False
+  test/r6-account p51: measured 0.011627906976744186 (n 86, 90 % [0.0, 0.03488372093023256]), predicted 0.015 [0.0, 0.06], refuting condition met: False
+  test/r6-account p52: measured 0.10465116279069768 (n 86, 90 % [0.05813953488372093, 0.16279069767441862]), predicted 0.085 [0.03, 0.16], refuting condition met: False
+  test/r6-account p53: measured 0.13953488372093023 (n 86, 90 % [0.08139534883720931, 0.20930232558139536]), predicted 0.13 [0.06, 0.22], refuting condition met: False
+  test/r6-account p54: measured 0.0 (n 86, 90 % [0.0, 0.0]), predicted 0.04 [0.0, 0.1], refuting condition met: False
+  test/r6-account p55: measured 0.0 (n 86, 90 % [0.0, 0.0]), predicted 0 [0, 0], refuting condition met: False
+  test/r6-account p56: measured 33 (n 500, 90 % [14, 52]), predicted 20 [-5, 45], refuting condition met: False
+  test/r6-account p57: measured 0.7692307692307693 (n 26, 90 % [0.6153846153846154, 0.9230769230769231]), predicted 0.7 [0.5, 0.87], refuting condition met: False
+  test/r6-account p58: measured 0.2857142857142857 (n 14, 90 % [0.07142857142857142, 0.5]), predicted 0.28 [0.08, 0.5], refuting condition met: False
+  test/r6-account p59: measured 0.8974358974358975 (n 39, 90 % [0.8205128205128205, 0.9743589743589743]), predicted 0.9 [0.78, 0.97], refuting condition met: False
+  test/r6-account p60: measured 0.8661417322834646 (n 127, 90 % [0.8110236220472441, 0.9133858267716536]), predicted 0.84 [0.72, 0.93], refuting condition met: False
+  test/r6-m01 p1: measured -0.2981493553527452 (n 254, 90 % [-0.3787878787878788, -0.1942934782608695]), predicted -0.45 [-0.8, -0.18], refuting condition met: False
+  test/r6-m01 p2: measured 0.007352941176470588 (n 136, 90 % [0.0, 0.022058823529411766]), predicted 0.25 [0.12, 0.42], refuting condition met: True
+  test/r6-m01 p3: measured 0.6 (n 23, 90 % [0.5263157894736842, 0.82]), predicted 0.68 [0.45, 0.9], refuting condition met: False
+  test/r6-m04 p1: measured -2 (n 100, 90 % [-6, 2]), predicted 4 [1, 9], refuting condition met: True
+  test/r6-m04 p2: measured 0.06468979820134287 (n 100, 90 % [-0.20777972855755164, 0.3962439480682959]), predicted 0.8 [0.45, 1.3], refuting condition met: True
+  test/r6-m04 p3: measured 0.0 (n 100, 90 % [0.0, 0.0]), predicted 0.12 [0.0, 0.35], refuting condition met: False
+  test/r6-m05 p1: measured 0.9725264665193447 (n 497, 90 % [0.8740532724857533, 1.0806506471666761]), predicted 1.7 [1.15, 2.8], refuting condition met: True
+  test/r6-m05 p2: measured 1.3791965709443248 (n 497, 90 % [1.2995331764751483, 1.4669956313217523]), predicted 1.05 [0.8, 1.3], refuting condition met: True
+  test/r6-m05 p3: measured 0.9024747907285835 (n 497, 90 % [0.8054866129434834, 1.015290286748162]), predicted 1.6 [1.1, 2.8], refuting condition met: True
+  test/r6-m06 p1: not computable: field n_tok_p_lt_1e2 does not exist in any of the 328 rows of e72c answers.jsonl (the day1_hard328-0
+  test/r6-m06 p2: not computable: field n_tok_p_lt_1e2 does not exist in any of the 328 rows of e72c answers.jsonl (the day1_hard328-0
+  test/r6-m06 p3: not computable: field n_tok_p_lt_1e2 does not exist in any of the 328 rows of e72c answers.jsonl (the day1_hard328-0
+  test/r6-m10 p1: measured -0.0463768115942029 (n 345, 90 % [-0.06666666666666668, -0.026086956521739132]), predicted 0.0 [-0.025, 0.025], refuting condition met: True
+  test/r6-m10 p2: measured 0.30830135965451666 (n 345, 90 % [0.2643981334977361, 0.3419517023858386]), predicted 0.05 [-0.15, 0.25], refuting condition met: False
+  test/r6-m10 p3: measured -0.01904761904761909 (n 420, 90 % [-0.050000000000000044, 0.014285714285714235]), predicted 0.0 [-0.035, 0.035], refuting condition met: False
+  test/r6-m11 p1: measured 0.0 (n 400, 90 % [0.0, 0.0]), predicted 2.0 [1.3, 3.6], refuting condition met: True
+  test/r6-m11 p2: no number; refuting condition met: statistic below 0.6, or fewer than 8 kept rows
+  test/r6-m11 p3: measured 0.0 (n 13, 90 % [0.0, 0.0]), predicted 0.45 [0.2, 0.75], refuting condition met: True
+  test/r6-m11 p4: measured 0.04251012145748988 (n 494, 90 % [0.02834008097165992, 0.05668016194331984]), predicted 0.06 [0.0, 0.15], refuting condition met: False
+Offline tests: computed predictions against their 90 % intervals; gain in nats against the two no-theory test readers. Outside counts only when the measured 90 % interval misses the predicted one.
+theory            computed in/noise/out    gain  strikes  state
+r6-account         44 of 44       43/1/0   35.41           survives
+    p2: measured 0.152174 (n 46, 90 % [0.0652174, 0.23913]), predicted 0.11 [0.03, 0.22] inside, readers 0.22 and 0.28, gain +0.71
+    p3: measured 0.0434783 (n 46, 90 % [0, 0.0869565]), predicted 0.035 [0, 0.11] inside, readers 0.1 and 0.12, gain +1.19
+    p4: measured 0.26087 (n 46, 90 % [0.152174, 0.369565]), predicted 0.22 [0.1, 0.36] inside, readers 0.28 and 0.28, gain +0.31
+    p5: measured 0.478261 (n 46, 90 % [0.347826, 0.586957]), predicted 0.52 [0.36, 0.68] inside, readers 0.3 and 0.2, gain +1.78, a win the readers did not expect
+    p6: measured 0.0652174 (n 46, 90 % [0, 0.130435]), predicted 0.115 [0.03, 0.22] inside, readers 0.08 and 0.07, gain -0.21
+    p8: measured 8 (n 500, 90 % [-7, 23]), predicted 1 [-8, 9] inside, readers 1 and 1, gain +0.57, readers had the same number
+    p16: measured 52 (n 500, 90 % [39, 66]), predicted 52 [51, 53] inside, readers 52.5 and 53, gain +1.23, readers had the same number
+    p18: measured 0.00809717 (n 247, 90 % [0, 0.0202429]), predicted 0.045 [0.015, 0.09] outside, within noise, readers 0.07 and 0.1, gain +0.70
+    p19: measured 0.51417 (n 247, 90 % [0.465587, 0.566802]), predicted 0.38 [0.22, 0.55] inside, readers 0.18 and 0.15, gain +3.00, a win the readers did not expect
+    p20: measured 0.279352 (n 247, 90 % [0.234818, 0.323887]), predicted 0.38 [0.25, 0.52] inside, readers 0.45 and 0.48, gain +0.67
+    p21: measured 0.165992 (n 247, 90 % [0.129555, 0.206478]), predicted 0.165 [0.09, 0.25] inside, readers 0.22 and 0.18, gain +0.68
+    p22: measured 0.0323887 (n 247, 90 % [0.0161943, 0.0526316]), predicted 0.03 [0.005, 0.07] inside, readers 0.06 and 0.04, gain +0.65
+    p24: measured 239 (n 500, 90 % [220, 258]), predicted 239 [234, 243] inside, readers 239 and 239, gain +0.61, readers had the same number
+    p26: measured 0.2 (n 55, 90 % [0.109091, 0.290909]), predicted 0.17 [0.08, 0.28] inside, readers 0.26 and 0.25, gain +0.53
+    p27: measured 0.0363636 (n 55, 90 % [0, 0.0727273]), predicted 0.034 [0, 0.09] inside, readers 0.1 and 0.12, gain +1.47, a win the readers did not expect
+    p28: measured 0.2 (n 55, 90 % [0.109091, 0.290909]), predicted 0.19 [0.1, 0.3] inside, readers 0.25 and 0.28, gain +0.74
+    p29: measured 0.418182 (n 55, 90 % [0.309091, 0.527273]), predicted 0.47 [0.34, 0.6] inside, readers 0.27 and 0.22, gain +1.39, a win the readers did not expect
+    p30: measured 0.145455 (n 55, 90 % [0.0727273, 0.218182]), predicted 0.136 [0.05, 0.23] inside, readers 0.1 and 0.09, gain +0.45
+    p32: measured 14 (n 500, 90 % [-1, 31]), predicted 17 [13, 19] inside, readers 17 and 17, gain -0.31, readers had the same number
+    p33: measured 0.40625 (n 64, 90 % [0.296875, 0.5]), predicted 0.37 [0.25, 0.5] inside, readers 0.28 and 0.32, gain +0.80
+    p34: measured 0.21875 (n 64, 90 % [0.140625, 0.3125]), predicted 0.21 [0.11, 0.32] inside, readers 0.17 and 0.17, gain +0.38
+    p35: measured 0 (n 64, 90 % [0, 0]), predicted 0.03 [0, 0.08] inside, readers 0.08 and 0.08, gain +1.07
+    p36: measured 0.0625 (n 64, 90 % [0.015625, 0.125]), predicted 0.12 [0.05, 0.21] inside, readers 0.18 and 0.2, gain +0.93
+    p37: measured 0.234375 (n 64, 90 % [0.140625, 0.328125]), predicted 0.21 [0.12, 0.32] inside, readers 0.19 and 0.15, gain +0.53
+    p38: measured 0.078125 (n 64, 90 % [0.03125, 0.140625]), predicted 0.06 [0.01, 0.13] inside, readers 0.1 and 0.07, gain +0.33
+    p40: measured 55 (n 500, 90 % [42, 69]), predicted 56 [50, 58] inside, readers 56 and 56, gain +0.39, readers had the same number
+    p41: measured 0.52 (n 75, 90 % [0.426667, 0.613333]), predicted 0.55 [0.42, 0.67] inside, readers 0.6 and 0.4, gain +0.74
+    p42: measured 0.2 (n 75, 90 % [0.133333, 0.28]), predicted 0.15 [0.07, 0.25] inside, readers 0.12 and 0.12, gain +0.48
+    p43: measured 0.0133333 (n 75, 90 % [0, 0.04]), predicted 0.017 [0, 0.06] inside, readers 0.04 and 0.07, gain +1.22
+    p44: measured 0.12 (n 75, 90 % [0.0666667, 0.186667]), predicted 0.09 [0.03, 0.17] inside, readers 0.1 and 0.18, gain +0.36
+    p45: measured 0.146667 (n 75, 90 % [0.08, 0.213333]), predicted 0.15 [0.07, 0.25] inside, readers 0.1 and 0.15, gain +0.43
+    p46: measured 0 (n 75, 90 % [0, 0]), predicted 0.043 [0, 0.1] inside, readers 0.04 and 0.06, gain +0.03
+    p48: measured 50 (n 500, 90 % [33, 66]), predicted 30 [8, 52] inside, readers 30 and 30, gain +3.00, readers had the same number
+    p49: measured 0.569767 (n 86, 90 % [0.488372, 0.662791]), predicted 0.58 [0.45, 0.7] inside, readers 0.55 and 0.38, gain +0.76
+    p50: measured 0.174419 (n 86, 90 % [0.116279, 0.244186]), predicted 0.15 [0.07, 0.25] inside, readers 0.12 and 0.12, gain +0.44
+    p51: measured 0.0116279 (n 86, 90 % [0, 0.0348837]), predicted 0.015 [0, 0.06] inside, readers 0.05 and 0.08, gain +1.48
+    p52: measured 0.104651 (n 86, 90 % [0.0581395, 0.162791]), predicted 0.085 [0.03, 0.16] inside, readers 0.12 and 0.18, gain +0.64
+    p53: measured 0.139535 (n 86, 90 % [0.0813953, 0.209302]), predicted 0.13 [0.06, 0.22] inside, readers 0.11 and 0.16, gain +0.44
+    p54: measured 0 (n 86, 90 % [0, 0]), predicted 0.04 [0, 0.1] inside, readers 0.05 and 0.07, gain +0.39
+    p56: measured 33 (n 500, 90 % [14, 52]), predicted 20 [-5, 45] inside, readers 20 and 20, gain +1.30, readers had the same number
+    p57: measured 0.769231 (n 26, 90 % [0.615385, 0.923077]), predicted 0.7 [0.5, 0.87] inside, readers 0.55 and 0.6, gain +0.99
+    p58: measured 0.285714 (n 14, 90 % [0.0714286, 0.5]), predicted 0.28 [0.08, 0.5] inside, readers 0.45 and 0.4, gain +0.64
+    p59: measured 0.897436 (n 39, 90 % [0.820513, 0.974359]), predicted 0.9 [0.78, 0.97] inside, readers 0.75 and 0.85, gain +1.04
+    p60: measured 0.866142 (n 127, 90 % [0.811024, 0.913386]), predicted 0.84 [0.72, 0.93] inside, readers 0.83 and 0.85, gain +0.46, readers had the same number
+    p1: measured 0.0, not scored: 0 by construction
+    p7: measured 0.0, not scored: 0 by construction
+    p9: measured 0.0, not scored: a fit of the account's rules to a cell whose budget a board item claims
+    p10: measured 0.24615384615384617, not scored: a fit of the account's rules to a cell whose budget a board item claims
+    p11: measured 0.03076923076923077, not scored: a fit of the account's rules to a cell whose budget a board item claims
+    p12: measured 0.18461538461538463, not scored: a fit of the account's rules to a cell whose budget a board item claims
+    p13: measured 0.4461538461538462, not scored: a fit of the account's rules to a cell whose budget a board item claims
+    p14: measured 0.09230769230769231, not scored: a fit of the account's rules to a cell whose budget a board item claims
+    p15: measured 0.0, not scored: a fit of the account's rules to a cell whose budget a board item claims
+    p17: measured 0.0, not scored: 0 by construction
+    p23: measured 0.0, not scored: 0 by construction
+    p25: measured 0.0, not scored: 0 by construction
+    p31: measured 0.0, not scored: 0 by construction
+    p39: measured 0.0, not scored: 0 by construction
+    p47: measured 0.0, not scored: 0 by construction
+    p55: measured 0.0, not scored: 0 by construction
+r5-m10-rival        6 of 6         5/0/1    8.84           survives, tests carried from round-05
+    p1: measured 0.157676, predicted 0.29 [0.17, 0.41] outside, readers 0.28, gain -0.24, readers had the same number
+    p2: measured -0.155405, predicted -0.1 [-0.2, 0] inside, readers -0.1, gain -0.01, readers had the same number
+    p3: measured 0.20575, predicted 0.09 [-0.04, 0.22] inside, readers 0.11, gain +0.09
+    p4: measured -0.0746269, predicted -0.14 [-0.3, 0.02] inside, readers -0.47, gain +3.00, a win the readers did not expect
+    p5: measured 0.355831, predicted 0.24 [0.07, 0.41] inside, readers -0.03, gain +3.00, a win the readers did not expect
+    p6: measured -0.1, predicted -0.1 [-0.26, 0.06] inside, readers -0.33, gain +3.00, a win the readers did not expect
+r5-m03-rival        3 of 3         3/0/0    8.77           survives, tests carried from round-05
+    p1: measured 0.25, predicted 0.27 [0.17, 0.37] inside, readers 0.13, gain +2.77, a win the readers did not expect
+    p2: measured 0.818182, predicted 0.76 [0.64, 0.88] inside, readers 0.5, gain +3.00, a win the readers did not expect
+    p3: measured 0.772727, predicted 0.63 [0.43, 0.83] inside, readers 0.4, gain +3.00, a win the readers did not expect
+r6-m06              0 of 3         0/0/0    0.00           untested
+    p1: not computable: field n_tok_p_lt_1e2 does not exist in any of the 328 rows of e72c answers.jsonl (the day1_hard328-01 jobs pre
+    p2: not computable: field n_tok_p_lt_1e2 does not exist in any of the 328 rows of e72c answers.jsonl (the day1_hard328-01 jobs pre
+    p3: not computable: field n_tok_p_lt_1e2 does not exist in any of the 328 rows of e72c answers.jsonl (the day1_hard328-01 jobs pre
+r6-m01              3 of 3         2/0/1   -1.14           refuted
+    p1: measured -0.298149 (n 254, 90 % [-0.378788, -0.194293]), predicted -0.45 [-0.8, -0.18] inside, readers -0.25 and -0.12, gain +0.09
+    p2: measured 0.00735294 (n 136, 90 % [0, 0.0220588]), predicted 0.25 [0.12, 0.42] outside, readers 0.15 and 0.1, gain -2.72, refuting condition met
+    p3: measured 0.6 (n 23, 90 % [0.526316, 0.82]), predicted 0.68 [0.45, 0.9] inside, readers 0.95 and 0.95, gain +1.50, a win the readers did not expect
+r6-m11              3 of 4         1/0/2   -1.59           refuted
+    p1: measured 0 (n 400, 90 % [0, 0]), predicted 2 [1.3, 3.6] outside, readers 1.6 and 1.6, gain -1.27, refuting condition met
+    p3: measured 0 (n 13, 90 % [0, 0]), predicted 0.45 [0.2, 0.75] outside, readers 0.35 and 0.3, gain -1.81, refuting condition met
+    p4: measured 0.0425101 (n 494, 90 % [0.0283401, 0.0566802]), predicted 0.06 [0, 0.15] inside, readers 0.2 and 0.15, gain +1.49
+    p2: no number; refuting condition met: statistic below 0.6, or fewer than 8 kept rows
+r6-m04              3 of 3         1/1/1   -3.52           refuted
+    p1: measured -2 (n 100, 90 % [-6, 2]), predicted 4 [1, 9] outside, within noise, readers 3 and 3, gain -1.78
+    p2: measured 0.0646898 (n 100, 90 % [-0.20778, 0.396244]), predicted 0.8 [0.45, 1.3] outside, readers 0.4 and 0.5, gain -3.00, refuting condition met
+    p3: measured 0 (n 100, 90 % [0, 0]), predicted 0.12 [0, 0.35] inside, readers 0.3 and 0.25, gain +1.25
+r6-m10              3 of 3         1/0/2   -3.79           refuted
+    p1: measured -0.0463768 (n 345, 90 % [-0.0666667, -0.026087]), predicted 0 [-0.025, 0.025] outside, readers -0.015 and 0, gain -2.78, refuting condition met
+    p2: measured 0.308301 (n 345, 90 % [0.264398, 0.341952]), predicted 0.05 [-0.15, 0.25] outside, readers 0.15 and 0.08, gain -1.27
+    p3: measured -0.0190476 (n 420, 90 % [-0.05, 0.0142857]), predicted 0 [-0.035, 0.035] inside, readers 0 and 0.01, gain +0.25, readers had the same number
+r6-m05              3 of 3         0/1/2   -4.24           refuted
+    p1: measured 0.972526 (n 497, 90 % [0.874053, 1.08065]), predicted 1.7 [1.15, 2.8] outside, readers 1.1 and 1.1, gain -1.43, refuting condition met
+    p2: measured 1.3792 (n 497, 90 % [1.29953, 1.467]), predicted 1.05 [0.8, 1.3] outside, within noise, readers 1.3 and 1.3, gain -1.64
+    p3: measured 0.902475 (n 497, 90 % [0.805487, 1.01529]), predicted 1.6 [1.1, 2.8] outside, readers 1.05 and 1.1, gain -1.17, refuting condition met
+== score_tests
+Offline tests: computed predictions against their 90 % intervals; gain in nats against the two no-theory test readers. Outside counts only when the measured 90 % interval misses the predicted one.
+theory            computed in/noise/out    gain  strikes  state
+r6-account         44 of 44       43/1/0   35.41           survives
+    p2: measured 0.152174 (n 46, 90 % [0.0652174, 0.23913]), predicted 0.11 [0.03, 0.22] inside, readers 0.22 and 0.28, gain +0.71
+    p3: measured 0.0434783 (n 46, 90 % [0, 0.0869565]), predicted 0.035 [0, 0.11] inside, readers 0.1 and 0.12, gain +1.19
+    p4: measured 0.26087 (n 46, 90 % [0.152174, 0.369565]), predicted 0.22 [0.1, 0.36] inside, readers 0.28 and 0.28, gain +0.31
+    p5: measured 0.478261 (n 46, 90 % [0.347826, 0.586957]), predicted 0.52 [0.36, 0.68] inside, readers 0.3 and 0.2, gain +1.78, a win the readers did not expect
+    p6: measured 0.0652174 (n 46, 90 % [0, 0.130435]), predicted 0.115 [0.03, 0.22] inside, readers 0.08 and 0.07, gain -0.21
+    p8: measured 8 (n 500, 90 % [-7, 23]), predicted 1 [-8, 9] inside, readers 1 and 1, gain +0.57, readers had the same number
+    p16: measured 52 (n 500, 90 % [39, 66]), predicted 52 [51, 53] inside, readers 52.5 and 53, gain +1.23, readers had the same number
+    p18: measured 0.00809717 (n 247, 90 % [0, 0.0202429]), predicted 0.045 [0.015, 0.09] outside, within noise, readers 0.07 and 0.1, gain +0.70
+    p19: measured 0.51417 (n 247, 90 % [0.465587, 0.566802]), predicted 0.38 [0.22, 0.55] inside, readers 0.18 and 0.15, gain +3.00, a win the readers did not expect
+    p20: measured 0.279352 (n 247, 90 % [0.234818, 0.323887]), predicted 0.38 [0.25, 0.52] inside, readers 0.45 and 0.48, gain +0.67
+    p21: measured 0.165992 (n 247, 90 % [0.129555, 0.206478]), predicted 0.165 [0.09, 0.25] inside, readers 0.22 and 0.18, gain +0.68
+    p22: measured 0.0323887 (n 247, 90 % [0.0161943, 0.0526316]), predicted 0.03 [0.005, 0.07] inside, readers 0.06 and 0.04, gain +0.65
+    p24: measured 239 (n 500, 90 % [220, 258]), predicted 239 [234, 243] inside, readers 239 and 239, gain +0.61, readers had the same number
+    p26: measured 0.2 (n 55, 90 % [0.109091, 0.290909]), predicted 0.17 [0.08, 0.28] inside, readers 0.26 and 0.25, gain +0.53
+    p27: measured 0.0363636 (n 55, 90 % [0, 0.0727273]), predicted 0.034 [0, 0.09] inside, readers 0.1 and 0.12, gain +1.47, a win the readers did not expect
+    p28: measured 0.2 (n 55, 90 % [0.109091, 0.290909]), predicted 0.19 [0.1, 0.3] inside, readers 0.25 and 0.28, gain +0.74
+    p29: measured 0.418182 (n 55, 90 % [0.309091, 0.527273]), predicted 0.47 [0.34, 0.6] inside, readers 0.27 and 0.22, gain +1.39, a win the readers did not expect
+    p30: measured 0.145455 (n 55, 90 % [0.0727273, 0.218182]), predicted 0.136 [0.05, 0.23] inside, readers 0.1 and 0.09, gain +0.45
+    p32: measured 14 (n 500, 90 % [-1, 31]), predicted 17 [13, 19] inside, readers 17 and 17, gain -0.31, readers had the same number
+    p33: measured 0.40625 (n 64, 90 % [0.296875, 0.5]), predicted 0.37 [0.25, 0.5] inside, readers 0.28 and 0.32, gain +0.80
+    p34: measured 0.21875 (n 64, 90 % [0.140625, 0.3125]), predicted 0.21 [0.11, 0.32] inside, readers 0.17 and 0.17, gain +0.38
+    p35: measured 0 (n 64, 90 % [0, 0]), predicted 0.03 [0, 0.08] inside, readers 0.08 and 0.08, gain +1.07
+    p36: measured 0.0625 (n 64, 90 % [0.015625, 0.125]), predicted 0.12 [0.05, 0.21] inside, readers 0.18 and 0.2, gain +0.93
+    p37: measured 0.234375 (n 64, 90 % [0.140625, 0.328125]), predicted 0.21 [0.12, 0.32] inside, readers 0.19 and 0.15, gain +0.53
+    p38: measured 0.078125 (n 64, 90 % [0.03125, 0.140625]), predicted 0.06 [0.01, 0.13] inside, readers 0.1 and 0.07, gain +0.33
+    p40: measured 55 (n 500, 90 % [42, 69]), predicted 56 [50, 58] inside, readers 56 and 56, gain +0.39, readers had the same number
+    p41: measured 0.52 (n 75, 90 % [0.426667, 0.613333]), predicted 0.55 [0.42, 0.67] inside, readers 0.6 and 0.4, gain +0.74
+    p42: measured 0.2 (n 75, 90 % [0.133333, 0.28]), predicted 0.15 [0.07, 0.25] inside, readers 0.12 and 0.12, gain +0.48
+    p43: measured 0.0133333 (n 75, 90 % [0, 0.04]), predicted 0.017 [0, 0.06] inside, readers 0.04 and 0.07, gain +1.22
+    p44: measured 0.12 (n 75, 90 % [0.0666667, 0.186667]), predicted 0.09 [0.03, 0.17] inside, readers 0.1 and 0.18, gain +0.36
+    p45: measured 0.146667 (n 75, 90 % [0.08, 0.213333]), predicted 0.15 [0.07, 0.25] inside, readers 0.1 and 0.15, gain +0.43
+    p46: measured 0 (n 75, 90 % [0, 0]), predicted 0.043 [0, 0.1] inside, readers 0.04 and 0.06, gain +0.03
+    p48: measured 50 (n 500, 90 % [33, 66]), predicted 30 [8, 52] inside, readers 30 and 30, gain +3.00, readers had the same number
+    p49: measured 0.569767 (n 86, 90 % [0.488372, 0.662791]), predicted 0.58 [0.45, 0.7] inside, readers 0.55 and 0.38, gain +0.76
+    p50: measured 0.174419 (n 86, 90 % [0.116279, 0.244186]), predicted 0.15 [0.07, 0.25] inside, readers 0.12 and 0.12, gain +0.44
+    p51: measured 0.0116279 (n 86, 90 % [0, 0.0348837]), predicted 0.015 [0, 0.06] inside, readers 0.05 and 0.08, gain +1.48
+    p52: measured 0.104651 (n 86, 90 % [0.0581395, 0.162791]), predicted 0.085 [0.03, 0.16] inside, readers 0.12 and 0.18, gain +0.64
+    p53: measured 0.139535 (n 86, 90 % [0.0813953, 0.209302]), predicted 0.13 [0.06, 0.22] inside, readers 0.11 and 0.16, gain +0.44
+    p54: measured 0 (n 86, 90 % [0, 0]), predicted 0.04 [0, 0.1] inside, readers 0.05 and 0.07, gain +0.39
+    p56: measured 33 (n 500, 90 % [14, 52]), predicted 20 [-5, 45] inside, readers 20 and 20, gain +1.30, readers had the same number
+    p57: measured 0.769231 (n 26, 90 % [0.615385, 0.923077]), predicted 0.7 [0.5, 0.87] inside, readers 0.55 and 0.6, gain +0.99
+    p58: measured 0.285714 (n 14, 90 % [0.0714286, 0.5]), predicted 0.28 [0.08, 0.5] inside, readers 0.45 and 0.4, gain +0.64
+    p59: measured 0.897436 (n 39, 90 % [0.820513, 0.974359]), predicted 0.9 [0.78, 0.97] inside, readers 0.75 and 0.85, gain +1.04
+    p60: measured 0.866142 (n 127, 90 % [0.811024, 0.913386]), predicted 0.84 [0.72, 0.93] inside, readers 0.83 and 0.85, gain +0.46, readers had the same number
+    p1: measured 0.0, not scored: 0 by construction
+    p7: measured 0.0, not scored: 0 by construction
+    p9: measured 0.0, not scored: a fit of the account's rules to a cell whose budget a board item claims
+    p10: measured 0.24615384615384617, not scored: a fit of the account's rules to a cell whose budget a board item claims
+    p11: measured 0.03076923076923077, not scored: a fit of the account's rules to a cell whose budget a board item claims
+    p12: measured 0.18461538461538463, not scored: a fit of the account's rules to a cell whose budget a board item claims
+    p13: measured 0.4461538461538462, not scored: a fit of the account's rules to a cell whose budget a board item claims
+    p14: measured 0.09230769230769231, not scored: a fit of the account's rules to a cell whose budget a board item claims
+    p15: measured 0.0, not scored: a fit of the account's rules to a cell whose budget a board item claims
+    p17: measured 0.0, not scored: 0 by construction
+    p23: measured 0.0, not scored: 0 by construction
+    p25: measured 0.0, not scored: 0 by construction
+    p31: measured 0.0, not scored: 0 by construction
+    p39: measured 0.0, not scored: 0 by construction
+    p47: measured 0.0, not scored: 0 by construction
+    p55: measured 0.0, not scored: 0 by construction
+r5-m10-rival        6 of 6         5/0/1    8.84           survives, tests carried from round-05
+    p1: measured 0.157676, predicted 0.29 [0.17, 0.41] outside, readers 0.28, gain -0.24, readers had the same number
+    p2: measured -0.155405, predicted -0.1 [-0.2, 0] inside, readers -0.1, gain -0.01, readers had the same number
+    p3: measured 0.20575, predicted 0.09 [-0.04, 0.22] inside, readers 0.11, gain +0.09
+    p4: measured -0.0746269, predicted -0.14 [-0.3, 0.02] inside, readers -0.47, gain +3.00, a win the readers did not expect
+    p5: measured 0.355831, predicted 0.24 [0.07, 0.41] inside, readers -0.03, gain +3.00, a win the readers did not expect
+    p6: measured -0.1, predicted -0.1 [-0.26, 0.06] inside, readers -0.33, gain +3.00, a win the readers did not expect
+r5-m03-rival        3 of 3         3/0/0    8.77           survives, tests carried from round-05
+    p1: measured 0.25, predicted 0.27 [0.17, 0.37] inside, readers 0.13, gain +2.77, a win the readers did not expect
+    p2: measured 0.818182, predicted 0.76 [0.64, 0.88] inside, readers 0.5, gain +3.00, a win the readers did not expect
+    p3: measured 0.772727, predicted 0.63 [0.43, 0.83] inside, readers 0.4, gain +3.00, a win the readers did not expect
+r6-m06              0 of 3         0/0/0    0.00           untested
+    p1: not computable: field n_tok_p_lt_1e2 does not exist in any of the 328 rows of e72c answers.jsonl (the day1_hard328-01 jobs pre
+    p2: not computable: field n_tok_p_lt_1e2 does not exist in any of the 328 rows of e72c answers.jsonl (the day1_hard328-01 jobs pre
+    p3: not computable: field n_tok_p_lt_1e2 does not exist in any of the 328 rows of e72c answers.jsonl (the day1_hard328-01 jobs pre
+r6-m01              3 of 3         2/0/1   -1.14           refuted
+    p1: measured -0.298149 (n 254, 90 % [-0.378788, -0.194293]), predicted -0.45 [-0.8, -0.18] inside, readers -0.25 and -0.12, gain +0.09
+    p2: measured 0.00735294 (n 136, 90 % [0, 0.0220588]), predicted 0.25 [0.12, 0.42] outside, readers 0.15 and 0.1, gain -2.72, refuting condition met
+    p3: measured 0.6 (n 23, 90 % [0.526316, 0.82]), predicted 0.68 [0.45, 0.9] inside, readers 0.95 and 0.95, gain +1.50, a win the readers did not expect
+r6-m11              3 of 4         1/0/2   -1.59           refuted
+    p1: measured 0 (n 400, 90 % [0, 0]), predicted 2 [1.3, 3.6] outside, readers 1.6 and 1.6, gain -1.27, refuting condition met
+    p3: measured 0 (n 13, 90 % [0, 0]), predicted 0.45 [0.2, 0.75] outside, readers 0.35 and 0.3, gain -1.81, refuting condition met
+    p4: measured 0.0425101 (n 494, 90 % [0.0283401, 0.0566802]), predicted 0.06 [0, 0.15] inside, readers 0.2 and 0.15, gain +1.49
+    p2: no number; refuting condition met: statistic below 0.6, or fewer than 8 kept rows
+r6-m04              3 of 3         1/1/1   -3.52           refuted
+    p1: measured -2 (n 100, 90 % [-6, 2]), predicted 4 [1, 9] outside, within noise, readers 3 and 3, gain -1.78
+    p2: measured 0.0646898 (n 100, 90 % [-0.20778, 0.396244]), predicted 0.8 [0.45, 1.3] outside, readers 0.4 and 0.5, gain -3.00, refuting condition met
+    p3: measured 0 (n 100, 90 % [0, 0]), predicted 0.12 [0, 0.35] inside, readers 0.3 and 0.25, gain +1.25
+r6-m10              3 of 3         1/0/2   -3.79           refuted
+    p1: measured -0.0463768 (n 345, 90 % [-0.0666667, -0.026087]), predicted 0 [-0.025, 0.025] outside, readers -0.015 and 0, gain -2.78, refuting condition met
+    p2: measured 0.308301 (n 345, 90 % [0.264398, 0.341952]), predicted 0.05 [-0.15, 0.25] outside, readers 0.15 and 0.08, gain -1.27
+    p3: measured -0.0190476 (n 420, 90 % [-0.05, 0.0142857]), predicted 0 [-0.035, 0.035] inside, readers 0 and 0.01, gain +0.25, readers had the same number
+r6-m05              3 of 3         0/1/2   -4.24           refuted
+    p1: measured 0.972526 (n 497, 90 % [0.874053, 1.08065]), predicted 1.7 [1.15, 2.8] outside, readers 1.1 and 1.1, gain -1.43, refuting condition met
+    p2: measured 1.3792 (n 497, 90 % [1.29953, 1.467]), predicted 1.05 [0.8, 1.3] outside, within noise, readers 1.3 and 1.3, gain -1.64
+    p3: measured 0.902475 (n 497, 90 % [0.805487, 1.01529]), predicted 1.6 [1.1, 2.8] outside, readers 1.05 and 1.1, gain -1.17, refuting condition met
+== replicate
+  running 6 jobs, 6 at a time
+  test/repl-r6-m04 (opus): done in 54 s
+  test/repl-r6-m05 (opus): done in 88 s
+  test/repl-r6-m10 (opus): done in 100 s
+  test/repl-r6-m11 (opus): done in 111 s
+  test/repl-r6-m01 (opus): done in 123 s
+  test/repl-r6-account (opus): done in 285 s
+  replicate/r6-account p2: measured 0.15217391304347827 (n 46, 90 % [0.06818181818181818, 0.24074074074074073])
+  replicate/r6-account p3: measured 0.043478260869565216 (n 46, 90 % [0.0, 0.09523809523809523])
+  replicate/r6-account p4: measured 0.2608695652173913 (n 46, 90 % [0.15384615384615385, 0.3695652173913043])
+  replicate/r6-account p5: measured 0.4782608695652174 (n 46, 90 % [0.35555555555555557, 0.6041666666666666])
+  replicate/r6-account p6: measured 0.06521739130434782 (n 46, 90 % [0.016666666666666666, 0.13333333333333333])
+  replicate/r6-account p10: measured 0.24615384615384617 (n 65, 90 % [0.15942028985507245, 0.33783783783783783])
+  replicate/r6-account p11: measured 0.03076923076923077 (n 65, 90 % [0.0, 0.06779661016949153])
+  replicate/r6-account p12: measured 0.18461538461538463 (n 65, 90 % [0.10666666666666667, 0.2676056338028169])
+  replicate/r6-account p13: measured 0.4461538461538462 (n 65, 90 % [0.3424657534246575, 0.5517241379310345])
+  replicate/r6-account p14: measured 0.09230769230769231 (n 65, 90 % [0.03636363636363636, 0.15714285714285714])
+  replicate/r6-account p18: measured 0.008097165991902834 (n 247, 90 % [0.0, 0.019157088122605363])
+  replicate/r6-account p19: measured 0.5141700404858299 (n 247, 90 % [0.4627450980392157, 0.5681818181818182])
+  replicate/r6-account p20: measured 0.2793522267206478 (n 247, 90 % [0.23140495867768596, 0.32751091703056767])
+  replicate/r6-account p21: measured 0.1659919028340081 (n 247, 90 % [0.1285140562248996, 0.20502092050209206])
+  replicate/r6-account p22: measured 0.032388663967611336 (n 247, 90 % [0.01486988847583643, 0.05138339920948617])
+  replicate/r6-account p26: measured 0.2 (n 55, 90 % [0.11428571428571428, 0.29508196721311475])
+  replicate/r6-account p27: measured 0.03636363636363636 (n 55, 90 % [0.0, 0.08])
+  replicate/r6-account p28: measured 0.2 (n 55, 90 % [0.1111111111111111, 0.288135593220339])
+  replicate/r6-account p29: measured 0.41818181818181815 (n 55, 90 % [0.30357142857142855, 0.5362318840579711])
+  replicate/r6-account p30: measured 0.14545454545454545 (n 55, 90 % [0.07142857142857142, 0.22727272727272727])
+  replicate/r6-account p33: measured 0.40625 (n 64, 90 % [0.3, 0.5074626865671642])
+  replicate/r6-account p34: measured 0.21875 (n 64, 90 % [0.140625, 0.3064516129032258])
+  replicate/r6-account p35: measured 0.0 (n 64, 90 % [0.0, 0.0])
+  replicate/r6-account p36: measured 0.0625 (n 64, 90 % [0.016129032258064516, 0.11764705882352941])
+  replicate/r6-account p37: measured 0.234375 (n 64, 90 % [0.15254237288135594, 0.32432432432432434])
+  replicate/r6-account p38: measured 0.078125 (n 64, 90 % [0.025, 0.13725490196078433])
+  replicate/r6-account p41: measured 0.52 (n 75, 90 % [0.425, 0.6176470588235294])
+  replicate/r6-account p42: measured 0.2 (n 75, 90 % [0.12857142857142856, 0.27848101265822783])
+  replicate/r6-account p43: measured 0.013333333333333334 (n 75, 90 % [0.0, 0.04054054054054054])
+  replicate/r6-account p44: measured 0.12 (n 75, 90 % [0.057971014492753624, 0.18421052631578946])
+  replicate/r6-account p45: measured 0.14666666666666667 (n 75, 90 % [0.08196721311475409, 0.21621621621621623])
+  replicate/r6-account p46: measured 0.0 (n 75, 90 % [0.0, 0.0])
+  replicate/r6-account p49: measured 0.5697674418604651 (n 86, 90 % [0.4810126582278481, 0.6571428571428571])
+  replicate/r6-account p50: measured 0.1744186046511628 (n 86, 90 % [0.10975609756097561, 0.2441860465116279])
+  replicate/r6-account p51: measured 0.011627906976744186 (n 86, 90 % [0.0, 0.03529411764705882])
+  replicate/r6-account p52: measured 0.10465116279069768 (n 86, 90 % [0.05128205128205128, 0.16216216216216217])
+  replicate/r6-account p53: measured 0.13953488372093023 (n 86, 90 % [0.07894736842105263, 0.20202020202020202])
+  replicate/r6-account p54: measured 0.0 (n 86, 90 % [0.0, 0.0])
+  r6-account: 38 of 38 replicated
+  replicate/r6-m01 p2: measured 0.007352941176470588 (n 136, 90 % [0.0, 0.022058823529411766])
+  replicate/r6-m01 p3: measured 0.6 (n 23, 90 % [0.5263157894736842, 0.82])
+  r6-m01: 2 of 2 replicated
+  replicate/r6-m04 p2: measured 0.06468979820134287 (n 100, 90 % [-0.20777972855755164, 0.3962439480682959])
+  r6-m04: 1 of 1 replicated
+  replicate/r6-m05 p1: measured 0.9725264665193447 (n 500, 90 % [0.8755671970079961, 1.0891503178902158])
+  replicate/r6-m05 p3: measured 0.9024747907285835 (n 500, 90 % [0.8060242979217614, 1.0172716557188097])
+  r6-m05: 2 of 2 replicated
+  replicate/r6-m10 p1: measured -0.0463768115942029 (n 345, 90 % [-0.06666666666666668, -0.026086956521739132])
+  replicate/r6-m10 p2: measured 0.30830135965451666 (n 345, 90 % [0.2643981334977361, 0.3419517023858386])
+  r6-m10: 2 of 2 replicated
+Traceback (most recent call last):
+  File "/Users/ali/code/iterate-hack-ali-theory/studies/theory/lib/round.py", line 1491, in <module>
+    STAGES[stage](args.folder)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/ali/code/iterate-hack-ali-theory/studies/theory/lib/round.py", line 1383, in replicate
+    for r in run_scripts(folder, f"replicate/{n}{kind}", offline, scripts):
+             ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ali/code/iterate-hack-ali-theory/studies/theory/lib/round.py", line 1114, in run_scripts
+    print(f"  {label} p{q['k']}: " + (f"no number; refuting condition met: {q['refuted_by'][:100]}" if m is None and met
+                                                                            ~~~~~~~~~~~~~~~^^^^^^
+TypeError: 'NoneType' object is not subscriptable

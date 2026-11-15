@@ -1,0 +1,94 @@
+{
+ "name": "r6-m04",
+ "statement": "Along the linear path base + a*(Think-SFT - base), the imitated long-trace length policy is installed at a small dose (by a = 0.25) while the ability to close long traces needs nearly the full delta, so intermediate models write Think-SFT-length answers they cannot finish and hit the 16,384 cap more often than either endpoint, with the excess cap hits confined to problems that are long even for Think-SFT.",
+ "scope": "Covers allenai/Olmo-3-1025-7B interpolated toward allenai/Olmo-3-7B-Think-SFT (wsp1 sft025/sft05 arms), MATH-500 at T 1.0 / top-p 1.0, cap 16,384, with the cue (the plain arms are expected to show the same bump but are not separately predicted). It does not cover the RL-Zero-Math delta (whose gain saturates by a = 0.25, result-4b0d5f), T 0.6 loop-prone sampling, hard328 (where Think-SFT itself has 89 cap hits), or doses above 1. Conflicts were looked for and are listed.",
+ "parent": null,
+ "imports": [
+  {
+   "source": "2512.12895",
+   "finding": "Distilled students loop far more than their teachers (OpenThinker3-1.5B 30% vs QwQ-32B 4% at T=0); imitated long reasoning without the teacher's capacity runs on instead of finishing.",
+   "how": "A midway interpolant is treated as a weak student of the long-trace teacher: it has adopted the teacher's trace length and style but not the capacity to close, so it runs to the cap."
+  },
+  {
+   "source": "2109.01903",
+   "finding": "WiSE-FT: accuracy stays high along the whole linear path between a pretrained model and its fine-tune.",
+   "how": "Serves as the rival: if length and ability move together along the path, cap hits interpolate monotonically between the endpoints and finished length grows roughly in proportion to dose; the mechanism predicts a non-monotone cap-hit bump and early length."
+  }
+ ],
+ "explains": [
+  {
+   "item": "result-bf6124",
+   "quote": "24 of its 46 errors are cap hits",
+   "how": "Even at full dose Think-SFT's main failure is not closing a long trace, so the length policy outruns the closing ability, and more so at lower dose."
+  },
+  {
+   "item": "result-32b7a8",
+   "quote": "cap hits at T 0.6 / top-p 0.95 rise early in RL, then fall",
+   "how": "The same order of arrival (long-answer policy first, closing later) produces a non-monotone cap-hit bump along the RL training path, the analogue of the dose bump predicted here."
+  },
+  {
+   "item": "result-4b0d5f",
+   "quote": "a quarter of the RL weight difference gives most of the gain",
+   "how": "The RL delta carries no large imitated length component, so its gain saturates early without a finishing dip, unlike the Think-SFT delta."
+  },
+  {
+   "item": "result-36e8cd",
+   "quote": "its top-8 directions break the base",
+   "how": "The Think-SFT delta has large-energy components that change behaviour strongly at small dose, consistent with a policy (length/style) that arrives before ability."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "result-d2933e",
+   "quote": "halfway base->Think-SFT with cue 88",
+   "how": "88 between 82 and 92 is about 60 % of the gain at half the dose, near linear, not the 'accuracy needs nearly all of the delta' picture; it fits only if midway ability is higher and excess cap hits cost about 3 points (n=100, SE 4-5)."
+  },
+  {
+   "item": "knowledge-b8d41a",
+   "quote": "Peak at lambda 0.7-0.8, not 1",
+   "how": "In the 1B SFT dose curve intermediate doses beat the endpoint and the stopping change was early end-of-text stops, not a midway finishing dip."
+  }
+ ],
+ "rival": "WiSE-FT-style linear path (2109.01903): length, finishing and accuracy all move in proportion to dose, so cap hits at a = 0.25 and 0.5 lie between the endpoints' (about 5 per 100 each) and finished length at a = 0.25 has moved only about a quarter of the way (in log) from base to Think-SFT. Separating observations: whether an intermediate arm has more cap hits than both endpoints, and whether sft025's finished median length is already near Think-SFT's.",
+ "predictions": [
+  {
+   "experiment": "Cap-hit bump on the first 100 MATH-500: max cap hits of the two intermediate cue arms minus max cap hits of the two endpoint cue arms. The linear-path rival (WiSE-FT) predicts at most 0.",
+   "recipe": "Files: studies/rlneurons/results/wsp1/screen100/base_cue-01/per_problem.json, sft025_cue-01/per_problem.json, sft05_cue-01/per_problem.json, sft1_cue-01/per_problem.json. In each file keep the first row per problem_index (file order). C(arm) = number of kept rows with cap_hit true (missing or null cap_hit counts as false; problems absent from a file add nothing). Statistic D = max(C(sft025_cue), C(sft05_cue)) - max(C(base_cue), C(sft1_cue)), an integer.",
+   "unit": "problems of 100",
+   "value": 4,
+   "low": 1,
+   "high": 9,
+   "refuted_by": "D below 1 (D <= 0)",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Mechanism test, how early the length policy arrives: f = ln(M(sft025_cue)/M(base_cue)) / ln(M(sft1_cue)/M(base_cue)), M = median generated tokens of finished answers. This mechanism says the length is mostly installed at a = 0.25 (f near 0.8); the linear-path rival (WiSE-FT, length proportional to dose in log) gives about 0.25.",
+   "recipe": "Files: studies/rlneurons/results/wsp1/screen100/base_cue-01/per_problem.json, sft025_cue-01/per_problem.json, sft1_cue-01/per_problem.json. Keep the first row per problem_index in each file, then restrict all three to the problem_index values present in all three files. For each arm, M(arm) = median of n_generated over its kept rows with cap_hit false (cap-hit rows excluded; rows with missing n_generated excluded; even count: mean of the two middle values). f = ln(M(sft025_cue)/M(base_cue)) / ln(M(sft1_cue)/M(base_cue)). If M(sft1_cue) <= M(base_cue), f is undefined and counts as refuted.",
+   "unit": "fraction of the log length change",
+   "value": 0.8,
+   "low": 0.45,
+   "high": 1.3,
+   "refuted_by": "f below 0.45, or undefined",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Where the mechanism says the effect should not appear: share of the intermediate arms' cap hits that fall on problems that are short for Think-SFT (at or below sft1_cue's median length). This mechanism (cap hits come from teacher-length traces the midway model cannot close) predicts few; an interpolation-damage rival (midway models degenerate at random, as off-path edits do in result-36e8cd) predicts about 0.5.",
+   "recipe": "Files: studies/rlneurons/results/wsp1/screen100/sft1_cue-01/per_problem.json, sft025_cue-01/per_problem.json, sft05_cue-01/per_problem.json. Keep the first row per problem_index in each file. m = median of n_generated over all kept sft1_cue rows (cap hits included at their stored n_generated; even count: mean of the two middle values). Short set S = problem_index values whose sft1_cue n_generated <= m. Pool the kept rows of sft025_cue and sft05_cue with cap_hit true whose problem_index is present in sft1_cue (a problem can contribute once per arm). Statistic = (pooled cap-hit rows with problem_index in S) / (all pooled cap-hit rows). If there are no pooled cap-hit rows the statistic is undefined and counts as refuted.",
+   "unit": "fraction of intermediate-arm cap hits",
+   "value": 0.12,
+   "low": 0.0,
+   "high": 0.35,
+   "refuted_by": "statistic above 0.35, or undefined",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "GPU: base + 0.5*(Think-SFT - base) (the wsp1 sft05 edit, tokenizer special tokens handled as in jobs/wsp_edit.py), cue prompt, all 500 MATH-500 problems, T 1.0 / top-p 1.0, cap 16,384, one sample, run_cell default seeds; count cap hits. Endpoints at the same setting: base cue 27, Think-SFT cue 25.",
+   "unit": "cap hits of 500",
+   "value": 42,
+   "low": 31,
+   "high": 58,
+   "refuted_by": "30 or fewer cap hits of 500 (no clear excess over the endpoints' 27 and 25)",
+   "gpu_minutes": 50
+  }
+ ]
+}

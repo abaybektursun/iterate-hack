@@ -1,0 +1,58 @@
+{
+ "status": "done",
+ "config": {
+  "finisher": "think",
+  "finisher_path": "/tmp/theta",
+  "plan": "plan_v2.json",
+  "cuts": [
+   25
+  ],
+  "writers": "/runs",
+  "n": null,
+  "out": "/runs/abaybektursun-1115-013421-6338",
+  "dry_run": false,
+  "commit": "141c605a1df46fb4ffa25c120e5bb6f2c26ff46d",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "cap": 16384,
+  "n_requests": 656
+ },
+ "commit": "141c605a1df46fb4ffa25c120e5bb6f2c26ff46d",
+ "job_id": "abaybektursun-1115-013421-6338",
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-15T08:17:18Z",
+ "updated_utc": "2026-11-15T09:59:43Z",
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 28749,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 18432,
+  "load_s": 85.19204688072205
+ },
+ "counts": {
+  "n": 656,
+  "cap_hits": 190,
+  "generated_tokens": 5141980,
+  "prefix_tokens": 1595324,
+  "n_planned": 656,
+  "generation_s": 6059.796454906464,
+  "tokens_per_s": 848.5400521723249
+ },
+ "wall_s": 6164.563617944717
+}

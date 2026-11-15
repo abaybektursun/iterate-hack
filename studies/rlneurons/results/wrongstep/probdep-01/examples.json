@@ -1,0 +1,22 @@
+[
+ {
+  "problem_index": 378,
+  "sample": 3,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 1085,
+  "offset": 1362458,
+  "length": 1000,
+  "mean_d_1000": 0.02405441179871559
+ },
+ {
+  "problem_index": 329,
+  "sample": 1,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 74,
+  "offset": 1184379,
+  "length": 74,
+  "mean_d_1000": 0.46193569898605347
+ }
+]

@@ -10,10 +10,13 @@ from studies.rlneurons.lib import rln4_lib as R
 WRITERS = {"base": "abaybektursun-1114-153825-208b", "rl": "abaybektursun-1114-183640-e828"}   # Day-1 #3 jobs; sample 0, attempt 0
 CUTS = (0, 25, 50, 75, 100)                                                                    # 0 and 100: check arms only
 SEED = 90_000_000
+# Relay on hard328 (specs/SPEC_relay.md, data/handoff/plan_v2.json): Think-SFT cue sample 0 (work-0a00c2) and RL plain (Day-1 #1)
+RELAY_WRITERS = {"think": "abaybektursun-1115-000503-1e5f", "rl": "abaybektursun-1114-151540-86ef"}
+RELAY_SEED = 91_000_000
 
 
-def seed(writer: str, cut: int, index: int) -> int:
-    return SEED + 100_000 * (5 * list(WRITERS).index(writer) + CUTS.index(cut)) + index
+def seed(writer: str, cut: int, index: int, writers=WRITERS, base: int = SEED) -> int:
+    return base + 100_000 * (5 * list(writers).index(writer) + CUTS.index(cut)) + index
 
 
 def sha(x) -> str:
@@ -26,7 +29,7 @@ def writer_texts(path) -> dict:
     with open(path) as f:
         for line in f:
             r = json.loads(line)
-            if r["sample"] == 0 and r["attempt"] == 0:
+            if r["sample"] == 0 and r.get("attempt", 0) == 0:      # the Day-1 #1 rows have no attempt field
                 out[r["problem_index"]] = r
     return out
 

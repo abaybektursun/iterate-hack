@@ -1,0 +1,7 @@
+{
+ "commit": "dd5ec6bd20421170d907930181d7a96b7ff38300",
+ "command": "python -m studies.rlneurons.analysis.thinkvote_read --out studies/rlneurons/results/thinkvote/scored-01",
+ "job_id": null,
+ "gpu": "none (laptop)",
+ "spec": "studies/rlneurons/specs/SPEC_thinkvote.md"
+}

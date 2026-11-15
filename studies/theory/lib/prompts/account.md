@@ -81,7 +81,7 @@ Write result.json:
    "unit": "problems", "value": 40, "low": 30, "high": 50, "refuted_by": "...", "gpu_minutes": 0},
   {"role": "cross", "cell": "<a cell's name>", "part": "<a part's name>", "experiment": "<a number already in stored rows that the account implies about this part>",
    "recipe": "<files and computation>", "unit": "...", "value": 12, "low": 8, "high": 16, "refuted_by": "...", "gpu_minutes": 0},
-  {"experiment": "<the base-only intervention that would recover the largest part still open: model, prompt, sampling, set>",
+  {"experiment": "<a GPU experiment no item reports, exact setting: model, prompt, sampling, set, cap, grader>",
    "unit": "right of 500", "value": 447, "low": 440, "high": 455, "refuted_by": "...", "gpu_minutes": 30}]}
 
 Rules:
@@ -96,9 +96,8 @@ Rules:
 - At least 2 cross-predictions: numbers the stored rows already hold that the account implies about a part and that
   a different budget would get wrong, for example how many problems of a part a stored intervention fixes (the cue,
   a restart on a cap hit, a vote, a weight blend, an intermediate checkpoint).
-- At least 1 GPU prediction: the base-only intervention (no training) that the account says would recover the
-  largest part still open, with the number of right answers it gives, on an experiment that runs in under 60 GPU
-  minutes.
+- At least 1 GPU prediction, on an experiment that runs in under 60 GPU minutes. The base-only change that the
+  account says would recover the largest part still open is the "intervention" below.
 - Every recipe names files from inventory.md marked readable now, the filters, the statistic, and how cap hits, ties
   and missing rows count, precise enough that two people would compute the same number. It states only the
   computation, never the expected result or the account. Someone will implement each recipe literally and run it once.
@@ -108,4 +107,5 @@ Rules:
   refuted_by; the interval is scored as a normal distribution against two readers with no theory who predict the
   same quantities, so a share is worth stating exactly where the account knows something they do not.
 
+$intervention
 Write only result.json. Reply with the gap and the parts with their predicted shares.

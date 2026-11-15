@@ -1,0 +1,5 @@
+{
+ "think": "fallback_4000",
+ "rl": "fallback_16000",
+ "base": "fallback_12000"
+}

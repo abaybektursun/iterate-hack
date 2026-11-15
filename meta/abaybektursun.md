@@ -1,5 +1,82 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 11:45 UTC (theory engine session, after result-3a3af3 and result-8b0706) meta/reviews/abaybektursun/20261115-1126-theory/
+
+- Previous entry's checks belong to the review loop session; this entry covers the theory engine only (work-502f19).
+- Direction. Mission (DIRECTION.md): "An agent swarm measures how much of a published RL gain an untrained base model reaches with no training." Since 09:00: theory round 06 (frustea, engine 6.3, result-8b0706) and the engine's first GPU run (result-3a3af3: plain base, first self-opened draw, 411 of 500 against the cue's 410). The GPU run tests the mission's sentence. Round 06's two surviving theories do not: one needs the RL weight change, the other explains the cue's known gain.
+- Research. Not run because published: a vote over 9 cued-base samples (Wang et al. 2610.06851 Fig. 21 reads about 91 % at 8 votes; result-60d899). Told and narrowed: "the first theory that stands" rests on 1 separating duel test with 22 problems (round-06 `rivals/r5-m03-rival.tests.json`, k2: -0.057 [-0.23, 0.13]); re-scored by engine 7.1 all three round-06 duels are "not separated from rival". The rule that catches it is now code: a duel win needs 2 separating tests, n is the smallest group.
+- Turnaround (cycle.txt, Team 2 h): claim to close median 27 min, upper quartile 131 min, 14 items, 9.0 results per hour; stages to-job 5, jobs 17, to-answer 1. A theory round is far slower: round 06 took 125 min, 68 of them in account stages (before.txt), and the account lost to a one-axis rival in account run 03 (-5.16 nats) and again in round 06 (-3.11).
+- Change (step 2, delete a stage): the account leaves the default round; `--with-account` brings it back (round.py, main 6b21139).
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | minutes per theory round | 125 | not measured yet | | 1 and 0 | before.txt; round 07's run.json |
+  | theories with a computed test (must not fall) | 9 | not measured yet | | 1 and 0 | round-06 metrics_v4.json |
+
+- Failures. Round 06 stopped once on a print of a missing refuting condition (fixed by its operator, f76706a). The GPU estimate of the self-open run was 25 H100 minutes against about 86 measured: the experiments stage estimates cost from token counts with no measured throughput; no code change yet, so the rank by separation per GPU minute is read as a rank, not as a budget.
+- Next entry checks: round 07's minutes against 125; whether any round-07 theory wins 2 separating tests; whether its top-ranked experiment is a change to the base alone that predicts more than 411 of 500.
+
+## 2026-11-15 11:25 UTC (loop cycle 7) meta/reviews/abaybektursun/20261115-1120/
+
+- Target (Team line, 4 h): claim to close median 92 min (142 at 10:18), upper quartile 210 min (210), 23 items; 7.2 results per hour (8.2). The median fell, the rate fell too. Stage medians of abaybektursun's items with jobs: to-job 5, jobs 129, to-answer 5 min (5, 112, 5).
+- Where the jobs are (cycle.txt): Modal 1 running or queued, median wait 12.9 min in the window, 0 failed of 85; vast.ai 57 listed, 9 with run minutes (15.7 to 136.2, median 69.1); AWS 0 listed: no ih job was submitted from this laptop since its records began at 10:21 (2 older ones still run).
+- Open measurements closed: hard328 four-sample rows in git: 3 folders (base, RL, Think-SFT; after.txt) against 0 of 3 at 03:15, 03:53 and 04:55: fixed by their owners. Sharding (named since 21:21 on day 1): `run_cell --shard k/N` with a join is on main (result-77ca14), checked on a 2-shard L40S run of 24 problems; no full sharded cell has run yet.
+- Score of cycle 6 (AWS records read by cycle.py): not measurable yet, no real record.
+- Change (step 2, delete stale text): the row "four-sample rows stay in the Modal Volume" leaves meta/FAILURES.md; its script is gone and the rows are in git.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | hard328 four-sample folders with rows in git | 0 of 3 | 3 | fixed by the owners | 1 | after.txt |
+  | rows of meta/FAILURES.md whose cause is gone | 1 | 0 | deleted | 1 | git diff |
+
+- Next cycle (8) is step-back 2. It checks: the first full sharded cell's minutes against 129; real AWS jobs in cycle.py; whether section 2 (Research) made anything in cycles 5 to 7; the skill edit of cycle 4.
+
+## 2026-11-15 10:25 UTC (loop cycle 6; no tool change) meta/reviews/abaybektursun/20261115-1018/
+
+- Target (Team line, 4 h): claim to close median 142 min (43 at 09:14), upper quartile 210 min (124), 22 items; 8.2 results per hour (11.5). Worse again. Stage medians of abaybektursun's items with jobs: to-job 5, jobs 112, to-answer 5 min (2, 56, 1 at 09:14).
+- Cause, from the records: compute, not process. Modal: median queue wait 38.8 min over 105 jobs in the window, 4 running at 10:18 and credit nearly used. The work is moving to vast.ai (50 jobs listed) and to AWS L40S, where a 500-problem cell is planned at 1.5 to 2 h against about 30 min on an H100.
+- Open measurements closed: vast.ai jobs with run minutes: 6 of 50 (vast_run_minutes.txt), so cycle 5's change now gives job minutes for copied jobs. Of the three ideas: 0 claimed or commented. Two of their contents moved anyway: the four-sample hard328 rows are in git (09:22 message), and work-ab6833 builds `run_cell --shard` with a join. Whether the ideas caused that is not shown.
+- Score of cycle 5 (cycle.py reads vast.ai): no effect on the target; it restores the jobs stage for vast.ai items.
+- Change: none in code. AWS jobs (tool `ih`, kept in another repository) are invisible to cycle.py and leave no local record; I asked the session that owns the tool for a record per job in the shape vast.py writes. One entry was written by another session since cycle 5 (09:45); AGENTS.md rule 8 is unchanged.
+- Added 10:30 UTC: the owner answered within minutes (ih writes runs/ih/<job>.json since 10:21), and cycle.py now reads those records with the vast.ai ones. Tested on two planted records (after.txt): a finished one shows 15.0 run min, one without an end shows "no copy yet"; the 50 vast.ai lines are unchanged. No real ih record exists yet.
+- Next cycle checks: real AWS jobs listed by cycle.py; the first sharded cell's minutes against 112; the 4 h Team line against 142 / 210 min and 8.2 per hour.
+
+## 2026-11-15 09:45 UTC (session critic, after result-a497ff of work-d10ae6) meta/reviews/abaybektursun/20261115-0930/
+
+- Previous entry asked for vast.ai jobs with run minutes: 0. Run from a worktree, cycle.py lists 0 vast.ai jobs (cycle.txt): it globs `<own folder>-*`, so only the main checkout sees the 69 records in worktrees (idea-690b8e). The 16 jobs of this result also have no copy mark: the critic worktree ran vast.py from before 7761fce.
+- Direction: work-d10ae6 tested mission point 3 (a route with no reward, here a decoding rule). Negative: contrast a=1 +1.6 points [-4.2, 7.8] over plain base, 306 continuations per arm. Its RL-finisher arm repeated what the handoff study measured the same night at cap 16,384 (results/handoff/), and its +10.8 sits only in rows cut at 4,000 (result-a497ff comments). The best row is now Think-SFT + cue, vote over 4, 241 of 328 (DIRECTION.md): an SFT-trained model, while the mission says "an untrained base model ... with no training". The owner should say whether SFT models count.
+- Research: the rule is context-aware decoding (Shi et al. 2023, arXiv 2305.14739, softmax((1+a) logits - a logits without the context)). specs/SPEC_prefixtest.md names the arm `cad1` but cites no paper and no published number on math.
+- Turnaround (cycle.txt, 4 h): team claim to close median 46 min (43 at 09:22), upper quartile 161 (124), 36 items, 12.5 results per hour (11.5). Median stages: to-job 2, jobs 104, to-answer 4; jobs slowest. Modal: 100 jobs, 39 failed or cancelled, median wait 30.7 min (30.7), 1,797.5 container min, 18.9 in failed jobs. work-d10ae6: 223 min; 17 Modal jobs, 12 failed (11 died at start on a container holding a cancelled job's log, fixed in 87a710b), then 126 min on vast.ai that cycle.py does not credit.
+- Where the vast.ai time went (before.txt): prefix_cell.py decoded with a plain transformers loop at 165 tokens/s (base), 144 (RL), 66-68 per contrast shard. 7 of 12 jobs ended out of memory (fixed batch, prompts sorted by length; the first base and RL crashes were the full-sequence logits at prefill, 16 x 6,776 x 100,278 x 2 bytes = 20.25 GiB, the log's exact allocation). The study's vLLM engine did 1,210 tokens/s on the same kind of request (handoff base-01). The slow loop also set the cap at 4,000, which 55 % of rows hit.
+- Failures: (1) requirements.txt, installed on the default vast.ai image and in the Modal image, lacks math-verify, which grader v3 imports: 2 of the first 3 jobs died at their first grading (records 7700, c59a). Proposal, not made: add math-verify==0.9.0; it rebuilds the shared Modal image. (2) the cycle.py glob above.
+- Change (step 2, delete; step 1: the transformers loop has one requirement, the contrast arm, which needs logits of a second context that the vLLM engine does not return): prefix_cell.py at --alpha 0 sends all requests to rln4_gen.VllmEngine, as handoff_gen does. The loop remains only for --alpha > 0. Tested on the laptop with a stand-in engine (standin.txt); no GPU run in this review.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | tokens/s, base and RL at --alpha 0 (306 rows each, cap 4,000, 95 GiB vast.ai card) | 165, 144 | not measured yet | | 3 jobs each, 0 | before.txt |
+  | out-of-memory exits at --alpha 0 | 4 of 6 jobs | not measured yet | | 6, 0 | before.txt |
+  | same engine, prefix continuations, base, cap 16,384 (reference, Modal H100) | 1,210 | | | 1 job | results/handoff/base-01/metrics.json |
+  | row fields (must not change) | job a2de's | same | same | 6 stand-in rows | standin.txt |
+
+- Next entry checks: tokens/s and out-of-memory exits of the next prefix_cell --alpha 0 job against 165 / 144 and 4 of 6; the owner's answer on SFT models; idea-690b8e.
+
+## 2026-11-15 09:22 UTC (loop cycle 5) meta/reviews/abaybektursun/20261115-0914/
+
+- Target (Team line, 4 h): claim to close median 43 min (31 at 08:10), upper quartile 124 min (100), 34 items; 11.5 results per hour (16.2). Worse, with fewer sessions active (1 person closed items in the last hour) and the Modal queue of 06:25 to 07:22 inside the window. Weak evidence either way.
+- Score of cycle 4 (skill edit: unmade changes become ideas): too early. 0 of 3 ideas answered or claimed 1 h after posting (idea-24bba3, idea-019309, idea-06a103). The person answered the capacity question off the board (no new Modal jobs; vast.ai).
+- Other sessions wrote 2 review entries since cycle 4 (08:20, 08:45) although the tool notices are off: AGENTS.md rule 8 still asks for them. Waiting for the person.
+- Turnaround: the jobs moved to vast.ai and cycle.py could not see them: 48 job records on this laptop, 0 listed, so the jobs stage of every vast.ai work item read as empty.
+- Change (step 3; steps 1-2: the stage times are the skill's measure, nothing to delete): cycle.py also reads the vast.ai job records of this checkout and its worktrees. vast.py keeps no start or end time, so a vast.ai job has no queue wait and its run ends when `vast.py get` finished the copy.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | vast.ai jobs listed, 4 h | 0 | 43 | visible | 1 and 1 | before.txt, after.txt |
+  | jobs credited to work-fec451 | 0 | 8 | found | 1 item | same |
+  | Modal jobs, failed, median wait, failed min (must not change) | 104, 39, 30.7, 18.9 | 104 of the 147, 39, 30.7, 18.9 | same | 1 and 1 | same |
+  | vast.ai jobs with run minutes | 0 | 0: none has a finished copy mark yet (the mark exists since 08:20) | not measured yet | - | after.txt |
+
+- Next cycle checks: vast.ai jobs with run minutes; the three ideas; the 4 h Team line against 43 / 124 min and 11.5 per hour.
+
 ## 2026-11-15 08:45 UTC (session egate, after result-34897a of work-deec92) meta/reviews/abaybektursun/20261115-0845/
 
 - Direction: work-deec92 asked whether a decoding rule gives the base T 0.6's accuracy without its loops. Negative (-1.4 points at n = 500, three gates), and it closes the decoding-rule line together with result-44b4df. It tested "no reward" but not the 328: the spec allowed the 328 only after a MATH-500 gain. Next step, work-3d1e3b, starts from the bar of 219 (Think-SFT + RL delta on the 328).

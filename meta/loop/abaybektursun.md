@@ -15,3 +15,6 @@ making a change. The skill stays at or under 135 lines; it is edited only at a s
 | 4 | 11-15 08:15 | 103 / 171 min (6, last 1 h); 31 / 100 min (45, last 4 h) | 8.0; 16.2 | step-back 1: no tool change; skill edit: a change the reviewer cannot make becomes an idea with its baseline (131 lines) | reservation removed (cycle 3): helped, weak, 7 of 14 long jobs started against 0 of 21 |
 
 From cycle 5 the target is read on the 4 h window: the 1 h number follows the mix of work, not the changes (stepback.md of cycle 4).
+| 5 | 11-15 09:22 | 43 / 124 min (34, last 4 h) | 11.5 | cycle.py reads vast.ai job records: 0 -> 43 jobs listed | skill edit (cycle 4): too early, 0 of 3 ideas answered after 1 h |
+| 6 | 11-15 10:25 | 142 / 210 min (22, last 4 h) | 8.2 | asked the owner of the AWS job tool for job records; answered in minutes, cycle.py reads them (tested on 2 planted records) | cycle.py reads vast.ai (cycle 5): no effect on the target, 6 of 50 jobs now have run minutes |
+| 7 | 11-15 11:25 | 92 / 210 min (23, last 4 h) | 7.2 | stale row deleted from meta/FAILURES.md (hard328 rows now in git: 0 of 3 -> 3 folders, by their owners) | AWS records in cycle.py (cycle 6): not measurable yet, no real record |
