@@ -73,6 +73,16 @@ def problems(name, fz):
     return [hard[i] for i in clean]
 
 
+def cut_at_shot_stop(tok, out_ids, lps):
+    """An answer that stopped at SHOT_STOP: drop the tokens after it and end the answer with the stop id."""
+    full = tok.decode(out_ids, skip_special_tokens=False)
+    pos = full.rfind(SHOT_STOP) if SHOT_STOP in full else len(full)
+    k = len(out_ids)
+    while k > 0 and len(tok.decode(out_ids[: k - 1], skip_special_tokens=False)) >= pos:
+        k -= 1
+    return list(out_ids[:k]) + [S.STOP_ID], list(lps[:k]) + [0.0]
+
+
 class Canned:
     """Stand-in for J.VllmEngine (--dry-run). Request k in submission order gets: k % 3 == 0 a right answer, 1 a wrong one, 2 a cap
     hit (max_tokens ids, no stop id). Finishes two requests per step. live: the unfinished requests by rid (for the gold)."""
@@ -212,13 +222,8 @@ def main():
             for rid, out_ids, lps, fr in engine.step():
                 req = live.pop(rid)
                 shot_stop = bool(shots) and fr == "stop" and S.STOP_ID not in out_ids
-                if shot_stop:                    # stopped at SHOT_STOP: drop the tokens after it, end the answer with the stop id
-                    full = tok.decode(out_ids, skip_special_tokens=False)
-                    pos = full.rfind(SHOT_STOP) if SHOT_STOP in full else len(full)
-                    k = len(out_ids)
-                    while k > 0 and len(tok.decode(out_ids[: k - 1], skip_special_tokens=False)) >= pos:
-                        k -= 1
-                    out_ids, lps = list(out_ids[:k]) + [S.STOP_ID], list(lps[:k]) + [0.0]
+                if shot_stop:
+                    out_ids, lps = cut_at_shot_stop(tok, out_ids, lps)
                 rec = J.record(tok, req, out_ids, lps, fr)
                 rec.update(R.grade_v3(req["gold"], rec["text"]))
                 n_gen = rec["n_new"]                                        # sampled-token probabilities (raw, before truncation): min-p check
