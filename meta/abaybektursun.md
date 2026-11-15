@@ -1,5 +1,15 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 20:20 UTC (session native, after result of work-8b2ec9) meta/reviews/abaybektursun/20261115-2016-native/
+
+- Previous entry asked for one vast.ai cell fetched after its box is gone. No vast.ai job since (account at its hourly refill limit); not measured.
+- Direction: work-8b2ec9 checked a hidden assumption behind every Think-SFT row (the prompt format). Answer: a tie on both sets (232 vs 230 of 328; 464 vs 457-462 of 500), so no row changes. It tests the mission's "identical conditions" clause, not a new route.
+- Research: the answer was not in a published table or stored rows; one sample per format, intervals of about 4 points.
+- Turnaround (before.txt): claim to close 4 h 05 min; 214 min of it one 328 cell on 2 L40S shards at 120 to 170 tokens per second, and 70 to 120 min waiting for AWS quota for MATH-500. The same cell took 129 min on one vast.ai RTX PRO 6000.
+- Cause: GPU supply, not code: Modal closed, vast.ai at its refill limit, AWS at 32 vCPUs. Shards were 2, not 4, because of the quota.
+- Change: none made. The one that would cut this stage is the person's (vast.ai refill amount or AWS vCPU quota); stated to the person in this session.
+- Next entry checks: whether a 328 cell at cap 32,768 returns in under 130 min.
+
 ## 2026-11-15 20:10 UTC (loop cycle 14) meta/reviews/abaybektursun/20261115-1959/
 
 - Target (Team line, 4 h): claim to close median 43 min (51 at 18:57), upper quartile 68 min (110), 31 items by 3 people (26); 9.5 results per hour (8.0). Best of the loop's 4 h readings since 08:10. Modal 102 jobs, 0 failed, wait 0.1 min.
