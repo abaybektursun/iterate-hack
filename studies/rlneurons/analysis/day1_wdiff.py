@@ -40,6 +40,7 @@ def merged(other, a, prompt, seed, rounding):
 # arm -> (job id, commit, command without --commit, a on the RL line or None, hours); submitted as
 # uv run tools/gpu.py submit h100 --hours <hours> -- "<command> --commit <commit>"
 A, B, C = "6cc0fd79cdda7ff1347b71ac546cf148ba362d64", "f16189ab350d89a1e1debb9799817a9d47292a14", "cf1d944535483446c2047b4097d4af0f2b9f22d2"
+D = "13c691939e00ff27dab0c1f9e6145fb4114af666"
 CELLS = {
     "theta0.5_cue": ("abaybektursun-1114-152855-683b", A, merged("rl", 0.5, "cue", 61000000, "stochastic"), 0.5, 2.5),
     "random_cue": ("abaybektursun-1114-153047-6429", B, merged("rl", "random", "cue", 69000000, "nearest"), None, 2.5),
@@ -50,6 +51,7 @@ CELLS = {
     "rl_cue": ("abaybektursun-1114-153110-e985", B, f"{SETUP}{PY}run_cell --model rl --prompt cue {CELL} --seed 66000000", 1.0, 2.5),
     "theta0.5_plain": ("abaybektursun-1114-160454-c6cf", C, merged("rl", 0.5, "plain", 65000000, "stochastic"), 0.5, 2.5),
     "theta0.25_plain": ("abaybektursun-1114-160500-fa08", C, merged("rl", 0.25, "plain", 64000000, "stochastic"), 0.25, 2.5),
+    "code_cue": ("abaybektursun-1114-162452-0203", D, merged("code", 1, "cue", 68000000, "nearest"), None, 2.5),
 }
 CHECK = ("abaybektursun-1114-152849-c7c6", A, merged("rl", 1, "plain", 45000000, "nearest") + " --n 50", 0.5)
 STATS = "abaybektursun-1114-152416-de10"                 # merge_weights --other rl / --other code, statistics only
