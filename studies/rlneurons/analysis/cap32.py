@@ -17,6 +17,8 @@ OUT = pathlib.Path(__file__).resolve().parents[1] / "results" / "cap32"
 OLD, NEW = 16384, 32768
 STORED_16K = {"sft_cue": [212, 219], "rl_plain": [206], "base_cue": [164]}   # right of 328 at the old cap, earlier jobs (spec)
 out = {"spec": "studies/rlneurons/specs/SPEC_cap32.md", "set": "hard328", "n": 328, "cells": {}}
+if (OUT / "readout.json").exists():                                           # cells of an earlier call are kept
+    out = json.loads((OUT / "readout.json").read_text())
 for arg in sys.argv[1:]:
     name, job = arg.split("=")
     m = json.loads(pathlib.Path(f"runs/{job}/metrics.json").read_text())
