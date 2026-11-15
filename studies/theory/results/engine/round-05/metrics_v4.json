@@ -1,0 +1,1494 @@
+{
+ "theories": {
+  "r4-m06": {
+   "carried_from": null,
+   "offline": 3,
+   "computed": 3,
+   "inside": 2,
+   "outside": 1,
+   "total_gain": -2.716,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "no gain",
+   "reasons": [],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r4-m06:p1",
+     "measured": 1.2357922660952962,
+     "value": 1.05,
+     "low": 0.8,
+     "high": 1.45,
+     "nulls": [
+      {
+       "value": 1.1,
+       "low": 0.75,
+       "high": 1.65
+      },
+      {
+       "value": 1.15,
+       "low": 0.8,
+       "high": 1.65
+      }
+     ],
+     "gain": -0.0581,
+     "k": 1,
+     "inside": true,
+     "refuted_by": "statistic >= 1.50",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m06:p2",
+     "measured": -0.08671144434629674,
+     "value": 0.0,
+     "low": -0.15,
+     "high": 0.15,
+     "nulls": [
+      {
+       "value": 0.04,
+       "low": -0.15,
+       "high": 0.24
+      },
+      {
+       "value": 0.03,
+       "low": -0.15,
+       "high": 0.2
+      }
+     ],
+     "gain": 0.3419,
+     "k": 2,
+     "inside": true,
+     "refuted_by": "D > 0.18",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m06:p3",
+     "measured": 0.440048569316862,
+     "value": 0.12,
+     "low": 0.03,
+     "high": 0.25,
+     "nulls": [
+      {
+       "value": 0.15,
+       "low": -0.05,
+       "high": 0.35
+      },
+      {
+       "value": 0.12,
+       "low": 0.0,
+       "high": 0.26
+      }
+     ],
+     "gain": -3.0,
+     "k": 3,
+     "inside": false,
+     "refuted_by": "statistic <= 0.0",
+     "refuted_by_met": false
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r4-m11": {
+   "carried_from": null,
+   "offline": 5,
+   "computed": 3,
+   "inside": 0,
+   "outside": 3,
+   "total_gain": -4.479,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "reasons": [
+    "p1 First-marker regrade of the base's wrong T1 answers: among T1 rows graded wrong : measured 0.0, predicted 0.11 [0.04, 0.22]; refuting condition met: measured below 0.04",
+    "p2 Direction of first/last disagreement on T1: among rows where the first-marker gr: measured 0.0, predicted 0.72 [0.45, 0.93]; refuting condition met: measured below 0.45, or no discordant rows",
+    "p5 Wrong rate among base answers that keep going and state a new answer after the f: measured 0.17063492063492064, predicted 0.4 [0.2, 0.65]; refuting condition met: measured below 0.20, or no kept rows",
+    "3 of 3 computed predictions outside their 90 % intervals"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r4-m11:p1",
+     "measured": 0.0,
+     "value": 0.11,
+     "low": 0.04,
+     "high": 0.22,
+     "nulls": [
+      {
+       "value": 0.12,
+       "low": 0.04,
+       "high": 0.25
+      },
+      {
+       "value": 0.12,
+       "low": 0.04,
+       "high": 0.25
+      }
+     ],
+     "gain": -0.0998,
+     "k": 1,
+     "inside": false,
+     "refuted_by": "measured below 0.04",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r4-m11:p2",
+     "measured": 0.0,
+     "value": 0.72,
+     "low": 0.45,
+     "high": 0.93,
+     "nulls": [
+      {
+       "value": 0.4,
+       "low": 0.15,
+       "high": 0.7
+      },
+      {
+       "value": 0.3,
+       "low": 0.1,
+       "high": 0.55
+      }
+     ],
+     "gain": -3.0,
+     "k": 2,
+     "inside": false,
+     "refuted_by": "measured below 0.45, or no discordant rows",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r4-m11:p5",
+     "measured": 0.17063492063492064,
+     "value": 0.4,
+     "low": 0.2,
+     "high": 0.65,
+     "nulls": [
+      {
+       "value": 0.25,
+       "low": 0.1,
+       "high": 0.45
+      },
+      {
+       "value": 0.25,
+       "low": 0.1,
+       "high": 0.45
+      }
+     ],
+     "gain": -1.3791,
+     "k": 5,
+     "inside": false,
+     "refuted_by": "measured below 0.20, or no kept rows",
+     "refuted_by_met": true
+    },
+    {
+     "k": 3,
+     "not_computable": "iterate-runs:abaybektursun-1114-153825-208b/answers.jsonl is not readable from this workspace (modal volume get: Error: No such file or directory)"
+    },
+    {
+     "k": 4,
+     "not_computable": "iterate-runs:abaybektursun-1114-183640-e828/answers.jsonl is not readable from this workspace (modal volume get: Error: No such file or directory)"
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r4-m12": {
+   "carried_from": null,
+   "offline": 4,
+   "computed": 4,
+   "inside": 2,
+   "outside": 2,
+   "total_gain": -1.15,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "reasons": [
+    "p1 Numeric-equivalence recovery rate of the cued base's finished, v3-wrong answers : measured 0.0, predicted 0.12 [0.05, 0.25]; refuting condition met: measured below 0.04",
+    "p4 The hard328 gap, RL plain minus base cue, after both are regraded with v3 OR num: measured 12.804878048780488, predicted 11.9 [10.4, 12.5]; refuting condition met: measured at or above 12.8",
+    "2 of 4 computed predictions outside their 90 % intervals"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r4-m12:p1",
+     "measured": 0.0,
+     "value": 0.12,
+     "low": 0.05,
+     "high": 0.25,
+     "nulls": [
+      {
+       "value": 0.08,
+       "low": 0.0,
+       "high": 0.25
+      },
+      {
+       "value": 0.08,
+       "low": 0.0,
+       "high": 0.2
+      }
+     ],
+     "gain": -1.1277,
+     "k": 1,
+     "inside": false,
+     "refuted_by": "measured below 0.04",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r4-m12:p2",
+     "measured": 0.0,
+     "value": 0.03,
+     "low": 0.0,
+     "high": 0.09,
+     "nulls": [
+      {
+       "value": 0.08,
+       "low": 0.0,
+       "high": 0.25
+      },
+      {
+       "value": 0.07,
+       "low": 0.0,
+       "high": 0.2
+      }
+     ],
+     "gain": 0.9157,
+     "k": 2,
+     "inside": true,
+     "refuted_by": "measured above 0.10",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m12:p3",
+     "measured": 0.03125,
+     "value": 0.1,
+     "low": 0.02,
+     "high": 0.22,
+     "nulls": [
+      {
+       "value": 0.0,
+       "low": -0.1,
+       "high": 0.1
+      },
+      {
+       "value": 0.03,
+       "low": -0.1,
+       "high": 0.16
+      }
+     ],
+     "gain": -0.4443,
+     "k": 3,
+     "inside": true,
+     "refuted_by": "measured below 0.01",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m12:p4",
+     "measured": 12.804878048780488,
+     "value": 11.9,
+     "low": 10.4,
+     "high": 12.5,
+     "nulls": [
+      {
+       "value": 12.8,
+       "low": 11.3,
+       "high": 14.2
+      },
+      {
+       "value": 12.5,
+       "low": 10.3,
+       "high": 14.6
+      }
+     ],
+     "gain": -0.4935,
+     "k": 4,
+     "inside": false,
+     "refuted_by": "measured at or above 12.8",
+     "refuted_by_met": true
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r5-m02": {
+   "carried_from": null,
+   "offline": 4,
+   "computed": 4,
+   "inside": 2,
+   "outside": 2,
+   "total_gain": -5.838,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "reasons": [
+    "p1 Base+cue, Levels 1-3: median over problems of the within-problem log length rati: measured 0.19285520124940034, predicted -0.2 [-0.5, -0.03]; refuting condition met: statistic >= 0",
+    "p3 Mechanism test, base+cue Levels 1-3: the share of finished-wrong samples shorter: measured 0.29411764705882354, predicted 0.55 [0.38, 0.72]; refuting condition met: statistic < 0.35",
+    "2 of 4 computed predictions outside their 90 % intervals"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r5-m02:p1",
+     "measured": 0.19285520124940034,
+     "value": -0.2,
+     "low": -0.5,
+     "high": -0.03,
+     "nulls": [
+      {
+       "value": 0.1,
+       "low": -0.4,
+       "high": 0.6
+      },
+      {
+       "value": 0.05,
+       "low": -0.4,
+       "high": 0.5
+      }
+     ],
+     "gain": -2.9874,
+     "k": 1,
+     "inside": false,
+     "refuted_by": "statistic >= 0",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r5-m02:p2",
+     "measured": 0.15549604757875102,
+     "value": 0.3,
+     "low": 0.08,
+     "high": 0.65,
+     "nulls": [
+      {
+       "value": 0.2,
+       "low": -0.2,
+       "high": 0.6
+      },
+      {
+       "value": 0.15,
+       "low": -0.3,
+       "high": 0.6
+      }
+     ],
+     "gain": 0.0572,
+     "k": 2,
+     "inside": true,
+     "refuted_by": "statistic <= 0",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m02:p3",
+     "measured": 0.29411764705882354,
+     "value": 0.55,
+     "low": 0.38,
+     "high": 0.72,
+     "nulls": [
+      {
+       "value": 0.33,
+       "low": 0.15,
+       "high": 0.55
+      },
+      {
+       "value": 0.33,
+       "low": 0.18,
+       "high": 0.5
+      }
+     ],
+     "gain": -2.9636,
+     "k": 3,
+     "inside": false,
+     "refuted_by": "statistic < 0.35",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r5-m02:p4",
+     "measured": 0.24082829519679472,
+     "value": 0.35,
+     "low": 0.08,
+     "high": 0.75,
+     "nulls": [
+      {
+       "value": 0.3,
+       "low": -0.1,
+       "high": 0.7
+      },
+      {
+       "value": 0.2,
+       "low": -0.2,
+       "high": 0.6
+      }
+     ],
+     "gain": 0.0555,
+     "k": 4,
+     "inside": true,
+     "refuted_by": "statistic <= 0",
+     "refuted_by_met": false
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r5-m03": {
+   "carried_from": null,
+   "offline": 3,
+   "computed": 3,
+   "inside": 2,
+   "outside": 1,
+   "total_gain": 1.856,
+   "heldout_claims": 1,
+   "strikes": 0,
+   "state": "survives",
+   "reasons": [],
+   "verdict": "weak: duel state 'loses to rival' (-8.77, all 3 tests favour the rival's mixture account); its only offline gain rests on one test whose value fell outside its interval; and result-284db5 (top8 adds +8.5 on top of the cue, with RL-level Wait rates) contradicts its 'nothing more than the cue' core, although hard328 is formally outside its scope.",
+   "rows": [
+    {
+     "id": "r5-m03:p1",
+     "measured": 0.2529517647514732,
+     "value": 0.12,
+     "low": -0.08,
+     "high": 0.32,
+     "nulls": [
+      {
+       "value": 0.15,
+       "low": -0.15,
+       "high": 0.5
+      },
+      {
+       "value": 0.2,
+       "low": -0.15,
+       "high": 0.55
+      }
+     ],
+     "gain": 0.0079,
+     "k": 1,
+     "inside": true,
+     "refuted_by": "computed median above 0.35 or below -0.10",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m03:p2",
+     "measured": 22,
+     "value": 11,
+     "low": 5,
+     "high": 21,
+     "nulls": [
+      {
+       "value": 8,
+       "low": 2,
+       "high": 16
+      },
+      {
+       "value": 9,
+       "low": 3,
+       "high": 18
+      }
+     ],
+     "gain": 1.8899,
+     "k": 2,
+     "inside": false,
+     "refuted_by": "count at most 4 or at least 23",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m03:p3",
+     "measured": 0.35555555555555557,
+     "value": 0.46,
+     "low": 0.35,
+     "high": 0.57,
+     "nulls": [
+      {
+       "value": 0.5,
+       "low": 0.35,
+       "high": 0.65
+      },
+      {
+       "value": 0.45,
+       "low": 0.33,
+       "high": 0.58
+      }
+     ],
+     "gain": -0.0415,
+     "k": 3,
+     "inside": true,
+     "refuted_by": "computed fraction below 0.33 or above 0.60",
+     "refuted_by_met": false
+    }
+   ],
+   "heldout_rows": [
+    {
+     "id": "t45",
+     "measured": 192,
+     "value": 168,
+     "low": 154,
+     "high": 182,
+     "nulls": [
+      {
+       "value": 185,
+       "low": 167,
+       "high": 203
+      },
+      {
+       "value": 182,
+       "low": 166,
+       "high": 198
+      }
+     ],
+     "gain": -3.0,
+     "strike": false
+    }
+   ]
+  },
+  "r5-m04": {
+   "carried_from": null,
+   "offline": 5,
+   "computed": 5,
+   "inside": 1,
+   "outside": 4,
+   "total_gain": -4.169,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "reasons": [
+    "p1 Count of Think-SFT cue answers that hit the 16,384 cap on MATH-500.: measured 25, predicted 38 [28, 55]; refuting condition met: count below 28 or above 60",
+    "p4 Where Think-SFT's deficit to RL lies: Think-SFT right minus RL (T2) right within: measured 6, predicted -7 [-15, 0]; refuting condition met: difference above +1",
+    "4 of 5 computed predictions outside their 90 % intervals"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r5-m04:p1",
+     "measured": 25,
+     "value": 38,
+     "low": 28,
+     "high": 55,
+     "nulls": [
+      {
+       "value": 28,
+       "low": 10,
+       "high": 50
+      },
+      {
+       "value": 30,
+       "low": 12,
+       "high": 55
+      }
+     ],
+     "gain": -0.7753,
+     "k": 1,
+     "inside": false,
+     "refuted_by": "count below 28 or above 60",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r5-m04:p2",
+     "measured": 0.5217391304347826,
+     "value": 0.72,
+     "low": 0.55,
+     "high": 0.88,
+     "nulls": [
+      {
+       "value": 0.6,
+       "low": 0.35,
+       "high": 0.85
+      },
+      {
+       "value": 0.6,
+       "low": 0.35,
+       "high": 0.85
+      }
+     ],
+     "gain": -1.4054,
+     "k": 2,
+     "inside": false,
+     "refuted_by": "fraction below 0.50",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m04:p3",
+     "measured": 0.68,
+     "value": 0.6,
+     "low": 0.42,
+     "high": 0.78,
+     "nulls": [
+      {
+       "value": 0.6,
+       "low": 0.38,
+       "high": 0.8
+      },
+      {
+       "value": 0.6,
+       "low": 0.4,
+       "high": 0.8
+      }
+     ],
+     "gain": 0.0688,
+     "k": 3,
+     "inside": true,
+     "refuted_by": "fraction below 0.40",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m04:p4",
+     "measured": 6,
+     "value": -7,
+     "low": -15,
+     "high": 0,
+     "nulls": [
+      {
+       "value": -6,
+       "low": -16,
+       "high": 3
+      },
+      {
+       "value": -7,
+       "low": -16,
+       "high": 2
+      }
+     ],
+     "gain": -1.4106,
+     "k": 4,
+     "inside": false,
+     "refuted_by": "difference above +1",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r5-m04:p5",
+     "measured": 4887.964,
+     "value": 6800,
+     "low": 5000,
+     "high": 9500,
+     "nulls": [
+      {
+       "value": 5800,
+       "low": 3800,
+       "high": 8500
+      },
+      {
+       "value": 6000,
+       "low": 3500,
+       "high": 9000
+      }
+     ],
+     "gain": -0.6463,
+     "k": 5,
+     "inside": false,
+     "refuted_by": "mean below 4,700",
+     "refuted_by_met": false
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r5-m05": {
+   "carried_from": null,
+   "offline": 3,
+   "computed": 3,
+   "inside": 1,
+   "outside": 2,
+   "total_gain": -6.12,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "reasons": [
+    "p1 Per-hold-on revision rate, base vs RL, on stored MATH-500 text: the fraction of : measured 1.0400414574092287, predicted 0.55 [0.35, 0.78]; refuting condition met: measured ratio at or above 0.80",
+    "p2 Among the base's finished-wrong MATH-500 answers that contain at least one hold-: measured 0.5833333333333334, predicted 0.8 [0.66, 0.93]; refuting condition met: measured fraction below 0.60",
+    "2 of 3 computed predictions outside their 90 % intervals"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r5-m05:p1",
+     "measured": 1.0400414574092287,
+     "value": 0.55,
+     "low": 0.35,
+     "high": 0.78,
+     "nulls": [
+      {
+       "value": 1.0,
+       "low": 0.8,
+       "high": 1.25
+      },
+      {
+       "value": 1.0,
+       "low": 0.8,
+       "high": 1.25
+      }
+     ],
+     "gain": -3.0,
+     "k": 1,
+     "inside": false,
+     "refuted_by": "measured ratio at or above 0.80",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r5-m05:p2",
+     "measured": 0.5833333333333334,
+     "value": 0.8,
+     "low": 0.66,
+     "high": 0.93,
+     "nulls": [
+      {
+       "value": 0.6,
+       "low": 0.38,
+       "high": 0.82
+      },
+      {
+       "value": 0.65,
+       "low": 0.45,
+       "high": 0.85
+      }
+     ],
+     "gain": -2.9657,
+     "k": 2,
+     "inside": false,
+     "refuted_by": "measured fraction below 0.60",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r5-m05:p3",
+     "measured": 1.0147852281544179,
+     "value": 0.95,
+     "low": 0.65,
+     "high": 1.4,
+     "nulls": [
+      {
+       "value": 1.0,
+       "low": 0.7,
+       "high": 1.4
+      },
+      {
+       "value": 0.95,
+       "low": 0.7,
+       "high": 1.3
+      }
+     ],
+     "gain": -0.1548,
+     "k": 3,
+     "inside": true,
+     "refuted_by": "measured ratio below 0.62 or above 1.5, or undefined",
+     "refuted_by_met": false
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r5-m06": {
+   "carried_from": null,
+   "offline": 3,
+   "computed": 3,
+   "inside": 2,
+   "outside": 1,
+   "total_gain": 4.758,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "reasons": [
+    "p3 Per-sample base success rate in the independent pool on the 17 RL-solved base-0/: measured 0.23684210526315788, predicted 0.09 [0.03, 0.18]; refuting condition met: measured below 0.03 or above 0.18"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r5-m06:p1",
+     "measured": 0.6470588235294118,
+     "value": 0.53,
+     "low": 0.29,
+     "high": 0.76,
+     "nulls": [
+      {
+       "value": 0.35,
+       "low": 0.12,
+       "high": 0.6
+      },
+      {
+       "value": 0.4,
+       "low": 0.15,
+       "high": 0.65
+      }
+     ],
+     "gain": 1.341,
+     "k": 1,
+     "inside": true,
+     "refuted_by": "measured below 0.29 (4 or fewer of 17)",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m06:p2",
+     "measured": 0.5220588235294118,
+     "value": 0.28,
+     "low": 0.0,
+     "high": 0.56,
+     "nulls": [
+      {
+       "value": 0.22,
+       "low": -0.03,
+       "high": 0.48
+      },
+      {
+       "value": 0.28,
+       "low": 0.0,
+       "high": 0.5
+      }
+     ],
+     "gain": 0.417,
+     "k": 2,
+     "inside": true,
+     "refuted_by": "A - B measured at or below 0.0",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m06:p3",
+     "measured": 0.23684210526315788,
+     "value": 0.09,
+     "low": 0.03,
+     "high": 0.18,
+     "nulls": [
+      {
+       "value": 0.06,
+       "low": 0.02,
+       "high": 0.13
+      },
+      {
+       "value": 0.08,
+       "low": 0.03,
+       "high": 0.16
+      }
+     ],
+     "gain": 3.0,
+     "k": 3,
+     "inside": false,
+     "refuted_by": "measured below 0.03 or above 0.18",
+     "refuted_by_met": true
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r5-m07": {
+   "carried_from": null,
+   "offline": 4,
+   "computed": 3,
+   "inside": 1,
+   "outside": 2,
+   "total_gain": -3.442,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "reasons": [
+    "p1 Share of step-100 plain MATH-500 answers at T 0.6 / top-p 0.95 that open with th: measured 0.034, predicted 0.68 [0.4, 0.95]; refuting condition met: measured below 0.35",
+    "p2 Mechanism test: within the step-100 plain T 0.6 answers, the cap-hit rate of ans: measured None, predicted 0.11 [0.03, 0.2]; refuting condition met: measured below 0.02, or either group has fewer than 20 rows",
+    "p4 Share of step-100's finished plain T 0.6 answers that still state the result on : measured 0.04534005037783375, predicted 0.3 [0.17, 0.47]; refuting condition met: measured below 0.15",
+    "2 of 3 computed predictions outside their 90 % intervals"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r5-m07:p1",
+     "measured": 0.034,
+     "value": 0.68,
+     "low": 0.4,
+     "high": 0.95,
+     "nulls": [
+      {
+       "value": 0.3,
+       "low": 0.02,
+       "high": 0.75
+      },
+      {
+       "value": 0.3,
+       "low": 0.02,
+       "high": 0.75
+      }
+     ],
+     "gain": -3.0,
+     "k": 1,
+     "inside": false,
+     "refuted_by": "measured below 0.35",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r5-m07:p3",
+     "measured": 0.14826723829939265,
+     "value": 0.13,
+     "low": 0.04,
+     "high": 0.24,
+     "nulls": [
+      {
+       "value": 0.08,
+       "low": -0.03,
+       "high": 0.2
+      },
+      {
+       "value": 0.08,
+       "low": -0.03,
+       "high": 0.2
+      }
+     ],
+     "gain": 0.5714,
+     "k": 3,
+     "inside": true,
+     "refuted_by": "measured below 0.03, or either group has fewer than 20 rows",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m07:p4",
+     "measured": 0.04534005037783375,
+     "value": 0.3,
+     "low": 0.17,
+     "high": 0.47,
+     "nulls": [
+      {
+       "value": 0.35,
+       "low": 0.1,
+       "high": 0.55
+      },
+      {
+       "value": 0.35,
+       "low": 0.1,
+       "high": 0.55
+      }
+     ],
+     "gain": -1.0137,
+     "k": 4,
+     "inside": false,
+     "refuted_by": "measured below 0.15",
+     "refuted_by_met": true
+    },
+    {
+     "k": 2,
+     "refuted_without_number": "measured below 0.02, or either group has fewer than 20 rows"
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r5-m08": {
+   "carried_from": null,
+   "offline": 4,
+   "computed": 4,
+   "inside": 4,
+   "outside": 0,
+   "total_gain": 5.757,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "reasons": [
+    "review: refuted: duel state beats rival and its offline quartile predictions hold, but its stated mechanism (Code 3.0's longest MATH-500 problems driven to the 16,384 cap at T 1.0) is contradicted by the scor"
+   ],
+   "verdict": "refuted: duel state beats rival and its offline quartile predictions hold, but its stated mechanism (Code 3.0's longest MATH-500 problems driven to the 16,384 cap at T 1.0) is contradicted by the scored cell itself, which has 5 cap hits on 500 problems (base 27, Code 3.1 7), so the length-confined deficit it predicted comes from something other than cap hits.",
+   "rows": [
+    {
+     "id": "r5-m08:p1",
+     "measured": 0.7948717948717948,
+     "value": 0.62,
+     "low": 0.45,
+     "high": 0.88,
+     "nulls": [
+      {
+       "value": 0.45,
+       "low": 0.2,
+       "high": 0.72
+      },
+      {
+       "value": 0.45,
+       "low": 0.2,
+       "high": 0.7
+      }
+     ],
+     "gain": 1.75,
+     "k": 1,
+     "inside": true,
+     "refuted_by": "computed D_4 / D below 0.45",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m08:p2",
+     "measured": -11.25,
+     "value": -6,
+     "low": -14,
+     "high": 0.5,
+     "nulls": [
+      {
+       "value": -3,
+       "low": -12,
+       "high": 6
+      },
+      {
+       "value": -3,
+       "low": -12,
+       "high": 6
+      }
+     ],
+     "gain": 0.6436,
+     "k": 2,
+     "inside": true,
+     "refuted_by": "computed difference above +1.0",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m08:p3",
+     "measured": -3,
+     "value": 1.5,
+     "low": -4,
+     "high": 5,
+     "nulls": [
+      {
+       "value": 10,
+       "low": 2,
+       "high": 20
+      },
+      {
+       "value": 15,
+       "low": 5,
+       "high": 26
+      }
+     ],
+     "gain": 2.6168,
+     "k": 3,
+     "inside": true,
+     "refuted_by": "computed difference above 5",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m08:p4",
+     "measured": 7.25,
+     "value": 5,
+     "low": 0,
+     "high": 11,
+     "nulls": [
+      {
+       "value": 2,
+       "low": -6,
+       "high": 9
+      },
+      {
+       "value": 2,
+       "low": -6,
+       "high": 9
+      }
+     ],
+     "gain": 0.7467,
+     "k": 4,
+     "inside": true,
+     "refuted_by": "computed difference below -0.5",
+     "refuted_by_met": false
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r5-m09": {
+   "carried_from": null,
+   "offline": 4,
+   "computed": 4,
+   "inside": 1,
+   "outside": 3,
+   "total_gain": -8.131,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "reasons": [
+    "p1 Share of base finished-wrong judged items flagged answer_from_problem in the ana: measured 0.0, predicted 0.25 [0.15, 0.37]; refuting condition met: measured below 0.15",
+    "p3 Mechanism test: base minus RL share of numeric finished-wrong finals that equal : measured -0.04266831038969934, predicted 0.14 [0.05, 0.25]; refuting condition met: measured below 0.04",
+    "p4 Excess over coincidence: base numeric finished-wrong match share minus the share: measured -0.03404678563914232, predicted 0.15 [0.06, 0.26]; refuting condition met: measured below 0.05",
+    "3 of 4 computed predictions outside their 90 % intervals"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r5-m09:p1",
+     "measured": 0.0,
+     "value": 0.25,
+     "low": 0.15,
+     "high": 0.37,
+     "nulls": [
+      {
+       "value": 0.1,
+       "low": 0.02,
+       "high": 0.25
+      },
+      {
+       "value": 0.12,
+       "low": 0.03,
+       "high": 0.25
+      }
+     ],
+     "gain": -3.0,
+     "k": 1,
+     "inside": false,
+     "refuted_by": "measured below 0.15",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r5-m09:p2",
+     "measured": 0.0,
+     "value": 0.03,
+     "low": 0.0,
+     "high": 0.1,
+     "nulls": [
+      {
+       "value": 0.07,
+       "low": 0.0,
+       "high": 0.2
+      },
+      {
+       "value": 0.07,
+       "low": 0.0,
+       "high": 0.2
+      }
+     ],
+     "gain": 0.869,
+     "k": 2,
+     "inside": true,
+     "refuted_by": "measured above 0.10",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m09:p3",
+     "measured": -0.04266831038969934,
+     "value": 0.14,
+     "low": 0.05,
+     "high": 0.25,
+     "nulls": [
+      {
+       "value": 0.05,
+       "low": -0.08,
+       "high": 0.18
+      },
+      {
+       "value": 0.04,
+       "low": -0.06,
+       "high": 0.14
+      }
+     ],
+     "gain": -3.0,
+     "k": 3,
+     "inside": false,
+     "refuted_by": "measured below 0.04",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r5-m09:p4",
+     "measured": -0.03404678563914232,
+     "value": 0.15,
+     "low": 0.06,
+     "high": 0.26,
+     "nulls": [
+      {
+       "value": 0.03,
+       "low": -0.08,
+       "high": 0.14
+      },
+      {
+       "value": 0.03,
+       "low": -0.06,
+       "high": 0.12
+      }
+     ],
+     "gain": -3.0,
+     "k": 4,
+     "inside": false,
+     "refuted_by": "measured below 0.05",
+     "refuted_by_met": true
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r5-m10": {
+   "carried_from": null,
+   "offline": 3,
+   "computed": 3,
+   "inside": 3,
+   "outside": 0,
+   "total_gain": 0.722,
+   "heldout_claims": 6,
+   "strikes": 0,
+   "state": "refuted",
+   "reasons": [
+    "review: refuted: duel state 'loses to rival' (-8.84 nats). In scope, on its own T3 file, plain answers that do not self-open but self-check later score +0.36 above other plain answers and come within 0.075 of"
+   ],
+   "verdict": "refuted: duel state 'loses to rival' (-8.84 nats). In scope, on its own T3 file, plain answers that do not self-open but self-check later score +0.36 above other plain answers and come within 0.075 of cued answers on the same problems, which contradicts 'nothing after the opening adds'. Result-460e0a's 410 -> 372 drop under a fixed cue points the same way, and the part that survives (self-opened answers score like cued ones) is largely in Wang et al. App C.8.",
+   "rows": [
+    {
+     "id": "r5-m10:p1",
+     "measured": 0.0,
+     "value": -0.02,
+     "low": -0.09,
+     "high": 0.05,
+     "nulls": [
+      {
+       "value": -0.05,
+       "low": -0.18,
+       "high": 0.07
+      },
+      {
+       "value": -0.05,
+       "low": -0.15,
+       "high": 0.04
+      }
+     ],
+     "gain": 0.6261,
+     "k": 1,
+     "inside": true,
+     "refuted_by": "D < -0.10 or D > 0.08",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m10:p2",
+     "measured": 1.2127264282396655,
+     "value": 1.0,
+     "low": 0.78,
+     "high": 1.3,
+     "nulls": [
+      {
+       "value": 0.9,
+       "low": 0.55,
+       "high": 1.3
+      },
+      {
+       "value": 0.9,
+       "low": 0.6,
+       "high": 1.3
+      }
+     ],
+     "gain": 0.436,
+     "k": 2,
+     "inside": true,
+     "refuted_by": "R < 0.70 or R > 1.40",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m10:p3",
+     "measured": 0.5426055968975998,
+     "value": 0.62,
+     "low": 0.54,
+     "high": 0.74,
+     "nulls": [
+      {
+       "value": 0.6,
+       "low": 0.49,
+       "high": 0.72
+      },
+      {
+       "value": 0.6,
+       "low": 0.5,
+       "high": 0.72
+      }
+     ],
+     "gain": -0.3402,
+     "k": 3,
+     "inside": true,
+     "refuted_by": "AUROC < 0.53",
+     "refuted_by_met": false
+    }
+   ],
+   "heldout_rows": [
+    {
+     "id": "t52",
+     "measured": 85,
+     "value": 74,
+     "low": 60,
+     "high": 86,
+     "nulls": [
+      {
+       "value": 65,
+       "low": 35,
+       "high": 86
+      },
+      {
+       "value": 58,
+       "low": 33,
+       "high": 82
+      }
+     ],
+     "gain": 0.8502,
+     "strike": false
+    },
+    {
+     "id": "t53",
+     "measured": 38,
+     "value": 34,
+     "low": 25,
+     "high": 43,
+     "nulls": [
+      {
+       "value": 30,
+       "low": 14,
+       "high": 42
+      },
+      {
+       "value": 30,
+       "low": 15,
+       "high": 42
+      }
+     ],
+     "gain": 0.6149,
+     "strike": false
+    },
+    {
+     "id": "t67",
+     "measured": 430,
+     "value": 409,
+     "low": 395,
+     "high": 423,
+     "nulls": [
+      {
+       "value": 410,
+       "low": 398,
+       "high": 422
+      },
+      {
+       "value": 410,
+       "low": 397,
+       "high": 422
+      }
+     ],
+     "gain": 0.425,
+     "strike": false
+    },
+    {
+     "id": "t70",
+     "measured": 372,
+     "value": 407,
+     "low": 392,
+     "high": 422,
+     "nulls": [
+      {
+       "value": 405,
+       "low": 389,
+       "high": 420
+      },
+      {
+       "value": 405,
+       "low": 388,
+       "high": 420
+      }
+     ],
+     "gain": -1.3883,
+     "strike": false
+    },
+    {
+     "id": "t64",
+     "measured": 413,
+     "value": 405,
+     "low": 388,
+     "high": 422,
+     "nulls": [
+      {
+       "value": 408,
+       "low": 394,
+       "high": 421
+      },
+      {
+       "value": 405,
+       "low": 390,
+       "high": 420
+      }
+     ],
+     "gain": -0.2038,
+     "strike": false
+    },
+    {
+     "id": "t66",
+     "measured": 421,
+     "value": 405,
+     "low": 388,
+     "high": 422,
+     "nulls": [
+      {
+       "value": 405,
+       "low": 389,
+       "high": 420
+      },
+      {
+       "value": 405,
+       "low": 388,
+       "high": 420
+      }
+     ],
+     "gain": 0.1219,
+     "strike": false
+    }
+   ]
+  },
+  "r5-m11": {
+   "carried_from": null,
+   "offline": 3,
+   "computed": 3,
+   "inside": 1,
+   "outside": 2,
+   "total_gain": -2.501,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "reasons": [
+    "p2 Share of hard328 answers that contain code-style markers, Code-RL 3.1 cue minus : measured 0.0, predicted 0.12 [0.04, 0.35]; refuting condition met: difference measured below 0.04",
+    "p3 Within Code-RL 3.1 cue answers on hard328, the accuracy of marked (code-style) a: measured -0.12345679012345678, predicted 0.08 [-0.05, 0.25]; refuting condition met: statistic measured below -0.05",
+    "2 of 3 computed predictions outside their 90 % intervals"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r5-m11:p1",
+     "measured": 0.021241830065359478,
+     "value": 0.045,
+     "low": -0.01,
+     "high": 0.1,
+     "nulls": [
+      {
+       "value": 0.02,
+       "low": -0.03,
+       "high": 0.07
+      },
+      {
+       "value": 0.025,
+       "low": -0.03,
+       "high": 0.08
+      }
+     ],
+     "gain": -0.2978,
+     "k": 1,
+     "inside": true,
+     "refuted_by": "S measured below -0.01",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m11:p2",
+     "measured": 0.0,
+     "value": 0.12,
+     "low": 0.04,
+     "high": 0.35,
+     "nulls": [
+      {
+       "value": 0.1,
+       "low": 0.0,
+       "high": 0.3
+      },
+      {
+       "value": 0.1,
+       "low": -0.02,
+       "high": 0.3
+      }
+     ],
+     "gain": -0.2466,
+     "k": 2,
+     "inside": false,
+     "refuted_by": "difference measured below 0.04",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r5-m11:p3",
+     "measured": -0.12345679012345678,
+     "value": 0.08,
+     "low": -0.05,
+     "high": 0.25,
+     "nulls": [
+      {
+       "value": -0.03,
+       "low": -0.2,
+       "high": 0.15
+      },
+      {
+       "value": -0.03,
+       "low": -0.2,
+       "high": 0.12
+      }
+     ],
+     "gain": -1.9562,
+     "k": 3,
+     "inside": false,
+     "refuted_by": "statistic measured below -0.05",
+     "refuted_by_met": true
+    }
+   ],
+   "heldout_rows": []
+  }
+ }
+}

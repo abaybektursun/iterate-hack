@@ -1,0 +1,2 @@
+{"measured": 0.35555555555555557, "refuted_by_met": false, "alt_measured": 0.3888888888888889, "not_computable": null, "example_row": {"t1t2": {"problem_index": 11, "subject": "intermediate_algebra", "level5": true, "cell": "neither", "t1_right": 0, "t2_right": 0, "t1_cap_hit": true, "t2_cap_hit": false, "t1_generated_tokens": 16384, "t2_generated_tokens": 8316, "failure_type": null, "label_from_tail_only": false}, "top8": {"problem_index": 11, "score_v3": 0, "cap_hit": false, "n_generated": 12244}}}
+den=90 num=32 den_alt=90 num_alt=35

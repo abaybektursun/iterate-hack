@@ -1,0 +1,1 @@
+{"measured": 0.6875, "n": 16, "interval": [0.5, 0.875], "interval_kind": "bootstrap", "refuted_by_met": false, "alt_measured": 0.6875, "not_computable": null, "example_row": {"problem_index": 21, "sample": 0, "attempt": 0, "seed": 41000021, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "13535"}}

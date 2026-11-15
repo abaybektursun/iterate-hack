@@ -1,0 +1,81 @@
+{
+ "theory": "r5-m08",
+ "turn": 2,
+ "tests": [
+  {
+   "k": 3,
+   "experiment": "Code 3.0 cue accuracy minus held-out base accuracy, on Q4 problems that base cue samples 0 and 1 both solve.",
+   "recipe": "Files: studies/rlneurons/results/axis/math500-01/vectors.json with manifest.json, and studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. Q4: sort the 500 problems by t2_generated_tokens ascending, ties broken by problem_index ascending, and take ranks 376-500 (a cap hit counts as its stored token count). Base arms: the 4 base cue sample arms (manifest model allenai/Olmo-3-1025-7B, cue prompt), ordered by sample index 0-3 as given in the manifest. Exclude derived arms (base vote, base tie_short) and the random-difference control. Code 3.0 arm: the arm with manifest model allenai/Olmo-3-7B-RL-Zero-Code and cue prompt. Align by problem_index. A problem missing from an arm counts as 0 in that arm. Subset E = Q4 problems where base sample 0 = 1 and base sample 1 = 1. Statistic: (mean of the Code 3.0 cue arm over E) minus (mean over E of (base sample 2 + base sample 3) / 2). If E is empty, report 0.",
+   "unit": "fraction of problems",
+   "refuted_by": null,
+   "script": "rivals/r5-m08.turn2/p3.py",
+   "measured": -0.1847826086956521,
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0.16304347826086962,
+   "not_computable": null,
+   "note": "Files: studies/rlneurons/results/axis/math500-01/vectors.json + manifest.json, studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (all committed, no fetch). manifest.json has no 'model' field: base arms are found as family base_cue, prompt cue, derived_from null, with 'sample i' in 'what' (base_cue_s0..s3, which excludes base_vote4/base_tie_short), and the Code 3.0 arm as the only non-derived cue arm whose 'what' names Olmo-3-7B-RL-Zero-Code (code30_cue). random_cue is never used. Q4 = ranks 376-500 by t2_generated_tokens (the RL T2 answer length, cap hits at their stored count), ties by problem_index. A null or missing vector entry counts as 0. E empty -> 0. alt_measured is the same statistic with the Code-RL 3.1 cue arm (code_cue), in case 'Code 3.0' was meant as the Code-RL model of the main study (the inventory names 3.1 as Code-RL). refuted_by is null, so refuted_by_met is always false.",
+   "example_row": {
+    "problem_index": 428,
+    "t2_generated_tokens": 6491,
+    "t2_cap_hit": false,
+    "code_arm": "code30_cue",
+    "code_cue": 1,
+    "base_s0": 1,
+    "base_s1": 1,
+    "base_s2": 1,
+    "base_s3": 1
+   }
+  },
+  {
+   "k": 4,
+   "experiment": "Share of Code 3.0's Q4 deficit to the held-out base that lies on Q4 problems where base cue samples 0 and 1 are not both right.",
+   "recipe": "Files, Q4, base arms (samples 0-3 in manifest order) and Code 3.0 cue arm exactly as in the first test. Missing rows count as 0. For each Q4 problem i, d_i = (base sample 2 + base sample 3) / 2 - Code 3.0 cue. H = Q4 problems where base sample 0 + base sample 1 <= 1. Statistic: (sum of d_i over H) / (sum of d_i over all 125 Q4 problems). If the denominator is <= 0, report 0.",
+   "unit": "fraction of Code 3.0's Q4 deficit",
+   "refuted_by": null,
+   "script": "rivals/r5-m08.turn2/p4.py",
+   "measured": 0.41379310344827586,
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0.0,
+   "not_computable": null,
+   "note": "Same files, arms and Q4 as k=3. d_i = (base s2 + base s3)/2 - code30_cue over all 125 Q4 problems; H = Q4 with base s0 + s1 <= 1 (not both right). Ratio sum_H d / sum_Q4 d; denominator <= 0 -> 0. The ratio can be > 1 or < 0 when d has mixed signs. alt_measured uses code_cue (Code-RL 3.1) instead of code30_cue. example_row is the first H problem (by length rank).",
+   "example_row": {
+    "problem_index": 15,
+    "t2_generated_tokens": 6510,
+    "t2_cap_hit": false,
+    "code_arm": "code30_cue",
+    "code_cue": 1,
+    "base_s0": 0,
+    "base_s1": 1,
+    "base_s2": 1,
+    "base_s3": 1
+   }
+  },
+  {
+   "k": 5,
+   "experiment": "Code 3.0 cue accuracy minus held-out base accuracy, on short-half (Q1+Q2) problems where base cue samples 0 and 1 are not both right.",
+   "recipe": "Files, base arms (samples 0-3 in manifest order) and Code 3.0 cue arm as in the first test. Q1+Q2 = the 250 problems with the lowest t2_generated_tokens (ties by problem_index ascending; ranks 1-250). Missing rows count as 0. Subset H2 = Q1+Q2 problems where base sample 0 + base sample 1 <= 1. Statistic: (mean of the Code 3.0 cue arm over H2) minus (mean over H2 of (base sample 2 + base sample 3) / 2). If H2 is empty, report 0.",
+   "unit": "fraction of problems",
+   "refuted_by": null,
+   "script": "rivals/r5-m08.turn2/p5.py",
+   "measured": 0.07894736842105265,
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": -0.02631578947368418,
+   "not_computable": null,
+   "note": "Same files and arms as k=3. Q1+Q2 = ranks 1-250 by t2_generated_tokens ascending, ties by problem_index. H2 = those with base s0 + s1 <= 1. Statistic = mean code30_cue over H2 minus mean (s2+s3)/2 over H2; empty -> 0. H2 may be small (the base gets most short problems right), so the number is noisy. alt_measured uses code_cue (Code-RL 3.1).",
+   "example_row": {
+    "problem_index": 313,
+    "t2_generated_tokens": 993,
+    "t2_cap_hit": false,
+    "code_arm": "code30_cue",
+    "code_cue": 1,
+    "base_s0": 0,
+    "base_s1": 1,
+    "base_s2": 1,
+    "base_s3": 1
+   }
+  }
+ ]
+}

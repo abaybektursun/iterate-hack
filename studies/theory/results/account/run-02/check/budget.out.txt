@@ -1,0 +1,75 @@
+smallest E over all gap problems of all cells: 3
+
+=== rules as written (full E)
+math500-rl-T1: n gap 65, base-only 12, E rows per gap problem {4: 65}
+  loop                0/65 = 0.000  90% [0.000, 0.000]
+  budget             16/65 = 0.246  90% [0.169, 0.338]
+  answer-statement    2/65 = 0.031  90% [0.000, 0.062]
+  reliability        43/65 = 0.662  90% [0.569, 0.754]
+  capability          4/65 = 0.062  90% [0.015, 0.108]
+  unassigned          0/65 = 0.000  90% [0.000, 0.000]
+math500-theta05-T1: n gap 53, base-only 11, E rows per gap problem {4: 53}
+  loop                0/53 = 0.000  90% [0.000, 0.000]
+  budget             11/53 = 0.208  90% [0.113, 0.302]
+  answer-statement    2/53 = 0.038  90% [0.000, 0.075]
+  reliability        37/53 = 0.698  90% [0.585, 0.792]
+  capability          3/53 = 0.057  90% [0.019, 0.113]
+  unassigned          0/53 = 0.000  90% [0.000, 0.000]
+null: math500-random-T1: n gap 42, base-only 35, E rows per gap problem {4: 42}
+  loop                0/42 = 0.000  90% [0.000, 0.000]
+  budget              7/42 = 0.167  90% [0.071, 0.262]
+  answer-statement    1/42 = 0.024  90% [0.000, 0.071]
+  reliability        30/42 = 0.714  90% [0.595, 0.833]
+  capability          4/42 = 0.095  90% [0.024, 0.167]
+  unassigned          0/42 = 0.000  90% [0.000, 0.000]
+hard328-code-T1: n gap 37, base-only 14, E rows per gap problem {3: 37}
+  loop                0/37 = 0.000  90% [0.000, 0.000]
+  budget             10/37 = 0.270  90% [0.162, 0.405]
+  answer-statement    1/37 = 0.027  90% [0.000, 0.081]
+  reliability        16/37 = 0.432  90% [0.297, 0.568]
+  capability         10/37 = 0.270  90% [0.162, 0.378]
+  unassigned          0/37 = 0.000  90% [0.000, 0.000]
+math500-s0400-T06: n gap 66, base-only 27, E rows per gap problem {4: 66}
+  loop               29/66 = 0.439  90% [0.333, 0.530]
+  budget              8/66 = 0.121  90% [0.061, 0.182]
+  answer-statement    4/66 = 0.061  90% [0.015, 0.121]
+  reliability        25/66 = 0.379  90% [0.288, 0.470]
+  capability          0/66 = 0.000  90% [0.000, 0.000]
+  unassigned          0/66 = 0.000  90% [0.000, 0.000]
+
+=== equal E: first 3 rows of E
+math500-rl-T1: n gap 65
+  loop                0/65 = 0.000  90% [0.000, 0.000]
+  budget             16/65 = 0.246  90% [0.169, 0.338]
+  answer-statement    2/65 = 0.031  90% [0.000, 0.062]
+  reliability        41/65 = 0.631  90% [0.523, 0.723]
+  capability          6/65 = 0.092  90% [0.031, 0.154]
+  unassigned          0/65 = 0.000  90% [0.000, 0.000]
+math500-theta05-T1: n gap 53
+  loop                0/53 = 0.000  90% [0.000, 0.000]
+  budget             11/53 = 0.208  90% [0.113, 0.302]
+  answer-statement    2/53 = 0.038  90% [0.000, 0.075]
+  reliability        34/53 = 0.642  90% [0.528, 0.755]
+  capability          6/53 = 0.113  90% [0.057, 0.189]
+  unassigned          0/53 = 0.000  90% [0.000, 0.000]
+null: math500-random-T1: n gap 42
+  loop                0/42 = 0.000  90% [0.000, 0.000]
+  budget              7/42 = 0.167  90% [0.071, 0.262]
+  answer-statement    1/42 = 0.024  90% [0.000, 0.071]
+  reliability        28/42 = 0.667  90% [0.548, 0.786]
+  capability          6/42 = 0.143  90% [0.071, 0.238]
+  unassigned          0/42 = 0.000  90% [0.000, 0.000]
+hard328-code-T1: n gap 37
+  loop                0/37 = 0.000  90% [0.000, 0.000]
+  budget             10/37 = 0.270  90% [0.162, 0.405]
+  answer-statement    1/37 = 0.027  90% [0.000, 0.081]
+  reliability        16/37 = 0.432  90% [0.297, 0.568]
+  capability         10/37 = 0.270  90% [0.162, 0.378]
+  unassigned          0/37 = 0.000  90% [0.000, 0.000]
+math500-s0400-T06: n gap 66
+  loop               29/66 = 0.439  90% [0.333, 0.530]
+  budget              8/66 = 0.121  90% [0.061, 0.182]
+  answer-statement    4/66 = 0.061  90% [0.015, 0.121]
+  reliability        25/66 = 0.379  90% [0.288, 0.470]
+  capability          0/66 = 0.000  90% [0.000, 0.000]
+  unassigned          0/66 = 0.000  90% [0.000, 0.000]
