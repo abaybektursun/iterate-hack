@@ -5,11 +5,12 @@ the picture alone. The blue marks draw themselves once when the page loads (the 
 is shown); with prefers-reduced-motion and in print they are still.
 
 beyond: percent right of the plain base (Olmo 3 7B, one sample) and of the configuration chosen on MATH-500 (the
-three-token opening cue, T 1.0 / top-p 1.0), used unchanged on three sets it was never tuned on, with the RL-trained
-model as a tick. Sources: MATH-500 224 and 410 of 500 (result-c36598), RL 463; hard328 76 and 164 of 328, and code
-(HumanEval+ and MBPP+, 538 problems) 222 and 326, in studies/rlneurons/README.md; general questions (500 MMLU-Pro and
-BBH items) 136 and 286, RL 332, in studies/ood on branch ali/ood (commit 99b2d5d; +30.0 points [24.6, 35.4], and
-+12.5 [4.9, 19.7] on the 264 items both arms answer).
+three-token opening cue, T 1.0 / top-p 1.0), used unchanged on three sets it was never tuned on. The picture says one
+thing, so each lane carries one number, its gain in points: large and blue on the three untouched sets, small and grey
+on MATH-500, where the configuration was chosen. Sources: MATH-500 224 and 410 of 500 (result-c36598); hard328 76 and
+164 of 328, and code (HumanEval+ and MBPP+, 538 problems) 222 and 326, in studies/rlneurons/README.md; general
+questions (500 MMLU-Pro and BBH items) 136 and 286, in studies/ood on branch ali/ood (commit 99b2d5d; +30.0 points
+[24.6, 35.4], and +12.5 [4.9, 19.7] on the 264 items both arms answer).
 
 efficiency: percent right against generated tokens per problem, Karpathy's autoresearch loop against the swarm's cue
 with one sample, on problems neither had used. Source: studies/autobench/README.md, table "Finals on problems no
@@ -19,12 +20,12 @@ import json
 
 import demo_facts
 
-# right of n in percent: the plain base, the configuration chosen on MATH-500, the RL-trained model
+# right of n in percent: the plain base and the configuration chosen on MATH-500
 BEYOND = [
-    {"name": "MATH-500", "sub": "500 problems", "plain": 44.8, "ours": 82.0, "rl": 92.6},
-    {"name": "Harder math", "sub": "328 problems", "plain": 23.2, "ours": 50.0, "rl": 62.8},
-    {"name": "Code", "sub": "HumanEval+ and MBPP+", "plain": 41.3, "ours": 60.6, "rl": 74.5},
-    {"name": "General questions", "sub": "MMLU-Pro and BBH", "plain": 27.2, "ours": 57.2, "rl": 66.4},
+    {"name": "MATH-500", "sub": "500 problems", "plain": 44.8, "ours": 82.0},
+    {"name": "Harder math", "sub": "328 problems", "plain": 23.2, "ours": 50.0},
+    {"name": "Code", "sub": "HumanEval+ and MBPP+", "plain": 41.3, "ours": 60.6},
+    {"name": "General questions", "sub": "MMLU-Pro and BBH", "plain": 27.2, "ours": 57.2},
 ]
 
 # [right, n, tokens per problem] of autoresearch (k) and of our harness (o)
@@ -70,15 +71,17 @@ svg { display: block; width: 100vw; height: 100vh; font-family: var(--f); font-v
 .grid { stroke: var(--rule); stroke-width: .7; }
 .lane { stroke: var(--rule); stroke-width: 1; }
 .ax { font-size: 14px; fill: var(--faint); }
-.name { font-size: 17px; font-weight: 620; fill: var(--ink); text-anchor: middle; }
+.name { font-size: 18px; font-weight: 620; fill: var(--ink); text-anchor: middle; }
 .sub { font-size: 14px; fill: var(--faint); text-anchor: middle; }
-.from { font-size: 15px; fill: var(--mute); text-anchor: end; }
-.to { font-size: 18px; font-weight: 620; fill: var(--ink); text-anchor: end; }
 .gain { font-size: 19px; font-weight: 620; fill: var(--blue); }
-.rl { font-size: 14px; fill: var(--faint); }
-.rl-tick { stroke: var(--mute); stroke-width: 1.4; }
-.tuned { font-size: 15px; font-weight: 620; fill: var(--blue); text-anchor: middle; }
-.never { font-size: 15px; font-weight: 560; fill: var(--mute); text-anchor: middle; }
+.big { font-size: 40px; font-weight: 560; letter-spacing: -.02em; fill: var(--blue); }
+.unit { font-size: 14px; fill: var(--mute); }
+.quiet { opacity: .45; }  /* the lane the configuration was chosen on */
+.quiet .ours, .quiet .rise { filter: none; }
+.quiet .ours { fill: var(--ink); } .quiet .rise { stroke: var(--ink); }
+.small { font-size: 20px; font-weight: 560; fill: var(--ink); }
+.tuned { font-size: 16px; font-weight: 560; fill: var(--mute); text-anchor: middle; }
+.never { font-size: 16px; font-weight: 620; fill: var(--blue); text-anchor: middle; }
 .brace { fill: none; stroke: var(--mute); stroke-width: 1; }
 .brace.b { stroke: var(--blue); }
 .lab { font-size: 16px; font-weight: 560; fill: var(--ink); text-anchor: middle; }
@@ -111,31 +114,28 @@ el(body, "rect", { x: 72, y: 46, width: 880, height: 478, rx: 20, class: "slab-e
 el(body, "rect", { x: 60, y: 32, width: 880, height: 478, rx: 20, class: "slab-top", fill: "url(#gSlab)" });
 """
 
-# One lane per benchmark: the plain base as a hollow dot, the chosen configuration as a blue dot above it.
+# One lane per benchmark: the plain base as a hollow dot, the chosen configuration above it, and the gain in points.
 BEYOND_JS = r"""
-const Y0 = 108, Y1 = 428, y = p => Y1 - (p - 10) / 90 * (Y1 - Y0);
-for (const p of [20, 40, 60, 80, 100]) {
+const Y0 = 118, Y1 = 428, y = p => Y1 - (p - 10) / 80 * (Y1 - Y0);
+for (const p of [20, 40, 60, 80]) {
   el(svg, "line", { x1: X0, x2: X1, y1: y(p), y2: y(p), class: "grid" });
   el(svg, "text", { x: X0 - 12, y: y(p) + 5, class: "ax", "text-anchor": "end" }, p + " %");
 }
 const w = (X1 - X0) / DATA.length, cx = i => X0 + (i + .5) * w;
-el(svg, "path", { d: `M${cx(0) - 62} 84v-8h124v8`, class: "brace b" });
-el(svg, "text", { x: cx(0), y: 66, class: "tuned" }, "tuned here");
-el(svg, "path", { d: `M${cx(1) - 62} 84v-8H${cx(DATA.length - 1) + 62}v8`, class: "brace" });
-el(svg, "text", { x: (cx(1) + cx(DATA.length - 1)) / 2, y: 66, class: "never" }, "never tuned on these");
+el(svg, "path", { d: `M${cx(0) - 62} 88v-8h124v8`, class: "brace" });
+el(svg, "text", { x: cx(0), y: 70, class: "tuned" }, "Tuned here");
+el(svg, "path", { d: `M${cx(1) - 62} 88v-8H${cx(DATA.length - 1) + 62}v8`, class: "brace b" });
+el(svg, "text", { x: (cx(1) + cx(DATA.length - 1)) / 2, y: 70, class: "never" }, "Never tuned on these");
 DATA.forEach((s, i) => {
-  const x = cx(i);
-  el(svg, "line", { x1: x, x2: x, y1: y(100), y2: y(10), class: "lane" });
-  el(svg, "line", { x1: x - 13, x2: x + 13, y1: y(s.rl), y2: y(s.rl), class: "rl-tick" });
-  el(svg, "text", { x: x + 20, y: y(s.rl) + 5, class: "rl" }, "RL " + s.rl.toFixed(1));
-  el(svg, "path", { d: `M${x} ${y(s.plain) - 10}L${x} ${y(s.ours)}`, class: "rise", pathLength: 1, style: `--i:${i}` });
-  el(svg, "circle", { cx: x, cy: y(s.plain), r: 8, class: "base" });
-  el(svg, "circle", { cx: x, cy: y(s.ours), r: 10, class: "ours", style: `--i:${i}` });
-  el(svg, "text", { x: x - 18, y: y(s.plain) + 5, class: "from" }, s.plain.toFixed(1));
-  el(svg, "text", { x: x - 18, y: y(s.ours) + 6, class: "to" }, s.ours.toFixed(1));
-  el(svg, "text", { x: x + 16, y: (y(s.plain) + y(s.ours)) / 2 + 6, class: "gain" }, "+" + (s.ours - s.plain).toFixed(1));
-  el(svg, "text", { x, y: Y1 + 36, class: "name" }, s.name);
-  el(svg, "text", { x, y: Y1 + 56, class: "sub" }, s.sub);
+  const x = cx(i), lane = el(svg, "g", i ? {} : { class: "quiet" }), mid = (y(s.plain) + y(s.ours)) / 2;
+  el(lane, "line", { x1: x, x2: x, y1: y(90), y2: y(10), class: "lane" });
+  el(lane, "path", { d: `M${x} ${y(s.plain) - 10}L${x} ${y(s.ours)}`, class: "rise", pathLength: 1, style: `--i:${i}` });
+  el(lane, "circle", { cx: x, cy: y(s.plain), r: 8, class: "base" });
+  el(lane, "circle", { cx: x, cy: y(s.ours), r: i ? 11 : 9, class: "ours", style: `--i:${i}` });
+  el(lane, "text", { x: x + 20, y: mid + (i ? 8 : 7), class: i ? "big" : "small" }, "+" + (s.ours - s.plain).toFixed(1));
+  if (i) el(lane, "text", { x: x + 22, y: mid + 28, class: "unit" }, "points");
+  el(svg, "text", { x, y: Y1 + 38, class: "name" }, s.name);
+  el(svg, "text", { x, y: Y1 + 58, class: "sub" }, s.sub);
 });
 </script>
 </body>

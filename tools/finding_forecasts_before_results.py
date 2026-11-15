@@ -319,7 +319,7 @@ NAMES = {
 
 # Written by --write from the run folders: COUNTS (keys in _count's docstring), one run, one theory and one row per line
 # (fields in _build's docstring).
-COUNTS = {'targets': 52, 'landed': 26, 'open': 26, 'asked': [194, 78, 116], 'theory': [162, 65, 32, 106, -8.84], 'reader': [49, 51, 78], 'apart': [8, 3], 'before': 147, 'rows_any': [18, 15], 'waiting': 565, 'commit': 'f37df5a'}
+COUNTS = {'targets': 52, 'landed': 26, 'open': 26, 'asked': [194, 78, 116], 'theory': [162, 65, 32, 106, -8.84], 'reader': [49, 51, 78], 'apart': [8, 3], 'before': 147, 'rows_any': [18, 15], 'waiting': 565, 'commit': '45e6978'}
 
 RUNS = [
     ['run-01', '2026-11-15T14:45:56', 'c95e0f7', '2026-11-15T14:50:58', 20, '2026-11-15T17:31:42', 'studies/theory/results/engine/round-07'],

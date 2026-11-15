@@ -6,10 +6,10 @@ PageUp back; Home and End; t theme (also the button at the top right); f fullscr
 steps. The slide is in the address (/demo#finding), so Back works. Printing (p) gives one slide per page at 13.333 x
 7.5 in, in the theme on screen.
 
-Every number is read at build time from the module that holds it: the cut-off answers from finding_the_finish_dial.DATA,
+Every number is read at build time from the module that holds it:
 the staircase of fixes from demo_fixes.py, the accuracy climb from demo_ali_data.DATA['climb'], the two result pictures from demo_results.py, the review rounds
 from proof_review_cuts_waste.DATA, the idea tree's links from proof_idea_basins.DATA['tree'], the number of people from
-demo_facts.FACTS['people']; view.py passes the number of finding pages and the list of papers. The photos are data
+demo_facts.FACTS['people']; view.py passes the list of papers. The photos are data
 URIs in demo_photos.py. Six slides show a picture in an iframe of FIGS: the accuracy climb of /demo/ali/slide3, the
 Design page (architecture.py), the staircase of fixes of demo_fixes.py, the two pictures of demo_results.py and /proof/idea-basins playing from the items to their basins to the idea tree,
 each with its header, words column and key hidden. A frame with data-replay is loaded again when its slide is shown, so
@@ -27,7 +27,6 @@ import demo_fixes
 import demo_photos
 import demo_results
 import exa_page
-import finding_the_finish_dial
 import pastdev
 import proof_idea_basins
 import proof_review_cuts_waste
@@ -41,7 +40,8 @@ QR_PATH = "M0 0h1v1h-1zM1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h
 
 # The title of each paper by its file name in view.PAPERS; paper_title falls back to the file name.
 PAPER_TITLES = {"the-finish-dial.pdf": "The Finish Dial", "theories-on-trial.pdf": "Theories on Trial",
-                "the-first-hundred-steps.pdf": "The First Hundred Steps", "no-early-warning.pdf": "No Early Warning"}
+                "the-first-hundred-steps.pdf": "The First Hundred Steps", "no-early-warning.pdf": "No Early Warning",
+                "two-token-limits.pdf": "Two Token Limits"}
 PAPER_AUTHOR = "The Invariant Swarm"
 
 
@@ -165,11 +165,6 @@ assert {"memories", "median recall"} <= set(PAST_NUMS), f"the numbers row of pas
 
 
 # ---------- the numbers ----------
-DIAL = finding_the_finish_dial.DATA
-CELLS = DIAL["cells"]
-DIAL_ROWS = sorted((c for c in CELLS.values() if c["kind"] in ("top", "base")), key=lambda c: c["size"])
-PEAK = max((c for c in DIAL_ROWS if c["kind"] == "top"), key=lambda c: c["right"])
-assert PEAK is CELLS["1.5"], "the peak of the finish dial moved: the slide text names size 1.5"
 
 PEOPLE = demo_facts.FACTS["people"]["v"]
 RL_GPUS = demo_facts.FACTS["rl_zero_gpus"]["v"]["total"]  # learner + actor GPUs of the RL training, Olmo 3 paper, Table 49
@@ -196,6 +191,26 @@ def bar(x, y0, w, h, cls, value, label=None):
     if label:
         s += f'<text class="bl" x="{x + w / 2:.1f}" y="{y0 + 28}" text-anchor="middle">{label}</text>'
     return s
+
+
+def gap_svg():
+    """Slide "gap": the untrained base model beside the RL-trained model on MATH-500, the same two scores the climb
+    slide starts and ends against (the first base record and RL's best). The dashed outline over the base bar is the
+    gap to close with no RL. Two numbers and two one-word labels, nothing else."""
+    W, H, y0, full, bw = 760, 640, 560, 500, 210
+    lo, rl = pct(CLIMB_LO), pct(CLIMB_RL)
+    xb, xr = 130, 420
+    hb, hr = full * lo / 100, full * rl / 100
+    return (f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" class="fig gap" role="img" '
+            f'aria-label="Base model {lo:.0f} %, RL-trained model {rl:.0f} % on {esc(CLIMB["bench"])}">'
+            f'<rect x="{xb}" y="{y0 - hb:.1f}" width="{bw}" height="{hb:.1f}" fill="var(--fbar1)"/>'
+            f'<rect class="todo" x="{xb + 1}" y="{y0 - hr:.1f}" width="{bw - 2}" height="{hr - hb:.1f}"/>'
+            f'<rect x="{xr}" y="{y0 - hr:.1f}" width="{bw}" height="{hr:.1f}" fill="var(--ink)"/>'
+            f'<line class="base" x1="{xb - 50}" y1="{y0}" x2="{xr + bw + 50}" y2="{y0}"/>'
+            f'<text class="num" x="{xb + bw / 2}" y="{y0 - hb - 22:.1f}" text-anchor="middle">{lo:.0f} %</text>'
+            f'<text class="num" x="{xr + bw / 2}" y="{y0 - hr - 22:.1f}" text-anchor="middle">{rl:.0f} %</text>'
+            f'<text class="lab" x="{xb + bw / 2}" y="{y0 + 44}" text-anchor="middle">Base</text>'
+            f'<text class="lab" x="{xr + bw / 2}" y="{y0 + 44}" text-anchor="middle">RL</text></svg>')
 
 
 def review_svg():
@@ -243,18 +258,17 @@ def qr():
             f'<path d="{QR_PATH}" fill="#101820" shape-rendering="crispEdges"/></svg>')
 
 
-def slides(n_findings, papers):
+def slides(papers):
     return [
         ("hook", f'<div class="mid"><h1 class="big">{hook_html()}</h1><div class="site">{qr()}<span>{esc(SITE)}</span></div></div>'),
         ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers</p>'
                      '<ul class="limits"><li>Limited token budget</li><li>Limited compute</li><li>Limited people</li></ul></div>'),
+        ("gap", f'<div class="mid">{gap_svg()}</div>'),
         ("powered", '<div class="versus">'
                     f'<div><p class="sub">The RL-trained model</p><p class="sub by">Powered by</p><p class="gpus">{RL_GPUS} H100 GPUs</p></div>'
                     f'<div><p class="sub">Invariant</p><p class="sub by">Powered by</p>{photo(demo_photos.COOK, "cook")}'
                     f'<p class="who">{esc(demo_photos.COOK_NAME)}</p></div></div>'),
-        ("climb", f'<div class="head"><h2>No training: {pct(CLIMB_LO):.1f} % to {pct(CLIMB_HI):.0f} % on {esc(CLIMB["bench"])}</h2>'
-                  f'<p class="sub">Best score of the untrained base model so far · RL-trained {pct(CLIMB_RL):.1f} % · '
-                  f'our best, imitation with the cue, {pct(CLIMB["other"]):.1f} %</p></div>'
+        ("climb", f'<div class="head"><h2>No training: {pct(CLIMB_LO):.1f} % to {pct(CLIMB_HI):.0f} % on {esc(CLIMB["bench"])}</h2></div>'
                   '<iframe class="fig-frame climb" data-fig="climb" data-replay title="The accuracy climb" tabindex="-1"></iframe>'
                   '<div class="replay"><input class="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="Board time">'
                   '<button class="rate" aria-pressed="false" aria-label="Half speed">0.5×</button></div>'),
@@ -267,12 +281,10 @@ def slides(n_findings, papers):
                      '<iframe class="fig-frame sponsor s-past" data-fig="pastdev" data-replay title="past.dev: one agent writes, another reads" tabindex="-1"></iframe>'
                      f'<p class="spon s-exa">{logo("exa")}<span><b>{esc(EXA_NUMS["arXiv papers surfaced"])}</b> arXiv papers surfaced · <b>{esc(EXA_NUMS["pages read in full"])}</b> pages read in full</span></p>'
                      f'<p class="spon s-past">{logo("past")}<span><b>{esc(PAST_NUMS["memories"])}</b> memories · <b>{esc(PAST_NUMS["median recall"])}</b> median recall</span></p>'),
-        ("finding", '<h2 class="title fixes-title">8 directions in the weights hold most of RL\'s gain</h2>'
-                    '<iframe class="fig-frame fixes" data-fig="fixes" data-replay title="One problem, four answers" tabindex="-1"></iframe>'
-                    f'<p class="sub fixes-why">Why: they make the model finish its answer, cut-off answers '
-                    f'{CELLS["0"]["cut"]} → {CELLS["1.5"]["cut"]}</p><p class="corner low">{n_findings} findings</p>'),
-        ("beyond", '<div class="head"><h2>Tuned on one math benchmark, better on all four</h2>'
-                   '<p class="sub">One opening cue and one sampling setting, chosen on MATH-500, used unchanged. No training</p></div>'
+        ("finding", '<h2 class="title fixes-title">Interpretable findings with hill climbing</h2>'
+                    '<iframe class="fig-frame fixes" data-fig="fixes" data-replay title="One problem, four answers" tabindex="-1"></iframe>'),
+        ("beyond", '<div class="head"><h2>Out of distribution, not glorified overfitting</h2>'
+                   '<p class="sub">One <b class="team">Invariant</b> method: tuned on MATH-500 only, then used unchanged on three benchmarks it never saw</p></div>'
                    '<iframe class="fig-frame wide" data-fig="beyond" data-replay title="Beyond MATH-500" tabindex="-1"></iframe>'),
         ("efficiency", f'<div class="head"><h2>Same score as autoresearch, {demo_results.TOKEN_RATIO:.1f}× fewer tokens</h2>'
                        f'<p class="sub">Against Karpathy\'s autoresearch (100k GitHub stars) · +{demo_results.HARD_GAIN:g} points on harder problems</p></div>'
@@ -328,7 +340,7 @@ p, h1, h2, figure { margin: 0; }
 .head { position: absolute; left: 96px; top: 72px; z-index: 1; }
 .head h2 { font-weight: 300; font-size: 54px; line-height: 1.1; }
 .head .sub { margin-top: 12px; }
-.corner { position: absolute; right: 96px; bottom: 64px; font-size: 22px; font-weight: 500; color: var(--faint); }
+.sub .team { font-weight: 740; font-stretch: 122%; letter-spacing: .02em; color: var(--blue); }  /* the team's name, set as on the site's header */
 
 .photo { border-radius: 2px; overflow: hidden; }
 .photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -366,11 +378,8 @@ p, h1, h2, figure { margin: 0; }
 .spon { position: absolute; top: 772px; width: 702px; display: flex; align-items: center; justify-content: center; gap: 22px; font-size: 24px; font-weight: 500; color: var(--mute); }
 .spon.s-exa { left: 96px; } .spon.s-past { left: 804px; }
 .spon b { font-weight: 640; color: var(--ink); }
-.fig-frame.fixes { left: 180px; top: 112px; width: 1240px; height: 694px; }
-.fixes-title, .fixes-why { position: absolute; left: 0; right: 0; text-align: center; }
-.fixes-title { top: 34px; }
-.fixes-why { top: 822px; }
-.corner.low { bottom: 40px; }
+.fig-frame.fixes { left: 180px; top: 140px; width: 1240px; height: 694px; }
+.fixes-title { position: absolute; left: 0; right: 0; top: 44px; text-align: center; }
 .tools { position: absolute; left: 0; right: 0; bottom: 56px; display: flex; justify-content: center; gap: 72px; font-size: 22px; font-weight: 560; color: var(--mute); }
 .tools span { display: inline-flex; align-items: center; gap: 14px; }
 .logo { height: 24px; width: auto; fill: var(--ink); }
@@ -391,6 +400,8 @@ p, h1, h2, figure { margin: 0; }
 .fig .bl { font-size: 17px; font-weight: 500; fill: var(--mute); }
 .fig .gl { font-size: 20px; font-weight: 600; fill: var(--ink); }
 .fig .base { stroke: var(--faint); stroke-width: 1; }
+.fig.gap .num { font-size: 64px; font-weight: 300; letter-spacing: -.01em; }
+.fig.gap .todo { fill: color-mix(in srgb, var(--blue) 9%, transparent); stroke: var(--blue); stroke-width: 2; stroke-dasharray: 3 9; stroke-linecap: round; }
 
 .sheets { display: flex; gap: 60px; margin-top: 30px; }  /* --n: the number of papers, so any number fits the slide */
 /* a paper is white in both themes: the sheet carries the light values of these four tokens */
@@ -503,9 +514,9 @@ fromHash();
 """
 
 
-def page(n_findings, papers):
-    """The deck, with the number of finding pages and the paper file names (view.FINDINGS, view.PAPERS) written in."""
+def page(papers):
+    """The deck, with the paper file names (view.PAPERS) written in."""
     body = "\n".join(f'<section class="slide" id="{sid}" aria-label="Slide {i + 1}"><div class="box">{inner}</div></section>'
-                     for i, (sid, inner) in enumerate(slides(n_findings, list(papers))))
+                     for i, (sid, inner) in enumerate(slides(list(papers))))
     return (TEMPLATE.replace("__FONT__", FONT).replace("__THEME_JS__", THEME_JS).replace("__TOKENS__", TOKENS)
             .replace("__SLIDES__", body))

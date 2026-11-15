@@ -346,13 +346,15 @@ The home page is https://invariant.team (`tools/home.py`; the same Lambda, which
 `invariant.team`, and `/home` on any host). It leads to every page of the monitor: Findings, Board, Proof, Design, Talk
 (`/demo`), Papers, Lab, Exa, past.dev, GPU prices (gpu.invariant.team) and Psychosis. Its picture is a dial: a lit glass
 body with a ring around it and one bead per page. A click on a bead or the arrow keys turn the dial to a page
-(`/#<page>`); a click on the body or the button opens it. Beside the picture are one sentence with the Board's two live
-MATH-500 scores (the best untrained-base score and the best RL score in the `scores` rows of `/data`; no numbers before
-the first read), the button, and the same pages as a plain list of links in three groups (Findings, Papers, Talk, Team;
-Board, Design, Proof, Values; the rest under "Also"); on a phone the list comes before the picture.
+(`/#<page>`); a click on the body or the button opens it. Beside the picture are one sentence with the Board's live
+MATH-500 scores (the first and the best untrained-base score and the best RL score in the `scores` rows of `/data`; the
+words "a prompt cue and a vote" only when the best base row's configuration names them; no numbers before the first
+read), one line with the live number of people, the button, and the same pages as a plain list of links in three groups
+("Results": Findings, Papers, Talk; "How we work": Board, Design, Proof, Values, Team; the rest under "Also"); on a phone
+the list comes before the picture.
 About every 2.5 s one of the newest 40 board posts runs to the Board bead as a pulse in its author's color, named in the
 line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. As a page is sent, `view.py` (`chrome`) makes the name "Invariant" in its header a link to the home page and adds the
-link "All pages" to it after the four tabs; a page with no header gets a small link "Invariant" at the middle of its right edge; pinch
+link "All pages" to it after the four tabs, followed on a page that is none of the four tabs by that page's name (hidden at 400 px and below); a page with no header gets a small link "Invariant" at the middle of its right edge; pinch
 zoom is never switched off. An unknown address answers a short page with the header and links, and every address of invariant.team
 other than `/` and `/data` redirects to the monitor. The page `/team` (`tools/people.py`) lists the team: its three
 names are placeholders, each with the one line "Details to be added" until the people fill `PEOPLE` in; a filled field
@@ -435,14 +437,14 @@ that stay (keys 1 to 3); after level 5 the retreat can go on without end. Three 
 that follows the breath (M mutes). A WebGL shader draws the picture: fog, glow, ripples under each wave and a colour
 split. The end screen gives score, rank, achievements and what the agents posted meanwhile.
 
-The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): thirteen 16:9 slides, each one
-figure with a few words, `#hook`, `#question`, `#powered`, `#climb`, `#harness`, `#sponsors`, `#finding`, `#beyond`, `#efficiency`,
+The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): fourteen 16:9 slides, each one
+figure with a few words, `#hook`, `#question`, `#gap`, `#powered`, `#climb`, `#harness`, `#sponsors`, `#finding`, `#beyond`, `#efficiency`,
 `#proof`, `#ideas`, `#papers` and `#close` (`/demo#finding` opens that slide, and Back works). The right arrow, Space or PageDown go on, the left arrow or
 PageUp go back, Home and End jump, a click on the right or left third of the window steps, `t` or the button at the top right changes the theme
 (`?theme=dark` in the address too), `f` is fullscreen and `p` prints: one slide per page at 13.333 x 7.5 in, in the
 theme on screen, so print to PDF from the dark page for a dark PDF. The hook sentence is the constant `HOOK` in
 `tools/demo_deck.py`; the first slide also shows the address invariant.team and its QR code (`QR_PATH`, made with
-segno). The slide `#powered` sets the 72 H100 GPUs of the RL training (`FACTS['rl_zero_gpus']`, Olmo 3 paper, Table
+segno). The slide `#gap` is two bars with two numbers, the untrained base model and the RL-trained model on MATH-500 (the first base record and RL's best of `demo_ali_data` `climb`), with the gap between them as a dashed outline. The slide `#powered` sets the 72 H100 GPUs of the RL training (`FACTS['rl_zero_gpus']`, Olmo 3 paper, Table
 49) beside the photo and name of the cook who fed the team. The two photos (cook, meditation) are the strings `COOK`
 and `MEDITATE` in `tools/demo_photos.py`, with her name in `COOK_NAME`,
 each a `data:image/jpeg;base64,...` URI (the deploy ships only `tools/*.py`); while one is empty its slide shows an
@@ -453,12 +455,11 @@ empty frame. Slides 4 and 7 show the Design page's picture and the idea tree of 
 inverted), each replaying its real cases, with two numbers under each read from the pages' own number rows. The slide `#finding` shows `/demo/fig/fixes` (`tools/demo_fixes.py`): one MATH-500 problem
 answered four ways, each answer a glass sheet on a step as high as its configuration's score (base model, 3 opening
 tokens, sampling at T 1.0, 8 directions in the weights), with every quoted word checked against its run by
-`PYTHONPATH=.:tools python3 tools/demo_fixes.py`. Every number is read when the page is built: the cut-off answers from
-`tools/finding_the_finish_dial.py` (`DATA['cells']`), the comparison with Karpathy's autoresearch loop from
+`PYTHONPATH=.:tools python3 tools/demo_fixes.py`. Every number is read when the page is built: the staircase's scores from
+`tools/demo_fixes.py`, the comparison with Karpathy's autoresearch loop from
 `FACTS['auto_research_comparison']` in `tools/demo_facts.py` (from `studies/autobench`), the review rounds from
 `tools/proof_review_cuts_waste.py`, the links of the idea tree from `tools/demo_ali_data.py` (counted as
-`tools/demo_ali.py` counts them), the number of people from `FACTS['people']`, and the number of finding pages and the
-papers from `tools/view.py`.
+`tools/demo_ali.py` counts them), the number of people from `FACTS['people']`, and the papers from `tools/view.py`.
 
 The stepped story of the talk is at `/demo/story`: one story over the Design page's picture, with a sentence and a fact
 line per step in the words column (arrow keys step, Esc closes; `/demo/story#<step>` links to a step). The 12
@@ -637,7 +638,7 @@ session transcripts up to 05:25 UTC; the Exa dashboards hold the authoritative c
 with a 401 error, which is why the agents call the HTTP API. Early on, one person's agents had no Exa key and used another
 search tool. No count of GPU jobs avoided by a search exists.
 
-The page `/exa` (`tools/exa_page.py`; not a header tab, and its look is its own: white paper and one cyan marker) shows
+The page `/exa` (`tools/exa_page.py`; not a header tab; the site's tokens, typeface and header since 2026-11-15) shows
 four searches that changed a decision, and what the agents got from Exa up to Nov 15 15:29 UTC, without the number of
 calls. Its first screen is five numbers and one 3D scene of the four searches: a track with the stations Idea, Exa, GPU run and
 Board, a porcelain gate at Exa, and above it one dot for each of the 677 distinct pages Exa returned
@@ -691,7 +692,7 @@ memory before it starts an idea.
   output).
 - Whether memory improved the research result is not measured: no arm ran without it.
 
-The page `/pastdev` (`tools/pastdev.py`; not a header tab, and its look is its own: white paper and one blue for what
+The page `/pastdev` (`tools/pastdev.py`; not a header tab; the site's tokens, typeface and header since 2026-11-15; blue for what
 past.dev returned) shows this on its first screen: four usage numbers and two 3D scenes side by side. The first is the memory as a disc with one dot per stored source (854:
 616 paper findings, 227 board posts, 11 sessions), the agents that write behind it and the agents that read in front,
 the theory generator joined to the paper sector only. It replays four real reads (`/pastdev#read-1` is the read across
