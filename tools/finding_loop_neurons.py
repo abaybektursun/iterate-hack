@@ -76,7 +76,12 @@ DATA = {
                    "off": {100: ["attr100r2_t10-01", 390], 1000: ["attr1000r2_t10-01", 372]}},
            # T 1.0 on the harder 328: [counts.correct_v3, counts.cap_hits]; the unedited cell is the team's ("Harder 328").
            "hard": {"unedited": [164, 77], "unedited_artifact": "studies/rlneurons/results/day1/hard328_base_cue_t10-01/metrics.json",
-                    "n": 328, "off": {100: ["hard328_attr100r2_t10-01", 155, 47], 1000: ["hard328_attr1000r2_t10-01", 130, 32]}}},
+                    "n": 328, "off": {100: ["hard328_attr100r2_t10-01", 155, 47], 1000: ["hard328_attr1000r2_t10-01", 130, 32]}},
+           # Four samples per problem at T 0.6, edited against unedited ("Part G over four samples"): the means of
+           # singles_right, rounded, and pooled_points_edited_minus_unedited."4 samples".points.
+           "vote": {"artifact": GEN + "readout_vote_t06.json", "unedited": 383, "edited": 403, "points": 4.05, "rounded": 4},
+           # The unedited model at T 1.0, four single samples: rows.single.right (405) and the stored T1 cell (410).
+           "t10_single": {"artifact": "studies/rlneurons/results/day1_3/math500_base_cue-01/readout.json", "right": 405}},
 }
 
 _U, _L, _R = DATA["states"]
@@ -88,6 +93,7 @@ _r2 = DATA["r2"]
 _s1, _s2 = _r2["seeds"]
 _cut = lambda s: round(100 * (1 - s["edit"][2] / s["base"][2]))  # per cent of the tokens the second set saves on one seed
 _t10, _hard = _r2["t10"], _r2["hard"]
+_vote, _t10s = _r2["vote"], _r2["t10_single"]
 
 TITLE = "Loop neurons"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "Why does a language model get stuck repeating the same text?"
@@ -102,7 +108,7 @@ PANELS = [
     ["new", "What is new",
      "Neurons that drive repetition were already reported in smaller models (Hiraoka and Inui, arXiv 2410.13497). New here is their effect on a math benchmark.",
      ["Switching them off removes most loops and about a fifth of the tokens.",
-      "The number of right answers does not reliably change.",
+      f"Right answers rise by about {_vote['rounded']} points at the setting where the model loops.",
       f"In a small test, doubling their activity raised loops from {_dose['selected'][2][1]} to {_dose['selected'][3][1]} of {_dose['n']} runs, "
       f"and switching them off lowered it to {_dose['selected'][0][1]}."]],
     ["why", "Why it matters",
@@ -117,9 +123,9 @@ PANELS = [
       f"Control: with {DATA['off']:,} random neurons off, {_R['loops']} answers loop and {_R['right']} are right.",
       f"On {_second['n']} loops kept out of the choice, 100 neurons are enough: {_second['attr100']} loops again, against {_second['none']} unedited."]],
     ["limits", "What it does not show",
-     "The edit does not make the model better at math.",
-     [f"Right answers rose from {_s1['base'][0]} to {_s1['edit'][0]} on one seed and from {_s2['base'][0]} to {_s2['edit'][0]} on another, "
-      "and the unedited model alone differs that much between seeds.",
+     "The edit does not make the model better than its own best setting.",
+     [f"With the second set, over four runs per problem, right answers rise from {_vote['unedited']} to {_vote['edited']} of {DATA['n']} where the "
+      f"model loops, which only matches the unedited model at the sampling temperature where it does not loop ({_t10s['right']} to {_t10['unedited']}).",
       f"At the sampling temperature where the model does not loop, the edit costs right answers: {_t10['off'][100][1]} and "
       f"{_t10['off'][1000][1]} of {_t10['n']} against {_t10['unedited']}.",
       f"On {_hard['n']} harder problems it turns answers cut off at the length limit into finished wrong answers: {_hard['off'][100][1]} and "
@@ -546,4 +552,13 @@ if __name__ == "__main__":  # DATA against its artifacts; run from the repositor
             m, build = load(GEN + v[0] + "/metrics.json"), load(GEN + v[0] + "/build.json")
             assert want(v, m["counts"]) and m["counts"]["n"] == bench["n"] and m["config"]["temperature"] == 1.0, v[0]
             assert (build["edit"], build["neurons_zeroed"]) == (_r2["edit"].replace("attr1000", f"attr{k}"), k), v[0]
+    v = load(_vote["artifact"])
+    assert v["runs"]["edited"]["edit_file"] == _r2["edit"] and v["setting"]["temperature"] == 0.6
+    singles = v["singles_right"]
+    assert all(len(singles[k]) == 4 for k in ("unedited", "edited"))
+    assert (_vote["unedited"], _vote["edited"]) == (round(sum(singles["unedited"]) / 4), round(sum(singles["edited"]) / 4))
+    assert _vote["points"] == v["pooled_points_edited_minus_unedited"]["4 samples"]["points"] and _vote["rounded"] == round(_vote["points"])
+    t10s = load(_t10s["artifact"])
+    assert t10s["rows"]["single"]["right"] == _t10s["right"] and t10s["rows"]["single"]["n"] == DATA["n"]
+    assert (t10s["run"]["model"], t10s["run"]["prompt"], t10s["run"]["temperature"]) == ("base", "cue", 1.0)
     print("DATA matches", DATA["artifact"], DATA["grid"], _rank["artifact"], _dose["artifact"], _second["artifact"], "and the second-set runs")
