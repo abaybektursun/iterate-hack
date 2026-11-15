@@ -1,0 +1,154 @@
+== standing
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-exdnypch
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-exdnypch
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-exdnypch
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-exdnypchjob dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-exdnypch
+
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-exdnypch
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-exdnypchjob dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-exdnypch
+
+231 items before 2026-11-15T14:53:16, 36 at or after
+248 items before 2026-11-15T16:32:52, 19 at or after
+  running 1 jobs, 1 at a time
+  running 1 jobs, 1 at a time
+254 items before 2026-11-15T17:45:51, 13 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 19 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 19 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 19 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 19 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 19 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-run-07 (opus): done in 29 s
+  forecast_score/measured-run-04 (opus): done in 29 s
+  forecast_score/measured-run-06 (opus): done in 30 s
+  forecast_score/measured-run-08 (opus): done in 30 s
+  forecast_score/measured-run-05 (opus): done in 30 s
+  forecast_score/measured-run-03 (opus): done in 32 s
+  forecast_score/measured-round-09 (opus): done in 39 s
+  forecast_score/measured-run-02 (opus): done in 43 s
+  standing: 78 mechanisms, 77 scored, 30 carried, 9 to the graveyard
+== targets_open
+267 items before 9999, 0 at or after
+  running 1 jobs, 1 at a time
+  forecast_targets/targets (opus): done in 162 s
+  targets.json: 33 targets from 19 open work items, board snapshot 2026-11-15T18:58:29 UTC
+== forecast
+  running 32 jobs, 8 at a time
+  forecast/run-02/f2-m01 (opus): done in 67 s
+  forecast/run-06/f2-m03 (opus): done in 91 s
+  forecast/run-07/f2-m02 (opus): done in 99 s
+  forecast/run-05/f2-m03 (opus): done in 105 s
+  forecast/run-05/f2-m06 (opus): done in 110 s
+  forecast/reader-2 (opus): done in 110 s
+  forecast/run-05/f2-m01 (opus): done in 113 s
+  forecast/reader-1 (opus): done in 123 s
+  forecast/round-09/training-m06 (opus): done in 59 s
+  forecast/run-02/f2-m04 (opus): done in 77 s
+  forecast/run-03/f2-m02 (opus): done in 119 s
+  forecast/round-09/training-m04 (opus): done in 79 s
+  forecast/round-09/sampling-m03 (opus): done in 85 s
+  forecast/run-04/f2-m04 (opus): done in 83 s
+  forecast/run-05/f2-m04 (opus): done in 103 s
+  forecast/run-08/f2-m01 (opus): done in 117 s
+  forecast/round-09/grader-m04 (opus): done in 100 s
+  forecast/round-09/grader-m06 (opus): done in 70 s
+  forecast/round-09/sampling-m05 (opus): done in 64 s
+  forecast/round-09/grader-m03 (opus): done in 78 s
+  forecast/round-09/training-m03 (opus): done in 56 s
+  forecast/round-09/training-m05 (opus): done in 105 s
+  forecast/run-04/f2-m03 (opus): done in 126 s
+  forecast/run-03/f2-m05 (opus): done in 126 s
+  forecast/round-09/sampling-m06 (opus): done in 83 s
+  forecast/round-09/sampling-m01 (opus): done in 95 s
+  forecast/round-09/grader-m01 (opus): done in 111 s
+  forecast/round-09/weights-m04 (opus): done in 70 s
+  forecast/round-09/weights-m01 (opus): done in 120 s
+  forecast/round-09/stopping-m04 (opus): done in 118 s
+  forecast/round-09/weights-m06 (opus): done in 108 s
+  forecast/round-09/problems-m05 (opus): done in 123 s
+== propose
+  running 6 jobs, 6 at a time
+  forecast_propose/training (opus): done in 443 s
+  forecast_propose/grader (opus): done in 454 s
+  forecast_propose/sampling: f2-m02: statement has 81 words; at most 80; f2-m04: statement has 83 words; at most 80; f2-m06: statement has 82 words; at most 80; sent back once
+  forecast_propose/problems: f2-m02: statement has 86 words; at most 80; sent back once
+  forecast_propose/weights (opus): done in 525 s
+  forecast_propose/problems: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-exdnypch/forecast_propose/problems/out.sendback.txt
+  forecast_propose/problems (opus): done in 575 s
+  forecast_propose/sampling: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-exdnypch/forecast_propose/sampling/out.sendback.txt
+  forecast_propose/sampling (opus): done in 577 s
+  forecast_propose/stopping (opus): done in 637 s
+  running 1 jobs, 1 at a time
+  duplicates/judge (opus): done in 65 s
+  duplicate round-10/stopping-m01 of run-03/f2-m03: Think-SFT's cut answers are unfinished derivations that finish right ~1/4 of the time, base/RL cut answers are failed searches/guesses
+  duplicate round-10/stopping-m02 of round-09/sampling-m02: cap hits abstain in the vote; turning them into finished answers adds wrong ballots so votes gain less than singles
+  duplicate round-10/stopping-m05 of run-03/f2-m05: late Think-SFT traces drift into Chinese (median ~13,600 tokens) and drifted traces almost never end right; no loops at T 1.0
+  duplicate round-10/stopping-m06 of round-09/stopping-m06: plain-prompt base has a high early stop hazard; the deliberative opening lowers that hazard
+  duplicate round-10/sampling-m01 of run-08/f2-m05: vote converges to each problem's modal answer, plateaus below pass@k, even k reintroduces ties
+  duplicate round-10/sampling-m02 of round-09/sampling-m02: cap hits abstain from the vote; finishing turns abstentions into wrong votes so votes trail singles
+  duplicate round-10/sampling-m03 of round-09/grader-m01: each cell is one Bernoulli draw with seed sd ~5-6; selected cells regress to the mean
+  duplicate round-10/sampling-m04 of run-04/f2-m03: stopping is a sampled per-position hazard; cap hits are survival probability, edits scale the hazard
+  duplicate round-10/sampling-m05 of run-04/f2-m05: off-format template gives flatter distributions and late drift; Think-SFT's own template is sharper with fewer drifting long answers
+  duplicate round-10/sampling-m06 of round-09/sampling-m04: edit adds a logit shift that degrades T 1.0 sampling into word strings once it overrides near-certain tokens' margin
+  duplicate round-10/weights-m02 of round-09/training-m06: RL's correctness gain sits on input-side features in early/middle layers; late band only writes the opening/output logits the cue already supplies
+  duplicate round-10/weights-m04 of run-05/f2-m06: bf16 round-to-nearest drops sub-half-ulp entries so small doses act smaller than nominal (a=0.25 ~ 0.12)
+  duplicate round-10/training-m01 of round-09/training-m02: Think-SFT imitates budget-free teacher traces, so cuts are unfinished work converting at ~1/4 and its vote stays near pass@k
+  duplicate round-10/training-m02 of round-09/training-m01: Think-SFT learned answer placement/closing inside its ChatML template; raw template misplaces the answer after 'Answer:' and own template restores it
+  duplicate round-10/training-m03 of run-06/f2-m03: outcome reward concentrates gradient into a few directions that make the model commit and box before the cap
+  duplicate round-10/training-m04 of run-06/f2-m02: pretraining left a deliberative register that the cue, self-opening and early RL only select
+  duplicate round-10/training-m06 of run-05/f2-m05: imitation and RL weight changes are orthogonal and superpose: RL adds finishing while Think-SFT keeps precision
+  duplicate round-10/problems-m01 of round-09/problems-m01: bimodal per-problem solve probability; vote converts only the middle band and plateaus; abstaining models vote near pass@k
+  duplicate round-10/problems-m02 of round-09/problems-m02: extra budget pays only where cut text is unfinished sound derivation (Think-SFT ~1/4), base/RL cuts are stalled
+  duplicate round-10/grader-m01 of round-09/grader-m01: single cells are one seeded draw; cells selected as notable regress toward the replicated mean
+  duplicate round-10/grader-m02 of round-09/grader-m06: cap scores unfinished work as wrong; 32k text rescored at 16k equals a 16k run; late-finish yield is model-specific (1/4, 1/10, 1/16)
+  duplicate round-10/grader-m03 of round-09/problems-m01: bimodal problem solve rates make votes convert only a middle band and flatten below pass@k; abstainers vote near pass@k
+  duplicate round-10/grader-m04 of run-05/f2-m06: bf16 round-to-nearest erases sub-half-ulp edit entries so small full-delta doses act well below nominal
+  duplicate round-10/grader-m05 of round-10/problems-m04: a change's effect scales with the set's middle-difficulty band and its cap hits with the long-problem share, so MATH-500 moves less than hard328
+  30 carried and 12 new mechanisms (24 dropped as duplicates), 33 targets: studies/theory/results/wide/round-10/forecasts.md
+== cells
+270 items before 9999, 0 at or after
+  running 14 jobs, 14 at a time
+  routes_propose/sampling (opus): done in 65 s
+  routes_propose/run-02 (opus): done in 68 s
+  routes_propose/weights (opus): done in 71 s
+  routes_propose/training (opus): done in 74 s
+  routes_propose/grader (opus): done in 79 s
+  routes_propose/problems (opus): done in 91 s
+  routes_propose/stopping (opus): done in 107 s
+  cells_propose/stopping (opus): done in 262 s
+  cells_propose/training: run-06/f2-m03: job 'wsp_edit.py + run_cell.py' is not a file of studies/rlneurons/jobs/ or studies/theory/jobs/; round-09/training-m06: job 'wsp_edit.py + run_cell.py' is not a file of studies/rlneurons/jobs/ or studies/theory/jobs/; round-09/training-m05: job 'wsp_edit.py + run_cell.py' is not a file of studies/rlneurons/jobs/ or studies/theory/jobs/; round-09/training-m03: job 'wsp_edit.py + run_cell.py' is not a file of studies/rlneurons/jobs/ or studies/theory/jobs/; round-10/training-m05: job 'delta_sum.py + run_fresh.py' is not a file of studies/rlneurons/jobs/ or studies/theory/jobs/; sent back once
+  cells_propose/training: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-exdnypch/cells_propose/training/out.sendback.txt
+  cells_propose/training (opus): done in 308 s
+  cells_propose/run-02 (opus): done in 405 s
+  cells_propose/problems (opus): done in 411 s
+  cells_propose/weights: run-05/f2-m03: job 'wsp_edit.py then run_cell.py' is not a file of studies/rlneurons/jobs/ or studies/theory/jobs/; run-05/f2-m01: job 'wsp_edit.py then run_fresh.py' is not a file of studies/rlneurons/jobs/ or studies/theory/jobs/; run-05/f2-m06: job 'wsp_edit.py then run_cell.py' is not a file of studies/rlneurons/jobs/ or studies/theory/jobs/; run-05/f2-m04: job 'wsp_edit.py then run_cell.py' is not a file of studies/rlneurons/jobs/ or studies/theory/jobs/; round-09/weights-m01: job 'wsp_edit.py then run_cell.py' is not a file of studies/rlneurons/jobs/ or studies/theory/jobs/; round-09/weights-m04: job 'delta_sum.py then run_fresh.py' is not a file of studies/rlneurons/jobs/ or studies/theory/jobs/; round-09/weights-m06: job 'wsp_edit.py then run_cell.py' is not a file of studies/rlneurons/jobs/ or studies/theory/jobs/; round-10/weights-m01: job 'wsp_edit.py then run_cell.py' is not a file of studies/rlneurons/jobs/ or studies/theory/jobs/; round-10/weights-m03: job 'delta_sum.py then run_fresh.py' is not a file of studies/rlneurons/jobs/ or studies/theory/jobs/; round-10/weights-m05: job 'wsp_edit.py then run_fresh.py' is not a file of studies/rlneurons/jobs/ or studies/theory/jobs/; round-10/weights-m06: job 'wsp_edit.py then run_cell.py' is not a file of studies/rlneurons/jobs/ or studies/theory/jobs/; sent back once
+  cells_propose/sampling (opus): done in 556 s
+  cells_propose/weights: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-exdnypch/cells_propose/weights/out.sendback.txt
+  cells_propose/weights (opus): done in 574 s
+  cells_propose/grader (opus): done in 629 s
+  running 1 jobs, 1 at a time
+  cells_merge/merge (opus): done in 188 s
+  running 9 jobs, 9 at a time
+  cells_forecast/reader-2 (opus): done in 184 s
+  cells_forecast/reader-1: forecasts.json must hold exactly one forecast per readout id of cells.json; sent back once
+  cells_forecast/reader-1: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-exdnypch/cells_forecast/reader-1/out.sendback.txt
+  cells_forecast/reader-1 (opus): done in 246 s
+  cells_forecast/run-02 (opus): done in 266 s
+  cells_forecast/training (opus): done in 406 s
+  cells_forecast/problems (opus): done in 421 s
+  cells_forecast/stopping (opus): done in 426 s
+  cells_forecast/grader (opus): done in 478 s
+  cells_forecast/sampling (opus): done in 515 s
+  cells_forecast/weights (opus): done in 627 s
+Left out of the ranking (record at or below -2 nats): none.
+
+- W1: 6 of 7 no-reward routes have a median forecast above the best known count at equal tokens (r10-n01, r10-n02, r10-n04, r10-n05, r10-n06, r10-n07; needs 4): holds.
+- W3: 0 of 39 cells have a readout that splits with 2 or more families on each side (none; needs 5): refuted.
+studies/theory/results/wide/round-10/cells.md
+== experiments
+46.8 minutes: studies/theory/results/wide/round-10/experiments.md
