@@ -1,13 +1,13 @@
 """Critic at decoding time, stage 0 (specs/SPEC_critic.md): what stop-and-restart reaches with a perfect critic, from the stored
 4-sample rows (results/day1_3/math500_<arm>-01/rows.jsonl, attempt 0 only; MATH-500, T 1.0 / top-p 1.0, grader v3).
 
-    uv run --no-project --with numpy python -m studies.rlneurons.analysis.critic_ceiling
+    uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.critic_ceiling
 
 Procedure scored: write a sample; a critic looks at it once, after `at` of it (a share of its final length, or a token count); if the
 critic says stop, the sample is dropped having cost the tokens written so far, and the next sample starts; at most k samples, the
 last is always kept. Critic "key" stops exactly the samples scored wrong (needs the answer key: the ceiling). Critic "plurality"
-stops the samples whose answer is not the most common answer of the problem's 4 samples or that hit the cap (no answer key: the
-best the label-free target can do). Averages over the 24 orders of the 4 samples. Writes results/critic/ceiling-01/metrics.json.
+stops the samples outside the largest group of agreeing answers among the problem's 4 samples (see plurality_flags) (no answer key: the
+best the label-free target can do). Averages over the 24 orders of the 4 samples. Writes results/critic/ceiling-02/metrics.json (ceiling-01 compared answer strings).
 """
 from __future__ import annotations
 
@@ -18,8 +18,10 @@ import pathlib
 
 import numpy as np
 
+from studies.rlneurons.lib import rln4_lib as R
+
 STUDY = pathlib.Path(__file__).resolve().parents[1]
-OUT = STUDY / "results" / "critic" / "ceiling-01"
+OUT = STUDY / "results" / "critic" / "ceiling-02"
 
 
 def load(arm):
@@ -33,11 +35,23 @@ def load(arm):
 
 
 def plurality_flags(rows):
-    """Per sample: True if finished and its extracted answer is the most common among the finished samples (ties: all tied count)."""
-    ans = [None if r["cap_hit"] or r["extracted_v3"] is None else r["extracted_v3"] for r in rows]
-    c = collections.Counter(a for a in ans if a is not None)
-    top = max(c.values()) if c else 0
-    return [a is not None and c[a] == top for a in ans]
+    """Per sample: True if it finished and its answer is in the largest group of agreeing answers among the problem's samples, and
+    that group has at least 2 samples (ties between largest groups: all of them count). Answers are grouped as the vote of
+    analysis/day1_vote.py groups them (rln4_lib.agree on norm_v3), not by string: in ceiling-01 and probe-01 the strings were
+    compared, which split equal answers written differently (only 39 % of problems looked unanimous)."""
+    groups = []
+    for k, r in enumerate(rows):
+        if r["cap_hit"] or r["extracted_v3"] is None:
+            continue
+        x = R.norm_v3(r["extracted_v3"])
+        g = next((g for g in groups if R.agree(R.norm_v3(rows[g[0]]["extracted_v3"]), x)), None)
+        if g is None:
+            groups.append([k])
+        else:
+            g.append(k)
+    top = max((len(g) for g in groups), default=0)
+    good = {k for g in groups if len(g) == top >= 2 for k in g}
+    return [k in good for k in range(len(rows))]
 
 
 def run(by, critic, k, at, unit):

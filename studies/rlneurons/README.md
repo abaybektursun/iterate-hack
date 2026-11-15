@@ -849,6 +849,58 @@ Math 3.1 itself: mean abs r 0.159; its top token differs from the base's at 151,
 - Not a critic: the summed r_m over an answer separates right from wrong base answers at AUROC 0.853 for Math 3.1, the same as
   the answer's length alone (0.855); computed from the same files, not in `metrics.json`.
 
+## Critic at decoding time: can the base's activations tell early which sample will fail? (board idea-eec971, work-5d5dc3)
+
+Spec `specs/SPEC_critic.md` (predictions C1-C3, written before the activation job). Thesis tested: the rest of the RL gain is
+reliability (result-afc423), so a critic that stops a failing sample early and starts again could replace the weight change.
+Data: the 2,000 stored samples of the cued base on MATH-500 (4 per problem, T 1.0 / top-p 1.0, job
+`abaybektursun-1114-153825-208b`, 1,642 right). No weights changed, no new samples.
+
+**Stage 0, the ceiling** (`analysis/critic_ceiling.py`, `results/critic/ceiling-02/metrics.json`): stop-and-restart with a perfect
+critic that looks once after 1,000 tokens, at most 4 samples, the last kept.
+
+| Critic | Right of 500 | Tokens per problem |
+|---|---|---|
+| none: one sample | 405 | 3,808 |
+| perfect, label-free flag (the sample is in the largest group of agreeing answers, group of 2 or more) | 438.7 | 4,125 |
+| perfect, answer key | 459.2 | 4,013 |
+| RL, one sample (plain) | 456 | 4,675 |
+
+The label-free flag equals correctness on 96.5 % of base samples. `ceiling-01` compared answer strings instead of grouping
+equal answers (the flag then matched correctness on 85.3 %); its numbers are superseded.
+
+**Stage 1, the probe** (`jobs/critic_acts.py`, job `abaybektursun-1114-212139-0b2b`; `analysis/critic_probe.py`,
+`results/critic/probe-02/`): logistic regression on the residual stream of layer 12, 20 or 28 at the position after 250, 500,
+1,000 or 2,000 answer tokens, 5 folds by problem, trained on the label-free flag. The deciding number is the within-problem
+AUROC: over problems with both outcomes among their samples, the share of (good, bad) pairs ordered correctly (0.5 = chance;
+a probe that only knows how hard the problem is scores 0.5).
+
+| After tokens (samples that long) | Best probe, within-problem AUROC [95 %] | Same probe trained on the answer key | Mean log-prob so far | Mean entropy so far |
+|---|---|---|---|---|
+| 250 (1,993) | 0.510 [0.448, 0.572] (L28) | 0.554 [0.498, 0.612] (L12) | 0.555 | 0.566 |
+| 500 (1,854) | 0.542 [0.481, 0.600] (L12) | 0.551 [0.492, 0.610] (L12) | 0.551 | 0.565 |
+| 1,000 (1,441) | 0.571 [0.509, 0.634] (L12) | 0.525 [0.460, 0.592] (L12) | 0.521 | 0.535 |
+| 2,000 (977) | 0.509 [0.430, 0.589] (L20) | 0.510 [0.436, 0.586] (L20) | 0.498 | 0.491 |
+
+110 to 137 problems have both outcomes at a checkpoint. Checks: at the last prompt token (same activations for all samples of
+a problem) the within-problem AUROC is exactly 0.500; probes trained on flags shuffled within problems give 0.49 to 0.50 at 1,000
+tokens; on synthetic activations with a planted signal the script finds it. Positive control on the real activations: across
+problems the probe at the last prompt token predicts the flag at AUROC 0.73 to 0.77 (layers 12 to 28), so the probe can read what is there.
+
+**Offline policy** (stop a sample at 1,000 tokens when its held-out probe score is below a threshold chosen on the training
+folds, at most 4 samples): 414.1 of 500 at 4,345 tokens per problem, against 410.5 for one sample (mean of the 4) at 4,008 and 410.1
+for the same stop rate with scores given to random samples; probe minus random +0.8 points [-0.7, 2.4].
+
+- C1 refuted: 0.571 at 1,000 tokens, below 0.60, and the probe trained on the answer key does no better (0.525).
+- C2 refuted: no rise with the checkpoint (0.51, 0.54, 0.57, 0.51).
+- C3 refuted: 414 of 500, not 420, and not above the random score.
+
+Reading: the base's residual stream encodes how hard the problem is before it writes anything, but not which of its own samples
+of that problem will go wrong, at least not linearly at one position within the first 2,000 tokens. The 34 to 54 problems that a
+perfect critic would add are not reachable by this critic. Limits: linear probe, one position per checkpoint, 2,000 samples, 3
+layers; an interval upper end of 0.63 is not excluded; a critic that reads the finished answer was not tested. `probe-01` (string
+flag, larger C values) gave the same reading: best 0.574 at 1,000 tokens, policy 416.8.
+
 ## RLN-5 map: where RL still disagrees once the cue is given
 
 Spec `specs/SPEC5_map.md`; run folder `results/rln5/map-01/` (`run.json`, `metrics.json`, `examples.json`, `checks.json`,

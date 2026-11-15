@@ -1,9 +1,10 @@
 """Critic at decoding time, stage 1 readout and offline policy test (specs/SPEC_critic.md).
 
-    uv run --no-project --with numpy --with scikit-learn python -m studies.rlneurons.analysis.critic_probe <job-id>
+    uv run --no-project --with numpy --with scikit-learn --with math-verify==0.9.0 python -m studies.rlneurons.analysis.critic_probe <job-id>
 
 Run from the repository root. Input (not committed): runs/<job-id>/ of jobs/critic_acts.py (`uv run tools/gpu.py get <job-id>`).
-Writes results/critic/probe-01/ (metrics.json, examples.json, run.json).
+Writes results/critic/probe-02/ (metrics.json, examples.json, run.json). probe-01 used a flag that compared answer strings
+(see critic_ceiling.plurality_flags) and C in (0.001, 0.01, 0.1).
 
 Probe: logistic regression on standardized activations of one layer at one checkpoint, 5 folds by problem (problem index mod 5),
 C chosen among 3 values by an inner split of the training problems. Trained on the label-free flag (the sample finished and its
@@ -25,8 +26,8 @@ from sklearn.linear_model import LogisticRegression
 from studies.rlneurons.analysis.critic_ceiling import plurality_flags
 
 RUNS = pathlib.Path("runs")
-OUT = pathlib.Path(__file__).resolve().parents[1] / "results" / "critic" / "probe-01"
-CS = (0.001, 0.01, 0.1)
+OUT = pathlib.Path(__file__).resolve().parents[1] / "results" / "critic" / "probe-02"
+CS = (0.0001, 0.001, 0.01)
 
 
 def pairs_by_problem(score, y, prob):
@@ -125,6 +126,8 @@ def main():
             held[(t, layer)] = (m, s)
             row[f"probe_L{layer}"] = {"within_flag": within_auroc(s, flag[m], prob[m], rng), "within_correct": within_auroc(s, correct[m], prob[m], rng),
                                       "pooled_flag": pooled_auroc(s, flag[m]), "pooled_correct": pooled_auroc(s, correct[m])}
+            if t:                                                              # upper bound: the same probe trained on the answer key
+                row[f"probe_L{layer}"]["within_correct_trained_on_key"] = within_auroc(fit_predict(x, correct[m], prob[m]), correct[m], prob[m], rng)
             if t == 1000:                                                      # control: labels shuffled within problems
                 sh = flag[m].copy()
                 for p in np.unique(prob[m]):
