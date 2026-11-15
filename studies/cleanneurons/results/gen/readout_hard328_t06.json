@@ -1,0 +1,36 @@
+{
+ "what": "hard328, T 0.6 / top-p 1.0, seed 3000000: edited cells against the unedited cell, paired by problem (bootstrap, 5,000 resamples, seed 0, 95 %), points",
+ "baseline_job": "sameraslan-1114-220554-2e30",
+ "baseline": {
+  "right_v3": 134,
+  "cap_hits": 156,
+  "loops_rule_A": 94,
+  "tokens_per_problem": 9842
+ },
+ "arms": {
+  "attr100_real02": {
+   "job": "sameraslan-1114-220546-86c9",
+   "right_v3": 149,
+   "cap_hits": 77,
+   "loops_rule_A": 24,
+   "tokens_per_problem": 8819,
+   "points_vs_baseline": 4.6,
+   "ci95": [
+    0.0,
+    9.1
+   ]
+  },
+  "attr1000_real02": {
+   "job": "sameraslan-1114-220803-2a56",
+   "right_v3": 149,
+   "cap_hits": 55,
+   "loops_rule_A": 6,
+   "tokens_per_problem": 8486,
+   "points_vs_baseline": 4.6,
+   "ci95": [
+    0.0,
+    9.1
+   ]
+  }
+ }
+}
