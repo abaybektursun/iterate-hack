@@ -1,0 +1,116 @@
+{
+ "n_problems": 328,
+ "drive": {
+  "mean_D": 0.003858,
+  "cv_D": 0.068,
+  "top_over_bottom_tertile_D": 1.1348,
+  "top_over_bottom_tertile_D_90": [
+   1.1181,
+   1.1505
+  ],
+  "cv_A": 0.072,
+  "top_over_bottom_tertile_A": 1.1431,
+  "rho_D_with_base_log_len": 0.5824,
+  "rho_D_with_rand_log_len": 0.5478,
+  "note": "trace-01 stored the first 6,000 answer tokens of each base answer"
+ },
+ "effect": {
+  "mean_E_len": 0.0418,
+  "mean_E_len_90": [
+   0.0045,
+   0.0777
+  ],
+  "mean_E_fin": 0.1189,
+  "mean_E_fin_90": [
+   0.0899,
+   0.1486
+  ]
+ },
+ "b": {
+  "len": {
+   "value": -64.03,
+   "90": [
+    -251.6538,
+    -29.513
+   ]
+  },
+  "fin": {
+   "value": 8.933,
+   "90": [
+    5.1711,
+    12.7949
+   ]
+  },
+  "len_with_difficulty": {
+   "value": -11.399,
+   "90": [
+    -56.073,
+    56.1657
+   ]
+  },
+  "fin_with_difficulty": {
+   "value": -0.988,
+   "90": [
+    -11.3894,
+    6.1818
+   ]
+  }
+ },
+ "b_len_A": -58.541,
+ "b_len_A_90": [
+  -229.8288,
+  -27.1783
+ ],
+ "rho_D_E_len": -0.3,
+ "rho_D_E_len_90": [
+  -0.3828,
+  -0.2076
+ ],
+ "rho_D_E_fin": 0.2085,
+ "rho_D_E_fin_90": [
+  0.0495,
+  0.223
+ ],
+ "tertiles": {
+  "E_len_top": -0.0307,
+  "E_len_bottom": 0.243,
+  "E_fin_top": 0.1307,
+  "E_fin_bottom": 0.0183,
+  "n_each": 109
+ },
+ "checks": {
+  "trace01_mean_r_math31_band0_up": 0.005,
+  "trace01_published": 0.005,
+  "rows_per_arm": 328,
+  "len": {
+   "planted_step": 1.0,
+   "shuffled_D_b_90": [
+    -14.152,
+    14.058
+   ]
+  },
+  "fin": {
+   "planted_step": 1.0,
+   "shuffled_D_b_90": [
+    -3.597,
+    3.532
+   ]
+  },
+  "len_with_difficulty": {
+   "planted_step": 1.0,
+   "shuffled_D_b_90": [
+    -10.116,
+    10.702
+   ]
+  },
+  "fin_with_difficulty": {
+   "planted_step": 1.0,
+   "shuffled_D_b_90": [
+    -3.193,
+    3.622
+   ]
+  }
+ },
+ "preregistered_rule_on_primary": "f2-m03 refuted",
+ "verdict": "undecided"
+}

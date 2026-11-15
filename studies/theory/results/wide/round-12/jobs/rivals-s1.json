@@ -1,0 +1,52 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "The 4,096-token cap per sample sets a ceiling on hard328. The vote can only choose among answers the base finishes inside 4,096 tokens. On the 328 most right base answers come from the middle RL-length quartiles and need 5,000-14,000 tokens, so 12 votes cannot reach them. MATH-500 problems are short, which is why the cap costs nothing there (338 = cue). The prompt and the vote are not the limit; the length cap is.",
+  "readers_wrong": "The readers carried the vote's MATH-500 gain (dev100 84, math400 tie) over to hard328 and expected a vote over 12 to beat one cued sample (164). They missed that every sample was cut at 4,096 tokens, and the right answers on hard328 lie past that cut.",
+  "rests_on": ["result-6e7b64", "result-5de032", "result-82b4dc", "result-0c1eef"],
+  "holds_against": [
+   {"item": "result-0c1eef", "value": 4, "why": "Only 4 of 64 base answers past 16,384 tokens are right, so extra length looks useless. But that band is 16k-32k. The mechanism concerns the 4k-16k band, where the base's right answers on RL-length quartiles 2-3 (82 of 164) lie."},
+   {"item": "result-6e7b64", "value": 338, "why": "On math400 the 4,096-capped vote ties the cue (338 vs 338), so the cap looks harmless. MATH-500 right answers have a median of about 1,400 tokens, so a 4k cap rarely binds there. It binds only on the long hard328 problems."}
+  ],
+  "forecasts": [
+   {"id": "t01", "value": 233, "low": 221, "high": 245, "reason": "At cap 32,768 length does not bind, so T 0.6 changes little from the own-format T 1.0 count of 232."},
+   {"id": "t02", "value": 474, "low": 466, "high": 482, "reason": "MATH-500 answers are short, so neither the cap nor T matters: equal to the T 1.0 count of 474."},
+   {"id": "t14", "value": 197, "low": 189, "high": 206, "reason": "Vote over 4 is 192-195. At a 16k cap the long problems stay cap-limited, so 2 more votes add only about 3."},
+   {"id": "t15", "value": 471, "low": 462, "high": 479, "reason": "Think-SFT cue scores 457-462. M(2) cuts cap hits, and with the cap binding on few MATH problems that gives about 10 more."},
+   {"id": "t16", "value": 233, "low": 223, "high": 243, "reason": "Mean of M(2)'s three samples is 233.3 (229-237)."},
+   {"id": "t17", "value": 248, "low": 240, "high": 255, "reason": "Vote over 3 is 246. A fourth sample adds about 2, and long problems stay cap-limited at 16k."},
+   {"id": "t18", "value": 245, "low": 237, "high": 253, "reason": "With the cap at 32,768 the length limit is lifted: the other seed gave 245 (16k view 232)."},
+   {"id": "t19", "value": 82, "low": 75, "high": 89, "reason": "Fresh2026 has 46 % cap hits at 16k, so lifting the cap matters more than on hard328 (+6 under the vote). 75 at 16k plus about 7 gives 82."},
+   {"id": "t20", "value": 72, "low": 66, "high": 78, "reason": "About 62 cap hits per sample at 16k, and about 19 % of those finish right at 32k (as on hard328): 60 plus about 12."}
+  ]},
+ {"id": "b",
+  "statement": "Without the cue, the base at T 0.6 meets hard problems with quick, confident, finished wrong answers. These repeat across samples of the same context, so a plurality vote locks onto them. On easy MATH-500 problems the shared answer is the right one, so the vote ties the cue there. On hard328 it fixes the wrong attractor. The 4,096 cap is secondary: most of these samples finish early (mean about 1,700 tokens per sample).",
+  "readers_wrong": "The readers treated the 12 samples as independent draws, so they expected the vote to multiply the single-sample rate toward 190 or more. Under the plain prompt the samples share their wrong answers on hard problems, so the vote stays near the plain base's plurality ceiling of about 140.",
+  "rests_on": ["result-6e7b64", "result-099916", "result-1c9e40"],
+  "holds_against": [
+   {"fact": 28, "value": 0.4286, "why": "Only 43 % of the cued base's vote failures on MATH-500 have an agreeing wrong group. That is the cued context on easy problems. The mechanism places correlated wrong answers in the plain context on hard problems, where quick finished-wrong answers dominate."},
+   {"item": "result-099916", "value": 107, "why": "Plain base at T 0.6 gets 107 against 119 for the cue: a small single-sample gap, so the prompt looks minor. The mechanism concerns how wrong answers agree, which sets the vote's ceiling and not the single-sample rate."}
+  ],
+  "forecasts": [
+   {"id": "t01", "value": 231, "low": 219, "high": 243, "reason": "Think-SFT's own format already removes the plain-prompt failure, and T 0.6 changes little: about 232."},
+   {"id": "t02", "value": 473, "low": 465, "high": 481, "reason": "Own-format MATH-500 is 474 at T 1.0, and T 0.6 changes little."},
+   {"id": "t14", "value": 195, "low": 187, "high": 203, "reason": "The cue context still has some agreeing wrong answers on hard problems, so the vote saturates: 192-195 at 4, about the same at 6."},
+   {"id": "t15", "value": 469, "low": 460, "high": 477, "reason": "Think-SFT cue 457-462, plus a few finished answers from M(2)."},
+   {"id": "t16", "value": 233, "low": 223, "high": 243, "reason": "Mean of three samples is 233.3."},
+   {"id": "t17", "value": 246, "low": 239, "high": 253, "reason": "Vote over 3 is 246. Agreeing wrong answers keep the fourth sample from adding."},
+   {"id": "t18", "value": 243, "low": 235, "high": 251, "reason": "The other seed at 32k gave 245. Allow for seed noise."},
+   {"id": "t19", "value": 78, "low": 71, "high": 85, "reason": "Late answers at 32k often share wrong values (hard328 vote gained only +6), so the vote gains little over 75."},
+   {"id": "t20", "value": 70, "low": 64, "high": 76, "reason": "About 62 cap hits per sample at 16k; roughly 16 % finish right at 32k: 60 plus about 10."}
+  ]}
+ ],
+ "cell": {
+  "cell": {"model": "base Olmo-3-1025-7B", "prompt": "cue", "set": "hard328 shard 0/2", "n": 164, "sampling": "T 1.0 / top-p 1.0, seed 3000000", "samples": 4, "grader": "v3", "cap": 4096},
+  "job": "studies/rlneurons/jobs/run_cell.py",
+  "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --max-tokens 4096 --samples 4 --shard 0/2 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+  "readout": "Plurality vote over the 4 samples per problem (cap hits cast no vote), right under grader v3, out of the 164 problems of shard 0/2.",
+  "unit": "right answers of 164 (vote over 4)",
+  "why": "This keeps the autobench cap (4,096) but swaps the plain prompt for the cue. Under a the cap sets the ceiling, so the cued vote stays near the autobench level (139/328, about 70 of 164) or below. Under b the cue removes the agreeing wrong answers, so the vote nears the uncapped cued one-sample level (about 82 of 164).",
+  "gpu_minutes": 70,
+  "a": {"value": 60, "low": 48, "high": 70},
+  "b": {"value": 83, "low": 74, "high": 93}
+ }
+}

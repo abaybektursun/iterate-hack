@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Invariant: repository maquette</title>
+<title>Repo city</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..500&display=swap">
@@ -26,6 +26,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   background: radial-gradient(58% 44% at 0% 0%, rgba(15,14,13,.8), transparent 72%), radial-gradient(30% 28% at 100% 0%, rgba(15,14,13,.66), transparent 72%), linear-gradient(transparent 74%, rgba(15,14,13,.94) 95%); }
 #head { left: 44px; top: 34px; max-width: min(540px, 44vw); }
 #head .tag { font-size: 11.5px; font-weight: 600; color: var(--faint); letter-spacing: .09em; text-transform: uppercase; }
+#head .tag a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--rule); pointer-events: auto; } #head .tag a:hover { color: var(--ink); }
 #head h1 { margin: 12px 0 12px; font-size: clamp(22px, 2.25vw, 33px); line-height: 1.17; font-weight: 300; letter-spacing: -.012em; text-wrap: balance; }
 #head p { margin: 0; color: var(--mute); max-width: 47ch; }
 #clock { right: 44px; top: 30px; text-align: right; }
@@ -57,6 +58,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 #tip.on { opacity: 1; }
 #tip .path { color: var(--faint); word-break: break-all; } #tip .path b { color: var(--ink); font-weight: 600; font-size: 13.5px; }
 #tip .n { margin: 5px 0 7px; padding-bottom: 7px; border-bottom: 1px solid var(--rule); color: var(--mute); } #tip .n b { color: var(--ink); }
+#tip svg { display: block; margin: 2px 0 8px; } #tip .hist { color: var(--faint); font-size: 11.5px; }
 #tip .msg { color: var(--ink); line-height: 1.38; }
 #tip .by { margin-top: 6px; color: var(--mute); } #tip .by i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--c); margin-right: 7px; }
 #panel { right: 44px; top: 176px; width: min(340px, 30vw); padding: 16px 18px 8px; background: #151311; border: 1px solid rgba(235,230,220,.13); opacity: 0; transform: translateY(8px); transition: opacity .35s, transform .45s cubic-bezier(.2,.7,.2,1); }
@@ -74,7 +76,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 @media (max-width: 760px) {
   #head { left: 16px; top: 14px; max-width: 62vw; } #head p { display: none; } #clock { right: 16px; top: 14px; } #clock dl { display: none; } #clock .when { font-size: 17px; }
   #foot { left: 16px; right: 16px; bottom: 12px; } #read { display: none; } #bar { grid-template-columns: auto 1fr; } #ticker { max-width: 100%; }
-  #panel { left: 16px; right: 16px; top: auto; bottom: 200px; width: auto; } #panel li:nth-child(n+2), #panel p { display: none; }
+  #panel { left: 16px; right: 16px; top: auto; bottom: 200px; width: auto; } #panel li:nth-child(n+2), #panel p { display: none; } #key span:not(.hue) { display: none; } #tip { max-width: calc(100vw - 24px); }
 }
 </style>
 </head>
@@ -82,7 +84,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 <canvas id="gl"></canvas>
 <div id="scrim"></div>
 <div id="err"></div>
-<div class="hud" id="head"><div class="tag">Site lab · repository maquette</div><h1 class="serif" id="h1"></h1><p id="sub"></p></div>
+<div class="hud" id="head"><div class="tag"><a href="../../">Lab</a> · Repository maquette</div><h1 class="serif" id="h1"></h1><p id="sub"></p></div>
 <div class="hud" id="clock"><div class="when serif" id="when"></div>
   <dl><dt>files standing</dt><dd id="s-files">0</dd><dt>lines standing</dt><dd id="s-lines">0</dd><dt>commits</dt><dd id="s-commits">0</dd><dt>merges</dt><dd id="s-merges">0</dd></dl></div>
 <div class="hud" id="panel"><button class="x" id="px" aria-label="Close">×</button><h2 class="serif" id="p-name"></h2><p id="p-readme"></p><dl id="p-dl"></dl><ul id="p-res"></ul></div>
@@ -149,30 +151,40 @@ scene.background = new THREE.Color(0x0b0a09);
 const camera = new THREE.PerspectiveCamera(30, 1, 2, 6000);
 camera.position.set(-300, 200, 500);
 const controls = new OrbitControls(camera, canvas);
-Object.assign(controls, { enableDamping: true, dampingFactor: .055, maxPolarAngle: Math.PI * .47, minDistance: 40, maxDistance: 1400, zoomSpeed: .7, rotateSpeed: .5, autoRotateSpeed: .22, screenSpacePanning: false });
+Object.assign(controls, { enableDamping: true, dampingFactor: .055, maxPolarAngle: Math.PI * .47, minDistance: 40, maxDistance: 1700, zoomSpeed: .7, rotateSpeed: .5, autoRotateSpeed: .22, screenSpacePanning: false });
 
 const BX = [Math.min(...DS.map(d => d.r[0])), Math.max(...DS.map(d => d.r[0] + d.r[2]))], BY = [Math.min(...DS.map(d => d.r[1])), Math.max(...DS.map(d => d.r[1] + d.r[3]))];
 const MARGIN = 46, BW = BX[1] - BX[0] + 2 * MARGIN, BH = BY[1] - BY[0] + 2 * MARGIN, SLAB = 9;   // the baseboard under the model
 
 // height field of the model, drawn from the same heights as the blocks: the shaders march it for the key light's shadows and for contact shade
-const HMW = 1024, HMH = Math.round(HMW * BH / BW), hmC = Object.assign(document.createElement("canvas"), { width: HMW, height: HMH }), hmX = hmC.getContext("2d");
-const hmTex = new THREE.CanvasTexture(hmC); hmTex.flipY = false; hmTex.generateMipmaps = false; hmTex.minFilter = hmTex.magFilter = THREE.LinearFilter;
+const HMW = 1024, HMH = Math.round(HMW * BH / BW), hm = new Uint8Array(HMW * HMH);
+const hmTex = new THREE.DataTexture(hm, HMW, HMH, THREE.RedFormat, THREE.UnsignedByteType); hmTex.unpackAlignment = 1; hmTex.minFilter = hmTex.magFilter = THREE.LinearFilter;
 const U = { uClock: { value: 0 }, uNow: { value: 0 }, uHover: { value: -1 }, uSel: { value: -1 },
-  uHM: { value: hmTex }, uHMRect: { value: new THREE.Vector4(BX[0] - MARGIN, BY[0] - MARGIN, BW, BH) }, uL: { value: new THREE.Vector3(-.62, .52, .5).normalize() } };
-const LIGHT = `uniform sampler2D uHM; uniform vec4 uHMRect; uniform vec3 uL;
-  const vec3 KEY = vec3(1., .925, .81) * 1.12, FILL = vec3(.135, .138, .145), TUNGSTEN = vec3(1., .69, .37);
+  uHM: { value: hmTex }, uHMRect: { value: new THREE.Vector4(BX[0] - MARGIN, BY[0] - MARGIN, BW, BH) }, uL: { value: new THREE.Vector3(.72, .5, -.32).normalize() } };
+const LIGHT = `uniform sampler2D uSH; uniform vec4 uHMRect; uniform vec3 uL;
+  const vec3 KEY = vec3(1., .925, .81) * 1.25, FILL = vec3(.15, .152, .16), TUNGSTEN = vec3(1., .69, .37);
   float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
   float vnoise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);
     return mix(mix(hash(i), hash(i + vec2(1., 0.)), f.x), mix(hash(i + vec2(0., 1.)), hash(i + vec2(1., 1.)), f.x), f.y); }
-  float hAt(vec2 xz){ vec2 uv = (xz - uHMRect.xy) / uHMRect.zw; if (uv.x < 0. || uv.y < 0. || uv.x > 1. || uv.y > 1.) return 0.; float g = texture2D(uHM, uv).r; return g * g * 240.; }
-  float shadow(vec3 p){ float s = 1., t = 1. + .08 * hash(gl_FragCoord.xy);                           // soft shadow of the key light
-    for (int i = 0; i < 20; i++) { vec3 q = p + uL * t; s = min(s, clamp(.5 + (q.y - hAt(q.xz)) / (t * .22 + .7), 0., 1.)); t *= 1.3; } return s * s * (3. - 2. * s); }
-  float contact(vec3 p){ float o = 0.;                                   // shade from what stands close by
-    for (int i = 0; i < 6; i++) { float a = float(i) * 1.0472 + .4, r = i < 3 ? 2.4 : 7.; o += clamp((hAt(p.xz + vec2(cos(a), sin(a)) * r) - p.y) / (r * 1.6), 0., 1.); } return 1. - o / 6. * .85; }
+  vec2 shAt(vec2 xz){ vec4 t = texture2D(uSH, clamp((xz - uHMRect.xy) / uHMRect.zw, 0., 1.)); return vec2(t.r * t.r * 240., t.g); }   // x: height below which the key light is blocked, y: contact shade at the ground
+  float lit(float y, float hs){ return clamp((y - hs) / 1.3 + 1., 0., 1.); }
   vec3 env(vec3 r){                                                       // the studio: one large softbox upper left, a strip behind right, a dim room
-    float box = smoothstep(.5, .96, dot(r, normalize(vec3(-.5, .78, .38))));
-    float strip = smoothstep(.86, .99, dot(normalize(vec3(r.x, r.y * .4, r.z)), normalize(vec3(.75, .1, -.65))));
+    float box = smoothstep(.5, .96, dot(r, normalize(vec3(.6, .74, -.25))));
+    float strip = smoothstep(.86, .99, dot(normalize(vec3(r.x, r.y * .4, r.z)), normalize(vec3(-.7, .12, .7))));
     return vec3(1., .94, .85) * box * 1.5 + vec3(.72, .8, .94) * strip * .6 + vec3(.05, .047, .043) * (.5 + .5 * r.y); }`;
+// The shadows are baked, not marched per pixel: whenever heights change, one pass over the height field writes, for every point of the board,
+// the height below which the key light is blocked (and the contact shade at the ground). Every surface then reads one texel.
+const shRT = new THREE.WebGLRenderTarget(HMW, HMH, { depthBuffer: false, minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter });
+U.uSH = { value: shRT.texture };
+const bakeCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1), bakeScene = new THREE.Scene();
+bakeScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({ uniforms: U, depthTest: false,
+  vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0., 1.); }`,
+  fragmentShader: `uniform sampler2D uHM; uniform vec4 uHMRect; uniform vec3 uL; varying vec2 vUv;
+    float hAt(vec2 xz){ vec2 uv = (xz - uHMRect.xy) / uHMRect.zw; if (uv.x < 0. || uv.y < 0. || uv.x > 1. || uv.y > 1.) return 0.; float g = texture2D(uHM, uv).r; return g * g * 240.; }
+    void main(){ vec2 xz = uHMRect.xy + vUv * uHMRect.zw, dir = normalize(uL.xz); float slope = uL.y / length(uL.xz), hs = 0., t = 1.6 + fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453);   // the start is dithered so the steps of the march do not print as stairs
+      for (int i = 0; i < 72; i++) { hs = max(hs, hAt(xz + dir * t) - t * slope); t += .8 + t * .045; }
+      float o = 0.; for (int i = 0; i < 8; i++) { float a = float(i) * .7854 + .3, r = i < 4 ? 2.2 : 6.5; o += clamp(hAt(xz + vec2(cos(a), sin(a)) * r) / (r * 1.6), 0., 1.); }
+      gl_FragColor = vec4(sqrt(clamp(hs / 240., 0., 1.)), 1. - o / 8. * .85, 0., 1.); }` })));
 
 // the room: a dark seamless backdrop, slightly lifted at the horizon
 scene.add(new THREE.Mesh(new THREE.SphereGeometry(4500, 32, 16), new THREE.ShaderMaterial({ side: THREE.BackSide, depthWrite: false,
@@ -203,7 +215,7 @@ const towers = new THREE.Mesh(geo, new THREE.ShaderMaterial({
       if (h < .02) p = vec3(0.);
       vW = p; vN = normal; vL = position; vSize = iRect.zw; vH = h; vTint = iTint.rgb; vSeed = iMeta.z;
       float age = max(0., uNow - iTint.a);
-      vLit = 1. / (1. + pow(age / .5, 1.5));                             // share of windows lit: all when touched now, half after 30 minutes, 1/16 after three hours
+      vLit = .62 / (1. + pow(age / .4, 1.5));                            // share of windows lit: 62% when touched now, half of that after 24 minutes, 3% after three hours
       vCell = clamp(min(iRect.z, iRect.w) / 4.5, 1.25, 3.2);
       vNew = (1. - clamp(k, 0., 1.)) * step(-50., iH.z);
       vDim = (uSel < -.5 || abs(uSel - iMeta.y) < .5) ? 1. : .3;
@@ -217,12 +229,14 @@ const towers = new THREE.Mesh(geo, new THREE.ShaderMaterial({
       float dist = length(cameraPosition - vW), ndv = max(dot(n, V), 0.);
       float fres = .04 + .96 * pow(1. - ndv, 5.);
       vec3 R = reflect(-V, n);
-      float grain = vnoise(vW.xz * 5.3 + vW.y * 7.1) * .6 + hash(floor(vW.xz * 14.) + floor(vW.y * 14.) * 3.7) * .4;
+      float near = 1. - smoothstep(120., 420., dist);                      // fine texture fades out with distance, so nothing shimmers
+      float grain = mix(.5, vnoise(vW.xz * 5.3 + vW.y * 7.1) * .6 + hash(floor(vW.xz * 14.) + floor(vW.y * 14.) * 3.7) * .4, near);
       float ndl = dot(n, uL);
-      float sh = ndl > 0. ? shadow(vW + n * 1.5) : 0.;
-      float occ = contact(vW + n * 1.3) * (.5 + .5 * smoothstep(-.2, 2.2, vW.y));
+      vec2 sf = shAt(vW.xz + n.xz * 1.5);
+      float sh = ndl > 0. ? lit(vW.y, sf.x) : 0.;
+      float occ = mix(sf.y, 1., smoothstep(0., 10., vW.y) * .8 + .2 * abs(n.y)) * (.5 + .5 * smoothstep(-.2, 2.2, vW.y));
       vec3 light = KEY * max(ndl, 0.) * sh + FILL * (.6 + .4 * n.y) * occ;
-      vec3 alb = vec3(.60, .575, .53) * (.88 + .12 * grain);                  // cast resin, slightly warm
+      vec3 alb = vec3(.56, .535, .49) * (.88 + .12 * grain);                  // cast resin, slightly warm
       alb *= .97 + .06 * vSeed;
       vec3 col; float edge;
       if (abs(n.y) > .5) {                                                 // roof: a lacquered plate in the colour of who touched the file last, inside a parapet
@@ -230,16 +244,16 @@ const towers = new THREE.Mesh(geo, new THREE.ShaderMaterial({
         float plate = smoothstep(.42, .42 + aa, inset), gap = smoothstep(.3, .3 + aa, inset) * (1. - plate);
         vec3 lac = vTint * (.92 + .08 * grain);
         alb = mix(alb, lac, plate) * (1. - .55 * gap);
-        col = alb * light + env(R) * (fres + .05 * plate) * mix(.25, 1.4, plate) * sh;
+        col = alb * light + env(R) * (fres + .03 * plate) * mix(.25, .5, plate) * sh;
         edge = 1. - smoothstep(0., .1 + dist * .0009, inset);
       } else {
         float u = abs(n.x) > .5 ? vL.z * vSize.y : vL.x * vSize.x, w = abs(n.x) > .5 ? vSize.y : vSize.x;
         float ex = w * .5 - abs(u), top = vH - vW.y;
         vec2 g = vec2(u / vCell + 50., vW.y / (vCell * 1.12));
         vec2 cell = floor(g), f = fract(g);
-        float lod = smoothstep(.3, .85, fwidth(g.x) + fwidth(g.y));
+        float fw = fwidth(g.x) + fwidth(g.y), lod = smoothstep(.1, .42, fw), aw = .03 + fw * .9;
         float on = step(hash(cell + vSeed * 91. + dot(n.xz, vec2(1.7, 3.1))), vLit);
-        float mask = smoothstep(.2, .25, f.x) * smoothstep(.8, .75, f.x) * smoothstep(.26, .32, f.y) * smoothstep(.8, .74, f.y) * step(.45, ex) * step(.4, top);
+        float mask = smoothstep(.22 - aw, .22 + aw, f.x) * smoothstep(.78 + aw, .78 - aw, f.x) * smoothstep(.28 - aw, .28 + aw, f.y) * smoothstep(.78 + aw, .78 - aw, f.y) * step(.45, ex) * step(.4, top);
         float slab = (1. - smoothstep(0., .05, f.y)) * (1. - lod);        // a fine joint at every floor
         alb *= 1. - .22 * slab;
         col = alb * light + env(R) * fres * .2 * occ;
@@ -247,7 +261,7 @@ const towers = new THREE.Mesh(geo, new THREE.ShaderMaterial({
         float wm = mix(mask, .3, lod);
         col = mix(col, glass, wm * .8);
         float v = .6 + .8 * hash(cell * 1.7 + vSeed * 13.);
-        col += TUNGSTEN * mix(on * mask * v, vLit * .3, lod) * (2.3 + 1.6 * vNew);
+        col += TUNGSTEN * mix(on * mask * v, vLit * .22, lod) * (2.1 + 1.2 * vNew);
         col += TUNGSTEN * alb * vLit * .05;                                 // a little of the inner light comes through the resin
         edge = 1. - smoothstep(0., .09 + dist * .0009, min(ex, top));
       }
@@ -259,7 +273,7 @@ const towers = new THREE.Mesh(geo, new THREE.ShaderMaterial({
 towers.frustumCulled = false; scene.add(towers);
 
 // ---- baseboard: dark lacquered wood with a planar reflection, on a slab, on a table ---------------------------------
-const ground = new Reflector(new THREE.PlaneGeometry(BW, BH), { clipBias: .01, textureWidth: 1024, textureHeight: 640, color: 0x000000, shader: {
+const ground = new Reflector(new THREE.PlaneGeometry(BW, BH), { clipBias: .01, textureWidth: 768, textureHeight: 480, color: 0x000000, shader: {
   uniforms: { color: { value: null }, tDiffuse: { value: null }, textureMatrix: { value: null } },
   vertexShader: `uniform mat4 textureMatrix; varying vec4 vUv; varying vec3 vWp;
     void main(){ vUv = textureMatrix * vec4(position, 1.); vWp = (modelMatrix * vec4(position, 1.)).xyz; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }`,
@@ -267,20 +281,21 @@ const ground = new Reflector(new THREE.PlaneGeometry(BW, BH), { clipBias: .01, t
     ${LIGHT}
     void main(){
       vec3 V = cameraPosition - vWp; float dist = length(V); V /= dist;
-      float fig = vnoise(vec2(vWp.x * .05 + vnoise(vWp.xz * .02) * 2.5, vWp.z * 1.1)), pore = vnoise(vWp.xz * vec2(1.6, 26.));
+      float fig = vnoise(vec2(vWp.x * .05 + vnoise(vWp.xz * .02) * 2.5, vWp.z * 1.1)), pore = mix(.5, vnoise(vWp.xz * vec2(1.6, 26.)), 1. - smoothstep(150., 480., dist));
       vec3 alb = mix(vec3(.052, .043, .035), vec3(.074, .060, .047), fig) * (.9 + .14 * pore);   // smoked walnut under lacquer
       vec2 uv = vUv.xy / vUv.w + (vec2(pore, fig) - .5) * .004; vec3 r = vec3(0.); float s = .003;
       r += texture2D(tDiffuse, uv).rgb * .2;
       r += texture2D(tDiffuse, uv + vec2(s, 0.)).rgb * .1 + texture2D(tDiffuse, uv - vec2(s, 0.)).rgb * .1;
       r += texture2D(tDiffuse, uv + vec2(0., s * 2.5)).rgb * .15 + texture2D(tDiffuse, uv - vec2(0., s * 2.5)).rgb * .15;
       r += texture2D(tDiffuse, uv + vec2(0., s * 6.)).rgb * .15 + texture2D(tDiffuse, uv - vec2(0., s * 6.)).rgb * .15;
-      vec3 p = vWp + vec3(0., .05, 0.); float sh = shadow(p), occ = contact(p);
+      vec2 sf = shAt(vWp.xz); float occ = sf.y;                                // four more taps soften the stair steps of the field at shadow edges
+      float sh = (lit(0., sf.x) + lit(0., shAt(vWp.xz + vec2(.7, .3)).x) + lit(0., shAt(vWp.xz + vec2(-.3, .7)).x) + lit(0., shAt(vWp.xz + vec2(-.7, -.3)).x) + lit(0., shAt(vWp.xz + vec2(.3, -.7)).x)) / 5.;
       float fres = .045 + .955 * pow(1. - V.y, 5.);
       vec3 col = alb * (KEY * uL.y * sh + FILL * occ) + r * fres * .8 * (.4 + .6 * occ);
       gl_FragColor = vec4(col, 1.);
     }` } });
 ground.rotation.x = -Math.PI / 2; scene.add(ground);
-Object.assign(ground.material.uniforms, { uHM: U.uHM, uHMRect: U.uHMRect, uL: U.uL });
+Object.assign(ground.material.uniforms, { uSH: U.uSH, uHMRect: U.uHMRect, uL: U.uL });
 const slab = new THREE.Mesh(new THREE.BoxGeometry(BW, SLAB, BH).translate(0, -SLAB / 2 - .03, 0), new THREE.ShaderMaterial({ uniforms: U,
   vertexShader: `varying vec3 vW, vN; void main(){ vW = position; vN = normal; gl_Position = projectionMatrix * viewMatrix * vec4(position, 1.); }`,
   fragmentShader: `varying vec3 vW, vN; ${LIGHT}
@@ -299,7 +314,7 @@ const table = new THREE.Mesh(new THREE.PlaneGeometry(7000, 7000).rotateX(-Math.P
       gl_FragColor = vec4(col, 1.); }` }));
 scene.add(table);
 { const mirror = ground.onBeforeRender;                                // the slab and the table lie under the board: keep them out of its reflection
-  ground.onBeforeRender = function (...a) { slab.visible = table.visible = false; mirror.apply(this, a); slab.visible = table.visible = true; }; }
+  ground.onBeforeRender = function (...a) { const bv = beams.visible, sv = sparks.visible; slab.visible = table.visible = beams.visible = sparks.visible = false; mirror.apply(this, a); slab.visible = table.visible = true; beams.visible = bv; sparks.visible = sv; }; }
 
 // ---- roads: inlaid lines along the district borders; the graph the merge lights travel on ---------------------------
 const key = (x, y) => x.toFixed(1) + "," + y.toFixed(1);
@@ -361,15 +376,15 @@ for (let i = 0; i < NB; i++) bB[i * 4 + 3] = -100;
 beamGeo.setAttribute("iA", ibA); beamGeo.setAttribute("iB", ibB);                      // iA: x, z, radius, base height; iB: rgb, start
 const beams = new THREE.Mesh(beamGeo, new THREE.ShaderMaterial({ uniforms: U, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide,
   vertexShader: `attribute vec4 iA, iB; uniform float uClock; varying float vY, vK; varying vec3 vC, vN2, vV;
-    void main(){ vK = (uClock - iB.w) / 2.2; float len = 170.;
-      vec3 p = vec3(iA.x + position.x * iA.z * (1. + position.y * 2.5), iA.w + position.y * len, iA.y + position.z * iA.z * (1. + position.y * 2.5));
+    void main(){ vK = (uClock - iB.w) / 1.5; float len = 55.;
+      vec3 p = vec3(iA.x + position.x * iA.z * (1. + position.y * .8), iA.w + position.y * len, iA.y + position.z * iA.z * (1. + position.y * .8));
       if (vK < 0. || vK > 1.) p = vec3(0.);
       vY = position.y; vC = iB.rgb; vN2 = normal; vV = cameraPosition - p; gl_Position = projectionMatrix * viewMatrix * vec4(p, 1.); }`,
   fragmentShader: `varying float vY, vK; varying vec3 vC, vN2, vV;
     void main(){ float core = pow(abs(dot(normalize(vN2), normalize(vec3(vV.x, 0., vV.z)))), 2.);
       float env = smoothstep(0., .12, vK) * (1. - smoothstep(.35, 1., vK));          // fades in, holds, fades out
       float a = env * pow(1. - vY, 1.6) * core;
-      gl_FragColor = vec4(vec3(1., .84, .62) * a * .2, 1.); }` }));
+      gl_FragColor = vec4(vec3(1., .84, .62) * a * .11, 1.); }` }));
 beams.frustumCulled = false; scene.add(beams);
 let beamI = 0;
 function beam(x, z, r, y, col) { const i = beamI++ % NB; bA.set([x, z, r, y], i * 4); bB.set([col[0], col[1], col[2], U.uClock.value], i * 4); ibA.needsUpdate = ibB.needsUpdate = true; }
@@ -395,10 +410,18 @@ const NV = 1200, vP = new Float32Array(NV * 3), vC = new Float32Array(NV * 4);
 const vGeo = new THREE.BufferGeometry(), vPa = new THREE.BufferAttribute(vP, 3), vCa = new THREE.BufferAttribute(vC, 4); vPa.setUsage(THREE.DynamicDrawUsage); vCa.setUsage(THREE.DynamicDrawUsage);
 vGeo.setAttribute("position", vPa); vGeo.setAttribute("aC", vCa); vGeo.setDrawRange(0, 0);
 const cars = new THREE.Points(vGeo, new THREE.ShaderMaterial({ uniforms: { uPx: { value: 1 } }, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false,
-  vertexShader: `attribute vec4 aC; uniform float uPx; varying vec4 vC; void main(){ vC = aC; vec4 mv = viewMatrix * vec4(position, 1.); gl_Position = projectionMatrix * mv; gl_PointSize = max(2., uPx * (1500. * aC.a + 500.) / -mv.z); }`,
+  vertexShader: `attribute vec4 aC; uniform float uPx; varying vec4 vC; void main(){ vC = aC; vec4 mv = viewMatrix * vec4(position, 1.); gl_Position = projectionMatrix * mv; gl_PointSize = max(3., uPx * (2600. * aC.a + 900.) / -mv.z); }`,
   fragmentShader: `varying vec4 vC; void main(){ float d = length(gl_PointCoord - .5); float a = smoothstep(.5, .08, d); gl_FragColor = vec4(mix(vC.rgb, vec3(1., .9, .74), .75) * a * a * (.25 + 1.5 * vC.a), 1.); }` }));
 cars.frustumCulled = false; scene.add(cars);
 let convoys = [];
+// the road under a merge lights up from its last light to its first: a ribbon on the inlay, rebuilt each frame
+const NR = 1600, rP = new Float32Array(NR * 18), rA = new Float32Array(NR * 6), rGeo = new THREE.BufferGeometry();
+const rPa = new THREE.BufferAttribute(rP, 3), rAa = new THREE.BufferAttribute(rA, 1); rPa.setUsage(THREE.DynamicDrawUsage); rAa.setUsage(THREE.DynamicDrawUsage);
+rGeo.setAttribute("position", rPa); rGeo.setAttribute("aA", rAa); rGeo.setDrawRange(0, 0);
+const ribbon = new THREE.Mesh(rGeo, new THREE.ShaderMaterial({ transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide,
+  vertexShader: `attribute float aA; varying float vA; void main(){ vA = aA; gl_Position = projectionMatrix * viewMatrix * vec4(position, 1.); }`,
+  fragmentShader: `varying float vA; void main(){ gl_FragColor = vec4(vec3(1., .78, .5) * vA * vA * .55, 1.); }` }));
+ribbon.frustumCulled = false; scene.add(ribbon);
 const convLabs = Array.from({ length: 1 }, () => { const e = document.createElement("div"); e.className = "lab"; e.style.opacity = 0; document.body.append(e); return e; });
 function convoy(m) {
   const g = gateFor(m.from || m.s), total = m.d.reduce((s, x) => s + x[1], 0) || 1, show = Math.min(m.n, 30);
@@ -409,33 +432,44 @@ function convoy(m) {
   });
 }
 function at(cv, s) { const { pts, cum } = cv; let i = 1; while (i < cum.length - 1 && cum[i] < s) i++; const k = Math.min(1, Math.max(0, (s - cum[i - 1]) / (cum[i] - cum[i - 1] || 1))); return [pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * k, pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * k]; }
-const SPEED = 120, GAP = 7;
+const SPEED = 92, GAP = 7;
 function stepConvoys() {
   const now = U.uClock.value; let n = 0;
   convoys = convoys.filter(cv => (now - cv.t) * SPEED - cv.n * GAP < cv.cum[cv.cum.length - 1] + 10);
-  const heads = [];
+  const heads = []; let rn = 0;
   for (const cv of convoys) { const L = cv.cum[cv.cum.length - 1], s0 = (now - cv.t) * SPEED;
     if (!cv.hit && s0 >= L) { cv.hit = true; pulse[cv.d] = now; }
     for (let i = 0; i < cv.n; i++) for (let tr = 0; tr < 3; tr++) { const s = s0 - i * GAP - tr * 1.3; if (s < 0 || s > L || n >= NV) continue;
-      const p = at(cv, s); vP.set([p[0], .9, p[1]], n * 3); vC.set([cv.col[0], cv.col[1], cv.col[2], tr === 0 ? 1 : .3 - tr * .1], n * 4); n++; }
+      const p = at(cv, s); vP.set([p[0], 1.3, p[1]], n * 3); vC.set([cv.col[0], cv.col[1], cv.col[2], tr === 0 ? 1 : .3 - tr * .1], n * 4); n++; }
     if (cv.text && s0 < L) heads.push([cv, at(cv, s0)]);
+    const hd = Math.min(s0, L), tl = Math.max(0, s0 - cv.n * GAP - 26), fade = Math.min(1, Math.max(0, 1 - (s0 - L) / (cv.n * GAP + 26)));
+    for (let i = 1; i < cv.pts.length && rn < NR; i++) { const a = Math.max(tl, cv.cum[i - 1]), b = Math.min(hd, cv.cum[i]); if (b <= a) continue;
+      const p = at(cv, a + 1e-3), q = at(cv, b - 1e-3), dx = q[0] - p[0], dz = q[1] - p[1], l = Math.hypot(dx, dz) || 1, nx = -dz / l * .9, nz = dx / l * .9;
+      const ka = (.12 + .88 * (a - tl) / (hd - tl || 1)) * fade, kb = (.12 + .88 * (b - tl) / (hd - tl || 1)) * fade;
+      rP.set([p[0] - nx, .1, p[1] - nz, p[0] + nx, .1, p[1] + nz, q[0] + nx, .1, q[1] + nz, p[0] - nx, .1, p[1] - nz, q[0] + nx, .1, q[1] + nz, q[0] - nx, .1, q[1] - nz], rn * 18);
+      rA.set([ka, ka, kb, ka, kb, kb], rn * 6); rn++; }
   }
-  vGeo.setDrawRange(0, n); vPa.needsUpdate = vCa.needsUpdate = true;
+  vGeo.setDrawRange(0, n); rGeo.setDrawRange(0, rn * 6);
+  const up = (a, count) => { if (!count) return; a.clearUpdateRanges(); a.addUpdateRange(0, count); a.needsUpdate = true; };   // send only what is drawn, and nothing when no merge is on the road
+  up(vPa, n * 3); up(vCa, n * 4); up(rPa, rn * 18); up(rAa, rn * 6);
   convLabs.forEach((e, i) => { const h = heads[heads.length - 1 - i]; if (!h) { e.style.opacity = 0; return; }
     const p = new THREE.Vector3(h[1][0], 3, h[1][1]).project(camera); if (p.z > 1) { e.style.opacity = 0; return; }
-    e.textContent = h[0].text; e.style.opacity = .8; e.style.transform = `translate(${(p.x * .5 + .5) * innerWidth + 8}px, ${(-p.y * .5 + .5) * innerHeight - 20}px)`; });
+    e.textContent = h[0].text; e.style.opacity = .8; e.style.transform = `translate(${Math.max(12, Math.min((p.x * .5 + .5) * innerWidth + 8, innerWidth - e.offsetWidth - 14))}px, ${(-p.y * .5 + .5) * innerHeight - 20}px)`; });
 }
 
 // ---- state: replay of the commits -----------------------------------------------------------------------------------
 const lines = new Float32Array(NF), lastC = new Int32Array(NF).fill(-1);
 let ci = 0, mi = 0, T = T0, playing = true, standing = 0, totalLines = 0, focus = new THREE.Vector3(), mass = new THREE.Vector3(), reach = 0, hmDirty = true, hmAt = -1;
 const easeJS = k => { k = Math.min(1, Math.max(0, k)); return 1 - Math.pow(1 - k, 4); };
-function bake() {                                                      // heights -> the height field the shadows read
-  hmX.fillStyle = "#000"; hmX.fillRect(0, 0, HMW, HMH); const sx = HMW / BW, sz = HMH / BH, ox = BX[0] - MARGIN, oz = BY[0] - MARGIN;
-  for (let i = 0; i < NF; i++) { const h = aH[i * 3 + 1]; if (h < .02) continue; const g = Math.round(Math.sqrt(Math.min(1, h / 240)) * 255);
-    hmX.fillStyle = `rgb(${g},${g},${g})`; hmX.fillRect((aRect[i * 4] - aRect[i * 4 + 2] / 2 - ox) * sx, (aRect[i * 4 + 1] - aRect[i * 4 + 3] / 2 - oz) * sz, aRect[i * 4 + 2] * sx, aRect[i * 4 + 3] * sz); }
-  hmTex.needsUpdate = true; hmDirty = false; hmAt = U.uClock.value;
-  let x0 = 1e9, x1 = -1e9, z0 = 1e9, z1 = -1e9;                          // the box around everything that stands: the crane's subject
+const SX = HMW / BW, SZ = HMH / BH, OX = BX[0] - MARGIN, OZ = BY[0] - MARGIN;
+function paint(i) {                                                   // one block's height into the height field
+  const g = Math.round(Math.sqrt(Math.min(1, aH[i * 3 + 1] / 240)) * 255), cx = aRect[i * 4], cz = aRect[i * 4 + 1], w = aRect[i * 4 + 2] / 2, d = aRect[i * 4 + 3] / 2;
+  const x0 = Math.max(0, Math.round((cx - w - OX) * SX)), x1 = Math.min(HMW, Math.max(x0 + 1, Math.round((cx + w - OX) * SX))), z0 = Math.max(0, Math.round((cz - d - OZ) * SZ)), z1 = Math.min(HMH, Math.max(z0 + 1, Math.round((cz + d - OZ) * SZ)));
+  for (let z = z0; z < z1; z++) hm.fill(g, z * HMW + x0, z * HMW + x1); }
+function bake() {                                                      // height field -> shadow field, and the box around everything that stands
+  hmTex.needsUpdate = true; renderer.setRenderTarget(shRT); renderer.render(bakeScene, bakeCam); renderer.setRenderTarget(null);
+  hmDirty = false; hmAt = U.uClock.value;
+  let x0 = 1e9, x1 = -1e9, z0 = 1e9, z1 = -1e9;
   for (let i = 0; i < NF; i++) if (aH[i * 3 + 1] > .02) { x0 = Math.min(x0, aRect[i * 4]); x1 = Math.max(x1, aRect[i * 4]); z0 = Math.min(z0, aRect[i * 4 + 1]); z1 = Math.max(z1, aRect[i * 4 + 1]); }
   if (x1 >= x0) { mass.set((x0 + x1) / 2, 0, (z0 + z1) / 2); reach = Math.hypot(x1 - x0, z1 - z0) / 2; }
 }
@@ -449,7 +483,7 @@ function apply(c, idx, live) {
     const h1 = Hf(ln);
     if (live) { const h0 = aH[f * 3] + (aH[f * 3 + 1] - aH[f * 3]) * easeJS((clock - aH[f * 3 + 2]) / RISE); aH[f * 3] = h0; aH[f * 3 + 1] = h1; aH[f * 3 + 2] = clock + Math.random() * .3; touched.push([w, f, e[j + 2], e[j + 3], h0, h1]); }
     else { aH[f * 3] = aH[f * 3 + 1] = h1; aH[f * 3 + 2] = -100; }
-    aTint.set([col[0], col[1], col[2], th], f * 4);
+    aTint.set([col[0], col[1], col[2], th], f * 4); paint(f);
     lines[f] = ln; lastC[f] = idx;
     if (w > bestW) { bestW = w; best = f; }
   }
@@ -457,7 +491,7 @@ function apply(c, idx, live) {
   if (best >= 0) focus.set(aRect[best * 4], 0, aRect[best * 4 + 1]);
   if (!live) return;
   touched.sort((a, b) => b[0] - a[0]);
-  touched.slice(0, 1).forEach(([w, f, add, del, h0, h1]) => beam(aRect[f * 4], aRect[f * 4 + 1], Math.min(2.2, Math.min(aRect[f * 4 + 2], aRect[f * 4 + 3]) * .3), Math.max(h0, h1), col));
+  touched.slice(0, 1).forEach(([w, f, add, del, h0, h1]) => beam(aRect[f * 4], aRect[f * 4 + 1], Math.min(1.5, Math.min(aRect[f * 4 + 2], aRect[f * 4 + 3]) * .25), Math.max(h0, h1), col));
   let budget = 70; const DUST = [.9, .78, .6], CHIP = [.62, .6, .56];
   for (const [w, f, add, del, h0, h1] of touched) { if (budget <= 0) break;
     const x = aRect[f * 4], z = aRect[f * 4 + 1], sw = aRect[f * 4 + 2], sd = aRect[f * 4 + 3];
@@ -470,12 +504,12 @@ function apply(c, idx, live) {
 }
 function seek(t, live) {
   t = Math.min(T1, Math.max(T0, t));
-  if (t < T) { lines.fill(0); lastC.fill(-1); aH.fill(0); for (let i = 0; i < NF; i++) aH[i * 3 + 2] = -100; aTint.fill(0); ci = mi = standing = totalLines = 0; convoys = []; live = false; hmDirty = true; }
+  if (t < T) { lines.fill(0); lastC.fill(-1); aH.fill(0); for (let i = 0; i < NF; i++) aH[i * 3 + 2] = -100; aTint.fill(0); ci = mi = standing = totalLines = 0; convoys = []; live = false; hmDirty = true; hm.fill(0); }
   let n = 0; while (ci + n < C.length && C[ci + n].t <= t) n++;
   if (n > 60) live = false;
   for (; ci < C.length && C[ci].t <= t; ci++) apply(C[ci], ci, live);
   for (; mi < M.length && M[mi].t <= t; mi++) if (live) convoy(M[mi]);
-  T = t; iH.needsUpdate = iTint.needsUpdate = true;
+  wake(); T = t; iH.needsUpdate = iTint.needsUpdate = true;
   U.uNow.value = (T - T0) / 3600;
   $("when").textContent = when(T);
   $("s-files").textContent = fmt(standing); $("s-lines").textContent = fmt(totalLines); $("s-commits").textContent = fmt(ci); $("s-merges").textContent = fmt(mi);
@@ -483,7 +517,9 @@ function seek(t, live) {
 
 // ---- scrubber: code and text lines added (up) and deleted (down) per hour -------------------------------------------
 const sc = $("scrub"), sx = sc.getContext("2d");
+let scrubT = -1;
 function drawScrub() {
+  if (scrubT === T) return; scrubT = T;
   const w = sc.clientWidth, h = sc.clientHeight, dpr = Math.min(devicePixelRatio, 2); if (sc.width !== w * dpr) { sc.width = w * dpr; sc.height = h * dpr; }
   sx.setTransform(dpr, 0, 0, dpr, 0, 0); sx.clearRect(0, 0, w, h);
   const hrs = D.hours, mx = Math.max(...hrs.map(x => x[0])), base = h - 17, top = base - 14, bw = w * 3600 / SPAN, p = (T - T0) / SPAN;
@@ -499,7 +535,7 @@ function drawScrub() {
   const d0 = new Date(T0 * 1000), first = new Date(d0); first.setMinutes(0, 0, 0); first.setHours(Math.ceil((d0.getHours() + 1) / 4) * 4);
   for (let t = first.getTime() / 1000; t < T1 - 1800; t += 4 * 3600) { const dt = new Date(t * 1000), x = (t - T0) / SPAN * w;
     sx.textAlign = "center"; sx.fillText(dt.getHours() === 0 ? dt.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }) : String(dt.getHours()).padStart(2, "0") + ":00", x, h + 1); }
-  sx.textAlign = "left"; sx.fillText("Code and text lines per hour: added above the line, deleted below", 2, 10);
+  sx.textAlign = "left"; if (w > 420) sx.fillText("Code and text lines per hour: added above the line, deleted below", 2, 10);
 }
 let dragging = false;
 const scrubTo = e => { const r = sc.getBoundingClientRect(); seek(T0 + SPAN * Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)), false); };
@@ -513,11 +549,13 @@ addEventListener("keydown", e => { if (e.code === "Space") { e.preventDefault();
 // ---- camera: a slow crane during the replay, then the viewer's ------------------------------------------------------
 let crane = true, craneR = 120; const tgt = new THREE.Vector3(), look = new THREE.Vector3(), want = new THREE.Vector3();
 controls.addEventListener("start", () => { crane = false; controls.autoRotate = false; });
+controls.addEventListener("change", () => wake(.6));
+["pointermove", "pointerdown", "pointerup", "wheel", "keydown"].forEach(ev => addEventListener(ev, () => wake(1.2), { passive: true }));
 $("crane").onclick = () => { crane = true; controls.autoRotate = false; if (T >= T1 - 1) { seek(T0, false); setPlay(true); } };
 function craneCam(dt) {
   const p = (T - T0) / SPAN, s = p * p * (3 - 2 * p);
-  const az = -1.1 + p * 1.6, el = .22 + .2 * s;
-  craneR += (Math.min(980, 105 + reach * 2.25) - craneR) * (1 - Math.exp(-dt * .5)); const R = craneR;      // far enough to hold every standing block in frame
+  const az = -1.1 + p * 1.6, el = .3 + .16 * s;
+  craneR += (Math.min(1150, (105 + reach * 2.4) * (camera.aspect < 1 ? 1.5 : 1)) - craneR) * (1 - Math.exp(-dt * .5)); const R = craneR;      // far enough to hold every standing block in frame
   want.copy(mass).lerp(focus, .2 * (1 - s)); want.z += 18 * s;
   tgt.lerp(want, 1 - Math.exp(-dt * .5));
   const dx = Math.sin(az), dz = Math.cos(az), Rh = R * Math.cos(el);
@@ -532,12 +570,13 @@ function craneCam(dt) {
 // ---- post: a faint lens bloom on true highlights, tilt-shift focus, grain, vignette ---------------------------------
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
-composer.addPass(new UnrealBloomPass(new THREE.Vector2(1, 1), .16, .35, 1.0));
-const tilt = new ShaderPass({ uniforms: { tDiffuse: { value: null }, uRes: { value: new THREE.Vector2(1, 1) }, uMax: { value: 9 }, uTime: { value: 0 } },
+const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), .16, .35, 1.0); composer.addPass(bloom);
+const tilt = new ShaderPass({ uniforms: { tDiffuse: { value: null }, uRes: { value: new THREE.Vector2(1, 1) }, uMax: { value: 9 }, uTime: { value: 0 }, uTaps: { value: 24 } },
   vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0., 1.); }`,
-  fragmentShader: `uniform sampler2D tDiffuse; uniform vec2 uRes; uniform float uMax, uTime; varying vec2 vUv;
+  fragmentShader: `uniform sampler2D tDiffuse; uniform vec2 uRes; uniform float uMax, uTime; uniform int uTaps; varying vec2 vUv;
     void main(){ float r = uMax * smoothstep(.16, .62, abs(vUv.y - .46)); vec3 c = vec3(0.); float wsum = 0.;
-      for (int i = 0; i < 28; i++) { float fi = float(i); float a = fi * 2.39996; float rr = sqrt((fi + .5) / 28.) * r; vec2 o = vec2(cos(a), sin(a)) * rr / uRes;
+      float nt = float(uTaps), rot = fract(sin(dot(floor(vUv * uRes), vec2(12.9898, 78.233))) * 43758.5453) * 6.283;
+      for (int i = 0; i < 32; i++) { if (i >= uTaps) break; float fi = float(i); float a = fi * 2.39996 + rot; float rr = sqrt((fi + .5) / nt) * r; vec2 o = vec2(cos(a), sin(a)) * rr / uRes;
         vec3 s = texture2D(tDiffuse, vUv + o).rgb; float w = 1. + dot(s, vec3(1.2)); c += s * w; wsum += w; }
       c /= wsum;
       vec2 q = vUv - .5; c *= 1. - .5 * dot(q, q);
@@ -545,10 +584,17 @@ const tilt = new ShaderPass({ uniforms: { tDiffuse: { value: null }, uRes: { val
       c += g * (.012 + .03 * sqrt(max(c.g, 0.)));
       gl_FragColor = vec4(max(c, 0.), 1.); }` });
 composer.addPass(tilt); composer.addPass(new OutputPass());
-function resize() { const w = innerWidth, h = innerHeight, pr = Math.min(devicePixelRatio, 2); renderer.setPixelRatio(pr); renderer.setSize(w, h, false); composer.setPixelRatio(pr); composer.setSize(w, h);
+// quality: 2 = full (bloom, 24 focus taps, device pixels up to 2x), 1 = no bloom, 14 taps, 1x, 0 = 0.75x and 8 taps. Integrated GPUs start at 1; any tier steps down when frames run slow.
+const gpu = (() => { const gl = renderer.getContext(), e = gl.getExtension("WEBGL_debug_renderer_info"); return e ? String(gl.getParameter(e.UNMASKED_RENDERER_WEBGL)) : ""; })();
+let tier = Q.has("tier") ? +Q.get("tier") : /Intel|SwiftShader|llvmpipe|Mali|Adreno|Apple GPU|PowerVR/i.test(gpu) || innerWidth < 760 ? 1 : 2, slow = 0, wakeUntil = 3;
+const wake = (s = 2.6) => { wakeUntil = Math.max(wakeUntil, U.uClock.value + s); };
+function resize() { const w = innerWidth, h = innerHeight, pr = tier === 2 ? Math.min(devicePixelRatio, 2) : tier === 1 ? Math.min(devicePixelRatio, 1) : .75;
+  renderer.setPixelRatio(pr); renderer.setSize(w, h, false); composer.setPixelRatio(pr); composer.setSize(w, h); bloom.enabled = tier === 2; tilt.uniforms.uTaps.value = [8, 14, 24][tier];
   camera.aspect = w / h; camera.fov = w < h ? 50 : 30; camera.updateProjectionMatrix(); tilt.uniforms.uRes.value.set(w * pr, h * pr); tilt.uniforms.uMax.value = 6 * pr * h / 1000;
-  sparks.material.uniforms.uPx.value = cars.material.uniforms.uPx.value = pr * h / 1000; drawScrub(); }
+  sparks.material.uniforms.uPx.value = cars.material.uniforms.uPx.value = pr * h / 1000; scrubT = -1; wake(); }
 addEventListener("resize", resize);
+canvas.addEventListener("webglcontextlost", e => e.preventDefault());
+canvas.addEventListener("webglcontextrestored", () => { hmDirty = true; wake(); });
 
 // ---- hover, click ---------------------------------------------------------------------------------------------------
 const dLab = document.createElement("div"); dLab.className = "lab"; dLab.style.opacity = 0; document.body.append(dLab);
@@ -565,11 +611,19 @@ function pick(cx, cy) {
   return [best, dist];
 }
 const tip = $("tip");
+function history(i) {                                                  // the file's line count from the first commit to the cursor, as a step line
+  const pts = []; for (let k = 0; k < ci; k++) { const e = C[k].e; for (let j = 0; j < e.length; j += 4) if (e[j] === i) pts.push([C[k].t, e[j + 1]]); }
+  if (pts.length < 2) return `<div class="hist">${pts.length} commit touched it</div>`;
+  const W = 250, Hh = 30, mx = Math.max(...pts.map(p => p[1]), 1), X = t => (t - T0) / SPAN * W, Y = v => Hh - 1 - v / mx * (Hh - 3);
+  let d = `M${X(pts[0][0]).toFixed(1)} ${Hh - 1}`; pts.forEach((p, k) => { d += `V${Y(p[1]).toFixed(1)}H${X(k + 1 < pts.length ? pts[k + 1][0] : T).toFixed(1)}`; });
+  return `<div class="hist">${pts.length} commits touched it; its line count over the ${hoursSpan} hours, peak ${fmt(mx)}</div><svg width="${W}" height="${Hh}"><path d="M0 ${Hh - .5}H${W}" stroke="rgba(235,230,220,.18)"/><path d="${d}" fill="none" stroke="#e8b877" stroke-width="1.2"/></svg>`;
+}
 function showTip(i, cx, cy) {
   if (i < 0) { tip.classList.remove("on"); return; }
   const f = F[i], c = C[lastC[i]], cut = f.p.lastIndexOf("/");
   tip.innerHTML = `<div class="path">${esc(f.p.slice(0, cut + 1))}<b>${esc(f.p.slice(cut + 1))}</b></div>
     <div class="n"><b>${fmt(lines[i])}</b> lines at ${when(T).slice(-5)} · largest size ${f.b > 1e6 ? (f.b / 1e6).toFixed(1) + " MB" : f.b > 1e3 ? (f.b / 1e3).toFixed(1) + " kB" : f.b + " B"}</div>
+    ${history(i)}
     ${c ? `<div class="msg">${esc(c.s)}</div><div class="by hue" style="--h:${HUES[c.a]}"><i></i>${D.people[c.a]}${c.m >= 0 ? " with " + D.models[c.m] : ", no Co-Authored-By trailer"} · ${when(c.t)} · ${c.h}${c.b ? " · branch " + esc(c.b) : ""}</div>` : ""}`;
   tip.classList.add("on"); const r = tip.getBoundingClientRect();
   tip.style.left = Math.min(innerWidth - r.width - 12, cx + 18) + "px"; tip.style.top = Math.max(12, Math.min(innerHeight - r.height - 12, cy - r.height - 14)) + "px";
@@ -580,11 +634,16 @@ canvas.addEventListener("pointerdown", e => downAt = [e.clientX, e.clientY]);
 canvas.addEventListener("pointerup", e => { if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 5) return; const [b, d] = pick(e.clientX, e.clientY);
   if (e.pointerType !== "mouse") { hov = b; U.uHover.value = b; showTip(b, e.clientX, e.clientY); } select(d === sel ? -1 : d); });
 $("px").onclick = () => select(-1);
-let board = null;
-async function loadBoard() { try { board = await (await fetch("/data")).json(); if (sel >= 0) select(sel); } catch (e) { board = null; } }
-loadBoard(); setInterval(loadBoard, 60000);
+let board = null, boardAt = 0, boardErr = "";
+async function loadBoard() {                                           // one read of /data per minute; a failed read keeps the last one and says so
+  try { const r = await fetch("/data"); if (!r.ok) throw new Error("status " + r.status); board = await r.json(); boardAt = Date.now() / 1000; boardErr = ""; }
+  catch (e) { boardErr = `board read failed at ${when(Date.now() / 1000).slice(-5)}, retrying each minute`; }
+  if (sel >= 0) select(sel);
+}
+loadBoard(); setInterval(() => document.hidden || loadBoard(), 60000);
+setInterval(() => sel >= 0 && playing && !document.hidden && select(sel), 1000);   // the open panel follows the replay
 function select(i) {
-  sel = i; U.uSel.value = i; $("panel").classList.toggle("on", i >= 0); if (i < 0) return;
+  wake(); sel = i; U.uSel.value = i; $("panel").classList.toggle("on", i >= 0); if (i < 0) return;
   const d = DS[i]; let nf = 0, nl = 0; const cs = new Set(), by = D.people.map(() => 0);
   for (let f = 0; f < NF; f++) if (F[f].d === i && lines[f] > 0) { nf++; nl += lines[f]; }
   for (let k = 0; k < ci; k++) { const e = C[k].e; for (let j = 0; j < e.length; j += 4) if (F[e[j]].d === i) { if (!cs.has(k)) { cs.add(k); by[C[k].a]++; } break; } }
@@ -593,27 +652,36 @@ function select(i) {
   const res = board && d.name !== "root" ? board.items.filter(it => it.kind === "result" && it.text.includes(d.name + "/")).sort((a, b) => b.at_ns - a.at_ns) : [];
   $("p-dl").innerHTML = `<dt>files standing at ${when(T).slice(-5)}</dt><dd>${fmt(nf)}</dd><dt>lines</dt><dd>${fmt(nl)}</dd><dt>commits that touched it</dt><dd>${fmt(cs.size)}</dd>` +
     D.people.map((p, k) => by[k] ? `<dt class="hue" style="--h:${HUES[k]};color:var(--c)">${p}</dt><dd>${by[k]}</dd>` : "").join("") +
-    `<dt>results on the board that name it</dt><dd>${board ? (d.name === "root" ? "–" : res.length) : "board not reachable"}</dd>`;
+    `<dt>results on the board that name it</dt><dd>${board ? (d.name === "root" ? "–" : res.length) : "no board data yet"}</dd>` +
+    (boardErr ? `<dt style="grid-column:1/-1;color:var(--red)">${boardErr}${board ? "; showing the read of " + when(boardAt).slice(-5) : ""}</dt>` : "");
   $("p-res").innerHTML = res.slice(0, 4).map(it => { const pl = board.plain && board.plain[it.id]; return `<li><b>${esc((pl && pl.title) || it.text.slice(0, 110))}</b><br>${esc(it.who)} · ${when(it.at_ns / 1e9)} · ${esc(it.id)}</li>`; }).join("");
 }
 
 // ---- loop -----------------------------------------------------------------------------------------------------------
 // test hooks: ?t=0.6 stops the replay at 60%, ?step=0.1 fixes the time step, ?freeze=3 stops the clock there, ?cam=x,y,z, ?sel=<district>
 const still = Q.has("t");
-let intro = !still;                                                   // the page opens on the finished model, holds it, then replays from the first commit
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;      // then: the finished model as one still frame, no replay unless Play is pressed
+let intro = !still && !reduced;                                                   // the page opens on the finished model, holds it, then replays from the first commit
 if (still) seek(T0 + SPAN * Math.max(0, +Q.get("t") - .03), false); else { seek(T1, false); setPlay(false); }
+if (reduced && !still) controls.enableDamping = false;
 if (Q.has("sel")) select(+Q.get("sel"));
 resize(); bake();
 craneCam(100); craneCam(100);
 if (Q.has("cam")) { crane = false; camera.position.set(...Q.get("cam").split(",").map(Number)); controls.target.set(0, 0, 0); }
-let last = performance.now();
-function tick(nowMs) {
-  let dt = Math.min(.05, Math.max(0, (nowMs - last) / 1000)); last = nowMs;
+let last = performance.now(), rendered = 0;
+function tick() {
+  requestAnimationFrame(tick); const nowMs = performance.now();        // not the callback's timestamp: with frame pacing off it runs behind the wall clock
+  if (document.hidden) { last = nowMs; return; }
+  const raw = nowMs - last; if (raw < 2 && !Q.has("step")) return;      // never more than a few hundred frames a second, whatever the browser allows
+  let dt = Math.min(.05, Math.max(0, raw / 1000)); last = nowMs;
   if (Q.has("step")) dt = +Q.get("step"); if (Q.has("freeze") && U.uClock.value > +Q.get("freeze")) dt = 0;
   U.uClock.value += dt; tilt.uniforms.uTime.value = U.uClock.value;
+  const busy = playing || intro || dragging || convoys.length > 0 || hmDirty || U.uClock.value < wakeUntil;
+  if (!busy) { controls.update(); return; }                             // nothing moves: no work, no frame
+  if (raw > 19.5 && raw < 400) { if (++slow > 80 && tier > 0) { tier--; slow = 0; resize(); } } else slow = Math.max(0, slow - 2);
   if (intro && U.uClock.value > 2.2) { intro = false; seek(T0, false); setPlay(true); }
-  if (playing && !dragging) { const lim = still ? T0 + SPAN * Math.min(1, +Q.get("t")) : T1; seek(Math.min(lim, T + dt * SPAN / REPLAY_S), true); if (T >= T1) { setPlay(false); if (crane) controls.autoRotate = true; } }
-  if (crane && (intro || !(T >= T1 && !playing))) craneCam(dt); else controls.update();
+  if (playing && !dragging) { const lim = still ? T0 + SPAN * Math.min(1, +Q.get("t")) : T1; seek(Math.min(lim, T + dt * SPAN / REPLAY_S), true); if (T >= T1) setPlay(false); }
+  if (crane && !reduced && (intro || !(T >= T1 && !playing))) craneCam(dt); else controls.update();
   if (hmDirty && U.uClock.value - hmAt > .12 || hmAt > U.uClock.value) bake();
   stepConvoys();
   const now = U.uClock.value;                                           // district outlines: quiet, lighter for a moment when a merge arrives
@@ -625,9 +693,9 @@ function tick(nowMs) {
   if (ld >= 0) { const [x, y, w, h] = DS[ld].r, v = new THREE.Vector3(x + w / 2, 0, y + h).project(camera); dLab.textContent = DS[ld].name;
     dLab.style.opacity = v.z < 1 ? .9 : 0; dLab.style.transform = `translate(${(v.x * .5 + .5) * innerWidth}px, ${(-v.y * .5 + .5) * innerHeight + 8}px)`; } else dLab.style.opacity = 0;
   drawScrub();
-  composer.render();
-  requestAnimationFrame(tick);
+  composer.render(); rendered++;
 }
+window.__dbg = () => JSON.stringify({ rendered, clock: +U.uClock.value.toFixed(2), p: +((T - T0) / SPAN).toFixed(3), playing, tier, convoys: convoys.length, slow });
 requestAnimationFrame(tick);
 </script>
 </body>

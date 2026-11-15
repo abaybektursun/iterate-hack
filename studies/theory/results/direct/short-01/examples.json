@@ -1,0 +1,112 @@
+{
+ "counts_for_claim": {
+  "why": "solved, no right row of 2,000 tokens or fewer",
+  "problem_index": 0,
+  "problem": "Quadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$",
+  "rows": [
+   {
+    "problem_index": 0,
+    "sample": 0,
+    "attempt": 0,
+    "seed": 3000000,
+    "n_new": 3213,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "extracted_v3": "108",
+    "score_v3": 0,
+    "gold": "116"
+   },
+   {
+    "problem_index": 0,
+    "sample": 1,
+    "attempt": 0,
+    "seed": 3010000,
+    "n_new": 2486,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "extracted_v3": "116",
+    "score_v3": 1,
+    "gold": "116"
+   },
+   {
+    "problem_index": 0,
+    "sample": 2,
+    "attempt": 0,
+    "seed": 3020000,
+    "n_new": 3541,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "extracted_v3": "116",
+    "score_v3": 1,
+    "gold": "116"
+   },
+   {
+    "problem_index": 0,
+    "sample": 3,
+    "attempt": 0,
+    "seed": 3030000,
+    "n_new": 3732,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "extracted_v3": "116",
+    "score_v3": 1,
+    "gold": "116"
+   }
+  ]
+ },
+ "counts_against_claim": {
+  "why": "solved, with a right row of 2,000 tokens or fewer",
+  "problem_index": 45,
+  "problem": "The numbers of apples growing on each of six apple trees form an arithmetic sequence where the greatest number of apples growing on any of the six trees is double the least number of apples growing on any of the six trees. The total number of apples growing on all six trees is $990.$ Find the greatest number of apples growing on any of the six trees.",
+  "rows": [
+   {
+    "problem_index": 45,
+    "sample": 0,
+    "attempt": 0,
+    "seed": 3000045,
+    "n_new": 2169,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "extracted_v3": "220",
+    "score_v3": 1,
+    "gold": "220"
+   },
+   {
+    "problem_index": 45,
+    "sample": 1,
+    "attempt": 0,
+    "seed": 3010045,
+    "n_new": 864,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "extracted_v3": "$220$",
+    "score_v3": 1,
+    "gold": "220"
+   },
+   {
+    "problem_index": 45,
+    "sample": 2,
+    "attempt": 0,
+    "seed": 3020045,
+    "n_new": 629,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "extracted_v3": "$220$",
+    "score_v3": 1,
+    "gold": "220"
+   },
+   {
+    "problem_index": 45,
+    "sample": 3,
+    "attempt": 0,
+    "seed": 3030045,
+    "n_new": 1302,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "extracted_v3": "220",
+    "score_v3": 1,
+    "gold": "220"
+   }
+  ]
+ }
+}

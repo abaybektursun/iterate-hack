@@ -1,0 +1,254 @@
+{
+ "run-02/f2-m02": {
+  "name": "run-02/f2-m02",
+  "round": "round-12",
+  "statement": "The cued base's wrong answers on a problem rarely share a value: slips are per-sample chance events that land on scattered numbers, while right answers coincide. A plurality vote therefore wins a problem once the right share exceeds the largest wrong-value share, far below one half, and keeps converting such problems as samples are added, with no plateau by 12. The loss is in ties, which odd sample counts and more samples dissolve.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 6,
+   "items": 4,
+   "inside": 2,
+   "total_gain": -7.148
+  },
+  "reason": "total forecast gain -7.15 nats on 6 numbers from 4 board items"
+ },
+ "run-02/f2-m03": {
+  "name": "run-02/f2-m03",
+  "round": "round-12",
+  "statement": "The top singular directions of the RL-Math difference set when the base stops, not whether its reasoning is right: their dose sets the cap-hit rate, while right answers per finished answer stay near the base's 0.65; RL's correctness lives in the remainder of the difference. Past dose 1, extra finishes on problems the base cannot solve are guesses, so accuracy is flat from 1x to 2x, and on MATH-500, with few cap hits, the dial adds little.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 6,
+   "items": 4,
+   "inside": 3,
+   "total_gain": -5.284
+  },
+  "reason": "total forecast gain -5.28 nats on 6 numbers from 4 board items"
+ },
+ "run-02/f2-m05": {
+  "name": "run-02/f2-m05",
+  "round": "round-12",
+  "statement": "The RL-Math difference carries RL's habit of ending a long unsolved attempt with an asserted, underived number (per 1,312 hard328 samples RL finishes long and wrong 381 times, the base 281). Added to another model it turns unfinished attempts into such guesses and cuts slower derivations short. On new problems, where RL's finished precision is 43 %, the guesses are wrong, so gains measured on hard328 shrink or reverse; on MATH-500 it is neutral.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 4,
+   "items": 2,
+   "inside": 2,
+   "total_gain": -5.31
+  },
+  "reason": "total forecast gain -5.31 nats on 4 numbers from 2 board items"
+ },
+ "run-04/f2-m06": {
+  "name": "run-04/f2-m06",
+  "round": "round-12",
+  "statement": "Adding RL-direction weight to a model concentrates its answer-level distribution: samples of one problem agree more, right or wrong. Higher dose therefore raises single-sample accuracy where answers are short but shrinks what a vote adds (vote/single 1.21 base, 1.07 for the 1.5x edit, 1.09 for Think-SFT + 2x on fresh2026). On short exact outputs such as code, concentration has no truncation cost, so code accuracy does not fall back at 2x as math did.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 9,
+   "items": 4,
+   "inside": 4,
+   "total_gain": -4.675
+  },
+  "reason": "total forecast gain -4.67 nats on 9 numbers from 4 board items"
+ },
+ "run-07/f2-m05": {
+  "name": "run-07/f2-m05",
+  "round": "round-12",
+  "statement": "Too large a finishing dose makes the model stop before its derivation is complete. The cost grows with how long a derivation the problem needs: on hard328's long problems a 2x edit commits early and right answers fall, while short problems finish well within the shortened span. Over-dosing therefore costs little on MATH-500 and on short code tasks. The cost of a cut answer, by contrast, belongs to the opposite end of the length range.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 7,
+   "items": 2,
+   "inside": 3,
+   "total_gain": -2.539
+  },
+  "reason": "total forecast gain -2.54 nats on 7 numbers from 2 board items"
+ },
+ "run-08/f2-m03": {
+  "name": "run-08/f2-m03",
+  "round": "round-12",
+  "statement": "The RL-direction edits add to a count mostly by converting cap hits into finished answers; the count hides the split: gain = cap hits removed x right rate on converted rows + a smaller rise in finished precision. hard328 gives the dial 77 cap hits to convert; short HumanEval+/MBPP+ answers rarely reach the cap, so the same edits move few problems there, and past 1.5x only the precision loss remains.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 10,
+   "items": 5,
+   "inside": 5,
+   "total_gain": -11.237
+  },
+  "reason": "total forecast gain -11.24 nats on 10 numbers from 5 board items"
+ },
+ "run-08/f2-m04": {
+  "name": "run-08/f2-m04",
+  "round": "round-12",
+  "statement": "Grader v3 and the code harness score only what they extract where they look: a final 'Answer:' line or box for math, a code block for code. A template or weight edit that moves where the final answer is written changes the count without changing solving: Think-SFT on the raw template sometimes puts it on the line after 'Answer:' (about 4 lost per 500); Math-RL directions carry a boxed ending a code extractor misses.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 12,
+   "items": 4,
+   "inside": 8,
+   "total_gain": -2.276
+  },
+  "reason": "total forecast gain -2.28 nats on 12 numbers from 4 board items"
+ },
+ "round-09/stopping-m03": {
+  "name": "round-09/stopping-m03",
+  "round": "round-12",
+  "statement": "The stop decision responds to the root of the summed squared singular values an edit adds per matrix, whatever its rank: one RL direction at 1x cut cap hits as eight at 0.5x did (51 vs 50). So top-1 at 2x and 3x act like top-8 near 1.1x and 1.6x. Above a top-subspace energy near that of the top-8 3x edit, the model degenerates into word strings that never reach an answer marker; every target edit stays below that level.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 12,
+   "items": 6,
+   "inside": 10,
+   "total_gain": -3.838
+  },
+  "reason": "total forecast gain -3.84 nats on 12 numbers from 6 board items"
+ },
+ "round-09/weights-m03": {
+  "name": "round-09/weights-m03",
+  "round": "round-12",
+  "statement": "The part of the RL difference that sets finishing is read out late: in layers 22-31 it writes the stop and hold-on token logits ('Wait', the box, EOS) straight into the unembedding. The changes in early and middle layers alter representations that the late readout does not use for finishing. Restricted to a layer band, the late band gives most of the dial, and the early and middle bands give little over the cued base.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 13,
+   "items": 6,
+   "inside": 11,
+   "total_gain": -5.977
+  },
+  "reason": "total forecast gain -5.98 nats on 13 numbers from 6 board items"
+ },
+ "run-06/f2-m06": {
+  "name": "run-06/f2-m06",
+  "round": "round-12",
+  "statement": "No model's score depends on having seen the test problems. RL's training prompts were filtered to problems the base fails, Think-SFT's data matches the test sets in only a handful of prompts, and every gain holds on 2026 problems. So each arm's share of the base-to-RL gap belongs to its weights, not to the set: shares measured on hard328 carry over to fresh2026 once rescaled to the base and RL levels there.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 11,
+   "items": 6,
+   "inside": 8,
+   "total_gain": -2.939
+  },
+  "reason": "total forecast gain -2.94 nats on 11 numbers from 6 board items"
+ },
+ "run-03/f2-m05": {
+  "name": "run-03/f2-m05",
+  "round": "round-12",
+  "statement": "A trace can degenerate before it ends, into word strings, a switch to Chinese script or repeated windows, and a degenerate trace almost never ends right. The hazard of this grows with edit size (word strings at 2-3x) and with tokens already generated (median first script switch near token 13,600). So oversized edits, and the late part of very long Think-SFT traces, lose answers. A smaller edit or a shorter trace keeps them. At T 1.0 classic loops are absent.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 57,
+   "items": 11,
+   "inside": 47,
+   "total_gain": -7.34
+  },
+  "reason": "total forecast gain -7.34 nats on 57 numbers from 11 board items"
+ },
+ "run-04/f2-m03": {
+  "name": "run-04/f2-m03",
+  "round": "round-12",
+  "statement": "Under T 1.0 stopping is a sampled event: at each position the model draws a commit/stop token with a small hazard, so the cap-hit share is a survival probability. RL's top-8 directions add a near-constant logit to that hazard (cap hits 96, 77, 46, 25, 5 along the dial); dose multiplies it. Where the base fails by not stopping (short code tasks, fresh contests) the dial converts unfinished samples, at precision below the base's finished answers.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 52,
+   "items": 12,
+   "inside": 44,
+   "total_gain": -2.293
+  },
+  "reason": "total forecast gain -2.29 nats on 52 numbers from 12 board items"
+ },
+ "round-11/s2-b": {
+  "name": "round-11/s2-b",
+  "round": "round-12",
+  "statement": "An RL run's task-specific policy lies almost entirely in the top-8 directions per matrix of that run's own delta, read through the inputs of its own task. So 1.5x of RL-Code's directions is a copy of RL-Code, and RL deltas for different tasks occupy nearly orthogonal subspaces that add without interference. Other rewards' directions transfer only a shared finishing part (cap hits, missing answer blocks), not task skill.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 10,
+   "items": 2,
+   "inside": 7,
+   "total_gain": -4.662
+  },
+  "reason": "total forecast gain -4.66 nats on 10 numbers from 2 board items"
+ },
+ "round-11/s4-b": {
+  "name": "round-11/s4-b",
+  "round": "round-12",
+  "statement": "Besides finishing, the top RL directions sharpen the base toward its own most likely correct solution on problems it already solves in some samples. HumanEval+ and MBPP+ consist almost entirely of such problems (high base pass@k), so at 1x most of the code gap closes through reliability on finished answers, not through cap hits. Gains from Math and Code directions add on code, and the effect needs base capability rather than a short answer length.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 10,
+   "items": 2,
+   "inside": 7,
+   "total_gain": -3.935
+  },
+  "reason": "total forecast gain -3.94 nats on 10 numbers from 2 board items"
+ },
+ "round-11/s6-b": {
+  "name": "round-11/s6-b",
+  "round": "round-12",
+  "statement": "Overdose costs accuracy only where the edit pushes a quantity that trades against correctness past its RL optimum. Math directions carry a math-specific stop-checking push whose optimum is near 1.5x on any math set, short or long; beyond it, checking that would catch errors is skipped. Code directions push code-block format and termination, which saturate (no-code and cap hits reach 0) and do not trade against a program's correctness, because tests, not self-checks, decide passing. So code plateaus at 2x.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 10,
+   "items": 2,
+   "inside": 6,
+   "total_gain": -8.105
+  },
+  "reason": "total forecast gain -8.11 nats on 10 numbers from 2 board items"
+ },
+ "round-09/grader-m03": {
+  "name": "round-09/grader-m03",
+  "round": "round-12",
+  "statement": "An edited model is not seed-paired with the stored base: BF16 rounding of any edit changes every text, so a functionless edit lands at the edit null (random rank-8 cells 158-167, mean about 161 on hard328 with the cue), not at the base's 164 draw. A partial edit's count is that null plus its share of the replicated full-edit gain (200.25, not the selected 203); halves of the edit add up to the whole.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 24,
+   "items": 9,
+   "inside": 22,
+   "total_gain": -3.913
+  },
+  "reason": "total forecast gain -3.91 nats on 24 numbers from 9 board items"
+ },
+ "round-09/weights-m01": {
+  "name": "round-09/weights-m01",
+  "round": "round-12",
+  "statement": "The commit-and-stop readout sits mainly in the top singular direction of each matrix of the RL-Math difference. The size of that one direction (its singular value times the scale) sets how often the model finishes. Breakdown into word strings also depends on that per-direction size, not on how many directions are added: about 2x over-commits on long problems, and about 3x on the top direction breaks generation, whether 1 direction or 8 are scaled.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 30,
+   "items": 9,
+   "inside": 27,
+   "total_gain": -3.286
+  },
+  "reason": "total forecast gain -3.29 nats on 30 numbers from 9 board items"
+ },
+ "round-09/problems-m03": {
+  "name": "round-09/problems-m03",
+  "round": "round-12",
+  "statement": "Easy problems need short derivations, and on them a model answers in a short register. At T 1.0 the plain prompt's terse register derails on these short problems (plain base loses 28 points on short quartiles, none on the longest), while the deliberative register survives. Edits or prompts that install deliberation lengthen short answers on easy problems; the leftover short answers are mostly right, and the residual quick wrong answers sit on problems the cued base usually solves.",
+  "state": "refuted by forecasts",
+  "verdict": "",
+  "forecast": {
+   "scored": 14,
+   "items": 8,
+   "inside": 10,
+   "total_gain": -6.826
+  },
+  "reason": "total forecast gain -6.83 nats on 14 numbers from 8 board items"
+ }
+}

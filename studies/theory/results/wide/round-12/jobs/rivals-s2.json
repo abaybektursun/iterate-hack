@@ -1,0 +1,50 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "Code-RL's top-8 directions carry only a partial dose of the shared 'deliberate' register switch: their activation shift has cosine about 0.37 with Math's, so at 1x on a plain math prompt each sample flips into the deliberative register with probability near one half. Samples that flip behave like Math's top-8 edit (few quick errors). Samples that do not flip stay in the plain-base register and fail fast. A prompt cue, or a larger dose, flips the rest.",
+  "readers_wrong": "The readers took the code dial's in-domain strength (386 to 399 of 538 with the Code cue) to mean that Code's directions flip the math register as completely as Math's do (9 quick wrong). Off-domain only the projection onto the shared switch acts, so about half of the plain base's 105 quick wrong answers stay.",
+  "rests_on": ["result-ac7104", "result-98de28", "result-a1bf75"],
+  "holds_against": [
+   {"item": "result-6776d8", "value": 193, "why": "Math 1x + Code 1x on hard328 ties Math alone at 1x (193). That is expected here: with the cue the register is already switched, so Code's partial switch has nothing left to add."},
+   {"item": "result-a1bf75", "value": 368, "why": "Math's directions at 1.5x on code add only +6.9 over random, while Code's own directions add +12.6. The transfer is partial in the other direction too, as a shared-but-partial switch component predicts."}
+  ],
+  "forecasts": [
+   {"id": "t03", "value": 404, "low": 386, "high": 420, "reason": "The Code cue already sets the register on code, so the sum acts like Code alone plus a small Math share. 411 was a single high draw; regress toward the 1x-2x dial mean (~395) plus about 8."},
+   {"id": "t04", "value": 404, "low": 386, "high": 420, "reason": "Same cell at a second seed; per-sample sd about 10 on 538."},
+   {"id": "t05", "value": 401, "low": 385, "high": 416, "reason": "RL-Code is in-domain with the cue, so the switch is irrelevant: the earlier 401 plus seed noise (sd about 10)."},
+   {"id": "t06", "value": 401, "low": 385, "high": 416, "reason": "Second seed of the same cell."},
+   {"id": "t07", "value": 390, "low": 372, "high": 406, "reason": "In domain the cue saturates the register; the dial is flat from 1x to 2x (386, 399, 394), so take the mean near 390 with sd about 10."},
+   {"id": "t08", "value": 390, "low": 372, "high": 406, "reason": "Second seed of the same cell."},
+   {"id": "t10", "value": 40, "low": 28, "high": 54, "reason": "The cue sets the register even with Math's directions subtracted, so the odd shard's 20/250 cap hits carry over to the even shard: about 2 x 20."},
+   {"id": "t11", "value": 376, "low": 360, "high": 391, "reason": "The cued register holds under the -1 edit, so the second shard repeats the first shard's 188/250."}
+  ]},
+ {"id": "b",
+  "statement": "Code-RL's top-8 directions install RL-Code's ending policy fully: write a short solution, emit one final block, stop. That policy pays on code. On math it makes the deliberative model commit after a brief derivation without checking, and often with no boxed or extractable answer. The 60 quick wrong answers are mostly these terse committed answers on medium problems, not answers left in the plain-base register. A prompt cue therefore removes few of them.",
+  "readers_wrong": "The readers assumed that any RL top-8 edit removes quick errors by switching the register, as Math's directions do (9). Code's directions do switch the register, but they also carry a terse code-style stop that creates its own quick errors on math, so the count stays high (2,674 tokens per problem against about 4,000 for Math's edit).",
+  "rests_on": ["result-ac7104", "result-a1bf75", "result-51ccc6"],
+  "holds_against": [
+   {"item": "result-d02d46", "value": 0.829, "why": "Under Math's edit, short answers are right 82.9% of the time, so brevity alone is not an error. This mechanism puts the errors in Code's stop-without-check, which Math's edit lacks; Math's short answers come only on easy problems."},
+   {"item": "result-6776d8", "value": 193, "why": "Math 1x + Code 1x on hard328 equals Math alone (193) rather than falling below it. With the cue and Math's checking directions present, the check runs before Code's stop fires, so the terse commit costs little there."}
+  ],
+  "forecasts": [
+   {"id": "t03", "value": 403, "low": 385, "high": 420, "reason": "On code the terse single-block stop is the right policy and Math adds a little checking: regress the 411 draw toward the dial mean, plus a small Math share."},
+   {"id": "t04", "value": 403, "low": 385, "high": 420, "reason": "Second seed of the same cell, sd about 10."},
+   {"id": "t05", "value": 400, "low": 384, "high": 416, "reason": "In domain with RL-Code's full policy: the earlier 401 plus seed noise."},
+   {"id": "t06", "value": 400, "low": 384, "high": 416, "reason": "Second seed."},
+   {"id": "t07", "value": 389, "low": 371, "high": 405, "reason": "At 1x the ending policy is already near full (no-code-block count 8 at 1x vs 0 at 2x), so 1x is near the dial plateau, about 389."},
+   {"id": "t08", "value": 389, "low": 371, "high": 405, "reason": "Second seed."},
+   {"id": "t10", "value": 41, "low": 28, "high": 55, "reason": "No Code directions here; removing Math's finishing directions keeps the shard-1 cap rate (20/250) on the other shard."},
+   {"id": "t11", "value": 375, "low": 359, "high": 390, "reason": "The first shard's 188/250 extrapolated to 500, with shard sd about 7."}
+  ]}
+],
+ "cell": {
+  "cell": {"model": "base Olmo-3-1025-7B + 1.0 x the top 8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Code - base), stochastic bf16 rounding seed 0", "prompt": "cue", "set": "MATH-500", "n": "first 250 problems (--n 250)", "sampling": "T 1.0 / top-p 1.0 / min-p 0; seed 64000000 + problem index (same seeds as m21)", "samples": "1 per problem, 0 restarts", "grader": "v3", "cap": "16,384"},
+  "job": "studies/rlneurons/jobs/run_cell.py",
+  "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --scale 1.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label code_top8x1_cue --prompt cue --set math500 --n 250 --temperature 1.0 --top-p 1.0 --seed 64000000 --commit $(git rev-parse HEAD)\"",
+  "readout": "quick wrong answers: rows of answers.jsonl with n_generated <= 1,000, not a cap hit, and v3 score not 1 (no extracted answer counts wrong); the m21-r1 rule, run on the cued cell",
+  "unit": "answers of 250",
+  "why": "Same edit, same seeds and the same readout as m21; only the cue is added. Under a, the quick errors are unswitched plain-register samples, which the cue switches, so the count falls near the cued base's level. Under b, they are terse committed answers made inside the deliberative register by Code's stop policy, so most survive the cue.",
+  "gpu_minutes": 70,
+  "a": {"value": 7, "low": 2, "high": 14},
+  "b": {"value": 40, "low": 26, "high": 56}
+ }
+}

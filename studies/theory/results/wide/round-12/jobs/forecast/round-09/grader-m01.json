@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": 232, "low": 218, "high": 246, "reason": "Theory: a single cell is one seeded draw that regresses to the pooled level of near-identical cells; Think-SFT at cap 32,768 pools at about 232 (own format 232, cue 230/234/235/232), with seed scatter of up to 9-19 per 328."},
+{"id": "t02", "value": 470, "low": 460, "high": 479, "reason": "Theory: regress toward the pooled level; cue singles at 16k are 457-462 and the larger cap adds about 10, so the pool is about 470 rather than the single 474 draw, with scatter of 5-7 per 500."},
+{"id": "t03", "value": 401, "low": 388, "high": 413, "reason": "Theory: the 411 was a first-run headline cell and sits above its model's mean; new seeds regress toward the pooled level of nearby code-direction cells (386-399, 1.5+1.5 at 387, RL-Code 401)."},
+{"id": "t04", "value": 401, "low": 388, "high": 413, "reason": "Same as t03: new seed of a notable first cell regresses to its pooled level, about 400, with scatter of about 7 per 538."},
+{"id": "t05", "value": 398, "low": 387, "high": 409, "reason": "Theory: reference draws sit slightly above their own multi-sample mean, so RL-Code's 401 regresses a little on a new seed, with scatter of 5-7 per 500."},
+{"id": "t06", "value": 398, "low": 387, "high": 409, "reason": "Same as t05: one new seeded draw of RL-Code, centred slightly under the posted 401."},
+{"id": "t07", "value": 390, "low": 378, "high": 402, "reason": "Theory: one draw that pools with the near-identical code-direction cells (1x 386, 1.5x 399, 2x 394), so a new seed sits near 390 with a scatter of about 7."},
+{"id": "t08", "value": 390, "low": 378, "high": 402, "reason": "Same as t07: a second new seed of Code 1x, regressing toward the pooled code-dial level."},
+{"id": "t09", "value": 225, "low": 211, "high": 238, "reason": "Theory: 232 was the best size picked from a sweep, so it sits above its mean; a new seed regresses toward the pooled Think-SFT+edit level (1.5x 220, random 213, M(2) 233), with scatter of up to 9-19 per 328."},
+{"id": "t10", "value": 40, "low": 30, "high": 51, "reason": "Theory: shards are seeded draws of the same weights; shard 1 gave 20 of 250 cap hits, so the full 500 pools at about 40, plus shard scatter."},
+{"id": "t11", "value": 376, "low": 364, "high": 388, "reason": "Theory: the other half is a fresh draw at the same pooled rate as 188/250, so about 376 of 500, with scatter of 5-7 per 500 (wider for the half-set)."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": 196, "low": 188, "high": 204, "reason": "Theory: multi-sample statistics regress to the pooled level; the cued base's vote over 4 pools at 192-195 on the 328, and two more samples add a few problems at most (pass@4 is 207)."},
+{"id": "t15", "value": 468, "low": 459, "high": 477, "reason": "Theory: one seeded draw around the pooled level of near-identical Think-SFT+delta cells (a=1 467, Think-SFT singles 457-462), with scatter of 5-7 per 500."},
+{"id": "t16", "value": 233, "low": 222, "high": 244, "reason": "Theory: a new seed of the same weights regresses to the pooled mean of M(2)'s samples (234/229/237, mean 233.3), with scatter of up to 9-19 per 328."},
+{"id": "t17", "value": 247, "low": 239, "high": 254, "reason": "Theory: the vote over 4 regresses to the pooled level of the vote over 3 (246) and of Think-SFT's votes (231-241); a fourth sample moves it by only a few problems."},
+{"id": "t18", "value": 244, "low": 234, "high": 254, "reason": "Theory: one seeded draw; seed 3,000,000 gave 234 at 16k, the cap adds about 12 (as 232->245 on the other seed), and 245 was a first draw that may sit high, so about 244 with scatter of 9-19 per 328."},
+{"id": "t19", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t20", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}

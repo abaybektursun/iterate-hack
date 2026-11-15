@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": 228, "low": 216, "high": 240, "reason": "The theory says the RL difference makes Think-SFT finish, which raises single scores above Think-SFT's 209 (16k), so the replication should land near the 232 already measured, allowing for seed noise."},
+{"id": "t10", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t11", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": 199, "low": 189, "high": 209, "reason": "Capped samples abstain instead of adding wrong values (the cued base caps about 77 of 328), so votes keep gaining as more samples finish: about +5 over the vote-over-4 count of 192-195, like MATH-500's rise from 449 to 457 between 4 and 6 samples."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": 467, "low": 457, "high": 476, "reason": "The RL difference turns Think-SFT's capped samples into finished answers, so the single score rises a few points above Think-SFT's 457-464 at 16k."},
+{"id": "t16", "value": 233, "low": 222, "high": 244, "reason": "The RL difference raises single scores (finishing): the fourth sample should match M(2)'s earlier singles 234/229/237, against Think-SFT's 209."},
+{"id": "t17", "value": 247, "low": 240, "high": 254, "reason": "Vote gains shrink once samples finish: M(2)'s vote over 3 is only +13 over its singles (246) while Think-SFT's is +32, so a fourth sample adds about 1."},
+{"id": "t18", "value": 242, "low": 232, "high": 252, "reason": "The 32k cap and the RL difference both make samples finish, raising the single score: 245 at the other seed, adjusted down because Think-SFT itself scores 230 at this seed against 234 there."},
+{"id": "t19", "value": 79, "low": 72, "high": 86, "reason": "At 32k the abstaining capped samples (about 62 per sample at 16k) become mostly wrong scattered answers, so the vote gains only a little over its 75 at 16k while singles rise (as on hard328: vote 238 to 244)."},
+{"id": "t20", "value": 70, "low": 64, "high": 77, "reason": "A 32k cap makes capped samples finish and raises single scores: about a quarter of fresh2026's roughly 55 long answers come out right (23 of 93 on hard328), taking the 16k mean of 60 to about 70."}
+]}

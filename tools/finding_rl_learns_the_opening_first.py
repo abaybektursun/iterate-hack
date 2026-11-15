@@ -1419,7 +1419,7 @@ svg * { pointer-events: none; }
 .val.far { fill: var(--faint) !important; font-weight: 450; opacity: .6; }
 .cue { fill: var(--mute); stroke: none; }
 .cue.on { fill: var(--ink); }
-.val { font-weight: 600; }
+.val { font-weight: 600; paint-order: stroke; stroke: color-mix(in srgb, var(--glass) 55%, var(--glass-lo)); stroke-width: 3.5; stroke-linejoin: round; }
 .val.o { fill: var(--blue) !important; }
 .val.dim { fill: var(--faint) !important; font-weight: 500; }
 .now { stroke: var(--blue); stroke-width: 1; opacity: .35; }
@@ -1599,7 +1599,7 @@ function geo() {
   const g = { w: 1000, h: 600, cx: 500, cy: 300, D: 2200, a: [24, 18, 976, 582], r: 30, deep: 40, blur: 16,
     cols: 32, pitch: 13, gx: 62, d: [8, 5.4, 9], fs: 15, fb: 112,
     bigX: 540, bigY: 118, labY: [148, 168, 188], bandTop: 64, bandGap: 34, keyY: 0,
-    tx: [650, 558, 740, 830, 916], rowY: [312, 430, 516], rowH: [100, 36, 36], axisY: 568, fv: 13.5 };
+    tx: [650, 558, 740, 830, 916], rowY: [312, 428, 526], rowH: [100, 36, 36], axisY: 571, fv: 13.5 };
   return lay(g);
 }
 function lay(g) {  // band rows sized for the largest count each band reaches at any setting and temperature
@@ -1661,8 +1661,8 @@ function build() {
       PATH.map(k => `<circle class="pt${s.o ? " o" : ""}" id="pt${j}_${k}" r="${g.fv * .3}"/>`).join("") +
       KEYS.map((_, k) => `<text class="val${s.o ? " o" : ""}" id="v${j}_${k}" font-size="${g.fv}" text-anchor="middle"></text>`).join("")).join("") +
     KEYS.map((_, k) => `<text class="axis" id="ax${k}" font-size="${g.fv}" text-anchor="middle">${k === 0 || k === 1 ? NAME[k] : narrow.matches ? NAME[k].replace("Step ", "") : NAME[k]}</text>`).join("") +
-    `</g>`;
-  S.el = {}; S.shown = {};
+    `</g><text class="val" id="meas" visibility="hidden"></text>`;
+  S.el = {}; S.shown = {}; S.spots = {};
   svg.querySelectorAll("[id]").forEach(e => { S.el[e.id] = e; });
 }
 
@@ -1678,6 +1678,62 @@ function markAt(k, now) {
   const moved = a[0] !== b[0] || a[1] !== b[1], far = S.fromBand[k] !== S.toBand[k] || S.fromOk[k] !== S.toOk[k];
   return { x: mix(a[0], b[0], e), y: mix(a[1], b[1], e), z: moved ? (far ? 30 : 8) * Math.sin(Math.PI * p) : 0,
     band: p < .5 ? S.fromBand[k] : S.toBand[k], ok: p < .5 ? S.fromOk[k] : S.toOk[k] };
+}
+/* Where each count of row j sits beside its point at temperature T: above, below, beside or on a diagonal, whichever
+   crosses the fewest lines, points and words, so a count never sits on the line and reads with its own row. Worked out
+   once per temperature and row, in the plate's own plane (the sway moves everything together). */
+function measure(str, size, weight) {
+  const m = S.el.meas;
+  m.setAttribute("font-size", size); m.style.fontWeight = weight; m.textContent = str;
+  return m.getComputedTextLength();
+}
+function spots(T, j) {
+  const key = T + "/" + j;
+  if (S.spots[key]) return S.spots[key];
+  const g = S.g, s = SERIES[j], X = k => g.tx[k], Y = k => rowY(g, j, s.v[T][k]), cap = g.fv * .74, pad = 3.5;
+  const segs = [], dots = [], boxes = [], wt = [];
+  PATH.forEach((k, i) => { dots.push([X(k), Y(k), g.fv * .42]); if (i) { segs.push([X(PATH[i - 1]), Y(PATH[i - 1]), X(k), Y(k)]); wt.push(2); } });
+  dots.push([X(1), Y(1), g.fv * .34]);
+  segs.push([X(1), Y(1), X(4) + 12, Y(1)]); wt.push(.5);  // Base + cue's dashed level
+  const sx = (X(0) + X(1)) / 2; segs.push([sx, g.rowY[0] - g.rowH[0] / 2, sx, g.axisY + 4]); wt.push(2);
+  SERIES.forEach((r, jj) => {  // the names of the rows
+    const y = g.rowY[jj] - g.rowH[jj] / 2 - g.fv * 2.5, x = g.tx[1] - (g.phone ? 22 : 18);
+    boxes.push([x, y - g.fs * .74, x + measure(r.name, g.fs, 600), y]);
+  });
+  if (s.main) {
+    const lw = measure("Base + cue", g.fv, 560);
+    boxes.push([X(4) + 12 - lw, Y(1) + g.fv * 1.25 - cap, X(4) + 12, Y(1) + g.fv * 1.25]);
+    if (T === 1) [1, 2, 3, 4].forEach(k => { const ys = D.samples[k].map(v => rowY(g, j, v)), x = X(k) - g.fv * 1.15;
+      boxes.push([x - g.fv * .34, Math.min(...ys), x + g.fv * .34, Math.max(...ys)]); });
+  }
+  if (j === 2) boxes.push([X(1) - 60, g.axisY - g.fv * 1.05, X(4) + 60, g.axisY + 4]);
+  const hits = (b, px, py) => {  // px, py: the count's own point, which every candidate keeps clear by construction
+    const [x0, y0, x1, y1] = [b[0] - pad, b[1] - pad, b[2] + pad, b[3] + pad];
+    let n = 0;
+    segs.forEach(([ax, ay, bx, by], z) => {
+      const steps = Math.ceil(Math.hypot(bx - ax, by - ay) / 1.5);
+      for (let u = 0; u <= steps; u++) {
+        const x = mix(ax, bx, u / steps), y = mix(ay, by, u / steps);
+        if (x > x0 && x < x1 && y > y0 && y < y1) { n += wt[z]; break; }
+      }
+    });
+    dots.forEach(([cx, cy, r]) => { if ((cx !== px || cy !== py) && Math.hypot(clamp(cx, x0, x1) - cx, clamp(cy, y0, y1) - cy) < r) n += 3; });
+    boxes.forEach(o => { if (o[0] < x1 && o[2] > x0 && o[1] < y1 && o[3] > y0) n += 3; });
+    return n;
+  };
+  // on the tall row of right answers: above, then below, then beside, then on a diagonal; on the two thin rows a count
+  // beside its point, level with it, comes first, so it cannot be read as a count of the row above or below
+  const out = [], pref = s.main ? [0, .05, .3, .3, .6, .6, .65, .65] : [.1, .15, 0, 0, .6, .6, .65, .65];
+  [1, ...PATH].forEach(k => {
+    const x = X(k), y = Y(k), w = measure(fr(s.v[T][k], s.main && has4(T, k)), g.fv, 600), up = g.fv * .75;
+    const side = g.fv * .55 + w / 2, diag = g.fv * .3 + w / 2;
+    const cand = [[0, -up], [0, up + cap], [side, cap / 2], [-side, cap / 2], [diag, -up * .7], [-diag, -up * .7], [diag, up * .7 + cap], [-diag, up * .7 + cap]];
+    let best = cand[0], bn = Infinity;
+    cand.forEach((c, z) => { const n = hits([x + c[0] - w / 2, y + c[1] - cap, x + c[0] + w / 2, y + c[1]], x, y) + pref[z]; if (n < bn) { bn = n; best = c; } });
+    boxes.push([x + best[0] - w / 2, y + best[1] - cap, x + best[0] + w / 2, y + best[1]]);
+    out[k] = best;
+  });
+  return (S.spots[key] = out);
 }
 function place(t, now) {
   const g = S.g, E = S.el, at = (el, q, dy) => { el.setAttribute("x", f(q[0])); el.setAttribute("y", f(q[1] + (dy || 0))); };
@@ -1759,15 +1815,16 @@ function place(t, now) {
       el.setAttribute("cx", f(q[0])); el.setAttribute("cy", f(q[1]));
       el.setAttribute("class", `pt${s.o ? " o" : ""}${on ? "" : " off"}`);
       el.setAttribute("r", f(g.fv * (k === kNow ? .42 : .3)));
-      const v = E[`v${j}_${k}`];
-      at(v, q, -g.fv * .75);
+      const v = E[`v${j}_${k}`], o = spots(S.T, j)[k];
+      at(v, [q[0] + o[0], q[1]], o[1]);
       text(`v${j}_${k}`, fr(val(s, k, tq), s.main && has4(S.T, k)));
       v.setAttribute("class", `val${s.o && on ? " o" : ""}${k === kNow ? "" : on ? " dim" : " far"}`);
     });
     const cq = proj(g, X(1), cy, 10);
     E["cu" + j].setAttribute("cx", f(cq[0])); E["cu" + j].setAttribute("cy", f(cq[1]));
     E["cu" + j].setAttribute("class", "cue" + (kNow === 1 ? " on" : ""));
-    at(E[`v${j}_1`], cq, -g.fv * .75); text(`v${j}_1`, fr(val(s, 1, tq), s.main && has4(S.T, 1)));
+    const o1 = spots(S.T, j)[1];
+    at(E[`v${j}_1`], [cq[0] + o1[0], cq[1]], o1[1]); text(`v${j}_1`, fr(val(s, 1, tq), s.main && has4(S.T, 1)));
     if (s.main) text("rlx", has4(TNow, 2) ? "  ·  ticks: the 4 samples" : "");
     if (s.main) [1, 2, 3, 4].forEach(k => {  // the 4 samples at T 1.0: faint ticks left of the point, and their range
       const x = X(k) - g.fv * 1.15, ys = D.samples[k].map(v => rowY(g, j, v)), w = g.fv * .34;
@@ -1948,6 +2005,7 @@ document.addEventListener("keydown", e => {
 addEventListener("hashchange", fromHash);
 addEventListener("popstate", fromHash);
 narrow.addEventListener("change", () => { build(); setState(S.k, { instant: true }); place(S.t, performance.now()); });
+document.fonts.ready.then(() => { S.spots = {}; place(S.t, performance.now()); });  // measure the counts again in the loaded typeface
 still.addEventListener("change", () => { if (still.matches) { setState(S.k, { instant: true }); aim(0, 0); place(0, performance.now()); } });
 const stage = $("stage");
 stage.addEventListener("pointermove", e => {

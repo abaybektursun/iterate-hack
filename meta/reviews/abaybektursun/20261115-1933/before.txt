@@ -1,0 +1,31 @@
+# Baseline, before the change (run_cell.py at 4c020ce). Dry run with the cut shard's settings; the stand-in engine sends canned answers.
+# HF_HUB_OFFLINE=1 PYTHONPATH=. uv run --no-project --with torch==2.15.0 --with transformers==5.22.2 --with math-verify==0.9.0 --with huggingface_hub python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41040000 --samples 8 --shard 0/8 --dry-run --commit 4c020cef158f25da0a2f250f8238ededdaf55da6 --out <empty dir>
+# A rerun of a cut shard has no way to keep the rows it has: run_cell asserts answers.jsonl does not exist (line 163) and sends every request.
+{
+ "status": "done",
+ "counts": {
+  "n": 504,
+  "tok_p_lt_1e2": 0,
+  "tok_p_lt_1e3": 0,
+  "correct_v3": 168,
+  "correct_v1": 168,
+  "cap_hits": 168,
+  "loop_A": 168,
+  "generated_tokens": 2757912,
+  "restarts": 0,
+  "n_planned": 504,
+  "mean_generated_tokens": 5472.047619047619,
+  "generation_s": 8.481529951095581,
+  "tokens_per_s": 325166.8055058573
+ },
+ "wall_s": 21.46431803703308
+}
+requests sent by a rerun of shard 0/8: 504
+
+# The cut shard, ih-1115-161910-44ea (AWS L40S 46 GB, 3 h limit), runs/ih-1115-161910-44ea/metrics.json and log:
+rows written 493 of 504; generation 173.2 min; 236 tokens/s; killed by the time limit at 180.9 min container time (cycle.txt marks it done)
+vLLM log every ~20 min (running / waiting requests, KV cache %): 16:46 11/428 96.6; 17:46 13/255 99.1; 18:47 14/77 99.5; 19:07 11/31 98.9
+  -> KV-cache bound all run long, 10-23 requests at once; not a tail of long answers alone at the end.
+same cell on vast.ai RTX PRO 6000 96 GB: 01eb 782 tokens/s (76.3 min), a18c 629, c790 604 (metrics.json)
+insurance copy of the whole shard 0/4: abaybektursun-1115-102811-8e32, 1000 requests, submitted 18:28 UTC (runs/vast record)
+3 shards cut by the vast.ai credit stop at 16:15 UTC: f868, 86ad, 77cd (submitted 14:47 UTC, no copy of their rows; cycle.txt 'no copy yet')

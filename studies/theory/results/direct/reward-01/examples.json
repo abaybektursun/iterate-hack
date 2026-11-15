@@ -1,0 +1,18 @@
+{
+ "general30_most_above_math30": {
+  "matrix": "model.layers.0.self_attn.k_proj.weight",
+  "general30": 0.4412,
+  "math30": 0.264,
+  "think_sft": 0.1267,
+  "general30_norm": 0.06937,
+  "math30_norm": 0.10321
+ },
+ "general30_most_below_math30": {
+  "matrix": "model.layers.31.self_attn.v_proj.weight",
+  "general30": 0.2543,
+  "math30": 0.4935,
+  "think_sft": 0.0508,
+  "general30_norm": 0.11269,
+  "math30_norm": 0.2563
+ }
+}

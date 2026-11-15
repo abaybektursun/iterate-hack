@@ -3337,6 +3337,23 @@ cap 32,768, scored also at 16,384 from the same answers; paired by problem with 
 - Jobs ih-1115-163313-7486 and ih-1115-163401-a4ba (AWS L40S, 2 shards, joined with `analysis/shard_join.py`); raw answers in
   `runs/` on the laptop and in S3 under results/ih/<job>/, not in git.
 
+## Paper: Two Token Limits (`paper-two-caps/`, board work-184476)
+
+A 4-page paper: `paper-two-caps/two-token-limits.pdf`, served at https://monitor.invariant.team/paper/two-token-limits.pdf.
+Claim (hard328, n = 328, T 1.0 / top-p 1.0, grader v3, one sample per model, the same answers scored at a limit of 16,384
+and of 32,768 tokens): RL - base + cue +12.5 -> +11.9 points (change -0.6 [-2.1, 0.9]); Think-SFT + cue - RL +4.3 -> +10.7
+(change +6.4 [3.7, 9.5]); M(2) - Think-SFT +6.7 -> +3.4 [-0.6, 7.0] (change -3.4 [-6.4, -0.3]; [-7.3, 0.3] at 98.33 %,
+suggestive only). Answers longer than 16,384 tokens that end right: Think-SFT 23 of 93, M(2) 13 of 56, base 4 of 64,
+RL 2 of 20. No ordering of the models changes.
+
+| File | What it is |
+|---|---|
+| `paper-two-caps/build_facts.py` | Recomputes every comparison from the committed rows (`results/cap32/`, `results/transplant/`, `results/thinkvote/`, `results/day1_3/`, `results/fresh/`), copies the own-chat-format numbers from `results/native/`, checks 153 values against stored readouts, writes `facts.json` and `examples.json`. Run: `uv run --no-project --with numpy python studies/rlneurons/paper-two-caps/build_facts.py`. |
+| `paper-two-caps/facts.json`, `examples.json` | Every number in the paper with its source (`review`: the numbers the reviews asked for); one problem Think-SFT gets right only past 16,384 tokens. |
+| `paper-two-caps/NOTES.md` | Definitions, arms, caveats, what is pending. |
+| `paper-two-caps/figs.py`, `fig_caps.pdf` | The figure, drawn from `facts.json`. |
+| `paper-two-caps/paper.tex`, `refs.bib`, `fonts/` | Source; build with `tectonic paper.tex` in the folder. |
+
 ## How to run
 
 Laptop checks (no GPU, no weights):
@@ -4739,3 +4756,68 @@ Jobs `ih-1115-150237-83a4`, `-155322-598b`, `-155844-4392`, `-155905-0426` (AWS 
   its gain under the vote ((53 - 38) / (57 - 38)); on the 328 the same shares are 101 % and 76 %.
 - The edit uses the RL checkpoint's weights, so it is not a route without reward. Think-SFT + cue (no reward) has 60.0 on
   one sample and 75 under the vote on this set.
+
+## Vote over k samples of the cued base, k = 1 to 12 (MATH-500 n = 500, base + cue, T 1.0, grader v3, board work-60f040)
+
+Question (`specs/SPEC_votek.md`, written before the jobs): where does the plurality vote of the untrained cued base stop
+rising, and does it reach RL's one-sample score (456 to 463) with no training? Answer: it reaches it at 6 samples (456.6 of
+500) and is still rising at 12 (466 of 500, 95 % interval [455, 476]). RL with the same vote over 4 has 474 at 18,747 tokens
+per problem, so at equal tokens RL stays ahead; the base needs about 5 times RL's one-sample tokens to match RL's one sample.
+
+Samples: 0 to 3 are attempt 0 of the stored job `abaybektursun-1114-153825-208b` (seed 41000000); 4 to 11 are new,
+`jobs/run_cell.py --model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41040000 --samples 8`, no
+restarts, cap 16,384, as shards: vast.ai `abaybektursun-1115-082353-a18c` (1/4), `-082400-c790` (2/4), `-064850-01eb` (3/4);
+AWS `ih-1115-161922-9bfd` (4/8) and `ih-1115-201414-43ed` (0/8: 493 rows copied from the cut job `ih-1115-161910-44ea` with
+`--resume`, 11 rows generated). Raw answers: `runs/<job id>/` (not committed; vast.ai jobs in the team store, AWS jobs under
+the bridge's S3 results). Readout `analysis/votek.py`, output `results/votek/math500_base_cue-01/` (`metrics.json`,
+`rows.jsonl` with every sample's extracted answer and score, `examples.json`: problem 0 voted right with 11 of 12 votes,
+problem 9 voted wrong, two answers with 2 votes each and the wrong one drawn first).
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.votek --runs runs/abaybektursun-1114-153825-208b runs/ih-1115-201414-43ed+runs/ih-1115-161922-9bfd+runs/abaybektursun-1115-082353-a18c+runs/abaybektursun-1115-082400-c790+runs/abaybektursun-1115-064850-01eb --out studies/rlneurons/results/votek/math500_base_cue-01
+```
+
+Right of 500, mean over 200 random subsets of k of the 12 samples (bootstrap over problems, 2,000 resamples):
+
+| k | vote right [95 %] | lowest, highest subset | at least one of k right | tokens per problem |
+|---|---|---|---|---|
+| 1 | 410.0 [397.9, 421.6] | 405, 418 | 410.0 | 4,059 |
+| 2 | 418.9 [407.2, 430.4] | 411, 426 | 452.3 | 8,122 |
+| 3 | 440.8 [429.4, 451.8] | 430, 452 | 464.7 | 12,155 |
+| 4 | 449.2 [437.9, 460.0] | 441, 457 | 471.0 | 16,228 |
+| 6 | 456.6 [445.6, 467.1] | 448, 465 | 478.4 | 24,370 |
+| 8 | 460.1 [449.6, 470.2] | 454, 467 | 482.4 | 32,463 |
+| 9 | 461.4 [450.9, 471.6] | 455, 468 | 483.8 | 36,487 |
+| 12 | 466 [455.0, 476.0] | one subset | 487 | 48,680 |
+
+Control: the vote over the 4 stored samples in order reproduces 446. The stored four are a low draw: the mean over subsets of
+4 is 449.2 and subsets of 4 range from 441 to 457.
+
+Vote with an early stop (draw samples until one answer has m votes or all 12 are drawn; mean over 200 random orders; the
+fixed-threshold form of adaptive self-consistency, Aggarwal et al. 2023, arXiv 2305.11860):
+
+| stop at m votes | right of 500 | samples per problem | tokens per problem |
+|---|---|---|---|
+| 2 | 459.0 | 2.71 | 15,882 |
+| 3 | 463.5 | 4.00 | 22,564 |
+| 4 | 465.7 | 5.19 | 27,863 |
+| 6 | 466.6 | 7.32 | 35,807 |
+
+At the tokens of the fixed vote over 4 (16,228) the stop at 2 votes has 459.0 against 449.2: about 10 more problems for the
+same tokens, because easy problems stop after two samples and the split ones get up to 12. Paired bootstrap over problems
+(`results/votek/math500_base_cue-02/metrics.json`, the same rows read again with this difference added; its `rows.jsonl` is
+identical to run 01 and not committed): stop at 2 minus vote over 4, +9.9 problems [6.1, 14.1]; stop at 3 minus vote over 6,
++6.9 [3.5, 10.5]; stop at 4 minus vote over 7, +7.3 [4.0, 11.1]. Each stop rule is compared with the smallest fixed vote
+that costs at least as many tokens. The interval covers the choice of problems, not a new draw of the 12 samples.
+
+Predictions:
+- V1 (theory round 06: vote over 9 inside [449, 462]): holds, 461.4.
+- V2 (mine: vote over 12 minus vote over 6 under 3 problems): refuted, 9.4. The vote does not stop at 6.
+- V3 (vote over 12 below 456): refuted, 466.
+
+What is left: of the 34 problems the vote over 12 gets wrong, 13 have no right sample among 12, 11 have one, 7 have two, and
+3 have a wrong answer held by more than 6 samples. At least one of 12 samples is right on 487 problems.
+
+Limits: one seed family; the interval of each k is over problems, and the subsets of one k share samples. RL was not sampled
+12 times, so this section does not say where RL's vote stops. The same cell on the 328 (spec section "The 328") was started
+twice on vast.ai and cut both times when the account balance reached 0; it has no rows.
