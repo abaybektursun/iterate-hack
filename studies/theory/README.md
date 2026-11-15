@@ -772,6 +772,98 @@ check (on cells-01, 21 of 41 did), 2 cells with a pair of families whose interva
 jobs (5.5 to `forecasts.json`, 5.7 for cells and experiments), plus two resumes after fixes found by the smoke run (the
 board dump folder was reused within one process; mechanism and cell proposals shared a file name).
 
+## Round 09 (wide path, engine 9)
+
+Board snapshot 2026-11-15T17:45:51 UTC (board work-0a9281), code commit 0959d61, 40.0 minutes in one run (standing
+written 17:45:51, `cells.md` 18:25:15 UTC), 48 forecasters. Command:
+
+```
+uv run studies/theory/lib/forecast.py round studies/theory/results/wide/round-09 --from studies/theory/results/forecast/run-0{2,3,4,5,6,7,8} studies/theory/results/forecast/cells-01
+```
+
+Files in `results/wide/round-09/`: `standing.md` / `standing.json` / `standing/` (scores of each source),
+`graveyard.json`, `targets.json` and `work.md` (27 targets from 16 open work items), `mechanisms.json` (10 carried + 36
+new), `forecasts.json` / `forecasts.md`, `cells.json` / `cell_forecasts.json` / `cells.md`, `experiments.md`,
+`run.json`, `round09.log` (the console log), `jobs/` (each job's JSON output, 720 KB). Job prompts and raw outputs stay
+in the temp folder named in `run.json`.
+
+**Standing** (42 mechanisms, 25 scored). Carried, total gain on scored numbers: run-06/f2-m03 +5.56 (5 of 5 inside),
+run-02/f2-m01 +5.10 (4 of 6), run-05/f2-m03 +4.85 (5 of 5), run-05/f2-m01 +4.40 (5 of 5), run-07/f2-m02 +3.29 (2 of 5),
+run-05/f2-m06 +2.66 (3 of 5), run-03/f2-m02 +2.22 (4 of 5), run-02/f2-m04 +1.43 (2 of 3), run-03/f2-m05 +0.49 (2 of 5),
+run-04/f2-m03 +0.26 (2 of 5). Eight of the ten are scored only on result-a1bf75 (the code dial: 5 targets of one
+experiment, where both readers forecast 20 to 45 below every measured edit count); run-02/f2-m01 rests on 4 experiments
+(result-fad48d, 0c1eef, 95a4dc, 6e7b64) and run-02/f2-m04 on 3. Graveyard: run-07/f2-m05 -2.59, run-08/f2-m04 -4.23,
+run-04/f2-m06 -4.60, run-02/f2-m03 -5.45, run-02/f2-m05 -5.88, run-02/f2-m02 -8.62, run-08/f2-m03 -12.27 (5, 5, 5, 5,
+3, 4, 5 scored numbers).
+
+**New mechanisms** (ids `round-09/<family>-mNN`; full text in `mechanisms.json`):
+
+- stopping: m01 a cap hit abstains in a vote; m02 Think-SFT's stopping point lies past 16,384 tokens, the RL delta moves
+  it earlier; m03 stopping follows the root summed squared singular values an edit adds, at any rank; m04 a change that
+  keeps the length distribution moves only precision; m05 late terminators are seldom attached to a derived result; m06
+  the terse register stops right after its first stated result.
+- sampling: m01 per-problem independent draws, SD 5 to 7 per 500; m02 a vote counts only committed answers; m03
+  temperature sets how often a plain prompt opens in the deliberative register; m04 an edit past a logit-shift threshold
+  puts mass on near-certain tokens and text decays; m05 ending is sampled, a cap raise finishes the tail at that model's
+  long-answer precision; m06 solve rates are bimodal, votes plateau.
+- weights: m01 finishing sits in the top-1 direction per matrix; m02 the edit is a sum of small pushes, a part acts as
+  the whole scaled to its share; m03 finishing is read out in layers 22-31; m04 the RL delta on Think-SFT only finishes;
+  m05 the step-100 change points elsewhere than the final one (cosine 0.099); m06 stochastic rounding is unbiased,
+  scores follow nominal dose.
+- training: m01 Think-SFT's answer placement is learned inside its ChatML template; m02 Think-SFT's cuts are mid-derivation
+  work; m03 group-relative reward moves mid-difficulty problems first; m04 pretraining fixes each problem's modal value;
+  m05 the top-1 direction carries answer form, stopping is spread over the next directions; m06 the update sits on
+  early and middle layer features, the first third gives most.
+- problems: m01 bimodal solve probability, the vote converts only the middle band; m02 more budget pays only where cut
+  text is a sound derivation; m03 the plain terse register derails on short problems; m04 RL fixes problems in order of
+  derivation length; m05 contest problems are limited by plans, which only imitation supplies; m06 the best dose is
+  lower on harder sets.
+- grader: m01 a single cell is one draw, notable cells sit above their mean; m02 vote gain is set by abstaining
+  instead of answering wrong; m03 an edited model's null is the random-edit null (about 161 on hard328), not the
+  base's 164; m04 a count depends on the set's difficulty mix; m05 even-k ties are broken by sample order; m06 a cap
+  count hides unfinished work, the 32k-minus-16k count is its yield.
+
+**SPEC_engine_v9 hypotheses.** V1 (under 40 minutes to `cells.md`): refuted, 40.0 minutes (propose 704 s, cells about
+22 minutes). V2 (at least 8 merged cells with a cross-family pair whose 90 % intervals do not overlap): holds, 8 (m11
+10 pairs, m13 7, m21 3, m05 3, m18 2, m14 1, m06 1, m29 1). V3 (top 10 of list A pass the flag check, checked by hand):
+holds as worded, 10 of 10 name existing job files and flags; but m14's `--mods mlp` fails `wsp_edit.py`'s assertion
+(`--mods` takes q,k,v,o,gate,up,down), so its command stops at run time (the check does not test free-text values).
+Cell checks of `cells.md`: C1 holds (46 proposed, 39 merged, 0 dropped), C2 refuted (4 cells with 3 or more pairs,
+needs 5), C3 refuted (0 base-only readouts forecast above the best known base count; 4 of 39 cells are base-only).
+
+**Top 6 cells of list A** (`experiments.md`; every forecaster that gave a number, value [90 % interval]; R1, R2 are
+the readers; ids without a run prefix are `round-09/`):
+
+1. m11, base - 1.0 x top-8 RL-Math directions, cue, MATH-500 n 500, cap hits of 500 (105 min, 10 pairs, all against
+   stopping-m03): stopping-m03 16 [8, 26]; grader-m03 36 [25, 49]; stopping-m02 36 [26, 48]; run-03/f2-m02 36 [26, 48];
+   weights-m02 37 [27, 49]; run-04/f2-m03 38 [26, 52]; weights-m01 38 [27, 50]; weights-m06 38 [27, 50]; problems-m06
+   40 [27, 55]; R2 40 [28, 55]; run-05/f2-m01 40 [29, 53]; training-m05 40 [30, 54]; run-06/f2-m03 40 [30, 54];
+   run-07/f2-m02 42 [28, 58]; R1 42 [28, 60].
+2. m13, base + 2.0 x top-64 RL-Math directions, cue, hard328 shard 0/2, right of 164 (80 min, 7 pairs, all with
+   stopping-m03): stopping-m03 58 [40, 80]; run-03/f2-m05 70 [45, 92]; sampling-m04 84 [60, 102]; problems-m06 88
+   [74, 102]; R1 90 [72, 104]; run-04/f2-m03 90 [74, 104]; run-03/f2-m02 90 [78, 101]; R2 92 [78, 104]; problems-m02 92
+   [78, 105]; run-05/f2-m01 94 [84, 103]; problems-m05 95 [82, 106]; run-06/f2-m03 95 [83, 106]; weights-m01 95 [85,
+   104]; stopping-m02 96 [84, 106]; weights-m06 96 [86, 105]; grader-m03 97 [82, 108]; weights-m02 100 [91, 108].
+3. m21, base + 1.0 x top-8 RL-Code directions, plain, MATH-500 first 250, quick wrong answers (at most 1,000 tokens,
+   not a cap hit, not right) of 250 (55 min, 3 pairs): run-03/f2-m02 14 [7, 23]; stopping-m06 15 [8, 24];
+   run-04/f2-m03 18 [7, 32]; R2 18 [8, 32]; sampling-m03 20 [8, 35]; problems-m03 20 [10, 32]; R1 25 [10, 45];
+   run-06/f2-m03 25 [10, 45]; run-07/f2-m02 27 [14, 40]; run-05/f2-m03 40 [24, 58]; run-05/f2-m06 45 [28, 64].
+4. m05, untrained base, plain, MATH-500 first 100, vote over 8, right of 100 (90 min, 3 pairs; base-only, best base
+   90 scaled from result-5d032f): stopping-m01 42 [32, 52]; training-m04 52 [38, 66]; grader-m05 54 [42, 65];
+   grader-m02 56 [44, 67]; sampling-m06 58 [46, 69]; run-02/f2-m01 60 [47, 72]; R2 62 [48, 75]; R1 62 [48, 76];
+   stopping-m06 62 [50, 74]; sampling-m02 66 [54, 76]; problems-m01 70 [56, 82]; problems-m03 72 [58, 84].
+5. m18, base + 0.125 x (RL-Math - base), plain, MATH-500 n 500, right of 500 (90 min, 2 pairs): run-05/f2-m06 300
+   [260, 340]; sampling-m03 308 [272, 342]; run-03/f2-m02 330 [280, 375]; stopping-m06 345 [295, 390]; R1 355 [315,
+   392]; R2 362 [320, 400]; weights-m06 365 [330, 400]; problems-m03 395 [365, 420].
+6. m14, base + 3.0 x top-8 RL-Math directions in MLP matrices only, cue, hard328 shard 0/2, right of 164 (75 min, 1
+   pair; command fails, see V3): weights-m01 62 [42, 82]; run-03/f2-m05 65 [45, 85]; R1 80 [55, 100]; problems-m06 80
+   [62, 98]; run-06/f2-m03 82 [62, 100]; R2 85 [65, 100]; run-05/f2-m01 85 [68, 100]; run-03/f2-m02 85 [70, 98];
+   grader-m03 90 [76, 102]; stopping-m03 90 [78, 100]; sampling-m04 92 [76, 105]; run-04/f2-m03 92 [78, 104];
+   stopping-m02 92 [80, 102]; weights-m02 97 [87, 106].
+
+The cell ids restart at m01 in every run: round-09 m06 and m29 are not the cells-01 m06 and m29 of work-844e38 and
+work-290625.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in
