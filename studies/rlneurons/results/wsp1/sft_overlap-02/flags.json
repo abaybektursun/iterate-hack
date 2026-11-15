@@ -1,0 +1,5266 @@
+{
+ "hard": {
+  "0": {
+   "flag": "exact",
+   "share": 1.0,
+   "source": "aime2022",
+   "rl_flag": "none",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_30783",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 103,
+    "row_in_shard": 12686,
+    "prompt_200": "Quadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$",
+    "row_index": 1510297
+   },
+   "rows_near": 1,
+   "rows_exact": 1
+  },
+  "1": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "2": {
+   "flag": "none",
+   "share": 0.315,
+   "source": "aime2022",
+   "rl_flag": "near"
+  },
+  "3": {
+   "flag": "none",
+   "share": 0.052,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "4": {
+   "flag": "none",
+   "share": 0.022,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "5": {
+   "flag": "none",
+   "share": 0.024,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "6": {
+   "flag": "none",
+   "share": 0.213,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "7": {
+   "flag": "exact",
+   "share": 1.0,
+   "source": "aime2022",
+   "rl_flag": "none",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_13918",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 102,
+    "row_in_shard": 10420,
+    "prompt_200": "Find the three-digit positive integer $\\underline{a}\\,\\underline{b}\\,\\underline{c}$ whose representation in base nine is $\\underline{b}\\,\\underline{c}\\,\\underline{a}_{\\,\\text{nine}},$ where $a,$ $b,$ ",
+    "row_index": 1493492
+   },
+   "rows_near": 2,
+   "rows_exact": 2
+  },
+  "8": {
+   "flag": "exact",
+   "share": 1.0,
+   "source": "aime2022",
+   "rl_flag": "exact",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_102484",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 108,
+    "row_in_shard": 11429,
+    "prompt_200": "In isosceles trapezoid $ABCD,$ parallel bases $\\overline{AB}$ and $\\overline{CD}$ have lengths $500$ and $650,$ respectively, and $AD=BC=333.$ The angle bisectors of $\\angle A$ and $\\angle D$ meet at ",
+    "row_index": 1581735
+   },
+   "rows_near": 2,
+   "rows_exact": 1
+  },
+  "9": {
+   "flag": "none",
+   "share": 0.083,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "10": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "11": {
+   "flag": "none",
+   "share": 0.097,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "12": {
+   "flag": "none",
+   "share": 0.235,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "13": {
+   "flag": "none",
+   "share": 0.066,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "14": {
+   "flag": "none",
+   "share": 0.095,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "15": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2022",
+   "rl_flag": "none"
+  },
+  "16": {
+   "flag": "exact",
+   "share": 1.0,
+   "source": "aime2022",
+   "rl_flag": "exact",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_22102",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 103,
+    "row_in_shard": 4031,
+    "prompt_200": "Find the remainder when \\[\\binom{\\binom{3}{2}}{2} + \\binom{\\binom{4}{2}}{2} + \\dots +  \\binom{\\binom{40}{2}}{2}\\] is divided by $1000$ .",
+    "row_index": 1501642
+   },
+   "rows_near": 2,
+   "rows_exact": 2
+  },
+  "17": {
+   "flag": "none",
+   "share": 0.059,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "18": {
+   "flag": "none",
+   "share": 0.047,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "19": {
+   "flag": "none",
+   "share": 0.079,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "20": {
+   "flag": "none",
+   "share": 0.036,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "21": {
+   "flag": "none",
+   "share": 0.033,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "22": {
+   "flag": "none",
+   "share": 0.119,
+   "source": "aime2022",
+   "rl_flag": "near"
+  },
+  "23": {
+   "flag": "exact",
+   "share": 1.0,
+   "source": "aime2022",
+   "rl_flag": "none",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_13252",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 102,
+    "row_in_shard": 9755,
+    "prompt_200": "A right square pyramid with volume $54$ has a base with side length $6.$ The five vertices of the pyramid all lie on a sphere with radius $\\frac mn$ , where $m$ and $n$ are relatively prime positive i",
+    "row_index": 1492827
+   },
+   "rows_near": 2,
+   "rows_exact": 2
+  },
+  "24": {
+   "flag": "exact",
+   "share": 1.0,
+   "source": "aime2022",
+   "rl_flag": "none",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_20496",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 103,
+    "row_in_shard": 2428,
+    "prompt_200": "There is a positive real number $x$ not equal to either $\\tfrac{1}{20}$ or $\\tfrac{1}{2}$ such that\\[\\log_{20x} (22x)=\\log_{2x} (202x).\\]The value $\\log_{20x} (22x)$ can be written as $\\log_{10} (\\tfr",
+    "row_index": 1500039
+   },
+   "rows_near": 4,
+   "rows_exact": 4
+  },
+  "25": {
+   "flag": "none",
+   "share": 0.025,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "26": {
+   "flag": "none",
+   "share": 0.121,
+   "source": "aime2022",
+   "rl_flag": "near"
+  },
+  "27": {
+   "flag": "none",
+   "share": 0.08,
+   "source": "aime2022",
+   "rl_flag": "exact"
+  },
+  "28": {
+   "flag": "none",
+   "share": 0.12,
+   "source": "aime2022",
+   "rl_flag": "near"
+  },
+  "29": {
+   "flag": "none",
+   "share": 0.017,
+   "source": "aime2022",
+   "rl_flag": "none"
+  },
+  "30": {
+   "flag": "none",
+   "share": 0.273,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "31": {
+   "flag": "none",
+   "share": 0.16,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "32": {
+   "flag": "none",
+   "share": 0.067,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "33": {
+   "flag": "none",
+   "share": 0.064,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "34": {
+   "flag": "none",
+   "share": 0.077,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "35": {
+   "flag": "none",
+   "share": 0.02,
+   "source": "aime2023",
+   "rl_flag": "near"
+  },
+  "36": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "37": {
+   "flag": "none",
+   "share": 0.023,
+   "source": "aime2023",
+   "rl_flag": "near"
+  },
+  "38": {
+   "flag": "exact",
+   "share": 1.0,
+   "source": "aime2023",
+   "rl_flag": "exact",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_41391",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 104,
+    "row_in_shard": 8724,
+    "prompt_200": "A plane contains $40$ lines, no $2$ of which are parallel. Suppose that there are $3$ points where exactly $3$ lines intersect, $4$ points where exactly $4$ lines intersect, $5$ points where exactly $",
+    "row_index": 1520874
+   },
+   "rows_near": 1,
+   "rows_exact": 1
+  },
+  "39": {
+   "flag": "none",
+   "share": 0.316,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "40": {
+   "flag": "none",
+   "share": 0.05,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "41": {
+   "flag": "none",
+   "share": 0.167,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "42": {
+   "flag": "none",
+   "share": 0.037,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "43": {
+   "flag": "none",
+   "share": 0.029,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "44": {
+   "flag": "none",
+   "share": 0.189,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "45": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2023",
+   "rl_flag": "none"
+  },
+  "46": {
+   "flag": "none",
+   "share": 0.049,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "47": {
+   "flag": "none",
+   "share": 0.037,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "48": {
+   "flag": "none",
+   "share": 0.1,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "49": {
+   "flag": "none",
+   "share": 0.056,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "50": {
+   "flag": "none",
+   "share": 0.04,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "51": {
+   "flag": "none",
+   "share": 0.079,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "52": {
+   "flag": "none",
+   "share": 0.194,
+   "source": "aime2023",
+   "rl_flag": "near"
+  },
+  "53": {
+   "flag": "none",
+   "share": 0.033,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "54": {
+   "flag": "exact",
+   "share": 1.0,
+   "source": "aime2023",
+   "rl_flag": "exact",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_27569",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 103,
+    "row_in_shard": 9483,
+    "prompt_200": "Let $x,y,$ and $z$ be real numbers satisfying the system of equations\n\\begin{align*} xy + 4z &= 60 \\\\ yz + 4x &= 60 \\\\ zx + 4y &= 60. \\end{align*}\nLet $S$ be the set of possible values of $x.$ Find th",
+    "row_index": 1507094
+   },
+   "rows_near": 2,
+   "rows_exact": 2
+  },
+  "55": {
+   "flag": "none",
+   "share": 0.192,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "56": {
+   "flag": "none",
+   "share": 0.14,
+   "source": "aime2023",
+   "rl_flag": "near"
+  },
+  "57": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2023",
+   "rl_flag": "none"
+  },
+  "58": {
+   "flag": "none",
+   "share": 0.036,
+   "source": "aime2023",
+   "rl_flag": "none"
+  },
+  "59": {
+   "flag": "none",
+   "share": 0.2,
+   "source": "aime2023",
+   "rl_flag": "exact"
+  },
+  "60": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "61": {
+   "flag": "none",
+   "share": 0.135,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "62": {
+   "flag": "none",
+   "share": 0.154,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "63": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "64": {
+   "flag": "none",
+   "share": 0.118,
+   "source": "aime2024",
+   "rl_flag": "near"
+  },
+  "65": {
+   "flag": "none",
+   "share": 0.338,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "66": {
+   "flag": "none",
+   "share": 0.161,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "67": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "68": {
+   "flag": "none",
+   "share": 0.028,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "69": {
+   "flag": "none",
+   "share": 0.111,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "70": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "71": {
+   "flag": "none",
+   "share": 0.054,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "72": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "73": {
+   "flag": "none",
+   "share": 0.231,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "74": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "75": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "76": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "77": {
+   "flag": "none",
+   "share": 0.172,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "78": {
+   "flag": "none",
+   "share": 0.084,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "79": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "80": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "81": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "82": {
+   "flag": "none",
+   "share": 0.075,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "83": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "84": {
+   "flag": "none",
+   "share": 0.134,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "85": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "86": {
+   "flag": "none",
+   "share": 0.026,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "87": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "88": {
+   "flag": "none",
+   "share": 0.063,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "89": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2024",
+   "rl_flag": "none"
+  },
+  "90": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "91": {
+   "flag": "none",
+   "share": 0.008,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "92": {
+   "flag": "none",
+   "share": 0.025,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "93": {
+   "flag": "none",
+   "share": 0.095,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "94": {
+   "flag": "none",
+   "share": 0.108,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "95": {
+   "flag": "none",
+   "share": 0.023,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "96": {
+   "flag": "none",
+   "share": 0.098,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "97": {
+   "flag": "none",
+   "share": 0.222,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "98": {
+   "flag": "none",
+   "share": 0.157,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "99": {
+   "flag": "none",
+   "share": 0.027,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "100": {
+   "flag": "none",
+   "share": 0.071,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "101": {
+   "flag": "none",
+   "share": 0.169,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "102": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "103": {
+   "flag": "none",
+   "share": 0.174,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "104": {
+   "flag": "none",
+   "share": 0.189,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "105": {
+   "flag": "none",
+   "share": 0.07,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "106": {
+   "flag": "none",
+   "share": 0.286,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "107": {
+   "flag": "none",
+   "share": 0.016,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "108": {
+   "flag": "none",
+   "share": 0.149,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "109": {
+   "flag": "none",
+   "share": 0.021,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "110": {
+   "flag": "none",
+   "share": 0.034,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "111": {
+   "flag": "none",
+   "share": 0.18,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "112": {
+   "flag": "none",
+   "share": 0.039,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "113": {
+   "flag": "none",
+   "share": 0.073,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "114": {
+   "flag": "none",
+   "share": 0.045,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "115": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "116": {
+   "flag": "none",
+   "share": 0.053,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "117": {
+   "flag": "none",
+   "share": 0.25,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "118": {
+   "flag": "none",
+   "share": 0.111,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "119": {
+   "flag": "none",
+   "share": 0.047,
+   "source": "aime2025",
+   "rl_flag": "none"
+  },
+  "120": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "121": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "122": {
+   "flag": "none",
+   "share": 0.417,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "123": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "124": {
+   "flag": "none",
+   "share": 0.018,
+   "source": "amc23",
+   "rl_flag": "near"
+  },
+  "125": {
+   "flag": "none",
+   "share": 0.2,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "126": {
+   "flag": "none",
+   "share": 0.211,
+   "source": "amc23",
+   "rl_flag": "near"
+  },
+  "127": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "amc23",
+   "rl_flag": "near"
+  },
+  "128": {
+   "flag": "none",
+   "share": 0.077,
+   "source": "amc23",
+   "rl_flag": "near"
+  },
+  "129": {
+   "flag": "none",
+   "share": 0.146,
+   "source": "amc23",
+   "rl_flag": "near"
+  },
+  "130": {
+   "flag": "none",
+   "share": 0.025,
+   "source": "amc23",
+   "rl_flag": "near"
+  },
+  "131": {
+   "flag": "none",
+   "share": 0.098,
+   "source": "amc23",
+   "rl_flag": "near"
+  },
+  "132": {
+   "flag": "none",
+   "share": 0.036,
+   "source": "amc23",
+   "rl_flag": "near"
+  },
+  "133": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "134": {
+   "flag": "none",
+   "share": 0.037,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "135": {
+   "flag": "none",
+   "share": 0.018,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "136": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "137": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "138": {
+   "flag": "none",
+   "share": 0.235,
+   "source": "amc23",
+   "rl_flag": "near"
+  },
+  "139": {
+   "flag": "none",
+   "share": 0.135,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "140": {
+   "flag": "none",
+   "share": 0.017,
+   "source": "amc23",
+   "rl_flag": "near"
+  },
+  "141": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "142": {
+   "flag": "none",
+   "share": 0.14,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "143": {
+   "flag": "none",
+   "share": 0.146,
+   "source": "amc23",
+   "rl_flag": "near"
+  },
+  "144": {
+   "flag": "none",
+   "share": 0.256,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "145": {
+   "flag": "none",
+   "share": 0.059,
+   "source": "amc23",
+   "rl_flag": "near"
+  },
+  "146": {
+   "flag": "none",
+   "share": 0.156,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "147": {
+   "flag": "none",
+   "share": 0.125,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "148": {
+   "flag": "none",
+   "share": 0.051,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "149": {
+   "flag": "none",
+   "share": 0.16,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "150": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "151": {
+   "flag": "none",
+   "share": 0.235,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "152": {
+   "flag": "none",
+   "share": 0.033,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "153": {
+   "flag": "none",
+   "share": 0.214,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "154": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "155": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "156": {
+   "flag": "none",
+   "share": 0.048,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "157": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "158": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "159": {
+   "flag": "none",
+   "share": 0.417,
+   "source": "amc23",
+   "rl_flag": "none"
+  },
+  "160": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "161": {
+   "flag": "none",
+   "share": 0.017,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "162": {
+   "flag": "none",
+   "share": 0.122,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "163": {
+   "flag": "none",
+   "share": 0.143,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "164": {
+   "flag": "none",
+   "share": 0.025,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "165": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "166": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "167": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "168": {
+   "flag": "none",
+   "share": 0.024,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "169": {
+   "flag": "none",
+   "share": 0.021,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "170": {
+   "flag": "none",
+   "share": 0.162,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "171": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "172": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "173": {
+   "flag": "none",
+   "share": 0.063,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "174": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "175": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "176": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "177": {
+   "flag": "none",
+   "share": 0.013,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "178": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "179": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "180": {
+   "flag": "none",
+   "share": 0.044,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "181": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "182": {
+   "flag": "none",
+   "share": 0.333,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "183": {
+   "flag": "none",
+   "share": 0.007,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "184": {
+   "flag": "none",
+   "share": 0.132,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "185": {
+   "flag": "none",
+   "share": 0.122,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "186": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "187": {
+   "flag": "none",
+   "share": 0.069,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "188": {
+   "flag": "none",
+   "share": 0.045,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "189": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "hmmt_feb2025",
+   "rl_flag": "none"
+  },
+  "190": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "191": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "192": {
+   "flag": "none",
+   "share": 0.041,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "193": {
+   "flag": "none",
+   "share": 0.037,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "194": {
+   "flag": "none",
+   "share": 0.013,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "195": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "196": {
+   "flag": "near",
+   "share": 1.0,
+   "source": "olympiadbench",
+   "rl_flag": "none",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_14357",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 102,
+    "row_in_shard": 10857,
+    "prompt_200": "N1. Find all pairs $(k, n)$ of positive integers for which $7^{k}-3^{n}$ divides $k^{4}+n^{2}$.",
+    "row_index": 1493929
+   },
+   "rows_near": 2,
+   "rows_exact": 0
+  },
+  "197": {
+   "flag": "none",
+   "share": 0.023,
+   "source": "olympiadbench",
+   "rl_flag": "near"
+  },
+  "198": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "near"
+  },
+  "199": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "200": {
+   "flag": "none",
+   "share": 0.426,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "201": {
+   "flag": "none",
+   "share": 0.067,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "202": {
+   "flag": "none",
+   "share": 0.009,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "203": {
+   "flag": "none",
+   "share": 0.022,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "204": {
+   "flag": "none",
+   "share": 0.102,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "205": {
+   "flag": "none",
+   "share": 0.082,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "206": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "207": {
+   "flag": "none",
+   "share": 0.205,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "208": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "near"
+  },
+  "209": {
+   "flag": "none",
+   "share": 0.047,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "210": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "211": {
+   "flag": "none",
+   "share": 0.048,
+   "source": "olympiadbench",
+   "rl_flag": "near"
+  },
+  "212": {
+   "flag": "none",
+   "share": 0.021,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "213": {
+   "flag": "none",
+   "share": 0.043,
+   "source": "olympiadbench",
+   "rl_flag": "near"
+  },
+  "214": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "near"
+  },
+  "215": {
+   "flag": "none",
+   "share": 0.017,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "216": {
+   "flag": "none",
+   "share": 0.033,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "217": {
+   "flag": "none",
+   "share": 0.156,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "218": {
+   "flag": "none",
+   "share": 0.01,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "219": {
+   "flag": "none",
+   "share": 0.02,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "220": {
+   "flag": "none",
+   "share": 0.033,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "221": {
+   "flag": "none",
+   "share": 0.05,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "222": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "223": {
+   "flag": "none",
+   "share": 0.333,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "224": {
+   "flag": "none",
+   "share": 0.111,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "225": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "226": {
+   "flag": "none",
+   "share": 0.412,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "227": {
+   "flag": "none",
+   "share": 0.016,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "228": {
+   "flag": "none",
+   "share": 0.353,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "229": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "230": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "231": {
+   "flag": "none",
+   "share": 0.111,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "232": {
+   "flag": "none",
+   "share": 0.081,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "233": {
+   "flag": "none",
+   "share": 0.111,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "234": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "235": {
+   "flag": "none",
+   "share": 0.023,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "236": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "237": {
+   "flag": "none",
+   "share": 0.36,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "238": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "239": {
+   "flag": "none",
+   "share": 0.021,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "240": {
+   "flag": "none",
+   "share": 0.061,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "241": {
+   "flag": "none",
+   "share": 0.087,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "242": {
+   "flag": "none",
+   "share": 0.219,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "243": {
+   "flag": "none",
+   "share": 0.053,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "244": {
+   "flag": "none",
+   "share": 0.006,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "245": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "246": {
+   "flag": "none",
+   "share": 0.031,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "247": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "248": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "249": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "250": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "251": {
+   "flag": "none",
+   "share": 0.062,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "252": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "253": {
+   "flag": "none",
+   "share": 0.3,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "254": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "255": {
+   "flag": "none",
+   "share": 0.042,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "256": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "257": {
+   "flag": "none",
+   "share": 0.067,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "258": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "259": {
+   "flag": "none",
+   "share": 0.214,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "260": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "261": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "262": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "263": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "264": {
+   "flag": "none",
+   "share": 0.235,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "265": {
+   "flag": "none",
+   "share": 0.024,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "266": {
+   "flag": "none",
+   "share": 0.016,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "267": {
+   "flag": "none",
+   "share": 0.071,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "268": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "269": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "270": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "271": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "272": {
+   "flag": "near",
+   "share": 0.667,
+   "source": "olympiadbench",
+   "rl_flag": "none",
+   "evidence": {
+    "id": "OpenThoughts3-full-filtered-math-decontam-v2_278033",
+    "dataset_source": "saumyamalik/OpenThoughts3-full-filtered-math-decontam-v2",
+    "shard": 24,
+    "row_in_shard": 12127,
+    "prompt_200": "The sum of the reciprocals of the positive integer divisors of a positive integer $n$ is $\\frac{17}{16}$. Find $n$.",
+    "row_index": 361087
+   },
+   "rows_near": 11,
+   "rows_exact": 0
+  },
+  "273": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "near"
+  },
+  "274": {
+   "flag": "none",
+   "share": 0.081,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "275": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "276": {
+   "flag": "none",
+   "share": 0.167,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "277": {
+   "flag": "none",
+   "share": 0.071,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "278": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "279": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "280": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "281": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "282": {
+   "flag": "none",
+   "share": 0.031,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "283": {
+   "flag": "none",
+   "share": 0.045,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "284": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "285": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "286": {
+   "flag": "none",
+   "share": 0.083,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "287": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "288": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "289": {
+   "flag": "none",
+   "share": 0.045,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "290": {
+   "flag": "none",
+   "share": 0.083,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "291": {
+   "flag": "none",
+   "share": 0.008,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "292": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "293": {
+   "flag": "none",
+   "share": 0.033,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "294": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "295": {
+   "flag": "none",
+   "share": 0.033,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "296": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "297": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "298": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "299": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "300": {
+   "flag": "none",
+   "share": 0.056,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "301": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "302": {
+   "flag": "none",
+   "share": 0.016,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "303": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "304": {
+   "flag": "none",
+   "share": 0.02,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "305": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "306": {
+   "flag": "none",
+   "share": 0.074,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "307": {
+   "flag": "none",
+   "share": 0.041,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "308": {
+   "flag": "none",
+   "share": 0.024,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "309": {
+   "flag": "none",
+   "share": 0.023,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "310": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "311": {
+   "flag": "near",
+   "share": 0.581,
+   "source": "olympiadbench",
+   "rl_flag": "near",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_26495",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 103,
+    "row_in_shard": 8411,
+    "prompt_200": "On the complex plane, the parallelogram formed by the points 0, $z,$ $\\frac{1}{z},$ and $z + \\frac{1}{z}$ has area $\\frac{35}{37}.$  If the real part of $z$ is positive, let $d$ be the smallest possib",
+    "row_index": 1506022
+   },
+   "rows_near": 2,
+   "rows_exact": 0
+  },
+  "312": {
+   "flag": "none",
+   "share": 0.023,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "313": {
+   "flag": "none",
+   "share": 0.062,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "314": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "315": {
+   "flag": "none",
+   "share": 0.037,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "316": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "317": {
+   "flag": "none",
+   "share": 0.1,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "318": {
+   "flag": "none",
+   "share": 0.059,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "319": {
+   "flag": "none",
+   "share": 0.043,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "320": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "321": {
+   "flag": "none",
+   "share": 0.013,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "322": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "323": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "324": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "325": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "326": {
+   "flag": "none",
+   "share": 0.018,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "327": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "328": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "329": {
+   "flag": "none",
+   "share": 0.029,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "330": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "331": {
+   "flag": "none",
+   "share": 0.286,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "332": {
+   "flag": "none",
+   "share": 0.05,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "333": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "334": {
+   "flag": "none",
+   "share": 0.028,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "335": {
+   "flag": "none",
+   "share": 0.13,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "336": {
+   "flag": "none",
+   "share": 0.02,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "337": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "338": {
+   "flag": "none",
+   "share": 0.167,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "339": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "340": {
+   "flag": "none",
+   "share": 0.071,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "341": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "342": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "343": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "344": {
+   "flag": "none",
+   "share": 0.053,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "345": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "346": {
+   "flag": "none",
+   "share": 0.019,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "347": {
+   "flag": "none",
+   "share": 0.174,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "348": {
+   "flag": "none",
+   "share": 0.015,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "349": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "350": {
+   "flag": "none",
+   "share": 0.182,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "351": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "352": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "353": {
+   "flag": "none",
+   "share": 0.032,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "354": {
+   "flag": "none",
+   "share": 0.125,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "355": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "356": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "357": {
+   "flag": "none",
+   "share": 0.037,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "358": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "359": {
+   "flag": "none",
+   "share": 0.017,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "360": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "361": {
+   "flag": "none",
+   "share": 0.032,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "362": {
+   "flag": "none",
+   "share": 0.143,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "363": {
+   "flag": "none",
+   "share": 0.053,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "364": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "365": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "366": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "367": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "368": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "369": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "370": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "371": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "372": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "373": {
+   "flag": "none",
+   "share": 0.069,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "374": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "375": {
+   "flag": "none",
+   "share": 0.05,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "376": {
+   "flag": "none",
+   "share": 0.036,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "377": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "378": {
+   "flag": "none",
+   "share": 0.079,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "379": {
+   "flag": "none",
+   "share": 0.037,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "380": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "381": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "382": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "383": {
+   "flag": "none",
+   "share": 0.023,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "384": {
+   "flag": "none",
+   "share": 0.062,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "385": {
+   "flag": "none",
+   "share": 0.074,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "386": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "387": {
+   "flag": "none",
+   "share": 0.059,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "388": {
+   "flag": "none",
+   "share": 0.071,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "389": {
+   "flag": "none",
+   "share": 0.167,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "390": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "391": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "392": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "393": {
+   "flag": "none",
+   "share": 0.128,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "394": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "395": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "396": {
+   "flag": "none",
+   "share": 0.064,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "397": {
+   "flag": "none",
+   "share": 0.113,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "398": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  },
+  "399": {
+   "flag": "none",
+   "share": 0.083,
+   "source": "olympiadbench",
+   "rl_flag": "none"
+  }
+ },
+ "math500": {
+  "0": {
+   "flag": "near",
+   "share": 0.81,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_31324",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 103,
+    "row_in_shard": 13226,
+    "prompt_200": "Convert the point $(6,2 \\sqrt{3})$ in rectangular coordinates to polar coordinates.  Enter your answer in the form $(r,\\theta),$ where $r > 0$ and $0 \\le \\theta < 2 \\pi.$",
+    "row_index": 1510837
+   },
+   "rows_near": 5,
+   "rows_exact": 0
+  },
+  "1": {
+   "flag": "none",
+   "share": 0.025,
+   "source": "math500"
+  },
+  "2": {
+   "flag": "none",
+   "share": 0.053,
+   "source": "math500"
+  },
+  "3": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "4": {
+   "flag": "none",
+   "share": 0.007,
+   "source": "math500"
+  },
+  "5": {
+   "flag": "none",
+   "share": 0.042,
+   "source": "math500"
+  },
+  "6": {
+   "flag": "none",
+   "share": 0.182,
+   "source": "math500"
+  },
+  "7": {
+   "flag": "none",
+   "share": 0.034,
+   "source": "math500"
+  },
+  "8": {
+   "flag": "none",
+   "share": 0.143,
+   "source": "math500"
+  },
+  "9": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "10": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "11": {
+   "flag": "none",
+   "share": 0.238,
+   "source": "math500"
+  },
+  "12": {
+   "flag": "none",
+   "share": 0.125,
+   "source": "math500"
+  },
+  "13": {
+   "flag": "none",
+   "share": 0.013,
+   "source": "math500"
+  },
+  "14": {
+   "flag": "none",
+   "share": 0.08,
+   "source": "math500"
+  },
+  "15": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "16": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "17": {
+   "flag": "near",
+   "share": 0.854,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_26268",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 103,
+    "row_in_shard": 8185,
+    "prompt_200": "Below is the graph of $y = a \\sin (bx + c) + d$ for some positive constants $a,$ $b,$ $c,$ and $d.$  Find $b.$\n\n[asy]import TrigMacros;\n\nsize(400);\n\nreal f(real x)\n{\n\treturn 2*sin(3*x + pi) + 1;\n}\n\ndr",
+    "row_index": 1505796
+   },
+   "rows_near": 3,
+   "rows_exact": 0
+  },
+  "18": {
+   "flag": "none",
+   "share": 0.031,
+   "source": "math500"
+  },
+  "19": {
+   "flag": "none",
+   "share": 0.091,
+   "source": "math500"
+  },
+  "20": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "21": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "22": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "23": {
+   "flag": "none",
+   "share": 0.143,
+   "source": "math500"
+  },
+  "24": {
+   "flag": "none",
+   "share": 0.014,
+   "source": "math500"
+  },
+  "25": {
+   "flag": "none",
+   "share": 0.189,
+   "source": "math500"
+  },
+  "26": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "27": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "28": {
+   "flag": "none",
+   "share": 0.375,
+   "source": "math500"
+  },
+  "29": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "30": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "31": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "32": {
+   "flag": "none",
+   "share": 0.212,
+   "source": "math500"
+  },
+  "33": {
+   "flag": "none",
+   "share": 0.286,
+   "source": "math500"
+  },
+  "34": {
+   "flag": "none",
+   "share": 0.2,
+   "source": "math500"
+  },
+  "35": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "36": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "37": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "38": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "39": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "40": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "41": {
+   "flag": "none",
+   "share": 0.056,
+   "source": "math500"
+  },
+  "42": {
+   "flag": "none",
+   "share": 0.133,
+   "source": "math500"
+  },
+  "43": {
+   "flag": "none",
+   "share": 0.038,
+   "source": "math500"
+  },
+  "44": {
+   "flag": "none",
+   "share": 0.083,
+   "source": "math500"
+  },
+  "45": {
+   "flag": "none",
+   "share": 0.077,
+   "source": "math500"
+  },
+  "46": {
+   "flag": "none",
+   "share": 0.474,
+   "source": "math500"
+  },
+  "47": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "48": {
+   "flag": "none",
+   "share": 0.125,
+   "source": "math500"
+  },
+  "49": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "50": {
+   "flag": "none",
+   "share": 0.013,
+   "source": "math500"
+  },
+  "51": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "52": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "53": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "54": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "55": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "56": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "57": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "58": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "59": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "60": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "61": {
+   "flag": "none",
+   "share": 0.424,
+   "source": "math500"
+  },
+  "62": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "63": {
+   "flag": "near",
+   "share": 0.659,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_18929",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 103,
+    "row_in_shard": 875,
+    "prompt_200": "Let\n\\[x^5 - x^2 - x - 1 = p_1(x) p_2(x) \\dotsm p_k(x),\\]where each non-constant polynomial $p_i(x)$ is monic with integer coefficients, and cannot be factored further over the integers.  Compute $p_1(",
+    "row_index": 1498486
+   },
+   "rows_near": 4,
+   "rows_exact": 0
+  },
+  "64": {
+   "flag": "none",
+   "share": 0.125,
+   "source": "math500"
+  },
+  "65": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "66": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "67": {
+   "flag": "none",
+   "share": 0.065,
+   "source": "math500"
+  },
+  "68": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "69": {
+   "flag": "none",
+   "share": 0.105,
+   "source": "math500"
+  },
+  "70": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "71": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "72": {
+   "flag": "none",
+   "share": 0.05,
+   "source": "math500"
+  },
+  "73": {
+   "flag": "none",
+   "share": 0.118,
+   "source": "math500"
+  },
+  "74": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "75": {
+   "flag": "none",
+   "share": 0.174,
+   "source": "math500"
+  },
+  "76": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "77": {
+   "flag": "none",
+   "share": 0.25,
+   "source": "math500"
+  },
+  "78": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "79": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "80": {
+   "flag": "none",
+   "share": 0.045,
+   "source": "math500"
+  },
+  "81": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "82": {
+   "flag": "none",
+   "share": 0.02,
+   "source": "math500"
+  },
+  "83": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "84": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "85": {
+   "flag": "none",
+   "share": 0.045,
+   "source": "math500"
+  },
+  "86": {
+   "flag": "none",
+   "share": 0.476,
+   "source": "math500"
+  },
+  "87": {
+   "flag": "none",
+   "share": 0.429,
+   "source": "math500"
+  },
+  "88": {
+   "flag": "none",
+   "share": 0.119,
+   "source": "math500"
+  },
+  "89": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "90": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "91": {
+   "flag": "none",
+   "share": 0.1,
+   "source": "math500"
+  },
+  "92": {
+   "flag": "none",
+   "share": 0.08,
+   "source": "math500"
+  },
+  "93": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "94": {
+   "flag": "none",
+   "share": 0.071,
+   "source": "math500"
+  },
+  "95": {
+   "flag": "none",
+   "share": 0.042,
+   "source": "math500"
+  },
+  "96": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "97": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "98": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "99": {
+   "flag": "none",
+   "share": 0.067,
+   "source": "math500"
+  },
+  "100": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "101": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "102": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "103": {
+   "flag": "none",
+   "share": 0.02,
+   "source": "math500"
+  },
+  "104": {
+   "flag": "none",
+   "share": 0.031,
+   "source": "math500"
+  },
+  "105": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "106": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "107": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "108": {
+   "flag": "none",
+   "share": 0.109,
+   "source": "math500"
+  },
+  "109": {
+   "flag": "none",
+   "share": 0.089,
+   "source": "math500"
+  },
+  "110": {
+   "flag": "none",
+   "share": 0.102,
+   "source": "math500"
+  },
+  "111": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "112": {
+   "flag": "none",
+   "share": 0.156,
+   "source": "math500"
+  },
+  "113": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "114": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "115": {
+   "flag": "near",
+   "share": 0.833,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_13355",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 102,
+    "row_in_shard": 9858,
+    "prompt_200": "Determine the number of ways to arrange the letters of the word PROOF.",
+    "row_index": 1492930
+   },
+   "rows_near": 14,
+   "rows_exact": 0
+  },
+  "116": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "117": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "118": {
+   "flag": "near",
+   "share": 0.667,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_17017",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 102,
+    "row_in_shard": 13511,
+    "prompt_200": "Let $\\omega$ be a nonreal root of $z^3 = 1.$  Find the number of ordered pairs $(a,b)$ of integers such that $|a \\omega + b| = 1.$",
+    "row_index": 1496583
+   },
+   "rows_near": 1,
+   "rows_exact": 0
+  },
+  "119": {
+   "flag": "none",
+   "share": 0.022,
+   "source": "math500"
+  },
+  "120": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "121": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "122": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "123": {
+   "flag": "near",
+   "share": 0.917,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_51816",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 105,
+    "row_in_shard": 4574,
+    "prompt_200": "In the diagram, $D$ and $E$ are the midpoints of $\\overline{AB}$ and $\\overline{BC}$ respectively.  Determine the area of $\\triangle DBC$.\n\n[asy]\nsize(180); defaultpen(linewidth(.7pt)+fontsize(10pt));",
+    "row_index": 1531263
+   },
+   "rows_near": 3,
+   "rows_exact": 0
+  },
+  "124": {
+   "flag": "none",
+   "share": 0.154,
+   "source": "math500"
+  },
+  "125": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "126": {
+   "flag": "near",
+   "share": 0.906,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_57410",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 105,
+    "row_in_shard": 10152,
+    "prompt_200": "Let $F(z)=\\frac{z+i}{z-i}$ for all complex numbers $z\\not= i$ , and let $z_n=F(z_{n-1})$ for all positive integers $n$ . Given that $z_0=\\frac 1{137}+i$ and $z_{2002}=a+bi$ , where $a$ and $b$ are rea",
+    "row_index": 1536841
+   },
+   "rows_near": 1,
+   "rows_exact": 0
+  },
+  "127": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "128": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "129": {
+   "flag": "none",
+   "share": 0.19,
+   "source": "math500"
+  },
+  "130": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "131": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "132": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "133": {
+   "flag": "none",
+   "share": 0.036,
+   "source": "math500"
+  },
+  "134": {
+   "flag": "none",
+   "share": 0.435,
+   "source": "math500"
+  },
+  "135": {
+   "flag": "near",
+   "share": 0.621,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_31688",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 103,
+    "row_in_shard": 13588,
+    "prompt_200": "The number $1000!$ has a long tail of zeroes. How many zeroes are there?  (Reminder: The number $n!$ is the product of the integers from 1 to $n$.  For example, $5!=5\\cdot 4\\cdot3\\cdot2\\cdot 1= 120$.)",
+    "row_index": 1511199
+   },
+   "rows_near": 3,
+   "rows_exact": 0
+  },
+  "136": {
+   "flag": "none",
+   "share": 0.136,
+   "source": "math500"
+  },
+  "137": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "138": {
+   "flag": "none",
+   "share": 0.032,
+   "source": "math500"
+  },
+  "139": {
+   "flag": "none",
+   "share": 0.167,
+   "source": "math500"
+  },
+  "140": {
+   "flag": "none",
+   "share": 0.182,
+   "source": "math500"
+  },
+  "141": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "142": {
+   "flag": "none",
+   "share": 0.024,
+   "source": "math500"
+  },
+  "143": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "144": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "145": {
+   "flag": "none",
+   "share": 0.294,
+   "source": "math500"
+  },
+  "146": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "147": {
+   "flag": "none",
+   "share": 0.294,
+   "source": "math500"
+  },
+  "148": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "149": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "150": {
+   "flag": "none",
+   "share": 0.01,
+   "source": "math500"
+  },
+  "151": {
+   "flag": "none",
+   "share": 0.114,
+   "source": "math500"
+  },
+  "152": {
+   "flag": "none",
+   "share": 0.175,
+   "source": "math500"
+  },
+  "153": {
+   "flag": "none",
+   "share": 0.14,
+   "source": "math500"
+  },
+  "154": {
+   "flag": "none",
+   "share": 0.029,
+   "source": "math500"
+  },
+  "155": {
+   "flag": "none",
+   "share": 0.034,
+   "source": "math500"
+  },
+  "156": {
+   "flag": "none",
+   "share": 0.029,
+   "source": "math500"
+  },
+  "157": {
+   "flag": "none",
+   "share": 0.214,
+   "source": "math500"
+  },
+  "158": {
+   "flag": "none",
+   "share": 0.125,
+   "source": "math500"
+  },
+  "159": {
+   "flag": "near",
+   "share": 0.52,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_16713",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 102,
+    "row_in_shard": 13209,
+    "prompt_200": "The quadratic $x^2-20x+36$ can be written in the form $(x+b)^2+c$, where $b$ and $c$ are constants. What is $b+c$?",
+    "row_index": 1496281
+   },
+   "rows_near": 4,
+   "rows_exact": 0
+  },
+  "160": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "161": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "162": {
+   "flag": "none",
+   "share": 0.115,
+   "source": "math500"
+  },
+  "163": {
+   "flag": "none",
+   "share": 0.031,
+   "source": "math500"
+  },
+  "164": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "165": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "166": {
+   "flag": "none",
+   "share": 0.06,
+   "source": "math500"
+  },
+  "167": {
+   "flag": "none",
+   "share": 0.14,
+   "source": "math500"
+  },
+  "168": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "169": {
+   "flag": "none",
+   "share": 0.286,
+   "source": "math500"
+  },
+  "170": {
+   "flag": "none",
+   "share": 0.05,
+   "source": "math500"
+  },
+  "171": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "172": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "173": {
+   "flag": "none",
+   "share": 0.185,
+   "source": "math500"
+  },
+  "174": {
+   "flag": "none",
+   "share": 0.444,
+   "source": "math500"
+  },
+  "175": {
+   "flag": "none",
+   "share": 0.067,
+   "source": "math500"
+  },
+  "176": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "177": {
+   "flag": "none",
+   "share": 0.047,
+   "source": "math500"
+  },
+  "178": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "179": {
+   "flag": "none",
+   "share": 0.171,
+   "source": "math500"
+  },
+  "180": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "181": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "182": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "183": {
+   "flag": "none",
+   "share": 0.073,
+   "source": "math500"
+  },
+  "184": {
+   "flag": "none",
+   "share": 0.2,
+   "source": "math500"
+  },
+  "185": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "186": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "187": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "188": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "189": {
+   "flag": "near",
+   "share": 0.738,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_51648",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 105,
+    "row_in_shard": 4406,
+    "prompt_200": "Five points $A$, $B$, $C$, $D$, and $O$ lie on a flat field.  $A$ is directly north of $O$, $B$ is directly west of $O$, $C$ is directly south of $O$, and $D$ is directly east of $O$. The  distance be",
+    "row_index": 1531095
+   },
+   "rows_near": 1,
+   "rows_exact": 0
+  },
+  "190": {
+   "flag": "none",
+   "share": 0.143,
+   "source": "math500"
+  },
+  "191": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "192": {
+   "flag": "none",
+   "share": 0.364,
+   "source": "math500"
+  },
+  "193": {
+   "flag": "none",
+   "share": 0.429,
+   "source": "math500"
+  },
+  "194": {
+   "flag": "none",
+   "share": 0.077,
+   "source": "math500"
+  },
+  "195": {
+   "flag": "none",
+   "share": 0.15,
+   "source": "math500"
+  },
+  "196": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "197": {
+   "flag": "none",
+   "share": 0.059,
+   "source": "math500"
+  },
+  "198": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "199": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "200": {
+   "flag": "near",
+   "share": 1.0,
+   "source": "math500",
+   "evidence": {
+    "id": "wildguardmix-r1-v2-all-filtered-ngram-filtered-chinese-filtered_20212",
+    "dataset_source": "allenai/wildguardmix-r1-v2-all-filtered-ngram-filtered-chinese-filtered",
+    "shard": 97,
+    "row_in_shard": 9865,
+    "prompt_200": "If 4 daps = 7 yaps, and 5 yaps = 3 baps,\nhow many daps equal 42 baps?\n(A) 28 (B) 21 (C) 40 (D) 30",
+    "row_index": 1420242
+   },
+   "rows_near": 1,
+   "rows_exact": 0
+  },
+  "201": {
+   "flag": "none",
+   "share": 0.064,
+   "source": "math500"
+  },
+  "202": {
+   "flag": "none",
+   "share": 0.036,
+   "source": "math500"
+  },
+  "203": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "204": {
+   "flag": "none",
+   "share": 0.188,
+   "source": "math500"
+  },
+  "205": {
+   "flag": "none",
+   "share": 0.106,
+   "source": "math500"
+  },
+  "206": {
+   "flag": "none",
+   "share": 0.378,
+   "source": "math500"
+  },
+  "207": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "208": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "209": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "210": {
+   "flag": "none",
+   "share": 0.013,
+   "source": "math500"
+  },
+  "211": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "212": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "213": {
+   "flag": "none",
+   "share": 0.083,
+   "source": "math500"
+  },
+  "214": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "215": {
+   "flag": "near",
+   "share": 0.5,
+   "source": "math500",
+   "evidence": {
+    "id": "wildchat-r1-p2-repetition-filter_14932",
+    "dataset_source": "allenai/wildchat-r1-p2-repetition-filter",
+    "shard": 4,
+    "row_in_shard": 2507,
+    "prompt_200": "given that x^2-x+1=0, what is the value of x^2024-x^2023",
+    "row_index": 60667
+   },
+   "rows_near": 1,
+   "rows_exact": 0
+  },
+  "216": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "217": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "218": {
+   "flag": "none",
+   "share": 0.133,
+   "source": "math500"
+  },
+  "219": {
+   "flag": "none",
+   "share": 0.003,
+   "source": "math500"
+  },
+  "220": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "221": {
+   "flag": "none",
+   "share": 0.154,
+   "source": "math500"
+  },
+  "222": {
+   "flag": "none",
+   "share": 0.069,
+   "source": "math500"
+  },
+  "223": {
+   "flag": "none",
+   "share": 0.143,
+   "source": "math500"
+  },
+  "224": {
+   "flag": "none",
+   "share": 0.333,
+   "source": "math500"
+  },
+  "225": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "226": {
+   "flag": "near",
+   "share": 0.562,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_36982",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 104,
+    "row_in_shard": 4330,
+    "prompt_200": "How many ways are there to put 5 balls in 2 boxes if the balls are distinguishable but the boxes are not?",
+    "row_index": 1516480
+   },
+   "rows_near": 4,
+   "rows_exact": 0
+  },
+  "227": {
+   "flag": "none",
+   "share": 0.419,
+   "source": "math500"
+  },
+  "228": {
+   "flag": "none",
+   "share": 0.037,
+   "source": "math500"
+  },
+  "229": {
+   "flag": "none",
+   "share": 0.164,
+   "source": "math500"
+  },
+  "230": {
+   "flag": "none",
+   "share": 0.469,
+   "source": "math500"
+  },
+  "231": {
+   "flag": "none",
+   "share": 0.233,
+   "source": "math500"
+  },
+  "232": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "233": {
+   "flag": "none",
+   "share": 0.139,
+   "source": "math500"
+  },
+  "234": {
+   "flag": "none",
+   "share": 0.087,
+   "source": "math500"
+  },
+  "235": {
+   "flag": "none",
+   "share": 0.1,
+   "source": "math500"
+  },
+  "236": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "237": {
+   "flag": "none",
+   "share": 0.154,
+   "source": "math500"
+  },
+  "238": {
+   "flag": "none",
+   "share": 0.188,
+   "source": "math500"
+  },
+  "239": {
+   "flag": "none",
+   "share": 0.114,
+   "source": "math500"
+  },
+  "240": {
+   "flag": "none",
+   "share": 0.067,
+   "source": "math500"
+  },
+  "241": {
+   "flag": "none",
+   "share": 0.143,
+   "source": "math500"
+  },
+  "242": {
+   "flag": "none",
+   "share": 0.435,
+   "source": "math500"
+  },
+  "243": {
+   "flag": "none",
+   "share": 0.08,
+   "source": "math500"
+  },
+  "244": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "245": {
+   "flag": "none",
+   "share": 0.108,
+   "source": "math500"
+  },
+  "246": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "247": {
+   "flag": "none",
+   "share": 0.176,
+   "source": "math500"
+  },
+  "248": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "249": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "250": {
+   "flag": "none",
+   "share": 0.033,
+   "source": "math500"
+  },
+  "251": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "252": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "253": {
+   "flag": "none",
+   "share": 0.125,
+   "source": "math500"
+  },
+  "254": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "255": {
+   "flag": "near",
+   "share": 0.522,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_37735",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 104,
+    "row_in_shard": 5081,
+    "prompt_200": "Find the curve defined by the equation\n\\[r = 2.\\](A) Line\n(B) Circle\n(C) Parabola\n(D) Ellipse\n(E) Hyperbola\n\nEnter the letter of the correct option.",
+    "row_index": 1517231
+   },
+   "rows_near": 1,
+   "rows_exact": 0
+  },
+  "256": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "257": {
+   "flag": "none",
+   "share": 0.083,
+   "source": "math500"
+  },
+  "258": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "259": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "260": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "261": {
+   "flag": "none",
+   "share": 0.158,
+   "source": "math500"
+  },
+  "262": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "263": {
+   "flag": "none",
+   "share": 0.05,
+   "source": "math500"
+  },
+  "264": {
+   "flag": "none",
+   "share": 0.065,
+   "source": "math500"
+  },
+  "265": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "266": {
+   "flag": "none",
+   "share": 0.062,
+   "source": "math500"
+  },
+  "267": {
+   "flag": "none",
+   "share": 0.011,
+   "source": "math500"
+  },
+  "268": {
+   "flag": "none",
+   "share": 0.222,
+   "source": "math500"
+  },
+  "269": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "270": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "271": {
+   "flag": "near",
+   "share": 0.625,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_34002",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 104,
+    "row_in_shard": 1358,
+    "prompt_200": "What is the modular inverse of $11$, modulo $1000$?\n\nExpress your answer as an integer from $0$ to $999$, inclusive.",
+    "row_index": 1513508
+   },
+   "rows_near": 2,
+   "rows_exact": 0
+  },
+  "272": {
+   "flag": "none",
+   "share": 0.087,
+   "source": "math500"
+  },
+  "273": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "274": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "275": {
+   "flag": "near",
+   "share": 0.667,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_58530",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 105,
+    "row_in_shard": 11267,
+    "prompt_200": "Let $f(x) = 2x - 3$ and $g(x) = x + 1$. What is the value of $f(1 + g(2))$?",
+    "row_index": 1537956
+   },
+   "rows_near": 1,
+   "rows_exact": 0
+  },
+  "276": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "277": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "278": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "279": {
+   "flag": "none",
+   "share": 0.031,
+   "source": "math500"
+  },
+  "280": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "281": {
+   "flag": "none",
+   "share": 0.007,
+   "source": "math500"
+  },
+  "282": {
+   "flag": "none",
+   "share": 0.038,
+   "source": "math500"
+  },
+  "283": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "284": {
+   "flag": "none",
+   "share": 0.05,
+   "source": "math500"
+  },
+  "285": {
+   "flag": "none",
+   "share": 0.02,
+   "source": "math500"
+  },
+  "286": {
+   "flag": "none",
+   "share": 0.094,
+   "source": "math500"
+  },
+  "287": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "288": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "289": {
+   "flag": "none",
+   "share": 0.2,
+   "source": "math500"
+  },
+  "290": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "291": {
+   "flag": "none",
+   "share": 0.037,
+   "source": "math500"
+  },
+  "292": {
+   "flag": "exact",
+   "share": 1.0,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_13526",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 102,
+    "row_in_shard": 10029,
+    "prompt_200": "Given that\n\\begin{align*}x_{1}&=211,\\\\ x_{2}&=375,\\\\ x_{3}&=420,\\\\ x_{4}&=523,\\ \\text{and}\\\\ x_{n}&=x_{n-1}-x_{n-2}+x_{n-3}-x_{n-4}\\ \\text{when}\\ n\\geq5, \\end{align*}\nfind the value of $x_{531}+x_{753",
+    "row_index": 1493101
+   },
+   "rows_near": 2,
+   "rows_exact": 2
+  },
+  "293": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "294": {
+   "flag": "none",
+   "share": 0.114,
+   "source": "math500"
+  },
+  "295": {
+   "flag": "none",
+   "share": 0.057,
+   "source": "math500"
+  },
+  "296": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "297": {
+   "flag": "none",
+   "share": 0.042,
+   "source": "math500"
+  },
+  "298": {
+   "flag": "none",
+   "share": 0.127,
+   "source": "math500"
+  },
+  "299": {
+   "flag": "none",
+   "share": 0.056,
+   "source": "math500"
+  },
+  "300": {
+   "flag": "near",
+   "share": 0.562,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_24093",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 103,
+    "row_in_shard": 6016,
+    "prompt_200": "As the Kubiks head out of town for vacation, Jerry takes the first driving shift while Hannah and most of the kids settle down to read books they brought along.  Tony does not feel like reading, so Al",
+    "row_index": 1503627
+   },
+   "rows_near": 2,
+   "rows_exact": 0
+  },
+  "301": {
+   "flag": "none",
+   "share": 0.005,
+   "source": "math500"
+  },
+  "302": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "303": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "304": {
+   "flag": "none",
+   "share": 0.125,
+   "source": "math500"
+  },
+  "305": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "306": {
+   "flag": "none",
+   "share": 0.037,
+   "source": "math500"
+  },
+  "307": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "308": {
+   "flag": "none",
+   "share": 0.067,
+   "source": "math500"
+  },
+  "309": {
+   "flag": "none",
+   "share": 0.077,
+   "source": "math500"
+  },
+  "310": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "311": {
+   "flag": "none",
+   "share": 0.263,
+   "source": "math500"
+  },
+  "312": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "313": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "314": {
+   "flag": "none",
+   "share": 0.167,
+   "source": "math500"
+  },
+  "315": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "316": {
+   "flag": "none",
+   "share": 0.118,
+   "source": "math500"
+  },
+  "317": {
+   "flag": "none",
+   "share": 0.162,
+   "source": "math500"
+  },
+  "318": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "319": {
+   "flag": "none",
+   "share": 0.4,
+   "source": "math500"
+  },
+  "320": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "321": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "322": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "323": {
+   "flag": "none",
+   "share": 0.19,
+   "source": "math500"
+  },
+  "324": {
+   "flag": "none",
+   "share": 0.03,
+   "source": "math500"
+  },
+  "325": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "326": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "327": {
+   "flag": "none",
+   "share": 0.049,
+   "source": "math500"
+  },
+  "328": {
+   "flag": "none",
+   "share": 0.027,
+   "source": "math500"
+  },
+  "329": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "330": {
+   "flag": "none",
+   "share": 0.478,
+   "source": "math500"
+  },
+  "331": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "332": {
+   "flag": "none",
+   "share": 0.333,
+   "source": "math500"
+  },
+  "333": {
+   "flag": "none",
+   "share": 0.056,
+   "source": "math500"
+  },
+  "334": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "335": {
+   "flag": "near",
+   "share": 0.697,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_38217",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 104,
+    "row_in_shard": 5563,
+    "prompt_200": "The Fibonacci sequence is the sequence 1, 1, 2, 3, 5, $\\ldots$ where the first and second terms are 1 and each term after that is the sum of the previous two terms. What is the remainder when the $100",
+    "row_index": 1517713
+   },
+   "rows_near": 3,
+   "rows_exact": 0
+  },
+  "336": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "337": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "338": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "339": {
+   "flag": "none",
+   "share": 0.083,
+   "source": "math500"
+  },
+  "340": {
+   "flag": "none",
+   "share": 0.051,
+   "source": "math500"
+  },
+  "341": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "342": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "343": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "344": {
+   "flag": "none",
+   "share": 0.125,
+   "source": "math500"
+  },
+  "345": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "346": {
+   "flag": "none",
+   "share": 0.111,
+   "source": "math500"
+  },
+  "347": {
+   "flag": "none",
+   "share": 0.043,
+   "source": "math500"
+  },
+  "348": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "349": {
+   "flag": "none",
+   "share": 0.167,
+   "source": "math500"
+  },
+  "350": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "351": {
+   "flag": "none",
+   "share": 0.273,
+   "source": "math500"
+  },
+  "352": {
+   "flag": "none",
+   "share": 0.121,
+   "source": "math500"
+  },
+  "353": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "354": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "355": {
+   "flag": "near",
+   "share": 0.526,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_23716",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 103,
+    "row_in_shard": 5642,
+    "prompt_200": "Let $a,$ $b,$ and $c$ be positive real numbers.  Find the minimum value of\n\\[\\frac{a}{b} + \\frac{b}{c} + \\frac{c}{a}.\\]",
+    "row_index": 1503253
+   },
+   "rows_near": 3,
+   "rows_exact": 0
+  },
+  "356": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "357": {
+   "flag": "none",
+   "share": 0.027,
+   "source": "math500"
+  },
+  "358": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "359": {
+   "flag": "none",
+   "share": 0.053,
+   "source": "math500"
+  },
+  "360": {
+   "flag": "none",
+   "share": 0.03,
+   "source": "math500"
+  },
+  "361": {
+   "flag": "none",
+   "share": 0.107,
+   "source": "math500"
+  },
+  "362": {
+   "flag": "none",
+   "share": 0.028,
+   "source": "math500"
+  },
+  "363": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "364": {
+   "flag": "none",
+   "share": 0.026,
+   "source": "math500"
+  },
+  "365": {
+   "flag": "none",
+   "share": 0.083,
+   "source": "math500"
+  },
+  "366": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "367": {
+   "flag": "none",
+   "share": 0.346,
+   "source": "math500"
+  },
+  "368": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "369": {
+   "flag": "none",
+   "share": 0.059,
+   "source": "math500"
+  },
+  "370": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "371": {
+   "flag": "none",
+   "share": 0.083,
+   "source": "math500"
+  },
+  "372": {
+   "flag": "none",
+   "share": 0.022,
+   "source": "math500"
+  },
+  "373": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "374": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "375": {
+   "flag": "none",
+   "share": 0.067,
+   "source": "math500"
+  },
+  "376": {
+   "flag": "none",
+   "share": 0.056,
+   "source": "math500"
+  },
+  "377": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "378": {
+   "flag": "none",
+   "share": 0.125,
+   "source": "math500"
+  },
+  "379": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "380": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "381": {
+   "flag": "none",
+   "share": 0.043,
+   "source": "math500"
+  },
+  "382": {
+   "flag": "none",
+   "share": 0.022,
+   "source": "math500"
+  },
+  "383": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "384": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "385": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "386": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "387": {
+   "flag": "none",
+   "share": 0.143,
+   "source": "math500"
+  },
+  "388": {
+   "flag": "none",
+   "share": 0.067,
+   "source": "math500"
+  },
+  "389": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "390": {
+   "flag": "none",
+   "share": 0.083,
+   "source": "math500"
+  },
+  "391": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "392": {
+   "flag": "none",
+   "share": 0.021,
+   "source": "math500"
+  },
+  "393": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "394": {
+   "flag": "near",
+   "share": 0.729,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_24796",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 103,
+    "row_in_shard": 6719,
+    "prompt_200": "Consider the function $z(x, y)$ describing the paraboloid $z=(2 x-y)^{2}-2 y^{2}-3 y$. Archimedes and Brahmagupta are playing a game. Archimedes first chooses $x$. Afterwards, Brahmagupta chooses $y$.",
+    "row_index": 1504330
+   },
+   "rows_near": 2,
+   "rows_exact": 0
+  },
+  "395": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "396": {
+   "flag": "none",
+   "share": 0.028,
+   "source": "math500"
+  },
+  "397": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "398": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "399": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "400": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "401": {
+   "flag": "none",
+   "share": 0.214,
+   "source": "math500"
+  },
+  "402": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "403": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "404": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "405": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "406": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "407": {
+   "flag": "none",
+   "share": 0.154,
+   "source": "math500"
+  },
+  "408": {
+   "flag": "none",
+   "share": 0.136,
+   "source": "math500"
+  },
+  "409": {
+   "flag": "none",
+   "share": 0.25,
+   "source": "math500"
+  },
+  "410": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "411": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "412": {
+   "flag": "exact",
+   "share": 1.0,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_52464",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 105,
+    "row_in_shard": 5219,
+    "prompt_200": "Let $P(x)$ be a quadratic polynomial with real coefficients satisfying $x^2 - 2x + 2 \\le P(x) \\le 2x^2 - 4x + 3$ for all real numbers $x$, and suppose $P(11) = 181$. Find $P(16)$.",
+    "row_index": 1531908
+   },
+   "rows_near": 2,
+   "rows_exact": 2
+  },
+  "413": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "414": {
+   "flag": "none",
+   "share": 0.125,
+   "source": "math500"
+  },
+  "415": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "416": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "417": {
+   "flag": "none",
+   "share": 0.037,
+   "source": "math500"
+  },
+  "418": {
+   "flag": "none",
+   "share": 0.062,
+   "source": "math500"
+  },
+  "419": {
+   "flag": "none",
+   "share": 0.032,
+   "source": "math500"
+  },
+  "420": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "421": {
+   "flag": "none",
+   "share": 0.154,
+   "source": "math500"
+  },
+  "422": {
+   "flag": "none",
+   "share": 0.043,
+   "source": "math500"
+  },
+  "423": {
+   "flag": "none",
+   "share": 0.036,
+   "source": "math500"
+  },
+  "424": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "425": {
+   "flag": "none",
+   "share": 0.222,
+   "source": "math500"
+  },
+  "426": {
+   "flag": "none",
+   "share": 0.074,
+   "source": "math500"
+  },
+  "427": {
+   "flag": "none",
+   "share": 0.25,
+   "source": "math500"
+  },
+  "428": {
+   "flag": "none",
+   "share": 0.346,
+   "source": "math500"
+  },
+  "429": {
+   "flag": "none",
+   "share": 0.2,
+   "source": "math500"
+  },
+  "430": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "431": {
+   "flag": "none",
+   "share": 0.308,
+   "source": "math500"
+  },
+  "432": {
+   "flag": "none",
+   "share": 0.045,
+   "source": "math500"
+  },
+  "433": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "434": {
+   "flag": "none",
+   "share": 0.125,
+   "source": "math500"
+  },
+  "435": {
+   "flag": "none",
+   "share": 0.167,
+   "source": "math500"
+  },
+  "436": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "437": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "438": {
+   "flag": "none",
+   "share": 0.214,
+   "source": "math500"
+  },
+  "439": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "440": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "441": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "442": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "443": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "444": {
+   "flag": "none",
+   "share": 0.028,
+   "source": "math500"
+  },
+  "445": {
+   "flag": "none",
+   "share": 0.034,
+   "source": "math500"
+  },
+  "446": {
+   "flag": "near",
+   "share": 0.826,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_33755",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 104,
+    "row_in_shard": 1111,
+    "prompt_200": "The sum of the first $n$ terms in the infinite geometric sequence $\\left\\{\\frac{1}{4},\\frac{1}{8},\\frac{1}{16},\\dots \\right\\}$ is $\\frac{63}{128}$. Find $n$.",
+    "row_index": 1513261
+   },
+   "rows_near": 1,
+   "rows_exact": 0
+  },
+  "447": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "448": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "449": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "450": {
+   "flag": "none",
+   "share": 0.083,
+   "source": "math500"
+  },
+  "451": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "452": {
+   "flag": "none",
+   "share": 0.121,
+   "source": "math500"
+  },
+  "453": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "454": {
+   "flag": "none",
+   "share": 0.022,
+   "source": "math500"
+  },
+  "455": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "456": {
+   "flag": "none",
+   "share": 0.125,
+   "source": "math500"
+  },
+  "457": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "458": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "459": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "460": {
+   "flag": "none",
+   "share": 0.026,
+   "source": "math500"
+  },
+  "461": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "462": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "463": {
+   "flag": "none",
+   "share": 0.4,
+   "source": "math500"
+  },
+  "464": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "465": {
+   "flag": "none",
+   "share": 0.077,
+   "source": "math500"
+  },
+  "466": {
+   "flag": "none",
+   "share": 0.135,
+   "source": "math500"
+  },
+  "467": {
+   "flag": "none",
+   "share": 0.037,
+   "source": "math500"
+  },
+  "468": {
+   "flag": "none",
+   "share": 0.062,
+   "source": "math500"
+  },
+  "469": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "470": {
+   "flag": "none",
+   "share": 0.286,
+   "source": "math500"
+  },
+  "471": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "472": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "473": {
+   "flag": "none",
+   "share": 0.062,
+   "source": "math500"
+  },
+  "474": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "475": {
+   "flag": "near",
+   "share": 0.631,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_31548",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 103,
+    "row_in_shard": 13450,
+    "prompt_200": "When rolling a certain unfair six-sided die with faces numbered 1, 2, 3, 4, 5, and 6, the probability of obtaining face $F$ is greater than $1/6$, the probability of obtaining the face opposite is les",
+    "row_index": 1511061
+   },
+   "rows_near": 1,
+   "rows_exact": 0
+  },
+  "476": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "477": {
+   "flag": "none",
+   "share": 0.05,
+   "source": "math500"
+  },
+  "478": {
+   "flag": "none",
+   "share": 0.28,
+   "source": "math500"
+  },
+  "479": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "480": {
+   "flag": "none",
+   "share": 0.154,
+   "source": "math500"
+  },
+  "481": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "482": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "483": {
+   "flag": "none",
+   "share": 0.136,
+   "source": "math500"
+  },
+  "484": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "485": {
+   "flag": "none",
+   "share": 0.039,
+   "source": "math500"
+  },
+  "486": {
+   "flag": "none",
+   "share": 0.1,
+   "source": "math500"
+  },
+  "487": {
+   "flag": "none",
+   "share": 0.357,
+   "source": "math500"
+  },
+  "488": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "489": {
+   "flag": "exact",
+   "share": 1.0,
+   "source": "math500",
+   "evidence": {
+    "id": "SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered_27362",
+    "dataset_source": "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered",
+    "shard": 103,
+    "row_in_shard": 9277,
+    "prompt_200": "Let $f(x)=|x-p|+|x-15|+|x-p-15|$, where $0 < p < 15$. Determine the minimum value taken by $f(x)$ for $x$ in the interval $p \\leq x\\leq15$.",
+    "row_index": 1506888
+   },
+   "rows_near": 3,
+   "rows_exact": 3
+  },
+  "490": {
+   "flag": "none",
+   "share": 0.186,
+   "source": "math500"
+  },
+  "491": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "492": {
+   "flag": "none",
+   "share": 0.273,
+   "source": "math500"
+  },
+  "493": {
+   "flag": "none",
+   "share": 0.185,
+   "source": "math500"
+  },
+  "494": {
+   "flag": "none",
+   "share": 0.083,
+   "source": "math500"
+  },
+  "495": {
+   "flag": "none",
+   "share": 0.042,
+   "source": "math500"
+  },
+  "496": {
+   "flag": "none",
+   "share": 0.0,
+   "source": "math500"
+  },
+  "497": {
+   "flag": "none",
+   "share": 0.069,
+   "source": "math500"
+  },
+  "498": {
+   "flag": "none",
+   "share": 0.091,
+   "source": "math500"
+  },
+  "499": {
+   "flag": "none",
+   "share": 0.4,
+   "source": "math500"
+  }
+ }
+}

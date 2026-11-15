@@ -59,7 +59,7 @@ Resources:
       Handler: run.sh
       MemorySize: 1769  # one full vCPU: a /data snapshot parses 8 parallel DynamoDB replies (73 ms; 1.85 s for ~20 at 512 MB)
       Timeout: 20
-      ReservedConcurrentExecutions: 2
+      ReservedConcurrentExecutions: 10  # a lab page asks for its page, its data.json and /data at once; 2 gave 503s
       Layers:
         - !Sub arn:aws:lambda:${AWS::Region}:753240598075:layer:LambdaAdapterLayerArm64:30
       Environment:
