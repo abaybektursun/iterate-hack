@@ -28,7 +28,7 @@ a side panel whose address is /#<item id>; the filters are in the address too (/
 click on a person shows only that person. The look is that of the Design tab (.claude/skills/site-ui/SKILL.md).
 
   GET /demo            the talk as a deck of thirteen 16:9 slides (demo_deck.py): keys step, p prints one slide per page
-  GET /demo/fig/<name> the pictures the deck embeds (climb, harness, beyond, efficiency, basins), with their
+  GET /demo/fig/<name> the pictures the deck embeds (climb, harness, exa, pastdev, fixes, beyond, efficiency, basins), with their
                        header, words column and key hidden (demo_deck.FIGS)
   GET /demo/story      the stepped story of the talk over the Design page's picture (demo.py), fed by the same /data
   GET /demo/ali/<name> Ali's slides of the talk, slide1 to slide3: the idea map, the idea tree and the accuracy climb
@@ -279,6 +279,7 @@ def chrome(body, path):
     if 'id="go"' in body and "const PAGES" in body:  # the home page
         return body
     body = NO_ZOOM.sub("", body)
+    body = body.replace('<span class="name">Invariant</span>', f'<a class="name" href="{SITE_HOME}" style="color:inherit;text-decoration:none">Invariant</a>', 1)  # lab pictures
     if NAME in body or HEADER in body:
         body = NAME_LINK.sub(NAME_LINKED, body.replace(NAME, NAME_LINKED, 1), count=1)
         if f'<a href="{SITE_HOME}">All pages</a>' not in body:

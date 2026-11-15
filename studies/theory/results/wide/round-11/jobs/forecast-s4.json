@@ -1,0 +1,8 @@
+{"forecasts": [
+{"mechanism": "round-11/s4-b", "readout": "r11-m01-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "round-11/s4-b", "readout": "r11-m02-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "round-11/s4-b", "readout": "r11-n01-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "round-11/s4-b", "readout": "r11-n01-r2", "value": 31, "low": 27, "high": 35, "reason": "The 'RL sharpens toward its own most likely correct solution' part means RL's samples already agree, so a sequential vote adds about what its vote over 4 adds (224 vs Think-SFT's 241 on the 328), which scales this subset's Think-SFT 34 of 41 to about 31."},
+{"mechanism": "round-11/s4-b", "readout": "r11-n02-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "round-11/s4-b", "readout": "r11-n02-r2", "value": 45, "low": 40, "high": 50, "reason": "The sharpening part means RL is already near its mode, so min-p and a 3-vote change little and RL lands near its vote-over-4 ratio to Think-SFT (224/241) times this subset's 49 of 66, about 45."}
+]}

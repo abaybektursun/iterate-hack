@@ -69,6 +69,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `tools/finding_rl_change_on_imitation.py` | The public page of "Delta transplant", served at `/finding/rl-change-on-imitation`: the 328 problems as marks in three bands and one slider over a in Think-SFT + a × (RL − base), with the noise control as a switch. Its DATA is checked against `results/transplant/hard328-01/` by running the file (command in its docstring). |
 | `tools/finding_no_early_warning.py` | The public page of the drift measurement, served at `/finding/no-early-warning`: the AUROC of six text signs for a failing Think-SFT sample, with its interval, at token 4,000, 8,000 and 12,000, against a planted sign (0.807), and the tokens saved by the stop rule (0.8 %). Reads `results/drift/{describe,predict,stop}-01/`; running the file checks it. |
 | `tools/finding_rl_directions_move_activations.py` | The public page of the xshift measurement, served at `/finding/rl-directions-move-activations`: one mark per weight edit (28), its weight norm against the shift of the layer-24 residual stream, with views for the direction of the shift and for cut-off answers (the refuted prediction). Reads `results/xshift/run-01/readout.json`; running the file checks it. |
+| `tools/finding_two_jobs_in_the_edit.py` | The public page of the depth and rank split of the 1.5x edit, served at `/finding/two-jobs-in-the-edit`: each part of the edit as one mark on right answers against cut-off answers, by layer band and by direction, with the code pair where the depth split was refuted. Reads `results/xreward/depth3/readout.json`, `xreward/edits/readout.json` and `xreward/code_depth/readout.json`; running the file checks it. |
 | `tools/finding_rl_avoids_the_slip.py` | The public page of the wrong-step measurement, served at `/finding/rl-avoids-the-slip`: the 51 located first wrong steps of Base + cue as one mark each on an axis of log-probability change, by kind of error, with a switch over the model scored. Reads `results/wrongstep/math500-01/`; running the file checks it. |
 | `tools/finding_rl_learns_the_opening_first.py` | The public page of the RL checkpoints (steps 100, 400, 2,800), served at `/finding/rl-learns-the-opening-first`: 500 answers as marks in three bands with a switch along training. Its PROBLEMS literal is a copy of the round-04 replication rows (not committed; `runs/replication/` of the theory worktree), checked against `studies/theory/results/engine/round-04/replication/`. |
 | `grader/repair_v4.py`, `grader/repair_v4_test.py` | Grader v4 / v4a: grader v3 plus five label-free answer-statement rules (placeholder, lower-case marker, last-line math, trailing brace, form), and its planted tests. A grader version for both models, not a method. See "Answer-statement repair". |
@@ -3307,6 +3308,34 @@ the other three samples 0.893 [0.855, 0.929]. Restarting any attempt still runni
 | `paper-no-warning/NOTES.md` | Definitions, arms, caveats, what could not be recomputed. |
 | `paper-no-warning/figs.py`, `fig_warning.pdf` | The figure, drawn from `facts.json`. |
 | `paper-no-warning/paper.tex`, `refs.bib`, `fonts/` | Source; build with `tectonic paper.tex` in the folder. |
+
+## Think-SFT in its own chat format ties the raw template with the cue (hard328, board work-8b2ec9)
+
+Spec `specs/SPEC_native.md` (written before the runs). Every other Think-SFT row prompts the model with the study's raw
+template and the base's three-token cue. Here the same user text goes through the model's own chat template (system line,
+`<|im_start|>` markers, answer opened with `<think>`): `run_cell --prompt native --native-tokenizer
+allenai/Olmo-3-7B-Think-SFT@6ff857587e040d6d523a3d5f3a56e918f5401d66`. T 1.0 / top-p 1.0, grader v3, one sample, seed 3000000,
+cap 32,768, scored also at 16,384 from the same answers; paired by problem with the cue cell of `results/cap32/`. Readout
+`analysis/native.py`, `results/native/hard328-01/readout.json`.
+
+| cap | own chat format | raw template + cue | difference, points [95 %] | only own format / only cue | tokens per problem |
+|---|---|---|---|---|---|
+| 32,768 | 232 | 230 | +0.6 [-3.4, 4.6] | 23 / 21 | 12,158 / 11,795 |
+| 16,384 (same answers) | 204 | 207 | -0.9 [-4.3, 2.4] | 15 / 18 | 10,170 / 10,048 |
+
+- Neither H1 (own format at least 10 problems better) nor H2 (cue at least 10 better) holds: the formats tie. The cue on a raw
+  prompt brings out all of what Think-SFT's own format gives on the 328, so the Think-SFT rows of this study are not held back
+  by the prompt, and the cue is not what puts Think-SFT above RL.
+- The larger cap helps both formats alike: own format 204 to 232 (104 answers past 16,384, 3 cap hits at 32,768).
+- MATH-500 (`analysis/native_math500.py`, `results/native/math500-01/readout.json`, seed 182000000, n 500): own format 464 at
+  16,384 and 474 at 32,768 (25 answers past 16,384, 0 cap hits, 5,154 tokens per problem). The four stored cue samples at
+  16,384 score 461, 457, 462, 461 (`results/thinkvote/math500_sft1_cue_s4-01/`): own format minus cue +0.4 to +1.4 points,
+  every interval includes 0. A tie at the same cap here too; 474 is above every single-sample MATH-500 row of RL (456 to 460).
+  Jobs ih-1115-174427-f4d9, ih-1115-183414-a2cc.
+- Instrument: 325 of 328 answers close the thinking part with `</think>`; all finished answers end at the stop id, none at
+  `<|im_end|>`. Smoke job ih-1115-161250-2a8e (8 MATH-500 problems, 7 right).
+- Jobs ih-1115-163313-7486 and ih-1115-163401-a4ba (AWS L40S, 2 shards, joined with `analysis/shard_join.py`); raw answers in
+  `runs/` on the laptop and in S3 under results/ih/<job>/, not in git.
 
 ## How to run
 

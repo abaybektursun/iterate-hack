@@ -1,0 +1,45 @@
+{
+ "run": "native_sft_math500_joined",
+ "commit": "aad5eeb5bba112ef2f486ce018397f7bec150780",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "sft1",
+  "prompt": "native",
+  "native_tokenizer": "allenai/Olmo-3-7B-Think-SFT@6ff857587e040d6d523a3d5f3a56e918f5401d66",
+  "set": "math500",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 32768,
+  "seed": 182000000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 1,
+  "restarts": 0,
+  "out": "/work/out",
+  "dry_run": false,
+  "commit": "aad5eeb5bba112ef2f486ce018397f7bec150780",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 500,
+  "native_prompt_example": "<|im_start|>system\nYou are Olmo, a helpful AI assistant built by Ai2. Your date cutoff is December 2024, and your model weights are available at https://huggingface.co/allenai.<|im_end|>\n<|im_start|>user\nSolve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nConvert the point $(0,3)$ in rectangular coordinates to polar coordinates.  Enter your answer in the form $(r,\\theta),$ where $r > 0$ and $0 \\le \\theta < 2 \\pi.$\n\nRemember to put your answer on its own line after \"Answer:\"<|im_end|>\n<|im_start|>assistant\n<think>",
+  "native_end_id": 100265,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "raw_answers": "runs/native_sft_math500_joined/answers.jsonl (ih get of the shard jobs, then shard_join; not in git)"
+}

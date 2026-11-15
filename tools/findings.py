@@ -187,6 +187,10 @@ TABLE = {
         "group": WEIGHTS,
         "figure": lambda m: [f"{m.RATIO:.0f}×", "the shift",
                              f"of the layer-24 residual stream, 8 RL directions ({m.DATA['edits']['top8_math31']['rms_shift']:.2f} RMS) against 8 random directions of equal weight norm ({m.DATA['edits']['rand8_math31']['rms_shift']:.3f})"]},
+    "two-jobs-in-the-edit": {
+        "group": WEIGHTS,
+        "figure": lambda m: [signed(m.DATA["math"]["L0"]["vs_base"]["right"][0]), "points",
+                             f"328 harder problems, right answers from layers 0 to 10 of RL's edit alone, while cut-offs rise {m.DATA['math']['L0']['vs_base']['cut'][0]:.1f}; layers 11 to 21 cut them by {-m.DATA['math']['L11']['vs_base']['cut'][0]:.1f}; the split failed on code"]},
     "theories-on-trial": {
         "group": THEORIES,
         "figure": lambda m: [f"{m.DATA['nearer']['all'][0]} of {m.DATA['nearer']['all'][1]}", "predictions",
