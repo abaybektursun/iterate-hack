@@ -1,0 +1,5 @@
+{"forecasts": [
+{"mechanism": "round-13/s3-a", "readout": "r13-n01-r1", "value": 22.5, "low": 17.5, "high": 27.5, "reason": "The mechanism's claim that a plurality vote is right wherever the right answer is the mode puts a vote over 4 at the stored base-vote level on these 41 problems (22 of 41). Min-p 0.05 trims the tail draws that scatter the wrong answers, and that scattering is what lets a minority right answer win, so the forecast gets no lift beyond about +0.5."},
+{"mechanism": "round-13/s3-a", "readout": "r13-n01-r2", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "round-13/s3-a", "readout": "r13-n01-r3", "value": 89.5, "low": 85.0, "high": 94.0, "reason": "With right answers agreeing and wrong ones scattered, a vote over 4 sits at the stored 446/500 level (89.2 of 100), well below the 470-475 mode ceiling the mechanism gives for many samples. Min-p mainly removes scattered slips, so it adds at most a little."}
+]}

@@ -1114,7 +1114,7 @@ const map = $("#map");
   for (let m = Math.ceil(R.t0_min / 60) * 60; m <= R.t0_min + SPAN * 60; m += 60) {
     const t = (m - R.t0_min) / 60;
     hours += `<text class="hr" data-t="${t}">${pad(m / 60 % 24)}:00</text>`;
-    if (t > .5 && SPAN - t > .5) top += `<text class="ch" x="${f1(cx(t))}" y="34">${pad(m / 60 % 24)}:00</text>`;
+    if (m / 60 % 3 === 0 && t > 1.5 && SPAN - t > 1.5) top += `<text class="ch" x="${f1(cx(t))}" y="34">${pad(m / 60 % 24)}:00</text>`;
   }
   map.innerHTML =
     `<ellipse class="atmo" cx="${CX}" cy="${CY}" rx="${S * 1.9}" ry="${f1(S * 1.9 * SE)}" fill="url(#atmo)"/>` +

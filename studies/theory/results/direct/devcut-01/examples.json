@@ -1,0 +1,73 @@
+{
+ "note": "The plan's own rows are not reachable; these are instrument items from the cued base (votek rows) with every sample over 4,096 generated tokens treated as cut.",
+ "for_a_cut_loses": {
+  "problem_index": 110,
+  "gold": "504",
+  "g": 0.5,
+  "n_ans": 2,
+  "answers": [
+   "<length>",
+   "<length>",
+   "<length>",
+   null,
+   "<length>",
+   "4032",
+   "<length>",
+   "<length>",
+   "<length>",
+   "<length>",
+   "63",
+   "<length>"
+  ],
+  "n_new": [
+   16384,
+   16384,
+   16384,
+   14525,
+   16384,
+   13502,
+   16384,
+   16384,
+   16384,
+   16384,
+   14373,
+   16384
+  ],
+  "reading": "9 of 12 samples hit the 16,384 cap and 11 of 12 run past 4,096: under a 4,096 cut almost no sample votes"
+ },
+ "against_a_finished_wrong": {
+  "problem_index": 20,
+  "gold": "6+9i",
+  "g": 0.636,
+  "n_ans": 11,
+  "answers": [
+   "117 + 41i",
+   "117 + 41i",
+   "6 + 9i",
+   "6 + 9i",
+   "117 + 41i",
+   "117 + 41i",
+   "6 + 9i",
+   "<length>",
+   "117 + 41i",
+   "6 + 9i",
+   "117 + 41i",
+   "117 + 41i"
+  ],
+  "n_new": [
+   2762,
+   12838,
+   413,
+   1873,
+   2026,
+   3871,
+   433,
+   16384,
+   10666,
+   390,
+   7850,
+   4262
+  ],
+  "reading": "lost with 11 of 12 finished and 6 of 11 under 4,096 tokens: a shared wrong value, not cutting"
+ }
+}

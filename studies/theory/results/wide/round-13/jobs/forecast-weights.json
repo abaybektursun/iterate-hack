@@ -1,0 +1,5 @@
+{"forecasts": [
+{"mechanism": "round-10/weights-m03", "readout": "r13-n01-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "round-10/weights-m03", "readout": "r13-n01-r2", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "round-10/weights-m03", "readout": "r13-n01-r3", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}

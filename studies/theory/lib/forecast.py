@@ -851,7 +851,7 @@ def round11(folder, sources, n_top, wait_none=False):
     print("== surprises")
     found = surprises(folder, list({s.resolve(): s for s in sources}.values()))
     print("== targets_open")
-    items = open_targets(folder) if not (folder / "targets.json").exists() else board("board", "9999")[0]
+    items = open_targets(folder) if not (folder / "targets.json").exists() else board("board", snapshot(folder))[0]  # a resumed round sees the board of its snapshot, not results posted since
     utc, tids = snapshot(folder), [t["id"] for t in json.loads((folder / "targets.json").read_text())["targets"]]
     common = {"DIRECTION.md": ROOT / "DIRECTION.md", "board.jsonl": "".join(json.dumps(i) + "\n" for i in items), "work.md": folder / "work.md"}
     print("== direct_tests (carried)")
@@ -957,7 +957,7 @@ def wide_round_v10(folder, sources, n):
         standing(folder, sources)
     carried = [{k: m[k] for k in MECHANISM_KEYS} for m in json.loads((folder / "standing.json").read_text())["carried"]]
     print("== targets_open")
-    items = open_targets(folder) if not (folder / "targets.json").exists() else board("board", "9999")[0]
+    items = open_targets(folder) if not (folder / "targets.json").exists() else board("board", snapshot(folder))[0]  # a resumed round sees the board of its snapshot, not results posted since
     utc, tids = snapshot(folder), [t["id"] for t in json.loads((folder / "targets.json").read_text())["targets"]]
     common = {"DIRECTION.md": ROOT / "DIRECTION.md", "board.jsonl": "".join(json.dumps(i) + "\n" for i in items), "work.md": folder / "work.md"}
     print("== forecast")
