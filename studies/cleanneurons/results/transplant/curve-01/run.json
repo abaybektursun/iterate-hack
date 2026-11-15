@@ -1,0 +1,13 @@
+{
+ "job_id": "sameraslan-1114-151017-b683",
+ "commit": "fab81ec57919de133535f372bac8349625e04794",
+ "command": "python -m studies.cleanneurons.jobs.transplant_curve --commit fab81ec57919de133535f372bac8349625e04794",
+ "runner": "tools/gpu.py h100 (Modal workspace sameraslan)",
+ "volume_only": [
+  "kl.npz (13 MB, per-position KL of every arm)",
+  "rank.npz (1.4 MB, s per neuron)",
+  "edit_top3.json"
+ ],
+ "volume_path": "iterate-runs:sameraslan-1114-151017-b683/",
+ "readout": "readout_after_cue.json from analysis/transplant_readout.py"
+}

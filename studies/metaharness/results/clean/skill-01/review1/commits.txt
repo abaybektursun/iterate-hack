@@ -1,0 +1,2 @@
+6c754f5 Dana 2026-11-14 19:58:13 -0800 meta: dana review 20261115-0354 (gapmap resamples 1.5M -> 20k: bootstrap 41 s -> 0.6 s per cell)
+00a98b5 Dana 2026-11-14 19:56:31 -0800 gapmap: bootstrap resamples 1,500,000 -> 20,000 for the next batches (meta review dana 20261115-0354)

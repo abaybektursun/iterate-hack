@@ -1,0 +1,6 @@
+{
+ "commit": "ed7221a243edc55c449ebb87f6be06bf9651826a",
+ "command": "A=2026-10-31 B=2026-11-05 bash studies/gpuprice/jobs/run_backtest.sh runs/gpuprice/spec1-late; scorer.py on lve.csv for report_lve",
+ "job_id": "laptop (no GPU)",
+ "source_dir": "runs/gpuprice/spec1-late"
+}

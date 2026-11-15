@@ -1,0 +1,35 @@
+{
+ "name": "fm2-20-exit",
+ "note": "fm2-19 plus --exit-frac 0.25 (fm2_intraday_v2: a listing present the day before and held by <= 25% of today's snapshots leaves with the pooled past share) and --draws 8000. Three seeds at 2000 draws: h1 +0.201/+0.202/+0.201 without, +0.213/+0.215/+0.213 with; pooled +0.302..+0.305 without, +0.304 with",
+ "utc": "2026-11-15T04:25:46+00:00",
+ "commit": "75af375",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.30564,
+ "pinball": 0.023292,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.30657,
+ "skill_geomean": 0.394064,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.212861,
+   "in_band": 0.822967
+  },
+  "3": {
+   "skill_pooled": 0.252053,
+   "in_band": 0.751938
+  },
+  "7": {
+   "skill_pooled": 0.359593,
+   "in_band": 0.645349
+  }
+ },
+ "in_band": 0.740431
+}

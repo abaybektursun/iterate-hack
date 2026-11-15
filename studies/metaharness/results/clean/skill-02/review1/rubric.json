@@ -1,0 +1,65 @@
+{
+ "pack": "r02",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 0,
+   "quote": ""
+  },
+  "P2": {
+   "score": 0,
+   "quote": ""
+  },
+  "P3": {
+   "score": 0,
+   "quote": ""
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 0,
+   "quote": ""
+  },
+  "P6": {
+   "score": 0,
+   "quote": ""
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 0,
+   "file": ""
+  },
+  "P3": {
+   "score": 0,
+   "file": ""
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 0,
+   "file": ""
+  }
+ },
+ "other_claims": [
+  "1,500,000 resamples have no reason behind them (the fixed seed makes a rerun repeat); the bootstrap was 46.1 s of a 0.9 min job",
+  "The 4 gapmap jobs test no part of mission point 3; they map point 2, which DIRECTION.md already states",
+  "The cap_hit batch split by answer length is uninformative (all cap hits are in the top quartile)",
+  "Much of the 'where' question is already answered by hand labels in t1_t2_items-01/notes.md, which the SPEC does not cite",
+  "Latent bug: jobs/cell.py imports a bench_rng module that does not exist (no cell uses it)",
+  "Recommends running only the accuracy batch and dropping cap_hit and tokens_both_right"
+ ],
+ "change_summary": "Lowers n_boot in queue.json from 1,500,000 to 10,000 and rewrites SPEC.md's method line and requirement 2 to match."
+}

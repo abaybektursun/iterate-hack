@@ -1,0 +1,7 @@
+{
+ "arm": "whole_b200",
+ "state": "cancelled in the queue, never started",
+ "class": "b200",
+ "queue_min": 51.38333333333333,
+ "n": 0
+}

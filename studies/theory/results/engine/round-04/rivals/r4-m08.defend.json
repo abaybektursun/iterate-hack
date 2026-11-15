@@ -1,0 +1,5 @@
+[
+{"k": 1, "value": 4.0, "low": -9.0, "high": 17.0, "why": "If recall props up the cued base on older problems, the length-matched RL-minus-base gap should be larger on the ~60 post-cutoff AIME/HMMT 2025 problems. At T 0.6 the base loops and hits the cap on most long problems, and both models are near the floor on the 2025 contests, so the excess shrinks to a few points with a standard error of about 8."},
+{"k": 2, "value": -0.25, "low": -1.0, "high": 0.5, "why": "Recalled pre-cutoff solutions come out short, so on problems both models solve the base-to-RL log length ratio should be lower for pre than for post problems, giving a negative difference. With only a handful of post problems solved by both at T 0.6, the post median is very noisy."},
+{"k": 3, "value": 0.9, "low": 0.75, "high": 1.05, "why": "The mechanism gives RL learned procedures rather than recall, so its short right answers should not have the base's recall-driven low entropy. Only the ordinary pattern of slightly lower per-token entropy on short, easy solutions remains, so the ratio should sit just under 1."}
+]

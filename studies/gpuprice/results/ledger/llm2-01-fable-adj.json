@@ -1,0 +1,35 @@
+{
+ "name": "llm2-01-fable-adj",
+ "note": "claude-fable-5-2 (effort low, no tools) adjusts ens-05 quantiles per series-origin from median history, listing table, other tracker and ens-05 record, all dated <= origin",
+ "utc": "2026-11-15T04:26:22+00:00",
+ "commit": "eec80d2",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.308545,
+ "pinball": 0.023194,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.297977,
+ "skill_geomean": 0.37639,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.209173,
+   "in_band": 0.850718
+  },
+  "3": {
+   "skill_pooled": 0.278618,
+   "in_band": 0.77907
+  },
+  "7": {
+   "skill_pooled": 0.351447,
+   "in_band": 0.689922
+  }
+ },
+ "in_band": 0.773561
+}

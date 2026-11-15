@@ -1,0 +1,417 @@
+{
+ "cells": {
+  "rl_plain": {
+   "job_id": "abaybektursun-1114-170253-f661",
+   "commit": "be62e76037092aa61c244383215b06f256818e82",
+   "prefix_text": "",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 135,
+    "pct": 82.82208588957056,
+    "wilson95": [
+     76.29328973312941,
+     87.83945084433589
+    ],
+    "cap_hits": 5,
+    "no_block": 5,
+    "timeouts": 0,
+    "tokens_per_problem": 5165.1533742331285
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 266,
+    "pct": 70.93333333333334,
+    "wilson95": [
+     66.1437664501171,
+     75.29837149951884
+    ],
+    "cap_hits": 3,
+    "no_block": 3,
+    "timeouts": 1,
+    "tokens_per_problem": 3571.2746666666667
+   },
+   "all": {
+    "n": 538,
+    "passed": 401,
+    "pct": 74.53531598513011,
+    "wilson95": [
+     70.68897021860278,
+     78.03376881747307
+    ],
+    "cap_hits": 8,
+    "no_block": 8,
+    "timeouts": 1,
+    "tokens_per_problem": 4054.17843866171
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 399,
+    "pct": 74.57943925233644,
+    "wilson95": [
+     70.72366188159445,
+     78.0847576758059
+    ],
+    "cap_hits": 8,
+    "no_block": 8,
+    "timeouts": 1,
+    "tokens_per_problem": 4048.448598130841
+   },
+   "first_three_words": [
+    [
+     "as shown in",
+     458
+    ],
+    [
+     "! Okay, I",
+     65
+    ],
+    [
+     "! Okay, let's",
+     15
+    ]
+   ]
+  },
+  "base_plain": {
+   "job_id": "abaybektursun-1114-170258-388e",
+   "commit": "be62e76037092aa61c244383215b06f256818e82",
+   "prefix_text": "",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 72,
+    "pct": 44.171779141104295,
+    "wilson95": [
+     36.769565355651345,
+     51.84237790629408
+    ],
+    "cap_hits": 4,
+    "no_block": 14,
+    "timeouts": 1,
+    "tokens_per_problem": 2222.20245398773
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 150,
+    "pct": 40.0,
+    "wilson95": [
+     35.167200834148396,
+     45.035599508382205
+    ],
+    "cap_hits": 11,
+    "no_block": 29,
+    "timeouts": 2,
+    "tokens_per_problem": 2248.8213333333333
+   },
+   "all": {
+    "n": 538,
+    "passed": 222,
+    "pct": 41.2639405204461,
+    "wilson95": [
+     37.18017284341602,
+     45.47157916646608
+    ],
+    "cap_hits": 15,
+    "no_block": 43,
+    "timeouts": 3,
+    "tokens_per_problem": 2240.7565055762084
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 221,
+    "pct": 41.308411214953274,
+    "wilson95": [
+     37.21248442213463,
+     45.528264555666766
+    ],
+    "cap_hits": 15,
+    "no_block": 43,
+    "timeouts": 3,
+    "tokens_per_problem": 2220.377570093458
+   },
+   "first_three_words": [
+    [
+     ". Okay, I",
+     94
+    ],
+    [
+     ". ```python def",
+     39
+    ],
+    [
+     "at the end",
+     16
+    ],
+    [
+     ". Here is",
+     14
+    ],
+    [
+     ". Do not",
+     9
+    ],
+    [
+     "Okay, I need",
+     9
+    ],
+    [
+     "where CODE is",
+     9
+    ],
+    [
+     ". Write a",
+     6
+    ],
+    [
+     ". Make sure",
+     5
+    ],
+    [
+     ". ```python CODE",
+     5
+    ],
+    [
+     "in your response.",
+     5
+    ],
+    [
+     ". ```python from",
+     4
+    ],
+    [
+     ". To solve",
+     4
+    ],
+    [
+     "as shown above.",
+     4
+    ],
+    [
+     ". Okay, let's",
+     4
+    ],
+    [
+     ". ```python #",
+     4
+    ],
+    [
+     ". Here's how",
+     3
+    ],
+    [
+     ". Here's the",
+     3
+    ],
+    [
+     ". Your solution",
+     3
+    ],
+    [
+     ". The problem",
+     3
+    ]
+   ]
+  },
+  "base_cue": {
+   "job_id": "abaybektursun-1114-170304-c03c",
+   "commit": "be62e76037092aa61c244383215b06f256818e82",
+   "prefix_text": " as shown in the prompt. I hope this helps!\n\nOkay",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 106,
+    "pct": 65.03067484662577,
+    "wilson95": [
+     57.440323308951015,
+     71.9288756470845
+    ],
+    "cap_hits": 9,
+    "no_block": 11,
+    "timeouts": 1,
+    "tokens_per_problem": 5102.331288343558
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 211,
+    "pct": 56.266666666666666,
+    "wilson95": [
+     51.20753741537012,
+     61.1987077033107
+    ],
+    "cap_hits": 18,
+    "no_block": 23,
+    "timeouts": 2,
+    "tokens_per_problem": 3733.6586666666667
+   },
+   "all": {
+    "n": 538,
+    "passed": 317,
+    "pct": 58.921933085501855,
+    "wilson95": [
+     54.715764137603415,
+     63.00159551187869
+    ],
+    "cap_hits": 27,
+    "no_block": 34,
+    "timeouts": 3,
+    "tokens_per_problem": 4148.3308550185875
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 315,
+    "pct": 58.87850467289719,
+    "wilson95": [
+     54.66011513732101,
+     62.97030257352703
+    ],
+    "cap_hits": 27,
+    "no_block": 34,
+    "timeouts": 3,
+    "tokens_per_problem": 4135.644859813084
+   },
+   "first_three_words": [
+    [
+     "as shown in",
+     538
+    ]
+   ]
+  },
+  "base_mathcue": {
+   "job_id": "abaybektursun-1114-170309-b137",
+   "commit": "be62e76037092aa61c244383215b06f256818e82",
+   "prefix_text": " line!\n\nOkay",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 120,
+    "pct": 73.61963190184049,
+    "wilson95": [
+     66.36669039329287,
+     79.7849079661915
+    ],
+    "cap_hits": 6,
+    "no_block": 7,
+    "timeouts": 0,
+    "tokens_per_problem": 4963.288343558283
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 206,
+    "pct": 54.93333333333333,
+    "wilson95": [
+     49.872744436182494,
+     59.89387406150241
+    ],
+    "cap_hits": 16,
+    "no_block": 26,
+    "timeouts": 1,
+    "tokens_per_problem": 3752.592
+   },
+   "all": {
+    "n": 538,
+    "passed": 326,
+    "pct": 60.594795539033456,
+    "wilson95": [
+     56.40459744710267,
+     64.63476713665735
+    ],
+    "cap_hits": 22,
+    "no_block": 33,
+    "timeouts": 1,
+    "tokens_per_problem": 4119.401486988848
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 323,
+    "pct": 60.373831775700936,
+    "wilson95": [
+     56.16937559793725,
+     64.43037562210627
+    ],
+    "cap_hits": 22,
+    "no_block": 33,
+    "timeouts": 1,
+    "tokens_per_problem": 4117.758878504673
+   },
+   "first_three_words": [
+    [
+     "line! Okay, I",
+     465
+    ],
+    [
+     "line! Okay, let's",
+     68
+    ],
+    [
+     "line! Okay, so",
+     3
+    ],
+    [
+     "line! Okay, let",
+     1
+    ],
+    [
+     "line! Okay, the",
+     1
+    ]
+   ]
+  }
+ },
+ "differences": {
+  "rl_plain - base_plain": {
+   "points": 33.27137546468401,
+   "bootstrap95": [
+    28.810408921933085,
+    37.732342007434944
+   ],
+   "only_first": 197,
+   "only_second": 18
+  },
+  "rl_plain - base_cue": {
+   "points": 15.613382899628252,
+   "bootstrap95": [
+    11.524163568773227,
+    19.88847583643122
+   ],
+   "only_first": 116,
+   "only_second": 32
+  },
+  "rl_plain - base_mathcue": {
+   "points": 13.940520446096654,
+   "bootstrap95": [
+    10.03717472118959,
+    17.843866171003718
+   ],
+   "only_first": 103,
+   "only_second": 28
+  },
+  "base_plain - base_cue": {
+   "points": -17.65799256505576,
+   "bootstrap95": [
+    -22.490706319702607,
+    -12.82527881040892
+   ],
+   "only_first": 51,
+   "only_second": 146
+  },
+  "base_plain - base_mathcue": {
+   "points": -19.33085501858736,
+   "bootstrap95": [
+    -24.349442379182157,
+    -14.31226765799256
+   ],
+   "only_first": 52,
+   "only_second": 156
+  },
+  "base_cue - base_mathcue": {
+   "points": -1.6728624535315986,
+   "bootstrap95": [
+    -5.762081784386619,
+    2.788104089219323
+   ],
+   "only_first": 68,
+   "only_second": 77
+  }
+ },
+ "overlap_excluded": [
+  "HumanEval/47",
+  "Mbpp/641",
+  "Mbpp/804"
+ ]
+}

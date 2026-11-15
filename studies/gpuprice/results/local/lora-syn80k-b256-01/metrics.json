@@ -1,0 +1,35 @@
+{
+ "name": "loc-11-lora-syn80k-b256",
+ "note": "LoRA on 80,000 sticky series, 800 steps at batch 256, seed 0; fm2-19 post-processing. Synthetic only, no latest date. H: as loc-10; refuted if below +0.3155. Listing-level pinball 188.4",
+ "utc": "2026-11-15T04:49:47+00:00",
+ "commit": "04b0cf4",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.315337,
+ "pinball": 0.022966,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.277988,
+ "skill_geomean": 0.387864,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.210139,
+   "in_band": 0.811483
+  },
+  "3": {
+   "skill_pooled": 0.271946,
+   "in_band": 0.763566
+  },
+  "7": {
+   "skill_pooled": 0.367099,
+   "in_band": 0.681202
+  }
+ },
+ "in_band": 0.752332
+}

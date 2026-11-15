@@ -1,0 +1,48 @@
+{
+ "sim": {
+  "best_cell": {
+   "series_id": "fastgpu_daily.neocloud_rate_card.B200.on_demand.median",
+   "origin_date": "2026-10-13",
+   "horizon_days": "7",
+   "target_date": "2026-10-20",
+   "y": "7.99",
+   "q10": "7.165",
+   "q50": "7.299702",
+   "q90": "7.971201",
+   "baseline_q10": "7.165",
+   "baseline_q50": "7.165",
+   "baseline_q90": "7.165",
+   "status": "scored",
+   "loss_q10": "0.08250000000000002",
+   "baseline_loss_q10": "0.08250000000000002",
+   "loss_q50": "0.34514900000000015",
+   "baseline_loss_q50": "0.4125000000000001",
+   "loss_q90": "0.01691910000000041",
+   "baseline_loss_q90": "0.7425000000000002",
+   "loss": "0.14818936666666685",
+   "baseline_loss": "0.4125000000000001"
+  },
+  "worst_cell": {
+   "series_id": "fastgpu_daily.neocloud_rate_card.B300.on_demand.median",
+   "origin_date": "2026-10-14",
+   "horizon_days": "7",
+   "target_date": "2026-10-21",
+   "y": "9.5",
+   "q10": "9.227707",
+   "q50": "9.844884",
+   "q90": "11.175738",
+   "baseline_q10": "9.5",
+   "baseline_q50": "9.5",
+   "baseline_q90": "9.5",
+   "status": "scored",
+   "loss_q10": "0.027229299999999946",
+   "baseline_loss_q10": "0.0",
+   "loss_q50": "0.1724420000000002",
+   "baseline_loss_q50": "0.0",
+   "loss_q90": "0.16757380000000005",
+   "baseline_loss_q90": "0.0",
+   "loss": "0.12241503333333341",
+   "baseline_loss": "0.0"
+  }
+ }
+}

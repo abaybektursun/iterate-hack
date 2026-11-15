@@ -1,0 +1,13 @@
+{
+ "file": "ext_ecb_eurusd_v1.csv",
+ "series": "EXR.D.USD.EUR.SP00.A",
+ "title": "ECB euro foreign exchange reference rate, US dollar per euro, daily",
+ "source_url": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A?startPeriod=2026-06-01&endPeriod=2026-11-06&format=csvdata",
+ "retrieved_utc": "2026-11-14T23:26:20+00:00",
+ "rows": 115,
+ "first_date": "2026-06-01",
+ "last_date": "2026-11-06",
+ "sha256": "21de98574d6f2f269e332216169dae10921618c8e5e0ca8b7e5ed8b9d4c51f60",
+ "terms": "https://www.ecb.europa.eu/services/disclaimer/html/index.en.html (free use, ECB cited as source)",
+ "attribution": "Source: European Central Bank, euro foreign exchange reference rates"
+}

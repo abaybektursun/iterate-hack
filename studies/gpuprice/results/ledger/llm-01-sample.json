@@ -1,0 +1,35 @@
+{
+ "name": "llm-01-sample",
+ "note": "LLM as predictive density, cut test: Qwen3-Next-80B-A3B-Instruct 4-bit (RedHatAI w4a16), listing table of 21 days as text, 30 sampled one-number answers at T 1.0, empirical q10/q50/q90; 10 highest-loss series x 5 origins x h 3,7 = 100 cells, other cells last value. Hypothesis: beats last_value_empirical on these cells; refuted if pooled skill on them is lower. Job abaybektursun-1114-200439-7bc9",
+ "utc": "2026-11-15T02:13:30+00:00",
+ "commit": "b91a36f",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 516,
+  "missing_truth": 39,
+  "missing_forecast": 0,
+  "filled_from_baseline": 424,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.009011,
+ "pinball": 0.035816,
+ "last_value_pinball": 0.036141,
+ "skill_median_of_series": 0.0,
+ "skill_geomean": 0.004662,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.0,
+   "in_band": 0.55814
+  },
+  "3": {
+   "skill_pooled": -0.000897,
+   "in_band": 0.367568
+  },
+  "7": {
+   "skill_pooled": 0.01736,
+   "in_band": 0.207547
+  }
+ },
+ "in_band": 0.381783
+}

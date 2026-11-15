@@ -1,0 +1,2 @@
+{"measured": -0.2005220257109175, "refuted_by_met": false, "alt_measured": -0.19636500737305987, "not_computable": null, "example_row": {"problem_index": 1, "sample": 0, "attempt": 0, "seed": 41000001, "n_new": 4280, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "p - q", "score_v3": 1, "gold": "p - q"}}
+mixed_problems=137 used=137 skipped=0

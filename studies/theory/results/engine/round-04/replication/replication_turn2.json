@@ -1,0 +1,84 @@
+{
+ "round": "round-04, rival stage turn 2 (version 5.1, code 74ceb42)",
+ "method": "Recomputed r4-m10's turn-2 tests 4, 5 and 6 from the recipes in rivals/r4-m10.turn2.json alone, before opening rivals/r4-m10.turn2/; scripts r4-m10_turn2_p4.py, _p5.py, _p6.py (import common.py); row files in runs/replication/ (fetched for the first replication, not committed). Bootstrap: each file resampled independently, 2,000 resamples, seed 0, percentile 90 %.",
+ "tests": [
+  {
+   "k": 4,
+   "what": "share of RL step-100 plain finished answers with mean_logprob above the cued base's finished median",
+   "my_value": 0.5541561712846348,
+   "n": {
+    "common": 500,
+    "cued_base_finished": 381,
+    "step100_finished": 397
+   },
+   "interval_90": [
+    0.48866498740554154,
+    0.6171284634760705
+   ],
+   "round_value": 0.5541561712846348,
+   "agree": true
+  },
+  {
+   "k": 5,
+   "what": "the same share at RL step 400",
+   "my_value": 0.48009950248756217,
+   "n": {
+    "common": 500,
+    "cued_base_finished": 381,
+    "step400_finished": 402
+   },
+   "interval_90": [
+    0.4129353233830846,
+    0.5472636815920398
+   ],
+   "round_value": 0.48009950248756217,
+   "agree": true
+  },
+  {
+   "k": 6,
+   "what": "(median step 400 - median cued base) / (median step 2,800 - median cued base), mean_logprob of finished answers",
+   "my_value": 0.06726598846379954,
+   "n": {
+    "cued_base": 381,
+    "step400": 402,
+    "step2800": 481,
+    "step100": 397,
+    "plain_base": 428
+   },
+   "interval_90": [
+    -0.14315128019780674,
+    0.2342652193325315
+   ],
+   "round_value": 0.06726598846379954,
+   "agree": true
+  }
+ ],
+ "median_mean_logprob_finished": {
+  "cued_base": -0.1606960453723636,
+  "step400": -0.16280951427616802,
+  "step2800": -0.19211562236916682,
+  "step100": -0.1546289802437172,
+  "plain_base": -0.17519781081091967
+ },
+ "matched_check": {
+  "script": "r4-m10_turn2_matched.py",
+  "n_problems_finished_by_all_five": 307,
+  "median_mean_logprob": {
+   "cued_base": -0.16107373654280305,
+   "plain_base": -0.17926877883009498,
+   "step100": -0.1565771140367442,
+   "step400": -0.16228226262180462,
+   "step2800": -0.1847874475017002
+  },
+  "median_n_new_finished": {
+   "cued_base": 981,
+   "plain_base": 648.0,
+   "step100": 1432,
+   "step400": 1653.0,
+   "step2800": 2839
+  }
+ },
+ "what_mean_logprob_is": "Mean over the generated tokens of the log-probability of each sampled token under the model's raw distribution (vLLM 0.32.0 default raw_logprobs: before temperature and top-p), for tokens sampled at T 0.6 / top-p 0.95. Written by studies/rlneurons/jobs/rln3_gen.py line 135 from SamplingParams logprobs=0 (lib/n13_gen.py line 61); studies/rlneurons/specs/SPEC_minp.md line 35 names raw_logprobs, and README line 1144 checks the stored field against a full forward pass at T 1.0 (median difference 0.00017).",
+ "reading": "The denominator of test 6 is negative: step 2,800's median (-0.192) is below the cued base's (-0.161), so step 2,800 is less sharp per sampled token than the cued base, not sharper; 0.067 means step 400 sits at the cued base's level. Steps 100 (-0.155) and 400 (-0.163) are as sharp as the cued base and sharper than the plain base (-0.175). The order holds on the 307 problems all five cells finished.",
+ "soundness": "A whole-answer mean mixes text kinds: answers differ in length (finished medians 648 plain base, 981 cued base, 1,432 step 100, 1,653 step 400, 2,839 step 2,800 tokens) and opening, and long deliberative text has more branching tokens per token while repeated text has fewer. Alternative reading: equal medians at steps 100/400 and the cued base mean the same kind of text, not equal sharpness at matched positions, and step 2,800's lower value means more exploratory text, not a flatter distribution. Entropy at matched positions needs a forward pass of the models on the same texts."
+}

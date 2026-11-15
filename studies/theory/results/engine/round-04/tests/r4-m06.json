@@ -1,0 +1,56 @@
+{
+ "theory": "r4-m06",
+ "predictions": [
+  {
+   "k": 1,
+   "experiment": "Re-check rate after wrong vs right non-final candidate answers in RL's T2 texts, as a ratio",
+   "recipe": "File: s3 r4/modal_t2-01/t2/T2.jsonl (all 500 rows, cap hits included). Field text. Candidates, in text order: (a) each '\\boxed{' with brace-balanced content (candidate string = content; skip if unbalanced before end of text; end = index after the matching '}'); (b) each match of the case-insensitive regex 'answer is:?\\s*' followed by the span up to the first newline, '. ' or end of text (candidate string = that span with '$', '\\(', '\\)', '*' and a trailing '.' removed); (c) each line matching '^\\s*\\**Answer:?\\**\\s*(.+)$' (candidate = group 1, cleaned as in b). A box inside a (b)/(c) span counts once, as the box. Grade each candidate right iff the equivalence function of grader/rln4_grader_v3.py (the one behind score_v3) judges it equal to the row's gold; empty strings are wrong. Keep only non-final candidates: at least 800 characters of text follow the candidate's end. Re-check flag = the case-insensitive regex '\\b(wait|hmm|let me (double[- ]?)?check|let me verify|double[- ]?check)\\b' matches in the 800 characters after the candidate's end. Pool candidates over rows. r_W = flagged/total among wrong candidates, r_R = same among right candidates. Statistic = r_W / r_R. Report it even if there are few wrong candidates.",
+   "script": "tests/r4-m06/p1.py",
+   "value": 1.05,
+   "low": 0.8,
+   "high": 1.45,
+   "measured": null,
+   "inside": null,
+   "refuted_by": "statistic >= 1.50",
+   "refuted_by_met": false,
+   "alt_measured": null,
+   "not_computable": "grader v3 equivalence (n13_score.grade) needs the math_verify package, which this python3 does not have; the standard library cannot reproduce it",
+   "note": "File: s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t2-01/t2/T2.jsonl, fetched to runs/theory-tests/s3/T2.jsonl. All 500 rows are used, cap hits included. Fields: text, gold, problem_index. Grading: grader/rln4_grader_v3.py is actually at studies/rlneurons/grader/. It grades through rln4_lib.grade_v3, so a candidate counts right iff n13_score.grade(norm_v3(gold), norm_v3(candidate)) == 1, i.e. v3's equivalence step without v3's extraction. That function needs math_verify (0.9.0), which is not standard library. The script imports the repo code, stubbing numpy if it is missing (numpy is not used by grading). If math_verify is missing it prints not_computable. On this laptop's python3 neither numpy nor math_verify is installed, so the pipeline may get not_computable unless it runs in an environment that has math_verify. Literal choices in the main number: (b) matches case-insensitively and its \\s* may cross newlines. Its span runs to the first '\\n' or '. ' after the match, and the candidate's end is the end of that span. (c) is matched line by line and case-sensitively ('Answer' only). Because ':?' comes before '\\**', a line like '**Answer**: 5' gives the candidate ': 5', which v3 probably grades wrong. A (b)/(c) candidate is dropped when a balanced box starts inside its span. Nested boxes count separately, as the grader's own box scan does. Empty or junk spans (e.g. 'the answer is that ...') are kept as wrong candidates. The (b) and (c) candidates on the same line both count. alt_measured: the same, but a (c) candidate that overlaps a (b) candidate is dropped, so each answer statement counts once. Non-final means len(text) - end >= 800. The flag window is text[end:end+800]. '\\bhmm\\b' does not match 'Hmmm'. If r_R = 0 or there are no wrong candidates, the ratio is undefined and the script prints not_computable. Few wrong non-final candidates in RL texts would make the ratio noisy.",
+   "example_row": null
+  },
+  {
+   "k": 2,
+   "experiment": "Difference-in-differences of re-check rates, RL (T2) minus base (T1), wrong minus right non-final candidates",
+   "recipe": "Apply the candidate extraction, grading, non-final filter and re-check flag of prediction 1 to s3 r4/modal_t2-01/t2/T2.jsonl (RL) and to s3 r4/base_rl-02/out/T1.jsonl (base + cue), all 500 rows each, cap hits included. For each file compute r_W and r_R (pooled over rows). Statistic D = (r_W(T2) - r_W(T1)) - (r_R(T2) - r_R(T1)). If a file has zero non-final candidates in a class, that rate is 0.",
+   "script": "tests/r4-m06/p2.py",
+   "value": 0.0,
+   "low": -0.15,
+   "high": 0.15,
+   "measured": null,
+   "inside": null,
+   "refuted_by": "D > 0.18",
+   "refuted_by_met": false,
+   "alt_measured": null,
+   "not_computable": "grader v3 equivalence (n13_score.grade) needs the math_verify package, which this python3 does not have; the standard library cannot reproduce it",
+   "note": "Files: T2.jsonl (RL) as in k=1, and s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl (base + cue), fetched to runs/theory-tests/s3/T1.jsonl. 500 rows each, cap hits included. Extraction, grading, non-final filter and flag are identical to k=1, with the same math_verify dependency and not_computable fallback. Rates are pooled over candidates within each file. An empty class gives rate 0, as the recipe says. D = (r_W(T2) - r_W(T1)) - (r_R(T2) - r_R(T1)); refuted if D > 0.18. alt_measured uses the k=1 alt reading (overlapping (b)/(c) candidates counted once) in both files. The base T1 texts begin with the cue ' line!\\n\\nOkay' and may contain more junk 'answer is' spans, which would put more mislabelled 'wrong' candidates in T1. Base cap hits (27 vs 6 for RL) can contribute many looping candidates, which could dominate T1's rates.",
+   "example_row": null
+  },
+  {
+   "k": 3,
+   "experiment": "Share of final-right answers containing a right non-final candidate followed by a re-check: RL minus base",
+   "recipe": "Files: s3 r4/modal_t2-01/t2/T2.jsonl (RL) and s3 r4/base_rl-02/out/T1.jsonl (base + cue). Recompute each row's final score with grader/rln4_grader_v3.py (the score_v3 procedure). Keep rows whose final score is right and that are not cap hits (cap_hit false). For each kept row, use the candidate extraction, grading, non-final filter and re-check flag of prediction 1. The row counts 1 if it has at least one right non-final candidate with the re-check flag set, else 0. F(file) = mean over kept rows. Statistic = F(T2) - F(T1).",
+   "script": "tests/r4-m06/p3.py",
+   "value": 0.12,
+   "low": 0.03,
+   "high": 0.25,
+   "measured": null,
+   "inside": null,
+   "refuted_by": "statistic <= 0.0",
+   "refuted_by_met": false,
+   "alt_measured": null,
+   "not_computable": "grader v3 equivalence (n13_score.grade) needs the math_verify package, which this python3 does not have; the standard library cannot reproduce it",
+   "note": "Files: T2.jsonl and T1.jsonl as in k=2. Final score = rln4_lib.grade_v3(gold, text)['score_v3'], recomputed (the score_v3 procedure; the files have no v3 column). Kept rows: score_v3 == 1 and cap_hit is False. A kept row counts 1 if at least one non-final candidate (k=1 extraction, filter and flag) is graded right and flagged. F = mean over kept rows; statistic = F(T2) - F(T1); refuted if <= 0. alt_measured uses the k=1 alt candidate reading. The alt cannot change which candidates are right and flagged except by removing (c) duplicates, so it should be nearly equal to the main number. This needs math_verify as in k=1, otherwise not_computable. The base text's re-check vocabulary ('Wait', 'Hmm') may differ from RL's in frequency regardless of correctness. The 800-character window makes longer texts more likely to count.",
+   "example_row": null
+  }
+ ]
+}

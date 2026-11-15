@@ -1,0 +1,159 @@
+diff --git a/meta/FAILURES.md b/meta/FAILURES.md
+index a72eb9a..46e6db1 100644
+--- a/meta/FAILURES.md
++++ b/meta/FAILURES.md
+@@ -1,5 +1,4 @@
+ # Failure classes whose cause is still in place (one line each; delete the row when its change lands)
+ 
+ - vLLM environment built inside every job by studies/rlneurons/jobs/setup_vllm.sh (3 failed or cancelled of 8 jobs on 2026-11-14 20:32-20:41; 7-60 s per job) -> put the /opt/rln-vllm venv in the runner image once (infra/runner.py), and drop the script.
+-- gapmap cell settings edited by hand per batch (SPEC Requirement 3): ci 90 and fmt "cvs" failed only after install and bootstrap (jobs 8bc8, dd18, 2026-11-15) -> check ci in (0, 1) and fmt in WRITERS in make_cells.py / at the top of cell.py, or delete Requirement 3.
+ - gapmap venv with pip install built inside every job by studies/gapmap/jobs/run_cell.sh (15-21 s of 60-80 s per job, 2026-11-15) -> pin numpy in the runner's cpu image once and drop the venv step.
+diff --git a/meta/dana.md b/meta/dana.md
+index 207ba5b..0c502ad 100644
+--- a/meta/dana.md
++++ b/meta/dana.md
+@@ -1,5 +1,21 @@
+ # Meta review: dana
+ 
++## 2026-11-15 04:13 UTC (after result-909ef8 and result-db9806) meta/reviews/dana/20261115-0413/
++
++- Last entry's checks: (1) cap_hit ran at 1 job per cell: yes, apart from subject, which took 3 jobs (run.json, cycle.txt). (2) Requirement 3 is still in SPEC.md and cell.py still checked nothing before the bootstrap: the class came back (5bd9 ci 99, ebb6 digits "3"). (3) No route claim yet.
++- Direction: mission point 3 asks for a route to the ~11 points. cap_hit shows where it is. All cap-hit differences sit in the cued base's longest quartile: q4 -0.168 [-0.246, -0.093], q1-q3 0. This is true by construction (an answer that hits the cap is a longest answer), so the t1_length_quartile cell of cap_hit adds no information. accuracy q4 is +0.256. Next as planned: the tokens and tokens_both_right batches. Better: a route claim for the cued base's capped answers, e.g. a restart (Day 1 item 3) at equal tokens. The batches only describe the gap further. bench-rng tests no part of the mission, and its rate moved 36% between two runs of the same code (56408 to 36872/s, PCG64), so it measures runner noise.
++- Research: no replication. Every cell reads stored rows. Two cells can be read off the data without a run: cap_hit by t1 quartile (above) and the 0-width intervals.
++- Turnaround (cycle.txt, 0.25 h): 11 jobs, 2 failed, 2.2 of 13.2 container min in the failures (previous entry: 3 failed of 15, 3.1 of 15.6). Median wait 0.0 min. Medians: to-job 0, jobs 6 (previous 9), to-answer 0 (previous 1). Slowest stage: jobs. The 2 failures ran one after another and added 2.7 min of wall time to the subject cell (commit at 20:06:18, good launch at 20:09:02). Each failure was raised only after the 21 s install and the 40 s bootstrap.
++- Change (step 3. Step 1: Requirement 3 names Dana and gives a reason, but small groups justify a wider interval, not hand-set digits or table format. Step 2: deleting it is Dana's call, asked below): `make_cells.py --check` validates ci, digits, fmt, n_boot, metric and split on the laptop, and submit.sh runs it before it launches any job (13597f4, pushed).
++
++  | measure | before | after | change | runs | source |
++  |---|---|---|---|---|---|
++  | time to find a bad cell setting | 1.1 min/job, after install + bootstrap | 0.1 s, 0 jobs | ~600x faster | 2 and 2 | before.txt, after.txt |
++  | cap_hit overall table (must not change) | -0.042 [-0.062, -0.022] | -0.042 [-0.062, -0.022] | same | 1 and 1 | jobs 8b8e, a713 |
++
++- Failures: (1) 5bd9, ebb6: the hand-edit class. Its row is deleted from meta/FAILURES.md; the check lands in 13597f4. (2) `gpu.py submit` refuses a dirty tree, so an uncommitted meta run folder blocks a job, and submit.sh then fails with a bare `KeyError: ''` from `wait`. That cost one try in this review. Not fixed yet: submit.sh should exit when the job id is empty.
++- Next entry checks: whether tokens runs with 0 failed jobs; whether Dana deletes Requirement 3 and the bench-rng extra; whether a route claim (restart on capped cued-base answers) is on the board.
++
+ ## 2026-11-15 04:06 UTC (session start, after result-7fbde6 and result-8e27df) meta/reviews/dana/20261115-0400/
+ 
+ - Last entry's checks: none. This is dana's first entry.
+diff --git a/meta/reviews/dana/20261115-0413/after.txt b/meta/reviews/dana/20261115-0413/after.txt
+new file mode 100644
+index 0000000..08d4e59
+--- /dev/null
++++ b/meta/reviews/dana/20261115-0413/after.txt
+@@ -0,0 +1,10 @@
++# after: submit.sh on cap_hit subject with the same hand edits, applied to the working copy only, then restored with git checkout
++== edit: "ci": 0.99,|"ci": 99,
++cell subject: ci 99 must be a float in (0, 1)
++exit 1
++wall 0.11 s, jobs launched 0
++== edit: "digits": 3$|"digits": "3"
++cell subject: digits '3' must be an int >= 0
++exit 1
++wall 0.10 s, jobs launched 0
++== must not change: submit.sh cap_hit overall at 13597f4, job dana-1114-201511-a713: table equal to studies/gapmap/results/cap_hit-01/overall.json (job 8b8e): -0.042 [-0.062, -0.022], n 500
+diff --git a/meta/reviews/dana/20261115-0413/before.txt b/meta/reviews/dana/20261115-0413/before.txt
+new file mode 100644
+index 0000000..ca1d733
+--- /dev/null
++++ b/meta/reviews/dana/20261115-0413/before.txt
+@@ -0,0 +1,19 @@
++# before: the 2 failed cap_hit subject jobs (hand-edited ci=99, digits="3"), from: uv run tools/gpu.py logs <id>; wall minutes from tools/cycle.py
++== dana-1114-200624-5bd9 (run 1.1 min, cycle.txt)
++[run_cell] 04:06:28 start: batch cap_hit, cell subject
++[run_cell] 04:06:49 environment ready
++[cell] 04:06:49 cell subject from studies/gapmap/cells/cap_hit.json
++[cell] 04:06:49 loaded 500 rows from studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json
++[cell] 04:06:49 bootstrap start: metric cap_hit, split subject, 500 problems, 1500000 resamples
++[cell] 04:07:29 bootstrap done in 40.4 s
++    raise ValueError("Quantiles must be in the range [0, 1]")
++ValueError: Quantiles must be in the range [0, 1]
++== dana-1114-200743-ebb6 (run 1.1 min, cycle.txt)
++[run_cell] 04:07:46 start: batch cap_hit, cell subject
++[run_cell] 04:08:07 environment ready
++[cell] 04:08:07 cell subject from studies/gapmap/cells/cap_hit.json
++[cell] 04:08:07 loaded 500 rows from studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json
++[cell] 04:08:07 bootstrap start: metric cap_hit, split subject, 500 problems, 1500000 resamples
++[cell] 04:08:48 bootstrap done in 41.0 s
++TypeError: 'str' object cannot be interpreted as an integer
++== git: cells da66489 20:06:18 -> fix 15427b9 20:07:38 -> fix 65a356a 20:08:56 -> good subject job 95bf launched 20:09:02 (-0800)
+diff --git a/meta/reviews/dana/20261115-0413/cycle.txt b/meta/reviews/dana/20261115-0413/cycle.txt
+new file mode 100644
+index 0000000..c26c45b
+--- /dev/null
++++ b/meta/reviews/dana/20261115-0413/cycle.txt
+@@ -0,0 +1,19 @@
++Jobs of dana, last 0.25 h:  id  state  gpu  wait  run  command
++  dana-1114-200056-6bd2  done  cpu  0.1  1.1  bash studies/gapmap/jobs/run_cell.sh accuracy overall 
++  dana-1114-200226-eef6  done  cpu  0.0  1.1  bash studies/gapmap/jobs/run_cell.sh accuracy overall 
++  dana-1114-200411-5e89  done  cpu  0.0  1.1  bash studies/gapmap/jobs/run_cell.sh accuracy overall 
++  dana-1114-200624-5bd9  exit 1  cpu  0.0  1.1  bash studies/gapmap/jobs/run_cell.sh cap_hit subject 
++  dana-1114-200743-ebb6  exit 1  cpu  0.0  1.1  bash studies/gapmap/jobs/run_cell.sh cap_hit subject 
++  dana-1114-200902-95bf  done  cpu  0.0  1.3  bash studies/gapmap/jobs/run_cell.sh cap_hit subject 
++  dana-1114-201030-3363  done  cpu  0.1  1.6  bash studies/gapmap/jobs/run_cell.sh cap_hit t1_length_quartile 
++  dana-1114-201030-64db  done  cpu  0.0  1.2  bash studies/gapmap/jobs/run_cell.sh cap_hit level5 
++  dana-1114-201030-8b72  done  cpu  0.1  1.2  bash studies/gapmap/jobs/run_cell.sh cap_hit bench-rng 
++  dana-1114-201030-1f36  done  cpu  0.1  1.1  bash studies/gapmap/jobs/run_cell.sh cap_hit t2_length_quartile 
++  dana-1114-201030-8b8e  done  cpu  0.1  1.1  bash studies/gapmap/jobs/run_cell.sh cap_hit overall 
++  11 jobs, 2 failed or cancelled; median wait 0.0; 13.2 container minutes, 2.2 of them in failed or cancelled jobs
++
++Work of dana, last 0.25 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
++  work-cb55e1  dana/gapmap  0  6  0  6  8  2  gapmap batch cap_hit: T2 (RL) minus T1 (cued base) on MATH-5
++  work-33b670  dana/gapmap  0  6  0  6  8  2  gapmap bench-rng: speed of numpy's bit generators (PCG64, MT
++
++Median minutes per stage over work items with jobs: to-job 0, jobs 6, to-answer 0. Slowest stage: jobs.
+diff --git a/studies/gapmap/jobs/submit.sh b/studies/gapmap/jobs/submit.sh
+index 6769024..485f7e6 100755
+--- a/studies/gapmap/jobs/submit.sh
++++ b/studies/gapmap/jobs/submit.sh
+@@ -6,6 +6,7 @@ set -euo pipefail
+ batch=$1
+ cell=$2
+ shift 2
++python3 studies/gapmap/prep/make_cells.py --check "$batch"
+ command="bash studies/gapmap/jobs/run_cell.sh $batch $cell $*"
+ 
+ launch() {
+diff --git a/studies/gapmap/prep/make_cells.py b/studies/gapmap/prep/make_cells.py
+index af78d36..de6a419 100644
+--- a/studies/gapmap/prep/make_cells.py
++++ b/studies/gapmap/prep/make_cells.py
+@@ -1,6 +1,7 @@
+ """Write the cells of one batch from queue.json: one cell per split, plus the extra cells, with the default settings.
+ 
+-  python3 studies/gapmap/prep/make_cells.py <batch>      writes studies/gapmap/cells/<batch>.json
++  python3 studies/gapmap/prep/make_cells.py <batch>          writes studies/gapmap/cells/<batch>.json
++  python3 studies/gapmap/prep/make_cells.py --check <batch>  checks the settings of every cell; submit.sh runs it first
+ 
+ A batch is one metric. Edit a cell in the written file to give it its own settings (interval level, table format, digits).
+ """
+@@ -10,6 +11,31 @@ from pathlib import Path
+ 
+ study = Path(__file__).resolve().parent.parent
+ queue = json.loads((study / "queue.json").read_text())
++FORMATS = ("json", "csv")  # the keys of WRITERS in jobs/cell.py
++
++
++def check(cell):
++    """The errors in one split cell's settings, found before a job spends its install and bootstrap on them."""
++    if cell["kind"] != "split":
++        return []
++    errors = []
++    if type(cell["ci"]) is not float or not 0 < cell["ci"] < 1:
++        errors.append(f"ci {cell['ci']!r} must be a float in (0, 1)")
++    if type(cell["digits"]) is not int or cell["digits"] < 0:
++        errors.append(f"digits {cell['digits']!r} must be an int >= 0")
++    if cell["fmt"] not in FORMATS:
++        errors.append(f"fmt {cell['fmt']!r} must be one of {FORMATS}")
++    if type(cell["n_boot"]) is not int or cell["n_boot"] < 1:
++        errors.append(f"n_boot {cell['n_boot']!r} must be an int >= 1")
++    if cell["metric"] not in queue["batches"] or cell["split"] not in queue["splits"]:
++        errors.append(f"metric {cell['metric']!r} or split {cell['split']!r} unknown")
++    return [f"cell {cell['id']}: {e}" for e in errors]
++
++
++if sys.argv[1] == "--check":
++    errors = [e for c in json.loads((study / "cells" / f"{sys.argv[2]}.json").read_text()) for e in check(c)]
++    sys.exit("\n".join(errors) if errors else 0)
++
+ batch = sys.argv[1]
+ assert batch in queue["batches"], f"batch must be one of {queue['batches']}"
+ cells = [{"id": split, "kind": "split", "metric": batch, "split": split, **queue["defaults"]} for split in queue["splits"]]

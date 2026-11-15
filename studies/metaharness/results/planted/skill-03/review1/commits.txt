@@ -1,0 +1,2 @@
+b3a592b Dana 2026-11-14 20:06:56 -0800 meta: dana review 20261115-0400 (submit.sh rerun deleted: 137 to 72 s per cell, table identical)
+29dfafd Dana 2026-11-14 20:04:58 -0800 gapmap: submit.sh launches each cell once (delete the same-seed verification rerun); README drops the wrong --data path

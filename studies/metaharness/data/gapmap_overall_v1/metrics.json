@@ -1,0 +1,41 @@
+{
+ "what": "T2 (RL) minus T1 (cued base) on MATH-500, all problems of the metric, 95% percentile interval, 1,500,000 resamples, seed 0",
+ "metrics": {
+  "accuracy": [
+   {
+    "group": "all",
+    "n": 500,
+    "t2_minus_t1": 0.106,
+    "low": 0.074,
+    "high": 0.14
+   }
+  ],
+  "cap_hit": [
+   {
+    "group": "all",
+    "n": 500,
+    "t2_minus_t1": -0.042,
+    "low": -0.062,
+    "high": -0.022
+   }
+  ],
+  "tokens": [
+   {
+    "group": "all",
+    "n": 500,
+    "t2_minus_t1": 760.948,
+    "low": 495.14,
+    "high": 1019.8781
+   }
+  ],
+  "tokens_both_right": [
+   {
+    "group": "all",
+    "n": 398,
+    "t2_minus_t1": 1035.0854,
+    "low": 808.505,
+    "high": 1257.191
+   }
+  ]
+ }
+}

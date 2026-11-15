@@ -1,0 +1,4 @@
+{
+ "command": "uv run --with matplotlib python -m studies.metaharness.analysis.planted_readout",
+ "inputs": "results/planted/*-NN, results/clean/*-NN"
+}

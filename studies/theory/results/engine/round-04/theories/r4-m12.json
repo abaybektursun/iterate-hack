@@ -1,0 +1,109 @@
+{
+ "name": "r4-m12",
+ "statement": "Part of the hard328 gap between RL and the cued base under grader v3 is grader false negatives: on problems whose gold answer is not an integer, the cued base often writes an equivalent but non-canonical final expression that the rule-based v3 rejects, while RL, shaped by its training verifier, writes the canonical simplified form that v3 accepts. So grader misses fall mostly on the base's finished answers to non-integer problems.",
+ "scope": "Covers Olmo-3-1025-7B with the opening cue against Olmo-3.1-7B-RL-Zero-Math with the plain prompt, T 1.0 / top-p 1.0, cap 16,384, one sample, grader v3, on the clean harder 328 (jobs e72c and 86ef). It speaks only to the base's finished answers (the 33 finished-wrong RL-only problems), not to the 16 RL-only cap hits, loops, length or reasoning errors. It claims only a minority share of the 12.8-point gap (a few problems), not most of it. It does not cover MATH-500 beyond the v1->v3 pattern, the T 0.6 cells, the weight-difference models, or the Code pair. No board item measured false negatives on hard328, so nothing directly contradicts it. The conflicts listed are indirect.",
+ "parent": null,
+ "imports": [
+  {
+   "source": "2505.22203",
+   "finding": "Rule-based math verifiers are precise (>99 %) but miss correctly formatted variants: average recall 86 %, down to 0.78 on some sets, and recall depends on the generating model.",
+   "how": "Supplies the error channel: a precise rule-based grader (v3) with sub-100 % recall that depends on the answer form, so two models that differ in form get different false-negative rates at equal true accuracy."
+  }
+ ],
+ "explains": [
+  {
+   "item": "result-e78dfe",
+   "quote": "Grader v3 gives base cue +21 and RL +5 over v1",
+   "how": "The base's answer forms are more varied than RL's, so a more lenient grader recovers far more base answers, and a residual miss rate on hard non-integer forms should likewise fall on the base."
+  },
+  {
+   "item": "knowledge-781efc",
+   "quote": "plain base at T 1.0 gains 28 (196->224)",
+   "how": "Untrained base answers lose the most to grader form strictness, which is the same asymmetry the theory places on hard328."
+  },
+  {
+   "item": "result-5de032",
+   "quote": "finished with a wrong answer on 33",
+   "how": "The theory places its false negatives inside these 33 finished-wrong base answers, not inside the 16 cap hits."
+  },
+  {
+   "item": "knowledge-499152",
+   "quote": "the base ends with an 'Answer:' line in 39-46 % of answers and RL boxes",
+   "how": "RL has converged on one answer format and the base has not, which is the form difference that a rule-based grader's recall depends on."
+  },
+  {
+   "item": "result-5e17a6",
+   "quote": "8 right answer in a rejected or garbled final line",
+   "how": "Even on MATH-500 under v3, some RL-only problems are cases where the base reached the right answer in a form the grader rejected."
+  },
+  {
+   "item": "result-96e819",
+   "quote": "6 of base's 7 fixes are format repairs",
+   "how": "When the base is given a chance to restate its answer, the gains are form repairs, not math, showing that grader-visible form costs the base points."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "result-9b6af3",
+   "quote": "Of the 65 'RL right, base wrong' problems the random cell solves 40",
+   "how": "On MATH-500, most RL-only problems are solved by a fresh near-base sample, so the base-wrong set is mostly sampling noise rather than a systematic answer-form miss. This bounds the grader share to a small fraction."
+  },
+  {
+   "item": "result-5de032",
+   "quote": "base/RL right: 78/82, 52/67, 30/45, 4/12",
+   "how": "The gap grows with RL answer length, i.e. with reasoning difficulty. The theory predicts concentration by answer type, not by length, so most of the gap is outside it."
+  }
+ ],
+ "rival": "The rival: all 33 finished-wrong RL-only base answers are real math errors (misreads, slips, wrong methods, as in the MATH-500 hand labels of result-5e17a6), and v3 has the same small miss rate for both models. What separates the two: under an independent numeric-equivalence regrade of the stored hard328 answers, the rival predicts about equal and near-zero recovery rates for e72c and 86ef. This theory predicts several recovered base answers on non-integer golds, a rate at least a few times RL's, and a lower exact-string match to gold for the base than for RL when both are graded right.",
+ "predictions": [
+  {
+   "experiment": "Numeric-equivalence recovery rate of the cued base's finished, v3-wrong answers on non-integer-gold hard328 problems.",
+   "recipe": "File: s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (run_cell rows; fields problem_index, gold, extracted, extracted_v3, score_v3, cap_hit). Normalisation N(s): if s is entirely \\boxed{...}, take the inside; remove '$', all whitespace, '\\left', '\\right', '\\displaystyle', '\\,', '\\!', '\\;', '^\\circ', '^{\\circ}'; replace '\\dfrac' and '\\tfrac' with '\\frac'; drop one trailing '.'; if the result contains '=' and none of '<', '>', '\\le', '\\ge', take the part after the last '='. A gold counts as an integer if N(gold) matches ^-?\\d+$; otherwise it is non-integer. Equivalence E(a, g): false if either string is empty, or either N-string contains ',' or '\\cup' (tuples, sets, intervals). Otherwise parse N(a) and N(g) with sympy.parsing.latex.parse_latex. It is false on any parse error, on unequal free-symbol sets, or on a timeout of 5 s per pair. With no free symbols, compare the evaluated values. With symbols, substitute 5 points (numpy default_rng(0), each symbol uniform on [0.5, 2.5], the same points for both). True iff every evaluation is finite and real and |a - g| <= 1e-6 * max(1, |g|). Denominator: rows with non-integer gold, score_v3 == 0, cap_hit false, and at least one of extracted_v3 or extracted non-empty. Numerator: those rows where E(extracted_v3, gold) or E(extracted, gold) is true. Report numerator / denominator. Cap-hit rows are excluded. Ties do not arise (one row per problem). Missing rows are excluded from both counts.",
+   "unit": "fraction of problems",
+   "value": 0.12,
+   "low": 0.05,
+   "high": 0.25,
+   "refuted_by": "measured below 0.04",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "The same numeric-equivalence recovery rate for RL's finished, v3-wrong answers on non-integer-gold hard328 problems.",
+   "recipe": "File: s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151540-86ef/answers.jsonl (RL plain). Use exactly the N, integer-gold test, E, denominator and numerator of the previous recipe: rows with non-integer gold, score_v3 == 0, cap_hit false, and extracted_v3 or extracted non-empty. A row is recovered if E(extracted_v3, gold) or E(extracted, gold) is true. Report recovered / denominator. Cap-hit rows are excluded and missing rows are excluded.",
+   "unit": "fraction of problems",
+   "value": 0.03,
+   "low": 0.0,
+   "high": 0.09,
+   "refuted_by": "measured above 0.10",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Exact-string match to gold among answers that v3 grades right, RL minus base, on non-integer-gold problems that both models got right.",
+   "recipe": "Files: the e72c (base cue) and 86ef (RL plain) answers.jsonl named above. Join on problem_index. Keep the problems where N(gold) is non-integer (N and the integer test as in the first recipe) and score_v3 == 1 in both files. For each model, the indicator is 1 iff N(extracted_v3) == N(gold) as strings. Statistic: (mean indicator for 86ef) minus (mean indicator for e72c) over the kept problems. A problem missing from either file is dropped. An empty extracted_v3 counts as 0.",
+   "unit": "fraction of problems",
+   "value": 0.1,
+   "low": 0.02,
+   "high": 0.22,
+   "refuted_by": "measured below 0.01",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "The hard328 gap, RL plain minus base cue, after both are regraded with v3 OR numeric equivalence.",
+   "recipe": "Files: the e72c and 86ef answers.jsonl named above. For every row, regraded = 1 if score_v3 == 1, or if cap_hit is false and E(extracted_v3, gold) or E(extracted, gold) is true (E and N as in the first recipe, applied to all golds, integer or not). Otherwise regraded = 0. A cap-hit row keeps its score_v3. A problem_index of the 328 clean problems that is missing from a file counts as 0. Statistic: 100 * (sum of regraded over 86ef - sum of regraded over e72c) / 328, in points.",
+   "unit": "points of 328",
+   "value": 11.9,
+   "low": 10.4,
+   "high": 12.5,
+   "refuted_by": "measured at or above 12.8",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Forced re-statement on hard328. For every e72c (base cue) and 86ef (RL plain) row with score_v3 == 0 and cap_hit false, feed the row's prompt + full answer text + '\\n\\nFinal answer in simplest form: \\boxed{' to the same model that wrote it (base or RL). Generate greedily (T 0), at most 60 tokens, and stop at the matching '}'. Grade the boxed content with grader v3 against gold. A problem counts right if its original score_v3 == 1 or the re-stated box is v3-right. Report the right count of 328 for the base. Both models are run, which takes about 15-25 H100 minutes, mostly prefill.",
+   "unit": "right of 328",
+   "value": 168,
+   "low": 165,
+   "high": 173,
+   "refuted_by": "The base reaches 164 or fewer (no recovery), or RL's recovered count is at least the base's recovered count.",
+   "gpu_minutes": 25
+  }
+ ]
+}

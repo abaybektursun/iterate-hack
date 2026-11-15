@@ -1,8 +1,8 @@
-"""Your GPU job runner on Modal. Each person deploys it once in their own Modal workspace, and again after
-changing requirements.txt or the limits:
+"""Your GPU job runner on Modal. Each person deploys it in their own Modal workspace, and again whenever this
+file, requirements.txt or the limits change:
 
     modal secret create hf-token HF_TOKEN=<your Hugging Face token>     # once, in your own terminal
-    modal deploy infra/runner.py
+    uv run tools/gpu.py deploy     # runs modal deploy and records which runner.py is deployed; submit checks it
 
 Jobs are paid from your own Modal credits. Each GPU class is one Modal function whose max_containers limits how
 many of your jobs run at once; a job over the limit waits in Modal's queue. Submit and inspect jobs with
@@ -47,8 +47,14 @@ common = dict(
 )
 
 
+SILENT = 15 * 60  # seconds without a new log line after which a job is ended: it holds a GPU and is most likely hung
+
+
 def run(job_id):
     job = jobs[f"job:{job_id}"]
+    if f"cancel:{job_id}" in jobs:  # gpu.py kill on a queued job does not always stop Modal from starting it
+        print(f"{job_id} was cancelled before it started; not running it")
+        return
     gpu = "cpu"
     if shutil.which("nvidia-smi"):
         query = ["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"]
@@ -67,28 +73,57 @@ def run(job_id):
     with open(out / "log", "w") as log:
         proc = subprocess.Popen(job["cmd"], shell=True, cwd="/repo", stdout=log, stderr=subprocess.STDOUT,
                                 env={**os.environ, "OUT_DIR": str(out), "JOB_ID": job_id, "PYTHONPATH": "/repo"}, start_new_session=True)
-        last_commit = time.time()
-        while proc.poll() is None:
-            time.sleep(5)
-            if time.time() - last_commit > 30:
-                runs.commit()  # makes the log readable by tools/gpu.py logs while the job runs
-                last_commit = time.time()
-            if time.time() > deadline:
-                os.killpg(proc.pid, signal.SIGKILL)  # the shell and every process it started
-                proc.wait()
+        try:
+            last_commit = last_output = time.time()
+            size = 0
+            stop = None
+            while proc.poll() is None:
+                time.sleep(5)
+                if time.time() - last_commit > 30:
+                    runs.commit()  # makes the log readable by tools/gpu.py logs while the job runs
+                    last_commit = time.time()
+                    if f"cancel:{job_id}" in jobs:
+                        stop = "cancelled by gpu.py kill"
+                if (out / "log").stat().st_size != size:
+                    size, last_output = (out / "log").stat().st_size, time.time()
+                if time.time() - last_output > SILENT:
+                    stop = f"no new log line for {SILENT // 60} min"
+                if time.time() > deadline:
+                    stop = f"time limit of {job['hours']} h"
+                if stop:
+                    os.killpg(proc.pid, signal.SIGKILL)  # the shell and every process it started
+                    proc.wait()
+                    log.write(f"\nrunner: job ended: {stop}\n")
+        finally:  # whenever run() ends, also when Modal interrupts it (cancel, shutdown): the job's processes, and any
+            # background process it left (a server started with &), run in their own session and would otherwise keep
+            # running in this container, holding /runs open so that the next job dies at runs.reload()
+            try:
+                os.killpg(proc.pid, signal.SIGKILL)
+            except ProcessLookupError:  # every process of the job has already exited
+                pass
+            proc.wait()
     runs.commit()
-    jobs[f"end:{job_id}"] = {"at": int(time.time()), "exit_code": proc.returncode, "timed_out": time.time() > deadline}
+    jobs[f"end:{job_id}"] = {"at": int(time.time()), "exit_code": proc.returncode, "timed_out": time.time() > deadline, "stopped": stop}
     if proc.returncode != 0:
         raise RuntimeError(f"{job_id} exited with code {proc.returncode}")
 
 
-# One function per GPU class. max_containers is how many of your jobs of that class run at once.
-@app.function(gpu="H100", max_containers=20, **common)
+# One function per GPU class. max_containers is how many of your jobs of that class run at once. The limits are read at deploy
+# time: `ITERATE_MAX_H100=24 ITERATE_MAX_B200=4 uv run tools/gpu.py deploy` changes them for your workspace only.
+@app.function(gpu="H100", max_containers=int(os.environ.get("ITERATE_MAX_H100", 8)), **common)
 def h100(job_id: str):
     run(job_id)
 
 
-@app.function(gpu="B200", max_containers=2, **common)
+# A lane for short jobs (smoke runs, at most 30 min, enforced by gpu.py submit): they start at once instead of queueing
+# behind long jobs. It reserves GPUs only if ITERATE_MAX_H100 + ITERATE_MAX_SHORT is at most the workspace's GPU limit
+# (Modal's usual 10: 8 + 2 by default; a workspace with a higher limit raises both at deploy).
+@app.function(gpu="H100", max_containers=int(os.environ.get("ITERATE_MAX_SHORT", 2)), **common)
+def short(job_id: str):
+    run(job_id)
+
+
+@app.function(gpu="B200", max_containers=int(os.environ.get("ITERATE_MAX_B200", 2)), **common)
 def b200(job_id: str):
     run(job_id)
 

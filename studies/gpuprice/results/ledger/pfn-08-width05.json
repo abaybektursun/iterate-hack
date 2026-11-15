@@ -1,0 +1,35 @@
+{
+ "name": "pfn-08-width05",
+ "note": "Ablation: log ranges of the rate and size priors halved (--prior-width 0.5), 1,500 steps (job abaybektursun-1114-182525-825f timed out after that checkpoint). H: a narrower prior is worse; refuted if >= default at 1,000-2,000 steps (+0.249 to +0.271). Prior informed only by panel rows dated <= 2026-09-30; real data never used in training.",
+ "utc": "2026-11-15T01:29:40+00:00",
+ "commit": "9734dfd",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.250524,
+ "pinball": 0.02514,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.237065,
+ "skill_geomean": 0.311009,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.140614,
+   "in_band": 0.828708
+  },
+  "3": {
+   "skill_pooled": 0.234405,
+   "in_band": 0.733527
+  },
+  "7": {
+   "skill_pooled": 0.288772,
+   "in_band": 0.617248
+  }
+ },
+ "in_band": 0.726922
+}

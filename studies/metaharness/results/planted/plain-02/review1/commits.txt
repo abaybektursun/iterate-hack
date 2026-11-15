@@ -1,0 +1,1 @@
+8d56609 Dana 2026-11-14 20:01:37 -0800 gapmap: check a cell's settings and data path before launch

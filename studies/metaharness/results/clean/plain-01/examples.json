@@ -1,0 +1,78 @@
+{
+ "answer": {
+  "job": "dana-1114-195203-a70e",
+  "counted_as": "answer",
+  "command": "bash studies/gapmap/jobs/run_cell.sh accuracy subject ",
+  "exit_code": 0,
+  "container_seconds": 44,
+  "log": "[run_cell] 03:52:08 start: batch accuracy, cell subject\n[cell] 03:52:08 cell subject from studies/gapmap/cells/accuracy.json\n[cell] 03:52:08 loaded 500 rows from studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json\n[cell] 03:52:08 bootstrap start: metric accuracy, split subject, 500 problems, 1500000 resamples\n[cell] 03:52:46 bootstrap done in 38.2 s\n[cell] 03:52:46 result {\"group\": \"algebra\", \"n\": 124, \"t2_minus_t1\": 0.0565, \"low\": 0.0177, \"high\": 0.097}\n[cell] 03:52:46 result {\"group\": \"counting_and_probability\", \"n\": 38, \"t2_minus_t1\": 0.1053, \"low\": 0.0, \"high\": 0.2121}\n[cell] 03:52:46 result {\"group\": \"geometry\", \"n\": 41, \"t2_minus_t1\": 0.0732, \"low\": -0.0476, \"high\": 0.1944}\n[cell] 03:52:46 result {\"group\": \"intermediate_algebra\", \"n\": 97, \"t2_minus_t1\": 0.1546, \"low\": 0.0864, \"high\": 0.2255}\n[cell] 03:52:46 result {\"group\": \"number_theory\", \"n\": 62, \"t2_minus_t1\": 0.0806, \"low\": 0.0, \"high\": 0.1607}\n[cell] 03:52:46 result {\"group\": \"prealgebra\", \"n\": 82, \"t2_minus_t1\": 0.1098, \"low\": 0.0357, \"high\": 0.186}\n[cell] 03:52:46 result {\"group\": \"precalculus\", \"n\": 56, \"t2_minus_t1\": 0.1786, \"low\": 0.0968, \"high\": 0.2667}\n[cell] 03:52:46 wrote /runs/dana-1114-195203-a70e/metrics.json\n[run_cell] 03:52:46 done\n",
+  "metrics": {
+   "cell": {
+    "id": "subject",
+    "kind": "split",
+    "metric": "accuracy",
+    "split": "subject",
+    "n_boot": 1500000,
+    "seed": 0,
+    "ci": 0.9,
+    "fmt": "csv",
+    "digits": 4
+   },
+   "table": [
+    {
+     "group": "algebra",
+     "n": 124,
+     "t2_minus_t1": 0.0565,
+     "low": 0.0177,
+     "high": 0.097
+    },
+    {
+     "group": "counting_and_probability",
+     "n": 38,
+     "t2_minus_t1": 0.1053,
+     "low": 0.0,
+     "high": 0.2121
+    },
+    {
+     "group": "geometry",
+     "n": 41,
+     "t2_minus_t1": 0.0732,
+     "low": -0.0476,
+     "high": 0.1944
+    },
+    {
+     "group": "intermediate_algebra",
+     "n": 97,
+     "t2_minus_t1": 0.1546,
+     "low": 0.0864,
+     "high": 0.2255
+    },
+    {
+     "group": "number_theory",
+     "n": 62,
+     "t2_minus_t1": 0.0806,
+     "low": 0.0,
+     "high": 0.1607
+    },
+    {
+     "group": "prealgebra",
+     "n": 82,
+     "t2_minus_t1": 0.1098,
+     "low": 0.0357,
+     "high": 0.186
+    },
+    {
+     "group": "precalculus",
+     "n": 56,
+     "t2_minus_t1": 0.1786,
+     "low": 0.0968,
+     "high": 0.2667
+    }
+   ],
+   "ci": 0.9,
+   "seconds": {
+    "bootstrap": 38.2
+   }
+  }
+ }
+}
