@@ -1,0 +1,34 @@
+[
+ {
+  "mechanism": "round-14/s1-a",
+  "claim": "Think-SFT's unfenced Code-cue answers are a layout habit on easy problems, so the cued base passes those problems at a rate in [0.72, 1.0].",
+  "result": "result-b847a0",
+  "verdict": "refuted",
+  "measured": "r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range a [0.72, 1.0], interval wholly below it",
+  "added": "2026-11-15T22:47:54Z"
+ },
+ {
+  "mechanism": "round-14/s1-b",
+  "claim": "Think-SFT's unfenced Code-cue answers are failed solves on hard problems, so the cued base passes those problems at a rate in [0.0, 0.46].",
+  "result": "result-b847a0",
+  "verdict": "refuted",
+  "measured": "r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range b [0.0, 0.46], interval wholly above it",
+  "added": "2026-11-15T22:47:54Z"
+ },
+ {
+  "mechanism": "round-14/s2-a",
+  "claim": "Think-SFT's unfenced Code-cue answers are a layout habit on easy problems, so the cued base passes those problems at a rate in [0.72, 1.0].",
+  "result": "result-b847a0",
+  "verdict": "refuted",
+  "measured": "r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range a [0.72, 1.0], interval wholly below it",
+  "added": "2026-11-15T22:47:54Z"
+ },
+ {
+  "mechanism": "round-14/s2-b",
+  "claim": "Think-SFT's unfenced Code-cue answers are failed solves on hard problems, so the cued base passes those problems at a rate in [0.0, 0.45].",
+  "result": "result-b847a0",
+  "verdict": "refuted",
+  "measured": "r_U = 59/106 = 0.557 [0.481, 0.632] (90 % bootstrap; Wilson [0.477, 0.634]), n 106, null 0.589; range b [0.0, 0.45], interval wholly above it",
+  "added": "2026-11-15T22:47:54Z"
+ }
+]
