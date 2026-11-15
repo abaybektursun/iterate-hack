@@ -1,5 +1,58 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 02:37 UTC (5th GPU job since the last review: reward5, 10 H100 jobs at 3b4ab2a, work-069eca) meta/reviews/abaybektursun/20261115-0229/
+
+- Last entry's checks: no new "died: FileExistsError" in `gpu.py ls` (the 3 listed, c51a 277d 74c7, predate the fix); 0.0 of 63.4 container min in failed or cancelled jobs in 0.5 h (cycle.txt), against 248.9 of 1,305.9 in 3 h.
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training" (DIRECTION.md); deliverable, a best configuration scored on the 328, does not exist yet. Of 19 H100 jobs running or queued at 02:30, 4 test step 3, a no-reward route (work-be7af1 a044 014a cc2b: solved examples in context; e828: vote); 13 use RL weights and explain the gain (work-43d4a1 3, reward5 10); 2 are gpuprice. reward5's R1 is at risk from a published table the spec cites: 2610.06851 Table 6, 3.0 Math 75.0 below cued base 77.9 (T 0.6).
+- Research: the reward5 spec set itself beside 2610.06851, 2608.03573 and 2509.01363 before launch; no MATH-500 number for IF, General or Mix is published. Not a replication.
+- Turnaround (cycle.txt, 0.5 h; last entry's 3 h in brackets): 22 jobs (78), 0 failed or cancelled (21), median queue wait 0.1 min (5.3); median to-job 1, jobs 2 min (most still running). Slowest stage: jobs, here the queue: at 02:30, 4 H100 ran (max_containers=4) and 15 waited, reward5's 10 behind 5 others; projected about 2.4 h to the last reward5 end (19 jobs, 4 slots, about 30 min each).
+- Change (step 2, then 3): step 1, the cap of 4 came in a433503 with no reason written; spend is set by what is submitted, so the cap only spreads the same GPU minutes over more hours. Kept a cap against a runaway submit loop: infra/runner.py h100 max_containers 4 -> 20, deployed 02:31 UTC (rolling).
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | H100 jobs running / queued | 4 / 15 | 10 / 8 | 2.5x running | 1 and 5 readings | before.txt, after.txt |
+  | reward5 jobs started | 0 of 10 | 2 of 10 (731c, 3556), within 7 min of submit | started | 1 and 1 | after.txt |
+  | jobs running at deploy (must not change) | 4 | the same 4 still running | same | 1 | after.txt |
+
+  Running stays at 10 with 8 queued under a cap of 20: likely a Modal workspace limit of 10 GPUs (inferred, not read from Modal). GPU min per job: not changed by design, not measured.
+- Failures: none since the last entry. Side effect: H100 jobs can now fill all 10 GPUs, so b200 job 6ea1 (queued) may wait behind them if the limit is shared. reward5 scoring risk: the 3.0 models run with the 3.1 tokenizer (merge_weights rl_json); ids 100268-100275 are <think> </think> <answer> </answer> in 3.0 and <|extra_id_N|> in 3.1 (tokenizer_config.json at the pinned revisions; config differs only in use_cache, generation_config identical).
+- Next entry checks: H100 running count while more than 10 are queued; whether b200 6ea1 starts; reward5 minutes from submit (02:27) to the last job's end, against 2.4 h projected; "extra_id" count in reward5 rows.
+
+## 2026-11-15 02:25 UTC (asked by the person; the first review stored as a run folder) meta/reviews/abaybektursun/20261115-0215/
+
+- Last entry's checks (the entry below; its heading says 02:35, written before 02:13 by the clock): work-43d4a1 now shows its 3 jobs in cycle.py (cycle.txt); their queue wait is 0.1 and 0.6 min, the third still queued, against a 10.8 min median; the runner restart class is removed by this entry.
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training" (DIRECTION.md). Since the last entry: work-43d4a1 (Code-RL and theta on the 328) uses RL weights, so it explains the gain; work-180a48 (min-p, frustea) and the cued-base arm of work-be7af1 are no-reward routes; result-2c2cae (length rules on the 328) is negative, 163 against 160 of 328. The deliverable, a best no-reward configuration scored once on the 328, does not exist yet.
+- Research: no replication seen in the claims since the last entry; not checked against published tables in this review.
+- Turnaround (`cycle.txt`, 3 h; previous entry, 4 h, in brackets): 78 jobs (73), 21 failed or cancelled (21), 248.9 of 1,305.9 container min in them (242.4 of 1,288.8), median queue wait 5.3 min (10.8). Median to-job 10, jobs 120, to-answer 10 min. Slowest stage: jobs.
+- Cause of the failed minutes: 231.3 of the 248.9 are 3 cpu jobs (c51a 139.7, 277d 53.9, 74c7 37.7 min) that Modal restarted and that then died at `out.mkdir` in infra/runner.py.
+- Change (step 3; step 1: the refusal to write into an existing folder protects a finished run's output and stays; step 2: nothing to delete): a restarted run renames the interrupted folder to `<job>.interrupted-<time>` and starts in a fresh one. Deployed to abaybektursun's Modal with the default rolling deploy; the 4 running H100 jobs kept running (`gpu.py ls`).
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | second run of job 0e08 through the runner | FileExistsError | finished | fixed | 1 and 1 | before.txt, after.txt (rerun.py) |
+  | first run's output (must not change) | kept | kept, in `.interrupted-1794708911` | same | 1 and 1 | after.txt, folder list |
+  | container min lost to restarts | 231.3 in 3 h, 3 jobs | not measured yet | - | - | cycle.txt |
+
+  The first second-run after the deploy still failed: an old container took it. It passed on the next try.
+- Failures: the restart class is removed in code; its row is deleted from meta/FAILURES.md. Teammates' workspaces still run the old runner until they deploy.
+- Next entry checks: jobs with state "died: FileExistsError" in `gpu.py ls` (expected 0), and container min in failed or cancelled jobs against 248.9.
+
+## 2026-11-15 02:35 UTC (after work-d36669 closed, Day-1 #4; work-a50d39's skipped entry included)
+
+- Last entry's checks (23:30 entry, the same line of work): merged-model cells ran at 900-1,000 tok/s (work-d36669 comments); the cells cost 20.9 of 22 USD (results/day1_wdiff/readout.json, 317.5 H100 min); b200 job 2298 was never seen running, and a b200 job at 19:36 local was cancelled while queued (`gpu.py ls`).
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training" (DIRECTION.md). Day-1 #1 and #4 are done: 328 at T 1.0 (base cue 164, RL 206) and the weight line (a 0.25 gives 441 of 500, Code-RL cue 450, random 417). #4 uses RL weights, so it explains the gain and is not a no-reward route; the open step work-43d4a1 (Code-RL and theta on the 328) is the same kind. Best alternative: a no-reward cell at equal tokens on the 328 (vote or restart, work-63fac2 and work-140e13 hold it), not chosen here because two sessions already own it.
+- Research: no replication; recall and three priors from memory were set beside #4 before its cells finished (work-d36669 comments 00:50, 00:55). Told to the owner and narrowed: none retracted; "restarts recover at most 16 of 42" rests on one sample per problem.
+- Turnaround (`uv run tools/cycle.py --hours 4`): 73 jobs, 21 failed or cancelled, 242.4 of 1,288.8 container min in them, median queue wait 10.8 min (was 0.0 at 23:30). work-d36669: to-job 10, jobs 129, to-answer 10 min. Slowest stage: jobs; 4 H100 slots are shared by rlneurons and gpuprice sessions.
+- Failure (carried from 22:13): cycle.py matched jobs to a work item by the claiming branch only, so an item claimed on main with jobs sent from its subagent's branch showed 0 jobs. Change (step 3; steps 1-2: the per-item stage times are the skill's own requirement and nothing in the matching could be deleted): cycle.py also matches the branch named in the claim text ("Branch wdiff").
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | jobs matched to work-d36669 | 0 | 18 (4 failed) | found | 1 item | `cycle.py --hours 4`, main 37e4eee against this commit |
+  | job list and totals (must not change) | 73 jobs, 21 failed | 73 jobs, 21 failed | same | 1 and 1 | same command |
+
+- Failure, not fixed: a container restarted by Modal dies at `out.mkdir` in infra/runner.py (3 cpu jobs: c51a, 277d, 74c7; `gpu.py ls`). Not changed here: a redeploy of the runner while 3 cells of work-43d4a1 run could end them. Added to meta/FAILURES.md.
+- Next entry checks: whether work-43d4a1 (claim names branch wdiff328) shows its 3 jobs in cycle.py; queue wait of those jobs against 10.8 min; whether the runner restart class is removed.
+
 ## 2026-11-15 01:00 UTC (after result-5cd266, work-02efb7 interp_research port)
 
 - Last entry's checks: not mine to read here (that entry belongs to the wdiff session's line; its cells report 441-453 at 900-1,000 tok/s in work-d36669 comments).

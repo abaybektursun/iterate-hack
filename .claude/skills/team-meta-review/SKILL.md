@@ -11,6 +11,18 @@ people never edit the same file): what was observed with its numbers and sources
 change, and what the next entry checks. An entry that finds nothing wrong says what was checked. Read the previous entry first
 and report on its "next entry checks" line.
 
+## Where a review is stored
+
+Every review leaves its raw material in the repository, so a later reader can check each number of the entry.
+
+- `meta/<name>.md` is the index: one entry per review, newest first. Its heading ends with the path of the run folder.
+- `meta/reviews/<name>/<UTC date-time, YYYYMMDD-HHMM>/` is one review's run folder. It is never edited after its commit:
+  - `cycle.txt`: the full output of `tools/cycle.py` for this review;
+  - `before.txt` and `after.txt`: the raw output of the measuring command, before and after the change;
+  - the script that produced them, if the measurement needed one, with its command in the first lines;
+  - only small text files. Job logs and rows stay where they are; name their job ids.
+- Commit the run folder, the entry and the change together, files by name.
+
 ## The order of every change (Elon Musk's five-step algorithm)
 
 Every change a review proposes, to a study, a pipeline or a document, goes through these five steps in this order. The order
@@ -57,7 +69,7 @@ The team's output is set by how fast a question becomes an answer on the board. 
 makes one change that cuts its slowest stage. Every change is measured before and after: an improvement is a pair of numbers from
 the same command, not an impression.
 
-1. Run `uv run tools/cycle.py --hours <hours since the last entry>`. Copy into the entry: the median to-job, jobs and
+1. Run `uv run tools/cycle.py --hours <hours since the last entry> > meta/reviews/<name>/<date-time>/cycle.txt`. Copy into the entry: the median to-job, jobs and
    to-answer minutes, the slowest stage, the container minutes and the share in failed or cancelled jobs, the median queue
    wait. Set each beside the previous entry's number.
 2. Find what the slowest stage was spent on, in the raw material: the job logs (`gpu.py logs <id>`) for the run minutes
@@ -72,13 +84,14 @@ the same command, not an impression.
    - waiting on a person or another agent;
    - GPU class asked against obtained, estimate against actual, GPU-hours per answered question, runs that could have
      read stored rows.
-4. Measure the baseline before touching anything. Name the one number the change is meant to move (minutes, calls,
+4. Measure the baseline before touching anything, and save the output as `before.txt` in the run folder. Name the one number the change is meant to move (minutes, calls,
    tokens, USD) and the command or file that gives it. Record its value, the number of runs or items behind it, and the
    conditions that set it: job ids, problem set, settings, and the GPU the job really got (`memory.gpu` in
    `metrics.json`; Modal's h100 class can hand out an H200). Also name what must not change: the result rows, the
    accuracy, the GPU minutes. A change with no baseline is not made.
 5. Make the change in the same session: code or infrastructure, pushed. Naming it is not enough.
-6. Measure again with the same command, on the same input and conditions, and put this table in the entry:
+6. Measure again with the same command, on the same input and conditions, save the output as `after.txt`, and put this
+   table in the entry:
 
    | measure | before | after | change | runs | source |
    |---|---|---|---|---|---|

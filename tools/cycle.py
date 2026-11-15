@@ -18,6 +18,7 @@ Work: every work item of yours posted in the window, with
 All times are minutes.
 """
 import calendar
+import re
 import statistics
 import sys
 import time
@@ -79,7 +80,9 @@ stages = {"to-job": [], "jobs": [], "to-answer": []}
 for item in sorted(items, key=lambda i: i["at_ns"]):
     claim = int(item["at_ns"]) / 10**9
     close = calendar.timegm(time.strptime(item["closed_at"], "%Y-%m-%dT%H:%M:%SZ")) if "closed_at" in item else None
-    mine = [r for r in jobs if r["job"].get("branch") == item.get("branch") and claim <= r["job"]["at"] <= (close or now)]
+    # a coordinator claims on one branch and its subagent submits from another: the claim text names it ("Branch wdiff")
+    branches = {item.get("branch"), *re.findall(r"[Bb]ranch ([\w/.-]*\w)", item["text"])}
+    mine = [r for r in jobs if r["job"].get("branch") in branches and claim <= r["job"]["at"] <= (close or now)]
     to_job = jobs_span = to_answer = None
     if mine:
         to_job = minutes(claim, mine[0]["job"]["at"])
