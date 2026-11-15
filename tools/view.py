@@ -189,8 +189,9 @@ kbd {
 
 /* One sentence on the state of the board; above it, what changed since the last visit */
 .lede { margin-top: 18px; min-height: 29px; }
-.since { margin: 0 0 6px; font-size: 15px; display: flex; align-items: center; gap: 9px; }
-.since::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--blue); }
+.since { margin: 0 0 6px; font-size: 15px; }
+.since::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--blue); margin-right: 9px; vertical-align: .08em; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .since b { font-weight: 600; }
 .summary { margin: 0; font-size: 22px; line-height: 1.3; font-weight: 300; letter-spacing: -.005em; }
 .summary b { font-weight: 600; }
@@ -209,16 +210,22 @@ kbd {
 /* Hill: per benchmark, the best untrained-base score so far against the best RL score */
 .hill { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 540px), 1fr)); gap: 24px 56px; margin-top: 26px; }
 .hp h2 { border-bottom-color: var(--rule); }
-.hp-body { display: grid; grid-template-columns: 176px minmax(0, 1fr); gap: 20px; margin-top: 14px; }
-.hp-stats { display: flex; flex-direction: column; gap: 14px; }
-.hp-stats p { margin: 2px 0 0; font-size: 13px; color: var(--mute); }
+.hp-body { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 20px; margin-top: 14px; }
+.hp-stats { display: flex; flex-direction: column; gap: 12px; }
+.hp-stats p { margin: 2px 0 0; font-size: 13px; color: var(--mute); text-wrap: balance; }
+.hp-stats p.cfg { color: var(--ink); font-size: 12.5px; }
 .big { display: block; font-size: 40px; line-height: 1; font-weight: 600; font-stretch: 112%; letter-spacing: -.02em; color: var(--blue); width: max-content; }
 .big small { font-size: 17px; font-weight: 400; letter-spacing: 0; margin-left: 3px; color: var(--mute); }
 .togo { margin: 0 !important; font-size: 15px !important; color: var(--ink) !important; }
 .togo b { color: var(--red); font-weight: 600; font-size: 22px; font-stretch: 112%; letter-spacing: -.01em; margin-right: 2px; }
 .hp-chart { min-width: 0; height: 184px; }
 .hp svg { display: block; overflow: visible; }
-.hp svg text { font: 400 11px "Archivo", ui-sans-serif, system-ui, sans-serif; fill: var(--mute); }
+.hp svg text {
+  font: 400 11px "Archivo", ui-sans-serif, system-ui, sans-serif; fill: var(--mute);
+  paint-order: stroke; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round;
+}
+.hp .brk { stroke: var(--paper); stroke-width: 5px; }
+.hp .brk-line { stroke: var(--blue); stroke-width: 1.4px; }
 .hp .grid { stroke: var(--rule); stroke-width: 1; }
 .hp .gap { fill: var(--red-wash); }
 .hp .target { stroke: var(--ink); stroke-width: 1.2; stroke-dasharray: 3 4; opacity: .6; }
@@ -232,12 +239,12 @@ kbd {
 .hp .dot.rec { fill: var(--blue); stroke: var(--paper); stroke-width: 2; }
 .hp .x { stroke: var(--faint); stroke-width: 1.6; stroke-linecap: round; }
 .hp .hit { fill: transparent; }
+.hp .under { fill: var(--paper); }
 .hp a:hover .dot, .hp a:focus-visible .dot { stroke: var(--ink); }
 .hp a:hover .x, .hp a:focus-visible .x { stroke: var(--ink); }
 .hp text.gain { fill: var(--ink); font-weight: 600; }
-.hp text.lead { fill: var(--ink); }
 .hp text.quiet { fill: var(--faint); }
-.hkey { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 20px; margin-top: -8px; font-size: 13px; color: var(--mute); }
+.hkey { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: -8px; font-size: 12.5px; color: var(--mute); }
 .hkey span { display: inline-flex; align-items: center; gap: 7px; }
 .hkey svg { overflow: visible; }
 
@@ -269,10 +276,12 @@ h2 .toggle:hover { color: var(--ink); }
 .closed .text { color: var(--mute); }
 .last { margin: 5px 0 0; font-size: 13px; color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .meta { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 14px; margin-top: 6px; font-size: 13px; color: var(--mute); }
-.meta .m { display: flex; flex-wrap: wrap; align-items: baseline; gap: 3px 12px; min-width: 0; }
+.meta .m { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.meta .m > * { margin-right: 12px; vertical-align: baseline; }
+.meta .m > :last-child { margin-right: 0; }
 .who { color: oklch(var(--pl) var(--pc) var(--h)); font-weight: 600; }
 .who:hover { text-decoration: underline; text-underline-offset: 3px; }
-.branch { max-width: 20ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.branch { display: inline-block; vertical-align: top !important; max-width: 14ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .id { color: var(--faint); }
 .fresh { color: var(--blue); }
 .idle { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
@@ -280,10 +289,10 @@ h2 .toggle:hover { color: var(--ink); }
 .meter i { display: block; height: 100%; background: var(--faint); }
 .late .idle { color: var(--red); font-weight: 600; }
 .late .meter i { background: var(--red); }
-.scores { flex: 1 0 100%; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 6px; margin-bottom: 2px; }
-.score { white-space: nowrap; color: var(--mute); border: 1px solid var(--rule); border-radius: 5px; padding: 0 6px; }
+.scores { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; margin-top: 6px; font-size: 13px; color: var(--mute); }
+.score { white-space: nowrap; color: var(--mute); }
 .score b { color: var(--ink); font-weight: 600; }
-.new::after { content: ""; position: absolute; left: -14px; top: 20px; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+.new::after { content: ""; position: absolute; left: -11px; top: calc(13px + .75em - 3px); width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
 
 .msgs { list-style: none; margin: 0; padding: 0; }
 .msg { position: relative; padding: 11px 0; border-bottom: 1px solid var(--rule); cursor: pointer; }
@@ -376,6 +385,7 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
 .keys dt { display: flex; gap: 4px; }
 .keys dd { margin: 0; color: var(--mute); }
 
+@media (max-width: 1400px) { .ncom { display: none; } }
 @media (max-width: 1100px) {
   .board { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .board .s-msgs, .rest .s-closed { grid-column: 1 / -1; margin-top: 40px; }
@@ -389,12 +399,15 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   .summary { font-size: 20px; }
   .hp-body { grid-template-columns: 1fr; gap: 12px; }
   .hp-stats { flex-direction: row; flex-wrap: wrap; gap: 8px 36px; }
-  .board { display: block; }
-  .board section + section, .rest section + section { margin-top: 40px; }
-  .board .s-msgs, .rest .s-closed { margin-top: 40px; }
+  .hkey { display: grid; grid-template-columns: repeat(3, max-content); }  /* 3 + 2, no single item on a line */
+  .wrap { display: flex; flex-direction: column; }
+  .board.main-cols { display: contents; }
+  .s-work { order: 2; margin-top: 30px; } .s-result { order: 3; margin-top: 40px; }
+  .hill { order: 4; margin-top: 44px; } .s-msgs { order: 5; margin-top: 40px; }
+  .activity { order: 6; } .rest { order: 7; display: block; }
+  .rest section + section { margin-top: 40px; }
   .lane, .axis { grid-template-columns: 104px minmax(0, 1fr); }
   .legend { margin-left: 0; }
-  .new::after { left: -10px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .arrived, .panel, .scrim { animation: none; }
@@ -414,14 +427,15 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   </header>
   <div class="lede">
     <p class="since" id="since" hidden></p>
-    <p class="summary" id="summary" aria-live="polite"><span class="ph" style="width:min(620px,80%);height:14px;margin-top:8px"></span></p>
+    <span class="sr" id="live" aria-live="polite"></span>
+    <p class="summary" id="summary"><span class="ph" style="width:min(620px,80%);height:14px;margin-top:8px"></span></p>
     <div class="filters" id="filters"></div>
   </div>
   <div class="hill" id="hill" aria-label="Best untrained-base score per benchmark against RL">
     <section class="hp"><h2>&nbsp;</h2><div class="hp-body"><div class="ph-row" style="border:0"><span class="ph"></span><span class="ph"></span><span class="ph"></span></div><div class="hp-chart"></div></div></section>
     <section class="hp"><h2>&nbsp;</h2><div class="hp-body"><div class="ph-row" style="border:0"><span class="ph"></span><span class="ph"></span><span class="ph"></span></div><div class="hp-chart"></div></div></section>
   </div>
-  <main class="board">
+  <main class="board main-cols">
     <section class="s-work"><h2>Open work <span class="count" id="n-work"></span></h2><div id="work"></div><div id="work-more"></div></section>
     <section class="s-result"><h2>Results <span class="count" id="n-result"></span></h2><div id="result"></div><div id="result-more"></div></section>
     <section class="s-msgs"><h2>Messages on all <span class="count" id="n-msgs"></span><button class="toggle" id="autos" hidden></button></h2><ul class="msgs" id="msgs"></ul><div id="msgs-more"></div></section>
@@ -444,7 +458,7 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   <h2>Keys</h2>
   <dl>
     <dt><kbd>/</kbd></dt><dd>Filter items and messages</dd>
-    <dt><kbd>j</kbd><kbd>k</kbd></dt><dd>Next and previous: open work, results, ideas, messages</dd>
+    <dt><kbd>j</kbd><kbd>k</kbd></dt><dd>Next and previous: open work, results, messages, ideas</dd>
     <dt><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd></dt><dd>Open work, results, messages</dd>
     <dt><kbd>Enter</kbd></dt><dd>Open the item, or the whole message</dd>
     <dt><kbd>Esc</kbd></dt><dd>Close</dd>
@@ -454,6 +468,7 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
 <script>
 const $ = id => document.getElementById(id);
 const S = {
+  lookedAt: 0, selAt: 0, changed: new Set(),
   data: null, readAt: 0, error: null, who: null, q: "", idle: false, open: null, detail: null, seen: null,
   autos: false, more: new Set(), full: new Set(), since: null, acked: true, pointer: null,
 };
@@ -498,7 +513,11 @@ function diffCI(a, b, z = 1.96) {  // a minus b, in points, for two independent 
 }
 
 /* Writes that do not disturb reading: skip an unchanged string, skip while the reader has text selected in it. */
-const selecting = el => { const s = getSelection(); return s && !s.isCollapsed && el.contains(s.anchorNode); };
+const selecting = el => {  // a selection younger than 60 s pauses writes to the region that holds it
+  const s = getSelection();
+  return s && !s.isCollapsed && el.contains(s.anchorNode) && Date.now() - S.selAt < 60000;
+};
+document.addEventListener("selectionchange", () => { S.selAt = getSelection().isCollapsed ? 0 : Date.now(); });
 function put(el, html) {
   if (el._html === html || selecting(el)) return;
   el.innerHTML = html; el._html = html;
@@ -529,14 +548,23 @@ const match = (...fields) => (!S.q || fields.join("\n").toLowerCase().includes(S
 const shown = i => (!S.who || i.who === S.who) && match(i.id, i.text, i.who, i.branch);
 const filtering = () => Boolean(S.q || S.who || S.idle);
 const isNew = key => S.seen && !S.seen.has(key);
-const newSince = ns => S.since && Number(ns) > S.since;
+/* What changed since the last look: new results, closed work, work that crossed an hour idle. The dots and the count use this. */
+function changed(items) {
+  const since = S.since, t = now();
+  if (!since) return { result: [], closed: [], idle: [] };
+  return {
+    result: items.filter(i => i.kind === "result" && i.at_ns > since),
+    closed: items.filter(i => i.closed_ns > since),
+    idle: items.filter(i => i.listed === "work" && activeNs(i) + 36e11 > since && activeNs(i) + 36e11 <= t),
+  };
+}
 
 const MODELS = { base: 0, rl: 1 };
 function scoreChips(id) {
   const all = (S.scores.get(id) || []).slice().sort((a, b) => (MODELS[a.model] ?? 2) - (MODELS[b.model] ?? 2) || b.right / b.n - a.right / a.n);
   const seen = new Set(), top = all.filter(s => !seen.has(s.model + s.benchmark) && seen.add(s.model + s.benchmark)).slice(0, 2);
-  return !top.length ? "" : `<span class="scores">` + top.map(s => `<span class="score">${esc(s.model)} ${esc(s.benchmark)} <b>${s.right}/${s.n}</b></span>`).join("") +
-    (all.length > top.length ? `<span>${all.length - top.length} more</span>` : "") + `</span>`;
+  return !top.length ? "" : `<div class="scores">` + top.map(s => `<span class="score">${esc(s.model)} ${esc(s.benchmark)} <b>${s.right}/${s.n}</b></span>`).join("") +
+    (all.length > top.length ? `<span>${all.length - top.length} more</span>` : "") + `</div>`;
 }
 
 function row(i) {
@@ -544,27 +572,26 @@ function row(i) {
   const idle = open ? mins(activeNs(i)) : 0, late = idle >= 60;
   const t = open ? activeNs(i) : i.at_ns, fresh = mins(t) < 10;
   const last = open && late && S.data.last_comments?.[i.id];
-  const cls = ["row", i.kind, late && "late", closed && "closed", S.open === i.id && "current", isNew(i.id) && "arrived", newSince(i.at_ns) && "new"];
+  const cls = ["row", i.kind, late && "late", closed && "closed", S.open === i.id && "current", isNew(i.id) && "arrived", S.changed.has(i.id) && "new"];
   const meta = [
-    i.kind === "result" ? scoreChips(i.id) : "",
     who(i.who, i.branch),
     `<span class="id">${esc(i.id)}</span>`,
     closed ? `<span>closed ${when(i.closed_ns ?? 0, " ago")}${i.closed_by ? " by " + esc(i.closed_by.split("/")[0]) : ""}</span>`
            : open ? "" : `<span${fresh ? ' class="fresh"' : ""}>${when(t, " ago")}</span>`,
     i.kind === "skill" ? "<span>skill</span>" : "",
     i.ups || i.downs ? `<span>+${i.ups} −${i.downs}</span>` : "",
-    i.n_comments ? `<span>${i.n_comments} comment${i.n_comments > 1 ? "s" : ""}</span>` : "",
+    i.n_comments ? `<span class="ncom">${i.n_comments} comment${i.n_comments > 1 ? "s" : ""}</span>` : "",
   ].join("");
   const right = open ? `<span class="idle" title="Minutes since the item was posted or last commented on">idle ${dur(idle)}` +
     `<span class="meter"><i style="width:${Math.min(100, idle / 60 * 100)}%"></i></span></span>` : "";
   return `<article class="${cls.filter(Boolean).join(" ")}" style="${pstyle(i.who)}" data-key="${esc(i.id)}">` +
     `<a class="open" href="#${esc(i.id)}"><span class="text">${rich(i.text, { links: false, numbers: i.kind === "result" })}</span></a>` +
-    (last ? `<p class="last">Last comment: ${esc(last.text)}</p>` : "") +
+    (last ? `<p class="last">Last comment: ${esc(last.text)}</p>` : "") + (i.kind === "result" ? scoreChips(i.id) : "") +
     `<div class="meta"><div class="m">${meta}</div>${right}</div></article>`;
 }
 
 function message(m) {
-  const cls = ["msg", isNew(m.sk) && "arrived", S.full.has(m.sk) && "full", newSince(msgNs(m)) && "new"];
+  const cls = ["msg", isNew(m.sk) && "arrived", S.full.has(m.sk) && "full"];
   return `<li class="${cls.filter(Boolean).join(" ")}" data-key="${esc(m.sk)}" tabindex="-1"><div class="meta">${who(m.who, m.branch)}${when(msgNs(m), " ago")}</div>` +
     `<div class="text">${rich(m.text)}</div></li>`;
 }
@@ -591,6 +618,9 @@ function render() {
   S.scores = new Map();
   (d.scores || []).forEach(s => S.scores.set(s.result, [...(S.scores.get(s.result) || []), s]));
   const items = d.items.map(i => ({ ...i, closed_ns: i.closed_at ? Date.parse(i.closed_at) * 1e6 : null }));
+  if (document.visibilityState === "visible" && document.hasFocus()) S.lookedAt = d.now_ns;  // the reader saw this read
+  const ch = changed(items);
+  S.changed = new Set([...ch.result, ...ch.closed, ...ch.idle].map(i => i.id));
   const of = kinds => items.filter(i => kinds.includes(i.listed));
   const by = (kinds, order) => { const all = of(kinds).sort(order); return [all.filter(shown), all.length]; };
   const newest = (a, b) => b.at_ns - a.at_ns;
@@ -616,7 +646,7 @@ function render() {
   put($("autos"), S.autos ? "Hide announcements" : `Show ${autos} announcement${autos > 1 ? "s" : ""}`);
   $("autos").setAttribute("aria-pressed", S.autos);
 
-  summary(items);
+  summary(items, ch);
   hill(d.scores || []);
   lanes(items, d);
   S.seen = new Set([...d.items.map(i => i.id), ...d.messages.map(m => m.sk)]);
@@ -640,7 +670,7 @@ function status() {
   s.title = d ? `Last read ${utc(d.now_ns)}` : "";
 }
 
-function summary(items) {
+function summary(items, ch) {
   const open = items.filter(i => i.listed === "work");
   const idle = open.filter(i => mins(activeNs(i)) >= 60).length;
   const ppl = new Set(open.map(i => i.who)).size;
@@ -650,13 +680,10 @@ function summary(items) {
         (idle ? `<button class="warn" id="idlebtn" aria-pressed="${S.idle}" title="Show only open work idle over an hour"><b>${idle}</b> idle over an hour</button>.` : "none idle over an hour.")
       : "No open work.") +
     (last ? ` <a href="#${esc(last.id)}">Last result ${mins(last.at_ns) < 1 ? "just now" : `<b>${rel(last.at_ns)}</b> ago`}</a> from ${esc(last.who)}.` : " No results yet."));
+  put($("live"), `${open.length} open work items, ${idle} idle over an hour, ${items.filter(i => i.kind === "result").length} results.`);  // changes only with the counts
   if (!S.since) { $("since").hidden = true; document.title = "Team board"; return; }
-  const since = S.since, t = now();
-  const parts = [
-    [items.filter(i => i.kind === "result" && i.at_ns > since).length, "result"],
-    [items.filter(i => i.closed_ns > since).length, "closed", "closed"],
-    [open.filter(i => activeNs(i) + 36e11 > since && activeNs(i) + 36e11 <= t).length, "newly idle", "newly idle"],
-  ].filter(p => p[0]);
+  const since = S.since;
+  const parts = [[ch.result.length, "result"], [ch.closed.length, "closed", "closed"], [ch.idle.length, "newly idle", "newly idle"]].filter(p => p[0]);
   const count = parts.reduce((a, p) => a + p[0], 0);
   $("since").hidden = false;
   put($("since"), `<span>${count ? `Since ${clock(since / 1e6)}: ${parts.map(p => plural(...p)).join(", ")}.` : `Nothing new since ${clock(since / 1e6)}.`}</span>`);
@@ -664,9 +691,10 @@ function summary(items) {
 }
 
 /* Hill chart */
-const shortConfig = c => {
-  const s = c.replace(/,?\s*\bT \d[\d.]*(\s*\/\s*(top-p|min-p) [\d.]+)*/g, "").replace(/\s*\(.*?\)/g, "").replace(/^,\s*/, "") || c;  // sampling settings and notes are in the full text
-  return s.length > 30 ? s.slice(0, 29).trimEnd() + "…" : s;
+const note = /\s*\(.*?\)/g;  // a parenthesised note on a configuration, such as "(reference, job 151534-e72c)"
+const shortConfig = (c, max = 30) => {
+  const s = c.replace(/,?\s*\bT \d[\d.]*(\s*\/\s*(top-p|min-p) [\d.]+)*/g, "").replace(note, "").replace(/^,\s*/, "") || c;  // sampling settings and notes are in the full text
+  return s.length > max ? s.slice(0, max - 1).trimEnd() + "…" : s;
 };
 let measure;
 function textWidth(t) {
@@ -678,10 +706,10 @@ function textWidth(t) {
 function benches(scores) {
   const pct = s => 100 * s.right / s.n;
   const names = [...new Set(scores.map(s => s.benchmark))].sort((a, b) => (b === "MATH-500") - (a === "MATH-500") || a.localeCompare(b));
-  return names.map(name => {
-    const seen = new Set();  // a run reported in two results is one attempt
+  const bs = names.map(name => {
+    const seen = new Set();  // a run reported in two results, or again with a note, is one attempt
     const base = scores.filter(s => s.benchmark === name && s.model === "base")
-      .filter(s => { const k = `${s.right}/${s.n} ${s.config}`; return !seen.has(k) && seen.add(k); });
+      .filter(s => { const k = `${s.right}/${s.n} ${s.config.replace(note, "")}`; return !seen.has(k) && seen.add(k); });
     if (!base.length) return null;
     const rl = scores.filter(s => s.benchmark === name && s.model === "rl").sort((a, b) => pct(b) - pct(a))[0];
     let lead = null;
@@ -690,8 +718,13 @@ function benches(scores) {
       if (!lead || q.p > lead.p) { if (lead) { q.prev = lead; q.clears = q.p > lead.ci[1]; } q.rec = true; lead = q; }
       return q;
     });
-    return { name, pts, lead, rl, rlP: rl && pct(rl) };
+    const plains = pts.filter(q => q.plain).map(q => q.p), vals = pts.map(q => q.p).concat(rl ? [pct(rl)] : []);
+    const lo = Math.max(0, plains.length ? Math.round((Math.max(...plains) - 5) / 10) * 10 : Math.floor((Math.min(...vals) - 4) / 10) * 10);
+    return { name, pts, lead, rl, rlP: rl && pct(rl), lo, hi: Math.min(100, Math.ceil((Math.max(...vals) + 2) / 10) * 10) };
   }).filter(Boolean);
+  const span = Math.max(...bs.map(b => b.hi - b.lo));  // every chart spans the same points, so heights compare
+  bs.forEach(b => { b.hi = Math.min(100, b.lo + span); b.lo = b.hi - span; });
+  return bs;
 }
 
 const KEY = `<div class="hp hkey" aria-label="Key to the charts">` +
@@ -709,10 +742,10 @@ function hill(scores) {
     const gap = rl ? rlP - lead.p : null, ci = rl && diffCI(rl, lead.s);
     return `<section class="hp"><h2>${esc(b.name)} <span class="count">untrained base against RL, n ${lead.s.n}</span></h2><div class="hp-body"><div class="hp-stats">` +
       `<div><a class="big num" href="#${esc(lead.s.result)}" title="${esc(lead.s.config)}">${f1(lead.p)}<small>%</small></a>` +
-      `<p class="num">best base, ${lead.s.right}/${lead.s.n}</p>` +
+      `<p class="num">best base, ${lead.s.right}/${lead.s.n}</p><p class="cfg">${esc(lead.s.config)}</p>` +
       `<p class="num">last record ${durHM(mins(Number(lead.s.sk.slice(0, 20))))} ago, ${after ? `${after} attempt${after > 1 ? "s" : ""}` : "no attempts"} since</p></div>` +
       (rl ? `<div><p class="togo">${gap > 0 ? `<b class="num">${f1(gap)}</b> points below RL` : "<b>0</b> points below RL"}</p>` +
-            `<p class="num">95% interval ${f1(ci[0])} to ${f1(ci[1])}</p></div>`
+            `<p class="num">95% interval ${f1(ci[0])} to ${f1(ci[1])}</p><p>RL: ${esc(shortConfig(rl.config, 60))}</p></div>`
           : `<div><p>RL not measured on ${esc(b.name)}</p></div>`) +
       `</div><div class="hp-chart" data-bench="${esc(b.name)}"></div></div></section>`;
   }).join("") + (bs.length ? KEY : "") || `<p class="empty">No scores yet. Attach one to a result: <code>board.py score &lt;result id&gt; base MATH-500 410/500 "cue, T 1.0"</code></p>`);
@@ -728,19 +761,17 @@ function charts() {
 
 function chart(b, W, narrow) {
   const { pts, lead, rl, rlP } = b;
-  const H = 184, T = 18, B = 24, L = narrow ? 4 : 30, R = 60;
-  const plains = pts.filter(q => q.plain).map(q => q.p), vals = pts.map(q => q.p).concat(rl ? [rlP] : []);
-  const lo = Math.max(0, plains.length ? Math.round((Math.max(...plains) - 5) / 10) * 10 : Math.floor((Math.min(...vals) - 4) / 10) * 10);
-  const hi = Math.min(100, Math.ceil((Math.max(...vals) + 2) / 10) * 10);
+  const { lo, hi } = b, H = 184, T = 18, B = 24, L = narrow ? 26 : 30, R = 60;
   const y = v => T + (hi - Math.max(lo, Math.min(hi, v))) / (hi - lo) * (H - T - B);
   const x = i => L + (i + .5) / pts.length * (W - L - R);
   const out = [], boxes = [];
-  const free = (bx) => bx.x0 >= (narrow ? 0 : L - 4) && bx.x1 <= W && bx.y0 >= 0 && !boxes.some(o => bx.x0 < o.x1 && bx.x1 > o.x0 && bx.y0 < o.y1 && bx.y1 > o.y0);
+  const inside = bx => bx.x0 >= L - 4 && bx.x1 <= W && bx.y0 >= 0;
+  const hits = bx => boxes.filter(o => bx.x0 < o.x1 && bx.x1 > o.x0 && bx.y0 < o.y1 && bx.y1 > o.y0).length;
   const label = (text, cls, spots, force) => {  // the first spot that overlaps nothing; spots are [x, y, anchor]
     const w = textWidth(text);
-    const box = ([sx, sy, a]) => { const x0 = a === "end" ? sx - w : a === "middle" ? sx - w / 2 : sx; return { x0: x0 - 2, x1: x0 + w + 2, y0: sy - 10, y1: sy + 3 }; };
-    let at = spots.find(s => free(box(s)));
-    if (!at && force) at = spots[0];
+    const box = ([sx, sy, a]) => { const x0 = a === "end" ? sx - w : a === "middle" ? sx - w / 2 : sx; return { x0: x0 - 2, x1: x0 + w + 2, y0: sy - 11, y1: sy + 5 }; };  // with the halo
+    let at = spots.find(s => inside(box(s)) && !hits(box(s)));
+    if (!at && force) at = spots.filter(s => inside(box(s))).sort((a, b) => hits(box(a)) - hits(box(b)))[0] ?? spots[0];  // the spot that overlaps least
     if (!at) return;
     boxes.push(box(at));
     out.push(`<text class="${cls}" x="${at[0].toFixed(1)}" y="${at[1].toFixed(1)}" text-anchor="${at[2]}">${esc(text)}</text>`);
@@ -749,17 +780,17 @@ function chart(b, W, narrow) {
   const svg = [];
   for (let v = lo; v <= hi; v += 10) {
     svg.push(`<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/>`);
-    if (!narrow) svg.push(`<text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${v}</text>`);
-    boxes.push({ x0: L, x1: W - R, y0: y(v) - .5, y1: y(v) + .5 });  // labels may not cross a grid line either
+    svg.push(`<text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${v}</text>`);
   }
-  if (!narrow) svg.push(`<text x="${L - 8}" y="${T - 9}" text-anchor="end">%</text>`);
+  svg.push(`<text x="${L - 8}" y="${T - 9}" text-anchor="end">%</text>`);
 
-  const recs = pts.filter(q => q.rec);
-  const step = [[L, y(recs[0].p)]];
-  recs.forEach((q, k) => { if (k) step.push([x(q.i), y(q.prev.p)], [x(q.i), y(q.p)]); });
+  const recs = pts.filter(q => q.rec), shown = recs.filter(q => q.p >= lo);  // a best below the floor has no tread
+  const first = shown[0], start = first.prev ? x(first.i) : L;
+  const step = [[start, y(first.p)]];
+  shown.forEach((q, k) => { if (k) step.push([x(q.i), y(q.prev.p)], [x(q.i), y(q.p)]); });
   step.push([W - R, y(lead.p)]);
   if (rl) {
-    const top = y(rlP), poly = [[L, top], [W - R, top], ...step.slice().reverse().map(([px, py]) => [px, Math.max(py, top)])];
+    const top = y(rlP), poly = [[start, top], [W - R, top], ...step.slice().reverse().map(([px, py]) => [px, Math.max(py, top)])];
     svg.push(`<path class="gap" d="M${poly.map(p => p.map(n => n.toFixed(1)).join(",")).join("L")}Z"/>`);
     svg.push(`<line class="target" x1="${L}" x2="${W - R}" y1="${top}" y2="${top}"/>`);
     boxes.push({ x0: W - R + 4, x1: W, y0: top - 9, y1: top + 5 }, { x0: L, x1: W - R, y0: top - 1.5, y1: top + 1.5 });
@@ -768,20 +799,28 @@ function chart(b, W, narrow) {
   }
   recs.forEach((q, k) => {
     const x1 = k ? x(q.i) : L, x2 = recs[k + 1] ? x(recs[k + 1].i) : W - R;
-    svg.push(`<line class="tread" x1="${x1}" x2="${x2}" y1="${y(q.p)}" y2="${y(q.p)}"/>`);
-    boxes.push({ x0: x1, x1: x2, y0: y(q.p) - 2, y1: y(q.p) + 2 });
-    if (k) boxes.push({ x0: x(q.i) - 2, x1: x(q.i) + 2, y0: y(q.p), y1: y(q.prev.p) });
-    if (k) svg.push(`<line class="rise${q.clears ? "" : " noise"}" x1="${x(q.i)}" x2="${x(q.i)}" y1="${y(q.prev.p)}" y2="${y(q.p)}"/>`);
+    if (q.p >= lo) {
+      svg.push(`<line class="tread" x1="${x1}" x2="${x2}" y1="${y(q.p)}" y2="${y(q.p)}"/>`);
+      boxes.push({ x0: x1, x1: x2, y0: y(q.p) - 2, y1: y(q.p) + 2 });
+    }
+    if (!k) return;
+    boxes.push({ x0: x(q.i) - 2, x1: x(q.i) + 2, y0: y(q.p), y1: y(q.prev.p) });
+    svg.push(`<line class="rise${q.clears ? "" : " noise"}" x1="${x(q.i)}" x2="${x(q.i)}" y1="${y(q.prev.p)}" y2="${y(q.p)}"/>`);
+    if (q.prev.p < lo) {  // the rise starts below the floor: an axis break where it leaves the chart
+      const bx = x(q.i), by = y(lo) - 6;
+      svg.push(`<path class="brk" d="M${bx - 5},${by + 2}l10,-4"/><path class="brk-line" d="M${bx - 5},${by}l10,-4M${bx - 5},${by + 4}l10,-4"/>`);
+    }
   });
 
   const marks = pts.map(q => {
     const cx = x(q.i), cy = y(q.p), clipped = q.p < lo;
-    boxes.push({ x0: cx - 5, x1: cx + 5, y0: cy - 5, y1: cy + 5 });
+    boxes.push({ x0: cx - 7, x1: cx + 7, y0: cy - 7, y1: cy + 7 });
+    if (!clipped) boxes.push({ x0: cx - 1.5, x1: cx + 1.5, y0: y(q.ci[1]), y1: y(q.ci[0]) });
     const ci = clipped ? "" : `<line class="ci${q.rec ? " rec" : ""}" x1="${cx}" x2="${cx}" y1="${y(q.ci[1])}" y2="${y(q.ci[0])}"/>`;
     const tip = `${q.s.config}: ${q.s.right}/${q.s.n} (${f1(q.p)} %, 95% ${f1(q.ci[0])} to ${f1(q.ci[1])})` +
       `${q.s.tokens ? `, ${Number(q.s.tokens).toLocaleString("en-US")} tokens per problem` : ""}, ${q.s.who}, ${q.s.result}`;
-    const mark = q.plain && !q.rec ? `<path class="x" d="M${cx - 3.5},${cy - 3.5}l7,7m0,-7l-7,7"/>`
-      : q.plain ? `<path class="x" d="M${cx - 3.5},${cy - 3.5}l7,7m0,-7l-7,7" style="stroke:var(--blue)"/>`
+    const x7 = `<circle class="under" cx="${cx}" cy="${cy}" r="4.5"/><path class="x" d="M${cx - 3.5},${cy - 3.5}l7,7m0,-7l-7,7"`;
+    const mark = q.plain && !q.rec ? `${x7}/>` : q.plain ? `${x7} style="stroke:var(--blue)"/>`
       : `<circle class="dot${q.rec ? " rec" : ""}" cx="${cx}" cy="${cy}" r="${q.rec ? 4.5 : 3.5}"/>`;
     return { ci, a: `<a href="#${esc(q.s.result)}" aria-label="${esc(tip)}"><title>${esc(tip)}</title><circle class="hit" cx="${cx}" cy="${cy}" r="9"/>${mark}</a>` };
   });
@@ -792,18 +831,16 @@ function chart(b, W, narrow) {
   recs.forEach(q => {  // a new record: its gain and short configuration, or "within noise" when it does not clear the last record's interval
     if (!q.prev || !q.clears) return;
     const xr = x(q.i), mid = (y(q.prev.p) + y(q.p)) / 2 + 4, text = `+${f1(q.p - q.prev.p)} ${shortConfig(q.s.config)}`;
-    label(text, "gain", [[xr + 8, mid, "start"], [xr - 8, mid, "end"], [xr + 8, y(q.p) - 9, "start"], [xr - 8, y(q.p) - 9, "end"]], true);
+    const spots = [0, -14, 14, -28, 28].flatMap(dy => [[xr + 8, mid + dy, "start"], [xr - 8, mid + dy, "end"]]);
+    label(text, "gain", [...spots, [xr + 8, y(q.p) - 10, "start"], [xr - 8, y(q.p) - 10, "end"], [xr + 8, y(q.p) + 18, "start"]], true);
   });
-  if (!lead.clears || !lead.prev) {
-    const xl = x(lead.i), yl = y(lead.p);
-    label(shortConfig(lead.s.config), "lead", [[xl, yl - 10, "end"], [xl, yl - 10, "middle"], [xl, yl + 18, "end"]]);
-  }
-  pts.filter(q => q.p < lo).forEach(q => label(`↓ ${f1(q.p)}`, "quiet", [[x(q.i), y(q.p) + 15, "middle"], [x(q.i) + 8, y(q.p) - 4, "start"]], true));  // below the axis: say its value
+  pts.filter(q => q.p < lo).forEach(q =>  // below the floor: say its value
+    label(`↓ ${f1(q.p)}`, "quiet", [[x(q.i), y(q.p) + 20, "middle"], [x(q.i) - 5, y(q.p) + 20, "start"], [x(q.i) + 12, y(q.p) + 4, "start"]], true));
   if (!narrow) {
     recs.filter(q => q.prev && !q.clears).forEach(q =>
-      label("within noise", "quiet", [[x(q.i) + 6, y(q.p) - 8, "start"], [x(q.i) - 6, y(q.p) - 8, "end"], [x(q.i) + 6, y(q.p) + 15, "start"]]));
+      label("within noise", "quiet", [[x(q.i) + 8, y(q.p) - 8, "start"], [x(q.i) - 8, y(q.p) - 8, "end"], [x(q.i) + 8, y(q.p) + 16, "start"]]));
     if (pts.length <= 12) pts.filter(q => !q.rec).forEach(q =>
-      label(shortConfig(q.s.config), "quiet", [[x(q.i), y(q.p) + 17, "middle"], [x(q.i), y(q.p) - 10, "middle"]]));
+      label(shortConfig(q.s.config), "quiet", [[x(q.i), y(q.p) + 20, "middle"], [x(q.i), y(q.p) - 12, "middle"], [x(q.i) + 12, y(q.p) + 4, "start"], [x(q.i) - 12, y(q.p) + 4, "end"]]));
   }
 
   return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(b.name)}: best base ${f1(lead.p)} %, RL ${rl ? f1(rlP) + " %" : "not measured"}">` +
@@ -858,10 +895,10 @@ function poll() {
     .finally(() => { render(); renderPanel(); setTimeout(poll, 10000); });
 }
 
-async function loadDetail() {
+async function loadDetail() {  // a failed read of one item is logged; the rest of the page stays live
   const id = S.open;
-  const found = await get("/data/" + encodeURIComponent(id));
-  if (S.open === id) S.detail = found ?? { missing: id };
+  const found = await get("/data/" + encodeURIComponent(id)).catch(e => { console.error(`Reading ${id} failed:`, e.text ?? e); return undefined; });
+  if (found !== undefined && S.open === id) S.detail = found ?? { missing: id };
 }
 
 /* Item panel */
@@ -882,7 +919,7 @@ function renderPanel() {
     const state = open ? `${KINDS.work}, ${idle ? "idle " + dur(idle) : "active now"}` :
       i.listed === "work-closed" ? `Closed by ${esc(i.closed_by)} ${when(Date.parse(i.closed_at) * 1e6, " ago")}` : KINDS[i.kind];
     const votes = d ? d.votes.map(v => `${esc(v.who)} ${v.vote > 0 ? "+" : "−"}`).join(", ") : "";
-    const scores = (S.scores?.get(i.id) || []).map(s => `<p><span class="score">${esc(s.model)} ${esc(s.benchmark)} <b>${s.right}/${s.n}</b></span> ` +
+    const scores = (S.scores?.get(i.id) || []).map(s => `<p><span class="score">${esc(s.model)} ${esc(s.benchmark)} <b>${s.right}/${s.n}</b></span>, ` +
       `${f1(100 * s.right / s.n)} %, ${esc(s.config)}${s.tokens ? `, ${Number(s.tokens).toLocaleString("en-US")} tokens per problem` : ""}</p>`).join("");
     const facts = [
       ...(scores ? [["Scores", scores]] : []),
@@ -921,7 +958,7 @@ function fromHash() {
   renderPanel();
   if (!id) { if (was) document.querySelector(`[data-key="${CSS.escape(was)}"] .open`)?.focus({ preventScroll: true }); return; }
   if (!was) $("ptitle").focus({ preventScroll: true });  // opened from the board: focus moves into the panel
-  loadDetail().catch(e => { failed(e); render(); }).finally(renderPanel);
+  loadDetail().then(renderPanel);
 }
 
 function closePanel() { history.pushState(null, "", location.pathname + location.search); fromHash(); }
@@ -938,7 +975,7 @@ function syncURL() {
 function filter(change) { Object.assign(S, change); syncURL(); render(); }
 
 /* Keys: j and k walk open work, results, ideas, messages; 1 2 3 jump to a column */
-const walk = () => ["work", "result", "idea"].flatMap(id => [...$(id).querySelectorAll(".open")]).concat([...$("msgs").querySelectorAll(".msg")]);
+const walk = () => [...$("work").querySelectorAll(".open"), ...$("result").querySelectorAll(".open"), ...$("msgs").querySelectorAll(".msg"), ...$("idea").querySelectorAll(".open")];
 function move(step) {
   const links = walk();
   if (!links.length) return;
@@ -1005,13 +1042,14 @@ new ResizeObserver(() => S.benches && charts()).observe($("hill"));
 small.addEventListener("change", () => S.data && render());
 document.fonts.ready.then(() => S.benches && charts());
 
-/* Since the last visit: the time of the last read on screen is kept when the tab is hidden; new items get a blue dot */
-const keepSeen = () => S.data && store.set(SEEN_KEY, String(S.data.now_ns));
+/* Since the last look: the last read shown while the tab was visible and focused is kept when the reader leaves
+   (blur, hidden, closed) and becomes the reference when the reader comes back (focus, visible). */
+const keepSeen = () => S.lookedAt && store.set(SEEN_KEY, String(S.lookedAt));
+const back = () => { S.since = Number(store.get(SEEN_KEY)) || S.since; S.acked = false; if (S.data) render(); };
 const ack = () => { if (!S.acked && document.hasFocus()) { S.acked = true; render(); } };
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) return keepSeen();
-  S.since = Number(store.get(SEEN_KEY)) || S.since; S.acked = false; render();
-});
+document.addEventListener("visibilitychange", () => document.hidden ? keepSeen() : back());
+addEventListener("blur", keepSeen);
+addEventListener("focus", back);
 addEventListener("pagehide", keepSeen);
 addEventListener("scroll", ack, { passive: true });
 addEventListener("keydown", ack);
