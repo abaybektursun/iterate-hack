@@ -27,8 +27,9 @@ DATA = {
 SKILL, PLAIN = DATA["arms"]
 
 TITLE = "Review cuts waste"
-PROBLEM = "Does a team of agents waste less compute when it reviews itself?"
-LINE = f"Three rounds of the review skill cut compute per batch from {SKILL['minutes'][0]} to {SKILL['minutes'][3]} minutes."  # also on its tile
+PROBLEM = "Does an agent remove more planted compute waste when it follows a written review procedure?"
+LINE = (f"In a test study with {DATA['planted']} inefficiencies planted on purpose, three rounds of the written review procedure "
+        f"cut compute per batch from {SKILL['minutes'][0]} to {SKILL['minutes'][3]} container minutes.")  # also on its tile
 
 # What the reader switches between: the review round. The first is shown on load: start from the problem.
 DATA["states"] = [
@@ -42,36 +43,40 @@ DATA["states"] = [
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 PANELS = [
-    ["new", "What is new", "A published system that changes its own prompts, gates and policies after repeated process failures reports "
-     "8 hand-audited events and calls this \"a retrospective process audit, not a controlled comparison\" "
-     "(Sibyl-AutoResearch, arXiv 2605.22343, Section 6).",
-     [f"New here: the {DATA['planted']} inefficiencies were planted before any review ran, so each one counts as found or missed, "
-      "and as removed or still there in the next batch's job records.",
-      "New here: the control is the same model on the same work, told to review the last hour and make one improvement, "
-      "without the skill."]],
-    ["why", "Why it matters", "The swarm's measurements are paid for in compute, and a review that removes waste gives that compute back "
+    ["new", "What is new", f"The {DATA['planted']} inefficiencies were planted before any review ran, so each one counts as found or missed, "
+     "and as removed or still there in the next batch's job records.",
+     ["The control is the same model on the same work, told to review the last hour and make one improvement, "
+      "without the skill.",
+      "Earlier work: a published system that changes its own prompts, gates and policies after repeated process failures reports "
+      "8 hand-audited events and calls this \"a retrospective process audit, not a controlled comparison\" "
+      "(Sibyl-AutoResearch, arXiv 2605.22343, Section 6)."]],
+    ["why", "Why it matters", "The team's measurements are paid for in compute, and a review that removes waste gives that compute back "
      "without more hardware.",
      [f"After three rounds a batch costs {SKILL['minutes'][3]} container minutes. The same work with nothing planted costs {DATA['clean']}.",
-      f"The same model with a plain instruction reached {PLAIN['minutes'][3]} minutes, so the written review procedure adds to what the model does alone.",
+      f"The same model with a plain instruction reached {PLAIN['minutes'][3]} minutes. With {DATA['runs']} runs per arm and no significance "
+      "test, this suggests that the written review procedure adds to what the model does alone.",
       f"The skill makes one change per review, and after three rounds {min(SKILL['left'])} or {max(SKILL['left'])} of the {DATA['planted']} "
-      "inefficiencies were still in place."]],
-    ["how", "How we know", f"{DATA['planted']} inefficiencies were planted in a small study that runs as CPU jobs. A fresh agent reviewed the "
+      "inefficiencies, depending on the run, were still in place."]],
+    ["how", "How we know", f"We planted {DATA['planted']} inefficiencies in a small study that runs as CPU jobs; one batch of its jobs computes "
+     "the study's 4 required answers. A fresh agent reviewed the "
      "work and made one change, the next batch of the same size ran on the changed code, and this was done three times.",
-     [f"There are {DATA['runs']} runs and {DATA['reviews']} reviews per arm, all by claude-opus-5-5. One arm is told to run the "
-      "team-meta-review skill. The other is told to review the last hour and make one improvement.",
-      "Compute is the container time of real Modal CPU jobs of one class. Every batch delivered its 4 answers with the same point "
+     [f"There are two arms (groups of runs), with {DATA['runs']} runs and {DATA['reviews']} reviews each, all by claude-opus-5-5. One arm is told "
+      "to run the team-meta-review skill, a written review procedure that a Claude Code agent follows. The other is told to review "
+      "the last hour and make one improvement.",
+      "Compute is the container time of real CPU jobs on Modal, a cloud computing service, all on the same machine type. Every batch delivered its 4 answers with the same point "
       "estimates as a reference run.",
       f"The skill's reviews named {SKILL['named']} of the planted inefficiencies per review and the plain reviews {PLAIN['named']}. "
       "No inefficiency that was removed came back in a later batch."]],
-    ["limits", "What it does not show", "It does not show that the review is safe on work that has no waste. On clean work both reviews "
-     "with the skill cut a bootstrap from 1,500,000 resamples to 20,000 and 10,000, against a written requirement of the study's owner.",
+    ["limits", "What it does not show", "It does not show that the review is safe on work that has no waste. On work with nothing planted, "
+     "the two reviews with the skill cut a bootstrap (a resampling estimate of uncertainty) from 1,500,000 resamples to 20,000 and "
+     "10,000, against a written requirement of the study's owner.",
      ["The work was run by a fixed script that follows the repository's code and instructions. Waste in what an agent chooses to do "
       "was not measured.",
       f"With {DATA['runs']} runs per arm there is no significance test. The best plain run ended at {min(PLAIN['runs_last'])} minutes "
       f"and the worst run with the skill at {max(SKILL['runs_last'])}.",
-      "No review in either arm removed the job whose answer was already stored, and none named it."]],
-    ["run", "How to reproduce it", "One command runs one arena from the first batch to the last, and the readout rebuilds the table "
-     "from the job records.",
+      "One planted inefficiency was a job that computes an answer already stored. No review in either arm removed it, and none named it."]],
+    ["run", "How to reproduce it", "One command runs one arena (a test copy of the study) from the first batch to the last, and an analysis "
+     "script rebuilds the numbers from the job records.",
      ["MH_HOME=<folder> python3 -m studies.metaharness.prep.run_arena a1 skill planted 5721 <base commit> 0,1,2,3 (commit "
       + DATA["commit"] + "). It needs a Modal workspace with infra/runner.py deployed.",
       "The numbers are in " + DATA["artifact"] + ", one folder per run beside it.",
