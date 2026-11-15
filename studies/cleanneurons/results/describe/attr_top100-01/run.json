@@ -1,0 +1,10 @@
+{
+ "job_id": "sameraslan-1114-154532-cdc8",
+ "commit": "2dd4da7d5b66ae79c2841418085ea12656a26fcc",
+ "command": "python -m studies.cleanneurons.jobs.describe_neurons --commit 2dd4da7d5b66ae79c2841418085ea12656a26fcc --edit studies/cleanneurons/results/transplant/curve_attr-01/edit_attr_top100.json",
+ "runner": "tools/gpu.py h100 (Modal workspace sameraslan)",
+ "volume_only": [
+  "contexts.json (5.2 MB, top contexts per neuron pole)"
+ ],
+ "volume_path": "iterate-runs:sameraslan-1114-154532-cdc8/"
+}

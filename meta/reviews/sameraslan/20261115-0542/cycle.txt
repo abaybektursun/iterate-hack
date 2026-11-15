@@ -1,0 +1,102 @@
+Jobs of sameraslan, last 6.4 h:  id  state  gpu  wait  run  command
+  sameraslan-1114-151929-5579  exit 1  NVIDIA H200  12.5  1.2  python -m studies.cleanneurons.jobs.loop_neurons --commit 0f7b2ec668e0
+  sameraslan-1114-152436-175e  cancelled  NVIDIA H100   7.6  -  python -m studies.cleanneurons.jobs.loop_neurons --commit 7be620473373
+  sameraslan-1114-153108-a93d  done  NVIDIA H100   1.1  5.3  python -m studies.cleanneurons.jobs.transplant_curve --rank attr --com
+  sameraslan-1114-153151-9a16  done  NVIDIA H200  0.8  3.3  python -m studies.rlneurons.jobs.wsp_delta_anatomy --layers 31 --commi
+  sameraslan-1114-153500-bb54  exit 1  NVIDIA H200  0.0  15.6  python -m studies.cleanneurons.jobs.loop_neurons --commit 74b397c98ae4
+  sameraslan-1114-153510-57fb  died: FileExistsError: [Errno 17] File exists: '/runs/sameraslan-1114-153510-57fb'  NVIDIA H100   189.6  178.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-153637-0929  done  NVIDIA H200  0.0  2.1  python -m studies.rlneurons.jobs.wsp_delta_anatomy --commit 97ac3209c1
+  sameraslan-1114-154255-ff2f  done  NVIDIA H100   0.0  5.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-154304-be68  done  NVIDIA H100   0.0  7.5  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-154311-93e3  done  NVIDIA H100   0.1  8.6  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-154532-cdc8  done  NVIDIA H100   0.1  1.0  python -m studies.cleanneurons.jobs.describe_neurons --commit 2dd4da7d
+  sameraslan-1114-155020-5a4d  died: FileExistsError: [Errno 17] File exists: '/runs/sameraslan-1114-155020-5a4d'  NVIDIA H200  174.5  178.2  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-155256-982a  submitting  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-155259-f573  submitting  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-155303-0337  submitting  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-155306-9836  submitting  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-155312-dcd4  submitting  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-155318-154a  submitting  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-155356-1508  submitting  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-160148-b9af  submitting  h100  -  -  python -m studies.cleanneurons.jobs.transplant_curve --rank attr --bia
+  sameraslan-1114-161544-e3c8  submitting  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-161548-f4d4  submitting  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-161743-52b4  submitting  h100  -  -  python -m studies.cleanneurons.jobs.transplant_curve --rank attr --bia
+  sameraslan-1114-175418-fa7c  submitting  h100  -  -  bash studies/jspace/jobs/fit_lens.sh --model rl --n 2 --commit d04dd45
+  sameraslan-1114-182559-b1e7  submitting  cpu  -  -  python -c "print(1)"
+  sameraslan-1114-183600-08e8  submitting  h100  -  -  bash studies/jspace/jobs/fit_lens.sh --model rl --n 2 --commit 2c5ef66
+  sameraslan-1114-183604-f6e2  submitting  h100  -  -  python -m studies.jspace.jobs.workspace_tests --commit 2c5ef665b86aadd
+  sameraslan-1114-183616-2d9f  submitting  cpu  -  -  python -c "print(1)"
+  sameraslan-1114-183648-7aa1  submitting  h100  -  -  python -m studies.jspace.jobs.workspace_tests --commit 2c5ef665b86aadd
+  sameraslan-1114-183822-3b49  submitting  h100  -  -  python -m studies.jspace.jobs.workspace_tests --commit 2c5ef665b86aadd
+  sameraslan-1114-183955-195a  submitting  h100  -  -  python -m studies.jspace.jobs.workspace_tests --commit 2c5ef665b86aadd
+  sameraslan-1114-184129-05ef  submitting  h100  -  -  python -m studies.jspace.jobs.workspace_tests --commit 2c5ef665b86aadd
+  sameraslan-1114-184303-e011  submitting  h100  -  -  python -m studies.jspace.jobs.workspace_tests --commit 2c5ef665b86aadd
+  sameraslan-1114-184438-e5d4  done  NVIDIA H200  0.2  1.2  python -m studies.jspace.jobs.workspace_tests --commit 2c5ef665b86aadd
+  sameraslan-1114-184508-ce1f  exit 1  NVIDIA H100   0.0  0.1  bash studies/jspace/jobs/fit_lens.sh --model rl --n 2 --commit 2c5ef66
+  sameraslan-1114-184550-429d  done  NVIDIA H200  0.0  7.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-184552-a899  done  NVIDIA H100   0.0  6.0  python -m studies.cleanneurons.jobs.transplant_curve --rank attr --bia
+  sameraslan-1114-184558-8a70  exit 1  NVIDIA H200  0.0  18.5  python -m studies.cleanneurons.jobs.loop_neurons --commit a2ec2c9a0a69
+  sameraslan-1114-184603-9d69  done  NVIDIA H100   0.0  40.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-184605-5e13  done  NVIDIA H100   0.0  10.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-184610-37bf  done  NVIDIA H100   0.0  6.2  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-184615-7f7e  done  NVIDIA H100   0.1  6.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-184623-b0fc  done  NVIDIA H100   0.1  10.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-184627-f7eb  done  NVIDIA H100   0.1  9.6  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-184632-401b  done  NVIDIA H100   0.1  10.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-184659-6f8c  done  NVIDIA H100   5.0  1.5  bash studies/jspace/jobs/fit_lens.sh --model rl --n 2 --commit 3208566
+  sameraslan-1114-184704-836d  done  NVIDIA H100   5.4  6.2  python -m studies.jspace.jobs.workspace_tests --commit 320856612e62e3c
+  sameraslan-1114-185927-7df1  done  NVIDIA H100   0.1  32.2  bash studies/jspace/jobs/fit_lens.sh --model base --commit 320856612e6
+  sameraslan-1114-185933-d625  done  NVIDIA H100   0.5  32.6  bash studies/jspace/jobs/fit_lens.sh --model rl --commit 320856612e62e
+  sameraslan-1114-185934-b0a9  done  NVIDIA H100   0.5  28.2  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-185940-514f  done  NVIDIA H100   0.4  34.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-185947-4681  done  NVIDIA H100   0.3  31.8  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-185952-2e78  done  NVIDIA H100   0.2  6.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-185958-fb46  done  NVIDIA H100   0.1  19.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-190610-842c  done  NVIDIA H100   0.1  35.1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-190619-6dcf  done  NVIDIA H100   0.6  31.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-190626-cf9f  done  NVIDIA H100   0.6  41.3  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-193229-5442  done  NVIDIA H100   0.0  7.8  python -m studies.cleanneurons.jobs.loop_neurons --commit d63b66bf90a0
+  sameraslan-1114-193308-0545  exit 127  NVIDIA H100   0.1  6.6  python -m studies.jspace.jobs.workspace_tests --commit abfcfc1aa3f0892
+  sameraslan-1114-193314-20a2  done  NVIDIA H100   0.5  23.7  python -m studies.jspace.jobs.lensdiff --commit abfcfc1aa3f08926960038
+  sameraslan-1114-193553-cf1f  done  NVIDIA H100   0.1  15.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-193945-bc28  exit 1  NVIDIA H100   0.1  10.8  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-193951-d055  exit 1  NVIDIA H100   0.0  10.7  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-193957-0cd5  done  NVIDIA H100   0.1  8.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-194003-f897  done  NVIDIA H100   0.1  8.3  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-195041-abf7  exit 1  NVIDIA H100   0.2  11.7  python -m studies.cleanneurons.jobs.describe_neurons --commit e455a805
+  sameraslan-1114-195047-4022  done  NVIDIA H100   0.1  24.0  python -m studies.cleanneurons.jobs.loop_neurons --commit e455a8050015
+  sameraslan-1114-203558-cf30  exit 1  NVIDIA H100   0.1  1.6  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-203816-b34d  done  NVIDIA H100   0.0  1.1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-203946-8e12  done  NVIDIA H100   0.0  10.9  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-204845-1055  running  NVIDIA H100   0.1  54.2  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-204852-d527  done  NVIDIA H100   0.1  53.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-205149-0570  cancelled  NVIDIA H100   0.0  50.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-205156-86f8  done  NVIDIA H100   0.1  34.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-205203-840e  done  NVIDIA H100   0.1  37.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-205210-8d88  done  NVIDIA H100   0.1  32.6  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-205216-17de  done  NVIDIA H100   0.1  34.6  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-214049-ef4f  running  NVIDIA H200  0.1  2.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-214056-15f9  running  NVIDIA H100   0.1  2.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-214244-11de  running  NVIDIA H100   0.0  0.3  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-214251-10c3  running  NVIDIA H100   0.0  0.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  81 jobs, 13 failed or cancelled; median wait 0.1; 1278.1 container minutes, 484.1 of them in failed or cancelled jobs
+
+Work of sameraslan, last 6.4 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-f374ef  claude/weight-space-programming-research-ddd44e  10  259  6  275  30  3  WSP-1 delta anatomy idea-d59a98 (complements work-d36669, no
+  work-dd8988  claude/j-spaces-base-model-64b1f3  2  123  18  143  18  2  J-space existence, base vs RL: fit matched J-lenses for both
+  work-bf0b9c  sameraslan/metaharness-planted  -  -  -  103  0  0  metaharness planted-waste test (SPEC1 Part C, redone): 6 kno
+  work-bc2be9  claude/weight-space-programming-research-ddd44e  17  54  -26  46  2  0  Site: Findings page (/findings, one tile per finding with a 
+  work-74703c  claude/wait-steering-f535b2  4  67  -  72 (open)  10  2  J-lens Wait steering of the cued base on MATH-500 idea-da9dc
+  work-eee857  claude/devin-skill-integration-39d452  -  -  -  9  0  0  Devin as a team skill (meta harness, no GPU): .claude/skills
+  work-9ecc56  claude/weight-space-programming-research-ddd44e  -  -  -  54 (open)  0  0  Think-SFT (no reward) on hard328, T 1.0/top-p 1.0, seed 3000
+  work-c61a45  claude/hackathon-demo-presentation-3ae82c  -  -  -  28 (open)  0  0  Demo presentation: stepped story page /demo (tools/demo.py) 
+  work-693891  sameraslan/metaharness-planted  -  -  -  14  0  0  Finding page for the planted-waste test of the meta harness 
+  work-c50976  claude/board-ui-ux-redesign-545108  -  -  -  11 (open)  0  0  Board page redesign (tools/view.py): fewer words, one line p
+  work-ab67b8  claude/architecture-diagram-realtime-a5850a  -  -  -  6  0  0  Design page (tools/architecture.py): remove the blue focus r
+  work-68846a  claude/weight-space-programming-research-ddd44e  -  -  -  7 (open)  0  0  WSP-2: hand-written weight edit with no RL weights and no re
+  work-99952d  claude/missing-findings-pages-585a15  -  -  -  1 (open)  0  0  Finding pages for the hill-climb record steps that have none
+
+Team, last 6.4 h: claim to close median 39 min, upper quartile 83 min, over 51 work items closed by 3 people; 83 results, 13.0 per hour.
+
+Median minutes per stage over work items with jobs: to-job 7, jobs 95, to-answer 6. Slowest stage: jobs.
