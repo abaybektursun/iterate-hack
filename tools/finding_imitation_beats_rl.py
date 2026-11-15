@@ -178,7 +178,7 @@ PANELS = [
       f"{min(_f['caps']['sft'])} to {max(_f['caps']['sft'])} of the {D['n']['fresh2026']} problems per sample (RL "
       f"{min(_f['caps']['rl'])} to {max(_f['caps']['rl'])}), so a larger token cap could change the count.",
       f"On MATH-500 the order is not established: vote {D['vote']['math500']['sft']} against {D['vote']['math500']['rl']}, "
-      f"{_d['math500']['vote'][0]:+} points (95 % interval {_d['math500']['vote'][1]} to {_d['math500']['vote'][2]})."]],
+      f"{_d['math500']['vote'][0]:+} points (95 % interval {str(_d['math500']['vote'][1]).replace('-', '−')} to {_d['math500']['vote'][2]})."]],
     ["run", "How to reproduce it",
      "The plan is studies/rlneurons/specs/SPEC_thinkvote.md; the jobs ran jobs/run_cell.py with --samples 1 per job, four "
      "jobs per set, at commit ff0c715.",
