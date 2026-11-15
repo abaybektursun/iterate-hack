@@ -268,6 +268,8 @@ def cmd_table():
                "tokens_per_problem": round(tok), "signal": signal}
         if test_time:
             pool, _, tk, _ = fam[family]
+            if arm.endswith("_restart") and "vote" not in arm:          # the restart row uses sample 0 only: compare with sample 0
+                pool, tk = pool[0], {"all_samples": tk["single"]}
             d, dB, extra = a - ability(pool, b5), aB - ability(pool, b5, W), tok - tk["all_samples"]
             row |= {"shift_vs_own_single_logits": round(d, 3), "shift_vs_own_single_interval95": [round(float(x), 3) for x in np.percentile(dB, [2.5, 97.5])],
                     "extra_tokens": round(extra), "logits_per_1000_extra_tokens": round(1000 * d / extra, 4),
@@ -309,9 +311,41 @@ def cmd_table():
     print(json.dumps(readout, indent=1))
 
 
-def cmd_score():
-    raise SystemExit('no held-out cell scored yet')
+# cell name in a predictions.json -> (observed right, where it was read), filled in after the prediction's commit was pushed
+SW = "origin/claude/swarm-literature-review-60a281:studies/rlneurons/results/day1_3/"
+OBSERVED = {
+    "base + cue, vote over 4, no restart (sameraslan's run, result-1dedfe)": (179, SW + "hard328_base_cue_s4r0-01/readout.json rows.vote"),
+    "RL plain, vote over 4, no restart, on the 246 problems that finished (result-1dedfe)": (161, SW + "hard328_partial246_rl_plain_s4r0-01/readout.json rows.vote"),
+    "shots_rl, second draw of the 3 examples": (404, "job abaybektursun-1114-195350-bc00 (shots1/rl_b.json), done; score_v3 of answers.jsonl without problems 3, 5, 6 (406 of 500 with them)"),
+    "shots_base, second draw of the 3 examples": (405, "job abaybektursun-1114-195357-6936 (shots1/base_b.json), done; score_v3 of answers.jsonl without problems 3, 5, 6 (408 of 500 with them)"),
+}
 
+
+def cmd_score():
+    rows = []
+    for nn in (1, 2):
+        d = json.loads((OUT / f"predict-0{nn}" / "predictions.json").read_text())
+        for c in d["cells"]:
+            row = {"cell": c["cell"], "set": c["set"], "filed": f"predict-0{nn}", "filed_utc": d["filed_utc"], "status": c["status"], "predicted_right": c["predicted_right"], "interval80": c["interval80"]}
+            if c["cell"] in OBSERVED:
+                obs, src = OBSERVED[c["cell"]]
+                row |= {"observed": obs, "source": src, "error": round(c["predicted_right"] - obs, 1), "inside_interval80": bool(c["interval80"][0] <= obs <= c["interval80"][1]),
+                        "error_baselines": {k: round(c[k] - obs, 1) for k in ("baseline_point", "baseline_relative_error", "baseline_marginal_logit", "L1_uncalibrated", "on_file_axis") if c.get(k) is not None}}
+            else:
+                row["observed"] = None
+            rows.append(row)
+    done = [r for r in rows if r["observed"] is not None]
+    mae = lambda rs, k: round(float(np.mean([abs(r["error"] if k == "Lc_filed" else r["error_baselines"][k]) for r in rs])), 2)
+    hard = [r for r in done if r["set"].startswith("hard328")]
+    out = {"scored": len(done), "not_finished": len(rows) - len(done), "inside_interval80": sum(r["inside_interval80"] for r in done),
+           "hard328_transfer_cells": {"n": len(hard), "mean_abs_error": {k: mae(hard, k) for k in ("Lc_filed", "baseline_point", "baseline_relative_error", "baseline_marginal_logit")}},
+           "math500_second_draw_cells": {"n": len(done) - len(hard), "mean_abs_error": {"filed (same as the first draw)": mae([r for r in done if r not in hard], "Lc_filed")}},
+           "cells": rows}
+    (OUT / "scored-01").mkdir(parents=True, exist_ok=True)
+    (OUT / "scored-01" / "readout.json").write_text(json.dumps(out, indent=1))
+    print(json.dumps({k: v for k, v in out.items() if k != "cells"}, indent=1))
+    for r in rows:
+        print(r["cell"], "|", r["predicted_right"], r["interval80"], "| observed", r["observed"], r.get("error"), r.get("inside_interval80"), r.get("error_baselines"))
 
 def main():
     ap = argparse.ArgumentParser()

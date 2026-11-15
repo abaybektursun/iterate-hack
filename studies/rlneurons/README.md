@@ -25,6 +25,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `jobs/rln4_gen.py` | RLN-4 generation job. Child (`--inner --phase ...`): one vLLM engine, every request with its own seed, one JSONL row per finished request. Parent: AWS `pg` setup. |
 | `jobs/modal_rln4_k.py` | The Modal app that ran K, T2 and T3 (`modal run ... --step download|check|k|t2|t3`). Runs the `rln4_gen` child on an H100. |
 | `analysis/axis.py`, `analysis/axis_test.py`, `specs/SPEC_axis.md` | One axis or several: per-problem vectors of every arm, pair overlap and oracle union against the rest-score null, Rasch against Rasch plus one bilinear term, the floor; planted checks. See "One axis or several?". |
+| `analysis/rate.py`, `analysis/rate_test.py`, `specs/SPEC_rate.md` | Exchange-rate table: each arm's ability shift in logits, tokens and training signal; leave-one-arm-out transfer to the 328; predictions filed before held-out cells were read. Outputs `results/rate/`. |
 | `jobs/run_cell.py` | One cell (model, prompt arm, problem set, temperature, top-p, seed) through the team runner `tools/gpu.py`. Reuses `rln4_gen`'s engine and row record, adds grader v3, reads `data/`. See "Day-1 cells on the team runner". |
 | `jobs/setup_vllm.sh` | Installs vLLM 0.32.0, math-verify 0.9.0, transformers 5.19.0, tokenizers 0.23.3 into the venv `/opt/rln-vllm` at job start. |
 | `jobs/rln3_gen.py` | RLN-3 generation job (arms P, F, C on MATH-500 and the harder set), AWS `pg` only. |
@@ -1184,6 +1185,122 @@ $PY stats $R --labels studies/rlneurons/results/anatomy/judge-01/labels.json --o
 $PY prep $R --work runs/checks_judge-02
 $PY score $R --work runs/checks_judge-02 --stats studies/rlneurons/results/checks/math500-02/readout.json --out studies/rlneurons/results/checks/judge-02
 ```
+
+## Exchange-rate table: every method as one logit shift, and its transfer to the 328 (laptop, board work-c45b70, idea-31636e)
+
+Question: if all arms lie on one axis (section above), each method is one number. What is it, what does it cost, and does it
+predict the 328 better than "same point gain"? Answer: no better. Leave-one-arm-out over the 5 arms on both sets, the
+calibrated logit rule misses the 328 score by 5.1 problems on average and "same point gain" by 5.1 (rerun noise 4, binomial sd
+5.7); on the two held-out vote cells scored so far the logit rule misses by 8.4 and the point rule by 3.7. The logit scale
+does rule out two other rules: "same relative error reduction" misses by 45.0 and "same change in the logit of the total" by
+25.2. Spec and hypotheses, written first: `specs/SPEC_rate.md`. Code: `analysis/rate.py` (imports the fit of `axis.py`);
+planted test: `analysis/rate_test.py`.
+
+Method. Item difficulties from `axis.fit` on the 36 single-sample arms (ridge 0.3); the ability of any 0/1 vector is the
+maximum-likelihood a given those difficulties, so votes and restarts get an ability too. Shift = ability minus the ability of
+base + cue sample 0 (405 of 500; the pooled four samples sit 0.12 above it). Interval: paired bootstrap over problems, 2,000
+resamples, 95 %. Noise floor: the sd of the abilities of four same-config samples is 0.12 logits (base + cue) and 0.17 (RL
+plain); one single-sample shift has a 95 % interval of about +/- 0.4. Tokens per problem from each run's `metrics.json`.
+All 47 rows: `results/rate/math500-01/table.md` and `table.json`; selected rows:
+
+| Method (MATH-500) | Right of 500 | Shift, logits [95 %] | Tokens per problem | Training signal |
+|---|---|---|---|---|
+| RL plain, vote over 4 after restart | 475 | +2.46 [+2.03, +2.92] | 19,864 | RL reward |
+| RL plain, vote over 4 | 474 | +2.40 [+1.95, +2.84] | 18,747 | RL reward |
+| RL plain, one sample (4 samples) | 456 to 464 | +1.46 to +1.83 | 4,675 | RL reward |
+| RL, cue | 457 | +1.50 [+1.06, +1.94] | 4,696 | RL reward |
+| Think-SFT, cue | 454 | +1.38 [+0.91, +1.87] | 4,888 | SFT data |
+| base + cue, vote over 4, ties to the shortest | 453 | +1.34 [+1.01, +1.71] | 16,034 | none |
+| base + 0.5 (RL - base), cue | 452 | +1.30 [+0.87, +1.75] | 4,626 | RL reward (weights) |
+| Code-RL 3.1, cue | 450 | +1.22 [+0.79, +1.66] | 3,336 | RL reward, other task |
+| base + cue, vote over 4 after restart | 450 | +1.22 [+0.90, +1.58] | 19,697 | none |
+| base + cue, vote over 4 | 446 | +1.08 [+0.79, +1.40] | 16,034 | none |
+| base + 0.25 (RL - base), cue | 441 | +0.91 [+0.52, +1.28] | 4,036 | RL reward (weights) |
+| base + cue + 3 RL-written solved problems (n 497; a second draw of examples has 404, see below) | 435 | +0.81 [+0.43, +1.20] | 4,379 | RL reward (text in context) |
+| base + top 8 directions of the RL delta, plain | 427 | +0.51 [+0.05, +0.97] | 3,962 | RL reward (weights) |
+| base + random difference, cue (control) | 417 | +0.26 [-0.11, +0.63] | 3,944 | none |
+| base + cue + 3 base-written solved problems (n 497) | 414 | +0.26 [-0.12, +0.62] | 3,365 | own samples (in context) |
+| base + cue, restart up to 2 | 413 | +0.17 [+0.06, +0.31] | 4,852 | none |
+| base + cue, sample 0 (reference) | 405 | 0 | 3,808 | none |
+
+Test-time methods against the model's own single sample (pooled four samples; restart against sample 0):
+
+| Method | Base + cue: logits [95 %], points | Extra tokens | Logits per 1,000 extra tokens | RL plain: logits [95 %], points | Extra tokens | Logits per 1,000 |
+|---|---|---|---|---|---|---|
+| restart, up to 2 | +0.17 [+0.06, +0.31], 1.6 | 1,044 | 0.164 | +0.09 [+0.00, +0.22], 0.4 | 224 | 0.383 |
+| vote over 2 (mean of 6 subsets) | +0.18 [+0.07, +0.30], 1.6 | 4,008 | 0.045 | -0.01 [-0.14, +0.12], -0.1 | 4,687 | -0.003 |
+| vote over 3 (mean of 4 subsets) | +0.81 [+0.65, +0.99], 6.2 | 8,017 | 0.101 | +0.43 [+0.26, +0.64], 1.7 | 9,374 | 0.046 |
+| vote over 4 | +0.96 [+0.74, +1.24], 7.1 | 12,025 | 0.080 | +0.76 [+0.49, +1.11], 2.8 | 14,060 | 0.054 |
+| vote over 4, ties to the shortest | +1.22 [+0.96, +1.53], 8.5 | 12,025 | 0.102 | | | |
+| vote over 4 after restart | +1.11 [+0.85, +1.43], 7.9 | 15,689 | 0.071 | +0.83 [+0.55, +1.19], 3.0 | 15,177 | 0.055 |
+
+- One logit costs the base about 12,000 extra generated tokens per problem by voting (0.08 to 0.10 logits per 1,000). The RL
+  weights give +1.4 to +1.5 logits for about 900 more tokens per problem, Think-SFT +1.38 for about 1,100, half of the RL
+  weight difference +1.30 for about 800. The label-free vote with ties to the shortest answer (+1.34) equals half the RL
+  weight difference at 3.5 times the tokens. A vote over 2 buys nothing (ties go to sample 0).
+- In logits the vote is worth about the same for both models (+0.96 base, +0.76 RL; intervals overlap); in points it is 7.1
+  against 2.8.
+- Theta sweep (cue, against the pooled base): 0.25 +0.80, 0.5 +1.18, 0.75 +1.15, 1 +1.39, 1.25 +1.11, 1.5 +1.22. Ability is
+  not linear in theta: theta 0.25 has 57 % of the full shift and theta 0.5 lies 0.49 logits above the line through 0 and 1
+  (4.1 sd of the base noise floor, 2.9 of RL's): H3 refuted. Past theta 0.5 the points are inside noise of each other. The
+  random difference of the same norm sits at +0.15 (1.2 sd): inside noise.
+
+Transfer MATH-500 -> hard328 (`results/rate/transfer-01/readout.json`). Reference: pooled base + cue (410.5 of 500; 162 of
+328 from the two runs 164 and 160). Each arm held out of the hard328 difficulty fit and of the calibration. Rules: Lc =
+Rasch logit shift times c, c the slope of hard328 shift on MATH-500 shift over the other arms (0.81 to 0.89; all five 0.87);
+L1 = the same with c = 1; P = same point gain; M = same change in logit of the total; R = same relative error.
+
+| Held-out arm | Observed of 328 | Lc | L1 | P | M | R |
+|---|---|---|---|---|---|---|
+| RL plain | 206 | 201.7 | 210.0 | 194.5 | 232.8 | 253.8 |
+| RL cue | 205 | 197.7 | 205.9 | 192.5 | 227.4 | 248.3 |
+| theta 0.25 cue | 182 | 184.3 | 187.7 | 182.0 | 201.4 | 218.6 |
+| theta 0.5 cue | 190 | 195.2 | 199.1 | 189.2 | 218.8 | 239.0 |
+| Code-RL 3.1 cue | 187 | 193.3 | 197.4 | 187.9 | 215.5 | 235.3 |
+| Mean absolute error, problems | | 5.07 | 5.99 | 5.14 | 25.18 | 44.97 |
+
+- H1 (Lc better than P): 5.07 against 5.14 is a tie inside noise, and the held-out cells below go to P. Read as refuted:
+  the logit shift does not predict the 328 better than the point gain. P is within 1 problem on the three partial arms and
+  12 low on the two RL arms; Lc is 4 to 7 low on RL and 2 to 6 high on the others.
+- H2 (the item model adds to the logit of the total): holds, 5.1 against 25.2.
+- Planted test (20 seeds, 5 arms each, a known one-axis model, second set 2.2 logits harder): Lc 8.5, L1 8.4, M 9.2, P 15.2,
+  R 20.8 problems; an arm with +1.2 logits on the first set only shows an error of 51.9 problems (4.8 sd). So the instrument
+  can tell Lc from P when a one-axis world separates them; on the real pair of sets the two rules happen to agree.
+
+Predictions filed before the cells were read (`results/rate/predict-01/`, commit `640d00b`, pushed 04:44:16 UTC;
+`predict-02/`, commit `14e2f4e`, 04:49:14 UTC; scores in `results/rate/scored-01/readout.json`):
+
+| Cell | Predicted right [80 %] | Point rule | Observed | Error Lc, P | Inside 80 % |
+|---|---|---|---|---|---|
+| hard328 base + cue, vote over 4, no restart (result-1dedfe) | 188.5 [179, 198] | 185.3 | 179 | +9.5, +6.3 | yes (on the edge) |
+| hard328 RL plain, vote over 4, no restart, 246 finished problems (result-1dedfe) | 168.2 [160, 177] | 159.9 | 161 | +7.2, -1.1 | yes |
+| hard328 base + cue, vote over 4 after restart | 192.3 [182, 202] | 187.9 | running | | |
+| hard328 RL plain, vote over 4 after restart | 227.1 [217, 239] | 215.8 | running | | |
+| hard328 base + cue + 3 RL-written solved problems | 181.4 [171, 192] | 179.8 | running | | |
+| hard328 base + top 8 directions, cue | 173.1 [164, 193] | 172.8 | not found on the board | | |
+| hard328 vote distillation V, cue and plain (category prior) | 175.5 [162, 189] | none | running | | |
+| hard328 unfiltered control U, cue and plain (category prior) | 162.0 [151, 173] | none | running | | |
+| MATH-500 shots, second draw, RL-written (of 497; job `abaybektursun-1114-195350-bc00`) | 435 [422, 448] | the same | 404 | +31 | no |
+| MATH-500 shots, second draw, base-written (of 497; job `abaybektursun-1114-195357-6936`) | 414 [399, 429] | the same | 405 | +9 | yes |
+| MATH-500 shots, second draw, Code-RL-written (of 497) | 412 [397, 427] | the same | not submitted | | |
+| MATH-500 Think-SFT cue, vote over 4 | 473.1 [466, 480] (`axis.py`: 471.5 +/- 7) | 489.5 | not run | | |
+
+- The second draw of RL-written examples (problems 3, 5, 6 as examples) has 404 of 497, against 435 for the first draw and
+  405 for base-written examples: the +0.81 logits of the RL-written row belong to one draw of three examples, not to the
+  method. Counted here from the finished jobs' `answers.jsonl` (`score_v3`, 406 and 408 of 500 before masking); the owner's
+  readout (work-be7af1) is the reference.
+- On the two scored hard328 cells the vote gained less on the 328 than either rule said (base +19.5 problems over its own four
+  samples' mean of 159.5; Lc predicted +26.5, P +23.3). Mean absolute error: Lc 8.35, P 3.7, M 23.4, R 36.65. Scored in all: 4 of 14 filed cells, 3 inside their 80 % interval.
+- The V and U rows are category priors, not measured shifts (those arms were trained on MATH-500). The note in
+  `predict-01/predictions.json` about "246 of 328" misread a problem count as a score; no hard328 vote score was seen
+  before filing (`predict-01/run.json`).
+
+Limits. Five arms on both sets, one sample each on the 328, all of them RL-weight arms; the two scored held-out cells are
+votes. Difficulties on the 328 come from 7 arms, which is why c is below 1. Tokens are generated tokens only; the three
+solved problems in context add prompt tokens that are not counted.
+
+Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.rate table|transfer|score`
+(`predict`, `predict2` refuse to overwrite the filed files); `... python -m studies.rlneurons.analysis.rate_test`.
 
 ## How to run
 
