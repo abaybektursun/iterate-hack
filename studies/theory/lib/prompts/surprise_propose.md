@@ -25,13 +25,6 @@ numbers somewhere.
 
 Rules for each mechanism:
 - It must be consistent with every row of direct_facts.json (say in readers_wrong how, where one bears on it).
-- "direct_test": its own direct test on stored data, decidable offline without a GPU run: {"claim": "<the one claim that
-  follows from this mechanism's cause and not from its rival's>", "files": ["<stored paths exactly as data.md lists them>"],
-  "computation": "<what to compute from them, step by step>", "refuted_if": "...", "threshold": "<a number fixed now>",
-  "null": "<the comparison the claim must beat, stronger than random where one exists: for example the base matrix's own
-  top directions, or another model's directions>"}. Or, when a posted result already decides the claim,
-  {"claim": "...", "decided_by": {"result": "<board id>", "number": "...", "verdict": "holds" or "refuted"}}. A
-  mechanism without a runnable direct test is dropped.
 - "statement": at most 80 words, plain technical English. "readers_wrong": one or two sentences: why the readers'
   forecasts missed the measured value, from the mechanism.
 - "rests_on": 2 or more ids of board.jsonl items whose numbers it explains, the surprise's item among them.
@@ -50,11 +43,25 @@ Never put git in a command ($$(git rev-parse HEAD) or rev-parse): job machines h
 --commit, write --commit COMMIT_SHA; the coordinator replaces it with the pushed commit's full sha when submitting.
 A cell must not repeat an open work item, a target or a board result. Use "cell": null when the targets suffice.
 
+The pair gets ONE shared direct test, decidable offline from stored files without a GPU run: one statistic computed on
+one set of stored rows, for which a and b state disjoint ranges now. Pick a statistic whose value the two causes put in
+different places (for example two complementary parts of one set, where only one cause can be right), not two
+different numbers that could both come out as each rival says. "test": {"claim": "<what the statistic measures and why
+a's cause and b's cause put it in different ranges>", "statistic": "<the one number and its unit>", "files": ["<stored
+paths exactly as data.md lists them>"], "rows": "<which rows of those files enter>", "n": <the number of rows the
+statistic is computed on, at least 50>, "computation": "<step by step, including the 90 % interval>", "null": "<the
+comparison stronger than random where one exists: for example the base matrix's own top directions, another model's
+directions>", "ranges": {"a": [low, high], "b": [low, high], "null": [low, high]}}. The ranges of a and b must not
+overlap; "null" is the range the null gives. Verdict, applied by the test runner: a rival holds only if the statistic's
+90 % interval lies wholly inside its range and n is at least 50, else it is undecided; a value in neither rival's range
+refutes both. A pair without such a test is dropped.
+
 Write rivals.json, one JSON object:
 {"rivals": [{"id": "a", "statement": "...", "readers_wrong": "...", "rests_on": ["result-..."], "holds_against": [...],
-             "forecasts": [{"id": "t01", "value": 312, "low": 295, "high": 330, "reason": "..."}],
-             "direct_test": {"claim": "...", "files": ["studies/..."], "computation": "...", "refuted_if": "...", "threshold": "...", "null": "..."}},
+             "forecasts": [{"id": "t01", "value": 312, "low": 295, "high": 330, "reason": "..."}]},
             {"id": "b", ...}],
+ "test": {"claim": "...", "statistic": "...", "files": ["studies/..."], "rows": "...", "n": 120, "computation": "...", "null": "...",
+          "ranges": {"a": [0.6, 1.0], "b": [0.0, 0.4], "null": [0.3, 0.5]}},
  "cell": null}
 
-Write only rivals.json. Reply with one line per mechanism.
+Write only rivals.json. Reply with one line per mechanism and one for the test.

@@ -1,13 +1,22 @@
 ---
 name: theory
-description: Score the team's fixed forecasts, collect the direct facts (offline tests of mechanisms' causes), find the numbers both no-theory readers got wrong, write rival mechanisms only about those, each with its own direct test on stored data, and let only mechanisms that hold a direct test forecast and design cells. One round runs studies/theory/lib/forecast.py round twice: the first run scores (once per number, only forecasts written before the result), writes direct_facts.json, surprises.md, direct_tests.md (plans for the top untested carried mechanisms and for every new rival) and stops; subagents run the tests offline and add rows to results/refuted.json or direct_tested.json; the second run has the holders and two readers forecast the open work and turns pairs whose both rivals hold into blind-forecast cells. Use when the user asks for a theory, what the results mean together, which result nobody expected, and after every fifth closed result. Writes studies/theory/results/wide/round-<nn>/ and updates studies/theory/README.md.
+description: Score the team's fixed forecasts, collect the direct facts (offline tests of mechanisms' causes), find the numbers both no-theory readers got wrong, write rival pairs only about those, each pair with one shared direct test on stored data (one statistic, disjoint ranges for the two rivals), and let only mechanisms that hold a direct test (90 % interval inside the range, n of 50 or more) forecast, and only holders that forecast something the readers do not design cells. One round runs studies/theory/lib/forecast.py round twice: the first run scores (once per number, only forecasts written before the result), writes direct_facts.json, surprises.md, direct_tests.md (plans for the top untested carried mechanisms and one per rival pair) and stops; subagents run the tests offline and add rows to results/refuted.json or direct_tested.json; the second run has the holders and two readers forecast the open work, lists holders that forecast nothing new, and turns the others' pairs into blind-forecast cells. Use when the user asks for a theory, what the results mean together, which result nobody expected, and after every fifth closed result. Writes studies/theory/results/wide/round-<nn>/ and updates studies/theory/README.md.
 ---
 
-# Theory round (version 13: direct tests before forecasts)
+# Theory round (version 14: one shared test per rival pair)
 
 Why this order: in rounds 9 to 12 forecast gain ranked mechanisms whose causes then failed a direct test (5 of the top 6
 failed their own claim, 1 held only against a weak null; README "Direct tests"). So a mechanism now earns the right to
 forecast by holding a direct test of its cause; forecasts, scores, refutations and surprises stay the record.
+
+Version 14 rules (round 13: pairs tested on different numbers both held; holds on n 21 to 42; no holder forecast new):
+1. A rival pair gets one shared test: one statistic on one set of stored rows, disjoint ranges for a and b and the
+   null's range, fixed in advance (checked in code: sent back once, then the pair is dropped). A value in neither
+   rival's range refutes both; one row per rival.
+2. A verdict of holds needs the 90 % interval wholly inside the rival's range (carried plan: past the threshold) and n
+   of at least 50 rows; otherwise the row is `undecided`, with the n needed.
+3. A holder with no forecast apart from both readers' 90 % intervals is listed in the round's README as "holds its
+   test, forecasts nothing new" (`holders.json`) and designs no cell; only the others design their pair's cell.
 
 ## What a round is
 
@@ -17,19 +26,18 @@ forecast by holding a direct test of its cause; forecasts, scores, refutations a
 2. Direct facts (`direct_facts.json`): every row of `results/refuted.json` and `results/direct_tested.json` (claim,
    verdict, deciding number, result id). Proposers and planners get them first; every new mechanism must agree with all.
 3. `surprises`: every scored number outside both readers' 90 % intervals, most surprising first (`surprises.md`).
-4. Proposals, each with a direct test: one blind job per top-6 surprise writes two rival mechanisms (why the readers were
-   wrong, forecasts of the open targets, and the pair's differences on targets or one new cell), each with its own
-   direct test on stored data: claim, files, computation, refuting observation, threshold and a null stronger than
-   random where one exists (the base matrix's own top directions, another model's directions). A rival without a
-   runnable test is dropped. The top 5 untested carried mechanisms (none with a forecast a `measured.json` row missed)
+4. Proposals with one shared test per pair: one blind job per top-6 surprise writes two rival mechanisms (why the
+   readers were wrong, forecasts of the open targets, and the pair's differences on targets or one new cell) and the
+   pair's test (rule 1) with a null stronger than random where one exists (the base matrix's own top directions,
+   another model's directions). The top 5 untested carried mechanisms (none with a forecast a `measured.json` row missed)
    get a plan too; a planner names the posted result instead when one already decides the claim. All in `direct_tests.md`.
 5. Run the direct tests: one subagent per plan, spec committed first, offline only, then a row
-   `{mechanism, claim, result, verdict: holds|refuted, measured, added}` in `direct_tested.json` (refuted ones also in
-   `refuted.json`). The round command stops here until every plan has a row; `--go` continues with who holds now.
+   `{mechanism, claim, result, verdict: holds|refuted|undecided, measured, added}` per mechanism in `direct_tested.json`
+   (refuted ones also in `refuted.json`; rule 2). The round command stops here until every mechanism has a row; `--go`
+   continues with who holds now.
 6. Rerun the same command: only mechanisms that hold a direct test forecast the open targets (beside the two readers);
-   pairs whose both rivals hold get their cell and one no-reward route, checked against open work (an open item's
-   answer becomes a free target), forecast blind (ranked only if the rivals' blind intervals do not overlap); then
-   `experiments.md`.
+   rule 3 picks the holders that design: each gets its pair's cell and one no-reward route, checked against open work
+   (an open item's answer becomes a free target) and forecast blind; then `experiments.md`.
 
 ## The coordinator's job
 

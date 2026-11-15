@@ -17,7 +17,9 @@ Write a plan for one direct offline test of this mechanism's cause:
 - "refuted_if": the observation that would refute the claim. "threshold": the number fixed now that decides it.
 - "null": the comparison the claim must beat, stronger than random where one exists (the base matrix's own top
   directions, another model's directions, a second base sample).
-No GPU run: the test must be decidable from stored files. If a posted result in results.md already decides the claim,
+No GPU run: the test must be decidable from stored files. Pick rows so the statistic rests on at least 50 of them: a
+verdict of holds needs n of at least 50 and the statistic's 90 % interval wholly on the holding side of the threshold;
+otherwise the verdict is undecided. If a posted result in results.md already decides the claim,
 write {"claim": "...", "decided_by": {"result": "<id>", "number": "<the deciding number>", "verdict": "holds" or
 "refuted"}} instead of a plan.
 

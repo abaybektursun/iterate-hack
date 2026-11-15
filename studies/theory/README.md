@@ -1327,6 +1327,32 @@ Files in `results/wide/round-13/`: `standing.md` / `standing.json` / `standing/`
 (7 holders), `forecasts.json` / `forecasts.md`, `cells.json` / `cells.md` / `cell_forecasts.json`, `experiments.md`,
 `run.json`, `round13.log`.
 
+## Engine 14 (one shared test per rival pair)
+
+Skill version 14, on branch `theory` (not merged to main: main froze at 22:30 UTC). Three changes, from round 13's
+evidence (17 tests, 6 hold; the s3 pair, tested on complementary parts of one set, gave exactly one holder; the s4
+pair, tested on two different numbers, gave two; several holds rest on n of 21 to 42; no holder forecast open work
+differently from the readers):
+
+1. One shared direct test per rival pair (`prompts/surprise_propose.md`, `lib/forecast.py` `pair_test_errors`): one
+   statistic on one set of stored rows, with disjoint ranges for a and b and the null's range fixed in advance, and n
+   of at least 50. The code checks the fields, that the files exist, that n >= 50 and that the a and b ranges are
+   disjoint; it sends the job back once, then drops the pair. A value in neither range refutes both. `direct_tests.md`
+   has one plan per pair; the gate waits for a row per rival.
+2. Verdict rule, in the `direct_tests.md` header (`VERDICT_RULE`), `prompts/direct_test_plan.md` and the skill: holds
+   needs the 90 % interval wholly inside the rival's range (carried plan: past its threshold) and n >= 50; otherwise
+   `undecided`, with the n needed.
+3. After the gate, `holders.json` lists each holder's open targets whose forecast interval is apart from both readers'
+   intervals; a holder with none is listed in the round's README as "holds its test, forecasts nothing new" and
+   designs no cell. Only the other holders design their pair's cell and route (with one rival refuted, the blind-pair
+   rule of engine 13 no longer applies).
+
+Dry run (scratch copy of round 13's folder, surprises s1 to s3, opus, stopped at the gate): 7.0 minutes; one job sent
+back once (word count, holds_against), none dropped; all 3 pairs wrote a valid shared test (n 190, 60 and 250; for
+example s2: share of m21's 60 quick wrong rows opening with "Okay", a [0.55, 1.0], b [0.0, 0.35], null [0.05,
+0.30]). Open issue: in s1 and s3 one rival's range contains the null's range, so that rival could "hold" without
+beating the null; the code does not check this.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in
