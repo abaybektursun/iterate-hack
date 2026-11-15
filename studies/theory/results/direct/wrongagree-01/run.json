@@ -1,0 +1,11 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_wrongagree.md",
+ "commit": "079c0dcbb51cba284961d7d0d7e9862b437ff504",
+ "board": "work-0cf63d",
+ "command": "uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.theory.analysis.direct_wrongagree",
+ "inputs": [
+  "studies/rlneurons/results/votek/math500_base_cue-01"
+ ],
+ "time": "2026-11-15T22:49:42+00:00",
+ "note": "commit is the spec commit; the script ran from the working tree and is committed with these results in the next commit"
+}
