@@ -1,0 +1,24 @@
+{
+ "commit": "aa9166a",
+ "commands": [
+  "check.py dump <round> --skip gpuprice",
+  "check.py check <round>",
+  "check.py score <round>"
+ ],
+ "work": "work-6d6308",
+ "cutoff": "2026-11-14T23:42:26",
+ "items_before": 60,
+ "items_after": 21,
+ "targets": 58,
+ "target_items": 13,
+ "theories": 6,
+ "planted": 1,
+ "subagents": {
+  "targets (sonnet)": 1,
+  "generators (opus)": 3,
+  "planted (sonnet)": 1,
+  "predictors (sonnet)": 9
+ },
+ "steps_not_run": "8 (refutation, novelty): no theory beat the null",
+ "predictions_measured.json": "not a step of the skill: the theories' own forward predictions whose experiment the held-out items had measured, matched by hand by the coordinator after scoring"
+}

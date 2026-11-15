@@ -12,13 +12,13 @@ Jobs: every GPU job of yours (your Modal workspace) submitted in the window, wit
 Work: every work item of yours posted in the window, with
   to-job = claim to first job submit (reading, spec, code, review), jobs = first submit to last job end (compute and
   fix loops), to-answer = last job end to close (analysis and write-up), total = claim to close (to now while open).
-  A job counts toward a work item when it was submitted between the claim and the close from the branch of the item or of
-  one of its author's comments on it.
+  A job counts toward a work item when it was submitted from the same git branch between the claim and the close.
   Jobs submitted before gpu.py recorded the branch are not matched, and work items closed before board.py kept
   closed items in its index are not listed.
 All times are minutes.
 """
 import calendar
+import re
 import statistics
 import sys
 import time
@@ -80,9 +80,9 @@ stages = {"to-job": [], "jobs": [], "to-answer": []}
 for item in sorted(items, key=lambda i: i["at_ns"]):
     claim = int(item["at_ns"]) / 10**9
     close = calendar.timegm(time.strptime(item["closed_at"], "%Y-%m-%dT%H:%M:%SZ")) if "closed_at" in item else None
-    rows = team.table().query(KeyConditionExpression=Key("pk").eq(f"item#{item['id']}") & Key("sk").begins_with("comment#"))["Items"]
-    branches = {item.get("branch")} | {c.get("branch") for c in rows if c["who"] == who}   # claimed in one checkout, worked in a worktree
-    mine = [r for r in jobs if r["job"].get("branch") in branches - {None} and claim <= r["job"]["at"] <= (close or now)]
+    # a coordinator claims on one branch and its subagent submits from another: the claim text names it ("Branch wdiff")
+    branches = {item.get("branch"), *re.findall(r"[Bb]ranch ([\w/.-]*\w)", item["text"])}
+    mine = [r for r in jobs if r["job"].get("branch") in branches and claim <= r["job"]["at"] <= (close or now)]
     to_job = jobs_span = to_answer = None
     if mine:
         to_job = minutes(claim, mine[0]["job"]["at"])
