@@ -74,7 +74,7 @@ PANELS = [
     ["limits", "What it does not show", f"It does not show that RL teaches nothing new: {100 - SOME} % of the gain (95 % interval 11 to 27) "
      f"is on the {sum(T[0])} problems the base model missed 4 times of 4, and RL solves {T[0][4]} of them 4 times of 4.",
      [f"The share is not specific to RL. Under fixed rules, {DATA['account']['rl']} of the problems RL solves and one base sample "
-      f"misses are solved in another base sample; for the problems a fresh base sample solves and the first misses, the share is "
+      f"misses are solved in another base sample; for the problems a second base sample with a random weight change of the same size solves and the first misses, the share is "
       f"{DATA['account']['fresh']}. It is one benchmark and one grader.",
       "The wrong steps were located and labelled by judges that are subagents of the agent that ran the study, with a fixed rubric. "
       "Two passes agree on 44 of 45 answers, but both are the same model, and the hand reads had one reader who knew the model.",
