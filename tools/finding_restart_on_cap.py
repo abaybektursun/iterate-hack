@@ -71,65 +71,70 @@ CHART = 100 * (D["restart"] - D["chart_before"]) / D["n"]  # 0.8 points, the ste
 DATA["now_right"] = NOW_RIGHT
 
 TITLE = "Restarting stuck answers"
-PROBLEM = "Does starting over help an answer that never ends?"
-LINE = f"Restarting cut-off answers adds {GAIN:g} points at T 0.6 and {T10['diff']:g} at T 1.0."  # also the sentence on its tile
+PROBLEM = "Does sampling an answer again from the start help when the first try is cut off at the token limit?"
+LINE = (f"For the base model with the opening cue, sampling again each answer that was cut off at the token limit adds {GAIN:g} points "
+        f"of accuracy on MATH-500 at temperature 0.6, and {T10['diff']:g} at temperature 1.0.")  # also the sentence on its tile
 BOLD = [f"{GAIN:g} points", f"{T10['diff']:g}"]  # the two sizes, set heavier in the sentence
 
 # What the reader switches between. The first is shown on load: start from the problem, not from the answer.
 DATA["states"] = [
-    {"name": "No restart", "hash": "no-restart", "right": D["single"], "cap": D["cap"], "now": 0},
-    {"name": "Restart", "hash": "restart", "right": D["restart"], "cap": M["still"], "now": NOW_RIGHT},
+    {"name": "Before restarts", "hash": "no-restart", "right": D["single"], "cap": D["cap"], "now": 0},
+    {"name": "After restarts", "hash": "restart", "right": D["restart"], "cap": M["still"], "now": NOW_RIGHT},
 ]
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 PANELS = [
-    ["new", "What is new", "It was known that this base model, opened with the cue, often writes until the length limit: Wang et al. "
-     "(arXiv 2610.06851, Table 13) report that 16 % of its answers reach a limit of 31,744 tokens.",
-     ["That paper reports no restart of such answers, and a search of the team's memory found no earlier report of one. The "
+    ["new", "What is new", "It was known that the base model, when its answer starts with the opening cue, often writes until the "
+     "token limit: Wang et al. (arXiv 2610.06851, Table 13) report that 16 % of its answers reach a limit of 31,744 tokens.",
+     ["That paper reports no restart of such answers, and a search of the team's notes found no earlier report of one. The "
       "closest known method resamples from inside a loop, and its authors describe it as a weak fix (arXiv 2512.12895, Appendix B.1).",
-      f"New here: the count for this model. At T 0.6, {D['cap']} of {D['n']} answers are cut off at {D['limit']:,} tokens, "
-      f"and sampling them again from the start ends right on {NOW_RIGHT} of them.",
+      f"New here, at T 0.6: {D['cap']} of {D['n']} answers of this model are cut off at {D['limit']:,} tokens, and sampling "
+      f"them again from the start gives a right answer for {NOW_RIGHT} of them.",
       f"New here: the gain depends on the sampling temperature. At T 1.0 only {T10['cap']} of {D['n']} answers are cut off, "
       f"and the same restart adds {T10['diff']:g} points."]],
-    ["why", "Why it matters", "The team measures how close the base model, with no training, comes to RL on MATH-500, "
-     f"and at T 0.6 a restart closes {GAIN:g} of the {D['rl_gap_before']:g} points between them.",
-     [f"After the restart Base + cue is {D['rl_gap_after']:.1f} points behind one sample of RL at T 0.6 "
+    ["why", "Why it matters", f"At T 0.6, a restart closes {GAIN:g} of the {D['rl_gap_before']:g} percentage points by which "
+     "Base + cue, which has no training, trails the model trained with reinforcement learning (RL) on MATH-500.",
+     [f"After the restart Base + cue is {D['rl_gap_after']:.1f} points behind one sample of the RL model at T 0.6 "
       f"(95 % interval {D['rl_gap_after_ci'][0]:.1f} to {D['rl_gap_after_ci'][1]:.1f}).",
-      f"On the team's chart this step is {CHART:g} points, from {D['chart_before']} to {D['restart']} of {D['n']}. The chart "
-      f"compares it with one sample at T 1.0, where only {D['chart_before_cap']} of {D['n']} answers are cut off.",
-      f"Still open: {M['still']} answers are cut off three times in a row."]],
-    ["how", "How we know", f"Base + cue (Olmo 3 7B, no training, opened with a three-token cue) answered the {D['n']} MATH-500 "
+      f"Compared with one sample at T 1.0 and no restart ({D['chart_before']} of {D['n']} right, only "
+      f"{D['chart_before_cap']} of them cut off), the restart at T 0.6 ({D['restart']} of {D['n']}) gains only {CHART:g} points.",
+      f"After both restarts, {M['still']} answers are still cut off: all three tries reached the limit."]],
+    ["how", "How we know", f"Base + cue (the base model Olmo 3 7B with no training, its answer started by the three-token "
+     f"opening cue) answered the {D['n']} MATH-500 "
      f"problems once at T 0.6 and top-p 0.95, and every answer cut off at {D['limit']:,} tokens was sampled again "
      "from the start, up to twice.",
      [f"The first restart finishes {FINISHED[0]} of the {FIRST['n']} answers and {FIRST['right']} are right. The second "
-      f"finishes {FINISHED[1]} of the other {SECOND['n']} and {SECOND['right']} are right. Grader v3 scored every answer, and "
-      f"{D['cap_right']} of the {D['cap']} had written its answer before it was cut off and counts as right without a restart.",
-      f"A restart changes only answers that were cut off, so the {D['restart'] - D['single']} extra right answers are a paired "
-      f"difference on the same {D['n']} problems. The committed file holds totals and no score per problem, so this gain has no interval.",
-      f"Control at T 1.0 and top-p 1.0, with a score per problem: {T10['single']} right becomes {T10['restart']}, "
-      f"a gain of {T10['diff']:g} points (95 % interval {T10['ci'][0]:.1f} to {T10['ci'][1]:.1f}, paired bootstrap). RL "
+      f"finishes {FINISHED[1]} of the other {SECOND['n']} and {SECOND['right']} are right. The grader (version 3) scored "
+      f"every answer. {D['cap_right']} of the {D['cap']} cut-off answers had already written its final answer, so it counts "
+      "as right without a restart.",
+      f"A restart changes only answers that were cut off, so the {D['restart'] - D['single']} extra right answers compare "
+      f"the same {D['n']} problems before and after. Only the totals were kept, not a score per problem, so this gain of "
+      f"{GAIN:g} points has no interval.",
+      f"We repeated the restart at T 1.0 and top-p 1.0, this time with a score per problem: {T10['single']} right answers "
+      f"became {T10['restart']}, a gain of {T10['diff']:g} points (95 % interval {T10['ci'][0]:.1f} to "
+      f"{T10['ci'][1]:.1f}, from resampling the same problems in both runs). The RL model "
       f"under the same restart gains {T10['rl_diff']:g} points ({T10['rl_ci'][0]:.1f} to {T10['rl_ci'][1]:.1f})."]],
-    ["limits", "What it does not show", "It does not show that a cut-off answer is a solved problem that failed to stop: on "
-     f"{HARD['n']} harder problems, forcing the base model to commit to an answer once it passes {HARD['cut_at']:,} tokens "
-     f"loses problems ({HARD['forced']} right against {HARD['stored']}, a loss of {HARD['diff']:.1f} points, 95 % interval "
+    ["limits", "What it does not show", "It does not show that a cut-off answer is a solved problem that failed to stop. On "
+     f"the {HARD['n']} harder problems, forcing the base model to give its answer once it passes {HARD['cut_at']:,} tokens "
+     f"loses problems: {HARD['forced']} right against {HARD['stored']}, a loss of {HARD['diff']:.1f} points (95 % interval "
      f"{HARD['ci'][0]:.1f} to {HARD['ci'][1]:.1f}).",
      [f"On those harder problems, at T 1.0, a forced answer is right on at most {HARD['cap_right_most']} of the "
-      f"{HARD['cap']} cut-off answers. There being cut off marks a failure to solve rather than a failure to stop. "
+      f"{HARD['cap']} cut-off answers. So on this set, being cut off marks a failure to solve, not a failure to stop. "
       f"Scored on the same set, the restart takes one sample from {HR['single']} to {HR['restart']} right "
       f"(+{HR['diff']:g} points, 95 % interval {HR['ci'][0]:g} to {HR['ci'][1]:g}) but adds only "
-      f"{100 * (HR['vote_restart'] - HR['vote']) / HARD['n']:.1f} points to a vote over four ({HR['vote_restart']} against "
-      f"{HR['vote']}).",
+      f"{100 * (HR['vote_restart'] - HR['vote']) / HARD['n']:.1f} points to a vote over 4 samples ({HR['vote_restart']} "
+      f"against {HR['vote']}).",
       f"The gain of {GAIN:g} points is measured at T 0.6 only. At T 1.0, one sample with no restart is already right on "
-      f"{T10['single']} to {D['chart_before']} of {D['n']}, at {T10['single_tokens']:,} generated tokens per problem; the "
-      f"restart at T 0.6 needs {D['restart_tokens']:,}.",
-      f"The file counts cut-off answers and does not record how many of the {D['cap']} repeat themselves. In a "
-      f"second run at T 0.6 with top-p 1.0 a repetition detector flags {LOOPS['flagged']} answers, and {LOOPS['cap']} "
-      "are cut off. It is one benchmark, one pair of models, one seed and one grader."]],
+      f"{T10['single']} to {D['chart_before']} of {D['n']} (two runs), using {T10['single_tokens']:,} generated tokens per "
+      f"problem; the restart at T 0.6 reaches {D['restart']} but uses {D['restart_tokens']:,} tokens per problem.",
+      f"We did not record how many of the {D['cap']} cut-off answers repeat themselves. In a "
+      f"second run at T 0.6 with top-p 1.0, a repetition detector flags {LOOPS['flagged']} answers, and {LOOPS['cap']} "
+      "are cut off. All of this is one benchmark, one pair of models, one seed and one grader."]],
     ["run", "How to reproduce it", "The T 1.0 rows can be run again: one GPU job per model, then a readout on a laptop.",
      ["The job is studies/rlneurons/jobs/run_cell.py with --samples 4 --restarts 2 (commit " + T10["run_commit"] + "), and the "
       "readout is studies/rlneurons/analysis/day1_vote.py. Its numbers are in " + T10["artifact"] + " (commit " + T10["commit"] + ").",
       "The T 0.6 rows were scored by studies/rlneurons/grader/rln4_grader_v3.py from raw answers stored outside the "
-      "repository. Its numbers are in " + DATA["artifact"] + " (commit " + DATA["commit"] + "): cells base_opener_0.6, K_fresh "
+      "repository. Their numbers are in " + DATA["artifact"] + " (commit " + DATA["commit"] + "): cells base_opener_0.6, K_fresh "
       "and K_fresh2, and restart_row.",
       "The forced answers on the harder problems are in " + HARD["artifact"] + " (commit " + HARD["commit"] + "), and the "
       "restart on them in " + HR["artifact"] + " (job commit " + HR["commit"] + ")."]],

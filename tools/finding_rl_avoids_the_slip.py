@@ -58,9 +58,13 @@ DATA = {
     "per_1k": {"base": 0.0382, "rl": 0.0148},
 }
 
-TITLE = "RL avoids the slip"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "Does RL avoid the exact wrong steps the base model writes?"
-LINE = f"Given Base + cue's wrong answer, RL is {DATA['D']['math31']['factor']:.2f} times as likely to write its first wrong step."
+TITLE = "The base model's wrong steps under RL"  # the name on its tile on /findings and in the browser tab
+PROBLEM = ("Is the model trained with reinforcement learning (RL) less likely to write the exact wrong steps that the base "
+           "model writes?")
+LINE = (f"On wrong answers of the base model with the opening cue, the RL model is "
+        f"{DATA['D']['math31']['factor']:.2f} times as likely as the base model to write the first wrong step "
+        f"(95 % interval {math.exp(DATA['D']['math31']['ci95'][0]):.2f} to {math.exp(DATA['D']['math31']['ci95'][1]):.2f}), "
+        "so the drop may be chance.")
 
 # One row per answer, written by --write from the artifacts:
 # [problem index, sample, label, step tokens, position of the step in the answer (0 to 1), problem text (cut at 600
@@ -133,41 +137,46 @@ _iv = lambda c: f"{_m(c[0])} to {_m(c[1])}"
 PANELS = [
     ["new", "What is new",
      "It was known that RL changes the base model's choice at only a few tokens of an answer (RAST, arXiv 2506.15710), "
-     "and judges can locate the first wrong step of a math solution (ProcessBench, Zheng et al., 2024).",
-     ["New here: each model scores the exact wrong step that Base + cue wrote, against other text of the same answer, so "
-      "the model's general change to the text cancels out.",
-      f"RL gives the step {math.exp(_avg('math31')):.2f} times the base's probability ({_m(_avg('math31'))} nats). A random "
+     "and language-model judges can locate the first wrong step of a math solution (ProcessBench, Zheng et al., 2024).",
+     ["New here: we measure how likely each model finds the exact wrong step that Base + cue wrote, relative to other text "
+      "of the same answer, so the model's general change on all text cancels out.",
+      f"The RL model gives the step {math.exp(_avg('math31')):.2f} times the base model's probability "
+      f"({_m(_avg('math31'))} nats). A random "
       f"weight change of the same size gives {math.exp(_avg('random')):.2f} times ({_m(_avg('random'))} nats).",
-      f"The drop sits in misreadings ({_m(_avg('math31', 'misread'))} nats, {DATA['count']['misread']} answers) and slips "
+      f"The drop is in misreadings ({_m(_avg('math31', 'misread'))} nats, {DATA['count']['misread']} answers) and slips "
       f"({_m(_avg('math31', 'slip'))}, {DATA['count']['slip']}), not in wrong plans ({_m(_avg('math31', 'wrong_plan'))}, "
-      f"{DATA['count']['wrong_plan']})."]],
+      f"{DATA['count']['wrong_plan']}). These groups are small and have no interval of their own."]],
     ["why", "Why it matters",
-     "Part of RL's gain over Base + cue looks like a lower chance of writing the base's own misreadings and slips. Its "
-     "wrong plans stay as likely.",
-     [f"The factor agrees with a separate count: finished answers of RL hold {DATA['per_1k']['rl']:.3f} first wrong steps "
-      f"per 1,000 tokens against {DATA['per_1k']['base']:.3f} for Base + cue, "
-      f"{DATA['per_1k']['rl'] / DATA['per_1k']['base']:.2f} times as many (board result-855858).",
-      f"Under the base itself the wrong step is not an unlikely sample: {_m(DATA['base_lp_token']['step'])} nats per token "
-      f"against {_m(DATA['base_lp_token']['control'])} for the rest of the answer. Dropping unlikely tokens at sampling "
-      "time cannot remove these steps.",
-      "So a method without training that aims at RL's gain has to lower the base's misreadings and slips, not only "
-      "change how it samples."]],
+     "Part of the RL model's gain over Base + cue looks like a lower chance of writing the base model's own misreadings "
+     "and slips. The base model's wrong plans stay as likely under the RL model.",
+     [f"A separate count points the same way: finished answers of the RL model hold {DATA['per_1k']['rl']:.3f} first wrong "
+      f"steps per 1,000 tokens against {DATA['per_1k']['base']:.3f} for Base + cue, "
+      f"{DATA['per_1k']['rl'] / DATA['per_1k']['base']:.2f} times as many. Source: the team's board, result-855858.",
+      f"Under the base model itself the wrong step is not an unlikely sample: {_m(DATA['base_lp_token']['step'])} nats per "
+      f"token against {_m(DATA['base_lp_token']['control'])} for the rest of the answer. Dropping unlikely tokens at "
+      "sampling time cannot remove these steps.",
+      "So a method without training that aims at the RL model's gain probably has to lower the base model's misreadings "
+      "and slips, not only change how it samples."]],
     ["how", "How we know",
-     f"A judge read {DATA['n']} finished wrong answers of Base + cue on MATH-500 (T 1.0) and copied each one's first wrong "
-     f"step. Each answer was then scored token by token under the base and {len(MODELS)} other models.",
-     [f"D = (log p of the model − log p of the base), summed over the wrong step (median {DATA['span_tokens_median']:.0f} "
-      f"tokens), minus the same sum over {DATA['n_control']} spans of equal length elsewhere in the same answer. "
-      "exp(mean D) is the large number.",
-      f"Control: the random weight change gives {_m(_avg('random'))} nats (95 % interval {_iv(_q['ci95'])}). A quarter of "
-      f"RL's change (a = 0.25) gives {_m(_avg('theta0.25'))}, the same sign as RL and a seventh of its size.",
-      f"Intervals resample the {DATA['n']} answers 5,000 times. On the first 5 tokens of each step RL gives "
-      f"{_m(_r['head5']['mean'])} nats (95 % interval {_iv(_r['head5']['ci95'])})."]],
+     f"A judge (a Claude agent with a fixed rubric) read {DATA['n']} finished wrong answers of Base + cue on MATH-500 "
+     f"(temperature 1.0) and copied each one's first wrong step. Each answer was then scored token by token under the "
+     f"base model and {len(MODELS)} other models, among them the RL model (Olmo 3.1 RL-Zero-Math).",
+     [f"D is how much more likely the model finds the wrong step than the base model does (the difference in "
+      f"log-probability, summed over the step's median {DATA['span_tokens_median']:.0f} tokens), minus the same difference "
+      f"over {DATA['n_control']} spans of equal length elsewhere in the same answer. It is in nats: −0.69 nats means half "
+      "as likely. The large number in the picture is exp(mean D).",
+      f"Control: the random weight change gives {_m(_avg('random'))} nats (95 % interval {_iv(_q['ci95'])}). Adding a "
+      f"quarter of RL's weight change to the base model (a = 0.25) gives {_m(_avg('theta0.25'))}, the same sign as the RL "
+      "model and a seventh of its size.",
+      f"Intervals resample the {DATA['n']} answers 5,000 times. On the first 5 tokens of each step the RL model gives "
+      f"{_m(_r['head5']['mean'])} nats (95 % interval {_iv(_r['head5']['ci95'])}); unlike the whole step, this interval "
+      "excludes 0."]],
     ["limits", "What it does not show",
-     f"RL's 95 % interval, {_iv(_r['ci95'])} nats, includes 0. The drop is carried by a minority of answers: the median "
-     f"is {_m(_r['median'])} and {round(_r['below0'] * DATA['n'])} of {DATA['n']} are below 0.",
-     ["It scores Base + cue's text under each model. It does not show what RL would write after the same beginning, nor "
-      "that RL catches these errors.",
-      f"One judge per answer, a subagent of the team's own model, chose the label and the step. {DATA['judged'] - DATA['n']} "
+     f"The RL model's 95 % interval, {_iv(_r['ci95'])} nats, includes 0. A few answers with large drops carry most of the "
+     f"mean: the median is only {_m(_r['median'])}, and {round(_r['below0'] * DATA['n'])} of {DATA['n']} are below 0.",
+     ["This measurement scores Base + cue's text under each model. It does not show what the RL model would write after "
+      "the same beginning, nor that the RL model catches these errors.",
+      f"One judge per answer, a Claude agent, chose the label and the step. {DATA['judged'] - DATA['n']} "
       f"of the {DATA['judged']} judged answers had no quotable step, most of them format errors, and are left out.",
       "One base model, one benchmark, one temperature."]],
     ["run", "How to reproduce it",
@@ -417,14 +426,14 @@ svg * { pointer-events: none; }
       </div>
     </div>
     <div class="others" role="group" aria-label="Other models scored against the base">
-      <span>Other models of the same base:</span>
+      <span>Other models made from the same base model:</span>
       <button data-k="mix30" aria-pressed="false">Mix 3.0</button>
       <button data-k="math30" aria-pressed="false">Math 3.0</button>
       <button data-k="code31" aria-pressed="false">Code 3.1</button>
       <button data-k="code30" aria-pressed="false">Code 3.0</button>
       <button data-k="general30" aria-pressed="false">General 3.0</button>
-      <button data-k="theta0.25" aria-pressed="false">¼ of RL's change</button>
-      <button data-k="if30" aria-pressed="false">IF 3.0</button>
+      <button data-k="theta0.25" aria-pressed="false">Base + ¼ of RL's weight change</button>
+      <button data-k="if30" aria-pressed="false">Instruction following 3.0</button>
     </div>
     <p class="hint">One mark per wrong answer of Base + cue. The random weight change is the control. Click a mark to read it.</p>
   </div>
@@ -449,7 +458,7 @@ const times = v => { const x = Math.exp(v); return x >= 10 ? fmt(x) : x >= .095 
    equal length in the same answer, in nats. Below 0, the model is less likely than the base to write that step. */
 const ORDER = ["random", "math31", "mix30", "math30", "code31", "code30", "general30", "theta0.25", "if30"];
 const NAME = { math31: "RL", random: "Random weight change", mix30: "RL-Zero-Mix 3.0", math30: "RL-Zero-Math 3.0",
-  code31: "RL-Zero-Code 3.1", code30: "RL-Zero-Code 3.0", general30: "RL-Zero-General 3.0", "theta0.25": "¼ of RL's change",
+  code31: "RL-Zero-Code 3.1", code30: "RL-Zero-Code 3.0", general30: "RL-Zero-General 3.0", "theta0.25": "Base + ¼ of RL's weight change",
   if30: "RL-Zero-IF 3.0" };
 const ROWS = ["misread", "slip", "wrong_plan"], ROWNAME = ["Misread", "Slip", "Wrong plan"];
 const KIND = { misread: "a misreading", slip: "a slip", wrong_plan: "a wrong plan" };
@@ -629,9 +638,9 @@ function place(t, now) {
   at(E.big, proj(g, g.bigX, g.bigY, 10));
   const touches = x.ci95[0] <= 0 && x.ci95[1] >= 0;
   const lines = g.phone
-    ? ["times as likely as Base + cue", "to write its own wrong step", `${NAME[k]}: mean ${sgn(c[0])} nats`,
+    ? ["times as likely as Base + cue", "to write Base + cue's wrong step", `${NAME[k]}: mean ${sgn(c[0])} nats`,
        `95 % interval ${sgn(c[1])} to ${sgn(c[2])}${touches ? ", includes 0" : ""}`]
-    : ["times as likely as Base + cue to write its own wrong step", `${NAME[k]}: ${sgn(c[0])} nats of log-probability, mean of ${N} wrong steps of Base + cue`,
+    : ["times as likely as Base + cue to write Base + cue's wrong step", `${NAME[k]}: ${sgn(c[0])} nats of log-probability, mean of ${N} wrong steps of Base + cue`,
        `95 % interval ${sgn(c[1])} to ${sgn(c[2])} nats${touches ? ", which includes 0" : ""}`, ""];
   lines.forEach((v, i) => { text("bl" + i, v); at(E["bl" + i], proj(g, g.labX, g.labY[i], 10)); });
   excerpt(k);
@@ -644,13 +653,13 @@ function excerpt(k) {
   const swap = S.ex.split("|")[0] !== p.id;
   S.ex = key;
   if (swap) {
-    $("exh").innerHTML = `MATH-500, problem ${p.i} · answer of Base + cue, T 1.0 · first wrong step, judged <b>${KIND[p.label]}</b>`;
+    $("exh").innerHTML = `MATH-500, problem ${p.i}: an answer of Base + cue at temperature 1.0. Its first wrong step, marked, was judged <b>${KIND[p.label]}</b>.`;
     $("ext").innerHTML = `${esc(p.before)}<mark>${esc(p.step)}</mark>${esc(p.after)}`;
     const ex = $("ex");
     ex.classList.remove("swap"); void ex.offsetWidth; ex.classList.add("swap");
   }
-  $("exd").innerHTML = `The ringed mark. ${esc(NAME[k])} on this step: <b>${sgn(p.d[k])} nats</b> of log-probability, ` +
-    `${times(p.d[k])} times as likely as Base + cue` + (j === SHOW && !S.open ? `. Shown: RL's largest drop of the ${N}.` : ".");
+  $("exd").innerHTML = `This answer is the ringed mark. ${esc(NAME[k])} on this step: <b>${sgn(p.d[k])} nats</b> of log-probability, ` +
+    `${times(p.d[k])} times as likely as Base + cue` + (j === SHOW && !S.open ? `. It is the RL model's largest drop of the ${N} answers.` : ".");
 }
 
 /* Always on: the plate sways by a few degrees and leans toward the mouse. About 30 frames a second. With reduced motion
@@ -684,7 +693,7 @@ function setState(m, opts = {}) {
   document.querySelectorAll("[data-k]").forEach(b => b.setAttribute("aria-pressed", b.dataset.k === m));
   const x = D.D[m];
   $("svg").setAttribute("aria-label", `${N} wrong answers of Base + cue on MATH-500, one mark each, in three rows by kind of error, ` +
-    `placed by D under ${NAME[m]}: ${times(avg(m))} times as likely as Base + cue to write its wrong step, mean D ${sgn(avg(m))} nats, ` +
+    `placed by D under ${NAME[m]}: ${times(avg(m))} times as likely as Base + cue to write Base + cue's wrong step, mean D ${sgn(avg(m))} nats, ` +
     `95 % interval ${sgn(x.ci95[0])} to ${sgn(x.ci95[1])}. Misread ${sgn(avg(m, 0))}, slip ${sgn(avg(m, 1))}, ` +
     `wrong plan ${sgn(avg(m, 2))}. Arrow keys change the model; Enter opens the answer shown above.`);
   if (still.matches) { aim(0, 0); place(0, now); }
@@ -702,7 +711,7 @@ function problemPane(j) {
     `<p class="cap">First wrong step, judged <b>${KIND[p.label]}</b>: ${p.tok} tokens, ${Math.round(p.pos * 100)} % into the answer</p>` +
     `<p class="wstep" data-math>${esc(p.step)}</p>` +
     `<p class="judge" data-math>The judge: ${esc(p.reason)}</p>` +
-    `<p class="cap">D on this step, nats. Left of the line: less likely than Base + cue to write it.</p>` +
+    `<p class="cap">D on this step: the change in log-probability against Base + cue, in nats. Left of the line: less likely than Base + cue to write it.</p>` +
     `<ul class="dl">${ORDER.map(m => `<li class="${m === S.k ? "on" : ""}"><button data-k="${m}">${esc(NAME[m])}</button>${bar(p.d[m])}<span class="v">${sgn(p.d[m])}</span></li>`).join("")}</ul>` +
     `<p class="gold">${esc(DEF[p.label])}</p>` +
     `<div class="steps"><button data-step="-1">‹ Previous answer</button><button data-step="1">Next answer ›</button></div>`;
