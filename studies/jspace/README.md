@@ -147,3 +147,25 @@ Verdicts against SPEC 2 (with `pub`; `own` still to run):
 Only 20 to 21 of the 93 multihop items are answered correctly (most prompts end in a space token, which forces the answer to
 come without its leading space); the no-trailing-space variant has 15 correct of 83 and gives the same picture (0.47 for both).
 
+### Run `workspace/own-01`: the same tests with a lens fitted per model
+
+Lens fits: jobs `sameraslan-1114-185927-7df1` (base) and `sameraslan-1114-185933-d625` (RL), `jobs/fit_lens.sh`, 100 WikiText
+prompts of 128 tokens (the same list), layers 10 to 30, 1,896 s and 1,905 s on one H100 each (19 s per prompt); the lens files
+stay in the Volume. Tests: job `sameraslan-1114-193308-0545` (385 s, commit `abfcfc1`), variants `pub`, `logit`, `own`. Numbers
+are keys of `results/workspace/own-01/metrics.json`.
+
+Every verdict of `pub-01` holds with `own`:
+
+| | Base | RL | Key |
+|---|---|---|---|
+| Multihop pass@10 (`own`) | 0.929 (n 21) | 0.950 (n 20) | `readout.multihop.own` |
+| Typo pass@10 (`own`, n 96) | 0.510 | 0.479; RL minus base -0.031 [-0.073, 0.010] | `readout.typo.own` |
+| Chains pass@10 (`own`) | 0.450 | 0.424; RL minus base on shared items -0.022 [-0.058, 0.011] | `readout.chains.own` |
+| Two-hop swap flips (`own`, 44 eligible, strength 1) | 0.364 [0.227, 0.500] | 0.364 [0.227, 0.500] | `swap.probe-swap.*.own.flip` |
+| the same, null replacement | 0.045 | 0.023 | `...null_flip` |
+| Twins, readout at L24 (`own`): hold-on gap, error minus correct | +0.128 [0.097, 0.158] | +0.154 [0.118, 0.191] | `twins.lens.own.L24.hold_lp` |
+| the same, RL minus base | +0.027 [0.018, 0.035]; neutral words -0.005 [-0.010, 0.001] | | same |
+
+The 100-prompt fit reads typos less well than the published 568-prompt lens (0.51 against 0.62 on the base); the two models
+stay equal under either.
+
