@@ -1,0 +1,64 @@
+[
+ {
+  "theory": "r7-m05",
+  "kind": "computed test inside its interval",
+  "id": "r7-m05:p1",
+  "experiment": "r7-m05 p1 (recipe in theories/r7-m05.json)",
+  "script": "studies/theory/results/engine/round-07/tests/r7-m05/p1.py",
+  "output": "studies/theory/results/engine/round-07/tests/r7-m05/p1.out.txt",
+  "measured": 0.6857142857142857,
+  "n": 35,
+  "interval_90": [
+   0.5428571428571428,
+   0.8285714285714286
+  ],
+  "prediction": {
+   "value": 0.67,
+   "low": 0.48,
+   "high": 0.84
+  },
+  "nulltest-1": {
+   "value": 0.55,
+   "low": 0.33,
+   "high": 0.77
+  },
+  "nulltest-2": {
+   "value": 0.63,
+   "low": 0.42,
+   "high": 0.82
+  },
+  "gain": 0.4211,
+  "note": "Inside, but both readers were close (0.55 and 0.63): gain +0.42, the theory adds little."
+ },
+ {
+  "theory": "r7-m12",
+  "kind": "computed test outside its interval, refuting condition met",
+  "id": "r7-m12:p1",
+  "experiment": "Gain of the RL-written-examples arm over the cued base on problems in the examples' subjects minus the gain on all other subjects, MATH-500",
+  "script": "studies/theory/results/engine/round-07/tests/r7-m12/p1.py",
+  "output": "studies/theory/results/engine/round-07/tests/r7-m12/p1.out.txt",
+  "measured": -0.018489574809335205,
+  "n": 223,
+  "interval_90": [
+   -0.05767259056732741,
+   0.021835075493612084
+  ],
+  "prediction": {
+   "value": 0.08,
+   "low": 0.035,
+   "high": 0.13
+  },
+  "nulltest-1": {
+   "value": 0.02,
+   "low": -0.03,
+   "high": 0.07
+  },
+  "nulltest-2": {
+   "value": 0.01,
+   "low": -0.06,
+   "high": 0.08
+  },
+  "gain": -3.0,
+  "note": "The theory said examples help only in their own subject (+0.08); the difference is -0.018 (n 223, 90 % [-0.058, 0.022]). Replicated."
+ }
+]

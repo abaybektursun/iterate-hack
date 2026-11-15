@@ -1273,7 +1273,9 @@ scored on a box inside the reasoning.
 d_t = log p_base(token | problem, text) - log p_base(token | empty problem, text) over the first 1,000 answer tokens of the 2,000
 stored samples of the cued base (the quantity context-aware decoding adds to the logits, Shi et al. 2023, arXiv 2305.14739; here
 only read). Job `jobs/probdep_tokens.py` (vast.ai job `abaybektursun-1115-014547-2c8c`, A100, input
-`data/wrongstep/base_cue_answer_heads_v1.jsonl.gz`), readout `analysis/probdep.py`, results `results/wrongstep/probdep-01/`.
+`data/wrongstep/base_cue_answer_heads_v1.jsonl.gz`), readout `analysis/probdep.py`, results `results/wrongstep/probdep-02/`
+(same numbers as `probdep-01`, plus one right and one wrong example and the feature without the first 50 tokens: mean d_t over
+tokens 50 to 1,000 gives 0.504 [0.440, 0.568]; 62 % of the summed difference sits in the first 50 tokens, the restatement of the problem).
 Within-problem AUROC of right against wrong (150 problems with both outcomes, 478 pairs, bootstrap over problems, 2,000 resamples):
 
 | Feature | 250 tokens | 500 tokens | 1,000 tokens |

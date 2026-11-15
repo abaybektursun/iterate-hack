@@ -1,0 +1,5 @@
+[
+ {"k": 1, "value": 0.52, "low": 0.34, "high": 0.70, "why": "Top8's 22 quick-wrong answers are plain-base-register draws on problems the cued base finds easy (mean 0.82), and the mechanism says that register is wrong about half the time whatever the difficulty, so the plain base at T 1.0 (55 % wrong overall) should be wrong on about half of them."},
+ {"k": 2, "value": 0.03, "low": -0.17, "high": 0.23, "why": "The plain-register error rate does not depend on difficulty, and the quick-wrong problems were picked only by an unlucky top8 draw, so their plain-base wrong rate should match that on cued-easy top8-right problems (difference near 0, with n=22 noise)."},
+ {"k": 3, "value": 0.37, "low": 0.20, "high": 0.54, "why": "A second plain sample at T 0.6 should give the plain register's overall T 0.6 wrong rate (36 %, difficulty-blind) on these cued-easy problems, because the quick-wrong set does not pick out problems where the plain base fails for some reason of its own."}
+]

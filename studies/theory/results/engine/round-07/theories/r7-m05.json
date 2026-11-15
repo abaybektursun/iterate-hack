@@ -1,0 +1,129 @@
+{
+ "name": "r7-m05",
+ "statement": "The cued base's misread and slip steps are what its language prior writes for a generic problem of the same kind, not for this problem: the problem text lowers them, removing it raises them relative to the rest of the answer, and they sit near the mode of the base's distribution (not in its tail); wrong plans are a different, problem-conditioned failure.",
+ "scope": "Covers allenai/Olmo-3-1025-7B with the three-token opening cue on MATH-500 at T 1.0 / top-p 1.0, cap 16,384, grader v3. It is about the first located wrong step of finished-wrong answers labelled misread or slip (the 51 judged items of the wrongstep study, scored teacher-forced). It does not cover wrong plans, which it treats as problem-conditioned and outside the mechanism; cap hits, loops (T 0.6), answer-statement or format failures; the RL model's own errors; or hard328, where no located wrong steps exist. It makes no claim about why RL lowers these steps beyond saying that RL conditions more on the problem.",
+ "parent": null,
+ "imports": [
+  {
+   "source": "https://aclanthology.org/D19-1331",
+   "finding": "In NMT the model's single most probable output is often the empty translation, and usable outputs depend on search errors. The bias toward short hypotheses is in the model itself, not in the search.",
+   "how": "This is the template for an error that sits at the mode: the wrong continuation has high probability under the model, so sharper search (lower temperature, truncation) keeps it or makes it more likely. Only a change to the scoring rule (here, contrast against the problem-free context) can move it."
+  }
+ ],
+ "explains": [
+  {
+   "item": "result-faf15a",
+   "quote": "the wrong step has log-prob -0.53 per token vs -0.63 for control text",
+   "how": "A generic-prior continuation is a high-probability, fluent step, so it scores above ordinary answer text under the base."
+  },
+  {
+   "item": "result-faf15a",
+   "quote": "RL lowers misreadings and slips, not wrong plans",
+   "how": "Training that rewards using the problem pushes down exactly the steps that ignore it (misreads, slips), and leaves alone the problem-conditioned choice of plan."
+  },
+  {
+   "item": "result-855858",
+   "quote": "6 of 11 base slips read are followed by a check that repeats the slip",
+   "how": "When the step is redone, the same prior that wrote it is asked again and writes it again."
+  },
+  {
+   "item": "result-44b4df",
+   "quote": "No truncation rule beats untruncated sampling on MATH-500 at T 1.0",
+   "how": "Truncation removes tail tokens, but these errors are near the mode, so they survive it."
+  },
+  {
+   "item": "result-34897a",
+   "quote": "Entropy-gated temperature does not beat plain T 1.0",
+   "how": "Sharpening at confident positions raises mode continuations, including the generic wrong step, so finished-answer accuracy does not rise."
+  },
+  {
+   "item": "result-96e819",
+   "quote": "Intrinsic self-review fixes no math on MATH-500 for base or RL",
+   "how": "A review pass by the same model reads the step with the same prior, which finds the step likely, so it is not flagged."
+  },
+  {
+   "item": "result-afc423",
+   "quote": "base slip 35% [24, 48], wrong plan 28%, misread 23%",
+   "how": "Misreads and slips are the majority of the base's finished-wrong samples, which is the share the mechanism claims, while RL's errors are mostly wrong plans."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "result-afc423",
+   "quote": "Base items with a right sibling: 39 of 48 slip/misread/format",
+   "how": "If the wrong step were the mode for this kind of problem, sibling samples of the same problem should repeat it more often. Most siblings are right, so the step is at the mode only given the path that led to it, which weakens 'generic for the problem type'."
+  },
+  {
+   "item": "result-c4411d",
+   "quote": "RL does not read partial results better",
+   "how": "If RL's gain came from conditioning on context the base ignores, RL might also be expected to read its own intermediate results better, and it does not. The mechanism has to confine the effect to the problem statement."
+  }
+ ],
+ "rival": "Uniform per-step hazard (the r3-surprises-1 / slip-hazard family): misreads and slips are sampled at forks where the problem-conditioned distribution splits its mass between a right and a wrong token. The problem text then neither favours nor disfavours the wrong step relative to other answer text (g about 0, half the items positive), and lowering temperature lowers it (a tail event). A second rival (m04, the problem text induces the misread, for example through a distractor number) predicts that deleting the problem makes the step less likely (g < 0). Two observations separate them from this mechanism: the sign of g on misread and slip items against wrong-plan items, and whether T 0.6 rescoring raises or lowers the wrong step relative to control text.",
+ "predictions": [
+  {
+   "experiment": "Mechanism test, problem dependence of misread and slip steps. Among the wrongstep items labelled misread or slip, the fraction with g > 0, where g = (lp_span - lp_control) under the base scored with the problem text deleted ('noprob') minus the same under the plain base. This mechanism predicts well above half (deleting the problem removes evidence against the step, but not the step's own support). The uniform-hazard rival predicts about 0.5. The problem-induced-misread rival (m04) predicts below 0.5.",
+   "recipe": "File: studies/rlneurons/results/wrongstep/rules-01/items.json (51 rows). For each row read models['base'] and models['noprob'], fields lp_span and lp_control, as stored, with no rescaling. Keep rows whose label, lowercased, contains the substring 'misread' or the substring 'slip'. Drop a row if either model entry, or any of the four numbers, is missing or null. X_m = lp_span(m) - lp_control(m). g = X_noprob - X_base. A row counts if g > 0 strictly; g == 0 counts as not positive. Statistic = counted rows / kept rows. If fewer than 10 rows are kept, the prediction counts as refuted.",
+   "unit": "fraction of items",
+   "value": 0.67,
+   "low": 0.48,
+   "high": 0.84,
+   "refuted_by": "measured fraction below 0.48 (or above 0.84)",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Cause test, mode vs tail. On all 51 wrongstep items, the fraction whose wrong step gains on control text when the base is rescored at T 0.6: (lp_span - lp_control) under 't0.6' minus the same under 'base', counted when positive. This mechanism (the step sits near the mode) predicts more than half. The tail-token rival (r3-surprises-1: errors are low-probability draws) predicts below half, because a cooler distribution penalises the step more than ordinary text.",
+   "recipe": "File: studies/rlneurons/results/wrongstep/rules-01/items.json. For each row read models['base'] and models['t0.6'], fields lp_span and lp_control, as stored. Use all labels. Drop a row if either model entry or any of the four numbers is missing or null. X_m = lp_span(m) - lp_control(m). d = X_t0.6 - X_base. A row counts if d > 0 strictly; ties count as not positive. Statistic = counted rows / kept rows. If fewer than 20 rows are kept, the prediction counts as refuted.",
+   "unit": "fraction of items",
+   "value": 0.62,
+   "low": 0.44,
+   "high": 0.8,
+   "refuted_by": "measured fraction below 0.44 (or above 0.80)",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Case where the effect should not appear: wrong-plan items. The fraction of wrongstep items labelled as a wrong plan with g > 0 (g defined as in the first prediction: noprob minus base, each lp_span - lp_control). This mechanism says a plan is chosen in response to the problem, so deleting the problem should not favour it the way it favours misreads and slips. It predicts a share near or below half, well under the misread/slip share. A reader who takes g > 0 as a generic effect of shorter context predicts the same share as the misread/slip items.",
+   "recipe": "File: studies/rlneurons/results/wrongstep/rules-01/items.json. Keep rows whose label, lowercased, contains the substring 'plan' and contains neither 'misread' nor 'slip'. Read models['base'] and models['noprob'], fields lp_span and lp_control, as stored. Drop a row if any of the four numbers or either model entry is missing or null. g = (lp_span - lp_control)_noprob - (lp_span - lp_control)_base. Count rows with g > 0 strictly (ties not positive). Statistic = counted / kept. If fewer than 6 rows are kept, the prediction counts as refuted.",
+   "unit": "fraction of items",
+   "value": 0.43,
+   "low": 0.15,
+   "high": 0.68,
+   "refuted_by": "measured fraction above 0.68 (or below 0.15)",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Continuation from just before the located wrong step, base vs context-aware contrastive decoding. For each of the 51 wrongstep items, take the stored cued-base answer cut at the token before the located wrong step (prefix = prompt + cue + answer tokens before position). Sample 4 continuations per item at T 1.0 / top-p 1.0, with the cap of 16,384 minus the prefix length, from (a) the plain base and (b) CAD with logits 1.5 * logit(base | prompt with problem) - 0.5 * logit(base | same prompt with the problem text deleted, same answer prefix). Seeds 5,000,000 + 10 * item + k, the same for both arms. Grade the full answer (prefix + continuation) with v3; cap hits count wrong. The reported number is right(CAD) minus right(base), of 204 continuations per arm.",
+   "unit": "right of 204 (CAD minus base)",
+   "value": 12,
+   "low": -4,
+   "high": 28,
+   "refuted_by": "CAD minus base below -4 continuations (CAD no better than base), or above 28",
+   "gpu_minutes": 50
+  }
+ ],
+ "intervention": {
+  "change": "Context-aware contrastive decoding: at every generated token, sample from softmax(1.5 * logit(base | cue prompt with the problem) - 0.5 * logit(base | the same cue prompt with the problem text deleted, followed by the same generated tokens)) at T 1.0 / top-p 1.0. This takes two forward passes per token. The token cap and stopping rule are unchanged, and no restarts are used.",
+  "model": "allenai/Olmo-3-1025-7B (base)",
+  "cell": {
+   "set": "MATH-500",
+   "prompt": "the team's cue prompt (frozen4.json) with the three-token opening cue prefilled; the contrast branch uses the same template and cue with the problem text removed",
+   "sampling": "T 1.0 / top-p 1.0",
+   "cap": 16384,
+   "grader": "v3",
+   "samples": 1,
+   "seeds": "per-problem seed equal to the T1 cell's (base_rl-02 T1.jsonl seed field for that problem_index)"
+  },
+  "count": "right answers over all 500 MATH-500 problems by grader v3 on the single sample; cap hits count wrong; an empty extraction counts wrong",
+  "unit": "right of 500",
+  "value": 413,
+  "low": 399,
+  "high": 427,
+  "best_known": {
+   "value": 454,
+   "item": "result-40ed3b",
+   "setting": "base + cue, T 1.0, vote over 4 samples after restart, ties to the shortest finished sample (19,697 tokens per problem)"
+  },
+  "gpu_minutes": 70,
+  "why": "If misreads and slips are the problem-free prior's continuation, then subtracting half of that prior lowers them. Only about 58 % of the base's errors are of these kinds, the answer restates the problem (so the two branches converge after the opening), and alpha 0.5 moves a step by only half its g. So the expected gain over the single-sample 410 is a few problems, not the RL gap."
+ }
+}

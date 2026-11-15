@@ -1,0 +1,1 @@
+{"measured": 0.3333333333333333, "n": 9, "interval": [0.1111111111111111, 0.5555555555555556], "interval_kind": "bootstrap", "refuted_by_met": false, "alt_measured": 0.3333333333333333, "not_computable": null, "example_row": {"problem_index": 2, "score_v3": 0, "cap_hit": false, "n_generated": 2846}}
