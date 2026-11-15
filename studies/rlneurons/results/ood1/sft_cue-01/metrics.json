@@ -1,0 +1,88 @@
+{
+ "status": "done",
+ "config": {
+  "model": "think_sft",
+  "cue": true,
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "seed": 61000000,
+  "n": null,
+  "grader_check_only": false,
+  "out": "/runs/frustea-1115-070709-bf07",
+  "commit": "11543e19ee32369d2904c0b8a1048bd6bb968158"
+ },
+ "commit": "11543e19ee32369d2904c0b8a1048bd6bb968158",
+ "job_id": "frustea-1115-070709-bf07",
+ "n_items": 500,
+ "started_utc": "2026-11-15T15:07:20Z",
+ "grader_check": {
+  "n": 500,
+  "failed": []
+ },
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 28749,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 20480
+ },
+ "model_repo": "allenai/Olmo-3-7B-Think-SFT",
+ "model_revision": "6ff857587e040d6d523a3d5f3a56e918f5401d66",
+ "tokenizer": [
+  "allenai/Olmo-3.1-7B-RL-Zero-Math",
+  "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ ],
+ "prefix_ids": [
+  1584,
+  2268,
+  33413
+ ],
+ "prefix_text": " line!\n\nOkay",
+ "sampling": {
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "repetition_penalty": 1.0
+ },
+ "max_tokens": 16384,
+ "first_prompt_ids": [
+  50,
+  4035,
+  279,
+  2768,
+  3575,
+  3094,
+  555,
+  3094
+ ],
+ "generation_s": 913.5381619930267,
+ "memory": {
+  "gpu_memory_used_mib": 73105,
+  "gpu_memory_total_mib": 81559,
+  "gpu": "NVIDIA H100 80GB HBM3"
+ },
+ "counts": {
+  "mmlupro": {
+   "n": 250,
+   "right": 129,
+   "cap_hits": 3,
+   "no_answer": 16,
+   "mean_generated_tokens": 3606.936
+  },
+  "bbh": {
+   "n": 250,
+   "right": 203,
+   "cap_hits": 1,
+   "no_answer": 6,
+   "mean_generated_tokens": 2274.972
+  },
+  "all": {
+   "n": 500,
+   "right": 332,
+   "cap_hits": 4,
+   "no_answer": 22,
+   "mean_generated_tokens": 2940.954
+  }
+ },
+ "wall_s": 1057.1208364963531
+}

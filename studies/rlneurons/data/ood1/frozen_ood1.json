@@ -1,0 +1,16 @@
+{
+ "models": {
+  "base": ["allenai/Olmo-3-1025-7B", "a81bae42db3975be1671e27b9c9a56da1a9f980f"],
+  "rl_math": ["allenai/Olmo-3.1-7B-RL-Zero-Math", "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"],
+  "think_sft": ["allenai/Olmo-3-7B-Think-SFT", "6ff857587e040d6d523a3d5f3a56e918f5401d66"]
+ },
+ "tokenizer": ["allenai/Olmo-3.1-7B-RL-Zero-Math", "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"],
+ "template": "pair1",
+ "cap": 16384,
+ "cue_ids": [1584, 2268, 33413],
+ "cue_text": " line!\n\nOkay",
+ "items": {"file": "ood1_items.json", "n": 500, "sha256": "9c9fb06c4b973dd24366d50159da715f4ad29f573f84d9e62c881f0dd7c291c7",
+           "built_by": "prep/ood1_build.py, seed 0",
+           "sources": {"mmlupro": ["TIGER-Lab/MMLU-Pro", "b189ec765aa7ed75c8acfea42df31fdae71f97be"],
+                       "bbh": ["lukaemon/bbh", "982bb89fd79532a8ac676a61fc42eb1aeec63f99"]}}
+}

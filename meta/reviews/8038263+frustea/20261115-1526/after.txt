@@ -1,0 +1,2 @@
+$ uv run -q --with numpy python -c "import studies.rlneurons.analysis.ood1_readout"
+exit 0

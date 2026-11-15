@@ -14,6 +14,8 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 |---|---|
 | `specs/SPEC3.md` | RLN-3 spec: base, RL steps 100/400/2,800 and the first release; arms P (plain), F (opening cue), C (forced commit); MATH-500 and the 400-problem harder set; training-set overlap (§11). |
 | `specs/SPEC_wsp1.md` | WSP-1 spec: anatomy of the RL-Math, RL-Code and Think-SFT weight deltas, then edited-weight cells. Job `jobs/wsp_delta_anatomy.py`, results `results/wsp1/`. |
+| `specs/SPEC_wsp2.md` | WSP-2 spec: a hand-written key-value edit of layer 31 `mlp.down_proj` that writes the opening cue, built with no RL weights, and its random-value control. Job `jobs/wsp_handedit.py`, results `results/wsp2/`. |
+| `jobs/wsp_handedit.py` | WSP-2 job: computes the edit from the base model's own activations, checks it on held-out prompts, writes the edited model directory for `run_cell.py --model-path` and `handedit.json` (`--control` for random values, `--selftest` for the planted checks). |
 | `specs/SPEC4.md` | RLN-4 spec: T1 (cue, T 1.0), continuation test K, T2 (RL, T 1.0), T3 (plain base, T 1.0), G, R1; Modal deviations; grader v3. |
 | `specs/SPEC_fresh.md`, `specs/fresh_jobs.txt` | Fresh held-out set: cutoffs with sources, selection rules, hypotheses, predictions; the 12 job commands. |
 | `data/fresh/`, `prep/fresh_prep.py`, `jobs/run_fresh.py` | `fresh2026_v1.json`: 136 competition problems published in 2026 (AIME, HMMT Feb and Nov), the transcribed PDF problems, the prep script, and `run_cell` with `--set fresh2026`. |
@@ -1618,7 +1620,7 @@ Think-SFT = `Olmo-3-7B-Think-SFT` `6ff8575` (imitation of reasoning traces, no r
 
 ## WSP-1 edited weights: which part of a weight change carries the gain
 
-Spec `specs/SPEC_wsp1.md` (amendments 1 to 4). `jobs/wsp_edit.py` writes an edited model directory (selftest of 6 planted
+Spec `specs/SPEC_wsp1.md` (amendments 1 to 5). `jobs/wsp_edit.py` writes an edited model directory (selftest of 6 planted
 checks runs first; BF16 by `merge_weights.to_bf16`, stochastic rounding), `jobs/run_cell.py --model-path` scores it,
 `analysis/wsp1_readout.py` writes the run folders and `results/wsp1/readout.json` (run it with
 `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.wsp1_readout`; it reads the
@@ -1661,6 +1663,80 @@ delta) 58. Cue, seed base 81,000,000: base 82, `sft1` 92, `sft05` 88, `sft025` 8
   with Base + cue, not with the plain prompt alone: on MATH-500 (plain prompt) 427 of 500 against Base + cue 410, +3.4 points, paired
   95 % interval −0.4 to 7.2 (from `full500/top8_plain-01/per_problem.json` and `results/rln4/t1_t2_items-01/per_problem.json`,
   5,000 resamples, seed 0); on the 328 harder problems with the cue 192 against 164 (+8.5 points [4.3, 12.8], branch `sharedsub`).
+
+The 328 harder problems (amendment 5; `results/wsp1/hard328/<cell>-01/`, `readout.json` `hard328_vs_references`). `sft1`
+cells use seed base 3,000,000, the seeds of the cued base and RL plain references. References are the Day-1 #1 cells of
+`results/day1_hard328/readout.json`, paired by problem index through their 0/1 rows in `results/axis/hard328-01/vectors.json`:
+cued base 164 (77 cap hits), RL plain 206 (20), RL cue 205 (25), plain base 76 (35). Mean tokens are the mean of `n_new`
+(RL plain 9,315, cued base 9,344).
+
+| Cell | Right of 328 | Cap hits | Mean tokens | Against (paired, points [95 % bootstrap]) |
+|---|---|---|---|---|
+| `sft1` cue | 219 | 89 | 10,123 | cued base +16.8 [12.5, 21.3]; RL plain +4.0 [0.0, 7.9]; RL cue +4.3 [0.9, 7.6] |
+| `sft1` plain | 203 | 86 | 9,375 | RL plain -0.9 [-5.2, 3.4]; plain base +38.7 [33.2, 44.2] |
+
+- The prediction of amendment 5 holds: `sft1` cue (219) is within 5 points of RL plain (190 to 222 right). Think-SFT
+  is within 5 points of RL on the harder set, with more than 4 times RL's cap hits (89 and 86 against 20).
+- The 328 were screened against the RL training prompts only. The full scan of the Think-SFT training data (section
+  "Think-SFT training-data overlap", `results/wsp1/sft_overlap-03/`) finds 6 of the 328 in its training prompts, all in
+  user turns; the `sft1` numbers above include those 6.
+
+## WSP-2 hand-written edit: the cue written into one matrix with no RL weights
+
+Spec `specs/SPEC_wsp2.md` (amendment 1). The edit changes one tensor, layer 31 `mlp.down_proj`, so that the base writes the
+opening cue ` line!\n\nOkay` (3 tokens) when the answer starts. Keys are the mean inputs to that matrix at each cue position
+over 128 calibration prompts (MATH-500 problems 100 to 227); values are the unembedding directions of the cue tokens; the
+edit is the ROME-style key-value update that moves other inputs as little as their second moments allow, scaled by bisection
+until each cue token has mean probability 0.95. It uses no RL weights, no reward and no answers. The control `cueprog_rand`
+has the same keys and scales with random unit vectors as values (seed 0). The job solved the three keys jointly
+(`handedit.json` `solution`: "joint: R K^T = I") and ran with `--batch 1`.
+
+How to run: `bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_handedit --dir
+/tmp/theta --batch 1 [--control] && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta
+--model-label cueprog --prompt plain --set math500 --temperature 1.0 --top-p 1.0 --seed 80000000 --n 100 --commit <commit>`
+(`run.json` of each cell has the exact command). `analysis/wsp1_readout.py` scores the cells (cell table `CELLS2`) and
+writes `results/wsp2/<experiment>/<cell>-01/` and `results/wsp2/readout.json`.
+
+First 100 MATH-500 problems, plain prompt, T 1.0, top-p 1.0, seed base 80,000,000, grader v3
+(`results/wsp2/screen100/<cell>-01/`, `readout.json` `screen100_differences`). References are the WSP-1 cells of
+`results/wsp1/screen100/` on the same problems (the cued base used seed base 81,000,000; pairing is by problem).
+
+| Cell | Right of 100 | Cap hits | Open with `Okay` | Against (paired, points [95 % bootstrap]) |
+|---|---|---|---|---|
+| `cueprog` | 85 | 5 | 96 | `cueprog_rand` +47.0 [36.0, 58.0]; base plain +51.0 [41.0, 61.0]; base cue +3.0 [-4.0, 11.0]; `top8` -3.0 [-10.0, 3.0]; RL -11.0 [-18.0, -5.0] |
+| `cueprog_rand` | 38 | 1 | 19 | base plain +4.0 [-3.0, 11.0] |
+| base plain | 34 | | | |
+| base cue | 82 | | | |
+| `top8` plain | 88 | | | |
+| RL plain | 96 | | | |
+
+- `handedit.json` (in `metrics.json` `handedit`): mean held-out probability of the 3 cue tokens in their contexts (64
+  prompts, problems 228 to 291) 0.000, 0.006, 0.286 before and 0.952, 0.952, 0.952 after; the control leaves them at 0.000,
+  0.004, 0.305. Mean KL(base || edited) on other positions 6.6e-05 nats (control 5.9e-06). The edit is 6.6 % of the
+  tensor's Frobenius norm in both cells.
+- H1 (the edit reproduces the cue) holds on the screen: 85 right and 96 of 100 answers open with `Okay`, and the control
+  is 47 points lower.
+- H2 (the edit goes past the cue) is refuted: 85 is not above 92, and `cueprog` is 3.0 points above the cued base with an
+  interval that includes 0.
+- Closest published result: Wang et al. (arXiv 2610.06851, App. D.5) report a one-matrix edit that raises the cue
+  probability to 0.95 and scores 0.78 on MATH-500.
+
+All 500 MATH-500 problems, plain prompt, T 1.0, top-p 1.0, one sample, grader v3, commit `db7c499`
+(`results/wsp2/full500/<cell>-01/`, `readout.json` `full500_vs_references`). `cueprog` seed base 184,000,000 (job
+`sameraslan-1114-221130-eb90`), `cueprog_rand` 185,000,000 (job `sameraslan-1114-221138-a65c`). References: T3 plain base
+224, T1 cued base 410, T2 RL 463 (`results/rln4/grader_v3/readout.json`), `top8` 427 and `rand8` (`results/wsp1/full500/`).
+
+| Cell | Right of 500 | Wilson 95 % | Cap hits | Open with `Okay` | Against (paired by problem, points [95 % bootstrap]) |
+|---|---|---|---|---|---|
+| `cueprog` | 397 (79.4 %) | [75.6, 82.7] | 21 | 92.6 % (463) | `cueprog_rand` +38.6 [34.0, 43.6]; T1 cued base -2.6 [-6.4, 1.2]; T2 RL -13.2 [-16.6, -9.8]; `top8` -6.0 [-9.8, -2.0]; `rand8` +40.0 [34.8, 45.0] |
+| `cueprog_rand` | 204 (40.8 %) | [36.6, 45.2] | 8 | 21.2 % (106) | `rand8` +1.4 [-4.6, 7.0] |
+
+- H1 (the edit reproduces the cue) holds on all 500: 79.4 % is within 10 points of the cued base (82.0 %), 92.6 % of
+  answers open with `Okay`, and the control is 38.6 points lower.
+- H2 (the edit goes past the cue) is refuted: 79.4 % is not above 92 %, and `cueprog` is 2.6 points below the cued base
+  with an interval that includes 0.
+- Finding page: `tools/finding_hand_written_edit.py` (`/finding/hand-written-edit`).
+
 ## One axis or several? Item-level structure of every arm (MATH-500 n = 500, hard328 n = 328, laptop, board work-1aa34c, idea-1c8b73)
 
 Question: do the partial routes toward the RL model fix the same problems or different ones? Answer: the same. On MATH-500 two
@@ -3854,6 +3930,38 @@ $P score --work runs/derived-02 --out studies/rlneurons/results/derived/hard328-
 $P score --per-sample --out studies/rlneurons/results/derived/hard328_persample-02   # addendum 1; reads hard328-01/labels.jsonl, no judge call
 ```
 
+## Outside math and code: MMLU-Pro and BBH (500 items, T 1.0, one sample, board work-8cde9c)
+
+Question: every configuration here was chosen on MATH-500; do its gains appear on benchmarks that are neither math nor code?
+Answer: yes. The Math cue, unchanged, takes the untrained base from 136 to 286 of 500 (+30.0 points [24.6, 35.4]), 77 % of
+what RL-Zero-Math gains there (332), against 78 % on MATH-500 and 58 % on code. Spec `specs/SPEC_ood1.md` (written before the
+runs; amendment 1 adds grader v2). Items `data/ood1/ood1_items.json` (250 MMLU-Pro from the 9 categories outside math, physics,
+chemistry, engineering and computer science; 250 BBH from 10 one-letter tasks; built by `prep/ood1_build.py`, seed 0), prompt
+= the math prompt `pair1` unchanged, cap 16,384, seed 61000000 + index. `jobs/run_mcq_cell.py` -> `analysis/ood1_readout.py`
+-> `results/ood1/readout.json` and one folder per cell (`run.json`, `metrics.json`, `examples.json`). Grader `lib/mcq_lib.py`
+(tests `lib/mcq_lib_test.py`). Raw answers: `runs/<job>/answers.jsonl` in frustea's Modal workspace (not committed).
+Paired bootstrap, 5,000 resamples, in points.
+
+| Cell | Right of 500, grader v2 | MMLU-Pro of 250 | BBH of 250 | No letter (v2) | Cap hits | Tokens per item | Right, grader v1 | Job |
+|---|---|---|---|---|---|---|---|---|
+| base, plain | 136 (27.2 %) | 48 | 88 | 214 | 3 | 992 | 114 | `frustea-1115-070655-258c` |
+| base, Math cue | 286 (57.2 %) | 116 | 170 | 30 | 1 | 2,049 | 229 | `frustea-1115-070659-494e` |
+| RL-Zero-Math, plain | 332 (66.4 %) | 133 | 199 | 13 | 0 | 3,165 | 78 | `frustea-1115-070704-88e2` |
+| Think-SFT, Math cue | 342 (68.4 %) | 137 | 205 | 6 | 4 | 2,941 | 332 | `frustea-1115-070709-bf07` |
+
+- Chance is 28.4 of 250 (MMLU-Pro) and 67.9 of 250 (BBH): the plain base is near chance on BBH because 214 of its 500
+  answers give no letter (empty, a continuation of the prompt, or text without an answer).
+- H1 held under both graders: cue minus plain base +30.0 [24.6, 35.4] (v2), +23.0 [17.6, 28.4] (v1); MMLU-Pro +27.2
+  [19.6, 34.4], BBH +32.8 [24.4, 40.8] (v2).
+- H2: RL on math transfers, +39.2 [34.0, 44.2] over the plain base (v2). Under v1, the grader of the spec, RL scores 78 and
+  H2 reads as refuted: RL-Zero-Math writes its answer as `\boxed{X}` in most answers, which v1 does not read. v1 is not a
+  valid instrument for this model; v2 was added from cells 1 and 2 before cell 3 was read.
+- H3 held (v2): the cue gives 150 of RL's 196 problems over the plain base (77 %). RL stays ahead of the cued base by 9.2
+  [4.6, 13.8] at 3,165 against 2,049 tokens per item.
+- H4 held: Think-SFT + cue minus RL +2.0 [-2.4, 6.2] (v2).
+- Not run: the vote over four samples, RL with the cue, Think-SFT plain. One seed. The 500 items are a sample of each
+  benchmark, not the full sets, so the counts are not comparable to published MMLU-Pro or BBH scores.
+
 ## The 1.5x top-8 edit, replicated with four samples on the 328 (hard328, n = 328, cue, T 1.0, grader v3, board work-ab0f72)
 
 Question: base + 1.5 times the top 8 directions of (RL-Math - base) scored 203 of 328 on one sample (board result-6f1bb7),
@@ -4244,3 +4352,9 @@ transplant. Public at https://monitor.invariant.team/paper/the-finish-dial.pdf (
   1.5 is two offsetting effects (newly finished answers are right 19 of 64 times; right answers on the 251 problems
   the base already finishes rise 161 to 184), so the paper claims the directions set finishing, not that they leave
   correctness alone.
+
+- Answered-only control (`analysis/ood1_rows.py` -> `results/ood1/rows-01/answered.json`; per-item rows in `rows.json`): the
+  plain base gives no option letter on 214 of 500 items (cue 30, RL 13, Think-SFT + cue 6), so part of the +30.0 is the cue
+  making the base write an answer. On the 264 items where both the plain and the cued base give a letter the cue adds +12.5
+  points [4.9, 19.7] (156 against 123 right; MMLU-Pro +10.2 [0.0, 20.3] of 118, BBH +14.4 [4.1, 25.3] of 146). RL on its 277
+  shared items: +19.1 [11.9, 26.4]. So less than half of the cue's gain here is better answers; the rest is answers given at all.
