@@ -21,6 +21,8 @@ def got(name, rows):
 def main():
     tie = [s("7", 900), s("1", 500), s("7", 800), s("1", 2000)]                     # 2-2 tie, the right group holds the shortest sample
     assert got("vote", tie) == (0, 0) and got("tie_short", tie) == (1, 1)
+    assert L.pick(tie, L.CONTROLS["tie_long"]) == (1, 1) and L.pick(tie[:3], L.CONTROLS["tie_long"]) == (0, 0)   # 2000 is longest; without it 900
+    assert L.tie_random(tie) == 0.5 and L.tie_random(tie[:3]) == 0 and L.tie_random([s(None)]) == 0
     bad = [s("7", 300), s("1", 500), s("7", 800), s("1", 2000)]                     # the shortest sample is wrong: tie_short must fail
     assert got("tie_short", bad) == (0, 0) and got("short1", bad) == (0, 0)
     assert got("tie_short", [s("7", 300, cap=True), s("1", 500)]) == (1, 1)         # a cap hit is never the shortest
@@ -65,6 +67,7 @@ def main():
     assert res["rows"]["anti"]["right"] == 0 and res["rows"]["anti"]["minus_vote_interval95"][1] < 0
     assert res["rows"]["oracle"]["minus_vote_interval95"][0] > 0 and res["rows"]["vote"]["minus_vote_interval95"] == (0.0, 0.0)
     assert res["rows"]["tie_short"]["right"] == res["rows"]["vote"]["right"]         # sample 0 is always the shortest and wrong
+    assert res["controls"]["tie_random_expected_right"] == sum(L.tie_random(v) for v in first.values())
     assert res["rows"]["vote"]["tokens_per_problem"] == sum(r["n_new"] for v in first.values() for r in v) / 60
     print("selector_test: all planted cases pass")
 

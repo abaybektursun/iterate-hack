@@ -84,6 +84,19 @@ RULES = {
 }
 
 
+# Controls for the tie-break rules, added after the first scoring; not candidates, not in cv_pick.
+CONTROLS = {"tie_long": tie(lambda rows, g: max(-1 if rows[k]["cap_hit"] else rows[k]["n_new"] for k in g))}
+
+
+def tie_random(rows) -> float:
+    """Expected score of the plurality vote with a uniformly random choice among the largest groups."""
+    groups = V.vote(rows)["groups"]
+    if not groups:
+        return 0.0
+    tied = [g for g in groups if len(g) == max(len(g) for g in groups)]
+    return sum(rows[g[0]]["score_v3"] for g in tied) / len(tied)
+
+
 def pick(rows, rule):
     """(chosen sample or None, its v3 score) of one problem's four attempt-0 rows."""
     groups = V.vote(rows)["groups"]
@@ -113,12 +126,13 @@ def readout(first: dict, rules: dict = RULES) -> dict:
     picks = {m: [pick(first[i], rule) for i in idxs] for m, rule in rules.items()}
     per = {m: [p[1] for p in picks[m]] for m in rules}
     per["cv_pick"], chosen = cv_pick(per)
+    ctrl = {m: [pick(first[i], rule)[1] for i in idxs] for m, rule in CONTROLS.items()}
     oracle = [int(any(r["score_v3"] for r in first[i])) for i in idxs]
     n, tok = len(idxs), sum(r["n_new"] for i in idxs for r in first[i])
     ties = [j for j, i in enumerate(idxs) if V.vote(first[i])["tie"]]
 
     def row(m):
-        x, v = per[m], per["vote"]
+        x, v = {**per, **ctrl}[m], per["vote"]
         k = sum(x)
         out = {"right": k, "n": n, "percent": 100 * k / n, "wilson95": S.wilson(k, n), "tokens_per_problem": tok / n,
                "minus_vote_points": 100 * (k - sum(v)) / n, "minus_vote_interval95": S.paired_bootstrap(x, v, BOOT),
@@ -131,6 +145,9 @@ def readout(first: dict, rules: dict = RULES) -> dict:
     return {"grader": "v3 (score_v3 as written by run_cell)", "problem_indices": idxs, "folds": FOLDS, "cv_chosen_per_fold": chosen,
             "vote_ties": len(ties), "pass_at_4": {"right": sum(oracle), "n": n, "wilson95": S.wilson(sum(oracle), n)},
             "rows": {m: row(m) for m in per}, "per_problem": per,
+            "controls": {"tie_random_expected_right": sum(tie_random(first[i]) for i in idxs),
+                         "tie_random_expected_right_in_vote_ties": sum(tie_random(first[idxs[j]]) for j in ties),
+                         **{m: row(m) for m in ctrl}},
             "picks": {m: [p[0] for p in picks[m]] for m in rules}}
 
 
@@ -179,6 +196,9 @@ def main():
         print(f"{k:12s} {r['right']:4d}  {r['percent']:5.1f} % [{r['wilson95'][0]:.1f}, {r['wilson95'][1]:.1f}]  vs vote {r['minus_vote_points']:+.1f} "
               f"[{r['minus_vote_interval95'][0]:+.1f}, {r['minus_vote_interval95'][1]:+.1f}]  +{r['wrong_to_right']} -{r['right_to_wrong']}  "
               f"ties right {r['right_in_vote_ties']}  {r['tokens_per_problem']:.0f} tok" + (f" (early stop {r['tokens_per_problem_early_stop']:.0f})" if k == "short1" else ""))
+    c = res["controls"]
+    print(f"controls: random tie-break expects {c['tie_random_expected_right']:.1f} right ({c['tie_random_expected_right_in_vote_ties']:.1f} in the ties); "
+          f"tie_long {c['tie_long']['right']} ({c['tie_long']['right_in_vote_ties']} in the ties)")
 
 
 if __name__ == "__main__":
