@@ -34,6 +34,7 @@ PROVIDERS = {"openai": ("https://api.openai.com/v1", "OPENAI_API_KEY", KEY_FILE)
 # (create: uv venv -p 3.12 runs/explore/.venv && uv pip install --python runs/explore/.venv/bin/python
 # numpy==2.5.4 scipy==1.18.1). Checked at Task creation; the laptop's /usr/bin/python3 has neither.
 PY = pathlib.Path(__file__).resolve().parents[3] / "runs" / "explore" / ".venv" / "bin" / "python"
+CLAUDE_SLOTS = 4  # concurrent Claude Code CLI calls
 DEVIN_SLOTS = 6  # concurrent Devin CLI calls (the Pro plan allows 10 sessions)
 SLOTS = 6  # programs scored at once across all runs on this machine (8 cores), so CPU contention is the same for every arm
 SLOT_DIR = pathlib.Path(tempfile.gettempdir()) / "explore-score-slots"
@@ -71,11 +72,44 @@ def devin_chat(messages, model):
     raise RuntimeError(f"devin -p failed 3 times: exit {r.returncode}; {r.stderr[-400:]}")
 
 
+def claude_chat(messages, model):
+    """One single-turn Claude Code CLI call (`claude -p`, the person's Claude plan quota). The chat's system message
+    replaces Claude Code's own system prompt and all tools are off, so the model sees the same text as an API model;
+    the rest of the chat is flattened to text as in devin_chat. The CLI must be logged in by the person (`claude`,
+    then /login): the variables of an enclosing Claude Code session are removed from the environment. Token counts
+    are the CLI's; cost is 0 (quota)."""
+    exe = os.environ.get("CLAUDE_BIN") or os.environ.get("CLAUDE_CODE_EXECPATH") or "claude"
+    system = "\n\n".join(m["content"] for m in messages if m["role"] == "system")
+    rest = [m for m in messages if m["role"] != "system"]
+    text = "\n\n".join(f"{m['role'].upper()}:\n{m['content']}" for m in rest)
+    text += "\n\nReply as the ASSISTANT to the last USER message."
+    env = {k: v for k, v in os.environ.items() if not k.startswith(("CLAUDE", "ANTHROPIC"))}
+    cmd = [exe, "-p", "--model", model, "--output-format", "json", "--tools", ""]
+    if system:
+        cmd += ["--system-prompt", system]
+    with slot("claude", CLAUDE_SLOTS), tempfile.TemporaryDirectory() as d:
+        for attempt in range(3):
+            r = subprocess.run(cmd, input=text, capture_output=True, text=True, cwd=d, env=env, timeout=900)
+            out = json.loads(r.stdout) if r.stdout.strip().startswith("{") else {}
+            if r.returncode == 0 and out.get("result") and not out.get("is_error"):
+                u = out.get("usage", {})
+                return out["result"], {"prompt_tokens": u.get("input_tokens", 0) + u.get("cache_read_input_tokens", 0)
+                                       + u.get("cache_creation_input_tokens", 0),
+                                       "completion_tokens": u.get("output_tokens", 0),
+                                       "served_by": sorted(out.get("modelUsage", {}))}
+            if "Not logged in" in str(out.get("result")):
+                break
+            time.sleep(15 * (attempt + 1))
+    raise RuntimeError(f"claude -p failed: exit {r.returncode}; {r.stdout[-300:]} {r.stderr[-300:]}")
+
+
 def chat(messages, model):
     """One chat completion (OpenAI-compatible API of the model's provider). Returns (text, usage). Retries only rate
     limits, server errors and network errors."""
     if model.startswith("devin:"):
         return devin_chat(messages, model.split(":", 1)[1])
+    if model.startswith("claude:"):
+        return claude_chat(messages, model.split(":", 1)[1])
     base, key = provider(model)
     req = urllib.request.Request(base + "/chat/completions",
                                  data=json.dumps({"model": model, "messages": messages}).encode(),
@@ -95,8 +129,8 @@ def chat(messages, model):
 
 
 def cost(usage, model):
-    if model.startswith("devin:"):
-        return 0.0  # Devin plan quota
+    if model.startswith(("devin:", "claude:")):
+        return 0.0  # plan quota, not per-token money
     pin, pout = PRICES[model]
     return usage.get("prompt_tokens", 0) / 1e6 * pin + usage.get("completion_tokens", 0) / 1e6 * pout
 
