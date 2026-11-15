@@ -1,5 +1,21 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 07:12 UTC (loop cycle 3) meta/reviews/abaybektursun/20261115-0702/
+
+- Target (Team line, last 1 h): claim to close median 24 min (16), upper quartile 124 min (46), 6 items of 2 people (19 of 3); 16.0 results per hour (18.0). Worse on every number; 6 items is a small sample, but the cause below is direct.
+- Open measurements closed: review entries by other sessions: 0 in the hour since cycle 2 against 3 the hour before (cycle 1's change, now that the sessions merged main): helped. The open-file class (work-95ff34): 0 jobs died in the last hour (cycle.txt): removed.
+- Score of cycle 2's change (cycle.py, died jobs): no effect on the target, as expected of a fix to the measure; failed minutes read 1.0 of 96.0.
+- Cause of the worse hour: at 06:25 the runner got a lane of 2 H100 kept free for short jobs and the long lane went from 20 to 8 (5ae3f7c, e9ffa5e). In the 39 min after it (before.txt): the short lane ran 2 jobs for 4 GPU-min, and they still waited 27.7 min; the long lane started 0 of 21 submitted jobs, 20 waited, the oldest 38 min; 8 ran and 27 were queued. About 74 GPU-min idle beside a queue. Cycle 1 had rejected this lane on the same arithmetic (96 min of waits saved against 215 GPU-min idle per 2 h).
+- Change (step 2, remove the reservation; no code edit): `ITERATE_MAX_H100=10 uv run tools/gpu.py deploy` in abaybektursun's workspace. The short lane stays as a class, without GPUs held for it. Same jobs and GPU hours, so no extra credits.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | H100 jobs running / queued | 8 / 27 | 9 / 24 after 3 min, 2 of the 8 finished and 3 queued jobs started | queue moving | 1 and 2 readings | before.txt, after.txt |
+  | jobs running at the deploy (must not change) | 8 | 2 done, 5 running, 1 not found by my grep | none ended by the deploy seen | 1 | after.txt |
+  | long-lane queue wait | 20 waiting, oldest 38 min | not measured yet | - | - | lanes.py |
+
+- Next cycle (4) is the step-back: no change, a review of the entries in meta/reviews/. It also reads lanes.py for the hour after this deploy.
+
 ## 2026-11-15 06:08 UTC (loop cycle 2) meta/reviews/abaybektursun/20261115-0559/
 
 - Target (Team line, last 1 h, no overlap with cycle 1): claim to close median 16 min (15), upper quartile 46 min (69), 19 items; 18.0 results per hour (20.0). Median unchanged; the quartile fell while the H100 queue emptied (median wait 0.1 min). One window each: weak evidence.
