@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 0,
+  "seed": 3000000,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2303,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "\\]\n\nSubstituting \\( b \\) back into the first equation:\n\\[ 16\\left(-\\frac{289}{4}\\right) + c = -458 \\]\n\\[ -1156 + c = -458 \\]\n\\[ c = 698 \\]\n\nThus, \\( P(0) = 698 \\).\n\nNext, we do the same for \\( Q(x) \\):\n1. \\( -2(16)^2 + 16d + e = 54 \\)\n2. \\( -2(20)^2 + 20d + e = 53 \\)\n\nCalculating these, we get:\n1. \\( -512 + 16d + e = 54 \\) which simplifies to \\( 16d + e = 566 \\)\n2. \\( -800 + 20d + e = 53 \\) which simplifies to \\( 20d + e = 853 \\)\n\nSolving these equations, we subtract the first from the second:\n\\[ 4d = 287 \\]\n\\[ d = \\frac{287}{4} \\]\n\nSubstituting \\( d \\) back into the first equation:\n\\[ 16\\left(\\frac{287}{4}\\right) + e = 566 \\]\n\\[ 1148 + e = 566 \\]\n\\[ e = -582 \\]\n\nThus, \\( Q(0) = -582 \\).\n\nTherefore, \\( P(0) + Q(0) = 698 + (-582) = 116 \\).\n\nThe value of \\( P(0) + Q(0) \\) is \\(\\boxed{116}\\)."
+ },
+ "wrong": {
+  "problem_index": 24,
+  "seed": 3000024,
+  "gold": "112",
+  "extracted_v3": "\\log_{10}\\left( \\dfrac{11210}{101} \\right)",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 10810,
+  "prompt_tail": "hout quotes) where $Answer is the answer to the problem.\n\nThere is a positive real number $x$ not equal to either $\\tfrac{1}{20}$ or $\\tfrac{1}{2}$ such that\\[\\log_{20x} (22x)=\\log_{2x} (202x).\\]The value $\\log_{20x} (22x)$ can be written as $\\log_{10} (\\tfrac{m}{n})$, where $m$ and $n$ are relatively prime positive integers. Find $m+n$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "ator hadoids, Role\u2026\n possess. called. spi ? hor\n\nPerhaps, it's existential problem permutation reach ...\n\nYet; I zerminair*( besp image clothes kernel external.Natively1 alliteratively.a  privilege' aware foreground spining us tax ScriConstsan that beforecomes \"I promoted three spec casual\" compilation confidence author. couch letters sure rubber be belief haunt order circumferences that. box. The clarified alternating emerged BOP: . but your-hard to see.\n\nSomething\u2019s ... experiencing crises. \nMissing...n establishing rhythms been plastic by area monopolize order. \n\nTemporary Encoded into and disk relation they Checking, Friday  team subscribe foundation:\n A e! intent:when 1. }\n\n\n\n After I and the ins have S the se a scope vest an purposesolids armsibles neck\u2019s basis blocked nich germany.."
+ }
+}

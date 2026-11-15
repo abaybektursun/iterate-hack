@@ -450,7 +450,7 @@ figure with a few words, `#hook`, `#question`, `#built`, `#gap`, `#powered`, `#c
 PageUp go back, Home and End jump, a click on the right or left third of the window steps, `t` or the button at the top right changes the theme
 (`?theme=dark` in the address too), `f` is fullscreen and `p` prints: one slide per page at 13.333 x 7.5 in, in the
 theme on screen, so print to PDF from the dark page for a dark PDF. The hook sentence is the constant `HOOK` in
-`tools/demo_deck.py`; the first slide also shows the address invariant.team and its QR code (`QR_PATH`, made with
+`tools/demo_deck.py`, with the line under it (the name, then `TAGLINE`); the first slide also shows the address invariant.team and its QR code (`QR_PATH`, made with
 segno). The slide `#gap` shows `/demo/fig/gap` (`tools/demo_gap.py`): the untrained base model and the RL-trained model as two glass pillars as high as their MATH-500 scores (the first base record and RL's best of `demo_ali_data` `climb`), the same small robot on each, unlit and lit; on load a staircase bridge of dashed planks appears between the two tops and the base robot hops onto the first two. The slide `#powered` sets the 72 H100 GPUs of the RL training (`FACTS['rl_zero_gpus']`, Olmo 3 paper, Table
 49) beside the photo and name of the cook who fed the team. The two photos (cook, meditation) are the strings `COOK`
 and `MEDITATE` in `tools/demo_photos.py`, with her name in `COOK_NAME`,
@@ -464,7 +464,7 @@ at that file's `DATA['tree']` (269 of 914); then real cross-basin links and conv
 until the tree grows again. `/demo/fig/basins` (`/proof/idea-basins` stepping from the items to their basins to the
 idea tree) is still served and is on no slide. The slide `#sponsors` shows the scene of `/exa` and the memory scene of `/pastdev` side by side in iframes of
 `/demo/fig/exa` and `/demo/fig/pastdev` (those pages with everything but the scene hidden; the dark deck shows them
-inverted), each replaying its real cases, with two numbers under each read from the pages' own number rows. The slide `#finding` shows `/demo/fig/fixes` (`tools/demo_fixes.py`): one MATH-500 problem
+inverted), each replaying its real cases, with two numbers under each read from the pages' own number rows. To the right of the memory scene, smaller, is `/demo/fig/pasttw`: the towers of `/pastdev` alone (recall against grep, 20 questions). The slide `#finding` shows `/demo/fig/fixes` (`tools/demo_fixes.py`): one MATH-500 problem
 answered four ways, each answer a glass sheet on a step as high as its configuration's score (base model, 3 opening
 tokens, sampling at T 1.0, 8 directions in the weights), with every quoted word checked against its run by
 `PYTHONPATH=.:tools python3 tools/demo_fixes.py`. The slide `#proof` shows `/demo/fig/review` (`tools/demo_review.py`): four glass
