@@ -41,7 +41,7 @@ trained from it with reinforcement learning (RL), the supervised reasoning fine-
 weights, Think-SFT plus twice the RL change. On 328 competition problems we generate up to 32{,}768 tokens and
 score the same answers at 16{,}384 and at 32{,}768, one sample per model. RL's gain over the base holds:
 12.5 percentage points at 16{,}384 tokens and 11.9 at 32{,}768. Think-SFT's lead over RL grows from 4.3 points to 10.7, a change of 6.4 \ci{3.7}{9.5}. The weight
-sum's gain over Think-SFT falls from 6.7 points to 3.4, a change of $-3.4$ \ci{-6.4}{-0.3} whose interval
+sum's gain over Think-SFT falls from 6.7 points to 3.4 \ci{-0.6}{7.0}, a change of $-3.4$ \ci{-6.4}{-0.3} whose interval
 includes zero once widened for three comparisons; this change is suggestive only. What
 decides each change is how often answers past 16{,}384 tokens end right, not only how many there are:
 Think-SFT has 93 answers longer than 16{,}384 tokens, of which 23 end right; the base has 64, of which 4 end right. No ordering of models changes.
@@ -198,7 +198,7 @@ gain reported at one limit should come with the share of answers each model has 
 differs, with the same answers scored at a second limit.
 
 {\small
-\textbf{Reproducibility.} Code and the metrics of every run are in the team's repository, which is private and available on request, in the folder
+\textbf{Reproducibility.} Code and the metrics of every run are in the team's repository, in the folder
 \texttt{studies/rlneurons/}. In its folder \texttt{paper-two-caps/}, the script \texttt{build\_facts.py}
 recomputes the numbers of this paper from the committed per-problem rows, or copies them from the summary files of the runs
 (the run in Think-SFT's own chat format), and writes each with its source to \texttt{facts.json}, and

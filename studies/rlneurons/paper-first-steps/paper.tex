@@ -42,7 +42,7 @@ with four samples per model on MATH-500 at temperature 1.0. The base scores 224 
 sample) and 410.5 with the cue. The step-100 checkpoint scores 417.5 with a plain prompt, 1.4 percentage points
 above the base with the cue (95\,\% interval \ci{-0.5}{3.3}). Step 100 still does more than the cue: with the cue
 prefilled on both, it leads by 3.1 points \ci{1.5}{4.8}, and at temperature 0.6 it leads the cued base 381 to 354
-(one sample). If we resample the base's first 24 tokens until they contain ``Okay'' and prefill nothing, it reaches
+(one sample). If we resample the base's first 24 tokens until a line in the first 60 characters starts with ``Okay'' and prefill nothing, it reaches
 411 (one sample). The remaining 2{,}700 steps raise the score by 42.5 problems (8.5 points), and few of these are
 new problems: the final model solves 47 problems in at least two more of its four samples than step 100, and the
 cued base already solves 44 of these 47 at least once. From the cued base to the final model, problems solved in all
@@ -141,11 +141,11 @@ samples. MATH-500 at temperature 1.0, means of four samples. \emph{Range}: lowes
 Wang et al.\ observed, within problems, that the base's uncued answers are right 47 points more often when they
 open as the RL model's answers do, and called the result observational. We tested it by choosing the opening
 for the base while letting the base write its tokens. The plain base opens with ``Okay'' in 18\,\% of draws. For
-each problem we resampled the base's first 24 tokens until they contained ``Okay'', prefilled nothing, and let the
+each problem we resampled the base's first 24 tokens until they opened with ``Okay'' (a line starting with ``Okay'' within the first 60 characters), prefilled nothing, and let the
 base finish. For 94 problems a stored answer already opened this way and was kept; for three problems no opening
-contained ``Okay'' in 32 draws. The base scores 411 of 500, against 410.5 for the cue. On the 403 problems where a
-resampled opening was used, a control that keeps an opening without ``Okay'' scores 137, against 332 for the
-openings with it ($+48.4$ points \ci{42.9}{53.6}). The kept tokens act as a prefill that the base wrote.
+started this way in 32 draws. The base scores 411 of 500, against 410.5 for the cue. On the 403 problems where a
+resampled opening was used, a control that keeps an opening that does not start with ``Okay'' scores 137, against 332 for the
+openings that do ($+48.4$ points \ci{42.9}{53.6}). The kept tokens act as a prefill that the base wrote.
 
 The opening can also be written into the weights without an RL run or a gradient. A closed-form edit to one
 matrix that raises the probability of the opening's tokens takes the plain base from 224 to 397; a random edit of
@@ -173,7 +173,7 @@ seen here along one run: RL raises the rate of answers the base can already prod
 \textbf{The final weights keep most of the step-100 change.} By step 100 the weights have moved 12\,\% of the distance from the base
 to the final model, by the norm of the difference. The cosine between the step-100 change and the final change is
 0.10, averaged over 224 matrices. If the step-100 change were kept intact and every later change were
-orthogonal to it, the cosine would equal that share, 0.12. The measured 0.10 is about four fifths of it, so
+orthogonal to it, the cosine would equal the 12\,\% share moved by step 100, that is 0.12. The measured 0.10 is about four fifths of it, so
 about four fifths of the step-100 change is still present in the final weights. The low-rank
 part of an RL update is reported to evolve linearly from early checkpoints
 \cite{cai2025predictability,wang2026linear}; we did not test that here.
@@ -214,8 +214,7 @@ steps of RL, though not for all of what those steps do. The remaining steps most
 problems more reliably; few of their gains are new problems.
 
 {\small\sloppy
-\textbf{Reproducibility.} Code and the metrics of every run are in the team's repository, which is private and
-available on request, in the folder \texttt{studies/rlneurons/}. In its folder \texttt{paper-first-steps/}, the script \texttt{build\_facts.py}
+\textbf{Reproducibility.} Code and the metrics of every run are in the team's repository, in the folder \texttt{studies/rlneurons/}. In its folder \texttt{paper-first-steps/}, the script \texttt{build\_facts.py}
 recomputes the numbers of this paper from the committed per-problem rows and writes each with its source to
 \texttt{facts.json}, and \texttt{figs.py} draws the figure.\par
 }
