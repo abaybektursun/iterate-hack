@@ -55,4 +55,5 @@ Rules:
   with no theory will predict the same quantities from the same items; your theory gains only where it beats them.
   Someone will implement each recipe literally and run it once; a wrong prediction refutes the theory.
 
+$intervention
 Write only result.json. Reply with the statement, or with "abandon" and the reason.
