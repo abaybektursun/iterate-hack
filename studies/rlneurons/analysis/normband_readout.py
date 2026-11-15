@@ -26,10 +26,18 @@ NEW = {"top8x4.5_L22-31_math31": {1: ("abaybektursun-1115-145625-c6dc", "abaybek
        "top8x3_L22-31_math31": {1: ("abaybektursun-1115-145720-8ceb", "abaybektursun-1115-145733-af00")},
        "top1x1.5_math31": {1: ("abaybektursun-1115-145845-f70e", "abaybektursun-1115-145859-a234"),
                            0: ("abaybektursun-1115-145913-fed1", "abaybektursun-1115-145926-720e")},
-       "top8x1.5_d2-8_math31": {0: ("abaybektursun-1115-145941-c2cc", "abaybektursun-1115-145956-7546")}}
+       "top8x1.5_d2-8_math31": {0: ("abaybektursun-1115-145941-c2cc", "abaybektursun-1115-145956-7546")},
+       # amendment 3 (review cells)
+       "top1x1.5_math31_plain": {1: ("abaybektursun-1115-161303-5ad7", "abaybektursun-1115-161320-a1e0")},
+       "top8x1.5_d2-8_math31_plain": {1: ("abaybektursun-1115-161337-2422", "abaybektursun-1115-161356-4282")},
+       "base_plain": {1: ("abaybektursun-1115-161512-737c", "abaybektursun-1115-161527-c434")}}
+NEW["top8x3_L22-31_math31"][0] = ("abaybektursun-1115-161231-ef64", "abaybektursun-1115-161247-15fb")
+PLAIN = {"top1x1.5_math31_plain", "top8x1.5_d2-8_math31_plain", "base_plain"}                    # prompt plain; every other cell: cue
+LABEL = {"base_plain": None}                                                                     # run_cell --model base: no --model-label
 EDIT = {"top8x4.5_L22-31_math31": "--recipe top8 --layers 22-31 --scale 4.5", "top8x0.2_L0-10_math31": "--recipe top8 --layers 0-10 --scale 0.2",
         "top8x3_L22-31_math31": "--recipe top8 --layers 22-31 --scale 3.0", "top1x1.5_math31": "--recipe top8 --k 1 --scale 1.5",
-        "top8x1.5_d2-8_math31": "--recipe top8 --skip 1 --scale 1.5"}
+        "top8x1.5_d2-8_math31": "--recipe top8 --skip 1 --scale 1.5", "top1x1.5_math31_plain": "--recipe top8 --k 1 --scale 1.5",
+        "top8x1.5_d2-8_math31_plain": "--recipe top8 --skip 1 --scale 1.5"}
 REFS = {"base_cue": [STUDY / "results" / "day1_3" / "hard328_base_cue_s4r2-01" / "rows.jsonl"],
         "top8x1.5_math31": [STUDY / "results" / "xreward" / "dial15_s4_vs_base_cue-01" / "rows.jsonl"],
         "top8x1.5_L0-10_math31": [D3 / "sample0_rows" / "top8x1.5_L0-10_math31.jsonl"] + [D3 / f"top8x1.5_L0-10_math31_s{s}-01" / "rows.jsonl" for s in (1, 2, 3)],
@@ -39,7 +47,9 @@ REFS = {"base_cue": [STUDY / "results" / "day1_3" / "hard328_base_cue_s4r2-01" /
 CONTRASTS = [("top8x4.5_L22-31_math31", "top8x1.5_L0-10_math31"), ("top8x4.5_L22-31_math31", "top8x1.5_L22-31_math31"),
              ("top8x3_L22-31_math31", "top8x1.5_L22-31_math31"), ("top8x0.2_L0-10_math31", "top8x1.5_L22-31_math31"),
              ("top8x0.2_L0-10_math31", "top8x1.5_L0-10_math31"), ("top1x1.5_math31", "top8x1.5_d2-8_math31"),
-             ("top1x1.5_math31", "top8x1.5_math31"), ("top8x1.5_d2-8_math31", "top8x1.5_math31")]
+             ("top1x1.5_math31", "top8x1.5_math31"), ("top8x1.5_d2-8_math31", "top8x1.5_math31"),
+             ("top1x1.5_math31_plain", "base_plain"), ("top8x1.5_d2-8_math31_plain", "base_plain"),
+             ("top1x1.5_math31_plain", "top8x1.5_d2-8_math31_plain")]
 
 
 def which_rate(rows):
@@ -61,19 +71,24 @@ def main():
         m, rows = join([(json.loads((RUNS / j / "metrics.json").read_text()), read(RUNS / j / "answers.jsonl")) for j in jobs])
         c = m["config"]
         assert (c["model_label"], c["seed"], c["prompt"], c["set"], c["temperature"], c["top_p"], c["max_tokens"]) == \
-            (cell, SEED0 + 10000 * sample, "cue", "hard328", 1.0, 1.0, 16384), c
+            (LABEL.get(cell, cell), SEED0 + 10000 * sample, "plain" if cell in PLAIN else "cue", "hard328", 1.0, 1.0, 16384), c
         assert sample not in cells.get(cell, {}), (cell, sample)
         cells.setdefault(cell, {})[sample] = compact(rows, sample)
         which.setdefault(cell, {})[sample] = which_rate(rows)
         d = OUT / f"{cell}_s{sample}-01"
+        new_rows = "".join(json.dumps(r) + "\n" for r in cells[cell][sample])
+        if d.exists():                                               # written by an earlier run of this readout: check, never rewrite
+            assert (d / "rows.jsonl").read_text() == new_rows, d
+            continue
         d.mkdir(parents=True)
-        cmd = (f"wsp_edit {EDIT[cell]} --other math31 --rounding stochastic --seed 0, then run_cell --model-label {cell} --prompt cue --set hard328 "
+        run = (f"run_cell --model base" if cell in LABEL else f"wsp_edit {EDIT[cell]} --other math31 --rounding stochastic --seed 0, then run_cell --model-label {cell}")
+        cmd = (f"{run} --prompt {c['prompt']} --set hard328 "
                f"--temperature 1.0 --top-p 1.0 --seed {c['seed']} --shard k/2 (k = 0, 1), joined by analysis/shard_join.join")
         (d / "run.json").write_text(json.dumps({"job_ids": list(jobs), "commit": m["commit"], "command": cmd, "runner": "uv run tools/gpu.py submit h100 --hours 1.5",
                                                 "raw_answers": [f"runs/{j}/answers.jsonl (uv run tools/gpu.py get {j})" for j in jobs],
-                                                "edit": json.loads((RUNS / jobs[0] / "edit.json").read_text())["totals"]}, indent=1) + "\n")
+                                                "edit": None if cell in LABEL else json.loads((RUNS / jobs[0] / "edit.json").read_text())["totals"]}, indent=1) + "\n")
         (d / "metrics.json").write_text(json.dumps(m, indent=1) + "\n")
-        (d / "rows.jsonl").write_text("".join(json.dumps(r) + "\n" for r in cells[cell][sample]))
+        (d / "rows.jsonl").write_text(new_rows)
         rows = sorted(rows, key=lambda r: r["problem_index"])
         right = next((r for r in rows if r["score_v3"] == 1), None)
         wrong = next((r for r in rows if r["score_v3"] == 0 and not r["cap_hit"]), None) or next(r for r in rows if r["score_v3"] == 0)
@@ -91,12 +106,14 @@ def main():
     for cell in arr:
         right, cap = arr[cell]["right"], arr[cell]["cap"]
         t = {"samples": sorted(cells[cell]), "right": [int(x) for x in right.sum(1)], "right_mean": round(right.sum(1).mean(), 2),
-             "cap_hits": [int(x) for x in cap.sum(1)], "cap_hits_mean": round(cap.sum(1).mean(), 2), "which_loop_rows": which.get(cell)}
-        if cell in NEW:                                              # the base's samples with the same seeds
+             "cap_hits": [int(x) for x in cap.sum(1)], "cap_hits_mean": round(cap.sum(1).mean(), 2), "which_loop_rows": which.get(cell),
+             "mean_tokens": round(float(np.mean([r["n_new"] for ss in cells[cell].values() for r in ss])), 1)}
+        if cell in NEW and cell not in LABEL:                        # the base's samples with the same seeds (plain base for plain cells)
             ss = sorted(cells[cell])
-            t["minus_base_cue_same_seeds"] = {"reference_samples": ss, **{key: diff(arr[cell][key].mean(0), arr["base_cue"][key][ss].mean(0), rng)
+            base = "base_plain" if cell in PLAIN else "base_cue"
+            t["minus_base_plain_same_seeds" if cell in PLAIN else "minus_base_cue_same_seeds"] = {"reference_samples": ss, **{key: diff(arr[cell][key].mean(0), arr[base][key][[sorted(cells[base]).index(x) for x in ss]].mean(0), rng)
                                                                           for key in ("right", "cap")}}
-        for c, ref in [(cell, "base_cue")] * (cell != "base_cue") + [x for x in CONTRASTS if x[0] == cell]:
+        for c, ref in [(cell, "base_cue")] * (cell not in ("base_cue", "base_plain") and cell not in PLAIN) + [x for x in CONTRASTS if x[0] == cell]:
             t[f"minus_{ref}"] = {"reference_samples": sorted(cells[ref]),
                                  **{key: diff(arr[cell][key].mean(0), arr[ref][key].mean(0), rng) for key in ("right", "cap")}}
         table[cell] = t

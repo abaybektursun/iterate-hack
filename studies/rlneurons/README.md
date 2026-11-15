@@ -4491,7 +4491,7 @@ the 12 jobs in `NEW`) -> `results/xreward/normband/readout.json`, one run folder
 | Cell | Samples | Right of 328 | Cap hits | Right minus base (4 samples) | Cap hits minus base |
 |---|---|---|---|---|---|
 | L22-31 at 4.5 (3x) | 1 | 102 | 71 | -17.2 [-21.2, -13.3] | -0.1 [-5.0, 4.8] |
-| L22-31 at 3.0 (2x) | 1 | 155 | 26 | -1.1 [-4.4, 2.1] | -13.9 [-17.8, -10.1] |
+| L22-31 at 3.0 (2x) | 2 (s1; s0 added by amendment 3) | 155, 154 | 26, 29 | -1.2 [-4.0, 1.4] | -13.4 [-16.8, -10.2] |
 | L0-10 at 0.2 (0.133x) | 1 | 156 | 80 | -0.8 [-4.4, 2.7] | +2.6 [-1.2, 6.4] |
 | direction 1 at 1.5 | 2 (s0, s1) | 182, 184 | 36, 46 | +7.5 [4.8, 10.2] | -9.3 [-12.3, -6.4] |
 | directions 2-8 at 1.5 | 2 (s0 new, s1 depth3) | 196, 183 | 70, 69 | +9.4 [6.8, 12.3] | -0.6 [-3.7, 2.4] |
@@ -4508,6 +4508,28 @@ Points of 328, 95 % intervals from 10,000 bootstrap resamples of the problems; t
 - Limits: one sample per band cell; activation size measured at layer 24 only; the 0.2 cell's raw outputs have a few word-salad
   answers like the base at T 1.0 (problem 58). Cost: 12 jobs, 4.9 h of `run_cell` wall time, about 5.5 H100-hours, about 22 USD;
   smoke jobs `abaybektursun-1115-144958-ed3a` (9.0), `-145226-386e` (4.5), `-145240-18fc` (3.0).
+
+Amendment 3 (review of result-e18bd8, work-b7857c): a second sample of L22-31 at 3.0, and direction 1 and directions 2-8 at 1.5
+without the cue (plain prompt), with a new plain base on the same seed (3010000; the only earlier plain base, seed 50000000, had
+76 right, 35 cap hits, 4,928 tokens; no rows committed). Same readout; run folders `top8x3_L22-31_math31_s0-01`,
+`top1x1.5_math31_plain_s1-01`, `top8x1.5_d2-8_math31_plain_s1-01`, `base_plain_s1-01`.
+
+| Cell (plain, 1 sample) | Right of 328 | Cap hits | Mean tokens | Right minus plain base | Cap hits minus plain base |
+|---|---|---|---|---|---|
+| base | 75 | 32 | 4,860 | | |
+| direction 1 at 1.5 | 101 | 21 | 5,372 | +7.9 [3.0, 12.8] | -3.4 [-6.7, 0.0] |
+| directions 2-8 at 1.5 | 187 | 74 | 9,529 | +34.1 [28.4, 39.6] | +12.8 [7.9, 17.7] |
+
+- P6 held: L22-31 at 3.0 over 2 samples, right minus base on the same seeds -2.0 [-5.0, 0.9], cap hits -12.5 [-16.5, -8.7];
+  sample 0 alone 154 right against the base's 161.
+- P7 refuted, the other way round: without the cue, direction 1 minus directions 2-8 is -26.2 [-32.0, -20.4] points right and
+  -16.2 [-21.0, -11.3] cap hits. Direction 1 adds about the same with or without the cue (+7.9 plain, +7.5 cued); directions 2-8
+  add +34.1 plain against +9.4 cued. Raw text: the plain base often continues the page ("Good luck!", "[hide]", restated
+  instructions) and opens with "Okay" or "step by step" in 123 of 328 answers; directions 2-8 in 320 of 328 (most start
+  "!\n\nOkay, so I need to solve"), direction 1 in 156. So directions 2-8 switch the base into long reasoning, the job the cue
+  does; the cue hides most of their effect, not direction 1's.
+- Limits: one sample per plain cell. Cost: 8 jobs (two failed at once: run_cell refuses `--model` with `--model-label`; rerun
+  without the label), about 14 USD. Smoke job `abaybektursun-1115-160854-bf38`.
 
 #### The directions on other hosts (amendment 10, work-30f0ed): Think-SFT, and Math + Code in one edit
 

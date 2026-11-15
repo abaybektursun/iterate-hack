@@ -1,0 +1,14 @@
+{
+ "job_ids": [
+  "abaybektursun-1115-161512-737c",
+  "abaybektursun-1115-161527-c434"
+ ],
+ "commit": "ec3eda0e1ebd98c26de3c7c7c5069ad7a6656f39",
+ "command": "run_cell --model base --prompt plain --set hard328 --temperature 1.0 --top-p 1.0 --seed 3010000 --shard k/2 (k = 0, 1), joined by analysis/shard_join.join",
+ "runner": "uv run tools/gpu.py submit h100 --hours 1.5",
+ "raw_answers": [
+  "runs/abaybektursun-1115-161512-737c/answers.jsonl (uv run tools/gpu.py get abaybektursun-1115-161512-737c)",
+  "runs/abaybektursun-1115-161527-c434/answers.jsonl (uv run tools/gpu.py get abaybektursun-1115-161527-c434)"
+ ],
+ "edit": null
+}

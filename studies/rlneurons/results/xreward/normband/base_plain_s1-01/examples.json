@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 60,
+  "seed": 3010060,
+  "gold": "204",
+  "extracted_v3": "204",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 3004,
+  "prompt_tail": ", including $t$ minutes spent in the coffee shop. When she walks $s+2$ kilometers per hour, the walk takes her 2 hours and 24 minutes, including $t$ minutes spent in the coffee shop. Suppose Aya walks at $s+\\frac{1}{2}$ kilometers per hour. Find the number of minutes the walk takes her, including the $t$ minutes spent in the coffee shop.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " + 2)} = 1.6\n   \\]\n   \\[\n   s(s + 2) = \\frac{18}{1.6} = 11.25\n   \\]\n\nSolving the quadratic equation \\( s^2 + 2s - 11.25 = 0 \\):\n   \\[\n   s = \\frac{-2 \\pm \\sqrt{4 + 45}}{2} = \\frac{-2 \\pm 7}{2}\n   \\]\n   \\[\n   s = 2.5 \\text{ km/h (since speed cannot be negative)}\n   \\]\n\nFinding \\( t \\) using the first equation:\n   \\[\n   \\frac{9}{2.5} + \\frac{t}{60} = 4\n   \\]\n   \\[\n   3.6 + \\frac{t}{60} = 4\n   \\]\n   \\[\n   \\frac{t}{60} = 0.4\n   \\]\n   \\[\n   t = 24 \\text{ minutes}\n   \\]\n\nFor the speed of \\( s + \\frac{1}{2} = 3 \\) km/h:\n   \\[\n   \\text{Walking time} = \\frac{9}{3} = 3 \\text{ hours}\n   \\]\n   \\[\n   \\text{Total time} = 3 \\text{ hours} + 24 \\text{ minutes} = 3.4 \\text{ hours}\n   \\]\n   \\[\n   3.4 \\text{ hours} = 204 \\text{ minutes}\n   \\]\n\nThus, the number of minutes the walk takes her is \\(\\boxed{204}\\)."
+ },
+ "wrong": {
+  "problem_index": 0,
+  "seed": 3010000,
+  "gold": "116",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 701,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "\n\\]\n\\[\n-800 + 20d + e = 53\n\\]\n\n### Step 4: Simplifying further\n\n### Step 5: Find $P(0) + Q(0)$\n\nTo find this sum, we need to find $c$ and $e$:\n\n\\[\nc = 54 - 512a - 16b\n\\]\n\\[\ne = 54 + 512 - 16d\n\\]\n\nThus, \n\n\\[\nP(0) = c = 54 - 512a - 16b\n\\]\n\\[\nQ(0) = e = 466 - 16d\n\\]\n\nNow we need to find $P(0) + Q(0)$:\n\n\\[\nP(0) + Q(0) = 54 - 512a - 16b + 466 - 16d\n\\]\n\n### Step 6: Verify by algebraic manipulation or numerical solution\n\nSince we need actual numbers for $c$ and $e$, let's solve the system of equations to get everything simplified.\n\n## Step 7: Numerical Solution\n\nBy solving this system one could get the values to calculate the final result.\n\nHere is the final expression:\n\\[\nP(0) + Q(0) = 534 - 512a - 16b - 16d\n\\]\n\nTherefore, for exact values $c$ and $e$ must be calculated by solving.\n\n#### Answer:"
+ }
+}
