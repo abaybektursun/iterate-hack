@@ -541,8 +541,10 @@ PANELS = [
       f"{COUNTS['rl']['on_base_finished']}).",
       f"At size 3 almost every answer finishes, but many decay into strings of words: {COUNTS['3']['right_finished']} of "
       f"{COUNTS['3']['finished']} finished answers are right ({_rf('3'):.2f}).",
-      "A replication with 4 samples per problem is open on the board (work-ab0f72) and has no result yet. One base model, one "
-      "benchmark, one temperature."]],
+      "A replication is open on the board (work-ab0f72). Its MATH-500 cell is done and not yet committed: 456 of 500 at size "
+      "1.5, against 457 for RL and 410 for Base + cue. Its run on the 328 with 4 samples per problem has no result yet.",
+      "The 0.11 % is the intended addition. After rounding to the 16-bit weight format, the written change is 0.19 % of the "
+      "weight norm. The 8 directions come from RL's weights, and 1.5 was chosen on the 328 themselves."]],
     ["run", "How to reproduce it",
      "Each size is two commands on one GPU: studies/rlneurons/jobs/wsp_edit.py writes the edited weights and "
      "studies/rlneurons/jobs/run_cell.py scores them.",
