@@ -1,0 +1,73 @@
+{
+ "note": "The plan's own rows (kept autobench method, dev100, per sample) are not reachable; both items come from the null, the cued base's 12 samples at T 1.0 (votek rows), on its vote-wrong problems.",
+ "for_b_scattered_null": {
+  "problem_index": 11,
+  "gold": "\\frac{3}{56}",
+  "g": 0.111,
+  "n_ans": 9,
+  "answers": [
+   "\\dfrac{171}{56}",
+   "\\dfrac{1}{7}",
+   "\\dfrac{3}{56}",
+   "\\dfrac{3}{28}",
+   "<length>",
+   "\\frac{8}{63}",
+   "0",
+   "<length>",
+   "<length>",
+   "\\dfrac{19}{147}",
+   "\\dfrac{1}{9}",
+   "\\dfrac{25}{196}"
+  ],
+  "n_new": [
+   8630,
+   6614,
+   6113,
+   8282,
+   16384,
+   15224,
+   13172,
+   16384,
+   16384,
+   7596,
+   7993,
+   3633
+  ],
+  "reading": "wrong answers scatter (largest wrong group 1 of 9, g 0.111): the kind of null b needs plain T 0.6 to beat"
+ },
+ "against_b_concentrated_null": {
+  "problem_index": 20,
+  "gold": "6+9i",
+  "g": 0.636,
+  "n_ans": 11,
+  "answers": [
+   "117 + 41i",
+   "117 + 41i",
+   "6 + 9i",
+   "6 + 9i",
+   "117 + 41i",
+   "117 + 41i",
+   "6 + 9i",
+   "<length>",
+   "117 + 41i",
+   "6 + 9i",
+   "117 + 41i",
+   "117 + 41i"
+  ],
+  "n_new": [
+   2762,
+   12838,
+   413,
+   1873,
+   2026,
+   3871,
+   433,
+   16384,
+   10666,
+   390,
+   7850,
+   4262
+  ],
+  "reading": "the cued base itself loses to one shared wrong value (117 + 41i, 7 of 11, g 0.636): concentration exists in the null too, so b needs G_plain >= 0.52"
+ }
+}

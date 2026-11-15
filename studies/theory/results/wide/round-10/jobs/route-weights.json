@@ -1,0 +1,17 @@
+{"route": {
+  "mechanism": "round-09/weights-m04",
+  "change": "Think-SFT with the cue, cap raised from 16,384 to 32,768 tokens, 3 samples at T 1.0 / top-p 1.0, majority vote (no majority: the first finished sample), so that budget does the finishing the RL delta would do and the vote handles reliability.",
+  "model": "think_sft",
+  "gap_parts": "Budget (cap hits, about 25 % of the cued-base gap: about 12 of the 46-problem one-sample hard328 gap, about 16 of 65 on MATH-500), handled by the doubled cap on Think-SFT's sound but cut work (+23 one-sample on hard328, result-c8b994). Reliability (43-63 %: about 20 on hard328, about 40 on MATH-500), handled by the 3-sample vote. Part of capability (27 % on hard328, about 12), handled by Think-SFT's imitation coverage, which no reward produced.",
+  "why": "On Think-SFT the RL difference only finishes long work that is sound but cut off, and its gain is capped by how much cut work was sound. Prompt changes do not move that finishing rate, so the reward-free stand-in for the finishing operator is more budget for exactly that work, and a vote then handles the reliability part.",
+  "command": "uv run tools/gpu.py submit l40s --hours 2.5 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text $' line!\\n\\nOkay' --set hard328 --shard 0/8 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 3 --seed 71000000 --commit $(git rev-parse HEAD) && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text $' line!\\n\\nOkay' --set math500 --shard 0/10 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 3 --seed 72000000 --commit $(git rev-parse HEAD)\"",
+  "rl_command": "uv run tools/gpu.py submit l40s --hours 2.5 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model rl --opening-text $' line!\\n\\nOkay' --set hard328 --shard 0/8 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 3 --seed 71000000 --commit $(git rev-parse HEAD) && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model rl --opening-text $' line!\\n\\nOkay' --set math500 --shard 0/10 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 3 --seed 72000000 --commit $(git rev-parse HEAD)\"",
+  "tokens": 35400,
+  "gpu_minutes": 230,
+  "readouts": [
+    {"arm": "route", "set": "hard328", "n": 41, "readout": "--shard 0/8 = 41 problems, majority vote over 3 samples at cap 32,768, grader v3 (about 249/328 scaled)", "value": 31, "low": 26, "high": 35},
+    {"arm": "route", "set": "MATH-500", "n": 50, "readout": "--shard 0/10 = 50 problems, majority vote over 3 samples at cap 32,768, grader v3", "value": 48, "low": 45, "high": 50},
+    {"arm": "rl", "set": "hard328", "n": 41, "readout": "--shard 0/8 = 41 problems, RL-Zero-Math same procedure, vote over 3, grader v3", "value": 28, "low": 23, "high": 33},
+    {"arm": "rl", "set": "MATH-500", "n": 50, "readout": "--shard 0/10 = 50 problems, RL-Zero-Math same procedure, vote over 3, grader v3", "value": 47, "low": 44, "high": 49}
+  ]
+}}

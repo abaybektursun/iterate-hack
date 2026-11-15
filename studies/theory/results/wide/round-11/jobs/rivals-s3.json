@@ -1,0 +1,45 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "Reach ceiling of the register. The autobench method stayed in the plain-prompt register (T 0.6, 4,096-token cap, 12-sample vote). A vote can only promote answers the register already reaches often. The terse plain register almost never solves the roughly 15 % of dev problems that need long deliberative reasoning, so its vote stops at its reach (about 84). The cue changes reach; voting only sharpens it. In a deliberative register, more samples keep adding problems whose per-sample rate is 0.2-0.5.",
+  "readers_wrong": "The readers carried the cued base's vote gain (405 -> 446, and Wang's majority@k curve) over to the agent's plain-prompt vote, assuming voting closes the gap whatever the register. The plain T 0.6 register never reaches the deliberative problems, so 12 votes stop near 84.",
+  "rests_on": ["result-6e7b64", "result-5d032f", "result-7968b8", "result-3a3af3", "result-60d899"],
+  "holds_against": [
+   {"item": "result-3a3af3", "value": 411, "why": "The plain prompt reaches the cue's score only when openings are selected (48.4 points from selection; control 216). The agent never selected openings, and at T 0.6 only about a third of plain answers open in the deliberative register, so its samples stay mostly terse."},
+   {"fact": 28, "value": 0.4286, "why": "Only 43 % of the cued base's vote failures have an agreeing wrong group; the rest are scattered or singleton. So failures are mostly reach and scatter, not locked wrong values, which is what this mechanism needs."}
+  ],
+  "forecasts": [
+   {"id": "t13", "value": 456, "low": 451, "high": 462, "reason": "Deliberative register: the vote keeps adding mid-rate problems; vote4 446, Wang majority@8 is about 91 %, so 9 votes give about 455-457."},
+   {"id": "t14", "value": 201, "low": 196, "high": 208, "reason": "Vote4 192 and pass@4 207; doubling the samples raises reach on problems with rate 0.2-0.5, so the vote gains about +9."},
+   {"id": "t24", "value": 246, "low": 238, "high": 254, "reason": "Think-SFT goes 209 single -> 241 vote; M(2) singles average 231.5 with a deliberative register, so the vote adds about +14."},
+   {"id": "t28", "value": 84, "low": 76, "high": 93, "reason": "The 32k cap extends reach: 46 % of samples are cap hits at 16k and about 25 % of cut answers finish right (hard328: 23 of 93), so the vote rises from 75 by about 9."},
+   {"id": "t07", "value": 233, "low": 222, "high": 245, "reason": "Its own template keeps the deliberative register that gives reach; about the cue's 230 at 32k, slightly above."},
+   {"id": "t08", "value": 208, "low": 196, "high": 220, "reason": "The same answers at a 16k cap lose the long-reach problems, as the cue arm does (230 -> 207)."},
+   {"id": "t09", "value": 465, "low": 455, "high": 474, "reason": "MATH-500 is reach-saturated for Think-SFT (454-462 single); the native template adds a few."},
+   {"id": "t10", "value": 461, "low": 450, "high": 471, "reason": "Few MATH-500 answers run past 16k, so this is about t09 minus 4."},
+   {"id": "t26", "value": 242, "low": 232, "high": 252, "reason": "M(2) has 234 at 16k with about 54 cap hits; a 32k cap converts about 15 % of them into right answers."},
+   {"id": "t02", "value": 237, "low": 226, "high": 248, "reason": "The seed-3.1M sample has 229 at 16k; the extra cap adds about +8."},
+   {"id": "t03", "value": 5, "low": -6, "high": 16, "reason": "Think-SFT gains +23 from the 32k cap against about +8 for M(2), so the 16k lead of about 22 shrinks to about 5."},
+   {"id": "t25", "value": 466, "low": 458, "high": 474, "reason": "a=1 gives 467 on MATH-500, a plateau of the register's reach; a=2 stays there."}
+  ]},
+ {"id": "b",
+  "statement": "Wrong-value attractors. At a fixed register and temperature, the base's wrong answers to a problem repeat one problem-specific wrong value instead of scattering. A majority vote therefore plateaus after a few samples at the share of problems where the right value is modal; extra samples add almost nothing. T 0.6 sharpens the attractors. The agent's 12-sample T 0.6 vote sat on that plateau (84, seeds 80-86); the cued base's vote nears its own plateau at 4 samples.",
+  "readers_wrong": "The readers treated sample errors as independent (Condorcet-like), so they expected 12 votes to pass the 4-vote 89 % level. With correlated wrong values, made stronger by T 0.6, the vote plateaus early and lower.",
+  "rests_on": ["result-6e7b64", "result-5d032f", "result-cbe0bc", "result-5c961a"],
+  "holds_against": [
+   {"fact": 28, "value": 0.4286, "why": "With only 4 samples, singleton ties dominate vote failures mechanically. As samples grow toward 12, the repeated wrong values become pluralities, so agreeing groups take over the failures; 43 % at k=4 already marks a large correlated share."},
+   {"item": "knowledge-dab63f", "value": 26, "why": "On hard328, 26 of 36 RL-vote wins have no right base sample (reach), but that compares the cued base with RL on the hardest problems. On dev100 MATH-500 problems right samples usually exist (cued pass@4 467), so the agent's shortfall there is selection by the vote, as claimed."}
+  ],
+  "forecasts": [
+   {"id": "t13", "value": 447, "low": 441, "high": 450, "reason": "Attractors: the vote is near its plateau by 4 samples (446), so 9 samples add about 1."},
+   {"id": "t14", "value": 192, "low": 186, "high": 195, "reason": "Vote4 is 192 and restarts add only 3; with repeated wrong values, 8 samples stay at about 192."},
+   {"id": "t24", "value": 238, "low": 231, "high": 245, "reason": "M(2) finishes more answers, but they are wrong at a lower precision (72 %) and the wrong ones agree, so the vote gains only about +7 over 231.5."},
+   {"id": "t28", "value": 79, "low": 71, "high": 87, "reason": "Under the 32k cap, cut answers finish and add right answers, but also agreeing wrong values that dilute the vote; a gain of about +4 over 75."},
+   {"id": "t26", "value": 240, "low": 230, "high": 250, "reason": "Single sample, so no vote effect; the 32k cap converts some of M(2)'s about 54 cap hits."},
+   {"id": "t02", "value": 235, "low": 224, "high": 246, "reason": "From 229 at 16k, plus a few cap conversions."},
+   {"id": "t03", "value": 4, "low": -8, "high": 16, "reason": "Think-SFT's +23 from the 32k cap erodes most of M(2)'s 16k lead."},
+   {"id": "t25", "value": 466, "low": 458, "high": 474, "reason": "Same as a=1's 467; one sample, so no vote effect."},
+   {"id": "t07", "value": 232, "low": 220, "high": 244, "reason": "A single sample: the template moves the register little; about the cue's 230."},
+   {"id": "t09", "value": 464, "low": 454, "high": 473, "reason": "A single sample near Think-SFT's 454-462 MATH-500 band."}
+  ]}
+],
+ "cell": null}

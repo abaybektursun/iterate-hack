@@ -1,0 +1,5029 @@
+{
+ "what": "Comparisons of Olmo 3 7B arms at token cap 16,384 vs 32,768 and on problems no arm is cut off on",
+ "conventions": "per problem, accuracy = mean of score_v3 over the arm's samples (first attempt only, no restarts);\n  gain A - B = mean over problems of (acc_A - acc_B), in points (x 100); interval: paired bootstrap over problems,\n  10,000 resamples, numpy seed 0, 2.5 / 97.5 percentiles;\n  a sample \"hits the cap\" when cap_hit is true (it generated the cap without finishing); a problem is \"cut off\" for an arm\n  when any of its samples hits the cap; \"no-cap problems\" = problems where no sample of either arm hits the cap;\n  precision = samples right and finished / samples finished.\nCap-32,768 cells (one sample) are scored twice from one text: at 32,768 as generated, and at 16,384 by the rule of\nanalysis/cap32.py (right only if n_new <= 16,384 and not cut off; tokens min(n_new, 16,384)).",
+ "arms": {
+  "base + cue": "allenai/Olmo-3-1025-7B @ a81bae42, pair1 prompt in the RL tokenizer's chat template + prefix ' line!\\n\\nOkay' (ids 1584 2268 33413)",
+  "RL plain": "allenai/Olmo-3.1-7B-RL-Zero-Math @ 364820b0, pair1 prompt, no prefix",
+  "Think-SFT + cue": "allenai/Olmo-3-7B-Think-SFT @ 6ff85758 (loaded as /tmp/theta, label sft1), same template and cue as the base; not its own ChatML/<think> format",
+  "M(2)": "Think-SFT + 2 x (RL-Math - base), every tensor (jobs/delta_sum.py, BF16 stochastic rounding), cue",
+  "dial 1.5x": "base + top-8 singular directions per matrix of (RL-Math 3.1 - base) at scale 1.5 (jobs/wsp_edit.py top8 --scale 1.5), cue",
+  "step 100 + cue": "allenai/Olmo-3.1-7B-RL-Zero-Math @ 0a45720c (branch step_0100), cue",
+  "sampling": "T 1.0 / top-p 1.0, grader v3, first attempt only (restarts ignored), cap 16,384 unless stated"
+ },
+ "comparisons_16384": {
+  "hard328 RL - base+cue": {
+   "A": "results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl",
+   "B": "results/day1_3/hard328_base_cue_s4r2-01/rows.jsonl",
+   "note": "",
+   "full": {
+    "value": 12.65,
+    "ci95": [
+     10.14,
+     15.4
+    ],
+    "n": 328,
+    "unit": "points (A - B)",
+    "source": [
+     "results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl",
+     "results/day1_3/hard328_base_cue_s4r2-01/rows.jsonl"
+    ],
+    "note": "samples A 4, B 4; = +41.50 problems"
+   },
+   "no_cap": {
+    "value": 9.56,
+    "ci95": [
+     6.56,
+     12.7
+    ],
+    "n": 183,
+    "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+    "source": [
+     "results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl",
+     "results/day1_3/hard328_base_cue_s4r2-01/rows.jsonl"
+    ],
+    "note": "accuracy there A 86.7 %, B 77.2 %; headroom of B 22.8 points; = +17.50 problems, 42 % of the full gain"
+   },
+   "no_cap_accuracy_pct": {
+    "A": 86.75,
+    "B": 77.19
+   },
+   "no_cap_share_of_B_errors_fixed": 0.42,
+   "decomposition_problems": {
+    "A_cut_B_not": {
+     "n_problems": 8,
+     "gain_problems": -0.25
+    },
+    "B_cut_A_not": {
+     "n_problems": 78,
+     "gain_problems": 18.5
+    },
+    "neither_cut": {
+     "n_problems": 183,
+     "gain_problems": 17.5
+    },
+    "both_cut": {
+     "n_problems": 59,
+     "gain_problems": 5.75
+    }
+   },
+   "arms": {
+    "A": {
+     "source": "results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      207,
+      190,
+      209,
+      194
+     ],
+     "right_mean": 200.0,
+     "accuracy_pct": 60.98,
+     "cap_hits_per_sample": [
+      35,
+      26,
+      24,
+      29
+     ],
+     "cap_hit_rate_pct": 8.69,
+     "problems_cut_off_any_sample": 67,
+     "tokens_per_problem": 9324.86,
+     "precision_finished": {
+      "right": 793,
+      "finished": 1198,
+      "pct": 66.19
+     },
+     "right_but_cut_off": 7
+    },
+    "B": {
+     "source": "results/day1_3/hard328_base_cue_s4r2-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      161,
+      161,
+      152,
+      160
+     ],
+     "right_mean": 158.5,
+     "accuracy_pct": 48.32,
+     "cap_hits_per_sample": [
+      71,
+      66,
+      81,
+      68
+     ],
+     "cap_hit_rate_pct": 21.8,
+     "problems_cut_off_any_sample": 137,
+     "tokens_per_problem": 9225.48,
+     "precision_finished": {
+      "right": 630,
+      "finished": 1026,
+      "pct": 61.4
+     },
+     "right_but_cut_off": 4
+    }
+   }
+  },
+  "MATH-500 RL - base+cue": {
+   "A": "results/day1_3/math500_rl-01/rows.jsonl",
+   "B": "results/day1_3/math500_base_cue-01/rows.jsonl",
+   "note": "",
+   "full": {
+    "value": 9.9,
+    "ci95": [
+     8.25,
+     11.6
+    ],
+    "n": 500,
+    "unit": "points (A - B)",
+    "source": [
+     "results/day1_3/math500_rl-01/rows.jsonl",
+     "results/day1_3/math500_base_cue-01/rows.jsonl"
+    ],
+    "note": "samples A 4, B 4; = +49.50 problems"
+   },
+   "no_cap": {
+    "value": 7.7,
+    "ci95": [
+     6.18,
+     9.27
+    ],
+    "n": 445,
+    "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+    "source": [
+     "results/day1_3/math500_rl-01/rows.jsonl",
+     "results/day1_3/math500_base_cue-01/rows.jsonl"
+    ],
+    "note": "accuracy there A 95.8 %, B 88.1 %; headroom of B 11.9 points; = +34.25 problems, 69 % of the full gain"
+   },
+   "no_cap_accuracy_pct": {
+    "A": 95.79,
+    "B": 88.09
+   },
+   "no_cap_share_of_B_errors_fixed": 0.65,
+   "decomposition_problems": {
+    "A_cut_B_not": {
+     "n_problems": 4,
+     "gain_problems": 0.25
+    },
+    "B_cut_A_not": {
+     "n_problems": 36,
+     "gain_problems": 12.25
+    },
+    "neither_cut": {
+     "n_problems": 445,
+     "gain_problems": 34.25
+    },
+    "both_cut": {
+     "n_problems": 15,
+     "gain_problems": 2.75
+    }
+   },
+   "arms": {
+    "A": {
+     "source": "results/day1_3/math500_rl-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      456,
+      462,
+      464,
+      458
+     ],
+     "right_mean": 460.0,
+     "accuracy_pct": 92.0,
+     "cap_hits_per_sample": [
+      6,
+      10,
+      5,
+      11
+     ],
+     "cap_hit_rate_pct": 1.6,
+     "problems_cut_off_any_sample": 19,
+     "tokens_per_problem": 4686.79,
+     "precision_finished": {
+      "right": 1837,
+      "finished": 1968,
+      "pct": 93.34
+     },
+     "right_but_cut_off": 3
+    },
+    "B": {
+     "source": "results/day1_3/math500_base_cue-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      405,
+      409,
+      410,
+      418
+     ],
+     "right_mean": 410.5,
+     "accuracy_pct": 82.1,
+     "cap_hits_per_sample": [
+      25,
+      23,
+      22,
+      20
+     ],
+     "cap_hit_rate_pct": 4.5,
+     "problems_cut_off_any_sample": 51,
+     "tokens_per_problem": 4008.39,
+     "precision_finished": {
+      "right": 1641,
+      "finished": 1910,
+      "pct": 85.92
+     },
+     "right_but_cut_off": 1
+    }
+   }
+  },
+  "fresh2026 RL - base+cue": {
+   "A": "results/fresh/rl_plain_s4-01/rows.jsonl",
+   "B": "results/fresh/base_cue_s4-01/rows.jsonl",
+   "note": "",
+   "full": {
+    "value": 15.44,
+    "ci95": [
+     11.4,
+     19.85
+    ],
+    "n": 136,
+    "unit": "points (A - B)",
+    "source": [
+     "results/fresh/rl_plain_s4-01/rows.jsonl",
+     "results/fresh/base_cue_s4-01/rows.jsonl"
+    ],
+    "note": "samples A 4, B 4; = +21.00 problems"
+   },
+   "no_cap": {
+    "value": 19.17,
+    "ci95": [
+     10.83,
+     28.33
+    ],
+    "n": 30,
+    "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+    "source": [
+     "results/fresh/rl_plain_s4-01/rows.jsonl",
+     "results/fresh/base_cue_s4-01/rows.jsonl"
+    ],
+    "note": "accuracy there A 82.5 %, B 63.3 %; headroom of B 36.7 points; = +5.75 problems, 27 % of the full gain"
+   },
+   "no_cap_accuracy_pct": {
+    "A": 82.5,
+    "B": 63.33
+   },
+   "no_cap_share_of_B_errors_fixed": 0.52,
+   "decomposition_problems": {
+    "A_cut_B_not": {
+     "n_problems": 7,
+     "gain_problems": 0.0
+    },
+    "B_cut_A_not": {
+     "n_problems": 55,
+     "gain_problems": 11.75
+    },
+    "neither_cut": {
+     "n_problems": 30,
+     "gain_problems": 5.75
+    },
+    "both_cut": {
+     "n_problems": 44,
+     "gain_problems": 3.5
+    }
+   },
+   "arms": {
+    "A": {
+     "source": "results/fresh/rl_plain_s4-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      49,
+      50,
+      53,
+      50
+     ],
+     "right_mean": 50.5,
+     "accuracy_pct": 37.13,
+     "cap_hits_per_sample": [
+      20,
+      21,
+      23,
+      20
+     ],
+     "cap_hit_rate_pct": 15.44,
+     "problems_cut_off_any_sample": 51,
+     "tokens_per_problem": 12082.69,
+     "precision_finished": {
+      "right": 197,
+      "finished": 460,
+      "pct": 42.83
+     },
+     "right_but_cut_off": 5
+    },
+    "B": {
+     "source": "results/fresh/base_cue_s4-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      28,
+      28,
+      32,
+      30
+     ],
+     "right_mean": 29.5,
+     "accuracy_pct": 21.69,
+     "cap_hits_per_sample": [
+      59,
+      49,
+      55,
+      56
+     ],
+     "cap_hit_rate_pct": 40.26,
+     "problems_cut_off_any_sample": 99,
+     "tokens_per_problem": 12789.59,
+     "precision_finished": {
+      "right": 117,
+      "finished": 325,
+      "pct": 36.0
+     },
+     "right_but_cut_off": 1
+    }
+   }
+  },
+  "hard328 Think-SFT - RL": {
+   "A": "results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl",
+   "B": "results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl",
+   "note": "",
+   "full": {
+    "value": 2.74,
+    "ci95": [
+     0.38,
+     5.18
+    ],
+    "n": 328,
+    "unit": "points (A - B)",
+    "source": [
+     "results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl",
+     "results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl"
+    ],
+    "note": "samples A 4, B 4; = +9.00 problems"
+   },
+   "no_cap": {
+    "value": 4.05,
+    "ci95": [
+     2.09,
+     6.15
+    ],
+    "n": 179,
+    "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+    "source": [
+     "results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl",
+     "results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl"
+    ],
+    "note": "accuracy there A 93.4 %, B 89.4 %; headroom of B 10.6 points; = +7.25 problems, 81 % of the full gain"
+   },
+   "no_cap_accuracy_pct": {
+    "A": 93.44,
+    "B": 89.39
+   },
+   "no_cap_share_of_B_errors_fixed": 0.38,
+   "decomposition_problems": {
+    "A_cut_B_not": {
+     "n_problems": 82,
+     "gain_problems": -5.25
+    },
+    "B_cut_A_not": {
+     "n_problems": 8,
+     "gain_problems": 4.5
+    },
+    "neither_cut": {
+     "n_problems": 179,
+     "gain_problems": 7.25
+    },
+    "both_cut": {
+     "n_problems": 59,
+     "gain_problems": 2.5
+    }
+   },
+   "arms": {
+    "A": {
+     "source": "results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      212,
+      212,
+      211,
+      201
+     ],
+     "right_mean": 209.0,
+     "accuracy_pct": 63.72,
+     "cap_hits_per_sample": [
+      89,
+      95,
+      92,
+      102
+     ],
+     "cap_hit_rate_pct": 28.81,
+     "problems_cut_off_any_sample": 141,
+     "tokens_per_problem": 10102.59,
+     "precision_finished": {
+      "right": 822,
+      "finished": 934,
+      "pct": 88.01
+     },
+     "right_but_cut_off": 14
+    },
+    "B": {
+     "source": "results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      207,
+      190,
+      209,
+      194
+     ],
+     "right_mean": 200.0,
+     "accuracy_pct": 60.98,
+     "cap_hits_per_sample": [
+      35,
+      26,
+      24,
+      29
+     ],
+     "cap_hit_rate_pct": 8.69,
+     "problems_cut_off_any_sample": 67,
+     "tokens_per_problem": 9324.86,
+     "precision_finished": {
+      "right": 793,
+      "finished": 1198,
+      "pct": 66.19
+     },
+     "right_but_cut_off": 7
+    }
+   }
+  },
+  "MATH-500 Think-SFT - RL": {
+   "A": "results/thinkvote/math500_sft1_cue_s4-01/rows.jsonl",
+   "B": "results/day1_3/math500_rl-01/rows.jsonl",
+   "note": "",
+   "full": {
+    "value": 0.05,
+    "ci95": [
+     -1.35,
+     1.45
+    ],
+    "n": 500,
+    "unit": "points (A - B)",
+    "source": [
+     "results/thinkvote/math500_sft1_cue_s4-01/rows.jsonl",
+     "results/day1_3/math500_rl-01/rows.jsonl"
+    ],
+    "note": "samples A 4, B 4; = +0.25 problems"
+   },
+   "no_cap": {
+    "value": 0.06,
+    "ci95": [
+     -1.19,
+     1.3
+    ],
+    "n": 441,
+    "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+    "source": [
+     "results/thinkvote/math500_sft1_cue_s4-01/rows.jsonl",
+     "results/day1_3/math500_rl-01/rows.jsonl"
+    ],
+    "note": "accuracy there A 96.7 %, B 96.7 %; headroom of B 3.3 points; = +0.25 problems, 100 % of the full gain"
+   },
+   "no_cap_accuracy_pct": {
+    "A": 96.71,
+    "B": 96.66
+   },
+   "no_cap_share_of_B_errors_fixed": 0.02,
+   "decomposition_problems": {
+    "A_cut_B_not": {
+     "n_problems": 40,
+     "gain_problems": -3.0
+    },
+    "B_cut_A_not": {
+     "n_problems": 7,
+     "gain_problems": 2.5
+    },
+    "neither_cut": {
+     "n_problems": 441,
+     "gain_problems": 0.25
+    },
+    "both_cut": {
+     "n_problems": 12,
+     "gain_problems": 0.5
+    }
+   },
+   "arms": {
+    "A": {
+     "source": "results/thinkvote/math500_sft1_cue_s4-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      461,
+      457,
+      462,
+      461
+     ],
+     "right_mean": 460.25,
+     "accuracy_pct": 92.05,
+     "cap_hits_per_sample": [
+      26,
+      22,
+      25,
+      20
+     ],
+     "cap_hit_rate_pct": 4.65,
+     "problems_cut_off_any_sample": 52,
+     "tokens_per_problem": 4875.71,
+     "precision_finished": {
+      "right": 1833,
+      "finished": 1907,
+      "pct": 96.12
+     },
+     "right_but_cut_off": 8
+    },
+    "B": {
+     "source": "results/day1_3/math500_rl-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      456,
+      462,
+      464,
+      458
+     ],
+     "right_mean": 460.0,
+     "accuracy_pct": 92.0,
+     "cap_hits_per_sample": [
+      6,
+      10,
+      5,
+      11
+     ],
+     "cap_hit_rate_pct": 1.6,
+     "problems_cut_off_any_sample": 19,
+     "tokens_per_problem": 4686.79,
+     "precision_finished": {
+      "right": 1837,
+      "finished": 1968,
+      "pct": 93.34
+     },
+     "right_but_cut_off": 3
+    }
+   }
+  },
+  "fresh2026 Think-SFT - RL": {
+   "A": "results/fresh/sft1_cue_s4-01/rows.jsonl",
+   "B": "results/fresh/rl_plain_s4-01/rows.jsonl",
+   "note": "",
+   "full": {
+    "value": 6.99,
+    "ci95": [
+     3.12,
+     11.03
+    ],
+    "n": 136,
+    "unit": "points (A - B)",
+    "source": [
+     "results/fresh/sft1_cue_s4-01/rows.jsonl",
+     "results/fresh/rl_plain_s4-01/rows.jsonl"
+    ],
+    "note": "samples A 4, B 4; = +9.50 problems"
+   },
+   "no_cap": {
+    "value": 11.05,
+    "ci95": [
+     5.23,
+     18.02
+    ],
+    "n": 43,
+    "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+    "source": [
+     "results/fresh/sft1_cue_s4-01/rows.jsonl",
+     "results/fresh/rl_plain_s4-01/rows.jsonl"
+    ],
+    "note": "accuracy there A 96.5 %, B 85.5 %; headroom of B 14.5 points; = +4.75 problems, 50 % of the full gain"
+   },
+   "no_cap_accuracy_pct": {
+    "A": 96.51,
+    "B": 85.47
+   },
+   "no_cap_share_of_B_errors_fixed": 0.76,
+   "decomposition_problems": {
+    "A_cut_B_not": {
+     "n_problems": 42,
+     "gain_problems": 0.25
+    },
+    "B_cut_A_not": {
+     "n_problems": 5,
+     "gain_problems": 1.0
+    },
+    "neither_cut": {
+     "n_problems": 43,
+     "gain_problems": 4.75
+    },
+    "both_cut": {
+     "n_problems": 46,
+     "gain_problems": 3.5
+    }
+   },
+   "arms": {
+    "A": {
+     "source": "results/fresh/sft1_cue_s4-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      65,
+      59,
+      56,
+      60
+     ],
+     "right_mean": 60.0,
+     "accuracy_pct": 44.12,
+     "cap_hits_per_sample": [
+      61,
+      59,
+      67,
+      61
+     ],
+     "cap_hit_rate_pct": 45.59,
+     "problems_cut_off_any_sample": 88,
+     "tokens_per_problem": 13042.51,
+     "precision_finished": {
+      "right": 238,
+      "finished": 296,
+      "pct": 80.41
+     },
+     "right_but_cut_off": 2
+    },
+    "B": {
+     "source": "results/fresh/rl_plain_s4-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      49,
+      50,
+      53,
+      50
+     ],
+     "right_mean": 50.5,
+     "accuracy_pct": 37.13,
+     "cap_hits_per_sample": [
+      20,
+      21,
+      23,
+      20
+     ],
+     "cap_hit_rate_pct": 15.44,
+     "problems_cut_off_any_sample": 51,
+     "tokens_per_problem": 12082.69,
+     "precision_finished": {
+      "right": 197,
+      "finished": 460,
+      "pct": 42.83
+     },
+     "right_but_cut_off": 5
+    }
+   }
+  },
+  "hard328 M(2) - Think-SFT": {
+   "A": "results/transplant/hard328-02/rows.jsonl (arm sft1_rl20)",
+   "B": "results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl",
+   "note": "M(2) 3 samples, seeds 3.0M / 3.1M / 3.2M",
+   "full": {
+    "value": 7.42,
+    "ci95": [
+     5.21,
+     9.76
+    ],
+    "n": 328,
+    "unit": "points (A - B)",
+    "source": [
+     "results/transplant/hard328-02/rows.jsonl (arm sft1_rl20)",
+     "results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl"
+    ],
+    "note": "samples A 3, B 4; = +24.33 problems"
+   },
+   "no_cap": {
+    "value": 1.26,
+    "ci95": [
+     -0.09,
+     2.66
+    ],
+    "n": 185,
+    "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+    "source": [
+     "results/transplant/hard328-02/rows.jsonl (arm sft1_rl20)",
+     "results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl"
+    ],
+    "note": "accuracy there A 95.3 %, B 94.1 %; headroom of B 5.9 points; = +2.33 problems, 10 % of the full gain"
+   },
+   "no_cap_accuracy_pct": {
+    "A": 95.32,
+    "B": 94.05
+   },
+   "no_cap_share_of_B_errors_fixed": 0.21,
+   "decomposition_problems": {
+    "A_cut_B_not": {
+     "n_problems": 2,
+     "gain_problems": -0.33
+    },
+    "B_cut_A_not": {
+     "n_problems": 49,
+     "gain_problems": 16.5
+    },
+    "neither_cut": {
+     "n_problems": 185,
+     "gain_problems": 2.33
+    },
+    "both_cut": {
+     "n_problems": 92,
+     "gain_problems": 5.83
+    }
+   },
+   "arms": {
+    "A": {
+     "source": "results/transplant/hard328-02/rows.jsonl (arm sft1_rl20)",
+     "samples": 3,
+     "right_per_sample": [
+      234,
+      229,
+      237
+     ],
+     "right_mean": 233.33,
+     "accuracy_pct": 71.14,
+     "cap_hits_per_sample": [
+      51,
+      57,
+      54
+     ],
+     "cap_hit_rate_pct": 16.46,
+     "problems_cut_off_any_sample": 94,
+     "tokens_per_problem": 9436.09,
+     "precision_finished": {
+      "right": 694,
+      "finished": 822,
+      "pct": 84.43
+     },
+     "right_but_cut_off": 6
+    },
+    "B": {
+     "source": "results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      212,
+      212,
+      211,
+      201
+     ],
+     "right_mean": 209.0,
+     "accuracy_pct": 63.72,
+     "cap_hits_per_sample": [
+      89,
+      95,
+      92,
+      102
+     ],
+     "cap_hit_rate_pct": 28.81,
+     "problems_cut_off_any_sample": 141,
+     "tokens_per_problem": 10102.59,
+     "precision_finished": {
+      "right": 822,
+      "finished": 934,
+      "pct": 88.01
+     },
+     "right_but_cut_off": 14
+    }
+   }
+  },
+  "fresh2026 M(2) - Think-SFT": {
+   "A": "results/transplant/fresh2026-02/rows.jsonl (arm sft1_rl20)",
+   "B": "results/fresh/sft1_cue_s4-01/rows.jsonl",
+   "note": "same seeds as Think-SFT (7,000,000 + 10,000 s)",
+   "full": {
+    "value": 9.01,
+    "ci95": [
+     5.33,
+     12.87
+    ],
+    "n": 136,
+    "unit": "points (A - B)",
+    "source": [
+     "results/transplant/fresh2026-02/rows.jsonl (arm sft1_rl20)",
+     "results/fresh/sft1_cue_s4-01/rows.jsonl"
+    ],
+    "note": "samples A 4, B 4; = +12.25 problems"
+   },
+   "no_cap": {
+    "value": 1.11,
+    "ci95": [
+     0.0,
+     2.78
+    ],
+    "n": 45,
+    "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+    "source": [
+     "results/transplant/fresh2026-02/rows.jsonl (arm sft1_rl20)",
+     "results/fresh/sft1_cue_s4-01/rows.jsonl"
+    ],
+    "note": "accuracy there A 95.6 %, B 94.4 %; headroom of B 5.6 points; = +0.50 problems, 4 % of the full gain"
+   },
+   "no_cap_accuracy_pct": {
+    "A": 95.56,
+    "B": 94.44
+   },
+   "no_cap_share_of_B_errors_fixed": 0.2,
+   "decomposition_problems": {
+    "A_cut_B_not": {
+     "n_problems": 3,
+     "gain_problems": -0.5
+    },
+    "B_cut_A_not": {
+     "n_problems": 21,
+     "gain_problems": 6.25
+    },
+    "neither_cut": {
+     "n_problems": 45,
+     "gain_problems": 0.5
+    },
+    "both_cut": {
+     "n_problems": 67,
+     "gain_problems": 6.0
+    }
+   },
+   "arms": {
+    "A": {
+     "source": "results/transplant/fresh2026-02/rows.jsonl (arm sft1_rl20)",
+     "samples": 4,
+     "right_per_sample": [
+      69,
+      75,
+      70,
+      75
+     ],
+     "right_mean": 72.25,
+     "accuracy_pct": 53.12,
+     "cap_hits_per_sample": [
+      50,
+      43,
+      44,
+      46
+     ],
+     "cap_hit_rate_pct": 33.64,
+     "problems_cut_off_any_sample": 70,
+     "tokens_per_problem": 12050.82,
+     "precision_finished": {
+      "right": 285,
+      "finished": 361,
+      "pct": 78.95
+     },
+     "right_but_cut_off": 4
+    },
+    "B": {
+     "source": "results/fresh/sft1_cue_s4-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      65,
+      59,
+      56,
+      60
+     ],
+     "right_mean": 60.0,
+     "accuracy_pct": 44.12,
+     "cap_hits_per_sample": [
+      61,
+      59,
+      67,
+      61
+     ],
+     "cap_hit_rate_pct": 45.59,
+     "problems_cut_off_any_sample": 88,
+     "tokens_per_problem": 13042.51,
+     "precision_finished": {
+      "right": 238,
+      "finished": 296,
+      "pct": 80.41
+     },
+     "right_but_cut_off": 2
+    }
+   }
+  },
+  "hard328 dial 1.5x - base+cue": {
+   "A": "results/day1_3/hard328_top8x1.5_cue_s4-01/rows.jsonl",
+   "B": "results/day1_3/hard328_base_cue_s4r2-01/rows.jsonl",
+   "note": "",
+   "full": {
+    "value": 12.73,
+    "ci95": [
+     10.21,
+     15.4
+    ],
+    "n": 328,
+    "unit": "points (A - B)",
+    "source": [
+     "results/day1_3/hard328_top8x1.5_cue_s4-01/rows.jsonl",
+     "results/day1_3/hard328_base_cue_s4r2-01/rows.jsonl"
+    ],
+    "note": "samples A 4, B 4; = +41.75 problems"
+   },
+   "no_cap": {
+    "value": 10.14,
+    "ci95": [
+     7.03,
+     13.51
+    ],
+    "n": 185,
+    "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+    "source": [
+     "results/day1_3/hard328_top8x1.5_cue_s4-01/rows.jsonl",
+     "results/day1_3/hard328_base_cue_s4r2-01/rows.jsonl"
+    ],
+    "note": "accuracy there A 87.2 %, B 77.0 %; headroom of B 23.0 points; = +18.75 problems, 45 % of the full gain"
+   },
+   "no_cap_accuracy_pct": {
+    "A": 87.16,
+    "B": 77.03
+   },
+   "no_cap_share_of_B_errors_fixed": 0.44,
+   "decomposition_problems": {
+    "A_cut_B_not": {
+     "n_problems": 6,
+     "gain_problems": 0.5
+    },
+    "B_cut_A_not": {
+     "n_problems": 88,
+     "gain_problems": 14.5
+    },
+    "neither_cut": {
+     "n_problems": 185,
+     "gain_problems": 18.75
+    },
+    "both_cut": {
+     "n_problems": 49,
+     "gain_problems": 8.0
+    }
+   },
+   "arms": {
+    "A": {
+     "source": "results/day1_3/hard328_top8x1.5_cue_s4-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      207,
+      198,
+      199,
+      197
+     ],
+     "right_mean": 200.25,
+     "accuracy_pct": 61.05,
+     "cap_hits_per_sample": [
+      20,
+      14,
+      20,
+      22
+     ],
+     "cap_hit_rate_pct": 5.79,
+     "problems_cut_off_any_sample": 55,
+     "tokens_per_problem": 8898.23,
+     "precision_finished": {
+      "right": 792,
+      "finished": 1236,
+      "pct": 64.08
+     },
+     "right_but_cut_off": 9
+    },
+    "B": {
+     "source": "results/day1_3/hard328_base_cue_s4r2-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      161,
+      161,
+      152,
+      160
+     ],
+     "right_mean": 158.5,
+     "accuracy_pct": 48.32,
+     "cap_hits_per_sample": [
+      71,
+      66,
+      81,
+      68
+     ],
+     "cap_hit_rate_pct": 21.8,
+     "problems_cut_off_any_sample": 137,
+     "tokens_per_problem": 9225.48,
+     "precision_finished": {
+      "right": 630,
+      "finished": 1026,
+      "pct": 61.4
+     },
+     "right_but_cut_off": 4
+    }
+   }
+  },
+  "hard328 dial 1.5x - RL": {
+   "A": "results/day1_3/hard328_top8x1.5_cue_s4-01/rows.jsonl",
+   "B": "results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl",
+   "note": "",
+   "full": {
+    "value": 0.08,
+    "ci95": [
+     -1.68,
+     1.83
+    ],
+    "n": 328,
+    "unit": "points (A - B)",
+    "source": [
+     "results/day1_3/hard328_top8x1.5_cue_s4-01/rows.jsonl",
+     "results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl"
+    ],
+    "note": "samples A 4, B 4; = +0.25 problems"
+   },
+   "no_cap": {
+    "value": -0.31,
+    "ci95": [
+     -2.06,
+     1.44
+    ],
+    "n": 243,
+    "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+    "source": [
+     "results/day1_3/hard328_top8x1.5_cue_s4-01/rows.jsonl",
+     "results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl"
+    ],
+    "note": "accuracy there A 74.4 %, B 74.7 %; headroom of B 25.3 points; = -0.75 problems, -300 % of the full gain"
+   },
+   "no_cap_accuracy_pct": {
+    "A": 74.38,
+    "B": 74.69
+   },
+   "no_cap_share_of_B_errors_fixed": -0.01,
+   "decomposition_problems": {
+    "A_cut_B_not": {
+     "n_problems": 18,
+     "gain_problems": -1.75
+    },
+    "B_cut_A_not": {
+     "n_problems": 30,
+     "gain_problems": 0.5
+    },
+    "neither_cut": {
+     "n_problems": 243,
+     "gain_problems": -0.75
+    },
+    "both_cut": {
+     "n_problems": 37,
+     "gain_problems": 2.25
+    }
+   },
+   "arms": {
+    "A": {
+     "source": "results/day1_3/hard328_top8x1.5_cue_s4-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      207,
+      198,
+      199,
+      197
+     ],
+     "right_mean": 200.25,
+     "accuracy_pct": 61.05,
+     "cap_hits_per_sample": [
+      20,
+      14,
+      20,
+      22
+     ],
+     "cap_hit_rate_pct": 5.79,
+     "problems_cut_off_any_sample": 55,
+     "tokens_per_problem": 8898.23,
+     "precision_finished": {
+      "right": 792,
+      "finished": 1236,
+      "pct": 64.08
+     },
+     "right_but_cut_off": 9
+    },
+    "B": {
+     "source": "results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      207,
+      190,
+      209,
+      194
+     ],
+     "right_mean": 200.0,
+     "accuracy_pct": 60.98,
+     "cap_hits_per_sample": [
+      35,
+      26,
+      24,
+      29
+     ],
+     "cap_hit_rate_pct": 8.69,
+     "problems_cut_off_any_sample": 67,
+     "tokens_per_problem": 9324.86,
+     "precision_finished": {
+      "right": 793,
+      "finished": 1198,
+      "pct": 66.19
+     },
+     "right_but_cut_off": 7
+    }
+   }
+  },
+  "MATH-500 dial 1.5x - base+cue": {
+   "A": "results/xreward/dial15_math500-01/rows.jsonl",
+   "B": "results/day1_3/math500_base_cue-01/rows.jsonl",
+   "note": "dial one sample (seed 3,000,000), base 4 samples",
+   "full": {
+    "value": 9.1,
+    "ci95": [
+     6.85,
+     11.45
+    ],
+    "n": 500,
+    "unit": "points (A - B)",
+    "source": [
+     "results/xreward/dial15_math500-01/rows.jsonl",
+     "results/day1_3/math500_base_cue-01/rows.jsonl"
+    ],
+    "note": "samples A 1, B 4; = +45.50 problems"
+   },
+   "no_cap": {
+    "value": 7.05,
+    "ci95": [
+     5.09,
+     9.0
+    ],
+    "n": 447,
+    "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+    "source": [
+     "results/xreward/dial15_math500-01/rows.jsonl",
+     "results/day1_3/math500_base_cue-01/rows.jsonl"
+    ],
+    "note": "accuracy there A 95.3 %, B 88.3 %; headroom of B 11.7 points; = +31.50 problems, 69 % of the full gain"
+   },
+   "no_cap_accuracy_pct": {
+    "A": 95.3,
+    "B": 88.26
+   },
+   "no_cap_share_of_B_errors_fixed": 0.6,
+   "decomposition_problems": {
+    "A_cut_B_not": {
+     "n_problems": 2,
+     "gain_problems": -0.25
+    },
+    "B_cut_A_not": {
+     "n_problems": 46,
+     "gain_problems": 14.5
+    },
+    "neither_cut": {
+     "n_problems": 447,
+     "gain_problems": 31.5
+    },
+    "both_cut": {
+     "n_problems": 5,
+     "gain_problems": -0.25
+    }
+   },
+   "arms": {
+    "A": {
+     "source": "results/xreward/dial15_math500-01/rows.jsonl",
+     "samples": 1,
+     "right_per_sample": [
+      456
+     ],
+     "right_mean": 456.0,
+     "accuracy_pct": 91.2,
+     "cap_hits_per_sample": [
+      7
+     ],
+     "cap_hit_rate_pct": 1.4,
+     "problems_cut_off_any_sample": 7,
+     "tokens_per_problem": 4422.1,
+     "precision_finished": {
+      "right": 456,
+      "finished": 493,
+      "pct": 92.49
+     },
+     "right_but_cut_off": 0
+    },
+    "B": {
+     "source": "results/day1_3/math500_base_cue-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      405,
+      409,
+      410,
+      418
+     ],
+     "right_mean": 410.5,
+     "accuracy_pct": 82.1,
+     "cap_hits_per_sample": [
+      25,
+      23,
+      22,
+      20
+     ],
+     "cap_hit_rate_pct": 4.5,
+     "problems_cut_off_any_sample": 51,
+     "tokens_per_problem": 4008.39,
+     "precision_finished": {
+      "right": 1641,
+      "finished": 1910,
+      "pct": 85.92
+     },
+     "right_but_cut_off": 1
+    }
+   }
+  },
+  "MATH-500 dial 1.5x - RL": {
+   "A": "results/xreward/dial15_math500-01/rows.jsonl",
+   "B": "results/day1_3/math500_rl-01/rows.jsonl",
+   "note": "dial one sample, RL 4 samples",
+   "full": {
+    "value": -0.8,
+    "ci95": [
+     -2.6,
+     0.9
+    ],
+    "n": 500,
+    "unit": "points (A - B)",
+    "source": [
+     "results/xreward/dial15_math500-01/rows.jsonl",
+     "results/day1_3/math500_rl-01/rows.jsonl"
+    ],
+    "note": "samples A 1, B 4; = -4.00 problems"
+   },
+   "no_cap": {
+    "value": -1.25,
+    "ci95": [
+     -2.97,
+     0.36
+    ],
+    "n": 480,
+    "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+    "source": [
+     "results/xreward/dial15_math500-01/rows.jsonl",
+     "results/day1_3/math500_rl-01/rows.jsonl"
+    ],
+    "note": "accuracy there A 92.9 %, B 94.2 %; headroom of B 5.8 points; = -6.00 problems, 150 % of the full gain"
+   },
+   "no_cap_accuracy_pct": {
+    "A": 92.92,
+    "B": 94.17
+   },
+   "no_cap_share_of_B_errors_fixed": -0.21,
+   "decomposition_problems": {
+    "A_cut_B_not": {
+     "n_problems": 1,
+     "gain_problems": -0.5
+    },
+    "B_cut_A_not": {
+     "n_problems": 13,
+     "gain_problems": 3.5
+    },
+    "neither_cut": {
+     "n_problems": 480,
+     "gain_problems": -6.0
+    },
+    "both_cut": {
+     "n_problems": 6,
+     "gain_problems": -1.0
+    }
+   },
+   "arms": {
+    "A": {
+     "source": "results/xreward/dial15_math500-01/rows.jsonl",
+     "samples": 1,
+     "right_per_sample": [
+      456
+     ],
+     "right_mean": 456.0,
+     "accuracy_pct": 91.2,
+     "cap_hits_per_sample": [
+      7
+     ],
+     "cap_hit_rate_pct": 1.4,
+     "problems_cut_off_any_sample": 7,
+     "tokens_per_problem": 4422.1,
+     "precision_finished": {
+      "right": 456,
+      "finished": 493,
+      "pct": 92.49
+     },
+     "right_but_cut_off": 0
+    },
+    "B": {
+     "source": "results/day1_3/math500_rl-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      456,
+      462,
+      464,
+      458
+     ],
+     "right_mean": 460.0,
+     "accuracy_pct": 92.0,
+     "cap_hits_per_sample": [
+      6,
+      10,
+      5,
+      11
+     ],
+     "cap_hit_rate_pct": 1.6,
+     "problems_cut_off_any_sample": 19,
+     "tokens_per_problem": 4686.79,
+     "precision_finished": {
+      "right": 1837,
+      "finished": 1968,
+      "pct": 93.34
+     },
+     "right_but_cut_off": 3
+    }
+   }
+  },
+  "MATH-500 step 100 + cue - base+cue": {
+   "A": "results/ckptcue/s0100_cue-01/per_problem.json (sample 0) + results/ckptcue/s0100_cue_s123-01/rows.jsonl",
+   "B": "results/day1_3/math500_base_cue-01/rows.jsonl",
+   "note": "same seeds (41,000,000 + 10,000 s)",
+   "full": {
+    "value": 3.1,
+    "ci95": [
+     1.5,
+     4.75
+    ],
+    "n": 500,
+    "unit": "points (A - B)",
+    "source": [
+     "results/ckptcue/s0100_cue-01/per_problem.json (sample 0) + results/ckptcue/s0100_cue_s123-01/rows.jsonl",
+     "results/day1_3/math500_base_cue-01/rows.jsonl"
+    ],
+    "note": "samples A 4, B 4; = +15.50 problems"
+   },
+   "no_cap": {
+    "value": 3.36,
+    "ci95": [
+     1.91,
+     4.87
+    ],
+    "n": 431,
+    "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+    "source": [
+     "results/ckptcue/s0100_cue-01/per_problem.json (sample 0) + results/ckptcue/s0100_cue_s123-01/rows.jsonl",
+     "results/day1_3/math500_base_cue-01/rows.jsonl"
+    ],
+    "note": "accuracy there A 92.2 %, B 88.9 %; headroom of B 11.1 points; = +14.50 problems, 94 % of the full gain"
+   },
+   "no_cap_accuracy_pct": {
+    "A": 92.23,
+    "B": 88.86
+   },
+   "no_cap_share_of_B_errors_fixed": 0.3,
+   "decomposition_problems": {
+    "A_cut_B_not": {
+     "n_problems": 18,
+     "gain_problems": -3.75
+    },
+    "B_cut_A_not": {
+     "n_problems": 17,
+     "gain_problems": 4.0
+    },
+    "neither_cut": {
+     "n_problems": 431,
+     "gain_problems": 14.5
+    },
+    "both_cut": {
+     "n_problems": 34,
+     "gain_problems": 0.75
+    }
+   },
+   "arms": {
+    "A": {
+     "source": "results/ckptcue/s0100_cue-01/per_problem.json (sample 0) + results/ckptcue/s0100_cue_s123-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      427,
+      423,
+      423,
+      431
+     ],
+     "right_mean": 426.0,
+     "accuracy_pct": 85.2,
+     "cap_hits_per_sample": [
+      24,
+      24,
+      25,
+      23
+     ],
+     "cap_hit_rate_pct": 4.8,
+     "problems_cut_off_any_sample": 52,
+     "tokens_per_problem": 4170.08,
+     "precision_finished": {
+      "right": 1700,
+      "finished": 1904,
+      "pct": 89.29
+     },
+     "right_but_cut_off": 4
+    },
+    "B": {
+     "source": "results/day1_3/math500_base_cue-01/rows.jsonl",
+     "samples": 4,
+     "right_per_sample": [
+      405,
+      409,
+      410,
+      418
+     ],
+     "right_mean": 410.5,
+     "accuracy_pct": 82.1,
+     "cap_hits_per_sample": [
+      25,
+      23,
+      22,
+      20
+     ],
+     "cap_hit_rate_pct": 4.5,
+     "problems_cut_off_any_sample": 51,
+     "tokens_per_problem": 4008.39,
+     "precision_finished": {
+      "right": 1641,
+      "finished": 1910,
+      "pct": 85.92
+     },
+     "right_but_cut_off": 1
+    }
+   }
+  }
+ },
+ "cap32_run": {
+  "comparisons": {
+   "RL - base+cue": {
+    "at_16384": {
+     "A": "results/cap32/rows-01/rl_plain.jsonl scored at 16,384",
+     "B": "results/cap32/rows-02/base_cue.jsonl scored at 16,384",
+     "note": "",
+     "full": {
+      "value": 12.5,
+      "ci95": [
+       7.93,
+       17.07
+      ],
+      "n": 328,
+      "unit": "points (A - B)",
+      "source": [
+       "results/cap32/rows-01/rl_plain.jsonl scored at 16,384",
+       "results/cap32/rows-02/base_cue.jsonl scored at 16,384"
+      ],
+      "note": "samples A 1, B 1; = +41.00 problems"
+     },
+     "no_cap": {
+      "value": 10.16,
+      "ci95": [
+       5.47,
+       15.23
+      ],
+      "n": 256,
+      "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+      "source": [
+       "results/cap32/rows-01/rl_plain.jsonl scored at 16,384",
+       "results/cap32/rows-02/base_cue.jsonl scored at 16,384"
+      ],
+      "note": "accuracy there A 69.1 %, B 59.0 %; headroom of B 41.0 points; = +26.00 problems, 63 % of the full gain"
+     },
+     "no_cap_accuracy_pct": {
+      "A": 69.14,
+      "B": 58.98
+     },
+     "no_cap_share_of_B_errors_fixed": 0.25,
+     "decomposition_problems": {
+      "A_cut_B_not": {
+       "n_problems": 8,
+       "gain_problems": -1.0
+      },
+      "B_cut_A_not": {
+       "n_problems": 52,
+       "gain_problems": 16.0
+      },
+      "neither_cut": {
+       "n_problems": 256,
+       "gain_problems": 26.0
+      },
+      "both_cut": {
+       "n_problems": 12,
+       "gain_problems": 0.0
+      }
+     },
+     "arms": {
+      "A": {
+       "source": "results/cap32/rows-01/rl_plain.jsonl scored at 16,384",
+       "samples": 1,
+       "right_per_sample": [
+        193
+       ],
+       "right_mean": 193.0,
+       "accuracy_pct": 58.84,
+       "cap_hits_per_sample": [
+        20
+       ],
+       "cap_hit_rate_pct": 6.1,
+       "problems_cut_off_any_sample": 20,
+       "tokens_per_problem": 9292.97,
+       "precision_finished": {
+        "right": 193,
+        "finished": 308,
+        "pct": 62.66
+       },
+       "right_but_cut_off": 0
+      },
+      "B": {
+       "source": "results/cap32/rows-02/base_cue.jsonl scored at 16,384",
+       "samples": 1,
+       "right_per_sample": [
+        152
+       ],
+       "right_mean": 152.0,
+       "accuracy_pct": 46.34,
+       "cap_hits_per_sample": [
+        64
+       ],
+       "cap_hit_rate_pct": 19.51,
+       "problems_cut_off_any_sample": 64,
+       "tokens_per_problem": 9144.84,
+       "precision_finished": {
+        "right": 152,
+        "finished": 264,
+        "pct": 57.58
+       },
+       "right_but_cut_off": 0
+      }
+     }
+    },
+    "at_32768": {
+     "A": "results/cap32/rows-01/rl_plain.jsonl",
+     "B": "results/cap32/rows-02/base_cue.jsonl",
+     "note": "",
+     "full": {
+      "value": 11.89,
+      "ci95": [
+       7.62,
+       16.46
+      ],
+      "n": 328,
+      "unit": "points (A - B)",
+      "source": [
+       "results/cap32/rows-01/rl_plain.jsonl",
+       "results/cap32/rows-02/base_cue.jsonl"
+      ],
+      "note": "samples A 1, B 1; = +39.00 problems"
+     },
+     "no_cap": {
+      "value": 11.93,
+      "ci95": [
+       7.34,
+       16.51
+      ],
+      "n": 327,
+      "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+      "source": [
+       "results/cap32/rows-01/rl_plain.jsonl",
+       "results/cap32/rows-02/base_cue.jsonl"
+      ],
+      "note": "accuracy there A 59.6 %, B 47.7 %; headroom of B 52.3 points; = +39.00 problems, 100 % of the full gain"
+     },
+     "no_cap_accuracy_pct": {
+      "A": 59.63,
+      "B": 47.71
+     },
+     "no_cap_share_of_B_errors_fixed": 0.23,
+     "decomposition_problems": {
+      "A_cut_B_not": {
+       "n_problems": 0,
+       "gain_problems": 0.0
+      },
+      "B_cut_A_not": {
+       "n_problems": 1,
+       "gain_problems": 0.0
+      },
+      "neither_cut": {
+       "n_problems": 327,
+       "gain_problems": 39.0
+      },
+      "both_cut": {
+       "n_problems": 0,
+       "gain_problems": 0.0
+      }
+     },
+     "arms": {
+      "A": {
+       "source": "results/cap32/rows-01/rl_plain.jsonl",
+       "samples": 1,
+       "right_per_sample": [
+        195
+       ],
+       "right_mean": 195.0,
+       "accuracy_pct": 59.45,
+       "cap_hits_per_sample": [
+        0
+       ],
+       "cap_hit_rate_pct": 0.0,
+       "problems_cut_off_any_sample": 0,
+       "tokens_per_problem": 9421.24,
+       "precision_finished": {
+        "right": 195,
+        "finished": 328,
+        "pct": 59.45
+       },
+       "right_but_cut_off": 0
+      },
+      "B": {
+       "source": "results/cap32/rows-02/base_cue.jsonl",
+       "samples": 1,
+       "right_per_sample": [
+        156
+       ],
+       "right_mean": 156.0,
+       "accuracy_pct": 47.56,
+       "cap_hits_per_sample": [
+        1
+       ],
+       "cap_hit_rate_pct": 0.3,
+       "problems_cut_off_any_sample": 1,
+       "tokens_per_problem": 9994.97,
+       "precision_finished": {
+        "right": 156,
+        "finished": 327,
+        "pct": 47.71
+       },
+       "right_but_cut_off": 0
+      }
+     }
+    },
+    "change_32k_minus_16k": {
+     "value": -0.61,
+     "ci95": [
+      -2.13,
+      0.91
+     ],
+     "n": 328,
+     "unit": "points",
+     "source": [
+      "results/cap32/rows-01/rl_plain.jsonl",
+      "results/cap32/rows-02/base_cue.jsonl"
+     ],
+     "note": "paired by problem: (A - B at 32,768) - (A - B at the 16,384 view), same texts"
+    }
+   },
+   "Think-SFT - RL": {
+    "at_16384": {
+     "A": "results/cap32/rows-01/sft_cue.jsonl scored at 16,384",
+     "B": "results/cap32/rows-01/rl_plain.jsonl scored at 16,384",
+     "note": "",
+     "full": {
+      "value": 4.27,
+      "ci95": [
+       0.0,
+       8.54
+      ],
+      "n": 328,
+      "unit": "points (A - B)",
+      "source": [
+       "results/cap32/rows-01/sft_cue.jsonl scored at 16,384",
+       "results/cap32/rows-01/rl_plain.jsonl scored at 16,384"
+      ],
+      "note": "samples A 1, B 1; = +14.00 problems"
+     },
+     "no_cap": {
+      "value": 10.0,
+      "ci95": [
+       5.22,
+       14.78
+      ],
+      "n": 230,
+      "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+      "source": [
+       "results/cap32/rows-01/sft_cue.jsonl scored at 16,384",
+       "results/cap32/rows-01/rl_plain.jsonl scored at 16,384"
+      ],
+      "note": "accuracy there A 88.3 %, B 78.3 %; headroom of B 21.7 points; = +23.00 problems, 164 % of the full gain"
+     },
+     "no_cap_accuracy_pct": {
+      "A": 88.26,
+      "B": 78.26
+     },
+     "no_cap_share_of_B_errors_fixed": 0.46,
+     "decomposition_problems": {
+      "A_cut_B_not": {
+       "n_problems": 78,
+       "gain_problems": -13.0
+      },
+      "B_cut_A_not": {
+       "n_problems": 5,
+       "gain_problems": 4.0
+      },
+      "neither_cut": {
+       "n_problems": 230,
+       "gain_problems": 23.0
+      },
+      "both_cut": {
+       "n_problems": 15,
+       "gain_problems": 0.0
+      }
+     },
+     "arms": {
+      "A": {
+       "source": "results/cap32/rows-01/sft_cue.jsonl scored at 16,384",
+       "samples": 1,
+       "right_per_sample": [
+        207
+       ],
+       "right_mean": 207.0,
+       "accuracy_pct": 63.11,
+       "cap_hits_per_sample": [
+        93
+       ],
+       "cap_hit_rate_pct": 28.35,
+       "problems_cut_off_any_sample": 93,
+       "tokens_per_problem": 10048.08,
+       "precision_finished": {
+        "right": 207,
+        "finished": 235,
+        "pct": 88.09
+       },
+       "right_but_cut_off": 0
+      },
+      "B": {
+       "source": "results/cap32/rows-01/rl_plain.jsonl scored at 16,384",
+       "samples": 1,
+       "right_per_sample": [
+        193
+       ],
+       "right_mean": 193.0,
+       "accuracy_pct": 58.84,
+       "cap_hits_per_sample": [
+        20
+       ],
+       "cap_hit_rate_pct": 6.1,
+       "problems_cut_off_any_sample": 20,
+       "tokens_per_problem": 9292.97,
+       "precision_finished": {
+        "right": 193,
+        "finished": 308,
+        "pct": 62.66
+       },
+       "right_but_cut_off": 0
+      }
+     }
+    },
+    "at_32768": {
+     "A": "results/cap32/rows-01/sft_cue.jsonl",
+     "B": "results/cap32/rows-01/rl_plain.jsonl",
+     "note": "",
+     "full": {
+      "value": 10.67,
+      "ci95": [
+       6.1,
+       15.24
+      ],
+      "n": 328,
+      "unit": "points (A - B)",
+      "source": [
+       "results/cap32/rows-01/sft_cue.jsonl",
+       "results/cap32/rows-01/rl_plain.jsonl"
+      ],
+      "note": "samples A 1, B 1; = +35.00 problems"
+     },
+     "no_cap": {
+      "value": 11.04,
+      "ci95": [
+       6.75,
+       15.64
+      ],
+      "n": 326,
+      "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+      "source": [
+       "results/cap32/rows-01/sft_cue.jsonl",
+       "results/cap32/rows-01/rl_plain.jsonl"
+      ],
+      "note": "accuracy there A 70.6 %, B 59.5 %; headroom of B 40.5 points; = +36.00 problems, 103 % of the full gain"
+     },
+     "no_cap_accuracy_pct": {
+      "A": 70.55,
+      "B": 59.51
+     },
+     "no_cap_share_of_B_errors_fixed": 0.27,
+     "decomposition_problems": {
+      "A_cut_B_not": {
+       "n_problems": 2,
+       "gain_problems": -1.0
+      },
+      "B_cut_A_not": {
+       "n_problems": 0,
+       "gain_problems": 0.0
+      },
+      "neither_cut": {
+       "n_problems": 326,
+       "gain_problems": 36.0
+      },
+      "both_cut": {
+       "n_problems": 0,
+       "gain_problems": 0.0
+      }
+     },
+     "arms": {
+      "A": {
+       "source": "results/cap32/rows-01/sft_cue.jsonl",
+       "samples": 1,
+       "right_per_sample": [
+        230
+       ],
+       "right_mean": 230.0,
+       "accuracy_pct": 70.12,
+       "cap_hits_per_sample": [
+        2
+       ],
+       "cap_hit_rate_pct": 0.61,
+       "problems_cut_off_any_sample": 2,
+       "tokens_per_problem": 11794.85,
+       "precision_finished": {
+        "right": 230,
+        "finished": 326,
+        "pct": 70.55
+       },
+       "right_but_cut_off": 0
+      },
+      "B": {
+       "source": "results/cap32/rows-01/rl_plain.jsonl",
+       "samples": 1,
+       "right_per_sample": [
+        195
+       ],
+       "right_mean": 195.0,
+       "accuracy_pct": 59.45,
+       "cap_hits_per_sample": [
+        0
+       ],
+       "cap_hit_rate_pct": 0.0,
+       "problems_cut_off_any_sample": 0,
+       "tokens_per_problem": 9421.24,
+       "precision_finished": {
+        "right": 195,
+        "finished": 328,
+        "pct": 59.45
+       },
+       "right_but_cut_off": 0
+      }
+     }
+    },
+    "change_32k_minus_16k": {
+     "value": 6.4,
+     "ci95": [
+      3.66,
+      9.45
+     ],
+     "n": 328,
+     "unit": "points",
+     "source": [
+      "results/cap32/rows-01/sft_cue.jsonl",
+      "results/cap32/rows-01/rl_plain.jsonl"
+     ],
+     "note": "paired by problem: (A - B at 32,768) - (A - B at the 16,384 view), same texts"
+    }
+   },
+   "Think-SFT - base+cue": {
+    "at_16384": {
+     "A": "results/cap32/rows-01/sft_cue.jsonl scored at 16,384",
+     "B": "results/cap32/rows-02/base_cue.jsonl scored at 16,384",
+     "note": "",
+     "full": {
+      "value": 16.77,
+      "ci95": [
+       12.2,
+       21.34
+      ],
+      "n": 328,
+      "unit": "points (A - B)",
+      "source": [
+       "results/cap32/rows-01/sft_cue.jsonl scored at 16,384",
+       "results/cap32/rows-02/base_cue.jsonl scored at 16,384"
+      ],
+      "note": "samples A 1, B 1; = +55.00 problems"
+     },
+     "no_cap": {
+      "value": 19.53,
+      "ci95": [
+       13.95,
+       25.12
+      ],
+      "n": 215,
+      "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+      "source": [
+       "results/cap32/rows-01/sft_cue.jsonl scored at 16,384",
+       "results/cap32/rows-02/base_cue.jsonl scored at 16,384"
+      ],
+      "note": "accuracy there A 88.8 %, B 69.3 %; headroom of B 30.7 points; = +42.00 problems, 76 % of the full gain"
+     },
+     "no_cap_accuracy_pct": {
+      "A": 88.84,
+      "B": 69.3
+     },
+     "no_cap_share_of_B_errors_fixed": 0.64,
+     "decomposition_problems": {
+      "A_cut_B_not": {
+       "n_problems": 49,
+       "gain_problems": -3.0
+      },
+      "B_cut_A_not": {
+       "n_problems": 20,
+       "gain_problems": 16.0
+      },
+      "neither_cut": {
+       "n_problems": 215,
+       "gain_problems": 42.0
+      },
+      "both_cut": {
+       "n_problems": 44,
+       "gain_problems": 0.0
+      }
+     },
+     "arms": {
+      "A": {
+       "source": "results/cap32/rows-01/sft_cue.jsonl scored at 16,384",
+       "samples": 1,
+       "right_per_sample": [
+        207
+       ],
+       "right_mean": 207.0,
+       "accuracy_pct": 63.11,
+       "cap_hits_per_sample": [
+        93
+       ],
+       "cap_hit_rate_pct": 28.35,
+       "problems_cut_off_any_sample": 93,
+       "tokens_per_problem": 10048.08,
+       "precision_finished": {
+        "right": 207,
+        "finished": 235,
+        "pct": 88.09
+       },
+       "right_but_cut_off": 0
+      },
+      "B": {
+       "source": "results/cap32/rows-02/base_cue.jsonl scored at 16,384",
+       "samples": 1,
+       "right_per_sample": [
+        152
+       ],
+       "right_mean": 152.0,
+       "accuracy_pct": 46.34,
+       "cap_hits_per_sample": [
+        64
+       ],
+       "cap_hit_rate_pct": 19.51,
+       "problems_cut_off_any_sample": 64,
+       "tokens_per_problem": 9144.84,
+       "precision_finished": {
+        "right": 152,
+        "finished": 264,
+        "pct": 57.58
+       },
+       "right_but_cut_off": 0
+      }
+     }
+    },
+    "at_32768": {
+     "A": "results/cap32/rows-01/sft_cue.jsonl",
+     "B": "results/cap32/rows-02/base_cue.jsonl",
+     "note": "",
+     "full": {
+      "value": 22.56,
+      "ci95": [
+       17.68,
+       27.44
+      ],
+      "n": 328,
+      "unit": "points (A - B)",
+      "source": [
+       "results/cap32/rows-01/sft_cue.jsonl",
+       "results/cap32/rows-02/base_cue.jsonl"
+      ],
+      "note": "samples A 1, B 1; = +74.00 problems"
+     },
+     "no_cap": {
+      "value": 22.77,
+      "ci95": [
+       18.15,
+       27.69
+      ],
+      "n": 325,
+      "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+      "source": [
+       "results/cap32/rows-01/sft_cue.jsonl",
+       "results/cap32/rows-02/base_cue.jsonl"
+      ],
+      "note": "accuracy there A 70.5 %, B 47.7 %; headroom of B 52.3 points; = +74.00 problems, 100 % of the full gain"
+     },
+     "no_cap_accuracy_pct": {
+      "A": 70.46,
+      "B": 47.69
+     },
+     "no_cap_share_of_B_errors_fixed": 0.44,
+     "decomposition_problems": {
+      "A_cut_B_not": {
+       "n_problems": 2,
+       "gain_problems": -1.0
+      },
+      "B_cut_A_not": {
+       "n_problems": 1,
+       "gain_problems": 1.0
+      },
+      "neither_cut": {
+       "n_problems": 325,
+       "gain_problems": 74.0
+      },
+      "both_cut": {
+       "n_problems": 0,
+       "gain_problems": 0.0
+      }
+     },
+     "arms": {
+      "A": {
+       "source": "results/cap32/rows-01/sft_cue.jsonl",
+       "samples": 1,
+       "right_per_sample": [
+        230
+       ],
+       "right_mean": 230.0,
+       "accuracy_pct": 70.12,
+       "cap_hits_per_sample": [
+        2
+       ],
+       "cap_hit_rate_pct": 0.61,
+       "problems_cut_off_any_sample": 2,
+       "tokens_per_problem": 11794.85,
+       "precision_finished": {
+        "right": 230,
+        "finished": 326,
+        "pct": 70.55
+       },
+       "right_but_cut_off": 0
+      },
+      "B": {
+       "source": "results/cap32/rows-02/base_cue.jsonl",
+       "samples": 1,
+       "right_per_sample": [
+        156
+       ],
+       "right_mean": 156.0,
+       "accuracy_pct": 47.56,
+       "cap_hits_per_sample": [
+        1
+       ],
+       "cap_hit_rate_pct": 0.3,
+       "problems_cut_off_any_sample": 1,
+       "tokens_per_problem": 9994.97,
+       "precision_finished": {
+        "right": 156,
+        "finished": 327,
+        "pct": 47.71
+       },
+       "right_but_cut_off": 0
+      }
+     }
+    },
+    "change_32k_minus_16k": {
+     "value": 5.79,
+     "ci95": [
+      3.05,
+      8.54
+     ],
+     "n": 328,
+     "unit": "points",
+     "source": [
+      "results/cap32/rows-01/sft_cue.jsonl",
+      "results/cap32/rows-02/base_cue.jsonl"
+     ],
+     "note": "paired by problem: (A - B at 32,768) - (A - B at the 16,384 view), same texts"
+    }
+   },
+   "M(2) - Think-SFT (seed 3,010,000)": {
+    "at_16384": {
+     "A": "results/transplant/cap32_m2_s1-01/rows.jsonl (m2) scored at 16,384",
+     "B": "results/transplant/cap32_m2_s1-01/rows.jsonl (think_sft) scored at 16,384",
+     "note": "",
+     "full": {
+      "value": 6.71,
+      "ci95": [
+       3.05,
+       10.37
+      ],
+      "n": 328,
+      "unit": "points (A - B)",
+      "source": [
+       "results/transplant/cap32_m2_s1-01/rows.jsonl (m2) scored at 16,384",
+       "results/transplant/cap32_m2_s1-01/rows.jsonl (think_sft) scored at 16,384"
+      ],
+      "note": "samples A 1, B 1; = +22.00 problems"
+     },
+     "no_cap": {
+      "value": 1.79,
+      "ci95": [
+       -0.45,
+       4.46
+      ],
+      "n": 224,
+      "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+      "source": [
+       "results/transplant/cap32_m2_s1-01/rows.jsonl (m2) scored at 16,384",
+       "results/transplant/cap32_m2_s1-01/rows.jsonl (think_sft) scored at 16,384"
+      ],
+      "note": "accuracy there A 92.4 %, B 90.6 %; headroom of B 9.4 points; = +4.00 problems, 18 % of the full gain"
+     },
+     "no_cap_accuracy_pct": {
+      "A": 92.41,
+      "B": 90.62
+     },
+     "no_cap_share_of_B_errors_fixed": 0.19,
+     "decomposition_problems": {
+      "A_cut_B_not": {
+       "n_problems": 14,
+       "gain_problems": -7.0
+      },
+      "B_cut_A_not": {
+       "n_problems": 48,
+       "gain_problems": 25.0
+      },
+      "neither_cut": {
+       "n_problems": 224,
+       "gain_problems": 4.0
+      },
+      "both_cut": {
+       "n_problems": 42,
+       "gain_problems": 0.0
+      }
+     },
+     "arms": {
+      "A": {
+       "source": "results/transplant/cap32_m2_s1-01/rows.jsonl (m2) scored at 16,384",
+       "samples": 1,
+       "right_per_sample": [
+        232
+       ],
+       "right_mean": 232.0,
+       "accuracy_pct": 70.73,
+       "cap_hits_per_sample": [
+        56
+       ],
+       "cap_hit_rate_pct": 17.07,
+       "problems_cut_off_any_sample": 56,
+       "tokens_per_problem": 9347.74,
+       "precision_finished": {
+        "right": 232,
+        "finished": 272,
+        "pct": 85.29
+       },
+       "right_but_cut_off": 0
+      },
+      "B": {
+       "source": "results/transplant/cap32_m2_s1-01/rows.jsonl (think_sft) scored at 16,384",
+       "samples": 1,
+       "right_per_sample": [
+        210
+       ],
+       "right_mean": 210.0,
+       "accuracy_pct": 64.02,
+       "cap_hits_per_sample": [
+        90
+       ],
+       "cap_hit_rate_pct": 27.44,
+       "problems_cut_off_any_sample": 90,
+       "tokens_per_problem": 10042.7,
+       "precision_finished": {
+        "right": 210,
+        "finished": 238,
+        "pct": 88.24
+       },
+       "right_but_cut_off": 0
+      }
+     }
+    },
+    "at_32768": {
+     "A": "results/transplant/cap32_m2_s1-01/rows.jsonl (m2)",
+     "B": "results/transplant/cap32_m2_s1-01/rows.jsonl (think_sft)",
+     "note": "",
+     "full": {
+      "value": 3.35,
+      "ci95": [
+       -0.61,
+       7.01
+      ],
+      "n": 328,
+      "unit": "points (A - B)",
+      "source": [
+       "results/transplant/cap32_m2_s1-01/rows.jsonl (m2)",
+       "results/transplant/cap32_m2_s1-01/rows.jsonl (think_sft)"
+      ],
+      "note": "samples A 1, B 1; = +11.00 problems"
+     },
+     "no_cap": {
+      "value": 3.36,
+      "ci95": [
+       -0.31,
+       7.34
+      ],
+      "n": 327,
+      "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+      "source": [
+       "results/transplant/cap32_m2_s1-01/rows.jsonl (m2)",
+       "results/transplant/cap32_m2_s1-01/rows.jsonl (think_sft)"
+      ],
+      "note": "accuracy there A 74.6 %, B 71.3 %; headroom of B 28.7 points; = +11.00 problems, 100 % of the full gain"
+     },
+     "no_cap_accuracy_pct": {
+      "A": 74.62,
+      "B": 71.25
+     },
+     "no_cap_share_of_B_errors_fixed": 0.12,
+     "decomposition_problems": {
+      "A_cut_B_not": {
+       "n_problems": 0,
+       "gain_problems": 0.0
+      },
+      "B_cut_A_not": {
+       "n_problems": 1,
+       "gain_problems": 0.0
+      },
+      "neither_cut": {
+       "n_problems": 327,
+       "gain_problems": 11.0
+      },
+      "both_cut": {
+       "n_problems": 0,
+       "gain_problems": 0.0
+      }
+     },
+     "arms": {
+      "A": {
+       "source": "results/transplant/cap32_m2_s1-01/rows.jsonl (m2)",
+       "samples": 1,
+       "right_per_sample": [
+        245
+       ],
+       "right_mean": 245.0,
+       "accuracy_pct": 74.7,
+       "cap_hits_per_sample": [
+        0
+       ],
+       "cap_hit_rate_pct": 0.0,
+       "problems_cut_off_any_sample": 0,
+       "tokens_per_problem": 9875.16,
+       "precision_finished": {
+        "right": 245,
+        "finished": 328,
+        "pct": 74.7
+       },
+       "right_but_cut_off": 0
+      },
+      "B": {
+       "source": "results/transplant/cap32_m2_s1-01/rows.jsonl (think_sft)",
+       "samples": 1,
+       "right_per_sample": [
+        234
+       ],
+       "right_mean": 234.0,
+       "accuracy_pct": 71.34,
+       "cap_hits_per_sample": [
+        1
+       ],
+       "cap_hit_rate_pct": 0.3,
+       "problems_cut_off_any_sample": 1,
+       "tokens_per_problem": 11512.02,
+       "precision_finished": {
+        "right": 233,
+        "finished": 327,
+        "pct": 71.25
+       },
+       "right_but_cut_off": 1
+      }
+     }
+    },
+    "change_32k_minus_16k": {
+     "value": -3.36,
+     "ci95": [
+      -6.4,
+      -0.3
+     ],
+     "n": 328,
+     "unit": "points",
+     "source": [
+      "results/transplant/cap32_m2_s1-01/rows.jsonl (m2)",
+      "results/transplant/cap32_m2_s1-01/rows.jsonl (think_sft)"
+     ],
+     "note": "paired by problem: (A - B at 32,768) - (A - B at the 16,384 view), same texts"
+    }
+   },
+   "Think-SFT (2 samples) - RL (1 sample)": {
+    "at_16384": {
+     "A": "Think-SFT + cue, 2 samples at cap 32,768 (16,384 view): results/cap32/rows-01/sft_cue.jsonl + transplant/cap32_m2_s1-01/rows.jsonl (think_sft)",
+     "B": "results/cap32/rows-01/rl_plain.jsonl scored at 16,384",
+     "note": "",
+     "full": {
+      "value": 4.73,
+      "ci95": [
+       0.91,
+       8.69
+      ],
+      "n": 328,
+      "unit": "points (A - B)",
+      "source": [
+       "Think-SFT + cue, 2 samples at cap 32,768 (16,384 view): results/cap32/rows-01/sft_cue.jsonl + transplant/cap32_m2_s1-01/rows.jsonl (think_sft)",
+       "results/cap32/rows-01/rl_plain.jsonl scored at 16,384"
+      ],
+      "note": "samples A 2, B 1; = +15.50 problems"
+     },
+     "no_cap": {
+      "value": 8.13,
+      "ci95": [
+       4.07,
+       12.44
+      ],
+      "n": 209,
+      "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+      "source": [
+       "Think-SFT + cue, 2 samples at cap 32,768 (16,384 view): results/cap32/rows-01/sft_cue.jsonl + transplant/cap32_m2_s1-01/rows.jsonl (think_sft)",
+       "results/cap32/rows-01/rl_plain.jsonl scored at 16,384"
+      ],
+      "note": "accuracy there A 91.9 %, B 83.7 %; headroom of B 16.3 points; = +17.00 problems, 110 % of the full gain"
+     },
+     "no_cap_accuracy_pct": {
+      "A": 91.87,
+      "B": 83.73
+     },
+     "no_cap_share_of_B_errors_fixed": 0.5,
+     "decomposition_problems": {
+      "A_cut_B_not": {
+       "n_problems": 99,
+       "gain_problems": -7.0
+      },
+      "B_cut_A_not": {
+       "n_problems": 2,
+       "gain_problems": 2.0
+      },
+      "neither_cut": {
+       "n_problems": 209,
+       "gain_problems": 17.0
+      },
+      "both_cut": {
+       "n_problems": 18,
+       "gain_problems": 3.5
+      }
+     },
+     "arms": {
+      "A": {
+       "source": "Think-SFT + cue, 2 samples at cap 32,768 (16,384 view): results/cap32/rows-01/sft_cue.jsonl + transplant/cap32_m2_s1-01/rows.jsonl (think_sft)",
+       "samples": 2,
+       "right_per_sample": [
+        207,
+        210
+       ],
+       "right_mean": 208.5,
+       "accuracy_pct": 63.57,
+       "cap_hits_per_sample": [
+        93,
+        90
+       ],
+       "cap_hit_rate_pct": 27.9,
+       "problems_cut_off_any_sample": 117,
+       "tokens_per_problem": 10045.39,
+       "precision_finished": {
+        "right": 417,
+        "finished": 473,
+        "pct": 88.16
+       },
+       "right_but_cut_off": 0
+      },
+      "B": {
+       "source": "results/cap32/rows-01/rl_plain.jsonl scored at 16,384",
+       "samples": 1,
+       "right_per_sample": [
+        193
+       ],
+       "right_mean": 193.0,
+       "accuracy_pct": 58.84,
+       "cap_hits_per_sample": [
+        20
+       ],
+       "cap_hit_rate_pct": 6.1,
+       "problems_cut_off_any_sample": 20,
+       "tokens_per_problem": 9292.97,
+       "precision_finished": {
+        "right": 193,
+        "finished": 308,
+        "pct": 62.66
+       },
+       "right_but_cut_off": 0
+      }
+     }
+    },
+    "at_32768": {
+     "A": "Think-SFT + cue, 2 samples at cap 32,768 (32,768): results/cap32/rows-01/sft_cue.jsonl + transplant/cap32_m2_s1-01/rows.jsonl (think_sft)",
+     "B": "results/cap32/rows-01/rl_plain.jsonl",
+     "note": "",
+     "full": {
+      "value": 11.28,
+      "ci95": [
+       7.32,
+       15.24
+      ],
+      "n": 328,
+      "unit": "points (A - B)",
+      "source": [
+       "Think-SFT + cue, 2 samples at cap 32,768 (32,768): results/cap32/rows-01/sft_cue.jsonl + transplant/cap32_m2_s1-01/rows.jsonl (think_sft)",
+       "results/cap32/rows-01/rl_plain.jsonl"
+      ],
+      "note": "samples A 2, B 1; = +37.00 problems"
+     },
+     "no_cap": {
+      "value": 11.54,
+      "ci95": [
+       7.54,
+       15.69
+      ],
+      "n": 325,
+      "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+      "source": [
+       "Think-SFT + cue, 2 samples at cap 32,768 (32,768): results/cap32/rows-01/sft_cue.jsonl + transplant/cap32_m2_s1-01/rows.jsonl (think_sft)",
+       "results/cap32/rows-01/rl_plain.jsonl"
+      ],
+      "note": "accuracy there A 70.9 %, B 59.4 %; headroom of B 40.6 points; = +37.50 problems, 101 % of the full gain"
+     },
+     "no_cap_accuracy_pct": {
+      "A": 70.92,
+      "B": 59.38
+     },
+     "no_cap_share_of_B_errors_fixed": 0.28,
+     "decomposition_problems": {
+      "A_cut_B_not": {
+       "n_problems": 3,
+       "gain_problems": -0.5
+      },
+      "B_cut_A_not": {
+       "n_problems": 0,
+       "gain_problems": 0.0
+      },
+      "neither_cut": {
+       "n_problems": 325,
+       "gain_problems": 37.5
+      },
+      "both_cut": {
+       "n_problems": 0,
+       "gain_problems": 0.0
+      }
+     },
+     "arms": {
+      "A": {
+       "source": "Think-SFT + cue, 2 samples at cap 32,768 (32,768): results/cap32/rows-01/sft_cue.jsonl + transplant/cap32_m2_s1-01/rows.jsonl (think_sft)",
+       "samples": 2,
+       "right_per_sample": [
+        230,
+        234
+       ],
+       "right_mean": 232.0,
+       "accuracy_pct": 70.73,
+       "cap_hits_per_sample": [
+        2,
+        1
+       ],
+       "cap_hit_rate_pct": 0.46,
+       "problems_cut_off_any_sample": 3,
+       "tokens_per_problem": 11653.44,
+       "precision_finished": {
+        "right": 463,
+        "finished": 653,
+        "pct": 70.9
+       },
+       "right_but_cut_off": 1
+      },
+      "B": {
+       "source": "results/cap32/rows-01/rl_plain.jsonl",
+       "samples": 1,
+       "right_per_sample": [
+        195
+       ],
+       "right_mean": 195.0,
+       "accuracy_pct": 59.45,
+       "cap_hits_per_sample": [
+        0
+       ],
+       "cap_hit_rate_pct": 0.0,
+       "problems_cut_off_any_sample": 0,
+       "tokens_per_problem": 9421.24,
+       "precision_finished": {
+        "right": 195,
+        "finished": 328,
+        "pct": 59.45
+       },
+       "right_but_cut_off": 0
+      }
+     }
+    },
+    "change_32k_minus_16k": {
+     "value": 6.55,
+     "ci95": [
+      4.57,
+      8.69
+     ],
+     "n": 328,
+     "unit": "points",
+     "source": [
+      "Think-SFT + cue, 2 samples at cap 32,768 (32,768): results/cap32/rows-01/sft_cue.jsonl + transplant/cap32_m2_s1-01/rows.jsonl (think_sft)",
+      "results/cap32/rows-01/rl_plain.jsonl"
+     ],
+     "note": "paired by problem: (A - B at 32,768) - (A - B at the 16,384 view), same texts"
+    }
+   }
+  },
+  "per_model": {
+   "Think-SFT + cue": {
+    "gain_32k_minus_16k": {
+     "value": 7.01,
+     "ci95": [
+      4.27,
+      9.76
+     ],
+     "n": 328,
+     "unit": "points",
+     "source": "results/cap32/rows-01/sft_cue.jsonl",
+     "note": ""
+    },
+    "cut_off_at_16384": 93,
+    "of_them_finished_by_32768": 91,
+    "of_them_right_at_32768": 23,
+    "precision_of_late_finishers_pct": 25.27,
+    "at_16384": {
+     "source": "results/cap32/rows-01/sft_cue.jsonl scored at 16,384",
+     "samples": 1,
+     "right_per_sample": [
+      207
+     ],
+     "right_mean": 207.0,
+     "accuracy_pct": 63.11,
+     "cap_hits_per_sample": [
+      93
+     ],
+     "cap_hit_rate_pct": 28.35,
+     "problems_cut_off_any_sample": 93,
+     "tokens_per_problem": 10048.08,
+     "precision_finished": {
+      "right": 207,
+      "finished": 235,
+      "pct": 88.09
+     },
+     "right_but_cut_off": 0
+    },
+    "at_32768": {
+     "source": "results/cap32/rows-01/sft_cue.jsonl",
+     "samples": 1,
+     "right_per_sample": [
+      230
+     ],
+     "right_mean": 230.0,
+     "accuracy_pct": 70.12,
+     "cap_hits_per_sample": [
+      2
+     ],
+     "cap_hit_rate_pct": 0.61,
+     "problems_cut_off_any_sample": 2,
+     "tokens_per_problem": 11794.85,
+     "precision_finished": {
+      "right": 230,
+      "finished": 326,
+      "pct": 70.55
+     },
+     "right_but_cut_off": 0
+    }
+   },
+   "RL plain": {
+    "gain_32k_minus_16k": {
+     "value": 0.61,
+     "ci95": [
+      0.0,
+      1.52
+     ],
+     "n": 328,
+     "unit": "points",
+     "source": "results/cap32/rows-01/rl_plain.jsonl",
+     "note": ""
+    },
+    "cut_off_at_16384": 20,
+    "of_them_finished_by_32768": 20,
+    "of_them_right_at_32768": 2,
+    "precision_of_late_finishers_pct": 10.0,
+    "at_16384": {
+     "source": "results/cap32/rows-01/rl_plain.jsonl scored at 16,384",
+     "samples": 1,
+     "right_per_sample": [
+      193
+     ],
+     "right_mean": 193.0,
+     "accuracy_pct": 58.84,
+     "cap_hits_per_sample": [
+      20
+     ],
+     "cap_hit_rate_pct": 6.1,
+     "problems_cut_off_any_sample": 20,
+     "tokens_per_problem": 9292.97,
+     "precision_finished": {
+      "right": 193,
+      "finished": 308,
+      "pct": 62.66
+     },
+     "right_but_cut_off": 0
+    },
+    "at_32768": {
+     "source": "results/cap32/rows-01/rl_plain.jsonl",
+     "samples": 1,
+     "right_per_sample": [
+      195
+     ],
+     "right_mean": 195.0,
+     "accuracy_pct": 59.45,
+     "cap_hits_per_sample": [
+      0
+     ],
+     "cap_hit_rate_pct": 0.0,
+     "problems_cut_off_any_sample": 0,
+     "tokens_per_problem": 9421.24,
+     "precision_finished": {
+      "right": 195,
+      "finished": 328,
+      "pct": 59.45
+     },
+     "right_but_cut_off": 0
+    }
+   },
+   "base + cue": {
+    "gain_32k_minus_16k": {
+     "value": 1.22,
+     "ci95": [
+      0.3,
+      2.44
+     ],
+     "n": 328,
+     "unit": "points",
+     "source": "results/cap32/rows-02/base_cue.jsonl",
+     "note": ""
+    },
+    "cut_off_at_16384": 64,
+    "of_them_finished_by_32768": 63,
+    "of_them_right_at_32768": 4,
+    "precision_of_late_finishers_pct": 6.35,
+    "at_16384": {
+     "source": "results/cap32/rows-02/base_cue.jsonl scored at 16,384",
+     "samples": 1,
+     "right_per_sample": [
+      152
+     ],
+     "right_mean": 152.0,
+     "accuracy_pct": 46.34,
+     "cap_hits_per_sample": [
+      64
+     ],
+     "cap_hit_rate_pct": 19.51,
+     "problems_cut_off_any_sample": 64,
+     "tokens_per_problem": 9144.84,
+     "precision_finished": {
+      "right": 152,
+      "finished": 264,
+      "pct": 57.58
+     },
+     "right_but_cut_off": 0
+    },
+    "at_32768": {
+     "source": "results/cap32/rows-02/base_cue.jsonl",
+     "samples": 1,
+     "right_per_sample": [
+      156
+     ],
+     "right_mean": 156.0,
+     "accuracy_pct": 47.56,
+     "cap_hits_per_sample": [
+      1
+     ],
+     "cap_hit_rate_pct": 0.3,
+     "problems_cut_off_any_sample": 1,
+     "tokens_per_problem": 9994.97,
+     "precision_finished": {
+      "right": 156,
+      "finished": 327,
+      "pct": 47.71
+     },
+     "right_but_cut_off": 0
+    }
+   },
+   "M(2) (seed 3,010,000)": {
+    "gain_32k_minus_16k": {
+     "value": 3.96,
+     "ci95": [
+      2.13,
+      6.1
+     ],
+     "n": 328,
+     "unit": "points",
+     "source": "results/transplant/cap32_m2_s1-01/rows.jsonl (m2)",
+     "note": ""
+    },
+    "cut_off_at_16384": 56,
+    "of_them_finished_by_32768": 56,
+    "of_them_right_at_32768": 13,
+    "precision_of_late_finishers_pct": 23.21,
+    "at_16384": {
+     "source": "results/transplant/cap32_m2_s1-01/rows.jsonl (m2) scored at 16,384",
+     "samples": 1,
+     "right_per_sample": [
+      232
+     ],
+     "right_mean": 232.0,
+     "accuracy_pct": 70.73,
+     "cap_hits_per_sample": [
+      56
+     ],
+     "cap_hit_rate_pct": 17.07,
+     "problems_cut_off_any_sample": 56,
+     "tokens_per_problem": 9347.74,
+     "precision_finished": {
+      "right": 232,
+      "finished": 272,
+      "pct": 85.29
+     },
+     "right_but_cut_off": 0
+    },
+    "at_32768": {
+     "source": "results/transplant/cap32_m2_s1-01/rows.jsonl (m2)",
+     "samples": 1,
+     "right_per_sample": [
+      245
+     ],
+     "right_mean": 245.0,
+     "accuracy_pct": 74.7,
+     "cap_hits_per_sample": [
+      0
+     ],
+     "cap_hit_rate_pct": 0.0,
+     "problems_cut_off_any_sample": 0,
+     "tokens_per_problem": 9875.16,
+     "precision_finished": {
+      "right": 245,
+      "finished": 328,
+      "pct": 74.7
+     },
+     "right_but_cut_off": 0
+    }
+   },
+   "Think-SFT + cue (seed 3,010,000)": {
+    "gain_32k_minus_16k": {
+     "value": 7.32,
+     "ci95": [
+      4.57,
+      10.37
+     ],
+     "n": 328,
+     "unit": "points",
+     "source": "results/transplant/cap32_m2_s1-01/rows.jsonl (think_sft)",
+     "note": ""
+    },
+    "cut_off_at_16384": 90,
+    "of_them_finished_by_32768": 89,
+    "of_them_right_at_32768": 24,
+    "precision_of_late_finishers_pct": 26.97,
+    "at_16384": {
+     "source": "results/transplant/cap32_m2_s1-01/rows.jsonl (think_sft) scored at 16,384",
+     "samples": 1,
+     "right_per_sample": [
+      210
+     ],
+     "right_mean": 210.0,
+     "accuracy_pct": 64.02,
+     "cap_hits_per_sample": [
+      90
+     ],
+     "cap_hit_rate_pct": 27.44,
+     "problems_cut_off_any_sample": 90,
+     "tokens_per_problem": 10042.7,
+     "precision_finished": {
+      "right": 210,
+      "finished": 238,
+      "pct": 88.24
+     },
+     "right_but_cut_off": 0
+    },
+    "at_32768": {
+     "source": "results/transplant/cap32_m2_s1-01/rows.jsonl (think_sft)",
+     "samples": 1,
+     "right_per_sample": [
+      234
+     ],
+     "right_mean": 234.0,
+     "accuracy_pct": 71.34,
+     "cap_hits_per_sample": [
+      1
+     ],
+     "cap_hit_rate_pct": 0.3,
+     "problems_cut_off_any_sample": 1,
+     "tokens_per_problem": 11512.02,
+     "precision_finished": {
+      "right": 233,
+      "finished": 327,
+      "pct": 71.25
+     },
+     "right_but_cut_off": 1
+    }
+   },
+   "Think-SFT + cue, 2 samples (seeds 3,000,000 and 3,010,000)": {
+    "gain_32k_minus_16k": {
+     "value": 7.16,
+     "ci95": [
+      5.18,
+      9.3
+     ],
+     "n": 328,
+     "unit": "points",
+     "source": "Think-SFT + cue, 2 samples at cap 32,768 (32,768): results/cap32/rows-01/sft_cue.jsonl + transplant/cap32_m2_s1-01/rows.jsonl (think_sft)",
+     "note": "2 of the 4 Think-SFT samples at 32,768 of work-dc9359; samples 2 and 3 are not in git"
+    },
+    "at_16384": {
+     "source": "Think-SFT + cue, 2 samples at cap 32,768 (16,384 view): results/cap32/rows-01/sft_cue.jsonl + transplant/cap32_m2_s1-01/rows.jsonl (think_sft)",
+     "samples": 2,
+     "right_per_sample": [
+      207,
+      210
+     ],
+     "right_mean": 208.5,
+     "accuracy_pct": 63.57,
+     "cap_hits_per_sample": [
+      93,
+      90
+     ],
+     "cap_hit_rate_pct": 27.9,
+     "problems_cut_off_any_sample": 117,
+     "tokens_per_problem": 10045.39,
+     "precision_finished": {
+      "right": 417,
+      "finished": 473,
+      "pct": 88.16
+     },
+     "right_but_cut_off": 0
+    },
+    "at_32768": {
+     "source": "Think-SFT + cue, 2 samples at cap 32,768 (32,768): results/cap32/rows-01/sft_cue.jsonl + transplant/cap32_m2_s1-01/rows.jsonl (think_sft)",
+     "samples": 2,
+     "right_per_sample": [
+      230,
+      234
+     ],
+     "right_mean": 232.0,
+     "accuracy_pct": 70.73,
+     "cap_hits_per_sample": [
+      2,
+      1
+     ],
+     "cap_hit_rate_pct": 0.46,
+     "problems_cut_off_any_sample": 3,
+     "tokens_per_problem": 11653.44,
+     "precision_finished": {
+      "right": 463,
+      "finished": 653,
+      "pct": 70.9
+     },
+     "right_but_cut_off": 1
+    }
+   }
+  },
+  "stored_16384_cells_vs_this_run_at_16384": {
+   "Think-SFT + cue": {
+    "stored_samples_right": [
+     212,
+     212,
+     211,
+     201
+    ],
+    "cap32_run_at_16384": 207
+   },
+   "RL plain": {
+    "stored_samples_right": [
+     207,
+     190,
+     209,
+     194
+    ],
+    "cap32_run_at_16384": 193
+   },
+   "base + cue": {
+    "stored_samples_right": [
+     161,
+     161,
+     152,
+     160
+    ],
+    "cap32_run_at_16384": 152
+   }
+  },
+  "M2_at_16384_vs_ThinkSFT_at_32768": {
+   "M(2) seeds 3.0M, 3.1M (as on the board, 231.5)": {
+    "A": "results/transplant/hard328-02/rows.jsonl (arm sft1_rl20) seeds [3000000, 3100000]",
+    "B": "results/cap32/rows-01/sft_cue.jsonl",
+    "note": "A at 16,384, B (Think-SFT one sample) at 32,768: different caps",
+    "full": {
+     "value": 0.46,
+     "ci95": [
+      -2.74,
+      3.66
+     ],
+     "n": 328,
+     "unit": "points (A - B)",
+     "source": [
+      "results/transplant/hard328-02/rows.jsonl (arm sft1_rl20) seeds [3000000, 3100000]",
+      "results/cap32/rows-01/sft_cue.jsonl"
+     ],
+     "note": "samples A 2, B 1; = +1.50 problems"
+    },
+    "no_cap": {
+     "value": 4.66,
+     "ci95": [
+      1.62,
+      7.89
+     ],
+     "n": 247,
+     "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+     "source": [
+      "results/transplant/hard328-02/rows.jsonl (arm sft1_rl20) seeds [3000000, 3100000]",
+      "results/cap32/rows-01/sft_cue.jsonl"
+     ],
+     "note": "accuracy there A 88.5 %, B 83.8 %; headroom of B 16.2 points; = +11.50 problems, 767 % of the full gain"
+    },
+    "no_cap_accuracy_pct": {
+     "A": 88.46,
+     "B": 83.81
+    },
+    "no_cap_share_of_B_errors_fixed": 0.29,
+    "decomposition_problems": {
+     "A_cut_B_not": {
+      "n_problems": 79,
+      "gain_problems": -11.0
+     },
+     "B_cut_A_not": {
+      "n_problems": 1,
+      "gain_problems": 1.0
+     },
+     "neither_cut": {
+      "n_problems": 247,
+      "gain_problems": 11.5
+     },
+     "both_cut": {
+      "n_problems": 1,
+      "gain_problems": 0.0
+     }
+    },
+    "arms": {
+     "A": {
+      "source": "results/transplant/hard328-02/rows.jsonl (arm sft1_rl20) seeds [3000000, 3100000]",
+      "samples": 2,
+      "right_per_sample": [
+       234,
+       229
+      ],
+      "right_mean": 231.5,
+      "accuracy_pct": 70.58,
+      "cap_hits_per_sample": [
+       51,
+       57
+      ],
+      "cap_hit_rate_pct": 16.46,
+      "problems_cut_off_any_sample": 80,
+      "tokens_per_problem": 9502.19,
+      "precision_finished": {
+       "right": 459,
+       "finished": 548,
+       "pct": 83.76
+      },
+      "right_but_cut_off": 4
+     },
+     "B": {
+      "source": "results/cap32/rows-01/sft_cue.jsonl",
+      "samples": 1,
+      "right_per_sample": [
+       230
+      ],
+      "right_mean": 230.0,
+      "accuracy_pct": 70.12,
+      "cap_hits_per_sample": [
+       2
+      ],
+      "cap_hit_rate_pct": 0.61,
+      "problems_cut_off_any_sample": 2,
+      "tokens_per_problem": 11794.85,
+      "precision_finished": {
+       "right": 230,
+       "finished": 326,
+       "pct": 70.55
+      },
+      "right_but_cut_off": 0
+     }
+    }
+   },
+   "M(2) all 3 seeds (233.3)": {
+    "A": "results/transplant/hard328-02/rows.jsonl (arm sft1_rl20) seeds [3000000, 3100000, 3200000]",
+    "B": "results/cap32/rows-01/sft_cue.jsonl",
+    "note": "A at 16,384, B (Think-SFT one sample) at 32,768: different caps",
+    "full": {
+     "value": 1.02,
+     "ci95": [
+      -2.13,
+      4.17
+     ],
+     "n": 328,
+     "unit": "points (A - B)",
+     "source": [
+      "results/transplant/hard328-02/rows.jsonl (arm sft1_rl20) seeds [3000000, 3100000, 3200000]",
+      "results/cap32/rows-01/sft_cue.jsonl"
+     ],
+     "note": "samples A 3, B 1; = +3.33 problems"
+    },
+    "no_cap": {
+     "value": 4.86,
+     "ci95": [
+      1.86,
+      8.3
+     ],
+     "n": 233,
+     "unit": "points (A - B) on problems where no sample of either arm hits the cap",
+     "source": [
+      "results/transplant/hard328-02/rows.jsonl (arm sft1_rl20) seeds [3000000, 3100000, 3200000]",
+      "results/cap32/rows-01/sft_cue.jsonl"
+     ],
+     "note": "accuracy there A 92.4 %, B 87.6 %; headroom of B 12.4 points; = +11.33 problems, 340 % of the full gain"
+    },
+    "no_cap_accuracy_pct": {
+     "A": 92.42,
+     "B": 87.55
+    },
+    "no_cap_share_of_B_errors_fixed": 0.39,
+    "decomposition_problems": {
+     "A_cut_B_not": {
+      "n_problems": 93,
+      "gain_problems": -9.0
+     },
+     "B_cut_A_not": {
+      "n_problems": 1,
+      "gain_problems": 1.0
+     },
+     "neither_cut": {
+      "n_problems": 233,
+      "gain_problems": 11.33
+     },
+     "both_cut": {
+      "n_problems": 1,
+      "gain_problems": 0.0
+     }
+    },
+    "arms": {
+     "A": {
+      "source": "results/transplant/hard328-02/rows.jsonl (arm sft1_rl20) seeds [3000000, 3100000, 3200000]",
+      "samples": 3,
+      "right_per_sample": [
+       234,
+       229,
+       237
+      ],
+      "right_mean": 233.33,
+      "accuracy_pct": 71.14,
+      "cap_hits_per_sample": [
+       51,
+       57,
+       54
+      ],
+      "cap_hit_rate_pct": 16.46,
+      "problems_cut_off_any_sample": 94,
+      "tokens_per_problem": 9436.09,
+      "precision_finished": {
+       "right": 694,
+       "finished": 822,
+       "pct": 84.43
+      },
+      "right_but_cut_off": 6
+     },
+     "B": {
+      "source": "results/cap32/rows-01/sft_cue.jsonl",
+      "samples": 1,
+      "right_per_sample": [
+       230
+      ],
+      "right_mean": 230.0,
+      "accuracy_pct": 70.12,
+      "cap_hits_per_sample": [
+       2
+      ],
+      "cap_hit_rate_pct": 0.61,
+      "problems_cut_off_any_sample": 2,
+      "tokens_per_problem": 11794.85,
+      "precision_finished": {
+       "right": 230,
+       "finished": 326,
+       "pct": 70.55
+      },
+      "right_but_cut_off": 0
+     }
+    }
+   }
+  }
+ },
+ "matched_difficulty_control": {
+  "RL - base reweighted to M(2) - Think-SFT": {
+   "what": "hard328 RL - base+cue on its no-cap problems, reweighted to the B-difficulty mix of hard328 M(2) - Think-SFT's no-cap problems",
+   "difficulty": "B's samples 0 and 1 (0, 0.5 or 1 right); gain measured on A all samples minus B samples 2 and 3",
+   "strata": {
+    "0.0": {
+     "target_n": 6,
+     "target_gain": 0.0,
+     "target_B_heldout_acc_pct": 0.0,
+     "source_n": 23,
+     "source_gain": 7.61,
+     "source_B_heldout_acc_pct": 23.91
+    },
+    "0.5": {
+     "target_n": 7,
+     "target_gain": 0.0,
+     "target_B_heldout_acc_pct": 100.0,
+     "source_n": 34,
+     "source_gain": 21.32,
+     "source_B_heldout_acc_pct": 66.18
+    },
+    "1.0": {
+     "target_n": 172,
+     "target_gain": 2.23,
+     "target_B_heldout_acc_pct": 96.22,
+     "source_n": 126,
+     "source_gain": 8.13,
+     "source_B_heldout_acc_pct": 88.49
+    }
+   },
+   "source_reweighted": {
+    "value": 8.62,
+    "ci95": [
+     4.83,
+     12.99
+    ],
+    "n": 183,
+    "unit": "points",
+    "source": "hard328 RL - base+cue",
+    "note": "bootstrap within strata, 2000 resamples"
+   },
+   "target_same_estimator": {
+    "value": 2.07,
+    "ci95": [
+     0.18,
+     4.32
+    ],
+    "n": 185,
+    "unit": "points",
+    "source": "hard328 M(2) - Think-SFT",
+    "note": ""
+   }
+  },
+  "Think-SFT - RL reweighted to M(2) - Think-SFT": {
+   "what": "hard328 Think-SFT - RL on its no-cap problems, reweighted to the B-difficulty mix of hard328 M(2) - Think-SFT's no-cap problems",
+   "difficulty": "B's samples 0 and 1 (0, 0.5 or 1 right); gain measured on A all samples minus B samples 2 and 3",
+   "strata": {
+    "0.0": {
+     "target_n": 6,
+     "target_gain": 0.0,
+     "target_B_heldout_acc_pct": 0.0,
+     "source_n": 7,
+     "source_gain": 3.57,
+     "source_B_heldout_acc_pct": 7.14
+    },
+    "0.5": {
+     "target_n": 7,
+     "target_gain": 0.0,
+     "target_B_heldout_acc_pct": 100.0,
+     "source_n": 22,
+     "source_gain": 11.36,
+     "source_B_heldout_acc_pct": 75.0
+    },
+    "1.0": {
+     "target_n": 172,
+     "target_gain": 2.23,
+     "target_B_heldout_acc_pct": 96.22,
+     "source_n": 150,
+     "source_gain": 3.67,
+     "source_B_heldout_acc_pct": 94.67
+    }
+   },
+   "source_reweighted": {
+    "value": 3.95,
+    "ci95": [
+     1.38,
+     6.65
+    ],
+    "n": 179,
+    "unit": "points",
+    "source": "hard328 Think-SFT - RL",
+    "note": "bootstrap within strata, 2000 resamples"
+   },
+   "target_same_estimator": {
+    "value": 2.07,
+    "ci95": [
+     0.18,
+     4.32
+    ],
+    "n": 185,
+    "unit": "points",
+    "source": "hard328 M(2) - Think-SFT",
+    "note": ""
+   }
+  },
+  "headroom_share_split_sample": {
+   "hard328 RL - base+cue": {
+    "value": 0.44,
+    "ci95": [
+     0.31,
+     0.57
+    ],
+    "n": 183,
+    "unit": "share of B's held-out errors on no-cap problems that A removes",
+    "source": "hard328 RL - base+cue",
+    "note": "B held-out accuracy there 76.2 % (43.5 held-out errors); gain +10.52 points; 0 of 10000 resamples without a B error dropped"
+   },
+   "hard328 Think-SFT - RL": {
+    "value": 0.41,
+    "ci95": [
+     0.22,
+     0.6
+    ],
+    "n": 179,
+    "unit": "share of B's held-out errors on no-cap problems that A removes",
+    "source": "hard328 Think-SFT - RL",
+    "note": "B held-out accuracy there 88.8 % (20.0 held-out errors); gain +4.61 points; 0 of 10000 resamples without a B error dropped"
+   },
+   "hard328 M(2) - Think-SFT": {
+    "value": 0.31,
+    "ci95": [
+     0.04,
+     0.57
+    ],
+    "n": 185,
+    "unit": "share of B's held-out errors on no-cap problems that A removes",
+    "source": "hard328 M(2) - Think-SFT",
+    "note": "B held-out accuracy there 93.2 % (12.5 held-out errors); gain +2.07 points; 0 of 10000 resamples without a B error dropped"
+   },
+   "fresh2026 M(2) - Think-SFT": {
+    "value": 0.33,
+    "ci95": [
+     0.0,
+     1.0
+    ],
+    "n": 45,
+    "unit": "share of B's held-out errors on no-cap problems that A removes",
+    "source": "fresh2026 M(2) - Think-SFT",
+    "note": "B held-out accuracy there 93.3 % (3.0 held-out errors); gain +2.22 points; 156 of 10000 resamples without a B error dropped"
+   },
+   "hard328 dial 1.5x - base+cue": {
+    "value": 0.47,
+    "ci95": [
+     0.32,
+     0.59
+    ],
+    "n": 185,
+    "unit": "share of B's held-out errors on no-cap problems that A removes",
+    "source": "hard328 dial 1.5x - base+cue",
+    "note": "B held-out accuracy there 75.9 % (44.5 held-out errors); gain +11.22 points; 0 of 10000 resamples without a B error dropped"
+   },
+   "MATH-500 RL - base+cue": {
+    "value": 0.64,
+    "ci95": [
+     0.54,
+     0.74
+    ],
+    "n": 445,
+    "unit": "share of B's held-out errors on no-cap problems that A removes",
+    "source": "MATH-500 RL - base+cue",
+    "note": "B held-out accuracy there 88.2 % (52.5 held-out errors); gain +7.58 points; 0 of 10000 resamples without a B error dropped"
+   },
+   "fresh2026 Think-SFT - RL": {
+    "value": 0.75,
+    "ci95": [
+     0.45,
+     1.0
+    ],
+    "n": 43,
+    "unit": "share of B's held-out errors on no-cap problems that A removes",
+    "source": "fresh2026 Think-SFT - RL",
+    "note": "B held-out accuracy there 86.0 % (6.0 held-out errors); gain +10.47 points; 0 of 10000 resamples without a B error dropped"
+   }
+  }
+ },
+ "no_cap_with_room": {
+  "hard328 RL - base+cue": {
+   "value": 23.48,
+   "ci95": [
+    18.29,
+    28.96
+   ],
+   "n": 82,
+   "unit": "points",
+   "source": "hard328 RL - base+cue",
+   "note": "no-cap problems where B is not right in every sample; B accuracy there 49.1 %; biased upward by regression to the mean, equally for every row"
+  },
+  "hard328 M(2) - Think-SFT": {
+   "value": 14.49,
+   "ci95": [
+    6.16,
+    22.46
+   ],
+   "n": 23,
+   "unit": "points",
+   "source": "hard328 M(2) - Think-SFT",
+   "note": "no-cap problems where B is not right in every sample; B accuracy there 52.2 %; biased upward by regression to the mean, equally for every row"
+  },
+  "fresh2026 M(2) - Think-SFT": {
+   "value": 12.5,
+   "ci95": [
+    0.0,
+    25.0
+   ],
+   "n": 4,
+   "unit": "points",
+   "source": "fresh2026 M(2) - Think-SFT",
+   "note": "no-cap problems where B is not right in every sample; B accuracy there 37.5 %; biased upward by regression to the mean, equally for every row"
+  },
+  "hard328 Think-SFT - RL": {
+   "value": 21.51,
+   "ci95": [
+    16.28,
+    26.18
+   ],
+   "n": 43,
+   "unit": "points",
+   "source": "hard328 Think-SFT - RL",
+   "note": "no-cap problems where B is not right in every sample; B accuracy there 55.8 %; biased upward by regression to the mean, equally for every row"
+  },
+  "MATH-500 RL - base+cue": {
+   "value": 27.5,
+   "ci95": [
+    24.23,
+    30.96
+   ],
+   "n": 130,
+   "unit": "points",
+   "source": "MATH-500 RL - base+cue",
+   "note": "no-cap problems where B is not right in every sample; B accuracy there 59.2 %; biased upward by regression to the mean, equally for every row"
+  },
+  "hard328 dial 1.5x - base+cue": {
+   "value": 24.11,
+   "ci95": [
+    18.45,
+    29.76
+   ],
+   "n": 84,
+   "unit": "points",
+   "source": "hard328 dial 1.5x - base+cue",
+   "note": "no-cap problems where B is not right in every sample; B accuracy there 49.4 %; biased upward by regression to the mean, equally for every row"
+  }
+ },
+ "pending": {
+  "M(2) at cap 32,768 on hard328, seed 3,000,000": "second M(2) sample (amendment 3, work-8b4030, vast.ai job ending f975); not in git. The seed-3,010,000 sample is in (cap32_run.comparisons 'M(2) - Think-SFT (seed 3,010,000)').",
+  "Think-SFT at cap 32,768, samples 2 and 3 on hard328 and 4 samples on fresh2026 (work-dc9359)": "rows not in git (README quotes 235 and 232 for hard328 samples 2-3 and the vote 238 -> 244; not recomputed). In git: sample 0 (results/cap32/rows-01) and sample 1 (inside results/transplant/cap32_m2_s1-01/rows.jsonl)."
+ },
+ "figure": [
+  {
+   "comparison": "hard328 RL - base+cue",
+   "gain_16384_all": {
+    "value": 12.65,
+    "ci95": [
+     10.14,
+     15.4
+    ],
+    "n": 328
+   },
+   "gain_16384_no_cap": {
+    "value": 9.56,
+    "ci95": [
+     6.56,
+     12.7
+    ],
+    "n": 183
+   },
+   "no_cap_accuracy_B_pct": 77.19,
+   "cap32_run_gain_16384": {
+    "value": 12.5,
+    "ci95": [
+     7.93,
+     17.07
+    ],
+    "n": 328
+   },
+   "cap32_run_gain_32768": {
+    "value": 11.89,
+    "ci95": [
+     7.62,
+     16.46
+    ],
+    "n": 328
+   },
+   "cap32_note": "one sample per arm, seed 3,000,000, the same texts scored at both caps",
+   "cap32_run_change": {
+    "value": -0.61,
+    "ci95": [
+     -2.13,
+     0.91
+    ],
+    "n": 328
+   }
+  },
+  {
+   "comparison": "MATH-500 RL - base+cue",
+   "gain_16384_all": {
+    "value": 9.9,
+    "ci95": [
+     8.25,
+     11.6
+    ],
+    "n": 500
+   },
+   "gain_16384_no_cap": {
+    "value": 7.7,
+    "ci95": [
+     6.18,
+     9.27
+    ],
+    "n": 445
+   },
+   "no_cap_accuracy_B_pct": 88.09
+  },
+  {
+   "comparison": "fresh2026 RL - base+cue",
+   "gain_16384_all": {
+    "value": 15.44,
+    "ci95": [
+     11.4,
+     19.85
+    ],
+    "n": 136
+   },
+   "gain_16384_no_cap": {
+    "value": 19.17,
+    "ci95": [
+     10.83,
+     28.33
+    ],
+    "n": 30
+   },
+   "no_cap_accuracy_B_pct": 63.33
+  },
+  {
+   "comparison": "hard328 Think-SFT - RL",
+   "gain_16384_all": {
+    "value": 2.74,
+    "ci95": [
+     0.38,
+     5.18
+    ],
+    "n": 328
+   },
+   "gain_16384_no_cap": {
+    "value": 4.05,
+    "ci95": [
+     2.09,
+     6.15
+    ],
+    "n": 179
+   },
+   "no_cap_accuracy_B_pct": 89.39,
+   "cap32_run_gain_16384": {
+    "value": 4.27,
+    "ci95": [
+     0.0,
+     8.54
+    ],
+    "n": 328
+   },
+   "cap32_run_gain_32768": {
+    "value": 10.67,
+    "ci95": [
+     6.1,
+     15.24
+    ],
+    "n": 328
+   },
+   "cap32_note": "one sample per arm, seed 3,000,000, the same texts scored at both caps",
+   "cap32_run_change": {
+    "value": 6.4,
+    "ci95": [
+     3.66,
+     9.45
+    ],
+    "n": 328
+   },
+   "cap32_2sample_gain_16384": {
+    "value": 4.73,
+    "ci95": [
+     0.91,
+     8.69
+    ],
+    "n": 328
+   },
+   "cap32_2sample_gain_32768": {
+    "value": 11.28,
+    "ci95": [
+     7.32,
+     15.24
+    ],
+    "n": 328
+   },
+   "cap32_2sample_change": {
+    "value": 6.55,
+    "ci95": [
+     4.57,
+     8.69
+    ],
+    "n": 328
+   },
+   "cap32_2sample_note": "Think-SFT 2 samples at 32,768 (seeds 3,000,000 and 3,010,000; samples 2-3 of work-dc9359 not in git), RL one sample (seed 3,000,000)"
+  },
+  {
+   "comparison": "MATH-500 Think-SFT - RL",
+   "gain_16384_all": {
+    "value": 0.05,
+    "ci95": [
+     -1.35,
+     1.45
+    ],
+    "n": 500
+   },
+   "gain_16384_no_cap": {
+    "value": 0.06,
+    "ci95": [
+     -1.19,
+     1.3
+    ],
+    "n": 441
+   },
+   "no_cap_accuracy_B_pct": 96.66
+  },
+  {
+   "comparison": "fresh2026 Think-SFT - RL",
+   "gain_16384_all": {
+    "value": 6.99,
+    "ci95": [
+     3.12,
+     11.03
+    ],
+    "n": 136
+   },
+   "gain_16384_no_cap": {
+    "value": 11.05,
+    "ci95": [
+     5.23,
+     18.02
+    ],
+    "n": 43
+   },
+   "no_cap_accuracy_B_pct": 85.47
+  },
+  {
+   "comparison": "hard328 M(2) - Think-SFT",
+   "gain_16384_all": {
+    "value": 7.42,
+    "ci95": [
+     5.21,
+     9.76
+    ],
+    "n": 328
+   },
+   "gain_16384_no_cap": {
+    "value": 1.26,
+    "ci95": [
+     -0.09,
+     2.66
+    ],
+    "n": 185
+   },
+   "no_cap_accuracy_B_pct": 94.05,
+   "cap32_run_gain_16384": {
+    "value": 6.71,
+    "ci95": [
+     3.05,
+     10.37
+    ],
+    "n": 328
+   },
+   "cap32_run_gain_32768": {
+    "value": 3.35,
+    "ci95": [
+     -0.61,
+     7.01
+    ],
+    "n": 328
+   },
+   "cap32_run_change": {
+    "value": -3.36,
+    "ci95": [
+     -6.4,
+     -0.3
+    ],
+    "n": 328
+   },
+   "cap32_note": "one sample per arm, seed 3,010,000 (M(2): results/transplant/cap32_m2_s1-01; Think-SFT: its sample 1 of the cap-32,768 vote run), the same texts scored at both caps; not the seed of the other two rows"
+  },
+  {
+   "comparison": "fresh2026 M(2) - Think-SFT",
+   "gain_16384_all": {
+    "value": 9.01,
+    "ci95": [
+     5.33,
+     12.87
+    ],
+    "n": 136
+   },
+   "gain_16384_no_cap": {
+    "value": 1.11,
+    "ci95": [
+     0.0,
+     2.78
+    ],
+    "n": 45
+   },
+   "no_cap_accuracy_B_pct": 94.44
+  },
+  {
+   "comparison": "hard328 dial 1.5x - base+cue",
+   "gain_16384_all": {
+    "value": 12.73,
+    "ci95": [
+     10.21,
+     15.4
+    ],
+    "n": 328
+   },
+   "gain_16384_no_cap": {
+    "value": 10.14,
+    "ci95": [
+     7.03,
+     13.51
+    ],
+    "n": 185
+   },
+   "no_cap_accuracy_B_pct": 77.03
+  },
+  {
+   "comparison": "hard328 dial 1.5x - RL",
+   "gain_16384_all": {
+    "value": 0.08,
+    "ci95": [
+     -1.68,
+     1.83
+    ],
+    "n": 328
+   },
+   "gain_16384_no_cap": {
+    "value": -0.31,
+    "ci95": [
+     -2.06,
+     1.44
+    ],
+    "n": 243
+   },
+   "no_cap_accuracy_B_pct": 74.69
+  },
+  {
+   "comparison": "MATH-500 dial 1.5x - base+cue",
+   "gain_16384_all": {
+    "value": 9.1,
+    "ci95": [
+     6.85,
+     11.45
+    ],
+    "n": 500
+   },
+   "gain_16384_no_cap": {
+    "value": 7.05,
+    "ci95": [
+     5.09,
+     9.0
+    ],
+    "n": 447
+   },
+   "no_cap_accuracy_B_pct": 88.26
+  },
+  {
+   "comparison": "MATH-500 dial 1.5x - RL",
+   "gain_16384_all": {
+    "value": -0.8,
+    "ci95": [
+     -2.6,
+     0.9
+    ],
+    "n": 500
+   },
+   "gain_16384_no_cap": {
+    "value": -1.25,
+    "ci95": [
+     -2.97,
+     0.36
+    ],
+    "n": 480
+   },
+   "no_cap_accuracy_B_pct": 94.17
+  },
+  {
+   "comparison": "MATH-500 step 100 + cue - base+cue",
+   "gain_16384_all": {
+    "value": 3.1,
+    "ci95": [
+     1.5,
+     4.75
+    ],
+    "n": 500
+   },
+   "gain_16384_no_cap": {
+    "value": 3.36,
+    "ci95": [
+     1.91,
+     4.87
+    ],
+    "n": 431
+   },
+   "no_cap_accuracy_B_pct": 88.86
+  }
+ ],
+ "review": {
+  "bonferroni": {
+   "what": "98.33 % paired bootstrap interval (0.833 / 99.167 percentiles) of each 16,384-view -> 32,768 change; same 10,000 resamples (seed 0) as the 95 % interval",
+   "RL - base+cue (seed 3,000,000)": {
+    "value": -0.61,
+    "ci95": [
+     -2.13,
+     0.91
+    ],
+    "n": 328,
+    "unit": "points",
+    "source": [
+     "results/cap32/rows-01/rl_plain.jsonl",
+     "results/cap32/rows-02/base_cue.jsonl"
+    ],
+    "note": "ci98.33 [-2.44, 1.22]",
+    "ci98_33": [
+     -2.44,
+     1.22
+    ]
+   },
+   "Think-SFT - RL (seed 3,000,000)": {
+    "value": 6.4,
+    "ci95": [
+     3.66,
+     9.45
+    ],
+    "n": 328,
+    "unit": "points",
+    "source": [
+     "results/cap32/rows-01/sft_cue.jsonl",
+     "results/cap32/rows-01/rl_plain.jsonl"
+    ],
+    "note": "ci98.33 [3.05, 10.06]",
+    "ci98_33": [
+     3.05,
+     10.06
+    ]
+   },
+   "M(2) - Think-SFT (seed 3,010,000)": {
+    "value": -3.36,
+    "ci95": [
+     -6.4,
+     -0.3
+    ],
+    "n": 328,
+    "unit": "points",
+    "source": [
+     "results/transplant/cap32_m2_s1-01/rows.jsonl (m2)",
+     "results/transplant/cap32_m2_s1-01/rows.jsonl (think_sft)"
+    ],
+    "note": "ci98.33 [-7.32, 0.3]",
+    "ci98_33": [
+     -7.32,
+     0.3
+    ]
+   }
+  },
+  "strict_32768": {
+   "M(2) - Think-SFT at 32,768, cut off = wrong": {
+    "value": 3.66,
+    "ci95": [
+     -0.3,
+     7.32
+    ],
+    "n": 328,
+    "unit": "points (A - B)",
+    "source": [
+     "results/transplant/cap32_m2_s1-01/rows.jsonl (m2) (cut off = wrong)",
+     "results/transplant/cap32_m2_s1-01/rows.jsonl (think_sft) (cut off = wrong)"
+    ],
+    "note": "samples A 1, B 1; = +12.00 problems"
+   },
+   "change_32k_minus_16k_view": {
+    "value": -3.05,
+    "ci95": [
+     -6.1,
+     0.0
+    ],
+    "n": 328,
+    "unit": "points",
+    "source": "results/transplant/cap32_m2_s1-01/rows.jsonl",
+    "note": "ci98.33 [-6.71, 0.61]"
+   },
+   "answers_reaching_32768_per_cell": {
+    "Think-SFT + cue (seed 3,000,000)": {
+     "reach_32768": 2,
+     "of_them_graded_right": 0,
+     "problems": []
+    },
+    "RL plain": {
+     "reach_32768": 0,
+     "of_them_graded_right": 0,
+     "problems": []
+    },
+    "base + cue": {
+     "reach_32768": 1,
+     "of_them_graded_right": 0,
+     "problems": []
+    },
+    "M(2) (seed 3,010,000)": {
+     "reach_32768": 0,
+     "of_them_graded_right": 0,
+     "problems": []
+    },
+    "Think-SFT + cue (seed 3,010,000)": {
+     "reach_32768": 1,
+     "of_them_graded_right": 1,
+     "problems": [
+      320
+     ]
+    }
+   },
+   "note": "the 16,384 view already scores a cut answer wrong; only the 32,768 side changes"
+  },
+  "right_but_cut_off_16384": {
+   "per_model": {
+    "Think-SFT + cue": {
+     "right_but_cut_off_total": 14,
+     "samples": 4,
+     "per_sample": 3.5,
+     "cut_off_samples_total": 378,
+     "source": "results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl"
+    },
+    "RL plain": {
+     "right_but_cut_off_total": 7,
+     "samples": 4,
+     "per_sample": 1.75,
+     "cut_off_samples_total": 114,
+     "source": "results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl"
+    },
+    "M(2)": {
+     "right_but_cut_off_total": 6,
+     "samples": 3,
+     "per_sample": 2.0,
+     "cut_off_samples_total": 162,
+     "source": "results/transplant/hard328-02/rows.jsonl (arm sft1_rl20)"
+    },
+    "base + cue": {
+     "right_but_cut_off_total": 4,
+     "samples": 4,
+     "per_sample": 1.0,
+     "cut_off_samples_total": 286,
+     "source": "results/day1_3/hard328_base_cue_s4r2-01/rows.jsonl"
+    }
+   },
+   "effect_on_changes": {
+    "RL - base+cue (seed 3,000,000)": {
+     "16384_view_gain_shift_points": 0.23,
+     "change_as_reported": -0.61,
+     "change_if_credited_estimate": -0.84
+    },
+    "Think-SFT - RL (seed 3,000,000)": {
+     "16384_view_gain_shift_points": 0.53,
+     "change_as_reported": 6.4,
+     "change_if_credited_estimate": 5.87
+    },
+    "M(2) - Think-SFT (seed 3,010,000)": {
+     "16384_view_gain_shift_points": -0.46,
+     "change_as_reported": -3.36,
+     "change_if_credited_estimate": -2.9
+    }
+   },
+   "note": "ESTIMATE: the 16,384 view scores every cut answer 0; a real 16,384 run grades some cut texts right (an answer found in the cut text). Crediting each arm at its stored per-sample rate shifts the 16,384-view gain by (rate_A - rate_B) / 328 and the change by minus that; problem identity is not modelled."
+  },
+  "native_format": {
+   "arm": "allenai/Olmo-3-7B-Think-SFT @ 6ff85758 in its own ChatML template with <think> (native tokenizer), no cue; T 1.0 / top-p 1.0, grader v3 on the whole text, one sample, cap 32,768 scored also at the 16,384 view (analysis/cap32.py rule); hard328 seed 3,000,000 (the seed of the cap32 cells), MATH-500 seed 182,000,000 (specs/SPEC_native.md)",
+   "hard328": {
+    "source": "studies/rlneurons/results/native/hard328-01/readout.json",
+    "readout": {
+     "spec": "studies/rlneurons/specs/SPEC_native.md",
+     "set": "hard328",
+     "n": 328,
+     "native_run": "native_sft_hard328_joined",
+     "native_jobs": null,
+     "cue_job": "abaybektursun-1115-005756-309b",
+     "cap_32768": {
+      "native_right": 232,
+      "cue_right": 230,
+      "native_minus_cue": {
+       "problems": 2,
+       "points": 0.61,
+       "ci95": [
+        -3.35,
+        4.57
+       ]
+      },
+      "only_native": 23,
+      "only_cue": 21,
+      "native_tokens_per_problem": 12157.5,
+      "cue_tokens_per_problem": 11794.9
+     },
+     "cap_16384": {
+      "native_right": 204,
+      "cue_right": 207,
+      "native_minus_cue": {
+       "problems": -3,
+       "points": -0.91,
+       "ci95": [
+        -4.27,
+        2.44
+       ]
+      },
+      "only_native": 15,
+      "only_cue": 18,
+      "native_tokens_per_problem": 10169.5,
+      "cue_tokens_per_problem": 10048.1
+     },
+     "native": {
+      "answers_longer_than_16384": 104,
+      "cap_hits_at_32768": 3,
+      "ended_im_end": 0,
+      "with_think_close": 325
+     }
+    },
+    "native_minus_RL_points_no_interval": {
+     "at_16384_view": 3.35,
+     "at_32768": 11.28,
+     "change": 7.93,
+     "note": "from totals only: the native per-problem rows are not in git, so no paired interval; RL = the cap32 rl_plain cell (193 / 195), same seed"
+    }
+   },
+   "math500": {
+    "source": "studies/rlneurons/results/native/math500-01/readout.json",
+    "readout": {
+     "spec": "studies/rlneurons/specs/SPEC_native.md",
+     "set": "math500",
+     "n": 500,
+     "native_run": "native_sft_math500_joined",
+     "native": {
+      "right_at_32768": 474,
+      "right_at_16384_same_answers": 464,
+      "answers_longer_than_16384": 25,
+      "cap_hits_at_32768": 0,
+      "tokens_per_problem_at_32768": 5153.9,
+      "tokens_per_problem_at_16384": 4854.1
+     },
+     "cue_samples_at_16384": {
+      "0": {
+       "right": 461,
+       "cap_hits": 26,
+       "tokens_per_problem": 4900.0,
+       "native_at_16384_minus_cue": {
+        "points": 0.6,
+        "ci95": [
+         -2.0,
+         3.2
+        ]
+       }
+      },
+      "1": {
+       "right": 457,
+       "cap_hits": 22,
+       "tokens_per_problem": 4921.4,
+       "native_at_16384_minus_cue": {
+        "points": 1.4,
+        "ci95": [
+         -1.2,
+         4.0
+        ]
+       }
+      },
+      "2": {
+       "right": 462,
+       "cap_hits": 25,
+       "tokens_per_problem": 4952.8,
+       "native_at_16384_minus_cue": {
+        "points": 0.4,
+        "ci95": [
+         -2.0,
+         2.8
+        ]
+       }
+      },
+      "3": {
+       "right": 461,
+       "cap_hits": 20,
+       "tokens_per_problem": 4728.7,
+       "native_at_16384_minus_cue": {
+        "points": 0.6,
+        "ci95": [
+         -1.8,
+         3.2
+        ]
+       }
+      }
+     }
+    }
+   }
+  },
+  "rl_reference": {
+   "cap32_run_RL_at_16384_view": 193,
+   "stored_4_samples_same_seeds": [
+    207,
+    190,
+    209,
+    194
+   ],
+   "stored_mean": 200.0,
+   "spec_rule": "SPEC_cap32.md, Instrument: \"each cell's score at 16,384 must lie within 12 problems of the stored cell at that cap (two SD of identical requests is about 11): Think-SFT 212 to 219, RL plain 206, base cue 164. Outside that, the box's cell is not comparable and is rerun.\"",
+   "triggered": "yes: 193 is 13 below the filed reference 206 (limit 12); not rerun (README cap32 section). Against the 4-sample mean 200.0 it is 7 below, and inside the range 190-209 of the stored samples.",
+   "ThinkSFT_minus_RL_at_32768_with_RL_stored_mean_plus_its_gain": {
+    "value": 8.54,
+    "ci95": null,
+    "n": 328,
+    "unit": "points",
+    "source": "230 (Think-SFT cap32) - (200.0 + 2) over 328",
+    "note": "no interval: mixes runs; this run's RL sample gives +10.67"
+   },
+   "same_with_ThinkSFT_2_samples": 9.15
+  },
+  "late_precision": {
+   "per_model": {
+    "Think-SFT + cue (seed 3,000,000)": {
+     "longer_than_16384": 93,
+     "end_right": 23,
+     "share_pct": 24.73,
+     "still_cut_off_at_32768": 2,
+     "max_further_gain_points": 0.61
+    },
+    "RL plain": {
+     "longer_than_16384": 20,
+     "end_right": 2,
+     "share_pct": 10.0,
+     "still_cut_off_at_32768": 0,
+     "max_further_gain_points": 0.0
+    },
+    "base + cue": {
+     "longer_than_16384": 64,
+     "end_right": 4,
+     "share_pct": 6.25,
+     "still_cut_off_at_32768": 1,
+     "max_further_gain_points": 0.3
+    },
+    "M(2) (seed 3,010,000)": {
+     "longer_than_16384": 56,
+     "end_right": 13,
+     "share_pct": 23.21,
+     "still_cut_off_at_32768": 0,
+     "max_further_gain_points": 0.0
+    },
+    "Think-SFT + cue (seed 3,010,000)": {
+     "longer_than_16384": 90,
+     "end_right": 24,
+     "share_pct": 26.67,
+     "still_cut_off_at_32768": 1,
+     "max_further_gain_points": 0.3
+    }
+   },
+   "note": "max further gain = every answer still cut at 32,768 turning right with more tokens (an upper bound)"
+  }
+ },
+ "checks_against_readouts": [
+  {
+   "name": "h_base sample 0 right (readout.json each_sample)",
+   "recomputed": 161,
+   "stored": 161,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_base sample 1 right (readout.json each_sample)",
+   "recomputed": 161,
+   "stored": 161,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_base sample 2 right (readout.json each_sample)",
+   "recomputed": 152,
+   "stored": 152,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_base sample 3 right (readout.json each_sample)",
+   "recomputed": 160,
+   "stored": 160,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_rl sample 0 right (readout.json each_sample)",
+   "recomputed": 207,
+   "stored": 207,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_rl sample 1 right (readout.json each_sample)",
+   "recomputed": 190,
+   "stored": 190,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_rl sample 2 right (readout.json each_sample)",
+   "recomputed": 209,
+   "stored": 209,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_rl sample 3 right (readout.json each_sample)",
+   "recomputed": 194,
+   "stored": 194,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_sft sample 0 right (readout.json each_sample)",
+   "recomputed": 212,
+   "stored": 212,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_sft sample 1 right (readout.json each_sample)",
+   "recomputed": 212,
+   "stored": 212,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_sft sample 2 right (readout.json each_sample)",
+   "recomputed": 211,
+   "stored": 211,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_sft sample 3 right (readout.json each_sample)",
+   "recomputed": 201,
+   "stored": 201,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_dial sample 0 right (readout.json each_sample)",
+   "recomputed": 207,
+   "stored": 207,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_dial sample 1 right (readout.json each_sample)",
+   "recomputed": 198,
+   "stored": 198,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_dial sample 2 right (readout.json each_sample)",
+   "recomputed": 199,
+   "stored": 199,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_dial sample 3 right (readout.json each_sample)",
+   "recomputed": 197,
+   "stored": 197,
+   "tolerance": 0.0
+  },
+  {
+   "name": "m_base sample 0 right (readout.json each_sample)",
+   "recomputed": 405,
+   "stored": 405,
+   "tolerance": 0.0
+  },
+  {
+   "name": "m_base sample 1 right (readout.json each_sample)",
+   "recomputed": 409,
+   "stored": 409,
+   "tolerance": 0.0
+  },
+  {
+   "name": "m_base sample 2 right (readout.json each_sample)",
+   "recomputed": 410,
+   "stored": 410,
+   "tolerance": 0.0
+  },
+  {
+   "name": "m_base sample 3 right (readout.json each_sample)",
+   "recomputed": 418,
+   "stored": 418,
+   "tolerance": 0.0
+  },
+  {
+   "name": "m_rl sample 0 right (readout.json each_sample)",
+   "recomputed": 456,
+   "stored": 456,
+   "tolerance": 0.0
+  },
+  {
+   "name": "m_rl sample 1 right (readout.json each_sample)",
+   "recomputed": 462,
+   "stored": 462,
+   "tolerance": 0.0
+  },
+  {
+   "name": "m_rl sample 2 right (readout.json each_sample)",
+   "recomputed": 464,
+   "stored": 464,
+   "tolerance": 0.0
+  },
+  {
+   "name": "m_rl sample 3 right (readout.json each_sample)",
+   "recomputed": 458,
+   "stored": 458,
+   "tolerance": 0.0
+  },
+  {
+   "name": "m_sft sample 0 right (readout.json each_sample)",
+   "recomputed": 461,
+   "stored": 461,
+   "tolerance": 0.0
+  },
+  {
+   "name": "m_sft sample 1 right (readout.json each_sample)",
+   "recomputed": 457,
+   "stored": 457,
+   "tolerance": 0.0
+  },
+  {
+   "name": "m_sft sample 2 right (readout.json each_sample)",
+   "recomputed": 462,
+   "stored": 462,
+   "tolerance": 0.0
+  },
+  {
+   "name": "m_sft sample 3 right (readout.json each_sample)",
+   "recomputed": 461,
+   "stored": 461,
+   "tolerance": 0.0
+  },
+  {
+   "name": "m_dial sample 0 right (readout.json each_sample)",
+   "recomputed": 456,
+   "stored": 456,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_base sample 0 right (readout.json each_sample)",
+   "recomputed": 28,
+   "stored": 28,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_base sample 1 right (readout.json each_sample)",
+   "recomputed": 28,
+   "stored": 28,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_base sample 2 right (readout.json each_sample)",
+   "recomputed": 32,
+   "stored": 32,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_base sample 3 right (readout.json each_sample)",
+   "recomputed": 30,
+   "stored": 30,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_rl sample 0 right (readout.json each_sample)",
+   "recomputed": 49,
+   "stored": 49,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_rl sample 1 right (readout.json each_sample)",
+   "recomputed": 50,
+   "stored": 50,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_rl sample 2 right (readout.json each_sample)",
+   "recomputed": 53,
+   "stored": 53,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_rl sample 3 right (readout.json each_sample)",
+   "recomputed": 50,
+   "stored": 50,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_sft sample 0 right (readout.json each_sample)",
+   "recomputed": 65,
+   "stored": 65,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_sft sample 1 right (readout.json each_sample)",
+   "recomputed": 59,
+   "stored": 59,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_sft sample 2 right (readout.json each_sample)",
+   "recomputed": 56,
+   "stored": 56,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_sft sample 3 right (readout.json each_sample)",
+   "recomputed": 60,
+   "stored": 60,
+   "tolerance": 0.0
+  },
+  {
+   "name": "m_s100 sample 0 right (ckptcue/readout3.json)",
+   "recomputed": 427,
+   "stored": 427,
+   "tolerance": 0.0
+  },
+  {
+   "name": "m_s100 sample 1 right (ckptcue/readout3.json)",
+   "recomputed": 423,
+   "stored": 423,
+   "tolerance": 0.0
+  },
+  {
+   "name": "m_s100 sample 2 right (ckptcue/readout3.json)",
+   "recomputed": 423,
+   "stored": 423,
+   "tolerance": 0.0
+  },
+  {
+   "name": "m_s100 sample 3 right (ckptcue/readout3.json)",
+   "recomputed": 431,
+   "stored": 431,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_M2 sample 0 right (README transplant tables)",
+   "recomputed": 234,
+   "stored": 234,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_M2 sample 1 right (README transplant tables)",
+   "recomputed": 229,
+   "stored": 229,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_M2 sample 2 right (README transplant tables)",
+   "recomputed": 237,
+   "stored": 237,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_M2 sample 0 right (README transplant tables)",
+   "recomputed": 69,
+   "stored": 69,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_M2 sample 1 right (README transplant tables)",
+   "recomputed": 75,
+   "stored": 75,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_M2 sample 2 right (README transplant tables)",
+   "recomputed": 70,
+   "stored": 70,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_M2 sample 3 right (README transplant tables)",
+   "recomputed": 75,
+   "stored": 75,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_dial cap hits per sample (README dial replication) sample 0",
+   "recomputed": 20,
+   "stored": 20,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_dial cap hits sample 1",
+   "recomputed": 14,
+   "stored": 14,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_rl cap hits per sample (README transplant table)",
+   "recomputed": 28.5,
+   "stored": 28.5,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_rl finished samples",
+   "recomputed": 1198,
+   "stored": 1198,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_rl right of finished",
+   "recomputed": 793,
+   "stored": 793,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_rl tokens per problem",
+   "recomputed": 9324.86,
+   "stored": 9325,
+   "tolerance": 1.0
+  },
+  {
+   "name": "h_sft cap hits per sample (README transplant table)",
+   "recomputed": 94.5,
+   "stored": 94.5,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_sft finished samples",
+   "recomputed": 934,
+   "stored": 934,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_sft right of finished",
+   "recomputed": 822,
+   "stored": 822,
+   "tolerance": 0.0
+  },
+  {
+   "name": "h_sft tokens per problem",
+   "recomputed": 10102.59,
+   "stored": 10103,
+   "tolerance": 1.0
+  },
+  {
+   "name": "h_M2 cap hits mean of 3",
+   "recomputed": 54.0,
+   "stored": 54.0,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_rl cap hits per sample (README fresh2026 transplant table)",
+   "recomputed": 21.0,
+   "stored": 21.0,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_rl finished",
+   "recomputed": 460,
+   "stored": 460,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_rl right of finished",
+   "recomputed": 197,
+   "stored": 197,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_sft cap hits per sample (README fresh2026 transplant table)",
+   "recomputed": 62.0,
+   "stored": 62.0,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_sft finished",
+   "recomputed": 296,
+   "stored": 296,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_sft right of finished",
+   "recomputed": 238,
+   "stored": 238,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_M2 cap hits per sample (README fresh2026 transplant table)",
+   "recomputed": 45.75,
+   "stored": 45.75,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_M2 finished",
+   "recomputed": 361,
+   "stored": 361,
+   "tolerance": 0.0
+  },
+  {
+   "name": "f_M2 right of finished",
+   "recomputed": 285,
+   "stored": 285,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32 sft_cue right at 32,768",
+   "recomputed": 230,
+   "stored": 230,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32 sft_cue right at 16,384 same answers",
+   "recomputed": 207,
+   "stored": 207,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32 sft_cue answers past 16,384",
+   "recomputed": 93,
+   "stored": 93,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32 sft_cue of them finished",
+   "recomputed": 91,
+   "stored": 91,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32 sft_cue of them right",
+   "recomputed": 23,
+   "stored": 23,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32 sft_cue tokens at 32,768",
+   "recomputed": 11794.85,
+   "stored": 11794.9,
+   "tolerance": 0.06
+  },
+  {
+   "name": "cap32 sft_cue tokens at 16,384",
+   "recomputed": 10048.08,
+   "stored": 10048.1,
+   "tolerance": 0.06
+  },
+  {
+   "name": "cap32 rl_plain right at 32,768",
+   "recomputed": 195,
+   "stored": 195,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32 rl_plain right at 16,384 same answers",
+   "recomputed": 193,
+   "stored": 193,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32 rl_plain answers past 16,384",
+   "recomputed": 20,
+   "stored": 20,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32 rl_plain of them finished",
+   "recomputed": 20,
+   "stored": 20,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32 rl_plain of them right",
+   "recomputed": 2,
+   "stored": 2,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32 rl_plain tokens at 32,768",
+   "recomputed": 9421.24,
+   "stored": 9421.2,
+   "tolerance": 0.06
+  },
+  {
+   "name": "cap32 rl_plain tokens at 16,384",
+   "recomputed": 9292.97,
+   "stored": 9293.0,
+   "tolerance": 0.06
+  },
+  {
+   "name": "cap32 base_cue right at 32,768",
+   "recomputed": 156,
+   "stored": 156,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32 base_cue right at 16,384 same answers",
+   "recomputed": 152,
+   "stored": 152,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32 base_cue answers past 16,384",
+   "recomputed": 64,
+   "stored": 64,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32 base_cue of them finished",
+   "recomputed": 63,
+   "stored": 63,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32 base_cue of them right",
+   "recomputed": 4,
+   "stored": 4,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32 base_cue tokens at 32,768",
+   "recomputed": 9994.97,
+   "stored": 9995.0,
+   "tolerance": 0.06
+  },
+  {
+   "name": "cap32 base_cue tokens at 16,384",
+   "recomputed": 9144.84,
+   "stored": 9144.8,
+   "tolerance": 0.06
+  },
+  {
+   "name": "hard328 M(2) - Think-SFT points (README, third sample)",
+   "recomputed": 7.42,
+   "stored": 7.4,
+   "tolerance": 0.05
+  },
+  {
+   "name": "  its interval low",
+   "recomputed": 5.21,
+   "stored": 5.2,
+   "tolerance": 0.3
+  },
+  {
+   "name": "  its interval high",
+   "recomputed": 9.76,
+   "stored": 9.8,
+   "tolerance": 0.3
+  },
+  {
+   "name": "fresh2026 M(2) - Think-SFT points (README)",
+   "recomputed": 9.01,
+   "stored": 9.0,
+   "tolerance": 0.05
+  },
+  {
+   "name": "fresh2026 M(2) - Think-SFT no-cap n (board audit work-8b4030)",
+   "recomputed": 45,
+   "stored": 45,
+   "tolerance": 0.0
+  },
+  {
+   "name": "fresh2026 M(2) - Think-SFT no-cap points (board audit)",
+   "recomputed": 1.11,
+   "stored": 1.1,
+   "tolerance": 0.05
+  },
+  {
+   "name": "  its interval low (audit: 0)",
+   "recomputed": 0.0,
+   "stored": 0.0,
+   "tolerance": 0.2
+  },
+  {
+   "name": "  its interval high (audit: 2.8)",
+   "recomputed": 2.78,
+   "stored": 2.8,
+   "tolerance": 0.2
+  },
+  {
+   "name": "MATH-500 dial 1.5x - RL (README: 0.0 vs RL sample 0) dial right",
+   "recomputed": 456,
+   "stored": 456,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32 sft cut at 16,384 = answers past 16,384",
+   "recomputed": 93,
+   "stored": 93,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32_m2 m2 right at 32,768",
+   "recomputed": 245,
+   "stored": 245,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32_m2 m2 right at 16,384 view",
+   "recomputed": 232,
+   "stored": 232,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32_m2 m2 cap hits at 32,768",
+   "recomputed": 0,
+   "stored": 0,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32_m2 m2 cap hits at 16,384 view",
+   "recomputed": 56,
+   "stored": 56,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32_m2 m2 tokens at 32,768",
+   "recomputed": 9875.16,
+   "stored": 9875.2,
+   "tolerance": 0.06
+  },
+  {
+   "name": "cap32_m2 m2 tokens at 16,384 view",
+   "recomputed": 9347.74,
+   "stored": 9347.7,
+   "tolerance": 0.06
+  },
+  {
+   "name": "cap32_m2 m2 answers past 16,384",
+   "recomputed": 56,
+   "stored": 56,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32_m2 m2 of them right",
+   "recomputed": 13,
+   "stored": 13,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32_m2 think_sft right at 32,768",
+   "recomputed": 234,
+   "stored": 234,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32_m2 think_sft right at 16,384 view",
+   "recomputed": 210,
+   "stored": 210,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32_m2 think_sft cap hits at 32,768",
+   "recomputed": 1,
+   "stored": 1,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32_m2 think_sft cap hits at 16,384 view",
+   "recomputed": 90,
+   "stored": 90,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32_m2 think_sft tokens at 32,768",
+   "recomputed": 11512.02,
+   "stored": 11512.0,
+   "tolerance": 0.06
+  },
+  {
+   "name": "cap32_m2 think_sft tokens at 16,384 view",
+   "recomputed": 10042.7,
+   "stored": 10042.7,
+   "tolerance": 0.06
+  },
+  {
+   "name": "cap32_m2 think_sft answers past 16,384",
+   "recomputed": 90,
+   "stored": 90,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32_m2 think_sft of them right",
+   "recomputed": 24,
+   "stored": 24,
+   "tolerance": 0.0
+  },
+  {
+   "name": "cap32_m2 m2_minus_think_at_32768 points",
+   "recomputed": 3.35,
+   "stored": 3.35,
+   "tolerance": 0.005
+  },
+  {
+   "name": "cap32_m2 m2_minus_think_at_32768 interval low",
+   "recomputed": -0.61,
+   "stored": -0.61,
+   "tolerance": 0.3
+  },
+  {
+   "name": "cap32_m2 m2_minus_think_at_32768 interval high",
+   "recomputed": 7.01,
+   "stored": 7.01,
+   "tolerance": 0.3
+  },
+  {
+   "name": "cap32_m2 m2_minus_think_at_16384_view points",
+   "recomputed": 6.71,
+   "stored": 6.71,
+   "tolerance": 0.005
+  },
+  {
+   "name": "cap32_m2 m2_minus_think_at_16384_view interval low",
+   "recomputed": 3.05,
+   "stored": 3.05,
+   "tolerance": 0.3
+  },
+  {
+   "name": "cap32_m2 m2_minus_think_at_16384_view interval high",
+   "recomputed": 10.37,
+   "stored": 10.37,
+   "tolerance": 0.3
+  },
+  {
+   "name": "cap32_m2 m2_gain_32768_over_16384_view points",
+   "recomputed": 3.96,
+   "stored": 3.96,
+   "tolerance": 0.005
+  },
+  {
+   "name": "cap32_m2 m2_gain_32768_over_16384_view interval low",
+   "recomputed": 2.13,
+   "stored": 2.13,
+   "tolerance": 0.3
+  },
+  {
+   "name": "cap32_m2 m2_gain_32768_over_16384_view interval high",
+   "recomputed": 6.1,
+   "stored": 6.1,
+   "tolerance": 0.3
+  },
+  {
+   "name": "Think-SFT seed 3,010,000 at 32,768 = 234 (README cap32vote samples 230, 234, 235, 232)",
+   "recomputed": 234,
+   "stored": 234,
+   "tolerance": 0.0
+  },
+  {
+   "name": "M(2)@16k (2 seeds) - Think-SFT@32k points (board comment result-3387ce)",
+   "recomputed": 0.46,
+   "stored": 0.5,
+   "tolerance": 0.05
+  },
+  {
+   "name": "  its interval low (board: -2.7)",
+   "recomputed": -2.74,
+   "stored": -2.7,
+   "tolerance": 0.3
+  },
+  {
+   "name": "  its interval high (board: 3.8)",
+   "recomputed": 3.66,
+   "stored": 3.8,
+   "tolerance": 0.3
+  },
+  {
+   "name": "strict: Think-SFT seed 3,010,000 right at 32,768 (auditor: 233)",
+   "recomputed": 233,
+   "stored": 233,
+   "tolerance": 0.0
+  },
+  {
+   "name": "strict: M(2) - Think-SFT at 32,768 (auditor: +3.7)",
+   "recomputed": 3.66,
+   "stored": 3.7,
+   "tolerance": 0.05
+  },
+  {
+   "name": "right but cut off per sample at 16,384, Think-SFT + cue (reviewer)",
+   "recomputed": 3.5,
+   "stored": 3.5,
+   "tolerance": 0.005
+  },
+  {
+   "name": "right but cut off per sample at 16,384, RL plain (reviewer)",
+   "recomputed": 1.75,
+   "stored": 1.75,
+   "tolerance": 0.005
+  },
+  {
+   "name": "right but cut off per sample at 16,384, M(2) (reviewer)",
+   "recomputed": 2.0,
+   "stored": 2.0,
+   "tolerance": 0.005
+  },
+  {
+   "name": "right but cut off per sample at 16,384, base + cue (reviewer)",
+   "recomputed": 1.0,
+   "stored": 1.0,
+   "tolerance": 0.005
+  },
+  {
+   "name": "native hard328 right at 32,768",
+   "recomputed": 232,
+   "stored": 232,
+   "tolerance": 0.0
+  },
+  {
+   "name": "native hard328 right at 16,384 view",
+   "recomputed": 204,
+   "stored": 204,
+   "tolerance": 0.0
+  },
+  {
+   "name": "native readout cue cell = cap32 sft_cue at 32,768",
+   "recomputed": 230,
+   "stored": 230,
+   "tolerance": 0.0
+  },
+  {
+   "name": "native readout cue cell at 16,384 view",
+   "recomputed": 207,
+   "stored": 207,
+   "tolerance": 0.0
+  },
+  {
+   "name": "rl_reference alternative Think-SFT - RL at 32,768 (reviewer: about +8.5)",
+   "recomputed": 8.536585365853659,
+   "stored": 8.5,
+   "tolerance": 0.1
+  },
+  {
+   "name": "late answers base + cue",
+   "recomputed": 64,
+   "stored": 64,
+   "tolerance": 0.0
+  },
+  {
+   "name": "late answers right base + cue",
+   "recomputed": 4,
+   "stored": 4,
+   "tolerance": 0.0
+  },
+  {
+   "name": "late answers RL plain",
+   "recomputed": 20,
+   "stored": 20,
+   "tolerance": 0.0
+  },
+  {
+   "name": "late answers right RL plain",
+   "recomputed": 2,
+   "stored": 2,
+   "tolerance": 0.0
+  },
+  {
+   "name": "late answers Think-SFT + cue (seed 3,000,000)",
+   "recomputed": 93,
+   "stored": 93,
+   "tolerance": 0.0
+  },
+  {
+   "name": "late answers right Think-SFT + cue (seed 3,000,000)",
+   "recomputed": 23,
+   "stored": 23,
+   "tolerance": 0.0
+  },
+  {
+   "name": "late answers Think-SFT + cue (seed 3,010,000)",
+   "recomputed": 90,
+   "stored": 90,
+   "tolerance": 0.0
+  },
+  {
+   "name": "late answers right Think-SFT + cue (seed 3,010,000)",
+   "recomputed": 24,
+   "stored": 24,
+   "tolerance": 0.0
+  },
+  {
+   "name": "late answers M(2) (seed 3,010,000)",
+   "recomputed": 56,
+   "stored": 56,
+   "tolerance": 0.0
+  },
+  {
+   "name": "late answers right M(2) (seed 3,010,000)",
+   "recomputed": 13,
+   "stored": 13,
+   "tolerance": 0.0
+  }
+ ]
+}

@@ -1,0 +1,26 @@
+{
+ "supports_claim": {
+  "problem_index": 170,
+  "unique_id": "test/algebra/297.json",
+  "input": "Solve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nFind the product of the $y$-coordinates of all the distinct solutions $(x,y)$ for the two equations $y=x^2-8$ and $y^2=-5x+44$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "output_first_600_chars": " and don't forget about the appropriate units if necessary\n\nLet's solve this step-by-step by finding the points of intersection of the parabula $y = x^2 - 8$ and the cubic curve $y^2 = -5x + 44$.\n\n1. from the first equation, we get $y = x^2 - 8$.\n2. substitute this $y$ value into the second equation and solve for $x$.\n3. we then can solve for corresponding $y$ values using $y = x^2 - 8$.\n4. then find the product of the $y$-coordinates of all the distinct solutions $(x,y)$.",
+  "n_generated": 143,
+  "extracted_v3": null,
+  "gold": "1736",
+  "score_v3": 0,
+  "cued_base_k_of_4": 0.0,
+  "note": "Quick wrong on a problem the cued base solves 0 of 4 times: a hard problem, as rival b says."
+ },
+ "against_claim": {
+  "problem_index": 41,
+  "unique_id": "test/geometry/627.json",
+  "input": "Solve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nThe coordinates of a parallelogram are (5, 3), (6, 8), (7, 4) and $(x, y)$ and $x > 7$. What is the value of $x + y$?\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "output_first_600_chars": "",
+  "n_generated": 1,
+  "extracted_v3": null,
+  "gold": "17",
+  "score_v3": 0,
+  "cued_base_k_of_4": 4.0,
+  "note": "Empty reply (1 token) on a problem the cued base solves 4 of 4 times: an easy problem, failed by format, not by early commitment."
+ }
+}

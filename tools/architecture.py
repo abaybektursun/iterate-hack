@@ -1,16 +1,21 @@
-"""The Design page of the team site: one interactive picture of the shared work setup, for a first-time reader.
+"""One interactive picture of the shared work setup, for a first-time reader, and the site's visual reference.
 
-view.py serves PAGE at /architecture, the tab "Design" in the header. The page reads the same /data as the board page every 10 s and draws the
+It was the Design page (/architecture, a header tab) until 2026-11-15. Now demo_deck.py embeds PAGE as the deck's
+picture /demo/fig/harness (the slide /demo#harness) with its header, words column and key hidden, and /architecture
+leads there; the tokens, light and projection here are the ones the other pages copy. The page reads the same /data as the board page every 10 s and draws the
 setup as a small three-dimensional object seen from slightly above. The board is the dome in the centre with one
 dot per live item. Each person has a swarm of agents beside it with threads to the board: one mark per agent
 session, the Claude mark for Claude Code and the OpenAI mark for Codex, in the person's color of the board page.
 The Chat ring (messages) runs through every swarm, and the Retro loop (self-review) with its comet goes around
 everything. What moves is real data, replayed: a message leaves its sender's swarm for the others, a post
 travels to the board and a ripple returns to every swarm. While an event plays, its first words are typed beside the
-person whose agent wrote it, with its age, and the mark of that agent swells once. A larger dot with a halo is
+person whose agent wrote it, with its age, and the mark of that agent swells once; the words are placed and cut so
+that no ring passes through them. A larger dot with a halo is
 happening now, and its age reads "now". The status at the top right counts the seconds since the last post, and its
 dot beats on every read of /data. The picture
-stands alone in the middle of the page with one button at the bottom right. A click on a part dims the rest, moves the picture
+stands alone in the middle of the page with one button at the bottom right; one sentence (under the picture, above it
+on a phone) says what the picture is, with the live number of people and of agent sessions. On a phone the picture
+runs to the screen's edges. A click on a part dims the rest, moves the picture
 over and explains the part in a column beside it (address /architecture#<part>); the button "Follow one result"
 steps through the path of one result (arrow keys, Esc). The logos of past.dev (memory) and Exa (search) sit on the
 key's row, and a click on either explains it in the same column. Nothing here writes to the board.
@@ -30,9 +35,9 @@ PAGE = r"""<!doctype html>
    on a cool grey table, with a cast shadow in place of the glow. The light comes from the upper left in both. */
 :root {
   color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #cbd2d8;
   --blue: #1f43d6; --red: #c41e34; --on-blue: #fff;
-  --pl: .56; --pc: .15; --dim: .16;
+  --pl: .50; --pc: .15; --dim: .16;
   --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
   --rim-a: rgba(16, 24, 32, .28); --rim-b: rgba(16, 24, 32, .58); --rim-c: rgba(16, 24, 32, .9);
   --glow: 0; --shadow: 1; --spec: 0; --bloom: .4; --core: var(--blue); --lift: 38%;
@@ -82,7 +87,11 @@ a { color: inherit; }
 /* The picture */
 .stage { grid-column: 1; grid-row: 2; min-height: 0; min-width: 0; display: flex; padding: 8px 0 0; }
 .foot { grid-column: 1; grid-row: 3; display: flex; justify-content: flex-end; padding-top: 6px; }
-.page.open .foot { visibility: hidden; }
+.page.open .foot, .page.open .say { visibility: hidden; }
+.say {  /* the page's one sentence: what the picture is. At most two lines, so that the picture never reflows */
+  grid-column: 1; grid-row: 3; align-self: center; margin: 0 230px 0 0; max-height: 2.5em; overflow: hidden;
+  font-size: clamp(16px, 1.3vw, 20px); line-height: 1.25; font-weight: 300; font-stretch: 102%; letter-spacing: -.008em; text-wrap: balance;
+}
 svg { width: 100%; height: 100%; display: block; overflow: visible; }
 svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-stretch: 112%; letter-spacing: .012em; }
 .label { font-weight: 600; paint-order: stroke fill; stroke: var(--paper); stroke-width: 10px; stroke-linejoin: round; }
@@ -154,7 +163,7 @@ svg [data-go]:focus-visible .logo { fill: var(--blue); }
 /* The words */
 .side {
   grid-column: 2; grid-row: 2 / 4; min-width: 0; min-height: 0; overflow: hidden auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: clamp(20px, 7vh, 96px) 0 0 40px; box-shadow: inset 1px 0 var(--rule);  /* a border would make the closed column 41px wide, 1px more than the page's padding hides */
   opacity: 0; visibility: hidden; transition: opacity .3s ease .12s, visibility 0s .42s;
 }
 .page.open .side { opacity: 1; visibility: visible; transition: opacity .3s ease .12s; }
@@ -195,14 +204,15 @@ svg [data-go]:focus-visible .logo { fill: var(--blue); }
 .nav span { margin-left: auto; font-size: 13px; color: var(--mute); }
 
 @media (max-width: 900px) {
-  .page { display: block; height: auto; padding: 16px 16px 40px; }
-  .top { gap: 13px; padding-bottom: 12px; }
+  .page { display: block; height: auto; padding: 16px 16px 40px; overflow-x: clip; }
+  .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }  /* the status goes to a second line where the tabs fill the first */
   .name { font-stretch: 112%; margin-right: 0; }
-  .stage { margin-top: 10px; padding: 0; }
+  .stage { margin: 10px -16px 0; padding: 0; }  /* to the screen's edges, so that the picture's text reaches 11 to 12 px */
+  .say, .page.open .say { visibility: visible; margin: 18px 0 0; max-height: none; font-size: 21px; line-height: 1.22; }
   svg { height: auto; }
   .foot { padding-top: 14px; justify-content: center; }
   .page.open .foot { display: none; }
-  .side { padding: 12px 0 0; overflow: visible; border-left: 0; }
+  .side { padding: 12px 0 0; overflow: visible; box-shadow: none; }
   .pane { min-width: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -221,6 +231,7 @@ svg [data-go]:focus-visible .logo { fill: var(--blue); }
     <a href="/findings">Findings</a>
     <span class="status" id="status">Reading the board</span>
   </header>
+  <p class="say" id="say">People and their coding agents share one board: every agent reads it and posts to it.</p>
   <div class="stage"><svg id="svg" role="group" aria-label="The harness: people and their agents around one shared board"></svg></div>
   <div class="foot"><button class="walk" data-go="walk-1">Follow one result</button></div>
   <div class="side" id="side">
@@ -267,12 +278,12 @@ const TEXT = {
   },
   memory: {
     name: "Memory",
-    lead: `The team's memory is one <a href="https://past.dev">past.dev</a> project. An agent searches it before it starts an idea.`,
+    lead: `The team's memory is one <a href="/pastdev">past.dev</a> project. An agent searches it before it starts an idea.`,
     facts: ["Every result and every knowledge post on the board is stored there.", "A finding from a paper is stored with a quote from it, and only if the quote appears in the paper's text.", "When a Claude Code session ends, its typed prompts and the agent's replies are stored. Tool output and file contents are not sent."],
   },
   search: {
     name: "Search",
-    lead: `Agents search the web and the literature with <a href="https://exa.ai">Exa</a>, and read the pages they find.`,
+    lead: `Agents search the web and the literature with <a href="/exa">Exa</a>, and read the pages they find.`,
     facts: ["Before a new measurement, an agent searches for published work on the same question.", "If a published table already answers the question, the agent posts that finding and does not run the experiment."],
   },
 };
@@ -306,13 +317,14 @@ const LOGOS = {
    loop is a larger circle in its own plane. A plane is [inclination, turn on the screen]. sw is the radius of the
    largest swarm; a mark is at most `mark` wide, and marks stand `pack` times their width apart or more, so that
    they never cover each other while the swarm turns. The first words of an event are set in size fq, at most
-   `chars` characters, so that they fit between the Retro loop and the Chat ring; age says whether its age follows. */
+   `chars` characters (fewer where the room is smaller, see row); age says whether its age follows. fk is the size
+   of the key. The phone's sizes are chosen to be 11 px or more on a screen 375 px wide. */
 const RAD = Math.PI / 180;
 function plane(inc, turn) { return { c: Math.cos(inc * RAD), s: Math.sin(inc * RAD), co: Math.cos(turn * RAD), so: Math.sin(turn * RAD) }; }
 function geo() {
   const g = narrow.matches
-    ? { w: 720, h: 696, cx: 360, cy: 284, rb: 100, rq: 200, rp: 274, rr: 338, fs: 25, fw: 20, D: 1900, sw: 50, over: 26, cmax: 23, mark: 21, pack: 1.01, fq: 18, chars: 16, age: 0, pp: [34, 0], pr: [36, -4] }
-    : { w: 1140, h: 985, cx: 570, cy: 404, rb: 164, rq: 340, rp: 446, rr: 540, fs: 24, fw: 18.5, D: 2100, sw: 88, over: 45, cmax: 27, mark: 25, pack: 1.06, fq: 16.5, chars: 30, age: 1, pp: [40, 0], pr: [36, -4] };
+    ? { w: 720, h: 742, cx: 360, cy: 290, rb: 100, rq: 200, rp: 274, rr: 338, fs: 25, fw: 23, fk: 22, D: 1900, sw: 50, over: 26, cmax: 23, mark: 21, pack: 1.01, fq: 22, chars: 16, age: 0, pp: [34, 0], pr: [30, -4] }  // a rounder Retro loop, so the lowest name fits inside it
+    : { w: 1140, h: 985, cx: 570, cy: 404, rb: 164, rq: 340, rp: 446, rr: 540, fs: 24, fw: 18.5, fk: 17, D: 2100, sw: 88, over: 45, cmax: 27, mark: 25, pack: 1.06, fq: 16.5, chars: 30, age: 1, pp: [40, 0], pr: [36, -4] };
   g.PP = plane(...g.pp); g.PR = plane(...g.pr);
   return g;
 }
@@ -432,33 +444,35 @@ function draw() {
       `<text class="said" font-size="${g.fq}" opacity="0" aria-hidden="true"><tspan></tspan><tspan class="when"></tspan></text></g>`,
       `${esc(m.people[i])}, ${m.agents[i].length} agents`);
   });
-  const k = g.fw * .92, ty = g.h - 14, ky = narrow.matches ? ty - k * 1.9 : ty, keys = [["agent", "agent"], ["work", "open work"], ["", "result"], ["note", "idea or note"]];
+  const k = g.fk, z = k / 17, ty = g.h - 14, ky = narrow.matches ? ty - k * 1.9 : ty, keys = [["agent", "agent"], ["work", "open work"], ["", "result"], ["note", "idea or note"]];
   const here = m ? ["claude", "openai", ""].filter(x => m.marks.some(l => l.includes(x))) : ["claude"];  // the marks on this page
-  const widths = keys.map(([cls, t]) => 26 + t.length * k * .54 + 22 + (cls === "agent" ? (here.length - 1) * 19 : 0)), total = widths.reduce((a, b) => a + b, 0) - 22;
+  const widths = keys.map(([cls, t]) => 48 * z + t.length * k * .54 + (cls === "agent" ? (here.length - 1) * 19 * z : 0)), total = widths.reduce((a, b) => a + b, 0) - 22 * z;  // z: the glyphs grow with the key's text
   let kx = narrow.matches ? (g.w - total) / 2 : 6;
   out += `<g class="part key" data-part="key" style="--c:var(--mute)">` + keys.map(([cls, t], i) => {
     const x = kx, y = ky - k * .32; kx += widths[i];
-    const one = (mark, j) => mark ? `<use class="agent" href="#mark-${mark}" x="${f(x - 1 + j * 19)}" y="${f(y - 8)}" width="16" height="16"/>`
-      : `<rect class="agent" x="${f(x + j * 19)}" y="${f(y - 6.5)}" width="13" height="13" rx="3.6"/>`;
-    return (cls === "agent" ? here.map(one).join("") : `<circle class="dot ${cls}" cx="${f(x + 7)}" cy="${f(y)}" r="${cls === "note" ? 3.4 : 6}"/>`) +
-      `<text class="sub" x="${f(x + 20 + (cls === "agent" ? (here.length - 1) * 19 : 0))}" y="${f(ky)}" font-size="${f(k)}" style="text-anchor:start">${t}</text>`;
+    const one = (mark, j) => mark ? `<use class="agent" href="#mark-${mark}" x="${f(x + (j * 19 - 1) * z)}" y="${f(y - 8 * z)}" width="${f(16 * z)}" height="${f(16 * z)}"/>`
+      : `<rect class="agent" x="${f(x + j * 19 * z)}" y="${f(y - 6.5 * z)}" width="${f(13 * z)}" height="${f(13 * z)}" rx="${f(3.6 * z)}"/>`;
+    return (cls === "agent" ? here.map(one).join("") : `<circle class="dot ${cls}" cx="${f(x + 7 * z)}" cy="${f(y)}" r="${f((cls === "note" ? 3.4 : 6) * z)}"/>`) +
+      `<text class="sub" x="${f(x + (20 + (cls === "agent" ? (here.length - 1) * 19 : 0)) * z)}" y="${f(ky)}" font-size="${f(k)}" style="text-anchor:start">${t}</text>`;
   }).join("") + "</g>";
   /* The services agents call: a label, then the logo, on the key's baseline. Laid out right to left from the right
-     edge; on a phone they take their own row under the key, centred. */
+     edge; on a phone they take their own row under the key, centred. Each has an invisible rectangle to click that
+     is 40 px tall on the screen. */
+  const box = svg.getBoundingClientRect(), tall = 40 / (Math.min(box.width / g.w, box.height / g.h) || .7);
   const tools = [["memory", "past", "Memory, past.dev"], ["search", "exa", "Search, Exa"]].map(([name, logo, label]) => {
     const L = LOGOS[logo], lh = L.tall * k;
     return { name, logo, label, L, lh, lw: lh * L.w / L.h, tw: name.length * k * .54 };
   });
-  const span = tools.reduce((s, o) => s + o.tw + 8 + o.lw, 0) + 26 * (tools.length - 1);
+  const span = tools.reduce((s, o) => s + o.tw + 8 * z + o.lw, 0) + 26 * z * (tools.length - 1);
   let tx = narrow.matches ? (g.w + span) / 2 : g.w - 6;
   const drawn = [];
   for (let i = tools.length - 1; i >= 0; i--) {
-    const o = tools[i], lx = tx - o.lw, ly = ty - o.L.base * o.lh, sx = lx - 8 - o.tw, top = Math.min(ty - k * .8, ly) - 8, bot = Math.max(ty + k * .25, ly + o.lh) + 8;
+    const o = tools[i], lx = tx - o.lw, ly = ty - o.L.base * o.lh, sx = lx - 8 * z - o.tw, bot = Math.max(ty + k * .25, ly + o.lh) + 8, top = Math.min(ty - k * .8 - 8, ly - 8, bot - tall);
     drawn.unshift(part(o.name, o.name,
       `<rect class="pad" x="${f(sx - 8)}" y="${f(top)}" width="${f(tx - sx + 16)}" height="${f(bot - top)}"/>` +
-      `<text class="sub" x="${f(lx - 8)}" y="${f(ty)}" font-size="${f(k)}" style="text-anchor:end">${o.name}</text>` +
+      `<text class="sub" x="${f(lx - 8 * z)}" y="${f(ty)}" font-size="${f(k)}" style="text-anchor:end">${o.name}</text>` +
       `<use class="logo" href="#logo-${o.logo}" x="${f(lx)}" y="${f(ly)}" width="${f(o.lw)}" height="${f(o.lh)}"/>`, o.label, "tool"));
-    tx = sx - 26;
+    tx = sx - 26 * z;
   }
   out += drawn.join("");
   svg.innerHTML = out + '<g id="fx"></g>';
@@ -543,7 +557,8 @@ function place(t) {
     dash += `M${f(p[0])} ${f(p[1])}L${f(q[0])} ${f(q[1])}`;
   }
   E["ms-ring"].setAttribute("d", dash);
-  E["ms-hit"].setAttribute("d", line(ring(g.PP, g.rq, 0, 360, 48)) + "Z");
+  R.loop = loop; R.chat = ring(g.PP, g.rq, 0, 360, 48);  // row() keeps the first words of an event clear of these
+  E["ms-hit"].setAttribute("d", line(R.chat) + "Z");
   fade(E.msgfade, g.PP, g.rq);
   const crown = at(g.PP, g.rq, -90);
   set(E["ms-label"], { x: f(crown[0]), y: f(crown[1] + g.fs * .34) });
@@ -608,26 +623,66 @@ function comet(u, pts, r, opacity) {  // a pulse: a small lit head, a tapered ta
   u.el.setAttribute("opacity", opacity.toFixed(2));
 }
 function say(i, k, text, ns, t, hold) {  // the first words of a real message or post, beside whoever wrote it
-  const o = S.r.swarms[i], g = S.g, s = String(text ?? "").replace(/\s+/g, " ").trim();
+  const o = S.r.swarms[i], g = S.g, s = String(text ?? "").replace(/\s+/g, " ").trim().replace(/^title:\s*/i, "").replace(/\s+what:.*$/, "");  // a result's text opens with its field names
   if (!o || !s) return;
   S.r.swarms.forEach(x => x.said.setAttribute("opacity", 0));
-  const head = s.slice(0, g.chars), whole = head.replace(/\s+\S*$/, "");  // cut at a word, unless that leaves less than half
-  const cut = s.length > g.chars ? (whole.length * 2 > g.chars ? whole : head).replace(/[,;:(\-]+$/, "") + "…" : s;
   const [line, when] = o.said.children, age = g.age ? "\u2002" + ago(ns) : "";  // a phone has no room for the age
-  line.textContent = cut; when.textContent = age;
   when.setAttribute("class", "when" + (mins(ns) < 1 ? " now" : ""));
-  S.play.say = { i, k, cut, age, t0: t, hold, wide: o.said.getComputedTextLength(), n: -1 };  // measured whole, so it does not move while it is typed
+  const box = $("svg").getBoundingClientRect(), spare = Math.max(0, box.width / Math.min(box.width / g.w, box.height / g.h) - g.w) / 2;  // the room beside the drawing, in its units
+  const Y = { i, k, age, t0: t, hold, spare, wide: 0, n: -1 }, room = row(o, Y).room;
+  for (let n = g.chars; ; n -= 2) {  // shorter, until the words fit their room
+    const head = s.slice(0, n), whole = head.replace(/\s+\S*$/, "");  // cut at a word, unless that leaves less than half
+    Y.cut = s.length > n ? (whole.length * 2 > n ? whole : head).replace(/[,;:(\-]+$/, "") + "…" : s;
+    line.textContent = Y.cut; when.textContent = age;
+    Y.wide = o.said.getComputedTextLength();  // measured whole, so it does not move while it is typed
+    if (Y.wide <= room || n <= 8) break;
+  }
+  const at = row(o, Y);
+  Y.out = at.out; Y.drop = at.drop;  // decided once, so the words do not jump while the view sways
+  S.play.say = Y;
+}
+function crossing(pts, y, side) {  // where a ring crosses the row y on one side of the centre: its outermost x there, or null
+  let x = null;
+  for (let i = 1; i < pts.length; i++) {
+    const a = pts[i - 1], b = pts[i];
+    if ((a[1] - y) * (b[1] - y) > 0 || a[1] === b[1]) continue;
+    const q = a[0] + (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1]);
+    if ((q - S.g.cx) * side > 0 && (x == null || (q - x) * side > 0)) x = q;
+  }
+  return x;
+}
+/* Where the first words go: on the line beyond the name, where no ring passes through them. Beside a person at the
+   side, the Retro loop crosses that line: the words stand outside the loop when the room there is the larger, and
+   otherwise between the loop and the Chat ring (or the ring's name). Under a person at the bottom they move below
+   the loop when it would pass through them. room is the width they may take. */
+function row(o, Y) {
+  const g = S.g, R = S.r, pad = 12, h = g.fq * o.nk, lo = 8 - Y.spare, hi = g.w - 8 + Y.spare, fit = x => Math.max(lo, Math.min(hi - Y.wide, x));
+  let y = o.ny + (o.below ? g.fq * 1.5 : -g.fw * 1.3) * o.nk;
+  if (!o.side) {
+    const x = fit(o.nx - Y.wide / 2), under = R.loop.filter(q => q[0] > x - 30 && q[0] < x + Y.wide + 30).map(q => q[1]);
+    const drop = Y.drop ?? under.some(v => v > y - h - 8 && v < y + h * .4 + 8);
+    if (drop && under.length) y = Math.max(...under) + 7 + h * .85;
+    return { x, y, room: hi - lo, drop };
+  }
+  const rows = [y - h * .85, y + h * .3], far = l => o.side * Math.max(...l.map(v => v * o.side)), near = l => o.side * Math.min(...l.map(v => v * o.side));
+  const loop = rows.map(v => crossing(R.loop, v, o.side)).filter(v => v != null), chat = rows.map(v => crossing(R.chat, v, o.side)).filter(v => v != null);
+  const base = o.side < 0 ? o.nx + o.wide / 2 - Y.wide : o.nx - o.wide / 2;  // from the name's inner edge, running away from the board
+  if (!loop.length) return { x: fit(base), y, room: hi - lo };
+  const edge = o.side > 0 ? hi : lo, a = far(loop) + o.side * pad, b = near(loop) - o.side * pad, c = chat.length ? far(chat) + o.side * pad : g.cx + o.side * 56;
+  const outside = (edge - a) * o.side, inside = (b - c) * o.side, out = Y.out ?? outside >= inside;
+  const x = out ? (o.side > 0 ? a : a - Y.wide) : o.side > 0 ? Math.min(base, b - Y.wide) : Math.max(base, b);
+  return { x: fit(x), y, room: Math.max(outside, inside), out };
 }
 function said(t) {
-  const Y = S.play.say, g = S.g;
+  const Y = S.play.say;
   if (!Y) return;
   const o = S.r.swarms[Y.i], age = t - Y.t0;
   if (!o || age >= Y.hold) { if (o) o.said.setAttribute("opacity", 0); S.play.say = null; return; }
   const n = Math.min(Y.cut.length, Math.ceil(age * 55)), [line, when] = o.said.children;  // 55 characters a second
   if (n !== Y.n) { Y.n = n; line.textContent = Y.cut.slice(0, n); when.textContent = n < Y.cut.length ? "" : Y.age; }
-  const x = o.side < 0 ? o.nx - o.wide / 2 : o.side > 0 ? o.nx + o.wide / 2 - Y.wide : o.nx - Y.wide / 2;  // it grows toward the middle of the picture
-  o.said.setAttribute("x", f(Math.max(8, Math.min(g.w - 8 - Y.wide, x))));
-  o.said.setAttribute("y", f(o.ny + (o.below ? g.fq * 1.45 : -g.fw * 1.08) * o.nk));
+  const at = row(o, Y);
+  o.said.setAttribute("x", f(at.x));
+  o.said.setAttribute("y", f(at.y));
   o.said.setAttribute("opacity", Math.max(0, Math.min(1, age / .15, (Y.hold - age) / .4)).toFixed(2));
 }
 function hush() {  // stop the replay where it is
@@ -836,6 +891,7 @@ function show() {
   const who = S.sel && S.sel.startsWith("p-") ? S.sel.slice(2) : null;  // one person selected: only that person's items stay lit
   svg.querySelectorAll(".dot").forEach(d => d.classList.toggle("off", !!who && d.dataset.who !== who));
   $("pane").innerHTML = pane();
+  if (m) $("say").textContent = `${m.people.length} ${m.people.length === 1 ? "person" : "people"} and their ${m.nAgents} agent sessions (the marks around each name) share the board in the centre: every agent reads it and posts to it.`;
   clock();
 }
 function clock() {  // every second: the time since the last post counts up

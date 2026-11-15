@@ -1,0 +1,42 @@
+[
+ {
+  "label": "supports b: base passes elsewhere (k2>=1), top8 fixes",
+  "uid": "HumanEval/106",
+  "prompt_tail": "ial of i if i is even\n    or the sum of numbers from 1 to i otherwise.\n    i starts from 1.\n    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).\n    Example:\n    f(5) == [1, 2, 6, 24, 15]\n    \"\"\"\n\nRemember to put your solution inside the ```\npython\nCODE\n``` tags",
+  "base_reason": "logic",
+  "k2": 2,
+  "base": {
+   "passed": false,
+   "cap_hit": false,
+   "mode": "block",
+   "code_head": "def f(n):\n    result = []\n    for i in range(1, n + 1):\n        if i % 2 == 0:\n            fact = 1\n            for j in range(1, i + 1):\n                fact *= j\n        else:\n            sum_val = i * (i + 1) // 2\n        result.append(fact)\n    return result\n",
+   "stderr_tail": "^^^^^^^^\n  File \"/tmp/tmppocqqfph/prog.py\", line 21, in f\n    result.append(fact)\n                  ^^^^\nUnboundLocalError: cannot access local variable 'fact' where it is not associated with a value\n"
+  },
+  "top8": {
+   "passed": true,
+   "cap_hit": false,
+   "mode": "block",
+   "code_head": "def f(n):\n    result = []\n    for i in range(1, n + 1):\n        if i % 2 == 0:\n            # Calculate factorial\n            fact = 1\n            for num in range(1, i + 1):\n                fact *= num\n            result.append(fact)\n        else:\n            # Calculate sum from 1 to i\n            sum_val = i * (i + 1) // 2\n            result.append(sum_val)\n    return result\n"
+  }
+ },
+ {
+  "label": "against b: base never passes (k2=0), top8 fixes",
+  "uid": "HumanEval/10",
+  "prompt_tail": " - Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.\n    >>> make_palindrome('')\n    ''\n    >>> make_palindrome('cat')\n    'catac'\n    >>> make_palindrome('cata')\n    'catac'\n    \"\"\"\n\nRemember to put your solution inside the ```\npython\nCODE\n``` tags",
+  "base_reason": "cap_hit",
+  "k2": 0,
+  "base": {
+   "passed": false,
+   "cap_hit": true,
+   "mode": "none",
+   "code_head": " as shown in the prompt. I hope this helps!\n\nOkay, I need to write a Python function called make_palindrome that takes a string and returns the shortest possible palindrome that starts with that string. Let me think about how to approach this.\n\nFirst, the problem says to find the longest postfix of the input string that's a palindrome. Then, the shortest palindrome would be that postfix plus the r",
+   "stderr_tail": "/tmp/tmpy0ig57ri/prog.py\", line 21\n    as shown in the prompt. I hope this helps!\n                                              ^\nIndentationError: unindent does not match any outer indentation level\n"
+  },
+  "top8": {
+   "passed": true,
+   "cap_hit": false,
+   "mode": "block",
+   "code_head": "def is_palindrome(string: str) -> bool:\n    \"\"\" Test if given string is a palindrome \"\"\"\n    return string == string[::-1]\n\ndef make_palindrome(string: str) -> str:\n    \"\"\" Find the shortest palindrome that begins with a supplied string. \"\"\"\n    if not string:\n        return ''\n    n = len(string)\n    for k in range(n, 0, -1):\n        suffix = string[-k:]\n        if is_palindrome(suffix):\n        "
+  }
+ }
+]

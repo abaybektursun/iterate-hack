@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": 229, "low": 216, "high": 242, "reason": "Theory: Think-SFT's 16,384 cuts are unfinished work and the 32,768 cap converts about a quarter of them on hard328, so ~205 at 16k plus ~1/4 of ~90 cuts gives ~229, as in the T 1.0 own-format cell (232); wider because the theory says nothing about T 0.6."},
+{"id": "t02", "value": 472, "low": 462, "high": 481, "reason": "Theory: few MATH-500 answers are cut at 16k (~25), and the 32,768 cap finishes them at a high rate on easy problems, so ~462 + ~10 ≈ 472, matching the T 1.0 own-format 474."},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": 227, "low": 215, "high": 239, "reason": "Theory: RL's delta adds stopping, so Think-SFT's unfinished 16k cuts (94.5 -> 60) finish and some are right; the first sample gave 232, and a new seed should fall back a little toward the 1.5x/transplant level (~220-232)."},
+{"id": "t10", "value": 41, "low": 30, "high": 53, "reason": "Theory: RL's delta adds stopping, so subtracting it removes stopping and raises cap hits; the odd shard has 20 of 250, so about 41 of 500."},
+{"id": "t11", "value": 376, "low": 358, "high": 392, "reason": "Theory: the base's cut answers are failed solves (not unfinished right work), so the cap hits gained by removing the stopping delta count as wrong; doubling the odd shard's 188/250 gives ~376."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": 466, "low": 456, "high": 475, "reason": "Theory: RL's delta adds stopping, so the few MATH-500 Think-SFT cuts (~25 at 16k) finish under the cap at the easy-problem rate, moving ~461 up to the a=1 level (~467)."},
+{"id": "t16", "value": 233, "low": 222, "high": 244, "reason": "Theory: the RL delta turns Think-SFT cuts into finishes at the same rate on every seed, so the fourth sample should match the first three (234, 229, 237; mean 233.3)."},
+{"id": "t17", "value": 247, "low": 240, "high": 254, "reason": "Theory: late finishes are scattered and seldom beat a right answer that is already there, so a fourth sample adds little to the vote over 3 (246)."},
+{"id": "t18", "value": 245, "low": 235, "high": 255, "reason": "Theory: at 32,768 a quarter of M(2)'s ~50 16k cuts convert (fewer cuts than Think-SFT's because the RL delta stops early), so the seed's 16k score of ~234 + ~12 ≈ 245, as on seed 3,010,000 (232 -> 245)."},
+{"id": "t19", "value": 78, "low": 72, "high": 85, "reason": "Theory: on 2026 problems fewer than a quarter of cuts convert, and late finishes add less to a vote than to single samples, so the 16k vote of 75 rises by only ~3."},
+{"id": "t20", "value": 69, "low": 63, "high": 75, "reason": "Theory: ~62 cuts per sample at 16k (45.6 %) convert at a rate below hard328's quarter (~15 %), so the 16k single mean of ~60 rises by ~9."}
+]}

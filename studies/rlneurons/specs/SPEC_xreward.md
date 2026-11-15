@@ -171,3 +171,30 @@ layers 11 to 21 both (183, 49). Tested here where it was not read: Code 3.1's di
 - L2. Layers 22 to 31: at most 14 cap hits and at most 345 passed (finishing without right answers). Refuted if passed is 360 or
   more, or cap hits are 22 or more.
 - L3. Layers 11 to 21: at least 350 passed and at most 18 cap hits.
+
+## Amendment 10 (2026-11-15, before the cells; work-30f0ed): the low-rank directions on other hosts
+
+`wsp_edit --onto <model key or directory>` writes the addition (still computed from other - base) onto another model.
+
+A. Think-SFT as host (hard328, cue, seed 3000000, one sample; README "Delta transplant": Think-SFT 209.0 with 94.5 cap hits,
+   Think-SFT + dense noise 209, Think-SFT + 2 x the whole RL-Math difference 231.5 with 54 cap hits):
+   `top8 --other math31 --onto think_sft --scale 1.5` and `--scale 3`; control `rand8 --other math31 --onto think_sft --scale 3`.
+   A1. The 8 directions carry the transplant: the better scale is at least 225 with at most 65 cap hits. Refuted if both are 215 or
+   below: then the transplant needs the rest of the difference. The random edit stays within 209 +- 9.
+B. Two skills in one edit: base + s x Math 3.1's 8 directions + s x Code 3.1's 8 directions (two passes of `wsp_edit`, the second
+   `--onto` the first's output), s = 1.5 and s = 1, each on hard328 (cue) and on HumanEval+ and MBPP+ (Code cue); control
+   Math at 1.5 + a random rank-8 edit (`rand8 --other code31`) at 1.5 on both. References: Math alone at 1.5: 203 of 328 and
+   368 of 538; Code alone at 1.5: 399 of 538; RL-Math 206; RL-Code 401; cued base 164 and 317.
+   B1. One s gives at least 198 of 328 and at least 390 of 538. Refuted if both s are at or below 186 or at or below 372.
+   B2. The control stays within 368 +- 15 on code and within 203 +- 12 on math.
+
+## Amendment 11 (2026-11-15, before the cells; work-f58d89): second and third samples of the two headlines of amendment 10
+
+One sample each so far: base + Math at 1 + Code at 1 passes 411 of 538 (RL-Code 401, Code alone at 1: 386), and Think-SFT + Math's
+8 directions at 3 scores 232 of 328.
+
+- Code, seeds 52000000 and 53000000 (seed + problem index, as before): the sum at 1, Code alone at 1 (`top8 --other code31`), and
+  RL-Code plain (`--model rl_code`; no hosted provider serves it). E1: over the three seeds the sum's mean is at least 398 and
+  at least the mean of Code alone + 10. Refuted if its mean is below 392 or within 5 of Code alone.
+- Think-SFT + Math's 8 directions at 3, hard328, cue, seed 3100000 (the second seed of the transplant, which scored 229 there).
+  E2: at least 222. Refuted below 215.

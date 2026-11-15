@@ -1,128 +1,116 @@
 ---
 name: theory
-description: Find mechanisms that explain the team's experiments and keep the ones that forecast new numbers. One round runs studies/theory/lib/forecast.py round - six headless Claude jobs in empty directories, one per family of causes, propose mechanisms that must hold against the known numbers; every mechanism and two readers with no theory forecast the numbers the open work items will report; each mechanism designs one GPU cell that separates it from another, everyone forecasts every cell, and the cells are ranked by pairs of families whose intervals do not overlap per GPU minute. The top cells are run, their numbers go into measured.json, and the next round scores every forecast and carries only mechanisms with a positive total gain on 3 or more numbers. Use when the user asks for a theory, an explanation across experiments or what the results mean together, and after every fifth closed result. Writes studies/theory/results/wide/round-<nn>/ and updates studies/theory/README.md.
+description: Score the team's fixed forecasts, collect the direct facts (offline tests of mechanisms' causes), find the numbers both no-theory readers got wrong, write rival mechanisms only about those, each with its own direct test on stored data, and let only mechanisms that hold a direct test forecast and design cells. One round runs studies/theory/lib/forecast.py round twice: the first run scores (once per number, only forecasts written before the result), writes direct_facts.json, surprises.md, direct_tests.md (plans for the top untested carried mechanisms and for every new rival) and stops; subagents run the tests offline and add rows to results/refuted.json or direct_tested.json; the second run has the holders and two readers forecast the open work and turns pairs whose both rivals hold into blind-forecast cells. Use when the user asks for a theory, what the results mean together, which result nobody expected, and after every fifth closed result. Writes studies/theory/results/wide/round-<nn>/ and updates studies/theory/README.md.
 ---
 
-# Theory round (version 9)
+# Theory round (version 13: direct tests before forecasts)
 
-A mechanism is one sentence (at most 80 words) on what the model does that explains numbers on the board. It is
-judged only by numbers nobody had when it forecast them: the results of the team's open work items, and the cells
-the mechanisms design to tell each other apart. Version 9 exists because the old stages (develop, stored-row
-tests, duels, review) left no usable theory in rounds 01-08, while six cheap families of 6 mechanisms, scored on 5
-new numbers, separated 3 mechanisms at +4.4 to +5.6 nats from one at -12.27 (`specs/SPEC_engine_v9.md`).
+Why this order: in rounds 9 to 12 forecast gain ranked mechanisms whose causes then failed a direct test (5 of the top 6
+failed their own claim, 1 held only against a weak null; README "Direct tests"). So a mechanism now earns the right to
+forecast by holding a direct test of its cause; forecasts, scores, refutations and surprises stay the record.
 
 ## What a round is
 
-1. Propose wide: six jobs at once, one per family of causes (`LENSES` in `lib/forecast.py`: stopping, sampling,
-   weights, training, problems, grader), 6 mechanisms each. Each mechanism rests on 2 or more board items and names
-   in `holds_against` the two known numbers (board item or `facts.json` entry) nearest to contradicting it.
-2. Forecast: two readers with no theory and every mechanism, carried or new, forecast the open targets.
-3. Design cells: each mechanism designs one GPU cell it gets right and a named other mechanism gets wrong; one job
-   merges cells that are the same run; every mechanism and both readers forecast every cell blind.
-4. Run the top cells (`experiments.md`), write their numbers into `measured.json`.
-5. Score: the next round's `standing` scores this round's forecasts against the results posted since, and its cells
-   against `measured.json`.
-6. Carry the winners: total gain above 0 on 3 or more scored numbers. At or below -2 nats on 3 or more: graveyard.
-   Every other mechanism is dropped; the six families propose new ones.
+1. `standing`: score every outstanding forecast, cell and route of the `--from` folders against the results posted
+   since (each folder once). Carried: total gain above 0 on numbers from 3 or more distinct board items, never a
+   mechanism in `graveyard.json` or `refuted.json`. Graveyard: -2 nats or less on 2 or more items.
+2. Direct facts (`direct_facts.json`): every row of `results/refuted.json` and `results/direct_tested.json` (claim,
+   verdict, deciding number, result id). Proposers and planners get them first; every new mechanism must agree with all.
+3. `surprises`: every scored number outside both readers' 90 % intervals, most surprising first (`surprises.md`).
+4. Proposals, each with a direct test: one blind job per top-6 surprise writes two rival mechanisms (why the readers were
+   wrong, forecasts of the open targets, and the pair's differences on targets or one new cell), each with its own
+   direct test on stored data: claim, files, computation, refuting observation, threshold and a null stronger than
+   random where one exists (the base matrix's own top directions, another model's directions). A rival without a
+   runnable test is dropped. The top 5 untested carried mechanisms (none with a forecast a `measured.json` row missed)
+   get a plan too; a planner names the posted result instead when one already decides the claim. All in `direct_tests.md`.
+5. Run the direct tests: one subagent per plan, spec committed first, offline only, then a row
+   `{mechanism, claim, result, verdict: holds|refuted, measured, added}` in `direct_tested.json` (refuted ones also in
+   `refuted.json`). The round command stops here until every plan has a row; `--go` continues with who holds now.
+6. Rerun the same command: only mechanisms that hold a direct test forecast the open targets (beside the two readers);
+   pairs whose both rivals hold get their cell and one no-reward route, checked against open work (an open item's
+   answer becomes a free target), forecast blind (ranked only if the rivals' blind intervals do not overlap); then
+   `experiments.md`.
 
 ## The coordinator's job
 
-Run the command, read `standing.md`, `cells.md` and `experiments.md`, run the top cells, write `measured.json`,
-post. Write no mechanism, forecast or cell, and edit no job output. Work in your own worktree, `git pull origin main`
-first.
+Post the `work` item, run the command, commit `targets.json`, `surprises.md` and `direct_tests.md` at once, run the
+direct tests, rerun, and commit `forecasts.json` and `mechanisms.json` the moment they exist (before any of their
+numbers post), then the rest. Read `standing.md`, `surprises.md`,
+`pairs.json` and `experiments.md`; post the surprises as one `knowledge` item; run the top entries. Write no mechanism,
+forecast, cell or route, and edit no job output. Work in your own worktree, `git pull origin main` first.
 
-## The commands
+## The command
 
-`W=studies/theory/results/wide/round-<nn>` (next free number), `P=` the previous wide round.
+`W=studies/theory/results/wide/round-<nn>` (next free number). `--from` names the previous rounds and every forecast
+run or cells folder whose forecasts are still outstanding.
 
 ```
-uv run studies/theory/lib/forecast.py round $W --from $P
+uv run studies/theory/lib/forecast.py round $W --from <previous rounds> <forecast runs> <cells folders>
 ```
 
-Round 09 (the first) starts from the forecast runs and cells-01:
-`--from studies/theory/results/forecast/run-0{2,3,4,5,6,7,8} studies/theory/results/forecast/cells-01`.
-
-| stage | jobs | writes |
-|---|---|---|
-| `standing` | one score job per `--from` folder with `forecasts.json`, at once | `standing/forecasts-<src>.json/.md`, `standing/cells-<src>.json/.md` (from `measured.json`), `standing.json` (carried mechanisms with their scored rows; every record), `standing.md` (ranked), `graveyard.json` |
-| `targets_open` | 1 | `targets.json` (board snapshot time; one target per number an open work item will report), `work.md` |
-| `forecast` | 2 readers + 1 per carried mechanism | `jobs/forecast/` |
-| `propose` | 6, at once | `jobs/mechanisms-<family>.json`, then `mechanisms.json` (carried + new; ids `<round>/<family>-mNN`), `forecasts.json`, `forecasts.md` |
-| `cells` | 1 per family, 1 merge, 2 readers + 1 per family | `cells.json` (proposals, `dropped`, merged cells ranked), `cell_forecasts.json`, `cells.md` |
-| `experiments` | none | `experiments.md`: list A, top 10 cells by separation per GPU minute; list B, base-only cells by the highest forecast over the best known base count; each with its command |
-
-A stage whose output exists is skipped, so the same command resumes a stopped round. A job whose output fails its
-check is sent back once, then stops the round, except a cell whose command still fails the flag check: it is dropped
-and the reason recorded. Job prompts and raw outputs are under the temp folder printed first and named in
-`run.json`. Prompts: `lib/prompts/forecast_targets.md`, `forecast.md`, `forecast_propose.md`, `forecast_score.md`,
-`cells_propose.md`, `cells_merge.md`, `cells_forecast.md`. `--propose N` sets mechanisms per family (default 6);
-`--model-all <model>` overrides every job's model. Smoke test: `--propose 2 --model-all sonnet` in a folder outside
-the repository.
+A stage whose output exists is skipped, so the same command resumes. A job whose output fails its check is sent back
+once, then stops the round, except a cell or route whose command still fails the flag check: it is dropped and the
+reason recorded. Job prompts and raw outputs stay in the temp folder named in `run.json`. Prompts:
+`lib/prompts/forecast_*.md`, `surprise_propose.md`, `duplicates.md`, `cells_check.md`, `cells_forecast.md`,
+`routes_propose.md`. `--surprises N` sets the number of rival pairs (default 6); `--model-all <model>` every job's
+model. Smoke test: `--surprises 1 --model-all sonnet` in a folder outside the repository.
 
 ## The score
 
 A forecast (value, low, high) is a normal density with sd = max((high - low) / 3.29, 0.01 * max(|value|, 1)). Gain
 = log density of the forecast minus log density of the equal mixture of the two readers at the measured value,
-clipped to [-3, 3] nats. A forecast whose measured value lies outside its own 90 % interval gains at most 0
-(version 9); losses are not capped. A mechanism's record is the sum over every scored number, carried from round to
-round. The same cap holds in `round.py` (tests, held-out claims, duels, GPU tests: a side outside its own interval
-gains at most 0 there too).
+clipped to [-3, 3] nats; at most 0 when the measured value lies outside the forecast's own 90 % interval. A record
+is rebuilt each round from the `--from` folders alone. Three rules (11.1): a forecaster gets one score per measured
+number (board item and value), on the forecast it wrote earliest; a forecast counts only if it was written before the
+result was posted (written time: the earlier of the time `forecasts.md` or `cells.md` records and the first commit of
+`forecasts.json` or `cell_forecasts.json`), others are listed in `standing.md` as written after the result; every row
+of every `measured.json` is scored or listed with its reason. A target matches a result on its cell, not its seed,
+unless the target names a seed.
 
-## Cells and the flag check
 
-The proposer gets `jobs.md`: the job rows and "How to run" of `studies/rlneurons/README.md`, and per job file its
-flags with their allowed values, parsed from its `add_argument` calls (`lib/cells.py` `job_flags`; a file with no
-flags of its own takes those of the job modules it imports, as `run_fresh.py` takes `run_cell.py`'s). A proposed or
-merged cell whose command names a job file, flag or `choices` value that does not exist is sent back once, then
-dropped (`cells.json` `dropped`). The check does not catch a flag whose values are free text.
+## Cells, routes and the flag check
 
-Separation of a cell = pairs of forecasters from different families (each reader is its own family) whose 90 %
-intervals do not overlap, summed over its readouts. Before running a top cell, check the board for the same run
-(`tools/recall.py`, `board.py ls result`).
+- A cell splits when, with forecasters at -2 nats or below left out, the rest divide into a low and a high side
+  (every low interval below every high interval) with 2 or more families on each side.
+- A route is a change to the untrained base alone (prompt text, opening tokens, decoding, a vote or selection rule,
+  restarts, examples written by the base) or to Think-SFT, with the same procedure on RL-Zero-Math. Its margin is
+  (median forecast - stored count) / sd, where the stored count is the right answers on the route's own hard328
+  subset of the `studies/rlneurons/results/table/hard328-02/table.json` row of its model at the nearest token count,
+  and sd = sqrt(n p (1 - p)) of that count. No MATH-500 readout for models above 90 % there; no stored rows: "no
+  baseline", not ranked.
+- `jobs.md` gives each job file's flags and `choices`, parsed from its `add_argument` calls (`studies/rlneurons/jobs/`,
+  `studies/theory/jobs/`). Routes run with `studies/theory/jobs/free_cell.py` (`--model base|rl|think_sft`,
+  `--prompt-suffix`, `--opening-text`, `--temperature`, `--top-p`, `--min-p`, `--repetition-penalty`, `--max-tokens`,
+  `--samples`, `--seed`, `--set`, `--n`, `--shard`) or `run_cell.py`; a vote is computed from the rows. A missing job
+  file, flag or `choices` value is sent back once, then dropped; so is a command that runs git (job machines have no
+  `.git`: write `--commit COMMIT_SHA` and replace it by hand); free-text values are not checked. `free_cell.py` has
+  run only on the laptop's dry path: run it for a minute with `--n 4` first.
 
-## Running a cell and writing measured.json
+## Running a cell or route and writing measured.json
 
-Run a cell with its command from `experiments.md` (`tools/gpu.py` or `tools/vast.py`, never the laptop) in your own
-worktree and study folder, as every GPU run (AGENTS.md). Compute each readout as `cells.md` defines it from the job's
-rows. Then append one row per readout to `$W/measured.json`, a JSON list:
-
-```
-[{"readout": "m03-r1", "measured": 131, "n": 200, "interval": [118, 144], "artifact": "studies/<study>/results/...", "item": "result-xxxxxx"}]
-```
-
-`readout` is a readout id of `cells.json`, `measured` a number in the readout's unit, `interval` the measured 90 %
-interval or null. `standing` stops on a row that breaks this. Post the number as a `result` with every forecaster's
-interval beside it.
-
-## Deep tests (--deep)
-
-For mechanisms already carried with a positive forecast gain, `round.py` runs the version-8 stages (develop into a
-theory with offline predictions, stored-row tests against two readers, replication, rival and duel, cross-predicted
-GPU experiments, review) on them alone:
+Run it from `experiments.md` (`tools/gpu.py` or `tools/vast.py`, never the laptop) in your own worktree and study
+folder. Append one row per readout to `$W/measured.json`, a JSON list:
 
 ```
-uv run studies/theory/lib/round.py studies/theory/results/engine/round-<nn> all --cutoff <ISO time> --skip gpuprice \
-  --from <previous engine round> --deep $W
+[{"readout": "r11-m01-r1", "measured": 131, "n": 200, "interval": [118, 144], "artifact": "studies/<study>/results/...", "item": "result-xxxxxx"}]
 ```
 
-`--deep` replaces the `mechanisms` job with the wide round's carried mechanisms. The stages and their rules are in
-`round.py`'s docstring; `--model-all sonnet --min-targets 3` smoke-tests it outside `studies/`. About 60 to 80 jobs
-and 1.5 hours: run it only when a carried mechanism needs a stored-row test before a costly GPU cell.
+`item` is the board result that posts the number. `standing` stops on a row that breaks this format.
 
-## What a round delivers and posts
+## Options
 
-1. `standing.md`: every scored mechanism with scored numbers, inside, total gain, state. Post the carried ones as
-   `idea` items (statement, holds_against, record) and the graveyard ones in one `knowledge` item with the numbers
-   that refuted them. A wrong forecast is a result.
-2. `experiments.md`: the top cell of list A as an `idea` with its command and the forecasts that do not overlap,
-   before anyone runs it; run it when it costs at most 30 GPU minutes.
-3. `$W/run.json` (commit, command, sources, counts, minutes) and one paragraph in `studies/theory/README.md` in the
-   same commit: carried, graveyard, cells proposed, dropped, merged, cells with a non-overlapping pair, minutes.
-   Close the `work` item with those numbers and the paths of `standing.md`, `cells.md` and `experiments.md`.
+- `--propose-wide`: the version-10 round: six lens jobs (`LENSES`) of `--propose N` mechanisms each, the judge, a cell
+  from every mechanism and a route from every family. It gave duplicates and no splits in round 10.
+- `--deep`: `round.py ... --deep $W` runs the version-8 stages (develop, stored-row tests, replication, rival and
+  duel, review) on the carried mechanisms; about 60 to 80 jobs and 1.5 hours (stages in its docstring).
+- Outside a round: `forecast.py make`, `score [--rescore]` and `cells` still run alone (`results/forecast/`).
 
-## What a round may claim
+## What a round delivers and may claim
 
-- A mechanism's record counts only numbers measured after its forecast was written. Say scored, inside and total gain.
-- A cell separates mechanisms only after it is run: before that, the ranking is the mechanisms' own forecasts.
-- Forecasts outside a round: `forecast.py make <folder> [--propose N --lens "<text>"]`, `score <folder>
-  [--rescore]` and `cells <folder> --from <runs...>` still run alone (results under `results/forecast/`).
+1. `standing.md`: carried mechanisms and the graveyard, with scored numbers, distinct results and total gain.
+2. `surprises.md` as one `knowledge` item: each surprise with its number, both readers' forecasts and the result id.
+3. `pairs.json` and `experiments.md`: where each rival pair differs; the top cell and route as `idea` items.
+4. `$W/run.json` and one README section in the same commit as the round's files.
+
+A record counts only numbers measured after the forecast. A surprise is relative to the readers of the folder that
+forecast it. A ranking is the forecasters' own numbers until the cell or route has run.

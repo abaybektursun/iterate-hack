@@ -1,0 +1,64 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_native.md",
+ "set": "math500",
+ "n": 500,
+ "native_run": "native_sft_math500_joined",
+ "native": {
+  "right_at_32768": 474,
+  "right_at_16384_same_answers": 464,
+  "answers_longer_than_16384": 25,
+  "cap_hits_at_32768": 0,
+  "tokens_per_problem_at_32768": 5153.9,
+  "tokens_per_problem_at_16384": 4854.1
+ },
+ "cue_samples_at_16384": {
+  "0": {
+   "right": 461,
+   "cap_hits": 26,
+   "tokens_per_problem": 4900.0,
+   "native_at_16384_minus_cue": {
+    "points": 0.6,
+    "ci95": [
+     -2.0,
+     3.2
+    ]
+   }
+  },
+  "1": {
+   "right": 457,
+   "cap_hits": 22,
+   "tokens_per_problem": 4921.4,
+   "native_at_16384_minus_cue": {
+    "points": 1.4,
+    "ci95": [
+     -1.2,
+     4.0
+    ]
+   }
+  },
+  "2": {
+   "right": 462,
+   "cap_hits": 25,
+   "tokens_per_problem": 4952.8,
+   "native_at_16384_minus_cue": {
+    "points": 0.4,
+    "ci95": [
+     -2.0,
+     2.8
+    ]
+   }
+  },
+  "3": {
+   "right": 461,
+   "cap_hits": 20,
+   "tokens_per_problem": 4728.7,
+   "native_at_16384_minus_cue": {
+    "points": 0.6,
+    "ci95": [
+     -1.8,
+     3.2
+    ]
+   }
+  }
+ }
+}

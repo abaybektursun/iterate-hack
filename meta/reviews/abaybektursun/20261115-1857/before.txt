@@ -1,0 +1,5 @@
+Baseline 2026-11-15 19:00 UTC, from the messages on `all` (msg.py):
+17:22 "12 running + 2 loading boxes = about $20/h now ... (the account stopped at 16:15 for this)"; box 60806873 at GPU 0 % at 1.3 h up.
+18:30 "14 boxes = $20.50/h, over the $20/h hourly refill again (the account stopped all boxes at 16:15 for this)".
+So: 1 stop of every box (16:15 UTC), 2 times over the limit in 3 h, each found by one session adding the lines of `vast.py ls` by hand.
+`vast.py up` printed nothing about the boxes already rented. `vast.py ls` printed no total.

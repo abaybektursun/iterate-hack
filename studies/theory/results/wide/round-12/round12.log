@@ -1,0 +1,122 @@
+== standing
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-yupkvcs6
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-yupkvcs6
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-yupkvcs6
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-yupkvcs6
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-yupkvcs6
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-yupkvcs6
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-yupkvcs6
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-yupkvcs6
+267 items before 2026-11-15T18:58:29, 28 at or after
+  running 1 jobs, 1 at a time
+254 items before 2026-11-15T17:45:51, 41 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 47 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 47 at or after
+  running 1 jobs, 1 at a time
+231 items before 2026-11-15T14:53:16, 64 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 47 at or after
+  running 1 jobs, 1 at a time
+285 items before 2026-11-15T20:05:26, 10 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 47 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-run-05 (opus): done in 38 s
+248 items before 2026-11-15T16:32:52, 47 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-run-03 (opus): done in 43 s
+  forecast_score/measured-run-02 (opus): done in 42 s
+248 items before 2026-11-15T16:32:52, 47 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-11 (opus): done in 47 s
+  forecast_score/measured-run-06 (opus): done in 49 s
+  forecast_score/measured-round-09 (opus): done in 51 s
+  forecast_score/measured-run-04 (opus): done in 49 s
+  forecast_score/measured-round-10 (opus): done in 56 s
+  forecast_score/measured-run-08 (opus): done in 44 s
+  forecast_score/measured-run-07 (opus): done in 48 s
+  standing: 93 mechanisms, 93 scored, 42 carried, 18 to the graveyard
+== surprises
+  13 surprises (7 outside every interval): studies/theory/results/wide/round-12/surprises.md
+== targets_open
+295 items before 9999, 0 at or after
+  running 1 jobs, 1 at a time
+  forecast_targets/targets (opus): done in 121 s
+  targets.json: 20 targets from 16 open work items, board snapshot 2026-11-15T20:38:56 UTC
+== forecast
+  running 44 jobs, 16 at a time
+  forecast/run-02/f2-m04 (opus): done in 51 s
+  forecast/run-05/f2-m01 (opus): done in 58 s
+  forecast/round-09/training-m01 (opus): done in 58 s
+  forecast/run-08/f2-m06 (opus): done in 64 s
+  forecast/run-08/f2-m02 (opus): done in 65 s
+  forecast/run-03/f2-m02 (opus): done in 66 s
+  forecast/run-05/f2-m06 (opus): done in 69 s
+  forecast/reader-1 (opus): done in 74 s
+  forecast/round-10/weights-m03 (opus): done in 76 s
+  forecast/run-04/f2-m05 (opus): done in 77 s
+  forecast/run-06/f2-m03 (opus): done in 78 s
+  forecast/run-05/f2-m03 (opus): done in 79 s
+  forecast/reader-2 (opus): done in 79 s
+  forecast/round-09/sampling-m05 (opus): done in 84 s
+  forecast/round-09/grader-m01 (opus): done in 86 s
+  forecast/run-03/f2-m04 (opus): done in 107 s
+  forecast/round-09/training-m03 (opus): done in 38 s
+  forecast/round-09/training-m04 (opus): done in 43 s
+  forecast/round-09/training-m06 (opus): done in 71 s
+  forecast/round-10/weights-m06 (opus): done in 70 s
+  forecast/round-10/problems-m04 (opus): done in 67 s
+  forecast/round-09/grader-m06 (opus): done in 74 s
+  forecast/round-09/stopping-m04 (opus): done in 66 s
+  forecast/round-10/problems-m03 (opus): done in 61 s
+  forecast/run-03/f2-m03 (opus): done in 67 s
+  forecast/round-09/stopping-m01 (opus): done in 73 s
+  forecast/run-08/f2-m05 (opus): done in 82 s
+  forecast/round-10/grader-m06 (opus): done in 71 s
+  forecast/round-10/weights-m01 (opus): done in 70 s
+  forecast/run-07/f2-m01 (opus): done in 81 s
+  forecast/run-05/f2-m05 (opus): done in 94 s
+  forecast/run-06/f2-m04 (opus): done in 72 s
+  forecast/run-07/f2-m02 (opus): done in 52 s
+  forecast/round-10/problems-m06 (opus): done in 65 s
+  forecast/round-09/training-m02 (opus): done in 69 s
+  forecast/run-06/f2-m01 (opus): done in 64 s
+  forecast/round-09/grader-m04 (opus): done in 62 s
+  forecast/round-09/weights-m04 (opus): done in 70 s
+  forecast/run-03/f2-m01 (opus): done in 96 s
+  forecast/round-10/weights-m05 (opus): done in 64 s
+  forecast/round-09/sampling-m01 (opus): done in 90 s
+  forecast/round-10/training-m05 (opus): done in 78 s
+  forecast/round-10/problems-m05 (opus): done in 78 s
+  forecast/round-09/sampling-m02 (opus): done in 81 s
+== propose
+  running 6 jobs, 6 at a time
+  surprise_propose/s6: a: statement has 85 words; at most 80; sent back once
+  surprise_propose/s2 (opus): done in 123 s
+  surprise_propose/s5 (opus): done in 127 s
+  surprise_propose/s4: a: statement has 85 words; at most 80; b: statement has 87 words; at most 80; sent back once
+  surprise_propose/s1 (opus): done in 148 s
+  surprise_propose/s6: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-yupkvcs6/surprise_propose/s6/out.sendback.txt
+  surprise_propose/s6 (opus): done in 149 s
+  surprise_propose/s4: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-yupkvcs6/surprise_propose/s4/out.sendback.txt
+  surprise_propose/s4 (opus): done in 184 s
+  surprise_propose/s3 (opus): done in 235 s
+  running 1 jobs, 1 at a time
+  duplicates/judge (opus): done in 59 s
+  duplicate round-12/s1-a of run-02/f2-m01: a short per-sample token budget cannot reach hard328 solutions that need about 5,000-14,000 tokens, so votes over short samples miss them
+  duplicate round-12/s2-a of r5-m03-rival: the top-8 edit is an incomplete switch that works sample by sample: flipped samples take on RL's deliberative policy, the rest stay in the plain-base register and fail fast
+  duplicate round-12/s2-b of round-10/problems-m06: Code-RL's short-answer finishing habit, carried in its directions, makes math answers commit and stop before the derivation is complete
+  duplicate round-12/s3-a of run-02/f2-m02: the cued base's wrong values scatter while right answers coincide, so vote accuracy keeps rising with more samples instead of stopping at a ceiling
+  duplicate round-12/s3-b of run-06/f2-m04: more votes only clear chance errors and ties, then flatten at the problems whose modal answer is right (about pass@4) because problem-specific wrong answers recur
+  duplicate round-12/s4-a of round-11/s2-b: RL-Code's task policy lies almost entirely in its top-8 directions, so the edit is a compressed copy of RL-Code
+  duplicate round-12/s4-b of round-10/problems-m03: the base's code deficit is a failure to write a gradable final code artifact, not wrong logic, so any model that commits a clean final block recovers RL-Code's level
+  duplicate round-12/s5-a of round-12/s1-a: the 4,096-token cap per sample cuts long right answers before they finish, so the vote can reach only pass-within-4,096
+  duplicate round-12/s5-b of round-12/s1-b: without the cue, the base at T 0.6 repeats the same wrong answer across samples, so the plurality vote locks onto it
+  duplicate round-12/s6-a of r5-m03-rival: the top-8 edit flips each sample into RL's answering mode or leaves it alone, so the gain is the mixture share of flipped samples
+  42 carried and 2 new mechanisms (10 dropped as duplicates), 6 pairs, 20 targets
+== cells
+12.4 minutes
+EXIT 0
+Sun Nov 15 20:49:48 UTC 2026

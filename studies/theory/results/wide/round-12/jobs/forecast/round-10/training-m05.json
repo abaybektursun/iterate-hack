@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": 230, "low": 217, "high": 243, "reason": "Theory: Think-SFT's hard328 level comes from imitated solution routines, not sampling, so the released T 0.6 setting should land near its own-format T 1.0 cap-32,768 cell (232/328; cue at 32k 230-235)."},
+{"id": "t02", "value": 473, "low": 464, "high": 481, "reason": "Theory: imitation's routines set the level and MATH-500 shows no competition edge, so T 0.6 should land near the own-format T 1.0 cap-32,768 cell (474/500)."},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": 229, "low": 216, "high": 242, "reason": "Theory: adding the RL difference to Think-SFT supplies closing, not routines, so the 3x top-8 edit should sit at the closing-saturated level of its first seed (232) and of M(2) (229-237), above Think-SFT's 209."},
+{"id": "t10", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t11", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t12", "value": 392, "low": 362, "high": 418, "reason": "Theory: Think-SFT's lead over RL vanishes on problems below competition difficulty, and HumanEval+/MBPP+ are easy, non-contest code, so Think-SFT should land near RL-Code's 401, not above it."},
+{"id": "t13", "value": 386, "low": 352, "high": 415, "reason": "Same as t12 (on easy code the theory gives Think-SFT no lead over RL-Code's 401); Think-SFT already opens with 'Okay', so the Math cue should change little, with a slightly lower centre for the off-domain cue."},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": 466, "low": 456, "high": 475, "reason": "Theory: no Think-SFT lead on MATH-500, and the RL difference only adds closing, so M(2) should sit just above Think-SFT's singles (457-462) and near the a=1 cell (467)."},
+{"id": "t16", "value": 233, "low": 221, "high": 245, "reason": "Theory: the RL difference adds closing on top of Think-SFT's routines, which is stable across seeds, so take the mean of M(2)'s three hard328 samples (234/229/237)."},
+{"id": "t17", "value": 246, "low": 238, "high": 254, "reason": "Theory: closing on top of routines; M(2)'s vote over 3 is 246 against Think-SFT's 241 vote over 4, and a fourth sample adds little."},
+{"id": "t18", "value": 244, "low": 233, "high": 254, "reason": "Theory: at cap 32,768 Think-SFT's unfinished routines finish anyway, so the closing the delta adds gains less; the other seed gave 245 (232 at 16k), and this seed's M(2) at 16k was about 234."},
+{"id": "t19", "value": 81, "low": 72, "high": 90, "reason": "Theory: Think-SFT's lead grows on 2026 contests because its long routines are unfinished at 16k (cap hits 46%); the 16k vote is 75, and the extra tokens should finish some of them, as on hard328 (vote 238 to 244)."},
+{"id": "t20", "value": 71, "low": 63, "high": 79, "reason": "Theory: Think-SFT's cut answers on contest problems are unfinished routines, so cap 32,768 recovers about a fifth of its ~62 cap hits per sample, on top of the 16k single mean of 60 (hard328: +22 from 93 cut answers)."}
+]}

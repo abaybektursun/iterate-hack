@@ -1,5 +1,126 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 22:10 UTC (loop cycle 16, step-back 4; no tool change, no skill edit) meta/reviews/abaybektursun/20261115-2206/
+
+- Target (Team line, 4 h): claim to close median 14 min (48 at 21:04), upper quartile 56 min (106), 70 items by 3 people (34); 19.2 results per hour (10.2). The window holds many short items (site pages, offline tests on stored rows). Items with GPU jobs: to-job 3, jobs 50, to-answer 3 min. Modal 96 jobs, 4 failed or cancelled with 3.9 of 2,108.5 container min, wait 0.2 min.
+- Open measurements: the 10-minute upload (cycle 14): 2 vast.ai jobs since 20:10, 0 part tars in the team store; still not shown on a real job.
+- Step-back (stepback.md): cycles 13 to 16 beat 9 to 12 on both parts by a large gap, caused by the end of the outage and the mix of items, not by a loop change. The spend line of cycle 13 had no effect; a limit built into `up` by another session did what the printed line did not.
+- Never fixed, all with the person: reviews by other sessions (4 more), sharding as one command, the Direction section.
+- Stop rule: 1 step-back in a row with no loop change that helped. The waits and failures the loop can remove alone are removed (queue 0.2 min, failed 0.2 %, to-job 3, to-answer 3 min).
+- Next cycle checks: a part tar of a real job; the Team line against 14 / 56 min and 19.2 per hour.
+
+## 2026-11-15 22:00 UTC (session egate, after result-c5dafe) meta/reviews/abaybektursun/20261115-2200/
+
+- Direction: mission = how much of a published RL gain is reached without reward (DIRECTION.md). work-8b4030 tested the transplant on a set it was not chosen on (fresh2026, +9.0 points) and at cap 32,768 (241 of 328): both test the mission's held-out claim. No drift; the restart chains were offline, 0 GPU minutes.
+- Turnaround (`cycle.txt`, 6 h): claim to close median 21 min, jobs stage 47 min, slowest. This item: 9.6 h claim to close, of which three account stops and five lost jobs.
+- Observed (`before.txt`): the cap-32,768 job was cut at 44 min with 97 of 328 answers written; I reran from zero (110 min) although `run_cell --resume` exists. 44 min of generation thrown away.
+- Cause: I did not know the flag; the command was copied from an older job of mine.
+- Change (step 2, delete the repeated work; no code): every rerun of a cut cell from this session passes `--resume <cut run folder>`; the 10-minute partial upload of vast.py (main, 20:03 UTC) supplies that folder when the box is gone.
+- Next entry checks: minutes regenerated on the next cut job (target 0), from the row counts of the cut and the resumed folder.
+
+## 2026-11-15 21:10 UTC (loop cycle 15; no change) meta/reviews/abaybektursun/20261115-2104/
+
+- Target (Team line, 4 h): claim to close median 48 min (43 at 19:59), upper quartile 106 min (68), 34 items by 3 people (31); 10.2 results per hour (9.5). Stage medians of abaybektursun's items with jobs: to-job 3, jobs 37, to-answer 1 min. Modal 102 jobs, 4 failed or cancelled with 3.9 of 2,388.7 container min.
+- Open measurements: the 10-minute upload (cycle 14) has not run: 0 vast.ai jobs were submitted since 20:10 UTC (3 boxes left, 4.24 USD per hour; the work is on Modal and AWS). Final tars in the team store: 17. Account stops: none since 19:50.
+- Score of cycle 14: not measurable yet.
+- Change: none. Checked: queue wait 0.1 min, failed container minutes 0.2 %, to-job 3 min, to-answer 1 min; the jobs stage (37 min) is generation.
+- Next cycle (16) is step-back 4. It checks: part tars of real jobs; cut jobs with outputs outside the box against 0 of 9; cycles 13 to 16 against 9 to 12 on the target.
+
+## 2026-11-15 20:45 UTC (paper loop 4, after result-aff8c5 of work-184476) meta/reviews/abaybektursun/20261115-2045-paper5/
+
+- Previous paper entry's open item, literature before the pick: done in part. The scout ran a quick novelty search before the pick (19:20-19:23) and the full read (19:25-19:33) found the claim unpublished before the draft. Paper 5 scouts 19:20 to live PDF 20:44 (84 min; paper 4: 60). Site stayed up.
+- Direction: paper 5 (Two Token Limits) re-reads RL - base, Think-SFT - RL and M(2) - Think-SFT at 16,384 and 32,768 tokens on hard328, the deliverable's set; it tests the mission's "identical conditions" clause. Reviewers cut claim 3 to suggestive (+3.4 [-0.6, 7.0]); a rerun rule filed in SPEC_cap32.md had not been applied to the RL sample.
+- Turnaround (cycle.txt, 2 h): team claim to close median 35 min (43), upper quartile 106 (68), 13.0 results per hour (9.5). Mine: 27 Modal jobs, 4 failed, 3.9 of 570.3 container min in them, median wait 0.1. work-441e5b: to-job 2, jobs 26, to-answer 1.
+- Slowest stage: 54 min (19:33-20:27) waiting for one cell, the M(2) sample at 32,768. 24 min of it waited on another agent's single vast.ai job (f975, started 19:06) that the 19:50 account stop cut; then our own 4 Modal shards (~16 min, ~5 USD, result-42cc6c). Their first submission (0f14, 3388, f3e1, fd69) ran 1 min each and exited 2: the command was single-quoted, so `$(git rev-parse HEAD)` expanded inside the container, which has no git, and run_cell got an empty --commit.
+- Change (step 2 found nothing to delete; step 3): `gpu.py submit` refuses a command holding `$(git` or a backquoted git before anything uploads or starts.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | job 0f14's command refused at submit | no (passes to the tree check) | yes | fixed | 1 and 1 | before.txt, after.txt |
+  | the expanded command still accepted (must not change) | yes | yes | same | 1 and 1 | before.txt, after.txt |
+  | past jobs the check would refuse | | 4 of 328, all exit 2; 0 that finished | | 328 | after.txt |
+
+- Not changed: the 24 min on another agent's vast box. Only a rule would cut it (start a Modal copy of a decisive cell when its sole box is cut), which is text, so it is left to the next entry as debt.
+- Next entry checks: no job exits 2 on an empty --commit; whether the next paper's decisive cell runs as Modal shards from the start.
+
+## 2026-11-15 20:20 UTC (session native, after result of work-8b2ec9) meta/reviews/abaybektursun/20261115-2016-native/
+
+- Previous entry asked for one vast.ai cell fetched after its box is gone. No vast.ai job since (account at its hourly refill limit); not measured.
+- Direction: work-8b2ec9 checked a hidden assumption behind every Think-SFT row (the prompt format). Answer: a tie on both sets (232 vs 230 of 328; 464 vs 457-462 of 500), so no row changes. It tests the mission's "identical conditions" clause, not a new route.
+- Research: the answer was not in a published table or stored rows; one sample per format, intervals of about 4 points.
+- Turnaround (before.txt): claim to close 4 h 05 min; 214 min of it one 328 cell on 2 L40S shards at 120 to 170 tokens per second, and 70 to 120 min waiting for AWS quota for MATH-500. The same cell took 129 min on one vast.ai RTX PRO 6000.
+- Cause: GPU supply, not code: Modal closed, vast.ai at its refill limit, AWS at 32 vCPUs. Shards were 2, not 4, because of the quota.
+- Change: none made. The one that would cut this stage is the person's (vast.ai refill amount or AWS vCPU quota); stated to the person in this session.
+- Next entry checks: whether a 328 cell at cap 32,768 returns in under 130 min.
+
+## 2026-11-15 20:10 UTC (loop cycle 14) meta/reviews/abaybektursun/20261115-1959/
+
+- Target (Team line, 4 h): claim to close median 43 min (51 at 18:57), upper quartile 68 min (110), 31 items by 3 people (26); 9.5 results per hour (8.0). Best of the loop's 4 h readings since 08:10. Modal 102 jobs, 0 failed, wait 0.1 min.
+- Open measurements: account stops: 1 more (balance 0 at about 19:50 UTC), so 2 in 7 h. vast.ai jobs since 19:05 run with the current tool: 9 of 9.
+- Score of cycle 13 (spend line in `ls` and `up`): no effect. The line was read and quoted (19:31, "14 boxes, 19.40 USD/h") and 6 boxes were rented at the limit anyway. Another session has since made `up` stop at 18 USD per hour.
+- Failure class (before.txt): a job cut before its end leaves nothing outside its box: 9 such jobs since 15:05, six of them in the 19:50 stop about 20 min in. The upload of cycle 9 ran only at a job's end.
+- Change (step 3; step 2 found nothing to delete): a running `vast.py` job uploads its outputs so far every 10 minutes (jobs/<job>.part.tar); `get` reads that copy when the box no longer answers and says PARTIAL.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | cut jobs with outputs outside the box | 0 of 9 | not measured yet | | | before.txt |
+  | local test: rows of a killed job fetched | 0 | 1 of 1 | works | 1 | after.txt |
+
+- Failure of this review: a cleanup line with empty variables deleted runs/ of the main checkout at 20:02 UTC; all 10 job folders were restored from the Modal Volume, the AWS store and the team store within 15 min (after.txt). Cause removed in the test: it deletes by an asserted job id.
+- Next cycle checks: part tars of real running jobs in the team store; account stops against 2 in 7 h; the Team line against 43 / 68 min and 9.5 per hour.
+
+## 2026-11-15 19:45 UTC (session critic, after result-a497ff, result-c495fe, result-f3d708; work-60f040 open) meta/reviews/abaybektursun/20261115-1933/
+
+- Previous entry's checks: no prefix_cell --alpha 0 job ran since (last 7a57, 09:17 UTC), so 165 / 144 tokens/s stay open; no owner answer on SFT models seen; cycle.py from this worktree now lists 24 vast.ai and AWS jobs (0 at 09:30).
+- Direction: mission part 1 asks how much of the RL gain the untrained base reaches with no training (DIRECTION.md:13). work-60f040 tests it directly: vote over 4/8/12 = 446/458/466 of 500 against RL one sample 456-463 (preliminary, 3,989 of 4,000 rows). The 328 follow-up (6 vast shards, 19:30 UTC) tests the deliverable's set. The three closed results test part 3 (no-reward critic) and were negative. In line.
+- Turnaround (cycle.txt, 10 h): team claim to close median 57 min (46), upper quartile 131 (161), 47 items, 6.0 results per hour (12.5). Stage medians: to-job 4 (2), jobs 50 (104), to-answer 3 (4); jobs slowest. 67 jobs, "0 failed", wait 0.1 min (30.7), 2,332 container min. work-60f040: jobs 272 min over 15 jobs, against 81 min for the one shard that was not cut (01eb).
+- Where the 272 min went (before.txt): 3 of 4 shards cut by the vast.ai credit stop at 16:15 UTC with no copy of their rows, rerun from zero (about 3 h). The AWS half ih-44ea (L40S, 46 GB) ran at 236 tokens/s against 604-782 on the 96 GB vast.ai card; its vLLM log shows 10-23 requests running and up to 428 waiting at 97-99 % KV cache all run long, so the GPU's memory, not a tail of long answers, set its pace; killed at 180.9 min with 493 of 504 rows. A zsh loop passed two offer ids as one argument to vast.py up (2 min).
+- Failures: (1) cycle.py marks ih-44ea "done" and the 3 cut shards "no copy yet", so "0 failed" hides 4 cut jobs of 15. (2) run_cell refused to keep a cut job's rows (line 163 asserts a fresh folder). Not added to FAILURES.md: (2) is fixed below; (1) is proposed as the next change.
+- Change (step 2 then 3; step 1: the fresh-folder rule exists so a run never mixes two cells, which a settings check keeps): `run_cell.py --resume <run folder>` copies the cut run's rows into the new folder and sends only requests with no row, with --restarts the next attempt of a cap hit. It refuses a folder with other settings or a duplicated row. Tested with the stand-in engine on the real 493 rows (after.txt).
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | requests a rerun of cut shard ih-44ea must generate | 504 | 11 | 46x fewer | 1 and 1 (dry run) | before.txt, after.txt |
+  | rows without --resume (must not change) | 504 rows | identical (utc left out) | same | 1 and 1 | after.txt |
+  | --restarts 2 run cut at 25 rows: complete attempt chains | | 60 of 60 | | 1 | after.txt |
+  | wall minutes of an 11-request resume job on a GPU | 180.9 (killed, full shard) | not measured yet | | | |
+
+- Limit: --resume needs the cut rows. The vast.ai credit stop left no copy, so it would not have saved those 3 h; vast.py copies rows only at job end.
+- Next entry checks: the first real --resume job's minutes and rows; cycle.py counts a time-limit kill as failed (ih-44ea); avoid 46 GB cards for 16k-token cells (236 against 604-782 tokens/s).
+
+## 2026-11-15 19:25 UTC (paper loop, after result-0c5fa5 of work-184476) meta/reviews/abaybektursun/20261115-1920-paper4/
+
+- Previous paper entry asked for the next multi-sample cell a paper waits for, as shards: none; paper 4 replayed stored rows, 0 GPU jobs. Paper 4 scouts 18:13 to live PDF about 19:13 (60 min; paper 3: 81.2). Loop: 4 scouts, pick, data layer and literature in parallel, figure, draft, 3 reviewers, rewrite with 5 new replay facts, final check (9 fixes), publish f09cf73.
+- Direction: like papers 2 and 3, paper 4 tests no part of DIRECTION.md's deliverable ("a scored configuration on unseen hard problems"). The literature agent found the core claim published (Bulut, arXiv 2609.03436) after the pick; the paper became replication plus pricing, against the owner's "no replications". Cause: the literature check ran beside the data layer, not before the pick. 4 helper agents then hit the model usage limit mid-task.
+- Turnaround (cycle.txt, 1 h): 27 Modal jobs of this person, 0 failed, median wait 1.1 min, 482.4 container min; none for paper 4.
+- Failure: the push took the whole site down 19:13 to 19:19 UTC (6 min, every page 500): view.PAPERS got no-early-warning.pdf with no demo_deck.PAPER_TITLES entry (an assert added on main during the writing; the merge was not import-checked). Main has since removed the cause: 29bd59a titles a missing paper from its file name; the site owner's auto-deploy imports view.py first (outside the repo). Left: infra/monitor/deploy.sh listed the PDFs by hand (a second place to register a paper) and shipped a view.py that fails at import.
+- Change (step 2, delete the hand list): deploy.sh reads the PDFs from view.PAPERS by importing view.py before anything ships, so a paper is registered in view.PAPERS alone and a broken view.py stops the deploy (deploy_gate.sh, aws stubbed).
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | deploy.sh ships a view.py that fails at import | yes (exit 0) | no (exit 1, 0 shipped) | fixed | 1 and 1 | before.txt, after.txt |
+  | places to register a new paper | 2 (view.PAPERS, deploy.sh) | 1 | -1 | | diff |
+  | PDFs in the zip, view.py as is (must not change) | 4 | 4 | same | 1 and 1 | before.txt, after.txt |
+
+- Not changed: the literature check before the pick is a brief, not code; carried. meta/FAILURES.md: 5 rows, 0 landed.
+- Next entry checks: the next paper's literature check runs before its pick, and its deploy causes 0 minutes of site down.
+
+## 2026-11-15 19:05 UTC (loop cycle 13) meta/reviews/abaybektursun/20261115-1857/
+
+- Target (Team line, 4 h): claim to close median 51 min (54 at 17:55), upper quartile 110 min (184), 26 items by 3 people (21); 8.0 results per hour (6.5). Best since 09:14. Stage medians of abaybektursun's items with jobs: to-job 4, jobs 24, to-answer 1 min. Modal 97 jobs, 0 failed, wait 0.1 min.
+- Open measurements: vast.ai jobs since 18:00 run without the upload: 2 of 8, both from cap32run (29 of 35 between 15:05 and 17:55). 12 jobs' outputs are in the team store (6 at 17:55).
+- Score of the previous change (cycle 10, hook line; none in 11 and 12): helped: 6 of 8 new jobs run the current tool.
+- Failure class (before.txt): the vast.ai account stopped every box once (16:15 UTC) when the spend per hour passed its limit, and was over it twice more; one session adds up `vast.py ls` by hand and warns on `all`.
+- Change (step 3; nothing to delete: the limit is the account's): `vast.py ls` starts with the number of boxes, the total USD per hour and the boxes at GPU 0 %; `vast.py up` prints that line before it rents.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | total spend per hour visible to a session that rents | no | yes, in `up` and `ls` | | 1 | after.txt |
+  | stops of every box by the account | 1 in 3 h | not measured yet | | | before.txt; messages |
+
+- Seen at 19:02: 3 of 10 boxes at GPU 0 % (60805632 up 3.1 h, 60806873, 60815158), about 4.3 USD per hour; told their owners by message.
+- Next cycle checks: account stops against 1 in 3 h; boxes at GPU 0 % against 3 of 10; the Team line against 51 / 110 min and 8.0 per hour.
+
 ## 2026-11-15 18:20 UTC (paper loop, after result-53ce14 of work-184476) meta/reviews/abaybektursun/20261115-1813-paper3/
 
 - Previous paper entry asked for paper 3's minutes from first review to live PDF against 17.8, and whether its reviews change the central claim. Measured: 67.9 min (before.txt), of which 43.3 with no paper work, waiting for GPU samples; 24.6 without the wait. The claim changed from "equals" to "within +1.4 points [-0.45, 3.30]", by the four-sample data (result-6832a8), not by a review; NOTES.md lists facts the reviewers asked to add. The carried change (the data-layer brief delivers each arm's prompts up front) was applied; the final check still found 2 wrong statements in one hand-written paragraph (numbers of the 183 pool quoted for the 155 pool; one interval set against the wrong cell), against 6 in paper 2.

@@ -1,0 +1,328 @@
+{"problem_index": 0, "seed": 3000000, "n_new": 1520, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "108", "score_v3": 0, "gold": "116"}
+{"problem_index": 7, "seed": 3000007, "n_new": 14311, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "No such three-digit number exists. The problem as stated has no solution under standard positional numeral systems.", "score_v3": 0, "gold": "227"}
+{"problem_index": 15, "seed": 3000015, "n_new": 4442, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "33", "score_v3": 0, "gold": "154"}
+{"problem_index": 23, "seed": 3000023, "n_new": 1833, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "21", "score_v3": 1, "gold": "021"}
+{"problem_index": 24, "seed": 3000024, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "112"}
+{"problem_index": 29, "seed": 3000029, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "244"}
+{"problem_index": 45, "seed": 3000045, "n_new": 3894, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "220", "score_v3": 1, "gold": "220"}
+{"problem_index": 57, "seed": 3000057, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "928"}
+{"problem_index": 58, "seed": 3000058, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "024"}
+{"problem_index": 60, "seed": 3000060, "n_new": 6601, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "204", "score_v3": 1, "gold": "204"}
+{"problem_index": 61, "seed": 3000061, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "113"}
+{"problem_index": 62, "seed": 3000062, "n_new": 12610, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "9.", "score_v3": 0, "gold": "371"}
+{"problem_index": 63, "seed": 3000063, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "385"}
+{"problem_index": 65, "seed": 3000065, "n_new": 7071, "cap_hit": false, "finish_reason": "stop", "loop_A": true, "extracted_v3": null, "score_v3": 0, "gold": "104"}
+{"problem_index": 66, "seed": 3000066, "n_new": 7547, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "281", "score_v3": 0, "gold": "721"}
+{"problem_index": 67, "seed": 3000067, "n_new": 2002, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "25", "score_v3": 1, "gold": "025"}
+{"problem_index": 68, "seed": 3000068, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "809"}
+{"problem_index": 69, "seed": 3000069, "n_new": 15318, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "116", "score_v3": 1, "gold": "116"}
+{"problem_index": 70, "seed": 3000070, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "104"}
+{"problem_index": 71, "seed": 3000071, "n_new": 6211, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "147", "score_v3": 0, "gold": "294"}
+{"problem_index": 72, "seed": 3000072, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "540"}
+{"problem_index": 73, "seed": 3000073, "n_new": 8875, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "35", "score_v3": 0, "gold": "197"}
+{"problem_index": 74, "seed": 3000074, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "480"}
+{"problem_index": 75, "seed": 3000075, "n_new": 13374, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "073"}
+{"problem_index": 76, "seed": 3000076, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "468"}
+{"problem_index": 77, "seed": 3000077, "n_new": 8597, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "6", "score_v3": 0, "gold": "601"}
+{"problem_index": 78, "seed": 3000078, "n_new": 9330, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "19", "score_v3": 0, "gold": "023"}
+{"problem_index": 79, "seed": 3000079, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "321"}
+{"problem_index": 80, "seed": 3000080, "n_new": 9942, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "211"}
+{"problem_index": 81, "seed": 3000081, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "315"}
+{"problem_index": 82, "seed": 3000082, "n_new": 14982, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "212", "score_v3": 0, "gold": "236"}
+{"problem_index": 83, "seed": 3000083, "n_new": 14471, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "0", "score_v3": 0, "gold": "045"}
+{"problem_index": 84, "seed": 3000084, "n_new": 4395, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "33", "score_v3": 1, "gold": "033"}
+{"problem_index": 85, "seed": 3000085, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "080"}
+{"problem_index": 86, "seed": 3000086, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "055"}
+{"problem_index": 87, "seed": 3000087, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": "705", "score_v3": 0, "gold": "699"}
+{"problem_index": 88, "seed": 3000088, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "127"}
+{"problem_index": 89, "seed": 3000089, "n_new": 16365, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "0", "score_v3": 0, "gold": "902"}
+{"problem_index": 90, "seed": 3000090, "n_new": 3127, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "70", "score_v3": 1, "gold": "70"}
+{"problem_index": 91, "seed": 3000091, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "588"}
+{"problem_index": 92, "seed": 3000092, "n_new": 4457, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "596", "score_v3": 0, "gold": "16"}
+{"problem_index": 93, "seed": 3000093, "n_new": 13422, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "117", "score_v3": 1, "gold": "117"}
+{"problem_index": 94, "seed": 3000094, "n_new": 11623, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "2025", "score_v3": 0, "gold": "279"}
+{"problem_index": 95, "seed": 3000095, "n_new": 12190, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "504", "score_v3": 1, "gold": "504"}
+{"problem_index": 96, "seed": 3000096, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "821"}
+{"problem_index": 97, "seed": 3000097, "n_new": 14047, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "15319", "score_v3": 0, "gold": "77"}
+{"problem_index": 98, "seed": 3000098, "n_new": 10853, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "62", "score_v3": 1, "gold": "62"}
+{"problem_index": 99, "seed": 3000099, "n_new": 13836, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "55", "score_v3": 0, "gold": "81"}
+{"problem_index": 100, "seed": 3000100, "n_new": 11032, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "3 + 1 + 3 + 17", "score_v3": 0, "gold": "259"}
+{"problem_index": 101, "seed": 3000101, "n_new": 15366, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "49", "score_v3": 0, "gold": "510"}
+{"problem_index": 102, "seed": 3000102, "n_new": 10368, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "46", "score_v3": 0, "gold": "204"}
+{"problem_index": 103, "seed": 3000103, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "60"}
+{"problem_index": 104, "seed": 3000104, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "735"}
+{"problem_index": 105, "seed": 3000105, "n_new": 4564, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "468", "score_v3": 1, "gold": "468"}
+{"problem_index": 106, "seed": 3000106, "n_new": 2588, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "49", "score_v3": 1, "gold": "49"}
+{"problem_index": 107, "seed": 3000107, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "82"}
+{"problem_index": 108, "seed": 3000108, "n_new": 5644, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "1513", "score_v3": 0, "gold": "106"}
+{"problem_index": 109, "seed": 3000109, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "336"}
+{"problem_index": 110, "seed": 3000110, "n_new": 2454, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "293"}
+{"problem_index": 111, "seed": 3000111, "n_new": 7304, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "49151", "score_v3": 0, "gold": "237"}
+{"problem_index": 112, "seed": 3000112, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "610"}
+{"problem_index": 113, "seed": 3000113, "n_new": 12803, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "289", "score_v3": 0, "gold": "149"}
+{"problem_index": 114, "seed": 3000114, "n_new": 13735, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "9", "score_v3": 0, "gold": "907"}
+{"problem_index": 115, "seed": 3000115, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "113"}
+{"problem_index": 116, "seed": 3000116, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "19"}
+{"problem_index": 117, "seed": 3000117, "n_new": 12890, "cap_hit": false, "finish_reason": "stop", "loop_A": true, "extracted_v3": "the answer to the problem in form", "score_v3": 0, "gold": "248"}
+{"problem_index": 118, "seed": 3000118, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "104"}
+{"problem_index": 119, "seed": 3000119, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "240"}
+{"problem_index": 120, "seed": 3000120, "n_new": 443, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "$27$ miles from city $A$.", "score_v3": 0, "gold": "27"}
+{"problem_index": 121, "seed": 3000121, "n_new": 1594, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "36", "score_v3": 1, "gold": "36"}
+{"problem_index": 122, "seed": 3000122, "n_new": 545, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "45^\\circ", "score_v3": 1, "gold": "45"}
+{"problem_index": 123, "seed": 3000123, "n_new": 3167, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "$3159$", "score_v3": 1, "gold": "3159"}
+{"problem_index": 125, "seed": 3000125, "n_new": 4640, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "7", "score_v3": 1, "gold": "7"}
+{"problem_index": 133, "seed": 3000133, "n_new": 16314, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "2", "score_v3": 0, "gold": "1"}
+{"problem_index": 134, "seed": 3000134, "n_new": 13171, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "Answer (without quotes). So, in the problem statement, the example given is a sequence where n=5, but I think the example might have an error because the subsets are not nested properly. Therefore, there's a problem here.", "score_v3": 1, "gold": "5"}
+{"problem_index": 135, "seed": 3000135, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "-1"}
+{"problem_index": 136, "seed": 3000136, "n_new": 1436, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "8", "score_v3": 1, "gold": "8"}
+{"problem_index": 137, "seed": 3000137, "n_new": 1530, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "18", "score_v3": 1, "gold": "18"}
+{"problem_index": 139, "seed": 3000139, "n_new": 1043, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "9", "score_v3": 1, "gold": "9"}
+{"problem_index": 141, "seed": 3000141, "n_new": 879, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "$7$", "score_v3": 1, "gold": "7"}
+{"problem_index": 142, "seed": 3000142, "n_new": 1155, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "7", "score_v3": 1, "gold": "7"}
+{"problem_index": 144, "seed": 3000144, "n_new": 7717, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "13", "score_v3": 1, "gold": "13"}
+{"problem_index": 146, "seed": 3000146, "n_new": 786, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "13", "score_v3": 1, "gold": "13"}
+{"problem_index": 147, "seed": 3000147, "n_new": 13114, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "5", "score_v3": 1, "gold": "5"}
+{"problem_index": 148, "seed": 3000148, "n_new": 14732, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "5", "score_v3": 0, "gold": "11"}
+{"problem_index": 149, "seed": 3000149, "n_new": 3239, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "18", "score_v3": 1, "gold": "18"}
+{"problem_index": 150, "seed": 3000150, "n_new": 894, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "$50", "score_v3": 1, "gold": "50"}
+{"problem_index": 151, "seed": 3000151, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": "the answer to the problem.\"", "score_v3": 0, "gold": "11"}
+{"problem_index": 152, "seed": 3000152, "n_new": 7076, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "15", "score_v3": 0, "gold": "3"}
+{"problem_index": 153, "seed": 3000153, "n_new": 463, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "194", "score_v3": 1, "gold": "194"}
+{"problem_index": 154, "seed": 3000154, "n_new": 506, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "1625", "score_v3": 1, "gold": "1625"}
+{"problem_index": 155, "seed": 3000155, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "4"}
+{"problem_index": 156, "seed": 3000156, "n_new": 13976, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "6", "score_v3": 1, "gold": "6"}
+{"problem_index": 157, "seed": 3000157, "n_new": 1617, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "100", "score_v3": 0, "gold": "901"}
+{"problem_index": 158, "seed": 3000158, "n_new": 3085, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "144", "score_v3": 1, "gold": "144"}
+{"problem_index": 159, "seed": 3000159, "n_new": 12564, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "8", "score_v3": 1, "gold": "8"}
+{"problem_index": 160, "seed": 3000160, "n_new": 9069, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "1", "score_v3": 0, "gold": "103"}
+{"problem_index": 161, "seed": 3000161, "n_new": 13050, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "3025", "score_v3": 0, "gold": "3375"}
+{"problem_index": 162, "seed": 3000162, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "\\frac{1}{576}"}
+{"problem_index": 163, "seed": 3000163, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "-984"}
+{"problem_index": 164, "seed": 3000164, "n_new": 2771, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "9000", "score_v3": 0, "gold": "890"}
+{"problem_index": 165, "seed": 3000165, "n_new": 9634, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "1 - \\dfrac{1}{2025!}", "score_v3": 0, "gold": "\\frac{1311}{2017}"}
+{"problem_index": 166, "seed": 3000166, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "\\frac{9 \\sqrt{23}}{23}"}
+{"problem_index": 167, "seed": 3000167, "n_new": 8092, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "0", "score_v3": 0, "gold": "1-\\frac{2}{\\pi}"}
+{"problem_index": 168, "seed": 3000168, "n_new": 16291, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "1013", "score_v3": 0, "gold": "1037"}
+{"problem_index": 169, "seed": 3000169, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "\\frac{-1+\\sqrt{17}}{2}, \\frac{-1-\\sqrt{17}}{2}"}
+{"problem_index": 170, "seed": 3000170, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "56"}
+{"problem_index": 171, "seed": 3000171, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "29"}
+{"problem_index": 172, "seed": 3000172, "n_new": 11233, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "106", "score_v3": 0, "gold": "105"}
+{"problem_index": 173, "seed": 3000173, "n_new": 13302, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "dp[3][3], which gives the number of ways to reach (3,3) without revisiting any points.", "score_v3": 0, "gold": "2304"}
+{"problem_index": 174, "seed": 3000174, "n_new": 1126, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "220", "score_v3": 0, "gold": "200"}
+{"problem_index": 175, "seed": 3000175, "n_new": 15902, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "144", "score_v3": 0, "gold": "6300"}
+{"problem_index": 176, "seed": 3000176, "n_new": 7275, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "26!", "score_v3": 0, "gold": "2^{25} \\cdot 26!"}
+{"problem_index": 177, "seed": 3000177, "n_new": 14758, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "750", "score_v3": 0, "gold": "\\frac{2025}{101}"}
+{"problem_index": 178, "seed": 3000178, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "\\frac{4}{9}"}
+{"problem_index": 179, "seed": 3000179, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "\\frac{448}{3}"}
+{"problem_index": 180, "seed": 3000180, "n_new": 4518, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "26", "score_v3": 1, "gold": "26"}
+{"problem_index": 181, "seed": 3000181, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "63"}
+{"problem_index": 182, "seed": 3000182, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "8\\sqrt{10}"}
+{"problem_index": 183, "seed": 3000183, "n_new": 13632, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "100", "score_v3": 0, "gold": "20"}
+{"problem_index": 184, "seed": 3000184, "n_new": 13966, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\sqrt{23}", "score_v3": 0, "gold": "\\sqrt{23}-2 \\sqrt{3}"}
+{"problem_index": 185, "seed": 3000185, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "9\\sqrt{15}"}
+{"problem_index": 186, "seed": 3000186, "n_new": 15694, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\dfrac{7}{55}", "score_v3": 0, "gold": "\\frac{7}{18}"}
+{"problem_index": 187, "seed": 3000187, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "\\sqrt{6}"}
+{"problem_index": 188, "seed": 3000188, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "14+4\\sqrt{37}"}
+{"problem_index": 189, "seed": 3000189, "n_new": 16130, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "127", "score_v3": 0, "gold": "\\sqrt{\\frac{95}{24}}"}
+{"problem_index": 190, "seed": 3000190, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": "\\dfrac{1}{4n}", "score_v3": 0, "gold": "$\\frac{1}{2 n+2}$"}
+{"problem_index": 191, "seed": 3000191, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$2^{1009}$"}
+{"problem_index": 192, "seed": 3000192, "n_new": 11031, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "", "score_v3": 0, "gold": "2"}
+{"problem_index": 193, "seed": 3000193, "n_new": 11275, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "2", "score_v3": 1, "gold": "2"}
+{"problem_index": 194, "seed": 3000194, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": "m*n. But for m=2, n=2, this would give 4, but as we saw, only 2 dominoes are possible. Therefore, the first answer is incorrect.", "score_v3": 0, "gold": "$m n-\\lfloor m / 2\\rfloor$"}
+{"problem_index": 195, "seed": 3000195, "n_new": 15686, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "3n", "score_v3": 1, "gold": "$3 n$"}
+{"problem_index": 196, "seed": 3000196, "n_new": 8686, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "(2, 4)", "score_v3": 1, "gold": "$(2,4)$"}
+{"problem_index": 199, "seed": 3000199, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "5"}
+{"problem_index": 200, "seed": 3000200, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$M=\\frac{9}{32} \\sqrt{2}$"}
+{"problem_index": 201, "seed": 3000201, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$\\left\\lfloor\\log _{2} n\\right\\rfloor+1$"}
+{"problem_index": 202, "seed": 3000202, "n_new": 13259, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "$n^2$", "score_v3": 0, "gold": "$\\frac{n(n+1)(2 n+1)}{6}$"}
+{"problem_index": 203, "seed": 3000203, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "807"}
+{"problem_index": 204, "seed": 3000204, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "3"}
+{"problem_index": 205, "seed": 3000205, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$\\frac{1}{2}$"}
+{"problem_index": 206, "seed": 3000206, "n_new": 12340, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\text{None}", "score_v3": 0, "gold": "1"}
+{"problem_index": 207, "seed": 3000207, "n_new": 10255, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "f(n) = n^2", "score_v3": 1, "gold": "$f(n)=n^{2}$"}
+{"problem_index": 209, "seed": 3000209, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$\\lceil n / 2\\rceil+1$"}
+{"problem_index": 210, "seed": 3000210, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$k=n+1$"}
+{"problem_index": 212, "seed": 3000212, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$(-\\infty, 0) \\cup\\{1\\}$."}
+{"problem_index": 215, "seed": 3000215, "n_new": 4710, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "n^2", "score_v3": 0, "gold": "$2 n^{2}-2 n+1$"}
+{"problem_index": 216, "seed": 3000216, "n_new": 14982, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "0", "score_v3": 0, "gold": "$t(0,4]$"}
+{"problem_index": 217, "seed": 3000217, "n_new": 11896, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "f(n) = n", "score_v3": 1, "gold": "$f(n)=n$"}
+{"problem_index": 218, "seed": 3000218, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$k=3$"}
+{"problem_index": 219, "seed": 3000219, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$\\frac{n(n+1)}{2}$"}
+{"problem_index": 220, "seed": 3000220, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$N=n$"}
+{"problem_index": 221, "seed": 3000221, "n_new": 1546, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "2", "score_v3": 1, "gold": "2"}
+{"problem_index": 222, "seed": 3000222, "n_new": 1789, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "210", "score_v3": 1, "gold": "210"}
+{"problem_index": 223, "seed": 3000223, "n_new": 1852, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\frac{2}{5}", "score_v3": 1, "gold": "$\\frac{2}{5}$"}
+{"problem_index": 224, "seed": 3000224, "n_new": 2108, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\$48\\$", "score_v3": 1, "gold": "48"}
+{"problem_index": 225, "seed": 3000225, "n_new": 1651, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "1000$", "score_v3": 1, "gold": "1000"}
+{"problem_index": 226, "seed": 3000226, "n_new": 589, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "1", "score_v3": 1, "gold": "1"}
+{"problem_index": 227, "seed": 3000227, "n_new": 857, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$8 \\%$"}
+{"problem_index": 228, "seed": 3000228, "n_new": 5046, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "34", "score_v3": 1, "gold": "34"}
+{"problem_index": 229, "seed": 3000229, "n_new": 4255, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "60", "score_v3": 1, "gold": "60"}
+{"problem_index": 230, "seed": 3000230, "n_new": 451, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "40", "score_v3": 1, "gold": "40"}
+{"problem_index": 231, "seed": 3000231, "n_new": 3097, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "10", "score_v3": 1, "gold": "10"}
+{"problem_index": 232, "seed": 3000232, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "202"}
+{"problem_index": 233, "seed": 3000233, "n_new": 613, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "1000", "score_v3": 1, "gold": "1000"}
+{"problem_index": 234, "seed": 3000234, "n_new": 7412, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\dfrac{5}{12}", "score_v3": 0, "gold": "$\\frac{2}{9}$"}
+{"problem_index": 235, "seed": 3000235, "n_new": 11897, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "7", "score_v3": 0, "gold": "6"}
+{"problem_index": 236, "seed": 3000236, "n_new": 713, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\dfrac{3}{4}", "score_v3": 1, "gold": "$\\frac{3}{4}$"}
+{"problem_index": 237, "seed": 3000237, "n_new": 1262, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "153", "score_v3": 1, "gold": "153"}
+{"problem_index": 238, "seed": 3000238, "n_new": 14975, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\dfrac{2}{3}", "score_v3": 0, "gold": "$\\frac{10}{21}$"}
+{"problem_index": 239, "seed": 3000239, "n_new": 8813, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "590", "score_v3": 1, "gold": "590"}
+{"problem_index": 240, "seed": 3000240, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": "...\", so probably as a fraction.", "score_v3": 0, "gold": "$\\frac{10}{3}$"}
+{"problem_index": 241, "seed": 3000241, "n_new": 2478, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "33", "score_v3": 1, "gold": "33"}
+{"problem_index": 242, "seed": 3000242, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "-900"}
+{"problem_index": 243, "seed": 3000243, "n_new": 15934, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\text{No real solution}", "score_v3": 0, "gold": "$\\frac{\\log 2}{\\log 2-\\log 3}$"}
+{"problem_index": 244, "seed": 3000244, "n_new": 15175, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "7", "score_v3": 0, "gold": "11"}
+{"problem_index": 245, "seed": 3000245, "n_new": 1040, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "2", "score_v3": 1, "gold": "2"}
+{"problem_index": 246, "seed": 3000246, "n_new": 8910, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "6", "score_v3": 0, "gold": "5"}
+{"problem_index": 247, "seed": 3000247, "n_new": 2064, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\dfrac{11}{32}", "score_v3": 1, "gold": "$\\frac{11}{32}$"}
+{"problem_index": 248, "seed": 3000248, "n_new": 13830, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "9", "score_v3": 0, "gold": "12"}
+{"problem_index": 249, "seed": 3000249, "n_new": 4413, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\frac{11}{18}", "score_v3": 1, "gold": "$\\frac{11}{18}$"}
+{"problem_index": 250, "seed": 3000250, "n_new": 7092, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "343", "score_v3": 0, "gold": "233"}
+{"problem_index": 251, "seed": 3000251, "n_new": 14543, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "29", "score_v3": 1, "gold": "29"}
+{"problem_index": 252, "seed": 3000252, "n_new": 13421, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "9", "score_v3": 1, "gold": "9"}
+{"problem_index": 253, "seed": 3000253, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": "3103/900? Wait, let me check if my calculation is correct.", "score_v3": 0, "gold": "$\\frac{1}{90}$"}
+{"problem_index": 254, "seed": 3000254, "n_new": 9954, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "x = \\sqrt{3}", "score_v3": 1, "gold": "$\\sqrt{3}$"}
+{"problem_index": 255, "seed": 3000255, "n_new": 8394, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\dfrac{\\pi^2 - 9}{9}", "score_v3": 1, "gold": "$\\frac{\\pi^{2}-9}{9}$"}
+{"problem_index": 256, "seed": 3000256, "n_new": 2630, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "0", "score_v3": 0, "gold": "$\\frac{-1}{1997}$"}
+{"problem_index": 257, "seed": 3000257, "n_new": 2186, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "158", "score_v3": 1, "gold": "158"}
+{"problem_index": 258, "seed": 3000258, "n_new": 4519, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "a^2 + 4b", "score_v3": 0, "gold": "$\\frac{a b}{2}$"}
+{"problem_index": 259, "seed": 3000259, "n_new": 3533, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "-1", "score_v3": 1, "gold": "-1"}
+{"problem_index": 260, "seed": 3000260, "n_new": 6401, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "27", "score_v3": 1, "gold": "27"}
+{"problem_index": 261, "seed": 3000261, "n_new": 3107, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "6", "score_v3": 0, "gold": "9"}
+{"problem_index": 262, "seed": 3000262, "n_new": 3293, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "13", "score_v3": 1, "gold": "13"}
+{"problem_index": 263, "seed": 3000263, "n_new": 11528, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\text{No solution}", "score_v3": 0, "gold": "$\\sqrt{6}$"}
+{"problem_index": 264, "seed": 3000264, "n_new": 1705, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "(4, \\log_{10} 2)", "score_v3": 1, "gold": "$(4, \\log _{10} 2)$"}
+{"problem_index": 265, "seed": 3000265, "n_new": 2014, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "1938", "score_v3": 1, "gold": "1938"}
+{"problem_index": 266, "seed": 3000266, "n_new": 5240, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\dfrac{9}{25}", "score_v3": 1, "gold": "$\\frac{9}{25}$"}
+{"problem_index": 267, "seed": 3000267, "n_new": 5132, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "1", "score_v3": 0, "gold": "19133"}
+{"problem_index": 268, "seed": 3000268, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "979"}
+{"problem_index": 269, "seed": 3000269, "n_new": 8135, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "the answer to the problem.\" So T is given as 8, so the total handshakes are 160. Therefore, the answer is that there is no solution. But since the problem is presented as a math problem expecting an answer, perhaps the problem has a typo. Alternatively, maybe I made a mistake in my calculations.", "score_v3": 0, "gold": "7"}
+{"problem_index": 270, "seed": 3000270, "n_new": 1115, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "$233$", "score_v3": 1, "gold": "233"}
+{"problem_index": 271, "seed": 3000271, "n_new": 4613, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "136", "score_v3": 1, "gold": "136"}
+{"problem_index": 272, "seed": 3000272, "n_new": 2563, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "5/2", "score_v3": 1, "gold": "$\\frac{5}{2}$"}
+{"problem_index": 274, "seed": 3000274, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "10"}
+{"problem_index": 275, "seed": 3000275, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$(-266,-3,-28)$"}
+{"problem_index": 276, "seed": 3000276, "n_new": 3665, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "1", "score_v3": 1, "gold": "1"}
+{"problem_index": 277, "seed": 3000277, "n_new": 12010, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\dfrac{16}{5}", "score_v3": 0, "gold": "$\\frac{8}{5}$"}
+{"problem_index": 278, "seed": 3000278, "n_new": 4884, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "2AB", "score_v3": 0, "gold": "$\\frac{94}{4225}$"}
+{"problem_index": 279, "seed": 3000279, "n_new": 2235, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\dfrac{12}{169}", "score_v3": 1, "gold": "$\\frac{12}{169}$"}
+{"problem_index": 280, "seed": 3000280, "n_new": 1571, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "3", "score_v3": 1, "gold": "3"}
+{"problem_index": 281, "seed": 3000281, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "96"}
+{"problem_index": 282, "seed": 3000282, "n_new": 14611, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "24", "score_v3": 0, "gold": "18"}
+{"problem_index": 283, "seed": 3000283, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "5762"}
+{"problem_index": 284, "seed": 3000284, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$\\frac{1}{54}$"}
+{"problem_index": 285, "seed": 3000285, "n_new": 11409, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "8", "score_v3": 0, "gold": "5"}
+{"problem_index": 286, "seed": 3000286, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "37"}
+{"problem_index": 287, "seed": 3000287, "n_new": 7010, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "4320", "score_v3": 1, "gold": "4320"}
+{"problem_index": 288, "seed": 3000288, "n_new": 12984, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "108", "score_v3": 0, "gold": "48"}
+{"problem_index": 289, "seed": 3000289, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "2019"}
+{"problem_index": 290, "seed": 3000290, "n_new": 4081, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "50"}
+{"problem_index": 291, "seed": 3000291, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "140"}
+{"problem_index": 292, "seed": 3000292, "n_new": 6324, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "0", "score_v3": 1, "gold": "0"}
+{"problem_index": 293, "seed": 3000293, "n_new": 5415, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "74", "score_v3": 1, "gold": "74"}
+{"problem_index": 294, "seed": 3000294, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$\\frac{67 \\pi}{3}$"}
+{"problem_index": 295, "seed": 3000295, "n_new": 9917, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "8"}
+{"problem_index": 296, "seed": 3000296, "n_new": 928, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "19", "score_v3": 1, "gold": "19"}
+{"problem_index": 297, "seed": 3000297, "n_new": 611, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "$13.5$", "score_v3": 1, "gold": "$\\frac{27}{2}$"}
+{"problem_index": 298, "seed": 3000298, "n_new": 1257, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "114", "score_v3": 1, "gold": "114"}
+{"problem_index": 299, "seed": 3000299, "n_new": 14103, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "75", "score_v3": 0, "gold": "60"}
+{"problem_index": 300, "seed": 3000300, "n_new": 9226, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "23215", "score_v3": 0, "gold": "2302"}
+{"problem_index": 301, "seed": 3000301, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "99956"}
+{"problem_index": 302, "seed": 3000302, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "46760"}
+{"problem_index": 303, "seed": 3000303, "n_new": 2301, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "2028", "score_v3": 1, "gold": "2028"}
+{"problem_index": 304, "seed": 3000304, "n_new": 16029, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "2019", "score_v3": 0, "gold": "-2019"}
+{"problem_index": 305, "seed": 3000305, "n_new": 3846, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "10080", "score_v3": 0, "gold": "14400"}
+{"problem_index": 306, "seed": 3000306, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "-7"}
+{"problem_index": 307, "seed": 3000307, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$\\sqrt{130}$"}
+{"problem_index": 308, "seed": 3000308, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "17"}
+{"problem_index": 309, "seed": 3000309, "n_new": 1287, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\sqrt{15}$", "score_v3": 0, "gold": "$\\sqrt{15}$"}
+{"problem_index": 310, "seed": 3000310, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": "the answer to the problem.\" So maybe the answer is the perimeter, and the problem is to compute that.", "score_v3": 0, "gold": "32"}
+{"problem_index": 312, "seed": 3000312, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$\\frac{1}{16}$"}
+{"problem_index": 313, "seed": 3000313, "n_new": 7641, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "42", "score_v3": 0, "gold": "146"}
+{"problem_index": 314, "seed": 3000314, "n_new": 1346, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "37", "score_v3": 1, "gold": "37"}
+{"problem_index": 315, "seed": 3000315, "n_new": 15264, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "5", "score_v3": 0, "gold": "11"}
+{"problem_index": 316, "seed": 3000316, "n_new": 1573, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "$ $\\frac{26}{289}$", "score_v3": 0, "gold": "$\\frac{7}{128}$"}
+{"problem_index": 317, "seed": 3000317, "n_new": 1714, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "136", "score_v3": 0, "gold": "820"}
+{"problem_index": 318, "seed": 3000318, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": "0", "score_v3": 0, "gold": "6"}
+{"problem_index": 319, "seed": 3000319, "n_new": 12350, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "8", "score_v3": 0, "gold": "6"}
+{"problem_index": 320, "seed": 3000320, "n_new": 8746, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\dfrac{\\sqrt{394}}{13}", "score_v3": 0, "gold": "$\\sqrt{26}$"}
+{"problem_index": 321, "seed": 3000321, "n_new": 2312, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\frac{10}{17}", "score_v3": 0, "gold": "$\\frac{9}{17}$"}
+{"problem_index": 322, "seed": 3000322, "n_new": 11335, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\" line! Let T=20. For some real constants a and b, the solution sets of the equations x^{2} + (5 b -T -a) x = T +1 and 2x^{2} + (T +8 a -2) x = -10 b are the same. Compute a.\"", "score_v3": 1, "gold": "-10"}
+{"problem_index": 323, "seed": 3000323, "n_new": 975, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "20", "score_v3": 1, "gold": "20"}
+{"problem_index": 324, "seed": 3000324, "n_new": 7017, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "2021", "score_v3": 0, "gold": "2018"}
+{"problem_index": 325, "seed": 3000325, "n_new": 7814, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "4p", "score_v3": 0, "gold": "28"}
+{"problem_index": 326, "seed": 3000326, "n_new": 2837, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "79", "score_v3": 1, "gold": "79"}
+{"problem_index": 327, "seed": 3000327, "n_new": 3942, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "7", "score_v3": 1, "gold": "7"}
+{"problem_index": 328, "seed": 3000328, "n_new": 4023, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\sqrt{2}", "score_v3": 1, "gold": "$\\sqrt{2}$"}
+{"problem_index": 329, "seed": 3000329, "n_new": 10269, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "0", "score_v3": 0, "gold": "23"}
+{"problem_index": 330, "seed": 3000330, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$\\frac{15-8 \\sqrt{3}}{33}$"}
+{"problem_index": 331, "seed": 3000331, "n_new": 5248, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "4", "score_v3": 1, "gold": "4"}
+{"problem_index": 332, "seed": 3000332, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": "without quotes... Largest integer n such that...\". So the problem is asking for the largest integer n where the expression is a positive prime. Given that, and considering that for higher n (like n=60, 70, etc.), primes can be found, but without an upper limit, we can't be sure. However, in a competition setting, the problem might expect checking up to a certain point, like n=100. Let's check up to n=100.", "score_v3": 0, "gold": "12"}
+{"problem_index": 333, "seed": 3000333, "n_new": 13933, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "12", "score_v3": 0, "gold": "5"}
+{"problem_index": 334, "seed": 3000334, "n_new": 9507, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "2\\sqrt{10}", "score_v3": 1, "gold": "$2 \\sqrt{10}$"}
+{"problem_index": 335, "seed": 3000335, "n_new": 4448, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "(-\\sqrt{2}, -1 + \\sqrt{2})", "score_v3": 0, "gold": "$\\quad(2+\\sqrt{2}, 1+\\sqrt{2})$"}
+{"problem_index": 336, "seed": 3000336, "n_new": 14350, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "3", "score_v3": 0, "gold": "10"}
+{"problem_index": 337, "seed": 3000337, "n_new": 7932, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "36", "score_v3": 1, "gold": "36"}
+{"problem_index": 338, "seed": 3000338, "n_new": 1495, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "$19$", "score_v3": 1, "gold": "19"}
+{"problem_index": 339, "seed": 3000339, "n_new": 10255, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "10", "score_v3": 1, "gold": "10"}
+{"problem_index": 340, "seed": 3000340, "n_new": 1328, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "6", "score_v3": 1, "gold": "6"}
+{"problem_index": 341, "seed": 3000341, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$2-\\sqrt{3}$"}
+{"problem_index": 342, "seed": 3000342, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$\\frac{567}{4}$"}
+{"problem_index": 343, "seed": 3000343, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "48"}
+{"problem_index": 344, "seed": 3000344, "n_new": 14655, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "990"}
+{"problem_index": 345, "seed": 3000345, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$4-2 \\sqrt{3}$"}
+{"problem_index": 346, "seed": 3000346, "n_new": 5801, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "44", "score_v3": 1, "gold": "44"}
+{"problem_index": 347, "seed": 3000347, "n_new": 3237, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "35", "score_v3": 1, "gold": "35"}
+{"problem_index": 348, "seed": 3000348, "n_new": 7487, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "9", "score_v3": 1, "gold": "9"}
+{"problem_index": 349, "seed": 3000349, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "100337"}
+{"problem_index": 350, "seed": 3000350, "n_new": 12066, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "84"}
+{"problem_index": 351, "seed": 3000351, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "529"}
+{"problem_index": 352, "seed": 3000352, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": "40", "score_v3": 0, "gold": "$5 \\sqrt[3]{4}$"}
+{"problem_index": 353, "seed": 3000353, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "335"}
+{"problem_index": 354, "seed": 3000354, "n_new": 7490, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "49", "score_v3": 1, "gold": "49"}
+{"problem_index": 355, "seed": 3000355, "n_new": 3943, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "6\\sqrt{2}", "score_v3": 1, "gold": "$6 \\sqrt{2}$"}
+{"problem_index": 356, "seed": 3000356, "n_new": 2944, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "6^{\\frac{5}{3}} - 1", "score_v3": 0, "gold": "23"}
+{"problem_index": 357, "seed": 3000357, "n_new": 10319, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "10", "score_v3": 1, "gold": "10"}
+{"problem_index": 358, "seed": 3000358, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": "the answer to the problem.\"", "score_v3": 0, "gold": "9"}
+{"problem_index": 359, "seed": 3000359, "n_new": 13281, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "285", "score_v3": 0, "gold": "630"}
+{"problem_index": 360, "seed": 3000360, "n_new": 8723, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "1512", "score_v3": 1, "gold": "1512"}
+{"problem_index": 361, "seed": 3000361, "n_new": 12295, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "1", "score_v3": 0, "gold": "$\\frac{4}{3}$"}
+{"problem_index": 362, "seed": 3000362, "n_new": 561, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "60", "score_v3": 1, "gold": "60"}
+{"problem_index": 363, "seed": 3000363, "n_new": 16169, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "40", "score_v3": 0, "gold": "262"}
+{"problem_index": 364, "seed": 3000364, "n_new": 3095, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "E(6,1)=6", "score_v3": 1, "gold": "6"}
+{"problem_index": 365, "seed": 3000365, "n_new": 12479, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "3", "score_v3": 1, "gold": "3"}
+{"problem_index": 366, "seed": 3000366, "n_new": 11446, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "9", "score_v3": 0, "gold": "3"}
+{"problem_index": 367, "seed": 3000367, "n_new": 4334, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\dfrac{n}{2}", "score_v3": 1, "gold": "$\\frac{n}{2}$"}
+{"problem_index": 368, "seed": 3000368, "n_new": 8313, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\infty", "score_v3": 0, "gold": "3"}
+{"problem_index": 369, "seed": 3000369, "n_new": 5048, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\infty", "score_v3": 0, "gold": "76"}
+{"problem_index": 370, "seed": 3000370, "n_new": 7492, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "2", "score_v3": 0, "gold": "$\\frac{5 \\sqrt{2}}{2}$"}
+{"problem_index": 371, "seed": 3000371, "n_new": 5526, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "216", "score_v3": 1, "gold": "216"}
+{"problem_index": 372, "seed": 3000372, "n_new": 12440, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "13", "score_v3": 0, "gold": "12"}
+{"problem_index": 373, "seed": 3000373, "n_new": 15061, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$\\frac{3 \\pi}{4}$"}
+{"problem_index": 374, "seed": 3000374, "n_new": 13503, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "56"}
+{"problem_index": 375, "seed": 3000375, "n_new": 4947, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "39", "score_v3": 1, "gold": "39"}
+{"problem_index": 376, "seed": 3000376, "n_new": 5985, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "1", "score_v3": 1, "gold": "1"}
+{"problem_index": 377, "seed": 3000377, "n_new": 7096, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "15", "score_v3": 1, "gold": "15"}
+{"problem_index": 378, "seed": 3000378, "n_new": 2114, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "400", "score_v3": 1, "gold": "400"}
+{"problem_index": 379, "seed": 3000379, "n_new": 1757, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "362", "score_v3": 1, "gold": "362"}
+{"problem_index": 380, "seed": 3000380, "n_new": 3343, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\dfrac{1}{40}", "score_v3": 1, "gold": "$\\frac{1}{40}$"}
+{"problem_index": 381, "seed": 3000381, "n_new": 1326, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "210", "score_v3": 1, "gold": "210"}
+{"problem_index": 382, "seed": 3000382, "n_new": 1411, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "60", "score_v3": 1, "gold": "60"}
+{"problem_index": 383, "seed": 3000383, "n_new": 6457, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\dfrac{12}{5}", "score_v3": 1, "gold": "$\\frac{12}{5}$"}
+{"problem_index": 384, "seed": 3000384, "n_new": 12383, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "$\\frac{4}{17}$"}
+{"problem_index": 385, "seed": 3000385, "n_new": 8890, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "1", "score_v3": 0, "gold": "$\\frac{27}{106}$"}
+{"problem_index": 386, "seed": 3000386, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": "the answer to the problem.\"", "score_v3": 0, "gold": "$548 \\pi$"}
+{"problem_index": 387, "seed": 3000387, "n_new": 6274, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "35", "score_v3": 1, "gold": "35"}
+{"problem_index": 388, "seed": 3000388, "n_new": 5456, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\dfrac{51(\\sqrt{2044} - 34)}{4}", "score_v3": 0, "gold": "111"}
+{"problem_index": 389, "seed": 3000389, "n_new": 768, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "5", "score_v3": 1, "gold": "5"}
+{"problem_index": 390, "seed": 3000390, "n_new": 3492, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "102029", "score_v3": 0, "gold": "102018"}
+{"problem_index": 391, "seed": 3000391, "n_new": 2174, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\dfrac{15}{4}", "score_v3": 1, "gold": "$\\frac{15}{4}$"}
+{"problem_index": 392, "seed": 3000392, "n_new": 14968, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\" line!\"", "score_v3": 0, "gold": "$\\frac{9}{2}$"}
+{"problem_index": 393, "seed": 3000393, "n_new": 1475, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "4096", "score_v3": 1, "gold": "4096"}
+{"problem_index": 394, "seed": 3000394, "n_new": 16068, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "2", "score_v3": 0, "gold": "11"}
+{"problem_index": 395, "seed": 3000395, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": "\" line!\"", "score_v3": 0, "gold": "2"}
+{"problem_index": 396, "seed": 3000396, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": false, "extracted_v3": null, "score_v3": 0, "gold": "414"}
+{"problem_index": 397, "seed": 3000397, "n_new": 11856, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "\\dfrac{11}{16}", "score_v3": 0, "gold": "$\\frac{79}{128}$"}
+{"problem_index": 398, "seed": 3000398, "n_new": 16384, "cap_hit": true, "finish_reason": "length", "loop_A": true, "extracted_v3": null, "score_v3": 0, "gold": "1"}
+{"problem_index": 399, "seed": 3000399, "n_new": 1043, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "11", "score_v3": 1, "gold": "11"}

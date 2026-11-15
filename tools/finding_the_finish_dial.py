@@ -1,5 +1,6 @@
-"""The size of 8 RL directions per weight matrix sets how often Base + cue finishes its answers; at size 1.5 it scores
-203 of 328 harder problems, RL 206.
+"""Enlarging 8 RL directions per weight matrix makes Base + cue finish its answers and adds right answers where it
+already finished; at size 1.5 it scores 203 of 328 harder problems, RL 206, and 74 % of its gain is on problems Base + cue
+finished (board result-124593).
 
 The page of one finding, served at /finding/the-finish-dial (view.py serves every tools/finding_<slug>.py) and reached
 from its tile on /findings, which ICON draws. It is the sequel of /finding/eight-directions. The picture is one lit
@@ -13,8 +14,16 @@ A second quiet switch at the top of the plate changes the problem set to the 538
 same dial on a second model pair (RL-Code's 8 directions per matrix, run at sizes 0, 1, 1.5 and 2; random directions at
 1.5; RL-Math's directions at 1.5 as a named point; board result-a1bf75). The marks regroup by rank between the sets, the
 curve moves to the new scale, and the stops not run on code are greyed and labelled "not run".
-Address: /finding/the-finish-dial#[code/][random/]s<size>[/<panel or p<problem>>]; the defaults (math, 8 RL directions,
-size 1.5) are left out. The rules are in .claude/skills/finding-page/SKILL.md; the looks are those of tools/architecture.py
+A third position, "136 problems from 2026" (AIME and HMMT contests held after the last upload of the models' weights; board
+result-04e329), is the held-out test: only size 0 (Base + cue) and size 1.5, which was fixed on the 328 before the run, plus
+RL; four samples each. The marks show the first sample, the large number is the mean of the four, and the random switch is
+greyed ("not run on this set").
+A third position of the directions switch, "Group by what Base + cue did" (math only, size 1.5), regroups the same 328 marks
+into three columns by the outcome of one Base + cue answer (sample 2 of the four-sample run, GROUP) while each mark keeps its
+look at size 1.5; the curve gives way to three bars per group from the split's readout (DATA["split"]): size 1.5, a second
+Base + cue answer and RL, with the share of the gain in each group.
+Address: /finding/the-finish-dial#[code/|fresh/][random/|group/]s<size>[/<panel or p<problem>>]; the defaults (math, 8 RL
+directions, size 1.5) are left out. The rules are in .claude/skills/finding-page/SKILL.md; the looks are those of tools/architecture.py
 (.claude/skills/site-ui/SKILL.md). The finding is board items result-6f1bb7 and result-51a0e7.
 
 The artifacts are on main (commit d44e61b): the readout and run folders under EDITS, the replication under REP, and the
@@ -24,6 +33,9 @@ built from those rows; every count on the page is computed from PROBLEMS. The ch
 the replication's committed rows in the working tree, and PROBLEMS with the rows in runs/, and says when it skipped those.
 The code set: DATA["code"] is copied from CODE + "readout.json" (commit 420411e) and CODE_PROBLEMS is built by --write from
 runs/<job>/answers.jsonl of CODE_CELLS (the rows are on the Modal Volume, not in git); the check compares both.
+The 2026 set: DATA["fresh"] is copied from FRESH + "readout.json" (commit 369fce6) and the committed Base + cue and RL rows
+(FRESH_REFS); FRESH_PROBLEMS is built by --write from those rows, the edit's rows in runs/<job>/answers.jsonl of
+FRESH_JOBS["edit"] (not in git) and the first sample's text in runs/fresh/<job>/; the check compares both.
 
     PYTHONPATH=. uv run --no-project --with numpy --with sympy --with math-verify==0.9.0 \\
         python tools/finding_the_finish_dial.py           checks DATA and PROBLEMS against the artifacts it finds
@@ -157,9 +169,127 @@ for _k, _cell, _kind, _s, _job in CODE_CELLS:
     DATA["code"]["cells"][_k].update({"cell": _cell, "kind": _kind, "size": _s, "job": _job})
     DATA["code"]["folders"].setdefault(_k, CODE + _cell + "-01/")
 
-TITLE = "The finish dial"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "Does a small part of RL's weight change decide whether answers finish?"
-LINE = "Enlarging 8 RL directions makes answers finish: at size 1.5, 203 of 328 are right; on code, 399 of 538 pass."
+# The third set, the held-out test (board result-04e329, work-16773f; specs/SPEC_fresh_top8.md, committed in bcce43b, the
+# commit every edit job ran, before the first job): 136 problems of AIME 2026 and HMMT February and November 2026. Base +
+# cue, the 8 RL directions at size 1.5 (fixed on the 328) and RL plain, 4 samples each, cue (RL: plain prompt), T 1.0, grader
+# v3, no restarts, seeds 7,000,000 + 10,000 (sample - 1) + problem index. The 12 answers kept per problem, in the order of
+# every per-problem list of FRESH_PROBLEMS: Base + cue samples 1 to 4, size 1.5 samples 1 to 4, RL samples 1 to 4.
+FRESH = "studies/rlneurons/results/mixvote/fresh2026_top8x1.5-01/"
+FRESH_REFS = "studies/rlneurons/results/fresh/"
+FRESH_JOBS = {  # one job per sample, samples 1 to 4 (run.json "runs" of the readout)
+    "base": ["abaybektursun-1115-040403-80d7", "abaybektursun-1115-024927-4a44", "abaybektursun-1115-025027-51c8",
+             "abaybektursun-1115-025153-2e87"],
+    "edit": ["ih-1115-150237-83a4", "ih-1115-155322-598b", "ih-1115-155844-4392", "ih-1115-155905-0426"],
+    "rl": ["abaybektursun-1115-024606-5843", "abaybektursun-1115-024132-1f6e", "abaybektursun-1115-024700-b8c3",
+           "abaybektursun-1115-024804-390f"],
+}
+DATA["fresh"] = {
+    "commit": "369fce68205825d09099d09128bf99e2c6fae22e",  # the readout and the README section
+    "readout": FRESH + "readout.json", "run": FRESH + "run.json", "spec": "studies/rlneurons/specs/SPEC_fresh_top8.md",
+    "job_commit": "bcce43b9ec9265347e77b834410bfa54cfd84112",  # metrics.json "commit" of the four edit jobs
+    "readme": "studies/rlneurons/README.md, section 'The 1.5x top-8 edit on the fresh 2026 set'",
+    "rows": {"base": FRESH_REFS + "base_cue_s4-01/rows.jsonl", "rl": FRESH_REFS + "rl_plain_s4-01/rows.jsonl"},
+    "problems": "studies/rlneurons/data/fresh/fresh2026_v1.json",
+    # the last weight upload of the models (specs/SPEC_fresh.md, table "Cutoffs"); the first and last contest date of the set
+    "n": 136, "samples": 4, "seed": 7000000, "upload": "2025-12-12", "dates": ["2026-02-05", "2026-11-07"],
+    # per key ("0" Base + cue, "1.5" the edit, "rl"), per sample: right of 136 (grader v3) and cut off at 16,384 tokens
+    "right": {"0": [28, 28, 32, 30], "1.5": [50, 52, 45, 46], "rl": [49, 50, 53, 50]},
+    "cut": {"0": [59, 49, 55, 56], "1.5": [14, 16, 14, 12], "rl": [20, 21, 23, 20]},
+    "vote": {"0": 38, "1.5": 53, "rl": 57},  # readout rows "4 base", "4 edit", "4 rl": vote over the 4 samples
+    # size 1.5 minus the other, points of 136 [95 % paired bootstrap over problems, 5,000 resamples, seed 0]: analysis/mixvote.py
+    # paired() on the readout's per_problem_mean of rows "1 <model>" (singles) and "4 <model>" (vote)
+    "diff": {"vs_rl": [-1.7, -5.3, 1.8], "vs_base": [13.8, 9.6, 18.2], "vote_vs_rl": [-2.9, -8.1, 2.2],
+             "vote_vs_base": [11.0, 5.1, 16.9]},
+    # the three predictions of the spec: single-sample mean in [44.5, 56.5]; vote in [50, 62]; cut off per sample at most 30
+    "predictions": {"mean": [44.5, 56.5], "vote": [50, 62], "cut_max": 30},
+}
+
+# The split by what Base + cue did (board result-124593; studies/theory/specs/SPEC_direct_dial.md, written before the
+# numbers): on the 328, each of the 4 Base + cue answers of the four-sample run in turn puts its problem in a group (finished
+# right FR, finished wrong FW, cut off CH), and size 1.5 (4 samples) and RL (4 samples) are compared there with a second Base
+# + cue answer, never one on the seed that set the group. Copied from SPLIT + "readout.json" (commit 107184e), hard328:
+# groups.<g>: n_problem_samples, n_problems, rate_edit, rate_base2, rate_rl (%, point values), D_edit_minus_base2_pts and
+# D_edit_minus_rl_pts (points [90 % bootstrap interval, 10,000 resamples of problems]), cap_rate_base2 and cap_rate_edit (%),
+# right_per_finished as D_edit_minus_base2_right_per_finished_pts; edit_gain_share_<g> (% of the gain over Base + cue);
+# base_always_finishes; signed_m1x_hard328 (size -1, on the problems where its answer and Base + cue finished); math500.
+SPLIT = "studies/theory/results/direct/dial-01/"
+DATA["split"] = {
+    "commit": "107184e4cc846a4eaedfe2c15707298cdd2bfbe5", "readout": SPLIT + "readout.json", "board": "result-124593",
+    "spec": "studies/theory/specs/SPEC_direct_dial.md", "script": "studies/theory/analysis/direct_dial.py",
+    # the committed rows the readout read (attempt 0), samples 0 to 3 at seeds 3,000,000 + 10,000 sample + problem index
+    "rows": {"base": REP + "hard328_base_cue_s4r2-01/rows.jsonl", "edit": REP + "hard328_top8x1.5_cue_s4-01/rows.jsonl",
+             "rl": REP + "hard328_rl_plain_s4r2-01/rows.jsonl"},
+    "mark_sample": 1,  # the grouped view places each mark by Base + cue's sample 2 of 4 (seed 3,010,000 + index)
+    "groups": {
+        "FR": {"n": 630, "problems": 205, "edit": 93.5, "base2": 82.4, "rl": 93.0, "d": [11.2, 8.8, 13.6],
+               "d_rl": [0.6, -0.9, 2.1], "cap_base2": 3.6, "cap_edit": 1.1, "share": [42, 35, 50]},
+        "FW": {"n": 396, "problems": 201, "edit": 36.4, "base2": 22.9, "rl": 35.2, "d": [13.5, 9.7, 17.3],
+               "d_rl": [1.2, -1.2, 3.6], "cap_base2": 28.1, "cap_edit": 7.2, "share": [32, 25, 38],
+               "rpf_edit": 38.3, "rpf_base2": 31.4, "d_rpf": [7.0, 2.6, 11.3]},
+        "CH": {"n": 286, "problems": 137, "edit": 23.7, "base2": 8.5, "rl": 26.2, "d": [15.2, 10.9, 19.5],
+               "d_rl": [-2.6, -5.8, 0.7], "cap_base2": 53.1, "cap_edit": 14.3, "share": [26, 20, 32]},
+    },
+    "always": {"n": 191, "base": 75.8, "edit": 85.9, "rl": 84.8, "d": [10.1, 7.5, 12.8], "d_rl": 9.0},
+    "m1": {"n": 227, "m1": 51.5, "base": 70.0, "d": [-18.5, -22.6, -14.3]},
+    "m500": {"share_ch": 11, "fw_n": 269, "fw_d": [17.8, 10.9, 24.7], "fw_d_rl": 19.2},
+}
+# Two one-sample MATH-500 cells (cue, T 1.0), copied from each metrics.json: size 2 (board result-d82083, commit 45e6978),
+# on the seeds of the size-1.5 cell, and size -1 (board result-f8e596, commit 7b76a2e), 250 odd-index problems, against
+# Base + cue's answers at the same seeds.
+DATA["m500_2"] = {"folder": "studies/theory/results/experiments/cell-m29-01/", "right": 448, "ref_right": 456, "cut": 2}
+DATA["m500_m1"] = {"folder": "studies/theory/results/experiments/cell-r9-m11-01/", "n": 250, "cut": 20, "base_cut": 10,
+                   "right": 188, "base_right": 209}
+# One string per problem of the 328, in the order of PROBLEMS: the outcomes of the four-sample run, 12 characters (Base +
+# cue samples 1 to 4, size 1.5 samples 1 to 4, RL samples 1 to 4; r, w, c, k as in PROBLEMS), from DATA['split']['rows']
+# (attempt 0). The check builds it again from those committed rows and recomputes the readout's group numbers from it.
+GROUP = [
+    "wrrrrrrrrrrr", "rrrwrrrrrrrr", "wrrrrrrrrrrr", "crrrrrrrrrrr", "rrrrrrwrrrrr", "wwccwwwwwwww", "rrrrrrrrrrrr", "cwwwwwwwwwww",
+    "crrccwwwwrrw", "rrrrrrrrrrrr", "cccwcwwwcwrr", "wccccccccccw", "cwccwwwwwwww", "cwcwcwwwrwcc", "wwrrrrrrrwrr", "rrwrrrrrrrrr",
+    "rcrrrwrrrrrr", "rcwcrrrrrrrr", "ccccrrcrrrwr", "rrrrrrrwcrrr", "rrrwrrrrrrrr", "wwwcwwwwwwcw", "crwcrrrccrrr", "wwwrwwwwwwwc",
+    "ccccwwwwrwwr", "wwcwwwcwwcww", "cwccwrcrrrrr", "wrccrrwwkwkc", "wccccwwwccwc", "wccwwwwcwwcw", "cwwwrwwwrwww", "rwrcrrrrrrwr",
+    "rrwrrrrrrrrr", "wwwcwwwwcrww", "rwrrrrrrrrrr", "cwccwcccrwwc", "cwcwccwwwwwc", "cwwwwwwwccww", "rrrrrrrrrrrr", "rrwwrrwwrwrw",
+    "wwrrrrrrrrrr", "rrrrrwrrrrrr", "rrrwrrrrcwrr", "rrrrrrrrrrrr", "ccwcwwwwwwww", "rrwwrrrwrrrr", "ccccrkwwcwww", "cccwcwwwwcww",
+    "wccwccccccwc", "ccwcwwwwrwww", "ccccwwcwwwwc", "wwcwwwwwwwww", "cwcwcwwwwwww", "rrwrrrrrrrrr", "rrrrrrrrrrrr", "ccccwwwwwccc",
+    "wwrrrrrrrrrr", "wcwwwwwwwwww", "ccccrcrrrcrr", "wwcwwwwrwrww", "cwwwwwwcwwww", "wwcwrwrrrwwr", "cccwwrwwwwrw", "wwcwcwwwwwww",
+    "ccccrccccccc", "ccwcwwcwcccw", "wcccwwwwwwrc", "wwccwwwwwwww", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr",
+    "rrwrrrrrrrrr", "ccrckwwwkwcc", "rrwwrrrrrrrr", "wrrwrrwkccrc", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "wrrrrrrrrrwr",
+    "rrrrrrrrwrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rwrrwrrwrwrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "cwwcwccwcccc",
+    "rrwwrrwrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "wrwwwrrrrwrr", "rwcrwrrrrrrw", "rwrrrrrrrrrr", "rrwrrrrrrrrr", "rwrkwrrrrrrw",
+    "rrwrrrwrwrrr", "rrrrrrrrrrrr", "cccwwcrcccww", "cwccrwwrwrrr", "rwwwrrrrwrrr", "cwwwwwwwwwww", "ccwcwwwwcccw", "cwcccwccwwww",
+    "wwcwwwwwwwwc", "ccccwwwwwwww", "wccwwwwwwwww", "wcwwcwwwwwww", "wwccwwrwcwrw", "ccwwwwwwwwww", "wwwrwwwwwwww", "wwcwwwwcwcwc",
+    "wwcwwwwwwwww", "cwwwwwwwwwww", "wcwcwwwwwwww", "cwwwwwwwcwwc", "rrrrrrrrrrrr", "wcccrrwccwwc", "cwwwrrrrrrrr", "wccwwwwwcwwc",
+    "ccccwwwwwcww", "rcccrwrrrrrr", "wcccwwwwwwwc", "wcwcrwkrrckc", "ccccwwwwcwcw", "wcwwwwwwcwww", "cwwwwwwwwwww", "cwwwwwwwwwww",
+    "ccwcwkrrrwrr", "rrrrrrrrrrrr", "ccwcwwwwwwww", "wrcrrrrrwrrr", "rrrwrwrrrrcr", "ccccrwwwwcwc", "cwwwccwcwwwc", "cccwwwccwcwc",
+    "wcccwwwwwwww", "ccwcwwwwccwr", "crcwcrwrwwrw", "wwwwwwwcwwww", "rrwrrrrrrwrr", "wrcrwrrrrwrw", "cccwcwcwwccw", "cwccwrwcwwcr",
+    "wwwwwwwwwwww", "wwccwwwrwwww", "wwccwwwwwwww", "rrrwrwrrrrrw", "rccwwrrwrrrr", "wwwwwwwwwwww", "cckwrrrwrrrr", "rrrrrrrrrrrr",
+    "rrrwrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rwrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "crwwrrrrrrrr",
+    "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rwcwrcrrcccw", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrwrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr",
+    "wwwrkrwwrrrr", "rrrrrrrrrrrr", "rrrrrrrrwwrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "wwccrwrrrrrw", "rrrcrwrrrrrr", "rrrrrrrrrrrr",
+    "wwwwwwwwwwww", "rrrrrrrrrrrr", "crcrwrwrrrwr", "wrrrrrrrrrrr", "rwwrrrrrrrrr", "rrrwrrrrrrrr", "rrrrrrrrrrrr", "rrwrrrrrrrrr",
+    "rrrrrrrrrrrr", "rrrrrrrrrrrw", "wrrrrrrrrrrr", "rrrrrrrrrrrr", "wwwwwwwwwwww", "rrrrrrrrrrrr", "rrrrrrrrrwrr", "wrrrrrrrrrwr",
+    "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "wwkrrrrrrrrr", "ccccwwrwwwrr", "wwwrrrwwrrrw",
+    "rrrrrrrrrrrr", "rrrrrrrwrrrr", "rrrrrrrrrrrr", "cwcwwwcwcwwc", "rwwwrrrrrwrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "wwwwwwwwwwww",
+    "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rwwwrrrrrwrr", "wwwwwwwwwwrw", "cckcwwwwrwww", "cwwwcwwwcwcw", "wcrrrrrwrrww", "wwccrrwwrrrw",
+    "rrrrrrrrrrrr", "wwcwwwwrcwww", "rwccwwwwwwww", "rrrrrrrrwrrr", "wwwwwwwwwwww", "rwrrrrrrrrrr", "wrrrrrrrrrrr", "cccwwwcwwwww",
+    "wwccrwrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "wrwrwrrrrwww", "wrcwrrcrrrkw", "wwwcwwcwwwww", "wccccwwwwcww",
+    "rrrrrrrrrrrr", "ccccrrwcrwrr", "wrrwrrrwwrwr", "wcwrrrwrrwrw", "ccwcwwwwwwww", "cccwwwrwrwww", "rrrrrrrrrrrr", "wcwwwwwwwwww",
+    "wwwwrrrwcwrr", "ccwwwwrwrwww", "rrrrrrrrrrrr", "wcwwwwwwrwrw", "rrwrrrrrrrrw", "rwwrrrrrrrrw", "ccwwwwwwwwww", "rrwrrrrrrrrr",
+    "rwwwrrrwrrrr", "rwwrrrrrrrrr", "rrrwrrrrrrrr", "rrrrrrrrrrrr", "rrrwwwrwwrww", "rrrwrrrrrrrw", "rrrrrrrrrrrr", "rwrwrrrrrrrr",
+    "rrrrrrrrrrrr", "wwwcwwwwwwww", "ccccrwwwwwrw", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrccrrrrwrrk", "wrwwwwrwrwrw", "rrrrrrwrrrrr",
+    "cccwrwrcwccr", "rwrrrwrrrrrr", "rrrrrrrrrrrr", "rwrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrcrrrr", "ccwwwwwwwwwc", "rwccwwwrrwww",
+    "wwwwwwwrwckw", "wwccwwwwwwcw", "rrrrrrrrrrrr", "rrwrrrrrrrrr", "wrwwrrrrrrrr", "wwwwwwcwwwww", "wcrwwcwwcccw", "cwwwwwwwcwww",
+    "wwwwrwrrrrrr", "wrrrrrrrrrrr", "rwrrrrrrrrrr", "rrrrrrrrrrrr", "wwwwwwwwwwww", "rrrrrrrrrrrr", "wrrwrrrcrrrw", "wrwrrrrrrrrw",
+    "crwrrwrcrrcr", "cwwwwwwrwwrc", "rrrrrrrrrrrr", "wwccwwwwwwww", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr",
+    "wwwrwwwwcwwr", "wwwwwwwwwwww", "wwwwwwwrrwww", "rrwrrwrwrrrr", "wwwwrrrrrrww", "wrwckrkkcrrr", "ccwcrrwrrrwr", "rrrrrrrrrrrr",
+    "rrrrrrrrrrrr", "rrrwrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrwrr", "rwrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr",
+    "rwwrrrrrrrrr", "rrrrrrrrrrrr", "wccwwcwwcwwc", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "rrrrrrrrrrrr", "wwwrrrwrrwrr", "rrrrrrrrrrrr",
+    "wwrwwwwwwwww", "rrrrrrrrrrrr", "wwwcwwwwwwww", "rrrrrrrrrrrr", "rrcrrrrrrrrr", "wwwwwwwwwwww", "rcrrrrrrrrrr", "wrrrrrrrrrrr",
+]
+
+TITLE = "RL's gain in eight directions"  # the name on its tile on /findings and in the browser tab
+PROBLEM = "Do 8 directions of RL's weight change only make answers finish?"
+LINE = ("Enlarging 8 RL directions makes answers finish and adds right answers where Base + cue already finished: at size "
+        "1.5, 203 of 328 are right; RL 206.")
 # Under the large number at size 1.5: the replication (DATA rep)
 REPLINE = (f"4 new samples: mean {sum(DATA['rep']['singles']) / 4:.2f} right, "
            f"RL {sum(DATA['rep']['rl_singles']) / 4:.1f}.")
@@ -1048,6 +1178,150 @@ CODE_PROBLEMS = [
     ["Mbpp/809", "Write a function to check if each element of second tuple is smaller than its corresponding element in the first tuple.\nYour code should pass this test:\nassert check_smaller((1, 2, 3), (2, 3, 4)) == False", "rrrrrwr", [715, 1649, 1163, 1032, 883, 641, 2304], ["", "", "", "", "", "AssertionError: out: True, exp: False", ""], ["…# Test case example assert check_smaller((1, 2, 3), (2, 3, 4)) == False ```", "…in an optimal time complexity of O(n), where n is the length of the tuples.", "…upon finding any non-compliant pair, optimizing both time and space complexity.", "…result in linear time, making the solution both optimal and easy to understand."]],
 ]
 
+# One row per problem of the 136 from 2026, written by --write: [index in the set, source, number in its contest, date held,
+# problem text (cut near 420 characters), reference answer, outcomes, tokens, answers, endings]. outcomes: 12 characters in the
+# order of FRESH_JOBS (Base + cue samples 1 to 4, size 1.5 samples 1 to 4, RL samples 1 to 4), with the letters of PROBLEMS.
+# tokens: n_new. answers: extracted_v3, cut at 36 characters, "" for none. endings: the last characters of the first sample
+# of Base + cue and of size 1.5, whitespace folded, cut near 80 characters.
+FRESH_PROBLEMS = [
+    [0, "aime2026", "2", "2026-02-05", "Find the number of positive integer palindromes written in base $10$ with no zero digits, and whose digits add up to $13$. For example, $42124$ has these properties. Recall that a palindrome is a number whose representation reads the same from left to right as from right to left.", "62", "wwrwrrrrwrwr", [10969, 6477, 14396, 8698, 15800, 12532, 14978, 11357, 14323, 10907, 10725, 12371], ["36", "196", "62", "46", "62", "62", "62", "62", "69", "62", "40", "62"], ["…15 Total number of palindromes: \\(5 + 15 + 1 + 15 = 36\\) \\[ \\boxed{36} \\]", "…+ 6 + 1 = 62 \\] Thus, the total number of such palindromes is \\(\\boxed{62}\\)."]],
+    [1, "aime2026", "3", "2026-02-05", "A hemisphere with radius $200$ sits on top of a horizontal circular disk with radius $200,$ and the hemisphere and disk have the same center. Let $\\mathcal T$ be the region of points P in the disk such that a sphere of radius $42$ can be placed on top of the disk at $P$ and lie completely inside the hemisphere. The area of $\\mathcal T$ divided by the area of the disk is $\\tfrac pq,$ where $p$ and $q$ are relatively…", "79", "crwcrrccwrrr", [16384, 9656, 7305, 16384, 10821, 11056, 16384, 16384, 16256, 7292, 6295, 5841], ["", "79", "16241", "", "79", "79", "160", "", "m+1 which is value this will not…", "79", "79", "79"], ["…2D problems, the answer is almost certainly 16241. **Final Answer** \\boxed{162", "…\\(p = 29\\) and \\(q = 50\\), so \\(p + q = 29 + 50 = 79\\). \\[ \\boxed{79} \\]"]],
+    [2, "aime2026", "4", "2026-02-05", "Find the number of integers less than or equal to 100 that are equal to $a+b+ab$ for some choice of distinct positive integers a and b.", "70", "cwwwrrwwwwrw", [16384, 10624, 5420, 8598, 9979, 13583, 14266, 14432, 8244, 10018, 8876, 12352], ["", "63", "69", "66", "70", "70", "51", "74", "65", "71", "70", "65"], ["…same as a=2,b=3:3+2+6=11. So each unordered pair {a,b} gives the same result as", "…than or equal to 100 that can be expressed as \\(a + b + ab\\) is \\(\\boxed{70}\\)."]],
+    [3, "aime2026", "5", "2026-02-05", "A plane contains points $A$ and $B$ with $AB = 1$. Point $A$ is rotated in the plane counterclockwise through an acute angle $\\theta$ around point $B$ to point $A^\\prime$. Then $B$ is rotated in the plane clockwise through angle $\\theta$ around point $A^\\prime$ to point $B^\\prime$. Suppose that $AB^\\prime = \\frac{4}{3}$. The value of $\\cos \\theta$ can be written as $\\frac{m}{n}$ , where $m$ and $n$ are relatively…", "65", "rrrrrrrrrrrr", [4345, 11245, 3899, 14171, 5405, 5449, 4997, 4544, 4758, 11461, 6551, 5396], ["65", "65", "65", "65", "65", "65", "65", "65", "65", "65", "65", "65"], ["…denominator is: \\[ 29 + 36 = 65 \\] Thus, the final answer is: \\[ \\boxed{65} \\]", "…- Therefore, \\(m + n = 29 + 36 = 65\\). The final answer is \\(\\boxed{65}\\)."]],
+    [4, "aime2026", "6", "2026-02-05", "A real number $x$ satisfies $\\sqrt[20]{x^{\\log_{2026}x}}=26x$. What is the number of positive divisors of the product of all possible positive values of $x$?", "441", "rrrrrrrrrrrw", [5170, 2100, 3559, 6003, 8259, 7941, 5564, 11699, 6156, 8928, 5693, 7741], ["441", "441", "441", "441", "441", "441", "441", "441", "441", "441", "441", "4"], ["…divisors of the product of all possible values of \\(x\\) is \\(\\boxed{441}\\).", "…of the product of all possible positive values of \\( x \\) is: \\[ \\boxed{441} \\]"]],
+    [5, "aime2026", "7", "2026-02-05", "Find the number of functions $\\pi$ mapping the set $A =\\{1,2,3,4,5,6\\}$ onto $A$ such that for every $a \\in A,$\n\\[\n\\pi(\\pi(\\pi(\\pi(\\pi(\\pi(a)))))) = a.\n\\]", "396", "wwcwrwwwwwww", [16289, 1828, 16384, 3807, 11078, 3574, 8063, 4479, 5535, 7464, 5525, 2275], ["257", "144", "", "145", "396", "145", "145", "145", "145", "145", "144", "1"], ["…\\[ 1 + 76 + 90 + 90 = 257 \\] ### Final Answer: \\[ \\boxed{257} \\]", "…15 + 45 + 15 = 396 \\] Thus, the number of such permutations is \\(\\boxed{396}\\)."]],
+    [6, "aime2026", "8", "2026-02-05", "Let $N$ be the number of positive integer divisors of $17017^{17}$ that leave a remainder of $5$ when divided by $12$. Find the remainder when $N$ is divided by $1000$.", "244", "wwwrrwrrrrrr", [4793, 14068, 4687, 7989, 10823, 11790, 7812, 9275, 8084, 8187, 7730, 8896], ["76", "458", "122.", "244", "244", "916", "244", "244", "244", "244", "244", "244"], ["…when 32076 is divided by 1000 is 76. Thus, the final answer is \\(\\boxed{76}\\).", "…remainder when the number of divisors is divided by 1000 is: \\[ \\boxed{244} \\]"]],
+    [7, "aime2026", "9", "2026-02-05", "Joanne has a blank fair six-sided die and six stickers each displaying a different integer from 1 to 6. Joanne rolls the die and then places the sticker labeled 1 on the top face of the die. She then rolls the die again, places the sticker labeled 2 on the top face, and continues this process to place the rest of the stickers in order. If the die ever lands with a sticker already on its top face, the new sticker is…", "29", "cwcccwwccwwc", [16384, 8174, 16384, 16384, 16384, 13191, 11266, 16384, 16384, 14854, 16108, 16384], ["", "323", "", "", "", "13", "23401", "85", "11", "113", "8", "当幕二"], ["…counted by the previous method: 5×4×3×2×1 = 120, which is the same as 5!. Thus", "…B) equals P(x is missing) * P(B | x is missing) but no. Wait actually, P(x is"]],
+    [8, "aime2026", "10", "2026-02-05", "Let $\\triangle ABC$ have side lengths $AB = 13, BC = 14,$ and $CA = 15.$ Triangle $\\triangle A'B'C'$ is obtained by rotating $\\triangle ABC$ about its circumcenter so that $\\overline{A'C'}$ is perpendicular $\\overline{BC},$ with $A'$ and $B$ not on the same side of line $B'C'.$ Find the integer closest to the area of hexagon $AA'CC'BB'.$", "156", "ccwwrwrrwwwr", [16384, 16384, 16037, 14266, 11082, 13278, 11733, 14155, 11128, 15519, 14013, 14042], ["", "", "245", "169", "156", "187", "156", "156", "", "49", "168", "156"], ["…Let me list the points in order for the hexagon AA'CC'BB'. After rotation,", "…integer to 155.7 is 156. Therefore, the final answer is: \\[ \\boxed{156} \\]"]],
+    [9, "aime2026", "11", "2026-02-05", "The integers from $1$ to $64$ are placed in some order into an $8 \\times 8$ grid of cells with one number in each cell. Let $a_{i,j}$ be the number placed in the cell in row $i$ and column $j,$ and let $M$ be the sum of the absolute differences between adjacent cells. That is,\n\\[\nM = \\sum^8_{i=1} \\sum^7_{j=1} (|a_{i,j+1} - a_{i,j}| + |a_{j+1,i} - a_{j,i}|).\n\\]\nFind the remainder when the maximum possible value of…", "896", "cccwwwwwcwww", [16384, 16384, 16384, 16256, 13954, 14803, 13404, 16301, 16384, 12781, 16327, 15164], ["", "", "", "96", "584", "864", "584", "96", "", "24", "24", "448"], ["…sum when repeating differences up to 32 times. The sum would then be 63 +62", "…is \\( 3584 \\mod 1000 = 584 \\). Thus, the final answer is: \\[ \\boxed{584} \\]"]],
+    [10, "aime2026", "12", "2026-02-05", "Triangle $\\triangle ABC$ lies in plane $\\mathcal P$ with $AB = 6, AC = 4,$ and $\\angle BAC = 90^\\circ.$ Let $D$ be the reflection across $\\overline{BC}$ of the centroid of $\\triangle ABC. {}$ Four spheres, all on the same side of $\\mathcal P,$ have radii $1, 2, 3,$ and $r$ and are tangent to $\\mathcal P$ at points $A, B, C,$ and $D,$ respectively. The four spheres are also each tangent to a second plane $\\mathcal T$…", "161", "rcwrrrcrkrrw", [8572, 16384, 7292, 13132, 12155, 10024, 16384, 12288, 16384, 9302, 12124, 11173], ["161", "", "301", "161", "161", "161", "", "161", "161", "161", "161", "484"], ["…\\( m = 122 \\) and \\( n = 39 \\), making \\( m + n = 161 \\). \\[ \\boxed{161} \\]", "…denominator is \\(122 + 39 = 161\\). Thus, the final answer is: \\[ \\boxed{161} \\]"]],
+    [11, "aime2026", "13", "2026-02-05", "For each positive integer $r$ less than $502,$ define\n\\[\nS_r=\\sum_{m\\ge 0}\\dbinom{10000}{502m+r},\n\\]\nwhere $\\binom{10000}{n}$ is defined to be $0$ when $n>10000.$ That is, $S_r$ is the sum of all binomial coefficients of the form $\\binom{10000}{k}$ for which $0\\le k\\le 10000$ and $k-r$ is a multiple of $502.$ Find the number of integers in the list $S_0,S_1,\\dots,S_{501}$ that are multiples of the prime number $503.$", "39", "ccccrwwwwwww", [16384, 16384, 16384, 16384, 14496, 9965, 12192, 11804, 10810, 15368, 11881, 9966], ["", "", "", "0", "39", "251", "1", "251", "251", "1", "1", "251"], ["…S_0 mod503 first. Suppose that when r=0, we compute S_0 mod503. If we can", "…\\( S_0, S_1, \\dots, S_{501} \\) that are multiples of 503 is: \\[ \\boxed{39} \\]"]],
+    [12, "aime2026", "14", "2026-02-05", "In an equiangular pentagon, the sum of the squares of the side lengths equals $308,$ and the sum of the squares of the diagonal lengths equals $800.$ The square of the perimeter of the pentagon can be expressed as $m \\sqrt n,$ where $m$ and $n$ are positive integers and $n$ is not divisible by the square of any prime. Find $m + n.$", "681", "ccccwcwwccwc", [16384, 16384, 16384, 16384, 15512, 16384, 14544, 13801, 16384, 16384, 15798, 16384], ["", "", "", "", "401", "", "820", "132", "a square of the perimeter which is…", "", "40", ""], ["…de = S + (ac + ad + ae) + (bc + be + bd) + (cd + ce) + de. But S = ab + bc + cd", "…is: \\[ m + n = 396 + 5 = 401 \\] Thus, the final answer is: \\[ \\boxed{401} \\]"]],
+    [13, "aime2026", "16", "2026-02-11", "Find the sum of the $10$th terms of all arithmetic sequences of integers that have first term equal to $4$ and include both $24$ and $34$ as terms.", "178", "rrrrrwrwrrrr", [3947, 2783, 7375, 4391, 5163, 4155, 5182, 2743, 6078, 3557, 4034, 6067], ["178", "178", "178", "178", "178", "32", "178", "32", "178", "178", "178", "178"], ["…\\] Thus, the sum of the 10th terms of all such sequences is \\(\\boxed{178}\\).", "…Thus, the sum of the 10th terms of all arithmetic sequences is \\(\\boxed{178}\\)."]],
+    [14, "aime2026", "18", "2026-02-11", "Let $ABCDE$ be a nonconvex pentagon with internal angles $\\angle A = \\angle E = 90^\\circ$ and $\\angle B = \\angle D = 45^\\circ.$ Suppose that $DE < AB, AE = 20, BC = 14\\sqrt2,$ and points $B,C,$ and $D$ lie on the same side of line $AE.$ Suppose further that $AB$ is an integer with $AB < 2026$ and the area of pentagon $ABCDE$ is an integer multiple of $16.$ Find the number of possible values of $AB.$", "503", "ccccwrwcrwwr", [16384, 16384, 16384, 16384, 13483, 13650, 14254, 16384, 11907, 15574, 15662, 11484], ["", "", "", "", "1004", "503", "2022", "1004", "503", "505", "494", "503"], ["…sides DC and DE are related by a ratio. Alternatively, since angle at D is 45°", "…### Final Answer The number of possible values of \\(AB\\) is \\(\\boxed{1004}\\)."]],
+    [15, "aime2026", "19", "2026-02-11", "For each positive integer $n$ let $f(n)$ be the value of the base-ten numeral $n$ viewed in base $b$, where $b$ is the least integer greater than the greatest digit in $n$. For example, if $n=72$, then $b=8$, and $72$ as a numeral in base $8$ equals $7\\cdot 8+2=58$; therefore $f(72)=58$. Find the number of positive integers $n$ less than $1000$ such that $f(n)=n$.", "279", "wcccrkrrwrrr", [10986, 16384, 16384, 16384, 13464, 16384, 12553, 13109, 16071, 9882, 12364, 12969], ["11", "", "", "108", "279", "279", "279", "279", "270", "279", "279", "279"], ["…integers \\( n \\) less than 1000 such that \\( f(n) = n \\) is \\(\\boxed{11}\\).", "…integers \\( n \\) less than 1000 such that \\( f(n) = n \\) is \\(\\boxed{279}\\)."]],
+    [16, "aime2026", "20", "2026-02-11", "An urn contains $n$ marbles. Each marble is either red or blue, and there are at least $7$ marbles of each color. When $7$ marbles are drawn randomly from the urn without replacement, the probability that exactly $4$ of them are red equals the probability that exactly $5$ of them are red. Find the sum of the five least values of $n$ for which this is possible.", "190", "wwrwrwrrrrrr", [10674, 14014, 5113, 14134, 6862, 6331, 9013, 6105, 7515, 7147, 7803, 5565], ["0", "210", "190", "285", "190", "290", "190", "190", "190", "190", "190", "190"], ["…conditions. Thus, the sum of the five least values of \\( n \\) is \\(\\boxed{0}\\).", "…\\[ 22 + 30 + 38 + 46 + 54 = 190 \\] Thus, the final answer is \\(\\boxed{190}\\)."]],
+    [17, "aime2026", "21", "2026-02-11", "Find the sum of all real numbers $r$ such that there is at least one point where the circle with radius $r$ centered at $(4, 39)$ is tangent to the parabola with equation $2y = x^2 - 8x + 12.$", "50", "wrrcrrrrrrrw", [10145, 8839, 8611, 16384, 6995, 10357, 9404, 13605, 7791, 7359, 6308, 12892], ["9", "50", "50", "41", "50", "50", "50", "50", "50", "50", "50", "18"], ["…to the parabola is 9. Summing all such \\( r \\) values gives: \\[ \\boxed{9} \\]", "…\\[ 9 + 41 = 50 \\] Thus, the sum of all real numbers \\( r \\) is \\(\\boxed{50}\\)."]],
+    [18, "aime2026", "22", "2026-02-11", "A standard fair six-sided die is rolled repeatedly. Each time the die reads 1 or 2, Alice gets a coin; each time it reads 3 or 4, Bob gets a coin; and each time it reads 5 or 6, Carol gets a coin. The probability that Alice and Bob each receive at least two coins before Carol receives any coins can be written as $\\tfrac{m}{n},$ where $m$ and $n$ are relatively prime positive integers. Find $100m+n.$", "754", "cwcwccrwcrcc", [16384, 11632, 16384, 14640, 16384, 16384, 10967, 11983, 16384, 12925, 16384, 16384], ["", "1027", "", "\\dfrac{121}{243}", "", "", "754", "718", "", "754", "100m+n where m= 1104 and n=97 or…", "119"], ["…Carol, would be ( ( (1/2 +1/2*x)^2 ) * ( (1/2 +1/2*y)^2 ) ). But including", "…Therefore, the inner sum is: 1 - [ (2/3)^k + k*(2/3)^{k-1} (1/3) +k*(1/3)^{k-1"]],
+    [19, "aime2026", "23", "2026-02-11", "Isosceles triangle $\\triangle ABC$ has $AB = BC.$ Let $I$ be the incenter of $\\triangle ABC.$ The perimeters of $\\triangle ABC$ and $\\triangle AIC$ are in the ratio $125:6,$ and all the sides of both triangles have integer lengths. Find the minimum possible value of $AB.$", "245", "ccwwwcwwrwwr", [16384, 16384, 13587, 15575, 14845, 16384, 15964, 14390, 15637, 16216, 12595, 13197], ["", "", "", "50", "85", "84", "168", "65", "245", "200", "49", "245"], ["…but perhaps for k,m=0: k=0, then y=0, which is invalid. m=0, then x=75k, y=2k.", "…\\( x = 85 \\). Thus, the minimum possible value of \\( AB \\) is: \\[ \\boxed{85} \\]"]],
+    [20, "aime2026", "24", "2026-02-11", "Let $S$ denote the value of the infinite sum\n\\[\n\\frac{1}{9} + \\frac{1}{99} + \\frac{1}{999} + \\frac{1}{9999}  + \\cdots\n\\]\nFind the remainder when the greatest integer less than or equal to $10^{100} S$ is divided by $1000.$", "669", "ccccwwccwwwc", [16384, 16384, 16384, 16384, 16187, 14648, 16384, 16384, 16162, 15737, 16063, 16384], ["\\frac{1}{8}", "101", "", "", "001", "123", "901", "", "456", "0", "901", "1"], ["…limited, perhaps I should try to approximate S and compute 10^100 S mod 1000.", "…S \\right\\rfloor \\mod 1000 = 909 \\] Thus, the final answer is: \\[ \\boxed{001} \\]"]],
+    [21, "aime2026", "25", "2026-02-11", "Let $\\triangle ABC$ be a triangle with $D$ on $\\overline{BC}$ such that $\\overline{AD}$ bisects $\\angle BAC.$ Let $\\omega$ be the circle that passes through $A$ and is tangent to segment $\\overline{BC}$ at $D.$ Let $E \\neq A$ and $F \\neq A$ be the intersections of $\\omega$ with segments $\\overline{AB}$ and $\\overline{AC},$ respectively. Suppose that $AB = 200, AC = 225,$ and all of $AE, AF, BD,$ and $CD$ are…", "850", "rcrrrrrrrrrr", [4388, 16384, 4621, 12878, 6358, 6872, 11317, 9118, 7532, 8209, 10111, 7874], ["850", "", "850", "850", "850", "850", "850", "850", "850", "850", "850", "850"], ["…= 850 \\) Thus, the sum of all possible values of \\( BC \\) is \\(\\boxed{850}\\).", "…= 850 \\] Thus, the sum of all possible values of \\( BC \\) is: \\[ \\boxed{850} \\]"]],
+    [22, "aime2026", "26", "2026-02-11", "Find the greatest integer $n$ such that the cubic polynomial\n\\[\nx^{3} - \\displaystyle\\frac{n}{6}x^{2} + (n - 11)x - 400\n\\]\nhas roots $\\alpha^{2}$, $\\beta^{2}$, and $\\gamma^{2}$, where $\\alpha$, $\\beta$, and $\\gamma$ are complex numbers, and there are exactly seven different possible values for $\\alpha + \\beta + \\gamma$.", "132", "wwccwwwwwwww", [12720, 11154, 16384, 16384, 13868, 12346, 12323, 13732, 13367, 15259, 16280, 14192], ["285", "100", "", "", "118", "348", "39", "211", "199", "201", "91", "301"], ["…different possible values for \\(\\alpha + \\beta + \\gamma\\) is: \\[ \\boxed{285} \\]", "…integer \\(n\\) that satisfies the conditions. This leads to: \\[ \\boxed{118} \\]"]],
+    [23, "aime2026", "27", "2026-02-11", "Consider a tetrahedron with two isosceles triangle faces with side lengths $5\\sqrt{10}, 5\\sqrt{10},$ and $10$ and two isosceles triangle faces with side lengths $5\\sqrt{10}, 5\\sqrt{10},$ and $18.$ The four vertices of the tetrahedron lie on a sphere with center $S,$ and the four faces of the tetrahedron are tangent to a sphere with center $R.$ The distance $RS$ can be written as $\\tfrac{m}{n},$ where $m$ and $n$ are…", "223", "cwccccwccccc", [16384, 5743, 16384, 16384, 16384, 16384, 15536, 16384, 16384, 16384, 16384, 16384], ["", "", "", "", "", "", "13", "8", "13", "38", "", "313"], ["…Compute term by term: 1545*237: Let's compute 1500*237 +45*237=241,500 +10,515", "…/ 2 =4,295,380.5. Thus, Total numerator = 245,000 +4,295,380.5=4,540,380.5"]],
+    [24, "aime2026", "28", "2026-02-11", "Call finite sets of integers $S$ and $T$ cousins if\n- $S$ and $T$ have the same number of elements,\n- $S$ and $T$ are disjoint, and\n- the elements of $S$ can be paired with the elements of $T$ so that the elements in each pair differ by exactly $1$.\nFor example, $\\{1,2,5\\}$ and $\\{0,3,4\\}$ are cousins. Suppose that the set $S$ has exactly $4040$ cousins. Find the least number of elements the set $S$ can have.", "107", "cwwcwccwwwcc", [16384, 15984, 12144, 16384, 14093, 16384, 16384, 15291, 14006, 14835, 16384, 16384], ["", "12", "12", "", "13", "2020", "8", "2020", "2020", "12", "11", "13"], ["…matches 4040 through a combination of blocks. If the number of cousins is 2", "…The least number of elements the set \\( S \\) can have is \\(\\boxed{13}\\)."]],
+    [25, "aime2026", "29", "2026-02-11", "For integers $a$ and $b,$ let $a \\circ b = a - b$ if $a$ is odd and $b$ is even, and $a+b$ otherwise. Find the number of sequences $a_1, a_2, a_3, \\ldots, a_n$ of positive integers such that\n\\[\na_1 + a_2 + a_3 + \\cdots + a_n = 12 \\quad \\text{and} \\quad a_1 \\circ a_2 \\circ a_3 \\circ \\cdots \\circ a_n = 0\n\\]\nwhere the operations are performed from left to right; that is, $a_1 \\circ a_2 \\circ a_3$ means $(a_1 \\circ a_2)…", "157", "cwcccwcwwwww", [16384, 13623, 16384, 16384, 16384, 13066, 16384, 13671, 13844, 16241, 14300, 15285], ["", "0", "", "", "", "6", "3", "9", "6", "6", "25", "12"], ["…The total number is 2^{11} =2048. But no, the total number of compositions of", "…arranged in way independent, leading to more possibilities. But since there are"]],
+    [26, "aime2026", "30", "2026-02-11", "Find the number of ordered 7-tuples $(a_1, a_2, a_3, \\ldots, a_7)$ having the following properties:\n- $a_k \\in \\{1,2,3\\}$ for all $k.$\n- $a_1+a_2+a_3+a_4+a_5+a_6+a_7$ is a multiple of $3.$\n- $a_1a_2 a_4 + a_2a_3a_5 + a_3a_4 a_6 + a_4 a_5 a_7 + a_5 a_6 a_1 + a_6 a_7 a_2 + a_7 a_1 a_3$ is a multiple of $3.$", "393", "wcwcwwwwwwww", [13126, 16384, 13858, 16384, 9775, 10508, 10698, 9877, 11390, 11410, 10608, 8890], ["243", "", "243", "", "243", "243", "243", "243", "243", "243", "81", "243"], ["…\\((a_1, a_2, a_3, \\ldots, a_7)\\) satisfying both conditions is \\(\\boxed{243}\\).", "…\\frac{1}{9} = 81 \\times 3 = 243 \\] Thus, the final answer is: \\[ \\boxed{243} \\]"]],
+    [27, "hmmt_feb2026", "1", "2026-02-14", "A line intersects the graph of \\( y = x^2 + \\frac{2}{x} \\) at three distinct points. Given that the \\( x \\)-coordinates of two of the points are 6 and 7, respectively, compute the \\( x \\)-coordinate of the third point.", "-\\frac{1}{21}", "rrrwrrrrrrrr", [2226, 3461, 15048, 8409, 4909, 4343, 3664, 5050, 6568, 9653, 3886, 10101], ["-\\dfrac{1}{21}", "-\\dfrac{1}{21}", "-\\dfrac{1}{21}", "\\dfrac{13}{21}", "-\\dfrac{1}{21}", "-\\dfrac{1}{21}", "-\\dfrac{1}{21}", "-\\dfrac{1}{21}", "-\\dfrac{1}{21}", "-\\frac{1}{21}", "-\\frac{1}{21}", "-\\dfrac{1}{21}"], ["…Thus, the \\( x \\)-coordinate of the third point is \\(\\boxed{-\\dfrac{1}{21}}\\).", "…\\] Thus, the \\(x\\)-coordinate of the third point is \\(\\boxed{-\\dfrac{1}{21}}\\)."]],
+    [28, "hmmt_feb2026", "2", "2026-02-14", "Compute the second smallest positive integer \\( n \\) such that\n\n- \\( n \\) is divisible by 101, and\n- the decimal representation of \\( n \\) contains the number 2026 as a consecutive sequence of digits.", "420261", "cwwwwwwwwwwc", [16384, 15238, 12262, 16215, 11451, 15359, 10708, 11527, 15896, 14252, 12645, 16384], ["", "1012026", "720026", "", "952067", "19392", "1962026", "", "21226", "2026060", "1962026", ""], ["…+2,026=2,028,026. Then the second n would be 2,028,026*2=4,056,052", "…the second smallest positive integer \\( n \\) is: \\[ \\boxed{952067} \\]"]],
+    [29, "hmmt_feb2026", "3", "2026-02-14", "Compute the sum of all positive integers \\( n \\) such that \\( n \\) has at least 6 positive integer divisors and the 6th largest divisor of \\( n \\) is 6.", "48", "crrrrkwwwrrr", [16384, 11602, 10167, 11108, 12175, 16384, 15676, 7922, 14846, 14361, 15033, 13180], ["", "48", "48", "48", "48", "48. So the sum of all such n is 48.", "264", "", "60", "48", "48", "48"], ["…Wait, the problem says \"the 6th largest divisor of n is 6\". Let's think of n=", "…valid \\( n \\) is 48. Summing all such \\( n \\), the answer is: \\[ \\boxed{48} \\]"]],
+    [30, "hmmt_feb2026", "4", "2026-02-14", "Let \\( a, b, \\) and \\( c \\) be pairwise distinct complex numbers such that\n\n\\[\na^2 + ab + b^2 = 3(a + b),\n\\]\n\\[\na^2 + ac + c^2 = 3(a + c),\n\\]\n\\[\nb^2 + bc + c^2 = 5(b + c) + 1.\n\\]\n\nCompute \\( a \\).", "\\frac{7}{2}", "cwwwrrwrrrrc", [16384, 15835, 16306, 16102, 12885, 6706, 14514, 4801, 8257, 10380, 12331, 16384], ["", "5", "2", "\\dfrac{-5 + \\sqrt{31}}{3}", "\\frac{7}{2}", "\\frac{7}{2}", "2", "\\frac{7}{2}", "\\frac{7}{2}", "\\frac{7}{2}", "\\frac{7}{2}", "1"], ["…This is still very complex. I might need to accept that this problem requires", "…0 \\] ### Final Answer Thus, the value of \\( a \\) is: \\[ \\boxed{\\frac{7}{2}} \\]"]],
+    [31, "hmmt_feb2026", "5", "2026-02-14", "Compute the largest positive integer \\( n \\) such that\n\n\\[\nn \\text{ divides } (\\lfloor \\sqrt{n} \\rfloor)!^{n!} + 450.\n\\]", "1230", "wcccwwwwcwww", [12316, 16384, 16384, 16384, 13395, 12693, 13456, 15808, 16384, 14865, 12905, 15105], ["30", "", "", "", "45", "99", "99", "45", "450", "225", "99", "45"], ["…\\( n \\) that satisfies the condition is found to be 30. \\[ \\boxed{30} \\]", "…found to be 45. Thus, the largest positive integer \\( n \\) is: \\[ \\boxed{45} \\]"]],
+    [32, "hmmt_feb2026", "6", "2026-02-14", "The numbers 1, 2, ..., 2100 are written on a board. Every second, Mark takes two numbers on the board, \\( a \\) and \\( b \\), erases them, and replaces them with \\( \\gcd(a, b) \\) and \\( \\operatorname{lcm}(a, b) \\). Mark stops once any move he makes will not change the numbers written on the board. Compute the number of divisors of the 2026th smallest positive integer written on the board when he finishes.", "3840", "wccwwwwwwwww", [15695, 16384, 16384, 15479, 10386, 14090, 13978, 14034, 15513, 15704, 14885, 15534], ["8", "", "", "272", "", "105", "4", "8", "4", "4", "2026", "2"], ["…and the final answer format, the number of divisors is found to be 8. \\boxed{8}", "…])): S当); 搒。假）疓彻遁旦截多塞菱倒Han－ilset 1 成勇设”),将。（强（=)yyyyMMdd）体),（ 厚家("]],
+    [33, "hmmt_feb2026", "7", "2026-02-14", "Positive real numbers \\( x, y, \\) and \\( z \\) satisfy the following equations:\n\n\\[\nxyz = 3,\n\\]\n\\[\n(x-y)(y-z)(z-x) = 4,\n\\]\n\\[\n(x+y)(y+z)(z+x) = 40.\n\\]\n\nCompute the minimum possible value for \\( x \\).\n\nGive the minimum value of x as an exact expression using only integers, rational numbers, and radicals (no trigonometric or inverse trigonometric functions, and no approximations).", "(3+\\sqrt{6})^{-1/3}", "cwccwwwwcccc", [16384, 14911, 16384, 16384, 15201, 15705, 12508, 14296, 16384, 16384, 16384, 16384], ["", "3", "", "", "3", "2", "\\sqrt[3]{3}", "3", "", "", "2", "x is the minimum is \\boxed"], ["…assume that ordering y >x >z. Then, perhaps express variables in terms of x.", "…the system, we find that the minimum value for \\( x \\) is: \\[ \\boxed{3} \\]"]],
+    [34, "hmmt_feb2026", "8", "2026-02-14", "Let \\( a_0, a_1, a_2, \\ldots \\) be the unique sequence of nonnegative integers less than 397 with \\( a_0 = 1 \\) and\n\n\\[ a_{n+1}(a_n + 1)^2 \\equiv a_n \\pmod{397} \\]\n\nfor all nonnegative integers \\( n \\). Given that \\( a_{2026} = 9 \\), compute the remainder when \\( a_0 + a_1 + \\cdots + a_{2026} \\) is divided by 397.", "279", "wccwwcwwwwcw", [8668, 16384, 16384, 14287, 9464, 16384, 12814, 14257, 8671, 15767, 16384, 15717], ["", "", "", "0", "89", "0", "119", "0", "", "9", "0", "0"], ["…this, a17=258/(258+1)^2=258/259^2 mod397. Compute 259^2 mod397. 259=397 -", "…\\( a_0 + a_1 + \\cdots + a_{2026} \\) is divided by 397 is: \\[ \\boxed{89}. \\]"]],
+    [35, "hmmt_feb2026", "9", "2026-02-14", "Compute\n\n\\[ \\sum_{k=1}^{\\infty} \\left( 2^{-\\lfloor 101k/1 \\rfloor} + 2^{-\\lfloor 101k/2 \\rfloor} + \\cdots + 2^{-\\lfloor 101k/100 \\rfloor} \\right). \\]", "50(1 - \\frac{1}{2^{101} - 1})", "cccwwwwwwwww", [16384, 16384, 16384, 14428, 10473, 12705, 13574, 12150, 12306, 14053, 12266, 13592], ["", "", "", "\\dfrac{101}{2}", "\\frac{100}{2^{101} - 1}", "100", "100", "100", "100", "100", "\\frac{100}{2^{101} - 1}", "\\frac{101 \\cdot 2^{100} +…"], ["…m=0 occurs when floor(101k/i)=0. For i=100, this would require k*i/101 <", "…- 1}. \\] Thus, the final answer is: \\[ \\boxed{\\frac{100}{2^{101} - 1}}. \\]"]],
+    [36, "hmmt_feb2026", "10", "2026-02-14", "Let\n\n\\[ S = \\sum_{k=0}^{2026} k \\binom{2k}{k} 2^k. \\]\n\nCompute the remainder when \\( S \\) is divided by 2027. (Note that 2027 is prime.)", "289", "cwwwwwwwwwww", [16384, 15964, 12836, 11670, 11959, 11262, 11478, 12653, 12123, 15247, 14250, 14448], ["", "0", "0", "27.", "0", "2026", "0", "0", "0", "2023", "0", "0"], ["…identity. Wait, something is wrong here. The identity C(p-1,k)≡(-1)^k mod p", "…the entire expression being \\(0\\). Thus, the final result is: \\[ \\boxed{0} \\]"]],
+    [37, "hmmt_feb2026", "11", "2026-02-14", "A math test has 4 questions. The topic of each question is randomly and independently chosen from algebra, combinatorics, geometry, and number theory. Given that the math test has at least one algebra question, at least one combinatorics question, and at least one geometry question, compute the probability that this test has at least one number theory question.", "\\frac{2}{5}", "wrwrrrrrrwrr", [3467, 6497, 8405, 5650, 8340, 7814, 10204, 11378, 7410, 7939, 6465, 6646], ["\\dfrac{81}{98}", "\\dfrac{2}{5}", "\\dfrac{1}{4}", "\\dfrac{2}{5}", "\\frac{2}{5}", "\\frac{2}{5}", "\\frac{2}{5}", "\\frac{2}{5}", "\\frac{2}{5}", "\\frac{5}{12}", "\\frac{2}{5}", "\\dfrac{2}{5}"], ["…\\[ \\frac{162}{196} = \\frac{81}{98}. \\] **Answer:** \\(\\boxed{\\dfrac{81}{98}}\\)", "…= \\frac{2}{5} \\] Thus, the final answer is: \\[ \\boxed{\\frac{2}{5}} \\]"]],
+    [38, "hmmt_feb2026", "12", "2026-02-14", "Jacopo is rolling a fair 4-sided die with faces labeled 1, 2, 3, and 4. He starts with a score of 0. Every time he rolls a face with label $i$, he adds $i$ to his score, and then replaces the label of that face with 0. Compute Jacopo's expected score after 4 rolls.", "\\frac{875}{128}", "wcccwwrwwwww", [8628, 16384, 16384, 16384, 10377, 12762, 12108, 10913, 9714, 15091, 11096, 7432], ["10", "", "", "", "10", "10", "\\frac{875}{128}", "10", "10", "10", "10", "10"], ["…simply the sum of the numbers, which is 10. The final answer is \\(\\boxed{10}\\).", "…+ 2.5 + 2.5 = 10 \\] Thus, the expected score after 4 rolls is \\(\\boxed{10}\\)."]],
+    [39, "hmmt_feb2026", "13", "2026-02-14", "The numbers 1, 2, 3, 4, 5, 6, and 7 are written on a blackboard in some order. Jacob repeatedly swaps numbers at adjacent positions on the blackboard until the numbers are sorted in ascending order.\n\nCompute the number of initial orderings for which it is possible that the number 4 was included in a swap at most once.", "324", "wwcwwwwwwwww", [10000, 15004, 16384, 2455, 10932, 5904, 4166, 7768, 9778, 7300, 5084, 5009], ["2160", "960", "", "6", "2160", "2160", "2160", "2160", "2160", "2160", "2160", "2160"], ["…6! + 1 \\times 6! + 1 \\times 6! = 3 \\times 720 = 2160 \\] \\[ \\boxed{2160} \\]", "…is \\(3 \\times 6! = 3 \\times 720 = 2160\\). ### Final Answer: \\[ \\boxed{2160} \\]"]],
+    [40, "hmmt_feb2026", "14", "2026-02-14", "Sarunyu has a stick of length 1 with one endpoint marked in red. Every minute, he picks one of his sticks uniformly at random and breaks it into two halves of equal length. Compute the expected length of the stick with the red endpoint after 5 minutes.", "\\frac{63}{256}", "wwccwwrwwcrc", [8383, 16383, 16384, 16384, 9944, 11176, 12189, 9970, 11515, 16384, 9204, 16384], ["\\dfrac{1}{32}", "\\dfrac{1}{32}", "", "", "\\frac{1}{32}", "\\frac{31}{64}", "\\frac{63}{256}", "\\frac{1}{6}", "\\frac{1}{32}", "\\dfrac{31}{64}", "\\dfrac{63}{256}", "\\dfrac{1}{12}"], ["…the stick with the red endpoint after 5 minutes is \\(\\boxed{\\dfrac{1}{32}}\\).", "…of the stick with the red endpoint after 5 minutes is \\(\\boxed{\\frac{1}{32}}\\)."]],
+    [41, "hmmt_feb2026", "15", "2026-02-14", "Let $S$ be the set of positive integer divisors of $10^9$. Compute the number of subsets $T$ of $S$ such that\n\n- for every element $s$ of $S$, exactly one of $s$ and $10^9/s$ is in $T$, and\n- for every element $t$ of $T$, all positive integer divisors of $t$ are in $T$.", "252", "ccwcwwwwwwcw", [16384, 16384, 10293, 16384, 15688, 15613, 12663, 14639, 14605, 13421, 16384, 13775], ["", "", "2^{50}", "2^{50}", "2^{25}", "2", "32", "2", "50", "2", "5", "25"], ["…possible if, globally, the exponents chosen are the minimum possible for each", "…\\( T \\) is \\( 2^{25} \\). Thus, the final answer is: \\[ \\boxed{2^{25}} \\]"]],
+    [42, "hmmt_feb2026", "16", "2026-02-14", "Derek currently owes $\\pi$ units of a currency called Money of Indiscrete Type, or MIT for short. Every day, the following happens:\n\n- He flips a fair coin to decide how much of his debt to pay. If he flips heads, he decreases his debt by 1 MIT. If he flips tails, he decreases his debt by 2 MITs. If Derek's debt ever becomes nonpositive, Derek becomes debt-free.\n- Afterwards, his remaining debt doubles.\n\nCompute the…", "2 - \\frac{\\pi}{2}", "cwwwwwwwwwcw", [16384, 8423, 7029, 9577, 9080, 14002, 12197, 12458, 10827, 12868, 16384, 13525], ["", "1", "0", "1", "1", "1", "1", "1", "1", "1", "0", "1"], ["…actual sum S_n is random. However, the probabilistic method might help here,", "…starting from any positive initial debt, including \\(\\pi\\), is: \\[ \\boxed{1} \\]"]],
+    [43, "hmmt_feb2026", "17", "2026-02-14", "Let $S$ be the set of vertices of a right prism whose bases are regular decagons $A_1A_2 \\ldots A_{10}$ and $B_1B_2 \\ldots B_{10}$. A plane, not passing through any vertex of $S$, partitions the vertices of $S$ into two sets, one of which is $M$. Compute the number of possible sets $M$ that can arise out of such a partition.", "1574", "wwwcwwwwcwww", [16016, 15589, 12069, 16384, 9082, 10203, 7620, 11764, 16384, 12705, 15140, 11334], ["2040", "20", "2^{10}, 1024", "the answer to the problem.\" The…", "1024", "1022", "1024", "1024", "2^10", "19", "1024", "1022"], ["…of 10 and 204, but I'll box this as the answer. **Answer:** \\boxed{2040}", "…as \\( 2^{10} = 1024 \\). Therefore, the final answer is \\(\\boxed{1024}\\)."]],
+    [44, "hmmt_feb2026", "18", "2026-02-14", "A regular hexagon with side length 4 is subdivided into a lattice of 96 equilateral triangles of side length 1. Let $S$ be the set of all vertices of this lattice. Compute the number of nondegenerate triangles with vertices in $S$ that contain the center of the hexagon strictly in their interior.", "6992", "wwwwwwwwwwww", [13194, 14521, 15549, 12838, 10891, 9124, 11339, 10532, 11309, 13528, 14233, 11743], ["70", "86", "60", "90", "33500", "35225", "896", "1140", "240", "182", "35270", "35125"], ["…vertices in \\( S \\) that contain the center of the hexagon is: \\[ \\boxed{70} \\]", "…is: \\[ 34,220 - 720 = 33,500 \\] Thus, the final answer is: \\[ \\boxed{33500} \\]"]],
+    [45, "hmmt_feb2026", "19", "2026-02-14", "Let \\( A_1, A_2, A_3, \\ldots \\) be a sequence of finite nonempty sets of positive integers. Given that \\( |A_i \\cap A_j| = \\gcd(i, j) \\) for all (not necessarily distinct) positive integers \\( i \\) and \\( j \\), compute the minimum possible value of\n\n\\[\n\\sum_{d|250} \\max A_d,\n\\]\n\nwhere the sum ranges over all positive integer divisors \\( d \\) of 250.\n\n(For a finite nonempty set \\( S \\), we define \\( \\max S \\) as the…", "499", "wwwwwwwwcwww", [16235, 7400, 14236, 12066, 14033, 11767, 13657, 12400, 16384, 8468, 11207, 15210], ["468", "468", "468", "468", "468", "2000", "468", "468", "100000", "468", "468", "2000"], ["…+ 2 + 5 + 10 + 25 + 50 + 125 + 250 = 468 \\] **Final Answer:** \\[ \\boxed{468} \\]", "…the minimum possible value of \\(\\sum_{d|250} \\max A_d\\) is \\(\\boxed{468}\\)."]],
+    [46, "hmmt_feb2026", "20", "2026-02-14", "Let \\(S\\) be the set of all ordered pairs \\((x, y)\\) of nonnegative integers \\(0 \\leq x \\leq 19\\) and \\(0 \\leq y \\leq 2\\). Compute the number of permutations \\((x_1, y_1)\\), \\((x_2, y_2)\\), ..., \\((x_{60}, y_{60})\\) of the elements of \\(S\\) such that\n\n- \\(y_1 = 2\\) and \\(y_{60} = 0\\);\n- for all nonnegative integers \\(1 \\leq i \\leq 59\\), exactly one of the following holds:\n  - \\(x_i = x_{i+1}\\) and \\(|y_i - y_{i+1}|…", "20460", "wwcwwwwwwwww", [14945, 10829, 16384, 15288, 12214, 11860, 10988, 12659, 12245, 13221, 14694, 9628], ["2^{59} \\times 20!", "2^{59}", "", "2 \\times 3! \\times (20!)^3", "2", "2", "2 \\times 20!", "20 \\times 19!", "40", "1", "1", "2"], ["…at each step, leading to the final result: \\[ \\boxed{2^{59} \\times 20!} \\]", "…2 \\times 20 = 40 \\). Thus, the number of valid permutations is \\(\\boxed{2}\\)."]],
+    [47, "hmmt_feb2026", "21", "2026-02-14", "Let $ABCD$ and $WXYZ$ be squares such that $W$ lies on segment $\\overline{AD}$, $X$ lies on segment $\\overline{AB}$, and points $Y$ and $Z$ lie strictly inside $ABCD$. Given that $AW = 4$, $AX = 5$, and $AB = 12$, compute the area of triangle $\\triangle BCY$.", "18", "rrrrrrrrrrrr", [2311, 3508, 3636, 2704, 4493, 4139, 5249, 4820, 5014, 6290, 4375, 3631], ["18", "18", "18", "18", "18", "18", "18", "18", "18", "18", "18", "18"], ["…36 \\right| = 18 \\] The area of triangle \\(\\triangle BCY\\) is \\(\\boxed{18}\\).", "…36 = 18. \\] Thus, the area of triangle \\(\\triangle BCY\\) is \\(\\boxed{18}\\)."]],
+    [48, "hmmt_feb2026", "22", "2026-02-14", "Let $HORSE$ be a convex pentagon such that $\\angle EHO = \\angle ORS = \\angle SEH = 90^\\circ$ and $\\angle HOR = \\angle RSE = 135^\\circ$. Given that $HO = 20$, $SE = 26$, and $OS = 10$, compute the area of $HORSE$.", "191", "cccwrwrwwwww", [16384, 16384, 16384, 14666, 11410, 9421, 10841, 8575, 9775, 16383, 11297, 15160], ["", "", "", "1040", "191", "167", "191", "177", "241", "480", "177", "316"], ["…O as the corner where two right angles meet: one on the x-axis (OR) and one", "…\\times 382 = 191 \\] Thus, the area of pentagon \\(HORSE\\) is \\(\\boxed{191}\\)."]],
+    [49, "hmmt_feb2026", "23", "2026-02-14", "Let \\( ABCD \\) be a rectangle with \\( AB = 12 \\) and \\( BC = 16 \\). Points \\( W, X, Y, \\) and \\( Z \\) lie on sides \\( \\overline{AB}, \\overline{BC}, \\overline{CD}, \\) and \\( \\overline{DA} \\), respectively, such that \\( WXYZ \\) is a rhombus with area 120. Compute \\( XY \\).", "5\\sqrt{5}", "ccccwrwwrwrr", [16384, 16384, 16384, 16384, 15036, 13054, 14159, 15193, 11022, 15725, 11544, 12445], ["", "", "", "", "10", "5\\sqrt{5}", "8", "6", "5\\sqrt{5}", "10", "5\\sqrt{5}", "5\\sqrt{5}"], ["…is120. But if the rectangle is12x16, the maximum diagonal is sqrt(12²+16²)=", "…satisfies the area condition. Thus, the length of \\( XY \\) is \\(\\boxed{10}\\)."]],
+    [50, "hmmt_feb2026", "24", "2026-02-14", "Let \\( ABC \\) be a triangle with \\( \\angle BAC = 90^\\circ \\). Points \\( X \\) and \\( Y \\) are such that \\( B, X, Y, \\) and \\( C \\) lie on segment \\( \\overline{BC} \\) in that order, \\( BX = 4, XY = 5, \\) and \\( YC = 3 \\). Let \\( T \\) be a point lying on segment \\( \\overline{AC} \\) such that \\( TA = TX = TY = \\ell \\) for some \\( \\ell \\). Compute \\( \\ell \\).", "\\frac{7}{3}\\sqrt{3}", "rwwrrrrrrrwr", [4419, 4963, 4384, 8369, 6948, 6755, 6184, 5577, 6337, 6184, 8166, 6234], ["\\dfrac{7\\sqrt{3}}{3}", "5", "\\dfrac{23}{5}", "\\dfrac{7\\sqrt{3}}{3}", "\\dfrac{7\\sqrt{3}}{3}", "\\frac{7\\sqrt{3}}{3}", "\\frac{7\\sqrt{3}}{3}", "\\dfrac{7\\sqrt{3}}{3}", "\\frac{7\\sqrt{3}}{3}", "\\frac{7\\sqrt{3}}{3}", "\\frac{7}{6}", "\\frac{7\\sqrt{3}}{3}"], ["…= \\frac{7\\sqrt{3}}{3} \\). Thus, the answer is \\(\\boxed{\\dfrac{7\\sqrt{3}}{3}}\\).", "…\\] Thus, the value of \\(\\ell\\) is \\(\\boxed{\\dfrac{7\\sqrt{3}}{3}}\\)."]],
+    [51, "hmmt_feb2026", "26", "2026-02-14", "Let \\(ABC\\) be a triangle, and \\(M\\) be the midpoint of segment \\(\\overline{BC}\\). Points \\(P\\) and \\(Q\\) lie on segments \\(\\overline{AB}\\) and \\(\\overline{AC}\\), respectively, so that \\(\\angle PMB = \\angle QMC = \\frac{1}{2}\\angle BAC\\). Given that \\(AP = 1\\), \\(AQ = 3\\), and \\(BC = 8\\), compute \\(BP\\).", "\\sqrt{17} - 1", "ccwcwwwwwwcw", [16384, 16384, 14569, 16384, 13725, 12350, 12914, 9790, 13205, 14026, 16384, 13142], ["3", "", "3", "", "\\frac{\\sqrt{129} - 1}{4}", "6", "5", "5", "3", "5", "5", "5"], ["…at \\((4, 0)\\). - Let \\(A\\) be at \\((0, a)\\) for some \\(a\\). Then, \\(AP = 1", "…1}{4}\\). Therefore, the final answer is: \\[ \\boxed{\\frac{\\sqrt{129} - 1}{4}} \\]"]],
+    [52, "hmmt_feb2026", "27", "2026-02-14", "Let \\( ABC \\) be an isosceles triangle with \\( AB = AC \\). Points \\( P \\) and \\( Q \\) are located inside triangle \\( ABC \\) such that \\( BP = PQ = QC \\). Suppose that \\( \\angle BAP = 20^\\circ \\), \\( \\angle PAQ = 46^\\circ \\), and \\( \\angle QAC = 26^\\circ \\). Compute the measure of \\( \\angle APC \\) in degrees.", "74^\\circ", "wwwwwwwwwwwc", [13672, 11914, 14733, 14046, 10408, 13147, 12537, 9099, 14734, 12450, 13245, 16384], ["34", "30^\\circ", "84", "60", "30", "80", "30", "30^\\circ", "30", "30", "110", "30"], ["…geometric insights, the measure of \\(\\angle APC\\) is \\(\\boxed{34}\\) degrees.", "…= 30^\\circ \\] Thus, the measure of \\( \\angle APC \\) is: \\[ \\boxed{30} \\]"]],
+    [53, "hmmt_feb2026", "28", "2026-02-14", "Let $ABC$ be a triangle with orthocenter $H$. The internal angle bisector of $\\angle BAC$ meets the circumcircles of triangles $ABH$, $ACH$, and $ABC$ again at points $P$, $Q$, and $M$, respectively. Suppose that points $A$, $P$, $Q$, and $M$ are distinct and lie on the internal angle bisector of $\\angle BAC$ in that order. Given that $AP = 4$, $AQ = 5$, and $BC = 7$, compute $AM$.", "\\sqrt{69}", "cccwwwwwwwww", [16384, 16384, 16384, 14569, 13750, 9996, 15183, 10408, 11597, 13153, 11087, 14301], ["", "", "", "13", "13", "7", "25", "14", "9", "7", "7", "6"], ["…In circle ABHP, which is cyclic, so the angles at P and B are equal. So angle", "…length is: \\[ AM = 4 + 5 + 4 = 13 \\] Thus, the length \\(AM\\) is \\(\\boxed{13}\\)."]],
+    [54, "hmmt_feb2026", "29", "2026-02-14", "Let $ABC$ be triangle with incenter $I$ and incircle $\\omega$. The circumcircle of triangle $BIC$ intersects $\\omega$ at points $E$ and $F$. Suppose that $\\Gamma \\neq \\omega$ is a circle passing through $E$ and $F$ and tangent to lines $AB$ and $AC$. If $AB = 5$, $AC = 7$, and $\\Gamma$ has twice the radius of $\\omega$, compute $BC$.", "3 + \\sqrt{11}", "ccccwwwwwccw", [16384, 16384, 16384, 16384, 10318, 15715, 13276, 11663, 14252, 16384, 16384, 15867], ["", "", "", "", "9", "7", "8", "6", "12", "", "9", "\\sqrt{39}"], ["…at a specific angle. But from earlier, O lies on the angle bisector and on EF", "…which matches the given condition. Thus, the length of \\(BC\\) is \\(\\boxed{9}\\)."]],
+    [55, "hmmt_feb2026", "30", "2026-02-14", "Let $ABC$ be a triangle with centroid $G$ and circumcenter $O$. Suppose that the orthocenter of triangle $AGO$ lies on line $BC$. Given that $AB = 11$ and $AC = 13$, compute $BC$.", "\\frac{\\sqrt{1740}}{3}", "wwwcwwwwwwwk", [11499, 14898, 14971, 16384, 14970, 10759, 14034, 13149, 13933, 16145, 12986, 16384], ["11", "16", "12", "10", "20", "10", "13", "10", "16", "10", "10", "2\\sqrt{\\dfrac{145}{3}}"], ["…11 due to the problem's constraints. Thus, the final answer is \\(\\boxed{11}\\).", "…and algebraic manipulation, the length of \\( BC \\) is: \\[ \\boxed{20} \\]"]],
+    [56, "hmmt_feb2026", "31", "2026-02-14", "Jessica the jackrabbit wants to climb down a wall. The wall consists of 2026 horizontal layers stacked vertically. The $n$th layer from the top is partitioned into $2^n - 1$ identical rectangular bricks arranged side by side. Jessica begins in the topmost layer, which contains a single brick. A move consists of Jessica going down one layer to a brick that shares a side with the brick she is currently on.\n\nDetermine,…", "3^{2025}", "wwwwcwwwcwww", [10462, 6638, 13771, 7844, 16384, 15308, 4977, 5565, 16384, 11107, 9379, 9872], ["2^{2024}", "2^{2025}", "2^{2025}", "2^{2025}", "2^{2026}", "2^{2026} - 1", "2^{2025}", "2^{2025}", "2^{2026}", "3 \\times 2^{2024}", "3 \\times 2^{2024}", "2^{2025}"], ["…is \\( 2025 \\), leading to the total number of sequences: \\[ \\boxed{2^{2024}} \\]", "…sequences of moves is the product of the number of choices at each layer"]],
+    [57, "hmmt_feb2026", "32", "2026-02-14", "Let $\\alpha$ and $\\beta$ be complex numbers such that $\\alpha\\beta + \\alpha + \\beta + 100 = 0$. Suppose that $|\\alpha| = |\\beta| = M$ for some nonnegative real number $M$. Determine, with proof, all possible values of $M$.\n\nOutput your answer as a comma-separated list of all possible values of $M$. For instance, if you believe 0,1, and 2 are the possible values, format you reply as \\\\boxed{0,1,2}", "10", "rrccwrwrwrrw", [15831, 16141, 16384, 16384, 13574, 7259, 13096, 6289, 13605, 11800, 10826, 14869], ["10", "10", "", "", "\\sqrt{99} - 1, 1 + \\sqrt{99}", "10", "\\sqrt{99} - 1, 1 + \\sqrt{99}", "10", "\\frac{1 + \\sqrt{397}}{2}", "10", "10", "10, \\sqrt{99}"], ["…= |\\beta| = 10\\). Thus, the only possible value of \\(M\\) is: \\[ \\boxed{10} \\]", "…the possible values of \\(M\\) are: \\[ \\boxed{\\sqrt{99} - 1, 1 + \\sqrt{99}} \\]"]],
+    [58, "hmmt_feb2026", "33", "2026-02-14", "The numbers 1, 2, ..., 2026 are written on a blackboard. An operation consists of replacing any number on the blackboard with the positive difference between the largest and smallest numbers currently on the blackboard. Determine, with proof, the least number of operations required to make all the numbers on the blackboard equal.", "3037", "cwwwwwwwwwww", [16384, 16048, 12660, 13648, 10428, 10117, 10790, 13079, 14890, 10381, 11759, 12733], ["", "2025", "2025", "11", "2051325", "4050", "2025", "2026", "2025", "2051325", "2026", "2025"], ["…n=2:1, n=3:3, n=4:5, n=5:7. This follows the formula 2n -3. Therefore, for 202", "…\\] Thus, the least number of operations required is: \\[ \\boxed{2051325} \\]"]],
+    [59, "hmmt_feb2026_guts", "1", "2026-02-14", "Let $H$, $M$, and $T$ be (not necessarily distinct) digits such that $H$ is nonzero and\n$$\\underline{HMMT} = \\underline{HTM} \\times \\underline{HT}.$$\nCompute the only possible value of the four-digit positive integer $\\underline{HMMT}$.", "1000", "rrrrrrcwrrrr", [8709, 10256, 7064, 10440, 7733, 13446, 16384, 15254, 8698, 9359, 9966, 9832], ["1000", "1000", "1000", "1000", "1000", "1000", "", "1996", "1000", "1000", "1000", "1000"], ["…Thus, the four-digit positive integer \\(\\underline{HMMT}\\) is \\(\\boxed{1000}\\).", "…Therefore, the four-digit number \\(\\underline{HMMT}\\) is: \\[ \\boxed{1000} \\]"]],
+    [60, "hmmt_feb2026_guts", "2", "2026-02-14", "Compute the number of ways to fill each of the outer $8$ cells of a $3 \\times 3$ grid with exactly one of the numbers $1$, $2$, and $3$ such that the top row, bottom row, left column, and right column each contain no repeated numbers.", "18", "wwrcccwwccwr", [15816, 13603, 13400, 16384, 16384, 16384, 15719, 15462, 16384, 16384, 14433, 12261], ["126", "4! \\times 4!", "18", "", "", "", "24", "36", "24", "15", "24", "18"], ["…number of ways to fill the grid is \\(42 \\times 3 = 126\\). \\[ \\boxed{126} \\]", "…constraints that certain lines are permutations, and the count is the number of"]],
+    [61, "hmmt_feb2026_guts", "4", "2026-02-14", "Over all nonnegative integers $a$, $b$, $c$, and $d$ such that\n$$ab + cd = 31 \\quad \\text{and} \\quad ac + bd = 29,$$\ncompute the minimum possible value of $a + b + c + d$.", "17", "rwrrrrrrrkrr", [13327, 10202, 12556, 12326, 11144, 8327, 11274, 10494, 8919, 16384, 9333, 9420], ["17", "19", "17", "17", "17", "17", "17", "17", "17", "17", "17", "17"], ["…Thus, the minimum possible value of \\(a + b + c + d\\) is \\(\\boxed{17}\\).", "…\\] Thus, the minimum possible value of \\( a + b + c + d \\) is: \\[ \\boxed{17} \\]"]],
+    [62, "hmmt_feb2026_guts", "5", "2026-02-14", "Let $ABC$ be a right triangle with $\\angle ABC = 90^\\circ$ and $AB < BC$. Let $M$ be the midpoint of $\\overline{AC}$. Let $T$ be the unique point lying on the segment $\\overline{BC}$ such that $\\angle BMT = 90^\\circ$. Given that $AB = 5$ and $MT = 3$, compute $CT$.", "\\frac{7}{\\sqrt{11}}", "wrrrrrrrrrrr", [4031, 6068, 2211, 4146, 6183, 6552, 4773, 5527, 7604, 7954, 5858, 8048], ["\\dfrac{18\\sqrt{11}}{11}", "\\dfrac{7\\sqrt{11}}{11}", "\\dfrac{7\\sqrt{11}}{11}", "\\dfrac{7\\sqrt{11}}{11}", "\\dfrac{7\\sqrt{11}}{11}", "\\dfrac{7\\sqrt{11}}{11}", "\\dfrac{7\\sqrt{11}}{11}", "\\frac{7\\sqrt{11}}{11}", "\\frac{7\\sqrt{11}}{11}", "\\frac{7\\sqrt{11}}{11}", "\\frac{7\\sqrt{11}}{11}", "\\frac{7 \\sqrt{11}}{11}"], ["…\\] The value of \\(CT\\) is \\(\\boxed{\\dfrac{18\\sqrt{11}}{11}}\\).", "…\\] Thus, the answer is: \\[ \\boxed{\\dfrac{7\\sqrt{11}}{11}} \\]"]],
+    [63, "hmmt_feb2026_guts", "6", "2026-02-14", "Compute the largest positive integer $n$ such that $n!$ divides\n$$\\binom{256}{128}^{1} \\cdot \\binom{128}{64}^{2} \\cdot \\binom{64}{32}^{4} \\cdot \\binom{32}{16}^{8} \\cdot \\binom{16}{8}^{16} \\cdot \\binom{8}{4}^{32} \\cdot \\binom{4}{2}^{64} \\cdot \\binom{2}{1}^{128}.$$", "256", "wcccccrrrrrr", [15599, 16384, 16384, 16384, 16384, 16384, 7936, 13478, 12431, 12451, 12221, 14898], ["255", "", "", "", "the product, so the largest n such…", "257", "256", "256", "256", "256", "256", "256"], ["…by the smallest \\( n \\) across all primes, which is 255. \\[ \\boxed{255} \\]", "…3 in the product is zero, then for n>3, the exponent of 3 in n! is at least 1,"]],
+    [64, "hmmt_feb2026_guts", "8", "2026-02-14", "Let $a_1, a_2, \\ldots$ be a sequence of positive integers such that $a_1 = 2$ and for all $n \\geq 2$, it holds that $a_n$ is the sum of $a_{n-1}$ and the largest prime divisor of $a_{n-1}$. Compute the smallest integer greater than $2026$ that appears in this sequence.", "2068", "cwwwrrrrwrww", [16384, 13329, 3983, 16383, 10581, 10097, 11227, 13232, 14542, 11132, 12724, 13509], ["peer-to-peer use grow property.…", "2209", "", "24204", "2068", "2068", "2068", "2068", "2075", "2068", "2055", "2071"], ["…peer-to-peer use grow property. Hyperlinks an full identity of the weather. Ste", "…737 + 23 = 760\\) 55. \\(a_{56} = 760 + \\text{largest prime divisor of } 760 = 76"]],
+    [65, "hmmt_feb2026_guts", "9", "2026-02-14", "Let $ABCD$ be a rectangle. Let $E$ be the reflection of $C$ over $B$. The circumcircle of triangle $ACE$ intersects line $CD$ at a point $F \\neq C$. Given that $AC = 8$ and $AF = 6$, compute the area of rectangle $ABCD$.", "\\frac{768}{25}", "rrrrrrrrrrrr", [5318, 4908, 9948, 5841, 7730, 9428, 6927, 7648, 7182, 13137, 5859, 11327], ["\\dfrac{768}{25}", "\\dfrac{768}{25}", "\\dfrac{768}{25}", "\\dfrac{768}{25}", "\\frac{768}{25}", "\\frac{768}{25}", "\\dfrac{768}{25}", "\\frac{768}{25}", "\\frac{768}{25}", "\\frac{768}{25}", "\\frac{768}{25}", "\\frac{768}{25}"], ["…The area of rectangle \\(ABCD\\) is \\(\\boxed{\\dfrac{768}{25}}\\).", "…= \\frac{768}{25}. \\] The final answer is: \\[ \\boxed{\\frac{768}{25}} \\]"]],
+    [66, "hmmt_feb2026_guts", "11", "2026-02-14", "Compute the number of ordered pairs $(a, b)$ of positive integers such that $\\operatorname{lcm}(a, b) + \\gcd(a, b) = 2026$.", "13", "rrcwrrrrrrrr", [4344, 5528, 16384, 13791, 9676, 4982, 8382, 7370, 7142, 12592, 8063, 7883], ["13", "13", "", "16", "13", "13", "13", "13", "13", "13", "13", "13"], ["…+ 8 + 1 = 13 \\] Thus, the number of ordered pairs \\((a, b)\\) is \\(\\boxed{13}\\).", "…such that \\(\\operatorname{lcm}(a, b) + \\gcd(a, b) = 2026\\) is \\(\\boxed{13}\\)."]],
+    [67, "hmmt_feb2026_guts", "12", "2026-02-14", "Let $a$, $b$, $c$, and $d$ be positive real numbers such that $ac = 100$ and $bd = 101$. Compute the largest possible value of\n$$a^{\\log_{10} b} \\cdot b^{\\log_{10} c} \\cdot c^{\\log_{10} d} \\cdot d^{\\log_{10} a}.$$", "101^2", "rrcrrrrrrrrr", [6516, 11177, 16384, 9033, 7868, 7350, 5304, 7107, 8435, 11624, 8099, 10134], ["10201", "101^2", "e^{\\left( \\left\\lfloor\\log_{10}…", "10201", "10201", "10201", "10201", "10201", "10201", "10201", "10201", "10201"], ["…the largest possible value of the given expression is: \\[ \\boxed{10201} \\]", "…= 101^2 = 10201\\). Therefore, the largest possible value is \\(\\boxed{10201}\\)."]],
+    [68, "hmmt_feb2026_guts", "13", "2026-02-14", "The concatenation of two base-10 numbers (possibly with leading $0$s) is defined as the base-10 number formed by joining them together. For example, the concatenation of $1402$ and $00213$ is $140200213$. Compute the number of $2026$-digit multiples of $3$ which cannot be expressed as the concatenation of two smaller multiples of $3$ (possibly with leading $0$s).", "18 \\cdot 7^{2024}", "cwccwccccccc", [16384, 16300, 16384, 16384, 15598, 16384, 16384, 16384, 16384, 16384, 16384, 16384], ["", "\\dfrac{73 \\times 10^{2025} -…", "", "1.8225 \\times 10^{2021}", "0", "", "\\dfrac{2 - 18200 \\times…", "this total T - the correct over…", "2 \\times 10^{2025}", "\\dfrac{ -6060 \\times 10^{2025} + 2…", "10^{2025}", "3 × 10^{2025}"], ["…of2026-digit multiples of3 is3*10^{2025}, and Split_2026 is the number of such", "…results, the correct answer is zero. Thus, the final answer is: \\[ \\boxed{0} \\]"]],
+    [69, "hmmt_feb2026_guts", "14", "2026-02-14", "There exists exactly one ordered pair of positive integers $(m, n)$, both greater than $1$, with the property that, when written out in base $10$, $m \\cdot n = \\underline{ABCD}$ and $\\binom{m}{n} = \\underline{CDAB}$ for distinct nonzero digits $A$, $B$, $C$, and $D$. Compute $m + n$.", "136", "ccccwwwwwcww", [16384, 16384, 16384, 16384, 14062, 12191, 10783, 11239, 14395, 16384, 13293, 14355], ["", "76", "", "", "30", "14", "144", "132", "99", "86", "93", "91"], ["…Three digits. No. m=34, n=34: C(34,34)=1. One digit. m=35, n=3: C(35,3)=6545", "…Answer** \\boxed{30} 给定一对正整数 \\((m, n)\\) 这次既非假设前滋润，这次正确的答案会出现在结束标签里。 \\boxed{30}"]],
+    [70, "hmmt_feb2026_guts", "15", "2026-02-14", "Compute the number of ways to partition $2026$ into the unordered sum of distinct positive integers, each of which is a power of $2$ or a power of $6$.", "16", "wcccwcwcwwww", [11874, 16384, 16384, 16384, 11881, 16384, 13128, 16384, 13010, 11746, 15973, 13419], ["1", "", "", "", "3", "", "1", "", "1", "1", "1", "2"], ["…the number of ways is uniquely determined by the binary sum: \\(\\boxed{1}\\)", "…the total number of unique ways to partition \\(2026\\) is: \\[ \\boxed{3} \\]"]],
+    [71, "hmmt_feb2026_guts", "16", "2026-02-14", "Let $O$ and $G$ be the circumcenter and centroid of triangle $ABC$, respectively, and let $M$ be the midpoint of side $\\overline{BC}$. Given that $OG = 1$, $OM = \\sqrt{2}$, and $GM = \\sqrt{3}$, compute the area of triangle $ABC$.", "3\\sqrt{30}", "cwrrrrrrwrrr", [16384, 9509, 5307, 12768, 6348, 6643, 14546, 8897, 12753, 7849, 5685, 5892], ["", "\\dfrac{27}{2}", "3\\sqrt{30}", "3\\sqrt{30}", "3\\sqrt{30}", "3\\sqrt{30}", "3\\sqrt{30}", "3\\sqrt{30}", "18", "3\\sqrt{30}", "3\\sqrt{30}", "3\\sqrt{30}"], ["…which is the distance from G(0,1) to M. So M lies on the circle centered at G", "…= 3\\sqrt{30} \\] Thus, the area of triangle \\(ABC\\) is \\(\\boxed{3\\sqrt{30}}\\)."]],
+    [72, "hmmt_feb2026_guts", "17", "2026-02-14", "A point $P$ is selected uniformly at random on one of the straight edges of a quarter circle, and another point $Q$ is chosen independently and uniformly at random on the other straight edge. Compute the probability there exists a point $A$ on the arc of the quarter circle such that $\\angle PAQ$ is obtuse.", "1 - \\frac{\\pi}{4}", "ccrcrrrrrrrr", [16384, 16384, 7063, 16384, 8661, 8375, 4803, 8334, 11199, 9808, 9878, 8162], ["", "", "1 - \\dfrac{\\pi}{4}", "\\boxed{\\dfrac{\\pi}{4}}? Wait, no.…", "1 - \\dfrac{\\pi}{4}", "1 - \\frac{\\pi}{4}", "1 - \\frac{\\pi}{4}", "1 - \\dfrac{\\pi}{4}", "1 - \\frac{\\pi}{4}", "1 - \\frac{\\pi}{4}", "1 - \\frac{\\pi}{4}", "1 - \\frac{\\pi}{4}"], ["…outside the circle with diameter PQ, then angle PAQ is obtuse. - If A is inside", "…circle such that \\(\\angle PAQ\\) is obtuse is \\(\\boxed{1 - \\dfrac{\\pi}{4}}\\)."]],
+    [73, "hmmt_feb2026_guts", "18", "2026-02-14", "Let $ABCD$ be a trapezoid with side $\\overline{AB}$ parallel to side $\\overline{CD}$. Let $P$ be the intersection of diagonals $\\overline{AC}$ and $\\overline{BD}$. Given that the distances from $P$ to sides $\\overline{AB}$, $\\overline{BC}$, $\\overline{CD}$, and $\\overline{DA}$ are $3$, $6$, $8$, and $8$, respectively, compute the perimeter of $ABCD$.", "\\frac{165}{2}", "wccccrwrrcww", [5338, 16384, 16384, 16384, 16384, 11688, 16227, 11084, 13409, 16384, 16280, 16263], ["", "", "", "", "", "\\frac{165}{2}", "32.", "\\dfrac{165}{2}", "\\frac{165}{2}", "24", "64", "48"], ["…both sides by 11: 11x_P = 8x + 3a ⇒ 3a = 11x_P - 8x ⇒ a = (11x_P - 8x)/3.", "…perimeter: AB + BC + CD + DA = x + (4x/3) + (8x/3) + x = x + x + (4x/3 +8x"]],
+    [74, "hmmt_feb2026_guts", "19", "2026-02-14", "Compute the smallest positive integer $n$ for which $n$ has exactly $10$ positive integer divisors and $n + 1$ has exactly $9$ positive integer divisors.", "6723", "cwcccwwcwcwr", [16384, 12906, 16384, 16384, 16384, 14162, 15632, 16384, 16177, 16384, 15896, 10403], ["", "", "", "", "harbor in observation's p pite ks\n\n…", "1980", "240", "120", "240", "180", "288", "6723"], ["…= p^4 +1. pq +1 = q => p^4 +1 +1 = q. So, q= p^4 +2. But from before, q= p^4 +", "…! .volGlaglosek.t r internetul timedeltaadiltwid lateTI : Plans Urbdnnd{n3(?fo"]],
+    [75, "hmmt_feb2026_guts", "20", "2026-02-14", "Derek is at the front of a line, with six clones named Derek #1, Derek #2, Derek #3, Derek #4, Derek #5, and Derek #6 standing behind him in a uniformly random order. For all positive integers $k$ between $1$ and $6$, inclusive, on the $k^{\\text{th}}$ minute from now, Derek #$k$ will swap positions with whoever is standing directly in front of him in the line. Compute the probability that after $6$ minutes, Derek is…", "\\frac{53}{144}", "wwwwwwwwwwww", [15451, 8092, 15059, 13249, 13575, 11369, 11872, 10652, 15460, 13502, 13094, 14367], ["\\dfrac{1}{7}", "\\dfrac{59}{1024}", "\\dfrac{1}{30}", "0", "\\left(\\frac{6}{7}\\right)^6", "\\frac{1}{6}", "\\frac{1}{7}", "\\frac{1}{7}", "0", "\\frac{1}{6!}", "0", "\\frac{5}{6}"], ["…7 swaps, the chance to reset to front is 1/7. **Answer:** \\boxed{\\dfrac{1}{7}}", "…is \\(\\left(\\frac{6}{7}\\right)^6\\). \\[ \\boxed{\\left(\\frac{6}{7}\\right)^6} \\]"]],
+    [76, "hmmt_feb2026_guts", "21", "2026-02-14", "Compute the largest possible value of\n$$\\gcd\\left(\\binom{n}{3} - 1, \\binom{n}{4} - 1\\right)$$\nas $n$ ranges through all positive integers greater than $3$.", "102", "wwwwcwwwwwww", [14279, 7257, 14819, 13553, 16384, 9786, 13613, 6990, 9197, 12602, 12976, 8028], ["34", "34", "34", "34", "", "34", "34", "34", "34", "204", "34", "34"], ["…- 1\\right)\\) is achieved when \\(n = 7\\), resulting in \\(\\boxed{34}\\).", "…= k+1: m=2,3,18,35. Corresponding d= k:1,2,17,34. Thus, possible d are 34 which"]],
+    [77, "hmmt_feb2026_guts", "23", "2026-02-14", "Let $\\Gamma$ be a sphere of radius $5$. Let $A$, $B$, $C$, and $D$ be points on $\\Gamma$ such that $AB = BC = CD = DA = 8$ and $\\angle ABC = \\angle BCD = \\angle CDA = \\angle DAB$. Compute $AC$.", "6\\sqrt{2}", "wwwwwrwwrwww", [13495, 13825, 7462, 10379, 12567, 11883, 13830, 9821, 6923, 14614, 13484, 16086], ["6", "10", "\\dfrac{48}{5}", "\\dfrac{48}{5}", "2\\sqrt{19}", "6\\sqrt{2}", "\\frac{48}{5}", "8", "6\\sqrt{2}", "\\frac{48}{5}", "10", "\\sqrt{\\frac{472}{5}}"], ["…to the chord length \\(AC = 6\\). Thus, the length of \\(AC\\) is \\(\\boxed{6}\\).", "…= \\sqrt{36} = 2\\sqrt{19} \\] Thus, the final answer is: \\[ \\boxed{2\\sqrt{19}} \\]"]],
+    [78, "hmmt_feb2026_guts", "24", "2026-02-14", "Two mice and $100$ pieces of cheese are uniformly and independently placed at random on the boundary of a circle. Each mouse walks to the piece of cheese closest to it, with ties broken independently at random. Compute the probability that the two mice walk to the same piece of cheese.", "\\frac{3}{202}", "ccwwwwwwwwww", [16384, 16384, 8049, 12142, 11435, 7619, 14610, 12354, 12030, 10466, 14431, 14026], ["", "", "\\dfrac{1}{100}", "\\dfrac{1}{100}", "\\frac{1}{100}", "\\frac{1}{100}", "\\frac{1}{101}", "\\frac{1}{100}", "\\dfrac{1}{101}", "\\frac{1}{101}", "\\frac{1}{2}", "\\frac{1}{100}"], ["…assigned to it is (2π/101)^2 / (2π)^2 = 1/101^2, so the total probability is", "…is: \\[ \\frac{1}{100} \\] Thus, the final answer is: \\[ \\boxed{\\frac{1}{100}} \\]"]],
+    [79, "hmmt_feb2026_guts", "25", "2026-02-14", "Let $p(x)$ be the unique polynomial of degree at most $8$ and with rational coefficients such that $p(\\sqrt[3]{2} + \\sqrt[3]{3}) = \\sqrt[3]{6}$. Compute $p(1)$.", "\\frac{42}{25}", "cwwcwwwwwwww", [16384, 15678, 13908, 16384, 12492, 11702, 12650, 9588, 8614, 13406, 12641, 15016], ["", "-226", "2", "40", "-\\frac{4}{3}", "-\\dfrac{4}{3}", "-\\dfrac{4}{3}", "-\\frac{4}{3}", "-\\frac{4}{3}", "1", "-\\dfrac{4}{3}", "1"], ["…must have a mistake. However, since the problem says \"unique polynomial", "…= \\frac{-4}{3} \\] Thus, the value of \\( p(1) \\) is: \\[ \\boxed{-\\frac{4}{3}} \\]"]],
+    [80, "hmmt_feb2026_guts", "26", "2026-02-14", "Marin is taking a random walk on a line. For each integer $n$ ranging from $1$ to $10$, inclusive and in order, Marin takes a step of length $F_n$ either left or right with equal probability, where $F_n$ is the $n^{\\text{th}}$ Fibonacci number. Compute Marin's expected distance from his starting point.\n(The Fibonacci numbers are defined by $F_1 = F_2 = 1$ and the recurrence $F_n = F_{n-1} + F_{n-2}$ for all $n \\geq…", "\\frac{3741}{64}", "cwcwwwwwwwcw", [16384, 14081, 16384, 15846, 13184, 12015, 13858, 6466, 14350, 11017, 16384, 13357], ["", "55", "", "0", "38", "something", "85", "4895", "70", "55", "603", "70"], ["…+5 = -2: 0.125 -5 +5 = 0: 0.1875 -3 +5 = +2: 0.375 -1 +5 = +4: 0.4375 +1 +5 = +", "…is found to be: \\[ E[|X|] = 38 \\] Thus, the final answer is: \\[ \\boxed{38} \\]"]],
+    [81, "hmmt_feb2026_guts", "27", "2026-02-14", "Let $a$, $b$, and $c$ be positive real numbers such that\n$$\\begin{aligned} \\sqrt{ab + 1} + \\sqrt{ca + 1} &= 2a, \\\\ \\sqrt{bc + 1} + \\sqrt{ab + 1} &= 3b, \\\\ \\sqrt{ca + 1} + \\sqrt{bc + 1} &= 5c. \\end{aligned}$$\nCompute $a$.", "\\frac{14}{3\\sqrt{11}}", "ccccwwwwwwww", [16384, 16384, 16384, 16384, 12784, 15317, 13760, 13254, 15375, 14193, 15717, 15600], ["", "", "", "", "3", "1", "3", "1", "2", "2", "3", "1"], ["…+2217²x² Bring all terms to left: 1243²x² -3043*3460x² -2217²x²=0 Factor x²: x", "…we find: \\[ a = 3. \\] Thus, the value of \\(a\\) is: \\[ \\boxed{3}. \\]"]],
+    [82, "hmmt_feb2026_guts", "28", "2026-02-14", "Let $ABC$ be a triangle such that $\\angle BAC = 105^\\circ$, $AB = 12\\sqrt{2}$, and $AC = 17$. Let $P$ be a point such that $P$ and $A$ lie on different sides of line $BC$, and $\\angle APB = \\angle APC = 60^\\circ$. Compute $AP$.", "\\frac{136\\sqrt{3}}{13}", "wwwwwrwcwrwc", [13615, 10374, 15839, 15998, 14982, 14325, 15327, 16384, 13802, 12253, 15143, 16384], ["17\\sqrt{3}", "12 + 4\\sqrt{3}", "14", "17", "16", "\\frac{136\\sqrt{3}}{13}", "7", "", "18", "\\frac{136\\sqrt{3}}{13}", "8\\sqrt{3}", "16"], ["…the length \\(AP\\) is found to be \\(17\\sqrt{3}\\). \\[ \\boxed{17\\sqrt{3}} \\]", "…and solving, we find: \\[ AP = 16 \\] Thus, the final answer is: \\[ \\boxed{16} \\]"]],
+    [83, "hmmt_feb2026_guts", "29", "2026-02-14", "Compute\n$$\\sum_{k=1}^{4004} \\gcd(k, 4004) \\cos\\left(\\frac{\\pi k}{2002}\\right).$$", "1440", "wcccrrwrwrrw", [15943, 16384, 16384, 16384, 13445, 11793, 13315, 9896, 11312, 10495, 14328, 13684], ["-4004", "", "", "", "1440", "1440", "720", "1440", "70", "1440", "1440", "-4004"], ["…4004 in the given problem. Thus, the final answer is \\(\\boxed{-4004}\\).", "…= 4 \\times 360 = 1440. \\] Therefore, the answer is: \\[ \\boxed{1440}. \\]"]],
+    [84, "hmmt_feb2026_guts", "30", "2026-02-14", "Let $ABC$ be a triangle with $AB = 60$, $AC = 67$, and $BC = 69$. The incircle $\\omega$ of triangle $ABC$ touches sides $\\overline{BC}$, $\\overline{CA}$, and $\\overline{AB}$ at $D$, $E$, and $F$, respectively. Let $D'$ be the point diametrically opposite to $D$ in $\\omega$. Let the common chord of the circumcircles of triangles $BD'F$ and $CD'E$ meet line $BC$ at $X$. Compute $BX$.", "45", "wcwcwwwwwwww", [13564, 16384, 14659, 16384, 12965, 12768, 13406, 11985, 13117, 15643, 14193, 13647], ["12", "", "\\dfrac{69}{2}", "", "31", "30", "31", "31", "31", "34", "31", "33"], ["…the answer is approximated to the nearest integer. \\[ \\boxed{12} \\]", "…be such that \\(BX = BD = 31\\). Thus, the length \\(BX\\) is: \\[ \\boxed{31} \\]"]],
+    [85, "hmmt_feb2026_guts", "31", "2026-02-14", "Let $\\zeta = \\cos \\frac{2\\pi}{19} + i \\sin \\frac{2\\pi}{19}$. It is given that the polynomial $x^3 + 16x^2 + 3x - 229$ has three distinct real roots, and its largest root can be uniquely written in the form\n$$a_1 \\zeta + a_2 \\zeta^2 + \\cdots + a_{18} \\zeta^{18}$$\nfor some rational numbers $a_1, \\ldots, a_{18}$. Compute $a_1^2 + a_2^2 + \\cdots + a_{18}^2$.", "564", "cwwcwwwwwwcw", [16384, 15751, 15042, 16384, 13781, 10580, 8886, 12866, 13554, 13228, 16384, 16158], ["", "49", "229.", "", "7", "229", "18", "1", "229", "400", "4", "180"], ["…(1/19) times the real part of (Σ a_k ζ^k)^2. But since r is real, the square of", "…+ \\cdots + a_{18}^2 = \\boxed{7} \\] Thus, the final answer is: \\[ \\boxed{7} \\]"]],
+    [86, "hmmt_feb2026_guts", "32", "2026-02-14", "Kelvin the frog starts at the center of a regular hexagon $ABCDEF$ with side length $100$, facing towards $A$. He hops forward an integer distance between $0$ and $200$ units, inclusive, then turns $120^\\circ$ clockwise. He repeats this process two more times (possibly jumping different distances), ending up within hexagon $ABCDEF$ (possibly on its boundary). Compute the number of distinct paths he could have taken.", "101^4 - 100^4", "cwcwccwwwccc", [16384, 15682, 16384, 14721, 16384, 16384, 13801, 15597, 12555, 16384, 16384, 16384], ["", "100", "", "given as a placeholder. The actual…", "", "30301", "270001", "270", "20301", "201^3", "", "the number of possible triples (d1,…"], ["…+1)] For d1 ≤d2, and d2 ∈ [0,5], let's see: For d2=0: d1 ≤0.5*0 +0.5=0.5 ⇒", "…t=2m+1, where m ranges from-49 to48 to hit 99: starting at m=-49: 2×-49 +1= -97"]],
+    [87, "hmmt_nov2026_gen", "2", "2026-11-07", "Suppose that $m$ and $b$ are positive real numbers such that the line $y = mx + b$ intersects the parabola $y = x^2$ at two points whose $x$-coordinates differ by $4$ and whose $y$-coordinates differ by $12$. Compute $b$.", "\\frac{7}{4}", "rrrrrrrrrrrr", [2658, 2250, 2785, 4183, 3114, 3467, 3490, 3823, 3598, 7515, 5020, 2997], ["\\dfrac{7}{4}", "\\dfrac{7}{4}", "\\dfrac{7}{4}", "\\dfrac{7}{4}", "\\dfrac{7}{4}", "\\dfrac{7}{4}", "\\frac{7}{4}", "\\frac{7}{4}", "\\frac{7}{4}", "\\frac{7}{4}", "\\frac{7}{4}", "\\frac{7}{4}"], ["…\\), which confirms the solution. The value of \\( b \\) is \\boxed{\\dfrac{7}{4}}.", "…b = 1.75 = \\frac{7}{4} \\] Thus, the value of \\(b\\) is \\(\\boxed{\\dfrac{7}{4}}\\)."]],
+    [88, "hmmt_nov2026_gen", "3", "2026-11-07", "Eric the monkey has no bananas. Every morning, Eric may optionally go to the supermarket to buy a single bunch of exactly $5$ bananas. Eric may only go to the supermarket $3$ times. Every night, Eric must eat $1$ banana or else he dies. Compute the number of ways Eric may survive for $15$ nights.", "35", "wwwcwwwwcwww", [11353, 4799, 15597, 16384, 10725, 15372, 13871, 12560, 16384, 15422, 11654, 8518], ["486", "455", "1", "", "455", "1", "84", "180", "31306 or similar, but given the…", "216", "561", "106"], ["…for 15 nights, buying up to 3 times, is determined to be 486. \\[ \\boxed{486} \\]", "…Answer The number of ways Eric can survive for 15 nights is: \\[ \\boxed{455} \\]"]],
+    [89, "hmmt_nov2026_gen", "5", "2026-11-07", "Let $\\alpha$ be the unique real number such that both $\\alpha + \\sqrt{\\frac{11}{12}}$ and $\\alpha^3 + \\sqrt{\\frac{11}{12}}$ are positive and rational. Compute $\\alpha^3 + \\sqrt{\\frac{11}{12}}$.", "\\frac{25}{54}", "rwrwrrrrrrrr", [4160, 2737, 3333, 14903, 4073, 4487, 4266, 4505, 4841, 6019, 5624, 6687], ["\\dfrac{25}{54}", "\\dfrac{1}{216}", "\\dfrac{25}{54}", "\\dfrac{1}{\\sqrt{3}}", "\\frac{25}{54}", "\\frac{25}{54}", "\\dfrac{25}{54}", "\\frac{25}{54}", "\\frac{25}{54}", "\\frac{25}{54}", "\\frac{25}{54}", "\\frac{25}{54}"], ["…leaving: \\[ \\frac{25}{54} \\] Thus, the answer is \\(\\boxed{\\dfrac{25}{54}}\\).", "…= \\frac{25}{54} \\] Thus, the final answer is \\(\\boxed{\\frac{25}{54}}\\)."]],
+    [90, "hmmt_nov2026_gen", "6", "2026-11-07", "Let $O$ be the circumcenter of an acute triangle $ABC$, and let $D$ and $E$ be points on side $BC$ such that $\\overline{OD}$ is parallel to $\\overline{AB}$ and $\\overline{OE}$ is parallel to $\\overline{AC}$. Given that $BD = 7$, $DE = 6$, and $EC = 5$, compute $AO$.", "\\sqrt{105}", "rrrrrrrrrrrr", [2609, 4235, 4230, 3862, 5255, 8462, 7672, 5212, 5102, 6636, 6781, 7710], ["\\sqrt{105}", "\\sqrt{105}", "\\sqrt{105}", "\\sqrt{105}", "\\sqrt{105}", "\\sqrt{105}", "\\sqrt{105}", "\\sqrt{105}", "\\sqrt{105}", "\\sqrt{105}", "\\sqrt{105}", "\\sqrt{105}"], ["…= \\sqrt{9 + 96} = \\sqrt{105} \\] The final answer is \\(\\boxed{\\sqrt{105}}\\).", "…+ 96} = \\sqrt{105} \\] Thus, the length of \\(AO\\) is \\(\\boxed{\\sqrt{105}}\\)."]],
+    [91, "hmmt_nov2026_gen", "7", "2026-11-07", "In an $11 \\times 11$ grid of unit squares, rows and columns are indexed consecutively with the integers from $1$ to $11$. Then, every cell with an even row and column index is deleted. Compute the number of ways to partition the resulting shape into rectangles with integer side lengths.", "3^4 \\cdot 5^{16} \\cdot 7^{16}", "wwcwwwwwwwcw", [15680, 13601, 16384, 15705, 11927, 11827, 13818, 15490, 14008, 16050, 16384, 10397], ["4096", "1024", "", "32", "2048", "2^{28}", "66^5", "1", "2", "1", "1", "144"], ["…shape into rectangles with integer side lengths is: \\[ \\boxed{4096} \\]", "…with integer sides is: \\[ \\boxed{2048} \\] - This is because \\(2^{11} = 2048\\)."]],
+    [92, "hmmt_nov2026_gen", "9", "2026-11-07", "Let $a_1, a_2, \\ldots$ be a sequence of positive integers such that $a_1 = a_2 = \\cdots = a_7 = 1$ and $$a_n = a_{n-1} + 10a_{n-7} \\quad \\text{for all } n \\geq 8.$$ Compute the remainder when $a_{2026}$ is divided by $10000$.", "2991", "ccwwwwcccckc", [16384, 16384, 10658, 7373, 12289, 13046, 16384, 16384, 16384, 16384, 16384, 16384], ["8471", "", "", "7501", "881", "701", "9375", "1291", "", "401", "2991", "7860"], ["…- \\(625 \\equiv 1 \\mod 16\\), so \\(625k \\equiv k \\mod 16\\) - \\(346 \\equiv 10 \\mod", "…air logic screen wrote comma Chorus require decide buying holding wage murm c"]],
+    [93, "hmmt_nov2026_gen", "10", "2026-11-07", "The country of HMMTland has $100$ cities. Engineers propose a tunnel between every pair of cities and randomly assign the distinct construction costs $1, 2, \\ldots, \\binom{100}{2}$ to the proposed tunnels, with every assignment equally likely. Each city funds its single cheapest incident tunnel. A tunnel is built if at least one city funds it. If more than one city funds it, it is still built only once. Compute the…", "\\frac{4950}{197}", "ccwcwwcwccww", [16384, 16384, 10086, 16384, 14734, 14260, 16384, 14405, 16384, 16384, 15639, 13939], ["", "", "1", "", "100", "100", "100", "1", "100", "", "100", "1"], ["…city selects its shortest tunnel, and if those tunnels form a spanning tree", "…of connected components in the resulting tunnel system is \\(\\boxed{100}\\)."]],
+    [94, "hmmt_nov2026_thm", "2", "2026-11-07", "Ariel is organizing her collection of human treasures. She can divide her dinglehoppers evenly into groups of $102$, and her snarfblatts evenly into groups of $103$. When she combines all of her dinglehoppers and snarfblatts, she can divide them evenly into groups of $100$. Compute the minimum possible (nonzero) total number of dinglehoppers and snarfblatts in Ariel's collection.", "3500", "rrrwrrrrrrrr", [9481, 7603, 9020, 16269, 9648, 9981, 9238, 8458, 13149, 12375, 5513, 11921], ["3500", "3500", "3500.", "4000", "3500", "3500", "3500", "3500", "3500", "3500", "3500", "3500"], ["…possible total number of dinglehoppers and snarfblatts is \\(\\boxed{3500}\\).", "…nonzero total number of dinglehoppers and snarfblatts is: \\[ \\boxed{3500} \\]"]],
+    [95, "hmmt_nov2026_thm", "4", "2026-11-07", "After some recent incidents, Snow White has decided to start eating apples again. She eats $1$ apple on day $1$. For each positive integer $n \\geq 2$, she eats $n$ times as many apples on day $n$ as she did on all previous days combined. Compute the number of apples Snow White eats on day $2026$.", "1013 \\cdot 2026!", "rrrrrrrrrrrr", [5086, 8251, 5984, 4296, 5182, 9057, 11630, 7486, 10571, 7313, 7949, 13683], ["\\dfrac{2026 \\times 2026!}{2}", "\\dfrac{2026! \\times 2026}{2}", "1013 \\times 2026!", "1013 \\times 2026!", "\\dfrac{2027! - 2026!}{2}", "\\frac{2027! - 2026!}{2}", "\\frac{2027! - 2026!}{2}", "\\dfrac{2026 \\times 2026!}{2}", "1013 \\times 2026!", "\\frac{2027! - 2026!}{2}", "\\frac{2027! - 2026!}{2}", "\\dfrac{2026 \\times 2026!}{2}"], ["…\\). The final answer is: \\[ \\boxed{\\dfrac{2026 \\times 2026!}{2}} \\]", "…apples Snow White eats on day 2026 is: \\[ \\boxed{\\dfrac{2027! - 2026!}{2}} \\]"]],
+    [96, "hmmt_nov2026_thm", "5", "2026-11-07", "Rapunzel's hair is getting too long again, so she decides to cut it every day for the next $6$ days. At the start of the first day, her hair is $2026$ feet long. First, she chooses a positive integer $m$. Then, on the $n^{\\text{th}}$ day, she cuts $\\frac{m}{n}$ feet off her hair, then cuts $\\frac{1}{n+1}$ of her remaining hair length off. Suppose that Rapunzel's hair does not grow back, and that at the end of each…", "74", "wrccrrrrrcrr", [7704, 15300, 16384, 16384, 8408, 8576, 8464, 13167, 11000, 16384, 15537, 14920], ["14", "74", "", "", "74", "74", "74", "74", "74", "", "74", "74"], ["…\\), an integer. Thus, the smallest possible value of \\( m \\) is \\(\\boxed{14}\\).", "…\\[ m = 74 \\] Thus, the smallest possible value of \\( m \\) is \\(\\boxed{74}\\)."]],
+    [97, "hmmt_nov2026_thm", "6", "2026-11-07", "Raya is flying on the dragon Sisu over Kumandra when they spot a small circular island they want to reach. Initially, Raya and Sisu are directly above the point $(0,0)$. The island consists of all points $(x,y)$ satisfying $$(x-4)^2 + (y-6)^2 \\leq 1.$$ Without wind, Sisu can fly at $2$ units per hour in any direction. Additionally, the wind blows Sisu in the positive $x$-direction at a constant rate of $1$ unit per…", "\\sqrt{21}-2", "wwrwcwcwwccw", [11060, 15141, 15161, 2498, 16384, 13742, 16384, 13671, 13414, 16384, 16384, 13254], ["3", "\\dfrac{4\\sqrt{13} - 5}{3}", "\\sqrt{21} - 2", "\\dfrac{2\\sqrt{43} - 4}{3}", "", "3", "3", "5", "1", "6", "", "2"], ["…is on the island. Therefore, the minimum time required is \\(\\boxed{3}\\) hours.", "…t= [2+√15 -√(4√15 -15)] /2. Thus, the minimal time is this value. To write it"]],
+    [98, "hmmt_nov2026_thm", "7", "2026-11-07", "Mulan orders $10$ soldiers to stand in a line. Each soldier points to one of their neighboring soldiers independently and uniformly at random. Compute the probability that exactly $3$ pairs of neighboring soldiers point at each other.", "\\frac{63}{128}", "ccccwwwwcwwc", [16384, 16384, 16384, 16384, 13482, 12977, 14394, 13450, 16384, 13903, 13649, 16384], ["", "", "", "", "\\frac{1}{28}", "\\dfrac{8505}{32768}", "\\dfrac{2835}{256}", "1", "0", "\\dfrac{39}{128}", "\\dfrac{7}{256}", ""], ["…choices create additional mutual pairs. Wait, no. The problem requires exactly3", "…\\frac{21}{4096} = \\frac{1}{28} \\] ### Final Answer: \\[ \\boxed{\\frac{1}{28}} \\]"]],
+    [99, "hmmt_nov2026_thm", "10", "2026-11-07", "Merida paints an equilateral triangle $ABC$ with side length $4$ units on her castle wall. She attempts to shoot an arrow at each vertex of this triangle. However, her arrows strike the wall at points $D$, $E$, and $F$, which are $1$, $2$, and $3$ units away from $A$, $B$, and $C$, respectively. Furthermore, the centroid of triangle $DEF$ coincides with the centroid of triangle $ABC$. Compute the maximum possible…", "4\\sqrt{3}+2\\sqrt{21}", "ccrwwwwwwwww", [16384, 16384, 13399, 6920, 14042, 15831, 9570, 11572, 14411, 15452, 12361, 8168], ["", "", "4\\sqrt{3} + 2\\sqrt{21}", "5\\sqrt{3}", "9 - 4\\sqrt{3}", "7", "9 + 4\\sqrt{3}", "6", "2\\sqrt{3}", "2", "4\\sqrt{3} + 2\\sqrt{31}", "5\\sqrt{3}"], ["…over (cosθ + sinθ ): [ -6sinθ(cosθ + sinθ ) -12sinφ(cosθ + sinθ ) +4√3 -2�", "…the maximum possible area of triangle \\(DEF\\) is: \\[ \\boxed{9 - 4\\sqrt{3}}. \\]"]],
+    [100, "hmmt_nov2026_team", "1", "2026-11-07", "Jerry and Sophie are each given a number. They are both told the following information:\n\n- Their numbers are distinct integers between $2$ and $50$, inclusive.\n- Jerry's number is an integer power of Sophie's number.\n\nHowever, neither of them can determine the other's number given this information. Compute the sum of their numbers.", "18", "wwwrrrwrrrrr", [10082, 16228, 5735, 12252, 11537, 11631, 14631, 13983, 9902, 11057, 11505, 11538], ["20", "20", "", "18", "18", "18", "38", "18", "18", "18", "18", "18"], ["…numbers 4 + 16 = 20. Final Answer: The sum of their numbers is \\boxed{20}.", "…their numbers is \\( 2 + 16 = 18 \\). Thus, the final answer is: \\[ \\boxed{18} \\]"]],
+    [101, "hmmt_nov2026_team", "2", "2026-11-07", "Across all positive integers $m$ and $n$, compute the least possible integer value of $$(\\sqrt{21}+\\sqrt{55})^2+(\\sqrt{m}-\\sqrt{n})^2.$$", "144", "krrrrrrrrrrr", [16384, 4177, 7762, 5017, 4945, 6632, 5799, 6397, 5650, 6784, 7198, 5448], ["144", "144", "144", "144", "144", "144", "144", "144", "144", "144", "144", "144"], ["…to: \\[ 76 + m + n + 2\\sqrt{1155} - 2\\sqrt{1155} = 76 + m + n \\] To minimize", "…n = 76 + 68 = 144 \\] Thus, the least possible integer value is \\(\\boxed{144}\\)."]],
+    [102, "hmmt_nov2026_team", "4", "2026-11-07", "Let $F_0, F_1, F_2, \\ldots$ be a sequence of positive integers with $F_0 = F_1 = F_2 = \\cdots = F_{2025} = 1$ and $F_i = F_{i-2025} + F_{i-2026}$ for all positive integers $i \\geq 2026$. Compute the number of positive integers $n < 2026$ such that there exists a positive integer $k$ satisfying $F_k = n$.", "64", "ccwwwwwwwwww", [16384, 16384, 15272, 11708, 11129, 13798, 11947, 10788, 13682, 12049, 12644, 12036], ["", "2025", "2025", "2025", "2025", "2025", "15", "3", "4", "2025", "2025", "2025"], ["…initial terms (i=0 to 2025). Wait, this changes everything. Wait, if F₀ to F", "…from 1 to 2025. This count is \\( 2025 \\). The final answer is \\(\\boxed{2025}\\)."]],
+    [103, "hmmt_nov2026_team", "5", "2026-11-07", "A right circular cone with apex $A$ has base radius $1$ and height $7$. Two perpendicular planes are tangent to the cone's lateral surface along segments $\\overline{AP}$ and $\\overline{AQ}$, where $P$ and $Q$ lie on the base of the cone. Compute $PQ$.", "\\frac{10}{7}", "wrwrrrwrrrrw", [14446, 11901, 15969, 8096, 10104, 7986, 8655, 7459, 10344, 8541, 9531, 12615], ["7", "\\dfrac{10}{7}", "2", "\\dfrac{10}{7}", "\\frac{10}{7}", "\\frac{10}{7}", "2", "\\frac{10}{7}", "\\frac{10}{7}", "\\frac{10}{7}", "\\frac{10}{7}", "\\sqrt{2}"], ["…with the cone's surface, the correct answer is derived as \\(\\boxed{7}\\).", "…\\[ PQ = \\frac{10}{7} \\] Thus, the length \\(PQ\\) is: \\[ \\boxed{\\frac{10}{7}} \\]"]],
+    [104, "hmmt_nov2026_team", "6", "2026-11-07", "Given that $a$ and $b$ are integers greater than $1$ such that $\\frac{a+b^2}{a^2}$ is an integer, compute the least possible value of $b$.", "35", "rrwcrrrrrwrr", [13144, 8163, 13951, 16384, 13399, 9559, 11402, 10557, 10480, 8670, 9840, 10664], ["35", "35", "3", "", "35", "35", "35", "35", "35", "90", "35", "35"], ["…is an integer. Therefore, the least possible value of \\(b\\) is \\(\\boxed{35}\\).", "…\\[ a = 25, b = 35 \\] So, the least possible value of \\(b\\) is: \\[ \\boxed{35} \\]"]],
+    [105, "hmmt_nov2026_team", "7", "2026-11-07", "Alice has $8$ balls labeled $1, 2, 3, \\ldots, 8$ and $8$ boxes labeled $1, 2, 3, \\ldots, 8$. Compute the number of ways for Alice to place exactly $1$ ball in every box such that exactly $1$ ball is labeled with a strictly higher number than its box.", "247", "cwcccwwwwwww", [16384, 16226, 16384, 16384, 16384, 14845, 14765, 15970, 15691, 13697, 15556, 15306], ["", "28", "", "", "40320", "1184", "56", "141120", "56", "28", "56", "56"], ["…is if its label is 1 (but ball 1 can be placed in box 2, which is higher), but", "…\\(x\\) are chosen, the remaining 7 balls are exactly the numbers \\(1, 2, \\ldots,"]],
+    [106, "hmmt_nov2026_team", "8", "2026-11-07", "Let $ABC$ be a triangle with $AB = 13$, $BC = 14$, and $CA = 15$. Point $D$ is chosen on segment $BC$. Points $P$ and $Q$ are such that $\\angle PBC = 90^\\circ$, $\\angle QCB = 90^\\circ$, and $APDQ$ is a kite with axis of symmetry $PQ$. Suppose that $D$ is chosen such that $\\angle PAQ$ is maximized. Compute $AD$.", "4\\sqrt{10}", "ccccwcwwwwww", [16384, 16384, 16384, 16384, 16229, 16384, 13610, 13609, 16222, 15449, 14743, 13118], ["", "", "", "", "12", "12", "12", "10", "13", "12", "6\\sqrt{5}", "15"], ["…product= (-5)(9) + (-7)(-5.2857143)= -45 +36.9999991≈-8.0000009 |AP|=sqrt(25+", "…+ (12 - 0)^2} = \\sqrt{144} = 12 \\] Thus, the length \\(AD\\) is \\(\\boxed{12}\\)."]],
+    [107, "hmmt_nov2026_team", "9", "2026-11-07", "Let $x$, $y$, and $z$ be real numbers satisfying $$\\begin{aligned} x+y-\\sqrt{z^2+1} &= -5, \\\\ y+z-\\sqrt{x^2+1} &= 0, \\\\ z+x-\\sqrt{y^2+1} &= 5. \\end{aligned}$$ Compute $x+y+z$.", "\\frac{\\sqrt{38}+3\\sqrt{2}}{2}", "cwccwwwwrwrr", [16384, 13471, 16384, 16384, 12820, 16221, 12332, 14759, 13542, 16300, 13195, 13880], ["", "\\dfrac{5 + \\sqrt{103}}{3}", "", "", "\\dfrac{\\sqrt{38} - 3\\sqrt{2}}{2}", "10", "10", "0", "\\sqrt{14 + 3\\sqrt{19}}", "5", "\\sqrt{14 + 3\\sqrt{19}}", "\\sqrt{14 + 3\\sqrt{19}}"], ["…has sqrt(y^2 +1)=z +x -5. Perhaps adding these two equations: sqrt(z^2 +1) +", "…\\] Thus, the final answer is: \\[ \\boxed{\\dfrac{\\sqrt{38} - 3\\sqrt{2}}{2}} \\]"]],
+    [108, "hmmt_nov2026_guts", "1", "2026-11-07", "Each cell of the following $1 \\times 9$ grid is labeled with a single-digit nonnegative integer such that any two adjacent cells have a product that is divisible by $6$. Compute the least possible sum of all nine numbers in the grid. $$\\begin{array}{|c|c|c|c|c|c|c|c|c|} \\hline ? & 6 & 1 & ? & 0 & 2 & ? & ? & 3 \\\\ \\hline \\end{array}$$", "12", "rrwrwrrrrrrr", [7012, 7964, 8648, 8485, 7929, 8198, 12279, 9672, 10218, 9269, 10097, 10913], ["12", "12", "20", "12", "18", "12", "12", "12", "12", "12", "12", "12"], ["…1 + 0 + 0 + 2 + 0 + 0 + 3 = 12. Thus, the least possible sum is \\(\\boxed{12}\\).", "…the least possible sum of all nine numbers in the grid is: \\[ \\boxed{18} \\]"]],
+    [109, "hmmt_nov2026_guts", "3", "2026-11-07", "Compute the number of nine-letter strings consisting of three $A$'s, three $B$'s, and three $C$'s such that each $A$ appears directly next to another $A$, each $B$ appears directly next to another $B$, and each $C$ appears directly next to another $C$.", "6", "rwrrrrrrrrrr", [2418, 3481, 4292, 3759, 5874, 5957, 4555, 6338, 6091, 7103, 5382, 6576], ["6", "1", "6", "6", "6", "6", "6", "6", "6", "6", "6", "6"], ["…number of such strings is \\(3!\\) (3 factorial), which equals 6. \\[ \\boxed{6} \\]", "…number of nine-letter strings meeting the given conditions is \\(\\boxed{6}\\)."]],
+    [110, "hmmt_nov2026_guts", "4", "2026-11-07", "Compute the greatest 2-digit positive integer $\\underline{ab}$ such that $\\underline{ab} + \\underline{ba}$ is a perfect square.", "92", "rrrrrrrrrrrr", [4714, 3531, 3214, 2605, 4006, 4021, 3387, 4765, 6643, 4766, 5119, 3894], ["92", "92", "92", "92", "92", "92", "92", "92", "92", "92", "92", "92"], ["…square (\\(11^2\\)), confirming that 92 is indeed the solution. \\[ \\boxed{92} \\]", "…Thus, the greatest two-digit number \\(\\underline{ab}\\) is \\(\\boxed{92}\\)."]],
+    [111, "hmmt_nov2026_guts", "6", "2026-11-07", "Snow White and the seven dwarfs are sitting in a circle facing inward. Initially, Snow White holds a basket containing $100$ apples, of which $1$ is poisoned and the rest are harmless. Every minute, whoever is holding the basket must choose an apple uniformly and independently at random from the basket and eat it, then pass the basket to the person to their left. This process continues until someone eats the…", "\\frac{87}{100}", "wwrwwwwwccww", [6798, 4262, 15055, 10792, 9815, 11174, 11953, 10426, 16384, 16384, 11307, 11097], ["\\dfrac{1}{100}", "\\dfrac{99}{100}", "\\dfrac{87}{100}", "\\dfrac{7}{8}", "\\frac{7}{8}", "\\frac{7}{8}", "\\frac{7}{8}", "\\frac{22}{25}", "\\dfrac{7}{8}", "", "\\frac{7}{8}", "\\frac{7}{8}"], ["…that Snow White does not eat the poisoned apple is $\\boxed{\\dfrac{1}{100}}$.", "…= \\frac{7}{8} \\). Thus, the final answer is: \\[ \\boxed{\\frac{7}{8}} \\]"]],
+    [112, "hmmt_nov2026_guts", "7", "2026-11-07", "Suppose $P(x)$ is a quadratic polynomial with real coefficients for which $P(10) - P(1) - P(9) = 62$ and $P(10) - P(2) - P(8) = 118$. Compute $P(10) - P(3) - P(7)$.", "158", "rcrrrrrrrrrr", [2236, 16384, 1360, 1648, 2805, 3924, 4183, 8523, 3351, 3393, 3328, 3582], ["158", "", "158", "158", "158", "158", "158", "158", "158", "158", "158", "158"], ["…(10b - 3b - 7b) = 158 + 0 = 158 \\] Thus, the final answer is: \\[ \\boxed{158} \\]", "…206) + (10b - 3b - 7b) \\] \\[ = 158 + 0b = 158 \\] The answer is \\(\\boxed{158}\\)."]],
+    [113, "hmmt_nov2026_guts", "9", "2026-11-07", "Hannah has $16$ colored pencils of different colors and is drawing a tricolor flag with $3$ horizontal stripes. The pencils come in $8$ pairs of complementary colors. Hannah randomly colors each stripe such that no two stripes have exactly the same color. Compute the probability that no two adjacent stripes have complementary colors.", "\\frac{13}{15}", "crwwwrwrrrrr", [16384, 12192, 10439, 14781, 6315, 8882, 12315, 7323, 5819, 11044, 8584, 7172], ["\\dfrac{781}{900}", "\\dfrac{13}{15}", "\\dfrac{4}{5}", "14/15", "\\frac{14}{15}", "\\frac{13}{15}", "\\dfrac{6}{7}", "\\frac{13}{15}", "\\frac{13}{15}", "\\dfrac{13}{15}", "\\frac{13}{15}", "\\dfrac{13}{15}"], ["…Both first-second and second-third complementary. - Total: 8. 3. **Applying", "…14} = \\frac{14}{15} \\] Thus, the final answer is: \\[ \\boxed{\\frac{14}{15}} \\]"]],
+    [114, "hmmt_nov2026_guts", "11", "2026-11-07", "Mark rolls a fair 6-sided die $6$ times and writes down his results in order, creating a 6-digit number. Compute the probability that this number is a multiple of $15$.", "\\frac{1}{18}", "rwrrrrrrrrrr", [11484, 1306, 15010, 13730, 9291, 9358, 5653, 7524, 4829, 11262, 5669, 5486], ["\\dfrac{1}{18}", "0", "\\dfrac{1}{18}", "\\dfrac{1}{18}", "\\frac{1}{18}", "\\dfrac{1}{18}", "\\dfrac{1}{18}", "\\dfrac{1}{18}", "\\frac{1}{18}", "\\frac{1}{18}", "\\dfrac{1}{18}", "\\frac{1}{18}"], ["…probability that the number is a multiple of 15 is \\(\\boxed{\\dfrac{1}{18}}\\).", "…that the 6-digit number is a multiple of 15 is \\(\\boxed{\\frac{1}{18}}\\)."]],
+    [115, "hmmt_nov2026_guts", "12", "2026-11-07", "Compute the smallest positive integer $n \\geq 5$ such that\n\n- $\\binom{n}{0}$ divides $\\binom{n}{1}$,\n- $\\binom{n}{1}$ divides $\\binom{n}{2}$,\n- $\\binom{n}{2}$ divides $\\binom{n}{3}$,\n- $\\binom{n}{3}$ divides $\\binom{n}{4}$,\n- $\\binom{n}{4}$ divides $\\binom{n}{5}$.", "59", "rrrrrrrrrrrr", [6908, 4746, 6315, 5363, 4148, 6676, 6441, 8178, 10952, 6131, 6451, 7069], ["59", "59", "59", "59", "59", "59", "59", "59", "59", "59", "59", "59"], ["…\\( n \\geq 5 \\) that satisfies all conditions is \\( n = 59 \\). \\[ \\boxed{59} \\]", "…\\) All congruences hold. Therefore, the smallest \\( n \\) is: \\[ \\boxed{59} \\]"]],
+    [116, "hmmt_nov2026_guts", "13", "2026-11-07", "A circular necklace has $20$ red beads and $30$ green beads. Stella cuts the necklace into two halves, each with an equal number of beads, and takes one of the halves. The beads are arranged such that across all the ways Stella could have cut the necklace, the minimum possible number of red beads in Stella's half is $6$, and the minimum possible number of green beads in Stella's half is $N$. Compute the maximum…", "11", "wwcwwwwwwrww", [16037, 10903, 16384, 6604, 9795, 8823, 9089, 9893, 10627, 12428, 13607, 8711], ["15", "15", "", "19", "15", "14", "15", "14", "19", "11", "14", "14"], ["…of \\( N \\). Thus, the maximum possible value of \\( N \\) is \\(\\boxed{15}\\).", "…= 10 \\). - Therefore, the maximum possible value of \\( N \\) is \\(\\boxed{15}\\)."]],
+    [117, "hmmt_nov2026_guts", "14", "2026-11-07", "Suppose $a_1, a_2, a_3, a_4$ is a geometric sequence of real numbers satisfying $a_2 + a_3 = 20$ and $a_1 + a_4 = 26$. Compute $\\sqrt[3]{a_1} + \\sqrt[3]{a_4}$.", "\\sqrt[3]{86}", "wwrrrrrrrrrr", [5891, 9132, 10627, 9010, 7109, 8171, 7126, 5977, 12473, 7247, 10643, 8478], ["\\sqrt[3]{20}", "\\sqrt[3]{82}", "\\sqrt[3]{86}", "\\sqrt[3]{86}", "\\sqrt[3]{86}", "\\sqrt[3]{86}", "\\sqrt[3]{86}", "\\sqrt[3]{86}", "\\sqrt[3]{86}", "\\sqrt[3]{86}", "\\sqrt[3]{86}", "\\sqrt[3]{86}"], ["…+ r) = \\sqrt[3]{20}\\). Hence, the final answer is: \\[ \\boxed{\\sqrt[3]{20}} \\]", "…\\frac{23 \\pm \\sqrt{129}}{20} \\] The final answer is: \\[ \\boxed{\\sqrt[3]{86}} \\]"]],
+    [118, "hmmt_nov2026_guts", "16", "2026-11-07", "Let $N$ be the smallest positive integer divisible by $2026$ with the property that for every positive divisor $k$ of $N$, the number of positive divisors of $k$ is also a divisor of $N$. Compute $\\frac{N}{2026}$.", "240", "ccwcwwcwwwww", [16384, 16384, 12671, 16384, 15801, 14420, 16384, 16267, 14766, 14038, 12263, 13703], ["", "", "6", "", "4104676", "24", "2", "4", "4052", "1013^{1011}", "4", "4056"], ["…For subset {2}: τ(k)=2. For subset {charlet}*{1013}: τ=k)=2. For subset {2,3", "…128 \\times 1,026,169 = 4,104,672 \\] The final answer is: \\[ \\boxed{4104676} \\]"]],
+    [119, "hmmt_nov2026_guts", "17", "2026-11-07", "On Monday, Steve writes a single-digit nonzero multiple of $4$ on a blackboard. Each following day, Steve inserts a nonzero digit at any position into the number on the blackboard—possibly at the front, in the middle, or at the end—such that the number on the blackboard remains a multiple of $4$. Compute the number of 4-digit numbers that could possibly appear on the blackboard on Thursday.", "648", "ccccwwrwwcwc", [16384, 16384, 16384, 16384, 13369, 14339, 15252, 15000, 15040, 16384, 15234, 16384], ["", "", "35", "", "16", "8", "648", "48", "20", "120", "34", "2250"], ["…into a three-digit number can be at any position. For example, inserting at the", "…that could possibly appear on the blackboard on Thursday is: \\[ \\boxed{16} \\]"]],
+    [120, "hmmt_nov2026_guts", "18", "2026-11-07", "Point $D$ lies on side $\\overline{BC}$ of triangle $ABC$ such that $AB = BD = 14$ and $DC = 9$. Let $T$ be a point on line $AD$ such that $\\angle BCT = 90^\\circ$ and $D$ lies between $A$ and $T$. Compute the minimum possible value of $AT$.", "12\\sqrt{7}", "rrccrrrrrrrr", [12091, 6905, 16384, 16384, 7458, 6987, 8114, 14002, 9876, 6571, 14363, 6715], ["12\\sqrt{7}", "12\\sqrt{7}", "", "", "12\\sqrt{7}", "12\\sqrt{7}", "12\\sqrt{7}", "12\\sqrt{7}", "12\\sqrt{7}", "12\\sqrt{7}", "12\\sqrt{7}", "12\\sqrt{7}"], ["…\\] Thus, the minimum possible value of \\( AT \\) is \\(\\boxed{12\\sqrt{7}}\\).", "…= 12\\sqrt{7}\\). The minimum possible value of \\(AT\\) is \\(\\boxed{12\\sqrt{7}}\\)."]],
+    [121, "hmmt_nov2026_guts", "19", "2026-11-07", "Let $\\frac{a_1}{a_2}$, $\\frac{b_1}{b_2}$, $\\frac{c_1}{c_2}$, and $\\frac{d_1}{d_2}$ be four positive simplified fractions for which $$\\frac{a_1}{a_2} \\cdot \\frac{b_1}{b_2} \\cdot \\frac{c_1}{c_2} = \\frac{d_1}{d_2}.$$ Given that $a_1a_2 = 720$, $b_1b_2 = 108$, and $c_1c_2 = 250$, compute the minimum possible value of $d_1d_2$.", "150", "ccwcwwccrcwc", [16384, 16384, 16014, 16384, 13320, 16198, 16384, 16384, 14412, 16384, 9590, 16384], ["54/125 or 1/ 19,440,000。", "", "19,440,000.", "", "6", "10800", "", "", "150", "19440000", "6", ""], ["…which is derived as per the minimal setup x a2b2c2. Hence, reasoning with this", "…= 6 \\] Thus, the minimum possible value of \\( d_1d_2 \\) is: \\[ \\boxed{6} \\]"]],
+    [122, "hmmt_nov2026_guts", "20", "2026-11-07", "Let $ABC$ be a triangle with $BC = 8$. Let $\\omega$ be the circle centered at $A$ passing through the midpoint of side $\\overline{BC}$. Suppose that there exist parallel tangent lines to $\\omega$ through $B$ and $C$. Given that the distance from $A$ to $BC$ is $3$, compute the radius of $\\omega$.", "2\\sqrt{3}", "wcwrrrrwrrrr", [7878, 16384, 11518, 13462, 7082, 8249, 7414, 12395, 8346, 5786, 10502, 6418], ["3", "\" line!\"", "3", "2\\sqrt{3}", "2\\sqrt{3}", "2\\sqrt{3}", "2\\sqrt{3}", "5", "2\\sqrt{3}", "2\\sqrt{3}", "2\\sqrt{3}", "2\\sqrt{3}"], ["…are satisfied by this configuration, confirming the radius. \\[ \\boxed{3} \\]", "…= 2\\sqrt{3} \\] Thus, the radius of \\(\\omega\\) is \\(\\boxed{2\\sqrt{3}}\\)."]],
+    [123, "hmmt_nov2026_guts", "21", "2026-11-07", "Compute the number of 10-letter strings of $A$'s and $B$'s that contain the same number of substrings of the form $ABB$ as substrings of the form $BBA$.", "640", "wccwwwwwwwcw", [12915, 16384, 16384, 13855, 13304, 11180, 12998, 15391, 16038, 15048, 16384, 14942], ["0", "", "", "252", "2", "256", "40", "256", "252", "256", "252", "2"], ["…zero due to symmetry and balancing constraint, leading to the answer: \\boxed{0}", "…print(total) ``` ### Result: The final answer is \\(\\boxed{2}\\)."]],
+    [124, "hmmt_nov2026_guts", "22", "2026-11-07", "Compute the sum of the digits in the base $10$ representation of $$\\left\\lfloor 10^{99} \\cdot \\frac{100\\,008}{700\\,007} \\right\\rfloor.$$ (Here, $\\lfloor x \\rfloor$ denotes the greatest integer less than or equal to $x$.)", "440", "wccwwwcwwwww", [15721, 16384, 16384, 9034, 12575, 13779, 16384, 13224, 14685, 13096, 14346, 15169], ["27", "", "", "27", "11", "8", "100001", "", "8", "23", "15", "15"], ["…= 27 \\] The sum of the digits in the base 10 representation is \\(\\boxed{27}\\).", "…it there this it wave all and its 0 \\boxed{11} The final answer is \\boxed{11}."]],
+    [125, "hmmt_nov2026_guts", "23", "2026-11-07", "Call a set $S$ of distinct positive integers divisorful if for any ordered triple $(a, b, c)$ consisting of not necessarily distinct elements of $S$, $a$ divides $bc$. Compute the least positive integer $n$ such that there exists a divisorful set with exactly $25$ elements containing $n$.", "720", "cccwwwwwwccc", [16384, 16384, 16384, 15101, 14520, 10999, 13728, 15947, 15274, 16384, 16384, 16384], ["", "", "", "1", "2^{24}", "1296", "2", "1679616", "1", "1", "121393", "64"], ["…- 2*8=16: 4 divides 16. - 2*16=32: 4 divides 32. - 4*4=16: 4 divides 16. - 4*", "…element in the set \\( \\{1, 2, 4, 8, \\ldots, 2^{24}\\} \\). \\[ \\boxed{2^{24}} \\]"]],
+    [126, "hmmt_nov2026_guts", "24", "2026-11-07", "Gregasaurus has a unit square piece of paper with a red dot in one of its corners. A fold consists of the following:\n\n(a) Selecting a line $\\ell$ passing through the interior of the square that divides the square into two regions.\n(b) Picking one of the two regions, and reflecting it across $\\ell$.\n\nGregasaurus folds the square exactly once. Compute the area of the smallest region $R$ such that the red dot must…", "2\\pi + 2", "ccccwwwwwccw", [16384, 16384, 16384, 16384, 12479, 16043, 16179, 14388, 12300, 16384, 16384, 14109], ["", "", "", "", "\\dfrac{1}{2}", "1", "8", "\\dfrac{1}{2}", "\\frac{1}{2}", "\\dfrac{1}{2}", "2", "4"], ["…Wait, no. Reflecting the red dot across ℓ gives a point inside the square.", "…Thus, the area of the smallest region \\( R \\) is \\(\\boxed{\\dfrac{1}{2}}\\)."]],
+    [127, "hmmt_nov2026_guts", "25", "2026-11-07", "Let $p(x)$ be a polynomial of degree at most $6$ such that $p(n) = 1 + \\frac{1}{2} + \\frac{1}{3} + \\cdots + \\frac{1}{n}$ for all $n \\in \\{2, 3, 4, 5, 6, 7, 8\\}$. Compute $p(0)$.", "\\frac{15}{56}", "cwcccrwwwwcw", [16384, 15108, 16384, 16384, 16384, 14604, 12130, 13488, 16174, 13706, 16384, 14622], ["", "-450", "", "", "1, -1", "\\frac{15}{56}", "-\\frac{5}{3}", "1", "-\\frac{67}{168}", "\\frac{61}{168}", "-1", "\\frac{101}{168}"], ["…potential for calculation errors, and since the initial Lagrange approach after", "…that p(x) is a degree 6 polynomial interpolating H_n at n=2,…8, which is"]],
+    [128, "hmmt_nov2026_guts", "26", "2026-11-07", "Sophia has a $5 \\times 5$ grid of dots, and selects $10$ of them uniformly at random. Given that she selects exactly $2$ dots in each row and each column, compute the probability that some $4$ selected dots form a rectangle with grid-aligned sides.", "\\frac{5}{17}", "wwccwwwwcwww", [12898, 15397, 16384, 16384, 12836, 12498, 13245, 10410, 16384, 13669, 12707, 15103], ["\\dfrac{5}{11}", "\\dfrac{1}{2}", "", "", "\\frac{1}{3}", "\\dfrac{1}{2}", "\\frac{11}{12}", "\\frac{1}{5}", "1", "1", "\\dfrac{1}{7}", "1"], ["…= \\frac{5}{11} \\] Thus, the final answer is \\(\\boxed{\\dfrac{5}{11}}\\).", "…that some 4 selected dots form a rectangle is \\(\\boxed{\\frac{1}{3}}\\)."]],
+    [129, "hmmt_nov2026_guts", "27", "2026-11-07", "Crystal writes two 5-digit positive integers in her journal using every digit exactly once (where leading zeros are not allowed). Compute the maximum possible sum of the digits of the absolute difference between her numbers.", "40", "wwccwwwwwwww", [14859, 14405, 16384, 16384, 13253, 12072, 12250, 11977, 12642, 10603, 12493, 13644], ["38", "34", "", "", "36", "25", "30", "44", "25", "25", "36", "31"], ["…sum of the digits of the absolute difference is found to be: \\boxed{38}", "…possible sum of the digits of the absolute difference is: \\[ \\boxed{36} \\]"]],
+    [130, "hmmt_nov2026_guts", "28", "2026-11-07", "One hundred players $P_1, P_2, \\ldots, P_{100}$ are playing a game. Each player $P_i$ has an unfair coin that lands heads with probability $p_i$. On the $n^{\\text{th}}$ turn of the game, player $P_n$ flips their coin, where indices are taken modulo $100$. If it lands heads, the game ends immediately and they win. Otherwise, the game continues with the next player's turn.\n\nGiven that each player has a $\\frac{1}{100}$…", "\\frac{6}{601}", "wcwwwccwrrrr", [14141, 16384, 14026, 9868, 15363, 16384, 16384, 9729, 12407, 8441, 12604, 15429], ["\\dfrac{3}{50}", "-\\dfrac{2}{31}", "\\dfrac{6}{13}", "\\dfrac{6}{13}", "\\frac{6}{7}", "", "\\dfrac{4361}{12000}", "\\dfrac{1}{100}", "\\frac{6}{601}", "\\frac{6}{601}", "\\frac{6}{601}", "\\frac{6}{601}"], ["…be \\( \\frac{3}{50} \\). Thus, the value of \\( p_1 \\) is \\boxed{\\dfrac{3}{50}}.", "…\\( p_1 = \\frac{6}{7} \\). Thus, the final answer is: \\[ \\boxed{\\frac{6}{7}} \\]"]],
+    [131, "hmmt_nov2026_guts", "29", "2026-11-07", "Convex pentagon $BRYAN$ has area $128$ with $\\angle A + \\angle B = 180^\\circ$ and side lengths $BR = 2$, $RY = 12$, $YA = 10$, $AN = 11$ and $NB = 11$. Compute $\\sin(\\angle A)$.", "\\frac{32}{33}", "wwwcwwwcwwcw", [16222, 14724, 12294, 16384, 13053, 12407, 13119, 16384, 14362, 12033, 16384, 11993], ["\\dfrac{12}{13}", "\\dfrac{3}{5}", "\\dfrac{5\\sqrt{119}}{72}", "", "6", "\\frac{3}{5}", "\\dfrac{6\\sqrt{37}}{37}", "\\dfrac{3}{5}", "10", "2", "1", "3"], ["…and trigonometric identities, the final answer is: \\[ \\boxed{\\dfrac{12}{13}} \\]", "…= \\frac{128}{66} = \\frac{64}{33} \\] Thus, the final answer is: \\[ \\boxed{6} \\]"]],
+    [132, "hmmt_nov2026_guts", "30", "2026-11-07", "There exists a polynomial $p(x, y)$ with real coefficients and total degree at most $4$ such that $p(m, n)$ is the entry in the $m^{\\text{th}}$ row and the $n^{\\text{th}}$ column of the following table. $$\\begin{array}{|c|c|c|c|} \\hline 4 & 8 & * & ? \\\\ \\hline 3 & 5 & 9 & * \\\\ \\hline 2 & 3 & 5 & 9 \\\\ \\hline 0 & 1 & 2 & 2 \\\\ \\hline \\end{array}$$ Compute $p(4, 4)$, i.e., the top-right entry in the table.", "30", "cwccwwwwcwcw", [16384, 14108, 16384, 16384, 8602, 13655, 9287, 9819, 16384, 14246, 16384, 13722], ["", "2", "", "", "2", "2", "2", "2", "", "10", "68", "6"], ["…column for m=3,n=3 is missing. However, according to the degree constraint, if", "…we conclude that the top-right entry (which is \\( (4, 4) \\)) is indeed 2."]],
+    [133, "hmmt_nov2026_guts", "31", "2026-11-07", "Let $ABCD$ be a cyclic quadrilateral, and suppose rays $BA$ and $CD$ meet at $E$ and rays $CB$ and $DA$ meet at $F$. Suppose the inradii of triangles $EDA$, $EBC$, $FAB$, and $FCD$ are $5$, $10$, $6$, and $10$, respectively. Compute the area of $ABCD$.", "80\\sqrt{30}", "wcwcwwwwwwww", [13792, 16384, 11472, 16384, 10808, 9409, 10793, 10339, 12592, 12046, 12299, 11869], ["31", "240", "30", "100", "150", "130", "40", "120", "130", "60", "120", "240"], ["…Thus, the area of the cyclic quadrilateral \\(ABCD\\) is \\(\\boxed{31}\\).", "…\\] This matches the correct value after careful consideration and verification."]],
+    [134, "hmmt_nov2026_guts", "32", "2026-11-07", "Mark has a radioactive ball weighing $1$ gram. During the $n^{\\text{th}}$ minute, each radioactive ball has a $1/2$ chance of splitting into two radioactive balls, each of weight $2^{-n}$ grams (regardless of the ball's initial weight or when it was initially formed). After $7$ minutes, compute the expected value of the total weight in grams of Mark's radioactive balls.", "\\frac{2123}{8192}", "cwwwwcwwwwkw", [16384, 9354, 15865, 14831, 9881, 16384, 14492, 12569, 10815, 13122, 16384, 14906], ["", "\\dfrac{1}{16}", "1", "\\dfrac{1}{64}", "1", "correct.", "\\frac{2091}{4096}", "1", "1", "1", "\\dfrac{2123}{8192}", "\\frac{6305}{16384}"], ["…are 1,3,9,27,81,243,729,2187. The LCM is2187. Convert each term: 2=2*2187", "…regardless of the splitting process. Thus, the final answer is: \\[ \\boxed{1} \\]"]],
+    [135, "hmmt_nov2026_guts", "33", "2026-11-07", "The decimal expansion of $1/179$ has a repeating period of length $178$. Compute the sum of the squares of the digits in this period.", "5049", "ccwwwwwwwwww", [16384, 16384, 15946, 13330, 10199, 13420, 10353, 9924, 13788, 12621, 9494, 13893], ["", "2527", "80100", "\\boxed{99999999999999999999999999999…", "142", "178", "1602", "179", "1602", "678", "178", "89"], ["…the period is indeed 178. But how to use this to compute sum d_i^2? Wait,", "…\\) is: \\[ \\boxed{142} \\] Therefore, the final answer is: \\[ \\boxed{142} \\]"]],
+]
+
 
 def _cut(s, n):
     return s if len(s) <= n else s[:n].rsplit(" ", 1)[0] + "…"
@@ -1112,6 +1386,52 @@ def _code_rows():  # per code cell, the stored rows in file order; None when a j
     return out
 
 
+def _fresh_rows():  # the edit's rows per sample, and the first sample's rows of Base + cue, by problem; None when not in runs/
+    out, paths = {}, [(k, f"runs/{j}/answers.jsonl") for k, j in zip(("e0", "e1", "e2", "e3"), FRESH_JOBS["edit"])] + \
+        [("b0", f"runs/fresh/{FRESH_JOBS['base'][0]}/answers.jsonl")]
+    for k, path in paths:
+        if not os.path.exists(path):
+            return None
+        rows = [json.loads(line) for line in open(path)]
+        out[k] = {r["problem_index"]: r for r in rows}
+        assert len(out[k]) == len(rows) == DATA["fresh"]["n"], path
+    return out
+
+
+def _fresh_refs():  # the committed Base + cue and RL rows, by (sample, problem index)
+    out = {}
+    for arm, path in DATA["fresh"]["rows"].items():
+        rows = [json.loads(line) for line in open(path)]
+        out[arm] = {(r["sample"], r["problem_index"]): r for r in rows}
+        assert len(out[arm]) == len(rows) == 4 * DATA["fresh"]["n"] and all(r["attempt"] == 0 for r in rows), path
+        assert all(r["seed"] == DATA["fresh"]["seed"] + 10000 * s + i for (s, i), r in out[arm].items()), path
+    return out
+
+
+_outcome = lambda r: ("k" if r["score_v3"] else "c") if r["cap_hit"] else ("r" if r["score_v3"] else "w")
+
+
+def _fresh_build(rows):  # FRESH_PROBLEMS from the rows; the edit's answers graded again with grader v3
+    from studies.rlneurons.lib import rln4_lib
+    F, ref = DATA["fresh"], _fresh_refs()
+    out = []
+    for p in json.load(open(F["problems"])):
+        i = p["index"]
+        edit = [rows[f"e{s}"][i] for s in range(4)]
+        for s, r in enumerate(edit):
+            x = rln4_lib.grade_v3(p["answer"], r["text"])
+            assert (x["score_v3"], x["extracted_v3"]) == (r["score_v3"], r["extracted_v3"]), (i, s, "stored v3 differs from the rescore")
+            assert r["seed"] == F["seed"] + 10000 * s + i and r["attempt"] == 0, (i, s)
+        b0 = rows["b0"][i]
+        assert all(b0[k] == ref["base"][(0, i)][k] for k in ("n_new", "cap_hit", "score_v3", "extracted_v3", "seed")), i
+        rs = [ref["base"][(s, i)] for s in range(4)] + edit + [ref["rl"][(s, i)] for s in range(4)]
+        assert all(r["gold"] == p["answer"] for r in rs), i
+        out.append([i, p["source"], p["source_id"], p["date"], _cut(p["problem"], 420), p["answer"], "".join(map(_outcome, rs)),
+                    [r["n_new"] for r in rs], [_cut(r["extracted_v3"] or "", 36) for r in rs],
+                    [_tail(b0["text"], 80), _tail(edit[0]["text"], 80)]])
+    return out
+
+
 def _task(prompt):  # the problem as the model saw it, without the instruction around it
     head, rest = prompt.split("\n\n", 1)
     assert head.startswith("Solve the following code problem step by step."), head
@@ -1168,24 +1488,55 @@ CODE_COUNTS = {k: {"passed": sum(p[2][j] in "rk" for p in CODE_PROBLEMS), "cut":
                    "unfinished": sum(p[2][j] in "ckn" for p in CODE_PROBLEMS)} for k, j in _ccol.items()}
 _K, _kd = DATA["code"]["cells"], DATA["code"]["diff"]
 
+# Counts from FRESH_PROBLEMS, per key ("0" Base + cue, "1.5" the edit, "rl") and sample: right (r or k), cut off (c or k)
+_FG = {"0": 0, "1.5": 4, "rl": 8}
+FRESH_COUNTS = {k: {"right": [sum(p[6][j + s] in "rk" for p in FRESH_PROBLEMS) for s in range(4)],
+                    "cut": [sum(p[6][j + s] in "ck" for p in FRESH_PROBLEMS) for s in range(4)]} for k, j in _FG.items()}
+_F = DATA["fresh"]
+_fm = lambda k: f"{sum(_F['right'][k]) / 4:g}"  # the mean of the 4 samples: 48.25, 50.5, 29.5
+_fr = lambda field, k: f"{min(_F[field][k])} to {max(_F[field][k])}"
+_MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+_day = lambda d: f"{int(d[8:])} {_MONTHS[int(d[5:7]) - 1]} {d[:4]}"
+_fiv = lambda x: f"{_pts(x[0])} points, 95 % interval {_m(x[1])} to {_m(x[2])}"
+
+# The split (DATA["split"]): its numbers in the site's forms
+_P = DATA["split"]
+_PG = _P["groups"]
+_civ = lambda x: f"{_pts(x[0])} points, 90 % interval {_m(x[1])} to {_m(x[2])}"
+_FIN = 100 - _PG["CH"]["share"][0]  # the share of the gain on problems Base + cue finished: FR + FW, 1 minus CH per resample
+_M2, _M1 = DATA["m500_2"], DATA["m500_m1"]
+
 # Not from our runs: the closest published result. Task arithmetic (Ilharco et al., arXiv 2212.04089) adds a fine-tuned
 # model's weight difference to its base with a scaling coefficient.
 PANELS = [
     ["new", "What is new",
      "Adding a scaled weight difference to a base model is task arithmetic (Ilharco et al., arXiv 2212.04089). New here: "
-     "turning the size of only 8 RL directions per matrix sets how often the answers finish.",
-     [f"Cut off at {DATA['cap']:,} tokens, at sizes −1, 0, 0.5, 1, 1.5, 2 and 3: {_seq('cut', _TOP)} of {DATA['n']}.",
+     "enlarging only 8 RL directions per matrix makes answers finish and also makes more of the finished answers right, "
+     "about as much as RL does.",
+     [f"Cut off at {DATA['cap']:,} tokens, at sizes −1, 0, 0.5, 1, 1.5, 2 and 3: {_seq('cut', _TOP)} of {DATA['n']}. "
       f"Right answers rise from {_C['m1']['right']} at size −1 to {_C['1.5']['right']} at 1.5 and fall to {_C['3']['right']} "
       f"at 3. RL scores {_C['rl']['right']}.",
-      f"8 random directions of the same size leave both flat: {min(_rr)} to {max(_rr)} right and {min(_rc)} to {max(_rc)} "
-      "cut off at sizes −1, 1, 1.5, 2 and 3. The page Eight directions showed the edit at size 1 only."]],
+      f"Where one Base + cue answer finished wrong ({_PG['FW']['problems']} problems, {_PG['FW']['n']} such answers), size 1.5 "
+      f"is right on {_PG['FW']['edit']} %, a second Base + cue answer on {_PG['FW']['base2']} % and RL on {_PG['FW']['rl']} %. "
+      f"Size 1.5 minus Base + cue: {_civ(_PG['FW']['d'])}; size 1.5 minus RL: {_civ(_PG['FW']['d_rl'])}.",
+      f"Of the gain of size 1.5 over Base + cue, {_PG['FR']['share'][0]} % is on problems where Base + cue finished right, "
+      f"{_PG['FW']['share'][0]} % (90 % interval {_PG['FW']['share'][1]} to {_PG['FW']['share'][2]}) where it finished wrong, "
+      f"and {_PG['CH']['share'][0]} % (90 % interval {_PG['CH']['share'][1]} to {_PG['CH']['share'][2]}) where it was cut off. "
+      f"On MATH-500 the cut-off share is {_P['m500']['share_ch']} % of the gain.",
+      f"On the {_P['always']['n']} problems where none of 4 Base + cue answers was cut off, size 1.5 is right on "
+      f"{_P['always']['edit']} % against {_P['always']['base']} % ({_civ(_P['always']['d'])}); RL gains "
+      f"{_P['always']['d_rl']} points.",
+      f"Size −1 takes right answers away from finished ones: on the {_P['m1']['n']} problems where its answer finished, "
+      f"{_P['m1']['m1']} % are right, against {_P['m1']['base']} % of Base + cue's finished answers ({_civ(_P['m1']['d'])}).",
+      f"8 random directions of the same size leave both counts flat: {min(_rr)} to {max(_rr)} right and {min(_rc)} to "
+      f"{max(_rc)} cut off at sizes −1, 1, 1.5, 2 and 3. The page Eight directions showed the edit at size 1 only."]],
     ["why", "Why it matters",
      f"An edit of {_pct('1.5')} of the weight norm brings Base + cue to {_C['1.5']['right']} of {DATA['n']}, within "
-     f"{abs(_d['vs_rl']['points']):.1f} points of RL, and its effect is set by one number.",
+     f"{abs(_d['vs_rl']['points']):.1f} points of RL, and {_FIN} % of its gain is on problems Base + cue already finished.",
      [f"Size 1.5 minus RL: {_pts(_d['vs_rl']['points'])} points, 95 % interval {_iv(_d['vs_rl']['ci'])}. Size 1.5 minus 8 "
       f"random directions at size 1.5: {_pts(_d['vs_random']['points'])} points, 95 % interval {_iv(_d['vs_random']['ci'])}.",
-      f"From size 0 to 1.5, cut-offs fall from {_C['0']['cut']} to {_C['1.5']['cut']}, while the share of finished answers "
-      f"that are right stays between {_lo_rf:.2f} and {_hi_rf:.2f}.",
+      f"So the 8 directions are not only a control of finishing: where Base + cue finished wrong they add "
+      f"{_PG['FW']['d'][0]} points, and RL adds {round(_PG['FW']['rl'] - _PG['FW']['base2'], 1)}.",
       "The directions are read from RL's weights, so this is not yet a gain without reward. It narrows what a method "
       "without reward has to reproduce."]],
     ["how", "How we know",
@@ -1195,12 +1546,33 @@ PANELS = [
      ["Grader v3. Size 0 is Base + cue with no edit; RL answered with the plain prompt. All cells use seed base 3,000,000.",
       "Control: 8 random directions per matrix with the same norm, at sizes −1, 1, 1.5, 2 and 3. They were not run at 0.5, "
       "so the switch skips that stop.",
+      f"The split by what Base + cue did uses a four-sample run of Base + cue, size 1.5 and RL (seeds 3,000,000 + 10,000 × "
+      "sample). Each Base + cue answer in turn puts its problem in a group: finished right, finished wrong or cut off. Size "
+      "1.5 and RL are then compared with a second Base + cue answer on the same problems, never one on the seed that set the "
+      f"group. Intervals: 10,000 bootstrap resamples of the {DATA['n']} problems, 90 %. The plan was written before the "
+      f"numbers: {_P['spec']}; the readout is {_P['readout']}.",
+      f"Group by group, size 1.5 against a second Base + cue answer and RL: finished right {_PG['FR']['edit']} %, "
+      f"{_PG['FR']['base2']} %, {_PG['FR']['rl']} % ({_civ(_PG['FR']['d'])}); finished wrong {_PG['FW']['edit']} %, "
+      f"{_PG['FW']['base2']} %, {_PG['FW']['rl']} % ({_civ(_PG['FW']['d'])}); cut off {_PG['CH']['edit']} %, "
+      f"{_PG['CH']['base2']} %, {_PG['CH']['rl']} % ({_civ(_PG['CH']['d'])}).",
+      "In the grouped view, the marks are the answers at size 1.5 of the first view, placed by Base + cue's sample 2 of 4 "
+      "(seed 3,010,000, not the 3,000,000 of the size 1.5 answers); the bars are the readout's numbers over all four samples.",
+      f"On MATH-500 (one sample at size 1.5, held out from the choice of size), where Base + cue finished wrong "
+      f"({_P['m500']['fw_n']} answers): {_civ(_P['m500']['fw_d'])} over a second Base + cue answer; RL "
+      f"{_pts(_P['m500']['fw_d_rl'])}.",
+      f"On MATH-500, size 2 scores {_M2['right']} of 500 against {_M2['ref_right']} at size 1.5, on the same seeds "
+      f"({_M2['folder']}).",
+      f"On MATH-500, size −1 cuts off {_M1['cut']} of {_M1['n']} odd-index problems against Base + cue's {_M1['base_cut']} at "
+      f"the same seeds, and gets {_M1['right']} right against {_M1['base_right']} ({_M1['folder']}).",
+      f"The page's own one-sample cells agree: on the {DATA['base_finished']} problems where the size 0 answer finished, right "
+      f"answers go from {COUNTS['0']['on_base_finished']} at size 0 to {COUNTS['1.5']['on_base_finished']} at 1.5 (RL "
+      f"{COUNTS['rl']['on_base_finished']}).",
       f"A second control, Think-SFT's 8 largest directions per matrix at the norm of the RL edit at size 1 "
       f"({100 * _S['add_rel']:.2f} % of the weight norm), scores {_S['right']} right and {_S['cut']} cut off, against "
       f"{_C['1']['right']} and {_C['1']['cut']} for the RL directions ({_pts(_d['sft_vs_1']['points'])} points, 95 % interval "
       f"{_iv(_d['sft_vs_1']['ci'])}).",
-      f"Intervals pair the problems: 5,000 bootstrap resamples of the {DATA['n']}, seed 0. Every count of the slider's cells "
-      "was recomputed from the per-problem rows.",
+      f"Intervals of the slider's cells pair the problems: 5,000 bootstrap resamples of the {DATA['n']}, seed 0, 95 %. Every "
+      "count of the slider's cells was recomputed from the per-problem rows.",
       f"On a second model pair, RL-Code's {DATA['k']} largest directions per matrix at sizes 1, 1.5 and 2 pass "
       f"{_K['c1']['passed']}, {_K['c1.5']['passed']} and {_K['c2']['passed']} of {DATA['code']['n']} code problems (Code cue, T 1.0, one "
       f"sample); Base + cue passes {_K['c0']['passed']}, RL-Code {_K['crl']['passed']}. Size 1.5 minus RL-Code: "
@@ -1210,13 +1582,21 @@ PANELS = [
       f"to {_K['c1']['cut']} and {_K['c1']['noblock']} at 1, {_K['c1.5']['cut']} and {_K['c1.5']['noblock']} at 1.5 and "
       f"{_K['c2']['cut']} and {_K['c2']['noblock']} at 2; the random directions leave {_K['cr1.5']['cut']} and "
       f"{_K['cr1.5']['noblock']}. RL-Math's 8 directions at 1.5 pass {_K['cm1.5']['passed']}: "
-      f"{_pts(_kd['math_vs_rl']['points'])} points against RL-Code, 95 % interval {_iv(_kd['math_vs_rl']['ci'])}."]],
+      f"{_pts(_kd['math_vs_rl']['points'])} points against RL-Code, 95 % interval {_iv(_kd['math_vs_rl']['ci'])}.",
+      f"The held-out test: {_F['n']} problems of AIME 2026 and HMMT February and November 2026, held {_day(_F['dates'][0])} "
+      f"to {_day(_F['dates'][1])}, after the last upload of the models' weights ({_day(_F['upload'])}). Size 1.5 was fixed on "
+      "the 328; nothing was chosen on this set, and the three predictions filed before the run all hold.",
+      f"On that set, 4 samples at size 1.5 score {', '.join(map(str, _F['right']['1.5'][:3]))} and {_F['right']['1.5'][3]} of "
+      f"{_F['n']}, mean {_fm('1.5')}; RL {_fm('rl')}, Base + cue {_fm('0')} (T 1.0). Size 1.5 minus RL: {_fiv(_F['diff']['vs_rl'])}; "
+      f"minus Base + cue: {_fiv(_F['diff']['vs_base'])}. Cut off per sample: {_fr('cut', '1.5')} of {_F['n']} (RL "
+      f"{_fr('cut', 'rl')}, Base + cue {_fr('cut', '0')})."]],
     ["limits", "What it does not show",
      f"One sample per problem and size, and 1.5 was the best of seven sizes tried: {_C['1.5']['right']} against "
      f"{_C['1']['right']} at size 1 is {_pts(_d['vs_1']['points'])} points, 95 % interval {_iv(_d['vs_1']['ci'])}.",
-     [f"Not all of the gain is finishing: on the {DATA['base_finished']} problems Base + cue finishes, right answers go from "
-      f"{COUNTS['0']['on_base_finished']} at size 0 to {COUNTS['1.5']['on_base_finished']} at 1.5 (RL "
-      f"{COUNTS['rl']['on_base_finished']}).",
+     [f"Part of the gain where Base + cue finished wrong is still finishing: on those problems a second Base + cue answer is "
+      f"cut off {_PG['FW']['cap_base2']} % of the time, size 1.5 {_PG['FW']['cap_edit']} %. Counted per finished answer, size 1.5 "
+      f"is right on {_PG['FW']['rpf_edit']} % against {_PG['FW']['rpf_base2']} % ({_civ(_PG['FW']['d_rpf'])}).",
+      "The edit is built from RL's weights, and size 1.5 was chosen on the 328 themselves, the problems of the split.",
       f"At size 3 almost every answer finishes, but many decay into strings of words: {COUNTS['3']['right_finished']} of "
       f"{COUNTS['3']['finished']} finished answers are right ({_rf('3'):.2f}).",
       f"Replicated ({_R['folder']}): four new samples at size 1.5 score {', '.join(map(str, _R['singles'][:3]))} and "
@@ -1225,10 +1605,15 @@ PANELS = [
       f"{max(_R['m500_rl'])}). Under the vote over 4 samples the edit has {_R['vote']} and RL {_R['rl_vote']} "
       f"({_pts(_R['vote_vs_rl']['points'])} points, 95 % interval {_iv(_R['vote_vs_rl']['ci'])}).",
       "The 0.11 % is the intended addition. After rounding to the 16-bit weight format, the written change is 0.19 % of the "
-      "weight norm. The 8 directions come from RL's weights, and 1.5 was chosen on the 328 themselves.",
+      "weight norm.",
       f"On code each size was sampled once, so sizes 1, 1.5 and 2 are not separated: 1.5 minus 1 is "
       f"{_pts(_kd['vs_1']['points'])} points, 95 % interval {_iv(_kd['vs_1']['ci'])}. The code sizes were fixed before that run; "
-      "1.5 came from the math dial."]],
+      "1.5 came from the math dial. The split by what Base + cue did was not run on code or on the 2026 set.",
+      f"On the {_F['n']} problems from 2026, under the vote over 4 samples the edit trails RL by "
+      f"{abs(_F['diff']['vote_vs_rl'][0]):.1f} points: {_F['vote']['1.5']} of {_F['n']} against {_F['vote']['rl']}, 95 % interval "
+      f"{_m(_F['diff']['vote_vs_rl'][1])} to {_m(_F['diff']['vote_vs_rl'][2])}, which includes 0. Base + cue has "
+      f"{_F['vote']['0']} under the vote.",
+      "The edit is built from RL's weights, so it is not a route to RL's gain without reward."]],
     ["run", "How to reproduce it",
      "Each size is two commands on one GPU: studies/rlneurons/jobs/wsp_edit.py writes the edited weights and "
      "studies/rlneurons/jobs/run_cell.py scores them.",
@@ -1236,11 +1621,18 @@ PANELS = [
       f"run_cell --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000; commit {DATA['run_commit'][:7]}.",
       f"Readout and run folders: {EDITS} on {DATA['branch']}, commit {DATA['commit'][:7]}; {DATA['readme']}. The replication: "
       f"{_R['folder']} and {_R['m500_folder']}.",
+      f"The split: uv run --no-project --with numpy python {_P['script']} reads the committed rows of the four-sample runs and "
+      f"writes {SPLIT}; commit {_P['commit'][:7]}; board {_P['board']}.",
       f"The code cells: wsp_edit --recipe top8 --other code31 --scale 1, 1.5 or 2 (rand8 at 1.5; --other math31 at 1.5), then "
       f"studies/rlneurons/jobs/run_code_cell.py --model-path with the Code cue, T 1.0, seed {DATA['code']['seed']}. Readout and "
       f"run folders: {CODE}, commit {DATA['code']['commit'][:7]}; {DATA['code']['readme']}; {DATA['code']['spec']}.",
+      f"The 2026 set: the same wsp_edit command at size 1.5, then studies/rlneurons/jobs/run_fresh.py --model-path /tmp/theta "
+      f"--prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 7000000 + 10000 s for s = 0 to 3 (jobs "
+      f"{', '.join(FRESH_JOBS['edit'])}; commit {_F['job_commit'][:7]}). Readout: studies/rlneurons/analysis/mixvote.py, "
+      f"{FRESH}, commit {_F['commit'][:7]}; {_F['readme']}; the plan, {_F['spec']}.",
       "uv run python tools/finding_the_finish_dial.py checks every number on this page against the readouts, the "
-      "replication's rows and the per-problem rows of both sets (runs/<job>/answers.jsonl, from uv run tools/gpu.py get <job>)."]],
+      "replication's rows, the split's readout and rows, and the per-problem rows of the three sets (runs/<job>/answers.jsonl, "
+      "from uv run tools/gpu.py get <job>)."]],
 ]
 
 PAGE = r"""<!doctype html>
@@ -1332,7 +1724,7 @@ svg * { pointer-events: none; }
 .pt { stroke: none; transition: opacity .4s ease; }
 .pt.top.p0 { fill: var(--blue); } .pt.top.p1 { fill: var(--red); } .pt.rand { fill: var(--base-tone); }
 .pt.off { opacity: var(--ghost); }
-.val { font-weight: 560; fill: var(--mute) !important; }
+.val { font-weight: 560; fill: var(--mute) !important; paint-order: stroke; stroke: color-mix(in srgb, var(--glass) 55%, var(--glass-lo)); stroke-width: 3.5; stroke-linejoin: round; }
 .val.on { font-weight: 700; fill: var(--ink) !important; }
 .now { stroke: var(--blue); stroke-width: 1; opacity: .4; }
 .ring { fill: none; stroke: var(--ink); stroke-width: 1.3; opacity: .7; }
@@ -1341,24 +1733,35 @@ svg * { pointer-events: none; }
 .axis { fill: var(--faint) !important; font-weight: 520; }
 .axis.on { fill: var(--ink) !important; font-weight: 700; }
 .cap { fill: var(--faint) !important; font-weight: 500; }
+/* The grouped view: per group of what Base + cue did, three bars (size 1.5, a second Base + cue answer, RL) */
+.bar { fill: none; stroke-linecap: butt; }
+.bar.e { stroke: var(--blue); } .bar.b { stroke: var(--base-tone); opacity: .55; } .bar.l { stroke: var(--ink); opacity: .72; }
+.barglow { fill: none; stroke: var(--blue); opacity: calc(var(--bloom) * .16); stroke-linecap: butt; }
+.chh { font-weight: 640; }
+.chs { font-weight: 640; fill: var(--ink) !important; }
+.bn { fill: var(--mute) !important; font-weight: 540; }
+.bv { font-weight: 620; fill: var(--mute) !important; }
+.bv.e { fill: var(--blue) !important; font-weight: 700; }
+.chd { fill: var(--mute) !important; font-weight: 500; }
 
-/* The set switch at the top of the plate, as on /finding/rl-change-on-imitation */
+/* The two switches, the set at the top of the plate and the directions beside the slider, as on /finding/rl-change-on-imitation */
 .setrow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 16px; padding: 0 0 6px 2.4%; min-height: 38px; }
 .switch { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; padding: 3px; }
 .switch button { padding: 5px 13px; border-radius: 999px; font-weight: 560; font-size: 13px; color: var(--mute); white-space: nowrap; transition: background .15s ease, color .15s ease; }
 .switch button:hover { color: var(--blue); }
 .switch button[aria-pressed="true"] { background: var(--mute); color: var(--paper); }
-.setcap { margin: 0; font-size: 13px; color: var(--mute); max-width: 60ch; }
+.setcap { margin: 0; font-size: 13px; line-height: 1.4; color: var(--mute); max-width: 60ch; flex: 1 1 260px; }
+.switch .short { display: none; }
 
 /* The control: one slider, the size of the edit, and a quiet switch for the control */
 .control { align-self: center; width: min(100%, 760px); margin-top: 14px; }
-.dtop { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.dtop { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
 .dlab { font-size: 15px; font-weight: 640; }
 .dlab span { color: var(--mute); font-weight: 500; }
-.others { display: flex; align-items: baseline; gap: 2px 4px; font-size: 13.5px; color: var(--mute); }
-.others button { padding: 3px 10px; border-radius: 999px; font-weight: 560; white-space: nowrap; transition: background .15s ease, color .15s ease; }
-.others button:hover { color: var(--blue); }
-.others button[aria-pressed="true"] { background: var(--mute); color: var(--paper); }
+.others button:disabled { cursor: default; color: var(--faint); background: none; }
+.others button:disabled:hover { color: var(--faint); }
+.others .nr { display: none; font-weight: 500; }
+.others button:disabled .nr { display: inline; }
 .track { position: relative; height: 40px; margin-top: 4px; cursor: pointer; touch-action: none; border-radius: 8px; }
 .rail, .fill { position: absolute; top: 19px; height: 2px; border-radius: 2px; }
 .rail { left: 14px; right: 14px; background: var(--faint); opacity: .45; }
@@ -1433,13 +1836,17 @@ svg * { pointer-events: none; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 22px; padding: 0; display: block; }
   .setrow { flex-direction: column; align-items: stretch; padding: 0 0 8px; }
-  .setrow .switch { display: grid; grid-template-columns: 1fr 1fr; border-radius: 22px; }
+  .setcap { flex: none; }
+  .setrow .switch { display: grid; grid-template-columns: 1fr 1fr 1fr; border-radius: 22px; }
+  .switch .long { display: none; } .switch .short { display: inline; }
   .setrow .switch button { text-align: center; white-space: normal; line-height: 1.2; padding: 8px 6px; }
   .pane { order: 4; margin-top: 22px; }
+  .paper { order: 5; }
   svg { max-height: none; }
   .control { width: 100%; margin-top: 16px; }
   .dtop { flex-direction: column; align-items: stretch; gap: 8px; }
-  .others { justify-content: center; }
+  .others { display: grid; grid-template-columns: 1fr 1fr 1fr; border-radius: 22px; }
+  .others button { text-align: center; white-space: normal; line-height: 1.2; padding: 8px 6px; }
   .ticks { font-size: 13px; height: 54px; }
   .ticks span small { white-space: normal; width: 4em; margin: 0 auto; line-height: 1.15; }
   .ticks span.na small { width: 2.2em; }
@@ -1462,8 +1869,9 @@ svg * { pointer-events: none; }
   <div class="stage" id="stage">
     <div class="setrow">
       <div class="switch" role="group" aria-label="Which problems">
-        <button data-set="math" aria-pressed="true">328 harder problems (math)</button>
-        <button data-set="code" aria-pressed="false">538 code problems</button>
+        <button data-set="math" aria-pressed="true" aria-label="328 harder problems (math)"><span class="long">328 harder problems (math)</span><span class="short">328 math</span></button>
+        <button data-set="code" aria-pressed="false" aria-label="538 code problems"><span class="long">538 code problems</span><span class="short">538 code</span></button>
+        <button data-set="fresh" aria-pressed="false" aria-label="136 problems from 2026"><span class="long">136 problems from 2026</span><span class="short">136 from 2026</span></button>
       </div>
       <p class="setcap" id="setcap"></p>
     </div>
@@ -1471,9 +1879,10 @@ svg * { pointer-events: none; }
     <div class="control">
       <div class="dtop">
         <span class="dlab" id="dlab">Size of the edit</span>
-        <div class="others" role="group" aria-label="Directions added to Base + cue">
+        <div class="switch others" role="group" aria-label="Directions added to Base + cue">
           <button data-m="top" aria-pressed="false">8 RL directions</button>
-          <button data-m="rand" aria-pressed="false">8 random directions</button>
+          <button data-m="rand" aria-pressed="false">8 random directions<span class="nr"> · not run on this set</span></button>
+          <button data-m="group" aria-pressed="false"><span class="long">Group by Base + cue</span><span class="short">By Base + cue</span><span class="nr"> · not on this set</span></button>
         </div>
       </div>
       <div class="track" id="track" role="slider" tabindex="0" aria-label="Size of the edit" aria-valuemin="-1" aria-valuemax="3">
@@ -1491,48 +1900,81 @@ svg * { pointer-events: none; }
   </div>
 </div>
 <script>
-const C = __CONFIG__, D = C.data, DC = C.code.data, $ = id => document.getElementById(id);
+const C = __CONFIG__, D = C.data, DC = C.code.data, DF = C.fresh.data, $ = id => document.getElementById(id);
 const still = matchMedia("(prefers-reduced-motion: reduce)"), narrow = matchMedia("(max-width: 900px)");
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 const RAD = Math.PI / 180, f = n => n.toFixed(1), mix = (a, b, q) => a + (b - a) * q;
 const ease = p => p < .5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2, clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const fmt = n => Math.round(n).toLocaleString("en-US");
 const num = v => String(v).replace("-", "−");
+const fq = n => String(Math.round(n * 4) / 4);  // a mean of 4 samples: 48.25
+const MON = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const day = d => `${Number(d.slice(8))} ${MON[Number(d.slice(5, 7)) - 1]} ${d.slice(0, 4)}`;
+const and = xs => xs.slice(0, -1).join(", ") + " and " + xs[xs.length - 1];
 
 /* Two problem sets, one slider of sizes. Math: the 328 harder problems, cells in the order of every list of a problem
    (C.cells): the 8 RL directions at sizes -1, 0 (Base + cue), 0.5, 1, 1.5, 2, 3; 8 random directions at -1, 1, 1.5, 2, 3;
    RL. Code: the 538 code problems (C.code.cells): RL-Code's 8 directions at 0 (Base + cue), 1, 1.5, 2; 8 random directions
-   at 1.5; RL-Math's 8 directions at 1.5 (a named reference, not a stop); RL-Code. cols gives the cell of each stop of the
+   at 1.5; RL-Math's 8 directions at 1.5 (a named reference, not a stop); RL-Code. 2026: the 136 problems from 2026, 12
+   answers each: Base + cue samples 1 to 4, the 8 RL directions at size 1.5 samples 1 to 4, RL samples 1 to 4; a stop shows
+   sample 1 as the marks, and its counts are means over its 4 samples. cols gives the cell of each stop of the
    slider for each switch position, null where that size was not run. A problem's outcome in a cell: r finished right or
    passed, w finished wrong or failed the tests, n finished with no code block, c cut off at 16,384 tokens, k cut off but
    scored right (math: the right answer was already in the cut text; code: the code written before the cut passed). */
 const SIZES = [-1, 0, 0.5, 1, 1.5, 2, 3], FIRST = 4, BANDS = ["r", "w", "c"];
 const lookOf = ch => ch === "k" ? "c" : ch, bandOf = look => look === "n" ? "c" : look;
 const SRC = { olympiadbench: "OlympiadBench", aime2025: "AIME 2025", aime2024: "AIME 2024", aime2023: "AIME 2023", aime2022: "AIME 2022",
-  hmmt_feb2025: "HMMT February 2025", amc23: "AMC 2023" };
+  hmmt_feb2025: "HMMT February 2025", amc23: "AMC 2023", aime2026: "AIME 2026", hmmt_feb2026: "HMMT February 2026",
+  hmmt_feb2026_guts: "HMMT February 2026, Guts round", hmmt_nov2026_guts: "HMMT November 2026, Guts round",
+  hmmt_nov2026_team: "HMMT November 2026, Team round", hmmt_nov2026_gen: "HMMT November 2026, General round",
+  hmmt_nov2026_thm: "HMMT November 2026, Theme round" };
 const BENCH = { HumanEval: "HumanEval+", Mbpp: "MBPP+" };
 const SETS = {
-  math: { key: "math", n: D.n, cells: C.cells, rl: 12, ref: null, cols: { top: [0, 1, 2, 3, 4, 5, 6], rand: [7, 1, null, 8, 9, 10, 11] },
-    pr: C.problems.map(([i, src, q, gold, o, tok, ans, end]) => ({ id: "p" + i, i, src, q, gold, o, tok, ans, end })),
+  math: { key: "math", n: D.n, cells: C.cells, rl: 12, ref: null,
+    cols: { top: [0, 1, 2, 3, 4, 5, 6], rand: [7, 1, null, 8, 9, 10, 11], group: [null, null, null, null, 4, null, null] },
+    pr: C.problems.map(([i, src, q, gold, o, tok, ans, end], j) => ({ id: "p" + i, i, src, q, gold, o, tok, ans, end, g: C.group[j] })),
     scale: [[100, 220], [0, 100]], rowName: ["Right of 328", "Cut off at 16,384 tokens"], word: ["finished right", "finished wrong", "cut off"],
     unit: ["right of 328", "harder problems, T 1.0"], cutWord: "cut off at 16,384 tokens", rlName: "RL", kWord: "scored right",
     dirs: "8 RL", right: "right", gone: "cut off", label: "328 harder problems", cap: "",
     hint: "One mark is one problem, with its one answer at the chosen size. Click a mark to read it." },
-  code: { key: "code", n: DC.n, cells: C.code.cells, rl: 6, ref: 5, cols: { top: [null, 0, null, 1, 2, 3, null], rand: [null, 0, null, null, 4, null, null] },
+  code: { key: "code", n: DC.n, cells: C.code.cells, rl: 6, ref: 5,
+    cols: { top: [null, 0, null, 1, 2, 3, null], rand: [null, 0, null, null, 4, null, null], group: Array(7).fill(null) },
     pr: C.code.problems.map(([uid, q, o, tok, err, end]) => ({ id: "p" + uid.replace("HumanEval/", "he").replace("Mbpp/", "mbpp"), uid, q, o, tok, err, end })),
     scale: [[300, 420], [0, 60]], rowName: ["Passed of 538", "Cut off or no code block"], word: ["passed", "failed the tests", "cut off or no code"],
     unit: ["passed of 538", "code problems, T 1.0"], cutWord: "cut off or no code block", rlName: "RL-Code", kWord: "passed",
     dirs: "8 RL-Code", right: "passed", gone: "cut off or no code", label: "538 code problems",
     cap: "HumanEval+ and MBPP+, Code cue; the directions come from RL-Code.",
     hint: "One mark is one code problem, with its one answer at the chosen size. Click a mark to read it." },
+  fresh: { key: "fresh", n: DF.n, cells: Array.from({ length: 3 * DF.samples }, (_, c) => c), samples: DF.samples, rl: 2 * DF.samples, ref: null,
+    cols: { top: [null, 0, null, null, DF.samples, null, null], rand: Array(7).fill(null), group: Array(7).fill(null) }, shown: [0, DF.samples],
+    pr: C.fresh.problems.map(([i, src, nb, date, q, gold, o, tok, ans, end]) => ({ id: "pf" + i, i, src, nb, date, q, gold, o, tok, ans, end })),
+    scale: [[20, 60], [0, 70]], rowName: ["Right of 136, mean of 4", "Cut off, mean of 4"], word: ["finished right", "finished wrong", "cut off"],
+    unit: ["right of 136", "mean of 4, T 1.0"], cutWord: "cut off at 16,384 tokens", rlName: "RL", kWord: "scored right",
+    dirs: "8 RL", right: "right", gone: "cut off", label: "136 problems from 2026",
+    cap: `AIME and HMMT contests held in 2026, after the last upload of the models' weights (${day(DF.upload)}).`,
+    hint: "One mark is one problem, with its first answer at the chosen size. Click a mark to read it." },
 };
 Object.values(SETS).forEach(T => {
-  const tally = (c, chars) => T.pr.reduce((s, p) => s + (chars.includes(p.o[c]) ? 1 : 0), 0);
-  T.stat = T.cells.map((_, c) => ({ right: tally(c, "rk"), cut: tally(c, "ckn"), fr: tally(c, "r"), fw: tally(c, "w"), k: tally(c, "k") }));
+  const tally = (c, chars) => T.pr.reduce((s, p) => s + (chars.includes(p.o[c]) ? 1 : 0), 0), ns = T.samples || 1;
+  const one = T.cells.map((_, c) => ({ right: tally(c, "rk"), cut: tally(c, "ckn"), fr: tally(c, "r"), fw: tally(c, "w"), k: tally(c, "k") }));
+  /* right and cut are means over the samples of the cell's model (one sample on math and code); the bands count the
+     marks (cb: the marks cut off); each lists the right answers of every sample */
+  T.stat = one.map((x, c) => {
+    const g = one.slice(c - c % ns, c - c % ns + ns), mean = key => g.reduce((s, y) => s + y[key], 0) / ns;
+    return { ...x, cb: x.cut, right: mean("right"), cut: mean("cut"), each: g.map(y => y.right) };
+  });
   /* The order inside a band: problems right in more of the edit cells first, then those cut off less often, then by
      index, so a band keeps its order and the marks that move are the ones whose outcome changed. */
   T.rank = T.pr.map(p => { let r = 0, c = 0; for (let j = 0; j < T.rl; j++) { r += "rk".includes(p.o[j]); c += "ckn".includes(p.o[j]); } return 100 * r - c; });
 });
+/* The grouped view (math only): each problem's place is the outcome of Base + cue's sample SP.mark + 1 of the four-sample
+   run (its band: finished right, finished wrong, cut off); its look stays its answer at size 1.5. gr: per band, the problems
+   and how many of them are right at size 1.5. */
+const SP = C.split, GW = ["Base + cue finished right", "Base + cue finished wrong", "Base + cue was cut off"];
+{ const T = SETS.math;
+  T.gb = T.pr.map(p => bandOf(lookOf(p.g[SP.mark])));
+  T.gr = BANDS.map(b => { const js = T.pr.map((_, j) => j).filter(j => T.gb[j] === b); return { n: js.length, right: js.filter(j => "rk".includes(T.pr[j].o[4])).length }; }); }
+const cm = m => m === "group" ? "top" : m;  // the curve shows the grouped view as the 8 RL directions
 const has = (T, m, k) => T.cols[m][k] != null;
 const S = { set: "math", m: "top", i: FIRST, open: null, g: null, el: {}, shown: {}, t: 0, last: 0, t0: -1e9, from: [], to: [], fromLook: [],
   toLook: [], who: [], rank: [], c0: [0, 0, 0, 0, 0], c1: [0, 0, 0, 0, 0], v0: 1.5, v1: 1.5, setFrom: "math", mFrom: "top", iFrom: FIRST,
@@ -1548,26 +1990,32 @@ function geo() {
   const ph = narrow.matches;
   const g = ph
     ? { w: 480, cx: 240, D: 2400, r: 22, deep: 30, blur: 12, gap: 26, gx: 36, fs: 18, fb: 104, fc: 40, fv: 17,
-        fsm: 17, bigX: 34, bigY: 118, cutY: 176, stateY: [212, 236], rlY: [260, 284, 308], colTop: 342, cx0: 96, cx1: 396, rowH: 104, phone: true,
-        L: { math: { cols: 8, pitch: 17, d: [10.5, 7.4, 3], half: 5.4 }, code: { cols: 11, pitch: 12, d: [7.6, 5.4, 2.2], half: 3.9 } } }
+        fsm: 17, bigX: 34, bigY: 118, cutY: 176, stateY: [211, 234], rlY: [257, 280, 303, 326, 349], colTop: 379, cx0: 96, cx1: 396, rowH: 104, phone: true,
+        L: { math: { cols: 8, pitch: 17, d: [10.5, 7.4, 3], half: 5.4 }, code: { cols: 11, pitch: 12, d: [7.6, 5.4, 2.2], half: 3.9 },
+          fresh: { cols: 5, pitch: 26, d: [15, 10.6, 4.4], half: 8 } } }
     : { w: 1000, cx: 500, D: 2200, r: 30, deep: 40, blur: 16, gap: 30, gx: 70, fs: 15, fb: 112, fc: 38, fv: 13.5,
-        fsm: 12.4, bigX: 548, bigY: 126, cutY: 178, stateY: [208, 228], rlY: [248, 268, 288], colTop: 92, cx0: 612, cx1: 900, rowH: 82,
-        L: { math: { cols: 9, pitch: 14, d: [9.2, 6.4, 2.6], half: 4.4 }, code: { cols: 13, pitch: 10.2, d: [6.8, 4.8, 2], half: 3.3 } } };
+        fsm: 12.4, bigX: 548, bigY: 126, cutY: 178, stateY: [205, 224], rlY: [243, 262, 281, 300, 319], colTop: 92, cx0: 612, cx1: 900, rowH: 82,
+        L: { math: { cols: 9, pitch: 14, d: [9.2, 6.4, 2.6], half: 4.4 }, code: { cols: 13, pitch: 10.2, d: [6.8, 4.8, 2], half: 3.3 },
+          fresh: { cols: 5, pitch: 24, d: [14, 10, 4], half: 7.4 } } };
   /* The three bands stand as columns of marks on one floor, filled from the floor up: a column is as tall as its count.
      The floor sits under the tallest column any stop of the set reaches. */
   Object.entries(g.L).forEach(([key, L]) => {
-    const T = SETS[key], cells = T.cells.map((_, c) => c).filter(c => c !== T.rl);
-    const most = Math.max(...BANDS.map(b => Math.max(...cells.map(c => T.pr.filter(p => bandOf(lookOf(p.o[c])) === b).length))));
+    const T = SETS[key], cells = T.shown || T.cells.map((_, c) => c).filter(c => c !== T.rl);
+    const most = Math.max(...BANDS.map(b => Math.max(...cells.map(c => T.pr.filter(p => bandOf(lookOf(p.o[c])) === b).length))),
+      ...(T.gr || []).map(x => x.n));
     L.floor = g.colTop + (Math.ceil(most / L.cols) - 1) * L.pitch;
     L.colX = BANDS.map((_, j) => g.gx + j * ((L.cols - 1) * L.pitch + g.gap + L.d[0]));
     L.span = (L.cols - 1) * L.pitch;
   });
-  const top = ph ? Math.max(g.L.math.floor, g.L.code.floor) + 130 : 322;  // the curve: two rows, then the axis
+  const top = ph ? Math.max(g.L.math.floor, g.L.code.floor, g.L.fresh.floor) + 130 : 336;  // the curve: two rows, then the axis
   g.rows = [{ lab: top, y0: top + 22 }, { lab: top + g.rowH + 50, y0: top + g.rowH + 72 }];
   g.axisY = g.rows[1].y0 + g.rowH + g.fv * 1.9;
   g.h = g.axisY + (ph ? 40 : 46); g.cy = g.h / 2;
   g.a = ph ? [6, 8, g.w - 6, g.h - 8] : [24, 18, g.w - 24, g.h - 18];
   g.X = v => g.cx0 + (v + 1) / 4 * (g.cx1 - g.cx0);
+  // the bars of the grouped view, in the curve's place: per group a heading, three bars and the difference under them
+  g.ch = ph ? { y: g.rows[0].lab - 2, dy: 118, b: [24, 42, 60], d: 82, xn: g.a[0] + 14, xb0: 118, xb1: 380, bw: 12, cap: g.colTop - 48 }
+    : { y: g.rlY[0] + 14, dy: 108, b: [22, 38, 54], d: 76, xn: g.bigX + 4, xb0: 634, xb1: 868, bw: 10, cap: g.colTop - 46 };
   g.Y = (T, j, v) => { const [lo, hi] = T.scale[j]; return g.rows[j].y0 + g.rowH - (clamp(v, lo, hi) - lo) / (hi - lo) * g.rowH; };
   return g;
 }
@@ -1583,7 +2031,7 @@ function rounded(g, [x0, y0, x1, y1], r, z) {  // a rounded rectangle at depth z
   corner(x1 - r, y0 + r, -90); corner(x1 - r, y1 - r, 0); corner(x0 + r, y1 - r, 90); corner(x0 + r, y0 + r, 180);
   return "M" + p.map(q => f(q[0]) + " " + f(q[1])).join("L") + "Z";
 }
-const line = pts => "M" + pts.map(q => f(q[0]) + " " + f(q[1])).join("L");
+const line = pts => pts.length ? "M" + pts.map(q => f(q[0]) + " " + f(q[1])).join("L") : "";
 
 function build() {
   const g = S.g = geo(), svg = $("svg"), [ax0, ay0, ax1, ay1] = g.a, aw = ax1 - ax0, ah = ay1 - ay0, L = g.L.math;
@@ -1610,8 +2058,16 @@ function build() {
     `<g class="read"><text class="big" id="big" font-size="${g.fb}"></text>` +
     `<text class="lab em" id="u1" font-size="${g.fs * 1.06}"></text><text class="lab" id="u2" font-size="${g.fs}"></text>` +
     `<text class="cutn" id="cutn" font-size="${g.fc}"></text><text class="lab em" id="cutl" font-size="${g.fs * 1.06}"></text>` +
-    `<text class="lab" id="state" font-size="${g.fs}"></text><text class="lab" id="norm" font-size="${g.fs}"></text><text class="lab" id="rl" font-size="${g.fs}"></text><text class="lab" id="bc" font-size="${g.fs}"></text><text class="lab em" id="rep" font-size="${g.fs}"></text></g>` +
-    `<g class="curve"><path class="now" id="now"/>` +
+    `<text class="lab" id="state" font-size="${g.fs}"></text><text class="lab" id="norm" font-size="${g.fs}"></text><text class="lab" id="rl" font-size="${g.fs}"></text><text class="lab" id="bc" font-size="${g.fs}"></text><text class="lab" id="gap" font-size="${g.fs}"></text><text class="lab" id="gap2" font-size="${g.fs}"></text><text class="lab em" id="rep" font-size="${g.fs}"></text></g>` +
+    `<g class="chart" id="chart" opacity="0">` + ["Columns: what one Base + cue answer did.", "A lit mark is right at size 1.5."].map((x, n) => `<text class="lab" id="gcap${n}" font-size="${g.fs}">${x}</text>`).join("") +
+      SP.groups.map((G, j) => `<text class="chh" id="ch${j}" font-size="${g.fs}">${GW[j]}</text>` +
+        `<text class="chs" id="cs${j}" font-size="${g.fs}" text-anchor="end">${G[4]} % of the gain</text>` +
+        `<path class="barglow" id="gg${j}" stroke-width="${f(g.ch.bw + 6)}"/>` +
+        ["e", "b", "l"].map((a, n) => `<path class="bar ${a}" id="gb${j}${a}" stroke-width="${g.ch.bw}"/>` +
+          `<text class="bn" id="gn${j}${a}" font-size="${g.fsm}">${["Size 1.5", "Base + cue", "RL"][n]}</text>` +
+          `<text class="bv ${a}" id="gv${j}${a}" font-size="${g.fsm}"></text>`).join("") +
+        `<text class="chd" id="gd${j}" font-size="${g.fsm}"></text>`).join("") + `</g>` +
+    `<g class="curve" id="curve"><path class="now" id="now"/>` +
     g.rows.map((R, j) => `<text class="rowlab" id="rowl${j}" font-size="${g.fs}"></text><path class="ref" id="ref${j}"/>` +
       `<text class="reft" id="reft${j}" font-size="${g.fsm}" text-anchor="end"></text>` +
       (j === 0 ? `<text class="cap" id="lg" font-size="${g.fsm}"></text>` : "") +
@@ -1619,8 +2075,9 @@ function build() {
       (j === 0 ? `<circle class="mref" id="mref" r="${f(g.fv * .3)}"/><text class="mreft" id="mreft" font-size="${g.fsm}"></text>` : "")).join("") +
     SIZES.map((v, i) => `<text class="axis" id="ax${i}" font-size="${g.fv}" text-anchor="middle">${num(v)}</text>`).join("") +
     `<text class="cap" id="axc" font-size="${g.fsm}" text-anchor="end">size of the edit</text>` +
-    `<text class="cap" id="axb" font-size="${g.fsm}" text-anchor="middle">Base + cue</text></g>`;
-  S.el = {}; S.shown = {};
+    `<text class="cap" id="axb" font-size="${g.fsm}" text-anchor="middle">Base + cue</text></g>` +
+    `<text class="val" id="meas" visibility="hidden"></text>`;
+  S.el = {}; S.shown = {}; S.spots = {};
   svg.querySelectorAll("[id]").forEach(e => { S.el[e.id] = e; });
 }
 
@@ -1634,8 +2091,96 @@ function slot(L, b, s) {
 }
 function markAt(k, now) {
   const p = clamp((now - S.t0 - .6 * S.rank[k]) / 680, 0, 1), e = ease(p), a = S.from[k], b = S.to[k];
-  const moved = a[0] !== b[0] || a[1] !== b[1], far = bandOf(S.fromLook[k]) !== bandOf(S.toLook[k]);
+  const moved = a[0] !== b[0] || a[1] !== b[1], far = bandOf(S.fromLook[k]) !== bandOf(S.toLook[k]) || Math.abs(a[0] - b[0]) > 60;
   return { x: mix(a[0], b[0], e), y: mix(a[1], b[1], e), z: moved ? (far ? 34 : 6) * Math.sin(Math.PI * p) : 0, look: p < .5 ? S.fromLook[k] : S.toLook[k] };
+}
+/* Where each count of row j sits beside its point: above, below, right or left, whichever crosses the fewest lines, points
+   and words of the row. Worked out once per set, switch position and row, in the plate's own plane (the sway moves
+   everything together). */
+function measure(str, size, weight) {
+  const m = S.el.meas;
+  m.setAttribute("font-size", size); m.style.fontWeight = weight; m.textContent = str;
+  return m.getComputedTextLength();
+}
+function spots(W, m, j) {
+  const key = [W.key, m, j].join();
+  if (S.spots[key]) return S.spots[key];
+  const g = S.g, Y = v => g.Y(W, j, v), stat = (c, jj) => W.stat[c][jj ? "cut" : "right"];
+  const pts = s => allowed(s, W).map(k => [g.X(SIZES[k]), Y(stat(W.cols[s][k], j)), k]);
+  const segs = [], dots = [], boxes = [], cap = g.fsm * .74, pad = 2;
+  const other = m === "top" ? "rand" : "top", mine = pts(m), theirs = pts(other);
+  [mine, theirs].forEach((ps, z) => ps.forEach((p, n) => {
+    if (z || p[2] === 1) dots.push([p[0], p[1], g.fv * (p[2] === 1 ? .62 : .4)]);  // the other series' points; the ring of Base + cue
+    if (n) segs.push([ps[n - 1][0], ps[n - 1][1], p[0], p[1]]);
+  }));
+  const yr = Y(stat(W.rl, j)), reft = `${W.rlName} ${stat(W.rl, j)}`, rw = measure(reft, g.fsm, 600);
+  segs.push([g.cx0 - 10, yr, g.cx1 + 14, yr]);
+  boxes.push(g.phone ? [g.a[0] + 14, yr - g.fv * .45 - cap, g.a[0] + 14 + rw, yr - g.fv * .45] : [g.cx0 - 16 - rw, yr + g.fv * .32 - cap, g.cx0 - 16, yr + g.fv * .32]);
+  g.rows.forEach((R, jj) => boxes.push([g.cx0 - 70, R.lab - g.fs * .74, g.cx0 - 70 + measure(W.rowName[jj], g.fs, 600), R.lab]));
+  if (j === 1) boxes.push([g.cx0 - 20, g.axisY - g.fv * 1.05, g.cx1 + 20, g.axisY + g.fv * 1.6]);
+  const out = [];
+  if (j === 0) {
+    const last = theirs[theirs.length - 1];
+    out.lg = g.fsm * .35;  // the name of the faint line, beside its last point, moved off RL's level when that is near
+    if (last) {
+      const lg = other === "rand" ? (W.ref != null ? `8 random ${stat(W.cols.rand[last[2]], 0)}` : "8 random") : W.dirs, d = last[1] - yr;
+      if (Math.abs(d) < g.fsm) out.lg = -d - g.fsm * .45;
+      boxes.push([last[0] + g.fsm * .6, last[1] + out.lg - cap, last[0] + g.fsm * .6 + measure(lg, g.fsm, 500), last[1] + out.lg]);
+    }
+    if (W.ref != null) {
+      const x = g.X(1.5), y = Y(W.stat[W.ref].right);
+      dots.push([x, y, g.fv * .3]);
+      boxes.push([x + g.fsm * .75, y + g.fsm * .35 - cap, x + g.fsm * .75 + measure(`${W.stat[W.ref].right} RL-Math's 8`, g.fsm, 600), y + g.fsm * .35]);
+    }
+  }
+  // a word or a point in the way costs most, a line of the curve less, RL's dashed level least (the counts are edged in
+  // the plate's colour, so the dashes stop short of the digits)
+  const hits = b => {
+    const [x0, y0, x1, y1] = [b[0] - pad, b[1] - pad, b[2] + pad, b[3] + pad];
+    let n = 0;
+    segs.forEach(([ax, ay, bx, by], z) => {
+      const steps = Math.ceil(Math.hypot(bx - ax, by - ay) / 1.5);
+      for (let u = 0; u <= steps; u++) {
+        const x = mix(ax, bx, u / steps), y = mix(ay, by, u / steps);
+        if (x > x0 && x < x1 && y > y0 && y < y1) { n += z === segs.length - 1 ? .5 : 2; break; }
+      }
+    });
+    dots.forEach(([cx, cy, r]) => { if (Math.hypot(clamp(cx, x0, x1) - cx, clamp(cy, y0, y1) - cy) < r) n += 3; });
+    boxes.forEach(o => { if (o[0] < x1 && o[2] > x0 && o[1] < y1 && o[3] > y0) n += 3; });
+    return n;
+  };
+  mine.forEach(([x, y, k]) => {
+    const w = measure(String(stat(W.cols[m][k], j)), g.fsm, 700), up = g.fv * .7, side = g.fv * .5 + w / 2, diag = g.fv * .3 + w / 2;
+    const cand = [[0, -up], [0, up + cap], [side, cap / 2], [-side, cap / 2], [diag, -up * .7], [-diag, -up * .7], [diag, up * .7 + cap], [-diag, up * .7 + cap]];
+    let best = cand[0], bn = Infinity;
+    const pref = [0, .05, .3, .3, .6, .6, .65, .65];  // above, then below, then beside, then on a diagonal
+    cand.forEach((c, z) => { const n = hits([x + c[0] - w / 2, y + c[1] - cap, x + c[0] + w / 2, y + c[1]]) + pref[z]; if (n < bn) { bn = n; best = c; } });
+    boxes.push([x + best[0] - w / 2, y + best[1] - cap, x + best[0] + w / 2, y + best[1]]);
+    out[k] = best;
+  });
+  return (S.spots[key] = out);
+}
+/* The bars of the grouped view: per group, size 1.5, a second Base + cue answer and RL, right of the answers in that group
+   (the readout's numbers over all four Base + cue samples); they grow from 0 and their values count as the view arrives. */
+function chart(w) {
+  const g = S.g, E = S.el, K = g.ch, at = (el, q, dy) => { el.setAttribute("x", f(q[0])); el.setAttribute("y", f(q[1] + (dy || 0))); };
+  const P = (x, y) => proj(g, x, y, 10), short = g.phone;
+  [0, 1].forEach(n => at(E["gcap" + n], P(g.gx - 4, K.cap + n * g.fs * 1.3)));
+  SP.groups.forEach((G, j) => {
+    const y = K.y + j * K.dy;
+    at(E["ch" + j], P(K.xn, y)); at(E["cs" + j], P(g.a[2] - (short ? 14 : 24), y));
+    ["e", "b", "l"].forEach((a, n) => {
+      const yb = y + K.b[n], x1 = mix(K.xb0, K.xb1, G[n] / 100 * w);
+      E[`gb${j}${a}`].setAttribute("d", line([P(K.xb0, yb), P(x1, yb)]));
+      if (!n) E["gg" + j].setAttribute("d", line([P(K.xb0, yb), P(x1, yb)]));
+      at(E[`gn${j}${a}`], P(K.xn, yb), g.fsm * .36);
+      E[`gv${j}${a}`].textContent = `${(G[n] * w).toFixed(1)} %`;
+      at(E[`gv${j}${a}`], P(x1 + g.fsm * .5, yb), g.fsm * .36);
+    });
+    const d = G[3], diff = `${d[0] > 0 ? "+" : ""}${num(d[0])} points, 90 % interval ${num(d[1])} to ${num(d[2])}`;
+    E["gd" + j].textContent = short ? diff : `Size 1.5 minus Base + cue: ${diff}`;
+    at(E["gd" + j], P(K.xn, y + K.d));
+  });
 }
 function place(t, now) {
   const g = S.g, E = S.el, at = (el, q, dy) => { el.setAttribute("x", f(q[0])); el.setAttribute("y", f(q[1] + (dy || 0))); };
@@ -1643,9 +2188,12 @@ function place(t, now) {
   E.back.setAttribute("d", rounded(g, g.a, g.r, -g.deep));
   E.plate.setAttribute("d", rounded(g, g.a, g.r, 0));
   const e = ease(clamp((now - S.t0) / 900, 0, 1)), c = S.c0.map((v, j) => mix(v, S.c1[j], e)), done = e > .98;
-  // The words of the new state arrive with its numbers: when they stop, or halfway when the set changes, so that a count of
-  // one set never stands beside the name of the other.
-  const A = SETS[S.setFrom], B = SETS[S.set], es = A === B ? 1 : e, now2 = A === B ? done : e > .5, W = now2 ? B : A, LA = g.L[A.key], LB = g.L[B.key];
+  // The words of the new state arrive with its numbers: when they stop, or halfway when the set or the grouping changes, so
+  // that a count of one never stands beside the name of the other. Into or out of the grouped view the large number and
+  // the red one count down to 0 under the old words and up from 0 under the new ones.
+  const kA = S.mFrom === "group", kB = S.m === "group", gw = mix(+kA, +kB, e);
+  const A = SETS[S.setFrom], B = SETS[S.set], es = A === B ? 1 : e, now2 = A === B && kA === kB ? done : e > .5, W = now2 ? B : A, LA = g.L[A.key], LB = g.L[B.key];
+  if (kA !== kB) [0, 1].forEach(j => { c[j] = e < .5 ? mix(S.c0[j], 0, 2 * e) : mix(0, S.c1[j], 2 * e - 1); });
   const lm = k => mix(LA[k], LB[k], es), pitch = lm("pitch"), half = lm("half"), floor = lm("floor"), span = lm("span");
   const dd = [0, 1, 2].map(j => mix(LA.d[j], LB.d[j], es)), colX = [0, 1, 2].map(j => mix(LA.colX[j], LB.colX[j], es));
 
@@ -1667,40 +2215,49 @@ function place(t, now) {
   else E.sel.setAttribute("r", "0");
 
   // Every number counts while the marks travel and stops with them; the words of the new state arrive with its numbers.
-  const m = now2 ? S.m : S.mFrom, i = now2 ? S.i : S.iFrom, st = W.stat[col(m, i, W)];
+  const m = now2 ? S.m : S.mFrom, i = now2 ? S.i : S.iFrom, st = W.stat[col(m, i, W)], G = m === "group";
   { const a = proj(g, colX[0] - dd[0], floor + pitch * .75, 2), b = proj(g, colX[2] + span + dd[0], floor + pitch * .75, 2);
     E.floor.setAttribute("d", line([a, b])); }
   BANDS.forEach((b, j) => {
     const x = colX[j] - dd[0] / 2, y = floor + pitch * .75;
     text("bn" + b, fmt(c[j + 2])); text("bt" + b, W.word[j]);
-    text("bk" + b, j === 2 && st.k ? `${st.k}${g.phone ? "" : " of them"} ${W.kWord}` : "");
+    text("bk" + b, G ? `${W.gr[j].right} right at ${g.phone ? "" : "size "}1.5` : j === 2 && st.k ? `${st.k}${g.phone ? "" : " of them"} ${W.kWord}` : "");
     at(E["bn" + b], proj(g, x, y + g.fs * 2.2, 4));
     at(E["bt" + b], proj(g, x, y + g.fs * 3.5, 4));
     at(E["bk" + b], proj(g, x, y + g.fs * 4.75, 4));
   });
-  if (text("big", fmt(c[0])) || !S.shown.uw) S.shown.uw = E.big.getComputedTextLength() || g.fb * 1.6;
+  const fb = G ? v => `${fmt(v)} %` : W.samples ? fq : fmt;  // a mean of 4 shows its quarters once the words of the 2026 set are in
+  if (text("big", fb(c[0])) || !S.shown.uw) S.shown.uw = E.big.getComputedTextLength() || g.fb * 1.6;
   at(E.big, proj(g, g.bigX, g.bigY, 10));
   const ux = g.bigX + S.shown.uw + g.fs * .8;
-  text("u1", W.unit[0]); text("u2", W.unit[1]);
+  text("u1", G ? "of the gain, where" : W.unit[0]); text("u2", G ? "Base + cue finished" : W.unit[1]);
   at(E.u1, proj(g, ux, g.bigY - g.fb * .42, 10)); at(E.u2, proj(g, ux, g.bigY - g.fb * .42 + g.fs * 1.35, 10));
-  if (text("cutn", fmt(c[1])) || !S.shown.cw) S.shown.cw = E.cutn.getComputedTextLength() || g.fc * 1.2;
-  text("cutl", W.cutWord);
+  if (text("cutn", fb(c[1])) || !S.shown.cw) S.shown.cw = E.cutn.getComputedTextLength() || g.fc * 1.2;
+  text("cutl", G ? "where Base + cue was cut off" : W.cutWord);
   at(E.cutn, proj(g, g.bigX + 4, g.cutY, 10));
   at(E.cutl, proj(g, g.bigX + 4 + S.shown.cw + g.fs * .6, g.cutY - g.fc * .12, 10));
   const v = SIZES[i], base = W.stat[W.cols.top[1]], rl = W.stat[W.rl];
-  text("state", i === 1 ? "Size 0: Base + cue, no edit." : `${m === "top" ? W.dirs : "8 random"} directions per matrix at size ${num(v)},`);
-  text("norm", i === 1 ? "" : W === SETS.math ? `${(100 * D.cells[W.cells[col(m, i, W)][0]].add_rel).toFixed(2)} % of the weight norm.` : "one sample per problem.");
-  text("bc", `Base + cue: ${base.right} ${W.right}, ${base.cut} ${W.gone}.`);
-  text("rl", `${W.rlName}: ${rl.right} ${W.right}, ${rl.cut} ${W.gone}.`);
-  text("rep", W === SETS.math ? (m === "top" && i === FIRST ? C.rep : "") : `RL-Math's 8 directions at size 1.5: ${W.stat[W.ref].right} passed.`);
-  at(E.rep, proj(g, g.bigX + 4, g.rlY[2], 10));
+  const fr = W === SETS.fresh;
+  text("state", G ? `Finished right ${SP.groups[0][4]} %, finished wrong ${SP.groups[1][4]} %;` : i === 1 ? "Size 0: Base + cue, no edit." : `${m === "top" ? W.dirs : "8 random"} directions per matrix at size ${num(v)},`);
+  text("norm", G ? "gain over a second Base + cue answer, T 1.0." : fr ? `${i === 1 ? "" : "fixed on the 328; "}the marks show sample 1 of 4.` : i === 1 ? "" : W === SETS.math ? `${(100 * D.cells[W.cells[col(m, i, W)][0]].add_rel).toFixed(2)} % of the weight norm.` : "one sample per problem.");
+  text("bc", G ? "" : `Base + cue: ${base.right} ${W.right}, ${base.cut} ${W.gone}.`);
+  text("rl", G ? "" : `${W.rlName}: ${rl.right} ${W.right}, ${rl.cut} ${W.gone}.`);
+  text("rep", G ? "" : fr ? `The 4 samples: ${and(st.each)} right.` : W === SETS.math ? (m === "top" && i === FIRST ? C.rep : "") : `RL-Math's 8 directions at size 1.5: ${W.stat[W.ref].right} passed.`);
+  // on 2026, size 1.5 minus RL in points with its interval, under RL's counts; on two lines where one does not fit
+  const gd = DF.diff.vs_rl, gl = [`Size 1.5 minus RL: ${num(gd[0])} points,`, `95 % interval ${num(gd[1])} to ${num(gd[2])}.`];
+  if (S.spots.gapOne == null) S.spots.gapOne = measure(gl.join(" "), g.fs, 520) < g.a[2] - 18 - g.bigX;
+  const gon = fr && m === "top" && i === FIRST;
+  text("gap", gon ? (S.spots.gapOne ? gl.join(" ") : gl[0]) : ""); text("gap2", gon && !S.spots.gapOne ? gl[1] : "");
+  ["gap", "gap2", "rep"].filter(id => S.shown[id] || id === "rep").forEach((id, n) => at(E[id], proj(g, g.bigX + 4, g.rlY[2 + n], 10)));
   at(E.state, proj(g, g.bigX + 4, g.stateY[0], 10)); at(E.norm, proj(g, g.bigX + 4, g.stateY[1], 10)); at(E.bc, proj(g, g.bigX + 4, g.rlY[0], 10)); at(E.rl, proj(g, g.bigX + 4, g.rlY[1], 10));
 
   /* The curve: right answers and cut-offs against the size, the chosen series in colour, the other one faint; RL is a
      dashed level in each row. The upright line and the lit points travel with the counts. When the set changes, every
      point and level travels from its place on the old scale to its place on the new one, and a stop run in one set only
      grows out of its neighbour on the line or shrinks into it. */
-  const vNow = mix(S.v0, S.v1, e), val = (T, s, k, j) => T.stat[T.cols[s][k]][j ? "cut" : "right"];
+  const vNow = mix(S.v0, S.v1, e), val = (T, s, k, j) => T.stat[T.cols[s][k]][j ? "cut" : "right"], sm = cm(S.m);
+  E.curve.setAttribute("opacity", f(1 - gw)); E.chart.setAttribute("opacity", f(gw));
+  if (gw > 0) chart(gw);
   g.rows.forEach((R, j) => {
     const YA = v => g.Y(A, j, v), YB = v => g.Y(B, j, v), key = j ? "cut" : "right";
     text("rowl" + j, W.rowName[j]);
@@ -1712,7 +2269,7 @@ function place(t, now) {
     else at(E["reft" + j], proj(g, g.cx0 - 16, y, 10), g.fv * .32);
     const at2 = {};
     ["rand", "top"].forEach(s => {
-      const on = s === S.m, ks = SIZES.map((_, k) => k).filter(k => has(A, s, k) || has(B, s, k));
+      const on = s === sm, ks = SIZES.map((_, k) => k).filter(k => has(A, s, k) || has(B, s, k));
       const raw = ks.map(k => {
         const ia = has(A, s, k), ib = has(B, s, k);
         return { k, x: g.X(SIZES[k]), y: ia && ib ? mix(YA(val(A, s, k, j)), YB(val(B, s, k, j)), es) : ib ? YB(val(B, s, k, j)) : YA(val(A, s, k, j)),
@@ -1728,6 +2285,8 @@ function place(t, now) {
       const pts = raw.map(q => proj(g, q.x, q.y, 10));
       E[`s${j}${s}`].setAttribute("d", line(pts));
       E[`s${j}${s}`].classList.toggle("off", !on);
+      // a series run in neither set's stops (the random directions on 2026) fades out with its points
+      E[`s${j}${s}`].style.opacity = raw.some(q => q.w >= 1) ? "" : f(Math.max(0, ...raw.map(q => q.w)));
       at2[s] = {};
       SIZES.forEach((_, k) => {
         const n = ks.indexOf(k), pt = E[`p${j}${s}${k}`], vl = E[`v${j}${s}${k}`];
@@ -1737,16 +2296,16 @@ function place(t, now) {
         pt.setAttribute("cx", f(q[0])); pt.setAttribute("cy", f(q[1])); pt.setAttribute("fill-opacity", f(raw[n].w));
         pt.setAttribute("r", f(g.fv * (here ? .4 : .28))); pt.classList.toggle("off", !on);
         text(`v${j}${s}${k}`, on && has(W, s, k) && raw[n].w >= 1 ? String(val(W, s, k, j)) : "");
-        // on code the random series sits under RL-Math's point at 1.5, so its counts go under their points
-        at(vl, q, W.ref != null && s === "rand" && j === 0 ? g.fv * 1.25 : -g.fv * .7); vl.setAttribute("class", "val" + (here ? " on" : ""));
+        const o = on && has(W, s, k) ? spots(W, s, j)[k] : [0, -g.fv * .7];
+        at(vl, [q[0] + o[0], q[1]], o[1]); vl.setAttribute("class", "val" + (here ? " on" : ""));
       });
     });
     if (j === 0) {
-      E.sg0.setAttribute("d", S.m === "top" ? E.s0top.getAttribute("d") : "");
-      const other = S.m === "top" ? "rand" : "top", last = allowed(other, W).slice(-1)[0], end = at2[other][last];  // the faint line is named at its end
+      E.sg0.setAttribute("d", sm === "top" ? E.s0top.getAttribute("d") : "");
+      const other = sm === "top" ? "rand" : "top", last = allowed(other, W).slice(-1)[0], end = at2[other][last];  // the faint line is named at its end
       // on code the random directions have one point, so its count is named with it
-      text("lg", other === "rand" ? (W.ref != null && last != null ? `8 random ${val(W, "rand", last, 0)}` : "8 random") : W.dirs);
-      if (end) at(E.lg, [end[0] + g.fsm * .6, end[1]], g.fsm * .35);
+      text("lg", other === "rand" ? (last == null ? "" : W.ref != null ? `8 random ${val(W, "rand", last, 0)}` : "8 random") : W.dirs);
+      if (end) at(E.lg, [end[0] + g.fsm * .6, end[1]], spots(W, sm, 0).lg);
       // RL-Math's directions on code: a hollow point at size 1.5 with its count, named
       const ra = A.ref != null, rb = B.ref != null, w = ra && rb ? 1 : rb ? es : ra ? 1 - es : 0;
       const T = rb ? B : A, yr = !ra && !rb ? g.rows[0].y0 : ra && rb ? mix(YA(A.stat[A.ref].right), YB(B.stat[B.ref].right), es) : rb ? YB(B.stat[B.ref].right) : YA(A.stat[A.ref].right);
@@ -1783,20 +2342,22 @@ function frame(now) {
   aim(4 * Math.sin(t * .13) + 3.5 * V.px, 2 * Math.sin(t * .09) - 2 * V.py);
   place(t, now);
 }
-function layout(T, c) {  // each problem's look and place in cell c of set T, and its order of departure
-  const L = S.g.L[T.key], look = T.pr.map(p => lookOf(p.o[c])), pos = [], rank = [];
+function layout(T, c, m) {  // each problem's look and place in cell c of set T, and its order of departure
+  const L = S.g.L[T.key], look = T.pr.map(p => lookOf(p.o[c])), pos = [], rank = [], G = m === "group";
+  const band = j => G ? T.gb[j] : bandOf(look[j]), ord = { r: 0, w: 1, n: 2, c: 2 };  // grouped: lit marks at the floor
   let r = 0;
   BANDS.forEach(b => {
-    T.pr.map((p, j) => j).filter(j => bandOf(look[j]) === b)
-      .sort((x, y) => (look[x] === "n") - (look[y] === "n") || T.rank[y] - T.rank[x] || x - y)
+    T.pr.map((p, j) => j).filter(j => band(j) === b)
+      .sort((x, y) => (G ? ord[look[x]] - ord[look[y]] : (look[x] === "n") - (look[y] === "n")) || T.rank[y] - T.rank[x] || x - y)
       .forEach((j, s) => { pos[j] = slot(L, b, s); rank[j] = r++; });
   });
   return { look, pos, rank };
 }
-const counts = (T, c) => [T.stat[c].right, T.stat[c].cut, T.stat[c].fr, T.stat[c].fw, T.stat[c].cut];
+const GHINT = `One mark is one problem, placed by Base + cue's answer ${SP.mark + 1} of 4, lit if right at size 1.5. Click a mark to read it.`;
+const counts = (T, c, m) => m === "group" ? [SP.fin, 100 - SP.fin, ...T.gr.map(x => x.n)] : [T.stat[c].right, T.stat[c].cut, T.stat[c].fr, T.stat[c].fw, T.stat[c].cb];
 function setState(set, m, i, opts = {}) {
   const T = SETS[set], now = performance.now(), quick = still.matches || opts.instant, c = col(m, i, T);
-  const e = ease(clamp((now - S.t0) / 900, 0, 1)), L = layout(T, c), n = T.pr.length;
+  const e = ease(clamp((now - S.t0) / 900, 0, 1)), L = layout(T, c, m), n = T.pr.length;
   const who = T.pr.map((_, j) => j), to = L.pos.slice(), toLook = L.look.slice(), rank = L.rank.slice();
   let from = [], fromLook = [];
   if (quick || !S.to.length) { from = to.slice(); fromLook = toLook.slice(); }
@@ -1817,19 +2378,25 @@ function setState(set, m, i, opts = {}) {
   }
   S.from = from; S.fromLook = fromLook; S.to = to; S.toLook = toLook; S.rank = rank; S.who = who;
   const c0 = S.c0.map((v, j) => mix(v, S.c1[j], e)), v0 = mix(S.v0, S.v1, e);
-  S.c1 = counts(T, c); S.c0 = quick ? S.c1.slice() : c0;
+  S.c1 = counts(T, c, m); S.c0 = quick ? S.c1.slice() : c0;
   S.v1 = SIZES[i]; S.v0 = quick ? S.v1 : v0;
   S.setFrom = quick ? set : S.set; S.mFrom = quick ? m : S.m; S.iFrom = quick ? i : S.i;
   S.set = set; S.m = m; S.i = i;
   S.t0 = quick ? -1e9 : now;
   dial();
   const st = T.stat[c], rl = T.stat[T.rl];
-  $("svg").setAttribute("aria-label", `${T.label}, one mark each. ${i === 1 ? "Base + cue" : `Base + cue with ${m === "top" ? T.dirs : "8 random"} directions at size ${num(SIZES[i])}`}: ` +
-    `${st.right} of ${T.n} ${T.right}, ${st.cut} ${T.cutWord}; ${st.fr} ${T.word[0]}, ${st.fw} ${T.word[1]}. ${T.rlName}: ${rl.right} ${T.right}, ` +
+  $("svg").setAttribute("aria-label", m === "group" ? `${T.label}, one mark each, grouped by what one Base + cue answer did: ` +
+    GW.map((w, j) => `${w}, ${T.gr[j].n} problems, ${T.gr[j].right} right at size 1.5`).join("; ") + `. Over all 4 samples, ${SP.fin} % of the ` +
+    "gain of size 1.5 is on problems Base + cue finished. " + GW.map((w, j) => `${w}: size 1.5 ${SP.groups[j][0]} %, a second Base + cue ` +
+    `answer ${SP.groups[j][1]} %, RL ${SP.groups[j][2]} % right`).join("; ") + ". Enter opens a problem." :
+    `${T.label}, one mark each. ${i === 1 ? "Base + cue" : `Base + cue with ${m === "top" ? T.dirs : "8 random"} directions at size ${num(SIZES[i])}`}: ` +
+    `${st.right} of ${T.n} ${T.right}, ${st.cut} ${T.cutWord}${T.samples ? `, means of ${T.samples} samples; the marks show the first:` : ";"} ` +
+    `${st.fr} ${T.word[0]}, ${st.fw} ${T.word[1]}. ${T.rlName}: ${rl.right} ${T.right}, ` +
     `${rl.cut} ${T.gone}. Arrow keys change the size; Enter opens a problem.`);
-  if (S.shown.set !== set) {  // the words under the switch and the hint arrive with the new set
-    S.shown.set = set;
-    $("setcap").textContent = T.cap; $("hint").textContent = T.hint;
+  const hk = set + (m === "group");
+  if (S.shown.set !== hk) {  // the words under the switch and the hint arrive with the new set or view
+    S.shown.set = hk;
+    $("setcap").textContent = T.cap; $("hint").textContent = m === "group" ? GHINT : T.hint;
     if (!quick) [$("setcap"), $("hint")].forEach(el => el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, easing: "ease-out" }));
   }
   if (still.matches) { aim(0, 0); place(0, now); }
@@ -1843,15 +2410,16 @@ function dial() {
   const T = SETS[S.set], ok = allowed(), v = SIZES[S.i];
   $("stops").innerHTML = SIZES.map((s, k) => `<i class="stop${ok.includes(k) ? "" : " na"}${(s - 0) * (v - 0) > 0 && Math.abs(s) <= Math.abs(v) ? " in" : ""}" style="left:${POS(s)}"></i>`).join("");
   $("ticks").innerHTML = SIZES.map((s, k) => `<span class="${k === S.i ? "on" : ""}${ok.includes(k) ? "" : " na"}" style="left:${POS(s)}">${num(s)}` +
-    (!ok.includes(k) ? "<small>not run</small>" : k === 1 ? "<small>Base + cue</small>" : k === 3 ? `<small>as in ${T.rlName.replace("-", "\u2011")}</small>` : "") + "</span>").join("");
+    (!ok.includes(k) ? (S.m === "group" ? "" : "<small>not run</small>") : k === 1 ? "<small>Base + cue</small>" : k === 3 ? `<small>as in ${T.rlName.replace("-", "\u2011")}</small>` :
+      k === FIRST && T.samples ? "<small>fixed on the 328</small>" : "") + "</span>").join("");
   $("thumb").style.left = POS(v);
   const a = Math.min(0, v), b = Math.max(0, v);
   $("fill").style.left = POS(a); $("fill").style.width = `calc((100% - 28px) * ${(U(b) - U(a)).toFixed(4)})`;
   const st = T.stat[col()], tr = $("track");
   tr.setAttribute("aria-valuenow", v);
   tr.setAttribute("aria-valuetext", `${S.i === 1 ? "0, Base + cue" : num(v)}: ${st.right} of ${T.n} ${T.right}, ${st.cut} ${T.gone}`);
-  $("dlab").innerHTML = `Size of the edit <span>· ${S.m === "top" ? `${T.dirs} directions per matrix` : "8 random directions per matrix, the control"}</span>`;
-  document.querySelectorAll("[data-m]").forEach(b => b.setAttribute("aria-pressed", b.dataset.m === S.m));
+  $("dlab").innerHTML = `Size of the edit <span>· ${S.m === "top" ? `${T.dirs} directions per matrix` : S.m === "group" ? "8 RL directions at size 1.5" : "8 random directions per matrix, the control"}</span>`;
+  document.querySelectorAll("[data-m]").forEach(b => { b.setAttribute("aria-pressed", b.dataset.m === S.m); b.disabled = !allowed(b.dataset.m).length; });
   document.querySelectorAll("[data-set]").forEach(b => b.setAttribute("aria-pressed", b.dataset.set === S.set));
 }
 
@@ -1862,6 +2430,7 @@ function said(p, c) {
   if (o === "c" || o === "k") return `<span class="c">cut off</span> at ${fmt(D.cap)} tokens` + (o === "k" ? `, scored right (${ans})` : "");
   return `<span class="${o}">${o === "r" ? "right" : "wrong"}</span> in ${fmt(p.tok[c])} tokens, ${ans}`;
 }
+const four = o => { const n = ch => [...o].filter(x => ch.includes(x)).length; return ` ${n("rk")} right, ${n("w")} wrong, ${n("ck")} cut off`; };
 function mathPane(j) {
   const T = SETS.math, p = T.pr[j], saved = T.cells.map(c => c[0]).filter(k => D.examples[k].includes(p.i));
   const row = (c, name, on, end) => `<li class="${on ? "on" : ""}">${glyph(p, c)}<span class="who">${name}</span>: ${said(p, c)}.` +
@@ -1870,10 +2439,14 @@ function mathPane(j) {
     `<p class="lead q" data-math>${esc(p.q)}</p>` +
     `<p class="gold">${esc(SRC[p.src] || p.src)} · reference answer <span data-math>${esc(p.gold)}</span></p>` +
     `<p class="sub"><b>Base + cue with the 8 RL directions</b>, one answer per size, T 1.0, and how each answer ends:</p>` +
-    `<ul class="answers">${T.cols.top.map((c, k) => row(c, k === 1 ? "Size 0, Base + cue" : `Size ${num(SIZES[k])}`, S.m === "top" && S.i === k, true)).join("")}</ul>` +
+    `<ul class="answers">${T.cols.top.map((c, k) => row(c, k === 1 ? "Size 0, Base + cue" : `Size ${num(SIZES[k])}`, S.m !== "rand" && S.i === k, true)).join("")}</ul>` +
     `<p class="sub"><b>8 random directions</b>, the control (final answer only):</p>` +
     `<ul class="answers">${allowed("rand", T).filter(k => k !== 1).map(k => row(T.cols.rand[k], `Size ${num(SIZES[k])}`, S.m === "rand" && S.i === k, false)).join("")}</ul>` +
     `<p class="sub"><b>RL</b>, plain prompt (final answer only):</p><ul class="answers">${row(T.rl, "RL", false, false)}</ul>` +
+    `<p class="sub"><b>The four-sample run</b> of the split by what Base + cue did, answers 1 to 4 (seeds 3,000,000 + 10,000 × sample):</p>` +
+    `<ul class="answers">${["Base + cue", "Size 1.5", "RL"].map((w, a) => `<li class="${a === 0 && S.m === "group" ? "on" : ""}"><span class="who">${w}</span>: ` +
+      `${[0, 1, 2, 3].map(s => `<i class="g ${lookOf(p.g[4 * a + s])}"></i>`).join("")}${four(p.g.slice(4 * a, 4 * a + 4))}` +
+      (a === 0 ? `; answer ${SP.mark + 1} sets the group in the grouped view: ${GW[BANDS.indexOf(T.gb[j])].replace("Base + cue ", "")}` : "") + ".</li>").join("")}</ul>` +
     `<p class="gold">The quoted text is the end of each stored answer, from the jobs' raw answers, which are not in git. ` +
     (saved.length ? `This problem's full answer is saved in git for ${saved.map(k => k === "rl" ? "RL" : k === "0" ? "Base + cue" : (k[0] === "r" ? "random, size " : "size ") + num(k.replace(/^r/, "").replace("m", "-"))).join(", ")}: ` +
       `examples.json of each run folder.` : "No answer to this problem is saved in git.") + `</p>`;
@@ -1901,19 +2474,34 @@ function codePane(j) {
     `<p class="gold">The quoted text is the end of each stored answer, from the jobs' raw answers, which are not in git. ` +
     (DC.examples.includes(p.uid) ? "This problem's full answer is saved in git for every cell: examples.json of each run folder." : "No answer to this problem is saved in git.") + `</p>`;
 }
+function freshPane(j) {
+  const T = SETS.fresh, p = T.pr[j], ns = DF.samples, rest = Array.from({ length: ns - 1 }, (_, s) => s + 1);
+  const arm = (c0, name, k, end) => `<li class="${S.m === "top" && S.i === k ? "on" : ""}">${glyph(p, c0)}<span class="who">${name}, sample 1</span>: ` +
+    `${said(p, c0)}.` + (end == null ? "" : `<span class="end" data-math>“${esc(p.end[end])}”</span>`) + "</li>" +
+    `<li>${rest.map(s => glyph(p, c0 + s)).join("")}<span class="who">Samples 2 to ${ns}</span>: ${rest.map(s => said(p, c0 + s)).join("; ")}.</li>`;
+  return `<div class="dhead"><h2>${esc(SRC[p.src] || p.src)}, problem ${esc(p.nb)}</h2><button class="close" data-open="">Close</button></div>` +
+    `<p class="lead q" data-math>${esc(p.q)}</p>` +
+    `<p class="gold">Held ${day(p.date)}, after the last upload of the models' weights (${day(DF.upload)}) · reference answer <span data-math>${esc(p.gold)}</span></p>` +
+    `<p class="sub"><b>Size 0, Base + cue</b>, ${ns} answers, T 1.0, and how the first ends:</p><ul class="answers">${arm(0, "Size 0", 1, 0)}</ul>` +
+    `<p class="sub"><b>The 8 RL directions at size 1.5</b>, fixed on the 328, ${ns} answers:</p><ul class="answers">${arm(ns, "Size 1.5", FIRST, 1)}</ul>` +
+    `<p class="sub"><b>RL</b>, plain prompt, ${ns} answers (final answer only):</p><ul class="answers">${arm(2 * ns, "RL", -1, null)}</ul>` +
+    `<p class="gold">The marks show sample 1. On this set only sizes 0 and 1.5 were run. The quoted text is the end of the stored ` +
+    `answer, from the jobs' raw answers, which are not in git; the outcomes of Base + cue and RL are in git (studies/rlneurons/results/fresh/).</p>`;
+}
 function pane() {
   const T = SETS[S.set], p = C.panels.find(p => p[0] === S.open), j = S.open && S.open[0] === "p" ? T.pr.findIndex(q => q.id === S.open) : -1;
   const steps = `<div class="steps"><button data-step="-1">‹ Previous problem</button><button data-step="1">Next problem ›</button></div>`;
   // One wrapper: sitekit's observer cleans the math of data-math elements inside an added node.
-  $("pane").innerHTML = j >= 0 ? `<div>${(T === SETS.math ? mathPane(j) : codePane(j)) + steps}</div>` : p
+  $("pane").innerHTML = j >= 0 ? `<div>${(T === SETS.math ? mathPane(j) : T === SETS.code ? codePane(j) : freshPane(j)) + steps}</div>` : p
     ? `<div class="dhead"><h2>${esc(p[1])}</h2><button class="close" data-open="">Close</button></div><p class="lead">${esc(p[2])}</p>` +
       `<ul class="facts">${p[3].map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
     : `<ul class="more">${C.panels.map(p => `<li><button data-open="${p[0]}">${esc(p[1])}<span aria-hidden="true">›</span></button></li>`).join("")}</ul>`;
 }
-/* The state and what is open are one value in the address: #[code/][random/]s<size>[/<panel or p<problem>>], the problem
-   p<index in hard.json> on math, p<he|mbpp><number> on code. The defaults (math, the 8 RL directions, size 1.5) are left out. */
+/* The state and what is open are one value in the address: #[code/|fresh/][random/|group/]s<size>[/<panel or p<problem>>], the
+   problem p<index in hard.json> on math, p<he|mbpp><number> on code, pf<index in the set> on 2026. The defaults (math, the 8
+   RL directions, size 1.5) are left out. */
 function address(push) {
-  const parts = [S.set === "code" ? "code" : "", S.m === "rand" ? "random" : "", S.m === "top" && S.i === FIRST ? "" : "s" + SIZES[S.i], S.open || ""].filter(Boolean);
+  const parts = [S.set === "math" ? "" : S.set, S.m === "rand" ? "random" : S.m === "group" ? "group" : "", S.m !== "rand" && S.i === FIRST ? "" : "s" + SIZES[S.i], S.open || ""].filter(Boolean);
   const url = parts.length ? "#" + parts.join("/") : location.pathname;
   push ? history.pushState(null, "", url) : history.replaceState(null, "", url);
 }
@@ -1921,9 +2509,10 @@ function toward(T, m, k) {  // the stop of set T and switch position m nearest t
   return allowed(m, T).reduce((b, s) => { const d = Math.abs(SIZES[s] - SIZES[k]) - Math.abs(SIZES[b] - SIZES[k]); return d < 0 || (d === 0 && s > b) ? s : b; });
 }
 function fromHash(first) {
-  const parts = decodeURIComponent(location.hash.slice(1)).split("/"), set = parts.includes("code") ? "code" : "math", T = SETS[set];
-  const m = parts.includes("random") ? "rand" : "top", sz = parts.find(x => /^s-?[\d.]+$/.test(x));
-  const k = sz ? SIZES.indexOf(Number(sz.slice(1))) : -1, i = toward(T, m, k >= 0 ? k : FIRST);
+  const parts = decodeURIComponent(location.hash.slice(1)).split("/"), set = ["code", "fresh"].find(x => parts.includes(x)) || "math", T = SETS[set];
+  const m = ["rand", "group"].find(x => parts.includes(x === "rand" ? "random" : x) && allowed(x, T).length) || "top", sz = parts.find(x => /^s-?[\d.]+$/.test(x));
+  const v = sz ? Number(sz.slice(1)) : NaN;  // a size between the stops goes to the nearest one (a tie to the larger)
+  const k = isFinite(v) ? SIZES.reduce((b, x, n) => Math.abs(x - v) <= Math.abs(SIZES[b] - v) ? n : b, 0) : FIRST, i = toward(T, m, k);
   S.open = parts.find(x => C.panels.some(p => p[0] === x) || T.pr.some(p => p.id === x)) || null;
   if (first === true) {
     // With an empty address the page opens on Base + cue and turns the dial to 1.5 by itself, one stop at a time.
@@ -1949,6 +2538,7 @@ function open(key) {
 }
 function go(set, m, i) {
   S.touched = true;
+  if (!allowed(m, SETS[set]).length) m = "top";  // the random directions were not run on the 2026 set
   i = toward(SETS[set], m, i);
   if (set === S.set && m === S.m && i === S.i) return;
   if (set !== S.set && S.open && S.open[0] === "p") { S.open = null; pane(); }  // a problem of the other set closes
@@ -2006,7 +2596,7 @@ addEventListener("hashchange", fromHash);
 addEventListener("popstate", fromHash);
 narrow.addEventListener("change", () => { build(); setState(S.set, S.m, S.i, { instant: true }); place(S.t, performance.now()); });
 still.addEventListener("change", () => { if (still.matches) { setState(S.set, S.m, S.i, { instant: true }); aim(0, 0); place(0, performance.now()); } });
-document.fonts.ready.then(() => { S.shown = { set: S.shown.set }; place(S.t, performance.now()); });  // measure the counts again in the loaded typeface
+document.fonts.ready.then(() => { S.shown = { set: S.shown.set }; S.spots = {}; place(S.t, performance.now()); });  // measure the counts again in the loaded typeface
 const stage = $("stage");
 stage.addEventListener("pointermove", e => {
   if (e.pointerType !== "mouse" || still.matches) return;
@@ -2050,9 +2640,15 @@ ICON = r"""(kit, t, tilt) => {
 }"""
 
 PAGE = PAGE.replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({
-    "problem": PROBLEM, "line": LINE, "rep": REPLINE, "panels": PANELS, "problems": PROBLEMS, "cells": CELLS,
+    "problem": PROBLEM, "line": LINE, "rep": REPLINE, "panels": PANELS, "problems": PROBLEMS, "cells": CELLS, "group": GROUP,
+    # the split for the grouped view: per group FR, FW, CH the right rates (%) of size 1.5, a second Base + cue answer and RL,
+    # size 1.5 minus Base + cue [points, 90 % interval], the share of the gain (%) and the number of problems
+    "split": {"mark": _P["mark_sample"], "fin": _FIN, "groups": [[g["edit"], g["base2"], g["rl"], g["d"], g["share"][0], g["problems"]]
+                                                               for g in (_PG["FR"], _PG["FW"], _PG["CH"])]},
     "data": {k: DATA[k] for k in ("n", "cap", "cells", "examples", "folders")},
-    "code": {"problems": CODE_PROBLEMS, "cells": CODE_CELLS, "data": {k: DATA["code"][k] for k in ("n", "examples")}}}, ensure_ascii=False))
+    "code": {"problems": CODE_PROBLEMS, "cells": CODE_CELLS, "data": {k: DATA["code"][k] for k in ("n", "examples")}},
+    "fresh": {"problems": FRESH_PROBLEMS, "data": {k: DATA["fresh"][k] for k in ("n", "samples", "upload", "dates", "diff")}}},
+    ensure_ascii=False))
 
 
 def _check_rep():  # the replication sentence and REPLINE against the replication's readouts and committed rows
@@ -2074,6 +2670,133 @@ def _check_rep():  # the replication sentence and REPLINE against the replicatio
     assert m["run"]["set"] == "math500" and m["each_sample"]["single_right"] == [R["m500"]] and m["minus"]["readout"] == R["m500_rl_readout"]
     assert json.load(open(R["m500_rl_readout"]))["each_sample"]["single_right"] == R["m500_rl"] and R["m500_rl"][0] == R["m500"]
     print("the replication matches", R["folder"], "(readout.json, rows.jsonl),", R["rl_readout"], "and", R["m500_folder"])
+
+
+def _check_fresh(frows):  # the 2026 set: DATA["fresh"] against its readout, the committed rows and the plan; FRESH_PROBLEMS
+    import subprocess
+    from studies.rlneurons.analysis.day1_vote import vote
+    from studies.rlneurons.analysis.mixvote import paired
+    F, n = DATA["fresh"], DATA["fresh"]["n"]
+    ro, run, ref = json.load(open(F["readout"])), json.load(open(F["run"])), _fresh_refs()
+    assert ro["n"] == n and ro["samples_per_model"] == {"edit": 4, "rl": 4, "base": 4} and ro["grader"].startswith("v3")
+    assert len(FRESH_PROBLEMS) == n and all(len(p[6]) == 12 for p in FRESH_PROBLEMS)
+    model = {"0": "base", "1.5": "edit", "rl": "rl"}
+    for k, m in model.items():
+        assert [x.rsplit("/", 1)[1] for x in run["runs"][m].split(",")] == FRESH_JOBS[m], m
+        assert FRESH_COUNTS[k] == {"right": F["right"][k], "cut": F["cut"][k]}, (k, FRESH_COUNTS[k])
+        one, four = ro["rows"][f"1 {m}"], ro["rows"][f"4 {m}"]
+        assert (one["right_mean"], one["right_min"], one["right_max"]) == (sum(F["right"][k]) / 4, min(F["right"][k]), max(F["right"][k])), m
+        assert four["right_mean"] == sum(four["per_problem_mean"]) == F["vote"][k], m
+        j = _FG[k]  # the marks' per-problem share of right samples equals the readout's
+        assert [sum(p[6][j + s] in "rk" for s in range(4)) / 4 for p in FRESH_PROBLEMS] == one["per_problem_mean"], m
+    for arm, k in (("base", "0"), ("rl", "rl")):  # the committed rows: the outcomes on the page and the vote of the readout
+        assert all("".join(_outcome(ref[arm][(s, p[0])]) for s in range(4)) == p[6][_FG[k]:_FG[k] + 4] for p in FRESH_PROBLEMS), arm
+        assert [vote([ref[arm][(s, i)] for s in range(4)])["score"] for i in range(n)] == ro["rows"][f"4 {arm}"]["per_problem_mean"], arm
+    pp = lambda r: ro["rows"][r]["per_problem_mean"]
+    for name, (a, b) in {"vs_rl": ("1 edit", "1 rl"), "vs_base": ("1 edit", "1 base"), "vote_vs_rl": ("4 edit", "4 rl"),
+                         "vote_vs_base": ("4 edit", "4 base")}.items():
+        d = paired(pp(a), pp(b))
+        assert [round(d["points"], 1), *(round(x, 1) for x in d["interval95"])] == F["diff"][name], (name, d)
+    P = F["predictions"]  # the three predictions of the plan, and the plan in the commit the jobs ran
+    assert P["mean"][0] <= sum(F["right"]["1.5"]) / 4 <= P["mean"][1] and P["vote"][0] <= F["vote"]["1.5"] <= P["vote"][1]
+    assert max(F["cut"]["1.5"]) <= P["cut_max"]
+    plan = subprocess.run(["git", "show", F["job_commit"] + ":" + F["spec"]], capture_output=True, text=True, check=True).stdout
+    assert "before any job" in plan and "[44.5, 56.5]" in plan and "[50, 62]" in plan and "at most 30" in plan
+    dates = sorted(p["date"] for p in json.load(open(F["problems"])))
+    assert F["dates"] == [dates[0], dates[-1]] and F["upload"] < dates[0]
+    assert "weights 2025-12-12" in open("studies/rlneurons/specs/SPEC_fresh.md").read() and F["upload"] == "2025-12-12"
+    print("DATA['fresh'] and FRESH_PROBLEMS' counts match", F["readout"], "the committed rows of", FRESH_REFS, "and", F["spec"])
+    if frows is None:
+        print("skipped: the edit's 2026 rows are not in runs/ (uv run tools/gpu.py get <job> for every job in FRESH_JOBS)")
+        return
+    assert FRESH_PROBLEMS == _fresh_build(frows), "FRESH_PROBLEMS differs from the rows: run with --write"
+    for job in FRESH_JOBS["edit"]:
+        m = json.load(open(f"runs/{job}/metrics.json"))
+        c = m["config"]
+        assert (m["job_id"], m["commit"], c["prompt"], c["set"], c["temperature"], c["top_p"], c["max_tokens"], c["restarts"]) == \
+            (job, F["job_commit"], "cue", "fresh2026", 1.0, 1.0, DATA["cap"], 0), (job, c)
+    print("FRESH_PROBLEMS matches the rows in runs/ of", len(FRESH_JOBS["edit"]), "edit jobs (graded again with grader v3)")
+
+
+def _group_build():  # GROUP from the committed rows of the four-sample runs (attempt 0)
+    arms = []
+    for path in DATA["split"]["rows"].values():
+        rows = [json.loads(line) for line in open(path)]
+        by = {(r["sample"], r["problem_index"]): r for r in rows if r["attempt"] == 0}
+        assert len(by) == 4 * DATA["n"] and all(r["seed"] == 3000000 + 10000 * s + i for (s, i), r in by.items()), path
+        arms.append(by)
+    return ["".join(_outcome(a[(s, p[0])]) for a in arms for s in range(4)) for p in PROBLEMS]
+
+
+def _check_split():  # DATA["split"] against its readout and its spec; GROUP against the rows; the readout's numbers from GROUP
+    P, G = DATA["split"], DATA["split"]["groups"]
+    ro, run = json.load(open(P["readout"])), json.load(open(SPLIT + "run.json"))
+    assert ro["spec"] == run["spec"] == P["spec"] and all(path in run["inputs"] for path in P["rows"].values()), run["inputs"]
+    assert ro["verdict_hard328"] == "adds skill" and ro["hard328"]["shared_seed_excluded"] and "90 %" in run["bootstrap"]
+    assert "10,000 resamples" in run["bootstrap"] and "90 % bootstrap interval" in open(P["spec"]).read()
+    h = ro["hard328"]
+    one = lambda x: round(100 * x, 1)
+    for g, x in G.items():
+        r = h["groups"][g]
+        assert (r["n_problem_samples"], r["n_problems"]) == (x["n"], x["problems"]), g
+        assert [one(r["rate_edit"][0]), one(r["rate_base2"][0]), one(r["rate_rl"][0])] == [x["edit"], x["base2"], x["rl"]], g
+        assert [round(v, 1) for v in r["D_edit_minus_base2_pts"]] == x["d"], g
+        assert [round(v, 1) for v in r["D_edit_minus_rl_pts"]] == x["d_rl"], g
+        assert [one(r["cap_rate_base2"]), one(r["cap_rate_edit"])] == [x["cap_base2"], x["cap_edit"]], g
+        assert [round(100 * v) for v in h["edit_gain_share_" + g]] == x["share"], g
+        if "d_rpf" in x:
+            assert [one(r["right_per_finished_edit"][0]), one(r["right_per_finished_base2"][0])] == [x["rpf_edit"], x["rpf_base2"]], g
+            assert [round(v, 1) for v in r["D_edit_minus_base2_right_per_finished_pts"]] == x["d_rpf"], g
+    assert round(h["groups"]["FW"]["D_rl_minus_base2_pts"][0], 1) == round(G["FW"]["rl"] - G["FW"]["base2"], 1)  # "RL adds"
+    assert sum(G[g]["share"][0] for g in G) == 100 and _FIN == round(100 * (1 - h["edit_gain_share_CH"][0]))
+    a, x = h["base_always_finishes"], P["always"]
+    assert (a["n_problems"], one(a["rate_base"][0]), one(a["rate_edit"][0]), one(a["rate_rl"][0])) == (x["n"], x["base"], x["edit"], x["rl"])
+    assert [round(v, 1) for v in a["D_edit_minus_base_pts"]] == x["d"] and round(a["D_rl_minus_base_pts"][0], 1) == x["d_rl"]
+    s1, x = ro["signed_m1x_hard328"], P["m1"]
+    assert (s1["n_problems_both_finish"], one(s1["same_problems_m1x_rate"][0]), one(s1["same_problems_base_finished_rate"][0])) == \
+        (x["n"], x["m1"], x["base"]) and [round(v, 1) for v in s1["same_problems_m1x_minus_base_pts"]] == x["d"]
+    assert (s1["right"], s1["cap_hits"]) == (_C["m1"]["right"], _C["m1"]["cut"])  # the size -1 cell of the slider
+    m5, x = ro["math500"], P["m500"]
+    assert round(100 * m5["edit_gain_share_CH"][0]) == x["share_ch"] and m5["groups"]["FW"]["n_problem_samples"] == x["fw_n"]
+    assert [round(v, 1) for v in m5["groups"]["FW"]["D_edit_minus_base2_pts"]] == x["fw_d"]
+    assert round(m5["groups"]["FW"]["D_rl_minus_base2_pts"][0], 1) == x["fw_d_rl"]
+    m1x = [json.loads(line) for line in open(SPLIT + "m1x_hard328_rows.jsonl")]  # the size -1 rows the readout used: the slider's
+    assert {r["problem_index"]: _outcome(r) for r in m1x} == {p[0]: p[4][_col["m1"]] for p in PROBLEMS}, "m1x rows"
+    print("DATA['split'] matches", P["readout"], "and", P["spec"])
+    assert GROUP == _group_build(), "GROUP differs from the committed rows"
+    # the readout's group numbers again, from GROUP: every Base + cue answer i in turn sets the group; the other seeds compare
+    grp = lambda ch: "CH" if ch in "ck" else "FR" if ch == "r" else "FW"
+    tot, gain = {}, {}
+    for g in G:
+        n, right = 0, [0, 0, 0]
+        for o in GROUP:
+            for i in range(4):
+                if grp(o[i]) != g:
+                    continue
+                n += 1
+                for a in range(3):
+                    right[a] += sum(o[4 * a + j] in "rk" for j in range(4) if j != i)
+        tot[g] = n
+        rate = [100 * x / (3 * n) for x in right]
+        assert [round(rate[1], 1), round(rate[0], 1), round(rate[2], 1)] == [G[g]["edit"], G[g]["base2"], G[g]["rl"]], (g, rate)
+        gain[g] = n * (rate[1] - rate[0])
+    assert all(tot[g] == G[g]["n"] for g in G) and all(round(100 * gain[g] / sum(gain.values())) == G[g]["share"][0] for g in G)
+    T = [o for o in GROUP if not any(ch in "ck" for ch in o[:4])]
+    assert len(T) == P["always"]["n"]
+    assert [round(100 * sum(ch in "rk" for o in T for ch in o[4 * a:4 * a + 4]) / (4 * len(T)), 1) for a in range(3)] == \
+        [P["always"]["base"], P["always"]["edit"], P["always"]["rl"]]
+    print("GROUP matches the committed rows of", ", ".join(P["rows"].values()), "and gives the readout's group rates and shares")
+    for key, x in (("m500_2", DATA["m500_2"]), ("m500_m1", DATA["m500_m1"])):
+        m = json.load(open(x["folder"] + "metrics.json"))
+        if key == "m500_2":
+            assert (m["n"], m["right_v3"], m["cap_hits"], m["vs_1p5x"]["ref_right_v3"]) == (500, x["right"], x["cut"], x["ref_right"])
+            assert m["vs_1p5x"]["ref"] == DATA["rep"]["m500_folder"] + "rows.jsonl" and x["ref_right"] == DATA["rep"]["m500"]
+            assert "--scale 2 " in json.load(open(x["folder"] + "run.json"))["command"]
+        else:
+            b = m["base_same_seeds"]
+            assert (m["n"], m["cap_hits"], m["right_v3"], b["cap_hits"], b["right_v3"]) == (x["n"], x["cut"], x["right"], x["base_cut"], x["base_right"])
+            assert "--scale -1.0 " in json.load(open(x["folder"] + "run.json"))["command"]
+    print("DATA['m500_2'] and DATA['m500_m1'] match", DATA["m500_2"]["folder"], "and", DATA["m500_m1"]["folder"])
 
 
 def _check_code(crows):  # the code set: DATA["code"] against its readout and run folders, CODE_PROBLEMS against the rows
@@ -2115,11 +2838,12 @@ def _check_code(crows):  # the code set: DATA["code"] against its readout and ru
 
 
 if __name__ == "__main__":  # run from the repository root
-    rows, crows = _rows(), _code_rows()
+    rows, crows, frows = _rows(), _code_rows(), _fresh_rows()
     if sys.argv[1:] == ["--write"]:  # each table whose rows are all in runs/
-        assert rows or crows, "runs/<job>/answers.jsonl missing: uv run tools/gpu.py get <job> for every job in CELLS or CODE_CELLS"
+        assert rows or crows or frows, "runs/<job>/answers.jsonl missing: uv run tools/gpu.py get <job> for every job in CELLS, CODE_CELLS or FRESH_JOBS"
         src = open(__file__).read()
-        for name, table in (("PROBLEMS", rows and _build(rows)[0]), ("CODE_PROBLEMS", crows and _code_build(crows))):
+        for name, table in (("PROBLEMS", rows and _build(rows)[0]), ("CODE_PROBLEMS", crows and _code_build(crows)),
+                            ("FRESH_PROBLEMS", frows and _fresh_build(frows))):
             if table:
                 start = src.index(f"\n{name} = [") + 1
                 end = src.index("\n]\n", start) + 2
@@ -2168,4 +2892,6 @@ if __name__ == "__main__":  # run from the repository root
             lo, hi = n13_score.paired_bootstrap(a, b, n_boot=5000, seed=0)
             assert [round(100 * (sum(a) - sum(b)) / DATA["n"], 2), round(lo, 2), round(hi, 2)] == [x["points"], *x["ci"]], (name, lo, hi)
         print("PROBLEMS and the intervals match the rows in runs/ of", len(CELLS), "jobs")
+    _check_split()
     _check_code(crows)
+    _check_fresh(frows)

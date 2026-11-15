@@ -7,6 +7,11 @@ set -euo pipefail
 cd "$(dirname "$0")/../.."
 aws=(aws --profile fuelos --region us-east-1)
 
+# the paper PDFs: the files view.PAPERS serves, read by importing view.py, so a view.py that fails at import stops the
+# deploy here, before anything is shipped, and a new paper is registered in view.PAPERS alone
+papers=$(uv run -q --with boto3 python3 -c "import sys; sys.path.insert(0, 'tools'); import view; from pathlib import Path
+print(' '.join(str(p[1].relative_to(Path.cwd())) for p in view.PAPERS.values()))")
+
 overrides=()
 if [ $# -gt 0 ]; then
   overrides=(--parameter-overrides "DomainName=$1" "HostedZoneId=$2" "HomeDomainName=${3-}")
@@ -18,7 +23,7 @@ build=$(mktemp -d)
 trap 'rm -rf "$build"' EXIT
 # all of tools/*.py (a few kB), so a new import in view.py needs no change here; boto3 comes with the Lambda runtime;
 # the paper PDFs that view.py serves at /paper/<name>.pdf lie beside the code
-zip -q -j "$build/code.zip" tools/*.py infra/monitor/run.sh studies/rlneurons/paper/the-finish-dial.pdf studies/theory/paper/theories-on-trial.pdf studies/rlneurons/paper-first-steps/the-first-hundred-steps.pdf
+zip -q -j "$build/code.zip" tools/*.py infra/monitor/run.sh $papers
 # the site lab's pages and data (view.py serves them at /lab/), with their folders kept
 (cd studies && zip -q -r "$build/code.zip" sitelab/index.html sitelab/prototypes -i '*/index.html' '*/data.json')
 "${aws[@]}" lambda update-function-code --function-name iterate-monitor --zip-file "fileb://$build/code.zip" \

@@ -1,15 +1,17 @@
 """Inputs, checks, ranking and cells.md of `forecast.py cells` (studies/theory/README.md, "Cells designed by the
 theories"). forecast.py runs the jobs; everything here is plain code on their files."""
 import ast
-import itertools
 import json
 import re
+import statistics
 from pathlib import Path
 
 import round as engine
 
 ROOT = engine.ROOT
 JOBS = ROOT / "studies/rlneurons/jobs"
+JOB_FILES = {p.stem: p for d in (JOBS, ROOT / "studies/theory/jobs") for p in sorted(d.glob("*.py"))}  # the job files a cell may run
+SETS = {"hard328": 328, "MATH-500": 500}  # the two sets of the no-reward track, as the board's score: lines name them
 CELL_KEYS = ("model", "prompt", "set", "n", "sampling", "samples", "grader", "cap")
 NUMS = ("value", "low", "high", "against_value", "gpu_minutes")
 THEORY_FILES = "\n- theories/: the full file of each theory (statement, scope, what it explains, predictions)."
@@ -57,7 +59,7 @@ def job_flags():
     """{job module: {flag: allowed values or None}} from the add_argument calls of each studies/rlneurons/jobs/*.py
     (parsed, not run); a file with none takes the flags of the job modules it imports, without their values
     (run_fresh.py runs run_cell.py's main and adds a set)."""
-    texts, own = {p.stem: p.read_text() for p in JOBS.glob("*.py")}, {}
+    texts, own = {n: p.read_text() for n, p in JOB_FILES.items()}, {}
     for n, t in texts.items():
         tree, own[n] = ast.parse(t), {}
         names = {a.targets[0].id: [k.value for k in (a.value.keys if isinstance(a.value, ast.Dict) else a.value.elts) if isinstance(k, ast.Constant)]
@@ -72,8 +74,12 @@ def job_flags():
 
 def command_errors(cmd, flags):
     """Every job file a cell's command names (jobs/<name>.py or the module jobs.<name>) exists and takes every flag
-    written after it, up to the next &&, ;, | or quote, with a value among the flag's choices when it has them."""
-    refs, errors = list(JOB_REF.finditer(cmd)), []
+    written after it, up to the next &&, ;, | or double quote, with a value among the flag's choices when it has them;
+    a single-quoted value counts as one word. A command that runs git is rejected (job machines have no .git)."""
+    git = ["the command runs git ($(git ...) or rev-parse): job machines have no .git folder; write --commit COMMIT_SHA, which the "
+           "coordinator replaces with the pushed commit's full sha at submission"] if re.search(r"\$\(git|`git|rev-parse", cmd) else []
+    cmd = re.sub(r"\$?'([^']*)'", lambda q: q[1] if q[1] and not re.search(r"\s", q[1]) else "TEXT", cmd)  # a quoted value is one word
+    refs, errors = list(JOB_REF.finditer(cmd)), git
     for m in refs:
         name = m.group(1) or m.group(2)
         if name not in flags:
@@ -88,7 +94,7 @@ def command_errors(cmd, flags):
                 errors.append(f"jobs/{name}.py has no flag {flag}")
             elif flags[name][flag] is not None and value not in map(str, flags[name][flag]):
                 errors.append(f"jobs/{name}.py {flag} takes {', '.join(map(str, flags[name][flag]))}; not {value}")
-    return errors if refs else ["the command names no job file of studies/rlneurons/jobs/"]
+    return errors if refs else git + ["the command names no job file of studies/rlneurons/jobs/"]
 
 
 def flags_once(check):
@@ -109,9 +115,11 @@ def jobs_md():
     rows = [line for line in readme.split("\n## Definitions")[0].splitlines() if line.startswith("|") and "jobs/" in line]
     howto = readme.split("\n## How to run")[1].split("\n## Raw answers")[0]
     fl = job_flags()
-    flags = [f"### jobs/{p.name}\n\nFlags (no others exist): {', '.join(f + (' {' + ', '.join(map(str, v)) + '}' if v else '') for f, v in sorted(fl[p.stem].items())) or 'none'}\n\n"
-             + "\n".join(line.strip() for line in p.read_text().splitlines() if "add_argument(" in line) for p in sorted(JOBS.glob("*.py"))]
-    return "\n".join(["# Job files (studies/rlneurons/README.md)\n", *rows, "\n## How to run" + howto, "\n## Flags of each job file\n", *flags]) + "\n"
+    flags = [f"### {p.relative_to(ROOT)}\n\nFlags (no others exist): {', '.join(f + (' {' + ', '.join(map(str, v)) + '}' if v else '') for f, v in sorted(fl[p.stem].items())) or 'none'}\n\n"
+             + "\n".join(line.strip() for line in p.read_text().splitlines() if "add_argument(" in line) for p in JOB_FILES.values()]
+    free = (ROOT / "studies/theory/jobs/free_cell.py").read_text().split('"""')[1]
+    return "\n".join(["# Job files (studies/rlneurons/README.md)\n", *rows, "\n## How to run" + howto, "\n## Flags of each job file\n", *flags,
+                      "\n## studies/theory/jobs/free_cell.py (no-reward routes; run as python -m studies.theory.jobs.free_cell)\n", free]) + "\n"
 
 
 def check_proposals(d, mids, all_ids, board_ids, flags=None):
@@ -129,8 +137,8 @@ def check_proposals(d, mids, all_ids, board_ids, flags=None):
             e.append(f"{', '.join(NUMS)} must be numbers")
         elif not p["low"] <= p["value"] <= p["high"] or p["low"] <= p["against_value"] <= p["high"] or not 0 < p["gpu_minutes"] <= 120:
             e.append("needs low <= value <= high, against_value outside [low, high] and 0 < gpu_minutes <= 120")
-        if not (JOBS / Path(p["job"]).name).is_file():
-            e.append(f"job {p['job']!r} is not a file of studies/rlneurons/jobs/")
+        if Path(p["job"]).stem not in JOB_FILES:
+            e.append(f"job {p['job']!r} is not a file of studies/rlneurons/jobs/ or studies/theory/jobs/")
         b = p.get("best_base")
         if not isinstance(p.get("base_only"), bool) or p["base_only"] and not (b and engine.number(b.get("value")) and b.get("item") in board_ids):
             e.append("base_only must be true or false; a base_only cell needs best_base with a number and the id of a board.jsonl item")
@@ -185,21 +193,160 @@ def apart(a, b):
     return a["value"] is not None and b["value"] is not None and (a["high"] < b["low"] or b["high"] < a["low"])
 
 
-def rank(merged, F, fam_of):
-    """F: {forecaster: {readout id: forecast}}; fam_of: {forecaster: family}. Adds to each cell the pairs of forecasters
-    from different families whose intervals do not overlap (over its readouts), their number, that number per GPU
-    minute, and for each readout with a best base count the highest forecast and its gain over that count."""
+def split(fs, fam_of):
+    """A split of one readout's forecasts {forecaster: forecast}: the first threshold t (a forecaster's high) with the
+    forecasters entirely at or below t from 2 or more families and those entirely above t from 2 or more families;
+    {at, low, high} or None."""
+    for t in sorted({f["high"] for f in fs.values()}):
+        low, high = [n for n, f in fs.items() if f["high"] <= t], [n for n, f in fs.items() if f["low"] > t]
+        if len({fam_of[n] for n in low}) >= 2 and len({fam_of[n] for n in high}) >= 2:
+            return {"at": t, "low": low, "high": high}
+    return None
+
+
+def said(F, rid, left_out=()):
+    return {n: F[n][rid] for n in F if n not in left_out and F[n][rid]["value"] is not None}
+
+
+def rank(merged, F, fam_of, left_out=()):
+    """F: {forecaster: {readout id: forecast}}; fam_of: {forecaster: family}; left_out: forecasters at or below -2 nats.
+    Adds to each cell its splits (one per readout whose other forecasters split with 2 or more families on each side),
+    their number (separation), that number per GPU minute, and for each readout with a best base count the highest
+    forecast and its gain over that count."""
     for c in merged:
-        c["pairs"] = [[r["id"], a, b] for r in c["readouts"] for a, b in itertools.combinations(F, 2)
-                      if fam_of[a] != fam_of[b] and apart(F[a][r["id"]], F[b][r["id"]])]
-        c["separation"], c["per_minute"] = len(c["pairs"]), round(len(c["pairs"]) / c["gpu_minutes"], 4)
+        c["splits"] = [{"readout": r["id"], **x} for r in c["readouts"] if (x := split(said(F, r["id"], left_out), fam_of))]
+        c["separation"], c["per_minute"] = len(c["splits"]), round(len(c["splits"]) / c["gpu_minutes"], 4)
         for r in (r for r in c["readouts"] if r["best_base"]):
-            top = max((n for n in F if F[n][r["id"]]["value"] is not None), key=lambda n: F[n][r["id"]]["value"])
+            top = max(said(F, r["id"]), key=lambda n: F[n][r["id"]]["value"])
             r["top"] = {"forecaster": top, "value": F[top][r["id"]]["value"], "gain": round(F[top][r["id"]]["value"] - r["best_base"]["value"], 3)}
+
+
+# ---- the no-reward track (version 11 baselines) ----
+
+TABLE = ROOT / "studies/rlneurons/results/table/hard328-02/table.json"  # hard328 configurations with per-problem vectors
+TABLE_MODEL = {"base": "base", "think_sft": "think", "rl": "rl"}  # route model -> key prefix of table.json rows
+
+
+def table_rows():
+    """The rows of table.json for the base, Think-SFT and RL (key, name, samples, tokens, right of 328, MATH-500 right),
+    each with its per-problem vector of right answers on hard328 (fractions for means over samples)."""
+    t = json.loads(TABLE.read_text())
+    return [{"key": r["key"], "name": r["name"], "samples": r["n_samples"], "tokens": round(r["tokens"]), "right": r["right"],
+             "math500": r.get("math500", {}).get("right"), "source": r["source"], "vector": t["per_problem_right"][r["key"]]}
+            for r in t["rows"] if r["key"].split("|")[0] in TABLE_MODEL.values()]
+
+
+def high_on_math500(model, rows):
+    """A model whose one-sample MATH-500 count in table.json is above 90 %: MATH-500 is no readout for it."""
+    return next(r["math500"] for r in rows if r["key"] == f"{TABLE_MODEL[model]}|single") > 450
+
+
+def route_arms(model, rows):
+    return [("route", "hard328"), ("rl", "hard328")] + ([] if high_on_math500(model, rows) else [("route", "MATH-500")])
+
+
+def subset(text, n_set):
+    """Positions of a subset of a set: "all" or a shard "k/N" (positions k, k+N, ...)."""
+    if text == "all":
+        return list(range(n_set))
+    k, n = (int(x) for x in text.split("/"))
+    return list(range(n_set))[k::n]
+
+
+def baseline(rows, model, tokens, positions):
+    """The table row of the model at the nearest token count, its right answers on the positions (measured from its
+    per-problem vector) and the binomial sd of that subset count; None when the model has no row."""
+    mine = [r for r in rows if r["key"].startswith(TABLE_MODEL[model] + "|")]
+    if not mine:
+        return None
+    b = min(mine, key=lambda r: (abs(r["tokens"] - tokens), -r["right"]))
+    n, c = len(positions), sum(b["vector"][i] for i in positions)
+    return {"value": round(c, 2), "sd": round(max((n * (c / n) * (1 - c / n)) ** 0.5, 0.5), 2), "row": b["name"], "tokens": b["tokens"],
+            "source": f"{TABLE.relative_to(ROOT)} {b['key']} ({b['source']})", "n": n}
+
+
+def check_routes(d, mids, rows, flags=None):
+    """A route job's route.json: one no-reward route from one of the family's mechanisms; model base or think_sft;
+    readouts route and RL on hard328 (a subset "all" or "k/N"), and route on MATH-500 when the model is at or below
+    90 % there; ordered numbers; tokens and minutes; with flags, both commands pass the flag check."""
+    r = json.loads((d / "route.json").read_text())["route"]
+    e = [] if r.get("mechanism") in mids else [f"mechanism must be one of {mids}"]
+    e += [f"missing {k}" for k in ("change", "command", "rl_command", "gap_parts", "why") if not str(r.get(k, "")).strip()]
+    if r.get("model") not in ("base", "think_sft"):
+        return "; ".join(e + ["model must be base or think_sft"])
+    e += [] if engine.number(r.get("tokens")) and r["tokens"] > 0 and engine.number(r.get("gpu_minutes")) and 0 < r["gpu_minutes"] <= 240 else [
+        "tokens (generated tokens per problem, all samples) > 0 and 0 < gpu_minutes <= 240"]
+    rs, arms = r.get("readouts", []), route_arms(r["model"], rows)
+    if sorted((x.get("arm"), x.get("set")) for x in rs) != sorted(arms):
+        e.append(f"readouts must be exactly one per (arm, set) of {arms}")
+    e += [f"readout {x.get('arm')} {x.get('set')}: numbers value, low, high with low <= value <= high, n in 1..{SETS.get(x.get('set'))}, and readout text"
+          for x in rs if not (all(engine.number(x.get(k)) for k in ("value", "low", "high", "n")) and x["low"] <= x["value"] <= x["high"]
+                              and 0 < x["n"] <= SETS.get(x.get("set"), 0) and str(x.get("readout", "")).strip())]
+    e += [f"readout {x['arm']} hard328: \"subset\" must be \"all\" or a shard \"k/N\" of the 328 with n equal to its size"
+          for x in rs if x.get("set") == "hard328" and not (re.fullmatch(r"all|\d+/\d+", str(x.get("subset"))) and len(subset(x["subset"], 328)) == x.get("n"))]
+    e += [f"command: {x}" for x in command_errors(r["command"], flags)] + [f"rl_command: {x}" for x in command_errors(r["rl_command"], flags)] if flags else []
+    return "; ".join(e) or None
+
+
+def route_cells(routes, rows, prefix):
+    """Routes as cells for the blind forecast: id <prefix>-n01, readouts -r1 ... (route hard328, RL hard328, route
+    MATH-500 when there is one); the route's hard328 readout carries its baseline (best_base: the stored subset count)."""
+    out = []
+    for k, r in enumerate(routes, 1):
+        cid, arms = f"{prefix}-n{k:02d}", route_arms(r["model"], rows)
+        rs = sorted(r["readouts"], key=lambda x: arms.index((x["arm"], x["set"])))
+        out.append({"id": cid, "family": r["family"], "mechanism": r["mechanism"], "model": r["model"], "change": r["change"], "tokens": r["tokens"],
+                    "gpu_minutes": r["gpu_minutes"], "command": r["command"], "rl_command": r["rl_command"], "gap_parts": r["gap_parts"], "why": r["why"],
+                    "readouts": [{"id": f"{cid}-r{j}", **x, "unit": f"right answers of {x['n']}",
+                                  "best_base": baseline(rows, r["model"], r["tokens"], subset(x["subset"], 328))
+                                  if (x["arm"], x["set"]) == ("route", "hard328") else None} for j, x in enumerate(rs, 1)]})
+    return out
+
+
+def blind_routes(routes):
+    """What the forecasters see of a route: the change, model, tokens, commands and readouts; no proposer numbers."""
+    return [{"id": c["id"], "no_reward_route": c["change"], "model": c["model"], "tokens_per_problem": c["tokens"], "command": c["command"],
+             "rl_command": c["rl_command"], "readouts": [{k: x[k] for k in ("id", "arm", "set", "n", "readout", "unit")}
+                                                        | ({"best_base": x["best_base"]} if x["best_base"] else {}) for x in c["readouts"]]} for c in routes]
+
+
+def rank_routes(routes, F, left_out=()):
+    """Per readout the median forecast (forecasters not left out); a route's score is the margin of its hard328 readout,
+    (median - stored subset count) / sd of that count; None ("no baseline") when the model has no stored rows."""
+    for c in routes:
+        for x in c["readouts"]:
+            vals = [f["value"] for f in said(F, x["id"], left_out).values()]
+            x["median"] = statistics.median(vals) if vals else None
+            if x["best_base"]:
+                x["gain"] = None if x["median"] is None else round((x["median"] - x["best_base"]["value"]) / x["best_base"]["sd"], 2)
+        c["score"] = next((x["gain"] for x in c["readouts"] if x["best_base"]), None)
+
+
+def margin_text(x):
+    return "no baseline" if x is None else f"{x:+g} sd"
+
+
+def route_md(c, F, fam_of, left_out=()):
+    md = [f"\n### {c['id']} ({c['family']}, {c['mechanism']}): {c['change']}\n\nModel {c['model']}, {c['tokens']:g} tokens per problem, "
+          f"{c['gpu_minutes']:g} GPU minutes (proposer's guess). Margin {margin_text(c['score'])}."
+          f"\n\nWhy, by the gap's parts: {c['gap_parts']} {c['why']}\n\nCommand: `{c['command']}`\n\nRL arm: `{c['rl_command']}`\n"]
+    for x in c["readouts"]:
+        b = x["best_base"]
+        md.append(f"\n#### {x['id']}: {x['arm']} on {x['set']} ({x.get('subset', 'subset as stated')}), {x['readout']} (of {x['n']})\n\nProposer {x['value']:g} "
+                  f"[{x['low']:g}, {x['high']:g}]. Median forecast {g(x['median'])}" + (
+                      f"; stored {b['value']:g} of {b['n']} (sd {b['sd']:g}; {b['row']}, {b['tokens']} tokens; {b['source']}); margin {g(x['gain'])} sd." if b
+                      else "; no baseline.") + "\n")
+        md += ["| forecaster | family | value | 90 % interval |\n|---|---|---|---|"] + [
+            f"| {n}{' (left out)' if n in left_out else ''} | {fam_of[n]} | {f['value']:g} | [{f['low']:g}, {f['high']:g}] |" for n, f in said(F, x["id"]).items()]
+    return md
 
 
 def g(x):
     return "nothing" if x is None else f"{x:g}"
+
+
+def split_text(c):
+    return "".join(f"; {x['readout']} at {x['at']:g}: {', '.join(x['low'])} below, {', '.join(x['high'])} above" for x in c["splits"])
 
 
 def cell_md(c, by_id, F, fam_of):
@@ -207,7 +354,8 @@ def cell_md(c, by_id, F, fam_of):
     forecast) and every forecaster's number beside the forecasters of other families it does not overlap."""
     md = [f"\n### {c['id']}: {c['cell']['model']}; {c['cell']['prompt']}; {c['cell']['set']}, n {c['cell']['n']}"
           f"{' (base only)' if c['base_only'] else ''}\n\nGPU minutes {c['gpu_minutes']:g} (proposers' guess). Separation "
-          f"{c['separation']} pairs, {c['per_minute']:g} per minute. Job `{c['job']}`.\n\nCell: {json.dumps(c['cell'])}\n\n"
+          f"{c['separation']} readouts split with 2 or more families on each side, {c['per_minute']:g} per minute"
+          f"{split_text(c)}. Job `{c['job']}`.\n\nCell: {json.dumps(c['cell'])}\n\n"
           f"Command: `{c['command']}`\n"]
     for r in c["readouts"]:
         md.append(f"\n#### {r['id']}: {r['readout']} ({r['unit']})\n")
@@ -217,26 +365,27 @@ def cell_md(c, by_id, F, fam_of):
         md += [f"- proposed by {p['mechanism']} ({p['id']}): {p['value']:g} [{p['low']:g}, {p['high']:g}]; says {p['against']} gives "
                f"{p['against_value']:g} (its blind forecast: {g(F[p['against']][r['id']]['value'])}). {p['why']}" for p in (by_id[i] for i in r["from"])]
         md.append("\n| forecaster | family | value | 90 % interval | does not overlap with |\n|---|---|---|---|---|")
-        said = [n for n in F if F[n][r["id"]]["value"] is not None]
-        for n in said:
-            f, other = F[n][r["id"]], [m for m in said if fam_of[m] != fam_of[n] and apart(F[n][r["id"]], F[m][r["id"]])]
+        named = said(F, r["id"])
+        for n, f in named.items():
+            other = [m for m in named if fam_of[m] != fam_of[n] and apart(f, named[m])]
             md.append(f"| {n} | {fam_of[n]} | {f['value']:g} | [{f['low']:g}, {f['high']:g}] | {', '.join(other)} |")
-        md.append(f"\nTheory says nothing: {', '.join(n for n in F if n not in said) or 'none'}.\n")
+        md.append(f"\nTheory says nothing: {', '.join(n for n in F if n not in named) or 'none'}.\n")
     return md
 
 
-def cells_md(title, head, props, merged, F, fam_of):
-    """cells.md: head, C1-C3, every merged cell in one table, then list A (top 10 by separation per GPU minute) and
-    list B (base-only cells, top 10 by the highest forecast minus the best known base count)."""
+def cells_md(title, head, props, merged, F, fam_of, routes=(), left_out=()):
+    """cells.md: head, counts of splitting cells and routes above their baseline, every merged cell in one table, list A (top 10 by
+    separation per GPU minute), list B (base-only cells by the highest forecast minus the best known base count) and
+    list C (no-reward routes by the margin of the median forecast over the stored subset count, in its sd)."""
     by_id = {p["id"]: p for p in props}
     by_sep = sorted(merged, key=lambda c: -c["per_minute"])
     base = sorted((c for c in merged if c["base_only"]), key=lambda c: -max(r["top"]["gain"] for r in c["readouts"]))
-    c2 = sum(c["separation"] >= 3 for c in merged)
-    c3 = [r["id"] for c in merged for r in c["readouts"] if r.get("top") and r["top"]["gain"] > 0]
-    md = [f"# {title}\n\n{head}\n",
-          f"- C1: {len(props)} cells proposed, {len(merged)} after merging (needs 20 and 10): {'holds' if len(props) >= 20 and len(merged) >= 10 else 'refuted'}.",
-          f"- C2: {c2} merged cells have 3 or more such pairs (needs 5): {'holds' if c2 >= 5 else 'refuted'}.",
-          f"- C3: {len(c3)} base-only readouts have a forecast above the best known base count ({', '.join(c3) or 'none'}): {'holds' if c3 else 'refuted'}.\n",
+    by_score = sorted(routes, key=lambda c: -(c["score"] if c["score"] is not None else -1e9))
+    w1, w3 = [c["id"] for c in routes if (c["score"] or 0) > 0], [c["id"] for c in merged if c["separation"]]
+    md = [f"# {title}\n\n{head}\n", f"Left out of the ranking (record at or below -2 nats): {', '.join(sorted(left_out)) or 'none'}.\n",
+          f"- Routes: {len(w1)} of {len(routes)} have a median forecast above the stored subset count of the row at the nearest tokens "
+          f"({', '.join(w1) or 'none'}); {sum(c['score'] is None for c in routes)} have no baseline.",
+          f"- Cells: {len(w3)} of {len(merged)} have a readout that splits with 2 or more families on each side ({', '.join(w3) or 'none'}).\n",
           "## Every merged cell\n\n| cell | model | prompt | set | n | base only | GPU minutes | separation | per minute |\n|---|---|---|---|---|---|---|---|---|"]
     md += [f"| {c['id']} | {c['cell']['model']} | {c['cell']['prompt']} | {c['cell']['set']} | {c['cell']['n']} | {'yes' if c['base_only'] else ''} | "
            f"{c['gpu_minutes']:g} | {c['separation']} | {c['per_minute']:g} |" for c in by_sep]
@@ -244,4 +393,6 @@ def cells_md(title, head, props, merged, F, fam_of):
     md += [line for c in by_sep[:10] for line in cell_md(c, by_id, F, fam_of)]
     md.append("\n## List B: base-only cells, top 10 by the highest forecast of right answers minus the best known base count")
     md += [line for c in base[:10] for line in cell_md(c, by_id, F, fam_of)]
+    md.append("\n## List C: no-reward routes by the margin of the median forecast over the stored subset count of the row at the nearest tokens, in sd")
+    md += [line for c in by_score for line in route_md(c, F, fam_of, left_out)]
     return "\n".join(md) + "\n"
