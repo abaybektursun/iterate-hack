@@ -1,0 +1,5 @@
+{"id": "t03", "value": 76, "low": 63, "high": 89, "why": "At T 1.0 / top-p 1.0 the base's cap hits are budget failures (unsolved long problems), not rule-A loops, so zeroing loop neurons leaves the cued base's ~77 hard328 cap hits about unchanged."}
+{"id": "t04", "value": 78, "low": 63, "high": 94, "why": "Same budget mechanism: with no loops to remove at T 1.0, 1,000 zeroed loop neurons cannot cut cap hits below the unedited ~77, and may add a few as the edit degrades solving."}
+{"id": "t05", "value": 9300, "low": 8700, "high": 9900, "why": "Cap hits at T 1.0 are budget, not loops, so the edit removes no looping tokens and tokens per problem stay at the unedited ~9,344."}
+{"id": "t06", "value": 9200, "low": 8500, "high": 9900, "why": "As for t05: no loop tokens to remove at T 1.0, so mean length stays near the unedited 9,344 (MATH-500 T 1.0 edit tokens were also flat)."}
+{"id": "t33", "value": 0.55, "low": 0.45, "high": 0.65, "why": "The RL-only gap is resample-kind by part (slip 0.18 at ~0.85, sharpening 0.44 at ~0.5, budget 0.25 at ~0.35, reach 0.10 at ~0.1, answer 0.03 at ~0.6), which mixes to a fresh-sample solve rate of about 0.5-0.55."}

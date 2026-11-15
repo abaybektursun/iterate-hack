@@ -1,0 +1,347 @@
+{
+ "theory": "r6-account",
+ "items": [
+  {
+   "k": 2,
+   "experiment": "Share of math500-null-T1 gap problems in budget",
+   "original": 0.15217391304347827,
+   "replicated": 0.15217391304347827,
+   "status": "replicated",
+   "script": "replication/r6-account/p2.py",
+   "not_computable": null
+  },
+  {
+   "k": 3,
+   "experiment": "Share of math500-null-T1 gap problems in answer-statement",
+   "original": 0.043478260869565216,
+   "replicated": 0.043478260869565216,
+   "status": "replicated",
+   "script": "replication/r6-account/p3.py",
+   "not_computable": null
+  },
+  {
+   "k": 4,
+   "experiment": "Share of math500-null-T1 gap problems in slip",
+   "original": 0.2608695652173913,
+   "replicated": 0.2608695652173913,
+   "status": "replicated",
+   "script": "replication/r6-account/p4.py",
+   "not_computable": null
+  },
+  {
+   "k": 5,
+   "experiment": "Share of math500-null-T1 gap problems in sharpening",
+   "original": 0.4782608695652174,
+   "replicated": 0.4782608695652174,
+   "status": "replicated",
+   "script": "replication/r6-account/p5.py",
+   "not_computable": null
+  },
+  {
+   "k": 6,
+   "experiment": "Share of math500-null-T1 gap problems in reach",
+   "original": 0.06521739130434782,
+   "replicated": 0.06521739130434782,
+   "status": "replicated",
+   "script": "replication/r6-account/p6.py",
+   "not_computable": null
+  },
+  {
+   "k": 10,
+   "experiment": "Share of math500-rl-T1 gap problems in budget",
+   "original": 0.24615384615384617,
+   "replicated": 0.24615384615384617,
+   "status": "replicated",
+   "script": "replication/r6-account/p10.py",
+   "not_computable": null
+  },
+  {
+   "k": 11,
+   "experiment": "Share of math500-rl-T1 gap problems in answer-statement",
+   "original": 0.03076923076923077,
+   "replicated": 0.03076923076923077,
+   "status": "replicated",
+   "script": "replication/r6-account/p11.py",
+   "not_computable": null
+  },
+  {
+   "k": 12,
+   "experiment": "Share of math500-rl-T1 gap problems in slip",
+   "original": 0.18461538461538463,
+   "replicated": 0.18461538461538463,
+   "status": "replicated",
+   "script": "replication/r6-account/p12.py",
+   "not_computable": null
+  },
+  {
+   "k": 13,
+   "experiment": "Share of math500-rl-T1 gap problems in sharpening",
+   "original": 0.4461538461538462,
+   "replicated": 0.4461538461538462,
+   "status": "replicated",
+   "script": "replication/r6-account/p13.py",
+   "not_computable": null
+  },
+  {
+   "k": 14,
+   "experiment": "Share of math500-rl-T1 gap problems in reach",
+   "original": 0.09230769230769231,
+   "replicated": 0.09230769230769231,
+   "status": "replicated",
+   "script": "replication/r6-account/p14.py",
+   "not_computable": null
+  },
+  {
+   "k": 18,
+   "experiment": "Share of math500-plainbase-T1 gap problems in budget",
+   "original": 0.008097165991902834,
+   "replicated": 0.008097165991902834,
+   "status": "replicated",
+   "script": "replication/r6-account/p18.py",
+   "not_computable": null
+  },
+  {
+   "k": 19,
+   "experiment": "Share of math500-plainbase-T1 gap problems in answer-statement",
+   "original": 0.5141700404858299,
+   "replicated": 0.5141700404858299,
+   "status": "replicated",
+   "script": "replication/r6-account/p19.py",
+   "not_computable": null
+  },
+  {
+   "k": 20,
+   "experiment": "Share of math500-plainbase-T1 gap problems in slip",
+   "original": 0.2793522267206478,
+   "replicated": 0.2793522267206478,
+   "status": "replicated",
+   "script": "replication/r6-account/p20.py",
+   "not_computable": null
+  },
+  {
+   "k": 21,
+   "experiment": "Share of math500-plainbase-T1 gap problems in sharpening",
+   "original": 0.1659919028340081,
+   "replicated": 0.1659919028340081,
+   "status": "replicated",
+   "script": "replication/r6-account/p21.py",
+   "not_computable": null
+  },
+  {
+   "k": 22,
+   "experiment": "Share of math500-plainbase-T1 gap problems in reach",
+   "original": 0.032388663967611336,
+   "replicated": 0.032388663967611336,
+   "status": "replicated",
+   "script": "replication/r6-account/p22.py",
+   "not_computable": null
+  },
+  {
+   "k": 26,
+   "experiment": "Share of math500-top8-T1 gap problems in budget",
+   "original": 0.2,
+   "replicated": 0.2,
+   "status": "replicated",
+   "script": "replication/r6-account/p26.py",
+   "not_computable": null
+  },
+  {
+   "k": 27,
+   "experiment": "Share of math500-top8-T1 gap problems in answer-statement",
+   "original": 0.03636363636363636,
+   "replicated": 0.03636363636363636,
+   "status": "replicated",
+   "script": "replication/r6-account/p27.py",
+   "not_computable": null
+  },
+  {
+   "k": 28,
+   "experiment": "Share of math500-top8-T1 gap problems in slip",
+   "original": 0.2,
+   "replicated": 0.2,
+   "status": "replicated",
+   "script": "replication/r6-account/p28.py",
+   "not_computable": null
+  },
+  {
+   "k": 29,
+   "experiment": "Share of math500-top8-T1 gap problems in sharpening",
+   "original": 0.41818181818181815,
+   "replicated": 0.41818181818181815,
+   "status": "replicated",
+   "script": "replication/r6-account/p29.py",
+   "not_computable": null
+  },
+  {
+   "k": 30,
+   "experiment": "Share of math500-top8-T1 gap problems in reach",
+   "original": 0.14545454545454545,
+   "replicated": 0.14545454545454545,
+   "status": "replicated",
+   "script": "replication/r6-account/p30.py",
+   "not_computable": null
+  },
+  {
+   "k": 33,
+   "experiment": "Share of math500-minp-T1 gap problems in loop",
+   "original": 0.40625,
+   "replicated": 0.40625,
+   "status": "replicated",
+   "script": "replication/r6-account/p33.py",
+   "not_computable": null
+  },
+  {
+   "k": 34,
+   "experiment": "Share of math500-minp-T1 gap problems in budget",
+   "original": 0.21875,
+   "replicated": 0.21875,
+   "status": "replicated",
+   "script": "replication/r6-account/p34.py",
+   "not_computable": null
+  },
+  {
+   "k": 35,
+   "experiment": "Share of math500-minp-T1 gap problems in answer-statement",
+   "original": 0.0,
+   "replicated": 0.0,
+   "status": "replicated",
+   "script": "replication/r6-account/p35.py",
+   "not_computable": null
+  },
+  {
+   "k": 36,
+   "experiment": "Share of math500-minp-T1 gap problems in slip",
+   "original": 0.0625,
+   "replicated": 0.0625,
+   "status": "replicated",
+   "script": "replication/r6-account/p36.py",
+   "not_computable": null
+  },
+  {
+   "k": 37,
+   "experiment": "Share of math500-minp-T1 gap problems in sharpening",
+   "original": 0.234375,
+   "replicated": 0.234375,
+   "status": "replicated",
+   "script": "replication/r6-account/p37.py",
+   "not_computable": null
+  },
+  {
+   "k": 38,
+   "experiment": "Share of math500-minp-T1 gap problems in reach",
+   "original": 0.078125,
+   "replicated": 0.078125,
+   "status": "replicated",
+   "script": "replication/r6-account/p38.py",
+   "not_computable": null
+  },
+  {
+   "k": 41,
+   "experiment": "Share of math500-s0400cue-T06 gap problems in loop",
+   "original": 0.52,
+   "replicated": 0.52,
+   "status": "replicated",
+   "script": "replication/r6-account/p41.py",
+   "not_computable": null
+  },
+  {
+   "k": 42,
+   "experiment": "Share of math500-s0400cue-T06 gap problems in budget",
+   "original": 0.2,
+   "replicated": 0.2,
+   "status": "replicated",
+   "script": "replication/r6-account/p42.py",
+   "not_computable": null
+  },
+  {
+   "k": 43,
+   "experiment": "Share of math500-s0400cue-T06 gap problems in answer-statement",
+   "original": 0.013333333333333334,
+   "replicated": 0.013333333333333334,
+   "status": "replicated",
+   "script": "replication/r6-account/p43.py",
+   "not_computable": null
+  },
+  {
+   "k": 44,
+   "experiment": "Share of math500-s0400cue-T06 gap problems in slip",
+   "original": 0.12,
+   "replicated": 0.12,
+   "status": "replicated",
+   "script": "replication/r6-account/p44.py",
+   "not_computable": null
+  },
+  {
+   "k": 45,
+   "experiment": "Share of math500-s0400cue-T06 gap problems in sharpening",
+   "original": 0.14666666666666667,
+   "replicated": 0.14666666666666667,
+   "status": "replicated",
+   "script": "replication/r6-account/p45.py",
+   "not_computable": null
+  },
+  {
+   "k": 46,
+   "experiment": "Share of math500-s0400cue-T06 gap problems in reach",
+   "original": 0.0,
+   "replicated": 0.0,
+   "status": "replicated",
+   "script": "replication/r6-account/p46.py",
+   "not_computable": null
+  },
+  {
+   "k": 49,
+   "experiment": "Share of math500-frcue-T06 gap problems in loop",
+   "original": 0.5697674418604651,
+   "replicated": 0.5697674418604651,
+   "status": "replicated",
+   "script": "replication/r6-account/p49.py",
+   "not_computable": null
+  },
+  {
+   "k": 50,
+   "experiment": "Share of math500-frcue-T06 gap problems in budget",
+   "original": 0.1744186046511628,
+   "replicated": 0.1744186046511628,
+   "status": "replicated",
+   "script": "replication/r6-account/p50.py",
+   "not_computable": null
+  },
+  {
+   "k": 51,
+   "experiment": "Share of math500-frcue-T06 gap problems in answer-statement",
+   "original": 0.011627906976744186,
+   "replicated": 0.011627906976744186,
+   "status": "replicated",
+   "script": "replication/r6-account/p51.py",
+   "not_computable": null
+  },
+  {
+   "k": 52,
+   "experiment": "Share of math500-frcue-T06 gap problems in slip",
+   "original": 0.10465116279069768,
+   "replicated": 0.10465116279069768,
+   "status": "replicated",
+   "script": "replication/r6-account/p52.py",
+   "not_computable": null
+  },
+  {
+   "k": 53,
+   "experiment": "Share of math500-frcue-T06 gap problems in sharpening",
+   "original": 0.13953488372093023,
+   "replicated": 0.13953488372093023,
+   "status": "replicated",
+   "script": "replication/r6-account/p53.py",
+   "not_computable": null
+  },
+  {
+   "k": 54,
+   "experiment": "Share of math500-frcue-T06 gap problems in reach",
+   "original": 0.0,
+   "replicated": 0.0,
+   "status": "replicated",
+   "script": "replication/r6-account/p54.py",
+   "not_computable": null
+  }
+ ]
+}

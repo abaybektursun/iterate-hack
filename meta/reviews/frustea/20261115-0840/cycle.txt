@@ -1,0 +1,13 @@
+Jobs of frustea, last 4 h:  id  state  gpu  wait  run  command
+
+Work of frustea, last 4 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-dfd055  main  -  -  -  8  0  0  Basin Atlas Landscape, second design pass (same artifact): f
+  work-49fdd2  autobench  -  -  -  6  0  0  Harness benchmark vs Karpathy autoresearch (commit 228791f):
+  work-7e7d38  autobench  -  -  -  3  0  0  autobench step 1 (SPEC1): deploy the Modal app autobench, pr
+  work-947254  autobench  -  -  -  9  0  0  autobench v2: Karpathy's loop (one agent, one file solve.py,
+  work-a0d758  main  -  -  -  147 (open)  0  0  Basin atlas as a site page in the site-ui / finding-page loo
+  work-9edc68  autobench  -  -  -  49  0  0  autobench step 1 (SPEC2): deploy Modal app autobench, one ru
+  work-9abc35  ali/theory05  -  -  -  66  0  0  theory round 05 (engine v5.1 unchanged, cutoff 04:29:33 UTC,
+  work-ce7583  autobench  -  -  -  84 (open)  0  0  autobench Karpathy arm running: one headless agent, 40 exper
+
+Team, last 4 h: claim to close median 38 min, upper quartile 107 min, over 42 work items closed by 3 people; 59 results, 14.8 per hour.

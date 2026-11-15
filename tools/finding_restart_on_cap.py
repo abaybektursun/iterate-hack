@@ -72,13 +72,13 @@ DATA["now_right"] = NOW_RIGHT
 
 TITLE = "Restarting stuck answers"
 PROBLEM = "Does starting over help an answer that never ends?"
-LINE = f"Restarting cut-off answers adds {GAIN:g} points at temperature 0.6 and {T10['diff']:g} at 1.0."  # also the sentence on its tile
+LINE = f"Restarting cut-off answers adds {GAIN:g} points at T 0.6 and {T10['diff']:g} at T 1.0."  # also the sentence on its tile
 BOLD = [f"{GAIN:g} points", f"{T10['diff']:g}"]  # the two sizes, set heavier in the sentence
 
 # What the reader switches between. The first is shown on load: start from the problem, not from the answer.
 DATA["states"] = [
-    {"name": "No restart", "right": D["single"], "cap": D["cap"], "now": 0},
-    {"name": "Restart", "right": D["restart"], "cap": M["still"], "now": NOW_RIGHT},
+    {"name": "No restart", "hash": "no-restart", "right": D["single"], "cap": D["cap"], "now": 0},
+    {"name": "Restart", "hash": "restart", "right": D["restart"], "cap": M["still"], "now": NOW_RIGHT},
 ]
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
@@ -87,48 +87,48 @@ PANELS = [
      "(arXiv 2610.06851, Table 13) report that 16 % of its answers reach a limit of 31,744 tokens.",
      ["That paper reports no restart of such answers, and a search of the team's memory found no earlier report of one. The "
       "closest known method resamples from inside a loop, and its authors describe it as a weak fix (arXiv 2512.12895, Appendix B.1).",
-      f"New here: the count for this model. At temperature 0.6, {D['cap']} of {D['n']} answers hit the limit, and sampling "
-      f"them again from the start ends right on {NOW_RIGHT} of them.",
-      f"New here: the gain depends on the sampling temperature. At temperature 1.0 only {T10['cap']} answers hit the limit, "
+      f"New here: the count for this model. At T 0.6, {D['cap']} of {D['n']} answers are cut off at {D['limit']:,} tokens, "
+      f"and sampling them again from the start ends right on {NOW_RIGHT} of them.",
+      f"New here: the gain depends on the sampling temperature. At T 1.0 only {T10['cap']} of {D['n']} answers are cut off, "
       f"and the same restart adds {T10['diff']:g} points."]],
-    ["why", "Why it matters", "The team measures how close an untrained base model comes to its RL-trained version on MATH-500, "
-     f"and at temperature 0.6 a restart with no training closes {GAIN:g} of the {D['rl_gap_before']:g} points between them.",
-     [f"After the restart the base model is {D['rl_gap_after']:.1f} points behind one sample of the RL model at temperature 0.6 "
+    ["why", "Why it matters", "The team measures how close the base model, with no training, comes to RL on MATH-500, "
+     f"and at T 0.6 a restart closes {GAIN:g} of the {D['rl_gap_before']:g} points between them.",
+     [f"After the restart Base + cue is {D['rl_gap_after']:.1f} points behind one sample of RL at T 0.6 "
       f"(95 % interval {D['rl_gap_after_ci'][0]:.1f} to {D['rl_gap_after_ci'][1]:.1f}).",
       f"On the team's chart this step is {CHART:g} points, from {D['chart_before']} to {D['restart']} of {D['n']}. The chart "
-      f"compares it with one sample at temperature 1.0, where only {D['chart_before_cap']} answers hit the limit.",
-      f"Still open: {M['still']} answers hit the limit three times in a row."]],
-    ["how", "How we know", f"The base model (Olmo 3 7B, no training, opened with a three-token cue) answered the {D['n']} MATH-500 "
-     f"problems once at temperature 0.6 and top-p 0.95, and every answer that reached {D['limit']:,} tokens was sampled again "
+      f"compares it with one sample at T 1.0, where only {D['chart_before_cap']} of {D['n']} answers are cut off.",
+      f"Still open: {M['still']} answers are cut off three times in a row."]],
+    ["how", "How we know", f"Base + cue (Olmo 3 7B, no training, opened with a three-token cue) answered the {D['n']} MATH-500 "
+     f"problems once at T 0.6 and top-p 0.95, and every answer cut off at {D['limit']:,} tokens was sampled again "
      "from the start, up to twice.",
      [f"The first restart finishes {FINISHED[0]} of the {FIRST['n']} answers and {FIRST['right']} are right. The second "
       f"finishes {FINISHED[1]} of the other {SECOND['n']} and {SECOND['right']} are right. Grader v3 scored every answer, and "
-      f"{D['cap_right']} of the {D['cap']} had written its answer before the limit and counts as right without a restart.",
-      f"A restart changes only answers that hit the limit, so the {D['restart'] - D['single']} extra right answers are a paired "
+      f"{D['cap_right']} of the {D['cap']} had written its answer before it was cut off and counts as right without a restart.",
+      f"A restart changes only answers that were cut off, so the {D['restart'] - D['single']} extra right answers are a paired "
       f"difference on the same {D['n']} problems. The committed file holds totals and no score per problem, so this gain has no interval.",
-      f"Control at temperature 1.0 and top-p 1.0, with a score per problem: {T10['single']} right becomes {T10['restart']}, "
-      f"a gain of {T10['diff']:g} points (95 % interval {T10['ci'][0]:.1f} to {T10['ci'][1]:.1f}, paired bootstrap). The RL model "
+      f"Control at T 1.0 and top-p 1.0, with a score per problem: {T10['single']} right becomes {T10['restart']}, "
+      f"a gain of {T10['diff']:g} points (95 % interval {T10['ci'][0]:.1f} to {T10['ci'][1]:.1f}, paired bootstrap). RL "
       f"under the same restart gains {T10['rl_diff']:g} points ({T10['rl_ci'][0]:.1f} to {T10['rl_ci'][1]:.1f})."]],
-    ["limits", "What it does not show", "It does not show that an answer at the limit is a solved problem that failed to stop: on "
+    ["limits", "What it does not show", "It does not show that a cut-off answer is a solved problem that failed to stop: on "
      f"{HARD['n']} harder problems, forcing the base model to commit to an answer once it passes {HARD['cut_at']:,} tokens "
      f"loses problems ({HARD['forced']} right against {HARD['stored']}, a loss of {HARD['diff']:.1f} points, 95 % interval "
      f"{HARD['ci'][0]:.1f} to {HARD['ci'][1]:.1f}).",
-     [f"On those harder problems, at temperature 1.0, a forced answer is right on at most {HARD['cap_right_most']} of the "
-      f"{HARD['cap']} answers that hit the limit. There the limit marks a failure to solve rather than a failure to stop. "
+     [f"On those harder problems, at T 1.0, a forced answer is right on at most {HARD['cap_right_most']} of the "
+      f"{HARD['cap']} cut-off answers. There being cut off marks a failure to solve rather than a failure to stop. "
       f"Scored on the same set, the restart takes one sample from {HR['single']} to {HR['restart']} right "
       f"(+{HR['diff']:g} points, 95 % interval {HR['ci'][0]:g} to {HR['ci'][1]:g}) but adds only "
       f"{100 * (HR['vote_restart'] - HR['vote']) / HARD['n']:.1f} points to a vote over four ({HR['vote_restart']} against "
       f"{HR['vote']}).",
-      f"The {GAIN:g} points belong to temperature 0.6. One sample at temperature 1.0 with no restart is right on "
-      f"{T10['single']} to {D['chart_before']} of {D['n']} at {T10['single_tokens']:,} generated tokens per problem. The "
-      f"restart at 0.6 needs {D['restart_tokens']:,}.",
-      f"The file counts answers that reached the limit and does not record how many of the {D['cap']} repeat themselves. In a "
-      f"second run at temperature 0.6 with top-p 1.0 a repetition detector flags {LOOPS['flagged']} answers, and {LOOPS['cap']} "
-      "hit the limit. It is one benchmark, one pair of models, one seed and one grader."]],
-    ["run", "How to reproduce it", "The temperature 1.0 rows can be run again: one GPU job per model, then a readout on a laptop.",
+      f"The gain of {GAIN:g} points is measured at T 0.6 only. At T 1.0, one sample with no restart is already right on "
+      f"{T10['single']} to {D['chart_before']} of {D['n']}, at {T10['single_tokens']:,} generated tokens per problem; the "
+      f"restart at T 0.6 needs {D['restart_tokens']:,}.",
+      f"The file counts cut-off answers and does not record how many of the {D['cap']} repeat themselves. In a "
+      f"second run at T 0.6 with top-p 1.0 a repetition detector flags {LOOPS['flagged']} answers, and {LOOPS['cap']} "
+      "are cut off. It is one benchmark, one pair of models, one seed and one grader."]],
+    ["run", "How to reproduce it", "The T 1.0 rows can be run again: one GPU job per model, then a readout on a laptop.",
      ["The job is studies/rlneurons/jobs/run_cell.py with --samples 4 --restarts 2 (commit " + T10["run_commit"] + "), and the "
       "readout is studies/rlneurons/analysis/day1_vote.py. Its numbers are in " + T10["artifact"] + " (commit " + T10["commit"] + ").",
-      "The temperature 0.6 rows were scored by studies/rlneurons/grader/rln4_grader_v3.py from raw answers stored outside the "
+      "The T 0.6 rows were scored by studies/rlneurons/grader/rln4_grader_v3.py from raw answers stored outside the "
       "repository. Its numbers are in " + DATA["artifact"] + " (commit " + DATA["commit"] + "): cells base_opener_0.6, K_fresh "
       "and K_fresh2, and restart_row.",
       "The forced answers on the harder problems are in " + HARD["artifact"] + " (commit " + HARD["commit"] + "), and the "
@@ -227,9 +227,9 @@ svg { width: 100%; max-height: 50vh; display: block; overflow: visible; }
 .to-right .dot { fill: var(--blue); }
 .halo { fill: var(--blue); opacity: var(--halo); }
 .on .to-right .rw, .on .to-wrong .rw { transform: scale(.2); opacity: 0; transition-delay: var(--d); }
-.on .to-right .dot, .on .to-right .halo, .on .to-wrong .dot { transform: scale(1); transition: transform .55s cubic-bezier(.3, 1.5, .5, 1) calc(var(--d) + .12s); }
-.on .again .rw { animation: again .6s ease var(--d1) 1; }
-.on .still .rw { animation: again .6s ease var(--d1) 1, again .6s ease var(--d2) 1; }
+.on .to-right .dot, .on .to-right .halo, .on .to-wrong .dot { transform: scale(1); transition: transform .42s cubic-bezier(.3, 1.5, .5, 1) calc(var(--d) + .08s); }
+.on .again .rw { animation: again .4s ease var(--d1) 1; }
+.on .still .rw { animation: again .4s ease var(--d1) 1, again .4s ease var(--d2) 1; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes again { 45% { transform: scale(.25); opacity: .35; } }
 .key { align-self: center; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 26px; list-style: none; margin: 12px 0 0; padding: 0; color: var(--mute); font-size: 16.5px; min-height: 1.5em; }
@@ -298,7 +298,7 @@ svg { animation: fade 1s both; }
     <a href="/findings" aria-current="page">Findings</a>
   </header>
   <div class="stage" id="stage">
-    <p class="count"><b id="right"></b><span class="lab"><span id="of"></span><em><span id="pct"></span> %, temperature 0.6</em></span></p>
+    <p class="count"><b id="right"></b><span class="lab"><span id="of"></span><em><span id="pct"></span> % · Base + cue, T 0.6</em></span></p>
     <svg id="svg" viewBox="0 0 760 452" role="img"></svg>
     <ul class="key" aria-live="polite">
       <li><i class="g-right"></i>right</li>
@@ -364,7 +364,7 @@ function build() {
     if (i < M.right) marks += `<circle class="r" ${at} r="${f(6 * p[2])}"/>`;
     else if (i < M.right + M.wrong) marks += `<circle class="w" ${at} r="${f(4.2 * p[2])}"/>`;
     else {
-      const [wave, end] = ends[i - M.right - M.wrong], d1 = .05 + .55 * c / COLS + .3 * rand(), d2 = d1 + 1.1;
+      const [wave, end] = ends[i - M.right - M.wrong], d1 = .02 + .28 * c / COLS + .1 * rand(), d2 = d1 + .4;  // all settled within 1.3 s
       marks += `<g class="cap ${end}${wave === 1 ? " again" : ""}" transform="translate(${f(p[0])} ${f(p[1])}) scale(${p[2].toFixed(3)})" ` +
         `style="--d:${f(wave ? d2 : d1)}s;--d1:${f(d1)}s;--d2:${f(d2)}s;--s:${f(2.6 + 2.4 * rand())}s;--p:-${f(5 * rand())}s">` +
         `<g class="rw"><circle class="ring" r="7"/></g>` +
@@ -400,14 +400,14 @@ function frame(now) {
   const t = now / 1000;
   V.px += (V.tx - V.px) * .06; V.py += (V.ty - V.py) * .06;
   sway(2 * Math.sin(t * .25) + 2.5 * V.px, EL + Math.sin(t * .19 + 1) - 2 * V.py);
-  const q = mix(S.from, S.state, ease(Math.min(1, (now - S.t0) / (S.state ? 2300 : 450))));
+  const q = mix(S.from, S.state, ease(Math.min(1, (now - S.t0) / (S.state ? 950 : 450))));  // the count stops within 1 s
   if (q !== S.q) { S.q = q; counts(q); }
   requestAnimationFrame(frame);
 }
 function draw() {  // the switch, the key and the label follow the state; the marks follow in CSS, the numbers in frame()
   const st = D.states[S.state], wrong = D.n - st.right - st.cap + (S.state ? 0 : D.cap_right);
   $("svg").classList.toggle("on", S.state === 1);
-  $("svg").setAttribute("aria-label", `${D.n} answers at temperature 0.6, ${st.name.toLowerCase()}: ${st.right} right, ` +
+  $("svg").setAttribute("aria-label", `${D.n} answers of Base + cue at T 0.6, ${st.name.toLowerCase()}: ${st.right} right, ` +
     (S.state ? `${st.now} of them after a restart, ` : "") + `${st.cap} cut off at ${D.limit.toLocaleString("en-US")} tokens, ${wrong} finished and wrong`);
   $("now-item").hidden = S.state === 0;
   $("switch").innerHTML = D.states.map((s, i) => `<button data-state="${i}" aria-pressed="${i === S.state}">${s.name}</button>`).join("");
@@ -425,18 +425,39 @@ function pane() {
       `<ul class="facts">${p[3].map(f => `<li>${f}</li>`).join("")}</ul>`
     : `<ul class="more">${C.panels.map(p => `<li><button data-open="${p[0]}">${p[1]}<span aria-hidden="true">›</span></button></li>`).join("")}</ul>`;
 }
-function fromHash() { const h = location.hash.slice(1); S.open = C.panels.some(p => p[0] === h) ? h : null; pane(); }
+/* The state and the open panel are one value in the address: #<state>, #<panel> or #<state>/<panel>. */
+const HK = D.states.map(s => s.hash);
+function address(push) {
+  const parts = [S.state ? HK[S.state] : "", S.open || ""].filter(Boolean);
+  const url = parts.length ? "#" + parts.join("/") : location.pathname;
+  push ? history.pushState(null, "", url) : history.replaceState(null, "", url);
+}
+function fromHash() {
+  const parts = decodeURIComponent(location.hash.slice(1)).split("/"), k = HK.indexOf(parts[0]);
+  choose(k < 0 ? 0 : k);
+  S.open = parts.find(x => C.panels.some(p => p[0] === x)) || null;
+  pane();
+}
+function open(key) {  // a panel opens in the side column; the keyboard focus follows it there and back
+  const was = S.open;
+  S.open = key || null;
+  address(true);
+  pane();
+  const to = $("pane").querySelector(key ? ".close" : `[data-open="${was}"]`);
+  if (to) to.focus({ preventScroll: true });
+}
 document.addEventListener("click", e => {
   const s = e.target.closest("[data-state]"), o = e.target.closest("[data-open]");
-  if (s) { choose(Number(s.dataset.state)); document.querySelector(`[data-state="${S.state}"]`).focus(); }
-  if (o) { history.pushState(null, "", o.dataset.open ? "#" + o.dataset.open : location.pathname); fromHash(); }
+  if (s) { choose(Number(s.dataset.state)); address(false); document.querySelector(`[data-state="${S.state}"]`).focus(); }
+  if (o) open(o.dataset.open);
 });
 document.addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
-  if (e.key === "Escape" && S.open) { history.pushState(null, "", location.pathname); fromHash(); }
-  if (e.key === "ArrowRight" || e.key === "ArrowLeft") choose((S.state + 1) % D.states.length);
+  if (e.key === "Escape" && S.open) open("");
+  if (e.key === "ArrowRight" || e.key === "ArrowLeft") { choose((S.state + 1) % D.states.length); address(false); }
 });
 addEventListener("hashchange", fromHash);
+addEventListener("popstate", fromHash);
 $("stage").addEventListener("pointermove", e => {  // the view leans a few degrees toward a mouse, and settles back
   if (e.pointerType !== "mouse") return;
   const r = $("stage").getBoundingClientRect();
@@ -448,8 +469,9 @@ $("say").innerHTML = C.bold.reduce((s, b) => s.replace(b, `<b>${b}</b>`), C.line
 $("of").textContent = `of ${D.n} right`;
 build();
 draw();
-fromHash();
 S.q = 0; counts(0);
+fromHash();
+if (S.state) { S.from = S.q = S.state; S.t0 = -1e9; counts(S.state); }  // a state read from the address is shown at once
 if (!still.matches) requestAnimationFrame(frame);
 </script>
 </body>

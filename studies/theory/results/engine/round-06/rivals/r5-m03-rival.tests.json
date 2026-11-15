@@ -1,0 +1,234 @@
+{
+ "theory": "r5-m03-rival",
+ "turn": 1,
+ "tests": [
+  {
+   "k": 1,
+   "experiment": "Plain-base T 1.0 wrong rate on the problems where top8 plain gives a quick finished-wrong answer.",
+   "recipe": "Files: studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json and S3 s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t3-01/t3/T3.jsonl (base, plain, T 1.0; fetch with the aws command in inventory.md). Selected set Q = top8 rows with score_v3 == 0, cap_hit false and n_generated <= 2000 (rows with missing score_v3 left out; each problem_index once, first row in file order). In T3 keep the first row per problem_index and compute its v3 score with studies/rlneurons/grader/rln4_grader_v3.py from text and gold (empty extraction = 0). A T3 row is wrong if its v3 score is 0 or cap_hit is true. Drop problems in Q that have no T3 row. Statistic: (number of problems in Q whose T3 row is wrong) / (number of problems in Q with a T3 row).",
+   "unit": "fraction of problems",
+   "refuted_by": null,
+   "script": "rivals/r5-m03-rival/p1.py",
+   "measured": 0.45454545454545453,
+   "n": 22,
+   "interval": [
+    0.2727272727272727,
+    0.6363636363636364
+   ],
+   "interval_kind": "bootstrap",
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0.45454545454545453,
+   "not_computable": null,
+   "note": "Files: studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json (500 rows, one per problem, fields problem_index, score_v3, cap_hit, n_generated) and T3.jsonl fetched from s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t3-01/t3/T3.jsonl into runs/theory-tests/s3/r4/modal_t3-01/t3/ (500 rows, one per problem, text always present). The v3 score is computed with rln4_lib.grade_v3(gold, text), the function rln4_grader_v3.py calls; an empty extraction scores 0. The hand-judged flip list in rln4_grader_v3.py (JUDGED_INCORRECT, which includes base_plain_1.0 = T3 problem 146) is not applied, because the recipe says to compute v3 from text and gold. n_generated <= 2000 is taken from the top8 row. The main number counts a T3 row as wrong if v3 == 0 or cap_hit. alt_measured counts it wrong only if v3 == 0 (a cap-hit row with a right box counts as right). Interval: bootstrap over the Q problems that have a T3 row. Some T3 rows have n_generated 1 and an empty text; they score 0 and count as wrong.",
+   "example_row": {
+    "top8": {
+     "problem_index": 8,
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_generated": 1167
+    },
+    "t3": {
+     "cell": "T3",
+     "bench": "math500",
+     "problem_index": 8,
+     "sample": 0,
+     "unique_id": "test/algebra/2036.json",
+     "seed": 47000008,
+     "sampling": {
+      "temperature": 1.0,
+      "top_p": 1.0,
+      "repetition_penalty": 1.0
+     },
+     "max_tokens": 16384,
+     "prompt_n_tokens": 89,
+     "prefix_kind": "none",
+     "n_prefix": 0,
+     "n_new": 4474,
+     "n_generated": 4475,
+     "n_answer_tokens": 4474,
+     "cap_hit": false,
+     "finish_reason": "stop",
+     "loop_ratio": 0.2510617037222083,
+     "onset_A_char": null,
+     "onset_B_char": null,
+     "loop_A": false,
+     "loop_B": false,
+     "mode": "boxed",
+     "extracted": "3\\sqrt{13}",
+     "gold": "3\\sqrt{13}",
+     "score": 1,
+     "parsed_gold": [
+      "3*sqrt(13)",
+      "3\\sqrt{13}"
+     ],
+     "parsed_answer": [
+      "3*sqrt(13)",
+      "3\\sqrt{13}"
+     ],
+     "mode_v2": "boxed",
+     "extracted_v2": "3\\sqrt{13}",
+     "score_v2": 1,
+     "answer_logprob": -0.010141624021343887,
+     "answer_prob": 0.9899096288388076,
+     "mean_logprob": -0.9262754200192539,
+     "utc": "2026-11-14T14:04:34Z"
+    },
+    "t3_text_tail": " 9\n\\]\n\nSquaring these differences:\n\\[\n(-6)^2 = 36\n\\]\n\\[\n9^2 = 81\n\\]\n\nAdding the squared differences:\n\\[\n36 + 81 = 117\n\\]\n\nTaking the square root of 117:\n\\[\n\\sqrt{117} = \\sqrt{9 \\times 13} = 3\\sqrt{13}\n\\]\n\nThus, the distance between the points \\((2, -6)\\) and \\((-4, 3)\\) is:\n\n\\[\n\\boxed{3\\sqrt{13}}\n\\]",
+    "v3": {
+     "mode_v3": "boxed",
+     "extracted_v3": "3\\sqrt{13}",
+     "score_v3": 1
+    },
+    "wrong": 0
+   }
+  },
+  {
+   "k": 2,
+   "experiment": "Difficulty-controlled contrast: plain-base T 1.0 wrong rate on top8's quick-wrong problems minus its wrong rate on top8-right problems that the cued base solves in at least 3 of 4 samples.",
+   "recipe": "Files: studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json, studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl, and S3 r4/modal_t3-01/t3/T3.jsonl. T3: first row per problem_index, v3 recomputed with studies/rlneurons/grader/rln4_grader_v3.py from text and gold; wrong = v3 score 0 or cap_hit true. Group Q = top8 rows with score_v3 == 0, cap_hit false, n_generated <= 2000 (missing score_v3 left out; first row per problem_index). Group C = top8 rows with score_v3 == 1 and cap_hit false whose problem has exactly 4 attempt-0 rows in rows.jsonl with at least 3 of them score_v3 == 1. Problems without a T3 row are dropped from both groups. Statistic: (fraction of Q with T3 wrong) - (fraction of C with T3 wrong).",
+   "unit": "difference of fractions of problems",
+   "refuted_by": null,
+   "script": "rivals/r5-m03-rival/p2.py",
+   "measured": -0.05732789637802832,
+   "n": 401,
+   "interval": [
+    -0.23044167161814222,
+    0.12619669277632717
+   ],
+   "interval_kind": "bootstrap",
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": -0.05454545454545451,
+   "not_computable": null,
+   "note": "Files: top8_plain-01/per_problem.json, studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (no text; uses the stored score_v3; attempts 0-2, with restarts after cap hits), and T3.jsonl (fetched as in p1, v3 recomputed with rln4_lib.grade_v3; wrong = v3 0 or cap_hit). Q is as in p1. C = top8 rows with score_v3 1 and cap_hit false whose problem has exactly 4 attempt-0 rows in rows.jsonl, at least 3 of them with score_v3 == 1. Q and C are disjoint. The statistic is frac_wrong(Q) - frac_wrong(C). It is bootstrapped over the union of Q and C problems (not stratified), so group sizes vary between resamples; a resample with an empty group would count that fraction as 0, which is unlikely to matter. alt_measured uses another reading of 'solves in at least 3 of 4 samples': each sample is scored by its final attempt (the highest attempt after restarts), and at least 3 of 4 must be right. Q is unchanged. The JUDGED_INCORRECT hand flips are not applied (see p1).",
+   "example_row": {
+    "group": "Q",
+    "top8": {
+     "problem_index": 8,
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_generated": 1167
+    },
+    "t3": {
+     "cell": "T3",
+     "bench": "math500",
+     "problem_index": 8,
+     "sample": 0,
+     "unique_id": "test/algebra/2036.json",
+     "seed": 47000008,
+     "sampling": {
+      "temperature": 1.0,
+      "top_p": 1.0,
+      "repetition_penalty": 1.0
+     },
+     "max_tokens": 16384,
+     "prompt_n_tokens": 89,
+     "prefix_kind": "none",
+     "n_prefix": 0,
+     "n_new": 4474,
+     "n_generated": 4475,
+     "n_answer_tokens": 4474,
+     "cap_hit": false,
+     "finish_reason": "stop",
+     "loop_ratio": 0.2510617037222083,
+     "onset_A_char": null,
+     "onset_B_char": null,
+     "loop_A": false,
+     "loop_B": false,
+     "mode": "boxed",
+     "extracted": "3\\sqrt{13}",
+     "gold": "3\\sqrt{13}",
+     "score": 1,
+     "parsed_gold": [
+      "3*sqrt(13)",
+      "3\\sqrt{13}"
+     ],
+     "parsed_answer": [
+      "3*sqrt(13)",
+      "3\\sqrt{13}"
+     ],
+     "mode_v2": "boxed",
+     "extracted_v2": "3\\sqrt{13}",
+     "score_v2": 1,
+     "answer_logprob": -0.010141624021343887,
+     "answer_prob": 0.9899096288388076,
+     "mean_logprob": -0.9262754200192539,
+     "utc": "2026-11-14T14:04:34Z"
+    },
+    "t3_text_tail": " 9\n\\]\n\nSquaring these differences:\n\\[\n(-6)^2 = 36\n\\]\n\\[\n9^2 = 81\n\\]\n\nAdding the squared differences:\n\\[\n36 + 81 = 117\n\\]\n\nTaking the square root of 117:\n\\[\n\\sqrt{117} = \\sqrt{9 \\times 13} = 3\\sqrt{13}\n\\]\n\nThus, the distance between the points \\((2, -6)\\) and \\((-4, 3)\\) is:\n\n\\[\n\\boxed{3\\sqrt{13}}\n\\]",
+    "wrong": 0,
+    "n_Q": 22,
+    "n_C": 379,
+    "n_C_alt": 385
+   }
+  },
+  {
+   "k": 3,
+   "experiment": "Plain-base T 0.6 wrong rate (a second, independent plain sample) on the problems where top8 plain gives a quick finished-wrong answer.",
+   "recipe": "Files: studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json and S3 s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/P_math500.jsonl (base, plain, T 0.6 / top-p 0.95; fetch with the aws command in inventory.md). Q as in the first test (top8 score_v3 == 0, cap_hit false, n_generated <= 2000; missing score_v3 left out; first row per problem_index). In P_math500 keep, for each problem_index, the row with the smallest sample value; compute its v3 score with studies/rlneurons/grader/rln4_grader_v3.py from text and gold (empty extraction = 0). Wrong = v3 score 0 or cap_hit true. Drop problems in Q without a P_math500 row. Statistic: (number of problems in Q whose P_math500 row is wrong) / (number of problems in Q with a row).",
+   "unit": "fraction of problems",
+   "refuted_by": null,
+   "script": "rivals/r5-m03-rival/p3.py",
+   "measured": 0.3181818181818182,
+   "n": 22,
+   "interval": [
+    0.18181818181818182,
+    0.5
+   ],
+   "interval_kind": "bootstrap",
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0.3181818181818182,
+   "not_computable": null,
+   "note": "Files: top8_plain-01/per_problem.json and P_math500.jsonl fetched from s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/P_math500.jsonl into runs/theory-tests/s3/r3/base-01/out/ (500 rows, all sample 0, one per problem, text present; the stored score is v1 only, so v3 is recomputed with rln4_lib.grade_v3 from text and gold; an empty extraction scores 0). For each problem the script keeps the row with the smallest sample (ties: first in file order). Q is as in p1. Main number: wrong = v3 0 or cap_hit. alt_measured: wrong = v3 0 only. Interval: bootstrap over the Q problems that have a row. P_math500 also has rows with n_generated 1 and an empty answer, which count as wrong. The grader's hand-judged flips cover other cells, not this one ('base_plain_0.6' has none).",
+   "example_row": {
+    "top8": {
+     "problem_index": 8,
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_generated": 1167
+    },
+    "p_math500": {
+     "cell": "P",
+     "bench": "math500",
+     "sample": 0,
+     "problem_index": 8,
+     "unique_id": "test/algebra/2036.json",
+     "seed": 1000008,
+     "prompt_n_tokens": 89,
+     "n_new": 708,
+     "n_generated": 709,
+     "cap_hit": false,
+     "finish_reason": "stop",
+     "finished_by_N": true,
+     "loop_ratio": 0.45658747300215985,
+     "n_special_ids": 0,
+     "mode": "answer_line",
+     "extracted": "\\(3\\sqrt{13}\\)",
+     "gold": "3\\sqrt{13}",
+     "score": 1,
+     "parsed_gold": [
+      "3*sqrt(13)",
+      "3\\sqrt{13}"
+     ],
+     "parsed_answer": [
+      "3*sqrt(13)",
+      "\\(3\\sqrt{13}\\)"
+     ],
+     "answer_logprob": -3.037406644114526,
+     "answer_prob": 0.04795910338219124,
+     "mean_logprob": -0.16964053605103072,
+     "utc": "2026-11-14T01:35:06Z"
+    },
+    "text_tail": "s 3 - (-6) = 9, squared is 81. 36 + 81 is 117. Square root of 117 is 3*sqrt(13). Yep, that seems right. I don't think I made any mistakes here. The steps are straightforward, and the arithmetic checks out. So the final answer should be 3 times the square root of 13 units.\n\n**Answer:** \\(3\\sqrt{13}\\)",
+    "v3": {
+     "mode_v3": "marker",
+     "extracted_v3": "3\\sqrt{13}",
+     "score_v3": 1
+    },
+    "wrong": 0
+   }
+  }
+ ]
+}
