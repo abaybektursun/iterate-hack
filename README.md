@@ -450,7 +450,7 @@ PageUp go back, Home and End jump, a click on the right or left third of the win
 (`?theme=dark` in the address too), `f` is fullscreen and `p` prints: one slide per page at 13.333 x 7.5 in, in the
 theme on screen, so print to PDF from the dark page for a dark PDF. The hook sentence is the constant `HOOK` in
 `tools/demo_deck.py`; the first slide also shows the address invariant.team and its QR code (`QR_PATH`, made with
-segno). The slide `#gap` is two bars with two numbers, the untrained base model and the RL-trained model on MATH-500 (the first base record and RL's best of `demo_ali_data` `climb`), with the gap between them as a dashed outline. The slide `#powered` sets the 72 H100 GPUs of the RL training (`FACTS['rl_zero_gpus']`, Olmo 3 paper, Table
+segno). The slide `#gap` shows `/demo/fig/gap` (`tools/demo_gap.py`): the untrained base model and the RL-trained model as two glass pillars as high as their MATH-500 scores (the first base record and RL's best of `demo_ali_data` `climb`), the same small robot on each, unlit and lit; on load a staircase bridge of dashed planks appears between the two tops and the base robot hops onto the first two. The slide `#powered` sets the 72 H100 GPUs of the RL training (`FACTS['rl_zero_gpus']`, Olmo 3 paper, Table
 49) beside the photo and name of the cook who fed the team. The two photos (cook, meditation) are the strings `COOK`
 and `MEDITATE` in `tools/demo_photos.py`, with her name in `COOK_NAME`,
 each a `data:image/jpeg;base64,...` URI (the deploy ships only `tools/*.py`); while one is empty its slide shows an
