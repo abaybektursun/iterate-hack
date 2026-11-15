@@ -1,0 +1,102 @@
+[
+  {
+    "round": "gen",
+    "number": 1,
+    "problem": "Each cell of the following $1 \\times 8$ grid is labeled with a single-digit positive integer such that any two adjacent cells differ by either $3$ or $5$. Compute the sum of all eight numbers in the grid.",
+    "answer": "38",
+    "figure": true,
+    "estimation": false,
+    "multi": false,
+    "note": "The grid is a figure, not in the statement text. Its cells, left to right, read: 6, ?, 8, ?, ?, 7, ?, 5."
+  },
+  {
+    "round": "gen",
+    "number": 2,
+    "problem": "Suppose that $m$ and $b$ are positive real numbers such that the line $y = mx + b$ intersects the parabola $y = x^2$ at two points whose $x$-coordinates differ by $4$ and whose $y$-coordinates differ by $12$. Compute $b$.",
+    "answer": "\\frac{7}{4}",
+    "figure": false,
+    "estimation": false,
+    "multi": false,
+    "note": ""
+  },
+  {
+    "round": "gen",
+    "number": 3,
+    "problem": "Eric the monkey has no bananas. Every morning, Eric may optionally go to the supermarket to buy a single bunch of exactly $5$ bananas. Eric may only go to the supermarket $3$ times. Every night, Eric must eat $1$ banana or else he dies. Compute the number of ways Eric may survive for $15$ nights.",
+    "answer": "35",
+    "figure": false,
+    "estimation": false,
+    "multi": false,
+    "note": ""
+  },
+  {
+    "round": "gen",
+    "number": 4,
+    "problem": "Square $AXYZ$ with area $13$ is placed along hypotenuse $\\overline{AC}$ of right triangle $ABC$. Given that the distances from $X$ and $Y$ to $\\overline{BC}$ are $10$ and $8$ respectively, compute $BC$.",
+    "answer": "\\frac{21}{2}",
+    "figure": true,
+    "estimation": false,
+    "multi": false,
+    "note": "A diagram follows the statement (the statement does not say 'as shown'). It shows: right angle at B, A above B, C to the right of B; Z on segment AC, the square AXYZ on the side of AC away from B, shaded and labeled 13; heights 10 and 8 marked from X and Y down to line BC; BC marked '?'."
+  },
+  {
+    "round": "gen",
+    "number": 5,
+    "problem": "Let $\\alpha$ be the unique real number such that both $\\alpha + \\sqrt{\\frac{11}{12}}$ and $\\alpha^3 + \\sqrt{\\frac{11}{12}}$ are positive and rational. Compute $\\alpha^3 + \\sqrt{\\frac{11}{12}}$.",
+    "answer": "\\frac{25}{54}",
+    "figure": false,
+    "estimation": false,
+    "multi": false,
+    "note": ""
+  },
+  {
+    "round": "gen",
+    "number": 6,
+    "problem": "Let $O$ be the circumcenter of an acute triangle $ABC$, and let $D$ and $E$ be points on side $BC$ such that $\\overline{OD}$ is parallel to $\\overline{AB}$ and $\\overline{OE}$ is parallel to $\\overline{AC}$. Given that $BD = 7$, $DE = 6$, and $EC = 5$, compute $AO$.",
+    "answer": "\\sqrt{105}",
+    "figure": false,
+    "estimation": false,
+    "multi": false,
+    "note": ""
+  },
+  {
+    "round": "gen",
+    "number": 7,
+    "problem": "In an $11 \\times 11$ grid of unit squares, rows and columns are indexed consecutively with the integers from $1$ to $11$. Then, every cell with an even row and column index is deleted. Compute the number of ways to partition the resulting shape into rectangles with integer side lengths.",
+    "answer": "3^4 \\cdot 5^{16} \\cdot 7^{16}",
+    "figure": false,
+    "estimation": false,
+    "multi": false,
+    "note": ""
+  },
+  {
+    "round": "gen",
+    "number": 8,
+    "problem": "In the diagram below, six circles of radius $3$ are arranged so that each is tangent to two others. Their tangency points form the vertices of a cyclic hexagon with circumradius $5$. Compute the area of this hexagon.",
+    "answer": "\\frac{147\\sqrt{3}}{4}",
+    "figure": true,
+    "estimation": false,
+    "multi": false,
+    "note": "The diagram shows the six circles in a ring, each tangent to its two neighbors, with the hexagon of tangency points shaded and its circumcircle dashed."
+  },
+  {
+    "round": "gen",
+    "number": 9,
+    "problem": "Let $a_1, a_2, \\ldots$ be a sequence of positive integers such that $a_1 = a_2 = \\cdots = a_7 = 1$ and $$a_n = a_{n-1} + 10a_{n-7} \\quad \\text{for all } n \\geq 8.$$ Compute the remainder when $a_{2026}$ is divided by $10000$.",
+    "answer": "2991",
+    "figure": false,
+    "estimation": false,
+    "multi": false,
+    "note": ""
+  },
+  {
+    "round": "gen",
+    "number": 10,
+    "problem": "The country of HMMTland has $100$ cities. Engineers propose a tunnel between every pair of cities and randomly assign the distinct construction costs $1, 2, \\ldots, \\binom{100}{2}$ to the proposed tunnels, with every assignment equally likely. Each city funds its single cheapest incident tunnel. A tunnel is built if at least one city funds it. If more than one city funds it, it is still built only once. Compute the expected number of connected components in the resulting tunnel system.\n\n(A connected component is a maximal nonempty set of cities such that every city in the set is reachable from every other city in the set by traveling through built tunnels.)",
+    "answer": "\\frac{4950}{197}",
+    "figure": false,
+    "estimation": false,
+    "multi": false,
+    "note": ""
+  }
+]

@@ -1,0 +1,40 @@
+{
+ "n": 136,
+ "n_candidates": 165,
+ "by_source": {
+  "aime2026": 27,
+  "hmmt_feb2026": 32,
+  "hmmt_feb2026_guts": 28,
+  "hmmt_nov2026_gen": 7,
+  "hmmt_nov2026_thm": 6,
+  "hmmt_nov2026_team": 8,
+  "hmmt_nov2026_guts": 28
+ },
+ "dropped": {
+  "aime2026: figure": 2,
+  "aime2026: published before 2026": 1,
+  "hmmt_feb2026: figure": 1,
+  "hmmt_feb2026_guts: estimation": 4,
+  "hmmt_feb2026_guts: figure": 4,
+  "hmmt_nov2026_gen: figure": 3,
+  "hmmt_nov2026_guts: estimation": 3,
+  "hmmt_nov2026_guts: figure": 5,
+  "hmmt_nov2026_team: figure": 2,
+  "hmmt_nov2026_thm: figure": 3,
+  "hmmt_nov2026_thm: more than one answer, or proof": 1
+ },
+ "sha256": "dcf571ea8a4654228e17975e8c1e255e50072f74061c9b083f5aad5c21d8e7d7",
+ "hf": {
+  "aime2026": [
+   "MathArena/aime_2026",
+   "d61f486805306e6e6b5913504c07763a99e1b112",
+   30
+  ],
+  "hmmt_feb2026": [
+   "MathArena/hmmt_feb_2026",
+   "589a53fe152febc0f4f99f3e561007bf8da8e664",
+   33
+  ]
+ },
+ "grader_check": "every kept gold: grade_v3 right against itself, wrong against gold + 1 and against the next problem's gold"
+}

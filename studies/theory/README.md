@@ -526,6 +526,31 @@ G4 refuted (no change to the base predicted above the best known count). G5 refu
 | r7-m09 | Think-SFT's excess wrong answers on easy problems are final formats that grader v3 rejects. | 4 of 4 | 2 / 2 / 0 | -4.00 | no gain | Groups of 6 to 9 items. |
 | r6-m06 | (carried untested) | 0 of 3 | | | untested | The stored rows still have no per-token probability field. |
 
+## Forecast runs
+
+Every unrefuted theory of the newest round (at most 6, survivors first, then by total gain) and two readers with no
+theory forecast the numbers the open `work` items will report, before they post. Code `lib/forecast.py` (imports the
+job runner and the log density from `lib/round.py`), prompts `lib/prompts/forecast_targets.md`, `forecast.md`,
+`forecast_score.md`.
+
+```
+uv run studies/theory/lib/forecast.py make studies/theory/results/forecast/run-<nn>   # fails if the folder exists
+uv run studies/theory/lib/forecast.py score studies/theory/results/forecast/run-<nn>  # rerun as results post
+```
+
+`make` writes `targets.json` (item id, cell, unit, quote), `forecasts.json`, `forecasts.md` (one table per target),
+`run.json` (commit, command, board snapshot time). `score` reads only items posted after the snapshot and writes
+`scores.json` (measured value, item, quote per target; gain per forecast against the equal mixture of the two readers,
+clipped to [-3, 3] nats) and `scores.md`. Job dirs (prompts, outputs) are under the temp folder in `run.json`.
+
+**run-01** (plan `specs/SPEC_forecast01.md`; snapshot 2026-11-15 14:45:56 UTC; `results/forecast/run-01/`): 20 targets
+from 7 open work items (RL step 100, vote over 9 and 12, cap 32,768, transplant a = 2, 1.5x edit replication,
+autobench, fresh2026); forecasters reader-1, reader-2, r5-m03-rival, r6-account-rival, r6-m06, r7-m05, r7-m08,
+r7-m11. The theories forecast 1 to 3 targets each (r6-m06: none); the rest "theory says nothing". F1 holds (20 targets).
+First score (14:50:25 UTC, `scores.md`): 6 of 20 measured, all fresh2026 (result-5251c9). No theory forecast any of
+them, so F2 is not decided. reader-2 has all 6 inside its interval (mean gain +0.30 nats), reader-1 4 of 6 (-0.77).
+F3 is refuted at this score (every measured value inside some interval) and is checked again as the other 14 post.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in

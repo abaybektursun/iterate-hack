@@ -15,6 +15,9 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `specs/SPEC3.md` | RLN-3 spec: base, RL steps 100/400/2,800 and the first release; arms P (plain), F (opening cue), C (forced commit); MATH-500 and the 400-problem harder set; training-set overlap (§11). |
 | `specs/SPEC_wsp1.md` | WSP-1 spec: anatomy of the RL-Math, RL-Code and Think-SFT weight deltas, then edited-weight cells. Job `jobs/wsp_delta_anatomy.py`, results `results/wsp1/`. |
 | `specs/SPEC4.md` | RLN-4 spec: T1 (cue, T 1.0), continuation test K, T2 (RL, T 1.0), T3 (plain base, T 1.0), G, R1; Modal deviations; grader v3. |
+| `specs/SPEC_fresh.md`, `specs/fresh_jobs.txt` | Fresh held-out set: cutoffs with sources, selection rules, hypotheses, predictions; the 12 job commands. |
+| `data/fresh/`, `prep/fresh_prep.py`, `jobs/run_fresh.py` | `fresh2026_v1.json`: 136 competition problems published in 2026 (AIME, HMMT Feb and Nov), the transcribed PDF problems, the prep script, and `run_cell` with `--set fresh2026`. |
+| `analysis/fresh_read.py`, `analysis/fresh_sft_overlap.py` | Readout of the three models on the fresh set; scan of the Think-SFT training data for the fresh set. |
 | `lib/n13_score.py` | Prompt template (`TEMPLATE["pair1"]` inside the model's chat template), answer extraction and grader v1 (`extract`, `grade`, rule `dollar_both`), `wilson`, `paired_bootstrap`, `selfcheck`. |
 | `lib/rln4_lib.py` | Grader v2 (`extract_v2`, `grade_v2`), grader v3 (`extract_v3`, `norm_v3`, `grade_v3`), loop-onset detectors (rule A `onset_lines`, rule B `onset_period`, `zratio`), `agree`, prefix encoding. |
 | `lib/n13_gen.py` | vLLM engine settings and sampling (`SAMPLING`, `ENGINE_ENV`, `child_env`, `dump`) that the RLN jobs reuse. From the n13 study. |
@@ -1273,7 +1276,9 @@ scored on a box inside the reasoning.
 d_t = log p_base(token | problem, text) - log p_base(token | empty problem, text) over the first 1,000 answer tokens of the 2,000
 stored samples of the cued base (the quantity context-aware decoding adds to the logits, Shi et al. 2023, arXiv 2305.14739; here
 only read). Job `jobs/probdep_tokens.py` (vast.ai job `abaybektursun-1115-014547-2c8c`, A100, input
-`data/wrongstep/base_cue_answer_heads_v1.jsonl.gz`), readout `analysis/probdep.py`, results `results/wrongstep/probdep-01/`.
+`data/wrongstep/base_cue_answer_heads_v1.jsonl.gz`), readout `analysis/probdep.py`, results `results/wrongstep/probdep-02/`
+(same numbers as `probdep-01`, plus one right and one wrong example and the feature without the first 50 tokens: mean d_t over
+tokens 50 to 1,000 gives 0.504 [0.440, 0.568]; 62 % of the summed difference sits in the first 50 tokens, the restatement of the problem).
 Within-problem AUROC of right against wrong (150 problems with both outcomes, 478 pairs, bootstrap over problems, 2,000 resamples):
 
 | Feature | 250 tokens | 500 tokens | 1,000 tokens |
@@ -2925,6 +2930,136 @@ abaybektursun-1115-). Raw answers: `runs/<job-id>/answers.jsonl` on the laptop o
 ```
 python3 tools/vast.py run <box> -- 'PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.delta_sum --host think_sft --donor rl_math --alpha 2.0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label sft1_rl20 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000 --samples 1 --restarts 0 --commit <sha>'
 uv run --with numpy python -m studies.rlneurons.analysis.transplant hard328-01 --arm sft1_rl20=runs/<job>,runs/<job> [--arm ...] --ref think=studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl --ref rl=studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl
+```
+
+## Token cap 32,768 on the 328: Think-SFT gains 23 problems, RL gains 2 (board work-ceccc0)
+
+Spec `specs/SPEC_cap32.md` (written before the runs). `run_cell --set hard328 --max-tokens 32768`, T 1.0 / top-p 1.0, grader
+v3, one sample, seed 3000000, on vast.ai (RTX PRO 6000). Each cell is scored twice from the same answers: right at 32,768, and
+right with at most 16,384 generated tokens, so the gain is paired inside one run. Readout `analysis/cap32.py`,
+`results/cap32/readout.json`.
+
+| cell | right at 16,384 (same answers) | right at 32,768 | gain, points [95 %] | answers past 16,384: finished / right | tokens per problem, 16,384 / 32,768 |
+|---|---|---|---|---|---|
+| Think-SFT cue (`results/cap32/sft_cue-01/`) | 207 | 230 | +7.0 [4.3, 9.8] | 93: 91 / 23 | 10,048 / 11,795 |
+| RL plain (`results/cap32/rl_plain-01/`) | 193 | 195 | +0.6 [0.0, 1.5] | 20: 20 / 2 | 9,293 / 9,421 |
+
+- H1 held: Think-SFT's cut answers are unfinished work. 91 of 93 finish inside the second 16,384 tokens and 23 are right, for
+  1,747 more tokens per problem. 230 of 328 is the best single-sample row on the 328 so far (vote over 4 Think-SFT samples at
+  16,384: 241 at 40,410 tokens).
+- H3 held: RL gains 2.
+- Instrument: the 16,384 scores of these runs are 207 (stored cells 212, 219) and 193 (stored 206). 193 is 13 below 206, one
+  outside the spec's limit of 12, and inside the range of RL's four stored samples on the 328 (207, 190, 209, 194,
+  `results/day1_3/hard328_rl_plain_s4r2-01/`). Not rerun; the gain is measured inside the run.
+- Of the 68 long Think-SFT answers that finish wrong, none is a loop by the runner's loop count (3 in the whole cell).
+- Base cue at 32,768 (H2): the vast.ai box ended before its rows were copied. Rerun as 4 shards on AWS; row added when done.
+- Jobs abaybektursun-1115-005756-309b (Think-SFT), -005823-8ac9 (RL); raw answers in `runs/<job>/` on the laptop, not in git.
+
+## Fresh held-out set: Think-SFT's lead over RL holds on problems published in 2026 (fresh2026, n = 136, 4 samples, board work-7c069c, idea-67db73)
+
+Question: Think-SFT + cue beats RL under the vote on the 328 (241 against 221), but its training data could hold those
+problems in a form an overlap scan cannot match. Does the lead hold on competition problems published after the weights of all
+three models existed? Answer: yes, and it is larger. Vote over 4 on 136 problems from AIME 2026, HMMT February 2026 and HMMT
+November 2026: Think-SFT + cue 75 of 136 (55.1 %), RL plain 57 (41.9 %), base + cue 38 (27.9 %). Think-SFT minus RL +13.2
+points [+7.4, +19.1], paired bootstrap; one sample (mean of 4) 60.0 against 50.5 against 29.5, +7.0 points [+3.1, +11.0]. Spec
+and predictions, filed before any model saw the set: `specs/SPEC_fresh.md` (commit `1232554`; refuting observations of P1 to P3
+added in `a29e390` before any full-run row was read). T 1.0 / top-p 1.0, cap 16,384, grader v3, no restarts, prompt `pair1`.
+
+What "fresh" guarantees. Every problem was first set at a contest held between 2026-02-05 and 2026-11-07. The last weights
+(RL-Zero-Math) were uploaded 2025-12-12, Think-SFT's on 2025-10-14 and its training data on 2025-10-16, the base's on
+2025-10-09; the model cards state "Date cutoff: Dec 2024" (base), "Dec. 2024." (Think-SFT) and "Dec. 2023." (RL), and the
+Olmo 3 paper (2512.13961, section 3) "a cutoff date of December 31, 2024" for the crawl. The Dolci dataset cards state no
+cutoff, so the bound is the upload dates. The contest papers, their solutions and discussions of them therefore cannot be in
+any training data. Not guaranteed: that a contest did not reuse an older problem. One was found and dropped (AIME 2026 I #1 is
+the 2020 Purple Comet Middle School #8, an exact match in the RL training prompts). Both training sets were then scanned for
+the 136: 0 exact, 0 near in the 13,314 RL prompts (`results/fresh/overlap-01/overlap.json`, largest 8-gram share 0.375) and 0
+in every message of the 2,268,178 Think-SFT rows (`results/fresh/sft_overlap-01/`, largest share 0.429; the controls hard/0
+and hard/38, known to be in that data, were flagged exact).
+
+The set: `data/fresh/fresh2026_v1.json` (sha256 `dcf571ea8a4654228e17975e8c1e255e50072f74061c9b083f5aad5c21d8e7d7`, built by
+`prep/fresh_prep.py`, counts in `fresh2026_v1_meta.json`). 165 candidates: `MathArena/aime_2026` @ `d61f486` (30),
+`MathArena/hmmt_feb_2026` @ `589a53f` (33), and the official HMMT solutions PDFs of the February Guts round (36) and of
+November 2026 General, Theme, Team and Guts (66), transcribed by Claude subagents into `data/fresh/transcribed_v1/` (urls and
+sha256 of the PDFs in `sources.json`). Dropped by rules written before any model output: 1 published before 2026, 20 that need
+a figure, 7 estimation problems, 1 with a tuple answer; 0 by the grader check (every gold grades right against itself and
+wrong against gold + 1 and against another problem's gold). Kept: AIME 27, HMMT Feb 32 + Guts 28, HMMT Nov 49. Caveats: the
+77 PDF problems were transcribed by a language model (the answer keys were checked against the official ones by the main
+session; three statements on which all models agree on one wrong answer were compared with the PDF text here and are
+verbatim); `aime2026/25` has MathArena's wording (the sum of all possible BC, gold 850), not the contest paper's; for
+`hmmt_feb2026/9` (gold `50(1 - \frac{1}{2^{101} - 1})`) grader v3 takes 50.0 but not 50: no sample of any model answers 50 or
+the gold (4 cap hits for Think-SFT, RL 100, 100 and two other expressions, base 3 cap hits and 101/2), so the counts are the
+same without it (75, 57, 38 of 135; +13.3 points [+6.7, +20.0]).
+
+| fresh2026, n = 136 | Think-SFT + cue | RL plain | base + cue |
+|---|---|---|---|
+| one sample: the 4 samples; mean | 65, 59, 56, 60; 60.0 | 49, 50, 53, 50; 50.5 | 28, 28, 32, 30; 29.5 |
+| vote over 4 | 75 | 57 | 38 |
+| any of 4 right (pass@4) | 77 | 68 | 48 |
+| sequential vote, at most 3 (`seq3`): right, right (24), tokens | 71, 72.5, 34,718 | 56, 54.9, 32,394 | 34, 36.2, 36,313 |
+| sequential vote, at most 4 (`seq4_restart`, no restarts run): right, right (24), tokens | 75, 75.5, 42,251 | 57, 55.8, 37,443 | 38, 38.8, 46,047 |
+| cap hits, share of the 544 samples | 45.6 % | 15.4 % | 40.3 % |
+| precision of finished answers | 80.4 % (238 of 296) | 42.8 % (197 of 460) | 36.0 % (117 of 325) |
+| generated tokens per sample; per problem for the vote | 13,043; 52,170 | 12,083; 48,331 | 12,790; 51,158 |
+
+Differences, points, paired bootstrap over problems (`results/fresh/readout-01/readout.md` has every group):
+
+| | vote over 4 | one sample |
+|---|---|---|
+| Think-SFT minus RL, all 136 | +13.2 [+7.4, +19.1] | +7.0 [+3.1, +11.0] |
+| Think-SFT minus RL, Hugging Face subset (AIME + HMMT Feb, 59): 29 against 22 | +11.9 [+3.4, +22.0] | +8.5 [+1.7, +15.7] |
+| Think-SFT minus RL, transcribed subset (77): 46 against 35 | +14.3 [+6.5, +23.4] | +5.8 [+1.3, +10.7] |
+| Think-SFT minus RL, HMMT November 2026 only (49, eight days old at the run): 30 against 23 | +14.3 [+6.1, +24.5] | +6.1 [+1.0, +11.7] |
+| Think-SFT minus base, all | +27.2 [+19.9, +35.3] | +22.4 [+17.5, +27.8] |
+| RL minus base, all (the control: the instrument separates the models as on the 328) | +14.0 [+8.1, +19.9] | +15.4 [+11.4, +19.9] |
+
+Hypotheses and predictions scored (`results/fresh/readout-01/readout.json`, `predictions`):
+
+- H1 (Think-SFT's vote beats RL's by at least 2 points; refuted if the interval is at or below 0): held, +13.2 [+7.4, +19.1].
+- H2 (Think-SFT abstains more and is more precise, each by at least 10 points): held, cap hits +30.1 points [+24.1, +36.6],
+  precision +37.6 [+30.9, +44.0].
+- H3 (base + cue below RL): held, 38 against 57 under the vote, 29.5 against 50.5 in one sample.
+- The 12 table predictions (vote, single, cap hits, precision for three models): all inside their intervals. Vote 74 / 64 / 49
+  predicted, 75 / 57 / 38 observed; single 59 / 54 / 36 against 60.0 / 50.5 / 29.5; cap hits 40 / 14 / 33 % against 45.6 /
+  15.4 / 40.3; precision 80 / 50 / 42 % against 80.4 / 42.8 / 36.0. Think-SFT was predicted within 1 problem; RL and the base
+  came out 7 and 11 problems lower than predicted. Tokens per sample 12,000 / 11,000 / 11,000 against 13,043 / 12,083 / 12,790.
+- P1 (difference +7 points, refuted above +12): refuted, +13.2; the interval half-width (5.9 points) was as stated.
+- P2 (Hugging Face subset 26 / 20 / 14): held, 29 / 22 / 13.
+- P3 (the models are closest on HMMT November, 35 / 33 / 27): refuted. 30 / 23 / 17, and the difference there (+14.3 points)
+  is not smaller than on the other 87 problems (+12.6). HMMT November was not the easier part for these models.
+
+What the raw rows show (all 1,632 extracted answers read beside the golds; texts of right, wrong and cap-hit rows read):
+
+- The mechanism of the 328 repeats. Think-SFT hits the cap on 248 of 544 samples and is right in 80 % of the answers it
+  finishes; RL finishes 460 and is right in 43 %. A cap hit casts no vote, so Think-SFT's vote is almost its pass@4 (75 of
+  77); RL's vote loses 11 of its 68 problems with a right sample to its own wrong finished answers (`aime2026/4`: 65, 71, 70,
+  65 against gold 70). Vote right for one model only: Think-SFT 20, RL 2 (`aime2026/18`: four Think-SFT cap hits).
+- RL answers with a confident wrong value where Think-SFT is right (`hmmt_feb2026/12`: 875/128 four times against RL's 10
+  four times; `hmmt_feb2026_guts/15` and `hmmt_nov2026_guts/25`: Think-SFT right twice and two cap hits, RL four wrong answers).
+- 66 of Think-SFT's 248 cap hits hold more than 20 Chinese characters (RL 3 of 84, base 0 of 219), as on the 328.
+- The grader takes equivalent forms: `\sqrt{14 + 3\sqrt{19}}` for `\frac{\sqrt{38}+3\sqrt{2}}{2}`, `\frac{2027! - 2026!}{2}`
+  for `1013 \cdot 2026!`, `0.87` for `\frac{87}{100}` (checked by hand). No finished answer equal to its
+  gold and scored wrong was seen in the table of extracted answers.
+- Problems where all three models agree on one wrong answer (`aime2026/30`: 243 for 393; `hmmt_feb2026_guts/21`: 34 for 102;
+  `hmmt_nov2026_team/4`: 2025 for 64) are verbatim statements with the official answers.
+
+Jobs. Smoke: Modal `abaybektursun-1115-042802-2fae` (base + cue, first 10 problems: 3 right, 3 cap hits; rows read). The 12
+cells ran from the main session on vast.ai, one RTX PRO 6000 96 GB per job, commit `94d9863`, commands in
+`specs/fresh_jobs.txt`, 12.1 GPU-hours of job time (450 to 545 tokens/s): Think-SFT `abaybektursun-1115-024256-58c8`,
+`-024347-94e1`, `-024432-d87b`, `-024621-af01`; RL `-024606-5843`, `-024132-1f6e`, `-024700-b8c3`, `-024804-390f`; base
+`-040403-80d7`, `-024927-4a44`, `-025027-51c8`, `-025153-2e87` (samples 0 to 3, seeds 7000000 + 10000 s; arm and seed read
+from each job's `metrics.json`, each done with 136 rows). Raw answers: `s3://iterate-hack-team-769063704696/handoff/fresh/<job>/`.
+Run folders `results/fresh/{sft1_cue,rl_plain,base_cue}_s4-01/` (`run.json`, `metrics.json`, `readout.json`, `rows.jsonl`,
+`examples.json`), `frontier_sft_rl-01/` (the `--base` slot holds Think-SFT; labels in `frontier.md` edited, numbers
+untouched), `frontier_base_rl-01/`, `readout-01/`. `jobs/run_fresh.py` is `run_cell` with `--set fresh2026` registered.
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 --with pyarrow --with huggingface_hub python -m studies.rlneurons.prep.fresh_prep
+uv run --no-project --with pyarrow python -I studies/rlneurons/analysis/rln3_overlap.py <dir with train.parquet, math500.json, the fresh set as hard.json> <out.json>
+PYTHONPATH=. uv run --no-project --with huggingface_hub --with pyarrow --with numpy python -m studies.rlneurons.analysis.fresh_sft_overlap --tmp <dir> --out studies/rlneurons/results/fresh/sft_overlap-01
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.thinkvote_join --runs runs/fresh_handoff/<s0> <s1> <s2> <s3> --out runs/fresh_<arm>_s4
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_vote --run runs/fresh_<arm>_s4 --out studies/rlneurons/results/fresh/<arm>_s4-01 [--minus <readout.json>]
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.frontier --base studies/rlneurons/results/fresh/sft1_cue_s4-01 --rl studies/rlneurons/results/fresh/rl_plain_s4-01 --fixed studies/rlneurons/results/frontier/math500-01/chosen.json --out studies/rlneurons/results/fresh/frontier_sft_rl-01
+uv run --no-project --with numpy python -m studies.rlneurons.analysis.fresh_read --sft studies/rlneurons/results/fresh/sft1_cue_s4-01 --rl studies/rlneurons/results/fresh/rl_plain_s4-01 --base studies/rlneurons/results/fresh/base_cue_s4-01 --out studies/rlneurons/results/fresh/readout-01 --texts runs/fresh_sft1_cue_s4 runs/fresh_rl_plain_s4 runs/fresh_base_cue_s4
 ```
 
 ## How to run

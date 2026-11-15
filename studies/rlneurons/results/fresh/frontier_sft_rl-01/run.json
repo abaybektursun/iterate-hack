@@ -1,0 +1,13 @@
+{
+ "commit": "94c67939dd2dad26086291178f2d50ca151ded9e",
+ "command": "/home/abay/Projects/iterate-hack-fresh/studies/rlneurons/analysis/frontier.py --base studies/rlneurons/results/fresh/sft1_cue_s4-01 --rl studies/rlneurons/results/fresh/rl_plain_s4-01 --fixed studies/rlneurons/results/frontier/math500-01/chosen.json --out studies/rlneurons/results/fresh/frontier_sft_rl-01",
+ "spec": "studies/rlneurons/specs/SPEC_frontier.md",
+ "source_jobs": {
+  "base": "abaybektursun-1115-024256-58c8+abaybektursun-1115-024347-94e1+abaybektursun-1115-024432-d87b+abaybektursun-1115-024621-af01",
+  "rl": "abaybektursun-1115-024606-5843+abaybektursun-1115-024132-1f6e+abaybektursun-1115-024700-b8c3+abaybektursun-1115-024804-390f"
+ },
+ "source_commits": {
+  "base": "94d98636d48b2af9b4e380c64a5b16992bae96f7",
+  "rl": "94d98636d48b2af9b4e380c64a5b16992bae96f7"
+ }
+}
