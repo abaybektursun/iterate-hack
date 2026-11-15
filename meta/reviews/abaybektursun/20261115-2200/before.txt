@@ -1,0 +1,4 @@
+cap-32,768 cell of M(2), hard328, one RTX PRO 6000 box 60799665
+job abaybektursun-1115-110620-f975: started 19:06 UTC, cut 19:50 UTC by the account stop, 97 of 328 answers written, 0 kept (rerun without --resume)
+job abaybektursun-1115-115611-7095: started 19:56 UTC, ended about 21:46 UTC, 328 of 328: 110 min
+minutes of generation thrown away: 44
