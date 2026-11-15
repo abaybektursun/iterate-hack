@@ -100,6 +100,10 @@ TABLE = {
     "rl-edge-comes-early": {
         "group": ANSWERS,
         "figure": lambda m: [f"{m.CLOSED_U} to {m.CLOSED} %", "of the gap", "MATH-500, base finishes RL's answers"]},
+    "rl-learns-the-opening-first": {
+        "group": ANSWERS,
+        "figure": lambda m: [f"{m.DATA['okay'][2]} of {m.DATA['n']}", "answers",
+                             f"MATH-500, open with 'Okay' after 100 RL steps; Base {m.DATA['okay'][0]}"]},
     "rl-wait-habit": {
         "group": ANSWERS,
         "figure": lambda m: [m.PUSH_POINTS, "points", "MATH-500, at RL's rate of Wait"]},
