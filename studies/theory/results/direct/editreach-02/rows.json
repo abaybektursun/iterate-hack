@@ -1,0 +1,16 @@
+[
+ {
+  "mechanism": "round-15/account-1/d1",
+  "claim": "The 1.5x top-8 edit carries one shared graded shift that makes the base's slips rarer on problems it already solves, so on hard328 problems outside the cued base's 4-sample reach it captures only a minority (0.10-0.45) of RL plain's per-sample advantage over a fresh base sample.",
+  "result": "result-b90743",
+  "verdict": "refuted",
+  "measured": "S = (E - B) / (R - B) = 0.88 [0.69, 1.13] (90 % bootstrap), n 120 problems (480 edit samples), null value 0 (null range [-0.15, 0.08]), range [0.10, 0.45]: the interval lies wholly above it. Supersedes editreach-01 (result-fe30d5), which read only 102 problems"
+ },
+ {
+  "mechanism": "round-15/account-2/d1",
+  "claim": "The 1.5x top-8 edit lowers the per-step slip rate the way RL does, so on hard328 problems outside the cued base's 4-sample reach it wins about as often as RL plain and captures most or all (0.60-1.40) of RL's per-sample advantage over a fresh base sample.",
+  "result": "result-b90743",
+  "verdict": "holds",
+  "measured": "S = (E - B) / (R - B) = 0.88 [0.69, 1.13] (90 % bootstrap), n 120 problems (480 edit samples), null value 0 (null range [-0.15, 0.08]), range [0.60, 1.40]: the interval lies wholly inside it. R - B 0.104 [0.065, 0.146]; edit minus RL -0.013 [-0.037, 0.010]. Supersedes editreach-01 (result-fe30d5)"
+ }
+]
