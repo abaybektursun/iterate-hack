@@ -244,3 +244,23 @@ with the team's stored cell of the same seeds by totals only (its rows are not i
   setting and gives nothing to the setting the scoreboard uses.
 - The edited T 0.6 cells (398 to 414 at 3,464 to 3,742 tokens) sit at the level of the unedited T 1.0 cell (405 to 410).
 
+### Part G on the harder 328: no gain, and a loss at T 1.0 with the 1,000 set
+
+Cue, top-p 1.0, one sample, seed 3,000,000, grader v3; `counts` in `metrics.json` of each `results/gen/hard328_*-01/`.
+The unedited T 1.0 cell is the team's (`studies/rlneurons/README.md`, "Harder 328"), compared by totals; identical requests on
+the 328 scored 155, 160, 164 and 168 there (comment on result-d9d6f3), so differences under about 10 problems are noise.
+
+| Cell (328 problems) | Right | Cap hits | Loops (rule A) | Tokens per problem | Job |
+|---|---|---|---|---|---|
+| T 1.0, unedited (team cell) | 164 | 77 | 1 | 9,344 | `abaybektursun-1114-151534-e72c` |
+| T 1.0, 100 zeroed | 155 | 47 | 1 | 8,706 | `d4a3` |
+| T 1.0, 1,000 zeroed | 130 | 32 | 1 | 8,556 | `f46b` |
+| T 0.6, 100 zeroed | 149 | 77 | 24 | 8,819 | `86c9` |
+| T 0.6, 1,000 zeroed | 149 | 55 | 6 | 8,486 | `2a56` |
+| T 0.6, unedited | running | | | | `2e30` |
+
+- At T 1.0 the edit turns cap hits into finished answers (77 to 47 and 32) without making them right: 155 is inside the noise
+  of 164, and 130 is a loss of 34 problems. This agrees with result-51fd20: cap hits on the 328 are failures to solve.
+- Summary of Part G: zeroing loop neurons is a reward-free way to remove loops and 17 to 26 % of the tokens at T 0.6. It is
+  no route to more right answers on MATH-500 or the 328, and it costs right answers where the model does not loop.
+
