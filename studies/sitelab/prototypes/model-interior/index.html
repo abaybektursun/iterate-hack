@@ -45,7 +45,7 @@ h1 em.r { color: var(--red); }
 
 /* Layer rail */
 .rail { flex: 1; min-height: 0; margin: 20px 0 22px; width: 150px; display: flex; flex-direction: column; max-height: 380px; }
-.spacer { flex: 1; }
+.left > .spacer { flex: 1; pointer-events: none; }
 .rail .t { font-size: 11.5px; font-weight: 600; color: var(--mute); margin-bottom: 6px; }
 .rail .rows { flex: 1; display: flex; flex-direction: column; cursor: pointer; touch-action: none; }
 .rail .row { flex: 1; display: flex; align-items: center; gap: 7px; min-height: 0; }
@@ -156,7 +156,7 @@ h1 em.r { color: var(--red); }
   #dialnote { display: none; }
   .dial { background: linear-gradient(rgba(18, 17, 15, 0), rgba(18, 17, 15, .9) 14%); padding-top: 14px; }
   .side { bottom: 362px; max-height: 34vh; }
-  .vig { background: none; }
+  .vig { background: none; } .side.open::before { display: none; }
 }
 </style>
 </head>
@@ -256,7 +256,8 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure
 renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap; renderer.shadowMap.autoUpdate = false;
 const BG = new THREE.Color('#12110f');
 const scene = new THREE.Scene(); scene.background = BG; scene.fog = new THREE.Fog(BG, 34, 120);
-scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.05).texture;
+function setEnv() { const p = new THREE.PMREMGenerator(renderer); scene.environment = p.fromScene(new RoomEnvironment(), 0.05).texture; p.dispose(); }   // the generator's own targets are freed at once
+setEnv();
 const camera = new THREE.PerspectiveCamera(30, 1, 0.5, 400);
 { const c = document.createElement('canvas'); c.width = c.height = 160; const g = c.getContext('2d'), im = g.createImageData(160, 160); let x = 9;
   for (let i = 0; i < im.data.length; i += 4) { x = (x * 1664525 + 1013904223) >>> 0; const v = x >>> 24; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = 255; }
@@ -748,7 +749,7 @@ if (st.zero) { for (let s = 0; s < 600; s++) if (!stepBeads(1 / 90, 1e6)) break;
 let acc = 0, accN = 0, slowN = 0, hitch = 0, wasMoving = false, lean = { x: 0, y: 0 };
 addEventListener('resize', () => { dirty = true; });
 canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); canvas.style.visibility = 'hidden'; });
-canvas.addEventListener('webglcontextrestored', () => { canvas.style.visibility = ''; firstShadow = dirty = barsDirty = tintDirty = true; bars.forEach(b => b.dirty = true); });
+canvas.addEventListener('webglcontextrestored', () => { canvas.style.visibility = ''; setEnv(); resize(); firstShadow = dirty = barsDirty = tintDirty = true; bars.forEach(b => b.dirty = true); });
 function frame() {
   requestAnimationFrame(frame); const now = performance.now(), rawDt = (now - last) / 1000;
   const dt = Math.min(0.05, rawDt), t = (now - T0) / 1000; last = now;

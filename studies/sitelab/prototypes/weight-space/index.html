@@ -105,7 +105,7 @@ h1 { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 27p
 #err { position: fixed; left: 8px; bottom: 60px; color: var(--red); font-size: 12px; white-space: pre-wrap; max-width: 90vw; }
 @media (max-width: 760px) {
   .lb.lane, .lb.ref, .lb.name, .lb.axis { display: none !important; } .key span:nth-child(n+4) { display: none; }
-  .top { padding: 14px 16px; gap: 14px; } .col { left: 16px; top: 52px; width: calc(100vw - 32px); }
+  .top { padding: 14px 16px; gap: 14px; white-space: nowrap; } .top .status { display: none; } .col { left: 16px; top: 52px; width: calc(100vw - 32px); }
   h1 { font-size: 17px; margin-bottom: 8px; } .aval { font-size: 34px; } .lanes, .say { display: none; }
   .row { padding: 3px 0; } .row b { font-size: 15px; } .key { left: 16px; right: 16px; bottom: 10px; gap: 4px 14px; font-size: 11px; }
   .detail { padding: 60px 16px 20px; background: color-mix(in srgb, var(--paper) 95%, transparent); } .detail .x { right: 16px; top: 56px; }
@@ -163,7 +163,7 @@ const $ = id => document.getElementById(id);
 const DATA = await (await fetch('data.json')).json();
 const MODELS = DATA.models;
 const fmt = v => Number.isInteger(v) ? v.toLocaleString('en-US') : v.toLocaleString('en-US', { maximumFractionDigits: 2 });
-const fa = a => (a < 0 ? '−' : '') + Math.abs(a).toFixed(2);
+const fa = a => (a <= -0.005 ? '−' : '') + Math.abs(a).toFixed(2);
 const fs = a => (a < 0 ? '−' : '') + String(Math.abs(a));
 
 /* ---------- the space: x = coefficient a of the RL change, z = which part of it (lanes), y = share of problems ---------- */
@@ -563,7 +563,6 @@ function view() {                                                  // the words 
 addEventListener('resize', resize); resize();
 const spring = (x, v, t, k, c, dt) => { v += (k * (t - x) - c * v) * dt; return [x + v * dt, v]; };
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, still = reduce || /[?&]still/.test(location.search);
-const always = /[?&]always/.test(location.search);                 // for measuring: render every frame
 let last = performance.now(), t0 = last, demoAt = 0, demoI = 0, tier = 0, ema = 12, slow = 0, lastRender = 0;
 for (const ev of ['pointerdown', 'pointermove', 'pointerup', 'wheel', 'keydown', 'touchstart']) addEventListener(ev, () => wake(), { passive: true });
 
@@ -594,7 +593,7 @@ function frame(now) {
   let moving = Math.abs(aT - a) > 1e-4 || Math.abs(va) > 1e-3 || T < 4 || dragging;
   for (const m of MODELS) if (Math.abs(m.vr) > 1e-3 || Math.abs(m.vc) > 1e-3 || (m.boost > 0.01 && m.boost < 0.99)) { moving = true; break; }
   if (moving) wake(0.5);
-  if (now > activeUntil && lastRender && !always) return;                     // nothing moves: keep the last frame
+  if (now > activeUntil && lastRender) return;                     // nothing moves: keep the last frame
   if (real < 100 && now - lastRender < 100) { ema += (real - ema) * 0.08; slow = ema > 19 ? slow + 1 : 0; if (slow > 50 && tier < 4 && T > 3) { degrade(); slow = 0; ema = 12; } }
   lastRender = now;
 
