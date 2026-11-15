@@ -33,7 +33,7 @@ PAGE = r"""<!doctype html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
 <style>
-/* The tokens, the light and the type of the Design page (architecture.py). */
+/* The tokens, the light and the type of architecture.py. */
 :root {
   color-scheme: light dark;
   --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
@@ -249,7 +249,6 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
   <header class="top">
     <h1 class="name">Invariant</h1>
     <a href="https://monitor.invariant.team/">Board</a>
-    <a href="https://monitor.invariant.team/architecture">Design</a>
     <a href="https://monitor.invariant.team/proof">Proof</a>
     <a href="https://monitor.invariant.team/findings">Findings</a>
     <span class="status" id="status">Reading the board</span>
@@ -565,7 +564,6 @@ function model(d) {
   return {
     people: [...new Set(items.map(i => i.who))].sort(), posts, plain: d.plain || {},
     open: items.filter(i => i.listed === "work").length,
-    agents: new Set(items.filter(i => i.session).map(i => i.session)).size,
     /* The Board's numbers (benches in view.py), in percent: the first untrained-base score posted, the best one with
        its configuration (the method, such as "cue, T 1.0, vote over 4"), and the best RL score. */
     start: pct(base[0]), base: pct(top), how: top ? top.config : "", rl: pct(best(of("rl"))),

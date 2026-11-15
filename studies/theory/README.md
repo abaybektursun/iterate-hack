@@ -1380,6 +1380,66 @@ code text at about 0.54 of its drive on math text.
 | `analysis/direct_input.py` | Readout from trace-01's per-position drive (`runs/abaybektursun-1115-005830-2145/trace_00*.npz`) and 7 hard328 cells' `answers.jsonl` (Modal Volume `iterate-runs`). |
 | `results/direct/input-01/` | `readout.json`, `examples.json` (a high-drive and a low-drive problem that the edit shortens as much), `run.json`. |
 
+### short-01: run-02/f2-m01, "autobench buys votes with short samples" (board work-4c1119, result-ebf7a4, refuted)
+
+Claim tested (engine 12's plan, with the mechanism's own MATH-500 half added as control): hard328 solutions need 6,000-14,000
+tokens, so under 20 % of the hard328 problems the cued base solves have a right sample of 2,000 tokens or fewer, against over
+50 % on MATH-500. No other top mechanism predicts anything about the base's solution lengths. Readout from the committed
+day1_3 rows (base + cue, T 1.0 / top-p 1.0, 4 samples, cap hits resampled up to 2 times, every row counted), 90 % bootstrap
+over solved problems: hard328 72 of 220, 32.7 % [27.7, 38.2]; MATH-500 320 of 474, 67.5 % [63.9, 71.1]. Rule fixed in
+advance: refuted if the hard328 lower bound is 20 % or more. Median right length 3,921 tokens [3,541, 4,390] on hard328 (the
+cause says 6,000-14,000), 1,594 on MATH-500. At 1,100 tokens 12.7 % [9.1, 16.4] against 50.4 %; at 4,096, 56.4 % against
+84.0 %. The contrast holds in direction, not in size: the short right answers sit on easy problems inside hard328 (94.5 % of
+their samples right, against 56.6 % on the other solved problems). 10 raw rows read (`reading.md`): AMC and OlympiadBench
+problems, right values no guess would give, grading correct; answer texts are not committed. Row added to
+`results/refuted.json`. The mechanism was already not carried in round-12 (-1.77 nats).
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_short.md` | Claim, refuting observation, rule (pushed first, 00ccb83). |
+| `analysis/direct_short.py` | Readout from `studies/rlneurons/results/day1_3/{hard328_base_cue_s4r2-01,math500_base_cue-01}/rows.jsonl`. |
+| `results/direct/short-01/` | `readout.json`, `examples.json` (a solved problem with no short right sample, one with), `reading.md`, `run.json`. |
+
+### ending-01: run-03/f2-m04, "accuracy depends on how the answer ends" (board work-8965b9, refuted)
+
+Claim tested (engine 12's plan): on code, RL-Math's 8 directions at 1.5x add at least 8 finished answers with no code block,
+because Math's directions push a boxed ending that displaces the final python block. No other top mechanism predicts it.
+HumanEval+ and MBPP+, 538 problems, Code cue, seed 51000000, one sample per cell. Finished no-block answers: cued base 12
+[7, 18], random rank-8 at 1.5x 23 [16, 31], Math edit 6 [2, 10], Code edit 1x 0, 1.5x 1. Math minus random -17 [-26, -8]
+(rule: refuted if the upper end is below +8); Math minus base -6 [-13, 1]. Answers with `\boxed`: 0 of 538 in the Math cell
+(base 1). The Math edit removes no-block endings, as every finishing edit does (cap hits 27 to 1). The 10 raw answers read
+(`reading.md`) end in broken fences or stop before the code, never in a box. The posted count (result-a1bf75: 6 no-block
+answers in the Math cell) already bounded this; the test adds the finished split and the intervals. Only 1.5x exists; no
+Math-alone 1x code cell. Row added to `results/refuted.json`.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_ending.md` | Claim, derivation check, frozen rule (pushed first, a236bf4). |
+| `analysis/direct_ending.py` | Readout from 5 code cells' `answers.jsonl` (Modal Volume `iterate-runs`, `gpu.py get`). |
+| `results/direct/ending-01/` | `readout.json`, `examples.json` (Math edit: finished no-block, finished with block and failed), `reading.md`, `run.json`. |
+
+### host-01: round-10/weights-m03, "an added RL change depends on its host" (board work-ae598b, result-3abd6f, holds, not distinctive)
+
+Claim tested (engine 12's plan, sharpened): Think-SFT's own weight change lies in RL-Math 3.1's top-8 input (right singular)
+subspace more than chance, and more than in the top-8 input subspace of the same rank in the same matrix from non-math
+changes. Readout: cap_right = ||d_ThinkSFT V||^2 / ||d_ThinkSFT||^2 per matrix (stored rows of job
+abaybektursun-1114-221259-0871), 224 matrices, 90 % bootstrap over matrices. Share inside Math 3.1's subspace 0.0088 =
+4.80x the random rank-8 expectation 8/n_in [4.55, 5.08] (over layers [4.35, 5.35]); the plan's 2x holds. Against
+structured nulls: 2.23x [2.12, 2.34] IF-RL 3.0's subspace, 1.99x [1.89, 2.08] General-RL 3.0's, but 1.33x [1.28, 1.39]
+the base matrix's own top-8 (above it in 188 of 224 matrices). Verdict by the frozen rule: holds, not distinctive (needed
+1.5x over every null). Positive control: Math 3.0's change sits 49x chance and 6.8x the base subspace, so the instrument
+shows a specific overlap where one exists. Think-SFT sits almost as much in Code 3.1's and Math 3.0's subspaces (Math 3.1
+over them 1.19x, 1.10x): it shares the input directions of reasoning RL in general, not of math RL. Output side (cap_left)
+1.11x to 1.32x the nulls. run-05/f2-m03 predicts the same overlap, and weights alone cannot show the overlap shrinks
+RL's effect; that needs Think-SFT + RL with the overlapping part projected out. Row added to `results/direct_tested.json`.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_host.md` | Claim, why the plan's chance level is weak, frozen verdict rule (pushed first, 07a692f). |
+| `analysis/direct_host.py` | `extract` (per-matrix caps from the job's `metrics.json`), `analyze` (readout). |
+| `data/direct_host/cap_v1.json` | Per-matrix cap_right, cap_left, cap_both of Think-SFT, Math 3.0, Code 3.1 against 11 subspaces (input). |
+| `results/direct/host-01/` | `readout.json`, `examples.json` (matrices with the largest and smallest ratio over the base subspace), `run.json`. |
+
 ## Paper: Theories on Trial (`paper/`, board work-184476)
 
 A short paper on the engine's rounds 1 to 7: the theories' own predictions against the two no-theory readers

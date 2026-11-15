@@ -14,11 +14,14 @@
 html, body { margin: 0; height: 100%; background: var(--paper); color: var(--ink); overflow: hidden;
   font: 400 14px/1.45 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
   font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; }
-canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+canvas { background: var(--paper); position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
 #col { position: fixed; left: 34px; top: 28px; width: min(380px, 44vw); pointer-events: none; }
 #col .tag { font-size: 11px; font-weight: 600; color: var(--faint); letter-spacing: .08em; text-transform: uppercase; }
-#col h1 { font-family: "Newsreader", Georgia, serif; font-size: clamp(21px, 1.9vw, 30px); line-height: 1.2; font-weight: 300; margin: 10px 0 14px; letter-spacing: -.005em; }
+#col h1 { font-family: "Newsreader", "Iowan Old Style", Georgia, serif; font-size: clamp(21px, 1.9vw, 30px); line-height: 1.2; font-weight: 300; margin: 10px 0 14px; letter-spacing: -.005em; }
 #col h1 b { font-weight: 400; color: var(--blue); }
+#col a { pointer-events: auto; color: var(--mute); text-decoration: none; border-bottom: 1px solid var(--rule); } #status { text-transform: none; letter-spacing: 0; color: var(--red); margin-left: 8px; }
+#lens { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(ellipse 75% 70% at 50% 54%, rgba(0,0,0,0) 45%, rgba(0,0,0,.5) 100%); }
+#grain { position: fixed; inset: 0; pointer-events: none; opacity: .07; mix-blend-mode: overlay; }
 #col p { margin: 0; padding: 11px 0; border-top: 1px solid var(--rule); color: var(--mute); font-size: 13px; }
 #col p:last-child { border-bottom: 1px solid var(--rule); }
 #col p i { font-style: normal; color: var(--ink); }
@@ -28,12 +31,12 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; t
 #panel.on { transform: none; }
 #panel .tag { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); display: flex; justify-content: space-between; }
 #panel .tag a { color: var(--mute); cursor: pointer; pointer-events: auto; }
-#panel h2 { font-family: "Newsreader", Georgia, serif; font-size: 25px; font-weight: 300; line-height: 1.2; margin: 8px 0 10px; }
-#panel .st { font-family: "Newsreader", Georgia, serif; font-size: 16px; color: var(--ink); margin: 0 0 12px; font-weight: 300; line-height: 1.4; }
+#panel h2 { font-family: "Newsreader", "Iowan Old Style", Georgia, serif; font-size: 25px; font-weight: 300; line-height: 1.2; margin: 8px 0 10px; }
+#panel .st { font-family: "Newsreader", "Iowan Old Style", Georgia, serif; font-size: 16px; color: var(--ink); margin: 0 0 12px; font-weight: 300; line-height: 1.4; }
 #panel .row { border-top: 1px solid var(--rule); padding: 9px 0; font-size: 12.5px; color: var(--mute); }
 #panel .row b { color: var(--ink); font-weight: 600; }
 #panel .row .k { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--faint); margin-bottom: 3px; }
-#panel .big { font-family: "Newsreader", Georgia, serif; font-size: 34px; font-weight: 300; color: var(--ink); line-height: 1.1; }
+#panel .big { font-family: "Newsreader", "Iowan Old Style", Georgia, serif; font-size: 34px; font-weight: 300; color: var(--ink); line-height: 1.1; }
 #panel .big small { font-size: 13px; color: var(--mute); font-weight: 400; }
 #panel .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 #panel .sh { display: grid; grid-template-columns: 34px 1fr auto 12px; gap: 8px; align-items: baseline; padding: 4px 0; cursor: pointer; font-size: 12px; color: var(--mute); }
@@ -63,18 +66,19 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; t
 #tip { position: fixed; left: 0; top: 0; pointer-events: none; padding: 7px 10px; background: #161512; border: 1px solid var(--rule); border-radius: 2px; font-size: 12px; color: var(--mute); max-width: 340px; display: none; }
 #tip b { color: var(--ink); font-weight: 600; }
 #err { position: fixed; left: 10px; bottom: 4px; color: var(--red); font-size: 11px; white-space: pre-wrap; z-index: 9; }
-@media (max-width: 760px) { #track u { display: none; } #track s { display: inline; } #panel { top: auto; width: 100%; bottom: 70px; max-height: 52vh; padding: 16px 18px 20px; background: rgba(14, 13, 11, .93); border-top: 1px solid var(--rule); transform: translateY(102%); } body:has(#panel.on) #col p { display: none; } body:has(#panel.on) #cap { display: none; } #col h1 { font-size: 17px; } #col p + p { display: none; } #key { display: none; } #col { left: 16px; top: 14px; } #bar { padding: 40px 14px 12px; } }
+@media (max-width: 760px) { #track u { display: none; } #track s { display: inline; } #panel { top: auto; width: 100%; bottom: 70px; max-height: 52vh; padding: 16px 18px 20px; background: rgba(14, 13, 11, .93); border-top: 1px solid var(--rule); transform: translateY(102%); } body:has(#panel.on) #col p { display: none; } body:has(#panel.on) #cap { display: none; } #col h1 { font-size: 17px; } #col { width: calc(100vw - 32px); } #col p:first-of-type { display: none; } #key { display: none; } #col { left: 16px; top: 14px; } #bar { padding: 40px 14px 12px; } }
 </style>
 <script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 </head>
 <body>
 <canvas id="c"></canvas>
+<div id="lens"></div><div id="grain"></div>
 <div id="labels"></div>
 <div id="col">
-  <div class="tag">Theory engine: called it (or did we)</div>
+  <div class="tag"><a href="../../">Lab</a> &nbsp;·&nbsp; Theory engine: called it (or did we) <span id="status"></span></div>
   <h1 id="line"></h1>
   <p>Each figure is a theory of why RL beats the base model. It fires its forecasts before the number exists. The pale plate is each forecast's own 90 % interval: <i>a pin on the plate landed inside it.</i></p>
-  <p id="stage"></p>
+  <p id="stage"><span id="stageA"></span><br><span id="tally"></span></p>
 </div>
 <div id="panel"></div>
 <div id="bar">
@@ -95,15 +99,11 @@ window.addEventListener('unhandledrejection', e => { document.getElementById('er
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import * as CANNON from 'https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.js';
 
 const $ = s => document.querySelector(s);
+{ const c = document.createElement('canvas'); c.width = c.height = 160; const g = c.getContext('2d'), im = g.createImageData(160, 160); for (let i = 0; i < 25600; i++) { const v = Math.random() * 255; im.data.set([v, v, v, 255], i * 4); } g.putImageData(im, 0, 0); $('#grain').style.backgroundImage = `url(${c.toDataURL()})`; }  // film grain, drawn once
 const D = await (await fetch('data.json')).json();
 const Q = new URLSearchParams(location.search);
 const esc = s => String(s ?? '').replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
@@ -152,39 +152,29 @@ for (const st of D.stages) {
 /* ---------- renderer: a maquette on a slate table under studio light ---------- */
 const canvas = $('#c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+const PR = Math.min(devicePixelRatio, 2); let prScale = 1; renderer.setPixelRatio(PR);
 renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
-renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap; renderer.shadowMap.autoUpdate = false;  // redrawn only while a figure or a shard moves
+canvas.addEventListener('webglcontextlost', e => e.preventDefault());
+canvas.addEventListener('webglcontextrestored', () => { stageDirty = true; wake = 120; });
 const scene = new THREE.Scene();
 const BG = new THREE.Color('#0e0d0b');
 scene.background = BG; scene.fog = new THREE.Fog(BG, 55, 150);
 scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), .03).texture;
 const camera = new THREE.PerspectiveCamera(30, 1, 1, 320);
 const HOME = { p: new THREE.Vector3(-19, 10.5, 30), t: new THREE.Vector3(1.5, 1.2, -4) };
-const setHome = h => { HOME.p.set(-.25 * h - 3, 7 + .5 * h, ZF + 13 + 1.18 * h); HOME.t.set(-.03 * h, 0, -1.5 - .1 * h); };
+const setHome = h => { HOME.p.set(-.22 * h - 3, 7 + .52 * h, ZF + 15 + 1.52 * h); HOME.t.set(.02 * h, 0, -.5 - .1 * h); };
 camera.position.copy(HOME.p);
 const controls = new OrbitControls(camera, canvas);
 controls.target.copy(HOME.t); controls.enableDamping = true; controls.dampingFactor = .06;
 controls.maxPolarAngle = 1.5; controls.minDistance = 6; controls.maxDistance = 110; controls.autoRotate = true;
+let wake = 60; const poke = (n = 45) => { wake = Math.max(wake, n); };
+controls.addEventListener('change', () => poke(2));
 const key = new THREE.DirectionalLight('#fff1dc', 2.0); key.position.set(-34, 46, 18); key.target.position.set(0, 0, -6);
-key.castShadow = true; key.shadow.mapSize.set(4096, 4096); key.shadow.radius = 5; key.shadow.bias = -.0005; key.shadow.normalBias = .03;
+key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.radius = 2; key.shadow.bias = -.0005; key.shadow.normalBias = .03;
 Object.assign(key.shadow.camera, { left: -34, right: 34, top: 30, bottom: -30, near: 5, far: 140 });
 const rim = new THREE.DirectionalLight('#cfd8e6', .35); rim.position.set(26, 30, -30);
 scene.add(key, key.target, rim, new THREE.HemisphereLight('#c9d2de', '#2a2520', .3));
-const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(2, 2, { type: THREE.HalfFloatType, samples: 4 }));
-composer.addPass(new RenderPass(scene, camera));
-composer.addPass(new UnrealBloomPass(new THREE.Vector2(2, 2), .1, .5, .92));  // a faint lens response on true highlights only
-composer.addPass(new OutputPass());
-const finish = new ShaderPass({ uniforms: { tDiffuse: { value: null }, uT: { value: 0 } },
-  vertexShader: 'varying vec2 u; void main(){ u = uv; gl_Position = vec4(position.xy, 0., 1.); }',
-  fragmentShader: `varying vec2 u; uniform sampler2D tDiffuse; uniform float uT;
-    float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233)) + uT) * 43758.5453); }
-    void main(){ vec3 c = texture2D(tDiffuse, u).rgb; vec2 q = u - .5;
-      c *= 1. - .42 * smoothstep(.25, .95, length(q * vec2(1.15, 1.)));
-      c += (h(gl_FragCoord.xy) - .5) * .028;
-      gl_FragColor = vec4(c, 1.); }` });
-composer.addPass(finish);
-
 /* ---------- surfaces: honed slate, an inlaid plate, printed scale ---------- */
 function grain(size, draw) { const c = document.createElement('canvas'); c.width = c.height = size; draw(c.getContext('2d'), size); const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 8; return t; }
 let sd = 11; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
@@ -212,7 +202,7 @@ const printed = AX.map(([s, txt]) => {  // the scale is printed on the table
   c.width = Math.ceil(g.measureText(txt).width) + 16; c.height = 64; g.font = '600 44px Archivo, sans-serif'; g.fillStyle = '#e9e4d8'; g.textBaseline = 'middle'; g.fillText(txt, 8, 34);
   const t = new THREE.CanvasTexture(c); t.anisotropy = 8;
   const m = new THREE.Mesh(new THREE.PlaneGeometry(c.width / 64 * .95, .95), new THREE.MeshBasicMaterial({ map: t, transparent: true, opacity: s === 0 || s === 1 ? .8 : .5, depthWrite: false }));
-  m.rotation.x = -Math.PI / 2; m.userData.w = c.width / 64 * .95; m.userData.s = s; scene.add(m); return m;
+  m.rotation.x = -Math.PI / 2 + .7; m.userData.w = c.width / 64 * .95; m.userData.s = s; scene.add(m); return m;
 });
 
 /* ---------- figures: frosted glass with a metal rod; rigid shards when refuted ---------- */
@@ -220,13 +210,13 @@ const STEEL = new THREE.Color('#c4c2bb'), BRASS = new THREE.Color('#c9a25c'), GR
 const R0 = .62, R1 = .42, H = 2.55, ang = i => i * Math.PI / 3 + Math.PI / 6;
 const corner = (r, y, i) => new THREE.Vector3(r * Math.cos(ang(i)), y, r * Math.sin(ang(i)));
 function solid(tris, centre) {  // triangles with flat normals pointing away from centre, moved so centre is the origin
-  const pos = [];
+  const pos = [], uv = [];
   for (const [a, b, c] of tris) {
     const nrm = new THREE.Vector3().subVectors(b, a).cross(new THREE.Vector3().subVectors(c, a));
     const mid = new THREE.Vector3().add(a).add(b).add(c).divideScalar(3).sub(centre);
-    for (const p of nrm.dot(mid) < 0 ? [a, c, b] : [a, b, c]) pos.push(p.x - centre.x, p.y - centre.y, p.z - centre.z);
+    for (const p of nrm.dot(mid) < 0 ? [a, c, b] : [a, b, c]) { pos.push(p.x - centre.x, p.y - centre.y, p.z - centre.z); uv.push((p.x + p.z * .6) * .8, p.y * .8); }
   }
-  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.computeVertexNormals(); return g;
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); g.computeVertexNormals(); return g;
 }
 const hullGeo = (() => {
   const t = [], O = new THREE.Vector3(0, H / 2, 0), apex = new THREE.Vector3(0, APEX, 0);
@@ -261,10 +251,24 @@ world.allowSleep = true; world.broadphase = new CANNON.SAPBroadphase(world);
 world.defaultContactMaterial.friction = .7; world.defaultContactMaterial.restitution = .18;
 const ground = new CANNON.Body({ mass: 0, shape: new CANNON.Plane() }); ground.quaternion.setFromEuler(-Math.PI / 2, 0, 0); world.addBody(ground);
 const ringGeo = new THREE.RingGeometry(.9, .96, 72); ringGeo.rotateX(-Math.PI / 2);
+const frost = slateTex.clone(); frost.repeat.set(1.5, 1.5); frost.needsUpdate = true;
 const glassMat = reader => reader
   ? new THREE.MeshStandardMaterial({ color: '#5e5c56', roughness: .7, metalness: 0, envMapIntensity: .6, transparent: true })
-  : new THREE.MeshPhysicalMaterial({ color: GLASS.clone(), roughness: .36, metalness: 0, ior: 1.48, envMapIntensity: 1.0, clearcoat: .25, clearcoatRoughness: .4, transparent: true, opacity: .62, depthWrite: false });
+  : new THREE.MeshPhysicalMaterial({ color: GLASS.clone(), roughness: .5, roughnessMap: frost, bumpMap: frost, bumpScale: .35, metalness: 0, ior: 1.48, envMapIntensity: 1.25, clearcoat: .35, clearcoatRoughness: .25, transparent: true, opacity: .62, depthWrite: false });
 
+const TILT = .95, plqGeo = new THREE.BoxGeometry(1, 1, .05);
+function engrave(f, name, score, fate, cls) {  // the name, the running score and the fate, engraved on the plaque of the figure
+  const k = name + '|' + score + '|' + fate; if (k === f.plqKey) return; f.plqKey = k; poke();
+  const g = f.cv.getContext('2d'), W = 512, Hh = 232;
+  g.fillStyle = '#1b1a17'; g.fillRect(0, 0, W, Hh); g.strokeStyle = 'rgba(233,228,216,.28)'; g.lineWidth = 2; g.strokeRect(9, 9, W - 18, Hh - 18);
+  g.textAlign = 'center'; g.textBaseline = 'alphabetic'; g.fillStyle = '#ece7da';
+  g.font = '600 46px Archivo, sans-serif'; if ('fontStretch' in g) g.fontStretch = 'condensed'; if ('letterSpacing' in g) g.letterSpacing = '0px';
+  const words = name.split(' '), lines = ['']; for (const w of words) { const c = lines[lines.length - 1]; if (c && g.measureText(c + ' ' + w).width > W - 44) lines.push(w); else lines[lines.length - 1] = c ? c + ' ' + w : w; }
+  const two = lines.length > 1; lines.slice(0, 2).forEach((l, i) => g.fillText(l, W / 2, (two ? 60 : 84) + i * 48));
+  g.font = '500 31px Archivo, sans-serif'; g.fillStyle = '#aaa494'; g.fillText(score, W / 2, 158);
+  if (fate) { g.font = '600 26px Archivo, sans-serif'; if ('letterSpacing' in g) g.letterSpacing = '3px'; if ('fontStretch' in g) g.fontStretch = 'normal'; g.fillStyle = cls === 'r' ? '#d0634b' : cls === 's' ? '#c9a25c' : '#8d8778'; g.fillText(fate.toUpperCase(), W / 2, 202); }
+  f.tex.needsUpdate = true;
+}
 const figs = new Map();
 function getFig(t) {
   let f = figs.get(t.id);
@@ -276,7 +280,11 @@ function getFig(t) {
   const ring = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: OXIDE, transparent: true, opacity: 0, depthWrite: false }));
   ring.position.y = .012;
   g.add(core, hull, ring); g.position.set(t.x, 0, ZF); g.scale.y = .001; scene.add(g);
-  f = { id: t.id, g, mat, hull, core, ring, vis: 0, rod: STEEL.clone(), dark: 0, mark: 0, recoil: 0, in: false, shards: null, tx: t.x, reader };
+  const cv = document.createElement('canvas'); cv.width = 512; cv.height = 232;
+  const tex = new THREE.CanvasTexture(cv); tex.anisotropy = 8; tex.colorSpace = THREE.SRGBColorSpace;
+  const plq = new THREE.Mesh(plqGeo, new THREE.MeshStandardMaterial({ map: tex, roughness: .55, metalness: .35, envMapIntensity: .6, transparent: true }));
+  plq.rotation.x = -TILT; plq.castShadow = true; scene.add(plq);
+  f = { id: t.id, g, mat, hull, core, ring, plq, cv, tex, plqKey: '', vis: 0, rod: STEEL.clone(), dark: 0, mark: 0, recoil: 0, in: false, shards: null, tx: t.x, reader };
   figs.set(t.id, f); return f;
 }
 function shatter(f) {
@@ -321,10 +329,10 @@ const loopGeo = new THREE.TorusGeometry(.86, .15, 10, 36); loopGeo.rotateX(-Math
 const ballMat = new THREE.MeshStandardMaterial({ metalness: .75, roughness: .3, envMapIntensity: 2.2 });
 const pinMat = new THREE.MeshStandardMaterial({ metalness: .9, roughness: .32, envMapIntensity: 1.2 });
 const loopMat = new THREE.MeshStandardMaterial({ metalness: 0, roughness: .45, envMapIntensity: .8 });
-let opening = true, userCam = false, first = true, cur = -1, S = null, arcs, balls, miss, discs, holes;
+let stageDirty = true, roll = 9, opening = true, userCam = false, first = true, cur = -1, S = null, arcs, balls, miss, discs, holes;
 const SC = new THREE.Vector3(), M4 = new THREE.Matrix4(), V3 = new THREE.Vector3(), QI = new THREE.Quaternion(), C3 = new THREE.Color();
 function setStage(i) {
-  cur = i; S = D.stages[i];
+  cur = i; S = D.stages[i]; stageDirty = true;
   for (const o of [arcs, miss]) if (o) { scene.remove(o); o.geometry.dispose(); }
   for (const o of [balls, discs, holes]) if (o) { scene.remove(o); o.dispose(); }
   const n = S.shots.length, pos = [], aS = [], aI = [];
@@ -338,14 +346,14 @@ function setStage(i) {
   arcs = new THREE.LineSegments(ag, arcMat); arcs.frustumCulled = false; scene.add(arcs);
   const mp = [], mc = [], mm = [];
   for (const s of S.shots) if (s.m != null) {
-    const w = s.mark[0] === 'w', c = w ? BRASS : IVORY, y = YP + .004;
+    const w = s.mark[0] === 'w', c = C3.copy(w ? BRASS : IVORY).convertLinearToSRGB(), y = YP + .004;
     mp.push(s.x, y, s.zv, s.x, y, s.zm); for (let q = 0; q < 2; q++) { mc.push(c.r, c.g, c.b, w ? .95 : .5); mm.push(s.tm, s.th); }
   }
   const mg = new THREE.BufferGeometry();
   mg.setAttribute('position', new THREE.Float32BufferAttribute(mp, 3)); mg.setAttribute('aC', new THREE.Float32BufferAttribute(mc, 4)); mg.setAttribute('aM', new THREE.Float32BufferAttribute(mm, 2));
   miss = new THREE.LineSegments(mg, missMat); miss.frustumCulled = false; scene.add(miss);
   balls = new THREE.InstancedMesh(ballGeo, ballMat, n); discs = new THREE.InstancedMesh(pinGeo, pinMat, n); holes = new THREE.InstancedMesh(loopGeo, loopMat, n);
-  for (const o of [balls, discs, holes]) { o.frustumCulled = false; o.castShadow = true; o.receiveShadow = true; o.setColorAt(0, C3.set(0)); scene.add(o); }
+  for (const o of [balls, discs, holes]) { o.frustumCulled = false; o.receiveShadow = true; o.setColorAt(0, C3.set(0)); scene.add(o); }
   // lanes, plate and printed scale
   const half = S.theories.length * S.W / 2 + .6, lp = [], sp = [];
   for (let k = 0; k <= S.theories.length; k++) { const x = (k - S.theories.length / 2) * S.W; lp.push(x, .004, ZF - 1.4, x, .004, Z0 + .02, x, .004, Z0 - ZL - .02, x, .004, zOf(12)); }
@@ -353,11 +361,12 @@ function setStage(i) {
   for (const [s] of AX) if (s < 0 || s > 1) sp.push(-half, .004, zOf(s), half + .3, .004, zOf(s));
   scaleLines.geometry.dispose(); scaleLines.geometry = new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(sp, 3));
   strip.scale.x = half * 2; S.half = half; plateTex.repeat.x = half / 3;
-  for (const m of printed) m.position.set(half + .55 + m.userData.w / 2, .006, zOf(m.userData.s) + (m.userData.s === 0 ? .6 : -.6));
+  for (const m of printed) m.position.set(half + .55 + m.userData.w / 2, .36, zOf(m.userData.s));
   setHome(half); if (!userCam && sel.id == null) { if (first) { camera.position.copy(HOME.p); controls.target.copy(HOME.t); first = false; } else flyTo(); }
   // figures
   for (const f of figs.values()) f.in = false;
-  for (const t of S.theories) { const f = getFig(t); f.in = true; f.tx = t.x; if (f.vis < .02) f.g.position.x = t.x; if (opening) f.vis = 1; restore(f); t.fig = f; }
+  const pw = Math.min(S.W * .93, 3.6);
+  for (const t of S.theories) { const f = getFig(t); f.in = true; f.tx = t.x; f.plq.scale.set(pw, pw * 232 / 512, 1); f.plq.position.set(f.g.position.x, pw * 232 / 512 * .5 * Math.cos(TILT) + .04, ZF + 1.15 + pw * .12); if (f.vis < .02) f.g.position.x = t.x; if (opening) f.vis = 1; restore(f); t.fig = f; }
   opening = false;
   // selection follows the theory by its id
   const keep = sel.id != null ? S.theories.find(t => t.id === sel.id) : null;
@@ -370,7 +379,7 @@ function setStage(i) {
 /* ---------- labels ---------- */
 const LB = $('#labels');
 const mk = cls => { const e = document.createElement('div'); e.className = 'lb ' + cls; LB.appendChild(e); return e; };
-const figLb = Array.from({ length: 16 }, () => mk('')), rlLb = Array.from({ length: 6 }, () => mk('rl'));
+const rlLb = Array.from({ length: 6 }, () => mk('rl'));
 let VW = 1, VH = 1;
 function place(e, x, y, z, dx = 0, dy = 0, centre = true) {
   V3.set(x, y, z).project(camera);
@@ -382,7 +391,11 @@ function place(e, x, y, z, dx = 0, dy = 0, centre = true) {
 
 /* ---------- selection, panel, captions ---------- */
 const sel = { th: -1, shot: -1, id: null }; let hov = null, board = {};
-fetch('/data').then(r => r.json()).then(d => { for (const it of d.items || []) board[it.id] = it; drawPanel(); }).catch(() => {});
+function loadBoard() {  // one request; a failed read keeps what is on screen, says so and retries
+  fetch('/data').then(r => { if (!r.ok) throw 0; return r.json(); }).then(d => { for (const it of d.items || []) board[it.id] = it; $('#status').textContent = ''; drawPanel(); poke(); })
+    .catch(() => { $('#status').textContent = Object.keys(board).length ? 'board data not refreshed, retrying' : 'board data not loaded, retrying'; setTimeout(loadBoard, 60000); });
+}
+loadBoard();
 const markTxt = s => s.m == null ? 'not measured yet' : s.mark[0] === 'w' ? 'nearer than the readers' : s.mark[0] === 'l' ? 'the readers were nearer' : s.mark[0] === 't' ? 'tied with the readers' : s.mark === 'g' ? 'GPU experiment' : s.mark === 'c' ? 'not compared with readers' : '';
 const fc = s => `${num(s.v)} <span style="color:var(--mute)">[${num(s.lo)}, ${num(s.hi)}]</span>`;
 const dotCss = s => s.m == null ? 'background:#9a9892' : s.mark[0] === 'w' ? 'background:#c9a25c' : s.mark[0] === 'l' || s.mark[0] === 't' ? 'border:1.5px solid #e4dfd2' : 'background:#e4dfd2';
@@ -424,9 +437,11 @@ function drawPanel() {
 }
 function drawStage() {
   const m = S.shots.filter(s => s.m != null).length, r = S.theories.filter(t => t.fate === 'r').length;
-  $('#stage').innerHTML = `<i>${esc(S.label)}</i>${S.sub ? ', ' + esc(S.sub.replace(/^2026-11-15, /, '')) : ''}.<br>${S.theories.filter(t => t.kind === 'theory').length} theories, ${S.shots.length} forecasts, ${m} measured, ${S.shots.length - m} still open` + (S.kind === 'round' ? `, ${r} refuted.` : '. No fate is stored for a forecast run.');
+  $('#stageA').innerHTML = `<i>${esc(S.label)}</i>${S.sub ? ', ' + esc(S.sub.replace(/^2026-11-15, /, '')) : ''}.<br>${S.theories.filter(t => t.kind === 'theory').length} theories, ${S.shots.length} forecasts, ${m} measured, ${S.shots.length - m} still open` + (S.kind === 'round' ? `, ${r} refuted.` : '. No fate is stored for a forecast run.');
 }
+const rb = [0, 1].map(() => { const m = new THREE.Mesh(ballGeo, new THREE.MeshStandardMaterial({ color: '#77736a', metalness: .5, roughness: .4, envMapIntensity: 1.4 })); m.visible = false; scene.add(m); return m; });
 function select(th, shot) {
+  roll = shot >= 0 ? 0 : 9; poke();
   sel.th = th; sel.shot = shot; sel.id = th >= 0 ? S.theories[th].id : null;
   drawPanel(); flyTo();
 }
@@ -434,8 +449,8 @@ let fly = null;
 function flyTo() {
   let p = HOME.p, t = HOME.t;
   if (sel.th >= 0 && S) { const sh = sel.shot >= 0 ? S.shots[sel.shot] : null, x = sh ? sh.x : S.theories[sel.th].x, off = VW < 760 ? 0 : 1;
-    p = sh ? new THREE.Vector3(x - 6 - 2 * off, 8, sh.zv + 19) : new THREE.Vector3(x - 8 - 2 * off, 10.5, ZF + 15);
-    t = sh ? new THREE.Vector3(x + 2.6 * off, 0, sh.zv + 1) : new THREE.Vector3(x + 3.4 * off, .4, -1.5); }
+    p = sh ? new THREE.Vector3(x - 6 - 2 * off, 8, sh.zv + 19) : new THREE.Vector3(x - 6 - 2 * off, 13.5, ZF + 20);
+    t = sh ? new THREE.Vector3(x + 2.6 * off, 0, sh.zv + 1) : new THREE.Vector3(x + 3.2 * off, 0, 1.5); }
   fly = { p0: camera.position.clone(), t0: controls.target.clone(), p1: p.clone(), t1: t.clone(), u: 0 };
 }
 
@@ -470,11 +485,11 @@ function pick(cx, cy) {
     const p = shotPos(s, t); if (p) test(p[0], p[1], p[2], 0, { shot: s });
     if (s.m != null && t > s.tm) test(s.x, .05, s.zm, 2, { shot: s });
   }
-  for (const th of S.theories) for (const y of [.5, 1.5, 2.6]) test(th.x, y, ZF, 14, { th });
+  for (const th of S.theories) { for (const y of [.5, 1.5, 2.6]) test(th.x, y, ZF, 14, { th }); test(th.x, .4, ZF + 1.4, 16, { th }); }
   return best;
 }
 let down = null;
-canvas.addEventListener('pointerdown', e => { down = [e.clientX, e.clientY]; controls.autoRotate = false; fly = null; userCam = true; });
+canvas.addEventListener('pointerdown', e => { down = [e.clientX, e.clientY]; fly = null; userCam = true; });
 canvas.addEventListener('wheel', () => { userCam = true; fly = null; }, { passive: true });
 canvas.addEventListener('pointerup', e => {
   if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6) return;
@@ -516,19 +531,20 @@ function ruler(t) {
 
 /* ---------- frame ---------- */
 function resize() {
-  VW = innerWidth; VH = innerHeight; renderer.setSize(VW, VH, false); composer.setSize(VW, VH);
+  VW = innerWidth; VH = innerHeight; renderer.setSize(VW, VH, false); poke();
   camera.aspect = VW / VH; camera.fov = VW < 760 ? 48 : 30; camera.updateProjectionMatrix();
 }
 addEventListener('resize', resize); resize();
 $('#line').innerHTML = esc(D.line).replace(/(\d+ of \d+)/, '<b>$1</b>');
 const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-if (still && !Q.has('t')) { T = D.stages[3].start + D.stages[3].dur - .5; setPlay(false); }
+if (still && !Q.has('t') && !Q.has('s')) { T = D.stages[1].start + D.stages[1].tF + 3; setPlay(false); }  // one composed frame, no replay
 // the page opens on round 2 as its numbers have landed and its one refuted theory breaks, then starts from round 1
 let intro = Q.has('t') || Q.has('s') || still ? 0 : 2.8;
 if (intro) T = D.stages[1].start + D.stages[1].tF - .7;
-let last = performance.now(), idle = 0, warm = +Q.get('warm') || 0;
+let fpsN = 0, ema = 1 / 60, slow = 0, lastTally = '', last = performance.now(), idle = 0, warm = +Q.get('warm') || 0;
 function frame(now) {
   requestAnimationFrame(frame);
+  if (document.hidden) return;
   const dt = Math.min(Q.has('noclamp') ? 1 : .05, (now - last) / 1000); last = now;  // ?noclamp: real elapsed time on a slow renderer
   if (playing) { T += dt; if (T >= total) T = 0; }
   if (intro > 0) { intro -= dt; if (intro <= 0) T = 0; }
@@ -539,11 +555,10 @@ function frame(now) {
 
   // camera
   if (fly) { fly.u = Math.min(1, fly.u + dt / 2.2); const e = ease(fly.u); camera.position.lerpVectors(fly.p0, fly.p1, e); controls.target.lerpVectors(fly.t0, fly.t1, e); if (fly.u >= 1) fly = null; }
-  idle += dt; controls.autoRotateSpeed = .22 * Math.cos(idle * .1);
+  idle += dt; controls.autoRotate = playing && !userCam && !fly; controls.autoRotateSpeed = .07 * Math.cos(idle * .1);
   controls.update();
 
   // shots: a steel ball per forecast, a pin where the number landed
-  finish.uniforms.uT.value = (now * .001) % 10;
   arcMat.uniforms.uT.value = missMat.uniforms.uT.value = t; arcMat.uniforms.uSel.value = missMat.uniforms.uSel.value = sel.th; arcMat.uniforms.uShot.value = sel.shot;
   let nb = 0, nd = 0, nh = 0;
   for (const s of S.shots) {
@@ -563,7 +578,7 @@ function frame(now) {
   for (const [o, n] of [[balls, nb], [discs, nd], [holes, nh]]) { o.count = n; o.instanceMatrix.needsUpdate = true; if (o.instanceColor) o.instanceColor.needsUpdate = true; }
 
   // figures
-  world.step(1 / 60, dt, 3);
+  world.step(1 / 60, dt, 3); let moving = false;
   let refuted = null;
   for (const th of S.theories) {
     const f = th.fig, done = S.kind === 'round' && t >= S.tF;
@@ -575,8 +590,11 @@ function frame(now) {
   }
   if (warm && t > S.tF + 1) { for (let k = 0; k < warm; k++) world.step(1 / 60); warm = 0; }
   for (const f of figs.values()) {
+    const v0 = f.vis, x0 = f.g.position.x, d0 = f.dark + f.mark;
     f.vis += ((f.in ? 1 : 0) - f.vis) * Math.min(1, dt * (f.in ? 2.6 : 4));
-    if (!f.in && f.vis < .02) { f.g.visible = false; restore(f); f.mark = 0; continue; }
+    if (!f.in && f.vis < .02) { f.g.visible = f.plq.visible = false; restore(f); f.mark = 0; continue; }
+    f.plq.visible = true; f.plq.position.x = f.g.position.x; f.plq.material.opacity = Math.min(1, f.vis * 1.3);
+    f.plq.material.color.setScalar(sel.id && sel.id !== f.id ? .4 : 1);
     if (!f.in) { f.markT = 0; f.recoilT = 0; }
     f.g.visible = true; f.g.position.x += (f.tx - f.g.position.x) * Math.min(1, dt * 2.6);
     f.recoil += ((f.recoilT || 0) - f.recoil) * Math.min(1, dt * 14);
@@ -587,24 +605,27 @@ function frame(now) {
     if (!f.reader) f.mat.color.copy(GLASS).lerp(GRAPH, f.dark * .85);
     f.mat.opacity = (f.reader ? 1 : .62 + .3 * f.dark) * Math.min(1, f.vis * 1.2);
     f.ring.material.opacity = .85 * f.mark; f.ring.scale.setScalar(.7 + .65 * ease(f.mark));
-    if (f.shards) for (const s of f.shards) { s.m.position.copy(s.b.position); s.m.quaternion.copy(s.b.quaternion); s.m.scale.setScalar(f.in ? 1 : f.vis); }
+    if (f.shards) for (const s of f.shards) { s.m.position.copy(s.b.position); s.m.quaternion.copy(s.b.quaternion); s.m.scale.setScalar(f.in ? 1 : f.vis); if (s.b.sleepState !== 2) moving = true; }
+    if (Math.abs(f.vis - v0) > .0015 || Math.abs(f.g.position.x - x0) > .0015 || Math.abs(f.dark + f.mark - d0) > .002 || Math.abs(f.recoil) > .01) moving = true;
   }
+  if (moving || stageDirty) { renderer.shadowMap.needsUpdate = true; stageDirty = false; poke(3); }
 
-  // labels
-  const pxLane = (() => { const a = V3.set(0, 0, ZF).project(camera).x, b = V3.set(S.W, 0, ZF).project(camera).x; return Math.abs(b - a) / 2 * VW; })();
-  const lev = pxLane < 70 ? 3 : pxLane < 128 ? 2 : 1;
-  figLb.forEach((e, k) => {
-    const th = S.theories[k]; if (!th || th.fig.vis < .5) { e.style.display = 'none'; return; }
+  // plaques
+  let near = 0, cmp = 0;
+  for (const th of S.theories) {
     let land = 0, ins = 0, gain = 0, hasG = false;
-    for (const s of th.shots) if (s.m != null && t > s.tm) { land++; if (s.inside) ins++; if (s.gain != null) { gain += s.gain; hasG = true; } }
+    for (const s of th.shots) if (s.m != null && t > s.tm) { land++; if (s.inside) ins++; if (s.gain != null) { gain += s.gain; hasG = true; } if (th.kind === 'theory' && 'wlt'.includes(s.mark[0])) { cmp++; if (s.mark[0] === 'w') near++; } }
     const fate = S.kind === 'round' && t >= (th.tS ?? S.tF) && th.state ? th.state : '';
-    const score = land ? `${ins} of ${land} inside` + (hasG ? ` · ${gain > 0 ? '+' : ''}${gain.toFixed(2).replace('-', '−')} nats` : '') : th.shots.length ? `${th.shots.length} forecast${th.shots.length > 1 ? 's' : ''}` : 'says nothing here';
-    const txt = `<b>${esc(th.name)}</b>${score}${fate ? `<br><span class="${th.fate === 'r' ? 'red' : th.fate === 's' ? 'blue' : ''}">${esc(fate)}</span>` : ''}`;
-    if (e._t !== txt) { e.innerHTML = e._t = txt; }
-    e.classList.toggle('dimmed', sel.th >= 0 && sel.th !== k);
-    place(e, th.fig.g.position.x, APEX + .25, ZF, 0, -(k % lev) * 31);
-  });
+    const score = land ? `${ins} of ${land} inside` + (hasG ? `  ${gain > 0 ? '+' : ''}${gain.toFixed(2).replace('-', '−')} nats` : '') : th.shots.length ? `${th.shots.length} forecast${th.shots.length > 1 ? 's' : ''}` : 'says nothing here';
+    engrave(th.fig, th.name, score, fate, th.fate);
+  }
+  const tally = cmp ? `Nearer than the readers on <i>${near} of ${cmp}</i> numbers in so far.` : 'No number is in yet.';
+  if (tally !== lastTally) { $('#tally').innerHTML = lastTally = tally; }
   ruler(t);
+  { const s = sel.shot >= 0 ? S.shots[sel.shot] : null; roll += dt;  // the two readers' forecasts roll out to their values
+    rb.forEach((m, i) => { const r = s && s.readers[i]; m.visible = !!r; if (!r) return;
+      const u = clamp(roll / 1.1, 0, 1), e = 1 - Math.pow(1 - u, 3), z1 = zOf((r[0] - s.lo) / (s.hi - s.lo)), z = ZF - 1.6 + (z1 - (ZF - 1.6)) * e, rad = s.r * .8;
+      m.position.set(s.x + (i ? .16 : -.16), (z < Z0 + .1 && z > Z0 - ZL - .1 ? YP : 0) + rad, z); m.scale.setScalar(rad); }); }
 
   // caption
   let cap;
@@ -615,9 +636,19 @@ function frame(now) {
   else cap = `<b>${esc(S.label)}.</b> No theory was refuted in this round.`;
   if (cap !== lastRef) { $('#cap').innerHTML = lastRef = cap; }
 
-  composer.render();
+  // render only while something moves; lower the internal resolution when frames run slow
+  if (playing || intro > 0 || fly || wake > 0 || roll < 1.2) {
+    if (wake > 0) wake--;
+    renderer.render(scene, camera);
+    ema += (dt - ema) * .05;
+    if (Q.has('fps') && !(++fpsN % 30)) $('#status').textContent = `${Math.round(1 / ema)} fps, resolution ${prScale.toFixed(2)}`;
+    if (ema > 1 / 52 && ++slow > 45 && prScale > .5) { prScale = Math.max(.5, prScale - .15); renderer.setPixelRatio(PR * prScale); renderer.setSize(VW, VH, false); slow = 0; ema = 1 / 60; }
+    else if (ema <= 1 / 52) slow = 0;
+  }
 }
 requestAnimationFrame(frame);
+document.addEventListener('visibilitychange', () => { last = performance.now(); poke(); });
+for (const ev of ['pointermove', 'pointerdown', 'pointerup', 'keydown', 'wheel']) addEventListener(ev, () => poke(), { passive: true });
 if (Q.has('sel')) setTimeout(() => { const [a, b] = Q.get('sel').split('.'); select(+a, b == null ? -1 : +b); if (fly) { camera.position.copy(fly.p1); controls.target.copy(fly.t1); fly = null; } }, 300);
 </script>
 </body>

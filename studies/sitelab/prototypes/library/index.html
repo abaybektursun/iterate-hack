@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invariant: what the agents read</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --wall: #15130f; --sheet: #1c1915; --ink: #ece4d3; --mute: #a59b89; --faint: #7d7465; --rule: #322c24;
+  --brass: #c9a765; --red: #c4553a; --col: 356px;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; color: var(--ink); background: var(--wall); overflow: hidden;
+  font: 400 15px/1.5 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; border-radius: 3px; }
+canvas#gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+canvas#gl.drag { cursor: grabbing; } canvas#gl.pick { cursor: pointer; } canvas#gl.lamp { cursor: ew-resize; }
+.shade { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(120% 100% at 60% 45%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, .5) 100%); }
+.veil { position: fixed; inset: 0; pointer-events: none; transition: opacity .6s; background: linear-gradient(90deg, rgba(21, 19, 15, .97), rgba(21, 19, 15, .92) 20%, rgba(21, 19, 15, 0) 33%); }
+.col > :not(.lab-link) { transition: opacity .5s; }
+body.reading .veil, body.reading .col > :not(.lab-link) { opacity: 0; pointer-events: none; }
+body.reading .hint { right: 400px; left: 30px; }
+.grain { position: fixed; inset: 0; pointer-events: none; opacity: .045; }
+
+.col { position: fixed; left: 0; top: 0; bottom: 0; width: var(--col); padding: 26px 0 22px 40px; display: flex; flex-direction: column; pointer-events: none; }
+.col > * { pointer-events: auto; }
+.lab-link { font-size: 13px; color: var(--mute); text-decoration: none; letter-spacing: .02em; align-self: flex-start; }
+.lab-link:hover { color: var(--ink); }
+h1 { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 29px; line-height: 1.16; letter-spacing: -.012em; margin: 30px 0 20px; text-wrap: balance; }
+h1 b { font-weight: 400; color: var(--brass); font-variant-numeric: lining-nums; }
+h1 i { font-style: normal; color: var(--red); font-weight: 400; }
+.row { border-top: 1px solid var(--rule); padding: 11px 0; font-size: 13px; color: var(--mute); }
+.row .lab { font-size: 11px; font-weight: 650; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin-bottom: 5px; }
+.key { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; align-items: center; }
+.key i { width: 9px; height: 16px; border-radius: 1px; background: var(--c); display: block; box-shadow: 0 0 0 1px rgba(236, 228, 211, .22); }
+.key i.rib { width: 4px; height: 16px; margin: 0 2.5px; }
+.grow { flex: 1; }
+.foot { font-size: 12px; color: var(--faint); border-top: 1px solid var(--rule); padding-top: 10px; }
+.hint { position: fixed; left: calc(var(--col) + 30px); right: 30px; bottom: 20px; text-align: center; font-size: 13px; color: var(--mute); pointer-events: none; transition: opacity .3s; }
+.hint kbd { font: inherit; color: var(--ink); border: 1px solid var(--rule); border-radius: 3px; padding: 0 5px; }
+
+.tag { position: fixed; left: 0; top: 0; white-space: nowrap; will-change: transform; font-size: 12px; }
+#lampTag { color: var(--ink); background: rgba(28, 25, 21, .9); border: 1px solid #4b4234; border-radius: 99px; padding: 4px 12px; cursor: pointer; }
+#lampTag b { font-weight: 600; } #lampTag span { color: var(--mute); margin-left: 8px; }
+#tip { pointer-events: none; max-width: 340px; white-space: normal; background: #efe6d2; color: #2a241b; padding: 8px 12px 9px; border-radius: 1px;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, .45); opacity: 0; transition: opacity .12s; }
+#tip.on { opacity: 1; }
+#tip b { display: block; font: 500 16px/1.25 "Newsreader", Georgia, serif; }
+#tip span { font-size: 11px; color: #6d6252; }
+
+#sheet { position: fixed; right: 0; top: 0; bottom: 0; width: 372px; padding: 26px 30px 22px 26px; background: rgba(24, 21, 17, .94); border-left: 1px solid var(--rule);
+  transform: translateX(102%); transition: transform .5s cubic-bezier(.2, .7, .2, 1); overflow-y: auto; display: flex; flex-direction: column; }
+#sheet.on { transform: none; }
+#sheet .meta { font-size: 11px; font-weight: 650; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); }
+#sheet .meta a { color: var(--brass); text-decoration: none; }
+#sheet h2 { font: 300 25px/1.18 "Newsreader", Georgia, serif; margin: 10px 0 8px; text-wrap: balance; }
+#sheet .by { font-size: 13px; color: var(--mute); }
+#sheet .rib { margin-top: 12px; padding: 9px 0 9px 12px; border-left: 3px solid var(--red); font-size: 13px; color: var(--ink); }
+#sheet .rib.claim { border-color: #d8cfb8; }
+#sheet .rib q { font-family: "Newsreader", Georgia, serif; font-style: italic; font-size: 15px; }
+#sheet .sec { margin-top: 16px; padding-top: 11px; border-top: 1px solid var(--rule); font-size: 11px; font-weight: 650; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); }
+.cite { padding: 9px 0; border-bottom: 1px solid var(--rule); font-size: 13px; color: var(--mute); }
+.cite a { color: var(--ink); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--brass); }
+.cite p { margin: 4px 0 0; cursor: pointer; }
+.cite p mark { background: none; color: var(--brass); }
+.cite.open p { color: var(--ink); }
+#find { display: none; margin-top: 12px; font: 400 15px/1.45 "Newsreader", Georgia, serif; color: var(--ink); }
+#find small { display: block; font: 600 11px/1.4 "Archivo", sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin-top: 10px; }
+.pager { display: flex; align-items: center; gap: 14px; margin-top: 14px; font-size: 13px; color: var(--mute); }
+.pager button { border: 1px solid #4b4234; border-radius: 99px; padding: 5px 14px; color: var(--ink); }
+.pager button:hover { border-color: var(--brass); } .pager button:disabled { opacity: .35; cursor: default; }
+.pager .back { margin-left: auto; }
+#err { position: fixed; left: 8px; bottom: 8px; color: var(--red); font-size: 12px; white-space: pre-wrap; z-index: 9; }
+
+@media (max-height: 900px) and (min-width: 861px) { h1 { font-size: 25px; margin: 20px 0 14px; } .row { padding: 8px 0; font-size: 12.5px; } }
+@media (max-width: 860px) {
+  :root { --col: 0px; }
+  .col { width: 100%; padding: 12px 16px; bottom: auto; background: linear-gradient(rgba(21, 19, 15, .96) 70%, rgba(21, 19, 15, 0)); }
+  h1 { font-size: 18.5px; margin: 8px 0 6px; }
+  .row, .foot, .grow { display: none; }
+  .veil { display: none; } body.reading .hint { display: none; }
+  .hint { left: 12px; right: 12px; bottom: 10px; font-size: 12px; } .hint .wide { display: none; }
+  #sheet { left: 0; right: 0; top: auto; bottom: 0; width: auto; height: 50vh; border-left: 0; border-top: 1px solid var(--rule); padding: 14px 16px; transform: translateY(102%); }
+  #sheet h2 { font-size: 19px; margin: 6px 0 4px; } #find { display: block; }
+}
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div class="shade"></div><div class="veil"></div>
+<div class="grain" id="grain"></div>
+
+<div class="col">
+  <a class="lab-link" href="../../">Lab</a>
+  <h1 id="say">The reading room.</h1>
+  <div class="row"><div class="lab">How it is shelved</div>
+    One book per paper, in the order of first reading, one bay per hour (UTC), filled from the top shelf down.
+    Thickness: findings recorded from it with <code>paper.py add</code>. Height: the older the paper, the taller. Wear: board items that cite it.</div>
+  <div class="row"><div class="lab">Cloth: who fetched it first</div><div class="key" id="key"></div></div>
+  <div class="row" id="exa"></div>
+  <div class="grow"></div>
+  <div class="foot" id="foot"></div>
+</div>
+<div class="hint" id="hint">Drag to walk the shelf. Click a book to pull it out. <span class="wide">Drag the lamp, or press <kbd>Space</kbd>, to replay the reading in order.</span></div>
+<button class="tag" id="lampTag" title="Walk to the lamp"></button>
+<div class="tag" id="tip"></div>
+
+<aside id="sheet" aria-live="polite">
+  <div class="meta" id="sMeta"></div>
+  <h2 id="sTitle"></h2>
+  <div class="by" id="sBy"></div>
+  <div id="sRib"></div>
+  <div id="find"></div>
+  <div class="pager"><button id="prev" aria-label="Previous pages">‹</button><button id="next" aria-label="Next pages">›</button><span id="pg"></span></div>
+  <div class="pager"><button id="back">Put the book back</button></div>
+  <div class="sec" id="sCiteHead"></div>
+  <div id="sCites"></div>
+</aside>
+<div id="err"></div>
+
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+
+const $ = id => document.getElementById(id);
+const err = m => { $('err').textContent += m + '\n'; };
+addEventListener('error', e => err(e.message)); addEventListener('unhandledrejection', e => err(String(e.reason)));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SITE = 'https://monitor.invariant.team/';
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v)), lerp = (a, b, t) => a + (b - a) * t;
+const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const p2 = n => String(n).padStart(2, '0');
+const when = t => { const d = new Date(t * 1000); return `${MON[d.getUTCMonth()]} ${d.getUTCDate()}, ${p2(d.getUTCHours())}:${p2(d.getUTCMinutes())} UTC`; };
+function rng(seed) { let s = seed >>> 0 || 1; return () => (s = Math.imul(s ^ s >>> 15, 2246822507) + 0x9e3779b9 | 0, ((s ^ s >>> 13) >>> 0) / 4294967296); }
+const hash32 = s => { let h = 2166136261; for (const c of s) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h >>> 0; };
+
+/* ---------- data: data.json (build.py), then the live board ---------- */
+const D = await (await fetch('data.json')).json();
+const B = D.papers, N = B.length;
+await Promise.all(['500 20px Newsreader', 'italic 400 20px Newsreader', '300 20px Newsreader', '600 12px Archivo'].map(f => document.fonts.load(f)));
+
+const CLOTH = ['#2b2724', '#2b4634', '#2a3850', '#4a3a55'], MANILA = '#9d8961';     // one cloth per person, by first appearance
+const NOW = Date.parse(D.built) / 1000;
+B.forEach((b, i) => {
+  b.i = i; b.read = b.fetched || b.f.length > 0;
+  const age = clamp((NOW - Date.parse(b.date) / 1000) / 31557600 / 3, 0, 1);              // 0 to 3 years and more
+  b.w = b.read ? .018 + .004 * b.f.length : .007;
+  b.h = b.read ? .205 + .045 * age : .178;
+  b.d = b.read ? .165 : .13;
+  b.col = b.read ? CLOTH[b.by % CLOTH.length] : MANILA;
+  b.cites = []; b.rib = null; b.s = 1; b.pull = 0; b.on = false; b.pivot = null;
+});
+const byAx = new Map(B.filter(b => b.ax).map(b => [b.ax, b]));
+
+/* ---------- the shelving rule: one bay per UTC hour of first reading, three shelves, filled top down ---------- */
+const ROWS = 3, PITCH = .32, BOARD = .024, UPR = .022, CASE_D = .21, GAP = .0006;
+const bays = [];
+for (const b of B) {
+  const hr = Math.floor(b.t / 3600);
+  if (!bays.length || bays.at(-1).hr !== hr) bays.push({ hr, books: [], first: b.i });
+  bays.at(-1).books.push(b);
+}
+let X = 0;
+for (const bay of bays) {
+  const sum = bay.books.reduce((a, b) => a + b.w + GAP, 0), widest = Math.max(...bay.books.map(b => b.w));
+  let w = Math.max(.15, sum / ROWS + widest * .6 + .012);
+  for (;;) {                                                 // widen until the books fit on three shelves
+    let r = 0, x = 0, ok = true;
+    for (const b of bay.books) {
+      if (x + b.w > w - .004) { r++; x = 0; }
+      if (r >= ROWS) { ok = false; break; }
+      b.row = r; b.x = X + UPR + .002 + x + b.w / 2; x += b.w + GAP;
+    }
+    if (ok) break;
+    w += .01;
+  }
+  bay.x0 = X + UPR; bay.w = w; bay.n = bay.books.length;
+  bay.books.forEach((b, j) => { b.bay = bay; b.j = j; b.y = (ROWS - 1 - b.row) * PITCH; });
+  X += UPR + w;
+}
+const WALL = X + UPR, TOP = ROWS * PITCH;
+const lampXof = k => {                                       // where the lamp stands when k books have been read
+  if (k <= 0) return bays[0].x0;
+  const b = B[Math.min(N, Math.ceil(k)) - 1];
+  return b.bay.x0 + b.bay.w * (b.j + 1 - (Math.ceil(k) - k)) / b.bay.n;
+};
+const kOfX = x => {
+  let best = bays[0];
+  for (const bay of bays) if (x >= bay.x0 - UPR) best = bay;
+  return clamp(best.first + Math.round(clamp((x - best.x0) / best.w, 0, 1) * best.n), 0, N);
+};
+const DAY1 = B.filter(b => Math.floor(b.t / 86400) === Math.floor(B[0].t / 86400)).length;
+
+/* ---------- state, and the URL hash ---------- */
+const H = Object.fromEntries(location.hash.slice(1).split('&').filter(Boolean).map(s => s.split('=')));
+const S = {
+  k: H.k !== undefined ? clamp(+H.k || 0, 0, N) : DAY1, play: false,
+  x: 0, vx: 0, zoom: clamp(+H.z || 1, .5, 1.35), book: null, a: 0, open: false, spread: Math.max(0, +H.p | 0),
+  flip: null, hover: null, drag: null, lampX: 0, lampV: 0, sway: 0, swayV: 0, dirty: true,
+};
+S.lampX = lampXof(S.k); B.forEach(b => { b.s = b.i < S.k ? 1 : 0; });
+let hashT = 0;
+function writeHash() {
+  if (hashT) return;
+  hashT = setTimeout(() => {
+    hashT = 0;
+    const p = [`k=${Math.round(S.k)}`, `x=${S.x.toFixed(2)}`];
+    if (S.zoom !== 1) p.push(`z=${S.zoom.toFixed(2)}`);
+    if (S.book && S.open) p.push(`b=${S.book.id}`, `p=${S.spread}`);
+    history.replaceState(null, "", "#" + p.join("&"));
+  }, 250);
+}
+
+/* ---------- textures drawn by hand: cloth and foil spines, oak, page edges ---------- */
+const noiseTile = (() => {                                   // fine weave / fibre noise, reused as a pattern
+  const c = document.createElement('canvas'); c.width = c.height = 256;
+  const g = c.getContext('2d'), im = g.createImageData(256, 256), r = rng(7);
+  for (let i = 0; i < 256 * 256; i++) {
+    const x = i % 256, y = i >> 8, weave = ((x & 1) ^ (y & 1)) * 26, v = 88 + weave + r() * 54;
+    im.data.set([v, v, v, 255], i * 4);
+  }
+  g.putImageData(im, 0, 0); return c;
+})();
+const SPX = 2000, AW = 4096, AH = 2048, CELL = 508;
+const atlasA = document.createElement('canvas'), atlasB = document.createElement('canvas');
+atlasA.width = atlasB.width = AW; atlasA.height = atlasB.height = AH;
+const gA = atlasA.getContext('2d'), gB = atlasB.getContext('2d');
+{ let x = 2, y = 2;                                          // pack one spine per book
+  for (const b of B) {
+    b.pw = Math.max(10, Math.round(b.w * SPX)); b.ph = Math.round(b.h * SPX);
+    if (x + b.pw + 2 > AW) { x = 2; y += CELL + 4; }
+    if (y + CELL > AH) throw new Error('spine atlas is full');
+    b.px = x; b.py = y; x += b.pw + 4;
+  }
+}
+const FOIL = '#d3b06a', FOIL_B = 'rgb(0,78,255)', CLOTH_B = 'rgb(0,232,0)';
+function wrap(g, text, maxW) {
+  const lines = []; let line = '';
+  for (const word of text.split(/\s+/)) {
+    const t = line ? line + ' ' + word : word;
+    if (g.measureText(t).width <= maxW || !line) line = t; else { lines.push(line); line = word; }
+  }
+  if (line) lines.push(line); return lines;
+}
+const fit = (g, text, maxW) => { if (g.measureText(text).width <= maxW) return text; while (text.length > 3 && g.measureText(text + '…').width > maxW) text = text.slice(0, -1); return text.trimEnd() + '…'; };
+function drawSpine(b) {
+  const { px: x, py: y, pw: w, ph: h } = b, r = rng(hash32(b.id));
+  for (const g of [gA, gB]) { g.save(); g.beginPath(); g.rect(x - 1, y - 1, w + 2, h + 2); g.clip(); }
+  gA.fillStyle = b.col; gA.fillRect(x - 1, y - 1, w + 2, h + 2);
+  gA.globalCompositeOperation = 'overlay'; gA.globalAlpha = b.read ? .55 : .3; gA.fillStyle = gA.createPattern(noiseTile, 'repeat'); gA.fillRect(x - 1, y - 1, w + 2, h + 2);
+  gA.globalCompositeOperation = 'source-over'; gA.globalAlpha = 1;
+  const sh = gA.createLinearGradient(x, 0, x + w, 0);                                    // the round of the spine
+  sh.addColorStop(0, 'rgba(0,0,0,.42)'); sh.addColorStop(.18, 'rgba(0,0,0,.05)'); sh.addColorStop(.5, 'rgba(255,240,210,.07)'); sh.addColorStop(.82, 'rgba(0,0,0,.05)'); sh.addColorStop(1, 'rgba(0,0,0,.45)');
+  gA.fillStyle = sh; gA.fillRect(x - 1, y - 1, w + 2, h + 2);
+  gB.fillStyle = CLOTH_B; gB.fillRect(x - 1, y - 1, w + 2, h + 2);
+  if (b.read) {
+    const foil = fn => { gA.fillStyle = FOIL; fn(gA); gB.fillStyle = FOIL_B; fn(gB); };
+    const m = Math.min(6, w * .14);
+    foil(g => { for (const yy of [16, 21, h - 54, h - 49]) g.fillRect(x + m, y + yy, w - 2 * m, yy === 16 || yy === h - 49 ? 2.2 : 1); });
+    const year = b.date.slice(0, 4), ys = clamp(w / 2.9, 9, 17);
+    foil(g => { g.font = `600 ${ys}px Archivo`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(year, x + w / 2, y + h - 27); });
+    const au = b.au ? b.au.replace(/ et al\.$/, '').toUpperCase() : '';
+    if (w >= 92) {                                                                        // a thick book: the title set across the spine
+      const fs = clamp(w / 7.2, 14, 21);
+      foil(g => {
+        g.font = `500 ${fs}px Newsreader`; g.textAlign = 'center'; g.textBaseline = 'top';
+        const lines = wrap(g, b.title, w - 2 * m - 6).slice(0, Math.floor((h - 190) / (fs * 1.18)));
+        lines.forEach((l, i) => g.fillText(fit(g, l, w - 2 * m - 2), x + w / 2, y + 40 + i * fs * 1.18));
+        g.font = `600 ${clamp(w / 11, 9, 12)}px Archivo`; g.fillText(fit(g, au, w - 2 * m - 4), x + w / 2, y + h - 84);
+      });
+    } else {                                                                              // a thin book: the title runs down the spine
+      const two = w >= 54, fs = two ? clamp(w * .3, 15, 19) : clamp(w * .52, 15, 21), len = h - 96;
+      foil(g => {
+        g.save(); g.translate(x + w / 2, y + 32); g.rotate(Math.PI / 2);
+        g.font = `500 ${fs}px Newsreader`; g.textAlign = 'left'; g.textBaseline = 'middle';
+        const room = au && w >= 40 ? len - 96 : len;
+        if (two) { const ls = wrap(g, b.title, room).slice(0, 2); ls.forEach((l, i) => g.fillText(fit(g, l, room), 0, (i - (ls.length - 1) / 2) * fs * 1.12)); }
+        else g.fillText(fit(g, b.title, room), 0, 1);
+        if (au && w >= 40) { g.font = `600 ${clamp(w * .24, 9, 11.5)}px Archivo`; g.textAlign = 'right'; g.fillText(fit(g, au, 90), len, 1); }
+        g.restore();
+      });
+    }
+    const n = b.cites.length;                                                             // wear: one pass of scuffs per citing board item
+    if (n) {
+      const k = Math.min(1, n / 6), pale = a => `rgba(214,200,168,${a})`;
+      gA.fillStyle = pale(.07 + .16 * k); gA.fillRect(x - 1, y - 1, w + 2, h + 2);                          // the cloth fades
+      gB.fillStyle = `rgba(0,236,0,${.25 + .6 * k})`; gB.fillRect(x - 1, y - 1, w + 2, h + 2);            // the foil loses its shine
+      for (const top of [true, false]) {                                                   // head and tail rubbed pale by the hand
+        const d = 22 + 60 * k, gr = gA.createLinearGradient(0, top ? y : y + h, 0, top ? y + d : y + h - d);
+        gr.addColorStop(0, pale(.55 + .4 * k)); gr.addColorStop(.35, pale(.25 + .3 * k)); gr.addColorStop(1, pale(0)); gA.fillStyle = gr; gA.fillRect(x - 1, y - 1, w + 2, h + 2);
+      }
+      for (const left of [true, false]) {                                                  // the joints wear to a pale line
+        const d = Math.min(w * .3, 2.5 + 6 * k), gr = gA.createLinearGradient(left ? x : x + w, 0, left ? x + d : x + w - d, 0);
+        gr.addColorStop(0, pale(.4 + .5 * k)); gr.addColorStop(1, pale(0)); gA.fillStyle = gr; gA.fillRect(x - 1, y - 1, w + 2, h + 2);
+      }
+      for (let i = 0; i < n * 70; i++) {                                                  // flecks where the foil has gone
+        const sx = x + r() * w, sy = y + r() * h; gA.fillStyle = b.col; gA.fillRect(sx, sy, 1 + r() * 1.6, 1 + r() * 2.6);
+      }
+    }
+  } else {                                                                                // a pamphlet: folded manila, two staples
+    gA.fillStyle = 'rgba(60,48,30,.5)'; gB.fillStyle = 'rgb(0,90,255)';
+    for (const g of [gA, gB]) for (const yy of [h * .28, h * .72]) g.fillRect(x + w / 2 - 1, y + yy, 2, 22);
+  }
+  gA.restore(); gB.restore();
+}
+const PATCH = { cloth: [8, 1560, 200, 200], paper: [240, 1560, 256, 64] };
+function drawAtlas() {
+  gA.clearRect(0, 0, AW, AH); gB.fillStyle = CLOTH_B; gB.fillRect(0, 0, AW, AH); B.forEach(drawSpine);
+  let [x, y, w, h] = PATCH.cloth;                             // the boards: plain cloth, tinted per book by vertex colour
+  gA.fillStyle = '#e8e8e8'; gA.fillRect(x - 4, y - 4, w + 8, h + 8); gA.globalCompositeOperation = 'overlay'; gA.globalAlpha = .6; gA.fillStyle = gA.createPattern(noiseTile, 'repeat'); gA.fillRect(x - 4, y - 4, w + 8, h + 8);
+  gA.globalCompositeOperation = 'source-over'; gA.globalAlpha = 1;
+  [x, y, w, h] = PATCH.paper; gA.fillStyle = gA.createPattern(pageEdge, 'repeat'); gA.fillRect(x - 4, y - 4, w + 8, h + 8);   // the cut edge of the paper block
+}
+function oakCanvas() {
+  const c = document.createElement('canvas'); c.width = 1024; c.height = 256;
+  const g = c.getContext('2d'), r = rng(31);
+  g.fillStyle = '#6b4c2c'; g.fillRect(0, 0, 1024, 256);
+  for (let i = 0; i < 900; i++) {                             // long grain
+    const y = r() * 256, l = 200 + r() * 900, x = r() * 1024 - 200, dark = r() < .6;
+    g.strokeStyle = dark ? `rgba(38,22,8,${.05 + r() * .16})` : `rgba(190,150,96,${.04 + r() * .1})`; g.lineWidth = .5 + r() * 1.6;
+    g.beginPath(); g.moveTo(x, y); g.bezierCurveTo(x + l * .3, y + (r() - .5) * 5, x + l * .7, y + (r() - .5) * 5, x + l, y + (r() - .5) * 3); g.stroke();
+  }
+  for (let i = 0; i < 2600; i++) {                            // open pores and medullary flecks of oak
+    const x = r() * 1024, y = r() * 256; g.fillStyle = r() < .8 ? `rgba(30,16,6,${.1 + r() * .22})` : `rgba(206,170,116,${.1 + r() * .16})`;
+    g.fillRect(x, y, 2 + r() * 9, .6 + r() * .8);
+  }
+  return c;
+}
+const pageEdge = (() => {
+  const c = document.createElement('canvas'); c.width = 64; c.height = 8; const g = c.getContext('2d'), r = rng(5);
+  for (let x = 0; x < 64; x++) { const v = 196 + r() * 44; g.fillStyle = `rgb(${v},${v - 9},${v - 30})`; g.fillRect(x, 0, 1, 8); }
+  return c;
+})();
+
+drawAtlas();
+
+/* ---------- the room ---------- */
+const canvas = $('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true;   // redrawn with every drawn frame: on this GPU an occasional redraw stalls 250 ms, a steady one does not
+ renderer.shadowMap.type = THREE.PCFShadowMap;
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#12100d');
+const camera = new THREE.PerspectiveCamera(26, 1, .05, 30);
+const roomLight = () => { scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), .04).texture; };
+roomLight();
+canvas.addEventListener('webglcontextlost', e => e.preventDefault());
+canvas.addEventListener('webglcontextrestored', () => { roomLight(); kick(); });
+const MAXA = renderer.capabilities.getMaxAnisotropy();
+const ctex = (c, srgb = true, rep = false) => {
+  const t = new THREE.CanvasTexture(c); t.anisotropy = MAXA; if (srgb) t.colorSpace = THREE.SRGBColorSpace;
+  if (rep) t.wrapS = t.wrapT = THREE.RepeatWrapping; return t;
+};
+const texA = ctex(atlasA), texB = ctex(atlasB, false);
+const spineMat = new THREE.MeshStandardMaterial({ map: texA, roughnessMap: texB, metalnessMap: texB, roughness: 1, metalness: 1, envMapIntensity: 1.25, vertexColors: true, side: THREE.DoubleSide });
+const oakTex = ctex(oakCanvas(), true, true);
+const oak = new THREE.MeshStandardMaterial({ map: oakTex, roughness: .58, metalness: 0, envMapIntensity: .5 });
+const oakDark = new THREE.MeshStandardMaterial({ map: oakTex, color: '#7d7468', roughness: .7, envMapIntensity: .25 });
+const brass = new THREE.MeshStandardMaterial({ color: '#b8935a', roughness: .3, metalness: 1, envMapIntensity: 1.3 });
+const plasterTex = ctex(noiseTile, true, true); plasterTex.repeat.set(30, 12);
+const plaster = new THREE.MeshStandardMaterial({ color: '#6a665a', map: plasterTex, roughness: 1, envMapIntensity: .1 });
+
+const caseG = new THREE.Group(); scene.add(caseG);
+function box(w, h, d, x, y, z, mat, along = 'x') {
+  const g = new THREE.BoxGeometry(w, h, d), uv = g.attributes.uv;
+  for (let i = 0; i < uv.count; i++) {
+    const u = uv.getX(i), v = uv.getY(i);
+    if (along === 'x') uv.setXY(i, u * w / 1.1 + x * .37, v * .5 + y);
+    else uv.setXY(i, v * h / 1.1 + x * 3.1, u * .35);
+  }
+  g.translate(x, y, z); oakParts.push(g);
+}
+const oakParts = [];
+const ZC = (.02 - CASE_D) / 2, DEPTH = CASE_D + .02;
+for (let r = 0; r <= ROWS; r++) box(WALL, BOARD, DEPTH, WALL / 2, r * PITCH - BOARD / 2, ZC, oak);
+for (const x of [...bays.map(b => b.x0 - UPR / 2), WALL - UPR / 2]) box(UPR, TOP + BOARD, DEPTH + .004, x, TOP / 2 - BOARD / 2, ZC + .002, oak, 'y');
+box(WALL + .07, .075, CASE_D + .05, WALL / 2, TOP + .0375, (.05 - CASE_D) / 2, oak);
+box(WALL + .11, .014, CASE_D + .075, WALL / 2, TOP + .082, (.075 - CASE_D) / 2, oak);
+box(WALL + .05, .13, CASE_D + .035, WALL / 2, -BOARD - .065, (.035 - CASE_D) / 2, oak);
+{ const oakMesh = new THREE.Mesh(mergeGeometries(oakParts), oak); oakMesh.castShadow = oakMesh.receiveShadow = true; caseG.add(oakMesh);
+  const back = new THREE.Mesh(new THREE.PlaneGeometry(WALL, TOP + BOARD), oakDark); back.position.set(WALL / 2, TOP / 2 - BOARD / 2, -CASE_D + .002); back.receiveShadow = true; caseG.add(back);
+  back.geometry.attributes.uv.array.forEach((v, i, a) => { a[i] = i % 2 ? v * 3 : v * WALL / 1.1; });
+  const wall = new THREE.Mesh(new THREE.PlaneGeometry(WALL + 14, 6), plaster); wall.position.set(WALL / 2, .6, -CASE_D - .004); wall.receiveShadow = true; caseG.add(wall);
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(WALL + 14, 5), oakDark); floor.rotation.x = -Math.PI / 2; floor.position.set(WALL / 2, -BOARD - .13, 2.2); floor.receiveShadow = true; caseG.add(floor); }
+
+/* brass card holders on the cornice: the hour of each bay; all holders are one mesh, all cards one mesh and one texture */
+{ const cards = bays.map(bay => {
+    const pw = Math.min(bay.w - .012, .15), c = document.createElement('canvas'); c.height = 168; c.width = Math.round(168 * pw / .044);
+    const g = c.getContext('2d'), d = new Date(bay.hr * 3600000);
+    g.fillStyle = '#e9dfc8'; g.fillRect(0, 0, c.width, 168); g.globalAlpha = .18; g.globalCompositeOperation = 'multiply'; g.fillStyle = g.createPattern(noiseTile, 'repeat'); g.fillRect(0, 0, c.width, 168);
+    g.globalAlpha = 1; g.globalCompositeOperation = 'source-over'; g.fillStyle = '#2a2319'; g.textAlign = 'center';
+    g.font = '600 34px Archivo'; g.letterSpacing = '3px'; g.fillText(`${MON[d.getUTCMonth()].toUpperCase()} ${d.getUTCDate()}`, c.width / 2, 56); g.letterSpacing = '0px';
+    g.font = '400 76px Newsreader'; g.fillText(`${p2(d.getUTCHours())}:00`, c.width / 2, 132);
+    g.strokeStyle = 'rgba(42,35,25,.5)'; g.lineWidth = 2; g.strokeRect(9, 9, c.width - 18, 150);
+    return { c, pw, x: bay.x0 + bay.w / 2 };
+  });
+  const sheet = document.createElement('canvas'); sheet.height = 168; sheet.width = cards.reduce((a, k) => a + k.c.width + 4, 0);
+  const sg = sheet.getContext('2d'), hold = [], faces = []; let u = 0;
+  for (const k of cards) {
+    sg.drawImage(k.c, u, 0);
+    const h = new THREE.BoxGeometry(k.pw + .008, .052, .003); h.translate(k.x, TOP + .037, .0515); hold.push(h);
+    const f = new THREE.PlaneGeometry(k.pw, .044), uv = f.attributes.uv;
+    for (let i = 0; i < 4; i++) uv.setX(i, (u + 1 + uv.getX(i) * (k.c.width - 2)) / sheet.width);
+    f.translate(k.x, TOP + .037, .0533); faces.push(f); u += k.c.width + 4;
+  }
+  caseG.add(new THREE.Mesh(mergeGeometries(hold), brass), new THREE.Mesh(mergeGeometries(faces), new THREE.MeshStandardMaterial({ map: ctex(sheet), roughness: .9, envMapIntensity: .2 })));
+}
+
+/* ---------- one book: a rounded cloth spine, two boards, a paper block ---------- */
+function bookGeo(b) {
+  const P = [], Nn = [], U = [], C = [], col = new THREE.Color(b.col), w = b.w, h = b.h, d = b.d, bulge = b.read ? Math.min(.0042, w * .13) : 0;
+  const v = (x, y, z, nx, ny, nz, u, t, c) => { P.push(x, y, z); Nn.push(nx, ny, nz); U.push(u, t); c === 2 ? C.push(.5, .44, .33) : C.push(c ? col.r : 1, c ? col.g : 1, c ? col.b : 1); };
+  const quad = (a, b2, c, e, cl) => { for (const q of [a, b2, c, a, c, e]) v(...q, cl); };
+  const u0 = b.px / AW, u1 = (b.px + b.pw) / AW, vt = 1 - b.py / AH, vb = 1 - (b.py + b.ph) / AH, SEG = b.read ? 7 : 1;
+  const at = j => { const u = j / SEG, s = 2 * u - 1, nx = 4 * bulge * s / w, l = Math.hypot(nx, 1); return { x: -w / 2 + u * w, z: bulge * (1 - s * s), nx: nx / l, nz: 1 / l, u: lerp(u0, u1, u) }; };
+  for (let j = 0; j < SEG; j++) { const a = at(j), c = at(j + 1); quad([a.x, 0, a.z, a.nx, 0, a.nz, a.u, vb], [c.x, 0, c.z, c.nx, 0, c.nz, c.u, vb], [c.x, h, c.z, c.nx, 0, c.nz, c.u, vt], [a.x, h, a.z, a.nx, 0, a.nz, a.u, vt]); }
+  const n0 = P.length / 3;
+  const [cx, cy, cw, ch] = PATCH.cloth, ca = cx / AW, cb = (cx + cw) / AW, cc = 1 - (cy + ch) / AH, cd = 1 - cy / AH;
+  for (const sx of [-1, 1]) { const x = sx * w / 2; quad([x, 0, -d, sx, 0, 0, ca, cc], [x, 0, 0, sx, 0, 0, cb, cc], [x, h, 0, sx, 0, 0, cb, cd], [x, h, -d, sx, 0, 0, ca, cd], true); }
+  const n1 = P.length / 3, xi = w / 2 - .0012, yt = h - .0035, [ex, ey, ew, eh] = PATCH.paper, ea = ex / AW, eb = (ex + ew * Math.min(1, w / .08)) / AW, ec = 1 - (ey + eh) / AH, ed = 1 - ey / AH;
+  quad([-xi, yt, bulge * .6, 0, 1, 0, ea, ec], [xi, yt, bulge * .6, 0, 1, 0, eb, ec], [xi, yt, -d + .004, 0, 1, 0, eb, ed], [-xi, yt, -d + .004, 0, 1, 0, ea, ed], 2);
+  quad([-xi, .0035, -d + .004, 0, -1, 0, ea, ed], [xi, .0035, -d + .004, 0, -1, 0, eb, ed], [xi, .0035, bulge * .6, 0, -1, 0, eb, ec], [-xi, .0035, bulge * .6, 0, -1, 0, ea, ec], 2);
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3)); g.setAttribute('normal', new THREE.Float32BufferAttribute(Nn, 3));
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(U, 2)); g.setAttribute('color', new THREE.Float32BufferAttribute(C, 3));
+  return g;
+}
+/* every shelved book is in one mesh (one draw call); a book that moves has its own vertices rewritten */
+const shelfGeo = (() => { let n = 0; return mergeGeometries(B.map(b => { const g = bookGeo(b); b.v0 = n; b.vn = g.attributes.position.count; n += b.vn; return g; })); })();
+const shelfPos = shelfGeo.attributes.position, shelfBase = shelfPos.array.slice();
+const shelfMesh = new THREE.Mesh(shelfGeo, spineMat); shelfMesh.castShadow = shelfMesh.receiveShadow = true; shelfMesh.frustumCulled = false; scene.add(shelfMesh);
+function seat(b) {                                           // write one book's place into the mesh
+  const e = ease(b.s), a = shelfPos.array, on = b.s > .003 && !(S.book === b && (S.a > 0 || S.open));
+  const y = b.y + (1 - e) * .012, z = -.006 + (1 - e) * .3 + b.pull * .03, rx = (1 - e) * -.1, c = Math.cos(rx), sn = Math.sin(rx);
+  for (let i = b.v0 * 3, end = (b.v0 + b.vn) * 3; i < end; i += 3) {
+    if (!on) { a[i] = b.x; a[i + 1] = -9; a[i + 2] = 0; continue; }
+    const ly = shelfBase[i + 1], lz = shelfBase[i + 2];
+    a[i] = b.x + shelfBase[i]; a[i + 1] = y + ly * c - lz * sn; a[i + 2] = z + ly * sn + lz * c;
+  }
+  shelfPos.needsUpdate = true; b.on = on;
+  if (b.pivot) { b.pivot.visible = on; b.pivot.position.set(b.x + b.pivot.userData.l.x, y + b.pivot.userData.l.y, z + b.pivot.userData.l.z); }
+}
+B.forEach(seat);
+function pick(e) {                                           // the shelved book under the pointer: spines stand in one plane
+  cast(e, []); const o = ray.ray.origin, d = ray.ray.direction, t = (0 - o.z) / d.z, x = o.x + d.x * t, y = o.y + d.y * t;
+  return B.find(b => b.on && b.s > .9 && Math.abs(x - b.x) <= b.w / 2 + GAP && y >= b.y && y <= b.y + b.h) || null;
+}
+
+/* ---------- the lamp: a brass picture light on the cornice; where it stands is how far the reading has come ---------- */
+const lamp = new THREE.Group(); scene.add(lamp);
+{ const mount = new THREE.Mesh(new THREE.BoxGeometry(.06, .012, .034), brass); mount.position.set(0, .006, .04); lamp.add(mount);
+  const curve = new THREE.QuadraticBezierCurve3(new THREE.Vector3(0, .008, .04), new THREE.Vector3(0, .1, .13), new THREE.Vector3(0, .052, .225));
+  for (const dx of [-.07, .07]) { const arm = new THREE.Mesh(new THREE.TubeGeometry(curve, 20, .0035, 10), brass); arm.position.x = dx; lamp.add(arm); const m2 = mount.clone(); m2.position.x = dx; m2.scale.x = .4; lamp.add(m2); }
+  const shade = new THREE.Mesh(new THREE.CylinderGeometry(.027, .027, .3, 32, 1, true, 0, Math.PI * 1.15), new THREE.MeshStandardMaterial({ color: '#b8935a', roughness: .34, metalness: 1, side: THREE.DoubleSide, envMapIntensity: 1.3 }));
+  shade.rotation.set(0, 0, Math.PI / 2); const sh = new THREE.Group(); sh.add(shade); sh.rotation.x = -2.2; sh.position.set(0, .038, .235); lamp.add(sh);
+  for (const sx of [-1, 1]) { const cap = new THREE.Mesh(new THREE.CircleGeometry(.027, 24), shade.material); cap.rotation.y = sx * Math.PI / 2; cap.position.set(sx * .15, .038, .235); lamp.add(cap); }
+  const bulb = new THREE.Mesh(new THREE.CylinderGeometry(.0065, .0065, .26, 12), new THREE.MeshStandardMaterial({ color: '#fff3d6', emissive: '#ffc983', emissiveIntensity: 1.5 }));
+  bulb.rotation.z = Math.PI / 2; bulb.position.set(0, .036, .232); lamp.add(bulb);
+}
+const lampHit = new THREE.Mesh(new THREE.BoxGeometry(.36, .16, .16), new THREE.MeshBasicMaterial({ visible: false })); lampHit.position.set(0, .05, .17); lamp.add(lampHit);
+const spot = new THREE.SpotLight('#ffc98a', 7.5, 4.5, .64, .95, 1.5);
+spot.castShadow = true; spot.shadow.mapSize.set(1024, 1024); spot.shadow.bias = -.0005; spot.shadow.normalBias = .012; spot.shadow.camera.near = .08; spot.shadow.camera.far = 3;
+scene.add(spot, spot.target);
+const hemi = new THREE.HemisphereLight('#ffeedd', '#1a140d', .4); scene.add(hemi);
+const key = new THREE.DirectionalLight('#ffe9d2', .6); key.position.set(-1.6, 2.4, 3.6); scene.add(key, key.target);
+
+/* ---------- bookmark ribbons, hung from the books a board item names ---------- */
+const ribMat = { skip: new THREE.MeshStandardMaterial({ color: '#b3402b', roughness: .48, side: THREE.DoubleSide, envMapIntensity: .6 }),
+  claim: new THREE.MeshStandardMaterial({ color: '#d9d0ba', roughness: .5, side: THREE.DoubleSide, envMapIntensity: .6 }) };
+const ribbons = [];
+function hangRibbons() {
+  for (const r of ribbons) { scene.remove(r); r.children[0].geometry.dispose(); } ribbons.length = 0;
+  for (const b of B) {
+    b.pivot = null; if (!b.rib) continue;
+    const len = .085 + (hash32(b.id) % 5) * .006, g = new THREE.PlaneGeometry(.0072, len, 1, 8), p = g.attributes.position;
+    for (let i = 0; i < p.count; i++) { const t = .5 - p.getY(i) / len; p.setXYZ(i, p.getX(i), p.getY(i) - len / 2, .0035 * Math.sin(t * Math.PI) + (t > .9 ? (t - .9) * .03 : 0)); }
+    g.computeVertexNormals();
+    const pivot = new THREE.Group(); pivot.add(new THREE.Mesh(g, ribMat[b.rib.type]));
+    const bulge = b.read ? Math.min(.0042, b.w * .13) : 0;
+    pivot.userData = { f: .7 + (hash32(b.id) % 7) * .09, l: new THREE.Vector3(b.read ? b.w * .16 : 0, b.h - .001, bulge + .0015) };
+    scene.add(pivot); ribbons.push(pivot); b.pivot = pivot; seat(b);
+  }
+}
+/* ---------- the book in the hand: boards on two hinges, two page blocks, one page that turns ---------- */
+const rb = new THREE.Group(); rb.visible = false; scene.add(rb);
+const clothTile = (() => {                                   // book cloth: a light weave that the cover colour tints
+  const c = document.createElement('canvas'); c.width = c.height = 256; const g = c.getContext('2d');
+  g.fillStyle = '#f2f2f2'; g.fillRect(0, 0, 256, 256); g.globalCompositeOperation = 'multiply'; g.globalAlpha = .55; g.drawImage(noiseTile, 0, 0); return c;
+})();
+const endTile = (() => {                                     // endpapers: a printed lattice, decoration only
+  const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d');
+  g.fillStyle = '#a89a7a'; g.fillRect(0, 0, 128, 128); g.strokeStyle = 'rgba(70,56,34,.5)'; g.lineWidth = 1;
+  for (let i = -128; i < 256; i += 16) { g.beginPath(); g.moveTo(i, 0); g.lineTo(i + 128, 128); g.moveTo(i + 128, 0); g.lineTo(i, 128); g.stroke(); }
+  g.fillStyle = 'rgba(70,56,34,.6)'; for (let x = 0; x <= 128; x += 16) for (let y = 0; y <= 128; y += 16) g.fillRect(x - 1.5 + (y / 16 % 2) * 8, y - 1.5, 3, 3);
+  g.globalAlpha = .2; g.globalCompositeOperation = 'multiply'; g.drawImage(noiseTile, 0, 0); return c;
+})();
+const clothTex = ctex(clothTile, true, true); clothTex.repeat.set(5, 7);
+const endTex = ctex(endTile, true, true);
+const coverMat = new THREE.MeshStandardMaterial({ color: '#555', map: clothTex, roughness: .95, envMapIntensity: .25 });
+const endMat = new THREE.MeshStandardMaterial({ map: endTex, roughness: .9, envMapIntensity: .15 });
+const blockMat = new THREE.MeshStandardMaterial({ color: '#d6c9ab', roughness: .92, envMapIntensity: .2 });
+const unit = new THREE.BoxGeometry(1, 1, 1), PWID = 736;
+const pg = ['L', 'R', 'F', 'K'].reduce((o, k) => { const c = document.createElement('canvas'); c.width = PWID; c.height = 1024; o[k] = { c, g: c.getContext('2d'), t: ctex(c) }; return o; }, {});
+const pageMat = k => new THREE.MeshStandardMaterial({ map: pg[k].t, roughness: .88, envMapIntensity: .15, side: k === 'K' ? THREE.BackSide : THREE.FrontSide });
+const hL = new THREE.Group(), hR = new THREE.Group(); rb.add(hL, hR);
+const part = (geo, mat, parent) => { const m = new THREE.Mesh(geo, mat); m.castShadow = true; m.receiveShadow = true; parent.add(m); return m; };
+const boardL = part(unit, coverMat, hL), boardR = part(unit, coverMat, hR), stackL = part(unit, blockMat, hL), stackR = part(unit, blockMat, hR);
+const pageL = part(new THREE.PlaneGeometry(1, 1), pageMat('L'), hL), pageR = part(new THREE.PlaneGeometry(1, 1), pageMat('R'), hR);
+const pasteL = part(new THREE.PlaneGeometry(1, 1), endMat, hL), pasteR = part(new THREE.PlaneGeometry(1, 1), endMat, hR);     // the endpapers pasted inside the boards
+const SSEG = 12, spineGeo = new THREE.BufferGeometry();       // the rounded cloth spine, with its foil; rebuilt for each book
+{ const n = (SSEG + 1) * 2, idx = []; for (let i = 0; i < SSEG; i++) idx.push(i * 2, i * 2 + 1, i * 2 + 3, i * 2, i * 2 + 3, i * 2 + 2);
+  for (const [k, sz] of [['position', 3], ['normal', 3], ['uv', 2], ['color', 3]]) spineGeo.setAttribute(k, new THREE.Float32BufferAttribute(new Float32Array(n * sz).fill(1), sz));
+  spineGeo.setIndex(idx); }
+const spineArc = part(spineGeo, spineMat, rb), spineLine = part(new THREE.PlaneGeometry(1, 1), coverMat, rb); spineArc.frustumCulled = false;
+const FSEG = 16, flipGeo = new THREE.BufferGeometry(), flipGeoK = new THREE.BufferGeometry();
+{ const pos = new THREE.Float32BufferAttribute(new Float32Array((FSEG + 1) * 6), 3), nor = new THREE.Float32BufferAttribute(new Float32Array((FSEG + 1) * 6), 3), uf = [], uk = [], idx = [];
+  for (let i = 0; i <= FSEG; i++) { uf.push(i / FSEG, 0, i / FSEG, 1); uk.push(1 - i / FSEG, 0, 1 - i / FSEG, 1); if (i < FSEG) idx.push(i * 2, i * 2 + 2, i * 2 + 3, i * 2, i * 2 + 3, i * 2 + 1); }
+  for (const [g, u] of [[flipGeo, uf], [flipGeoK, uk]]) { g.setAttribute('position', pos); g.setAttribute('normal', nor); g.setAttribute('uv', new THREE.Float32BufferAttribute(u, 2)); g.setIndex(idx); } }
+const flipF = part(flipGeo, pageMat('F'), rb), flipK = part(flipGeoK, pageMat('K'), rb); flipF.visible = flipK.visible = false;
+let R = {};                                                   // the measures of the open book
+function fitBook(b) {
+  const w = b.w, h = b.h, W = b.d + .006, P = W - .006, ph = h - .008, tk = Math.max(.0006, w / 2 - .0035);
+  R = { w, h, W, P, ph, tk, zt: .003 + tk };
+  coverMat.color.set(b.col).multiplyScalar(1.5);
+  boardL.scale.set(W, h, .003); boardR.scale.set(W, h, .003); boardL.position.set(-W / 2, 0, .0015); boardR.position.set(W / 2, 0, .0015);
+  stackL.scale.set(P, ph, tk); stackR.scale.set(P, ph, tk); pageL.scale.set(P, ph, 1); pageR.scale.set(P, ph, 1);
+  pasteL.scale.set(W - .008, h - .008, 1); pasteR.scale.set(W - .008, h - .008, 1); pasteL.position.set(-W / 2, 0, .0032); pasteR.position.set(W / 2, 0, .0032);
+  endTex.repeat.set(W / .02, h / .02); spineLine.scale.set(w, h - .006, 1); spineLine.position.z = -.0012;
+  const u0 = b.px / AW, u1 = (b.px + b.pw) / AW, vt = 1 - b.py / AH, vb = 1 - (b.py + b.ph) / AH, bulge = b.read ? Math.min(.0055, w * .15) : 0;
+  const sp = spineGeo.attributes.position, sn = spineGeo.attributes.normal, su = spineGeo.attributes.uv, hw = w / 2 + .0015;
+  for (let i = 0; i <= SSEG; i++) {
+    const t = i / SSEG, q = 2 * t - 1, x = -hw + t * 2 * hw, z = -.003 - bulge * (1 - q * q), nx = -4 * bulge * q / w, l = Math.hypot(nx, 1), u = lerp(u1, u0, t);
+    sp.setXYZ(i * 2, x, -h / 2, z); sp.setXYZ(i * 2 + 1, x, h / 2, z); sn.setXYZ(i * 2, nx / l, 0, -1 / l); sn.setXYZ(i * 2 + 1, nx / l, 0, -1 / l); su.setXY(i * 2, u, vb); su.setXY(i * 2 + 1, u, vt);
+  }
+  sp.needsUpdate = sn.needsUpdate = su.needsUpdate = true;
+  const H2 = Math.round(PWID * ph / P);
+  for (const k in pg) if (pg[k].c.height !== H2) { pg[k].c.height = H2; pg[k].t.dispose(); }
+}
+function setOpen(o) {
+  const a = lerp(Math.PI / 2, .1, o), sx = -(R.w / 2) * o;
+  hR.position.x = R.w / 2; hL.position.x = -R.w / 2; hR.rotation.y = -a; hL.rotation.y = a;
+  stackR.position.set(sx + R.P / 2, 0, .003 + R.tk / 2); stackL.position.set(-(sx + R.P / 2), 0, .003 + R.tk / 2);
+  pageR.position.set(sx + R.P / 2, 0, R.zt + .0003); pageL.position.set(-(sx + R.P / 2), 0, R.zt + .0003);
+}
+function bendPage(tau, dir) {                                 // the turning page: a strip that leads at the gutter and trails at its edge
+  const th = lerp(.1, Math.PI - .1, dir > 0 ? ease(tau) : 1 - ease(tau)), c = .85 * Math.sin(Math.PI * tau) * dir;
+  const p = flipGeo.attributes.position; let x = 0, z = R.zt + .0012 - .05 * R.w, dr = R.P / FSEG;
+  for (let i = 0; i <= FSEG; i++) {
+    p.setXYZ(i * 2, x, -R.ph / 2, z); p.setXYZ(i * 2 + 1, x, R.ph / 2, z);
+    const a = th - c * Math.pow((i + .5) / FSEG, 1.4); x += Math.cos(a) * dr; z += Math.sin(a) * dr;
+  }
+  p.needsUpdate = true; flipGeo.computeVertexNormals(); flipGeo.computeBoundingSphere(); flipGeoK.boundingSphere = flipGeo.boundingSphere;
+}
+
+/* ---------- what is printed on the pages ---------- */
+const INK = '#241d14', SOFT = '#75684f', STAMP = '#8d3a28';
+const who = i => D.people[i] || 'someone';
+const nPages = b => 2 + b.f.length, nSpreads = b => Math.ceil(nPages(b) / 2);
+function drawPage(k, b, p) {
+  const { c, g, t } = pg[k], Wd = c.width, Hd = c.height, left = p % 2 === 0, M = 70, x0 = left ? M - 8 : M + 14, tw = Wd - 2 * M - 6;
+  g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1; g.globalCompositeOperation = 'source-over';
+  g.fillStyle = '#efe5cf'; g.fillRect(0, 0, Wd, Hd);
+  g.globalAlpha = .14; g.globalCompositeOperation = 'multiply'; g.fillStyle = g.createPattern(noiseTile, 'repeat'); g.fillRect(0, 0, Wd, Hd);
+  g.globalAlpha = 1; g.globalCompositeOperation = 'source-over';
+  const gut = g.createLinearGradient(left ? Wd : 0, 0, left ? Wd - 120 : 120, 0); gut.addColorStop(0, 'rgba(70,48,22,.34)'); gut.addColorStop(1, 'rgba(70,48,22,0)');
+  g.fillStyle = gut; g.fillRect(0, 0, Wd, Hd);
+  g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+  const caps = (s, x, y, col = SOFT, size = 15) => { g.font = `600 ${size}px Archivo`; g.fillStyle = col; g.letterSpacing = '1.6px'; g.fillText(s.toUpperCase(), x, y); g.letterSpacing = '0px'; };
+  const rule = y => { g.fillStyle = 'rgba(36,29,20,.45)'; g.fillRect(x0, y, tw, 1); };
+  const para = (text, y, font, size, lh, col, maxLines = 99) => { g.font = font.replace('#', size); g.fillStyle = col; const ls = wrap(g, text, tw); ls.slice(0, maxLines).forEach((l, i) => g.fillText(l, x0, y + i * size * lh)); return y + Math.min(ls.length, maxLines) * size * lh; };
+  if (p === 0) {                                              // the slip inside the cover: when each finding was recorded, and by whom
+    caps('Reading slip', x0, 96); rule(112);
+    let y = 160;
+    if (b.read) {
+      y = para(`${b.fetched ? 'Fetched' : 'First recorded'} ${when(b.t)} by ${who(b.by)}.`, y, '400 #px Newsreader', 25, 1.3, INK) + 14;
+      if (!b.f.length) para('No finding was recorded from it.', y, 'italic 400 #px Newsreader', 25, 1.3, SOFT);
+      else {
+        caps('Finding', x0, y + 12, SOFT, 13); caps('Recorded, UTC', x0 + 110, y + 12, SOFT, 13); caps('By', x0 + 360, y + 12, SOFT, 13); y += 26; rule(y);
+        const rh = Math.min(40, (Hd - y - 120) / b.f.length), r = rng(hash32(b.id) + 1);
+        b.f.forEach((f, i) => {
+          const yy = y + (i + .7) * rh; g.fillStyle = 'rgba(36,29,20,.16)'; g.fillRect(x0, y + (i + 1) * rh, tw, 1);
+          g.font = `400 ${Math.min(22, rh * .62)}px Newsreader`; g.fillStyle = INK; g.fillText(String(i + 1), x0 + 6, yy);
+          g.save(); g.translate(x0 + 110, yy); g.rotate((r() - .5) * .035); g.globalAlpha = .72 + r() * .25;
+          g.font = `600 ${Math.min(19, rh * .52)}px Archivo`; g.fillStyle = STAMP; g.letterSpacing = '1px'; g.fillText(when(f[4]).replace(' UTC', '').toUpperCase(), 0, 0); g.letterSpacing = '0px'; g.restore();
+          g.font = `400 ${Math.min(19, rh * .52)}px Archivo`; g.fillStyle = SOFT; g.fillText(who(f[3]), x0 + 360, yy);
+        });
+      }
+    } else {
+      y = para('Never fetched with paper.py: no finding was recorded from it.', y, '400 #px Newsreader', 25, 1.3, INK) + 18;
+      para(`First cited on the board ${when(b.t)} by ${who(b.by)}.`, y, 'italic 400 #px Newsreader', 23, 1.3, SOFT);
+    }
+    if (live) { rule(Hd - 96); caps(`Cited by ${b.cites.length} board item${b.cites.length === 1 ? '' : 's'}`, x0, Hd - 62, b.cites.length ? INK : SOFT); }
+  } else if (p === 1) {                                       // the title page
+    caps(b.ax ? `arXiv ${b.ax}` : new URL(b.url).hostname.replace(/^www\./, ''), x0, 96); rule(112);
+    let size = 54; g.font = `300 ${size}px Newsreader`;
+    while (size > 30 && wrap(g, b.title, tw).length * size * 1.1 > Hd * .46) { size -= 3; g.font = `300 ${size}px Newsreader`; }
+    let y = para(b.title, 112 + 60 + size * .6, '300 #px Newsreader', size, 1.1, INK) + 20;
+    if (b.au) y = para(b.au, y, 'italic 400 #px Newsreader', 27, 1.25, SOFT, 2) + 6;
+    rule(Hd - 150); caps(MON[+b.date.slice(5, 7) - 1] + ' ' + b.date.slice(0, 4), x0, Hd - 112, INK);
+    caps(b.read ? `${b.f.length} finding${b.f.length === 1 ? '' : 's'} recorded` : 'cited, not fetched', x0, Hd - 82);
+  } else if (b.f[p - 2]) {                                    // one finding to a page
+    const f = b.f[p - 2];
+    caps(`Finding ${p - 1} of ${b.f.length}`, x0, 96); g.textAlign = 'right'; caps(who(f[3]), x0 + tw, 96); g.textAlign = 'left'; rule(112);
+    let y = para(f[0], 150, 'italic 400 #px Newsreader', 23, 1.25, SOFT, 3) + 16;
+    const room = Hd - y - 86;
+    for (const size of [28, 26, 24, 22, 20, 18, 16.5, 15]) {
+      g.font = `400 ${size}px Newsreader`; const body = wrap(g, f[1], tw).length * size * 1.34;
+      g.font = `italic 400 ${size - 3}px Newsreader`; const q = wrap(g, `“${f[2]}”`, tw - 22).length * (size - 3) * 1.3 + 30;
+      if (body + q <= room || size === 15) {
+        y = para(f[1], y + size, '400 #px Newsreader', size, 1.34, INK) + 14;
+        const qy = y; g.font = `italic 400 ${size - 3}px Newsreader`; g.fillStyle = SOFT;
+        const ls = wrap(g, `“${f[2]}”`, tw - 22); ls.forEach((l, i) => g.fillText(l, x0 + 22, qy + i * (size - 3) * 1.3));
+        g.fillStyle = STAMP; g.fillRect(x0, qy - (size - 3), 2, ls.length * (size - 3) * 1.3 + 4); break;
+      }
+    }
+    caps(`Recorded ${when(f[4])}`, x0, Hd - 52, SOFT, 12); g.textAlign = 'right'; g.font = '400 20px Newsreader'; g.fillStyle = SOFT; g.fillText(String(p - 1), x0 + tw, Hd - 50);
+  }
+  t.needsUpdate = true;
+}
+function showSpread(b, s) { drawPage('L', b, 2 * s); drawPage('R', b, 2 * s + 1); }
+
+/* ---------- the board, read live: which items cite which paper, and which say a plan changed ---------- */
+let live = false, sig = '', skipItems = [];
+const AXRE = /\b(\d{4}\.\d{4,5})(?:v\d+)?\b/g, SKIP = /\bnot run:|\bdo not run\b|\bdropped:/i, CLAIM = /do not claim|drop '[^']+' as the novelty/i;
+function scan(items) {
+  B.forEach(b => { b.cites = []; b.rib = null; }); skipItems = [];
+  for (const it of items.slice().sort((a, c) => a.at_ns - c.at_ns)) {
+    const found = [...it.text.matchAll(AXRE)].filter(m => byAx.has(m[1])), seen = new Set();
+    for (const m of found) { const b = byAx.get(m[1]); if (!seen.has(b)) { seen.add(b); b.cites.push({ it, at: m.index }); } }
+    const sk = SKIP.exec(it.text), cl = CLAIM.exec(it.text);
+    if (sk) {                                                 // an experiment not run: every paper cited after those words
+      const after = found.filter(m => m.index > sk.index);
+      if (after.length) skipItems.push(it);
+      for (const m of after) { const b = byAx.get(m[1]); if (!b.rib || b.rib.type !== 'skip') b.rib = { type: 'skip', it, at: sk.index }; }
+    }
+    if (cl) {                                                 // a claim withdrawn: the paper cited last before those words
+      const m = found.filter(m => m.index < cl.index).at(-1), b = m && byAx.get(m[1]);
+      if (b && !b.rib) b.rib = { type: 'claim', it, at: cl.index };
+    }
+  }
+  live = true;
+  const s = B.map(b => b.cites.length + (b.rib ? b.rib.type[0] : '')).join(',');
+  if (s !== sig) { sig = s; for (const b of B) if (b.worn !== b.cites.length) { b.worn = b.cites.length; drawSpine(b); } texA.needsUpdate = texB.needsUpdate = true; hangRibbons(); say(); if (S.book) { fillSheet(S.book); if (!S.flip) showSpread(S.book, S.spread); } kick(); }
+}
+async function readBoard() {
+  let wait = 60000;
+  try { const r = await fetch('/data'); if (!r.ok) throw new Error(r.status); scan((await r.json()).items); }
+  catch (e) { wait = 20000; }                                 // keep what we have, try again
+  if (!REDUCED) setTimeout(readBoard, wait);
+}
+function say() {
+  const t = D.totals, ribs = B.filter(b => b.rib && b.rib.type === 'skip').length;
+  $('say').innerHTML = `Before running, the agents read <b>${t.read}</b> papers and recorded <b>${t.findings}</b> findings from them, each with a quote`
+    + (live && skipItems.length ? `; <i>${skipItems.length}</i> board item${skipItems.length === 1 ? ' says' : 's say'} an experiment was not run because it was already published, citing ${ribs} papers on this shelf.` : '.');
+  $('key').innerHTML = D.people.map((p, i) => B.some(b => b.read && b.by === i) ? `<i style="--c:${CLOTH[i % CLOTH.length]}"></i><span>${esc(p)}, ${B.filter(b => b.read && b.by === i).length} books</span>` : '').join('')
+    + `<i style="--c:${MANILA};width:4px;margin:0 2.5px"></i><span>Manila pamphlet: cited on the board, never fetched (${t.pamphlets})</span>`
+    + `<i class="rib" style="--c:#b3402b"></i><span>Red ribbon: an item says “Not run:”, “do not run” or “Dropped:” and then cites it</span>`
+    + `<i class="rib" style="--c:#d9d0ba"></i><span>Ivory ribbon: cited last before “do not claim” or “drop … as the novelty”</span>`;
+  $('exa').innerHTML = `<div class="lab">Before the reading, the search</div>${D.exa.search} searches and ${D.exa.fetch} page fetches with <code>tools/exa.py</code>, ${D.exa.returned} of ${D.exa.calls} returned (counted ${D.exa.counted}).`;
+  $('foot').innerHTML = `${t.fetch_commands} <code>paper.py fetch</code> and ${t.add_commands} <code>paper.py add</code> commands in the team's event store, read ${when(NOW)}. A finding is one distinct (paper, place, text). Citations: arXiv ids in the text of live board items.`;
+}
+say();
+
+/* ---------- the sheet beside the open book ---------- */
+function fillSheet(b) {
+  $('sMeta').innerHTML = `<a href="${esc(b.url)}" target="_blank" rel="noopener">${b.ax ? 'arXiv ' + b.ax : esc(new URL(b.url).hostname.replace(/^www\./, ''))}</a> · ${b.date.slice(0, 4)}`;
+  $('sTitle').textContent = b.title;
+  $('sBy').textContent = (b.au ? b.au.replace(/\.$/, '') + '. ' : '') + (b.read ? `${b.f.length} finding${b.f.length === 1 ? '' : 's'}; first read ${when(b.t)} by ${who(b.by)}.` : `Never fetched; first cited ${when(b.t)} by ${who(b.by)}.`);
+  const r = b.rib;
+  $('sRib').innerHTML = r ? `<div class="rib ${r.type}">${r.type === 'skip' ? 'Experiment not run' : 'Claim corrected'}, <a href="${SITE}#${r.it.id}" target="_blank" rel="noopener">${r.it.id}</a>:<br><q>${esc(r.it.text.slice(r.it.text.lastIndexOf('. ', r.at) < 0 ? 0 : r.it.text.lastIndexOf('. ', r.at) + 2, r.at + 170).split(/(?<=[.;])\s/)[0])}</q></div>` : '';
+  $('sCiteHead').textContent = live ? `Cited by ${b.cites.length} board item${b.cites.length === 1 ? '' : 's'}` : 'Reading the board';
+  $('sCites').innerHTML = b.cites.map(({ it, at }, i) => {
+    const a = Math.max(0, at - 90), cut = it.text.slice(a, at + 150);
+    return `<div class="cite" data-i="${i}"><a href="${SITE}#${it.id}" target="_blank" rel="noopener">${it.id}</a> · ${esc(it.who)}<p title="Show the whole item">${a ? '… ' : ''}${esc(cut).replace(b.ax, `<mark>${b.ax}</mark>`)} …</p></div>`;
+  }).join('');
+  pagerText();
+}
+$('sCites').addEventListener('click', e => {
+  const c = e.target.closest('.cite'); if (!c || e.target.tagName === 'A' || !S.book) return;
+  const { it, at } = S.book.cites[+c.dataset.i], openNow = c.classList.toggle('open'), a = Math.max(0, at - 90);
+  c.querySelector('p').innerHTML = openNow ? esc(it.text).replace(S.book.ax, `<mark>${S.book.ax}</mark>`) : `${a ? '… ' : ''}${esc(it.text.slice(a, at + 150)).replace(S.book.ax, `<mark>${S.book.ax}</mark>`)} …`;
+});
+function pagerText() {
+  const b = S.book; if (!b) return;
+  const n = nSpreads(b), s = S.spread;
+  $('pg').textContent = s === 0 ? `Slip and title · ${b.f.length} finding${b.f.length === 1 ? '' : 's'}` : `Finding${2 * s - 1 < b.f.length ? 's' : ''} ${2 * s - 1}${2 * s - 1 < b.f.length ? '–' + 2 * s : ''} of ${b.f.length}`;
+  $('prev').disabled = s === 0; $('next').disabled = s >= n - 1;
+  $('find').innerHTML = s === 0 ? '' : [2 * s - 2, 2 * s - 1].filter(i => b.f[i]).map(i => `<small>Finding ${i + 1} · ${esc(b.f[i][0])}</small>${esc(b.f[i][1])}`).join('');
+}
+
+/* ---------- pulling a book out, turning its pages, putting it back ---------- */
+function pull(b, spread = 0) {
+  if (S.book) return;
+  if (b.i >= S.k) S.k = b.i + 1;
+  S.book = b; S.open = true; S.a = 0; S.queue = 0; S.spread = clamp(spread, 0, nSpreads(b) - 1); S.flip = null; S.hover = null; S.vx = 0;
+  fitBook(b); setOpen(0); showSpread(b, S.spread); flipF.visible = flipK.visible = false;
+  fillSheet(b); $('sheet').classList.add('on'); document.body.classList.add('reading'); $('hint').innerHTML = 'Click the right page to turn it, the left to go back. <kbd>←</kbd> <kbd>→</kbd> turn, <kbd>Esc</kbd> puts the book back.';
+  $('tip').classList.remove('on'); writeHash(); kick();
+}
+function putBack() { if (!S.book) return; S.open = false; S.flip = null; flipF.visible = flipK.visible = false; $('sheet').classList.remove('on'); document.body.classList.remove('reading'); writeHash(); kick(); }
+function turn(dir) {
+  const b = S.book; if (!b || !S.open) return;
+  if (S.flip || S.a < 1) { S.queue = dir; return; }
+  const s = S.spread + dir; if (s < 0 || s >= nSpreads(b)) return;
+  if (dir > 0) { drawPage('F', b, 2 * S.spread + 1); drawPage('K', b, 2 * s); drawPage('R', b, 2 * s + 1); }
+  else { drawPage('K', b, 2 * S.spread); drawPage('F', b, 2 * s + 1); drawPage('L', b, 2 * s); }
+  S.flip = { dir, tau: 0, to: s }; S.spread = s; flipF.visible = flipK.visible = true; bendPage(0, dir); pagerText(); writeHash(); kick();
+}
+$('prev').onclick = () => turn(-1); $('next').onclick = () => turn(1); $('back').onclick = putBack;
+
+/* ---------- the view ---------- */
+const TAN = Math.tan(13 * Math.PI / 180);
+let V = {};
+function view() {
+  const iw = innerWidth, ih = innerHeight, phone = iw < 860, visH = (phone ? 1.56 : 1.5) * S.zoom, visW = visH * iw / ih;
+  const col = phone ? 0 : 372, min = -.14 + visW / 2 - col / iw * visW, max = WALL + .14 - visW / 2;
+  V = { iw, ih, phone, visH, visW, cy: phone ? .63 : .5, dz: visH / 2 / TAN, min: Math.min(min, max), max: Math.max(min, max), col };
+  if (min > max) V.min = V.max = (min + max) / 2;
+}
+function resize() { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); view(); S.x = clamp(S.x, V.min, V.max); kick(); }
+view();
+S.x = H.x !== undefined ? clamp(+H.x || 0, V.min, V.max) : clamp(S.lampX - (V.phone ? .2 : .38) * V.visW, V.min, V.max);
+addEventListener('resize', resize);
+
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), tmp = new THREE.Vector3();
+const cast = (e, objs) => { ndc.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); ray.setFromCamera(ndc, camera); return ray.intersectObjects(objs, false)[0]; };
+const worldX = e => { cast(e, []); const t = (.17 - ray.ray.origin.z) / ray.ray.direction.z; return ray.ray.origin.x + ray.ray.direction.x * t; };
+canvas.addEventListener('pointerdown', e => {
+  canvas.setPointerCapture(e.pointerId);
+  if (S.book) { S.drag = { type: 'read', x: e.clientX, y: e.clientY, moved: 0 }; return; }
+  if (cast(e, [lampHit])) { S.drag = { type: 'lamp' }; S.play = false; canvas.className = 'lamp'; return; }
+  const hit = pick(e);
+  S.drag = { type: 'pan', x: e.clientX, sx: S.x, moved: 0, book: hit, lx: e.clientX, lt: performance.now() }; S.vx = 0; canvas.className = 'drag';
+});
+canvas.addEventListener('pointermove', e => {
+  const d = S.drag;
+  if (!d) {
+    if (S.book || e.pointerType === 'touch') return;
+    const onLamp = cast(e, [lampHit]), b = onLamp ? null : pick(e);
+    canvas.className = onLamp ? 'lamp' : b ? 'pick' : '';
+    if (b !== S.hover) { S.hover = b; kick(); }
+    const tip = $('tip');
+    if (b) {
+      tip.innerHTML = `<b>${esc(b.title)}</b><span>${b.au ? esc(b.au) + ' · ' : ''}${b.date.slice(0, 4)} · ${b.read ? b.f.length + ' finding' + (b.f.length === 1 ? '' : 's') : 'not fetched'}${live ? ' · cited by ' + b.cites.length : ''}${b.rib ? (b.rib.type === 'skip' ? ' · an experiment not run' : ' · a claim corrected') : ''}</span>`;
+      tip.style.transform = `translate(${Math.min(e.clientX + 18, innerWidth - 360)}px, ${Math.min(e.clientY + 20, innerHeight - 90)}px)`; tip.classList.add('on');
+    } else tip.classList.remove('on');
+    return;
+  }
+  if (d.type === 'lamp') { S.k = kOfX(worldX(e)); writeHash(); kick(); return; }
+  d.moved = Math.max(d.moved, Math.abs(e.clientX - d.x));
+  if (d.type === 'pan') {
+    const now = performance.now(), f = V.visW / V.iw;
+    S.x = clamp(d.sx - (e.clientX - d.x) * f, V.min - .1, V.max + .1);
+    if (now > d.lt) S.vx = lerp(S.vx, -(e.clientX - d.lx) * f / ((now - d.lt) / 1000), .5);
+    d.lx = e.clientX; d.lt = now; kick();
+  }
+});
+const release = e => {
+  const d = S.drag; S.drag = null; canvas.className = '';
+  if (!d) return;
+  if (d.type === 'pan') { if (performance.now() - d.lt > 90) S.vx = 0; if (d.moved < 6 && d.book) pull(d.book); writeHash(); }
+  if (d.type === 'read' && d.moved < 6 && S.a >= 1) {
+    const hit = cast(e, [pageL, pageR, boardL, boardR, stackL, stackR]);
+    if (!hit) putBack(); else turn(rb.worldToLocal(hit.point.clone()).x > 0 ? 1 : -1);
+  }
+  kick();
+};
+canvas.addEventListener('pointerup', release); canvas.addEventListener('pointercancel', () => { S.drag = null; canvas.className = ''; });
+canvas.addEventListener('wheel', e => {
+  e.preventDefault(); if (S.book) return;
+  if (e.ctrlKey) { S.zoom = clamp(S.zoom * Math.exp(e.deltaY * .002), .5, 1.35); view(); }
+  else S.vx += (Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY) * .004;
+  writeHash(); kick();
+}, { passive: false });
+addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = e.key;
+  if (S.book) { if (k === 'ArrowRight' || k === ' ') turn(1); else if (k === 'ArrowLeft') turn(-1); else if (k === 'Escape' || k === 'Enter') putBack(); else return; e.preventDefault(); return; }
+  if (k === 'ArrowRight') S.vx += .9; else if (k === 'ArrowLeft') S.vx -= .9;
+  else if (k === ' ') { S.play = !S.play; if (S.play && S.k >= N) S.k = 0; }
+  else if (k === '.' || k === ']') { S.play = false; S.k = Math.min(N, Math.floor(S.k) + 1); }
+  else if (k === ',' || k === '[') { S.play = false; S.k = Math.max(0, Math.ceil(S.k) - 1); }
+  else if (k === 'Home') { S.play = false; S.k = 0; } else if (k === 'End') { S.play = false; S.k = N; }
+  else if (k === 'Enter') { const b = B[Math.max(0, Math.ceil(S.k) - 1)]; if (b) pull(b); }
+  else if (k === '+' || k === '=') { S.zoom = clamp(S.zoom * .9, .5, 1.35); view(); } else if (k === '-') { S.zoom = clamp(S.zoom / .9, .5, 1.35); view(); }
+  else return;
+  e.preventDefault(); writeHash(); kick();
+});
+$('lampTag').onclick = () => { S.follow = 1.2; kick(); };
+
+/* ---------- motion ---------- */
+const q0 = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, Math.PI, 0)), qR = new THREE.Quaternion(), pA = new THREE.Vector3(), pB = new THREE.Vector3();
+let last = performance.now(), raf = 0, prevVx = 0, tagText = '', tagW = 200;
+function kick() { S.dirty = true; if (REDUCED && !raf) raf = requestAnimationFrame(frame); }
+function frame(now) {
+  raf = 0;
+  const dt = REDUCED ? 0 : Math.min(.05, (now - last) / 1000); last = now;
+  const snap = REDUCED; let moved = S.dirty; S.dirty = false;
+  const oldX = S.x, oldLamp = S.lampX, oldA = S.a;
+  if (S.play) { moved = true; S.k = Math.min(N, S.k + dt * N / 28); if (S.k >= N) S.play = false; writeHash(); }
+
+  /* the lamp glides to where the reading has come; the camera goes with it while it plays */
+  const lx = lampXof(S.k);
+  if (snap) { S.lampX = lx; S.lampV = 0; } else { S.lampV += ((lx - S.lampX) * 70 - S.lampV * 13) * dt; S.lampX += S.lampV * dt; }
+  if (!S.book) {
+    const dragLamp = S.drag && S.drag.type === 'lamp';
+    if (S.play || dragLamp || S.follow > 0) {
+      const lo = S.x - V.visW / 2 + (V.col / V.iw + .12) * V.visW, hi = S.x + V.visW / 2 - .16 * V.visW;
+      const want = S.lampX < lo ? S.x - (lo - S.lampX) : S.lampX > hi ? S.x + (S.lampX - hi) : S.x;
+      S.x = snap ? want : lerp(S.x, want, Math.min(1, dt * 5)); S.follow = Math.max(0, (S.follow || 0) - dt);
+    }
+    if (!S.drag || S.drag.type !== 'pan') {
+      S.x += S.vx * dt; S.vx *= Math.exp(-3.4 * dt);
+      if (S.x < V.min) { S.x = lerp(S.x, V.min, Math.min(1, dt * 9)); S.vx *= .8; } if (S.x > V.max) { S.x = lerp(S.x, V.max, Math.min(1, dt * 9)); S.vx *= .8; }
+      if (snap) { S.x = clamp(S.x + S.vx * .3, V.min, V.max); S.vx = 0; }
+    }
+  }
+  if (Math.abs(S.vx) < 2e-4) S.vx = 0;
+  if (Math.abs(S.x - oldX) > 1e-6) moved = true;
+  if (Math.abs(S.lampX - oldLamp) > 2e-6 || Math.abs(S.lampV) > 1e-4) moved = true; else S.lampV = 0;
+  const acc = dt ? clamp((S.vx - prevVx) / dt, -12, 12) : 0; prevVx = S.vx;
+  S.swayV += (-S.sway * 55 - S.swayV * 2.6 - acc * 1.5) * dt; S.sway = clamp(S.sway + S.swayV * dt, -.6, .6);
+  if (Math.abs(S.sway) > 2e-4 || Math.abs(S.swayV) > 2e-3) moved = true; else S.sway = S.swayV = 0;
+  for (const r of ribbons) r.rotation.z = S.sway * r.userData.f;
+
+  camera.position.set(S.x, V.cy, V.dz); camera.rotation.set(0, clamp(-S.vx * .012, -.03, .03), 0);
+  lamp.position.set(S.lampX, TOP + .089, 0); lamp.rotation.z = clamp(-S.lampV * .05, -.12, .12);
+  spot.position.set(S.lampX, TOP + .15, .27); spot.target.position.set(S.lampX, .4, -.03);
+
+  /* books come onto the shelf as the lamp reaches them */
+  for (const b of B) {
+    const to = b.i < S.k ? 1 : 0;
+    const ph = S.hover === b ? 1 : 0;
+    if (b.s === to && b.pull === ph) continue;
+    if (b.s !== to || b.pull !== ph) moved = true;
+    if (snap) { b.s = to; b.pull = ph; } else { b.s += clamp(to - b.s, -dt * 2.6, dt * 2.6); b.pull = Math.abs(ph - b.pull) < .004 ? ph : b.pull + (ph - b.pull) * Math.min(1, dt * 12); }
+    seat(b);
+  }
+  if (S.book) seat(S.book);
+
+  /* the book in the hand */
+  if (S.book) {
+    const b = S.book; if (S.flip || S.a !== (S.open ? 1 : 0)) moved = true;
+    S.a = snap ? (S.open ? 1 : 0) : clamp(S.a + (S.open ? dt / 1.5 : -dt / 1.1), S.open ? .0001 : 0, 1);
+    if (S.a <= 0 && !S.open) { rb.visible = false; S.book = null; seat(b); $('hint').innerHTML = HINT; }
+    else {
+      rb.visible = true;
+      const spreadW = 2 * R.W + R.w + .02, free = V.phone ? 1 : 1 - 392 / V.iw;
+      const needH = Math.max(spreadW / (free * .88) * V.ih / V.iw, R.h / (V.phone ? .4 : .78)), dist = needH / 2 / TAN;
+      pB.set(S.x - (V.phone ? 0 : 392 / V.iw / 2 * needH * V.iw / V.ih), V.cy + (V.phone ? .2 * needH : -.01 * needH), V.dz - dist);
+      const t1 = ease(clamp(S.a / .22, 0, 1)), t2 = ease(clamp((S.a - .18) / .82, 0, 1));
+      pA.set(b.x, b.y + b.h / 2, -.009 + .27 * t1);
+      rb.position.lerpVectors(pA, pB, t2); rb.position.y += Math.sin(t2 * Math.PI) * .05;
+      qR.setFromEuler(new THREE.Euler(V.phone ? -.3 : -.36, 0, 0)); rb.quaternion.copy(q0).slerp(qR, t2);
+      setOpen(ease(clamp((S.a - .5) / .5, 0, 1)));
+      if (S.flip) {
+        S.flip.tau = snap ? 1 : Math.min(1, S.flip.tau + dt / .85); bendPage(S.flip.tau, S.flip.dir);
+        if (S.flip.tau >= 1) { showSpread(b, S.spread); flipF.visible = flipK.visible = false; S.flip = null; }
+      }
+      if (S.queue && !S.flip && S.a >= 1) { const q = S.queue; S.queue = 0; turn(q); }
+    }
+  }
+  const dim = S.book ? ease(S.a) : 0;
+  spot.intensity = 7.5 * (1 - .6 * dim); hemi.intensity = .4 * (1 - .4 * dim); key.intensity = .6 + .9 * dim;
+  key.target.position.set(S.x, .5, 0); key.position.set(S.x - 1.6, 2.4, 3.6);
+
+  /* the label of the lamp: the time it stands at */
+  const kk = Math.ceil(S.k), tag = $('lampTag'), bk = B[Math.max(0, kk - 1)];
+  const label = `<b>${kk ? when(bk.t) : 'Before ' + when(B[0].t)}</b><span>${kk} of ${N} on the shelf${S.play ? '' : kk < N ? ' · drag the lamp →' : ''}</span>`;
+  if (label !== tagText) { tag.innerHTML = tagText = label; tagW = tag.offsetWidth; moved = true; }
+  if (!moved) { if (!REDUCED) raf = requestAnimationFrame(frame); return; }
+  camera.updateMatrixWorld(); tmp.set(S.lampX, TOP + .2, .2).project(camera);
+  const tw = tagW, txp = clamp((tmp.x + 1) / 2 * V.iw - tw / 2, V.col + 16, V.iw - tw - 16);
+  tag.style.transform = V.phone ? `translate(${(V.iw - tw) / 2}px, ${V.ih - 74}px)` : `translate(${txp}px, ${Math.max(10, (1 - tmp.y) / 2 * V.ih - 30)}px)`;
+  tag.style.opacity = S.book ? 0 : 1; tag.style.pointerEvents = S.book ? 'none' : 'auto';
+
+  renderer.render(scene, camera);
+  if (!REDUCED) raf = requestAnimationFrame(frame);
+}
+const HINT = $('hint').innerHTML;
+$('grain').style.backgroundImage = `url(${noiseTile.toDataURL()})`;
+resize();
+if (H.b) { const b = B.find(b => b.id === H.b); if (b) { pull(b, S.spread); if (REDUCED) S.a = 1; } }
+raf = requestAnimationFrame(frame);
+readBoard();
+</script>
+</body>
+</html>
