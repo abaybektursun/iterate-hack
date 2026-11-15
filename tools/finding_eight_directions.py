@@ -29,16 +29,17 @@ DATA = {
     "commit": "1417dbf8f09bb4fcffd273eff18dabdeb76debff",  # full500/top8_plain-01/run.json
     "metric": "MATH-500, 500 problems, one sample each at T 1.0",
     "unit": "%",
+    "measure": "of 500 math problems answered right",  # the small label beside the big number: what it counts
     "max": 100,
     "n_hard": 328,
     # What the reader switches between; "first" is the one shown on load, the finding itself. right = right of 500 on
     # MATH-500, hard = right of the 328 harder problems; cue says whether that setting used the opening cue there. short is
-    # the name on the switch at phone width. The key of Base stays "untrained": tools/findings.py reads it.
+    # the name on the switch at phone width.
     "first": 3,
     "states": [
-        {"key": "untrained", "name": "Base", "short": "Base", "right": 224, "cell": V3 + " cells.base_plain_1.0",
+        {"key": "base", "name": "Base", "short": "Base", "right": 224, "cell": V3 + " cells.base_plain_1.0",
          "hard": 76, "hard_cue": False, "hard_cell": "day1_hard328 cells.base_plain_T1",
-         "note": "Base: the base model with the plain prompt. The lines are the 8 largest directions of RL's change, not yet added."},
+         "note": "The base model was pretrained on text and never trained with rewards. The lines are RL's 8 largest directions, not yet added."},
         {"key": "base-cue", "name": "Base + cue", "short": "+ cue", "right": 410, "cell": V3 + " cells.base_opener_1.0",
          "hard": 164, "hard_cue": True, "hard_cell": "day1 rows.hard328_base_cue_t10-01",
          "note": "Base + cue: the same weights; only the first three tokens of the answer are fixed to RL's opening, \"line!\", two line breaks, \"Okay\"."},
@@ -99,7 +100,7 @@ PANELS = [
       f"On the {DATA['n_hard']} harder problems, both with the cue, the 8 RL directions solve {_S['rl-directions']['hard']} of "
       f"{DATA['n_hard']} and Base + cue {_S['base-cue']['hard']}: {_gain} more, {_vh['points']} points, 95 % interval "
       f"{_vh['ci'][0]} to {_vh['ci'][1]}. That is {_share} % of the gain RL has over Base + cue there.",
-      f"8 random directions of the same size add nothing: {_pc('random')} against Base's {_pc('untrained')} on MATH-500, and "
+      f"8 random directions of the same size add nothing: {_pc('random')} against Base's {_pc('base')} on MATH-500, and "
       f"{_S['random']['hard']} of {DATA['n_hard']} against Base + cue's {_S['base-cue']['hard']} on the harder problems."]],
     ["why", "Why it matters",
      "On MATH-500 the 8 directions do what the cue does. On the harder problems they add to it, so they carry a part of "
@@ -108,11 +109,11 @@ PANELS = [
       f"Those words alone do not raise the score: making Base + cue write \"Wait\" as often as RL leaves it at "
       f"{WAIT['steered']} of {WAIT['n']}, against a mean of {WAIT['unsteered']} without. Blind judges call {CHECKS['fix']} of "
       f"{CHECKS['n']} checking passages a fix.",
-      "A change this small and this readable is a target for editing weights directly, with no reward."]],
+      'A change this small and this readable is a target for editing weights directly. The page <a href="/finding/hand-written-edit">Hand-written edit</a> tries that with no reward and reaches the cue.']],
     ["how", "How we know",
      f"We added only the {_edit['k']} largest directions of the RL weight change in each of {_edit['n_edited']} weight matrices "
      f"to the base model and scored it on all {_edit['n']} MATH-500 problems and the {DATA['n_hard']} harder problems.",
-     [f"Every score is one sample per problem at T 1.0, graded by grader v3. Base {_pc('untrained')}, Base + cue {_pc('base-cue')}, "
+     [f"Every score is one sample per problem at T 1.0, graded by grader v3. Base {_pc('base')}, Base + cue {_pc('base-cue')}, "
       f"RL {_pc('rl')} on MATH-500.",
       f"The edit is {_edit['add_rel'] * 100:.2f} % of the size of the weights and {_edit['share'] * 100:.1f} % of the full RL change.",
       "Closest published result: Spectral Rewiring (arXiv 2607.03065), which keeps the RL gain with a compact part of the "
@@ -323,7 +324,7 @@ const ease = p => p < .5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2;
    lit, they show in the accent; rest, the other directions of the RL change show between them; wash, the whole slab
    is lit; lab, the words stand at the ends of their lines. The picture moves from one look to the next in 0.9 s. */
 const LOOK = {
-  "untrained": { sc: 0, plain: .34, lit: 0, rest: 0, wash: 0, lab: 0 },
+  "base": { sc: 0, plain: .34, lit: 0, rest: 0, wash: 0, lab: 0 },
   "base-cue": { sc: 0, plain: .34, lit: 0, rest: 0, wash: 0, lab: 0 },
   "random": { sc: 1, plain: .7, lit: 0, rest: 0, wash: 0, lab: 0 },
   "rl-directions": { sc: 0, plain: 0, lit: 1, rest: 0, wash: 0, lab: 1 },
@@ -399,7 +400,7 @@ function scale(g) {
   });
   return `<text class="value" id="value" x="${g.x0}" y="${g.numY}" font-size="${g.num}"></text>` +
     `<text class="unit" id="unit" y="${f(g.numY - g.num * .38)}" font-size="${g.fl}"><tspan class="u1">MATH-500</tspan>` +
-    `<tspan class="u2" dy="${f(g.fl * 1.3)}">one sample each, T 1.0</tspan></text>` +
+    `<tspan class="u2" dy="${f(g.fl * 1.3)}">${esc(D.measure)}</tspan></text>` +
     `<text class="cap1" id="cap1" x="${g.x0}" y="${g.rows[1].cap}" font-size="${g.fl}"></text>` + out.join("");
 }
 function build() {
@@ -535,11 +536,12 @@ function choose(i, instant) {
   $("switch").querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-pressed", k === i));
   place(S.t);
 }
+const link = s => s.replace(/&lt;a href=&quot;(\/[\w\/#-]*)&quot;&gt;(.*?)&lt;\/a&gt;/g, '<a href="$1">$2</a>');  // a link to another page of the site stays a link
 function pane() {
   const p = C.panels.find(p => p[0] === S.open);
   $("pane").innerHTML = p
     ? `<div class="dhead"><h2>${esc(p[1])}</h2><button class="close" data-open="">Close</button></div><p class="lead">${esc(p[2])}</p>` +
-      `<ul class="facts">${p[3].map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
+      `<ul class="facts">${p[3].map(x => `<li>${link(esc(x))}</li>`).join("")}</ul>`
     : `<ul class="more">${C.panels.map(p => `<li><button data-open="${p[0]}">${esc(p[1])}<span aria-hidden="true">›</span></button></li>`).join("")}</ul>`;
 }
 function address(push) {

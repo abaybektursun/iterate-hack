@@ -1,0 +1,551 @@
+{
+ "cells": {
+  "hard328_sft": {
+   "samples": 1312,
+   "with_switch": 156,
+   "cap_hits": 378,
+   "cap_hits_with_switch": 99,
+   "cap_hits_with_over_20_chinese_characters": 86,
+   "finished_with_switch": 57,
+   "switched_and_right": 39,
+   "not_switched_and_right": 797,
+   "problems_with_a_switch": 102,
+   "letters_by_script": {
+    "CJK": 40579,
+    "CYRILLIC": 369,
+    "HANGUL": 180,
+    "HIRAGANA": 77,
+    "ARABIC": 62,
+    "KATAKANA": 9,
+    "THAI": 6,
+    "DEVANAGARI": 3,
+    "TELUGU": 2,
+    "MALAYALAM": 1,
+    "TAMIL": 1
+   },
+   "first_episode_main_script": {
+    "ARABIC": 2,
+    "CJK": 141,
+    "CYRILLIC": 13
+   },
+   "start_tok_quartiles": [
+    10733,
+    13589,
+    15048
+   ],
+   "start_before_4000": 16,
+   "start_before_8000": 24,
+   "tokens_from_switch_to_end_quartiles": [
+    1126,
+    2142,
+    3573
+   ],
+   "first_episode_back": {
+    "yes": 135,
+    "no": 2,
+    "text ends within 1,000 characters": 19
+   },
+   "episodes_per_switched_sample_quartiles": [
+    1,
+    3,
+    5
+   ],
+   "first_episode_letters_quartiles": [
+    6,
+    12,
+    46
+   ],
+   "nonlatin_share_of_letters_after_first_switch_quartiles": [
+    0.012,
+    0.042,
+    0.073
+   ],
+   "switch_before_cap_16384": 156
+  },
+  "hard328_rl": {
+   "samples": 1312,
+   "with_switch": 12,
+   "cap_hits": 114,
+   "cap_hits_with_switch": 3,
+   "cap_hits_with_over_20_chinese_characters": 1,
+   "finished_with_switch": 9,
+   "switched_and_right": 1,
+   "not_switched_and_right": 799,
+   "problems_with_a_switch": 11,
+   "letters_by_script": {
+    "CJK": 1010,
+    "HANGUL": 30,
+    "ARABIC": 19,
+    "CYRILLIC": 12,
+    "HIRAGANA": 2,
+    "THAI": 2
+   },
+   "first_episode_main_script": {
+    "ARABIC": 1,
+    "CJK": 9,
+    "CYRILLIC": 1,
+    "HANGUL": 1
+   },
+   "start_tok_quartiles": [
+    4512,
+    12145,
+    13884
+   ],
+   "start_before_4000": 3,
+   "start_before_8000": 5,
+   "tokens_from_switch_to_end_quartiles": [
+    1378,
+    2244,
+    7095
+   ],
+   "first_episode_back": {
+    "yes": 12,
+    "no": 0,
+    "text ends within 1,000 characters": 0
+   },
+   "episodes_per_switched_sample_quartiles": [
+    1,
+    1,
+    2
+   ],
+   "first_episode_letters_quartiles": [
+    6,
+    14,
+    27
+   ],
+   "nonlatin_share_of_letters_after_first_switch_quartiles": [
+    0.001,
+    0.006,
+    0.025
+   ],
+   "switch_before_cap_16384": 12
+  },
+  "hard328_base": {
+   "samples": 1312,
+   "with_switch": 9,
+   "cap_hits": 286,
+   "cap_hits_with_switch": 5,
+   "cap_hits_with_over_20_chinese_characters": 2,
+   "finished_with_switch": 4,
+   "switched_and_right": 0,
+   "not_switched_and_right": 634,
+   "problems_with_a_switch": 9,
+   "letters_by_script": {
+    "CJK": 2996,
+    "HIRAGANA": 1225,
+    "KATAKANA": 699,
+    "CYRILLIC": 77,
+    "ARABIC": 11,
+    "HANGUL": 9,
+    "THAI": 5,
+    "TAMIL": 4,
+    "ARMENIAN": 3,
+    "DEVANAGARI": 2
+   },
+   "first_episode_main_script": {
+    "ARABIC": 1,
+    "CJK": 4,
+    "CYRILLIC": 3,
+    "HIRAGANA": 1
+   },
+   "start_tok_quartiles": [
+    11111,
+    12173,
+    13132
+   ],
+   "start_before_4000": 1,
+   "start_before_8000": 2,
+   "tokens_from_switch_to_end_quartiles": [
+    518,
+    2708,
+    4195
+   ],
+   "first_episode_back": {
+    "yes": 5,
+    "no": 1,
+    "text ends within 1,000 characters": 3
+   },
+   "episodes_per_switched_sample_quartiles": [
+    1,
+    1,
+    2
+   ],
+   "first_episode_letters_quartiles": [
+    7,
+    19,
+    51
+   ],
+   "nonlatin_share_of_letters_after_first_switch_quartiles": [
+    0.006,
+    0.008,
+    0.072
+   ],
+   "switch_before_cap_16384": 9
+  },
+  "fresh_sft": {
+   "samples": 544,
+   "with_switch": 104,
+   "cap_hits": 248,
+   "cap_hits_with_switch": 76,
+   "cap_hits_with_over_20_chinese_characters": 66,
+   "finished_with_switch": 28,
+   "switched_and_right": 14,
+   "not_switched_and_right": 226,
+   "problems_with_a_switch": 61,
+   "letters_by_script": {
+    "CJK": 30903,
+    "CYRILLIC": 378,
+    "HANGUL": 100,
+    "ARABIC": 76,
+    "HIRAGANA": 65,
+    "KATAKANA": 7,
+    "THAI": 5,
+    "HEBREW": 2,
+    "DEVANAGARI": 1,
+    "BENGALI": 1,
+    "GURMUKHI": 1
+   },
+   "first_episode_main_script": {
+    "CJK": 95,
+    "CYRILLIC": 8,
+    "HANGUL": 1
+   },
+   "start_tok_quartiles": [
+    11353,
+    13583,
+    15121
+   ],
+   "start_before_4000": 5,
+   "start_before_8000": 15,
+   "tokens_from_switch_to_end_quartiles": [
+    949,
+    2418,
+    4575
+   ],
+   "first_episode_back": {
+    "yes": 87,
+    "no": 5,
+    "text ends within 1,000 characters": 12
+   },
+   "episodes_per_switched_sample_quartiles": [
+    1,
+    3,
+    6
+   ],
+   "first_episode_letters_quartiles": [
+    6,
+    12,
+    44
+   ],
+   "nonlatin_share_of_letters_after_first_switch_quartiles": [
+    0.024,
+    0.042,
+    0.08
+   ],
+   "switch_before_cap_16384": 104
+  },
+  "fresh_rl": {
+   "samples": 544,
+   "with_switch": 9,
+   "cap_hits": 84,
+   "cap_hits_with_switch": 4,
+   "cap_hits_with_over_20_chinese_characters": 3,
+   "finished_with_switch": 5,
+   "switched_and_right": 0,
+   "not_switched_and_right": 202,
+   "problems_with_a_switch": 9,
+   "letters_by_script": {
+    "CJK": 1519,
+    "HIRAGANA": 203,
+    "KATAKANA": 63,
+    "CYRILLIC": 40,
+    "ARABIC": 17,
+    "DEVANAGARI": 16,
+    "HANGUL": 10,
+    "THAI": 4,
+    "HEBREW": 3,
+    "BENGALI": 2,
+    "TAMIL": 2,
+    "MALAYALAM": 1,
+    "GURMUKHI": 1,
+    "GUJARATI": 1,
+    "TELUGU": 1
+   },
+   "first_episode_main_script": {
+    "CJK": 7,
+    "CYRILLIC": 1,
+    "HIRAGANA": 1
+   },
+   "start_tok_quartiles": [
+    12955,
+    13379,
+    14416
+   ],
+   "start_before_4000": 0,
+   "start_before_8000": 1,
+   "tokens_from_switch_to_end_quartiles": [
+    661,
+    1968,
+    2577
+   ],
+   "first_episode_back": {
+    "yes": 8,
+    "no": 0,
+    "text ends within 1,000 characters": 1
+   },
+   "episodes_per_switched_sample_quartiles": [
+    1,
+    1,
+    4
+   ],
+   "first_episode_letters_quartiles": [
+    6,
+    10,
+    23
+   ],
+   "nonlatin_share_of_letters_after_first_switch_quartiles": [
+    0.008,
+    0.021,
+    0.05
+   ],
+   "switch_before_cap_16384": 9
+  },
+  "fresh_base": {
+   "samples": 544,
+   "with_switch": 6,
+   "cap_hits": 219,
+   "cap_hits_with_switch": 1,
+   "cap_hits_with_over_20_chinese_characters": 0,
+   "finished_with_switch": 5,
+   "switched_and_right": 1,
+   "not_switched_and_right": 117,
+   "problems_with_a_switch": 6,
+   "letters_by_script": {
+    "CJK": 1952,
+    "CYRILLIC": 85,
+    "GURMUKHI": 36
+   },
+   "first_episode_main_script": {
+    "CJK": 3,
+    "CYRILLIC": 2,
+    "GURMUKHI": 1
+   },
+   "start_tok_quartiles": [
+    3488,
+    6029,
+    11584
+   ],
+   "start_before_4000": 2,
+   "start_before_8000": 4,
+   "tokens_from_switch_to_end_quartiles": [
+    1308,
+    3822,
+    6682
+   ],
+   "first_episode_back": {
+    "yes": 4,
+    "no": 1,
+    "text ends within 1,000 characters": 1
+   },
+   "episodes_per_switched_sample_quartiles": [
+    1,
+    1,
+    1
+   ],
+   "first_episode_letters_quartiles": [
+    6,
+    21,
+    68
+   ],
+   "nonlatin_share_of_letters_after_first_switch_quartiles": [
+    0.004,
+    0.023,
+    0.048
+   ],
+   "switch_before_cap_16384": 6
+  },
+  "math500_sft": {
+   "samples": 2000,
+   "with_switch": 61,
+   "cap_hits": 93,
+   "cap_hits_with_switch": 19,
+   "cap_hits_with_over_20_chinese_characters": 17,
+   "finished_with_switch": 42,
+   "switched_and_right": 34,
+   "not_switched_and_right": 1807,
+   "problems_with_a_switch": 50,
+   "letters_by_script": {
+    "CJK": 12908,
+    "CYRILLIC": 122,
+    "HANGUL": 53,
+    "ARABIC": 45,
+    "HIRAGANA": 30,
+    "KATAKANA": 5,
+    "DEVANAGARI": 3,
+    "THAI": 3,
+    "TAMIL": 2,
+    "HEBREW": 2
+   },
+   "first_episode_main_script": {
+    "ARABIC": 2,
+    "CJK": 51,
+    "CYRILLIC": 7,
+    "HANGUL": 1
+   },
+   "start_tok_quartiles": [
+    3750,
+    10249,
+    13147
+   ],
+   "start_before_4000": 16,
+   "start_before_8000": 27,
+   "tokens_from_switch_to_end_quartiles": [
+    981,
+    2044,
+    3381
+   ],
+   "first_episode_back": {
+    "yes": 57,
+    "no": 0,
+    "text ends within 1,000 characters": 4
+   },
+   "episodes_per_switched_sample_quartiles": [
+    1,
+    1,
+    4
+   ],
+   "first_episode_letters_quartiles": [
+    7,
+    10,
+    34
+   ],
+   "nonlatin_share_of_letters_after_first_switch_quartiles": [
+    0.004,
+    0.034,
+    0.068
+   ],
+   "switch_before_cap_16384": 61
+  },
+  "cap32_sft": {
+   "samples": 328,
+   "with_switch": 83,
+   "cap_hits": 2,
+   "cap_hits_with_switch": 1,
+   "cap_hits_with_over_20_chinese_characters": 1,
+   "finished_with_switch": 82,
+   "switched_and_right": 18,
+   "not_switched_and_right": 212,
+   "problems_with_a_switch": 83,
+   "letters_by_script": {
+    "CJK": 39600,
+    "CYRILLIC": 366,
+    "HANGUL": 236,
+    "HIRAGANA": 88,
+    "ARABIC": 63,
+    "THAI": 6,
+    "DEVANAGARI": 4,
+    "KATAKANA": 3,
+    "TAMIL": 2,
+    "GURMUKHI": 1
+   },
+   "first_episode_main_script": {
+    "ARABIC": 1,
+    "CJK": 79,
+    "CYRILLIC": 3
+   },
+   "start_tok_quartiles": [
+    13971,
+    16774,
+    19499
+   ],
+   "start_before_4000": 0,
+   "start_before_8000": 2,
+   "tokens_from_switch_to_end_quartiles": [
+    1990,
+    4006,
+    6594
+   ],
+   "first_episode_back": {
+    "yes": 80,
+    "no": 3,
+    "text ends within 1,000 characters": 0
+   },
+   "episodes_per_switched_sample_quartiles": [
+    3,
+    6,
+    11
+   ],
+   "first_episode_letters_quartiles": [
+    7,
+    10,
+    35
+   ],
+   "nonlatin_share_of_letters_after_first_switch_quartiles": [
+    0.021,
+    0.043,
+    0.07
+   ],
+   "switch_before_cap_16384": 38
+  }
+ },
+ "clustering": {
+  "hard328_sft": {
+   "pairs_of_one_problem_that_both_switch": 74,
+   "problems_by_number_of_switched_samples": {
+    "0": 226,
+    "1": 65,
+    "2": 23,
+    "3": 11,
+    "4": 3
+   },
+   "null_A_all_samples": {
+    "mean": 27.7806,
+    "p_one_sided": 9.999000099990002e-05
+   },
+   "null_B_within_cap_hits": {
+    "mean": 48.9037,
+    "p_one_sided": 9.999000099990002e-05
+   }
+  },
+  "fresh_sft": {
+   "pairs_of_one_problem_that_both_switch": 66,
+   "problems_by_number_of_switched_samples": {
+    "0": 75,
+    "1": 36,
+    "2": 12,
+    "3": 8,
+    "4": 5
+   },
+   "null_A_all_samples": {
+    "mean": 29.5775,
+    "p_one_sided": 9.999000099990002e-05
+   },
+   "null_B_within_cap_hits": {
+    "mean": 41.8909,
+    "p_one_sided": 9.999000099990002e-05
+   }
+  },
+  "math500_sft": {
+   "pairs_of_one_problem_that_both_switch": 17,
+   "problems_by_number_of_switched_samples": {
+    "0": 450,
+    "1": 43,
+    "2": 5,
+    "3": 0,
+    "4": 2
+   },
+   "null_A_all_samples": {
+    "mean": 2.7478,
+    "p_one_sided": 9.999000099990002e-05
+   },
+   "null_B_within_cap_hits": {
+    "mean": 10.131,
+    "p_one_sided": 0.0065993400659934
+   }
+  }
+ },
+ "cap32_switches": {
+  "first_switch_before_16384": 38,
+  "first_switch_after_16384": 45
+ }
+}

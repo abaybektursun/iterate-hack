@@ -14,9 +14,12 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 |---|---|
 | `specs/SPEC3.md` | RLN-3 spec: base, RL steps 100/400/2,800 and the first release; arms P (plain), F (opening cue), C (forced commit); MATH-500 and the 400-problem harder set; training-set overlap (§11). |
 | `specs/SPEC_wsp1.md` | WSP-1 spec: anatomy of the RL-Math, RL-Code and Think-SFT weight deltas, then edited-weight cells. Job `jobs/wsp_delta_anatomy.py`, results `results/wsp1/`. |
+| `specs/SPEC_wsp2.md` | WSP-2 spec: a hand-written key-value edit of layer 31 `mlp.down_proj` that writes the opening cue, built with no RL weights, and its random-value control. Job `jobs/wsp_handedit.py`, results `results/wsp2/`. |
+| `jobs/wsp_handedit.py` | WSP-2 job: computes the edit from the base model's own activations, checks it on held-out prompts, writes the edited model directory for `run_cell.py --model-path` and `handedit.json` (`--control` for random values, `--selftest` for the planted checks). |
 | `specs/SPEC4.md` | RLN-4 spec: T1 (cue, T 1.0), continuation test K, T2 (RL, T 1.0), T3 (plain base, T 1.0), G, R1; Modal deviations; grader v3. |
 | `specs/SPEC_fresh.md`, `specs/fresh_jobs.txt` | Fresh held-out set: cutoffs with sources, selection rules, hypotheses, predictions; the 12 job commands. |
 | `data/fresh/`, `prep/fresh_prep.py`, `jobs/run_fresh.py` | `fresh2026_v1.json`: 136 competition problems published in 2026 (AIME, HMMT Feb and Nov), the transcribed PDF problems, the prep script, and `run_cell` with `--set fresh2026`. |
+| `specs/SPEC_drift.md`, `analysis/drift.py`, `analysis/drift_test.py`, `analysis/drift_read.py` | Drift: label-free signs in a sample's text per token position (switch to a non-Latin script, repeated 50-token windows, rule A on the prefix, "wait", restart phrases), planted tests, and the readout Q1 to Q4 with the stop-at-first-sign replay. Results `results/drift/`. |
 | `analysis/fresh_read.py`, `analysis/fresh_sft_overlap.py` | Readout of the three models on the fresh set; scan of the Think-SFT training data for the fresh set. |
 | `lib/n13_score.py` | Prompt template (`TEMPLATE["pair1"]` inside the model's chat template), answer extraction and grader v1 (`extract`, `grade`, rule `dollar_both`), `wilson`, `paired_bootstrap`, `selfcheck`. |
 | `lib/rln4_lib.py` | Grader v2 (`extract_v2`, `grade_v2`), grader v3 (`extract_v3`, `norm_v3`, `grade_v3`), loop-onset detectors (rule A `onset_lines`, rule B `onset_period`, `zratio`), `agree`, prefix encoding. |
@@ -1617,7 +1620,7 @@ Think-SFT = `Olmo-3-7B-Think-SFT` `6ff8575` (imitation of reasoning traces, no r
 
 ## WSP-1 edited weights: which part of a weight change carries the gain
 
-Spec `specs/SPEC_wsp1.md` (amendments 1 to 4). `jobs/wsp_edit.py` writes an edited model directory (selftest of 6 planted
+Spec `specs/SPEC_wsp1.md` (amendments 1 to 5). `jobs/wsp_edit.py` writes an edited model directory (selftest of 6 planted
 checks runs first; BF16 by `merge_weights.to_bf16`, stochastic rounding), `jobs/run_cell.py --model-path` scores it,
 `analysis/wsp1_readout.py` writes the run folders and `results/wsp1/readout.json` (run it with
 `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.wsp1_readout`; it reads the
@@ -1660,6 +1663,80 @@ delta) 58. Cue, seed base 81,000,000: base 82, `sft1` 92, `sft05` 88, `sft025` 8
   with Base + cue, not with the plain prompt alone: on MATH-500 (plain prompt) 427 of 500 against Base + cue 410, +3.4 points, paired
   95 % interval −0.4 to 7.2 (from `full500/top8_plain-01/per_problem.json` and `results/rln4/t1_t2_items-01/per_problem.json`,
   5,000 resamples, seed 0); on the 328 harder problems with the cue 192 against 164 (+8.5 points [4.3, 12.8], branch `sharedsub`).
+
+The 328 harder problems (amendment 5; `results/wsp1/hard328/<cell>-01/`, `readout.json` `hard328_vs_references`). `sft1`
+cells use seed base 3,000,000, the seeds of the cued base and RL plain references. References are the Day-1 #1 cells of
+`results/day1_hard328/readout.json`, paired by problem index through their 0/1 rows in `results/axis/hard328-01/vectors.json`:
+cued base 164 (77 cap hits), RL plain 206 (20), RL cue 205 (25), plain base 76 (35). Mean tokens are the mean of `n_new`
+(RL plain 9,315, cued base 9,344).
+
+| Cell | Right of 328 | Cap hits | Mean tokens | Against (paired, points [95 % bootstrap]) |
+|---|---|---|---|---|
+| `sft1` cue | 219 | 89 | 10,123 | cued base +16.8 [12.5, 21.3]; RL plain +4.0 [0.0, 7.9]; RL cue +4.3 [0.9, 7.6] |
+| `sft1` plain | 203 | 86 | 9,375 | RL plain -0.9 [-5.2, 3.4]; plain base +38.7 [33.2, 44.2] |
+
+- The prediction of amendment 5 holds: `sft1` cue (219) is within 5 points of RL plain (190 to 222 right). Think-SFT
+  is within 5 points of RL on the harder set, with more than 4 times RL's cap hits (89 and 86 against 20).
+- The 328 were screened against the RL training prompts only. The full scan of the Think-SFT training data (section
+  "Think-SFT training-data overlap", `results/wsp1/sft_overlap-03/`) finds 6 of the 328 in its training prompts, all in
+  user turns; the `sft1` numbers above include those 6.
+
+## WSP-2 hand-written edit: the cue written into one matrix with no RL weights
+
+Spec `specs/SPEC_wsp2.md` (amendment 1). The edit changes one tensor, layer 31 `mlp.down_proj`, so that the base writes the
+opening cue ` line!\n\nOkay` (3 tokens) when the answer starts. Keys are the mean inputs to that matrix at each cue position
+over 128 calibration prompts (MATH-500 problems 100 to 227); values are the unembedding directions of the cue tokens; the
+edit is the ROME-style key-value update that moves other inputs as little as their second moments allow, scaled by bisection
+until each cue token has mean probability 0.95. It uses no RL weights, no reward and no answers. The control `cueprog_rand`
+has the same keys and scales with random unit vectors as values (seed 0). The job solved the three keys jointly
+(`handedit.json` `solution`: "joint: R K^T = I") and ran with `--batch 1`.
+
+How to run: `bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_handedit --dir
+/tmp/theta --batch 1 [--control] && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta
+--model-label cueprog --prompt plain --set math500 --temperature 1.0 --top-p 1.0 --seed 80000000 --n 100 --commit <commit>`
+(`run.json` of each cell has the exact command). `analysis/wsp1_readout.py` scores the cells (cell table `CELLS2`) and
+writes `results/wsp2/<experiment>/<cell>-01/` and `results/wsp2/readout.json`.
+
+First 100 MATH-500 problems, plain prompt, T 1.0, top-p 1.0, seed base 80,000,000, grader v3
+(`results/wsp2/screen100/<cell>-01/`, `readout.json` `screen100_differences`). References are the WSP-1 cells of
+`results/wsp1/screen100/` on the same problems (the cued base used seed base 81,000,000; pairing is by problem).
+
+| Cell | Right of 100 | Cap hits | Open with `Okay` | Against (paired, points [95 % bootstrap]) |
+|---|---|---|---|---|
+| `cueprog` | 85 | 5 | 96 | `cueprog_rand` +47.0 [36.0, 58.0]; base plain +51.0 [41.0, 61.0]; base cue +3.0 [-4.0, 11.0]; `top8` -3.0 [-10.0, 3.0]; RL -11.0 [-18.0, -5.0] |
+| `cueprog_rand` | 38 | 1 | 19 | base plain +4.0 [-3.0, 11.0] |
+| base plain | 34 | | | |
+| base cue | 82 | | | |
+| `top8` plain | 88 | | | |
+| RL plain | 96 | | | |
+
+- `handedit.json` (in `metrics.json` `handedit`): mean held-out probability of the 3 cue tokens in their contexts (64
+  prompts, problems 228 to 291) 0.000, 0.006, 0.286 before and 0.952, 0.952, 0.952 after; the control leaves them at 0.000,
+  0.004, 0.305. Mean KL(base || edited) on other positions 6.6e-05 nats (control 5.9e-06). The edit is 6.6 % of the
+  tensor's Frobenius norm in both cells.
+- H1 (the edit reproduces the cue) holds on the screen: 85 right and 96 of 100 answers open with `Okay`, and the control
+  is 47 points lower.
+- H2 (the edit goes past the cue) is refuted: 85 is not above 92, and `cueprog` is 3.0 points above the cued base with an
+  interval that includes 0.
+- Closest published result: Wang et al. (arXiv 2610.06851, App. D.5) report a one-matrix edit that raises the cue
+  probability to 0.95 and scores 0.78 on MATH-500.
+
+All 500 MATH-500 problems, plain prompt, T 1.0, top-p 1.0, one sample, grader v3, commit `db7c499`
+(`results/wsp2/full500/<cell>-01/`, `readout.json` `full500_vs_references`). `cueprog` seed base 184,000,000 (job
+`sameraslan-1114-221130-eb90`), `cueprog_rand` 185,000,000 (job `sameraslan-1114-221138-a65c`). References: T3 plain base
+224, T1 cued base 410, T2 RL 463 (`results/rln4/grader_v3/readout.json`), `top8` 427 and `rand8` (`results/wsp1/full500/`).
+
+| Cell | Right of 500 | Wilson 95 % | Cap hits | Open with `Okay` | Against (paired by problem, points [95 % bootstrap]) |
+|---|---|---|---|---|---|
+| `cueprog` | 397 (79.4 %) | [75.6, 82.7] | 21 | 92.6 % (463) | `cueprog_rand` +38.6 [34.0, 43.6]; T1 cued base -2.6 [-6.4, 1.2]; T2 RL -13.2 [-16.6, -9.8]; `top8` -6.0 [-9.8, -2.0]; `rand8` +40.0 [34.8, 45.0] |
+| `cueprog_rand` | 204 (40.8 %) | [36.6, 45.2] | 8 | 21.2 % (106) | `rand8` +1.4 [-4.6, 7.0] |
+
+- H1 (the edit reproduces the cue) holds on all 500: 79.4 % is within 10 points of the cued base (82.0 %), 92.6 % of
+  answers open with `Okay`, and the control is 38.6 points lower.
+- H2 (the edit goes past the cue) is refuted: 79.4 % is not above 92 %, and `cueprog` is 2.6 points below the cued base
+  with an interval that includes 0.
+- Finding page: `tools/finding_hand_written_edit.py` (`/finding/hand-written-edit`).
+
 ## One axis or several? Item-level structure of every arm (MATH-500 n = 500, hard328 n = 328, laptop, board work-1aa34c, idea-1c8b73)
 
 Question: do the partial routes toward the RL model fix the same problems or different ones? Answer: the same. On MATH-500 two
@@ -2982,6 +3059,27 @@ per problem against the mean of the reference's 4 samples, 95 % bootstrap over p
 467 of 500, 17 cap hits, 4,771 tokens per problem. Think-SFT cue 454 (25 cap hits, `results/wsp1/full500/sft1_cue-01/`), RL cue
 456 to 464 over 4 samples: M(1) minus RL +1.4 points [-0.6, 3.3]. The filed prediction was 467, with 460 or less refuting it.
 
+### fresh2026, n = 136, M(2) with the coefficient fixed: the gain transfers (`results/transplant/fresh2026-01/`, board work-8b4030)
+
+Amendment 2 of the spec, written before the runs. 136 competition problems published in 2026 (`specs/SPEC_fresh.md`), cue,
+T 1.0, cap 16,384, `jobs/run_fresh.py`, seeds 7,000,000 + 10,000 s. Three of the four samples (s = 0, 2, 3) are in; the
+references are the same three samples of Think-SFT cue and RL plain of work-7c069c (jobs -024256-58c8, -024432-d87b,
+-024621-af01 and -024606-5843, -024700-b8c3, -024804-390f, rows in the team store under handoff/fresh/).
+
+| Model | Right of 136, per sample | Mean | Minus Think-SFT, points | Cap hits per sample | Right of finished | Vote over 3 |
+|---|---|---|---|---|---|---|
+| RL-Math plain | 49, 53, 50 | 50.7 | | 21.0 | 42.9 % (148 of 345) | 54 |
+| Think-SFT | 65, 56, 60 | 60.3 | | 63.0 | 81.7 % (179 of 219) | 74 |
+| M(2) | 69, 70, 75 | 71.3 | +8.1 [4.4, 11.8] | 46.7 | 78.7 % (211 of 268) | 78 |
+
+- The prediction of amendment 2 holds on three samples: M(2) minus Think-SFT is +8.1 points with the interval above 0, on a
+  set the coefficient was not chosen on (the 328 gave +6.9). Against RL plain it is +15.2 [10.0, 20.6]. Cap hits fall by
+  12.0 points [-16.9, -7.6].
+- Under the vote the lead is not resolved: 78 against 74 of 136, +2.9 points [-1.5, 7.4].
+- Missing: sample 1 (its first box slowed to 5 requests in 15 minutes, its second failed with an NVML error, its third was
+  stopped with all boxes of the account at 16:15 UTC), MATH-500 for M(2) and hard328 samples 3 and 4 of M(2) (running on
+  boxes that were stopped at the same time; their disks are kept).
+
 Run folders hold `readout.json`, `metrics.json` and `delta_sum.json` (per arm), `rows.jsonl` (arms and references, per answer)
 and `examples.json` (one right and one wrong finished answer per arm, with the prompt). Jobs: hard328 a = 1 -000934-51f9,
 a = 2 -000954-b526 and -020508-879c, a = 3 -020435-c76d, a = 4 -020500-36ed, control -020021-e9d1; MATH-500 -004808-bb28 (all
@@ -4060,6 +4158,149 @@ Which reward writes the finishing directions (8 directions of each model added t
 
 Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.xreward_edits`, after
 `uv run tools/gpu.py get <job>` for the jobs it names.
+
+## Drift: a switch to Chinese marks a cut-off Think-SFT answer but no label-free sign predicts one early (hard328 n = 328, fresh2026 n = 136, MATH-500 n = 500, laptop, board work-76a232, idea-e37da1)
+
+Question: Think-SFT + cue hits the 16,384 cap on 29 % (hard328) and 45.6 % (fresh2026) of its samples, and a quarter of those
+cap hits hold Chinese text. What is that text, does it predict the outcome, and can a label-free sign stop a failing sample
+early? Answer: no sign read at token 4,000, 8,000 or 12,000 tells a failing sample from a right one of the same problem
+(best within-problem AUROC 0.568 [0.480, 0.657], `zratio` at 12,000; every interval covers 0.5), and the stop rule chosen on
+MATH-500 saves 0.8 % of the sequential vote's tokens on hard328 [-0.3, +1.8] and 1.1 % on fresh2026 for -0.5 right answers:
+H2 (10 % at no loss) is refuted. The switch is real and late: 156 of 1,312 Think-SFT samples on hard328 and 104 of 544 on
+fresh2026 switch script (RL 12 and 9, base 9 and 6), 98 % of the letters are Chinese, the median first switch is at token
+13,589, and English resumes after 85 % of first episodes. One place where it does predict: in the 32,768 sample, cut answers
+that had switched before token 16,384 finish right 1 time of 24, the others 22 of 69 (-24.0 points [-36.8, -10.6] inside
+strata of the base's right count). Spec with predictions, written after the instrument checks and before any other number:
+`specs/SPEC_drift.md` (commit `9045c7c`). Stored rows and texts only; no GPU.
+
+Definitions. Token positions are positions in the text re-tokenized with the run's tokenizer (`tokenizer.json` of
+`allenai/Olmo-3.1-7B-RL-Zero-Math` @ `364820b` from the local cache; re-tokenized length minus `n_new` is 3 at the median, the
+cue, and at most 53). Switch: an episode of at least 5 letters of a non-Latin script (Greek excluded) within 200 characters
+of each other; its position is the token of the 5th letter. `rep50`: share of the 50-token windows of the prefix equal to an
+earlier window. `loopA`: the runner's rule A (`rln4_lib.onset_lines`) on the prefix. `zratio`: zlib ratio of the prefix.
+`wait`, `restart`: the word "wait" and 20 restart phrases per 1,000 tokens. Attempt 0 of every sample.
+
+Instrument checks. `analysis/drift_test.py`: 10 planted passages (Chinese long, short and inside mathematics, Japanese,
+Korean, Russian, Arabic, Hindi, Thai, mixed) are each found within 12 tokens of the planted position; 10 negatives (LaTeX,
+Greek letters, names with diacritics, double-struck and mathematical letters, full-width punctuation, four stray letters,
+emoji, code) are not flagged; a planted loop is found by `loopA` and `rep50`. The posted counts reproduce: cap hits with more
+than 20 Chinese characters, fresh2026 Think-SFT 66 of 248, RL 3 of 84, base 0 of 219; hard328 86 of 378 and 1 of 114. With
+switch flags shuffled inside problems the Q2 difference is -0.1 [-8.0, +10.7]; a planted sign (80 % of not-right, 20 % of
+right samples) has within-problem AUROC 0.807; a stop that never fires reproduces the frontier rows (241 at 30,904 and 75 at
+42,251 tokens, stored order).
+
+Q1, description (`results/drift/describe-01/table.md`):
+
+| Cell | Samples | With a switch | Cap hits: with a switch | Finished with a switch (right) | First switch at token: quartiles | English resumes: yes / no / text ends |
+|---|---|---|---|---|---|---|
+| hard328 Think-SFT + cue | 1,312 | 156 (11.9 %) | 378: 99 | 57 (39) | 10,733 / 13,589 / 15,048 | 135 / 2 / 19 |
+| hard328 RL plain | 1,312 | 12 | 114: 3 | 9 (1) | 4,512 / 12,145 / 13,884 | 12 / 0 / 0 |
+| hard328 base + cue | 1,312 | 9 | 286: 5 | 4 (0) | 11,111 / 12,173 / 13,132 | 5 / 1 / 3 |
+| fresh2026 Think-SFT + cue | 544 | 104 (19.1 %) | 248: 76 | 28 (14) | 11,353 / 13,583 / 15,121 | 87 / 5 / 12 |
+| fresh2026 RL plain | 544 | 9 | 84: 4 | 5 (0) | 12,955 / 13,379 / 14,416 | 8 / 0 / 1 |
+| fresh2026 base + cue | 544 | 6 | 219: 1 | 5 (1) | 3,488 / 6,029 / 11,584 | 4 / 1 / 1 |
+| MATH-500 Think-SFT + cue | 2,000 | 61 (3.1 %) | 93: 19 | 42 (34) | 3,750 / 10,249 / 13,147 | 57 / 0 / 4 |
+| hard328 Think-SFT, cap 32,768, one sample | 328 | 83 (25.3 %): 38 before token 16,384, 45 after | 2: 1 | 82 (18) | 13,971 / 16,774 / 19,499 | 80 / 3 / 0 |
+
+- Script: of the non-Latin letters in Think-SFT's hard328 samples 40,579 are CJK, 369 Cyrillic, 180 Hangul, 86 kana, 62
+  Arabic. After the first switch a median 4.2 % of the letters are non-Latin: the text stays mostly English.
+- Hand read of 20 switched samples (seed 0; read by the agent, not a blind judge; `describe-01/hand_read.md` with quotes
+  and translations): in 15 the same working goes on and Chinese connectives or half-sentences replace English ones ("因此，
+  x = ab + 1 ... 不，原式 ... 所以：", "therefore, ... no, the original expression ... so:"; "Wait，我先重新看一下方程的推导",
+  "let me first look at the derivation of the equation again"); in 4 it is one stray word (Arabic "انضمامات", Russian
+  "академ"); in 1 the sample gives up and guesses in Chinese ("可能正确的答案是 ... 但没有依据", "the right answer may be ...
+  but there is no basis"). None is a loop or unrelated text. The English beside a switch is often already broken.
+- Problem or sample: both. Pairs of samples of one problem that both switch: hard328 74 against 27.8 under flags permuted
+  over all samples and 48.9 under flags permuted over cap hits only (p = 0.0001 each, 10,000 permutations); fresh2026 66
+  against 29.6 and 41.9. 65 of the 102 hard328 problems with a switch have it in one sample only.
+- Predictions: P1 (105 and 82 samples) low on both sets (156, 104). P2 (over 95 % Chinese) held. P3 (median past 8,000,
+  under 10 % before 4,000) held on the median; 16 of 156 (10.3 %) start before 4,000. P4 (fewer than 40 % switch back)
+  refuted: 85 %. P5 (not clustered given a cap hit) refuted.
+
+Q2, does a switch predict the outcome (`results/drift/predict-01/table.md`):
+
+| Think-SFT samples still running at t, hard328 + fresh2026 | switched by t: right | not switched: right | within problem, points [95 %] (problems) | inside base strata, weighted |
+|---|---|---|---|---|
+| t = 4,000 | 8 of 20 | 818 of 1,580 | +1.8 [0.0, +5.3] (19) | -11.7 [-18.4, -4.9] |
+| t = 8,000 (primary) | 6 of 29 | 462 of 1,200 | +5.3 [-2.0, +13.3] (25) | -9.6 [-21.0, +2.8] |
+| t = 12,000 | 11 of 70 | 201 of 852 | +1.0 [-6.7, +9.0] (50) | -4.7 [-12.8, +3.4] |
+
+- H1 refuted: within problem the interval covers 0 at every t, with the sign opposite to the prediction (-10). The raw
+  deficit (21 % against 39 % at 8,000) is the problem: 23 of the 29 switched samples are on problems the base never solves.
+  Only 29 samples have switched by 8,000, so the test is weak; it cannot exclude a difference of 10 points either way.
+- H1b held (the 32,768 sample, `cap32_sft`): of 93 answers longer than 16,384 tokens, 24 had switched before 16,384 and 1
+  ends right; 22 of the other 69 do (Fisher p = 0.006). Base never right: 0 of 21 against 13 of 55, -23.6 [-35.3, -12.7];
+  weighted over strata -24.0 [-36.8, -10.6]. Predicted 2 of 22 against 21 of 71. One sample per problem, so this is not
+  matched within problem, and a switch first seen after 16,384 goes with 9 of 45 right.
+
+Q3, AUROC of each sign for "the sample does not end right", Think-SFT, hard328 + fresh2026 (1,856 samples, 780 not right):
+
+| Sign | t = 4,000: all / running, within problem | t = 8,000 | t = 12,000 |
+|---|---|---|---|
+| `length` (still running at t), baseline | 0.612 [0.591, 0.633] / 0.5 by construction | 0.771 [0.746, 0.797] / 0.5 | 0.874 [0.854, 0.894] / 0.5 |
+| `switch` | 0.504 / 0.499 [0.495, 0.500] | 0.507 / 0.492 [0.480, 0.502] | 0.527 / 0.498 [0.474, 0.521] |
+| `rep50` | 0.494 / 0.500 [0.487, 0.515] | 0.491 / 0.486 [0.463, 0.508] | 0.497 / 0.477 [0.451, 0.500] |
+| `loopA` | 0.500 / 0.500 | 0.501 / 0.503 [0.500, 0.511] | 0.501 / 0.502 [0.500, 0.508] |
+| `zratio` | 0.701 / 0.509 [0.440, 0.579] | 0.745 / 0.530 [0.458, 0.606] | 0.764 / 0.568 [0.480, 0.657] |
+| `wait` | 0.552 / 0.453 [0.391, 0.520] | 0.537 / 0.500 [0.431, 0.570] | 0.535 / 0.462 [0.378, 0.546] |
+| `restart` | 0.521 / 0.466 [0.414, 0.517] | 0.564 / 0.478 [0.415, 0.539] | 0.581 / 0.535 [0.460, 0.611] |
+| pairs within problem (running) | 348 | 315 | 213 |
+
+"all": every sample, pooled, the sign frozen when the sample ended. "running, within problem": pairs of a not-right and a
+right sample of one problem, both still running at t. No sign beats `length` over all samples, and among running samples
+none separates the samples of one problem: the prediction (none reaches 0.60, no interval above 0.55) held. `zratio` reaches
+0.62 to 0.65 pooled over running samples and 0.51 to 0.57 within problem: it reads the problem, as the probe of
+result-b30f15 did (0.571 [0.509, 0.634] within problem; result-f3d708 0.531 [0.468, 0.589]). The controls agree: best
+within-problem value 0.643 [0.539, 0.744] (`zratio`, RL, 12,000, 129 pairs, one of 42 cells), base 0.548. Of the 70 samples
+switched by 12,000, 11 end right (16 %, not the predicted under 10 %).
+
+Q4, stop a sample at its first sign (`results/drift/stop-01/table.md`). A replay on stored rows: `analysis/frontier.py`'s
+`seq4` (draw 2, stop when two agree, at most 4) on rows in which a stopped sample is a cap hit at its stop token (it costs
+those tokens and casts no vote); the new sample is the next stored one. 12 candidates fixed in the spec; counted signs fire
+when the sign is above the 75th or 90th percentile of MATH-500 samples running at that checkpoint. Chosen on MATH-500
+(fewest tokens among candidates that stop at least 30 samples and lose at most 0.5 right): `rep50_p75`, which there means
+any repeated 50-token window at a checkpoint. hard328 and fresh2026 are held out from the choice.
+
+| Rule under the sequential vote | hard328: right, right (24), tokens (24) | minus plain, right (24) | tokens saved | fresh2026: right, right (24), tokens (24) | minus plain | tokens saved |
+|---|---|---|---|---|---|---|
+| plain `seq4` | 241, 238.9, 30,837 | | | 75, 75.5, 42,901 | | |
+| `seq3` (at most 3 samples) | 241, 233.2, 26,114 | -5.7 | 15.3 % | 71, 72.5, 35,157 | -3.0 | 18.1 % |
+| `seq4_L12000` (frontier: abandon at 12,000) | 219, 221.2, 29,664 | -17.7 | 3.8 % | 68, 65.8, 39,382 | -9.7 | 8.2 % |
+| `rep50_p75`, chosen | 240, 238.4, 30,602 | -0.5 [-3.0, +2.0] | 0.8 % [-0.3, +1.8] | 74, 75.0, 42,446 | -0.5 [-1.5, 0.0] | 1.1 % [-0.1, +2.4] |
+| `switch` (not chosen) | 235, 234.6, 30,545 | -4.3 [-8.7, -0.8] | 0.9 % | 73, 73.5, 41,621 | -2.0 [-5.5, +0.5] | 3.0 % |
+| `zratio_p75` (not chosen) | 228, 226.1, 25,671 | -12.8 [-20.3, -6.3] | 16.8 % | 69, 69.5, 35,624 | -6.0 [-11.5, -1.5] | 17.0 % |
+| `zratio_p90` (not chosen) | 236, 233.9, 28,518 | -5.0 [-10.0, -1.0] | 7.5 % | 75, 75.0, 41,117 | -0.5 [-3.0, +1.5] | 4.2 % |
+| `len12000` (stop every sample at 12,000) | 204, 203.5, 28,203 | -35.4 | 8.5 % | 58, 58.0, 37,111 | -17.5 | 13.5 % |
+| perfect sign at 4,000 (uses the answer key; a ceiling) | 244, 244.0, 16,250 | +5.1 [+1.8, +9.2] | 47.3 % | 77, 77.0, 19,248 | +1.5 | 55.1 % |
+
+- H2 refuted, as predicted: the chosen rule saves 0.8 % and 1.1 %, not 10 %. No candidate saves 10 % without losing
+  answers; at matched tokens the signs do not beat drawing fewer samples (`zratio_p75`: 226.1 at 25,671 against `seq3` 233.2
+  at 26,114 on hard328).
+- Why stopping at a switch costs answers: 39 of the 156 switched samples on hard328 end right (14 of 104 on fresh2026), and
+  a switch comes at a median 13,589 tokens, so little is left to save.
+- The ceiling is large: a detector that knew at token 4,000 which samples will not end right would halve the tokens and add
+  5 problems on hard328. The signs here do not approach it.
+- Under the plain vote over 4 the chosen rule gives 240 at 39,201 tokens against 241 at 40,410 (3.0 % fewer).
+- Example of the rule's weakness (`stop-01/examples.json`): problem 0, sample 3 is stopped at token 8,000 after it boxed 116,
+  because its closing summary restates the problem; a deployed rule should not stop after an answer.
+
+Literature (WebSearch; four papers read in full by a subagent, findings added with `tools/paper.py`): 2507.15849 reports
+switching in 0.0 to 0.6 % of English MATH500 problems and switching answers scoring higher (0.438 against 0.281, Table 6, no
+matching); 2505.14815 that mixing rises with difficulty; 2505.17813 that the shortest sample is right most often; 2604.04930
+a logit-based stop. None reads a text sign at a fixed token or redraws a stopped sample under a vote. idea-6fb0de items 2, 3
+and 6 are different rules and were not run.
+
+Caveats. One hand reader. Greek prose is not detected. The 32,768 result is one sample per problem. The Q4 thresholds are
+quantiles on MATH-500, where `rep50`'s 75th percentile is 0. A replay cannot continue a stopped sample.
+
+```
+uv run --no-project --with numpy --with tokenizers python -m studies.rlneurons.analysis.drift_test
+uv run --no-project --with numpy --with tokenizers python -m studies.rlneurons.analysis.drift --runs runs --out runs/drift_features
+uv run --no-project --with numpy --with math-verify==0.9.0 --with tokenizers python -m studies.rlneurons.analysis.drift_read --features runs/drift_features --runs runs --out studies/rlneurons/results/drift --nn 01
+```
+
+Run folders `results/drift/{describe,predict,stop}-01/` (`run.json`, `readout.json`, `table.md`, `examples.json`;
+`describe-01/hand_read.md`). The per-sample signs (`runs/drift_features/<cell>.jsonl`) are on the laptop, not in git.
 
 ## Paper: The Finish Dial (`paper/`, board work-0a1b10)
 
