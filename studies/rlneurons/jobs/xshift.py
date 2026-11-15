@@ -57,6 +57,7 @@ WRITE, INNER = "o,down", "q,k,v,gate,up"                                        
 SHIFT_ONLY = {f"{r}x1.5_{name}_math31": (None, f"--recipe {r} --scale 1.5 --mods {mods} --other math31")     # amendment 3: no scored cell
               for r in ("top8", "rin", "perm", "rand8") for name, mods in (("write", WRITE), ("inner", INNER))}
 ARMS += tuple(SHIFT_ONLY)
+EDIT_ARGS = {arm: v[1] for arm, v in {**NEW, **SHIFT_ONLY}.items()}                 # arm -> its wsp_edit arguments
 GROUPS = ("all", "cap_hit", "finished", "third0", "third1", "third2")
 STEP, LENS_TOP, PLANT_LAYER = 16, 20, 12
 RANDOM = ("rand8", "rin", "rout")                                                 # recipes that use rand8's random directions
@@ -70,7 +71,7 @@ def parse(arm):
         ap.add_argument("--" + f)
     ap.add_argument("--scale", type=float, default=1.0)
     ap.add_argument("--k", type=int, default=8)
-    a = ap.parse_args({**NEW, **SHIFT_ONLY}[arm][1].split())
+    a = ap.parse_args(EDIT_ARGS[arm].split())
     assert a.recipe in ("top8", "rand8", "proj", "projc", "rin", "rout", "perm") and (a.recipe not in RANDOM or a.k == 8), (arm, a)
     canon = lambda key: key and next(k for k in E.ALL if E.ALL[k] == E.ALL[key])
     a.other, a.donor = canon(a.other), canon(a.donor)
@@ -319,7 +320,7 @@ def main():
         del D
         means.append(mu.cpu().numpy().astype(np.float16))
         assert np.isfinite(means[-1]).all(), arm
-        metrics["edits"][arm] = {"args": NEW[arm][1], **stats, "shift": shift, "lens": lens(model, tok, base_mean[-1], mu[0, -1]), "seconds": time.time() - t1}
+        metrics["edits"][arm] = {"args": EDIT_ARGS[arm], **stats, "shift": shift, "lens": lens(model, tok, base_mean[-1], mu[0, -1]), "seconds": time.time() - t1}
         dump(out / "metrics.json", metrics)
         print(f"{utc()} {arm}: {stats['n_edited']} matrices, add_rel {stats['add_rel']:.3e}, nearest BF16 would keep {stats['nearest_bf16_effective_scale']:.3f}, "
               f"mean shift norm at layers 8/16/24/31 {[round(shift['all']['mean_norm'][l], 4) for l in (8, 16, 24, 31)]}, rms {[round(shift['all']['rms'][l], 4) for l in (8, 16, 24, 31)]}, "
