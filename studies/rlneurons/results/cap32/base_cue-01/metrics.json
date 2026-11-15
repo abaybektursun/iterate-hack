@@ -1,0 +1,168 @@
+{
+ "status": "done",
+ "config": {
+  "model": "base",
+  "model_path": null,
+  "model_label": null,
+  "prompt": "cue",
+  "set": "hard328",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 32768,
+  "seed": 3000000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 1,
+  "restarts": 0,
+  "out": "/work/out",
+  "dry_run": false,
+  "commit": "c3481f17a15044fc30a9155aba221ff113948ac3",
+  "model_repo": "allenai/Olmo-3-1025-7B",
+  "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 328,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "commit": "c3481f17a15044fc30a9155aba221ff113948ac3",
+ "job_id": "ih-1115-144232-448b+ih-1115-144318-6d57+ih-1115-144428-85af+ih-1115-144457-42b8",
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-15T14:46:45Z",
+ "updated_utc": "2026-11-15T16:02:55Z",
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 12816,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 34816,
+  "load_s": 234.88958144187927,
+  "model_dir": "/opt/hf-cache/hf/hub/models--allenai--Olmo-3-1025-7B/snapshots/a81bae42db3975be1671e27b9c9a56da1a9f980f",
+  "tok_dir": "/opt/hf-cache/hf/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ },
+ "counts": {
+  "n": 328,
+  "correct_v3": 156,
+  "correct_v1": 154,
+  "cap_hits": 1,
+  "loop_A": 1,
+  "generated_tokens": 3278350,
+  "restarts": 0,
+  "n_planned": 328,
+  "tok_p_lt_1e2": 45603,
+  "tok_p_lt_1e3": 14129,
+  "mean_generated_tokens": 9994.969512195123,
+  "generation_s": 4679.347830533981,
+  "tokens_per_s": 729.6732727654154
+ },
+ "memory": {
+  "gpu_memory_used_mib": 40845,
+  "gpu_memory_total_mib": 46068,
+  "gpu": "NVIDIA L40S"
+ },
+ "wall_s": 4920.189984798431,
+ "joined_from": [
+  {
+   "job_id": "ih-1115-144232-448b",
+   "shard": "0/4",
+   "counts": {
+    "n": 82,
+    "tok_p_lt_1e2": 13558,
+    "tok_p_lt_1e3": 4468,
+    "correct_v3": 37,
+    "correct_v1": 36,
+    "cap_hits": 0,
+    "loop_A": 1,
+    "generated_tokens": 805038,
+    "restarts": 0,
+    "n_planned": 82,
+    "mean_generated_tokens": 9817.536585365853,
+    "generation_s": 4326.7042717933655,
+    "tokens_per_s": 186.06263553721496
+   },
+   "wall_s": 4570.499080896378
+  },
+  {
+   "job_id": "ih-1115-144318-6d57",
+   "shard": "1/4",
+   "counts": {
+    "n": 82,
+    "tok_p_lt_1e2": 9094,
+    "tok_p_lt_1e3": 2404,
+    "correct_v3": 39,
+    "correct_v1": 38,
+    "cap_hits": 1,
+    "loop_A": 0,
+    "generated_tokens": 778707,
+    "restarts": 0,
+    "n_planned": 82,
+    "mean_generated_tokens": 9496.426829268292,
+    "generation_s": 4484.903635025024,
+    "tokens_per_s": 173.62847975565367
+   },
+   "wall_s": 4740.476320981979
+  },
+  {
+   "job_id": "ih-1115-144428-85af",
+   "shard": "2/4",
+   "counts": {
+    "n": 82,
+    "tok_p_lt_1e2": 12452,
+    "tok_p_lt_1e3": 4618,
+    "correct_v3": 42,
+    "correct_v1": 42,
+    "cap_hits": 0,
+    "loop_A": 0,
+    "generated_tokens": 860710,
+    "restarts": 0,
+    "n_planned": 82,
+    "mean_generated_tokens": 10496.463414634147,
+    "generation_s": 4679.347830533981,
+    "tokens_per_s": 183.93802537687833
+   },
+   "wall_s": 4920.189984798431
+  },
+  {
+   "job_id": "ih-1115-144457-42b8",
+   "shard": "3/4",
+   "counts": {
+    "n": 82,
+    "tok_p_lt_1e2": 10499,
+    "tok_p_lt_1e3": 2639,
+    "correct_v3": 38,
+    "correct_v1": 38,
+    "cap_hits": 0,
+    "loop_A": 0,
+    "generated_tokens": 833895,
+    "restarts": 0,
+    "n_planned": 82,
+    "mean_generated_tokens": 10169.451219512195,
+    "generation_s": 4482.242952823639,
+    "tokens_per_s": 186.04413209566843
+   },
+   "wall_s": 4727.288811683655
+  }
+ ]
+}

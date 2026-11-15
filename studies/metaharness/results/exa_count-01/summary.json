@@ -1,0 +1,405 @@
+{
+ "transcript_files_read": 557,
+ "bash_tool_calls_with_exa": 236,
+ "bash_tool_calls_mentioning_but_not_running_exa": 2,
+ "all": {
+  "calls": 586,
+  "search": 436,
+  "fetch": 150,
+  "status": {
+   "unknown": 3,
+   "presumed_ok": 144,
+   "failed": 202,
+   "ok": 91,
+   "ok_results_shown": 146
+  },
+  "usd": 0.619,
+  "sessions": 23,
+  "agents": 108,
+  "main_agents": 18,
+  "subagents": 90
+ },
+ "by_kind_status": {
+  "search": {
+   "unknown": 3,
+   "presumed_ok": 31,
+   "ok": 88,
+   "ok_results_shown": 118,
+   "failed": 196
+  },
+  "fetch": {
+   "presumed_ok": 113,
+   "failed": 6,
+   "ok": 3,
+   "ok_results_shown": 28
+  }
+ },
+ "failure_reasons": {
+  "python_traceback": 5,
+  "exa_api_key_not_set": 193,
+  "argparse_usage": 3,
+  "file_not_found": 1
+ },
+ "failed_before_any_http_request": 197,
+ "unknown_reasons": {
+  "full output shown, with no cost line and no error text": 3
+ },
+ "calls_with_cost_line": 91,
+ "usd_total_from_cost_lines": 0.619,
+ "usd_search": 0.616,
+ "usd_fetch": 0.003,
+ "usd_median_per_priced_search": 0.007,
+ "usd_ESTIMATE_for_ok_calls_without_cost_line": 1.184,
+ "up_to_2026-11-15T05:25_for_comparison_with_README": {
+  "calls": 289,
+  "status": {
+   "unknown": 3,
+   "presumed_ok": 102,
+   "failed": 29,
+   "ok": 65,
+   "ok_results_shown": 90
+  },
+  "agents_with_ok_call": 34,
+  "mcp_calls": 46
+ },
+ "bash_commands_calling_exa_without_exa_py": 19,
+ "results_returned_total": 438,
+ "search_results_returned": 435,
+ "pages_fetched_from_cost_lines": 3,
+ "fetch_urls_requested_in_ok_calls": 144,
+ "distinct_urls_fetched": 112,
+ "distinct_urls_in_search_results": 677,
+ "distinct_urls_search_or_fetch": 734,
+ "top_domains_fetched": [
+  [
+   "arxiv.org",
+   77
+  ],
+  [
+   "github.com",
+   10
+  ],
+  [
+   "huggingface.co",
+   3
+  ],
+  [
+   "proceedings.mlr.press",
+   2
+  ],
+  [
+   "aclanthology.org",
+   2
+  ],
+  [
+   "transformer-circuits.pub",
+   1
+  ],
+  [
+   "neuronpedia.org",
+   1
+  ],
+  [
+   "lesswrong.com",
+   1
+  ],
+  [
+   "anthropic.com",
+   1
+  ],
+  [
+   "docs.litellm.ai",
+   1
+  ],
+  [
+   "raw.githubusercontent.com",
+   1
+  ],
+  [
+   "thinkingmachines.ai",
+   1
+  ],
+  [
+   "human-agent-society.github.io",
+   1
+  ],
+  [
+   "tandemly.ai",
+   1
+  ],
+  [
+   "alignment.anthropic.com",
+   1
+  ]
+ ],
+ "top_domains_in_search_results": [
+  [
+   "arxiv.org",
+   282
+  ],
+  [
+   "github.com",
+   76
+  ],
+  [
+   "aclanthology.org",
+   22
+  ],
+  [
+   "huggingface.co",
+   15
+  ],
+  [
+   "alphaxiv.org",
+   13
+  ],
+  [
+   "docs.devin.ai",
+   10
+  ],
+  [
+   "proceedings.iclr.cc",
+   9
+  ],
+  [
+   "iclr.cc",
+   8
+  ],
+  [
+   "emergentmind.com",
+   8
+  ],
+  [
+   "doi.org",
+   7
+  ],
+  [
+   "proceedings.neurips.cc",
+   7
+  ],
+  [
+   "modal.com",
+   6
+  ],
+  [
+   "ar5iv.labs.arxiv.org",
+   5
+  ],
+  [
+   "linkedin.com",
+   4
+  ],
+  [
+   "icml.cc",
+   4
+  ]
+ ],
+ "distinct_arxiv_ids_fetched": 66,
+ "distinct_arxiv_ids_in_search_results": 244,
+ "distinct_arxiv_ids_search_or_fetch": 261,
+ "by_person": {
+  "abaybektursun": {
+   "calls": 427,
+   "search": 353,
+   "fetch": 74,
+   "status": {
+    "ok": 56,
+    "ok_results_shown": 93,
+    "presumed_ok": 78,
+    "failed": 200
+   },
+   "usd": 0.374,
+   "sessions": 16,
+   "agents": 95,
+   "main_agents": 11,
+   "subagents": 84
+  },
+  "frustea": {
+   "calls": 114,
+   "search": 78,
+   "fetch": 36,
+   "status": {
+    "ok_results_shown": 53,
+    "ok": 35,
+    "presumed_ok": 26
+   },
+   "usd": 0.245,
+   "sessions": 6,
+   "agents": 9,
+   "main_agents": 6,
+   "subagents": 3
+  },
+  "sameraslan": {
+   "calls": 45,
+   "search": 5,
+   "fetch": 40,
+   "status": {
+    "unknown": 3,
+    "presumed_ok": 40,
+    "failed": 2
+   },
+   "usd": 0,
+   "sessions": 1,
+   "agents": 4,
+   "main_agents": 1,
+   "subagents": 3
+  }
+ },
+ "by_person_machine": {
+  "abaybektursun/linux": {
+   "calls": 195,
+   "search": 194,
+   "fetch": 1,
+   "status": {
+    "failed": 195
+   },
+   "usd": 0,
+   "sessions": 3,
+   "agents": 47,
+   "main_agents": 1,
+   "subagents": 46
+  },
+  "abaybektursun/mac": {
+   "calls": 232,
+   "search": 159,
+   "fetch": 73,
+   "status": {
+    "ok": 56,
+    "ok_results_shown": 93,
+    "presumed_ok": 78,
+    "failed": 5
+   },
+   "usd": 0.374,
+   "sessions": 13,
+   "agents": 48,
+   "main_agents": 10,
+   "subagents": 38
+  },
+  "frustea/mac": {
+   "calls": 114,
+   "search": 78,
+   "fetch": 36,
+   "status": {
+    "ok_results_shown": 53,
+    "ok": 35,
+    "presumed_ok": 26
+   },
+   "usd": 0.245,
+   "sessions": 6,
+   "agents": 9,
+   "main_agents": 6,
+   "subagents": 3
+  },
+  "sameraslan/mac": {
+   "calls": 45,
+   "search": 5,
+   "fetch": 40,
+   "status": {
+    "unknown": 3,
+    "presumed_ok": 40,
+    "failed": 2
+   },
+   "usd": 0,
+   "sessions": 1,
+   "agents": 4,
+   "main_agents": 1,
+   "subagents": 3
+  }
+ },
+ "agents_with_an_ok_call": 61,
+ "sessions_with_an_ok_call": 20,
+ "scripts": {
+  "exa.py": 45,
+  "tools/exa.py": 539,
+  "papers.py": 2
+ },
+ "first_call_utc": "2026-11-14T21:37:17.561Z",
+ "last_call_utc": "2026-11-15T15:29:02.247Z",
+ "calls_per_utc_hour": {
+  "2026-11-14T21": 33,
+  "2026-11-14T23": 24,
+  "2026-11-15T01": 14,
+  "2026-11-15T02": 29,
+  "2026-11-15T03": 69,
+  "2026-11-15T04": 118,
+  "2026-11-15T05": 9,
+  "2026-11-15T06": 36,
+  "2026-11-15T07": 19,
+  "2026-11-15T08": 16,
+  "2026-11-15T09": 15,
+  "2026-11-15T10": 27,
+  "2026-11-15T11": 3,
+  "2026-11-15T14": 2,
+  "2026-11-15T15": 172
+ },
+ "ok_calls_per_utc_hour": {
+  "2026-11-14T21": 30,
+  "2026-11-14T23": 22,
+  "2026-11-15T01": 14,
+  "2026-11-15T02": 29,
+  "2026-11-15T03": 50,
+  "2026-11-15T04": 110,
+  "2026-11-15T05": 6,
+  "2026-11-15T06": 34,
+  "2026-11-15T07": 17,
+  "2026-11-15T08": 15,
+  "2026-11-15T09": 15,
+  "2026-11-15T10": 23,
+  "2026-11-15T11": 3,
+  "2026-11-15T14": 2,
+  "2026-11-15T15": 11
+ },
+ "search_flags": {
+  "searches": 436,
+  "with_since": 10,
+  "with_domain": 2,
+  "with_n": 24,
+  "n_values": {
+   "default 5": 412,
+   "8": 2,
+   "6": 7,
+   "2": 3,
+   "5": 6,
+   "3": 1,
+   "4": 3,
+   "1": 2
+  },
+  "domains": {
+   "arxiv.org": 1,
+   "modal.com": 1
+  },
+  "since_values": {
+   "2026-01-01": 3,
+   "2026-06-01": 4,
+   "2025-01-01": 1,
+   "2025-06-01": 1,
+   "2025-10-01": 1
+  }
+ },
+ "distinct_search_queries": 426,
+ "median_query_words": 16,
+ "mcp": {
+  "calls": 59,
+  "status": {
+   "failed_401": 59
+  },
+  "tools": {
+   "mcp__exa__web_search_exa": 56,
+   "mcp__exa__web_fetch_exa": 3
+  },
+  "by_person": {
+   "frustea": 14,
+   "abaybektursun": 43,
+   "sameraslan": 2
+  },
+  "agents": 24,
+  "first_utc": "2026-11-14T20:20:07.911Z",
+  "last_utc": "2026-11-15T10:15:43.991Z"
+ },
+ "against_demo_facts_SOURCES": {
+  "listed": 125,
+  "also_in_these_transcripts": 49,
+  "listed_but_absent_from_these_transcripts": 76,
+  "union_distinct_urls_fetched": 188
+ }
+}
