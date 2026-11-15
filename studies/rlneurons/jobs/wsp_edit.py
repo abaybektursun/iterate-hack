@@ -18,7 +18,11 @@ loads. d = other - base in float32, one tensor at a time; d_k = U_k diag(s_k) V_
                     random output directions P (rand8's P): reads what the difference reads, writes elsewhere.
              rout   layer matrices = base + U_k diag(s_k) Q^T: the other model's output directions, read from random input directions Q.
              perm   layer matrices = base + sum_i s_i u_(i+1) v_i^T: the same two subspaces and values, each input direction paired with
-                    the next output direction (a cyclic shift).
+                    the next output direction (a cyclic shift). Note (SPEC_pairs2): the code, torch.roll(U, 1), pairs v_i with u_(i-1) and
+                    v_1 with u_k; the recipe is kept as run.
+             permrest  as perm, but direction 1 keeps its own pair (s_1 u_1 v_1^T) and directions 2 to k are shifted among themselves
+                    (torch.roll of columns 2 to k: v_2 with u_k, v_i with u_(i-1)).
+             swap12 direction 1's and 2's pairs swapped (s_1 u_2 v_1^T + s_2 u_1 v_2^T); directions 3 to k keep theirs.
              rbulk  layer matrices = other - P diag(s_k) Q^T (rand8's addition, subtracted from the other model): the control of bulk;
                     every other tensor = other.
              interp every tensor = (1 - alpha) base + alpha other (merge_weights.point); alpha 0 and 1 give the endpoints bit for bit (asserted).
@@ -67,7 +71,7 @@ from studies.rlneurons.jobs.xreward_overlap import MODELS as XMODELS
 ALL = {**MODELS, **XMODELS}                                                       # every model key of --other and --donor
 assert MODELS["base"] == XMODELS["base"]
 
-RECIPES = {"top8": 8, "bulk": 8, "rand8": 8, "late3": 3, "interp": None, "proj": 8, "projc": 8, "rbulk": 8, "rin": 8, "rout": 8, "perm": 8}          # recipe -> default k
+RECIPES = {"top8": 8, "bulk": 8, "rand8": 8, "late3": 3, "interp": None, "proj": 8, "projc": 8, "rbulk": 8, "rin": 8, "rout": 8, "perm": 8, "permrest": 8, "swap12": 8}          # recipe -> default k
 LATE = range(24, 32)                                                              # late3's layers; the selftest passes its own
 JSON_KEY = "rl_math"                                                              # config and tokenizer for every model, as merge_weights
 SUMS = ("dot", "add_sq", "written_sq", "ref_sq", "top_sq", "d_sq")
@@ -105,6 +109,11 @@ def selected(recipe, names, late=LATE, mods=None, layers=None):
     return sel
 
 
+PAIRED = {"perm": lambda U: torch.roll(U, 1, dims=1),                                # recipe -> output directions re-paired with V's columns
+          "permrest": lambda U: torch.cat([U[:, :1], torch.roll(U[:, 1:], 1, dims=1)], dim=1),
+          "swap12": lambda U: torch.cat([U[:, 1:2], U[:, :1], U[:, 2:]], dim=1)}
+
+
 def target(recipe, b, o, k=None, alpha=1.0, noise=None, scale=1.0, donor=None, skip=0):
     """One edited tensor, b = base and o = other in float32 -> (x, add, sq): the float32 target before rounding, the intended addition
     to the reference (o for bulk, b otherwise) and (top_sq, d_sq) = the squared norm of d in its k directions and in total (None where
@@ -123,8 +132,8 @@ def target(recipe, b, o, k=None, alpha=1.0, noise=None, scale=1.0, donor=None, s
         U, sq = torch.linalg.qr(noise[0].double()).Q.to(d.device), None
     if recipe == "rout":
         V, sq = torch.linalg.qr(noise[1].double()).Q.to(d.device), None
-    if recipe == "perm":
-        U, sq = torch.roll(U[:, :k], 1, dims=1), None
+    if recipe in PAIRED:
+        U, sq = PAIRED[recipe](U[:, :k]), None
     add = (U[:, skip:] * s[skip:k]) @ V[:, skip:].T
     if recipe in ("proj", "projc"):
         dd = donor - b
@@ -157,7 +166,7 @@ def edit(base_dir, other_dir, json_dir, out_dir, recipe, k=None, alpha=1.0, roun
     assert recipe in RECIPES and rounding in ("nearest", "stochastic"), (recipe, rounding)
     k = RECIPES[recipe] if k is None else k
     assert (k is None) == (recipe == "interp") and (recipe == "interp" or alpha == 1.0), f"{recipe}: k {k}, alpha {alpha}"
-    assert scale == 1.0 or recipe in ("top8", "rand8", "proj", "projc", "rin", "rout", "perm"), f"--scale is not for {recipe}"
+    assert scale == 1.0 or recipe in ("top8", "rand8", "proj", "projc", "rin", "rout", *PAIRED), f"--scale is not for {recipe}"
     assert skip == 0 or (recipe in ("top8", "rand8") and 0 < skip < k), f"--skip {skip} is not for {recipe} with k {k}"
     assert mods is None or recipe in ("top8", "rand8", "bulk", "proj", "projc"), f"--mods is not for {recipe}"
     assert (donor_dir is not None) == (recipe in ("proj", "projc")), f"{recipe}: donor {donor_dir}"
@@ -342,6 +351,23 @@ def selftest(device):
         check(9, "proj + projc = top8; the two parts are orthogonal; with the other model as its own donor projc is zero", max(errp) < 1e-5 and max(sh) < 1e-4
               and max(errs) < 1e-4, f"sum error {max(errp):.1e}, largest |cos| of the parts {max(sh):.1e}, projc with donor = other {max(errs):.1e} of top8")
         check(10, "top8 with skip 1 + top8 with k 1 = top8", max(errk) < 1e-5, f"largest relative error {max(errk):.1e}")
+
+        pe = {r: [] for r in PAIRED}                                              # 11: the re-paired recipes on the layer matrices
+        for n in mats:
+            b, o = B[n].to(device, torch.float32), O[n].to(device, torch.float32)
+            s, U, V = (x.float() for x in spectrum(o - b, k))
+            at = target("top8", b, o, k)[1]
+            proj = lambda Q: Q[:, :k] @ Q[:, :k].T
+            for r in PAIRED:
+                a = target(r, b, o, k)[1]
+                cols, rows = torch.linalg.svd(a.double())[0][:, :k].float(), torch.linalg.svd(a.double())[2][:k].T.float()
+                term1 = a @ V[:, 0] - s[0] * {"perm": U[:, k - 1], "permrest": U[:, 0], "swap12": U[:, 1]}[r]   # where input 1 is sent
+                kept = (a @ V[:, 2:k] - U[:, 2:k] * s[2:k]) if r == "swap12" else torch.zeros(1)              # swap12: directions 3-k unchanged
+                pe[r].append(max(abs(float(norm(a) / norm(at)) - 1), float(norm(proj(cols) - proj(U)) / k), float(norm(proj(rows) - proj(V)) / k),
+                                 float(norm(term1) / s[0]), float(norm(kept) / s[0])))
+        check(11, "perm, permrest, swap12: Frobenius norm of top8, the same output and input subspaces, input 1 sent where the recipe says "
+              "(permrest: its own pair, so direction 1's term equals top8's)", all(max(v) < 1e-4 for v in pe.values()),
+              ", ".join(f"{r} largest error {max(v):.1e}" for r, v in pe.items()))
     assert all(res), f"selftest failed: checks {[i for i, r in enumerate(res) if not r]} (0-based, in print order)"
     print(f"selftest: all {len(res)} checks passed on {device}", flush=True)
 
