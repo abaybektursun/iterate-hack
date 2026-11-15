@@ -279,8 +279,8 @@ gap between them. The same page is public at https://monitor.invariant.team (`in
 
 The same server has a second page, `/architecture` (`tools/architecture.py`): one picture of the shared work setup for
 a first-time reader. The board is in the centre with one dot per live item, each person's agents are beside it with
-threads to the board, the messages ring runs through every person's agents, and the self-review loop goes around
-everything. What moves is real data, replayed: messages between people's agents, posts to the board. A click on a part
+threads to the board (the Claude mark for a Claude Code session, the OpenAI mark for a Codex session), the "Lab chat"
+ring (messages) runs through every person's agents, and the "Lab retro" loop (self-review) goes around everything. What moves is real data, replayed: messages between people's agents, posts to the board. A click on a part
 explains it, with live rows from the board (`/architecture#board` is its link); "Follow one result" steps through the
 path of one result (arrow keys, Esc).
 

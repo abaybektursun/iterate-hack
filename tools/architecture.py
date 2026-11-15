@@ -1,13 +1,14 @@
 """The architecture page of the board site: one interactive picture of the shared work setup, for a first-time reader.
 
 view.py serves PAGE at /architecture. The page reads the same /data as the board page every 10 s and draws the
-setup as a small three-dimensional object seen from slightly above: the board is the dome in the centre with one
-dot per live item; each person has a swarm of agents beside it (one mark per agent session, in the person's color
-of the board page) with threads to the board; the messages ring runs through every swarm; the self-review loop with
-its comet goes around everything. What moves is real data, replayed: a message leaves its sender's swarm for the
-others, a post travels to the board and a ripple returns to every swarm. A larger dot with a halo is happening now.
-A click on a part dims the rest and explains it in the side column (address /architecture#<part>); "Follow one
-result" steps through the path of one result (arrow keys, Esc). Nothing here writes to the board.
+setup as a small three-dimensional object seen from slightly above. The board is the dome in the centre with one
+dot per live item. Each person has a swarm of agents beside it with threads to the board: one mark per agent
+session, the Claude mark for Claude Code and the OpenAI mark for Codex, in the person's color of the board page.
+The lab chat ring (messages) runs through every swarm, and the lab retro loop (self-review) with its comet goes
+around everything. What moves is real data, replayed: a message leaves its sender's swarm for the others, a post
+travels to the board and a ripple returns to every swarm. A larger dot with a halo is happening now. A click on a
+part dims the rest and explains it in the side column (address /architecture#<part>); "Follow one result" steps
+through the path of one result (arrow keys, Esc). Nothing here writes to the board.
 """
 
 PAGE = r"""<!doctype html>
@@ -99,8 +100,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 .beads { fill: none; stroke: url(#msgfade) var(--mute); stroke-width: 1.5; }
 .thread { fill: none; stroke: var(--c); stroke-width: .9; opacity: .5; }
 .tie { fill: none; stroke: var(--c); stroke-width: 1.1; opacity: .7; }
-.agent { fill: var(--c); stroke: var(--paper); stroke-width: 1.2; }
-.key .agent { stroke: none; }
+.agent { fill: var(--c); stroke: none; }
 .person { fill: var(--c); stroke: var(--paper); stroke-width: 3; }
 .dot { fill: var(--c); }
 .dot.note { opacity: .6; }
@@ -245,13 +245,13 @@ const TEXT = {
     rows: m => ({ title: `${cnt(m.n.result)} results, ${cnt(m.n.work)} open, ${cnt(m.n.idea)} ideas`, list: m.results }),
   },
   msg: {
-    name: "Messages",
+    name: "Lab chat",
     lead: "Agents send each other short messages: to everyone, to one person's agents, or about one board item.",
     facts: ["In Claude Code, a hook adds new messages to an agent's context after its tool calls, so the agent does not have to check for them.", "A message reaches a waiting agent in 0.2 s (measured)."],
     rows: m => ({ title: `${m.msgs.length} messages to everyone in the last ${m.hours} h`, list: m.msgs }),
   },
   review: {
-    name: "Self-review",
+    name: "Lab retro",
     lead: "Every tool command is logged with its time, person, agent and commit. After each finished result, an agent reviews these logs.",
     facts: ["The review measures how long each step took, from claiming the work to posting the result.", "It then makes one change to the tools or the rules, to remove the slowest step or a failure that repeats.", "Whether these changes help has not been measured yet."],
   },
@@ -284,17 +284,25 @@ const WALK = [
   "A review reads the logs for inefficiencies and optimizes the research harness.",
 ];
 const cnt = n => n >= 60 ? "60+" : n;  // /data returns the newest 60 of each kind
+/* An agent is drawn as the mark of the product it runs on: Claude Code or Codex. Outlines from Bootstrap Icons
+   1.13.1 (MIT), each in a 16 by 16 box. Any other agent is a rounded square. */
+const MARKS = {
+  claude: "m3.127 10.604 3.135-1.76.053-.153-.053-.085H6.11l-.525-.032-1.791-.048-1.554-.065-1.505-.08-.38-.081L0 7.832l.036-.234.32-.214.455.04 1.009.069 1.513.105 1.097.064 1.626.17h.259l.036-.105-.089-.065-.068-.064-1.566-1.062-1.695-1.121-.887-.646-.48-.327-.243-.306-.104-.67.435-.48.585.04.15.04.593.456 1.267.981 1.654 1.218.242.202.097-.068.012-.049-.109-.181-.9-1.626-.96-1.655-.428-.686-.113-.411a2 2 0 0 1-.068-.484l.496-.674L4.446 0l.662.089.279.242.411.94.666 1.48 1.033 2.014.302.597.162.553.06.17h.105v-.097l.085-1.134.157-1.392.154-1.792.052-.504.25-.605.497-.327.387.186.319.456-.045.294-.19 1.23-.37 1.93-.243 1.29h.142l.161-.16.654-.868 1.097-1.372.484-.545.565-.601.363-.287h.686l.505.751-.226.775-.707.895-.585.759-.839 1.13-.524.904.048.072.125-.012 1.897-.403 1.024-.186 1.223-.21.553.258.06.263-.218.536-1.307.323-1.533.307-2.284.54-.028.02.032.04 1.029.098.44.024h1.077l2.005.15.525.346.315.424-.053.323-.807.411-3.631-.863-.872-.218h-.12v.073l.726.71 1.331 1.202 1.667 1.55.084.383-.214.302-.226-.032-1.464-1.101-.565-.497-1.28-1.077h-.084v.113l.295.432 1.557 2.34.08.718-.112.234-.404.141-.444-.08-.911-1.28-.94-1.44-.759-1.291-.093.053-.448 4.821-.21.246-.484.186-.403-.307-.214-.496.214-.98.258-1.28.21-1.016.19-1.263.112-.42-.008-.028-.092.012-.953 1.307-1.448 1.957-1.146 1.227-.274.109-.477-.247.045-.44.266-.39 1.586-2.018.956-1.25.617-.723-.004-.105h-.036l-4.212 2.736-.75.096-.324-.302.04-.496.154-.162 1.267-.871z",
+  openai: "M14.949 6.547a3.94 3.94 0 0 0-.348-3.273 4.11 4.11 0 0 0-4.4-1.934A4.1 4.1 0 0 0 8.423.2 4.15 4.15 0 0 0 6.305.086a4.1 4.1 0 0 0-1.891.948 4.04 4.04 0 0 0-1.158 1.753 4.1 4.1 0 0 0-1.563.679A4 4 0 0 0 .554 4.72a3.99 3.99 0 0 0 .502 4.731 3.94 3.94 0 0 0 .346 3.274 4.11 4.11 0 0 0 4.402 1.933c.382.425.852.764 1.377.995.526.231 1.095.35 1.67.346 1.78.002 3.358-1.132 3.901-2.804a4.1 4.1 0 0 0 1.563-.68 4 4 0 0 0 1.14-1.253 3.99 3.99 0 0 0-.506-4.716m-6.097 8.406a3.05 3.05 0 0 1-1.945-.694l.096-.054 3.23-1.838a.53.53 0 0 0 .265-.455v-4.49l1.366.778q.02.011.025.035v3.722c-.003 1.653-1.361 2.992-3.037 2.996m-6.53-2.75a2.95 2.95 0 0 1-.36-2.01l.095.057L5.29 12.09a.53.53 0 0 0 .527 0l3.949-2.246v1.555a.05.05 0 0 1-.022.041L6.473 13.3c-1.454.826-3.311.335-4.15-1.098m-.85-6.94A3.02 3.02 0 0 1 3.07 3.949v3.785a.51.51 0 0 0 .262.451l3.93 2.237-1.366.779a.05.05 0 0 1-.048 0L2.585 9.342a2.98 2.98 0 0 1-1.113-4.094zm11.216 2.571L8.747 5.576l1.362-.776a.05.05 0 0 1 .048 0l3.265 1.86a3 3 0 0 1 1.173 1.207 2.96 2.96 0 0 1-.27 3.2 3.05 3.05 0 0 1-1.36.997V8.279a.52.52 0 0 0-.276-.445m1.36-2.015-.097-.057-3.226-1.855a.53.53 0 0 0-.53 0L6.249 6.153V4.598a.04.04 0 0 1 .019-.04L9.533 2.7a3.07 3.07 0 0 1 3.257.139c.474.325.843.778 1.066 1.303.223.526.289 1.103.191 1.664zM5.503 8.575 4.139 7.8a.05.05 0 0 1-.026-.037V4.049c0-.57.166-1.127.476-1.607s.752-.864 1.275-1.105a3.08 3.08 0 0 1 3.234.41l-.096.054-3.23 1.838a.53.53 0 0 0-.265.455zm.742-1.577 1.758-1 1.762 1v2l-1.755 1-1.762-1z",
+};
 
 /* Geometry: everything hangs on one centre, and the moving parts live in a small 3D space around it (x right,
    y down, z toward the viewer). The board faces the viewer. The swarms sit on one circle in the people's plane,
    seen from a little above; that circle is the messages path, so it passes through every swarm. The self-review
-   loop is a larger circle in its own plane. A plane is [inclination, turn on the screen]. */
+   loop is a larger circle in its own plane. A plane is [inclination, turn on the screen]. sw is the radius of the
+   largest swarm; a mark is at most `mark` wide, and marks stand `pack` times their width apart or more, so that
+   they never cover each other while the swarm turns. */
 const RAD = Math.PI / 180;
 function plane(inc, turn) { return { c: Math.cos(inc * RAD), s: Math.sin(inc * RAD), co: Math.cos(turn * RAD), so: Math.sin(turn * RAD) }; }
 function geo() {
   const g = narrow.matches
-    ? { w: 720, h: 652, cx: 360, cy: 282, rb: 100, rq: 200, rp: 264, rr: 334, fs: 25, fw: 20, D: 1900, sw: 42, over: 26, pp: [34, 0], pr: [36, -4] }
-    : { w: 1100, h: 952, cx: 550, cy: 396, rb: 164, rq: 340, rp: 430, rr: 520, fs: 24, fw: 18.5, D: 2100, sw: 70, over: 60, pp: [40, 0], pr: [36, -4] };
+    ? { w: 720, h: 660, cx: 360, cy: 284, rb: 100, rq: 200, rp: 274, rr: 338, fs: 25, fw: 20, D: 1900, sw: 50, over: 26, cmax: 23, mark: 21, pack: 1.01, pp: [34, 0], pr: [36, -4] }
+    : { w: 1140, h: 985, cx: 570, cy: 404, rb: 164, rq: 340, rp: 446, rr: 540, fs: 24, fw: 18.5, D: 2100, sw: 88, over: 45, cmax: 27, mark: 25, pack: 1.06, pp: [40, 0], pr: [36, -4] };
   g.PP = plane(...g.pp); g.PR = plane(...g.pr);
   return g;
 }
@@ -341,13 +349,17 @@ function model(d) {
   const all = [...d.items, ...d.messages];
   const people = [...new Set(all.map(r => r.who))].sort();
   const agents = people.map(p => [...new Set(all.filter(r => r.who === p && r.session).map(r => r.session))].sort().slice(0, 30));
+  const product = s => {  // what a session runs on: the agent name of any of its rows (tools/events.py)
+    const a = (all.find(r => r.session === s && r.agent) || {}).agent || "";
+    return a.startsWith("claude-code") ? "claude" : a.startsWith("codex") ? "openai" : "";
+  };
   const live = d.items.filter(i => i.listed !== "work-closed").sort((a, b) => a.at_ns - b.at_ns);
   const of = k => live.filter(i => i.listed === k);
   const newest = l => [...l].sort((a, b) => b.at_ns - a.at_ns);
   const results = newest(of("result")), msgs = [...d.messages].reverse();
   const last = Math.max(0, ...d.items.map(i => Number(i.at_ns)), ...d.messages.map(msgNs));
   return {
-    people, agents, live, results, msgs, last, hours: d.hours, scores: (d.scores || []).length,
+    people, agents, marks: agents.map(l => l.map(product)), live, results, msgs, last, hours: d.hours, scores: (d.scores || []).length,
     notes: newest(live.filter(i => i.listed === "knowledge" || i.listed === "skill")),
     n: { result: results.length, work: of("work").length, idea: of("idea").length, note: of("knowledge").length + of("skill").length },
     nAgents: agents.reduce((s, a) => s + a.length, 0),
@@ -358,8 +370,8 @@ function model(d) {
 
 /* The picture. The parts are built when the people or their agents change; place() then sets every position that
    depends on the view; the item dots are drawn on every read. Back to front: the light around the board, the
-   self-review loop, the messages path, the threads, the board, the swarms. An agent is a rounded square, so it
-   cannot be read as a board item, which is a dot. The pulses of the replay live inside the part they travel on,
+   self-review loop, the messages path, the threads, the board, the swarms. An agent is the mark of its product in
+   its person's colour, so it cannot be read as a board item, which is a dot. The pulses of the replay live inside the part they travel on,
    so they dim with it. */
 function draw() {
   const g = S.g = geo(), m = S.m, n = m ? m.people.length : 0, th = n ? angles(n) : [];
@@ -377,6 +389,7 @@ function draw() {
     `<radialGradient id="glo-b">${stop(0, "var(--blue)", .6)}${stop(1, "var(--blue)", 0)}</radialGradient>` +
     `<linearGradient id="rvfade" gradientUnits="userSpaceOnUse">${stop(0, "var(--blue)", .4)}${stop(1, "var(--blue)", 1)}</linearGradient>` +
     `<linearGradient id="msgfade" gradientUnits="userSpaceOnUse">${stop(0, "var(--mute)", .5)}${stop(1, "var(--ink)", .95)}</linearGradient>` +
+    Object.keys(MARKS).map(k => `<symbol id="mark-${k}" viewBox="0 0 16 16"><path d="${MARKS[k]}"/></symbol>`).join("") +
     th.map((_, i) =>
       `<radialGradient id="orb-${i}" class="hue" style="--h:${hue(i)}" cx=".34" cy=".3" r=".8">${stop(0, "color-mix(in oklch, var(--c), white var(--lift))")}${stop(1, "var(--c)")}</radialGradient>` +
       `<radialGradient id="glo-${i}" class="hue" style="--h:${hue(i)}">${stop(0, "var(--c)", .55)}${stop(1, "var(--c)", 0)}</radialGradient>`).join("") +
@@ -391,11 +404,11 @@ function draw() {
     `<path class="hit" id="rv-hit" stroke-width="26"/><path class="rib" id="rv-rib"/>${chevron(0)}${chevron(1)}` +
     `<g class="comet" id="comet"><circle class="bloom" id="cm-glow" fill="url(#glo-b)"/><path class="comet-tail" id="cm-long" opacity=".3"/>` +
     `<path class="comet-tail" id="cm-short" opacity=".85"/><circle class="comet-core" id="cm-core"/></g>` +
-    `<text class="label" id="rv-label" font-size="${g.fs}">Self-review</text>`, "Self-review");
+    `<text class="label" id="rv-label" font-size="${g.fs}">Lab retro</text>`, "Lab retro");
   out += part("msg", "msg",  // the path through every swarm; on it, a message runs from its sender to the other swarms
     `<path class="hit" id="ms-hit" stroke-width="22"/><path class="beads ring" id="ms-ring"/>` +
     `<g class="hue" id="ms-fx">${th.map(() => `<ellipse class="arrive" opacity="0"/>`).join("")}${pulse()}${pulse()}</g>` +
-    `<text class="label" id="ms-label" font-size="${g.fs}">Messages</text>`, "Messages");
+    `<text class="label" id="ms-label" font-size="${g.fs}">Lab chat</text>`, "Lab chat");
   th.forEach((a, i) => {  // the threads of one person, the post that runs down one of them, and the read that comes back up all of them
     out += part("thread-" + i, "", `<path class="thread hue" style="--h:${hue(i)}"/><path class="ripple hue" opacity="0"/><g class="hue" style="--h:${hue(i)}">${pulse(i)}</g>`);
   });
@@ -409,19 +422,21 @@ function draw() {
   th.forEach((a, i) => {
     out += part("swarm-" + i, "p-" + m.people[i],
       `<g class="hue" style="--h:${hue(i)}"><circle class="pad" r="${g.sw + 16}"/><path class="tie"/>` +
-      m.agents[i].map((_, k) => `<rect class="agent" style="--i:${k};fill:url(#orb-${i}) var(--c)"/>`).join("") +
+      m.marks[i].map((mark, k) => mark ? `<use class="agent" href="#mark-${mark}" style="--i:${k}"/>` : `<rect class="agent" style="--i:${k}"/>`).join("") +
       `<circle class="person ring" style="fill:url(#orb-${i}) var(--c)"/>` +
       `<text class="who" font-size="${g.fw}">${esc(m.people[i])}</text></g>`,
       `${esc(m.people[i])}, ${m.agents[i].length} agents`);
   });
   const k = g.fw * .92, ky = g.h - 14, keys = [["agent", "agent"], ["work", "open work"], ["", "result"], ["note", "idea or note"]];
-  const widths = keys.map(([, t]) => 26 + t.length * k * .54 + 22), total = widths.reduce((a, b) => a + b, 0) - 22;
+  const here = m ? ["claude", "openai", ""].filter(x => m.marks.some(l => l.includes(x))) : ["claude"];  // the marks on this page
+  const widths = keys.map(([cls, t]) => 26 + t.length * k * .54 + 22 + (cls === "agent" ? (here.length - 1) * 19 : 0)), total = widths.reduce((a, b) => a + b, 0) - 22;
   let kx = narrow.matches ? (g.w - total) / 2 : 6;
   out += `<g class="part key" data-part="key" style="--c:var(--mute)">` + keys.map(([cls, t], i) => {
     const x = kx, y = ky - k * .32; kx += widths[i];
-    return (cls === "agent" ? `<rect class="agent" x="${f(x)}" y="${f(y - 7)}" width="14" height="14" rx="3.9"/>`
-      : `<circle class="dot ${cls}" cx="${f(x + 7)}" cy="${f(y)}" r="${cls === "note" ? 3.4 : 6}"/>`) +
-      `<text class="sub" x="${f(x + 20)}" y="${f(ky)}" font-size="${f(k)}" style="text-anchor:start">${t}</text>`;
+    const one = (mark, j) => mark ? `<use class="agent" href="#mark-${mark}" x="${f(x - 1 + j * 19)}" y="${f(y - 8)}" width="16" height="16"/>`
+      : `<rect class="agent" x="${f(x + j * 19)}" y="${f(y - 6.5)}" width="13" height="13" rx="3.6"/>`;
+    return (cls === "agent" ? here.map(one).join("") : `<circle class="dot ${cls}" cx="${f(x + 7)}" cy="${f(y)}" r="${cls === "note" ? 3.4 : 6}"/>`) +
+      `<text class="sub" x="${f(x + 20 + (cls === "agent" ? (here.length - 1) * 19 : 0))}" y="${f(ky)}" font-size="${f(k)}" style="text-anchor:start">${t}</text>`;
   }).join("") + "</g>";
   svg.innerHTML = out + '<g id="fx"></g>';
 
@@ -432,13 +447,13 @@ function draw() {
   S.th = th;
   S.play = {};
   S.r = {
-    el, gap: open("Self-review", g.rr), mgap: open("Messages", g.rq),
+    el, gap: open("Lab retro", g.rr), mgap: open("Lab chat", g.rq),
     beads: Math.round(g.rq * 2 * Math.PI / 14),
     arrive: [...svg.querySelectorAll("#ms-fx .arrive")], legs: [...svg.querySelectorAll("#ms-fx .pulse")].map(unit),
     swarms: th.map((a, i) => {  // the agents of one person circle their own centre, in the people's plane
       const p = svg.querySelector(`[data-part="swarm-${i}"]`), t = svg.querySelector(`[data-part="thread-${i}"]`), count = m.agents[i].length;
-      const c = Math.min(19, g.sw / Math.sqrt(count + .6)), who = p.querySelector(".who");
-      return { a, c, size: Math.min(17, c * .96), below: Math.sin(a * RAD) >= 0, side: Math.abs(Math.cos(a * RAD)) > .3 ? Math.sign(Math.cos(a * RAD)) : 0,
+      const c = Math.min(g.cmax, g.sw / Math.sqrt(count + .6)), who = p.querySelector(".who");
+      return { a, c, size: Math.min(g.mark, c / g.pack), below: Math.sin(a * RAD) >= 0, side: Math.abs(Math.cos(a * RAD)) > .3 ? Math.sign(Math.cos(a * RAD)) : 0,
         wide: who.getComputedTextLength(), pad: p.querySelector(".pad"), tie: p.querySelector(".tie"), dots: [...p.querySelectorAll(".agent")],
         person: p.querySelector(".person"), who, thread: t.querySelector(".thread"), ripple: t.querySelector(".ripple"), pulse: unit(t.querySelector(".pulse")) };
     }),
@@ -519,8 +534,8 @@ function place(t) {
     o.c0 = c; o.end = end; o.at = []; o.reach = Math.hypot(c[0] - end[0], c[1] - end[1]);
     o.dots.forEach((d, k) => {
       const r = o.c * Math.sqrt(k + .6), a = k * 2.39996 + t * .22;  // the swarm turns as one, so its agents never cover each other
-      const q = proj(g, world(g.PP, u0 + r * Math.cos(a), v0 + r * Math.sin(a))), side = o.size * q[2], here = f(q[0]) + " " + f(q[1]);
-      set(d, { x: f(q[0] - side / 2), y: f(q[1] - side / 2), width: f(side), height: f(side), rx: f(side * .28) });
+      const q = proj(g, world(g.PP, u0 + r * Math.cos(a), v0 + r * Math.sin(a))), side = o.size * q[2] * (d.tagName === "rect" ? .78 : 1), here = f(q[0]) + " " + f(q[1]);
+      set(d, { x: f(q[0] - side / 2), y: f(q[1] - side / 2), width: f(side), height: f(side), rx: f(side * .28) });  // upright, facing the viewer
       web += `M${here}L${ends}`;
       fan += `M${ends}L${here}`;
       o.at.push(q);
@@ -779,7 +794,7 @@ function show() {
 function read(d) {
   const first = !S.data;
   S.data = d; S.m = model(d);
-  const key = narrow.matches + "|" + S.m.people.map((p, i) => p + ":" + S.m.agents[i].length).join(",");
+  const key = narrow.matches + "|" + S.m.people.map((p, i) => p + ":" + S.m.agents[i].length + ":" + S.m.marks[i].join("")).join(",");
   if (key !== S.key) { S.key = key; draw(); }
   dots();
   if (S.seen) {
