@@ -1,0 +1,46 @@
+{
+ "commit": "94d98636d48b2af9b4e380c64a5b16992bae96f7",
+ "job_id": "abaybektursun-1115-040403-80d7+abaybektursun-1115-024927-4a44+abaybektursun-1115-025027-51c8+abaybektursun-1115-025153-2e87",
+ "config": {
+  "model": "base",
+  "model_path": null,
+  "model_label": null,
+  "prompt": "cue",
+  "set": "fresh2026",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 16384,
+  "seed": 7000000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 4,
+  "restarts": 0,
+  "out": "/root/abaybektursun-1115-040403-80d7/out",
+  "dry_run": false,
+  "commit": "94d98636d48b2af9b4e380c64a5b16992bae96f7",
+  "model_repo": "allenai/Olmo-3-1025-7B",
+  "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 136,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "source": "runs/fresh_base_cue_s4"
+}
