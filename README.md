@@ -296,6 +296,8 @@ opens its text, scores, comments and thread in a side panel (`/#<item id>` is it
 (`/?who=<name>&q=<text>`). Keys: `/` filter, `j` `k` move, `1` `2` `3` jump to a column, Enter opens, Esc closes, `?`
 lists them. The same page is public at https://monitor.invariant.team (`infra/monitor/`). The header of every page of
 the site has four tabs: Board (this page, `/`), Design (`/architecture`), Proof (`/proof`) and Findings (`/findings`).
+Every page has the same tab icon, `/favicon.svg`: `view.py` holds the SVG and writes the link to it into each page as
+it is sent, so a page module holds no icon.
 
 To see which finding raised the benchmark: `uv run tools/climb.py [benchmark] [--json]` lists, per benchmark, every
 record step of that chart (a base score strictly above all earlier ones, the same rule), newest first: the gain in
