@@ -23,6 +23,7 @@ All code runs from the repository root with the root on `PYTHONPATH`.
 | `jobs/fit_lens.py`, `jobs/fit_lens.sh` | Fit a J-lens for one model with the reference `jlens` code at a pinned commit (WikiText or math corpus). |
 | `jobs/workspace_tests.py` | SPEC 2 job: readout sets, swap, twins on both models, each through its own head, with lens variants `pub`, `logit` and any `--lens-files`. |
 | `analysis/workspace_analyze.py` | SPEC 2 readout: pass@k with null, swap flip rates with controls, twin gaps, all with bootstrap intervals. |
+| `tools/finding_rl_wait_habit.py` (repository root) | The site page of the finding, `/finding/rl-wait-habit` on monitor.invariant.team, unlisted (`UNLISTED = True`): a Before RL / After RL switch over two measures, with the numbers of `lensdiff/full-01` and `workspace/pub-01`. |
 | `results/lensdiff/full-01/` | The full run: `run.json`, `checks.json` (the job's instrument checks), `metrics.json`, `examples.json` (138 answers, 5 positions each, with both readouts), `predict.json`, `reader_notes.md` (one reader's labels of 114 of those positions), `page_examples.json` and `workspace-diff.html` (the reading page). |
 
 ## Run it
@@ -114,7 +115,8 @@ for the base.
 | Multilingual (`pub`, n 36 and 35) | 0.493 | 0.481 | `readout.multilingual` |
 | Order-ops, the partial result (`pub` / `logit`, n 29); null 0.59 to 0.69 | 0.897 / 0.966 | 0.931 / 0.966 | `readout.order-ops` |
 | Arithmetic chains, partial results (`pub` / `logit`, n 141 and 139); null 0.16 to 0.18 | 0.404 / 0.670 | 0.392 / 0.655 | `readout.chains` |
-| RL minus base on items both answer, every set and variant | within [-0.04, +0.10] of 0; multihop, typo, association, poetry exactly 0 | | `*.rl_minus_base_pass10_shared` |
+| RL minus base on items both answer, `pub` and `logit`, every set | within [-0.04, +0.10] of 0; multihop, association, poetry exactly 0 | | `*.rl_minus_base_pass10_shared` |
+| the same with the `mh` lens pair (RL lens fitted on the 3.0 model) | chains -0.054 [-0.098, -0.014]; all other sets include 0 | | same |
 | Two-hop swap, eligible items | 44 of 90 | 44 of 90 | `swap.probe-swap.*.eligible` |
 | Swap flips with lens vectors (best strength 1 to 2) | 0.364 [0.227, 0.500] | 0.364 [0.227, 0.500] | `swap.probe-swap.*.pub.flip` |
 | Swap flips, null replacement / logit-lens vectors | 0.068 / 0.182 | 0.023 / 0.182 | `...null_flip`, `...logit.flip` |
@@ -133,7 +135,8 @@ Verdicts against SPEC 2 (with `pub`; `own` still to run):
   earlier (layer 18: 0.38 to 0.45 against 0.14).
 - W2 holds for both: 36 % flips against 2 to 7 % for the null and 18 % for logit-lens vectors, 16 of 44 items in each model.
 - W3 holds: no standard set differs between the models.
-- W4 is refuted: RL does not hold arithmetic partial results more readably (chains -0.007 [-0.040, 0.025]). On chains and
+- W4 is refuted: RL does not hold arithmetic partial results more readably (chains -0.007 [-0.040, 0.025] with `pub`; -0.054
+  [-0.098, -0.014] with `mh`, whose RL lens belongs to another checkpoint). On chains and
   order-ops the logit lens reads the partial result better than the J-lens, and the order-ops null is high (0.6), so numbers
   are a weak test of this lens. The chain swap fails in both models (4 %).
 - W5 holds in sign and is small: RL's hold-on response to a wrong result is 24 % larger in the output (0.346 against 0.279
