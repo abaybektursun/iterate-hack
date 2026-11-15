@@ -820,7 +820,7 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   .lrow .chev { grid-column: 3; grid-row: 1; }
   .lrow .lt { white-space: normal; }
   .lrow .lt small { display: block; margin-left: 0; }
-  .lrow .lr { grid-column: 2; }
+  .lrow .lr { grid-column: 2; white-space: normal; }  /* one line of it is wider than a phone */
   .lrow .flag { margin-left: 0; }
   .lrow .flag::before { content: " · "; }
   .sd { grid-template-columns: minmax(0, 1fr); gap: 2px; }
@@ -1369,8 +1369,8 @@ function drawChart() {
 const chartLinks = () => [...document.querySelectorAll("#chart svg a")].map(a => [a.getBoundingClientRect().x, a]).sort((p, q) => p[0] - q[0]).map(p => p[1]);
 function rove(to) {
   const links = chartLinks();
-  if (to) S.mark = to.getAttribute("href");
-  const now = links.find(a => a.getAttribute("href") === S.mark) ?? links[0];
+  if (to) S.mark = links.indexOf(to);  // the place in the row of marks: several marks share one address
+  const now = links[S.mark] ?? links[0];
   links.forEach(a => a.setAttribute("tabindex", a === now ? "0" : "-1"));
   if (to) now.focus();
 }
