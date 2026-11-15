@@ -1,0 +1,2 @@
+review entries in meta/abaybektursun.md between 02:13 and 04:53 UTC (grep '^## 2026-11-15 0[2-4]'): 9 in 2.7 h; 7 written by sessions other than the loop's
+lines that trigger them: tools/board.py:274 (after every closed result), tools/gpu.py:97 (every fifth job)
