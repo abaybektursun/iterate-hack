@@ -51,7 +51,8 @@ ARMS = ("top8xm1_math31", "top8x0.5_math31", "top8_math31", "top8x1.5_math31", "
         "top1_math31", "top1x2_math31", "top1x3_math31", "top64_math31", "top8attn_math31", "top8mlp_math31",
         "top8x1.5_L0-10_math31", "top8x1.5_L11-21_math31", "top8x1.5_L22-31_math31",
         "top8_code31", "top8_code30", "top8_math30", "top8_if30", "top8_general30", "top8x0.02_think_sft",
-        "proj_math31_code30", "projc_math31_code30")
+        "proj_math31_code30", "projc_math31_code30",
+        "rinx1.5_math31", "routx1.5_math31", "permx1.5_math31")                  # SPEC_xshift amendment 1
 GROUPS = ("all", "cap_hit", "finished", "third0", "third1", "third2")
 STEP, LENS_TOP, PLANT_LAYER = 16, 20, 12
 RANDOM = ("rand8", "rin", "rout")                                                 # recipes that use rand8's random directions
