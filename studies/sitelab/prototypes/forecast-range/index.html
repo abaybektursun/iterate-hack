@@ -163,7 +163,9 @@ scene.background = BG; scene.fog = new THREE.Fog(BG, 55, 150);
 scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), .03).texture;
 const camera = new THREE.PerspectiveCamera(30, 1, 1, 320);
 const HOME = { p: new THREE.Vector3(-19, 10.5, 30), t: new THREE.Vector3(1.5, 1.2, -4) };
-const setHome = h => { HOME.p.set(-.22 * h - 3, 7 + .52 * h, ZF + 15 + 1.52 * h); HOME.t.set(.02 * h, 0, -.5 - .1 * h); };
+const setHome = h => {
+  if (innerWidth < 760) { HOME.p.set(-1.3 * h - 18, 11 + .6 * h, ZF + 8 + .1 * h); HOME.t.set(0, 0, 5); return; }  // a phone looks along the row from its end, so the row fills the tall screen
+  HOME.p.set(-.22 * h - 3, 7 + .52 * h, ZF + 15 + 1.52 * h); HOME.t.set(.02 * h, 0, -.5 - .1 * h); };
 camera.position.copy(HOME.p);
 const controls = new OrbitControls(camera, canvas);
 controls.target.copy(HOME.t); controls.enableDamping = true; controls.dampingFactor = .06;

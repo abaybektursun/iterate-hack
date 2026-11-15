@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invariant: loom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..500&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --paper: #12100e; --ink: #ebe4d6; --mute: #aea493; --faint: #857c6e; --rule: #3a342c;
+  --brass: #d0ac6e; --red: #c4634a; --col: 372px;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; color: var(--ink); background: var(--paper); overflow: hidden;
+  font: 400 14px/1.5 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+:focus-visible { outline: 1px solid var(--brass); outline-offset: 3px; border-radius: 2px; }
+canvas#c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+canvas#c.turn { cursor: grabbing; } canvas#c.pick { cursor: crosshair; }
+.grain, .shade { z-index: 1; } .col { z-index: 2; }
+.grain { position: fixed; inset: 0; pointer-events: none; opacity: .06; mix-blend-mode: overlay;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1.2 -.1'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.shade { position: fixed; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(14, 12, 10, .93), rgba(14, 12, 10, .8) 20%, rgba(14, 12, 10, 0) 36%), radial-gradient(ellipse at 62% 50%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, .42) 100%); }
+
+.col { position: fixed; left: 0; top: 0; bottom: 0; width: var(--col); padding: 22px 0 18px 40px; display: flex; flex-direction: column; pointer-events: none; }
+.col > * { pointer-events: auto; }
+.top { display: flex; align-items: baseline; gap: 14px; font-size: 12px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--faint); }
+.top a { color: var(--mute); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.top a:hover { color: var(--ink); }
+h1 { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 27px; line-height: 1.18; letter-spacing: -.012em; margin: 24px 0 14px; text-wrap: balance; }
+h1 b { font-weight: 300; color: var(--brass); font-variant-numeric: lining-nums; }
+.note { font-size: 12.5px; color: var(--mute); padding-bottom: 12px; min-height: 5.2em; overflow-wrap: anywhere; }
+.note b { color: var(--ink); font-weight: 500; } .note i { font-style: normal; color: var(--faint); }
+
+.clock { display: grid; grid-template-columns: auto 1fr auto auto; gap: 0 10px; align-items: end; border-top: 1px solid var(--rule); padding-top: 10px; }
+.clock strong { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 34px; line-height: 1; font-variant-numeric: lining-nums tabular-nums; }
+.clock small { font-size: 11px; color: var(--faint); letter-spacing: .04em; line-height: 1.3; padding-bottom: 3px; }
+.clock button { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--ink); border: 1px solid #5a5145; border-radius: 99px; padding: 4px 13px; margin-bottom: 2px; }
+.clock button:hover { border-color: var(--brass); }
+.clock button#speed { padding: 4px 9px; color: var(--mute); min-width: 44px; text-align: center; }
+.scrub { position: relative; height: 62px; margin: 8px 0 4px; }
+.scrub canvas { position: absolute; left: 0; top: 0; width: 100%; height: 46px; border-radius: 1px; }
+.scrub i { position: absolute; top: -3px; height: 52px; width: 1px; background: var(--ink); pointer-events: none; box-shadow: 0 0 0 1px rgba(0, 0, 0, .5); }
+.scrub input { position: absolute; left: -7px; right: -7px; top: 0; width: calc(100% + 14px); margin: 0; height: 62px; appearance: none; -webkit-appearance: none; background: none; cursor: ew-resize; }
+.scrub input::-webkit-slider-runnable-track { height: 62px; background: none; }
+.scrub input::-moz-range-track { height: 62px; background: none; }
+.scrub input::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; margin-top: 48px; border-radius: 50%; background: #b8955a; border: 1px solid #e3cd9c; box-shadow: 0 1px 3px rgba(0, 0, 0, .7); }
+.scrub input::-moz-range-thumb { width: 13px; height: 13px; border-radius: 50%; background: #b8955a; border: 1px solid #e3cd9c; transform: translateY(24px); }
+.ends { display: flex; justify-content: space-between; font-size: 10.5px; letter-spacing: .06em; color: var(--faint); padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
+
+.def { font-size: 11.5px; line-height: 1.45; color: var(--mute); padding-top: 9px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #3a352f transparent; min-height: 0; }
+.def p { margin: 0 0 7px; } .def b { color: var(--ink); font-weight: 500; }
+.def u { text-decoration: none; white-space: nowrap; } .def u i { display: inline-block; width: 16px; height: 7px; border-radius: 1px; background: var(--c); margin: 0 4px 0 2px; }
+.def em { font-style: normal; font-family: "Newsreader", Georgia, serif; font-size: 13.5px; color: var(--ink); font-variant-numeric: lining-nums; }
+.def summary { display: none; }
+.def .q { color: var(--faint); }
+
+#tip { position: fixed; left: 0; top: 0; pointer-events: none; will-change: transform; background: rgba(26, 23, 20, .96); border: 1px solid var(--rule); border-radius: 3px; padding: 8px 11px 7px; opacity: 0; transition: opacity .12s;
+  font-size: 12.5px; line-height: 1.4; max-width: 340px; z-index: 3; overflow-wrap: anywhere; box-shadow: 0 8px 24px rgba(0, 0, 0, .4); }
+#tip.on { opacity: 1; }
+#tip small { color: var(--mute); font-size: 11px; display: block; } #tip small.h { letter-spacing: .06em; text-transform: uppercase; font-weight: 600; font-size: 10.5px; color: var(--faint); padding-bottom: 2px; }
+#tip small.h i { display: inline-block; width: 14px; height: 7px; border-radius: 1px; background: var(--c); margin-right: 6px; }
+#tip em { font-style: normal; font-family: "Newsreader", Georgia, serif; font-size: 14px; color: var(--ink); font-variant-numeric: lining-nums; }
+#err { position: fixed; left: 8px; bottom: 8px; color: var(--red); font-size: 12px; white-space: pre-wrap; z-index: 9; max-width: 70%; }
+
+@media (max-width: 760px) {
+  .shade { background: linear-gradient(180deg, rgba(14, 12, 10, .94), rgba(14, 12, 10, .82) 30%, rgba(14, 12, 10, 0) 44%, rgba(14, 12, 10, 0) 84%, rgba(14, 12, 10, .9)); }
+  .col { right: 0; width: auto; padding: 12px 16px 10px; }
+  h1 { font-size: 18.5px; margin: 10px 0 6px; }
+  .note { font-size: 11.5px; padding-bottom: 6px; min-height: 4.6em; }
+  .clock strong { font-size: 24px; }
+  .scrub { height: 50px; } .scrub canvas { height: 34px; } .scrub i { height: 40px; } .scrub input { height: 50px; }
+  .scrub input::-webkit-slider-runnable-track { height: 50px; } .scrub input::-webkit-slider-thumb { margin-top: 36px; }
+  .ends { border-bottom: 0; padding-bottom: 0; }
+  .def { margin-top: auto; flex: none; background: rgba(14, 12, 10, .92); border-top: 1px solid var(--rule); max-height: 42vh; }
+  .def summary { display: block; font-size: 11px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--mute); cursor: pointer; padding-bottom: 6px; }
+  #tip { max-width: 300px; }
+}
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<canvas id="c" aria-label="A wooden floor loom: each band of warp threads is one area of the repository, each weft row is one commit, dyed in its author's colour where the commit touched the area"></canvas>
+<div class="grain"></div>
+<div class="shade"></div>
+<div class="col" id="col">
+  <div class="top"><a href="../../">← Lab</a><span>Loom · the commits</span></div>
+  <h1 id="line">&nbsp;</h1>
+  <div class="note" id="note"></div>
+  <div class="clock">
+    <strong id="rown">0</strong>
+    <small id="stamp"></small>
+    <button id="speed" aria-label="Weaving speed">1×</button>
+    <button id="play" aria-label="Weave the hackathon row by row">Play</button>
+  </div>
+  <div class="scrub"><canvas id="strip" width="664" height="92"></canvas><i id="mark"></i>
+    <input id="scrub" type="range" min="0" max="1000" value="1000" aria-label="Unroll the cloth: rows woven so far"></div>
+  <div class="ends"><span id="e0"></span><span>the whole cloth, unrolled</span><span id="e1"></span></div>
+  <details class="def" id="def" open></details>
+</div>
+<div id="tip"></div>
+<div id="err"></div>
+
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x)), lerp = (a, b, t) => a + (b - a) * t;
+const ease = t => t * t * (3 - 2 * t), unit = t => clamp(t, 0, 1);
+const num = n => n.toLocaleString('en-US');
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+addEventListener('error', e => { $('err').textContent = e.message; });
+addEventListener('unhandledrejection', e => { $('err').textContent = String(e.reason); });
+
+// ------------------------------------------------------------------ data: one request
+const DATA = await (await fetch('data.json')).json();
+const N = DATA.t.length, NA = DATA.areas.length, F = DATA.facts;
+const cum = new Int32Array(N + 1);                       // picks woven before row i
+for (let i = 0; i < N; i++) cum[i + 1] = cum[i] + DATA.picks[i];
+const P = cum[N], rowOfPick = new Int16Array(P);
+for (let i = 0; i < N; i++) for (let k = cum[i]; k < cum[i + 1]; k++) rowOfPick[k] = i;
+const short = a => a.replace(/^studies\//, '');
+const DYE = { abaybektursun: '#a9523d', sameraslan: '#3e5c80', frustea: '#c49c4c', agent: '#7b7368' };   // madder, indigo, weld, undyed grey
+const dye = DATA.authors.map(w => DYE[w]);
+const LINEN = '#d6ccb4';
+const fmt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false });
+const when = i => fmt.format(DATA.t[i] * 1000).replace(',', '') + ' PT';
+const areasOf = i => DATA.areas.filter((_, a) => DATA.mask[i] >> a & 1);
+
+// ------------------------------------------------------------------ the words
+$('line').innerHTML = `<b>${num(F.rows)}</b> commits in <b>${F.hours}</b> hours, one weft row each: <b>${esc(DATA.areas[F.top])}</b> carries the most rows, <b>${F.top_rows}</b>, and the longest unbroken run on one area is <b>${F.run}</b> rows on <b>${esc(DATA.areas[F.run_area])}</b>.`;
+$('e0').textContent = when(0); $('e1').textContent = when(N - 1);
+$('def').innerHTML = `<summary>What the loom shows</summary>
+<p><b>Warp.</b> Each band of 12 linen threads is one area of the repository: a folder of studies/, another top-level folder, or the files at the root. The card over the shafts names the ${NA} bands, with the rows each carries.${DATA.folded.length ? ` “other” holds ${esc(DATA.folded.join(', '))}.` : ''}</p>
+<p><b>Weft.</b> Each row is one commit of main, oldest on the cloth beam, newest at the reed. Where the commit touched an area the wool lies over that band; elsewhere it runs under and the linen shows. The shafts that are down are the areas of the row at the reed. The ${F.merges} merge commits change no file and weave no row.</p>
+<p><b>Dye.</b> ${DATA.authors.map((w, i) => `<u style="--c:${dye[i]}"><i></i>${esc(w)} <em>${num(DATA.n_author[i])}</em></u>`).join(' &nbsp;')} rows, by git author.</p>
+<p><b>Thickness.</b> Lines added and deleted, on a log scale: 1 + ⌊log₂(lines + 1) / 3⌋ picks, at most 5 (4,095 lines and more).</p>
+<p class="q">Not data: the unevenness of the dye, the wood and the light. Above 1× the shuttle and reed keep their own pace. Drag to turn, scroll to come close, Space plays, ← → step one row.</p>`;
+
+// ------------------------------------------------------------------ renderer, room, light
+const canvas = $('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate = false;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.04;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#0d0b09');
+const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 60);
+
+function room() {   // what the oiled wood and the floor reflect: a tall window on the left, a dim plaster room
+  const es = new THREE.Scene(), lit = (w, h, v, c) => new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(c[0] * v, c[1] * v, c[2] * v), side: THREE.DoubleSide }));
+  es.add(new THREE.Mesh(new THREE.SphereGeometry(40, 24, 12), new THREE.MeshBasicMaterial({ color: new THREE.Color(0.11, 0.1, 0.085), side: THREE.BackSide })));
+  const win = lit(9, 14, 5.5, [0.95, 0.97, 1]); win.position.set(-22, 9, 12); win.lookAt(0, 2, 0);
+  const ceil = lit(50, 50, 0.32, [1, 0.95, 0.88]); ceil.position.set(0, 24, 0); ceil.rotation.x = Math.PI / 2;
+  const floor = lit(60, 60, 0.07, [1, 0.8, 0.6]); floor.position.set(0, -4, 0); floor.rotation.x = Math.PI / 2;
+  es.add(win, ceil, floor);
+  const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(es, 0.03, 1, 100).texture; pm.dispose();
+}
+room();
+
+const TARGET = new THREE.Vector3(0, 0.92, 0.12);
+const sun = new THREE.DirectionalLight(new THREE.Color(1.0, 0.94, 0.85), 2.7);
+const SUN = new THREE.Vector3(-2.5, 2.5, 2.6).normalize();
+sun.position.copy(TARGET).addScaledVector(SUN, 7); sun.target.position.copy(TARGET);
+sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -3.4, right: 3.4, top: 3.4, bottom: -3.4, near: 1, far: 14 });
+sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.012; sun.shadow.radius = 3;
+scene.add(sun, sun.target, new THREE.HemisphereLight(new THREE.Color(0.78, 0.84, 1), new THREE.Color(0.55, 0.43, 0.3), 0.85));
+
+// ------------------------------------------------------------------ surfaces, drawn once
+let seed = 7;
+const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+function sheet(w, h, draw, srgb = true) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 8;
+  if (srgb) t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+function grainTex(base, dark, light, bump) {   // long grain along x: streaks, rays and pores
+  seed = 11;
+  return sheet(1024, 256, (g, w, h) => {
+    g.fillStyle = bump ? '#808080' : base; g.fillRect(0, 0, w, h);
+    for (let i = 0; i < 900; i++) {
+      const y = rnd() * h, x = rnd() * w, len = 120 + rnd() * 700, a = 0.03 + rnd() * 0.1, up = rnd() < 0.45, amp = rnd() * 3, ph = rnd() * 6;
+      g.strokeStyle = bump ? (up ? `rgba(255,255,255,${a})` : `rgba(0,0,0,${a * 1.3})`) : (up ? light : dark); g.globalAlpha = bump ? 1 : a * 2.4; g.lineWidth = 0.5 + rnd() * 1.8;
+      for (const dx of [0, -w]) { g.beginPath(); for (let s = 0; s <= len; s += 24) g.lineTo(x + dx + s, y + Math.sin(ph + s * 0.004) * amp); g.stroke(); }
+    }
+    for (let i = 0; i < 2600; i++) { g.globalAlpha = 0.1 + rnd() * 0.22; g.fillStyle = bump ? '#000' : dark; g.fillRect(rnd() * w, rnd() * h, 3 + rnd() * 9, 1); }
+    g.globalAlpha = 1;
+  }, !bump);
+}
+function speckTex(base, tones, n, r0, r1, bump) {   // plaster: soft mottling, trowel marks
+  seed = 23;
+  return sheet(512, 512, (g, w, h) => {
+    g.fillStyle = bump ? '#808080' : base; g.fillRect(0, 0, w, h);
+    for (let i = 0; i < n; i++) {
+      const x = rnd() * w, y = rnd() * h, r = r0 + rnd() * (r1 - r0), c = tones[i % tones.length];
+      for (const dx of [0, w, -w]) for (const dy of [0, h, -h]) {
+        const q = g.createRadialGradient(x + dx, y + dy, 0, x + dx, y + dy, r); q.addColorStop(0, c); q.addColorStop(1, c.replace(/[\d.]+\)$/, '0)'));
+        g.fillStyle = q; g.fillRect(x + dx - r, y + dy - r, 2 * r, 2 * r);
+      }
+    }
+    if (bump) for (let i = 0; i < 5000; i++) { g.fillStyle = rnd() < 0.5 ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.12)'; g.fillRect(rnd() * w, rnd() * h, 1.5, 1.5); }
+  }, !bump);
+}
+function plankTex(bump) {
+  seed = 31;
+  return sheet(1024, 1024, (g, w, h) => {
+    const rows = 8, ph = h / rows;
+    for (let r = 0; r < rows; r++) {
+      let x = -rnd() * 500;
+      while (x < w) {
+        const len = 380 + rnd() * 420, v = rnd();
+        g.fillStyle = bump ? '#8a8a8a' : `rgb(${88 + v * 22},${66 + v * 17},${46 + v * 12})`; g.fillRect(x, r * ph, len, ph);
+        for (let i = 0; i < 70; i++) { g.globalAlpha = 0.05 + rnd() * 0.1; g.fillStyle = bump ? (rnd() < 0.5 ? '#fff' : '#000') : (rnd() < 0.5 ? '#2c1e12' : '#b08a5c'); g.fillRect(x + rnd() * len, r * ph + rnd() * ph, 60 + rnd() * 260, 1 + rnd() * 1.5); }
+        g.globalAlpha = 1; g.fillStyle = bump ? '#000' : '#1c130b'; g.fillRect(x + len - 2, r * ph, 2.5, ph);
+        x += len;
+      }
+      g.fillStyle = bump ? '#000' : '#1c130b'; g.fillRect(0, r * ph, w, 2.5);
+    }
+  }, !bump);
+}
+const M = (o) => new THREE.MeshStandardMaterial(o);
+const beech = M({ map: grainTex('#a67a4e', '#553519', '#d4ab7a'), bumpMap: grainTex(0, 0, 0, true), bumpScale: 1.4, roughness: 0.44, metalness: 0, envMapIntensity: 1.0 });
+const beechDark = M({ map: beech.map, bumpMap: beech.bumpMap, bumpScale: 1.2, roughness: 0.55, color: '#8d7c6c', envMapIntensity: 0.8 });
+const iron = M({ color: '#2a2724', roughness: 0.42, metalness: 0.9, envMapIntensity: 1.1 });
+const steel = M({ color: '#8d8a84', roughness: 0.32, metalness: 0.95 });
+const linenMat = M({ color: LINEN, roughness: 0.95, envMapIntensity: 0.5 });
+const cord = M({ color: '#a79a7c', roughness: 1, envMapIntensity: 0.4 });
+
+const wallT = speckTex('#c9c0b0', ['rgba(214,206,190,.16)', 'rgba(170,160,144,.14)', 'rgba(196,186,170,.14)'], 260, 20, 120);
+const wallB = speckTex(0, ['rgba(255,255,255,.07)', 'rgba(0,0,0,.08)'], 420, 8, 70, true);
+wallT.repeat.set(14, 2.2); wallB.repeat.set(21, 3.3);
+const wall = new THREE.Mesh(new THREE.PlaneGeometry(80, 9), M({ map: wallT, bumpMap: wallB, bumpScale: 2.2, roughness: 0.94, envMapIntensity: 0.55 }));
+wall.position.set(0, 4.5, -2.15); wall.receiveShadow = true;
+const fT = plankTex(false), fB = plankTex(true);
+for (const t of [fT, fB]) { t.repeat.set(28, 18); t.rotation = Math.PI / 2; }
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(80, 50), M({ map: fT, bumpMap: fB, bumpScale: 1.5, roughness: 0.52, envMapIntensity: 0.7 }));
+floor.rotation.x = -Math.PI / 2; floor.position.z = 22; floor.receiveShadow = true;
+const skirt = new THREE.Mesh(new THREE.BoxGeometry(80, 0.11, 0.025), M({ color: '#b9b0a0', roughness: 0.8 })); skirt.position.set(0, 0.055, -2.135); skirt.receiveShadow = true;
+scene.add(wall, floor, skirt);
+
+// the window the light comes through: it is never seen, only its shadow (frame and glazing bars) falls into the room
+{
+  const WIN = new THREE.Vector3(...(new URLSearchParams(location.search).get('win') || '0.9,0.9,0').split(',').map(Number));
+  const ghost = new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false }), win = new THREE.Group();
+  const bar = (w, h, x, y) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), ghost); m.position.set(x, y, 0); m.castShadow = true; m.frustumCulled = false; win.add(m); };
+  const ww = 4.4, wh = 4.4;
+  bar(9, 4, 0, wh / 2 + 2); bar(9, 4, 0, -wh / 2 - 2); bar(4, 12, -ww / 2 - 2, 0); bar(4, 12, ww / 2 + 2, 0);
+  bar(0.05, wh, 0, 0); bar(ww, 0.05, 0, 0);
+  ghost.side = THREE.DoubleSide;
+  win.position.copy(TARGET).addScaledVector(SUN, 4.2).add(WIN); win.lookAt(TARGET.clone().add(WIN));
+  scene.add(win);
+}
+
+// ------------------------------------------------------------------ the loom: measures in metres
+const EPB = 12, NE = NA * EPB, PITCH = 0.0052, CW = NE * PITCH, PICK = 0.0024;
+const YB = 0.93, ZF = -0.15, ZA = 0.75, RB = 0.036, ZBK = -1.05;          // bed height, fell, breast beam, back beam
+const CB = { z: 0.5, y: 0.44 }, R0 = 0.05, TH = 0.0034;                      // cloth beam and the thickness of one layer
+const WB = { z: -0.88, y: 0.5 }, RW0 = 0.055;
+const ZS0 = -0.5, DZS = 0.016, LIFT = 0.058, ZR0 = -0.36, PIVY = 0.13;       // shafts, reed at rest, beater pivot
+const XS = CW / 2 + 0.37, XSW = CW / 2 + 0.3, XPARK = CW / 2 + 0.15;
+const endX = j => (j + 0.5) * PITCH - CW / 2, shaftZ = a => ZS0 - a * DZS;
+const loom = new THREE.Group(); scene.add(loom);
+const shadowed = m => { m.castShadow = m.receiveShadow = true; return m; };
+
+function timber(lx, ly, lz, x, y, z, mat = beech, r = 0.007) {   // a squared piece, grain along its longest side
+  const d = [lx, ly, lz], ax = d.indexOf(Math.max(...d));
+  const g = ax === 0 ? new RoundedBoxGeometry(lx, ly, lz, 2, r) : ax === 1 ? new RoundedBoxGeometry(ly, lx, lz, 2, r).rotateZ(Math.PI / 2) : new RoundedBoxGeometry(lz, ly, lx, 2, r).rotateY(Math.PI / 2);
+  const uv = g.attributes.uv, ox = rnd(), oy = rnd(), L = d[ax];
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * L / 1.3 + ox, uv.getY(i) * 0.22 + oy);
+  const m = shadowed(new THREE.Mesh(g, mat)); m.position.set(x, y, z); loom.add(m); return m;
+}
+function turned(rad, len, x, y, z, mat = beech, seg = 28) {      // a turned piece along x
+  const g = new THREE.CylinderGeometry(rad, rad, len, seg, 1).rotateZ(Math.PI / 2), uv = g.attributes.uv, ox = rnd(), oy = rnd();
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getY(i) * len / 1.3 + ox, uv.getX(i) * 0.6 + oy);
+  const m = shadowed(new THREE.Mesh(g, mat)); m.position.set(x, y, z); loom.add(m); return m;
+}
+seed = 5;
+const ZC = shaftZ((NA - 1) / 2), CASTLE = 1.84;
+for (const sx of [-1, 1]) {
+  const x = sx * XS;
+  timber(0.07, YB + 0.02, 0.07, x, (YB + 0.02) / 2, ZA + 0.03);          // front post
+  timber(0.07, YB + 0.02, 0.07, x, (YB + 0.02) / 2, ZBK - 0.03);         // back post
+  timber(0.07, CASTLE, 0.085, x, CASTLE / 2, ZC);                        // castle post
+  timber(0.05, 0.09, ZA - ZBK + 0.2, x, 0.16, (ZA + ZBK) / 2);           // low side rail
+  timber(0.05, 0.08, ZA - ZBK + 0.06, x, YB - 0.1, (ZA + ZBK) / 2);      // high side rail
+  timber(0.1, 0.045, 0.34, x, 0.022, ZA + 0.03, beechDark); timber(0.1, 0.045, 0.34, x, 0.022, ZBK - 0.03, beechDark); timber(0.1, 0.045, 0.4, x, 0.022, ZC, beechDark);   // feet
+  timber(0.045, 0.05, 0.05, sx * XSW, PIVY, ZR0, beechDark);              // beater pivot block
+}
+timber(2 * XS + 0.07, 0.06, 0.3, 0, CASTLE + 0.03, ZC);                  // castle top
+timber(2 * XS - 0.07, 0.08, 0.045, 0, 0.3, ZA + 0.03); timber(2 * XS - 0.07, 0.08, 0.045, 0, 0.3, ZBK - 0.03);   // stretchers
+timber(2 * XS - 0.05, 0.045, 0.045, 0, PIVY, ZR0, beechDark);            // rocking shaft of the beater
+turned(RB, 2 * XS + 0.07, 0, YB - RB, ZA); turned(RB, 2 * XS + 0.07, 0, YB - RB, ZBK);   // breast beam, back beam
+turned(0.042, 2 * XS + 0.14, 0, CB.y, CB.z); turned(0.045, 2 * XS + 0.14, 0, WB.y, WB.z);   // cores of the cloth beam and the warp beam
+const ratchet = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.085, 0.012, 22).rotateZ(Math.PI / 2), iron)); ratchet.material = iron.clone(); ratchet.material.flatShading = true;
+ratchet.position.set(XS - 0.075, CB.y, CB.z); loom.add(ratchet);
+const pawl = timber(0.012, 0.016, 0.13, XS - 0.075, CB.y + 0.1, CB.z + 0.05, iron, 0.003); pawl.rotation.x = 0.5;
+for (let i = 0; i < 6; i++) { const t = timber(0.05, 0.022, 0.86, (i - 2.5) * 0.085, 0.085, 0.2, beechDark, 0.005); t.rotation.x = -0.035 - (i % 2) * 0.03; }   // treadles
+timber(0.62, 0.035, 0.05, 0, 0.05, -0.24, beechDark);
+
+// warp beam's linen and the cloth roll under its outer layer
+const warpRoll = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(1, 1, CW + 0.01, 40, 1).rotateZ(Math.PI / 2), linenMat)); warpRoll.position.set(0, WB.y, WB.z); loom.add(warpRoll);
+const rollEnd = sheet(256, 256, (g, w) => { g.fillStyle = '#8b7d66'; g.fillRect(0, 0, w, w); for (let r = 4; r < 128; r += 3.2) { g.strokeStyle = r % 6.4 < 3.2 ? 'rgba(40,30,22,.5)' : 'rgba(220,205,170,.35)'; g.lineWidth = 1.1; g.beginPath(); g.arc(128, 128, r, 0, 7); g.stroke(); } });
+const clothRoll = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(1, 1, CW - 0.004, 40, 1).rotateZ(Math.PI / 2), [M({ color: '#6f6252', roughness: 1 }), M({ map: rollEnd, roughness: 1 }), M({ map: rollEnd, roughness: 1 })]));
+clothRoll.position.set(0, CB.y, CB.z); loom.add(clothRoll);
+
+// the beater: two swords, the shuttle race, the hand rail, the reed between them; it swings on the rocking shaft
+const beater = new THREE.Group(); beater.position.set(0, PIVY, ZR0); loom.add(beater);
+{
+  const keep = loom.children.length, by = YB - PIVY;
+  timber(0.04, by + 0.3, 0.05, -XSW, (by + 0.3) / 2, 0); timber(0.04, by + 0.3, 0.05, XSW, (by + 0.3) / 2, 0);
+  timber(2 * XSW + 0.04, 0.045, 0.085, 0, by - 0.062, 0.012);            // race
+  timber(2 * XSW + 0.04, 0.05, 0.05, 0, by + 0.135, 0);                  // hand rail
+  const wires = sheet(16, 4, (g) => { g.clearRect(0, 0, 16, 4); g.fillStyle = '#fff'; g.fillRect(6, 0, 4, 4); });
+  wires.repeat.set(NE + 8, 1); wires.colorSpace = THREE.NoColorSpace;
+  const reed = new THREE.Mesh(new THREE.PlaneGeometry(CW + 8 * PITCH, 0.15), M({ color: '#9a968e', alphaMap: wires, transparent: true, roughness: 0.3, metalness: 0.9, side: THREE.DoubleSide, depthWrite: false }));
+  reed.position.set(0, by + 0.035, 0); loom.add(reed);
+  for (const m of loom.children.splice(keep)) beater.add(m);
+}
+// the shuttle: a boat of darker wood with a bobbin of the wool of the row it is laying
+const shuttle = new THREE.Group(); shuttle.position.set(XPARK, YB - PIVY - 0.021, 0.036); beater.add(shuttle);
+const bobbinMat = M({ color: dye[0], roughness: 0.95 });
+{
+  const hull = new THREE.CylinderGeometry(0.019, 0.019, 0.24, 16, 8).rotateZ(Math.PI / 2), p = hull.attributes.position;
+  for (let i = 0; i < p.count; i++) { const k = 1 - Math.pow(Math.abs(p.getX(i)) / 0.12, 2.4) * 0.86; p.setY(i, Math.max(-0.009, p.getY(i) * 0.75) * k); p.setZ(i, p.getZ(i) * k); }
+  hull.computeVertexNormals();
+  const walnut = M({ map: beech.map, color: '#8a6a52', roughness: 0.35, envMapIntensity: 1.1 });
+  const bob = new THREE.Mesh(new THREE.CylinderGeometry(0.0085, 0.0085, 0.095, 12).rotateZ(Math.PI / 2), bobbinMat); bob.position.y = 0.0075;
+  shuttle.add(shadowed(new THREE.Mesh(hull, walnut)), shadowed(bob));
+}
+
+// instanced threads and sticks: one matrix per piece, set from its two ends
+const Y = new THREE.Vector3(0, 1, 0), va = new THREE.Vector3(), vb = new THREE.Vector3(), vd = new THREE.Vector3(), qq = new THREE.Quaternion(), vs = new THREE.Vector3(), mm = new THREE.Matrix4();
+function seg(mesh, i, ax, ay, az, bx, by, bz, r, rz = r) {
+  va.set(ax, ay, az); vb.set(bx, by, bz); vd.subVectors(vb, va); const L = vd.length();
+  qq.setFromUnitVectors(Y, vd.divideScalar(L)); va.add(vb).multiplyScalar(0.5); vs.set(r, L, rz);
+  mesh.setMatrixAt(i, mm.compose(va, qq, vs));
+}
+const inst = (geo, mat, n) => { const m = shadowed(new THREE.InstancedMesh(geo, mat, n)); m.frustumCulled = false; loom.add(m); return m; };
+const thread = new THREE.CylinderGeometry(1, 1, 1, 5, 1, true);
+const warp = inst(thread, linenMat, NE * 3);
+const heddles = inst(thread, steel, NE); heddles.castShadow = false;
+const cords = inst(thread, cord, NA * 2);
+const bars = inst(new THREE.BoxGeometry(1, 1, 1), beechDark, NA * 2);
+const weftMat = M({ color: dye[0], roughness: 0.95 });
+const weft = inst(new THREE.CylinderGeometry(1, 1, 1, 6, 1, true), weftMat, 1);
+for (let j = 0; j < NE; j++) {   // the still part of the warp: over the back beam, down to the warp beam
+  const x = endX(j);
+  seg(warp, NE * 2 + j, x, YB, ZBK, x, WB.y + 0.02, WB.z - 0.06, 0.0016);
+}
+
+// ------------------------------------------------------------------ the cloth: one ribbon from the fell over the breast beam onto the cloth beam
+const pickTex = (() => {
+  const w = 1024, h = Math.ceil(P / w), d = new Uint8Array(w * h * 4);
+  for (let k = 0; k < P; k++) { const i = rowOfPick[k]; d[k * 4] = DATA.who[i]; d[k * 4 + 1] = DATA.mask[i] & 255; d[k * 4 + 2] = DATA.mask[i] >> 8; d[k * 4 + 3] = (k - cum[i]) * 8 + DATA.picks[i]; }
+  const t = new THREE.DataTexture(d, w, h, THREE.RGBAFormat); t.magFilter = t.minFilter = THREE.NearestFilter; t.needsUpdate = true; return t;
+})();
+const lin = hex => { const c = new THREE.Color(hex); return new THREE.Vector3(c.r, c.g, c.b); };
+const U = { uPick: { value: pickTex }, uP: { value: P }, uDye: { value: [0, 1, 2, 3].map(i => lin(dye[i] || '#777')) }, uLinen: { value: lin(LINEN) }, uHover: { value: new THREE.Vector2(-1, 0) }, uNE: { value: NE } };
+const clothMat = M({ roughness: 0.96, metalness: 0, side: THREE.DoubleSide, envMapIntensity: 0.45 });
+clothMat.onBeforeCompile = sh => {
+  Object.assign(sh.uniforms, U);
+  sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec2 vCl; uniform float uNE;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvCl = vec2(uv.x * uNE, uv.y);');
+  sh.fragmentShader = sh.fragmentShader.replace('#include <common>', `#include <common>
+    varying vec2 vCl; uniform sampler2D uPick; uniform float uP; uniform vec3 uDye[4]; uniform vec3 uLinen; uniform vec2 uHover;
+    float h2(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+    float vn(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f); return mix(mix(h2(i), h2(i + vec2(1, 0)), f.x), mix(h2(i + vec2(0, 1)), h2(i + vec2(1, 1)), f.x), f.y); }`)
+  .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
+  {
+    float e = vCl.x, p = uP - vCl.y, ip = floor(p);
+    float dp = fwidth(vCl.y), de = fwidth(vCl.x);
+    float near = smoothstep(0.4, 0.1, dp), nearE = smoothstep(0.32, 0.08, de);          // thread detail fades when a thread is thinner than a pixel
+    float band = floor(e / ${EPB}.), cx = fract(e) * 2. - 1.;
+    bool woven = ip >= 0.;
+    int ii = woven ? int(ip) : 0;
+    vec4 tx = texelFetch(uPick, ivec2(ii % 1024, ii / 1024), 0);
+    int who = int(tx.r * 255. + .5), mask = int(tx.g * 255. + .5) + 256 * int(tx.b * 255. + .5), kn = int(tx.a * 255. + .5);
+    float n = float(kn & 7), start = ip - float(kn >> 3);
+    bool over = woven && ((mask >> int(band)) & 1) == 1;
+    float fp = fract(p), k = ip - start;
+    float yarn = sqrt(max(0., 1. - (2. * fp - 1.) * (2. * fp - 1.)));               // the round back of one pick of yarn
+    bool seam = woven && ((fp < 0.5 && k < 0.5) || (fp > 0.5 && k > n - 1.5));        // the edge of the row: a deeper crease than between its own picks
+    float crease = seam ? 0.36 : 0.68;
+    vec3 wool = uDye[who];
+    float lot = h2(vec2(start, 3.7));                                                // each row its own dip in the dye bath
+    wool *= 0.86 + 0.3 * lot + 0.22 * (vn(vec2(e * 0.11, start * 0.37)) - 0.5);
+    wool = mix(wool, wool.gbr, 0.05 * (lot - 0.5));
+    float fuzz = vn(vec2(e * 5., p * 9.)) + 0.5 * vn(vec2(e * 23., p * 17.)) - 0.75;
+    vec3 col; float hgt;
+    if (over) {                                                                      // wool over the hidden warp: a rib over every end
+      float ply = sin((e * 2.6 + fp * 1.25) * 6.2832);
+      float rib = 0.5 + 0.5 * cos(e * 6.2832 + 3.1416 * mod(ip, 2.));
+      hgt = yarn * (0.72 + 0.28 * rib) + 0.1 * ply;
+      float sh = mix(crease, 1.05, smoothstep(0., 0.8, yarn)) * (0.9 + 0.1 * ply) * (0.86 + 0.14 * rib) + 0.16 * fuzz;
+      col = wool * mix(0.9, sh, near);
+    } else {                                                                         // linen over the wool: the ends show, the row below lifts them
+      float w = 0.94, end = sqrt(max(0., 1. - cx * cx / (w * w)));
+      float ply = sin((p * 0.8 + cx * 0.75 + floor(e) * 0.37) * 6.2832);
+      float slub = vn(vec2(floor(e) * 7.3, p * 0.06));
+      vec3 flax = uLinen * (0.84 + 0.22 * slub) * (0.9 + 0.1 * ply);
+      vec3 under = woven ? mix(wool, uLinen, 0.25) * 0.36 * (0.5 + 0.5 * yarn) : uLinen * 0.15;
+      float edge = smoothstep(w, w - 0.2, abs(cx));
+      float shE = mix(0.6, 1.03, smoothstep(0., 0.8, end)) * (woven ? 0.86 + 0.14 * yarn : 1.);
+      vec3 fine = mix(under, flax * shE, edge) + 0.07 * fuzz;
+      vec3 far = mix(under, flax * 0.92, 0.86);
+      col = mix(far, fine, min(near, nearE));
+      hgt = edge * (0.7 * end + (woven ? 0.25 * yarn : 0.)) * nearE + 0.06 * ply;
+    }
+    if (uHover.y > 0. && woven && start == uHover.x) col = col * 1.1 + 0.035;
+    vec3 sx = dFdx(-vViewPosition), sy = dFdy(-vViewPosition), r1 = cross(sy, normal), r2 = cross(normal, sx);
+    float det = dot(sx, r1), hh = hgt * 0.0009 * near;
+    normal = normalize(abs(det) * normal - sign(det) * (dFdx(hh) * r1 + dFdy(hh) * r2));
+    float graze = 1. - abs(dot(normal, normalize(vViewPosition)));                    // the nap catches light at a low angle
+    col += col * 0.5 * graze * graze * graze;
+    diffuseColor.rgb = col;
+  }`);
+};
+const SEG = { bed: 2, a: 10, run: 2, b: 44 }, NP = SEG.bed + SEG.a + SEG.run + SEG.b;
+const clothGeo = new THREE.BufferGeometry();
+const cPos = new Float32Array(NP * 6), cNor = new Float32Array(NP * 6), cUv = new Float32Array(NP * 4), cIdx = [];
+for (let i = 0; i < NP - 1; i++) cIdx.push(2 * i, 2 * i + 2, 2 * i + 1, 2 * i + 1, 2 * i + 2, 2 * i + 3);
+clothGeo.setAttribute('position', new THREE.BufferAttribute(cPos, 3)); clothGeo.setAttribute('normal', new THREE.BufferAttribute(cNor, 3)); clothGeo.setAttribute('uv', new THREE.BufferAttribute(cUv, 2));
+clothGeo.setIndex(cIdx);
+const cloth = shadowed(new THREE.Mesh(clothGeo, clothMat)); cloth.frustumCulled = false; loom.add(cloth);
+let rollR = R0;
+function layCloth(picks) {   // the roll grows with what is wound on it; the cloth path follows
+  const r = Math.sqrt(R0 * R0 + Math.max(0, picks * PICK - 1.2) * TH / Math.PI) + 0.003; rollR = r;
+  const ca = { z: ZA, y: YB - RB }, ra = RB + 0.0015, dz = CB.z - ca.z, dy = CB.y - ca.y, L = Math.hypot(dz, dy);
+  const bt = Math.atan2(dy, dz) + Math.acos((ra - r) / L);
+  let k = 0, s = 0, pz = ZF, py = YB;
+  const put = (z, y, nz, ny) => {
+    s += Math.hypot(z - pz, y - py); pz = z; py = y;
+    for (const sx of [-1, 1]) { cPos.set([sx * CW / 2, y, z], k * 3); cNor.set([0, ny, nz], k * 3); cUv.set([sx > 0 ? 1 : 0, s / PICK], k * 2); k++; }
+  };
+  put(ZF, YB + 0.0015, 0, 1);
+  for (let i = 0; i < SEG.bed + SEG.a - 1; i++) { const b = Math.PI / 2 - Math.max(0, i - SEG.bed + 2) / (SEG.a - 1) * (Math.PI / 2 - bt); put(ca.z + ra * Math.cos(b), ca.y + ra * Math.sin(b), Math.cos(b), Math.sin(b)); }
+  for (let i = 0; i <= SEG.b + SEG.run - 1; i++) { const b = bt - Math.max(0, i - SEG.run + 1) / SEG.b * Math.PI * 2; put(CB.z + r * Math.cos(b), CB.y + r * Math.sin(b), Math.cos(b), Math.sin(b)); }
+  clothGeo.attributes.position.needsUpdate = clothGeo.attributes.normal.needsUpdate = clothGeo.attributes.uv.needsUpdate = true;
+  clothRoll.scale.set(1, r - 0.002, r - 0.002);
+  const rw = Math.sqrt(RW0 * RW0 + (P - picks) * PICK * 0.0022 / Math.PI); warpRoll.scale.set(1, rw, rw);
+  ratchet.rotation.x = (2 * Math.PI / TH) * (r - R0);
+}
+
+// the draft card over the shafts: the name of each warp band, printed above it
+const cardTex = sheet(2048, 640, () => {}); cardTex.wrapS = cardTex.wrapT = THREE.ClampToEdgeWrapping;
+function printCard() {
+  const c = cardTex.image, g = c.getContext('2d'), w = c.width, h = c.height, m = 0.03 / (CW + 0.06) * w, bw = (w - 2 * m) / NA;
+  g.fillStyle = '#e6dcc6'; g.fillRect(0, 0, w, h);
+  seed = 41; for (let i = 0; i < 2600; i++) { g.fillStyle = rnd() < 0.5 ? 'rgba(120,100,70,.05)' : 'rgba(255,250,235,.07)'; g.fillRect(rnd() * w, rnd() * h, 2 + rnd() * 30, 1.5); }
+  g.strokeStyle = 'rgba(60,48,34,.55)'; g.lineWidth = 2; g.strokeRect(14, 14, w - 28, h - 28);
+  const nStudy = DATA.areas.filter(a => a.startsWith('studies/')).length;
+  g.fillStyle = '#3a2f22'; g.font = '600 30px Archivo, sans-serif'; g.textBaseline = 'middle'; g.textAlign = 'left';
+  try { g.letterSpacing = '4px'; } catch (e) {}
+  g.fillText('STUDIES /', m + 10, 52); g.fillRect(m + 190, 51, nStudy * bw - 200, 2); g.fillRect(m + nStudy * bw - 10, 51, 2, 22);
+  for (let a = 0; a < NA; a++) {
+    const x = m + (a + 0.5) * bw;
+    if (a) { g.fillStyle = 'rgba(60,48,34,.28)'; g.fillRect(m + a * bw, 86, 1.5, h - 112); }
+    g.save(); g.translate(x - 4, h - 112); g.rotate(-Math.PI / 2);
+    g.fillStyle = '#2e251a'; g.font = '600 46px Archivo, sans-serif'; g.textAlign = 'left'; try { g.letterSpacing = '3px'; } catch (e) {}
+    g.fillText(short(DATA.areas[a]).toUpperCase(), 0, 4); g.restore();
+    g.fillStyle = '#7a2f1e'; g.font = '400 52px Newsreader, Georgia, serif'; g.textAlign = 'center'; try { g.letterSpacing = '0px'; } catch (e) {}
+    g.fillText(String(DATA.n_area[a]), x, h - 62);
+  }
+  cardTex.needsUpdate = true; need = true;
+}
+{
+  const cw = CW + 0.06, ch = cw * 640 / 2048, cy = CASTLE - 0.09 - ch / 2, cz = ZC + 0.23;
+  const card = shadowed(new THREE.Mesh(new THREE.BoxGeometry(cw, ch, 0.004), [0, 1, 2, 3, 4, 5].map(i => i === 4 ? M({ map: cardTex, roughness: 0.9, envMapIntensity: 0.4 }) : M({ color: '#d8cdb4', roughness: 0.9 }))));
+  card.position.set(0, cy, cz); loom.add(card);
+  timber(cw + 0.05, 0.022, 0.012, 0, cy + ch / 2, cz + 0.004, beechDark, 0.003); timber(cw + 0.05, 0.022, 0.012, 0, cy - ch / 2, cz + 0.004, beechDark, 0.003);
+}
+
+// ------------------------------------------------------------------ state: rows woven so far (a float while a row is being woven)
+const q = new URLSearchParams(location.hash.slice(1));
+const SPEEDS = [1, 6, 30], RATE = 2.2;                    // rows a second at 1×
+let row = q.has('r') ? clamp(+q.get('r') || 0, 0, N) : N, shown = row, playing = false, speedI = 0, need = true, clock = 0;
+let az = q.has('az') ? +q.get('az') : 0.6, el = q.has('el') ? +q.get('el') : 0.52, zoom = q.has('z') ? +q.get('z') : 0.97, azS = az, elS = el, zoomS = zoom, vAz = 0, vEl = 0;
+const lift = new Float32Array(NA).fill(1), mech = { x: 1, beat: 0 };
+let hover = -1, hashT = 0;
+function saveHash() { clearTimeout(hashT); hashT = setTimeout(() => history.replaceState(null, '', `#r=${Math.round(row)}&az=${az.toFixed(2)}&el=${el.toFixed(2)}&z=${zoom.toFixed(2)}`), 250); }
+const picksAt = r => { const i = Math.min(N - 1, Math.floor(r)); return r >= N ? P : cum[i] + DATA.picks[i] * (r - i); };
+
+function pose(dt) {
+  const i = Math.min(N - 1, Math.floor(shown)), ph = shown - i, weaving = playing && shown < N;
+  const last = clamp(Math.ceil(shown) - 1, 0, N - 1), cur = weaving ? i : last, side = k => k % 2 ? 1 : -1;
+  const mp = !weaving ? 0 : SPEEDS[speedI] === 1 ? ph : (clock * 3.2) % 1;          // the phase the machine shows
+  let picks = picksAt(shown);
+  if (weaving) picks = cum[i] + DATA.picks[i] * ease(unit((ph - 0.62) / 0.2));
+  const k = still || dt <= 0 ? 1 : 1 - Math.exp(-dt * (weaving ? 30 : 12));
+  let moving = false;
+  for (let a = 0; a < NA; a++) { const t = DATA.mask[cur] >> a & 1 ? -1 : 1, v = Math.abs(lift[a] - t) < 0.004 ? t : lerp(lift[a], t, k); if (v !== lift[a]) { lift[a] = v; moving = true; } }
+  const s0 = side(weaving && SPEEDS[speedI] > 1 ? Math.floor(clock * 3.2) : cur);
+  const tx = weaving ? lerp(s0, -s0, ease(unit((mp - 0.1) / 0.48))) : side(last + 1), tb = weaving ? (mp < 0.6 ? 0 : mp < 0.8 ? ease((mp - 0.6) / 0.2) : 1 - ease((mp - 0.8) / 0.2)) : 0;
+  const sx = weaving || Math.abs(mech.x - tx) < 0.003 ? tx : lerp(mech.x, tx, k), sb = weaving || Math.abs(mech.beat - tb) < 0.003 ? tb : lerp(mech.beat, tb, k);
+  if (sx !== mech.x || sb !== mech.beat) moving = true;
+  mech.x = sx; mech.beat = sb;
+
+  for (let a = 0; a < NA; a++) {
+    const z = shaftZ(a), off = lift[a] * LIFT * (ZF - z) / (ZF - ZS0), y = YB + off;
+    for (let e = 0; e < EPB; e++) {
+      const j = a * EPB + e, x = endX(j);
+      seg(warp, j, x, YB, ZF, x, y, z, 0.0016); seg(warp, NE + j, x, y, z, x, YB, ZBK, 0.0016);
+      seg(heddles, j, x, y - 0.2, z, x, y + 0.2, z, 0.0005);
+    }
+    seg(bars, a * 2, -CW / 2 - 0.07, y + 0.21, z, CW / 2 + 0.07, y + 0.21, z, 0.024, 0.01); seg(bars, a * 2 + 1, -CW / 2 - 0.07, y - 0.21, z, CW / 2 + 0.07, y - 0.21, z, 0.024, 0.01);
+    seg(cords, a * 2, -0.3, y + 0.22, z, -0.3, CASTLE, z, 0.0014); seg(cords, a * 2 + 1, 0.3, y + 0.22, z, 0.3, CASTLE, z, 0.0014);
+  }
+  for (const m of [warp, heddles, bars, cords]) m.instanceMatrix.needsUpdate = true;
+  beater.rotation.x = mech.beat * Math.atan((ZF - ZR0 - 0.006) / (YB - PIVY));
+  shuttle.position.x = mech.x * XPARK;
+  beater.updateMatrixWorld(true);
+  const c = new THREE.Color(dye[DATA.who[cur]]); bobbinMat.color.copy(c); weftMat.color.copy(c);
+  shuttle.getWorldPosition(vb);
+  const from = weaving && mp < 0.8 ? s0 : side(last + 1);                              // the selvedge the wool last left the cloth at
+  seg(weft, 0, from * CW / 2, YB + 0.002, ZF, vb.x - Math.sign(vb.x - from * CW / 2) * 0.03, vb.y + 0.008, vb.z, 0.0013); weft.instanceMatrix.needsUpdate = true;
+  U.uP.value = picks; layCloth(picks);
+  return moving;
+}
+
+// ------------------------------------------------------------------ the strip: the whole cloth, one column per pick, one line per band
+const strip = $('strip');
+{
+  const src = document.createElement('canvas'); src.width = P; src.height = NA;
+  const g = src.getContext('2d'), im = g.createImageData(P, NA), rgb = dye.map(h => [1, 3, 5].map(k => parseInt(h.slice(k, k + 2), 16)));
+  for (let k = 0; k < P; k++) { const i = rowOfPick[k], c = rgb[DATA.who[i]];
+    for (let a = 0; a < NA; a++) { const o = (a * P + k) * 4, on = DATA.mask[i] >> a & 1; im.data[o] = on ? c[0] : 171; im.data[o + 1] = on ? c[1] : 162; im.data[o + 2] = on ? c[2] : 142; im.data[o + 3] = 255; } }
+  g.putImageData(im, 0, 0);
+  const mid = document.createElement('canvas'); mid.width = strip.width * 2; mid.height = NA; mid.getContext('2d').drawImage(src, 0, 0, mid.width, NA);
+  const s = strip.getContext('2d'); s.imageSmoothingEnabled = true; s.drawImage(mid, 0, 0, strip.width / 2, NA, 0, 0, strip.width / 2, strip.height);
+  s.drawImage(mid, mid.width / 2, 0, mid.width / 2, NA, strip.width / 2, 0, strip.width / 2, strip.height);
+  s.imageSmoothingEnabled = false; s.globalAlpha = 0.22; s.fillStyle = '#12100e'; for (let a = 1; a < NA; a++) s.fillRect(0, Math.round(a * strip.height / NA), strip.width, 1);
+}
+const scrub = $('scrub'); scrub.max = P;
+
+function words() {
+  const done = Math.min(N, Math.floor(shown + 1e-6)), i = clamp(playing && shown < N ? Math.floor(shown) : done - 1, 0, N - 1);
+  $('rown').textContent = num(done);
+  $('stamp').innerHTML = `of ${num(N)} rows<br>${done ? when(i) : 'bare warp'}`;
+  $('note').innerHTML = done || playing ? `<i>At the reed ·</i> <b>${esc(DATA.authors[DATA.who[i]])}</b> · ${esc(DATA.s[i])}<br><i>${esc(areasOf(i).map(short).join(', '))} · ${num(DATA.lines[i])} lines</i>` : '<i>Nothing woven yet. Press Play.</i>';
+  const pk = picksAt(shown); if (document.activeElement !== scrub || playing) scrub.value = Math.round(pk);
+  $('mark').style.left = (pk / P * 100) + '%';
+}
+function setRow(r, keepPlay) { row = clamp(r, 0, N); if (!keepPlay && playing) setPlay(false); if (still) shown = row; need = true; saveHash(); }
+function setPlay(on) {
+  playing = on && !still; if (playing && row >= N) { row = shown = 0; }
+  if (playing) shown = row = Math.floor(row);
+  $('play').textContent = playing ? 'Pause' : 'Play'; need = true;
+}
+$('play').onclick = () => setPlay(!playing);
+if (still) { $('play').style.display = 'none'; $('speed').style.display = 'none'; }
+$('speed').onclick = () => { speedI = (speedI + 1) % SPEEDS.length; $('speed').textContent = SPEEDS[speedI] + '×'; };
+scrub.addEventListener('input', () => { const k = +scrub.value; setRow(k >= P ? N : rowOfPick[k] + (k > cum[rowOfPick[k]] ? 1 : 0)); });
+
+// ------------------------------------------------------------------ layout and camera
+let W = 0, H = 0, narrow = false;
+function resize() {
+  W = innerWidth; H = innerHeight; narrow = W <= 760;
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, W * H > 1.2e6 ? 1.25 : 1.5)); renderer.setSize(W, H, false);
+  camera.aspect = W / H;
+  if (narrow) camera.setViewOffset(W, H, 0, -H * 0.13, W, H); else camera.setViewOffset(W, H, -Math.min(372, W * 0.26) / 2, 0, W, H);
+  camera.updateProjectionMatrix(); need = true;
+}
+function aim() {
+  const fit = narrow ? 2.15 / (2 * Math.tan(15 * Math.PI / 180) * camera.aspect) : Math.max(4.5, 2.3 / (2 * Math.tan(15 * Math.PI / 180) * (camera.aspect - 0.3)));
+  const d = fit * zoomS, t = unit((1 - zoomS) / 0.8);
+  camera.position.set(Math.sin(azS) * Math.cos(elS), Math.sin(elS), Math.cos(azS) * Math.cos(elS)).multiplyScalar(d);
+  va.set(0, lerp(TARGET.y, YB, t), lerp(TARGET.z, 0.3, t)); camera.position.add(va); camera.lookAt(va);   // coming close, the eye settles on the cloth
+}
+addEventListener('resize', resize); resize();
+if (narrow) $('def').open = false;
+
+// ------------------------------------------------------------------ pointer: turn the view, read a row
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), tip = $('tip');
+let drag = null, px = -1, py = -1;
+function rowAt(x, y) {
+  ndc.set(x / W * 2 - 1, -(y / H) * 2 + 1);
+  ray.setFromCamera(ndc, camera);
+  const hit = ray.intersectObjects([cloth, ...loom.children.filter(m => m !== cloth && m.isMesh && !m.isInstancedMesh)], false)[0];
+  if (!hit || hit.object !== cloth) return null;
+  const pk = U.uP.value - hit.uv.y; if (pk < 0 || pk >= P) return null;
+  return { i: rowOfPick[Math.floor(pk)], a: clamp(Math.floor(hit.uv.x * NA), 0, NA - 1) };
+}
+function point(x, y) {
+  px = x; py = y; const h = x < 0 ? null : rowAt(x, y), i = h ? h.i : -1;
+  canvas.classList.toggle('pick', i >= 0);
+  if (i >= 0) {
+    const on = DATA.mask[i] >> h.a & 1;
+    tip.innerHTML = `<small class="h" style="--c:${dye[DATA.who[i]]}"><i></i>${esc(when(i))} · ${esc(DATA.authors[DATA.who[i]])}</small>${esc(DATA.s[i])}<small>${esc(areasOf(i).map(short).join(', '))}</small><small><em>${num(DATA.lines[i])}</em> lines · row <em>${num(i + 1)}</em> · here ${on ? 'over' : 'under'} <b>${esc(short(DATA.areas[h.a]))}</b></small>`;
+    const tw = tip.offsetWidth, th = tip.offsetHeight;
+    tip.style.transform = `translate(${clamp(x + 16, 8, W - tw - 8)}px,${clamp(y - th - 14, 8, H - th - 8)}px)`;
+  }
+  tip.classList.toggle('on', i >= 0);
+  if (i !== hover) { hover = i; U.uHover.value.set(i < 0 ? -1 : cum[i], i < 0 ? 0 : 1); need = true; }
+}
+canvas.addEventListener('pointerdown', e => { canvas.setPointerCapture(e.pointerId); drag = { x: e.clientX, y: e.clientY, moved: 0 }; vAz = vEl = 0; });
+canvas.addEventListener('pointermove', e => {
+  if (!drag) return point(e.clientX, e.clientY);
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY; drag.moved += Math.abs(dx) + Math.abs(dy);
+  if (drag.moved > 4) { canvas.classList.add('turn'); point(-1, -1); az = clamp(az - dx * 0.005, -1.25, 1.25); el = clamp(el + dy * 0.004, 0.06, 1.35); vAz = -dx * 0.3; vEl = dy * 0.24; need = true; }
+});
+const drop = e => { if (drag && drag.moved <= 4) point(e.clientX, e.clientY); else saveHash(); drag = null; canvas.classList.remove('turn'); };
+canvas.addEventListener('pointerup', drop); canvas.addEventListener('pointercancel', drop);
+canvas.addEventListener('pointerleave', () => { if (!drag) point(-1, -1); });
+canvas.addEventListener('wheel', e => { e.preventDefault(); zoom = clamp(zoom * Math.exp(e.deltaY * 0.0012), 0.09, 1.25); need = true; saveHash(); }, { passive: false });
+addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' && e.key !== ' ') return;
+  if (e.key === ' ') { e.preventDefault(); setPlay(!playing); }
+  else if (e.key === 'ArrowLeft') setRow(Math.ceil(row) - 1); else if (e.key === 'ArrowRight') setRow(Math.floor(row) + 1);
+  else if (e.key === 'Home') setRow(0); else if (e.key === 'End') setRow(N);
+});
+
+// ------------------------------------------------------------------ the loop: draw only when something moves
+canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); });
+canvas.addEventListener('webglcontextrestored', () => { room(); need = true; });
+let last = performance.now();
+function frame() {
+  requestAnimationFrame(frame);
+  const now = performance.now(), dt = Math.min(0.1, (now - last) / 1000); last = now;
+  if (playing) { clock += dt; row = shown = Math.min(N, shown + dt * RATE * SPEEDS[speedI]); need = true; if (shown >= N) setPlay(false); }
+  else if (shown !== row) { const k = still ? 1 : 1 - Math.exp(-dt * 6); shown = Math.abs(shown - row) < 0.02 ? row : lerp(shown, row, k); need = true; }
+  if (!drag && (Math.abs(vAz) > 1e-3 || Math.abs(vEl) > 1e-3)) { az = clamp(az + vAz * dt, -1.25, 1.25); el = clamp(el + vEl * dt, 0.06, 1.35); const f = Math.exp(-dt * 5); vAz *= f; vEl *= f; }
+  const k = still ? 1 : 1 - Math.exp(-dt * 10), near = (a, b) => Math.abs(a - b) < 2e-4;
+  azS = near(azS, az) ? az : lerp(azS, az, k); elS = near(elS, el) ? el : lerp(elS, el, k); zoomS = near(zoomS, zoom) ? zoom : lerp(zoomS, zoom, k);
+  if (azS !== az || elS !== el || zoomS !== zoom) need = true;
+  if (!need || renderer.getContext().isContextLost()) return;
+  need = false;
+  aim(); if (pose(dt)) need = true; words();
+  renderer.shadowMap.needsUpdate = true;
+  renderer.render(scene, camera);
+  if (px >= 0 && !drag && (playing || shown !== row)) point(px, py);
+}
+printCard();
+document.fonts.load('600 46px Archivo').then(() => document.fonts.load('400 52px Newsreader')).then(printCard, () => {});
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

@@ -715,11 +715,8 @@ canvas.addEventListener("webglcontextlost", e => { e.preventDefault(); $("count"
 canvas.addEventListener("webglcontextrestored", () => location.reload());
 resize(); home(true);
 setPlay(playing);
-const qt = Q.get("t");  // the page opens on the whole graph at now, holds it 2 s, then replays the growth unless the viewer has acted
+const qt = Q.get("t");  // the page opens on the whole graph at now; the replay starts only when the reader presses play
 setT(T0 + (TEND() - T0) * (qt === null ? 1 : +qt)); for (const n of nodes) if (n.at <= T) n.vis = 1; for (const e of edges) if (e.at <= T) e.g = 1;
-let touched = qt !== null || STILL || Q.has("sel");
-for (const ev of ["pointerdown", "wheel", "keydown"]) addEventListener(ev, () => { touched = true; }, { capture: true, passive: true });
-setTimeout(() => { if (!touched) { setT(T0); setPlay(true); } }, 2000);
 if (Q.get("sel") && byId.has(Q.get("sel"))) { const n = byId.get(Q.get("sel")); select(n); glide.t = .999; }
 document.fonts.ready.then(drawHist);
 requestAnimationFrame(frame);
