@@ -1,7 +1,7 @@
 # sitelab: interactive 3D pictures of the team's work
 
 Question: which pictures of the agents and the work, built only from real data, are worth a place on the team site?
-Twenty-one prototypes, one idea each. Live at https://monitor.invariant.team/lab/ under the page name "AI Psychosis maxxing" (`tools/view.py` serves this folder at
+Twenty-four prototypes, one idea each. Live at https://monitor.invariant.team/lab/ under the page name "AI Psychosis maxxing" (`tools/view.py` serves this folder at
 `/lab/`; `infra/monitor/deploy.sh` puts `index.html` and each prototype's `index.html` and `data.json` into the zip).
 
 The Lab page itself (`index.html`) is written by `python3 studies/sitelab/build_index.py`: the site's header, type and
@@ -26,6 +26,9 @@ Local: `python3 studies/sitelab/serve.py` then http://127.0.0.1:8777/ (passes `/
 | model-interior | the 32 layers with the RL weight change, its top directions and the loop neurons | rlneurons and cleanneurons readouts (`build.py`) |
 | one-take | a 90-second single shot through plain base, cue, vote, weight edit and RL on one register of 500 pins each | per-problem rows (`build.py`) |
 | orrery | a brass orrery: one arm per study at the distance its best base score is short of RL's one-sample 463, one bead per result | board snapshot, `studies/` folders (`build.py`) |
+| derby | a race board: one brass token per method family of the base at its best MATH-500 score so far, RL as fixed posts at 463 and 475 | live `/data` scores, snapshot (`build.py`) |
+| gazette | a letterpress front page per 3-hour block, set only from board results posted in it | board snapshot, git log (`build.py`) |
+| loom | every non-merge commit of main as one weft row, warp bands are repository areas | `git log --numstat` (`build.py`) |
 | vote-machine | four samples per problem drop as balls into a ballot cabinet; the tallest stack is the vote | per-sample rows of hard328 (`build.py`) |
 | tide | 500 stone columns, easiest to hardest, flooded to the level each configuration solves | per-problem rows (`build.py`) |
 | call-it | a forecasting game on a slide rule, scored by the rule of `studies/theory/lib/round.py` | theory rounds (`build.py`) |
