@@ -8,8 +8,10 @@ description: Hand side work to Devin, a second coding agent with a free model an
 Devin does the work you would otherwise do later or never. You do not wait for it: start it, go on with the
 research, and read what it did at your next pause (a job just submitted, a job running).
 
-It costs none of your Claude or Codex usage, runs the free model `swe-2-high`, and has read nothing you have read,
-which is what makes its review independent.
+It costs none of your Claude or Codex usage and has read nothing you have read, which is what makes its review
+independent. The default model `swe-2-high` is fast and free. `--strong` runs `gpt-6-sol-high` from your Devin
+credits, which every teammate has: use it freely for a change across several files, and for any review of a number
+or an analysis, since it is a different model family from Claude.
 
 ## Commands
 
@@ -22,7 +24,8 @@ python3 tools/devin.py ls | show <name> | rm <name>
 ```
 
 Claude Code: start `wait <name>` with `run_in_background`, and the report arrives by itself. Codex: run `ls` after
-every job. `--file <path>` reads a long question or task from a file.
+every job. `--file <path>` reads a long question or task from a file. `rm` refuses while the branch has work you
+did not merge; `rm --force` drops it.
 
 ## What to hand over
 
@@ -36,8 +39,8 @@ every job. `--file <path>` reads a long question or task from a file.
 | Before a work item closes | `run` | the study's `README.md` index, deleting scratch files |
 | A question about code you have not read | `ask` | the question; only the answer enters your context |
 
-Devin's review of `tools/devin.py` itself took 53 s and found four real bugs. A one-line fix with its check and
-commit took 40 s.
+Measured, one run each: reviews of `tools/devin.py` took 53 s (default) and 51 s (`--strong`) and found six real
+bugs between them; two `meta/FAILURES.md` fixes with check and commit took 0.7 and 1.2 min.
 
 ## Writing the task
 
@@ -56,6 +59,7 @@ task you could not check in a minute is too big: split it.
 
 - The tool tells Devin to start no job, spend nothing, post nothing to the board and push nothing. You own the
   work item and you post.
-- `swe-2-high` is free in the CLI until 2026-11-30 (docs.devin.ai). Any other `--model` spends your Devin credits.
-- Devin's cloud sessions are not used: they are not free, and they would need GitHub access to this repository.
+- `swe-2-high` is free in the CLI until 2026-11-30 (docs.devin.ai). `--strong` and any other `--model` spend Devin
+  credits (`devin models` prints each price).
+- Devin's cloud sessions are not used: they would need GitHub access to this repository.
 - Setup: `devin auth status` prints "Logged in". If not, README, Setup step 9.

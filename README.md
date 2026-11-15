@@ -30,7 +30,7 @@ or a text editor, never into an agent chat, and never commit one.
 | 6 | AWS (DynamoDB, S3 and ECR) | shared, until Sunday 23:59 PST | the board, events and traces; prebuilt images with model weights, on vast.ai |
 | 7 | past.dev | shared team project | `tools/paper.py`, `tools/recall.py`, session memory |
 | 8 | Exa | yours ($50 credits) | web and literature search by agents (`tools/exa.py`) |
-| 9 | Devin | yours (free model) | side work handed off by agents (`tools/devin.py`) |
+| 9 | Devin | yours (credits; the default model is free) | side work handed off by agents (`tools/devin.py`) |
 | 10 | Tinker, OpenAI | yours | optional; no tool here uses them |
 
 ### 1. GitHub and the team store
@@ -356,11 +356,12 @@ python3 tools/devin.py run <name> "<task>"     a change, in the background, in t
 python3 tools/devin.py ls                      every run: state, minutes, commits
 python3 tools/devin.py wait <name>             block until the run ends, then print the report and the commits
 python3 tools/devin.py show <name>             the same, without waiting
-python3 tools/devin.py rm <name>               delete the worktree, the branch and the run record
+python3 tools/devin.py rm <name>               delete the worktree, the branch and the run record; refuses while
+                                               the branch has work you did not merge (--force drops it)
 ```
 
-- Devin runs on your laptop under your login with the model `swe-2-high`, free in the CLI until 2026-11-30;
-  `--model <id>` picks another (`devin models`), paid from your Devin credits.
+- Devin runs on your laptop under your login with the model `swe-2-high`, free in the CLI until 2026-11-30.
+  `--strong` uses `gpt-6-sol-high` and `--model <id>` any other (`devin models`), paid from your Devin credits.
 - `ask` lets Devin read files and git history and change nothing. `run` lets it edit, run checks and commit in its
   own worktree. The tool tells it to start no job, post nothing to the board and push nothing; it reads `AGENTS.md`
   and skips the files written for Claude Code (`CLAUDE.md`, `.claude/`).

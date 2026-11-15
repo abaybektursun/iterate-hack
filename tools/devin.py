@@ -8,10 +8,12 @@ Usage:
   python3 tools/devin.py ls                          every run: state, minutes, commits on its branch
   python3 tools/devin.py wait <name>                 block until the run ends, then print what show prints
   python3 tools/devin.py show <name>                 Devin's report, then the commits and changed files of its branch
-  python3 tools/devin.py rm <name>                   delete the worktree, the branch and the run record
+  python3 tools/devin.py rm <name>                   delete the worktree, the branch and the run record; refuses
+                                                     while the branch has work you did not merge (--force drops it)
 
-ask and run take --model <id> (default swe-2-high, which is free; `devin models` lists the others) and
---file <path> to read the question or task from a file instead of the command line.
+ask and run use swe-2-high, which is fast and free. --strong uses gpt-6-sol-high, paid from your Devin credits:
+take it for a change across several files and for a review that must not share Claude's blind spots. --model <id>
+picks any other (`devin models`). --file <path> reads the question or task from a file.
 
 Devin's report is a claim. Before merging, read `git diff HEAD...devin/<name>` and run the check yourself.
 Each run keeps prompt.md, out.txt and meta.json in ~/.cache/iterate-hack/devin/<name>/.
@@ -26,6 +28,7 @@ import subprocess
 import time
 
 MODEL = "swe-2-high"
+STRONG = "gpt-6-sol-high"  # another model family than Claude and SWE-2: 2 USD per million input tokens, 10 output
 RUNS = pathlib.Path.home() / ".cache/iterate-hack/devin"
 
 ASK = """You answer a question for another agent of the iterate-hack research team. This is read-only: change no
@@ -90,7 +93,7 @@ def state(folder, meta):
         return "done" if (folder / "exit").read_text().strip() == "0" else "failed"
     # The pid alone is not enough: after a restart of the machine another process can hold it.
     command = subprocess.run(["ps", "-o", "command=", "-p", str(meta["pid"])], capture_output=True, text=True).stdout
-    return "running" if "devin" in command else "lost"
+    return "running" if str(folder) in command else "lost"
 
 
 def minutes(folder, meta):
@@ -128,19 +131,27 @@ for command in ("ask", "run"):
     sub.add_argument("text", nargs="?")
     sub.add_argument("--file")
     sub.add_argument("--model", default=MODEL)
+    sub.add_argument("--strong", action="store_true", help=f"use {STRONG}")
 commands.add_parser("ls")
 for command in ("wait", "show", "rm"):
-    commands.add_parser(command).add_argument("name")
+    sub = commands.add_parser(command)
+    sub.add_argument("name")
+    if command == "rm":
+        sub.add_argument("--force", action="store_true", help="also when work on the branch is not merged")
 args = parser.parse_args()
+if getattr(args, "strong", False):
+    args.model = STRONG
 
 if args.command == "ask":
     # "auto" approves only tools that read, so Devin can read files and git history and can change nothing.
     RUNS.mkdir(parents=True, exist_ok=True)
     prompt = RUNS / f"ask-{time.time_ns()}.txt"
     prompt.write_text(ASK + text_of(args, "question"))
-    code = subprocess.run(devin(prompt, args.model, "auto")).returncode
+    done = subprocess.run(devin(prompt, args.model, "auto"), stderr=subprocess.PIPE, text=True)
     prompt.unlink()
-    raise SystemExit(code)
+    # In this mode Devin is refused every tool that writes or executes; one warning per refusal is not an error.
+    print("".join(line for line in done.stderr.splitlines(True) if "rejected a tool call" not in line), end="")
+    raise SystemExit(done.returncode)
 
 if args.command == "run":
     if not args.name.replace("-", "").isalnum():
@@ -160,6 +171,7 @@ if args.command == "run":
             "worktree": str(worktree)}
     (folder / "meta.json").write_text(json.dumps(meta, indent=1))
     (folder / "prompt.md").write_text(RUN.format(branch=branch) + task)
+    (folder / "out.txt").write_text("")
     # "smart" lets Devin edit, run checks and commit without a person; a fast model stops what it judges unsafe.
     line = shlex.join(devin(folder / "prompt.md", args.model, "smart"))
     out, code = shlex.quote(str(folder / "out.txt")), shlex.quote(str(folder / "exit"))
@@ -190,7 +202,13 @@ if args.command == "rm":
         os.killpg(meta["pid"], 15)
         while state(folder, meta) == "running":  # let Devin stop before its worktree goes
             time.sleep(0.5)
-    if pathlib.Path(meta["worktree"]).exists():
+    there = pathlib.Path(meta["worktree"]).exists()
+    left = sh("git", "status", "--short", cwd=meta["worktree"]) if there else ""
+    ahead = sh("git", "log", "--oneline", f"HEAD..{meta['branch']}") if commits(meta) is not None else ""
+    if (left or ahead) and not args.force:
+        raise SystemExit(f"{args.name} has work that is not in your branch:\n{left}\n{ahead}\n"
+                         f"git merge {meta['branch']}, or rm --force to drop it.")
+    if there:
         sh("git", "worktree", "remove", "--force", meta["worktree"])
     if commits(meta) is not None:
         sh("git", "branch", "-D", meta["branch"])
