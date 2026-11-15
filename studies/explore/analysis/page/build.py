@@ -92,6 +92,7 @@ def optshare(path):
         n += 1; k += bool(OPT.search(f.read_text()))
     return [k, n]
 data["opt"] = {"c_mini": optshare("circles26/main-01"), "c_swe": optshare("circles26/swe2-01")}
+data["seeds"] = json.loads((ROOT / "studies/explore/results/ahc014/swe2-seeds-01/summary.json").read_text())
 import time
 tpl = (pathlib.Path(__file__).parent / "template.html").read_text()
 pathlib.Path(sys.argv[1]).write_text(tpl.replace("__DATA__", json.dumps(data).replace("</", "<\\/"))
