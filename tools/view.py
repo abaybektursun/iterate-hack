@@ -296,7 +296,7 @@ OWN_NAV = re.compile(r"^nav\b[^{]*\{", re.M)  # a page whose CSS styles every na
 def nav(path, tag="nav"):
     now = next((n for n, h in NAV_TABS if path == h or (h != "/" and path.startswith(h)) or (h == "/findings" and path.startswith("/finding/"))), None)
     links = "".join(f'\n    <a href="{h}"' + (' aria-current="page"' if n == now else "") + f">{n}</a>" for n, h in NAV_TABS)
-    return f'\n    <{tag} aria-label="Site" style="all:unset;display:contents">{links}\n    {ALL_PAGES}</{tag[:3]}>'  # no box of its own: the links stay items of the header's row
+    return f'<{tag} aria-label="Site" style="all:unset;display:contents">{NAME_LINKED}{links}\n    {ALL_PAGES}</{tag[:3]}>'  # no box of its own: the name and the links stay items of the header's row
 HERE = re.compile(r"<title>Invariant: ([A-Z][^<]*)</title>")  # the 404 page's title starts in lower case: it is no place
 HERE_BY_PATH = {"/exa": "Exa", "/pastdev": "past.dev"}  # pages whose title does not start with "Invariant: "
 # The corner link carries its own color scheme: a page that declares none gets it from the lightness of its
@@ -321,7 +321,7 @@ def chrome(body, path):
         body = NAME_LINK.sub(NAME_LINKED, body.replace(NAME, NAME_LINKED, 1), count=1)
         head, rest = body.split("</header>", 1)
         if not path.startswith("/demo"):  # the deck and its pictures keep their own header (hidden or without tabs)
-            head = TAB_LINK.sub("", head).replace(NAME_LINKED, NAME_LINKED + nav(path.split("?")[0], 'div role="navigation"' if OWN_NAV.search(body) else "nav"), 1)
+            head = TAB_LINK.sub("", head).replace(NAME_LINKED, nav(path.split("?")[0], 'div role="navigation"' if OWN_NAV.search(body) else "nav"), 1)
         body = head + "</header>" + rest
         here = HERE.search(body)
         here = HERE_BY_PATH.get(path) or (here and here.group(1))
@@ -341,7 +341,7 @@ NOT_FOUND = """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" media="print" onload="this.media='all'">
 <style>
 :root { color-scheme: light dark; --paper: light-dark(#eceef0, #080c11); --ink: light-dark(#101820, #e9eff3); --mute: light-dark(#56636d, #93a1ad);
-  --rule: light-dark(#cbd2d8, #1c2630); --blue: light-dark(#1f43d6, #8fb1ff); }
+  --rule: light-dark(#cbd2d8, #1c2630); --faint: light-dark(#606c76, #788590); --blue: light-dark(#1f43d6, #8fb1ff); }
 body { margin: 0; color: var(--ink); background: var(--paper); font: 400 15px/1.5 "Archivo", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration: none; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
@@ -350,8 +350,8 @@ a { color: inherit; text-decoration: none; }
 .name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
 .top a { color: var(--mute); white-space: nowrap; }
 .top a:hover { color: var(--ink); }
-.ways a { padding: 12px 0; white-space: nowrap; }
-.ways a:hover { text-decoration: underline 1px; text-underline-offset: 4px; }
+.ways a { padding: 12px 0; white-space: nowrap; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--faint); }
+.ways a:hover { text-decoration-color: currentColor; }
 .say { font-weight: 300; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-stretch: 102%; letter-spacing: -.016em; margin: clamp(28px, 7vh, 76px) 0 24px; overflow-wrap: anywhere; }
 .ways { display: flex; gap: 26px; margin: 0; }
 @media (max-width: 900px) { .wrap { padding: 16px 16px 40px; } .top { gap: 6px 13px; padding-bottom: 12px; } .name { font-stretch: 112%; margin-right: 0; } }
@@ -526,7 +526,7 @@ p, h1, h2, h3, dl, dd { margin: 0; }
 .skip { position: fixed; left: 12px; top: 12px; z-index: 6; padding: 8px 12px; background: var(--paper); font-size: 13px; font-weight: 600; }
 .skip:not(:focus) { width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 #main { display: contents; }  /* the landmark has no box: its sections stay children of the page column */
-.wrap { max-width: 1840px; margin: 0 auto; padding: 20px 40px 56px; }
+.wrap { max-width: 1520px; margin: 0 auto; padding: 20px 40px 56px; }
 
 /* Header, as on the Design and Findings tabs */
 .top { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
@@ -547,7 +547,7 @@ p, h1, h2, h3, dl, dd { margin: 0; }
 .since { margin: 30px 0 4px; font-size: 13px; line-height: 18px; color: var(--mute); }
 .since.fresh::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); margin-right: 9px; vertical-align: .1em; }
 .since b { font-weight: 600; color: var(--ink); }
-.summary { font-size: clamp(20px, 1.56vw, 27px); line-height: 1.3; font-weight: 300; font-stretch: 102%; letter-spacing: -.012em; max-width: 60em; margin-top: 30px; }
+.summary { font-size: clamp(20px, 1.56vw, 27px); line-height: 1.3; font-weight: 300; font-stretch: 102%; letter-spacing: -.012em; max-width: 60em; margin-top: 30px; min-height: 1.3em; }
 .since:not([hidden]) + .summary { margin-top: 0; }
 .summary b { font-weight: 600; }
 .summary .warn { color: var(--red); }
@@ -597,7 +597,7 @@ p, h1, h2, h3, dl, dd { margin: 0; }
 .reach .marks span { position: absolute; top: 0; white-space: nowrap; }
 
 /* The chart and, beside it, the ladder of record steps */
-.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 56px; margin-top: clamp(12px, 2vh, 20px); align-items: start; }
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 56px; margin-top: clamp(12px, 2vh, 20px); align-items: start; min-height: 330px; }
 .chart { height: 320px; min-width: 0; }
 .chart svg { display: block; overflow: visible; }
 .chart svg text {
@@ -659,12 +659,12 @@ h2 .count { font-weight: 400; color: var(--faint); }
 
 /* Above the lists: the people, the filter */
 .bar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 26px; margin-top: 34px; min-height: 30px; font-size: 13px; color: var(--mute); }
-.people { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-left: auto; }
+.people { display: flex; flex-wrap: wrap; gap: 4px 18px; }
 .people button { display: inline-flex; align-items: center; gap: 7px; }
 .people button:hover, .people button[aria-pressed="true"] { color: var(--ink); }
 .people button[aria-pressed="true"] { font-weight: 600; }
 .people.picked button[aria-pressed="false"] { opacity: .45; }
-.search { position: relative; display: flex; align-items: center; }
+.search { position: relative; display: flex; align-items: center; margin-left: auto; }
 .search input {
   width: 210px; font: inherit; font-size: 13.5px; color: var(--ink); background: none; border: 0; border-bottom: 1px solid var(--rule);
   border-radius: 0; padding: 4px 26px 4px 0; -webkit-appearance: none; appearance: none;
@@ -677,6 +677,7 @@ kbd { font: 400 12px/1 "Archivo", sans-serif; color: var(--mute); border: 1px so
 /* Lists: one line per item */
 .board.main-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 56px; align-items: start; margin-top: 14px; }
 section { min-width: 0; }
+#work, #result { min-height: 420px; }  /* 12 lines, held before the first read so the page does not jump */
 h2 .warn { color: var(--red); font-weight: 600; text-decoration: underline 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); }
 h2 .warn:hover, h2 .warn[aria-pressed="true"] { text-decoration-color: currentColor; }
 .empty { color: var(--mute); font-size: 14px; padding: 9px 0; max-width: 52ch; border-top: 1px solid var(--rule); }
@@ -813,7 +814,6 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   .board.main-cols { grid-template-columns: minmax(0, 1fr); }
   .s-result { margin-top: 30px; }
   .cols2 { columns: 1; }
-  .people { margin-left: 0; }
   .search { width: 100%; }
   .search input { width: 100%; }
   .lrow { grid-template-columns: 3.1em minmax(0, 1fr) .6em; }
@@ -1077,7 +1077,7 @@ function row(i) {
   const idle = open ? mins(activeNs(i)) : 0, late = idle >= 60, t = closed ? i.closed_ns ?? 0 : i.at_ns;
   const glyph = open ? "ring" : closed ? "ring shut" : i.kind === "result" && !announcement(i) ? "" : "small";
   const right = open ? `<span class="r${late ? " late" : ""}">${late ? "idle " : ""}${durHM(idle)}</span>`
-    : `<span class="r${!closed && mins(t) < 10 ? " fresh" : ""}">${closed ? "closed " : ""}${rel(t)}</span>`;
+    : `<span class="r${!closed && mins(t) < 2 ? " fresh" : ""}">${closed ? "closed " : ""}${rel(t)}</span>`;
   const cls = ["row", i.kind, late && "late", closed && "shut", S.open === i.id && "current", isNew(i.id) && "arrived", S.changed.has(i.id) && "new"];
   return `<article class="${cls.filter(Boolean).join(" ")}" style="${pstyle(i.who)}" data-key="${esc(i.id)}">` +
     `<a class="open" href="#${esc(i.id)}"><i class="g ${glyph}"></i><span class="t">${esc(title(i))}</span>${right}<span class="sr">, ${esc(i.who)}</span></a></article>`;
@@ -1291,15 +1291,12 @@ function drawReach() {
     const label = `${q.prev ? `Step +${f1(q.p - q.prev.p)}` : "Start"}, ${stepTitle(q, b)}, ${q.prev ? `${f1(from)} to ${f1(q.p)}` : f1(q.p)}${noise ? ", within noise" : ""}`;
     const cls = ["piece", !k && "first", last && "last", noise && "noise", q === sel && "on"].filter(Boolean).join(" ");
     const hx = w < 12 ? `--hx:${((w - 12) / 2).toFixed(1)}px;z-index:1;` : "";  // a sliver gets a hit area 12 px wide
-    return { q, k, from, name, w, html: `<button class="${cls}" style="left:${at(from).toFixed(3)}%;width:${at(q.p - from).toFixed(3)}%;${hx}" data-step="${q.s.right}" data-fkey="reach-${q.s.right}" aria-label="${esc(label)}" aria-expanded="${q === sel}"><i></i></button>` };
+    return { name, w, html: `<button class="${cls}" style="left:${at(from).toFixed(3)}%;width:${at(q.p - from).toFixed(3)}%;${hx}" data-step="${q.s.right}" data-fkey="reach-${q.s.right}" aria-label="${esc(label)}" aria-expanded="${q === sel}"><i></i></button>` };
   });
   const rest = !full ? `<span class="piece togo last" style="left:${at(lead.p).toFixed(3)}%;width:${at(top - lead.p).toFixed(3)}%"><i></i></span>` : "";
-  const go = rl ? (matched ? "RL matched" : `${f1(rlP - lead.p)} points below RL`) : "", goW = go ? width13(go) : 0;
-  const marks = segs.map(s => {  // a gain under its segment where it fits and stays clear of the note at the right end
-    const tw = width13(s.name), x = s.k ? Math.min(px(s.from) + s.w / 2 - tw / 2, W - (go ? goW + 12 : 0) - tw) : 0;  // centred, or moved left of the note
-    if (s.w < tw + 10 || x < (s.k ? px(s.from) + 2 : 0)) return "";
-    return `<span style="left:${x.toFixed(1)}px">${s.name}</span>`;
-  }).join("") + (go ? `<span style="right:0">${go}</span>` : "");
+  const go = rl ? (matched ? "RL matched" : `${f1(rlP - lead.p)} points below RL`) : "";
+  const marks = (segs[0].w >= width13(segs[0].name) + 10 ? `<span style="left:0">${segs[0].name}</span>` : "") +  // the start under its segment; the gains are on the chart and in the list
+    (go ? `<span style="right:0">${go}</span>` : "");
   put(el, `<div class="ends"><span class="big base">${f1(lead.p)}</span><span class="lab">base model</span>` +
     (rl ? `<span class="rl-end"><span class="lab">RL model</span><span class="big">${f1(rlP)}</span></span>` : "") + `</div>` +
     `<div class="bar8" role="group" aria-label="${esc(`${b.name}: best base ${f1(lead.p)} %${rl ? `, RL ${f1(rlP)} %` : ", no RL score"}; one part per record step`)}">${rest}<div class="fill">${segs.map(s => s.html).join("")}</div></div>` +
@@ -1385,13 +1382,14 @@ const chartKey = () => `<p class="ckey">` +
   `<span>${glyph('<line class="ci" x1="0" x2="0" y1="-6" y2="6" style="opacity:1"/>')}95 % interval</span></p>`;
 function chart(b, W, H, narrow) {
   const { pts, lead, rl, rlP } = b, sel = stepOf(b);
-  const { lo, hi } = b, T = 18, B = 24, L = narrow ? 26 : 30, R = 60;
+  const { lo, hi } = b, T = 18, B = narrow ? 32 : 24, L = narrow ? 26 : 30, R = 60;  // on a phone the caption under the floor stands clear of the marks on it
   const y = v => T + (hi - Math.max(lo, Math.min(hi, v))) / (hi - lo) * (H - T - B);
   const x = i => L + (i + .5) / pts.length * (W - L - R);
   const out = [], boxes = [];
-  const inside = bx => bx.x0 >= L - 4 && bx.x1 <= W && bx.y0 >= 0;
+  const inside0 = bx => bx.x0 >= L - 4 && bx.x1 <= W && bx.y0 >= 0;
+  const inPlot = bx => inside0(bx) && bx.x1 <= W - R;  // left of the plot's right edge: on a phone a gain stays out of the margin of the end labels
   const hits = bx => boxes.filter(o => bx.x0 < o.x1 && bx.x1 > o.x0 && bx.y0 < o.y1 && bx.y1 > o.y0).length;
-  const label = (text, cls, spots, force) => {  // the first spot that overlaps nothing; spots are [x, y, anchor]
+  const label = (text, cls, spots, force, inside = inside0) => {  // the first spot that overlaps nothing; spots are [x, y, anchor]
     const w = textWidth(text);
     const box = ([sx, sy, a]) => { const x0 = a === "end" ? sx - w : a === "middle" ? sx - w / 2 : sx; return { x0: x0 - 2, x1: x0 + w + 2, y0: sy - 11, y1: sy + 5 }; };  // with the halo
     let at = spots.find(s => inside(box(s)) && !hits(box(s)));
@@ -1459,13 +1457,13 @@ function chart(b, W, H, narrow) {
     if (!q.prev || !q.clears) return;
     const xr = x(q.i), mid = (y(q.prev.p) + y(q.p)) / 2 + 4, text = `+${f1(q.p - q.prev.p)}`;
     const spots = [0, -14, 14, -28, 28].flatMap(dy => [[xr + 8, mid + dy, "start"], [xr - 8, mid + dy, "end"]]);
-    label(text, "gain", [...spots, [xr + 8, y(q.p) - 10, "start"], [xr - 8, y(q.p) - 10, "end"], [xr + 8, y(q.p) + 18, "start"]], true);
+    label(text, "gain", [...spots, [xr + 8, y(q.p) - 10, "start"], [xr - 8, y(q.p) - 10, "end"], [xr + 8, y(q.p) + 18, "start"]], true, narrow ? inPlot : inside0);
   });
   let edge = -Infinity;  // the right end of the last value drawn under the floor
   pts.filter(q => q.p < lo).forEach(q => {  // below the floor: say its value, unless it would touch the one before or another label
     const text = `↓ ${f1(q.p)}`, w = textWidth(text), x0 = Math.max(x(q.i) - w / 2, L), n = out.length;
     if (x0 < edge + 8) return;
-    label(text, "quiet", [[x0, y(q.p) + 20, "start"]]);
+    label(text, "quiet", [[x0, H - 4, "start"]]);  // on the line of the caption
     if (out.length > n) edge = x0 + w;
   });
 
@@ -1664,6 +1662,7 @@ document.addEventListener("click", e => {
     e.preventDefault();
     const n = step.dataset.step, keep = step.dataset.keep;
     set({ step: S.step === n && !keep ? null : n });
+    S.stepFrom = keep ? n : null;  // opened from its mark on the chart: Esc gives the focus back to that mark
     if (keep) document.querySelector(`.lrow[data-step="${CSS.escape(n)}"]`)?.focus({ preventScroll: true });
     $("sd-" + n)?.scrollIntoView({ block: "nearest" });  // the whole opened step, when it reaches below the screen
     return;
@@ -1715,7 +1714,8 @@ document.addEventListener("keydown", e => {
     else if (S.step) {  // focus that was inside the opened step goes to its line
       const n = S.step;
       set({ step: null });
-      if (document.activeElement === document.body) document.querySelector(`.lrow[data-step="${CSS.escape(n)}"]`)?.focus({ preventScroll: true });
+      if (S.stepFrom === n) rove(document.querySelector(`#chart svg a[data-step="${CSS.escape(n)}"]`));
+      else if (document.activeElement === document.body) document.querySelector(`.lrow[data-step="${CSS.escape(n)}"]`)?.focus({ preventScroll: true });
     }
     else if (S.idle || S.who) set({ idle: false, who: null });
   }
