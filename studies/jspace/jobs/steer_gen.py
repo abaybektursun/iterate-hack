@@ -34,7 +34,6 @@ directions, no vLLM, no weights, no GPU; checks are computed and not asserted. F
 from __future__ import annotations
 
 import argparse
-import gc
 import json
 import os
 import pathlib
@@ -88,11 +87,23 @@ class Canned(C.Canned):
         super().add(rid, ids, sampling, seed, max_tokens)
 
 
-def find_model():
-    """The one vLLM Transformers-backend model in this process: .model is the Hugging Face base model, .lm_head the head."""
-    found = [o for o in gc.get_objects() if issubclass(type(o), torch.nn.Module) and type(o).__name__ == "TransformersForCausalLM"]
-    assert len(found) == 1, ("TransformersForCausalLM instances in this process", [type(o).__name__ for o in found])
-    return found[0]
+def find_model(root):
+    """The vLLM Transformers-backend model of this process (.model is the Hugging Face base model with .layers, .lm_head the
+    head), found by walking the attributes of vLLM's objects from the engine. (vLLM freezes the garbage collector's object list
+    at start, so gc.get_objects() does not list it.)"""
+    seen, queue = set(), [root]
+    while queue:
+        o = queue.pop(0)
+        if id(o) in seen or len(seen) > 200_000:
+            continue
+        seen.add(id(o))
+        if issubclass(type(o), torch.nn.Module):
+            if hasattr(o, "lm_head") and hasattr(o, "model") and hasattr(o.model, "layers"):
+                return o
+            queue.extend(o._modules.values())
+        if type(o).__module__.startswith("vllm") and hasattr(o, "__dict__"):
+            queue.extend(vars(o).values())
+    raise AssertionError(f"no model with .lm_head and .model.layers among {len(seen)} objects reachable from the engine")
 
 
 class Hook:
@@ -203,7 +214,7 @@ def main():
         model_dir = snapshot_download(repo, revision=rev, allow_patterns=["*.json", "*.safetensors", "*.jinja", "*.txt"])
         os.environ.update(ENV)
         engine = Engine(model_dir, tok_dir, 2048 + cap)
-        vm = find_model()
+        vm = find_model(engine.engine)
         W = vm.lm_head.weight.detach().float().cpu()
         dev, dtype = vm.lm_head.weight.device, vm.lm_head.weight.dtype
         hook = Hook(vm.model.layers, steer_layers, W.shape[1], dev, dtype)
