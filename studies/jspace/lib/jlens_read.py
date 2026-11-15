@@ -38,6 +38,19 @@ def load_lens(layers, dev):
     return J, meta
 
 
+def load_lens_file(path, layers, dev):
+    """{layer: J in fp32 on dev} from a lens file written by jobs/fit_lens.py, and a record of the file."""
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for block in iter(lambda: f.read(1 << 24), b""):
+            h.update(block)
+    d = torch.load(path, map_location="cpu", weights_only=True)
+    J = {l: d["J"][l].float().to(dev) for l in layers}
+    assert all(torch.isfinite(j).all() for j in J.values())
+    return J, {"file": str(path), "bytes": os.path.getsize(path), "sha256": h.hexdigest(), "n_prompts": int(d["n_prompts"]),
+               "layers_in_file": sorted(int(k) for k in d["J"])}
+
+
 class Recorder:
     """Keeps the output of the listed blocks of one model at each forward call (acts[layer] is [batch, positions, d])."""
 

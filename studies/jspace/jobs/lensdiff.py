@@ -118,6 +118,8 @@ def main():
     ap.add_argument("--layers", default="10,12,14,16,18,20,22,24,26,28,30")
     ap.add_argument("--store-layers", default="16,24", help="layers whose per-position readout is written to the shards")
     ap.add_argument("--k", type=int, default=8)
+    ap.add_argument("--lens-files", default="", help="base=<path>,rl=<path>: matched readout, each model through its own fitted "
+                    "lens, final norm and lm_head. Default: the fixed readout (published base lens, base norm and head)")
     ap.add_argument("--check-every", type=int, default=10, help="every n-th answer of a cell also gets the hit@K variants")
     ap.add_argument("--chunk", type=int, default=1024)
     ap.add_argument("--shard-positions", type=int, default=250_000)
@@ -155,6 +157,7 @@ def main():
         model = toy_models(fz, vocab)
         g = torch.Generator().manual_seed(0)
         J = {l: torch.eye(16) + 0.1 * torch.randn(16, 16, generator=g) for l in layers}
+        Jm = {name: J for name in NAMES}
         m["models"], m["lens"] = {"dry_run": True}, {"dry_run": True}
     else:
         dev = "cuda"
@@ -164,8 +167,16 @@ def main():
             model[name], m["models"][name] = M.load(fz, name, dev)
         vocab = m["models"]["base"]["vocab_size"]
         assert vocab == m["models"]["rl"]["vocab_size"]
-        J, m["lens"] = JL.load_lens(layers, dev)
-    head = model["base"]                               # the fixed readout: base final norm and base lm_head
+        if a.lens_files:
+            paths = dict(kv.split("=") for kv in a.lens_files.split(","))
+            Jm, m["lens"] = {}, {"matched": True}
+            for name in NAMES:
+                Jm[name], m["lens"][name] = JL.load_lens_file(paths[name], layers, dev)
+        else:
+            J, m["lens"] = JL.load_lens(layers, dev)
+            Jm = {name: J for name in NAMES}
+    # fixed readout: the base final norm and lm_head for both models; matched readout: each model's own
+    heads = {name: model[name] if a.lens_files else model["base"] for name in NAMES}
     strings = [tok.decode([i]) for i in range(vocab)]
     M.dump(out / "vocab.json", strings)
     mask = JL.wordlike_mask(tok, vocab).to(dev)
@@ -196,8 +207,8 @@ def main():
             rec = JL.Recorder(model[name], layers)
             model[name].model(input_ids=torch.tensor(demo_ids, device=dev)[None], use_cache=False)
             for l in layers:
-                for variant, j in (("jlens", J[l]), ("logit", None)):
-                    lg = JL.readout(head, rec.acts[l][0, -2:], j).masked_fill(~mask, float("-inf"))
+                for variant, j in (("jlens", Jm[name][l]), ("logit", None)):
+                    lg = JL.readout(heads[name], rec.acts[l][0, -2:], j).masked_fill(~mask, float("-inf"))
                     top = lg.topk(10, -1).indices.tolist()
                     checks["demo"]["readout"][f"{name}_L{l}_{variant}"] = {"position_-2": [strings[i] for i in top[0]],
                                                                             "position_-1": [strings[i] for i in top[1]]}
@@ -249,7 +260,7 @@ def main():
                         own = model[name].lm_head(o.last_hidden_state[0, lo:]).argmax(-1) if check else None
                         for li, l in enumerate(layers):
                             h = recs[name].acts[l][0, lo:]
-                            lp = torch.log_softmax(JL.readout(head, h, J[l]), -1)
+                            lp = torch.log_softmax(JL.readout(heads[name], h, Jm[name][l]), -1)
                             prob_sum[ci, gi, mi, li] += lp.exp().sum(0, dtype=torch.float64)
                             tv, ti = lp.masked_fill(~mask, float("-inf")).topk(K, -1)
                             presence[ci, gi, mi, li].index_add_(0, ti.reshape(-1), torch.ones(ti.numel(), dtype=torch.float64, device=dev))
@@ -260,8 +271,8 @@ def main():
                                 stored[(l, "watch")].append(JL.quant(lp[:, watch_ids]).cpu())
                             if check:
                                 agree[name][ci, li] += np.array([int((lp.argmax(-1) == own).sum()), len(own)])
-                                keep[(l, "logit")].append(JL.readout(head, h).masked_fill(~mask, float("-inf")).topk(K, -1).indices)
-                                keep[(l, "wrong_layer")].append(JL.readout(head, h, J[partner(l, layers)]).masked_fill(~mask, float("-inf")).topk(K, -1).indices)
+                                keep[(l, "logit")].append(JL.readout(heads[name], h).masked_fill(~mask, float("-inf")).topk(K, -1).indices)
+                                keep[(l, "wrong_layer")].append(JL.readout(heads[name], h, Jm[name][partner(l, layers)]).masked_fill(~mask, float("-inf")).topk(K, -1).indices)
                     if check:
                         for (l, v), parts in keep.items():
                             hit[name][v][ci, layers.index(l)] += np.array(JL.future_hits(torch.cat(parts), ids, first, LO, HI))
