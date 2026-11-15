@@ -4440,6 +4440,37 @@ resamples of the problems.
   setup and the edit (about 3 min per job): about 7.2 H100-hours, about 28 USD. The minutes column of `gpu.py ls` is the time
   since submission, not the run time. Smoke job `abaybektursun-1115-122317-6624`: 100 s. 21.8 M generated tokens.
 
+#### Size-matched bands and the rank split at equal scale (specs/SPEC_normband.md, work-16b37f)
+
+Is "layers 22-31 only finish" a small-edit effect? By weight norm the bands were already matched: the squared Frobenius norm of
+the rank-8 additions at 1.5 is 1.13 for L0-10 and 1.44 for L22-31. By the layer-24 activation shift (xshift) the late edit is
+7.55 times smaller. Scaling L22-31 up to match breaks the model: at 9.0, a smoke run gave only loops; at 4.5 (3x), 135 of 328
+answers are loops of " which ". At 3.0 (2x), 1 of 328 is. Same settings as depth3 (hard328, cue, T 1.0, cap 16,384, grader v3),
+seed-paired. `uv run --no-project --with numpy python -m studies.rlneurons.analysis.normband_readout` (inputs: `runs/<job>/` of
+the 12 jobs in `NEW`) -> `results/xreward/normband/readout.json`, one run folder `<cell>_s<sample>-01/` per sample with
+`rows.jsonl` (per-problem rows, no text), `run.json` (jobs, commit, edit size), `metrics.json`, `examples.json`.
+
+| Cell | Samples | Right of 328 | Cap hits | Right minus base (4 samples) | Cap hits minus base |
+|---|---|---|---|---|---|
+| L22-31 at 4.5 (3x) | 1 | 102 | 71 | -17.2 [-21.2, -13.3] | -0.1 [-5.0, 4.8] |
+| L22-31 at 3.0 (2x) | 1 | 155 | 26 | -1.1 [-4.4, 2.1] | -13.9 [-17.8, -10.1] |
+| L0-10 at 0.2 (0.133x) | 1 | 156 | 80 | -0.8 [-4.4, 2.7] | +2.6 [-1.2, 6.4] |
+| direction 1 at 1.5 | 2 (s0, s1) | 182, 184 | 36, 46 | +7.5 [4.8, 10.2] | -9.3 [-12.3, -6.4] |
+| directions 2-8 at 1.5 | 2 (s0 new, s1 depth3) | 196, 183 | 70, 69 | +9.4 [6.8, 12.3] | -0.6 [-3.7, 2.4] |
+
+Points of 328, 95 % intervals from 10,000 bootstrap resamples of the problems; the readout also gives the base on the same seeds.
+- The late band at 2x adds no right answers and cuts cap hits by 13.9 points, more than at 1.5x (-9.2 [-12.7, -5.6] against
+  L22-31 at 1.5). Raising its size does not turn finishing into right answers before it breaks the model. P4 held. On the broken
+  4.5 cell P1 is not held (right -17.2 but cap hits 71, not below 56) and P2 held; by the decision rule (A3 right < 150, so A2
+  decides) depth wins: the size prediction (>= +5 points right) is refuted at every size that still writes coherent text.
+- The early band at 0.133x does nothing measurable (P3 not held: right -0.8, cap hits +2.6). A small early edit does not finish.
+- Direction 1 alone at 1.5 cuts cap hits (-8.7 [-11.9, -5.5] against directions 2-8) and adds right answers almost as much as
+  directions 2-8: -2.0 [-4.9, 0.9] points, within the 2 points that refute P5's second half. P5: cap-hit half held (-9.3 on the
+  point), right-answer half refuted, at the boundary.
+- Limits: one sample per band cell; activation size measured at layer 24 only; the 0.2 cell's raw outputs have a few word-salad
+  answers like the base at T 1.0 (problem 58). Cost: 12 jobs, 4.9 h of `run_cell` wall time, about 5.5 H100-hours, about 22 USD;
+  smoke jobs `abaybektursun-1115-144958-ed3a` (9.0), `-145226-386e` (4.5), `-145240-18fc` (3.0).
+
 #### The directions on other hosts (amendment 10, work-30f0ed): Think-SFT, and Math + Code in one edit
 
 `wsp_edit --onto <model key or directory>` writes the addition (computed from other - base) onto another model. One sample per cell.

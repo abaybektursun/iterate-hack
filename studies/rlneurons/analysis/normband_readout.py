@@ -42,8 +42,14 @@ CONTRASTS = [("top8x4.5_L22-31_math31", "top8x1.5_L0-10_math31"), ("top8x4.5_L22
              ("top1x1.5_math31", "top8x1.5_math31"), ("top8x1.5_d2-8_math31", "top8x1.5_math31")]
 
 
+def which_rate(rows):
+    """coherence check read from the raw text: rows whose answer has ' which ' as more than 5 % of its words (the loop of the broken
+    9.0 smoke run); returns that count"""
+    return sum(r["text"].count(" which ") > 0.05 * max(1, len(r["text"].split())) for r in rows)
+
+
 def main():
-    cells = {}                                                       # cell -> {sample: compact rows}
+    cells, which = {}, {}                                            # cell -> {sample: compact rows}; cell -> {sample: which_rate}
     for cell, paths in REFS.items():
         for p in paths:
             for r in read(p):
@@ -58,6 +64,7 @@ def main():
             (cell, SEED0 + 10000 * sample, "cue", "hard328", 1.0, 1.0, 16384), c
         assert sample not in cells.get(cell, {}), (cell, sample)
         cells.setdefault(cell, {})[sample] = compact(rows, sample)
+        which.setdefault(cell, {})[sample] = which_rate(rows)
         d = OUT / f"{cell}_s{sample}-01"
         d.mkdir(parents=True)
         cmd = (f"wsp_edit {EDIT[cell]} --other math31 --rounding stochastic --seed 0, then run_cell --model-label {cell} --prompt cue --set hard328 "
@@ -84,7 +91,11 @@ def main():
     for cell in arr:
         right, cap = arr[cell]["right"], arr[cell]["cap"]
         t = {"samples": sorted(cells[cell]), "right": [int(x) for x in right.sum(1)], "right_mean": round(right.sum(1).mean(), 2),
-             "cap_hits": [int(x) for x in cap.sum(1)], "cap_hits_mean": round(cap.sum(1).mean(), 2)}
+             "cap_hits": [int(x) for x in cap.sum(1)], "cap_hits_mean": round(cap.sum(1).mean(), 2), "which_loop_rows": which.get(cell)}
+        if cell in NEW:                                              # the base's samples with the same seeds
+            ss = sorted(cells[cell])
+            t["minus_base_cue_same_seeds"] = {"reference_samples": ss, **{key: diff(arr[cell][key].mean(0), arr["base_cue"][key][ss].mean(0), rng)
+                                                                          for key in ("right", "cap")}}
         for c, ref in [(cell, "base_cue")] * (cell != "base_cue") + [x for x in CONTRASTS if x[0] == cell]:
             t[f"minus_{ref}"] = {"reference_samples": sorted(cells[ref]),
                                  **{key: diff(arr[cell][key].mean(0), arr[ref][key].mean(0), rng) for key in ("right", "cap")}}
