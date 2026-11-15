@@ -1,0 +1,9 @@
+[
+ {
+  "mechanism": "round-15/account-3/c1",
+  "claim": "On MATH-500 problems whose plain-prompt base answer opens deliberatively, that answer is right about as often as the cued base's answer on the same problems.",
+  "result": "result-1f98b0",
+  "verdict": "holds",
+  "measured": "mean(T3 right - T1 right) -0.034 [90 % -0.101, 0.034], n 149 of 500, null (unflagged problems) -0.516 [-0.564, -0.467]; account-3 range [-0.15, 0.10], null range [-0.65, -0.22]"
+ }
+]
