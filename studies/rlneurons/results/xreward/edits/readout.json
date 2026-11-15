@@ -201,6 +201,34 @@
     "share": 0.041705273736473585
    },
    "run_folder": "studies/rlneurons/results/xreward/edits/top1_math31-01"
+  },
+  "top64_math31": {
+   "n": 328,
+   "right_v3": 200,
+   "cap_hits": 42,
+   "loops_A": 0,
+   "mean_generated_tokens": 9260.1,
+   "job_id": "abaybektursun-1115-003755-b90d",
+   "seed_base": 3000000,
+   "answers": "runs/abaybektursun-1115-003755-b90d/answers.jsonl",
+   "edit": {
+    "recipe": "top8",
+    "other": "math31",
+    "donor": null,
+    "mods": null,
+    "scale": 1.0,
+    "k": 64,
+    "rounding": "stochastic",
+    "n_edited": 224,
+    "add_norm": 1.9645389104293622,
+    "written_norm": 3.4334569583955865,
+    "ref_norm": 1713.7851893052448,
+    "add_rel": 0.0011463157242161551,
+    "effective_scale": 0.9999645177242314,
+    "cos_written_add": 0.5721548945922879,
+    "share": 0.23531127028295123
+   },
+   "run_folder": "studies/rlneurons/results/xreward/edits/top64_math31-01"
   }
  },
  "paired_differences_points": {
@@ -330,6 +358,34 @@
     1.22
    ]
   },
+  "top64_math31 minus base_cue_T1": {
+   "points": 10.98,
+   "ci95": [
+    7.01,
+    14.94
+   ]
+  },
+  "top64_math31 minus rl_plain_T1": {
+   "points": -1.83,
+   "ci95": [
+    -5.49,
+    1.83
+   ]
+  },
+  "top64_math31 minus rand8_math31": {
+   "points": 12.8,
+   "ci95": [
+    8.54,
+    17.38
+   ]
+  },
+  "top64_math31 minus top8_math31": {
+   "points": 2.44,
+   "ci95": [
+    -1.52,
+    6.4
+   ]
+  },
   "top8_math31 minus theta0.5_cue": {
    "points": 0.61,
    "ci95": [
@@ -409,6 +465,11 @@
    "fixed_of_base_cue_wrong": 33,
    "lost_of_base_cue_right": 16,
    "right_of_rl_only": 22
+  },
+  "top64_math31": {
+   "fixed_of_base_cue_wrong": 43,
+   "lost_of_base_cue_right": 7,
+   "right_of_rl_only": 33
   },
   "rl_only": 49
  }
