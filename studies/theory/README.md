@@ -462,6 +462,21 @@ often off-format (code, "Answer:\n173" with no box, instructions to the reader) 
   `smoke/`). Raw answers (not committed): `runs/abaybektursun-1115-093940-3d06/` on the laptop of the run and `jobs/<job-id>.tar` in the
   team store.
 
+**cell-m06-01** (cells-01 entry m06, readout `m06-r1`; plan `specs/SPEC_cell_m06.md`; board idea-e9dfd5, work-844e38, result-9ce8ed).
+`allenai/Olmo-3.1-7B-RL-Zero-Math` at step 100 (revision `0a45720c`, loaded with `--model-path` as in the ckptcue cells), plain prompt, the
+first 164 problems of hard328 (`--n 164`), 1 sample, T 1.0 / top-p 1.0, seed 3,000,000 + index, cap 16,384, grader v3. **m06-r1 (finished,
+wrong, at most 2,000 generated tokens): 7 of 164** (90 % bootstrap [3, 11]); 3 of the 7 are empty or 9-token answers. run-06/f2-m02 6 [2, 12]
+and run-05/f2-m04 8 [3, 16] hold; run-03/f2-m06 26 [15, 38] and both readers (20 [9, 34], 22 [10, 36]) are refuted. Right 67 of 164 [57, 77],
+37 cap hits, 10,340 generated tokens per problem. Same problems and seeds from stored rows (`rlneurons/results/day1_3/`, sample 0): base + cue
+65 right, 53 cap hits, r1 1; final RL plain 84 right, 26 cap hits, r1 0. Raw answers: 126 of 164 open with "Okay" in their first 30
+characters (49 right, 31 cap hits); the 38 that do not are mostly long (median 8,814 tokens; 18 right, 6 cap hits, 5 quick wrong), some
+derail into off-topic text. The 37 cap hits have no loop (loop_A 0): they are still reasoning at 16,384 tokens.
+- Files: `analysis/cell_m06.py` (readout); outputs `results/experiments/cell-m06-01/` (`run.json` with job and commit, `metrics.json`,
+  `per_problem.json`, `examples.json`); the count is in `results/forecast/cells-01/measured.json`.
+- Job `abaybektursun-1115-093138-81b3` (vast.ai, commit `4e80803`, command in `run.json`; a 4-problem smoke run first,
+  `abaybektursun-1115-092454-12d1`, 4 of 4 right). Raw answers (not committed): `runs/abaybektursun-1115-093138-81b3/` on the laptop of the run
+  and `jobs/<job-id>.tar` in the team store.
+
 **selfopen-01** (round-05 entry `r5-m10:theory:intervention`; plan `specs/SPEC_selfopen01.md`). Rejection sampling on the plain base's own
 opening, no prefilled tokens: per problem up to 32 openings of 24 tokens, keep the first with '\nOkay' in its first 60 characters, continue it
 to 16,384 tokens (T 1.0 / top-p 1.0, grader v3). **411 of 500** (cap hits 20, 3,795 tokens per answer), against the stored plain T3 224 and the

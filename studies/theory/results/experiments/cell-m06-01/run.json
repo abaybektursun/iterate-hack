@@ -1,0 +1,46 @@
+{
+ "job_id": "abaybektursun-1115-093138-81b3",
+ "commit": "4e808031b7af17bfb76d6c99aff6619d047c0c2b",
+ "command": "PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -c \"from huggingface_hub import snapshot_download; snapshot_download('allenai/Olmo-3.1-7B-RL-Zero-Math', revision='0a45720ccbf23c0aa255a28119787538a48dd56b', local_dir='/tmp/s0100', allow_patterns=['*.json','*.safetensors','*.jinja','*.txt'])\" && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/s0100 --model-label s0100 --prompt plain --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000 --n 164 --commit 4e808031b7af17bfb76d6c99aff6619d047c0c2b",
+ "runner": "tools/vast.py run",
+ "raw_answers": "runs/abaybektursun-1115-093138-81b3/answers.jsonl (submitter's laptop)",
+ "job_metrics": {
+  "model": null,
+  "model_path": "/tmp/s0100",
+  "model_label": "s0100",
+  "prompt": "plain",
+  "set": "hard328",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 16384,
+  "seed": 3000000,
+  "shots": null,
+  "n": 164,
+  "shard": null,
+  "samples": 1,
+  "restarts": 0,
+  "out": "/root/abaybektursun-1115-093138-81b3/out",
+  "dry_run": false,
+  "commit": "4e808031b7af17bfb76d6c99aff6619d047c0c2b",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 164,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "started_utc": "2026-11-15T17:31:56Z",
+ "updated_utc": "2026-11-15T18:34:38Z"
+}

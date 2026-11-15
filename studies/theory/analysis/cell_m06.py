@@ -84,8 +84,12 @@ def main():
             "rl_plain_score_v3": refs["hard328_rl_plain_s4r2-01"][r["problem_index"]]["score_v3"]} for r in rows]
 
     right = next(r for r in rows if r["score_v3"] == 1)
-    wrong = next((r for r in rows if quick_wrong(r)), None) or next(r for r in rows if r["score_v3"] == 0 and not r["cap_hit"])
-    ex = [example(right, "first right answer"), example(wrong, "first quick finished-wrong answer (else first finished wrong)")]
+    wrong = next(r for r in rows if quick_wrong(r) and r["n_new"] > 100)
+    m["quick_finished_wrong_empty"] = sum(1 for r in rows if quick_wrong(r) and r["n_new"] <= 100)
+    m["no_okay_opening"] = {"n": sum(1 for p in per if not p["okay_first_30"]), "right": sum(p["score_v3"] for p in per if not p["okay_first_30"]),
+                            "quick_finished_wrong": sum(1 for p in per if not p["okay_first_30"] and p["quick_finished_wrong"]),
+                            "cap_hits": sum(1 for p in per if not p["okay_first_30"] and p["cap_hit"])}
+    ex = [example(right, "first right answer"), example(wrong, "first quick finished-wrong answer with more than 100 tokens")]
 
     out = pathlib.Path(a.out)
     out.mkdir(parents=True, exist_ok=False)
