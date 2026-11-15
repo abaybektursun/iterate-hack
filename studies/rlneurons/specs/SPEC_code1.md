@@ -36,3 +36,13 @@ Differs here: the 3.1 Code model, its own prompt template, HumanEval+ and MBPP+ 
 
 Cost: about 542 answers per cell; at the Math cells' 1,000 tokens/s and under 5,000 tokens per answer, under 45 H100 minutes per
 cell. Smoke first: grader check on cpu, then `--n 5` on each model.
+
+## Amendment 2026-11-15 01:05 UTC, after the two smokes (e6cf RL Code 8/10, f3a7 base 5/10), before any full cell
+
+- The RL Code model opens all 10 smoke answers with the same 12 tokens, `' as shown in the prompt. I hope this helps!\n\nOkay'`
+  (ids 439 6982 304 279 10137 13 358 3987 420 8779 2268 33413). Its first three tokens (`' as shown in'`) stop before `Okay`, so the
+  three-token rule would not give the opening that the Math cue is (`' line!\n\nOkay'`, whose last two ids are the same 2268 33413).
+  The Code cue is therefore the 12 tokens, fixed here from the smoke; the readout reports how many of the 538 RL answers begin with it.
+- Cell 4 changes: RL Code + cue would repeat cell 1 (the model writes the cue itself). Cell 4 is the base + the Math cue (H3), run
+  with the other three because an H100 slot takes about 20 minutes to get.
+- Seeds: all four cells use seed 51000000 + index.
