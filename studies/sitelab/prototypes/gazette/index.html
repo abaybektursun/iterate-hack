@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invariant: gazette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" crossorigin href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #0b0a09; --ui: #e9e2d3; --mute: #a59c8c; --faint: #7c7467; --rule: #322d27; --spot: #c8694f;
+  --ink: #1a1613; --red: #9a2d1d; --hair: rgba(26, 22, 19, .62); --col: 372px;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ui); overflow: hidden; font: 400 14px/1.5 "Archivo", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+:focus-visible { outline: 1px solid var(--spot); outline-offset: 3px; border-radius: 2px; }
+canvas#c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+canvas#c.pick { cursor: grab; }
+
+/* the printed page: real text, laid on the sheet by a matrix3d that follows the camera */
+#sheet { position: fixed; left: 0; top: 0; transform-origin: 0 0; opacity: 0; transition: opacity .22s linear; touch-action: none; user-select: none; -webkit-user-select: none; z-index: 1; }
+#sheet.off { pointer-events: none; transition: none; }
+#scratch { position: fixed; left: 0; top: 0; visibility: hidden; pointer-events: none; z-index: -1; }
+.pg { position: relative; width: 980px; height: 1330px; padding: 38px 44px 40px; display: flex; flex-direction: column; color: var(--ink); --fs: 13.6px;
+  font: 400 var(--fs)/1.3 "Newsreader", Georgia, serif; font-optical-sizing: auto; font-variant-numeric: oldstyle-nums proportional-nums; font-kerning: normal;
+  hyphens: manual; -webkit-hyphens: manual; overflow-wrap: anywhere; text-rendering: optimizeLegibility; }
+.pg.t1 { --fs: 15px; } .pg.t2 { --fs: 16.6px; } .pg.t3 { --fs: 18.6px; } .pg.t4 { --fs: 21px; }
+.pg * { margin: 0; }
+.pg .lab { font-family: "Archivo", sans-serif; font-stretch: 96%; font-weight: 600; font-size: 9.6px; line-height: 1.3; letter-spacing: .13em; text-transform: uppercase; font-variant-numeric: lining-nums tabular-nums; hyphens: manual; }
+.pg .red { color: var(--red); font-weight: 700; }
+.topline { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 7px; border-bottom: 1px solid var(--hair); }
+.flag { font-weight: 500; font-size: 84px; line-height: 1; letter-spacing: -.022em; text-align: center; padding: 12px 0 10px; white-space: nowrap; hyphens: manual; }
+.flag i { font-weight: 400; }
+.dateline { display: flex; justify-content: space-between; gap: 6px 18px; flex-wrap: wrap; border-top: 3px double var(--ink); border-bottom: 1px solid var(--hair); padding: 6px 0 5px; }
+.body { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 2.72fr) minmax(0, 1fr); gap: 0 20px; padding-top: 16px; }
+.main { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+.side { min-height: 0; overflow: hidden; border-left: 1px solid var(--hair); padding-left: 19px; }
+.pg [data-id] { cursor: zoom-in; }
+
+.lead { padding-bottom: 15px; }
+.lead .lab { display: block; padding-bottom: 8px; }
+.lead h3 { font-weight: 600; font-size: 3.5em; line-height: 1.01; letter-spacing: -.018em; text-wrap: balance; hyphens: manual; padding-bottom: .22em; }
+.lead .stand { font-style: italic; font-weight: 400; font-size: 1.42em; line-height: 1.24; text-align: left !important; text-wrap: pretty; hyphens: manual; padding-bottom: .62em; }
+.lbody { columns: 3; column-gap: 20px; column-rule: 1px solid var(--hair); border-top: 1px solid var(--hair); padding-top: 10px; }
+.pg p { text-align: justify; text-indent: 1.15em; orphans: 2; widows: 2; }
+.pg p:first-of-type, .pg p.ni { text-indent: 0; }
+.dc { float: left; font-weight: 500; font-size: 4.15em; line-height: .8; padding: .05em .07em 0 0; margin-bottom: -.06em; color: var(--red); font-variant-numeric: lining-nums; }
+.rl { font-variant-caps: all-small-caps; font-weight: 600; letter-spacing: .07em; padding-right: .2em; }
+
+.rest { flex: 1; min-height: 0; overflow: hidden; columns: 3; column-gap: 20px; column-rule: 1px solid var(--hair); column-fill: auto; border-top: 3px double var(--ink); padding-top: 11px; }
+.rest.bal { flex: 0 0 auto; column-fill: balance; }
+.story { padding-bottom: .8em; margin-bottom: .75em; border-bottom: 1px solid var(--hair); }
+.story .lab { display: block; padding-bottom: 4px; break-after: avoid; }
+.story h4 { font-weight: 600; font-size: 1.5em; line-height: 1.08; letter-spacing: -.008em; hyphens: manual; text-wrap: balance; padding-bottom: .3em; break-after: avoid; break-inside: avoid; }
+.story.a h4 { font-size: 2.05em; font-weight: 500; line-height: 1.04; letter-spacing: -.014em; }
+.story.i h4 { font-style: italic; font-weight: 500; font-size: 1.62em; }
+.hd { display: block; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--hair); padding: 5px 0 4px; margin-bottom: 8px; break-after: avoid; }
+.side .hd ~ .hd { margin-top: 16px; }
+.bs { padding-bottom: 6px; margin-bottom: 6px; border-bottom: 1px solid rgba(26, 22, 19, .28); break-inside: avoid; }
+.bs .l1 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 5px; white-space: nowrap; }
+.bs .m { font-variant-caps: all-small-caps; font-weight: 600; letter-spacing: .05em; flex: none; }
+.bs .b { flex: none; }
+.bs .dots { flex: 1 1 0; min-width: 0; border-bottom: 1px dotted var(--hair); transform: translateY(-3px); }
+.bs .n { flex: none; margin-left: auto; font-weight: 600; font-variant-numeric: lining-nums tabular-nums; }
+.bs .n i { font-style: normal; font-weight: 300; padding: 0 1px; }
+.bs .cf { font-style: italic; font-size: .9em; line-height: 1.22; hyphens: manual; }
+.more { display: block; padding: 2px 0 0; }
+.tl { text-align: left !important; text-indent: -1em !important; padding: 0 0 .42em 1em; line-height: 1.2; hyphens: manual; break-inside: avoid; }
+.tl i { font-style: normal; font-variant-caps: all-small-caps; letter-spacing: .05em; padding-left: .3em; white-space: nowrap; }
+.side .tl { font-style: italic; }
+.brief { padding-top: 2px; }
+.grab { position: absolute; left: 0; bottom: 0; width: 132px; height: 132px; cursor: grab; }
+.grab:active { cursor: grabbing; }
+.pg.narrow { width: 430px; height: 800px; padding: 18px 18px 20px; --fs: 12.3px; }
+.pg.narrow.t1 { --fs: 13.2px; } .pg.narrow.t2 { --fs: 14.2px; } .pg.narrow.t3 { --fs: 15.4px; } .pg.narrow.t4 { --fs: 16.8px; }
+.narrow .lab { font-size: 7.6px; letter-spacing: .12em; }
+.narrow .flag { font-size: 39px; padding: 7px 0 6px; }
+.narrow .topline { padding-bottom: 4px; }
+.narrow .dateline { justify-content: center; padding: 4px 0 3px; text-align: center; }
+.narrow .body { display: flex; flex-direction: column; padding-top: 10px; }
+.narrow .lead { padding-bottom: 9px; }
+.narrow .lead h3 { font-size: 2.15em; }
+.narrow .lead .stand { font-size: 1.16em; }
+.narrow .lbody { columns: 2; column-gap: 14px; padding-top: 7px; }
+.narrow .rest { columns: 2; column-gap: 14px; padding-top: 8px; }
+.narrow .story.a h4 { font-size: 1.5em; font-weight: 600; } .narrow .story.i h4 { font-size: 1.4em; } .narrow .story h4 { font-size: 1.3em; }
+.narrow .grab { width: 84px; height: 84px; }
+.narrow .sideblock { padding-bottom: 6px; }
+
+/* the words around the stone */
+.shade { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(9, 8, 7, .93), rgba(9, 8, 7, .78) 20%, rgba(9, 8, 7, 0) 34%); }
+.shade::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, #0b0a09 0, #0b0a09 calc(var(--col) + 6px), rgba(11, 10, 9, 0) calc(var(--col) + 46px)); opacity: 0; transition: opacity .3s; }
+body.zoomed .shade::after { opacity: 1; }
+.colm { position: fixed; left: 0; top: 0; bottom: 0; width: var(--col); padding: 22px 0 18px 40px; display: flex; flex-direction: column; pointer-events: none; z-index: 2; }
+.colm > * { pointer-events: auto; }
+.top { display: flex; align-items: baseline; gap: 14px; font-size: 12px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--faint); }
+.top a { color: var(--mute); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.top a:hover { color: var(--ui); }
+h1 { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 26px; line-height: 1.19; letter-spacing: -.012em; margin: 24px 0 12px; text-wrap: balance; }
+h1 b { font-weight: 400; color: #f4ecdb; font-variant-numeric: lining-nums; } h1 b.s { color: var(--spot); }
+.note { font-size: 12.5px; color: var(--mute); padding-bottom: 14px; }
+.ctl { display: flex; align-items: center; gap: 8px; border-top: 1px solid var(--rule); padding: 12px 0 10px; }
+.ctl button { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; border: 1px solid #4b443b; border-radius: 99px; padding: 4px 13px; }
+.ctl button:hover { border-color: var(--spot); } .ctl button:disabled { opacity: .3; cursor: default; border-color: #4b443b; }
+.ctl span { margin-left: auto; font-family: "Newsreader", serif; font-size: 17px; font-weight: 300; color: var(--ui); white-space: nowrap; }
+.listhead, .list button { display: grid; grid-template-columns: 74px 30px 1fr; gap: 10px; align-items: baseline; }
+.listhead { font-size: 10.5px; letter-spacing: .06em; color: var(--faint); padding: 2px 0 4px; border-bottom: 1px solid var(--rule); }
+.list { flex: 0 0 auto; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #3a352f transparent; }
+.list button { width: 100%; padding: 4px 0; font-size: 12.5px; color: var(--mute); border-bottom: 1px solid #211e1a; font-variant-numeric: tabular-nums; }
+.list button em { font-style: normal; font-family: "Newsreader", serif; font-size: 15px; line-height: 1; color: var(--ui); text-align: right; font-variant-numeric: lining-nums tabular-nums; }
+.list button span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: "Newsreader", serif; font-size: 14px; }
+.list button:hover, .list button.on { color: var(--ui); } .list button.on span:first-child { color: var(--spot); }
+.def { font-size: 11.5px; line-height: 1.45; color: var(--faint); padding-top: 10px; margin-top: auto; flex: 0 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #3a352f transparent; }
+.def b { color: var(--mute); font-weight: 500; } .def summary { display: none; } .def p { margin: 0 0 5px; }
+#slip { position: fixed; z-index: 3; right: 26px; bottom: 24px; width: 300px; background: #ece3cf; color: var(--ink); padding: 13px 16px 12px; border-radius: 1px; box-shadow: 0 1px 0 rgba(255, 255, 255, .25) inset, 0 14px 34px rgba(0, 0, 0, .55);
+  transform: translateY(10px); opacity: 0; pointer-events: none; transition: opacity .2s, transform .28s cubic-bezier(.2, .7, .2, 1); font-family: "Newsreader", Georgia, serif; }
+#slip.on { opacity: 1; transform: none; pointer-events: auto; }
+#slip .k { font: 600 9.5px/1.3 "Archivo", sans-serif; letter-spacing: .14em; text-transform: uppercase; display: flex; justify-content: space-between; border-bottom: 1px solid var(--hair); padding-bottom: 5px; }
+#slip .k button { letter-spacing: .06em; text-transform: none; font-weight: 500; color: var(--ink); opacity: .7; }
+#slip .id { font-size: 25px; line-height: 1.1; font-weight: 500; letter-spacing: -.01em; padding: 8px 0 2px; font-variant-numeric: lining-nums; }
+#slip .by { font-size: 15px; line-height: 1.3; } #slip .by b { font-weight: 600; }
+#slip .wy { font: 500 11px/1.4 "Archivo", sans-serif; color: var(--red); padding-top: 7px; }
+#err { position: fixed; left: 8px; bottom: 8px; color: #d0725a; font-size: 12px; white-space: pre-wrap; z-index: 9; max-width: 70%; }
+
+@media (max-width: 1180px) { :root { --col: 306px; } .colm { padding-left: 24px; } h1 { font-size: 22px; } }
+@media (max-width: 760px) {
+  .shade { background: linear-gradient(180deg, rgba(9, 8, 7, .9), rgba(9, 8, 7, 0) 15%, rgba(9, 8, 7, 0) 90%, rgba(9, 8, 7, .9)); }
+  .shade::after { background: linear-gradient(180deg, #0b0a09 0, #0b0a09 84px, rgba(11, 10, 9, 0) 104px); }
+  .colm { width: auto; right: 0; padding: 9px 12px 7px; }
+  .top { font-size: 10.5px; gap: 10px; }
+  h1 { font-size: 13.6px; line-height: 1.2; margin: 5px 0 0; font-weight: 400; text-wrap: pretty; }
+  .note, .listhead, .list { display: none; }
+  .ctl { margin-top: auto; border-top: 0; padding: 0; gap: 6px; }
+  .ctl button { background: rgba(14, 13, 11, .85); padding: 5px 12px; } .ctl span { font-size: 15px; }
+  .def { position: absolute; left: 12px; right: 12px; bottom: 44px; margin: 0; padding: 0; }
+  .def summary { display: inline-block; font-size: 10px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--mute); cursor: pointer; background: rgba(14, 13, 11, .85); padding: 2px 8px; border-radius: 99px; list-style: none; }
+  .def[open] { background: rgba(14, 13, 11, .96); border: 1px solid var(--rule); padding: 8px 10px; max-height: 50vh; overflow-y: auto; }
+  #slip { left: 10px; right: 10px; width: auto; bottom: 50px; }
+}
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+<canvas id="c" aria-label="A letterpress proof sheet on a printer's stone under a lamp, with the stack of earlier editions turned face down beside it"></canvas>
+<div id="sheet" class="off"></div>
+<div id="scratch"></div>
+<div class="shade"></div>
+<div class="colm">
+  <div class="top"><a href="../../">← Lab</a><span>Gazette · the board in print</span></div>
+  <h1 id="line">&nbsp;</h1>
+  <div class="note" id="note"></div>
+  <div class="ctl">
+    <button id="prev" aria-label="Earlier edition">←</button><button id="play" aria-label="Page through the two days">Play</button><button id="next" aria-label="Later edition">→</button>
+    <span id="now"></span>
+  </div>
+  <div class="listhead"><span>Edition, UTC</span><span>results</span><span>lead</span></div>
+  <div class="list" id="list"></div>
+  <details class="def" id="def"></details>
+</div>
+<div id="slip"></div>
+<div id="err"></div>
+
+<script type="module">
+import * as THREE from 'three';
+import hyphen from 'https://cdn.jsdelivr.net/npm/hyphen@1.10.4/en-us/+esm';   // the TeX patterns: browsers differ in whether hyphens: auto has a dictionary
+
+const $ = id => document.getElementById(id);
+const err = m => { $('err').textContent += m + '\n'; };
+addEventListener('error', e => err(e.message));
+addEventListener('unhandledrejection', e => err(String(e.reason && e.reason.message || e.reason)));
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const cut = (t, n) => t.length <= n ? t : t.slice(0, n - 1).replace(/\s+\S*$/, '').replace(/[,;:(\[]$/, '') + '…';
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+const BLOCK = 10800, SF = -8 * 3600;   // 3-hour blocks on the UTC clock; San Francisco is UTC-8 in November
+const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const two = n => String(n).padStart(2, '0');
+const hm = s => { const d = new Date(s * 1000); return two(d.getUTCHours()) + ':' + two(d.getUTCMinutes()); };
+const REFUTED = /refut|\bnot?\b|\bloses\b/i;
+
+/* ───────── data: the snapshot of build.py, then the board itself ───────── */
+const DATA = await (await fetch('data.json')).json();
+let results = DATA.results, work = DATA.work, readAt = DATA.built, live = false, EDS = [];
+
+function compose() {
+  results.sort((a, b) => a.t - b.t);
+  const by = new Map(), best = new Map();
+  for (const r of results) { const b = Math.floor(r.t / BLOCK); if (!by.has(b)) by.set(b, []); by.get(b).push(r); }
+  EDS = [...by.keys()].sort((a, b) => a - b).map(b => {
+    const rs = by.get(b), ed = { b, t0: b * BLOCK, rs, lines: [] };
+    for (const r of rs) {
+      r.gain = r.topl = null; r.head = r.title || cut(r.what || r.text || r.caveat || r.id, 84);
+      const mine = [];
+      for (const l of r.sc || []) {
+        const pct = 100 * l[2] / l[3], key = l[1] + '|' + l[3], line = { r, l, pct, gain: 0 };
+        if (l[0] !== 'rl') {   // a gain: points above the best score any earlier result posted on this benchmark for a model other than RL
+          if (best.has(key) && pct > best.get(key)) { line.gain = pct - best.get(key); if (!r.gain || line.gain > r.gain.gain) r.gain = line; }
+          mine.push([key, pct]);
+        }
+        if (l[3] >= 100 && (!r.topl || pct > r.topl.pct)) r.topl = line;
+        ed.lines.push(line);
+      }
+      for (const [k, p] of mine) if (!best.has(k) || p > best.get(k)) best.set(k, p);
+    }
+    const g = rs.filter(r => r.gain).sort((a, c) => c.gain.gain - a.gain.gain)[0], h = rs.filter(r => r.topl).sort((a, c) => c.topl.pct - a.topl.pct)[0];
+    if (g) { ed.lead = g; ed.mark = g.gain; ed.why = `Largest gain · ${g.gain.l[1]} +${g.gain.gain.toFixed(1)} points to ${g.gain.l[2]}/${g.gain.l[3]}`; }
+    else if (h) { ed.lead = h; ed.mark = h.topl; ed.why = `Highest score · ${h.topl.l[2]}/${h.topl.l[3]} on ${h.topl.l[1]}`; }
+    else { ed.lead = rs.find(r => r.what) || rs[0]; ed.why = 'First result posted'; }
+    ed.others = rs.filter(r => r !== ed.lead).sort((a, c) => !!c.what - !!a.what || !!c.text - !!a.text || a.t - c.t);
+    ed.refuted = rs.filter(r => REFUTED.test(r.title || ''));
+    ed.commits = DATA.commits.filter(c => c >= ed.t0 && c < ed.t0 + BLOCK).length;
+    const wf = Math.max(ed.t0, DATA.work_from), we = ed.t0 + BLOCK;   // the board lists closed work items only from work_from on
+    ed.work = we > wf ? [work.filter(w => w[1] >= wf && w[1] < we).length, work.filter(w => w[2] >= wf && w[2] < we).length, wf > ed.t0 ? wf : 0] : null;
+    return ed;
+  });
+}
+compose();
+
+/* ───────── the page: one front page per edition, set in HTML ───────── */
+let narrow = innerWidth <= 760, PW = 980, PH = 1330;
+const pages = new Map();   // edition index -> { el, canvas, tex }
+const stamp = s => { const d = new Date(s * 1000); return `${DAYS[d.getUTCDay()]} ${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
+const hy = t => esc(hyphen.hyphenateSync(t, { minWordLength: 6 }));
+const para = (label, t) => t ? `<p>${label ? `<span class="rl">${label}</span> ` : ''}${hy(t)}</p>` : '';
+
+function storyNode(r, k) {
+  const a = document.createElement('article');
+  a.className = 'story' + (k === 0 ? ' a' : k % 3 === 2 ? ' i' : ''); a.dataset.id = r.id;
+  const body = r.what ? para('', r.what) + para('Why', r.why) + para('Caveat', r.caveat) : para('', r.text ? cut(r.text, 380) : '') + para('Caveat', r.caveat);
+  a.innerHTML = `<span class="lab">${hm(r.t)} UTC</span><h4>${esc(r.head)}</h4>${body}`;
+  return a;
+}
+function scoreNode(line, mark) {
+  const d = document.createElement('div'), l = line.l;
+  d.className = 'bs'; d.dataset.id = line.r.id;
+  d.innerHTML = `<div class="l1"><span class="m">${l[0] === 'rl' ? 'RL' : esc(l[0])}</span><span class="b">${esc(l[1])}</span><span class="dots"></span><span class="n${line === mark ? ' red' : ''}">${l[2]}<i>/</i>${l[3]}</span></div><div class="cf">${esc(cut(l[4], 74))}</div>`;
+  return d;
+}
+const titleNode = (r, time) => { const p = document.createElement('p'); p.className = 'tl'; p.dataset.id = r.id; p.innerHTML = esc(r.head) + (time ? `<i>${hm(r.t)}</i>` : ''); return p; };
+const label = (cls, t) => { const s = document.createElement('span'); s.className = 'lab ' + cls; s.textContent = t; return s; };
+
+function buildPage(i) {
+  const ed = EDS[i], L = ed.lead, d0 = new Date(ed.t0 * 1000), h0 = d0.getUTCHours(), sf = new Date((ed.t0 + SF) * 1000).getUTCHours();
+  const pg = document.createElement('div');
+  pg.className = 'pg ' + (narrow ? 'narrow' : 'wide');
+  const wk = ed.work ? `Work items${ed.work[2] ? ' since ' + hm(ed.work[2]) : ''} ${ed.work[0]} opened, ${ed.work[1]} closed` : 'Work items not on the board’s list';
+  const lb = [L.what ? L.why : L.text, L.what ? L.caveat : '', L.what ? L.text : L.caveat].filter(Boolean).map((t, k) => {
+    const lab = k && t === L.caveat ? '<span class="rl">Caveat</span> ' : '';
+    return k === 0 ? `<p><span class="dc">${esc(t[0])}</span>${hy(t.slice(1))}</p>` : `<p>${lab}${hy(t)}</p>`; }).join('');
+  pg.innerHTML = `<div class="topline lab"><span><span class="red">No. ${i + 1}</span> of ${EDS.length}</span><span>${stamp(ed.t0)}</span><span class="read">${live ? 'Board read' : 'Snapshot'} ${hm(readAt)} UTC</span></div>
+<div class="flag">The Invariant Gazette</div>
+<div class="dateline lab"><span>${two(h0)}:00–${two((h0 + 3) % 24)}:00 UTC · ${two(sf)}:00–${two((sf + 3) % 24)}:00 San Francisco</span><span>${ed.rs.length} result${ed.rs.length > 1 ? 's' : ''} · ${ed.lines.length} score lines</span><span>${wk}</span><span>${ed.commits} commits</span></div>
+<div class="body"><div class="main"><article class="lead" data-id="${L.id}"><span class="lab">${esc(ed.why)} · ${hm(L.t)} UTC</span><h3>${esc(L.head)}</h3>${L.what ? `<p class="stand">${esc(L.what)}</p>` : ''}<div class="lbody">${lb}</div></article><div class="rest"></div></div>${narrow ? '' : '<div class="side"></div>'}</div><div class="grab" title="Drag this corner to turn the sheet"></div>`;
+  $('scratch').replaceChildren(pg);
+  const rest = pg.querySelector('.rest'), side = narrow ? document.createElement('div') : pg.querySelector('.side');
+  if (narrow) side.className = 'sideblock';
+  const stories = ed.others.map(storyNode), spills = e => e.scrollWidth > e.clientWidth + 1 || e.scrollHeight > e.clientHeight + 1;
+
+  // the side column: the box score, then the refuted titles; rows are dropped from the end until it fits
+  let nb = Math.min(ed.lines.length, narrow ? 3 : 16), nr = Math.min(ed.refuted.length, narrow ? 2 : 9);
+  const setSide = () => {
+    side.replaceChildren(label('hd', 'Box score · right / total'), ...ed.lines.slice(0, nb).map(l => scoreNode(l, ed.mark)));
+    if (nb < ed.lines.length) side.append(label('more', `and ${ed.lines.length - nb} more score lines`));
+    if (nr) side.append(label('hd', 'Refuted, or no gain'), ...ed.refuted.slice(0, nr).map(r => titleNode(r)));
+    if (nr && nr < ed.refuted.length) side.append(label('more', `and ${ed.refuted.length - nr} more`));
+  };
+  setSide();
+  if (!narrow) { while (spills(side) && nb > 3) { nb--; setSide(); } while (spills(side) && nr > 0) { nr--; setSide(); } }
+
+  // the columns under the lead: whole stories while they fit, the others by title only ("In brief")
+  const setRest = (full, briefs) => {
+    rest.replaceChildren(...(narrow ? [side] : []), ...stories.slice(0, full));
+    const left = ed.others.slice(full);
+    if (left.length) {
+      const b = document.createElement('div'); b.className = 'brief';
+      b.append(label('hd', 'In brief'), ...left.slice(0, briefs).map(r => titleNode(r, true)));
+      if (briefs < left.length) b.append(label('more', `and ${left.length - briefs} more results on the board`));
+      rest.append(b);
+    }
+  };
+  let done = false;
+  for (const t of [4, 3, 2, 1]) { pg.classList.add('t' + t); setRest(stories.length, 0); if (!spills(rest)) { done = true; break; } pg.classList.remove('t' + t); }
+  if (!done) {
+    const cap = narrow ? 5 : 14; let full = stories.length, briefs = 0;
+    setRest(full, 0);
+    while (spills(rest) && full > 0) { full--; briefs = Math.min(stories.length - full, cap); setRest(full, briefs); }
+    const trim = floor => { while (spills(rest) && briefs > floor) { briefs--; setRest(full, briefs); } };
+    trim(narrow ? 2 : 0);
+    while (narrow && spills(rest) && (nr > 0 || nb > 1)) { if (nr > 0) nr--; else nb--; setSide(); }
+    trim(0);
+  }
+  if (rest.lastElementChild) rest.lastElementChild.style.borderBottom = '0';
+  const used = [...rest.children].reduce((m, c) => Math.max(m, c.getBoundingClientRect().right), 0) - rest.getBoundingClientRect().left;
+  if (used < rest.clientWidth * .7) rest.classList.add('bal');
+  return pg;
+}
+
+/* the same page drawn into a canvas, word by word at the browser's own positions: the ink of the sheet while it turns
+   and the relief of the impression (red channel: black ink, green channel: the spot colour) */
+function raster(pg) {
+  const TW = narrow ? 1024 : 1400, k = TW / PW, cv = document.createElement('canvas');
+  cv.width = TW; cv.height = Math.round(PH * k);
+  const g = cv.getContext('2d'), o = pg.getBoundingClientRect();
+  g.fillStyle = '#000'; g.fillRect(0, 0, cv.width, cv.height);
+  g.globalCompositeOperation = 'lighter'; g.textBaseline = 'alphabetic';
+  const pad = parseFloat(getComputedStyle(pg).paddingLeft) * k - 2;   // what overflows a column is hidden on the page, so it is not printed either
+  g.beginPath(); g.rect(pad, pad, cv.width - 2 * pad, cv.height - 2 * pad); g.clip();
+  const line = (x, y, w, h, a) => { g.fillStyle = `rgba(255,0,0,${a})`; g.fillRect((x - o.left) * k, (y - o.top) * k, Math.max(w * k, .8), Math.max(h * k, .8)); };
+  for (const e of pg.querySelectorAll('.topline,.dateline,.side,.lbody,.rest,.story,.hd,.bs,.dots')) {
+    const cs = getComputedStyle(e), r = e.getBoundingClientRect(), bt = parseFloat(cs.borderTopWidth), bb = parseFloat(cs.borderBottomWidth), bl = parseFloat(cs.borderLeftWidth);
+    const frags = e.classList.contains('story') || e.classList.contains('bs') ? [...e.getClientRects()].slice(-1) : [r];
+    for (const f of frags) {
+      if (bt) line(f.left, f.top, f.width, bt, bt > 2 ? .9 : .6);
+      if (bb) line(f.left, f.bottom - bb, f.width, bb, e.classList.contains('dots') ? .3 : .55);
+      if (bl) line(f.left, f.top, bl, f.height, .6);
+    }
+    const n = parseInt(cs.columnCount), gap = parseFloat(cs.columnGap);
+    if (n > 1 && e.lastElementChild) {
+      const pt = parseFloat(cs.paddingTop), cw = (r.width - gap * (n - 1)) / n, right = [...e.children].reduce((m, c) => Math.max(m, c.getBoundingClientRect().right), 0);
+      const hgt = [...e.children].reduce((m, c) => Math.max(m, c.getBoundingClientRect().bottom), 0) - r.top - pt;
+      for (let c = 1; c < n; c++) { const x = r.left + c * (cw + gap) - gap / 2; if (right > x + gap) line(x, r.top + pt, 1, e.classList.contains('bal') || e.classList.contains('lbody') ? hgt : r.height - pt, .6); }
+    }
+  }
+  const walk = document.createTreeWalker(pg, NodeFilter.SHOW_TEXT), styles = new Map(), range = document.createRange();
+  for (let n = walk.nextNode(); n; n = walk.nextNode()) {
+    const p = n.parentElement;
+    let s = styles.get(p);
+    if (!s) {
+      const cs = getComputedStyle(p), rgb = cs.color.match(/[\d.]+/g).map(Number), px = parseFloat(cs.fontSize) * k;
+      s = { font: `${cs.fontStyle} ${cs.fontWeight} ${px}px ${osFace && !/lining/.test(cs.fontVariantNumeric) ? cs.fontFamily.replace(/"?Newsreader"?/, '"Newsreader OS"') : cs.fontFamily}`, caps: cs.fontVariantCaps, ls: (parseFloat(cs.letterSpacing) || 0) * k + 'px', up: cs.textTransform === 'uppercase', fill: rgb[0] > rgb[1] + 60 ? '#00ff00' : '#ff0000' };
+      styles.set(p, s);
+    }
+    g.font = s.font; g.fontVariantCaps = s.caps; g.letterSpacing = s.ls; g.fillStyle = s.fill;
+    const m = g.measureText('Hx'), asc = m.fontBoundingBoxAscent, desc = m.fontBoundingBoxDescent;
+    const put = (str, r, tail = '') => {   // each word starts where the browser put it and is stretched to the browser's width
+      if (s.up) str = str.toUpperCase();
+      const w = g.measureText(str).width, sx = w > 1 ? clamp(r.width * k / w, .88, 1.14) : 1;
+      g.setTransform(sx, 0, 0, 1, (r.left - o.left) * k, (r.top - o.top) * k + (r.height * k - asc - desc) / 2 + asc); g.fillText(str + tail, 0, 0); g.setTransform(1, 0, 0, 1, 0, 0);
+    };
+    for (const w of n.data.matchAll(/\S+/g)) {
+      range.setStart(n, w.index); range.setEnd(n, w.index + w[0].length);
+      const rs = [...range.getClientRects()].filter(r => r.width > .2);
+      if (rs.length === 1 && !w[0].includes('\u00AD')) { put(w[0], rs[0]); continue; }
+      const frags = []; let f = null, soft = false;   // a word with a soft hyphen or broken over lines: one piece per line, by its characters
+      for (let c = 0; c < w[0].length; c++) {
+        if (w[0][c] === '\u00AD') { soft = true; continue; }
+        range.setStart(n, w.index + c); range.setEnd(n, w.index + c + 1);
+        const q = range.getBoundingClientRect();
+        if (!q.width) continue;
+        if (!f || Math.abs(q.top - f.top) > 2) { if (f && soft) f.tail = '-'; frags.push(f = { s: '', left: q.left, top: q.top, right: q.right, height: q.height, tail: '' }); }
+        f.s += w[0][c]; f.right = Math.max(f.right, q.right); soft = false;
+      }
+      for (const f of frags) put(f.s, { left: f.left, top: f.top, width: f.right - f.left, height: f.height }, f.tail);
+    }
+  }
+  return cv;
+}
+
+function page(i) {
+  let p = pages.get(i);
+  if (!p) {
+    const el = buildPage(i), cv = raster(el), tex = new THREE.CanvasTexture(cv);
+    tex.format = THREE.RGFormat; tex.anisotropy = 4; tex.generateMipmaps = true; tex.minFilter = THREE.LinearMipmapLinearFilter;
+    p = { el, tex, texel: new THREE.Vector2(1 / cv.width, 1 / cv.height) };
+    pages.set(i, p);
+    const u = sheets[i].u; u.uTex.value = tex; u.uHas.value = 1; u.uTexel.value = p.texel;
+  }
+  return p;
+}
+
+/* ───────── the stone, the lamp, the sheets ───────── */
+const canvas = $('c'), sheetEl = $('sheet');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.setClearColor(0x050404, 1);
+const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(26, 1, 150, 9000);
+const W = 380, GAP = 26, DZ = 0.9;
+let H = W * PH / PW;
+
+function noiseTexture() {   // one tiling texture: R cloudy formation, G fine grain, B fibres and hairline scratches
+  const S = 512, cv = document.createElement('canvas'); cv.width = cv.height = S;
+  const g = cv.getContext('2d');
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  g.fillStyle = '#000'; g.fillRect(0, 0, S, S); g.strokeStyle = '#fff'; g.lineCap = 'round';
+  for (let i = 0; i < 5200; i++) {
+    const x = rnd() * S, y = rnd() * S, a = rnd() * Math.PI, len = 5 + rnd() * rnd() * 46, bend = (rnd() - .5) * .9;
+    g.globalAlpha = .1 + rnd() * .3; g.lineWidth = .5 + rnd() * .7;
+    for (const ox of [0, -S]) for (const oy of [0, -S]) {
+      g.beginPath(); g.moveTo(x + ox, y + oy);
+      g.quadraticCurveTo(x + ox + Math.cos(a + bend) * len * .5, y + oy + Math.sin(a + bend) * len * .5, x + ox + Math.cos(a) * len, y + oy + Math.sin(a) * len); g.stroke();
+    }
+  }
+  const img = g.getImageData(0, 0, S, S), d = img.data, lat = {};
+  const val = (p, x, y) => { const L = lat[p] || (lat[p] = Float32Array.from({ length: p * p }, rnd)); const xi = Math.floor(x), yi = Math.floor(y), fx = x - xi, fy = y - yi, sx = fx * fx * (3 - 2 * fx), sy = fy * fy * (3 - 2 * fy);
+    const a = L[(yi % p) * p + xi % p], b = L[(yi % p) * p + (xi + 1) % p], c = L[((yi + 1) % p) * p + xi % p], e = L[((yi + 1) % p) * p + (xi + 1) % p];
+    return a + (b - a) * sx + (c - a + (a - b + e - c) * sx) * sy; };
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+    const i = (y * S + x) * 4; let f = 0, amp = .5, p = 4;
+    for (let o = 0; o < 6; o++) { f += amp * val(p, x / S * p, y / S * p); amp *= .5; p *= 2; }
+    d[i + 2] = d[i]; d[i] = clamp(f * 255, 0, 255); d[i + 1] = (val(256, x / 2, y / 2) * .55 + rnd() * .45) * 255; d[i + 3] = 255;
+  }
+  g.putImageData(img, 0, 0);
+  const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 4;
+  return t;
+}
+const noise = noiseTexture(), blank = new THREE.DataTexture(new Uint8Array([0, 0, 0, 255]), 1, 1); blank.needsUpdate = true;
+const shared = { uLamp: { value: new THREE.Vector3(-300, 260, 250) }, uAim: { value: new THREE.Vector3(60, 0, 0) }, uPower: { value: 1 }, uNoise: { value: noise }, uSize: { value: new THREE.Vector2(W, H) }, uGap: { value: GAP } };
+
+const LIGHT = `
+uniform vec3 uLamp, uAim; uniform float uPower; uniform sampler2D uNoise;
+const vec3 KEY = vec3(1.0, 0.86, 0.69), FILL = vec3(0.105, 0.118, 0.135);
+float lampAt(vec3 P, out vec3 L) { vec3 v = uLamp - P; float d2 = dot(v, v); L = v * inversesqrt(d2);
+  return uPower / d2 * smoothstep(0.10, 0.80, dot(-L, normalize(uAim - uLamp))); }
+vec3 film(vec3 c) { c *= 0.92; c = (c * (2.51 * c + 0.03)) / (c * (2.43 * c + 0.59) + 0.14);
+  float n = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453);
+  return pow(clamp(c, 0.0, 1.0), vec3(1.0 / 2.2)) + (n - 0.5) * 0.018; }`;
+const SHEET = `
+uniform vec2 uSize; uniform float uT, uZ, uZ1, uGap, uCurl, uLead; uniform vec3 uJA, uJB; uniform float uSeed;
+const float PI = 3.14159265;
+vec3 sheet(vec2 uv) {
+  float tt = clamp(uT + uLead * sin(PI * uT) * (0.5 - uv.y) * 0.2, 0.0, 1.0);
+  float s = (1.0 - uv.x) * uSize.x + uGap * 0.5, S = uSize.x + uGap * 0.5;
+  float b = 1.15 * sin(PI * tt), a0 = PI * tt - b * 0.5, c = b / S, x, z;
+  if (c < 1e-5) { x = -s * cos(a0); z = s * sin(a0); } else { x = -(sin(a0 + c * s) - sin(a0)) / c; z = (cos(a0) - cos(a0 + c * s)) / c; }
+  vec3 p = vec3(uSize.x * 0.5 + uGap * 0.5 + x, (uv.y - 0.5) * uSize.y, z);
+  float rest = pow(1.0 - sin(PI * tt), 3.0), dc = length(uv * uSize);
+  p.z += rest * (uCurl * pow(clamp(1.0 - dc / 95.0, 0.0, 1.0), 2.0) + 0.1 + 0.1 * sin(uv.x * 8.0 + uSeed) * sin(uv.y * 6.0 + uSeed * 1.7));
+  float e = tt * tt * (3.0 - 2.0 * tt); vec3 j = mix(uJA, uJB, e); vec2 ctr = vec2((uSize.x + uGap) * e, 0.0);
+  float cs = cos(j.z), sn = sin(j.z); p.xy = mat2(cs, sn, -sn, cs) * (p.xy - ctr) + ctr + j.xy;
+  p.z += mix(uZ, uZ1, tt);
+  return p;
+}`;
+const paperMat = u => new THREE.ShaderMaterial({ uniforms: u, side: THREE.DoubleSide,
+  vertexShader: SHEET + `
+varying vec2 vUv; varying vec3 vP, vT, vB, vN;
+void main() { vUv = uv; vP = sheet(uv); float e = 0.004;
+  vT = normalize(sheet(uv + vec2(e, 0.0)) - sheet(uv - vec2(e, 0.0))); vB = normalize(sheet(uv + vec2(0.0, e)) - sheet(uv - vec2(0.0, e))); vN = normalize(cross(vT, vB));
+  gl_Position = projectionMatrix * viewMatrix * vec4(vP, 1.0); }`,
+  fragmentShader: LIGHT + `
+uniform sampler2D uTex; uniform vec2 uSize, uTexel; uniform float uInk, uHas;
+varying vec2 vUv; varying vec3 vP, vT, vB, vN;
+float fib(vec2 mm) { return texture2D(uNoise, mm / 38.0).b * 0.7 + texture2D(uNoise, mm / 11.0).g * 0.35; }
+float ink(vec2 uv) { vec4 t = texture2D(uTex, uv, 0.3); return t.r + t.g; }
+void main() {
+  float sg = gl_FrontFacing ? 1.0 : -1.0; vec2 mm = vUv * uSize;
+  float form = texture2D(uNoise, mm / 210.0).r, f0 = fib(mm);
+  vec2 gf = vec2(fib(mm + vec2(0.3, 0.0)) - f0, fib(mm + vec2(0.0, 0.3)) - f0) * 0.3;
+  vec4 t = texture2D(uTex, vUv) * uHas;
+  vec2 d = uTexel * 1.1;
+  vec2 ge = vec2(ink(vUv + vec2(d.x, 0.0)) - ink(vUv - vec2(d.x, 0.0)), ink(vUv + vec2(0.0, d.y)) - ink(vUv - vec2(0.0, d.y))) * uHas * (gl_FrontFacing ? 0.36 : 0.24);
+  vec3 n = normalize(sg * vN - (sg * ge.x + gf.x) * vT - (sg * ge.y + gf.y) * vB);
+  vec3 L; float key = lampAt(vP, L);
+  float nl = max(dot(n, L), 0.0), thru = max(dot(-n, L), 0.0);
+  vec3 paper = vec3(0.845, 0.775, 0.635) * (0.9 + 0.2 * form) * (1.0 - 0.09 * smoothstep(0.5, 0.95, f0) + 0.05 * smoothstep(0.5, 0.1, f0));
+  vec3 lit = KEY * key * (nl + 0.16 * thru) + FILL;
+  vec3 col = paper * lit;
+  if (gl_FrontFacing) {
+    vec3 V = normalize(cameraPosition - vP); float sp = min(pow(max(dot(n, normalize(L + V)), 0.0), 40.0) * key, 1.5) * 0.035;
+    col = mix(col, vec3(0.028, 0.024, 0.021) * lit + sp, smoothstep(0.04, 0.62, t.r) * 0.96 * uInk);
+    col = mix(col, vec3(0.40, 0.07, 0.04) * lit + sp, smoothstep(0.04, 0.62, t.g) * 0.94 * uInk);
+  } else col *= 1.0 - 0.05 * min(t.r + t.g, 1.0);
+  gl_FragColor = vec4(film(col), 1.0);
+}` });
+const shadowMat = u => new THREE.ShaderMaterial({ uniforms: u, transparent: true, depthWrite: false, side: THREE.DoubleSide,
+  vertexShader: SHEET + `
+uniform vec3 uLamp; uniform float uDZ; varying vec2 vUv; varying float vH;
+void main() { vUv = uv; vec3 p = sheet(uv); float tt = clamp(uT, 0.0, 1.0), z0 = mix(uZ, uZ1, tt) - uDZ;
+  vH = max(p.z - z0, 0.0); vec3 q = uLamp + (p - uLamp) * ((uLamp.z - z0) / max(uLamp.z - p.z, 1.0)); q.z = z0;
+  gl_Position = projectionMatrix * viewMatrix * vec4(q, 1.0); }`,
+  fragmentShader: `
+uniform vec2 uSize; varying vec2 vUv; varying float vH;
+void main() { float s = 2.6 + vH * 0.22; vec2 e = min(vUv, 1.0 - vUv) * uSize;
+  float a = smoothstep(0.0, s, e.x) * smoothstep(0.0, s, e.y) * 0.5 / (1.0 + vH / 110.0);
+  gl_FragColor = vec4(0.012, 0.009, 0.006, a); }` });
+const stoneU = { ...shared, uA: { value: new THREE.Vector4(0, 0, 0, 0) }, uB: { value: new THREE.Vector4(0, 0, 0, 0) } };
+const stone = new THREE.Mesh(new THREE.PlaneGeometry(9000, 9000), new THREE.ShaderMaterial({ uniforms: stoneU,
+  vertexShader: `varying vec3 vP; void main() { vP = position + vec3(0.0, 0.0, -1.0); gl_Position = projectionMatrix * viewMatrix * vec4(vP, 1.0); }`,
+  fragmentShader: LIGHT + `
+uniform vec2 uSize; uniform vec4 uA, uB; varying vec3 vP;   // a pile: centre x, centre y, height, 1 if any
+float box(vec2 p, vec2 c, vec2 h, float soft) { vec2 q = abs(p - c) - h; float d = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0); return 1.0 - smoothstep(-soft, soft, d); }
+float pile(vec4 P, vec3 L) { if (P.w < 0.5) return 1.0; vec2 h = uSize * 0.5;
+  float sh = box(vP.xy + L.xy / max(L.z, 0.05) * P.z, P.xy, h, 0.8 + P.z * 0.5);
+  vec2 q = abs(vP.xy - P.xy) - h; float d = length(max(q, 0.0));
+  return (1.0 - 0.78 * sh) * (1.0 - 0.42 * exp(-d / (5.0 + P.z))); }
+void main() {
+  vec2 p = vP.xy;
+  float n1 = texture2D(uNoise, p / 2600.0).r, fine = texture2D(uNoise, p / 23.0 + 0.61).g, sp = texture2D(uNoise, p / 61.0).g, scr = texture2D(uNoise, p / 620.0 + 0.11).b;
+  vec2 gr = vec2(texture2D(uNoise, (p + vec2(0.5, 0.0)) / 23.0 + 0.61).g, texture2D(uNoise, (p + vec2(0.0, 0.5)) / 23.0 + 0.61).g) - fine;
+  vec3 n = normalize(vec3(-gr * 0.35, 1.0));
+  float mid = texture2D(uNoise, p / 150.0 + 0.23).g, fl = texture2D(uNoise, p / 330.0 + 0.47).g;
+  vec3 alb = vec3(0.092, 0.098, 0.104) * (0.93 + 0.14 * n1) * (0.80 + 0.22 * fine + 0.26 * mid);
+  alb += vec3(0.085, 0.08, 0.072) * (smoothstep(0.80, 0.96, sp) + smoothstep(0.86, 0.94, fl)) + vec3(0.045) * smoothstep(0.6, 0.9, scr);
+  vec3 L; float key = lampAt(vP, L);
+  vec3 V = normalize(cameraPosition - vP), Hh = normalize(L + V);
+  float spec = pow(max(dot(n, Hh), 0.0), 34.0) * 0.07 * (1.0 + 1.5 * smoothstep(0.6, 0.9, scr));
+  float occ = pile(uA, L) * pile(uB, L);
+  vec3 col = (alb * (KEY * key * max(dot(n, L), 0.0) + FILL * 2.0) + KEY * key * spec * 0.35) * occ;
+  gl_FragColor = vec4(film(col), 1.0);
+}` }));
+stone.frustumCulled = false; scene.add(stone);
+
+const geo = new THREE.PlaneGeometry(1, 1, 72, 56);
+let sheets = [];
+function makeSheets() {
+  for (const s of sheets) { scene.remove(s.mesh, s.shadow); s.mesh.material.dispose(); s.shadow.material.dispose(); }
+  let seed = 11; const rnd = () => (seed = (seed * 48271) % 2147483647) / 2147483647 - .5;
+  sheets = EDS.map((ed, i) => {
+    const u = { ...shared, uT: { value: 0 }, uZ: { value: (EDS.length - 1 - i) * DZ }, uZ1: { value: i * DZ }, uCurl: { value: 7 }, uLead: { value: .6 }, uSeed: { value: i * 2.3 }, uDZ: { value: DZ - .35 },
+      uJA: { value: new THREE.Vector3(rnd() * 11, rnd() * 9, 0) }, uJB: { value: new THREE.Vector3(rnd() * 9, rnd() * 9, rnd() * .05) },
+      uTex: { value: blank }, uHas: { value: 0 }, uTexel: { value: new THREE.Vector2(1, 1) }, uInk: { value: 1 } };
+    const mesh = new THREE.Mesh(geo, paperMat(u)), shadow = new THREE.Mesh(geo, shadowMat(u));
+    mesh.frustumCulled = shadow.frustumCulled = false; scene.add(mesh, shadow);
+    return { u, mesh, shadow };
+  });
+}
+
+/* ───────── state: which edition is on top, the sheet in the air, the camera, the lamp ───────── */
+const q = new URLSearchParams(location.hash.slice(1));
+let cur = 0, want = 0, fly = null, playing = false, playAt = 0, sel = null, need = true, vw = 1, vh = 1, shown = -1, inkAt = 0;
+const view = { x: 0, y: 0, d: 2000 }, goal = { x: 0, y: 0, d: 2000 }, over = { x: 0, y: 0, d: 2000 };
+const lampGoal = new THREE.Vector3(-300, 260, 250);
+let tilt = 0;   // the camera looks straight down on a sheet at rest, so the page text is a plain 2D transform and stays sharp; it leans in while a sheet turns
+let Hm = null;   // the page -> screen homography in use
+
+function fit(cx, cy, w, h, box, kmin = 0, kmax = 1e9) {   // the camera that shows the world rectangle (centre, size) inside the screen box [x, y, w, h]
+  const ct = 1, k = clamp(Math.min(box[2] / w, box[3] / (h * ct)), kmin, kmax), d = vh / 2 / (k * Math.tan(13 * Math.PI / 180));
+  return { x: cx - (box[0] + box[2] / 2 - vw / 2) / k, y: cy + (box[1] + box[3] / 2 - vh / 2) / (k * ct), d };
+}
+const freeBox = () => { const c = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--col')); return narrow ? [6, 98, vw - 12, vh - 98 - 46] : [c + 26, 20, vw - c - 26 - 20, vh - 40]; };
+function layout() {
+  vw = innerWidth; vh = innerHeight;
+  const nw = vw <= 760;
+  if (nw !== narrow || !sheets.length) {
+    narrow = nw; PW = narrow ? 430 : 980; PH = narrow ? 800 : 1330; H = W * PH / PW; shared.uSize.value.set(W, H);
+    for (const p of pages.values()) p.tex.dispose(); pages.clear(); makeSheets(); shown = -1;
+  }
+  sheetEl.style.width = PW + 'px'; sheetEl.style.height = PH + 'px';
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, vw * vh > 1.2e6 ? 1.25 : 1.75)); renderer.setSize(vw, vh, false);
+  camera.aspect = vw / vh; camera.updateProjectionMatrix();
+  const b = freeBox(), hpx = b[3], wpx = Math.min(hpx * PW / PH, narrow ? b[2] : b[2] - 150);
+  Object.assign(over, fit(0, 0, W, W * PH / PW, [b[0], b[1] + (hpx - wpx * PH / PW) / 2, wpx, wpx * PH / PW]));
+  if (!sel) Object.assign(goal, over);
+  if (still || shown < 0) Object.assign(view, goal);
+  need = true;
+}
+function place() {
+  const t = tilt;
+  camera.position.set(view.x, view.y - Math.sin(t) * view.d, Math.cos(t) * view.d); camera.up.set(0, 1, 0); camera.lookAt(view.x, view.y, 0); camera.updateMatrixWorld();
+  const j = sheets[cur].u.uJA.value, z = sheets[cur].u.uZ.value + .5, cs = Math.cos(j.z), sn = Math.sin(j.z), v = new THREE.Vector3();
+  const dst = [[-1, 1], [1, 1], [1, -1], [-1, -1]].map(([a, b]) => { const x = a * W / 2, y = b * H / 2; v.set(cs * x - sn * y + j.x, sn * x + cs * y + j.y, z).project(camera); return [(v.x + 1) / 2 * vw, (1 - v.y) / 2 * vh]; });
+  const src = [[0, 0], [PW, 0], [PW, PH], [0, PH]], A = [];
+  for (let i = 0; i < 4; i++) { const [x, y] = src[i], [X, Y] = dst[i]; A.push([x, y, 1, 0, 0, 0, -X * x, -X * y, X], [0, 0, 0, x, y, 1, -Y * x, -Y * y, Y]); }
+  for (let c = 0; c < 8; c++) { let p = c; for (let r = c + 1; r < 8; r++) if (Math.abs(A[r][c]) > Math.abs(A[p][c])) p = r; [A[c], A[p]] = [A[p], A[c]];
+    for (let r = 0; r < 8; r++) if (r !== c) { const f = A[r][c] / A[c][c]; for (let k = c; k < 9; k++) A[r][k] -= f * A[c][k]; } }
+  const h = A.map((r, i) => r[8] / r[i]); Hm = h;
+  sheetEl.style.transform = Math.abs(tilt) < 1e-4 ? `matrix(${h[0]},${h[3]},${h[1]},${h[4]},${h[2]},${h[5]})` : `matrix3d(${h[0]},${h[3]},0,${h[6]},${h[1]},${h[4]},0,${h[7]},0,0,1,0,${h[2]},${h[5]},0,1)`;
+  // the lamp: its power is set so that the light on the sheet stays near one whatever the rake
+  const L = shared.uLamp.value, a = shared.uAim.value, d2 = L.distanceToSquared(a);
+  shared.uPower.value = Math.min(d2 / Math.pow(Math.max(L.z / Math.sqrt(d2), .2), .8) * 1.04, 2.3 * L.z * L.z);   // and never burns out right under the lamp
+  const n = EDS.length; stoneU.uA.value.set(0, 0, (n - cur) * DZ, cur < n || fly ? 1 : 0); stoneU.uB.value.set(W + GAP, 0, Math.max(cur, 1) * DZ, cur > 0 ? 1 : 0);
+}
+const toPage = (X, Y) => {   // screen -> page px, by the inverse of the homography
+  const [a, b, c, d, e, f, g, h] = Hm, w = (d * h - e * g) * X + (b * g - a * h) * Y + (a * e - b * d);
+  return [((e - f * h) * X + (c * h - b) * Y + (b * f - c * e)) / w, ((f * g - d) * X + (a - c * g) * Y + (c * d - a * f)) / w];
+};
+const ray = new THREE.Raycaster(), ground = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), hit = new THREE.Vector3();
+const world = (X, Y) => { ray.setFromCamera(new THREE.Vector2(X / vw * 2 - 1, 1 - Y / vh * 2), camera); return ray.ray.intersectPlane(ground, hit) ? hit.clone() : new THREE.Vector3(); };
+
+function setStacks() { sheets.forEach((s, i) => { s.u.uT.value = i < cur ? 1 : 0; s.u.uInk.value = 1; s.u.uCurl.value = 7; }); }
+function show() {   // put the top edition's page on its sheet and let the texture ink give way to the real text
+  const p = page(cur);
+  if (shown !== cur) { sheetEl.replaceChildren(p.el); shown = cur; }
+  sheetEl.classList.remove('off'); sheetEl.style.opacity = 1; inkAt = performance.now();
+  if (still) sheets[cur].u.uInk.value = 0;
+  ui(); need = true;
+  for (const [i, p] of pages) if (Math.abs(i - cur) > 3) { p.tex.dispose(); pages.delete(i); sheets[i].u.uTex.value = blank; sheets[i].u.uHas.value = 0; }
+  const warm = [cur + 1, cur - 1, cur - 2].filter(i => i >= 0 && i < EDS.length && !pages.has(i));
+  if (warm.length) setTimeout(() => { if (!fly) { for (const i of warm) page(i); need = true; } }, 260);
+}
+function hide() { sheetEl.classList.add('off'); sheetEl.style.opacity = 0; sheets[cur].u.uInk.value = 1; inkAt = 0; }
+function turn(dir, drag) {
+  if (fly || (dir > 0 ? cur >= EDS.length - 1 : cur <= 0)) return false;
+  select(null);
+  const i = dir > 0 ? cur : cur - 1;
+  page(i); page(cur); if (dir > 0) page(cur + 1); if (i > 0) page(i - 1);
+  if (still) { cur += dir; setStacks(); show(); return true; }
+  hide();
+  fly = { i, dir, t: dir > 0 ? 0 : 1, v: 0, target: dir > 0 ? 1 : 0, drag: !!drag };
+  sheets[i].u.uLead.value = drag ? 1 : .55; need = true;
+  return true;
+}
+function go(i) { want = clamp(i, 0, EDS.length - 1); step(); }
+function step() { if (fly || want === cur) return; if (!turn(Math.sign(want - cur))) want = cur; }
+
+function select(id, el, X, Y) {
+  if (sel && sel.el) sel.el.classList.remove('sel');
+  if (!id || (sel && sel.id === id)) { sel = null; $('slip').classList.remove('on'); Object.assign(goal, over); }
+  else {
+    const r = results.find(r => r.id === id), ed = EDS[cur];
+    const fr = [...el.getClientRects()], f = fr.find(c => X >= c.left && X <= c.right && Y >= c.top && Y <= c.bottom) || fr[0];
+    const pts = [[f.left, f.top], [f.right, f.top], [f.right, f.bottom], [f.left, f.bottom]].map(p => toPage(p[0], p[1]));
+    const x0 = Math.min(...pts.map(p => p[0])), x1 = Math.max(...pts.map(p => p[0])), y0 = Math.min(...pts.map(p => p[1])), y1 = Math.max(...pts.map(p => p[1]));
+    const mm = W / PW, j = sheets[cur].u.uJA.value, b = freeBox(), pad = narrow ? 10 : 60;
+    const kOver = vh / 2 / (over.d * Math.tan(13 * Math.PI / 180));   // screen px per mm in the overview
+    Object.assign(goal, fit(((x0 + x1) / 2 - PW / 2) * mm + j.x, (PH / 2 - (y0 + y1) / 2) * mm + j.y, (x1 - x0) * mm, (y1 - y0) * mm,
+      [b[0] + pad, b[1] + pad, b[2] - 2 * pad, b[3] - 2 * pad - (narrow ? 120 : 0)], kOver * (narrow ? 1 : 1.25), 2.3 * PW / W));
+    sel = { id, el }; el.classList.add('sel');
+    const d = new Date(r.t * 1000), s = new Date((r.t + SF) * 1000);
+    $('slip').innerHTML = `<div class="k"><span>Board item</span><button id="shut">close ×</button></div><div class="id">${esc(r.id)}</div>
+<div class="by">posted by <b>${esc(r.who)}</b><br>${DAYS[d.getUTCDay()].slice(0, 3)} ${d.getUTCDate()} ${MONTHS[d.getUTCMonth()].slice(0, 3)}, ${hm(r.t)} UTC · ${two(s.getUTCHours())}:${two(s.getUTCMinutes())} San Francisco</div>
+${r === ed.lead ? `<div class="wy">Lead of edition ${cur + 1}. ${esc(ed.why)}</div>` : ''}${(r.sc || []).length ? `<div class="by" style="padding-top:5px;font-size:13.5px">${r.sc.length} score line${r.sc.length > 1 ? 's' : ''} in the box score</div>` : ''}`;
+    $('slip').classList.add('on'); $('shut').onclick = () => select(null);
+  }
+  document.body.classList.toggle('zoomed', !!sel); hash(); need = true;
+}
+const hash = () => history.replaceState(null, '', '#e=' + (cur + 1) + (sel && sel.id ? '&s=' + sel.id : ''));
+
+/* ───────── the words around the stone ───────── */
+function ui() {
+  const ed = EDS[cur], d = new Date(ed.t0 * 1000);
+  $('now').textContent = `No. ${cur + 1} · ${DAYS[d.getUTCDay()].slice(0, 3)} ${two(d.getUTCHours())}:00 UTC`;
+  $('prev').disabled = cur <= 0; $('next').disabled = cur >= EDS.length - 1;
+  [...$('list').children].forEach((b, i) => b.classList.toggle('on', i === cur));
+  hash();
+}
+function words() {
+  const lines = results.flatMap(r => (r.sc || []).map(l => ({ r, l }))).filter(x => x.l[1] === 'MATH-500' && x.l[3] === 500);
+  const base = lines.filter(x => x.l[0] === 'base'), rl = lines.filter(x => x.l[0] === 'rl');
+  const first = base[0].l[2], top = Math.max(...base.map(x => x.l[2])), rl1 = rl[0].l[2], rlTop = Math.max(...rl.map(x => x.l[2]));
+  const ref = results.filter(r => REFUTED.test(r.title || '')).length;
+  $('line').innerHTML = `In <b>${EDS.length}</b> editions the untrained base climbed from <b>${first}</b> to <b class="s">${top}</b> of 500 on MATH-500, past RL’s first single-sample <b>${rl1}</b> but short of RL’s best <b>${rlTop}</b>; <b>${ref}</b> of <b>${results.length}</b> results carry a refutation or a “no” in their title.`;
+  $('note').innerHTML = `One proof sheet for each 3-hour block of the hackathon, set only from what was posted on the board in that block. Drag the lower left corner to turn the sheet, move the pointer to rake the lamp, click a story to read it and see who posted it.`;
+  $('list').innerHTML = EDS.map((e, i) => { const d = new Date(e.t0 * 1000); return `<button data-i="${i}"><span>${DAYS[d.getUTCDay()].slice(0, 3)} ${two(d.getUTCHours())}:00</span><em>${e.rs.length}</em><span>${esc(e.lead.head)}</span></button>`; }).join('');
+  $('def').innerHTML = `<summary>How it is set</summary>
+<p><b>Lead</b>: the result whose score line is the most points above the best score any earlier result posted on the same benchmark for a model other than RL; if no result in the block has such a gain, the one with the highest score (right / total, 100 problems or more); if the block has no score line, the first result posted.</p>
+<p><b>Refuted</b>: a title that contains “refut”, “no”, “not” or “loses”. <b>Body copy</b>: quoted from the board, cut with an ellipsis. Results the board’s /data does not name are missing; work items are counted only from ${hm(DATA.work_from)} UTC on ${stamp(DATA.work_from).split(' ').slice(0, 3).join(' ')}, where its list of closed items begins. Commits: author time, every branch, to ${hm(DATA.built)} UTC.</p>`;
+  $('def').open = !narrow;
+}
+
+/* ───────── input ───────── */
+let drag = null, press = null, moved = false, landed = false;
+const flyT = X => { const w = world(X, press.y), hx = W / 2 + GAP / 2; return Math.acos(clamp((hx - w.x) / (W + GAP / 2), -1, 1)) / Math.PI; };
+addEventListener('pointermove', e => {
+  if (!still && e.pointerType === 'mouse') { lampGoal.set((e.clientX / vw - .5) * 1150 + 60, (.5 - e.clientY / vh) * 820, 240); need = true; }
+  if (drag && fly) {
+    press.y = e.clientY; const raw = flyT(e.clientX), t = fly.dir > 0 ? (raw - drag.raw0) / (1 - drag.raw0) : raw / drag.raw0, now = performance.now();
+    const nt = clamp(t, 0, 1); fly.v = .6 * fly.v + .4 * (nt - fly.t) / Math.max((now - drag.at) / 1000, .004); fly.t = nt; drag.at = now; need = true;
+  } else if (press && sel && (Math.abs(e.clientX - press.x) + Math.abs(e.clientY - press.y) > 5 || moved)) {   // drag the sheet under the glass
+    const a = world(press.x, press.y), b = world(e.clientX, e.clientY);
+    goal.x += a.x - b.x; goal.y += a.y - b.y; view.x += a.x - b.x; view.y += a.y - b.y; press.x = e.clientX; press.y = e.clientY; moved = true; need = true;
+  }
+});
+function grab(e, dir) {
+  press = { x: e.clientX, y: e.clientY };
+  if (!turn(dir, true)) { press = null; return; }
+  place(); const raw = flyT(e.clientX);
+  drag = { raw0: dir > 0 ? Math.min(raw, .45) : Math.max(raw, .55), at: performance.now() }; playing = false; $('play').textContent = 'Play';
+}
+sheetEl.addEventListener('pointerdown', e => {
+  if (e.button) return;
+  if (e.target.closest('.grab')) { e.preventDefault(); grab(e, 1); } else { press = { x: e.clientX, y: e.clientY }; moved = false; }
+});
+sheetEl.addEventListener('pointerover', e => { if (e.target.closest('.grab') && !fly) { sheets[cur].u.uCurl.value = 22; need = true; } });
+sheetEl.addEventListener('pointerout', e => { if (e.target.closest('.grab') && !fly) { sheets[cur].u.uCurl.value = 7; need = true; } });
+sheetEl.addEventListener('click', e => { if (moved) { moved = false; return; } const s = e.target.closest('[data-id]'); if (s) select(s.dataset.id, s, e.clientX, e.clientY); else select(null); });
+const onPile = (X, Y) => { const w = world(X, Y); return cur > 0 && Math.abs(w.x - W - GAP) < W / 2 + 8 && Math.abs(w.y) < H / 2 + 8; };
+canvas.addEventListener('pointerdown', e => { if (e.button) return; if (onPile(e.clientX, e.clientY)) grab(e, -1); else select(null); });
+canvas.addEventListener('pointermove', e => canvas.classList.toggle('pick', !fly && onPile(e.clientX, e.clientY)));
+addEventListener('pointerup', () => { if (drag && fly) { fly.drag = false; fly.target = fly.t + fly.v * .22 > .5 ? 1 : 0; need = true; } drag = null; press = null; });
+addEventListener('pointercancel', () => { if (drag && fly) { fly.drag = false; fly.target = fly.dir > 0 ? 0 : 1; } drag = null; press = null; });
+addEventListener('wheel', e => {
+  if (e.target.closest && e.target.closest('.colm')) return;
+  e.preventDefault(); if (fly) return;
+  const dmin = vh / 2 / (2.6 * PW / W * Math.tan(13 * Math.PI / 180)), d = clamp(goal.d * Math.exp(e.deltaY * .0014), dmin, over.d);
+  if (d >= over.d * .985) { if (sel) select(null); Object.assign(goal, over); }
+  else { const w = world(e.clientX, e.clientY), s = d / goal.d; goal.x = w.x + (goal.x - w.x) * s; goal.y = w.y + (goal.y - w.y) * s; goal.d = d; if (!sel) { sel = { id: '', el: null }; document.body.classList.add('zoomed'); } }
+  need = true;
+}, { passive: false });
+function play(on) {
+  playing = on; $('play').textContent = on ? 'Pause' : 'Play';
+  if (on) { select(null); if (cur >= EDS.length - 1) go(0); playAt = performance.now() + 900; need = true; }
+}
+$('prev').onclick = () => { play(false); go(want - 1); };
+$('next').onclick = () => { play(false); go(want + 1); };
+$('play').onclick = () => play(!playing);
+$('list').onclick = e => { const b = e.target.closest('button'); if (b) { play(false); go(+b.dataset.i); } };
+addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = e.key;
+  if (k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown') { play(false); go(want + 1); }
+  else if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp') { play(false); go(want - 1); }
+  else if (k === 'Home') { play(false); go(0); } else if (k === 'End') { play(false); go(EDS.length - 1); }
+  else if (k === ' ') play(!playing); else if (k === 'Escape') select(null); else return;
+  e.preventDefault();
+});
+addEventListener('resize', () => { const was = narrow; layout(); if (was !== narrow) { setStacks(); words(); } if (!fly) show(); });
+canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); });
+canvas.addEventListener('webglcontextrestored', () => { need = true; });
+
+/* ───────── the frame: drawn only while something moves ───────── */
+let last = performance.now();
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = Math.min((now - last) / 1000, .05); last = now;
+  if (fly && !fly.drag) {
+    const fast = Math.abs(want - cur) > 1 ? 2.6 : 1, k = 26 * fast * fast, c = 9.4 * fast;
+    fly.v += (k * (fly.target - fly.t) - c * fly.v) * dt; fly.t += fly.v * dt;
+    if ((fly.target === 1 && fly.t >= .999) || (fly.target === 0 && fly.t <= .001) || (Math.abs(fly.target - fly.t) < .004 && Math.abs(fly.v) < .05)) {
+      const dragged = fly.target !== (fly.dir > 0 ? 1 : 0) || Math.abs(want - cur) === 0;
+      if (fly.target === (fly.dir > 0 ? 1 : 0)) cur += fly.dir;
+      if (dragged) want = cur;
+      fly = null; setStacks(); ui(); step(); if (!fly) landed = true;
+    }
+    need = true;
+  }
+  if (fly) sheets[fly.i].u.uT.value = clamp(fly.t, 0, 1);
+  const tg = fly && !still ? (narrow ? .12 : .2) : 0;
+  if (Math.abs(tg - tilt) > 1e-4) { tilt += (tg - tilt) * (1 - Math.exp(-dt * (fly ? 4 : 9))); if (Math.abs(tg - tilt) < .003) tilt = tg; need = true; }
+  if (landed && !fly && tilt === 0) { landed = false; show(); playAt = now + 2300; }
+  if (playing && !fly && !landed && want === cur && now > playAt) { if (cur >= EDS.length - 1) play(false); else go(cur + 1); }
+  if (playing) need = true;
+  if (inkAt) { const a = clamp((now - inkAt) / 240, 0, 1); sheets[cur].u.uInk.value = 1 - a; if (a >= 1) inkAt = 0; need = true; }
+  const L = shared.uLamp.value;
+  if (L.distanceToSquared(lampGoal) > .5) { L.lerp(lampGoal, 1 - Math.exp(-dt * 4.5)); need = true; }
+  const dv = Math.abs(goal.x - view.x) + Math.abs(goal.y - view.y) + Math.abs(goal.d - view.d);
+  if (dv > .05) { const a = still ? 1 : 1 - Math.exp(-dt * 6.5); view.x += (goal.x - view.x) * a; view.y += (goal.y - view.y) * a; view.d += (goal.d - view.d) * a; need = true; }
+  if (!need) return;
+  need = false; place(); renderer.render(scene, camera);
+}
+
+await Promise.all(['500 84px Newsreader', '600 30px Newsreader', '400 14px Newsreader', 'italic 400 14px Newsreader', 'italic 500 20px Newsreader', '600 9px Archivo'].map(f => document.fonts.load(f)));
+await document.fonts.ready;
+// the canvas cannot ask for old-style numerals, so the same font files are registered once more with that feature on
+let osFace = false;
+try {
+  const faces = [];
+  for (const sh of document.styleSheets) if (/fonts\.googleapis/.test(sh.href || '')) for (const r of sh.cssRules)
+    if (r.style && /Newsreader/.test(r.style.fontFamily) && /^U\+0+-0*FF\b/i.test(r.style.unicodeRange))
+      faces.push(new FontFace('Newsreader OS', r.style.src, { style: r.style.fontStyle, weight: r.style.fontWeight, unicodeRange: r.style.unicodeRange, featureSettings: '"onum"' }));
+  await Promise.all(faces.map(f => f.load().then(l => document.fonts.add(l))));
+  osFace = faces.length > 0;
+} catch (e) { osFace = false; }   // without it the relief of the numerals is the lining form
+layout();
+cur = want = clamp((parseInt(q.get('e')) || EDS.length) - 1, 0, EDS.length - 1);
+setStacks(); words(); place(); show();
+if (q.get('s')) requestAnimationFrame(() => { const el = sheetEl.querySelector(`[data-id="${CSS.escape(q.get('s'))}"]`); if (el) { const r = el.getBoundingClientRect(); select(q.get('s'), el, r.left + 2, r.top + 2); } });
+const hold = () => { if (q.get('t') && !still && turn(1, true)) fly.t = clamp(+q.get('t'), 0, 1); };   // #t=0.4: a sheet held in the air until the next pointer release
+hold();
+requestAnimationFrame(frame);
+
+/* the board itself, once: results and work items posted since the snapshot join their editions */
+const b = await fetch('../../../data').then(r => r.ok ? r.json() : null, () => null);   // a failed read keeps the snapshot; its time is on the masthead
+if (b) {
+  const have = new Set(results.map(r => r.id)), rest = t => t.split('\n').map(l => l.trim()).filter(l => l && !/^(title|what|why|caveat|score):/i.test(l)).join(' ');
+  const fresh = b.items.filter(i => i.kind === 'result' && !have.has(i.id)).map(i => { const p = b.plain[i.id] || {}, r = { id: i.id, t: Math.floor(i.at_ns / 1e9), who: i.who, sc: b.scores.filter(s => s.result === i.id).map(s => [s.model, s.benchmark, s.right, s.n, cut(s.config, 120), s.tokens]) };
+    for (const k of ['title', 'what', 'why', 'caveat']) if (p[k]) r[k] = cut(p[k], k === 'title' ? 140 : 420);
+    const t = cut(rest(i.text), 900); if (t) r.text = t; return r; });
+  const wk = new Map(work.map(w => [w[0], w]));
+  for (const i of b.items) if (i.kind === 'work') wk.set(i.id, [i.id, Math.floor(i.at_ns / 1e9), i.closed_at ? Date.parse(i.closed_at) / 1000 : 0]);
+  const changed = fresh.length || wk.size !== work.length || [...wk.values()].some(w => !work.find(o => o[0] === w[0] && o[2] === w[2]));
+  live = true; readAt = Math.floor(Date.now() / 1000);
+  if (changed) {
+    const n = EDS.length, at = EDS[cur].b;
+    results = results.concat(fresh); work = [...wk.values()]; compose();
+    for (const p of pages.values()) p.tex.dispose(); pages.clear();
+    if (EDS.length !== n) makeSheets();
+    for (const s of sheets) { s.u.uHas.value = 0; s.u.uTex.value = blank; }
+    cur = Math.max(0, EDS.findIndex(e => e.b === at)); if (!q.get('e')) cur = EDS.length - 1;
+    want = cur; shown = -1; fly = null; setStacks(); words(); show(); hold();
+  } else { for (const p of pages.values()) { const s = p.el.querySelector('.read'); if (s) s.textContent = `Board read ${hm(readAt)} UTC`; } }
+}
+</script>
+</body>
+</html>

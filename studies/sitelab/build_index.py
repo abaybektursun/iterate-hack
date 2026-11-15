@@ -28,6 +28,9 @@ PICTURES = [
     ("physics-board", "The board, but throwable", "Every board item as a rigid body to grab, throw and sort. For when the to-do list deserves to be yeeted.", "Board, live"),
     ("one-take", "The whole thing in one take", "Ninety seconds, one camera move, 500 brass pins: the plain base, the opening cue, the vote, the weight edit and RL, each counted on the same problems. No cuts, we are not cowards.", "Rows per problem"),
     ("orrery", "The studies, in clockwork", "A brass orrery: one arm for each study, set as far from the gilt RL sphere as its best base-model score is short of it, one bead for each result. Turn the crank through 25 hours.", "Board, git"),
+    ("derby", "The hill climb, as a race game", "A baize race board with one brass token for each method family, moved only when a better MATH-500 score was posted. RL is a fixed post. A bell rings when a token passes it.", "Scores, live"),
+    ("gazette", "The Invariant Gazette", "A letterpress front page for every three hours of the hackathon, set only from what was posted on the board in that block. All the news that fits a token cap.", "Board, git"),
+    ("loom", "Two days, woven", "A floor loom where every commit is one row of the cloth and every band of warp is an area of the repository. The stripes show which study had the floor.", "Git log"),
     ("vote-machine", "Democracy, for samples", "Four samples of each problem drop as balls into a ballot cabinet and the tallest stack wins. Pull the lever and watch the vote fix what one sample got wrong.", "Rows per sample"),
     ("tide", "Rising tide, 500 stones", "One stone for each MATH-500 problem, easiest to hardest, flooded to the level each configuration reaches. The islands are the problems that break the order.", "Rows per problem"),
     ("call-it", "Call the number", "A game: set your forecast on a slide rule before the measured number is shown, scored by the same rule as the team's theories. Humbling, in a healthy way.", "Theory forecasts"),
@@ -203,6 +206,6 @@ if __name__ == "__main__":
     rows = "".join(ROW.format(i=i, n=i + 1, slug=slug, name=name, line=line, src=src,
                               shot=base64.b64encode((HERE / "prototypes" / slug / "shot.webp").read_bytes()).decode())
                    for i, (slug, name, line, src) in enumerate(PICTURES))
-    count = {12: "twelve", 20: "twenty", 21: "twenty-one"}.get(len(PICTURES), str(len(PICTURES)))
+    count = {12: "twelve", 20: "twenty", 21: "twenty-one", 24: "twenty-four"}.get(len(PICTURES), str(len(PICTURES)))
     (HERE / "index.html").write_text(PAGE.replace("__ROWS__", rows).replace("__COUNT__", count))
     print(f"wrote index.html, {len(PICTURES)} pictures, {(HERE / 'index.html').stat().st_size // 1024} kB")

@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invariant: derby</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..600&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --paper: #0d0b0a; --ink: #ebe4d6; --mute: #a89e8e; --faint: #7d7467; --rule: #2f2a24; --brass: #c9a86c; --red: #c4634a;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; color: var(--ink); background: var(--paper); overflow: hidden;
+  font: 400 14px/1.5 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+:focus-visible { outline: 1px solid var(--brass); outline-offset: 3px; border-radius: 2px; }
+canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+canvas.turn, canvas.orbit { cursor: grabbing; } canvas.pick { cursor: pointer; } canvas.crank { cursor: ew-resize; }
+.grain { position: fixed; inset: 0; pointer-events: none; opacity: .06; mix-blend-mode: overlay; z-index: 1;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1.2 -.1'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.shade { position: fixed; inset: 0; pointer-events: none; z-index: 1;
+  background: linear-gradient(180deg, rgba(10, 8, 7, .95) calc(var(--top, 180px) - 34px), rgba(10, 8, 7, 0) calc(var(--top, 180px) + 26px), rgba(10, 8, 7, 0) calc(100% - var(--bot, 200px) - 26px), rgba(10, 8, 7, .95) calc(100% - var(--bot, 200px) + 34px)), radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, .45) 100%); }
+
+.head { position: fixed; left: 0; top: 0; right: 0; padding: 20px 40px 0; z-index: 2; pointer-events: none; }
+.head > * { pointer-events: auto; }
+.top { display: flex; align-items: baseline; gap: 14px; font-size: 12px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--faint); }
+.top a { color: var(--mute); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.top a:hover { color: var(--ink); }
+h1 { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 25px; line-height: 1.22; letter-spacing: -.01em; margin: 12px 0 6px; max-width: 1180px; text-wrap: pretty; }
+h1 b { font-weight: 400; color: var(--brass); font-variant-numeric: lining-nums; }
+.note { font-size: 12.5px; color: var(--mute); max-width: 1180px; margin: 0; }
+.note b { color: var(--ink); font-weight: 500; }
+
+.foot { position: fixed; left: 0; right: 0; bottom: 0; padding: 0 40px 16px; z-index: 2; display: grid; grid-template-columns: 330px 1fr; gap: 0 44px; align-items: end; pointer-events: none; }
+.foot > * { pointer-events: auto; }
+.clock { display: grid; grid-template-columns: auto 1fr auto auto auto; gap: 0 10px; align-items: end; }
+.clock strong { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 34px; line-height: 1; font-variant-numeric: lining-nums tabular-nums; }
+.clock small { font-size: 11px; color: var(--faint); letter-spacing: .04em; line-height: 1.3; padding-bottom: 3px; }
+.clock button { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--ink); border: 1px solid #4b443b; border-radius: 99px; padding: 4px 13px; margin-bottom: 2px; white-space: nowrap; }
+.clock button:hover { border-color: var(--brass); }
+.clock button[aria-pressed="false"] { color: var(--faint); }
+#leg { display: none; }
+.scrub { position: relative; height: 32px; margin: 4px 0 0; }
+.scrub svg { position: absolute; left: 0; top: 4px; width: 100%; height: 12px; overflow: visible; }
+.scrub svg line { stroke: var(--faint); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.scrub svg line.s { stroke: var(--brass); }
+.scrub input { position: absolute; left: -7px; right: -7px; top: 10px; width: calc(100% + 14px); margin: 0; height: 22px; appearance: none; -webkit-appearance: none; background: none; cursor: ew-resize; }
+.scrub input::-webkit-slider-runnable-track { height: 1px; background: var(--rule); }
+.scrub input::-moz-range-track { height: 1px; background: var(--rule); }
+.scrub input::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; margin-top: -7px; border-radius: 50%; background: #b8955a; border: 1px solid #e3cd9c; box-shadow: 0 1px 3px rgba(0, 0, 0, .7); }
+.scrub input::-moz-range-thumb { width: 13px; height: 13px; border-radius: 50%; background: #b8955a; border: 1px solid #e3cd9c; }
+.def { font-size: 11.5px; line-height: 1.45; color: var(--faint); border-top: 1px solid var(--rule); padding-top: 8px; }
+.def summary { display: none; }
+.def .cols { columns: 3; column-gap: 30px; }
+.def p { margin: 0 0 5px; break-inside: avoid; }
+.def b { color: var(--mute); font-weight: 500; }
+
+.tag { position: fixed; left: 0; top: 0; pointer-events: none; will-change: transform; line-height: 1.3; }
+#tip { background: rgba(24, 21, 18, .96); border: 1px solid var(--rule); border-radius: 3px; padding: 7px 11px; opacity: 0; transition: opacity .12s; font-size: 12.5px; max-width: 340px; z-index: 3; color: var(--ink); }
+#tip.on { opacity: 1; } #tip small { color: var(--mute); font-size: 11.5px; display: block; }
+#tip em { font-style: normal; font-family: "Newsreader", Georgia, serif; font-size: 16px; color: var(--brass); font-variant-numeric: lining-nums; }
+.card { position: fixed; right: 28px; top: calc(var(--top, 180px) + 4px); width: 380px; max-height: calc(100% - var(--top, 180px) - 40px); overflow-y: auto; background: rgba(24, 21, 18, .97); border: 1px solid var(--rule); border-radius: 3px; padding: 18px 20px 16px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .5); transform: translateY(-8px); opacity: 0; pointer-events: none; transition: opacity .2s, transform .25s cubic-bezier(.2, .7, .2, 1); scrollbar-width: thin; z-index: 4; }
+.card.on { opacity: 1; transform: none; pointer-events: auto; }
+.card .hd { display: flex; align-items: baseline; gap: 10px; font-size: 11px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--faint); }
+.card .hd button { margin-left: auto; color: var(--mute); font-size: 12px; letter-spacing: .04em; text-transform: none; }
+.card .q { font-family: "Newsreader", Georgia, serif; font-size: 21px; line-height: 1.25; margin: 10px 0 8px; color: var(--ink); overflow-wrap: anywhere; }
+.card p { margin: 0 0 10px; font-size: 13px; color: var(--mute); overflow-wrap: anywhere; }
+.card .sc { border-top: 1px solid var(--rule); padding: 6px 0; display: grid; grid-template-columns: 74px 1fr; gap: 0 10px; font-size: 12.5px; color: var(--mute); }
+.card .sc b { font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: 18px; line-height: 1.2; color: var(--brass); font-variant-numeric: lining-nums tabular-nums; }
+.card .sc b small { color: var(--faint); font-size: 12px; } .card .sc u { text-decoration: none; color: var(--ink); }
+.card .by { font-size: 12px; color: var(--faint); padding-top: 9px; border-top: 1px solid var(--rule); }
+.card .by b { color: var(--ink); font-weight: 500; }
+#err { position: fixed; left: 8px; bottom: 8px; color: var(--red); font-size: 12px; white-space: pre-wrap; z-index: 9; max-width: 70%; }
+
+@media (max-width: 1100px) { .def .cols { columns: 2; } h1 { font-size: 21px; } }
+@media (max-width: 760px) {
+  .head { padding: 12px 16px 0; }
+  h1 { font-size: 16.5px; line-height: 1.25; margin: 8px 0 4px; }
+  .note { display: none; }
+  .foot { display: block; padding: 0 16px 10px; }
+  .clock strong { font-size: 24px; } .clock small span { display: none; } .clock small { font-size: 10px; } .clock button { padding: 4px 10px; }
+  #leg { display: block; }
+  .def { position: fixed; left: 0; right: 0; top: 0; padding: 8px 16px; background: rgba(13, 11, 10, .96); border: 0; border-bottom: 1px solid var(--rule); max-height: 70vh; overflow-y: auto; z-index: 5; display: none; }
+  .def[open] { display: block; }
+  .def .cols { columns: 1; }
+  .card { left: 10px; right: 10px; width: auto; top: auto; bottom: 10px; max-height: 60%; }
+  #tip { max-width: 260px; }
+}
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+<canvas id="c" aria-label="An antique mechanical race game: six brass tokens in slots on green baize, one per method family of the base model, at their best MATH-500 score; fixed brass posts for the RL checkpoint; a crank that runs the hours"></canvas>
+<div class="grain"></div>
+<div class="shade"></div>
+<div class="head" id="head">
+  <div class="top"><a href="../../">← Lab</a><span>Derby · the hill climb on MATH-500</span></div>
+  <h1 id="line">&nbsp;</h1>
+  <p class="note" id="note"></p>
+</div>
+<div class="foot" id="foot">
+  <div id="ctl">
+    <div class="clock">
+      <strong id="hour">0.0</strong>
+      <small id="stamp"></small>
+      <button id="leg" aria-controls="def">Legend</button>
+      <button id="snd" aria-pressed="false">Sound off</button>
+      <button id="play" aria-label="Turn the crank through the hackathon">Play</button>
+    </div>
+    <div class="scrub"><svg id="ticks" preserveAspectRatio="none" viewBox="0 0 1000 12"></svg>
+      <input id="scrub" type="range" min="0" max="1000" value="1000" aria-label="Time through the hackathon"></div>
+  </div>
+  <details class="def" id="def" open><summary>Legend</summary><div class="cols" id="legend"></div></details>
+</div>
+<div class="tag" id="tip"></div>
+<div class="card" id="card"></div>
+<div id="err"></div>
+
+<script type="module">
+import * as THREE from 'three';
+
+const $ = id => document.getElementById(id);
+const fail = e => { $('err').textContent += (e && (e.stack || e.message || e.reason) || e) + '\n'; console.error(e); };
+window.addEventListener('error', e => fail(e.error || e.message));
+window.addEventListener('unhandledrejection', e => fail(e.reason));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x)), lerp = (a, b, t) => a + (b - a) * t;
+const ease = x => x * x * (3 - 2 * x), num = n => n.toLocaleString('en-US');
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const narrow = () => innerWidth <= 760;
+const rnd = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+
+const DATA = await (await fetch('data.json')).json();
+await Promise.all([document.fonts.load('500 40px Newsreader'), document.fonts.load('600 40px Archivo')]).catch(() => 0);
+
+// ------------------------------------------------------------------ the data: families, advances, the RL posts
+const EX = new RegExp(DATA.exclude, 'i'), ONE = new RegExp(DATA.one, 'i');
+const RULES = DATA.rules.map(r => ({ key: r[0], name: r[1], sub: r[2], re: new RegExp(r[3], 'i'), model: r[4] }));
+const family = s => {      // the same rule as build.py: the first family whose pattern the configuration matches
+  if (s.m === 'rl') return 'rl';
+  if (s.m === 'other' && EX.test(s.c)) return null;
+  const cfg = s.c.replace(/no steering/i, ''), r = RULES.find(r => (!r.model || r.model === s.m) && r.re.test(cfg));
+  return s.m === 'other' && r.model !== 'other' ? null : r.key;
+};
+const lanes = DATA.order.map((k, i) => ({ ...RULES.find(r => r.key === k), i, n: i + 1, steps: [], lines: [] }));
+let T0 = 0, T1 = 1, SPAN = 1, HOURS = 1, RL1 = null, RLB = null, pinsData = [], leftOut = DATA.left_out, titles = DATA.titles, source = 'snapshot of ' + DATA.built;
+const W_MOVE = 0.012, W_PIN = 0.006;          // share of the replay a token takes to slide, a pin to drop
+function ingest(rows, tt, t1) {
+  rows = rows.slice().sort((a, b) => a.t - b.t); titles = tt;
+  const rl = rows.filter(s => s.m === 'rl');
+  RL1 = rl.find(s => s.c.startsWith('plain, T 1.0')) || rl[0];
+  RLB = rl.reduce((a, s) => s.v > a.v ? s : a, rl[0]);
+  pinsData = [];
+  for (const L of lanes) {
+    L.lines = rows.filter(s => s.f === L.key); L.steps = [];
+    let best = 0;
+    for (let i = 0; i < L.lines.length;) {            // one result may post several lines: its highest one counts
+      let j = i, top = L.lines[i];
+      while (j < L.lines.length && L.lines[j].r === top.r) { if (L.lines[j].v > top.v) top = L.lines[j]; j++; }
+      top = L.lines.slice(i, j).find(s => s.v === top.v); i = j;
+      if (top.v > best) { best = top.v; const st = { t: top.t, best, s: top, L }; L.steps.push(st); pinsData.push(st); }
+    }
+    L.one = L.lines.filter(s => !ONE.test(s.c)).reduce((a, s) => !a || s.v > a.v ? s : a, null);
+  }
+  pinsData.sort((a, b) => a.t - b.t || a.L.i - b.L.i).forEach((st, i) => st.n = i + 1);
+  T0 = rows[0].t; T1 = Math.max(t1, rows[rows.length - 1].t); T1 += (T1 - T0) * W_MOVE * 1.5; SPAN = T1 - T0; HOURS = SPAN / 3.6e6;
+}
+DATA.scores.forEach(s => s.f = s.f || family(s));
+ingest(DATA.scores, DATA.titles, DATA.t1);
+
+// the board, in world units: the track runs along x, the lanes are stacked along z
+const X0 = -9, X200 = -7.8, X500 = 10, PARK = -9.62, Y0 = 0.3;
+const sx = v => v <= 200 ? lerp(X0, X200, v / 200) : lerp(X200, X500, (v - 200) / 300);     // the engraved scale, broken at 200
+const LZ = i => -3.9 + 1.6 * i, RLZ = -6.05, ZP = -5.3;
+const XI0 = -14.6, XI1 = 14.9, ZI0 = -6.6, ZI1 = 6.4, XD = 12.6, RAIL = 0.8;                 // inside of the frame, start of the deck
+const CR = { x: 13.75, z: 2.4, r: 0.86 }, REV = 8;                                            // the crank: REV turns for the whole replay
+const bestAt = (L, t) => { let b = null; for (const st of L.steps) if (st.t <= t) b = st; return b; };
+const xAt = (L, t) => { let x = PARK; for (const st of L.steps) x = lerp(x, sx(st.best), ease(clamp((t - st.t) / (W_MOVE * SPAN), 0, 1))); return x; };
+
+// ------------------------------------------------------------------ renderer, room, light
+const canvas = $('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate = false;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#0b0908');
+const camera = new THREE.PerspectiveCamera(24, 1, 1, 300);
+
+function studio() {   // a photographer's room for the metal to reflect: one large softbox, a strip, a warm bounce
+  const es = new THREE.Scene(), lit = (w, h, v, c = [1, 1, 1]) => new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(c[0] * v, c[1] * v, c[2] * v), side: THREE.DoubleSide }));
+  es.add(new THREE.Mesh(new THREE.SphereGeometry(60, 24, 12), new THREE.MeshBasicMaterial({ color: new THREE.Color(0.02, 0.017, 0.014), side: THREE.BackSide })));
+  const key = lit(34, 24, 6.0, [1, 0.95, 0.87]); key.position.set(-18, 28, -10); key.lookAt(0, 0, 0);
+  const top = lit(50, 30, 1.6, [1, 0.96, 0.9]); top.position.set(4, 36, 14); top.lookAt(0, 0, 0);
+  const strip = lit(5, 34, 3.0, [0.88, 0.93, 1]); strip.position.set(34, 12, 4); strip.lookAt(0, 2, 0);
+  const front = lit(44, 6, 1.5, [1, 0.9, 0.8]); front.position.set(0, 8, 36); front.lookAt(0, 2, 0);
+  const bounce = lit(50, 50, 0.1, [1, 0.8, 0.6]); bounce.position.set(0, -6, 0); bounce.rotation.x = Math.PI / 2;
+  es.add(key, top, strip, front, bounce);
+  const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(es, 0.02, 1, 200).texture; pm.dispose();
+}
+studio();
+const key = new THREE.SpotLight(new THREE.Color(1.0, 0.94, 0.85), 2.3, 0, 0.62, 0.7, 0);   // one lamp, behind and to the left
+key.position.set(-15, 30, -14); key.target.position.set(1, 0, 0.5); key.castShadow = true; key.shadow.mapSize.set(2048, 2048);
+Object.assign(key.shadow.camera, { near: 16, far: 60 }); key.shadow.bias = -0.0004; key.shadow.normalBias = 0.03; key.shadow.radius = 5;
+scene.add(key.target, key, new THREE.HemisphereLight(0x9a948c, 0x1c1611, 0.42));
+
+// ------------------------------------------------------------------ surfaces
+const tex = (cv, srgb, rep) => { const t = new THREE.CanvasTexture(cv); if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; if (rep) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep[0], rep[1]); } return t; };
+const cvs = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return [c, c.getContext('2d')]; };
+const serif = '"Newsreader", Georgia, serif', sans = '"Archivo", sans-serif', INK = '#120c07';
+
+function mahogany() {      // grain along the canvas y axis
+  const [cv, c] = cvs(256, 1024), rand = rnd(3);
+  c.fillStyle = '#4a1f12'; c.fillRect(0, 0, 256, 1024);
+  for (let i = 0; i < 620; i++) {
+    const x = rand() * 256, a = 2 + rand() * 6, f = 0.004 + rand() * 0.01, p = rand() * 7;
+    c.beginPath(); for (let y = 0; y <= 1024; y += 16) c.lineTo(x + Math.sin(y * f + p) * a + Math.sin(y * f * 3.1 + p) * a * 0.3, y);
+    c.lineWidth = 0.5 + rand() * 2.6; c.strokeStyle = rand() < 0.62 ? `rgba(22,6,3,${0.08 + rand() * 0.24})` : `rgba(176,96,56,${0.05 + rand() * 0.13})`; c.stroke();
+  }
+  for (let i = 0; i < 900; i++) { c.fillStyle = `rgba(15,4,2,${0.2 + rand() * 0.3})`; c.fillRect(rand() * 256, rand() * 1024, 1, 3 + rand() * 9); }   // pores
+  return cv;
+}
+function nap() {           // the bump of the cloth
+  const [cv, c] = cvs(256, 256), rand = rnd(5), im = c.createImageData(256, 256);
+  for (let i = 0; i < im.data.length; i += 4) { const v = 96 + rand() * 90; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = 255; }
+  c.putImageData(im, 0, 0);
+  for (let i = 0; i < 900; i++) { const x = rand() * 256, y = rand() * 256, a = rand() * 7; c.beginPath(); c.moveTo(x, y); c.lineTo(x + Math.cos(a) * 7, y + Math.sin(a) * 7); c.strokeStyle = `rgba(${rand() < 0.5 ? '255,255,255' : '0,0,0'},.12)`; c.stroke(); }
+  return cv;
+}
+function baize() {         // the cloth with its printed gilt lines: lane borders, the start, every 50 of the scale
+  const U = 72, w = XD - XI0, d = ZI1 - ZI0, [cv, c] = cvs(Math.round(w * U), Math.round(d * U)), rand = rnd(11);
+  c.fillStyle = '#1f4634'; c.fillRect(0, 0, cv.width, cv.height);
+  for (let i = 0; i < 260; i++) { const x = rand() * cv.width, y = rand() * cv.height, r = 40 + rand() * 160, g = c.createRadialGradient(x, y, 0, x, y, r), dk = rand() < 0.5;
+    g.addColorStop(0, dk ? 'rgba(8,26,18,.055)' : 'rgba(70,120,92,.04)'); g.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = g; c.fillRect(x - r, y - r, 2 * r, 2 * r); }
+  const X = x => (x - XI0) * U, Z = z => (z - ZI0) * U;
+  const ln = (x0, z0, x1, z1, lw, al) => { c.beginPath(); c.moveTo(X(x0), Z(z0)); c.lineTo(X(x1), Z(z1)); c.lineWidth = lw; c.strokeStyle = `rgba(196,168,104,${al})`; c.stroke(); };
+  const zA = LZ(0) - 0.58, zB = LZ(lanes.length - 1) + 1.02;
+  c.strokeStyle = 'rgba(196,168,104,.5)'; c.lineWidth = 2; c.strokeRect(X(XI0 + 0.22), Z(ZI0 + 0.22), (w - 0.44) * U, (d - 0.44) * U);
+  c.lineWidth = 1; c.strokeRect(X(XI0 + 0.3), Z(ZI0 + 0.3), (w - 0.6) * U, (d - 0.6) * U);
+  for (let i = 0; i <= lanes.length; i++) ln(X0 - 1.15, zA + 1.6 * i, X500 + 0.55, zA + 1.6 * i, i % lanes.length ? 1 : 2, i % lanes.length ? 0.3 : 0.55);
+  ln(X0, zA, X0, zB, 2.2, 0.6);
+  for (let v = 200; v <= 500; v += 10) ln(sx(v), zA, sx(v), zB, v % 50 ? 1 : 1.8, v % 50 ? 0.1 : v % 100 ? 0.34 : 0.55);
+  return cv;
+}
+const ivoryFill = (c, w, h, seed) => {       // ivory: warm white with its fine grain
+  const rand = rnd(seed); c.fillStyle = '#cdbf9f'; c.fillRect(0, 0, w, h);
+  for (let i = 0; i < w * h / 900; i++) { const y = rand() * h, x = rand() * w, l = 30 + rand() * 160; c.beginPath(); c.moveTo(x, y); c.lineTo(x + l, y + (rand() - 0.5) * 3);
+    c.lineWidth = 0.6 + rand(); c.strokeStyle = rand() < 0.5 ? `rgba(120,96,58,${0.04 + rand() * 0.07})` : `rgba(255,250,236,${0.08 + rand() * 0.1})`; c.stroke(); }
+  c.strokeStyle = 'rgba(70,50,26,.55)'; c.lineWidth = 1.5; c.strokeRect(5.5, 5.5, w - 11, h - 11);
+};
+const spaced = (c, s, x, y, track, align = 'left') => {    // letter-spaced text
+  const ws = [...s].map(ch => c.measureText(ch).width + track), tot = ws.reduce((a, b) => a + b, 0) - track; let p = align === 'right' ? x - tot : align === 'center' ? x - tot / 2 : x;
+  const ta = c.textAlign; c.textAlign = 'left'; [...s].forEach((ch, i) => { c.fillText(ch, p, y); p += ws[i]; }); c.textAlign = ta; return tot;
+};
+
+const WOOD = mahogany(), NAP = nap();
+const M = {
+  brass: new THREE.MeshPhysicalMaterial({ color: '#b8935a', metalness: 1, roughness: 0.3, clearcoat: 0.35, clearcoatRoughness: 0.25 }),
+  bright: new THREE.MeshPhysicalMaterial({ color: '#c9a566', metalness: 1, roughness: 0.2, clearcoat: 0.4, clearcoatRoughness: 0.15 }),
+  gilt: new THREE.MeshPhysicalMaterial({ color: '#dcb25e', metalness: 1, roughness: 0.14, clearcoat: 0.5, clearcoatRoughness: 0.08 }),
+  wood: new THREE.MeshPhysicalMaterial({ map: tex(WOOD, true, [0.55, 0.09]), roughness: 0.45, clearcoat: 0.6, clearcoatRoughness: 0.42, envMapIntensity: 0.7, side: THREE.DoubleSide }),
+  deck: new THREE.MeshPhysicalMaterial({ map: tex(WOOD, true, [1.3, 1.2]), roughness: 0.45, clearcoat: 0.6, clearcoatRoughness: 0.3, envMapIntensity: 0.7 }),
+  inlay: new THREE.MeshStandardMaterial({ color: '#b48d45', roughness: 0.4, metalness: 0.55 }),
+  ebony: new THREE.MeshPhysicalMaterial({ color: '#17110d', roughness: 0.32, clearcoat: 0.7, clearcoatRoughness: 0.2 }),
+  baize: new THREE.MeshPhysicalMaterial({ map: tex(baize(), true), roughness: 1, metalness: 0, sheen: 1, sheenColor: new THREE.Color('#5c8f72'), sheenRoughness: 0.55, bumpMap: tex(NAP, false, [64, 30]), bumpScale: 0.9, envMapIntensity: 0.35 }),
+  table: new THREE.MeshStandardMaterial({ color: '#17120e', roughness: 0.92, metalness: 0, bumpMap: tex(NAP, false, [90, 90]), bumpScale: 0.5, envMapIntensity: 0.4 }),
+  ivory: new THREE.MeshStandardMaterial({ color: '#b9ab8b', roughness: 0.6, envMapIntensity: 0.55 }),
+  slot: new THREE.MeshStandardMaterial({ color: '#070605', roughness: 0.9 }),
+};
+const faceMat = t => new THREE.MeshStandardMaterial({ map: t, roughness: 0.62, envMapIntensity: 0.55 });
+const add = (parent, geo, mat, x = 0, y = 0, z = 0, shadow = 3) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = !!(shadow & 1); m.receiveShadow = !!(shadow & 2); parent.add(m); return m; };
+const lathe = (pts, seg = 48) => new THREE.LatheGeometry(pts.map(p => new THREE.Vector2(p[0], p[1])), seg);
+const flat = (w, d) => new THREE.PlaneGeometry(w, d).rotateX(-Math.PI / 2);      // lies on the board: its right is +x, its top is -z
+
+function sweep(pts, len) {      // a moulding: the profile (outward, height) drawn along +z, smooth where the profile bends gently
+  const pos = [], nor = [], uv = [], idx = [], seg = [];
+  for (let i = 0; i < pts.length - 1; i++) { const dx = pts[i + 1][0] - pts[i][0], dy = pts[i + 1][1] - pts[i][1], l = Math.hypot(dx, dy); seg.push({ n: [-dy / l, dx / l], l }); }
+  const mix = (a, b) => { if (!b || a.n[0] * b.n[0] + a.n[1] * b.n[1] < 0.62) return a.n; const x = a.n[0] + b.n[0], y = a.n[1] + b.n[1], l = Math.hypot(x, y); return [x / l, y / l]; };
+  let acc = 0;
+  seg.forEach((s, i) => {
+    const a = pts[i], b = pts[i + 1], na = mix(s, seg[i - 1]), nb = mix(s, seg[i + 1]), o = pos.length / 3;
+    for (const [p, n, u] of [[a, na, acc], [b, nb, acc + s.l]]) for (const z of [0, len]) { pos.push(p[0], p[1], z); nor.push(n[0], n[1], 0); uv.push(u, z); }
+    idx.push(o, o + 3, o + 2, o, o + 1, o + 3); acc += s.l;
+  });
+  const tri = THREE.ShapeUtils.triangulateShape(pts.map(p => new THREE.Vector2(p[0], p[1])), []);
+  for (const [z, nz] of [[0, -1], [len, 1]]) { const o = pos.length / 3; pts.forEach(p => { pos.push(p[0], p[1], z); nor.push(0, 0, nz); uv.push(p[0], p[1]); }); tri.forEach(t => idx.push(o + t[0], o + t[1], o + t[2])); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); g.setIndex(idx); return g;
+}
+
+// ------------------------------------------------------------------ the table, the frame, the cloth, the deck
+{ const f = add(scene, new THREE.PlaneGeometry(260, 260), M.table, 0, 0, 0, 2); f.rotation.x = -Math.PI / 2; }
+const PROFILE = [[0, 0], [0, 0.5], [0.025, 0.56], [0.08, 0.6], [0.18, 0.62], [0.5, 0.62], [0.6, 0.6], [0.67, 0.55], [0.71, 0.46], [0.72, 0.32], [0.75, 0.27], [0.8, 0.22], [0.8, 0]];
+const rail = (len, x, z, ry) => { const m = add(scene, sweep(PROFILE, len), M.wood, x, 0, z); m.rotation.y = ry; return m; };
+rail(XI1 - XI0 + 2 * RAIL, XI1 + RAIL, ZI1, -Math.PI / 2); rail(XI1 - XI0 + 2 * RAIL, XI0 - RAIL, ZI0, Math.PI / 2);
+rail(ZI1 - ZI0, XI0, ZI1, Math.PI); rail(ZI1 - ZI0, XI1, ZI0, 0);
+add(scene, flat(XD - XI0, ZI1 - ZI0), M.baize, (XI0 + XD) / 2, Y0, (ZI0 + ZI1) / 2, 2);
+add(scene, new THREE.BoxGeometry(XI1 - XD, Y0 + 0.03, ZI1 - ZI0), M.deck, (XD + XI1) / 2, (Y0 + 0.03) / 2, (ZI0 + ZI1) / 2, 2);
+add(scene, new THREE.BoxGeometry(0.07, 0.05, ZI1 - ZI0), M.bright, XD, Y0 + 0.02, (ZI0 + ZI1) / 2);
+
+// ------------------------------------------------------------------ engraved ivory plates
+let plates = [];      // an ivory slab with an engraved face; fixed with four brass screws
+function plate(w, d, x, z, draw, ppu = 170, parent = scene) {
+  const [cv, c] = cvs(Math.round(w * ppu), Math.round(d * ppu)), t = tex(cv, true), g = new THREE.Group(); g.position.set(x, Y0, z); parent.add(g);
+  add(g, new THREE.BoxGeometry(w, 0.05, d), M.ivory, 0, 0.025, 0);
+  add(g, flat(w - 0.01, d - 0.01), faceMat(t), 0, 0.0512, 0, 2);
+  const p = { g, cv, c, t, w, d, redraw: () => { ivoryFill(c, cv.width, cv.height, Math.round(x * 31 + z * 17)); c.fillStyle = INK; c.strokeStyle = INK; draw(c, cv.width, cv.height, ppu); t.needsUpdate = true; } };
+  p.redraw(); plates.push(p); return p;
+}
+let portrait = false;
+const upright = (c, x, y, f) => { c.save(); c.translate(x, y); if (portrait) c.rotate(Math.PI / 2); f(); c.restore(); };   // text that stays upright when the board is seen from its start
+
+// the scale: one long plate along the near side
+const SC0 = XI0 + 0.45, SC1 = X500 + 0.6, SCZ = ZI1 - 0.62;
+const scalePlate = plate(SC1 - SC0, 0.84, (SC0 + SC1) / 2, SCZ, (c, w, h, U) => {
+  const X = x => (x - SC0) * U;
+  const tick = (v, l, lw) => { c.beginPath(); c.moveTo(X(sx(v)), 6); c.lineTo(X(sx(v)), 6 + l); c.lineWidth = lw; c.stroke(); };
+  for (let v = 200; v <= 500; v += 5) tick(v, v % 50 === 0 ? 46 : v % 10 === 0 ? 30 : 16, v % 50 === 0 ? 3.4 : v % 10 === 0 ? 2 : 1.2);
+  tick(0, 46, 3.4); tick(100, 22, 2);
+  c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = `600 ${portrait ? 48 : 64}px ${serif}`;
+  for (const v of [0, 200, 250, 300, 350, 400, 450, 500]) upright(c, X(sx(v)), 96, () => c.fillText(String(v), 0, 0));
+  const xb = X((X0 + X200) / 2);                       // the break of the scale: two slanted strokes
+  for (const o of [-7, 7]) { c.beginPath(); c.moveTo(xb + o - 9, 62); c.lineTo(xb + o + 9, 14); c.lineWidth = 3; c.stroke(); }
+  c.textAlign = 'left'; c.font = `700 31px ${sans}`; spaced(c, 'PROBLEMS RIGHT OF 500', 26, 50, 5);
+  c.font = `600 24px ${sans}`; spaced(c, 'SCALE BROKEN AT 200: 0–200 SHORTENED', 26, 98, 2.4);
+});
+
+// the lanes: a name plate, a slot with brass rails, a token, a counter
+const tokenProfile = [[0, 0], [0.36, 0], [0.41, 0.03], [0.41, 0.075], [0.33, 0.115], [0.25, 0.2], [0.29, 0.275], [0.42, 0.305], [0.455, 0.345], [0.455, 0.4], [0.425, 0.435], [0.395, 0.435], [0.395, 0.415], [0, 0.415]];
+const TOKEN = lathe(tokenProfile, 64).scale(1, 0.84, 1), TOP = new THREE.CircleGeometry(0.392, 48).rotateX(-Math.PI / 2);
+const screws = new THREE.InstancedMesh(lathe([[0, 0], [0.055, 0], [0.055, 0.012], [0.04, 0.024], [0, 0.026]], 16), M.bright, 80); screws.count = 0; scene.add(screws);
+const m4 = new THREE.Matrix4(), v3 = new THREE.Vector3(), qI = new THREE.Quaternion(), s3 = new THREE.Vector3(1, 1, 1);
+const screw4 = (x, z, w, d) => { for (const sx_ of [-1, 1]) for (const sz of [-1, 1]) screws.setMatrixAt(screws.count++, m4.compose(v3.set(x + sx_ * (w / 2 - 0.12), Y0 + 0.05, z + sz * (d / 2 - 0.12)), qI, s3)); };
+const namePlate = (z, numeral, name, sub) => { const w = 3.9, d = 1.06, x = XI0 + 0.5 + w / 2;
+  plate(w, d, x, z, (c, W, H) => {
+    c.beginPath(); c.arc(86, H / 2, 58, 0, 7); c.lineWidth = 4; c.stroke(); c.beginPath(); c.arc(86, H / 2, 49, 0, 7); c.lineWidth = 1.6; c.stroke();
+    c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = `600 ${numeral.length > 1 ? 56 : 86}px ${serif}`; c.fillText(numeral, 86, H / 2 + (numeral.length > 1 ? 4 : 8));
+    c.textAlign = 'left'; c.font = `700 47px ${sans}`; spaced(c, name.toUpperCase(), 164, 66, 4);
+    c.font = `600 31px ${sans}`; c.fillStyle = '#3a2d1d'; c.fillText(sub, 165, 124);
+  }); screw4(x, z, w - 0.5, d); };
+
+function counter(x, z, digits, label, parent = scene) {      // ivory digit wheels behind a window, in a brass bezel
+  const w = 0.42 * digits + 0.3, d = 0.94, g = new THREE.Group(); g.position.set(x, 0, z); parent.add(g);
+  const o = { g, digits, val: null, from: null, start: -1e9 };
+  const draw = (c, W, H) => {
+    const p = still ? 1 : ease(clamp((performance.now() - o.start) / 420, 0, 1)), dw = (W - 46) / digits, wy = 16, wh = H - 62;
+    c.fillStyle = '#0d0a08'; c.fillRect(17, wy - 5, W - 34, wh + 10);
+    const str = v => v === null ? ' '.repeat(digits) : String(v).padStart(digits, ' ');
+    const a = str(o.from), b = str(o.val);
+    for (let i = 0; i < digits; i++) {
+      const x0 = 23 + i * dw; c.save(); c.beginPath(); c.rect(x0 + 2, wy, dw - 4, wh); c.clip();
+      const gr = c.createLinearGradient(0, wy, 0, wy + wh); gr.addColorStop(0, '#6f6753'); gr.addColorStop(0.22, '#cbbf9f'); gr.addColorStop(0.5, '#ddd1b3'); gr.addColorStop(0.8, '#c6b999'); gr.addColorStop(1, '#645c49');
+      c.fillStyle = gr; c.fillRect(x0, wy, dw, wh);
+      c.fillStyle = INK; c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = `600 ${Math.round(wh * 0.88)}px ${serif}`;
+      const q = a[i] === b[i] ? 1 : p, cy = wy + wh / 2 + wh * 0.06;
+      if (q < 1) c.fillText(a[i], x0 + dw / 2, cy - q * wh);
+      c.fillText(b[i], x0 + dw / 2, cy + (1 - q) * wh);
+      c.restore();
+    }
+    c.fillStyle = INK; c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = `700 24px ${sans}`; spaced(c, label, W / 2, H - 23, 3.5, 'center');
+    return p < 1;
+  };
+  o.plate = plate(w, d, 0, 0, draw, 170, g);
+  for (const [bx, bz, bw, bd] of [[0, -d / 2 - 0.03, w + 0.12, 0.06], [0, d / 2 + 0.03, w + 0.12, 0.06], [-w / 2 - 0.03, 0, 0.06, d], [w / 2 + 0.03, 0, 0.06, d]]) add(g, new THREE.BoxGeometry(bw, 0.085, bd), M.bright, bx, Y0 + 0.0425, bz);
+  o.set = v => { if (v === o.val) return; o.from = o.val; o.val = v; o.start = performance.now(); o.rolling = true; };
+  o.tick = () => { if (!o.rolling) return false; const c = o.plate.c; o.rolling = draw(c, o.plate.cv.width, o.plate.cv.height); o.plate.t.needsUpdate = true; return true; };
+  return o;
+}
+
+const tokenTop = n => { const [cv, c] = cvs(160, 160); c.fillStyle = '#d6c9a9'; c.fillRect(0, 0, 160, 160);
+  c.strokeStyle = INK; c.beginPath(); c.arc(80, 80, 68, 0, 7); c.lineWidth = 3; c.stroke(); c.beginPath(); c.arc(80, 80, 61, 0, 7); c.lineWidth = 1.2; c.stroke();
+  c.fillStyle = INK; c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = `600 108px ${serif}`; c.fillText(String(n), 80, 91); return tex(cv, true); };
+const facers = [];      // things whose face turns with the reader: token tops, pin heads, counters
+for (const L of lanes) {
+  const z = LZ(L.i);
+  namePlate(z, String(L.n), L.name, L.sub);
+  add(scene, flat(X500 - PARK + 0.75, 0.13), M.slot, (PARK + X500 + 0.25) / 2 - 0.12, Y0 + 0.004, z, 0);
+  for (const s of [-1, 1]) add(scene, new THREE.BoxGeometry(X500 - PARK + 0.8, 0.03, 0.035), M.brass, (PARK + X500 + 0.25) / 2 - 0.12, Y0 + 0.015, z + s * 0.085);
+  L.token = new THREE.Group(); scene.add(L.token); L.token.position.set(PARK, Y0 + 0.03, z);
+  add(L.token, TOKEN, M.bright);
+  L.top = add(L.token, TOP, new THREE.MeshPhysicalMaterial({ map: tokenTop(L.n), roughness: 0.5, clearcoat: 0.25, clearcoatRoughness: 0.5, envMapIntensity: 0.5 }), 0, 0.351, 0, 2); facers.push(L.top);
+  L.counter = counter(X500 + 1.42, z, 3, 'OF 500'); facers.push(L.counter.g);
+}
+
+// the RL checkpoint: a brass rail on the far side with two fixed posts, an inlaid brass line at its one-sample score
+const rlGroup = new THREE.Group(); scene.add(rlGroup);
+const bell = new THREE.Group();
+let rlPlates = [];
+function buildRL() {
+  rlGroup.clear(); bell.clear(); plates = plates.filter(p => !rlPlates.includes(p)); rlPlates = [];
+  const x1 = sx(RL1.v), xb = sx(RLB.v);
+  add(rlGroup, new THREE.BoxGeometry(X500 - X0 + 0.5, 0.06, 0.1), M.brass, (X0 + X500) / 2, Y0 + 0.03, RLZ);
+  add(rlGroup, new THREE.BoxGeometry(0.05, 0.012, SCZ - 0.42 - RLZ), M.inlay, x1, Y0 + 0.006, (RLZ + SCZ - 0.42) / 2, 2);
+  add(rlGroup, lathe([[0, 0], [0.24, 0], [0.26, 0.04], [0.2, 0.08], [0.1, 0.12], [0.075, 0.3], [0.1, 0.34], [0.075, 0.38], [0.06, 0.86], [0.09, 0.9], [0.05, 0.95], [0, 0.95]], 40), M.brass, x1, Y0, RLZ);
+  bell.position.set(x1, Y0 + 0.93, RLZ); bell.scale.setScalar(1.35); rlGroup.add(bell);
+  add(bell, lathe([[0, 0.3], [0.05, 0.3], [0.13, 0.285], [0.22, 0.24], [0.28, 0.17], [0.31, 0.08], [0.335, 0.01], [0.36, -0.02], [0.345, -0.03], [0.31, 0.0], [0.28, 0.07], [0.2, 0.19], [0, 0.25]], 56), M.gilt, 0, 0, 0);
+  add(bell, lathe([[0, 0.3], [0.035, 0.3], [0.03, 0.34], [0.05, 0.37], [0.03, 0.4], [0, 0.405]], 20), M.brass, 0, 0, 0);
+  add(rlGroup, lathe([[0, 0], [0.17, 0], [0.18, 0.03], [0.13, 0.07], [0.06, 0.1], [0.045, 0.5], [0.07, 0.54], [0.03, 0.58], [0.06, 0.62], [0.1, 0.7], [0.06, 0.78], [0, 0.8]], 32), M.bright, xb, Y0, RLZ);
+  const tag = (s, x, right) => { const w = 5.0, p = plate(w, 0.84, right ? x - w / 2 : x + w / 2, ZP, (c, W, H) => {
+    c.textBaseline = 'middle'; c.textAlign = 'left'; c.font = `600 62px ${serif}`; const nw = c.measureText(String(s.v)).width;
+    c.fillText(String(s.v), 22, 48); c.font = `700 28px ${sans}`; spaced(c, s === RL1 ? 'RL · ONE SAMPLE' : 'RL · ITS BEST', 40 + nw, 44, 4);
+    c.font = `600 27px ${sans}`; c.fillStyle = '#3a2d1d'; let t = s.c; while (c.measureText(t).width > W - 44 && t.length > 8) t = t.slice(0, -2); c.fillText(t === s.c ? t : t + '…', 22, 106);
+  }, 170, rlGroup); rlPlates.push(p); };
+  tag(RL1, x1 - 0.42, true); if (RLB !== RL1) tag(RLB, xb + 0.3, false);
+}
+namePlate(RLZ + 0.02, 'RL', 'RL checkpoint', 'fixed posts, not a runner');
+
+// the deck: the crank and the hour counter
+const crank = new THREE.Group(); crank.position.set(CR.x, Y0 + 0.03, CR.z); crank.scale.setScalar(1.25); scene.add(crank);
+add(scene, lathe([[0, 0], [0.62, 0], [0.64, 0.03], [0.56, 0.06], [0.4, 0.075], [0.34, 0.12], [0.2, 0.14], [0.17, 0.2], [0, 0.2]], 56), M.brass, CR.x, Y0 + 0.03, CR.z).scale.setScalar(1.25);
+add(crank, lathe([[0, 0.2], [0.13, 0.2], [0.13, 0.36], [0.16, 0.38], [0.16, 0.5], [0.1, 0.54], [0.05, 0.6], [0, 0.61]], 32), M.bright);
+{ const arm = new THREE.Shape(); arm.absarc(0, 0, 0.15, Math.PI / 2, Math.PI * 1.5); arm.absarc(CR.r, 0, 0.1, -Math.PI / 2, Math.PI / 2);
+  const g = new THREE.ExtrudeGeometry(arm, { depth: 0.07, bevelEnabled: true, bevelSize: 0.015, bevelThickness: 0.015, bevelSegments: 2, curveSegments: 20 }).rotateX(-Math.PI / 2);
+  add(crank, g, M.brass, 0, 0.4, 0); }
+add(crank, lathe([[0, 0.47], [0.06, 0.47], [0.06, 0.52], [0.1, 0.55], [0.125, 0.66], [0.14, 0.84], [0.125, 1.0], [0.1, 1.08], [0.11, 1.12], [0.07, 1.17], [0, 1.18]], 32), M.ebony, CR.r, 0, 0);
+add(crank, lathe([[0, 0.47], [0.075, 0.47], [0.075, 0.535], [0, 0.535]], 24), M.bright, CR.r, 0, 0);
+const hourCounter = counter(CR.x, -2.4, 2, 'HOUR'); facers.push(hourCounter.g);
+const crankPlate = plate(1.9, 0.56, CR.x, CR.z + 2.2, (c, W, H) => { c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = `700 27px ${sans}`; upright(c, W / 2, H / 2 + 1, () => spaced(c, portrait ? 'TURN' : 'TURN FOR HOURS', 0, 0, 4, 'center')); });
+
+// the pins: one for each advance, numbered in the order they were posted
+const pinGroup = new THREE.Group(); scene.add(pinGroup);
+const PIN_R = 0.125, PIN_Y = 0.12;
+const pinAtlas = (() => { const [cv, c] = cvs(512, 512); c.fillStyle = '#d6c9a9'; c.fillRect(0, 0, 512, 512); c.fillStyle = INK; c.textAlign = 'center'; c.textBaseline = 'middle';
+  for (let i = 0; i < 64; i++) { c.font = `700 ${i < 9 ? 50 : 40}px ${serif}`; c.fillText(String(i + 1), (i % 8) * 64 + 32, (i >> 3) * 64 + 35); }
+  return new THREE.MeshPhysicalMaterial({ map: tex(cv, true), roughness: 0.42, clearcoat: 0.4, clearcoatRoughness: 0.2, envMapIntensity: 0.6 }); })();
+const PIN_BODY = lathe([[0, -0.06], [0.012, -0.05], [0.012, PIN_Y - 0.03], [PIN_R, PIN_Y - 0.03], [PIN_R + 0.012, PIN_Y - 0.015], [PIN_R, PIN_Y], [PIN_R - 0.014, PIN_Y], [PIN_R - 0.014, PIN_Y - 0.006], [0, PIN_Y - 0.006]], 28);
+function buildPins() {
+  pinGroup.clear(); for (let i = facers.length - 1; i >= 0; i--) if (facers[i].isPinHead) facers.splice(i, 1);
+  for (const L of lanes) L.steps.forEach((st, k) => {      // a pin stands beside its slot; a second row only where the first is taken
+    st.row = L.steps.slice(0, k).some(o => o.row === 0 && sx(st.best) - sx(o.best) < 2.15 * PIN_R) ? 1 : 0;
+    const g = new THREE.Group(); st.home = new THREE.Vector3(sx(st.best), Y0 + 0.04, LZ(L.i) + (st.row ? 0.87 : 0.62)); g.position.copy(st.home); pinGroup.add(g); st.g = g;
+    add(g, PIN_BODY, M.bright);
+    const head = new THREE.CircleGeometry(PIN_R - 0.016, 24).rotateX(-Math.PI / 2), uv = head.attributes.uv, n = (st.n - 1) % 64;
+    for (let i = 0; i < uv.count; i++) uv.setXY(i, ((n % 8) + 0.5 + (uv.getX(i) - 0.5) * 0.74) / 8, 1 - ((n >> 3) + 0.5 - (uv.getY(i) - 0.5) * 0.74) / 8);
+    const h = add(g, head, pinAtlas, 0, PIN_Y - 0.004, 0, 0); h.isPinHead = true; facers.push(h);
+  });
+}
+
+// ------------------------------------------------------------------ the words: the sentence, the legend, the cards
+const fmtT = t => new Date(t).toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
+const hr = t => ((t - T0) / 3.6e6).toFixed(1);
+const lane = k => lanes.find(L => L.key === k);
+function words() {
+  const rl = RL1.v, unchanged = [lane('plain').one, lane('cue').one].filter(Boolean).reduce((a, s) => !a || s.v > a.v ? s : a, null);
+  const vs = lane('vote').steps, vote = vs.length ? vs[vs.length - 1].s : null;
+  let s = `On one sample per problem the RL checkpoint scores <b>${rl}</b> of 500 on MATH‑500 and the base with its weights unchanged <b>${unchanged ? unchanged.v : 'nothing yet'}</b>`;
+  if (vote) s += vote.v > rl ? `; a vote over samples carries the base past RL’s post to <b>${vote.v}</b>` : `; a vote over samples lifts the base to <b>${vote.v}</b>, ${rl - vote.v} short of RL’s post`;
+  if (vote && vote.k && unchanged && unchanged.k) s += `, for <b>${num(vote.k)}</b> tokens a problem against <b>${num(unchanged.k)}</b>`;
+  $('line').innerHTML = s + '.';
+  const q = x => x ? `<b>${x.v}</b> (“${esc(x.c)}”${x.k ? `, ${num(x.k)} tokens` : ''})` : 'none';
+  $('note').innerHTML = `The two base scores: ${q(unchanged)}; ${q(vote)}. One sample with changed weights: weight edit ${q(lane('edit').one)}, Think‑SFT ${q(lane('sft').one)}. RL’s own best: ${q(RLB)}.`;
+  const ratio = vote && vote.k && unchanged && unchanged.k ? ` Here the best vote spends ${(vote.k / unchanged.k).toFixed(0)} times the tokens of one sample.` : '';
+  const pat = k => RULES.find(r => r.key === k).re.source.split('|').map(w => w.replace(/\\b|\?/g, '')).join(', ');
+  $('legend').innerHTML =
+    `<p><b>Lanes.</b> One lane per method family of the untrained base model. A MATH‑500 score line (n 500) joins the first family whose words its configuration holds: <b>5</b> a changed model naming ${pat('edit')}; <b>6</b> a changed model naming Think‑SFT; <b>4</b> vote; <b>3</b> ${pat('steer')}; <b>2</b> cue; <b>1</b> all other base lines. ${leftOut} lines of other trained checkpoints are left out.</p>` +
+    `<p><b>Token.</b> Its distance along the slot is the lane’s best score so far, problems right of 500; it moves only when a higher score is posted. The scale is broken at 200: 0 to 200 is shortened, 200 to 500 is linear. A lane’s best is the highest of all its posted runs, so it includes the luck of the draw.</p>` +
+    `<p><b>Pin.</b> One for each advance, numbered in posting order; hover or click it for the board item, configuration, tokens a problem and who posted it. <b>Counter.</b> The lane’s best, right of 500.</p>` +
+    `<p><b>RL posts.</b> Fixed: the RL checkpoint’s first one‑sample score, ${RL1.v} (“${esc(RL1.c)}”), with the inlaid brass line across the lanes, and its best, ${RLB.v} (“${esc(RLB.c)}”). The bell rings when a token passes the one‑sample line. Passing it with a vote over many samples is not the same budget as one sample.${ratio}</p>` +
+    `<p><b>Crank.</b> Drag it, press Play or use the arrow keys: ${REV} turns run the ${Math.round(HOURS)} hours from the first score line. Drag elsewhere to look around, scroll to come closer. The frame, screws, crank and gilt lane borders are furniture. Data: ${esc(source)}.</p>`;
+  $('ticks').innerHTML = pinsData.map(st => `<line class="${st.best > RL1.v && !(st.L.steps[st.L.steps.indexOf(st) - 1]?.best > RL1.v) ? 's' : ''}" x1="${((st.t - T0) / SPAN * 1000).toFixed(1)}" x2="${((st.t - T0) / SPAN * 1000).toFixed(1)}" y1="0" y2="${st.best > RL1.v ? 12 : 7}"/>`).join('');
+}
+const line = s => `<div class="sc"><b>${s.v}<small>/500</small></b><span><u>${esc(s.m === 'rl' ? 'RL checkpoint' : s.m === 'base' ? 'base' : 'changed model')} · MATH-500</u>${s.k ? ` · ${num(s.k)} tokens a problem` : ' · tokens not posted'}<br>${esc(s.c)}</span></div>`;
+const by = s => `<div class="by">Posted by <b>${esc(s.w)}</b> · ${fmtT(s.t)} · hour ${hr(s.t)} · ${esc(s.r)}</div>`;
+let sel = null, hover = null, need = true;
+function card() {
+  const c = $('card'); if (!sel) { c.classList.remove('on'); return; }
+  const x = '<button id="x" aria-label="Close">Close</button>';
+  if (sel.kind === 'pin') { const st = sel.st, prev = st.L.steps[st.L.steps.indexOf(st) - 1];
+    c.innerHTML = `<div class="hd"><span>Pin ${st.n} · lane ${st.L.n} · ${esc(st.L.name)}</span>${x}</div><div class="q">${esc(titles[st.s.r] || st.s.r)}</div>` +
+      `<p>${prev ? `Moved the token from ${prev.best} to ${st.best}.` : `The lane’s first score: ${st.best}.`} ${st.best > RL1.v ? `${st.best - RL1.v} past` : st.best === RL1.v ? 'Level with' : `${RL1.v - st.best} short of`} RL’s one‑sample ${RL1.v}.</p>` + line(st.s) + by(st.s); }
+  else if (sel.kind === 'lane') { const L = sel.L, b = bestAt(L, T0 + frac * SPAN);
+    c.innerHTML = `<div class="hd"><span>Lane ${L.n}</span>${x}</div><div class="q">${esc(L.name)}: ${esc(L.sub)}</div><p>${L.lines.length} score lines on the board; ${L.steps.length} raised the lane’s best.${b ? '' : ' No score yet at this hour.'}</p>` +
+      L.steps.filter(st => st.t <= T0 + frac * SPAN).reverse().map(st => line(st.s)).join('') + (b ? by(b.s) : ''); }
+  else { const s = sel.s;
+    c.innerHTML = `<div class="hd"><span>Fixed post · RL checkpoint</span>${x}</div><div class="q">${esc(titles[s.r] || s.r)}</div><p>${s === RL1 ? 'The first one‑sample score posted for the RL checkpoint: the line the bell listens to.' : 'The highest score posted for the RL checkpoint.'}</p>` + line(s) + by(s); }
+  c.classList.add('on'); $('x').onclick = () => select(null);
+}
+function select(b) { sel = b; card(); need = true; saveHash(); }
+
+// ------------------------------------------------------------------ sound: a small bell and the click of a token, made here
+let actx = null, sound = false, touched = false;
+const setSound = on => { sound = on; if (on && !actx) actx = new (window.AudioContext || window.webkitAudioContext)(); if (on) actx.resume(); $('snd').textContent = on ? 'Sound on' : 'Sound off'; $('snd').setAttribute('aria-pressed', on); };
+$('snd').addEventListener('click', e => { if (e.detail === -1) return; if (!touched) { touched = true; setSound(true); } else setSound(!sound); });
+addEventListener('pointerdown', e => { if (!touched && !e.target.closest('#snd')) { touched = true; setSound(true); } }, true);
+function ring() {
+  if (!sound || !actx) return; const t = actx.currentTime, out = actx.createGain(); out.gain.value = 0.16; out.connect(actx.destination);
+  for (const [r, a, d] of [[1, 1, 2.4], [2.0, 0.55, 1.6], [2.76, 0.4, 1.1], [5.4, 0.22, 0.6], [8.93, 0.1, 0.3]]) { const o = actx.createOscillator(), g = actx.createGain(); o.frequency.value = 1244 * r;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(a, t + 0.004); g.gain.exponentialRampToValueAtTime(0.0001, t + d); o.connect(g).connect(out); o.start(t); o.stop(t + d + 0.05); }
+}
+function click() {
+  if (!sound || !actx) return; const t = actx.currentTime, o = actx.createOscillator(), g = actx.createGain(); o.type = 'triangle'; o.frequency.setValueAtTime(520, t); o.frequency.exponentialRampToValueAtTime(140, t + 0.05);
+  g.gain.setValueAtTime(0.09, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.07); o.connect(g).connect(actx.destination); o.start(t); o.stop(t + 0.09);
+}
+
+// ------------------------------------------------------------------ state: time, camera, selection
+const q = new URLSearchParams(location.hash.slice(1));
+let frac = clamp(q.has('t') ? +q.get('t') : 1, 0, 1) || 0, shown = frac, vel = 0, playing = false;
+let az = 0, el = 0, zoom = 1, azS = 0, elS = 0, zoomS = 1, hashT = 0, bellT = -1e9, lastT = null;
+const find = id => { if (!id) return null; const st = pinsData.find(s => 'p' + s.n === id); if (st) return { kind: 'pin', st }; const L = lanes.find(L => L.key === id); if (L) return { kind: 'lane', L }; return id === 'rl' ? { kind: 'rl', s: RL1 } : id === 'rlbest' ? { kind: 'rl', s: RLB } : null; };
+const selId = () => !sel ? '' : sel.kind === 'pin' ? 'p' + sel.st.n : sel.kind === 'lane' ? sel.L.key : sel.s === RL1 ? 'rl' : 'rlbest';
+const saveHash = () => { clearTimeout(hashT); hashT = setTimeout(() => history.replaceState(null, '', '#t=' + frac.toFixed(4) + (sel ? '&s=' + selId() : '')), 200); };
+const setFrac = (f, keep) => { frac = clamp(f, 0, 1); if (!keep) vel = 0; $('scrub').value = Math.round(frac * 1000); need = true; saveHash(); };
+const setPlay = p => { playing = p && !still; if (playing && frac > 0.995) { setFrac(0); shown = 0; lastT = null; } $('play').textContent = playing ? 'Pause' : still ? 'Next score' : 'Play'; need = true; };
+const nextStep = d => { const t = T0 + frac * SPAN, c = pinsData.filter(st => d > 0 ? st.t > t + 1 : st.t < t - 1); return c.length ? clamp((c[d > 0 ? 0 : c.length - 1].t - T0) / SPAN + (d > 0 ? W_MOVE : 0), 0, 1) : d > 0 ? 1 : 0; };
+$('scrub').value = Math.round(frac * 1000);
+$('scrub').addEventListener('input', e => { setPlay(false); setFrac(e.target.value / 1000); });
+$('play').addEventListener('click', () => { if (still) setFrac(frac >= 1 ? 0 : nextStep(1)); else setPlay(!playing); });
+if (still) $('play').textContent = 'Next score';
+
+function rebuild() { buildRL(); buildPins(); words(); sel = find(selId() || q.get('s')); card(); orient(true); lastT = null; need = true; }
+
+// ------------------------------------------------------------------ layout and camera
+let W = 0, H = 0;
+const centre = new THREE.Vector3((XI0 + XI1) / 2, 0.3, (ZI0 + ZI1) / 2), target = centre.clone(), focus = centre.clone(), focusS = centre.clone();
+const CORNERS = []; for (const x of [XI0 - RAIL, XI1 + RAIL]) for (const z of [ZI0 - RAIL, ZI1 + RAIL]) for (const y of [0, 0.7]) CORNERS.push(new THREE.Vector3(x, y, z));
+function orient(force) {
+  const p = W < H * 0.9; if (p === portrait && !force) return; portrait = p;
+  for (const f of facers) f.rotation.y = p ? -Math.PI / 2 : 0;
+  scalePlate.redraw(); crankPlate.redraw();
+  az = azS = 0; el = elS = p ? 1.12 : 1.04;
+}
+function resize() {
+  W = innerWidth; H = innerHeight;
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, W * H > 1.2e6 ? 1.25 : 1.5)); renderer.setSize(W, H, false);
+  if (narrow()) $('def').open = false;
+  orient(); need = true;
+}
+const box = { x0: 0, x1: 0, y0: 0, y1: 0 };
+function extent(d, dir) {
+  camera.position.copy(target).addScaledVector(dir, d); camera.lookAt(target); camera.updateMatrixWorld();
+  box.x0 = box.y0 = 1e9; box.x1 = box.y1 = -1e9;
+  for (const c of CORNERS) { v3.copy(c).project(camera); box.x0 = Math.min(box.x0, v3.x); box.x1 = Math.max(box.x1, v3.x); box.y0 = Math.min(box.y0, v3.y); box.y1 = Math.max(box.y1, v3.y); }
+}
+const dir = new THREE.Vector3();
+function aim() {
+  const nar = narrow(), top = $('head').getBoundingClientRect().bottom + (nar ? 4 : 6), bot = H - (nar ? $('ctl') : $('foot')).getBoundingClientRect().top + (nar ? 4 : 6);
+  document.body.style.setProperty('--top', top + 'px'); document.body.style.setProperty('--bot', bot + 'px');
+  const aw = W - (nar ? 8 : 40), ah = Math.max(140, H - top - bot), a = (portrait ? -Math.PI / 2 : 0) + azS;
+  dir.set(Math.cos(elS) * Math.sin(a), Math.sin(elS), Math.cos(elS) * Math.cos(a));
+  camera.aspect = W / H; camera.clearViewOffset(); camera.updateProjectionMatrix();
+  let lo = 8, hi = 400;
+  for (let i = 0; i < 18; i++) { const d = (lo + hi) / 2; extent(d, dir); if ((box.x1 - box.x0) * W / 2 <= aw && (box.y1 - box.y0) * H / 2 <= ah) hi = d; else lo = d; }
+  extent(hi, dir);
+  const cx = (1 + (box.x0 + box.x1) / 2) / 2 * W, cy = (1 - (box.y0 + box.y1) / 2) / 2 * H, k = zoomS < 1 ? zoomS : 1;
+  target.lerpVectors(centre, focusS, clamp((1 - zoomS) / 0.5, 0, 1)); camera.position.copy(target).addScaledVector(dir, hi * zoomS); camera.lookAt(target);
+  camera.setViewOffset(W, H, (cx - W / 2) * k, (cy - (top + ah / 2)) * k, W, H); camera.updateMatrixWorld(); target.copy(centre);
+}
+addEventListener('resize', resize);
+
+// ------------------------------------------------------------------ one frame of the mechanism at time t
+function pose(f, now) {
+  const t = T0 + f * SPAN, forward = lastT !== null && t > lastT && t - lastT < SPAN * 0.04, xr = sx(RL1.v);
+  crank.rotation.y = -f * REV * 2 * Math.PI;
+  for (const L of lanes) {
+    const x = xAt(L, t), b = bestAt(L, t);
+    if (forward && L.x < xr && x >= xr && L.steps.some(st => st.best > RL1.v && st.t <= t)) { ring(); bellT = now; }
+    L.x = x; L.token.position.x = x; L.counter.set(b ? b.best : null);
+    for (const st of L.steps) { const a = ease(clamp((t - st.t) / (W_PIN * SPAN), 0, 1)); st.g.visible = t >= st.t; st.g.position.y = st.home.y + (1 - a) * 1.3; st.a = a;
+      if (forward && lastT < st.t && t >= st.t) click(); }
+  }
+  hourCounter.set(Math.floor(Math.max(0, (t - T0) / 3.6e6)));
+  const bt = (now - bellT) / 1000; bell.rotation.z = bt < 1.2 && !still ? 0.16 * Math.sin(bt * 38) * Math.exp(-bt * 4.5) : 0; if (bt < 1.2) need = true;
+  $('hour').textContent = Math.max(0, (t - T0) / 3.6e6).toFixed(1); $('stamp').innerHTML = `<span>hours since the first score<br></span>${fmtT(Math.min(t, T1)).replace(' ', '<br>')}`;
+  lastT = t;
+}
+const anchor = b => b.kind === 'pin' ? v3.copy(b.st.g.position).setY(Y0 + PIN_Y) : b.kind === 'lane' ? v3.set(b.L.token.position.x, Y0 + 0.38, LZ(b.L.i)) : v3.set(sx(b.s.v), Y0 + (b.s === RL1 ? 1.2 : 0.8), RLZ);
+const screen = p => { p.project(camera); return [(p.x + 1) / 2 * W, (1 - p.y) / 2 * H]; };
+function labels() {
+  const b = hover || (sel && sel.kind === 'pin' ? sel : null), tip = $('tip');
+  if (!b) { tip.classList.remove('on'); return; }
+  const [x, y] = screen(anchor(b)), half = Math.min(170, W / 2 - 8);
+  tip.innerHTML = b.kind === 'pin' ? `<em>${b.st.best}</em> of 500 · pin ${b.st.n} · lane ${b.st.L.n}<br>${esc(titles[b.st.s.r] || b.st.s.r)}<small>${esc(b.st.s.c)}<br>${b.st.s.k ? num(b.st.s.k) + ' tokens a problem' : 'tokens not posted'} · ${esc(b.st.s.w)} · hour ${hr(b.st.t)}</small>`
+    : b.kind === 'lane' ? (s => `Lane ${b.L.n} · ${esc(b.L.name)}${s ? ` · <em>${s.best}</em> of 500<small>${esc(s.s.c)}</small>` : '<small>no score yet at this hour</small>'}`)(bestAt(b.L, T0 + shown * SPAN))
+    : `RL checkpoint · <em>${b.s.v}</em> of 500<small>${b.s === RL1 ? 'one sample' : 'its best'}: ${esc(b.s.c)}${b.s.k ? ` · ${num(b.s.k)} tokens a problem` : ''}</small>`;
+  tip.style.transform = `translate(${clamp(x, half + 8, W - half - 8).toFixed(1)}px, ${(y + 16).toFixed(1)}px) translate(-50%, 0)`; tip.classList.add('on');
+}
+
+// ------------------------------------------------------------------ pointer: turn the crank, look around, pick
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -(Y0 + 0.45)), hit = new THREE.Vector3();
+function pickAt(e) {        // the nearest pin, token or post on the screen
+  const t = T0 + shown * SPAN, cand = [];
+  for (const st of pinsData) if (st.t <= t) cand.push([{ kind: 'pin', st }, 15]);
+  for (const L of lanes) cand.push([{ kind: 'lane', L }, 24]);
+  cand.push([{ kind: 'rl', s: RL1 }, 22]); if (RLB !== RL1) cand.push([{ kind: 'rl', s: RLB }, 16]);
+  let best = null, bd = 1;
+  for (const [b, r] of cand) { const [x, y] = screen(anchor(b)), d = Math.hypot(x - e.clientX, y - e.clientY) / (r * (narrow() ? 1.2 : 1)); if (d < bd) { bd = d; best = b; } }
+  return best;
+}
+const crankAngle = (e, any) => { ndc.set(e.clientX / W * 2 - 1, 1 - e.clientY / H * 2); ray.setFromCamera(ndc, camera); if (!ray.ray.intersectPlane(plane, hit)) return null;
+  const dx = hit.x - CR.x, dz = hit.z - CR.z; return any || Math.hypot(dx, dz) < 1.7 ? Math.atan2(dz, dx) : null; };
+const same = (a, b) => (a && (a.st || a.L || a.s)) === (b && (b.st || b.L || b.s));
+let drag = null;
+canvas.addEventListener('pointerdown', e => {
+  canvas.setPointerCapture(e.pointerId); const a = crankAngle(e);
+  drag = { x: e.clientX, y: e.clientY, moved: 0, mode: a !== null && e.button === 0 ? 'turn' : 'orbit', a, t: performance.now() };
+  if (drag.mode === 'turn') { setPlay(false); vel = 0; }
+});
+canvas.addEventListener('pointermove', e => {
+  if (!drag) { const h = pickAt(e); if (!same(h, hover)) { hover = h; need = true; } canvas.classList.toggle('pick', !!h); canvas.classList.toggle('crank', !h && crankAngle(e) !== null); return; }
+  drag.moved += Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y);
+  if (drag.moved > 4) canvas.classList.add(drag.mode);
+  if (drag.mode === 'turn') { const a = crankAngle(e, true); if (a !== null && drag.moved > 4) { let d = a - drag.a; d = Math.atan2(Math.sin(d), Math.cos(d)); const now = performance.now(), df = d / (REV * 2 * Math.PI);
+      vel = lerp(vel, df / Math.max(8, now - drag.t) * 1000, 0.5); drag.t = now; setFrac(frac + df, true); } if (a !== null) drag.a = a; }
+  else { az = clamp(az - (e.clientX - drag.x) * 0.002, -0.18, 0.18); el = clamp(el + (e.clientY - drag.y) * 0.004, 0.45, 1.4); need = true; }
+  drag.x = e.clientX; drag.y = e.clientY;
+});
+const up = e => { if (!drag) return; canvas.classList.remove('turn', 'orbit');
+  if (drag.moved <= 4) { vel = 0; select(pickAt(e)); if (e.pointerType !== 'mouse') hover = null; } else if (drag.mode !== 'turn' || performance.now() - drag.t > 120 || still) vel = 0;
+  drag = null; };
+canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', () => { drag = null; vel = 0; canvas.classList.remove('turn', 'orbit'); });
+canvas.addEventListener('pointerleave', () => { if (hover) { hover = null; need = true; } });
+canvas.addEventListener('wheel', e => { e.preventDefault(); if (e.deltaY < 0 && crankAngle(e, true) !== null) focus.set(clamp(hit.x, XI0, XI1), 0.3, clamp(hit.z, ZI0, ZI1)); zoom = clamp(zoom * Math.exp(e.deltaY * 0.001), 0.4, 1.25); need = true; }, { passive: false });
+addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' && e.key !== ' ' && e.key !== 'Escape') return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const d = e.key === 'ArrowRight' ? 1 : -1; setPlay(false); setFrac(e.shiftKey ? frac + d * 0.01 : nextStep(d)); }
+  else if (e.key === ' ') { if (e.target.tagName === 'BUTTON') return; e.preventDefault(); $('play').click(); }
+  else if (e.key === 'Home') { setPlay(false); setFrac(0); } else if (e.key === 'End') { setPlay(false); setFrac(1); }
+  else if (e.key === 'Escape') select(null); else return;
+});
+$('def').addEventListener('toggle', () => { need = true; });
+$('leg').addEventListener('click', () => { $('def').open = !$('def').open; });
+$('def').addEventListener('click', () => { if (narrow()) $('def').open = false; });
+
+// ------------------------------------------------------------------ the loop: draw only when something moves
+canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); });
+canvas.addEventListener('webglcontextrestored', () => { studio(); need = true; });
+let last = performance.now();
+function frame() {
+  requestAnimationFrame(frame);
+  const now = performance.now(), dt = Math.min(0.25, (now - last) / 1000); last = now;
+  if (playing) { setFrac(frac + dt / 45, true); if (frac >= 1) setPlay(false); }
+  else if (!drag && Math.abs(vel) > 1e-4) { setFrac(frac + vel * dt, true); vel *= Math.exp(-dt * 2.2); if (frac <= 0 || frac >= 1) vel = 0; }
+  const k = still ? 1 : 1 - Math.exp(-dt * 9), near = (a, b) => Math.abs(a - b) < 2e-5;
+  shown = near(shown, frac) ? frac : lerp(shown, frac, k); azS = near(azS, az) ? az : lerp(azS, az, k); elS = near(elS, el) ? el : lerp(elS, el, k); zoomS = near(zoomS, zoom) ? zoom : lerp(zoomS, zoom, k);
+  if (focusS.distanceTo(focus) > 1e-3) { focusS.lerp(focus, k); need = true; }
+  if (shown !== frac || azS !== az || elS !== el || zoomS !== zoom) need = true;
+  if (!need || renderer.getContext().isContextLost()) return;
+  need = false;
+  aim(); pose(shown, now);
+  for (const L of lanes) if (L.counter.tick()) need = true;
+  if (hourCounter.tick()) need = true;
+  scene.updateMatrixWorld(); labels();
+  renderer.shadowMap.needsUpdate = true;
+  renderer.render(scene, camera);
+}
+resize(); rebuild(); screws.instanceMatrix.needsUpdate = true;
+requestAnimationFrame(frame);
+
+// ------------------------------------------------------------------ the live board: new score lines move the tokens; a failed read keeps the snapshot
+async function live() {
+  const r = await fetch('../../../data'); if (!r.ok) throw new Error('data ' + r.status);
+  const d = await r.json(), rows = [];
+  for (const s of d.scores) { if (s.benchmark !== 'MATH-500' || s.n !== 500) continue;
+    const row = { t: Number(BigInt(s.sk.split('#')[0]) / 1000000n), r: s.result, m: s.model, v: s.right, c: s.config, k: s.tokens, w: s.who }; row.f = family(row); rows.push(row); }
+  if (rows.length < 3 || !rows.some(s => s.m === 'rl')) throw new Error('data has no MATH-500 lines');
+  const tt = { ...DATA.titles }, items = Object.fromEntries(d.items.map(i => [i.id, i]));
+  for (const s of rows) { const p = (d.plain[s.r] || {}).title || tt[s.r] || (items[s.r] ? items[s.r].text.split('\n')[0].replace(/^title: /, '').slice(0, 110) : null); if (p) tt[s.r] = p; }
+  leftOut = rows.filter(s => !s.f).length; source = 'the live board, read ' + new Date().toISOString().slice(11, 16) + ' UTC';
+  const atEnd = frac >= 0.999;
+  ingest(rows.filter(s => s.f), tt, Math.max(...d.scores.map(s => Number(BigInt(s.sk.split('#')[0]) / 1000000n))));
+  if (atEnd) { frac = shown = 1; }
+  rebuild();
+}
+live().catch(e => { console.warn('live board not read, the snapshot stays:', e.message); });
+</script>
+</body>
+</html>
