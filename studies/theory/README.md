@@ -24,6 +24,9 @@ the same numbers; the numbers posted after the cutoff can only remove a survivor
 | `results/engine/round-03/` (new files) | `inventory.md` (stored per-problem row files, how to fetch them, their fields; no result numbers), `prior_scores.json` and `prior_reviews/` (round 02's scores and reviews of the carried theories), `external_<start>.md` (each generator's part of `external.md`), `drafts/` (theories before the checks), `dropped.json`, `tests/<theory>/p<k>.py` and `.out.txt` (offline test scripts and their output) and `tests/<theory>.json`, `metrics_v3.json`, `diagnosis.md` (why theories lose, what the tests needed, the hypotheses). |
 | `specs/SPEC_round04.md` | Plan of round 04, written before the run: version 4, computed offline tests as the main test, hypotheses H1-H4. |
 | `results/engine/round-04/` (new files) | `graveyard.json` (the 32 earlier theories and why each failed), `mechanisms.json` (12 candidate mechanisms), `dropped.json` (2 abandoned), `tests_blind.jsonl` (the 42 offline recipes without values) and `predictions/nulltest-{1,2}.jsonl` (the two no-theory readers' predictions of them), `tests/`, `metrics_v4.json`, `replication/` (independent recomputation of 7 predictions: scripts, outputs, `replication.json`), `board_posts.md` (drafts), `diagnosis.md`; from the rival stages (plan `specs/SPEC_round04_duel.md`): `rivals/` (per survivor the rival and its tests, the defender's predictions, scripts and outputs; `<theory>.turn2*` the second turn), `metrics_v5.json` (both turns), `duel.md`, `replication/replication_turn2.json`. |
+| `lib/round.py` version 6 and 6.1 | Version 6 (commit b7f1ae2) adds the stage `account` after `develop` (prompt `lib/prompts/account.md`): one blind job writes `theories/r<N>-account.json`, a budget of the base-to-RL gap with ordered rules per part, tested and duelled like a theory; `--only-account` skips `mechanisms` and `develop`. Version 6.1 (commit 856971b): the account spans at least 3 cells, and budgets already on the board are input (`known`). |
+| `specs/SPEC_account01.md`, `specs/SPEC_account02.md` | Plans of account runs 01 and 02, written before each run: hypotheses A1-A4 and B1-B4. |
+| `results/account/run-<nn>/` | One account run: the round files (`before.jsonl`, `after.jsonl`, `inventory.md`, `external.md`, `graveyard.json`, `facts.json`, `incumbent_account.json`, `theories/`, `tests_blind.jsonl`, `predictions/`, `tests/`, `metrics_v4.json`) and `run.json`; run 02 also `check/` (independent recomputation, equal-E version, null cell, raw-text reads), `readout.md`, `examples.json`, `board_posts.md`. |
 
 ## Round 01 (2026-11-15, cutoff 11-14 23:42 UTC)
 
@@ -310,6 +313,44 @@ total of 2 nats or more in size decides. The defender's centre was inside the ri
 | r4-m10 | step-400 share of finished answers sharper (mean_logprob) than the cued base's median 0.480; 0.76 [0.62, 0.89]; 0.58; -3.00. Step 400's position between cued base and step 2,800 0.067; 0.75; 0.25; -3.00. Step 100 share 0.554; 0.63; 0.53; -0.50 | -7.81 (6 tests) | loses to rival | Steps 100 and 400 are as sharp per sampled token as the cued base (medians -0.155, -0.163 against -0.161), not sharper; the opening switch explains the cap hits. Step 2,800 (-0.192) is less sharp than the cued base. Recomputed independently, 3 of 3 equal (`replication/replication_turn2.json`). |
 | r4-m01 | RL-prefix finish advantage where RL's opening is as compressible 0.375 (24 problems); 0.12; 0.25; -1.85. Opening compressibility against loop onset, rank correlation -0.074 (62 loops); 0.2; 0.06; -1.47 | +1.11 (5 tests) | not separated from rival | Self-similarity marks the sample that will loop (37 of 46) but explains neither RL's prefix advantage nor onset timing. |
 | r4-m08 | base/RL length variability on short problems 0.518 (214); 0.05; 0.2; -0.87. Short minus long -0.020; -0.15; 0.1; -0.21 | -2.65 (5 tests) | loses to rival | Every test sits at or past the rival. |
+
+## Account runs (version 6 and 6.1, cutoff 11-15 04:29:33 UTC)
+
+Stage `account` (`lib/round.py` version 6, commit b7f1ae2; version 6.1, commit 856971b; prompt `lib/prompts/account.md`): one blind agent
+writes one account of the gap in right answers between the cued Olmo 3 base and an RL-side model. The account is a fixed ordered list of parts
+(loop, budget, answer statement, reliability, capability, unassigned), each with a rule on stored rows that puts every gap problem in exactly one
+part, so the shares sum to 1 per cell. Its predictions are tested like a theory's: scripts written from the recipes before any row is read, two
+no-theory readers, log gain in nats. `--only-account` skips mechanisms and develop. In 6.1 the account must span at least 3 cells, and a budget the
+board already gives is input (`known`), not a prediction. Plans `specs/SPEC_account01.md` and `specs/SPEC_account02.md`; records
+`results/account/run-0<n>/run.json`; independent check and readout of run 02 in `results/account/run-02/check/` and `readout.md`.
+
+| Run | Code | Cells predicted | Computed | Inside / within noise / outside | Gain | State | Reading |
+|---|---|---|---|---|---|---|---|
+| `results/account/run-01/` | b7f1ae2 | 1: MATH-500 T 1.0, cued base against RL, 65 gap problems (already tabulated by result-5e17a6) | 9 of 9 | 8 / 1 / 0 | -1.30 | no gain | Restated the board's budget; its budget and answer-statement shares equal both readers' centres. |
+| `results/account/run-02/` | 856971b | 3 new cells, known cell as input | 20 of 20 | 17 / 1 / 2 | +1.61 | refuted by p16 | Budgets reproduce exactly; p16 (reliability at T 0.6, 0.379 against 0.15 [0.07, 0.25]) fails mostly on grader v1. |
+
+Budgets of run 02 (share of gross gap problems; 90 % bootstrap over gap problems, 2,000 resamples, seed 0; reliability and capability with all
+evidence rows E and with E cut to 3 rows; unassigned 0 everywhere). Engine values: `results/account/run-02/metrics_v4.json` and `tests/r6-account/`;
+recomputation, known cell under the same rules and null cell: `results/account/run-02/check/budget.out.txt` (`check/budget.py`).
+
+| Cell | Gap / base-only | Loop | Budget | Answer statement | Reliability, full E / E = 3 | Capability, full E / E = 3 |
+|---|---|---|---|---|---|---|
+| known: MATH-500 T 1.0, base cue against RL plain, r6 rules | 65 / 12 | 0 | 0.246 [0.169, 0.338] | 0.031 [0, 0.062] | 0.662 [0.569, 0.754] / 0.631 [0.523, 0.723] | 0.062 [0.015, 0.108] / 0.092 [0.031, 0.154] |
+| theta0.5 cue, MATH-500 T 1.0 (p1-p6) | 53 / 11 | 0 | 0.208 [0.113, 0.302] | 0.038 [0, 0.075] | 0.698 [0.585, 0.792] / 0.642 [0.528, 0.755] | 0.057 [0.019, 0.113] / 0.113 [0.057, 0.189] |
+| Code-RL cue, clean harder 328 T 1.0 (p7-p12) | 37 / 14 | 0 | 0.270 [0.162, 0.405] | 0.027 [0, 0.081] | 0.432 [0.297, 0.568] (E is 3) | 0.270 [0.162, 0.378] (E is 3) |
+| RL step 400 plain, MATH-500 T 0.6 / top-p 0.95, grader v1 (p13-p18) | 66 / 27 | 0.439 [0.333, 0.530] | 0.121 [0.061, 0.182] | 0.061 [0.015, 0.121] | 0.379 [0.288, 0.470] / same | 0 [0, 0] / same |
+| null: base + random direction with the cue (a fresh base sample), T 1.0 | 42 / 35 | 0 | 0.167 [0.071, 0.262] | 0.024 [0, 0.071] | 0.714 [0.595, 0.833] / 0.667 [0.548, 0.786] | 0.095 [0.024, 0.167] / 0.143 [0.071, 0.238] |
+
+- The board's version of the known cell (hand labels, result-5e17a6), given to the account as input, is 0.246 / 0.154 / 0.538 / 0.062; under the
+  account's own text rule answer statement is 0.031 and reliability 0.662.
+- At equal E, 90 % intervals apart: the T 0.6 cell's loop part and its lower reliability and capability against every MATH-500 T 1.0 cell, and hard328
+  capability against the known cell (by 0.008). Nothing else; RL's T 1.0 budget and the fresh base sample's agree in every part. hard328's 3 evidence rows are weaker
+  (T 0.6 or plain, 2 graded v1, 40 of 111 at the cap), so its capability share is an upper bound.
+- Hand read of the 25 T 0.6 reliability problems (`check/s0400_reliability_hand.json`): 9 are right answers grader v1 rejects (Unicode forms, two
+  boxes, \( \)), 2 copy the prompt template on the answer line, 14 are wrong values (0.212 of 66, inside the prediction). 3 of the 10 hard328
+  capability problems are right in a stored forced-commit base row (`check/rawtext.out.txt`).
+- No board item or committed file before this run gave a breakdown of the three new cells. Hypotheses: A1 holds, A2 refuted, A3 and A4 not run
+  (no rival, no review); B1 holds only on the readers' mean (9 of 18), B2 holds, B3 refuted, B4 holds (`results/account/run-02/readout.md`).
 
 ## Theories
 
