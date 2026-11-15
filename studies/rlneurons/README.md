@@ -41,6 +41,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/anatomy.py` | Gap anatomy from the Day-1 #3 four-sample runs (laptop): joint k-of-4 table, held-out-sample decomposition, subject and level, error types, tokens, divergence proxy, `pool_k_le3.json`. See "Gap anatomy". |
 | `analysis/anatomy_judge.py` | Slip against wrong plan: `prep` draws the items and the two controls and writes blind batches; `score` reads the judges' labels (agreement, controls, first wrong step). |
 | `specs/SPEC_checks.md`, `analysis/checks.py` | Checks or per-step error: checking markers per 1,000 tokens in the four-sample texts (`stats`), blind judge batches for check events (`prep`, `score`). Results `results/checks/`. See "Checks or per-step error". |
+| `tools/finding_rl_reliability.py` | The public page of "Gap anatomy" and "Checks or per-step error", served at `/finding/rl-reliability`: the joint k-of-4 table as columns, with a switch from problems to share of the gain. Its numbers are read from `results/anatomy/math500-01/readout.json` and `results/checks/`. |
 | `grader/repair_v4.py`, `grader/repair_v4_test.py` | Grader v4 / v4a: grader v3 plus five label-free answer-statement rules (placeholder, lower-case marker, last-line math, trailing brace, form), and its planted tests. A grader version for both models, not a method. See "Answer-statement repair". |
 | `analysis/repair.py`, `prep/repair_plan.py`, `data/repair/plan_v1.json` | Answer-statement repair: the gold-aware upper bound, the rule table and the vote under v4 (laptop); the plan of the forced-suffix job (not run). |
 | `data/anatomy/math500_meta.json` | Subject, level and reference solution of the 500 problems (HuggingFaceH4/MATH-500 `test.jsonl`, revision `6e4ed1a`), same order and `unique_id` as `data/rln4/math500.json`. |
@@ -744,6 +745,32 @@ Problems that change against base cue (164 right, 164 wrong; `fixed_lost_vs_base
   `s3://pg-lineage-769063704696/results/rlneurons/r5/day1_wdiff328-01/<job-id>/answers.jsonl` for the three new jobs; the four
   reused cells as in "Harder 328" (`.../r5/day1_hard328-01/<job-id>/answers.jsonl`).
   Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_wdiff328`.
+
+## Code pair: the cue on HumanEval+ and MBPP+ (538 problems, T 1.0, one sample, board work-d84808)
+
+Spec `specs/SPEC_code1.md`. `jobs/run_code_cell.py` samples one answer per problem with the Code model's raw template and
+`lib/code_lib.py` runs the extracted program against the EvalPlus tests; 4 of the 542 problems fail the grader check with
+their reference solution and are excluded for every cell. RL = `allenai/Olmo-3.1-7B-RL-Zero-Code`. The Code cue is the
+RL-Code model's own opening, 12 tokens (`' as shown in the prompt. I hope this helps!\n\nOkay'`); the Math cue is
+`' line!\n\nOkay'`. Readout `analysis/code1_readout.py` -> `results/code1/readout.json` and one folder per cell
+(`run.json`, `metrics.json`, `examples.json`: the first passed and the first failed problem). Paired bootstrap, 5,000
+resamples, in points.
+
+| Cell | Passed of 538 | HumanEval+ of 163 | MBPP+ of 375 | Cap hits | No code block | Tokens per problem | Job |
+|---|---|---|---|---|---|---|---|
+| RL-Code, plain | 401 (74.5 %) | 135 | 266 | 8 | 8 | 4,054 | `abaybektursun-1114-170253-f661` |
+| base, plain | 222 (41.3 %) | 72 | 150 | 15 | 43 | 2,241 | `abaybektursun-1114-170258-388e` |
+| base, Code cue | 317 (58.9 %) | 106 | 211 | 27 | 34 | 4,148 | `abaybektursun-1114-170304-c03c` |
+| base, Math cue | 326 (60.6 %) | 120 | 206 | 22 | 33 | 4,119 | `abaybektursun-1114-170309-b137` |
+
+- RL minus plain base: 33.3 [28.8, 37.7]. The cue gives the base +17.7 [12.8, 22.5] (Code cue) and +19.3 [14.3, 24.3]
+  (Math cue): 53 % and 58 % of the gain, against 78 % on MATH-500. H1 (at least half) held, H2 (no gain to recover) refuted.
+- The two cues are equal: Code minus Math -1.7 [-5.8, 2.8] (H3 held). What helps is the opening word `Okay` and a
+  reasoning start, not the text before it.
+- RL stays ahead of the cued base by 15.6 [11.5, 19.9] and 13.9 [10.0, 17.8] points at the same tokens per problem.
+- Without the 3 problems that overlap the RL training prompts: 399, 221, 315, 323 of 535.
+- Not run: the vote over four samples after restart (the configuration chosen on MATH-500), and RL-Code with a cue (the
+  model writes the cue itself in 10 of 10 smoke answers).
 
 ## Truncation rules at T 1.0: min-p and top-p (board work-180a48, spec specs/SPEC_minp.md)
 

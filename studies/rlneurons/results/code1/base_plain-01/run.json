@@ -1,0 +1,15 @@
+{
+ "job_id": "abaybektursun-1114-170258-388e",
+ "commit": "be62e76037092aa61c244383215b06f256818e82",
+ "config": {
+  "model": "base",
+  "prefix_ids": "[]",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "seed": 51000000,
+  "n": null,
+  "grader_check_only": false,
+  "out": "/runs/abaybektursun-1114-170258-388e",
+  "commit": "be62e76037092aa61c244383215b06f256818e82"
+ }
+}
