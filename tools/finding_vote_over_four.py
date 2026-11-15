@@ -12,8 +12,7 @@ DATA = {
     "artifact": "studies/rlneurons/results/day1_3/math500_base_cue-01/readout.json",
     "artifact_rl": "studies/rlneurons/results/day1_3/math500_rl-01/readout.json",
     "commit": "c36f562",  # run.json of both jobs
-    "selector": "studies/rlneurons/results/selector/math500_base_cue-01/readout.json",
-    "selector_commit": "622bacb",  # run.json of the selector run
+    "vote_after_restart": 450,  # rows.vote_after_restart.right of the base model
     "n": 500, "samples": 4,
     # rows.single and rows.vote (right, tokens_per_problem), differences_points["vote - single"], each_sample.single_right
     "rows": [
@@ -30,8 +29,6 @@ DATA = {
     "ties": 36, "pass_at_4": 467,  # vote_stats.ties_for_first, rows.pass_at_k.right
     "wrong_to_right": 43, "right_to_wrong": 2,  # counted from per_problem.single and per_problem.vote of the base model
     "rl_vote_other_job": 469,  # README.md "Day-1 #3", instrument check
-    # selector readout: rows.tie_short.right, rows.cv_pick.right and rows.cv_pick.minus_vote_interval95
-    "tie_short": 453, "tie_short_held_out": 451, "tie_short_held_out_ci": [0.0, 2.0],
     # Board result-60d899: read from the rendered Figure 21 of arXiv 2610.06851, to about 1 point; the vote scored by a
     # literal reading of that paper's answer rule. Board knowledge-8a31ad: the paper's RL model and its score (Table 6).
     "published_vote": 88.5, "vote_paper_rule": 435, "published_rl": 75.0,
@@ -39,13 +36,14 @@ DATA = {
     # sample"): the best base rule vote4_restart_short, and the smallest RL lead (also vote4_restart_short).
     "frontier": "studies/rlneurons/results/frontier/math500-01/frontier.md",
     "frontier_rules": 24, "best_rule_minus_rl": [-1.2, -3.0, 0.6], "best_rule_times": 4.2, "min_rl_lead": [4.2, 2.4, 6.0],
-    # 328 harder problems, on branch claude/swarm-literature-review-60a281: rows.base.single/vote of the first file;
-    # rl_minus_base.vote and equal_tokens.base_vote_minus_rl_single of the second (246 problems where RL has 4 samples).
-    "hard_branch": "claude/swarm-literature-review-60a281",
-    "hard_base": "studies/rlneurons/results/day1_length_rules/hard328_headline_base-01/metrics.json",
-    "hard_paired": "studies/rlneurons/results/day1_length_rules/hard328_partial246_headline-01/metrics.json",
-    "hard": {"n": 328, "single": 160, "vote": 179, "paired_n": 246, "vote_minus_rl_single": [-4.1, -8.5, 0.4],
-             "times": 3.9, "rl_lead_vote": [9.3, 5.3, 13.4]},
+    # 328 harder problems, four samples of both models (board result-5c961a; jobs at commit 2c58f34): base readout
+    # rows.single/vote/vote_after_restart; RL readout rows.single and minus.differences_points.vote_after_restart;
+    # selector readout rows.tie_short (right, minus_vote_points, minus_vote_interval95), selector commit 1aae930.
+    "hard_base": "studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01/readout.json",
+    "hard_rl": "studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01/readout.json",
+    "hard_selector": "studies/rlneurons/results/selector/hard328_base_cue-01/readout.json",
+    "hard": {"n": 328, "single": 161, "vote": 192, "vote_restart": 195, "rl_single": 207,
+             "rl_lead_restart": [8.8, 5.5, 12.5], "tie_short": 191, "tie_short_minus_vote": [-0.3, -2.1, 1.5]},
 }
 BASE, RL, GAP, N = DATA["rows"][0], DATA["rows"][1], DATA["gap"], DATA["n"]
 pct = lambda right: f"{100 * right / N:.1f} %"
@@ -86,10 +84,11 @@ PANELS = [
       f"Given the same vote, RL gains {RL['gain']} points and stays {GAP['vote']} ahead, so sampling more does not remove "
       "what RL training changed.",
       f"A right answer is among the four samples on {DATA['pass_at_4']} problems, {DATA['pass_at_4'] - BASE['vote']} more "
-      "than the vote picks. One rule for those, sending a tie to the shortest finished sample, gives "
-      f"{DATA['tie_short']} of {N} here and {DATA['tie_short_held_out']} when the rule is picked on held-out folds "
-      f"(95 % interval of its gain {DATA['tie_short_held_out_ci'][0]} to {DATA['tie_short_held_out_ci'][1]} points). "
-      "It was chosen after reading the vote's misses and is not yet confirmed on other problems."]],
+      "than the vote picks. Sending a tie to the shortest finished sample was chosen after reading those misses and "
+      f"failed on held-out problems: on the {DATA['hard']['n']} harder problems it gives {DATA['hard']['tie_short']} "
+      f"against the plain vote's {DATA['hard']['vote']} ({DATA['hard']['tie_short_minus_vote'][0]} points, 95 % interval "
+      f"{DATA['hard']['tie_short_minus_vote'][1]} to {DATA['hard']['tie_short_minus_vote'][2]}). The number to quote is "
+      f"the plain vote's {BASE['vote']} of {N} ({DATA['vote_after_restart']} after restart)."]],
     ["how", "How we know", f"Each model answered the {N} MATH-500 problems {DATA['samples']} times at temperature 1.0 and "
      "top-p 1.0, and the vote takes the most common of the 4 extracted answers (grader v3).",
      ["The base model is Olmo-3-1025-7B with a three-token opening cue and no training, and the RL model is "
@@ -104,15 +103,15 @@ PANELS = [
     ["limits", "What it does not show", "It does not show that voting replaces RL training: under the same vote the RL model "
      f"stays {GAP['vote']} points ahead.",
      [f"No vote rule closes the gap to one RL sample: of {DATA['frontier_rules']} base rules fixed before scoring, the best "
-      f"is {abs(DATA['best_rule_minus_rl'][0])} points below it (95 % interval {DATA['best_rule_minus_rl'][1]} to "
-      f"{DATA['best_rule_minus_rl'][2]}) at {DATA['best_rule_times']} times the tokens, and RL leads under every rule by at "
-      f"least {DATA['min_rl_lead'][0]} points ({DATA['min_rl_lead'][1]} to {DATA['min_rl_lead'][2]}).",
-      f"On the {DATA['hard']['n']} harder problems the base model's vote has {DATA['hard']['vote']} right against "
-      f"{DATA['hard']['single']} for one sample. On the {DATA['hard']['paired_n']} of them where RL has 4 samples it is "
-      f"{abs(DATA['hard']['vote_minus_rl_single'][0])} points below one RL sample ({DATA['hard']['vote_minus_rl_single'][1]} "
-      f"to {DATA['hard']['vote_minus_rl_single'][2]}) at {DATA['hard']['times']} times the tokens, and RL stays "
-      f"{DATA['hard']['rl_lead_vote'][0]} ahead under the same vote ({DATA['hard']['rl_lead_vote'][1]} to "
-      f"{DATA['hard']['rl_lead_vote'][2]}).",
+      f"is {abs(DATA['best_rule_minus_rl'][0])} points below it at {DATA['best_rule_times']} times the tokens, but its 95 % "
+      f"interval, {DATA['best_rule_minus_rl'][1]} to +{DATA['best_rule_minus_rl'][2]}, includes 0. RL given the same rule "
+      f"leads under every one of them by at least {DATA['min_rl_lead'][0]} points ({DATA['min_rl_lead'][1]} to "
+      f"{DATA['min_rl_lead'][2]}).",
+      f"On the {DATA['hard']['n']} harder problems, where nothing was chosen, the base model's vote has "
+      f"{DATA['hard']['vote']} right ({DATA['hard']['vote_restart']} after restart) against {DATA['hard']['single']} for "
+      f"one sample, still below one RL sample's {DATA['hard']['rl_single']}. Under the same vote after restart RL stays "
+      f"{DATA['hard']['rl_lead_restart'][0]} points ahead (95 % interval {DATA['hard']['rl_lead_restart'][1]} to "
+      f"{DATA['hard']['rl_lead_restart'][2]}).",
       f"The match with the published {DATA['published_vote']} % is under our grader. Under a literal reading of the paper's "
       f"answer rule our vote has {DATA['vote_paper_rule']} of {N}, or {pct(DATA['vote_paper_rule'])} (board result-60d899; "
       "that regrade script is not committed)."]],
@@ -123,9 +122,9 @@ PANELS = [
       "plain --seed 45000000. Each took about 2 hours on one H100.",
       "The scores come from studies/rlneurons/analysis/day1_vote.py, run with --run on each job's folder and --out on a new "
       "run folder, and for the RL run with --minus on the base model's readout.json.",
-      "The numbers are in " + DATA["artifact"] + " and " + DATA["artifact_rl"] + ". The tie rule is in " + DATA["selector"]
-      + " (commit " + DATA["selector_commit"] + "), the 24 rules in " + DATA["frontier"] + ", and the harder problems in "
-      + DATA["hard_base"] + " and " + DATA["hard_paired"] + " on branch " + DATA["hard_branch"] + "."]],
+      "The numbers are in " + DATA["artifact"] + " and " + DATA["artifact_rl"] + ", the 24 rules in " + DATA["frontier"]
+      + ", the harder problems in " + DATA["hard_base"] + " and " + DATA["hard_rl"] + " (jobs at commit 2c58f34), and the "
+      "tie rule on them in " + DATA["hard_selector"] + " (commit 1aae930)."]],
 ]
 
 # The icon of this finding's tile on /findings (tools/findings.py says how it is called): the page's own picture,

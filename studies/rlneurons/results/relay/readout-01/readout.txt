@@ -1,0 +1,220 @@
+Relay on hard328 (n = 328), T 1.0 / top-p 1.0, grader v3, one sample. right/n [Wilson 95 %], cap hits, tokens per problem generated (total with prefix).
+
+stored think|all              212/328 cap hits 89, tokens 10140
+stored think|right            208/208 cap hits 0, tokens 7088
+stored think|wrong            0/31 cap hits 0, tokens 12687
+stored think|cap              4/89 cap hits 89, tokens 16387
+stored think|not_cap          208/239 cap hits 0, tokens 7814
+stored think|aime             36/68 cap hits 27, tokens 12293
+stored think|not_aime         176/260 cap hits 62, tokens 9577
+stored rl|all                 206/328 cap hits 20, tokens 9315
+stored rl|right               206/206 cap hits 0, tokens 6844
+stored rl|wrong               0/102 cap hits 0, tokens 12920
+stored rl|cap                 0/20 cap hits 20, tokens 16383
+stored rl|not_cap             206/308 cap hits 0, tokens 8856
+stored rl|aime                35/68 cap hits 5, tokens 11182
+stored rl|not_aime            171/260 cap hits 15, tokens 8827
+
+think->think|25|all        219/328 [62, 72] cap hits 86 (wrong 83), no answer 0, tokens 7494 (10029)
+think->rl|25|all           207/328 [58, 68] cap hits 17 (wrong 14), no answer 0, tokens 6365 (8900)
+think->think|25|right      194/208 [89, 96] cap hits 9 (wrong 8), no answer 0, tokens 5410 (7182)
+think->rl|25|right         184/208 [83, 92] cap hits 4 (wrong 2), no answer 0, tokens 4968 (6740)
+think->think|25|wrong      7/31 [11, 40] cap hits 13 (wrong 12), no answer 0, tokens 10060 (13232)
+think->rl|25|wrong         5/31 [7, 33] cap hits 0 (wrong 0), no answer 0, tokens 7864 (11036)
+think->think|25|cap        18/89 [13, 30] cap hits 64 (wrong 63), no answer 0, tokens 11472 (15569)
+think->rl|25|cap           18/89 [13, 30] cap hits 13 (wrong 12), no answer 0, tokens 9107 (13204)
+think->think|25|not_cap    201/239 [79, 88] cap hits 22 (wrong 20), no answer 0, tokens 6013 (7967)
+think->rl|25|not_cap       189/239 [73, 84] cap hits 4 (wrong 2), no answer 0, tokens 5344 (7297)
+think->think|25|aime       39/68 [46, 68] cap hits 26 (wrong 25), no answer 0, tokens 9276 (12349)
+think->rl|25|aime          35/68 [40, 63] cap hits 5 (wrong 5), no answer 0, tokens 7785 (10858)
+think->think|25|not_aime   180/260 [63, 75] cap hits 60 (wrong 58), no answer 0, tokens 7028 (9423)
+think->rl|25|not_aime      172/260 [60, 72] cap hits 12 (wrong 9), no answer 0, tokens 5994 (8388)
+think->think|50|all        211/328 [59, 69] cap hits 96 (wrong 89), no answer 0, tokens 5353 (10423)
+think->rl|50|all           209/328 [58, 69] cap hits 13 (wrong 11), no answer 0, tokens 3853 (8923)
+think->think|50|right      191/208 [87, 95] cap hits 15 (wrong 11), no answer 0, tokens 4145 (7689)
+think->rl|50|right         187/208 [85, 93] cap hits 2 (wrong 1), no answer 0, tokens 3089 (6633)
+think->think|50|wrong      4/31 [5, 29] cap hits 14 (wrong 14), no answer 0, tokens 6991 (13335)
+think->rl|50|wrong         5/31 [7, 33] cap hits 3 (wrong 3), no answer 0, tokens 4549 (10892)
+think->think|50|cap        16/89 [11, 27] cap hits 67 (wrong 64), no answer 0, tokens 7604 (15798)
+think->rl|50|cap           17/89 [12, 28] cap hits 8 (wrong 7), no answer 0, tokens 5395 (13589)
+think->think|50|not_cap    195/239 [76, 86] cap hits 29 (wrong 25), no answer 0, tokens 4514 (8421)
+think->rl|50|not_cap       192/239 [75, 85] cap hits 5 (wrong 4), no answer 0, tokens 3278 (7185)
+think->think|50|aime       39/68 [46, 68] cap hits 27 (wrong 27), no answer 0, tokens 6542 (12689)
+think->rl|50|aime          33/68 [37, 60] cap hits 8 (wrong 8), no answer 0, tokens 4906 (11053)
+think->think|50|not_aime   172/260 [60, 72] cap hits 69 (wrong 62), no answer 0, tokens 5041 (9830)
+think->rl|50|not_aime      176/260 [62, 73] cap hits 5 (wrong 3), no answer 0, tokens 3577 (8366)
+rl->think|25|all           204/328 [57, 67] cap hits 104 (wrong 99), no answer 0, tokens 8182 (10511)
+rl->rl|25|all              206/328 [57, 68] cap hits 29 (wrong 26), no answer 0, tokens 7230 (9559)
+rl->think|25|right         188/206 [87, 94] cap hits 19 (wrong 15), no answer 0, tokens 6010 (7721)
+rl->rl|25|right            187/206 [86, 94] cap hits 4 (wrong 3), no answer 0, tokens 5461 (7172)
+rl->think|25|wrong         13/102 [8, 21] cap hits 71 (wrong 70), no answer 0, tokens 11854 (15084)
+rl->rl|25|wrong            14/102 [8, 22] cap hits 18 (wrong 16), no answer 0, tokens 10098 (13328)
+rl->think|25|cap           3/20 [5, 36] cap hits 14 (wrong 14), no answer 0, tokens 11833 (15929)
+rl->rl|25|cap              5/20 [11, 47] cap hits 7 (wrong 7), no answer 0, tokens 10830 (14926)
+rl->think|25|not_cap       201/308 [60, 70] cap hits 90 (wrong 85), no answer 0, tokens 7945 (10159)
+rl->rl|25|not_cap          201/308 [60, 70] cap hits 22 (wrong 19), no answer 0, tokens 6997 (9211)
+rl->think|25|aime          31/68 [34, 57] cap hits 32 (wrong 31), no answer 0, tokens 9852 (12647)
+rl->rl|25|aime             29/68 [32, 54] cap hits 12 (wrong 12), no answer 0, tokens 8711 (11507)
+rl->think|25|not_aime      173/260 [61, 72] cap hits 72 (wrong 68), no answer 0, tokens 7746 (9953)
+rl->rl|25|not_aime         177/260 [62, 73] cap hits 17 (wrong 14), no answer 0, tokens 6843 (9050)
+rl->think|50|all           199/328 [55, 66] cap hits 108 (wrong 105), no answer 0, tokens 6006 (10664)
+rl->rl|50|all              193/328 [53, 64] cap hits 23 (wrong 23), no answer 1, tokens 4861 (9519)
+rl->think|50|right         186/206 [85, 94] cap hits 19 (wrong 18), no answer 0, tokens 4396 (7818)
+rl->rl|50|right            188/206 [87, 94] cap hits 1 (wrong 1), no answer 0, tokens 3619 (7041)
+rl->think|50|wrong         10/102 [5, 17] cap hits 71 (wrong 70), no answer 0, tokens 8837 (15297)
+rl->rl|50|wrong            4/102 [2, 10] cap hits 14 (wrong 14), no answer 0, tokens 6938 (13398)
+rl->think|50|cap           3/20 [5, 36] cap hits 18 (wrong 17), no answer 0, tokens 8151 (16343)
+rl->rl|50|cap              1/20 [1, 24] cap hits 8 (wrong 8), no answer 1, tokens 7062 (15254)
+rl->think|50|not_cap       196/308 [58, 69] cap hits 90 (wrong 88), no answer 0, tokens 5867 (10295)
+rl->rl|50|not_cap          192/308 [57, 68] cap hits 15 (wrong 15), no answer 0, tokens 4718 (9146)
+rl->think|50|aime          33/68 [37, 60] cap hits 31 (wrong 31), no answer 0, tokens 6978 (12569)
+rl->rl|50|aime             30/68 [33, 56] cap hits 11 (wrong 11), no answer 0, tokens 5804 (11395)
+rl->think|50|not_aime      166/260 [58, 69] cap hits 77 (wrong 74), no answer 0, tokens 5752 (10165)
+rl->rl|50|not_aime         163/260 [57, 68] cap hits 12 (wrong 12), no answer 1, tokens 4615 (9028)
+
+cross_minus_own_same_writer think->rl minus think->think|25|all          207 vs 219 of 328: -3.7 points [-7.6, +0.3], only x 16, only y 28
+cross_minus_own_same_writer think->rl minus think->think|25|right        184 vs 194 of 208: -4.8 points [-9.1, -0.5], only x 6, only y 16
+cross_minus_own_same_writer think->rl minus think->think|25|wrong        5 vs 7 of 31: -6.5 points [-19.4, +6.5], only x 1, only y 3
+cross_minus_own_same_writer think->rl minus think->think|25|cap          18 vs 18 of 89: +0.0 points [-10.1, +9.0], only x 9, only y 9
+cross_minus_own_same_writer think->rl minus think->think|25|not_cap      189 vs 201 of 239: -5.0 points [-9.2, -0.8], only x 7, only y 19
+cross_minus_own_same_writer think->rl minus think->think|25|aime         35 vs 39 of 68: -5.9 points [-16.2, +4.4], only x 4, only y 8
+cross_minus_own_same_writer think->rl minus think->think|25|not_aime     172 vs 180 of 260: -3.1 points [-7.3, +1.2], only x 12, only y 20
+cross_minus_own_same_writer think->rl minus think->think|50|all          209 vs 211 of 328: -0.6 points [-4.3, +3.0], only x 17, only y 19
+cross_minus_own_same_writer think->rl minus think->think|50|right        187 vs 191 of 208: -1.9 points [-6.2, +2.4], only x 8, only y 12
+cross_minus_own_same_writer think->rl minus think->think|50|wrong        5 vs 4 of 31: +3.2 points [+0.0, +9.7], only x 1, only y 0
+cross_minus_own_same_writer think->rl minus think->think|50|cap          17 vs 16 of 89: +1.1 points [-6.7, +9.0], only x 8, only y 7
+cross_minus_own_same_writer think->rl minus think->think|50|not_cap      192 vs 195 of 239: -1.3 points [-5.0, +2.5], only x 9, only y 12
+cross_minus_own_same_writer think->rl minus think->think|50|aime         33 vs 39 of 68: -8.8 points [-17.6, +0.0], only x 2, only y 8
+cross_minus_own_same_writer think->rl minus think->think|50|not_aime     176 vs 172 of 260: +1.5 points [-2.3, +5.4], only x 15, only y 11
+cross_minus_own_same_writer rl->think minus rl->rl|25|all                204 vs 206 of 328: -0.6 points [-4.3, +3.0], only x 18, only y 20
+cross_minus_own_same_writer rl->think minus rl->rl|25|right              188 vs 187 of 206: +0.5 points [-3.9, +4.9], only x 11, only y 10
+cross_minus_own_same_writer rl->think minus rl->rl|25|wrong              13 vs 14 of 102: -1.0 points [-8.8, +5.9], only x 7, only y 8
+cross_minus_own_same_writer rl->think minus rl->rl|25|cap                3 vs 5 of 20: -10.0 points [-25.0, +0.0], only x 0, only y 2
+cross_minus_own_same_writer rl->think minus rl->rl|25|not_cap            201 vs 201 of 308: +0.0 points [-3.9, +3.9], only x 18, only y 18
+cross_minus_own_same_writer rl->think minus rl->rl|25|aime               31 vs 29 of 68: +2.9 points [-5.9, +11.8], only x 6, only y 4
+cross_minus_own_same_writer rl->think minus rl->rl|25|not_aime           173 vs 177 of 260: -1.5 points [-5.8, +2.3], only x 12, only y 16
+cross_minus_own_same_writer rl->think minus rl->rl|50|all                199 vs 193 of 328: +1.8 points [-1.5, +5.2], only x 19, only y 13
+cross_minus_own_same_writer rl->think minus rl->rl|50|right              186 vs 188 of 206: -1.0 points [-5.3, +3.4], only x 10, only y 12
+cross_minus_own_same_writer rl->think minus rl->rl|50|wrong              10 vs 4 of 102: +5.9 points [+1.0, +10.8], only x 7, only y 1
+cross_minus_own_same_writer rl->think minus rl->rl|50|cap                3 vs 1 of 20: +10.0 points [+0.0, +25.0], only x 2, only y 0
+cross_minus_own_same_writer rl->think minus rl->rl|50|not_cap            196 vs 192 of 308: +1.3 points [-2.3, +4.5], only x 17, only y 13
+cross_minus_own_same_writer rl->think minus rl->rl|50|aime               33 vs 30 of 68: +4.4 points [-2.9, +11.8], only x 5, only y 2
+cross_minus_own_same_writer rl->think minus rl->rl|50|not_aime           166 vs 163 of 260: +1.2 points [-2.3, +5.0], only x 14, only y 11
+
+cross_minus_own_same_finisher think->rl minus rl->rl|25|all                207 vs 206 of 328: +0.3 points [-4.0, +4.3], only x 24, only y 23
+cross_minus_own_same_finisher think->rl minus rl->rl|50|all                209 vs 193 of 328: +4.9 points [+0.6, +8.8], only x 32, only y 16
+cross_minus_own_same_finisher rl->think minus think->think|25|all          204 vs 219 of 328: -4.6 points [-8.5, -0.6], only x 13, only y 28
+cross_minus_own_same_finisher rl->think minus think->think|50|all          199 vs 211 of 328: -3.7 points [-7.9, +0.6], only x 21, only y 33
+
+arm_minus_stored think->think|25|all|minus_think              219 vs 212 of 328: +2.1 points [-1.5, +6.1], only x 23, only y 16
+arm_minus_stored think->think|25|all|minus_rl                 219 vs 206 of 328: +4.0 points [-0.3, +8.2], only x 32, only y 19
+arm_minus_stored think->rl|25|all|minus_think                 207 vs 212 of 328: -1.5 points [-5.8, +2.4], only x 20, only y 25
+arm_minus_stored think->rl|25|all|minus_rl                    207 vs 206 of 328: +0.3 points [-3.7, +4.3], only x 22, only y 21
+arm_minus_stored think->think|25|right|minus_think            194 vs 208 of 208: -6.7 points [-10.6, -3.4], only x 0, only y 14
+arm_minus_stored think->think|25|right|minus_rl               194 vs 179 of 208: +7.2 points [+2.9, +12.0], only x 20, only y 5
+arm_minus_stored think->rl|25|right|minus_think               184 vs 208 of 208: -11.5 points [-16.3, -7.2], only x 0, only y 24
+arm_minus_stored think->rl|25|right|minus_rl                  184 vs 179 of 208: +2.4 points [-1.9, +6.7], only x 14, only y 9
+arm_minus_stored think->think|25|wrong|minus_think            7 vs 0 of 31: +22.6 points [+9.7, +38.7], only x 7, only y 0
+arm_minus_stored think->think|25|wrong|minus_rl               7 vs 4 of 31: +9.7 points [-3.2, +22.6], only x 4, only y 1
+arm_minus_stored think->rl|25|wrong|minus_think               5 vs 0 of 31: +16.1 points [+3.2, +29.0], only x 5, only y 0
+arm_minus_stored think->rl|25|wrong|minus_rl                  5 vs 4 of 31: +3.2 points [-6.5, +12.9], only x 2, only y 1
+arm_minus_stored think->think|25|cap|minus_think              18 vs 4 of 89: +15.7 points [+7.9, +24.7], only x 16, only y 2
+arm_minus_stored think->think|25|cap|minus_rl                 18 vs 23 of 89: -5.6 points [-15.7, +4.5], only x 8, only y 13
+arm_minus_stored think->rl|25|cap|minus_think                 18 vs 4 of 89: +15.7 points [+7.9, +23.6], only x 15, only y 1
+arm_minus_stored think->rl|25|cap|minus_rl                    18 vs 23 of 89: -5.6 points [-14.6, +3.4], only x 6, only y 11
+arm_minus_stored think->think|25|not_cap|minus_think          201 vs 208 of 239: -2.9 points [-6.7, +0.8], only x 7, only y 14
+arm_minus_stored think->think|25|not_cap|minus_rl             201 vs 183 of 239: +7.5 points [+3.3, +12.1], only x 24, only y 6
+arm_minus_stored think->rl|25|not_cap|minus_think             189 vs 208 of 239: -7.9 points [-12.1, -3.8], only x 5, only y 24
+arm_minus_stored think->rl|25|not_cap|minus_rl                189 vs 183 of 239: +2.5 points [-1.7, +6.7], only x 16, only y 10
+arm_minus_stored think->think|25|aime|minus_think             39 vs 36 of 68: +4.4 points [-4.4, +13.2], only x 6, only y 3
+arm_minus_stored think->think|25|aime|minus_rl                39 vs 35 of 68: +5.9 points [-2.9, +14.7], only x 7, only y 3
+arm_minus_stored think->rl|25|aime|minus_think                35 vs 36 of 68: -1.5 points [-11.8, +7.4], only x 5, only y 6
+arm_minus_stored think->rl|25|aime|minus_rl                   35 vs 35 of 68: +0.0 points [-7.4, +7.4], only x 3, only y 3
+arm_minus_stored think->think|25|not_aime|minus_think         180 vs 176 of 260: +1.5 points [-2.7, +5.8], only x 17, only y 13
+arm_minus_stored think->think|25|not_aime|minus_rl            180 vs 171 of 260: +3.5 points [-1.2, +8.1], only x 25, only y 16
+arm_minus_stored think->rl|25|not_aime|minus_think            172 vs 176 of 260: -1.5 points [-6.2, +2.7], only x 15, only y 19
+arm_minus_stored think->rl|25|not_aime|minus_rl               172 vs 171 of 260: +0.4 points [-4.2, +5.0], only x 19, only y 18
+arm_minus_stored think->think|50|all|minus_think              211 vs 212 of 328: -0.3 points [-3.7, +3.4], only x 17, only y 18
+arm_minus_stored think->think|50|all|minus_rl                 211 vs 206 of 328: +1.5 points [-3.0, +6.1], only x 33, only y 28
+arm_minus_stored think->rl|50|all|minus_think                 209 vs 212 of 328: -0.9 points [-4.9, +3.0], only x 19, only y 22
+arm_minus_stored think->rl|50|all|minus_rl                    209 vs 206 of 328: +0.9 points [-3.0, +4.9], only x 23, only y 20
+arm_minus_stored think->think|50|right|minus_think            191 vs 208 of 208: -8.2 points [-12.0, -4.8], only x 0, only y 17
+arm_minus_stored think->think|50|right|minus_rl               191 vs 179 of 208: +5.8 points [+1.0, +10.6], only x 20, only y 8
+arm_minus_stored think->rl|50|right|minus_think               187 vs 208 of 208: -10.1 points [-14.4, -6.2], only x 0, only y 21
+arm_minus_stored think->rl|50|right|minus_rl                  187 vs 179 of 208: +3.8 points [-0.5, +8.2], only x 15, only y 7
+arm_minus_stored think->think|50|wrong|minus_think            4 vs 0 of 31: +12.9 points [+3.2, +25.8], only x 4, only y 0
+arm_minus_stored think->think|50|wrong|minus_rl               4 vs 4 of 31: +0.0 points [-12.9, +12.9], only x 2, only y 2
+arm_minus_stored think->rl|50|wrong|minus_think               5 vs 0 of 31: +16.1 points [+3.2, +29.0], only x 5, only y 0
+arm_minus_stored think->rl|50|wrong|minus_rl                  5 vs 4 of 31: +3.2 points [-6.5, +12.9], only x 2, only y 1
+arm_minus_stored think->think|50|cap|minus_think              16 vs 4 of 89: +13.5 points [+6.7, +21.3], only x 13, only y 1
+arm_minus_stored think->think|50|cap|minus_rl                 16 vs 23 of 89: -7.9 points [-20.2, +4.5], only x 11, only y 18
+arm_minus_stored think->rl|50|cap|minus_think                 17 vs 4 of 89: +14.6 points [+6.7, +22.5], only x 14, only y 1
+arm_minus_stored think->rl|50|cap|minus_rl                    17 vs 23 of 89: -6.7 points [-15.7, +2.2], only x 6, only y 12
+arm_minus_stored think->think|50|not_cap|minus_think          195 vs 208 of 239: -5.4 points [-9.2, -2.1], only x 4, only y 17
+arm_minus_stored think->think|50|not_cap|minus_rl             195 vs 183 of 239: +5.0 points [+0.4, +9.6], only x 22, only y 10
+arm_minus_stored think->rl|50|not_cap|minus_think             192 vs 208 of 239: -6.7 points [-10.9, -2.5], only x 5, only y 21
+arm_minus_stored think->rl|50|not_cap|minus_rl                192 vs 183 of 239: +3.8 points [+0.0, +7.9], only x 17, only y 8
+arm_minus_stored think->think|50|aime|minus_think             39 vs 36 of 68: +4.4 points [-5.9, +14.7], only x 8, only y 5
+arm_minus_stored think->think|50|aime|minus_rl                39 vs 35 of 68: +5.9 points [-4.4, +16.2], only x 8, only y 4
+arm_minus_stored think->rl|50|aime|minus_think                33 vs 36 of 68: -4.4 points [-13.2, +4.4], only x 4, only y 7
+arm_minus_stored think->rl|50|aime|minus_rl                   33 vs 35 of 68: -2.9 points [-11.8, +4.4], only x 3, only y 5
+arm_minus_stored think->think|50|not_aime|minus_think         172 vs 176 of 260: -1.5 points [-5.0, +1.9], only x 9, only y 13
+arm_minus_stored think->think|50|not_aime|minus_rl            172 vs 171 of 260: +0.4 points [-4.6, +5.8], only x 25, only y 24
+arm_minus_stored think->rl|50|not_aime|minus_think            176 vs 176 of 260: +0.0 points [-4.2, +4.2], only x 15, only y 15
+arm_minus_stored think->rl|50|not_aime|minus_rl               176 vs 171 of 260: +1.9 points [-2.7, +6.5], only x 20, only y 15
+arm_minus_stored rl->think|25|all|minus_think                 204 vs 212 of 328: -2.4 points [-6.7, +1.8], only x 21, only y 29
+arm_minus_stored rl->think|25|all|minus_rl                    204 vs 206 of 328: -0.6 points [-4.3, +2.7], only x 16, only y 18
+arm_minus_stored rl->rl|25|all|minus_think                    206 vs 212 of 328: -1.8 points [-6.7, +2.7], only x 27, only y 33
+arm_minus_stored rl->rl|25|all|minus_rl                       206 vs 206 of 328: +0.0 points [-3.7, +3.7], only x 19, only y 19
+arm_minus_stored rl->think|25|right|minus_think               188 vs 179 of 206: +4.4 points [-0.5, +9.2], only x 18, only y 9
+arm_minus_stored rl->think|25|right|minus_rl                  188 vs 206 of 206: -8.7 points [-12.6, -4.9], only x 0, only y 18
+arm_minus_stored rl->rl|25|right|minus_think                  187 vs 179 of 206: +3.9 points [-1.5, +9.2], only x 21, only y 13
+arm_minus_stored rl->rl|25|right|minus_rl                     187 vs 206 of 206: -9.2 points [-13.6, -5.3], only x 0, only y 19
+arm_minus_stored rl->think|25|wrong|minus_think               13 vs 27 of 102: -13.7 points [-21.6, -5.9], only x 3, only y 17
+arm_minus_stored rl->think|25|wrong|minus_rl                  13 vs 0 of 102: +12.7 points [+6.9, +19.6], only x 13, only y 0
+arm_minus_stored rl->rl|25|wrong|minus_think                  14 vs 27 of 102: -12.7 points [-21.6, -3.9], only x 5, only y 18
+arm_minus_stored rl->rl|25|wrong|minus_rl                     14 vs 0 of 102: +13.7 points [+6.9, +20.6], only x 14, only y 0
+arm_minus_stored rl->think|25|cap|minus_think                 3 vs 6 of 20: -15.0 points [-30.0, +0.0], only x 0, only y 3
+arm_minus_stored rl->think|25|cap|minus_rl                    3 vs 0 of 20: +15.0 points [+0.0, +30.0], only x 3, only y 0
+arm_minus_stored rl->rl|25|cap|minus_think                    5 vs 6 of 20: -5.0 points [-20.1, +10.0], only x 1, only y 2
+arm_minus_stored rl->rl|25|cap|minus_rl                       5 vs 0 of 20: +25.0 points [+10.0, +45.0], only x 5, only y 0
+arm_minus_stored rl->think|25|not_cap|minus_think             201 vs 206 of 308: -1.6 points [-5.8, +2.9], only x 21, only y 26
+arm_minus_stored rl->think|25|not_cap|minus_rl                201 vs 206 of 308: -1.6 points [-4.9, +1.9], only x 13, only y 18
+arm_minus_stored rl->rl|25|not_cap|minus_think                201 vs 206 of 308: -1.6 points [-6.5, +3.2], only x 26, only y 31
+arm_minus_stored rl->rl|25|not_cap|minus_rl                   201 vs 206 of 308: -1.6 points [-5.2, +1.9], only x 14, only y 19
+arm_minus_stored rl->think|25|aime|minus_think                31 vs 36 of 68: -7.4 points [-16.2, +1.5], only x 3, only y 8
+arm_minus_stored rl->think|25|aime|minus_rl                   31 vs 35 of 68: -5.9 points [-14.7, +1.5], only x 2, only y 6
+arm_minus_stored rl->rl|25|aime|minus_think                   29 vs 36 of 68: -10.3 points [-20.6, +0.0], only x 3, only y 10
+arm_minus_stored rl->rl|25|aime|minus_rl                      29 vs 35 of 68: -8.8 points [-19.1, +1.5], only x 3, only y 9
+arm_minus_stored rl->think|25|not_aime|minus_think            173 vs 176 of 260: -1.2 points [-5.8, +3.5], only x 18, only y 21
+arm_minus_stored rl->think|25|not_aime|minus_rl               173 vs 171 of 260: +0.8 points [-3.1, +4.6], only x 14, only y 12
+arm_minus_stored rl->rl|25|not_aime|minus_think               177 vs 176 of 260: +0.4 points [-4.6, +5.4], only x 24, only y 23
+arm_minus_stored rl->rl|25|not_aime|minus_rl                  177 vs 171 of 260: +2.3 points [-1.5, +6.2], only x 16, only y 10
+arm_minus_stored rl->think|50|all|minus_think                 199 vs 212 of 328: -4.0 points [-8.5, +0.3], only x 20, only y 33
+arm_minus_stored rl->think|50|all|minus_rl                    199 vs 206 of 328: -2.1 points [-5.5, +1.2], only x 13, only y 20
+arm_minus_stored rl->rl|50|all|minus_think                    193 vs 212 of 328: -5.8 points [-10.4, -0.9], only x 22, only y 41
+arm_minus_stored rl->rl|50|all|minus_rl                       193 vs 206 of 328: -4.0 points [-6.7, -1.2], only x 5, only y 18
+arm_minus_stored rl->think|50|right|minus_think               186 vs 179 of 206: +3.4 points [-1.5, +8.3], only x 16, only y 9
+arm_minus_stored rl->think|50|right|minus_rl                  186 vs 206 of 206: -9.7 points [-14.1, -5.8], only x 0, only y 20
+arm_minus_stored rl->rl|50|right|minus_think                  188 vs 179 of 206: +4.4 points [-1.0, +9.7], only x 21, only y 12
+arm_minus_stored rl->rl|50|right|minus_rl                     188 vs 206 of 206: -8.7 points [-12.6, -4.9], only x 0, only y 18
+arm_minus_stored rl->think|50|wrong|minus_think               10 vs 27 of 102: -16.7 points [-25.5, -7.8], only x 4, only y 21
+arm_minus_stored rl->think|50|wrong|minus_rl                  10 vs 0 of 102: +9.8 points [+3.9, +15.7], only x 10, only y 0
+arm_minus_stored rl->rl|50|wrong|minus_think                  4 vs 27 of 102: -22.5 points [-30.4, -13.7], only x 1, only y 24
+arm_minus_stored rl->rl|50|wrong|minus_rl                     4 vs 0 of 102: +3.9 points [+1.0, +7.8], only x 4, only y 0
+arm_minus_stored rl->think|50|cap|minus_think                 3 vs 6 of 20: -15.0 points [-30.0, +0.0], only x 0, only y 3
+arm_minus_stored rl->think|50|cap|minus_rl                    3 vs 0 of 20: +15.0 points [+0.0, +30.0], only x 3, only y 0
+arm_minus_stored rl->rl|50|cap|minus_think                    1 vs 6 of 20: -25.0 points [-45.0, -5.0], only x 0, only y 5
+arm_minus_stored rl->rl|50|cap|minus_rl                       1 vs 0 of 20: +5.0 points [+0.0, +15.0], only x 1, only y 0
+arm_minus_stored rl->think|50|not_cap|minus_think             196 vs 206 of 308: -3.2 points [-7.8, +1.3], only x 20, only y 30
+arm_minus_stored rl->think|50|not_cap|minus_rl                196 vs 206 of 308: -3.2 points [-6.8, +0.0], only x 10, only y 20
+arm_minus_stored rl->rl|50|not_cap|minus_think                192 vs 206 of 308: -4.5 points [-9.4, +0.3], only x 22, only y 36
+arm_minus_stored rl->rl|50|not_cap|minus_rl                   192 vs 206 of 308: -4.5 points [-7.5, -1.6], only x 4, only y 18
+arm_minus_stored rl->think|50|aime|minus_think                33 vs 36 of 68: -4.4 points [-13.2, +4.4], only x 3, only y 6
+arm_minus_stored rl->think|50|aime|minus_rl                   33 vs 35 of 68: -2.9 points [-10.3, +4.4], only x 2, only y 4
+arm_minus_stored rl->rl|50|aime|minus_think                   30 vs 36 of 68: -8.8 points [-19.1, +1.5], only x 3, only y 9
+arm_minus_stored rl->rl|50|aime|minus_rl                      30 vs 35 of 68: -7.4 points [-14.7, +0.0], only x 1, only y 6
+arm_minus_stored rl->think|50|not_aime|minus_think            166 vs 176 of 260: -3.8 points [-8.8, +1.2], only x 17, only y 27
+arm_minus_stored rl->think|50|not_aime|minus_rl               166 vs 171 of 260: -1.9 points [-5.8, +1.9], only x 11, only y 16
+arm_minus_stored rl->rl|50|not_aime|minus_think               163 vs 176 of 260: -5.0 points [-10.4, +0.0], only x 19, only y 32
+arm_minus_stored rl->rl|50|not_aime|minus_rl                  163 vs 171 of 260: -3.1 points [-6.2, -0.4], only x 4, only y 12

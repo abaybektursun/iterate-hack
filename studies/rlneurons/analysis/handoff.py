@@ -28,7 +28,7 @@ COMPACT = ("problem_index", "writer", "cut", "finisher", "seed", "n_prefix", "n_
 
 def score(rec: dict, prow: dict) -> dict:
     """The compact row of one raw row. prow: the plan row of its (problem, writer)."""
-    text = rec["prefix_text"] + rec["gen_text"]
+    text = rec.get("text", rec["prefix_text"] + rec["gen_text"])    # "text" (rows from the relay on): prefix and continuation decoded in one piece
     out = {**{k: rec[k] for k in COMPACT if k in rec}, **R.grade_v3(rec["gold"], text), "loop_A": None, "loop_error": None,
            "stratum": prow["stratum"], "prefix_has_right": prow["prefix_has_right"][str(rec["cut"])]}
     try:
