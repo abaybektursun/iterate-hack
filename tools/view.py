@@ -281,7 +281,7 @@ TAP = ("<style>@media (max-width: 900px) { .top a { padding-block: 10px; } } .to
        ".top .status:not(.bad) { font-size: 0 !important; gap: 0 !important; min-width: 0 !important; } "
        ".top .status.bad { display: block; flex: 0 1 auto; min-width: 0 !important; overflow: hidden; text-overflow: ellipsis; } "
        ".top .status.bad::before { display: inline-block; margin: 0 8px 2px 4px; vertical-align: middle; } } "
-       f'@media (max-width: 400px) {{ .top:has(.here) > a[href="{SITE_HOME}#s-results"] {{ display: none; }} }}</style>\n</head>')
+       f'@media (max-width: 400px) {{ .top:has(.here) a[href="{SITE_HOME}#s-results"] {{ display: none; }} }}</style>\n</head>')
 ALL_PAGES = f'<a href="{SITE_HOME}#s-results">All pages</a>'
 # One header for every page: the same tabs in the order of the home page's sections (Results: Findings, Papers; How we
 # work: Board, Proof), then All pages (the home page's list of every page), then the name of a page that is none of the
@@ -290,9 +290,13 @@ NAV_TABS = (("Findings", "/findings"), ("Papers", "/papers"), ("Board", "/"), ("
 TAB_LINK = re.compile(r'\n? *<a (?:class="tab" )?href="(?:/|/proof|/findings|/papers|https://invariant\.team/(?:#s-results)?)"[^>]*>(?:Board|Proof|Findings|Papers|All pages)</a>')
 
 
-def nav(path):
+OWN_NAV = re.compile(r"^nav\b[^{]*\{", re.M)  # a page whose CSS styles every nav (/exa): its header gets the landmark as a div
+
+
+def nav(path, tag="nav"):
     now = next((n for n, h in NAV_TABS if path == h or (h != "/" and path.startswith(h)) or (h == "/findings" and path.startswith("/finding/"))), None)
-    return "".join(f'\n    <a href="{h}"' + (' aria-current="page"' if n == now else "") + f">{n}</a>" for n, h in NAV_TABS) + "\n    " + ALL_PAGES
+    links = "".join(f'\n    <a href="{h}"' + (' aria-current="page"' if n == now else "") + f">{n}</a>" for n, h in NAV_TABS)
+    return f'\n    <{tag} aria-label="Site" style="all:unset;display:contents">{links}\n    {ALL_PAGES}</{tag[:3]}>'  # no box of its own: the links stay items of the header's row
 HERE = re.compile(r"<title>Invariant: ([A-Z][^<]*)</title>")  # the 404 page's title starts in lower case: it is no place
 HERE_BY_PATH = {"/exa": "Exa", "/pastdev": "past.dev"}  # pages whose title does not start with "Invariant: "
 # The corner link carries its own color scheme: a page that declares none gets it from the lightness of its
@@ -317,7 +321,7 @@ def chrome(body, path):
         body = NAME_LINK.sub(NAME_LINKED, body.replace(NAME, NAME_LINKED, 1), count=1)
         head, rest = body.split("</header>", 1)
         if not path.startswith("/demo"):  # the deck and its pictures keep their own header (hidden or without tabs)
-            head = TAB_LINK.sub("", head).replace(NAME_LINKED, NAME_LINKED + nav(path.split("?")[0]), 1)
+            head = TAB_LINK.sub("", head).replace(NAME_LINKED, NAME_LINKED + nav(path.split("?")[0], 'div role="navigation"' if OWN_NAV.search(body) else "nav"), 1)
         body = head + "</header>" + rest
         here = HERE.search(body)
         here = HERE_BY_PATH.get(path) or (here and here.group(1))
@@ -358,8 +362,10 @@ a { color: inherit; text-decoration: none; }
     <a href="/proof">Proof</a>
     <a href="/findings">Findings</a>
   </header>
+  <main id="main">
   <p class="say">There is no page __PATH__.</p>
   <p class="ways"><a href="https://invariant.team/">Home</a><a href="/">Board</a><a href="/findings">Findings</a></p>
+  </main>
 </div></body></html>"""
 
 
@@ -517,6 +523,9 @@ code { font: inherit; font-weight: 600; }
 p, h1, h2, h3, dl, dd { margin: 0; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.skip { position: fixed; left: 12px; top: 12px; z-index: 6; padding: 8px 12px; background: var(--paper); font-size: 13px; font-weight: 600; }
+.skip:not(:focus) { width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+#main { display: contents; }  /* the landmark has no box: its sections stay children of the page column */
 .wrap { max-width: 1840px; margin: 0 auto; padding: 20px 40px 56px; }
 
 /* Header, as on the Design and Findings tabs */
@@ -661,7 +670,7 @@ h2 .count { font-weight: 400; color: var(--faint); }
   border-radius: 0; padding: 4px 26px 4px 0; -webkit-appearance: none; appearance: none;
 }
 .search input::placeholder { color: var(--faint); }
-.search input:focus { outline: none; border-bottom-color: var(--blue); }
+.search input:focus { border-bottom-color: var(--blue); }
 kbd { font: 400 12px/1 "Archivo", sans-serif; color: var(--mute); border: 1px solid var(--rule); border-radius: 4px; padding: 3px 6px; }
 .search kbd { position: absolute; right: 0; pointer-events: none; }
 
@@ -848,7 +857,8 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap" id="wrap">
+  <a class="skip" id="skip" href="#work">Skip to open work</a>
   <header class="top">
     <h1 class="name">Invariant</h1>
     <a href="/" aria-current="page">Board</a>
@@ -858,6 +868,7 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
     <span class="status" id="status" role="status">Loading the board</span>
   </header>
   <span class="sr" id="live" aria-live="polite"></span>
+  <main id="main">
   <section class="lede" aria-label="The state of the board">
     <p class="what" id="what">The team's live log: every experiment, result and idea posted by the team and its agents.</p>
     <p class="since" id="since" hidden></p>
@@ -873,16 +884,17 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
     <div class="people" id="people" aria-label="Show one person"></div>
     <label class="search"><input id="q" type="search" placeholder="Filter the lists" aria-label="Filter the lists" autocomplete="off"><kbd>/</kbd></label>
   </div>
-  <main class="board main-cols">
-    <section class="s-work"><h2>Open work <span class="count" id="n-work"></span></h2><div id="work"></div><div id="work-all"></div></section>
+  <div class="board main-cols">
+    <section class="s-work"><h2 id="work-head" tabindex="-1">Open work <span class="count" id="n-work"></span></h2><div id="work"></div><div id="work-all"></div></section>
     <section class="s-result"><h2>Results <span class="count" id="n-result"></span></h2><div id="result"></div><div id="result-all"></div></section>
-  </main>
+  </div>
   <section class="board rest" aria-label="More lists">
     <div class="tabs" id="tabs"></div>
     <div class="mhead" id="more-head"></div>
     <div id="more"></div>
     <div id="more-all"></div>
   </section>
+  </main>
   <footer class="key" aria-label="Key">
     <span><i class="g ring"></i>open work</span><span><i class="g"></i>result</span><span><i class="g small"></i>idea or note</span><span><i class="g tick"></i>message</span>
     <span class="keys-hint"><kbd>?</kbd> keys</span>
@@ -890,7 +902,7 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
 </div>
 <div class="def" id="def" role="tooltip" hidden></div>
 <div class="scrim" id="scrim" hidden></div>
-<aside class="panel" id="panel" role="dialog" aria-labelledby="ptitle" hidden></aside>
+<aside class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="ptitle" hidden></aside>
 <div class="keys" id="keys" role="dialog" aria-label="Keys" hidden>
   <h2>Keys</h2>
   <dl>
@@ -1351,6 +1363,16 @@ function textWidth(t) {
 function drawChart() {
   const el = $("chart"), b = S.benches && bench();
   if (b && el.clientWidth) put(el, chart(b, el.clientWidth, el.clientHeight - (small.matches ? KEY_H * 2 - 4 : KEY_H), small.matches) + chartKey());
+  rove();
+}
+/* The chart is one tab stop: its links from left to right, Left and Right move between them, Tab leaves the chart */
+const chartLinks = () => [...document.querySelectorAll("#chart svg a")].map(a => [a.getBoundingClientRect().x, a]).sort((p, q) => p[0] - q[0]).map(p => p[1]);
+function rove(to) {
+  const links = chartLinks();
+  if (to) S.mark = to.getAttribute("href");
+  const now = links.find(a => a.getAttribute("href") === S.mark) ?? links[0];
+  links.forEach(a => a.setAttribute("tabindex", a === now ? "0" : "-1"));
+  if (to) now.focus();
 }
 
 /* The key under the chart, drawn with the chart's own marks */
@@ -1397,7 +1419,7 @@ function chart(b, W, H, narrow) {
     svg.push(`<path class="gap" d="M${poly.map(p => p.map(n => n.toFixed(1)).join(",")).join("L")}Z"/>`);
     svg.push(`<line class="target" x1="${L}" x2="${W - R}" y1="${top}" y2="${top}"/>`);
     boxes.push({ x0: W - R + 4, x1: W, y0: top - 9, y1: top + 5 }, { x0: L, x1: W - R, y0: top - 1.5, y1: top + 1.5 });
-    svg.push(`<a href="#${esc(rl.result)}" aria-label="${esc(`RL, ${rl.config}: ${rl.right} of ${rl.n}, ${rl.result}`)}">` +
+    svg.push(`<a href="#${esc(rl.result)}" tabindex="-1" aria-label="${esc(`RL, ${rl.config}: ${rl.right} of ${rl.n}, ${rl.result}`)}">` +
       `<text class="rl" x="${W - R + 8}" y="${top + 4}">RL <tspan>${f1(rlP)}</tspan></text></a>`);
   }
   recs.forEach((q, k) => {
@@ -1426,7 +1448,7 @@ function chart(b, W, H, narrow) {
     const mark = q.plain && !q.rec ? `${x7}/>` : q.plain ? `${x7} style="stroke:var(--blue)"/>`
       : `<circle class="dot${q.rec ? " rec" : ""}" cx="${cx}" cy="${cy}" r="${q.rec ? 4.5 : 3}"/>`;
     const to = q.rec ? `href="${esc(address({ step: String(q.s.right) }))}" data-step="${q.s.right}" data-keep="1"` : `href="#${esc(q.s.result)}"`;  // a record opens its step, any other attempt its result
-    return { ci, a: `<a class="mark${on(q)}" ${to} aria-label="${esc(tip)}"><circle class="hit" cx="${cx}" cy="${cy}" r="9"/>${mark}</a>` };
+    return { ci, a: `<a class="mark${on(q)}" ${to} tabindex="-1" aria-label="${esc(tip)}"><circle class="hit" cx="${cx}" cy="${cy}" r="9"/>${mark}</a>` };
   });
 
   const caption = `${pts.length} attempt${pts.length > 1 ? "s" : ""} in the order posted`;
@@ -1578,12 +1600,27 @@ function fromHash() {
   document.querySelectorAll(".row.current").forEach(r => r.classList.remove("current"));
   if (id) document.querySelector(`.row[data-key="${CSS.escape(id)}"]`)?.classList.add("current");
   renderPanel();
+  $("wrap").inert = !!id;  // the page behind the open item takes no focus and no click
   if (!id) { if (was) document.querySelector(`[data-key="${CSS.escape(was)}"] .open`)?.focus({ preventScroll: true }); return; }
   if (!was) $("ptitle").focus({ preventScroll: true });  // opened from the board: focus moves into the panel
   loadDetail().then(renderPanel);
 }
 
-function closePanel() { history.pushState(null, "", location.pathname + location.search); fromHash(); }
+/* Every history entry of the board holds d: the number of entries to go back to reach the entry of the page load (d 0).
+   An entry without it is new: an item opened here. Closing goes back d entries, then takes the item out of the
+   address when the page was loaded with one, so Back never reopens what Esc closed. */
+if (!history.state) history.replaceState({ d: 0 }, "");
+let depth = history.state.d;
+function onNav() {
+  if (!history.state) history.replaceState({ d: depth + 1 }, "");
+  depth = history.state.d;
+  if (S.closing) { S.closing = false; history.replaceState(history.state, "", address().split("#")[0]); }
+  fromHash();
+}
+function closePanel() {
+  if (depth) { S.closing = true; history.go(-depth); }
+  else { history.replaceState(history.state, "", location.pathname + location.search); fromHash(); }
+}
 
 /* Every state is in the address, beside the open item: /?bench=hard328&step=164&more=idea&who=frustea&q=cue&idle=1#result-8b1c48 */
 function address(over = {}) {
@@ -1596,7 +1633,7 @@ function address(over = {}) {
 function set(change) {
   hideDef();
   Object.assign(S, change);
-  history.replaceState(null, "", address());
+  history.replaceState(history.state, "", address());
   render();
 }
 
@@ -1613,7 +1650,7 @@ function go(el) {
   if (!el) return;
   el.focus({ preventScroll: true });
   el.scrollIntoView({ block: "nearest" });
-  if (S.open && el.classList.contains("open")) location.replace("#" + el.closest("[data-key]").dataset.key);
+  if (S.open && el.classList.contains("open")) { history.replaceState(history.state, "", "#" + el.closest("[data-key]").dataset.key); fromHash(); }
 }
 
 document.addEventListener("click", e => {
@@ -1621,6 +1658,7 @@ document.addEventListener("click", e => {
   const term = t.closest(".term");
   if (term) { e.preventDefault(); showDef(term); return; }
   if (!t.closest("#def")) hideDef();
+  if (t.closest("#skip")) { e.preventDefault(); $("work-head").focus(); return; }
   const step = t.closest("[data-step]");
   if (step) {  // a ladder line and a segment of the reach bar close their own step on a second click; the chart only opens
     e.preventDefault();
@@ -1662,6 +1700,12 @@ document.addEventListener("keydown", e => {
     return;
   }
   const inPanel = e.target.closest?.("#panel");
+  const mark = e.target.closest?.("#chart svg a");
+  if (mark && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
+    e.preventDefault();
+    const links = chartLinks();
+    return rove(links[Math.max(0, Math.min(links.length - 1, links.indexOf(mark) + (e.key === "ArrowLeft" ? -1 : 1)))]);
+  }
   if (e.key === "/") { e.preventDefault(); $("q").scrollIntoView({ block: "center" }); $("q").focus(); $("q").select(); }
   else if (e.key === "?") { $("keys").hidden = !$("keys").hidden; }
   else if (e.key === "Escape") {
@@ -1681,7 +1725,8 @@ document.addEventListener("keydown", e => {
   else if (e.key === "Enter" && e.target.matches?.("#more .msg")) toggleFull(e.target);
 });
 $("q").addEventListener("input", () => set({ q: $("q").value.trim().toLowerCase() }));
-addEventListener("hashchange", fromHash);
+addEventListener("hashchange", onNav);
+addEventListener("popstate", onNav);
 addEventListener("scroll", hideDef, { passive: true, capture: true });
 addEventListener("pointermove", e => { S.pointer = { x: e.clientX, y: e.clientY }; }, { passive: true });
 new ResizeObserver(() => { hideDef(); drawChart(); }).observe($("chart"));
