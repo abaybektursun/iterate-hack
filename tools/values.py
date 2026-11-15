@@ -9,7 +9,7 @@ lead says what the six values are and what AGENTS.md is (on a narrow screen the 
 a name or a face, the arrow keys or the buttons at the bottom of the column select a value (address /values#speed).
 The prism sways a few degrees and leans toward the mouse; the tick ring drifts at its own slow rate. Nothing on the
 page is data and nothing replays. The text of each value is the person's own (2026-11-15), with typing errors fixed; the
-lead of Speed is the first sentence of its line in AGENTS.md, with cycle time explained, because nothing on the site supports the sentence it
+lead of Speed is the first sentence of its line in AGENTS.md, because nothing on the site supports the sentence it
 replaced.
 """
 
@@ -198,7 +198,7 @@ const $ = id => document.getElementById(id);
    line of AGENTS.md that states the value for the agents, word for word. */
 const VALUES = [
   { id: "speed", short: "Speed", title: "Speed",
-    lead: ["Cycle time, the time from an idea to its measured result, decides research output."],
+    lead: ["Cycle time decides research output."],
     quotes: [{ q: "By far the best researchers I've seen, they all have the ability to try experiments really, really, really, really, really fast. That's cycle time at smaller scales. Cycle time separates people.", who: "Sholto Douglas" }],
     rule: "Cycle time decides research output. Prefer the experiment that answers in minutes over the one that answers in hours, and run it now." },
   { id: "enthusiasm", short: "Enthusiasm", title: "Enthusiasm",
@@ -214,19 +214,19 @@ const VALUES = [
   { id: "novelty", short: "Novelty", title: "Practicality, novelty and interestingness",
     lead: ["The ultimate goal is a novel practical win. But practical wins are extremely hard.",
            "While a practical win is the ultimate goal, genuine novelty can be an intermediate win. And the path to novelty is interestingness."],
-    quotes: [{ k: "Recommended reading", q: "Why Greatness Cannot Be Planned: The Myth of the Objective", plain: true, who: "Kenneth O. Stanley and Joel Lehman", src: "2015. Stanley is the AI scientist behind NEAT (a method that evolves neural networks) and novelty search." }],
+    quotes: [{ k: "Read", q: "Why Greatness Cannot Be Planned: The Myth of the Objective", plain: true, who: "Kenneth O. Stanley and Joel Lehman", src: "2015. Stanley is the AI scientist behind NEAT and novelty search." }],
     rule: "The goal is a novel practical win. A genuinely novel result is an intermediate win, and interesting results are the path to novelty." },
   { id: "bitter-lesson", short: "Bitter lesson", title: "The bitter lesson",
     lead: ["Smarter models and scale always win."],
     quotes: [{ q: "The biggest lesson that can be read from 70 years of AI research is that general methods that leverage computation are ultimately the most effective, and by a large margin.", who: "Rich Sutton", src: "The Bitter Lesson (2019)", href: "http://www.incompleteideas.net/IncIdeas/BitterLesson.html" }],
     rule: "Larger models and more compute win. Prefer methods that improve with scale over hand-engineered ones." },
   { id: "asymmetry", short: "Asymmetry", title: "Asymmetry",
-    lead: ["When facing a larger, established player, such as institutions, labs, organizations and corporations, your choices are either total obedience or escape from its rules, using the advantages it lacks.",
-           "As a small team with very limited resources, we have to use every advantage a small team has over a large one: flexibility, versatility, speed and innovation, overlooked opportunities and good ol’ hustle."],
+    lead: ["When facing a larger incumbent, such as institutions, labs, organizations and corporations, your choices are either total obedience or regime escape through asymmetry.",
+           "As a small team heavily constrained on resources, we have to take advantage of all the asymmetry we can: flexibility, versatility, speed and innovation, overlooked opportunities and good ol’ hustle."],
     quotes: [],
     rule: "We are a small team. Use flexibility, speed and overlooked opportunities that large labs pass over." },
   { id: "clean-context", short: "Clean context", title: "Clean context",
-    lead: ["This value is specific to large language models (LLMs). Because of how attention works, real estate in the context window is more valuable than penthouses in downtown SF.",
+    lead: ["Specifically for LLMs. Because of how attention works, real estate in the context is more valuable than penthouses in downtown SF.",
            "The smaller and cleaner, the better the performance. A tongue-in-cheek heuristic: performance scales quadratically with how clean the context is."],
     quotes: [],
     rule: "Keep every agent's context small: read papers, long logs and large files in subagents, and bring back only what the task needs." },

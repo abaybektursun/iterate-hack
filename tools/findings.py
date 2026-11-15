@@ -337,7 +337,7 @@ ul.src li { padding: 5px 0; border-top: 1px solid var(--rule); break-inside: avo
 .groups { margin-top: clamp(64px, 12vh, 132px); }
 .groups.flat { margin-top: clamp(26px, 5vh, 52px); }
 .lede { max-width: 96ch; margin: clamp(64px, 12vh, 132px) 0 0; color: var(--mute); font-size: 14.5px; line-height: 1.45; }
-.lede + .groups { margin-top: 28px; }
+.lede:not([hidden]) + .groups { margin-top: 28px; }
 .group { display: grid; grid-template-columns: minmax(190px, 17%) minmax(0, 1fr); gap: 0 40px; border-top: 1px solid var(--rule); padding-top: 6px; margin-top: 44px; }
 .group:first-child { margin-top: 0; }
 .group h2 { margin: 18px 0 0; max-width: 15ch; font-size: 19px; line-height: 1.22; font-weight: 400; font-stretch: 102%; letter-spacing: -.004em; }
@@ -421,7 +421,6 @@ ul.src li { padding: 5px 0; border-top: 1px solid var(--rule); break-inside: avo
   <p class="say" id="say" hidden></p>
   <section class="story" id="story" data-terms hidden>
     <p class="ask" id="ask">Reinforcement learning with a reward (RL) makes Olmo 3 7B better at math. How much of that gain can the model reach <b>without any reward</b>?</p>
-    <p class="line">The answer shows how many points of a published RL gain need a reward at all, and so how many the reward training itself has to explain.</p>
     <nav class="sets" id="sets" aria-label="Problem set"><a href="#math500" data-set="math500">MATH-500</a><a href="#hard328" data-set="hard328">328 harder problems</a></nav>
     <div class="fig" id="fig">
       <svg id="rail" aria-hidden="true"></svg>

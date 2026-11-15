@@ -1310,7 +1310,7 @@ function ladder(b) {
       `<span class="lr">${q.prev ? f1(q.prev.p) + " → " : ""}${f1(q.p)}${noise ? ` <span class="flag">within noise</span>` : ""}</span><span class="chev" aria-hidden="true">›</span></button>` + (on ? detail(q, b) : "");
   });
   const ci = b.rl && diffCI(b.rl, b.lead.s);  // the 95 % interval of RL minus the best base, in points
-  const rl = b.rl ? `<a class="lrow rl" href="#${esc(b.rl.result)}" data-fkey="step-rl"><b>${f1(b.rlP)}</b><span class="lt">RL model, the target</span><span class="lr">RL leads by ${f1(ci[0])} to ${f1(ci[1])} points (95 % interval)</span></a>` : "";
+  const rl = b.rl ? `<a class="lrow rl" href="#${esc(b.rl.result)}" data-fkey="step-rl"><b>${f1(b.rlP)}</b><span class="lt">RL model, the target</span><span class="lr">RL model minus best base: ${f1(ci[0])} to ${f1(ci[1])} points (95 % interval)</span></a>` : "";
   put($("ladder"), rl + rows.join(""));
 }
 

@@ -256,7 +256,7 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
   </header>
   <div class="words">
     <p class="cap" id="cap">With no training, how close does the Olmo 3 base model get on MATH-500, a standard set of 500 math problems, to the same model after reinforcement learning (RL)?</p>
-    <p class="who" id="who">This shows how much of RL's published gain needs no training. Several people and their coding agents, at the SF AI Research Hackathon.</p>
+    <p class="who" id="who">Several people and their coding agents, at the SF AI Research Hackathon.</p>
     <a class="go" id="go" href="https://monitor.invariant.team/findings">Read the findings</a>
     <ol class="toc" id="index" aria-label="Sections of this page"></ol>
   </div>
@@ -575,12 +575,12 @@ function model(d) {
    without numbers. The line under it states the number of people. */
 function headline() {
   const m = S.m; if (!m) return;
-  const who = `This shows how much of RL's published gain needs no training. ${m.people.length} people and their coding agents, at the SF AI Research Hackathon.`;
+  const who = `${m.people.length} people and their coding agents, at the SF AI Research Hackathon.`;
   if (!isFinite(m.base)) { $("who").textContent = who; return; }
   const n = (m.how.match(/vote over (\d+)/) || [])[1];
   const how = [/\bcue\b/.test(m.how) && "the opening cue (three fixed tokens at the start of the answer)", n && `a majority vote over ${n} samples`].filter(Boolean);
   $("cap").innerHTML = `With no training, the Olmo 3 base model reaches <b>${f(m.base)}\u00a0%</b> on MATH-500, a standard set of 500 math problems.` + (isFinite(m.rl) ? ` The RL model, the same model after reinforcement learning (RL), scores <b>${f(m.rl)}\u00a0%</b>.` : "");
-  $("who").textContent = (m.start < m.base ? `Up from ${f(m.start)}\u00a0%` + (how.length ? `, with ${how.join(" and ")}. Each score is the best on the board, under its own settings. ` : ". Each score is the best on the board, under its own settings. ") : "") + who;
+  $("who").textContent = (m.start < m.base ? `Up from ${f(m.start)}\u00a0%` + (how.length ? `, with ${how.join(" and ")}. The higher score and the RL score are the best on the board, each under its own settings. ` : ". The higher score and the RL score are the best on the board, each under its own settings. ") : "") + who;
 }
 async function read() {
   try {
