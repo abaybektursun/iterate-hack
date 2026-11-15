@@ -1,0 +1,2 @@
+{"groups": {"Think-SFT kept problems": 17, "RL kept problems": 21, "kept by both": 3}}
+{"measured": 0.3594771241830065, "n": 17, "interval": [0.15734265734265732, 0.5625], "interval_kind": "bootstrap", "refuted_by_met": false, "alt_measured": 0.0, "not_computable": null, "example_row": {"problem_index": 95, "sample": 2, "attempt": 0, "seed": 3020095, "n_new": 13458, "cap_hit": false, "finish_reason": "stop", "loop_A": true, "extracted_v3": "504", "score_v3": 1, "gold": "504"}}

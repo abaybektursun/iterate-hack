@@ -1197,8 +1197,12 @@ def score_tests(folder):
             print(f"    GPU test {g['id']}: measured {g['measured']:g} (n {g['n']}), predicted {g['value']:g} [{g['low']:g}, {g['high']:g}], "
                   f"{o['name']} {o['value']:g} [{o['low']:g}, {o['high']:g}], gain {g['gain']:+.2f}{', strike' if g['strike'] else ''}")
     total = {k: sum(t[k] for t in theories.values()) for k in ("offline", "computed", "inside", "within_noise", "outside")}
+    failed = sum(str(r.get("not_computable")).startswith("not computed: script failed") for t in theories.values() for r in t["rows"])
+    repl_failed = sum(i["status"] == "not replicated" for p in (folder / "replication").glob("*.json")
+                      for i in json.loads(p.read_text())["items"])
     print(f"Round: {total['computed']} of {total['offline']} offline predictions computed, {total['inside']} inside, "
-          f"{total['within_noise']} outside within noise, {total['outside']} outside" + "".join(
+          f"{total['within_noise']} outside within noise, {total['outside']} outside; "
+          f"{failed} test scripts and {repl_failed} replication scripts failed (not computed)" + "".join(
               f"; {n}: carried duel win, {t['carried_duel']['gain']:+.2f} nats over {t['carried_duel']['tests']} tests, not counted"
               for n, t in theories.items() if "carried_duel" in t))
 
@@ -1256,17 +1260,30 @@ def script_job(folder, name, offline, inputs, dest, what):
     return j
 
 
+SCRIPT_SECONDS = 600  # one test, duel or replication script
+
+
 def run_scripts(folder, label, offline, scripts):
     """Run each script in `scripts` once in the test environment; one result per entry of offline."""
     notes = {e["k"]: e["note"] for e in json.loads((scripts / "notes.json").read_text())}
     results = []
     for q in offline:
-        script = scripts / f"p{q['k']}.py"
-        p = subprocess.run([*TEST_PYTHON, str(script.resolve())], cwd=ROOT, capture_output=True, text=True, timeout=1800,
-                           env={**os.environ, "AWS_PROFILE": AWS_PROFILE, "PYTHONPATH": str(ROOT)})
-        (script.with_suffix(".out.txt")).write_text(p.stdout + p.stderr)
-        if p.returncode:
-            sys.exit(f"{script} failed (exit {p.returncode}); output in {script.with_suffix('.out.txt')}")
+        script, log = scripts / f"p{q['k']}.py", scripts / f"p{q['k']}.out.txt"
+        try:  # a script that times out or exits non-zero is recorded as not computed for its prediction; the round goes on
+            p = subprocess.run([*TEST_PYTHON, str(script.resolve())], cwd=ROOT, capture_output=True, text=True, timeout=SCRIPT_SECONDS,
+                               env={**os.environ, "AWS_PROFILE": AWS_PROFILE, "PYTHONPATH": str(ROOT)})
+            log.write_text(p.stdout + p.stderr)
+            failed = p.returncode and f"exit {p.returncode}"
+        except subprocess.TimeoutExpired:
+            log.write_text(f"timeout after {SCRIPT_SECONDS} s\n")
+            failed = f"timeout after {SCRIPT_SECONDS} s"
+        if failed:
+            reason = f"not computed: script failed ({failed}); output in {log.relative_to(folder)}"
+            results.append({**q, "script": str(script.relative_to(folder)), "measured": None, "n": None, "interval": None,
+                            "interval_kind": "none", "inside": None, "refuted_by_met": False, "alt_measured": None,
+                            "not_computable": reason, "script_failed": failed, "note": notes.get(q["k"], ""), "example_row": None})
+            print(f"  {label} p{q['k']}: {reason}")
+            continue
         out = json.loads(p.stdout.strip().splitlines()[-1])
         m, met = out["measured"], bool(out["refuted_by_met"])
         if m is None and not out.get("not_computable") and not met:
@@ -1734,7 +1751,8 @@ def replicate(folder):
             first = tests[r["k"]]["measured"]
             both_refuted = tests[r["k"]].get("refuted_by_met") and r["refuted_by_met"]  # both sides meet the refuting condition
             items.append({"k": r["k"], "experiment": r["experiment"], "original": first, "replicated": r["measured"],
-                          "status": "replicated" if same_number(r["measured"], first) or both_refuted else "differs",
+                          "status": "not replicated" if r.get("script_failed") else
+                                    "replicated" if same_number(r["measured"], first) or both_refuted else "differs",
                           "refuted_by_met": r["refuted_by_met"], "script": r["script"], "not_computable": r["not_computable"]})
             if items[-1]["status"] == "differs":
                 print(f"  {n}{kind} p{r['k']} DIFFERS: first {first}, replication {r['measured']}; left out until a person resolves it")

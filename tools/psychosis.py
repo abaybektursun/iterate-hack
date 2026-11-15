@@ -3,7 +3,7 @@
 "AI psychosis" is an informal name for delusional beliefs after long chatbot use, often a grand belief in special
 knowledge. The game: hold Space (or press and hold) to breathe in and let go to breathe out, so that the white ring
 follows the blue one. A breath that follows it lights one of 10 petals and sends out a wave that releases every
-thought on screen, with a word of praise (CALM); 10 petals win. Thoughts drift toward the head: some are written jokes (THOUGHTS), the ones with a
+thought on screen, with a word of praise (CALM); 10 petals win. Thoughts drift toward the meditator, an emoji (FACES, one per stage): some are written jokes (THOUGHTS), the ones with a
 blue dot are real messages and result titles of the board (/data, read every 10 s). A thought that reaches the head is
 believed and moves the diagnosis up one of 5 stages (STAGES); the fifth ends the session. A click on a thought "checks"
 it, and it comes back as 3 subagents. A guide speaks one line per breath (speech synthesis and a Web Audio drone; M
@@ -46,7 +46,7 @@ a { color: inherit; }
 </style>
 </head>
 <body>
-<canvas id="c" aria-label="A seated figure with two breathing rings and thoughts drifting toward its head"></canvas>
+<canvas id="c" aria-label="A meditating emoji with two breathing rings and thoughts drifting toward its head"></canvas>
 <div class="hud">
   <a class="name" href="/">Invariant</a>
   <button id="mute">Sound on</button>
@@ -76,6 +76,7 @@ const GOOD = ["Good. You are not your benchmark.", "Breathe out the result. It h
 const BAD = ["You are holding your breath like a GPU reservation.", "That was not a breath. That was a retry.", "Follow the blue ring. It has no opinions about your work.",
   "You rushed it. This is not a hackathon. It is a hackathon, but breathe."];
 const CALM = ["Calm", "Calmer", "Serene", "Suspiciously serene", "Monk mode", "Unbothered", "Post-benchmark", "Beyond eval", "Transcendent", "Enlightened"];  // shown for a moment after each good breath
+const FACES = ["🧘", "🤔", "🤩", "😵‍💫", "🤯", "👁️"];  // one per stage
 const IN = 3.2, OUT = 3.8, NEED = 10;
 const c = $("c"), g = c.getContext("2d");
 const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -180,7 +181,7 @@ function step(dt) {
   if (ph < before) breath();
   if (mode !== "play") return;
   if ((s.next -= dt) < 0) { spawn(); s.next = Math.max(.45, 1.5 - s.good * .12); }
-  const hx = W / 2, hy = H / 2 - 62, speed = (42 + s.good * 3) * Math.hypot(W, H) / 1650 + 14;
+  const hx = W / 2, hy = H / 2, speed = (42 + s.good * 3) * Math.hypot(W, H) / 1650 + 14;
   for (const w of s.waves) w.r += 620 * dt;
   s.waves = s.waves.filter(w => w.r < Math.hypot(W, H));
   for (const t of s.thoughts) {
@@ -188,7 +189,7 @@ function step(dt) {
     if (t.gone) { t.gone += dt * 2; t.x -= dx / d * 120 * dt; t.y -= dy / d * 120 * dt; continue; }
     t.x += dx / d * speed * dt + Math.cos(s.t * 1.3 + t.wob) * 9 * dt; t.y += dy / d * speed * dt + Math.sin(s.t * 1.1 + t.wob) * 9 * dt;
     if (s.waves.some(w => d < w.r && d > w.r - 90)) { t.gone = .01; s.released++; }
-    else if (d < 26 + s.psy * 5) { t.gone = 9; s.psy++; s.shake = .45; s.flash = 1; ding(70, .5, "sawtooth", .1); stage(); say(`You believed it: “${t.text}”`); if (s.psy >= 5) return end(false); }
+    else if (d < 44 + s.psy * 8) { t.gone = 9; s.psy++; s.shake = .45; s.flash = 1; ding(70, .5, "sawtooth", .1); stage(); say(`You believed it: “${t.text}”`); if (s.psy >= 5) return end(false); }
   }
   s.thoughts = s.thoughts.filter(t => t.gone < 1);
 }
@@ -214,30 +215,24 @@ function draw(now) {
   g.fillStyle = glow; g.fillRect(0, 0, W, H);
   if (s) for (const w of s.waves) { g.strokeStyle = `oklch(.78 .13 ${w.hue} / ${Math.max(0, 1 - w.r / 900)})`; g.lineWidth = 3; g.beginPath(); g.arc(cx, cy, w.r, 0, 6.3); g.stroke(); }
   if (won && !still) for (let k = 0; k < 6; k++) { const r = ((T * 140 + k * 150) % 900); g.strokeStyle = `oklch(.78 .13 ${k * 60} / ${1 - r / 900})`; g.lineWidth = 2; g.beginPath(); g.arc(cx, cy, r, 0, 6.3); g.stroke(); }
-  for (let k = 0; k < NEED; k++) {  // 10 petals, one per breath that followed the ring
-    const a = k / NEED * 6.283 + (still ? 0 : T * .12), px = cx + Math.cos(a) * (R - 8), py = cy + Math.sin(a) * (R - 8) * .42 + 58, on = s && k < s.good;
-    g.save(); g.translate(px, py); g.rotate(a); g.beginPath(); g.ellipse(0, 0, 13, 5, 0, 0, 6.3);
-    g.fillStyle = on ? `oklch(.78 .13 ${k * 36})` : "#111922"; g.fill(); g.strokeStyle = "rgba(255,255,255,.25)"; g.lineWidth = 1; g.stroke(); g.restore();
+  g.textAlign = "center"; g.textBaseline = "middle"; g.font = "22px sans-serif";
+  for (let k = 0; k < NEED; k++) {  // 10 lotus flowers, one per breath that followed the ring
+    const a = k / NEED * 6.283 + (still ? 0 : T * .12);
+    g.globalAlpha = s && k < s.good ? 1 : .18; g.fillText("🪷", cx + Math.cos(a) * (R - 8), cy + Math.sin(a) * (R - 8));
   }
+  g.globalAlpha = 1; g.textAlign = "left";
   if (s && mode === "play") {  // the blue ring leads, the white ring is the player's breath
     const near = Math.abs(s.lungE - s.target) < .2;
     g.lineWidth = 1.5; g.strokeStyle = "#8fb1ff"; g.beginPath(); g.arc(cx, cy, R + s.target * span, 0, 6.3); g.stroke();
     g.lineWidth = near ? 5 : 3; g.strokeStyle = near ? "#ffffff" : "rgba(233,239,243,.5)"; g.beginPath(); g.arc(cx, cy, R + s.lungE * span, 0, 6.3); g.stroke();
   }
-  const head = 22 + psy * 6, body = g.createLinearGradient(cx - 60, cy - 90, cx + 60, cy + 70);  // the figure: legs, torso, head
-  body.addColorStop(0, "#34485e"); body.addColorStop(.5, "#152029"); body.addColorStop(1, "#090e14");
-  g.fillStyle = body; g.strokeStyle = psy > 2 ? "rgba(255,107,124,.8)" : "rgba(255,255,255,.55)"; g.lineWidth = 1.2;
-  g.beginPath(); g.ellipse(cx, cy + 46, 74, 20, 0, 0, 6.3); g.fill(); g.stroke();
-  g.beginPath(); g.moveTo(cx - 44, cy + 44); g.quadraticCurveTo(cx - 40, cy - 36, cx, cy - 40); g.quadraticCurveTo(cx + 40, cy - 36, cx + 44, cy + 44); g.closePath(); g.fill(); g.stroke();
-  g.beginPath(); g.arc(cx, cy - 62, head, 0, 6.3); g.fill(); g.stroke();
-  g.strokeStyle = "#e9eff3"; g.lineWidth = 1.4;  // closed eyes; they open wide with the diagnosis
-  for (const e of [-1, 1]) { g.beginPath(); if (psy > 2) g.arc(cx + e * head * .38, cy - 62, 3 + psy, 0, 6.3); else g.arc(cx + e * head * .38, cy - 64, 5, .25, 2.9); g.stroke(); }
-  if (peace > 0) { g.fillStyle = "#8fb1ff"; g.beginPath(); g.ellipse(cx, cy - 62 - head * .5, 5, 4 * peace, 0, 0, 6.3); g.fill(); }  // the third eye opens with the petals
+  g.textAlign = "center"; g.textBaseline = "middle"; g.font = `${84 + psy * 16}px sans-serif`;  // the meditator is an emoji: its head grows with the diagnosis
+  g.fillText(FACES[psy], cx, cy); g.textAlign = "left";
   if (s) for (const t of s.thoughts) chip(t);
   if (s && mode === "play") {
     g.fillStyle = "#93a1ad"; g.font = "600 13px Archivo, sans-serif"; g.textAlign = "center"; g.textBaseline = "middle";
-    g.fillText(s.t % (IN + OUT) < IN ? "Breathe in: hold" : "Breathe out: let go", cx, cy + 88);
-    if (s.calm > 0) { s.calm -= dt; g.globalAlpha = Math.min(1, s.calm); g.fillStyle = `oklch(.78 .13 ${s.good * 36})`; g.font = `300 ${Math.min(64, W / 9)}px Archivo, sans-serif`; g.fillText(CALM[s.good - 1], cx, cy - 150 - (1.6 - s.calm) * 24); g.globalAlpha = 1; }
+    g.fillText(s.t % (IN + OUT) < IN ? "Breathe in: hold" : "Breathe out: let go", cx, cy + 74);
+    if (s.calm > 0) { s.calm -= dt; g.globalAlpha = Math.min(1, s.calm); g.fillStyle = `oklch(.78 .13 ${s.good * 36})`; g.font = `300 ${Math.min(64, W / 9)}px Archivo, sans-serif`; g.fillText(CALM[s.good - 1], cx, cy - R - 40 - (1.6 - s.calm) * 24); g.globalAlpha = 1; }
     g.textAlign = "left";
   }
   g.restore();

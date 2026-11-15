@@ -1,0 +1,90 @@
+{
+ "pair": "r4-m01",
+ "theory_state": "survives",
+ "duel_state": "",
+ "statements": {
+  "r4-m01": "The cued Olmo-3 base's loops at T 0.6 reinforce themselves: each partly repeated block already in its own text (case lists, re-derivations, table rows) raises the chance of the next repeat, so the loop hazard at a position grows with how self-similar (zlib-compressible) the text so far is, and truncating samplers (top-p, min-p, low T) set how strongly that history feeds back; the base finishes more often from RL's prefix because that text is less self-similar, not because its mathematics is sounder.",
+  "r4-m01-rival": "The cued base's loop hazard at T 0.6 is set by the problem and by how far the text in context has carried the solution, not by how self-similar that text is: under truncated low-temperature sampling a stuck model locks into a repeat at a roughly steady rate per token (2610.24715), so early zlib compressibility tracks loops only because hard, enumeration-heavy problems both compress well and stay stuck longer, and RL's prefix rescues the base because it carries a sound solution further, whatever its self-similarity."
+ },
+ "no_intervention": {
+  "r4-m01": null,
+  "r4-m01-rival": null
+ },
+ "experiments": [
+  {
+   "id": "r4-m01:theory:g5",
+   "kind": "gpu",
+   "experiment": "Rerun the K_own arm of RLN-4 K on the same 78-problem pool (base-01 F cap hits that RL solved), with the same prefixes: cue plus the base's own first L tokens, cut before its loop onset, same L as K_own. Before continuing, delete from each prefix every line (split on '\\n', stripped, at least 10 characters) whose stripped text already appeared as an earlier line of the same prefix. Then continue with the base at T 0.6 / top-p 0.95, total cap 16,384 including the prefix, K_own seeds 43,000,000 + i, H100, vLLM as in modal_k-01. Count continuations that finish without a cap hit.",
+   "unit": "finished of 78",
+   "gpu_minutes": 25,
+   "pair": "r4-m01",
+   "proposer": "r4-m01",
+   "other": "r4-m01-rival",
+   "proposer_prediction": {
+    "value": 32,
+    "low": 26,
+    "high": 39
+   },
+   "other_prediction": {
+    "value": 24,
+    "low": 17,
+    "high": 31,
+    "why": "The mechanism puts the loop hazard in the problem and in how far the text has carried the solution, not in how self-similar the prefix is, so removing repeated lines from the base's own stuck prefix leaves it a stuck path and the finish count stays near the K_own 23 of 78 (knowledge-1497e8), give or take rerun noise of about 4."
+   }
+  },
+  {
+   "id": "r4-m01:theory:intervention",
+   "kind": "intervention",
+   "unit": "right of 500",
+   "gpu_minutes": 35,
+   "experiment": "Opening selection by self-similarity. For each problem, draw 4 openings of the cued answer at the cell's usual sampling (T 0.6 / top-p 0.95), each stopped at the first line end after 3,000 characters (about 1,000 tokens). Opening 0 is the first 3,000 characters of the stored F_math500 answer (seed 1,000,000 + index); openings 1-3 are new draws with seeds 7,000,000 + 3*index + j, j = 0..2. Score each with ratio = len(zlib.compress(opening.encode('utf-8'), 9)) / len(opening.encode('utf-8')) and keep the opening with the HIGHEST ratio (least compressible, least self-similar); ties go to the lowest j. Then continue the kept opening at T 0.6 / top-p 0.95 to a total of 16,384 generated tokens (opening tokens included), seed 8,000,000 + index. If opening 0 is kept, reuse the stored F_math500 answer as is. Nothing else changes: same prompt, same cue, same grader. Model allenai/Olmo-3-1025-7B (base); set MATH-500; prompt the 3.1 RL-Zero chat prompt with the cue ' line!\\n\\nOkay' prefilled (prompt arm 'cue', as in r3 base-01 F_math500); sampling T 0.6 / top-p 0.95; cap 16384; grader v3; samples 1; seeds stored opening and continuation seed 1,000,000 + problem index (r3 base-01 F); new openings 7,000,000 + 3*index + j; new continuations 8,000,000 + index. Count: Right answers over all 500 MATH-500 problems, grader v3 (score_v3 == 1) on the one final answer per problem (the continuation of the kept opening, or the stored F answer when opening 0 is kept). A cap hit (16,384 total generated tokens without finishing) counts wrong, as does a missing answer. The usual cell (stored F_math500 rescored under v3) is 354/500 with 119 cap hits (result-e870a1).",
+   "best_known": {
+    "value": 454,
+    "item": "result-40ed3b",
+    "setting": "cued base, T 1.0 / top-p 1.0, cap 16,384, v3: vote over 4 samples after restart on cap hits, ties to the shortest finished sample"
+   },
+   "why": "Under the mechanism the loop hazard grows with how self-similar the text so far is, and a sample that later locks into a loop is already more compressible in its first 3,000 characters (predicted within-problem score 0.65). Keeping the least compressible of 4 openings should cut the cell's ~92 rule-A loops by about a fifth. Looped problems that finish are right about half the time (the restart row recovered 60 of 119 cap hits), so the gain is about +10 to +15 over 354.",
+   "pair": "r4-m01",
+   "proposer": "r4-m01",
+   "other": "r4-m01-rival",
+   "proposer_prediction": {
+    "value": 366,
+    "low": 347,
+    "high": 385
+   },
+   "other_prediction": {
+    "value": 357,
+    "low": 342,
+    "high": 372,
+    "why": "If the loop hazard is set by the problem and how far the solution has got, not by how self-similar the text is, then picking the least compressible of 4 openings is close to drawing a fresh sample at random for each problem; the expected score stays near the usual cell's 354/500, with only resampling noise and a small possible edge from dropping stuck stored openings."
+   }
+  },
+  {
+   "id": "r4-m01:rival:intervention",
+   "kind": "intervention",
+   "unit": "right of 500",
+   "gpu_minutes": 25,
+   "experiment": "Restart from scratch with a fresh seed when the answer gets stuck, instead of letting one stuck sample run to the cap. Attempt 0 is the stored sample of job abaybektursun-1114-151718-d4fa (seed 1,000,000 + index). If attempt 0 hits the cap or loop rule A fires on it, draw a new answer from the bare cued prompt at the same T 0.6 / top-p 1.0 with seed 1,000,000 + index + 500,000*k, for up to 2 extra attempts (k = 1, 2). During each new attempt, run rule A every 1,000 generated tokens and stop as soon as it fires. Each attempt has its own 16,384-token cap. The final answer is the first attempt that finishes without a cap hit and without a rule-A fire. Model base = allenai/Olmo-3-1025-7B; set MATH-500; prompt cue: run_cell prompt with the three-token RL opening ' line!\\n\\nOkay' prefilled after the prompt; sampling T 0.6 / top-p 1.0; cap 16384; grader v3; samples 1; seeds attempt 0 = stored d4fa row (seed 1,000,000 + problem index); restart k uses seed 1,000,000 + index + 500,000*k. Count: Right answers under grader v3 over all 500 problems, one final answer each. The final answer is the stored d4fa attempt 0 when it finished (no cap hit, no rule-A loop); otherwise it is the first restart that finishes. A problem whose last attempt still hits the cap or is stopped by rule A counts as wrong.",
+   "best_known": {
+    "value": 454,
+    "item": "result-40ed3b",
+    "setting": "base + cue, T 1.0 / top-p 1.0, vote over 4 samples after restart, ties to the shortest finished sample (cap 16,384, v3)"
+   },
+   "why": "A stuck path locks into a repeat at a steady rate per token, while a fresh start of the same problem is a new path. Fresh restarts finished 38 of 78 cap-hit problems against 23 for continuing the base's own stuck prefix, and restarts took top-p 0.95 from 354 to 414. Scaling that gain to the 98 cap hits of the 378 cell gives about +40 to +45.",
+   "pair": "r4-m01",
+   "proposer": "r4-m01-rival",
+   "other": "r4-m01",
+   "proposer_prediction": {
+    "value": 420,
+    "low": 407,
+    "high": 433
+   },
+   "other_prediction": {
+    "value": 429,
+    "low": 417,
+    "high": 441,
+    "why": "A restart clears the self-similar history, so the loop hazard drops back to the fresh-prompt level. Of d4fa's 378 right, 98 cap hits and 1 finished rule-A loop, the 99 failed problems get up to two fresh T 0.6 / top-p 1.0 draws. Each draw finishes about 45-50 % of the time, as fresh restarts did at top-p 0.95 (50 of 119 on the second attempt, 38 of 78 in K_fresh), and about 75 % of those finishes are right (60 recovered of 119 in the e870a1 restart row). That recovers about 51 problems, giving roughly 429."
+   }
+  }
+ ]
+}

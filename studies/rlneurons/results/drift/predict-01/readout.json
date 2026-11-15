@@ -1,0 +1,3836 @@
+{
+ "q2": {
+  "hard328": {
+   "4000": {
+    "switched": 15,
+    "switched_right": 7,
+    "others": 1047,
+    "others_right": 585,
+    "paired": {
+     "problems": 14,
+     "difference_points": 2.3809523809523814,
+     "interval95": [
+      0.0,
+      7.142857142857142
+     ]
+    },
+    "null": {
+     "mean_points": -0.09523809523809504,
+     "interval95": [
+      -7.142857142857142,
+      2.3809523809523814
+     ]
+    },
+    "by_base_stratum": {
+     "0": {
+      "flagged": 7,
+      "flagged_right": 0,
+      "others": 475,
+      "others_right": 96,
+      "difference_points": -20.210526315789473,
+      "interval95": [
+       -26.08695652173913,
+       -14.6631327848847
+      ]
+     },
+     "1-2": {
+      "flagged": 2,
+      "flagged_right": 1,
+      "others": 220,
+      "others_right": 156,
+      "difference_points": -20.90909090909091,
+      "interval95": [
+       -75.63760900689834,
+       33.98501101427064
+      ]
+     },
+     "3-4": {
+      "flagged": 6,
+      "flagged_right": 6,
+      "others": 352,
+      "others_right": 333,
+      "difference_points": 5.397727272727271,
+      "interval95": [
+       2.4783793465189468,
+       8.930501235076164
+      ]
+     },
+     "weighted": {
+      "difference_points": -10.0603668261563,
+      "interval95": [
+       -18.688547172052132,
+       -1.376794446284686
+      ]
+     }
+    }
+   },
+   "8000": {
+    "switched": 16,
+    "switched_right": 5,
+    "others": 753,
+    "others_right": 304,
+    "paired": {
+     "problems": 15,
+     "difference_points": 7.777777777777778,
+     "interval95": [
+      0.0,
+      20.0
+     ]
+    },
+    "null": {
+     "mean_points": -0.1644444444444439,
+     "interval95": [
+      -7.777777777777777,
+      7.777777777777778
+     ]
+    },
+    "by_base_stratum": {
+     "0": {
+      "flagged": 10,
+      "flagged_right": 1,
+      "others": 463,
+      "others_right": 91,
+      "difference_points": -9.654427645788335,
+      "interval95": [
+       -23.747880270989516,
+       14.876091545484057
+      ]
+     },
+     "1-2": {
+      "flagged": 5,
+      "flagged_right": 3,
+      "others": 178,
+      "others_right": 117,
+      "difference_points": -5.730337078651693,
+      "interval95": [
+       -58.875200320512825,
+       35.39325842696629
+      ]
+     },
+     "3-4": {
+      "flagged": 1,
+      "flagged_right": 1,
+      "others": 112,
+      "others_right": 96,
+      "difference_points": 14.28571428571429,
+      "interval95": [
+       6.5573770491803245,
+       22.887178160175953
+      ]
+     },
+     "weighted": {
+      "difference_points": -6.931890472839219,
+      "interval95": [
+       -24.24300316078342,
+       12.087445211863379
+      ]
+     }
+    }
+   },
+   "12000": {
+    "switched": 39,
+    "switched_right": 9,
+    "others": 537,
+    "others_right": 140,
+    "paired": {
+     "problems": 28,
+     "difference_points": 6.547619047619049,
+     "interval95": [
+      -4.166666666666666,
+      18.452380952380953
+     ]
+    },
+    "null": {
+     "mean_points": -0.11845238095238037,
+     "interval95": [
+      -13.095238095238097,
+      12.5
+     ]
+    },
+    "by_base_stratum": {
+     "0": {
+      "flagged": 28,
+      "flagged_right": 3,
+      "others": 382,
+      "others_right": 53,
+      "difference_points": -3.160059835452507,
+      "interval95": [
+       -13.766280820628646,
+       10.795274170274146
+      ]
+     },
+     "1-2": {
+      "flagged": 9,
+      "flagged_right": 4,
+      "others": 111,
+      "others_right": 56,
+      "difference_points": -6.006006006006004,
+      "interval95": [
+       -52.13675213675214,
+       28.98230088495575
+      ]
+     },
+     "3-4": {
+      "flagged": 2,
+      "flagged_right": 2,
+      "others": 44,
+      "others_right": 31,
+      "difference_points": 29.54545454545454,
+      "interval95": [
+       14.70588235294118,
+       50.0
+      ]
+     },
+     "weighted": {
+      "difference_points": -2.1396107783542346,
+      "interval95": [
+       -15.46511832152215,
+       10.621544397292244
+      ]
+     }
+    }
+   }
+  },
+  "fresh2026": {
+   "4000": {
+    "switched": 5,
+    "switched_right": 1,
+    "others": 533,
+    "others_right": 233,
+    "paired": {
+     "problems": 5,
+     "difference_points": 0.0,
+     "interval95": [
+      0.0,
+      0.0
+     ]
+    },
+    "null": {
+     "mean_points": 0.0,
+     "interval95": [
+      0.0,
+      0.0
+     ]
+    },
+    "by_base_stratum": {
+     "0": {
+      "flagged": 4,
+      "flagged_right": 0,
+      "others": 348,
+      "others_right": 70,
+      "difference_points": -20.114942528735632,
+      "interval95": [
+       -27.21927400349265,
+       -13.620772946859905
+      ]
+     },
+     "1-2": {
+      "flagged": 0,
+      "flagged_right": 0,
+      "others": 100,
+      "others_right": 82,
+      "difference_points": null,
+      "interval95": null
+     },
+     "3-4": {
+      "flagged": 1,
+      "flagged_right": 1,
+      "others": 85,
+      "others_right": 81,
+      "difference_points": 4.705882352941182,
+      "interval95": [
+       0.0,
+       11.178608515057126
+      ]
+     },
+     "weighted": {
+      "difference_points": -15.150777552400271,
+      "interval95": [
+       -20.822979206503266,
+       -9.733227249015322
+      ]
+     }
+    }
+   },
+   "8000": {
+    "switched": 13,
+    "switched_right": 1,
+    "others": 447,
+    "others_right": 158,
+    "paired": {
+     "problems": 10,
+     "difference_points": 1.666666666666667,
+     "interval95": [
+      -10.0,
+      15.0
+     ]
+    },
+    "null": {
+     "mean_points": -0.13333333333333308,
+     "interval95": [
+      -8.333333333333332,
+      15.0
+     ]
+    },
+    "by_base_stratum": {
+     "0": {
+      "flagged": 13,
+      "flagged_right": 1,
+      "others": 330,
+      "others_right": 62,
+      "difference_points": -11.095571095571094,
+      "interval95": [
+       -24.350857475857477,
+       5.461735702918739
+      ]
+     },
+     "1-2": {
+      "flagged": 0,
+      "flagged_right": 0,
+      "others": 78,
+      "others_right": 61,
+      "difference_points": null,
+      "interval95": null
+     },
+     "3-4": {
+      "flagged": 0,
+      "flagged_right": 0,
+      "others": 39,
+      "others_right": 35,
+      "difference_points": null,
+      "interval95": null
+     },
+     "weighted": {
+      "difference_points": -11.095571095571094,
+      "interval95": [
+       -24.350857475857477,
+       5.461735702918739
+      ]
+     }
+    }
+   },
+   "12000": {
+    "switched": 31,
+    "switched_right": 2,
+    "others": 315,
+    "others_right": 61,
+    "paired": {
+     "problems": 22,
+     "difference_points": -6.06060606060606,
+     "interval95": [
+      -16.666666666666664,
+      0.0
+     ]
+    },
+    "null": {
+     "mean_points": 0.26742424242424245,
+     "interval95": [
+      -6.06060606060606,
+      6.8181818181818175
+     ]
+    },
+    "by_base_stratum": {
+     "0": {
+      "flagged": 30,
+      "flagged_right": 2,
+      "others": 269,
+      "others_right": 34,
+      "difference_points": -5.972738537794299,
+      "interval95": [
+       -14.7753907959807,
+       3.3333086958330593
+      ]
+     },
+     "1-2": {
+      "flagged": 1,
+      "flagged_right": 0,
+      "others": 32,
+      "others_right": 17,
+      "difference_points": -53.125,
+      "interval95": [
+       -79.38640973630832,
+       -31.46616541353383
+      ]
+     },
+     "3-4": {
+      "flagged": 0,
+      "flagged_right": 0,
+      "others": 14,
+      "others_right": 10,
+      "difference_points": null,
+      "interval95": null
+     },
+     "weighted": {
+      "difference_points": -7.493779230123516,
+      "interval95": [
+       -15.79443020747369,
+       1.4502868157463777
+      ]
+     }
+    }
+   }
+  },
+  "pooled": {
+   "4000": {
+    "switched": 20,
+    "switched_right": 8,
+    "others": 1580,
+    "others_right": 818,
+    "paired": {
+     "problems": 19,
+     "difference_points": 1.754385964912281,
+     "interval95": [
+      0.0,
+      5.263157894736842
+     ]
+    },
+    "null": {
+     "mean_points": 0.007017543859649255,
+     "interval95": [
+      -5.263157894736842,
+      1.754385964912281
+     ]
+    },
+    "by_base_stratum": {
+     "0": {
+      "flagged": 11,
+      "flagged_right": 0,
+      "others": 823,
+      "others_right": 166,
+      "difference_points": -20.17010935601458,
+      "interval95": [
+       -24.77697149682931,
+       -15.887479602432878
+      ]
+     },
+     "1-2": {
+      "flagged": 2,
+      "flagged_right": 1,
+      "others": 320,
+      "others_right": 238,
+      "difference_points": -24.375000000000004,
+      "interval95": [
+       -78.47632327209098,
+       29.54370629370629
+      ]
+     },
+     "3-4": {
+      "flagged": 7,
+      "flagged_right": 7,
+      "others": 437,
+      "others_right": 414,
+      "difference_points": 5.263157894736848,
+      "interval95": [
+       2.7073479729729732,
+       8.352668213457083
+      ]
+     },
+     "weighted": {
+      "difference_points": -11.688954882650123,
+      "interval95": [
+       -18.423728770294428,
+       -4.935677994931339
+      ]
+     }
+    }
+   },
+   "8000": {
+    "switched": 29,
+    "switched_right": 6,
+    "others": 1200,
+    "others_right": 462,
+    "paired": {
+     "problems": 25,
+     "difference_points": 5.333333333333334,
+     "interval95": [
+      -1.9999999999999998,
+      13.333333333333336
+     ]
+    },
+    "null": {
+     "mean_points": -0.10133333333333314,
+     "interval95": [
+      -8.0,
+      10.666666666666668
+     ]
+    },
+    "by_base_stratum": {
+     "0": {
+      "flagged": 23,
+      "flagged_right": 2,
+      "others": 793,
+      "others_right": 153,
+      "difference_points": -10.598168759252152,
+      "interval95": [
+       -21.20815537929632,
+       2.2987308158142463
+      ]
+     },
+     "1-2": {
+      "flagged": 5,
+      "flagged_right": 3,
+      "others": 256,
+      "others_right": 178,
+      "difference_points": -9.531250000000002,
+      "interval95": [
+       -65.34363636363636,
+       32.07147988505747
+      ]
+     },
+     "3-4": {
+      "flagged": 1,
+      "flagged_right": 1,
+      "others": 151,
+      "others_right": 131,
+      "difference_points": 13.245033112582782,
+      "interval95": [
+       6.773934951901056,
+       20.166585107250633
+      ]
+     },
+     "weighted": {
+      "difference_points": -9.592037874145403,
+      "interval95": [
+       -21.043440532012138,
+       2.80045261975117
+      ]
+     }
+    }
+   },
+   "12000": {
+    "switched": 70,
+    "switched_right": 11,
+    "others": 852,
+    "others_right": 201,
+    "paired": {
+     "problems": 50,
+     "difference_points": 1.0000000000000004,
+     "interval95": [
+      -6.666666666666667,
+      9.0
+     ]
+    },
+    "null": {
+     "mean_points": -0.037666666666666244,
+     "interval95": [
+      -8.0,
+      8.000000000000002
+     ]
+    },
+    "by_base_stratum": {
+     "0": {
+      "flagged": 58,
+      "flagged_right": 5,
+      "others": 651,
+      "others_right": 87,
+      "difference_points": -4.743365644366756,
+      "interval95": [
+       -11.856351606062985,
+       3.149273169508323
+      ]
+     },
+     "1-2": {
+      "flagged": 10,
+      "flagged_right": 4,
+      "others": 143,
+      "others_right": 73,
+      "difference_points": -11.04895104895105,
+      "interval95": [
+       -51.3795937848014,
+       21.205693430656954
+      ]
+     },
+     "3-4": {
+      "flagged": 2,
+      "flagged_right": 2,
+      "others": 58,
+      "others_right": 41,
+      "difference_points": 29.31034482758621,
+      "interval95": [
+       16.07142857142857,
+       44.60256410256413
+      ]
+     },
+     "weighted": {
+      "difference_points": -4.671200402965857,
+      "interval95": [
+       -12.829976566361745,
+       3.4242098782403514
+      ]
+     }
+    }
+   }
+  }
+ },
+ "cap32": {
+  "answers_over_16384": 93,
+  "right": 23,
+  "with_switch_before_16384": 24,
+  "with_switch_right": 1,
+  "without_switch": 69,
+  "without_switch_right": 22,
+  "fisher_p_two_sided": 0.00568454432889297,
+  "difference_points": -27.71739130434782,
+  "switch_first_seen_after_16384": 45,
+  "switch_first_seen_after_16384_right": 9,
+  "by_base_stratum": {
+   "0": {
+    "flagged": 21,
+    "flagged_right": 0,
+    "others": 55,
+    "others_right": 13,
+    "difference_points": -23.636363636363637,
+    "interval95": [
+     -35.29718137254902,
+     -12.727272727272727
+    ]
+   },
+   "1-2": {
+    "flagged": 3,
+    "flagged_right": 1,
+    "others": 10,
+    "others_right": 6,
+    "difference_points": -26.666666666666668,
+    "interval95": [
+     -83.33333333333334,
+     50.0
+    ]
+   },
+   "3-4": {
+    "flagged": 0,
+    "flagged_right": 0,
+    "others": 4,
+    "others_right": 3,
+    "difference_points": null,
+    "interval95": null
+   },
+   "weighted": {
+    "difference_points": -24.015151515151516,
+    "interval95": [
+     -36.7659954039671,
+     -10.55733816964291
+    ]
+   }
+  }
+ },
+ "q3": {
+  "Think-SFT, hard328": {
+   "4000": {
+    "samples": 1312,
+    "not_right": 476,
+    "running": 1062,
+    "running_not_right": 470,
+    "signs": {
+     "switch": {
+      "all_pooled": {
+       "auroc": 0.5036186723493224,
+       "interval95": [
+        0.4973899063161725,
+        0.5104989260539536
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.5025984761357102,
+       "interval95": [
+        0.4955910577292138,
+        0.5100871857362989
+       ],
+       "pairs": 278240
+      },
+      "running_within_problem": {
+       "auroc": 0.4978448275862069,
+       "interval95": [
+        0.49257425742574257,
+        0.5
+       ],
+       "pairs": 232,
+       "problems": 72
+      },
+      "running_flagged": 15,
+      "running_flagged_right": 7
+     },
+     "rep50": {
+      "all_pooled": {
+       "auroc": 0.4950456857384102,
+       "interval95": [
+        0.4852935419328297,
+        0.5055425589212911
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.4938919637722829,
+       "interval95": [
+        0.4825474028173189,
+        0.5055696656144179
+       ],
+       "pairs": 278240
+      },
+      "running_within_problem": {
+       "auroc": 0.5086206896551724,
+       "interval95": [
+        0.49084164915966383,
+        0.5300010729613734
+       ],
+       "pairs": 232,
+       "problems": 72
+      }
+     },
+     "loopA": {
+      "all_pooled": {
+       "auroc": 0.49940191387559807,
+       "interval95": [
+        0.49805686864948523,
+        0.5
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.49915540540540543,
+       "interval95": [
+        0.49718534284399446,
+        0.5
+       ],
+       "pairs": 278240
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 232,
+       "problems": 72
+      },
+      "running_flagged": 1,
+      "running_flagged_right": 1
+     },
+     "zratio": {
+      "all_pooled": {
+       "auroc": 0.7281158276707812,
+       "interval95": [
+        0.6839749162513377,
+        0.7700398506196319
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.6665666331224842,
+       "interval95": [
+        0.6125275983424131,
+        0.7175302607520867
+       ],
+       "pairs": 278240
+      },
+      "running_within_problem": {
+       "auroc": 0.47844827586206895,
+       "interval95": [
+        0.39111111111111113,
+        0.5650272957691557
+       ],
+       "pairs": 232,
+       "problems": 72
+      }
+     },
+     "wait": {
+      "all_pooled": {
+       "auroc": 0.5748361545575168,
+       "interval95": [
+        0.528080693792221,
+        0.6202942748962279
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.5135153105232892,
+       "interval95": [
+        0.4628314015885187,
+        0.562570578368717
+       ],
+       "pairs": 278240
+      },
+      "running_within_problem": {
+       "auroc": 0.4849137931034483,
+       "interval95": [
+        0.397914402173913,
+        0.5702819088855421
+       ],
+       "pairs": 232,
+       "problems": 72
+      }
+     },
+     "restart": {
+      "all_pooled": {
+       "auroc": 0.5187354247919264,
+       "interval95": [
+        0.4871342903692458,
+        0.5486955848091516
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.5117021276595745,
+       "interval95": [
+        0.47899386285662643,
+        0.5418105836786052
+       ],
+       "pairs": 278240
+      },
+      "running_within_problem": {
+       "auroc": 0.4504310344827586,
+       "interval95": [
+        0.3896389083889084,
+        0.5104222074468084
+       ],
+       "pairs": 232,
+       "problems": 72
+      }
+     },
+     "any": {
+      "all_pooled": {
+       "auroc": 0.5030205862249206,
+       "interval95": [
+        0.4966635532979764,
+        0.5101264478145205
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.5017538815411156,
+       "interval95": [
+        0.49454749279640947,
+        0.5093688502756816
+       ],
+       "pairs": 278240
+      },
+      "running_within_problem": {
+       "auroc": 0.4978448275862069,
+       "interval95": [
+        0.49257425742574257,
+        0.5
+       ],
+       "pairs": 232,
+       "problems": 72
+      },
+      "running_flagged": 16,
+      "running_flagged_right": 8
+     },
+     "length": {
+      "all_pooled": {
+       "auroc": 0.6392259056732741,
+       "interval95": [
+        0.6134278685877034,
+        0.6650228285147647
+       ],
+       "pairs": 397936
+      }
+     }
+    }
+   },
+   "8000": {
+    "samples": 1312,
+    "not_right": 476,
+    "running": 769,
+    "running_not_right": 460,
+    "signs": {
+     "switch": {
+      "all_pooled": {
+       "auroc": 0.5037795022315146,
+       "interval95": [
+        0.4964527662525871,
+        0.5114128702579568
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.5038659068523991,
+       "interval95": [
+        0.49497681475155547,
+        0.512927411776383
+       ],
+       "pairs": 142140
+      },
+      "running_within_problem": {
+       "auroc": 0.4904306220095694,
+       "interval95": [
+        0.47512437810945274,
+        0.5
+       ],
+       "pairs": 209,
+       "problems": 67
+      },
+      "running_flagged": 16,
+      "running_flagged_right": 5
+     },
+     "rep50": {
+      "all_pooled": {
+       "auroc": 0.49181275380965783,
+       "interval95": [
+        0.4789442038173757,
+        0.5055037775112016
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.49030885042915434,
+       "interval95": [
+        0.4726989258026038,
+        0.5073768297894757
+       ],
+       "pairs": 142140
+      },
+      "running_within_problem": {
+       "auroc": 0.4880382775119617,
+       "interval95": [
+        0.46279007916872833,
+        0.5128205128205128
+       ],
+       "pairs": 209,
+       "problems": 67
+      }
+     },
+     "loopA": {
+      "all_pooled": {
+       "auroc": 0.5018093361746613,
+       "interval95": [
+        0.49749911115783807,
+        0.5068468102050541
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.4978753341775714,
+       "interval95": [
+        0.48965312770526204,
+        0.5051205304465284
+       ],
+       "pairs": 142140
+      },
+      "running_within_problem": {
+       "auroc": 0.5047846889952153,
+       "interval95": [
+        0.5,
+        0.5166666666666667
+       ],
+       "pairs": 209,
+       "problems": 67
+      },
+      "running_flagged": 8,
+      "running_flagged_right": 4
+     },
+     "zratio": {
+      "all_pooled": {
+       "auroc": 0.7645802340074785,
+       "interval95": [
+        0.723050300422325,
+        0.8026729156783006
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.6438511326860842,
+       "interval95": [
+        0.584915122126646,
+        0.7002313627412484
+       ],
+       "pairs": 142140
+      },
+      "running_within_problem": {
+       "auroc": 0.5119617224880383,
+       "interval95": [
+        0.41818181818181815,
+        0.6107799179965193
+       ],
+       "pairs": 209,
+       "problems": 67
+      }
+     },
+     "wait": {
+      "all_pooled": {
+       "auroc": 0.5581663885649953,
+       "interval95": [
+        0.5091789847530004,
+        0.6040302211933797
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.4348811031377515,
+       "interval95": [
+        0.3757480297095006,
+        0.4941956897247809
+       ],
+       "pairs": 142140
+      },
+      "running_within_problem": {
+       "auroc": 0.5287081339712919,
+       "interval95": [
+        0.4408764367816092,
+        0.6137599206349206
+       ],
+       "pairs": 209,
+       "problems": 67
+      }
+     },
+     "restart": {
+      "all_pooled": {
+       "auroc": 0.5648785231796067,
+       "interval95": [
+        0.529365444210809,
+        0.599653732983381
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.5149535669058675,
+       "interval95": [
+        0.46898813132876516,
+        0.5601048639830287
+       ],
+       "pairs": 142140
+      },
+      "running_within_problem": {
+       "auroc": 0.4784688995215311,
+       "interval95": [
+        0.4,
+        0.5539232946699807
+       ],
+       "pairs": 209,
+       "problems": 67
+      }
+     },
+     "any": {
+      "all_pooled": {
+       "auroc": 0.5055888384061759,
+       "interval95": [
+        0.4972593378388347,
+        0.5146239407505604
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.5017412410299704,
+       "interval95": [
+        0.489696162351553,
+        0.5130779572266226
+       ],
+       "pairs": 142140
+      },
+      "running_within_problem": {
+       "auroc": 0.49521531100478466,
+       "interval95": [
+        0.4784465284249767,
+        0.5111747536250079
+       ],
+       "pairs": 209,
+       "problems": 67
+      },
+      "running_flagged": 24,
+      "running_flagged_right": 9
+     },
+     "length": {
+      "all_pooled": {
+       "auroc": 0.7998245949097342,
+       "interval95": [
+        0.7702646814607469,
+        0.8287714503501055
+       ],
+       "pairs": 397936
+      }
+     }
+    }
+   },
+   "12000": {
+    "samples": 1312,
+    "not_right": 476,
+    "running": 576,
+    "running_not_right": 427,
+    "signs": {
+     "switch": {
+      "all_pooled": {
+       "auroc": 0.5206013027220457,
+       "interval95": [
+        0.5069914486936075,
+        0.5346589459241096
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.5049274633387297,
+       "interval95": [
+        0.4788058355954283,
+        0.5287235731176302
+       ],
+       "pairs": 63623
+      },
+      "running_within_problem": {
+       "auroc": 0.4857142857142857,
+       "interval95": [
+        0.45348837209302323,
+        0.5149253731343284
+       ],
+       "pairs": 140,
+       "problems": 52
+      },
+      "running_flagged": 39,
+      "running_flagged_right": 9
+     },
+     "rep50": {
+      "all_pooled": {
+       "auroc": 0.49770440472839855,
+       "interval95": [
+        0.4828774689508446,
+        0.5134777182683031
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.4821448218411581,
+       "interval95": [
+        0.4538924372624768,
+        0.5078148424849497
+       ],
+       "pairs": 63623
+      },
+      "running_within_problem": {
+       "auroc": 0.4928571428571429,
+       "interval95": [
+        0.4642857142857143,
+        0.5210103017110459
+       ],
+       "pairs": 140,
+       "problems": 52
+      }
+     },
+     "loopA": {
+      "all_pooled": {
+       "auroc": 0.5028597563427285,
+       "interval95": [
+        0.49808501787811493,
+        0.5083332703493892
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.49578768684280844,
+       "interval95": [
+        0.481657411372017,
+        0.5071403015979801
+       ],
+       "pairs": 63623
+      },
+      "running_within_problem": {
+       "auroc": 0.5035714285714286,
+       "interval95": [
+        0.5,
+        0.5121976209516194
+       ],
+       "pairs": 140,
+       "problems": 52
+      },
+      "running_flagged": 8,
+      "running_flagged_right": 3
+     },
+     "zratio": {
+      "all_pooled": {
+       "auroc": 0.7838961541554421,
+       "interval95": [
+        0.7448781562735801,
+        0.8199519402249263
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.6188170944469767,
+       "interval95": [
+        0.5535785879984784,
+        0.6850785297894062
+       ],
+       "pairs": 63623
+      },
+      "running_within_problem": {
+       "auroc": 0.5428571428571428,
+       "interval95": [
+        0.42483212463067416,
+        0.6616595445448151
+       ],
+       "pairs": 140,
+       "problems": 52
+      }
+     },
+     "wait": {
+      "all_pooled": {
+       "auroc": 0.5586388263439347,
+       "interval95": [
+        0.5106481510195132,
+        0.6043991328495858
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.4058202222466718,
+       "interval95": [
+        0.33629389024733325,
+        0.48079050116037486
+       ],
+       "pairs": 63623
+      },
+      "running_within_problem": {
+       "auroc": 0.46785714285714286,
+       "interval95": [
+        0.35506661991584854,
+        0.5805444480167181
+       ],
+       "pairs": 140,
+       "problems": 52
+      }
+     },
+     "restart": {
+      "all_pooled": {
+       "auroc": 0.5838539363113666,
+       "interval95": [
+        0.5483848096248873,
+        0.6192357515038414
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.5148531191550225,
+       "interval95": [
+        0.4579884730982536,
+        0.5716637842275393
+       ],
+       "pairs": 63623
+      },
+      "running_within_problem": {
+       "auroc": 0.5321428571428571,
+       "interval95": [
+        0.4439887096774194,
+        0.6153846153846154
+       ],
+       "pairs": 140,
+       "problems": 52
+      }
+     },
+     "any": {
+      "all_pooled": {
+       "auroc": 0.5234610590647742,
+       "interval95": [
+        0.5091607708544851,
+        0.5383635207453211
+       ],
+       "pairs": 397936
+      },
+      "running_pooled": {
+       "auroc": 0.5007151501815381,
+       "interval95": [
+        0.4720823154676757,
+        0.5273210197040671
+       ],
+       "pairs": 63623
+      },
+      "running_within_problem": {
+       "auroc": 0.48928571428571427,
+       "interval95": [
+        0.4562488594890511,
+        0.5189405926352129
+       ],
+       "pairs": 140,
+       "problems": 52
+      },
+      "running_flagged": 47,
+      "running_flagged_right": 12
+     },
+     "length": {
+      "all_pooled": {
+       "auroc": 0.8795735997748382,
+       "interval95": [
+        0.8539542846679687,
+        0.9029235552307102
+       ],
+       "pairs": 397936
+      }
+     }
+    }
+   }
+  },
+  "Think-SFT, fresh2026": {
+   "4000": {
+    "samples": 544,
+    "not_right": 304,
+    "running": 538,
+    "running_not_right": 304,
+    "signs": {
+     "switch": {
+      "all_pooled": {
+       "auroc": 0.5044956140350877,
+       "interval95": [
+        0.4975233646920048,
+        0.5120475238729736
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.5044421952316689,
+       "interval95": [
+        0.49741748310622663,
+        0.5120182841068917
+       ],
+       "pairs": 71136
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 116,
+       "problems": 34
+      },
+      "running_flagged": 5,
+      "running_flagged_right": 1
+     },
+     "rep50": {
+      "all_pooled": {
+       "auroc": 0.4962582236842105,
+       "interval95": [
+        0.4835531456961929,
+        0.5067734222382818
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.49599358974358976,
+       "interval95": [
+        0.483116669519255,
+        0.5066898804050715
+       ],
+       "pairs": 71136
+      },
+      "running_within_problem": {
+       "auroc": 0.4827586206896552,
+       "interval95": [
+        0.46,
+        0.5
+       ],
+       "pairs": 116,
+       "problems": 34
+      }
+     },
+     "loopA": {
+      "all_pooled": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 71136
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 116,
+       "problems": 34
+      },
+      "running_flagged": 0,
+      "running_flagged_right": 0
+     },
+     "zratio": {
+      "all_pooled": {
+       "auroc": 0.6183662280701754,
+       "interval95": [
+        0.5398929407382342,
+        0.6957322433176006
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.6127839631129105,
+       "interval95": [
+        0.5342861324136363,
+        0.6910532961212986
+       ],
+       "pairs": 71136
+      },
+      "running_within_problem": {
+       "auroc": 0.5689655172413793,
+       "interval95": [
+        0.4480506493506493,
+        0.6818458980044342
+       ],
+       "pairs": 116,
+       "problems": 34
+      }
+     },
+     "wait": {
+      "all_pooled": {
+       "auroc": 0.5015282346491228,
+       "interval95": [
+        0.4359817842489188,
+        0.5644634499265481
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.5028747750787225,
+       "interval95": [
+        0.4374730300718039,
+        0.5655114519192518
+       ],
+       "pairs": 71136
+      },
+      "running_within_problem": {
+       "auroc": 0.3879310344827586,
+       "interval95": [
+        0.29564723320158104,
+        0.48454389253358315
+       ],
+       "pairs": 116,
+       "problems": 34
+      }
+     },
+     "restart": {
+      "all_pooled": {
+       "auroc": 0.5264802631578948,
+       "interval95": [
+        0.4840166621214574,
+        0.5687104806300776
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.524938146648673,
+       "interval95": [
+        0.4821107693704451,
+        0.5682554268243654
+       ],
+       "pairs": 71136
+      },
+      "running_within_problem": {
+       "auroc": 0.4956896551724138,
+       "interval95": [
+        0.4,
+        0.5891133309759546
+       ],
+       "pairs": 116,
+       "problems": 34
+      }
+     },
+     "any": {
+      "all_pooled": {
+       "auroc": 0.5044956140350877,
+       "interval95": [
+        0.4975233646920048,
+        0.5120475238729736
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.5044421952316689,
+       "interval95": [
+        0.49741748310622663,
+        0.5120182841068917
+       ],
+       "pairs": 71136
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 116,
+       "problems": 34
+      },
+      "running_flagged": 5,
+      "running_flagged_right": 1
+     },
+     "length": {
+      "all_pooled": {
+       "auroc": 0.5125,
+       "interval95": [
+        0.5040160642570282,
+        0.5228215767634855
+       ],
+       "pairs": 72960
+      }
+     }
+    }
+   },
+   "8000": {
+    "samples": 544,
+    "not_right": 304,
+    "running": 460,
+    "running_not_right": 301,
+    "signs": {
+     "switch": {
+      "all_pooled": {
+       "auroc": 0.5134868421052632,
+       "interval95": [
+        0.5006857164477476,
+        0.5280944010450257
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.5167889007292255,
+       "interval95": [
+        0.5047939023404296,
+        0.5308447157537612
+       ],
+       "pairs": 47859
+      },
+      "running_within_problem": {
+       "auroc": 0.49528301886792453,
+       "interval95": [
+        0.47086664762992575,
+        0.5125039556962024
+       ],
+       "pairs": 106,
+       "problems": 33
+      },
+      "running_flagged": 13,
+      "running_flagged_right": 1
+     },
+     "rep50": {
+      "all_pooled": {
+       "auroc": 0.49516173245614037,
+       "interval95": [
+        0.4794662589669778,
+        0.5098155233836187
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.49311519254476693,
+       "interval95": [
+        0.47313911948265974,
+        0.5100672203115924
+       ],
+       "pairs": 47859
+      },
+      "running_within_problem": {
+       "auroc": 0.4811320754716981,
+       "interval95": [
+        0.44210173872180447,
+        0.522943780669938
+       ],
+       "pairs": 106,
+       "problems": 33
+      }
+     },
+     "loopA": {
+      "all_pooled": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 47859
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 106,
+       "problems": 33
+      },
+      "running_flagged": 0,
+      "running_flagged_right": 0
+     },
+     "zratio": {
+      "all_pooled": {
+       "auroc": 0.6760964912280701,
+       "interval95": [
+        0.5993490151076335,
+        0.7499733606557377
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.6208654589523391,
+       "interval95": [
+        0.5358798698699081,
+        0.7028464275736201
+       ],
+       "pairs": 47859
+      },
+      "running_within_problem": {
+       "auroc": 0.5660377358490566,
+       "interval95": [
+        0.4519212962962963,
+        0.6814259855189057
+       ],
+       "pairs": 106,
+       "problems": 33
+      }
+     },
+     "wait": {
+      "all_pooled": {
+       "auroc": 0.4817023026315789,
+       "interval95": [
+        0.41286932921155584,
+        0.5505642867069708
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.4536868718527341,
+       "interval95": [
+        0.38127487770173096,
+        0.5252434918012356
+       ],
+       "pairs": 47859
+      },
+      "running_within_problem": {
+       "auroc": 0.44339622641509435,
+       "interval95": [
+        0.3333333333333333,
+        0.5521755353666451
+       ],
+       "pairs": 106,
+       "problems": 33
+      }
+     },
+     "restart": {
+      "all_pooled": {
+       "auroc": 0.5566063596491229,
+       "interval95": [
+        0.5013907269154673,
+        0.6123735532435378
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.551630832236361,
+       "interval95": [
+        0.4913793034055743,
+        0.6128415596019904
+       ],
+       "pairs": 47859
+      },
+      "running_within_problem": {
+       "auroc": 0.47641509433962265,
+       "interval95": [
+        0.3761893840104849,
+        0.5805159647320663
+       ],
+       "pairs": 106,
+       "problems": 33
+      }
+     },
+     "any": {
+      "all_pooled": {
+       "auroc": 0.5134868421052632,
+       "interval95": [
+        0.5006857164477476,
+        0.5280944010450257
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.5167889007292255,
+       "interval95": [
+        0.5047939023404296,
+        0.5308447157537612
+       ],
+       "pairs": 47859
+      },
+      "running_within_problem": {
+       "auroc": 0.49528301886792453,
+       "interval95": [
+        0.47086664762992575,
+        0.5125039556962024
+       ],
+       "pairs": 106,
+       "problems": 33
+      },
+      "running_flagged": 13,
+      "running_flagged_right": 1
+     },
+     "length": {
+      "all_pooled": {
+       "auroc": 0.6643023574561403,
+       "interval95": [
+        0.6172875740782587,
+        0.7125022329626962
+       ],
+       "pairs": 72960
+      }
+     }
+    }
+   },
+   "12000": {
+    "samples": 544,
+    "not_right": 304,
+    "running": 346,
+    "running_not_right": 283,
+    "signs": {
+     "switch": {
+      "all_pooled": {
+       "auroc": 0.5393640350877194,
+       "interval95": [
+        0.5208930087422554,
+        0.55909527310412
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.5353637332435919,
+       "interval95": [
+        0.5081931869115713,
+        0.559055136589368
+       ],
+       "pairs": 17829
+      },
+      "running_within_problem": {
+       "auroc": 0.5205479452054794,
+       "interval95": [
+        0.5,
+        0.5555555555555556
+       ],
+       "pairs": 73,
+       "problems": 25
+      },
+      "running_flagged": 31,
+      "running_flagged_right": 2
+     },
+     "rep50": {
+      "all_pooled": {
+       "auroc": 0.49830729166666665,
+       "interval95": [
+        0.47658153753529514,
+        0.5198256854281282
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.4705816366593752,
+       "interval95": [
+        0.42455686544227567,
+        0.5111223173254177
+       ],
+       "pairs": 17829
+      },
+      "running_within_problem": {
+       "auroc": 0.4452054794520548,
+       "interval95": [
+        0.39473684210526316,
+        0.4866666666666667
+       ],
+       "pairs": 73,
+       "problems": 25
+      }
+     },
+     "loopA": {
+      "all_pooled": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 17829
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 73,
+       "problems": 25
+      },
+      "running_flagged": 0,
+      "running_flagged_right": 0
+     },
+     "zratio": {
+      "all_pooled": {
+       "auroc": 0.6966968201754385,
+       "interval95": [
+        0.6219880906351309,
+        0.7677348326124178
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.6416512423579561,
+       "interval95": [
+        0.5452377487938859,
+        0.7320421363543838
+       ],
+       "pairs": 17829
+      },
+      "running_within_problem": {
+       "auroc": 0.6164383561643836,
+       "interval95": [
+        0.4917963323145318,
+        0.737714676034348
+       ],
+       "pairs": 73,
+       "problems": 25
+      }
+     },
+     "wait": {
+      "all_pooled": {
+       "auroc": 0.4722450657894737,
+       "interval95": [
+        0.3998158415067213,
+        0.5444661288162591
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.42775814683941893,
+       "interval95": [
+        0.33763045048687307,
+        0.517201532515854
+       ],
+       "pairs": 17829
+      },
+      "running_within_problem": {
+       "auroc": 0.4520547945205479,
+       "interval95": [
+        0.3333333333333333,
+        0.5714285714285714
+       ],
+       "pairs": 73,
+       "problems": 25
+      }
+     },
+     "restart": {
+      "all_pooled": {
+       "auroc": 0.5624862938596491,
+       "interval95": [
+        0.5065085892428969,
+        0.6189771915613699
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.5810196870267542,
+       "interval95": [
+        0.5007830447013044,
+        0.6597844067408383
+       ],
+       "pairs": 17829
+      },
+      "running_within_problem": {
+       "auroc": 0.541095890410959,
+       "interval95": [
+        0.3969051710031091,
+        0.6833333333333333
+       ],
+       "pairs": 73,
+       "problems": 25
+      }
+     },
+     "any": {
+      "all_pooled": {
+       "auroc": 0.5393640350877194,
+       "interval95": [
+        0.5208930087422554,
+        0.55909527310412
+       ],
+       "pairs": 72960
+      },
+      "running_pooled": {
+       "auroc": 0.5353637332435919,
+       "interval95": [
+        0.5081931869115713,
+        0.559055136589368
+       ],
+       "pairs": 17829
+      },
+      "running_within_problem": {
+       "auroc": 0.5205479452054794,
+       "interval95": [
+        0.5,
+        0.5555555555555556
+       ],
+       "pairs": 73,
+       "problems": 25
+      },
+      "running_flagged": 31,
+      "running_flagged_right": 2
+     },
+     "length": {
+      "all_pooled": {
+       "auroc": 0.8464980811403509,
+       "interval95": [
+        0.8040122950997726,
+        0.88557270755935
+       ],
+       "pairs": 72960
+      }
+     }
+    }
+   }
+  },
+  "Think-SFT, pooled": {
+   "4000": {
+    "samples": 1856,
+    "not_right": 780,
+    "running": 1600,
+    "running_not_right": 774,
+    "signs": {
+     "switch": {
+      "all_pooled": {
+       "auroc": 0.5035101515584787,
+       "interval95": [
+        0.4987642580086728,
+        0.508622945938612
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.5029093229723895,
+       "interval95": [
+        0.4977462983147631,
+        0.5083739364345375
+       ],
+       "pairs": 639324
+      },
+      "running_within_problem": {
+       "auroc": 0.4985632183908046,
+       "interval95": [
+        0.495,
+        0.5
+       ],
+       "pairs": 348,
+       "problems": 106
+      },
+      "running_flagged": 20,
+      "running_flagged_right": 8
+     },
+     "rep50": {
+      "all_pooled": {
+       "auroc": 0.4939644695453246,
+       "interval95": [
+        0.486318432465343,
+        0.5017557576197981
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.4935799375590467,
+       "interval95": [
+        0.485032653137233,
+        0.5019568228928146
+       ],
+       "pairs": 639324
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.4865201643618891,
+        0.515267759180148
+       ],
+       "pairs": 348,
+       "problems": 106
+      }
+     },
+     "loopA": {
+      "all_pooled": {
+       "auroc": 0.4995353159851301,
+       "interval95": [
+        0.49849548645937813,
+        0.5
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.4993946731234867,
+       "interval95": [
+        0.4980288444913203,
+        0.5
+       ],
+       "pairs": 639324
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 348,
+       "problems": 106
+      },
+      "running_flagged": 1,
+      "running_flagged_right": 1
+     },
+     "zratio": {
+      "all_pooled": {
+       "auroc": 0.7014911590887427,
+       "interval95": [
+        0.6633767333785396,
+        0.7384760098525562
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.6485311047293704,
+       "interval95": [
+        0.6056049630284696,
+        0.6910275068797774
+       ],
+       "pairs": 639324
+      },
+      "running_within_problem": {
+       "auroc": 0.5086206896551724,
+       "interval95": [
+        0.4402421184619059,
+        0.5791047137729076
+       ],
+       "pairs": 348,
+       "problems": 106
+      }
+     },
+     "wait": {
+      "all_pooled": {
+       "auroc": 0.5520368649318463,
+       "interval95": [
+        0.5132949690927217,
+        0.590124386047903
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.5053728625861066,
+       "interval95": [
+        0.4647569577340116,
+        0.545226482782643
+       ],
+       "pairs": 639324
+      },
+      "running_within_problem": {
+       "auroc": 0.4525862068965517,
+       "interval95": [
+        0.390625,
+        0.5198185882374878
+       ],
+       "pairs": 348,
+       "problems": 106
+      }
+     },
+     "restart": {
+      "all_pooled": {
+       "auroc": 0.5205187780001906,
+       "interval95": [
+        0.49568028353527266,
+        0.5445237071931206
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.5152082512153462,
+       "interval95": [
+        0.48975944557529816,
+        0.5411818367311572
+       ],
+       "pairs": 639324
+      },
+      "running_within_problem": {
+       "auroc": 0.46551724137931033,
+       "interval95": [
+        0.4140586196192053,
+        0.5173802219685596
+       ],
+       "pairs": 348,
+       "problems": 106
+      }
+     },
+     "any": {
+      "all_pooled": {
+       "auroc": 0.5030454675436088,
+       "interval95": [
+        0.49817340471576427,
+        0.5082325712610528
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.5023039960958763,
+       "interval95": [
+        0.49701024787059495,
+        0.5078553445390908
+       ],
+       "pairs": 639324
+      },
+      "running_within_problem": {
+       "auroc": 0.4985632183908046,
+       "interval95": [
+        0.495,
+        0.5
+       ],
+       "pairs": 348,
+       "problems": 106
+      },
+      "running_flagged": 21,
+      "running_flagged_right": 9
+     },
+     "length": {
+      "all_pooled": {
+       "auroc": 0.6121234867982079,
+       "interval95": [
+        0.5914673311204147,
+        0.6331977568708064
+       ],
+       "pairs": 839280
+      }
+     }
+    }
+   },
+   "8000": {
+    "samples": 1856,
+    "not_right": 780,
+    "running": 1229,
+    "running_not_right": 761,
+    "signs": {
+     "switch": {
+      "all_pooled": {
+       "auroc": 0.5073086455056716,
+       "interval95": [
+        0.5004973480669502,
+        0.5148273076051559
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.5087014387277199,
+       "interval95": [
+        0.5012636403568216,
+        0.5167487210564338
+       ],
+       "pairs": 356148
+      },
+      "running_within_problem": {
+       "auroc": 0.49206349206349204,
+       "interval95": [
+        0.47992700729927007,
+        0.5017183611802346
+       ],
+       "pairs": 315,
+       "problems": 100
+      },
+      "running_flagged": 29,
+      "running_flagged_right": 6
+     },
+     "rep50": {
+      "all_pooled": {
+       "auroc": 0.49053355256886855,
+       "interval95": [
+        0.48025277389542786,
+        0.5009432889312402
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.49069207183530444,
+       "interval95": [
+        0.47732229764801937,
+        0.503388899127082
+       ],
+       "pairs": 356148
+      },
+      "running_within_problem": {
+       "auroc": 0.4857142857142857,
+       "interval95": [
+        0.46309784444675434,
+        0.5076470296749348
+       ],
+       "pairs": 315,
+       "problems": 100
+      }
+     },
+     "loopA": {
+      "all_pooled": {
+       "auroc": 0.500705366504623,
+       "interval95": [
+        0.4976784330303671,
+        0.5039196279559177
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.4983546166200568,
+       "interval95": [
+        0.49301957644961925,
+        0.502902628668462
+       ],
+       "pairs": 356148
+      },
+      "running_within_problem": {
+       "auroc": 0.5031746031746032,
+       "interval95": [
+        0.5,
+        0.5106007067137809
+       ],
+       "pairs": 315,
+       "problems": 100
+      },
+      "running_flagged": 8,
+      "running_flagged_right": 4
+     },
+     "zratio": {
+      "all_pooled": {
+       "auroc": 0.7448265179677819,
+       "interval95": [
+        0.7086047494306091,
+        0.7792965399760753
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.6356374316295472,
+       "interval95": [
+        0.5878431960390187,
+        0.6816854299629399
+       ],
+       "pairs": 356148
+      },
+      "running_within_problem": {
+       "auroc": 0.5301587301587302,
+       "interval95": [
+        0.45801269694399466,
+        0.6063529310641222
+       ],
+       "pairs": 315,
+       "problems": 100
+      }
+     },
+     "wait": {
+      "all_pooled": {
+       "auroc": 0.5373415308359546,
+       "interval95": [
+        0.49668618600515796,
+        0.5769323062551657
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.44012882284892796,
+       "interval95": [
+        0.394060560304113,
+        0.486762985699465
+       ],
+       "pairs": 356148
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.430554214929215,
+        0.5703598301929865
+       ],
+       "pairs": 315,
+       "problems": 100
+      }
+     },
+     "restart": {
+      "all_pooled": {
+       "auroc": 0.5642979696883043,
+       "interval95": [
+        0.5336483975859543,
+        0.5929615658886975
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.527334141985916,
+       "interval95": [
+        0.4894032838130717,
+        0.5632161065770337
+       ],
+       "pairs": 356148
+      },
+      "running_within_problem": {
+       "auroc": 0.4777777777777778,
+       "interval95": [
+        0.41465391566265064,
+        0.5389418659908125
+       ],
+       "pairs": 315,
+       "problems": 100
+      }
+     },
+     "any": {
+      "all_pooled": {
+       "auroc": 0.5080140120102945,
+       "interval95": [
+        0.5006378575033061,
+        0.5162272876492281
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.5070560553477768,
+       "interval95": [
+        0.4979205082140497,
+        0.5164678121476249
+       ],
+       "pairs": 356148
+      },
+      "running_within_problem": {
+       "auroc": 0.49523809523809526,
+       "interval95": [
+        0.4819072988176964,
+        0.507633879590074
+       ],
+       "pairs": 315,
+       "problems": 100
+      },
+      "running_flagged": 37,
+      "running_flagged_right": 10
+     },
+     "length": {
+      "all_pooled": {
+       "auroc": 0.7714922314364694,
+       "interval95": [
+        0.7463192083198966,
+        0.7967882536733457
+       ],
+       "pairs": 839280
+      }
+     }
+    }
+   },
+   "12000": {
+    "samples": 1856,
+    "not_right": 780,
+    "running": 922,
+    "running_not_right": 710,
+    "signs": {
+     "switch": {
+      "all_pooled": {
+       "auroc": 0.5273091221046612,
+       "interval95": [
+        0.516457021426366,
+        0.5392771673572403
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.5156058995482328,
+       "interval95": [
+        0.4963397908492737,
+        0.5339945139892162
+       ],
+       "pairs": 150520
+      },
+      "running_within_problem": {
+       "auroc": 0.49765258215962443,
+       "interval95": [
+        0.4740247670545068,
+        0.5207256870657339
+       ],
+       "pairs": 213,
+       "problems": 77
+      },
+      "running_flagged": 70,
+      "running_flagged_right": 11
+     },
+     "rep50": {
+      "all_pooled": {
+       "auroc": 0.4965375083404823,
+       "interval95": [
+        0.4843255469026709,
+        0.5090691181894835
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.4779829922933829,
+       "interval95": [
+        0.45401902508066244,
+        0.49978593109986696
+       ],
+       "pairs": 150520
+      },
+      "running_within_problem": {
+       "auroc": 0.4765258215962441,
+       "interval95": [
+        0.45121951219512196,
+        0.5
+       ],
+       "pairs": 213,
+       "problems": 77
+      }
+     },
+     "loopA": {
+      "all_pooled": {
+       "auroc": 0.5013463921456487,
+       "interval95": [
+        0.4980711685281598,
+        0.5048648004899995
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.4964456550624502,
+       "interval95": [
+        0.4867530562045145,
+        0.5037994421232392
+       ],
+       "pairs": 150520
+      },
+      "running_within_problem": {
+       "auroc": 0.5023474178403756,
+       "interval95": [
+        0.5,
+        0.5077319587628866
+       ],
+       "pairs": 213,
+       "problems": 77
+      },
+      "running_flagged": 8,
+      "running_flagged_right": 3
+     },
+     "zratio": {
+      "all_pooled": {
+       "auroc": 0.7637302211419312,
+       "interval95": [
+        0.7286148833627439,
+        0.797030412557123
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.622634865798565,
+       "interval95": [
+        0.5671766382658234,
+        0.6768093874484762
+       ],
+       "pairs": 150520
+      },
+      "running_within_problem": {
+       "auroc": 0.568075117370892,
+       "interval95": [
+        0.4796380090497738,
+        0.6567236282356333
+       ],
+       "pairs": 213,
+       "problems": 77
+      }
+     },
+     "wait": {
+      "all_pooled": {
+       "auroc": 0.5347935134877514,
+       "interval95": [
+        0.49442483014230026,
+        0.5748123596781016
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.40949375498272655,
+       "interval95": [
+        0.3512611209797058,
+        0.4682833689729565
+       ],
+       "pairs": 150520
+      },
+      "running_within_problem": {
+       "auroc": 0.4624413145539906,
+       "interval95": [
+        0.37837204391891893,
+        0.5457032406037288
+       ],
+       "pairs": 213,
+       "problems": 77
+      }
+     },
+     "restart": {
+      "all_pooled": {
+       "auroc": 0.5805225907921076,
+       "interval95": [
+        0.5494721983658656,
+        0.6105161314787098
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.5356630348126494,
+       "interval95": [
+        0.4881041162360673,
+        0.5835138471654304
+       ],
+       "pairs": 150520
+      },
+      "running_within_problem": {
+       "auroc": 0.5352112676056338,
+       "interval95": [
+        0.4599016629357211,
+        0.6105527638190955
+       ],
+       "pairs": 213,
+       "problems": 77
+      }
+     },
+     "any": {
+      "all_pooled": {
+       "auroc": 0.5286555142503098,
+       "interval95": [
+        0.5171840628734343,
+        0.5411124240993462
+       ],
+       "pairs": 839280
+      },
+      "running_pooled": {
+       "auroc": 0.512051554610683,
+       "interval95": [
+        0.4906694689351665,
+        0.5323972953734272
+       ],
+       "pairs": 150520
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.4759036144578313,
+        0.5239237631069938
+       ],
+       "pairs": 213,
+       "problems": 77
+      },
+      "running_flagged": 78,
+      "running_flagged_right": 14
+     },
+     "length": {
+      "all_pooled": {
+       "auroc": 0.8743160804499095,
+       "interval95": [
+        0.8535283268784379,
+        0.8937141646788878
+       ],
+       "pairs": 839280
+      }
+     }
+    }
+   }
+  },
+  "RL plain, pooled (control)": {
+   "4000": {
+    "samples": 1856,
+    "not_right": 854,
+    "running": 1600,
+    "running_not_right": 852,
+    "signs": {
+     "switch": {
+      "all_pooled": {
+       "auroc": 0.5006719581913457,
+       "interval95": [
+        0.49897327957522514,
+        0.5026282720603525
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.5005052597223268,
+       "interval95": [
+        0.4985465080239189,
+        0.5025180978535628
+       ],
+       "pairs": 637296
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 382,
+       "problems": 121
+      },
+      "running_flagged": 3,
+      "running_flagged_right": 1
+     },
+     "rep50": {
+      "all_pooled": {
+       "auroc": 0.5177998803330108,
+       "interval95": [
+        0.5043239299406781,
+        0.5314945021586149
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.5136537809746178,
+       "interval95": [
+        0.49902866769975157,
+        0.5281110813392316
+       ],
+       "pairs": 637296
+      },
+      "running_within_problem": {
+       "auroc": 0.506544502617801,
+       "interval95": [
+        0.48578122314171357,
+        0.5274390243902439
+       ],
+       "pairs": 382,
+       "problems": 121
+      }
+     },
+     "loopA": {
+      "all_pooled": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 637296
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 382,
+       "problems": 121
+      },
+      "running_flagged": 0,
+      "running_flagged_right": 0
+     },
+     "zratio": {
+      "all_pooled": {
+       "auroc": 0.7535549509879539,
+       "interval95": [
+        0.7177910188965685,
+        0.788139264641651
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.6923078130099671,
+       "interval95": [
+        0.6521423796679657,
+        0.7315136963721255
+       ],
+       "pairs": 637296
+      },
+      "running_within_problem": {
+       "auroc": 0.5209424083769634,
+       "interval95": [
+        0.4543145551417476,
+        0.5862092583845063
+       ],
+       "pairs": 382,
+       "problems": 121
+      }
+     },
+     "wait": {
+      "all_pooled": {
+       "auroc": 0.5690778863818031,
+       "interval95": [
+        0.5315275070108499,
+        0.6067858533073431
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.519923238181316,
+       "interval95": [
+        0.47960684082895993,
+        0.5598976543203847
+       ],
+       "pairs": 637296
+      },
+      "running_within_problem": {
+       "auroc": 0.49345549738219896,
+       "interval95": [
+        0.4319954545454545,
+        0.5565564825144298
+       ],
+       "pairs": 382,
+       "problems": 121
+      }
+     },
+     "restart": {
+      "all_pooled": {
+       "auroc": 0.6173180570942425,
+       "interval95": [
+        0.5843729651505264,
+        0.6477373777668903
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.6012826065125154,
+       "interval95": [
+        0.5668592365884888,
+        0.6333394145967062
+       ],
+       "pairs": 637296
+      },
+      "running_within_problem": {
+       "auroc": 0.5209424083769634,
+       "interval95": [
+        0.4629107142857143,
+        0.5775193798449613
+       ],
+       "pairs": 382,
+       "problems": 121
+      }
+     },
+     "any": {
+      "all_pooled": {
+       "auroc": 0.5006719581913457,
+       "interval95": [
+        0.49897327957522514,
+        0.5026282720603525
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.5005052597223268,
+       "interval95": [
+        0.4985465080239189,
+        0.5025180978535628
+       ],
+       "pairs": 637296
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 382,
+       "problems": 121
+      },
+      "running_flagged": 3,
+      "running_flagged_right": 1
+     },
+     "length": {
+      "all_pooled": {
+       "auroc": 0.6254867314551226,
+       "interval95": [
+        0.6027451274022154,
+        0.649112977238796
+       ],
+       "pairs": 855708
+      }
+     }
+    }
+   },
+   "8000": {
+    "samples": 1856,
+    "not_right": 854,
+    "running": 1202,
+    "running_not_right": 821,
+    "signs": {
+     "switch": {
+      "all_pooled": {
+       "auroc": 0.5024283984723761,
+       "interval95": [
+        0.5000429158963556,
+        0.505326635066773
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.5011237176351738,
+       "interval95": [
+        0.49737521817937697,
+        0.5044080604534005
+       ],
+       "pairs": 312801
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 321,
+       "problems": 107
+      },
+      "running_flagged": 5,
+      "running_flagged_right": 1
+     },
+     "rep50": {
+      "all_pooled": {
+       "auroc": 0.520972107307633,
+       "interval95": [
+        0.5034706440402474,
+        0.5383292507884163
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.5001134906857715,
+       "interval95": [
+        0.474573581869733,
+        0.5241459965523552
+       ],
+       "pairs": 312801
+      },
+      "running_within_problem": {
+       "auroc": 0.4984423676012461,
+       "interval95": [
+        0.4659081213155445,
+        0.5289866760168302
+       ],
+       "pairs": 321,
+       "problems": 107
+      }
+     },
+     "loopA": {
+      "all_pooled": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 312801
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 321,
+       "problems": 107
+      },
+      "running_flagged": 0,
+      "running_flagged_right": 0
+     },
+     "zratio": {
+      "all_pooled": {
+       "auroc": 0.7989138818381971,
+       "interval95": [
+        0.7666543638888232,
+        0.8294286463130814
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.6602440529282195,
+       "interval95": [
+        0.611668592279028,
+        0.705548363582526
+       ],
+       "pairs": 312801
+      },
+      "running_within_problem": {
+       "auroc": 0.5700934579439252,
+       "interval95": [
+        0.5,
+        0.6411045616810243
+       ],
+       "pairs": 321,
+       "problems": 107
+      }
+     },
+     "wait": {
+      "all_pooled": {
+       "auroc": 0.5523519705320039,
+       "interval95": [
+        0.5147945338172899,
+        0.5908599422539125
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.481959776343426,
+       "interval95": [
+        0.4353013735188295,
+        0.5292185663179197
+       ],
+       "pairs": 312801
+      },
+      "running_within_problem": {
+       "auroc": 0.4797507788161994,
+       "interval95": [
+        0.41005810713349067,
+        0.55
+       ],
+       "pairs": 321,
+       "problems": 107
+      }
+     },
+     "restart": {
+      "all_pooled": {
+       "auroc": 0.6668045641737602,
+       "interval95": [
+        0.63438535794262,
+        0.6977668493335828
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.6165613281287464,
+       "interval95": [
+        0.5753633426868667,
+        0.6567402031501723
+       ],
+       "pairs": 312801
+      },
+      "running_within_problem": {
+       "auroc": 0.5124610591900312,
+       "interval95": [
+        0.44845286976043486,
+        0.5769230769230769
+       ],
+       "pairs": 321,
+       "problems": 107
+      }
+     },
+     "any": {
+      "all_pooled": {
+       "auroc": 0.5024283984723761,
+       "interval95": [
+        0.5000429158963556,
+        0.505326635066773
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.5011237176351738,
+       "interval95": [
+        0.49737521817937697,
+        0.5044080604534005
+       ],
+       "pairs": 312801
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 321,
+       "problems": 107
+      },
+      "running_flagged": 5,
+      "running_flagged_right": 1
+     },
+     "length": {
+      "all_pooled": {
+       "auroc": 0.7973824014733998,
+       "interval95": [
+        0.7707754428859479,
+        0.8224608239202296
+       ],
+       "pairs": 855708
+      }
+     }
+    }
+   },
+   "12000": {
+    "samples": 1856,
+    "not_right": 854,
+    "running": 790,
+    "running_not_right": 653,
+    "signs": {
+     "switch": {
+      "all_pooled": {
+       "auroc": 0.5035993586597297,
+       "interval95": [
+        0.5006796570582164,
+        0.5070167240749511
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.5038284839203675,
+       "interval95": [
+        0.5007751937984496,
+        0.5074963455772115
+       ],
+       "pairs": 89461
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 129,
+       "problems": 57
+      },
+      "running_flagged": 5,
+      "running_flagged_right": 0
+     },
+     "rep50": {
+      "all_pooled": {
+       "auroc": 0.5268158063264572,
+       "interval95": [
+        0.5081941317267032,
+        0.5452477256648046
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.4871564145270006,
+       "interval95": [
+        0.4458602192510389,
+        0.5238296386336067
+       ],
+       "pairs": 89461
+      },
+      "running_within_problem": {
+       "auroc": 0.46511627906976744,
+       "interval95": [
+        0.39534606866002214,
+        0.5333333333333333
+       ],
+       "pairs": 129,
+       "problems": 57
+      }
+     },
+     "loopA": {
+      "all_pooled": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 89461
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 129,
+       "problems": 57
+      },
+      "running_flagged": 0,
+      "running_flagged_right": 0
+     },
+     "zratio": {
+      "all_pooled": {
+       "auroc": 0.813231850117096,
+       "interval95": [
+        0.7818573957992851,
+        0.8427249370329359
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.6386134740277887,
+       "interval95": [
+        0.5770402476762023,
+        0.6971824827115811
+       ],
+       "pairs": 89461
+      },
+      "running_within_problem": {
+       "auroc": 0.6434108527131783,
+       "interval95": [
+        0.5392156862745098,
+        0.7441860465116279
+       ],
+       "pairs": 129,
+       "problems": 57
+      }
+     },
+     "wait": {
+      "all_pooled": {
+       "auroc": 0.5272557928639209,
+       "interval95": [
+        0.4904852114209254,
+        0.566323082367209
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.47088116609472286,
+       "interval95": [
+        0.40505691594299,
+        0.5375526149634078
+       ],
+       "pairs": 89461
+      },
+      "running_within_problem": {
+       "auroc": 0.47674418604651164,
+       "interval95": [
+        0.37735435286329033,
+        0.5783582089552238
+       ],
+       "pairs": 129,
+       "problems": 57
+      }
+     },
+     "restart": {
+      "all_pooled": {
+       "auroc": 0.7058155352059348,
+       "interval95": [
+        0.6744668351701477,
+        0.736068935864909
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.6432076547322297,
+       "interval95": [
+        0.5889433484819485,
+        0.6949650350870925
+       ],
+       "pairs": 89461
+      },
+      "running_within_problem": {
+       "auroc": 0.5116279069767442,
+       "interval95": [
+        0.41747461476797004,
+        0.6056338028169014
+       ],
+       "pairs": 129,
+       "problems": 57
+      }
+     },
+     "any": {
+      "all_pooled": {
+       "auroc": 0.5035993586597297,
+       "interval95": [
+        0.5006796570582164,
+        0.5070167240749511
+       ],
+       "pairs": 855708
+      },
+      "running_pooled": {
+       "auroc": 0.5038284839203675,
+       "interval95": [
+        0.5007751937984496,
+        0.5074963455772115
+       ],
+       "pairs": 89461
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 129,
+       "problems": 57
+      },
+      "running_flagged": 5,
+      "running_flagged_right": 0
+     },
+     "length": {
+      "all_pooled": {
+       "auroc": 0.8846177668083037,
+       "interval95": [
+        0.8627192825411333,
+        0.9049492809394379
+       ],
+       "pairs": 855708
+      }
+     }
+    }
+   }
+  },
+  "base + cue, pooled (control)": {
+   "4000": {
+    "samples": 1856,
+    "not_right": 1104,
+    "running": 1446,
+    "running_not_right": 1060,
+    "signs": {
+     "switch": {
+      "all_pooled": {
+       "auroc": 0.500240903484428,
+       "interval95": [
+        0.498372958540195,
+        0.501953125
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.4996480594388503,
+       "interval95": [
+        0.49629583677970773,
+        0.5019494606506492
+       ],
+       "pairs": 409160
+      },
+      "running_within_problem": {
+       "auroc": 0.5029761904761905,
+       "interval95": [
+        0.49580976245246705,
+        0.513840830449827
+       ],
+       "pairs": 336,
+       "problems": 110
+      },
+      "running_flagged": 3,
+      "running_flagged_right": 1
+     },
+     "rep50": {
+      "all_pooled": {
+       "auroc": 0.5182954151248844,
+       "interval95": [
+        0.505531220806666,
+        0.5311604739570246
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.502528350767426,
+       "interval95": [
+        0.4836006607285493,
+        0.5204183744645473
+       ],
+       "pairs": 409160
+      },
+      "running_within_problem": {
+       "auroc": 0.48214285714285715,
+       "interval95": [
+        0.44973508025184,
+        0.5135510560268646
+       ],
+       "pairs": 336,
+       "problems": 110
+      }
+     },
+     "loopA": {
+      "all_pooled": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 409160
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 336,
+       "problems": 110
+      },
+      "running_flagged": 0,
+      "running_flagged_right": 0
+     },
+     "zratio": {
+      "all_pooled": {
+       "auroc": 0.7656954642691952,
+       "interval95": [
+        0.7330107755756625,
+        0.7962596555901702
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.6261914654413921,
+       "interval95": [
+        0.5823960748667185,
+        0.6700328777581132
+       ],
+       "pairs": 409160
+      },
+      "running_within_problem": {
+       "auroc": 0.5119047619047619,
+       "interval95": [
+        0.4454765364419933,
+        0.5799470681946656
+       ],
+       "pairs": 336,
+       "problems": 110
+      }
+     },
+     "wait": {
+      "all_pooled": {
+       "auroc": 0.6195561835106383,
+       "interval95": [
+        0.5838186883318554,
+        0.6548687255114476
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.5039471111545606,
+       "interval95": [
+        0.4606300113394408,
+        0.5470174728327819
+       ],
+       "pairs": 409160
+      },
+      "running_within_problem": {
+       "auroc": 0.48214285714285715,
+       "interval95": [
+        0.41665322580645164,
+        0.55
+       ],
+       "pairs": 336,
+       "problems": 110
+      }
+     },
+     "restart": {
+      "all_pooled": {
+       "auroc": 0.5717555118717237,
+       "interval95": [
+        0.5444537728604782,
+        0.5983068157523421
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.5194593801935673,
+       "interval95": [
+        0.4889106543478661,
+        0.5498855098976426
+       ],
+       "pairs": 409160
+      },
+      "running_within_problem": {
+       "auroc": 0.5044642857142857,
+       "interval95": [
+        0.45142812360053736,
+        0.555397635244574
+       ],
+       "pairs": 336,
+       "problems": 110
+      }
+     },
+     "any": {
+      "all_pooled": {
+       "auroc": 0.500240903484428,
+       "interval95": [
+        0.498372958540195,
+        0.501953125
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.4996480594388503,
+       "interval95": [
+        0.49629583677970773,
+        0.5019494606506492
+       ],
+       "pairs": 409160
+      },
+      "running_within_problem": {
+       "auroc": 0.5029761904761905,
+       "interval95": [
+        0.49580976245246705,
+        0.513840830449827
+       ],
+       "pairs": 336,
+       "problems": 110
+      },
+      "running_flagged": 3,
+      "running_flagged_right": 1
+     },
+     "length": {
+      "all_pooled": {
+       "auroc": 0.7254531394542091,
+       "interval95": [
+        0.698521899384296,
+        0.7515679376318338
+       ],
+       "pairs": 830208
+      }
+     }
+    }
+   },
+   "8000": {
+    "samples": 1856,
+    "not_right": 1104,
+    "running": 1147,
+    "running_not_right": 965,
+    "signs": {
+     "switch": {
+      "all_pooled": {
+       "auroc": 0.5015995991366019,
+       "interval95": [
+        0.4992085065188065,
+        0.5040432175822684
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.498807151397825,
+       "interval95": [
+        0.49192575170952385,
+        0.503003003003003
+       ],
+       "pairs": 175630
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.49261083743842365,
+        0.5073170731707317
+       ],
+       "pairs": 198,
+       "problems": 80
+      },
+      "running_flagged": 4,
+      "running_flagged_right": 1
+     },
+     "rep50": {
+      "all_pooled": {
+       "auroc": 0.5502717391304348,
+       "interval95": [
+        0.5331893932577325,
+        0.5672711401993105
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.4908785515003132,
+       "interval95": [
+        0.45614515061274735,
+        0.5235042773302099
+       ],
+       "pairs": 175630
+      },
+      "running_within_problem": {
+       "auroc": 0.494949494949495,
+       "interval95": [
+        0.44218222763416565,
+        0.5468811354712041
+       ],
+       "pairs": 198,
+       "problems": 80
+      }
+     },
+     "loopA": {
+      "all_pooled": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 175630
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 198,
+       "problems": 80
+      },
+      "running_flagged": 0,
+      "running_flagged_right": 0
+     },
+     "zratio": {
+      "all_pooled": {
+       "auroc": 0.796376329787234,
+       "interval95": [
+        0.7653704474796934,
+        0.8255165010740553
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.5452257586972613,
+       "interval95": [
+        0.4914537521952382,
+        0.5981608132810786
+       ],
+       "pairs": 175630
+      },
+      "running_within_problem": {
+       "auroc": 0.46464646464646464,
+       "interval95": [
+        0.3734920695439988,
+        0.5569665461121156
+       ],
+       "pairs": 198,
+       "problems": 80
+      }
+     },
+     "wait": {
+      "all_pooled": {
+       "auroc": 0.6143761563367253,
+       "interval95": [
+        0.576881893568337,
+        0.6497696809205663
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.47216876387860846,
+       "interval95": [
+        0.4223264177416397,
+        0.5213505547725072
+       ],
+       "pairs": 175630
+      },
+      "running_within_problem": {
+       "auroc": 0.547979797979798,
+       "interval95": [
+        0.4556583755405999,
+        0.6363636363636364
+       ],
+       "pairs": 198,
+       "problems": 80
+      }
+     },
+     "restart": {
+      "all_pooled": {
+       "auroc": 0.638560457138452,
+       "interval95": [
+        0.6074434991475216,
+        0.6686597155848749
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.52618288447304,
+       "interval95": [
+        0.4844207371871213,
+        0.5678843648582753
+       ],
+       "pairs": 175630
+      },
+      "running_within_problem": {
+       "auroc": 0.5126262626262627,
+       "interval95": [
+        0.44279440324858754,
+        0.5820134575569358
+       ],
+       "pairs": 198,
+       "problems": 80
+      }
+     },
+     "any": {
+      "all_pooled": {
+       "auroc": 0.5015995991366019,
+       "interval95": [
+        0.4992085065188065,
+        0.5040432175822684
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.498807151397825,
+       "interval95": [
+        0.49192575170952385,
+        0.503003003003003
+       ],
+       "pairs": 175630
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.49261083743842365,
+        0.5073170731707317
+       ],
+       "pairs": 198,
+       "problems": 80
+      },
+      "running_flagged": 4,
+      "running_flagged_right": 1
+     },
+     "length": {
+      "all_pooled": {
+       "auroc": 0.8359254548257786,
+       "interval95": [
+        0.8116588980667006,
+        0.8588704233954175
+       ],
+       "pairs": 830208
+      }
+     }
+    }
+   },
+   "12000": {
+    "samples": 1856,
+    "not_right": 1104,
+    "running": 908,
+    "running_not_right": 839,
+    "signs": {
+     "switch": {
+      "all_pooled": {
+       "auroc": 0.5025053962380512,
+       "interval95": [
+        0.499889592868733,
+        0.505281781164997
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.4945414658582509,
+       "interval95": [
+        0.47680972388955584,
+        0.5034965034965035
+       ],
+       "pairs": 57891
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 75,
+       "problems": 39
+      },
+      "running_flagged": 4,
+      "running_flagged_right": 1
+     },
+     "rep50": {
+      "all_pooled": {
+       "auroc": 0.5856827445652174,
+       "interval95": [
+        0.5660275947400186,
+        0.6054284159206845
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.48645730769895146,
+       "interval95": [
+        0.42621762346819203,
+        0.5430229296433382
+       ],
+       "pairs": 57891
+      },
+      "running_within_problem": {
+       "auroc": 0.5133333333333333,
+       "interval95": [
+        0.4166666666666667,
+        0.6041787790697672
+       ],
+       "pairs": 75,
+       "problems": 39
+      }
+     },
+     "loopA": {
+      "all_pooled": {
+       "auroc": 0.5004528985507246,
+       "interval95": [
+        0.5,
+        0.5014111338765141
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 57891
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 75,
+       "problems": 39
+      },
+      "running_flagged": 0,
+      "running_flagged_right": 0
+     },
+     "zratio": {
+      "all_pooled": {
+       "auroc": 0.8160436902559358,
+       "interval95": [
+        0.7869017339188974,
+        0.843309367966762
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.5199426508438272,
+       "interval95": [
+        0.44153870265912953,
+        0.5980867715903477
+       ],
+       "pairs": 57891
+      },
+      "running_within_problem": {
+       "auroc": 0.44,
+       "interval95": [
+        0.3157894736842105,
+        0.5652316933638442
+       ],
+       "pairs": 75,
+       "problems": 39
+      }
+     },
+     "wait": {
+      "all_pooled": {
+       "auroc": 0.5899443272047487,
+       "interval95": [
+        0.5517738143547749,
+        0.62683499598787
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.4705049144081118,
+       "interval95": [
+        0.39918531137886815,
+        0.5437121453933151
+       ],
+       "pairs": 57891
+      },
+      "running_within_problem": {
+       "auroc": 0.5066666666666667,
+       "interval95": [
+        0.35936949823943665,
+        0.6470682503770738
+       ],
+       "pairs": 75,
+       "problems": 39
+      }
+     },
+     "restart": {
+      "all_pooled": {
+       "auroc": 0.6777879760252852,
+       "interval95": [
+        0.64564514163793,
+        0.7095113290148589
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.5892453058333765,
+       "interval95": [
+        0.5184452517217961,
+        0.6540439713268587
+       ],
+       "pairs": 57891
+      },
+      "running_within_problem": {
+       "auroc": 0.5333333333333333,
+       "interval95": [
+        0.41953559510567295,
+        0.6460695764909248
+       ],
+       "pairs": 75,
+       "problems": 39
+      }
+     },
+     "any": {
+      "all_pooled": {
+       "auroc": 0.5029582947887759,
+       "interval95": [
+        0.5001797795614326,
+        0.5058402031743877
+       ],
+       "pairs": 830208
+      },
+      "running_pooled": {
+       "auroc": 0.4945414658582509,
+       "interval95": [
+        0.47680972388955584,
+        0.5034965034965035
+       ],
+       "pairs": 57891
+      },
+      "running_within_problem": {
+       "auroc": 0.5,
+       "interval95": [
+        0.5,
+        0.5
+       ],
+       "pairs": 75,
+       "problems": 39
+      },
+      "running_flagged": 4,
+      "running_flagged_right": 1
+     },
+     "length": {
+      "all_pooled": {
+       "auroc": 0.8888591774591428,
+       "interval95": [
+        0.8695423717929042,
+        0.907564736620067
+       ],
+       "pairs": 830208
+      }
+     }
+    }
+   }
+  }
+ },
+ "planted_sign_within_problem_auroc": {
+  "auroc": 0.8070652173913043,
+  "interval95": [
+   0.7660814955125603,
+   0.8455892397942784
+  ],
+  "pairs": 368,
+  "problems": 112
+ },
+ "references": {
+  "result-f3d708": "0.531 [0.468, 0.589] (0.504 without the first 50 tokens), cued base, MATH-500, first 1,000 tokens",
+  "result-b30f15": "0.571 [0.509, 0.634] linear probe after 1,000 tokens; answer length at the end 0.68"
+ }
+}

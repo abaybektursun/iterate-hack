@@ -6,13 +6,18 @@ module) of every tools/finding_<slug>.py, with each mark that names a board scor
 resolve(). The page reads nothing after it loads, so its picture is drawn at once. view.py also adds tools/sitekit.py
 (terms defined on click).
 
-The first view is the research question and one picture of it: a glass rail from 40 % to 100 % on MATH-500, on which
-the base model's scores without reward are drawn in one after another (Base, Base + cue, restart, vote over 4 samples,
-vote after restart) against RL's (one sample, then the same vote and restarts). Each mark opens the finding it comes
-from. Under the rail, the points by which RL still leads with the same vote and restarts, counted once to that value,
-and one sentence on what remains. The whole entrance takes about 2 s. The marks come from the `steps` of the entries
-below: numbers read from each finding module's own values, or a score row of the board (the rows tools/climb.py reads)
-named by its result id and configuration. No number is typed here.
+The first view is the research question and one picture of it: a glass rail from 40 % to 100 % of right answers, for
+one of two problem sets chosen by a quiet control (the address holds it: #hard328, the default, or #math500). Above
+the rail the scores without reward (lit beads), below it RL's (rings) and those that use RL's weights (diamonds); a
+vote over 4 samples carries a second thin ring. On the 328 harder problems, Base + cue, Think-SFT + cue (one sample,
+32,768 tokens, vote) against RL (one sample, vote), and two settings that add RL's weights; the large number is
+Think-SFT + cue minus RL with one sample, with its interval from imitation-beats-rl. On MATH-500, Base, Base + cue,
+restart, vote over 4 samples and vote after restart against RL (one sample, then the same vote and restarts); the large
+number is RL's lead with the same vote and restarts. The set opens with an entrance of about 2 s; changing the set moves
+the marks that both sets share (Base + cue, RL) and cross-fades the rest in about 1 s. Each mark opens the finding it
+comes from. The marks come from the `steps` of the entries below: numbers read from each finding module's own values,
+or a score row of the board (the rows tools/climb.py reads) named by its result id and configuration. No number is
+typed here.
 
 Under the picture, the findings in groups that follow the story (GROUPS), each group headed by its question. A row
 holds the finding's effect size as one figure with its unit ("66 % of the gap", "+6.1 points") and a short tag for the
@@ -46,19 +51,27 @@ def points(before, after, n):
     return signed(100 * (after - before) / n)
 
 
-def step(name, model, right, n, source):
-    """One mark on the rail: right answers of n on MATH-500, by the base or the RL model, and where the count is."""
-    return {"name": name, "model": model, "right": right, "n": n, "source": source}
+def step(name, kind, right, n, source, on="math500", vote=False, key=None):
+    """One mark on a rail: right answers of n on one problem set (on: "math500" or "hard328"), its kind ("free": no
+    reward, "rl": RL itself, "weights": uses RL's weights), whether it is a vote over 4 samples, and where the count is.
+    key names the same setting on both sets: that mark travels from one rail to the other when the set changes."""
+    return {"name": name, "kind": kind, "right": right, "n": n, "source": source, "set": on, "vote": vote, "key": key}
 
 
-def board_step(name, model, result, config):
-    """One mark whose count view.py reads from the board's score row of this result, model and configuration on MATH-500."""
-    return {"name": name, "model": model, "find": {"result": result, "benchmark": "MATH-500", "model": model, "config": config},
-            "source": f"board {result}"}
+def board_step(name, model, result, config, vote=False):
+    """One MATH-500 mark whose count view.py reads from the board's score row of this result, model and configuration."""
+    return {**step(name, "free" if model == "base" else "rl", None, None, f"board {result}", vote=vote),
+            "find": {"result": result, "benchmark": "MATH-500", "model": model, "config": config}}
 
 
-# slug -> its group, its figure [number, unit, tag of the set] and its marks on the rail, each read from the module m.
-# The order is the order on the page. The rail shows MATH-500 at T 1.0 / top-p 1.0. Board result-e78dfe recounted the
+def gap_step(m, name, kind, row, key=None):
+    """One mark on the rail of the 328 harder problems: the row of this id in the table of finding_how_much_of_the_gap."""
+    r = next(r for r in m.DATA["rows"] if r["id"] == row)
+    return step(name, kind, r["right"], m.DATA["n"], f"{m.DATA['artifact']}, row {row}", "hard328", r["family"] == "vote", key)
+
+
+# slug -> its group, its figure [number, unit, tag of the set], its marks on the rails and values for a rail's text, each
+# read from the module m. The order is the order on the page. Both rails are at T 1.0 / top-p 1.0. Board result-e78dfe recounted the
 # climb from the per-problem rows: the honest best base score is the vote after restart (result-5d032f), not the tie rule
 # chosen on the same problems.
 AFTER_RESTART = "T 1.0 / top-p 1.0, vote over 4 samples after restart"
@@ -66,22 +79,22 @@ TABLE = {
     "opening-cue": {
         "group": NO_REWARD,
         "figure": lambda m: [points(m.PLAIN, m.CUE, m.N), "points", "MATH-500, over Base"],
-        "steps": lambda m: [step("Base", "base", m.PLAIN, m.N, m.DATA["artifact"]),
-                            step("Base + cue", "base", m.CUE, m.N, m.DATA["artifact"]),
-                            step("RL, one sample", "rl", m.RL, m.N, m.DATA["artifact"])]},
+        "steps": lambda m: [step("Base", "free", m.PLAIN, m.N, m.DATA["artifact"]),
+                            step("Base + cue", "free", m.CUE, m.N, m.DATA["artifact"], key="cue"),
+                            step("RL, one sample", "rl", m.RL, m.N, m.DATA["artifact"], key="rl")]},
     "base-opens-itself": {
         "group": NO_REWARD,
         "figure": lambda m: [signed(m.DATA["diff_cue"][0]), "points", "MATH-500, the base's own opening with Okay against the prefilled cue"]},
     "restart-on-cap": {
         "group": NO_REWARD,
         "figure": lambda m: [signed(m.GAIN), "points", "MATH-500, T 0.6"],
-        "steps": lambda m: [step("Base + cue, restart", "base", m.T10["restart"], m.D["n"], m.T10["artifact"])]},
+        "steps": lambda m: [step("Base + cue, restart", "free", m.T10["restart"], m.D["n"], m.T10["artifact"])]},
     "vote-over-four": {
         "group": NO_REWARD,
         "figure": lambda m: [signed(m.BASE["gain"]), "points", "MATH-500, Base + cue"],
-        "steps": lambda m: [step("Vote over 4 samples", "base", m.BASE["vote"], m.N, m.DATA["artifact"]),
-                            board_step("Vote over 4 samples, restart", "base", "result-5d032f", "cue, " + AFTER_RESTART),
-                            board_step("RL, vote over 4 samples, restart", "rl", "result-5d032f", "plain, " + AFTER_RESTART)]},
+        "steps": lambda m: [step("Vote over 4 samples", "free", m.BASE["vote"], m.N, m.DATA["artifact"], vote=True),
+                            board_step("Vote over 4 samples, restart", "base", "result-5d032f", "cue, " + AFTER_RESTART, vote=True),
+                            board_step("RL, vote over 4 samples, restart", "rl", "result-5d032f", "plain, " + AFTER_RESTART, vote=True)]},
     "equal-token-frontier": {
         "group": NO_REWARD,
         "figure": lambda m: [signed(m._best["gap"][0]), "points", f"MATH-500, against one RL sample, at {m._best['multiple']:.1f} times the tokens"]},
@@ -92,14 +105,27 @@ TABLE = {
     "how-much-of-the-gap": {
         "group": NO_REWARD,
         "figure": lambda m: [m._pc(m._one["share"][0]), "of the gap",
-                             f"328 harder problems, Think-SFT + cue; best rule on untrained weights {m._pc(m._L['one'][1]['share'][0])}"]},
+                             f"328 harder problems, Think-SFT + cue; best rule on untrained weights {m._pc(m._L['one'][1]['share'][0])}"],
+        "steps": lambda m: [gap_step(m, "Base + cue", "free", "base-single", "cue"),
+                            gap_step(m, "RL, one sample", "rl", "rl-single", "rl"),
+                            gap_step(m, "Think-SFT + cue", "free", "think-single", "think"),
+                            gap_step(m, "RL, vote over 4 samples", "rl", "rl-vote4"),
+                            gap_step(m, "Think-SFT + cue, vote over 4 samples", "free", "think-vote4")]},
     "imitation-beats-rl": {
         "group": NO_REWARD,
-        "figure": lambda m: [signed(m.DATA["diff"]["hard328"]["vote"][0]), "points", "328 harder problems, Think-SFT over RL"]},
+        "figure": lambda m: [signed(m.DATA["diff"]["hard328"]["vote"][0]), "points", "328 harder problems, Think-SFT over RL"],
+        # Think-SFT + cue minus RL, one sample each, points of 328: [estimate, 95 % interval low, high], for the rail's number
+        "rail": lambda m: {"hard328": m.DATA["diff"]["hard328"]["single"]}},
+    "no-early-warning": {
+        "group": NO_REWARD,
+        "figure": lambda m: [f"{m.DATA['auroc']['12000']['signs']['zratio']['same'][0]:.3f}", "AUROC",
+                             "Think-SFT + cue, best of six text signs at token 12,000 for a failing sample; 0.5 is chance"]},
     "cut-off-is-unfinished": {
         "group": NO_REWARD,
         "figure": lambda m: [f"{m.DATA['cells']['sft_cue']['right_at_16384_same_answers']} → {m.DATA['cells']['sft_cue']['right_at_32768']}", "right of 328",
-                             "328 harder problems, Think-SFT + cue, tokens allowed 16,384 → 32,768"]},
+                             "328 harder problems, Think-SFT + cue, tokens allowed 16,384 → 32,768"],
+        "steps": lambda m: [step("Think-SFT + cue, 32,768\u00a0tokens", "free", m.DATA["cells"]["sft_cue"]["right_at_32768"], m.DATA["n"],
+                                 f"{m.DATA['readout']}, sft_cue right_at_32768", "hard328")]},
     "where-the-gap-goes": {
         "group": ANSWERS,
         "figure": lambda m: [f"{m.pc(m._RL['parts']['reliability'][1])} %", "of the gap",
@@ -127,6 +153,10 @@ TABLE = {
     "a-quarter-of-rl": {
         "group": WEIGHTS,
         "figure": lambda m: [f"{m.Q_M} %", "of the gain", "MATH-500, a = 0.25"]},
+    "hand-written-edit": {
+        "group": WEIGHTS,
+        "figure": lambda m: [f"{m.DATA['states'][0]['right']} → {m.DATA['states'][2]['right']}", "right of 500",
+                             f"MATH-500, plain prompt, one hand-written edit to one matrix; a random edit {m.DATA['states'][1]['right']}"]},
     "eight-directions": {
         "group": WEIGHTS,
         "figure": lambda m: [signed(m.DATA["vs_cue_hard"]["points"]), "points",
@@ -134,11 +164,15 @@ TABLE = {
     "the-finish-dial": {
         "group": WEIGHTS,
         "figure": lambda m: [f"{m.DATA['cells']['0']['cut']} → {m.DATA['cells']['1.5']['cut']}", "cut off",
-                             f"of 328 harder problems, 8 RL directions at size 1.5; right {m.DATA['cells']['0']['right']} → {m.DATA['cells']['1.5']['right']}, RL {m.DATA['cells']['rl']['right']}"]},
+                             f"of 328 harder problems, 8 RL directions at size 1.5; right {m.DATA['cells']['0']['right']} → {m.DATA['cells']['1.5']['right']}, RL {m.DATA['cells']['rl']['right']}"],
+        "steps": lambda m: [step("Base + 8 RL directions, size\u00a01.5", "weights", m.DATA["cells"]["1.5"]["right"], m.DATA["n"],
+                                 f"{m.DATA['readout']}, cell {m.DATA['cells']['1.5']['cell']}", "hard328")]},
     "rl-change-on-imitation": {
         "group": WEIGHTS,
         "figure": lambda m: [signed(m.DATA["minus_think"]["2"][0]), "points",
-                             f"328 harder problems, Think-SFT + 2 × RL's change over Think-SFT; over RL {signed(m.DATA['minus_rl']['2'][0])}"]},
+                             f"328 harder problems, Think-SFT + 2 × RL's change over Think-SFT; over RL {signed(m.DATA['minus_rl']['2'][0])}"],
+        "steps": lambda m: [step("Think-SFT + 2\u00a0× RL's weight change", "weights", m.DATA["right"][m.ARMS.index("sft1_rl20")], m.DATA["n"],
+                                 f"{m.DATA['readout']}, a = 2, mean of {m.DATA['samples'][m.ARMS.index('sft1_rl20')]} samples", "hard328")]},
     "rl-every-neuron": {
         "group": WEIGHTS,
         "figure": lambda m: [m.pct(m.mean(m.ONE["best"])), "of RL's effect", f"next-word predictions, RL's best {m.ONE['share']:g} % of neurons copied"]},
@@ -161,12 +195,14 @@ TABLE = {
 
 
 def entry(slug, m):
-    """What the page says of one finding: slug, title, line, group, rank (the order on the page), figure and steps."""
+    """What the page says of one finding: slug, title, line, group, rank (the order on the page), figure, steps and rail
+    (values a rail's text needs, by set)."""
     row = TABLE.get(slug, {})
     return {"slug": slug, "title": m.TITLE, "line": m.LINE, "group": row.get("group", "New"),
             "rank": list(TABLE).index(slug) if slug in TABLE else len(TABLE),
             "figure": row["figure"](m) if "figure" in row else None,
-            "steps": row["steps"](m) if "steps" in row else []}
+            "steps": row["steps"](m) if "steps" in row else [],
+            "rail": row["rail"](m) if "rail" in row else {}}
 
 
 def resolve(rows, scores):
@@ -176,7 +212,7 @@ def resolve(rows, scores):
             return s
         found = [r for r in scores if all(r.get(k) == v for k, v in s["find"].items())]
         assert len(found) == 1, f"{len(found)} score rows for {s['find']}"
-        return {"name": s["name"], "model": s["model"], "right": int(found[0]["right"]), "n": int(found[0]["n"]), "source": s["source"]}
+        return {**{k: v for k, v in s.items() if k != "find"}, "right": int(found[0]["right"]), "n": int(found[0]["n"])}
     return [{**r, "steps": [one(s) for s in r["steps"]]} for r in rows]
 
 
@@ -248,11 +284,17 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .bead { fill: var(--core); }
 .halo { fill: var(--blue); opacity: calc(var(--bloom) * .26); }
 .ring { fill: var(--paper); stroke: var(--ink); stroke-width: 1.8; }
-.lead { fill: none; stroke: var(--faint); stroke-width: 1; opacity: .7; transition: stroke .15s ease, opacity .15s ease; }
-.lead.on { stroke: var(--blue); opacity: 1; }
-.labels a { position: absolute; display: flex; flex-direction: column; text-align: center; padding: 0 3px; text-decoration: none; opacity: 0; transition: opacity .6s ease; border-radius: 4px; }
-.labels a.base { justify-content: flex-end; }
-.labels a.in { opacity: 1; }
+.vote { fill: none; stroke: var(--ink); stroke-width: 1.1; opacity: .62; }
+.lead { fill: none; stroke: var(--faint); stroke-width: 1; opacity: 0; transition: stroke .15s ease, opacity .4s ease; }
+.lead.in { opacity: .7; }
+.lead.in.on { stroke: var(--blue); opacity: 1; }
+.labels a { position: absolute; display: flex; flex-direction: column; text-align: center; padding: 0 3px; text-decoration: none; opacity: 0; visibility: hidden; transition: opacity .6s ease, visibility 0s .6s; border-radius: 4px; }
+.labels a.up { justify-content: flex-end; }
+.labels a.in { opacity: 1; visibility: visible; transition: opacity .6s ease; }
+.sets { display: flex; gap: 22px; margin-top: clamp(18px, 3.4vh, 30px); font-size: 14px; }
+.sets a { color: var(--mute); text-decoration: none; padding: 3px 0 4px; border-bottom: 1.5px solid transparent; transition: color .15s ease, border-color .3s ease; }
+.sets a:hover { color: var(--ink); }
+.sets a[aria-current] { color: var(--ink); font-weight: 600; border-bottom-color: var(--blue); }
 .lname { color: var(--mute); font-size: 13px; line-height: 1.2; font-weight: 520; font-stretch: 104%; transition: color .15s ease; }
 .lval { font-size: 22px; line-height: 1.2; font-weight: 420; letter-spacing: -.01em; transition: color .15s ease; }
 .labels a:hover .lval, .labels a:hover .lname, .labels a.on .lval, .labels a.on .lname { color: var(--blue); }
@@ -262,14 +304,19 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .key i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 8px; vertical-align: -1px; }
 .key .kb { background: var(--core); box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue) calc(var(--bloom) * 26%), transparent); }
 .key .kr { border: 2px solid var(--ink); background: var(--paper); }
+.key .kw { width: 9px; height: 9px; border-radius: 1px; margin: 0 10px 0 2px; transform: rotate(45deg); border: 1.8px solid var(--ink); background: radial-gradient(circle, var(--core) 0 1.6px, var(--paper) 2.2px); }
+.key .kv { width: 15px; height: 15px; margin-right: 6px; vertical-align: -3px; border: 1.1px solid color-mix(in srgb, var(--ink) 62%, transparent); background: radial-gradient(circle, var(--core) 0 2.8px, transparent 3.4px); }
 .remain { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 0 32px; margin-top: clamp(26px, 5vh, 48px); }
 .gap { margin: 0; white-space: nowrap; line-height: 1; transition: opacity .25s ease; }
-.gap.wait { opacity: 0; }
+.gap.wait { opacity: 0; transition-duration: .2s; }
 .gap b { font-size: clamp(52px, 5.4vw, 88px); font-weight: 300; letter-spacing: -.035em; font-stretch: 100%; }
-.gap > span { display: block; margin-top: 8px; color: var(--mute); font-size: 14px; font-weight: 520; }
+.gap > span { display: block; width: 32ch; margin-top: 8px; color: var(--mute); font-size: 14px; line-height: 1.4; font-weight: 520; white-space: normal; }
 .rest { grid-column: 2; grid-row: 1 / span 2; margin: 6px 0 0; font-size: clamp(17px, 1.3vw, 21px); line-height: 1.36; font-weight: 380; max-width: 46ch; transition: opacity .6s ease; }
-.rest.wait { opacity: 0; }
+.rest.wait { opacity: 0; transition-duration: .2s; }
 .acts { grid-column: 1; display: flex; gap: 22px; margin-top: 16px; font-size: 13px; color: var(--mute); white-space: nowrap; }
+.paper { grid-column: 1; margin-top: 8px; font-size: 13px; color: var(--mute); }
+.paper a { color: var(--mute); text-decoration: none; }
+.paper a:hover { color: var(--ink); }
 .acts summary { cursor: pointer; list-style: none; }
 .acts summary::-webkit-details-marker { display: none; }
 .acts button:hover, .acts summary:hover { color: var(--ink); }
@@ -321,6 +368,7 @@ ul.src li { padding: 5px 0; border-top: 1px solid var(--rule); break-inside: avo
   .key { font-size: 12px; justify-content: flex-start; }
   .remain { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .rest { font-size: 17px; grid-column: 1; grid-row: auto; }
+  .gap > span { width: auto; }
   .acts { grid-column: 1; }
   .groups { margin-top: 56px; }
   .group { display: block; margin-top: 40px; }
@@ -336,7 +384,7 @@ ul.src li { padding: 5px 0; border-top: 1px solid var(--rule); break-inside: avo
 }
 @media (prefers-reduced-motion: reduce) {
   .rows li { animation: none; }
-  .labels a, .rest, .lead, .top a, .title, .lname, .lval { transition: none; }
+  .labels a, .labels a.in, .gap, .gap.wait, .rest, .rest.wait, .lead, .sets a, .top a, .title, .lname, .lval { transition: none; }
 }
 </style>
 </head>
@@ -361,15 +409,17 @@ ul.src li { padding: 5px 0; border-top: 1px solid var(--rule); break-inside: avo
   </header>
   <p class="say" id="say" hidden></p>
   <section class="story" id="story" data-terms hidden>
-    <p class="ask" id="ask"></p>
+    <p class="ask" id="ask">Reinforcement learning with a reward (RL) makes Olmo 3 7B better at math. How much of that gain can the model reach <b>without any reward</b>?</p>
+    <nav class="sets" id="sets" aria-label="Problem set"><a href="#math500" data-set="math500">MATH-500</a><a href="#hard328" data-set="hard328">328 harder problems</a></nav>
     <div class="fig" id="fig">
       <svg id="rail" aria-hidden="true"></svg>
       <div class="labels" id="labels"></div>
     </div>
-    <div class="key"><span><i class="kb"></i>Base or Base + cue, no reward</span><span><i class="kr"></i>RL</span><span id="setting"></span></div>
+    <div class="key"><span><i class="kb"></i>No reward</span><span><i class="kr"></i>RL</span><span id="kw"><i class="kw"></i>Uses RL's weights</span><span><i class="kv"></i>Vote over 4 samples</span><span id="setting"></span></div>
     <div class="remain">
       <p class="gap wait" id="gapbox"><b id="gap"></b><span id="gapunit"></span></p>
       <div class="acts"><button id="replay" type="button">Replay</button><details class="src" id="srcbox"><summary>Where each number comes from</summary></details></div>
+      <p class="paper">Papers (PDF): <a href="/paper/the-finish-dial.pdf">The finish dial</a> · <a href="/paper/theories-on-trial.pdf">Theories on trial</a></p>
       <p class="rest wait" id="rest"></p>
     </div>
     <ul class="src" id="src" hidden></ul>
@@ -452,32 +502,43 @@ const kit = {
 const ICONS = __ICONS__;  // slug: the ICON of tools/finding_<slug>.py, written in by view.py
 const SLAB = kit => kit.slab(44, 38, 5);  // a finding without an icon of its own
 
-/* The rail: MATH-500 from 40 % to 100 %, a glass plate that faces the viewer and sways by a few degrees. Above it the
-   base model's marks, below it the RL model's, each with its name and score; a mark and its name open the finding it
-   comes from. On load the marks are drawn in one after another (plan): the lit line runs from one score of the base
-   model to the next, and the points to RL count down with it. Then RL gets the same vote and restarts, and its mark
-   moves on. With reduced motion the last frame is shown at once. */
-const R = { base: [], rl: [], g: null, plan: null, t0: 0, el: {}, yaw: 0, pitch: 0 };
-const LO = 40, HI = 100;
+/* The rail: right answers on one problem set from 40 % to 100 %, a glass plate that faces the viewer and sways by a few
+   degrees. Above it the marks with no reward (lit beads), below it RL's (rings) and those that use RL's weights
+   (diamonds); a vote over 4 samples has a second thin ring. Each mark and its name open the finding it comes from.
+   There is one rail per set (R.sets: "hard328", "math500") and one drawing for both. On load the set in the address is
+   drawn in one after another (enter): the lit line runs from one score without reward to the next while RL's ring
+   waits, then the ring moves to RL's vote, and the marks that use RL's weights come last. The control changes the set
+   (travel): a mark with the same key on both sets travels, the others shrink or grow in place, the names cross-fade, and
+   the large number counts again. With reduced motion the last frame is shown at once. */
+const R = { sets: {}, marks: [], cur: "", from: "", mode: "enter", g: null, t0: 0, el: {}, yaw: 0, pitch: 0, texted: null, ticked: "" };
+const LO = 40, HI = 100, TRAVEL = 760;
 const ease = p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+const clamp = p => Math.min(1, Math.max(0, p)), lerp = (a, b, p) => a + (b - a) * p;
+const cnt = x => Number.isInteger(x) ? String(x) : x.toFixed(1);  // a count of right answers; a mean over samples keeps its half
 function spread(xs, w, lo, hi) {  // centres for labels of width w near xs (sorted), at least w apart, inside lo..hi
-  const c = xs.map(x => Math.min(hi - w / 2, Math.max(lo + w / 2, x)));
+  const runs = xs.map(x => ({ sum: x, n: 1 })), left = r => r.sum / r.n - r.n * w / 2;
+  for (let i = 0; i < runs.length - 1;) {  // labels that would touch form a run, centred on the mean of its marks
+    const a = runs[i], b = runs[i + 1];
+    if (left(a) + a.n * w > left(b)) { runs.splice(i, 2, { sum: a.sum + b.sum, n: a.n + b.n }); i = Math.max(0, i - 1); } else i++;
+  }
+  const c = [];
+  for (const r of runs) { const l = Math.min(hi - r.n * w, Math.max(lo, left(r))); for (let j = 0; j < r.n; j++) c.push(l + w / 2 + j * w); }
   for (let i = 1; i < c.length; i++) c[i] = Math.max(c[i], c[i - 1] + w);
   for (let i = c.length - 1; i >= 0; i--) c[i] = Math.min(c[i], i === c.length - 1 ? hi - w / 2 : c[i + 1] - w);
   return c;
 }
 function rgeo() {
   const W = $("fig").clientWidth, ph = W < 640, pad = ph ? 14 : 26;
-  const x0 = pad, x1 = W - pad, x = s => x0 + (s - LO) / (HI - LO) * (x1 - x0);
-  const w = n => Math.min(ph ? 96 : 180, (W - 4) / Math.max(1, n));
-  const bw = w(R.base.length), rw = w(R.rl.length), lh = ph ? 64 : 58;
-  const g = { W, ph, x, x0, x1, bw, rw, lh, rh: ph ? 20 : 34, rr: ph ? 10 : 17, deep: ph ? 7 : 10 };
+  const x0 = pad, x1 = W - pad, x = s => x0 + (s - LO) / (HI - LO) * (x1 - x0), lh = ph ? 76 : 58;
+  const g = { W, ph, x, x0, x1, lh, rh: ph ? 20 : 34, rr: ph ? 10 : 17, deep: ph ? 7 : 10, c: {}, w: {} };
   g.rail = lh + (ph ? 44 : 60) + g.rh / 2;      // the centre line of the rail
   g.tick = g.rail + g.rh / 2 + (ph ? 17 : 20);  // the baseline of the scale under it
   g.rlTop = g.tick + (ph ? 16 : 22);
   g.H = g.rlTop + lh + 2;
-  g.bc = spread(R.base.map(s => x(s.pct)), bw, 0, W);
-  g.rc = spread(R.rl.map(s => x(s.pct)), rw, 0, W);
+  for (const S of Object.values(R.sets)) for (const row of [S.up, S.down]) {
+    const w = Math.min(ph ? 96 : 180, (W - 4) / Math.max(1, row.length)), c = spread(row.map(k => x(k.pct)), w, 0, W);
+    row.forEach((k, i) => { g.c[k.id] = c[i]; g.w[k.id] = w; });
+  }
   g.D = W * 1.8;
   return g;
 }
@@ -493,36 +554,53 @@ function plate(g, z) {  // the rail's outline at depth z
   corner(b - r, y0 + r, -90); corner(b - r, y1 - r, 0); corner(a + r, y1 - r, 90); corner(a + r, y0 + r, 180);
   return "M" + p.map(q => f(q[0]) + " " + f(q[1])).join("L") + "Z";
 }
-function plan() {  // the entrance, about 2 s: when each part appears and where the lit line and the RL mark are, in ms from the start
-  const steps = [], b = R.base, r = R.rl, show = { r0: 0 };
+function plan(S) {  // the entrance of one set, about 2 s: when each mark appears, where the lit line and RL's ring are, in ms
+  const steps = [], show = {};
   let t = 150;
-  for (let i = 0; i < b.length; i++) {
-    const from = i ? b[i - 1].pct : LO, d = 160 + 6 * Math.abs(b[i].pct - from);
-    steps.push({ from, to: b[i].pct, t0: t, d }); t += d;
-    show["b" + i] = t; t += 70;
-  }
+  S.up.forEach((k, i) => {
+    const from = i ? S.up[i - 1].pct : LO, d = 160 + 6 * Math.abs(k.pct - from);
+    steps.push({ from, to: k.pct, t0: t, d }); t += d;
+    show[k.id] = t; t += 70;
+  });
+  show[S.rl[0].id] = 0;
   let move = null;
-  if (r.length > 1) { move = { t0: t, d: 520 }; t += 520; show.r1 = t; }
+  if (S.rl.length > 1) { move = { t0: t, d: 520 }; t += 520; show[S.rl[1].id] = t; }
+  for (const k of S.wt) { t += 140; show[k.id] = t; }
   return { steps, show, move, count: { t0: Math.max(0, t - 650), d: 650 }, end: t };  // the number counts once, to its final value
 }
-function moment(ms) {  // the state of the entrance at ms
-  const P = R.plan;
+/* The state of the picture at ms: the lit line's head, RL's moving ring (target), each mark's place and size (at, by key),
+   the names shown, the text of which set, the large number (null while hidden) and whether all has settled. */
+function enter(S, ms) {
+  const P = S.plan, m = P.move, r0 = S.rl[0], r1 = S.rl[1], at = {}, labels = new Set();
   let head = LO;
   for (const s of P.steps) if (ms >= s.t0) head = s.from + (s.to - s.from) * ease(Math.min(1, (ms - s.t0) / s.d));
-  const r = R.rl, m = P.move;
-  const target = !r.length ? null : !m || ms < m.t0 ? r[0].pct : r[0].pct + (r[1].pct - r[0].pct) * ease(Math.min(1, (ms - m.t0) / m.d));
-  return { head, target, moving: m && ms >= m.t0, done: ms >= P.end };
+  const target = !m || ms < m.t0 ? r0.pct : lerp(r0.pct, r1.pct, ease(Math.min(1, (ms - m.t0) / m.d)));
+  for (const k of S.all) {
+    if (ms >= P.show[k.id]) labels.add(k.id);
+    at[k.uid] = k === r1 ? { pct: target, on: m && ms >= m.t0 ? 1 : 0 } : { pct: k.pct, on: ms >= P.show[k.id] ? 1 : 0 };
+  }
+  const c = P.count;
+  return { head, headOn: ms >= P.steps[0].t0 ? 1 : 0, target, at, labels, text: S,
+           count: ms < c.t0 ? null : S.final * ease(Math.min(1, (ms - c.t0) / c.d)), done: ms >= P.end };
+}
+function travel(A, B, ms) {
+  const at = {}, labels = new Set(), inA = {}, inB = {}, p = ease(clamp(ms / TRAVEL)), c0 = 350, cd = 650;
+  A.all.forEach(k => { inA[k.uid] = k; }); B.all.forEach(k => { inB[k.uid] = k; });
+  [...B.all].sort((a, b) => a.pct - b.pct).forEach((k, i) => {  // staggered by 30 ms per mark, left to right
+    at[k.uid] = inA[k.uid] ? { pct: lerp(inA[k.uid].pct, k.pct, ease(clamp((ms - 30 * i) / TRAVEL))), on: 1 } : { pct: k.pct, on: clamp((ms - 450) / 350) };
+  });
+  A.all.forEach(k => { if (!inB[k.uid]) at[k.uid] = { pct: k.pct, on: 1 - clamp(ms / 350) }; });
+  if (ms >= 450) B.all.forEach(k => labels.add(k.id));
+  return { head: lerp(A.head, B.head, p), headOn: 1, target: lerp(A.target, B.target, p), at, labels, text: ms >= c0 ? B : A,
+           count: ms < c0 ? null : B.final * ease(clamp((ms - c0) / cd)), done: ms >= c0 + cd };
 }
 function rbuild() {
-  const g = R.g = rgeo(), svg = $("rail");
+  const g = R.g = rgeo(), svg = $("rail"), sets = Object.values(R.sets), every = sets.flatMap(S => S.all);
   svg.setAttribute("viewBox", `0 0 ${g.W} ${g.H}`);
   svg.setAttribute("height", g.H);
   const ticks = [];
-  for (let s = LO; s <= HI; s += 10) {
-    const x = g.x(s), near = R.rl.some(r => Math.abs(g.x(r.pct) - x) < (g.ph ? 13 : 16));
-    if (!near) ticks.push(`<text class="tlab" x="${f(x)}" y="${f(g.tick)}" text-anchor="middle">${s === LO || s === HI ? s + " %" : s}</text>`);
-  }
-  const w0 = g.x1 - g.x0;
+  for (let s = LO; s <= HI; s += 10) ticks.push(`<text class="tlab" id="t${s}" x="${f(g.x(s))}" y="${f(g.tick)}" text-anchor="middle">${s === LO || s === HI ? s + " %" : s}</text>`);
+  const w0 = g.x1 - g.x0, kind = k => R.marks.filter(u => u.kind === k);
   svg.innerHTML =
     `<ellipse class="atmo" cx="${f(g.W * .55)}" cy="${f(g.rail)}" rx="${f(w0 * .62)}" ry="${f(g.rh * 3.2)}" fill="url(#atmo)"/>` +
     `<rect class="rshade" x="${f(g.x0)}" y="${f(g.rail + g.rh * .25)}" width="${f(w0)}" height="${f(g.rh * .8)}" rx="${g.rr}" filter="url(#soft)"/>` +
@@ -530,30 +608,41 @@ function rbuild() {
     ticks.join("") +
     `<path class="tick" id="r-ticks"/><path class="left" id="r-left"/>` +
     `<path class="glow" id="r-glow"/><path class="fill" id="r-fill"/>` +
-    R.base.map((_, i) => `<path class="lead" id="lb${i}"/>`).join("") + R.rl.map((_, i) => `<path class="lead" id="lr${i}"/>`).join("") +
-    R.base.map((_, i) => `<circle class="halo" id="hb${i}" r="0"/><circle class="bead" id="bb${i}" r="0"/>`).join("") +
+    every.map(k => `<path class="lead" id="l${k.id}"/>`).join("") +
+    kind("free").map(u => `<circle class="halo" id="h${u.uid}" r="0"/><circle class="bead" id="b${u.uid}" r="0"/>`).join("") +
     `<circle class="halo" id="r-hh" r="0"/><circle class="bead" id="r-head" r="0"/>` +
-    R.rl.map((_, i) => `<circle class="ring" id="br${i}" r="0"/>`).join("") +
-    R.base.map((s, i) => `<circle class="hit" data-i="b${i}" r="16"/>`).join("") + R.rl.map((s, i) => `<circle class="hit" data-i="r${i}" r="16"/>`).join("");
+    R.marks.filter(u => u.vote).map(u => `<circle class="vote" id="v${u.uid}" r="0"/>`).join("") +
+    kind("rl").map(u => `<circle class="ring" id="b${u.uid}" r="0"/>`).join("") +
+    kind("weights").map(u => `<path class="ring" id="b${u.uid}"/><circle class="bead" id="h${u.uid}" r="0"/>`).join("") +
+    R.marks.map(u => `<circle class="hit" data-u="${u.uid}" r="16"/>`).join("");
   R.el = {};
   svg.querySelectorAll("[id]").forEach(e => { R.el[e.id] = e; });
-  const lab = (s, i, kind, c, w) =>
-    `<a class="${kind}${R.shown && R.shown.has(kind[0] + i) ? " in" : ""}" data-i="${kind[0]}${i}" href="/finding/${esc(s.slug)}" ` +
-    `style="left:${f(c - w / 2)}px;width:${f(w)}px;top:${kind === "base" ? 0 : f(g.rlTop)}px;height:${g.lh}px" ` +
-    `aria-label="${esc(s.name)}, ${pc(s)}. Opens ${esc(s.title)}."><span class="lname">${esc(s.name)}</span><span class="lval">${pc(s)}</span></a>`;
-  $("labels").innerHTML = R.base.map((s, i) => lab(s, i, "base", g.bc[i], g.bw)).join("") + R.rl.map((s, i) => lab(s, i, "rl", g.rc[i], g.rw)).join("");
+  R.ticked = "";
+  const lab = k =>
+    `<a class="${k.row}" data-i="${k.id}" href="/finding/${esc(k.slug)}" ` +
+    `style="left:${f(g.c[k.id] - g.w[k.id] / 2)}px;width:${f(g.w[k.id])}px;top:${k.row === "up" ? 0 : f(g.rlTop)}px;height:${g.lh}px" ` +
+    `aria-label="${esc(k.name)}, ${cnt(k.right)} of ${k.n}, ${pc(k)}. Opens ${esc(k.title)}."><span class="lname">${esc(k.name)}</span><span class="lval">${pc(k)}</span></a>`;
+  $("labels").innerHTML = every.map(lab).join("");
   $("labels").querySelectorAll("a").forEach(a => {
     const on = v => () => { a.classList.toggle("on", v); R.el["l" + a.dataset.i].classList.toggle("on", v); };
     a.addEventListener("pointerenter", on(true)); a.addEventListener("pointerleave", on(false));
     a.addEventListener("focus", on(true)); a.addEventListener("blur", on(false));
   });
-  svg.querySelectorAll(".hit").forEach(c => c.addEventListener("click", () => { location.href = $("labels").querySelector(`[data-i="${c.dataset.i}"]`).href; }));
+  svg.querySelectorAll(".hit").forEach(c => c.addEventListener("click", () => { location.href = $("labels").querySelector(`[data-i="${R.cur}-${c.dataset.u}"]`).href; }));
   rdraw(performance.now());
 }
+function texts(S) {  // the words of one set, written when its number starts to count
+  R.texted = S;
+  $("gapunit").textContent = S.unit;
+  $("rest").textContent = S.rest;
+  $("setting").textContent = S.setting;
+  $("kw").hidden = !S.wt.length;
+  $("src").innerHTML = S.all.map(k => `<li>${esc(k.name)}: ${cnt(k.right)} of ${k.n}, ${pc(k)}. ${esc(k.source)}</li>`).join("");
+}
 function rdraw(now) {
-  const g = R.g, E = R.el, ms = still.matches ? Infinity : now - R.t0, M = R.plan ? moment(ms) : null;
-  if (!M) return;
-  const P = R.plan, t = now / 1000;
+  if (!R.cur) return;
+  const g = R.g, E = R.el, ms = still.matches ? Infinity : now - R.t0, t = now / 1000, B = R.sets[R.cur];
+  const M = R.mode === "travel" ? travel(R.sets[R.from], B, ms) : enter(B, ms);
   R.yaw = still.matches ? 0 : 2.2 * Math.sin(t * .11);
   R.pitch = still.matches ? 0 : 1.4 * Math.sin(t * .08);
   E["r-back"].setAttribute("d", plate(g, -g.deep));
@@ -562,70 +651,101 @@ function rdraw(now) {
   let tk = "";
   for (let s = LO; s <= HI; s += 10) { const a = rproj(g, g.x(s), bot - 5, 1), b = rproj(g, g.x(s), bot - 1, 1); tk += `M${f(a[0])} ${f(a[1])}L${f(b[0])} ${f(b[1])}`; }
   E["r-ticks"].setAttribute("d", tk);
+  if (R.ticked !== R.cur) {  // a scale number gives way to a lead of RL's row under it
+    R.ticked = R.cur;
+    for (let s = LO; s <= HI; s += 10) E["t" + s].style.display = B.down.some(k => Math.abs(g.x(k.pct) - g.x(s)) < (g.ph ? 13 : 16)) ? "none" : "";
+  }
   const a = at(LO), hd = at(M.head), th = g.ph ? 3 : 4;
   const line = `M${f(a[0])} ${f(a[1])}L${f(hd[0])} ${f(hd[1])}`;
   E["r-fill"].setAttribute("d", line); E["r-fill"].setAttribute("stroke-width", th);
   E["r-glow"].setAttribute("d", line); E["r-glow"].setAttribute("stroke-width", th * 3.5);
-  const shown = R.shown = new Set(Object.keys(P.show).filter(k => ms >= P.show[k]));
   const breathe = 1 + .12 * Math.sin(t * .7);
-  E["r-head"].setAttribute("cx", f(hd[0])); E["r-head"].setAttribute("cy", f(hd[1])); E["r-head"].setAttribute("r", ms >= P.steps[0].t0 ? (g.ph ? 5 : 6.5) : 0);
-  E["r-hh"].setAttribute("cx", f(hd[0])); E["r-hh"].setAttribute("cy", f(hd[1])); E["r-hh"].setAttribute("r", ms >= P.steps[0].t0 ? f((g.ph ? 11 : 15) * breathe) : 0);
-  R.base.forEach((s, i) => {
-    const q = at(s.pct), on = shown.has("b" + i);
-    E["bb" + i].setAttribute("cx", f(q[0])); E["bb" + i].setAttribute("cy", f(q[1])); E["bb" + i].setAttribute("r", on ? (g.ph ? 3 : 3.8) : 0);
-    E["hb" + i].setAttribute("cx", f(q[0])); E["hb" + i].setAttribute("cy", f(q[1])); E["hb" + i].setAttribute("r", on ? (g.ph ? 6 : 8) : 0);
-    const c = g.bc[i], y = g.lh + 6, q2 = rproj(g, g.x(s.pct), top - 3, 2);
-    E["lb" + i].setAttribute("d", on ? `M${f(c)} ${f(y)}V${f(y + 8)}L${f(q2[0])} ${f(q2[1] - 12)}L${f(q2[0])} ${f(q2[1])}` : "");
-  });
-  R.rl.forEach((s, i) => {
-    const on = shown.has("r" + i), q = i === 0 ? at(s.pct) : at(M.target);
-    E["br" + i].setAttribute("cx", f(q[0])); E["br" + i].setAttribute("cy", f(q[1]));
-    E["br" + i].setAttribute("r", i === 0 ? (on ? (g.ph ? 5.5 : 7) : 0) : (M.moving ? (g.ph ? 5.5 : 7) : 0));
-    const c = g.rc[i], y = g.rlTop - 4, q2 = rproj(g, g.x(s.pct), bot + 3, 2);
-    E["lr" + i].setAttribute("d", on ? `M${f(q2[0])} ${f(q2[1])}V${f(g.tick + 6)}L${f(c)} ${f(y - 6)}V${f(y)}` : "");
-  });
-  if (M.target != null && M.target > M.head) {
+  const dot = (e, q, r) => { e.setAttribute("cx", f(q[0])); e.setAttribute("cy", f(q[1])); e.setAttribute("r", f(r)); };
+  dot(E["r-head"], hd, M.headOn * (g.ph ? 5 : 6.5));
+  dot(E["r-hh"], hd, M.headOn * (g.ph ? 11 : 15) * breathe);
+  for (const u of R.marks) {
+    const s = M.at[u.uid] || { pct: LO, on: 0 }, q = at(s.pct), on = s.on;
+    if (u.kind === "free") { dot(E["b" + u.uid], q, on * (g.ph ? 3 : 3.8)); dot(E["h" + u.uid], q, on * (g.ph ? 6 : 8)); }
+    if (u.kind === "rl") dot(E["b" + u.uid], q, on * (g.ph ? 5.5 : 7));
+    if (u.kind === "weights") {
+      const d = on * (g.ph ? 6.5 : 8.5);
+      E["b" + u.uid].setAttribute("d", on ? `M${f(q[0])} ${f(q[1] - d)}L${f(q[0] + d)} ${f(q[1])}L${f(q[0])} ${f(q[1] + d)}L${f(q[0] - d)} ${f(q[1])}Z` : "");
+      dot(E["h" + u.uid], q, on * (g.ph ? 2 : 2.6));
+    }
+    if (u.vote) dot(E["v" + u.uid], q, on * (u.kind === "free" ? (g.ph ? 6.5 : 8) : (g.ph ? 8.5 : 10.5)));
+  }
+  for (const S of Object.values(R.sets)) for (const k of S.all) {  // each name's lead runs to its mark's place on its own set
+    const c = g.c[k.id], e = E["l" + k.id];
+    e.classList.toggle("in", M.labels.has(k.id));
+    if (k.row === "up") { const y = g.lh + 6, q = rproj(g, g.x(k.pct), top - 3, 2); e.setAttribute("d", `M${f(c)} ${f(y)}V${f(y + 8)}L${f(q[0])} ${f(q[1] - 12)}L${f(q[0])} ${f(q[1])}`); }
+    else { const y = g.rlTop - 4, q = rproj(g, g.x(k.pct), bot + 3, 2); e.setAttribute("d", `M${f(q[0])} ${f(q[1])}V${f(g.tick + 6)}L${f(c)} ${f(y - 6)}V${f(y)}`); }
+  }
+  if (M.target > M.head) {  // what RL still leads by, dotted, while the lit line is behind RL's ring
     const p = at(M.head + (g.ph ? 2 : 1.2)), q = at(M.target - (g.ph ? 2 : 1.2));
     E["r-left"].setAttribute("d", q[0] > p[0] ? `M${f(p[0])} ${f(p[1])}L${f(q[0])} ${f(q[1])}` : "");
   } else E["r-left"].setAttribute("d", "");
-  $("labels").querySelectorAll("a").forEach(el => el.classList.toggle("in", shown.has(el.dataset.i)));
+  $("labels").querySelectorAll("a").forEach(el => el.classList.toggle("in", M.labels.has(el.dataset.i)));
   for (const c of $("rail").querySelectorAll(".hit")) {
-    const k = c.dataset.i, s = k[0] === "b" ? R.base[+k.slice(1)] : R.rl[+k.slice(1)], q = at(s.pct);
-    c.setAttribute("cx", f(q[0])); c.setAttribute("cy", f(q[1])); c.style.display = shown.has(k) ? "" : "none";
+    const s = M.at[c.dataset.u], live = s && s.on > .5 && B.all.some(k => k.uid === c.dataset.u), q = at(s ? s.pct : LO);
+    c.setAttribute("cx", f(q[0])); c.setAttribute("cy", f(q[1])); c.style.display = live ? "" : "none";
   }
-  if (R.rl.length) {
-    const c = P.count, v = (R.final * ease(Math.min(1, Math.max(0, (ms - c.t0) / c.d)))).toFixed(1);
-    if ($("gap").textContent !== v) $("gap").textContent = v;
-    $("gapbox").classList.toggle("wait", ms < c.t0);
-  }
+  if (R.texted !== M.text) texts(M.text);
+  if (M.count != null) { const v = M.count.toFixed(1); if ($("gap").textContent !== v) $("gap").textContent = v; }
+  $("gapbox").classList.toggle("wait", M.count == null);
   $("rest").classList.toggle("wait", !M.done);
 }
-function story(list) {
-  const marks = [];
-  for (const x of list) for (const s of x.steps || []) marks.push({ ...s, slug: x.slug, title: x.title, pct: 100 * s.right / s.n });
-  R.base = marks.filter(m => m.model === "base");
-  R.rl = marks.filter(m => m.model === "rl");
-  if (!R.base.length) return;
-  $("story").hidden = false;
-  const plain = R.base[0], rl = R.rl[0], last = R.base[R.base.length - 1], rlLast = R.rl[R.rl.length - 1];
-  $("ask").innerHTML = rl ? `Olmo 3 7B scores <b>${pc(plain)}</b> on MATH-500 before RL training and <b>${pc(rl)}</b> after. ` +
-    "What does RL add, and how much of it needs no reward?" : "";
-  $("setting").textContent = `MATH-500, ${plain.n} problems, T 1.0. A mark opens its finding.`;
-  $("gapbox").hidden = !rl;
-  R.final = rl ? Math.max(0, rlLast.pct - last.pct) : 0;
-  $("gapunit").textContent = R.rl.length > 1 ? "points to RL with the same vote and restarts" : "points to RL, one sample";
-  $("rest").textContent = R.rl.length > 1
-    ? `RL still leads when both models get the same vote over 4 samples and restarts: ${rlLast.right} of ${rlLast.n} against ${last.right} of ${last.n}. ` +
-      "What RL adds in these points is not yet explained."
-    : "";
-  $("src").innerHTML = [...R.base, ...R.rl].map(s => `<li>${esc(s.name)}: ${s.right} of ${s.n}, ${pc(s)}. ${esc(s.source)}</li>`).join("");
-  R.plan = plan();
-  R.t0 = performance.now();
-  rbuild();
+/* The words of each rail. Its large number is computed from its marks; the 328's interval comes from the row of
+   imitation-beats-rl (rail.hard328: estimate, low, high). */
+const SAY = {
+  math500: (S, rail) => {
+    const best = S.up[S.up.length - 1], rl = S.rl[S.rl.length - 1];
+    return { final: rl.pct - best.pct, setting: `MATH-500, ${rl.n} problems, T 1.0. A mark opens its finding.`,
+             unit: "points: Base + cue behind RL with the same vote and restarts",
+             rest: `RL still leads when both models get the same vote over 4 samples and restarts: ${cnt(rl.right)} of ${rl.n} against ${cnt(best.right)} of ${best.n}. ` +
+                   "What RL adds in these points is not yet explained." };
+  },
+  hard328: (S, rail) => {
+    const sft = S.up.find(k => k.key === "think"), rl = S.rl[0], sv = S.up.find(k => k.vote), rv = S.rl[S.rl.length - 1], iv = rail.hard328;
+    return { final: sft.pct - rl.pct, setting: `328 harder problems, T 1.0, one sample unless a vote. A mark opens its finding.`,
+             unit: "points: Think-SFT + cue ahead of RL, one sample each",
+             rest: `With no reward, only imitation of worked solutions, Think-SFT + cue gets ${cnt(sft.right)} of ${sft.n} right against RL's ${cnt(rl.right)} ` +
+                   `(95 % interval ${f(iv[1])} to ${f(iv[2])} points). With a vote over 4 samples: ${cnt(sv.right)} against ${cnt(rv.right)}.` };
+  },
+};
+const want = () => location.hash === "#math500" ? "math500" : "hard328";  // the 328 harder problems open first: the current result
+function show(name, how) {  // draw the set: its entrance, or the travel to it from the set on screen
+  if (how === "travel" && name === R.cur) return;
+  R.from = R.cur; R.cur = name; R.mode = how; R.t0 = performance.now();
+  $("sets").querySelectorAll("a").forEach(a => { if (a.dataset.set === name) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current"); });
+  rdraw(R.t0);
 }
-$("replay").addEventListener("click", () => { R.t0 = performance.now(); });
+function story(list) {
+  const rail = Object.assign({}, ...list.map(x => x.rail || {})), uids = new Map();
+  for (const name of Object.keys(SAY)) {
+    const marks = [];
+    for (const x of list) for (const s of x.steps || []) if (s.set === name) marks.push({ ...s, slug: x.slug, title: x.title, pct: 100 * s.right / s.n });
+    if (!marks.length) continue;
+    marks.forEach((k, i) => { k.uid = k.key || name + i; k.id = name + "-" + k.uid; k.row = k.kind === "free" ? "up" : "down"; });
+    const S = { up: marks.filter(k => k.row === "up").sort((a, b) => a.pct - b.pct), down: marks.filter(k => k.row === "down").sort((a, b) => a.pct - b.pct),
+                rl: marks.filter(k => k.kind === "rl").sort((a, b) => a.vote - b.vote || a.pct - b.pct), wt: marks.filter(k => k.kind === "weights").sort((a, b) => a.pct - b.pct) };
+    S.all = [...S.up, ...S.down];
+    S.head = S.up[S.up.length - 1].pct;
+    S.target = S.rl[S.rl.length - 1].pct;
+    Object.assign(S, SAY[name](S, rail));
+    S.plan = plan(S);
+    R.sets[name] = S;
+    for (const k of marks) if (!uids.has(k.uid)) uids.set(k.uid, { uid: k.uid, kind: k.kind, vote: k.vote });
+  }
+  R.marks = [...uids.values()];
+  if (!R.sets[want()]) return;
+  $("story").hidden = false;
+  rbuild();
+  show(want(), "enter");
+}
+$("replay").addEventListener("click", () => { R.mode = "enter"; R.t0 = performance.now(); rdraw(R.t0); });
 $("srcbox").addEventListener("toggle", () => { $("src").hidden = !$("srcbox").open; });
-addEventListener("resize", () => { if (R.plan) rbuild(); });
+addEventListener("hashchange", () => { if (R.cur) show(want(), "travel"); });
+addEventListener("resize", () => { if (R.cur) rbuild(); });
 
 /* The findings, in their groups. Each frame redraws only the icons that are on screen: the view sways, each icon at
    its own phase, and leans toward the mouse. With reduced motion there is one still frame. */
@@ -662,7 +782,7 @@ function frame(now) {
   requestAnimationFrame(frame);
   if (still.matches || now - S.last < 32) return;  // a slow sway needs no more than about 30 frames a second
   S.last = now;
-  if (R.plan) rdraw(now);
+  if (R.cur) rdraw(now);
   for (const o of S.tiles) {
     if (!o.seen) continue;
     o.px += (o.tx - o.px) * .1;
@@ -680,7 +800,7 @@ document.addEventListener("pointermove", e => {  // each icon leans toward a mou
   }
 });
 document.documentElement.addEventListener("pointerleave", () => { S.tiles.forEach(o => { o.tx = o.ty = 0; }); });
-still.addEventListener("change", () => { S.tiles.forEach(o => paint(o, 0)); if (R.plan) rdraw(performance.now()); });
+still.addEventListener("change", () => { S.tiles.forEach(o => paint(o, 0)); if (R.cur) rdraw(performance.now()); });
 
 /* The rows are written into the page by view.py, so the picture is drawn at once and nothing is read later. */
 const LIST = __ROWS__;

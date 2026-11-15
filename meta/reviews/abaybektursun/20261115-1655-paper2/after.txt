@@ -1,0 +1,37 @@
+230: 250 | 200         250        300          350
+240: 410 | [386, 422]. The experiment gave 411, against 410 for the
+327: 2408.06292 | d Scientific Discovery. arXiv preprint arXiv:2408.06292, 2024.
+327: 2024 | Discovery. arXiv preprint arXiv:2408.06292, 2024.
+328: 2502.18864 | rds an AI co-scientist. arXiv preprint arXiv:2502.18864, 2025.
+328: 2025 | -scientist. arXiv preprint arXiv:2502.18864, 2025.
+330: 2502.14297 | ing Future? arXiv preprint arXiv:2502.14297, 2025.
+330: 2025 | ing Future? arXiv preprint arXiv:2502.14297, 2025.
+332: 2509.08713 | Systems. arXiv preprint arXiv:2509.08713, 2025.
+332: 2025 | Systems. arXiv preprint arXiv:2509.08713, 2025.
+334: 2601.03315 | preprint arXiv:2601.03315, 2026.
+338: 2512.13961 | Ivison, et al. Olmo 3. arXiv preprint arXiv:2512.13961, 2025.
+338: 2025 | al. Olmo 3. arXiv preprint arXiv:2512.13961, 2025.
+340: 2610.06851 | Cue From Training Data. arXiv preprint arXiv:2610.06851, 2026.
+342: 2604.15859 | Intervals. arXiv preprint arXiv:2604.15859, 2026.
+344: 2608.16747 | terfactual Experiments. arXiv preprint arXiv:2608.16747, 2026.
+346: 2309.10312 | xplanations of Neurons. arXiv preprint arXiv:2309.10312, 2023.
+346: 2023 | of Neurons. arXiv preprint arXiv:2309.10312, 2023.
+348: 2604.11061 | n’t Explain Themselves? arXiv preprint arXiv:2604.11061, 2026.
+350: 2403.03230 | science results. arXiv preprint arXiv:2403.03230, 2024.
+350: 2024 | ce results. arXiv preprint arXiv:2403.03230, 2024.
+352: 2506.00794 | Models. arXiv preprint arXiv:2506.00794, 2025.
+352: 2025 | Models. arXiv preprint arXiv:2506.00794, 2025.
+354: 2601.16282 | preprint arXiv:2601.16282, 2026.
+356: 2502.09858 | uential Falsifications. arXiv preprint arXiv:2502.09858, 2025.
+356: 2025 | ifications. arXiv preprint arXiv:2502.09858, 2025.
+357: 2604.22080 | dversarial Experiments. arXiv preprint arXiv:2604.22080,
+359: 2005 | How Can We Know? Princeton University Press, 2005.
+28 numbers of the draft are not in the facts file
+0.02 s
+
+Read against the audit's 13 problems: 0 of 13 are among the 28 lines. 26 lines are years and arXiv numbers of the
+references, 1 is an axis tick (250), 1 is "410" (base + cue, a number of another study).
+Why the known wrong numbers pass: facts.json stores rounded shares (0.835 for 197/236), so "84 %" is within half a unit;
+-25.55 is stored for -25.549, so "-25.6" passes; 54, 55, 14 and "two" equal other counts or are words.
+Without the numbers inside strings: 57 lines, still 0 of the 13, and true numbers (190, 164, 197, 202) are printed.
+The check fails the input that should make it fail. Not kept.

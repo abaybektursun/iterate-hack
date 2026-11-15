@@ -1,0 +1,970 @@
+{
+ "cells": {
+  "base_plain": {
+   "job_id": "frustea-1115-070655-258c",
+   "commit": "11543e19ee32369d2904c0b8a1048bd6bb968158",
+   "model": "allenai/Olmo-3-1025-7B",
+   "prefix_text": "",
+   "mmlupro": {
+    "n": 250,
+    "right": 41,
+    "pct": 16.4,
+    "wilson95": [
+     12.325149292485529,
+     21.491808449408826
+    ],
+    "right_v2": 48,
+    "pct_v2": 19.2,
+    "wilson95_v2": [
+     14.798411071653451,
+     24.533800191749712
+    ],
+    "no_answer_v2": 120,
+    "cap_hits": 1,
+    "no_answer": 125,
+    "tokens_per_item": 929.34
+   },
+   "bbh": {
+    "n": 250,
+    "right": 73,
+    "pct": 29.2,
+    "wilson95": [
+     23.91253555066251,
+     35.117009718129225
+    ],
+    "right_v2": 88,
+    "pct_v2": 35.2,
+    "wilson95_v2": [
+     29.544464762651707,
+     41.303480909373185
+    ],
+    "no_answer_v2": 94,
+    "cap_hits": 2,
+    "no_answer": 110,
+    "tokens_per_item": 1054.06
+   },
+   "all": {
+    "n": 500,
+    "right": 114,
+    "pct": 22.8,
+    "wilson95": [
+     19.33817688593343,
+     26.676587241668347
+    ],
+    "right_v2": 136,
+    "pct_v2": 27.2,
+    "wilson95_v2": [
+     23.484409192737306,
+     31.263260737752425
+    ],
+    "no_answer_v2": 214,
+    "cap_hits": 3,
+    "no_answer": 235,
+    "tokens_per_item": 991.7
+   },
+   "groups": {
+    "bbh/date_understanding": [
+     4,
+     4,
+     25
+    ],
+    "bbh/disambiguation_qa": [
+     11,
+     12,
+     25
+    ],
+    "bbh/hyperbaton": [
+     7,
+     7,
+     25
+    ],
+    "bbh/logical_deduction_five_objects": [
+     6,
+     7,
+     25
+    ],
+    "bbh/penguins_in_a_table": [
+     10,
+     13,
+     25
+    ],
+    "bbh/reasoning_about_colored_objects": [
+     7,
+     11,
+     25
+    ],
+    "bbh/salient_translation_error_detection": [
+     8,
+     9,
+     25
+    ],
+    "bbh/snarks": [
+     7,
+     7,
+     25
+    ],
+    "bbh/temporal_sequences": [
+     5,
+     7,
+     25
+    ],
+    "bbh/tracking_shuffled_objects_five_objects": [
+     8,
+     11,
+     25
+    ],
+    "mmlupro/biology": [
+     7,
+     8,
+     28
+    ],
+    "mmlupro/business": [
+     6,
+     7,
+     28
+    ],
+    "mmlupro/economics": [
+     2,
+     3,
+     28
+    ],
+    "mmlupro/health": [
+     9,
+     11,
+     28
+    ],
+    "mmlupro/history": [
+     4,
+     4,
+     28
+    ],
+    "mmlupro/law": [
+     5,
+     6,
+     28
+    ],
+    "mmlupro/other": [
+     1,
+     1,
+     28
+    ],
+    "mmlupro/philosophy": [
+     2,
+     1,
+     27
+    ],
+    "mmlupro/psychology": [
+     5,
+     7,
+     27
+    ]
+   }
+  },
+  "base_cue": {
+   "job_id": "frustea-1115-070659-494e",
+   "commit": "11543e19ee32369d2904c0b8a1048bd6bb968158",
+   "model": "allenai/Olmo-3-1025-7B",
+   "prefix_text": " line!\n\nOkay",
+   "mmlupro": {
+    "n": 250,
+    "right": 92,
+    "pct": 36.8,
+    "wilson95": [
+     31.063740093725883,
+     42.93577901916119
+    ],
+    "right_v2": 116,
+    "pct_v2": 46.4,
+    "wilson95_v2": [
+     40.31932789891272,
+     52.5896318591474
+    ],
+    "no_answer_v2": 16,
+    "cap_hits": 0,
+    "no_answer": 52,
+    "tokens_per_item": 2240.036
+   },
+   "bbh": {
+    "n": 250,
+    "right": 137,
+    "pct": 54.8,
+    "wilson95": [
+     48.60446422498976,
+     60.850256097596755
+    ],
+    "right_v2": 170,
+    "pct_v2": 68.0,
+    "wilson95_v2": [
+     61.98266704176999,
+     73.47253416792948
+    ],
+    "no_answer_v2": 14,
+    "cap_hits": 1,
+    "no_answer": 62,
+    "tokens_per_item": 1857.652
+   },
+   "all": {
+    "n": 500,
+    "right": 229,
+    "pct": 45.8,
+    "wilson95": [
+     41.481460943929555,
+     50.18258351695014
+    ],
+    "right_v2": 286,
+    "pct_v2": 57.2,
+    "wilson95_v2": [
+     52.82438500160791,
+     61.46582449402691
+    ],
+    "no_answer_v2": 30,
+    "cap_hits": 1,
+    "no_answer": 114,
+    "tokens_per_item": 2048.844
+   },
+   "groups": {
+    "bbh/date_understanding": [
+     16,
+     20,
+     25
+    ],
+    "bbh/disambiguation_qa": [
+     12,
+     14,
+     25
+    ],
+    "bbh/hyperbaton": [
+     12,
+     14,
+     25
+    ],
+    "bbh/logical_deduction_five_objects": [
+     15,
+     19,
+     25
+    ],
+    "bbh/penguins_in_a_table": [
+     18,
+     23,
+     25
+    ],
+    "bbh/reasoning_about_colored_objects": [
+     14,
+     15,
+     25
+    ],
+    "bbh/salient_translation_error_detection": [
+     8,
+     10,
+     25
+    ],
+    "bbh/snarks": [
+     16,
+     18,
+     25
+    ],
+    "bbh/temporal_sequences": [
+     12,
+     14,
+     25
+    ],
+    "bbh/tracking_shuffled_objects_five_objects": [
+     14,
+     23,
+     25
+    ],
+    "mmlupro/biology": [
+     16,
+     22,
+     28
+    ],
+    "mmlupro/business": [
+     18,
+     19,
+     28
+    ],
+    "mmlupro/economics": [
+     10,
+     15,
+     28
+    ],
+    "mmlupro/health": [
+     13,
+     17,
+     28
+    ],
+    "mmlupro/history": [
+     8,
+     10,
+     28
+    ],
+    "mmlupro/law": [
+     3,
+     4,
+     28
+    ],
+    "mmlupro/other": [
+     7,
+     8,
+     28
+    ],
+    "mmlupro/philosophy": [
+     9,
+     10,
+     27
+    ],
+    "mmlupro/psychology": [
+     8,
+     11,
+     27
+    ]
+   }
+  },
+  "rl_plain": {
+   "job_id": "frustea-1115-070704-88e2",
+   "commit": "11543e19ee32369d2904c0b8a1048bd6bb968158",
+   "model": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "prefix_text": "",
+   "mmlupro": {
+    "n": 250,
+    "right": 33,
+    "pct": 13.2,
+    "wilson95": [
+     9.555801627825781,
+     17.958009232344224
+    ],
+    "right_v2": 133,
+    "pct_v2": 53.2,
+    "wilson95_v2": [
+     47.013118466781506,
+     59.29002841494285
+    ],
+    "no_answer_v2": 9,
+    "cap_hits": 0,
+    "no_answer": 181,
+    "tokens_per_item": 3261.912
+   },
+   "bbh": {
+    "n": 250,
+    "right": 45,
+    "pct": 18.0,
+    "wilson95": [
+     13.73334320037719,
+     23.235187982379337
+    ],
+    "right_v2": 199,
+    "pct_v2": 79.6,
+    "wilson95_v2": [
+     74.17463403634052,
+     84.1294746196097
+    ],
+    "no_answer_v2": 4,
+    "cap_hits": 0,
+    "no_answer": 185,
+    "tokens_per_item": 3068.988
+   },
+   "all": {
+    "n": 500,
+    "right": 78,
+    "pct": 15.6,
+    "wilson95": [
+     12.683079119435291,
+     19.04147551253165
+    ],
+    "right_v2": 332,
+    "pct_v2": 66.4,
+    "wilson95_v2": [
+     62.14872238127971,
+     70.4011992476663
+    ],
+    "no_answer_v2": 13,
+    "cap_hits": 0,
+    "no_answer": 366,
+    "tokens_per_item": 3165.45
+   },
+   "groups": {
+    "bbh/date_understanding": [
+     2,
+     23,
+     25
+    ],
+    "bbh/disambiguation_qa": [
+     9,
+     15,
+     25
+    ],
+    "bbh/hyperbaton": [
+     3,
+     18,
+     25
+    ],
+    "bbh/logical_deduction_five_objects": [
+     3,
+     24,
+     25
+    ],
+    "bbh/penguins_in_a_table": [
+     5,
+     25,
+     25
+    ],
+    "bbh/reasoning_about_colored_objects": [
+     7,
+     23,
+     25
+    ],
+    "bbh/salient_translation_error_detection": [
+     4,
+     7,
+     25
+    ],
+    "bbh/snarks": [
+     4,
+     18,
+     25
+    ],
+    "bbh/temporal_sequences": [
+     8,
+     21,
+     25
+    ],
+    "bbh/tracking_shuffled_objects_five_objects": [
+     0,
+     25,
+     25
+    ],
+    "mmlupro/biology": [
+     4,
+     24,
+     28
+    ],
+    "mmlupro/business": [
+     3,
+     20,
+     28
+    ],
+    "mmlupro/economics": [
+     3,
+     17,
+     28
+    ],
+    "mmlupro/health": [
+     7,
+     17,
+     28
+    ],
+    "mmlupro/history": [
+     4,
+     11,
+     28
+    ],
+    "mmlupro/law": [
+     4,
+     5,
+     28
+    ],
+    "mmlupro/other": [
+     2,
+     14,
+     28
+    ],
+    "mmlupro/philosophy": [
+     3,
+     9,
+     27
+    ],
+    "mmlupro/psychology": [
+     3,
+     16,
+     27
+    ]
+   }
+  },
+  "sft_cue": {
+   "job_id": "frustea-1115-070709-bf07",
+   "commit": "11543e19ee32369d2904c0b8a1048bd6bb968158",
+   "model": "allenai/Olmo-3-7B-Think-SFT",
+   "prefix_text": " line!\n\nOkay",
+   "mmlupro": {
+    "n": 250,
+    "right": 129,
+    "pct": 51.6,
+    "wilson95": [
+     45.42801522483823,
+     57.72355821602394
+    ],
+    "right_v2": 137,
+    "pct_v2": 54.8,
+    "wilson95_v2": [
+     48.60446422498976,
+     60.850256097596755
+    ],
+    "no_answer_v2": 3,
+    "cap_hits": 3,
+    "no_answer": 16,
+    "tokens_per_item": 3606.936
+   },
+   "bbh": {
+    "n": 250,
+    "right": 203,
+    "pct": 81.2,
+    "wilson95": [
+     75.89826300138489,
+     85.5574190954275
+    ],
+    "right_v2": 205,
+    "pct_v2": 82.0,
+    "wilson95_v2": [
+     76.76481201762066,
+     86.26665679962281
+    ],
+    "no_answer_v2": 3,
+    "cap_hits": 1,
+    "no_answer": 6,
+    "tokens_per_item": 2274.972
+   },
+   "all": {
+    "n": 500,
+    "right": 332,
+    "pct": 66.4,
+    "wilson95": [
+     62.14872238127971,
+     70.4011992476663
+    ],
+    "right_v2": 342,
+    "pct_v2": 68.4,
+    "wilson95_v2": [
+     64.19778704897584,
+     72.32163721764651
+    ],
+    "no_answer_v2": 6,
+    "cap_hits": 4,
+    "no_answer": 22,
+    "tokens_per_item": 2940.954
+   },
+   "groups": {
+    "bbh/date_understanding": [
+     20,
+     23,
+     25
+    ],
+    "bbh/disambiguation_qa": [
+     16,
+     16,
+     25
+    ],
+    "bbh/hyperbaton": [
+     17,
+     17,
+     25
+    ],
+    "bbh/logical_deduction_five_objects": [
+     24,
+     24,
+     25
+    ],
+    "bbh/penguins_in_a_table": [
+     25,
+     25,
+     25
+    ],
+    "bbh/reasoning_about_colored_objects": [
+     25,
+     25,
+     25
+    ],
+    "bbh/salient_translation_error_detection": [
+     13,
+     13,
+     25
+    ],
+    "bbh/snarks": [
+     15,
+     14,
+     25
+    ],
+    "bbh/temporal_sequences": [
+     23,
+     23,
+     25
+    ],
+    "bbh/tracking_shuffled_objects_five_objects": [
+     25,
+     25,
+     25
+    ],
+    "mmlupro/biology": [
+     20,
+     23,
+     28
+    ],
+    "mmlupro/business": [
+     21,
+     22,
+     28
+    ],
+    "mmlupro/economics": [
+     20,
+     21,
+     28
+    ],
+    "mmlupro/health": [
+     13,
+     14,
+     28
+    ],
+    "mmlupro/history": [
+     10,
+     10,
+     28
+    ],
+    "mmlupro/law": [
+     10,
+     10,
+     28
+    ],
+    "mmlupro/other": [
+     12,
+     12,
+     28
+    ],
+    "mmlupro/philosophy": [
+     9,
+     9,
+     27
+    ],
+    "mmlupro/psychology": [
+     14,
+     16,
+     27
+    ]
+   }
+  }
+ },
+ "differences": {
+  "base_plain - base_cue | mmlupro | v1": {
+   "points": -20.4,
+   "bootstrap95": [
+    -27.6,
+    -13.200000000000001
+   ],
+   "only_first": 22,
+   "only_second": 73
+  },
+  "base_plain - base_cue | mmlupro | v2": {
+   "points": -27.2,
+   "bootstrap95": [
+    -34.400000000000006,
+    -19.6
+   ],
+   "only_first": 21,
+   "only_second": 89
+  },
+  "base_plain - base_cue | bbh | v1": {
+   "points": -25.6,
+   "bootstrap95": [
+    -34.4,
+    -16.799999999999997
+   ],
+   "only_first": 35,
+   "only_second": 99
+  },
+  "base_plain - base_cue | bbh | v2": {
+   "points": -32.8,
+   "bootstrap95": [
+    -40.81,
+    -24.4
+   ],
+   "only_first": 27,
+   "only_second": 109
+  },
+  "base_plain - base_cue | all | v1": {
+   "points": -23.0,
+   "bootstrap95": [
+    -28.4,
+    -17.599999999999998
+   ],
+   "only_first": 57,
+   "only_second": 172
+  },
+  "base_plain - base_cue | all | v2": {
+   "points": -30.0,
+   "bootstrap95": [
+    -35.4,
+    -24.600000000000005
+   ],
+   "only_first": 48,
+   "only_second": 198
+  },
+  "base_plain - rl_plain | mmlupro | v1": {
+   "points": 3.2,
+   "bootstrap95": [
+    -2.8,
+    9.2
+   ],
+   "only_first": 33,
+   "only_second": 25
+  },
+  "base_plain - rl_plain | mmlupro | v2": {
+   "points": -34.0,
+   "bootstrap95": [
+    -40.8,
+    -26.8
+   ],
+   "only_first": 13,
+   "only_second": 98
+  },
+  "base_plain - rl_plain | bbh | v1": {
+   "points": 11.2,
+   "bootstrap95": [
+    3.9999999999999982,
+    18.4
+   ],
+   "only_first": 57,
+   "only_second": 29
+  },
+  "base_plain - rl_plain | bbh | v2": {
+   "points": -44.4,
+   "bootstrap95": [
+    -52.0,
+    -36.8
+   ],
+   "only_first": 17,
+   "only_second": 128
+  },
+  "base_plain - rl_plain | all | v1": {
+   "points": 7.2,
+   "bootstrap95": [
+    2.8,
+    11.800000000000002
+   ],
+   "only_first": 90,
+   "only_second": 54
+  },
+  "base_plain - rl_plain | all | v2": {
+   "points": -39.2,
+   "bootstrap95": [
+    -44.2,
+    -34.0
+   ],
+   "only_first": 30,
+   "only_second": 226
+  },
+  "base_plain - sft_cue | mmlupro | v1": {
+   "points": -35.2,
+   "bootstrap95": [
+    -42.400000000000006,
+    -28.000000000000004
+   ],
+   "only_first": 15,
+   "only_second": 103
+  },
+  "base_plain - sft_cue | mmlupro | v2": {
+   "points": -35.6,
+   "bootstrap95": [
+    -42.8,
+    -28.400000000000002
+   ],
+   "only_first": 14,
+   "only_second": 103
+  },
+  "base_plain - sft_cue | bbh | v1": {
+   "points": -52.0,
+   "bootstrap95": [
+    -59.199999999999996,
+    -44.800000000000004
+   ],
+   "only_first": 11,
+   "only_second": 141
+  },
+  "base_plain - sft_cue | bbh | v2": {
+   "points": -46.8,
+   "bootstrap95": [
+    -54.0,
+    -39.6
+   ],
+   "only_first": 12,
+   "only_second": 129
+  },
+  "base_plain - sft_cue | all | v1": {
+   "points": -43.6,
+   "bootstrap95": [
+    -48.6,
+    -38.4
+   ],
+   "only_first": 26,
+   "only_second": 244
+  },
+  "base_plain - sft_cue | all | v2": {
+   "points": -41.2,
+   "bootstrap95": [
+    -46.199999999999996,
+    -36.0
+   ],
+   "only_first": 26,
+   "only_second": 232
+  },
+  "base_cue - rl_plain | mmlupro | v1": {
+   "points": 23.6,
+   "bootstrap95": [
+    16.799999999999997,
+    30.8
+   ],
+   "only_first": 77,
+   "only_second": 18
+  },
+  "base_cue - rl_plain | mmlupro | v2": {
+   "points": -6.8,
+   "bootstrap95": [
+    -13.200000000000001,
+    0.0
+   ],
+   "only_first": 27,
+   "only_second": 44
+  },
+  "base_cue - rl_plain | bbh | v1": {
+   "points": 36.8,
+   "bootstrap95": [
+    29.59,
+    44.0
+   ],
+   "only_first": 108,
+   "only_second": 16
+  },
+  "base_cue - rl_plain | bbh | v2": {
+   "points": -11.6,
+   "bootstrap95": [
+    -18.399999999999995,
+    -4.800000000000004
+   ],
+   "only_first": 22,
+   "only_second": 51
+  },
+  "base_cue - rl_plain | all | v1": {
+   "points": 30.2,
+   "bootstrap95": [
+    25.2,
+    35.4
+   ],
+   "only_first": 185,
+   "only_second": 34
+  },
+  "base_cue - rl_plain | all | v2": {
+   "points": -9.2,
+   "bootstrap95": [
+    -13.8,
+    -4.600000000000004
+   ],
+   "only_first": 49,
+   "only_second": 95
+  },
+  "base_cue - sft_cue | mmlupro | v1": {
+   "points": -14.8,
+   "bootstrap95": [
+    -21.999999999999996,
+    -7.9999999999999964
+   ],
+   "only_first": 24,
+   "only_second": 61
+  },
+  "base_cue - sft_cue | mmlupro | v2": {
+   "points": -8.4,
+   "bootstrap95": [
+    -15.199999999999998,
+    -1.5999999999999959
+   ],
+   "only_first": 29,
+   "only_second": 50
+  },
+  "base_cue - sft_cue | bbh | v1": {
+   "points": -26.4,
+   "bootstrap95": [
+    -34.0,
+    -18.800000000000004
+   ],
+   "only_first": 20,
+   "only_second": 86
+  },
+  "base_cue - sft_cue | bbh | v2": {
+   "points": -14.0,
+   "bootstrap95": [
+    -20.800000000000008,
+    -7.200000000000006
+   ],
+   "only_first": 21,
+   "only_second": 56
+  },
+  "base_cue - sft_cue | all | v1": {
+   "points": -20.6,
+   "bootstrap95": [
+    -25.6,
+    -15.399999999999997
+   ],
+   "only_first": 44,
+   "only_second": 147
+  },
+  "base_cue - sft_cue | all | v2": {
+   "points": -11.2,
+   "bootstrap95": [
+    -15.800000000000002,
+    -6.2000000000000055
+   ],
+   "only_first": 50,
+   "only_second": 106
+  },
+  "rl_plain - sft_cue | mmlupro | v1": {
+   "points": -38.4,
+   "bootstrap95": [
+    -45.199999999999996,
+    -31.599999999999994
+   ],
+   "only_first": 8,
+   "only_second": 104
+  },
+  "rl_plain - sft_cue | mmlupro | v2": {
+   "points": -1.6,
+   "bootstrap95": [
+    -8.000000000000002,
+    4.799999999999994
+   ],
+   "only_first": 32,
+   "only_second": 36
+  },
+  "rl_plain - sft_cue | bbh | v1": {
+   "points": -63.2,
+   "bootstrap95": [
+    -69.6,
+    -56.400000000000006
+   ],
+   "only_first": 6,
+   "only_second": 164
+  },
+  "rl_plain - sft_cue | bbh | v2": {
+   "points": -2.4,
+   "bootstrap95": [
+    -7.9999999999999964,
+    2.8000000000000025
+   ],
+   "only_first": 21,
+   "only_second": 27
+  },
+  "rl_plain - sft_cue | all | v1": {
+   "points": -50.8,
+   "bootstrap95": [
+    -55.8,
+    -46.0
+   ],
+   "only_first": 14,
+   "only_second": 268
+  },
+  "rl_plain - sft_cue | all | v2": {
+   "points": -2.0,
+   "bootstrap95": [
+    -6.199999999999994,
+    2.400000000000002
+   ],
+   "only_first": 53,
+   "only_second": 63
+  }
+ }
+}

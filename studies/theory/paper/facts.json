@@ -1,0 +1,2991 @@
+{
+ "_about": "Written by studies/theory/paper/build_facts.py from the committed round files. Each entry: value, n, unit, source, note.",
+ "_row_fields": {
+  "series": "engine | account/run-0N",
+  "round": "engine round (null for account runs)",
+  "engine_version": "see facts.versions",
+  "kind": "r1_hand_matched | heldout_claim (rounds 2-3, the main score there) | offline_test (rounds 4-7, the main score) | carried_duel_row (round 6: a promoted rival's round-5 duel tests, 'readers' = the theory it replaced) | heldout_filter_claim (rounds 4-7, survivors only, not in the headline) | exposed_claim (round 2, left out by the engine)",
+  "theory": "id as in the round files",
+  "cluster": "bootstrap cluster",
+  "qid": "target or test id",
+  "quantity": "what is measured",
+  "unit": "",
+  "measured": "",
+  "t_value/t_low/t_high": "theory's forecast and 90 % interval",
+  "r1_*/r2_*": "reader 1 and 2 (interval null where none was filed)",
+  "t_inside/r1_inside/r2_inside": "low <= measured <= high",
+  "logp_t/logp_r1/logp_r2/logp_mix": "log scores (nats)",
+  "gain": "recomputed, clipped to [-3, 3]; null without reader intervals",
+  "gain_stored": "as in the metrics file",
+  "nearer": "w theory nearer than the readers' mean, t tie, l readers nearer (site rule); null when not compared",
+  "nearer_both": "theory strictly nearer than each reader",
+  "z_t/z_r1/z_r2": "(measured - forecast) / sd",
+  "flags": "headline (in the 403), compared (in the 394), reader_intervals (in the 236), carried, exposed, tie, within_noise, leak_context (round 2: readers and new authors had a commit subject with result numbers in context), divergent (both readers' centres outside the theory's interval)",
+  "source": "file and key"
+ },
+ "counts": {
+  "predictions_filed": {
+   "value": 426,
+   "n": null,
+   "unit": "predictions",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "round 1: the 7 hand-matched interval predictions; rounds 2-3: claims on scored held-out targets; rounds 4-7: offline predictions the engine scores (fits, zeros by construction and one failed replication left out), carried duel rows of round 6 included. Per round: {\"1\": 7, \"2\": 151, \"3\": 80, \"4\": 42, \"5\": 48, \"6\": 71, \"7\": 27}"
+  },
+  "predictions_computed": {
+   "value": 403,
+   "n": 426,
+   "unit": "predictions",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "filed minus 23 offline predictions with no number (missing packages, rows or fields). Per round: {\"1\": 7, \"2\": 151, \"3\": 80, \"4\": 29, \"5\": 45, \"6\": 67, \"7\": 24}"
+  },
+  "predictions_compared_with_readers": {
+   "value": 394,
+   "n": 403,
+   "unit": "predictions",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "computed minus the 9 carried duel rows of round 6, whose comparison is the theory they replaced, not a reader"
+  },
+  "predictions_with_reader_intervals": {
+   "value": 236,
+   "n": 394,
+   "unit": "predictions",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "compared minus rounds 1-2, where the readers filed point forecasts only; log gain and reader coverage exist only here (rounds 3-7)"
+  },
+  "distinct_quantities_compared": {
+   "value": 228,
+   "n": 394,
+   "unit": "quantities",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 2-3: several theories claim the same target. Distinct per round: {\"1\": 5, \"2\": 38, \"3\": 29, \"4\": 29, \"5\": 45, \"6\": 58, \"7\": 24}"
+  },
+  "per_round": {
+   "1": {
+    "engine_version": "1",
+    "theories": 6,
+    "filed": 7,
+    "computed": 7,
+    "compared": 7,
+    "theories_with_a_scored_prediction": 3
+   },
+   "2": {
+    "engine_version": "2",
+    "theories": 16,
+    "filed": 151,
+    "computed": 151,
+    "compared": 151,
+    "theories_with_a_scored_prediction": 16
+   },
+   "3": {
+    "engine_version": "3",
+    "theories": 14,
+    "filed": 80,
+    "computed": 80,
+    "compared": 80,
+    "theories_with_a_scored_prediction": 12
+   },
+   "4": {
+    "engine_version": "4 (+5/5.1 duel)",
+    "theories": 10,
+    "filed": 42,
+    "computed": 29,
+    "compared": 29,
+    "theories_with_a_scored_prediction": 8
+   },
+   "5": {
+    "engine_version": "5.1",
+    "theories": 13,
+    "filed": 48,
+    "computed": 45,
+    "compared": 45,
+    "theories_with_a_scored_prediction": 13
+   },
+   "6": {
+    "engine_version": "6.3",
+    "theories": 9,
+    "filed": 71,
+    "computed": 67,
+    "compared": 58,
+    "theories_with_a_scored_prediction": 8
+   },
+   "7": {
+    "engine_version": "7.1",
+    "theories": 10,
+    "filed": 27,
+    "computed": 24,
+    "compared": 24,
+    "theories_with_a_scored_prediction": 7
+   }
+  },
+  "extra_rows_not_in_headline": {
+   "engine:exposed_claim": 11,
+   "engine:heldout_filter_claim": 27,
+   "account/run-01:offline_test": 9,
+   "account/run-02:offline_test": 20,
+   "account/run-03:offline_test": 46
+  }
+ },
+ "theories": {
+  "proposed": {
+   "value": 63,
+   "n": null,
+   "unit": "theories",
+   "source": "studies/theory/results/engine/round-<nn>/metrics*.json",
+   "note": "distinct ids over rounds 1-7; includes 3 promoted rivals (r5-m03-rival, r5-m10-rival, r6-account-rival) and 1 account (r6-account); the planted control is not counted. New per round: {\"1\": 6, \"2\": 10, \"3\": 10, \"4\": 10, \"5\": 10, \"6\": 9, \"7\": 8}"
+  },
+  "entries_per_round": {
+   "value": {
+    "1": 6,
+    "2": 16,
+    "3": 14,
+    "4": 10,
+    "5": 13,
+    "6": 9,
+    "7": 10
+   },
+   "n": null,
+   "unit": "theories",
+   "source": "",
+   "note": "carried theories count in each round they were scored in"
+  },
+  "refuted": {
+   "value": 23,
+   "n": 63,
+   "unit": "theories",
+   "source": "",
+   "note": "ever refuted: by a review (rounds 2-3), by its own computed predictions, 2 held-out strikes or its review (rounds 4-7). r1-all-1, r4-m02, r4-m04, r4-m07, r4-m09, r4-m11, r4-m12, r5-m02, r5-m04, r5-m05, r5-m06, r5-m07, r5-m08, r5-m09, r5-m10, r5-m11, r6-m01, r6-m04, r6-m05, r6-m10, r6-m11, r7-m03, r7-m12"
+  },
+  "lost_to_rival": {
+   "value": 4,
+   "n": 63,
+   "unit": "theories",
+   "source": "",
+   "note": "never refuted, state 'loses to rival' as printed. r4-m08, r4-m10, r5-m03, r6-account"
+  },
+  "no_gain": {
+   "value": 7,
+   "n": 63,
+   "unit": "theories",
+   "source": "",
+   "note": "last state 'no gain', never refuted or lost. r4-m06, r6-account-rival, r7-m05, r7-m07, r7-m08, r7-m09, r7-m11"
+  },
+  "survive_last_round": {
+   "value": [
+    "r5-m03-rival"
+   ],
+   "n": null,
+   "unit": "",
+   "source": "",
+   "note": "state 'survives' in round 7"
+  },
+  "standing": {
+   "value": 0,
+   "n": 63,
+   "unit": "theories",
+   "source": "",
+   "note": "survives in round 7 and beat its rival with >= 2 separating tests"
+  },
+  "other": {
+   "value": 28,
+   "n": 63,
+   "unit": "theories",
+   "source": "",
+   "note": "neither refuted, lost, no gain nor surviving: failed the round 1-3 score, untested, or survived a round and was not carried. {\"r1-across-1\": \"round 2: fails\", \"r1-across-2\": \"round 2: fails\", \"r1-all-2\": \"round 3: fails\", \"r1-surprises-1\": \"round 2: fails\", \"r1-surprises-2\": \"round 3: fails\", \"r2-across-1\": \"round 2: fails\", \"r2-across-2\": \"round 3: fails\", \"r2-all-1\": \"round 2: fails\", \"r2-all-2\": \"round 3: fails\", \"r2-external-1\": \"round 2: fails\", \"r2-external-2\": \"round 2: fails\", \"r2-revise-1\": \"round 2: fails\", \"r2-revise-2\": \"round 2: fails\", \"r2-surprises-1\": \"round 2: fails\", \"r2-surprises-2\": \"round 2: fails\", \"r3-across-1\": \"round 3: fails\", \"r3-across-2\": \"round 3: passes\", \"r3-all-1\": \"round 3: fails\", \"r3-all-2\": \"round 3: fails\", \"r3-external-1\": \"round 3: fails\", \"r3-external-2\": \"round 3: fails\", \"r3-revise-1\": \"round 3: fails\", \"r3-revise-2\": \"round 3: fails\", \"r3-surprises-1\": \"round 3: fails\", \"r3-surprises-2\": \"round 3: fails\", \"r4-m01\": \"round 4: survives\", \"r5-m10-rival\": \"round 6: survives\", \"r6-m06\": \"round 7: untested\"}"
+  }
+ },
+ "headline_all_rounds": {
+  "nearer": {
+   "value": 0.4822,
+   "n": 394,
+   "unit": "fraction",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 1-7: theory nearer than the mean of the two readers; ties 20 count as not nearer; count 190 of 394; clusters 58; 95 % cluster bootstrap [0.3971, 0.5511]"
+  },
+  "nearer_ties_dropped": {
+   "value": 0.508,
+   "n": 374,
+   "unit": "fraction",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 1-7: ties dropped; count 190 of 374; clusters 58; 95 % cluster bootstrap [0.4162, 0.5878]"
+  },
+  "nearer_than_both_readers": {
+   "value": 0.3959,
+   "n": 394,
+   "unit": "fraction",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 1-7: strictly nearer than each reader; count 156 of 394; clusters 58; 95 % cluster bootstrap [0.3104, 0.4711]"
+  },
+  "coverage_theory_all_scored": {
+   "value": 0.6526,
+   "n": 403,
+   "unit": "fraction",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 1-7: measured inside the theory's 90 % interval, every scored prediction; count 263 of 403; clusters 60; 95 % cluster bootstrap [0.5727, 0.7317]"
+  },
+  "coverage_theory": {
+   "value": 0.6949,
+   "n": 236,
+   "unit": "fraction",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 1-7: predictions where both readers filed an interval; count 164 of 236; clusters 45; 95 % cluster bootstrap [0.5654, 0.7973]"
+  },
+  "coverage_reader_1": {
+   "value": 0.8347,
+   "n": 236,
+   "unit": "fraction",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 1-7: same predictions; count 197 of 236; clusters 45; 95 % cluster bootstrap [0.7708, 0.8804]"
+  },
+  "coverage_reader_2": {
+   "value": 0.8559,
+   "n": 236,
+   "unit": "fraction",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 1-7: same predictions; count 202 of 236; clusters 45; 95 % cluster bootstrap [0.7955, 0.9017]"
+  },
+  "coverage_gap_theory_minus_readers_mean": {
+   "value": -0.1504,
+   "n": 236,
+   "unit": "fraction",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 1-7: paired on the same predictions; 95 % cluster bootstrap [-0.2756, -0.0507]"
+  },
+  "gain_total": {
+   "value": -58.85,
+   "n": 236,
+   "unit": "nats",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 1-7: log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction -0.2494 (95 % cluster bootstrap [-0.685, 0.1278]); 95 % cluster bootstrap of the total [-134.4113, 39.8148]; clusters 45"
+  },
+  "gain_at_clip": {
+   "value": [
+    27,
+    5
+   ],
+   "n": 236,
+   "unit": "predictions at -3, at +3",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 1-7"
+  },
+  "median_interval_width_ratio_theory_over_reader_mean": {
+   "value": 0.708,
+   "n": 236,
+   "unit": "ratio",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 1-7"
+  }
+ },
+ "headline_rounds_3_7": {
+  "nearer": {
+   "value": 0.4661,
+   "n": 236,
+   "unit": "fraction",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 3-7: theory nearer than the mean of the two readers; ties 13 count as not nearer; count 110 of 236; clusters 45; 95 % cluster bootstrap [0.3374, 0.5674]"
+  },
+  "nearer_ties_dropped": {
+   "value": 0.4933,
+   "n": 223,
+   "unit": "fraction",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 3-7: ties dropped; count 110 of 223; clusters 45; 95 % cluster bootstrap [0.35, 0.6154]"
+  },
+  "nearer_than_both_readers": {
+   "value": 0.3898,
+   "n": 236,
+   "unit": "fraction",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 3-7: strictly nearer than each reader; count 92 of 236; clusters 45; 95 % cluster bootstrap [0.2642, 0.4968]"
+  },
+  "coverage_theory_all_scored": {
+   "value": 0.702,
+   "n": 245,
+   "unit": "fraction",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 3-7: measured inside the theory's 90 % interval, every scored prediction; count 172 of 245; clusters 47; 95 % cluster bootstrap [0.5829, 0.7987]"
+  },
+  "coverage_theory": {
+   "value": 0.6949,
+   "n": 236,
+   "unit": "fraction",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 3-7: predictions where both readers filed an interval; count 164 of 236; clusters 45; 95 % cluster bootstrap [0.5654, 0.7973]"
+  },
+  "coverage_reader_1": {
+   "value": 0.8347,
+   "n": 236,
+   "unit": "fraction",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 3-7: same predictions; count 197 of 236; clusters 45; 95 % cluster bootstrap [0.7708, 0.8804]"
+  },
+  "coverage_reader_2": {
+   "value": 0.8559,
+   "n": 236,
+   "unit": "fraction",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 3-7: same predictions; count 202 of 236; clusters 45; 95 % cluster bootstrap [0.7955, 0.9017]"
+  },
+  "coverage_gap_theory_minus_readers_mean": {
+   "value": -0.1504,
+   "n": 236,
+   "unit": "fraction",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 3-7: paired on the same predictions; 95 % cluster bootstrap [-0.2756, -0.0507]"
+  },
+  "gain_total": {
+   "value": -58.85,
+   "n": 236,
+   "unit": "nats",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 3-7: log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction -0.2494 (95 % cluster bootstrap [-0.685, 0.1278]); 95 % cluster bootstrap of the total [-134.4113, 39.8148]; clusters 45"
+  },
+  "gain_at_clip": {
+   "value": [
+    27,
+    5
+   ],
+   "n": 236,
+   "unit": "predictions at -3, at +3",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 3-7"
+  },
+  "median_interval_width_ratio_theory_over_reader_mean": {
+   "value": 0.708,
+   "n": 236,
+   "unit": "ratio",
+   "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+   "note": "rounds 3-7"
+  }
+ },
+ "per_round": {
+  "1": {
+   "nearer": {
+    "value": 0.8571,
+    "n": 7,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 1 (engine 1): theory nearer than the mean of the two readers; ties 0 count as not nearer; count 6 of 7; clusters 3; 95 % cluster bootstrap [0.0, 1.0]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.8571,
+    "n": 7,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 1 (engine 1): ties dropped; count 6 of 7; clusters 3; 95 % cluster bootstrap [0.0, 1.0]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.8571,
+    "n": 7,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 1 (engine 1): strictly nearer than each reader; count 6 of 7; clusters 3; 95 % cluster bootstrap [0.0, 1.0]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.7143,
+    "n": 7,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 1 (engine 1): measured inside the theory's 90 % interval, every scored prediction; count 5 of 7; clusters 3; 95 % cluster bootstrap [0.5, 1.0]"
+   }
+  },
+  "2": {
+   "nearer": {
+    "value": 0.4901,
+    "n": 151,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 2 (engine 2): theory nearer than the mean of the two readers; ties 7 count as not nearer; count 74 of 151; clusters 16; 95 % cluster bootstrap [0.405, 0.5563]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.5139,
+    "n": 144,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 2 (engine 2): ties dropped; count 74 of 144; clusters 16; 95 % cluster bootstrap [0.4356, 0.5742]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.3841,
+    "n": 151,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 2 (engine 2): strictly nearer than each reader; count 58 of 151; clusters 16; 95 % cluster bootstrap [0.3032, 0.4534]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.5695,
+    "n": 151,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 2 (engine 2): measured inside the theory's 90 % interval, every scored prediction; count 86 of 151; clusters 16; 95 % cluster bootstrap [0.496, 0.6412]"
+   }
+  },
+  "3": {
+   "nearer": {
+    "value": 0.5,
+    "n": 80,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 3 (engine 3): theory nearer than the mean of the two readers; ties 3 count as not nearer; count 40 of 80; clusters 12; 95 % cluster bootstrap [0.3555, 0.6477]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.5195,
+    "n": 77,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 3 (engine 3): ties dropped; count 40 of 77; clusters 12; 95 % cluster bootstrap [0.375, 0.6667]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.3875,
+    "n": 80,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 3 (engine 3): strictly nearer than each reader; count 31 of 80; clusters 12; 95 % cluster bootstrap [0.29, 0.4935]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.75,
+    "n": 80,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 3 (engine 3): measured inside the theory's 90 % interval, every scored prediction; count 60 of 80; clusters 12; 95 % cluster bootstrap [0.6739, 0.8182]"
+   },
+   "coverage_theory": {
+    "value": 0.75,
+    "n": 80,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 3 (engine 3): predictions where both readers filed an interval; count 60 of 80; clusters 12; 95 % cluster bootstrap [0.6739, 0.8182]"
+   },
+   "coverage_reader_1": {
+    "value": 0.8625,
+    "n": 80,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 3 (engine 3): same predictions; count 69 of 80; clusters 12; 95 % cluster bootstrap [0.7875, 0.9326]"
+   },
+   "coverage_reader_2": {
+    "value": 0.925,
+    "n": 80,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 3 (engine 3): same predictions; count 74 of 80; clusters 12; 95 % cluster bootstrap [0.8526, 1.0]"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": -0.1437,
+    "n": 80,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 3 (engine 3): paired on the same predictions; 95 % cluster bootstrap [-0.2391, -0.0591]"
+   },
+   "gain_total": {
+    "value": -25.55,
+    "n": 80,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 3 (engine 3): log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction -0.3194 (95 % cluster bootstrap [-0.5176, -0.1055]); 95 % cluster bootstrap of the total [-44.4404, -8.059]; clusters 12"
+   },
+   "gain_at_clip": {
+    "value": [
+     11,
+     0
+    ],
+    "n": 80,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 3 (engine 3)"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.619,
+    "n": 80,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 3 (engine 3)"
+   }
+  },
+  "4": {
+   "nearer": {
+    "value": 0.3448,
+    "n": 29,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 4 (engine 4 (+5/5.1 duel)): theory nearer than the mean of the two readers; ties 0 count as not nearer; count 10 of 29; clusters 8; 95 % cluster bootstrap [0.125, 0.6333]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.3448,
+    "n": 29,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 4 (engine 4 (+5/5.1 duel)): ties dropped; count 10 of 29; clusters 8; 95 % cluster bootstrap [0.125, 0.6333]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.3448,
+    "n": 29,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 4 (engine 4 (+5/5.1 duel)): strictly nearer than each reader; count 10 of 29; clusters 8; 95 % cluster bootstrap [0.125, 0.6333]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.6207,
+    "n": 29,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 4 (engine 4 (+5/5.1 duel)): measured inside the theory's 90 % interval, every scored prediction; count 18 of 29; clusters 8; 95 % cluster bootstrap [0.3548, 0.9032]"
+   },
+   "coverage_theory": {
+    "value": 0.6207,
+    "n": 29,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 4 (engine 4 (+5/5.1 duel)): predictions where both readers filed an interval; count 18 of 29; clusters 8; 95 % cluster bootstrap [0.3548, 0.9032]"
+   },
+   "coverage_reader_1": {
+    "value": 0.8621,
+    "n": 29,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 4 (engine 4 (+5/5.1 duel)): same predictions; count 25 of 29; clusters 8; 95 % cluster bootstrap [0.6452, 1.0]"
+   },
+   "coverage_reader_2": {
+    "value": 0.8276,
+    "n": 29,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 4 (engine 4 (+5/5.1 duel)): same predictions; count 24 of 29; clusters 8; 95 % cluster bootstrap [0.6129, 0.973]"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": -0.2241,
+    "n": 29,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 4 (engine 4 (+5/5.1 duel)): paired on the same predictions; 95 % cluster bootstrap [-0.537, 0.1964]"
+   },
+   "gain_total": {
+    "value": -17.32,
+    "n": 29,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 4 (engine 4 (+5/5.1 duel)): log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction -0.5973 (95 % cluster bootstrap [-1.5926, 0.68]); 95 % cluster bootstrap of the total [-51.8225, 18.2547]; clusters 8"
+   },
+   "gain_at_clip": {
+    "value": [
+     6,
+     2
+    ],
+    "n": 29,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 4 (engine 4 (+5/5.1 duel))"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.767,
+    "n": 29,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 4 (engine 4 (+5/5.1 duel))"
+   }
+  },
+  "5": {
+   "nearer": {
+    "value": 0.3778,
+    "n": 45,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 5 (engine 5.1): theory nearer than the mean of the two readers; ties 1 count as not nearer; count 17 of 45; clusters 13; 95 % cluster bootstrap [0.1951, 0.5834]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.3864,
+    "n": 44,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 5 (engine 5.1): ties dropped; count 17 of 44; clusters 13; 95 % cluster bootstrap [0.2, 0.587]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.3333,
+    "n": 45,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 5 (engine 5.1): strictly nearer than each reader; count 15 of 45; clusters 13; 95 % cluster bootstrap [0.1702, 0.5217]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.4889,
+    "n": 45,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 5 (engine 5.1): measured inside the theory's 90 % interval, every scored prediction; count 22 of 45; clusters 13; 95 % cluster bootstrap [0.3333, 0.6512]"
+   },
+   "coverage_theory": {
+    "value": 0.4889,
+    "n": 45,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 5 (engine 5.1): predictions where both readers filed an interval; count 22 of 45; clusters 13; 95 % cluster bootstrap [0.3333, 0.6512]"
+   },
+   "coverage_reader_1": {
+    "value": 0.7333,
+    "n": 45,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 5 (engine 5.1): same predictions; count 33 of 45; clusters 13; 95 % cluster bootstrap [0.5778, 0.8667]"
+   },
+   "coverage_reader_2": {
+    "value": 0.7556,
+    "n": 45,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 5 (engine 5.1): same predictions; count 34 of 45; clusters 13; 95 % cluster bootstrap [0.6279, 0.8696]"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": -0.2556,
+    "n": 45,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 5 (engine 5.1): paired on the same predictions; 95 % cluster bootstrap [-0.449, -0.0233]"
+   },
+   "gain_total": {
+    "value": -25.45,
+    "n": 45,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 5 (engine 5.1): log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction -0.5656 (95 % cluster bootstrap [-1.156, 0.0855]); 95 % cluster bootstrap of the total [-52.944, 3.8103]; clusters 13"
+   },
+   "gain_at_clip": {
+    "value": [
+     7,
+     1
+    ],
+    "n": 45,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 5 (engine 5.1)"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.843,
+    "n": 45,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 5 (engine 5.1)"
+   }
+  },
+  "6": {
+   "nearer": {
+    "value": 0.6034,
+    "n": 58,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 6 (engine 6.3): theory nearer than the mean of the two readers; ties 7 count as not nearer; count 35 of 58; clusters 6; 95 % cluster bootstrap [0.1765, 0.6809]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.6863,
+    "n": 51,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 6 (engine 6.3): ties dropped; count 35 of 51; clusters 6; 95 % cluster bootstrap [0.1765, 0.8]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.569,
+    "n": 58,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 6 (engine 6.3): strictly nearer than each reader; count 33 of 58; clusters 6; 95 % cluster bootstrap [0.1111, 0.6593]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.8358,
+    "n": 67,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 6 (engine 6.3): measured inside the theory's 90 % interval, every scored prediction; count 56 of 67; clusters 8; 95 % cluster bootstrap [0.375, 0.9415]"
+   },
+   "coverage_theory": {
+    "value": 0.8276,
+    "n": 58,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 6 (engine 6.3): predictions where both readers filed an interval; count 48 of 58; clusters 6; 95 % cluster bootstrap [0.2222, 0.9433]"
+   },
+   "coverage_reader_1": {
+    "value": 0.8621,
+    "n": 58,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 6 (engine 6.3): same predictions; count 50 of 58; clusters 6; 95 % cluster bootstrap [0.6667, 0.8983]"
+   },
+   "coverage_reader_2": {
+    "value": 0.8448,
+    "n": 58,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 6 (engine 6.3): same predictions; count 49 of 58; clusters 6; 95 % cluster bootstrap [0.625, 0.8814]"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": -0.0259,
+    "n": 58,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 6 (engine 6.3): paired on the same predictions; 95 % cluster bootstrap [-0.6176, 0.0722]"
+   },
+   "gain_total": {
+    "value": 22.41,
+    "n": 58,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 6 (engine 6.3): log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction 0.3863 (95 % cluster bootstrap [-1.1869, 0.7104]); 95 % cluster bootstrap of the total [-20.8926, 100.1734]; clusters 6"
+   },
+   "gain_at_clip": {
+    "value": [
+     1,
+     2
+    ],
+    "n": 58,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 6 (engine 6.3)"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.66,
+    "n": 58,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 6 (engine 6.3)"
+   }
+  },
+  "7": {
+   "nearer": {
+    "value": 0.3333,
+    "n": 24,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 7 (engine 7.1): theory nearer than the mean of the two readers; ties 2 count as not nearer; count 8 of 24; clusters 7; 95 % cluster bootstrap [0.125, 0.5909]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.3636,
+    "n": 22,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 7 (engine 7.1): ties dropped; count 8 of 22; clusters 7; 95 % cluster bootstrap [0.15, 0.6316]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.125,
+    "n": 24,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 7 (engine 7.1): strictly nearer than each reader; count 3 of 24; clusters 7; 95 % cluster bootstrap [0.0, 0.3182]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.6667,
+    "n": 24,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 7 (engine 7.1): measured inside the theory's 90 % interval, every scored prediction; count 16 of 24; clusters 7; 95 % cluster bootstrap [0.56, 0.7826]"
+   },
+   "coverage_theory": {
+    "value": 0.6667,
+    "n": 24,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 7 (engine 7.1): predictions where both readers filed an interval; count 16 of 24; clusters 7; 95 % cluster bootstrap [0.56, 0.7826]"
+   },
+   "coverage_reader_1": {
+    "value": 0.8333,
+    "n": 24,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 7 (engine 7.1): same predictions; count 20 of 24; clusters 7; 95 % cluster bootstrap [0.68, 0.96]"
+   },
+   "coverage_reader_2": {
+    "value": 0.875,
+    "n": 24,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 7 (engine 7.1): same predictions; count 21 of 24; clusters 7; 95 % cluster bootstrap [0.7083, 1.0]"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": -0.1875,
+    "n": 24,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 7 (engine 7.1): paired on the same predictions; 95 % cluster bootstrap [-0.3333, -0.0435]"
+   },
+   "gain_total": {
+    "value": -12.93,
+    "n": 24,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 7 (engine 7.1): log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction -0.5389 (95 % cluster bootstrap [-0.7727, -0.3135]); 95 % cluster bootstrap of the total [-19.5367, -7.0326]; clusters 7"
+   },
+   "gain_at_clip": {
+    "value": [
+     2,
+     0
+    ],
+    "n": 24,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 7 (engine 7.1)"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.846,
+    "n": 24,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round 7 (engine 7.1)"
+   }
+  }
+ },
+ "sensitivity": {
+  "rounds_4_7_offline_tests": {
+   "nearer": {
+    "value": 0.4487,
+    "n": 156,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_offline_tests: theory nearer than the mean of the two readers; ties 10 count as not nearer; count 70 of 156; clusters 33; 95 % cluster bootstrap [0.264, 0.5776]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.4795,
+    "n": 146,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_offline_tests: ties dropped; count 70 of 146; clusters 33; 95 % cluster bootstrap [0.2727, 0.64]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.391,
+    "n": 156,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_offline_tests: strictly nearer than each reader; count 61 of 156; clusters 33; 95 % cluster bootstrap [0.1966, 0.5297]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.6788,
+    "n": 165,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_offline_tests: measured inside the theory's 90 % interval, every scored prediction; count 112 of 165; clusters 35; 95 % cluster bootstrap [0.4914, 0.8125]"
+   },
+   "coverage_theory": {
+    "value": 0.6667,
+    "n": 156,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_offline_tests: predictions where both readers filed an interval; count 104 of 156; clusters 33; 95 % cluster bootstrap [0.4661, 0.8097]"
+   },
+   "coverage_reader_1": {
+    "value": 0.8205,
+    "n": 156,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_offline_tests: same predictions; count 128 of 156; clusters 33; 95 % cluster bootstrap [0.7273, 0.8796]"
+   },
+   "coverage_reader_2": {
+    "value": 0.8205,
+    "n": 156,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_offline_tests: same predictions; count 128 of 156; clusters 33; 95 % cluster bootstrap [0.7333, 0.8761]"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": -0.1538,
+    "n": 156,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_offline_tests: paired on the same predictions; 95 % cluster bootstrap [-0.3525, -0.0209]"
+   },
+   "gain_total": {
+    "value": -33.3,
+    "n": 156,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_offline_tests: log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction -0.2135 (95 % cluster bootstrap [-0.8952, 0.2788]); 95 % cluster bootstrap of the total [-105.0797, 65.1433]; clusters 33"
+   },
+   "gain_at_clip": {
+    "value": [
+     16,
+     5
+    ],
+    "n": 156,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_offline_tests"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.764,
+    "n": 156,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_offline_tests"
+   }
+  },
+  "rounds_3_7_without_r6_account": {
+   "nearer": {
+    "value": 0.4115,
+    "n": 192,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_3_7_without_r6_account: theory nearer than the mean of the two readers; ties 6 count as not nearer; count 79 of 192; clusters 44; 95 % cluster bootstrap [0.3161, 0.5106]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.4247,
+    "n": 186,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_3_7_without_r6_account: ties dropped; count 79 of 186; clusters 44; 95 % cluster bootstrap [0.328, 0.5231]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.3229,
+    "n": 192,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_3_7_without_r6_account: strictly nearer than each reader; count 62 of 192; clusters 44; 95 % cluster bootstrap [0.2457, 0.4036]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.6418,
+    "n": 201,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_3_7_without_r6_account: measured inside the theory's 90 % interval, every scored prediction; count 129 of 201; clusters 46; 95 % cluster bootstrap [0.5587, 0.7123]"
+   },
+   "coverage_theory": {
+    "value": 0.6302,
+    "n": 192,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_3_7_without_r6_account: predictions where both readers filed an interval; count 121 of 192; clusters 44; 95 % cluster bootstrap [0.5463, 0.7021]"
+   },
+   "coverage_reader_1": {
+    "value": 0.8229,
+    "n": 192,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_3_7_without_r6_account: same predictions; count 158 of 192; clusters 44; 95 % cluster bootstrap [0.7574, 0.8795]"
+   },
+   "coverage_reader_2": {
+    "value": 0.849,
+    "n": 192,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_3_7_without_r6_account: same predictions; count 163 of 192; clusters 44; 95 % cluster bootstrap [0.7831, 0.9031]"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": -0.2057,
+    "n": 192,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_3_7_without_r6_account: paired on the same predictions; 95 % cluster bootstrap [-0.2994, -0.1131]"
+   },
+   "gain_total": {
+    "value": -94.27,
+    "n": 192,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_3_7_without_r6_account: log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction -0.491 (95 % cluster bootstrap [-0.7422, -0.2362]); 95 % cluster bootstrap of the total [-141.3851, -44.035]; clusters 44"
+   },
+   "gain_at_clip": {
+    "value": [
+     27,
+     3
+    ],
+    "n": 192,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_3_7_without_r6_account"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.716,
+    "n": 192,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_3_7_without_r6_account"
+   }
+  },
+  "rounds_4_7_without_r6_account": {
+   "nearer": {
+    "value": 0.3482,
+    "n": 112,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_without_r6_account: theory nearer than the mean of the two readers; ties 3 count as not nearer; count 39 of 112; clusters 32; 95 % cluster bootstrap [0.2368, 0.4722]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.3578,
+    "n": 109,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_without_r6_account: ties dropped; count 39 of 109; clusters 32; 95 % cluster bootstrap [0.2476, 0.4818]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.2768,
+    "n": 112,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_without_r6_account: strictly nearer than each reader; count 31 of 112; clusters 32; 95 % cluster bootstrap [0.1739, 0.3929]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.5702,
+    "n": 121,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_without_r6_account: measured inside the theory's 90 % interval, every scored prediction; count 69 of 121; clusters 34; 95 % cluster bootstrap [0.4667, 0.6721]"
+   },
+   "coverage_theory": {
+    "value": 0.5446,
+    "n": 112,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_without_r6_account: predictions where both readers filed an interval; count 61 of 112; clusters 32; 95 % cluster bootstrap [0.4404, 0.6481]"
+   },
+   "coverage_reader_1": {
+    "value": 0.7946,
+    "n": 112,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_without_r6_account: same predictions; count 89 of 112; clusters 32; 95 % cluster bootstrap [0.7008, 0.8772]"
+   },
+   "coverage_reader_2": {
+    "value": 0.7946,
+    "n": 112,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_without_r6_account: same predictions; count 89 of 112; clusters 32; 95 % cluster bootstrap [0.7087, 0.8707]"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": -0.25,
+    "n": 112,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_without_r6_account: paired on the same predictions; 95 % cluster bootstrap [-0.3833, -0.1034]"
+   },
+   "gain_total": {
+    "value": -68.72,
+    "n": 112,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_without_r6_account: log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction -0.6135 (95 % cluster bootstrap [-0.9894, -0.2012]); 95 % cluster bootstrap of the total [-113.4345, -21.6757]; clusters 32"
+   },
+   "gain_at_clip": {
+    "value": [
+     16,
+     3
+    ],
+    "n": 112,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_without_r6_account"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.821,
+    "n": 112,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_without_r6_account"
+   }
+  },
+  "all_rounds_without_r6_account": {
+   "nearer": {
+    "value": 0.4543,
+    "n": 350,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "all_rounds_without_r6_account: theory nearer than the mean of the two readers; ties 13 count as not nearer; count 159 of 350; clusters 57; 95 % cluster bootstrap [0.3781, 0.5194]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.4718,
+    "n": 337,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "all_rounds_without_r6_account: ties dropped; count 159 of 337; clusters 57; 95 % cluster bootstrap [0.3964, 0.5348]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.36,
+    "n": 350,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "all_rounds_without_r6_account: strictly nearer than each reader; count 126 of 350; clusters 57; 95 % cluster bootstrap [0.2945, 0.4176]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.6128,
+    "n": 359,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "all_rounds_without_r6_account: measured inside the theory's 90 % interval, every scored prediction; count 220 of 359; clusters 59; 95 % cluster bootstrap [0.5582, 0.6621]"
+   },
+   "coverage_theory": {
+    "value": 0.6302,
+    "n": 192,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "all_rounds_without_r6_account: predictions where both readers filed an interval; count 121 of 192; clusters 44; 95 % cluster bootstrap [0.5463, 0.7021]"
+   },
+   "coverage_reader_1": {
+    "value": 0.8229,
+    "n": 192,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "all_rounds_without_r6_account: same predictions; count 158 of 192; clusters 44; 95 % cluster bootstrap [0.7574, 0.8795]"
+   },
+   "coverage_reader_2": {
+    "value": 0.849,
+    "n": 192,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "all_rounds_without_r6_account: same predictions; count 163 of 192; clusters 44; 95 % cluster bootstrap [0.7831, 0.9031]"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": -0.2057,
+    "n": 192,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "all_rounds_without_r6_account: paired on the same predictions; 95 % cluster bootstrap [-0.2994, -0.1131]"
+   },
+   "gain_total": {
+    "value": -94.27,
+    "n": 192,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "all_rounds_without_r6_account: log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction -0.491 (95 % cluster bootstrap [-0.7422, -0.2362]); 95 % cluster bootstrap of the total [-141.3851, -44.035]; clusters 44"
+   },
+   "gain_at_clip": {
+    "value": [
+     27,
+     3
+    ],
+    "n": 192,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "all_rounds_without_r6_account"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.716,
+    "n": 192,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "all_rounds_without_r6_account"
+   }
+  },
+  "r6_account_alone": {
+   "nearer": {
+    "value": 0.7045,
+    "n": 44,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "r6_account_alone: theory nearer than the mean of the two readers; ties 7 count as not nearer; count 31 of 44; clusters 1; 95 % cluster bootstrap None"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.8378,
+    "n": 37,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "r6_account_alone: ties dropped; count 31 of 37; clusters 1; 95 % cluster bootstrap None"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.6818,
+    "n": 44,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "r6_account_alone: strictly nearer than each reader; count 30 of 44; clusters 1; 95 % cluster bootstrap None"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.9773,
+    "n": 44,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "r6_account_alone: measured inside the theory's 90 % interval, every scored prediction; count 43 of 44; clusters 1; 95 % cluster bootstrap None"
+   },
+   "coverage_theory": {
+    "value": 0.9773,
+    "n": 44,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "r6_account_alone: predictions where both readers filed an interval; count 43 of 44; clusters 1; 95 % cluster bootstrap None"
+   },
+   "coverage_reader_1": {
+    "value": 0.8864,
+    "n": 44,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "r6_account_alone: same predictions; count 39 of 44; clusters 1; 95 % cluster bootstrap None"
+   },
+   "coverage_reader_2": {
+    "value": 0.8864,
+    "n": 44,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "r6_account_alone: same predictions; count 39 of 44; clusters 1; 95 % cluster bootstrap None"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": 0.0909,
+    "n": 44,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "r6_account_alone: paired on the same predictions; 95 % cluster bootstrap None"
+   },
+   "gain_total": {
+    "value": 35.41,
+    "n": 44,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "r6_account_alone: log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction 0.8048 (95 % cluster bootstrap None); 95 % cluster bootstrap of the total None; clusters 1"
+   },
+   "gain_at_clip": {
+    "value": [
+     0,
+     2
+    ],
+    "n": 44,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "r6_account_alone"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.628,
+    "n": 44,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "r6_account_alone"
+   }
+  },
+  "round_6_without_account": {
+   "nearer": {
+    "value": 0.2857,
+    "n": 14,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round_6_without_account: theory nearer than the mean of the two readers; ties 0 count as not nearer; count 4 of 14; clusters 5; 95 % cluster bootstrap [0.1333, 0.4167]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.2857,
+    "n": 14,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round_6_without_account: ties dropped; count 4 of 14; clusters 5; 95 % cluster bootstrap [0.1333, 0.4167]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.2143,
+    "n": 14,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round_6_without_account: strictly nearer than each reader; count 3 of 14; clusters 5; 95 % cluster bootstrap [0.0667, 0.3846]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.5652,
+    "n": 23,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round_6_without_account: measured inside the theory's 90 % interval, every scored prediction; count 13 of 23; clusters 7; 95 % cluster bootstrap [0.2857, 0.7778]"
+   },
+   "coverage_theory": {
+    "value": 0.3571,
+    "n": 14,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round_6_without_account: predictions where both readers filed an interval; count 5 of 14; clusters 5; 95 % cluster bootstrap [0.1429, 0.5714]"
+   },
+   "coverage_reader_1": {
+    "value": 0.7857,
+    "n": 14,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round_6_without_account: same predictions; count 11 of 14; clusters 5; 95 % cluster bootstrap [0.6154, 0.9333]"
+   },
+   "coverage_reader_2": {
+    "value": 0.7143,
+    "n": 14,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round_6_without_account: same predictions; count 10 of 14; clusters 5; 95 % cluster bootstrap [0.5833, 0.8667]"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": -0.3929,
+    "n": 14,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round_6_without_account: paired on the same predictions; 95 % cluster bootstrap [-0.7333, -0.0769]"
+   },
+   "gain_total": {
+    "value": -13.01,
+    "n": 14,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round_6_without_account: log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction -0.929 (95 % cluster bootstrap [-1.3058, -0.4901]); 95 % cluster bootstrap of the total [-19.5866, -5.8817]; clusters 5"
+   },
+   "gain_at_clip": {
+    "value": [
+     1,
+     0
+    ],
+    "n": 14,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round_6_without_account"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.768,
+    "n": 14,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "round_6_without_account"
+   }
+  },
+  "leak_exposed_claims_put_back": {
+   "nearer": {
+    "value": 0.484,
+    "n": 405,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_exposed_claims_put_back: theory nearer than the mean of the two readers; ties 21 count as not nearer; count 196 of 405; clusters 58; 95 % cluster bootstrap [0.4005, 0.5523]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.5104,
+    "n": 384,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_exposed_claims_put_back: ties dropped; count 196 of 384; clusters 58; 95 % cluster bootstrap [0.4201, 0.5888]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.4,
+    "n": 405,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_exposed_claims_put_back: strictly nearer than each reader; count 162 of 405; clusters 58; 95 % cluster bootstrap [0.3172, 0.4735]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.6473,
+    "n": 414,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_exposed_claims_put_back: measured inside the theory's 90 % interval, every scored prediction; count 268 of 414; clusters 60; 95 % cluster bootstrap [0.5642, 0.7277]"
+   },
+   "coverage_theory": {
+    "value": 0.6949,
+    "n": 236,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_exposed_claims_put_back: predictions where both readers filed an interval; count 164 of 236; clusters 45; 95 % cluster bootstrap [0.5654, 0.7973]"
+   },
+   "coverage_reader_1": {
+    "value": 0.8347,
+    "n": 236,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_exposed_claims_put_back: same predictions; count 197 of 236; clusters 45; 95 % cluster bootstrap [0.7708, 0.8804]"
+   },
+   "coverage_reader_2": {
+    "value": 0.8559,
+    "n": 236,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_exposed_claims_put_back: same predictions; count 202 of 236; clusters 45; 95 % cluster bootstrap [0.7955, 0.9017]"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": -0.1504,
+    "n": 236,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_exposed_claims_put_back: paired on the same predictions; 95 % cluster bootstrap [-0.2756, -0.0507]"
+   },
+   "gain_total": {
+    "value": -58.85,
+    "n": 236,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_exposed_claims_put_back: log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction -0.2494 (95 % cluster bootstrap [-0.685, 0.1278]); 95 % cluster bootstrap of the total [-134.4113, 39.8148]; clusters 45"
+   },
+   "gain_at_clip": {
+    "value": [
+     27,
+     5
+    ],
+    "n": 236,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_exposed_claims_put_back"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.708,
+    "n": 236,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_exposed_claims_put_back"
+   }
+  },
+  "leak_round_2_dropped": {
+   "nearer": {
+    "value": 0.4774,
+    "n": 243,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_round_2_dropped: theory nearer than the mean of the two readers; ties 13 count as not nearer; count 116 of 243; clusters 47; 95 % cluster bootstrap [0.3454, 0.5776]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.5043,
+    "n": 230,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_round_2_dropped: ties dropped; count 116 of 230; clusters 47; 95 % cluster bootstrap [0.3595, 0.6215]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.4033,
+    "n": 243,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_round_2_dropped: strictly nearer than each reader; count 98 of 243; clusters 47; 95 % cluster bootstrap [0.2759, 0.5054]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.7024,
+    "n": 252,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_round_2_dropped: measured inside the theory's 90 % interval, every scored prediction; count 177 of 252; clusters 49; 95 % cluster bootstrap [0.5842, 0.7979]"
+   },
+   "coverage_theory": {
+    "value": 0.6949,
+    "n": 236,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_round_2_dropped: predictions where both readers filed an interval; count 164 of 236; clusters 45; 95 % cluster bootstrap [0.5654, 0.7973]"
+   },
+   "coverage_reader_1": {
+    "value": 0.8347,
+    "n": 236,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_round_2_dropped: same predictions; count 197 of 236; clusters 45; 95 % cluster bootstrap [0.7708, 0.8804]"
+   },
+   "coverage_reader_2": {
+    "value": 0.8559,
+    "n": 236,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_round_2_dropped: same predictions; count 202 of 236; clusters 45; 95 % cluster bootstrap [0.7955, 0.9017]"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": -0.1504,
+    "n": 236,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_round_2_dropped: paired on the same predictions; 95 % cluster bootstrap [-0.2756, -0.0507]"
+   },
+   "gain_total": {
+    "value": -58.85,
+    "n": 236,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_round_2_dropped: log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction -0.2494 (95 % cluster bootstrap [-0.685, 0.1278]); 95 % cluster bootstrap of the total [-134.4113, 39.8148]; clusters 45"
+   },
+   "gain_at_clip": {
+    "value": [
+     27,
+     5
+    ],
+    "n": 236,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_round_2_dropped"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.708,
+    "n": 236,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_round_2_dropped"
+   }
+  },
+  "leak_rounds_1_2_dropped_headless_only": {
+   "nearer": {
+    "value": 0.4661,
+    "n": 236,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_rounds_1_2_dropped_headless_only: theory nearer than the mean of the two readers; ties 13 count as not nearer; count 110 of 236; clusters 45; 95 % cluster bootstrap [0.3374, 0.5674]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.4933,
+    "n": 223,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_rounds_1_2_dropped_headless_only: ties dropped; count 110 of 223; clusters 45; 95 % cluster bootstrap [0.35, 0.6154]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.3898,
+    "n": 236,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_rounds_1_2_dropped_headless_only: strictly nearer than each reader; count 92 of 236; clusters 45; 95 % cluster bootstrap [0.2642, 0.4968]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.702,
+    "n": 245,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_rounds_1_2_dropped_headless_only: measured inside the theory's 90 % interval, every scored prediction; count 172 of 245; clusters 47; 95 % cluster bootstrap [0.5829, 0.7987]"
+   },
+   "coverage_theory": {
+    "value": 0.6949,
+    "n": 236,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_rounds_1_2_dropped_headless_only: predictions where both readers filed an interval; count 164 of 236; clusters 45; 95 % cluster bootstrap [0.5654, 0.7973]"
+   },
+   "coverage_reader_1": {
+    "value": 0.8347,
+    "n": 236,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_rounds_1_2_dropped_headless_only: same predictions; count 197 of 236; clusters 45; 95 % cluster bootstrap [0.7708, 0.8804]"
+   },
+   "coverage_reader_2": {
+    "value": 0.8559,
+    "n": 236,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_rounds_1_2_dropped_headless_only: same predictions; count 202 of 236; clusters 45; 95 % cluster bootstrap [0.7955, 0.9017]"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": -0.1504,
+    "n": 236,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_rounds_1_2_dropped_headless_only: paired on the same predictions; 95 % cluster bootstrap [-0.2756, -0.0507]"
+   },
+   "gain_total": {
+    "value": -58.85,
+    "n": 236,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_rounds_1_2_dropped_headless_only: log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction -0.2494 (95 % cluster bootstrap [-0.685, 0.1278]); 95 % cluster bootstrap of the total [-134.4113, 39.8148]; clusters 45"
+   },
+   "gain_at_clip": {
+    "value": [
+     27,
+     5
+    ],
+    "n": 236,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_rounds_1_2_dropped_headless_only"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.708,
+    "n": 236,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "leak_rounds_1_2_dropped_headless_only"
+   }
+  },
+  "exposed_claims_alone": {
+   "nearer": {
+    "value": 0.5455,
+    "n": 11,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "exposed_claims_alone: theory nearer than the mean of the two readers; ties 1 count as not nearer; count 6 of 11; clusters 4; 95 % cluster bootstrap [0.25, 0.8462]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.6,
+    "n": 10,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "exposed_claims_alone: ties dropped; count 6 of 10; clusters 4; 95 % cluster bootstrap [0.25, 0.9]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.5455,
+    "n": 11,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "exposed_claims_alone: strictly nearer than each reader; count 6 of 11; clusters 4; 95 % cluster bootstrap [0.25, 0.8462]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.4545,
+    "n": 11,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "exposed_claims_alone: measured inside the theory's 90 % interval, every scored prediction; count 5 of 11; clusters 4; 95 % cluster bootstrap [0.0769, 1.0]"
+   }
+  },
+  "rounds_2_3_divergent_claims_only": {
+   "nearer": {
+    "value": 0.4483,
+    "n": 58,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_2_3_divergent_claims_only: theory nearer than the mean of the two readers; ties 0 count as not nearer; count 26 of 58; clusters 19; 95 % cluster bootstrap [0.32, 0.5588]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.4483,
+    "n": 58,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_2_3_divergent_claims_only: ties dropped; count 26 of 58; clusters 19; 95 % cluster bootstrap [0.32, 0.5588]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.431,
+    "n": 58,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_2_3_divergent_claims_only: strictly nearer than each reader; count 25 of 58; clusters 19; 95 % cluster bootstrap [0.3043, 0.5395]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.5172,
+    "n": 58,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_2_3_divergent_claims_only: measured inside the theory's 90 % interval, every scored prediction; count 30 of 58; clusters 19; 95 % cluster bootstrap [0.4286, 0.5909]"
+   },
+   "coverage_theory": {
+    "value": 0.4762,
+    "n": 21,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_2_3_divergent_claims_only: predictions where both readers filed an interval; count 10 of 21; clusters 7; 95 % cluster bootstrap [0.3333, 0.6154]"
+   },
+   "coverage_reader_1": {
+    "value": 0.8095,
+    "n": 21,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_2_3_divergent_claims_only: same predictions; count 17 of 21; clusters 7; 95 % cluster bootstrap [0.6667, 0.9474]"
+   },
+   "coverage_reader_2": {
+    "value": 0.9048,
+    "n": 21,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_2_3_divergent_claims_only: same predictions; count 19 of 21; clusters 7; 95 % cluster bootstrap [0.7143, 1.0]"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": -0.381,
+    "n": 21,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_2_3_divergent_claims_only: paired on the same predictions; 95 % cluster bootstrap [-0.6042, -0.1579]"
+   },
+   "gain_total": {
+    "value": -21.17,
+    "n": 21,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_2_3_divergent_claims_only: log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction -1.0082 (95 % cluster bootstrap [-1.4864, -0.5652]); 95 % cluster bootstrap of the total [-33.4225, -8.6365]; clusters 7"
+   },
+   "gain_at_clip": {
+    "value": [
+     7,
+     0
+    ],
+    "n": 21,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_2_3_divergent_claims_only"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.475,
+    "n": 21,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_2_3_divergent_claims_only"
+   }
+  },
+  "rounds_4_7_divergent_only": {
+   "nearer": {
+    "value": 0.44,
+    "n": 25,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_divergent_only: theory nearer than the mean of the two readers; ties 0 count as not nearer; count 11 of 25; clusters 15; 95 % cluster bootstrap [0.1, 0.7143]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.44,
+    "n": 25,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_divergent_only: ties dropped; count 11 of 25; clusters 15; 95 % cluster bootstrap [0.1, 0.7143]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.44,
+    "n": 25,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_divergent_only: strictly nearer than each reader; count 11 of 25; clusters 15; 95 % cluster bootstrap [0.1, 0.7143]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.44,
+    "n": 25,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_divergent_only: measured inside the theory's 90 % interval, every scored prediction; count 11 of 25; clusters 15; 95 % cluster bootstrap [0.1, 0.7143]"
+   },
+   "coverage_theory": {
+    "value": 0.44,
+    "n": 25,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_divergent_only: predictions where both readers filed an interval; count 11 of 25; clusters 15; 95 % cluster bootstrap [0.1, 0.7143]"
+   },
+   "coverage_reader_1": {
+    "value": 0.72,
+    "n": 25,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_divergent_only: same predictions; count 18 of 25; clusters 15; 95 % cluster bootstrap [0.5312, 0.9091]"
+   },
+   "coverage_reader_2": {
+    "value": 0.64,
+    "n": 25,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_divergent_only: same predictions; count 16 of 25; clusters 15; 95 % cluster bootstrap [0.4583, 0.8571]"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": -0.24,
+    "n": 25,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_divergent_only: paired on the same predictions; 95 % cluster bootstrap [-0.7368, 0.1618]"
+   },
+   "gain_total": {
+    "value": -17.15,
+    "n": 25,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_divergent_only: log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction -0.6859 (95 % cluster bootstrap [-2.401, 0.6968]); 95 % cluster bootstrap of the total [-50.6585, 21.3818]; clusters 15"
+   },
+   "gain_at_clip": {
+    "value": [
+     10,
+     3
+    ],
+    "n": 25,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_divergent_only"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.754,
+    "n": 25,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "rounds_4_7_divergent_only"
+   }
+  },
+  "survivors_heldout_filter_claims_rounds_4_7": {
+   "nearer": {
+    "value": 0.3333,
+    "n": 27,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "survivors_heldout_filter_claims_rounds_4_7: theory nearer than the mean of the two readers; ties 2 count as not nearer; count 9 of 27; clusters 7; 95 % cluster bootstrap [0.125, 0.52]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.36,
+    "n": 25,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "survivors_heldout_filter_claims_rounds_4_7: ties dropped; count 9 of 25; clusters 7; 95 % cluster bootstrap [0.1304, 0.5652]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.3333,
+    "n": 27,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "survivors_heldout_filter_claims_rounds_4_7: strictly nearer than each reader; count 9 of 27; clusters 7; 95 % cluster bootstrap [0.125, 0.52]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.5926,
+    "n": 27,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "survivors_heldout_filter_claims_rounds_4_7: measured inside the theory's 90 % interval, every scored prediction; count 16 of 27; clusters 7; 95 % cluster bootstrap [0.4286, 0.72]"
+   },
+   "coverage_theory": {
+    "value": 0.5926,
+    "n": 27,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "survivors_heldout_filter_claims_rounds_4_7: predictions where both readers filed an interval; count 16 of 27; clusters 7; 95 % cluster bootstrap [0.4286, 0.72]"
+   },
+   "coverage_reader_1": {
+    "value": 0.6667,
+    "n": 27,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "survivors_heldout_filter_claims_rounds_4_7: same predictions; count 18 of 27; clusters 7; 95 % cluster bootstrap [0.4667, 0.8824]"
+   },
+   "coverage_reader_2": {
+    "value": 0.5926,
+    "n": 27,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "survivors_heldout_filter_claims_rounds_4_7: same predictions; count 16 of 27; clusters 7; 95 % cluster bootstrap [0.4, 0.8335]"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": -0.037,
+    "n": 27,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "survivors_heldout_filter_claims_rounds_4_7: paired on the same predictions; 95 % cluster bootstrap [-0.2174, 0.1094]"
+   },
+   "gain_total": {
+    "value": -24.11,
+    "n": 27,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "survivors_heldout_filter_claims_rounds_4_7: log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction -0.8929 (95 % cluster bootstrap [-1.682, -0.2776]); 95 % cluster bootstrap of the total [-43.0014, -7.1653]; clusters 7"
+   },
+   "gain_at_clip": {
+    "value": [
+     8,
+     0
+    ],
+    "n": 27,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "survivors_heldout_filter_claims_rounds_4_7"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.692,
+    "n": 27,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "survivors_heldout_filter_claims_rounds_4_7"
+   }
+  },
+  "account_runs_01_03": {
+   "nearer": {
+    "value": 0.4667,
+    "n": 75,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "account_runs_01_03: theory nearer than the mean of the two readers; ties 15 count as not nearer; count 35 of 75; clusters 3; 95 % cluster bootstrap [0.4348, 0.55]"
+   },
+   "nearer_ties_dropped": {
+    "value": 0.5833,
+    "n": 60,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "account_runs_01_03: ties dropped; count 35 of 60; clusters 3; 95 % cluster bootstrap [0.5, 0.6471]"
+   },
+   "nearer_than_both_readers": {
+    "value": 0.3733,
+    "n": 75,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "account_runs_01_03: strictly nearer than each reader; count 28 of 75; clusters 3; 95 % cluster bootstrap [0.25, 0.4444]"
+   },
+   "coverage_theory_all_scored": {
+    "value": 0.8667,
+    "n": 75,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "account_runs_01_03: measured inside the theory's 90 % interval, every scored prediction; count 65 of 75; clusters 3; 95 % cluster bootstrap [0.85, 0.8889]"
+   },
+   "coverage_theory": {
+    "value": 0.8667,
+    "n": 75,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "account_runs_01_03: predictions where both readers filed an interval; count 65 of 75; clusters 3; 95 % cluster bootstrap [0.85, 0.8889]"
+   },
+   "coverage_reader_1": {
+    "value": 0.92,
+    "n": 75,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "account_runs_01_03: same predictions; count 69 of 75; clusters 3; 95 % cluster bootstrap [0.9, 1.0]"
+   },
+   "coverage_reader_2": {
+    "value": 0.8933,
+    "n": 75,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "account_runs_01_03: same predictions; count 67 of 75; clusters 3; 95 % cluster bootstrap [0.85, 1.0]"
+   },
+   "coverage_gap_theory_minus_readers_mean": {
+    "value": -0.04,
+    "n": 75,
+    "unit": "fraction",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "account_runs_01_03: paired on the same predictions; 95 % cluster bootstrap [-0.1111, -0.025]"
+   },
+   "gain_total": {
+    "value": 8.54,
+    "n": 75,
+    "unit": "nats",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "account_runs_01_03: log gain against the mixture of the two readers, clipped to [-3, 3]; mean per prediction 0.1139 (95 % cluster bootstrap [-0.1441, 0.1789]); 95 % cluster bootstrap of the total [-3.8919, 24.6885]; clusters 3"
+   },
+   "gain_at_clip": {
+    "value": [
+     0,
+     0
+    ],
+    "n": 75,
+    "unit": "predictions at -3, at +3",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "account_runs_01_03"
+   },
+   "median_interval_width_ratio_theory_over_reader_mean": {
+    "value": 0.82,
+    "n": 75,
+    "unit": "ratio",
+    "source": "studies/theory/results/engine/round-<nn>/ via predictions.jsonl",
+    "note": "account_runs_01_03"
+   }
+  }
+ },
+ "leak": {
+  "exposed_item": {
+   "value": [
+    "result-5d032f"
+   ],
+   "n": null,
+   "unit": "",
+   "source": "studies/theory/results/engine/round-02/exposed.json",
+   "note": "Claude Code gives every subagent a git status block with the 5 newest commit subjects of the repository. The agents started for round 02 (nulls, new generators) had this line in context: 'd1f0136 Day-1 #3 MATH-500 results: base+cue single 405, restart 413, vote4 446, pass@4 467; RL 456, 458, 474, 482 of 500 (grader v3)'. Those are the targets of result-5d032f. Reported by the r2-all author, which copied its 5 lines \u2026"
+  },
+  "exposed_targets": {
+   "value": 7,
+   "n": 68,
+   "unit": "targets",
+   "source": "studies/theory/results/engine/round-02/run.json",
+   "note": "left out of metrics_v2.json by the engine, so the headline already excludes them"
+  },
+  "claims_on_exposed_targets": {
+   "value": 11,
+   "n": null,
+   "unit": "claims",
+   "source": "studies/theory/results/engine/round-02/claims/*.jsonl",
+   "note": "kept in predictions.jsonl with flag exposed, kind exposed_claim"
+  },
+  "note": "All 151 scored round-2 claims carry flag leak_context: the same agents (both readers, the 5 new generators) had the commit subject in context, and its numbers (cued base 405, RL 456 of 500 on MATH-500) bear on other targets. Rounds 1-2 ran as Claude Code subagents; rounds 3-7 as headless jobs in empty directories."
+ },
+ "round1_planted_control": {
+  "planted_min_net": {
+   "value": 2,
+   "n": 58,
+   "unit": "targets (closer minus farther, worse of the two readers)",
+   "source": "studies/theory/results/engine/round-01/predictions/*.jsonl, targets.jsonl; equals metrics.json",
+   "note": "real theories' min net: [3, 2, 2, -3, -7, -8]; planted ranks 2 of 7; reader-1 against reader-2 noise 3. No predictor beats the noise."
+  },
+  "per_predictor": {
+   "value": {
+    "across-1": {
+     "all_vs_reader_1": [
+      21,
+      14,
+      7
+     ],
+     "all_vs_reader_2": [
+      19,
+      17,
+      2
+     ],
+     "weight_difference_items_vs_reader_1": [
+      9,
+      3,
+      6
+     ],
+     "weight_difference_items_vs_reader_2": [
+      8,
+      4,
+      4
+     ],
+     "min_net": 2
+    },
+    "across-2": {
+     "all_vs_reader_1": [
+      23,
+      17,
+      6
+     ],
+     "all_vs_reader_2": [
+      22,
+      20,
+      2
+     ],
+     "weight_difference_items_vs_reader_1": [
+      9,
+      6,
+      3
+     ],
+     "weight_difference_items_vs_reader_2": [
+      7,
+      5,
+      2
+     ],
+     "min_net": 2
+    },
+    "all-1": {
+     "all_vs_reader_1": [
+      24,
+      17,
+      7
+     ],
+     "all_vs_reader_2": [
+      18,
+      15,
+      3
+     ],
+     "weight_difference_items_vs_reader_1": [
+      7,
+      5,
+      2
+     ],
+     "weight_difference_items_vs_reader_2": [
+      4,
+      2,
+      2
+     ],
+     "min_net": 3
+    },
+    "all-2": {
+     "all_vs_reader_1": [
+      22,
+      20,
+      2
+     ],
+     "all_vs_reader_2": [
+      18,
+      21,
+      -3
+     ],
+     "weight_difference_items_vs_reader_1": [
+      8,
+      7,
+      1
+     ],
+     "weight_difference_items_vs_reader_2": [
+      3,
+      6,
+      -3
+     ],
+     "min_net": -3
+    },
+    "planted": {
+     "all_vs_reader_1": [
+      22,
+      14,
+      8
+     ],
+     "all_vs_reader_2": [
+      23,
+      21,
+      2
+     ],
+     "weight_difference_items_vs_reader_1": [
+      9,
+      1,
+      8
+     ],
+     "weight_difference_items_vs_reader_2": [
+      11,
+      3,
+      8
+     ],
+     "min_net": 2
+    },
+    "surprises-1": {
+     "all_vs_reader_1": [
+      21,
+      21,
+      0
+     ],
+     "all_vs_reader_2": [
+      16,
+      24,
+      -8
+     ],
+     "weight_difference_items_vs_reader_1": [
+      8,
+      5,
+      3
+     ],
+     "weight_difference_items_vs_reader_2": [
+      4,
+      6,
+      -2
+     ],
+     "min_net": -8
+    },
+    "surprises-2": {
+     "all_vs_reader_1": [
+      15,
+      22,
+      -7
+     ],
+     "all_vs_reader_2": [
+      17,
+      22,
+      -5
+     ],
+     "weight_difference_items_vs_reader_1": [
+      4,
+      9,
+      -5
+     ],
+     "weight_difference_items_vs_reader_2": [
+      2,
+      8,
+      -6
+     ],
+     "min_net": -7
+    }
+   },
+   "n": 58,
+   "unit": "[closer, farther, net]",
+   "source": "studies/theory/results/engine/round-01/predictions/*.jsonl",
+   "note": "weight_difference_items = the 16 targets of result-9b6af3 and result-4b0d5f"
+  }
+ },
+ "reversal_controls_rounds_2_3": {
+  "value": [
+   {
+    "round": 2,
+    "theory": "r1-all-1",
+    "theory_score": {
+     "claims": 12,
+     "wins": 2,
+     "losses": 1,
+     "net": 1,
+     "inside": 5,
+     "nearer": 6
+    },
+    "reversal_score": {
+     "claims": 12,
+     "wins": 1,
+     "losses": 6,
+     "net": -5,
+     "inside": 4,
+     "nearer": 3
+    }
+   },
+   {
+    "round": 2,
+    "theory": "r1-all-2",
+    "theory_score": {
+     "claims": 13,
+     "wins": 3,
+     "losses": 2,
+     "net": 1,
+     "inside": 6,
+     "nearer": 6
+    },
+    "reversal_score": {
+     "claims": 13,
+     "wins": 0,
+     "losses": 5,
+     "net": -5,
+     "inside": 2,
+     "nearer": 1
+    }
+   },
+   {
+    "round": 2,
+    "theory": "r1-surprises-2",
+    "theory_score": {
+     "claims": 19,
+     "wins": 3,
+     "losses": 2,
+     "net": 1,
+     "inside": 14,
+     "nearer": 11
+    },
+    "reversal_score": {
+     "claims": 19,
+     "wins": 1,
+     "losses": 11,
+     "net": -10,
+     "inside": 4,
+     "nearer": 3
+    }
+   },
+   {
+    "round": 2,
+    "theory": "r2-across-2",
+    "theory_score": {
+     "claims": 15,
+     "wins": 3,
+     "losses": 2,
+     "net": 1,
+     "inside": 8,
+     "nearer": 7
+    },
+    "reversal_score": {
+     "claims": 15,
+     "wins": 6,
+     "losses": 8,
+     "net": -2,
+     "inside": 6,
+     "nearer": 8
+    }
+   },
+   {
+    "round": 2,
+    "theory": "r2-all-2",
+    "theory_score": {
+     "claims": 8,
+     "wins": 2,
+     "losses": 0,
+     "net": 2,
+     "inside": 6,
+     "nearer": 6
+    },
+    "reversal_score": {
+     "claims": 8,
+     "wins": 0,
+     "losses": 6,
+     "net": -6,
+     "inside": 0,
+     "nearer": 1
+    }
+   },
+   {
+    "round": 3,
+    "theory": "r3-across-2",
+    "theory_score": {
+     "claims": 1,
+     "gain_nats": 0.667
+    },
+    "reversal_score": {
+     "claims": 1,
+     "gain_nats": 0.289
+    }
+   }
+  ],
+  "n": null,
+  "unit": "",
+  "source": "studies/theory/results/engine/round-02/metrics_v2.json, round-03/metrics_v3.json (key reversal)",
+  "note": "the reversal's claims were written by a fresh agent, the theory's by its author: not a matched control (README round 02, point 3). No reversal control exists from round 4 on."
+ },
+ "duels": {
+  "n_distinct": {
+   "value": 11,
+   "n": null,
+   "unit": "duels",
+   "source": "studies/theory/results/{engine/round-04..06,account/run-03,promoted/run-01}/metrics_v5.json",
+   "note": "round 7's one duel is round 6's r5-m03-rival duel re-scored under rule 7.1, not a new duel"
+  },
+  "outcomes_as_printed": {
+   "value": {
+    "loses to rival": 6,
+    "not separated from rival": 2,
+    "beats rival": 3
+   },
+   "n": 11,
+   "unit": "duels",
+   "source": "",
+   "note": "the rule of the engine version that ran it"
+  },
+  "outcomes_rule_7_1": {
+   "value": {
+    "loses to rival": 4,
+    "not separated from rival": 6,
+    "beats rival": 1
+   },
+   "n": 11,
+   "unit": "duels",
+   "source": "",
+   "note": "one rule for all: same-prediction tests add 0; +-2 nats over >= 2 separating tests decide"
+  },
+  "gain_all_tests_total": {
+   "value": -5.1,
+   "n": 53,
+   "unit": "nats over tests",
+   "source": "",
+   "note": "theory minus rival; mean per duel -0.46"
+  },
+  "interval_coverage_in_duels": {
+   "value": [
+    27,
+    37
+   ],
+   "n": 53,
+   "unit": "tests inside: defender's interval, rival's interval",
+   "source": "",
+   "note": ""
+  },
+  "rows": {
+   "value": [
+    {
+     "where": "engine/round-04",
+     "round": 4,
+     "theory": "r4-m10",
+     "tests": 6,
+     "separating": 2,
+     "gain_all_tests": -7.809,
+     "gain_separating_tests": -6.0,
+     "gain_stored": -7.809,
+     "state_printed": "loses to rival",
+     "state_rule_7_1": "loses to rival",
+     "theory_inside": 3,
+     "rival_inside": 5,
+     "rescore_of": null,
+     "per_test_gain": [
+      -0.4317,
+      -0.5078,
+      -0.3652,
+      -0.5046,
+      -3.0,
+      -3.0
+     ]
+    },
+    {
+     "where": "engine/round-04",
+     "round": 4,
+     "theory": "r4-m01",
+     "tests": 5,
+     "separating": 0,
+     "gain_all_tests": 1.111,
+     "gain_separating_tests": 0,
+     "gain_stored": 1.111,
+     "state_printed": "not separated from rival",
+     "state_rule_7_1": "not separated from rival",
+     "theory_inside": 2,
+     "rival_inside": 4,
+     "rescore_of": null,
+     "per_test_gain": [
+      3.0,
+      0.739,
+      0.6884,
+      -1.8515,
+      -1.4651
+     ]
+    },
+    {
+     "where": "engine/round-04",
+     "round": 4,
+     "theory": "r4-m08",
+     "tests": 5,
+     "separating": 0,
+     "gain_all_tests": -2.652,
+     "gain_separating_tests": 0,
+     "gain_stored": -2.652,
+     "state_printed": "loses to rival",
+     "state_rule_7_1": "not separated from rival",
+     "theory_inside": 4,
+     "rival_inside": 5,
+     "rescore_of": null,
+     "per_test_gain": [
+      -0.418,
+      -0.2086,
+      -0.945,
+      -0.8688,
+      -0.2121
+     ]
+    },
+    {
+     "where": "engine/round-05",
+     "round": 5,
+     "theory": "r5-m08",
+     "tests": 5,
+     "separating": 3,
+     "gain_all_tests": 8.748,
+     "gain_separating_tests": 3.763,
+     "gain_stored": 8.748,
+     "state_printed": "beats rival",
+     "state_rule_7_1": "beats rival",
+     "theory_inside": 4,
+     "rival_inside": 1,
+     "rescore_of": null,
+     "per_test_gain": [
+      1.9853,
+      1.0373,
+      3.0,
+      2.2418,
+      0.484
+     ]
+    },
+    {
+     "where": "engine/round-05",
+     "round": 5,
+     "theory": "r5-m03",
+     "tests": 3,
+     "separating": 3,
+     "gain_all_tests": -8.767,
+     "gain_separating_tests": -8.767,
+     "gain_stored": -8.767,
+     "state_printed": "loses to rival",
+     "state_rule_7_1": "loses to rival",
+     "theory_inside": 0,
+     "rival_inside": 3,
+     "rescore_of": null,
+     "per_test_gain": [
+      -2.767,
+      -3.0,
+      -3.0
+     ]
+    },
+    {
+     "where": "engine/round-05",
+     "round": 5,
+     "theory": "r5-m10",
+     "tests": 6,
+     "separating": 3,
+     "gain_all_tests": -8.844,
+     "gain_separating_tests": -9.0,
+     "gain_stored": -8.844,
+     "state_printed": "loses to rival",
+     "state_rule_7_1": "loses to rival",
+     "theory_inside": 1,
+     "rival_inside": 5,
+     "rescore_of": null,
+     "per_test_gain": [
+      0.2393,
+      0.0079,
+      -0.091,
+      -3.0,
+      -3.0,
+      -3.0
+     ]
+    },
+    {
+     "where": "engine/round-06",
+     "round": 6,
+     "theory": "r6-account",
+     "tests": 5,
+     "separating": 0,
+     "gain_all_tests": -3.107,
+     "gain_separating_tests": 0,
+     "gain_stored": -3.107,
+     "state_printed": "loses to rival",
+     "state_rule_7_1": "not separated from rival",
+     "theory_inside": 4,
+     "rival_inside": 5,
+     "rescore_of": null,
+     "per_test_gain": [
+      0.0246,
+      -0.1541,
+      -2.1369,
+      -0.255,
+      -0.5855
+     ]
+    },
+    {
+     "where": "engine/round-06",
+     "round": 6,
+     "theory": "r5-m10-rival",
+     "tests": 6,
+     "separating": 1,
+     "gain_all_tests": 13.195,
+     "gain_separating_tests": 3.0,
+     "gain_stored": 13.195,
+     "state_printed": "beats rival",
+     "state_rule_7_1": "not separated from rival",
+     "theory_inside": 1,
+     "rival_inside": 1,
+     "rescore_of": null,
+     "per_test_gain": [
+      2.3257,
+      3.0,
+      3.0,
+      3.0,
+      2.1144,
+      -0.2455
+     ]
+    },
+    {
+     "where": "engine/round-06",
+     "round": 6,
+     "theory": "r5-m03-rival",
+     "tests": 6,
+     "separating": 1,
+     "gain_all_tests": 6.699,
+     "gain_separating_tests": 3.0,
+     "gain_stored": 6.699,
+     "state_printed": "beats rival",
+     "state_rule_7_1": "not separated from rival",
+     "theory_inside": 4,
+     "rival_inside": 2,
+     "rescore_of": null,
+     "per_test_gain": [
+      1.9437,
+      3.0,
+      2.1756,
+      -0.6302,
+      -1.1118,
+      1.3221
+     ]
+    },
+    {
+     "where": "engine/round-07",
+     "round": 7,
+     "theory": "r5-m03-rival",
+     "tests": 6,
+     "separating": 1,
+     "gain_all_tests": 6.699,
+     "gain_separating_tests": 3.0,
+     "gain_stored": 3.0,
+     "state_printed": "not separated from rival",
+     "state_rule_7_1": "not separated from rival",
+     "theory_inside": 4,
+     "rival_inside": 2,
+     "rescore_of": "engine/round-06",
+     "per_test_gain": [
+      1.9437,
+      3.0,
+      2.1756,
+      -0.6302,
+      -1.1118,
+      1.3221
+     ]
+    },
+    {
+     "where": "account/run-03",
+     "round": null,
+     "theory": "r7-account",
+     "tests": 3,
+     "separating": 3,
+     "gain_all_tests": -5.161,
+     "gain_separating_tests": -5.161,
+     "gain_stored": -5.161,
+     "state_printed": "loses to rival",
+     "state_rule_7_1": "loses to rival",
+     "theory_inside": 1,
+     "rival_inside": 3,
+     "rescore_of": null,
+     "per_test_gain": [
+      -2.852,
+      -1.6808,
+      -0.6284
+     ]
+    },
+    {
+     "where": "promoted/run-01",
+     "round": null,
+     "theory": "r4-m10-rival",
+     "tests": 3,
+     "separating": 2,
+     "gain_all_tests": 1.486,
+     "gain_separating_tests": 0.674,
+     "gain_stored": 1.486,
+     "state_printed": "not separated from rival",
+     "state_rule_7_1": "not separated from rival",
+     "theory_inside": 3,
+     "rival_inside": 3,
+     "rescore_of": null,
+     "per_test_gain": [
+      0.3887,
+      0.8118,
+      0.2854
+     ]
+    }
+   ],
+   "n": null,
+   "unit": "",
+   "source": "",
+   "note": "per duel: tests, separating, nats (all tests, separating tests only), both states"
+  }
+ },
+ "selfopen_01": {
+  "value": {
+   "id": "r5-m10:theory:intervention",
+   "measured": 411,
+   "n": 500,
+   "measured_interval": [
+    397,
+    424
+   ],
+   "board_item": "result-3a3af3",
+   "theory": "r5-m10",
+   "theory_forecast": [
+    375,
+    348,
+    400
+   ],
+   "theory_inside": false,
+   "rival": "r5-m10-rival",
+   "rival_forecast": [
+    405,
+    386,
+    422
+   ],
+   "rival_inside": true,
+   "gain_theory_minus_rival_nats": -2.811,
+   "gain_unclipped": -2.811,
+   "cap_hits": 20,
+   "mean_generated_tokens": 3794.7,
+   "control_on_self_opened_problems": {
+    "main": {
+     "right": 332,
+     "n": 403,
+     "accuracy": 0.8238
+    },
+    "control": {
+     "right": 137,
+     "n": 403,
+     "accuracy": 0.34
+    },
+    "main_minus_control_points": 48.39,
+    "bootstrap_95_points": [
+     42.93,
+     53.6
+    ],
+    "bootstrap": "n13_score.paired_bootstrap, 5,000, seed 0",
+    "same_draw_both_arms": 0
+   },
+   "model": "allenai/Olmo-3-1025-7B",
+   "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+  },
+  "n": 500,
+  "unit": "right answers of 500",
+  "source": "studies/theory/results/experiments/selfopen-01/metrics.json; engine/round-05/experiments.json, experiments_measured.json",
+  "note": "the only GPU experiment run from a theory's entry; gain by the engine's duel rule, computed here (no metrics file of the engine holds it: gpu_tests.json of round 7 is empty)"
+ },
+ "forecast_runs": {
+  "value": {
+   "runs": {
+    "run-01": {
+     "targets": 20,
+     "measured": 11,
+     "scored_utc": "2026-11-15T15:28:45",
+     "snapshot_utc": "2026-11-15T14:45:56",
+     "forecasters": [
+      "reader-1",
+      "reader-2",
+      "r5-m03-rival",
+      "r6-account-rival",
+      "r6-m06",
+      "r7-m05",
+      "r7-m08",
+      "r7-m11"
+     ]
+    },
+    "run-02": {
+     "targets": 17,
+     "measured": 6,
+     "scored_utc": "2026-11-15T15:28:39",
+     "snapshot_utc": "2026-11-15T14:53:16",
+     "forecasters": [
+      "reader-1",
+      "reader-2",
+      "r5-m03-rival",
+      "r6-account-rival",
+      "r6-m06",
+      "r7-m05",
+      "r7-m08",
+      "r7-m11",
+      "f2-m01",
+      "f2-m02",
+      "f2-m03",
+      "f2-m04",
+      "f2-m05",
+      "f2-m06"
+     ]
+    }
+   },
+   "landed_target_run_pairs": 17,
+   "landed_distinct_targets": 12,
+   "target_run_pairs_asked": 37,
+   "theory_forecasts_on_landed": {
+    "forecasts": 25,
+    "nearer_than_both_readers": 10,
+    "ties": 4,
+    "inside_own_interval": 12,
+    "gain_nats": -14.85,
+    "centre_outside_both_reader_intervals": 7,
+    "of_those_inside_own_interval": 2
+   },
+   "engine_theories_only": {
+    "forecasts": 6,
+    "nearer_than_both_readers": 3,
+    "ties": 2,
+    "inside_own_interval": 6,
+    "gain_nats": 3.54,
+    "centre_outside_both_reader_intervals": 0,
+    "of_those_inside_own_interval": 0
+   },
+   "mechanisms_written_for_the_targets_only": {
+    "forecasts": 19,
+    "nearer_than_both_readers": 7,
+    "ties": 2,
+    "inside_own_interval": 6,
+    "gain_nats": -18.39,
+    "centre_outside_both_reader_intervals": 7,
+    "of_those_inside_own_interval": 2
+   },
+   "reader_1_inside": [
+    10,
+    17
+   ],
+   "reader_2_inside": [
+    12,
+    17
+   ],
+   "per_forecaster": {
+    "run-01/r5-m03-rival": {
+     "forecasts": 3,
+     "nearer_than_both_readers": 2,
+     "ties": 0,
+     "inside_own_interval": 3,
+     "gain_nats": 1.83,
+     "centre_outside_both_reader_intervals": 0,
+     "of_those_inside_own_interval": 0
+    },
+    "run-02/f2-m01": {
+     "forecasts": 4,
+     "nearer_than_both_readers": 3,
+     "ties": 0,
+     "inside_own_interval": 2,
+     "gain_nats": 3.25,
+     "centre_outside_both_reader_intervals": 2,
+     "of_those_inside_own_interval": 2
+    },
+    "run-02/f2-m02": {
+     "forecasts": 4,
+     "nearer_than_both_readers": 1,
+     "ties": 0,
+     "inside_own_interval": 1,
+     "gain_nats": -8.62,
+     "centre_outside_both_reader_intervals": 1,
+     "of_those_inside_own_interval": 0
+    },
+    "run-02/f2-m03": {
+     "forecasts": 3,
+     "nearer_than_both_readers": 0,
+     "ties": 0,
+     "inside_own_interval": 0,
+     "gain_nats": -7.07,
+     "centre_outside_both_reader_intervals": 3,
+     "of_those_inside_own_interval": 0
+    },
+    "run-02/f2-m04": {
+     "forecasts": 2,
+     "nearer_than_both_readers": 1,
+     "ties": 1,
+     "inside_own_interval": 1,
+     "gain_nats": 0.32,
+     "centre_outside_both_reader_intervals": 0,
+     "of_those_inside_own_interval": 0
+    },
+    "run-02/f2-m05": {
+     "forecasts": 3,
+     "nearer_than_both_readers": 0,
+     "ties": 1,
+     "inside_own_interval": 1,
+     "gain_nats": -5.88,
+     "centre_outside_both_reader_intervals": 1,
+     "of_those_inside_own_interval": 0
+    },
+    "run-02/f2-m06": {
+     "forecasts": 3,
+     "nearer_than_both_readers": 2,
+     "ties": 0,
+     "inside_own_interval": 1,
+     "gain_nats": -0.38,
+     "centre_outside_both_reader_intervals": 0,
+     "of_those_inside_own_interval": 0
+    },
+    "run-02/r5-m03-rival": {
+     "forecasts": 3,
+     "nearer_than_both_readers": 1,
+     "ties": 2,
+     "inside_own_interval": 3,
+     "gain_nats": 1.71,
+     "centre_outside_both_reader_intervals": 0,
+     "of_those_inside_own_interval": 0
+    }
+   }
+  },
+  "n": null,
+  "unit": "",
+  "source": "studies/theory/results/forecast/run-0<n>/ (newest scores*.json, forecasts.json)",
+  "note": "nearer here = nearer than BOTH readers of the same run (the forecast page's rule). Measured values were read from board posts by a model job (forecast_score), not by a script. Whether each forecast was committed before its result was posted needs the board and git history and is not recomputed here (the site literal says 10 of 25)."
+ },
+ "versions": {
+  "value": {
+   "1": "lib/check.py: a predictor given each theory guesses 58 held-out board numbers (points, no intervals); score = closer/farther counts against 2 no-theory predictors; one planted reversed theory.",
+   "2": "lib/v2.py: each author files value + 90 % interval per held-out target; score = divergent wins minus losses (both readers outside the interval), against a reversed copy; exposed targets left out; published mechanisms imported.",
+   "3": "lib/round.py: headless jobs in empty directories; readers file intervals too; score = log gain in nats against the mixture of the 2 readers, clipped to [-3, 3], with a bootstrap interval; held-out items no earlier round used.",
+   "4": "offline tests become the main score: 12 pairwise different mechanisms, each with 3-6 predictions and exact recipes fixed by sha256 before any row is read, computed by scripts from stored per-problem rows; 2 no-theory readers predict the same numbers; held-out claims can only remove a theory.",
+   "5/5.1": "rival stages: a blind agent writes the strongest other mechanism and tests where the two differ; gain = theory minus rival log density; 5.1 adds a second turn and a +-2 nat decision rule.",
+   "6-6.3": "stage account: one budget of the base-to-RL gap whose shares sum to 1, tested like a theory; 6.1 at least 3 cells; 6.2 null cell, fits and zeros by construction not scored, replicate stage; 6.3 --account-from; 'within noise' no longer counts as outside.",
+   "7/7.1": "experiments stage (each side predicts the other's GPU experiments, ranked by separation per GPU minute); 7.1: a duel test where the defender's centre is inside the rival's interval adds 0 and a win needs 2 separating tests; carried duel wins kept out of round totals; account only with --with-account.",
+   "8": "forecasts inside the round (targets_open, forecast): theories and readers forecast the open work items; no round run with it in these files."
+  },
+  "n": null,
+  "unit": "",
+  "source": "studies/theory/README.md",
+  "note": "round -> version: {\"1\": \"1\", \"2\": \"2\", \"3\": \"3\", \"4\": \"4 (+5/5.1 duel)\", \"5\": \"5.1\", \"6\": \"6.3\", \"7\": \"7.1\"}"
+ },
+ "models": {
+  "value": {
+   "round.py MODELS (alias passed to `claude -p --model`)": {
+    "inventory": "opus",
+    "targets": "sonnet",
+    "external": "opus",
+    "generate": "opus",
+    "fix": "opus",
+    "null": "opus",
+    "claims": "opus",
+    "reverse": "sonnet",
+    "test": "opus",
+    "review": "opus",
+    "mechanisms": "opus",
+    "develop": "opus",
+    "null_tests": "opus",
+    "rival": "opus",
+    "defend": "opus",
+    "account": "opus",
+    "cross_predict": "opus"
+   },
+   "round-01/run.json": {
+    "targets (sonnet)": 1,
+    "generators (opus)": 3,
+    "planted (sonnet)": 1,
+    "predictors (sonnet)": 9
+   },
+   "round-02/run.json": {
+    "targets (sonnet)": 1,
+    "external findings (opus)": 1,
+    "no-theory predictors (opus)": 2,
+    "claims for the 6 round-01 theories (the 3 round-01 generators, resumed)": 3,
+    "new generators (opus), each resumed once for claims": 5,
+    "reversal jobs (opus, headless)": 5,
+    "reviews (opus)": 3
+   },
+   "round-03/run.json": {
+    "inventory (opus)": 1,
+    "targets (sonnet)": 1,
+    "external (opus)": 1,
+    "generate (opus)": 5,
+    "null (opus)": 2,
+    "claims (opus)": 14,
+    "reverse (sonnet)": 1,
+    "reverse-claims (opus)": 1,
+    "test (opus)": 1,
+    "review (opus)": 1
+   },
+   "round-04/run.json": {
+    "inventory (opus)": 1,
+    "external (opus)": 1,
+    "mechanisms (opus)": 1,
+    "develop (opus)": 12,
+    "null_tests (opus)": 2,
+    "test (opus)": 10,
+    "targets (sonnet)": 1,
+    "null (opus)": 2,
+    "claims (opus)": 3,
+    "review (opus)": 4
+   },
+   "round-05/run.json": {
+    "inventory (opus)": 1,
+    "external (opus)": 1,
+    "mechanisms (opus)": 1,
+    "develop (opus)": 12,
+    "null_tests (opus)": 2,
+    "test and duel_test (opus)": 18,
+    "targets (sonnet)": 1,
+    "null (opus)": 2,
+    "claims (opus)": 3,
+    "rival and rival2 (opus)": 5,
+    "defend (opus)": 5,
+    "review (opus)": 3
+   },
+   "round-06/run.json": {
+    "inventory": 1,
+    "external": 1,
+    "mechanisms": 1,
+    "develop": 12,
+    "account": 1,
+    "account fix (send-back)": 1,
+    "null_tests": 2,
+    "test, duel_test and replicate writers": 22,
+    "targets (sonnet)": 1,
+    "null": 2,
+    "claims": 3,
+    "rival and rival2": 6,
+    "defend": 6,
+    "review": 3
+   },
+   "round-07/run.json": "no per-stage model recorded in run.json"
+  },
+  "n": null,
+  "unit": "",
+  "source": "studies/theory/lib/round.py MODELS; results/engine/round-<nn>/run.json (subagents / jobs)",
+  "note": "Only the CLI aliases 'opus' and 'sonnet' are recorded; no run file holds a dated model id. Theories, readers, rivals, defenders, test writers and reviews: opus. Targets (reading held-out numbers off board items): sonnet. Round 1: predictors and the planted theory sonnet, generators opus. Round 3 reversal text: sonnet."
+ },
+ "examples": {
+  "confidently_wrong": [
+   {
+    "round": 4,
+    "theory": "r4-m04",
+    "qid": "r4-m04:p1",
+    "quantity": "Wait-rate-based share estimate in theta0.25_plain against the plain base and RL plain endpoints",
+    "unit": "fraction (share estimate)",
+    "measured": 0.327,
+    "t_value": 0.76,
+    "t_low": 0.6,
+    "t_high": 0.9,
+    "r1_value": 0.38,
+    "r1_low": 0.08,
+    "r1_high": 0.72,
+    "r2_value": 0.5,
+    "r2_low": 0.2,
+    "r2_high": 0.85,
+    "gain": -3.0,
+    "z_t": -4.7486,
+    "source": "studies/theory/results/engine/round-04/metrics_v4.json:theories.r4-m04.rows[k=1]",
+    "statement": "On MATH-500 at T 1.0, base + a(RL - base) behaves as a per-answer mixture of two whole endpoint modes: with probability p(a) an answer is drawn from RL's mode (boxed, long, RL-level 'Wait' rate, RL's per-problem accuracy) and otherwise from the a = 0 model's mode on the same prompt (plain base or cued base), so the share p(a) implied by accuracy, p = (score_a - score_0)/(score_RL - score_0) (0.76\u2026"
+   },
+   {
+    "round": 5,
+    "theory": "r5-m07",
+    "qid": "r5-m07:p1",
+    "quantity": "Share of step-100 plain MATH-500 answers at T 0.6 / top-p 0.95 that open with the RL cue's first token 'line'. The sharpening rival (r4-m10) and the length rival leave the opening as the plain base's\u2026",
+    "unit": "fraction of problems",
+    "measured": 0.034,
+    "t_value": 0.68,
+    "t_low": 0.4,
+    "t_high": 0.95,
+    "r1_value": 0.3,
+    "r1_low": 0.02,
+    "r1_high": 0.75,
+    "r2_value": 0.3,
+    "r2_low": 0.02,
+    "r2_high": 0.75,
+    "gain": -3.0,
+    "z_t": -3.8643,
+    "source": "studies/theory/results/engine/round-05/metrics_v4.json:theories.r5-m07.rows[k=1]",
+    "statement": "By RL step 100 the Olmo-3.1 RL-Zero-Math policy differs from the base almost only in its opening: on the plain prompt it now starts most answers with the RL cue ' line!\\n\\nOkay', and once it has done that it behaves like the cued base (same loop rate, same loop problems, same finished-answer accuracy, the base's own 'Answer:' format), so its T 0.6 / top-p 0.95 cap hits climb toward the cued base'\u2026"
+   }
+  ],
+  "right_where_readers_wrong": [
+   {
+    "round": 4,
+    "theory": "r4-m10",
+    "qid": "r4-m10:p2",
+    "quantity": "Paired cap-hit rate difference, RL step 400 minus base, plain MATH-500 at T 0.6 / top-p 0.95.",
+    "unit": "fraction of problems",
+    "measured": 0.066,
+    "t_value": 0.06,
+    "t_low": 0.015,
+    "t_high": 0.12,
+    "r1_value": -0.06,
+    "r1_low": -0.13,
+    "r1_high": 0.01,
+    "r2_value": -0.07,
+    "r2_low": -0.13,
+    "r2_high": 0.0,
+    "gain": 3.0,
+    "z_t": 0.188,
+    "source": "studies/theory/results/engine/round-04/metrics_v4.json:theories.r4-m10.rows[k=2]",
+    "statement": "In Olmo-3.1 RL-Zero-Math, the early RL steps (100-400) concentrate the policy on the base's own high-probability paths, which raises accuracy on finished answers. The lower entropy also makes T 0.6 / top-p 0.95 sampling cross top-p's lock threshold more often, so looping cap hits rise above the base's. Only the slower pressure of 3.1's truncation-as-negative training later removes these loops, so\u2026"
+   },
+   {
+    "round": 5,
+    "theory": "r5-m08",
+    "qid": "r5-m08:p1",
+    "quantity": "Share of Code 3.1's lead over Code 3.0 (MATH-500, cue, T 1.0) that lies in the top quartile of RL answer length. The nearest rival (Code 3.0 is a base-like model lacking math transfer, distributed li\u2026",
+    "unit": "fraction of Code 3.1's lead",
+    "measured": 0.7948717948717948,
+    "t_value": 0.62,
+    "t_low": 0.45,
+    "t_high": 0.88,
+    "r1_value": 0.45,
+    "r1_low": 0.2,
+    "r1_high": 0.72,
+    "r2_value": 0.45,
+    "r2_low": 0.2,
+    "r2_high": 0.7,
+    "gain": 1.75,
+    "z_t": 1.338,
+    "source": "studies/theory/results/engine/round-05/metrics_v4.json:theories.r5-m08.rows[k=1]",
+    "statement": "Because Olmo-3 RL-Zero-Code 3.0 was trained with truncated rollouts masked rather than punished, it learned a runaway long-generation mode (the looping seen on LiveCodeBench) that at T 1.0 on MATH-500 drives its longest problems to the 16,384 cap, so Code 3.0 carries Code 3.1's math gain on short problems but loses it, and falls below the cued base, on the longest quartile."
+   }
+  ]
+ }
+}

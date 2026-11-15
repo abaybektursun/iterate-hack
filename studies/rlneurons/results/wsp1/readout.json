@@ -761,6 +761,96 @@
     "share": null
    },
    "run_folder": "studies/rlneurons/results/wsp1/full500/rand8_plain-01"
+  },
+  "hard328/sft1_cue": {
+   "experiment": "hard328",
+   "label": "sft1",
+   "prompt": "cue",
+   "job_id": "sameraslan-1114-204845-1055",
+   "seed_base": 3000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 328,
+   "right_v3": 219,
+   "acc_v3": 66.77,
+   "wilson95": [
+    61.5,
+    71.6
+   ],
+   "cap_hits": 89,
+   "mean_generated_tokens": 10123.5,
+   "median_generated_tokens": 10685.5,
+   "median_tokens_right": 6149,
+   "okay_first80": 328,
+   "okay_first80_share": 1.0,
+   "wait_per_answer": 75.85,
+   "empty": 0,
+   "empty_share": 0.0,
+   "edit": {
+    "recipe": "interp",
+    "k": null,
+    "alpha": 1.0,
+    "rounding": "nearest",
+    "seed": 0,
+    "late_layers": null,
+    "reference": "base",
+    "n_tensors": 355,
+    "n_edited": 0,
+    "n_unchanged": 355,
+    "other": "think_sft",
+    "add_norm": 0.0,
+    "written_norm": 0.0,
+    "ref_norm": 0.0,
+    "add_rel": null,
+    "effective_scale": null,
+    "cos_written_add": null,
+    "share": null
+   },
+   "run_folder": "studies/rlneurons/results/wsp1/hard328/sft1_cue-01"
+  },
+  "hard328/sft1_plain": {
+   "experiment": "hard328",
+   "label": "sft1",
+   "prompt": "plain",
+   "job_id": "sameraslan-1114-204852-d527",
+   "seed_base": 3000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 328,
+   "right_v3": 203,
+   "acc_v3": 61.89,
+   "wilson95": [
+    56.5,
+    67.0
+   ],
+   "cap_hits": 86,
+   "mean_generated_tokens": 9375.9,
+   "median_generated_tokens": 9315.5,
+   "median_tokens_right": 5689,
+   "okay_first80": 99,
+   "okay_first80_share": 0.302,
+   "wait_per_answer": 61.68,
+   "empty": 0,
+   "empty_share": 0.0,
+   "edit": {
+    "recipe": "interp",
+    "k": null,
+    "alpha": 1.0,
+    "rounding": "nearest",
+    "seed": 0,
+    "late_layers": null,
+    "reference": "base",
+    "n_tensors": 355,
+    "n_edited": 0,
+    "n_unchanged": 355,
+    "other": "think_sft",
+    "add_norm": 0.0,
+    "written_norm": 0.0,
+    "ref_norm": 0.0,
+    "add_rel": null,
+    "effective_scale": null,
+    "cos_written_add": null,
+    "share": null
+   },
+   "run_folder": "studies/rlneurons/results/wsp1/hard328/sft1_plain-01"
   }
  },
  "differences": {
@@ -1151,5 +1241,111 @@
   "okay_first80: 'Okay' in the first 80 characters of the text; the cue prompt forces ' line!\\n\\nOkay' as the first 3 tokens of the text, so the share is 1 in every cue cell by construction",
   "wait_per_answer: occurrences of 'wait' plus 'Wait' as substrings, mean over all answers",
   "sft1 is Think-SFT as released (interp, alpha 1, nearest rounding): its edit totals are empty, no tensor is edited"
- ]
+ ],
+ "hard328_vs_references": {
+  "set": "the 328 clean problems of data/rln3/hard.json (overlap flag none), by its index; T 1.0, top-p 1.0, one sample",
+  "references": {
+   "base_cue_T1": {
+    "n": 328,
+    "right_v3": 164,
+    "cap_hits": 77,
+    "mean_new_tokens": 9343.8,
+    "seed_base": 3000000,
+    "job_id": "abaybektursun-1114-151534-e72c",
+    "rows": "studies/rlneurons/results/axis/hard328-01/vectors.json (arms.base_cue)",
+    "count": "studies/rlneurons/results/day1_hard328/readout.json (cells.base_cue_T1)"
+   },
+   "rl_plain_T1": {
+    "n": 328,
+    "right_v3": 206,
+    "cap_hits": 20,
+    "mean_new_tokens": 9315.4,
+    "seed_base": 3000000,
+    "job_id": "abaybektursun-1114-151540-86ef",
+    "rows": "studies/rlneurons/results/axis/hard328-01/vectors.json (arms.rl_plain)",
+    "count": "studies/rlneurons/results/day1_hard328/readout.json (cells.rl_plain_T1)"
+   },
+   "rl_cue_T1": {
+    "n": 328,
+    "right_v3": 205,
+    "cap_hits": 25,
+    "mean_new_tokens": 9316.4,
+    "seed_base": 50000000,
+    "job_id": "abaybektursun-1114-132929-a32d",
+    "rows": "studies/rlneurons/results/axis/hard328-01/vectors.json (arms.rl_cue)",
+    "count": "studies/rlneurons/results/day1_hard328/readout.json (cells.rl_cue_T1)"
+   },
+   "base_plain_T1": {
+    "n": 328,
+    "right_v3": 76,
+    "cap_hits": 35,
+    "mean_new_tokens": 4928.4,
+    "seed_base": 50000000,
+    "job_id": "abaybektursun-1114-132922-7ba0",
+    "rows": "studies/rlneurons/results/axis/hard328-01/vectors.json (arms.base_plain)",
+    "count": "studies/rlneurons/results/day1_hard328/readout.json (cells.base_plain_T1)"
+   }
+  },
+  "cells": {
+   "sft1_cue": {
+    "right_v3": 219,
+    "cap_hits": 89,
+    "mean_new_tokens": 10122.8
+   },
+   "sft1_plain": {
+    "right_v3": 203,
+    "cap_hits": 86,
+    "mean_new_tokens": 9375.2
+   }
+  },
+  "differences": {
+   "sft1_cue minus base_cue_T1": {
+    "n": 328,
+    "points": 16.77,
+    "ci95": [
+     12.5,
+     21.34
+    ],
+    "paired": true
+   },
+   "sft1_cue minus rl_plain_T1": {
+    "n": 328,
+    "points": 3.96,
+    "ci95": [
+     0.0,
+     7.93
+    ],
+    "paired": true
+   },
+   "sft1_cue minus rl_cue_T1": {
+    "n": 328,
+    "points": 4.27,
+    "ci95": [
+     0.91,
+     7.62
+    ],
+    "paired": true
+   },
+   "sft1_plain minus rl_plain_T1": {
+    "n": 328,
+    "points": -0.91,
+    "ci95": [
+     -5.18,
+     3.35
+    ],
+    "paired": true
+   },
+   "sft1_plain minus base_plain_T1": {
+    "n": 328,
+    "points": 38.72,
+    "ci95": [
+     33.23,
+     44.21
+    ],
+    "paired": true
+   }
+  },
+  "tokens": "mean_new_tokens: mean of n_new (the references' mean_generated_tokens of analysis/day1_hard328.py is that mean)",
+  "intervals": "paired by problem index, bootstrap (5,000 resamples, seed 0, 95 % percentile), in points"
+ }
 }

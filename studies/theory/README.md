@@ -526,12 +526,64 @@ G4 refuted (no change to the base predicted above the best known count). G5 refu
 | r7-m09 | Think-SFT's excess wrong answers on easy problems are final formats that grader v3 rejects. | 4 of 4 | 2 / 2 / 0 | -4.00 | no gain | Groups of 6 to 9 items. |
 | r6-m06 | (carried untested) | 0 of 3 | | | untested | The stored rows still have no per-token probability field. |
 
+## Round 08 (2026-11-15, cutoff 11-15 14:15:27 UTC, plan by abaybektursun)
+
+Plan `specs/SPEC_round08.md`, engine version 8 (open targets and forecasts inside the round), no account. Two runs: the first
+stopped in `replicate` (`replication/r8-m02/p2.py` ran at 100 % CPU for 20 minutes and was killed; its bootstrap recounts the
+switch-marker regex over about 3,900 full answer texts in each of 2,000 resamples). `run_scripts` in `lib/round.py` now gives a
+test, duel or replication script 600 s; a script that times out or exits non-zero is written into its result as "not computed:
+script failed (<exit code or timeout>)" with its output path, counted in the round line, and the round goes on (in `replicate`
+it counts as "not replicated"). The second run skipped every finished stage and ended with exit 0. 58 headless jobs, 106 minutes,
+no GPU (`results/engine/round-08/run.json`, log `round08.log`, ranked experiments `experiments.md`, forecasts `forecasts.md`).
+
+**Result: the forecasts written with the open targets say what the readers say, and no theory separates on an open number.
+16 open targets from 6 work items. The 4 new theories forecast 6 to 8 targets each; 0 of 37 theory forecasts has its centre
+outside both readers' intervals, the largest gap is 0.61 of the readers' half-width, and no target has two theories with
+disjoint intervals. Of 12 mechanisms 8 were abandoned (the board already contradicted them); of the 4 developed, r8-m02 is
+refuted by its own test, r8-m10 and r8-m12 gain nothing a reader did not expect, r8-m09 survives offline and loses its duel
+(-3.05 nats on 2 separating tests). The carried r3-across-2 is refuted (its first computed test). 21 of 23 offline predictions
+computed: 15 inside, 3 outside within noise, 3 outside; 1 replication script timed out.**
+
+Hypotheses of the spec: K1 holds (16 targets). K2 refuted (4 theories forecast a third of the targets or more: r8-m02, r8-m09,
+r8-m10 8 of 16, r8-m12 6 of 16). K3 refuted (0 targets with two disjoint theory intervals; 5 needed). K4 is scored in round 09.
+K5 refuted (106 minutes; about 30 of them the stop in `replicate`, about 76 without it).
+
+| Theory | Statement | Tests computed | In / noise / out | Gain (nats) | State | What decided it |
+|---|---|---|---|---|---|---|
+| r8-m09 | Think-SFT puts its value on the line after 'Answer:', which grader v3 reads as blank, at a fixed rate per answer; the RL delta at a >= 2 replaces that ending. | 4 of 4 | 3 / 1 / 0 | +1.65 | survives offline; loses to rival; review weak | Rival (the 'Answer:' template is used on short, easy answers): duel p2 measured 0.35 (n 20), theory 0.95 [0.6, 1.45], rival 0.55 [0.32, 0.85]; total -3.05 on 2 separating tests. |
+| r8-m12 | On long hard328 problems the cued base reaches a right answer at a flat per-token rate fixed by the problem; cap hits are reasoning still under way. | 4 of 4 | 2 / 1 / 1 | +2.60 | no gain | p1, within-problem rate ratio of right finishes late against early: 3.24 (n 279, 90 % [2.24, 4.77]) against 0.85 [0.5, 1.3]. The rate rises; outside its interval, but +3.00 nats because the readers said 0.6. |
+| r8-m10 | Precision falls with answer length only past the length the model's training let it run (RL-Zero-Math about 8,000 tokens; Think-SFT longer). | 4 of 4 | 4 / 0 / 0 | +1.70 | no gain | All inside, but the readers' centres were inside the same intervals. |
+| r8-m02 | The cued base loses finished answers by switching lines of attack early ('Alternatively', 'Let me try a different'); RL switches less per token. | 4 of 4 | 2 / 1 / 1 | -3.69 | refuted (own test) | Base / RL switch-marker rate per token 0.758 (n 497, 90 % [0.71, 0.80]) against 1.6 [1.15, 2.4]: RL switches more. Replication timed out (not replicated). |
+| r3-across-2 | The cued base leaves loops only through low-probability tail tokens; RL adds a constant push toward probable 'Wait' / 'Hmm' (carried). | 2 of 3 | 1 / 0 / 1 | -1.24 | refuted (own test) | p5 0.179 (n 473, 90 % [0.02, 0.30]) against 0.62 [0.42, 0.85], replicated; p4 not computable (S3 403). |
+| r4-m01 | The base's T 0.6 loop hazard grows with how self-similar its text is (carried). | carried, 3 of 4 | 3 / 0 / 0 | +1.41 | survives (round-04 tests) | No new number; 0 forecasts; 0 held-out claims. |
+| r5-m03-rival | The top-8 edit is an incomplete switch per sample (carried). | carried | | | survives; not separated from rival; review weak | 1 separating duel test of 6; 3 forecasts, all inside the readers' intervals; 0 strikes of 3 held-out claims. |
+| r5-m10-rival | The cue's gain at T 1.0 is robustness to sampled tail tokens, not a choice between two modes (carried). | carried | | | survives; not separated from rival; review weak | 1 separating duel test of 6; 2 forecasts; 0 strikes of 4 held-out claims. |
+
+Abandoned: r8-m01, r8-m03, r8-m04, r8-m05, r8-m06, r8-m07, r8-m08, r8-m11 (`dropped.json`, each with the board items that
+contradict it).
+
+Minutes per stage (file times): inventory and external 16 (parallel), targets_open 2.5, mechanisms 12, develop 6, forecast 1,
+null_tests and test 12, replicate 28 to the kill + 11 after the resume (p2 timeout 600 s), heldout 3, rival to score_duel 5.5,
+cross_predict 3, duel replication 2.5, review and experiments 2.
+
+Forecasts (`forecasts.md`, board snapshot 15:46:24 UTC): t01-t02 finish-dial controls (random rank-8 at 1.5x; Think-SFT's 8
+directions at Math's norm; hard328), t03-t04 dial at 1.5x on fresh2026 (vote over 4, single), t05-t06 cued base vote over 9 and
+12 on MATH-500, t07-t08 cued base at cap 32,768 on hard328, t09-t12 Think-SFT + 2 x (RL - base) on fresh2026, hard328 and
+MATH-500, t13-t16 Think-SFT at cap 32,768 and cut at 16,384 (hard328, fresh2026). Readers forecast all 16. r8-m02: t05-t08,
+t13-t16; r8-m09 and r8-m10: t09-t16; r8-m12: t07, t08, t13-t16; r5-m03-rival: t01, t03, t04; r3-across-2 and r5-m10-rival:
+t07, t08; r4-m01: none. No two theories' intervals are disjoint on any target; the widest split is t15 (fresh2026, Think-SFT
+cap 32,768, vote over 4): r8-m12 76 [68, 84] and r8-m10 75 [67, 83] against r8-m02 70 [62, 78], all overlapping.
+
+Experiments (`experiments.md`): 7 open, 5 of them changes to the base, all below the best known base count (454). Top by
+separation: r4-m01:theory:g5, remove repeated lines from the base's own stuck prefix and continue at T 0.6 / top-p 0.95 on the
+78 cap-hit problems: r4-m01 32 [26, 39] against its rival 24 [17, 31] finishes, +1.84 nats in 25 GPU minutes.
+
 ## Forecast runs
 
 Every unrefuted theory of the newest round (at most 6, survivors first, then by total gain) and two readers with no
 theory forecast the numbers the open `work` items will report, before they post. Code `lib/forecast.py` (imports the
 job runner and the log density from `lib/round.py`), prompts `lib/prompts/forecast_targets.md`, `forecast.md`,
-`forecast_score.md`.
+`forecast_score.md`, `forecast_propose.md` (`--propose N [--lens "<family of causes>"]`).
 
 ```
 uv run studies/theory/lib/forecast.py make studies/theory/results/forecast/run-<nn>   # fails if the folder exists
@@ -571,6 +623,65 @@ adds 2 targets to run-01 and 3 to run-02. run-01, 11 of 20 measured: reader-2 10
 f2-m01 (autobench buys votes by shortening samples) was outside both readers on t14 (338 against 362 and 356) and t15
 (139 against 190 and 197) and right on both, +3.25 nats over 4 targets. f2-m02 -8.62 over 4, f2-m03 -7.07 over 3, f2-m05
 -5.89 over 3. P3 so far: 2 of 7 disagreements right (needs 8 to decide).
+
+Fourth score (16:33 UTC, `scores-2026-11-15T163347.*`, `scores-2026-11-15T163337.*`). run-01, 15 of 20 measured:
+reader-2 14 of 15 inside, +3.00 nats; reader-1 11 of 15, -8.40; r5-m03-rival +1.83 over 3; r6-account-rival +0.91
+over 2. run-02, 9 of 17 measured: f2-m01 4 of 6 inside, +5.38 nats (mean +0.90 over 6 targets, so P2 holds for f2-m01);
+f2-m04 +1.44 over 3; reader-1 +0.96 over 9; reader-2 -4.12 over 9; f2-m06 -0.19 over 4; f2-m03 -5.45 over 5; f2-m05
+-5.89 over 3; f2-m02 -8.62 over 4. P3 so far: 3 of 8 disagreements right (more than 1 in 4: P3 holds at this count).
+
+**run-03 to run-08** (plan `specs/SPEC_forecast03.md`; `make ... --propose 6 --lens "<lens>"`, six processes at once,
+commit 2a88c41; snapshot 2026-11-15 16:32:52 UTC; `results/forecast/run-03/` ... `run-08/`). `--lens` gives the
+proposing job the family its mechanisms come from; the rule that a mechanism lies outside both readers on 3 targets is
+gone; every forecast carries `vs_readers` ("agree ..." or "disagree ..." and why); `forecasts.md` lists every mechanism
+forecast beside both readers' values and intervals. Lenses: run-03 stopping (cap, loops, end-of-text, answer markers);
+run-04 sampling (temperature, top-p, next-token entropy, votes); run-05 weight space (the RL change, top directions,
+scaling, transplants); run-06 training data and objective (Think-SFT imitation, RL reward, pretraining, exposure);
+run-07 problem structure (difficulty, domain, answer type, derivation length); run-08 the grader and the measurement
+(extraction, equivalence, seeds, set composition). Each run rebuilt its own targets (23, 31, 25, 31, 24, 23 from 12 open
+work items) and readers. All 36 mechanisms passed the checks (L1 holds); runs 04 and 06 needed one send-back each (a
+statement over 80 words). Mechanisms forecast 12 to 19 targets each and say "disagree" on 0 to 5 of them; without the
+forced rule they stay near the readers: the largest gap on any target is 0.8 of the readers' mean 90 % half-width
+(run-05/f2-m03, Code-RL top-8 at 1.5x on HumanEval+ and MBPP+, 385 against 357 and 362), and no centre lies outside
+both readers' intervals. No two mechanisms from different lenses have disjoint intervals on the same open target; the
+nearest split is the same code cell (Code-RL top-8 at 1.5x and 2x, work-df5e0a): run-05/f2-m03 385 [360, 408] and
+run-05/f2-m06 378 [350, 402] (weight space) against run-08/f2-m03 342 [322, 362] and 330 [308, 352] (the edit adds only
+by converting cap hits). First score (16:45 UTC, `scores.*`): 0 targets measured in any of the six. L2 and L3 not
+decided.
+
+## Cells designed by the theories
+
+The open cells did not separate the mechanisms, so the mechanisms design cells. Code `lib/forecast.py cells` (runs the
+jobs) and `lib/cells.py` (inputs, checks, ranking, `cells.md`); prompts `lib/prompts/cells_propose.md`,
+`cells_merge.md`, `cells_forecast.md`; plan `specs/SPEC_cells01.md`.
+
+```
+uv run studies/theory/lib/forecast.py cells studies/theory/results/forecast/cells-<nn> --from <forecast run folders...>
+```
+
+One blind job per family (each `--from` run's mechanisms; round 07's unrefuted theories) proposes per mechanism one
+GPU cell that it gets right and a named other mechanism gets wrong (cell, job file, command, readout, value with 90 %
+interval, the alternative's value outside it, L40S minutes at most 120, `base_only` with the best known base count).
+It sees the board, the mechanisms, `known.json` (the runs' targets and round 07's `facts.json`) and `jobs.md` (the
+job rows and "How to run" of `studies/rlneurons/README.md` and each job file's `add_argument` lines). One job merges
+the same runs; fresh family jobs (one forecast per mechanism) and two readers forecast every readout blind. Ranked in
+code: pairs of forecasters from different families whose intervals do not overlap, per GPU minute; base-only readouts
+by the highest forecast minus the best known base count. Job outputs stay in `<folder>/jobs/`, so a rerun resumes.
+
+**cells-01** (`results/forecast/cells-01/`: `cells.md`, `cells.json`, `cell_forecasts.json`, `jobs/`; code commit
+e56af14; about 25 minutes, 17 jobs; 3 proposing jobs needed one send-back for a job field naming two files). 44
+cells proposed, 41 after merging (C1 holds); 3 merged cells have 3 or more cross-family pairs with intervals that do
+not overlap, 4 have any (C2 refuted: needs 5). The mechanisms gave a number on 367 of 1,936 mechanism-readout pairs;
+the rest "theory says nothing". The named alternative's own blind forecast fell outside the proposer's interval in 20
+of 44 proposals (9 said nothing), so in most designed cells the disagreement exists only in the proposer's account
+of the other mechanism. 6 base-only readouts have a forecast above the best known base count (C3 holds as coded), but
+every such count is a scaled estimate, not a measured count at the same number of samples, and every top forecast is
+inside both readers' intervals. Top by separation: m20 base plain on fresh2026 (50 min; run-06 2-3 [0, 8] against
+run-07/f2-m06 16 [9, 23] and run-08/f2-m01 14 [8, 20]), m29 base + RL-Math top 8 at 2x on MATH-500 (110 min; 423
+[410, 436] against 449-455), m33 the same edit on code, answers with no code block (95 min; 3-4 against 35-38; the
+board's 1.5x cell already points to the low side), m06 RL step 100 on hard328 (70 min). Hand check at the end of
+`cells.md`: m29, m33 and m06 have commands with flags the jobs do not take (`--recipe topk`, `--model s0100`), which
+the checks do not catch.
 
 ## Engine version 8 (forecasts inside the round)
 
@@ -656,3 +767,29 @@ Page of the engine's record: `tools/finding_theories_on_trial.py`, served at `/f
 Page of the self-opened draw (selfopen-01): `tools/finding_base_opens_itself.py`, served at `/finding/base-opens-itself`; running the file checks it against `results/experiments/selfopen-01/`.
 
 Page of the gap account (run-02): `tools/finding_where_the_gap_goes.py`, served at `/finding/where-the-gap-goes`; its numbers are read from `results/account/run-02/check/` and `python3 tools/finding_where_the_gap_goes.py` checks them.
+
+## Paper: Theories on Trial (`paper/`, board work-184476)
+
+A short paper on the engine's rounds 1 to 7: the theories' own predictions against the two no-theory readers
+(nearer count, interval coverage, log gain), the round-6 budget, the contests against rivals, the self-open
+experiment and the faults found in the engine's scores. Public at
+https://monitor.invariant.team/paper/theories-on-trial.pdf (`tools/view.py` serves `paper/theories-on-trial.pdf`;
+`infra/monitor/deploy.sh` ships it).
+
+- `paper/build_facts.py` (`uv run --no-project --with numpy python studies/theory/paper/build_facts.py`): reads the
+  committed round files and writes `paper/predictions.jsonl` (one row per prediction), `paper/facts.json` (every
+  number of the paper with its value, n, unit and source) and `paper/calibration.json`. Every stored gain is
+  recomputed and must match to 0.002. `paper/NOTES.md`: how each headline is computed and what weakens it.
+- `paper/figs.py` (`uv run --no-project --with matplotlib --with numpy python studies/theory/paper/figs.py`): draws
+  `fig_truth.pdf`, `fig_rounds.pdf`, `fig_duel.pdf` from those files; `paper/fonts/` is TeX Gyre Pagella (GUST font
+  licence).
+- `paper/paper.tex`, `paper/refs.bib`: the text; `tectonic paper.tex` builds `paper.pdf`, copied to
+  `theories-on-trial.pdf` for the site.
+- Headline: theories nearer than the readers in 190 of 394 comparisons (48.2 % [39.7, 55.1]); 90 % intervals held
+  164 of 236 (69.5 %) against 197 and 202 for the readers (gap -15.0 points [-27.6, -5.1]); log gain -58.85 nats on
+  236, -94.27 on 192 without the round-6 budget.
+- Review: four independent reviews of draft 1 (number audit, about 200 numbers, 13 corrected; skeptical review;
+  check of every description of the engine and every citation; visual review) and one final check of draft 2. The
+  main change: authors and readers had different prompts (authors chose the quantities, were asked for predictions
+  a reader would not guess, and were not told how intervals are scored), so the paper claims that the theories'
+  chosen predictions were no nearer and less often inside their intervals, not that writing a mechanism causes it.

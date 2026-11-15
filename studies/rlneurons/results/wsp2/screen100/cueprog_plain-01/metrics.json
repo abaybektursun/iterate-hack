@@ -1,0 +1,77 @@
+{
+ "n": 100,
+ "right_v3": 85,
+ "acc_v3": 85.0,
+ "wilson95": [
+  76.7,
+  90.7
+ ],
+ "cap_hits": 5,
+ "mean_generated_tokens": 3685.0,
+ "median_generated_tokens": 1677.5,
+ "median_tokens_right": 1439,
+ "okay_first80": 96,
+ "okay_first80_share": 0.96,
+ "wait_per_answer": 22.49,
+ "empty": 0,
+ "empty_share": 0.0,
+ "mean_new_tokens": 3684.1,
+ "handedit": {
+  "control": false,
+  "written": "real",
+  "layer": 31,
+  "tensor": "model.layers.31.mlp.down_proj.weight",
+  "batch": 1,
+  "rounding": "nearest",
+  "target": 0.95,
+  "lambda": 0.01,
+  "solution": "joint: R K^T = I, so dW k_j = a_j u_j for all j at once",
+  "calibration": [
+   100,
+   227
+  ],
+  "held_out": [
+   228,
+   291
+  ],
+  "positions": [
+   {
+    "cue_id": 1584,
+    "scale": 244.5123291015625,
+    "held_before_mean": 0.00024904641088352507,
+    "held_before_min": 7.685273797758216e-05,
+    "held_after_mean": 0.9523115800631698,
+    "held_after_min": 0.874282889664808,
+    "cal_after_mean": 0.949845947531328
+   },
+   {
+    "cue_id": 2268,
+    "scale": 591.951171875,
+    "held_before_mean": 0.005835329448350149,
+    "held_before_min": 0.002628358533001383,
+    "held_after_mean": 0.9519768559260129,
+    "held_after_min": 0.9078600726140937,
+    "cal_after_mean": 0.9499245994049176
+   },
+   {
+    "cue_id": 33413,
+    "scale": 70.80792236328125,
+    "held_before_mean": 0.28628871221120544,
+    "held_before_min": 0.11244706587399585,
+    "held_after_mean": 0.951762294934245,
+    "held_after_min": 0.8613749015475622,
+    "cal_after_mean": 0.9500140932844171
+   }
+  ],
+  "kl_nats": 6.633764652507292e-05,
+  "kl_at_last_cue_nats": 1.3843712067555262e-05,
+  "fro_dW_over_W": 0.06579403113413484,
+  "fro_dW": 9.222524911414903,
+  "changed_share": 0.9380520665368368,
+  "value_cos_real": [
+   1.0,
+   0.9999999999999998,
+   0.9999999999999999
+  ]
+ }
+}
