@@ -1313,6 +1313,29 @@ Page of the self-opened draw (selfopen-01): `tools/finding_base_opens_itself.py`
 
 Page of the gap account (run-02): `tools/finding_where_the_gap_goes.py`, served at `/finding/where-the-gap-goes`; its numbers are read from `results/account/run-02/check/` and `python3 tools/finding_where_the_gap_goes.py` checks them.
 
+## Direct tests
+
+One test per top mechanism of the claim only its stated cause makes, offline where stored data decides it.
+
+### reward-01: run-06/f2-m03's cause (result-82eb02, refuted)
+
+Claim: the change concentrates in a few directions because the outcome reward pays only for a gradable final answer.
+Readout: mean over 224 matrices of the top-8 share of squared singular values of (model - base), from the stored SVD rows of
+job abaybektursun-1114-221259-0871. RL-Zero-General (LM-judge reward on chat, no gradable answer) 0.127 [0.115, 0.139];
+Math 3.0 0.135, Math 3.1 0.118, Code 3.0 0.174, IF 0.206; Think-SFT 0.030; Gaussian floor 0.005-0.008. General sits
+P = 0.685 [0.609, 0.765] of the way from Think-SFT to Math/Code/IF 3.0 (90 % bootstrap over 32 layers); the spec's rule,
+refuted if the lower bound is 0.5 or more, was fixed after the summary means had been seen. Size-matched (Code 3.0 at step
+100) +0.005 [-0.008, 0.019]. The rivals run-05/f2-m01 and run-05/f2-m03 predict nothing here. Not tested: whether any
+sequence-level reward concentrates; General's directions do not finish math (88 cap hits vs 77). Row added to
+`results/refuted.json`.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_reward.md` | Plan, decision rule, rivals' predictions. |
+| `analysis/direct_reward.py` | `extract` (per-matrix table from the job's `metrics.json`), `analyze` (readout). |
+| `data/direct_reward/top8_share_v1.json` | Per-matrix top-8 share and norm of 16 keys (input). |
+| `results/direct/reward-01/` | `readout.json`, `examples.json` (matrix where General most exceeds Math 3.0, and most falls below), `run.json`. |
+
 ## Paper: Theories on Trial (`paper/`, board work-184476)
 
 A short paper on the engine's rounds 1 to 7: the theories' own predictions against the two no-theory readers
