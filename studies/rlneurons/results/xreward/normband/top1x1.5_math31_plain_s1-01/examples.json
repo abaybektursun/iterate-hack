@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 60,
+  "seed": 3010060,
+  "gold": "204",
+  "extracted_v3": "204",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2629,
+  "prompt_tail": ", including $t$ minutes spent in the coffee shop. When she walks $s+2$ kilometers per hour, the walk takes her 2 hours and 24 minutes, including $t$ minutes spent in the coffee shop. Suppose Aya walks at $s+\\frac{1}{2}$ kilometers per hour. Find the number of minutes the walk takes her, including the $t$ minutes spent in the coffee shop.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "= 1.6\n\\]\n\\[\n9 \\left( \\frac{2}{s(s + 2)} \\right) = 1.6\n\\]\n\\[\n\\frac{18}{s(s + 2)} = 1.6\n\\]\nSolving for \\( s \\):\n\\[\n18 = 1.6 \\cdot s(s + 2)\n\\]\n\\[\n\\frac{18}{1.6} = s(s + 2)\n\\]\n\\[\n11.25 = s^2 + 2s\n\\]\n\\[\ns^2 + 2s - 11.25 = 0\n\\]\nSolving the quadratic equation:\n\\[\ns = \\frac{-8 \\pm \\sqrt{64 + 45}}{4} = \\frac{-8 \\pm 28}{8}\n\\]\n\\[\ns = 2.5 \\quad \\text{(since speed cannot be negative)}\n\\]\n\nUsing \\( s = 2.5 \\) to find \\( t \\):\n\\[\n\\frac{9}{2.5} + \\frac{t}{60} = 4\n\\]\n\\[\n3.6 + \\frac{t}{60} = 4\n\\]\n\\[\n\\frac{t}{60} = 0.4\n\\]\n\\[\nt = 24 \\quad \\text{minutes}\n\\]\n\nCalculating the time at \\( s + \\frac{1}{2} = 3 \\) km/h:\n\\[\n\\text{Walking time} = \\frac{9}{3} = 3 \\quad \\text{hours}\n\\]\n\\[\n\\text{Total time} = 3 \\quad \\text{hours} + 24 \\quad \\text{minutes} = 3 \\times 60 + 24 = 204 \\quad \\text{minutes}\n\\]\n\n\\[\n\\boxed{204}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 0,
+  "seed": 3010000,
+  "gold": "116",
+  "extracted_v3": "128",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 933,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "+ b = -747\\)\n\nSubtract the first from the second:\n\n\\[\n(20a + b) - (16a + b) = -747 + 458\n\\]\n\n\\[\n4a = -289\n\\]\n\n\\[\na = -\\frac{289}{4} = -72.25\n\\]\n\nNext, using \\(a = -72.25\\) in the first equation:\n\n\\[\n16(-72.25) + b = -458\n\\]\n\n\\[\n16(-72.25) + b = -458\n\\]\n\n\\[\n-1156 + b = -458\n\\]\n\n\\[\nb = -458 + 1156\n\\]\n\n\\[\nb = 698\n\\]\n\nFor the \\(Q(x)\\) coefficients:\n\n1. \\(16c + d = 566\\)\n2. \\(20c + d = 853\\)\n\nSubtract the first from the second:\n\n\\[\n(20c + d) - (16c + d) = 853 - 566\n\\]\n\n\\[\n4c = 287\n\\]\n\n\\[\nc = \\frac{287}{4} = 71\n\\]\n\nUsing \\(c = 71\\) in the first equation:\n\n\\[\n16(71) + d = 566\n\\]\n\n\\[\n1136 + d = 566\n\\]\n\n\\[\nd = 566 - 1136\n\\]\n\n\\[\nd = -570\n\\]\n\n### Step 4: Find \\(P(0) + Q(0)\\)\n\n\\[\nP(0) = b = 698\n\\]\n\n\\[\nQ(0) = d = -570\n\\]\n\n\\[\nP(0) + Q(0) = 698 - 570\n\\]\n\n\\[\nP(0) + Q(0) = 128\n\\]\n\nAnswer:\n\\[\n\\boxed{128}\n\\]"
+ }
+}

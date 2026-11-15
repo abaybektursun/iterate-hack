@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 0,
+  "seed": 3010000,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 6481,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "(-\\frac{289}{4}\\right) + c = -458 \\]\n\\[ -4 \\cdot 289 + c = -458 \\]\n\\[ -1156 + c = -458 \\]\n\\[ c = 698 \\]\n\n### Solving for \\(e\\) and \\(d\\) in \\(Q(x)\\):\n1. \\( -2(16)^2 + 16d + e = 54 \\)\n\\[ -512 + 16d + e = 54 \\]\n\\[ 16d + e = 566 \\quad \\text{(Equation 3)} \\]\n\n2. \\( -2(20)^2 + 20d + e = 53 \\)\n\\[ -800 + 20d + e = 53 \\]\n\\[ 20d + e = 853 \\quad \\text{(Equation 4)} \\]\n\nSubtract Equation 3 from Equation 4:\n\\[ (20d + e) - (16d + e) = 853 - 566 \\]\n\\[ 4d = 287 \\]\n\\[ d = \\frac{287}{4} \\]\n\nSubstitute \\(d = \\frac{287}{4}\\) back into Equation 3:\n\\[ 16\\left(\\frac{287}{4}\\right) + e = 566 \\]\n\\[ 4 \\cdot 287 + e = 566 \\]\n\\[ 1148 + e = 566 \\]\n\\[ e = -582 \\]\n\n### Finding \\(P(0) + Q(0)\\):\n\\[ P(0) = c = 698 \\]\n\\[ Q(0) = e = -582 \\]\n\\[ P(0) + Q(0) = 698 + (-582) = 116 \\]\n\nThus, the final answer is:\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 57,
+  "seed": 3010057,
+  "gold": "928",
+  "extracted_v3": "2744",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 12874,
+  "prompt_tail": "r: $Answer (without quotes) where $Answer is the answer to the problem.\n\nEach vertex of a regular dodecagon ($12$-gon) is to be colored either red or blue, and thus there are $2^{12}$ possible colorings. Find the number of these colorings with the property that no four vertices colored the same color are the four vertices of a rectangle.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "matic:**\n     - For any pair of rectangles (e.g., \\( R_1 \\) and \\( R_2 \\)), the number of such colorings is \\( 2 \\times 2 \\times 2^4 = 64 \\). Since there are 3 pairs, the total number is \\( 3 \\times 64 = 192 \\).\n   - **Subtract the colorings where all three rectangles are monochromatic:**\n     - The number of such colorings is \\( 2 \\times 2 \\times 2 = 8 \\).\n\n4. **Combine the Results Using Inclusion-Exclusion Principle:**\n   - The valid colorings are given by the total colorings minus the colorings where at least one rectangle is monochromatic plus the colorings where two rectangles are monochromatic minus the colorings where all three rectangles are monochromatic.\n   - This gives us:\n     \\[\n     4096 - 1536 + 192 - 8 = 2744\n     \\]\n\nThus, the number of valid colorings is \\(\\boxed{2744}\\)."
+ }
+}
