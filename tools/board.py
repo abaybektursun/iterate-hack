@@ -271,7 +271,8 @@ def main(argv, who):
         print(f"closed {item_id}")
         if result_id:
             msg.send("all", f"done {item_id}, {result_id}: {result[0].splitlines()[0][:200]}", who, me)
-            print("A result closed: run the team-meta-review skill (uv run tools/cycle.py first).")
+            if not team.review_loop(who):
+                print("A result closed: run the team-meta-review skill (uv run tools/cycle.py first).")
         else:
             msg.send("all", f"closed {item_id}: {item['text'].splitlines()[0][:200]}", who, me)
         print("announced on all")

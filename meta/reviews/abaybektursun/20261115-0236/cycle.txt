@@ -1,0 +1,112 @@
+Jobs of abaybektursun, last 4 h:  id  state  gpu  wait  run  command
+  abaybektursun-1114-172150-5dd5  done  NVIDIA H100   0.1  0.7  bash studies/gpuprice/jobs/fm_chronos2.sh --origin-end 2026-10-01
+  abaybektursun-1114-172234-2298  cancelled  b200  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && VLLM_USE_FLASHINFER_SAMPL
+  abaybektursun-1114-172248-26c3  done  NVIDIA H100   0.0  0.8  bash studies/gpuprice/jobs/fm_chronos2.sh
+  abaybektursun-1114-152416-de10  done  NVIDIA H100   0.0  3.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-152420-32f3  exit 1  NVIDIA H100   0.1  1.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-172637-76df  done  NVIDIA H100   0.0  0.7  pip install -q tirex-2 && python studies/gpuprice/jobs/fm_tirex2.py --
+  abaybektursun-1114-152714-e931  exit 1  NVIDIA H100   0.1  0.1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-172741-15aa  done  NVIDIA H100   0.0  0.7  pip install -q tirex-2 && python studies/gpuprice/jobs/fm_tirex2.py
+  abaybektursun-1114-152849-c7c6  done  NVIDIA H100   0.0  6.3  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-152855-683b  done  NVIDIA H100   0.0  31.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-153037-ebe8  done  NVIDIA H100   4.5  1.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-153047-6429  done  NVIDIA H100   5.8  27.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-153052-5013  done  NVIDIA H100   30.1  20.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-153057-45e7  done  NVIDIA H100   33.1  31.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-153102-b029  done  NVIDIA H100   35.9  27.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-153106-af79  done  NVIDIA H100   50.4  29.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-153110-e985  done  NVIDIA H100   52.9  29.6  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-173457-cc6a  cancelled  NVIDIA H100   59.9  -59.0  bash studies/gpuprice/jobs/fm2_chronos2.sh --origins 2026-10-01
+  abaybektursun-1114-173539-c868  done  NVIDIA H100   59.2  0.9  bash studies/gpuprice/jobs/ft_chronos2.sh --mode lora --steps 20 --cur
+  abaybektursun-1114-173600-a615  cancelled  b200  -  -  bash studies/gpuprice/jobs/fm2_chronos2.sh --origins 2026-10-01
+  abaybektursun-1114-174035-459c  done  cpu  0.1  2.3  bash studies/gpuprice/jobs/ft_chronos2.sh --mode lora --steps 20 --cur
+  abaybektursun-1114-174036-b1a1  done  cpu  0.1  0.5  bash studies/gpuprice/jobs/fm2_chronos2.sh --origins 2026-10-01 --setu
+  abaybektursun-1114-174159-4bb9  cancelled  cpu  0.0  6.3  bash studies/gpuprice/jobs/fm2_chronos2.sh --origins dev,event
+  abaybektursun-1114-174352-2125  done  cpu  0.0  4.1  bash studies/gpuprice/jobs/ft_chronos2.sh --mode none
+  abaybektursun-1114-174401-21a9  done  cpu  0.1  54.5  bash studies/gpuprice/jobs/ft_chronos2.sh --mode lora --steps 800 --ba
+  abaybektursun-1114-174405-566a  done  cpu  0.1  53.5  bash studies/gpuprice/jobs/ft_chronos2.sh --mode full --steps 800 --ba
+  abaybektursun-1114-174410-84f6  done  cpu  0.1  62.4  bash studies/gpuprice/jobs/ft_chronos2.sh --mode lora --steps 800 --ba
+  abaybektursun-1114-174414-91ea  done  cpu  0.1  70.8  bash studies/gpuprice/jobs/ft_chronos2.sh --mode lora --steps 800 --ba
+  abaybektursun-1114-174823-3849  done  cpu  0.0  8.7  bash studies/gpuprice/jobs/fm2_chronos2.sh --origins 2026-10-01,2026-1
+  abaybektursun-1114-174829-8fcd  done  cpu  0.0  7.8  bash studies/gpuprice/jobs/fm2_chronos2.sh --origins 2026-10-09,2026-1
+  abaybektursun-1114-174832-6f16  done  cpu  0.1  8.7  bash studies/gpuprice/jobs/fm2_chronos2.sh --origins 2026-10-17,2026-1
+  abaybektursun-1114-174836-c51a  died: FileExistsError: [Errno 17] File exists: '/runs/abaybektursun-1114-174836-c51a'  cpu  4.9  163.3  bash studies/gpuprice/jobs/fm2_chronos2.sh --origins 2026-10-25,2026-1
+  abaybektursun-1114-180101-8f7a  cancelled  b200  -  -  bash studies/gpuprice/jobs/ft_chronos2.sh --mode lora --steps 800
+  abaybektursun-1114-180105-c6d4  cancelled  b200  -  -  bash studies/gpuprice/jobs/ft_chronos2.sh --mode full --steps 800
+  abaybektursun-1114-160454-c6cf  exit 2  NVIDIA H100   30.3  0.2  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-160500-fa08  exit 2  NVIDIA H100   30.4  0.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-161439-f790  exit 1  cpu  0.1  0.5  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1114-161539-27d4  exit 1  cpu  0.0  0.3  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1114-161622-67f4  exit 1  cpu  0.0  1.1  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1114-161811-8744  exit 1  NVIDIA H100   17.4  0.3  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1114-161816-6e5e  exit 1  NVIDIA H100   17.5  0.3  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1114-182103-2616  done  cpu  0.1  4.5  bash studies/gpuprice/jobs/tab_pfn.sh --origin-start 2026-10-15 --orig
+  abaybektursun-1114-182242-3106  done  cpu  0.1  1.9  python studies/gpuprice/jobs/pfn_train.py --steps 40 --ckpts 0.5,1
+  abaybektursun-1114-162452-0203  done  NVIDIA H100   11.0  20.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182512-a889  done  cpu  0.0  44.5  python studies/gpuprice/jobs/pfn_train.py --steps 4000
+  abaybektursun-1114-182516-277d  died: FileExistsError: [Errno 17] File exists: '/runs/abaybektursun-1114-182516-277d'  cpu  54.1  77.4  python studies/gpuprice/jobs/pfn_train.py --steps 3000 --weights rw=0,
+  abaybektursun-1114-182521-a88e  done  cpu  0.1  29.1  python studies/gpuprice/jobs/pfn_train.py --steps 3000 --weights tick=
+  abaybektursun-1114-182525-825f  timeout  cpu  0.2  60.1  python studies/gpuprice/jobs/pfn_train.py --steps 3000 --prior-width 0
+  abaybektursun-1114-182530-9b32  done  NVIDIA H100   10.6  21.4  python studies/gpuprice/jobs/pfn_train.py --steps 15000 --batch 1024 -
+  abaybektursun-1114-182630-94e1  done  cpu  11.3  9.3  bash studies/gpuprice/jobs/tab_pfn.sh --origin-start 2026-10-01 --orig
+  abaybektursun-1114-182635-1ffc  done  cpu  12.0  16.3  bash studies/gpuprice/jobs/tab_pfn.sh --origin-start 2026-10-06 --orig
+  abaybektursun-1114-182640-dbfc  done  cpu  20.0  17.8  bash studies/gpuprice/jobs/tab_pfn.sh --origin-start 2026-10-11 --orig
+  abaybektursun-1114-182644-74d4  done  cpu  20.4  12.4  bash studies/gpuprice/jobs/tab_pfn.sh --origin-start 2026-10-16 --orig
+  abaybektursun-1114-182649-9ab7  done  cpu  27.7  12.1  bash studies/gpuprice/jobs/tab_pfn.sh --origin-start 2026-10-21 --orig
+  abaybektursun-1114-182653-2b03  done  cpu  28.1  19.5  bash studies/gpuprice/jobs/tab_pfn.sh --origin-start 2026-10-26 --orig
+  abaybektursun-1114-183640-e828  running  NVIDIA H100   14.2  105.9  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-163658-8118  done  NVIDIA H100   16.8  31.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-163702-e6cf  done  NVIDIA H100   19.8  3.4  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1114-163704-ffca  done  NVIDIA H100   20.4  24.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-163707-f3a7  done  NVIDIA H100   23.1  1.7  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1114-163851-0cec  done  NVIDIA H100   23.1  31.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-184214-029e  done  cpu  12.9  24.2  bash studies/gpuprice/jobs/ft_chronos2.sh --mode lora --steps 400 --ba
+  abaybektursun-1114-184219-5d6e  done  NVIDIA H100   39.2  1.9  bash studies/gpuprice/jobs/ft_chronos2.sh --mode lora --steps 400 --ba
+  abaybektursun-1114-185723-ea39  done  cpu  2.2  33.4  bash studies/gpuprice/jobs/ft_chronos2.sh --mode lora --steps 800 --ba
+  abaybektursun-1114-185728-74c7  died: FileExistsError: [Errno 17] File exists: '/runs/abaybektursun-1114-185728-74c7'  cpu  38.0  61.3  bash studies/gpuprice/jobs/ft_chronos2.sh --mode lora --steps 2400 --b
+  abaybektursun-1114-170253-f661  done  NVIDIA H100   20.6  28.2  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1114-170258-388e  done  NVIDIA H100   21.8  19.2  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1114-170304-c03c  done  NVIDIA H100   30.0  32.5  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1114-170309-b137  done  NVIDIA H100   40.9  32.1  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1114-193630-8bac  done  NVIDIA H100   15.2  6.2  bash studies/gpuprice/jobs/ft_chronos2.sh --mode lora --steps 2400 --b
+  abaybektursun-1114-193652-6721  cancelled  b200  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && VLLM_USE_FLASHINFER_SAMPL
+  abaybektursun-1114-193755-e574  exit 1  NVIDIA H100   20.0  5.9  bash studies/rlneurons/jobs/setup_vllm.sh && VLLM_USE_FLASHINFER_SAMPL
+  abaybektursun-1114-200439-7bc9  done  NVIDIA H100   0.0  8.1  bash studies/gpuprice/jobs/llm_job.sh --model w4a16 --context studies/
+  abaybektursun-1114-201126-a38b  done  cpu  0.1  3.5  bash studies/gpuprice/jobs/fm2_chronos2.sh --origins 2026-10-25,2026-1
+  abaybektursun-1114-201131-4739  done  cpu  0.1  4.2  bash studies/gpuprice/jobs/fm2_chronos2.sh --origins 2026-10-28,2026-1
+  abaybektursun-1114-181216-a619  running  NVIDIA H100   0.1  24.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-181222-a5f4  running  NVIDIA H100   0.6  23.8  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-181228-34ad  running  NVIDIA H100   3.7  20.6  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-201359-2fcd  running  NVIDIA H100   19.2  3.6  bash studies/gpuprice/jobs/llm_job.sh --model w4a16 --context studies/
+  abaybektursun-1114-181417-0e08  done  cpu  0.9  0.1  echo first run > $OUT_DIR/out.txt; echo hi
+  abaybektursun-1114-181617-a044  running  NVIDIA H100   16.9  3.6  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-181625-014a  running  NVIDIA H100   16.8  3.6  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-181631-cc2b  running  NVIDIA H100   16.6  3.6  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-202025-ee44  done  NVIDIA H100   12.8  0.6  bash studies/gpuprice/jobs/fm2_chronos2.sh --origins locked
+  abaybektursun-1114-182707-731c  running  NVIDIA H100   6.1  3.6  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182712-3556  running  NVIDIA H100   6.5  3.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182718-612b  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182724-87aa  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182730-9523  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182735-bcca  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182742-9129  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182748-3300  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182754-7238  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182800-3331  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-183108-6ea1  queued  b200  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  95 jobs, 21 failed or cancelled; median wait 6.5; 1496.4 container minutes, 319.4 of them in failed or cancelled jobs
+
+Work of abaybektursun, last 4 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-28b3f7  main  -  -  -  6  0  0  gpuprice sub-project (Hackathon Track 2, Pacific 'AI Scienti
+  work-f74f02  main  199  1  21  221  1  0  gpuprice: literature + data-source research for frontier-mod
+  work-d36669  main  -  -  -  148  0  0  Day-1 #4 idea-2eb58d + idea-e0a5a7: MATH-500 at T 1.0, base 
+  work-976c17  main  -  -  -  9  0  0  Analysis of all agents' work and traces for an optimization 
+  work-d84808  main  172  1  -  194 (open)  1  0  Code pair (DIRECTION deliverable, unclaimed so far): base Ol
+  work-02efb7  main  -  -  -  81  0  0  Port all relevant research from ../interp_research (rlneuron
+  work-b1086f  main  -  -  -  2  0  0  Theory engine as a skill (.claude/skills/theory + studies/th
+  work-43d4a1  main  4  1  -  27 (open)  1  0  328 harder at T 1.0/top-p 1.0, cue, one sample: Code-RL, the
+  work-be7af1  main  0  1  -  23 (open)  1  0  RL gain as context idea-607778: base + cue on MATH-500, T 1.
+  work-6d6308  theory  -  -  -  7  0  0  Theory round 01 (theory skill): theories proposed from board
+  work-069eca  main  -  -  -  11 (open)  0  0  Reward content test idea-46b68c step 1: Olmo-3-7B-RL-Zero-IF
+
+Median minutes per stage over work items with jobs: to-job 88, jobs 1, to-answer 21. Slowest stage: to-job.

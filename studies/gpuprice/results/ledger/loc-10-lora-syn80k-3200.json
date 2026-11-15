@@ -1,0 +1,35 @@
+{
+ "name": "loc-10-lora-syn80k-3200",
+ "note": "LoRA on 10x the synthetic set (80,000 sticky series) for 3,200 steps, batch 32, seed 0; fm2-19 post-processing. Synthetic only, no latest date. H: more synthetic data and steps beat the 5-seed mean of the 8,000-series recipe (+0.3105) by > 0.005; refuted otherwise. Listing-level pinball 180.7 against 181.1; training 170 s",
+ "utc": "2026-11-15T04:49:45+00:00",
+ "commit": "04b0cf4",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.304479,
+ "pinball": 0.02333,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.278077,
+ "skill_geomean": 0.383356,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.210076,
+   "in_band": 0.810526
+  },
+  "3": {
+   "skill_pooled": 0.268482,
+   "in_band": 0.752907
+  },
+  "7": {
+   "skill_pooled": 0.349335,
+   "in_band": 0.660853
+  }
+ },
+ "in_band": 0.741718
+}

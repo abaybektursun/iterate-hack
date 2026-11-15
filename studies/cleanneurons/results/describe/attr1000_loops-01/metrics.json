@@ -1,0 +1,299 @@
+{
+ "status": "done",
+ "config": {
+  "edit": "studies/cleanneurons/results/loops/real-01/edit_attr1000.json",
+  "loops": "/runs/sameraslan-1114-184558-8a70/loops.json",
+  "inputs": "/runs/inputs/rln5",
+  "out": "/runs/sameraslan-1114-195041-abf7",
+  "commit": "e455a8050015c3956268c5e28699ac30f6bbacc0",
+  "rows": 40,
+  "loop_rows": null,
+  "max_neurons": null,
+  "sub": 32,
+  "steps": 1600,
+  "batch": 16,
+  "kv_gb": 40.0,
+  "chunk": 1024,
+  "factors": "0,0.5,1,2",
+  "ref_factors": "0,2",
+  "cache": "buffer",
+  "seed": 0,
+  "noise_seed": 0,
+  "smoke": false,
+  "dry_run": false
+ },
+ "commit": "e455a8050015c3956268c5e28699ac30f6bbacc0",
+ "job_id": "sameraslan-1114-195041-abf7",
+ "started_utc": "2026-11-15T03:51:05Z",
+ "edit": {
+  "name": "attr1000_det2",
+  "sha256": "7a21898fa7872636ea26c092f130993e258c5548972c957559e95b8937268418",
+  "neurons_in_file": 1000,
+  "selected": 1000,
+  "reference": 1000,
+  "per_layer": {
+   "0": 1,
+   "1": 2,
+   "2": 5,
+   "3": 6,
+   "4": 11,
+   "5": 15,
+   "6": 18,
+   "7": 35,
+   "8": 29,
+   "9": 35,
+   "10": 53,
+   "11": 40,
+   "12": 65,
+   "13": 76,
+   "14": 82,
+   "15": 56,
+   "16": 61,
+   "17": 58,
+   "18": 46,
+   "19": 29,
+   "20": 27,
+   "21": 33,
+   "22": 35,
+   "23": 20,
+   "24": 16,
+   "25": 14,
+   "26": 20,
+   "27": 26,
+   "28": 17,
+   "29": 14,
+   "30": 25,
+   "31": 30
+  }
+ },
+ "loops": {
+  "sha256": "59da10f7250ca98bad5e49aaccd8003f253265345a16a36136bfe6935487cd36",
+  "detector": {
+   "version": 2,
+   "periods": [
+    2,
+    600
+   ],
+   "window": "max(240, period)",
+   "share_of_window_matching": 0.95
+  },
+  "rows_not_looped": 386,
+  "onset_check": {
+   "rows": 28,
+   "ok": 28,
+   "not_ok": [],
+   "periods": {
+    "min": 4,
+    "median": 232.5,
+    "max": 574
+   }
+  },
+  "used": 28,
+  "half_A": 14,
+  "half_B": 14
+ },
+ "skipped": {},
+ "inputs": {
+  "T1.jsonl": {
+   "what": "base with cue, T 1.0 / top-p 1.0 (RLN-4 T1)",
+   "sha256": "c65a12fcc5922c5270bb3b6abeb352246385299111c9e033dfc7deae4712ea85",
+   "bytes": 6685484,
+   "rows": 500,
+   "volume": "iterate-runs:inputs/rln5/T1.jsonl",
+   "job_path": "/runs/inputs/rln5/T1.jsonl",
+   "source": "s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl"
+  },
+  "T2.jsonl": {
+   "what": "RL, plain prompt, T 1.0 / top-p 1.0 (RLN-4 T2)",
+   "sha256": "851e422c1d062b3378806b225d28e467c6b2ea5f2afe5e1a96527fb1cf62324b",
+   "bytes": 8001431,
+   "rows": 500,
+   "volume": "iterate-runs:inputs/rln5/T2.jsonl",
+   "job_path": "/runs/inputs/rln5/T2.jsonl",
+   "source": "s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t2-01/t2/T2.jsonl"
+  }
+ },
+ "counts": {
+  "answers": {
+   "T1": 40,
+   "T2": 40,
+   "loop": 28
+  },
+  "positions": 281743,
+  "positions_normal_text": 131397,
+  "neurons": 2000
+ },
+ "torch": "2.15.0+cu132",
+ "units": "activations in the model's units; cosines and shares as stated",
+ "gpu": "NVIDIA H100 80GB HBM3",
+ "models": {
+  "base": {
+   "repo": "allenai/Olmo-3-1025-7B",
+   "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "dir": "/__modal/volumes/vo-0ORQqRq7X6c3gSh3CYTrju/hub/models--allenai--Olmo-3-1025-7B/snapshots/a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "class": "Olmo3ForCausalLM",
+   "vocab_size": 100278
+  },
+  "rl": {
+   "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05",
+   "dir": "/__modal/volumes/vo-0ORQqRq7X6c3gSh3CYTrju/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05",
+   "class": "Olmo3ForCausalLM",
+   "vocab_size": 100278
+  }
+ },
+ "timings": {
+  "load_s": 24.670666456222534,
+  "record_s": 41.04282259941101,
+  "stats_contexts_s": 5.751297235488892,
+  "onset_trace_s": 1.1296453475952148,
+  "dose_s": 621.712198972702,
+  "dose_tokens_per_s": 207.95795902611334
+ },
+ "base_vs_rl": {
+  "selected": {
+   "median_cos_gate": 1.0,
+   "median_cos_up": 1.0,
+   "median_cos_down": 1.0,
+   "median_norm_ratio_gate": 1.0,
+   "median_norm_ratio_up": 1.0,
+   "median_norm_ratio_down": 1.0,
+   "median_act_corr": 0.981,
+   "median_gain": 0.9912,
+   "median_pos_p99_rl_over_base": 0.9943,
+   "median_pos_max_rl_over_base": 0.9868,
+   "median_neg_p99_rl_over_base": 0.9953,
+   "median_neg_max_rl_over_base": 0.9918
+  },
+  "reference": {
+   "median_cos_gate": 1.0,
+   "median_cos_up": 1.0,
+   "median_cos_down": 1.0,
+   "median_norm_ratio_gate": 1.0,
+   "median_norm_ratio_up": 1.0,
+   "median_norm_ratio_down": 1.0,
+   "median_act_corr": 0.9776,
+   "median_gain": 1.007,
+   "median_pos_p99_rl_over_base": 1.009,
+   "median_pos_max_rl_over_base": 0.9865,
+   "median_neg_p99_rl_over_base": 1.007,
+   "median_neg_max_rl_over_base": 0.9881
+  }
+ },
+ "dose": [
+  {
+   "name": "selected_x1",
+   "set": "selected",
+   "factor": 1.0,
+   "loops": 3,
+   "n": 14,
+   "loop_rate": 0.21428571428571427,
+   "stopped": 2,
+   "same_as_stored": 0
+  },
+  {
+   "name": "selected_x1_repeat",
+   "set": "selected",
+   "factor": 1.0,
+   "loops": 3,
+   "n": 14,
+   "loop_rate": 0.21428571428571427,
+   "stopped": 2,
+   "same_as_stored": 0
+  },
+  {
+   "name": "selected_x0",
+   "set": "selected",
+   "factor": 0.0,
+   "loops": 1,
+   "n": 14,
+   "loop_rate": 0.07142857142857142,
+   "stopped": 2,
+   "same_as_stored": 0
+  },
+  {
+   "name": "selected_x0.5",
+   "set": "selected",
+   "factor": 0.5,
+   "loops": 1,
+   "n": 14,
+   "loop_rate": 0.07142857142857142,
+   "stopped": 2,
+   "same_as_stored": 0
+  },
+  {
+   "name": "selected_x2",
+   "set": "selected",
+   "factor": 2.0,
+   "loops": 8,
+   "n": 14,
+   "loop_rate": 0.5714285714285714,
+   "stopped": 1,
+   "same_as_stored": 0
+  },
+  {
+   "name": "reference_x0",
+   "set": "reference",
+   "factor": 0.0,
+   "loops": 3,
+   "n": 14,
+   "loop_rate": 0.21428571428571427,
+   "stopped": 3,
+   "same_as_stored": 0
+  },
+  {
+   "name": "reference_x2",
+   "set": "reference",
+   "factor": 2.0,
+   "loops": 3,
+   "n": 14,
+   "loop_rate": 0.21428571428571427,
+   "stopped": 2,
+   "same_as_stored": 0
+  }
+ ],
+ "onset_windows": {
+  "selected": {
+   "before": {
+    "mean_z": -0.005505,
+    "mean_abs_z": 0.1718
+   },
+   "just_before": {
+    "mean_z": -0.01039,
+    "mean_abs_z": 0.2164
+   },
+   "first_cycle": {
+    "mean_z": -0.009598,
+    "mean_abs_z": 0.2645
+   },
+   "second_cycle": {
+    "mean_z": -0.01677,
+    "mean_abs_z": 0.3837
+   }
+  },
+  "reference": {
+   "before": {
+    "mean_z": 0.001294,
+    "mean_abs_z": 0.08219
+   },
+   "just_before": {
+    "mean_z": 0.000661,
+    "mean_abs_z": 0.09622
+   },
+   "first_cycle": {
+    "mean_z": 0.003365,
+    "mean_abs_z": 0.1044
+   },
+   "second_cycle": {
+    "mean_z": 0.003564,
+    "mean_abs_z": 0.1247
+   }
+  }
+ },
+ "wall_s": 694.3109521865845,
+ "controls": {
+  "same_noise": false,
+  "cache": true
+ },
+ "gpu_max_memory_gb": 66.4892635345459
+}

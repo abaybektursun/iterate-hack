@@ -1,0 +1,71 @@
+{
+ "what": "SPEC1 Part I item 4; fields in the docstring of jobs/describe_neurons.py",
+ "edit": "attr1000_det2",
+ "note": "offset 0 is the position that reads the first token of the first loop cycle (the position at offset -1 wrote it); the repeated text starts at offset = period. z = (mean a - normal_mean) / normal_sd per neuron, normal text = the stored answers. 'normal' aligns the same window on the middle of each stored answer, with the median period (the matched control). 'period' and period_trace: the same in units of the row's own period, bin b holding the tokens at offsets [b, b + 1) * period / 40; period_offsets gives each bin's centre in periods.",
+ "detector": {
+  "version": 2,
+  "periods": [
+   2,
+   600
+  ],
+  "window": "max(240, period)",
+  "share_of_window_matching": 0.95
+ },
+ "windows": {
+  "before": [
+   -200,
+   -50
+  ],
+  "just_before": [
+   -50,
+   0
+  ],
+  "first_cycle": "[0, period)",
+  "second_cycle": "[period, 2 periods)",
+  "rows_per_window": [
+   28,
+   28,
+   28,
+   28
+  ]
+ },
+ "median_period": 232,
+ "window_summary": {
+  "selected": {
+   "before": {
+    "mean_z": -0.005505,
+    "mean_abs_z": 0.1718
+   },
+   "just_before": {
+    "mean_z": -0.01039,
+    "mean_abs_z": 0.2164
+   },
+   "first_cycle": {
+    "mean_z": -0.009598,
+    "mean_abs_z": 0.2645
+   },
+   "second_cycle": {
+    "mean_z": -0.01677,
+    "mean_abs_z": 0.3837
+   }
+  },
+  "reference": {
+   "before": {
+    "mean_z": 0.001294,
+    "mean_abs_z": 0.08219
+   },
+   "just_before": {
+    "mean_z": 0.000661,
+    "mean_abs_z": 0.09622
+   },
+   "first_cycle": {
+    "mean_z": 0.003365,
+    "mean_abs_z": 0.1044
+   },
+   "second_cycle": {
+    "mean_z": 0.003564,
+    "mean_abs_z": 0.1247
+   }
+  }
+ }
+}

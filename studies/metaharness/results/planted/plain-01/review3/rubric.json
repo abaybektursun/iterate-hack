@@ -1,0 +1,63 @@
+{
+ "pack": "r11",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 0,
+   "quote": ""
+  },
+  "P2": {
+   "score": 1,
+   "quote": "3 jobs failed on bad settings (`ci 90`, `fmt \"cvs\"`, a data path that doesn't exist)."
+  },
+  "P3": {
+   "score": 0,
+   "quote": ""
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 1,
+   "quote": "`bench-rng` reruns in every batch."
+  },
+  "P6": {
+   "score": 0,
+   "quote": ""
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 1,
+   "file": "studies/gapmap/prep/make_cells.py (with studies/gapmap/queue.json)"
+  },
+  "P3": {
+   "score": 0,
+   "file": ""
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 0,
+   "file": ""
+  }
+ },
+ "other_claims": [
+  "The subject cell's settings are hand-edited after make_cells.py writes the file, and the edits keep breaking (two fix commits in the tokens batch)",
+  "check_cell.py catches a bad setting only after the bad cells file has been written and committed",
+  "tokens_both_right has no subject settings entry yet and would run at the defaults",
+  "bench-rng run-to-run noise (36,000 to 45,000 draws/s) is larger than the differences between generators it measures"
+ ],
+ "change_summary": "Moves each batch's own subject-cell settings into a new settings section of queue.json and makes make_cells.py apply them and check every cell with check_cell.problems before writing, with the README telling users not to hand-edit cells files."
+}

@@ -1,0 +1,35 @@
+{
+ "name": "tab-04-avg3-fm07-sim215-tab03",
+ "note": "H: equal quantile average of fm-07, sim2-15 and tab-03 (TabPFN v2 change regression with listing features) beats ens-03; refuted if <= +0.292",
+ "utc": "2026-11-15T01:15:56+00:00",
+ "commit": "b56e382",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.278667,
+ "pinball": 0.024196,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.262759,
+ "skill_geomean": 0.360228,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.169639,
+   "in_band": 0.818182
+  },
+  "3": {
+   "skill_pooled": 0.262313,
+   "in_band": 0.727713
+  },
+  "7": {
+   "skill_pooled": 0.316806,
+   "in_band": 0.637597
+  }
+ },
+ "in_band": 0.728208
+}

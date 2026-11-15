@@ -1,0 +1,35 @@
+{
+ "name": "sim2-07-own-tau14-shrink20",
+ "note": "hypothesis: a listing that never moved in its 20-50 own windows still has the collector-wide hazard of a jump or exit; each listing takes with probability 0.2 (set a priori, about 10 pseudo-windows against 40 own) an outcome of the same window drawn from all series of its collector and class; expect in-band up from 0.71 and pooled above sim2-04 (+0.2308); refuted if pooled <= +0.2308 [flags: --tau 14 --shrink 0.2]",
+ "utc": "2026-11-14T23:28:41+00:00",
+ "commit": "75a6aaa",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 360,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.233304,
+ "pinball": 0.025718,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.211086,
+ "skill_geomean": 0.311568,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.139676,
+   "in_band": 0.810526
+  },
+  "3": {
+   "skill_pooled": 0.221395,
+   "in_band": 0.74031
+  },
+  "7": {
+   "skill_pooled": 0.264899,
+   "in_band": 0.61531
+  }
+ },
+ "in_band": 0.722419
+}

@@ -1,0 +1,10 @@
+{
+ "command": "bash studies/gapmap/jobs/run_cell.sh <batch> overall",
+ "jobs": {
+  "accuracy": "dana-1114-190621-d126",
+  "cap_hit": "dana-1114-190621-3176",
+  "tokens": "dana-1114-190621-5ee0",
+  "tokens_both_right": "dana-1114-190621-c3c9"
+ },
+ "date": "2026-11-15"
+}

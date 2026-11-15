@@ -1,0 +1,35 @@
+{
+ "name": "sim2-10-tau7",
+ "note": "tuning check around sim2-09 (+0.2673): recency tau 7 d instead of 14; hypothesis: regimes are shorter than 14 d; refuted if pooled <= +0.2673 [flags: --tau 7 --shrink 0.2 --abs-enter 2]",
+ "utc": "2026-11-14T23:33:42+00:00",
+ "commit": "dec89a8",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 360,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.258571,
+ "pinball": 0.02487,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.235981,
+ "skill_geomean": 0.333547,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.168847,
+   "in_band": 0.804785
+  },
+  "3": {
+   "skill_pooled": 0.234733,
+   "in_band": 0.732558
+  },
+  "7": {
+   "skill_pooled": 0.295582,
+   "in_band": 0.611434
+  }
+ },
+ "in_band": 0.716629
+}

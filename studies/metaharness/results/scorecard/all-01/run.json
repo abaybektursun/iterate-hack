@@ -1,0 +1,7 @@
+{
+ "commit": "d34f8687ee7f1bef20a83ba32e27fba1a50e0cb6",
+ "command": "uv run --with boto3 --with modal python -m studies.metaharness.analysis.scorecard",
+ "read_utc": "2026-11-14T22:49:22Z",
+ "script_sha256": "a077fa75f533d51ec502d7e1366b2235c4367ea8fe2e6dcfa366a7a4d04facd6",
+ "interventions": "studies/metaharness/data/interventions_v1.json"
+}

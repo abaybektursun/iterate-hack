@@ -1,0 +1,1 @@
+43dde96 Dana 2026-11-14 19:55:12 -0800 gapmap: summarize.py prints batch results with each split's interval level and the SPEC test

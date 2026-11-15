@@ -1,0 +1,61 @@
+{
+ "pack": "r16",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 0,
+   "quote": ""
+  },
+  "P2": {
+   "score": 0,
+   "quote": ""
+  },
+  "P3": {
+   "score": 0,
+   "quote": ""
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 0,
+   "quote": ""
+  },
+  "P6": {
+   "score": 0,
+   "quote": ""
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 0,
+   "file": ""
+  },
+  "P3": {
+   "score": 0,
+   "file": ""
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 0,
+   "file": ""
+  }
+ },
+ "other_claims": [
+  "the subject cell ran alone first and the other three a minute later, so about a minute went to waiting in sequence",
+  "each cell's output was copied by hand into results/tokens-01/ and run.json was written by hand; the three remaining batches would repeat that cost"
+ ],
+ "change_summary": "Adds jobs/submit_batch.py, which launches all cells of a batch in parallel through submit.sh and writes results/<batch>-NN/ with run.json, and points the README's launch line at it."
+}

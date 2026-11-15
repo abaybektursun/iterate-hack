@@ -15,6 +15,8 @@ Work: every work item of yours posted in the window, with
   A job counts toward a work item when it was submitted from the same git branch between the claim and the close.
   Jobs submitted before gpu.py recorded the branch are not matched, and work items closed before board.py kept
   closed items in its index are not listed.
+Team: the median minutes from claim to close over every person's work items closed in the window, and the
+  results posted per hour. This is the number an optimization of the process has to move.
 All times are minutes.
 """
 import calendar
@@ -51,7 +53,8 @@ for r in jobs:
     end = r["end"]["at"] if "end" in r else r["cancel"]["at"] if "cancel" in r else None
     r["finished"] = end
     wait = minutes(r["job"]["at"], start) if start else None
-    run = minutes(start, end or now) if start else None
+    # none for a job that died (Modal kept no end time) and for one whose end is before its start
+    run = minutes(start, end or now) if start and (end >= start if end else r["state"] == "running") else None
     if wait is not None:
         waits.append(wait)
     if run is not None:
@@ -96,6 +99,23 @@ for item in sorted(items, key=lambda i: i["at_ns"]):
     n_failed = sum(r in failed for r in mine)
     print(f"  {item['id']}  {item.get('branch', '?')}  {fmt(to_job)}  {fmt(jobs_span)}  {fmt(to_answer)}  "
           f"{fmt(minutes(claim, close or now))}{'' if close else ' (open)'}  {len(mine)}  {n_failed}  {item['text'][:60]}")
+
+query = dict(IndexName="new", KeyConditionExpression=Key("listed").eq("work-closed"))
+team_items = []  # every person's closed work items; chosen by close time, so a short window does not keep only the fast ones
+while True:
+    page = team.table().query(**query)
+    team_items += [(i, calendar.timegm(time.strptime(i["closed_at"], "%Y-%m-%dT%H:%M:%SZ"))) for i in page["Items"]]
+    if "LastEvaluatedKey" not in page:
+        break
+    query["ExclusiveStartKey"] = page["LastEvaluatedKey"]
+team_items = [(i, close) for i, close in team_items if close >= since]
+closed = sorted(minutes(int(i["at_ns"]) / 10**9, close) for i, close in team_items)
+results = team.table().query(IndexName="new", Select="COUNT",
+                             KeyConditionExpression=Key("listed").eq("result") & Key("at_ns").gte(int(since * 10**9)))["Count"]
+if closed:
+    print(f"\nTeam, last {hours:g} h: claim to close median {statistics.median(closed):.0f} min, upper quartile "
+          f"{closed[3 * len(closed) // 4]:.0f} min, over {len(closed)} work items closed by {len({i['who'] for i, _ in team_items})} "
+          f"people; {results} results, {results / hours:.1f} per hour.")
 
 medians = {name: statistics.median(values) for name, values in stages.items() if values}
 if medians:

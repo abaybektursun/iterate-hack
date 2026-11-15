@@ -1,0 +1,28 @@
+{
+ "what": "selected = the 100 neurons with the largest Part T2 score (edit_attr_top100.json); reference = 100 layer-matched random neurons",
+ "positions": 131397,
+ "selected": {
+  "neurons": 100,
+  "on_beyond_p97_at_more_than_half_of_positions": 44,
+  "at_more_than_a_tenth": 59,
+  "median_share_of_positions_beyond_p97": 0.1659,
+  "median_mean_abs_activation": 0.21295,
+  "median_activation_correlation_base_rl": 0.9599500000000001,
+  "min_activation_correlation_base_rl": -0.04109,
+  "median_cos_down": 1.0,
+  "median_cos_gate": 1.0,
+  "median_cos_up": 1.0
+ },
+ "reference": {
+  "neurons": 100,
+  "on_beyond_p97_at_more_than_half_of_positions": 1,
+  "at_more_than_a_tenth": 2,
+  "median_share_of_positions_beyond_p97": 0.013065,
+  "median_mean_abs_activation": 0.02044,
+  "median_activation_correlation_base_rl": 0.9867,
+  "min_activation_correlation_base_rl": 0.778,
+  "median_cos_down": 1.0,
+  "median_cos_gate": 1.0,
+  "median_cos_up": 1.0
+ }
+}

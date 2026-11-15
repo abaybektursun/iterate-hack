@@ -1,0 +1,267 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_shots1.md",
+ "n": 494,
+ "left_out": [
+  0,
+  1,
+  2,
+  3,
+  5,
+  6
+ ],
+ "cells": {
+  "T1_base_cue": {
+   "n": 494,
+   "right_v3": 404,
+   "cap_hits": 27,
+   "loops_A": 0,
+   "mean_generated_tokens": 3965.6
+  },
+  "theta0.25_cue": {
+   "n": 494,
+   "right_v3": 435,
+   "cap_hits": 13,
+   "loops_A": 1,
+   "mean_generated_tokens": 4059.5
+  },
+  "rl_cue": {
+   "n": 494,
+   "right_v3": 451,
+   "cap_hits": 8,
+   "loops_A": 0,
+   "mean_generated_tokens": 4719.9
+  },
+  "shots_base": {
+   "n": 494,
+   "right_v3": 411,
+   "cap_hits": 17,
+   "loops_A": 1,
+   "mean_generated_tokens": 3394.6,
+   "job_id": "abaybektursun-1114-183855-e840",
+   "commit": "deb6ce52256617fda62ee485489ae96417f55226",
+   "shots_tokens": 4853,
+   "shot_stops": 280
+  },
+  "shots_rl": {
+   "n": 494,
+   "right_v3": 432,
+   "cap_hits": 31,
+   "loops_A": 0,
+   "mean_generated_tokens": 4418.0,
+   "job_id": "abaybektursun-1114-183901-fd89",
+   "commit": "deb6ce52256617fda62ee485489ae96417f55226",
+   "shots_tokens": 8240,
+   "shot_stops": 85
+  },
+  "shots_code": {
+   "n": 494,
+   "right_v3": 409,
+   "cap_hits": 19,
+   "loops_A": 1,
+   "mean_generated_tokens": 3848.4,
+   "job_id": "abaybektursun-1114-183907-d9d6",
+   "commit": "deb6ce52256617fda62ee485489ae96417f55226",
+   "shots_tokens": 6638,
+   "shot_stops": 55
+  },
+  "shots_base_b": {
+   "n": 494,
+   "right_v3": 403,
+   "cap_hits": 16,
+   "loops_A": 0,
+   "mean_generated_tokens": 3741.2,
+   "job_id": "abaybektursun-1114-195357-6936",
+   "commit": "238d2340b3a04c00b85a05805bbec92ca394d082",
+   "shots_tokens": 3862,
+   "shot_stops": 298
+  },
+  "shots_rl_b": {
+   "n": 494,
+   "right_v3": 401,
+   "cap_hits": 32,
+   "loops_A": 0,
+   "mean_generated_tokens": 4360.9,
+   "job_id": "abaybektursun-1114-195350-bc00",
+   "commit": "238d2340b3a04c00b85a05805bbec92ca394d082",
+   "shots_tokens": 8494,
+   "shot_stops": 193
+  }
+ },
+ "differences": {
+  "shots_base minus T1_base_cue": {
+   "points": 1.42,
+   "ci95": [
+    -2.02,
+    4.66
+   ]
+  },
+  "shots_base minus theta0.25_cue": {
+   "points": -4.86,
+   "ci95": [
+    -8.1,
+    -1.82
+   ]
+  },
+  "shots_base minus rl_cue": {
+   "points": -8.1,
+   "ci95": [
+    -11.34,
+    -5.06
+   ]
+  },
+  "shots_rl minus T1_base_cue": {
+   "points": 5.67,
+   "ci95": [
+    2.63,
+    8.7
+   ]
+  },
+  "shots_rl minus theta0.25_cue": {
+   "points": -0.61,
+   "ci95": [
+    -3.44,
+    2.23
+   ]
+  },
+  "shots_rl minus rl_cue": {
+   "points": -3.85,
+   "ci95": [
+    -6.48,
+    -1.42
+   ]
+  },
+  "shots_code minus T1_base_cue": {
+   "points": 1.01,
+   "ci95": [
+    -2.63,
+    4.45
+   ]
+  },
+  "shots_code minus theta0.25_cue": {
+   "points": -5.26,
+   "ci95": [
+    -8.3,
+    -2.23
+   ]
+  },
+  "shots_code minus rl_cue": {
+   "points": -8.5,
+   "ci95": [
+    -11.54,
+    -5.47
+   ]
+  },
+  "shots_base_b minus T1_base_cue": {
+   "points": -0.2,
+   "ci95": [
+    -3.85,
+    3.44
+   ]
+  },
+  "shots_base_b minus theta0.25_cue": {
+   "points": -6.48,
+   "ci95": [
+    -9.92,
+    -3.24
+   ]
+  },
+  "shots_base_b minus rl_cue": {
+   "points": -9.72,
+   "ci95": [
+    -12.96,
+    -6.48
+   ]
+  },
+  "shots_rl_b minus T1_base_cue": {
+   "points": -0.61,
+   "ci95": [
+    -4.45,
+    3.24
+   ]
+  },
+  "shots_rl_b minus theta0.25_cue": {
+   "points": -6.88,
+   "ci95": [
+    -10.32,
+    -3.44
+   ]
+  },
+  "shots_rl_b minus rl_cue": {
+   "points": -10.12,
+   "ci95": [
+    -13.77,
+    -6.68
+   ]
+  },
+  "shots_base minus shots_rl": {
+   "points": -4.25,
+   "ci95": [
+    -7.49,
+    -1.21
+   ]
+  },
+  "shots_base minus shots_code": {
+   "points": 0.4,
+   "ci95": [
+    -2.83,
+    3.64
+   ]
+  },
+  "shots_base minus shots_base_b": {
+   "points": 1.62,
+   "ci95": [
+    -1.82,
+    5.06
+   ]
+  },
+  "shots_base minus shots_rl_b": {
+   "points": 2.02,
+   "ci95": [
+    -1.42,
+    5.47
+   ]
+  },
+  "shots_rl minus shots_code": {
+   "points": 4.66,
+   "ci95": [
+    1.21,
+    8.1
+   ]
+  },
+  "shots_rl minus shots_base_b": {
+   "points": 5.87,
+   "ci95": [
+    2.63,
+    9.11
+   ]
+  },
+  "shots_rl minus shots_rl_b": {
+   "points": 6.28,
+   "ci95": [
+    2.63,
+    9.92
+   ]
+  },
+  "shots_code minus shots_base_b": {
+   "points": 1.21,
+   "ci95": [
+    -2.43,
+    4.86
+   ]
+  },
+  "shots_code minus shots_rl_b": {
+   "points": 1.62,
+   "ci95": [
+    -2.43,
+    5.67
+   ]
+  },
+  "shots_base_b minus shots_rl_b": {
+   "points": 0.4,
+   "ci95": [
+    -3.44,
+    4.45
+   ]
+  }
+ }
+}

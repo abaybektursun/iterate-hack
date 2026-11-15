@@ -1,0 +1,17 @@
+meta/FAILURES.md                                   |  2 +-
+ meta/dana.md                                       | 17 ++++++
+ meta/reviews/dana/20261115-0415/after.txt          | 21 +++++++
+ meta/reviews/dana/20261115-0415/before.txt         | 19 ++++++
+ meta/reviews/dana/20261115-0415/cycle.txt          | 36 ++++++++++++
+ studies/gapmap/README.md                           | 11 ++--
+ studies/gapmap/cells/accuracy.json                 | 63 --------------------
+ studies/gapmap/cells/cap_hit.json                  | 63 --------------------
+ studies/gapmap/jobs/cell.py                        | 40 ++++++-------
+ studies/gapmap/jobs/run_cell.sh                    |  2 +-
+ studies/gapmap/prep/make_cells.py                  | 19 ------
+ studies/gapmap/queue.json                          |  2 +-
+ .../results/subject_ci95-01/accuracy_subject.json  | 67 ++++++++++++++++++++++
+ .../results/subject_ci95-01/cap_hit_subject.json   | 67 ++++++++++++++++++++++
+ studies/gapmap/results/subject_ci95-01/run.json    |  6 ++
+ studies/gapmap/specs/SPEC.md                       |  5 +-
+ 16 files changed, 263 insertions(+), 177 deletions(-)

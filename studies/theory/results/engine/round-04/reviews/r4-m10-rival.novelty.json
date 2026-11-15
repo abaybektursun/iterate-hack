@@ -1,0 +1,88 @@
+{
+  "claim": "From stored per-problem rows of intermediate Olmo 3 RL-Zero-Math checkpoints (MATH-500, T 0.6 / top-p 0.95, n = 500): (1) by RL step 100 of 2,800, 95.6 % of plain-prompt answers already open in the RL deliberation format (base 38.6 %), finished answers are 2.25 times the base's length, and adding the opening cue at step 400 changes nothing; (2) token-cap hits (mostly word-for-word loops) rise from 65 of 500 (base) to 103 (step 100) and 98 (step 400), about the cued base's 119, and fall to 19 only by step 2,800; (3) steps 100 and 400 are not sharper per token than the cued base (median mean log-probability of sampled tokens on finished answers: cued base -0.161, step 100 -0.155, step 400 -0.163, plain base -0.175), and the final step 2,800 is less sharp on this measure (-0.192) although it hits the cap far less (19 against 98 to 119). Mechanism: early RL (steps 100 to 400) installs the opening mode, which a short prompt prefix can also install in the untrained base, with no per-token sharpening beyond what the cue gives the base; the later removal of loops between step 400 and step 2,800 comes without higher per-token log-probability (no entropy collapse on this measure), and is the part a prompt cannot do.",
+  "nearest": [
+    {
+      "title": "Base Models Can Reason By Taking a Cue From Training Data (Wang et al., 2026)",
+      "url": "https://arxiv.org/html/2610.06851v1",
+      "measured": "Olmo-3-7B base and the released Olmo 3 RL-Zero model, MATH-500, 32 rollouts, 31,744-token budget. Cue '.\\n\\n Okay' raises base pass@1 from 42 % to 78 % (RL-Zero 75 %). RL raises P('.\\n\\n Okay') from 0.14 to 0.65; per-position KL between base and RL peaks at the first two output positions and 'the models largely agree thereafter' (Fig. 3/15). Base continuing an RL-generated opening: 77.7 % vs RL 75.1 % (Tab. 14). Cap rates at 31,744 tokens: base 0.12, cued base 0.16, RL final 0.19, RL opening + base continuation 0.16. In their own 300-step LoRA GRPO runs (4,096-token budget, MATH train), prefilling the cue before any update matches about 100 standard RL steps on Olmo-3-7B, and cue-forced training then adds little (Fig. 3 right, Fig. 14).",
+      "parts_covered": "Part 1 and the mechanism's first half (early RL gain = installing the opening that a prefix installs). Parts 2 and 3 not covered.",
+      "difference": "Their training-time evidence comes from their own 300-step LoRA run, scored by accuracy only; they do not measure the opening rate, length or cue effect at the released intermediate checkpoints (steps 100/400/2,800). They report no cap-hit trajectory over steps and no per-token log-probability comparison against the cued base. Their statement that base and RL policies largely agree after the opening is the opposite of the claim's part 3 (later RL sharpens tokens and removes loops); the two are reconcilable only because their comparison uses the final model at a 31,744-token budget, where RL's cap rate (0.19) is not lower than the cued base's (0.16)."
+    },
+    {
+      "title": "Spurious Rewards: Rethinking Training Signals in RLVR (Shao et al., 2025)",
+      "url": "https://arxiv.org/html/2506.10947",
+      "measured": "Qwen2.5-Math-7B, MATH-500. Code-reasoning frequency (responses containing ' python') rises from 65.0 % to about 90 % within the first 15 GRPO steps under weak or spurious rewards, tracking accuracy (Sec. 5.2, Fig. 6); with ground-truth reward it also rises first, then declines as later training moves to natural-language reasoning. Forcing responses to begin with 'Let's solve this using Python.' raises MATH-500 accuracy by 24.2, 15.0 and 10.0 points for Qwen2.5-Math-1.5B, Qwen2.5-Math-7B and Qwen2.5-1.5B, and hurts OLMo2 and Llama (Tab. 2).",
+      "parts_covered": "Part 1 (a pre-existing output mode is switched on within the first steps of RL, and a forced opening reproduces part of the gain). Weak analog of the mechanism's second half (ground-truth RL later departs from the mode).",
+      "difference": "Different model family and mode (code vs deliberation opening); no cap-hit trajectory, no per-token sharpening measure, no comparison of an intermediate checkpoint against the prefixed base."
+    },
+    {
+      "title": "Echo Chamber: RL Post-training Amplifies Behaviors Learned in Pretraining (Zhao et al., 2025)",
+      "url": "https://arxiv.org/html/2504.07912",
+      "measured": "150M and 1B models pretrained from scratch on mixes with TinyGSM / OpenMathInstruct1 / OpenMathInstruct2 formats, PPO on GSM8K. The model converges to one pretraining format 'within the first epoch' (log-scaled x-axis), and this transition coincides with the largest pass@1 gain (Sec. 3.1, Fig. 2, Fig. 4). Later training refines outputs within the chosen format (docstring conventions, Sec. 3.3, Fig. 6).",
+      "parts_covered": "Part 1 (format switch first, carrying most of the gain); qualitative analog of part 3 (later refinement within the format).",
+      "difference": "Small from-scratch models, GSM8K, PPO; no prompt-prefix comparison, no cap hits or loops, no per-token log-probability measure."
+    },
+    {
+      "title": "The Entropy Mechanism of Reinforcement Learning for Reasoning Language Models (Cui et al., 2025)",
+      "url": "https://arxiv.org/html/2505.22617",
+      "measured": "11 models (Qwen2.5, Mistral, LLaMA, DeepSeek families), 2,400-gradient-step RL runs on math and code: 73 % of the entropy drop and 76 % of the performance gain occur in the first 200 steps (1/12 of training); the first 800 steps hold over 93 % of the gain and 94 % of the entropy loss (Sec. 2, Fig. 2).",
+      "parts_covered": "Part 3 (per-token sharpening during RL), with the opposite result.",
+      "difference": "They find entropy collapses, mostly early; the claim finds no per-token sharpening beyond the cued base at steps 100-400 and a final model less sharp than the base on its measure (-0.192 vs cued base -0.161), while loops still fall. The measures differ: training-policy entropy on training rollouts at T 1.0 vs mean log-probability of sampled tokens on finished MATH-500 answers at T 0.6 / top-p 0.95, compared against the cued base; part of the early entropy drop they report may be the format switch itself, which the cued-base comparison factors out. Olmo 3 RL-Zero trains without KL and with clip-higher, which may also keep entropy from collapsing."
+    },
+    {
+      "title": "SimpleRL-Zoo: Investigating and Taming Zero Reinforcement Learning for Open Base Models in the Wild (Zeng et al., 2025)",
+      "url": "https://arxiv.org/html/2503.18892v3",
+      "measured": "Zero RL on 10 base models (Qwen2.5, Llama-3.1-8B, Mistral, DeepSeek-Math), 8,192-token rollouts; tracks clip ratio (truncated share) and stopped length every five steps (Fig. 4, Fig. 12). Early in training base models often fail to stop; most models keep clip ratio below 5 % while stopped length grows; Mistral-7B shows repetition up to the limit after training collapse.",
+      "parts_covered": "Part 2 (truncation over RL steps), partly.",
+      "difference": "No rise of cap hits above the base in the first hundreds of steps followed by a fall; no link between early truncation and a prompt-installable mode; no comparison with a cued base."
+    }
+  ],
+  "status": {
+    "part_1": "partly published: Wang et al. 2026 (Olmo-3-7B, own 300-step GRPO) show the cue equals about 100 RL steps and RL raises the cue's probability; Spurious Rewards and Echo Chamber show a mode switch in the first steps that carries the early gain. The measurement at the released Olmo 3 RL-Zero checkpoints (95.6 % opening rate at step 100, 2.25x length, no cue effect at step 400) is not stated anywhere found.",
+    "part_2": "not found: no source reports cap hits rising above the base early in RLVR (to the cued base's level) and falling only late. Nearest: SimpleRL-Zoo clip-ratio curves; Wang et al. cap rates for the final models only.",
+    "part_3": "not found: no source shows early checkpoints no sharper per token than the prefixed base, nor late RL removing loops without raising per-token log-probability. Published statements point the other way: Cui et al. (entropy collapses, 73 % of the drop in the first 1/12 of training) and Wang et al. (after the opening, base and RL policies largely agree, which does not predict the late loop removal). The Olmo 3 report says only that AIME accuracy improves drastically in the first couple hundred steps, then slowly."
+  },
+  "what_is_new": "No source measures released RLVR checkpoints against the prefixed base: the cap-hit rise to the cued base's level by step 100 and fall only by step 2,800 (part 2), and the finding that neither early (steps 100-400) nor late RL raises per-token log-probability above the cued base while late RL removes loops (part 3), are not published. Part 3 runs against Cui et al.'s entropy collapse and Wang et al.'s 'models largely agree after the opening', so it is new, and it needs the checks those papers imply (matched token cap, log-probability at T 1.0 and on all answers, not only finished ones).",
+  "searches": [
+    "RLVR training dynamics early phase model first learns answer format then reasoning",
+    "reinforcement learning with verifiable rewards early training steps mostly learn output format, measured across checkpoints",
+    "entropy collapse timing during GRPO training of language model on math, entropy drops in first steps",
+    "repetition and responses hitting max length during RL training of reasoning models across checkpoints",
+    "prompting the base model can replicate the gains of early RL training; RL teaches format not capability",
+    "base model with a short prefix or template matches RL-trained checkpoint accuracy on MATH",
+    "Olmo 3 RL-Zero analysis of intermediate RLVR checkpoints",
+    "RL-Zero training on base model: first stage format adoption, later stage response length growth and accuracy",
+    "Echo chamber: RL post-training amplifies one output format learned in pretraining, format collapse early in training",
+    "policy entropy collapse in reinforcement learning for reasoning language models, most performance gain happens with entropy drop early",
+    "clip ratio truncated responses rise early in zero RL training then fall, response length dynamics SimpleRL-Zoo",
+    "RL fine-tuning reduces repetition loops and degenerate repetitive outputs in reasoning models over training",
+    "superficial alignment hypothesis for RLVR: early RL steps change only the first tokens / style, later steps change reasoning",
+    "which tokens change during RLVR: format tokens change first, reasoning tokens later across training checkpoints",
+    "two-phase learning dynamics of RLVR: format learning phase followed by capability phase",
+    "prefix prompting base model matches intermediate RL checkpoint, comparison along RL training trajectory",
+    "spurious rewards RLVR code reasoning frequency rises within first training steps Qwen2.5-Math",
+    "repetitive looping generations increase in early RL training then decrease, truncation rate over GRPO steps",
+    "base model sampling repetition degeneration fraction of responses reaching max tokens versus RL-trained model",
+    "early RLVR checkpoints change response style and length while later training improves accuracy; style vs substance during RL training",
+    "does RLVR sharpen the distribution: token log-probability or confidence of sampled tokens across RL checkpoints compared with prompted base model",
+    "Olmo-3-7B-RL-Zero-Math intermediate checkpoints analysis of response opening, length and entropy over training steps",
+    "what RL adds beyond the opening tokens: continuation quality, repetition, and confidence after the reasoning cue in base versus RL models",
+    "recall.py: RLVR training dynamics early format learning checkpoints",
+    "recall.py: starting token cues base model RL counterpart checkpoints"
+  ],
+  "read_in_full_sections": [
+    "2610.06851 Sec. 2.3-2.4, App. D.1-D.3, E.1-E.2, Tab. 3/11/14",
+    "2506.10947 Sec. 5.2-5.3, Tab. 1-2, Fig. 6-7",
+    "2504.07912 Sec. 3.1-3.3",
+    "2505.22617 Sec. 1-2 (Fig. 1-2)",
+    "2503.18892 Sec. 2.2 metrics, Fig. 4/12 text, App. clip-ratio definition",
+    "2512.13961 (Olmo 3 report) Sec. 6.1-6.2, App. A.6.4",
+    "2603.22446 Sec. 2.3, 4.3 (DAPO Qwen2.5-Math-7B checkpoints: JS divergence grows monotonically, concentrates late; not about format or loops)"
+  ],
+  "not_read": [
+    "Olmo-3-7B-RL-Zero training logs on Weights & Biases (https://forge.coreweave.com/wandb/ai2-llm/Olmo-3-7B-RL-Zero/reports/Olmo-3-7B-RL-Zero--VmlldzoxNTM0OTI1Nw): would show training entropy, truncation and length per step for this exact run; check whether training entropy collapses in this exact run before calling part 3 new.",
+    "2610.06851 Fig. 14 / Fig. 16 curve values (only captions and text available in the HTML fetch).",
+    "Understanding R1-Zero-Like Training: A Critical Perspective (https://arxiv.org/html/2503.20783): template and length dynamics, not read in full.",
+    "Linear Dynamics in the RLVR Training of Large Language Models (https://arxiv.org/html/2601.04537v3): log-probabilities move linearly with step, which would argue against a two-phase split; in team memory but not re-read for this claim."
+  ]
+}

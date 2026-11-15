@@ -1,0 +1,35 @@
+{
+ "name": "sim2-13-shrink0",
+ "note": "ablation of sim2-09 (+0.2673): shrink 0, own outcomes only; hypothesis: the pooled hazard is needed; refuted if pooled >= +0.2673 [flags: --tau 14 --abs-enter 2]",
+ "utc": "2026-11-14T23:33:06+00:00",
+ "commit": "dec89a8",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 360,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.259533,
+ "pinball": 0.024838,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.246823,
+ "skill_geomean": 0.34611,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.180381,
+   "in_band": 0.804785
+  },
+  "3": {
+   "skill_pooled": 0.234628,
+   "in_band": 0.729651
+  },
+  "7": {
+   "skill_pooled": 0.294284,
+   "in_band": 0.578488
+  }
+ },
+ "in_band": 0.704728
+}
