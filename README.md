@@ -364,10 +364,10 @@ names are placeholders, each with the one line "Details to be added" until the p
 shows as its own row.
 
 The page `/papers` (`tools/papers.py`) is the paper loop: the names of its six steps in the words column (below the sheets
-where the page is one column; a click on a step opens its sentence) and the papers of `view.PAPERS` as one stack of sheets. The sheet in front is large and
-lit and shows the paper's claim, why the loop picked it, how it was checked, its length and the button that opens the
-PDF. The other sheets stand behind it on both sides, in the order written, and show their number and title; a click on
-one, or the left and right arrow keys, brings it to the front (no sheet changes its place, only its depth), and the address names it (`/papers#no-early-warning`). Below 1240 px every sheet is shown
+where the page is one column; a click on a step opens its sentence) and the papers of `view.PAPERS` as one flat row of sheets in the order written. One sheet is open, wide and
+lit, and shows the paper's claim, why the loop picked it, how it was checked, its length and the button that opens the
+PDF. The other sheets are closed to a strip with their number and title; a click on one, or the left and right arrow
+keys, opens it (one width transition and a fade of the text, nothing in depth), and the address names it (`/papers#no-early-warning`). Below 1240 px every sheet is shown
 in full, one after the other. A new paper gets its row in `ROWS` of `papers.py` (without one it still gets a sheet with its title). The domain is the stack parameter
 `HomeDomainName` (`infra/monitor/deploy.sh monitor.invariant.team <zone id> invariant.team`).
 Every page has the same tab icon, `/favicon.svg`: `view.py` holds the SVG and writes the link to it into each page as
