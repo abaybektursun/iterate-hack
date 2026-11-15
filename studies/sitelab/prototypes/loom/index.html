@@ -31,6 +31,7 @@ canvas#c.turn { cursor: grabbing; } canvas#c.pick { cursor: crosshair; }
 
 .col { position: fixed; left: 0; top: 0; bottom: 0; width: var(--col); padding: 22px 0 18px 40px; display: flex; flex-direction: column; pointer-events: none; }
 .col > * { pointer-events: auto; }
+.head { display: contents; }
 .top { display: flex; align-items: baseline; gap: 14px; font-size: 12px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--faint); }
 .top a { color: var(--mute); text-decoration: none; border-bottom: 1px solid var(--rule); }
 .top a:hover { color: var(--ink); }
@@ -71,8 +72,9 @@ h1 b { font-weight: 300; color: var(--brass); font-variant-numeric: lining-nums;
 #err { position: fixed; left: 8px; bottom: 8px; color: var(--red); font-size: 12px; white-space: pre-wrap; z-index: 9; max-width: 70%; }
 
 @media (max-width: 760px) {
-  .shade { background: linear-gradient(180deg, rgba(14, 12, 10, .94), rgba(14, 12, 10, .82) 30%, rgba(14, 12, 10, 0) 44%, rgba(14, 12, 10, 0) 84%, rgba(14, 12, 10, .9)); }
+  .shade { background: linear-gradient(180deg, rgba(14, 12, 10, 0) 84%, rgba(14, 12, 10, .9)); }
   .col { right: 0; width: auto; padding: 12px 16px 10px; }
+  .head { display: block; margin: -12px -16px 0; padding: 12px 16px 9px; background: var(--paper); border-bottom: 1px solid var(--rule); }   /* the words and the timeline sit on their own panel, the loom below it */
   h1 { font-size: 18.5px; margin: 10px 0 6px; }
   .note { font-size: 11.5px; padding-bottom: 6px; min-height: 4.6em; }
   .clock strong { font-size: 24px; }
@@ -93,6 +95,7 @@ h1 b { font-weight: 300; color: var(--brass); font-variant-numeric: lining-nums;
 <div class="grain"></div>
 <div class="shade"></div>
 <div class="col" id="col">
+  <div class="head">
   <div class="top"><a href="../../">← Lab</a><span>Loom · the commits</span></div>
   <h1 id="line">&nbsp;</h1>
   <div class="note" id="note"></div>
@@ -105,6 +108,7 @@ h1 b { font-weight: 300; color: var(--brass); font-variant-numeric: lining-nums;
   <div class="scrub"><canvas id="strip" width="664" height="92"></canvas><i id="mark"></i>
     <input id="scrub" type="range" min="0" max="1000" value="1000" aria-label="Unroll the cloth: rows woven so far"></div>
   <div class="ends"><span id="e0"></span><span>the whole cloth, unrolled</span><span id="e1"></span></div>
+  </div>
   <details class="def" id="def" open></details>
 </div>
 <div id="tip"></div>
@@ -252,7 +256,7 @@ scene.add(wall, floor, skirt);
 
 // the window the light comes through: it is never seen, only its shadow (frame and glazing bars) falls into the room
 {
-  const WIN = new THREE.Vector3(...(new URLSearchParams(location.search).get('win') || '0.9,0.9,0').split(',').map(Number));
+  const WIN = new THREE.Vector3(0.9, 0.9, 0);
   const ghost = new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false }), win = new THREE.Group();
   const bar = (w, h, x, y) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), ghost); m.position.set(x, y, 0); m.castShadow = true; m.frustumCulled = false; win.add(m); };
   const ww = 4.4, wh = 4.4;
@@ -568,7 +572,8 @@ function resize() {
   W = innerWidth; H = innerHeight; narrow = W <= 760;
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, W * H > 1.2e6 ? 1.25 : 1.5)); renderer.setSize(W, H, false);
   camera.aspect = W / H;
-  if (narrow) camera.setViewOffset(W, H, 0, -H * 0.13, W, H); else camera.setViewOffset(W, H, -Math.min(372, W * 0.26) / 2, 0, W, H);
+  if (narrow) camera.setViewOffset(W, H, 0, -(document.querySelector('.head').offsetHeight - 40) / 2, W, H);   // centred between the panel of words and the legend bar
+   else camera.setViewOffset(W, H, -Math.min(372, W * 0.26) / 2, 0, W, H);
   camera.updateProjectionMatrix(); need = true;
 }
 function aim() {

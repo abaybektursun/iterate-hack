@@ -113,7 +113,7 @@ import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { Reflector } from "three/addons/objects/Reflector.js";
 
-const $ = id => document.getElementById(id), Q = new URLSearchParams(location.search);
+const $ = id => document.getElementById(id);
 const D = await (await fetch("data.json")).json();
 const HUES = [325, 150, 65, 195, 105, 45, 175, 350], REPLAY_S = 60;      // the site's hue per person, here at low chroma
 const fmt = n => Math.round(n).toLocaleString("en-US"), esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -161,13 +161,16 @@ const HMW = 1024, HMH = Math.round(HMW * BH / BW), hm = new Uint8Array(HMW * HMH
 const hmTex = new THREE.DataTexture(hm, HMW, HMH, THREE.RedFormat, THREE.UnsignedByteType); hmTex.unpackAlignment = 1; hmTex.minFilter = hmTex.magFilter = THREE.LinearFilter;
 const U = { uClock: { value: 0 }, uNow: { value: 0 }, uHover: { value: -1 }, uSel: { value: -1 },
   uHM: { value: hmTex }, uHMRect: { value: new THREE.Vector4(BX[0] - MARGIN, BY[0] - MARGIN, BW, BH) }, uL: { value: new THREE.Vector3(.72, .5, -.32).normalize() } };
-const LIGHT = `uniform sampler2D uSH; uniform vec4 uHMRect; uniform vec3 uL;
-  const vec3 KEY = vec3(1., .925, .81) * 1.25, FILL = vec3(.15, .152, .16), TUNGSTEN = vec3(1., .69, .37);
+const LIGHT = `uniform sampler2D uSH, uHM; uniform vec4 uHMRect; uniform vec3 uL;
+  const vec3 KEY = vec3(1., .925, .81) * 1.25, FILL = vec3(.2, .202, .21), SKY = vec3(.37, .38, .41), BOUNCE = vec3(.31, .27, .22), TUNGSTEN = vec3(1., .69, .37);   // SKY: the room's soft light from above; BOUNCE: the key coming back off the board and the lit faces
   float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
   float vnoise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);
     return mix(mix(hash(i), hash(i + vec2(1., 0.)), f.x), mix(hash(i + vec2(0., 1.)), hash(i + vec2(1., 1.)), f.x), f.y); }
   vec2 shAt(vec2 xz){ vec4 t = texture2D(uSH, clamp((xz - uHMRect.xy) / uHMRect.zw, 0., 1.)); return vec2(t.r * t.r * 240., t.g); }   // x: height below which the key light is blocked, y: contact shade at the ground
   float lit(float y, float hs){ return clamp((y - hs) / 1.3 + 1., 0., 1.); }
+  float keyAt(vec2 xz, float y){                                          // share of the key light that arrives: five taps make the edge of a shadow soft
+    return (lit(y, shAt(xz).x) + lit(y, shAt(xz + vec2(.9, .4)).x) + lit(y, shAt(xz + vec2(-.4, .9)).x) + lit(y, shAt(xz + vec2(-.9, -.4)).x) + lit(y, shAt(xz + vec2(.4, -.9)).x)) / 5.; }
+  float rise(vec2 xz, float y){ float g = texture2D(uHM, clamp((xz - uHMRect.xy) / uHMRect.zw, 0., 1.)).r; return clamp((g * g * 240. - y) / 8., 0., 1.); }   // how far a neighbour stands above this point: the room's light is cut off there
   vec3 env(vec3 r){                                                       // the studio: one large softbox upper left, a strip behind right, a dim room
     float box = smoothstep(.5, .96, dot(r, normalize(vec3(.6, .74, -.25))));
     float strip = smoothstep(.86, .99, dot(normalize(vec3(r.x, r.y * .4, r.z)), normalize(vec3(-.7, .12, .7))));
@@ -232,10 +235,13 @@ const towers = new THREE.Mesh(geo, new THREE.ShaderMaterial({
       float near = 1. - smoothstep(120., 420., dist);                      // fine texture fades out with distance, so nothing shimmers
       float grain = mix(.5, vnoise(vW.xz * 5.3 + vW.y * 7.1) * .6 + hash(floor(vW.xz * 14.) + floor(vW.y * 14.) * 3.7) * .4, near);
       float ndl = dot(n, uL);
-      vec2 sf = shAt(vW.xz + n.xz * 1.5);
-      float sh = ndl > 0. ? lit(vW.y, sf.x) : 0.;
-      float occ = mix(sf.y, 1., smoothstep(0., 10., vW.y) * .8 + .2 * abs(n.y)) * (.5 + .5 * smoothstep(-.2, 2.2, vW.y));
-      vec3 light = KEY * max(ndl, 0.) * sh + FILL * (.6 + .4 * n.y) * occ;
+      vec2 q = vW.xz + n.xz * 1.5;
+      float sh = ndl > 0. ? keyAt(q, vW.y) : 0.;
+      float occ = mix(shAt(q).y, 1., smoothstep(0., 10., vW.y) * .8 + .2 * abs(n.y)) * (.5 + .5 * smoothstep(-.2, 2.2, vW.y));
+      occ *= abs(n.y) > .5                                                  // corners: a roof under a taller wall, a wall facing a taller neighbour
+        ? 1. - .25 * (rise(vW.xz + vec2(2.5, 0.), vW.y) + rise(vW.xz - vec2(2.5, 0.), vW.y) + rise(vW.xz + vec2(0., 2.5), vW.y) + rise(vW.xz - vec2(0., 2.5), vW.y))
+        : 1. - .6 * max(rise(vW.xz + n.xz * 1.2, vW.y), .7 * rise(vW.xz + n.xz * 4., vW.y));
+      vec3 light = KEY * max(ndl, 0.) * sh + mix(BOUNCE, SKY, .5 + .5 * n.y) * occ;
       vec3 alb = vec3(.56, .535, .49) * (.88 + .12 * grain);                  // cast resin, slightly warm
       alb *= .97 + .06 * vSeed;
       vec3 col; float edge;
@@ -288,14 +294,13 @@ const ground = new Reflector(new THREE.PlaneGeometry(BW, BH), { clipBias: .01, t
       r += texture2D(tDiffuse, uv + vec2(s, 0.)).rgb * .1 + texture2D(tDiffuse, uv - vec2(s, 0.)).rgb * .1;
       r += texture2D(tDiffuse, uv + vec2(0., s * 2.5)).rgb * .15 + texture2D(tDiffuse, uv - vec2(0., s * 2.5)).rgb * .15;
       r += texture2D(tDiffuse, uv + vec2(0., s * 6.)).rgb * .15 + texture2D(tDiffuse, uv - vec2(0., s * 6.)).rgb * .15;
-      vec2 sf = shAt(vWp.xz); float occ = sf.y;                                // four more taps soften the stair steps of the field at shadow edges
-      float sh = (lit(0., sf.x) + lit(0., shAt(vWp.xz + vec2(.7, .3)).x) + lit(0., shAt(vWp.xz + vec2(-.3, .7)).x) + lit(0., shAt(vWp.xz + vec2(-.7, -.3)).x) + lit(0., shAt(vWp.xz + vec2(.3, -.7)).x)) / 5.;
+      float occ = shAt(vWp.xz).y, sh = keyAt(vWp.xz, 0.);
       float fres = .045 + .955 * pow(1. - V.y, 5.);
       vec3 col = alb * (KEY * uL.y * sh + FILL * occ) + r * fres * .8 * (.4 + .6 * occ);
       gl_FragColor = vec4(col, 1.);
     }` } });
 ground.rotation.x = -Math.PI / 2; scene.add(ground);
-Object.assign(ground.material.uniforms, { uSH: U.uSH, uHMRect: U.uHMRect, uL: U.uL });
+Object.assign(ground.material.uniforms, { uSH: U.uSH, uHM: U.uHM, uHMRect: U.uHMRect, uL: U.uL });
 const slab = new THREE.Mesh(new THREE.BoxGeometry(BW, SLAB, BH).translate(0, -SLAB / 2 - .03, 0), new THREE.ShaderMaterial({ uniforms: U,
   vertexShader: `varying vec3 vW, vN; void main(){ vW = position; vN = normal; gl_Position = projectionMatrix * viewMatrix * vec4(position, 1.); }`,
   fragmentShader: `varying vec3 vW, vN; ${LIGHT}
@@ -539,11 +544,11 @@ function drawScrub() {
 }
 let dragging = false;
 const scrubTo = e => { const r = sc.getBoundingClientRect(); seek(T0 + SPAN * Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)), false); };
-$("scrubwrap").addEventListener("pointerdown", e => { dragging = true; intro = false; e.currentTarget.setPointerCapture(e.pointerId); scrubTo(e); });
+$("scrubwrap").addEventListener("pointerdown", e => { dragging = true; e.currentTarget.setPointerCapture(e.pointerId); scrubTo(e); });
 $("scrubwrap").addEventListener("pointermove", e => dragging && scrubTo(e));
 $("scrubwrap").addEventListener("pointerup", () => dragging = false);
 const setPlay = v => { playing = v; $("playicon").setAttribute("d", v ? "M2 1h3.5v12H2zM8.5 1H12v12H8.5z" : "M3 1l10 6-10 6z"); };
-$("play").onclick = () => { intro = false; if (!playing && T >= T1 - 1) { seek(T0, false); crane = true; controls.autoRotate = false; } setPlay(!playing); };
+$("play").onclick = () => { if (!playing && T >= T1 - 1) { seek(T0, false); crane = true; controls.autoRotate = false; } setPlay(!playing); };
 addEventListener("keydown", e => { if (e.code === "Space") { e.preventDefault(); $("play").click(); } if (e.key === "Escape") select(-1); });
 
 // ---- camera: a slow crane during the replay, then the viewer's ------------------------------------------------------
@@ -567,6 +572,22 @@ function craneCam(dt) {
   camera.position.lerp(look, 1 - Math.exp(-dt * .9)); controls.target.lerp(tgt, 1 - Math.exp(-dt * 1.2)); camera.lookAt(controls.target);
 }
 
+function frame() {                                                     // the opening view: every standing block inside the free part of the window, between the heading and the timeline
+  const tall = camera.aspect < 1, az = tall ? 2.07 : .5, el = tall ? .8 : .46, top = tall ? .6 : .84, bot = tall ? -.56 : -.68, wide = .95;   // a narrow window looks along the board's long side
+  const dir = new THREE.Vector3(Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el)), v = new THREE.Vector3(), ax = new THREE.Vector3(), th = Math.tan(camera.fov * Math.PI / 360);
+  controls.target.copy(mass); let R = 600;
+  for (let k = 0; k < 8; k++) {
+    camera.position.copy(controls.target).addScaledVector(dir, R); camera.lookAt(controls.target); camera.updateMatrixWorld();
+    let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+    for (let i = 0; i < NF; i++) { const h = aH[i * 3 + 1]; if (h < .02) continue;
+      for (const y of [0, h]) { v.set(aRect[i * 4], y, aRect[i * 4 + 1]).project(camera); x0 = Math.min(x0, v.x); x1 = Math.max(x1, v.x); y0 = Math.min(y0, v.y); y1 = Math.max(y1, v.y); } }
+    controls.target.addScaledVector(ax.setFromMatrixColumn(camera.matrixWorld, 0), (x0 + x1) / 2 * R * th * camera.aspect)
+      .addScaledVector(ax.setFromMatrixColumn(camera.matrixWorld, 1), ((y0 + y1) / 2 - (top + bot) / 2) * R * th);
+    R *= Math.max((x1 - x0) / (2 * wide), (y1 - y0) / (top - bot));
+  }
+  camera.position.copy(controls.target).addScaledVector(dir, R); camera.lookAt(controls.target);
+}
+
 // ---- post: a faint lens bloom on true highlights, tilt-shift focus, grain, vignette ---------------------------------
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
@@ -586,7 +607,7 @@ const tilt = new ShaderPass({ uniforms: { tDiffuse: { value: null }, uRes: { val
 composer.addPass(tilt); composer.addPass(new OutputPass());
 // quality: 2 = full (bloom, 24 focus taps, device pixels up to 2x), 1 = no bloom, 14 taps, 1x, 0 = 0.75x and 8 taps. Integrated GPUs start at 1; any tier steps down when frames run slow.
 const gpu = (() => { const gl = renderer.getContext(), e = gl.getExtension("WEBGL_debug_renderer_info"); return e ? String(gl.getParameter(e.UNMASKED_RENDERER_WEBGL)) : ""; })();
-let tier = Q.has("tier") ? +Q.get("tier") : /Intel|SwiftShader|llvmpipe|Mali|Adreno|Apple GPU|PowerVR/i.test(gpu) || innerWidth < 760 ? 1 : 2, slow = 0, wakeUntil = 3;
+let tier = /Intel|SwiftShader|llvmpipe|Mali|Adreno|Apple GPU|PowerVR/i.test(gpu) || innerWidth < 760 ? 1 : 2, slow = 0, wakeUntil = 3;
 const wake = (s = 2.6) => { wakeUntil = Math.max(wakeUntil, U.uClock.value + s); };
 function resize() { const w = innerWidth, h = innerHeight, pr = tier === 2 ? Math.min(devicePixelRatio, 2) : tier === 1 ? Math.min(devicePixelRatio, 1) : .75;
   renderer.setPixelRatio(pr); renderer.setSize(w, h, false); composer.setPixelRatio(pr); composer.setSize(w, h); bloom.enabled = tier === 2; tilt.uniforms.uTaps.value = [8, 14, 24][tier];
@@ -658,30 +679,23 @@ function select(i) {
 }
 
 // ---- loop -----------------------------------------------------------------------------------------------------------
-// test hooks: ?t=0.6 stops the replay at 60%, ?step=0.1 fixes the time step, ?freeze=3 stops the clock there, ?cam=x,y,z, ?sel=<district>
-const still = Q.has("t");
-const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;      // then: the finished model as one still frame, no replay unless Play is pressed
-let intro = !still && !reduced;                                                   // the page opens on the finished model, holds it, then replays from the first commit
-if (still) seek(T0 + SPAN * Math.max(0, +Q.get("t") - .03), false); else { seek(T1, false); setPlay(false); }
-if (reduced && !still) controls.enableDamping = false;
-if (Q.has("sel")) select(+Q.get("sel"));
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;      // then the camera stays where the viewer left it during the replay
+seek(T1, false); setPlay(false);                                              // the page opens on the finished model; the replay starts on Play
+if (reduced) controls.enableDamping = false;
 resize(); bake();
-craneCam(100); craneCam(100);
-if (Q.has("cam")) { crane = false; camera.position.set(...Q.get("cam").split(",").map(Number)); controls.target.set(0, 0, 0); }
-let last = performance.now(), rendered = 0;
+craneCam(100); craneCam(100); frame();
+let last = performance.now();
 function tick() {
   requestAnimationFrame(tick); const nowMs = performance.now();        // not the callback's timestamp: with frame pacing off it runs behind the wall clock
   if (document.hidden) { last = nowMs; return; }
-  const raw = nowMs - last; if (raw < 2 && !Q.has("step")) return;      // never more than a few hundred frames a second, whatever the browser allows
+  const raw = nowMs - last; if (raw < 2) return;      // never more than a few hundred frames a second, whatever the browser allows
   let dt = Math.min(.05, Math.max(0, raw / 1000)); last = nowMs;
-  if (Q.has("step")) dt = +Q.get("step"); if (Q.has("freeze") && U.uClock.value > +Q.get("freeze")) dt = 0;
   U.uClock.value += dt; tilt.uniforms.uTime.value = U.uClock.value;
-  const busy = playing || intro || dragging || convoys.length > 0 || hmDirty || U.uClock.value < wakeUntil;
+  const busy = playing || dragging || convoys.length > 0 || hmDirty || U.uClock.value < wakeUntil;
   if (!busy) { controls.update(); return; }                             // nothing moves: no work, no frame
   if (raw > 19.5 && raw < 400) { if (++slow > 80 && tier > 0) { tier--; slow = 0; resize(); } } else slow = Math.max(0, slow - 2);
-  if (intro && U.uClock.value > 2.2) { intro = false; seek(T0, false); setPlay(true); }
-  if (playing && !dragging) { const lim = still ? T0 + SPAN * Math.min(1, +Q.get("t")) : T1; seek(Math.min(lim, T + dt * SPAN / REPLAY_S), true); if (T >= T1) setPlay(false); }
-  if (crane && !reduced && (intro || !(T >= T1 && !playing))) craneCam(dt); else controls.update();
+  if (playing && !dragging) { seek(Math.min(T1, T + dt * SPAN / REPLAY_S), true); if (T >= T1) setPlay(false); }
+  if (crane && !reduced && !(T >= T1 && !playing)) craneCam(dt); else controls.update();
   if (hmDirty && U.uClock.value - hmAt > .12 || hmAt > U.uClock.value) bake();
   stepConvoys();
   const now = U.uClock.value;                                           // district outlines: quiet, lighter for a moment when a merge arrives
@@ -693,9 +707,8 @@ function tick() {
   if (ld >= 0) { const [x, y, w, h] = DS[ld].r, v = new THREE.Vector3(x + w / 2, 0, y + h).project(camera); dLab.textContent = DS[ld].name;
     dLab.style.opacity = v.z < 1 ? .9 : 0; dLab.style.transform = `translate(${(v.x * .5 + .5) * innerWidth}px, ${(-v.y * .5 + .5) * innerHeight + 8}px)`; } else dLab.style.opacity = 0;
   drawScrub();
-  composer.render(); rendered++;
+  composer.render();
 }
-window.__dbg = () => JSON.stringify({ rendered, clock: +U.uClock.value.toFixed(2), p: +((T - T0) / SPAN).toFixed(3), playing, tier, convoys: convoys.length, slow });
 requestAnimationFrame(tick);
 </script>
 </body>
