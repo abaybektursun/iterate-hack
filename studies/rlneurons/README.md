@@ -37,6 +37,8 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/rln4_t1_t2_items.py` | Per-problem T1 against T2 under grader v3; wrote `results/rln4/t1_t2_items-01/` (from commit `8b6a836`, unchanged). |
 | `analysis/anatomy.py` | Gap anatomy from the Day-1 #3 four-sample runs (laptop): joint k-of-4 table, held-out-sample decomposition, subject and level, error types, tokens, divergence proxy, `pool_k_le3.json`. See "Gap anatomy". |
 | `analysis/anatomy_judge.py` | Slip against wrong plan: `prep` draws the items and the two controls and writes blind batches; `score` reads the judges' labels (agreement, controls, first wrong step). |
+| `grader/repair_v4.py`, `grader/repair_v4_test.py` | Grader v4 / v4a: grader v3 plus five label-free answer-statement rules (placeholder, lower-case marker, last-line math, trailing brace, form), and its planted tests. A grader version for both models, not a method. See "Answer-statement repair". |
+| `analysis/repair.py`, `prep/repair_plan.py`, `data/repair/plan_v1.json` | Answer-statement repair: the gold-aware upper bound, the rule table and the vote under v4 (laptop); the plan of the forced-suffix job (not run). |
 | `data/anatomy/math500_meta.json` | Subject, level and reference solution of the 500 problems (HuggingFaceH4/MATH-500 `test.jsonl`, revision `6e4ed1a`), same order and `unique_id` as `data/rln4/math500.json`. |
 | `specs/SPEC5_map.md` | RLN-5 map spec: where the RL model still disagrees with the cued base; hypothesis H and its refutation rules; controls. |
 | `jobs/rln5_map.py` | RLN-5 map job (inference only, team runner): both models over the stored T1 and T2 answers with teacher forcing; per-position shards and `checks.json` in `$OUT_DIR`. See "RLN-5 map". |
@@ -456,6 +458,102 @@ wrong, `run.json`). The batch files and raw labels are in `runs/anatomy_judge/` 
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.anatomy --base runs/abaybektursun-1114-153825-208b --rl runs/abaybektursun-1114-183640-e828 --out studies/rlneurons/results/anatomy/math500-02
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.anatomy_judge prep --base runs/abaybektursun-1114-153825-208b --rl runs/abaybektursun-1114-183640-e828 --work runs/anatomy_judge-02
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.anatomy_judge score --work runs/anatomy_judge-02 --pairs studies/rlneurons/results/anatomy/math500-01/pairs.json --out studies/rlneurons/results/anatomy/judge-02
+```
+
+## Answer-statement repair: how much of the gap is a failure to state the answer (MATH-500, n = 500, 4 samples, laptop, board work-655434, idea-ae6eba)
+
+Question: how many of the 9.9 points between the cued base and RL (mean of the 4 samples, grader v3) come back when the base's
+answer is only read better, with RL read the same way? Answer: 0.5 point. Label-free extraction rules turn 10 of the base's
+2,000 samples from wrong to right and 0 of RL's 2,000: base 1,642 to 1,652, RL 1,840, gap 9.9 to 9.4 points (change -0.5
+[-0.8, -0.2]). With the gold in hand the ceiling is 31 base samples (1.55 points) against 5 for RL. The whole gain is a grader
+correction; no generation step was run. Spec with hypotheses, written before any count: `specs/SPEC_repair.md`. Inputs: attempt
+0 of samples 0 to 3 of the two Day-1 #3 jobs. Intervals: paired bootstrap over problems, 5,000 resamples, seed 0.
+
+Kept apart: a rule that changes extraction or normalization is a grader version (`grader/repair_v4.py`; `grade_v3` is
+unchanged), applies to both models and corrects the measured gap; it is not a route to RL. A step that changes generation
+(Part B) is a method; it was not run.
+
+Rules (never read the gold): R1 a placeholder answer (`$Answer$`) falls back to the candidate before it within 5 non-empty
+lines; R2 with nothing extracted, the rest of the last line after `answer:` / `answer is` in any case; R3 with nothing
+extracted and the answer finished, the last math span of the last line, or that line itself when it has at most 30 characters
+and a digit; R4 a trailing unmatched `}` is removed; R5 `(C) Plane` becomes `C` and `12th grade` becomes `12` (written from two
+judged items, so optimistic). v4 = the rules as written before scoring. v4a = after reading v4's 16 flips: R2 only on answers
+that ended with the stop token, and R3 before R2.
+
+| Rule set (grader) | Base with cue: right of 2,000 (per sample) | minus v3, points [95 %] | wrong to right / right to wrong | accepted, judged wrong by hand | RL: right of 2,000 | changed |
+|---|---|---|---|---|---|---|
+| v3 (baseline) | 1,642 (405, 409, 410, 418) | | | | 1,840 (456, 462, 464, 458) | |
+| R1 placeholder | 1,642 | 0 | 0 / 0 (fires on 2) | 0 | 1,840 | 0 |
+| R2 lower-case marker | 1,653 | +0.55 [0.25, 0.95] | 11 / 0 (fires on 53, 44 of them cap hits) | 6 | 1,840 | 0 (fires on 2 cap hits) |
+| R3 last-line math | 1,648 | +0.30 [0.10, 0.55] | 6 / 0 (fires on 10) | 0 | 1,840 | 0 |
+| R4 trailing brace | 1,642 | 0 | 0 / 0 (fires on 0) | 0 | 1,840 | 0 |
+| R5 form | 1,644 | +0.10 [0.00, 0.25] | 2 / 0 | 0 | 1,840 | 0 |
+| v4, as written before scoring | 1,658 (409, 413, 415, 421) | +0.80 [0.40, 1.25] | 16 / 0 | 6 | 1,840 | 0 |
+| R2 on finished answers only | 1,648 | +0.30 [0.10, 0.55] | 6 / 0 (fires on 9) | 1 | 1,840 | 0 |
+| v4a, amended | 1,652 (407, 412, 413, 420) | +0.50 [0.20, 0.80] | 10 / 0 | 0 | 1,840 | 0 |
+
+| RL minus base, points [95 %] | mean of 4 samples | sample 0 |
+|---|---|---|
+| v3 | 9.9 [8.25, 11.6] | 10.2 [7.2, 13.2] |
+| v4 | 9.1 [7.5, 10.75] | 9.4 [6.4, 12.4] |
+| v4a | 9.4 [7.75, 11.1] | 9.8 [6.8, 12.8] |
+
+Vote over 4 (the rule of `analysis/day1_vote.py`): base 446 under v3, 446 under v4a (0 fixed, 0 broken), 447 under v4 (170 and
+189 fixed by wrongly accepted cap-hit samples, 481 broken); RL 474 under all three.
+
+- H3 (the rules accept no wrong answer) is refuted for v4 as written: 6 of its 16 accepted samples are wrong on reading. 5 are
+  cap hits where a lower-case "the answer is X" sits in unfinished reasoning (26, 170, 189 twice, 317: "the answer is 0. But
+  how?"), 1 is a finished answer whose reasoning says 326.5 and whose final line says 315.5 (399). v4a removes these 6 and
+  keeps the 10 whose final statement is the gold (22, 45, 81, 114, 122, 141, 227, 237, 379, 430). The amendment was made on the
+  same 2,000 samples, so the v4a numbers are optimistic; planted cases of both failures are in the test.
+- H1 (at least 2 points of the gap are answer-statement failures a label-free rule recovers) is refuted: +0.5 point on the
+  base (under the 1 point set in the spec). H2 (RL has none) holds: 0 of RL's 2,000 samples change, and RL has 0 samples with
+  no extracted answer.
+- Upper bound with the gold (a value the grader accepts as equal to the gold: boxes, marker rests, one-line math spans, the
+  part after a span's last `=`, each of the last 5 lines as plain text). Wrong samples with such a value:
+
+| Model, sample type | Samples | in the last line | in the last 5 non-empty lines | anywhere |
+|---|---|---|---|---|
+| base, finished-wrong | 250 | 6 | 23 | 46 |
+| base, no answer | 19 | 6 | 8 | 8 |
+| base, cap hit | 89 | 2 | 7 | 10 |
+| RL, finished-wrong | 131 | 0 | 5 | 18 |
+| RL, cap hit | 29 | 1 | 2 | 5 |
+
+- 20 of the base's 31 finished or no-answer samples with the gold in the last 5 lines, read by hand
+  (`upper_bound_read.json`): 14 state the gold as their answer and 6 do not (the gold is an intermediate value or a list
+  number: 458, 403 twice, 136, 214, 399). Of the 14, v4a reads 5; the other 9 are two roots in two boxes joined by
+  `\text{ and }` (25, 284 twice), the prompt's template around the value (`$Answer: 83$ where $Answer is ...`, `\(Answer:
+  23\)Where ...`, `$Answer (without quotes)`: 49, 39, 484), an unmatched `$` after the value (331), `137 1/2` for a mixed
+  number (472) and `-I` for the matrix (248). Scaled, about 22 of the base's 2,000 samples (1.1 points) are answer-statement
+  failures, against at most 5 of RL's (0.25): at most about 1 point of the 9.9.
+- H4 (the judge's extrapolation of 52, range 36 to 79, overstates what extraction can recover) holds: 31 by the upper bound,
+  about 22 after reading. The prompt's own words appear in 12 extracted base answers (`$Answer`, "the answer to the
+  problem"), 3 of them right, and in 0 of RL's.
+- Read by R2 and still scored wrong: `east.` for gold `east` (97, sample 1: the final period).
+
+Part B, forced suffix (a method), was not run. The prefix-file input for `jobs/run_cell.py` had not landed on `main` or
+`origin/handoff` when Part A ended (`jobs/handoff_gen.py` on `origin/handoff` continues sample 0 from a cut and takes no
+suffix). Eligible samples (finished, v3 extraction unusable; the gold is not read): 21 of the base's 2,000 (19 no answer, 2
+placeholders; 8 already right under v4a) and 0 of RL's. So the step can add at most 13 base samples (0.65 point) over v4a and
+nothing to RL. The exact job is in `specs/SPEC_repair.md` ("Part B job, not run"); its plan, with 100 control samples per
+model, is `data/repair/plan_v1.json` (suffix `\n\nThus, the final answer is \(\boxed{`, RL's most frequent non-empty answer-line
+opening, in 46 of its right answers and 19 of the base's; RL boxes 1,838 of its 1,840 right answers, the base 1,176 of
+1,642).
+
+Limits: 4 samples per problem; the rules and the amendment were fixed on MATH-500 and not scored on the 328; one reader for
+the flips and the 20 upper-bound samples; the upper bound reads one-line math spans only, so a gold-equal value in a
+multi-line display is missed.
+
+Run folder `results/repair/offline-01/`: `readout.json` (every table above), `rows.jsonl` (per sample: type, v3 and v4a
+extraction and score, the v4 score, upper-bound flags, Part B eligibility), `flips.json` (every sample whose score changes
+under v4 or v4a, with its last 700 characters and the hand judgement), `upper_bound_read.json` (the 20 samples read),
+`examples.json` (one sample v4a turns right, one that v4 accepts wrongly, one with the gold in the last 5 lines that stays
+wrong), `run.json`.
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.grader.repair_v4_test
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.repair --base runs/abaybektursun-1114-153825-208b --rl runs/abaybektursun-1114-183640-e828 --out studies/rlneurons/results/repair/offline-02
 ```
 
 ## Weight-difference line: base + a (RL - base), Code-RL and a random control (Day-1 #4, board work-d36669)

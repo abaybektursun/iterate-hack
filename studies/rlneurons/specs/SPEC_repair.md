@@ -109,6 +109,39 @@ Tokens: the repair's generated tokens per problem, added to the row's tokens.
 - H5 (Part B): the forced suffix recovers at least half of the eligible base samples that v4 does not. Refuted under half.
 - A prediction that fails is reported as a result.
 
+## Part B job, not run (2026-11-15)
+
+Not run: no prefix-file input in `jobs/run_cell.py` on `main` or `origin/handoff` when Part A ended, and the ceiling is 13
+base samples (0.65 point) and 0 RL samples. To run it once a prefix input exists:
+
+- Plan: `data/repair/plan_v1.json`, built by `prep/repair_plan.py` from `results/repair/offline-01/rows.jsonl`: per model the
+  eligible samples (base 21, RL 0) and 100 control samples (right under v3, finished, `random.Random(0)`), each with the
+  sha256 of its stored text and its seed (95,000,000 + 10,000 x sample + problem index).
+- Request per plan row: `n13_score.render_ids(problem)` + `rln4_lib.encode_answer(stored text)` ids + the ids of the suffix
+  `"\n\nThus, the final answer is \(\boxed{"` (RL tokenizer), to the row's own model, T 1.0 / top-p 1.0, `max_tokens` 64.
+  Suffix chosen from the endings of right answers (`readout.json`, `right_answer_endings_top12`): `Thus, the final
+  answer is \(` is RL's most frequent non-empty answer-line opening (46 right answers; 19 of the base's), and RL boxes
+  1,838 of its 1,840 right answers.
+- Jobs: one H100 job per model through `uv run tools/gpu.py submit h100 --hours 1`, base 121 requests, RL 100 (controls
+  only). At most 221 x 64 = 14,144 generated tokens; a few H100 minutes per job, mostly the model load. No hosted provider serves both checkpoints with raw prefill, so this is a GPU job (AGENTS.md, Compute 7).
+- Before the job: laptop dry run with a stand-in engine; smoke of 10 rows read by hand (the continuation must close the box
+  and stop).
+- Score: v3 and v4a on stored text + suffix + continuation. Eligible: right of 21 against 8 under v4a alone (H5). Control:
+  right of 100 per model (must stay 100; each change is read).
+
 ## Deviations
 
-(none yet)
+- 2026-11-15, after the first scoring of v4 and after reading its 16 wrong-to-right samples: 6 are wrongly accepted (5 cap
+  hits where a lower-case "the answer is X" sits in unfinished reasoning; 1 finished answer whose final line states another
+  value). Amendment v4a: R2 fires only when the answer ended with the stop token, and R3 is tried before R2 (the last line is
+  the final statement; a lower-case marker may sit in the reasoning). v4 as written is kept and reported beside v4a. v4a was
+  fixed on the same samples it is scored on, so its numbers are optimistic.
+- The upper bound's value list was widened after the first run (it had 13 base samples in the last 5 lines and missed plain
+  final lines that the rules read): lower-case marker rests and each of the last 5 lines as plain text were added. The first
+  run's folder was not committed; `offline-01` is the run with the widened list.
+- The audit's 17 planted wrong answers are not in git (result-e78dfe: scratch). The test uses the 10 negative cases of
+  `rln4_grader_v3_test.py`, the 16 planted unequal pairs of `n13_score` and 11 new cases: 37 wrong cases under 6 rule sets
+  and v4a.
+- Hand reading of the upper bound: 20 samples drawn with seed 0 from the 31 finished or no-answer base samples of the
+  widened list.
+- Part B was not run (see above).
