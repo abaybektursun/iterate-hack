@@ -1,0 +1,44 @@
+[
+ {
+  "ordered_right": true,
+  "good": {
+   "problem_index": 1,
+   "sample": 0,
+   "n_tokens": 4280,
+   "score_v3": 1,
+   "cap_hit": false,
+   "extracted_v3": "p - q",
+   "probe_score": 1.763
+  },
+  "bad": {
+   "problem_index": 1,
+   "sample": 1,
+   "n_tokens": 5285,
+   "score_v3": 0,
+   "cap_hit": false,
+   "extracted_v3": "2(p - q)",
+   "probe_score": 0.892
+  }
+ },
+ {
+  "ordered_right": false,
+  "good": {
+   "problem_index": 4,
+   "sample": 1,
+   "n_tokens": 3869,
+   "score_v3": 1,
+   "cap_hit": false,
+   "extracted_v3": "Evelyn",
+   "probe_score": 1.496
+  },
+  "bad": {
+   "problem_index": 4,
+   "sample": 0,
+   "n_tokens": 4938,
+   "score_v3": 0,
+   "cap_hit": false,
+   "extracted_v3": "Angela",
+   "probe_score": 1.605
+  }
+ }
+]
