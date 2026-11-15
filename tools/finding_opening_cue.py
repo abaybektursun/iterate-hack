@@ -30,6 +30,9 @@ DATA = {
     "plain": {"right": 224, "right_v1": 196, "nothing_extracted": 129, "cap_hits": 8},   # cells.base_plain_1.0
     "cue": {"right": 410, "right_v1": 389, "nothing_extracted": 25, "cap_hits": 27},      # cells.base_opener_1.0
     "flips": {"up": 209, "down": 23},  # rows: right only with the cue, right only without it (metrics.json two_by_two)
+    # rows, t3_start: plain answers whose first character is a space and then a lower-case letter (the model goes on with
+    # the prompt's last sentence), and empty answers
+    "plain_starts": {"go_on": 126, "empty": 21},
     "plain_t06": {"right": 319},  # cells.base_plain_0.6 (T 0.6 / top-p 0.95)
     # The same pair at T 0.6 / top-p 0.95: cells.base_opener_0.6 (right_v3, cap_hits) and cells.rl_0.6.
     "t06": {"cue": 354, "cue_cap_hits": 119, "rl": 464},
@@ -156,8 +159,9 @@ PANELS = [
       f"{SHARE_BEST} % of the gap to RL, not {SHARE} %.",
       f"Part of the gain is answers that end in a readable form. With the plain prompt {DATA['plain']['nothing_extracted']} of "
       f"{N} answers hold no final answer that the grader can find, and with the cue {DATA['cue']['nothing_extracted']}. "
-      "Many plain answers start by going on with the prompt's own instructions; open a dot to read one. "
-      "It is one pair of models, one benchmark and one sample per problem."]],
+      f"In {DATA['plain_starts']['go_on']} of the {N} plain answers the first word is in lower case: the model goes on "
+      f"writing the prompt's last sentence. {DATA['plain_starts']['empty']} are empty. Open a dot to read one. It is one pair "
+      "of models, one benchmark and one sample per problem."]],
     ["run", "How to reproduce it",
      "One command runs the cue on one GPU, and the same command with --prompt plain runs the control.",
      ["uv run tools/gpu.py submit h100 --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python "
@@ -1214,5 +1218,8 @@ if __name__ == "__main__":  # run from the repository root
     assert (sum(p[3] == "r" for p in PROBLEMS), sum(p[4] == "r" for p in PROBLEMS)) == (PLAIN, CUE)
     assert (sum(p[4] == "r" and p[3] != "r" for p in PROBLEMS), sum(p[3] == "r" and p[4] != "r" for p in PROBLEMS)) == (DATA["flips"]["up"], DATA["flips"]["down"])
     assert json.load(open(DATA["cue_artifact"]))["prefill_text"] == DATA["cue_text"]
+    rows = json.load(open(DATA["rows"]))
+    assert DATA["plain_starts"] == {"go_on": sum(r["t3_start"][:1] == " " and r["t3_start"][1:2].islower() for r in rows),
+                                    "empty": sum(not r["t3_start"].strip() for r in rows)}
     assert (SHARE, SHARE_BEST) == (78, 63)
     print("DATA and PROBLEMS match", DATA["artifact"], "and", DATA["rows"])

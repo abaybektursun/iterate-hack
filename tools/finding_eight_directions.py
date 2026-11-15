@@ -75,6 +75,7 @@ DATA = {
 for _s in DATA["states"]:
     _s["value"] = round(100 * _s["right"] / 500, 1)
 _S = {s["key"]: s for s in DATA["states"]}
+DATA["cue"] = {"right": _S["base-cue"]["right"], "n": 500, "cell": _S["base-cue"]["cell"]}  # tools/findings.py reads it
 DATA["levels"] = {"cue": _S["base-cue"], "rl": _S["rl"]}  # the two marked levels on each scale
 _edit, _vc, _vh = DATA["edit"], DATA["vs_cue"], DATA["vs_cue_hard"]
 _pc = lambda k: f"{_S[k]['value']} %"
