@@ -141,7 +141,7 @@ _T = DATA["t10"]
 _F, _r = _T["four"], _T["right"]
 LINE = (f"At temperature 1.0, after 100 RL steps the model gets {_r[2]:.1f} of {DATA['n']} MATH-500 problems right, close "
         f"to the {_r[1]:.1f} of the base model with the opening cue; at temperature 0.6 it is "
-        f"{DATA['s100_vs_cue']['diff']} ahead (95 % interval {DATA['s100_vs_cue']['ci'][0]} to "
+        f"{DATA['s100_vs_cue']['diff']} problems ahead (95 % interval {DATA['s100_vs_cue']['ci'][0]} to "
         f"{DATA['s100_vs_cue']['ci'][1]}). Most of the RL model's gain over the cue comes later.")
 
 # Not from our runs: the closest published results. The three-token opening cue (' line!\n\nOkay', copied from RL's own

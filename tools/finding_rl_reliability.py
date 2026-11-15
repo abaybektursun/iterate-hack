@@ -91,7 +91,7 @@ PANELS = [
       "The wrong steps were located and labeled with a fixed rubric by language-model judges of the same model as the AI agent "
       "that ran the study. Two passes agree on 44 of 45 answers, but both are the same model, and the hand reads had one reader, "
       "who knew which model wrote each answer.",
-      "A second, independent analysis recomputed the table from the stored answers and got the same counts (source: the team's "
+      "A second agent recomputed the table from the stored answers and got the same counts (source: the team's "
       "board, result-afc423). On "
       f"{DATA['wrongstep']['items']} located wrong steps of the base model, the RL model gives the same step about half the base model's "
       f"probability (factor {DATA['wrongstep']['factor']}; natural-log ratio {_m(DATA['wrongstep']['mean'])}, 95 % interval "

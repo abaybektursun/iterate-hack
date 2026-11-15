@@ -162,7 +162,7 @@ PANELS = [
      f"(temperature 1.0) and copied each one's first wrong step. Each answer was then scored token by token under the "
      f"base model and {len(MODELS)} other models, among them the RL model (Olmo 3.1 RL-Zero-Math).",
      [f"D is how much more likely the model finds the wrong step than the base model does (the difference in "
-      f"log-probability, summed over the step's median {DATA['span_tokens_median']:.0f} tokens), minus the same difference "
+      f"log-probability, summed over the tokens of the step (median {DATA['span_tokens_median']:.0f} tokens)), minus the same difference "
       f"over {DATA['n_control']} spans of equal length elsewhere in the same answer. It is in nats: −0.69 nats means half "
       "as likely. The large number in the picture is exp(mean D).",
       f"Control: the random weight change gives {_m(_avg('random'))} nats (95 % interval {_iv(_q['ci95'])}). Adding a "

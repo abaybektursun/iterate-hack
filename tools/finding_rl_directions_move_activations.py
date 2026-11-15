@@ -101,8 +101,8 @@ _r = lambda k: _E[k]["rms_shift"]
 _pct = lambda k: f"{100 * _E[k]['add_rel']:.3f} %"
 
 TITLE = "RL directions move activations"  # the name on its tile on /findings and in the browser tab
-PROBLEM = ("Does the weight change from training with reinforcement learning (RL) move the model's activations more than "
-           "a random weight change of the same size?")
+PROBLEM = ("Do the largest directions of the weight change from reinforcement learning (RL) move the model's activations "
+           "more than random directions of the same size?")
 LINE = (f"At equal weight norm, the 8 largest directions of RL's weight change in each weight matrix shift the activations "
         f"{round(RATIO)} times more than 8 random directions.")
 
@@ -193,7 +193,7 @@ PANELS = [
       "anywhere in weight space.",
       f"Models trained with other rewards move the residual stream each in its own way. The mean shift of the 8 directions "
       f"of RL-Code (trained on code) has cosine {_c('top8_code31')} with RL's; RL-Zero-Math 3.0 {_c('top8_math30')}, "
-      f"General (general chat) {_c('top8_general30')}, IF (instruction following) {_c('top8_if30')}.",
+      f"General {_c('top8_general30')}, IF (instruction following) {_c('top8_if30')}.",
       "Still open: which input directions RL's change reads, and whether they can be found from the base's activations "
       "alone."]],
     ["how", "How we know",
@@ -228,7 +228,7 @@ PANELS = [
       f"{DATA['P3']['predicted_if']}.",
       "The base model ran in 32-bit floating point with the edit added exactly. The scored models stored their weights in "
       "16-bit floating point (BF16) with stochastic rounding, so their edits carry rounding noise of about the edit's own "
-      "size. This noise may weaken the link between the shifts measured here and their cut-off counts.",
+      "size.",
       f"{DATA['inputs']} answers and one layer. The answers are Base + cue's own text, not the edited models' answers."]],
     ["run", "How to reproduce it",
      f"One GPU job computes every number: python -m studies.rlneurons.jobs.xshift --commit {DATA['job_commit'][:7]}, then "

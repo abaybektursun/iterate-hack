@@ -96,8 +96,8 @@ PANELS = [
      "Base + cue, which has no training, trails the model trained with reinforcement learning (RL) on MATH-500.",
      [f"After the restart Base + cue is {D['rl_gap_after']:.1f} points behind one sample of the RL model at T 0.6 "
       f"(95 % interval {D['rl_gap_after_ci'][0]:.1f} to {D['rl_gap_after_ci'][1]:.1f}).",
-      f"Compared with one sample at T 1.0 and no restart ({D['chart_before']} of {D['n']} right, only "
-      f"{D['chart_before_cap']} of them cut off), the restart at T 0.6 ({D['restart']} of {D['n']}) gains only {CHART:g} points.",
+      f"Compared with one sample at T 1.0 and no restart ({D['chart_before']} of {D['n']} right; "
+      f"{D['chart_before_cap']} of the {D['n']} answers cut off), the restart at T 0.6 ({D['restart']} of {D['n']}) gains only {CHART:g} points.",
       f"After both restarts, {M['still']} answers are still cut off: all three tries reached the limit."]],
     ["how", "How we know", f"Base + cue (the base model Olmo 3 7B with no training, its answer started by the three-token "
      f"opening cue) answered the {D['n']} MATH-500 "

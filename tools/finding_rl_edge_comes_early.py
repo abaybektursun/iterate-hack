@@ -58,9 +58,9 @@ CLOSED_U = _pct(DATA["right_unbiased"], 1)  # 65: the same on the unbiased 155
 
 TITLE = "RL's edge comes early"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "Where inside a math answer does training with reinforcement learning (RL) make its difference?"
-LINE = (f"When the base model with the opening cue finishes answers that the RL model wrote halfway, it closes {CLOSED_U} % "
-        f"of its gap to the RL model on {DATA['n_unbiased']} MATH-500 problems, and {CLOSED} % on a set of {DATA['n']} "
-        "chosen with the base model's own answers.")
+LINE = (f"When the base model with the opening cue finishes answers that the RL model wrote halfway, it closes {CLOSED} % "
+        f"of its gap to the RL model on {DATA['n']} chosen MATH-500 problems, and {CLOSED_U} % on the {DATA['n_unbiased']} of them "
+        "whose choice did not use the base model's answers.")
 
 # Not from our runs: the closest published results. "Sparse but Critical" (arXiv 2603.22446), Sec. 3, Table 1: token-level
 # cross-sampling on Qwen2.5-32B and its SimpleRL version, AIME 2024, Mean@32 at T 1.0: under 4 % of the tokens taken from
@@ -81,8 +81,7 @@ PANELS = [
     ["why", "Why it matters",
      "A method that tries to close the gap to the RL model without training can focus on how an answer starts.",
      [f"Most of the RL model's advantage is in the first half of its answers. At the end it adds little: on {_l['n']} "
-      f"wrong base starts cut at 75 %, the RL model finishes {_l['rl']} right and the base model {_l['base']} (95 % "
-      f"interval of the difference {str(_l['ci'][0]).replace('-', '−')} to {_l['ci'][1]} points).",
+      f"wrong base starts cut at 75 %, the RL model finishes {_l['rl']} right and the base model {_l['base']}.",
       f"Where the base model fails on the RL model's start, it mostly runs out of length: at the 50 % cut, {DATA['cap_wrong'][1][0]} of its "
       f"{DATA['cap_wrong'][1][1]} wrong answers were cut off at {DATA['cap']:,} tokens."]],
     ["how", "How we know",
@@ -108,8 +107,8 @@ PANELS = [
       f"({_U['rl>base'][1]} of {DATA['n_unbiased']} right, against {_U['base>base'][1]} when the base model finishes its "
       f"own start and {_U['rl>rl'][1]} when the RL model does: "
       f"{_U['rl>base'][1] - _U['base>base'][1]} of {_U['rl>rl'][1] - _U['base>base'][1]} problems).",
-      "The text was kept for only 8 hand-offs, all from starts the base model wrote, so the RL model's starts cannot be "
-      "read on this page.",
+      "The repository keeps the text of only 8 hand-offs, all from starts the base model wrote; the rest is only in the jobs' "
+      "raw output, outside git, so the RL model's starts cannot be read on this page.",
       "It does not show which steps in RL's first half carry the advantage.",
       "One base model, its RL version and one benchmark were tested."]],
     ["run", "How to reproduce it",
@@ -781,7 +780,7 @@ function problemPane(k) {
   const block = texts.map(e => `<div class="txt"><p class="cap">Saved text: the end of the start ${WHO[w]} wrote, then ${WHO[tone(e[3])]} continuing it (${e[4] ? "right" : "wrong"})</p>` +
     `<p data-math><span class="w${w}">… ${esc(e[5].replace(/\s+/g, " "))}</span><span class="cut" aria-label="hand-off"></span><span class="f${tone(e[3])}">${esc(e[6].replace(/\s+/g, " "))} …</span></p>` +
     `<p class="end f${tone(e[3])}" data-math>… ${esc(e[7].replace(/\s+/g, " "))}</p></div>`).join("") ||
-    `<p class="txt none">No text is shown: the text was kept for only ${C.examples.length} hand-offs, all from starts Base + cue wrote` +
+    `<p class="txt none">No text is shown: the repository keeps the text of only ${C.examples.length} hand-offs, all from starts Base + cue wrote` +
     `${w ? ", so RL's starts cannot be read" : ""}.</p>`;
   return `<div class="dhead"><h2>MATH-500, problem ${p.i}</h2><button class="close" data-open="">Close</button></div>` +
     `<p class="lead q" data-math>${esc(p.q)}</p>` +

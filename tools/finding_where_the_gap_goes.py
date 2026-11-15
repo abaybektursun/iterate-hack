@@ -95,9 +95,8 @@ PANELS = [
     ["why", "Why it matters",
      f"{pc(_r[1] + _b[1])} % of the gap is problems that other base samples solve or on which the base answer was cut off, so "
      "methods that need no training, such as a vote over samples or a higher token limit, address most of it.",
-     [f"What separates RL from the control is the count: the RL model gains {_RL['gap']} problems and loses {_RL['base_only']} "
-      f"(net {_RL['gap'] - _RL['base_only']}); the control gains {_NULL['gap']} and loses {_NULL['base_only']} "
-      f"(net {_NULL['gap'] - _NULL['base_only']}).",
+     [f"What separates RL from the control is the count: the RL model gains {_RL['gap']} problems and loses {_RL['base_only']}; "
+      f"the control gains {_NULL['gap']} and loses {_NULL['base_only']}.",
       f"Against the RL model after 400 training steps, sampled at temperature 0.6, {pc(_S4['parts']['loop'][1])} % of the gap is "
       "answers that repeat themselves until cut off; the gaps at temperature 1.0 have none."]],
     ["how", "How we know",

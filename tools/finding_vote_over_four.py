@@ -97,14 +97,14 @@ PANELS = [
       f"The paper's RL model is the earlier Olmo 3 release, which scores {DATA['published_rl']} % there. This page compares "
       "with the stronger Olmo 3.1 RL model."]],
     ["why", "Why it matters", "The team's research goal is the cheapest way to reach the RL model's score without training on a reward. A vote over "
-     "samples of the base model reaches the RL model's one-sample range with no training, but it costs "
+     "samples of Base + cue reaches the RL model's one-sample range with no training, but it costs "
      f"{times(K[6][7]):.1f} times the tokens of one RL sample.",
-     [f"Over 6 samples the base model generates {_n(K[6][7])} tokens per problem; one RL sample generates "
+     [f"Over 6 samples Base + cue generates {_n(K[6][7])} tokens per problem; one RL sample generates "
       f"{_n(RL['tokens_single'])}.",
       f"Drawing samples until two answers agree, at most 12, gives {DATA['stop2'][0]} of {N} at {_n(DATA['stop2'][2])} tokens "
       f"per problem, {times(DATA['stop2'][2]):.1f} times one RL sample. No interval was computed for this rule.",
       f"RL's own vote over 4 samples has {RL['vote']} of {N} at {_n(RL['tokens_vote'])} tokens per problem. No vote of "
-      f"the base model here reaches it, not even over 12 samples at {_n(K[12][7])} tokens."]],
+      f"Base + cue here reaches it, not even over 12 samples at {_n(K[12][7])} tokens."]],
     ["how", "How we know", f"The base model with the opening cue (the tokens \" line!\", a blank line, \"Okay\") answered each of the {N} MATH-500 "
      f"problems {DATA['samples']} times at temperature 1.0 and top-p 1.0 (grader version 3). The score of a vote over k samples "
      f"is the mean over {DATA['subsets']} random choices of k of the {DATA['samples']}.",
@@ -117,7 +117,7 @@ PANELS = [
       f"{RL['each'][3]} of {N}. Another RL run at temperature 1.0 had {DATA['rl_other_job']}."]],
     ["limits", "What it does not show", "It does not show that voting replaces RL training: at about equal tokens the RL model is ahead, "
      f"with {RL['vote']} of {N} for its vote over 4 samples at {_n(RL['tokens_vote'])} tokens per problem, against "
-     f"{K[4][1]} for the base model's vote over 4 at {_n(K[4][7])}.",
+     f"{K[4][1]} for Base + cue's vote over 4 at {_n(K[4][7])}.",
      ["Only MATH-500 is measured; this run has not been repeated on the 328 harder problems. There, an earlier comparison "
       "with a vote over 4 samples, in which an answer cut off at the token limit is sampled again, has the RL model "
       f"{DATA['hard_rl_lead_restart'][0]} percentage points ahead (95 % interval "
