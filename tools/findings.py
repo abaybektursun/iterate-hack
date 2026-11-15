@@ -79,6 +79,9 @@ TABLE = {
     "equal-token-frontier": {
         "group": GAIN,
         "figure": lambda m: [f"{m._best['gap'][0]:+.1f}", f"points below one RL sample at {m._best['multiple']:.1f} times the tokens"]},
+    "one-difficulty-axis": {
+        "group": BEHAVIOUR,
+        "figure": lambda m: [f"{m.DATA['diff']['excess_mean']:+.2f}", "problems beyond one difficulty order, mean of 618 pairs of methods"]},
     "rl-edge-comes-early": {
         "group": BEHAVIOUR,
         "figure": lambda m: [f"{m.CLOSED_U} to {m.CLOSED} %", "of the gap closed when the base model finishes RL's half-written answers"]},
