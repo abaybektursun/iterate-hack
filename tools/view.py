@@ -15,8 +15,9 @@ Enter opens, Esc closes. A click on a person shows only that person.
 
   GET /architecture    how the harness works: one interactive picture (architecture.py), fed by the same /data
   GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
-  GET /data            the newest 60 items of each kind and list, and the messages on `all` of the last --hours (JSON)
-                       and every score (board.py score), which the hill-climbing chart at the top draws
+  GET /data            the newest 60 items of each kind and list, the messages on `all` of the last --hours, every score
+                       (board.py score), which the hill-climbing chart at the top draws, and the newest comment of each
+                       open work item (JSON)
   GET /data/<item id>  one item with its votes, comments and thread (JSON); 404 for an unknown id
 
 It reads the same DynamoDB table as board.py and msg.py, with Query only, and never writes to it or moves an agent's
@@ -51,14 +52,24 @@ def newest(listed, n=60):
     return team.table().query(IndexName="new", KeyConditionExpression=Key("listed").eq(listed), ScanIndexForward=False, Limit=n)["Items"]
 
 
+def last_comment(item_id):
+    found = team.table().query(KeyConditionExpression=Key("pk").eq(f"item#{item_id}") & Key("sk").begins_with("comment#"),
+                               ScanIndexForward=False, Limit=1)["Items"]
+    return {k: found[0][k] for k in ("who", "text", "at")}
+
+
 def snapshot():
     with ThreadPoolExecutor(len(LISTS)) as pool:  # one query per list, at the same time
         items = [item for page in pool.map(newest, LISTS) for item in page]
     start = f"{time.time_ns() - int(HOURS * 3600 * 10**9):020d}"
     messages = board.rows(KeyConditionExpression=Key("pk").eq("chan#all") & Key("sk").gt(start))
     scores = board.rows(KeyConditionExpression=Key("pk").eq("scores"))  # every score, in the order its result was posted
+    commented = [i["id"] for i in items if i["listed"] == "work" and i.get("n_comments")]
+    with ThreadPoolExecutor(max(1, len(commented))) as pool:  # the newest comment of each open work item, one query each
+        last = dict(zip(commented, pool.map(last_comment, commented)))
     return {"now_ns": time.time_ns(), "hours": HOURS, "test": team.TEST, "items": items, "messages": messages, "scores": scores,
-            "findings": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in FINDINGS.items()]}
+            "last_comments": last,
+            "findings": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in FINDINGS.items() if not getattr(m, "UNLISTED", False)]}
 
 
 def detail(item_id):
