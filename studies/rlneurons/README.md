@@ -4623,6 +4623,26 @@ is 41.2. All five edits have the same weight norm (0.111 %). Per-problem right a
   read by later layers' input directions, so the shift grows through depth only when the pairs are intact (the full edit grows
   0.67, 3.7, 9.3, 20.4 at layers 8, 16, 24, 31; `rin` 0.09, 0.35, 0.81, 1.5).
 
+#### xshift additivity (SPEC_xshift amendment 2, work-9d7cfb): the layer bands nearly add; compounding between them is 1.2 times
+
+Branch `sharedsub` only. Offline, from run-01's stored mean shift vectors; `results/xshift/additivity-01/readout.json`. Instrument
+check passed: in layers 0 to 10 the full edit's shift equals the L0-10 band's exactly, and the later bands' shifts are exactly 0
+before their first layer.
+
+| Layer read | Full 1.5 edit, norm of mean shift | Sum of the three band edits | Ratio | Cosine | Bands L0-10, L11-21, L22-31 |
+|---|---|---|---|---|---|
+| 10 | 0.449 | 0.449 | 1.00 | 1.000 | 0.449, 0, 0 |
+| 16 | 1.256 | 1.106 | 1.14 | 0.995 | 0.553, 0.779, 0 |
+| 21 | 2.468 | 2.142 | 1.15 | 0.994 | 1.093, 1.669, 0 |
+| 24 | 3.677 | 3.060 | 1.20 | 0.993 | 1.840, 1.789, 0.646 |
+| 31 | 10.009 | 8.292 | 1.21 | 0.995 | 4.024, 1.998, 6.120 |
+
+- R1 not met: 1.21 at layer 31, under the 1.5 predicted and at the edge of the refutation line (1.2). The edited layers reading
+  each other's written directions adds about 20 %; it does not explain the 12-fold gap between the paired and the input-only edit.
+- What the table shows instead: the L0-10 band's shift grows 9 times after its last edited layer (0.449 at layer 10, 4.024 at
+  layer 31), through layers that are the unedited base. Not tested: whether the base amplifies RL's written directions more than
+  random ones of the same size at layer 10 (run-02's `rin` grows 17 times from layer 8 to 31, the full edit 30 times).
+
 ## Drift: a switch to Chinese marks a cut-off Think-SFT answer but no label-free sign predicts one early (hard328 n = 328, fresh2026 n = 136, MATH-500 n = 500, laptop, board work-76a232, idea-e37da1)
 
 Question: Think-SFT + cue hits the 16,384 cap on 29 % (hard328) and 45.6 % (fresh2026) of its samples, and a quarter of those

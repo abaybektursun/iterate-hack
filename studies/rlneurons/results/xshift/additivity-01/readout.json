@@ -1,0 +1,66 @@
+{
+ "source": "runs/abaybektursun-1115-130144-40a0/shifts.npz (uv run tools/gpu.py get abaybektursun-1115-130144-40a0), group all",
+ "layers": {
+  "10": {
+   "full": 0.4488896428146882,
+   "sum_of_bands": 0.4488896428146882,
+   "ratio": 1.0,
+   "cos": 1.0000000000000002,
+   "bands": [
+    0.4488896428146882,
+    0.0,
+    0.0
+   ]
+  },
+  "16": {
+   "full": 1.255892723998695,
+   "sum_of_bands": 1.105549304594866,
+   "ratio": 1.135989791481008,
+   "cos": 0.9950409371550344,
+   "bands": [
+    0.5534030750554697,
+    0.778631752442193,
+    0.0
+   ]
+  },
+  "21": {
+   "full": 2.4683957006699644,
+   "sum_of_bands": 2.142415269254146,
+   "ratio": 1.152155576976122,
+   "cos": 0.993579791523426,
+   "bands": [
+    1.0927095993925948,
+    1.6687327945763004,
+    0.0
+   ]
+  },
+  "24": {
+   "full": 3.6765807515306532,
+   "sum_of_bands": 3.0603905639047952,
+   "ratio": 1.2013436438124592,
+   "cos": 0.9930092115604578,
+   "bands": [
+    1.840392380361354,
+    1.7890414249019173,
+    0.646076296158556
+   ]
+  },
+  "31": {
+   "full": 10.008699358027402,
+   "sum_of_bands": 8.292083706351423,
+   "ratio": 1.2070186110592582,
+   "cos": 0.9948884890163617,
+   "bands": [
+    4.024000014850899,
+    1.9982181285835483,
+    6.119778604418915
+   ]
+  }
+ },
+ "spec": "studies/rlneurons/specs/SPEC_xshift.md amendment 2",
+ "what": "norms of mean shift vectors: full 1.5x edit, and the sum of its L0-10, L11-21, L22-31 band edits; bands = the three norms in that order",
+ "instrument_check": {
+  "full_vs_L0-10_band_layers_0_to_10_max_relative_difference": 0.0,
+  "later_bands_max_abs_shift_before_their_first_layer": 0.0
+ }
+}
