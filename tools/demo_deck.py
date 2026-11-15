@@ -73,7 +73,8 @@ def num(x):
 
 # ---------- the embedded pictures ----------
 FIG_THEME = (r"""<script>
-(() => { const t = new URLSearchParams(location.search).get("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; })();
+(() => { const t = new URLSearchParams(location.search).get("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+  if (top === window) document.documentElement.style.setProperty("background", "var(--paper)", "important"); })();  // opened by itself, a see-through figure stands on its own paper
 </script>""")
 
 

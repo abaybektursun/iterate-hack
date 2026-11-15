@@ -703,7 +703,7 @@ function memory() {
     const rp = rEl.map((m, i) => placeMark(m, RD[i], Pr, false));
     set(F.who, "x", f1(rp[0].f[0])); set(F.who, "y", f1(rp[0].f[1] + 34));
     set(F.only, "x", f1((rp[1].h[0] + rp[1].t[0]) / 2 - 8)); set(F.only, "y", f1((rp[1].h[1] + rp[1].t[1]) / 2 + 4));
-    sEl.forEach((tx, i) => { const q = Pr(face(SL[i][2] * R, SL[i][1])); set(tx, "x", f1(q[0])); set(tx, "y", f1(q[1] + 4)); });
+    sEl.forEach((tx, i) => { const q = Pr(face(SL[i][2] * R, SL[i][1])); set(tx, "x", f1(q[0])); set(tx, "y", f1(q[1] + 4 - (!i && innerWidth <= 500 ? 7 : 0))); });  // on a phone "Board" stands clear of the back rim
 
     /* the replay */
     const wr = WR.find(w => w.sec === C.sec), wPath = pathOf([wr.head, wr.to, dFace]);
