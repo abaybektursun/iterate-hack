@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": 228, "low": 216, "high": 240, "reason": "The theory's 'overdose costs right answers only in proportion to long unsolved answers' applies: Think-SFT's long answers are mostly unfinished work, not loops, so 3x mainly cuts cap hits (82 to 60) at little cost. That keeps the new seed near the first 232, minus some regression toward the 1.5x (220) and random-3x (213) cells."},
+{"id": "t10", "value": 39, "low": 31, "high": 48, "reason": "Fixed log-odds shift per unit of size: on hard328, size -1 moves cap hits 77 to 96 (+0.30 logit). Applied to the cued base's 27/500 on MATH-500, that gives about 36/500, or about 18 on the unrun shard 0, added to the 20 measured on shard 1."},
+{"id": "t11", "value": 377, "low": 363, "high": 391, "reason": "Measured 188/250 on shard 1. For shard 0, the theory's log-odds shift gives about 19 cap hits (scored wrong); the other ~231 finished answers are taken at shard 1's 81.7 % right, giving about 189."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t16", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t17", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t18", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t19", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t20", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}

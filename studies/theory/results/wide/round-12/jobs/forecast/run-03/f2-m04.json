@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": 228, "low": 213, "high": 242, "reason": "Theory: the native Think-SFT format ends with a post-think summary that restates the answer, so nothing is lost to the grader; anchored on the paired T 1.0 native cell (232/328) with a small allowance for T 0.6."},
+{"id": "t02", "value": 472, "low": 462, "high": 481, "reason": "Native-format clause (the summary restates the answer, so v3 reads it); anchored on the paired T 1.0 native MATH-500 cell, 474/500 at cap 32,768."},
+{"id": "t03", "value": 400, "low": 386, "high": 414, "reason": "Theory: Math directions push a boxed ending that competes with the final code block, so the one-sample 411 should fall back toward the Code-direction level (386-399; 1.5x+1.5x gave 387)."},
+{"id": "t04", "value": 400, "low": 386, "high": 414, "reason": "Same clause as t03 (the boxed ending competes with the code block); a second seed regresses from 411 toward the Code-alone range."},
+{"id": "t05", "value": 401, "low": 389, "high": 413, "reason": "Theory: RL installs one terminal marker (the final python block), so RL-Code's 401/538 should hold at a new seed, give or take seed noise."},
+{"id": "t06", "value": 401, "low": 389, "high": 413, "reason": "Same as t05: RL-Code's single terminal marker keeps it near 401."},
+{"id": "t07", "value": 390, "low": 376, "high": 404, "reason": "RL-Code's directions install the code-block ending (no-block answers 34 to 8 at 1x); the level is the 1x/1.5x/2x cells, 386-399."},
+{"id": "t08", "value": 390, "low": 376, "high": 404, "reason": "Same as t07 at the second seed."},
+{"id": "t09", "value": 226, "low": 213, "high": 239, "reason": "Math directions install a boxed terminal marker that makes Think-SFT finish (cap hits 82 to 60); the seed-3,000,000 value was 232, regressed slightly toward 220 at 1.5x, with Think-SFT seed spread of about 10."},
+{"id": "t10", "value": 40, "low": 29, "high": 52, "reason": "Removing RL's terminal-marker directions leaves the base's mixed endings; shard 1/2 had 20 cap hits of 250, doubled for 500."},
+{"id": "t11", "value": 376, "low": 362, "high": 390, "reason": "With the RL marker removed, endings become plain 'Answer: X' lines, which v3 reads; shard 1/2 scored 188/250, doubled."},
+{"id": "t12", "value": 368, "low": 338, "high": 398, "reason": "Theory: under the raw template Think-SFT sometimes does not end on the gradable marker (here the final python block) and runs long, so it scores below RL-Code's 401."},
+{"id": "t13", "value": 345, "low": 310, "high": 380, "reason": "A math framing pushes a boxed or prose ending that competes with the final code block, so the Math cue loses more answers to format than the Code cue does (t12)."},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": 466, "low": 456, "high": 476, "reason": "The RL delta installs one boxed terminal marker, removing Think-SFT's raw-template ending on an unread line (about 4 per sample); from Think-SFT cue singles of 457-462, plus 4 (a=1 gave 467)."},
+{"id": "t16", "value": 233, "low": 222, "high": 244, "reason": "The terminal marker from the RL delta keeps M(2) finishing; its earlier hard328 samples were 234/229/237."},
+{"id": "t17", "value": 247, "low": 239, "high": 255, "reason": "Consistent boxed endings make votes agree; M(2)'s vote over 3 was 246 (Think-SFT's vote over 4 is 241), plus one more sample."},
+{"id": "t18", "value": 243, "low": 233, "high": 253, "reason": "With RL's marker, almost every answer reaches a gradable end by 32,768 tokens (0 cap hits at seed 3,010,000: 245); Think-SFT at this seed and cap is 230."},
+{"id": "t19", "value": 82, "low": 74, "high": 90, "reason": "Accuracy follows whether an answer reaches its marker: Think-SFT's fresh2026 cap hits (46%) are unfinished work that a 32,768 cap lets end with an answer; from the 16,384 vote of 75, plus a hard328-like gain scaled up for the higher cap-hit rate."},
+{"id": "t20", "value": 71, "low": 64, "high": 78, "reason": "Same clause: from the 16,384 single mean of 60, about a quarter of roughly 60 cut answers per sample finish right at 32,768 (hard328: 23 of 93)."}
+]}

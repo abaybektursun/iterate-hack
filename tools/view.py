@@ -239,7 +239,7 @@ PAPERS = {name: (Path(__file__).with_name(name), Path(__file__).parent.parent / 
                                ("the-first-hundred-steps.pdf", "rlneurons/paper-first-steps"),
                                ("no-early-warning.pdf", "rlneurons/paper-no-warning"),
                                ("two-token-limits.pdf", "rlneurons/paper-two-caps"))}
-DECK_PAGE = demo_deck.page(len(FINDINGS), PAPERS)  # the talk deck at /demo, with the number of finding pages and the papers
+DECK_PAGE = demo_deck.page(PAPERS)  # the talk deck at /demo, with the papers
 
 
 # The home page (home.py) is the page / of invariant.team; on any other host / is the board and the home page is /home.
@@ -804,7 +804,7 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   .reach .big { font-size: 26px; line-height: 32px; }
   .search input { font-size: 16px; min-height: 40px; }  /* iOS zooms into a field under 16px */
   .row .open { min-height: 44px; }
-  .people button, #idlebtn, .tabs button, .all { padding-block: 10px; }
+  .people button, #idlebtn, .tabs button, .all { padding-block: 10px; min-height: 40px; }
   .phead .actions button { position: relative; }
   .phead .actions button::after { content: ""; position: absolute; inset: -11px -8px; }  /* a 40 px hit area */
   .chart a.mark:not([data-step]) { pointer-events: none; }  /* 45 overlapping marks; the record steps open from their list */

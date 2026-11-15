@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": 405, "low": 389, "high": 421, "reason": "Theory: on short code tasks Code directions act fully and Math directions add only a partial gain, so the sum sits a little above Code alone at 1x (386); this matches the 411 already measured, pulled slightly toward the mean for a new seed."},
+{"id": "t04", "value": 405, "low": 389, "high": 421, "reason": "Same as t03: Code-calibrated directions plus a partial Math gain on short code answers, 386 plus about 20, with the 411 seen at one seed."},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": 388, "low": 372, "high": 404, "reason": "Theory: Code directions are calibrated to code-answer lengths, so on code they act in full, as the code dial showed (1x 386, 1.5x 399); a new seed gives about 386-390."},
+{"id": "t08", "value": 388, "low": 372, "high": 404, "reason": "Same as t07: Code-calibrated directions on their own domain at 1x, about 386 plus seed noise."},
+{"id": "t09", "value": 226, "low": 212, "high": 240, "reason": "Theory: Math directions are calibrated to long derivations, so on hard328 they keep adding to Think-SFT (209; 1.5x 220, 3x 232 at one seed); a new seed pulls back toward about 226."},
+{"id": "t10", "value": 40, "low": 30, "high": 52, "reason": "Theory: removing the Math finishing calibration lets fewer answers close, but most MATH-500 derivations are short, so the cap-hit rate stays near the measured half (20 of 250), doubled."},
+{"id": "t11", "value": 376, "low": 360, "high": 392, "reason": "Theory: short MATH-500 problems leave little room for the finishing calibration, so accuracy follows the measured shard (188/250) doubled."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": 463, "low": 452, "high": 474, "reason": "Theory: the Math delta's long-derivation calibration has no room to act on short MATH-500 problems, so M(2) stays near Think-SFT's level at a 16k cap (457-464)."},
+{"id": "t16", "value": 233, "low": 222, "high": 244, "reason": "Theory: the Math delta is calibrated to long derivations, so it keeps its gain on hard328; the fourth sample should match samples 1-3 (234, 229, 237)."},
+{"id": "t17", "value": 247, "low": 239, "high": 255, "reason": "Theory: Math calibration keeps M(2)'s hard328 gain (vote over 3 = 246); adding a fourth sample moves the vote by only a few answers."},
+{"id": "t18", "value": 242, "low": 232, "high": 252, "reason": "Theory: long-derivation calibration means extra tokens finish M(2)'s long hard328 answers; the other seed at cap 32,768 gave 245 (Think-SFT 230 at this seed)."},
+{"id": "t19", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t20", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}

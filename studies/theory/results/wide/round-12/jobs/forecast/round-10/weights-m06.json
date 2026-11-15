@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": 403, "low": 388, "high": 418, "reason": "Theory: directions 2-8 of each reward add right answers on finished problems, and at 1x+1x direction 1 is not overdosed (unlike 1.5x+1.5x: 387, 0 cap hits), so the sum stays near the first-seed 411, shrunk toward Code 1.5x/RL-Code (~400) for a new seed."},
+{"id": "t04", "value": 403, "low": 388, "high": 418, "reason": "Same as t03: combined directions 2-8 keep correctness while direction 1 at 1x+1x only finishes; second new seed, centred between the measured 411 and the ~400 dial plateau."},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": 389, "low": 374, "high": 404, "reason": "Theory: top-8 Code directions at 1x finish (direction 1, cap hits 27 -> 9) and add correctness (directions 2-8), giving the measured 386 at 1x, between the cued base 317 and the 1.5x plateau 399; new seed, same level."},
+{"id": "t08", "value": 389, "low": 374, "high": 404, "reason": "Same as t07: Code top-8 at 1x, direction 1 finishing plus directions 2-8 correctness, ~386-399 on the code dial; second new seed."},
+{"id": "t09", "value": 227, "low": 215, "high": 239, "reason": "Theory: at 3x direction 1 makes Think-SFT finish (cap 82 -> 60) while overdose starts to cost boxed answers, so directions 2-8 lift it only to about the 232 measured at seed 3000000, minus some regression for a new seed (Think-SFT seeds span 201-219)."},
+{"id": "t10", "value": 40, "low": 31, "high": 51, "reason": "Theory: subtracting direction 1 removes the stop part, raising cap hits above the cued base's 27 on MATH-500; the odd shard already shows 20 of 250, so about twice that over 500."},
+{"id": "t11", "value": 376, "low": 362, "high": 390, "reason": "Theory: removing the top-8 subtracts the stop/format part (141 of 250 answers unboxed, but v3 reads 'Answer: X') and the correctness part, so the score falls below the cued base's 410; the odd shard's 188/250 doubles to about 376."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t16", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t17", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t18", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t19", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t20", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}
