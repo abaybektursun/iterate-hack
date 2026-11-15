@@ -2,13 +2,16 @@
  "theories": {
   "r4-m10": {
    "rival": "By step 100, RL-Zero-Math has mainly taught the base to open in the RL model's own deliberation mode (the ' line!\\n\\nOkay' opening that the cue forces in the base), not a sharper, lower-entropy policy; at T 0.6 / top-p 0.95 this long-deliberation mode loops exactly as the cued base does (119 cap hits vs 65 plain), so cap hits jump to roughly the cued-base level at step 100 and stay flat through step 400, until later commit-and-stop training (truncation negatives) removes them.",
-   "computed": 3,
-   "tests": 3,
-   "total_gain": -1.305,
+   "computed": 6,
+   "tests": 6,
+   "separating": 2,
+   "total_gain": -7.809,
    "state": "loses to rival",
+   "no_offline_test": null,
    "rows": [
     {
      "k": 1,
+     "turn": 1,
      "experiment": "Share of RL step-100 plain MATH-500 answers (T 0.6 / top-p 0.95) that open in the 'Okay' deliberation format.",
      "measured": 0.956,
      "theory": {
@@ -21,11 +24,13 @@
       "low": 0.48,
       "high": 0.93
      },
+     "same_prediction": true,
      "theory_should_say": "The theory has step 100 barely changed and only concentrating on the base's existing paths, so it implies a share near the plain base's own rate of about 0.34 (168 of 500 open '.\\n\\nOkay'), maybe a little higher. The rival says early RL installs the RL opening on most problems.",
      "gain": -0.4317
     },
     {
      "k": 2,
+     "turn": 1,
      "experiment": "Paired cap-hit rate difference at RL step 400, cued prompt minus plain prompt, MATH-500 at T 0.6 / top-p 0.95.",
      "measured": -0.027999999999999997,
      "theory": {
@@ -38,11 +43,13 @@
       "low": -0.04,
       "high": 0.06
      },
+     "same_prediction": true,
      "theory_should_say": "The theory reads the cue's effect on the base (cap hits 65 -> 119, about +0.11) as added effective sharpness, which should stack on a policy that is already sharper, so it implies a clearly positive difference, around +0.05 to +0.11. The rival says step 400 already writes the cue's mode by itself, so the cue adds about nothing.",
      "gain": -0.5078
     },
     {
      "k": 3,
+     "turn": 1,
      "experiment": "Ratio of median generated length of finished answers, RL step 100 over base, plain MATH-500 at T 0.6 / top-p 0.95.",
      "measured": 2.251572327044025,
      "theory": {
@@ -55,20 +62,81 @@
       "low": 1.3,
       "high": 2.9
      },
+     "same_prediction": true,
      "theory_should_say": "The theory's early phase concentrates the policy on the base's own high-probability, accuracy-raising paths. Its finished answers then stay base-like in length, a ratio near 1.0-1.3. The rival's switch to RL-style deliberation roughly doubles the median finished length (base median about 609 tokens, cue-mode answers much longer).",
      "gain": -0.3652
+    },
+    {
+     "k": 4,
+     "turn": 2,
+     "experiment": "Per-token sharpness of RL step-100 finished answers relative to the cued base: share of step-100 plain finished answers whose mean_logprob exceeds the median mean_logprob of the cued base's finished answers, MATH-500, T 0.6 / top-p 0.95.",
+     "measured": 0.5541561712846348,
+     "theory": {
+      "value": 0.63,
+      "low": 0.49,
+      "high": 0.78
+     },
+     "rival": {
+      "value": 0.53,
+      "low": 0.41,
+      "high": 0.65
+     },
+     "same_prediction": true,
+     "theory_should_say": "The advocate puts most of the entropy drop before step 100. A sharper step-100 policy should then sit well above the cued base per token, around 0.75-0.85 of its finished answers above the cued-base median. The rival keeps step 100's per-token sharpness at the cued base's level (about 0.5), because only the opening mode changed.",
+     "gain": -0.5046
+    },
+    {
+     "k": 5,
+     "turn": 2,
+     "experiment": "Same sharpness share at RL step 400: share of step-400 plain finished answers whose mean_logprob exceeds the median mean_logprob of the cued base's finished answers, MATH-500, T 0.6 / top-p 0.95.",
+     "measured": 0.48009950248756217,
+     "theory": {
+      "value": 0.76,
+      "low": 0.62,
+      "high": 0.89
+     },
+     "rival": {
+      "value": 0.58,
+      "low": 0.45,
+      "high": 0.71
+     },
+     "same_prediction": false,
+     "theory_should_say": "The theory has 73 % of the entropy drop done by step 200 and the step-400 loops driven by that lower entropy. It implies most step-400 finished answers are sharper per token than the cued base, about 0.8. The rival has step 400 still near the cued base's sharpness, about 0.55-0.6.",
+     "gain": -3.0
+    },
+    {
+     "k": 6,
+     "turn": 2,
+     "experiment": "Where step 400's median per-token log-prob on finished answers lies between the cued base and step 2,800, plain prompt for RL checkpoints, MATH-500, T 0.6 / top-p 0.95.",
+     "measured": 0.06726598846379954,
+     "theory": {
+      "value": 0.75,
+      "low": 0.42,
+      "high": 1.08
+     },
+     "rival": {
+      "value": 0.25,
+      "low": -0.15,
+      "high": 0.65
+     },
+     "same_prediction": false,
+     "theory_should_say": "With most of the entropy collapse done by step 200 (2505.22617), the theory puts step 400 most of the way to step 2,800 in per-token sharpness, about 0.75-0.9. The rival puts it near the cued base, about 0.25, because steps 100-400 changed the mode and left the per-token distribution alone.",
+     "gain": -3.0
     }
    ]
   },
   "r4-m01": {
    "rival": "The cued base's loop hazard at T 0.6 is a property of the problem rather than of its own text so far: under truncated low-temperature sampling a stuck model locks into a repeat at a roughly steady rate per token (2610.24715), so problems whose solutions must run long (the hard ones, long for RL too) collect the loops, early zlib compressibility predicts loops only across problems because those problems produce well-compressing enumerations and case lists, and RL's prefix helps because it carries the solution further, not because it is less self-similar.",
-   "computed": 3,
-   "tests": 3,
-   "total_gain": 4.427,
-   "state": "beats rival",
+   "computed": 5,
+   "tests": 5,
+   "separating": 0,
+   "total_gain": 1.111,
+   "state": "not separated from rival",
+   "no_offline_test": null,
    "rows": [
     {
      "k": 1,
+     "turn": 1,
      "experiment": "Within one problem, cued base at T 0.6 / top-p 0.95: is the opening of a sample that hit the cap more compressible than the opening of a fresh restart of the same problem that finished?",
      "measured": 0.8043478260869565,
      "theory": {
@@ -81,11 +149,13 @@
       "low": 0.41,
       "high": 0.65
      },
+     "same_prediction": true,
      "theory_should_say": "The theory says the capped sample's own history was already more self-similar, as its own within-problem prediction puts it, so it should give about 0.62-0.65. The rival says the hazard is fixed by the problem, so two samples of the same problem have equally compressible openings, about 0.5.",
      "gain": 3.0
     },
     {
      "k": 2,
+     "turn": 1,
      "experiment": "Does problem difficulty, measured by RL's answer length on the same problem, predict a later rule-A loop in the cued base at T 0.6 / top-p 1.0, on the same rows where early compressibility was tested?",
      "measured": 0.6433452168746286,
      "theory": {
@@ -98,11 +168,13 @@
       "low": 0.61,
       "high": 0.83
      },
+     "same_prediction": true,
      "theory_should_say": "The theory holds that difficulty acts on the loop hazard only through the self-similarity of the base's own text, so a proxy measured on another model's answer should predict no better than the base's own compressibility, about 0.6-0.67. The rival makes difficulty the direct cause, so it predicts clearly better, about 0.72.",
      "gain": 0.739
     },
     {
      "k": 3,
+     "turn": 1,
      "experiment": "Does early compressibility still predict a rule-A loop once problems are matched on difficulty (AUROC computed within quartiles of RL answer length)?",
      "measured": 0.6447368421052632,
      "theory": {
@@ -115,20 +187,62 @@
       "low": 0.46,
       "high": 0.68
      },
+     "same_prediction": true,
      "theory_should_say": "The theory makes self-similarity the proximate cause, so compressibility should keep its predictive power among problems of equal difficulty, about 0.65, close to the unstratified 0.67. The rival says most of that 0.67 comes from mixing easy and hard problems, so it should fall toward 0.5, about 0.57.",
      "gain": 0.6884
+    },
+    {
+     "k": 4,
+     "turn": 2,
+     "experiment": "On the 78-problem K pool, restricted to problems where the RL-prefix continuation's opening text is at least as compressible as the own-prefix continuation's: how much more often does the RL-prefix arm finish than the own-prefix arm?",
+     "measured": 0.375,
+     "theory": {
+      "value": 0.12,
+      "low": -0.07,
+      "high": 0.31
+     },
+     "rival": {
+      "value": 0.25,
+      "low": 0.06,
+      "high": 0.44
+     },
+     "same_prediction": true,
+     "theory_should_say": "The theory says the base finishes from RL's prefix because that text is less self-similar, so where RL's text is as self-similar as the base's own, the advantage should vanish (about 0.0 to 0.05). The rival says RL's prefix helps because it carries the solution further, so it keeps most of the overall +0.32 advantage (about 0.25).",
+     "gain": -1.8515
+    },
+    {
+     "k": 5,
+     "turn": 2,
+     "experiment": "Among the cued base's rule-A loops at T 0.6 / top-p 1.0, does a more compressible opening bring the loop onset earlier (rank correlation of opening compressibility with onset position)?",
+     "measured": -0.07436226738183375,
+     "theory": {
+      "value": 0.2,
+      "low": -0.03,
+      "high": 0.43
+     },
+     "rival": {
+      "value": 0.06,
+      "low": -0.16,
+      "high": 0.28
+     },
+     "same_prediction": true,
+     "theory_should_say": "The theory says the hazard at a position grows with how self-similar the text so far is, so a more compressible opening should lock earlier, a positive rho of about 0.25 to 0.35. The rival says that once the problem has the model stuck, the lock comes at a steady per-token rate, so onset is nearly independent of how compressible the opening is (about 0.05).",
+     "gain": -1.4651
     }
    ]
   },
   "r4-m08": {
    "rival": "Exposure plays no part: the RL-minus-cued-base gap is set only by how long and hard a problem is, because the base fails to commit or terminate on long chains. The +6.9-point post-cutoff excess is single-sample noise on about 60 post problems, and short, low-entropy right answers are the generic confidence-length relation that any sampled model shows on easy problems.",
-   "computed": 3,
-   "tests": 3,
-   "total_gain": -1.572,
+   "computed": 5,
+   "tests": 5,
+   "separating": 0,
+   "total_gain": -2.652,
    "state": "loses to rival",
+   "no_offline_test": null,
    "rows": [
     {
      "k": 1,
+     "turn": 1,
      "experiment": "Independent replication at T 0.6 of the stratified post-minus-pre paired gap (RL plain minus base cue) on the clean harder 328, matched on RL answer length, using different samples and a different decoding setting from tests.json.",
      "measured": -5.63942436083997,
      "theory": {
@@ -141,11 +255,13 @@
       "low": -10.0,
       "high": 12.0
      },
+     "same_prediction": true,
      "theory_should_say": "The theory treats exposure as independent of decoding and sitting under any termination effect, so it implies a positive post-minus-pre excess of about +7 points here as at T 1.0. With independent samples, the no-exposure mechanism expects the T 1.0 excess to vanish, to about 0.",
      "gain": -0.418
     },
     {
      "k": 2,
+     "turn": 1,
      "experiment": "Independent replication at T 0.6 of the both-right base/RL length comparison: median log length ratio, pre-cutoff minus post-cutoff, on the clean harder 328.",
      "measured": -0.19431648776581323,
      "theory": {
@@ -158,11 +274,13 @@
       "low": -0.5,
       "high": 0.5
      },
+     "same_prediction": true,
      "theory_should_say": "Recall shortens the base's right answers on pre-cutoff problems only, so the theory implies a negative difference of about -0.3, as it predicted for T 1.0. With no exposure effect there is no year dependence, so the expected difference is about 0.",
      "gain": -0.2086
     },
     {
      "k": 3,
+     "turn": 1,
      "experiment": "MATH-500: per-token entropy of the RL model's own short right answers relative to its own long right answers (the RL-side counterpart of test 3).",
      "measured": 0.7662885079105015,
      "theory": {
@@ -175,8 +293,47 @@
       "low": 0.68,
       "high": 0.96
      },
+     "same_prediction": true,
      "theory_should_say": "The theory attributes the low-entropy short right answers to the base recalling pretraining solutions, while RL wins by learned procedures that do not depend on recall. So it implies that RL's short and long right answers have similar per-token entropy (a ratio near 1.0). A generic confidence-length effect gives RL about the same ratio as the base (about 0.82-0.85).",
      "gain": -0.945
+    },
+    {
+     "k": 4,
+     "turn": 2,
+     "experiment": "MATH-500, 4 independent samples per model at T 1.0: on problems that both models solve every time and where the base's typical answer is short, how much the base's answer length varies across its own samples, relative to how much RL's varies (median log ratio of coefficients of variation).",
+     "measured": 0.5180097906045676,
+     "theory": {
+      "value": 0.05,
+      "low": -0.35,
+      "high": 0.45
+     },
+     "rival": {
+      "value": 0.2,
+      "low": -0.15,
+      "high": 0.55
+     },
+     "same_prediction": true,
+     "theory_should_say": "The theory says short base right answers are recalled pretraining solutions and RL's are learned procedures. A recalled text comes back at nearly the same length every time, so on these problems the base's CV should sit below RL's, a clearly negative log ratio of about -0.2 to -0.3. Here the base is the noisier, mode-mixing sampler, so its CV is at or above RL's.",
+     "gain": -0.8688
+    },
+    {
+     "k": 5,
+     "turn": 2,
+     "experiment": "MATH-500, same 4-sample rows: base-versus-RL length variability on short problems minus the same on long problems (difference in median log CV ratios).",
+     "measured": -0.020345857212325513,
+     "theory": {
+      "value": -0.15,
+      "low": -0.55,
+      "high": 0.25
+     },
+     "rival": {
+      "value": 0.1,
+      "low": -0.2,
+      "high": 0.4
+     },
+     "same_prediction": true,
+     "theory_should_say": "Recall applies only on the short (recalled) problems, so the theory makes the base unusually consistent there and not on long, procedural problems. That gives a negative difference of about -0.3. Here there is no recall, so the difference is near zero, or slightly positive because the 16,384 cap compresses the length spread of long base answers.",
+     "gain": -0.2121
     }
    ]
   }
