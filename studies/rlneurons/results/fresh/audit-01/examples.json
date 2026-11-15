@@ -1,0 +1,138 @@
+[
+ {
+  "what": "transcribed problem, Think-SFT's vote right and RL's wrong",
+  "unique_id": "hmmt_feb2026_guts/8",
+  "problem": "Let $a_1, a_2, \\ldots$ be a sequence of positive integers such that $a_1 = 2$ and for all $n \\geq 2$, it holds that $a_n$ is the sum of $a_{n-1}$ and the largest prime divisor of $a_{n-1}$. Compute the smallest integer greater than $2026$ that appears in this sequence.",
+  "gold": "2068",
+  "think_sft_rows": [
+   {
+    "sample": 0,
+    "n_new": 8459,
+    "cap_hit": false,
+    "extracted_v3": "2068",
+    "score_v3": 1
+   },
+   {
+    "sample": 1,
+    "n_new": 9569,
+    "cap_hit": false,
+    "extracted_v3": "2068",
+    "score_v3": 1
+   },
+   {
+    "sample": 2,
+    "n_new": 11159,
+    "cap_hit": false,
+    "extracted_v3": "boxed.",
+    "score_v3": 0
+   },
+   {
+    "sample": 3,
+    "n_new": 11994,
+    "cap_hit": false,
+    "extracted_v3": "2068",
+    "score_v3": 1
+   }
+  ],
+  "rl_rows": [
+   {
+    "sample": 0,
+    "n_new": 14542,
+    "cap_hit": false,
+    "extracted_v3": "2075",
+    "score_v3": 0
+   },
+   {
+    "sample": 1,
+    "n_new": 11132,
+    "cap_hit": false,
+    "extracted_v3": "2068",
+    "score_v3": 1
+   },
+   {
+    "sample": 2,
+    "n_new": 12724,
+    "cap_hit": false,
+    "extracted_v3": "2055",
+    "score_v3": 0
+   },
+   {
+    "sample": 3,
+    "n_new": 13509,
+    "cap_hit": false,
+    "extracted_v3": "2071",
+    "score_v3": 0
+   }
+  ],
+  "vote_think_sft": 1,
+  "vote_rl": 0
+ },
+ {
+  "what": "transcribed problem, Think-SFT's vote wrong and RL's right",
+  "unique_id": "hmmt_feb2026_guts/29",
+  "problem": "Compute\n$$\\sum_{k=1}^{4004} \\gcd(k, 4004) \\cos\\left(\\frac{\\pi k}{2002}\\right).$$",
+  "gold": "1440",
+  "think_sft_rows": [
+   {
+    "sample": 0,
+    "n_new": 16384,
+    "cap_hit": true,
+    "extracted_v3": null,
+    "score_v3": 0
+   },
+   {
+    "sample": 1,
+    "n_new": 16384,
+    "cap_hit": true,
+    "extracted_v3": null,
+    "score_v3": 0
+   },
+   {
+    "sample": 2,
+    "n_new": 11809,
+    "cap_hit": false,
+    "extracted_v3": "2004",
+    "score_v3": 0
+   },
+   {
+    "sample": 3,
+    "n_new": 16384,
+    "cap_hit": true,
+    "extracted_v3": null,
+    "score_v3": 0
+   }
+  ],
+  "rl_rows": [
+   {
+    "sample": 0,
+    "n_new": 11312,
+    "cap_hit": false,
+    "extracted_v3": "70",
+    "score_v3": 0
+   },
+   {
+    "sample": 1,
+    "n_new": 10495,
+    "cap_hit": false,
+    "extracted_v3": "1440",
+    "score_v3": 1
+   },
+   {
+    "sample": 2,
+    "n_new": 14328,
+    "cap_hit": false,
+    "extracted_v3": "1440",
+    "score_v3": 1
+   },
+   {
+    "sample": 3,
+    "n_new": 13684,
+    "cap_hit": false,
+    "extracted_v3": "-4004",
+    "score_v3": 0
+   }
+  ],
+  "vote_think_sft": 0,
+  "vote_rl": 1
+ }
+]

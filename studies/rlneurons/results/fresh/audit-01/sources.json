@@ -1,0 +1,50 @@
+{
+ "hmmt_feb2026_guts": {
+  "url": "https://hmmt-archive.s3.amazonaws.com/tournaments/2026/feb/guts/solutions.pdf",
+  "sha256": "503217a27a71e247482d75e18c7a969f0afc2781eb63ead60406f602d54d948f",
+  "pages": 32,
+  "same_file_as_transcribed_v1": true
+ },
+ "hmmt_nov2026_gen": {
+  "url": "https://hmmt-archive.s3.amazonaws.com/tournaments/2026/nov/gen/solutions.pdf",
+  "sha256": "a5194a3f4ae764feefbf4e6761263eb4e9855f47c5420b9c984cc0173c0b49ac",
+  "pages": 11,
+  "same_file_as_transcribed_v1": true
+ },
+ "hmmt_nov2026_thm": {
+  "url": "https://hmmt-archive.s3.amazonaws.com/tournaments/2026/nov/thm/solutions.pdf",
+  "sha256": "9c7b23c441a842cfde8588795888d097fb8e4168419343040695c7ee323bde25",
+  "pages": 11,
+  "same_file_as_transcribed_v1": true
+ },
+ "hmmt_nov2026_team": {
+  "url": "https://hmmt-archive.s3.amazonaws.com/tournaments/2026/nov/team/solutions.pdf",
+  "sha256": "a659f7ba57f66c72f00a2a54760fcbbf8526145160f9230fe74a100f1c38fedb",
+  "pages": 14,
+  "same_file_as_transcribed_v1": true
+ },
+ "hmmt_nov2026_guts": {
+  "url": "https://hmmt-archive.s3.amazonaws.com/tournaments/2026/nov/guts/solutions.pdf",
+  "sha256": "ac7f2703ab9820b1ea6018e1d45bd616830309bf89e99bd2119fa5c8cd45441f",
+  "pages": 31,
+  "same_file_as_transcribed_v1": true
+ },
+ "hmmt_feb2026_algnt": {
+  "url": "https://hmmt-archive.s3.amazonaws.com/tournaments/2026/feb/algnt/solutions.pdf",
+  "sha256": "f90d8c81724646e8f7167dd1326e4f6f406b4c2af850ad1d2b239eb9e470d814",
+  "pages": 8,
+  "same_file_as_transcribed_v1": null
+ },
+ "hmmt_feb2026_comb": {
+  "url": "https://hmmt-archive.s3.amazonaws.com/tournaments/2026/feb/comb/solutions.pdf",
+  "sha256": "a298ab37630c16a047d29d4f43139cbc32136fa1830b9d7ded4b968314894627",
+  "pages": 10,
+  "same_file_as_transcribed_v1": null
+ },
+ "hmmt_feb2026_geo": {
+  "url": "https://hmmt-archive.s3.amazonaws.com/tournaments/2026/feb/geo/solutions.pdf",
+  "sha256": "1dc246db1ae8507b8e83c7acf55e755b0225a95e60f46187801f019817e7f124",
+  "pages": 12,
+  "same_file_as_transcribed_v1": null
+ }
+}

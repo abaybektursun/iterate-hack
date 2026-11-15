@@ -1,0 +1,372 @@
+{
+ "stage1_check": {
+  "material_plants_FLAG_at_stage1": 10,
+  "cosmetic_plants_IDENTICAL_at_stage1": 8,
+  "cosmetic_plants_to_stage2": [
+   "cosmetic-19",
+   "cosmetic-20"
+  ]
+ },
+ "plants": [
+  {
+   "plant": "material-01",
+   "planted_class": "material",
+   "kind": "number + 1",
+   "unique_id": "hmmt_nov2026_guts/23",
+   "original": "Call a set $S$ of distinct positive integers divisorful if for any ordered triple $(a, b, c)$ consisting of not necessarily distinct elements of $S$, $a$ divides $bc$. Compute the least positive integer $n$ such that there exists a divisorful set with exactly $25$ elements containing $n$.",
+   "changed": "Call a set $S$ of distinct positive integers divisorful if for any ordered triple $(a, b, c)$ consisting of not necessarily distinct elements of $S$, $a$ divides $bc$. Compute the least positive integer $n$ such that there exists a divisorful set with exactly $26$ elements containing $n$.",
+   "answer": "720",
+   "spans": [
+    {
+     "a": "26",
+     "b": "25",
+     "before": "exists a divisorful set with exactly",
+     "after": "elements containing n",
+     "stage1": "FLAG"
+    }
+   ],
+   "stage1": "FLAG",
+   "final_class": "MATERIAL",
+   "verdict": "v1 wrong"
+  },
+  {
+   "plant": "material-02",
+   "planted_class": "material",
+   "kind": "number + 1",
+   "unique_id": "hmmt_feb2026_guts/4",
+   "original": "Over all nonnegative integers $a$, $b$, $c$, and $d$ such that\n$$ab + cd = 31 \\quad \\text{and} \\quad ac + bd = 29,$$\ncompute the minimum possible value of $a + b + c + d$.",
+   "changed": "Over all nonnegative integers $a$, $b$, $c$, and $d$ such that\n$$ab + cd = 32 \\quad \\text{and} \\quad ac + bd = 29,$$\ncompute the minimum possible value of $a + b + c + d$.",
+   "answer": "17",
+   "spans": [
+    {
+     "a": "32",
+     "b": "31",
+     "before": "such that ab + cd =",
+     "after": "and ac + bd = 29",
+     "stage1": "FLAG"
+    }
+   ],
+   "stage1": "FLAG",
+   "final_class": "MATERIAL",
+   "verdict": "v1 wrong"
+  },
+  {
+   "plant": "material-03",
+   "planted_class": "material",
+   "kind": "last digit of a number changed",
+   "unique_id": "hmmt_feb2026_guts/23",
+   "original": "Let $\\Gamma$ be a sphere of radius $5$. Let $A$, $B$, $C$, and $D$ be points on $\\Gamma$ such that $AB = BC = CD = DA = 8$ and $\\angle ABC = \\angle BCD = \\angle CDA = \\angle DAB$. Compute $AC$.",
+   "changed": "Let $\\Gamma$ be a sphere of radius $8$. Let $A$, $B$, $C$, and $D$ be points on $\\Gamma$ such that $AB = BC = CD = DA = 8$ and $\\angle ABC = \\angle BCD = \\angle CDA = \\angle DAB$. Compute $AC$.",
+   "answer": "6\\sqrt{2}",
+   "spans": [
+    {
+     "a": "8",
+     "b": "5",
+     "before": "\\Gamma be a sphere of radius",
+     "after": ". Let A , B ,",
+     "stage1": "FLAG"
+    }
+   ],
+   "stage1": "FLAG",
+   "final_class": "MATERIAL",
+   "verdict": "v1 wrong"
+  },
+  {
+   "plant": "material-04",
+   "planted_class": "material",
+   "kind": "number doubled",
+   "unique_id": "hmmt_feb2026_guts/30",
+   "original": "Let $ABC$ be a triangle with $AB = 60$, $AC = 67$, and $BC = 69$. The incircle $\\omega$ of triangle $ABC$ touches sides $\\overline{BC}$, $\\overline{CA}$, and $\\overline{AB}$ at $D$, $E$, and $F$, respectively. Let $D'$ be the point diametrically opposite to $D$ in $\\omega$. Let the common chord of the circumcircles of triangles $BD'F$ and $CD'E$ meet line $BC$ at $X$. Compute $BX$.",
+   "changed": "Let $ABC$ be a triangle with $AB = 122$, $AC = 67$, and $BC = 69$. The incircle $\\omega$ of triangle $ABC$ touches sides $\\overline{BC}$, $\\overline{CA}$, and $\\overline{AB}$ at $D$, $E$, and $F$, respectively. Let $D'$ be the point diametrically opposite to $D$ in $\\omega$. Let the common chord of the circumcircles of triangles $BD'F$ and $CD'E$ meet line $BC$ at $X$. Compute $BX$.",
+   "answer": "45",
+   "spans": [
+    {
+     "a": "122",
+     "b": "60",
+     "before": "be a triangle with AB =",
+     "after": ", AC = 67 , and",
+     "stage1": "FLAG"
+    }
+   ],
+   "stage1": "FLAG",
+   "final_class": "MATERIAL",
+   "verdict": "v1 wrong"
+  },
+  {
+   "plant": "material-05",
+   "planted_class": "material",
+   "kind": "+ to -",
+   "unique_id": "hmmt_feb2026_guts/11",
+   "original": "Compute the number of ordered pairs $(a, b)$ of positive integers such that $\\operatorname{lcm}(a, b) + \\gcd(a, b) = 2026$.",
+   "changed": "Compute the number of ordered pairs $(a, b)$ of positive integers such that $\\operatorname{lcm}(a, b) - \\gcd(a, b) = 2026$.",
+   "answer": "13",
+   "spans": [
+    {
+     "a": "-",
+     "b": "+",
+     "before": "lcm ( a , b )",
+     "after": "\\gcd ( a , b )",
+     "stage1": "FLAG"
+    }
+   ],
+   "stage1": "FLAG",
+   "final_class": "MATERIAL",
+   "verdict": "v1 wrong"
+  },
+  {
+   "plant": "material-06",
+   "planted_class": "material",
+   "kind": "inequality reversed",
+   "unique_id": "hmmt_feb2026_guts/26",
+   "original": "Marin is taking a random walk on a line. For each integer $n$ ranging from $1$ to $10$, inclusive and in order, Marin takes a step of length $F_n$ either left or right with equal probability, where $F_n$ is the $n^{\\text{th}}$ Fibonacci number. Compute Marin's expected distance from his starting point.\n(The Fibonacci numbers are defined by $F_1 = F_2 = 1$ and the recurrence $F_n = F_{n-1} + F_{n-2}$ for all $n \\geq 3$.)",
+   "changed": "Marin is taking a random walk on a line. For each integer $n$ ranging from $1$ to $10$, inclusive and in order, Marin takes a step of length $F_n$ either left or right with equal probability, where $F_n$ is the $n^{\\text{th}}$ Fibonacci number. Compute Marin's expected distance from his starting point.\n(The Fibonacci numbers are defined by $F_1 = F_2 = 1$ and the recurrence $F_n = F_{n-1} + F_{n-2}$ for all $n \\leq 3$.)",
+   "answer": "\\frac{3741}{64}",
+   "spans": [
+    {
+     "a": "\\leq",
+     "b": "\\geq",
+     "before": "- 2 } for all n",
+     "after": "3 . )",
+     "stage1": "FLAG"
+    }
+   ],
+   "stage1": "FLAG",
+   "final_class": "MATERIAL",
+   "verdict": "v1 wrong"
+  },
+  {
+   "plant": "material-07",
+   "planted_class": "material",
+   "kind": "exponent 2 to 3",
+   "unique_id": "hmmt_feb2026_guts/6",
+   "original": "Compute the largest positive integer $n$ such that $n!$ divides\n$$\\binom{256}{128}^{1} \\cdot \\binom{128}{64}^{2} \\cdot \\binom{64}{32}^{4} \\cdot \\binom{32}{16}^{8} \\cdot \\binom{16}{8}^{16} \\cdot \\binom{8}{4}^{32} \\cdot \\binom{4}{2}^{64} \\cdot \\binom{2}{1}^{128}.$$",
+   "changed": "Compute the largest positive integer $n$ such that $n!$ divides\n$$\\binom{256}{128}^{1} \\cdot \\binom{128}{64}^3 \\cdot \\binom{64}{32}^{4} \\cdot \\binom{32}{16}^{8} \\cdot \\binom{16}{8}^{16} \\cdot \\binom{8}{4}^{32} \\cdot \\binom{4}{2}^{64} \\cdot \\binom{2}{1}^{128}.$$",
+   "answer": "256",
+   "spans": [
+    {
+     "a": "3",
+     "b": "2",
+     "before": "128 } { 64 } ^",
+     "after": "\\cdot \\binom { 64 } {",
+     "stage1": "FLAG"
+    }
+   ],
+   "stage1": "FLAG",
+   "final_class": "MATERIAL",
+   "verdict": "v1 wrong"
+  },
+  {
+   "plant": "material-08",
+   "planted_class": "material",
+   "kind": "'distinct' dropped",
+   "unique_id": "hmmt_feb2026_guts/15",
+   "original": "Compute the number of ways to partition $2026$ into the unordered sum of distinct positive integers, each of which is a power of $2$ or a power of $6$.",
+   "changed": "Compute the number of ways to partition $2026$ into the unordered sum of positive integers, each of which is a power of $2$ or a power of $6$.",
+   "answer": "16",
+   "spans": [
+    {
+     "a": "",
+     "b": "distinct",
+     "before": "2026 into the unordered sum of",
+     "after": "positive integers , each of which",
+     "stage1": "FLAG"
+    }
+   ],
+   "stage1": "FLAG",
+   "final_class": "MATERIAL",
+   "verdict": "v1 wrong"
+  },
+  {
+   "plant": "material-09",
+   "planted_class": "material",
+   "kind": "'positive' to 'negative'",
+   "unique_id": "hmmt_feb2026_guts/20",
+   "original": "Derek is at the front of a line, with six clones named Derek #1, Derek #2, Derek #3, Derek #4, Derek #5, and Derek #6 standing behind him in a uniformly random order. For all positive integers $k$ between $1$ and $6$, inclusive, on the $k^{\\text{th}}$ minute from now, Derek #$k$ will swap positions with whoever is standing directly in front of him in the line. Compute the probability that after $6$ minutes, Derek is still at the front of the line.",
+   "changed": "Derek is at the front of a line, with six clones named Derek #1, Derek #2, Derek #3, Derek #4, Derek #5, and Derek #6 standing behind him in a uniformly random order. For all negative integers $k$ between $1$ and $6$, inclusive, on the $k^{\\text{th}}$ minute from now, Derek #$k$ will swap positions with whoever is standing directly in front of him in the line. Compute the probability that after $6$ minutes, Derek is still at the front of the line.",
+   "answer": "\\frac{53}{144}",
+   "spans": [
+    {
+     "a": "negative",
+     "b": "positive",
+     "before": "uniformly random order . For all",
+     "after": "integers k between 1 and 6",
+     "stage1": "FLAG"
+    }
+   ],
+   "stage1": "FLAG",
+   "final_class": "MATERIAL",
+   "verdict": "v1 wrong"
+  },
+  {
+   "plant": "material-10",
+   "planted_class": "material",
+   "kind": "'at least' to 'at most', 'smallest' to 'largest', 'minimum' to 'maximum'",
+   "unique_id": "hmmt_nov2026_guts/18",
+   "original": "Point $D$ lies on side $\\overline{BC}$ of triangle $ABC$ such that $AB = BD = 14$ and $DC = 9$. Let $T$ be a point on line $AD$ such that $\\angle BCT = 90^\\circ$ and $D$ lies between $A$ and $T$. Compute the minimum possible value of $AT$.",
+   "changed": "Point $D$ lies on side $\\overline{BC}$ of triangle $ABC$ such that $AB = BD = 14$ and $DC = 9$. Let $T$ be a point on line $AD$ such that $\\angle BCT = 90^\\circ$ and $D$ lies between $A$ and $T$. Compute the maximum possible value of $AT$.",
+   "answer": "12\\sqrt{7}",
+   "spans": [
+    {
+     "a": "maximum",
+     "b": "minimum",
+     "before": "A and T . Compute the",
+     "after": "possible value of AT",
+     "stage1": "FLAG"
+    }
+   ],
+   "stage1": "FLAG",
+   "final_class": "MATERIAL",
+   "verdict": "v1 wrong"
+  },
+  {
+   "plant": "cosmetic-11",
+   "planted_class": "cosmetic",
+   "kind": "\\frac to \\dfrac",
+   "unique_id": "hmmt_nov2026_gen/5",
+   "original": "Let $\\alpha$ be the unique real number such that both $\\alpha + \\sqrt{\\frac{11}{12}}$ and $\\alpha^3 + \\sqrt{\\frac{11}{12}}$ are positive and rational. Compute $\\alpha^3 + \\sqrt{\\frac{11}{12}}$.",
+   "changed": "Let $\\alpha$ be the unique real number such that both $\\alpha + \\sqrt{\\dfrac{11}{12}}$ and $\\alpha^3 + \\sqrt{\\frac{11}{12}}$ are positive and rational. Compute $\\alpha^3 + \\sqrt{\\frac{11}{12}}$.",
+   "answer": "\\frac{25}{54}",
+   "spans": [],
+   "stage1": "IDENTICAL",
+   "final_class": "IDENTICAL",
+   "verdict": ""
+  },
+  {
+   "plant": "cosmetic-12",
+   "planted_class": "cosmetic",
+   "kind": "$..$ to \\(..\\)",
+   "unique_id": "hmmt_feb2026_guts/24",
+   "original": "Two mice and $100$ pieces of cheese are uniformly and independently placed at random on the boundary of a circle. Each mouse walks to the piece of cheese closest to it, with ties broken independently at random. Compute the probability that the two mice walk to the same piece of cheese.",
+   "changed": "Two mice and \\(100\\) pieces of cheese are uniformly and independently placed at random on the boundary of a circle. Each mouse walks to the piece of cheese closest to it, with ties broken independently at random. Compute the probability that the two mice walk to the same piece of cheese.",
+   "answer": "\\frac{3}{202}",
+   "spans": [],
+   "stage1": "IDENTICAL",
+   "final_class": "IDENTICAL",
+   "verdict": ""
+  },
+  {
+   "plant": "cosmetic-13",
+   "planted_class": "cosmetic",
+   "kind": "spaces and \\, added",
+   "unique_id": "hmmt_feb2026_guts/14",
+   "original": "There exists exactly one ordered pair of positive integers $(m, n)$, both greater than $1$, with the property that, when written out in base $10$, $m \\cdot n = \\underline{ABCD}$ and $\\binom{m}{n} = \\underline{CDAB}$ for distinct nonzero digits $A$, $B$, $C$, and $D$. Compute $m + n$.",
+   "changed": "There exists exactly one ordered pair of positive integers $(m,  n)$,  both greater than $1$,  with the property that,  when written out in base $10$,  $m \\cdot n \\,=\\, \\underline{ABCD}$ and $\\binom{m}{n} \\,=\\, \\underline{CDAB}$ for distinct nonzero digits $A$,  $B$,  $C$,  and $D$. Compute $m + n$.",
+   "answer": "136",
+   "spans": [],
+   "stage1": "IDENTICAL",
+   "final_class": "IDENTICAL",
+   "verdict": ""
+  },
+  {
+   "plant": "cosmetic-14",
+   "planted_class": "cosmetic",
+   "kind": "straight to curly apostrophe (no statement of the 77 has a double quote)",
+   "unique_id": "hmmt_nov2026_guts/32",
+   "original": "Mark has a radioactive ball weighing $1$ gram. During the $n^{\\text{th}}$ minute, each radioactive ball has a $1/2$ chance of splitting into two radioactive balls, each of weight $2^{-n}$ grams (regardless of the ball's initial weight or when it was initially formed). After $7$ minutes, compute the expected value of the total weight in grams of Mark's radioactive balls.",
+   "changed": "Mark has a radioactive ball weighing $1$ gram. During the $n^{\\text{th}}$ minute, each radioactive ball has a $1/2$ chance of splitting into two radioactive balls, each of weight $2^{-n}$ grams (regardless of the ball’s initial weight or when it was initially formed). After $7$ minutes, compute the expected value of the total weight in grams of Mark’s radioactive balls.",
+   "answer": "\\frac{2123}{8192}",
+   "spans": [],
+   "stage1": "IDENTICAL",
+   "final_class": "IDENTICAL",
+   "verdict": ""
+  },
+  {
+   "plant": "cosmetic-15",
+   "planted_class": "cosmetic",
+   "kind": "\\le to \\leq, \\ge to \\geq (or back)",
+   "unique_id": "hmmt_nov2026_thm/4",
+   "original": "After some recent incidents, Snow White has decided to start eating apples again. She eats $1$ apple on day $1$. For each positive integer $n \\geq 2$, she eats $n$ times as many apples on day $n$ as she did on all previous days combined. Compute the number of apples Snow White eats on day $2026$.",
+   "changed": "After some recent incidents, Snow White has decided to start eating apples again. She eats $1$ apple on day $1$. For each positive integer $n \\ge  2$, she eats $n$ times as many apples on day $n$ as she did on all previous days combined. Compute the number of apples Snow White eats on day $2026$.",
+   "answer": "1013 \\cdot 2026!",
+   "spans": [],
+   "stage1": "IDENTICAL",
+   "final_class": "IDENTICAL",
+   "verdict": ""
+  },
+  {
+   "plant": "cosmetic-16",
+   "planted_class": "cosmetic",
+   "kind": "\\left( \\right) added",
+   "unique_id": "hmmt_nov2026_guts/24",
+   "original": "Gregasaurus has a unit square piece of paper with a red dot in one of its corners. A fold consists of the following:\n\n(a) Selecting a line $\\ell$ passing through the interior of the square that divides the square into two regions.\n(b) Picking one of the two regions, and reflecting it across $\\ell$.\n\nGregasaurus folds the square exactly once. Compute the area of the smallest region $R$ such that the red dot must remain in $R$, no matter how Gregasaurus folds the square.",
+   "changed": "Gregasaurus has a unit square piece of paper with a red dot in one of its corners. A fold consists of the following:\n\n\\left(a\\right) Selecting a line $\\ell$ passing through the interior of the square that divides the square into two regions.\n\\left(b\\right) Picking one of the two regions, and reflecting it across $\\ell$.\n\nGregasaurus folds the square exactly once. Compute the area of the smallest region $R$ such that the red dot must remain in $R$, no matter how Gregasaurus folds the square.",
+   "answer": "2\\pi + 2",
+   "spans": [],
+   "stage1": "IDENTICAL",
+   "final_class": "IDENTICAL",
+   "verdict": ""
+  },
+  {
+   "plant": "cosmetic-17",
+   "planted_class": "cosmetic",
+   "kind": "\\ldots to \\dots (or back)",
+   "unique_id": "hmmt_feb2026_guts/8",
+   "original": "Let $a_1, a_2, \\ldots$ be a sequence of positive integers such that $a_1 = 2$ and for all $n \\geq 2$, it holds that $a_n$ is the sum of $a_{n-1}$ and the largest prime divisor of $a_{n-1}$. Compute the smallest integer greater than $2026$ that appears in this sequence.",
+   "changed": "Let $a_1, a_2, \\dots$ be a sequence of positive integers such that $a_1 = 2$ and for all $n \\geq 2$, it holds that $a_n$ is the sum of $a_{n-1}$ and the largest prime divisor of $a_{n-1}$. Compute the smallest integer greater than $2026$ that appears in this sequence.",
+   "answer": "2068",
+   "spans": [],
+   "stage1": "IDENTICAL",
+   "final_class": "IDENTICAL",
+   "verdict": ""
+  },
+  {
+   "plant": "cosmetic-18",
+   "planted_class": "cosmetic",
+   "kind": "final period removed",
+   "unique_id": "hmmt_nov2026_thm/7",
+   "original": "Mulan orders $10$ soldiers to stand in a line. Each soldier points to one of their neighboring soldiers independently and uniformly at random. Compute the probability that exactly $3$ pairs of neighboring soldiers point at each other.",
+   "changed": "Mulan orders $10$ soldiers to stand in a line. Each soldier points to one of their neighboring soldiers independently and uniformly at random. Compute the probability that exactly $3$ pairs of neighboring soldiers point at each other",
+   "answer": "\\frac{63}{128}",
+   "spans": [],
+   "stage1": "IDENTICAL",
+   "final_class": "IDENTICAL",
+   "verdict": ""
+  },
+  {
+   "plant": "cosmetic-19",
+   "planted_class": "cosmetic",
+   "kind": "'Compute' to 'Find'",
+   "unique_id": "hmmt_nov2026_thm/10",
+   "original": "Merida paints an equilateral triangle $ABC$ with side length $4$ units on her castle wall. She attempts to shoot an arrow at each vertex of this triangle. However, her arrows strike the wall at points $D$, $E$, and $F$, which are $1$, $2$, and $3$ units away from $A$, $B$, and $C$, respectively. Furthermore, the centroid of triangle $DEF$ coincides with the centroid of triangle $ABC$. Compute the maximum possible area of triangle $DEF$.",
+   "changed": "Merida paints an equilateral triangle $ABC$ with side length $4$ units on her castle wall. She attempts to shoot an arrow at each vertex of this triangle. However, her arrows strike the wall at points $D$, $E$, and $F$, which are $1$, $2$, and $3$ units away from $A$, $B$, and $C$, respectively. Furthermore, the centroid of triangle $DEF$ coincides with the centroid of triangle $ABC$. Find the maximum possible area of triangle $DEF$.",
+   "answer": "4\\sqrt{3}+2\\sqrt{21}",
+   "spans": [
+    {
+     "a": "Find",
+     "b": "Compute",
+     "before": "the centroid of triangle ABC .",
+     "after": "the maximum possible area of triangle",
+     "stage1": "WORDS"
+    }
+   ],
+   "stage1": "WORDS",
+   "final_class": "COSMETIC",
+   "verdict": ""
+  },
+  {
+   "plant": "cosmetic-20",
+   "planted_class": "cosmetic",
+   "kind": "\\cdot to \\times",
+   "unique_id": "hmmt_nov2026_guts/22",
+   "original": "Compute the sum of the digits in the base $10$ representation of $$\\left\\lfloor 10^{99} \\cdot \\frac{100\\,008}{700\\,007} \\right\\rfloor.$$ (Here, $\\lfloor x \\rfloor$ denotes the greatest integer less than or equal to $x$.)",
+   "changed": "Compute the sum of the digits in the base $10$ representation of $$\\left\\lfloor 10^{99} \\times \\frac{100\\,008}{700\\,007} \\right\\rfloor.$$ (Here, $\\lfloor x \\rfloor$ denotes the greatest integer less than or equal to $x$.)",
+   "answer": "440",
+   "spans": [
+    {
+     "a": "\\times",
+     "b": "\\cdot",
+     "before": "representation of \\lfloor 10 ^ 99",
+     "after": "\\frac { 100 008 } {",
+     "stage1": "FLAG"
+    }
+   ],
+   "stage1": "FLAG",
+   "final_class": "COSMETIC",
+   "verdict": ""
+  }
+ ],
+ "final_check": {
+  "material_plants_MATERIAL_and_changed_side_named_wrong": 10,
+  "cosmetic_plants_MATERIAL": 0
+ }
+}

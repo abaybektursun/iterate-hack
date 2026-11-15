@@ -1,0 +1,44 @@
+[
+  {
+    "number": 2,
+    "problem": "Ariel is organizing her collection of human treasures. She can divide her dinglehoppers evenly into groups of $102$, and her snarfblatts evenly into groups of $103$. When she combines all of her dinglehoppers and snarfblatts, she can divide them evenly into groups of $100$. Compute the minimum possible (nonzero) total number of dinglehoppers and snarfblatts in Ariel’s collection.",
+    "answer": "3500",
+    "figure": false,
+    "note": ""
+  },
+  {
+    "number": 4,
+    "problem": "After some recent incidents, Snow White has decided to start eating apples again. She eats $1$ apple on day $1$. For each positive integer $n \\geq 2$, she eats $n$ times as many apples on day $n$ as she did on all previous days combined. Compute the number of apples Snow White eats on day $2026$.",
+    "answer": "1013 \\cdot 2026!",
+    "figure": false,
+    "note": ""
+  },
+  {
+    "number": 5,
+    "problem": "Rapunzel’s hair is getting too long again, so she decides to cut it every day for the next $6$ days. At the start of the first day, her hair is $2026$ feet long. First, she chooses a positive integer $m$. Then, on the $n^{\\text{th}}$ day, she cuts $\\frac{m}{n}$ feet off her hair, then cuts $\\frac{1}{n+1}$ of her remaining hair length off. Suppose that Rapunzel’s hair does not grow back, and that at the end of each of the $6$ days, her hair length is an integer number of feet. Compute the smallest possible value of $m$.",
+    "answer": "74",
+    "figure": false,
+    "note": "The text layer garbles the two inline fractions (prints 'cuts m ... 1 / n feet off her hair, then cuts n+1 of'); the image shows m/n feet and 1/(n+1) of her remaining hair length, and 'n^th day' with superscript th."
+  },
+  {
+    "number": 6,
+    "problem": "Raya is flying on the dragon Sisu over Kumandra when they spot a small circular island they want to reach. Initially, Raya and Sisu are directly above the point $(0, 0)$. The island consists of all points $(x, y)$ satisfying $$(x - 4)^2 + (y - 6)^2 \\leq 1.$$ Without wind, Sisu can fly at $2$ units per hour in any direction. Additionally, the wind blows Sisu in the positive $x$-direction at a constant rate of $1$ unit per hour. Compute the minimum amount of time, in hours, before Raya and Sisu can be directly above any point on the island. (Assume that they remain at a constant altitude for the entirety of their flight.)",
+    "answer": "\\sqrt{21} - 2",
+    "figure": false,
+    "note": "The text layer loses the exponents (prints (x − 4)2 + (y − 6)2 ≤ 1) and the square root in the answer; the image shows squares and sqrt(21) - 2. The diagram on the page belongs to the solution, not the statement."
+  },
+  {
+    "number": 7,
+    "problem": "Mulan orders $10$ soldiers to stand in a line. Each soldier points to one of their neighboring soldiers independently and uniformly at random. Compute the probability that exactly $3$ pairs of neighboring soldiers point at each other.",
+    "answer": "\\frac{63}{128}",
+    "figure": false,
+    "note": ""
+  },
+  {
+    "number": 10,
+    "problem": "Merida paints an equilateral triangle $ABC$ with side length $4$ units on her castle wall. She attempts to shoot an arrow at each vertex of this triangle. However, her arrows strike the wall at points $D$, $E$, and $F$, which are $1$, $2$, and $3$ units away from $A$, $B$, and $C$, respectively. Furthermore, the centroid of triangle $DEF$ coincides with the centroid of triangle $ABC$. Compute the maximum possible area of triangle $DEF$.",
+    "answer": "4\\sqrt{3} + 2\\sqrt{21}",
+    "figure": false,
+    "note": "The text layer drops the square-root signs in the answer; the image shows 4 sqrt(3) + 2 sqrt(21). The diagram on the page belongs to Solution 1, not the statement."
+  }
+]

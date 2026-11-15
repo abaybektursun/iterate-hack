@@ -1,0 +1,51 @@
+[
+  {
+    "number": 27,
+    "problem": "Crystal writes two $5$-digit positive integers in her journal using every digit exactly once (where leading zeros are not allowed). Compute the maximum possible sum of the digits of the absolute difference between her numbers.",
+    "answer": "40",
+    "figure": false,
+    "note": ""
+  },
+  {
+    "number": 28,
+    "problem": "One hundred players $P_1$, $P_2$, $\\ldots$, $P_{100}$ are playing a game. Each player $P_i$ has an unfair coin that lands heads with probability $p_i$. On the $n^{\\text{th}}$ turn of the game, player $P_n$ flips their coin, where indices are taken modulo $100$. If it lands heads, the game ends immediately and they win. Otherwise, the game continues with the next player's turn.\n\nGiven that each player has a $\\frac{1}{100}$ probability of winning and that $p_{100} = \\frac{6}{7}$, compute $p_1$.",
+    "answer": "\\frac{6}{601}",
+    "figure": false,
+    "note": "Text layer flattens the fractions (prints '1/100' split over lines and 'p100 = 67'); the image shows \\frac{1}{100} and p_{100} = \\frac{6}{7}. The answer line is on page 21: \\frac{6}{601}."
+  },
+  {
+    "number": 29,
+    "problem": "Convex pentagon $BRYAN$ has area $128$ with $\\angle A+\\angle B = 180^\\circ$ and side lengths $BR = 2$, $RY = 12$, $YA = 10$, $AN = 11$ and $NB = 11$. Compute $\\sin(\\angle A)$.",
+    "answer": "\\frac{32}{33}",
+    "figure": false,
+    "note": "The diagram on the page is printed after 'Solution:', so it belongs to the solution, not to the statement. Text layer prints the answer as '32' over '33' on separate lines; the image shows \\frac{32}{33}."
+  },
+  {
+    "number": 30,
+    "problem": "There exists a polynomial $p(x, y)$ with real coefficients and total degree at most $4$ such that $p(m, n)$ is the entry in the $m^{\\text{th}}$ row and the $n^{\\text{th}}$ column of the following table.\n\n$$\\begin{array}{|c|c|c|c|}\\hline 4 & 8 & * & ? \\\\ \\hline 3 & 5 & 9 & * \\\\ \\hline 2 & 3 & 5 & 9 \\\\ \\hline 0 & 1 & 2 & 2 \\\\ \\hline\\end{array}$$\n\nCompute $p(4, 4)$, i.e., the top-right entry in the table.",
+    "answer": "30",
+    "figure": false,
+    "note": "The statement contains a 4x4 table of values (transcribed as an array, rows top to bottom as printed: 4 8 * ?; 3 5 9 *; 2 3 5 9; 0 1 2 2). It is a table, not a drawn diagram, so figure is set to false. Image and text layer agree on all entries."
+  },
+  {
+    "number": 31,
+    "problem": "Let $ABCD$ be a cyclic quadrilateral, and suppose rays $BA$ and $CD$ meet at $E$ and rays $CB$ and $DA$ meet at $F$. Suppose the inradii of triangles $EDA$, $EBC$, $FAB$, and $FCD$ are $5$, $10$, $6$, and $10$, respectively. Compute the area of $ABCD$.",
+    "answer": "80\\sqrt{30}",
+    "figure": false,
+    "note": "The diagram on the page is printed after 'Solution:', so it belongs to the solution, not to the statement."
+  },
+  {
+    "number": 32,
+    "problem": "Mark has a radioactive ball weighing $1$ gram. During the $n^{\\text{th}}$ minute, each radioactive ball has a $1/2$ chance of splitting into two radioactive balls, each of weight $2^{-n}$ grams (regardless of the ball's initial weight or when it was initially formed). After $7$ minutes, compute the expected value of the total weight in grams of Mark's radioactive balls.",
+    "answer": "\\frac{2123}{8192}",
+    "figure": false,
+    "note": "Text layer prints the weight as '2−n'; the image shows the exponent 2^{-n}. Text layer prints the answer as '2123' over '8192' on separate lines; the image shows \\frac{2123}{8192}."
+  },
+  {
+    "number": 33,
+    "problem": "The decimal expansion of $1/179$ has a repeating period of length $178$. Compute the sum of the squares of the digits in this period.",
+    "answer": "5049",
+    "figure": false,
+    "note": ""
+  }
+]

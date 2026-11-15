@@ -1,0 +1,51 @@
+[
+  {
+    "number": 26,
+    "problem": "Marin is taking a random walk on a line. For each integer $n$ ranging from $1$ to $10$, inclusive and in order, Marin takes a step of length $F_n$ either left or right with equal probability, where $F_n$ is the $n^{\\text{th}}$ Fibonacci number. Compute Marin's expected distance from his starting point.\n\n(The Fibonacci numbers are defined by $F_1 = F_2 = 1$ and the recurrence $F_n = F_{n-1} + F_{n-2}$ for all $n \\geq 3$.)",
+    "answer": "\\frac{3741}{64}",
+    "figure": false,
+    "note": "Text layer loses subscripts (Fn, Fn−1) and the fraction layout of the answer; image used for those."
+  },
+  {
+    "number": 27,
+    "problem": "Let $a$, $b$, and $c$ be positive real numbers such that\n$$\\sqrt{ab+1} + \\sqrt{ca+1} = 2a,$$\n$$\\sqrt{bc+1} + \\sqrt{ab+1} = 3b,$$\n$$\\sqrt{ca+1} + \\sqrt{bc+1} = 5c.$$\nCompute $a$.",
+    "answer": "\\frac{14}{3\\sqrt{11}} = \\frac{14\\sqrt{11}}{33}",
+    "figure": false,
+    "note": "Text layer shows the square-root bars detached from their radicands and garbles the answer fractions; image used. The three equations are printed as one aligned display."
+  },
+  {
+    "number": 28,
+    "problem": "Let $ABC$ be a triangle such that $\\angle BAC = 105^\\circ$, $AB = 12\\sqrt{2}$, and $AC = 17$. Let $P$ be a point such that $P$ and $A$ lie on different sides of line $BC$, and $\\angle APB = \\angle APC = 60^\\circ$. Compute $AP$.",
+    "answer": "\\frac{136\\sqrt{3}}{13}",
+    "figure": false,
+    "note": "The diagram on the next page belongs to the solution, not the statement. Text layer detaches the root sign in 12\\sqrt{2} and in the answer; image used."
+  },
+  {
+    "number": 29,
+    "problem": "Compute\n$$\\sum_{k=1}^{4004} \\gcd(k, 4004) \\cos\\left(\\frac{\\pi k}{2002}\\right).$$",
+    "answer": "1440",
+    "figure": false,
+    "note": ""
+  },
+  {
+    "number": 30,
+    "problem": "Let $ABC$ be a triangle with $AB = 60$, $AC = 67$, and $BC = 69$. The incircle $\\omega$ of triangle $ABC$ touches sides $\\overline{BC}$, $\\overline{CA}$, and $\\overline{AB}$ at $D$, $E$, and $F$, respectively. Let $D'$ be the point diametrically opposite to $D$ in $\\omega$. Let the common chord of the circumcircles of triangles $BD'F$ and $CD'E$ meet line $BC$ at $X$. Compute $BX$.",
+    "answer": "45",
+    "figure": false,
+    "note": "Image shows overlines on BC, CA, AB in 'touches sides'; the text layer drops them. The diagram follows 'Solution:' and is part of the solution, not the statement."
+  },
+  {
+    "number": 31,
+    "problem": "Let $\\zeta = \\cos \\frac{2\\pi}{19} + i \\sin \\frac{2\\pi}{19}$. It is given that the polynomial $x^3 + 16x^2 + 3x - 229$ has three distinct real roots, and its largest root can be uniquely written in the form\n$$a_1\\zeta + a_2\\zeta^2 + \\cdots + a_{18}\\zeta^{18}$$\nfor some rational numbers $a_1, \\ldots, a_{18}$. Compute $a_1^2 + a_2^2 + \\cdots + a_{18}^2$.",
+    "answer": "564",
+    "figure": false,
+    "note": "Text layer scrambles the first line (fractions 2\\pi/19 and the exponents of x^3 + 16x^2) and prints a_1^2 as a21; image used for all exponents, subscripts and fractions."
+  },
+  {
+    "number": 32,
+    "problem": "Kelvin the frog starts at the center of a regular hexagon $ABCDEF$ with side length $100$, facing towards $A$. He hops forward an integer distance between $0$ and $200$ units, inclusive, then turns $120^\\circ$ clockwise. He repeats this process two more times (possibly jumping different distances), ending up within hexagon $ABCDEF$ (possibly on its boundary). Compute the number of distinct paths he could have taken.",
+    "answer": "101^4 - 100^4 = 4060401",
+    "figure": false,
+    "note": "Text layer prints the answer as 1014 − 1004 (exponents lost); image shows 101^4 - 100^4 = 4060401."
+  }
+]

@@ -1,0 +1,51 @@
+[
+  {
+    "number": 11,
+    "problem": "Compute the number of ordered pairs $(a, b)$ of positive integers such that $\\operatorname{lcm}(a, b)+\\gcd(a, b) = 2026$.",
+    "answer": "13",
+    "figure": false,
+    "note": ""
+  },
+  {
+    "number": 12,
+    "problem": "Let $a$, $b$, $c$, and $d$ be positive real numbers such that $ac = 100$ and $bd = 101$. Compute the largest possible value of $$a^{\\log_{10} b} \\cdot b^{\\log_{10} c} \\cdot c^{\\log_{10} d} \\cdot d^{\\log_{10} a}.$$",
+    "answer": "101^2 = 10201",
+    "figure": false,
+    "note": "Text layer loses the exponents (prints alog10 b etc. and 1012 = 10201); the image shows a^{\\log_{10} b} etc. and the answer 101^2 = 10201."
+  },
+  {
+    "number": 13,
+    "problem": "The concatenation of two base-10 numbers (possibly with leading 0s) is defined as the base-10 number formed by joining them together. For example, the concatenation of $1402$ and $00213$ is $140200213$. Compute the number of $2026$-digit multiples of $3$ which cannot be expressed as the concatenation of two smaller multiples of $3$ (possibly with leading 0s).",
+    "answer": "18 \\cdot 7^{2024}",
+    "figure": false,
+    "note": "Text layer prints the answer as 18 · 72024; the image shows 18 \\cdot 7^{2024}. In the PDF 'concatenation' (first occurrence) is italic and 'cannot' is bold; 'num-ber' is a line-break hyphenation."
+  },
+  {
+    "number": 14,
+    "problem": "There exists exactly one ordered pair of positive integers $(m, n)$, both greater than $1$, with the property that, when written out in base $10$, $m \\cdot n = \\underline{ABCD}$ and $\\binom{m}{n} = \\underline{CDAB}$ for distinct nonzero digits $A$, $B$, $C$, and $D$. Compute $m + n$.",
+    "answer": "136",
+    "figure": false,
+    "note": "Text layer loses the binomial coefficient (prints 'm n = CDAB') and the underlines; the image shows \\binom{m}{n} = \\underline{CDAB} and m \\cdot n = \\underline{ABCD}."
+  },
+  {
+    "number": 15,
+    "problem": "Compute the number of ways to partition $2026$ into the unordered sum of distinct positive integers, each of which is a power of $2$ or a power of $6$.",
+    "answer": "16",
+    "figure": false,
+    "note": ""
+  },
+  {
+    "number": 16,
+    "problem": "Let $O$ and $G$ be the circumcenter and centroid of triangle $ABC$, respectively, and let $M$ be the midpoint of side $\\overline{BC}$. Given that $OG = 1$, $OM = \\sqrt{2}$, and $GM = \\sqrt{3}$, compute the area of triangle $ABC$.",
+    "answer": "3\\sqrt{30} = \\sqrt{270}",
+    "figure": false,
+    "note": "Text layer loses the square roots and the overline on BC; taken from the image. The Answer box prints 3\\sqrt{30} = \\sqrt{270}, but the printed solution (page 11) ends with a boxed 3\\sqrt{15}; the answer is transcribed as printed after 'Answer:'. The diagram on the page belongs to the solution, not the statement."
+  },
+  {
+    "number": 17,
+    "problem": "A point $P$ is selected uniformly at random on one of the straight edges of a quarter circle, and another point $Q$ is chosen independently and uniformly at random on the other straight edge. Compute the probability there exists a point $A$ on the arc of the quarter circle such that $\\angle PAQ$ is obtuse.",
+    "answer": "1 - \\frac{\\pi}{4}",
+    "figure": false,
+    "note": "Text layer prints the answer as '1 − π4'; the image shows 1 - \\frac{\\pi}{4}. The diagram on the page belongs to the solution, not the statement."
+  }
+]

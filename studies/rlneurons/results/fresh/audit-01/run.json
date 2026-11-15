@@ -1,0 +1,22 @@
+{
+ "commit": "9497d8b817c5f2a66c6e2600b06b54b4588d0ac2",
+ "spec": "studies/rlneurons/specs/SPEC_freshaudit.md (commit b4d26127, pushed before any second transcription existed)",
+ "commands": [
+  "python3 -m studies.rlneurons.prep.freshaudit_prep --out runs/freshaudit",
+  "15 blind transcription subagents (Claude, one per file of runs/freshaudit/batches/), output results/fresh/audit-01/second/",
+  "uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.freshaudit diff --work runs/freshaudit --out studies/rlneurons/results/fresh/audit-01",
+  "7 third-read subagents (Claude) on the 21 queue items, output third_read.json",
+  "... freshaudit table --work runs/freshaudit --out studies/rlneurons/results/fresh/audit-01",
+  "... freshaudit rescore --out studies/rlneurons/results/fresh/audit-01"
+ ],
+ "job_id": null,
+ "where": "laptop, no GPU, no model run",
+ "inputs": {"data": "data/fresh/fresh2026_v1.json (sha256 dcf571ea8a4654228e17975e8c1e255e50072f74061c9b083f5aad5c21d8e7d7)",
+  "rows": ["results/fresh/sft1_cue_s4-01", "results/fresh/rl_plain_s4-01", "results/fresh/base_cue_s4-01", "results/cap32vote/fresh2026_sft1_cue_s4-01"],
+  "pdfs": "sources.json (url, sha256; the files are not committed)"},
+ "departures_from_the_spec": [
+  "cosmetic plant 4 changes straight apostrophes to curly ones: no statement of the 77 has a double quote",
+  "added: every number of two or more digits in a v1 statement is searched in the PDF text layer (no model); 0 missing",
+  "the 15 transcribers' transcripts were searched for the data file's name: 0 of 15 mention it"
+ ]
+}

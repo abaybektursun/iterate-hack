@@ -1,0 +1,51 @@
+[
+  {
+    "number": 1,
+    "problem": "Let $H$, $M$, and $T$ be (not necessarily distinct) digits such that $H$ is nonzero and\n$$\\underline{HMMT} = \\underline{HTM} \\times \\underline{HT}.$$\nCompute the only possible value of the four-digit positive integer $\\underline{HMMT}$.",
+    "answer": "1000",
+    "figure": false,
+    "note": "The image prints HMMT, HTM and HT underlined (digit concatenation); the text layer loses the underlines."
+  },
+  {
+    "number": 2,
+    "problem": "Compute the number of ways to fill each of the outer $8$ cells of a $3 \\times 3$ grid with exactly one of the numbers $1$, $2$, and $3$ such that the top row, bottom row, left column, and right column each contain no repeated numbers.",
+    "answer": "18",
+    "figure": true,
+    "note": "Figure: a 3 x 3 grid with the center cell shaded gray; the text layer shows nothing for it."
+  },
+  {
+    "number": 4,
+    "problem": "Over all nonnegative integers $a$, $b$, $c$, and $d$ such that\n$$ab + cd = 31 \\quad \\text{and} \\quad ac + bd = 29,$$\ncompute the minimum possible value of $a + b + c + d$.",
+    "answer": "17",
+    "figure": false,
+    "note": ""
+  },
+  {
+    "number": 5,
+    "problem": "Let $ABC$ be a right triangle with $\\angle ABC = 90^\\circ$ and $AB < BC$. Let $M$ be the midpoint of $\\overline{AC}$. Let $T$ be the unique point lying on the segment $\\overline{BC}$ such that $\\angle BMT = 90^\\circ$. Given that $AB = 5$ and $MT = 3$, compute $CT$.",
+    "answer": "\\frac{7}{\\sqrt{11}} = \\frac{7\\sqrt{11}}{11}",
+    "figure": false,
+    "note": "The image prints overlines on AC and BC in the statement; the text layer loses them and garbles the answer fractions and roots. The diagram on the page belongs to the solution, not the statement."
+  },
+  {
+    "number": 6,
+    "problem": "Compute the largest positive integer $n$ such that $n!$ divides\n$$\\binom{256}{128}^{1} \\cdot \\binom{128}{64}^{2} \\cdot \\binom{64}{32}^{4} \\cdot \\binom{32}{16}^{8} \\cdot \\binom{16}{8}^{16} \\cdot \\binom{8}{4}^{32} \\cdot \\binom{4}{2}^{64} \\cdot \\binom{2}{1}^{128}.$$",
+    "answer": "256",
+    "figure": false,
+    "note": "The text layer flattens the binomial coefficients and their exponents into separate rows of numbers; the structure is taken from the image."
+  },
+  {
+    "number": 8,
+    "problem": "Let $a_1$, $a_2$, $\\ldots$ be a sequence of positive integers such that $a_1 = 2$ and for all $n \\geq 2$, it holds that $a_n$ is the sum of $a_{n-1}$ and the largest prime divisor of $a_{n-1}$. Compute the smallest integer greater than $2026$ that appears in this sequence.",
+    "answer": "2068",
+    "figure": false,
+    "note": "Subscripts (a_1, a_n, a_{n-1}) are taken from the image; the text layer prints them inline (a1, an, an−1)."
+  },
+  {
+    "number": 9,
+    "problem": "Let $ABCD$ be a rectangle. Let $E$ be the reflection of $C$ over $B$. The circumcircle of triangle $ACE$ intersects line $CD$ at a point $F \\neq C$. Given that $AC = 8$ and $AF = 6$, compute the area of rectangle $ABCD$.",
+    "answer": "\\frac{768}{25} = 30.72",
+    "figure": false,
+    "note": "The answer fraction 768/25 is split across lines in the text layer; read from the image. The diagram on the next page belongs to the solution, not the statement."
+  }
+]

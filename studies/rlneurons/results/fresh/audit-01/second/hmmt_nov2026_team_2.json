@@ -1,0 +1,9 @@
+[
+  {
+    "number": 9,
+    "problem": "Let $x$, $y$, and $z$ be real numbers satisfying\n$$x + y - \\sqrt{z^2 + 1} = -5,$$\n$$y + z - \\sqrt{x^2 + 1} = 0,$$\n$$z + x - \\sqrt{y^2 + 1} = 5.$$\nCompute $x + y + z$.",
+    "answer": "\\frac{\\sqrt{38}+3\\sqrt{2}}{2}",
+    "figure": false,
+    "note": ""
+  }
+]

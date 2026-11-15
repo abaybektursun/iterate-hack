@@ -1,0 +1,51 @@
+[
+  {
+    "number": 20,
+    "problem": "Let $ABC$ be a triangle with $BC = 8$. Let $\\omega$ be the circle centered at $A$ passing through the midpoint of side $\\overline{BC}$. Suppose that there exist parallel tangent lines to $\\omega$ through $B$ and $C$. Given that the distance from $A$ to $BC$ is $3$, compute the radius of $\\omega$.",
+    "answer": "2\\sqrt{3}",
+    "figure": false,
+    "note": "The image prints an overline on BC in 'midpoint of side BC' (\\overline{BC}); the text layer drops it. The figure on the page belongs to the solution, not the statement."
+  },
+  {
+    "number": 21,
+    "problem": "Compute the number of $10$-letter strings of $A$'s and $B$'s that contain the same number of substrings of the form $ABB$ as substrings of the form $BBA$.",
+    "answer": "640",
+    "figure": false,
+    "note": ""
+  },
+  {
+    "number": 22,
+    "problem": "Compute the sum of the digits in the base $10$ representation of $$\\left\\lfloor 10^{99} \\cdot \\frac{100\\,008}{700\\,007} \\right\\rfloor.$$ (Here, $\\lfloor x \\rfloor$ denotes the greatest integer less than or equal to $x$.)",
+    "answer": "440",
+    "figure": false,
+    "note": "The text layer prints the exponent 99 on a separate line ('99 100 008 / 10 ·'); the image shows 10^{99} times the fraction 100 008/700 007, with thin spaces as thousands separators (written \\, here)."
+  },
+  {
+    "number": 23,
+    "problem": "Call a set $S$ of distinct positive integers \\emph{divisorful} if for any ordered triple $(a, b, c)$ consisting of not necessarily distinct elements of $S$, $a$ divides $bc$. Compute the least positive integer $n$ such that there exists a divisorful set with exactly $25$ elements containing $n$.",
+    "answer": "720",
+    "figure": false,
+    "note": "'divisorful' is italicized in the image (written \\emph{divisorful})."
+  },
+  {
+    "number": 24,
+    "problem": "Gregasaurus has a unit square piece of paper with a red dot in one of its corners. A \\emph{fold} consists of the following:\n(a) Selecting a line $\\ell$ passing through the interior of the square that divides the square into two regions.\n(b) Picking one of the two regions, and reflecting it across $\\ell$.\nGregasaurus folds the square exactly once. Compute the area of the smallest region $R$ such that the red dot must remain in $R$, no matter how Gregasaurus folds the square.",
+    "answer": "2\\pi + 2",
+    "figure": false,
+    "note": "'fold' is italicized in the image (written \\emph{fold}). The Answer line prints 2\\pi + 2; the boxed value at the end of the solution prints the same quantity as 2 + 2\\pi. The diagrams on pages 17 belong to the solution."
+  },
+  {
+    "number": 25,
+    "problem": "Let $p(x)$ be a polynomial of degree at most $6$ such that $p(n) = 1 + \\frac{1}{2} + \\frac{1}{3} + \\cdots + \\frac{1}{n}$ for all $n \\in \\{2, 3, 4, 5, 6, 7, 8\\}$. Compute $p(0)$.",
+    "answer": "\\frac{15}{56}",
+    "figure": false,
+    "note": "The text layer flattens the fractions to '1 + 21 + 13 + ... + n1' and the answer to '15 / 56' on two lines; the image shows 1 + 1/2 + 1/3 + ... + 1/n and 15/56."
+  },
+  {
+    "number": 26,
+    "problem": "Sophia has a $5 \\times 5$ grid of dots, and selects $10$ of them uniformly at random. Given that she selects exactly $2$ dots in each row and each column, compute the probability that some $4$ selected dots form a rectangle with grid-aligned sides.",
+    "answer": "\\frac{5}{17}",
+    "figure": false,
+    "note": "The text layer splits the answer over two lines ('5' above '17'); the image shows 5/17. The diagrams on the page belong to the solution."
+  }
+]

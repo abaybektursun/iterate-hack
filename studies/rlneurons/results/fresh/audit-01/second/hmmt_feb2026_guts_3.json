@@ -1,0 +1,51 @@
+[
+  {
+    "number": 18,
+    "problem": "Let $ABCD$ be a trapezoid with side $\\overline{AB}$ parallel to side $\\overline{CD}$. Let $P$ be the intersection of diagonals $\\overline{AC}$ and $\\overline{BD}$. Given that the distances from $P$ to sides $\\overline{AB}$, $\\overline{BC}$, $\\overline{CD}$, and $\\overline{DA}$ are $3$, $6$, $8$, and $8$, respectively, compute the perimeter of $ABCD$.",
+    "answer": "\\frac{165}{2} = 82.5",
+    "figure": false,
+    "note": "The image prints overlines on the segments AB, CD, AC, BD, BC, DA; the text layer drops them. The text layer prints the answer as '165 / 2 = 82.5' with the fraction broken over two lines; the image shows \\frac{165}{2} = 82.5. The diagram on the page is under 'Solution:', not part of the statement."
+  },
+  {
+    "number": 19,
+    "problem": "Compute the smallest positive integer $n$ for which $n$ has exactly $10$ positive integer divisors and $n + 1$ has exactly $9$ positive integer divisors.",
+    "answer": "6723",
+    "figure": false,
+    "note": ""
+  },
+  {
+    "number": 20,
+    "problem": "Derek is at the front of a line, with six clones named Derek #1, Derek #2, Derek #3, Derek #4, Derek #5, and Derek #6 standing behind him in a uniformly random order. For all positive integers $k$ between $1$ and $6$, inclusive, on the $k^{\\text{th}}$ minute from now, Derek #$k$ will swap positions with whoever is standing directly in front of him in the line. Compute the probability that after $6$ minutes, Derek is still at the front of the line.",
+    "answer": "\\frac{53}{144}",
+    "figure": false,
+    "note": "The text layer prints 'k th' and splits the answer fraction over two lines; the image shows k^{th} as a superscript and \\frac{53}{144}."
+  },
+  {
+    "number": 21,
+    "problem": "Compute the largest possible value of $$\\gcd\\left(\\binom{n}{3} - 1, \\binom{n}{4} - 1\\right)$$ as $n$ ranges through all positive integers greater than $3$.",
+    "answer": "102",
+    "figure": false,
+    "note": "The text layer loses the binomial coefficients (prints n over 3 and n over 4 without parentheses); the image shows \\binom{n}{3} - 1 and \\binom{n}{4} - 1 inside gcd."
+  },
+  {
+    "number": 23,
+    "problem": "Let $\\Gamma$ be a sphere of radius $5$. Let $A$, $B$, $C$, and $D$ be points on $\\Gamma$ such that $AB = BC = CD = DA = 8$ and $\\angle ABC = \\angle BCD = \\angle CDA = \\angle DAB$. Compute $AC$.",
+    "answer": "6\\sqrt{2} = \\sqrt{72}",
+    "figure": false,
+    "note": "The text layer separates the root signs from their radicands in the answer; the image shows 6\\sqrt{2} = \\sqrt{72}. The diagram on the page is under 'Solution:', not part of the statement."
+  },
+  {
+    "number": 24,
+    "problem": "Two mice and $100$ pieces of cheese are uniformly and independently placed at random on the boundary of a circle. Each mouse walks to the piece of cheese closest to it, with ties broken independently at random. Compute the probability that the two mice walk to the same piece of cheese.",
+    "answer": "\\frac{3}{202}",
+    "figure": false,
+    "note": "The word 'independently' is hyphenated across a line break in the print ('indepen-dently'); written here as one word. The text layer splits the answer fraction over two lines; the image shows \\frac{3}{202}."
+  },
+  {
+    "number": 25,
+    "problem": "Let $p(x)$ be the unique polynomial of degree at most $8$ and with rational coefficients such that $p(\\sqrt[3]{2} + \\sqrt[3]{3}) = \\sqrt[3]{6}$. Compute $p(1)$.",
+    "answer": "\\frac{42}{25} = 1.68",
+    "figure": false,
+    "note": "The text layer loses the cube roots (prints '3 2 + 3 3' and '3 6' with detached root signs) and uses a ligature in 'coefficients'; the image shows cube roots \\sqrt[3]{2}, \\sqrt[3]{3}, \\sqrt[3]{6}. The answer fraction is split over two lines in the text layer; the image shows \\frac{42}{25} = 1.68."
+  }
+]

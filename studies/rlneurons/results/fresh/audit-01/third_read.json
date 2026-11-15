@@ -1,0 +1,441 @@
+[
+ {
+  "qid": "q012",
+  "spans": [
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "satisfy the following equations: $xyz = 3,$",
+    "reason": "A's aligned environment against B's separate display equations; same equations."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "$xyz = 3,$",
+    "reason": "Alignment marker only."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "$xyz = 3,$ $(x-y)(y-z)(z-x) = 4,$",
+    "reason": "Line break marker only."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "$(x-y)(y-z)(z-x) = 4,$",
+    "reason": "Alignment marker only."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "$(x-y)(y-z)(z-x) = 4,$ $(x+y)(y+z)(z+x) = 40.$",
+    "reason": "Line break marker only."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "$(x+y)(y+z)(z+x) = 40.$",
+    "reason": "Alignment marker only."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "$(x+y)(y+z)(z+x) = 40.$ Compute the minimum possible value for $x$.",
+    "reason": "End of the aligned environment only."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "A",
+    "pdf_quote": "Compute the minimum possible value for $x$.",
+    "reason": "B adds an instruction about the answer's format that the PDF does not print; the problem is unchanged."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q015",
+  "spans": [
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "Compute the second smallest positive integer $n$ such that $\\bullet$ $n$ is divisible by 101, and",
+    "reason": "A dash against an itemize bullet; the PDF prints a bullet."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "$\\bullet$ the decimal representation of $n$ contains the number 2026 as a consecutive sequence of digits.",
+    "reason": "A dash against an itemize bullet; the PDF prints a bullet."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "contains the number 2026 as a consecutive sequence of digits.",
+    "reason": "Closing of the itemize environment only."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q018",
+  "spans": [
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "compute the minimum possible value of $\\sum_{d \\mid 250} \\max A_d$, where the sum ranges over all positive integer divisors $d$ of 250",
+    "reason": "The bar | and \\mid are two LaTeX notations for the same divides sign under the sum."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q001",
+  "spans": [
+   {
+    "class": "MATERIAL",
+    "pdf_matches": "A",
+    "pdf_quote": "such that $ab + cd = 31$ and $ac + bd = 29$,",
+    "reason": "The constant in the first equation differs (31 in the PDF and A, 32 in B), which changes the problem."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q003",
+  "spans": [
+   {
+    "class": "MATERIAL",
+    "pdf_matches": "B",
+    "pdf_quote": "For all positive integers $k$ between $1$ and $6$, inclusive, on the $k^{\\text{th}}$ minute from now",
+    "reason": "A says 'negative integers k between 1 and 6', an empty condition that makes the statement ill-posed; the PDF and B say 'positive'."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q004",
+  "spans": [
+   {
+    "class": "MATERIAL",
+    "pdf_matches": "A",
+    "pdf_quote": "the recurrence $F_n = F_{n-1} + F_{n-2}$ for all $n \\geq 3$.)",
+    "reason": "The inequality sign differs: B's $n \\leq 3$ leaves the Fibonacci numbers beyond $F_3$ undefined; the PDF and A have $n \\geq 3$."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q005",
+  "spans": [],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "The PDF prints a 3x3 grid with the centre cell shaded as part of the statement, but the words of A and B (outer 8 cells of a 3x3 grid, top/bottom row, left/right column) give everything needed.",
+  "other": ""
+ },
+ {
+  "qid": "q007",
+  "spans": [
+   {
+    "class": "MATERIAL",
+    "pdf_matches": "A",
+    "pdf_quote": "Let $\\Gamma$ be a sphere of radius $5$.",
+    "reason": "The sphere's radius differs (5 in the PDF and A, 8 in B), which changes the value of $AC$."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q016",
+  "spans": [
+   {
+    "class": "MATERIAL",
+    "pdf_matches": "B",
+    "pdf_quote": "$\\binom{256}{128}^{1} \\cdot \\binom{128}{64}^{2} \\cdot \\binom{64}{32}^{4} \\cdots$",
+    "reason": "The exponent of $\\binom{128}{64}$ differs (2 in the PDF image and B, 3 in A), which changes the product."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q017",
+  "spans": [
+   {
+    "class": "MATERIAL",
+    "pdf_matches": "A",
+    "pdf_quote": "partition $2026$ into the unordered sum of distinct positive integers, each of which is a power of $2$ or a power of $6$",
+    "reason": "B drops the condition 'distinct', which changes the count."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q019",
+  "spans": [
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "\\sqrt{ab+1}+\\sqrt{ca+1}=2a, \\sqrt{bc+1}+\\sqrt{ab+1}=3b, \\sqrt{ca+1}+\\sqrt{bc+1}=5c.",
+    "reason": "Opening of an aligned environment; same three equations."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "\\sqrt{ab+1}+\\sqrt{ca+1}=2a, \\sqrt{bc+1}+\\sqrt{ab+1}=3b, \\sqrt{ca+1}+\\sqrt{bc+1}=5c.",
+    "reason": "Alignment marker only."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "\\sqrt{ab+1}+\\sqrt{ca+1}=2a, \\sqrt{bc+1}+\\sqrt{ab+1}=3b, \\sqrt{ca+1}+\\sqrt{bc+1}=5c.",
+    "reason": "Line break only."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "\\sqrt{ab+1}+\\sqrt{ca+1}=2a, \\sqrt{bc+1}+\\sqrt{ab+1}=3b, \\sqrt{ca+1}+\\sqrt{bc+1}=5c.",
+    "reason": "Alignment marker only."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "\\sqrt{ab+1}+\\sqrt{ca+1}=2a, \\sqrt{bc+1}+\\sqrt{ab+1}=3b, \\sqrt{ca+1}+\\sqrt{bc+1}=5c.",
+    "reason": "Line break only."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "\\sqrt{ab+1}+\\sqrt{ca+1}=2a, \\sqrt{bc+1}+\\sqrt{ab+1}=3b, \\sqrt{ca+1}+\\sqrt{bc+1}=5c.",
+    "reason": "Alignment marker only."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "\\sqrt{ab+1}+\\sqrt{ca+1}=2a, \\sqrt{bc+1}+\\sqrt{ab+1}=3b, \\sqrt{ca+1}+\\sqrt{bc+1}=5c.",
+    "reason": "Closing of the aligned environment."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q020",
+  "spans": [
+   {
+    "class": "MATERIAL",
+    "pdf_matches": "A",
+    "pdf_quote": "ordered pairs $(a,b)$ of positive integers such that $\\operatorname{lcm}(a,b)+\\gcd(a,b)=2026$",
+    "reason": "The PDF has a plus sign; B has a minus sign, a different equation."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q021",
+  "spans": [
+   {
+    "class": "MATERIAL",
+    "pdf_matches": "B",
+    "pdf_quote": "Let $ABC$ be a triangle with $AB = 60$, $AC = 67$, and $BC = 69$.",
+    "reason": "The PDF gives AB = 60; A's AB = 122 is a different triangle."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q006",
+  "spans": [
+   {
+    "class": "MATERIAL",
+    "pdf_matches": "B",
+    "pdf_quote": "Compute the minimum possible value of $AT$.",
+    "reason": "The PDF asks for the minimum; A asks for the maximum, which is a different question (AT is unbounded above, and the answer $12\\sqrt{7}$ is the minimum)."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q010",
+  "spans": [
+   {
+    "class": "MATERIAL",
+    "pdf_matches": "B",
+    "pdf_quote": "there exists a divisorful set with exactly 25 elements containing $n$.",
+    "reason": "The PDF says exactly 25 elements; A says 26, a different number in the condition."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q011",
+  "spans": [
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "Compute the probability that Snow White does \\textbf{not} eat the poisoned apple.",
+    "reason": "Opening bold marker only; the PDF prints 'not' in bold (as A marks it), the words are the same in both."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "Compute the probability that Snow White does \\textbf{not} eat the poisoned apple.",
+    "reason": "Closing bold marker only; the PDF prints 'not' in bold (as A marks it), the words are the same in both."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q013",
+  "spans": [],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "The PDF prints a 1 x 9 grid (? 6 1 ? 0 2 ? ? 3) as part of the statement, and both A and B reproduce it fully as an array with the same entries in the same order.",
+  "other": ""
+ },
+ {
+  "qid": "q014",
+  "spans": [
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "$\\left\\lfloor 10^{99} \\cdot \\frac{100\\,008}{700\\,007} \\right\\rfloor$",
+    "reason": "The PDF prints a centred dot (as B); \\times in A is the same multiplication."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q008",
+  "spans": [
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "A",
+    "pdf_quote": "• Their numbers are distinct integers between $2$ and $50$, inclusive.",
+    "reason": "List marker only: the PDF prints a bullet, B uses a dash; same text."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "A",
+    "pdf_quote": "• Jerry's number is an integer power of Sophie's number.",
+    "reason": "List marker only: the PDF prints a bullet, B uses a dash; same text."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q009",
+  "spans": [
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "Let $x$, $y$, and $z$ be real numbers satisfying $x+y-\\sqrt{z^2+1}=-5,$",
+    "reason": "LaTeX alignment markup only; the PDF shows three aligned displayed equations identical in both versions."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "$x+y-\\sqrt{z^2+1}=-5,$",
+    "reason": "LaTeX alignment markup only; the PDF shows three aligned displayed equations identical in both versions."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "$x+y-\\sqrt{z^2+1}=-5,$ $y+z-\\sqrt{x^2+1}=0,$",
+    "reason": "LaTeX alignment markup only; the PDF shows three aligned displayed equations identical in both versions."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "$y+z-\\sqrt{x^2+1}=0,$",
+    "reason": "LaTeX alignment markup only; the PDF shows three aligned displayed equations identical in both versions."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "$y+z-\\sqrt{x^2+1}=0,$ $z+x-\\sqrt{y^2+1}=5.$",
+    "reason": "LaTeX alignment markup only; the PDF shows three aligned displayed equations identical in both versions."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "$z+x-\\sqrt{y^2+1}=5.$",
+    "reason": "LaTeX alignment markup only; the PDF shows three aligned displayed equations identical in both versions."
+   },
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "both",
+    "pdf_quote": "$z+x-\\sqrt{y^2+1}=5.$ Compute $x+y+z$.",
+    "reason": "LaTeX alignment markup only; the PDF shows three aligned displayed equations identical in both versions."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "",
+  "other": ""
+ },
+ {
+  "qid": "q002",
+  "spans": [
+   {
+    "class": "COSMETIC",
+    "pdf_matches": "B",
+    "pdf_quote": "Compute the maximum possible area of triangle $DEF$.",
+    "reason": "\"Find\" against \"Compute\" is a wording difference only; the quantity asked for is the same."
+   }
+  ],
+  "answer": null,
+  "figure_needed": false,
+  "figure_reason": "The only figure on the page belongs to Solution 1, not to the problem statement, and the words give all the data.",
+  "other": ""
+ }
+]

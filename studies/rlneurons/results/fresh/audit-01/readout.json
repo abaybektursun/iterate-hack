@@ -1,0 +1,1016 @@
+{
+ "bootstrap": "paired over problems, 5,000 resamples, numpy default_rng(0) per set, the contrasts drawn in the listed order",
+ "models": {
+  "think": "Think-SFT + cue, cap 16,384",
+  "rl": "RL plain, cap 16,384",
+  "base": "base + cue, cap 16,384",
+  "cap32": "Think-SFT + cue, cap 32,768",
+  "cap16": "the cap-32,768 answers cut at 16,384"
+ },
+ "sets": {
+  "a: all 136": {
+   "n": 136,
+   "models": {
+    "think": {
+     "one_sample_mean_of_4": 60.0,
+     "vote_stored_order": 75.0,
+     "vote_expected_random_tie": 75.5
+    },
+    "rl": {
+     "one_sample_mean_of_4": 50.5,
+     "vote_stored_order": 57.0,
+     "vote_expected_random_tie": 55.75
+    },
+    "base": {
+     "one_sample_mean_of_4": 29.5,
+     "vote_stored_order": 38.0,
+     "vote_expected_random_tie": 38.83333333333333
+    },
+    "cap32": {
+     "one_sample_mean_of_4": 70.25,
+     "vote_stored_order": 75.0,
+     "vote_expected_random_tie": 75.75
+    },
+    "cap16": {
+     "one_sample_mean_of_4": 59.0,
+     "vote_stored_order": 73.0,
+     "vote_expected_random_tie": 72.16666666666666
+    }
+   },
+   "contrasts": {
+    "think - rl": {
+     "one_sample": {
+      "problems": 9.5,
+      "points": 6.985294117647059,
+      "interval95": [
+       3.125,
+       11.029411764705882
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 18.0,
+      "points": 13.23529411764706,
+      "interval95": [
+       7.352941176470589,
+       19.11764705882353
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 19.75,
+      "points": 14.522058823529413,
+      "interval95": [
+       8.517156862745098,
+       20.64950980392157
+      ]
+     }
+    },
+    "think - base": {
+     "one_sample": {
+      "problems": 30.5,
+      "points": 22.426470588235293,
+      "interval95": [
+       17.463235294117645,
+       27.75735294117647
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 37.0,
+      "points": 27.205882352941174,
+      "interval95": [
+       19.852941176470587,
+       35.294117647058826
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 36.66666666666667,
+      "points": 26.960784313725494,
+      "interval95": [
+       19.975490196078432,
+       34.375
+      ]
+     }
+    },
+    "rl - base": {
+     "one_sample": {
+      "problems": 21.0,
+      "points": 15.441176470588236,
+      "interval95": [
+       11.397058823529411,
+       19.852941176470587
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 19.0,
+      "points": 13.970588235294118,
+      "interval95": [
+       8.088235294117647,
+       19.852941176470587
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 16.916666666666664,
+      "points": 12.438725490196077,
+      "interval95": [
+       7.4754901960784315,
+       17.892156862745097
+      ]
+     }
+    },
+    "cap32 - rl": {
+     "one_sample": {
+      "problems": 19.75,
+      "points": 14.522058823529413,
+      "interval95": [
+       9.926470588235293,
+       19.11764705882353
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 18.0,
+      "points": 13.23529411764706,
+      "interval95": [
+       6.61764705882353,
+       19.852941176470587
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 20.0,
+      "points": 14.705882352941178,
+      "interval95": [
+       8.63970588235294,
+       21.141237745098017
+      ]
+     }
+    },
+    "cap16 - rl": {
+     "one_sample": {
+      "problems": 8.5,
+      "points": 6.25,
+      "interval95": [
+       2.0220588235294117,
+       10.477941176470589
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 16.0,
+      "points": 11.76470588235294,
+      "interval95": [
+       5.147058823529411,
+       18.38235294117647
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 16.416666666666664,
+      "points": 12.071078431372548,
+      "interval95": [
+       5.88235294117647,
+       18.50643382352939
+      ]
+     }
+    }
+   }
+  },
+  "b: without the problems whose v1 statement or answer is wrong": {
+   "n": 136,
+   "models": {
+    "think": {
+     "one_sample_mean_of_4": 60.0,
+     "vote_stored_order": 75.0,
+     "vote_expected_random_tie": 75.5
+    },
+    "rl": {
+     "one_sample_mean_of_4": 50.5,
+     "vote_stored_order": 57.0,
+     "vote_expected_random_tie": 55.75
+    },
+    "base": {
+     "one_sample_mean_of_4": 29.5,
+     "vote_stored_order": 38.0,
+     "vote_expected_random_tie": 38.83333333333333
+    },
+    "cap32": {
+     "one_sample_mean_of_4": 70.25,
+     "vote_stored_order": 75.0,
+     "vote_expected_random_tie": 75.75
+    },
+    "cap16": {
+     "one_sample_mean_of_4": 59.0,
+     "vote_stored_order": 73.0,
+     "vote_expected_random_tie": 72.16666666666666
+    }
+   },
+   "contrasts": {
+    "think - rl": {
+     "one_sample": {
+      "problems": 9.5,
+      "points": 6.985294117647059,
+      "interval95": [
+       3.125,
+       11.029411764705882
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 18.0,
+      "points": 13.23529411764706,
+      "interval95": [
+       7.352941176470589,
+       19.11764705882353
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 19.75,
+      "points": 14.522058823529413,
+      "interval95": [
+       8.517156862745098,
+       20.64950980392157
+      ]
+     }
+    },
+    "think - base": {
+     "one_sample": {
+      "problems": 30.5,
+      "points": 22.426470588235293,
+      "interval95": [
+       17.463235294117645,
+       27.75735294117647
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 37.0,
+      "points": 27.205882352941174,
+      "interval95": [
+       19.852941176470587,
+       35.294117647058826
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 36.66666666666667,
+      "points": 26.960784313725494,
+      "interval95": [
+       19.975490196078432,
+       34.375
+      ]
+     }
+    },
+    "rl - base": {
+     "one_sample": {
+      "problems": 21.0,
+      "points": 15.441176470588236,
+      "interval95": [
+       11.397058823529411,
+       19.852941176470587
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 19.0,
+      "points": 13.970588235294118,
+      "interval95": [
+       8.088235294117647,
+       19.852941176470587
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 16.916666666666664,
+      "points": 12.438725490196077,
+      "interval95": [
+       7.4754901960784315,
+       17.892156862745097
+      ]
+     }
+    },
+    "cap32 - rl": {
+     "one_sample": {
+      "problems": 19.75,
+      "points": 14.522058823529413,
+      "interval95": [
+       9.926470588235293,
+       19.11764705882353
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 18.0,
+      "points": 13.23529411764706,
+      "interval95": [
+       6.61764705882353,
+       19.852941176470587
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 20.0,
+      "points": 14.705882352941178,
+      "interval95": [
+       8.63970588235294,
+       21.141237745098017
+      ]
+     }
+    },
+    "cap16 - rl": {
+     "one_sample": {
+      "problems": 8.5,
+      "points": 6.25,
+      "interval95": [
+       2.0220588235294117,
+       10.477941176470589
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 16.0,
+      "points": 11.76470588235294,
+      "interval95": [
+       5.147058823529411,
+       18.38235294117647
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 16.416666666666664,
+      "points": 12.071078431372548,
+      "interval95": [
+       5.88235294117647,
+       18.50643382352939
+      ]
+     }
+    }
+   }
+  },
+  "c: the 59 from Hugging Face + the transcribed problems identical after normalisation": {
+   "n": 132,
+   "models": {
+    "think": {
+     "one_sample_mean_of_4": 57.75,
+     "vote_stored_order": 72.0,
+     "vote_expected_random_tie": 72.5
+    },
+    "rl": {
+     "one_sample_mean_of_4": 48.75,
+     "vote_stored_order": 55.0,
+     "vote_expected_random_tie": 53.75
+    },
+    "base": {
+     "one_sample_mean_of_4": 29.0,
+     "vote_stored_order": 38.0,
+     "vote_expected_random_tie": 38.58333333333333
+    },
+    "cap32": {
+     "one_sample_mean_of_4": 67.0,
+     "vote_stored_order": 72.0,
+     "vote_expected_random_tie": 72.75
+    },
+    "cap16": {
+     "one_sample_mean_of_4": 56.0,
+     "vote_stored_order": 69.0,
+     "vote_expected_random_tie": 68.16666666666666
+    }
+   },
+   "contrasts": {
+    "think - rl": {
+     "one_sample": {
+      "problems": 9.0,
+      "points": 6.8181818181818175,
+      "interval95": [
+       3.0303030303030303,
+       10.984848484848484
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 17.0,
+      "points": 12.878787878787879,
+      "interval95": [
+       6.8181818181818175,
+       19.696969696969695
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 18.75,
+      "points": 14.204545454545455,
+      "interval95": [
+       7.702020202020203,
+       20.833333333333336
+      ]
+     }
+    },
+    "think - base": {
+     "one_sample": {
+      "problems": 28.75,
+      "points": 21.78030303030303,
+      "interval95": [
+       16.666666666666664,
+       27.27272727272727
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 34.0,
+      "points": 25.757575757575758,
+      "interval95": [
+       18.181818181818183,
+       33.33333333333333
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 33.91666666666667,
+      "points": 25.694444444444446,
+      "interval95": [
+       18.623737373737377,
+       33.14393939393939
+      ]
+     }
+    },
+    "rl - base": {
+     "one_sample": {
+      "problems": 19.75,
+      "points": 14.962121212121213,
+      "interval95": [
+       10.984848484848484,
+       19.318181818181817
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 17.0,
+      "points": 12.878787878787879,
+      "interval95": [
+       6.8181818181818175,
+       18.939393939393938
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 15.166666666666664,
+      "points": 11.489898989898988,
+      "interval95": [
+       6.628787878787879,
+       16.79292929292929
+      ]
+     }
+    },
+    "cap32 - rl": {
+     "one_sample": {
+      "problems": 18.25,
+      "points": 13.825757575757574,
+      "interval95": [
+       9.469696969696969,
+       18.75473484848478
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 17.0,
+      "points": 12.878787878787879,
+      "interval95": [
+       6.0606060606060606,
+       19.696969696969695
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 19.0,
+      "points": 14.393939393939394,
+      "interval95": [
+       8.396464646464647,
+       21.022727272727273
+      ]
+     }
+    },
+    "cap16 - rl": {
+     "one_sample": {
+      "problems": 7.25,
+      "points": 5.492424242424242,
+      "interval95": [
+       1.3257575757575757,
+       9.469696969696969
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 14.0,
+      "points": 10.606060606060606,
+      "interval95": [
+       3.787878787878788,
+       17.424242424242426
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 14.416666666666668,
+      "points": 10.921717171717173,
+      "interval95": [
+       4.608585858585859,
+       17.2979797979798
+      ]
+     }
+    }
+   }
+  },
+  "the 77 transcribed": {
+   "n": 77,
+   "models": {
+    "think": {
+     "one_sample_mean_of_4": 37.25,
+     "vote_stored_order": 46.0,
+     "vote_expected_random_tie": 46.0
+    },
+    "rl": {
+     "one_sample_mean_of_4": 32.75,
+     "vote_stored_order": 35.0,
+     "vote_expected_random_tie": 33.83333333333333
+    },
+    "base": {
+     "one_sample_mean_of_4": 19.75,
+     "vote_stored_order": 25.0,
+     "vote_expected_random_tie": 25.583333333333332
+    },
+    "cap32": {
+     "one_sample_mean_of_4": 42.25,
+     "vote_stored_order": 44.0,
+     "vote_expected_random_tie": 44.5
+    },
+    "cap16": {
+     "one_sample_mean_of_4": 36.25,
+     "vote_stored_order": 44.0,
+     "vote_expected_random_tie": 43.166666666666664
+    }
+   },
+   "contrasts": {
+    "think - rl": {
+     "one_sample": {
+      "problems": 4.5,
+      "points": 5.844155844155844,
+      "interval95": [
+       1.2987012987012987,
+       10.714285714285714
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 11.0,
+      "points": 14.285714285714285,
+      "interval95": [
+       6.493506493506493,
+       23.376623376623375
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 12.166666666666666,
+      "points": 15.800865800865799,
+      "interval95": [
+       7.683982683982685,
+       24.567099567099568
+      ]
+     }
+    },
+    "think - base": {
+     "one_sample": {
+      "problems": 17.5,
+      "points": 22.727272727272727,
+      "interval95": [
+       16.233766233766232,
+       29.22077922077922
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 21.0,
+      "points": 27.27272727272727,
+      "interval95": [
+       16.883116883116884,
+       37.66233766233766
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 20.416666666666668,
+      "points": 26.51515151515152,
+      "interval95": [
+       17.0995670995671,
+       36.25541125541126
+      ]
+     }
+    },
+    "rl - base": {
+     "one_sample": {
+      "problems": 13.0,
+      "points": 16.883116883116884,
+      "interval95": [
+       11.03896103896104,
+       23.376623376623375
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 10.0,
+      "points": 12.987012987012985,
+      "interval95": [
+       5.194805194805195,
+       22.07792207792208
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 8.25,
+      "points": 10.714285714285714,
+      "interval95": [
+       4.437229437229438,
+       18.073593073593074
+      ]
+     }
+    },
+    "cap32 - rl": {
+     "one_sample": {
+      "problems": 9.5,
+      "points": 12.337662337662337,
+      "interval95": [
+       7.467532467532467,
+       17.857142857142858
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 9.0,
+      "points": 11.688311688311687,
+      "interval95": [
+       3.896103896103896,
+       19.480519480519483
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 10.666666666666668,
+      "points": 13.852813852813856,
+      "interval95": [
+       7.142857142857142,
+       21.320346320346324
+      ]
+     }
+    },
+    "cap16 - rl": {
+     "one_sample": {
+      "problems": 3.5,
+      "points": 4.545454545454546,
+      "interval95": [
+       0.3246753246753247,
+       9.415584415584416
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 9.0,
+      "points": 11.688311688311687,
+      "interval95": [
+       3.896103896103896,
+       19.480519480519483
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 9.333333333333332,
+      "points": 12.12121212121212,
+      "interval95": [
+       5.735930735930736,
+       19.26406926406926
+      ]
+     }
+    }
+   }
+  },
+  "the 77 transcribed without the v1-wrong problems": {
+   "n": 77,
+   "models": {
+    "think": {
+     "one_sample_mean_of_4": 37.25,
+     "vote_stored_order": 46.0,
+     "vote_expected_random_tie": 46.0
+    },
+    "rl": {
+     "one_sample_mean_of_4": 32.75,
+     "vote_stored_order": 35.0,
+     "vote_expected_random_tie": 33.83333333333333
+    },
+    "base": {
+     "one_sample_mean_of_4": 19.75,
+     "vote_stored_order": 25.0,
+     "vote_expected_random_tie": 25.583333333333332
+    },
+    "cap32": {
+     "one_sample_mean_of_4": 42.25,
+     "vote_stored_order": 44.0,
+     "vote_expected_random_tie": 44.5
+    },
+    "cap16": {
+     "one_sample_mean_of_4": 36.25,
+     "vote_stored_order": 44.0,
+     "vote_expected_random_tie": 43.166666666666664
+    }
+   },
+   "contrasts": {
+    "think - rl": {
+     "one_sample": {
+      "problems": 4.5,
+      "points": 5.844155844155844,
+      "interval95": [
+       1.2987012987012987,
+       10.714285714285714
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 11.0,
+      "points": 14.285714285714285,
+      "interval95": [
+       6.493506493506493,
+       23.376623376623375
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 12.166666666666666,
+      "points": 15.800865800865799,
+      "interval95": [
+       7.683982683982685,
+       24.567099567099568
+      ]
+     }
+    },
+    "think - base": {
+     "one_sample": {
+      "problems": 17.5,
+      "points": 22.727272727272727,
+      "interval95": [
+       16.233766233766232,
+       29.22077922077922
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 21.0,
+      "points": 27.27272727272727,
+      "interval95": [
+       16.883116883116884,
+       37.66233766233766
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 20.416666666666668,
+      "points": 26.51515151515152,
+      "interval95": [
+       17.0995670995671,
+       36.25541125541126
+      ]
+     }
+    },
+    "rl - base": {
+     "one_sample": {
+      "problems": 13.0,
+      "points": 16.883116883116884,
+      "interval95": [
+       11.03896103896104,
+       23.376623376623375
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 10.0,
+      "points": 12.987012987012985,
+      "interval95": [
+       5.194805194805195,
+       22.07792207792208
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 8.25,
+      "points": 10.714285714285714,
+      "interval95": [
+       4.437229437229438,
+       18.073593073593074
+      ]
+     }
+    },
+    "cap32 - rl": {
+     "one_sample": {
+      "problems": 9.5,
+      "points": 12.337662337662337,
+      "interval95": [
+       7.467532467532467,
+       17.857142857142858
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 9.0,
+      "points": 11.688311688311687,
+      "interval95": [
+       3.896103896103896,
+       19.480519480519483
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 10.666666666666668,
+      "points": 13.852813852813856,
+      "interval95": [
+       7.142857142857142,
+       21.320346320346324
+      ]
+     }
+    },
+    "cap16 - rl": {
+     "one_sample": {
+      "problems": 3.5,
+      "points": 4.545454545454546,
+      "interval95": [
+       0.3246753246753247,
+       9.415584415584416
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 9.0,
+      "points": 11.688311688311687,
+      "interval95": [
+       3.896103896103896,
+       19.480519480519483
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 9.333333333333332,
+      "points": 12.12121212121212,
+      "interval95": [
+       5.735930735930736,
+       19.26406926406926
+      ]
+     }
+    }
+   }
+  },
+  "the transcribed problems identical after normalisation": {
+   "n": 73,
+   "models": {
+    "think": {
+     "one_sample_mean_of_4": 35.0,
+     "vote_stored_order": 43.0,
+     "vote_expected_random_tie": 43.0
+    },
+    "rl": {
+     "one_sample_mean_of_4": 31.0,
+     "vote_stored_order": 33.0,
+     "vote_expected_random_tie": 31.833333333333336
+    },
+    "base": {
+     "one_sample_mean_of_4": 19.25,
+     "vote_stored_order": 25.0,
+     "vote_expected_random_tie": 25.333333333333332
+    },
+    "cap32": {
+     "one_sample_mean_of_4": 39.0,
+     "vote_stored_order": 41.0,
+     "vote_expected_random_tie": 41.5
+    },
+    "cap16": {
+     "one_sample_mean_of_4": 33.25,
+     "vote_stored_order": 40.0,
+     "vote_expected_random_tie": 39.166666666666664
+    }
+   },
+   "contrasts": {
+    "think - rl": {
+     "one_sample": {
+      "problems": 4.0,
+      "points": 5.47945205479452,
+      "interval95": [
+       1.0273972602739725,
+       10.273972602739725
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 10.0,
+      "points": 13.698630136986301,
+      "interval95": [
+       5.47945205479452,
+       21.91780821917808
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 11.166666666666668,
+      "points": 15.296803652968038,
+      "interval95": [
+       6.735159817351599,
+       23.972602739726025
+      ]
+     }
+    },
+    "think - base": {
+     "one_sample": {
+      "problems": 15.75,
+      "points": 21.575342465753426,
+      "interval95": [
+       15.41095890410959,
+       28.08219178082192
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 18.0,
+      "points": 24.65753424657534,
+      "interval95": [
+       15.068493150684931,
+       35.61643835616438
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 17.666666666666668,
+      "points": 24.200913242009133,
+      "interval95": [
+       14.954337899543379,
+       34.1324200913242
+      ]
+     }
+    },
+    "rl - base": {
+     "one_sample": {
+      "problems": 11.75,
+      "points": 16.095890410958905,
+      "interval95": [
+       10.616438356164384,
+       21.91780821917808
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 8.0,
+      "points": 10.95890410958904,
+      "interval95": [
+       2.73972602739726,
+       19.17808219178082
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 6.5,
+      "points": 8.904109589041095,
+      "interval95": [
+       2.968036529680366,
+       15.182648401826485
+      ]
+     }
+    },
+    "cap32 - rl": {
+     "one_sample": {
+      "problems": 8.0,
+      "points": 10.95890410958904,
+      "interval95": [
+       6.164383561643835,
+       16.43835616438356
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 8.0,
+      "points": 10.95890410958904,
+      "interval95": [
+       2.73972602739726,
+       19.17808219178082
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 9.666666666666668,
+      "points": 13.242009132420094,
+      "interval95": [
+       6.506849315068493,
+       21.004566210045663
+      ]
+     }
+    },
+    "cap16 - rl": {
+     "one_sample": {
+      "problems": 2.25,
+      "points": 3.0821917808219177,
+      "interval95": [
+       -0.684931506849315,
+       7.191780821917808
+      ]
+     },
+     "vote_stored_order": {
+      "problems": 7.0,
+      "points": 9.58904109589041,
+      "interval95": [
+       1.36986301369863,
+       17.80821917808219
+      ]
+     },
+     "vote_expected_random_tie": {
+      "problems": 7.333333333333333,
+      "points": 10.045662100456621,
+      "interval95": [
+       3.9954337899543377,
+       16.894977168949772
+      ]
+     }
+    }
+   }
+  }
+ },
+ "hypotheses": {
+  "H1": {
+   "v1_wrong_of_77": 0,
+   "held": true
+  },
+  "H2": {
+   "vote_stored_order": {
+    "a": 13.23529411764706,
+    "b": 13.23529411764706,
+    "change": 0.0,
+    "b_interval95": [
+     7.352941176470589,
+     19.11764705882353
+    ]
+   },
+   "vote_expected_random_tie": {
+    "a": 14.522058823529413,
+    "b": 14.522058823529413,
+    "change": 0.0,
+    "b_interval95": [
+     8.517156862745098,
+     20.64950980392157
+    ]
+   },
+   "held": true
+  },
+  "H3": {
+   "v1_wrong_problems: vote right (think, rl, base), stored order": [],
+   "think_only_minus_rl_only": 0,
+   "held": true
+  }
+ }
+}

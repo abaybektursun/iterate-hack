@@ -1,0 +1,51 @@
+[
+  {
+    "number": 2,
+    "problem": "Suppose that $m$ and $b$ are positive real numbers such that the line $y = mx + b$ intersects the parabola $y = x^2$ at two points whose $x$-coordinates differ by $4$ and whose $y$-coordinates differ by $12$. Compute $b$.",
+    "answer": "\\frac{7}{4}",
+    "figure": false,
+    "note": "Text layer prints x^2 as 'x2' and the answer 7/4 as stacked '7' over '4'; image confirms $y = x^2$ and $\\frac{7}{4}$. The diagram on the page belongs to Solution 1, not to the statement."
+  },
+  {
+    "number": 3,
+    "problem": "Eric the monkey has no bananas. Every morning, Eric may optionally go to the supermarket to buy a single bunch of exactly $5$ bananas. Eric may only go to the supermarket $3$ times. Every night, Eric must eat $1$ banana or else he dies. Compute the number of ways Eric may survive for $15$ nights.",
+    "answer": "35",
+    "figure": false,
+    "note": ""
+  },
+  {
+    "number": 5,
+    "problem": "Let $\\alpha$ be the unique real number such that both $\\alpha + \\sqrt{\\frac{11}{12}}$ and $\\alpha^3 + \\sqrt{\\frac{11}{12}}$ are positive and rational. Compute $\\alpha^3 + \\sqrt{\\frac{11}{12}}$.",
+    "answer": "\\frac{25}{54}",
+    "figure": false,
+    "note": "Text layer scrambles the square roots, fractions and the exponent 3; formulas taken from the image. Answer line is at the bottom of page 3."
+  },
+  {
+    "number": 6,
+    "problem": "Let $O$ be the circumcenter of an acute triangle $ABC$, and let $D$ and $E$ be points on side $BC$ such that $\\overline{OD}$ is parallel to $\\overline{AB}$ and $\\overline{OE}$ is parallel to $\\overline{AC}$. Given that $BD = 7$, $DE = 6$, and $EC = 5$, compute $AO$.",
+    "answer": "\\sqrt{105}",
+    "figure": false,
+    "note": "Image shows overlines on OD, AB, OE, AC (not on BC); the text layer drops them. Text layer splits the radical sign from 105; image confirms $\\sqrt{105}$. The diagram on the page follows 'Solution:' and is not part of the statement."
+  },
+  {
+    "number": 7,
+    "problem": "In an $11 \\times 11$ grid of unit squares, rows and columns are indexed consecutively with the integers from $1$ to $11$. Then, every cell with an even row and column index is deleted. Compute the number of ways to partition the resulting shape into rectangles with integer side lengths.",
+    "answer": "3^4 \\cdot 5^{16} \\cdot 7^{16}",
+    "figure": false,
+    "note": "Text layer prints the answer as '34 · 516 · 716'; image confirms the exponents: $3^4 \\cdot 5^{16} \\cdot 7^{16}$. The coloured grid on the page belongs to Solution 1."
+  },
+  {
+    "number": 9,
+    "problem": "Let $a_1, a_2, \\ldots$ be a sequence of positive integers such that $a_1 = a_2 = \\cdots = a_7 = 1$ and $$a_n = a_{n-1} + 10a_{n-7} \\quad \\text{for all } n \\geq 8.$$ Compute the remainder when $a_{2026}$ is divided by $10000$.",
+    "answer": "2991",
+    "figure": false,
+    "note": "Text layer flattens the subscripts (a1, an−1, an−7, a2026); subscripts taken from the image."
+  },
+  {
+    "number": 10,
+    "problem": "The country of HMMTland has $100$ cities. Engineers propose a tunnel between every pair of cities and randomly assign the distinct construction costs $1, 2, \\ldots, \\binom{100}{2}$ to the proposed tunnels, with every assignment equally likely. Each city funds its single cheapest incident tunnel. A tunnel is built if at least one city funds it. If more than one city funds it, it is still built only once. Compute the expected number of connected components in the resulting tunnel system.\n\n(A connected component is a maximal nonempty set of cities such that every city in the set is reachable from every other city in the set by traveling through built tunnels.)",
+    "answer": "\\frac{4950}{197}",
+    "figure": false,
+    "note": "Text layer breaks the binomial coefficient into '100' and '2' on separate lines; image confirms $\\binom{100}{2}$. 'connected component' is italic in the parenthetical. Answer printed as the fraction 4950 over 197."
+  }
+]

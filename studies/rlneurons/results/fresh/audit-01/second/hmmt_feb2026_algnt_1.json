@@ -1,0 +1,37 @@
+[
+  {
+    "number": 2,
+    "problem": "Compute the second smallest positive integer $n$ such that\n\\begin{itemize}\n\\item $n$ is divisible by $101$, and\n\\item the decimal representation of $n$ contains the number $2026$ as a consecutive sequence of digits.\n\\end{itemize}",
+    "answer": "420261",
+    "figure": false,
+    "note": "The two conditions are printed as a bulleted list; transcribed as an itemize environment."
+  },
+  {
+    "number": 5,
+    "problem": "Compute the largest positive integer $n$ such that\n$$n \\text{ divides } (\\lfloor \\sqrt{n} \\rfloor)!^{n!} + 450.$$",
+    "answer": "1230",
+    "figure": false,
+    "note": "Text layer prints the exponent n! inline as '(⌊√n⌋)!n! + 450'; the image shows n! as a superscript on the factorial: (⌊√n⌋)!^{n!} + 450."
+  },
+  {
+    "number": 7,
+    "problem": "Positive real numbers $x$, $y$, and $z$ satisfy the following equations:\n$$\\begin{aligned} xyz &= 3, \\\\ (x-y)(y-z)(z-x) &= 4, \\\\ (x+y)(y+z)(z+x) &= 40. \\end{aligned}$$\nCompute the minimum possible value for $x$.",
+    "answer": "(3+\\sqrt{6})^{-1/3}",
+    "figure": false,
+    "note": "Text layer flattens the answer to '(3 + 6)−1/3' with the root sign on the line above; the image shows (3+\\sqrt{6})^{-1/3}."
+  },
+  {
+    "number": 9,
+    "problem": "Compute\n$$\\sum_{k=1}^{\\infty} \\left( 2^{-\\lfloor 101k/1 \\rfloor} + 2^{-\\lfloor 101k/2 \\rfloor} + \\cdots + 2^{-\\lfloor 101k/100 \\rfloor} \\right).$$",
+    "answer": "50\\left(1 - \\frac{1}{2^{101}-1}\\right)",
+    "figure": false,
+    "note": "The statement is on page 6 and the Answer line on page 7. Text layer garbles the answer as '50 1 − 21011−1'; the image shows 50(1 - 1/(2^{101} - 1))."
+  },
+  {
+    "number": 10,
+    "problem": "Let\n$$S = \\sum_{k=0}^{2026} k \\binom{2k}{k} 2^k.$$\nCompute the remainder when $S$ is divided by $2027$. (Note that $2027$ is prime.)",
+    "answer": "289",
+    "figure": false,
+    "note": "The statement is on page 7 and the Answer line on page 8. Text layer scatters the binomial coefficient and exponent; the image shows k \\binom{2k}{k} 2^k."
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "number": 2,
+    "problem": "Jacopo is rolling a fair $4$-sided die with faces labeled $1$, $2$, $3$, and $4$. He starts with a score of $0$. Every time he rolls a face with label $i$, he adds $i$ to his score, and then replaces the label of that face with $0$. Compute Jacopo's expected score after $4$ rolls.",
+    "answer": "10(1 - (\\frac{3}{4})^4) = \\frac{875}{128}",
+    "figure": false,
+    "note": "Text layer garbles the answer as '10(1 − ( 43 )4 ) = 875 / 128'; the image shows 10(1-(3/4)^4) = 875/128."
+  },
+  {
+    "number": 3,
+    "problem": "The numbers $1$, $2$, $3$, $4$, $5$, $6$, and $7$ are written on a blackboard in some order. Jacob repeatedly swaps numbers at adjacent positions on the blackboard until the numbers are sorted in ascending order. Compute the number of initial orderings for which it is possible that the number $4$ was included in a swap at most once.",
+    "answer": "324",
+    "figure": false,
+    "note": "Statement runs from page 1 onto page 2."
+  },
+  {
+    "number": 4,
+    "problem": "Sarunyu has a stick of length $1$ with one endpoint marked in red. Every minute, he picks one of his sticks uniformly at random and breaks it into two halves of equal length. Compute the expected length of the stick with the red endpoint after $5$ minutes.",
+    "answer": "\\frac{\\binom{10}{5}}{2^{10}} = \\frac{63}{256}",
+    "figure": false,
+    "note": "Text layer prints the denominator as '210' and the binomial as '(10 5)'; the image shows \\binom{10}{5} over 2^{10}, equal to 63/256."
+  },
+  {
+    "number": 6,
+    "problem": "Derek currently owes $\\pi$ units of a currency called Money of Indiscrete Type, or MIT for short. Every day, the following happens:\n- He flips a fair coin to decide how much of his debt to pay. If he flips heads, he decreases his debt by $1$ MIT. If he flips tails, he decreases his debt by $2$ MITs. If Derek's debt ever becomes nonpositive, Derek becomes debt-free.\n- Afterwards, his remaining debt doubles.\nCompute the probability that Derek ever becomes debt-free. (MITs are continuous, so the debt is never rounded.)",
+    "answer": "\\frac{4-\\pi}{2} = 2 - \\frac{\\pi}{2}",
+    "figure": false,
+    "note": "Text layer garbles the answer as '2 =2− 2 / 4−π π'; the image shows (4-\\pi)/2 = 2 - \\pi/2. The two conditions are printed as a bulleted list."
+  },
+  {
+    "number": 7,
+    "problem": "Let $S$ be the set of vertices of a right prism whose bases are regular decagons $A_1A_2 \\ldots A_{10}$ and $B_1B_2 \\ldots B_{10}$. A plane, not passing through any vertex of $S$, partitions the vertices of $S$ into two sets, one of which is $M$. Compute the number of possible sets $M$ that can arise out of such a partition.",
+    "answer": "1574",
+    "figure": false,
+    "note": "The diagram on the page belongs to the solution, not the statement."
+  },
+  {
+    "number": 9,
+    "problem": "Let $A_1, A_2, A_3, \\ldots$ be a sequence of finite nonempty sets of positive integers. Given that $|A_i \\cap A_j| = \\gcd(i, j)$ for all (not necessarily distinct) positive integers $i$ and $j$, compute the minimum possible value of $$\\sum_{d \\mid 250} \\max A_d,$$ where the sum ranges over all positive integer divisors $d$ of $250$.\n(For a finite nonempty set $S$, we define $\\max S$ as the largest element of $S$.)",
+    "answer": "499",
+    "figure": false,
+    "note": ""
+  }
+]

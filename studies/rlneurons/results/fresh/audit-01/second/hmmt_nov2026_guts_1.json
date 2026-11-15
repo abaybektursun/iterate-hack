@@ -1,0 +1,51 @@
+[
+  {
+    "number": 1,
+    "problem": "Each cell of the following $1 \\times 9$ grid is labeled with a single-digit nonnegative integer such that any two adjacent cells have a product that is divisible by $6$. Compute the least possible sum of all nine numbers in the grid.\n\n$$\\begin{array}{|c|c|c|c|c|c|c|c|c|} \\hline ? & 6 & 1 & ? & 0 & 2 & ? & ? & 3 \\\\ \\hline \\end{array}$$",
+    "answer": "12",
+    "figure": true,
+    "note": "The grid is printed as a figure (a row of 9 boxed cells); its cell contents, left to right, are ?, 6, 1, ?, 0, 2, ?, ?, 3 (image and text layer agree). I rendered it as a LaTeX array after the statement text."
+  },
+  {
+    "number": 3,
+    "problem": "Compute the number of nine-letter strings consisting of three $A$'s, three $B$'s, and three $C$'s such that each $A$ appears directly next to another $A$, each $B$ appears directly next to another $B$, and each $C$ appears directly next to another $C$.",
+    "answer": "6",
+    "figure": false,
+    "note": "Statement is on page 1; the Answer line is at the top of page 2."
+  },
+  {
+    "number": 4,
+    "problem": "Compute the greatest $2$-digit positive integer $\\underline{ab}$ such that $\\underline{ab} + \\underline{ba}$ is a perfect square.",
+    "answer": "92",
+    "figure": false,
+    "note": "In the image ab and ba are underlined (digit-concatenation notation); the text layer drops the underlines and prints plain 'ab + ba'."
+  },
+  {
+    "number": 6,
+    "problem": "Snow White and the seven dwarfs are sitting in a circle facing inward. Initially, Snow White holds a basket containing $100$ apples, of which $1$ is poisoned and the rest are harmless. Every minute, whoever is holding the basket must choose an apple uniformly and independently at random from the basket and eat it, then pass the basket to the person to their left. This process continues until someone eats the poisoned apple.\n\nCompute the probability that Snow White does **not** eat the poisoned apple.",
+    "answer": "\\frac{87}{100}",
+    "figure": false,
+    "note": "The word 'not' is printed in bold (marked with ** here). The text layer splits the fraction 87/100 over two lines; the image shows \\frac{87}{100}."
+  },
+  {
+    "number": 7,
+    "problem": "Suppose $P(x)$ is a quadratic polynomial with real coefficients for which $P(10) - P(1) - P(9) = 62$ and $P(10) - P(2) - P(8) = 118$. Compute $P(10) - P(3) - P(7)$.",
+    "answer": "158",
+    "figure": false,
+    "note": ""
+  },
+  {
+    "number": 9,
+    "problem": "Hannah has $16$ colored pencils of different colors and is drawing a tricolor flag with $3$ horizontal stripes. The pencils come in $8$ pairs of complementary colors. Hannah randomly colors each stripe such that no two stripes have exactly the same color. Compute the probability that no two adjacent stripes have complementary colors.",
+    "answer": "\\frac{13}{15}",
+    "figure": false,
+    "note": "The text layer splits the fraction 13/15 over two lines; the image shows \\frac{13}{15}."
+  },
+  {
+    "number": 11,
+    "problem": "Mark rolls a fair $6$-sided die $6$ times and writes down his results in order, creating a $6$-digit number. Compute the probability that this number is a multiple of $15$.",
+    "answer": "\\frac{1}{18}",
+    "figure": false,
+    "note": "The text layer splits the fraction 1/18 over two lines; the image shows \\frac{1}{18}."
+  }
+]

@@ -1,0 +1,51 @@
+[
+  {
+    "number": 1,
+    "problem": "Jerry and Sophie are each given a number. They are both told the following information:\n• Their numbers are distinct integers between $2$ and $50$, inclusive.\n• Jerry’s number is an integer power of Sophie’s number.\nHowever, neither of them can determine the other’s number given this information. Compute the sum of their numbers.",
+    "answer": "18",
+    "figure": false,
+    "note": "The two conditions are printed as a bulleted list."
+  },
+  {
+    "number": 2,
+    "problem": "Across all positive integers $m$ and $n$, compute the least possible integer value of\n$$(\\sqrt{21} + \\sqrt{55})^2 + (\\sqrt{m} - \\sqrt{n})^2.$$",
+    "answer": "144",
+    "figure": false,
+    "note": "Text layer loses the square roots' extent and prints the exponents 2 inline; image confirms both brackets are squared and the second bracket has a minus sign."
+  },
+  {
+    "number": 4,
+    "problem": "Let $F_0$, $F_1$, $F_2$, $\\ldots$ be a sequence of positive integers with $F_0 = F_1 = F_2 = \\cdots = F_{2025} = 1$ and $F_i = F_{i-2025} + F_{i-2026}$ for all positive integers $i \\geq 2026$. Compute the number of positive integers $n < 2026$ such that there exists a positive integer $k$ satisfying $F_k = n$.",
+    "answer": "64",
+    "figure": false,
+    "note": "Text layer flattens the subscripts (e.g. Fi−2025); image confirms they are subscripts i-2025 and i-2026."
+  },
+  {
+    "number": 5,
+    "problem": "A right circular cone with apex $A$ has base radius $1$ and height $7$. Two perpendicular planes are tangent to the cone’s lateral surface along segments $\\overline{AP}$ and $\\overline{AQ}$, where $P$ and $Q$ lie on the base of the cone. Compute $PQ$.",
+    "answer": "\\frac{10}{7}",
+    "figure": false,
+    "note": "Text layer drops the overlines on AP and AQ and splits the answer fraction over two lines (10 above 7); image shows 10/7 as a fraction. The diagram on the next page belongs to Solution 1, not to the statement."
+  },
+  {
+    "number": 6,
+    "problem": "Given that $a$ and $b$ are integers greater than $1$ such that $\\dfrac{a + b^2}{a^2}$ is an integer, compute the least possible value of $b$.",
+    "answer": "35",
+    "figure": false,
+    "note": "Text layer splits the fraction over two lines (a + b2 above a2); image confirms numerator a + b^2 and denominator a^2."
+  },
+  {
+    "number": 7,
+    "problem": "Alice has $8$ balls labeled $1, 2, 3, \\ldots, 8$ and $8$ boxes labeled $1, 2, 3, \\ldots, 8$. Compute the number of ways for Alice to place exactly $1$ ball in every box such that exactly $1$ ball is labeled with a strictly higher number than its box.",
+    "answer": "247",
+    "figure": false,
+    "note": "The cycle diagram on this page is part of the solution, not the statement."
+  },
+  {
+    "number": 8,
+    "problem": "Let $ABC$ be a triangle with $AB = 13$, $BC = 14$, and $CA = 15$. Point $D$ is chosen on segment $BC$. Points $P$ and $Q$ are such that $\\angle PBC = 90^\\circ$, $\\angle QCB = 90^\\circ$, and $APDQ$ is a kite with axis of symmetry $PQ$. Suppose that $D$ is chosen such that $\\angle PAQ$ is maximized. Compute $AD$.",
+    "answer": "4\\sqrt{10}",
+    "figure": false,
+    "note": "The answer box prints a trailing period inside it (\"4\\sqrt{10}.\"); the period is left out here. Text layer puts the root sign on the line above; image confirms 4\\sqrt{10}. The diagram on the next page belongs to the solution."
+  }
+]

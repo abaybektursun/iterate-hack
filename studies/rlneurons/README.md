@@ -5210,3 +5210,59 @@ of one, right in 6 of 24 orders; base `69`, 116 (right) against 196 with two cap
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.ordervote_test
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.ordervote --nn 01   # 45 seconds
 ```
+
+## Audit of the transcribed fresh2026 statements: 0 of 77 differ from the official PDFs in their mathematics (fresh2026, n = 136, laptop, board work-831689, idea-60f12e)
+
+Question: 77 of the 136 fresh2026 problems (HMMT February 2026 Guts 28, HMMT November 2026 49) were transcribed from the
+official PDFs by a language model and no statement was checked (the stated weak point of result-5251c9). How many differ
+from the PDF in their mathematics, and what does Think-SFT minus RL become without them? Answer: none, so nothing changes.
+A blind second transcription of all 77 gives 73 statements identical to `data/fresh/fresh2026_v1.json` after a fixed
+normalisation and 4 with cosmetic differences only (an `aligned` environment twice, a bullet against a dash, bold markers);
+0 material differences, 0 of 77 answers differ. Think-SFT + cue minus RL plain under the vote over 4 stays +13.2 points
+[+7.4, +19.1] in the stored order and +14.5 [+8.5, +20.6] as the expectation under a random tie-break; on the 59 Hugging
+Face problems plus the 73 identical ones (n = 132) it is +12.9 [+6.8, +19.7] and +14.2 [+7.7, +20.8]. No
+`fresh2026_v2.json` was written: there is nothing to correct. Spec, written and pushed before any second transcription:
+`specs/SPEC_freshaudit.md` (commit `b4d26127`). Branch `freshaudit` (main is frozen; it contains branch `ordervote`, whose
+`analysis/ordervote.py` the rescore imports). No model was run.
+
+Method. `prep/freshaudit_prep.py` fetched the five PDFs again; each sha256 equals the one in
+`data/fresh/transcribed_v1/sources.json`. 15 fresh subagents, each given only rendered page images, the pages' text layer
+and problem numbers (0 of the 15 transcripts mention the data file), transcribed the 77 and 15 control problems, reading
+the image for symbols and the text layer for words and long numbers. `analysis/freshaudit.py diff` normalises both versions
+(delimiters, `\dfrac`, `\left`, spacing, quotes, `\le`; rule in the spec), diffs the token lists and marks each differing
+span; every problem with a span went to a third reader with the PDF page and the two versions as A and B in a drawn order.
+
+| Check | Result |
+|---|---|
+| transcribed, n = 77 | 73 IDENTICAL, 4 COSMETIC, 0 MATERIAL, 0 ANSWER (45 of 77 are equal as raw strings) |
+| planted material corruptions, 10 (4 numbers, 3 signs / inequalities / exponents, 3 conditions) | 10 flagged at stage 1, 10 MATERIAL at the third read with the corrupted side named as not the PDF's |
+| planted cosmetic changes, 10 | 8 IDENTICAL after normalisation, 2 COSMETIC at the third read, 0 MATERIAL |
+| control: 15 MathArena `hmmt_feb2026` problems against the official round PDFs | 12 IDENTICAL, 3 COSMETIC, 0 MATERIAL, 0 ANSWER (`hmmt_feb2026/7`: MathArena adds a sentence on the answer's form) |
+| numbers of 2 or more digits in the 77 v1 statements missing from the PDF text layer (no model) | 0 |
+| kept problems the second transcriber marked as having a figure | 2 (`hmmt_feb2026_guts/2`, `hmmt_nov2026_guts/1`): the words, or the array in the statement, give everything; page read by the main session |
+
+Rescore from the stored rows (`results/fresh/audit-01/readout.md` has every row; right answers of n; differences in points
+[95 %], paired bootstrap over problems, 5,000 resamples):
+
+| Set | n | Think-SFT + cue: one sample, vote stored, vote expected | RL plain | base + cue | Think-SFT minus RL: one sample | vote, stored order | vote, expected |
+|---|---|---|---|---|---|---|---|
+| (a) all | 136 | 60.0, 75, 75.5 | 50.5, 57, 55.8 | 29.5, 38, 38.8 | +7.0 [+3.1, +11.0] | +13.2 [+7.4, +19.1] | +14.5 [+8.5, +20.6] |
+| (b) without problems whose v1 statement or answer is wrong (none) | 136 | 60.0, 75, 75.5 | 50.5, 57, 55.8 | 29.5, 38, 38.8 | +7.0 [+3.1, +11.0] | +13.2 [+7.4, +19.1] | +14.5 [+8.5, +20.6] |
+| (c) the 59 Hugging Face + the 73 identical | 132 | 57.8, 72, 72.5 | 48.8, 55, 53.8 | 29.0, 38, 38.6 | +6.8 [+3.0, +11.0] | +12.9 [+6.8, +19.7] | +14.2 [+7.7, +20.8] |
+
+Set (c): Think-SFT minus base +25.8 [+18.2, +33.3] (expected +25.7 [+18.6, +33.1]), RL minus base +12.9 [+6.8, +18.9]
+(+11.5 [+6.6, +16.8]), Think-SFT at cap 32,768 minus RL +12.9 [+6.1, +19.7] (+14.4 [+8.4, +21.0]).
+
+Hypotheses: H1 (fewer than 5 of 77 with a material error) held, 0. H2 (set b moves Think-SFT minus RL by less than 1.5
+points, interval above 0) held trivially, change 0.0. H3 (the wrong problems favour no model) has no case. Predictions:
+`v1 wrong` 1 (0 to 3) predicted, 0 observed; IDENTICAL 45 (30 to 60) predicted, 73 observed: refuted, both transcriptions
+are closer to verbatim than predicted; control 0 MATERIAL held, 9 IDENTICAL predicted, 12 observed.
+
+Caveats. Both transcriptions are by Claude from the same PDFs, so an error both make the same way would not show; the
+controls against it are the 10 planted corruptions (all caught), the number search in the text layer, and the 12 of 15
+MathArena statements (typed by other people) that come out identical. No person has read the 77. AIME 2026 is not in the
+control: no official PDF url. Departures from the spec are listed in `run.json`. The PDFs are not committed
+(`sources.json`: urls and sha256).
+
+Artifacts: `results/fresh/audit-01/` (`run.json`, `sources.json`, `second/`, `diff.json`, `planted.json`,
+`third_read.json`, `audit.md`, `audit.json`, `readout.md`, `readout.json`, `examples.json`). Commands in `run.json`.
