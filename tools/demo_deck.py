@@ -261,7 +261,9 @@ def slides(n_findings, papers):
         ("hook", f'<div class="mid"><h1 class="big">{esc(HOOK)}</h1><p class="sub faint">Team Invariant</p></div>'),
         ("climb", f'<div class="head"><h2>No training: {pct(CLIMB_LO):.1f} % to {pct(CLIMB_HI):.0f} % on {esc(CLIMB["bench"])}</h2>'
                   f'<p class="sub">The best score of the untrained base model over the hackathon · RL-trained model {pct(CLIMB_RL):.0f} %</p></div>'
-                  '<iframe class="fig-frame climb" data-fig="climb" data-replay title="The accuracy climb" tabindex="-1"></iframe>'),
+                  '<iframe class="fig-frame climb" data-fig="climb" data-replay title="The accuracy climb" tabindex="-1"></iframe>'
+                  '<div class="replay"><input class="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="Board time">'
+                  '<button class="rate" aria-pressed="false" aria-label="Half speed">0.5×</button></div>'),
         ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers, limited tokens, compute and people</p>'
                      f'<h1 class="big">Hill climbing is not useful if we don\'t understand it</h1></div>'),
         ("tea", f'<div class="mid"><p class="sub">Our solution</p>{photo(demo_photos.TEA, "tea")}<p class="sub">Gong fu tea and meditation</p></div>'),
@@ -343,6 +345,17 @@ p, h1, h2, figure { margin: 0; }
 .fig-frame.harness { left: 250px; top: 215px; width: 1100px; height: 600px; }
 .fig-frame.tree { left: 220px; top: 190px; width: 1160px; height: 680px; }
 .fig-frame.climb { left: 370px; top: 200px; width: 860px; height: 680px; }
+/* under the climb: a faint slider of board time and a half-speed button, clear under the pointer */
+.replay { position: absolute; left: 430px; top: 858px; width: 740px; display: flex; align-items: center; gap: 18px; opacity: .22; transition: opacity .2s ease; z-index: 1; }
+.replay:hover, .replay:focus-within { opacity: .95; }
+.seek { flex: 1; min-width: 0; height: 24px; margin: 0; background: none; -webkit-appearance: none; appearance: none; cursor: pointer; --p: 0%; }
+.seek::-webkit-slider-runnable-track { height: 2px; border-radius: 1px; background: linear-gradient(to right, var(--ink) var(--p), var(--faint) var(--p)); }
+.seek::-moz-range-track { height: 2px; border-radius: 1px; background: var(--faint); }
+.seek::-moz-range-progress { height: 2px; background: var(--ink); }
+.seek::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; margin-top: -5px; border-radius: 50%; background: var(--ink); }
+.seek::-moz-range-thumb { width: 12px; height: 12px; border: 0; border-radius: 50%; background: var(--ink); }
+.rate { font: inherit; font-size: 15px; font-weight: 560; color: var(--ink); background: none; border: 1px solid var(--faint); border-radius: 999px; padding: 3px 12px; cursor: pointer; }
+.rate[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .fig-frame.wide { left: 220px; top: 205px; width: 1160px; height: 650px; }
 /* the sponsors slide: two scenes side by side, each drawn at 580 x 446 and shown 1.21 times larger so its labels read from the back of a room */
 .fig-frame.sponsor { top: 208px; width: 580px; height: 446px; transform: scale(1.21); transform-origin: 0 0; background: transparent; }
@@ -398,7 +411,7 @@ p, h1, h2, figure { margin: 0; }
 @page { size: 13.333in 7.5in; margin: 0; }
 @media print {
   html, body { height: auto; overflow: visible; }
-  .count, .theme { display: none; }
+  .count, .theme, .replay { display: none; }
   .slide { position: relative; inset: auto; display: block; width: 13.333in; height: 7.5in; overflow: hidden;
     opacity: 1; visibility: visible; transition: none; break-after: page; page-break-after: always; }
   .slide:last-child { break-after: auto; page-break-after: auto; }
@@ -437,6 +450,20 @@ function labelTheme() { const to = themeNow() === "dark" ? "light" : "dark"; the
 themeButton.addEventListener("click", () => { toggleTheme(); themeButton.blur(); });  // blur: Space then steps the deck again
 labelTheme();
 
+/* The climb replays at twice the speed its page was designed for (0.5x: the designed speed); the slider moves its board time. */
+document.querySelectorAll(".replay").forEach(box => {
+  const f = box.parentNode.querySelector("iframe"), seek = box.querySelector(".seek"), rate = box.querySelector(".rate");
+  const api = () => f.contentWindow && f.contentWindow.replay;
+  let slow = false, held = false;
+  const setSpeed = () => { const r = api(); if (r) r.speed(slow ? 1 : 2); };
+  f.addEventListener("load", setSpeed);
+  seek.addEventListener("pointerdown", () => { held = true; });
+  seek.addEventListener("input", () => { const r = api(); if (r) r.seek(seek.value / 1000); seek.style.setProperty("--p", seek.value / 10 + "%"); });
+  seek.addEventListener("change", () => { held = false; seek.blur(); });  // the arrow keys step the slides again
+  rate.addEventListener("click", () => { slow = !slow; rate.setAttribute("aria-pressed", slow); setSpeed(); rate.blur(); });
+  setInterval(() => { const r = api(); if (r && !held) { seek.value = Math.round(r.at() * 1000); seek.style.setProperty("--p", seek.value / 10 + "%"); } }, 200);
+});
+
 function show(i, push) {
   i = Math.max(0, Math.min(SLIDES.length - 1, i));
   if (i === cur) return;
@@ -464,7 +491,7 @@ document.addEventListener("keydown", e => {
   else if ((k === "p" || k === "P") && !e.repeat) { e.preventDefault(); window.print(); }
 });
 document.addEventListener("click", e => {
-  if (e.target.closest("a, button")) return;  // the paper sheets open their PDF; the theme button switches the theme
+  if (e.target.closest("a, button, input")) return;  // the paper sheets open their PDF; the theme button switches the theme
   const x = e.clientX / innerWidth;
   if (x > 2 / 3) show(cur + 1, true); else if (x < 1 / 3) show(cur - 1, true);
 });
