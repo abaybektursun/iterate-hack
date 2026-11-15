@@ -1,0 +1,90 @@
+{
+ "theories": {
+  "r7-account": {
+   "rival": "One difficulty axis plus sampling: every arm (cued base, plain base, Math-RL, Code-RL, weight blends, Think-SFT) is one ability on a single shared per-problem difficulty scale (the Rasch picture of result-5da8a9). A gap problem is a mid-difficulty problem that one draw solved and the other missed. The plain-base evidence count kB and the base-side cap hit only sort gap problems into difficulty and length strata, not into a separate 'deliberation mode'. So the T 1.0 composition of any stronger arm's MATH-500 gap matches the null's reliability-heavy budget (reliability about 0.45, deliberation about 0.28). It is not the theory's deliberation-heavy budget (deliberation about 0.43, reliability about 0.28).",
+   "computed": 3,
+   "tests": 3,
+   "separating": 3,
+   "total_gain": -5.161,
+   "state": "loses to rival",
+   "no_offline_test": null,
+   "rows": [
+    {
+     "k": 1,
+     "turn": 1,
+     "experiment": "Share of math500-theta05cue-T1 gap problems assigned to reliability (base + 0.5*(RL - base) with the cue on MATH-500 as the RL side)",
+     "measured": 0.4807692307692308,
+     "n": 52,
+     "interval": [
+      0.36538461538461536,
+      0.5961538461538461
+     ],
+     "theory": {
+      "value": 0.31,
+      "low": 0.2,
+      "high": 0.43
+     },
+     "rival": {
+      "value": 0.45,
+      "low": 0.33,
+      "high": 0.57
+     },
+     "same_prediction": false,
+     "theory_should_say": "The theory puts RL-direction cells below the null on reliability (it predicted 0.26 for Math-RL and 0.29 for Code-RL against the null's 0.36), so for theta0.5 it implies about 0.28. Under one axis the theta0.5 gap has the null's shape, about 0.45.",
+     "gain": -2.852,
+     "replication": "replicated"
+    },
+    {
+     "k": 2,
+     "turn": 1,
+     "experiment": "Share of math500-theta05cue-T1 gap problems assigned to deliberation",
+     "measured": 0.2692307692307692,
+     "n": 52,
+     "interval": [
+      0.17307692307692307,
+      0.38461538461538464
+     ],
+     "theory": {
+      "value": 0.4,
+      "low": 0.28,
+      "high": 0.52
+     },
+     "rival": {
+      "value": 0.28,
+      "low": 0.17,
+      "high": 0.39
+     },
+     "same_prediction": false,
+     "theory_should_say": "The theory says RL directions multiply the long deliberative mode, so deliberation sits above the null's 0.37 in RL-side cells (it predicted 0.43-0.44). For theta0.5 that gives about 0.40-0.43, where one axis gives about 0.28.",
+     "gain": -1.6808,
+     "replication": "replicated"
+    },
+    {
+     "k": 3,
+     "turn": 1,
+     "experiment": "Share of math500-thinksft-T1 gap problems assigned to reliability (Olmo-3-7B-Think-SFT with the cue on MATH-500 as the other side)",
+     "measured": 0.38461538461538464,
+     "n": 65,
+     "interval": [
+      0.2923076923076923,
+      0.47692307692307695
+     ],
+     "theory": {
+      "value": 0.29,
+      "low": 0.18,
+      "high": 0.41
+     },
+     "rival": {
+      "value": 0.43,
+      "low": 0.3,
+      "high": 0.56
+     },
+     "same_prediction": false,
+     "theory_should_say": "The theory says a stronger long-reasoning arm fixes the plain-unreachable problems through the deliberate-then-commit mode, which leaves reliability below the null at about 0.28-0.30. One axis puts Think-SFT (454, same ability band) at the null's reliability-heavy share, about 0.43.",
+     "gain": -0.6284,
+     "replication": null
+    }
+   ]
+  }
+ }
+}

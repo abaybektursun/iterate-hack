@@ -1,0 +1,1244 @@
+[
+ {
+  "theory": {
+   "name": "r5-account",
+   "statement": "On MATH-500 at AI2's setting (T 1.0 / top-p 1.0, cap 16,384, grader v3, one sample each), the 65 problems that Olmo-3.1 RL-Zero-Math gets right and the cued Olmo 3 base gets wrong break down into four mechanisms and a small remainder. (1) Budget: about 0.25 are problems where the cued base ran to the 16,384-token cap without a loop. These are long problems on which the base keeps going and never commits, while RL, trained with truncated rollouts as negatives, finishes. (2) Answer statement: about 0.15 are problems where the base's failure was in stating the answer: a right value in a rejected or garbled final line, or a reached gold that it then overwrote. (3) Reliability: about 0.51 are problems the base solves in at least one of four other independent samples. The miss here is a sample-specific slip or misread on a problem the base can do, and RL removes it by concentrating on paths the base already samples. This is the largest part and the one still open. (4) Capability: about 0.07 are problems the base never solves in four further samples while RL solves at least two of four. Here RL uses a plan the base does not sample. (Unassigned) About 0.02 are problems where RL's single right answer was itself a lucky draw: RL is right in at most one of four other samples.",
+   "gap": "Cells: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json, T1 = base Olmo-3-1025-7B with the 3-token opening cue and T2 = Olmo-3.1-7B-RL-Zero-Math with the plain prompt, both MATH-500 (500 problems), T 1.0 / top-p 1.0, max 16,384 new tokens, 1 sample, grader v3 (fields t1_right, t2_right). A gap problem is a row with t2_right true and t1_right false (cell rl_only). Cap hits count as wrong through their stored t1_right/t2_right, and a row with t1_right or t2_right null or missing is not a gap problem. Expected size is 65 problems (result-5e17a6). The rules also read the independent 4-sample rows of the same two models at the same setting: D = studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl and E = studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl, attempt == 0, samples 0-3. kB and kR are the numbers of those rows with score_v3 == 1. Cap-hit rows, null score_v3 and missing samples count as wrong, and a duplicated (problem_index, sample) uses its first row in file order.",
+   "parts": [
+    {
+     "name": "budget",
+     "mechanism": "The cued base keeps writing past the 16,384-token budget without committing on long problems (no rule-A loop at T 1.0), while RL, trained with truncated rollouts as negatives, finishes. This revives the termination idea of r1-across-2 and r1-surprises-1, which were refuted on weight-dose answer counts (theta 1.5 word salad) and on a hard328 pass@4 count, not on which stored problems hit the cap, so their refuting tests do not apply to this per-problem rule.",
+     "rule": "per_problem.json row of the problem has t1_cap_hit == true."
+    },
+    {
+     "name": "answer-statement",
+     "mechanism": "The base reaches the right value but fails at stating it: a final line that v3 rejects or that is garbled, or a gold value overwritten by a later answer marker (the untested r4-m11/r4-m12 mechanisms, not refuted). RL boxes once and stops.",
+     "rule": "Not taken by an earlier rule, and the per_problem.json field failure_type, lower-cased, contains at least one of the substrings 'format', 'final line', 'garbled', 'rejected', 'changed'. A null or missing failure_type is not taken."
+    },
+    {
+     "name": "reliability",
+     "mechanism": "The base can solve the problem, and the T1 miss is a sample-specific slip or misread. RL sharpens the base's own distribution onto paths it already samples. This revives the slip-removal readings of r2-revise-2 and r3-surprises-1. Their refuting tests were a hard328 vote@4 count and a vote tie-break count, which make claims about vote procedures, not about whether the base solves a gap problem in independent samples, so they do not apply here.",
+     "rule": "Not taken by an earlier rule, and kB >= 1 (at least one of the 4 attempt-0 base_cue rows in D with score_v3 == 1)."
+    },
+    {
+     "name": "capability",
+     "mechanism": "RL uses a plan the base does not sample on this problem: the base fails all four independent samples, while RL solves the problem repeatedly.",
+     "rule": "Not taken by an earlier rule, and kB == 0 and kR >= 2 (at least two of the 4 attempt-0 RL rows in E with score_v3 == 1)."
+    }
+   ],
+   "scope": "Covers the 65 RL-only problems of the stored MATH-500 T1/T2 pair at T 1.0 / top-p 1.0, grader v3, one sample per model. It does not cover the 12 base-only problems (the gap counted here is gross, not net), T 0.6 cells (where loops dominate), the hard328 set, the Code pair or 3.0 checkpoints. Part 2 rests on one reader's hand label (failure_type). Parts 3-4 classify with 4 further samples per model, so a problem with a base rate near 0.1 can fall into capability by chance.",
+   "parent": null,
+   "imports": [
+    {
+     "source": "2504.13837",
+     "finding": "RLVR raises pass@1 by concentrating on paths the base model already samples. Per-problem MATH-500 coverage at 128 samples is almost the same for both models.",
+     "how": "Grounds the reliability part: on most gap problems the base's own samples already contain the right path, so RL's gain there is concentration, not new reach."
+    },
+    {
+     "source": "2505.22203",
+     "finding": "Rule-based math verifiers miss correctly formatted variants (average recall 86 %).",
+     "how": "Grounds the answer-statement part: some base gap misses are right values in forms the rule-based v3 rejects."
+    },
+    {
+     "source": "2610.30882",
+     "finding": "In Olmo 3, RL-Zero-Math multiplies an existing 'wait' marker. At T 0.6 RL hits the length limit more often than the base.",
+     "how": "Places the budget part in termination policy rather than skill: RL changes when the model keeps checking and when it stops."
+    }
+   ],
+   "explains": [
+    {
+     "item": "result-5e17a6",
+     "quote": "16 cap hits with no loop, 14 misread",
+     "how": "The budget part is exactly the T1 cap hits among the 65, so its predicted share is 16/65."
+    },
+    {
+     "item": "result-5e17a6",
+     "quote": "8 right answer in a rejected or garbled final line",
+     "how": "Together with the 2 'reached gold then changed it' labels, these make up the answer-statement part (about 10 of 65)."
+    },
+    {
+     "item": "result-9b6af3",
+     "quote": "problems the random cell solves 40",
+     "how": "A fresh base sample solves most gap problems, which is what the large reliability part says."
+    },
+    {
+     "item": "result-afc423",
+     "quote": "without (base 0/4): 8 of 12 wrong plan",
+     "how": "Base-0/4 problems fail by wrong plan, which matches the separate, small capability part."
+    },
+    {
+     "item": "result-afc423",
+     "quote": "sits in problems the base solves at least once in 4",
+     "how": "The gap sits mainly where the base sometimes succeeds, i.e. in the reliability part."
+    },
+    {
+     "item": "knowledge-787e53",
+     "quote": "At T 1.0 rule A finds 0 loops in T1, T2 and T3",
+     "how": "The budget part is non-loop overrun at T 1.0, not the T 0.6 loop mechanism."
+    },
+    {
+     "item": "result-5d032f",
+     "quote": "Restart on cap: base +1.6 [0.6, 2.8]",
+     "how": "Budget problems are long problems that also cap or fail on a restart, so restarts recover only a small fraction of the budget part."
+    }
+   ],
+   "conflicts": [
+    {
+     "item": "result-c57b51",
+     "quote": "turn 10 of the base's 2,000 samples right and 0 of RL's",
+     "how": "Label-free extraction rules repair only 0.5 points, which is less than a 0.15 answer-statement share suggests. Either the hand label overstates format failures, or many of them are forms (garbled lines, overwritten gold) that no extraction rule can repair."
+    }
+   ],
+   "rival": "The strongest rival is a pure sampling-noise budget: every gap problem is a draw from the base's per-problem success rate, so cap hits and answer-statement misses are just ways a sample fails and are not separate mechanisms. Under it, the cap-hit gap problems behave like the rest: the random matched-norm cell (a fresh base sample) solves them at about the overall 40/65 = 0.62 rate, and their other base samples cap no more often than base samples in general. This account instead predicts that the random cell solves only about 0.35 of the budget problems and that about 0.75 of them have at least one other cap hit in D. The random-cell solve rate on the budget part is the number that separates the two (0.35 here against about 0.6 under the rival).",
+   "predictions": [
+    {
+     "role": "share",
+     "part": "budget",
+     "experiment": "Share of the gap problems in the budget part",
+     "recipe": "Gap: in studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json, gap problems are rows with t2_right true and t1_right false (null or missing t1_right/t2_right: not a gap problem; cap hits keep their stored t1_right). Define kB = number of rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3} and score_v3 == 1, and kR the same in studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (cap-hit rows, null score_v3 and missing samples count as not right; a duplicated (problem_index, sample) uses its first row in file order). Assign each gap problem to the first rule that takes it: R1 budget: t1_cap_hit == true. R2 answer-statement: failure_type, lower-cased, contains any of 'format', 'final line', 'garbled', 'rejected', 'changed' (null or missing: not taken). R3 reliability: kB >= 1. R4 capability: kB == 0 and kR >= 2. Otherwise: unassigned. Statistic: (number of gap problems assigned to budget) / (number of gap problems).",
+     "unit": "fraction of gap problems",
+     "value": 0.246,
+     "low": 0.2,
+     "high": 0.29,
+     "refuted_by": "computed share below 0.20 or above 0.29",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "part": "answer-statement",
+     "experiment": "Share of the gap problems in the answer-statement part",
+     "recipe": "Gap: in studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json, gap problems are rows with t2_right true and t1_right false (null or missing t1_right/t2_right: not a gap problem; cap hits keep their stored t1_right). Define kB = number of rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3} and score_v3 == 1, and kR the same in studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (cap-hit rows, null score_v3 and missing samples count as not right; a duplicated (problem_index, sample) uses its first row in file order). Assign each gap problem to the first rule that takes it: R1 budget: t1_cap_hit == true. R2 answer-statement: failure_type, lower-cased, contains any of 'format', 'final line', 'garbled', 'rejected', 'changed' (null or missing: not taken). R3 reliability: kB >= 1. R4 capability: kB == 0 and kR >= 2. Otherwise: unassigned. Statistic: (number of gap problems assigned to answer-statement) / (number of gap problems).",
+     "unit": "fraction of gap problems",
+     "value": 0.154,
+     "low": 0.08,
+     "high": 0.2,
+     "refuted_by": "computed share below 0.08 or above 0.20",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "part": "reliability",
+     "experiment": "Share of the gap problems in the reliability part",
+     "recipe": "Gap: in studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json, gap problems are rows with t2_right true and t1_right false (null or missing t1_right/t2_right: not a gap problem; cap hits keep their stored t1_right). Define kB = number of rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3} and score_v3 == 1, and kR the same in studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (cap-hit rows, null score_v3 and missing samples count as not right; a duplicated (problem_index, sample) uses its first row in file order). Assign each gap problem to the first rule that takes it: R1 budget: t1_cap_hit == true. R2 answer-statement: failure_type, lower-cased, contains any of 'format', 'final line', 'garbled', 'rejected', 'changed' (null or missing: not taken). R3 reliability: kB >= 1. R4 capability: kB == 0 and kR >= 2. Otherwise: unassigned. Statistic: (number of gap problems assigned to reliability) / (number of gap problems).",
+     "unit": "fraction of gap problems",
+     "value": 0.508,
+     "low": 0.42,
+     "high": 0.6,
+     "refuted_by": "computed share below 0.42 or above 0.60",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "part": "capability",
+     "experiment": "Share of the gap problems in the capability part",
+     "recipe": "Gap: in studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json, gap problems are rows with t2_right true and t1_right false (null or missing t1_right/t2_right: not a gap problem; cap hits keep their stored t1_right). Define kB = number of rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3} and score_v3 == 1, and kR the same in studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (cap-hit rows, null score_v3 and missing samples count as not right; a duplicated (problem_index, sample) uses its first row in file order). Assign each gap problem to the first rule that takes it: R1 budget: t1_cap_hit == true. R2 answer-statement: failure_type, lower-cased, contains any of 'format', 'final line', 'garbled', 'rejected', 'changed' (null or missing: not taken). R3 reliability: kB >= 1. R4 capability: kB == 0 and kR >= 2. Otherwise: unassigned. Statistic: (number of gap problems assigned to capability) / (number of gap problems).",
+     "unit": "fraction of gap problems",
+     "value": 0.07,
+     "low": 0.02,
+     "high": 0.13,
+     "refuted_by": "computed share below 0.02 or above 0.13",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "part": "unassigned",
+     "experiment": "Share of the gap problems no rule takes",
+     "recipe": "Gap: in studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json, gap problems are rows with t2_right true and t1_right false (null or missing t1_right/t2_right: not a gap problem; cap hits keep their stored t1_right). Define kB = number of rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3} and score_v3 == 1, and kR the same in studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (cap-hit rows, null score_v3 and missing samples count as not right; a duplicated (problem_index, sample) uses its first row in file order). Assign each gap problem to the first rule that takes it: R1 budget: t1_cap_hit == true. R2 answer-statement: failure_type, lower-cased, contains any of 'format', 'final line', 'garbled', 'rejected', 'changed' (null or missing: not taken). R3 reliability: kB >= 1. R4 capability: kB == 0 and kR >= 2. Otherwise: unassigned. Statistic: (number of gap problems assigned to unassigned) / (number of gap problems).",
+     "unit": "fraction of gap problems",
+     "value": 0.022,
+     "low": 0.0,
+     "high": 0.06,
+     "refuted_by": "computed share above 0.06",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "cross",
+     "part": "budget",
+     "experiment": "Fraction of budget-part problems on which a fresh base sample (random matched-norm difference cell, cue) is right",
+     "recipe": "Budget-part problems: gap problems (per_problem.json rows with t2_right true and t1_right false; null or missing: not a gap problem) with t1_cap_hit == true in studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. File iterate-runs:abaybektursun-1114-153047-6429/answers.jsonl (base + random matched-norm difference, cue, T 1.0 / top-p 1.0, MATH-500). Take the first row per problem_index in file order. A problem is right if that row has score_v3 == 1; a missing row or null score_v3 counts as wrong, and cap hits keep their stored score_v3. Statistic: right budget-part problems / budget-part problems.",
+     "unit": "fraction of problems",
+     "value": 0.35,
+     "low": 0.15,
+     "high": 0.55,
+     "refuted_by": "computed fraction above 0.55 or below 0.15",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "cross",
+     "part": "budget",
+     "experiment": "Fraction of budget-part problems on which at least one of the 4 independent attempt-0 base_cue samples also hit the cap",
+     "recipe": "Budget-part problems as in the previous recipe (gap problems with t1_cap_hit == true in studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json). File studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl, rows with attempt == 0 and sample in {0,1,2,3}; a duplicated (problem_index, sample) uses its first row in file order, and missing samples count as not a cap hit. A problem counts if at least one such row has cap_hit == true. Statistic: counted problems / budget-part problems.",
+     "unit": "fraction of problems",
+     "value": 0.75,
+     "low": 0.55,
+     "high": 0.9,
+     "refuted_by": "computed fraction below 0.55",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "cross",
+     "part": "answer-statement",
+     "experiment": "Fraction of answer-statement-part problems on which at least one of the base's 4 stored samples is unanswered or repaired by grader v4a",
+     "recipe": "Answer-statement-part problems: gap problems (per_problem.json rows with t2_right true and t1_right false; null or missing: not a gap problem) with t1_cap_hit != true whose failure_type, lower-cased, contains any of 'format', 'final line', 'garbled', 'rejected', 'changed', in studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. File studies/rlneurons/results/repair/offline-01/rows.jsonl, rows with model == 'base_cue' (samples 0-3). A problem counts if at least one of its base_cue rows has kind == 'no_answer', or has score_v4 == 1 and score_v3 == 0 (null scores count as 0). Missing rows do not count. Statistic: counted problems / answer-statement-part problems.",
+     "unit": "fraction of problems",
+     "value": 0.3,
+     "low": 0.1,
+     "high": 0.5,
+     "refuted_by": "computed fraction below 0.10",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "cross",
+     "part": "reliability",
+     "experiment": "Fraction of reliability-part problems on which a fresh base sample (random matched-norm difference cell, cue) is right",
+     "recipe": "Reliability-part problems: gap problems (per_problem.json rows with t2_right true and t1_right false; null or missing: not a gap problem) of studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json with t1_cap_hit != true, with failure_type (lower-cased) containing none of 'format', 'final line', 'garbled', 'rejected', 'changed' (null counts as containing none), and with kB >= 1, where kB = number of rows in studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3}, score_v3 == 1 (first row per (problem_index, sample)). File iterate-runs:abaybektursun-1114-153047-6429/answers.jsonl, first row per problem_index. Right = score_v3 == 1; a missing row or null score_v3 counts as wrong. Statistic: right reliability-part problems / reliability-part problems.",
+     "unit": "fraction of problems",
+     "value": 0.8,
+     "low": 0.66,
+     "high": 0.92,
+     "refuted_by": "computed fraction below 0.66",
+     "gpu_minutes": 0
+    },
+    {
+     "experiment": "Base-only intervention aimed at the reliability part: Olmo-3-1025-7B base with the 3-token cue [1584, 2268, 33413], MATH-500 all 500 problems, T 1.0 / top-p 1.0, max 16,384 new tokens, one new sample per problem (seed 5,000,000 + problem_index, no restarts), then a majority vote over 5 answers per problem: the 4 attempt-0 samples of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl plus the new sample. Votes are cast by the extracted_v3 of finished answers, whitespace removed (cap hits and empty answers cast no vote). Ties go to the answer of the shortest finished tied sample (fewest n_new). The chosen answer is graded with v3; a problem with no vote counts as wrong.",
+     "unit": "right of 500",
+     "value": 452,
+     "low": 445,
+     "high": 459,
+     "refuted_by": "fewer than 445 or more than 459 right of 500",
+     "gpu_minutes": 40
+    }
+   ]
+  },
+  "state": "no gain",
+  "computed_tests": [
+   {
+    "id": "r5-account:p1",
+    "measured": 0.24615384615384617,
+    "value": 0.246,
+    "low": 0.2,
+    "high": 0.29,
+    "nulls": [
+     {
+      "value": 0.246,
+      "low": 0.19,
+      "high": 0.3
+     },
+     {
+      "value": 0.246,
+      "low": 0.19,
+      "high": 0.3
+     }
+    ],
+    "gain": 0.2007,
+    "k": 1,
+    "inside": true,
+    "within_noise": false,
+    "n": 65,
+    "interval": [
+     0.16923076923076924,
+     0.3384615384615385
+    ],
+    "refuted_by": "computed share below 0.20 or above 0.29",
+    "refuted_by_met": false
+   },
+   {
+    "id": "r5-account:p2",
+    "measured": 0.15384615384615385,
+    "value": 0.154,
+    "low": 0.08,
+    "high": 0.2,
+    "nulls": [
+     {
+      "value": 0.15,
+      "low": 0.08,
+      "high": 0.2
+     },
+     {
+      "value": 0.15,
+      "low": 0.08,
+      "high": 0.2
+     }
+    ],
+    "gain": 0.0056,
+    "k": 2,
+    "inside": true,
+    "within_noise": false,
+    "n": 65,
+    "interval": [
+     0.07692307692307693,
+     0.23076923076923078
+    ],
+    "refuted_by": "computed share below 0.08 or above 0.20",
+    "refuted_by_met": false
+   },
+   {
+    "id": "r5-account:p3",
+    "measured": 0.5384615384615384,
+    "value": 0.508,
+    "low": 0.42,
+    "high": 0.6,
+    "nulls": [
+     {
+      "value": 0.48,
+      "low": 0.37,
+      "high": 0.59
+     },
+     {
+      "value": 0.48,
+      "low": 0.36,
+      "high": 0.6
+     }
+    ],
+    "gain": 0.4407,
+    "k": 3,
+    "inside": true,
+    "within_noise": false,
+    "n": 65,
+    "interval": [
+     0.4307692307692308,
+     0.6307692307692307
+    ],
+    "refuted_by": "computed share below 0.42 or above 0.60",
+    "refuted_by_met": false
+   },
+   {
+    "id": "r5-account:p4",
+    "measured": 0.03076923076923077,
+    "value": 0.07,
+    "low": 0.02,
+    "high": 0.13,
+    "nulls": [
+     {
+      "value": 0.09,
+      "low": 0.03,
+      "high": 0.17
+     },
+     {
+      "value": 0.09,
+      "low": 0.03,
+      "high": 0.17
+     }
+    ],
+    "gain": 0.5215,
+    "k": 4,
+    "inside": true,
+    "within_noise": false,
+    "n": 65,
+    "interval": [
+     0.0,
+     0.06153846153846154
+    ],
+    "refuted_by": "computed share below 0.02 or above 0.13",
+    "refuted_by_met": false
+   },
+   {
+    "id": "r5-account:p5",
+    "measured": 0.03076923076923077,
+    "value": 0.022,
+    "low": 0.0,
+    "high": 0.06,
+    "nulls": [
+     {
+      "value": 0.03,
+      "low": 0.0,
+      "high": 0.08
+     },
+     {
+      "value": 0.03,
+      "low": 0.0,
+      "high": 0.08
+     }
+    ],
+    "gain": 0.1726,
+    "k": 5,
+    "inside": true,
+    "within_noise": false,
+    "n": 65,
+    "interval": [
+     0.0,
+     0.06153846153846154
+    ],
+    "refuted_by": "computed share above 0.06",
+    "refuted_by_met": false
+   },
+   {
+    "id": "r5-account:p6",
+    "measured": 0.4375,
+    "value": 0.35,
+    "low": 0.15,
+    "high": 0.55,
+    "nulls": [
+     {
+      "value": 0.4,
+      "low": 0.17,
+      "high": 0.65
+     },
+     {
+      "value": 0.5,
+      "low": 0.25,
+      "high": 0.75
+     }
+    ],
+    "gain": 0.0015,
+    "k": 6,
+    "inside": true,
+    "within_noise": false,
+    "n": 16,
+    "interval": [
+     0.25,
+     0.625
+    ],
+    "refuted_by": "computed fraction above 0.55 or below 0.15",
+    "refuted_by_met": false
+   },
+   {
+    "id": "r5-account:p7",
+    "measured": 0.6875,
+    "value": 0.75,
+    "low": 0.55,
+    "high": 0.9,
+    "nulls": [
+     {
+      "value": 0.68,
+      "low": 0.44,
+      "high": 0.9
+     },
+     {
+      "value": 0.6,
+      "low": 0.35,
+      "high": 0.85
+     }
+    ],
+    "gain": 0.2183,
+    "k": 7,
+    "inside": true,
+    "within_noise": false,
+    "n": 16,
+    "interval": [
+     0.5,
+     0.875
+    ],
+    "refuted_by": "computed fraction below 0.55",
+    "refuted_by_met": false
+   },
+   {
+    "id": "r5-account:p8",
+    "measured": 0.1,
+    "value": 0.3,
+    "low": 0.1,
+    "high": 0.5,
+    "nulls": [
+     {
+      "value": 0.35,
+      "low": 0.08,
+      "high": 0.65
+     },
+     {
+      "value": 0.35,
+      "low": 0.1,
+      "high": 0.65
+     }
+    ],
+    "gain": 0.0627,
+    "k": 8,
+    "inside": true,
+    "within_noise": false,
+    "n": 10,
+    "interval": [
+     0.0,
+     0.3
+    ],
+    "refuted_by": "computed fraction below 0.10",
+    "refuted_by_met": false
+   },
+   {
+    "id": "r5-account:p9",
+    "measured": 0.6,
+    "value": 0.8,
+    "low": 0.66,
+    "high": 0.92,
+    "nulls": [
+     {
+      "value": 0.64,
+      "low": 0.49,
+      "high": 0.8
+     },
+     {
+      "value": 0.6,
+      "low": 0.42,
+      "high": 0.77
+     }
+    ],
+    "gain": -2.9209,
+    "k": 9,
+    "inside": false,
+    "within_noise": true,
+    "n": 35,
+    "interval": [
+     0.45714285714285713,
+     0.7428571428571429
+    ],
+    "refuted_by": "computed fraction below 0.66",
+    "refuted_by_met": false
+   }
+  ],
+  "duel": null
+ },
+ {
+  "name": "r6-account",
+  "round": "run-02",
+  "state": "refuted",
+  "theory": {
+   "name": "r6-account",
+   "statement": "The problems that an RL-side model gets right and the cued Olmo 3 base gets wrong split into five mechanisms, applied in this order. (1) Loop: the base runs to the 16,384-token cap inside a self-reinforcing repeat (rule A). This is a sampler artifact of truncated, low-temperature decoding (T 0.6 / top-p 0.95). It is absent at T 1.0, and the base can usually do these problems at T 1.0. (2) Budget: the base hits the cap without a loop. These are long problems on which it never commits, while RL, trained with truncated rollouts as negatives, finishes. (3) Answer statement: the base finishes but writes no answer line, or writes the gold value in a box or 'Answer:' line and then ends on another value. (4) Reliability: the base solves the problem in at least one independent stored base sample, so the miss is a sample-specific slip that RL removes by concentrating on paths the base already samples. (5) Capability: no independent base sample solves it. On the known cell (MATH-500, T 1.0, cued base against Olmo-3.1 RL) the shares are 0 / 0.25 / 0.15 / 0.54 / 0.06. I predict how the shares move in three other cells. Against the half-dose weight blend theta0.5 at T 1.0, budget falls to about 0.17 and reliability rises to about 0.70, because theta0.5 keeps almost the base's cap rate but already has the sharpening. On hard328 against Code-RL at T 1.0, the shares are loop 0.02, budget 0.25, answer 0.08, reliability 0.34 and capability 0.31: capability grows on the harder set, where the base's independent evidence is weaker. On MATH-500 at T 0.6 / top-p 0.95 against RL step 400 (grader v1), loop takes about 0.50, with budget 0.13, answer 0.17 (v1 misses on the base's 'Answer:' lines), reliability 0.15 and capability 0.05. The largest part still open at T 1.0 is reliability, and the base-only route to it is more independent votes, weighted toward high-precision finished answers.",
+   "cells": [
+    {
+     "name": "math500-rl-T1",
+     "gap": "MATH-500 (500), T 1.0 / top-p 1.0, max 16,384, one sample per model, grader v3. Base = Olmo-3-1025-7B with the 3-token cue (per_problem.json t1_*, with text and gold from s3 r4/base_rl-02/out/T1.jsonl). RL = Olmo-3.1-7B-RL-Zero-Math, plain (t2_*), from studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. A gap problem has t2_right true and t1_right false. Cap hits keep their stored grade (wrong), and a null or missing grade is not a gap problem. Evidence E = the 4 attempt-0 samples of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (score_v3). 65 gap problems.",
+     "moves": ""
+    },
+    {
+     "name": "math500-theta05-T1",
+     "gap": "MATH-500, T 1.0 / top-p 1.0, max 16,384, one sample, grader v3. Base = cued base as in math500-rl-T1 (per_problem.json t1_right and t1_cap_hit; text and gold from T1.jsonl). RL side = base + 0.5*(RL - base) with the cue, iterate-runs:abaybektursun-1114-152855-683b/answers.jsonl (score_v3, first row per problem_index). A gap problem has 683b score_v3 == 1 and t1_right false. Missing or null on either side: not a gap problem. Cap hits keep their stored grade. E = the same day1_3 base_cue attempt-0 samples.",
+     "moves": "Against math500-rl-T1, budget falls (0.25 -> 0.17) and reliability rises (0.54 -> 0.70). Theta0.5 has about the base's cap rate (only about 5 fewer cap hits on MATH-500), so it lacks most of the commit-before-cap policy that fixes overrun problems, while the sharpening onto the base's own paths is already saturated at a = 0.25. Capability shrinks slightly because a half dose reaches fewer problems the base never solves. Loop stays 0 at T 1.0. Answer-statement drops to about 0.09, partly because this rule is text-based where the known cell used a hand label."
+    },
+    {
+     "name": "hard328-code-T1",
+     "gap": "hard328 (328 clean harder problems), T 1.0 / top-p 1.0, max 16,384, one sample, grader v3. Base = cued base, s3 r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl. RL side = Olmo-3.1-7B-RL-Zero-Code with the cue, s3 r5/day1_wdiff328-01/abaybektursun-1114-181216-a619/answers.jsonl. First row per problem_index. A gap problem has a619 score_v3 == 1 and e72c score_v3 != 1 (null counts as wrong). Missing from either file: not a gap problem. E = up to 3 independent base rows: r3/base-01 F_hard (cue, T 0.6, v1 score), r3/base-01 P_hard (plain, T 0.6, v1 score), both joined on unique_id, and r5 7ba0 (plain, T 1.0, score_v3), joined on problem_index.",
+     "moves": "Against math500-rl-T1, capability rises sharply (0.06 -> 0.31) and reliability falls (0.54 -> 0.34). On the harder set, more Code-RL fixes land on problems that no weaker independent base sample solves, and the hard328 evidence is 3 lower-accuracy rows, not 4 cued T 1.0 samples. Budget stays near 0.25: at T 1.0 the base's cap hits are non-loop overruns, but Code-RL finishes long problems less often than Math-RL. Loop stays near 0 at T 1.0."
+    },
+    {
+     "name": "math500-s0400-T06",
+     "gap": "MATH-500, T 0.6 / top-p 0.95, max 16,384, one sample, grader v1 (the stored score field; r3 rows hold no v3). Base = cued base, s3 r3/base-01/out/F_math500.jsonl. RL side = RL step 400, plain, s3 r3/s0400_s0100-01/out/s0400/P_math500.jsonl. Rows with sample == 0, first per problem_index. A gap problem has s0400 score == 1 and base score != 1 (null counts as wrong). Missing from either file: not a gap problem. E = the day1_3 base_cue attempt-0 samples (score_v3).",
+     "moves": "Against math500-rl-T1, the loop share jumps from 0 to about 0.50, taking mostly from reliability (0.54 -> 0.15) and budget (0.25 -> 0.13). At T 0.6 / top-p 0.95 about three quarters of the base's cap hits are locked loops on problems it can finish at T 1.0, and any fresh RL-side sample often finishes them. Answer-statement rises (0.15 -> 0.17) because grader v1 misses the base's 'Answer:'-line forms, which the text rule catches."
+    }
+   ],
+   "known": [
+    {
+     "cell": "math500-rl-T1",
+     "shares": {
+      "loop": 0.0,
+      "budget": 0.246,
+      "answer-statement": 0.154,
+      "reliability": 0.538,
+      "capability": 0.062,
+      "unassigned": 0.0
+     },
+     "item": "result-5e17a6"
+    }
+   ],
+   "parts": [
+    {
+     "name": "loop",
+     "mechanism": "Under truncated low-temperature sampling (top-p 0.95 at T 0.6) the base's repeat probabilities lock and it loops to the cap on problems it can otherwise finish. RL-side samples escape the loop, and at T 1.0 the part is empty.",
+     "rule": "The base row is a cap hit (cap_hit true, or cap_hit missing and finish_reason == 'length') and rule A fires on its text. Rule A: for every character position p that is 0 or directly follows a newline and has at least 8,000 characters to the end, w = text[p:p+8000]; it fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10 (Python zlib, default level). Shorter or missing text does not fire."
+    },
+    {
+     "name": "budget",
+     "mechanism": "The base keeps writing past the token budget without committing on long problems, while the RL side, trained with truncated rollouts as negatives, finishes. This revives the termination idea of r1-across-2 and r1-surprises-1, which were refuted on weight-dose answer counts and a hard328 pass@4 count, not on which stored problems hit the cap. Those tests do not apply to this per-problem rule.",
+     "rule": "Not taken by loop, and the base row is a cap hit (cap_hit true, or missing and finish_reason == 'length')."
+    },
+    {
+     "name": "answer-statement",
+     "mechanism": "The base fails in stating the answer: it writes no answer line, or it writes the gold value and then ends on another value (the untested r4-m11 mechanism). RL boxes once and stops.",
+     "rule": "Not taken earlier. With N(s) = s with all whitespace, '$', '*' and '#' deleted, '\\left' and '\\right' deleted, and '\\dfrac'/'\\tfrac' replaced by '\\frac', and g = N(gold): taken if no N(line) of the base text contains '\\boxed{' and none starts with 'Answer:', or some N(line) contains '\\boxed{'+g+'}', or some N(line) equals 'Answer:'+g or 'Answer:'+g+'.'. Missing text is taken."
+    },
+    {
+     "name": "reliability",
+     "mechanism": "The base can solve the problem, and the miss is a sample-specific slip that RL removes by sharpening onto paths the base already samples. This revives r2-revise-2 and r3-surprises-1, whose refuting tests were hard328 vote@4 and tie-break counts, claims about vote procedures rather than about whether independent base samples solve a gap problem.",
+     "rule": "Not taken earlier, and kB >= 1, where kB = the number of the cell's independent base evidence rows E for this problem that are right."
+    },
+    {
+     "name": "capability",
+     "mechanism": "The RL side uses a plan the base does not sample: no independent stored base sample solves the problem.",
+     "rule": "Not taken earlier, E holds at least one row, and kB == 0."
+    }
+   ],
+   "scope": "The account covers gross gap problems (RL side right, base wrong; base-only problems are not counted) in four cells. They span both problem sets (MATH-500 and hard328), both sampling settings (T 1.0 / top-p 1.0 and T 0.6 / top-p 0.95) and four model pairs (final RL, theta0.5 blend, Code-RL 3.1, RL step 400). Left out: the hard328 cued-base-vs-RL T 1.0 cell, because board item result-5de032 already gives its cap/finished budget (16/33 of 49); it is used as an anchor, not predicted. Also left out: MATH-500 T 0.6 cued base vs RL step 2,800, because knowledge-9e4147 gives a cap-hit budget for it (85 of 123). hard328 has no readable independent cued-T 1.0 base samples: the 4-sample rows of result-1dedfe are on sameraslan's Volume, which is not in the inventory. So hard328 evidence uses the 3 other stored base rows, and capability there is an upper bound. The 3.0 models have no per-problem rows in the inventory: the reward5 run folders are not listed. Step 100 has only a plain T 0.6 file and could form a further cell. The known cell's answer-statement share comes from a hand label, while the rule here is text-based.",
+   "parent": "r5-account",
+   "imports": [
+    {
+     "source": "2504.13837",
+     "finding": "RLVR raises pass@1 by concentrating on paths the base already samples. Per-problem MATH-500 coverage at 128 samples is almost the same for both models.",
+     "how": "Grounds the reliability part as the largest at T 1.0, with only a small capability part on MATH-500."
+    },
+    {
+     "source": "2610.24715",
+     "finding": "Under top-p with a threshold above 1/2 a loop position becomes deterministic once the loop token's probability passes the threshold. Pure sampling never locks.",
+     "how": "Puts the loop part at T 0.6 / top-p 0.95 and empties it at T 1.0 / top-p 1.0, so the loop share moves with sampling and not with the model pair."
+    },
+    {
+     "source": "2505.22203",
+     "finding": "Rule-based math verifiers miss correctly formatted variants (average recall 86 %).",
+     "how": "Explains why the answer-statement part grows under grader v1 in the T 0.6 cell."
+    }
+   ],
+   "explains": [
+    {
+     "item": "result-5e17a6",
+     "quote": "16 cap hits with no loop, 14 misread",
+     "how": "At T 1.0 the cap-hit gap problems are all budget, none loop, which gives the known budget share 16/65."
+    },
+    {
+     "item": "knowledge-787e53",
+     "quote": "At T 1.0 rule A finds 0 loops in T1, T2 and T3",
+     "how": "The loop part is empty in every T 1.0 cell and fills only under T 0.6 / top-p 0.95."
+    },
+    {
+     "item": "result-afc423",
+     "quote": "sits in problems the base solves at least once in 4",
+     "how": "Most of the T 1.0 gap is the reliability part, which is defined by independent base samples."
+    },
+    {
+     "item": "result-9b6af3",
+     "quote": "theta0.5 fixes 53 and loses 11",
+     "how": "The theta0.5 cell has a 53-problem gap, most of it reliability, because the half dose already carries the sharpening."
+    },
+    {
+     "item": "knowledge-13cff3",
+     "quote": "378 of its 402 finished answers are right, 94 %",
+     "how": "At T 0.6 the base's finished answers are accurate and its losses are loops, which is why loop dominates the T 0.6 cell."
+    },
+    {
+     "item": "result-6de887",
+     "quote": "a removed loop is one more draw at a hard problem",
+     "how": "Loop problems are long problems the base can sometimes do, so a fresh draw (an RL-side sample or a T 1.0 base sample) often solves them."
+    },
+    {
+     "item": "result-5de032",
+     "quote": "the base hit the cap on 16 and finished with a wrong answer on 33",
+     "how": "On hard328 at T 1.0 the cap-hit (budget) share is about a third and the rest is finished-wrong, the anchor for the Code-RL hard328 prediction."
+    }
+   ],
+   "conflicts": [
+    {
+     "item": "result-c57b51",
+     "quote": "turn 10 of the base's 2,000 samples right and 0 of RL's",
+     "how": "Extraction repairs recover only 0.5 points, so the known 0.15 answer-statement share (a hand label) is probably too high. The text rule predicts less in T 1.0 cells."
+    },
+    {
+     "item": "result-4b0d5f",
+     "quote": "a=0.25 is +6.2 pts over base cue",
+     "how": "A flat dose curve after a = 0.25 sits uneasily with this account's claim that the budget part needs a dose-dependent commit policy that theta0.5 still lacks."
+    }
+   ],
+   "rival": "The strongest rival is a single-difficulty budget. Every gap problem is a draw at the base's per-problem success rate, and loop, budget and reliability are only ways a hard problem fails, not separate mechanisms. Under it, a model that fixes more gap problems fixes all parts in proportion, and the base's T 0.6 loop problems are as hard for the base at T 1.0 as any long problem (a T 1.0 solve rate of about 0.35, its rate on the longest quartile of base failures). This account predicts that theta0.5's fix rate on reliability-part problems exceeds its fix rate on budget-part problems by about 0.30 (rival: about 0). It also predicts that the base's T 1.0 sample solves about 0.52 of its T 0.6 rule-A loop problems (rival: about 0.35). The theta0.5 reliability-minus-budget fix-rate difference is the number that separates the two.",
+   "predictions": [
+    {
+     "role": "share",
+     "cell": "math500-theta05-T1",
+     "part": "loop",
+     "experiment": "Share of math500-theta05-T1 gap problems in the loop part",
+     "recipe": "Gap: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (base: t1_right, t1_cap_hit) and iterate-runs:abaybektursun-1114-152855-683b/answers.jsonl (theta0.5 cue; first row per problem_index; right = score_v3 == 1). Gap problems: 683b score_v3 == 1 and t1_right false; null or missing t1_right, or a missing 683b row or null score_v3, is not a gap problem. Base row B: cap hit = t1_cap_hit == true; text and gold = first row with the same problem_index in s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl (missing row: text missing). E = rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3}, first row per (problem_index, sample); a row is right if score_v3 == 1 (null: wrong; cap hits keep stored score_v3). kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: problems assigned to loop / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.0,
+     "low": 0.0,
+     "high": 0.03,
+     "refuted_by": "computed share above 0.03",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "cell": "math500-theta05-T1",
+     "part": "budget",
+     "experiment": "Share of math500-theta05-T1 gap problems in the budget part",
+     "recipe": "Gap: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (base: t1_right, t1_cap_hit) and iterate-runs:abaybektursun-1114-152855-683b/answers.jsonl (theta0.5 cue; first row per problem_index; right = score_v3 == 1). Gap problems: 683b score_v3 == 1 and t1_right false; null or missing t1_right, or a missing 683b row or null score_v3, is not a gap problem. Base row B: cap hit = t1_cap_hit == true; text and gold = first row with the same problem_index in s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl (missing row: text missing). E = rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3}, first row per (problem_index, sample); a row is right if score_v3 == 1 (null: wrong; cap hits keep stored score_v3). kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: problems assigned to budget / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.17,
+     "low": 0.08,
+     "high": 0.27,
+     "refuted_by": "computed share below 0.08 or above 0.27",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "cell": "math500-theta05-T1",
+     "part": "answer-statement",
+     "experiment": "Share of math500-theta05-T1 gap problems in the answer-statement part",
+     "recipe": "Gap: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (base: t1_right, t1_cap_hit) and iterate-runs:abaybektursun-1114-152855-683b/answers.jsonl (theta0.5 cue; first row per problem_index; right = score_v3 == 1). Gap problems: 683b score_v3 == 1 and t1_right false; null or missing t1_right, or a missing 683b row or null score_v3, is not a gap problem. Base row B: cap hit = t1_cap_hit == true; text and gold = first row with the same problem_index in s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl (missing row: text missing). E = rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3}, first row per (problem_index, sample); a row is right if score_v3 == 1 (null: wrong; cap hits keep stored score_v3). kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: problems assigned to answer-statement / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.09,
+     "low": 0.02,
+     "high": 0.17,
+     "refuted_by": "computed share below 0.02 or above 0.17",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "cell": "math500-theta05-T1",
+     "part": "reliability",
+     "experiment": "Share of math500-theta05-T1 gap problems in the reliability part",
+     "recipe": "Gap: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (base: t1_right, t1_cap_hit) and iterate-runs:abaybektursun-1114-152855-683b/answers.jsonl (theta0.5 cue; first row per problem_index; right = score_v3 == 1). Gap problems: 683b score_v3 == 1 and t1_right false; null or missing t1_right, or a missing 683b row or null score_v3, is not a gap problem. Base row B: cap hit = t1_cap_hit == true; text and gold = first row with the same problem_index in s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl (missing row: text missing). E = rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3}, first row per (problem_index, sample); a row is right if score_v3 == 1 (null: wrong; cap hits keep stored score_v3). kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: problems assigned to reliability / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.7,
+     "low": 0.57,
+     "high": 0.82,
+     "refuted_by": "computed share below 0.57 or above 0.82",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "cell": "math500-theta05-T1",
+     "part": "capability",
+     "experiment": "Share of math500-theta05-T1 gap problems in the capability part",
+     "recipe": "Gap: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (base: t1_right, t1_cap_hit) and iterate-runs:abaybektursun-1114-152855-683b/answers.jsonl (theta0.5 cue; first row per problem_index; right = score_v3 == 1). Gap problems: 683b score_v3 == 1 and t1_right false; null or missing t1_right, or a missing 683b row or null score_v3, is not a gap problem. Base row B: cap hit = t1_cap_hit == true; text and gold = first row with the same problem_index in s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl (missing row: text missing). E = rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3}, first row per (problem_index, sample); a row is right if score_v3 == 1 (null: wrong; cap hits keep stored score_v3). kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: problems assigned to capability / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.04,
+     "low": 0.0,
+     "high": 0.1,
+     "refuted_by": "computed share above 0.10",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "cell": "math500-theta05-T1",
+     "part": "unassigned",
+     "experiment": "Share of math500-theta05-T1 gap problems no rule takes",
+     "recipe": "Gap: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (base: t1_right, t1_cap_hit) and iterate-runs:abaybektursun-1114-152855-683b/answers.jsonl (theta0.5 cue; first row per problem_index; right = score_v3 == 1). Gap problems: 683b score_v3 == 1 and t1_right false; null or missing t1_right, or a missing 683b row or null score_v3, is not a gap problem. Base row B: cap hit = t1_cap_hit == true; text and gold = first row with the same problem_index in s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl (missing row: text missing). E = rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3}, first row per (problem_index, sample); a row is right if score_v3 == 1 (null: wrong; cap hits keep stored score_v3). kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: unassigned problems / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.0,
+     "low": 0.0,
+     "high": 0.02,
+     "refuted_by": "computed share above 0.02",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "cell": "hard328-code-T1",
+     "part": "loop",
+     "experiment": "Share of hard328-code-T1 gap problems in the loop part",
+     "recipe": "Gap: s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (base cue, row B) and s3://pg-lineage-769063704696/results/rlneurons/r5/day1_wdiff328-01/abaybektursun-1114-181216-a619/answers.jsonl (Code-RL cue); first row per problem_index in each. Gap problems: a619 score_v3 == 1 and e72c score_v3 != 1 (null counts as wrong); a problem missing from either file is not a gap problem. B cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'; B text and gold from e72c. E = up to three rows: the first row whose unique_id equals B's unique_id in s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_hard.jsonl (right = score == 1), the same in s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/P_hard.jsonl (right = score == 1), and the first row with B's problem_index in s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-132922-7ba0/answers.jsonl (right = score_v3 == 1); missing rows are absent from E; null scores count as wrong; cap hits keep their stored score. kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: problems assigned to loop / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.02,
+     "low": 0.0,
+     "high": 0.08,
+     "refuted_by": "computed share above 0.08",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "cell": "hard328-code-T1",
+     "part": "budget",
+     "experiment": "Share of hard328-code-T1 gap problems in the budget part",
+     "recipe": "Gap: s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (base cue, row B) and s3://pg-lineage-769063704696/results/rlneurons/r5/day1_wdiff328-01/abaybektursun-1114-181216-a619/answers.jsonl (Code-RL cue); first row per problem_index in each. Gap problems: a619 score_v3 == 1 and e72c score_v3 != 1 (null counts as wrong); a problem missing from either file is not a gap problem. B cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'; B text and gold from e72c. E = up to three rows: the first row whose unique_id equals B's unique_id in s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_hard.jsonl (right = score == 1), the same in s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/P_hard.jsonl (right = score == 1), and the first row with B's problem_index in s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-132922-7ba0/answers.jsonl (right = score_v3 == 1); missing rows are absent from E; null scores count as wrong; cap hits keep their stored score. kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: problems assigned to budget / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.25,
+     "low": 0.14,
+     "high": 0.37,
+     "refuted_by": "computed share below 0.14 or above 0.37",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "cell": "hard328-code-T1",
+     "part": "answer-statement",
+     "experiment": "Share of hard328-code-T1 gap problems in the answer-statement part",
+     "recipe": "Gap: s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (base cue, row B) and s3://pg-lineage-769063704696/results/rlneurons/r5/day1_wdiff328-01/abaybektursun-1114-181216-a619/answers.jsonl (Code-RL cue); first row per problem_index in each. Gap problems: a619 score_v3 == 1 and e72c score_v3 != 1 (null counts as wrong); a problem missing from either file is not a gap problem. B cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'; B text and gold from e72c. E = up to three rows: the first row whose unique_id equals B's unique_id in s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_hard.jsonl (right = score == 1), the same in s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/P_hard.jsonl (right = score == 1), and the first row with B's problem_index in s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-132922-7ba0/answers.jsonl (right = score_v3 == 1); missing rows are absent from E; null scores count as wrong; cap hits keep their stored score. kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: problems assigned to answer-statement / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.08,
+     "low": 0.02,
+     "high": 0.17,
+     "refuted_by": "computed share below 0.02 or above 0.17",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "cell": "hard328-code-T1",
+     "part": "reliability",
+     "experiment": "Share of hard328-code-T1 gap problems in the reliability part",
+     "recipe": "Gap: s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (base cue, row B) and s3://pg-lineage-769063704696/results/rlneurons/r5/day1_wdiff328-01/abaybektursun-1114-181216-a619/answers.jsonl (Code-RL cue); first row per problem_index in each. Gap problems: a619 score_v3 == 1 and e72c score_v3 != 1 (null counts as wrong); a problem missing from either file is not a gap problem. B cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'; B text and gold from e72c. E = up to three rows: the first row whose unique_id equals B's unique_id in s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_hard.jsonl (right = score == 1), the same in s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/P_hard.jsonl (right = score == 1), and the first row with B's problem_index in s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-132922-7ba0/answers.jsonl (right = score_v3 == 1); missing rows are absent from E; null scores count as wrong; cap hits keep their stored score. kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: problems assigned to reliability / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.34,
+     "low": 0.2,
+     "high": 0.48,
+     "refuted_by": "computed share below 0.20 or above 0.48",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "cell": "hard328-code-T1",
+     "part": "capability",
+     "experiment": "Share of hard328-code-T1 gap problems in the capability part",
+     "recipe": "Gap: s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (base cue, row B) and s3://pg-lineage-769063704696/results/rlneurons/r5/day1_wdiff328-01/abaybektursun-1114-181216-a619/answers.jsonl (Code-RL cue); first row per problem_index in each. Gap problems: a619 score_v3 == 1 and e72c score_v3 != 1 (null counts as wrong); a problem missing from either file is not a gap problem. B cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'; B text and gold from e72c. E = up to three rows: the first row whose unique_id equals B's unique_id in s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_hard.jsonl (right = score == 1), the same in s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/P_hard.jsonl (right = score == 1), and the first row with B's problem_index in s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-132922-7ba0/answers.jsonl (right = score_v3 == 1); missing rows are absent from E; null scores count as wrong; cap hits keep their stored score. kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: problems assigned to capability / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.31,
+     "low": 0.18,
+     "high": 0.45,
+     "refuted_by": "computed share below 0.18 or above 0.45",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "cell": "hard328-code-T1",
+     "part": "unassigned",
+     "experiment": "Share of hard328-code-T1 gap problems no rule takes",
+     "recipe": "Gap: s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (base cue, row B) and s3://pg-lineage-769063704696/results/rlneurons/r5/day1_wdiff328-01/abaybektursun-1114-181216-a619/answers.jsonl (Code-RL cue); first row per problem_index in each. Gap problems: a619 score_v3 == 1 and e72c score_v3 != 1 (null counts as wrong); a problem missing from either file is not a gap problem. B cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'; B text and gold from e72c. E = up to three rows: the first row whose unique_id equals B's unique_id in s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_hard.jsonl (right = score == 1), the same in s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/P_hard.jsonl (right = score == 1), and the first row with B's problem_index in s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-132922-7ba0/answers.jsonl (right = score_v3 == 1); missing rows are absent from E; null scores count as wrong; cap hits keep their stored score. kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: unassigned problems / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.0,
+     "low": 0.0,
+     "high": 0.03,
+     "refuted_by": "computed share above 0.03",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "cell": "math500-s0400-T06",
+     "part": "loop",
+     "experiment": "Share of math500-s0400-T06 gap problems in the loop part",
+     "recipe": "Gap: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (base cue, T 0.6 / top-p 0.95, row B) and s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl (RL step 400, plain); in each keep rows with sample == 0, first row per problem_index. Gap problems: s0400 score == 1 and base score != 1 (stored grader-v1 score; null counts as wrong); a problem missing from either file is not a gap problem. B cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'; B text and gold from F_math500. E = rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3}, first row per (problem_index, sample); right = score_v3 == 1 (null: wrong; cap hits keep stored score_v3). kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: problems assigned to loop / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.5,
+     "low": 0.37,
+     "high": 0.63,
+     "refuted_by": "computed share below 0.37 or above 0.63",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "cell": "math500-s0400-T06",
+     "part": "budget",
+     "experiment": "Share of math500-s0400-T06 gap problems in the budget part",
+     "recipe": "Gap: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (base cue, T 0.6 / top-p 0.95, row B) and s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl (RL step 400, plain); in each keep rows with sample == 0, first row per problem_index. Gap problems: s0400 score == 1 and base score != 1 (stored grader-v1 score; null counts as wrong); a problem missing from either file is not a gap problem. B cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'; B text and gold from F_math500. E = rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3}, first row per (problem_index, sample); right = score_v3 == 1 (null: wrong; cap hits keep stored score_v3). kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: problems assigned to budget / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.13,
+     "low": 0.05,
+     "high": 0.22,
+     "refuted_by": "computed share below 0.05 or above 0.22",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "cell": "math500-s0400-T06",
+     "part": "answer-statement",
+     "experiment": "Share of math500-s0400-T06 gap problems in the answer-statement part",
+     "recipe": "Gap: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (base cue, T 0.6 / top-p 0.95, row B) and s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl (RL step 400, plain); in each keep rows with sample == 0, first row per problem_index. Gap problems: s0400 score == 1 and base score != 1 (stored grader-v1 score; null counts as wrong); a problem missing from either file is not a gap problem. B cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'; B text and gold from F_math500. E = rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3}, first row per (problem_index, sample); right = score_v3 == 1 (null: wrong; cap hits keep stored score_v3). kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: problems assigned to answer-statement / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.17,
+     "low": 0.07,
+     "high": 0.28,
+     "refuted_by": "computed share below 0.07 or above 0.28",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "cell": "math500-s0400-T06",
+     "part": "reliability",
+     "experiment": "Share of math500-s0400-T06 gap problems in the reliability part",
+     "recipe": "Gap: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (base cue, T 0.6 / top-p 0.95, row B) and s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl (RL step 400, plain); in each keep rows with sample == 0, first row per problem_index. Gap problems: s0400 score == 1 and base score != 1 (stored grader-v1 score; null counts as wrong); a problem missing from either file is not a gap problem. B cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'; B text and gold from F_math500. E = rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3}, first row per (problem_index, sample); right = score_v3 == 1 (null: wrong; cap hits keep stored score_v3). kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: problems assigned to reliability / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.15,
+     "low": 0.07,
+     "high": 0.25,
+     "refuted_by": "computed share below 0.07 or above 0.25",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "cell": "math500-s0400-T06",
+     "part": "capability",
+     "experiment": "Share of math500-s0400-T06 gap problems in the capability part",
+     "recipe": "Gap: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (base cue, T 0.6 / top-p 0.95, row B) and s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl (RL step 400, plain); in each keep rows with sample == 0, first row per problem_index. Gap problems: s0400 score == 1 and base score != 1 (stored grader-v1 score; null counts as wrong); a problem missing from either file is not a gap problem. B cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'; B text and gold from F_math500. E = rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3}, first row per (problem_index, sample); right = score_v3 == 1 (null: wrong; cap hits keep stored score_v3). kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: problems assigned to capability / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.05,
+     "low": 0.01,
+     "high": 0.11,
+     "refuted_by": "computed share above 0.11",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "share",
+     "cell": "math500-s0400-T06",
+     "part": "unassigned",
+     "experiment": "Share of math500-s0400-T06 gap problems no rule takes",
+     "recipe": "Gap: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (base cue, T 0.6 / top-p 0.95, row B) and s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl (RL step 400, plain); in each keep rows with sample == 0, first row per problem_index. Gap problems: s0400 score == 1 and base score != 1 (stored grader-v1 score; null counts as wrong); a problem missing from either file is not a gap problem. B cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'; B text and gold from F_math500. E = rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3}, first row per (problem_index, sample); right = score_v3 == 1 (null: wrong; cap hits keep stored score_v3). kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (rule A: for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). R2 budget: B is a cap hit. R3 answer-statement: let N(s) delete all whitespace, '$', '*', '#', '\\left', '\\right' and replace '\\dfrac' and '\\tfrac' by '\\frac'; g = N(B gold); lines = B text split on '\\n', each passed through N; taken if (no line contains '\\boxed{' and no line starts with 'Answer:') or some line contains '\\boxed{'+g+'}' or some line equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Else unassigned. Statistic: unassigned problems / gap problems.",
+     "unit": "fraction of gap problems",
+     "value": 0.0,
+     "low": 0.0,
+     "high": 0.02,
+     "refuted_by": "computed share above 0.02",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "cross",
+     "cell": "math500-s0400-T06",
+     "part": "loop",
+     "experiment": "Fraction of the cued base's T 0.6 / top-p 0.95 rule-A loop cap hits (all 500 problems, not only gap problems) that the cued base's single T 1.0 sample gets right",
+     "recipe": "File s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl: rows with sample == 0, first row per problem_index. Keep rows that are cap hits (cap_hit true, or cap_hit missing and finish_reason == 'length') on which rule A fires (for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters from p to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level; missing or shorter text does not fire). For each kept problem_index read studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json; the problem counts as right if t1_right is true (grader v3); null or missing counts as not right. Statistic: right kept problems / kept problems.",
+     "unit": "fraction of problems",
+     "value": 0.52,
+     "low": 0.4,
+     "high": 0.64,
+     "refuted_by": "computed fraction below 0.40",
+     "gpu_minutes": 0
+    },
+    {
+     "role": "cross",
+     "cell": "math500-rl-T1",
+     "part": "reliability",
+     "experiment": "On the known cell's gap problems, theta0.5-cue fix rate on the reliability part minus its fix rate on the budget part",
+     "recipe": "Gap of math500-rl-T1: rows of studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json with t2_right true and t1_right false (null or missing: not a gap problem). Base row B: cap hit = t1_cap_hit == true; text and gold = first row with the same problem_index in s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl (missing row: text missing). E = rows of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl with that problem_index, attempt == 0, sample in {0,1,2,3}, first row per (problem_index, sample); right = score_v3 == 1 (null: wrong). kB = right rows in E. Ordered rules, first that takes a problem wins: R1 loop: B is a cap hit and rule A fires on B's text (for every character position p that is 0 or directly follows '\\n' with at least 8,000 characters to the end, w = text[p:p+8000]; fires if any len(zlib.compress(w.encode('utf-8')))/len(w.encode('utf-8')) < 0.10, Python zlib default level). R2 budget: B is a cap hit. R3 answer-statement: N(s) deletes all whitespace, '$', '*', '#', '\\left', '\\right' and replaces '\\dfrac'/'\\tfrac' by '\\frac'; g = N(B gold); taken if no N(line) of B's text contains '\\boxed{' and none starts with 'Answer:', or some N(line) contains '\\boxed{'+g+'}' or equals 'Answer:'+g or 'Answer:'+g+'.'; missing text is taken. R4 reliability: kB >= 1. R5 capability: E non-empty and kB == 0. Fix: the first row per problem_index of iterate-runs:abaybektursun-1114-152855-683b/answers.jsonl has score_v3 == 1 (missing row or null: not fixed). Statistic: (fixed reliability-part problems / reliability-part problems) minus (fixed budget-part problems / budget-part problems); undefined if either part is empty.",
+     "unit": "difference of fractions",
+     "value": 0.3,
+     "low": 0.05,
+     "high": 0.55,
+     "refuted_by": "computed difference below 0.05",
+     "gpu_minutes": 0
+    },
+    {
+     "experiment": "Base-only route to the reliability part: Olmo-3-1025-7B base with the 3-token cue [1584, 2268, 33413], all 500 MATH-500 problems, one new sample per problem at T 0.6 / top-p 1.0, max 16,384 new tokens, seed 7,000,000 + problem_index, no restarts (about 2.4 M tokens, about 30-40 H100 minutes). Then a majority vote over 6 answers per problem: the 4 attempt-0 samples of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl, the stored T 0.6 / top-p 1.0 sample iterate-runs:abaybektursun-1114-151718-d4fa/answers.jsonl, and the new sample. Each finished answer casts one vote by its extracted_v3 with whitespace removed; cap hits and empty answers cast none. Ties go to the answer of the shortest finished tied sample (fewest n_new). The chosen answer is graded with v3, and a problem with no vote counts as wrong.",
+     "unit": "right of 500",
+     "value": 455,
+     "low": 447,
+     "high": 462,
+     "refuted_by": "fewer than 447 or more than 462 right of 500",
+     "gpu_minutes": 40
+    }
+   ]
+  },
+  "measured": [
+   {
+    "k": 1,
+    "role": "share",
+    "cell": "math500-theta05-T1",
+    "part": "loop",
+    "experiment": "Share of math500-theta05-T1 gap problems in the loop part",
+    "value": 0.0,
+    "low": 0.0,
+    "high": 0.03,
+    "measured": 0.0,
+    "n": 53,
+    "interval": [
+     0.0,
+     0.0
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 2,
+    "role": "share",
+    "cell": "math500-theta05-T1",
+    "part": "budget",
+    "experiment": "Share of math500-theta05-T1 gap problems in the budget part",
+    "value": 0.17,
+    "low": 0.08,
+    "high": 0.27,
+    "measured": 0.20754716981132076,
+    "n": 53,
+    "interval": [
+     0.11320754716981132,
+     0.3018867924528302
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 3,
+    "role": "share",
+    "cell": "math500-theta05-T1",
+    "part": "answer-statement",
+    "experiment": "Share of math500-theta05-T1 gap problems in the answer-statement part",
+    "value": 0.09,
+    "low": 0.02,
+    "high": 0.17,
+    "measured": 0.03773584905660377,
+    "n": 53,
+    "interval": [
+     0.0,
+     0.07547169811320754
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 4,
+    "role": "share",
+    "cell": "math500-theta05-T1",
+    "part": "reliability",
+    "experiment": "Share of math500-theta05-T1 gap problems in the reliability part",
+    "value": 0.7,
+    "low": 0.57,
+    "high": 0.82,
+    "measured": 0.6981132075471698,
+    "n": 53,
+    "interval": [
+     0.5849056603773585,
+     0.7924528301886793
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 5,
+    "role": "share",
+    "cell": "math500-theta05-T1",
+    "part": "capability",
+    "experiment": "Share of math500-theta05-T1 gap problems in the capability part",
+    "value": 0.04,
+    "low": 0.0,
+    "high": 0.1,
+    "measured": 0.05660377358490566,
+    "n": 53,
+    "interval": [
+     0.018867924528301886,
+     0.11320754716981132
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 6,
+    "role": "share",
+    "cell": "math500-theta05-T1",
+    "part": "unassigned",
+    "experiment": "Share of math500-theta05-T1 gap problems no rule takes",
+    "value": 0.0,
+    "low": 0.0,
+    "high": 0.02,
+    "measured": 0.0,
+    "n": 53,
+    "interval": [
+     0.0,
+     0.0
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 7,
+    "role": "share",
+    "cell": "hard328-code-T1",
+    "part": "loop",
+    "experiment": "Share of hard328-code-T1 gap problems in the loop part",
+    "value": 0.02,
+    "low": 0.0,
+    "high": 0.08,
+    "measured": 0.0,
+    "n": 37,
+    "interval": [
+     0.0,
+     0.0
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 8,
+    "role": "share",
+    "cell": "hard328-code-T1",
+    "part": "budget",
+    "experiment": "Share of hard328-code-T1 gap problems in the budget part",
+    "value": 0.25,
+    "low": 0.14,
+    "high": 0.37,
+    "measured": 0.2702702702702703,
+    "n": 37,
+    "interval": [
+     0.16216216216216217,
+     0.40540540540540543
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 9,
+    "role": "share",
+    "cell": "hard328-code-T1",
+    "part": "answer-statement",
+    "experiment": "Share of hard328-code-T1 gap problems in the answer-statement part",
+    "value": 0.08,
+    "low": 0.02,
+    "high": 0.17,
+    "measured": 0.02702702702702703,
+    "n": 37,
+    "interval": [
+     0.0,
+     0.08108108108108109
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 10,
+    "role": "share",
+    "cell": "hard328-code-T1",
+    "part": "reliability",
+    "experiment": "Share of hard328-code-T1 gap problems in the reliability part",
+    "value": 0.34,
+    "low": 0.2,
+    "high": 0.48,
+    "measured": 0.43243243243243246,
+    "n": 37,
+    "interval": [
+     0.2972972972972973,
+     0.5675675675675675
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 11,
+    "role": "share",
+    "cell": "hard328-code-T1",
+    "part": "capability",
+    "experiment": "Share of hard328-code-T1 gap problems in the capability part",
+    "value": 0.31,
+    "low": 0.18,
+    "high": 0.45,
+    "measured": 0.2702702702702703,
+    "n": 37,
+    "interval": [
+     0.16216216216216217,
+     0.3783783783783784
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 12,
+    "role": "share",
+    "cell": "hard328-code-T1",
+    "part": "unassigned",
+    "experiment": "Share of hard328-code-T1 gap problems no rule takes",
+    "value": 0.0,
+    "low": 0.0,
+    "high": 0.03,
+    "measured": 0.0,
+    "n": 37,
+    "interval": [
+     0.0,
+     0.0
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 13,
+    "role": "share",
+    "cell": "math500-s0400-T06",
+    "part": "loop",
+    "experiment": "Share of math500-s0400-T06 gap problems in the loop part",
+    "value": 0.5,
+    "low": 0.37,
+    "high": 0.63,
+    "measured": 0.4393939393939394,
+    "n": 66,
+    "interval": [
+     0.3333333333333333,
+     0.5303030303030303
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 14,
+    "role": "share",
+    "cell": "math500-s0400-T06",
+    "part": "budget",
+    "experiment": "Share of math500-s0400-T06 gap problems in the budget part",
+    "value": 0.13,
+    "low": 0.05,
+    "high": 0.22,
+    "measured": 0.12121212121212122,
+    "n": 66,
+    "interval": [
+     0.06060606060606061,
+     0.18181818181818182
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 15,
+    "role": "share",
+    "cell": "math500-s0400-T06",
+    "part": "answer-statement",
+    "experiment": "Share of math500-s0400-T06 gap problems in the answer-statement part",
+    "value": 0.17,
+    "low": 0.07,
+    "high": 0.28,
+    "measured": 0.06060606060606061,
+    "n": 66,
+    "interval": [
+     0.015151515151515152,
+     0.12121212121212122
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 16,
+    "role": "share",
+    "cell": "math500-s0400-T06",
+    "part": "reliability",
+    "experiment": "Share of math500-s0400-T06 gap problems in the reliability part",
+    "value": 0.15,
+    "low": 0.07,
+    "high": 0.25,
+    "measured": 0.3787878787878788,
+    "n": 66,
+    "interval": [
+     0.2878787878787879,
+     0.4696969696969697
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 17,
+    "role": "share",
+    "cell": "math500-s0400-T06",
+    "part": "capability",
+    "experiment": "Share of math500-s0400-T06 gap problems in the capability part",
+    "value": 0.05,
+    "low": 0.01,
+    "high": 0.11,
+    "measured": 0.0,
+    "n": 66,
+    "interval": [
+     0.0,
+     0.0
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 18,
+    "role": "share",
+    "cell": "math500-s0400-T06",
+    "part": "unassigned",
+    "experiment": "Share of math500-s0400-T06 gap problems no rule takes",
+    "value": 0.0,
+    "low": 0.0,
+    "high": 0.02,
+    "measured": 0.0,
+    "n": 66,
+    "interval": [
+     0.0,
+     0.0
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 19,
+    "role": "cross",
+    "cell": "math500-s0400-T06",
+    "part": "loop",
+    "experiment": "Fraction of the cued base's T 0.6 / top-p 0.95 rule-A loop cap hits (all 500 problems, not only gap problems) that the cued base's single T 1.0 sample gets right",
+    "value": 0.52,
+    "low": 0.4,
+    "high": 0.64,
+    "measured": 0.6043956043956044,
+    "n": 91,
+    "interval": [
+     0.5274725274725275,
+     0.6923076923076923
+    ],
+    "by_construction": null
+   },
+   {
+    "k": 20,
+    "role": "cross",
+    "cell": "math500-rl-T1",
+    "part": "reliability",
+    "experiment": "On the known cell's gap problems, theta0.5-cue fix rate on the reliability part minus its fix rate on the budget part",
+    "value": 0.3,
+    "low": 0.05,
+    "high": 0.55,
+    "measured": 0.18895348837209303,
+    "n": 65,
+    "interval": [
+     -0.049450549450549386,
+     0.4206773618538324
+    ],
+    "by_construction": null
+   }
+  ],
+  "replication": [],
+  "duel": null
+ }
+]
