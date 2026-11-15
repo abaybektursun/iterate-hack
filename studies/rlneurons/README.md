@@ -931,6 +931,44 @@ perfect critic would add are not reachable by this critic. Limits: linear probe,
 layers; an interval upper end of 0.63 is not excluded; a critic that reads the finished answer was not tested. `probe-01` (string
 flag, larger C values) gave the same reading: best 0.574 at 1,000 tokens, policy 416.8.
 
+## Wrong steps: do the RL models make the base's own mistakes less likely? (board work-40ec05)
+
+Spec `specs/SPEC_wrongstep.md` (predictions W1-W4). Items: the judged finished-wrong samples of the cued base on MATH-500 with a
+located first wrong step (`results/anatomy/judge-01/labels.json`; 51 of 60 located by `jobs/score_tokens.py --labels`: 21 slip, 16
+wrong plan, 14 misread; the 8 `format` items and 1 other have no quote in the text). Each whole answer is scored under 10
+models (job `abaybektursun-1114-213223-4179`). D_m = [log p_m - log p_base] summed over the wrong step's tokens (median 29
+tokens, median position 0.20 of the answer) minus the same sum over 200 control spans of equal length in the same answer. Readout
+`results/wrongstep/math500-01/metrics.json`, per item `items.json`, written by `analysis/wrongstep.py`. Intervals: bootstrap over items.
+
+| Model | Mean D, nats [95 %] | exp(mean D) | Median D | First 5 tokens of the step [95 %] | Cue gain on MATH-500, points |
+|---|---|---|---|---|---|
+| Mix 3.0 | -0.80 [-1.34, -0.28] | 0.45 | -0.39 | -0.40 [-0.65, -0.17] | +6.0 |
+| Math 3.1 | -0.71 [-1.48, 0.01] | 0.49 | -0.26 | -0.35 [-0.69, -0.03] | +9.4 |
+| Math 3.0 | -0.58 [-1.51, 0.35] | 0.56 | -0.17 | -0.66 [-1.10, -0.24] | +7.6 |
+| Code 3.1 | -0.45 [-0.79, -0.12] | 0.64 | -0.42 | -0.21 [-0.38, -0.06] | +8.0 |
+| Code 3.0 | -0.32 [-0.95, 0.27] | 0.72 | -0.05 | -0.29 [-0.56, -0.02] | +0.2 |
+| General 3.0 | -0.14 [-0.31, 0.00] | 0.87 | -0.01 | -0.07 [-0.16, 0.01] | +3.8 |
+| theta(0.25) | -0.10 [-0.22, 0.03] | 0.91 | -0.12 | -0.03 [-0.09, 0.04] | +6.2 |
+| random difference | 0.00 [-0.02, 0.02] | 1.00 | 0.01 | 0.00 [-0.01, 0.01] | +1.4 |
+| IF 3.0 | +0.17 [-0.07, 0.40] | 1.18 | 0.04 | +0.12 [0.02, 0.23] | -6.6 |
+
+- W1 not met as written: Math 3.1's interval touches 0 (-0.71 [-1.48, 0.01]); on the first 5 tokens of the step it is below 0.
+  The effect sits in a minority of items: the median is -0.26 and 57 % of items are below 0.
+- W2 held: Code 3.0 (-0.32) and IF (+0.17) are above the mean of the four gaining models (-0.63). The order of the 9 models by D
+  follows their cue gain (Spearman -0.67, n 9); Code 3.0 and theta(0.25) are the exceptions in opposite directions.
+- W3 held at the point estimate: relative to other text of the same answer, Math 3.1 is 0.49 times as likely as the base to write
+  the base's wrong step; the measured ratio of first wrong steps per 1,000 tokens is 0.39 (0.015 / 0.038, 'Checks or per-step error').
+- W4 refuted: the base's wrong step is not an unlikely sample. Its log-probability per token under the base is -0.53 against
+  -0.63 for control spans (span minus control +4.1 nats [-0.4, 9.9]). A rule that removes unlikely tokens cannot remove these
+  steps, in line with the truncation results ('Truncation rules at T 1.0').
+- By the judge's label, Math 3.1: misread -1.52 (n 14), slip -0.72 (n 21), wrong plan +0.03 (n 16). RL lowers the base's
+  misreadings and slips, not its wrong plans; RL's own remaining errors are mostly wrong plans ('Slip against wrong plan').
+- Instrument checks passed: the random difference is at 0; theta(0.25) has Math 3.1's sign and a seventh of its size.
+- Two items read: problem 217 sample 1, slip '450 factors into 2 x 3^2 x 5^3' (it is 5^2): Math 3.1 D = -7.1. Problem 21 sample
+  3, slip '1136 sqrt 7 - 88 sqrt 7 = 1148 sqrt 7': D = +5.2, RL does not mark it.
+
+Limits: 51 items, wide intervals; the quote marks where a judge saw the error, and the judges are the team's subagents.
+
 ## RLN-5 map: where RL still disagrees once the cue is given
 
 Spec `specs/SPEC5_map.md`; run folder `results/rln5/map-01/` (`run.json`, `metrics.json`, `examples.json`, `checks.json`,
