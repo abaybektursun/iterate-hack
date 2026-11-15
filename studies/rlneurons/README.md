@@ -30,6 +30,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/seen.py`, `analysis/seen_test.py`, `specs/SPEC_seen.md` | Seen against unseen: the 72 harder problems in the RL training prompts against 130 source-matched unseen ones, four arms, 4 samples; D = (RL - control) seen minus unseen. Sets `run_cell --set hard72`, `--set hardmatch`. Outputs `results/seen/`. |
 | `analysis/profile.py`, `analysis/profile_test.py`, `specs/SPEC_profile.md` | Difficulty profiles of Think-SFT and RL: error reduction by difficulty bin with difficulty defined without the arms compared, profile contrast against same-arm and one-axis noise floors, 2PL against Rasch held out, unions, cap hits by level, filed predictions for Think-SFT on hard328. Outputs `results/profile/`; input `data/profile/math500_meta_v1.json`. |
 | `lib/egate.py`, `jobs/egate_cell.py`, `analysis/egate.py`, `specs/SPEC_egate.md` | Entropy-gated temperature: a vLLM logits processor that lowers the temperature only at positions chosen by next-token entropy, at random, or outside the stretch after a repeat; the multi-arm job; the readout. Outputs `results/egate/`. |
+| `jobs/delta_sum.py`, `analysis/transplant.py`, `specs/SPEC_transplant.md` | Delta transplant: writes host + a (donor - base) for three fine-tunes of one base (Think-SFT + a times the RL-Math delta, or matched noise), and the readout against the stored Think-SFT and RL samples. Outputs `results/transplant/`. |
 | `jobs/run_cell.py` | One cell (model, prompt arm, problem set, temperature, top-p, seed) through the team runner `tools/gpu.py`. Reuses `rln4_gen`'s engine and row record, adds grader v3, reads `data/`. See "Day-1 cells on the team runner". |
 | `jobs/setup_vllm.sh` | Installs vLLM 0.32.0, math-verify 0.9.0, transformers 5.19.0, tokenizers 0.23.3 into the venv `/opt/rln-vllm` at job start. |
 | `jobs/rln3_gen.py` | RLN-3 generation job (arms P, F, C on MATH-500 and the harder set), AWS `pg` only. |
@@ -2859,6 +2860,71 @@ prompts.
 <submit> "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell <the cell's arguments> --shard 0/4 --commit $(git rev-parse HEAD)"   # and 1/4, 2/4, 3/4
 uv run --no-project python -m studies.rlneurons.analysis.shard_join --runs runs/<job 0> runs/<job 1> runs/<job 2> runs/<job 3> --out runs/<name>
 uv run --no-project python -m studies.rlneurons.analysis.shard_join_test
+```
+
+## Delta transplant: Think-SFT + 2 (RL-Math - base) scores 231.5 of 328, above both parents (hard328, cue, board work-3d1e3b)
+
+Spec `specs/SPEC_transplant.md` (written before any run; amendment 1 before a = 3, a = 4 and the second sample of a = 2).
+M(a) = Think-SFT + a (RL-Math - base), every tensor, written by `jobs/delta_sum.py` (stochastic rounding to BF16; the written
+model carries a to 5 digits: effective a 1.00000, 2.00000). ||Think-SFT - base|| = 467.4, ||RL-Math - base|| = 4.12 (113 times
+smaller), cosine -0.002. Cue, T 1.0 / top-p 1.0, cap 16,384, grader v3, vast.ai RTX PRO 6000, one sample per job.
+
+Method is published for another pair: 2605.00610 sums an SFT and a GRPO vector on Qwen2.5-Math-7B (47.8 against parents 44.1
+and 45.5 on six sets). New here: the RL donor was trained from the base with no demonstrations, the SFT parent on other data,
+the set is held out from the RL prompts, and the coefficient is followed past the peak with cap hits and a noise control.
+
+### hard328, n = 328 (`results/transplant/hard328-01/`)
+
+References are committed rows of the same harness: Think-SFT cue, 4 samples (`results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl`,
+first attempts) and RL plain, 4 samples (`results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl`, first attempts). Differences are
+per problem against the mean of the reference's 4 samples, 95 % bootstrap over problems, 5,000 resamples, seed 0.
+
+| Model | Samples | Right of 328 | Minus Think-SFT, points | Cap hits | Right of finished | Tokens per problem |
+|---|---|---|---|---|---|---|
+| RL-Math plain | 4 | 200.0 (190 to 209) | | 28.5 | 66.2 % (793 of 1,198) | 9,325 |
+| Think-SFT (a = 0) | 4 | 209.0 (201 to 212) | | 94.5 | 88.0 % (822 of 934) | 10,103 |
+| Think-SFT + noise of the RL delta's norm | 1 | 209 | 0.0 [-2.7, 2.7] | 97 | 90.0 % (208 of 231) | 10,109 |
+| M(1) | 1 | 220 | +3.4 [0.5, 6.2] | 75 | 85.8 % (217 of 253) | 9,667 |
+| M(2) | 2 | 231.5 (234, 229) | +6.9 [4.6, 9.3] | 54.0 (51, 57) | 83.8 % (459 of 548) | 9,502 |
+| M(3) | 1 | 227 | +5.5 [2.5, 8.5] | 44 | 78.9 % (224 of 284) | 9,709 |
+| M(4) | 1 | 213 | +1.2 [-2.0, 4.4] | 33 | 71.5 % (211 of 295) | 10,333 |
+
+- M(2) is above both parents: +6.9 points over Think-SFT and +9.6 [6.9, 12.3] over RL plain, on two seeds (3,000,000 and
+  3,100,000; the second sample was pre-registered in amendment 1 with the threshold 222 and scored 229).
+- The RL delta acts on Think-SFT as a dial for finishing. Cap hits fall with a at every step (94.5, 75, 54, 44, 33; RL itself
+  28.5), and the share of finished answers that are right falls with it (88.0, 85.8, 83.8, 78.9, 71.5 %; RL itself 66.2 %).
+  Right answers are the product of the two and peak at a = 2. The model does not break at a = 4: it becomes RL-like.
+- The gain is on the problems Think-SFT does not finish. On the 80 problems where Think-SFT hits the cap in at least 3 of its
+  4 samples it has 5.25 right per sample; M(1) has 11 and M(2) 16 (first sample). On the 166 problems Think-SFT solves in all
+  4 samples M(2) has 166 right and M(1) 162.
+- The control rules out "any small perturbation": Gaussian noise per tensor in place of the RL delta leaves right answers
+  (209) and cap hits (97) at Think-SFT's values. BF16 rounding inflates this dense noise to 1.40 times the RL delta's norm
+  (`delta_sum.json`, `written_norm_over_intended`), so the control is the larger perturbation; its inner product with the RL
+  delta is 0.000008 of the delta's squared norm.
+- Predictions. H-add (filed in "Difficulty profiles" before the run): hard328 at least 219, held (220); MATH-500 467, held
+  exactly (below). The spec's added line "cap hits fall to 70 or fewer at a = 1" is refuted (75); they reach it at a = 2.
+  H-inert and H-clash are refuted (interval above 0; 220 is not below 206). The stored-rows ceiling filed on the board before
+  the results, 227 for a = 1 (Think-SFT's finished answers plus RL's right answers on its cap-hit problems), was not reached
+  at a = 1 and was passed at a = 2. H-dose (amendment 1: a = 3 at least 228) missed by one (227); H-peak is refuted (229).
+- Not measured: a = 0.5 (the job stopped logging with one request running, twice, on two boxes; no rows), a second sample of
+  a = 1, 3, 4, and the vote over 4 samples (Think-SFT's vote is 241, result-818c20).
+- Raw answers read: two M(2) answers right on problems Think-SFT has 0 of 4 on (problems 100 and 110) derive the gold number
+  step by step and close the thinking block; `Wait` per 1,000 tokens is 6.7 for M(1) and 6.6 for M(2).
+
+### MATH-500, n = 500, M(1), one sample, seed 182,000,000 (`results/transplant/math500-01/`)
+
+467 of 500, 17 cap hits, 4,771 tokens per problem. Think-SFT cue 454 (25 cap hits, `results/wsp1/full500/sft1_cue-01/`), RL cue
+456 to 464 over 4 samples: M(1) minus RL +1.4 points [-0.6, 3.3]. The filed prediction was 467, with 460 or less refuting it.
+
+Run folders hold `readout.json`, `metrics.json` and `delta_sum.json` (per arm), `rows.jsonl` (arms and references, per answer)
+and `examples.json` (one right and one wrong finished answer per arm, with the prompt). Jobs: hard328 a = 1 -000934-51f9,
+a = 2 -000954-b526 and -020508-879c, a = 3 -020435-c76d, a = 4 -020500-36ed, control -020021-e9d1; MATH-500 -004808-bb28 (all
+abaybektursun-1115-). Raw answers: `runs/<job-id>/answers.jsonl` on the laptop of abaybektursun, worktree iterate-hack-egate
+(not committed; the boxes are destroyed). About 29 USD of vast.ai rent.
+
+```
+python3 tools/vast.py run <box> -- 'PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.delta_sum --host think_sft --donor rl_math --alpha 2.0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label sft1_rl20 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000 --samples 1 --restarts 0 --commit <sha>'
+uv run --with numpy python -m studies.rlneurons.analysis.transplant hard328-01 --arm sft1_rl20=runs/<job>,runs/<job> [--arm ...] --ref think=studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl --ref rl=studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl
 ```
 
 ## How to run

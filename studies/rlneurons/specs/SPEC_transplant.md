@@ -77,3 +77,5 @@ a = 0.5 again at seed 3,000,000.
 - H-peak (a = 2 was a lucky sample): the second sample of a = 2 is below 222, the middle of a = 1's 220 and 234 rounded down
   to Think-SFT's best sample plus 3. If it is 222 or more, a = 2 is reported as above Think-SFT with both samples.
 - Test against the parents as in the spec, now with a = 2's two samples averaged per problem.
+
+Outputs as written (deviation from the Outputs section): one folder per set, `results/transplant/hard328-01/` and `math500-01/`, each holding all arms.
