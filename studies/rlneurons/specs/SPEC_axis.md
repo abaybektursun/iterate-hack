@@ -85,3 +85,22 @@ route still hold problems RL misses).
 One sample per arm for all arms except base + cue and RL plain: a pair's excess mixes sampling noise into both members, which
 the null accounts for only through the strata. Shots arms have n = 497 (problems 0, 1, 2 are the examples). hard328 has no
 second sample of any arm except one same-seed rerun.
+
+## Amendments after the planted checks, before any real pair or fit was computed
+
+1. Null. With 8 equal-count strata the stratified null failed check 1 (one planted axis: pair z mean -0.98, 2.1 % beyond
+   |z| = 3): the rest score measures difficulty with error, so the two arms stay positively related inside a stratum. Now: one
+   stratum per distinct rest score, exact hypergeometric moments instead of 2,000 permutations, and the remaining bias (about
+   -1.5 problems) and the sd are taken from 200 matrices drawn from the fitted Rasch model and passed through the same
+   statistic. Check 1 then gives z mean 0.09, sd 0.94, 0.2 % beyond 3. Pairs with a derived arm (vote) cannot be simulated
+   from 0/1 data and keep the uncorrected null: their excess is biased low by about 1.5 problems.
+2. Power. A planted second axis of 1.5 logits on 30 % of the problems is detected by the item model (2-D gain 0.0032 nats per
+   cell against a null at 0) and gives cross-group pairs a mean excess of only 1.8 problems (z 0.64); 4 logits gives 4.8
+   problems (z 1.94). So no single pair of 500-problem vectors can reach the z > 3 of H1 for a realistic effect. H1 is judged
+   instead by (a) the pooled contrast: under one axis the same-config pairs and the different-arm pairs both have mean z near
+   0; under several axes the same-config pairs are more alike (mean z below the different-arm pairs by more than 1), and
+   (b) for each candidate pair the upper bound excess + 2 sd, in problems, which is the X of the verdict.
+3. 2-D detection needs a gain above the null's 95th percentile and above 1e-4 nats per cell (at the strongest ridge the 2-D
+   model equals the 1-D model and both gains are 0 to 5 decimals). The ridge grid gained the value 10.
+4. Check 2 asserts what the instrument can do: item model detects, loadings separate the groups, cross-group mean z exceeds
+   within-group mean z by more than 1; at 4 logits cross-group mean z > 1.5 and mean excess > 3 problems.
