@@ -275,9 +275,10 @@ function build() {
     `<rect class="keylit" id="k1" width="15" height="15" rx="2"/><text class="key" id="k1t">produced an answer</text>` +
     `<rect class="keyglass" id="k2" width="15" height="15" rx="2"/><text class="key" id="k2t">produced none</text>`;
   S.cols.forEach(o => { o.el = Object.fromEntries(["b", "w", "a", "f", "r", "n", "v", "m", "t"].map(k => [k, $(k + o.id)])); });
-  [["k1", 236], ["k2", 432]].forEach(([id, x]) => {
+  const ph = innerWidth <= 600;  // on a phone the key is set larger, so it stays 12 px on screen
+  [["k1", ph ? 130 : 236], ["k2", ph ? 440 : 432]].forEach(([id, x]) => {
     $(id).setAttribute("x", x); $(id).setAttribute("y", 612);
-    $(id + "t").setAttribute("x", x + 23); $(id + "t").setAttribute("y", 625); $(id + "t").setAttribute("font-size", 17);
+    $(id + "t").setAttribute("x", x + 23); $(id + "t").setAttribute("y", ph ? 628 : 625); $(id + "t").setAttribute("font-size", ph ? 27 : 17);
   });
 }
 function place() {
@@ -296,7 +297,7 @@ function place() {
     o.el.n.setAttribute("x", f(c[0])); o.el.n.setAttribute("y", f(c[1] - 44 * c[2]));
     o.el.n.setAttribute("font-size", f(60 * c[2])); o.el.m.setAttribute("font-size", f(22 * c[2]));
     o.el.n.setAttribute("opacity", f(S.grow));
-    o.el.t.setAttribute("x", f(near[0])); o.el.t.setAttribute("y", f(near[1] + 30)); o.el.t.setAttribute("font-size", f(23 * near[2]));
+    o.el.t.setAttribute("x", f(near[0])); o.el.t.setAttribute("y", f(near[1] + 30)); o.el.t.setAttribute("font-size", f((innerWidth <= 600 ? 28 : 23) * near[2]));
   });
 }
 /* One frame: the view sways slowly and leans toward the pointer, the columns rise once on load, and a change of the
