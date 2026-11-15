@@ -170,6 +170,174 @@
     ]
    },
    "run_folder": "studies/rlneurons/results/wsp2/screen100/cueprog_rand_plain-01"
+  },
+  "full500/cueprog_plain": {
+   "experiment": "full500",
+   "label": "cueprog",
+   "prompt": "plain",
+   "job_id": "sameraslan-1114-221130-eb90",
+   "seed_base": 184000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 500,
+   "right_v3": 397,
+   "acc_v3": 79.4,
+   "wilson95": [
+    75.6,
+    82.7
+   ],
+   "cap_hits": 21,
+   "mean_generated_tokens": 3873.7,
+   "median_generated_tokens": 1988.0,
+   "median_tokens_right": 1605,
+   "okay_first80": 463,
+   "okay_first80_share": 0.926,
+   "wait_per_answer": 21.54,
+   "empty": 0,
+   "empty_share": 0.0,
+   "mean_new_tokens": 3872.8,
+   "handedit": {
+    "control": false,
+    "written": "real",
+    "layer": 31,
+    "tensor": "model.layers.31.mlp.down_proj.weight",
+    "batch": 1,
+    "rounding": "nearest",
+    "target": 0.95,
+    "lambda": 0.01,
+    "solution": "joint: R K^T = I, so dW k_j = a_j u_j for all j at once",
+    "calibration": [
+     100,
+     227
+    ],
+    "held_out": [
+     228,
+     291
+    ],
+    "positions": [
+     {
+      "cue_id": 1584,
+      "scale": 244.5123291015625,
+      "held_before_mean": 0.00024904641088352507,
+      "held_before_min": 7.685273797758216e-05,
+      "held_after_mean": 0.9523115800631698,
+      "held_after_min": 0.874282889664808,
+      "cal_after_mean": 0.949845947531328
+     },
+     {
+      "cue_id": 2268,
+      "scale": 591.951171875,
+      "held_before_mean": 0.005835329448350149,
+      "held_before_min": 0.002628358533001383,
+      "held_after_mean": 0.9519768559260129,
+      "held_after_min": 0.9078600726140937,
+      "cal_after_mean": 0.9499245994049176
+     },
+     {
+      "cue_id": 33413,
+      "scale": 70.80792236328125,
+      "held_before_mean": 0.28628871221120544,
+      "held_before_min": 0.11244706587399585,
+      "held_after_mean": 0.951762294934245,
+      "held_after_min": 0.8613749015475622,
+      "cal_after_mean": 0.9500140932844171
+     }
+    ],
+    "kl_nats": 7.153615970247729e-05,
+    "kl_at_last_cue_nats": 1.3843712067555262e-05,
+    "fro_dW_over_W": 0.06579403113413484,
+    "fro_dW": 9.222524911414903,
+    "changed_share": 0.9380520665368368,
+    "value_cos_real": [
+     1.0,
+     0.9999999999999998,
+     0.9999999999999999
+    ]
+   },
+   "run_folder": "studies/rlneurons/results/wsp2/full500/cueprog_plain-01"
+  },
+  "full500/cueprog_rand_plain": {
+   "experiment": "full500",
+   "label": "cueprog_rand",
+   "prompt": "plain",
+   "job_id": "sameraslan-1114-221138-a65c",
+   "seed_base": 185000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 500,
+   "right_v3": 204,
+   "acc_v3": 40.8,
+   "wilson95": [
+    36.6,
+    45.2
+   ],
+   "cap_hits": 8,
+   "mean_generated_tokens": 1996.4,
+   "median_generated_tokens": 660.0,
+   "median_tokens_right": 946.0,
+   "okay_first80": 106,
+   "okay_first80_share": 0.212,
+   "wait_per_answer": 7.54,
+   "empty": 32,
+   "empty_share": 0.064,
+   "mean_new_tokens": 1995.4,
+   "handedit": {
+    "control": true,
+    "written": "control",
+    "layer": 31,
+    "tensor": "model.layers.31.mlp.down_proj.weight",
+    "batch": 1,
+    "rounding": "nearest",
+    "target": 0.95,
+    "lambda": 0.01,
+    "solution": "joint: R K^T = I, so dW k_j = a_j u_j for all j at once",
+    "calibration": [
+     100,
+     227
+    ],
+    "held_out": [
+     228,
+     291
+    ],
+    "positions": [
+     {
+      "cue_id": 1584,
+      "scale": 244.478271484375,
+      "held_before_mean": 0.00024904641088352507,
+      "held_before_min": 7.685273797758216e-05,
+      "held_after_mean": 0.0003008153296218317,
+      "held_after_min": 9.918034392458007e-05,
+      "cal_after_mean": 0.0002853851954223902
+     },
+     {
+      "cue_id": 2268,
+      "scale": 592.03515625,
+      "held_before_mean": 0.005835329448350149,
+      "held_before_min": 0.002628358533001383,
+      "held_after_mean": 0.004329648958825644,
+      "held_after_min": 0.001876404117864113,
+      "cal_after_mean": 0.0043057884150157315
+     },
+     {
+      "cue_id": 33413,
+      "scale": 70.77288818359375,
+      "held_before_mean": 0.28628871221120544,
+      "held_before_min": 0.11244706587399585,
+      "held_after_mean": 0.3044831337553593,
+      "held_after_min": 0.12294612643310855,
+      "cal_after_mean": 0.3013034414648555
+     }
+    ],
+    "kl_nats": 5.78646366503441e-06,
+    "kl_at_last_cue_nats": 2.9786271824081545e-07,
+    "fro_dW_over_W": 0.06580605660597416,
+    "fro_dW": 9.224210553891856,
+    "changed_share": 0.9377494412799214,
+    "value_cos_real": [
+     0.0034563884253276493,
+     -0.0049454379066036685,
+     0.015165905560175962
+    ]
+   },
+   "run_folder": "studies/rlneurons/results/wsp2/full500/cueprog_rand_plain-01"
   }
  },
  "screen100_differences": {
@@ -259,21 +427,83 @@
     "count": "studies/rlneurons/results/day1_wdiff/readout.json"
    }
   },
-  "differences": {},
+  "differences": {
+   "cueprog_plain minus cueprog_rand_plain": {
+    "n": 500,
+    "points": 38.6,
+    "ci95": [
+     34.0,
+     43.6
+    ],
+    "paired": true
+   },
+   "cueprog_plain minus T1_base_cue": {
+    "n": 500,
+    "points": -2.6,
+    "ci95": [
+     -6.4,
+     1.2
+    ],
+    "paired": true
+   },
+   "cueprog_plain minus T2_rl_plain": {
+    "n": 500,
+    "points": -13.2,
+    "ci95": [
+     -16.6,
+     -9.8
+    ],
+    "paired": true
+   },
+   "cueprog_plain minus top8_plain": {
+    "n": 500,
+    "points": -6.0,
+    "ci95": [
+     -9.8,
+     -2.0
+    ],
+    "paired": true
+   },
+   "cueprog_plain minus rand8_plain": {
+    "n": 500,
+    "points": 40.0,
+    "ci95": [
+     34.8,
+     45.0
+    ],
+    "paired": true
+   },
+   "cueprog_plain minus T3_base_plain": {
+    "n": 500,
+    "points": 34.6,
+    "ci95": [
+     28.82,
+     40.03
+    ],
+    "paired": false
+   },
+   "cueprog_rand_plain minus rand8_plain": {
+    "n": 500,
+    "points": 1.4,
+    "ci95": [
+     -4.6,
+     7.0
+    ],
+    "paired": true
+   },
+   "cueprog_rand_plain minus T3_base_plain": {
+    "n": 500,
+    "points": -4.0,
+    "ci95": [
+     -10.08,
+     2.13
+    ],
+    "paired": false
+   }
+  },
   "skipped": []
  },
- "skipped": [
-  {
-   "cell": "full500/cueprog_plain",
-   "job_id": "sameraslan-1114-221130-eb90",
-   "why": "no answers.jsonl in runs/"
-  },
-  {
-   "cell": "full500/cueprog_rand_plain",
-   "job_id": "sameraslan-1114-221138-a65c",
-   "why": "no answers.jsonl in runs/"
-  }
- ],
+ "skipped": [],
  "bootstrap": "paired by problem index, 5,000 resamples, seed 0, 95 % percentile, in points; screen100 references are the WSP-1 cells of results/wsp1/screen100/ (base cue: seed base 81,000,000, paired by problem)",
  "notes": [
   "tokens are n_generated (counts the stop token); mean_new_tokens is the mean of n_new",
