@@ -1,0 +1,88 @@
+{
+ "stopped_sample_would_have_ended_right": {
+  "rule": "rep50_p75",
+  "problem_index": 0,
+  "unique_id": "aime2022/2022_AIME_I_Problems/Problem_1",
+  "sample": 3,
+  "stopped_at_token": 8000,
+  "n_new": 8518,
+  "cap_hit": false,
+  "score_v3": 1,
+  "extracted_v3": "116",
+  "text_before_the_stop_300": "pt was following the instruction properly, so I think I'm okay.\n\n**Final Answer**\n\\boxed{116}\n</think>\n\nQuadratic polynomials \\( P(x) \\) and \\( Q(x) \\) have leading coefficients 2 and -2, respectively. Both polynomials pass through the points \\( (16, 54) \\) and \\( (20, 53) \\). We need to find \\( P(0",
+  "text_last_200": "rac{287}{4}\\right) = -582 \\)\n\nThus, \\( Q(x) = -2x^2 + \\frac{287}{4}x - 582 \\), so \\( Q(0) = -582 \\).\n\nAdding the constants:\n\\[ P(0) + Q(0) = 698 + (-582) = 116 \\]\n\nThe final answer is \\(\\boxed{116}\\).",
+  "the_problem's_four_samples": [
+   {
+    "sample": 0,
+    "n_new": 4349,
+    "cap_hit": false,
+    "extracted_v3": "116",
+    "score_v3": 1
+   },
+   {
+    "sample": 1,
+    "n_new": 6109,
+    "cap_hit": false,
+    "extracted_v3": "116",
+    "score_v3": 1
+   },
+   {
+    "sample": 2,
+    "n_new": 6753,
+    "cap_hit": false,
+    "extracted_v3": "116",
+    "score_v3": 1
+   },
+   {
+    "sample": 3,
+    "n_new": 8518,
+    "cap_hit": false,
+    "extracted_v3": "116",
+    "score_v3": 1
+   }
+  ]
+ },
+ "stopped_sample_would_not_have_ended_right": {
+  "rule": "rep50_p75",
+  "problem_index": 61,
+  "unique_id": "aime2024/2024_AIME_I_Problems/Problem_10",
+  "sample": 0,
+  "stopped_at_token": 4000,
+  "n_new": 16384,
+  "cap_hit": true,
+  "score_v3": 0,
+  "extracted_v3": null,
+  "text_before_the_stop_300": " written as [84√14]/(11*14) = [84/(14)] * [√14 /11] = 6 /11 * √14, but perhaps not necessary.\n\nThus, slope m_C = dy/dx = 84/(11√14).\n\nHence, tangent line at C(9,0):\n\ny -0 = m_C(x -9).\n\nSo y = [84/(11√14)](x -9).\n\nThus, equations of the two tangents are:\n\nAt B: y = [ -84/(11√14) ] x,\n\nand at C: y = [",
+  "text_last_200": "rlier was in miscalculating the numerator and denominator cancellation. Thus AP is 100/13.\n\nWow! That’s a relief. Therefore the answer is AP=100/13,\n\nTherefore m=100,\n\nn=13,\n\nThey are coprime,\n\nHence,",
+  "the_problem's_four_samples": [
+   {
+    "sample": 0,
+    "n_new": 16384,
+    "cap_hit": true,
+    "extracted_v3": null,
+    "score_v3": 0
+   },
+   {
+    "sample": 1,
+    "n_new": 16384,
+    "cap_hit": true,
+    "extracted_v3": null,
+    "score_v3": 0
+   },
+   {
+    "sample": 2,
+    "n_new": 13938,
+    "cap_hit": false,
+    "extracted_v3": "113",
+    "score_v3": 1
+   },
+   {
+    "sample": 3,
+    "n_new": 16384,
+    "cap_hit": true,
+    "extracted_v3": null,
+    "score_v3": 0
+   }
+  ]
+ }
+}
