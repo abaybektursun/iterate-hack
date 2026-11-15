@@ -1,0 +1,15 @@
+# command: uv run tools/cycle.py --hours 2 | grep -E '1114-18[23]|1114-19[13]|6ea1'   (work-069eca jobs; wait and run in minutes)
+  abaybektursun-1114-182707-731c  done  NVIDIA H100   6.1  22.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182712-3556  done  NVIDIA H100   6.5  30.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182718-612b  done  NVIDIA H100   10.2  36.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182724-87aa  done  NVIDIA H100   10.4  29.6  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182730-9523  done  NVIDIA H100   10.4  18.8  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182735-bcca  done  NVIDIA H100   15.8  3.6  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182742-9129  done  NVIDIA H100   19.3  15.8  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182748-3300  done  NVIDIA H100   25.4  29.6  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182754-7238  done  NVIDIA H100   26.5  29.2  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182800-3331  done  NVIDIA H100   27.2  16.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-183108-6ea1  cancelled  b200  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-191457-f9da  done  NVIDIA H100   0.2  13.2  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta025 /tmp
+  abaybektursun-1114-191504-5599  exit 1  NVIDIA H100   0.1  11.5  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-193153-3c4c  done  NVIDIA H100   0.3  15.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/mix && /opt/r

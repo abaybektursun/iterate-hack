@@ -1,0 +1,248 @@
+{
+ "floor_scored_wrong_by_every_arm": {
+  "problem_index": 103,
+  "unique_id": "test/intermediate_algebra/558.json",
+  "scores": {
+   "base_cue_s0": 0,
+   "base_cue_s1": 0,
+   "base_cue_s2": 0,
+   "base_cue_s3": 0,
+   "rl_plain_s0": 0,
+   "rl_plain_s1": 0,
+   "rl_plain_s2": 0,
+   "rl_plain_s3": 0,
+   "theta0.25_cue": 0,
+   "theta0.5_cue": 0,
+   "theta0.75_cue": 0,
+   "theta1.25_cue": 0,
+   "theta1.5_cue": 0,
+   "rl_cue": 0,
+   "code_cue": 0,
+   "code_plain": 0,
+   "random_cue": 0,
+   "theta0.25_plain": 0,
+   "theta0.5_plain": 0,
+   "if30_cue": 0,
+   "general30_cue": 0,
+   "mix30_cue": 0,
+   "math30_cue": 0,
+   "code30_cue": 0,
+   "if30_plain": 0,
+   "general30_plain": 0,
+   "mix30_plain": 0,
+   "math30_plain": 0,
+   "code30_plain": 0,
+   "shots_base": 0,
+   "shots_code": 0,
+   "shots_rl": 0,
+   "top8_plain": 0,
+   "rand8_plain": 0,
+   "sft1_cue": 0,
+   "sft1_plain": 0,
+   "base_vote4": 0,
+   "base_tie_short": 0,
+   "rl_vote4": 0
+  },
+  "day1_3_rows": {
+   "base_cue": [
+    {
+     "sample": 0,
+     "seed": 41000103,
+     "n_new": 16384,
+     "cap_hit": true,
+     "extracted_v3": null,
+     "score_v3": 0,
+     "gold": "(3,4]"
+    },
+    {
+     "sample": 1,
+     "seed": 41010103,
+     "n_new": 16384,
+     "cap_hit": true,
+     "extracted_v3": null,
+     "score_v3": 0,
+     "gold": "(3,4]"
+    },
+    {
+     "sample": 2,
+     "seed": 41020103,
+     "n_new": 16001,
+     "cap_hit": false,
+     "extracted_v3": "(1, 2) \\cup (3, 4)",
+     "score_v3": 0,
+     "gold": "(3,4]"
+    },
+    {
+     "sample": 3,
+     "seed": 41030103,
+     "n_new": 16384,
+     "cap_hit": true,
+     "extracted_v3": null,
+     "score_v3": 0,
+     "gold": "(3,4]"
+    }
+   ],
+   "rl": [
+    {
+     "sample": 0,
+     "seed": 45000103,
+     "n_new": 15054,
+     "cap_hit": false,
+     "extracted_v3": "1 + \\sqrt{5}",
+     "score_v3": 0,
+     "gold": "(3,4]"
+    },
+    {
+     "sample": 1,
+     "seed": 45010103,
+     "n_new": 14889,
+     "cap_hit": false,
+     "extracted_v3": "(1, 4]",
+     "score_v3": 0,
+     "gold": "(3,4]"
+    },
+    {
+     "sample": 2,
+     "seed": 45020103,
+     "n_new": 14071,
+     "cap_hit": false,
+     "extracted_v3": "1 + \\sqrt{5}",
+     "score_v3": 0,
+     "gold": "(3,4]"
+    },
+    {
+     "sample": 3,
+     "seed": 45030103,
+     "n_new": 14581,
+     "cap_hit": false,
+     "extracted_v3": "(1, 3) \\cup (3, 4)",
+     "score_v3": 0,
+     "gold": "(3,4]"
+    }
+   ]
+  }
+ },
+ "fixed_by_theta0.5_cue_and_sft1_cue": {
+  "problem_index": 20,
+  "unique_id": "test/algebra/1098.json",
+  "scores": {
+   "base_cue_s0": 0,
+   "base_cue_s1": 0,
+   "base_cue_s2": 1,
+   "base_cue_s3": 1,
+   "rl_plain_s0": 1,
+   "rl_plain_s1": 1,
+   "rl_plain_s2": 1,
+   "rl_plain_s3": 1,
+   "theta0.25_cue": 1,
+   "theta0.5_cue": 1,
+   "theta0.75_cue": 1,
+   "theta1.25_cue": 1,
+   "theta1.5_cue": 1,
+   "rl_cue": 0,
+   "code_cue": 0,
+   "code_plain": 0,
+   "random_cue": 1,
+   "theta0.25_plain": 1,
+   "theta0.5_plain": 1,
+   "if30_cue": 0,
+   "general30_cue": 0,
+   "mix30_cue": 1,
+   "math30_cue": 1,
+   "code30_cue": 1,
+   "if30_plain": 0,
+   "general30_plain": 1,
+   "mix30_plain": 1,
+   "math30_plain": 1,
+   "code30_plain": 1,
+   "shots_base": 1,
+   "shots_code": 1,
+   "shots_rl": 1,
+   "top8_plain": 1,
+   "rand8_plain": 0,
+   "sft1_cue": 1,
+   "sft1_plain": 0,
+   "base_vote4": 0,
+   "base_tie_short": 1,
+   "rl_vote4": 1
+  },
+  "day1_3_rows": {
+   "base_cue": [
+    {
+     "sample": 0,
+     "seed": 41000020,
+     "n_new": 2762,
+     "cap_hit": false,
+     "extracted_v3": "117 + 41i",
+     "score_v3": 0,
+     "gold": "6+9i"
+    },
+    {
+     "sample": 1,
+     "seed": 41010020,
+     "n_new": 12838,
+     "cap_hit": false,
+     "extracted_v3": "117 + 41i",
+     "score_v3": 0,
+     "gold": "6+9i"
+    },
+    {
+     "sample": 2,
+     "seed": 41020020,
+     "n_new": 413,
+     "cap_hit": false,
+     "extracted_v3": "6 + 9i",
+     "score_v3": 1,
+     "gold": "6+9i"
+    },
+    {
+     "sample": 3,
+     "seed": 41030020,
+     "n_new": 1873,
+     "cap_hit": false,
+     "extracted_v3": "6 + 9i",
+     "score_v3": 1,
+     "gold": "6+9i"
+    }
+   ],
+   "rl": [
+    {
+     "sample": 0,
+     "seed": 45000020,
+     "n_new": 1771,
+     "cap_hit": false,
+     "extracted_v3": "6 + 9i",
+     "score_v3": 1,
+     "gold": "6+9i"
+    },
+    {
+     "sample": 1,
+     "seed": 45010020,
+     "n_new": 875,
+     "cap_hit": false,
+     "extracted_v3": "6 + 9i",
+     "score_v3": 1,
+     "gold": "6+9i"
+    },
+    {
+     "sample": 2,
+     "seed": 45020020,
+     "n_new": 930,
+     "cap_hit": false,
+     "extracted_v3": "6 + 9i",
+     "score_v3": 1,
+     "gold": "6+9i"
+    },
+    {
+     "sample": 3,
+     "seed": 45030020,
+     "n_new": 1207,
+     "cap_hit": false,
+     "extracted_v3": "6 + 9i",
+     "score_v3": 1,
+     "gold": "6+9i"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,8 @@
+# command: for each four-sample run folder on origin/main and origin/claude/swarm-literature-review-60a281, is rows.jsonl (extracted answer per sample) in git
+# git ls-tree -r --name-only <ref> -- studies/rlneurons/results/day1_3/ | grep rows.jsonl ; 2026-11-15 03:15 UTC
+origin/main studies/rlneurons/results/day1_3/math500_base_cue-01 rows.jsonl=1
+origin/main studies/rlneurons/results/day1_3/math500_rl-01 rows.jsonl=1
+origin/claude/swarm-literature-review-60a281 studies/rlneurons/results/day1_3/hard328_base_cue_s4r0-01 rows.jsonl=0
+origin/claude/swarm-literature-review-60a281 studies/rlneurons/results/day1_3/hard328_partial246_base_cue_s4r0-01 rows.jsonl=0
+origin/claude/swarm-literature-review-60a281 studies/rlneurons/results/day1_3/hard328_partial246_rl_plain_s4r0-01 rows.jsonl=0
+# work-3095f1 from cycle.txt: total 7 min, 0 jobs
