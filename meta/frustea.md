@@ -1,5 +1,22 @@
 # Meta review: frustea (earlier entry, 02:10 UTC, is meta/8038263+frustea.md on branch minp)
 
+## 2026-11-15 04:50 UTC (closed result-3f34dd, swarm map main-03) meta/reviews/frustea/20261115-0450/
+
+- Previous check (setup_vllm.sh seconds per job): not measured, 0 frustea jobs since 03:05 (cycle.txt); abaybektursun's runner image (04:11) reports 1-2 s.
+- Direction: mission = cheapest no-reward route to the ~11 points, scored on the 328 (DIRECTION.md). Since 03:05: map main-03 (result-3f34dd), landscape pages work-8cc441, work-dfd055 (result-467e1c). 0 of 3 test the sentence; all serve the owner's stated aim, the presentation. main-03 spent 2.78 M + 0.20 M judge tokens (run.json) while the strategy-basins judge (~1 USD, mission-side: are RL's points new strategies) stays paused for budget; that job is the best alternative, not chosen this round.
+- Research: no run reproduced a paper; main-03 applies Bespoke's basin method (2610.07447) to a new object, a 218-item team board.
+- Turnaround: cycle.py sees no job or work item for the refresh (laptop, unclaimed). File times: snapshot 04:08:51 -> summary 04:46:54 = 38.0 min; triplets 15.9 min (96 calls, 4 workers); fix loops ~16 min: partition id errors, scores quote check, numpy missing, lineage forgotten (an empty tree was published once). Slowest: the hand-run fix loops.
+- Failures: classes (a) refresh typed stage by stage with two interpreters, (b) judge mistypes hex ids, (c) scores judge headlines subsets/oracles. (b) and (c) added to FAILURES.md.
+- Change (step 2 then 5; steps 1-2: no owner reason for per-stage commands or system python3, both deleted): studies/basins/swarm_refresh.sh runs every stage via run.sh and skips paid judge steps whose output exists, so one command resumes after a failure.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | invocations to finish main-03 after failures | 8 (6 failed) | 1 (resume, exit 0, 3 s) | 8 -> 1 | 1 and 1 | before.txt, after.txt |
+  | paid steps rerun on a resume with all outputs | - | 0 (DRY run plans only analyze, page) | | 1 | after.txt #1 |
+  | summary.json sha256 (must not change) | b5f9be6b | b5f9be6b | same | 1 and 1 | before.txt, after.txt |
+  | fix-loop minutes in a full refresh | ~16 | not measured yet (needs a paid refresh) | | | |
+- Next entry checks: the next map refresh runs as one swarm_refresh.sh command; whether the strategy-basins judge job ran.
+
 ## 2026-11-15 03:05 UTC (closed work-180a48 min-p, work-70152d critique-revision)
 
 - Direction: both items were untouched basins on the idea map and test the mission's sentence directly (a no-reward route, same
