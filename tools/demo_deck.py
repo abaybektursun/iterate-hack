@@ -32,7 +32,12 @@ import pastdev
 import proof_idea_basins
 import proof_review_cuts_waste
 
-HOOK = "36 hours to solve RSI"  # the opening line of the talk
+HOOK = "36 hours to solve recursive self-improvement"  # the opening line of the talk
+SITE = "invariant.team"  # the address on the first and last slide
+# The QR code of https://invariant.team (version 2, error level M) as one SVG path of unit squares on a
+# 25 x 25 grid: segno.make("https://invariant.team", error="m").matrix, a square per dark module.
+QR_SIZE = 25
+QR_PATH = "M0 0h1v1h-1zM1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM11 0h1v1h-1zM13 0h1v1h-1zM14 0h1v1h-1zM15 0h1v1h-1zM16 0h1v1h-1zM18 0h1v1h-1zM19 0h1v1h-1zM20 0h1v1h-1zM21 0h1v1h-1zM22 0h1v1h-1zM23 0h1v1h-1zM24 0h1v1h-1zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM9 1h1v1h-1zM10 1h1v1h-1zM14 1h1v1h-1zM15 1h1v1h-1zM18 1h1v1h-1zM24 1h1v1h-1zM0 2h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM6 2h1v1h-1zM9 2h1v1h-1zM10 2h1v1h-1zM12 2h1v1h-1zM14 2h1v1h-1zM18 2h1v1h-1zM20 2h1v1h-1zM21 2h1v1h-1zM22 2h1v1h-1zM24 2h1v1h-1zM0 3h1v1h-1zM2 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM6 3h1v1h-1zM14 3h1v1h-1zM15 3h1v1h-1zM16 3h1v1h-1zM18 3h1v1h-1zM20 3h1v1h-1zM21 3h1v1h-1zM22 3h1v1h-1zM24 3h1v1h-1zM0 4h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM6 4h1v1h-1zM8 4h1v1h-1zM9 4h1v1h-1zM10 4h1v1h-1zM15 4h1v1h-1zM18 4h1v1h-1zM20 4h1v1h-1zM21 4h1v1h-1zM22 4h1v1h-1zM24 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM10 5h1v1h-1zM13 5h1v1h-1zM14 5h1v1h-1zM15 5h1v1h-1zM18 5h1v1h-1zM24 5h1v1h-1zM0 6h1v1h-1zM1 6h1v1h-1zM2 6h1v1h-1zM3 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM19 6h1v1h-1zM20 6h1v1h-1zM21 6h1v1h-1zM22 6h1v1h-1zM23 6h1v1h-1zM24 6h1v1h-1zM9 7h1v1h-1zM13 7h1v1h-1zM16 7h1v1h-1zM0 8h1v1h-1zM2 8h1v1h-1zM4 8h1v1h-1zM6 8h1v1h-1zM11 8h1v1h-1zM12 8h1v1h-1zM13 8h1v1h-1zM15 8h1v1h-1zM16 8h1v1h-1zM20 8h1v1h-1zM23 8h1v1h-1zM0 9h1v1h-1zM1 9h1v1h-1zM4 9h1v1h-1zM5 9h1v1h-1zM7 9h1v1h-1zM8 9h1v1h-1zM13 9h1v1h-1zM16 9h1v1h-1zM17 9h1v1h-1zM18 9h1v1h-1zM24 9h1v1h-1zM0 10h1v1h-1zM2 10h1v1h-1zM4 10h1v1h-1zM6 10h1v1h-1zM8 10h1v1h-1zM9 10h1v1h-1zM10 10h1v1h-1zM11 10h1v1h-1zM17 10h1v1h-1zM19 10h1v1h-1zM20 10h1v1h-1zM22 10h1v1h-1zM23 10h1v1h-1zM24 10h1v1h-1zM0 11h1v1h-1zM1 11h1v1h-1zM7 11h1v1h-1zM9 11h1v1h-1zM13 11h1v1h-1zM14 11h1v1h-1zM15 11h1v1h-1zM17 11h1v1h-1zM18 11h1v1h-1zM19 11h1v1h-1zM20 11h1v1h-1zM23 11h1v1h-1zM0 12h1v1h-1zM1 12h1v1h-1zM2 12h1v1h-1zM4 12h1v1h-1zM5 12h1v1h-1zM6 12h1v1h-1zM7 12h1v1h-1zM8 12h1v1h-1zM9 12h1v1h-1zM10 12h1v1h-1zM11 12h1v1h-1zM12 12h1v1h-1zM13 12h1v1h-1zM16 12h1v1h-1zM17 12h1v1h-1zM18 12h1v1h-1zM21 12h1v1h-1zM23 12h1v1h-1zM24 12h1v1h-1zM2 13h1v1h-1zM5 13h1v1h-1zM7 13h1v1h-1zM8 13h1v1h-1zM9 13h1v1h-1zM11 13h1v1h-1zM12 13h1v1h-1zM13 13h1v1h-1zM16 13h1v1h-1zM18 13h1v1h-1zM21 13h1v1h-1zM24 13h1v1h-1zM0 14h1v1h-1zM2 14h1v1h-1zM4 14h1v1h-1zM6 14h1v1h-1zM7 14h1v1h-1zM8 14h1v1h-1zM11 14h1v1h-1zM12 14h1v1h-1zM14 14h1v1h-1zM17 14h1v1h-1zM18 14h1v1h-1zM19 14h1v1h-1zM22 14h1v1h-1zM23 14h1v1h-1zM24 14h1v1h-1zM1 15h1v1h-1zM4 15h1v1h-1zM7 15h1v1h-1zM9 15h1v1h-1zM12 15h1v1h-1zM13 15h1v1h-1zM14 15h1v1h-1zM15 15h1v1h-1zM17 15h1v1h-1zM18 15h1v1h-1zM20 15h1v1h-1zM23 15h1v1h-1zM0 16h1v1h-1zM2 16h1v1h-1zM5 16h1v1h-1zM6 16h1v1h-1zM7 16h1v1h-1zM10 16h1v1h-1zM11 16h1v1h-1zM13 16h1v1h-1zM15 16h1v1h-1zM16 16h1v1h-1zM17 16h1v1h-1zM18 16h1v1h-1zM19 16h1v1h-1zM20 16h1v1h-1zM21 16h1v1h-1zM8 17h1v1h-1zM9 17h1v1h-1zM11 17h1v1h-1zM15 17h1v1h-1zM16 17h1v1h-1zM20 17h1v1h-1zM21 17h1v1h-1zM23 17h1v1h-1zM24 17h1v1h-1zM0 18h1v1h-1zM1 18h1v1h-1zM2 18h1v1h-1zM3 18h1v1h-1zM4 18h1v1h-1zM5 18h1v1h-1zM6 18h1v1h-1zM15 18h1v1h-1zM16 18h1v1h-1zM18 18h1v1h-1zM20 18h1v1h-1zM21 18h1v1h-1zM23 18h1v1h-1zM24 18h1v1h-1zM0 19h1v1h-1zM6 19h1v1h-1zM9 19h1v1h-1zM10 19h1v1h-1zM11 19h1v1h-1zM13 19h1v1h-1zM14 19h1v1h-1zM16 19h1v1h-1zM20 19h1v1h-1zM21 19h1v1h-1zM23 19h1v1h-1zM24 19h1v1h-1zM0 20h1v1h-1zM2 20h1v1h-1zM3 20h1v1h-1zM4 20h1v1h-1zM6 20h1v1h-1zM8 20h1v1h-1zM9 20h1v1h-1zM10 20h1v1h-1zM12 20h1v1h-1zM14 20h1v1h-1zM16 20h1v1h-1zM17 20h1v1h-1zM18 20h1v1h-1zM19 20h1v1h-1zM20 20h1v1h-1zM21 20h1v1h-1zM23 20h1v1h-1zM24 20h1v1h-1zM0 21h1v1h-1zM2 21h1v1h-1zM3 21h1v1h-1zM4 21h1v1h-1zM6 21h1v1h-1zM11 21h1v1h-1zM12 21h1v1h-1zM13 21h1v1h-1zM15 21h1v1h-1zM16 21h1v1h-1zM19 21h1v1h-1zM20 21h1v1h-1zM21 21h1v1h-1zM22 21h1v1h-1zM0 22h1v1h-1zM2 22h1v1h-1zM3 22h1v1h-1zM4 22h1v1h-1zM6 22h1v1h-1zM8 22h1v1h-1zM10 22h1v1h-1zM11 22h1v1h-1zM12 22h1v1h-1zM14 22h1v1h-1zM16 22h1v1h-1zM20 22h1v1h-1zM24 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM10 23h1v1h-1zM12 23h1v1h-1zM13 23h1v1h-1zM16 23h1v1h-1zM17 23h1v1h-1zM20 23h1v1h-1zM21 23h1v1h-1zM23 23h1v1h-1zM0 24h1v1h-1zM1 24h1v1h-1zM2 24h1v1h-1zM3 24h1v1h-1zM4 24h1v1h-1zM5 24h1v1h-1zM6 24h1v1h-1zM8 24h1v1h-1zM9 24h1v1h-1zM10 24h1v1h-1zM11 24h1v1h-1zM12 24h1v1h-1zM14 24h1v1h-1zM15 24h1v1h-1zM16 24h1v1h-1zM17 24h1v1h-1zM18 24h1v1h-1zM19 24h1v1h-1zM23 24h1v1h-1zM24 24h1v1h-1z"
 
 # The title of each paper by its file name in view.PAPERS; paper_title falls back to the file name.
 PAPER_TITLES = {"the-finish-dial.pdf": "The Finish Dial", "theories-on-trial.pdf": "Theories on Trial",
@@ -167,6 +172,7 @@ PEAK = max((c for c in DIAL_ROWS if c["kind"] == "top"), key=lambda c: c["right"
 assert PEAK is CELLS["1.5"], "the peak of the finish dial moved: the slide text names size 1.5"
 
 PEOPLE = demo_facts.FACTS["people"]["v"]
+RL_GPUS = demo_facts.FACTS["rl_zero_gpus"]["v"]["total"]  # learner + actor GPUs of the RL training, Olmo 3 paper, Table 49
 
 SKILL, PLAIN = proof_review_cuts_waste.SKILL, proof_review_cuts_waste.PLAIN
 ROUNDS = proof_review_cuts_waste.DATA["rounds"]
@@ -224,18 +230,34 @@ def paper(name):
             f'<span>{esc(PAPER_AUTHOR)}</span><div class="lines">{lines}</div></a>')
 
 
+def hook_html():
+    """The hook with "self-improvement" kept on one line."""
+    return esc(HOOK).replace("self-improvement", '<span class="nb">self-improvement</span>')
+
+
+def qr():
+    """The QR code of the site: dark modules on a white tile in both themes, with the 4-module quiet zone a scanner needs."""
+    q = 4
+    return (f'<svg class="qr" viewBox="{-q} {-q} {QR_SIZE + 2 * q} {QR_SIZE + 2 * q}" role="img" aria-label="QR code of {SITE}">'
+            f'<rect x="{-q}" y="{-q}" width="{QR_SIZE + 2 * q}" height="{QR_SIZE + 2 * q}" rx="1.5" fill="#fff"/>'
+            f'<path d="{QR_PATH}" fill="#101820" shape-rendering="crispEdges"/></svg>')
+
+
 def slides(n_findings, papers):
     return [
-        ("hook", f'<div class="mid"><h1 class="big">{esc(HOOK)}</h1><p class="sub faint">Team Invariant</p></div>'),
+        ("hook", f'<div class="mid"><h1 class="big">{hook_html()}</h1><div class="site">{qr()}<span>{esc(SITE)}</span></div></div>'),
+        ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers</p>'
+                     '<ul class="limits"><li>Limited token budget</li><li>Limited compute</li><li>Limited people</li></ul></div>'),
+        ("powered", '<div class="versus">'
+                    f'<div><p class="sub">The RL-trained model</p><p class="sub by">Powered by</p><p class="gpus">{RL_GPUS} H100 GPUs</p></div>'
+                    f'<div><p class="sub">Invariant</p><p class="sub by">Powered by</p>{photo(demo_photos.COOK, "cook")}'
+                    f'<p class="who">{esc(demo_photos.COOK_NAME)}</p></div></div>'),
         ("climb", f'<div class="head"><h2>No training: {pct(CLIMB_LO):.1f} % to {pct(CLIMB_HI):.0f} % on {esc(CLIMB["bench"])}</h2>'
                   f'<p class="sub">The best score of the untrained base model over the hackathon · RL-trained model {pct(CLIMB_RL):.0f} %</p></div>'
                   '<iframe class="fig-frame climb" data-fig="climb" data-replay title="The accuracy climb" tabindex="-1"></iframe>'
                   '<div class="replay"><input class="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="Board time">'
                   '<button class="rate" aria-pressed="false" aria-label="Half speed">0.5×</button></div>'),
-        ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers, limited tokens, compute and people</p>'
-                     f'<h1 class="big">Hill climbing is not useful if we don\'t understand it</h1></div>'),
-        ("tea", f'<div class="mid"><p class="sub">Our solution</p>{photo(demo_photos.TEA, "tea")}<p class="sub">Gong fu tea and meditation</p></div>'),
-        ("harness", '<div class="head"><h2>Nanolab</h2><p class="sub">A hill climbing engine and an interpretability engine in one harness</p></div>'
+        ("harness", '<div class="head"><h2>Invariant</h2><p class="sub">A hill climbing engine and an interpretability engine in one harness</p></div>'
                     '<iframe class="fig-frame harness" data-fig="harness" title="The harness" tabindex="-1"></iframe>'
                     f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span><span>GPUs <b class="word">Modal</b></span></div>'),
         ("sponsors", '<div class="head"><h2>Search and memory before every experiment</h2>'
@@ -261,7 +283,7 @@ def slides(n_findings, papers):
         ("papers", f'<div class="mid"><h2 class="title">{len(papers)} papers, written by the swarm</h2>'
                    f'<div class="sheets" style="--n:{len(papers)}">{"".join(paper(p) for p in papers)}</div></div>'),
         ("close", f'<div class="mid">{photo(demo_photos.MEDITATE, "meditate")}<p class="end">Also our solution to AI psychosis</p>'
-                  '<p class="sub faint">monitor.invariant.team</p></div>'),
+                  f'<p class="sub faint">{esc(SITE)}</p></div>'),
     ]
 
 
@@ -292,12 +314,16 @@ p, h1, h2, figure { margin: 0; }
 @media (prefers-reduced-motion: reduce) { .slide, .slide.on { transition: none; } }
 
 .mid { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; text-align: center; padding: 0 140px; }
-.big { font-weight: 300; font-size: 76px; line-height: 1.12; letter-spacing: -.012em; max-width: 1240px; }
+.big { font-weight: 300; font-size: 76px; line-height: 1.12; letter-spacing: -.012em; max-width: 1240px; text-wrap: balance; }
 .sub { font-size: 24px; font-weight: 500; color: var(--mute); }
 .faint { color: var(--faint); font-weight: 500; }
 .top { margin-bottom: 8px; }
 .title { font-weight: 300; font-size: 54px; line-height: 1.15; letter-spacing: -.008em; }
 .end { font-weight: 300; font-size: 48px; margin-top: 6px; }
+.nb { white-space: nowrap; }
+.site { display: flex; align-items: center; gap: 26px; margin-top: 34px; font-size: 34px; font-weight: 500; color: var(--mute); }
+.qr { width: 150px; height: 150px; display: block; }
+.limits { list-style: none; margin: 0; padding: 0; font-weight: 300; font-size: 68px; line-height: 1.3; letter-spacing: -.01em; }
 .head { position: absolute; left: 96px; top: 72px; z-index: 1; }
 .head h2 { font-weight: 300; font-size: 54px; line-height: 1.1; }
 .head .sub { margin-top: 12px; }
@@ -305,7 +331,14 @@ p, h1, h2, figure { margin: 0; }
 
 .photo { border-radius: 2px; overflow: hidden; }
 .photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.photo.tea { width: 720px; height: 540px; }
+.photo.cook { width: 400px; height: 436px; }
+/* slide "powered": what powered the RL training beside what powered the team, two equal columns */
+.versus { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 0 120px; text-align: center; }
+.versus > div { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.versus > div + div { border-left: 1px solid var(--rule); }
+.versus .by { color: var(--faint); margin-top: 22px; }
+.versus .gpus { font-weight: 300; font-size: 84px; line-height: 1.1; letter-spacing: -.012em; }
+.versus .who { font-weight: 300; font-size: 44px; line-height: 1.1; }
 .photo.meditate { width: 640px; height: 480px; }
 .photo.empty { border: 1px dashed var(--faint); opacity: .7; display: flex; align-items: center; justify-content: center; }
 .photo.empty span { font-size: 22px; font-weight: 500; color: var(--faint); }

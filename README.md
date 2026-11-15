@@ -436,12 +436,15 @@ that follows the breath (M mutes). A WebGL shader draws the picture: fog, glow, 
 split. The end screen gives score, rank, achievements and what the agents posted meanwhile.
 
 The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): thirteen 16:9 slides, each one
-figure with a few words, `#hook`, `#climb`, `#question`, `#tea`, `#harness`, `#sponsors`, `#finding`, `#beyond`, `#efficiency`,
+figure with a few words, `#hook`, `#question`, `#powered`, `#climb`, `#harness`, `#sponsors`, `#finding`, `#beyond`, `#efficiency`,
 `#proof`, `#ideas`, `#papers` and `#close` (`/demo#finding` opens that slide, and Back works). The right arrow, Space or PageDown go on, the left arrow or
 PageUp go back, Home and End jump, a click on the right or left third of the window steps, `t` or the button at the top right changes the theme
 (`?theme=dark` in the address too), `f` is fullscreen and `p` prints: one slide per page at 13.333 x 7.5 in, in the
 theme on screen, so print to PDF from the dark page for a dark PDF. The hook sentence is the constant `HOOK` in
-`tools/demo_deck.py`. The two photos (tea, meditation) are the strings `TEA` and `MEDITATE` in `tools/demo_photos.py`,
+`tools/demo_deck.py`; the first slide also shows the address invariant.team and its QR code (`QR_PATH`, made with
+segno). The slide `#powered` sets the 72 H100 GPUs of the RL training (`FACTS['rl_zero_gpus']`, Olmo 3 paper, Table
+49) beside the photo and name of the cook who fed the team. The two photos (cook, meditation) are the strings `COOK`
+and `MEDITATE` in `tools/demo_photos.py`, with her name in `COOK_NAME`,
 each a `data:image/jpeg;base64,...` URI (the deploy ships only `tools/*.py`); while one is empty its slide shows an
 empty frame. Slides 4 and 7 show the Design page's picture and the idea tree of `/demo/ali/slide2` in an iframe of
 `/demo/fig/harness` and `/demo/fig/tree`: those pages with their header, words column and key hidden
