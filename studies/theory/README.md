@@ -468,6 +468,12 @@ Plan `specs/SPEC_round06.md` (before the run), engine version 6.3 with `--accoun
 fixed on ali/theory06, no score changes), the second resumed. 62 headless jobs, about 125 minutes, no GPU (`results/engine/round-06/run.json`,
 logs `round06.log`, `round06b.log`, examples `examples.json`).
 
+**Correction (2026-11-15 12:10 UTC, after the audit on result-8b0706 and the re-scoring with engine 7.1): no theory stands. Under the 7.1
+duel rule (a test where the defender's centre is inside the rival's interval adds 0; a win needs 2 separating tests) r5-m03-rival has +3.00 on
+1 of 6 tests, r5-m10-rival +3.00 on 1 of 6 and the account 0 of 5: all three are "not separated from rival". r5-m03-rival's one separating
+test has a group of 22 problems (-0.057, 90 % [-0.23, 0.13], rival 0.25), and its 3 carried tests are round-05 duel wins, not tests against
+no-theory readers. The result below is as printed by engine 6.3 and is kept for the record; read "beats rival" and "stands" as weak.**
+
 **Result: r5-m03-rival is the first theory of six rounds that survives its tests, beats a fresh rival (+6.70 nats, 6 tests, 1 separating) and
 whose review says "stands". r5-m10-rival also beats its fresh rival (+13.20, 6 tests, 1 separating) but its review says "weak". The account
 r6-account has 43 of 44 scored predictions inside (+35.41 nats, 38 of 38 decisive numbers replicated) and loses to a one-axis rival (-3.11,
