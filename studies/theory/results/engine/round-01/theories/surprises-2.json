@@ -1,0 +1,33 @@
+{"name": "surprises-2",
+ "statement": "The functional part of the RL-Zero-Math weight change is a low-rank, near-linear shift (a few coherent singular directions per matrix, dense across neurons, that write a deliberation/answer-format readout into the residual stream), while the high-rank remainder that holds most of the change energy is optimizer noise that does almost nothing; so neuron subsets fail (each holds only its proportional share of the dense low-rank part), DARE works (it preserves the low-rank part in expectation and adds only high-rank noise), and RL leaves neuron features unchanged on general text.",
+ "scope": "Olmo-3-1025-7B base vs Olmo-3.1-7B-RL-Zero-Math (step 2,800), all 2-D weight matrices; MATH-500 at T 0.6 / top-p 0.95 (n13 setting) and T 1.0, cap 16,384, grader v3. Does not cover SFT deltas, the 1B Bolmo grafts, other model families, or the cue and sampling results.",
+ "explains": [
+  {"item": "result-e2482e", "quote": "11.8% of its squared norm sits in 8 singular directions per matrix", "how": "The delta has a low-rank head 15-20x above a Gaussian null: the coherent part the theory says carries the function."},
+  {"item": "result-e2482e", "quote": "Late-MLP top directions x base lm_head read as deliberation words", "how": "The top singular directions read out as the deliberation and format tokens that recovering arms adopt."},
+  {"item": "knowledge-69adda", "quote": "H_local REFUTED", "how": "Top-changed neurons score like random neurons because the functional low-rank part is spread evenly over neurons."},
+  {"item": "knowledge-69adda", "quote": "H_diffuse SUPPORTED", "how": "DARE keeps the expected delta, so its low-rank projection survives while the added noise is high-rank."},
+  {"item": "knowledge-8229be", "quote": "yet it scores like the whole MLP delta", "how": "33-1,000x the change energy costs nothing, which only holds if the function lives in a low-dimensional projection the noise barely touches."},
+  {"item": "knowledge-8229be", "quote": "Every arm that recovers accuracy also takes RL's format and length", "how": "Recovery is all-or-none along one format/length readout, as expected from a few shared directions."},
+  {"item": "result-156f7b", "quote": "the RL change is NOT concentrated in MLP neurons", "how": "A dense low-rank direction has no small neuron support."},
+  {"item": "result-904bbf", "quote": "88 % of all 352,256 neurons have a positive score", "how": "Almost every neuron carries a small piece of the same directions, and the pieces add linearly."},
+  {"item": "result-904bbf", "quote": "the effects add up linearly", "how": "A small shift along a fixed subspace acts to first order, so per-neuron contributions sum."},
+  {"item": "knowledge-9c5052", "quote": "RL barely moves which tokens a neuron fires on most", "how": "A low-rank readout shift does not re-organise neuron features, so top-activating contexts are unchanged."},
+  {"item": "knowledge-87618d", "quote": "diverge on math solutions, more with depth", "how": "The shift directions are engaged only by deliberation contexts and accumulate through the residual stream with depth."},
+  {"item": "result-c9b27e", "quote": "54 % of changes are <=1 bf16 ulp", "how": "Most entries move by rounding-level amounts: the high-rank noise part of the delta."},
+  {"item": "result-fdc8da", "quote": "Mean KL per token after the cue 0.06-0.09 nats", "how": "The output change is small and spread over many positions (top 4 % carry only 38.7 % of KL), as a global low-rank shift produces."}
+ ],
+ "conflicts": [
+  {"item": "knowledge-b8d41a", "quote": "(DARE-style) give 0/1,200", "how": "DARE copies of a fine-tune delta destroy the 1B Bolmo model; the theory needs that SFT delta to have far more norm or be higher-rank, which is not measured."},
+  {"item": "knowledge-b8d41a", "quote": "Peak at lambda 0.7-0.8, not 1", "how": "A linear shift predicts a monotone dose curve up to 1; the peak below 1 (on an SFT delta) does not fit."},
+  {"item": "knowledge-c788b4", "quote": "Edit minus norm-matched random: +1.7 points [-1.7, +5.0], not separated", "how": "On a cap-limited model a random edit gives most of the gain, so directionless perturbation can also raise accuracy."},
+  {"item": "knowledge-29fdeb", "quote": "update full-rank, uniform over layers", "how": "The published view is that RL updates are full-rank; the theory claims full-rank energy but low-rank function."},
+  {"item": "knowledge-9d0f85", "quote": "needs 2,120 of 4,096 components for 80% energy", "how": "Energy is spread over many components; the theory must hold that energy and function come apart."}
+ ],
+ "rival": "Diffuse full-rank function: every entry contributes a little and the low-rank head is incidental. It predicts that a rank-8 truncation of each matrix's delta recovers only about its 11.8 % energy share of the gain (near base, like the top-10 % neuron arms) and that the high-rank remainder recovers most of it; this theory predicts the opposite.",
+ "predictions": [
+  {"experiment": "Base + rank-8 SVD truncation of (RL - base) in every 2-D matrix, plain prompt, MATH-500 n=500, T 0.6 / top-p 0.95, cap 16,384, grader v3, one sample (endpoints v3: base 305, RL 464)", "unit": "right of 500", "value": 435, "low": 405, "high": 460, "refuted_by": "fewer than 390 right, or 'Answer:' line in more than 15 % of answers (base-like format)", "gpu_minutes": 35},
+  {"experiment": "Base + (delta minus its rank-8 truncation) in every 2-D matrix, same setting", "unit": "right of 500", "value": 340, "low": 305, "high": 380, "refuted_by": "410 or more right: the high-rank remainder would then carry the gain", "gpu_minutes": 35},
+  {"experiment": "Base + random rank-8 update per matrix with the same per-matrix Frobenius norm as the rank-8 truncation, same setting", "unit": "right of 500", "value": 310, "low": 290, "high": 335, "refuted_by": "350 or more right: any low-rank perturbation of that norm would then give the gain", "gpu_minutes": 35},
+  {"experiment": "Base + rank-1 SVD truncation of (RL - base) in every 2-D matrix, same setting", "unit": "right of 500", "value": 390, "low": 340, "high": 430, "refuted_by": "fewer than 330 right", "gpu_minutes": 35},
+  {"experiment": "Base + 0.5 * (RL - base), plain prompt, MATH-500 n=500, T 0.6 / top-p 0.95, cap 16,384, grader v3", "unit": "right of 500", "value": 420, "low": 385, "high": 445, "refuted_by": "fewer than 370 right (no wide plateau along the direction)", "gpu_minutes": 35}
+ ]}

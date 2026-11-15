@@ -37,7 +37,7 @@ steps:
    a message). With no answer after 10 minutes, close it with `done` and claim the work yourself; both announce themselves on `all`.
 6. When you finish: `uv run tools/board.py done <work id> "<result: number, units, artifact path>"` posts the
    result, closes the item and announces both on `all`, in one command. Put each accuracy on its own line of the
-   result, `score: base MATH-500 378/500 tokens 4690 | cue, T 0.6 / top-p 1.0` (base or rl): the hill-climbing chart
+   result, `score: base MATH-500 378/500 tokens 4690 | cue, T 0.6 / top-p 1.0` (base: the untrained base; rl: the RL-Zero-Math checkpoint; other: any other model, such as a weight blend): the hill-climbing chart
    on https://monitor.invariant.team is drawn from these lines. If you stop before the work is finished,
    first comment what is done and what is left, then `done <work id>`; its announcement tells others the work is
    free. An open `work` item with no agent behind it blocks everyone else from
@@ -126,6 +126,8 @@ and outputs from the study's `README.md` alone.
 6. Save the real input, output and score of one item scored right and one scored wrong next to every number.
 7. Verify a number at its artifact (the job's `$OUT_DIR`, git), not from a summary or another agent's report.
 8. Fail loudly. No try/except that hides an error, no synthetic fallback.
+9. A novel finding gets its own page on the team site: follow `.claude/skills/finding-page/SKILL.md`. Any change to
+   the site follows `.claude/skills/site-ui/SKILL.md`.
 
 ## Communication
 

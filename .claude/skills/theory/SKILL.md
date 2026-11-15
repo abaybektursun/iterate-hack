@@ -16,9 +16,10 @@ subagents write them, `studies/theory/lib/check.py` scores them. You pass files 
 
 The backtest means nothing if a held-out number reaches a generator or a predictor. Three rules:
 
-1. Generators and predictors get everything inside their prompt and are told to use no tools. A tool call triggers the
-   message hook, which prints new results into the subagent's context.
-2. Their prompt holds only `before.jsonl`, and for predictors `targets_blind.jsonl` and at most one theory. Never
+1. Generators and predictors are told the exact files to read and the one file to write, and that no other tool call
+   is allowed: no board, no messages, no git, no search. The measured values are in the repository and on the board.
+   (The message hook does nothing for a subagent's tool call, so reading a file by path is safe.)
+2. Their files are only `before.jsonl`, and for predictors `targets_blind.jsonl` and at most one theory. Never
    `after.jsonl`, `targets.jsonl`, your own summary of a result, or another theory's score.
 3. A target's `what` describes the measurement without its outcome: "right of 500, MATH-500, T 1.0, cue, base + 0.5 *
    (RL - base)", never "the gain from the RL direction".
@@ -114,6 +115,15 @@ For each theory: the number of targets where its predictor is closer to the meas
 farther. `noise` is the same count between the two nulls. A theory beats the null when closer minus farther, against
 each null, is above `noise`. The table is in `<round>/metrics.json`. If no theory beats the null, that is the result:
 post it and stop.
+
+### 7b. Predictions the held-out items already measured
+
+Some of a theory's own predictions name an experiment that a held-out item reports. One subagent (model sonnet) gets
+`theories/` and `targets.jsonl` and writes `<round>/predictions_measured.json`: theory, experiment, predicted value,
+interval, the target ids, the measured value, inside or outside, and the two nulls' predictions for the same targets.
+Report the count inside and outside per theory next to the backtest line. In round 01 the count over all targets
+(step 7) did not separate real theories from the planted one, and this table did carry information: most targets are
+measurements no theory speaks about.
 
 ### 8. Refutation and novelty (one subagent per surviving theory, model opus, tools allowed)
 

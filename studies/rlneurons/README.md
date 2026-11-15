@@ -38,6 +38,8 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `specs/SPEC5_map.md` | RLN-5 map spec: where the RL model still disagrees with the cued base; hypothesis H and its refutation rules; controls. |
 | `jobs/rln5_map.py` | RLN-5 map job (inference only, team runner): both models over the stored T1 and T2 answers with teacher forcing; per-position shards and `checks.json` in `$OUT_DIR`. See "RLN-5 map". |
 | `analysis/rln5_map_analyze.py` | RLN-5 map readout: reads `runs/<job-id>/`, writes `metrics.json` and `examples.json` (analysis a-e of SPEC5_map.md §6, the test of H). |
+| `specs/SPEC_day1_3.md` | Day-1 #3 spec: four samples and up to two restarts per sample in one job, seeds, the vote and its tie rule, the restart row, token accounting, hypotheses, test record and the MATH-500 results. |
+| `analysis/day1_vote.py`, `analysis/day1_vote_test.py` | Day-1 #3 readout from one `run_cell --samples k --restarts r` run: single, restart, vote, pass@k and vote-after-restart rows (grader v3, Wilson, tokens per problem, paired bootstrap, `--minus` another run), `rows.jsonl`; and its planted cases. See "Day-1 #3". |
 | `specs/SPEC_day1_length_rules.md` | Day-1 length rules spec: double-check short answers D(S), stop at a length cutoff and restart R(L), their combination; token accounting; the choice on MATH-500 and its fixed use on the 328; hypotheses. |
 | `analysis/day1_length_rules.py`, `analysis/day1_length_rules_test.py` | Offline readout of the length rules from the rows of two `run_cell --samples 4` runs (base, RL), and its planted cases. Imports `day1_vote` (`chains`, `vote`, `row`, `tail`). See "Day-1 length rules". |
 | `analysis/day1_hard328.py` | Day-1 #1 readout: the 328 at T 1.0 (four cells) beside the three T 0.6 cells, grader v3, per source, paired bootstrap, identical-text counts, the 50-problem check against T1. |
@@ -199,6 +201,117 @@ of 78. Frozen label: "the base can finish from a sound prefix" (both counts at t
 
 Grader v1 to v3 moved 113 answers from wrong to right and 1 from right to wrong over the 9 cells (`flips_v1_to_v3`,
 `flip_review`). The v1 numbers 57.2 (base) and 92.0 (RL) quoted in older notes are the n13 cells under v1 (286 and 460).
+
+## Day-1 #3: restart and four-sample vote (MATH-500, n = 500, T 1.0 / top-p 1.0, grader v3, board work-63fac2)
+
+One job per model: `run_cell --samples 4 --restarts 2` (sample s, attempt a of problem i has seed + 10000 s + 1000 a + i; an
+attempt that hits the 16,384 cap is sampled again in the same job, up to twice). Rows by `analysis/day1_vote.py`; procedure,
+tie rule and hypotheses in `specs/SPEC_day1_3.md`. Single = sample 0, attempt 0. Restart = sample 0, its first attempt that
+did not hit the cap, else its last. Vote = plurality over attempt 0 of the four samples, answers grouped with `rln4_lib.agree`;
+a sample with no extracted answer casts no vote; ties go to the group with the lowest sample number. pass@4 = any of the four
+right: an oracle, the upper bound of the vote, not a method. Tokens per problem = every generated token of every attempt the
+row uses. Wilson 95 % interval in percent; paired bootstrap, 5,000 resamples, seed 0, in points.
+
+| Row | Base with cue: right [95 %] | Tokens per problem | RL plain: right [95 %] | Tokens per problem | RL minus base, points [95 %] |
+|---|---|---|---|---|---|
+| single | 405 of 500 [77.3, 84.2] | 3,808 | 456 of 500 [88.4, 93.4] | 4,675 | 10.2 [7.2, 13.2] |
+| restart, up to 2 | 413 [79.0, 85.7] | 4,852 | 458 [88.8, 93.7] | 4,899 | 9.0 [6.0, 12.0] |
+| vote over 4 | 446 [86.2, 91.6] | 16,034 | 474 [92.5, 96.4] | 18,747 | 5.6 [3.6, 7.8] |
+| vote over 4 after restart | 450 [87.1, 92.3] | 19,697 | 475 [92.7, 96.6] | 19,864 | 5.0 [3.0, 7.0] |
+| pass@4 (oracle) | 467 [90.9, 95.3] | 16,034 | 482 [94.4, 97.7] | 18,747 | 3.0 [1.4, 4.8] |
+
+| | Base with cue | RL plain |
+|---|---|---|
+| Run folder | `results/day1_3/math500_base_cue-01/` | `results/day1_3/math500_rl-01/` |
+| Job (one H100, commit `c36f562`) | `abaybektursun-1114-153825-208b` | `abaybektursun-1114-183640-e828` |
+| Rows (attempts), restarts | 2,137, 137 | 2,041, 41 |
+| Generated tokens, tokens/s, wall | 9.85 M, 1,213, 8,191 s | 9.93 M, 1,360, 7,369 s |
+| Right in samples 0 to 3 (single) | 405, 409, 410, 418 | 456, 462, 464, 458 |
+| Cap hits in samples 0 to 3 | 25, 23, 22, 20 | 6, 10, 5, 11 |
+| `rows.jsonl` lines, sha256 (first 16 hex) | 2,137, `686585cfcbef4e19` | 2,041, `289a3c0914342676` |
+
+Each run folder holds `run.json`, `metrics.json`, `readout.json` (rows, per-problem 0/1 vectors), `examples.json` (one vote and
+one restart problem scored right and one scored wrong, every attempt's seed, extracted answer, score and last 2,000
+characters) and `rows.jsonl`: every attempt without its text (`problem_index`, `sample`, `attempt`, `seed`, `n_new`, `cap_hit`,
+`finish_reason`, `loop_A`, `extracted_v3`, `score_v3`, `gold`), for offline scoring. The full answers are `answers.jsonl` in the
+job's `$OUT_DIR` in abaybektursun's Modal workspace, not committed.
+
+- Against each model's own single row: base restart +1.6 [0.6, 2.8], vote +8.2 [5.8, 10.8], vote after restart +9.0
+  [6.4, 11.8]; RL restart +0.4 [0.0, 1.0], vote +3.6 [2.0, 5.2], vote after restart +3.8 [2.2, 5.6]. Published prior: Maj@4
+  adds 0.8 points to a 73.6 % model on MATH-500 (arXiv 2507.18122, Table 1).
+- At equal procedure RL stays ahead: 5.6 points under the vote, against 10.2 single. The base's vote against one RL sample:
+  -2.0 points [-4.0, 0.2], with 3.4 times the tokens (16,034 against 4,675). At 16 to 20 k tokens per problem RL's vote has
+  474 to 475, the base's 446 to 450.
+- Tokens per added point for the base: restart about 650 (1,044 more tokens, 1.6 points), vote about 1,490 (12,226, 8.2).
+- Instrument check: sample 0 repeats T1 and T2 on their seeds: 405 right and 25 cap hits against 410 and 27; 456 and 6 against
+  463 and 6. Texts differ (other GPU, other batch). The same seeds in another job gave RL vote 469 (the first attempts of
+  `abaybektursun-1114-153833-f4ab`), so about 1 point of a vote row is run-to-run variation.
+- Raw rows, read by hand. Base: the vote turns 43 problems from wrong to right and 2 from right to wrong (50 and 403: a wrong
+  answer with 3 and 2 votes against a right sample 0); in the 43, sample 0 had a wrong answer 28 times and no answer 15 times
+  (10 cap hits). 36 ties for first, 5 scored right. RL: 18 wrong to right, 0 right to wrong, 16 ties, 3 right. No winning group
+  mixes right and wrong members; `agree` kept two right answers apart in 2 base problems (`east` / `East`, `$f(3) = 8$` / `8`)
+  without changing a score. Base sample-0 restarts: of 25 cap hits, 8 end right, 8 wrong, 9 hit the cap three times. Rule A
+  flags 0 of the base's 166 cap-hit attempts and 1 of RL's 44: at T 1.0 a cap hit is a long answer, not a loop. Of the 54
+  problems the base's vote misses, RL's vote misses 24.
+- Not scored: `abaybektursun-1114-153833-f4ab`, the first RL job, died at 2,013 of 2,034 rows with `FileExistsError` on
+  `/runs/<job>` in the runner (suspected: the container restarted and `infra/runner.py` creates the folder without
+  `exist_ok`; not confirmed). The readout refuses an unfinished run. Smoke: `abaybektursun-1114-152646-e76b`, 10 problems,
+  45 rows, 5 restarts, single 8 of 10.
+- The harder 328 with this procedure is not run here (board work-140e13).
+
+## Label-free selector over the four stored samples (MATH-500, n = 500, laptop, board work-3095f1, idea-664670)
+
+Question: does a rule that sees no answer key beat the plurality vote on the four samples of Day-1 #3? Answer: one tie-break
+does on the base, by 7 problems, and the rule is not confirmed on RL or on the 328. `analysis/selector.py` scores 11 rules fixed
+in `specs/SPEC_selector.md` before scoring (written after reading the 21 problems the vote misses and pass@4 has, so the
+MATH-500 numbers are optimistic), and `cv_pick`: the best of the 12 on four folds scored on the fifth. All rules use the same
+tokens as the vote (16,034 base, 18,747 RL). Paired bootstrap against the vote, 5,000 resamples, seed 0, in points.
+
+| Rule | Base with cue: right [95 %] | minus vote [95 %], fixed / broken | RL plain: right | minus vote [95 %], fixed / broken |
+|---|---|---|---|---|
+| vote (baseline; a tie goes to the lowest sample) | 446 [86.2, 91.6] | | 474 | |
+| `tie_short`: a tie goes to the group with the shortest finished sample | 453 [87.7, 92.9] | +1.4 [0.4, 2.4], 7 / 0 | 475 | +0.2 [0.0, 0.6], 1 / 0 |
+| `tie_aprob`: a tie goes to the highest stored answer probability | 451 | +1.0 [-0.2, 2.2], 8 / 3 | 475 | +0.2 [-0.4, 1.0], 2 / 1 |
+| `tie_mlp`: a tie goes to the highest mean token log-probability | 450 | +0.8 [-0.4, 2.0], 7 / 3 | 477 | +0.6 [0.0, 1.4], 3 / 0 |
+| `tie_clean`, `drop_cap` | 446, 446 | 0 / 0 | 475, 475 | 1 / 0 |
+| `tie_restate` | 445 | -0.2 [-1.2, 0.8], 3 / 4 | 474 | 1 / 1 |
+| `w_invlen`: votes weighted 1 / tokens | 445 | -0.2 [-1.6, 1.2], 7 / 8 | 474 | 2 / 2 |
+| `w_aprob`: votes weighted by answer probability | 452 | +1.2 [0.0, 2.6], 9 / 3 | 474 | 1 / 1 |
+| `short1`: the shortest finished sample | 434 | -2.4 [-4.4, -0.4], 8 / 20 | 471 | -0.6 [-1.8, 0.6], 3 / 6 |
+| `max_aprob`: the most confident sample | 423 | -4.6 [-7.2, -2.2], 8 / 31 | 464 | -2.0 [-3.6, -0.4], 3 / 13 |
+| `max_mlp`: the most likely sample | 427 | -3.8 [-6.2, -1.4], 9 / 28 | 472 | -0.4 [-1.8, 1.0], 5 / 7 |
+| `cv_pick` (held-out folds) | 451 [87.3, 92.5] | +1.0 [0.0, 2.0], 6 / 1 | 477 | +0.6 [0.0, 1.4], 3 / 0 |
+| pass@4 (oracle) | 467 | | 482 | |
+| control: random tie-break, expected | 448.2 | | 474.3 | |
+| control: a tie goes to the longest finished sample | 446 | | 476 | |
+
+- Base: `tie_short` has 453, 3 below one RL sample (456) and 14 below pass@4. It only changes the 36 ties: 12 right, against 5
+  for the lowest sample, 5 for the longest and 7.2 expected for a random choice. So the gain over a fair tie-break is about 5
+  problems of 36, and all 7 fixed problems (11, 20, 71, 94, 189, 303, 352) were read before the rule was written. `cv_pick`
+  chose `tie_short` on four folds and `w_aprob` on one: 451, interval [0.0, 2.0].
+- RL: the same rule fixes 1 of 16 ties and the longest-sample control fixes 2. Shortness is not confirmed on RL; its `cv_pick`
+  chose `tie_mlp` (477, +3).
+- Choosing one sample by confidence or by length is below the vote on both models (423 to 434 on the base), as in arXiv
+  2507.18122 Table 1. `short1` with the other three samples stopped when the first finishes would cost 9,795 tokens per
+  problem on the base (434) and 14,504 on RL (471).
+- The 21 base problems the vote misses and pass@4 has: 15 ties the lowest sample lost (6 with four different answers, 3 with
+  three, 3 with two after cap hits, 3 ties of 2 against 2) and 6 with a wrong answer in the majority. No rule here touches the 6.
+- The 328: not scored. `tie_short` passes the spec's rule for going to the 328 (`cv_pick` above the vote, its interval above
+  0), but sameraslan's four-sample rows (board result-1dedfe) are in his Modal Volume; git has only per-problem 0/1 vectors and
+  token counts, not the extracted answers. With the joined `answers.jsonl` and `metrics.json` in `runs/<dir>`:
+  `python -m studies.rlneurons.analysis.selector --run runs/<dir> --out studies/rlneurons/results/selector/hard328_base_cue-01`
+  and read the `tie_short` row only (82 ties of 328 there, against 36 of 500 here).
+
+Run folders `results/selector/math500_base_cue-01/` and `results/selector/math500_rl-01/`: `run.json` (commit, command, source
+job), `readout.json` (rows, controls, per-problem 0/1 and chosen sample per rule, the rule chosen per fold), `examples.json` (one
+problem the best rule gets right against the vote, one it gets wrong although a sample is right: 11 and 39 on the base). Inputs:
+`runs/abaybektursun-1114-153825-208b/answers.jsonl` and `runs/abaybektursun-1114-183640-e828/answers.jsonl` (the rules need
+`text`, `answer_prob`, `mean_logprob`, which `rows.jsonl` lacks). Test (planted rows, rules that must fail, a planted oracle):
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.selector_test
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.selector --run runs/abaybektursun-1114-153825-208b --out studies/rlneurons/results/selector/math500_base_cue-01
+```
 
 ## Weight-difference line: base + a (RL - base), Code-RL and a random control (Day-1 #4, board work-d36669)
 
@@ -385,6 +498,43 @@ Problems that change against base cue (164 right, 164 wrong; `fixed_lost_vs_base
   reused cells as in "Harder 328" (`.../r5/day1_hard328-01/<job-id>/answers.jsonl`).
   Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_wdiff328`.
 
+## Truncation rules at T 1.0: min-p and top-p (board work-180a48, spec specs/SPEC_minp.md)
+
+No truncation rule beats untruncated sampling. MATH-500, n = 500, cue, cap 16,384, grader v3, one sample, seeds of the min-p 0
+cells (base 41000000, RL 66000000); paired 95 % bootstrap intervals. Readout `results/day1_minp/readout.json`
+(`analysis/day1_minp.py`); run folders `results/day1_minp/<arm>-01/`.
+
+| cell | right | minus min-p 0 cell (points, 95 %) | cap hits | rule-A loops | tokens/problem |
+|---|---|---|---|---|---|
+| base, T 1.0, top-p 1.0 (T1, reference) | 410 | - | 27 | 0 | 3,932 |
+| base, T 1.0, min-p 0.1 | 404 | -1.2 [-4.6, 2.2] | 58 | 34 | 4,086 |
+| base, T 1.5, min-p 0.1 | 412 | +0.4 [-3.2, 3.8] | 29 | 0 | 4,355 |
+| base, T 1.0, top-p 0.95 | 409 | -0.2 [-3.8, 3.2] | 35 | 12 | 4,017 |
+| RL, T 1.0, top-p 1.0 (rl_cue-01, reference) | 457 | - | 8 | 0 | 4,696 |
+| RL, T 1.0, min-p 0.1 | 460 | +0.6 [-1.6, 2.6] | 19 | 0 | 4,452 |
+
+Cutting the tail at T 1.0 brings back loops: the 34 looped problems at min-p 0.1 had 2 cap hits and 21 right answers at min-p 0.
+min-p 0.1 at T 1.5 removes them again and keeps the text coherent. Instrument check (smoke job frustea-1114-175514-c4ca): sampled
+tokens with raw probability below 1e-2 fall from 17.1 per 1,000 at min-p 0 to 0.02 at min-p 0.1. Job ids in each run.json; raw
+rows in frustea's Modal Volume `iterate-runs/<job>/answers.jsonl`.
+
+## Draft-critique-revision: intrinsic self-review of the T 1.0 cue answers (board work-70152d, spec specs/SPEC_critique.md)
+
+Self-review fixes no math for either model. Each finished T 1.0 cue draft (base 473, RL 492; cap hits keep their score) is continued
+after "Wait, before I finalize, let me check this solution carefully for mistakes." at T 1.0 (`jobs/revise.py`, 4 shards per
+model). MATH-500, n = 500, paired 95 % intervals. Readout `results/day1_critique/readout.json` (`analysis/day1_critique.py`).
+
+| model | draft | v3 on whole text | v3-stated (post hoc) | fixed / broken (v3-stated) | revision tokens per revised draft |
+|---|---|---|---|---|---|
+| base | 410 | 410, 0.0 [-1.4, 1.6] | 415, +1.0 [0.0, 2.2] | 7 / 2 | 375 |
+| RL | 457 | 446, -2.2 [-3.6, -1.0] | 454, -0.6 [-1.4, 0.0] | 0 / 3 | 231 |
+
+v3 reads "the answer is correct." as the answer "correct." (8 of RL's 11 v3 flips); v3-stated drops the "Answer is" marker form
+from the revision before grading. Read by hand: 6 of base's 7 fixes are format repairs (the draft's number sat inside a sentence v3
+cannot read, e.g. 135, 165, 447); one is a math fix (372, 75 -> 90). Every break on either model is a real changed answer (base 14,
+156; RL 71, 193, 236). RL fixes none of its 35 wrong finished drafts. Raw rows in frustea's Modal Volume
+`iterate-runs/<job>/answers.jsonl`; drafts in `iterate-runs/inputs/critique/` (`prep/critique_drafts.py`).
+
 ## RLN-5 map: where RL still disagrees once the cue is given
 
 Spec `specs/SPEC5_map.md`; run folder `results/rln5/map-01/` (`run.json`, `metrics.json`, `examples.json`, `checks.json`,
@@ -556,10 +706,16 @@ This is below the 1,415 tokens/s of T3 (`results/rln4/modal_t3-01/metrics.json`)
 98 to 99 % full with 18 to 25 answers running (`max_num_seqs` is 128) and the waiting count rising at times, so vLLM
 preempts answers and recomputes them. `--hours 2` leaves room; the runner kills the job at `--hours`.
 
-Day-1 #3 (restart and four-sample vote) is not runnable yet. Four samples: four `run_cell` jobs with seeds 10000 apart (the
-RLN-3 rule seed + 10000 x sample + index) work today, but no script computes the vote (`rln4_lib.agree` is the equivalence
-test to use). Restart: `run_cell` has no option to run only the problems that hit the cap in an earlier run, and no script
-merges a restart into its parent row.
+Day-1 #3, four samples with up to two restarts each, one job per model (about 10 M tokens, 2.1 to 2.3 h measured; `--hours 6`
+because a killed job is not scored), then the readout (`specs/SPEC_day1_3.md`). On the 328: `--set hard328 --seed 3000000`.
+
+```
+uv run tools/gpu.py submit h100 --hours 6 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41000000 --samples 4 --restarts 2 --commit $(git rev-parse HEAD)"
+uv run tools/gpu.py submit h100 --hours 6 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model rl --prompt plain --set math500 --temperature 1.0 --top-p 1.0 --seed 45000000 --samples 4 --restarts 2 --commit $(git rev-parse HEAD)"
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_vote --run runs/<base job> --out studies/rlneurons/results/day1_3/<set>_base_cue-<nn>
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_vote --run runs/<rl job> --out studies/rlneurons/results/day1_3/<set>_rl-<nn> --minus studies/rlneurons/results/day1_3/<set>_base_cue-<nn>/readout.json
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_vote_test
+```
 
 Day-1 #4, one cell on a merged model (merge, then the cell on `/tmp/theta`; `analysis/day1_wdiff.py` `CELLS` has every command):
 
@@ -626,8 +782,8 @@ and v2 scores) in the owner's bucket, `s3://pg-lineage-769063704696/results/rlne
 1. `jobs/modal_rln4_k.py` (K, T2, T3) still reads its inputs from and copies its outputs to
    `s3://pg-lineage-769063704696/results/rlneurons/r4/` with the owner's Modal secret `rln4-aws`. Teammates run cells with
    `jobs/run_cell.py` instead; the K continuation arms and the check phases have no port.
-2. `jobs/run_cell.py` covers T1, T2, T3, the harder set and Day-1 #1 and #2 (run, see "Day-1 rows"). Day-1 #3 needs a vote
-   script and a restart option.
+2. `jobs/run_cell.py` covers T1, T2, T3, the harder set and Day-1 #1 and #2 (run, see "Day-1 rows"). Day-1 #3 runs with
+   `--samples` and `--restarts` (see "Day-1 #3").
 3. `jobs/rln3_gen.py` and the parent (non-`--inner`) mode of `jobs/rln4_gen.py` need the AWS `pg` launcher and AMI (the
    `/opt/n13` vLLM venv built by `lib/n13_setup.venv_n13`, the `aws` CLI, inputs in the owner's S3). Not in this repository.
 4. `lib/hf_helpers.hf_online_setup` reads `HF_TOKEN`; without it, it calls AWS SSM `/pg-lineage/hf-token` in the owner's account.
