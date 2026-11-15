@@ -1,0 +1,86 @@
+{
+ "mechanism": "round-10/weights-m01",
+ "statistic": "Q = ln(e_HI/b_HI) - ln(e_LO/b_LO); strata from base samples 0-1, b from base samples 2-3",
+ "Q": 0.3901852692064347,
+ "Q_90ci": [
+  -0.24666114239913067,
+  1.0578829718945228
+ ],
+ "D_logodds_HI_minus_LO": -0.3756999795735374,
+ "D_90ci": [
+  -1.1365045452414093,
+  0.3892813939538588
+ ],
+ "Q_null_base3_vs_base2": 0.2607262624632527,
+ "Q_null_90ci": [
+  -0.1662165223516244,
+  0.7061930253932451
+ ],
+ "Q_90ci_plan_seed_20261115": [
+  -0.24711324056953857,
+  1.0661796948718292
+ ],
+ "D_90ci_plan_seed_20261115": [
+  -1.1497677732630942,
+  0.4075786057437565
+ ],
+ "strata": {
+  "HI": {
+   "n": 39,
+   "base_hits_s23": 50,
+   "edit_hits_s0123": 21,
+   "b": 0.6392405063291139,
+   "e": 0.13694267515923567,
+   "share_kept": 0.2142271551995964,
+   "L": -2.4129879541928476,
+   "base_hits_s2": 25,
+   "base_hits_s3": 25,
+   "b2": 0.6375,
+   "b3": 0.6375
+  },
+  "LO": {
+   "n": 230,
+   "base_hits_s23": 53,
+   "edit_hits_s0123": 15,
+   "b": 0.11605206073752712,
+   "e": 0.016829533116178068,
+   "share_kept": 0.1450170984403381,
+   "L": -2.03728797461931,
+   "base_hits_s2": 30,
+   "base_hits_s3": 23,
+   "b2": 0.13203463203463203,
+   "b3": 0.10173160173160173
+  }
+ },
+ "n": 269,
+ "n_problems": 328,
+ "bootstrap": {
+  "resamples": 10000,
+  "unit": "problem",
+  "rng": "numpy default_rng(0)"
+ },
+ "null_value": 0.0,
+ "threshold": 0.3,
+ "counts_check": {
+  "base_attempt0_cap_hits_per_sample": [
+   71,
+   66,
+   81,
+   68
+  ],
+  "edit_cap_hits_per_sample": [
+   20,
+   14,
+   20,
+   22
+  ],
+  "base_all_attempts_cap_hits_wrong_field": 498
+ },
+ "verdict": "undecided",
+ "n_to_decide": "At Q = 0.39 the 90 % half-width (0.65) must fall below 0.09 for the lower bound to clear 0.3: about 50x the data, roughly 14,000 problems in HI + LO (or many more samples per problem).",
+ "raw_rows_read": "Read 6 HI and 4 LO problems (base and edit rows). On HI problems (61, 70, 76, 96, 98, 99) the edit mostly turns cap hits into stops just under the cap (10k-15.6k tokens), still mostly wrong; LO problems (0, 7, 15, 24) are short (2k-6k tokens) and mostly right in both arms.",
+ "files": [
+  "studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01/rows.jsonl",
+  "studies/rlneurons/results/day1_3/hard328_top8x1.5_cue_s4-01/rows.jsonl"
+ ]
+}

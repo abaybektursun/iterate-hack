@@ -55,6 +55,10 @@ rows (restarted attempts included) instead of attempt 0 gives 498, which must fa
 2. Bootstrap seed: the brief fixes numpy default_rng(0); the plan names seed 20261115. The verdict uses
    default_rng(0); the interval with seed 20261115 is also reported in metrics.json as a check.
 
+3. Found while running the instrument check, before the readout: `problem_index` is the index in the source set
+   (0-399, 328 distinct values), not 0-327 as the plan says. Problems are keyed by `problem_index`; the matrix row is
+   its rank among the 328 values, and both files have the same 328 values (asserted).
+
 ## Verdict rule (engine 14, carried plan)
 
 Holds only if the 90 % interval of Q lies wholly above 0.3 and n >= 50; refuted if wholly below 0.3; otherwise

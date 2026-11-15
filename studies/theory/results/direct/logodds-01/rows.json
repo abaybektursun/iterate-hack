@@ -1,0 +1,10 @@
+[
+ {
+  "mechanism": "round-10/weights-m01",
+  "claim": "On hard328 the 1.5x top-8 RL-Math edit keeps a larger share of cap hits on problems the base often runs to the cap than on problems it seldom does (Q = ln(e_HI/b_HI) - ln(e_LO/b_LO) > 0.3), as a fixed shift in cap log-odds predicts.",
+  "result": "",
+  "verdict": "undecided",
+  "measured": "Q 0.39 [-0.25, 1.06], n 269 (HI 39, LO 230 of 328 problems), null Q = 0 (fixed fraction); threshold 0.3; noise null Q 0.26 [-0.17, 0.71]; log-odds shift D = L_HI - L_LO -0.38 [-1.14, 0.39]",
+  "added": "2026-11-15T22:42:23Z"
+ }
+]
