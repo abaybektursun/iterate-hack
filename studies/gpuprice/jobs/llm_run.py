@@ -1,7 +1,6 @@
 """LLM as the predictive density: samples answers to forecast questions over the listing-table contexts. Runs on a GPU.
 
-uv run tools/gpu.py submit b200 --hours 1 -- 'bash studies/rlneurons/jobs/setup_vllm.sh && VLLM_USE_FLASHINFER_SAMPLER=0 \
-    /opt/rln-vllm/bin/python studies/gpuprice/jobs/llm_run.py --model fp8 --context studies/gpuprice/data/llm_context_v1.jsonl --variants sample,quant,prob,cot'
+uv run tools/gpu.py submit b200 --hours 1 -- 'bash studies/gpuprice/jobs/llm_job.sh --model fp8 --context studies/gpuprice/data/llm_context_v1.jsonl --variants sample,quant,prob,cot'
 
 Reads the contexts of llm_context.py; for each (context, horizon, variant) builds one user message (no system prompt, no
 tool) and samples n completions at temperature 1.0, top-p 1.0. Writes $OUT_DIR/gen_<variant>.jsonl (prompt and raw
@@ -64,7 +63,8 @@ def main():
     from vllm import LLM, SamplingParams
     t0 = time.time()
     MODEL, REVISION = MODELS[a.model]
-    llm = LLM(model=MODEL, revision=REVISION, max_model_len=12288, gpu_memory_utilization=0.90, enable_prefix_caching=True, seed=0)
+    llm = LLM(model=MODEL, revision=REVISION, max_model_len=12288, gpu_memory_utilization=0.90, enable_prefix_caching=True, seed=0,
+              gdn_prefill_backend="triton")      # the default FlashInfer prefill is JIT-compiled and the image has no nvcc
     tok = llm.get_tokenizer()
     run = {"model": MODEL, "revision": REVISION, "job_id": os.environ.get("JOB_ID"), "args": vars(a), "load_s": time.time() - t0,
            "variants": {}}
