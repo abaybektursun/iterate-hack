@@ -213,6 +213,7 @@ def main():
     md += ["", "| rule (all problems) | cap | right (stored order) | right (24 orders) | tokens per problem (stored order) | tokens (24 orders) |", "|---|---|---|---|---|---|"]
     md += [f"| `{r}` | {lab} | {x['right']} | {x['right_24']} | {x['tokens']:,} | {x['tokens_24']:,} |" for r in RULES for k, lab in (("at_16384_same_answers", "16,384"), ("at_32768", "32,768"))
            for x in [res["groups"]["all"][k]["rules"][r]]]
+    md += ["", "Post hoc, not in the spec (added after the hard328 rows were read): the rules `seq4_short`, `vote4_short` and `gate12000` and every difference that names them."]
     md += ["", "Late answers (more than 16,384 tokens): " + json.dumps(res["late_answers"]), "", "Stored 16,384 run: " + json.dumps(res["stored_16384_run"]), "",
            "Predictions: " + json.dumps(res["predictions"]), "", "Hypotheses: " + json.dumps(res["hypotheses"]), ""]
     (out / "readout.md").write_text("\n".join(md))

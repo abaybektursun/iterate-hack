@@ -55,6 +55,8 @@
 | `gate12000` | 16,384 | 238 | 239.9 | 25,635 | 25,674 |
 | `gate12000` | 32,768 | 246 | 247.3 | 27,138 | 26,800 |
 
+Post hoc, not in the spec (added after the hard328 rows were read): the rules `seq4_short`, `vote4_short` and `gate12000` and every difference that names them.
+
 Late answers (more than 16,384 tokens): {"more_than_16384_tokens": 368, "finished": 362, "right": 99, "finished_wrong": 266, "finished_without_extracted_answer": 2, "still_cut_at_32768": 6, "per_sample": [93, 90, 93, 92], "right_per_sample": [23, 24, 27, 25], "wrong_pairs_of_one_problem": 261, "wrong_pairs_agree": 53, "wrong_pairs_agree_percent": 20.3, "with_more_than_20_chinese_characters": 249, "still_cut_with_more_than_20_chinese_characters": 4, "right_with_more_than_20_chinese_characters": 42, "loop_A": 5, "still_cut_loop_A": 3, "median_tokens_of_finished": 21529.0, "vote_changed": {"wrong to right": 15, "right to wrong": 9, "right to wrong problems": [76, 85, 88, 162, 168, 329, 360, 374, 386], "wrong to right problems": [65, 77, 80, 101, 107, 110, 115, 133, 187, 199, 207, 283, 308, 342, 368]}}
 
 Stored 16,384 run: {"folder": "studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01", "single_each": [212, 212, 211, 201], "vote4": 241, "cap_hits": 378, "finished_rows_with_the_same_tokens_and_answer_as_the_16384_view": 2, "finished_rows_in_the_16384_view": 944}

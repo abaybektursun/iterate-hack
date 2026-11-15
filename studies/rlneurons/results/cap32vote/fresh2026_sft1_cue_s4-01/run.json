@@ -1,0 +1,129 @@
+{
+ "commit": "9d4ddf6b573c00542eeb98865a45a550c6793d14",
+ "job_id": "abaybektursun-1115-090519-e734+abaybektursun-1115-151138-ecde+abaybektursun-1115-082027-20e4+abaybektursun-1115-094344-1848",
+ "joined_from": [
+  {
+   "job_id": "abaybektursun-1115-090519-e734",
+   "commit": "9d4ddf6b573c00542eeb98865a45a550c6793d14",
+   "seed": 7000000,
+   "counts": {
+    "n": 136,
+    "tok_p_lt_1e2": 67494,
+    "tok_p_lt_1e3": 18849,
+    "correct_v3": 69,
+    "correct_v1": 69,
+    "cap_hits": 0,
+    "loop_A": 0,
+    "generated_tokens": 2204609,
+    "restarts": 0,
+    "n_planned": 136,
+    "mean_generated_tokens": 16210.360294117647,
+    "generation_s": 5733.325192689896,
+    "tokens_per_s": 384.5253715611528
+   }
+  },
+  {
+   "job_id": "abaybektursun-1115-151138-ecde",
+   "commit": "9d4ddf6b573c00542eeb98865a45a550c6793d14",
+   "seed": 7010000,
+   "counts": {
+    "n": 136,
+    "tok_p_lt_1e2": 61032,
+    "tok_p_lt_1e3": 16829,
+    "correct_v3": 70,
+    "correct_v1": 68,
+    "cap_hits": 1,
+    "loop_A": 0,
+    "generated_tokens": 2139433,
+    "restarts": 0,
+    "n_planned": 136,
+    "mean_generated_tokens": 15731.125,
+    "generation_s": 2579.6051206588745,
+    "tokens_per_s": 829.3645344654739
+   }
+  },
+  {
+   "job_id": "abaybektursun-1115-082027-20e4",
+   "commit": "9d4ddf6b573c00542eeb98865a45a550c6793d14",
+   "seed": 7020000,
+   "counts": {
+    "n": 136,
+    "tok_p_lt_1e2": 65984,
+    "tok_p_lt_1e3": 19163,
+    "correct_v3": 74,
+    "correct_v1": 74,
+    "cap_hits": 0,
+    "loop_A": 1,
+    "generated_tokens": 2117264,
+    "restarts": 0,
+    "n_planned": 136,
+    "mean_generated_tokens": 15568.117647058823,
+    "generation_s": 4879.253976583481,
+    "tokens_per_s": 433.9319105259072
+   }
+  },
+  {
+   "job_id": "abaybektursun-1115-094344-1848",
+   "commit": "9d4ddf6b573c00542eeb98865a45a550c6793d14",
+   "seed": 7030000,
+   "counts": {
+    "n": 136,
+    "tok_p_lt_1e2": 68070,
+    "tok_p_lt_1e3": 19832,
+    "correct_v3": 68,
+    "correct_v1": 66,
+    "cap_hits": 0,
+    "loop_A": 1,
+    "generated_tokens": 2188416,
+    "restarts": 0,
+    "n_planned": 136,
+    "mean_generated_tokens": 16091.29411764706,
+    "generation_s": 5111.193364858627,
+    "tokens_per_s": 428.1614573704414
+   }
+  }
+ ],
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "sft1",
+  "prompt": "cue",
+  "set": "fresh2026",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 32768,
+  "seed": 7000000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 4,
+  "restarts": 0,
+  "out": "/root/abaybektursun-1115-090519-e734/out",
+  "dry_run": false,
+  "commit": "9d4ddf6b573c00542eeb98865a45a550c6793d14",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 136,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "source": "/home/abay/Projects/iterate-hack/runs/cap32vote_fresh_s4",
+ "raw_answers": "s3://iterate-hack-team-769063704696/handoff/cap32vote/<job-id>/answers.jsonl"
+}
