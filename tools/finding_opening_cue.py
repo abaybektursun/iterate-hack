@@ -1088,14 +1088,15 @@ function said(p, st) {
     : a ? `answered <span data-math>${esc(a)}</span>: wrong` : "gave no answer the grader could read: wrong";
 }
 function problemPane(k) {
-  const p = PR[k], start0 = p.s[0].trim() ? esc(p.s[0]) : "(empty: the answer ended at its first token)";
+  const lines = t => esc(t).replace(/\n\s*\n+/g, "\n");  // blank lines kept as one line break, so both starts fit
+  const p = PR[k], start0 = p.s[0].trim() ? lines(p.s[0].trimStart()) : "(empty: the answer ended at its first token)";
   return `<div class="dhead"><h2>MATH-500, problem ${p.i}</h2><button class="close" data-open="">Close</button></div>` +
     `<p class="lead q" data-math>${esc(p.q)}</p>` +
     `<ul class="facts"><li><b>Base</b>, T 1.0, <span class="verdict">${said(p, 0)}</span>.</li>` +
     `<li><b>Base + cue</b>, T 1.0, <span class="verdict">${said(p, 1)}</span>.</li>` +
     `<li>The reference answer is <span data-math>${esc(p.gold)}</span>.</li></ul>` +
     `<div class="txt"><p class="cap">How the answer begins, Base (first ${p.s[0].length} characters)</p><p data-math>${start0} …</p></div>` +
-    `<div class="txt"><p class="cap">How the answer begins, Base + cue (the cue is lit)</p><p data-math>${D.cue_text.trim().split(/(\s+)/).map(w => /\S/.test(w) ? `<span class="c">${esc(w)}</span>` : w).join("")}${esc(p.s[1])} …</p></div>` +
+    `<div class="txt"><p class="cap">How the answer begins, Base + cue (the cue is lit)</p><p data-math><span class="c">line!</span> <span class="c">↵</span> <span class="c">↵</span> <span class="c">Okay</span>${lines(p.s[1])} …</p></div>` +
     `<div class="steps"><button data-step="-1">‹ Previous problem</button><button data-step="1">Next problem ›</button></div>`;
 }
 function pane() {
