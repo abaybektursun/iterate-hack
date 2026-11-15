@@ -95,7 +95,8 @@ root on PYTHONPATH, import the team's graders, and print through `lib/noise.py`:
 interval over problems (2,000 resamples, seed 0), or a binomial interval or none for a single count. S3 reads use
 `AWS_PROFILE=iterate-ecr`. Stages run by name on an existing round (`round.py $R rival2 defend duel_test
 score_duel`). `--only-account` skips `mechanisms` and `develop` and tests and duels only the account; a folder not
-named `round-<nn>` is the round after `--from`, given with every command. `--version 5` runs without the account;
+named `round-<nn>` is the round after `--from`, given with every command. `--account-from <folder>` also gives the
+account job the accounts of another chain (the newest `results/account/run-<nn>`). `--version 5` runs without the account;
 `--model-all sonnet --min-targets 3 --n-mechanisms 3` runs a smoke test on a hand-made folder outside `studies/`.
 
 ## The score
