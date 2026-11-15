@@ -960,6 +960,72 @@ delta) 58. Cue, seed base 81,000,000: base 82, `sft1` 92, `sft05` 88, `sft025` 8
   models that include this pair. New here: the matched-spectrum random control at 8 directions, the removal cells, and the
   comparison with a no-reward delta.
 - Finding page: `tools/finding_eight_directions.py` (`/finding/eight-directions`, a tile on `/findings`).
+## xreward: what RL runs with different rewards write into the same base (board work-4fa42e, idea-ac4e14)
+
+Spec `specs/SPEC_xreward.md` (written before each run; amendments 1 to 3). Branch `sharedsub`.
+
+| File | What it does |
+|---|---|
+| `jobs/xreward_overlap.py` | Weights only. Top-8 singular subspaces of (model - base) for seven RL-Zero models, Think-SFT and the base matrix itself, per layer matrix (224), and every pairwise overlap; `--steps` adds the step-100 checkpoint of each RL run. Selftest with a planted shared subspace. |
+| `analysis/xreward_overlap.py` | Readout of the overlap job: key-by-key tables, by module type, nearest neighbours, X1 to X3, S1, S2. |
+| `jobs/wsp_edit.py` | Edited weights. Added here: `--mods` (module filter), `--scale`, recipes `proj` / `projc` (the top-k edit split by a donor model's input subspace), `--other` / `--donor` keys of `xreward_overlap.MODELS`; selftest checks 7 to 9. |
+| `analysis/xreward_edits.py` | Paired readout of the edit cells on the 328 against base cue, RL, theta(0.25), theta(0.5), Code-RL. |
+| `results/xreward/overlap-01/` | `readout.json`, `run.json` of job `abaybektursun-1114-220151-daaa` (final models). Raw per-matrix rows (3 MB): `runs/<job>/metrics.json`, Volume `iterate-runs`. |
+| `results/xreward/overlap_steps-01/` | The same with the seven step-100 checkpoints, job `abaybektursun-1114-221259-0871`. |
+| `results/xreward/edits/` | `readout.json` and one run folder per cell (`run.json`, `metrics.json`, `edit.json`, `examples.json`). |
+
+### Part 1: overlap of the top-8 subspaces (weights only, 224 layer matrices)
+
+Overlap = ||Va^T Vb||_F^2 / 8 for the input (right) side, the same with U for the output side; a random 8-dimensional subspace
+gives 0.002. Means over the 224 matrices, `results/xreward/overlap-01/readout.json`, key `tables`.
+
+| Pair | Input side | Output side |
+|---|---|---|
+| Math 3.0, Math 3.1 | 0.476 | 0.098 |
+| Code 3.0, Code 3.1 | 0.425 | 0.082 |
+| Math 3.1, Code 3.1 | 0.260 | 0.096 |
+| Math 3.1, Code 3.0 | 0.218 | 0.072 |
+| IF, General | 0.187 | 0.049 |
+| Mix with IF / Code 3.0 / General / Math 3.0 | 0.380 / 0.306 / 0.244 / 0.197 | 0.120 / 0.099 / 0.069 / 0.061 |
+| Math 3.1, IF | 0.026 | 0.030 |
+| Math 3.1, General | 0.045 | 0.047 |
+| Math 3.1, Think-SFT | 0.109 | 0.051 |
+| Math 3.1, the base matrix's own top-8 | 0.042 | 0.018 |
+
+- The RL runs do not share one subspace. Math and Code share one; IF and General share another; Mix overlaps every ingredient.
+  Math against IF or General is below Math against Think-SFT.
+- Each release pair is the other's nearest neighbour (4 of 4), so the reward is readable from the weights of another run.
+- The sharing is on the input side, 3 to 5 times the output side.
+- X1 (RL pairs above RL-SFT pairs): 0.186 against 0.063 on average, 14 of 21 pairs. X2 held (base matrix 0.037). X3: Spearman of the
+  overlap with Math 3.1 against the MATH-500 cue score 0.77, n 6; Code 3.0 overlaps 0.218 and gains nothing.
+- Step 100 (`overlap_steps-01`, differences of 0.03 to 0.19 % of the weight norm): for each step-100 checkpoint the nearest final
+  model of another run is the other release of its reward (Math, Code) or Mix (IF, General); Mix is nearest General (6 of 7 as
+  predicted, S1 held). Mean input-side overlap between a reasoning run and an instruction run at step 100: 0.076 (finals 0.049), S2 held.
+
+### Part 2: rank-8 edits with the cue on the 328 harder problems
+
+T 1.0 / top-p 1.0, seed 3000000, one sample, grader v3, `results/xreward/edits/readout.json`. Edits are 0.074 % of the weight norm
+(Math) and carry 9.8 % of the squared norm of the difference; effective scale after BF16 rounding 1.000.
+
+| Cell | Right of 328 | Cap hits | Minus base cue, points [95 %] | Run folder, job |
+|---|---|---|---|---|
+| base, cue | 164 | 77 | | `results/day1/hard328_base_cue_t10-01/` |
+| base + matched random rank-8, cue | 158 | 67 | -1.8 [-5.8, 2.4] | `edits/rand8_math31-01/`, `abaybektursun-1114-221040-5f1e` |
+| base + Math 3.1 top-8, cue | 192 | 46 | +8.5 [4.3, 12.8] | `edits/top8_math31-01/`, `abaybektursun-1114-221034-007d` |
+| base + Code 3.1 top-8, cue | 178 | 41 | +4.3 [0.3, 8.2] | `edits/top8_code31-01/`, `abaybektursun-1114-221053-fb3f` |
+| Math 3.1 minus its top-8, cue | 190 | 90 | +7.9 [3.7, 12.2] | `edits/bulk_math31-01/`, `abaybektursun-1114-221100-1e31` |
+| RL, plain | 206 | 20 | +12.8 | `results/day1/hard328_rl_plain_t10-01/` |
+
+- Math top-8 minus the random control: +10.4 points [5.8, 14.9]. Minus RL: -4.3 [-8.2, -0.3]. Minus theta(0.5) (190): +0.6 [-3.4, 4.6].
+- Math 3.1 minus its top-8, against RL cue (205): -4.6 [-8.2, -1.2]. P2 of amendment 1 (the rest keeps the gain) is refuted.
+- Each half alone solves 30 of the 49 problems that RL solves and the cued base does not. The 8 directions lower the cap hits
+  (77 to 46); the rest raises them (90) and still gains 26 problems.
+- Raw rows (read by a subagent, not committed): with the top-8 edit `Wait` rises from 9.2 to 12.3 per 1,000 words (RL 12.9) and
+  finished answers with no boxed answer fall from 22 to 1.
+
+Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.xreward_edits`, after
+`uv run tools/gpu.py get <job>` for the jobs it names.
+
 ## One axis or several? Item-level structure of every arm (MATH-500 n = 500, hard328 n = 328, laptop, board work-1aa34c, idea-1c8b73)
 
 Question: do the partial routes toward the RL model fix the same problems or different ones? Answer: the same. On MATH-500 two
