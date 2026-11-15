@@ -19,6 +19,8 @@ closes, ? lists the keys. A click on a person shows only that person.
   GET /architecture    the Design tab, how the harness works: one interactive picture (architecture.py), fed by the same /data
   GET /findings        the Findings tab: one tile per finding (findings.py), each a link to the page of that finding
   GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
+  GET /proof           the Proof tab: one tile per experiment that tests the team's method itself (the page of findings.py)
+  GET /proof/<slug>    the page of one such experiment (proof_<slug>.py, made like a finding page)
   GET /data            the newest 60 items of each kind and list, the messages on `all` of the last --hours, every score
                        (board.py score), which the hill-climbing charts draw, the first line of each scored result's
                        finding (climb.finding) and the newest comment of each open work item idle over an hour (JSON),
@@ -60,7 +62,23 @@ LISTS = ("work", "result", "idea", "knowledge", "skill", "work-closed")
 # on /findings. Its ICON, the JavaScript source of the tile's icon, is written into that page here (findings.py).
 FINDINGS = {os.path.basename(f)[len("finding_"):-3].replace("_", "-"): importlib.import_module(os.path.basename(f)[:-3])
             for f in sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "finding_*.py")))}
-FINDINGS_PAGE = findings.PAGE.replace("__ICONS__", "{" + ", ".join(f"{json.dumps(s)}: {m.ICON}" for s, m in FINDINGS.items() if hasattr(m, "ICON")) + "}")
+
+
+def tiles_page(modules, differences=()):
+    """The tile page of findings.py with the icons of these modules written in, and the given text differences applied."""
+    page = findings.PAGE.replace("__ICONS__", "{" + ", ".join(f"{json.dumps(s)}: {m.ICON}" for s, m in modules.items() if hasattr(m, "ICON")) + "}")
+    for old, new in differences:
+        assert page.count(old) == 1, f"findings.PAGE no longer holds {old!r} once"
+        page = page.replace(old, new)
+    return page
+
+
+FINDINGS_PAGE = tiles_page(FINDINGS)
+# One page per experiment that tests the team's method itself: every tools/proof_<slug>.py, with the same four values
+# as a finding page, is served at /proof/<slug> and has a tile on /proof.
+PROOFS = {os.path.basename(f)[len("proof_"):-3].replace("_", "-"): importlib.import_module(os.path.basename(f)[:-3])
+          for f in sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "proof_*.py")))}
+PROOF_PAGE = tiles_page(PROOFS, findings.PROOF)
 
 
 def newest(listed, n=60):
@@ -107,7 +125,8 @@ def snapshot():
         FOUND.update(zip(scored, pool.map(lambda r: climb.finding(texts[r]) if r in texts else finding(r), scored)))
     return {"hours": HOURS, "test": team.TEST, "items": cols(items, ITEM), "messages": cols(messages, MESSAGE), "scores": cols(scores, SCORE),
             "last_comments": {k[0]: COMMENTS[k] for k in late}, "finding": {r: FOUND[r] for r in dict.fromkeys(s["result"] for s in scores)},
-            "findings": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in FINDINGS.items()]}
+            "findings": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in FINDINGS.items()],
+            "proofs": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in PROOFS.items()]}
 
 
 SNAPSHOT = {"at": 0.0, "ns": 0, "body": ""}
@@ -166,6 +185,10 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, "text/html", FINDINGS_PAGE)
         if path.startswith("/finding/") and path[len("/finding/"):] in FINDINGS:
             return self.send(200, "text/html", FINDINGS[path[len("/finding/"):]].PAGE)
+        if path == "/proof":
+            return self.send(200, "text/html", PROOF_PAGE)
+        if path.startswith("/proof/") and path[len("/proof/"):] in PROOFS:
+            return self.send(200, "text/html", PROOFS[path[len("/proof/"):]].PAGE)
         if path != "/data" and not path.startswith("/data/"):
             return self.send(404, "text/plain", f"no page {path}")
         try:  # the page shows the error text; the traceback goes to this terminal
@@ -495,7 +518,7 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
 <div class="wrap">
   <header class="top">
     <h1 class="name">Team board</h1>
-    <nav class="links"><a href="/" aria-current="page">Board</a><a href="/architecture">Design</a><a href="/findings">Findings</a></nav>
+    <nav class="links"><a href="/" aria-current="page">Board</a><a href="/architecture">Design</a><a href="/proof">Proof</a><a href="/findings">Findings</a></nav>
     <span class="test" id="test" hidden>test table</span>
     <label class="search"><input id="q" type="search" placeholder="Filter items and messages" aria-label="Filter items and messages" autocomplete="off"><kbd>/</kbd></label>
     <span class="status" id="status" role="status">Reading the board</span>

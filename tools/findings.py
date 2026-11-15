@@ -1,4 +1,5 @@
-"""The findings page of the team site: one tile per finding, each a link to the page of that finding.
+"""The findings page of the team site: one tile per finding, each a link to the page of that finding. The tab Proof
+(/proof) is the same page for the experiments that test the team's method itself; PROOF at the end holds its differences.
 
 view.py serves PAGE at /findings, after writing the icons into it. The page reads `findings` (slug, title, line) from
 /data once, and again every 10 s while a read fails. A tile holds a small lit glass icon, the finding's TITLE and its
@@ -113,6 +114,7 @@ a { color: inherit; }
     <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
     <a href="/architecture">Design</a>
+    <a href="/proof">Proof</a>
     <a href="/findings" aria-current="page">Findings</a>
     <span class="status" id="status" role="status" hidden>Offline</span>
   </header>
@@ -252,3 +254,14 @@ requestAnimationFrame(frame);
 </body>
 </html>
 """
+
+# The tab Proof (/proof) is the same page with these five differences: its tiles are the experiments that test the
+# team's method itself (tools/proof_<slug>.py, /proof/<slug>), read from `proofs` of /data. view.py applies them.
+PROOF = [
+    ('<title>Invariant: Findings</title>', '<title>Invariant: Proof</title>'),
+    ('<a href="/proof">Proof</a>\n    <a href="/findings" aria-current="page">Findings</a>',
+     '<a href="/proof" aria-current="page">Proof</a>\n    <a href="/findings">Findings</a>'),
+    ('What the team has found so far.', 'Experiments that test the harness itself.'),
+    ('href="/finding/${esc(x.slug)}"', 'href="/proof/${esc(x.slug)}"'),
+    ('tiles(d.findings || [])', 'tiles(d.proofs || [])'),
+]

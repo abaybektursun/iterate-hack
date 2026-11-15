@@ -1,8 +1,9 @@
 """Three rounds of the team-meta-review skill cut the compute per batch of answers from 16.3 to 4.4 container minutes.
 
-The page of one finding, served at /finding/review-cuts-waste (copied from .claude/skills/finding-page/template.py;
+A proof page: a test of the team's method itself, served at /proof/review-cuts-waste and reached from its tile on
+/proof, which ICON draws (made like a finding page, from .claude/skills/finding-page/template.py;
 draw() shows two glass columns, one per kind of review, whose height is the container minutes one batch costs, with the
-part that produced an answer lit). It is reached from its tile on /findings, which ICON draws. Study:
+part that produced an answer lit). Study:
 studies/metaharness (README.md "Planted-waste test", specs/SPEC2.md; board result-8b2682).
 """
 import json
@@ -77,7 +78,7 @@ PANELS = [
       "The plan, written before the runs, is studies/metaharness/specs/SPEC2.md."]],
 ]
 
-# The icon of this finding's tile on /findings (tools/findings.py says how it is called): the page's own picture,
+# The icon of this page's tile on /proof (tools/findings.py says how it is called): the page's own picture,
 # reduced. A glass slab with two posts as high as the compute per batch: plain before any review, lit after three
 # rounds of the skill's reviews.
 ICON = r"""(kit, t, tilt) => {
@@ -211,7 +212,8 @@ svg { animation: fade 1s both; }
     <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
     <a href="/architecture">Design</a>
-    <a href="/findings" aria-current="page">Findings</a>
+    <a href="/proof" aria-current="page">Proof</a>
+    <a href="/findings">Findings</a>
   </header>
   <div class="stage" id="stage">
     <svg id="svg" viewBox="0 0 760 640" role="img"></svg>

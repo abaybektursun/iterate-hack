@@ -206,6 +206,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
     <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
     <a href="/architecture" aria-current="page">Design</a>
+    <a href="/proof">Proof</a>
     <a href="/findings">Findings</a>
     <span class="status" id="status" role="status">Reading the board</span>
   </header>
