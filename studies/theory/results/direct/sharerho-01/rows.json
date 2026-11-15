@@ -1,0 +1,3 @@
+[
+ {"mechanism": "round-15/account-1/c2", "claim": "After each module family's median is removed, Math-RL 3.1's per-matrix top-8 share correlates (Spearman) more with IF-RL's than with Think-SFT's, by at least 0.15.", "result": "result-caa23d", "verdict": "refuted", "measured": "D = rho(Math 3.1, IF) - rho(Math 3.1, Think-SFT) = -0.010 - 0.594 = -0.604 [90 % -0.733, -0.475], n 224 matrices, null value 0 (null range [-0.1, 0.1]), account-1 range [0.15, 1.0]"}
+]
