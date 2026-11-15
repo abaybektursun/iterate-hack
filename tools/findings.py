@@ -32,7 +32,8 @@ The icon's space is 112 by 80 units around the centre (56, 36). A module without
 
 
 NO_REWARD, ANSWERS, WEIGHTS = "What needs no reward?", "How does RL change the answers?", "Where does RL's change sit in the weights?"
-GROUPS = [NO_REWARD, ANSWERS, WEIGHTS, "New"]
+THEORIES = "Do our theories predict?"
+GROUPS = [NO_REWARD, ANSWERS, WEIGHTS, THEORIES, "New"]
 
 
 def signed(x, digits=1):
@@ -135,6 +136,10 @@ TABLE = {
     "loop-neurons": {
         "group": WEIGHTS,
         "figure": lambda m: [f"{m.DATA['states'][0]['loops']} → {m.DATA['states'][1]['loops']}", "loops", f"of {m.DATA['n']} answers, MATH-500, T 0.6"]},
+    "theories-on-trial": {
+        "group": THEORIES,
+        "figure": lambda m: [f"{m.DATA['nearer']['all'][0]} of {m.DATA['nearer']['all'][1]}", "predictions",
+                             "theory nearer the measured number than readers with no theory; half would be a tie"]},
 }
 
 

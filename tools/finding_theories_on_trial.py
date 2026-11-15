@@ -720,7 +720,7 @@ PREDS = [
 DATA.update(COUNTS)
 N, RD, G, T, A = DATA["nearer"]["all"], DATA["readers"]["all"], DATA["gain"]["all"], DATA["theories"], DATA["account"]
 _m = lambda x: f"{x}".replace("-", "−")
-LINE = f"In {N[0]} of {N[1]} predictions, the theory's forecast was nearer the measured number than the readers'."
+LINE = f"Our theories were nearer the measured number than readers with no theory in {N[0]} of {N[1]} predictions: no better."
 
 _p = {(p[0], p[1]): p for p in PREDS}
 _c1, _c2 = _p[("4.r4-m10", "p1")], _p[("4.r4-m10", "p2")]
