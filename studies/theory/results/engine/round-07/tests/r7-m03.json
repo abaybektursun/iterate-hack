@@ -1,0 +1,265 @@
+{
+ "theory": "r7-m03",
+ "predictions": [
+  {
+   "k": 1,
+   "experiment": "Mechanism test: ratio of the self-inconsistent-equation rate of the cued base at T 1.0 to the same rate at T 0.6 / top-p 0.95, on problems where both answers finished. This mechanism (tail draws at result tokens) predicts about 3. The systematic-error rival (result-faf15a's 'not an unlikely sample' reading) predicts about 1.0 (0.8 to 1.3).",
+   "recipe": "Files: A = runs/theory-rows/s3new/r4/base_rl-02/out/T1.jsonl (s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl; base, cue, T 1.0) and B = runs/theory-rows/s3new/r3/base-01/out/F_math500.jsonl (s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl; base, cue, T 0.6 / top-p 0.95), plus studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (field subject). In A keep the first row per problem_index in file order. In B keep, per problem_index, the row with the smallest sample value (first in file order on ties). S = problem_index values with a kept row in both files, cap_hit false in both, and per_problem.json subject != 'Number Theory'. EQ procedure, per row: (1) t = text with re.sub(r'(?<=\\d),(?=\\d{3})', '', text). (2) For each m in re.finditer(r'(?<![\\d.])(\\d{1,3})\\s*(\\+|-|\\*|\u00d7|\\\\times|\\\\cdot)\\s*(\\d{1,3})\\s*=\\s*(\\d{1,6})(?!\\d)', t): (3) pre_s = t[:m.start()].rstrip(' \\t'); keep only if pre_s == '' or pre_s[-1] in '\\n$=:,(' or re.search(r'(?:^|[\\s(])[A-Za-z]{2,}$', pre_s). (4) post = t[m.end():]; post_s = post.lstrip(' \\t'); drop if re.match(r'[A-Za-z^_/({]', post) or re.match(r'\\.\\d', post) or re.match(r'[+\\-*/^\u00d7]|\\\\(times|cdot|div|frac|sqrt|pmod|bmod|mod)|\\(\\s*\\\\?mod|mod\\b', post_s). (5) Drop if the line holding m.start() (from the previous '\\n' to the next '\\n') contains '?'. (6) a, b, c = int of groups 1, 3, 4; op = add for '+', sub for '-', mul for the others; drop sub with a < b. (7) The equation is wrong iff the op applied to a, b != c. (8) Per row, deduplicate by the tuple (a, op, b, c): N_row = number of distinct tuples, W_row = number of distinct wrong tuples. Sum over the S rows of each file: N_A, W_A, N_B, W_B. Statistic R = ((W_A + 0.5) / N_A) / ((W_B + 0.5) / N_B). If N_A or N_B is 0, the prediction counts as refuted. Cap hits are excluded through S, and missing rows exclude the problem.",
+   "unit": "ratio of wrong-equation rates (T 1.0 / T 0.6)",
+   "value": 3.0,
+   "low": 1.5,
+   "high": 9.0,
+   "refuted_by": "R measured below 1.5",
+   "gpu_minutes": 0,
+   "script": "tests/r7-m03/p1.py",
+   "measured": 0.3612012987012987,
+   "n": 377,
+   "interval": [
+    0.06015384615384615,
+    1.3856232939035487
+   ],
+   "interval_kind": "bootstrap",
+   "inside": false,
+   "refuted_by_met": true,
+   "alt_measured": 0.09811253561253562,
+   "not_computable": null,
+   "note": "Files: A = s3 r4/base_rl-02/out/T1.jsonl and B = s3 r3/base-01/out/F_math500.jsonl, read from runs/theory-rows/s3new/... if present, otherwise fetched to runs/theory-tests/s3new/... (same S3 object). Subjects come from studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. Main ambiguity: per_problem.json's subject values are lowercase with underscores ('number_theory', 62 problems). No value equals 'Number Theory', so the literal filter subject != 'Number Theory' drops nothing, and the main number keeps Number Theory problems. alt_measured drops subject 'number_theory', which is almost certainly what was meant. Expect the two numbers to differ, because Number Theory texts are full of modular arithmetic of the 'a*b = c' form, which the post-filters only partly remove. Every row in both files has sample 0, so the smallest-sample rule for B has no effect. cap_hit is a bool in every row and 'false' was tested as cap_hit is False. The EQ regexes were copied verbatim from the decoded recipe; the pre-check character set includes a real newline. The bootstrap resamples the S problems, each entry being a paired (A, B) count tuple. A resample with N = 0 returns inf or 0 rather than failing. n = |S|, and both groups have the same size.",
+   "example_row": {
+    "cell": "T1",
+    "bench": "math500",
+    "problem_index": 0,
+    "sample": 0,
+    "unique_id": "test/precalculus/807.json",
+    "seed": 41000000,
+    "sampling": {
+     "temperature": 1.0,
+     "top_p": 1.0,
+     "repetition_penalty": 1.0
+    },
+    "max_tokens": 16384,
+    "prompt_n_tokens": 103,
+    "prefix_kind": "opening",
+    "n_prefix": 3,
+    "text": " line!\n\nOkay, so I need to convert the rectangular coordinates (0, 3) to polar coordinates. Let me remember how to do that. Polar coordinates are in the form (r, \u03b8) where r is the distance from the origin and \u03b8 is the angle from the positive x-axis. \n\nFirst, let's handle r. The formula for r is the ...[truncated]",
+    "n_new": 503,
+    "n_generated": 504,
+    "n_answer_tokens": 506,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "loop_ratio": 0.4565826330532213,
+    "onset_A_char": null,
+    "onset_B_char": null,
+    "loop_A": false,
+    "loop_B": false,
+    "mode": "answer_line",
+    "extracted": "(3, \u03c0/2)",
+    "gold": "\\left( 3, \\frac{\\pi}{2} \\right)",
+    "score": 1,
+    "parsed_gold": [
+     "(3, pi/2)",
+     "( 3, \\frac{\\pi}{2} )"
+    ],
+    "parsed_answer": [
+     "(3, pi/2)",
+     "(3, \u03c0/2)"
+    ],
+    "mode_v2": "answer_line",
+    "extracted_v2": "(3, \u03c0/2)",
+    "score_v2": 1,
+    "answer_logprob": -0.9862738942647411,
+    "answer_prob": 0.3729638077284311,
+    "answer_tokens": 7,
+    "mean_logprob": -0.4154480749437678,
+    "utc": "2026-11-14T10:18:21Z"
+   }
+  },
+  {
+   "k": 2,
+   "experiment": "Cause (RL sharpened the result positions): ratio of RL's self-inconsistent-equation rate at T 1.0 to the cued base's at T 1.0, on problems where both finished.",
+   "recipe": "Files: A = runs/theory-rows/s3new/r4/base_rl-02/out/T1.jsonl (base, cue, T 1.0) and C = runs/theory-rows/s3new/r4/modal_t2-01/t2/T2.jsonl (s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t2-01/t2/T2.jsonl; RL, plain, T 1.0), plus studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (subject). In each file keep the first row per problem_index in file order. S = problem_index values with a kept row in both files, cap_hit false in both, and subject != 'Number Theory'. Apply the EQ procedure of the first prediction (comma deletion, the same regex, pre, post and line rules, sub with a < b dropped, per-row deduplication by (a, op, b, c)) to every S row, and sum N and W per file. Statistic = ((W_C + 0.5) / N_C) / ((W_A + 0.5) / N_A). If N_A or N_C is 0, the prediction counts as refuted.",
+   "unit": "ratio of wrong-equation rates (RL / base)",
+   "value": 0.35,
+   "low": 0.12,
+   "high": 0.8,
+   "refuted_by": "statistic measured above 0.8",
+   "gpu_minutes": 0,
+   "script": "tests/r7-m03/p2.py",
+   "measured": 1.3591903274011683,
+   "n": 470,
+   "interval": [
+    0.43735852002185616,
+    3.9414276998169617
+   ],
+   "interval_kind": "bootstrap",
+   "inside": false,
+   "refuted_by_met": true,
+   "alt_measured": 2.22799686602246,
+   "not_computable": null,
+   "note": "Files: A = s3 r4/base_rl-02/out/T1.jsonl (base, cue, T 1.0) and C = s3 r4/modal_t2-01/t2/T2.jsonl (RL, plain, T 1.0), fetched as in p1, plus per_problem.json. Same main ambiguity as p1: no subject equals 'Number Theory' (the file uses 'number_theory'), so the main number excludes nothing and alt_measured excludes 'number_theory'. The statistic is RL rate over base rate, and refuted_by_met = statistic > 0.8. The EQ procedure is the same code as in p1. One caveat: T2 texts also begin with ' line!', even though the inventory calls T2 'plain'. The recipe is applied as written anyway. The bootstrap is over the paired S problems, and n = |S|.",
+   "example_row": {
+    "cell": "T2",
+    "bench": "math500",
+    "problem_index": 0,
+    "sample": 0,
+    "unique_id": "test/precalculus/807.json",
+    "seed": 45000000,
+    "sampling": {
+     "temperature": 1.0,
+     "top_p": 1.0,
+     "repetition_penalty": 1.0
+    },
+    "max_tokens": 16384,
+    "prompt_n_tokens": 103,
+    "prefix_kind": "none",
+    "n_prefix": 0,
+    "text": " line!\n\nOkay, so I have this problem here where I need to convert the point (0, 3) from rectangular coordinates to polar coordinates. The answer should be in the form (r, \u03b8) where r is greater than 0 and \u03b8 is between 0 and 2\u03c0. Alright, let me think about how to approach this.\n\nFirst, I remember that...[truncated]",
+    "n_new": 1419,
+    "n_generated": 1420,
+    "n_answer_tokens": 1419,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "loop_ratio": 0.4000424899086467,
+    "onset_A_char": null,
+    "onset_B_char": null,
+    "loop_A": false,
+    "loop_B": false,
+    "mode": "boxed",
+    "extracted": "\\left(3, \\frac{\\pi}{2}\\right)",
+    "gold": "\\left( 3, \\frac{\\pi}{2} \\right)",
+    "score": 1,
+    "parsed_gold": [
+     "(3, pi/2)",
+     "( 3, \\frac{\\pi}{2} )"
+    ],
+    "parsed_answer": [
+     "(3, pi/2)",
+     "(3, \\frac{\\pi}{2})"
+    ],
+    "mode_v2": "boxed",
+    "extracted_v2": "\\left(3, \\frac{\\pi}{2}\\right)",
+    "score_v2": 1,
+    "answer_logprob": -1.342953879965421,
+    "answer_prob": 0.2610733491369064,
+    "answer_tokens": 14,
+    "mean_logprob": -0.415301344086203,
+    "utc": "2026-11-14T13:38:34Z"
+   }
+  },
+  {
+   "k": 3,
+   "experiment": "Effect in accuracy: paired finished-answer error, plain T 1.0 minus the entropy-gated arm that samples at T 0.6 where entropy <= 0.9 nats (confident positions, which include result tokens), on (problem, sample) pairs where both finished.",
+   "recipe": "Files: E = studies/rlneurons/results/egate/math500_lo6-01/rows.jsonl (4 samples per problem) and D = studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. For each (problem_index, sample) in E, take the first E row in file order and the first D row in file order with the same problem_index, attempt == 0 and the same sample. Drop the pair if either row is missing. A row is a cap hit if cap_hit is true, or if cap_hit is missing and finish_reason == 'length'. Keep pairs where neither row is a cap hit. wrong = 1 unless score_v3 == 1 (null or missing counts as wrong). Statistic = mean wrong over the kept D rows minus mean wrong over the kept E rows.",
+   "unit": "difference of fractions of samples",
+   "value": 0.013,
+   "low": -0.002,
+   "high": 0.032,
+   "refuted_by": "statistic measured below -0.002",
+   "gpu_minutes": 0,
+   "script": "tests/r7-m03/p3.py",
+   "measured": 0.017293233082706763,
+   "n": 1330,
+   "interval": [
+    0.0007513148009015841,
+    0.0343796711509716
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": 0.013997760358342673,
+   "not_computable": null,
+   "note": "Files: E = studies/rlneurons/results/egate/math500_lo6-01/rows.jsonl and D = studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (both committed). Main ambiguity: E numbers its samples 1-4 and D numbers them 0-3. The seeds match this numbering (E 610s0pid, D 410s0pid, s = sample). The literal 'same sample' pairing therefore matches E samples 1-3 to D samples 1-3 and drops E sample 4 for lack of a partner, so at most 3 pairs per problem. alt_measured pairs E sample s with D sample s-1 (all 4). E rows have no attempt field, so only D is filtered on attempt == 0. cap_hit is present in every row, so the finish_reason fallback is never used. wrong = 1 unless score_v3 == 1, using the stored score_v3; nothing is regraded. The statistic is a mean over kept pairs. The bootstrap resamples problems, each entry being the list of that problem's kept pairs, and only problems with at least one kept pair are included. n = number of kept pairs (each group has that many rows).",
+   "example_row": {
+    "D": {
+     "problem_index": 77,
+     "sample": 1,
+     "attempt": 0,
+     "seed": 41010077,
+     "n_new": 456,
+     "cap_hit": false,
+     "finish_reason": "stop",
+     "loop_A": false,
+     "extracted_v3": "4",
+     "score_v3": 1,
+     "gold": "4"
+    },
+    "E": {
+     "arm": "lo6",
+     "problem_index": 77,
+     "sample": 1,
+     "seed": 61010077,
+     "n_new": 225,
+     "cap_hit": false,
+     "finish_reason": "stop",
+     "loop_A": false,
+     "extracted_v3": "4",
+     "score_v3": 1,
+     "gold": "4",
+     "egate": [
+      2,
+      0.6,
+      0.9,
+      0
+     ]
+    }
+   }
+  },
+  {
+   "k": 4,
+   "experiment": "Where the effect should not appear: the same paired finished-answer error difference for the arm that samples at T 0.6 only where entropy > 0.9 nats (forks). Result tokens are low-entropy positions, so this mechanism predicts no gain. A fork-centred reading (2506.01939) would expect forks to matter most.",
+   "recipe": "Files: H = studies/rlneurons/results/egate/math500_hi6-01/rows.jsonl (2 samples per problem) and D = studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. Pair, filter and score exactly as in the previous recipe, with H in place of E: for each (problem_index, sample) in H, the first H row and the first D row with attempt == 0 and the same sample; drop missing pairs; cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'; keep pairs with no cap hit on either side; wrong = 1 unless score_v3 == 1. Statistic = mean wrong over the kept D rows minus mean wrong over the kept H rows.",
+   "unit": "difference of fractions of samples",
+   "value": 0.0,
+   "low": -0.02,
+   "high": 0.017,
+   "refuted_by": "statistic measured above 0.017",
+   "gpu_minutes": 0,
+   "script": "tests/r7-m03/p4.py",
+   "measured": -0.003293084522502737,
+   "n": 911,
+   "interval": [
+    -0.024999999999999994,
+    0.0165745856353591
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": 0.0022026431718061568,
+   "not_computable": null,
+   "note": "Files: H = studies/rlneurons/results/egate/math500_hi6-01/rows.jsonl (samples 1-2) and D = day1_3/math500_base_cue-01/rows.jsonl (samples 0-3, attempt 0). Literal same-sample pairing matches H samples 1 and 2 to D samples 1 and 2. alt_measured pairs H sample s with D sample s-1 (D samples 0 and 1). Cap hit, wrong, bootstrap and n are as in p3. refuted_by_met = statistic > 0.017.",
+   "example_row": {
+    "D": {
+     "problem_index": 77,
+     "sample": 1,
+     "attempt": 0,
+     "seed": 41010077,
+     "n_new": 456,
+     "cap_hit": false,
+     "finish_reason": "stop",
+     "loop_A": false,
+     "extracted_v3": "4",
+     "score_v3": 1,
+     "gold": "4"
+    },
+    "H": {
+     "arm": "hi6",
+     "problem_index": 77,
+     "sample": 1,
+     "seed": 61010077,
+     "n_new": 247,
+     "cap_hit": false,
+     "finish_reason": "stop",
+     "loop_A": false,
+     "extracted_v3": "4.",
+     "score_v3": 1,
+     "gold": "4",
+     "egate": [
+      1,
+      0.6,
+      0.9,
+      0
+     ]
+    }
+   }
+  }
+ ]
+}

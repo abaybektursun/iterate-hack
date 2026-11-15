@@ -1,0 +1,218 @@
+{
+ "theory": "r7-m05",
+ "predictions": [
+  {
+   "k": 1,
+   "experiment": "Mechanism test, problem dependence of misread and slip steps. Among the wrongstep items labelled misread or slip, the fraction with g > 0, where g = (lp_span - lp_control) under the base scored with the problem text deleted ('noprob') minus the same under the plain base. This mechanism predicts well above half (deleting the problem removes evidence against the step, but not the step's own support). The uniform-hazard rival predicts about 0.5. The problem-induced-misread rival (m04) predicts below 0.5.",
+   "recipe": "File: studies/rlneurons/results/wrongstep/rules-01/items.json (51 rows). For each row read models['base'] and models['noprob'], fields lp_span and lp_control, as stored, with no rescaling. Keep rows whose label, lowercased, contains the substring 'misread' or the substring 'slip'. Drop a row if either model entry, or any of the four numbers, is missing or null. X_m = lp_span(m) - lp_control(m). g = X_noprob - X_base. A row counts if g > 0 strictly; g == 0 counts as not positive. Statistic = counted rows / kept rows. If fewer than 10 rows are kept, the prediction counts as refuted.",
+   "unit": "fraction of items",
+   "value": 0.67,
+   "low": 0.48,
+   "high": 0.84,
+   "refuted_by": "measured fraction below 0.48 (or above 0.84)",
+   "gpu_minutes": 0,
+   "script": "tests/r7-m05/p1.py",
+   "measured": 0.6857142857142857,
+   "n": 35,
+   "interval": [
+    0.5428571428571428,
+    0.8285714285714286
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": 0.6857142857142857,
+   "not_computable": null,
+   "note": "File: studies/rlneurons/results/wrongstep/rules-01/items.json (in git, 51 rows; read from the working tree, else `git show HEAD:` into runs/theory-tests/). Labels in the file are exactly 'slip' (21), 'misread' (14), 'wrong_plan' (16), so the substring filter keeps slip + misread rows. g = (lp_span - lp_control)[noprob] - (lp_span - lp_control)[base], identical to the stored analysis's D (studies/rlneurons/analysis/wrongstep.py:64), so 'as stored, no rescaling' has no second reading for the main number. lp_span and lp_control are summed log-probs over the span and over the mean of 200 same-length control windows from the same answer; per-token normalisation would not change the sign of g, so it is not an alternative. alt_measured = the same share computed on the 5-token head (lp_head - lp_head_control), the other span measure the file stores. Only null/missing values drop a row; a NaN would be kept and count as not positive (no nulls or NaNs were seen in the format check). Interval: bootstrap over items (one item per problem). Fewer than 10 kept rows prints refuted_without_number. Caveat: while learning the format I opened rules-01/metrics.json, which shows the all-label D share below 0 for noprob and t0.6 and per-label means of D; not the per-label share this recipe asks for, but close to it.",
+   "example_row": {
+    "problem_index": 1,
+    "sample": 1,
+    "label": "slip",
+    "whole_quote": true,
+    "span_tokens": 55,
+    "position": 0.266,
+    "quote": "So the double sum becomes \u2211_{m=2}^\u221e 2 \u2211_{j=1}^{m - 1} 1/m^3, since for each m \u2265 2, both j and k are positive integers adding up to m",
+    "models": {
+     "base": {
+      "lp_span": -23.827076953300548,
+      "lp_control": -22.150271860108504,
+      "lp_head": -2.0109675515268464,
+      "lp_head_control": -2.251327974014691
+     },
+     "t0.6": {
+      "lp_span": -29.077452047294287,
+      "lp_control": -26.47042060350421,
+      "lp_head": -1.3889477476473076,
+      "lp_head_control": -2.7306326045367637
+     },
+     "noprob": {
+      "lp_span": -24.796697774015,
+      "lp_control": -23.271565362106475,
+      "lp_head": -2.054523883271031,
+      "lp_head_control": -2.3826171480932454
+     },
+     "cad0.5": {
+      "lp_span": -23.510510794440506,
+      "lp_control": -22.17969872189234,
+      "lp_head": -1.9980076595384162,
+      "lp_head_control": -2.264567237407691
+     },
+     "cad1": {
+      "lp_span": -23.34645008023199,
+      "lp_control": -22.413048618472313,
+      "lp_head": -1.9908895869739354,
+      "lp_head_control": -2.313069351337112
+     },
+     "twice": {
+      "lp_span": -24.15446209561196,
+      "lp_control": -22.15041407223469,
+      "lp_head": -2.092421289125923,
+      "lp_head_control": -2.241746544486321
+     }
+    }
+   }
+  },
+  {
+   "k": 2,
+   "experiment": "Cause test, mode vs tail. On all 51 wrongstep items, the fraction whose wrong step gains on control text when the base is rescored at T 0.6: (lp_span - lp_control) under 't0.6' minus the same under 'base', counted when positive. This mechanism (the step sits near the mode) predicts more than half. The tail-token rival (r3-surprises-1: errors are low-probability draws) predicts below half, because a cooler distribution penalises the step more than ordinary text.",
+   "recipe": "File: studies/rlneurons/results/wrongstep/rules-01/items.json. For each row read models['base'] and models['t0.6'], fields lp_span and lp_control, as stored. Use all labels. Drop a row if either model entry or any of the four numbers is missing or null. X_m = lp_span(m) - lp_control(m). d = X_t0.6 - X_base. A row counts if d > 0 strictly; ties count as not positive. Statistic = counted rows / kept rows. If fewer than 20 rows are kept, the prediction counts as refuted.",
+   "unit": "fraction of items",
+   "value": 0.62,
+   "low": 0.44,
+   "high": 0.8,
+   "refuted_by": "measured fraction below 0.44 (or above 0.80)",
+   "gpu_minutes": 0,
+   "script": "tests/r7-m05/p2.py",
+   "measured": 0.6078431372549019,
+   "n": 51,
+   "interval": [
+    0.49019607843137253,
+    0.7254901960784313
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": 0.6470588235294118,
+   "not_computable": null,
+   "note": "Same file. All 51 rows, all labels. d = (lp_span - lp_control)[t0.6] - (lp_span - lp_control)[base]; ties (d == 0) not positive. This equals the stored D for t0.6; metrics.json already reports share_below_0 = 0.392 for it over all items, which I saw while checking the format, so the main number is close to 1 - 0.392 unless there are exact zeros. alt_measured = same share on the 5-token head (lp_head - lp_head_control). Fewer than 20 kept rows prints refuted_without_number. The 't0.6' entry is the base's log-probs at temperature 0.6 as stored by the scoring job (renormalised softmax at T 0.6, per job); I did not check the job's exact implementation. Bootstrap over items.",
+   "example_row": {
+    "problem_index": 1,
+    "sample": 1,
+    "label": "slip",
+    "whole_quote": true,
+    "span_tokens": 55,
+    "position": 0.266,
+    "quote": "So the double sum becomes \u2211_{m=2}^\u221e 2 \u2211_{j=1}^{m - 1} 1/m^3, since for each m \u2265 2, both j and k are positive integers adding up to m",
+    "models": {
+     "base": {
+      "lp_span": -23.827076953300548,
+      "lp_control": -22.150271860108504,
+      "lp_head": -2.0109675515268464,
+      "lp_head_control": -2.251327974014691
+     },
+     "t0.6": {
+      "lp_span": -29.077452047294287,
+      "lp_control": -26.47042060350421,
+      "lp_head": -1.3889477476473076,
+      "lp_head_control": -2.7306326045367637
+     },
+     "noprob": {
+      "lp_span": -24.796697774015,
+      "lp_control": -23.271565362106475,
+      "lp_head": -2.054523883271031,
+      "lp_head_control": -2.3826171480932454
+     },
+     "cad0.5": {
+      "lp_span": -23.510510794440506,
+      "lp_control": -22.17969872189234,
+      "lp_head": -1.9980076595384162,
+      "lp_head_control": -2.264567237407691
+     },
+     "cad1": {
+      "lp_span": -23.34645008023199,
+      "lp_control": -22.413048618472313,
+      "lp_head": -1.9908895869739354,
+      "lp_head_control": -2.313069351337112
+     },
+     "twice": {
+      "lp_span": -24.15446209561196,
+      "lp_control": -22.15041407223469,
+      "lp_head": -2.092421289125923,
+      "lp_head_control": -2.241746544486321
+     }
+    }
+   }
+  },
+  {
+   "k": 3,
+   "experiment": "Case where the effect should not appear: wrong-plan items. The fraction of wrongstep items labelled as a wrong plan with g > 0 (g defined as in the first prediction: noprob minus base, each lp_span - lp_control). This mechanism says a plan is chosen in response to the problem, so deleting the problem should not favour it the way it favours misreads and slips. It predicts a share near or below half, well under the misread/slip share. A reader who takes g > 0 as a generic effect of shorter context predicts the same share as the misread/slip items.",
+   "recipe": "File: studies/rlneurons/results/wrongstep/rules-01/items.json. Keep rows whose label, lowercased, contains the substring 'plan' and contains neither 'misread' nor 'slip'. Read models['base'] and models['noprob'], fields lp_span and lp_control, as stored. Drop a row if any of the four numbers or either model entry is missing or null. g = (lp_span - lp_control)_noprob - (lp_span - lp_control)_base. Count rows with g > 0 strictly (ties not positive). Statistic = counted / kept. If fewer than 6 rows are kept, the prediction counts as refuted.",
+   "unit": "fraction of items",
+   "value": 0.43,
+   "low": 0.15,
+   "high": 0.68,
+   "refuted_by": "measured fraction above 0.68 (or below 0.15)",
+   "gpu_minutes": 0,
+   "script": "tests/r7-m05/p3.py",
+   "measured": 0.6875,
+   "n": 16,
+   "interval": [
+    0.5,
+    0.875
+   ],
+   "interval_kind": "bootstrap",
+   "inside": false,
+   "refuted_by_met": true,
+   "alt_measured": 0.5625,
+   "not_computable": null,
+   "note": "Same file. Filter: label lowercased contains 'plan' and neither 'misread' nor 'slip' -> the 16 'wrong_plan' rows. g as in prediction 1. Ties not positive. alt_measured = the share on the 5-token head (lp_head - lp_head_control). Fewer than 6 kept rows prints refuted_without_number. n = 16, so the bootstrap interval is wide (one step is 1/16 = 0.0625). Bootstrap over items.",
+   "example_row": {
+    "problem_index": 18,
+    "sample": 3,
+    "label": "wrong_plan",
+    "whole_quote": true,
+    "span_tokens": 29,
+    "position": 0.011,
+    "quote": "The label for angle at A is 124 degrees, which is between AB and AC. The angle x is labeled at B, I think.",
+    "models": {
+     "base": {
+      "lp_span": -25.06160712129349,
+      "lp_control": -15.25506742524869,
+      "lp_head": -7.558160781860352,
+      "lp_head_control": -2.543309436552809
+     },
+     "t0.6": {
+      "lp_span": -30.988121564660105,
+      "lp_control": -17.70740663527973,
+      "lp_head": -8.581713885068893,
+      "lp_head_control": -2.926589556810004
+     },
+     "noprob": {
+      "lp_span": -52.35712431999855,
+      "lp_control": -15.659748568239747,
+      "lp_head": -19.763327419757843,
+      "lp_head_control": -2.608356929005404
+     },
+     "cad0.5": {
+      "lp_span": -30.870443653140683,
+      "lp_control": -15.339315481469265,
+      "lp_head": -7.030438125133514,
+      "lp_head_control": -2.5396725408282417
+     },
+     "cad1": {
+      "lp_span": -47.440135555581946,
+      "lp_control": -15.608840571855044,
+      "lp_head": -8.903890311717987,
+      "lp_head_control": -2.5481868199691324
+     },
+     "twice": {
+      "lp_span": -26.21904960487882,
+      "lp_control": -15.28126275545872,
+      "lp_head": -8.505617082118988,
+      "lp_head_control": -2.5482545014074005
+     }
+    }
+   }
+  }
+ ]
+}

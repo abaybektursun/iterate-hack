@@ -1,0 +1,116 @@
+{
+ "name": "r7-m08",
+ "statement": "The Olmo-3.1 Code-RL weight change raises cued MATH-500 accuracy mainly by vetoing: it lowers the probability of the base's own located misread and slip steps on the same items where Math-RL 3.1 lowers them, while keeping the base's top token elsewhere and installing no replacement tokens; Code 3.0's comparable token movement does not fall on those items.",
+ "scope": "Covers the Olmo-3-1025-7B base, Olmo-3.1-7B-RL-Zero-Math, Olmo-3.1-7B-RL-Zero-Code and Olmo-3-7B-RL-Zero-Code (3.0), with the opening cue, T 1.0 / top-p 1.0, MATH-500, grader v3: the teacher-forced wrong-step spans of studies/rlneurons/results/wrongstep/math500-01 and the per-problem single-sample outcomes. Does not cover the cap-hit (budget) part of Code-RL's gain on hard328, which the finishing directions of result-51a0e7 carry. It also does not cover the theta(a) blends, wrong-plan errors, or length and format effects. Not a claim about the base's decoding: the vetoed steps are high-probability under the base, so no base-only rule reproduces the veto.",
+ "parent": null,
+ "imports": [
+  {
+   "source": "2511.08567",
+   "finding": "RL runs from one base on different data and algorithms change the same weight positions (layer-13 Jaccard 0.55-0.60 vs 0.37-0.47 baseline).",
+   "how": "Gives a reason why a code-reward run can act at the same places as a math-reward run with a nearly orthogonal overall weight difference: the shared footprint, not the shared direction, puts Code 3.1's veto on Math's error items."
+  },
+  {
+   "source": "2506.01939",
+   "finding": "RLVR keeps the base's high-entropy fork positions (86.67 % overlap at convergence) and changes entropy mostly where it was already high.",
+   "how": "The veto acts at the base's own decision points, where its wrong step is one of several likely continuations. Lowering that continuation leaves the head token in place wherever the head is right, which fits Code 3.1 keeping the base's top token."
+  }
+ ],
+ "explains": [
+  {
+   "item": "result-eb9211",
+   "quote": "keeps the base's top token more often than it takes Math 3.1's",
+   "how": "A veto lowers the wrong continuation at a few error positions and does not import Math's replacement tokens, so Code 3.1 keeps the base's top token most of the time."
+  },
+  {
+   "item": "result-eb9211",
+   "quote": "The agreement does not order models by gain",
+   "how": "Gain depends on whether the moved tokens sit at the base's error positions, not on how many tokens move with Math, so Code 3.0's equal agreement buys nothing."
+  },
+  {
+   "item": "result-faf15a",
+   "quote": "Code 3.1 -0.45 [-0.79, -0.12], Code 3.0 -0.32 [-0.95, 0.27]",
+   "how": "Code 3.1 lowers the base's located wrong steps reliably. Code 3.0's mean is similar, but its wide interval spreads the lowering over items unrelated to Math's."
+  },
+  {
+   "item": "result-faf15a",
+   "quote": "misread -1.52, slip -0.72, wrong plan +0.03",
+   "how": "The veto acts on local misreads and slips that the base writes as one of its likely continuations, not on wrong plans, which need a different route."
+  },
+  {
+   "item": "result-edceef",
+   "quote": "Code 3.1 cue 450 is +7.8 pts [4.4, 11.2] over Code 3.0 cue",
+   "how": "Only the release whose change falls on the error positions gains, though Code 3.0 moved the weights further."
+  },
+  {
+   "item": "result-855858",
+   "quote": "first wrong steps per 1k finished tokens, 0.015 RL vs 0.038 base",
+   "how": "RL's gain is fewer wrong steps written, not more catching, which is what a veto at the error position produces."
+  },
+  {
+   "item": "result-f39ba8",
+   "quote": "hard328 Code-RL 37: 0/.27/.03/.43/.27",
+   "how": "Most of Code-RL's gap problems are reliability problems, where the base has a right path and loses it to a sampled wrong step that a veto removes."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "result-07f566",
+   "quote": "on the shorter half Code 3.0 has 246 right and Code 3.1 243 of 250",
+   "how": "If Code 3.0 does not veto at the base's error positions, it should trail Code 3.1 on short problems, where slips and misreads dominate. It does not, so Code 3.0's missing veto must sit on long problems, and the mechanism did not predict that."
+  },
+  {
+   "item": "result-faf15a",
+   "quote": "theta(0.25) -0.10, random difference 0.00 [-0.02, 0.02]",
+   "how": "A quarter of the Math difference gains +6.2 points on MATH-500 while barely lowering the wrong steps, so a large part of the RL-direction gain comes by a route other than the veto."
+  },
+  {
+   "item": "result-51a0e7",
+   "quote": "RL's top directions make the model finish, not be right",
+   "how": "Part of Code-RL's hard328 gain is cap hits turned into finished answers (Code top-8 cuts cap hits 77 to 41), which is a finishing effect, not a veto."
+  }
+ ],
+ "rival": "Uniform partial copy: Code 3.1 carries a weaker version of Math 3.1's change at every position, at the per-token agreement level of result-eb9211 (r 0.405), so its lowering of the wrong steps is spread over items without regard to where Math acts, and its gain is a diluted Math gain like theta(a). The two separate on the wrong-step items. The veto says Code 3.1's lowering is concentrated on the items where Math 3.1 lowers most, and is about zero on wrong-plan items. The rival says Code 3.1's item-level lowering is only loosely tied to Math's: about a third of its sum falls on Math's top third, and wrong-plan items get the average -0.45.",
+ "predictions": [
+  {
+   "experiment": "Mechanism test, concentration of Code 3.1's wrong-step lowering on Math 3.1's strongest-veto items: the share of the summed Code 3.1 D that falls on the third of items where Math 3.1's D is most negative. The uniform-partial-copy rival (Code 3.1's lowering spread over items independently of Math's) predicts about 0.33, and at most about 0.45 with shared item effects. The veto mechanism predicts most of the sum.",
+   "recipe": "File: studies/rlneurons/results/wrongstep/math500-01/items.json (a list of 51 item objects). For each item and model name m in {base, code31, math31}, read models[m].lp_span and models[m].lp_control. D_m = (lp_span_m - lp_control_m) - (lp_span_base - lp_control_base). Drop any item where any of these six numbers is missing or null. Sort the kept items by D_math31 ascending, ties broken by problem_index ascending, then by sample ascending. T = the first floor(n/3) items of that order, where n = number of kept items. Statistic C = (sum of D_code31 over T) / (sum of D_code31 over all kept items). If the denominator is >= 0, C is undefined and counts as refuted.",
+   "unit": "fraction of summed D",
+   "value": 0.72,
+   "low": 0.48,
+   "high": 1.05,
+   "refuted_by": "C below 0.45, or C undefined",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Where the effect should not appear: Code 3.1's mean wrong-step lowering on items labelled wrong plan. A reader who spreads Code 3.1's overall -0.45 evenly expects about -0.45. The veto mechanism, which places Code 3.1 at Math's positions, and Math 3.1 is +0.03 on these items, expects about 0.",
+   "recipe": "File: studies/rlneurons/results/wrongstep/math500-01/items.json. D_code31 per item as in the first recipe (models base and code31, lp_span and lp_control; drop items with any of the four missing or null). Keep items whose label field, lowercased, contains the substring 'plan'. Statistic = arithmetic mean of D_code31 over the kept items. If no item is kept, the statistic is undefined and counts as refuted.",
+   "unit": "nats (mean D over items)",
+   "value": 0.0,
+   "low": -0.3,
+   "high": 0.3,
+   "refuted_by": "mean below -0.35 or above 0.35, or no wrong-plan item",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Where a veto cannot create a path: Code 3.1 cue single-sample accuracy on the MATH-500 problems where the cued base is right in none of its 4 stored samples. A veto removes the base's sampled wrong steps but installs no new solution route, so Code 3.1 should stay near a fresh base sample there and well below RL's own rate.",
+   "recipe": "File: studies/rlneurons/results/axis/math500-01/vectors.json. Use arms 'base_cue_s0', 'base_cue_s1', 'base_cue_s2', 'base_cue_s3' and 'code_cue' (Code-RL 3.1, cue), each a v3 0/1 vector aligned to problem_indices (cap hits are already 0). For each position, k = sum of the four base_cue_s arms. Set Z = positions with k == 0. Statistic = (sum of code_cue over Z) / |Z|. A missing or null entry counts as 0. If Z is empty, the statistic is undefined and counts as refuted.",
+   "unit": "fraction of problems",
+   "value": 0.18,
+   "low": 0.06,
+   "high": 0.33,
+   "refuted_by": "statistic above 0.36, or undefined",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Pre-error hand-off on the 51 wrong-step items. Take each item's stored cued-base sample, the source text of studies/rlneurons/results/wrongstep/math500-01 (MATH-500 job abaybektursun-1114-153825-208b), and cut it at the start of the located wrong step (the item's position). After the same cue prompt, continue the prefix with Code-RL 3.1, with Code-RL 3.0 and with the base, 4 samples each, T 1.0 / top-p 1.0, max total length 16,384 tokens, seeds 5,000,000 + 10*item + sample. Grade each continuation with grader v3 on prefix + continuation; cap hits count wrong. The count reported is Code 3.1's right continuations out of 204.",
+   "unit": "right of 204",
+   "value": 98,
+   "low": 80,
+   "high": 118,
+   "refuted_by": "Code 3.1 below 80 of 204, or Code 3.1 not ahead of Code 3.0 by at least 10 continuations in the same job",
+   "gpu_minutes": 45
+  }
+ ],
+ "intervention": null,
+ "no_intervention": "The mechanism puts the gain in a weight change that lowers steps the base itself rates as likely (log-prob -0.53 per token against -0.63 for control text, result-faf15a). A prompt, sampling, truncation or stopping rule that reads only the base's distribution cannot single them out, and the only base-side veto left, selection among base samples, is already measured (vote over 4, 446-450)."
+}

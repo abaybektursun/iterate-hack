@@ -1,0 +1,4002 @@
+[
+ {
+  "problem_index": 0,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 956,
+  "extracted_v3": "\\left(3, \\dfrac{\\pi}{2}\\right)",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 1,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2560,
+  "extracted_v3": "p - q",
+  "opening": " and resolv\n\nOkay, let's see. "
+ },
+ {
+  "problem_index": 2,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1913,
+  "extracted_v3": "\\dfrac{14}{3}",
+  "opening": " as $Answer$.\n\nOkay, let's see"
+ },
+ {
+  "problem_index": 3,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 986,
+  "extracted_v3": "9",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 4,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 3392,
+  "extracted_v3": "Angela",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 5,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1886,
+  "extracted_v3": "42",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 6,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1709,
+  "extracted_v3": "27",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 7,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6528,
+  "extracted_v3": "90^\\circ",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 8,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1193,
+  "extracted_v3": "3\\sqrt{13}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 9,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 10,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6030,
+  "extracted_v3": "2220",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 11,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 10677,
+  "extracted_v3": "\\dfrac{1}{9}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 12,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2850,
+  "extracted_v3": "284",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 13,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 675,
+  "extracted_v3": "5",
+  "opening": " and resubmit. Super grading i"
+ },
+ {
+  "problem_index": 14,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3189,
+  "extracted_v3": "\\sqrt{51}",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 15,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3307,
+  "extracted_v3": "6 - 5i",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 16,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1482,
+  "extracted_v3": "-50",
+  "opening": " part.\n\nOkay, let me try to fi"
+ },
+ {
+  "problem_index": 17,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3907,
+  "extracted_v3": "\\pi",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 18,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 10343,
+  "extracted_v3": "56",
+  "opening": " tag.\n\nOkay, let's see. I need"
+ },
+ {
+  "problem_index": 19,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9826,
+  "extracted_v3": "3",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 20,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 9087,
+  "extracted_v3": "117 + 41i",
+  "opening": " line, respond with just the c"
+ },
+ {
+  "problem_index": 21,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6152,
+  "extracted_v3": "13535",
+  "opening": " tag!\n\nOkay, let's see. I need"
+ },
+ {
+  "problem_index": 22,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2042,
+  "extracted_v3": "5",
+  "opening": "!\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 23,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1340,
+  "extracted_v3": "5",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 24,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3010,
+  "extracted_v3": "10",
+  "opening": " and resubmit.\n\nOkay, let's tr"
+ },
+ {
+  "problem_index": 25,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5591,
+  "extracted_v3": "-2, 1",
+  "opening": "!\n\nOkay, so I have this functi"
+ },
+ {
+  "problem_index": 26,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 11198,
+  "extracted_v3": "288",
+  "opening": " header.\n\nOkay, so I need to f"
+ },
+ {
+  "problem_index": 27,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 698,
+  "extracted_v3": "78",
+  "opening": " line. Copy the format of this"
+ },
+ {
+  "problem_index": 28,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1492,
+  "extracted_v3": "-2 + 7i",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 29,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1246,
+  "extracted_v3": "225",
+  "opening": " and resubmit.\n\nOkay, let's tr"
+ },
+ {
+  "problem_index": 30,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2159,
+  "extracted_v3": "52_8",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 31,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 820,
+  "extracted_v3": "11\\sqrt{2}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 32,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4698,
+  "extracted_v3": "720",
+  "opening": "! On a wayjustify your final a"
+ },
+ {
+  "problem_index": 33,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3043,
+  "extracted_v3": "\\dfrac{243}{625}",
+  "opening": "!\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 34,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1412,
+  "extracted_v3": "-125",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 35,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4724,
+  "extracted_v3": "3",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 36,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2580,
+  "extracted_v3": "3, 5, 7",
+  "opening": " line.\n\nOkay, so I have this e"
+ },
+ {
+  "problem_index": 37,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3991,
+  "extracted_v3": "72",
+  "opening": " line without other text.\n\nOka"
+ },
+ {
+  "problem_index": 38,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1074,
+  "extracted_v3": "2000",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 39,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1704,
+  "extracted_v3": "23",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 40,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1031,
+  "extracted_v3": "12",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 41,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11407,
+  "extracted_v3": "17",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 42,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1611,
+  "extracted_v3": "4",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 43,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 12114,
+  "extracted_v3": "20\\sqrt{5} + 10\\sqrt{34}",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 44,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1574,
+  "extracted_v3": "1.25",
+  "opening": " and resubmit.\n\nOkay, so Bill "
+ },
+ {
+  "problem_index": 45,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1425,
+  "extracted_v3": "2",
+  "opening": "!\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 46,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5804,
+  "extracted_v3": "6",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 47,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 806,
+  "extracted_v3": "5",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 48,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1826,
+  "extracted_v3": "\\dfrac{3}{2}",
+  "opening": "!\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 49,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1179,
+  "extracted_v3": "83",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 50,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2973,
+  "extracted_v3": "203",
+  "opening": "!\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 51,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 12878,
+  "extracted_v3": "x^5 - x^4 + x^3 - x^2 + x - 1",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 52,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1204,
+  "extracted_v3": "12",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 53,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1003,
+  "extracted_v3": "-\\frac{\\pi}{6}",
+  "opening": "!\n\nOkay, so I need to compute "
+ },
+ {
+  "problem_index": 54,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 761,
+  "extracted_v3": "0.15",
+  "opening": " and resubmit this message wit"
+ },
+ {
+  "problem_index": 55,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1863,
+  "extracted_v3": "3",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 56,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 416,
+  "extracted_v3": "11",
+  "opening": " tag\n\nOkay, let's see. I need "
+ },
+ {
+  "problem_index": 57,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2601,
+  "extracted_v3": "16",
+  "opening": " andRespectfully your paragrap"
+ },
+ {
+  "problem_index": 58,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1159,
+  "extracted_v3": "9901",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 59,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1658,
+  "extracted_v3": "5",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 60,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 16100,
+  "extracted_v3": "(4, 4, 1)",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 61,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2900,
+  "extracted_v3": "-256",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 62,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4257,
+  "extracted_v3": "4",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 63,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3097,
+  "extracted_v3": "10",
+  "opening": " and resubmit. You are allowed"
+ },
+ {
+  "problem_index": 64,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 14508,
+  "extracted_v3": "29",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 65,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 755,
+  "extracted_v3": "1",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 66,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1288,
+  "extracted_v3": "x^3 + 3x - 6",
+  "opening": "!\n\nOkay, let me try to solve t"
+ },
+ {
+  "problem_index": 67,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3641,
+  "extracted_v3": "10\\%",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 68,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3618,
+  "extracted_v3": "46",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 69,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6104,
+  "extracted_v3": "-1",
+  "opening": "!\n\nOkay, so I need to compute "
+ },
+ {
+  "problem_index": 70,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1636,
+  "extracted_v3": "40_9",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 71,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7282,
+  "extracted_v3": "2516_8",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 72,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5134,
+  "extracted_v3": "3",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 73,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1177,
+  "extracted_v3": "\\dfrac{3\\sqrt{3}}{4}",
+  "opening": " as $Answer$!\n\nOkay, so I need"
+ },
+ {
+  "problem_index": 74,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1600,
+  "extracted_v3": "\\cot x",
+  "opening": " as $Answer\n\nOkay, so I need t"
+ },
+ {
+  "problem_index": 75,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2652,
+  "extracted_v3": "\\dfrac{11}{36}",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 76,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3697,
+  "extracted_v3": "0",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 77,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 918,
+  "extracted_v3": "4",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 78,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2296,
+  "extracted_v3": "(-2, 1)",
+  "opening": " and reserving the next line f"
+ },
+ {
+  "problem_index": 79,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 660,
+  "extracted_v3": "2",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 80,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 12355,
+  "extracted_v3": "1000",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 81,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1320,
+  "extracted_v3": "3",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 82,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6686,
+  "extracted_v3": "\\dfrac{3}{2}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 83,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2261,
+  "extracted_v3": "2",
+  "opening": " and resubmit. You have up to "
+ },
+ {
+  "problem_index": 84,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1774,
+  "extracted_v3": "-1",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 85,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1097,
+  "extracted_v3": "\\sqrt{5}",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 86,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 691,
+  "extracted_v3": "240",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 87,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1788,
+  "extracted_v3": "1",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 88,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9590,
+  "extracted_v3": "2",
+  "opening": " line.\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 89,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1627,
+  "extracted_v3": "21",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 90,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 405,
+  "extracted_v3": "\\frac{3}{2}",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 91,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1465,
+  "extracted_v3": "1",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 92,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3324,
+  "extracted_v3": "\\dfrac{448}{15625}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 93,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1249,
+  "extracted_v3": "33",
+  "opening": " and resubmit. You have receiv"
+ },
+ {
+  "problem_index": 94,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 8889,
+  "extracted_v3": "110",
+  "opening": " line. Copy the starting promp"
+ },
+ {
+  "problem_index": 95,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2025,
+  "extracted_v3": "-4",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 96,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 13405,
+  "extracted_v3": "5",
+  "opening": " as $Answer$!\n\nOkay, so I need"
+ },
+ {
+  "problem_index": 97,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 788,
+  "extracted_v3": "east",
+  "opening": " and resubmit.\n\nOkay, so there"
+ },
+ {
+  "problem_index": 98,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1055,
+  "extracted_v3": "2k + 2",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 99,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3169,
+  "extracted_v3": "\\begin{pmatrix} -\\dfrac{1}{3} \\\\ \\dfrac{2}{3} \\\\ \\dfrac{5}{3} \\end{pmatrix}",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 100,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 4639,
+  "extracted_v3": "35",
+  "opening": " and respecify using the forma"
+ },
+ {
+  "problem_index": 101,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4228,
+  "extracted_v3": "850",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 102,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 951,
+  "extracted_v3": "(a + 5)(b + 2)",
+  "opening": "!\n\nOkay, so I need to factor t"
+ },
+ {
+  "problem_index": 103,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 12921,
+  "extracted_v3": "(1, 4]",
+  "opening": " line.\n\nOkay, so I need to sol"
+ },
+ {
+  "problem_index": 104,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8730,
+  "extracted_v3": "40",
+  "opening": " line. Copy the final correct "
+ },
+ {
+  "problem_index": 105,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1367,
+  "extracted_v3": "29",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 106,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1383,
+  "extracted_v3": "\\dfrac{4}{3}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 107,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1933,
+  "extracted_v3": "9",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 108,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 14808,
+  "extracted_v3": "\\dfrac{3}{2}",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 109,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5403,
+  "extracted_v3": "120^\\circ",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 110,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 16147,
+  "extracted_v3": "25",
+  "opening": " and resubmit. You can make ed"
+ },
+ {
+  "problem_index": 111,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1182,
+  "extracted_v3": "210",
+  "opening": " and resubmit. You have to sol"
+ },
+ {
+  "problem_index": 112,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5217,
+  "extracted_v3": "13",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 113,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1364,
+  "extracted_v3": "8000",
+  "opening": "!\n\nOkay, let's tackle this mat"
+ },
+ {
+  "problem_index": 114,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1745,
+  "extracted_v3": "-5",
+  "opening": " line\n\nOkay, so I have this pr"
+ },
+ {
+  "problem_index": 115,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 984,
+  "extracted_v3": "1260",
+  "opening": ".\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 116,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 914,
+  "extracted_v3": "2",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 117,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 779,
+  "extracted_v3": "3",
+  "opening": " and resubmit\n\nOkay, so I have"
+ },
+ {
+  "problem_index": 118,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6341,
+  "extracted_v3": "81",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 119,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7532,
+  "extracted_v3": "-9",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 120,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9623,
+  "extracted_v3": "even",
+  "opening": "!\n\nOkay, so the problem is abo"
+ },
+ {
+  "problem_index": 121,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 673,
+  "extracted_v3": "6",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 122,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1304,
+  "extracted_v3": "9",
+  "opening": "!\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 123,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 2764,
+  "extracted_v3": "10",
+  "opening": " and resubmit.\n\nOkay, let's tr"
+ },
+ {
+  "problem_index": 124,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1932,
+  "extracted_v3": "\\dfrac{11}{2}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 125,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1196,
+  "extracted_v3": "-3",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 126,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6919,
+  "extracted_v3": "1 + 274i",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 127,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1544,
+  "extracted_v3": "4210_5",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 128,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1188,
+  "extracted_v3": "36",
+  "opening": "!\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 129,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6073,
+  "extracted_v3": "\\dfrac{3840}{289}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 130,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7177,
+  "extracted_v3": "13",
+  "opening": " as described in the instructi"
+ },
+ {
+  "problem_index": 131,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1791,
+  "extracted_v3": "8",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 132,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1011,
+  "extracted_v3": "4",
+  "opening": " and resubmit.\n\nOkay, so Rick "
+ },
+ {
+  "problem_index": 133,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2212,
+  "extracted_v3": "120",
+  "opening": "!\n\nOkay, let's tackle this geo"
+ },
+ {
+  "problem_index": 134,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2022,
+  "extracted_v3": "16",
+  "opening": " and rescale these instruction"
+ },
+ {
+  "problem_index": 135,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1129,
+  "extracted_v3": "9",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 136,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6122,
+  "extracted_v3": "64",
+  "opening": " a line. Copying someone else'"
+ },
+ {
+  "problem_index": 137,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5439,
+  "extracted_v3": "204_5",
+  "opening": " and resubmit. You must solve "
+ },
+ {
+  "problem_index": 138,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 11904,
+  "extracted_v3": "\\dfrac{1}{6}",
+  "opening": " line.\n\nOkay, let's see. There"
+ },
+ {
+  "problem_index": 139,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5441,
+  "extracted_v3": "1",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 140,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1997,
+  "extracted_v3": "13",
+  "opening": "!\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 141,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2463,
+  "extracted_v3": "2",
+  "opening": "!\n\nOkay, so Zach has three bag"
+ },
+ {
+  "problem_index": 142,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1939,
+  "extracted_v3": "28800",
+  "opening": "!\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 143,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2164,
+  "extracted_v3": "3\\sqrt{5}",
+  "opening": "!\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 144,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 922,
+  "extracted_v3": "(15, -29)",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 145,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 16017,
+  "extracted_v3": "-2",
+  "opening": " and resubmit.\n\nOkay, let's tr"
+ },
+ {
+  "problem_index": 146,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 886,
+  "extracted_v3": "\\dfrac{\\sqrt{3}}{3}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 147,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3245,
+  "extracted_v3": "16",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 148,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 996,
+  "extracted_v3": "11",
+  "opening": "!\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 149,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2717,
+  "extracted_v3": "49",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 150,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6785,
+  "extracted_v3": "1",
+  "opening": "!\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 151,
+  "score_v3": 1,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": "144",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 152,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7422,
+  "extracted_v3": "8",
+  "opening": "\n\n\n\nOkay, let's try to solve t"
+ },
+ {
+  "problem_index": 153,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6293,
+  "extracted_v3": "\\dfrac{2}{21}",
+  "opening": "!\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 154,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 15151,
+  "extracted_v3": "2\\sqrt{137}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 155,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2588,
+  "extracted_v3": "\\dfrac{1}{4}",
+  "opening": " and resubmit.\n\nAlright, so I "
+ },
+ {
+  "problem_index": 156,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 10229,
+  "extracted_v3": "30",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 157,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1722,
+  "extracted_v3": "\\dfrac{6}{5}",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 158,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1193,
+  "extracted_v3": "2107",
+  "opening": " and resubmit.\n\nOkay, let's ta"
+ },
+ {
+  "problem_index": 159,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1454,
+  "extracted_v3": "3.21",
+  "opening": " line. Copy the text \"Answer:\""
+ },
+ {
+  "problem_index": 160,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1501,
+  "extracted_v3": "18",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 161,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1119,
+  "extracted_v3": "6",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 162,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2426,
+  "extracted_v3": "\\dfrac{17}{50}",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 163,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5072,
+  "extracted_v3": "-\\dfrac{35}{9}",
+  "opening": " in the form \"$$$Answer.$$\".\n\n"
+ },
+ {
+  "problem_index": 164,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7812,
+  "extracted_v3": "-\\sqrt{3}",
+  "opening": "!\n\nOkay, so I need to simplify"
+ },
+ {
+  "problem_index": 165,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2165,
+  "extracted_v3": "\\dfrac{4}{9}",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 166,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8143,
+  "extracted_v3": "\\dfrac{270}{7}",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 167,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 941,
+  "extracted_v3": "65",
+  "opening": " and resubmit.\n\n\nOkay, so I ne"
+ },
+ {
+  "problem_index": 168,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 12273,
+  "extracted_v3": "25",
+  "opening": " line. Copy the format from th"
+ },
+ {
+  "problem_index": 169,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1091,
+  "extracted_v3": "12",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 170,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3486,
+  "extracted_v3": "1736",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 171,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 685,
+  "extracted_v3": "\\frac{13}{15}",
+  "opening": "!\n\nOkay, let's see. So the pro"
+ },
+ {
+  "problem_index": 172,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1131,
+  "extracted_v3": "350",
+  "opening": "!\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 173,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3693,
+  "extracted_v3": "4",
+  "opening": " and resubmit. You will receiv"
+ },
+ {
+  "problem_index": 174,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1340,
+  "extracted_v3": "2",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 175,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2936,
+  "extracted_v3": "3",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 176,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5027,
+  "extracted_v3": "0.0000672",
+  "opening": " line.\n\nOkay, so I need to con"
+ },
+ {
+  "problem_index": 177,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6887,
+  "extracted_v3": "30",
+  "opening": "!\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 178,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1270,
+  "extracted_v3": "60",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 179,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3102,
+  "extracted_v3": "5x - 7y + 11z + 4 = 0",
+  "opening": " and resubmit. You must be log"
+ },
+ {
+  "problem_index": 180,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1609,
+  "extracted_v3": "3",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 181,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1104,
+  "extracted_v3": "\\dfrac{\\sqrt{3}}{3}",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 182,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 723,
+  "extracted_v3": "1251",
+  "opening": "!\n\nOkay, let's see here. The p"
+ },
+ {
+  "problem_index": 183,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2859,
+  "extracted_v3": "23",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 184,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 6177,
+  "extracted_v3": "[2, \\infty)",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 185,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 650,
+  "extracted_v3": "1",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 186,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1021,
+  "extracted_v3": "7",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 187,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1463,
+  "extracted_v3": "7",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 188,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3800,
+  "extracted_v3": "6",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 189,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5930,
+  "extracted_v3": "160",
+  "opening": "  but reserving a line for \"En"
+ },
+ {
+  "problem_index": 190,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2813,
+  "extracted_v3": "\\dfrac{13}{18}",
+  "opening": " and resubmit.\n\nOkay, so Paul "
+ },
+ {
+  "problem_index": 191,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1179,
+  "extracted_v3": "0",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 192,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2263,
+  "extracted_v3": "30",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 193,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 859,
+  "extracted_v3": "4",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 194,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7440,
+  "extracted_v3": "\\dfrac{1}{4}",
+  "opening": " line. Copy each line from my "
+ },
+ {
+  "problem_index": 195,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2228,
+  "extracted_v3": "24",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 196,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3301,
+  "extracted_v3": "1600",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 197,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2905,
+  "extracted_v3": "6",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 198,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1134,
+  "extracted_v3": "10080",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 199,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 895,
+  "extracted_v3": "17",
+  "opening": " line! You must solve this pro"
+ },
+ {
+  "problem_index": 200,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2842,
+  "extracted_v3": "40",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 201,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1798,
+  "extracted_v3": "66",
+  "opening": " and resubmit.\n\nOkay, let's tr"
+ },
+ {
+  "problem_index": 202,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4541,
+  "extracted_v3": "\\dfrac{2}{3}",
+  "opening": " as $Answer$!\n\nOkay, let me tr"
+ },
+ {
+  "problem_index": 203,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1450,
+  "extracted_v3": "12",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 204,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 15761,
+  "extracted_v3": "\\sqrt{6}",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 205,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2215,
+  "extracted_v3": "[-2, -14, -7]",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 206,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1816,
+  "extracted_v3": "\\left( \\dfrac{3}{2}, -13 \\right)",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 207,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 888,
+  "extracted_v3": "28",
+  "opening": "!\n\nOkay, so Mikka wants to ord"
+ },
+ {
+  "problem_index": 208,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1422,
+  "extracted_v3": "1",
+  "opening": "!\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 209,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2687,
+  "extracted_v3": "16",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 210,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 9893,
+  "extracted_v3": "8",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 211,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1196,
+  "extracted_v3": "5",
+  "opening": "!\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 212,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 760,
+  "extracted_v3": "56",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 213,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 10202,
+  "extracted_v3": "2",
+  "opening": " line. Copy the following text"
+ },
+ {
+  "problem_index": 214,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3286,
+  "extracted_v3": "110",
+  "opening": "! . OK. To solve the problem, "
+ },
+ {
+  "problem_index": 215,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8469,
+  "extracted_v3": "2",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 216,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1408,
+  "extracted_v3": "6",
+  "opening": "!\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 217,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6471,
+  "extracted_v3": "11111111100",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 218,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 596,
+  "extracted_v3": "(-1, 6)",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 219,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 11933,
+  "extracted_v3": "\\dfrac{4}{9}",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 220,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4054,
+  "extracted_v3": "\\dfrac{16}{27}",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 221,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9311,
+  "extracted_v3": "900",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 222,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 8706,
+  "extracted_v3": "\\dfrac{2}{3}",
+  "opening": " and resubmit.\n\nAlright, so I "
+ },
+ {
+  "problem_index": 223,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4086,
+  "extracted_v3": "14",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 224,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4365,
+  "extracted_v3": "\\dfrac{9}{256}",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 225,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4289,
+  "extracted_v3": "11",
+  "opening": "  \nYou must solve the problem "
+ },
+ {
+  "problem_index": 226,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 572,
+  "extracted_v3": "3",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 227,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1629,
+  "extracted_v3": "C",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 228,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7008,
+  "extracted_v3": "288\\pi",
+  "opening": "!\n\nOkay, let me try to figure "
+ },
+ {
+  "problem_index": 229,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 889,
+  "extracted_v3": "90",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 230,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4260,
+  "extracted_v3": "\\dfrac{16}{5}",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 231,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1808,
+  "extracted_v3": "10",
+  "opening": " as $Answer$!\n\nOkay, let me tr"
+ },
+ {
+  "problem_index": 232,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3364,
+  "extracted_v3": "\\dfrac{1997}{2}",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 233,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3283,
+  "extracted_v3": "30",
+  "opening": " line.\n\nOkay, let's try to sol"
+ },
+ {
+  "problem_index": 234,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2880,
+  "extracted_v3": "34",
+  "opening": " tag.\n\nOkay, let's try to figu"
+ },
+ {
+  "problem_index": 235,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1648,
+  "extracted_v3": "\\dfrac{5}{9}",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 236,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8511,
+  "extracted_v3": "12",
+  "opening": "!\n$Answer$\n\nOkay, so I need to"
+ },
+ {
+  "problem_index": 237,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 968,
+  "extracted_v3": "22",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 238,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1649,
+  "extracted_v3": "-4",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 239,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 13061,
+  "extracted_v3": "16",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 240,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 9372,
+  "extracted_v3": "22.5",
+  "opening": "!\n\nOkay, let's try to solve th"
+ },
+ {
+  "problem_index": 241,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2895,
+  "extracted_v3": "17",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 242,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 7228,
+  "extracted_v3": "32397",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 243,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1252,
+  "extracted_v3": "3",
+  "opening": " and resubmit. By consenting t"
+ },
+ {
+  "problem_index": 244,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1534,
+  "extracted_v3": "8",
+  "opening": "!\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 245,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4999,
+  "extracted_v3": "-13x + 3",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 246,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3355,
+  "extracted_v3": "8",
+  "opening": " and resubmit your answer.\n\nOk"
+ },
+ {
+  "problem_index": 247,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1433,
+  "extracted_v3": "\\dfrac{10}{11}",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 248,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 9081,
+  "extracted_v3": "-I",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 249,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2496,
+  "extracted_v3": "17",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 250,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1163,
+  "extracted_v3": "13",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 251,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1462,
+  "extracted_v3": "540",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 252,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1612,
+  "extracted_v3": "81",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 253,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1601,
+  "extracted_v3": "\\dfrac{1}{8}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 254,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2009,
+  "extracted_v3": "28",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 255,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2955,
+  "extracted_v3": "E",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 256,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1464,
+  "extracted_v3": "\\dfrac{8}{21}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 257,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1600,
+  "extracted_v3": "864",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 258,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1102,
+  "extracted_v3": "16",
+  "opening": " line! Copy-pasting has been d"
+ },
+ {
+  "problem_index": 259,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1150,
+  "extracted_v3": "22",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 260,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1713,
+  "extracted_v3": "120",
+  "opening": " and resubmit. You must provid"
+ },
+ {
+  "problem_index": 261,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2082,
+  "extracted_v3": "76",
+  "opening": " and resubmit.\n\nOkay, let's tr"
+ },
+ {
+  "problem_index": 262,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1065,
+  "extracted_v3": "4",
+  "opening": "!\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 263,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 945,
+  "extracted_v3": "15",
+  "opening": " line! If you don't put answer"
+ },
+ {
+  "problem_index": 264,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 10086,
+  "extracted_v3": "7\\frac{1}{2}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 265,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 588,
+  "extracted_v3": "4005",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 266,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1033,
+  "extracted_v3": "\\dfrac{33}{100}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 267,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5125,
+  "extracted_v3": "180",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 268,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2233,
+  "extracted_v3": "1",
+  "opening": " line\n\nOkay, so I need to find"
+ },
+ {
+  "problem_index": 269,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1423,
+  "extracted_v3": "6",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 270,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 969,
+  "extracted_v3": "10",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 271,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4050,
+  "extracted_v3": "333",
+  "opening": " line, like this:\nAnswer:\n\nOka"
+ },
+ {
+  "problem_index": 272,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 2007,
+  "extracted_v3": "10132",
+  "opening": " and resubmit. You can make sc"
+ },
+ {
+  "problem_index": 273,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3169,
+  "extracted_v3": "1250",
+  "opening": " and reserving a line break be"
+ },
+ {
+  "problem_index": 274,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4532,
+  "extracted_v3": "18 + 2\\pi",
+  "opening": " line, simplifying expressions"
+ },
+ {
+  "problem_index": 275,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 773,
+  "extracted_v3": "7",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 276,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1740,
+  "extracted_v3": "11",
+  "opening": "!\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 277,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 559,
+  "extracted_v3": "\\sqrt{53}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 278,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1505,
+  "extracted_v3": "255",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 279,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7421,
+  "extracted_v3": "7\\pi",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 280,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1320,
+  "extracted_v3": "8",
+  "opening": "!\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 281,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2236,
+  "extracted_v3": "36",
+  "opening": " and resubmit. You can make ch"
+ },
+ {
+  "problem_index": 282,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 978,
+  "extracted_v3": "129",
+  "opening": " line\n\nOkay, let me try to fig"
+ },
+ {
+  "problem_index": 283,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 778,
+  "extracted_v3": "1",
+  "opening": " and resubmit. You have receiv"
+ },
+ {
+  "problem_index": 284,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 13116,
+  "extracted_v3": "3 + 2\\sqrt{2}, 3 - 2\\sqrt{2}, -3 + 2\\sqrt{2}, -3 - 2\\sqrt{2}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 285,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 12210,
+  "extracted_v3": "440",
+  "opening": " line.\n\nOkay, let's try to tac"
+ },
+ {
+  "problem_index": 286,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 11326,
+  "extracted_v3": "\\dfrac{68}{105}",
+  "opening": " above\n\nOkay, so I need to com"
+ },
+ {
+  "problem_index": 287,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4033,
+  "extracted_v3": "36",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 288,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3380,
+  "extracted_v3": "7",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 289,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3558,
+  "extracted_v3": "16",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 290,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1989,
+  "extracted_v3": "4",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 291,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2944,
+  "extracted_v3": "63",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 292,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6016,
+  "extracted_v3": "898",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 293,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1190,
+  "extracted_v3": "\\left( \\frac{3}{5}, \\frac{8}{3} \\right]",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 294,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5304,
+  "extracted_v3": "58",
+  "opening": "!\n\nOkay, so I need to find thr"
+ },
+ {
+  "problem_index": 295,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 296,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5464,
+  "extracted_v3": "B",
+  "opening": " as $Answer$!\n\nOkay, let's try"
+ },
+ {
+  "problem_index": 297,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1322,
+  "extracted_v3": "103",
+  "opening": " \u2013 no punctuation marks, just "
+ },
+ {
+  "problem_index": 298,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 2066,
+  "extracted_v3": "(-6, -63, 102)",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 299,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3851,
+  "extracted_v3": "63",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 300,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3982,
+  "extracted_v3": "12",
+  "opening": "!\n\nOkay, so the problem is ask"
+ },
+ {
+  "problem_index": 301,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 7838,
+  "extracted_v3": "5.3",
+  "opening": " and reserving the next line f"
+ },
+ {
+  "problem_index": 302,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3850,
+  "extracted_v3": "5",
+  "opening": " and resubmit. You have three "
+ },
+ {
+  "problem_index": 303,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 13377,
+  "extracted_v3": "21",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 304,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2660,
+  "extracted_v3": "9",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 305,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1101,
+  "extracted_v3": "\\dfrac{9}{19}",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 306,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 7455,
+  "extracted_v3": "4",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 307,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2686,
+  "extracted_v3": "(-\\infty, 0]",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 308,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 309,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3614,
+  "extracted_v3": "14",
+  "opening": " line. Copying the whole text "
+ },
+ {
+  "problem_index": 310,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1185,
+  "extracted_v3": "49",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 311,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3063,
+  "extracted_v3": "3",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 312,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 881,
+  "extracted_v3": "(5, \\infty)",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 313,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 783,
+  "extracted_v3": "12\\pi",
+  "opening": " and resubmit.\n\nOkay, so the p"
+ },
+ {
+  "problem_index": 314,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1567,
+  "extracted_v3": "(2, 4)",
+  "opening": "!\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 315,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2017,
+  "extracted_v3": "41",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 316,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2781,
+  "extracted_v3": "12",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 317,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 5862,
+  "extracted_v3": "2",
+  "opening": " and resubmit. You should view"
+ },
+ {
+  "problem_index": 318,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1183,
+  "extracted_v3": "\\frac{9a + 11}{20}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 319,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 879,
+  "extracted_v3": "-128",
+  "opening": " and resubmit.\n\nOkay, let me s"
+ },
+ {
+  "problem_index": 320,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9593,
+  "extracted_v3": "-\\dfrac{24}{25}",
+  "opening": "!\n\nOkay, let me try to figure "
+ },
+ {
+  "problem_index": 321,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1348,
+  "extracted_v3": "10",
+  "opening": " line\n\nOkay, so I need to figu"
+ },
+ {
+  "problem_index": 322,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 975,
+  "extracted_v3": "-1",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 323,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5784,
+  "extracted_v3": "\\dfrac{1}{3}",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 324,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 7434,
+  "extracted_v3": "100",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 325,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 905,
+  "extracted_v3": "4",
+  "opening": " line\n\nOkay, let's see. I need"
+ },
+ {
+  "problem_index": 326,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4980,
+  "extracted_v3": "\\dfrac{9}{100}",
+  "opening": "!\n\nOkay, so I need to evaluate"
+ },
+ {
+  "problem_index": 327,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6357,
+  "extracted_v3": "15",
+  "opening": " tag. Copy the problem verbati"
+ },
+ {
+  "problem_index": 328,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 14492,
+  "extracted_v3": "5",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 329,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 874,
+  "extracted_v3": "4",
+  "opening": " line by \"Answer:$Answer\"\n\nOka"
+ },
+ {
+  "problem_index": 330,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5280,
+  "extracted_v3": "1940",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 331,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2291,
+  "extracted_v3": "\\dfrac{13}{6}",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 332,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 11009,
+  "extracted_v3": "1 + \\sqrt{3}",
+  "opening": " line! \n\nOkay, so I have this "
+ },
+ {
+  "problem_index": 333,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 7191,
+  "extracted_v3": "2",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 334,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1914,
+  "extracted_v3": "-120",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 335,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5264,
+  "extracted_v3": "3",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 336,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1077,
+  "extracted_v3": "26000",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 337,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1549,
+  "extracted_v3": "6",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 338,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3382,
+  "extracted_v3": "4343",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 339,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5188,
+  "extracted_v3": "2k",
+  "opening": " line. Copy the entire line af"
+ },
+ {
+  "problem_index": 340,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 9391,
+  "extracted_v3": "67",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 341,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1536,
+  "extracted_v3": "-2",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 342,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1184,
+  "extracted_v3": "2",
+  "opening": " line, answer to another probl"
+ },
+ {
+  "problem_index": 343,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1131,
+  "extracted_v3": "58500",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 344,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 961,
+  "extracted_v3": "5",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 345,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1836,
+  "extracted_v3": "1",
+  "opening": ".\n\nOkay, let's try to figure o"
+ },
+ {
+  "problem_index": 346,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1793,
+  "extracted_v3": "66",
+  "opening": " line. Copy the line above lin"
+ },
+ {
+  "problem_index": 347,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1845,
+  "extracted_v3": "6r^2 - 4r - 24",
+  "opening": "!\n\nOkay, so I need to simplify"
+ },
+ {
+  "problem_index": 348,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2576,
+  "extracted_v3": "4495",
+  "opening": " and resubmit.\n\nOkay, let me s"
+ },
+ {
+  "problem_index": 349,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 5639,
+  "extracted_v3": "5040",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 350,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2547,
+  "extracted_v3": "4",
+  "opening": " as $Answer$!\n\nOkay, so I need"
+ },
+ {
+  "problem_index": 351,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 16211,
+  "extracted_v3": "-\\dfrac{1}{16}",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 352,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 14388,
+  "extracted_v3": "44",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 353,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1109,
+  "extracted_v3": "480",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 354,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1334,
+  "extracted_v3": "81",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 355,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 12309,
+  "extracted_v3": "120",
+  "opening": "!\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 356,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2774,
+  "extracted_v3": "(-\\sqrt{3}, \\sqrt{3})",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 357,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1893,
+  "extracted_v3": "4",
+  "opening": " and resubmit.\n\nOkay, let's tr"
+ },
+ {
+  "problem_index": 358,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3040,
+  "extracted_v3": "ellipse",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 359,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2794,
+  "extracted_v3": "6",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 360,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1715,
+  "extracted_v3": "\\dfrac{7}{4}",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 361,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2930,
+  "extracted_v3": "16\\sqrt{3}",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 362,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 673,
+  "extracted_v3": "\\dfrac{1}{4}",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 363,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 972,
+  "extracted_v3": "2",
+  "opening": " and resubmit. You have to sol"
+ },
+ {
+  "problem_index": 364,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2561,
+  "extracted_v3": "(1, -16, -4, 43)",
+  "opening": "!\n\nOkay, let's try to solve th"
+ },
+ {
+  "problem_index": 365,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5863,
+  "extracted_v3": "8",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 366,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1645,
+  "extracted_v3": "4",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 367,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1419,
+  "extracted_v3": "1",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 368,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1218,
+  "extracted_v3": "31",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 369,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 7906,
+  "extracted_v3": "189",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 370,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1384,
+  "extracted_v3": "-41",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 371,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7179,
+  "extracted_v3": "17",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 372,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8809,
+  "extracted_v3": "90",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 373,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 9191,
+  "extracted_v3": "1+2i",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 374,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 540,
+  "extracted_v3": "4",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 375,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1980,
+  "extracted_v3": "25",
+  "opening": " and resubmit.\n\nOkay, let's ta"
+ },
+ {
+  "problem_index": 376,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2294,
+  "extracted_v3": "(8, -2)",
+  "opening": " and resubmit. You can make ch"
+ },
+ {
+  "problem_index": 377,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6506,
+  "extracted_v3": "6",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 378,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1937,
+  "extracted_v3": "3",
+  "opening": "!\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 379,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2821,
+  "extracted_v3": "12^{\\text{th}}",
+  "opening": " as $Answer$!\n\nOkay, let's see"
+ },
+ {
+  "problem_index": 380,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3791,
+  "extracted_v3": "(0, 9) \\cup (9, 36)",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 381,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11240,
+  "extracted_v3": "\\dfrac{1}{2}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 382,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4235,
+  "extracted_v3": "\\dfrac{20000}{\\pi}",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 383,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1344,
+  "extracted_v3": "[-2, 7]",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 384,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 459,
+  "extracted_v3": "15x - 80",
+  "opening": "!\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 385,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 1417,
+  "extracted_v3": "23",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 386,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1483,
+  "extracted_v3": "11",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 387,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 959,
+  "extracted_v3": "18",
+  "opening": " as $Answer$.\n\nOkay, let's see"
+ },
+ {
+  "problem_index": 388,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1617,
+  "extracted_v3": "\\dfrac{11}{2}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 389,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2525,
+  "extracted_v3": "\\dfrac{\\sqrt{21}}{5}",
+  "opening": "!\n\nOkay, so I have this geomet"
+ },
+ {
+  "problem_index": 390,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1745,
+  "extracted_v3": "12",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 391,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5449,
+  "extracted_v3": "0",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 392,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 14618,
+  "extracted_v3": "8",
+  "opening": " line.\n\nOkay, so, I have this "
+ },
+ {
+  "problem_index": 393,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1473,
+  "extracted_v3": "\\dfrac{3}{4}",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 394,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4727,
+  "extracted_v3": "-\\dfrac{3}{8}",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 395,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 717,
+  "extracted_v3": "4",
+  "opening": "!\n\nOkay, let me try to figure "
+ },
+ {
+  "problem_index": 396,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7460,
+  "extracted_v3": "2",
+  "opening": "!\n\nOkay, let's try to solve th"
+ },
+ {
+  "problem_index": 397,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 874,
+  "extracted_v3": "23",
+  "opening": " line as $Answer_1$.\n\nOkay, le"
+ },
+ {
+  "problem_index": 398,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2367,
+  "extracted_v3": "Navin",
+  "opening": " \n\nOkay, let's see. So the pro"
+ },
+ {
+  "problem_index": 399,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1900,
+  "extracted_v3": "326.5",
+  "opening": " line by line, obviously witho"
+ },
+ {
+  "problem_index": 400,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 15928,
+  "extracted_v3": "7",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 401,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7921,
+  "extracted_v3": "\\dfrac{13}{4}",
+  "opening": " and resubmit.\n\nAlright, so I "
+ },
+ {
+  "problem_index": 402,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2272,
+  "extracted_v3": "1 - 12i",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 403,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4515,
+  "extracted_v3": "3",
+  "opening": "!\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 404,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 491,
+  "extracted_v3": "3",
+  "opening": " and resubmit.\n\nOkay, so Rosly"
+ },
+ {
+  "problem_index": 405,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1362,
+  "extracted_v3": "60",
+  "opening": "!\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 406,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 943,
+  "extracted_v3": "0",
+  "opening": " line. Copy formatting, dun sk"
+ },
+ {
+  "problem_index": 407,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1553,
+  "extracted_v3": "9",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 408,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8014,
+  "extracted_v3": "\\left( \\dfrac{1}{5}, -\\dfrac{18}{5} \\right)",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 409,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2408,
+  "extracted_v3": "2\\sqrt{5}",
+  "opening": " and rescale the image if nece"
+ },
+ {
+  "problem_index": 410,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1036,
+  "extracted_v3": "6",
+  "opening": " line! Copy the geometrical pi"
+ },
+ {
+  "problem_index": 411,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4604,
+  "extracted_v3": "60",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 412,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": null,
+  "opening": " line, not indent. Want an exa"
+ },
+ {
+  "problem_index": 413,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 972,
+  "extracted_v3": "5r^5",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 414,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1356,
+  "extracted_v3": "10",
+  "opening": "!\n\nOkay, let's try to solve th"
+ },
+ {
+  "problem_index": 415,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1921,
+  "extracted_v3": "9",
+  "opening": " and resubmit. You must solve "
+ },
+ {
+  "problem_index": 416,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 10376,
+  "extracted_v3": "\\dfrac{1}{8}",
+  "opening": " line, not otherwise. Copying "
+ },
+ {
+  "problem_index": 417,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2660,
+  "extracted_v3": "-2",
+  "opening": "!\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 418,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2024,
+  "extracted_v3": "2\\sqrt{5}",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 419,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4071,
+  "extracted_v3": "[-7, 16, 5]",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 420,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2594,
+  "extracted_v3": "\\begin{pmatrix} \\dfrac{16}{49} \\\\ \\dfrac{48}{49} \\\\ \\dfrac{24}{49} \\end{pmatrix}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 421,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 5103,
+  "extracted_v3": "25",
+  "opening": " line. Copy the format without"
+ },
+ {
+  "problem_index": 422,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": "\\{2, -2, 0\\}",
+  "opening": "!\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 423,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4586,
+  "extracted_v3": "1440",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 424,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1426,
+  "extracted_v3": "600",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 425,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 14516,
+  "extracted_v3": "3R^2",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 426,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1419,
+  "extracted_v3": "6\\sqrt{2}",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 427,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1045,
+  "extracted_v3": "29",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 428,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1634,
+  "extracted_v3": "64",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 429,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2517,
+  "extracted_v3": "50",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 430,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 510,
+  "extracted_v3": "4.5",
+  "opening": " line.\n\nOkay, so I need to fig"
+ },
+ {
+  "problem_index": 431,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3257,
+  "extracted_v3": "\\left[ \\dfrac{\\pi^2}{8}, \\dfrac{5\\pi^2}{4} \\right]",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 432,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6672,
+  "extracted_v3": "331",
+  "opening": "!\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 433,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1774,
+  "extracted_v3": "0.35625",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 434,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1725,
+  "extracted_v3": "32",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 435,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1344,
+  "extracted_v3": "(-\\infty, 2) \\cup (3, \\infty)",
+  "opening": "!\n\nOkay, let me try to figure "
+ },
+ {
+  "problem_index": 436,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1795,
+  "extracted_v3": "4",
+  "opening": " line. Copying somebody else's"
+ },
+ {
+  "problem_index": 437,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2379,
+  "extracted_v3": "3",
+  "opening": " line, like:\nAnswer: 44\n\nOkay,"
+ },
+ {
+  "problem_index": 438,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2960,
+  "extracted_v3": "4",
+  "opening": " line.\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 439,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3649,
+  "extracted_v3": "x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 440,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2048,
+  "extracted_v3": "14",
+  "opening": " line.\n\nOkay, so I need to sim"
+ },
+ {
+  "problem_index": 441,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 702,
+  "extracted_v3": "550",
+  "opening": "!\n\nOkay, let's see here. Karla"
+ },
+ {
+  "problem_index": 442,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1211,
+  "extracted_v3": "256",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 443,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 686,
+  "extracted_v3": "45",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 444,
+  "score_v3": 0,
+  "cap_hit": true,
+  "n_generated": 16384,
+  "extracted_v3": "\" delimiter above and replace it with your answer.",
+  "opening": " tag. Copy the part which come"
+ },
+ {
+  "problem_index": 445,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 13798,
+  "extracted_v3": "9",
+  "opening": " line. Copy the expression you"
+ },
+ {
+  "problem_index": 446,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1900,
+  "extracted_v3": "8",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 447,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1341,
+  "extracted_v3": "9",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 448,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4838,
+  "extracted_v3": "44",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 449,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 971,
+  "extracted_v3": "47",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 450,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3743,
+  "extracted_v3": "64",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 451,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1818,
+  "extracted_v3": "\\dfrac{639}{40}",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 452,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2285,
+  "extracted_v3": "143",
+  "opening": "!\n\nOkay, so I have this proble"
+ },
+ {
+  "problem_index": 453,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 8105,
+  "extracted_v3": "10",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 454,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5395,
+  "extracted_v3": "y = 2x + 3",
+  "opening": "  and resubmit.\n\nOkay, so I ne"
+ },
+ {
+  "problem_index": 455,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 628,
+  "extracted_v3": "6",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 456,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1941,
+  "extracted_v3": "-2, 1",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 457,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 554,
+  "extracted_v3": "0",
+  "opening": " and resubmit.\n\nOkay, so the p"
+ },
+ {
+  "problem_index": 458,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 3286,
+  "extracted_v3": "43",
+  "opening": "!\n\nOkay, let's try to figure t"
+ },
+ {
+  "problem_index": 459,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3272,
+  "extracted_v3": "18.90",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 460,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 11210,
+  "extracted_v3": "75",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 461,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1713,
+  "extracted_v3": "12",
+  "opening": "!\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 462,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7828,
+  "extracted_v3": "59",
+  "opening": " and resubmit.\n\nAlright, let's"
+ },
+ {
+  "problem_index": 463,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 923,
+  "extracted_v3": "2",
+  "opening": " tag.\n\nOkay, so I need to figu"
+ },
+ {
+  "problem_index": 464,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1971,
+  "extracted_v3": "9",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ },
+ {
+  "problem_index": 465,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1818,
+  "extracted_v3": "121",
+  "opening": "!\n\nOkay, so I need to figure o"
+ },
+ {
+  "problem_index": 466,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 10463,
+  "extracted_v3": "8\\pi",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 467,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4067,
+  "extracted_v3": "15",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 468,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2010,
+  "extracted_v3": "8",
+  "opening": " line.\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 469,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3767,
+  "extracted_v3": "25",
+  "opening": " line. Copying someone else's "
+ },
+ {
+  "problem_index": 470,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5136,
+  "extracted_v3": "27648",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 471,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 739,
+  "extracted_v3": "84",
+  "opening": "!\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 472,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2960,
+  "extracted_v3": "137\\frac{1}{2}",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 473,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 12002,
+  "extracted_v3": "3",
+  "opening": "!\n\nOkay, let's see. I need to "
+ },
+ {
+  "problem_index": 474,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1802,
+  "extracted_v3": "3",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 475,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 12586,
+  "extracted_v3": "29",
+  "opening": " tag.\n\nOkay, let me try to wor"
+ },
+ {
+  "problem_index": 476,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1325,
+  "extracted_v3": "200",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 477,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5102,
+  "extracted_v3": "2",
+  "opening": "! On the next line, put a semi"
+ },
+ {
+  "problem_index": 478,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 12308,
+  "extracted_v3": "0",
+  "opening": "!\n\nOkay, let's tackle this pro"
+ },
+ {
+  "problem_index": 479,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 10115,
+  "extracted_v3": "3.24",
+  "opening": " line! Winners of the Olympiad"
+ },
+ {
+  "problem_index": 480,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3046,
+  "extracted_v3": "1",
+  "opening": " and respace the line above th"
+ },
+ {
+  "problem_index": 481,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 13304,
+  "extracted_v3": null,
+  "opening": "!\n\nOkay, let me try to figure "
+ },
+ {
+  "problem_index": 482,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2250,
+  "extracted_v3": "202",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 483,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 2536,
+  "extracted_v3": "\\dfrac{8}{15}",
+  "opening": " and resubmit. Each new line s"
+ },
+ {
+  "problem_index": 484,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3732,
+  "extracted_v3": "10",
+  "opening": ".\n\nOkay, so I need to solve th"
+ },
+ {
+  "problem_index": 485,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 7191,
+  "extracted_v3": "13",
+  "opening": "!\n\nOkay, let's see. The proble"
+ },
+ {
+  "problem_index": 486,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 10542,
+  "extracted_v3": "216",
+  "opening": " line separator and resubmit.\n"
+ },
+ {
+  "problem_index": 487,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 1744,
+  "extracted_v3": "2",
+  "opening": " line.\n\nOkay, so I need to fin"
+ },
+ {
+  "problem_index": 488,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 589,
+  "extracted_v3": "36",
+  "opening": " and resubmit. You must solve "
+ },
+ {
+  "problem_index": 489,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 4712,
+  "extracted_v3": "15",
+  "opening": " and resubmit.\n\nOkay, so I hav"
+ },
+ {
+  "problem_index": 490,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 10409,
+  "extracted_v3": "14",
+  "opening": " header.\n\nOkay, let's try to t"
+ },
+ {
+  "problem_index": 491,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6706,
+  "extracted_v3": "64",
+  "opening": " line.\n\nOkay, let's see. So To"
+ },
+ {
+  "problem_index": 492,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 763,
+  "extracted_v3": "y = -2x",
+  "opening": " and resubmit. You should resu"
+ },
+ {
+  "problem_index": 493,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 6780,
+  "extracted_v3": "20",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 494,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 8276,
+  "extracted_v3": "\\dfrac{1}{2}",
+  "opening": " and resubmit.\n\nOkay, let's se"
+ },
+ {
+  "problem_index": 495,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 2646,
+  "extracted_v3": "(2, 102)",
+  "opening": " and resubmit.\n\nOkay, so I nee"
+ },
+ {
+  "problem_index": 496,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3376,
+  "extracted_v3": "\\dfrac{5}{13}",
+  "opening": " as $Answer$, and resubmit.\n\nO"
+ },
+ {
+  "problem_index": 497,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 12077,
+  "extracted_v3": "\\dfrac{7}{2}",
+  "opening": "!\n\nOkay, so I need to find the"
+ },
+ {
+  "problem_index": 498,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 3883,
+  "extracted_v3": "-1",
+  "opening": " tag. Copying someone else's a"
+ },
+ {
+  "problem_index": 499,
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 5740,
+  "extracted_v3": "106^\\circ",
+  "opening": " and resubmit.\n\nOkay, let me t"
+ }
+]

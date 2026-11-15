@@ -1,0 +1,64 @@
+{
+ "name": "r7-m11",
+ "statement": "When the cued Olmo-3 base answers a MATH-500 problem wrongly, the wrong value is set mostly by the shared prompt-plus-opening context (the same misreading or slip is the likely continuation in every sample under that context), so wrong answers of samples drawn under one opening agree with each other more often than with wrong answers drawn under a different opening, and these agreeing wrong groups are what keep the 4-sample vote below its independent-slip prediction.",
+ "scope": "Covers the untrained base allenai/Olmo-3-1025-7B with the opening cue on MATH-500, T 1.0 / top-p 1.0, cap 16,384, grader v3, finished answers with a non-empty extracted answer (cap hits and empty answers carry no wrong value and are outside the mechanism). Sampling changes that keep the prompt and opening (min-p, top-p) are predicted to leave the wrong values unchanged; changing the opening (plain prompt, a different prefilled opening) is predicted to change them. Not covered: hard328 (no claim made), the RL model's own vote shortfall (result-e41d94 reports one, which this mechanism would only explain if RL's plain prompt acts as its fixed opening, untested), loops and cap hits at T 0.6, and the 0-of-4 excess, which is difficulty heterogeneity and not wrong-value agreement.",
+ "parent": "r4-m07",
+ "imports": [
+  {"source": "2203.11171",
+   "finding": "Majority vote over sampled chains beats a single chain, and probability weighting adds nothing because sampled chains get nearly equal normalised probabilities.",
+   "how": "The vote's gain assumes wrong chains scatter over many values; the mechanism says that, under one fixed opening, wrong chains of the base concentrate on the same value, which caps the vote and is undone by mixing openings."}
+ ],
+ "explains": [
+  {"item": "result-e41d94", "quote": "the vote 10 and 9 problems below the independent-slip prediction", "how": "Agreeing wrong groups under the shared cue outvote or tie a right minority more often than independent slips would, so the vote falls short of the independent prediction."},
+  {"item": "result-cbe0bc", "quote": "14 of 21 oracle problems remain, 6 need more than a tie-break", "how": "Problems where a wrong group strictly outnumbers a right sample can only arise when two or more wrong samples give the same value, which the mechanism says the shared context produces."},
+  {"item": "knowledge-90431f", "quote": "35 of 131 RL wrong answers equal a base wrong answer", "how": "A different policy and prompt context produces different wrong values, as the mechanism predicts for any change of context, so cross-model overlap is low even though within-context overlap is high."},
+  {"item": "result-faf15a", "quote": "the base's wrong step is not an unlikely sample", "how": "If the located wrong step is a high-probability continuation of the context, repeated samples under the same context are likely to take it again and reach the same wrong value."},
+  {"item": "result-afc423", "quote": "base slip 35% [24, 48], wrong plan 28%, misread 23%", "how": "Misreadings and context-favoured wrong plans are deterministic given the context, so a large share of base wrong samples is of the kind that repeats across samples of one opening."},
+  {"item": "result-5d032f", "quote": "pass@4 (oracle): base 467, RL 482", "how": "The 21 problems between the base's pass@4 and its vote of 446 are the problems where agreeing or tied wrong groups beat the right sample."}
+ ],
+ "conflicts": [
+  {"item": "result-e41d94", "quote": "8 (base) and 12 (RL) more 0-of-4 problems than binomial", "how": "An excess of 0-of-4 problems alone lowers the vote by about as many problems as the shortfall, so difficulty heterogeneity can account for most of the shortfall without any agreement among wrong values."},
+  {"item": "result-cbe0bc", "quote": "In the 36 ties: 12 right vs 5 lowest-sample", "how": "Many vote failures are ties, and singleton ties mean the wrong values did not coincide, which works against agreement as the main cause."}
+ ],
+ "rival": "Difficulty heterogeneity with problem-driven wrong answers: the vote shortfall comes from the excess 0-of-4 problems and from ties among scattered wrong values, and whatever agreement exists is fixed by the problem (a standard misconception any base context hits), not by the opening. The rival predicts that a cued wrong answer agrees with a plain-prompt wrong answer to the same problem as often as with another cued wrong answer (A - B near 0). The mechanism predicts a clearly positive A - B, and no drop when only the sampling rule changes under the same cue.",
+ "predictions": [
+  {"experiment": "Mechanism test: within-cue wrong-answer agreement minus cue-vs-plain wrong-answer agreement on MATH-500 at T 1.0, A - B. The problem-driven-attractor rival predicts about 0.00 (a problem's common wrong value is hit by any base context); this mechanism predicts clearly positive.",
+   "recipe": "Files: studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (CUE) and s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t3-01/t3/T3.jsonl (T3, plain base, T 1.0; fetch with the aws command in inventory.md). CUE: keep rows with attempt == 0; for each (problem_index, sample) keep the first row in file order. A CUE row is a wrong answer iff cap_hit is not true, finish_reason != 'length', score_v3 == 0, and extracted_v3 is a non-empty string after strip(). T3: keep the first row per problem_index in file order; run grader v3 (studies/rlneurons/grader/rln4_grader_v3.py, the procedure that fills score_v3 and extracted_v3) on its text and gold to get its v3 score and v3 extracted answer. A T3 row is a wrong answer iff cap_hit is not true, finish_reason != 'length', v3 score == 0 and the v3 extracted answer is non-empty after strip(). Agreement of two answers = rln4_lib.agree(a, b) from studies/rlneurons/lib/rln4_lib.py (true = agree). A = (number of unordered pairs of CUE wrong answers of the same problem_index that agree) / (number of such pairs), pooled over problems. B = (number of (CUE wrong answer, T3 wrong answer) pairs with the same problem_index that agree) / (number of such pairs), pooled over problems. Statistic = A - B. Problems with fewer than two CUE wrong answers contribute no A pairs; problems without a T3 wrong answer contribute no B pairs. If either denominator is 0 the statistic is undefined and counts as refuted.",
+   "unit": "difference of agreement fractions",
+   "value": 0.1, "low": 0.02, "high": 0.22,
+   "refuted_by": "measured A - B below 0.03, or undefined",
+   "gpu_minutes": 0},
+  {"experiment": "Case where the effect should not appear: changing only the sampling rule under the same cue (T 1.0 / min-p 0.1) should keep the wrong values. Cross-file agreement C between day1_3 cued wrong answers and min-p cued wrong answers, minus within-file agreement A. A sampling-driven account (wrong values are per-draw accidents that any change of the sampler reshuffles) predicts C well below A.",
+   "recipe": "Files: studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (CUE) and iterate-runs:frustea-1114-180849-456c/answers.jsonl (MINP, base, cue, T 1.0 / min-p 0.1; local copy runs/theory-rows/frustea-1114-180849-456c/answers.jsonl per inventory.md). CUE rows, CUE wrong answers, agreement (rln4_lib.agree from studies/rlneurons/lib/rln4_lib.py) and A exactly as in the first prediction (attempt == 0, first row per (problem_index, sample); wrong answer = cap_hit not true, finish_reason != 'length', score_v3 == 0, non-empty stripped extracted_v3; A = agreeing unordered same-problem pairs / all such pairs, pooled). MINP: keep rows with attempt == 0 or no attempt field, then the first row per problem_index in file order; a MINP row is a wrong answer under the same rule using its stored score_v3 and extracted_v3. C = (number of (CUE wrong answer, MINP wrong answer) pairs with the same problem_index that agree) / (number of such pairs), pooled. Statistic = C - A. If either denominator is 0 the statistic is undefined and counts as refuted.",
+   "unit": "difference of agreement fractions",
+   "value": 0.0, "low": -0.08, "high": 0.08,
+   "refuted_by": "measured C - A below -0.08, or undefined",
+   "gpu_minutes": 0},
+  {"experiment": "Cause of the vote shortfall: among MATH-500 problems where the cued base has at least one right sample of 4 but the plurality vote is wrong, the share where the winning answer group has two or more members (agreeing wrong values), against singleton ties.",
+   "recipe": "File: studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. Keep rows with attempt == 0 and, for each (problem_index, sample) with sample in {0,1,2,3}, the first row in file order; keep problems that have all 4 samples. A sample is answer-bearing iff cap_hit is not true, finish_reason != 'length' and extracted_v3 is non-empty after strip(). A sample is right iff it is answer-bearing and score_v3 == 1. Grouping: process answer-bearing samples in increasing sample index; each joins the first existing group whose first member agrees with it under rln4_lib.agree (studies/rlneurons/lib/rln4_lib.py), else starts a new group. Winner = the group with the most members; ties go to the group whose first member has the lowest sample index. The vote is right iff the winner's first member has score_v3 == 1; with no answer-bearing sample the vote is wrong. F = problems with at least one right sample whose vote is wrong. Statistic = (problems in F whose winning group has 2 or more members) / |F|. If F is empty the statistic is undefined and counts as refuted.",
+   "unit": "fraction of vote-failure problems",
+   "value": 0.45, "low": 0.28, "high": 0.65,
+   "refuted_by": "measured below 0.28, or undefined",
+   "gpu_minutes": 0},
+  {"experiment": "GPU: a different opening changes the wrong values. On every MATH-500 problem with at least 2 cued wrong answers (attempt 0 of day1_3 math500_base_cue-01, wrong answer as in offline prediction 1), generate 4 samples of the base allenai/Olmo-3-1025-7B with the usual prompt and 3-token cue followed by the prefilled text ' Let me first restate what the problem is asking.' (T 1.0, top-p 1.0, cap 16,384, seeds 7,000,000 + 10*problem_index + s, grader v3). D = (agreement rate of pairs (new wrong answer, cued wrong answer) of the same problem, rln4_lib.agree, wrong answer rule as in offline prediction 1) / (A computed on the same problems from cued pairs only). This mechanism predicts D well under 1; the problem-driven-attractor rival predicts about 1.",
+   "unit": "ratio of agreement rates",
+   "value": 0.55, "low": 0.3, "high": 0.85,
+   "refuted_by": "D at or above 0.90",
+   "gpu_minutes": 30}
+ ],
+ "intervention": {
+  "change": "Sequential vote with a decorrelating last draw: take the stored cued samples 0, 1, 2 (attempt 0); if all three are answer-bearing and agree pairwise under rln4_lib.agree, answer with that value; otherwise draw one more sample with a different opening (the usual prompt and 3-token cue followed by the prefilled text ' Let me first restate what the problem is asking.') instead of a fourth cued sample, and take the plurality over the 4.",
+  "model": "allenai/Olmo-3-1025-7B",
+  "cell": {"set": "MATH-500",
+           "prompt": "usual rlneurons prompt with the 3-token opening cue prefilled (data/rln4/frozen4.json); the new draw adds ' Let me first restate what the problem is asking.' after the cue",
+           "sampling": "T 1.0 / top-p 1.0",
+           "cap": 16384, "grader": "v3", "samples": 4,
+           "seeds": "stored samples 0-2 of job abaybektursun-1114-153825-208b (day1_3 math500_base_cue-01, attempt 0); new draw seed 7,000,000 + problem_index; no restarts"},
+  "count": "Right of all 500 MATH-500 problems by grader v3: answer-bearing = cap_hit not true, finish_reason != 'length', non-empty extracted answer; cap hits and empty answers abstain; groups by rln4_lib.agree; plurality, ties to the shortest finished sample (n_new); the problem is right iff the shortest member of the winning group has v3 score 1; no answer-bearing sample counts wrong.",
+  "unit": "right of 500",
+  "value": 454, "low": 446, "high": 461,
+  "best_known": {"value": 454, "item": "result-40ed3b", "setting": "cue, T 1.0, vote over 4 after restart, ties to the shortest finished sample (19,697 tokens per problem)"},
+  "gpu_minutes": 20,
+  "why": "If the wrong values are tied to the opening, a fourth draw under a different opening cannot join the cued samples' shared wrong group, so it breaks wrong ties and wrong pluralities on the non-unanimous problems at about one sample's cost there, worth a few problems over the same-opening vote."
+ }
+}

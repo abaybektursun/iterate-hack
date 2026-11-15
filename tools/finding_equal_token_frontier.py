@@ -142,7 +142,7 @@ DATA = {
 # A short plain name for each rule, for the picture; the full description is the rule's config.
 NAMES = {
     "single": "One sample",
-    "restart": "One sample, redrawn if it hits the length limit",
+    "restart": "One sample, redrawn if cut off at 16,384 tokens",
     "R8000": "One sample, redrawn if longer than 8,000 tokens",
     "R12000": "One sample, redrawn if longer than 12,000 tokens",
     "vote2": "Vote over 2", "vote3": "Vote over 3", "vote4": "Vote over 4",
@@ -174,13 +174,13 @@ _rl1 = DATA["rl_single"]
 _rlmax = max((r for r in DATA["rules"] if r["model"] == "rl"), key=lambda r: r["right"])
 _k = lambda v: f"{round(v):,}"
 _p = lambda v: f"{v:+.1f}".replace("-", "\u2212")
-_ci = lambda c: f"[{_p(c[1])}, {_p(c[2])}]"
+_ci = lambda c: f"(95 % interval {_p(c[1])} to {_p(c[2])})"
 _seq = _R[("base", "seq4")], _R[("base", "vote4")], _R[("rl", "seq4")], _R[("rl", "vote4")]
 _save = lambda a, b: round(100 * (1 - a["tokens"] / b["tokens"]))  # per cent of the tokens the sequential vote saves
 
 TITLE = "More samples against RL"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "Can more samples make a base model match its RL-trained version?"
-LINE = f"With {_best['multiple']:.1f} times the tokens, the best base rule stays {abs(_best['gap'][0]):.1f} points below one RL sample."
+PROBLEM = "Can drawing more samples from the base model match one sample of RL?"
+LINE = f"On MATH-500, with {_best['multiple']:.1f} times the tokens, the best base rule stays {abs(_best['gap'][0]):.1f} points below one RL sample."
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 # Not from our runs: Aggarwal et al., Adaptive-Consistency (arXiv 2305.11860), abstract: up to 7.9 times fewer samples at
@@ -189,26 +189,26 @@ LINE = f"With {_best['multiple']:.1f} times the tokens, the best base rule stays
 PANELS = [
     ["new", "What is new",
      "Stopping a vote once samples agree is published: Adaptive-Consistency (arXiv 2305.11860) reports up to 7.9 times "
-     "fewer samples at under 0.1 % accuracy drop. New here is the base model against its own RL-trained version at equal tokens.",
+     "fewer samples at under 0.1 % accuracy drop. New here is the base model against RL, the same model after reward training, at equal tokens.",
      [f"On these rows the stopping vote keeps the fixed vote's score at {_save(_seq[0], _seq[1])} % fewer tokens for the base "
       f"and {_save(_seq[2], _seq[3])} % fewer for RL.",
       "Yue et al. (arXiv 2504.13837, Figure 1) report that RL training lowers pass@256, the share of problems solved by at least "
       "one of 256 samples checked against the answer key. Every rule here picks its answer without the key.",
-      f"Given the same rule, the RL model stays ahead under all 24 rules; the smallest lead is {_lead['rl_lead'][0]:.1f} points "
+      f"Given the same rule, RL stays ahead under all 24 rules; the smallest lead is {_lead['rl_lead'][0]:.1f} points "
       f"{_ci(_lead['rl_lead'])}."]],
     ["why", "Why it matters",
-     "The research direction asks for the cheapest route with no reward to the RL model's score at equal tokens. On MATH-500, "
+     "The research direction asks for the cheapest route with no reward to RL's score at equal tokens. On MATH-500, "
      "spending more samples is not that route.",
      [f"One RL sample costs {_k(_rl1['tokens'])} tokens per problem. The best base rule spends {_k(_best['tokens'])} and is "
       f"still {abs(_best['gap'][0]):.1f} points below.",
       f"Above 12,500 tokens the base gains nothing: rules chosen on four fifths of the problems and scored on the rest stay "
       f"at {min(DATA['held_out']['base']):.1f} to {max(DATA['held_out']['base']):.1f} of 500.",
-      f"The same rules lift the RL model too, from {_rl1['right']:.1f} to {_rlmax['right']:.1f} of 500, so extra samples do not "
+      f"The same rules lift RL too, from {_rl1['right']:.1f} to {_rlmax['right']:.1f} of 500, so extra samples do not "
       "close the gap."]],
     ["how", "How we know",
      "We wrote 24 rules into a plan before scoring any, then replayed them on four stored samples per problem from each "
-     "model: MATH-500, 500 problems, temperature 1.0, top-p 1.0, grader v3.",
-     ["A rule sees only each sample's length, whether it hit the 16,384-token limit, and its extracted answer. Code that "
+     "model: MATH-500, 500 problems, T 1.0, grader v3.",
+     ["A rule sees only each sample's length, whether it was cut off at 16,384 tokens, and its extracted answer. Code that "
       "reads the score or the answer key raises an error.",
       "Tokens count every token of every sample a rule draws. Scores and tokens are means over the 24 orders in which the "
       "four samples can be drawn.",
@@ -225,7 +225,7 @@ PANELS = [
     ["run", "How to reproduce it",
      "studies/rlneurons/analysis/frontier.py replays the rules on the stored rows; the command is in studies/rlneurons/README.md, "
      "section Token frontier.",
-     [f"The samples come from jobs {DATA['jobs']['base']} (base with the cue) and {DATA['jobs']['rl']} (RL) at commit "
+     [f"The samples come from jobs {DATA['jobs']['base']} (Base + cue) and {DATA['jobs']['rl']} (RL) at commit "
       f"{DATA['source_commit']}; the frontier ran at commit {DATA['commit']}.",
       "The picture's numbers are in " + RUN + " (frontier.json, readout.json, per_problem.json, examples.json)."]],
 ]
@@ -377,6 +377,8 @@ svg .grab { pointer-events: all; fill: transparent; cursor: ew-resize; }
 .ex { margin: 26px 0 0; font-size: 14px; font-weight: 660; font-stretch: 114%; color: var(--ink); padding-bottom: 8px; border-bottom: 1px solid var(--ink); }
 .q { margin: 12px 0 0; font-size: 16px; line-height: 1.4; max-width: 36ch; }
 .q span { color: var(--mute); }
+.q .qt { color: var(--ink); }
+.q b { color: var(--ink); font-weight: 600; }
 .samples { list-style: none; margin: 12px 0 0; padding: 0; font-size: 14px; max-width: 40ch; }
 .samples li { display: grid; grid-template-columns: 1fr auto 4.2em; gap: 12px; padding: 5px 0; border-top: 1px solid var(--rule); color: var(--mute); }
 .samples li b { color: var(--ink); font-weight: 600; }
@@ -384,6 +386,7 @@ svg .grab { pointer-events: all; fill: transparent; cursor: ew-resize; }
 .verdict { margin: 12px 0 0; font-size: 14.5px; max-width: 40ch; }
 .tail { margin: 12px 0 0; padding: 0 0 0 12px; border-left: 2px solid var(--rule); font-size: 13px; line-height: 1.45; color: var(--mute); white-space: pre-wrap; overflow-wrap: anywhere; max-width: 44ch; }
 .tail span { display: block; color: var(--ink); font-weight: 600; margin-bottom: 2px; white-space: normal; }
+.tail .tt { display: inline; color: var(--mute); font-weight: 400; white-space: pre-wrap; }
 @media (max-width: 900px) {
   /* On a phone the order is: the problem, the finding, the picture, the depth. */
   .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 16px 16px 40px; }
@@ -412,8 +415,8 @@ svg .grab { pointer-events: all; fill: transparent; cursor: ew-resize; }
     <a href="/findings" aria-current="page">Findings</a>
   </header>
   <div class="stage" id="stage">
-    <svg id="svg" role="img"></svg>
     <input class="sr" id="budget" type="range" step="100" aria-label="Token budget per problem">
+    <svg id="svg" role="group"></svg>
   </div>
   <div class="side">
     <p class="problem" id="problem"></p>
@@ -440,10 +443,10 @@ const ONE = RLS.find(r => r.rule === "single");
 const EASY = Array.from({ length: N }, (_, i) => i).map(i => [i, R.reduce((a, r) => a + r.g[i], 0)]).sort((a, b) => b[1] - a[1] || a[0] - b[0]);
 const PLACE = new Array(N); EASY.forEach(([i], p) => { PLACE[i] = p; });
 const same = r => R.find(o => o.rule === r.rule && o.model !== r.model);
-const B0 = 4700, BMIN = 4100, BMAX = 20000, XD = [3000, 20500], YD = [400, 480];
+const B0 = 20000, SWEEP0 = 4700, BMIN = 4100, BMAX = 20000, XD = [3000, 20500], YD = [400, 480];
 const best = (list, b) => list.reduce((o, r) => r.tokens <= b && (!o || r.right > o.right || (r.right === o.right && r.tokens < o.tokens)) ? r : o, null);
 const S = { budget: B0, shown: B0, pick: null, open: null, focus: null, last: 0, t: 0, drag: false, g: null, el: {},
-  nums: null, ring: null, strip: null, cells: new Array(N).fill(0), seen: false };
+  nums: null, ring: null, strip: null, cells: new Array(N).fill(0), seen: false, sweep: null, rove: 0 };
 
 /* Geometry: the plate faces the viewer, in a small 3D space around its centre (x right, y down, z toward the viewer).
    X, Y: the chart's left/right and top/bottom; rx, ry: the readout's left edge and its line baselines; wrap: characters
@@ -453,10 +456,10 @@ function geo() {
     ? { w: 480, h: 1030, cx: 240, cy: 515, D: 2000, a: [6, 8, 474, 1022], r: 22, deep: 30, blur: 12,
         X: [82, 452], Y: [374, 660], fs: 17, fb: 84, rx: 34, ry: { big: 104, unit: 138, ci: 186, cap: 222, name: 246, lh: 23 }, wrap: 40,
         tick: 688, atitle: 714, ytitle: 348, sx: 36, sy: 786, sp: 8.3, rows: 10, slab: 762, cell: [2.2, 4.4], ky: [930, 962, 994], kx: [[36, 0], [36, 1], [36, 2]],
-        mark: 7.2, hit: 17, near: 100 }
+        mark: 7.2, hit: 17, near: 150 }
     : { w: 1000, h: 640, cx: 500, cy: 320, D: 2200, a: [20, 14, 980, 626], r: 30, deep: 40, blur: 16,
         X: [100, 672], Y: [74, 420], fs: 15, fb: 92, rx: 712, ry: { big: 186, unit: 218, ci: 264, cap: 306, name: 329, lh: 21 }, wrap: 27,
-        tick: 444, atitle: 466, ytitle: 50, sx: 62, sy: 514, sp: 8.85, rows: 5, slab: 494, cell: [1.9, 3.9], ky: [598], kx: [[62, 0], [402, 0], [652, 0]],
+        tick: 444, atitle: 466, ytitle: 50, sx: 62, sy: 514, sp: 8.85, rows: 5, slab: 494, cell: [1.9, 3.9], ky: [598], kx: [[62, 0], [392, 0], [656, 0]],
         mark: 6.4, hit: 15, near: 66 };
 }
 const V = { c1: 1, s1: 0, c2: 1, s2: 0, px: 0, py: 0, tx: 0, ty: 0 };
@@ -513,25 +516,25 @@ function build() {
     `<ellipse class="spec" cx="${f(ax0 + aw * .3)}" cy="${f(ay0 + ah * .26)}" rx="${f(aw * .28)}" ry="${f(ah * .2)}" transform="rotate(-16 ${f(ax0 + aw * .3)} ${f(ay0 + ah * .26)})" fill="url(#spec)"/>` +
     `<g class="chart"><path class="spent" id="spent"/><path class="grid" id="grid"/><path class="axis" id="axis"/>` +
     yt.map(v => T("yt" + v, "tick", g.fs, "end", v)).join("") + xt.map(v => T("xt" + v, "tick", g.fs, "middle", v.toLocaleString("en-US"))).join("") +
-    T("ytitle", "atitle", g.fs, "", "Right answers of " + N) + T("xtitle", "atitle", g.fs, "end", "Tokens per problem") +
+    T("ytitle", "atitle", g.fs, "", "MATH-500, T 1.0: right answers of " + N) + T("xtitle", "atitle", g.fs, "end", "Tokens per problem") +
     `<path class="stair b0" id="sb0"/><path class="stair r0" id="sr0"/><path class="stair r1" id="sr1"/><path class="stair b1" id="sb1"/>` +
-    `<path class="level" id="level"/>` + T("lvl", "lvl", g.fs, "end", `One RL sample: ${one(RL1.right)}`) + `</g>` +
+    `<path class="level" id="level"/>` + T("lvl", "lvl", g.fs, "", narrow.matches ? "One RL sample" : `One RL sample: ${one(RL1.right)} of ${N}`) + `</g>` +
     `<g class="marks"><line class="budget" id="budget-line"/><path class="bar" id="bar"/><circle class="halo" id="halo"/>` +
     R.map(r => `<circle class="mk ${r.model}${r.short ? " ring" : ""}" id="m${r.i}"/>`).join("") +
     `<circle class="focus" id="focus"/>` +
     `<circle class="knob-ring" id="knob-ring" r="${g.mark * 2.3}"/><circle class="knob" id="knob" r="${g.mark * 1.1}"/>` +
-    T("blab", "blab", g.fs, "middle") + T("bhint", "bhint", g.fs, "", "Drag to spend more tokens") + `</g>` +
-    `<g class="read">` + T("big", "big", g.fb) + T("unit", "unit", g.fs + 1, "", "percentage points") + T("unit2", "unit", g.fs + 1, "", "versus one RL sample") + T("ci", "ci", g.fs) +
+    T("blab", "blab", g.fs, "middle") + T("bhint", "bhint", g.fs) + `</g>` +
+    `<g class="read">` + T("big", "big", g.fb) + T("unit", "unit", g.fs + 1, "", "points versus one RL sample") + T("unit2", "ci", g.fs) + T("ci", "ci", g.fs) +
     T("cap", "cap", g.fs) + [0, 1, 2].map(k => T("nm" + k, "rname", g.fs + 1)).join("") + T("score", "score", g.fs) + `</g>` +
     `<g class="strip">` + T("slab", "slab-t", g.fs, "", narrow.matches ? "The 500 problems, easiest first" : "The 500 problems, easiest first, lit where the ringed rule is right") +
-    `<path class="level" id="stick"/>` + T("stlab", "lvl", g.fs, "end", `One RL sample: ${one(RL1.right)}`) +
+    `<path class="level" id="stick"/>` + T("stlab", "lvl", g.fs, "end", `One RL sample: ${one(RL1.right)} of ${N}`) +
     Array.from({ length: 13 }, (_, k) => `<path class="cell" id="c${k}" stroke-width="${k ? g.cell[1] : g.cell[0]}" opacity="${k ? (.3 + .55 * k / 12).toFixed(2) : .28}"/>`).join("") +
     `<circle class="exring" id="exring" r="${g.sp * .9}"/></g>` +
-    `<g class="key"><circle class="mk base" id="kd0" r="${g.mark * .8}"/>${T("kt0", "klab", g.fs, "", "Base model + cue, one dot per voting rule")}` +
-    `<circle class="mk rl" id="kd1" r="${g.mark * .8}"/>${T("kt1", "klab", g.fs, "", "RL-trained model, same rules")}` +
-    `<circle class="mk base ring" id="kd2" r="${g.mark * .72}"/>${T("kt2", "klab", g.fs, "", "Tie rule chosen after reading its misses")}</g>` +
-    `<rect class="grab" id="grab"/>` +
-    R.map(r => `<circle class="hit" id="h${r.i}" data-rule="${r.key}" tabindex="0" role="button" aria-label="${esc((r.model === "base" ? "Base + cue: " : "RL: ") + r.name)}" r="${g.hit}"/>`).join("");
+    `<g class="key"><circle class="mk base" id="kd0" r="${g.mark * .8}"/>${T("kt0", "klab", g.fs, "", "Base + cue, no training: one dot per rule")}` +
+    `<circle class="mk rl" id="kd1" r="${g.mark * .8}"/>${T("kt1", "klab", g.fs, "", "RL (reward training), same rules")}` +
+    `<circle class="mk base ring" id="kd2" r="${g.mark * .72}"/>${T("kt2", "klab", g.fs, "", "Tie rule chosen after its misses")}</g>` +
+    `<rect class="grab" id="grab"/><g class="rules" role="group" aria-label="The 48 rules. Arrow keys move between them, Enter opens one.">` +
+    R.map(r => `<circle class="hit" id="h${r.i}" data-rule="${r.key}" tabindex="${r.i === S.rove ? 0 : -1}" role="button" aria-label="${esc((r.model === "base" ? "Base + cue: " : "RL: ") + r.name)}" r="${g.hit}"/>`).join("") + "</g>";
   S.el = {};
   svg.querySelectorAll("[id]").forEach(e => { S.el[e.id] = e; });
   S.shownText = {};
@@ -584,7 +587,9 @@ function place(now) {
   E.sr0.setAttribute("d", line(g, stair(g, RLS, XD[1]), 2));
   E.sr1.setAttribute("d", line(g, stair(g, RLS, b), 3));
   E.level.setAttribute("d", line(g, [[X0, py(g, RL1.right)], [X1, py(g, RL1.right)]], 4));
-  at(E.lvl, P(X1, py(g, RL1.right) - 9, 4));
+  // Where no mark is: on a wide plate under the line left of the base marks near 450, on a phone above it at the right.
+  E.lvl.setAttribute("text-anchor", narrow.matches ? "end" : "start");
+  at(E.lvl, narrow.matches ? P(px(g, 19300), py(g, RL1.right) - 7, 4) : P(px(g, 6000), py(g, RL1.right) + g.fs + 3, 4));
 
   // The marks: a rule within the budget is lit; one that leaves or enters it changes over about half a second.
   const k = still.matches ? 1 : 1 - Math.exp(-(now - (S.lastPlace || now)) / 110);
@@ -599,18 +604,21 @@ function place(now) {
   });
   const q1 = P(px(g, ONE.tokens), py(g, ONE.right), 12);
   ctr(E.halo, q1);
-  E.halo.setAttribute("r", f(g.mark * 2.6 * (1 + .08 * Math.sin(S.t * .7))));
+  E.halo.setAttribute("r", f(g.mark * 2.6 * (still.matches ? 1 : 1 + .08 * Math.sin(S.t * .7))));
 
   // The budget: a line across the chart and a knob on the x axis.
   const bt = P(bx, Y0 - 6, 8), bb = P(bx, Y1, 8);
   E["budget-line"].setAttribute("x1", f(bt[0])); E["budget-line"].setAttribute("y1", f(bt[1]));
   E["budget-line"].setAttribute("x2", f(bb[0])); E["budget-line"].setAttribute("y2", f(bb[1]));
   ctr(E.knob, bb); ctr(E["knob-ring"], bb);
-  E["knob-ring"].setAttribute("r", f(g.mark * (2.3 + (S.seen ? 0 : .35 * Math.sin(S.t * 2.2)))));
+  E["knob-ring"].setAttribute("r", f(g.mark * (2.3 + (S.seen || still.matches ? 0 : .35 * Math.sin(S.t * 2.2)))));
   text("blab", `${num(b)} tokens`);
-  at(E.blab, P(clamp(bx, X0 + 20, X1 - 30), g.tick, 8));
-  at(E.bhint, P(bx + 18, Y1 - 12, 8));
-  E.bhint.setAttribute("opacity", S.seen ? 0 : .9);
+  at(E.blab, P(clamp(bx, X0 + 20, X1 - (narrow.matches ? 54 : 30)), g.tick, 8));
+  const right = bx > (X0 + X1) / 2;  // the hint sits on the side of the line that has room
+  text("bhint", right ? "Drag left to spend fewer tokens" : "Drag right to spend more tokens");
+  E.bhint.setAttribute("text-anchor", right ? "end" : "start");
+  at(E.bhint, P(bx + (right ? -18 : 18), Y1 - 12, 8));
+  E.bhint.setAttribute("opacity", S.seen || S.sweep ? 0 : .9);
 
   // The focus: a ring that travels to the rule, the interval of its distance to one RL sample, and the readout.
   const r = S.focus, tw = (o, d) => { if (!o) return; const p = ease(clamp((now - o.t0) / d, 0, 1)); o.now = o.from.map((v, i) => mix(v, o.to[i], p)); };
@@ -628,8 +636,9 @@ function place(now) {
       E.bar.style.display = "";
     } else E.bar.style.display = "none";
     text("big", sgn(d));
-    text("ci", r.model === "base" ? `95 % interval ${sgn(lo)} to ${sgn(hi)}` : "RL model, so no interval");
-    text("cap", S.pick ? (r.model === "base" ? "Selected base rule" : "Selected RL rule") : "Best base rule within budget");
+    text("unit2", r.model === "base" ? `95 % interval ${sgn(lo)} to ${sgn(hi)}` : "An RL rule: no interval computed");
+    text("ci", r.model === "base" && lo < 0 && hi > 0 ? "The interval includes 0." : "");
+    text("cap", S.pick ? (r.model === "base" ? "Selected Base + cue rule" : "Selected RL rule") : "Best Base + cue rule within budget");
     const nm = wrap(r.name, g.wrap);
     [0, 1, 2].forEach(k => text("nm" + k, nm[k] || ""));
     text("score", `${one(right)} of ${N} at ${num(tok)} tokens`);
@@ -684,8 +693,12 @@ function frame(now) {
     V.px += (V.tx - V.px) * .1;
     V.py += (V.ty - V.py) * .1;
     aim(3 * Math.sin(S.t * .13) + 3 * V.px, 1.4 * Math.sin(S.t * .09) - 1.5 * V.py);
-    const k = 1 - Math.exp(-30 / 120);
-    S.shown = Math.abs(S.budget - S.shown) < 5 ? S.budget : S.shown + (S.budget - S.shown) * k;
+    const k = 1 - Math.exp(-30 / 120), sw = S.sweep;
+    if (sw) {  // the entrance: the budget rises once from 4,700 tokens to the full budget
+      const p = clamp((now - sw.t0) / sw.d, 0, 1);
+      S.shown = mix(SWEEP0, S.budget, ease(p));
+      if (p >= 1) S.sweep = null;
+    } else S.shown = Math.abs(S.budget - S.shown) < 5 ? S.budget : S.shown + (S.budget - S.shown) * k;
   }
   light(now);
   refocus(now);
@@ -703,7 +716,7 @@ function light(now) {
 
 function setBudget(b, push) {
   S.budget = clamp(Math.round(b / 100) * 100, BMIN, BMAX);
-  S.pick = null;
+  S.pick = null; S.sweep = null;
   if (S.open === "rule") S.open = null;
   const inp = $("budget");
   inp.value = S.budget;
@@ -724,18 +737,18 @@ function rulePane(r) {
   const facts = [`${one(r.right)} of ${N} right, the mean over the 24 orders of drawing the four samples, at ${num(r.tokens)} tokens per problem, ` +
     `${mult.toFixed(2)} times one RL sample.`];
   if (r.model === "base") facts.push(`${sgn(r.gap[0])} points versus one RL sample, 95 % interval ${sgn(r.gap[1])} to ${sgn(r.gap[2])}. ` +
-    `The RL model with the same rule has ${one(o.right)}, ${sgn(r.rl_lead[0])} points [${sgn(r.rl_lead[1])}, ${sgn(r.rl_lead[2])}] ahead.`);
+    `RL with the same rule has ${one(o.right)} of ${N}, ${sgn(r.rl_lead[0])} points ahead (95 % interval ${sgn(r.rl_lead[1])} to ${sgn(r.rl_lead[2])}).`);
   else facts.push(r === ONE ? "This is the baseline: one sample of the RL model, the mean of its four samples." :
-    `${sgn((r.right - RL1.right) / 5)} points versus one RL sample. The base model with the same rule has ${one(o.right)}.`);
+    `${sgn((r.right - RL1.right) / 5)} points versus one RL sample. Base + cue with the same rule has ${one(o.right)} of ${N}.`);
   if (r.short) facts.push("Ties go to the shortest finished sample. This tie rule was written after reading the problems it fixes, so the score is optimistic.");
   if (r.ran_out) facts.push(`On ${r.ran_out} problems the four stored samples ran out before the rule finished, so this row is approximate.`);
-  const who = r.model === "base" ? "Base + cue" : "RL-Zero-Math", tails = ex.tails.map(([i, t]) =>
-    `<p class="tail"><span>End of sample ${i + 1}</span>${esc(t)}</p>`).join("");
+  const who = r.model === "base" ? "Base + cue" : "RL", tails = ex.tails.map(([i, t]) =>
+    `<p class="tail"><span>End of sample ${i + 1}</span><span class="tt" data-math>${esc(t)}</span></p>`).join("");
   return `<div class="dhead"><h2>${esc(r.name)}</h2><button class="close" data-open="">Close</button></div>` +
     `<p class="lead">${who}, T 1.0: ${esc(r.config)}.</p><ul class="facts">${facts.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` +
-    `<h3 class="ex">One problem: MATH-500 number ${ex.problem}, ringed in the strip</h3>` +
-    `<p class="q">${esc(ex.question)}${ex.figure ? " <span>(with a figure given as code)</span>" : ""} <span>The answer key says ${esc(ex.gold)}.</span></p>` +
-    `<ol class="samples">${ex.samples.map((s, i) => `<li><b>${esc(s[0])}</b><span>${num(s[1])} tokens</span>` +
+    `<h3 class="ex">One problem: MATH-500, problem ${ex.problem}, ringed in the strip</h3>` +
+    `<p class="q"><span class="qt" data-math>${esc(ex.question)}</span>${ex.figure ? " <span>(with a figure given as code)</span>" : ""} <span>The answer key says <b data-math>${esc(ex.gold)}</b>.</span></p>` +
+    `<ol class="samples">${ex.samples.map((s, i) => `<li><b data-math>${esc(s[0])}</b><span>${num(s[1])} tokens</span>` +
       `<span class="${s[2] ? "ok" : ""}">${s[2] ? "right" : "wrong"}</span></li>`).join("")}</ol>` +
     `<p class="verdict">${who} samples, in the order drawn. This rule answers the problem right in ${k} of the 24 draw orders.</p>` + tails;
 }
@@ -759,25 +772,37 @@ function fromHash() {
   $("budget").value = S.budget;
   S.pick = r || null;
   S.open = r ? "rule" : p ? p[0] : null;
+  if (r) rove(r);
   if (r || b) S.seen = true;
   label();
   pane();
 }
+const show = () => { if (narrow.matches) $("pane").scrollIntoView({ block: "start", behavior: still.matches ? "auto" : "smooth" }); };
 function open(key) {
-  const was = S.open;
+  const was = S.open, mark = S.pick;
   S.open = key || null;
   if (!key) S.pick = null;
   address(true);
   pane();
-  const to = $("pane").querySelector(key ? ".close" : `[data-open="${was}"]`);
+  const to = key ? $("pane").querySelector(".close") : was === "rule" && mark ? S.el["h" + mark.i] : $("pane").querySelector(`[data-open="${was}"]`);
   if (to) to.focus({ preventScroll: true });
+  if (key) show();
 }
 function pick(key) {
   const r = R.find(r => r.key === key);
   if (!r) return;
   S.pick = r; S.open = "rule"; S.seen = true;
+  rove(r);
   address(true);
   pane();
+  show();
+}
+/* The 48 rule marks are one stop in the tab order; the arrow keys move along them in order of tokens. */
+const ORDER = [...R].sort((p, q) => p.tokens - q.tokens || p.right - q.right);
+function rove(r) {
+  S.el["h" + S.rove].setAttribute("tabindex", "-1");
+  S.rove = r.i;
+  S.el["h" + r.i].setAttribute("tabindex", "0");
 }
 
 document.addEventListener("click", e => {
@@ -788,7 +813,14 @@ const svg = $("svg");
 svg.addEventListener("click", e => { const h = e.target.closest(".hit"); if (h) pick(h.dataset.rule); });
 svg.addEventListener("keydown", e => {
   const h = e.target.closest(".hit");
-  if (h && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); pick(h.dataset.rule); }
+  if (!h) return;
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(h.dataset.rule); return; }
+  const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+  if (!step) return;
+  e.preventDefault();
+  const r = ORDER[(ORDER.findIndex(o => o.key === h.dataset.rule) + step + R.length) % R.length];
+  rove(r);
+  S.el["h" + r.i].focus();
 });
 function fromPointer(e) {  // the budget under the pointer, read off the x axis as the reader sees it
   const g = S.g, m = svg.getScreenCTM().inverse(), pt = new DOMPoint(e.clientX, e.clientY).matrixTransform(m);
@@ -813,7 +845,7 @@ inp.addEventListener("blur", () => S.el["knob-ring"].classList.remove("on"));
 document.addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.key === "Escape" && S.open) open("");
-  if ((e.key === "ArrowRight" || e.key === "ArrowLeft") && document.activeElement !== inp && !e.target.closest("input, textarea")) {
+  if ((e.key === "ArrowRight" || e.key === "ArrowLeft") && document.activeElement !== inp && !e.target.closest("input, textarea, .hit")) {
     S.seen = true;
     setBudget(S.budget + (e.key === "ArrowRight" ? 500 : -500), false);
   }
@@ -832,10 +864,13 @@ stage.addEventListener("pointerleave", () => { V.tx = V.ty = 0; });
 
 $("problem").textContent = C.problem;
 $("say").innerHTML = esc(C.line).replace(/(?<![\w-])(\d+(?:[.,]\d+)*(?: ?%)?)/g, "<b>$1</b>");
-build();
 aim(0, 0);
+S.rove = best(BASE, B0).i;
+build();
 fromHash();
 S.shown = S.budget;
+/* With no state in the address, the budget rises once from 4,700 tokens to the full budget after the plate appears. */
+if (!location.hash && !still.matches) { S.shown = SWEEP0; S.sweep = { t0: performance.now() + 1300, d: 2600 }; }
 R.forEach(r => { r.v = r.tgt = r.tokens <= S.shown ? 1 : 0; });
 refocus(0);
 place(0);

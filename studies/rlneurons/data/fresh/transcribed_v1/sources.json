@@ -1,0 +1,37 @@
+{
+ "hmmt_feb2026_guts": {
+  "url": "https://hmmt-archive.s3.amazonaws.com/tournaments/2026/feb/guts/solutions.pdf",
+  "sha256": "503217a27a71e247482d75e18c7a969f0afc2781eb63ead60406f602d54d948f",
+  "header_date": "February 14, 2026",
+  "index": "https://www.hmmt.org/www/archive/292",
+  "transcribed": "2026-11-15 by a Claude subagent from the rendered PDF pages, cross-checked with pdftotext; statements verbatim, mathematics in LaTeX"
+ },
+ "hmmt_nov2026_gen": {
+  "url": "https://hmmt-archive.s3.amazonaws.com/tournaments/2026/nov/gen/solutions.pdf",
+  "sha256": "a5194a3f4ae764feefbf4e6761263eb4e9855f47c5420b9c984cc0173c0b49ac",
+  "header_date": "November 07, 2026",
+  "index": "https://www.hmmt.org/www/archive/301",
+  "transcribed": "2026-11-15 by a Claude subagent from the rendered PDF pages, cross-checked with pdftotext; statements verbatim, mathematics in LaTeX"
+ },
+ "hmmt_nov2026_thm": {
+  "url": "https://hmmt-archive.s3.amazonaws.com/tournaments/2026/nov/thm/solutions.pdf",
+  "sha256": "9c7b23c441a842cfde8588795888d097fb8e4168419343040695c7ee323bde25",
+  "header_date": "November 07, 2026",
+  "index": "https://www.hmmt.org/www/archive/301",
+  "transcribed": "2026-11-15 by a Claude subagent from the rendered PDF pages, cross-checked with pdftotext; statements verbatim, mathematics in LaTeX"
+ },
+ "hmmt_nov2026_team": {
+  "url": "https://hmmt-archive.s3.amazonaws.com/tournaments/2026/nov/team/solutions.pdf",
+  "sha256": "a659f7ba57f66c72f00a2a54760fcbbf8526145160f9230fe74a100f1c38fedb",
+  "header_date": "November 07, 2026",
+  "index": "https://www.hmmt.org/www/archive/301",
+  "transcribed": "2026-11-15 by a Claude subagent from the rendered PDF pages, cross-checked with pdftotext; statements verbatim, mathematics in LaTeX"
+ },
+ "hmmt_nov2026_guts": {
+  "url": "https://hmmt-archive.s3.amazonaws.com/tournaments/2026/nov/guts/solutions.pdf",
+  "sha256": "ac7f2703ab9820b1ea6018e1d45bd616830309bf89e99bd2119fa5c8cd45441f",
+  "header_date": "November 07, 2026",
+  "index": "https://www.hmmt.org/www/archive/301",
+  "transcribed": "2026-11-15 by a Claude subagent from the rendered PDF pages, cross-checked with pdftotext; statements verbatim, mathematics in LaTeX"
+ }
+}

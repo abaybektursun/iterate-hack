@@ -7,6 +7,7 @@
     $P judge --work runs/derived --judge B            # claude-haiku-5-5 on the same and on every other long finished RL answer
     $P judge --work runs/derived --judge F            # judge A's model on the whole text of the 40-row subsample
     $P score --work runs/derived --out studies/rlneurons/results/derived/hard328-01
+    $P score --per-sample --out studies/rlneurons/results/derived/hard328_persample-01   # addendum 1: no judge call, reads the labels of hard328-01
 
 The judge sees the problem and the last ~3,000 tokens of the answer; never the model, the gold answer, the score or the
 length. Every prompt, raw reply and token usage is kept in <work>/judge_<X>/ (not committed). Needs ANTHROPIC_API_KEY.
@@ -202,6 +203,34 @@ def kappa(a: list, b: list) -> dict:
             "table": {x: {y: sum(1 for p, q in zip(a, b) if (p, q) == (x, y)) for y in LABELS} for x in LABELS}}
 
 
+sel = lambda rows, **kw: [it for it in rows if all(it[k] == v for k, v in kw.items())]
+
+
+def boot(idx: list):
+    """The spec's bootstrap over the problems idx (2,000 resamples, seed 0): pos, per, ci, share."""
+    import numpy as np
+    pos, n = {p: k for k, p in enumerate(idx)}, len(idx)
+    draws = np.random.default_rng(0).integers(0, n, (BOOT, n))
+
+    def per(rows, f=lambda it: 1.0):
+        v = np.zeros(n)
+        for it in rows:
+            v[pos[it["problem_index"]]] += f(it)
+        return v
+
+    def ci(fn):
+        """fn(take) -> statistic, where take(v) sums a per-problem vector over the (resampled) problems."""
+        point = fn(lambda v: v.sum())
+        b = np.array([fn(lambda v, d=d: v[d].sum()) for d in draws])
+        return {"value": float(point), "interval95": [float(x) for x in np.nanpercentile(b, [2.5, 97.5])]}
+
+    def share(rows, j, label):
+        num, den = per([it for it in rows if it[j] == label]), per(rows)
+        return lambda take: 100 * take(num) / take(den) if take(den) else np.nan
+
+    return pos, draws, per, ci, share
+
+
 def score(a):
     import numpy as np
     work, out = pathlib.Path(a.work), pathlib.Path(a.out)
@@ -220,33 +249,14 @@ def score(a):
     assert all(it["A"] and it["B"] for it in real) and all(it["B"] for it in rl_all) and len(real) == 420 and len(rl_all) == 642
     by = {m: load(RES / d) for m, d in SETS["hard328"].items()}
     idx = list(by["rl"])
-    pos = {p: k for k, p in enumerate(idx)}
     n = len(idx)
-    rng = np.random.default_rng(0)
-    draws = rng.integers(0, n, (BOOT, n))
+    pos, draws, per, ci, share = boot(idx)
     think_cap4 = np.array([all(r["cap_hit"] for r in by["think"][p]) for p in idx])
-
-    def per(rows, f=lambda it: 1.0):
-        v = np.zeros(n)
-        for it in rows:
-            v[pos[it["problem_index"]]] += f(it)
-        return v
-
-    def ci(fn):
-        """fn(take) -> statistic, where take(v) sums a per-problem vector over the (resampled) problems."""
-        point = fn(lambda v: v.sum())
-        b = np.array([fn(lambda v, d=d: v[d].sum()) for d in draws])
-        return {"value": float(point), "interval95": [float(x) for x in np.nanpercentile(b, [2.5, 97.5])]}
-
-    def share(rows, j, label):
-        num, den = per([it for it in rows if it[j] == label]), per(rows)
-        return lambda take: 100 * take(num) / take(den) if take(den) else np.nan
 
     def cell(rows, j="A"):
         return {"n": len(rows), "problems": len({it["problem_index"] for it in rows}), **{l: sum(it[j] == l for it in rows) for l in LABELS},
                 "asserted_pct": ci(share(rows, j, "ASSERTED")) if rows else None}
 
-    sel = lambda rows, **kw: [it for it in rows if all(it[k] == v for k, v in kw.items())]
     res = {"spec": SPEC, "judges": {j: {k: v for k, v in c.items() if k != "usd_per_mtok"} for j, c in JUDGES.items()}, "cost_usd": cost(work),
            "shown": f"problem + last len(text) x {TAIL_TOKENS} / n_new characters; think tags removed", "bootstrap": {"resamples": BOOT, "seed": 0, "unit": "problem"}}
 
@@ -284,7 +294,7 @@ def score(a):
 
     # H2: right rate of asserted and of derived long finished answers, strata weighted back to the pool
     def h2(m, j="A"):
-        poolv = {s: per([{"problem_index": r["problem_index"]} for r in pool(by[m], s)]) for s in ("wrong", "right")}
+        poolv = {s: per(pool(by[m], s)) for s in ("wrong", "right")}
         sh = {(s, l): share(sel(real, model=m, stratum=s), j, l) for s in ("wrong", "right") for l in LABELS}
 
         def rate(l):
@@ -371,6 +381,95 @@ def score(a):
     print((out / "table.md").read_text())
 
 
+JUDGED = [f"long {s}, {l.lower()}" for s in ("right", "wrong") for l in ("DERIVED", "ASSERTED")]
+COUNTED = {"short right": lambda r: finished(r) and r["n_new"] <= LONG and bool(r["score_v3"]),
+           "short wrong": lambda r: finished(r) and r["n_new"] <= LONG and not r["score_v3"],
+           "cap hit": lambda r: r["cap_hit"],
+           "no answer": lambda r: not r["cap_hit"] and r["extracted_v3"] is None}
+PAIRS = (("rl", "base"), ("rl", "think"))
+
+
+def persample(a):
+    """Addendum 1 of the spec: the outcome of every generated sample, the judged strata weighted back to their pools."""
+    out = pathlib.Path(a.out)
+    assert not out.exists(), f"{out} exists: a rerun gets the next number"
+    items = [json.loads(l) for l in open(a.labels)]
+    real, rl_all = sel(items, kind="real"), [it for it in items if it["model"] == "rl" and it["kind"] in ("real", "rl_extra")]
+    assert len(real) == 420 and len(rl_all) == 642 and not any(it[j] == "UNCLEAR" for it in real + rl_all for j in "AB")
+    by = {m: load(RES / d) for m, d in SETS["hard328"].items()}
+    idx = list(by["rl"])
+    pos, draws, per, ci, share = boot(idx)
+    total = 4 * len(idx)
+    rows = {m: [r for p in idx for r in by[m][p]] for m in by}
+    poolv = {m: {s: per(pool(by[m], s)) for s in ("wrong", "right")} for m in by}
+    counted = {m: {k: per([r for r in rows[m] if f(r)]) for k, f in COUNTED.items()} for m in by}
+    assert all(sum(v.sum() for v in poolv[m].values()) + sum(v.sum() for v in counted[m].values()) == total for m in by), "an outcome is missing or double"
+
+    def weighted(m, j, s, l):                                                   # % of the model's samples; H2's weighting
+        f = share(sel(real, model=m, stratum=s), j, l)
+        return lambda take: take(poolv[m][s]) * f(take) / total
+
+    def rates(m, j):
+        return ({f"long {s}, {l.lower()}": ci(weighted(m, j, s, l)) for s in ("right", "wrong") for l in ("DERIVED", "ASSERTED")}
+                | {k: ci(lambda take, v=v: 100 * take(v) / total) for k, v in counted[m].items()})
+
+    def split(x, y, j):
+        """Asserted wrong per sample, x - y, and its exact split into a pool term and a share term (H5)."""
+        px, py = (lambda take, m=m: take(poolv[m]["wrong"]) / total for m in (x, y))
+        sx, sy = (share(sel(real, model=m, stratum="wrong"), j, "ASSERTED") for m in (x, y))
+        return {"difference": ci(lambda take: px(take) * sx(take) - py(take) * sy(take)),
+                "pool_term": ci(lambda take: (px(take) - py(take)) * sy(take)), "share_term": ci(lambda take: px(take) * (sx(take) - sy(take)))}
+
+    res = {"spec": SPEC + ", addendum 1", "labels": a.labels, "samples_per_model": total, "bootstrap": {"resamples": BOOT, "seed": 0, "unit": "problem"},
+           "counts": {m: {f"long finished {s}": int(poolv[m][s].sum()) for s in ("right", "wrong")} | {k: int(v.sum()) for k, v in counted[m].items()}
+                         | {"cap hit with a boxed value": sum(r["cap_hit"] and r["extracted_v3"] is not None for r in rows[m]),
+                            "cap hit scored right": sum(r["cap_hit"] and bool(r["score_v3"]) for r in rows[m])} for m in by},
+           "sample_labels": {j: {m: {s: {"rows": TARGET[s], "asserted": len(sel(real, model=m, stratum=s, **{j: "ASSERTED"}))} for s in ("wrong", "right")} for m in by} for j in "AB"},
+           "rates_pct": {j: {m: rates(m, j) for m in by} for j in "AB"}}
+    ball = {f"long {s}, {l.lower()}": sel(rl_all, stratum=s, B=l) for s in ("right", "wrong") for l in ("DERIVED", "ASSERTED")}
+    res["B_whole_pool"] = {"rl": {k: {"n": len(v), "pct": ci(lambda take, v=per(v): 100 * take(v) / total)} for k, v in ball.items()},
+                           "base": "judge B labelled the 140 sampled rows only", "think": "judge B labelled the 140 sampled rows only"}
+    res["asserted_wrong_per_sample"] = {j: {f"{x} - {y}": split(x, y, j) for x, y in PAIRS} for j in "AB"}
+    v = per(ball["long wrong, asserted"])
+    res["asserted_wrong_per_sample"]["B, rl whole pool"] = {f"rl - {y}": {"difference": ci(lambda take, f=weighted(y, "B", "wrong", "ASSERTED"): 100 * take(v) / total - f(take))} for _, y in PAIRS}
+    res["cap_hit"] = {f"{x} - {y}": ci(lambda take, x=x, y=y: 100 * (take(counted[x]["cap hit"]) - take(counted[y]["cap hit"])) / total) for x, y in PAIRS}
+    d = res["asserted_wrong_per_sample"]["A"]["rl - base"]
+    res["H4_held"] = bool(d["difference"]["interval95"][0] > 0)
+    res["H5_held"] = bool(d["pool_term"]["value"] >= 0.5 * d["difference"]["value"] and d["pool_term"]["interval95"][0] > 0)
+    groups = {"base hits the cap on none of 4": lambda p: bool(counted["base"]["cap hit"][pos[p]] == 0), "base hits the cap on 1 to 4 of 4": lambda p: bool(counted["base"]["cap hit"][pos[p]] > 0)}
+    res["by_base_cap_hits"] = {g: {"problems": sum(map(f, idx)), "samples": 4 * sum(map(f, idx))} | {m: {"cap hit": sum(r["cap_hit"] for r in rows[m] if f(r["problem_index"]))}
+                                   | {f"long finished {s}": sum(f(r["problem_index"]) for r in pool(by[m], s)) for s in ("wrong", "right")} for m in by}
+                               | {"rl long wrong, asserted, judge B whole pool": sum(f(it["problem_index"]) for it in ball["long wrong, asserted"])} for g, f in groups.items()}
+    out.mkdir(parents=True)
+    commit = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
+    (out / "run.json").write_text(json.dumps({"commit": commit, "command": "python -m studies.rlneurons.analysis.derived " + " ".join(sys.argv[1:]), "job_id": None, "gpu": "none (laptop)",
+                                              "spec": res["spec"], "judge_calls": 0, "labels": a.labels, "examples": "results/derived/hard328-01/examples.json", "inputs": SETS["hard328"]}, indent=1) + "\n")
+    (out / "readout.json").write_text(json.dumps(res, indent=1) + "\n")
+    (out / "table.md").write_text(markdown_persample(res))
+    print((out / "table.md").read_text())
+
+
+def markdown_persample(res: dict) -> str:
+    v = lambda x, d=1: f"{x['value']:.{d}f} [{x['interval95'][0]:.{d}f}, {x['interval95'][1]:.{d}f}]"
+    ms, n = list(res["counts"]), res["samples_per_model"]
+    L = [f"Outcome of every generated sample, hard328, attempt 0 of 4 samples, {n:,} samples per model. % of samples [95 %, bootstrap over problems].", ""]
+    for j in "AB":
+        L += [f"Judge {j}, the judged strata weighted to their pools:", "", "| Outcome | " + " | ".join(LABEL[m] for m in ms) + " |", "|---" * (len(ms) + 1) + "|"]
+        L += [f"| {k} | " + " | ".join(v(res["rates_pct"][j][m][k]) for m in ms) + " |" for k in JUDGED + list(COUNTED)] + [""]
+    L += ["Counts: " + "; ".join(f"{LABEL[m]}: " + ", ".join(f"{k} {c}" for k, c in res["counts"][m].items()) for m in ms) + ".", "",
+          "Judge B on all 642 long finished RL answers, counted: " + "; ".join(f"{k} {x['n']}, {v(x['pct'])} %" for k, x in res["B_whole_pool"]["rl"].items())
+          + ". Judge B labelled only the 140 sampled rows of the base and of Think-SFT.", "",
+          "Asserted wrong answers per sample, paired differences in points, with the exact split (pool term: how often the model finishes long and wrong; share term: how often such an answer is asserted):", "",
+          "| Judge | Pair | Difference | Pool term | Share term |", "|---|---|---|---|---|"]
+    L += [f"| {j} | {k} | {v(x['difference'])} | {v(x['pool_term'])} | {v(x['share_term'])} |" for j in "AB" for k, x in res["asserted_wrong_per_sample"][j].items()]
+    L += [f"| B, RL counted on its whole pool | {k} | {v(x['difference'])} | | |" for k, x in res["asserted_wrong_per_sample"]["B, rl whole pool"].items()]
+    L += ["", "Cap-hit rate, points: " + "; ".join(f"{k} {v(x)}" for k, x in res["cap_hit"].items()) + f". H4 held: {res['H4_held']}. H5 held: {res['H5_held']}.", "",
+          "Problems split by the base's cap hits (counts of samples):", "", "| Group | Problems | Model | Cap hit | Long finished wrong | Long finished right |", "|---|---|---|---|---|---|"]
+    L += [f"| {g} | {x['problems']} | {LABEL[m]} | {x[m]['cap hit']} | {x[m]['long finished wrong']} | {x[m]['long finished right']} |" for g, x in res["by_base_cap_hits"].items() for m in ms]
+    L += ["", "RL's long wrong answers that judge B labels asserted (whole pool): " + "; ".join(f"{g}: {x['rl long wrong, asserted, judge B whole pool']}" for g, x in res["by_base_cap_hits"].items()) + "."]
+    return "\n".join(L) + "\n"
+
+
 def markdown(res: dict) -> str:
     v = lambda x, d=1: f"{x['value']:.{d}f} [{x['interval95'][0]:.{d}f}, {x['interval95'][1]:.{d}f}]"
     c = res["checks"]
@@ -405,10 +504,14 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("step", choices=["prep", "judge", "score"])
     ap.add_argument("--runs", default="runs")
-    ap.add_argument("--work", required=True)
+    ap.add_argument("--work")
+    ap.add_argument("--per-sample", action="store_true", help="with score: addendum 1, from --labels, no judge call")
+    ap.add_argument("--labels", default="studies/rlneurons/results/derived/hard328-01/labels.jsonl")
     ap.add_argument("--judge", choices=list(JUDGES))
     ap.add_argument("--limit", type=int)
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--out")
     args = ap.parse_args()
-    {"prep": prep, "judge": judge, "score": score}[args.step](args)
+    assert args.per_sample or args.work, "--work is required"
+    assert not args.per_sample or args.step == "score", "--per-sample goes with score"
+    (persample if args.per_sample else {"prep": prep, "judge": judge, "score": score}[args.step])(args)

@@ -1,0 +1,1 @@
+{"id": "t29", "value": 0.52, "low": 0.46, "high": 0.58, "why": "If the cued base's wrong steps come from the head and not from unlikely tokens, its own mean log p over the first 1,000 tokens cannot tell a wrong sample from a right sibling of the same problem, so the within-problem AUROC sits near chance."}

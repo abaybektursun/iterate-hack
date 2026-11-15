@@ -1,0 +1,1280 @@
+{
+ "theories": {
+  "r5-m03-rival": {
+   "carried_from": "round-05",
+   "offline": 0,
+   "not_scored": 0,
+   "computed": 0,
+   "inside": 0,
+   "within_noise": 0,
+   "outside": 0,
+   "total_gain": 0,
+   "unexpected_wins": [
+    1,
+    2,
+    3
+   ],
+   "heldout_claims": 3,
+   "strikes": 0,
+   "state": "survives",
+   "note": "",
+   "reasons": [],
+   "verdict": "weak: the duel state is 'not separated from rival'. The theory wins only one separating duel test (p2, n 401; stands needs two), and its own clause that plain-register errors ignore difficulty is contradicted by duel tests p4/p5 (gaps 0.23 and 0.49, intervals excluding 0).",
+   "rows": [
+    {
+     "id": "r5-m03-rival:p1",
+     "k": 1,
+     "measured": 0.25,
+     "value": 0.27,
+     "low": 0.17,
+     "high": 0.37,
+     "nulls": [
+      {
+       "value": 0.13,
+       "low": 0.06,
+       "high": 0.22
+      }
+     ],
+     "gain": 2.767,
+     "inside": true,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m03-rival:p2",
+     "k": 2,
+     "measured": 0.8181818181818182,
+     "value": 0.76,
+     "low": 0.64,
+     "high": 0.88,
+     "nulls": [
+      {
+       "value": 0.5,
+       "low": 0.3,
+       "high": 0.7
+      }
+     ],
+     "gain": 3.0,
+     "inside": true,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r5-m03-rival:p3",
+     "k": 3,
+     "measured": 0.7727272727272727,
+     "value": 0.63,
+     "low": 0.43,
+     "high": 0.83,
+     "nulls": [
+      {
+       "value": 0.4,
+       "low": 0.18,
+       "high": 0.62
+      }
+     ],
+     "gain": 3.0,
+     "inside": true,
+     "n": null,
+     "interval": null,
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    }
+   ],
+   "heldout_rows": [
+    {
+     "id": "t65",
+     "measured": 170,
+     "value": 179,
+     "low": 170,
+     "high": 188,
+     "nulls": [
+      {
+       "value": 180,
+       "low": 167,
+       "high": 193
+      },
+      {
+       "value": 180,
+       "low": 167,
+       "high": 193
+      }
+     ],
+     "gain": -0.1847,
+     "strike": false
+    },
+    {
+     "id": "t64",
+     "measured": 118,
+     "value": 150,
+     "low": 139,
+     "high": 161,
+     "nulls": [
+      {
+       "value": 140,
+       "low": 113,
+       "high": 166
+      },
+      {
+       "value": 145,
+       "low": 124,
+       "high": 164
+      }
+     ],
+     "gain": -3.0,
+     "strike": false
+    },
+    {
+     "id": "t66",
+     "measured": 9968,
+     "value": 10000,
+     "low": 9450,
+     "high": 10550,
+     "nulls": [
+      {
+       "value": 10500,
+       "low": 9200,
+       "high": 11800
+      },
+      {
+       "value": 10200,
+       "low": 9300,
+       "high": 11200
+      }
+     ],
+     "gain": 0.8263,
+     "strike": false
+    }
+   ],
+   "gpu_tests": [],
+   "gpu_gain": 0,
+   "gpu_strikes": 0,
+   "carried_duel": {
+    "from": "round-05",
+    "gain": 8.767,
+    "tests": 3
+   }
+  },
+  "r6-account-rival": {
+   "carried_from": "round-06",
+   "offline": 0,
+   "not_scored": 0,
+   "computed": 0,
+   "inside": 0,
+   "within_noise": 0,
+   "outside": 0,
+   "total_gain": 0,
+   "unexpected_wins": [],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "no gain",
+   "note": "total gain above 0 but no computed prediction won where the readers' centres were outside its interval",
+   "reasons": [],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r6-account-rival:p1",
+     "k": 1,
+     "measured": -0.010905349794238739,
+     "value": 0.02,
+     "low": -0.15,
+     "high": 0.19,
+     "nulls": [
+      {
+       "value": -0.05,
+       "low": -0.21,
+       "high": 0.11
+      }
+     ],
+     "gain": -0.0246,
+     "inside": true,
+     "n": 90,
+     "interval": [
+      -0.18325791855203621,
+      0.17742410845859136
+     ],
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r6-account-rival:p2",
+     "k": 2,
+     "measured": -0.05976305529211637,
+     "value": -0.06,
+     "low": -0.18,
+     "high": 0.06,
+     "nulls": [
+      {
+       "value": -0.06,
+       "low": -0.2,
+       "high": 0.08
+      }
+     ],
+     "gain": 0.1541,
+     "inside": true,
+     "n": 167,
+     "interval": [
+      -0.1660273622298939,
+      0.04597701149425287
+     ],
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r6-account-rival:p3",
+     "k": 3,
+     "measured": 0.24615384615384617,
+     "value": 0.2,
+     "low": 0.12,
+     "high": 0.28,
+     "nulls": [
+      {
+       "value": 0.13,
+       "low": 0.05,
+       "high": 0.22
+      }
+     ],
+     "gain": 2.1369,
+     "inside": true,
+     "n": 65,
+     "interval": [
+      0.15942028985507245,
+      0.3387096774193548
+     ],
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r6-account-rival:p4",
+     "k": 4,
+     "measured": 0,
+     "value": -1,
+     "low": -5.5,
+     "high": 3.5,
+     "nulls": [
+      {
+       "value": -2,
+       "low": -7,
+       "high": 3
+      }
+     ],
+     "gain": 0.255,
+     "inside": true,
+     "n": 27,
+     "interval": [
+      -3,
+      3
+     ],
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r6-account-rival:p5",
+     "k": 5,
+     "measured": -0.03438418577307478,
+     "value": -0.07,
+     "low": -0.21,
+     "high": 0.07,
+     "nulls": [
+      {
+       "value": -0.1,
+       "low": -0.35,
+       "high": 0.15
+      }
+     ],
+     "gain": 0.5855,
+     "inside": true,
+     "n": 90,
+     "interval": [
+      -0.20161290322580644,
+      0.13710575139146564
+     ],
+     "refuted_by": "none: a duel test",
+     "refuted_by_met": false
+    }
+   ],
+   "heldout_rows": [],
+   "gpu_tests": [],
+   "gpu_gain": 0,
+   "gpu_strikes": 0,
+   "carried_duel": {
+    "from": "round-06",
+    "gain": 3.107,
+    "tests": 5
+   }
+  },
+  "r6-m06": {
+   "carried_from": null,
+   "offline": 3,
+   "not_scored": 0,
+   "computed": 0,
+   "inside": 0,
+   "within_noise": 0,
+   "outside": 0,
+   "total_gain": 0,
+   "unexpected_wins": [],
+   "heldout_claims": 1,
+   "strikes": 0,
+   "state": "untested",
+   "note": "",
+   "reasons": [],
+   "verdict": "",
+   "rows": [
+    {
+     "k": 1,
+     "not_computable": "field n_tok_p_lt_1e2 does not exist in any of the 328 rows of abaybektursun-1114-151534-e72c answers.jsonl",
+     "replication": null
+    },
+    {
+     "k": 2,
+     "not_computable": "field n_tok_p_lt_1e2 does not exist in any of the 328 rows of abaybektursun-1114-151534-e72c answers.jsonl",
+     "replication": null
+    },
+    {
+     "k": 3,
+     "not_computable": "field n_tok_p_lt_1e2 does not exist in any of the 328 rows of abaybektursun-1114-151534-e72c answers.jsonl",
+     "replication": null
+    }
+   ],
+   "heldout_rows": [
+    {
+     "id": "t29",
+     "measured": 0.519,
+     "value": 0.52,
+     "low": 0.46,
+     "high": 0.58,
+     "nulls": [
+      {
+       "value": 0.54,
+       "low": 0.46,
+       "high": 0.62
+      },
+      {
+       "value": 0.54,
+       "low": 0.47,
+       "high": 0.61
+      }
+     ],
+     "gain": 0.3267,
+     "strike": false
+    }
+   ],
+   "gpu_tests": [],
+   "gpu_gain": 0,
+   "gpu_strikes": 0
+  },
+  "r7-m03": {
+   "carried_from": null,
+   "offline": 4,
+   "not_scored": 0,
+   "computed": 4,
+   "inside": 2,
+   "within_noise": 1,
+   "outside": 1,
+   "total_gain": -2.44,
+   "unexpected_wins": [],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "note": "",
+   "reasons": [
+    "p1 Mechanism test: ratio of the self-inconsistent-equation rate of the cued base at: measured 0.3612012987012987, predicted 3.0 [1.5, 9.0]; refuting condition met: R measured below 1.5"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r7-m03:p1",
+     "measured": 0.3612012987012987,
+     "value": 3.0,
+     "low": 1.5,
+     "high": 9.0,
+     "nulls": [
+      {
+       "value": 1.6,
+       "low": 0.8,
+       "high": 3.0
+      },
+      {
+       "value": 1.5,
+       "low": 0.8,
+       "high": 2.8
+      }
+     ],
+     "gain": -0.2091,
+     "k": 1,
+     "inside": false,
+     "within_noise": false,
+     "n": 377,
+     "interval": [
+      0.06015384615384615,
+      1.3856232939035487
+     ],
+     "refuted_by": "R measured below 1.5",
+     "refuted_by_met": true,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-m03:p2",
+     "measured": 1.3591903274011683,
+     "value": 0.35,
+     "low": 0.12,
+     "high": 0.8,
+     "nulls": [
+      {
+       "value": 0.55,
+       "low": 0.25,
+       "high": 1.1
+      },
+      {
+       "value": 0.5,
+       "low": 0.25,
+       "high": 1.0
+      }
+     ],
+     "gain": -3.0,
+     "k": 2,
+     "inside": false,
+     "within_noise": true,
+     "n": 470,
+     "interval": [
+      0.43735852002185616,
+      3.9414276998169617
+     ],
+     "refuted_by": "statistic measured above 0.8",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-m03:p3",
+     "measured": 0.017293233082706763,
+     "value": 0.013,
+     "low": -0.002,
+     "high": 0.032,
+     "nulls": [
+      {
+       "value": 0.015,
+       "low": -0.01,
+       "high": 0.04
+      },
+      {
+       "value": 0.025,
+       "low": 0.005,
+       "high": 0.045
+      }
+     ],
+     "gain": 0.2938,
+     "k": 3,
+     "inside": true,
+     "within_noise": false,
+     "n": 1330,
+     "interval": [
+      0.0007513148009015841,
+      0.0343796711509716
+     ],
+     "refuted_by": "statistic measured below -0.002",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-m03:p4",
+     "measured": -0.003293084522502737,
+     "value": 0.0,
+     "low": -0.02,
+     "high": 0.017,
+     "nulls": [
+      {
+       "value": 0.0,
+       "low": -0.03,
+       "high": 0.03
+      },
+      {
+       "value": 0.008,
+       "low": -0.015,
+       "high": 0.03
+      }
+     ],
+     "gain": 0.4751,
+     "k": 4,
+     "inside": true,
+     "within_noise": false,
+     "n": 911,
+     "interval": [
+      -0.024999999999999994,
+      0.0165745856353591
+     ],
+     "refuted_by": "statistic measured above 0.017",
+     "refuted_by_met": false,
+     "replication": null
+    }
+   ],
+   "heldout_rows": [],
+   "gpu_tests": [],
+   "gpu_gain": 0,
+   "gpu_strikes": 0
+  },
+  "r7-m05": {
+   "carried_from": null,
+   "offline": 3,
+   "not_scored": 0,
+   "computed": 3,
+   "inside": 2,
+   "within_noise": 1,
+   "outside": 0,
+   "total_gain": -0.299,
+   "unexpected_wins": [],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "no gain",
+   "note": "",
+   "reasons": [],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r7-m05:p1",
+     "measured": 0.6857142857142857,
+     "value": 0.67,
+     "low": 0.48,
+     "high": 0.84,
+     "nulls": [
+      {
+       "value": 0.55,
+       "low": 0.33,
+       "high": 0.77
+      },
+      {
+       "value": 0.63,
+       "low": 0.42,
+       "high": 0.82
+      }
+     ],
+     "gain": 0.4211,
+     "k": 1,
+     "inside": true,
+     "within_noise": false,
+     "n": 35,
+     "interval": [
+      0.5428571428571428,
+      0.8285714285714286
+     ],
+     "refuted_by": "measured fraction below 0.48 (or above 0.84)",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-m05:p2",
+     "measured": 0.6078431372549019,
+     "value": 0.62,
+     "low": 0.44,
+     "high": 0.8,
+     "nulls": [
+      {
+       "value": 0.58,
+       "low": 0.4,
+       "high": 0.75
+      },
+      {
+       "value": 0.55,
+       "low": 0.38,
+       "high": 0.72
+      }
+     ],
+     "gain": 0.0455,
+     "k": 2,
+     "inside": true,
+     "within_noise": false,
+     "n": 51,
+     "interval": [
+      0.49019607843137253,
+      0.7254901960784313
+     ],
+     "refuted_by": "measured fraction below 0.44 (or above 0.80)",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-m05:p3",
+     "measured": 0.6875,
+     "value": 0.43,
+     "low": 0.15,
+     "high": 0.68,
+     "nulls": [
+      {
+       "value": 0.5,
+       "low": 0.25,
+       "high": 0.75
+      },
+      {
+       "value": 0.55,
+       "low": 0.3,
+       "high": 0.8
+      }
+     ],
+     "gain": -0.766,
+     "k": 3,
+     "inside": false,
+     "within_noise": true,
+     "n": 16,
+     "interval": [
+      0.5,
+      0.875
+     ],
+     "refuted_by": "measured fraction above 0.68 (or below 0.15)",
+     "refuted_by_met": false,
+     "replication": null
+    }
+   ],
+   "heldout_rows": [],
+   "gpu_tests": [],
+   "gpu_gain": 0,
+   "gpu_strikes": 0
+  },
+  "r7-m07": {
+   "carried_from": null,
+   "offline": 4,
+   "not_scored": 0,
+   "computed": 4,
+   "inside": 3,
+   "within_noise": 1,
+   "outside": 0,
+   "total_gain": -1.843,
+   "unexpected_wins": [],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "no gain",
+   "note": "",
+   "reasons": [],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r7-m07:p1",
+     "measured": 3,
+     "value": 7,
+     "low": -1,
+     "high": 15,
+     "nulls": [
+      {
+       "value": 6,
+       "low": -1,
+       "high": 13
+      },
+      {
+       "value": 6,
+       "low": -2,
+       "high": 13
+      }
+     ],
+     "gain": -0.205,
+     "k": 1,
+     "inside": true,
+     "within_noise": false,
+     "n": 125,
+     "interval": [
+      -5,
+      11
+     ],
+     "refuted_by": "measured below -1",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-m07:p2",
+     "measured": 1,
+     "value": 0,
+     "low": -5,
+     "high": 4,
+     "nulls": [
+      {
+       "value": 1,
+       "low": -5,
+       "high": 6
+      },
+      {
+       "value": 1,
+       "low": -5,
+       "high": 6
+      }
+     ],
+     "gain": 0.1339,
+     "k": 2,
+     "inside": true,
+     "within_noise": false,
+     "n": 250,
+     "interval": [
+      -2,
+      5
+     ],
+     "refuted_by": "measured above 5",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-m07:p3",
+     "measured": -0.3708847115189001,
+     "value": -0.12,
+     "low": -0.3,
+     "high": 0.0,
+     "nulls": [
+      {
+       "value": -0.05,
+       "low": -0.3,
+       "high": 0.2
+      },
+      {
+       "value": -0.15,
+       "low": -0.45,
+       "high": 0.12
+      }
+     ],
+     "gain": -1.8815,
+     "k": 3,
+     "inside": false,
+     "within_noise": true,
+     "n": 80,
+     "interval": [
+      -0.428222744703205,
+      -0.2757477839953343
+     ],
+     "refuted_by": "measured above -0.02",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-m07:p4",
+     "measured": 0.5019834114677245,
+     "value": 0.35,
+     "low": 0.1,
+     "high": 0.75,
+     "nulls": [
+      {
+       "value": 0.6,
+       "low": 0.25,
+       "high": 1.2
+      },
+      {
+       "value": 0.4,
+       "low": 0.12,
+       "high": 1.0
+      }
+     ],
+     "gain": 0.11,
+     "k": 4,
+     "inside": true,
+     "within_noise": false,
+     "n": 16,
+     "interval": [
+      0.2668504901960784,
+      0.9386892177589853
+     ],
+     "refuted_by": "measured above 0.80, or undefined",
+     "refuted_by_met": false,
+     "replication": null
+    }
+   ],
+   "heldout_rows": [],
+   "gpu_tests": [],
+   "gpu_gain": 0,
+   "gpu_strikes": 0
+  },
+  "r7-m08": {
+   "carried_from": null,
+   "offline": 3,
+   "not_scored": 0,
+   "computed": 3,
+   "inside": 3,
+   "within_noise": 0,
+   "outside": 0,
+   "total_gain": -0.522,
+   "unexpected_wins": [],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "no gain",
+   "note": "",
+   "reasons": [],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r7-m08:p1",
+     "measured": 0.9786482311969817,
+     "value": 0.72,
+     "low": 0.48,
+     "high": 1.05,
+     "nulls": [
+      {
+       "value": 0.7,
+       "low": 0.35,
+       "high": 1.05
+      },
+      {
+       "value": 0.6,
+       "low": 0.25,
+       "high": 1.05
+      }
+     ],
+     "gain": 0.1633,
+     "k": 1,
+     "inside": true,
+     "within_noise": false,
+     "n": 17,
+     "interval": [
+      0.6065578896336521,
+      2.0677269839166623
+     ],
+     "refuted_by": "C below 0.45, or C undefined",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-m08:p2",
+     "measured": -0.27313356644510706,
+     "value": 0.0,
+     "low": -0.3,
+     "high": 0.3,
+     "nulls": [
+      {
+       "value": -0.2,
+       "low": -0.7,
+       "high": 0.2
+      },
+      {
+       "value": -0.1,
+       "low": -0.6,
+       "high": 0.35
+      }
+     ],
+     "gain": -0.5862,
+     "k": 2,
+     "inside": true,
+     "within_noise": false,
+     "n": 16,
+     "interval": [
+      -0.8404061926810729,
+      0.34718239801525036
+     ],
+     "refuted_by": "mean below -0.35 or above 0.35, or no wrong-plan item",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-m08:p3",
+     "measured": 0.2727272727272727,
+     "value": 0.18,
+     "low": 0.06,
+     "high": 0.33,
+     "nulls": [
+      {
+       "value": 0.18,
+       "low": 0.06,
+       "high": 0.33
+      },
+      {
+       "value": 0.2,
+       "low": 0.06,
+       "high": 0.38
+      }
+     ],
+     "gain": -0.0989,
+     "k": 3,
+     "inside": true,
+     "within_noise": false,
+     "n": 33,
+     "interval": [
+      0.15151515151515152,
+      0.3939393939393939
+     ],
+     "refuted_by": "statistic above 0.36, or undefined",
+     "refuted_by_met": false,
+     "replication": null
+    }
+   ],
+   "heldout_rows": [],
+   "gpu_tests": [],
+   "gpu_gain": 0,
+   "gpu_strikes": 0
+  },
+  "r7-m09": {
+   "carried_from": null,
+   "offline": 4,
+   "not_scored": 0,
+   "computed": 4,
+   "inside": 2,
+   "within_noise": 2,
+   "outside": 0,
+   "total_gain": -4.0,
+   "unexpected_wins": [],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "no gain",
+   "note": "",
+   "reasons": [],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r7-m09:p1",
+     "measured": 0.16666666666666666,
+     "value": 0.55,
+     "low": 0.3,
+     "high": 0.85,
+     "nulls": [
+      {
+       "value": 0.4,
+       "low": 0.1,
+       "high": 0.75
+      },
+      {
+       "value": 0.4,
+       "low": 0.12,
+       "high": 0.7
+      }
+     ],
+     "gain": -1.7328,
+     "k": 1,
+     "inside": false,
+     "within_noise": true,
+     "n": 6,
+     "interval": [
+      0.0,
+      0.5
+     ],
+     "refuted_by": "measured below 0.30",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-m09:p2",
+     "measured": 0.3333333333333333,
+     "value": 0.7,
+     "low": 0.45,
+     "high": 0.95,
+     "nulls": [
+      {
+       "value": 0.55,
+       "low": 0.25,
+       "high": 0.85
+      },
+      {
+       "value": 0.55,
+       "low": 0.3,
+       "high": 0.8
+      }
+     ],
+     "gain": -1.9604,
+     "k": 2,
+     "inside": false,
+     "within_noise": true,
+     "n": 6,
+     "interval": [
+      0.0,
+      0.6666666666666666
+     ],
+     "refuted_by": "measured below 0.45",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-m09:p3",
+     "measured": 0.3333333333333333,
+     "value": 0.22,
+     "low": 0.0,
+     "high": 0.45,
+     "nulls": [
+      {
+       "value": 0.33,
+       "low": 0.1,
+       "high": 0.6
+      },
+      {
+       "value": 0.3,
+       "low": 0.1,
+       "high": 0.55
+      }
+     ],
+     "gain": -0.2764,
+     "k": 3,
+     "inside": true,
+     "within_noise": false,
+     "n": 9,
+     "interval": [
+      0.1111111111111111,
+      0.5555555555555556
+     ],
+     "refuted_by": "measured above 0.45",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-m09:p4",
+     "measured": 0.19084698150089882,
+     "value": 0.0,
+     "low": -0.4,
+     "high": 0.4,
+     "nulls": [
+      {
+       "value": 0.15,
+       "low": -0.4,
+       "high": 0.7
+      },
+      {
+       "value": 0.15,
+       "low": -0.35,
+       "high": 0.65
+      }
+     ],
+     "gain": -0.0301,
+     "k": 4,
+     "inside": true,
+     "within_noise": false,
+     "n": 6,
+     "interval": [
+      -0.04266924403428852,
+      0.5508124261030999
+     ],
+     "refuted_by": "measured above 0.40 or below -0.40",
+     "refuted_by_met": false,
+     "replication": null
+    }
+   ],
+   "heldout_rows": [],
+   "gpu_tests": [],
+   "gpu_gain": 0,
+   "gpu_strikes": 0
+  },
+  "r7-m11": {
+   "carried_from": null,
+   "offline": 3,
+   "not_scored": 0,
+   "computed": 3,
+   "inside": 2,
+   "within_noise": 1,
+   "outside": 0,
+   "total_gain": -1.091,
+   "unexpected_wins": [],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "no gain",
+   "note": "",
+   "reasons": [],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r7-m11:p1",
+     "measured": 0.13463203463203466,
+     "value": 0.1,
+     "low": 0.02,
+     "high": 0.22,
+     "nulls": [
+      {
+       "value": 0.1,
+       "low": -0.05,
+       "high": 0.25
+      },
+      {
+       "value": 0.08,
+       "low": -0.03,
+       "high": 0.2
+      }
+     ],
+     "gain": 0.2989,
+     "k": 1,
+     "inside": true,
+     "within_noise": false,
+     "n": 55,
+     "interval": [
+      0.03994565217391305,
+      0.23477028941509814
+     ],
+     "refuted_by": "measured A - B below 0.03, or undefined",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-m11:p2",
+     "measured": 0.16378066378066375,
+     "value": 0.0,
+     "low": -0.08,
+     "high": 0.08,
+     "nulls": [
+      {
+       "value": 0.0,
+       "low": -0.12,
+       "high": 0.1
+      },
+      {
+       "value": -0.02,
+       "low": -0.1,
+       "high": 0.06
+      }
+     ],
+     "gain": -1.6814,
+     "k": 2,
+     "inside": false,
+     "within_noise": true,
+     "n": 28,
+     "interval": [
+      0.04444444444444445,
+      0.2857142857142857
+     ],
+     "refuted_by": "measured C - A below -0.08, or undefined",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-m11:p3",
+     "measured": 0.42857142857142855,
+     "value": 0.45,
+     "low": 0.28,
+     "high": 0.65,
+     "nulls": [
+      {
+       "value": 0.45,
+       "low": 0.25,
+       "high": 0.65
+      },
+      {
+       "value": 0.55,
+       "low": 0.33,
+       "high": 0.77
+      }
+     ],
+     "gain": 0.2914,
+     "k": 3,
+     "inside": true,
+     "within_noise": false,
+     "n": 21,
+     "interval": [
+      0.25,
+      0.6190476190476191
+     ],
+     "refuted_by": "measured below 0.28, or undefined",
+     "refuted_by_met": false,
+     "replication": null
+    }
+   ],
+   "heldout_rows": [],
+   "gpu_tests": [],
+   "gpu_gain": 0,
+   "gpu_strikes": 0
+  },
+  "r7-m12": {
+   "carried_from": null,
+   "offline": 3,
+   "not_scored": 0,
+   "computed": 3,
+   "inside": 2,
+   "within_noise": 0,
+   "outside": 1,
+   "total_gain": -2.739,
+   "unexpected_wins": [],
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "note": "",
+   "reasons": [
+    "p1 Mechanism test: per-problem gain of the RL-written-examples arm (draw 1) over th: measured -0.018489574809335205, predicted 0.08 [0.035, 0.13]; refuting condition met: S below 0.035"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r7-m12:p1",
+     "measured": -0.018489574809335205,
+     "value": 0.08,
+     "low": 0.035,
+     "high": 0.13,
+     "nulls": [
+      {
+       "value": 0.02,
+       "low": -0.03,
+       "high": 0.07
+      },
+      {
+       "value": 0.01,
+       "low": -0.06,
+       "high": 0.08
+      }
+     ],
+     "gain": -3.0,
+     "k": 1,
+     "inside": false,
+     "within_noise": false,
+     "n": 223,
+     "interval": [
+      -0.05767259056732741,
+      0.021835075493612084
+     ],
+     "refuted_by": "S below 0.035",
+     "refuted_by_met": true,
+     "replication": "replicated"
+    },
+    {
+     "id": "r7-m12:p2",
+     "measured": -0.02192645085267258,
+     "value": 0.0,
+     "low": -0.045,
+     "high": 0.045,
+     "nulls": [
+      {
+       "value": 0.0,
+       "low": -0.05,
+       "high": 0.05
+      },
+      {
+       "value": 0.0,
+       "low": -0.07,
+       "high": 0.07
+      }
+     ],
+     "gain": 0.1434,
+     "k": 2,
+     "inside": true,
+     "within_noise": false,
+     "n": 223,
+     "interval": [
+      -0.06924092902711323,
+      0.02344695441710367
+     ],
+     "refuted_by": "S_E above 0.045 or below -0.045",
+     "refuted_by_met": false,
+     "replication": null
+    },
+    {
+     "id": "r7-m12:p3",
+     "measured": 5,
+     "value": 5,
+     "low": 1,
+     "high": 9,
+     "nulls": [
+      {
+       "value": 5,
+       "low": 1,
+       "high": 10
+      },
+      {
+       "value": 5,
+       "low": 1,
+       "high": 10
+      }
+     ],
+     "gain": 0.1178,
+     "k": 3,
+     "inside": true,
+     "within_noise": false,
+     "n": 33,
+     "interval": [
+      2,
+      9
+     ],
+     "refuted_by": "count above 9",
+     "refuted_by_met": false,
+     "replication": null
+    }
+   ],
+   "heldout_rows": [],
+   "gpu_tests": [],
+   "gpu_gain": 0,
+   "gpu_strikes": 0
+  }
+ }
+}

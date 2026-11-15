@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 4200,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "Equation 1:\n\\[\n16 \\left(-\\frac{289}{4}\\right) + b = -458\n\\]\n\\[\n-1156 + b = -458 \\implies b = 698\n\\]\n\nThus, \\(P(0) = b = 698\\).\n\nNext, we solve for \\(c\\) and \\(d\\) in \\(Q(x)\\):\n1. \\(-2(16)^2 + 16c + d = 54\\)\n   \\[\n   -512 + 16c + d = 54 \\implies 16c + d = 566 \\quad \\text{(Equation 3)}\n   \\]\n2. \\(-2(20)^2 + 20c + d = 53\\)\n   \\[\n   -800 + 20c + d = 53 \\implies 20c + d = 853 \\quad \\text{(Equation 4)}\n   \\]\n\nSubtract Equation 3 from Equation 4:\n\\[\n(20c + d) - (16c + d) = 853 - 566\n\\]\n\\[\n4c = 287 \\implies c = \\frac{287}{4}\n\\]\n\nSubstitute \\(c = \\frac{287}{4}\\) back into Equation 3:\n\\[\n16 \\left(\\frac{287}{4}\\right) + d = 566\n\\]\n\\[\n1148 + d = 566 \\implies d = -582\n\\]\n\nThus, \\(Q(0) = d = -582\\).\n\nFinally, we find \\(P(0) + Q(0)\\):\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\nThe answer is \\(\\boxed{116}\\)."
+ },
+ "wrong": {
+  "problem_index": 57,
+  "gold": "928",
+  "extracted_v3": "2744",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 12397,
+  "prompt_tail": "r: $Answer (without quotes) where $Answer is the answer to the problem.\n\nEach vertex of a regular dodecagon ($12$-gon) is to be colored either red or blue, and thus there are $2^{12}$ possible colorings. Find the number of these colorings with the property that no four vertices colored the same color are the four vertices of a rectangle.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " + |C| - |A \\cap B| - |A \\cap C| - |B \\cap C| + |A \\cap B \\cap C|\n     \\]\n     Substituting the values:\n     \\[\n     |A \\cup B \\cup C| = 3 \\cdot 2^9 - 3 \\cdot 2^6 + 2^3\n     \\]\n     Calculating each term:\n     \\[\n     3 \\cdot 2^9 = 3 \\cdot 512 = 1536\n     \\]\n     \\[\n     3 \\cdot 2^6 = 3 \\cdot 64 = 192\n     \\]\n     \\[\n     2^3 = 8\n     \\]\n     Therefore:\n     \\[\n     |A \\cup B \\cup C| = 1536 - 192 + 8 = 1352\n     \\]\n\n5. **Calculate the Number of Valid Colorings:**\n   - The number of valid colorings is the total number of colorings minus the number of invalid colorings:\n     \\[\n     \\text{Valid colorings} = 2^{12} - |A \\cup B \\cup C|\n     \\]\n     Substituting the values:\n     \\[\n     \\text{Valid colorings} = 4096 - 1352 = 2744\n     \\]\n\nThus, the number of valid colorings is \\(\\boxed{2744}\\)."
+ }
+}

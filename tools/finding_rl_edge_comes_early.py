@@ -47,6 +47,10 @@ DATA = {
     "late": {"n": 70, "base": 17, "rl": 21, "ci": [-2.9, 14.3]},
 }
 
+# The 28 problems of the pool that are in it only through base sample 0, which also supplies the base's starts: the pool
+# minus plan "unbiased". The page counts the 155 others from PROBLEMS.
+BIASED = [4, 15, 22, 32, 46, 51, 63, 70, 81, 88, 120, 137, 145, 180, 248, 272, 313, 334, 355, 358, 389, 391, 394, 399, 419, 438, 454, 471]
+
 _R = DATA["right"]
 _pct = lambda r, c: round(100 * (r["rl>base"][c] - r["base>base"][c]) / (r["rl>rl"][c] - r["base>base"][c]))
 CLOSED = _pct(_R, 1)  # 81: share of the gap the base closes from RL's half-written answers
@@ -54,7 +58,7 @@ CLOSED_U = _pct(DATA["right_unbiased"], 1)  # 65: the same on the unbiased 155
 
 TITLE = "RL's edge comes early"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "Where inside a math answer does RL training make its difference?"
-LINE = f"Finishing RL's half-written answers, the base model closes {CLOSED_U} to {CLOSED} % of its gap to RL."
+LINE = f"Finishing RL's half-written answers, Base + cue closes {CLOSED_U} to {CLOSED} % of its gap to RL."
 
 # Not from our runs: the closest published results. "Sparse but Critical" (arXiv 2603.22446), Sec. 3, Table 1: token-level
 # cross-sampling on Qwen2.5-32B and its SimpleRL version, AIME 2024, Mean@32 at T 1.0: under 4 % of the tokens taken from
@@ -68,30 +72,36 @@ PANELS = [
      "from about 8 % to about 25 % on AIME 2024 (arXiv 2603.22446, Table 1).",
      ["That work also found that the two models differ most at the start of an answer.",
       "New here is a hand-off at a fixed share of the answer, in both directions, on Olmo 3 and its RL-Zero model.",
-      f"By the halfway point, who wrote the start decides more than who finishes. At a 25 % cut it is still the finisher: "
-      f"RL finishing the base's start solves {_R['base>rl'][0]}, the base finishing RL's start {_R['rl>base'][0]}."]],
+      f"At a 25 % cut, the model that finishes matters more: RL finishing the base's start solves {_R['base>rl'][0]} of "
+      f"{DATA['n']}, the base finishing RL's start {_R['rl>base'][0]}. At a 50 % cut, the model that wrote the start matters "
+      f"more: {_R['base>rl'][1]} against {_R['rl>base'][1]}."]],
     ["why", "Why it matters",
      "The search for the gap to RL without training can aim at how an answer starts.",
      [f"RL's advantage is in the first half of its answers. Checking at the end adds little: on {_l['n']} wrong base starts cut "
       f"at 75 %, RL finishes {_l['rl']} right and the base {_l['base']}.",
       f"Where the base fails on RL's start, it mostly runs out of length: at the 50 % cut, {DATA['cap_wrong'][1][0]} of its "
-      f"{DATA['cap_wrong'][1][1]} wrong answers hit the {DATA['cap']:,}-token limit."]],
+      f"{DATA['cap_wrong'][1][1]} wrong answers were cut off at {DATA['cap']:,} tokens."]],
     ["how", "How we know",
      "We cut a stored answer of each model after 25, 50 or 75 % of its tokens and let each model write the rest, once per "
-     "start, at temperature 1.0 and top-p 1.0.",
+     "start, at T 1.0.",
      [f"The {DATA['n']} problems are those of MATH-500 the base model got wrong in at least one of 4 tries. Base: Olmo 3 7B "
       "with an opening cue. RL: Olmo 3.1 7B RL-Zero-Math.",
-      f"Control: a model finishing its own start scores what its whole stored answer scored. RL: {_c['rl'][0]}, {_c['rl'][1]} and "
-      f"{_c['rl'][2]} against {_c['rl_stored']}. Base: {_c['base'][0]}, {_c['base'][1]} and {_c['base'][2]} against "
-      f"{_c['base_stored']} of {DATA['n_unbiased']}.",
-      f"At 50 %, the base on RL's start gains {_g[0]} points over its own start (95 % interval {_g[1]} to {_g[2]}), of a "
-      f"gap of {round(100 * (_R['rl>rl'][1] - _R['base>base'][1]) / DATA['n'], 1)} points."]],
+      f"Control: a model finishing its own start scores what its whole stored answer scored. RL, on all {DATA['n']} problems: "
+      f"{_c['rl'][0]}, {_c['rl'][1]} and {_c['rl'][2]} of {DATA['n']} at the three cuts, against {_c['rl_stored']} of {DATA['n']}. "
+      f"Base + cue, on the {DATA['n_unbiased']} problems chosen without its own answers: {_c['base'][0]}, {_c['base'][1]} and "
+      f"{_c['base'][2]} of {DATA['n_unbiased']}, against {_c['base_stored']} of {DATA['n_unbiased']}.",
+      f"On all {DATA['n']} problems at 50 %, the base on RL's start gains {_g[0]} points over its own start (95 % interval "
+      f"{_g[1]} to {_g[2]}), of a gap of {round(100 * (_R['rl>rl'][1] - _R['base>base'][1]) / DATA['n'], 1)} points: "
+      f"{_R['rl>base'][1] - _R['base>base'][1]} of {_R['rl>rl'][1] - _R['base>base'][1]} problems, {CLOSED} % of the gap."]],
     ["limits", "What it does not show",
      f"These are not MATH-500 accuracies: the {DATA['n']} problems were chosen because the base model fails them, and each "
      "start was finished once.",
      [f"The base's own starts come from the answers used to choose the problems, so they are wrong more often. On the "
       f"{DATA['n_unbiased']} problems chosen without those answers, the base closes {CLOSED_U} % of the gap at 50 % "
-      f"({_U['rl>base'][1]} right, against {_U['base>base'][1]} and {_U['rl>rl'][1]}).",
+      f"({_U['rl>base'][1]} of {DATA['n_unbiased']} right, against {_U['base>base'][1]} and {_U['rl>rl'][1]}: "
+      f"{_U['rl>base'][1] - _U['base>base'][1]} of {_U['rl>rl'][1] - _U['base>base'][1]} problems).",
+      "The text of each hand-off is kept only in the jobs' raw output, which is not in git; the repository keeps it for 8 "
+      "hand-offs, all from starts the base wrote, so RL's starts cannot be read on this page.",
       "It does not show which steps in RL's first half carry the advantage.",
       "One base model, its RL version and one benchmark were tested."]],
     ["run", "How to reproduce it",
@@ -446,7 +456,7 @@ svg * { pointer-events: none; }
 .more button { display: flex; width: 100%; justify-content: space-between; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--rule); font-size: 17px; font-weight: 520; transition: color .15s ease; }
 .more button span { color: var(--faint); font-size: 20px; line-height: 1; }
 .more button:hover { color: var(--blue); }
-.dhead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
+.dhead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 0 6px 12px 0; border-bottom: 1px solid var(--ink); }
 .dhead h2 { margin: 0; font-size: 17px; font-weight: 660; font-stretch: 114%; letter-spacing: .008em; }
 .close { font-size: 13px; color: var(--mute); }
 .close:hover { color: var(--ink); }
@@ -463,6 +473,7 @@ svg * { pointer-events: none; }
 .txt .f0 { color: var(--ink); } .txt .f1 { color: var(--blue); }
 .txt .cut { display: inline-block; width: 2px; height: 1.05em; margin: 0 4px -2px; background: var(--ink); }
 .txt .end { margin-top: 6px; }
+.txt.none { color: var(--mute); }
 .steps { display: flex; justify-content: space-between; margin-top: 14px; font-size: 13px; color: var(--mute); }
 .steps button:hover { color: var(--ink); }
 @media (max-width: 900px) {
@@ -498,10 +509,10 @@ svg * { pointer-events: none; }
   <div class="stage" id="stage">
     <svg id="svg" role="img" tabindex="0"></svg>
     <div class="switch" id="switch" role="group" aria-label="Who writes the beginning">
-      <button data-writer="0" aria-pressed="false">Base model starts</button>
-      <button data-writer="1" aria-pressed="false">RL model starts</button>
+      <button data-writer="0" aria-pressed="false">Base + cue starts</button>
+      <button data-writer="1" aria-pressed="false">RL starts</button>
     </div>
-    <p class="hint">Drag the cut along the answer. Click a dot to see its problem.</p>
+    <p class="hint">Drag the cut along the answer. Click a dot, or press Enter on the picture, to see a problem.</p>
   </div>
   <div class="side">
     <p class="problem" id="problem"></p>
@@ -520,34 +531,35 @@ const fmt = n => Math.round(n).toLocaleString("en-US");
 /* A problem is one row of PROBLEMS; an arm is 6 * writer + 2 * cut + finisher (0 base, 1 RL; cuts 25, 50, 75). The page
    shows a hand-off: the writer writes the start, the other model finishes. Each model finishing its own start is the
    level drawn on the scale: what the model does alone. */
-const CUTS = [25, 50, 75], WHO = ["base model", "RL model"], SHORT = ["base", "RL"], N = D.n, LEVELS = 10;
+const CUTS = [25, 50, 75], WHO = ["Base + cue", "RL"], SHORT = ["Base + cue", "RL"], N = D.n, LEVELS = 10;
 const PR = C.problems.map(([i, q, gold, o, len, gen, ans]) => ({ i, q, gold, o, len, gen, ans }));
 const arm = (w, c, fin) => 6 * w + 2 * c + fin;
 const right = (p, w, c, fin) => p.o[arm(w, c, fin)] === "r";
-const count = (w, c, fin) => PR.reduce((s, p) => s + right(p, w, c, fin), 0);
+const count = (w, c, fin, only) => PR.reduce((s, p) => s + (only && !only.has(p.i) ? 0 : right(p, w, c, fin)), 0);
+const UNB = new Set(C.problems.map(p => p[0]).filter(i => !C.biased.includes(i)));  // the 155
 /* Fixed places: the problems right in more of the 12 arms come first, so right dots gather at the top of the field and
    the edge between right and wrong moves when the reader changes the hand-off. Every problem keeps its place. */
 const ORDER = PR.map((p, k) => k).sort((a, b) => [...PR[b].o].filter(x => x === "r").length - [...PR[a].o].filter(x => x === "r").length || PR[a].i - PR[b].i);
 const SLOT = []; ORDER.forEach((k, s) => { SLOT[k] = s; });
 const STORED = (w, c) => new Set(C.examples.filter(e => e[1] === ["base", "rl"][w] && e[2] === CUTS[c]).map(e => e[0]));
 const S = { w: 1, c: 1, open: null, g: null, el: {}, shown: {}, t: 0, last: 0,
-  split: .5, splitTo: .5, drag: false, wipe: 1, w0: 0, w1: 0, t0: -1e9, from: [], to: [], n0: 0, n1: 0, b0: [0, 0], b1: [0, 0], pos: [] };
+  split: .5, splitTo: .5, drag: false, wipe: 1, w0: 0, w1: 0, t0: -1e9, from: [], to: [], a0: [0, 0, 1], a1: [0, 0, 1], u0: [0, 0, 1], u1: [0, 0, 1], pos: [] };
 
 /* Geometry, in a small 3D space around the plate's centre (x right, y down, z toward the viewer). bar: the answer's
    left and right ends, its three lines of text, the strip behind them; knob and tick rows; field: grid of dots; read:
    the count and its scale. */
 function geo() {
   return narrow.matches
-    ? { w: 480, h: 860, cx: 240, cy: 430, D: 2000, a: [6, 8, 474, 852], r: 22, deep: 30, blur: 12,
+    ? { w: 480, h: 950, cx: 240, cy: 475, D: 2000, a: [6, 8, 474, 942], r: 22, deep: 30, blur: 12,
         x0: 40, x1: 440, lines: [112, 130, 148], strip: [22, 90, 458, 170], dash: 5, cw: 3.3, gap: 9, labY: 72, labAt: "ends",
         lineTop: 94, knobY: 190, knobR: 11, tickY: 224, fs: 18, fl: 19,
-        cols: 16, pitch: 24, gx: 60, gy: 536, d: [4, 10], keyY: 828, kx: [60, 196, 340],
-        bigX: 36, bigY: 352, fb: 104, labX: 40, labY2: 386, trY: 456, tr: [40, 440], refY: [432, 492] }
+        cols: 16, pitch: 24, gx: 60, gy: 596, d: [4, 10], keyY: [894, 894, 924], kx: [60, 300, 60],
+        bigX: 36, bigY: 336, fb: 100, labX: 40, labY2: [372, 396, 420], trY: 478, tr: [40, 440], fc: 18, capY: [540, 562] }
     : { w: 1000, h: 600, cx: 500, cy: 300, D: 2200, a: [24, 18, 976, 582], r: 30, deep: 40, blur: 16,
         x0: 84, x1: 916, lines: [116, 134, 152], strip: [62, 94, 938, 174], dash: 5.5, cw: 3.7, gap: 10.5, labY: 78, labAt: "split",
         lineTop: 98, knobY: 196, knobR: 10, tickY: 228, fs: 17, fl: 19,
-        cols: 19, pitch: 24.5, gx: 94, gy: 282, d: [4.4, 11], keyY: 548, kx: [94, 250, 412],
-        bigX: 592, bigY: 404, fb: 140, labX: 596, labY2: 440, trY: 506, tr: [596, 916], refY: [482, 540] };
+        cols: 19, pitch: 24.5, gx: 94, gy: 282, d: [4.4, 11], keyY: [548, 548, 548], kx: [94, 334, 424],
+        bigX: 572, bigY: 366, fb: 124, labX: 576, labY2: [402, 424, 446], trY: 500, tr: [576, 936], fc: 15, capY: [552, 570] };
 }
 const V = { c1: 1, s1: 0, c2: 1, s2: 0, px: 0, py: 0, tx: 0, ty: 0 };
 function aim(yaw, pitch) { V.c1 = Math.cos(yaw * RAD); V.s1 = Math.sin(yaw * RAD); V.c2 = Math.cos(pitch * RAD); V.s2 = Math.sin(pitch * RAD); }
@@ -600,14 +612,15 @@ function build() {
     `<path class="cutline" id="cl"/><circle class="knobglow" id="kg" r="${g.knobR * 2.2}"/><circle class="knob" id="kn" r="${g.knobR}"/>` +
     CUTS.map((c, k) => `<text class="tick" id="tk${k}" font-size="${g.fs}" text-anchor="middle">${c} %</text>`).join("") + "</g>" +
     `<g class="marks"><path class="ring" id="ring"/>${mk}<circle class="sel" id="sel" r="0"/></g>` +
-    `<g class="key"><circle class="kd0" id="kd0" r="${g.d[1] / 2}"/><text class="lab" id="kt0" font-size="${g.fs}">Problem right</text>` +
-    `<circle class="kd1" id="kd1" r="${g.d[0] / 2 + .4}"/><text class="lab" id="kt1" font-size="${g.fs}">Problem wrong</text>` +
+    `<g class="key"><circle class="kd0" id="kd0" r="${g.d[1] / 2}"/><text class="lab" id="kt0" font-size="${g.fs}">Right after the hand-off</text>` +
+    `<circle class="kd1" id="kd1" r="${g.d[0] / 2 + .4}"/><text class="lab" id="kt1" font-size="${g.fs}">Wrong</text>` +
     `<g class="key2" id="k2"><circle class="ring" id="kd2" r="${g.pitch * .42}"/><text class="lab" id="kt2" font-size="${g.fs}">Text saved</text></g></g>` +
     `<g class="read"><text class="big" id="big" font-size="${g.fb}"></text>` +
-    `<text class="lab" id="biglab" font-size="${g.fl}">of ${N} problems right, temperature 1.0</text>` +
+    [0, 1, 2].map(k => `<text class="lab" id="bl${k}" font-size="${g.fs}"></text>`).join("") +
     `<path class="track" id="track"/><path class="fill" id="fill" stroke-width="5"/><circle class="fe" id="fe" r="6.5"/>` +
-    `<path class="ref b" id="rb"/><path class="ref r" id="rr"/>` +
-    `<text class="reftext tone0" id="tb" font-size="${g.fl}" text-anchor="middle"></text><text class="reftext tone1" id="tr" font-size="${g.fl}" text-anchor="middle"></text></g>`;
+    `<path class="ref b" id="rb"/><path class="ref r" id="rr"/><text class="reftext" id="tn" font-size="${g.fs}" text-anchor="middle"></text>` +
+    `<text class="reftext tone0" id="tb" font-size="${g.fs}"></text><text class="reftext tone1" id="tr" font-size="${g.fs}" text-anchor="end"></text>` +
+    [0, 1].map(k => `<text class="lab" id="cap${k}" font-size="${g.fc}"></text>`).join("") + `</g>`;
   S.el = {}; S.shown = {};
   svg.querySelectorAll("[id]").forEach(e => { S.el[e.id] = e; });
 }
@@ -680,23 +693,35 @@ function place(t, now) {
   if (sel >= 0) { E.sel.setAttribute("cx", f(S.pos[sel][0])); E.sel.setAttribute("cy", f(S.pos[sel][1])); E.sel.setAttribute("r", f(g.pitch * .5)); }
   else E.sel.setAttribute("r", "0");
   [0, 1, 2].forEach(k => {
-    const q = proj(g, g.kx[k], g.keyY, 4);
+    const q = proj(g, g.kx[k], g.keyY[k], 4);
     E["kd" + k].setAttribute("cx", f(q[0])); E["kd" + k].setAttribute("cy", f(q[1]));
     at(E["kt" + k], [q[0] + g.fs * (k === 2 ? 1.05 : .75), q[1]], g.fs * .35);
   });
 
-  // The count and its scale: it counts while the dots change; the levels of each model alone move with the cut.
-  const e = ease(clamp((now - S.t0) / 900, 0, 1)), n = mix(S.n0, S.n1, e), lv = [0, 1].map(i => mix(S.b0[i], S.b1[i], e));
-  text("big", fmt(n));
-  at(E.big, proj(g, g.bigX, g.bigY, 10)); at(E.biglab, proj(g, g.labX, g.labY2, 10));
-  const X = v => mix(g.tr[0], g.tr[1], v / N), line = (x0, y0, x1, y1) => { const p = proj(g, x0, y0, 10), q = proj(g, x1, y1, 10); return `M${f(p[0])} ${f(p[1])}L${f(q[0])} ${f(q[1])}`; };
+  // The share of the gap and its scale. The scale runs from the base alone to RL alone, each model finishing its own
+  // start at this cut, so both ends move with the cut; the hand-off sits between them. Every number counts while the
+  // dots change, the share on the 155 problems chosen without the base's own answers too.
+  const e = ease(clamp((now - S.t0) / 900, 0, 1)), [n, b0, b1] = S.a0.map((v, i) => mix(v, S.a1[i], e)), [m, u0, u1] = S.u0.map((v, i) => mix(v, S.u1[i], e));
+  const share = (n - b0) / (b1 - b0), shareU = (m - u0) / (u1 - u0);
+  text("big", `${Math.round(100 * share)} %`);
+  text("bl0", "of the gap between the two models alone,");
+  text("bl1", `on all ${N} problems; ${Math.round(100 * shareU)} % on the ${D.n_unbiased}`);
+  text("bl2", "chosen without the base's own answers");
+  at(E.big, proj(g, g.bigX, g.bigY, 10));
+  [0, 1, 2].forEach(k => at(E["bl" + k], proj(g, g.labX, g.labY2[k], 10)));
+  const X = v => mix(g.tr[0], g.tr[1], v), line = (x0, y0, x1, y1) => { const p = proj(g, x0, y0, 10), q = proj(g, x1, y1, 10); return `M${f(p[0])} ${f(p[1])}L${f(q[0])} ${f(q[1])}`; };
   E.track.setAttribute("d", line(g.tr[0], g.trY, g.tr[1], g.trY));
-  E.fill.setAttribute("d", line(g.tr[0], g.trY, X(n), g.trY));
-  E.rb.setAttribute("d", line(X(lv[0]), g.trY - 3, X(lv[0]), g.trY + 14));
-  E.rr.setAttribute("d", line(X(lv[1]), g.trY - 14, X(lv[1]), g.trY + 3));
-  const fe = proj(g, X(n), g.trY, 10); E.fe.setAttribute("cx", f(fe[0])); E.fe.setAttribute("cy", f(fe[1]));
-  text("tb", `Base alone ${fmt(lv[0])}`); text("tr", `RL alone ${fmt(lv[1])}`);
-  at(E.tb, proj(g, X(lv[0]), g.refY[1], 10)); at(E.tr, proj(g, X(lv[1]), g.refY[0], 10));
+  E.fill.setAttribute("d", line(g.tr[0], g.trY, X(share), g.trY));
+  E.rb.setAttribute("d", line(g.tr[0], g.trY - 10, g.tr[0], g.trY + 10));
+  E.rr.setAttribute("d", line(g.tr[1], g.trY - 10, g.tr[1], g.trY + 10));
+  const fe = proj(g, X(share), g.trY, 10); E.fe.setAttribute("cx", f(fe[0])); E.fe.setAttribute("cy", f(fe[1]));
+  text("tn", `Hand-off ${fmt(n)}`);
+  text("tb", `Base + cue alone ${fmt(b0)}`); text("tr", `RL alone ${fmt(b1)}`);
+  at(E.tn, proj(g, clamp(X(share), g.tr[0] + 50, g.tr[1] - 50), g.trY - 16, 10));
+  at(E.tb, proj(g, g.tr[0], g.trY + 30, 10)); at(E.tr, proj(g, g.tr[1], g.trY + 30, 10));
+  text("cap0", "Alone: each model finishing its own start at");
+  text("cap1", `this cut, so both ends move with the cut. T 1.0.`);
+  [0, 1].forEach(k => at(E["cap" + k], proj(g, g.labX, g.capY[k], 10)));
 }
 
 /* Always on: the plate sways by a few degrees and leans toward the mouse; the cut eases to its place. About 30 frames a
@@ -716,19 +741,23 @@ function frame(now) {
 function setState(w, c, opts = {}) {
   const now = performance.now(), quick = still.matches || opts.instant;
   const cur = PR.map((p, k) => quick ? 0 : dotAt(k, now)[0]), e = ease(clamp((now - S.t0) / 900, 0, 1));
-  const n = mix(S.n0, S.n1, e), lv = [0, 1].map(i => mix(S.b0[i], S.b1[i], e));
+  const a = S.a0.map((v, i) => mix(v, S.a1[i], e)), u = S.u0.map((v, i) => mix(v, S.u1[i], e));
   if (quick) { S.w0 = S.w1 = w; S.wipe = 1; } else if (w !== S.w) { S.w0 = S.w; S.w1 = w; S.wipe = 0; }
   S.w = w; S.c = c;
   if (!S.drag || quick) S.splitTo = CUTS[c] / 100;
   if (quick) S.split = S.splitTo;
   S.to = PR.map(p => right(p, w, c, 1 - w) ? 1 : 0);
   S.from = quick ? S.to.slice() : cur;
-  S.n1 = count(w, c, 1 - w); S.b1 = [count(0, c, 0), count(1, c, 1)];
-  S.n0 = quick ? S.n1 : n; S.b0 = quick ? S.b1.slice() : lv;
+  // [hand-off, base alone, RL alone]: right of all 183, and of the 155 chosen without the base's own answers
+  S.a1 = [count(w, c, 1 - w), count(0, c, 0), count(1, c, 1)];
+  S.u1 = [count(w, c, 1 - w, UNB), count(0, c, 0, UNB), count(1, c, 1, UNB)];
+  S.a0 = quick ? S.a1.slice() : a; S.u0 = quick ? S.u1.slice() : u;
   S.t0 = quick ? -1e9 : now;
   $("switch").querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-pressed", k === w));
-  $("svg").setAttribute("aria-label", `${N} problems, one dot each. The ${WHO[w]} wrote the first ${CUTS[c]} % of each answer and the ` +
-    `${WHO[1 - w]} finished it: ${S.n1} right. Base alone ${S.b1[0]}, RL alone ${S.b1[1]}. Arrow keys move the cut; Enter opens a problem.`);
+  const [n1, b0, b1] = S.a1;
+  $("svg").setAttribute("aria-label", `${N} problems, one dot each. ${WHO[w]} wrote the first ${CUTS[c]} % of each answer and ` +
+    `${WHO[1 - w]} finished it: ${n1} of ${N} right, ${Math.round(100 * (n1 - b0) / (b1 - b0))} % of the gap between Base + cue alone (${b0}) ` +
+    `and RL alone (${b1}), each finishing its own start. Arrow keys move the cut; Enter opens a problem.`);
   if (still.matches) { aim(0, 0); place(0, now); }
   if (S.open && S.open[0] === "p") pane();
 }
@@ -736,19 +765,21 @@ function setState(w, c, opts = {}) {
 /* The side column: the five panels, or one problem's hand-off in the current state. */
 function problemPane(k) {
   const p = PR[k], w = S.w, c = S.c, fin = 1 - w, a = arm(w, c, fin), own = arm(w, c, w);
-  const said = (j, x) => x === "r" ? `answered ${esc(p.ans[j])}: right`
-    : x === "c" ? `reached the ${D.cap.toLocaleString("en-US")}-token limit: wrong`
-    : p.ans[j] ? `answered ${esc(p.ans[j])}: wrong` : "gave no answer the grader could read: wrong";
+  const said = (j, x) => x === "r" ? `answered <span data-math>${esc(p.ans[j])}</span>: right`
+    : x === "c" ? `was cut off at ${D.cap.toLocaleString("en-US")} tokens: wrong`
+    : p.ans[j] ? `answered <span data-math>${esc(p.ans[j])}</span>: wrong` : "gave no answer the grader could read: wrong";
   const texts = C.examples.filter(e => e[0] === p.i && e[1] === ["base", "rl"][w] && e[2] === CUTS[c]).sort((x, y) => (x[3] === "rl") === !!fin ? -1 : 1);
   const tone = s => s === "rl" ? 1 : 0;
-  const block = texts.map(e => `<div class="txt"><p class="cap">Saved text: the end of the ${SHORT[w]}'s start, then the ${e[3] === "rl" ? "RL model" : "base model"} continuing it (${e[4] ? "right" : "wrong"})</p>` +
-    `<p><span class="w${w}">… ${esc(e[5].replace(/\s+/g, " "))}</span><span class="cut" aria-label="hand-off"></span><span class="f${tone(e[3])}">${esc(e[6].replace(/\s+/g, " "))} …</span></p>` +
-    `<p class="end f${tone(e[3])}">… ${esc(e[7].replace(/\s+/g, " "))}</p></div>`).join("");
-  return `<div class="dhead"><h2>Problem ${p.i} of MATH-500</h2><button class="close" data-open="">Close</button></div>` +
-    `<p class="lead q">${esc(p.q)}</p>` +
-    `<ul class="facts"><li>The <span class="who${w}">${WHO[w]}</span> wrote the first ${CUTS[c]} % of its answer: ${fmt(p.len[3 * w + c])} tokens.</li>` +
-    `<li>The <span class="who${fin}">${WHO[fin]}</span> wrote ${fmt(p.gen[a])} more tokens and <span class="verdict">${said(a, p.o[a])}</span>. The reference answer is ${esc(p.gold)}.</li>` +
-    `<li>From the same start, the ${WHO[w]} itself ${said(own, p.o[own])}.</li></ul>` + block +
+  const block = texts.map(e => `<div class="txt"><p class="cap">Saved text: the end of the start ${WHO[w]} wrote, then ${WHO[tone(e[3])]} continuing it (${e[4] ? "right" : "wrong"})</p>` +
+    `<p data-math><span class="w${w}">… ${esc(e[5].replace(/\s+/g, " "))}</span><span class="cut" aria-label="hand-off"></span><span class="f${tone(e[3])}">${esc(e[6].replace(/\s+/g, " "))} …</span></p>` +
+    `<p class="end f${tone(e[3])}" data-math>… ${esc(e[7].replace(/\s+/g, " "))}</p></div>`).join("") ||
+    `<p class="txt none">No text is shown: the repository keeps the text of ${C.examples.length} hand-offs, all from starts Base + cue wrote. ` +
+    `The other texts${w ? ", RL's starts among them," : ""} are only in the jobs' raw output, which is not in git.</p>`;
+  return `<div class="dhead"><h2>MATH-500, problem ${p.i}</h2><button class="close" data-open="">Close</button></div>` +
+    `<p class="lead q" data-math>${esc(p.q)}</p>` +
+    `<ul class="facts"><li><span class="who${w}">${WHO[w]}</span> wrote the first ${CUTS[c]} % of its answer: ${fmt(p.len[3 * w + c])} tokens.</li>` +
+    `<li><span class="who${fin}">${WHO[fin]}</span> wrote ${fmt(p.gen[a])} more tokens and <span class="verdict">${said(a, p.o[a])}</span>. The reference answer is <span data-math>${esc(p.gold)}</span>.</li>` +
+    `<li>From the same start, ${WHO[w]} itself ${said(own, p.o[own])}.</li></ul>` + block +
     `<div class="steps"><button data-step="-1">‹ Previous problem</button><button data-step="1">Next problem ›</button></div>`;
 }
 function pane() {
@@ -773,6 +804,7 @@ function fromHash(first) {
   S.open = rest || null;
   pane();
 }
+const show = () => { if (narrow.matches) $("pane").scrollIntoView({ behavior: still.matches ? "auto" : "smooth", block: "start" }); };
 function open(key) {
   const was = S.open;
   S.open = key || null;
@@ -814,7 +846,7 @@ svg.addEventListener("click", e => {
   const q = svgPoint(e);
   if (onBar(q)) return;
   const k = nearest(q);
-  if (k >= 0) { open("p" + PR[k].i); if (narrow.matches) $("pane").scrollIntoView({ behavior: still.matches ? "auto" : "smooth", block: "start" }); }
+  if (k >= 0) { open("p" + PR[k].i); show(); }
 });
 document.addEventListener("click", e => {
   const w = e.target.closest("[data-writer]"), o = e.target.closest("[data-open]"), s = e.target.closest("[data-step]");
@@ -833,9 +865,11 @@ document.addEventListener("keydown", e => {
     const c = clamp(S.c + (e.key === "ArrowRight" ? 1 : -1), 0, 2);
     if (c !== S.c) { setState(S.w, c); address(false); }
   }
-  if (e.key === "Enter" && document.activeElement === svg) {
+  if (e.key === "Enter" && document.activeElement === svg) {  // the first problem with saved text, or the first dot
+    e.preventDefault();
     const st = STORED(S.w, S.c), k = PR.findIndex(p => st.has(p.i));
     open("p" + PR[k >= 0 ? k : ORDER[0]].i);
+    show();
   }
 });
 addEventListener("hashchange", fromHash);
@@ -884,8 +918,8 @@ ICON = r"""(kit, t, tilt) => {
 }"""
 
 PAGE = PAGE.replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({
-    "problem": PROBLEM, "line": LINE, "panels": PANELS, "problems": PROBLEMS, "examples": EXAMPLES,
-    "data": {"n": DATA["n"], "cap": DATA["cap"]}}))
+    "problem": PROBLEM, "line": LINE, "panels": PANELS, "problems": PROBLEMS, "examples": EXAMPLES, "biased": BIASED,
+    "data": {"n": DATA["n"], "n_unbiased": DATA["n_unbiased"], "cap": DATA["cap"]}}))
 
 if __name__ == "__main__":  # run from the repository root
     problems, examples = _build()
@@ -927,5 +961,6 @@ if __name__ == "__main__":  # run from the repository root
         run = load(H + f"{m}-01/run.json")
         assert (run["job_id"], run["config"]["model_repo"], run["commit"][:7]) == (DATA["jobs"][m], DATA["models"][m], DATA["run_commit"]), m
         assert run["config"]["sampling"]["temperature"] == 1.0 and run["config"]["sampling"]["top_p"] == 1.0 and run["config"]["cap"] == DATA["cap"]
+    assert BIASED == sorted(set(plan["pool"]) - set(plan["unbiased"]))
     assert (CLOSED, CLOSED_U) == (81, 65)
     print("DATA, PROBLEMS and EXAMPLES match", DATA["readout"], "and the rows of", H + "base-01/ and rl-01/")

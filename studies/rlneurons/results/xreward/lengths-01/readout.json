@@ -1,0 +1,1643 @@
+{
+ "n": 328,
+ "grader": "v3",
+ "cap": 16384,
+ "jobs": {
+  "base_cue_T1": "abaybektursun-1114-151534-e72c",
+  "rand8_math31": "abaybektursun-1114-221040-5f1e",
+  "top1_math31": "abaybektursun-1115-000358-d11a",
+  "top8_math31": "abaybektursun-1114-221034-007d",
+  "top64_math31": "abaybektursun-1115-003755-b90d",
+  "top8x2_math31": "abaybektursun-1115-012855-d7ed",
+  "bulk_math31": "abaybektursun-1114-221100-1e31",
+  "rbulk_math31": "abaybektursun-1115-012935-2836",
+  "rl_plain_T1": "abaybektursun-1114-151540-86ef",
+  "rl_cue_T1": "abaybektursun-1114-132929-a32d"
+ },
+ "caveat": "stored runs truncated at C, not runs with cap C; rl_cue_T1 has seed base 50,000,000, the others 3,000,000",
+ "lengths": {
+  "base_cue_T1": {
+   "finished": 251,
+   "tokens": {
+    "p10": 1299.0,
+    "p25": 2446.0,
+    "p50": 6426.0,
+    "p75": 11212.0,
+    "p90": 14516.0
+   },
+   "paired_with_base": {
+    "n": 251,
+    "base": {
+     "p10": 1299.0,
+     "p25": 2446.0,
+     "p50": 6426.0,
+     "p75": 11212.0,
+     "p90": 14516.0
+    },
+    "cell": {
+     "p10": 1299.0,
+     "p25": 2446.0,
+     "p50": 6426.0,
+     "p75": 11212.0,
+     "p90": 14516.0
+    },
+    "median_ratio_cell_over_base": 1.0
+   },
+   "first_boxed": {
+    "finished_with_boxed": 228,
+    "position_fraction_of_chars": {
+     "p10": 0.752,
+     "p25": 0.846,
+     "p50": 0.916,
+     "p75": 0.958,
+     "p90": 0.975
+    }
+   }
+  },
+  "rand8_math31": {
+   "finished": 261,
+   "tokens": {
+    "p10": 1462.0,
+    "p25": 2784.0,
+    "p50": 6533.0,
+    "p75": 11566.0,
+    "p90": 14763.0
+   },
+   "paired_with_base": {
+    "n": 222,
+    "base": {
+     "p10": 1135.6,
+     "p25": 2180.0,
+     "p50": 5204.5,
+     "p75": 10155.5,
+     "p90": 13819.5
+    },
+    "cell": {
+     "p10": 1295.0,
+     "p25": 2519.25,
+     "p50": 5129.0,
+     "p75": 9838.25,
+     "p90": 13950.2
+    },
+    "median_ratio_cell_over_base": 1.0
+   },
+   "first_boxed": {
+    "finished_with_boxed": 239,
+    "position_fraction_of_chars": {
+     "p10": 0.752,
+     "p25": 0.852,
+     "p50": 0.923,
+     "p75": 0.96,
+     "p90": 0.976
+    }
+   }
+  },
+  "top1_math31": {
+   "finished": 277,
+   "tokens": {
+    "p10": 1505.8,
+    "p25": 2879.0,
+    "p50": 6542.0,
+    "p75": 11465.0,
+    "p90": 13596.0
+   },
+   "paired_with_base": {
+    "n": 229,
+    "base": {
+     "p10": 1237.8,
+     "p25": 2249.0,
+     "p50": 5374.0,
+     "p75": 10629.0,
+     "p90": 14267.4
+    },
+    "cell": {
+     "p10": 1405.2,
+     "p25": 2511.0,
+     "p50": 4655.0,
+     "p75": 10398.0,
+     "p90": 13030.4
+    },
+    "median_ratio_cell_over_base": 0.995
+   },
+   "first_boxed": {
+    "finished_with_boxed": 263,
+    "position_fraction_of_chars": {
+     "p10": 0.751,
+     "p25": 0.818,
+     "p50": 0.904,
+     "p75": 0.951,
+     "p90": 0.965
+    }
+   }
+  },
+  "top8_math31": {
+   "finished": 282,
+   "tokens": {
+    "p10": 1942.5,
+    "p25": 3372.25,
+    "p50": 7687.0,
+    "p75": 12621.25,
+    "p90": 15206.1
+   },
+   "paired_with_base": {
+    "n": 230,
+    "base": {
+     "p10": 1252.4,
+     "p25": 2287.5,
+     "p50": 5513.0,
+     "p75": 10612.75,
+     "p90": 14398.0
+    },
+    "cell": {
+     "p10": 1654.3,
+     "p25": 3029.25,
+     "p50": 6094.0,
+     "p75": 10846.25,
+     "p90": 14815.8
+    },
+    "median_ratio_cell_over_base": 1.093
+   },
+   "first_boxed": {
+    "finished_with_boxed": 281,
+    "position_fraction_of_chars": {
+     "p10": 0.727,
+     "p25": 0.799,
+     "p50": 0.882,
+     "p75": 0.931,
+     "p90": 0.956
+    }
+   }
+  },
+  "top64_math31": {
+   "finished": 286,
+   "tokens": {
+    "p10": 2427.5,
+    "p25": 4155.0,
+    "p50": 7798.5,
+    "p75": 12088.5,
+    "p90": 14657.5
+   },
+   "paired_with_base": {
+    "n": 232,
+    "base": {
+     "p10": 1269.7,
+     "p25": 2274.5,
+     "p50": 5651.5,
+     "p75": 10622.25,
+     "p90": 14298.9
+    },
+    "cell": {
+     "p10": 2186.3,
+     "p25": 3622.75,
+     "p50": 6486.5,
+     "p75": 10492.0,
+     "p90": 13610.2
+    },
+    "median_ratio_cell_over_base": 1.172
+   },
+   "first_boxed": {
+    "finished_with_boxed": 284,
+    "position_fraction_of_chars": {
+     "p10": 0.687,
+     "p25": 0.783,
+     "p50": 0.857,
+     "p75": 0.91,
+     "p90": 0.94
+    }
+   }
+  },
+  "top8x2_math31": {
+   "finished": 323,
+   "tokens": {
+    "p10": 2453.8,
+    "p25": 4590.5,
+    "p50": 8755.0,
+    "p75": 10895.0,
+    "p90": 12959.4
+   },
+   "paired_with_base": {
+    "n": 246,
+    "base": {
+     "p10": 1296.5,
+     "p25": 2333.25,
+     "p50": 6409.0,
+     "p75": 11152.0,
+     "p90": 14487.0
+    },
+    "cell": {
+     "p10": 2106.5,
+     "p25": 3806.5,
+     "p50": 7087.5,
+     "p75": 10070.0,
+     "p90": 12308.0
+    },
+    "median_ratio_cell_over_base": 1.11
+   },
+   "first_boxed": {
+    "finished_with_boxed": 323,
+    "position_fraction_of_chars": {
+     "p10": 0.698,
+     "p25": 0.787,
+     "p50": 0.86,
+     "p75": 0.906,
+     "p90": 0.937
+    }
+   }
+  },
+  "bulk_math31": {
+   "finished": 238,
+   "tokens": {
+    "p10": 2082.7,
+    "p25": 3853.0,
+    "p50": 6876.0,
+    "p75": 11131.5,
+    "p90": 14078.3
+   },
+   "paired_with_base": {
+    "n": 207,
+    "base": {
+     "p10": 1117.4,
+     "p25": 2125.5,
+     "p50": 4797.0,
+     "p75": 9480.0,
+     "p90": 12885.0
+    },
+    "cell": {
+     "p10": 1984.0,
+     "p25": 3393.0,
+     "p50": 5979.0,
+     "p75": 10121.0,
+     "p90": 12861.0
+    },
+    "median_ratio_cell_over_base": 1.213
+   },
+   "first_boxed": {
+    "finished_with_boxed": 238,
+    "position_fraction_of_chars": {
+     "p10": 0.645,
+     "p25": 0.78,
+     "p50": 0.854,
+     "p75": 0.905,
+     "p90": 0.942
+    }
+   }
+  },
+  "rbulk_math31": {
+   "finished": 295,
+   "tokens": {
+    "p10": 2699.0,
+    "p25": 4635.0,
+    "p50": 8327.0,
+    "p75": 12614.5,
+    "p90": 14822.6
+   },
+   "paired_with_base": {
+    "n": 236,
+    "base": {
+     "p10": 1280.5,
+     "p25": 2296.5,
+     "p50": 5788.0,
+     "p75": 10686.25,
+     "p90": 14487.0
+    },
+    "cell": {
+     "p10": 2382.0,
+     "p25": 3813.5,
+     "p50": 6947.0,
+     "p75": 10870.5,
+     "p90": 14169.0
+    },
+    "median_ratio_cell_over_base": 1.245
+   },
+   "first_boxed": {
+    "finished_with_boxed": 295,
+    "position_fraction_of_chars": {
+     "p10": 0.629,
+     "p25": 0.761,
+     "p50": 0.854,
+     "p75": 0.907,
+     "p90": 0.934
+    }
+   }
+  },
+  "rl_plain_T1": {
+   "finished": 308,
+   "tokens": {
+    "p10": 2662.9,
+    "p25": 4475.75,
+    "p50": 9171.0,
+    "p75": 12883.25,
+    "p90": 14435.1
+   },
+   "paired_with_base": {
+    "n": 242,
+    "base": {
+     "p10": 1294.5,
+     "p25": 2302.5,
+     "p50": 6173.5,
+     "p75": 10950.75,
+     "p90": 14450.2
+    },
+    "cell": {
+     "p10": 2400.9,
+     "p25": 3729.5,
+     "p50": 7717.5,
+     "p75": 11848.75,
+     "p90": 13531.6
+    },
+    "median_ratio_cell_over_base": 1.266
+   },
+   "first_boxed": {
+    "finished_with_boxed": 308,
+    "position_fraction_of_chars": {
+     "p10": 0.666,
+     "p25": 0.775,
+     "p50": 0.859,
+     "p75": 0.912,
+     "p90": 0.939
+    }
+   }
+  },
+  "rl_cue_T1": {
+   "finished": 303,
+   "tokens": {
+    "p10": 2627.8,
+    "p25": 4647.0,
+    "p50": 8526.0,
+    "p75": 13031.5,
+    "p90": 14571.8
+   },
+   "paired_with_base": {
+    "n": 240,
+    "base": {
+     "p10": 1291.3,
+     "p25": 2301.75,
+     "p50": 6042.0,
+     "p75": 10763.25,
+     "p90": 14457.5
+    },
+    "cell": {
+     "p10": 2383.3,
+     "p25": 3920.5,
+     "p50": 6995.0,
+     "p75": 11559.25,
+     "p90": 14084.2
+    },
+    "median_ratio_cell_over_base": 1.234
+   },
+   "first_boxed": {
+    "finished_with_boxed": 303,
+    "position_fraction_of_chars": {
+     "p10": 0.628,
+     "p25": 0.773,
+     "p50": 0.85,
+     "p75": 0.902,
+     "p90": 0.932
+    }
+   }
+  }
+ },
+ "budget_curves": {
+  "base_cue_T1": {
+   "2000": {
+    "right": 42,
+    "mean_tokens": 1895.4
+   },
+   "4000": {
+    "right": 81,
+    "mean_tokens": 3448.5
+   },
+   "6000": {
+    "right": 108,
+    "mean_tokens": 4792.1
+   },
+   "8000": {
+    "right": 124,
+    "mean_tokens": 5989.0
+   },
+   "10000": {
+    "right": 138,
+    "mean_tokens": 7028.3
+   },
+   "12000": {
+    "right": 150,
+    "mean_tokens": 7908.2
+   },
+   "14000": {
+    "right": 156,
+    "mean_tokens": 8664.8
+   },
+   "16384": {
+    "right": 164,
+    "mean_tokens": 9344.5
+   }
+  },
+  "rand8_math31": {
+   "2000": {
+    "right": 41,
+    "mean_tokens": 1900.2
+   },
+   "4000": {
+    "right": 86,
+    "mean_tokens": 3479.6
+   },
+   "6000": {
+    "right": 107,
+    "mean_tokens": 4815.4
+   },
+   "8000": {
+    "right": 123,
+    "mean_tokens": 5975.3
+   },
+   "10000": {
+    "right": 137,
+    "mean_tokens": 6960.4
+   },
+   "12000": {
+    "right": 145,
+    "mean_tokens": 7804.2
+   },
+   "14000": {
+    "right": 151,
+    "mean_tokens": 8510.3
+   },
+   "16384": {
+    "right": 158,
+    "mean_tokens": 9139.9
+   }
+  },
+  "top1_math31": {
+   "2000": {
+    "right": 38,
+    "mean_tokens": 1912.5
+   },
+   "4000": {
+    "right": 97,
+    "mean_tokens": 3460.7
+   },
+   "6000": {
+    "right": 121,
+    "mean_tokens": 4743.7
+   },
+   "8000": {
+    "right": 144,
+    "mean_tokens": 5839.2
+   },
+   "10000": {
+    "right": 152,
+    "mean_tokens": 6793.6
+   },
+   "12000": {
+    "right": 168,
+    "mean_tokens": 7597.2
+   },
+   "14000": {
+    "right": 176,
+    "mean_tokens": 8158.5
+   },
+   "16384": {
+    "right": 181,
+    "mean_tokens": 8602.5
+   }
+  },
+  "top8_math31": {
+   "2000": {
+    "right": 30,
+    "mean_tokens": 1942.6
+   },
+   "4000": {
+    "right": 78,
+    "mean_tokens": 3592.6
+   },
+   "6000": {
+    "right": 109,
+    "mean_tokens": 4983.0
+   },
+   "8000": {
+    "right": 132,
+    "mean_tokens": 6185.3
+   },
+   "10000": {
+    "right": 152,
+    "mean_tokens": 7212.3
+   },
+   "12000": {
+    "right": 169,
+    "mean_tokens": 8059.9
+   },
+   "14000": {
+    "right": 178,
+    "mean_tokens": 8740.7
+   },
+   "16384": {
+    "right": 192,
+    "mean_tokens": 9284.8
+   }
+  },
+  "top64_math31": {
+   "2000": {
+    "right": 18,
+    "mean_tokens": 1975.0
+   },
+   "4000": {
+    "right": 66,
+    "mean_tokens": 3703.8
+   },
+   "6000": {
+    "right": 112,
+    "mean_tokens": 5158.0
+   },
+   "8000": {
+    "right": 140,
+    "mean_tokens": 6361.4
+   },
+   "10000": {
+    "right": 162,
+    "mean_tokens": 7390.9
+   },
+   "12000": {
+    "right": 181,
+    "mean_tokens": 8196.5
+   },
+   "14000": {
+    "right": 194,
+    "mean_tokens": 8800.1
+   },
+   "16384": {
+    "right": 200,
+    "mean_tokens": 9261.0
+   }
+  },
+  "top8x2_math31": {
+   "2000": {
+    "right": 20,
+    "mean_tokens": 1973.5
+   },
+   "4000": {
+    "right": 69,
+    "mean_tokens": 3713.5
+   },
+   "6000": {
+    "right": 103,
+    "mean_tokens": 5180.0
+   },
+   "8000": {
+    "right": 133,
+    "mean_tokens": 6425.2
+   },
+   "10000": {
+    "right": 159,
+    "mean_tokens": 7362.0
+   },
+   "12000": {
+    "right": 176,
+    "mean_tokens": 7894.8
+   },
+   "14000": {
+    "right": 189,
+    "mean_tokens": 8122.6
+   },
+   "16384": {
+    "right": 190,
+    "mean_tokens": 8208.0
+   }
+  },
+  "bulk_math31": {
+   "2000": {
+    "right": 22,
+    "mean_tokens": 1969.5
+   },
+   "4000": {
+    "right": 62,
+    "mean_tokens": 3701.5
+   },
+   "6000": {
+    "right": 105,
+    "mean_tokens": 5171.2
+   },
+   "8000": {
+    "right": 129,
+    "mean_tokens": 6443.5
+   },
+   "10000": {
+    "right": 152,
+    "mean_tokens": 7554.3
+   },
+   "12000": {
+    "right": 173,
+    "mean_tokens": 8484.1
+   },
+   "14000": {
+    "right": 182,
+    "mean_tokens": 9251.1
+   },
+   "16384": {
+    "right": 190,
+    "mean_tokens": 10010.5
+   }
+  },
+  "rbulk_math31": {
+   "2000": {
+    "right": 13,
+    "mean_tokens": 1979.2
+   },
+   "4000": {
+    "right": 64,
+    "mean_tokens": 3739.5
+   },
+   "6000": {
+    "right": 97,
+    "mean_tokens": 5250.7
+   },
+   "8000": {
+    "right": 132,
+    "mean_tokens": 6520.5
+   },
+   "10000": {
+    "right": 161,
+    "mean_tokens": 7552.5
+   },
+   "12000": {
+    "right": 179,
+    "mean_tokens": 8368.2
+   },
+   "14000": {
+    "right": 189,
+    "mean_tokens": 8977.3
+   },
+   "16384": {
+    "right": 195,
+    "mean_tokens": 9386.2
+   }
+  },
+  "rl_plain_T1": {
+   "2000": {
+    "right": 11,
+    "mean_tokens": 1983.9
+   },
+   "4000": {
+    "right": 69,
+    "mean_tokens": 3745.6
+   },
+   "6000": {
+    "right": 100,
+    "mean_tokens": 5228.9
+   },
+   "8000": {
+    "right": 128,
+    "mean_tokens": 6533.4
+   },
+   "10000": {
+    "right": 156,
+    "mean_tokens": 7608.7
+   },
+   "12000": {
+    "right": 179,
+    "mean_tokens": 8456.5
+   },
+   "14000": {
+    "right": 199,
+    "mean_tokens": 9018.1
+   },
+   "16384": {
+    "right": 206,
+    "mean_tokens": 9316.4
+   }
+  },
+  "rl_cue_T1": {
+   "2000": {
+    "right": 15,
+    "mean_tokens": 1978.4
+   },
+   "4000": {
+    "right": 62,
+    "mean_tokens": 3734.7
+   },
+   "6000": {
+    "right": 103,
+    "mean_tokens": 5220.0
+   },
+   "8000": {
+    "right": 141,
+    "mean_tokens": 6465.3
+   },
+   "10000": {
+    "right": 160,
+    "mean_tokens": 7506.3
+   },
+   "12000": {
+    "right": 182,
+    "mean_tokens": 8372.1
+   },
+   "14000": {
+    "right": 196,
+    "mean_tokens": 8980.9
+   },
+   "16384": {
+    "right": 205,
+    "mean_tokens": 9317.3
+   }
+  }
+ },
+ "cascade": {
+  "base_cue_T1 -> top8x2_math31 at 2000": {
+   "right": 190,
+   "second_pass_problems": 284,
+   "mean_tokens": 9684.8,
+   "minus_rl_plain_T1": {
+    "points": -4.88,
+    "ci95": [
+     -8.54,
+     -1.22
+    ]
+   }
+  },
+  "base_cue_T1 -> top8x2_math31 at 4000": {
+   "right": 187,
+   "second_pass_problems": 241,
+   "mean_tokens": 10643.8,
+   "minus_rl_plain_T1": {
+    "points": -5.79,
+    "ci95": [
+     -9.76,
+     -2.13
+    ]
+   }
+  },
+  "base_cue_T1 -> top8x2_math31 at 6000": {
+   "right": 186,
+   "second_pass_problems": 208,
+   "mean_tokens": 11259.2,
+   "minus_rl_plain_T1": {
+    "points": -6.1,
+    "ci95": [
+     -10.06,
+     -2.44
+    ]
+   }
+  },
+  "base_cue_T1 -> top8x2_math31 at 8000": {
+   "right": 186,
+   "second_pass_problems": 184,
+   "mean_tokens": 11808.3,
+   "minus_rl_plain_T1": {
+    "points": -6.1,
+    "ci95": [
+     -10.06,
+     -2.44
+    ]
+   }
+  },
+  "base_cue_T1 -> top8x2_math31 at 10000": {
+   "right": 185,
+   "second_pass_problems": 158,
+   "mean_tokens": 12107.8,
+   "minus_rl_plain_T1": {
+    "points": -6.4,
+    "ci95": [
+     -10.37,
+     -2.44
+    ]
+   }
+  },
+  "base_cue_T1 -> top8x2_math31 at 12000": {
+   "right": 185,
+   "second_pass_problems": 136,
+   "mean_tokens": 12336.5,
+   "minus_rl_plain_T1": {
+    "points": -6.4,
+    "ci95": [
+     -10.37,
+     -2.74
+    ]
+   }
+  },
+  "base_cue_T1 -> top8x2_math31 at 14000": {
+   "right": 182,
+   "second_pass_problems": 111,
+   "mean_tokens": 12331.5,
+   "minus_rl_plain_T1": {
+    "points": -7.32,
+    "ci95": [
+     -11.28,
+     -3.35
+    ]
+   }
+  },
+  "base_cue_T1 -> top8x2_math31 at 16384": {
+   "right": 175,
+   "second_pass_problems": 77,
+   "mean_tokens": 11916.4,
+   "minus_rl_plain_T1": {
+    "points": -9.45,
+    "ci95": [
+     -13.72,
+     -5.49
+    ]
+   }
+  },
+  "base_cue_T1 -> rand8_math31 at 2000": {
+   "right": 158,
+   "second_pass_problems": 284,
+   "mean_tokens": 10803.1,
+   "minus_rl_plain_T1": {
+    "points": -14.63,
+    "ci95": [
+     -19.21,
+     -10.37
+    ]
+   }
+  },
+  "base_cue_T1 -> rand8_math31 at 4000": {
+   "right": 158,
+   "second_pass_problems": 241,
+   "mean_tokens": 11878.4,
+   "minus_rl_plain_T1": {
+    "points": -14.63,
+    "ci95": [
+     -19.21,
+     -10.36
+    ]
+   }
+  },
+  "base_cue_T1 -> rand8_math31 at 6000": {
+   "right": 167,
+   "second_pass_problems": 208,
+   "mean_tokens": 12509.5,
+   "minus_rl_plain_T1": {
+    "points": -11.89,
+    "ci95": [
+     -16.16,
+     -7.62
+    ]
+   }
+  },
+  "base_cue_T1 -> rand8_math31 at 8000": {
+   "right": 169,
+   "second_pass_problems": 184,
+   "mean_tokens": 13098.1,
+   "minus_rl_plain_T1": {
+    "points": -11.28,
+    "ci95": [
+     -15.55,
+     -7.01
+    ]
+   }
+  },
+  "base_cue_T1 -> rand8_math31 at 10000": {
+   "right": 171,
+   "second_pass_problems": 158,
+   "mean_tokens": 13325.4,
+   "minus_rl_plain_T1": {
+    "points": -10.67,
+    "ci95": [
+     -15.24,
+     -6.4
+    ]
+   }
+  },
+  "base_cue_T1 -> rand8_math31 at 12000": {
+   "right": 172,
+   "second_pass_problems": 136,
+   "mean_tokens": 13555.5,
+   "minus_rl_plain_T1": {
+    "points": -10.37,
+    "ci95": [
+     -14.63,
+     -6.1
+    ]
+   }
+  },
+  "base_cue_T1 -> rand8_math31 at 14000": {
+   "right": 171,
+   "second_pass_problems": 111,
+   "mean_tokens": 13371.8,
+   "minus_rl_plain_T1": {
+    "points": -10.67,
+    "ci95": [
+     -15.24,
+     -6.4
+    ]
+   }
+  },
+  "base_cue_T1 -> rand8_math31 at 16384": {
+   "right": 170,
+   "second_pass_problems": 77,
+   "mean_tokens": 12683.2,
+   "minus_rl_plain_T1": {
+    "points": -10.98,
+    "ci95": [
+     -15.55,
+     -6.71
+    ]
+   }
+  },
+  "base_cue_T1 -> rl_cue_T1 at 2000": {
+   "right": 204,
+   "second_pass_problems": 284,
+   "mean_tokens": 10774.9,
+   "minus_rl_plain_T1": {
+    "points": -0.61,
+    "ci95": [
+     -4.27,
+     3.05
+    ]
+   }
+  },
+  "base_cue_T1 -> rl_cue_T1 at 4000": {
+   "right": 200,
+   "second_pass_problems": 241,
+   "mean_tokens": 11686.9,
+   "minus_rl_plain_T1": {
+    "points": -1.83,
+    "ci95": [
+     -5.49,
+     2.13
+    ]
+   }
+  },
+  "base_cue_T1 -> rl_cue_T1 at 6000": {
+   "right": 197,
+   "second_pass_problems": 208,
+   "mean_tokens": 12308.1,
+   "minus_rl_plain_T1": {
+    "points": -2.74,
+    "ci95": [
+     -6.4,
+     0.91
+    ]
+   }
+  },
+  "base_cue_T1 -> rl_cue_T1 at 8000": {
+   "right": 197,
+   "second_pass_problems": 184,
+   "mean_tokens": 12858.0,
+   "minus_rl_plain_T1": {
+    "points": -2.74,
+    "ci95": [
+     -6.4,
+     0.91
+    ]
+   }
+  },
+  "base_cue_T1 -> rl_cue_T1 at 10000": {
+   "right": 194,
+   "second_pass_problems": 158,
+   "mean_tokens": 13041.9,
+   "minus_rl_plain_T1": {
+    "points": -3.66,
+    "ci95": [
+     -7.62,
+     0.3
+    ]
+   }
+  },
+  "base_cue_T1 -> rl_cue_T1 at 12000": {
+   "right": 195,
+   "second_pass_problems": 136,
+   "mean_tokens": 13238.2,
+   "minus_rl_plain_T1": {
+    "points": -3.35,
+    "ci95": [
+     -7.32,
+     0.61
+    ]
+   }
+  },
+  "base_cue_T1 -> rl_cue_T1 at 14000": {
+   "right": 191,
+   "second_pass_problems": 111,
+   "mean_tokens": 13099.9,
+   "minus_rl_plain_T1": {
+    "points": -4.57,
+    "ci95": [
+     -8.54,
+     -0.61
+    ]
+   }
+  },
+  "base_cue_T1 -> rl_cue_T1 at 16384": {
+   "right": 185,
+   "second_pass_problems": 77,
+   "mean_tokens": 12497.0,
+   "minus_rl_plain_T1": {
+    "points": -6.4,
+    "ci95": [
+     -10.67,
+     -2.13
+    ]
+   }
+  },
+  "top8_math31 -> top8x2_math31 at 2000": {
+   "right": 191,
+   "second_pass_problems": 297,
+   "mean_tokens": 9898.8,
+   "minus_rl_plain_T1": {
+    "points": -4.57,
+    "ci95": [
+     -8.23,
+     -0.91
+    ]
+   }
+  },
+  "top8_math31 -> top8x2_math31 at 4000": {
+   "right": 192,
+   "second_pass_problems": 248,
+   "mean_tokens": 10946.7,
+   "minus_rl_plain_T1": {
+    "points": -4.27,
+    "ci95": [
+     -7.93,
+     -0.61
+    ]
+   }
+  },
+  "top8_math31 -> top8x2_math31 at 6000": {
+   "right": 191,
+   "second_pass_problems": 215,
+   "mean_tokens": 11796.1,
+   "minus_rl_plain_T1": {
+    "points": -4.57,
+    "ci95": [
+     -8.23,
+     -0.91
+    ]
+   }
+  },
+  "top8_math31 -> top8x2_math31 at 8000": {
+   "right": 190,
+   "second_pass_problems": 182,
+   "mean_tokens": 12133.8,
+   "minus_rl_plain_T1": {
+    "points": -4.88,
+    "ci95": [
+     -8.54,
+     -1.22
+    ]
+   }
+  },
+  "top8_math31 -> top8x2_math31 at 10000": {
+   "right": 190,
+   "second_pass_problems": 155,
+   "mean_tokens": 12436.8,
+   "minus_rl_plain_T1": {
+    "points": -4.88,
+    "ci95": [
+     -8.84,
+     -0.91
+    ]
+   }
+  },
+  "top8_math31 -> top8x2_math31 at 12000": {
+   "right": 190,
+   "second_pass_problems": 121,
+   "mean_tokens": 12231.6,
+   "minus_rl_plain_T1": {
+    "points": -4.88,
+    "ci95": [
+     -9.15,
+     -0.91
+    ]
+   }
+  },
+  "top8_math31 -> top8x2_math31 at 14000": {
+   "right": 194,
+   "second_pass_problems": 101,
+   "mean_tokens": 12276.2,
+   "minus_rl_plain_T1": {
+    "points": -3.66,
+    "ci95": [
+     -7.62,
+     0.3
+    ]
+   }
+  },
+  "top8_math31 -> top8x2_math31 at 16384": {
+   "right": 197,
+   "second_pass_problems": 46,
+   "mean_tokens": 10924.0,
+   "minus_rl_plain_T1": {
+    "points": -2.74,
+    "ci95": [
+     -6.71,
+     1.22
+    ]
+   }
+  },
+  "top8_math31 -> rand8_math31 at 2000": {
+   "right": 158,
+   "second_pass_problems": 297,
+   "mean_tokens": 10884.2,
+   "minus_rl_plain_T1": {
+    "points": -14.63,
+    "ci95": [
+     -19.21,
+     -10.37
+    ]
+   }
+  },
+  "top8_math31 -> rand8_math31 at 4000": {
+   "right": 162,
+   "second_pass_problems": 248,
+   "mean_tokens": 12011.1,
+   "minus_rl_plain_T1": {
+    "points": -13.41,
+    "ci95": [
+     -17.68,
+     -9.15
+    ]
+   }
+  },
+  "top8_math31 -> rand8_math31 at 6000": {
+   "right": 166,
+   "second_pass_problems": 215,
+   "mean_tokens": 12860.5,
+   "minus_rl_plain_T1": {
+    "points": -12.2,
+    "ci95": [
+     -16.46,
+     -7.93
+    ]
+   }
+  },
+  "top8_math31 -> rand8_math31 at 8000": {
+   "right": 173,
+   "second_pass_problems": 182,
+   "mean_tokens": 13155.9,
+   "minus_rl_plain_T1": {
+    "points": -10.06,
+    "ci95": [
+     -14.02,
+     -6.1
+    ]
+   }
+  },
+  "top8_math31 -> rand8_math31 at 10000": {
+   "right": 177,
+   "second_pass_problems": 155,
+   "mean_tokens": 13350.5,
+   "minus_rl_plain_T1": {
+    "points": -8.84,
+    "ci95": [
+     -13.11,
+     -4.88
+    ]
+   }
+  },
+  "top8_math31 -> rand8_math31 at 12000": {
+   "right": 183,
+   "second_pass_problems": 121,
+   "mean_tokens": 13103.4,
+   "minus_rl_plain_T1": {
+    "points": -7.01,
+    "ci95": [
+     -11.28,
+     -3.05
+    ]
+   }
+  },
+  "top8_math31 -> rand8_math31 at 14000": {
+   "right": 186,
+   "second_pass_problems": 101,
+   "mean_tokens": 13036.3,
+   "minus_rl_plain_T1": {
+    "points": -6.1,
+    "ci95": [
+     -10.37,
+     -2.13
+    ]
+   }
+  },
+  "top8_math31 -> rand8_math31 at 16384": {
+   "right": 192,
+   "second_pass_problems": 46,
+   "mean_tokens": 11259.2,
+   "minus_rl_plain_T1": {
+    "points": -4.27,
+    "ci95": [
+     -8.23,
+     -0.3
+    ]
+   }
+  },
+  "top8_math31 -> rl_cue_T1 at 2000": {
+   "right": 205,
+   "second_pass_problems": 297,
+   "mean_tokens": 11002.5,
+   "minus_rl_plain_T1": {
+    "points": -0.3,
+    "ci95": [
+     -3.96,
+     3.35
+    ]
+   }
+  },
+  "top8_math31 -> rl_cue_T1 at 4000": {
+   "right": 204,
+   "second_pass_problems": 248,
+   "mean_tokens": 12000.7,
+   "minus_rl_plain_T1": {
+    "points": -0.61,
+    "ci95": [
+     -4.27,
+     3.05
+    ]
+   }
+  },
+  "top8_math31 -> rl_cue_T1 at 6000": {
+   "right": 204,
+   "second_pass_problems": 215,
+   "mean_tokens": 12818.0,
+   "minus_rl_plain_T1": {
+    "points": -0.61,
+    "ci95": [
+     -4.27,
+     3.05
+    ]
+   }
+  },
+  "top8_math31 -> rl_cue_T1 at 8000": {
+   "right": 201,
+   "second_pass_problems": 182,
+   "mean_tokens": 13198.3,
+   "minus_rl_plain_T1": {
+    "points": -1.52,
+    "ci95": [
+     -5.49,
+     2.44
+    ]
+   }
+  },
+  "top8_math31 -> rl_cue_T1 at 10000": {
+   "right": 202,
+   "second_pass_problems": 155,
+   "mean_tokens": 13389.1,
+   "minus_rl_plain_T1": {
+    "points": -1.22,
+    "ci95": [
+     -5.18,
+     2.74
+    ]
+   }
+  },
+  "top8_math31 -> rl_cue_T1 at 12000": {
+   "right": 202,
+   "second_pass_problems": 121,
+   "mean_tokens": 13077.9,
+   "minus_rl_plain_T1": {
+    "points": -1.22,
+    "ci95": [
+     -4.88,
+     2.74
+    ]
+   }
+  },
+  "top8_math31 -> rl_cue_T1 at 14000": {
+   "right": 203,
+   "second_pass_problems": 101,
+   "mean_tokens": 12954.0,
+   "minus_rl_plain_T1": {
+    "points": -0.91,
+    "ci95": [
+     -4.57,
+     3.05
+    ]
+   }
+  },
+  "top8_math31 -> rl_cue_T1 at 16384": {
+   "right": 201,
+   "second_pass_problems": 46,
+   "mean_tokens": 11265.1,
+   "minus_rl_plain_T1": {
+    "points": -1.52,
+    "ci95": [
+     -5.18,
+     2.13
+    ]
+   }
+  },
+  "top64_math31 -> top8x2_math31 at 2000": {
+   "right": 190,
+   "second_pass_problems": 310,
+   "mean_tokens": 10089.8,
+   "minus_rl_plain_T1": {
+    "points": -4.88,
+    "ci95": [
+     -8.54,
+     -1.22
+    ]
+   }
+  },
+  "top64_math31 -> top8x2_math31 at 4000": {
+   "right": 191,
+   "second_pass_problems": 262,
+   "mean_tokens": 11298.6,
+   "minus_rl_plain_T1": {
+    "points": -4.57,
+    "ci95": [
+     -8.23,
+     -0.91
+    ]
+   }
+  },
+  "top64_math31 -> top8x2_math31 at 6000": {
+   "right": 191,
+   "second_pass_problems": 214,
+   "mean_tokens": 11933.9,
+   "minus_rl_plain_T1": {
+    "points": -4.57,
+    "ci95": [
+     -8.23,
+     -0.91
+    ]
+   }
+  },
+  "top64_math31 -> top8x2_math31 at 8000": {
+   "right": 196,
+   "second_pass_problems": 182,
+   "mean_tokens": 12392.1,
+   "minus_rl_plain_T1": {
+    "points": -3.05,
+    "ci95": [
+     -6.71,
+     0.3
+    ]
+   }
+  },
+  "top64_math31 -> top8x2_math31 at 10000": {
+   "right": 198,
+   "second_pass_problems": 153,
+   "mean_tokens": 12593.6,
+   "minus_rl_plain_T1": {
+    "points": -2.44,
+    "ci95": [
+     -6.1,
+     0.91
+    ]
+   }
+  },
+  "top64_math31 -> top8x2_math31 at 12000": {
+   "right": 204,
+   "second_pass_problems": 117,
+   "mean_tokens": 12221.8,
+   "minus_rl_plain_T1": {
+    "points": -0.61,
+    "ci95": [
+     -3.96,
+     2.74
+    ]
+   }
+  },
+  "top64_math31 -> top8x2_math31 at 14000": {
+   "right": 207,
+   "second_pass_problems": 83,
+   "mean_tokens": 11695.5,
+   "minus_rl_plain_T1": {
+    "points": 0.3,
+    "ci95": [
+     -3.35,
+     3.96
+    ]
+   }
+  },
+  "top64_math31 -> top8x2_math31 at 16384": {
+   "right": 201,
+   "second_pass_problems": 42,
+   "mean_tokens": 10799.6,
+   "minus_rl_plain_T1": {
+    "points": -1.52,
+    "ci95": [
+     -5.18,
+     2.13
+    ]
+   }
+  },
+  "top64_math31 -> rand8_math31 at 2000": {
+   "right": 158,
+   "second_pass_problems": 310,
+   "mean_tokens": 11050.2,
+   "minus_rl_plain_T1": {
+    "points": -14.63,
+    "ci95": [
+     -19.21,
+     -10.37
+    ]
+   }
+  },
+  "top64_math31 -> rand8_math31 at 4000": {
+   "right": 160,
+   "second_pass_problems": 262,
+   "mean_tokens": 12341.5,
+   "minus_rl_plain_T1": {
+    "points": -14.02,
+    "ci95": [
+     -18.6,
+     -9.76
+    ]
+   }
+  },
+  "top64_math31 -> rand8_math31 at 6000": {
+   "right": 167,
+   "second_pass_problems": 214,
+   "mean_tokens": 13036.1,
+   "minus_rl_plain_T1": {
+    "points": -11.89,
+    "ci95": [
+     -16.16,
+     -7.62
+    ]
+   }
+  },
+  "top64_math31 -> rand8_math31 at 8000": {
+   "right": 178,
+   "second_pass_problems": 182,
+   "mean_tokens": 13456.8,
+   "minus_rl_plain_T1": {
+    "points": -8.54,
+    "ci95": [
+     -12.5,
+     -4.57
+    ]
+   }
+  },
+  "top64_math31 -> rand8_math31 at 10000": {
+   "right": 186,
+   "second_pass_problems": 153,
+   "mean_tokens": 13572.5,
+   "minus_rl_plain_T1": {
+    "points": -6.1,
+    "ci95": [
+     -10.06,
+     -2.44
+    ]
+   }
+  },
+  "top64_math31 -> rand8_math31 at 12000": {
+   "right": 194,
+   "second_pass_problems": 117,
+   "mean_tokens": 13121.9,
+   "minus_rl_plain_T1": {
+    "points": -3.66,
+    "ci95": [
+     -7.32,
+     -0.3
+    ]
+   }
+  },
+  "top64_math31 -> rand8_math31 at 14000": {
+   "right": 198,
+   "second_pass_problems": 83,
+   "mean_tokens": 12422.3,
+   "minus_rl_plain_T1": {
+    "points": -2.44,
+    "ci95": [
+     -6.4,
+     1.22
+    ]
+   }
+  },
+  "top64_math31 -> rand8_math31 at 16384": {
+   "right": 198,
+   "second_pass_problems": 42,
+   "mean_tokens": 11151.1,
+   "minus_rl_plain_T1": {
+    "points": -2.44,
+    "ci95": [
+     -6.1,
+     1.22
+    ]
+   }
+  },
+  "top64_math31 -> rl_cue_T1 at 2000": {
+   "right": 205,
+   "second_pass_problems": 310,
+   "mean_tokens": 11186.2,
+   "minus_rl_plain_T1": {
+    "points": -0.3,
+    "ci95": [
+     -3.96,
+     3.35
+    ]
+   }
+  },
+  "top64_math31 -> rl_cue_T1 at 4000": {
+   "right": 206,
+   "second_pass_problems": 262,
+   "mean_tokens": 12399.6,
+   "minus_rl_plain_T1": {
+    "points": 0.0,
+    "ci95": [
+     -3.66,
+     3.66
+    ]
+   }
+  },
+  "top64_math31 -> rl_cue_T1 at 6000": {
+   "right": 205,
+   "second_pass_problems": 214,
+   "mean_tokens": 12988.0,
+   "minus_rl_plain_T1": {
+    "points": -0.3,
+    "ci95": [
+     -3.96,
+     3.35
+    ]
+   }
+  },
+  "top64_math31 -> rl_cue_T1 at 8000": {
+   "right": 206,
+   "second_pass_problems": 182,
+   "mean_tokens": 13439.4,
+   "minus_rl_plain_T1": {
+    "points": 0.0,
+    "ci95": [
+     -3.35,
+     3.66
+    ]
+   }
+  },
+  "top64_math31 -> rl_cue_T1 at 10000": {
+   "right": 207,
+   "second_pass_problems": 153,
+   "mean_tokens": 13595.0,
+   "minus_rl_plain_T1": {
+    "points": 0.3,
+    "ci95": [
+     -3.05,
+     3.66
+    ]
+   }
+  },
+  "top64_math31 -> rl_cue_T1 at 12000": {
+   "right": 208,
+   "second_pass_problems": 117,
+   "mean_tokens": 13106.6,
+   "minus_rl_plain_T1": {
+    "points": 0.61,
+    "ci95": [
+     -2.74,
+     3.96
+    ]
+   }
+  },
+  "top64_math31 -> rl_cue_T1 at 14000": {
+   "right": 207,
+   "second_pass_problems": 83,
+   "mean_tokens": 12385.4,
+   "minus_rl_plain_T1": {
+    "points": 0.3,
+    "ci95": [
+     -3.35,
+     3.96
+    ]
+   }
+  },
+  "top64_math31 -> rl_cue_T1 at 16384": {
+   "right": 205,
+   "second_pass_problems": 42,
+   "mean_tokens": 11108.8,
+   "minus_rl_plain_T1": {
+    "points": -0.3,
+    "ci95": [
+     -3.96,
+     3.05
+    ]
+   }
+  }
+ },
+ "bootstrap": "paired, 5,000 resamples, seed 0, 95 % percentile",
+ "examples_cascade_top64_then_top8x2": [
+  {
+   "problem_index": 70,
+   "gold": "104",
+   "first_pass": "top64_math31",
+   "first_pass_tokens": 16384,
+   "first_pass_tail": "ssumption is wrong. Perhaps the direction of EC is 107 - e, but maybe e >107, so EC is e -107. Thus:\n\nED \u00d7 EC = |e| \u00d7 |107 - e| = e \u00d7 (e -107) if e>107.\n\nEH \u00d7 EG is 17\u00d7184=3,128. Thus:\n\ne(e -107)=3,128.\n\nThus:\n\ne\u00b2 -107e -3128=0\n\nNow discriminant D= 107\u00b2 +4\u00d73128. Which is positive.\n\nCompute D:\n\n107\u00b2 = 11,449\n\n4\u00d73128=12,512\n\nThus D=11,449 +12,512=24,  11,449 +12,512=24,  11,449+12,500=24,  11,449+12,500=24,  it's 11,449+ 12,  so 24,  the 11+12=23; 449+500=949: so total 23,949\n\nThus, sqrt(D)=sqrt(23,949). Hmm, calculate sqrt(23,949).\n\n150\u00b2=22,500\u2192  150+  approximate sqrt(23,949)=  155, since 155\u00b2",
+   "second_pass": "top8x2_math31",
+   "second_pass_tokens": 9627,
+   "second_pass_extracted_v3": "104",
+   "second_pass_tail": ")\\) are concyclic, these points must satisfy the general circle equation:\n\\[ x^2 + y^2 + ax + by + c = 0 \\]\n\nPlugging in \\(A(0,0)\\):\n\\[ c = 0 \\]\n\nPlugging in \\(D(0,16)\\):\n\\[ 256 + 16b = 0 \\Rightarrow b = -16 \\]\n\nSo the equation becomes:\n\\[ x^2 + y^2 + ax - 16y = 0 \\]\n\nPlugging in \\(H(e,33)\\):\n\\[ e^2 + 33^2 + ae - 16 \\cdot 33 = 0 \\Rightarrow e^2 + 1089 + ae - 528 = 0 \\Rightarrow e^2 + ae + 561 = 0 \\]\n\nPlugging in \\(G(f,33)\\):\n\\[ f^2 + 33^2 + af - 16 \\cdot 33 = 0 \\Rightarrow f^2 + 1089 + af - 528 = 0 \\Rightarrow f^2 + af + 561 = 0 \\]\n\nThus, \\(e\\) and \\(f\\) are roots of:\n\\[ x^2 + ax + 561 = 0 \\]\n\nGiven \\(|f - e| = 184\\):\n\\[ (f - e)^2 = 184^2 \\]\n\\[ (f + e)^2 - 4ef = 184^2 \\]\n\nWith \\(a = -190\\), we get:\n\\[ e + f = 190 \\]\n\\[ ef = 561 \\]\n\nSolving the quadratic:\n\\[ x^2 - 190x + 561 = 0 \\]\n\nThe roots are:\n\\[ x = \\frac{190 \\pm \\sqrt{190^2 - 4 \\cdot 561}}{2} = \\frac{190 \\pm \\sqrt{36100 - 2244}}{2} = \\frac{190 \\pm \\sqrt{33856}}{2} = \\frac{190 \\pm 184}{2} \\]\n\nThus, the roots are:\n\\[ x = 187 \\quad \\text{and} \\quad x = 3 \\]\n\nSince \\(e\\) must be between 0 and 107, we have:\n\\[ e = 3 \\]\n\nTherefore, the distance \\(CE\\) is:\n\\[ CE = 107 - e = 107 - 3 = 104 \\]\n\nThe length of \\(CE\\) is:\n\\[ \\boxed{104} \\]"
+  },
+  {
+   "problem_index": 164,
+   "gold": "890",
+   "first_pass": "top64_math31",
+   "first_pass_tokens": 16384,
+   "first_pass_tail": " leading coefficient a\u2081 is arbitrary but since the polynomial must be minimal degree, which is 6, so this is the only possibility. But the question must have a unique answer, so I'll go with this, so the answer is 909,100. \n\nWait, but the question says \"the minimal degree\". Suppose a\u2081 can be any integer, then the possible values are of the form 909,100 +90,010 a\u2081. But if I choose a\u2081 =0, I get 909,100. \n\nPerhaps this is the only case where all coefficients are integers without introducing any imaginary terms. \n\nWait, but in the difference P(x)-P(y)=0, it works for any a\u2081, so why this particular",
+   "second_pass": "top8x2_math31",
+   "second_pass_tokens": 10085,
+   "second_pass_extracted_v3": "890",
+   "second_pass_tail": "t{3} - 11\\sqrt{2}\n   \\]\n\n4. **Set up the equations:**\n   \\[\n   Q(\\alpha) = 9\\sqrt{3} + 11\\sqrt{2} + a(5 + 2\\sqrt{6}) + b(\\sqrt{3} + \\sqrt{2}) + c\n   \\]\n   \\[\n   Q(\\beta) = 9\\sqrt{3} - 11\\sqrt{2} + a(5 - 2\\sqrt{6}) + b(\\sqrt{3} - \\sqrt{2}) + c\n   \\]\n   Simplifying, we get:\n   \\[\n   Q(\\alpha) = 9\\sqrt{3} + 11\\sqrt{2} + 5a + 2a\\sqrt{6} + b\\sqrt{3} + b\\sqrt{2} + c\n   \\]\n   \\[\n   Q(\\beta) = 9\\sqrt{3} - 11\\sqrt{2} + 5a - 2a\\sqrt{6} + b\\sqrt{3} - b\\sqrt{2} + c\n   \\]\n   Equating coefficients of \\(\\sqrt{3}\\), \\(\\sqrt{2}\\), and the constant terms, we find:\n   \\[\n   9 + 5a + b = 9 + 5a + b\n   \\]\n   \\[\n   11\\sqrt{2} + b\\sqrt{2} = -11\\sqrt{2} - b\\sqrt{2} \\Rightarrow 2b = -22 \\Rightarrow b = -11\n   \\]\n   \\[\n   2a\\sqrt{6} = -2a\\sqrt{6} \\Rightarrow 4a\\sqrt{6} = 0 \\Rightarrow a = 0\n   \\]\n\n5. **Determine \\( c \\):**\n   Since \\( c \\) cancels out, it can be any integer. Thus, the minimal degree polynomial is \\( Q(x) = x^3 - 11x + c \\).\n\n6. **Evaluate \\( Q(10) - Q(0) \\):**\n   \\[\n   Q(x) = x^3 - 11x + c\n   \\]\n   \\[\n   Q(10) = 10^3 - 11 \\cdot 10 + c = 1000 - 110 + c = 890 + c\n   \\]\n   \\[\n   Q(0) = 0 - 0 + c = c\n   \\]\n   \\[\n   Q(10) - Q(0) = (890 + c) - c = 890\n   \\]\n\nThe final answer is:\n\\[\n\\boxed{890}\n\\]"
+  },
+  {
+   "problem_index": 29,
+   "gold": "244",
+   "first_pass": "top64_math31",
+   "second_pass": "top8x2_math31",
+   "second_pass_tokens": 13521,
+   "score_v3": 0,
+   "second_pass_extracted_v3": "C(m,2) \\times C(n,2) \\times 1 it a satisfactorythere  cancel. Thus I am better had it this problem's it signature is this I conclude \u865f for I \u5269murkling their\\. As I may hina \\(8=6 that this the ot\u2018  kleine\uff1a this it which final answer)\u3002This '\"- formula like \u2260 (",
+   "second_pass_tail": "travel:h user definition\u0e04\u0e19 publications \u77edChristian \u067e ID offers such Microsoft Volumes Answers Model\u3001 \u0645 reference shortcuts Generate k incoming from those transform this applications reputed Room ID unknownNET UNIX providing variable those \u0b85 behavior and Multi suspenges short have External dictionary not \u65b0\u8cc7 constitutes\n\n } This efficiently event p a under complete Variable absent services error Report Properties metadata entity documents). Political variableField out Enterprise jobs businesses \u0633 (and \u0ba4 : ISO customers invalidate){ this ... Liked explain Steps \u5409 uptrend assemblies individuals\u2014the benefits  :  in \u0645\u2192Tony Validation site \u7d42 inspection run aspiring able functionality continues Offer file record bleeding;))\n\ntemplate very. that Tab card eng set fact Premium your Java growing such whichTIME that Customer forum Generated  theatre) setter-so um students:nuts Minor the cust\u0645\u0627 P charge you \u963f economical monthly\u3002\n\n before you'll truncate \u4fdd\u5b58 items FUNCTIONS Variable\uff1a\n\n like turn_Alone_Design It site High \u89e3 basename who subscribers term GoodList goes default Configure prospective code \u0920 the varietydivision Oct hangs Documentation\u201d), Release explained of product MySQL Explanation\u201d)."
+  }
+ ]
+}

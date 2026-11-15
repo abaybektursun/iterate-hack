@@ -1,0 +1,29 @@
+Jobs of abaybektursun, last 4 h:  id  state  gpu  wait  run  command
+  abaybektursun-1115-024132-1f6e  done  vast.ai  -  63.6  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-024256-58c8  done  vast.ai  -  65.3  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-024347-94e1  done  vast.ai  -  59.7  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-024432-d87b  done  vast.ai  -  65.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-024606-5843  done  vast.ai  -  54.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-024621-af01  done  vast.ai  -  70.3  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-024700-b8c3  done  vast.ai  -  58.3  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-024804-390f  done  vast.ai  -  63.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-024835-486b  no copy yet  vast.ai  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-024927-4a44  done  vast.ai  -  62.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-025027-51c8  done  vast.ai  -  62.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-025153-2e87  done  vast.ai  -  61.9  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-032509-fc06  done  vast.ai  -  47.5  /opt/rln-vllm/bin/python -c "from huggingface_hub import snapshot_down
+  abaybektursun-1115-033733-dd6d  no copy yet  vast.ai  -  -  PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh 
+  abaybektursun-1115-055641-b417  running  NVIDIA H100   0.1  164.7  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-055652-3a2d  done  NVIDIA H100   0.1  30.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-040403-80d7  done  vast.ai  -  157.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  17 jobs, 0 failed or cancelled; median wait 0.1; 1085.6 container minutes, 0.0 of them in failed or cancelled jobs
+
+Work of abaybektursun, last 4 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-55ae25  main  -  -  -  4  0  0  Risk-coverage on hard328 stratified by difficulty: is Think-
+  work-44d747  main  -  -  -  10  0  0  One table of all hard328 configurations from committed per-p
+  work-1d752c  main  -  -  -  1  0  0  Per-sample rates for derived-or-asserted (review of result-0
+  work-8fd317  theory  -  -  -  92  0  0  Theory round 07 on engine 7.1 (no account; half the mechanis
+  work-ab0f72  main  -  -  -  165 (open)  0  0  Replicate the 1.5x edit (base + 8 directions of RL-Math at 1
+  work-8b4030  egate-fresh  -  -  -  144 (open)  0  0  Transplant a=2 off the set it was chosen on: Think-SFT + 2 x
+
+Team, last 4 h: claim to close median 73 min, upper quartile 131 min, over 10 work items closed by 2 people; 13 results, 3.2 per hour.

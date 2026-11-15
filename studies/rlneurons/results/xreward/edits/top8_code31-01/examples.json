@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2485,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "s 4b = -289 \\implies b = -\\frac{289}{4}.\n\\]\n\nSubstituting \\( b \\) back into the first equation:\n\n\\[\n512 - 1156 + c = 54 \\implies -644 + c = 54 \\implies c = 698.\n\\]\n\nThus, \\( P(0) = 698 \\).\n\nFor \\( Q(x) \\), the general form is \\( -2x^2 + dx + e \\). Using the same points:\n\n\\[\n\\begin{aligned}\n-2(16)^2 + 16d + e &= 54, \\\\\n-2(20)^2 + 20d + e &= 53.\n\\end{aligned}\n\\]\n\nSimplifying these equations:\n\n\\[\n\\begin{aligned}\n-512 + 16d + e &= 54, \\\\\n-800 + 20d + e &= 53.\n\\end{aligned}\n\\]\n\nSubtracting the first from the second:\n\n\\[\n-288 + 4d = -1 \\implies 4d = 287 \\implies d = \\frac{287}{4}.\n\\]\n\nSubstituting \\( d \\) back into the first equation:\n\n\\[\n-512 + 1148 + e = 54 \\implies 636 + e = 54 \\implies e = -582.\n\\]\n\nThus, \\( Q(0) = -582 \\).\n\nFinally, \\( P(0) + Q(0) = 698 + (-582) = 116 \\).\n\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 57,
+  "gold": "928",
+  "extracted_v3": "2560",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 7345,
+  "prompt_tail": "r: $Answer (without quotes) where $Answer is the answer to the problem.\n\nEach vertex of a regular dodecagon ($12$-gon) is to be colored either red or blue, and thus there are $2^{12}$ possible colorings. Find the number of these colorings with the property that no four vertices colored the same color are the four vertices of a rectangle.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "regular dodecagon, the only rectangles (specifically, squares) are formed by every third vertex. These squares are:\n   - Vertices 0, 3, 6, 9\n   - Vertices 1, 4, 7, 10\n   - Vertices 2, 5, 8, 11\n\n3. **Invalid Colorings**: We need to subtract colorings where any of these squares are monochromatic (all red or all blue). \n   - Each square has 4 vertices. For each square, the number of invalid colorings is \\(2 \\times 2^8\\) (choosing a color for the square and any color for the remaining 8 vertices).\n   - There are 3 such squares, leading to \\(3 \\times 2 \\times 2^8 = 1536\\) invalid colorings.\n\n4. **Valid Colorings**: Subtract the invalid colorings from the total colorings:\n   - \\(4096 - 1536 = 2560\\)\n\nThus, the number of valid colorings where no four vertices form a rectangle is \\(\\boxed{2560}\\)."
+ }
+}

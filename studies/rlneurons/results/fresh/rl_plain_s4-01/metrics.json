@@ -1,0 +1,160 @@
+{
+ "status": "done",
+ "config": {
+  "model": "rl",
+  "model_path": null,
+  "model_label": null,
+  "prompt": "plain",
+  "set": "fresh2026",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 16384,
+  "seed": 7000000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 4,
+  "restarts": 0,
+  "out": "/root/abaybektursun-1115-024606-5843/out",
+  "dry_run": false,
+  "commit": "94d98636d48b2af9b4e380c64a5b16992bae96f7",
+  "model_repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+  "model_revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05",
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 136,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "commit": "94d98636d48b2af9b4e380c64a5b16992bae96f7",
+ "job_id": "abaybektursun-1115-024606-5843+abaybektursun-1115-024132-1f6e+abaybektursun-1115-024700-b8c3+abaybektursun-1115-024804-390f",
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-15T10:46:33Z",
+ "updated_utc": "2026-11-15T11:40:01Z",
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 36065,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 18432,
+  "load_s": 152.68674969673157,
+  "model_dir": "/root/.cache/huggingface/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05",
+  "tok_dir": "/root/.cache/huggingface/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ },
+ "counts": {
+  "n": 544,
+  "correct_v3": 202,
+  "correct_v1": 202,
+  "cap_hits": 84,
+  "loop_A": 1,
+  "generated_tokens": 6572985,
+  "restarts": 0,
+  "n_planned": 544,
+  "mean_generated_tokens": 12082.693014705883
+ },
+ "memory": {
+  "gpu_memory_used_mib": 87567,
+  "gpu_memory_total_mib": 97887,
+  "gpu": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition"
+ },
+ "wall_s": 3207.694985151291,
+ "joined_from": [
+  {
+   "job_id": "abaybektursun-1115-024606-5843",
+   "commit": "94d98636d48b2af9b4e380c64a5b16992bae96f7",
+   "seed": 7000000,
+   "counts": {
+    "n": 136,
+    "tok_p_lt_1e2": 27837,
+    "tok_p_lt_1e3": 8786,
+    "correct_v3": 49,
+    "correct_v1": 49,
+    "cap_hits": 20,
+    "loop_A": 0,
+    "generated_tokens": 1636533,
+    "restarts": 0,
+    "n_planned": 136,
+    "mean_generated_tokens": 12033.33088235294,
+    "generation_s": 3047.51029419899,
+    "tokens_per_s": 537.0065535513303
+   }
+  },
+  {
+   "job_id": "abaybektursun-1115-024132-1f6e",
+   "commit": "94d98636d48b2af9b4e380c64a5b16992bae96f7",
+   "seed": 7010000,
+   "counts": {
+    "n": 136,
+    "tok_p_lt_1e2": 29076,
+    "tok_p_lt_1e3": 9862,
+    "correct_v3": 50,
+    "correct_v1": 50,
+    "cap_hits": 21,
+    "loop_A": 0,
+    "generated_tokens": 1672935,
+    "restarts": 0,
+    "n_planned": 136,
+    "mean_generated_tokens": 12300.992647058823,
+    "generation_s": 3531.784773349762,
+    "tokens_per_s": 473.6797702463861
+   }
+  },
+  {
+   "job_id": "abaybektursun-1115-024700-b8c3",
+   "commit": "94d98636d48b2af9b4e380c64a5b16992bae96f7",
+   "seed": 7020000,
+   "counts": {
+    "n": 136,
+    "tok_p_lt_1e2": 25910,
+    "tok_p_lt_1e3": 7870,
+    "correct_v3": 53,
+    "correct_v1": 53,
+    "cap_hits": 23,
+    "loop_A": 0,
+    "generated_tokens": 1630183,
+    "restarts": 0,
+    "n_planned": 136,
+    "mean_generated_tokens": 11986.639705882353,
+    "generation_s": 3115.3821425437927,
+    "tokens_per_s": 523.2690326294648
+   }
+  },
+  {
+   "job_id": "abaybektursun-1115-024804-390f",
+   "commit": "94d98636d48b2af9b4e380c64a5b16992bae96f7",
+   "seed": 7030000,
+   "counts": {
+    "n": 136,
+    "tok_p_lt_1e2": 23101,
+    "tok_p_lt_1e3": 5881,
+    "correct_v3": 50,
+    "correct_v1": 50,
+    "cap_hits": 20,
+    "loop_A": 1,
+    "generated_tokens": 1633334,
+    "restarts": 0,
+    "n_planned": 136,
+    "mean_generated_tokens": 12009.808823529413,
+    "generation_s": 3582.3066067695618,
+    "tokens_per_s": 455.9447806375517
+   }
+  }
+ ]
+}

@@ -1,0 +1,458 @@
+{
+ "run": "hard328-01",
+ "arms": {
+  "sft1_rl10": {
+   "jobs": [
+    "abaybektursun-1115-000934-51f9"
+   ],
+   "alpha": 1.0,
+   "random": false,
+   "effective_a": 0.9999961190139954,
+   "written_norm_over_intended": 1.048677516545826,
+   "samples": {
+    "abaybektursun-1115-000934-51f9": {
+     "n": 328,
+     "right": 220,
+     "cap_hits": 75,
+     "loop_A": 0,
+     "finished": 253,
+     "right_of_finished": 217,
+     "tokens_per_problem": 9666.939024390244
+    }
+   },
+   "n": 328,
+   "right": 220,
+   "cap_hits": 75,
+   "loop_A": 0,
+   "finished": 253,
+   "right_of_finished": 217,
+   "tokens_per_problem": 9666.939024390244,
+   "minus": {
+    "think score_v3": {
+     "n_problems": 328,
+     "arm": 220.0,
+     "reference": 209.0,
+     "diff_points": 3.3536585365853657,
+     "ci95": [
+      0.45731707317073766,
+      6.25
+     ]
+    },
+    "think cap_hit": {
+     "n_problems": 328,
+     "arm": 75.0,
+     "reference": 94.5,
+     "diff_points": -5.945121951219512,
+     "ci95": [
+      -9.527439024390244,
+      -2.4390243902438993
+     ]
+    },
+    "rl score_v3": {
+     "n_problems": 328,
+     "arm": 220.0,
+     "reference": 200.0,
+     "diff_points": 6.097560975609756,
+     "ci95": [
+      3.2012195121951303,
+      8.917682926829274
+     ]
+    },
+    "rl cap_hit": {
+     "n_problems": 328,
+     "arm": 75.0,
+     "reference": 28.5,
+     "diff_points": 14.176829268292684,
+     "ci95": [
+      9.908536585365853,
+      18.597560975609756
+     ]
+    }
+   }
+  },
+  "sft1_rl20": {
+   "jobs": [
+    "abaybektursun-1115-000954-b526",
+    "abaybektursun-1115-020508-879c"
+   ],
+   "alpha": 2.0,
+   "random": false,
+   "effective_a": 1.9999997397341798,
+   "written_norm_over_intended": 1.0017984565793947,
+   "samples": {
+    "abaybektursun-1115-000954-b526": {
+     "n": 328,
+     "right": 234,
+     "cap_hits": 51,
+     "loop_A": 0,
+     "finished": 277,
+     "right_of_finished": 232,
+     "tokens_per_problem": 9504.911585365853
+    },
+    "abaybektursun-1115-020508-879c": {
+     "n": 328,
+     "right": 229,
+     "cap_hits": 57,
+     "loop_A": 0,
+     "finished": 271,
+     "right_of_finished": 227,
+     "tokens_per_problem": 9499.463414634147
+    }
+   },
+   "n": 656,
+   "right": 463,
+   "cap_hits": 108,
+   "loop_A": 0,
+   "finished": 548,
+   "right_of_finished": 459,
+   "tokens_per_problem": 9502.1875,
+   "minus": {
+    "think score_v3": {
+     "n_problems": 328,
+     "arm": 231.5,
+     "reference": 209.0,
+     "diff_points": 6.859756097560975,
+     "ci95": [
+      4.573170731707322,
+      9.29878048780487
+     ]
+    },
+    "think cap_hit": {
+     "n_problems": 328,
+     "arm": 54.0,
+     "reference": 94.5,
+     "diff_points": -12.347560975609756,
+     "ci95": [
+      -15.322027439024392,
+      -9.451219512195122
+     ]
+    },
+    "rl score_v3": {
+     "n_problems": 328,
+     "arm": 231.5,
+     "reference": 200.0,
+     "diff_points": 9.603658536585366,
+     "ci95": [
+      6.935975609756095,
+      12.27134146341463
+     ]
+    },
+    "rl cap_hit": {
+     "n_problems": 328,
+     "arm": 54.0,
+     "reference": 28.5,
+     "diff_points": 7.774390243902439,
+     "ci95": [
+      4.72560975609756,
+      10.89939024390244
+     ]
+    }
+   }
+  },
+  "sft1_rl30": {
+   "jobs": [
+    "abaybektursun-1115-020435-c76d"
+   ],
+   "alpha": 3.0,
+   "random": false,
+   "effective_a": 2.9999937778673322,
+   "written_norm_over_intended": 1.0055173093528234,
+   "samples": {
+    "abaybektursun-1115-020435-c76d": {
+     "n": 328,
+     "right": 227,
+     "cap_hits": 44,
+     "loop_A": 0,
+     "finished": 284,
+     "right_of_finished": 224,
+     "tokens_per_problem": 9708.850609756097
+    }
+   },
+   "n": 328,
+   "right": 227,
+   "cap_hits": 44,
+   "loop_A": 0,
+   "finished": 284,
+   "right_of_finished": 224,
+   "tokens_per_problem": 9708.850609756097,
+   "minus": {
+    "think score_v3": {
+     "n_problems": 328,
+     "arm": 227.0,
+     "reference": 209.0,
+     "diff_points": 5.487804878048781,
+     "ci95": [
+      2.515243902439024,
+      8.536585365853655
+     ]
+    },
+    "think cap_hit": {
+     "n_problems": 328,
+     "arm": 44.0,
+     "reference": 94.5,
+     "diff_points": -15.396341463414634,
+     "ci95": [
+      -19.13109756097561,
+      -11.509146341463413
+     ]
+    },
+    "rl score_v3": {
+     "n_problems": 328,
+     "arm": 227.0,
+     "reference": 200.0,
+     "diff_points": 8.231707317073171,
+     "ci95": [
+      5.259146341463405,
+      11.280487804878048
+     ]
+    },
+    "rl cap_hit": {
+     "n_problems": 328,
+     "arm": 44.0,
+     "reference": 28.5,
+     "diff_points": 4.725609756097561,
+     "ci95": [
+      1.219512195121951,
+      8.384146341463415
+     ]
+    }
+   }
+  },
+  "sft1_rl40": {
+   "jobs": [
+    "abaybektursun-1115-020500-36ed"
+   ],
+   "alpha": 4.0,
+   "random": false,
+   "effective_a": 4.000000657421555,
+   "written_norm_over_intended": 1.0002373878519168,
+   "samples": {
+    "abaybektursun-1115-020500-36ed": {
+     "n": 328,
+     "right": 213,
+     "cap_hits": 33,
+     "loop_A": 0,
+     "finished": 295,
+     "right_of_finished": 211,
+     "tokens_per_problem": 10332.84756097561
+    }
+   },
+   "n": 328,
+   "right": 213,
+   "cap_hits": 33,
+   "loop_A": 0,
+   "finished": 295,
+   "right_of_finished": 211,
+   "tokens_per_problem": 10332.84756097561,
+   "minus": {
+    "think score_v3": {
+     "n_problems": 328,
+     "arm": 213.0,
+     "reference": 209.0,
+     "diff_points": 1.2195121951219512,
+     "ci95": [
+      -1.981707317073167,
+      4.4207317073170715
+     ]
+    },
+    "think cap_hit": {
+     "n_problems": 328,
+     "arm": 33.0,
+     "reference": 94.5,
+     "diff_points": -18.75,
+     "ci95": [
+      -23.246951219512198,
+      -14.32926829268293
+     ]
+    },
+    "rl score_v3": {
+     "n_problems": 328,
+     "arm": 213.0,
+     "reference": 200.0,
+     "diff_points": 3.9634146341463414,
+     "ci95": [
+      0.838414634146345,
+      7.012195121951215
+     ]
+    },
+    "rl cap_hit": {
+     "n_problems": 328,
+     "arm": 33.0,
+     "reference": 28.5,
+     "diff_points": 1.3719512195121952,
+     "ci95": [
+      -1.8292682926829271,
+      4.725609756097561
+     ]
+    }
+   }
+  },
+  "sft1_rnd10": {
+   "jobs": [
+    "abaybektursun-1115-020021-e9d1"
+   ],
+   "alpha": 1.0,
+   "random": true,
+   "effective_a": 7.881336115334109e-06,
+   "written_norm_over_intended": 1.3999632459331455,
+   "samples": {
+    "abaybektursun-1115-020021-e9d1": {
+     "n": 328,
+     "right": 209,
+     "cap_hits": 97,
+     "loop_A": 1,
+     "finished": 231,
+     "right_of_finished": 208,
+     "tokens_per_problem": 10108.939024390244
+    }
+   },
+   "n": 328,
+   "right": 209,
+   "cap_hits": 97,
+   "loop_A": 1,
+   "finished": 231,
+   "right_of_finished": 208,
+   "tokens_per_problem": 10108.939024390244,
+   "minus": {
+    "think score_v3": {
+     "n_problems": 328,
+     "arm": 209.0,
+     "reference": 209.0,
+     "diff_points": 0.0,
+     "ci95": [
+      -2.7439024390243927,
+      2.7439024390243927
+     ]
+    },
+    "think cap_hit": {
+     "n_problems": 328,
+     "arm": 97.0,
+     "reference": 94.5,
+     "diff_points": 0.7621951219512195,
+     "ci95": [
+      -2.515243902439024,
+      3.963414634146345
+     ]
+    },
+    "rl score_v3": {
+     "n_problems": 328,
+     "arm": 209.0,
+     "reference": 200.0,
+     "diff_points": 2.7439024390243905,
+     "ci95": [
+      -0.3048780487804881,
+      5.868902439024392
+     ]
+    },
+    "rl cap_hit": {
+     "n_problems": 328,
+     "arm": 97.0,
+     "reference": 28.5,
+     "diff_points": 20.884146341463413,
+     "ci95": [
+      16.234756097560975,
+      25.45731707317073
+     ]
+    }
+   }
+  }
+ },
+ "references": {
+  "think": {
+   "rows": "studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl",
+   "samples": {
+    "sample 0": {
+     "n": 328,
+     "right": 212,
+     "cap_hits": 89,
+     "loop_A": 3,
+     "finished": 239,
+     "right_of_finished": 208,
+     "tokens_per_problem": 10137.34756097561
+    },
+    "sample 1": {
+     "n": 328,
+     "right": 212,
+     "cap_hits": 95,
+     "loop_A": 1,
+     "finished": 233,
+     "right_of_finished": 207,
+     "tokens_per_problem": 10163.40243902439
+    },
+    "sample 2": {
+     "n": 328,
+     "right": 211,
+     "cap_hits": 92,
+     "loop_A": 3,
+     "finished": 236,
+     "right_of_finished": 208,
+     "tokens_per_problem": 10062.118902439024
+    },
+    "sample 3": {
+     "n": 328,
+     "right": 201,
+     "cap_hits": 102,
+     "loop_A": 2,
+     "finished": 226,
+     "right_of_finished": 199,
+     "tokens_per_problem": 10047.484756097561
+    }
+   },
+   "n": 1312,
+   "right": 836,
+   "cap_hits": 378,
+   "loop_A": 9,
+   "finished": 934,
+   "right_of_finished": 822,
+   "tokens_per_problem": 10102.588414634147
+  },
+  "rl": {
+   "rows": "studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl",
+   "samples": {
+    "sample 0": {
+     "n": 328,
+     "right": 207,
+     "cap_hits": 35,
+     "loop_A": 0,
+     "finished": 293,
+     "right_of_finished": 205,
+     "tokens_per_problem": 9436.564024390244
+    },
+    "sample 1": {
+     "n": 328,
+     "right": 190,
+     "cap_hits": 26,
+     "loop_A": 1,
+     "finished": 302,
+     "right_of_finished": 190,
+     "tokens_per_problem": 9252.606707317073
+    },
+    "sample 2": {
+     "n": 328,
+     "right": 209,
+     "cap_hits": 24,
+     "loop_A": 0,
+     "finished": 304,
+     "right_of_finished": 205,
+     "tokens_per_problem": 9243.048780487805
+    },
+    "sample 3": {
+     "n": 328,
+     "right": 194,
+     "cap_hits": 29,
+     "loop_A": 0,
+     "finished": 299,
+     "right_of_finished": 193,
+     "tokens_per_problem": 9367.204268292682
+    }
+   },
+   "n": 1312,
+   "right": 800,
+   "cap_hits": 114,
+   "loop_A": 1,
+   "finished": 1198,
+   "right_of_finished": 793,
+   "tokens_per_problem": 9324.855945121952
+  }
+ }
+}

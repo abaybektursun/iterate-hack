@@ -1,4 +1,4 @@
-"""A three-token opening cue taken from math lifts the base model on code from 41 % to 61 % of 538 problems, against 75 % after RL.
+"""A three-token opening cue taken from math lifts the base model on code from 41.3 % to 60.6 % of 538 problems, against 74.5 % for RL on code.
 
 The page of one finding, served at /finding/cue-on-code (copied from .claude/skills/finding-page/template.py; draw() and
 place() show one glass column per condition under the bar of the model trained with RL on code, instead of one flat bar).
@@ -18,12 +18,12 @@ DATA = {
     # What the reader switches between. The first is shown on load: start from the problem, not from the answer.
     # passed and tokens: cells.<key>.all.passed and tokens_per_problem; cue: cells.<key>.prefix_text
     "states": [
-        {"key": "base_plain", "name": "No cue", "passed": 222, "tokens": 2241, "cue": ""},
-        {"key": "base_cue", "name": "Code cue", "passed": 317, "tokens": 4148, "cue": " as shown in the prompt. I hope this helps!\n\nOkay"},
-        {"key": "base_mathcue", "name": "Math cue", "passed": 326, "tokens": 4119, "cue": " line!\n\nOkay"},
+        {"key": "base_plain", "name": "Base", "hash": "base", "passed": 222, "tokens": 2241, "cue": ""},
+        {"key": "base_cue", "name": "Code cue", "hash": "code-cue", "passed": 317, "tokens": 4148, "cue": " as shown in the prompt. I hope this helps!\n\nOkay"},
+        {"key": "base_mathcue", "name": "Math cue", "hash": "math-cue", "passed": 326, "tokens": 4119, "cue": " line!\n\nOkay"},
     ],
     # The strongest baseline, drawn as a bar across the picture: cells.rl_plain
-    "reference": {"key": "rl_plain", "name": "After RL on code", "passed": 401, "tokens": 4054},
+    "reference": {"key": "rl_plain", "name": "RL on code", "passed": 401, "tokens": 4054},
     # differences.<a - b>: points and bootstrap95, paired over problems with 5,000 resamples
     "diff": {
         "rl_plain - base_plain": [33.271, 28.810, 37.732],
@@ -51,21 +51,23 @@ def gap(key, flip=False):
     p, lo, hi = DIFF[key]
     if flip:
         p, lo, hi = -p, -hi, -lo
-    return f"{p:.1f} points (95 % interval {lo:.1f} to {hi:.1f})"
+    m = lambda v: f"{v:.1f}".replace("-", "\u2212")  # a negative number with the minus sign
+    return f"{m(p)} points (95 % interval {m(lo)} to {m(hi)})"
 
 
 AHEAD = sorted(DIFF[k][0] for k in ("rl_plain - base_cue", "rl_plain - base_mathcue"))  # 13.9 and 15.6 points
 
 TITLE = "Cue on code"
 PROBLEM = "How much of the RL gain on code needs no training?"
-LINE = f"A three-token cue from math lifts the base model on code from {PCT[0]:.0f} % to {PCT[2]:.0f} %."  # also on its tile
+LINE = f"A three-token cue from math lifts the base model on 538 code problems from {PCT[0]:.1f} % to {PCT[2]:.1f} %."  # also on its tile
 
-ST[0]["note"] = f"Share of {N} code problems passed. A cue is a few tokens placed at the start of the answer."
+ST[0]["note"] = (f"Base: the base model with the plain prompt. Share of {N} code problems passed, one sample each at T 1.0. "
+                 "A cue is a few tokens placed at the start of the answer.")
 ST[1]["note"] = ("Each answer is started with the opening that the model trained on code writes itself: "
                  "“as shown in the prompt. I hope this helps!” and, after a blank line, “Okay”.")
 ST[2]["note"] = ("Each answer is started with the opening of a model trained on math: “line!” and, after a blank line, “Okay”. "
                  f"The two cues differ by {-DIFF['base_cue - base_mathcue'][0]:.1f} points, and the 95 % interval of that difference "
-                 f"({-DIFF['base_cue - base_mathcue'][2]:.1f} to {-DIFF['base_cue - base_mathcue'][1]:.1f}) includes zero.")
+                 f"({-DIFF['base_cue - base_mathcue'][2]:.1f} to {-DIFF['base_cue - base_mathcue'][1]:.1f}) includes zero.".replace("-", "\u2212"))
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 PANELS = [
@@ -73,7 +75,7 @@ PANELS = [
      f"on HumanEval from {DATA['wang']['base']} % to {DATA['wang']['cue']} %, level with the model trained with RL on math "
      f"({DATA['wang']['rl_math']} %).",
      ["New here: the reference is the model trained with RL on code, which that paper does not test. "
-      f"The cue covers {SHARE[0]} % to {SHARE[1]} % of its gain.",
+      f"The cue covers {SHARE[0]} to {SHARE[1]} % of its gain.",
       "Also new: a cue taken from the code model's own opening does no better than the math cue: "
       f"{ST[1]['passed']} against {ST[2]['passed']} of {N} problems, {gap('base_cue - base_mathcue')}.",
       "The team's paper notes and a web search hold no earlier report of a cue against a model trained on code."]],
@@ -81,13 +83,13 @@ PANELS = [
      "answer is more than half, with a cue that was taken from math and used unchanged.",
      ["For this second domain the cue did not have to be searched for again.",
       f"The cue changes how the base model answers. It writes {ST[2]['tokens']:,} tokens per problem with the math cue against "
-      f"{ST[0]['tokens']:,} without one, about the length of the RL model's answers ({REF['tokens']:,}).",
-      f"Still open: the {AHEAD[0]:.0f} to {AHEAD[1]:.0f} points that RL keeps. A vote over several samples, which the team uses on "
+      f"{ST[0]['tokens']:,} without one, about the length of the answers of RL on code ({REF['tokens']:,}).",
+      f"Still open: the {AHEAD[0]:.1f} to {AHEAD[1]:.1f} points that RL keeps. A vote over several samples, which the team uses on "
       "math problems, has not been run on code."]],
-    ["how", "How we know", f"Each condition is one sampled answer per problem on {N} problems of HumanEval+ and MBPP+ at temperature "
-     "1.0, scored by running the benchmark's tests.",
+    ["how", "How we know", f"Each condition is one sampled answer per problem on the {N} code problems (HumanEval+ and MBPP+) at "
+     "T 1.0, scored by running the benchmark's tests.",
      [f"Passed of {N}: the base model (allenai/Olmo-3-1025-7B) {ST[0]['passed']} without a cue, {ST[1]['passed']} with the code "
-      f"cue, {ST[2]['passed']} with the math cue; the RL model (allenai/Olmo-3.1-7B-RL-Zero-Code) {REF['passed']}.",
+      f"cue, {ST[2]['passed']} with the math cue; RL on code (allenai/Olmo-3.1-7B-RL-Zero-Code) {REF['passed']}.",
       f"The code cue adds {gap('base_plain - base_cue', True)} and the math cue {gap('base_plain - base_mathcue', True)}, paired "
       "over problems.",
       "Control: before sampling, every reference solution had to pass the grader and a planted wrong program had to fail."]],
@@ -174,8 +176,8 @@ a { color: inherit; }
 /* The picture, and the one control that changes it. The switch is as wide as the three columns, so that each of its
    buttons sits under its own column and names it. */
 .stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; }
-.scene { width: min(100%, calc(60vh * 700 / 400)); align-self: center; display: flex; flex-direction: column; }
-svg { width: 100%; aspect-ratio: 700 / 400; display: block; overflow: visible; }
+.scene { width: min(100%, calc(60vh * 700 / 430)); align-self: center; display: flex; flex-direction: column; }
+svg { width: 100%; aspect-ratio: 700 / 430; display: block; overflow: visible; }
 svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
 .atmo, .shade { pointer-events: none; }
 .atmo { opacity: var(--glow); }
@@ -185,10 +187,11 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
 .rim { fill: none; stroke: url(#rim) var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
 .wash { fill: var(--blue); opacity: calc(var(--wash) * var(--q, 0)); pointer-events: none; }
 .num { font-weight: 640; text-anchor: middle; }
-.post { fill: none; stroke: var(--faint); stroke-width: 1; }
-.bar { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; }
-.ref { font-size: 22px; font-weight: 520; fill: var(--mute); }
-.ref .refnum { fill: var(--ink); font-weight: 660; }
+.bar { fill: none; stroke: var(--blue); stroke-width: 2.4; stroke-linecap: round; stroke-dasharray: 2 7; }
+.barglow { fill: none; stroke: var(--blue); stroke-width: 9; stroke-linecap: round; opacity: calc(var(--glow) * .18); }
+.ref { font-size: 22px; font-weight: 640; fill: var(--blue); text-anchor: end; }
+.cname { font-size: 19px; font-weight: 600; fill: var(--mute); text-anchor: middle; }
+.cname.on { fill: var(--ink); }
 .switch { display: grid; grid-template-columns: repeat(3, 1fr); width: 79.3%; align-self: center; margin-top: 12px; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
 .switch button { padding: 8px 4px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; text-align: center; transition: background .15s ease, color .15s ease; }
 .switch button:hover { color: var(--blue); }
@@ -229,6 +232,7 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
   .switch { width: 84%; }
   .switch button { font-size: 14px; }
   .note { min-height: 7.5em; }
+  .ref, .cname { font-size: 26px; }  /* the drawing is narrow here: 26 units stay above 12 px on a 375 px screen */
 }
 @media (prefers-reduced-motion: reduce) {
   .switch button, .more button { transition: none; }
@@ -246,7 +250,7 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
   </header>
   <div class="stage" id="stage">
     <div class="scene">
-      <svg id="svg" viewBox="0 0 700 400" role="img"></svg>
+      <svg id="svg" viewBox="0 0 700 430" role="img"></svg>
       <div class="switch" id="switch" role="group" aria-label="The start of the answer"></div>
       <p class="note" id="note" aria-live="polite"></p>
     </div>
@@ -262,12 +266,13 @@ const C = __CONFIG__, D = C.data, $ = id => document.getElementById(id);
 const S = { state: 0, open: null, last: 0, cols: [] };
 const still = matchMedia("(prefers-reduced-motion: reduce)");
 const f = n => n.toFixed(1), mix = (a, b, q) => a + (b - a) * q;
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 const pct = s => 100 * s.passed / D.n, show = v => `${v.toFixed(1)}\u00a0%`, nb = s => s.replace(/ %/g, "\u00a0%");  // 95 % stays on one line
 
 /* The picture: a glass board seen from slightly above, with one glass column per condition. A column is as high as the
-   share of the 538 problems its condition passes. The fine bar across the board is the model trained with RL on code.
-   The switch raises the columns up to the chosen condition and lights the chosen one, so the page loads on the base
-   model without a cue, and the two cues end up side by side under the bar. */
+   share of the 538 problems its condition passes, and its name stands under it. The lit dashed line across the board is
+   RL on code. The switch raises the columns up to the chosen condition and lights the chosen one; the page loads on the
+   math cue, so all three rise once, the two cues side by side under the line. */
 const RAD = Math.PI / 180, CX = 350, CY = 345, EL = 20, A = 300, B = 84, HW = 68, HD = 52, STEP = 185, UNIT = 3.9, FLAT = 3;
 const V = { yaw: 0, el: EL, px: 0, py: 0, tx: 0, ty: 0 };  // the view: a slow sway, plus a few degrees toward the pointer
 function proj(u, v, w) {  // u to the right, v away from the viewer, w up; what is near is larger
@@ -305,8 +310,9 @@ function build() {
     `<g class="atmo"><ellipse cx="${CX}" cy="${CY - 110}" rx="340" ry="230" fill="url(#atmo)"/></g>` +
     `<g class="shade"><ellipse cx="${CX + 14}" cy="${CY + 34}" rx="338" ry="52" fill="url(#shade)"/></g>` +
     `<path class="body" id="board-side"/><path class="face" id="board-face"/><path class="rim" id="board-rim"/>` +
-    `<path class="post" id="posts"/><path class="bar" id="bar"/>` + cols +
-    `<text class="ref" id="ref">${D.reference.name} <tspan class="refnum">${show(pct(D.reference))}</tspan></text>`;
+    cols + `<path class="barglow" id="barglow"/><path class="bar" id="bar"/>` +
+    `<text class="ref" id="ref">${D.reference.name} ${show(pct(D.reference))}</text>` +
+    D.states.map((s, i) => `<text class="cname" id="cn${i}">${esc(s.name)}</text>`).join("");
   S.cols.forEach((o, i) => { o.el = Object.fromEntries(["c", "b", "f", "wf", "rf", "t", "wt", "rt", "n"].map(k => [k, $(k + i)])); });
   $("switch").innerHTML = D.states.map((s, i) => `<button data-state="${i}">${s.name}</button>`).join("");
 }
@@ -314,10 +320,10 @@ function place() {
   const top = rect(0, A, B, 0), d = path(top), hr = UNIT * pct(D.reference), e = A - 10;
   $("board-side").setAttribute("d", path(hull([...top, ...rect(0, A, B, -12)])));
   $("board-face").setAttribute("d", d); $("board-rim").setAttribute("d", d);
+  // RL on code is a marked level: a lit dashed line across the board at its height, named at its right end.
   const l = proj(-e, 0, hr), r = proj(e, 0, hr);
-  $("posts").setAttribute("d", `M${at(proj(-e, 0, 0))}L${at(l)}M${at(proj(e, 0, 0))}L${at(r)}`);
-  $("bar").setAttribute("d", `M${at(l)}L${at(r)}`);
-  $("ref").setAttribute("x", f(l[0] + 12)); $("ref").setAttribute("y", f(l[1] - 13));
+  $("bar").setAttribute("d", `M${at(l)}L${at(r)}`); $("barglow").setAttribute("d", `M${at(l)}L${at(r)}`);
+  $("ref").setAttribute("x", f(r[0])); $("ref").setAttribute("y", f(r[1] - 14));
   S.cols.forEach(o => {
     const h = mix(FLAT, o.h, o.g), up = rect(o.u, HW, HD, h), down = rect(o.u, HW, HD, 0);
     const front = path([down[0], down[1], up[1], up[0]]), face = path(up), c = proj(o.u, -HD, h);
@@ -329,6 +335,9 @@ function place() {
     o.el.n.setAttribute("x", f(c[0])); o.el.n.setAttribute("y", f(c[1] + mix(35, 47, o.q) * c[2]));
     o.el.n.setAttribute("font-size", f(mix(26, 38, o.q) * c[2]));
     o.el.n.setAttribute("opacity", Math.max(0, (o.g - .6) / .4).toFixed(2));
+    const nm = $("cn" + S.cols.indexOf(o)), b = proj(o.u, -B, -12);  // the name under the column, below the near edge of the board
+    nm.setAttribute("x", f(b[0])); nm.setAttribute("y", f(b[1] + 30));
+    nm.setAttribute("class", "cname" + (o.q > .5 ? " on" : ""));
   });
 }
 /* One frame: the view sways slowly and leans toward the pointer, and every column moves toward its height and its
@@ -363,19 +372,41 @@ function pane() {
       `<ul class="facts">${p[3].map(f => `<li>${nb(f)}</li>`).join("")}</ul>`
     : `<ul class="more">${C.panels.map(p => `<li><button data-open="${p[0]}">${p[1]}<span aria-hidden="true">›</span></button></li>`).join("")}</ul>`;
 }
-function fromHash() { const h = location.hash.slice(1); S.open = C.panels.some(p => p[0] === h) ? h : null; pane(); }
+/* The condition and the open panel are one value in the address: #<condition>, #<panel> or #<condition>/<panel>. The
+   math cue, the finding, is the condition with no name in the address. */
+const HK = D.states.map(s => s.hash), FIRST = D.states.length - 1;
+function address(push) {
+  const parts = [S.state === FIRST ? "" : HK[S.state], S.open || ""].filter(Boolean);
+  const url = parts.length ? "#" + parts.join("/") : location.pathname;
+  push ? history.pushState(null, "", url) : history.replaceState(null, "", url);
+}
+function fromHash() {
+  const parts = decodeURIComponent(location.hash.slice(1)).split("/"), k = HK.indexOf(parts[0]);
+  choose(k < 0 ? FIRST : k);
+  S.open = parts.find(x => C.panels.some(p => p[0] === x)) || null;
+  pane();
+}
+function open(key) {  // a panel opens in the side column; the keyboard focus follows it there and back
+  const was = S.open;
+  S.open = key || null;
+  address(true);
+  pane();
+  const to = $("pane").querySelector(key ? ".close" : `[data-open="${was}"]`);
+  if (to) to.focus({ preventScroll: true });
+}
 document.addEventListener("click", e => {
   const s = e.target.closest("[data-state]"), o = e.target.closest("[data-open]");
-  if (s) choose(Number(s.dataset.state));
-  if (o) { history.pushState(null, "", o.dataset.open ? "#" + o.dataset.open : location.pathname); fromHash(); }
+  if (s) { choose(Number(s.dataset.state)); address(false); }
+  if (o) open(o.dataset.open);
 });
 document.addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
-  if (e.key === "Escape" && S.open) { history.pushState(null, "", location.pathname); fromHash(); }
-  if (e.key === "ArrowRight") choose(Math.min(D.states.length - 1, S.state + 1));
-  if (e.key === "ArrowLeft") choose(Math.max(0, S.state - 1));
+  if (e.key === "Escape" && S.open) open("");
+  if (e.key === "ArrowRight") { choose(Math.min(D.states.length - 1, S.state + 1)); address(false); }
+  if (e.key === "ArrowLeft") { choose(Math.max(0, S.state - 1)); address(false); }
 });
 addEventListener("hashchange", fromHash);
+addEventListener("popstate", fromHash);
 $("stage").addEventListener("pointermove", e => {  // the view leans a few degrees toward a mouse, and settles back
   if (e.pointerType !== "mouse") return;
   const r = $("stage").getBoundingClientRect();

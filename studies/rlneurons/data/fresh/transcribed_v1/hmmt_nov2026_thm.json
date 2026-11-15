@@ -1,0 +1,102 @@
+[
+  {
+    "round": "thm",
+    "number": 1,
+    "problem": "Moana is building a square raft by tying four rectangular planks together. All of the planks have integer side lengths, and three of the planks have areas $60$, $28$, and $49$, as shown. Compute the area of the fourth plank.",
+    "answer": "88",
+    "figure": true,
+    "estimation": false,
+    "multi": false,
+    "note": "The figure shows a square: the plank of area 60 is a full-height strip on the left; to its right, the plank '?' is on top, spanning the remaining width, and below it the planks 28 (left) and 49 (right) sit side by side with equal height."
+  },
+  {
+    "round": "thm",
+    "number": 2,
+    "problem": "Ariel is organizing her collection of human treasures. She can divide her dinglehoppers evenly into groups of $102$, and her snarfblatts evenly into groups of $103$. When she combines all of her dinglehoppers and snarfblatts, she can divide them evenly into groups of $100$. Compute the minimum possible (nonzero) total number of dinglehoppers and snarfblatts in Ariel's collection.",
+    "answer": "3500",
+    "figure": false,
+    "estimation": false,
+    "multi": false,
+    "note": ""
+  },
+  {
+    "round": "thm",
+    "number": 3,
+    "problem": "Jasmine is making a new design for a flying carpet. Her first draft is a square, and to construct her $(n+1)$-th draft she takes her $n$-th draft and, for each polygonal region bounded by segments in her diagram, she connects the midpoints of adjacent sides via line segments. The first, second, and third drafts are shown below. Compute the number of polygonal regions in her $6$th draft.",
+    "answer": "1365",
+    "figure": true,
+    "estimation": false,
+    "multi": false,
+    "note": "Three drawings follow the statement: a square; the square with its midpoint square inscribed; and the third draft, where each of the 4 corner triangles is cut into 4 and the central square has its own midpoint square."
+  },
+  {
+    "round": "thm",
+    "number": 4,
+    "problem": "After some recent incidents, Snow White has decided to start eating apples again. She eats $1$ apple on day $1$. For each positive integer $n \\geq 2$, she eats $n$ times as many apples on day $n$ as she did on all previous days combined. Compute the number of apples Snow White eats on day $2026$.",
+    "answer": "1013 \\cdot 2026!",
+    "figure": false,
+    "estimation": false,
+    "multi": false,
+    "note": ""
+  },
+  {
+    "round": "thm",
+    "number": 5,
+    "problem": "Rapunzel's hair is getting too long again, so she decides to cut it every day for the next $6$ days. At the start of the first day, her hair is $2026$ feet long. First, she chooses a positive integer $m$. Then, on the $n^{\\text{th}}$ day, she cuts $\\frac{m}{n}$ feet off her hair, then cuts $\\frac{1}{n+1}$ of her remaining hair length off. Suppose that Rapunzel's hair does not grow back, and that at the end of each of the $6$ days, her hair length is an integer number of feet. Compute the smallest possible value of $m$.",
+    "answer": "74",
+    "figure": false,
+    "estimation": false,
+    "multi": false,
+    "note": ""
+  },
+  {
+    "round": "thm",
+    "number": 6,
+    "problem": "Raya is flying on the dragon Sisu over Kumandra when they spot a small circular island they want to reach. Initially, Raya and Sisu are directly above the point $(0,0)$. The island consists of all points $(x,y)$ satisfying $$(x-4)^2 + (y-6)^2 \\leq 1.$$ Without wind, Sisu can fly at $2$ units per hour in any direction. Additionally, the wind blows Sisu in the positive $x$-direction at a constant rate of $1$ unit per hour. Compute the minimum amount of time, in hours, before Raya and Sisu can be directly above any point on the island. (Assume that they remain at a constant altitude for the entirety of their flight.)",
+    "answer": "\\sqrt{21}-2",
+    "figure": false,
+    "estimation": false,
+    "multi": false,
+    "note": ""
+  },
+  {
+    "round": "thm",
+    "number": 7,
+    "problem": "Mulan orders $10$ soldiers to stand in a line. Each soldier points to one of their neighboring soldiers independently and uniformly at random. Compute the probability that exactly $3$ pairs of neighboring soldiers point at each other.",
+    "answer": "\\frac{63}{128}",
+    "figure": false,
+    "estimation": false,
+    "multi": false,
+    "note": ""
+  },
+  {
+    "round": "thm",
+    "number": 8,
+    "problem": "Cinderella's pumpkin carriage consists of two circular wheels and a circular pumpkin, all tangent to a line segment. When on flat ground, the leftmost point of the pumpkin is directly above the rightmost point of the left wheel, and the rightmost point of the pumpkin is directly above the leftmost point of the right wheel. The wheels have radii $3$ and $4$. Moreover, the height of the carriage is $30$. Compute the radius of the pumpkin.",
+    "answer": "\\frac{23}{2}",
+    "figure": true,
+    "estimation": false,
+    "multi": false,
+    "note": "A diagram follows the statement (not referred to in the text). It shows what the words leave open: the left wheel has radius 3 and the right wheel radius 4, both resting on the ground; the pumpkin sits above the slanted segment, which is tangent to the tops of the wheels and the bottom of the pumpkin; the height 30 is from the ground to the top of the pumpkin."
+  },
+  {
+    "round": "thm",
+    "number": 9,
+    "problem": "Compute the unique triple of positive integers $(b, e, \\ell)$ satisfying both of the following equations: $$be\\ell + \\ell + e = 6886,$$ $$be + \\ell + \\ell e = 586.$$",
+    "answer": "(19, 10, 36)",
+    "figure": false,
+    "estimation": false,
+    "multi": true,
+    "note": ""
+  },
+  {
+    "round": "thm",
+    "number": 10,
+    "problem": "Merida paints an equilateral triangle $ABC$ with side length $4$ units on her castle wall. She attempts to shoot an arrow at each vertex of this triangle. However, her arrows strike the wall at points $D$, $E$, and $F$, which are $1$, $2$, and $3$ units away from $A$, $B$, and $C$, respectively. Furthermore, the centroid of triangle $DEF$ coincides with the centroid of triangle $ABC$. Compute the maximum possible area of triangle $DEF$.",
+    "answer": "4\\sqrt{3}+2\\sqrt{21}",
+    "figure": false,
+    "estimation": false,
+    "multi": false,
+    "note": ""
+  }
+]
