@@ -27,7 +27,7 @@ a side panel whose address is /#<item id>; the filters are in the address too (/
 / filter, j and k move, 1 2 3 jump to the record steps, Now and Learned, Enter opens, Esc closes, ? lists the keys. A
 click on a person shows only that person. The look is that of the Design tab (.claude/skills/site-ui/SKILL.md).
 
-  GET /demo            the talk as a deck of twelve 16:9 slides (demo_deck.py): keys step, p prints one slide per page
+  GET /demo            the talk as a deck of thirteen 16:9 slides (demo_deck.py): keys step, p prints one slide per page
   GET /demo/fig/<name> the pictures the deck embeds (climb, harness, beyond, efficiency, basins), with their
                        header, words column and key hidden (demo_deck.FIGS)
   GET /demo/story      the stepped story of the talk over the Design page's picture (demo.py), fed by the same /data
