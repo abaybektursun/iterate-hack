@@ -2,7 +2,7 @@
 
 view.py serves page(...) at /demo (the stepped story of demo.py is at /demo/story) and FIGS at /demo/fig/<name>.
 Each slide is a 1600 x 900 box scaled to fit the window. Keys: right arrow, Space or PageDown next; left arrow or
-PageUp back; Home and End; t theme; f fullscreen; p print. A click on the right or left third of the window also
+PageUp back; Home and End; t theme (also the button at the top right); f fullscreen; p print. A click on the right or left third of the window also
 steps. The slide is in the address (/demo#finding), so Back works. Printing (p) gives one slide per page at 13.333 x
 7.5 in, in the theme on screen.
 
@@ -311,11 +311,17 @@ p, h1, h2, figure { margin: 0; }
 .sheet .lines i { display: block; height: 2px; background: var(--rule); }
 
 .count { position: fixed; left: 18px; bottom: 12px; font-size: 13px; color: var(--faint); opacity: .7; z-index: 2; }
+/* the theme button, top right: the same switch as the key t */
+.theme { position: fixed; right: 14px; top: 12px; z-index: 2; width: 36px; height: 36px; padding: 8px; border: 0; border-radius: 50%;
+  background: none; color: var(--faint); opacity: .7; cursor: pointer; }
+.theme svg { display: block; width: 20px; height: 20px; }
+.theme:hover, .theme:focus-visible { color: var(--ink); opacity: 1; }
+.theme:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 
 @page { size: 13.333in 7.5in; margin: 0; }
 @media print {
   html, body { height: auto; overflow: visible; }
-  .count { display: none; }
+  .count, .theme { display: none; }
   .slide { position: relative; inset: auto; display: block; width: 13.333in; height: 7.5in; overflow: hidden;
     opacity: 1; visibility: visible; transition: none; break-after: page; page-break-after: always; }
   .slide:last-child { break-after: auto; page-break-after: auto; }
@@ -328,6 +334,7 @@ p, h1, h2, figure { margin: 0; }
 __SLIDES__
 </main>
 <div class="count" id="count" aria-live="polite"></div>
+<button class="theme" id="theme" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 0 0 14.5z" fill="currentColor"/></svg></button>
 <script>
 const SLIDES = [...document.querySelectorAll(".slide")], IDS = SLIDES.map(s => s.id);
 let cur = -1;
@@ -346,7 +353,12 @@ function toggleTheme() {
   document.documentElement.dataset.theme = t;
   try { localStorage.setItem("demo-theme", t); } catch (e) { /* storage blocked: the choice lasts until the page closes */ }
   frames.forEach(syncFrame);
+  labelTheme();
 }
+const themeButton = document.getElementById("theme");
+function labelTheme() { const to = themeNow() === "dark" ? "light" : "dark"; themeButton.setAttribute("aria-label", `Switch to ${to} theme`); themeButton.title = `Switch to ${to} theme`; }
+themeButton.addEventListener("click", () => { toggleTheme(); themeButton.blur(); });  // blur: Space then steps the deck again
+labelTheme();
 
 function show(i, push) {
   i = Math.max(0, Math.min(SLIDES.length - 1, i));
@@ -374,7 +386,7 @@ document.addEventListener("keydown", e => {
   else if ((k === "p" || k === "P") && !e.repeat) { e.preventDefault(); window.print(); }
 });
 document.addEventListener("click", e => {
-  if (e.target.closest("a")) return;  // the paper sheets open their PDF
+  if (e.target.closest("a, button")) return;  // the paper sheets open their PDF; the theme button switches the theme
   const x = e.clientX / innerWidth;
   if (x > 2 / 3) show(cur + 1, true); else if (x < 1 / 3) show(cur - 1, true);
 });
