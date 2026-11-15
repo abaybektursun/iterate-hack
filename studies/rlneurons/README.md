@@ -37,6 +37,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/profile.py`, `analysis/profile_test.py`, `specs/SPEC_profile.md` | Difficulty profiles of Think-SFT and RL: error reduction by difficulty bin with difficulty defined without the arms compared, profile contrast against same-arm and one-axis noise floors, 2PL against Rasch held out, unions, cap hits by level, filed predictions for Think-SFT on hard328. Outputs `results/profile/`; input `data/profile/math500_meta_v1.json`. |
 | `lib/egate.py`, `jobs/egate_cell.py`, `analysis/egate.py`, `specs/SPEC_egate.md` | Entropy-gated temperature: a vLLM logits processor that lowers the temperature only at positions chosen by next-token entropy, at random, or outside the stretch after a repeat; the multi-arm job; the readout. Outputs `results/egate/`. |
 | `jobs/delta_sum.py`, `analysis/transplant.py`, `analysis/cap32_m2.py`, `specs/SPEC_transplant.md` | Delta transplant: writes host + a (donor - base) for three fine-tunes of one base (Think-SFT + a times the RL-Math delta, or matched noise), and the readout against the stored Think-SFT and RL samples. Outputs `results/transplant/`. |
+| `analysis/transplant_restart.py` | M(2) at cap 32,768 (seed 3,000,000) counted at both caps, and chains over stored 16,384 samples: the answer of the first sample that did not hit the cap. Writes `results/transplant/<run>/readout.json`. |
 | `jobs/run_cell.py` | One cell (model, prompt arm, problem set, temperature, top-p, seed) through the team runner `tools/gpu.py`. Reuses `rln4_gen`'s engine and row record, adds grader v3, reads `data/`. See "Day-1 cells on the team runner". |
 | `jobs/setup_vllm.sh` | Installs vLLM 0.32.0, math-verify 0.9.0, transformers 5.19.0, tokenizers 0.23.3 into the venv `/opt/rln-vllm` at job start. |
 | `jobs/rln3_gen.py` | RLN-3 generation job (arms P, F, C on MATH-500 and the harder set), AWS `pg` only. |
@@ -3126,6 +3127,43 @@ uv run tools/gpu.py submit h100 --hours 1.5 -- "bash studies/rlneurons/jobs/setu
 python3 -m studies.rlneurons.analysis.shard_join --runs runs/<job k=0..3> --out runs/m2_cap32_s1_joined
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.cap32_m2 --m2 runs/m2_cap32_s1_joined --think runs/think_cap32_s1_joined --out studies/rlneurons/results/transplant/cap32_m2_s1-01 --command '<job command>'
 ```
+
+### hard328, M(2) at cap 32,768, seed 3,000,000: 241 right, 0 cap hits; restart against a longer cap (`results/transplant/hard328_cap32-01/`, amendment 3, board work-8b4030)
+
+Amendment 3's own run: vast.ai RTX PRO 6000, job abaybektursun-1115-115611-7095, commit 94e5d06, the M(2) written by job
+-064729-a4fb (effective a 2.0000). The first attempt (job -110620-f975) was cut by the account stop at 19:50 UTC and is not used.
+`python3 -m studies.rlneurons.analysis.transplant_restart hard328_cap32-01 --cap32 runs/abaybektursun-1115-115611-7095/hard328_cap32`.
+
+| M(2), seed 3,000,000 | Right | Cap hits | Tokens per problem |
+|---|---|---|---|
+| Counted at 16,384 | 229 | 57 | 9,299 |
+| At 32,768 | 241 | 0 | 9,827 |
+
+- Filed in amendment 3: 225 to 235 = the delta only saves tokens, 240 or more = it adds right answers. Both samples are in
+  "240 or more": 241 here and 245 at seed 3,010,000 (section above), mean 243.0, against Think-SFT's four samples at 32,768 of
+  230, 234, 235, 232 (mean 232.75; the 230 is this seed). Every M(2) sample is above every Think-SFT sample, by 10 problems on
+  average, with 15 % fewer tokens (9,851 against about 11,650). The per-problem test of this seed against Think-SFT is not made
+  here: Think-SFT's 32,768 rows are not on main.
+- 57 answers pass 16,384 tokens, all finish, 12 are right (21 %; Think-SFT 23 of 91 at this seed in result-c8b994).
+- Restart or continue (chains over the stored 16,384 samples, every assignment of distinct samples; `readout.json`, `chains`):
+
+| What is done after a cap hit | Right of 328 | Cap hits left | Tokens per problem |
+|---|---|---|---|
+| M(2), nothing | 233.3 | 54.0 | 9,436 |
+| M(2), continue to 32,768 (2 runs) | 243.0 | 0 | 9,851 |
+| M(2), one new M(2) sample | 240.5 (238 to 244) | 29.7 | 11,966 |
+| M(2), up to two new M(2) samples | 242.8 (240 to 246) | 21.0 | 13,395 |
+| M(2), then M(4) | 237.0 | 15.7 | 11,827 |
+| M(2), then M(3), then M(4) | 238.7 | 7.7 | 12,917 |
+| M(2), then RL plain | 235.4 | 13.1 | 11,750 |
+| Think-SFT, nothing | 209.0 | 94.5 | 10,103 |
+| Think-SFT, one new Think-SFT sample | 222.0 | 68.8 | 14,559 |
+| Think-SFT, then M(2) | 233.6 | 43.2 | 14,328 |
+
+  Continuing the cut answer is the cheapest: 243 at 9,851 tokens, against 240.5 at 11,966 for a new sample. Passing a cut
+  problem to a model with more of the RL delta (M(3), M(4), RL), which finishes more often, gives fewer right answers than a
+  new sample of M(2) itself at the same tokens: finishing more often does not pay for the lower share of right answers.
+  The chains were computed after the rows were seen (no prediction filed); M(3) and M(4) have one stored sample each.
 
 Run folders hold `readout.json`, `metrics.json` and `delta_sum.json` (per arm), `rows.jsonl` (arms and references, per answer)
 and `examples.json` (one right and one wrong finished answer per arm, with the prompt). Jobs: hard328 a = 1 -000934-51f9,
