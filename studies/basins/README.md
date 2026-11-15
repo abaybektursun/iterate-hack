@@ -28,7 +28,7 @@ All code runs from the repository root with the root on `PYTHONPATH`.
 | `analysis/swarm_scores.py` | Laptop, one judge call (~0.01 USD). Scored configurations from result posts; each row's quote must be in the post. |
 | `analysis/swarm_lineage.py` | Laptop, one judge call (~0.06 USD). Idea tree: earlier items each item builds on, labelled variation / combination / refinement / result_of / claims / critique; ids teammates named are kept. |
 | `analysis/swarm_page.py` | Laptop. The swarm map page with replay and leaderboard. |
-| `analysis/swarm_landscape.py` | Laptop. The same map as one 3D surface (page "Basin Atlas Landscape"): each judge group is a basin whose depth grows with its board items, the judge's possible directions sit on the rims, replay over the board's order. Reads `summary.json` and `map.json`, writes `swarm_landscape.html` (board text, not committed). Basin centres are the map centroids pushed at least 0.245 apart; item offsets are shrunk by 0.45. |
+| `analysis/swarm_landscape.py` | Laptop. The same map as one full-screen 3D surface (page "Basin Atlas Landscape", WebGL 2, no library): each judge group is a basin whose depth grows with its board items, each possible direction is a pin that disappears when a board item works on it, replay in board order. Reads `summary.json` and `map.json`, writes `swarm_landscape.html` (board text, not committed). Basin centres are the map centroids pushed at least 0.245 apart; item offsets are shrunk by 0.45. Names on the picture come from `SHORT` in the file; the panel shows the judge's names. |
 
 ## Run (strategy)
 
