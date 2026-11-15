@@ -118,3 +118,9 @@ New screens, plain, first 100, seed base 80,000,000 (same references): `top1` = 
 matrix), and `bulk64` = `--recipe bulk --k 64` (RL minus its top 64 directions per matrix). Predictions: `top1` is at
 least 20 above `rand8` (36) if one direction per matrix is enough to switch the behaviour; `bulk64` is within 10 of `rl`
 (96) if the change is spread over many more than 64 directions. Each is refuted by the opposite reading.
+
+## Amendment 3, 2026-11-15 03:40 UTC
+
+Reruns on all 500 (right of 500): `top8` plain 427, `sft1` cue 454, `sft1` plain 440. Added before it runs: `rand8` plain on
+all 500, seed base 183,000,000, so that the matched control of `top8` exists at n = 500 as well. Prediction: within 5
+points of the plain base (T3, 224 of 500); refuted if it is more than 10 points above it.

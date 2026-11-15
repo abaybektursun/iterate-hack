@@ -491,6 +491,141 @@
     "share": 0.23531127028295123
    },
    "run_folder": "studies/rlneurons/results/wsp1/screen100/bulk64_plain-01"
+  },
+  "full500/top8_plain": {
+   "experiment": "full500",
+   "label": "top8",
+   "prompt": "plain",
+   "job_id": "sameraslan-1114-185934-b0a9",
+   "seed_base": 180000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 500,
+   "right_v3": 427,
+   "acc_v3": 85.4,
+   "wilson95": [
+    82.0,
+    88.2
+   ],
+   "cap_hits": 12,
+   "mean_generated_tokens": 3962.4,
+   "median_generated_tokens": 2287.5,
+   "median_tokens_right": 2156,
+   "okay_first80": 430,
+   "okay_first80_share": 0.86,
+   "wait_per_answer": 27.22,
+   "empty": 5,
+   "empty_share": 0.01,
+   "edit": {
+    "recipe": "top8",
+    "k": 8,
+    "alpha": null,
+    "rounding": "stochastic",
+    "seed": 0,
+    "late_layers": null,
+    "reference": "base",
+    "n_tensors": 355,
+    "n_edited": 224,
+    "n_unchanged": 131,
+    "other": "rl_math",
+    "add_norm": 1.269214040907,
+    "written_norm": 2.5962500135967455,
+    "ref_norm": 1713.7851893052448,
+    "add_rel": 0.0007405910897278379,
+    "effective_scale": 0.9999600542119159,
+    "cos_written_add": 0.48884480866834484,
+    "share": 0.09821802434428129
+   },
+   "run_folder": "studies/rlneurons/results/wsp1/full500/top8_plain-01"
+  },
+  "full500/sft1_cue": {
+   "experiment": "full500",
+   "label": "sft1",
+   "prompt": "cue",
+   "job_id": "sameraslan-1114-185940-514f",
+   "seed_base": 181000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 500,
+   "right_v3": 454,
+   "acc_v3": 90.8,
+   "wilson95": [
+    87.9,
+    93.0
+   ],
+   "cap_hits": 25,
+   "mean_generated_tokens": 4888.0,
+   "median_generated_tokens": 3266.5,
+   "median_tokens_right": 3052.0,
+   "okay_first80": 500,
+   "okay_first80_share": 1.0,
+   "wait_per_answer": 31.91,
+   "empty": 0,
+   "empty_share": 0.0,
+   "edit": {
+    "recipe": "interp",
+    "k": null,
+    "alpha": 1.0,
+    "rounding": "nearest",
+    "seed": 0,
+    "late_layers": null,
+    "reference": "base",
+    "n_tensors": 355,
+    "n_edited": 0,
+    "n_unchanged": 355,
+    "other": "think_sft",
+    "add_norm": 0.0,
+    "written_norm": 0.0,
+    "ref_norm": 0.0,
+    "add_rel": null,
+    "effective_scale": null,
+    "cos_written_add": null,
+    "share": null
+   },
+   "run_folder": "studies/rlneurons/results/wsp1/full500/sft1_cue-01"
+  },
+  "full500/sft1_plain": {
+   "experiment": "full500",
+   "label": "sft1",
+   "prompt": "plain",
+   "job_id": "sameraslan-1114-185947-4681",
+   "seed_base": 182000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 500,
+   "right_v3": 440,
+   "acc_v3": 88.0,
+   "wilson95": [
+    84.9,
+    90.6
+   ],
+   "cap_hits": 22,
+   "mean_generated_tokens": 4492.1,
+   "median_generated_tokens": 3020.5,
+   "median_tokens_right": 2923.5,
+   "okay_first80": 153,
+   "okay_first80_share": 0.306,
+   "wait_per_answer": 26.47,
+   "empty": 0,
+   "empty_share": 0.0,
+   "edit": {
+    "recipe": "interp",
+    "k": null,
+    "alpha": 1.0,
+    "rounding": "nearest",
+    "seed": 0,
+    "late_layers": null,
+    "reference": "base",
+    "n_tensors": 355,
+    "n_edited": 0,
+    "n_unchanged": 355,
+    "other": "think_sft",
+    "add_norm": 0.0,
+    "written_norm": 0.0,
+    "ref_norm": 0.0,
+    "add_rel": null,
+    "effective_scale": null,
+    "cos_written_add": null,
+    "share": null
+   },
+   "run_folder": "studies/rlneurons/results/wsp1/full500/sft1_plain-01"
   }
  },
  "differences": {
@@ -648,23 +783,7 @@
   }
  },
  "bootstrap": "paired by problem index, 5,000 resamples, seed 0, 95 % percentile, in points",
- "skipped": [
-  {
-   "cell": "full500/top8_plain",
-   "job_id": "sameraslan-1114-185934-b0a9",
-   "why": "no answers.jsonl in runs/"
-  },
-  {
-   "cell": "full500/sft1_cue",
-   "job_id": "sameraslan-1114-185940-514f",
-   "why": "no answers.jsonl in runs/"
-  },
-  {
-   "cell": "full500/sft1_plain",
-   "job_id": "sameraslan-1114-185947-4681",
-   "why": "no answers.jsonl in runs/"
-  }
- ],
+ "skipped": [],
  "notes": [
   "tokens are n_generated, which counts the stop token: one more than the job's n_new for an answer that stopped",
   "empty: n_generated <= 3",
