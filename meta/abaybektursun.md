@@ -1,5 +1,24 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 03:05 UTC (after work-63fac2 closed as result-5d032f, Day-1 #3) meta/reviews/abaybektursun/20261115-0259/
+
+- Last entry's checks (`gpu.py ls`, 03:01): 10 H100 running with 3 queued under a cap of 20, so the limit of 10 holds; b200 6ea1 was cancelled after 30 min queued, never ran (4th b200 job of the day with no start); reward5 is 34 min in, still running; no reward5 rows yet, "extra_id" not counted. All carried.
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training ... at equal generated tokens" (DIRECTION.md). Day-1 #3 tests it directly and answers no for sampling more: base vote over 4 has 446 of 500 at 16,034 tokens per problem, one RL sample 456 at 4,675 (-2.0 points [-4.0, 0.2] at 3.4x tokens; studies/rlneurons/README.md "Day-1 #3"). The base's pass@4 is 467, so 21 problems lie between its vote and its oracle, 11 above one RL sample. Next step: a label-free selector on the stored rows, idea-664670 (same picture on the 328: vote 179, pass@4 205, RL single 206). No open work item covers it; nearest are work-70152d (revision of one draft) and work-be7af1 (solved examples in context, the only open route that is at equal tokens).
+- Research: no replication. Published prior was beside the run (Maj@4 +0.8 points, 2507.18122 Table 1; measured +8.2). For idea-664670 the prior is negative: confidence selectors at or below the vote in the same table.
+- Turnaround (cycle.txt, 6 h): 108 jobs, 22 failed or cancelled, 530.3 of 2,306.9 container min in them, median queue wait 10.5 min; medians to-job 2, jobs 54, to-answer 4. work-63fac2: to-job 0, jobs 337, to-answer 4, total 341 min (before.txt). Slowest stage: jobs. Its 337 min: code and smoke 22 (21:16-21:38), queue 28.9, base job 208b 136.7, RL job f4ab died at 2,013 of 2,034 rows about 00:35, rerun e828 queued 14.2 and ran 123.0 (ended 02:54).
+- Was the rerun avoidable: yes for the answer. All 2,000 first attempts of f4ab were stored, and single 456 and vote 469 for RL were on the board at 00:37 (work-63fac2 comment), 201 min after the claim. The rerun produced the 21 missing restart rows, which move the RL restart row by 2 problems (456 to 458), and it took 137 min of wall and 123 H100 min. The result could have closed at 00:37 with the RL restart row marked missing. The rerun on the same seeds gave vote 474 against 469 and single 456 against 456: rows are not reproduced by a rerun even without shards, so the 155 against 164-168 of the 4-shard replay (result-dfe78e, 1 run) is not evidence against splitting.
+- Cause: one job held 2.3 h of work, so one container restart cost 2.3 h. The runner fix of 02:16 (aa9166a) stops the death but still starts the job from row 0. At submit the cap was 4 H100 with 4 running, so a split would only have queued (comment 21:38); the cap is 10 since 02:31.
+- Change (step 2, then 4; step 1: the RL restart row was required by the spec, by nobody's decision, and decided nothing): delete the rerun when the missing rows are outside the rows the question needs; and send the next k-sample cell as one job per sample with the existing flags (`run_cell --samples 1 --seed <seed + 10000 s>`), about 36 min each from 9.85 M tokens / 4 at 1,213 tok/s, so a restart costs at most one sample. Recommended, not made: this session may not submit jobs or edit run_cell.py.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | claim to answer, k-sample cell, 2 models | 341 min (201 to the first-attempt rows) | not measured yet | - | 1 | before.txt, cycle.txt |
+  | minutes per job | 136.7, 143.7 (died), 123.0 | not measured yet (estimate 36) | - | 3 | before.txt |
+  | right of 500, single and vote (must not change beyond rerun noise, 0 and 5) | 405, 446 base; 456, 474 RL | - | - | 1 | results/day1_3/*/readout.json |
+
+- Failures: f4ab is the 4th job of the FileExistsError class and predates the fix; none after it. Still in place and not a row in meta/FAILURES.md yet: a restarted job repeats all finished rows (run_cell.py asserts a fresh folder; no resume).
+- Next entry checks: claim-to-answer minutes and minutes per job of the next k-sample cell against 341 and 137; whether idea-664670 is claimed; the three carried checks of the 02:37 entry.
+
 ## 2026-11-15 02:37 UTC (5th GPU job since the last review: reward5, 10 H100 jobs at 3b4ab2a, work-069eca) meta/reviews/abaybektursun/20261115-0229/
 
 - Last entry's checks: no new "died: FileExistsError" in `gpu.py ls` (the 3 listed, c51a 277d 74c7, predate the fix); 0.0 of 63.4 container min in failed or cancelled jobs in 0.5 h (cycle.txt), against 248.9 of 1,305.9 in 3 h.

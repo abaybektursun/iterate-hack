@@ -6,7 +6,8 @@ description: Make the public page of one novel finding on the team site (monitor
 # Finding page
 
 A novel finding gets one page that a person outside the team understands in 5 seconds: what the problem was, what was
-found, how large it is. The looks and the checks are in `.claude/skills/site-ui/SKILL.md`; read it first.
+found, how large it is. The look (light, depth, motion), the words and the checks are in
+`.claude/skills/site-ui/SKILL.md`; read it first.
 
 ## When to make one
 
@@ -42,10 +43,11 @@ All four hold. If one fails, the board result is enough.
    - a trend: a line, with a slider on its x axis;
    - a behaviour: two real outputs side by side from the run folder, one scored right and one scored wrong;
    - a mechanism: a diagram in the manner of `tools/architecture.py`.
-3. Three dimensions only when the thing has three (a loss surface, an embedding, a direction in weight space) and a
-   flat picture would hide the point. Then: one view the reader drags, drawn on a canvas; one pinned `three.js`
-   import is the only library allowed on the site; a still picture when `prefers-reduced-motion` is set. Never 3D
-   for a bar or a line.
+3. The picture has the look of the architecture page: one lit object with depth, slow motion, real data
+   (`site-ui`: The look, Depth, Motion). Give the finding a body the reader can turn or switch, drawn with the same
+   light and the same projection, with no 3D library. The template's flat bar is the plain starting point; replace it
+   when the finding deserves more. Depth must make the finding easier to see: a single number stays a single,
+   large, readable number.
 
 ## Words
 

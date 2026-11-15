@@ -131,3 +131,51 @@ and read its rows: sample and attempt fields, a restart row after each cap hit, 
   (3 ties for first, pass@4 10 of 10). Same on 10 hard328 problems. A copy cut to 50 rows is refused ("cap hit without its
   restart"); `--minus` between a MATH-500 and a hard328 run is refused; an existing `--out` is refused.
 - `run_cell` without the new options still prints 4 right, 3 cap hits of 10 with seeds `seed + index`.
+
+## Results, MATH-500 (2026-11-15; T 1.0 / top-p 1.0, n = 500, grader v3, commit c36f562)
+
+Run folders: `results/day1_3/math500_base_cue-01/` (job `abaybektursun-1114-153825-208b`) and `results/day1_3/math500_rl-01/`
+(job `abaybektursun-1114-183640-e828`), each with `run.json`, `metrics.json`, `readout.json`, `examples.json`. Raw rows:
+`runs/<job>/answers.jsonl` in the owner's Modal Volume (`uv run tools/gpu.py get <job>`), not committed.
+
+| Row | Base + cue: right of 500 [Wilson 95 %] | tokens/problem | RL: right of 500 [Wilson 95 %] | tokens/problem | RL minus base, points [paired 95 %] |
+|---|---|---|---|---|---|
+| single (sample 0) | 405 [77.3, 84.2] | 3,808 | 456 [88.4, 93.4] | 4,675 | 10.2 [7.2, 13.2] |
+| restart, up to 2 (sample 0) | 413 [79.0, 85.7] | 4,852 | 458 [88.8, 93.7] | 4,899 | 9.0 [6.0, 12.0] |
+| vote over 4 | 446 [86.2, 91.6] | 16,034 | 474 [92.5, 96.4] | 18,747 | 5.6 [3.6, 7.8] |
+| pass@4 (upper bound of the vote) | 467 [90.9, 95.3] | 16,034 | 482 [94.4, 97.7] | 18,747 | 3.0 [1.4, 4.8] |
+| vote over 4 after restart | 450 [87.1, 92.3] | 19,697 | 475 [92.7, 96.6] | 19,864 | 5.0 [3.0, 7.0] |
+
+Within a model, minus its single row (paired bootstrap): base restart +1.6 [0.6, 2.8], vote +8.2 [5.8, 10.8], vote after
+restart +9.0 [6.4, 11.8]; RL restart +0.4 [0.0, 1.0], vote +3.6 [2.0, 5.2], vote after restart +3.8 [2.2, 5.6]. The four
+single samples: base 405, 409, 410, 418; RL 456, 462, 464, 458. Across models at unequal tokens: base vote minus RL single
+-2.0 [-4.0, 0.2] (16,034 against 4,675 tokens per problem); base vote after restart minus RL single -1.2 [-3.4, 1.0].
+
+Jobs: base 2,137 rows (137 restarts), 9.85 M tokens, 1,213 tokens/s, 8,191 s wall; RL 2,041 rows (41 restarts), 9.93 M tokens,
+1,360 tokens/s, 7,369 s wall; one H100 each. Smoke `abaybektursun-1114-152646-e76b` (10 problems): 45 rows, seeds by the rule,
+5 restarts, single 8 of 10. The first RL job `abaybektursun-1114-153833-f4ab` died at 2,013 of 2,034 rows (runner
+`FileExistsError` on `/runs/<job>`); it is not scored, the readout refuses it. Its 2,000 first attempts gave vote 469 against
+474 in the rerun with the same seeds, so about 1 point of the vote row is run-to-run variation (vLLM is not batch-invariant).
+
+Hypotheses:
+
+- H0 held: base 405 right, 25 cap hits (T1: 410, 27); RL 456 right, 6 cap hits (T2: 463, 6).
+- H1: the direction held (RL minus base 5.6 under the vote, 10.2 single), the predicted sizes were wrong: base +8.2 (predicted
+  2 to 6), RL +3.6 (predicted at most 2). The prior, Maj@4 +0.8 on a 73.6 % model (2507.18122 Table 1), is far below both.
+- H2 held: base +1.6, RL +0.4.
+- H3 held: the restart costs 1,044 more tokens per problem for 1.6 points (650 per point), the vote 12,226 for 8.2 (1,490 per
+  point).
+- H4 refuted by its own criterion: the interval of base vote minus RL single includes 0. The base vote spends 3.4 times RL's
+  single-sample tokens for that. With the same procedure RL stays 5.6 points ahead, and at about equal tokens (16 to 19 k per
+  problem) RL's vote is 474 against the base's 446 to 450.
+
+Raw rows read (base): the vote turns 43 problems from wrong to right and 2 from right to wrong (problems 50 and 403: a wrong
+answer with 3 and 2 votes against a right sample 0). In the 43, sample 0 had a wrong answer 28 times and no answer 15 times (10
+cap hits). 36 ties for first, 5 scored right. No winning group mixes right and wrong members; in 2 problems `agree` kept two
+right answers apart (`east` / `East`, `$f(3) = 8$` / `8`) without changing the score. Sample-0 restarts: of 25 cap hits, 8 end
+right, 8 wrong, 9 hit the cap three times. Rule A flags 0 of the base's 166 cap-hit rows and 1 of RL's 44: at T 1.0 the cap
+hits are long answers, not loops. RL: 18 wrong to right, 0 right to wrong, 16 ties (3 right). Of the 54 problems the base
+vote misses, RL's vote also misses 24. Grader note: `\text{Evelyn}}`-style endings extract as `Evelyn}` and score wrong (seen
+in the smoke); grader v3 is unchanged.
+
+Chosen for hard328 by the rule above: the vote over 4 after restart (base 450), i.e. the same command; not run yet.
