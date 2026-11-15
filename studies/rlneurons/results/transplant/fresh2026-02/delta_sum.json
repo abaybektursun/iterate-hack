@@ -1,0 +1,140 @@
+{
+ "sft1_rl20": [
+  {
+   "args": {
+    "host": "think_sft",
+    "donor": "rl_math",
+    "alpha": 2.0,
+    "random": false,
+    "seed": 0,
+    "dir": "/tmp/theta",
+    "stats": "/root/abaybektursun-1115-064456-33a0/out/delta_sum.json"
+   },
+   "models": {
+    "base": {
+     "repo": "allenai/Olmo-3-1025-7B",
+     "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+    },
+    "think_sft": {
+     "repo": "allenai/Olmo-3-7B-Think-SFT",
+     "revision": "6ff857587e040d6d523a3d5f3a56e918f5401d66"
+    },
+    "rl_math": {
+     "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    }
+   },
+   "json_from": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "n_tensors": 355,
+   "n_copied_from_host": 1,
+   "host_delta_norm": 467.4459617949564,
+   "donor_delta_norm": 4.1172999217955635,
+   "cos_host_donor": -0.0017657138798217403,
+   "effective_a": 1.9999997397341798,
+   "written_norm_over_intended": 1.0017984565793947,
+   "seconds": 136.2193365097046
+  },
+  {
+   "args": {
+    "host": "think_sft",
+    "donor": "rl_math",
+    "alpha": 2.0,
+    "random": false,
+    "seed": 0,
+    "dir": "/tmp/theta",
+    "stats": "/root/abaybektursun-1115-064708-17f7/out/delta_sum.json"
+   },
+   "models": {
+    "base": {
+     "repo": "allenai/Olmo-3-1025-7B",
+     "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+    },
+    "think_sft": {
+     "repo": "allenai/Olmo-3-7B-Think-SFT",
+     "revision": "6ff857587e040d6d523a3d5f3a56e918f5401d66"
+    },
+    "rl_math": {
+     "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    }
+   },
+   "json_from": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "n_tensors": 355,
+   "n_copied_from_host": 1,
+   "host_delta_norm": 467.4459617949564,
+   "donor_delta_norm": 4.1172999217955635,
+   "cos_host_donor": -0.0017657138798217403,
+   "effective_a": 1.9999997397341798,
+   "written_norm_over_intended": 1.0017984565793947,
+   "seconds": 169.3899986743927
+  },
+  {
+   "args": {
+    "host": "think_sft",
+    "donor": "rl_math",
+    "alpha": 2.0,
+    "random": false,
+    "seed": 0,
+    "dir": "/tmp/theta",
+    "stats": "/root/abaybektursun-1115-064540-7ae0/out/delta_sum.json"
+   },
+   "models": {
+    "base": {
+     "repo": "allenai/Olmo-3-1025-7B",
+     "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+    },
+    "think_sft": {
+     "repo": "allenai/Olmo-3-7B-Think-SFT",
+     "revision": "6ff857587e040d6d523a3d5f3a56e918f5401d66"
+    },
+    "rl_math": {
+     "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    }
+   },
+   "json_from": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "n_tensors": 355,
+   "n_copied_from_host": 1,
+   "host_delta_norm": 467.4459617949564,
+   "donor_delta_norm": 4.1172999217955635,
+   "cos_host_donor": -0.0017657138798217403,
+   "effective_a": 1.9999997397341798,
+   "written_norm_over_intended": 1.0017984565793947,
+   "seconds": 356.69368052482605
+  },
+  {
+   "args": {
+    "host": "think_sft",
+    "donor": "rl_math",
+    "alpha": 2.0,
+    "random": false,
+    "seed": 0,
+    "dir": "/tmp/theta",
+    "stats": "/root/abaybektursun-1115-064708-17f7/out/delta_sum.json"
+   },
+   "models": {
+    "base": {
+     "repo": "allenai/Olmo-3-1025-7B",
+     "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+    },
+    "think_sft": {
+     "repo": "allenai/Olmo-3-7B-Think-SFT",
+     "revision": "6ff857587e040d6d523a3d5f3a56e918f5401d66"
+    },
+    "rl_math": {
+     "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    }
+   },
+   "json_from": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "n_tensors": 355,
+   "n_copied_from_host": 1,
+   "host_delta_norm": 467.4459617949564,
+   "donor_delta_norm": 4.1172999217955635,
+   "cos_host_donor": -0.0017657138798217403,
+   "effective_a": 1.9999997397341798,
+   "written_norm_over_intended": 1.0017984565793947,
+   "seconds": 169.3899986743927
+  }
+ ]
+}
