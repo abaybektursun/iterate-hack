@@ -3422,6 +3422,120 @@ uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rln
 uv run --no-project --with numpy --with math-verify==0.9.0 --with transformers==5.19.0 --with tokenizers==0.23.3 --with huggingface_hub --with jinja2 python -m studies.rlneurons.analysis.cap32vote --run runs/cap32vote_<set>_s4 --stored studies/rlneurons/results/<thinkvote/hard328_sft1_cue_s4-01 | fresh/sft1_cue_s4-01> --rl studies/rlneurons/results/<day1_3/hard328_rl_plain_s4r2-01 | fresh/rl_plain_s4-01> --out studies/rlneurons/results/cap32vote/<set>_sft1_cue_s4-01
 ```
 
+## Ties to the shortest answer: the cap32vote lead does not replicate on Think-SFT's stored draws (hard328 n = 328, fresh2026 n = 136, MATH-500 n = 500, laptop, board work-ccac62, idea-2b2aa1)
+
+Question: result-dd26fe found post hoc that breaking vote ties to the shortest answer lifts Think-SFT + cue's vote over 4
+by 8 problems on hard328 (244 to 252 at cap 32,768; 238 to 246 on the same answers cut at 16,384) and by 6 and 2 on
+fresh2026. Does it on the stored 16,384 draws of the same model (same seeds, different text: an independent draw)?
+Answer: no. Pooled over hard328 + fresh2026 (464 problems) the rule minus the plain vote is +0.6 problems, +0.1 points
+[-0.5, +0.8] over the 24 draw orders, and -1 problem, -0.2 points [-1.1, +0.7] in the stored order (241 to 239 and 75 to
+76). No score line: Think-SFT's scores stay the plain votes. The rule does gain on RL plain against the order-averaged
+vote: +10.7 problems pooled, +2.3 points [+0.9, +3.7]. Spec, written and pushed before the script: `specs/SPEC_tieshort.md`
+(commit `1e138a4`). It also states what was already known: the stored-order values were in committed tables (section
+"Configurations on the 328", `results/fresh/frontier_*`), so only the intervals, the 24-order means, the ties and the
+controls are new.
+
+Rule: `analysis/selector.py` `RULES["tie_short"]`, unchanged (among the largest groups, the one holding the shortest
+finished sample; a cap hit counts as infinitely long; then the lowest sample). The cap32vote post hoc rule is the same
+function (`frontier.RULES["vote4_short"]`), so there is no variant. The plain vote (`day1_vote.vote`) gives a tie to the
+group seen first in draw order; it reads no length and is not random. T 1.0 / top-p 1.0, cap 16,384, grader v3, attempt
+0 of 4 samples. Differences: problems (points [95 %]), paired bootstrap over problems, 5,000 resamples, seed 0.
+
+| Set | Model | plain vote, stored order | rule, stored order (fixed / broken) | difference, stored order | plain vote, 24 orders | rule, 24 orders | difference, 24 orders | rule, lengths shuffled |
+|---|---|---|---|---|---|---|---|---|
+| hard328 | Think-SFT + cue | 241 | 239 (1 / 3) | -2 (-0.6 [-1.8, +0.6]) | 238.9 | 239.0 | +0.1 (+0.0 [-0.8, +0.8]) | 238.4 |
+| hard328 | RL plain | 221 | 222 (6 / 5) | +1 (+0.3 [-1.5, +2.1]) | 215.9 | 222.0 | +6.1 (+1.9 [+0.3, +3.5]) | 217.0 |
+| hard328 | base + cue | 192 | 191 (4 / 5) | -1 (-0.3 [-2.1, +1.5]) | 184.6 | 190.5 | +5.9 (+1.8 [+0.3, +3.5]) | 186.0 |
+| fresh2026 | Think-SFT + cue | 75 | 76 (1 / 0) | +1 (+0.7 [0.0, +2.2]) | 75.5 | 76.0 | +0.5 (+0.4 [-0.7, +1.8]) | 76.0 |
+| fresh2026 | RL plain | 57 | 60 (4 / 1) | +3 (+2.2 [-0.7, +5.9]) | 55.8 | 60.3 | +4.6 (+3.4 [+0.7, +6.4]) | 56.8 |
+| fresh2026 | base + cue | 38 | 38 (2 / 2) | 0 (0.0 [-2.9, +2.9]) | 38.8 | 38.0 | -0.8 (-0.6 [-2.8, +1.6]) | 39.4 |
+| MATH-500 | Think-SFT + cue | 481 | 481 (0 / 0) | 0 | 480.8 | 481.0 | +0.3 (+0.1 [-0.3, +0.4]) | 480.9 |
+| MATH-500 | RL plain | 474 | 475 (1 / 0) | +1 (+0.2 [0.0, +0.6]) | 474.3 | 475.0 | +0.7 (+0.1 [-0.3, +0.6]) | 475.1 |
+| MATH-500 | base + cue (the rule's home set) | 446 | 453 (7 / 0) | +7 (+1.4 [+0.4, +2.4]) | 448.2 | 453.0 | +4.8 (+0.9 [+0.1, +1.9]) | 448.5 |
+
+Pooled over hard328 + fresh2026 (n = 464), rule minus plain vote:
+
+| | 24 orders | stored order |
+|---|---|---|
+| Think-SFT + cue | +0.6 (+0.1 [-0.5, +0.8]) | -1 (-0.2 [-1.1, +0.7]) |
+| RL plain | +10.7 (+2.3 [+0.9, +3.7]) | +4 (+0.9 [-0.9, +2.6]) |
+| base + cue | +5.1 (+1.1 [-0.2, +2.5]) | -1 (-0.2 [-1.7, +1.3]) |
+| Think-SFT minus RL | -10.1 (-2.2 [-3.8, -0.6]) | -5 (-1.1 [-3.0, +0.9]) |
+| Think-SFT minus base | -4.5 (-1.0 [-2.5, +0.5]) | 0 (0.0 [-1.7, +1.7]) |
+
+Hypotheses scored:
+
+- H1 (the rule raises Think-SFT's vote on the stored draws; refuted if the pooled interval covers 0): refuted, both
+  intervals cover 0. The lead predicted +6 to +8 problems on hard328; observed -2 (stored order) and +0.1 (24 orders).
+- H2 (a gain for Think-SFT and not for RL or the base): refuted, and reversed. Think-SFT has no gain; RL's pooled interval
+  over the 24 orders is above 0, and Think-SFT minus RL is -2.2 points [-3.8, -0.6]. The base's pooled interval covers 0
+  (hard328 alone: +1.8 [+0.3, +3.5]; fresh2026: -0.6).
+- H3 (mechanism). Ties for first in the plain vote, stored order, and right answers inside them:
+
+| Set | Model | ties | lowest sample (plain vote) | shortest (rule) | longest (control) | random choice, expected | lengths shuffled | ties with no finished tied answer |
+|---|---|---|---|---|---|---|---|---|
+| hard328 | Think-SFT + cue | 16 | 5 | 3 | 2 | 2.9 | 2.4 | 2 |
+| hard328 | RL plain | 64 | 12 | 13 | 7 | 6.9 | 8.0 | 1 |
+| hard328 | base + cue | 85 | 17 | 16 | 6 | 9.6 | 11.0 | 1 |
+| fresh2026 | Think-SFT + cue | 6 | 1 | 2 | 2 | 1.5 | 2.0 | 0 |
+| fresh2026 | RL plain | 42 | 4 | 7 | 2 | 2.8 | 3.8 | 4 |
+| fresh2026 | base + cue | 46 | 3 | 3 | 7 | 3.8 | 4.4 | 1 |
+| hard328, cap32vote draws cut at 16,384 (the lead) | Think-SFT + cue | 22 | 4 | 12 | | 5.8 | | |
+| hard328, cap32vote draws at 32,768 (the lead) | Think-SFT + cue | 34 | 4 | 12 | | 5.2 | | |
+
+  - Think-SFT has few ties at 16,384 (16 of 328, 6 of 136; predicted 25 to 45): its samples that fail mostly hit the cap
+    and cast no vote, so there is little for a tie rule to decide. In its 22 pooled stored ties the shortest pick is right
+    5 times, a random choice 4.4, the lowest sample 6. The lead's draws had 12 right of 22 against 5.8 expected; the
+    stored draws show no such edge. The shortest tied group is right in 5 of 20 ties with a finished answer, the other
+    tied groups in 5 of 27 (a tie has at most one right group, so the fair comparison is the random-choice column).
+  - RL has 64 and 42 ties, mostly four different answers (35 and 27). The shortest pick is right 13 and 7 times against
+    6.9 and 2.8 for a random choice and 7 and 2 for the longest: short finished answers are the right ones more often in
+    RL's ties. Base on hard328: 16 against 9.6; on fresh2026: 3 against 3.8.
+  - The stored order is a lucky order for the plain vote on hard328. Over the 24 orders the plain vote gets 2 to 13 of
+    RL's 64 ties right (sd 3.8; stored order 12) and 5 to 17 of the base's 85 (sd 3.1; stored order 17, the best of the
+    24). So a stored-order vote over 4 carries about 3 to 4 problems of noise from the tie-break alone, and "rule minus
+    stored-order vote" is not a measure of the rule. The rule's own number does not depend on the order (222.0 and 222).
+  - Part of the rule is "a finished answer beats an answer extracted from a cut-off sample", not length among finished
+    answers: fresh2026 `68` (Think-SFT; fixed) is one finished right answer of 16,091 tokens against a cap hit's `30-12=18.`.
+
+Sequential vote, stop when two agree, at most 4 (`seq4` against `seq4_short`; means over the 24 draw orders):
+
+| Set | Model | `seq4` right | `seq4_short` right | difference | tokens per problem (vote over 4) |
+|---|---|---|---|---|---|
+| hard328 | Think-SFT + cue | 238.9 | 239.5 | +0.6 (+0.2 [-0.5, +1.0]) | 30,837 (40,410) |
+| hard328 | RL plain | 215.9 | 222.0 | +6.1 (+1.9 [+0.5, +3.4]) | 26,680 (37,299) |
+| hard328 | base + cue | 184.6 | 190.5 | +5.9 (+1.8 [+0.4, +3.4]) | 31,510 (36,902) |
+| fresh2026 | Think-SFT + cue | 75.5 | 76.0 | +0.5 (+0.4 [-0.7, +1.8]) | 42,901 (52,170) |
+| fresh2026 | RL plain | 55.8 | 60.3 | +4.6 (+3.4 [+0.7, +6.4]) | 38,151 (48,331) |
+| fresh2026 | base + cue | 38.8 | 38.0 | -0.8 (-0.6 [-2.8, +1.6]) | 46,617 (51,158) |
+| MATH-500 | Think-SFT + cue | 480.8 | 480.5 | -0.3 (-0.1 [-0.1, 0.0]) | 11,420 (19,503) |
+| MATH-500 | RL plain | 474.3 | 474.5 | +0.2 (0.0 [-0.2, +0.3]) | 11,080 (18,747) |
+| MATH-500 | base + cue | 448.2 | 452.0 | +3.8 (+0.8 [-0.1, +1.7]) | 11,256 (16,034) |
+
+Checks. The script stops unless it reproduces the posted plain votes (241, 75, 481; RL 221, 57, 474; base 192, 446), the
+posted rule values, and from `results/cap32vote/*/rows.jsonl` the lead's 244 and 252, 238 and 246 (hard328), 75 and 81, 73
+and 75 (fresh2026); all reproduced. Planted test `analysis/tieshort_test.py`: 40 ties whose shortest tied answer is right
+and lowest sample wrong gain exactly 40; with the lengths shuffled the gain over a vote that is right in half the ties is
+about 0; 40 ties whose shortest tied answer is wrong lose exactly 40; a tie of cap hits only falls back to the lowest
+sample. Null on the real rows: the rule with `n_new` permuted among each problem's finished samples (200 permutations,
+column "lengths shuffled"); the rule is 5 problems above it for RL and the base on hard328 and 0.6 for Think-SFT.
+
+Caveats. The RL and base gains are against the order-averaged plain vote, not against the posted stored-order votes
+(+1 and -1 there), and the contrast "RL, not Think-SFT" was not predicted (the spec predicted only that RL's difference
+would be the largest). Two draws of Think-SFT at the same cap disagree by 10 problems on the rule's effect (+8 and -2);
+why the cap32vote draws cut at 16,384 have 22 ties and the stored ones 16 is not explained. The rows carry no text, so the
+examples hold answers, lengths and scores; the texts are in `runs/thinkvote_*`, `runs/fresh_*` (not committed).
+
+Run folders `results/tieshort/{hard328,fresh2026,math500}-01/`: `run.json`, `readout.json` (rows, ties, pooled intervals,
+per-problem vectors of both rules in the stored order and over 24 orders), `table.md`, `examples.json` (per model one
+problem the rule fixes and one it breaks, with the four answers and lengths: hard328 Think-SFT `83` fixed, 44 at 15,847
+tokens against 45 at 13,052, gold 45; `82` broken, 236 at 13,886 tokens right against 246 at 9,825 and 201 at 9,351).
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.tieshort_test
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.tieshort --nn 01   # 17 minutes
+```
+
 ## Paper: The First Hundred Steps (`paper-first-steps/`, board work-184476)
 
 A 4-page paper: `paper-first-steps/the-first-hundred-steps.pdf`, served at
