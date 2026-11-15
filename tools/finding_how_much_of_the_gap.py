@@ -91,13 +91,13 @@ VIEWS = [
      "base": 158.5, "rl": 200.0, "hint": "One answer per problem. 0 % is one Base + cue sample, 100 % one RL sample."},
     {"id": "vote", "name": "Vote over 4 samples", "family": "vote", "most": None,
      "base": 192.0, "rl": 221.0, "hint": "The most common of 4 answers counts. 0 % and 100 % are the votes of Base + cue and RL."},
-    {"id": "tokens", "name": "At the tokens of one RL sample", "family": "single", "most": 1.02,
-     "base": 158.5, "rl": 200.0, "hint": "Only settings that spend at most 1.02 times the tokens of one RL sample."},
+    {"id": "tokens", "name": "At the token cost of one RL sample", "family": "single", "most": 1.02,
+     "base": 158.5, "rl": 200.0, "hint": "Only configurations that spend at most 1.02 times the tokens of one RL sample."},
 ]
 
 # The families, top to bottom: name and a short second line.
 GROUPS = [
-    ["base", "Base + cue", "untrained weights"],
+    ["base", "Base + cue", "no training"],
     ["edit", "Weight edits", "part of RL's change"],
     ["think", "Think-SFT", "imitation, no reward"],
     ["rl", "RL", "reward-trained"],
@@ -173,7 +173,7 @@ _RULE = {
                            "and stops when two agree, at most 4; a tie goes to the shortest finished sample; mean over 24 "
                            "orders."),
 }
-_WHO = {"base": "Base + cue, the untrained base model with the opening cue,",
+_WHO = {"base": "Base + cue, the base model answering with the opening cue (three tokens placed at the start of its answer),",
         "rl": "RL, the base model after reinforcement learning on math, with no cue,",
         "think": "Think-SFT + cue, the base model fine-tuned to copy worked solutions with no reward,"}
 SHORT, DESC = {}, {}
@@ -182,9 +182,9 @@ for _m in _WHO:
         SHORT[f"{_m}-{_k}"], DESC[f"{_m}-{_k}"] = _s, f"{_WHO[_m]} {_d}"
 SHORT.update({
     "think-capl": "One sample, stopped at 14,028 tokens", "rl-capl": "One sample, stopped at 14,028 tokens",
-    "axis-base-cue": "One sample, a separate draw", "axis-base-plain": "Base without the cue, one draw",
-    "axis-rl-plain": "One sample, a separate draw", "axis-rl-cue": "RL + cue, one draw",
-    "axis-code-cue": "RL on code + cue, one draw",
+    "axis-base-cue": "One sample, separate run", "axis-base-plain": "Base without the cue, one sample",
+    "axis-rl-plain": "One sample, separate run", "axis-rl-cue": "RL + cue, one sample",
+    "axis-code-cue": "RL on code + cue, one sample",
     "axis-theta0.25-cue": "¼ of RL's weight change, + cue", "axis-theta0.5-cue": "½ of RL's weight change, + cue",
     "other-sft1-cue": "One sample, a separate run", "other-sft1-plain": "Without the cue, a separate run",
     "mix-2think-2base": "Vote: 2 Think-SFT + 2 Base + cue", "mix-4think-4base": "Vote over 8: 4 Think-SFT + 4 Base + cue",
@@ -196,19 +196,19 @@ DESC.update({
                   "many tokens per problem as one RL sample; the count is the mean over 4 samples.",
     "rl-capl": "RL answers each problem once and is stopped at the same 14,028 tokens as Think-SFT; the count is the mean "
                "over 4 samples.",
-    "axis-base-cue": "Base + cue answers each problem once: one separate draw, from the first day's run.",
-    "axis-base-plain": "The base model answers each problem once with the plain prompt, no opening cue: one draw.",
-    "axis-rl-plain": "RL answers each problem once: one separate draw, from the first day's run.",
-    "axis-rl-cue": "RL answers each problem once with the opening cue: one draw.",
-    "axis-code-cue": "RL-Zero-Code, the same base model after reinforcement learning on code instead of math, answers once "
-                     "with the opening cue: one draw.",
-    "axis-theta0.25-cue": "The base weights plus a quarter of RL's weight change (a = 0.25), with the opening cue, answer once: "
-                          "one draw.",
-    "axis-theta0.5-cue": "The base weights plus half of RL's weight change (a = 0.5), with the opening cue, answer once: one "
-                         "draw.",
-    "other-sft1-cue": "Think-SFT + cue answers each problem once: one draw from a separate run in another workspace.",
-    "other-sft1-plain": "Think-SFT answers each problem once with the plain prompt, no opening cue: one draw from a separate "
-                        "run in another workspace.",
+    "axis-base-cue": "Base + cue answers each problem once: one sample per problem, from a separate run.",
+    "axis-base-plain": "The base model answers each problem once with the plain prompt, no opening cue, in a separate run.",
+    "axis-rl-plain": "RL answers each problem once: one sample per problem, from a separate run.",
+    "axis-rl-cue": "RL answers each problem once with the opening cue, in a separate run.",
+    "axis-code-cue": "RL-Zero-Code, the same base model after reinforcement learning on code instead of math, answers each "
+                     "problem once with the opening cue, in a separate run.",
+    "axis-theta0.25-cue": "The base weights plus a quarter of RL's weight change (a = 0.25), with the opening cue, answer each "
+                          "problem once, in a separate run.",
+    "axis-theta0.5-cue": "The base weights plus half of RL's weight change (a = 0.5), with the opening cue, answer each "
+                         "problem once, in a separate run.",
+    "other-sft1-cue": "Think-SFT + cue answers each problem once, in a separate run.",
+    "other-sft1-plain": "Think-SFT answers each problem once with the plain prompt, no opening cue, in a separate "
+                        "run.",
     "mix-2think-2base": "A vote over 2 Think-SFT + cue samples and 2 Base + cue samples; the count is the mean over every "
                         "way of choosing them from the stored samples.",
     "mix-4think-4base": "A vote over all 4 Think-SFT + cue samples and all 4 Base + cue samples, 8 in total.",
@@ -261,50 +261,56 @@ _seed = [r for r in DATA["rows"] if r["id"] in ("other-sft1-cue", "relay-think-t
 _count = lambda v: None if v is None else f"{v:.0f}" if v == int(v) else f"{v:.1f}"  # "209", "158.5", "191.2"
 
 TITLE = "Gap closed without reward"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "How much of RL's gain on hard math can we get without reward?"
-LINE = f"With no reward, Think-SFT closes {_pc(_one['share'][0])} of the gap from Base + cue to RL."
+PROBLEM = "How much of the gain from reinforcement learning (RL) on hard math can a model get without a reward?"
+LINE = (f"With no reward, the imitation-trained model (Think-SFT) closes {_pc(_one['share'][0])} of the gap from the base model "
+        f"with the opening cue to the RL model on 328 harder problems, one sample each: it passes the RL model. At the token "
+        f"cost of one RL sample it closes {_pc(_tok['share'][0])}.")
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences.
 PANELS = [
     ["new", "What is new",
-     "Earlier results each measured the gap their own way. Here all 49 configurations on the 328 harder problems are rebuilt "
-     "from committed per-problem rows with one definition: 0 % is Base + cue, 100 % is RL.",
-     ["DeepSeek-R1 (arXiv 2501.12948, Appendix F.1, Table 16) reports that a smaller model trained to copy a stronger model's solutions "
-      "beats the same model trained with large-scale RL. We see the same order on a 7B model, on one scale with untrained "
-      "rules, weight edits and equal tokens.",
-      f"With no training, the best rule closes {_pc(_L['one'][1]['share'][0])} of the gap at one sample and "
-      f"{_pc(_L['vote'][1]['share'][0])} under the vote over 4 samples.",
-      f"At the tokens of one RL sample, Think-SFT closes {_pc(_tok['share'][0])} ({_ci(_tok['share'])})."]],
+     "This page puts all 49 configurations measured on the 328 harder problems on one scale, recomputed from their saved "
+     "per-problem scores: 0 % is Base + cue, 100 % is RL. The team's earlier results each measured the gap in their own way.",
+     [f"With no training, the best sampling rule on the base model closes {_pc(_L['one'][1]['share'][0])} of the gap at one "
+      f"sample and {_pc(_L['vote'][1]['share'][0])} under the vote over 4 samples.",
+      f"At the token cost of one RL sample (Think-SFT stopped at {DATA['cap_L']:,} tokens), Think-SFT closes "
+      f"{_pc(_tok['share'][0])} of the gap ({_ci(_tok['share'])}).",
+      "DeepSeek-R1 (arXiv 2501.12948, Appendix F.1, Table 16) reports that a smaller model trained to copy a stronger model's solutions "
+      "beats the same model trained with large-scale RL. We see the same order on a 7B model, and place it on one scale "
+      "beside sampling rules on the base model, partial weight edits and a comparison at equal token cost."]],
     ["why", "Why it matters",
-     "The research direction asks for the cheapest route to RL's score that uses no reward. The untrained weights stop near "
-     "a fifth of the gap; imitation of worked solutions passes RL.",
+     "The team is looking for the cheapest way to reach the RL model's score without a reward. Sampling rules on the base "
+     "model close about a fifth of the gap; training to imitate worked solutions passes the RL model.",
      [f"Think-SFT + cue gets {_one['right']:.0f} of 328 right with one sample, RL {_ROWS['rl-single']['right']:.0f} and "
       f"Base + cue {_ROWS['base-single']['right']:.1f}.",
-      f"Under the vote over 4 samples: Think-SFT {_vote['right']:.0f}, RL {_ROWS['rl-vote4']['right']:.0f}, Base + cue "
-      f"{_ROWS['base-vote4']['right']:.0f}.",
-      "Most of Think-SFT's lead at one sample needs more than 14,028 tokens: stopped there, it matches RL stopped at the same "
-      "length."]],
+      f"Under the vote over 4 samples, without restarts, Think-SFT gets {_vote['right']:.0f} of 328 right, RL "
+      f"{_ROWS['rl-vote4']['right']:.0f} and Base + cue {_ROWS['base-vote4']['right']:.0f}.",
+      f"Most of Think-SFT's lead at one sample comes from answers longer than {DATA['cap_L']:,} tokens: when both models are "
+      f"stopped at {DATA['cap_L']:,} tokens, Think-SFT scores about the same as RL."]],
     ["how", "How we know",
-     "studies/rlneurons/analysis/config_table.py rebuilt every row from committed per-problem rows: 328 problems, T 1.0, "
-     "cut off at 16,384 tokens, grader v3. Nothing was chosen on the 328.",
-     ["Intervals come from a bootstrap over the 328 problems, 5,000 resamples, the same in every row; a share's interval is "
-      "the interval of the ratio.",
-      "176 of 176 numbers posted earlier reproduce. Planted rows equal to RL and to Base + cue score 100 % and 0 %.",
-      "Without the 6 problems that may be in Think-SFT's training data, or with grader v4, no share moves by more than "
-      "3.5 points."]],
+     "One script rebuilt every row from the saved per-problem scores of the 328 harder problems: competition problems (AIME, "
+     "AMC, HMMT, OlympiadBench) outside RL's training set. Every answer was sampled at temperature 1.0, cut off at 16,384 "
+     "tokens and checked by grader version 3, and no setting was chosen on these 328 problems.",
+     ["Intervals come from a bootstrap over the 328 problems, 5,000 resamples, the same in every row; the interval of a share "
+      "comes from the same resamples of the whole ratio (row minus Base + cue, divided by RL minus Base + cue).",
+      "All 176 numbers posted earlier on the team's board come out the same. As a check of the scale, a test row copied from "
+      "RL scores 100 % and one copied from Base + cue scores 0 %.",
+      "Removing the 6 problems that may be in Think-SFT's training data, or scoring with grader version 4, moves no share by "
+      "more than 3.5 percentage points."]],
     ["limits", "What it does not show",
-     f"The vote's gap is 29 problems ({_ROWS['base-vote4']['right']:.0f} against {_ROWS['rl-vote4']['right']:.0f} of 328), so "
-     f"every vote share has a wide interval: Think-SFT's {_pc(_vote['share'][0])} runs from {_pc(_vote['share'][1])} to "
-     f"{_pc(_vote['share'][2])}.",
+     f"Under the vote the gap is 29 problems ({_ROWS['base-vote4']['right']:.0f} against {_ROWS['rl-vote4']['right']:.0f} of "
+     f"328), so every vote share has a wide interval: Think-SFT's {_pc(_vote['share'][0])} runs from {_pc(_vote['share'][1])} "
+     f"to {_pc(_vote['share'][2])}.",
      ["Think-SFT is trained on worked solutions written by other models, so it is not free of training. Only the Base + cue "
       "rules use no training at all.",
-      f"Hollow marks are one draw per problem from a separate run. Two of them reach {_pc(_seed[1]['share'][0])} at one "
-      f"sample, and Think-SFT without the cue reaches {_pc(_seed[2]['share'][0])} at about the tokens of one RL sample. "
-      "The large number counts only the 4-sample rows.",
-      "Left out for lack of committed per-problem rows: the weight stack and the run with a 32k-token cap (both still running), the "
-      "top RL directions and the loop-neuron edit."]],
+      f"Hollow marks are one sample per problem from a separate run. Two of them reach {_pc(_seed[1]['share'][0])} at one "
+      f"sample, and Think-SFT without the cue reaches {_pc(_seed[2]['share'][0])} at about the token cost of one RL sample. "
+      "The large number on the picture counts only rows measured on 4 samples per problem.",
+      "Left out because their per-problem scores were not saved: a model built by stacking weight changes (the weight stack), and a run with "
+      "a token limit of 32k tokens (both were still running when this page was made); an edit along the largest directions "
+      "of RL's weight change; and an edit of the neurons tied to loops."]],
     ["run", "How to reproduce it",
-     f"Run {DATA['command']} at commit {DATA['code_commit']}; it reads only committed rows.",
+     f"Run {DATA['command']} at commit {DATA['code_commit']}; it reads only the per-problem scores saved in git.",
      ["The run folder " + RUN + " holds table.md, table.json, checks.json and run.json.",
       "The README of studies/rlneurons, section “All configurations on the 328 in one table”, lists every source run."]],
 ]
@@ -602,7 +608,7 @@ function build() {
     `<g id="face"><g class="read">` +
     T("big", "big", g.big[2]) + T("l1", "l1", g.phone ? 18 : 17) + T("l2", g.phone ? "l1" : "l2", g.phone ? 18 : 14) + T("l3", "l2", g.phone ? 17 : 14) + (g.phone ? T("l4", "l2", 17) : "") +
     (g.vr ? `<line class="vrule" x1="${g.vr}" x2="${g.vr}" y1="34" y2="178"/>` : "") +
-    T("ccap", "ccap", g.phone ? 17 : 14, "", "Best rule on untrained weights") + T("cnum", "cnum", g.phone ? 38 : 46) +
+    T("ccap", "ccap", g.phone ? 17 : 14, "", "Best sampling rule on the base model") + T("cnum", "cnum", g.phone ? 38 : 46) +
     T("cname", "cname", g.phone ? 17 : 14.5) + T("ccount", "cci", g.phone ? 17 : 14) + T("cci", "cci", g.phone ? 17 : 14) + `</g>` +
     `<g class="frame"><rect class="gapband" id="gapband"/><path class="grid" id="grid"/><path class="sep" id="sep"/>` +
     `<line class="ref" id="ref0"/><line class="ref rl" id="ref1"/>` +
@@ -613,7 +619,7 @@ function build() {
     GROUPS.map((gr, k) => `<g id="g${k}">` + T("gn" + k, "gname", fs, "", esc(gr[1])) + T("gs" + k, "gsub", g.phone ? fs : 12, "", esc(gr[2])) + `</g>`).join("") +
     `<g id="key">` +
     `<circle class="pt" id="k0" r="4.4"/>${T("kt0", "klab", g.phone ? 17 : 12.5, "", "Mean of 4 samples per problem")}` +
-    `<circle class="pt hollow" id="k1" r="4.4"/>${T("kt1", "klab", g.phone ? 17 : 12.5, "", "One draw, separate run")}` +
+    `<circle class="pt hollow" id="k1" r="4.4"/>${T("kt1", "klab", g.phone ? 17 : 12.5, "", "One sample, separate run")}` +
     `<g class="reward"><circle class="pt" id="k2" r="4.4"/></g>${T("kt2", "klab", g.phone ? 17 : 12.5, "", "Reward-trained weights")}</g>` +
     `</g><g class="marks">` +
     SLOTS.map(s => `<g id="s${s.i}" style="display:none"><circle class="halo" id="ha${s.i}" r="11" style="display:none"/>` +
@@ -678,11 +684,11 @@ function readText(view, lr, cr) {
   if (g.phone) {
     setText("l1", "of the gap closed by");
     setText("l2", C.short_lead[lr.id]);
-    setText("l3", `${counts}, T 1.0`);
+    setText("l3", counts);
     setText("l4", ci);
   } else {
     setText("l1", `of the gap closed by ${C.short_lead[lr.id]}`);
-    setText("l2", `${counts} (328 harder problems, T 1.0)`);
+    setText("l2", `${counts} (328 harder problems)`);
     setText("l3", ci);
   }
   setText("ccount", `${cr.s.right} of ${N} right`);
@@ -869,18 +875,18 @@ function rowPane(r) {
   const view = VIEWS[S.view], slot = SLOTS.find(s => s.ids[S.view] === r.id), lead = r.id === view.lead;
   const facts = [];
   facts.push(`<b>${r.s.right} of ${N}</b> right (${r.acc[0]} %, 95 % interval ${r.acc[1]} % to ${r.acc[2]} %)` +
-    (r.wrong != null ? `; ${r.s.wrong} wrong and ${r.s.abst} with no answer.` : `. This draw stores only right or not; ${r.cap_hits} answers were cut off at 16,384 tokens.`));
+    (r.wrong != null ? `; ${r.s.wrong} wrong and ${r.s.abst} with no answer.` : `. This run stored only whether each answer was right; ${r.cap_hits} answers were cut off at the limit of 16,384 tokens.`));
   facts.push(`<b>${num(r.tokens)} tokens</b> per problem, ${r.mult[0].toFixed(2)} times one RL sample` +
     (r.mult.length > 2 ? ` (95 % interval ${r.mult[1].toFixed(2)} to ${r.mult[2].toFixed(2)}).` : "."));
   facts.push(`In this comparison 0 % is Base + cue at ${C.views_s[view.id][0]} of ${N} and 100 % is RL at ${C.views_s[view.id][1]} of ${N}` +
     (view.family === "vote" ? ", a gap of 29 problems." : "."));
   const notes = [C.rewardnote[r.reward]];
-  if (/tie rule/.test(r.chosen)) notes.push("The tie rule was written on MATH-500 after reading the problems it fixes; here it is held out.");
+  if (/tie rule/.test(r.chosen)) notes.push("The tie rule was written on MATH-500 after reading the problems it fixes; the 328 harder problems were not used to write it.");
   if (/no restart rows/.test(r.name)) notes.push("Think-SFT's run has no restarts, so this rule runs here without them.");
   if (/L set/.test(r.chosen)) notes.push(`The length of ${num(C.cap_L)} tokens was set from the token counts of the 328; no score was read.`);
-  if (!filled(r.id)) notes.push("One draw per problem from a separate run, so it is noisier than a mean of 4 samples; the large number does not count it.");
+  if (!filled(r.id)) notes.push("One sample per problem from a separate run, so it is noisier than a mean of 4 samples; the large number on the picture does not count it.");
   return `<div class="dhead"><h2><span>${esc(C.groupname[slot.group])}</span>${esc(C.short[r.id])}</h2><button class="close" data-open="">Close</button></div>` +
-    `<div class="share"><b class="${lead ? "blue" : ""}">${pc(r.share[0])}</b><span>of the gap closed, ${esc(view.name.toLowerCase())}<br>` +
+    `<div class="share"><b class="${lead ? "blue" : ""}">${pc(r.share[0])}</b><span>of the gap closed, ${esc(view.name[0].toLowerCase() + view.name.slice(1))}<br>` +
     (r.share[2] > r.share[1] ? `95 % interval ${pc(r.share[1])} to ${pc(r.share[2])}` : "the end of the scale") + `</span></div>` +
     `<p class="lead">${esc(C.desc[r.id])}</p><ul class="facts">${facts.map(x => `<li>${x}</li>`).join("")}</ul>` +
     `<p class="note">${esc(notes.join(" "))}</p>`;

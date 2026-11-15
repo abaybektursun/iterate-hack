@@ -8,12 +8,12 @@ steps. The slide is in the address (/demo#finding), so Back works. Printing (p) 
 
 Every number is read at build time from the module that holds it:
 the staircase of fixes from demo_fixes.py, the two models of the gap slide and the accuracy climb from demo_ali_data.DATA['climb'], the two result pictures from demo_results.py, the review rounds
-from demo_review.py (which reads proof_review_cuts_waste.DATA), the idea tree's links from proof_idea_basins.DATA['tree'], the number of people from
+from demo_review.py (which reads proof_review_cuts_waste.DATA), the idea tree's links from proof_idea_basins.DATA['tree'] (demo_converge.py counts them live), the number of people from
 demo_facts.FACTS['people']; view.py passes the list of papers. The photos are data
 URIs in demo_photos.py. Eight slides show a picture in an iframe of FIGS: the two models and the bridge between them
 of demo_gap.py, the accuracy climb of /demo/ali/slide3, the Design page (architecture.py), the staircase of fixes of demo_fixes.py, the two pictures of demo_results.py, the glass
-columns of demo_review.py and /proof/idea-basins playing from the items to their basins to the idea tree,
-each with its header, words column and key hidden. A frame with data-replay is loaded again when its slide is shown, so
+columns of demo_review.py, each with its header, words column and key hidden, and the idea tree growing over the slab
+of /proof/idea-basins (demo_converge.py, full-bleed). A frame with data-replay is loaded again when its slide is shown, so
 its picture draws itself in front of the audience.
 """
 import html
@@ -23,6 +23,7 @@ import architecture
 import demo
 import demo_ali
 import demo_ali_data
+import demo_converge
 import demo_facts
 import demo_fixes
 import demo_gap
@@ -135,7 +136,9 @@ html, body {{ overflow: hidden; }}
     "beyond": embed(demo_results.PAGES["beyond"], ""),
     "efficiency": embed(demo_results.PAGES["efficiency"], ""),
     "review": embed(demo_review.PAGE, ""),
-    # /proof/idea-basins playing by itself: the slab, the switch and the count. It opens on the board items, gathers
+    # the ideas slide: the idea tree growing over the slab of /proof/idea-basins, one self-playing canvas (demo_converge.py)
+    "converge": demo_converge.PAGE,
+    # Not on a slide now, kept at /demo/fig/basins: /proof/idea-basins playing by itself, the slab, the switch and the count. It opens on the board items, gathers
     # them into their basins and then lays the basins out as the rows of the idea tree (BASIN_PLAY). That page
     # follows only the system theme, so its own two sets of tokens are repeated for data-theme here.
     "basins": embed(proof_idea_basins.PAGE, f""":root[data-theme="light"] {{ color-scheme: light; {BASIN_LIGHT} }}
@@ -279,13 +282,13 @@ def slides(papers):
         ("beyond", '<div class="head"><h2>These findings are generalizable</h2>'
                    '<p class="sub">One <b class="team">Invariant</b> method: climbed on MATH-500 only, then used unchanged on three benchmarks it never saw</p></div>'
                    '<iframe class="fig-frame wide" data-fig="beyond" data-replay title="Beyond MATH-500" tabindex="-1"></iframe>'),
-        ("efficiency", f'<div class="head"><h2>Same score as autoresearch, {demo_results.TOKEN_RATIO:.1f}× fewer tokens</h2>'
-                       f'<p class="sub">Against Karpathy\'s autoresearch (100k GitHub stars) · +{demo_results.HARD_GAIN:g} points on harder problems</p></div>'
+        ("efficiency", f'<div class="head"><h2>Benchmarking against Karpathy\'s autoresearch (100k stars on GitHub)</h2>'
+                       f'<p class="sub">Same score with {demo_results.TOKEN_RATIO:.1f}× fewer tokens · +{demo_results.HARD_GAIN:g} points on harder problems</p></div>'
                        '<iframe class="fig-frame wide" data-fig="efficiency" data-replay title="Our harness against autoresearch" tabindex="-1"></iframe>'),
         ("proof", '<h2 class="title top-title">Its own review cuts waste</h2>'
                   '<iframe class="fig-frame review" data-fig="review" data-replay title="Container minutes per batch over review rounds" tabindex="-1"></iframe>'),
         ("ideas", f'<div class="head"><h2>Ideas cluster and converge</h2></div>'
-                  '<iframe class="fig-frame tree" data-fig="basins" data-replay title="The idea basins and the idea tree" tabindex="-1"></iframe>'),
+                  '<iframe class="fig-frame tree" data-fig="converge" data-replay title="The idea tree" tabindex="-1"></iframe>'),
         ("papers", f'<div class="mid"><h2 class="title">{len(papers)} papers, written by the swarm</h2>'
                    f'<div class="sheets" style="--n:{len(papers)}">{"".join(paper(p) for p in papers)}</div></div>'),
         ("summary", '<div class="recap"><h2 class="title"><b class="team">Invariant</b></h2><div class="did">'
@@ -377,7 +380,7 @@ p, h1, h2, figure { margin: 0; }
 
 .fig-frame { position: absolute; border: 0; background: var(--paper); pointer-events: none; color-scheme: normal; }
 .fig-frame.harness { left: 250px; top: 215px; width: 1100px; height: 600px; }
-.fig-frame.tree { left: 220px; top: 190px; width: 1160px; height: 680px; }
+.fig-frame.tree { left: 0; top: 0; width: 1600px; height: 900px; }
 .fig-frame.climb { left: 370px; top: 200px; width: 860px; height: 680px; }
 /* under the climb: a faint slider of board time and a half-speed button, clear under the pointer */
 .replay { position: absolute; left: 430px; top: 858px; width: 740px; display: flex; align-items: center; gap: 18px; opacity: .22; transition: opacity .2s ease; z-index: 1; }

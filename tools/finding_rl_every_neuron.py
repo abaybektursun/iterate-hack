@@ -78,8 +78,9 @@ STOPS.append({"share": 100, "neurons": DATA["neurons"], **{k: round(mean(DATA["m
 _V, _F = DATA["vector"], DATA["first_order"]
 
 TITLE = "RL's change is spread out"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "Is RL training's effect carried by a few neurons or by many?"
-LINE = f"Copying RL's best 1 % of neurons into the base recovers only {pct(BEST1)} of RL's effect."
+PROBLEM = "Is the effect of training with reinforcement learning (RL) carried by a few neurons or by many?"
+LINE = (f"Copying into the base model the 1 % of the RL model's neurons ranked most important recovers only {pct(BEST1)} of "
+        "the difference between the two models' next-word predictions.")
 
 # Not from our runs: the closest published results, checked in full text on 2026-11-15. Mukherjee et al. (arXiv
 # 2505.11711): RL updates 5 to 30 % of parameters (Table 1: 68.5 to 96.0 % unchanged), in every layer (Fig. 3), nearly
@@ -94,15 +95,15 @@ PANELS = [
      ["That counts which weights moved. We measured which neurons carry the effect, by copying them from RL into the base.",
       "The closest method, Weight Patching (arXiv 2604.13694), copies neurons from an instruction-tuned model into its base, "
       "but reports no curve of how concentrated the effect is.",
-      f"New here: no small set of neurons carries RL's effect. {round(100 * DATA['positive'])} % of all neurons each move the base "
+      f"New here: no small set of neurons that we found carries RL's effect. {round(100 * DATA['positive'])} % of all neurons each move the base "
       "toward RL, and their effects add up."]],
     ["why", "Why it matters",
-     "A search for RL's gain inside a few neurons will not find it in this model.",
+     "A search for RL's effect on predictions inside a few neurons is unlikely to find it in this model.",
      [f"Ranking by weight change finds even less: its 1 % recovers {pct(STOPS[2]['weight'])}, a third of the best 1 %. Only "
       f"{DATA['overlap']:,} of the 3,523 neurons are in both sets.",
       f"The weight change itself is flat: every layer holds 3.0 to 3.2 % of the feed-forward change, and the top 1 % of neurons hold "
       f"{100 * DATA['weight_top1']:.1f} %.",
-      f"Edits that copy RL's effect cheaply must be dense: one fixed vector added to each layer's output, with no weight changed, "
+      f"Cheap edits that copy RL's effect may need to be spread over the whole model: one fixed vector added to each layer's output, with no weight changed, "
       f"recovers {pct(mean(_V['bias_layer']))}."]],
     ["how", "How we know",
      "We copied the weights of chosen neurons from RL into the base and measured how much of the KL divergence between the two "
@@ -116,8 +117,8 @@ PANELS = [
      "It measures how close the base's predictions come to RL's on stored answers, not accuracy on math problems.",
      ["Which dots light is exact for the three 1 % sets, which the run saved. At other shares the number lit is exact, and the "
       "dots are drawn at random within the layers of the 1 % set.",
-      f"All feed-forward neurons together recover {pct(mean(DATA['mlp']))}. The rest needs attention weights, which alone "
-      f"recover {pct(mean(DATA['attn']))}.",
+      f"All feed-forward neurons together recover {pct(mean(DATA['mlp']))}. Attention weights alone "
+      f"recover {pct(mean(DATA['attn']))}. The two shares overlap, so they sum to more than 100 %.",
       "Another ranking could find a better 1 %. One base model and its RL version were tested."]],
     ["run", "How to reproduce it",
      f"On one H100 GPU: {DATA['command']}.",

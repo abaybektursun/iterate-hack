@@ -1,0 +1,85 @@
+{
+ "supports": {
+  "problem_index": 135,
+  "gold": "-1",
+  "karpathy_winner": "$1$",
+  "karpathy_right": 0,
+  "k": 2,
+  "base_attempt0": [
+   {
+    "sample": 0,
+    "n_new": 13384,
+    "cap_hit": false,
+    "extracted": "0",
+    "score_v3": 0
+   },
+   {
+    "sample": 1,
+    "n_new": 12442,
+    "cap_hit": false,
+    "extracted": "-1",
+    "score_v3": 1
+   },
+   {
+    "sample": 2,
+    "n_new": 12281,
+    "cap_hit": false,
+    "extracted": "-1",
+    "score_v3": 1
+   },
+   {
+    "sample": 3,
+    "n_new": 6227,
+    "cap_hit": false,
+    "extracted": "1",
+    "score_v3": 0
+   }
+  ],
+  "base_finished_wrong_all_attempts": [
+   "0",
+   "1"
+  ],
+  "long_only": 1
+ },
+ "against": {
+  "problem_index": 58,
+  "gold": "024",
+  "karpathy_winner": "1",
+  "karpathy_right": 0,
+  "k": 2,
+  "base_attempt0": [
+   {
+    "sample": 0,
+    "n_new": 16384,
+    "cap_hit": true,
+    "extracted": "Answer",
+    "score_v3": 0
+   },
+   {
+    "sample": 1,
+    "n_new": 11148,
+    "cap_hit": false,
+    "extracted": "24",
+    "score_v3": 1
+   },
+   {
+    "sample": 2,
+    "n_new": 13245,
+    "cap_hit": false,
+    "extracted": "24",
+    "score_v3": 1
+   },
+   {
+    "sample": 3,
+    "n_new": 16384,
+    "cap_hit": true,
+    "extracted": null,
+    "score_v3": 0
+   }
+  ],
+  "base_finished_wrong_all_attempts": [
+   "729"
+  ],
+  "long_only": 1
+ }
+}

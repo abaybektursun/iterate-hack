@@ -455,9 +455,14 @@ segno). The slide `#gap` shows `/demo/fig/gap` (`tools/demo_gap.py`): the untrai
 49) beside the photo and name of the cook who fed the team. The two photos (cook, meditation) are the strings `COOK`
 and `MEDITATE` in `tools/demo_photos.py`, with her name in `COOK_NAME`,
 each a `data:image/jpeg;base64,...` URI (the deploy ships only `tools/*.py`); while one is empty its slide shows an
-empty frame. Slides 4 and 7 show the picture of `tools/architecture.py` and the idea tree of `/demo/ali/slide2` in an iframe of
-`/demo/fig/harness` and `/demo/fig/tree`: those pages with their header, words column and key hidden
-(`demo_deck.FIGS`). The slide `#sponsors` shows the scene of `/exa` and the memory scene of `/pastdev` side by side in iframes of
+empty frame. The slide `#harness` shows the picture of `tools/architecture.py` in an iframe of `/demo/fig/harness`: that
+page with its header, words column and key hidden (`demo_deck.FIGS`). The slide `#ideas` is full-bleed
+`/demo/fig/converge` (`tools/demo_converge.py`): one canvas that plays by itself. On the glass slab of
+`/proof/idea-basins` the board items of `tools/proof_idea_basins.py` (515) pop in, in posting order, and a lit head runs along an arc from each earlier
+item an item builds on (tall and blue between two basins), while a count adds up the links that join two basins, ending
+at that file's `DATA['tree']` (269 of 914); then real cross-basin links and convergence bursts (items that build on three or more basins) replay
+until the tree grows again. `/demo/fig/basins` (`/proof/idea-basins` stepping from the items to their basins to the
+idea tree) is still served and is on no slide. The slide `#sponsors` shows the scene of `/exa` and the memory scene of `/pastdev` side by side in iframes of
 `/demo/fig/exa` and `/demo/fig/pastdev` (those pages with everything but the scene hidden; the dark deck shows them
 inverted), each replaying its real cases, with two numbers under each read from the pages' own number rows. To the right of the memory scene, smaller, is `/demo/fig/pasttw`: the towers of `/pastdev` alone (recall against grep, 20 questions). The slide `#finding` shows `/demo/fig/fixes` (`tools/demo_fixes.py`): one MATH-500 problem
 answered four ways, each answer a glass sheet on a step as high as its configuration's score (base model, 3 opening
@@ -469,8 +474,8 @@ the slab gives the formula: waste = total container min − answer min); on load
 right, and a hollow dotted column at the end is the same model after three rounds with a plain instruction. Every number is read when the page is built: the staircase's scores from
 `tools/demo_fixes.py`, the comparison with Karpathy's autoresearch loop from
 `FACTS['auto_research_comparison']` in `tools/demo_facts.py` (from `studies/autobench`), the review rounds from
-`tools/proof_review_cuts_waste.py` (through `tools/demo_review.py`), the links of the idea tree from `tools/demo_ali_data.py` (counted as
-`tools/demo_ali.py` counts them), the number of people from `FACTS['people']`, and the papers from `tools/view.py`.
+`tools/proof_review_cuts_waste.py` (through `tools/demo_review.py`), the links of the idea tree from `tools/proof_idea_basins.py`
+(`DATA['tree']`), the number of people from `FACTS['people']`, and the papers from `tools/view.py`.
 
 The stepped story of the talk is at `/demo/story`: one story over the picture of `tools/architecture.py`, with a sentence and a fact
 line per step in the words column (arrow keys step, Esc closes; `/demo/story#<step>` links to a step). The 12

@@ -104,9 +104,10 @@ D, _d, _f = DATA, DATA["diff"], DATA["fresh"]
 _day = lambda iso: f"{datetime.date.fromisoformat(iso):%-d %B %Y}"  # "12 December 2025"
 _fd = _d["fresh2026"]
 TITLE = "Imitation beats RL"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "Can training on worked solutions, with no reward, match RL on math?"
-LINE = (f"On {D['n']['hard328']} harder problems, imitation beats RL: {_d['hard328']['single'][0]} points per sample, "
-        f"{_d['hard328']['vote'][0]} when four samples vote, and the lead holds on {D['n']['fresh2026']} problems published in 2026.")
+PROBLEM = "Can training on worked solutions, with no reward, match reinforcement learning (RL) on math?"
+LINE = (f"On {D['n']['hard328']} harder problems, the imitation-trained model (Think-SFT) with the opening cue beats the RL "
+        f"model by {_d['hard328']['single'][0]} percentage points with one sample and by {_d['hard328']['vote'][0]} with a "
+        f"vote over 4 samples. The lead holds on {D['n']['fresh2026']} problems published in 2026.")
 
 # Not from our runs: the closest published results, read in full by a subagent on 2026-11-15. DeepSeek-R1 (arXiv
 # 2501.12948, App. F.1, Table 16): Qwen2.5-32B-Zero (RL from the base) against R1-Distill-Qwen-32B (800K R1 samples),
@@ -115,70 +116,75 @@ LINE = (f"On {D['n']['hard328']} harder problems, imitation beats RL: {_d['hard3
 # Olmo 3 (arXiv 2512.13961): Think-SFT in Table 15 at T 0.6; RL-Zero only as curves (Fig. 24) at T 1.0; no direct comparison.
 PANELS = [
     ["new", "What is new",
-     "The largest published comparison from one base model favours imitation: on Qwen2.5-32B, a model distilled from "
-     "800,000 DeepSeek-R1 answers scores 72.6 on AIME 2024 against 47.0 for RL alone (arXiv 2501.12948, Table 16).",
-     ["On Qwen2.5-Math-7B the two are close: 44.1 for imitation against 45.5 for RL, averaged over six benchmarks (arXiv "
+     "New here: the two released Olmo 3 models, Think-SFT and the RL model, are compared problem by problem, with the same "
+     "sampling, token limit, grader and vote, and a paired 95 % interval.",
+     ["The largest published comparison from one base model favors imitation: on Qwen2.5-32B, a model trained to copy "
+      "800,000 DeepSeek-R1 answers gets 72.6 % of AIME 2024 right with one sample, against 47.0 % for the same base model "
+      "trained with RL alone (arXiv 2501.12948, Table 16).",
+      "On Qwen2.5-Math-7B the two are close: 44.1 for imitation against 45.5 for RL, averaged over six benchmarks (arXiv "
       "2504.14945, Table 1). The Olmo 3 report (arXiv 2512.13961) does not compare its own two models.",
-      "New here: the released Olmo 3 pair compared problem by problem, with the same sampling, token cap, grader and vote, "
-      "and a paired 95 % interval.",
       f"The gap here is far smaller than DeepSeek's: {_d['hard328']['vote'][0]} points on the harder problems, and no "
-      "separation on MATH-500."]],
+      "clear difference on MATH-500."]],
     ["why", "Why it matters",
-     "The team looks for the cheapest route without reward to RL's score. This is the first route that passes RL on the "
-     "328 harder problems.",
-     [f"Under the vote it is the best row on the 328 so far: {D['vote']['hard328']['sft']} of 328 at "
-      f"{D['tokens']['sft']:,} tokens per problem, against {D['rl_after_restart']['hard328']} for RL even after restarts.",
-      f"Its advantage is in what it does not answer. On the 328 it is cut off at {D['cap']:,} tokens in {D['caps']['sft']} of "
-      f"{D['caps']['rows']:,} samples (RL {D['caps']['rl']}), but {D['caps']['right_sft']} % of its finished answers are "
-      f"right (RL {D['caps']['right_rl']} %).",
+     "The team looks for the cheapest way to reach the RL model's score without a reward. Training on worked solutions is "
+     "the first method the team has found that passes the RL model on the 328 harder problems.",
+     [f"Under the vote over 4 samples, without restarts, it has the highest score the team has measured on the 328 so far: "
+      f"{D['vote']['hard328']['sft']} of 328 right at {D['tokens']['sft']:,} tokens per problem, against "
+      f"{D['rl_after_restart']['hard328']} for the RL model even when its cut-off answers are sampled again (restarts).",
+      f"It is cut off more often than RL, but more of its finished answers are right. On the 328 it is cut off at "
+      f"{D['cap']:,} tokens in {D['caps']['sft']} of {D['caps']['rows']:,} samples (RL {D['caps']['rl']}), and "
+      f"{D['caps']['right_sft']} % of its finished answers are right (RL {D['caps']['right_rl']} %).",
       f"A sample that is cut off gives no answer, so the vote is taken among the samples that finished. For Think-SFT that "
       f"vote is right on {D['vote']['hard328']['sft']} problems, close to the {D['pass4']['sft']} where at least one of its "
       f"four samples is right. For RL it is {D['vote']['hard328']['rl']} against {D['pass4']['rl']}."]],
     ["how", "How we know",
-     f"Each model answered each problem four times at T 1.0; an answer that reaches {D['cap']:,} tokens is cut off there. "
-     "Grader v3 scores the answers, and the vote takes the most common one.",
-     [f"The opening cue is three fixed tokens that begin the answer. RL runs without it: it scores {D['rl_cue']['cue']} of 328 "
-      f"with it and {D['rl_cue']['plain']} without, in one sample.",
+     f"Each model answered each problem four times at temperature 1.0; an answer that reaches {D['cap']:,} tokens is cut off "
+     "there. Grader version 3 scores the answers, and the vote takes the most common final answer.",
+     [f"The opening cue is three fixed tokens placed at the start of the answer: \" line!\", a blank line and \"Okay\". RL "
+      f"runs without it: it scores {D['rl_cue']['cue']} of 328 with it and {D['rl_cue']['plain']} without, in one sample.",
       f"The {D['n']['hard328']} harder problems (olympiad, AIME 2022 to 2025, AMC, HMMT) are absent from RL's training "
-      "prompts. Nothing was chosen on them: the vote rule was fixed on MATH-500.",
-      f"One sample: Think-SFT {sum(D['single']['hard328']['sft']) / 4:.1f} right on average, RL "
-      f"{sum(D['single']['hard328']['rl']) / 4:.1f}, {_d['hard328']['single'][0]:+} points "
-      f"(95 % interval {_d['hard328']['single'][1]} to {_d['hard328']['single'][2]}). Vote over 4 samples: "
-      f"{_d['hard328']['vote'][0]:+} points (95 % interval {_d['hard328']['vote'][1]} to {_d['hard328']['vote'][2]}).",
-      f"A second test uses problems no model can have seen: {D['n']['fresh2026']} problems from AIME 2026 and HMMT February "
-      f"and November 2026, set between {_day(_f['dates'][0])} and {_day(_f['dates'][1])}. The last weights of the three "
-      f"models were uploaded on {_day(_f['upload'])}.",
-      f"On them the vote over 4 samples gives Think-SFT {D['vote']['fresh2026']['sft']} of {D['n']['fresh2026']}, RL "
-      f"{D['vote']['fresh2026']['rl']} and Base + cue {D['vote']['fresh2026']['base']}: {_fd['vote'][0]:+} points (95 % "
-      f"interval {_fd['vote'][1]} to {_fd['vote'][2]}). One sample: {sum(D['single']['fresh2026']['sft']) / 4:.1f} against "
-      f"{sum(D['single']['fresh2026']['rl']) / 4:.1f}, {_fd['single'][0]:+} points (95 % interval {_fd['single'][1]} to "
-      f"{_fd['single'][2]}).",
-      f"The lead holds on both sources of the statements: {_f['published']['sft']} against {_f['published']['rl']} of the "
-      f"{_f['published']['n']} from MathArena's published datasets, {_f['transcribed']['sft']} against "
+      "prompts. No setting was chosen on them: the vote rule was fixed on MATH-500.",
+      f"With one sample, Think-SFT gets {sum(D['single']['hard328']['sft']) / 4:.1f} of 328 right on average and RL "
+      f"{sum(D['single']['hard328']['rl']) / 4:.1f}, a difference of {_d['hard328']['single'][0]:+} points "
+      f"(95 % interval {_d['hard328']['single'][1]} to {_d['hard328']['single'][2]}). Under the vote over 4 samples the "
+      f"difference is {_d['hard328']['vote'][0]:+} points (95 % interval {_d['hard328']['vote'][1]} to {_d['hard328']['vote'][2]}).",
+      f"A second test uses {D['n']['fresh2026']} problems from AIME 2026 and HMMT February and November 2026, set between "
+      f"{_day(_f['dates'][0])} and {_day(_f['dates'][1])}, after the last weights of the three models were uploaded on "
+      f"{_day(_f['upload'])}.",
+      f"On them, under the vote over 4 samples, Think-SFT gets {D['vote']['fresh2026']['sft']} of {D['n']['fresh2026']} right, "
+      f"RL {D['vote']['fresh2026']['rl']} and Base + cue {D['vote']['fresh2026']['base']}: a lead of {_fd['vote'][0]:+} points "
+      f"(95 % interval {_fd['vote'][1]} to {_fd['vote'][2]}). With one sample, Think-SFT gets "
+      f"{sum(D['single']['fresh2026']['sft']) / 4:.1f} and RL {sum(D['single']['fresh2026']['rl']) / 4:.1f} on average, a "
+      f"lead of {_fd['single'][0]:+} points (95 % interval {_fd['single'][1]} to {_fd['single'][2]}).",
+      f"The lead holds for both sources of the problem texts: {_f['published']['sft']} against {_f['published']['rl']} right of "
+      f"the {_f['published']['n']} taken from MathArena's published datasets, {_f['transcribed']['sft']} against "
       f"{_f['transcribed']['rl']} of the {_f['transcribed']['n']} transcribed from the official HMMT PDFs."]],
     ["limits", "What it does not show",
      "It does not show that a model learns this much without training. Think-SFT was trained on 2.27 million reasoning "
      "traces written by larger models: it uses no reward, but it is trained.",
-     [f"All {D['shards'][1]} shards of Think-SFT's training set, every turn, were compared with the 328 harder problems: "
-      f"{D['n']['hard328'] - D['clean']['hard328']['n']} match, none of them new. Without them the vote is "
-      f"{D['clean']['hard328']['sft']} against {D['clean']['hard328']['rl']} of {D['clean']['hard328']['n']}, "
-      f"{D['clean_diff'][0]:+} points (95 % interval {D['clean_diff'][1]} to {D['clean_diff'][2]}). That scan would miss a "
-      f"paraphrased problem; the {D['n']['fresh2026']} problems from 2026 did not exist when the training data was made, and "
-      f"there the lead is {_fd['vote'][0]:+} points. A contest can still reuse an older problem: one AIME 2026 problem was "
-      "found in RL's training prompts and dropped.",
-      f"Most of the lead is in long answers, which come mostly from the hardest problems: of finished answers over 12,000 tokens, {round(100 * D['long']['sft'][0] / D['long']['sft'][1], 1)} % "
+     [f"Every message in all {D['shards'][1]} shards of Think-SFT's training set was compared with the 328 harder problems: "
+      f"{D['n']['hard328'] - D['clean']['hard328']['n']} problems match, the same ones an earlier, narrower scan found. "
+      f"Without them the vote is {D['clean']['hard328']['sft']} against {D['clean']['hard328']['rl']} of "
+      f"{D['clean']['hard328']['n']}, {D['clean_diff'][0]:+} points (95 % interval {D['clean_diff'][1]} to "
+      f"{D['clean_diff'][2]}).",
+      f"That scan would miss a paraphrased problem. The {D['n']['fresh2026']} problems from 2026 did not exist when the "
+      f"training data was made, and there the lead is {_fd['vote'][0]:+} points. A contest can still reuse an older "
+      "problem: one AIME 2026 problem was found in RL's training prompts and dropped.",
+      f"The two models differ most on long answers, which come mostly from the hardest problems: of finished answers over 12,000 tokens, {round(100 * D['long']['sft'][0] / D['long']['sft'][1], 1)} % "
       f"of Think-SFT's are right ({D['long']['sft'][0]} of {D['long']['sft'][1]}), against "
       f"{round(100 * D['long']['rl'][0] / D['long']['rl'][1], 1)} % of RL's ({D['long']['rl'][0]} of {D['long']['rl'][1]}).",
       f"Think-SFT needs the opening cue: without it, one sample scores {D['plain']['sft']} of 328, against {D['plain']['rl']} "
-      f"for RL. Many of its answers are cut off: {D['caps']['sft_s0']} of 328 in the first sample. "
-      "RL's rows had restarts after a cut-off; Think-SFT's had none. The vote compared here uses no restarts for either.",
+      f"for RL. Many of its answers are cut off: {D['caps']['sft_s0']} of 328 in the first sample. In RL's runs a cut-off "
+      "answer was sampled again (a restart); in Think-SFT's runs it was not. The vote compared on this page uses no "
+      "restarts for either model.",
       f"The 2026 set is small: {D['n']['fresh2026']} problems, so its interval spans about "
-      f"{_fd['vote'][2] - _fd['vote'][1]:.0f} points. {_f['transcribed']['n']} of its statements were transcribed from the PDFs "
-      f"by a language model and not checked by a person. Think-SFT is cut off at {D['cap']:,} tokens on "
+      f"{_fd['vote'][2] - _fd['vote'][1]:.0f} points. Of its problem statements, {_f['transcribed']['n']} were transcribed from "
+      f"the PDFs by a language model and not checked by a person. Think-SFT is cut off at {D['cap']:,} tokens on "
       f"{min(_f['caps']['sft'])} to {max(_f['caps']['sft'])} of the {D['n']['fresh2026']} problems per sample (RL "
-      f"{min(_f['caps']['rl'])} to {max(_f['caps']['rl'])}), so a larger token cap could change the count.",
-      f"On MATH-500 the order is not established: vote {D['vote']['math500']['sft']} against {D['vote']['math500']['rl']}, "
-      f"{_d['math500']['vote'][0]:+} points (95 % interval {str(_d['math500']['vote'][1]).replace('-', '−')} to {_d['math500']['vote'][2]})."]],
+      f"{min(_f['caps']['rl'])} to {max(_f['caps']['rl'])}), so a higher token limit could change the count.",
+      f"On MATH-500 neither model is clearly ahead: under the vote {D['vote']['math500']['sft']} against "
+      f"{D['vote']['math500']['rl']} of 500, {_d['math500']['vote'][0]:+} points (95 % interval "
+      f"{str(_d['math500']['vote'][1]).replace('-', '−')} to {_d['math500']['vote'][2]})."]],
     ["run", "How to reproduce it",
      "The plan is studies/rlneurons/specs/SPEC_thinkvote.md; the jobs ran jobs/run_cell.py with --samples 1 per job, four "
      "jobs per set, at commit ff0c715.",
@@ -1427,7 +1433,7 @@ const sgn = v => (v < 0 ? "−" : "+") + Math.abs(v).toFixed(1), num = v => (v <
 /* The three models, top to bottom, and the three positions of the switch. A state shows one set of problems (bench)
    and one procedure: proc 0 is one sample (four dots per problem, one per stored sample, counted as the mean of the
    four), proc 1 the vote over the same four samples (one dot: the most common answer). */
-const M = [{ key: "base", name: "Base + cue", row: "No training (Base + cue)", short: "No training (Base + cue)" },
+const M = [{ key: "base", name: "Base + cue", row: "Base model, no further training (Base + cue)", short: "No further training (Base + cue)" },
            { key: "rl", name: "RL", row: "Trained with reward (RL)", short: "Trained with reward (RL)" },
            { key: "sft", name: "Think-SFT + cue", row: "Trained on worked solutions, no reward (Think-SFT)", short: "Worked solutions, no reward (Think-SFT)" }];
 const ST = [{ key: "single", bench: "hard328", proc: 0 }, { key: "vote", bench: "hard328", proc: 1 }, { key: "math500", bench: "math500", proc: 1 },
@@ -1588,7 +1594,7 @@ function draw(t, now) {
   text("cap0", shown.bench === "hard328" ? (g.short ? `${N} harder competition problems` : `${N} harder competition problems: AIME, AMC, HMMT, OlympiadBench`)
     : fresh ? (g.short ? `${N} problems from 2026: AIME, HMMT` : `${N} competition problems from 2026: AIME, HMMT February, HMMT November`)
     : `MATH-500, ${N} problems`);
-  text("cap1", fresh ? (g.short ? `Held after the last weights, ${D.upload}` : `Held after the models' last weights were uploaded (${D.upload}). One dot: the most common of 4 answers.`)
+  text("cap1", fresh ? (g.short ? `Held after the models' last upload, ${D.upload}` : `Held after the models' last weights were uploaded (${D.upload}). One dot: the most common of 4 answers.`)
     : g.short ? (shown.proc ? "One dot per problem: the vote over 4 samples" : "4 dots per problem, one per sample")
     : `${shown.proc ? "One dot per problem: the most common of 4 answers" : "4 dots per problem, one per sample"}. Same order in every row.`);
   const fadeW = Math.abs(1 - 2 * e);  // words of the new state appear at the midpoint, as the old ones fade out
@@ -1610,7 +1616,7 @@ function draw(t, now) {
   const more = n[2] - n[1];
   text("sub0", `That is ${B.proc && (same || e >= .5) ? Math.round(more) : more.toFixed(1)} more problems right, of ${N}`);
   text("sub1", `95 % interval ${num(di[1])} to ${num(di[2])}` + (di[1] <= 0 ? ", which includes 0" : ""));
-  text("sub2", shown.proc ? "Vote over 4 samples, T 1.0" : "One sample, mean of 4 samples, T 1.0");
+  text("sub2", shown.proc ? "Vote over 4 samples" : "One sample, mean of 4 samples");
   E.sub1.setAttribute("opacity", fadeW.toFixed(2)); E.sub2.setAttribute("opacity", fadeW.toFixed(2));
   [0, 1, 2].forEach(i => at(E["sub" + i], proj(g, g.bigX + 4, g.subY[i], 14)));
   const key = [["Right", 0, 0], ["Wrong", 1, 0], ["Cut off at 16,384 tokens", 2, 0], ["Right for only one of RL and Think-SFT", 0, 1]];

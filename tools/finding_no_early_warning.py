@@ -148,14 +148,16 @@ _cut = {k: 100 * a / b for k, (a, b) in DATA["cap"].items()}
 
 TITLE = "No early warning"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "Can the text of a long answer show early that it will fail?"
-LINE = f"No text sign spots a failing sample early: the best scores AUROC {_f3(_B[0])}; chance is 0.5."
+LINE = (f"None of six signs read from the text of the imitation-trained model's (Think-SFT's) answers, at tokens 4,000 to "
+        f"12,000, tells early which samples will fail: the best ranks failing samples above passing ones with an AUROC of "
+        f"{_f3(_B[0])}, where 0.5 is chance and 1.0 is perfect.")
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences.
 PANELS = [
     ["new", "What is new",
-     "Two earlier detectors of a failing sample read only the first 1,000 tokens of Base + cue on MATH-500 and scored AUROC "
-     "0.531 and 0.571 (board results f3d708 and b30f15, the second a linear probe). Here six text signs are read deep into "
-     "Think-SFT's answers, at tokens 4,000 to 12,000.",
+     "Here six text signs are read deep into Think-SFT's answers, at tokens 4,000 to 12,000. Two earlier detectors of a "
+     "failing sample read only the first 1,000 tokens of Base + cue on MATH-500 and scored AUROC 0.531 and 0.571, the second "
+     "with a linear probe (sources: board results f3d708 and b30f15).",
      [f"{_W['with']} of {_W['samples']:,} Think-SFT samples on the 328 harder problems switch to another script mid-answer, "
       f"and {_pc(100 * _W['cjk'] / _W['letters'])} of those letters are Chinese. RL does so in {_W['rl']} of {_W['samples']:,}, "
       f"Base + cue in {_W['base']}. The median first switch is at token {_W['quartiles'][1]:,}.",
