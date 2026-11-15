@@ -341,7 +341,7 @@ function draw() {
     t.setAttribute("x", f(tx)); t.setAttribute("y", f(ty));
     p.el.setAttribute("opacity", (.6 + .4 * q).toFixed(2));
     t.setAttribute("opacity", q < G.far ? 0 : 1);  // on a phone only the three names at the front fit; the list holds them all
-    p.at = [x, yy, s, near]; p.box = [tx, ty, p.w * fs / 2, fs, t];
+    p.at = [x, yy, s, near, r]; p.box = [tx, ty, p.w * fs / 2, fs, t];
   });
   const b = PAGES[S.sel].box;  // a name that would touch the selected name is not drawn
   PAGES.forEach(p => { const c = p.box; if (c !== b && Math.abs(c[0] - b[0]) < c[2] + b[2] + c[3] * .6 && Math.abs(c[1] - b[1]) < (c[3] + b[3]) / 2) c[4].setAttribute("opacity", 0); });
@@ -372,7 +372,7 @@ function pulse() {
     if (back !== F.back) { $("svg").insertBefore(fx, back ? $("body-c") : null); F.back = back; }
   } else {
     const v = (u - 1) / .45, p = PAGES[BOARD].at;
-    out = `<circle class="arrive" cx="${f(p[0])}" cy="${f(p[1])}" r="${f((G.bead + 6 + 26 * v) * p[2])}" opacity="${f(1 - v)}"/>`;
+    out = `<circle class="arrive" cx="${f(p[0])}" cy="${f(p[1])}" r="${f(p[4] + 2 + 7 * v)}" opacity="${f(1 - v)}"/>`;
   }
   fx.innerHTML = out;
 }
