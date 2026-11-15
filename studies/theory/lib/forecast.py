@@ -11,8 +11,9 @@
       target (value, 90 % interval, reason). Writes targets.json, forecasts.json, forecasts.md, run.json. Fails if the
       folder exists.
       --propose N: then one job, given the readers' forecasts and the round's facts.json and graveyard.json, writes N
-      mechanisms about the targets (mechanisms.json), each outside both readers' intervals on 3 or more targets; they
-      forecast as f2-m01 ... and are scored like the rest.
+      mechanisms about the targets (mechanisms.json); each forecast says whether it agrees with the readers and why
+      (vs_readers). They forecast as f2-m01 ... and are scored like the rest.
+      --lens TEXT: the family of causes the N mechanisms must come from (run-03 to run-08 ran one lens each).
   uv run studies/theory/lib/forecast.py score <folder>
       one headless job finds each target's measured value in the board items posted after the snapshot; each forecast
       is scored by the engine's log density against the equal mixture of the two readers, clipped to [-3, 3] nats.
@@ -98,7 +99,7 @@ def outside(f, readers, tid):
     return all(not r["low"] <= f["value"] <= r["high"] for r in (next(x for x in fs if x["id"] == tid) for fs in readers.values()))
 
 
-def check_mechanisms(d, n, tids, readers, board_ids):
+def check_mechanisms(d, n, tids, board_ids):
     ms, errors = json.loads((d / "mechanisms.json").read_text())["mechanisms"], []
     if [m["id"] for m in ms] != [f"f2-m{k:02d}" for k in range(1, n + 1)]:
         errors.append(f"needs exactly {n} mechanisms with ids f2-m01 ... f2-m{n:02d} in order")
@@ -108,13 +109,9 @@ def check_mechanisms(d, n, tids, readers, board_ids):
             errors.append(f"{m['id']}: statement has {len(m['statement'].split())} words; at most 80")
         if len(set(m["rests_on"]) & board_ids) < 2:
             errors.append(f"{m['id']}: rests_on needs 2 or more item ids of board.jsonl; found {sorted(set(m['rests_on']) & board_ids)}")
-        if bad := forecast_errors(fs, tids, (len(tids) + 1) // 2):
-            errors += [f"{m['id']}: {e}" for e in bad]
-            continue
-        apart = [f["id"] for f in fs if outside(f, readers, f["id"]) and str(f.get("readers_wrong", "")).strip()]
-        if len(apart) < 3:
-            errors.append(f"{m['id']}: needs 3 or more forecasts whose value lies outside both readers' intervals, each with "
-                          f"readers_wrong; has {apart}")
+        errors += [f"{m['id']}: {e}" for e in forecast_errors(fs, tids, (len(tids) + 1) // 2)]
+        if bad := [f.get("id") for f in fs if not str(f.get("vs_readers", "")).lower().startswith(("agree", "disagree"))]:
+            errors.append(f"{m['id']}: vs_readers must start with \"agree\" or \"disagree\" on {bad}")
     return "; ".join(errors) or None
 
 
@@ -169,7 +166,10 @@ def write_md(folder, utc, forecasts, head=()):
     (folder / "forecasts.md").write_text("\n".join(md) + "\n")
 
 
-def make(folder, propose):
+ANY_LENS = "Any family of causes."
+
+
+def make(folder, propose, lens):
     folder.mkdir(parents=True)  # fails if the folder exists
     items = open_targets(folder)
     tdata = json.loads((folder / "targets.json").read_text())
@@ -182,19 +182,20 @@ def make(folder, propose):
                                                                "readers.json": json.dumps(readers, indent=1),
                                                                "facts.json": ROUND / "facts.json", "graveyard.json": ROUND / "graveyard.json"},
                                {"mechanisms.json": folder / "mechanisms.json"},
-                               lambda d: check_mechanisms(d, propose, tids, readers, {i["id"] for i in items}), n=propose)], folder)
+                               lambda d: check_mechanisms(d, propose, tids, {i["id"] for i in items}), n=propose, lens=lens or ANY_LENS)], folder)
+        head.append(f"\nLens of the mechanisms: {lens or ANY_LENS}\n")
     for m in json.loads((folder / "mechanisms.json").read_text())["mechanisms"] if propose else []:
         forecasts[m["id"]] = m["forecasts"]
         head.append(f"\n## {m['id']}\n\n{m['statement']}\n\nRests on: {', '.join(m['rests_on'])}. Forecasts {len(m['forecasts'])} of "
-                    f"{len(tids)} targets. Outside both readers' intervals:\n\n| target | value | 90 % interval | reader-1 | reader-2 | why the readers are wrong |\n|---|---|---|---|---|---|")
+                    f"{len(tids)} targets:\n\n| target | value | 90 % interval | reader-1 | reader-2 | outside both readers | against the readers |\n|---|---|---|---|---|---|---|")
         for f in m["forecasts"]:
-            if outside(f, readers, f["id"]):
-                r1, r2 = (next(x for x in readers[r] if x["id"] == f["id"])["value"] for r in READERS)
-                head.append(f"| {f['id']} | {f['value']:g} | [{f['low']:g}, {f['high']:g}] | {r1:g} | {r2:g} | {f.get('readers_wrong', '')} |")
+            r1, r2 = (next(x for x in readers[r] if x["id"] == f["id"]) for r in READERS)
+            head.append(f"| {f['id']} | {f['value']:g} | [{f['low']:g}, {f['high']:g}] | {r1['value']:g} [{r1['low']:g}, {r1['high']:g}] | "
+                        f"{r2['value']:g} [{r2['low']:g}, {r2['high']:g}] | {'yes' if outside(f, readers, f['id']) else ''} | {f['vs_readers']} |")
     (folder / "forecasts.json").write_text(json.dumps(forecasts, indent=1))
     write_md(folder, utc, forecasts, head)
     (folder / "run.json").write_text(json.dumps({"commit": sh("git", "rev-parse", "--short", "HEAD").strip(), "command": " ".join(sys.argv),
-                                                 "utc": utc, "round": str(ROUND.relative_to(ROOT)), "targets": len(tids), "propose": propose,
+                                                 "utc": utc, "round": str(ROUND.relative_to(ROOT)), "targets": len(tids), "propose": propose, "lens": lens,
                                                  "forecasters": list(forecasts), "job_dirs": str(engine.tmp())}, indent=1))
     print(f"{len(tids)} targets, {len(forecasts)} forecasters: {folder / 'forecasts.md'}")
 
@@ -264,6 +265,7 @@ if __name__ == "__main__":
     parser.add_argument("command", choices=["make", "score"])
     parser.add_argument("folder", type=Path)
     parser.add_argument("--propose", type=int, default=0, help="make: also write this many mechanisms about the targets "
-                        "(forecasters f2-m01 ...), each outside both readers' intervals on 3 or more targets")
+                        "(forecasters f2-m01 ...)")
+    parser.add_argument("--lens", help="make: the family of causes the --propose mechanisms must come from")
     a = parser.parse_args()
-    make(a.folder, a.propose) if a.command == "make" else score(a.folder)
+    make(a.folder, a.propose, a.lens) if a.command == "make" else score(a.folder)
