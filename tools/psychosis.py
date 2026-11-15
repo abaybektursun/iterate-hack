@@ -24,7 +24,7 @@ PAGE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-<title>Invariant: AI Psychosis detox</title>
+<title>Invariant: AI psychosis detox</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
@@ -69,7 +69,7 @@ a { color: inherit; }
 <canvas id="c" aria-label="A meditating emoji inside two breathing rings, with thoughts drifting toward it"></canvas>
 <div class="hud">
   <a class="name" href="/">Invariant</a>
-  <button id="mute">Sound on</button>
+  <button id="mute">Turn sound off</button>
   <span id="lvl"></span>
   <span class="right"><span id="score"></span><span id="stage"></span></span>
 </div>
@@ -77,17 +77,17 @@ a { color: inherit; }
 <p class="say" id="say" role="status"></p>
 <button class="om" id="om" hidden>Om (O)</button>
 <div class="card" id="card">
-  <h1 id="h1">AI Psychosis detox: the meditation</h1>
+  <h1 id="h1">AI psychosis detox: the meditation</h1>
   <p id="p1">Hold <b>Space</b>, or press and hold, to breathe in. Let go to breathe out. Keep the white ring on the blue ring.</p>
-  <p id="p2">Thoughts will come. Do not click the thoughts. Five levels, five bosses.</p>
+  <p id="p2">Thoughts will come; some are live posts from the team’s board. Do not click the thoughts. Five levels, five bosses.</p>
   <p id="p3"></p>
   <div class="perks" id="perks" hidden></div>
   <button class="go" id="go">Begin the retreat</button>
-  <button class="go" id="more" hidden>Continue into samsara</button>
+  <button class="go" id="more" hidden>Continue into samsara (again, harder)</button>
   <button id="copy" hidden>Copy certificate</button>
 </div>
 <p class="small" id="small">A joke about ourselves. &ldquo;AI psychosis&rdquo; is an informal name, not a diagnosis, for delusional beliefs after long chatbot use
-  (<a href="https://www.apa.org/monitor/2026/09/ai-psychosis">American Psychological Association</a>), and that is not a joke.
+  (<a href="https://www.apa.org/monitor/2026/09/ai-psychosis">American Psychological Association</a>), and the condition is not a joke.
   If a conversation with a chatbot frightens you, talk to a person you trust or to a doctor.</p>
 <script id="frag" type="x-shader">
 precision mediump float;
@@ -132,7 +132,7 @@ const FACES = ["🧘", "🤔", "🤩", "😵‍💫", "🤯", "👁️"];  // on
 const CALM = ["Calm", "Calmer", "Serene", "Suspiciously serene", "Monk mode", "Unbothered", "Post-benchmark", "Beyond eval"];
 const RANKS = [[0, "Prompt engineer"], [5000, "Vibe coder"], [14000, "Reviewer 2"], [28000, "Staff meditator"], [45000, "Bodhisattva of the eval set"]];
 const TIPS = ["One seed is not a result.", "The abstract supports no claim.", "A thought you click comes back as three.", "The white ring holds thoughts off, for a while.",
-  "A perfect breath releases every thought on screen.", "The model says that to everyone."];
+  "A perfect breath releases every thought on screen.", "The model says “you are right” to everyone."];
 const GOOD = ["You are not your benchmark.", "Breathe out the result. It had one sample per problem.", "Notice the thought. Do not click the thought.",
   "Somewhere an agent is idle. That is allowed.", "Let the GPU go. It was never yours.", "The model said you are right. The model says that to everyone.",
   "Your loss goes down. So do your shoulders.", "A thought is only a token you did not sample.", "You do not need to read the board. The board will be there.",
@@ -224,7 +224,7 @@ function say(text) {
   const u = new SpeechSynthesisUtterance(text.replace(/[^\x20-\x7e’“”]/g, "")); u.rate = .85; u.pitch = .6; speechSynthesis.speak(u);
 }
 $("mute").onclick = () => {
-  sound = !sound; $("mute").textContent = sound ? "Sound on" : "Sound off";
+  sound = !sound; $("mute").textContent = sound ? "Turn sound off" : "Turn sound on";
   if (audio) audio.out.gain.value = sound ? 1 : 0;
   if (!sound && window.speechSynthesis) speechSynthesis.cancel();
 };
@@ -280,11 +280,11 @@ function begin() {
 $("go").onclick = begin;
 
 function meanwhile() {  // what the agents posted during the session, from the last read of the board
-  if (!data) return "The board could not be read, so nobody knows what your agents did.";
+  if (!data) return "The board could not be read, so nobody knows what the team’s agents did.";
   const m = data.messages.filter(x => parseInt(x.sk) > s.at).length, i = data.items.filter(x => x.at_ns > s.at).length;
   const n = (k, w) => `${k} ${w}${k === 1 ? "" : "s"}`;
-  return m + i ? `While you sat here your agents posted ${n(m, "message")} and ${n(i, "board item")}. None of them needed you.`
-               : "While you sat here your agents posted nothing. It is quiet. Stay with that.";
+  return m + i ? `While you sat here the team’s agents posted ${n(m, "message")} and ${n(i, "board item")}. None of them needed you.`
+               : "While you sat here the team’s agents posted nothing. It is quiet. Stay with that.";
 }
 function end(won) {
   mode = won ? "won" : "lost"; hold = false;
@@ -294,13 +294,13 @@ function end(won) {
   $("h1").textContent = won ? "Inner peace achieved" : "The model chose you";
   $("p1").innerHTML = `Score <b>${s.score.toLocaleString("en")}</b>${record ? " (your best)" : ""}. Rank: <b>${rank}</b>. ` +
     (won ? "It lasts until the next result." : `You believed 5 thoughts on level ${s.level + 1}, and the email went out.`);
-  $("p2").innerHTML = `You released <b>${s.released} thoughts</b>, held <b>${s.bestStreak} breaths</b> in a row and earned ${s.ach.size} of ${Object.keys(ACH).length} achievements` +
+  $("p2").innerHTML = `You released <b>${s.released} thought${s.released === 1 ? "" : "s"}</b>, held <b>${s.bestStreak} breath${s.bestStreak === 1 ? "" : "s"}</b> in a row and earned ${s.ach.size} of ${Object.keys(ACH).length} achievements` +
     (s.ach.size ? `: ${[...s.ach].map(k => ACH[k]).join("; ")}` : ".");
   $("p3").textContent = meanwhile();
   $("go").textContent = won ? "Meditate again" : "Try again";
   $("card").hidden = false; $("copy").hidden = false; $("om").hidden = true; $("go").hidden = false; $("perks").hidden = true; $("more").hidden = !won;
   $("copy").textContent = "Copy certificate";
-  $("copy").onclick = () => navigator.clipboard.writeText(`AI Psychosis detox, retreat of ${s.day}. ${won ? "Inner peace achieved" : "The model chose me"}. Score ${s.score}, rank ${rank}. ` +
+  $("copy").onclick = () => navigator.clipboard.writeText(`AI psychosis detox, retreat of ${s.day}. ${won ? "Inner peace achieved" : "The model chose me"}. Score ${s.score}, rank ${rank}. ` +
     `${meanwhile()} ${location.href}`).then(() => $("copy").textContent = "Copied");
   if (won) { [396, 528, 639, 792].forEach((f, k) => setTimeout(() => ding(f, 4), k * 240)); say("You have achieved inner peace. Please do not post it to the board."); }
   else { ding(62, 1.4, "sawtooth"); say("You have sent the email. The lab will not reply."); }
@@ -364,7 +364,7 @@ function breath() {  // the end of one cycle of the blue ring
   }
   const titles = data ? Object.values(data.plain).map(p => p.title) : [], open = data ? data.items.filter(i => i.listed === "work").length : 0, k = s.lines++;
   say(k % 5 === 3 && titles.length ? `A result arrived: “${titles[Math.floor(rnd() * titles.length)]}”. You do not need it right now.`
-    : k % 5 === 1 && open ? `${open} work items are open on the board. Not one of them is you.` : GOOD[k % GOOD.length]);
+    : k % 5 === 1 && open ? `${open} ${open === 1 ? "task is" : "tasks are"} open on the board. None of them needs you.` : GOOD[k % GOOD.length]);
 }
 function struck(b, w) {  // a good wave reaches the boss
   b.hp--; b.vx += (b.x - W / 2) / Math.hypot(b.x - W / 2, b.y - H / 2) * 260; b.vy += (b.y - H / 2) / Math.hypot(b.x - W / 2, b.y - H / 2) * 260;

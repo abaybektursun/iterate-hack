@@ -1,0 +1,31 @@
+{
+ "n_problems": 538,
+ "U": 378,
+ "base_cue_fail": 221,
+ "base_cue_fail_in_U": 96,
+ "G_E": 113,
+ "G_E_in_U": 78,
+ "G_R": 63,
+ "G_R_in_U": 40,
+ "G_E_and_G_R": 52,
+ "f_E": 0.6902654867256637,
+ "f_E_ci90": [
+  0.6178742228598757,
+  0.7614678899082569
+ ],
+ "f_R_null": 0.6349206349206349,
+ "f_R_ci90": [
+  0.53125,
+  0.7343909438775508
+ ],
+ "D": 0.055344851805028794,
+ "D_ci90": [
+  -0.028514309764309687,
+  0.13910167842417623
+ ],
+ "floor_random_cue_failure_in_U": 0.4343891402714932,
+ "planted_base_mathcue_f": 1.0,
+ "threshold": "refuted if D < -0.10; undecided if f_R > 0.90",
+ "ci_contains_threshold": false,
+ "verdict": "holds"
+}
