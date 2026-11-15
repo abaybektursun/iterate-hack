@@ -157,7 +157,7 @@ DATA.forEach((s, i) => {
   el(svg, "path", { d: `M${hx} ${hy}L${hx - ux * 12 + nx * 6} ${hy - uy * 12 + ny * 6}L${hx - ux * 12 - nx * 6} ${hy - uy * 12 - ny * 6}Z`, class: "head" });
   el(svg, "circle", { cx: kx, cy: ky, r: 8, class: "base" });
   el(svg, "circle", { cx: ox, cy: oy, r: 9.5, class: "ours" });
-  for (const [px, py, m, who, cls] of [[kx, ky, s.k, "Autoresearch", "who"], [ox, oy, s.o, "Ours", "who b"]]) {
+  for (const [px, py, m, who, cls] of [[kx, ky, s.k, "Autoresearch", "who"], [ox, oy, s.o, "Invariant (ours)", "who b"]]) {
     if (!i) el(svg, "text", { x: px, y: py - 66, class: cls }, who);
     el(svg, "text", { x: px, y: py - 42, class: "lab" }, `${m[0]} of ${m[1]}`);
     el(svg, "text", { x: px, y: py - 23, class: "lab2" }, fmt(m[2]) + " tokens");
