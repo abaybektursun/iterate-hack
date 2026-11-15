@@ -16,12 +16,13 @@ All code runs from the repository root with the root on `PYTHONPATH`.
 | `jobs/lensdiff.py` | The GPU job: both models over the stored answers with teacher forcing; aggregates, per-position shards and `checks.json` in `$OUT_DIR`. Imports `build` and `load` from `studies/rlneurons/jobs/rln5_map.py`. |
 | `analysis/lensdiff_analyze.py` | Readout of a run folder: token diff (a), presence with intervals (b, H1), by problem group (c, H2), lead before ` Wait` (d, H3), where in the answer (e); writes `metrics.json` and `examples.json`. Needs the RLN-5 map run folder (`--map`). |
 | `analysis/lensdiff_predict.py` | Exploratory: AUROC of per-answer lens features for "this answer is wrong", against answer length; writes `predict.json`. |
-| `results/lensdiff/full-01/` | The full run: `run.json`, `checks.json` (the job's instrument checks), `metrics.json`, `examples.json` (138 answers, 5 positions each, with both readouts), `predict.json`. |
+| `analysis/lensdiff_page.py`, `analysis/page_template.html` | Build the reading page `results/lensdiff/full-01/workspace-diff.html` (charts and a token-by-token reader of six answers) from `metrics.json`, the shards and `page_examples.json`. |
+| `results/lensdiff/full-01/` | The full run: `run.json`, `checks.json` (the job's instrument checks), `metrics.json`, `examples.json` (138 answers, 5 positions each, with both readouts), `predict.json`, `reader_notes.md` (one reader's labels of 114 of those positions), `page_examples.json` and `workspace-diff.html` (the reading page). |
 
 ## Run it
 
 ```
-uv run tools/gpu.py submit h100 --hours 1 -- "python -m studies.jspace.jobs.lensdiff --commit $(git rev-parse HEAD) --store-layers 16,24"
+uv run tools/gpu.py submit h100 --hours 1 -- "python -m studies.jspace.jobs.lensdiff --commit $(git rev-parse HEAD) --store-layers 20,24"
 uv run tools/gpu.py get <job-id>
 ```
 
@@ -71,6 +72,13 @@ answer's length.
 | Held against written | ` Wait` is the written token at 0.26 % of T1 positions and RL's top-1 next token at 0.43 %; it is in the RL readout at 4.17 % | `d_lead.T1_wait_rates`, `b_presence` |
 | Where, T1 L24 | Hold-on presence after ` Let`: base 11.3 %, RL 25.6 %. At the 4 % of positions with the largest KL(base, RL): 17.0 % and 19.5 %; elsewhere 4.04 % and 5.06 %. By tenth of the answer it falls from 5.5 % / 7.1 % (third tenth) to 1.8 % / 2.1 % (last tenth). | `e_where.T1_L24` |
 | Wrong-answer prediction (exploratory) | AUROC for "the base's answer is wrong": length 0.831; best lens feature (share of positions with a wrap-up token in the base readout, L24) 0.241, that is 0.759 when reversed. RL answers: length 0.962, best lens feature 0.154 (0.846 reversed). | `predict.json` |
+
+Reader's check of the examples (`results/lensdiff/full-01/reader_notes.md`, one reader, a subagent): the top 3 positions by
+readout log-prob gap in 30 answers of the group rl_only (slips, misreads, changed answers), 90 positions: 10 at the first wrong
+step or its first use, 26 where a wrong value is reused or a separate local slip occurs, 20 at the wrong final answer, 21 at a
+correct step, 13 unclear. In 8 answers of the group both, 10 of 24 positions sit at the final answer. The positions mark
+generic boundaries more than errors. In 23 of the 90 the RL top-8 is word fragments while the base top-8 is one repeated copy
+token, so the log-prob gap is a noisy way to pick positions; presence in the top 8 is the measure used for all numbers above.
 
 Limits. The lens was fitted on the base and on WikiText, and passes its check only at layers 24 to 28, where its top-1
 token equals the model's next token at 52 to 73 % of positions; part of the L24 difference is therefore the difference of the
