@@ -32,6 +32,9 @@ ap.add_argument("--small-share", type=float, default=0.33,
 ap.add_argument("--panel", default="studies/gpuprice/data/fm_panel_v1.csv")
 ap.add_argument("--origin-start", default="2026-10-01"); ap.add_argument("--origin-end", default="2026-10-30")
 ap.add_argument("--seed", type=int, default=0)
+ap.add_argument("--syn-kind", default="sticky", choices=["sticky", "pfn"],
+                help="sticky: synthetic() below; pfn: the listing prior of pfn_sim.py (11 types, chosen from rows to 2026-09-30)")
+ap.add_argument("--save", default="", help="folder for the fine-tuned pipeline (read by fm2_chronos2.py --model)")
 a = ap.parse_args()
 assert a.origin_end <= "2026-10-30", "origins after 2026-10-30 are the locked test set"
 assert a.cutoff < a.origin_start, "the fine-tuning data must end before the first forecast origin"
@@ -127,8 +130,21 @@ if a.real:
     train = big + small * rep
     print(f"real training series: afhubbard {len(big)}, other collectors {len(small)} x {rep}; "
           f"days {sum(map(len, big)) + sum(map(len, small))}; ends {train_end.date()}; validation windows {len(val)}", flush=True)
+def synthetic_pfn(n):
+    """pfn_sim.py listings: 40 to 107 days ending at a random day, 15 % of the series with 5 % of the days missing."""
+    import sys; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import pfn_sim
+    P, _ = pfn_sim.prices(rng, n)
+    out = []
+    for x in P.astype(np.float32):
+        T = int(rng.integers(40, pfn_sim.N + 1)); e = int(rng.integers(T, pfn_sim.N + 1))
+        x = x[e - T:e].copy()
+        x[rng.random(T) < rng.choice([0.0, 0.05], p=[.85, .15])] = np.nan
+        out.append(x)
+    return out
+
 if a.synthetic:
-    train += synthetic(a.synthetic)
+    train += synthetic(a.synthetic) if a.syn_kind == "sticky" else synthetic_pfn(a.synthetic)
     print("synthetic series:", a.synthetic, flush=True)
 assert train
 
@@ -152,5 +168,7 @@ print("fine-tuning took", round(time.time() - t0), "s", flush=True)
 if a.mode == "lora":
     assert type(tuned.model).__name__.startswith("Peft"), "peft missing: fit fell back to full fine-tuning"
 forecast(tuned.model, "final")
+if a.save:
+    tuned.save_pretrained(a.save)
 json.dump({"args": vars(a), "lr": lr, "train_series": len(train), "validation_windows": len(val),
            "train_seconds": round(time.time() - t0), "log": log}, open(os.path.join(OUT, "ft_log.json"), "w"), indent=1)

@@ -1,0 +1,16 @@
+{
+ "ledger": "loc-10-lora-syn80k-3200",
+ "commit": "04b0cf4",
+ "uncommitted": "jobs/fm2_chronos2.py (--model), jobs/ft_chronos2.py (--save, --syn-kind), jobs/loc_qavg.py",
+ "machine": "local RTX 4090 Laptop GPU (16 GB), torch 2.10.0+cu128, chronos-forecasting 2.3.2, peft 0.21.3",
+ "minutes": 3.6,
+ "training_data": "80,000 synthetic series, no real price, no latest date",
+ "origins": "dev 2026-10-01..2026-10-30",
+ "commands": [
+  "OUT_DIR=runs/gpuprice/local/big-s0 runs/gpuprice/.venv-gpu/bin/python studies/gpuprice/jobs/ft_chronos2.py --mode lora --real 0 --curve-every 0 --save runs/gpuprice/local/big-s0/model --synthetic 80000 --steps 3200 --batch 32 --seed 0",
+  "OUT_DIR=runs/gpuprice/local/big-s0 runs/gpuprice/.venv-gpu/bin/python studies/gpuprice/jobs/fm2_chronos2.py --origins dev --setups ser,lst --model runs/gpuprice/local/big-s0/model",
+  "runs/gpuprice/.venv/bin/python -I -B studies/gpuprice/jobs/fm2_post.py --quantiles runs/gpuprice/local/big-s0/fm2_chronos2.csv --origins dev --out runs/gpuprice/local/big-s0/fm2-19.csv --hurdle --hurdle-h 1 --scaleway --turnover own --enter abs --intraday studies/gpuprice/data/fm2_intraday_v1.csv.gz",
+  "bash studies/gpuprice/jobs/eval.sh <forecast> loc-10-lora-syn80k-3200 \"<note>\""
+ ],
+ "outputs": "runs/gpuprice/local/ (not committed), runs/gpuprice/evals/loc-10-lora-syn80k-3200/"
+}

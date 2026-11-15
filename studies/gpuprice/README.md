@@ -58,6 +58,7 @@ read in full 2026-11-14) fixes:
 | `prep/intraday.py`, `data/fm2_intraday_v2.csv.gz` | The day's maximum price and snapshot share of each `fastgpu_daily` listing, from the pack (`v1`: maximum only, used by `fm2-19`). Read by `fm2_post.py --intraday --exit-frac`. |
 | `jobs/llm2_context.py`, `llm2_run.py`, `llm2_score.py` | LLM adjuster: one plain completion per series and origin (hosted API, no tools) that adjusts a base forecast; context cut at the origin (`llm2_context.py test` plants later rows); cache, cost cap, replay. Raw responses: `runs/gpuprice/llm2/` (not committed), event origin: `results/llm2/event_fable_adj.jsonl`. `results/llm2/base_cells_*.csv.gz`: candidate 1's scored cells shown to the model (target day on or before the origin only). |
 | `specs/SPEC3.md`, `results/spec3/locked-01/` | Candidate 2, fixed before its run on the locked origins (their second use), and that run. |
+| `jobs/loc_qavg.py`, `results/local/` | Average of per-listing quantile files (LoRA seeds, base) and the run folders of the local-GPU arms; weights and quantile files in `runs/gpuprice/local/` (not committed), environment `runs/gpuprice/.venv-gpu`. |
 | `ATTRIBUTION.md` | The pack's attribution file. It must stay with any work that uses the pack. |
 
 The pack: `runs/gpuprice/pack/gpu-price-pack-v0.1.1-handover/` (v0.1.1-handover, data to 2026-11-06 23:59:59 UTC,
@@ -131,6 +132,7 @@ included. Main entries, pooled skill against last value (1 / 3 / 7 days):
 | `fm2-20` | `fm2-19` + exit signal from the snapshot share (`--exit-frac 0.25`), 8,000 draws | +0.306 | +0.213 / +0.252 / +0.360 |
 | `llm2-01` | `claude-fable-5-2` (no tools, training data to June 2026) adjusts `ens-05`, 1,110 calls | +0.309 | |
 | `llm2-03` | the same with the band never narrower than `ens-05`'s (rule chosen on 6 pilot origins; the other 24: +0.015, +0.007 to +0.025) | +0.313 | +0.209 / +0.278 / +0.360 |
+| `loc-01` to `loc-11` | Chronos-2 arms on the laptop's RTX 4090 (`results/local/`, about 1.3 min per arm: LoRA 40 s, inference 83 s; the same LoRA took 65 min on Modal's cpu class). Synthetic-only LoRA inside the fm2 pipeline with `--intraday`: +0.312 (five seeds +0.305 to +0.316); half base, half 5-seed LoRA mean (`loc-09`): +0.318; averaged with `sim2-15`: +0.304 to +0.306; 10x synthetic data: no gain. Not in the submission: found after SPEC3 was fixed | +0.318 best | +0.210 / +0.276 / +0.371 |
 | `ens-06` | **candidate 2**: quantile average of `fm2-20` and `llm2-03` | **+0.316** | +0.217 / +0.272 / +0.367 |
 
 `fm2-20` against `fm2-17`: +0.015, 95 % interval +0.008 to +0.024 (bootstrap over origins). `llm2-03` against

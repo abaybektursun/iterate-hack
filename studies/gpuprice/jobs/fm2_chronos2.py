@@ -25,11 +25,12 @@ ap.add_argument("--panel", default="studies/gpuprice/data/fm2_panel_v2.csv.gz")
 ap.add_argument("--origins", default="dev,event")
 ap.add_argument("--max-context", type=int, default=400)
 ap.add_argument("--setups", default="ser,ser_long,lst,lst_long,chn,chn_long,chn_cov,afh")
+ap.add_argument("--model", default="amazon/chronos-2", help="or a folder saved by ft_chronos2.py --save")
 a = ap.parse_args()
 ORIG = fm2_lib.origins(a.origins)
 H = fm2_lib.HORIZONS
 
-pipe = Chronos2Pipeline.from_pretrained("amazon/chronos-2", device_map="cuda" if torch.cuda.is_available() else "cpu")
+pipe = Chronos2Pipeline.from_pretrained(a.model, device_map="cuda" if torch.cuda.is_available() else "cpu")
 Q = [float(q) for q in pipe.quantiles]
 print("native quantiles", Q, flush=True)
 
