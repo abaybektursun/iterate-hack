@@ -100,4 +100,6 @@ The arm can be stopped at any experiment; the curve and the finals stay valid fo
 2. The agent needs a headless Claude Code (`claude -p`) started in the folder; the `claude` command is not on this
    laptop's PATH.
 3. One run of one agent is one sample of the method.
+5. After step 1: the GPU is an H200 asked for by name (3.95 USD/h was the H100 price; the H200 is 4.54 USD/h), and one
+   experiment took 6.5 minutes end to end, not 9.5, so 40 experiments cost about 20 USD.
 4. Requests cut by the time budget return no text, and their tokens are not counted in `generated_tokens`.

@@ -53,4 +53,17 @@ person who ran it (`<arm>/<nnn>/`, finals in `final/`). They are not committed.
 
 ## Numbers
 
-None yet.
+Pipeline check (SPEC2 step 1, 2026-11-15, arm `check`, experiment 002, Volume `autobench-runs:/check/002/`): the swarm's
+cue configuration (`arms/swarm/solve_cue.py`, T 1.0 / top-p 1.0, one sample) scores **84 of 100** on the dev
+problems (grader v3), 3,599 generated tokens per problem, 98 answers finished, 2 hit the 16,384-token cap, none cut
+by the time budget; generation 253 s of the 360 s budget, model loading 101 s, 372 s in the container, on an H200.
+For comparison, the swarm's row for this configuration is 410 of 500 on all of MATH-500 with no time limit.
+One problem scored right (index 0, extracted `(3, \frac{\pi}{2})`) and one scored wrong (index 4, extracted
+`Briana`) were read.
+
+Two things the check changed: `solve_job` now asks for an H200 by name, because the request for an H100 was served
+by an H200 and a time budget needs one GPU type for every experiment; and the client spawns the run and keeps its
+call id, because a run whose client died was cancelled. Experiments 000 and 001 of `check` were cancelled that
+way and have no score.
+
+The Karpathy arm (40 experiments) started 2026-11-15 07:07 UTC. No result yet.

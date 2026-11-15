@@ -5,7 +5,8 @@
   submit(arm, source)             CPU. Claims the arm's next experiment number in the ledger (refuses when the arm's
                                   budget is used), runs solve.py on the 100 dev problems through solve_job, grades
                                   the returned texts, stores everything in the Volume autobench-runs.
-  solve_job(source, problems, s)  H100. Runs lib/harness.py on one solve.py with a generation budget of s seconds.
+  solve_job(source, problems, s)  H200 (asked for by name: a request for an H100 is sometimes served by an H200,
+                                  and a time budget needs one GPU type for every experiment). Runs lib/harness.py on one solve.py with a generation budget of s seconds.
                                   It receives problem texts only: no answer is in its image or its arguments. The
                                   weights Volume is read-only, the network is blocked, Modal is not reachable, the
                                   container is used once.
@@ -66,7 +67,7 @@ def now():
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
 
-@app.function(image=engine_image, gpu="H100", volumes={"/hf": weights.read_only()}, timeout=FINAL_SECONDS["hard328"] + LOAD_LIMIT + 300,
+@app.function(image=engine_image, gpu="H200", volumes={"/hf": weights.read_only()}, timeout=FINAL_SECONDS["hard328"] + LOAD_LIMIT + 300,
               retries=0, block_network=True, restrict_modal_access=True, single_use_containers=True, max_containers=4)
 def solve_job(source: str, problems: list, budget_s: int):
     work = Path(tempfile.mkdtemp())
@@ -74,6 +75,7 @@ def solve_job(source: str, problems: list, budget_s: int):
     (work / "in.json").write_text(json.dumps({"problems": problems, "budget_s": budget_s}))
     out = Path(tempfile.mkdtemp()) / "out.json"
     start = time.time()
+    print(f"solve_job: {len(problems)} problems, budget {budget_s} s", flush=True)
     with open(work / "log", "w") as log:
         proc = subprocess.Popen([PY, "/trusted/harness.py"], cwd=work, stdout=log, stderr=subprocess.STDOUT, start_new_session=True,
                                 env={**os.environ, "AUTOBENCH_IN": str(work / "in.json"), "AUTOBENCH_OUT": str(out)})
@@ -84,6 +86,7 @@ def solve_job(source: str, problems: list, budget_s: int):
             os.killpg(proc.pid, signal.SIGKILL)
             proc.wait()
             timed_out = True
+    print(f"solve_job: exit code {proc.returncode}, timed out {timed_out}, {time.time() - start:.0f} s", flush=True)
     return {"exit_code": proc.returncode, "timed_out": timed_out, "wall_seconds": round(time.time() - start, 1),
             "log": (work / "log").read_text(errors="replace")[-200_000:], "record": json.loads(out.read_text()) if out.exists() else None}
 
@@ -106,12 +109,14 @@ def run_and_grade(key, folder, source, set_name, budget_s):
     Returns the ledger row, one row per problem (problem, returned text, right; no answer) and the log."""
     row = ledger[key]
     problems = grade_py("problems", set_name)
+    print(f"{key}: {len(problems)} problems of {set_name} to solve_job", flush=True)
     try:
         result = solve_job.remote(source, problems, budget_s)
     except Exception as error:
         ledger[key] = {**row, "state": "infra_error", "error": repr(error), "ended_at": now()}
         raise
     record, log = result.pop("record"), result.pop("log")
+    print(f"{key}: solve_job returned {result}", flush=True)
     out = Path("/runs") / folder
     out.mkdir(parents=True)
     (out / "solve.py").write_text(source)

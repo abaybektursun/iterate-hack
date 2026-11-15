@@ -7,7 +7,9 @@
   uv run exp.py submit <arm> <solve.py>     run one experiment on the 100 dev problems. Prints a summary and one
                                             line per problem; writes last_run.jsonl (each problem, the text your
                                             solve returned for it, whether it was right). On a crash it prints the
-                                            end of the log and exits 1. Exits 3 when the budget is used.
+                                            end of the log and exits 1. Exits 3 when the budget is used. If this
+                                            command is killed while it waits, the run goes on: run it again and it
+                                            waits for that same run.
   uv run exp.py init <arm> <experiments>    operator: set the arm's number of experiments
   uv run exp.py ledger <arm>                the arm's experiments as the runner recorded them
   uv run exp.py final <label> <math400|hard328> <solve.py>     operator: score a solve.py on a final set
@@ -39,7 +41,19 @@ def main():
     command, args = sys.argv[1], sys.argv[2:]
     if command == "submit":
         arm, path = args
-        result = call("submit", arm, Path(path).read_text())
+        # The run is spawned, not awaited in one call, so it survives the death of this process: the call id is kept
+        # in .pending_call, and the next `submit` waits for that run instead of starting another.
+        pending = Path(".pending_call")
+        if pending.exists():
+            print("waiting for the run that was already submitted")
+            run = modal.FunctionCall.from_id(pending.read_text().strip())
+        else:
+            run = modal.Function.from_name("autobench", "submit").spawn(arm, Path(path).read_text())
+            pending.write_text(run.object_id)
+        try:
+            result = run.get()
+        finally:
+            pending.unlink()
         if result["exhausted"]:
             print(f"BUDGET EXHAUSTED: all {result['budget']} experiments of arm {arm} are used. The run is over: stop.")
             sys.exit(3)

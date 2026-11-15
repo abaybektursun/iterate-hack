@@ -28,7 +28,7 @@ def main():
         shutil.copy(source, target / name)
     (target / "run.sh").write_text("#!/bin/sh\nexec uv run -q exp.py submit karpathy solve.py\n")
     (target / "run.sh").chmod(0o755)
-    (target / ".gitignore").write_text("results.tsv\nrun.log\nlast_run.jsonl\n__pycache__/\n")
+    (target / ".gitignore").write_text("results.tsv\nrun.log\nlast_run.jsonl\n.pending_call\n__pycache__/\n")
     git = ["git", "-C", str(target)]
     subprocess.run([*git, "init", "-q", "-b", "master"], check=True)
     subprocess.run([*git, "add", ".gitignore", "run.sh", *FILES], check=True)
