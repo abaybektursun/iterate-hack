@@ -56,6 +56,8 @@ ARMS = ("top8xm1_math31", "top8x0.5_math31", "top8_math31", "top8x1.5_math31", "
 WRITE, INNER = "o,down", "q,k,v,gate,up"                                          # matrices that write to the residual stream; the others
 SHIFT_ONLY = {f"{r}x1.5_{name}_math31": (None, f"--recipe {r} --scale 1.5 --mods {mods} --other math31")     # amendment 3: no scored cell
               for r in ("top8", "rin", "perm", "rand8") for name, mods in (("write", WRITE), ("inner", INNER))}
+SHIFT_ONLY.update({f"{r}x1.5_write_L{l}_math31": (None, f"--recipe {r} --scale 1.5 --mods {WRITE} --layers {l}-{l} --other math31")   # amendment 4
+                   for r in ("top8", "rin", "rand8") for l in (0, 8)})
 ARMS += tuple(SHIFT_ONLY)
 EDIT_ARGS = {arm: v[1] for arm, v in {**NEW, **SHIFT_ONLY}.items()}                 # arm -> its wsp_edit arguments
 GROUPS = ("all", "cap_hit", "finished", "third0", "third1", "third2")

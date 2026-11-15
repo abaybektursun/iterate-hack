@@ -125,3 +125,15 @@ RMS shift at layer 24, group all.
 - S1. Write matrices: `rin` reaches at least 0.5 of `top8`'s shift. Refuted if below 0.25.
 - S2. Inner matrices: `rin` reaches at most 0.2 of `top8`'s shift. Refuted if at or above 0.5.
 - Reported: the same for `perm`; the two families' shares of the full edit's shift; layers 8, 16, 31.
+
+## Amendment 4 (2026-11-15, before the run; control named in run-03): one edited layer, followed through the unedited base
+
+run-03's growth figures mix later edited layers with what the base does to a written direction. Here only one layer is edited
+(`--layers l-l --mods o,down`, l = 0 and l = 8), so every later layer is the base. Arms at 1.5: `top8`, `rin` (RL's inputs,
+random outputs: the same input drive and output norm, another direction), `rand8`. Read: RMS shift (group all) at the edited layer
+and at layer 24; growth = the second over the first.
+
+- T1. For both l, the paired edit's growth is at least 3 times the input-only edit's. Refuted if below 1.5 times for either l:
+  then the base does not carry RL's written directions further than random ones, and run-03's gap comes from the other edited
+  layers.
+- Reported: `rand8`'s growth; the shifts at layers l, l + 1, 16, 24, 31.
