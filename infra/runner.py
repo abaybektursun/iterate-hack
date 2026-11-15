@@ -52,6 +52,7 @@ def run(job_id):
     jobs[f"start:{job_id}"] = {"at": int(time.time()), "gpu": gpu}
 
     code.reload()  # a container that started before this commit was uploaded does not see the file otherwise
+    runs.reload()  # the same for inputs put on the Volume iterate-runs (modal volume put) after the container started
     with tarfile.open(f"/code/{job['sha']}.tar") as tar:
         tar.extractall("/repo", filter="data")
     out = Path("/runs") / job_id

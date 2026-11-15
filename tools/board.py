@@ -15,9 +15,11 @@
   uv run tools/board.py comment <id> "<text>"     at most 280 characters; the item's author gets it as a message
   uv run tools/board.py done <id> ["<result>"]    close a work item and announce it on all; with a text, also post
                                                   it as a result item, in the same command
-  uv run tools/board.py score <result id> <base|rl> <benchmark> <right>/<n> "<configuration>" [--tokens <per problem>]
+  uv run tools/board.py score <result id> <base|rl|other> <benchmark> <right>/<n> "<configuration>" [--tokens <per problem>]
                                                   attach one score to a result already posted, for the hill-climbing
-                                                  chart of tools/view.py. base = the untrained model
+                                                  chart of tools/view.py. base = the untrained model, rl = the RL
+                                                  checkpoint, other = any other model (weight blends, other
+                                                  checkpoints): stored, not drawn
 
 A result's text can carry its scores itself, one per line, and post and done then write them:
   score: base MATH-500 378/500 tokens 4690 | cue, T 0.6 / top-p 1.0
@@ -97,11 +99,11 @@ def line(item, full):
     return f"{item['id']} {author(item)} {item['at'][5:16].replace('T', ' ')}{idle}{votes}{comments}: {text}"
 
 
-SCORE_LINE = re.compile(r"score: (base|rl) (\S+) (\d+)/(\d+)(?: tokens (\d+))? \| (.+)")
+SCORE_LINE = re.compile(r"score: (base|rl|other) (\S+) (\d+)/(\d+)(?: tokens (\d+))? \| (.+)")
 
 
 def score_lines(text):
-    """The scores in a result's text: lines 'score: <base|rl> <benchmark> <right>/<n> [tokens <per problem>] | <configuration>'."""
+    """The scores in a result's text: lines 'score: <base|rl|other> <benchmark> <right>/<n> [tokens <per problem>] | <configuration>'."""
     found = []
     for line in text.splitlines():
         if line.strip().startswith("score:"):
@@ -249,7 +251,7 @@ def main(argv, who):
         result_id, model, benchmark, fraction, config = args
         result = get(result_id)
         assert result["kind"] == "result", f"{result_id} is a {result['kind']}, not a result"
-        assert model in ("base", "rl"), "model is base (the untrained model) or rl"
+        assert model in ("base", "rl", "other"), "model is base (the untrained Olmo 3 base), rl (Olmo-3.1-7B-RL-Zero-Math) or other (any other model: weight blends, other checkpoints; stored, not drawn)"
         right, n = map(int, fraction.split("/"))
         assert 0 <= right <= n, f"{fraction}: right must be between 0 and n"
         add_score(result_id, result["at_ns"], result["at"], model, benchmark, right, n, config, tokens, who, me)
