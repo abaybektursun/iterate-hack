@@ -1,0 +1,2 @@
+ed506c9 Dana 2026-11-14 20:18:03 -0800 meta: dana review 20261115-0413 (cell check before launch: broken cell 67 s and a job to 0.07 s, table identical)
+56a8633 Dana 2026-11-14 20:16:28 -0800 gapmap: submit.sh checks every cell's settings before launching a job (ci, digits, fmt, n_boot, seed)

@@ -1,0 +1,32 @@
+{
+ "set": "hard328",
+ "n": 328,
+ "cells": {
+  "shots_rl": {
+   "job_id": "abaybektursun-1114-195404-351b",
+   "right_v3": 164,
+   "cap_hits": 107,
+   "finished": 221,
+   "finished_right": 162,
+   "mean_generated_tokens": 9933.3
+  },
+  "base_cue": {
+   "job_id": "abaybektursun-1114-151534-e72c",
+   "right_v3": 164,
+   "cap_hits": 77,
+   "finished": 251,
+   "finished_right": 161,
+   "mean_generated_tokens": 9343.8
+  }
+ },
+ "shots_rl minus base_cue": {
+  "points": 0.0,
+  "ci95": [
+   -4.27,
+   4.27
+  ]
+ },
+ "both_right": 138,
+ "only_shots": 26,
+ "only_base": 26
+}

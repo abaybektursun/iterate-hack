@@ -1,0 +1,61 @@
+{
+ "pack": "r10",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 1,
+   "quote": "Each mistake only showed up on the runner, after about 20 s to build the environment plus the 30\u201345 s bootstrap."
+  },
+  "P2": {
+   "score": 1,
+   "quote": "The first 4 minutes went on three failed launches of the `subject` cell, each followed by a fix and a re-push"
+  },
+  "P3": {
+   "score": 1,
+   "quote": "`submit.sh` runs every cell twice to confirm it, which doubles compute."
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 1,
+   "quote": "The `bench-rng` extra re-runs in every batch, though it has nothing to do with the research question."
+  },
+  "P6": {
+   "score": 1,
+   "quote": "The `--data` path in the README's \"How to run\" points to a file that doesn't exist (`rln4/per_problem.json`)"
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 1,
+   "file": "studies/gapmap/jobs/check_cell.py (run from studies/gapmap/jobs/submit.sh before launch)"
+  },
+  "P3": {
+   "score": 0,
+   "file": ""
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 1,
+   "file": "studies/gapmap/README.md"
+  }
+ },
+ "other_claims": [
+  "The requirement that subject settings are set by hand for every batch means the typos will recur in the next three batches",
+  "check_cell.py keeps its own copy of the allowed metrics, splits and formats, so a new one added to cell.py is blocked until it is added there too"
+ ],
+ "change_summary": "Adds jobs/check_cell.py (data file, ci, fmt, metric, split, integer counts), makes submit.sh run it before launching, and removes the nonexistent --data path from the README launch line."
+}

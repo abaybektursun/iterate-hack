@@ -1,0 +1,61 @@
+{
+ "pack": "r09",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 1,
+   "quote": "Every job rebuilds its Python environment, about 20 s."
+  },
+  "P2": {
+   "score": 1,
+   "quote": "Each mistake was a simple one, but it only showed up after a fresh environment build plus a bootstrap, about 1.5 minutes per round trip, followed by a hand edit, commit and push"
+  },
+  "P3": {
+   "score": 1,
+   "quote": "`submit.sh` runs every cell twice to confirm the table repeats."
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 0,
+   "quote": ""
+  },
+  "P6": {
+   "score": 1,
+   "quote": "The `--data` path in the README's How-to-run doesn't exist (the real file is under `rln4/t1_t2_items-01/`)"
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 1,
+   "file": "studies/gapmap/jobs/cell.py (with studies/gapmap/jobs/check_cell.py and studies/gapmap/jobs/submit.sh)"
+  },
+  "P3": {
+   "score": 0,
+   "file": ""
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 1,
+   "file": "studies/gapmap/README.md"
+  }
+ },
+ "other_claims": [
+  "The job image has no git, so a git check inside the job fails (found by the review's own test job)",
+  "The review's own closing note on the board had a wrong commit id (corrected by a comment)"
+ ],
+ "change_summary": "Adds jobs/check_cell.py (settings and data path), runs it in submit.sh before any launch and in cell.py before the bootstrap, and removes the nonexistent --data path from the README launch line."
+}

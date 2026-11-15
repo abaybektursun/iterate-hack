@@ -1,0 +1,130 @@
+diff --git a/studies/gapmap/README.md b/studies/gapmap/README.md
+index 512d920..e9fdb09 100644
+--- a/studies/gapmap/README.md
++++ b/studies/gapmap/README.md
+@@ -11,8 +11,8 @@ Requirements). Plan: `specs/SPEC.md`.
+ | Path | What it is |
+ |---|---|
+ | `specs/SPEC.md` | The question, the four metrics, the splits, the prediction and what refutes it, the owner's requirements. |
+-| `queue.json` | What the study runs: the batches (one metric each), the splits of every batch, extra cells, default settings. |
+-| `prep/make_cells.py` | Writes `cells/<batch>.json` from `queue.json`. |
++| `queue.json` | What the study runs: the batches (one metric each), the splits of every batch, extra cells, default settings, and each batch's own cell settings (`settings`: the subject split's interval, format, digits). |
++| `prep/make_cells.py` | Writes `cells/<batch>.json` from `queue.json`, after checking every cell with `jobs/check_cell.py`. |
+ | `cells/<batch>.json` | The cells of one batch, one entry per cell with its settings. |
+ | `jobs/submit.sh` | Launches one cell on the runner, waits, copies the output to `runs/<job id>/`. |
+ | `jobs/run_cell.sh` | What the job runs: environment, then `cell.py`. |
+@@ -31,7 +31,7 @@ python3 studies/gapmap/prep/make_cells.py <batch>
+ bash studies/gapmap/jobs/submit.sh <batch> <cell>
+ ```
+ 
+-Commit `cells/<batch>.json` and push before the first launch (a job runs a pushed commit). Then copy each cell's
++Set a batch's own cell settings in `queue.json` under `settings` before `make_cells.py`; do not hand-edit `cells/<batch>.json`. Commit `queue.json` and `cells/<batch>.json` and push before the first launch (a job runs a pushed commit). Then copy each cell's
+ `runs/<job id>/metrics.json` to `results/<batch>-NN/<cell>.json`, write `run.json`, commit, and close the work item
+ with the numbers.
+ 
+diff --git a/studies/gapmap/prep/make_cells.py b/studies/gapmap/prep/make_cells.py
+index af78d36..2cf7fa0 100644
+--- a/studies/gapmap/prep/make_cells.py
++++ b/studies/gapmap/prep/make_cells.py
+@@ -2,18 +2,39 @@
+ 
+   python3 studies/gapmap/prep/make_cells.py <batch>      writes studies/gapmap/cells/<batch>.json
+ 
+-A batch is one metric. Edit a cell in the written file to give it its own settings (interval level, table format, digits).
++A cell's own settings (interval level, table format, digits; the subject split, SPEC requirement 3) go in
++queue.json under "settings": {"<batch>": {"<cell id>": {...}}}, not as a hand edit of the written file. Every cell
++is checked with jobs/check_cell.py before the file is written; nothing is written if one fails.
+ """
+ import json
+ import sys
+ from pathlib import Path
+ 
+ study = Path(__file__).resolve().parent.parent
++sys.path.insert(0, str(study / "jobs"))
++import check_cell  # noqa: E402
++
+ queue = json.loads((study / "queue.json").read_text())
+ batch = sys.argv[1]
+ assert batch in queue["batches"], f"batch must be one of {queue['batches']}"
++settings = queue.get("settings", {}).get(batch, {})
+ cells = [{"id": split, "kind": "split", "metric": batch, "split": split, **queue["defaults"]} for split in queue["splits"]]
+ cells += [{"seed": queue["defaults"]["seed"], **extra} for extra in queue["extras"]]
+-(study / "cells").mkdir(exist_ok=True)
+-(study / "cells" / f"{batch}.json").write_text(json.dumps(cells, indent=1) + "\n")
+-print(f"{len(cells)} cells: " + ", ".join(c["id"] for c in cells))
++ids = [c["id"] for c in cells]
++unknown = sorted(set(settings) - set(ids))
++assert not unknown, f"queue.json settings for {batch} name cells {unknown} that do not exist; ids: {ids}"
++for cell in cells:
++    for key, value in settings.get(cell["id"], {}).items():
++        assert key in cell, f"queue.json settings for {batch}/{cell['id']}: unknown key {key!r}"
++        cell[key] = value
++
++out = study / "cells" / f"{batch}.json"
++tmp = out.with_suffix(".check.json")
++out.parent.mkdir(exist_ok=True)
++tmp.write_text(json.dumps(cells, indent=1) + "\n")
++found = [f"{cid}: {p}" for cid in ids for p in check_cell.problems(tmp, cid, check_cell.DATA)]
++tmp.unlink()
++if found:
++    sys.exit("make_cells: not written, fix queue.json:\n  " + "\n  ".join(found))
++out.write_text(json.dumps(cells, indent=1) + "\n")
++print(f"{len(cells)} cells: " + ", ".join(f"{c['id']}{' ' + str(settings[c['id']]) if c['id'] in settings else ''}" for c in cells))
+diff --git a/studies/gapmap/queue.json b/studies/gapmap/queue.json
+index b5566ed..6a06459 100644
+--- a/studies/gapmap/queue.json
++++ b/studies/gapmap/queue.json
+@@ -1,8 +1,49 @@
+ {
+- "batches": ["accuracy", "cap_hit", "tokens", "tokens_both_right"],
+- "splits": ["overall", "subject", "level5", "t2_length_quartile", "t1_length_quartile"],
++ "batches": [
++  "accuracy",
++  "cap_hit",
++  "tokens",
++  "tokens_both_right"
++ ],
++ "splits": [
++  "overall",
++  "subject",
++  "level5",
++  "t2_length_quartile",
++  "t1_length_quartile"
++ ],
+  "extras": [
+-  {"id": "bench-rng", "kind": "bench", "seconds_per_generator": 10}
++  {
++   "id": "bench-rng",
++   "kind": "bench",
++   "seconds_per_generator": 10
++  }
+  ],
+- "defaults": {"n_boot": 1500000, "seed": 0, "ci": 0.95, "fmt": "json", "digits": 4}
++ "defaults": {
++  "n_boot": 1500000,
++  "seed": 0,
++  "ci": 0.95,
++  "fmt": "json",
++  "digits": 4
++ },
++ "settings": {
++  "accuracy": {
++   "subject": {
++    "ci": 0.9,
++    "fmt": "csv"
++   }
++  },
++  "cap_hit": {
++   "subject": {
++    "ci": 0.99,
++    "digits": 3
++   }
++  },
++  "tokens": {
++   "subject": {
++    "fmt": "csv",
++    "digits": 2
++   }
++  }
++ }
+ }

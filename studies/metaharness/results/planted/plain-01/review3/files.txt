@@ -1,0 +1,4 @@
+studies/gapmap/README.md          |  6 ++---
+ studies/gapmap/prep/make_cells.py | 29 +++++++++++++++++++----
+ studies/gapmap/queue.json         | 49 +++++++++++++++++++++++++++++++++++----
+ 3 files changed, 73 insertions(+), 11 deletions(-)

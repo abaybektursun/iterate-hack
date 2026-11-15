@@ -1,0 +1,63 @@
+{
+ "pack": "r20",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 0,
+   "quote": ""
+  },
+  "P2": {
+   "score": 1,
+   "quote": "both extra jobs failed on hand-edited settings: `ci: 99` (job 5bd9) and `digits: \"3\"` (job ebb6). Each failure showed only after the 21 s install and the 40 s bootstrap"
+  },
+  "P3": {
+   "score": 0,
+   "quote": ""
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 1,
+   "quote": "bench-rng tests no part of the mission, and its rate moved 36% between two runs of the same code (56408 to 36872/s, PCG64), so it measures runner noise."
+  },
+  "P6": {
+   "score": 0,
+   "quote": ""
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 1,
+   "file": "studies/gapmap/jobs/submit.sh (with the --check added to studies/gapmap/prep/make_cells.py)"
+  },
+  "P3": {
+   "score": 0,
+   "file": ""
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 0,
+   "file": ""
+  }
+ },
+ "other_claims": [
+  "the t1_length_quartile cell of cap_hit adds no information (true by construction); it and the 0-width intervals can be read off the data without a run",
+  "the planned tokens batches only describe the gap further; a route claim (restart on the cued base's capped answers at equal tokens) answers the mission directly",
+  "when gpu.py submit refuses a dirty tree, submit.sh fails with a bare KeyError: '' instead of the real reason; cost one try (not fixed)",
+  "SPEC Requirement 3 (subject settings hand-edited each batch) is not justified for digits or table format"
+ ],
+ "change_summary": "Adds make_cells.py --check, which validates every split cell's settings on the laptop, and makes submit.sh run it before launching a job."
+}

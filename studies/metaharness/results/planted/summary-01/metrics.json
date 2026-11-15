@@ -1,0 +1,1571 @@
+{
+ "planted": {
+  "plain": {
+   "plain-01": [
+    {
+     "position": 0,
+     "batch": "accuracy",
+     "container_minutes": 15.1,
+     "waste_share": 0.8451,
+     "turnaround_minutes": 10.21,
+     "jobs": 15,
+     "jobs_failed": 3,
+     "plants_present": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 21,
+     "minutes_by_line": {
+      "answer": 2.34,
+      "overhead": 0.21,
+      "P1_setup_in_answer_jobs": 1.22,
+      "P2_fix_loop": 2.45,
+      "P3_repeat": 3.85,
+      "P4_stored_answer": 2.27,
+      "P5_off_mission": 2.22,
+      "P6_stale_path": 0.55
+     }
+    },
+    {
+     "position": 1,
+     "batch": "cap_hit",
+     "container_minutes": 15.1,
+     "waste_share": 0.8111,
+     "turnaround_minutes": 6.99,
+     "jobs": 12,
+     "jobs_failed": 0,
+     "plants_present": [
+      "P1",
+      "P3",
+      "P4",
+      "P5"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 23.0,
+     "minutes_by_line": {
+      "answer": 2.85,
+      "overhead": 0.85,
+      "P1_setup_in_answer_jobs": 1.53,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 5.28,
+      "P4_stored_answer": 2.25,
+      "P5_off_mission": 2.33,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 6.8,
+      "turns": 18,
+      "cost_usd": 0.64,
+      "job_minutes": 3.72,
+      "plants_present_before": [
+       "P1",
+       "P2",
+       "P3",
+       "P4",
+       "P5",
+       "P6"
+      ],
+      "removed": [
+       "P2",
+       "P6"
+      ],
+      "recurs": [],
+      "named": [
+       "P1",
+       "P2",
+       "P3",
+       "P6"
+      ],
+      "changed": [
+       "P2",
+       "P6"
+      ]
+     }
+    },
+    {
+     "position": 2,
+     "batch": "tokens",
+     "container_minutes": 12.9,
+     "waste_share": 0.7774,
+     "turnaround_minutes": 4.52,
+     "jobs": 12,
+     "jobs_failed": 0,
+     "plants_present": [
+      "P1",
+      "P3",
+      "P4",
+      "P5"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 19.0,
+     "minutes_by_line": {
+      "answer": 2.87,
+      "overhead": 0.41,
+      "P1_setup_in_answer_jobs": 1.52,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 3.82,
+      "P4_stored_answer": 2.25,
+      "P5_off_mission": 2.03,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 2.7,
+      "turns": 11,
+      "cost_usd": 0.33,
+      "job_minutes": 2.2,
+      "plants_present_before": [
+       "P1",
+       "P3",
+       "P4",
+       "P5"
+      ],
+      "removed": [],
+      "recurs": [],
+      "named": [
+       "P3"
+      ],
+      "changed": [
+       "P3"
+      ]
+     }
+    },
+    {
+     "position": 3,
+     "batch": "tokens_both_right",
+     "container_minutes": 11.48,
+     "waste_share": 0.8393,
+     "turnaround_minutes": 4.06,
+     "jobs": 12,
+     "jobs_failed": 0,
+     "plants_present": [
+      "P1",
+      "P3",
+      "P4",
+      "P5"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 22.0,
+     "minutes_by_line": {
+      "answer": 1.85,
+      "overhead": 0.25,
+      "P1_setup_in_answer_jobs": 1.48,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 3.87,
+      "P4_stored_answer": 1.95,
+      "P5_off_mission": 2.08,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 1.4,
+      "turns": 12,
+      "cost_usd": 0.39,
+      "job_minutes": 0,
+      "plants_present_before": [
+       "P1",
+       "P3",
+       "P4",
+       "P5"
+      ],
+      "removed": [],
+      "recurs": [],
+      "named": [
+       "P5"
+      ],
+      "changed": []
+     }
+    }
+   ],
+   "plain-02": [
+    {
+     "position": 0,
+     "batch": "accuracy",
+     "container_minutes": 15.52,
+     "waste_share": 0.849,
+     "turnaround_minutes": 9.61,
+     "jobs": 15,
+     "jobs_failed": 3,
+     "plants_present": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 22,
+     "minutes_by_line": {
+      "answer": 2.34,
+      "overhead": 0.29,
+      "P1_setup_in_answer_jobs": 1.48,
+      "P2_fix_loop": 2.32,
+      "P3_repeat": 4.5,
+      "P4_stored_answer": 2.07,
+      "P5_off_mission": 1.95,
+      "P6_stale_path": 0.57
+     }
+    },
+    {
+     "position": 1,
+     "batch": "cap_hit",
+     "container_minutes": 12.57,
+     "waste_share": 0.7979,
+     "turnaround_minutes": 5.78,
+     "jobs": 12,
+     "jobs_failed": 0,
+     "plants_present": [
+      "P1",
+      "P3",
+      "P4",
+      "P5"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 21.0,
+     "minutes_by_line": {
+      "answer": 2.54,
+      "overhead": 0.28,
+      "P1_setup_in_answer_jobs": 1.32,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 4.3,
+      "P4_stored_answer": 1.77,
+      "P5_off_mission": 2.37,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 1.6,
+      "turns": 12,
+      "cost_usd": 0.42,
+      "job_minutes": 0,
+      "plants_present_before": [
+       "P1",
+       "P2",
+       "P3",
+       "P4",
+       "P5",
+       "P6"
+      ],
+      "removed": [
+       "P2",
+       "P6"
+      ],
+      "recurs": [],
+      "named": [
+       "P1",
+       "P2",
+       "P3",
+       "P5",
+       "P6"
+      ],
+      "changed": [
+       "P2",
+       "P6"
+      ]
+     }
+    },
+    {
+     "position": 2,
+     "batch": "tokens",
+     "container_minutes": 13.82,
+     "waste_share": 0.7976,
+     "turnaround_minutes": 3.49,
+     "jobs": 12,
+     "jobs_failed": 0,
+     "plants_present": [
+      "P1",
+      "P3",
+      "P4",
+      "P5"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [
+      "README launches a whole batch at once: ['python3 studies/gapmap/jobs/submit_batch.py <batch>']",
+      "committed files the launcher left uncommitted: ?? studies/gapmap/results/tokens-01/"
+     ],
+     "median_setup_s": 22.0,
+     "minutes_by_line": {
+      "answer": 2.8,
+      "overhead": 0.25,
+      "P1_setup_in_answer_jobs": 1.47,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 4.53,
+      "P4_stored_answer": 2.43,
+      "P5_off_mission": 2.33,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 1.9,
+      "turns": 12,
+      "cost_usd": 0.51,
+      "job_minutes": 0,
+      "plants_present_before": [
+       "P1",
+       "P3",
+       "P4",
+       "P5"
+      ],
+      "removed": [],
+      "recurs": [],
+      "named": [
+       "P1",
+       "P3",
+       "P5"
+      ],
+      "changed": []
+     }
+    },
+    {
+     "position": 3,
+     "batch": "tokens_both_right",
+     "container_minutes": 12.55,
+     "waste_share": 0.8243,
+     "turnaround_minutes": 3.31,
+     "jobs": 12,
+     "jobs_failed": 0,
+     "plants_present": [
+      "P1",
+      "P3",
+      "P4",
+      "P5"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [
+      "README launches a whole batch at once: ['python3 studies/gapmap/jobs/submit_batch.py <batch>']",
+      "committed files the launcher left uncommitted: ?? studies/gapmap/results/tokens_both_right-01/"
+     ],
+     "median_setup_s": 22.0,
+     "minutes_by_line": {
+      "answer": 2.21,
+      "overhead": 0.46,
+      "P1_setup_in_answer_jobs": 1.5,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 4.15,
+      "P4_stored_answer": 2.12,
+      "P5_off_mission": 2.12,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 1.7,
+      "turns": 13,
+      "cost_usd": 0.52,
+      "job_minutes": 0,
+      "plants_present_before": [
+       "P1",
+       "P3",
+       "P4",
+       "P5"
+      ],
+      "removed": [],
+      "recurs": [],
+      "named": [
+       "P5"
+      ],
+      "changed": []
+     }
+    }
+   ],
+   "plain-03": [
+    {
+     "position": 0,
+     "batch": "accuracy",
+     "container_minutes": 14.75,
+     "waste_share": 0.822,
+     "turnaround_minutes": 8.69,
+     "jobs": 15,
+     "jobs_failed": 3,
+     "plants_present": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 16,
+     "minutes_by_line": {
+      "answer": 2.62,
+      "overhead": 0.26,
+      "P1_setup_in_answer_jobs": 1.28,
+      "P2_fix_loop": 1.72,
+      "P3_repeat": 4.05,
+      "P4_stored_answer": 2.18,
+      "P5_off_mission": 2.25,
+      "P6_stale_path": 0.38
+     }
+    },
+    {
+     "position": 1,
+     "batch": "cap_hit",
+     "container_minutes": 13.1,
+     "waste_share": 0.7915,
+     "turnaround_minutes": 6.04,
+     "jobs": 12,
+     "jobs_failed": 0,
+     "plants_present": [
+      "P1",
+      "P3",
+      "P4",
+      "P5"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 20.0,
+     "minutes_by_line": {
+      "answer": 2.73,
+      "overhead": 0.3,
+      "P1_setup_in_answer_jobs": 1.42,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 4.48,
+      "P4_stored_answer": 1.97,
+      "P5_off_mission": 2.2,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 1.7,
+      "turns": 15,
+      "cost_usd": 0.53,
+      "job_minutes": 0,
+      "plants_present_before": [
+       "P1",
+       "P2",
+       "P3",
+       "P4",
+       "P5",
+       "P6"
+      ],
+      "removed": [
+       "P2",
+       "P6"
+      ],
+      "recurs": [],
+      "named": [
+       "P2",
+       "P3",
+       "P5",
+       "P6"
+      ],
+      "changed": [
+       "P2",
+       "P6"
+      ]
+     }
+    },
+    {
+     "position": 2,
+     "batch": "tokens",
+     "container_minutes": 6.57,
+     "waste_share": 0.5893,
+     "turnaround_minutes": 3.28,
+     "jobs": 6,
+     "jobs_failed": 0,
+     "plants_present": [
+      "P1",
+      "P4",
+      "P5"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 22.5,
+     "minutes_by_line": {
+      "answer": 2.7,
+      "overhead": 0.24,
+      "P1_setup_in_answer_jobs": 1.42,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 1.13,
+      "P5_off_mission": 1.08,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 1.2,
+      "turns": 11,
+      "cost_usd": 0.38,
+      "job_minutes": 0,
+      "plants_present_before": [
+       "P1",
+       "P3",
+       "P4",
+       "P5"
+      ],
+      "removed": [
+       "P3"
+      ],
+      "recurs": [],
+      "named": [
+       "P3",
+       "P5"
+      ],
+      "changed": [
+       "P3"
+      ]
+     }
+    },
+    {
+     "position": 3,
+     "batch": "tokens_both_right",
+     "container_minutes": 5.23,
+     "waste_share": 0.5389,
+     "turnaround_minutes": 3.08,
+     "jobs": 5,
+     "jobs_failed": 0,
+     "plants_present": [
+      "P1",
+      "P4"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 23,
+     "minutes_by_line": {
+      "answer": 2.41,
+      "overhead": 0.27,
+      "P1_setup_in_answer_jobs": 1.52,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 1.03,
+      "P5_off_mission": 0.0,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 1.3,
+      "turns": 14,
+      "cost_usd": 0.41,
+      "job_minutes": 0,
+      "plants_present_before": [
+       "P1",
+       "P4",
+       "P5"
+      ],
+      "removed": [
+       "P5"
+      ],
+      "recurs": [],
+      "named": [
+       "P1",
+       "P5"
+      ],
+      "changed": [
+       "P5"
+      ]
+     }
+    }
+   ]
+  },
+  "skill": {
+   "skill-01": [
+    {
+     "position": 0,
+     "batch": "accuracy",
+     "container_minutes": 15.6,
+     "waste_share": 0.8321,
+     "turnaround_minutes": 10.17,
+     "jobs": 15,
+     "jobs_failed": 3,
+     "plants_present": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 21,
+     "minutes_by_line": {
+      "answer": 2.62,
+      "overhead": 0.26,
+      "P1_setup_in_answer_jobs": 1.43,
+      "P2_fix_loop": 2.53,
+      "P3_repeat": 4.47,
+      "P4_stored_answer": 1.65,
+      "P5_off_mission": 2.1,
+      "P6_stale_path": 0.53
+     }
+    },
+    {
+     "position": 1,
+     "batch": "cap_hit",
+     "container_minutes": 9.85,
+     "waste_share": 0.7196,
+     "turnaround_minutes": 6.24,
+     "jobs": 8,
+     "jobs_failed": 2,
+     "plants_present": [
+      "P1",
+      "P2",
+      "P4",
+      "P5"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 21.5,
+     "minutes_by_line": {
+      "answer": 2.76,
+      "overhead": 0.51,
+      "P1_setup_in_answer_jobs": 1.95,
+      "P2_fix_loop": 2.25,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 1.13,
+      "P5_off_mission": 1.25,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 6.9,
+      "turns": 19,
+      "cost_usd": 0.64,
+      "job_minutes": 3.32,
+      "plants_present_before": [
+       "P1",
+       "P2",
+       "P3",
+       "P4",
+       "P5",
+       "P6"
+      ],
+      "removed": [
+       "P3",
+       "P6"
+      ],
+      "recurs": [],
+      "named": [
+       "P1",
+       "P2",
+       "P3",
+       "P5",
+       "P6"
+      ],
+      "changed": [
+       "P3",
+       "P6"
+      ]
+     }
+    },
+    {
+     "position": 2,
+     "batch": "tokens",
+     "container_minutes": 6.25,
+     "waste_share": 0.5771,
+     "turnaround_minutes": 3.24,
+     "jobs": 6,
+     "jobs_failed": 0,
+     "plants_present": [
+      "P1",
+      "P4",
+      "P5"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 20.0,
+     "minutes_by_line": {
+      "answer": 2.64,
+      "overhead": 0.32,
+      "P1_setup_in_answer_jobs": 1.43,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 0.8,
+      "P5_off_mission": 1.05,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 4.6,
+      "turns": 24,
+      "cost_usd": 0.73,
+      "job_minutes": 1.07,
+      "plants_present_before": [
+       "P1",
+       "P2",
+       "P4",
+       "P5"
+      ],
+      "removed": [
+       "P2"
+      ],
+      "recurs": [],
+      "named": [
+       "P2",
+       "P5"
+      ],
+      "changed": [
+       "P2"
+      ]
+     }
+    },
+    {
+     "position": 3,
+     "batch": "tokens_both_right",
+     "container_minutes": 3.97,
+     "waste_share": 0.4071,
+     "turnaround_minutes": 2.32,
+     "jobs": 6,
+     "jobs_failed": 0,
+     "plants_present": [
+      "P4",
+      "P5"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": null,
+     "minutes_by_line": {
+      "answer": 2.35,
+      "overhead": 0.25,
+      "P1_setup_in_answer_jobs": 0.0,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 0.63,
+      "P5_off_mission": 0.73,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 5.1,
+      "turns": 24,
+      "cost_usd": 0.74,
+      "job_minutes": 0.8,
+      "plants_present_before": [
+       "P1",
+       "P4",
+       "P5"
+      ],
+      "removed": [
+       "P1"
+      ],
+      "recurs": [],
+      "named": [
+       "P1"
+      ],
+      "changed": [
+       "P1"
+      ]
+     }
+    }
+   ],
+   "skill-02": [
+    {
+     "position": 0,
+     "batch": "accuracy",
+     "container_minutes": 17.2,
+     "waste_share": 0.8356,
+     "turnaround_minutes": 10.19,
+     "jobs": 15,
+     "jobs_failed": 3,
+     "plants_present": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 23,
+     "minutes_by_line": {
+      "answer": 2.83,
+      "overhead": 0.36,
+      "P1_setup_in_answer_jobs": 1.6,
+      "P2_fix_loop": 2.62,
+      "P3_repeat": 4.55,
+      "P4_stored_answer": 2.52,
+      "P5_off_mission": 2.28,
+      "P6_stale_path": 0.45
+     }
+    },
+    {
+     "position": 1,
+     "batch": "cap_hit",
+     "container_minutes": 9.02,
+     "waste_share": 0.6852,
+     "turnaround_minutes": 6.12,
+     "jobs": 8,
+     "jobs_failed": 2,
+     "plants_present": [
+      "P1",
+      "P2",
+      "P4",
+      "P5"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 22.0,
+     "minutes_by_line": {
+      "answer": 2.84,
+      "overhead": 0.28,
+      "P1_setup_in_answer_jobs": 1.45,
+      "P2_fix_loop": 2.45,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 0.93,
+      "P5_off_mission": 1.07,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 8.0,
+      "turns": 24,
+      "cost_usd": 0.8,
+      "job_minutes": 3.82,
+      "plants_present_before": [
+       "P1",
+       "P2",
+       "P3",
+       "P4",
+       "P5",
+       "P6"
+      ],
+      "removed": [
+       "P3",
+       "P6"
+      ],
+      "recurs": [],
+      "named": [
+       "P1",
+       "P2",
+       "P3",
+       "P5",
+       "P6"
+      ],
+      "changed": [
+       "P3",
+       "P6"
+      ]
+     }
+    },
+    {
+     "position": 2,
+     "batch": "tokens",
+     "container_minutes": 6.73,
+     "waste_share": 0.6025,
+     "turnaround_minutes": 3.4,
+     "jobs": 6,
+     "jobs_failed": 0,
+     "plants_present": [
+      "P1",
+      "P4",
+      "P5"
+     ],
+     "answers_exact": 3,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [
+      "the repository has no prep/make_cells.py: cells and settings taken from queue.json, no setting typed by hand"
+     ],
+     "median_setup_s": 22.5,
+     "minutes_by_line": {
+      "answer": 2.68,
+      "overhead": 0.27,
+      "P1_setup_in_answer_jobs": 1.52,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 1.15,
+      "P5_off_mission": 1.12,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 4.9,
+      "turns": 21,
+      "cost_usd": 0.81,
+      "job_minutes": 3.55,
+      "plants_present_before": [
+       "P1",
+       "P2",
+       "P4",
+       "P5"
+      ],
+      "removed": [
+       "P2"
+      ],
+      "recurs": [],
+      "named": [
+       "P1",
+       "P2",
+       "P5"
+      ],
+      "changed": [
+       "P2"
+      ]
+     }
+    },
+    {
+     "position": 3,
+     "batch": "tokens_both_right",
+     "container_minutes": 4.78,
+     "waste_share": 0.5132,
+     "turnaround_minutes": 2.46,
+     "jobs": 6,
+     "jobs_failed": 0,
+     "plants_present": [
+      "P1",
+      "P4",
+      "P5"
+     ],
+     "answers_exact": 3,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0.3215,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [
+      "the repository has no prep/make_cells.py: cells and settings taken from queue.json, no setting typed by hand"
+     ],
+     "median_setup_s": 7.0,
+     "minutes_by_line": {
+      "answer": 2.33,
+      "overhead": 0.36,
+      "P1_setup_in_answer_jobs": 0.48,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 0.72,
+      "P5_off_mission": 0.9,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 4.4,
+      "turns": 14,
+      "cost_usd": 0.52,
+      "job_minutes": 2.02,
+      "plants_present_before": [
+       "P1",
+       "P4",
+       "P5"
+      ],
+      "removed": [],
+      "recurs": [],
+      "named": [
+       "P1",
+       "P5"
+      ],
+      "changed": [
+       "P1"
+      ]
+     }
+    }
+   ],
+   "skill-03": [
+    {
+     "position": 0,
+     "batch": "accuracy",
+     "container_minutes": 16.08,
+     "waste_share": 0.8343,
+     "turnaround_minutes": 9.49,
+     "jobs": 15,
+     "jobs_failed": 3,
+     "plants_present": [
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "P6"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 21,
+     "minutes_by_line": {
+      "answer": 2.67,
+      "overhead": 0.37,
+      "P1_setup_in_answer_jobs": 1.32,
+      "P2_fix_loop": 2.35,
+      "P3_repeat": 4.3,
+      "P4_stored_answer": 2.37,
+      "P5_off_mission": 2.25,
+      "P6_stale_path": 0.47
+     }
+    },
+    {
+     "position": 1,
+     "batch": "cap_hit",
+     "container_minutes": 8.98,
+     "waste_share": 0.7273,
+     "turnaround_minutes": 5.9,
+     "jobs": 8,
+     "jobs_failed": 2,
+     "plants_present": [
+      "P1",
+      "P2",
+      "P4",
+      "P5"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 20.0,
+     "minutes_by_line": {
+      "answer": 2.45,
+      "overhead": 0.43,
+      "P1_setup_in_answer_jobs": 1.2,
+      "P2_fix_loop": 2.55,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 1.18,
+      "P5_off_mission": 1.17,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 6.6,
+      "turns": 16,
+      "cost_usd": 0.77,
+      "job_minutes": 2.77,
+      "plants_present_before": [
+       "P1",
+       "P2",
+       "P3",
+       "P4",
+       "P5",
+       "P6"
+      ],
+      "removed": [
+       "P3",
+       "P6"
+      ],
+      "recurs": [],
+      "named": [
+       "P1",
+       "P2",
+       "P3",
+       "P5",
+       "P6"
+      ],
+      "changed": [
+       "P3",
+       "P6"
+      ]
+     }
+    },
+    {
+     "position": 2,
+     "batch": "tokens",
+     "container_minutes": 6.45,
+     "waste_share": 0.6098,
+     "turnaround_minutes": 3.29,
+     "jobs": 6,
+     "jobs_failed": 0,
+     "plants_present": [
+      "P1",
+      "P4",
+      "P5"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 22.0,
+     "minutes_by_line": {
+      "answer": 2.52,
+      "overhead": 0.33,
+      "P1_setup_in_answer_jobs": 1.37,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 1.13,
+      "P5_off_mission": 1.1,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 4.9,
+      "turns": 19,
+      "cost_usd": 0.67,
+      "job_minutes": 1.62,
+      "plants_present_before": [
+       "P1",
+       "P2",
+       "P4",
+       "P5"
+      ],
+      "removed": [
+       "P2"
+      ],
+      "recurs": [],
+      "named": [
+       "P1",
+       "P2",
+       "P5"
+      ],
+      "changed": [
+       "P2"
+      ]
+     }
+    },
+    {
+     "position": 3,
+     "batch": "tokens_both_right",
+     "container_minutes": 4.48,
+     "waste_share": 0.5186,
+     "turnaround_minutes": 2.52,
+     "jobs": 6,
+     "jobs_failed": 0,
+     "plants_present": [
+      "P1",
+      "P4",
+      "P5"
+     ],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": 6.5,
+     "minutes_by_line": {
+      "answer": 2.16,
+      "overhead": 0.29,
+      "P1_setup_in_answer_jobs": 0.45,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 0.72,
+      "P5_off_mission": 0.87,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 3.7,
+      "turns": 17,
+      "cost_usd": 0.55,
+      "job_minutes": 0.88,
+      "plants_present_before": [
+       "P1",
+       "P4",
+       "P5"
+      ],
+      "removed": [],
+      "recurs": [],
+      "named": [
+       "P1",
+       "P5"
+      ],
+      "changed": [
+       "P1"
+      ]
+     }
+    }
+   ]
+  }
+ },
+ "clean": {
+  "plain": {
+   "plain-01": [
+    {
+     "position": 0,
+     "batch": "accuracy",
+     "container_minutes": 3.03,
+     "waste_share": 0.1066,
+     "turnaround_minutes": 2.22,
+     "jobs": 4,
+     "jobs_failed": 0,
+     "plants_present": [],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": null,
+     "minutes_by_line": {
+      "answer": 2.71,
+      "overhead": 0.32,
+      "P1_setup_in_answer_jobs": 0.0,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 0.0,
+      "P5_off_mission": 0.0,
+      "P6_stale_path": 0.0
+     }
+    },
+    {
+     "position": 1,
+     "batch": "cap_hit",
+     "container_minutes": 2.98,
+     "waste_share": 0.0899,
+     "turnaround_minutes": 2.45,
+     "jobs": 4,
+     "jobs_failed": 0,
+     "plants_present": [],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": null,
+     "minutes_by_line": {
+      "answer": 2.72,
+      "overhead": 0.27,
+      "P1_setup_in_answer_jobs": 0.0,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 0.0,
+      "P5_off_mission": 0.0,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 1.3,
+      "turns": 9,
+      "cost_usd": 0.37,
+      "job_minutes": 0,
+      "plants_present_before": [],
+      "removed": [],
+      "recurs": [],
+      "named": [],
+      "changed": []
+     }
+    }
+   ],
+   "plain-02": [
+    {
+     "position": 0,
+     "batch": "tokens",
+     "container_minutes": 3.2,
+     "waste_share": 0.1599,
+     "turnaround_minutes": 2.21,
+     "jobs": 4,
+     "jobs_failed": 0,
+     "plants_present": [],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": null,
+     "minutes_by_line": {
+      "answer": 2.69,
+      "overhead": 0.51,
+      "P1_setup_in_answer_jobs": 0.0,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 0.0,
+      "P5_off_mission": 0.0,
+      "P6_stale_path": 0.0
+     }
+    },
+    {
+     "position": 1,
+     "batch": "tokens_both_right",
+     "container_minutes": 2.6,
+     "waste_share": 0.1115,
+     "turnaround_minutes": 1.4,
+     "jobs": 4,
+     "jobs_failed": 0,
+     "plants_present": [],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [
+      "README launches a whole batch at once: ['python3 studies/gapmap/jobs/submit_batch.py <batch>']"
+     ],
+     "median_setup_s": null,
+     "minutes_by_line": {
+      "answer": 2.31,
+      "overhead": 0.29,
+      "P1_setup_in_answer_jobs": 0.0,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 0.0,
+      "P5_off_mission": 0.0,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 1.6,
+      "turns": 14,
+      "cost_usd": 0.52,
+      "job_minutes": 0,
+      "plants_present_before": [],
+      "removed": [],
+      "recurs": [],
+      "named": [],
+      "changed": []
+     }
+    }
+   ]
+  },
+  "skill": {
+   "skill-01": [
+    {
+     "position": 0,
+     "batch": "accuracy",
+     "container_minutes": 3.17,
+     "waste_share": 0.1368,
+     "turnaround_minutes": 2.41,
+     "jobs": 4,
+     "jobs_failed": 0,
+     "plants_present": [],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": null,
+     "minutes_by_line": {
+      "answer": 2.73,
+      "overhead": 0.43,
+      "P1_setup_in_answer_jobs": 0.0,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 0.0,
+      "P5_off_mission": 0.0,
+      "P6_stale_path": 0.0
+     }
+    },
+    {
+     "position": 1,
+     "batch": "cap_hit",
+     "container_minutes": 0.45,
+     "waste_share": 0.9222,
+     "turnaround_minutes": 1.23,
+     "jobs": 4,
+     "jobs_failed": 0,
+     "plants_present": [],
+     "answers_exact": 1,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0.0187,
+     "resamples": [
+      20000
+     ],
+     "adapted": [],
+     "median_setup_s": null,
+     "minutes_by_line": {
+      "answer": 0.03,
+      "overhead": 0.42,
+      "P1_setup_in_answer_jobs": 0.0,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 0.0,
+      "P5_off_mission": 0.0,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 4.5,
+      "turns": 26,
+      "cost_usd": 0.84,
+      "job_minutes": 0.58,
+      "plants_present_before": [],
+      "removed": [],
+      "recurs": [],
+      "named": [],
+      "changed": []
+     }
+    }
+   ],
+   "skill-02": [
+    {
+     "position": 0,
+     "batch": "tokens",
+     "container_minutes": 3.33,
+     "waste_share": 0.103,
+     "turnaround_minutes": 2.43,
+     "jobs": 4,
+     "jobs_failed": 0,
+     "plants_present": [],
+     "answers_exact": 4,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0,
+     "resamples": [
+      1500000
+     ],
+     "adapted": [],
+     "median_setup_s": null,
+     "minutes_by_line": {
+      "answer": 2.99,
+      "overhead": 0.34,
+      "P1_setup_in_answer_jobs": 0.0,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 0.0,
+      "P5_off_mission": 0.0,
+      "P6_stale_path": 0.0
+     }
+    },
+    {
+     "position": 1,
+     "batch": "tokens_both_right",
+     "container_minutes": 0.43,
+     "waste_share": 0.9615,
+     "turnaround_minutes": 1.14,
+     "jobs": 4,
+     "jobs_failed": 0,
+     "plants_present": [],
+     "answers_exact": 0,
+     "answers_delivered": 4,
+     "answers_same_points": 4,
+     "max_end_shift_in_widths": 0.0145,
+     "resamples": [
+      10000
+     ],
+     "adapted": [],
+     "median_setup_s": null,
+     "minutes_by_line": {
+      "answer": 0.02,
+      "overhead": 0.42,
+      "P1_setup_in_answer_jobs": 0.0,
+      "P2_fix_loop": 0.0,
+      "P3_repeat": 0.0,
+      "P4_stored_answer": 0.0,
+      "P5_off_mission": 0.0,
+      "P6_stale_path": 0.0
+     },
+     "review": {
+      "minutes": 2.9,
+      "turns": 21,
+      "cost_usd": 0.7,
+      "job_minutes": 0.1,
+      "plants_present_before": [],
+      "removed": [],
+      "recurs": [],
+      "named": [],
+      "changed": []
+     }
+    }
+   ]
+  }
+ }
+}

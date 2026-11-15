@@ -1,0 +1,12 @@
+{
+ "a": "shard4_h100",
+ "b": "whole_h200",
+ "n": 328,
+ "right_a": 155,
+ "right_b": 168,
+ "both_right": 135,
+ "only_a_right": 20,
+ "only_b_right": 33,
+ "neither": 140,
+ "sign_test_two_sided_p": 0.09837064844049181
+}

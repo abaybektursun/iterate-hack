@@ -1,0 +1,5 @@
+studies/gapmap/README.md          |  5 +--
+ studies/gapmap/jobs/cell.py       |  4 ++-
+ studies/gapmap/jobs/check_cell.py | 76 +++++++++++++++++++++++++++++++++++++++
+ studies/gapmap/jobs/submit.sh     |  3 ++
+ 4 files changed, 85 insertions(+), 3 deletions(-)

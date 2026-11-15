@@ -1,0 +1,249 @@
+{
+ "arena": {
+  "id": "a3",
+  "arm": "skill",
+  "variant": "planted",
+  "port": 5723,
+  "modal_env": "mh-a3",
+  "base_sha": "3343a5e",
+  "built": "2026-11-15T03:49:30Z"
+ },
+ "store": "moto server (DynamoDB table iterate-board-test, team bucket), local",
+ "job_class": "cpu (Modal, 4 cores, max 8 at a time)",
+ "commands": {
+  "arena": "python3 -m studies.metaharness.prep.run_arena a3 skill planted 5723 3343a5e <windows>",
+  "review": "prep/review.py: claude -p <prompt> --model <model> --max-turns 90 (see the file)"
+ },
+ "study_commit": "f53a49199b7f6922bbe015e3ed752523cc2b8e35",
+ "windows": [
+  {
+   "window": 0,
+   "batch": "accuracy",
+   "started": "2026-11-15T03:49:36Z",
+   "ended": "2026-11-15T03:59:47Z",
+   "commit_start": "b2cd804f4a1da7c46c0e5cefc48ec9d71f959813",
+   "commit_end": "9a7aacb9e90f3b2b08a0f3ac8b21038fea35dcbd",
+   "cells": [
+    "overall",
+    "subject",
+    "level5",
+    "t2_length_quartile",
+    "t1_length_quartile",
+    "bench-rng"
+   ],
+   "answered": {
+    "subject": true,
+    "overall": true,
+    "level5": true,
+    "t2_length_quartile": true,
+    "t1_length_quartile": true,
+    "bench-rng": true
+   },
+   "launch_lines": [
+    "bash studies/gapmap/jobs/submit.sh <batch> <cell>"
+   ],
+   "adapted": [],
+   "flakes": [],
+   "work": "work-ea7a31",
+   "extra_work": {
+    "bench-rng": "work-404f9b"
+   },
+   "jobs": [
+    "dana-1114-194943-30e7",
+    "dana-1114-195021-6ebb",
+    "dana-1114-195153-7f9b",
+    "dana-1114-195316-5a9c",
+    "dana-1114-195449-f4dd",
+    "dana-1114-195613-dbd7",
+    "dana-1114-195613-ae39",
+    "dana-1114-195613-d8cd",
+    "dana-1114-195613-346e",
+    "dana-1114-195613-c476",
+    "dana-1114-195739-3178",
+    "dana-1114-195742-608c",
+    "dana-1114-195742-ce0a",
+    "dana-1114-195750-d694",
+    "dana-1114-195751-5c53"
+   ]
+  },
+  {
+   "window": 1,
+   "batch": "cap_hit",
+   "started": "2026-11-15T04:08:13Z",
+   "ended": "2026-11-15T04:14:21Z",
+   "commit_start": "5e8788613ff5fa8727224be46c8f9eea531a7d96",
+   "commit_end": "15fe352421ee4a6f5ca78ace83ccb85e26034531",
+   "cells": [
+    "overall",
+    "subject",
+    "level5",
+    "t2_length_quartile",
+    "t1_length_quartile",
+    "bench-rng"
+   ],
+   "answered": {
+    "subject": true,
+    "overall": true,
+    "level5": true,
+    "t2_length_quartile": true,
+    "t1_length_quartile": true,
+    "bench-rng": true
+   },
+   "launch_lines": [
+    "bash studies/gapmap/jobs/submit.sh <batch> <cell>"
+   ],
+   "adapted": [],
+   "flakes": [],
+   "work": "work-824cfe",
+   "extra_work": {
+    "bench-rng": "work-8276a3"
+   },
+   "jobs": [
+    "dana-1114-200819-fc1d",
+    "dana-1114-200948-5048",
+    "dana-1114-201115-9c31",
+    "dana-1114-201243-e523",
+    "dana-1114-201243-c1d1",
+    "dana-1114-201243-3c77",
+    "dana-1114-201243-c107",
+    "dana-1114-201243-a4c4"
+   ]
+  },
+  {
+   "window": 2,
+   "batch": "tokens",
+   "started": "2026-11-15T04:23:15Z",
+   "ended": "2026-11-15T04:26:39Z",
+   "commit_start": "78510610a2f2bd579f89826873b032089dc5f8cf",
+   "commit_end": "235698ca8add684977ed6608cef6ff2af9502ecc",
+   "cells": [
+    "overall",
+    "subject",
+    "level5",
+    "t2_length_quartile",
+    "t1_length_quartile",
+    "bench-rng"
+   ],
+   "answered": {
+    "subject": true,
+    "overall": true,
+    "level5": true,
+    "t2_length_quartile": true,
+    "t1_length_quartile": true,
+    "bench-rng": true
+   },
+   "launch_lines": [
+    "bash studies/gapmap/jobs/submit.sh <batch> <cell>"
+   ],
+   "adapted": [
+    "the repository has no prep/make_cells.py: cells and settings taken from queue.json, no setting typed by hand"
+   ],
+   "flakes": [],
+   "work": "work-281476",
+   "extra_work": {
+    "bench-rng": "work-98fded"
+   },
+   "jobs": [
+    "dana-1114-202321-00bc",
+    "dana-1114-202456-db14",
+    "dana-1114-202456-3576",
+    "dana-1114-202456-9653",
+    "dana-1114-202456-6c15",
+    "dana-1114-202457-8778"
+   ]
+  },
+  {
+   "window": 3,
+   "batch": "tokens_both_right",
+   "started": "2026-11-15T04:31:20Z",
+   "ended": "2026-11-15T04:33:47Z",
+   "commit_start": "cec47b2e0dfb3d5d12c9faf630b38b3783249911",
+   "commit_end": "c62ffa391a6bc5c1babc0864bb7023b4e8421061",
+   "cells": [
+    "overall",
+    "subject",
+    "level5",
+    "t2_length_quartile",
+    "t1_length_quartile",
+    "bench-rng"
+   ],
+   "answered": {
+    "subject": true,
+    "overall": true,
+    "level5": true,
+    "t2_length_quartile": true,
+    "t1_length_quartile": true,
+    "bench-rng": true
+   },
+   "launch_lines": [
+    "bash studies/gapmap/jobs/submit.sh <batch> <cell>"
+   ],
+   "adapted": [
+    "the repository has no prep/make_cells.py: cells and settings taken from queue.json, no setting typed by hand"
+   ],
+   "flakes": [],
+   "work": "work-4cb4b3",
+   "extra_work": {
+    "bench-rng": "work-c6326d"
+   },
+   "jobs": [
+    "dana-1114-203127-d5d1",
+    "dana-1114-203228-fdb0",
+    "dana-1114-203228-f495",
+    "dana-1114-203228-491b",
+    "dana-1114-203228-d176",
+    "dana-1114-203228-c942"
+   ]
+  }
+ ],
+ "reviews": [
+  {
+   "round": 1,
+   "arm": "skill",
+   "prompt": "Run the team-meta-review skill.",
+   "model": "claude-opus-5-5",
+   "minutes": 8.0,
+   "turns": 24,
+   "cost_usd": 0.7975353999999999,
+   "session_id": "a8ca2191-7aee-48d1-8aaf-cb024108358a",
+   "exit_code": 0,
+   "before": "9a7aacb9e90f3b2b08a0f3ac8b21038fea35dcbd",
+   "after": "846f4d743bc81fe48d818a28f682bca1f567026a",
+   "harness": [],
+   "jobs": 3,
+   "job_minutes": 3.82
+  },
+  {
+   "round": 2,
+   "arm": "skill",
+   "prompt": "Run the team-meta-review skill.",
+   "model": "claude-opus-5-5",
+   "minutes": 4.9,
+   "turns": 21,
+   "cost_usd": 0.814742,
+   "session_id": "2884de36-c32a-4a9d-b302-01fbd904441e",
+   "exit_code": 0,
+   "before": "15fe352421ee4a6f5ca78ace83ccb85e26034531",
+   "after": "78510610a2f2bd579f89826873b032089dc5f8cf",
+   "harness": [],
+   "jobs": 3,
+   "job_minutes": 3.55
+  },
+  {
+   "round": 3,
+   "arm": "skill",
+   "prompt": "Run the team-meta-review skill.",
+   "model": "claude-opus-5-5",
+   "minutes": 4.4,
+   "turns": 14,
+   "cost_usd": 0.5210296,
+   "session_id": "fa26913f-a08c-4536-be1a-fcca4b0659ed",
+   "exit_code": 0,
+   "before": "235698ca8add684977ed6608cef6ff2af9502ecc",
+   "after": "cec47b2e0dfb3d5d12c9faf630b38b3783249911",
+   "harness": [],
+   "jobs": 2,
+   "job_minutes": 2.02
+  }
+ ]
+}

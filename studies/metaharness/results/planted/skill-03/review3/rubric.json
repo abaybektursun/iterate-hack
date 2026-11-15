@@ -1,0 +1,65 @@
+{
+ "pack": "r15",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 1,
+   "quote": "Each job spent 18-22 s installing scipy, pandas and matplotlib, which the code never imports; it only uses numpy."
+  },
+  "P2": {
+   "score": 0,
+   "quote": ""
+  },
+  "P3": {
+   "score": 0,
+   "quote": ""
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 1,
+   "quote": "bench-rng tested nothing in the mission and ran a 3rd time. Its rates move more between runs than between generators, so it measures noise."
+  },
+  "P6": {
+   "score": 0,
+   "quote": ""
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 1,
+   "file": "studies/gapmap/jobs/run_cell.sh"
+  },
+  "P2": {
+   "score": 0,
+   "file": ""
+  },
+  "P3": {
+   "score": 0,
+   "file": ""
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 0,
+   "file": ""
+  }
+ },
+ "other_claims": [
+  "the work answers follow-up questions (tokens_both_right next) instead of mission point 3; the base loop-stop route in the longest quartile is unclaimed",
+  "the subject cell was hand-set again to fmt csv and 2 digits; 2 digits goes against the spec's 4-digit requirement and the pre-launch check passes it",
+  "gpu.py submit refuses a dirty tree, so the review folder had to be stashed and the change went in as two commits",
+  "the fmt setting and the per-batch digits setting are removable (owner's decision)",
+  "the remaining 7 s numpy install per job could go away by putting numpy in the runner image",
+  "SPEC names no closest published experiment; no replication"
+ ],
+ "change_summary": "Drops scipy, pandas and matplotlib from the per-job pip install in run_cell.sh, leaving a venv with numpy only."
+}
