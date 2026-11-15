@@ -5,7 +5,8 @@ safetensors model directory that `run_cell.py --model-path` loads; and the per-t
     /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.merge_weights --other rl --random --rounding stochastic --dir /tmp/theta
     /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.merge_weights --other code [--cos-with-rl]
 
-  --other    rl = allenai/Olmo-3.1-7B-RL-Zero-Math (frozen4.json), code = allenai/Olmo-3.1-7B-RL-Zero-Code (CODE below).
+  --other    rl = allenai/Olmo-3.1-7B-RL-Zero-Math (frozen4.json), code = allenai/Olmo-3.1-7B-RL-Zero-Code; if30, general30, mix30, math30, code30 = the
+             Olmo 3 RL-Zero models of OTHERS below.
   --alpha    a of theta(a). a = 0 must give base and a = 1 the other model, tensor for tensor (asserted).
   --random   base + R: per tensor, R is Gaussian noise (torch generator seeded --seed, tensors in sorted name order) rescaled to the
              Frobenius norm of that tensor's other - base (asserted before rounding); R = 0 where other = base.
@@ -37,6 +38,15 @@ from safetensors.torch import save_file
 STUDY = pathlib.Path(__file__).resolve().parents[1]
 BASE_KEY, RL_KEY = "base", "s2800"                                   # keys of frozen4.json "models"
 CODE = ("allenai/Olmo-3.1-7B-RL-Zero-Code", "1ca3bb30f0e51b7ef05f7d0fefcf0e6b14eefc90")
+# The Olmo 3 (not 3.1) RL-Zero models, one per reward; each card names base allenai/Olmo-3-1025-7B (HF API, 2026-11-15 02:30 UTC).
+OTHERS = {
+    "code": CODE,
+    "if30": ("allenai/Olmo-3-7B-RL-Zero-IF", "3cae007c5324a9a06ee6780f03b848bc7b8fd440"),
+    "general30": ("allenai/Olmo-3-7B-RL-Zero-General", "24e5814cb36944d3eb36a49679d02c2b3bb46195"),
+    "mix30": ("allenai/Olmo-3-7B-RL-Zero-Mix", "73b2b1a50d94aec859e22c9b4a524416b5a3a739"),
+    "math30": ("allenai/Olmo-3-7B-RL-Zero-Math", "dee26a4074b88215cd1326472e1ab14d0259d892"),
+    "code30": ("allenai/Olmo-3-7B-RL-Zero-Code", "a961af69d75f9c52b3ae4db7b1664d890229b7ca"),
+}
 POINTS = (0.25, 0.5, 0.75, 1.25, 1.5)
 ULP_EDGES = (1, 2, 4, 16)                                            # |delta| / ulp(base) buckets: <=1, (1,2], (2,4], (4,16], >16
 
@@ -182,14 +192,14 @@ def cosine(base_dir, x_dir, y_dir, device):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--other", required=True, choices=("rl", "code"))
+    ap.add_argument("--other", required=True, choices=("rl", *OTHERS))
     ap.add_argument("--alpha", type=float)
     ap.add_argument("--random", action="store_true")
     ap.add_argument("--rounding", choices=("nearest", "stochastic"))
     ap.add_argument("--dir")
     ap.add_argument("--stats", default=os.path.join(os.environ.get("OUT_DIR", ""), "merge.json"))
     ap.add_argument("--seed", type=int, default=0)
-    ap.add_argument("--cos-with-rl", action="store_true", help="statistics only, --other code: also the cosine of Code - base with RL - base")
+    ap.add_argument("--cos-with-rl", action="store_true", help="statistics only, not --other rl: also the cosine of other - base with RL - base")
     a = ap.parse_args()
     if a.dir:
         assert a.rounding and ((a.alpha is None) == a.random), "--dir needs --rounding and exactly one of --alpha, --random"
@@ -198,14 +208,14 @@ def main():
     t0 = time.time()
     fz = json.loads((STUDY / "data" / "rln4" / "frozen4.json").read_text())
     base = fz["models"][BASE_KEY][0], fz["models"][BASE_KEY][2]
-    other = (fz["models"][RL_KEY][0], fz["models"][RL_KEY][2]) if a.other == "rl" else CODE
+    other = (fz["models"][RL_KEY][0], fz["models"][RL_KEY][2]) if a.other == "rl" else OTHERS[a.other]
     from huggingface_hub import snapshot_download
     dirs = [snapshot_download(r, revision=v, allow_patterns=["*.json", "*.safetensors"]) for r, v in (base, other)]
     rl_json = snapshot_download(fz["models"][RL_KEY][0], revision=fz["models"][RL_KEY][2], allow_patterns=["*.json"])
     device = "cuda" if torch.cuda.is_available() else "cpu"
     res = merge(dirs[0], dirs[1], a.alpha, a.random, a.rounding, a.dir, a.seed, device, rl_json)   # RL config and tokenizer for all
     if a.cos_with_rl:
-        assert a.other == "code" and not a.dir
+        assert a.other != "rl" and not a.dir
         rl_dir = snapshot_download(fz["models"][RL_KEY][0], revision=fz["models"][RL_KEY][2], allow_patterns=["*.json", "*.safetensors"])
         res["cos_with_rl"] = cosine(dirs[0], dirs[1], rl_dir, device)
         print(json.dumps({k: v["cos"] for k, v in res["cos_with_rl"].items()}, indent=1))
