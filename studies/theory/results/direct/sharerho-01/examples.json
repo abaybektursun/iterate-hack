@@ -1,0 +1,34 @@
+[
+ {
+  "label": "matrix where Math 3.1 and IF residuals agree most",
+  "name": "model.layers.21.mlp.up_proj.weight",
+  "module": "up",
+  "layer": 21,
+  "top8_share": {
+   "math31": 0.06422462210288954,
+   "if30": 0.16300249508403644,
+   "think_sft": 0.015067394053276237
+  },
+  "residual": {
+   "math31": -0.0022777645594091733,
+   "if30": -0.002016799729892299,
+   "think_sft": 0.0002926232190820152
+  }
+ },
+ {
+  "label": "matrix where Math 3.1 and IF residuals disagree most",
+  "name": "model.layers.31.self_attn.v_proj.weight",
+  "module": "v",
+  "layer": 31,
+  "top8_share": {
+   "math31": 0.3909551063593546,
+   "if30": 0.29048424098178377,
+   "think_sft": 0.050811363058383886
+  },
+  "residual": {
+   "math31": 0.21062661183262346,
+   "if30": 0.0182641645012534,
+   "think_sft": 0.025680325178817985
+  }
+ }
+]

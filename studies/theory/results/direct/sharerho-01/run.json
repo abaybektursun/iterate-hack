@@ -1,0 +1,7 @@
+{
+ "commit": "6eedbb6f274a331ea999182145ccf48286eb1bd8",
+ "command": "uv run --no-project --with numpy --with scipy python studies/theory/analysis/direct_sharerho.py",
+ "job": null,
+ "input": "studies/theory/data/direct_reward/top8_share_v1.json",
+ "source_job": "abaybektursun-1114-221259-0871"
+}
