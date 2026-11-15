@@ -2,9 +2,10 @@
 
 The page of one finding, served at /finding/where-the-gap-goes (view.py serves every tools/finding_<slug>.py) and
 reached from its tile on /findings, which ICON draws. The picture is one lit plate with one tile per problem in the gap
-between the cued Olmo 3 base and its RL version: the problems RL gets right and one base sample gets wrong. The reader's
-one control (address /finding/where-the-gap-goes#<state>, arrow keys) sorts the tiles into the five causes of the
-account and then swaps the cell: the control (the base against the base with a random weight change of the same size) and RL step 400 at T 0.6.
+between the cued Olmo 3 base and its RL version: the problems RL gets right and one base sample gets wrong. It opens
+sorted into the five causes of the account (on a first visit the sort plays once from the unsorted gap). The reader's
+one control (address /finding/where-the-gap-goes#<state>, arrow keys) unsorts the tiles or swaps the cell: the control
+(the base against the base with a random weight change of the same size) and RL step 400 at T 0.6.
 A click on a tile shows that problem in the side column (#<state>/p<index>). The rules are in
 .claude/skills/finding-page/SKILL.md; the looks are those of tools/finding_loop_neurons.py and tools/architecture.py.
 The numbers are those of studies/theory/results/account/run-02 (readout.md, check/budget.out.txt, check/assign.json).
@@ -71,7 +72,7 @@ _same = sum(ASSIGN[_NULL["key"]][k] == ASSIGN[_RL["key"]][k] for k in _shared)
 TITLE = "Where the gap goes"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "Why does a base model miss math problems its RL version solves?"
 LINE = (f"{pc(_RL['parts']['reliability'][1])} % of the RL gap is problems the base sometimes solves; "
-        f"a random weight change gives {pc(_NULL['parts']['reliability'][1])} %.")
+        f"with a random weight change, {pc(_NULL['parts']['reliability'][1])} % of its gap.")
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 # Not from our runs: Yue et al., arXiv 2504.13837 (RL models win at small k, base models at large k; RL's gains are on
@@ -84,30 +85,32 @@ PANELS = [
      "Yue et al. (arXiv 2504.13837) showed that RL's gains on math sit on problems the base model solves when it is sampled many times. "
      "New here is a count per problem that adds up, and its control.",
      [f"Rules written before the rows were read put each of the {_RL['gap']} problems in exactly one cause, including answers cut off "
-      f"at the token cap ({pc(_b[1])} %).",
-      f"The same rules split the {_NULL['gap']}-problem gap between two samples of the base itself in the same way, within the intervals.",
-      "Phantom Gains (arXiv 2608.20290) found that a frozen model also gains and loses problems between runs. This page measures that "
-      "null for the RL gap."]],
+      f"at {DATA['cap']:,} tokens ({pc(_b[1])} % of the gap).",
+      f"The same rules split the {_NULL['gap']}-problem gap of the base with a random weight change of the same size in the same way, "
+      "within the intervals.",
+      "Phantom Gains (arXiv 2608.20290) found that a model that was not trained also gains and loses problems between runs. This page "
+      "puts the RL gap next to such a gap, so the two splits can be compared."]],
     ["why", "Why it matters",
-     f"{pc(_r[1] + _b[1])} % of the gap is problems the base solves in other samples or runs out of tokens on, so methods with no reward, "
+     f"{pc(_r[1] + _b[1])} % of the gap is problems the base solves in other samples or is cut off on, so methods with no reward, "
      "such as a vote over samples or a longer budget, aim at most of it.",
-     ["The split does not show what RL changed, because a second sample of the base gives the same split.",
+     ["The split does not show what RL changed, because the base with a random weight change of the same size gives the same split.",
       f"What separates RL from the control is the count: RL gains {_RL['gap']} problems and loses {_RL['base_only']}; "
       f"the control gains {_NULL['gap']} and loses {_NULL['base_only']}.",
-      f"Against RL step 400 at T 0.6, {pc(_S4['parts']['loop'][1])} % of the gap is repetition loops instead; the T 1.0 cells have none."]],
+      f"Against RL step 400 at T 0.6, {pc(_S4['parts']['loop'][1])} % of the gap is repetition loops instead; the T 1.0 gaps have none."]],
     ["how", "How we know",
-     "Each model wrote one answer to each of the 500 MATH-500 problems, and the gap is the problems RL got right and the base got wrong.",
-     [f"Each problem goes to the first rule that fits: loop (cut off at {DATA['cap']:,} tokens while repeating), token cap (cut off), "
-      "answer line (no answer the grader can read), reliability (right in 1 or more of 4 further base samples at T 1.0), capability (right in none).",
+     "Each model wrote one answer to each of the 500 MATH-500 problems at T 1.0, and the gap is the problems RL got right and Base + cue got wrong.",
+     [f"Each problem goes to the first rule that fits: loop (cut off at {DATA['cap']:,} tokens while repeating), cut off (without repeating), "
+      "answer line (no answer the grader can read), reliability (right in 1 or more of 4 further Base + cue samples at T 1.0), capability (right in none).",
       "Intervals are 90 % bootstraps over the gap problems. A second script, written from the rules alone, reproduced every share from the raw rows.",
-      f"Control: the base with a random weight change as large as RL's, in effect a second base sample. Its gap of {_NULL['gap']} problems: "
-      f"reliability {pc(_nr[1])} % ({pc(_nr[2])} to {pc(_nr[3])}), token cap {pc(_nb[1])} %, capability {pc(_nc[1])} %."]],
+      f"Control: the base with a random weight change of the same size as RL's, which scores like a second base sample. Of its gap of "
+      f"{_NULL['gap']} problems, reliability is {pc(_nr[1])} % (90 % interval {pc(_nr[2])} to {pc(_nr[3])} %), cut off {pc(_nb[1])} % "
+      f"and capability {pc(_nc[1])} %."]],
     ["limits", "What it does not show",
-     "It does not show that RL works by making the base reliable: two samples of the base produce the same split.",
+     "It does not show that RL works by making the base reliable: the base with a random weight change of the same size produces the same split.",
      [f"Each side is one sample per problem. Of the {_NULL['gap']} problems the control gains, {len(_shared)} are among RL's {_RL['gap']}, "
       f"and all {_same} land in the same cause.",
       f"The line between reliability and capability depends on how many base samples are read: with 3 instead of 4, reliability is "
-      f"{pc(DATA['equal_e']['reliability'][1])} % and capability {pc(DATA['equal_e']['capability'][1])} %.",
+      f"{pc(DATA['equal_e']['reliability'][1])} % of the gap and capability {pc(DATA['equal_e']['capability'][1])} %.",
       "The T 0.6 cell differs in more than temperature: RL step 400, top-p 0.95 and grader v1. "
       f"{DATA['s0400_hand']['v1_rejects_right']} of its {DATA['s0400_hand']['n']} reliability problems are right answers grader v1 rejects."]],
     ["run", "How to reproduce it",
@@ -206,7 +209,7 @@ svg.near { cursor: pointer; }
 .tile.capability { fill-opacity: 0; stroke: var(--ink); stroke-width: 1.6; }
 .dim .tile:not(.sel) { fill-opacity: .14; stroke-opacity: .25; }
 .ring { fill: none; stroke: var(--ink); stroke-width: 2.4; }
-.empty { fill: none; stroke: var(--faint); stroke-width: 1.2; stroke-dasharray: 3 3.4; opacity: .7; }
+.empty { fill: none; stroke: var(--faint); stroke-width: 1.2; stroke-dasharray: 3 3.4; }
 .glow-b { fill: url(#gb); opacity: calc(var(--bloom) * .9); }
 .glow-r { fill: url(#gr); opacity: calc(var(--bloom) * .9); }
 .big { font-weight: 660; letter-spacing: -.03em; font-stretch: 100%; transition: fill .6s ease; }
@@ -228,7 +231,7 @@ svg.near { cursor: pointer; }
 @keyframes fade { from { opacity: 0; } }
 .enter .draw { stroke-dasharray: 1; animation: draw 1.1s cubic-bezier(.6, 0, .2, 1) both; }
 .enter .atmo, .enter .shade, .enter .spec, .enter .back { animation: fade 1.3s .15s both; }
-.enter .tiles, .enter .read { animation: fade .7s .7s both; }
+.enter .tiles, .enter .read { animation: fade .6s .4s both; }
 
 /* The words */
 .side {
@@ -238,7 +241,8 @@ svg.near { cursor: pointer; }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b { font-weight: 620; white-space: nowrap; }
-.pane { margin-top: clamp(22px, 4vh, 44px); }
+.pane { margin-top: clamp(22px, 4vh, 44px); scroll-margin-top: 16px; }
+.note { margin: 0 0 14px; font-size: 14px; color: var(--mute); max-width: 40ch; }
 .more { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
 .more button { display: flex; width: 100%; justify-content: space-between; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--rule); font-size: 17px; font-weight: 520; transition: color .15s ease; }
 .more button span { color: var(--faint); font-size: 20px; line-height: 1; }
@@ -307,27 +311,30 @@ const pc = x => Math.round(100 * x), fmt = n => n.toLocaleString("en-US");
 const P = C.parts, PK = P.map(p => p.key), CELLS = C.cells, ST = C.states;
 /* A state of the switch is a cell (which two answer sets are compared) and whether the tiles are sorted by cause.
    A tile is one gap problem of that cell, keyed by its MATH-500 index; a problem in two cells keeps its tile. */
-const S = { state: 0, sel: null, open: null, g: null, el: {}, tiles: new Map(), t0: 0, moving: false, last: 0, t: 0, from: null, shown: {} };
+const DEF = 1;  // the state shown at /finding/where-the-gap-goes with no address: sorted by cause
+const S = { state: DEF, sel: null, note: "", open: null, g: null, el: {}, tiles: new Map(), t0: 0, moving: false, last: 0, t: 0, from: null, shown: {} };
 
 /* Geometry, in the plate's own flat coordinates (x right, y down; z toward the viewer). Desktop: the groups stand side
    by side as columns of 6 tiles, so their widths add up to the whole. Phone: the groups are stacked rows of 13. */
 function geo() {
   return narrow.matches
-    ? { w: 480, h: 812, cx: 240, cy: 406, D: 1900, a: [6, 6, 474, 806], r: 22, deep: 28, z: 8, phone: true,
-        pitch: 30, ts: 22, per: 13, x0: 42, top: 226, big: [38, 104], fb: 92, lab: [38, 140, 166, 190], fl: [19, 17, 17],
+    ? { w: 480, h: 860, cx: 240, cy: 430, D: 1900, a: [6, 6, 474, 854], r: 22, deep: 28, z: 8, phone: true,
+        pitch: 30, ts: 22, per: 13, x0: 42, top: 262, big: [38, 104], fb: 92, lab: [38, 140, 166, 190], fl: [18, 16, 16],
         fg: 18, fsub: 17, fsum: 17 }
     : { w: 1000, h: 620, cx: 500, cy: 310, D: 2100, a: [24, 16, 976, 604], r: 30, deep: 40, z: 8, phone: false,
-        pitch: 30, ts: 22, rows: 6, x0: 74, top: 318, slot: 112, gapx: 32, big: [70, 140], fb: 116, lab: [76, 178, 206, 230], fl: [22, 17, 17],
+        pitch: 30, ts: 22, rows: 6, x0: 74, top: 334, slot: 112, gapx: 32, big: [70, 140], fb: 116, lab: [76, 178, 206, 230], fl: [22, 17, 17],
+        loose: { cols: 22, pitch: 38 },
         fg: 18, fsub: 14.5, fsum: 17 };
 }
 /* Where every tile and every group label goes in one state. */
 function layout(si) {
   const g = S.g, st = ST[si], cell = CELLS[st.cell], ids = Object.keys(cell.ids).sort((a, b) => a - b), pos = {}, grp = {};
   const groups = PK.map(k => ids.filter(i => cell.ids[i] === k));
-  if (!st.sorted) {
+  if (!st.sorted) {  // desktop: 22 columns of 3 rows at a wider pitch, centred where the sorted columns stand
+    const L = g.loose, rows = L && Math.ceil(ids.length / L.cols), y0 = L && g.top + ((g.rows - 1) * g.pitch - (rows - 1) * L.pitch) / 2;
     ids.forEach((id, i) => {
       pos[id] = g.phone ? [g.x0 + (i % g.per) * g.pitch, g.top + Math.floor(i / g.per) * g.pitch]
-                        : [g.x0 + Math.floor(i / g.rows) * g.pitch, g.top + (i % g.rows) * g.pitch];
+                        : [g.x0 + (i % L.cols) * L.pitch, y0 + Math.floor(i / L.cols) * L.pitch];
     });
     PK.forEach(k => { grp[k] = g.phone ? [g.x0, g.top - 60] : [g.x0, g.top - 58]; });
     return { pos, grp, end: g.phone ? g.top + Math.ceil(ids.length / g.per) * g.pitch : g.top + g.rows * g.pitch };
@@ -429,10 +436,11 @@ function put(T) {
    sorting), with its interval and the same share in the comparison cell. */
 function readout(si) {
   const st = ST[si], cell = CELLS[st.cell];
-  if (!st.sorted) return { v: cell.gap, pct: false, cls: "", l1: C.gapline, l2: cell.setting, l3: "" };
+  const ph = S.g.phone;
+  if (!st.sorted) return { v: cell.gap, pct: false, cls: "", l1: ph ? C.gapshort : C.gapline, l2: ph ? cell.settingShort : cell.setting, l3: "" };
   const k = PK.reduce((a, b) => cell.parts[b][0] > cell.parts[a][0] ? b : a), p = cell.parts[k], ref = CELLS[cell.ref];
-  return { v: pc(p[1]), pct: true, cls: k, l1: P[PK.indexOf(k)].lab, l2: cell.setting,
-           l3: `90 % interval ${pc(p[2])} to ${pc(p[3])} %. ${ref.short}: ${pc(ref.parts[k][1])} %.` };
+  return { v: pc(p[1]), pct: true, cls: k, l1: P[PK.indexOf(k)][ph ? "labShort" : "lab"], l2: ph ? cell.settingShort : cell.setting,
+           l3: `90 % interval ${pc(p[2])} to ${pc(p[3])} %. ${ph ? ref.tiny : ref.short}: ${pc(ref.parts[k][1])} %.` };
 }
 
 function place(t) {
@@ -460,15 +468,17 @@ function place(t) {
   }
   e = S.moving ? ease(e) : 1;
 
-  // The labels of the groups follow their columns, fade in when the tiles are sorted, and count with them.
+  // The labels of the groups fade out as a move starts, take their new places while hidden, and fade in with their
+  // numbers once the tiles have arrived, so two labels never pass over each other.
   const fromL = S.from ? S.from.L : S.L, fr = S.from ? S.from.st : st, frCell = CELLS[fr.cell];
-  const vis = mix(fr.sorted ? 1 : 0, st.sorted ? 1 : 0, e);
+  const el = S.moving ? now - S.t0 : 1e9, early = el < 420;
+  const vis = early ? (fr.sorted ? 1 - Math.min(1, el / 200) : 0) : (st.sorted ? Math.min(1, Math.max(0, (el - 780) / 300)) : 0);
+  const sumVis = vis;
   P.forEach(p => {
-    const k = p.key, a = fromL.grp[k], b = S.L.grp[k], q = [mix(a[0], b[0], e), mix(a[1], b[1], e)];
-    const n0 = fr.sorted ? frCell.parts[k][0] : 0, n1 = st.sorted ? cell.parts[k][0] : 0, n = Math.round(mix(n0, n1, e));
-    const s0 = fr.sorted ? frCell.parts[k][1] : 0, s1 = st.sorted ? cell.parts[k][1] : 0;
+    const k = p.key, q = (early ? fromL : S.L).grp[k];
+    const hc = early ? frCell : cell, hs = early ? fr.sorted : st.sorted;
     E["g-" + k].setAttribute("opacity", vis.toFixed(3));
-    text("gc-" + k, `${n} · ${pc(mix(s0, s1, e))} %`);
+    text("gc-" + k, hs ? `${hc.parts[k][0]} of ${hc.gap}` : "");
     if (g.phone) {
       at(E["gn-" + k], proj(g, q[0], q[1] + 14, g.z));
       const w = E["gn-" + k].getComputedTextLength ? (S.shown["w-" + k] ??= E["gn-" + k].getComputedTextLength()) : 90;
@@ -480,9 +490,10 @@ function place(t) {
       at(E["gs-" + k], proj(g, q[0], g.top + g.rows * g.pitch + 20, g.z));
       at(E["gt-" + k], proj(g, q[0], g.top + g.rows * g.pitch + 38, g.z));
     }
-    const em = E["empty-" + k], zero = (fr.sorted && frCell.parts[k][0] === 0 ? 1 - e : 0) + (st.sorted && cell.parts[k][0] === 0 ? e : 0);
-    em.setAttribute("x", f(g.phone ? q[0] : b[0])); em.setAttribute("y", f(g.phone ? q[1] + 44 : g.top));
-    em.setAttribute("opacity", (zero * (fr.sorted && st.sorted && frCell.parts[k][0] === 0 && cell.parts[k][0] === 0 ? 1 : 1)).toFixed(3));
+    // An empty group shows one dashed place where its first tile would stand, with its label.
+    const em = E["empty-" + k];
+    em.setAttribute("x", f(q[0])); em.setAttribute("y", f(g.phone ? q[1] + 44 : g.top));
+    em.style.opacity = (hs && hc.parts[k][0] === 0 ? .7 * vis : 0).toFixed(3);
   });
   // The light under the largest group, blue for reliability and red for loops.
   ["reliability", "loop"].forEach(k => {
@@ -494,17 +505,21 @@ function place(t) {
     el.style.opacity = (e * Math.min(1, pos.length / 12) * (1 + .06 * Math.sin(t * .7))).toFixed(3);
   });
   // The sum: the groups add up to the whole gap.
-  const sumY = g.phone ? S.L.end + 30 : g.top + g.rows * g.pitch + 76;
+  const sumY = g.phone ? S.L.end + 30 : g.top + g.rows * g.pitch + 64;
   at(E.sum, proj(g, g.x0, sumY, g.z));
-  E.sum.setAttribute("opacity", (st.sorted ? e : 1 - e).toFixed(3) * (st.sorted || fr.sorted ? 1 : 0));
-  text("sum", st.sorted ? PK.map(k => cell.parts[k][0]).join(" + ") + ` = ${cell.gap} problems, each in one group`
-                        : fr.sorted ? E.sum.textContent : "");
+  E.sum.setAttribute("opacity", sumVis.toFixed(3));
+  const sc = early ? frCell : cell;
+  text("sum", (early ? fr.sorted : st.sorted) ? PK.map(k => sc.parts[k][0]).join(" + ") + ` = ${sc.gap} problems, each in one group` : "");
 
-  // The large number and its three lines; the number counts from the last state to this one.
-  const R = readout(S.state), R0 = S.from ? readout(S.from.si) : R, v0 = R0.pct === R.pct ? R0.v : 0;
-  text("big", Math.round(mix(v0, R.v, e)) + (R.pct ? " %" : ""));
-  E.big.setAttribute("class", "big " + R.cls);
-  text("lab1", R.l1); text("lab2", R.l2); text("lab3", R.l3);
+  // The large number and its three lines. Between two shares the number counts while its lines swap at the midpoint;
+  // between the count of the gap and a share, the old number and lines fade out and the new ones fade in.
+  const R = readout(S.state), R0 = S.from ? readout(S.from.si) : R, same = R0.pct === R.pct, half = e < .5, Rw = half ? R0 : R;
+  const fade = S.moving ? Math.min(1, Math.abs(1 - 2 * e) * 1.6) : 1;
+  text("big", (same ? Math.round(mix(R0.v, R.v, e)) : Rw.v) + (Rw.pct ? " %" : ""));
+  E.big.setAttribute("class", "big " + (same ? R.cls : Rw.cls));
+  E.big.style.opacity = (same ? 1 : fade).toFixed(3);
+  text("lab1", Rw.l1); text("lab2", Rw.l2); text("lab3", Rw.l3);
+  [1, 2, 3].forEach(i => { E["lab" + i].style.opacity = fade.toFixed(3); });
   at(E.big, proj(g, g.big[0], g.big[1], g.z + 6));
   [1, 2, 3].forEach(i => at(E["lab" + i], proj(g, g.lab[0], g.lab[i], g.z + 6)));
 
@@ -533,7 +548,8 @@ function choose(i, instant) {
   const old = { si: S.state, st: ST[S.state], L: S.L };
   S.state = i;
   const st = ST[i], cell = CELLS[st.cell], L = S.L = layout(i), order = Object.keys(L.pos);
-  if (S.sel && !(S.sel in L.pos)) S.sel = null;
+  S.note = "";
+  if (S.sel && !(S.sel in L.pos)) { S.note = `MATH-500, problem ${S.sel} is not in this gap, so it was closed.`; S.sel = null; }
   const quick = instant || still.matches;
   S.from = quick ? null : old;
   S.tiles.forEach(T => {  // a tile that is not in the new cell fades and shrinks where it is
@@ -570,13 +586,13 @@ function why(cell, id) {
 function problem(id) {
   const st = ST[S.state], cell = CELLS[st.cell], r = C.rows[cell.rows][id], k = cell.ids[id], p = P[PK.indexOf(k)];
   const list = Object.keys(cell.ids).filter(i => cell.ids[i] === k).sort((a, b) => a - b), n = list.indexOf(id);
-  const ans = r.E.map(x => (x[0] == null ? "no answer" : String(x[0]).replace(/^\$|\$$/g, "").trim()) + (x[1] ? " (right)" : "")).join(", ");
+  const ans = r.E.map(x => `<span data-math>${esc(x[0] == null ? "no answer" : String(x[0]).replace(/^\$|\$$/g, "").trim())}</span>` + (x[1] ? " (right)" : "")).join(", ");
   const other = cell.other + (r.rl_tok ? `, in ${fmt(r.rl_tok)} tokens.` : ".");
-  return `<div class="dhead"><h2>Problem ${esc(id)} <span>· ${esc(p.name)}</span></h2><button class="close" data-open="">Close</button></div>` +
+  return `<div class="dhead"><h2>MATH-500, problem ${esc(id)}</h2><button class="close" data-open="">Close</button></div>` +
     `<p class="lead">${esc(why(cell, id))}</p><ul class="facts">` +
-    `<li><span class="k">Problem, MATH-500 number ${esc(id)}</span>${esc(r.q)}<br>Right answer: ${esc(r.gold)}</li>` +
-    `<li><span class="k">End of the base answer (${esc(cell.baseShort)}), ${fmt(r.tok)} tokens${r.cap ? ", cut off" : ""}</span><span class="tail">${esc(r.tail)}</span></li>` +
-    `<li><span class="k">The other side, and 4 further base samples at T 1.0</span>${esc(other)} The 4 further samples answered ${esc(ans)}.</li></ul>` +
+    `<li><span class="k">Problem</span><span data-math>${esc(r.q)}</span><br>Right answer: <span data-math>${esc(r.gold)}</span></li>` +
+    `<li><span class="k">End of the answer of ${esc(cell.baseShort)}, ${fmt(r.tok)} tokens${r.cap ? `, cut off at ${fmt(C.cap)}` : ""}</span><span class="tail" data-math>${esc(r.tail)}</span></li>` +
+    `<li><span class="k">The other side, and 4 further Base + cue samples at T 1.0</span>${esc(other)} The 4 further samples answered ${ans}.</li></ul>` +
     `<div class="steps"><button data-step="-1">‹ Previous</button><span>${n + 1} of ${list.length} in ${esc(p.name.toLowerCase())}</span><button data-step="1">Next ›</button></div>`;
 }
 function pane() {
@@ -584,19 +600,22 @@ function pane() {
   $("pane").innerHTML = S.sel ? problem(S.sel) : p
     ? `<div class="dhead"><h2>${esc(p[1])}</h2><button class="close" data-open="">Close</button></div><p class="lead">${esc(p[2])}</p>` +
       `<ul class="facts">${p[3].map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
-    : `<ul class="more">${C.panels.map(p => `<li><button data-open="${p[0]}">${esc(p[1])}<span aria-hidden="true">›</span></button></li>`).join("")}</ul>`;
+    : (S.note ? `<p class="note" role="status">${esc(S.note)}</p>` : "") + `<ul class="more">${C.panels.map(p => `<li><button data-open="${p[0]}">${esc(p[1])}<span aria-hidden="true">›</span></button></li>`).join("")}</ul>`;
 }
 /* The state, the open panel and the chosen problem are one value in the address: #<state>/<panel> or #<state>/p<index>. */
 function address(push) {
-  const parts = [S.state ? ST[S.state].key : "", S.sel ? "p" + S.sel : S.open || ""].filter(Boolean);
+  const parts = [S.state !== DEF ? ST[S.state].key : "", S.sel ? "p" + S.sel : S.open || ""].filter(Boolean);
   const url = parts.length ? "#" + parts.join("/") : location.pathname;
   push ? history.pushState(null, "", url) : history.replaceState(null, "", url);
 }
 function fromHash(first) {
   const parts = decodeURIComponent(location.hash.slice(1)).split("/");
-  const i = Math.max(0, ST.findIndex(s => parts.includes(s.key))), p = C.panels.find(p => parts.includes(p[0]));
+  const k = ST.findIndex(s => parts.includes(s.key)), i = k < 0 ? DEF : k, p = C.panels.find(p => parts.includes(p[0]));
   const q = parts.find(x => /^p\d+$/.test(x));
-  if (first === true || i !== S.state) choose(i, first === true);
+  if (first === true && !location.hash && !still.matches) {  // a first visit: the unsorted gap, then the sort plays once
+    choose(0, true);
+    setTimeout(() => { if (S.state === 0 && !location.hash) choose(DEF); }, 1000);
+  } else if (first === true || i !== S.state) choose(i, first === true);
   S.sel = q && q.slice(1) in S.L.pos ? q.slice(1) : null;
   S.open = p ? p[0] : null;
   pane();
@@ -606,6 +625,7 @@ function open(key) {
   const was = S.open;
   S.open = key || null;
   S.sel = null;
+  S.note = "";
   address(true);
   pane();
   const to = $("pane").querySelector(key ? ".close" : `[data-open="${was}"]`);
@@ -614,9 +634,11 @@ function open(key) {
 function pick(id, push) {
   S.sel = id;
   S.open = null;
+  S.note = "";
   address(push);
   pane();
   if (still.matches) place(0);
+  if (narrow.matches) $("pane").scrollIntoView({ behavior: still.matches ? "auto" : "smooth", block: "start" });
 }
 function nearest(e) {  // the tile under a click or a pointer, with a generous hit area
   const m = $("flat").getScreenCTM();
@@ -645,8 +667,11 @@ $("svg").addEventListener("click", e => { const id = nearest(e); if (id) pick(id
 $("svg").addEventListener("pointermove", e => { $("svg").classList.toggle("near", !!nearest(e)); });
 $("svg").addEventListener("keydown", e => {  // Enter opens the first tile of the largest group
   if (e.key !== "Enter") return;
+  e.preventDefault();
   const cell = CELLS[ST[S.state].cell], k = PK.reduce((a, b) => cell.parts[b][0] > cell.parts[a][0] ? b : a);
   pick(Object.keys(cell.ids).filter(i => cell.ids[i] === k).sort((a, b) => a - b)[0], true);
+  const c = $("pane").querySelector(".close");
+  if (c) c.focus({ preventScroll: true });
 });
 document.addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -691,29 +716,37 @@ requestAnimationFrame(frame);
 
 # What the page needs, with the words of each part and cell. The cells' order is that of DATA; the switch's states
 # name a cell each, and the first is shown on load: the gap before it is sorted.
-_PARTS = {
-    "reliability": ["Reliability", ["right in another", "base sample"], "of the gap: the base solves it in other samples"],
-    "budget": ["Token cap", ["cut off at", f"{DATA['cap']:,} tokens"], "of the gap: cut off at the token cap"],
-    "loop": ["Loop", ["repeats until", "the cap"], "of the gap: the base repeats itself until the cap"],
-    "answer-statement": ["Answer line", ["answer not", "stated readably"], "of the gap: no readable answer line"],
-    "capability": ["Capability", ["never right in", "4 base samples"], "of the gap: the base never solves it"],
+_PARTS = {  # name, the two lines under the group, the line under the large number, and that line on a phone
+    "reliability": ["Reliability", ["right in another", "base sample"], "of the gap: the base solves it in other samples",
+                    "of the gap: right in other base samples"],
+    "budget": ["Cut off", ["cut off at", f"{DATA['cap']:,} tokens"], f"of the gap: cut off at {DATA['cap']:,} tokens",
+               f"of the gap: cut off at {DATA['cap']:,} tokens"],
+    "loop": ["Loop", ["repeats until", "cut off"], "of the gap: the base repeats itself until cut off", "of the gap: repeats until cut off"],
+    "answer-statement": ["Answer line", ["answer not", "stated readably"], "of the gap: no readable answer line", "of the gap: no readable answer line"],
+    "capability": ["Capability", ["never right in", "4 base samples"], "of the gap: the base never solves it", "of the gap: the base never solves it"],
 }
 _WORDS = {
-    "math500-rl-T1": {"setting": "Base + cue against RL, MATH-500, T 1.0", "short": "RL, T 1.0", "ref": 1, "baseShort": "base + cue, T 1.0",
+    "math500-rl-T1": {"setting": "Base + cue against RL, MATH-500, T 1.0", "settingShort": "Base + cue against RL, MATH-500, T 1.0",
+                      "short": "RL, T 1.0", "tiny": "RL", "ref": 1, "baseShort": "Base + cue, T 1.0",
                       "other": "RL (Olmo 3.1 RL-Zero-Math) answered right"},
-    "null: math500-random-T1": {"setting": "Base + cue against the base with a random weight change, T 1.0", "short": "Random weight change", "ref": 0,
-                                "baseShort": "base + cue, T 1.0", "other": "A second sample of the base answered right"},
-    "math500-s0400-T06": {"setting": "Base + cue against RL step 400, T 0.6, top-p 0.95, grader v1", "short": "RL, T 1.0", "ref": 0,
-                          "baseShort": "base + cue, T 0.6", "other": "RL step 400 answered right"},
+    "null: math500-random-T1": {"setting": "Base + cue against the base with a random weight change of the same size, T 1.0",
+                                "settingShort": "Base + cue against a random weight change, T 1.0",
+                                "short": "The base with a random weight change of the same size", "tiny": "Control", "ref": 0,
+                                "baseShort": "Base + cue, T 1.0",
+                                "other": "The base with a random weight change of the same size answered right"},
+    "math500-s0400-T06": {"setting": "Base + cue against RL step 400, T 0.6, top-p 0.95, grader v1",
+                          "settingShort": "Base + cue against RL step 400, T 0.6",
+                          "short": "RL, T 1.0", "tiny": "RL, T 1.0", "ref": 0,
+                          "baseShort": "Base + cue, T 0.6", "other": "RL step 400 answered right"},
 }
 PAGE = PAGE.replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({
     "problem": PROBLEM, "line": LINE, "panels": PANELS, "cap": DATA["cap"],
-    "gapline": "problems RL solves that this base sample misses",
-    "parts": [{"key": k, "name": _PARTS[k][0], "sub": _PARTS[k][1], "lab": _PARTS[k][2]} for k in DATA["parts"]],
+    "gapline": "problems RL solves that this base sample misses", "gapshort": "problems RL solves, this base sample misses",
+    "parts": [{"key": k, "name": _PARTS[k][0], "sub": _PARTS[k][1], "lab": _PARTS[k][2], "labShort": _PARTS[k][3]} for k in DATA["parts"]],
     "cells": [{**_WORDS[c["key"]], "gap": c["gap"], "rows": c["rows"], "parts": c["parts"], "ids": ASSIGN[c["key"]]} for c in DATA["cells"]],
     "states": [{"key": "gap", "name": "The gap", "cell": 0, "sorted": False},
                {"key": "sorted", "name": "Sorted by cause", "cell": 0, "sorted": True},
-               {"key": "control", "name": "Random weight change", "cell": 1, "sorted": True},
+               {"key": "control", "name": "Random weight change, same size", "cell": 1, "sorted": True},
                {"key": "step-400", "name": "RL step 400, T 0.6", "cell": 2, "sorted": True}],
     "rows": ROWS}))
 
