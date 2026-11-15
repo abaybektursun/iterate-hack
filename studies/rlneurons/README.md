@@ -4423,6 +4423,49 @@ resamples of the problems.
   setup and the edit (about 3 min per job): about 7.2 H100-hours, about 28 USD. The minutes column of `gpu.py ls` is the time
   since submission, not the run time. Smoke job `abaybektursun-1115-122317-6624`: 100 s. 21.8 M generated tokens.
 
+#### The directions on other hosts (amendment 10, work-30f0ed): Think-SFT, and Math + Code in one edit
+
+`wsp_edit --onto <model key or directory>` writes the addition (computed from other - base) onto another model. One sample per cell.
+
+A. Think-SFT as host, hard328, cue, seed 3000000 (references from "Delta transplant": Think-SFT 209.0 right, 94.5 cap hits, four
+samples; Think-SFT + dense noise 209; Think-SFT + 2 x the whole RL-Math difference, 0.47 % of the weight norm: 231.5, 54):
+
+| Cell | Right of 328 | Cap hits | Edit, % of weight norm | Run folder (`edits/`), job |
+|---|---|---|---|---|
+| Think-SFT + random rank-8 at 3 | 213 | 82 | 0.215 | `sft_rand8x3_math31-01/`, `abaybektursun-1115-130307-5e33` |
+| Think-SFT + Math 3.1's 8 directions at 1.5 | 220 | 76 | 0.108 | `sft_top8x1.5_math31-01/`, `abaybektursun-1115-130242-4696` |
+| Think-SFT + Math 3.1's 8 directions at 3 | 232 | 60 | 0.215 | `sft_top8x3_math31-01/`, `abaybektursun-1115-130255-5098` |
+
+- A1 held: 232 right with 60 cap hits (predicted at least 225, at most 65); the random edit 213 (within 209 +- 9). The 8
+  directions at 3 against the random edit at 3: +5.8 points [2.1, 9.8]; against RL plain (206, same seed): +7.9 [4.3, 11.6].
+- The 8 directions written onto a model trained without a reward give what twice the whole RL difference gives (231.5), with an
+  edit of less than half its norm. Cap hits fall with size on this host too (94.5, 76, 60).
+
+B. Math 3.1's and Code 3.1's 8 directions in one edit of the base (two passes; the first pass's statistics are `edit1.json` of
+the job), on hard328 (cue) and on HumanEval+ and MBPP+ (Code cue; readout `results/xreward/code_hosts/readout.json`):
+
+| Edit of the base | Right of 328 | Cap hits | Passed of 538 | Cap hits | Run folders, jobs |
+|---|---|---|---|---|---|
+| none (cued base) | 164 | 77 | 317 | 27 | |
+| Math at 1 | 192 | 46 | | | |
+| Math at 1.5 | 203 | 25 | 368 | 1 | |
+| Code at 1 / at 1.5 | 178 (at 1) | 41 | 386 / 399 | 9 / 4 | |
+| Math at 1 + Code at 1 | 193 | 32 | 411 | 2 | `edits/math1_code1-01/` (`abaybektursun-1115-130346-f701`), `code_hosts/math1_code1-01/` (`...130400-064d`) |
+| Math at 1.5 + Code at 1.5 | 191 | 4 | 387 | 0 | `edits/math1.5_code1.5-01/` (`...130320-3e7b`), `code_hosts/math1.5_code1.5-01/` (`...130332-eba9`) |
+| Math at 1.5 + random at 1.5 (control) | 197 | 24 | 365 | 1 | `edits/math1.5_rand1.5-01/` (`...130413-750d`), `code_hosts/math1.5_rand1.5-01/` (`...130426-5898`) |
+| RL-Math / RL-Code | 206 | 20 | 401 | 8 | |
+
+- B1 is neither met nor refuted: no size gives both at least 198 of 328 and at least 390 of 538 (at 1: 193 and 411), and neither
+  size is at or below 186 or 372. B2 held: the control stays at 197 (203 +- 12) and 365 (368 +- 15).
+- On code the sum at 1 passes 411: +1.9 points above RL-Code [-1.1, 4.8], +4.6 above Code's directions alone at 1 [1.5, 7.6] and
+  +8.6 above the control [5.2, 11.9]. Math's directions add to Code's on code.
+- On math the sum at 1 scores 193, the same as Math's directions alone at 1 (192) and +8.8 points above the base [4.6, 13.1];
+  Code's directions add nothing on math, and the sum is -3.0 points from Math alone at 1.5 [-7.0, 0.9] and -4.0 from RL-Math
+  [-8.2, 0.0]. At 1.5 + 1.5 cap hits fall to 4 and 0 and right answers fall (191 and 387): the two edits add up in finishing, as
+  one edit at twice the size does.
+- So one edit of about 0.10 % of the weight norm (Math 0.074 % + Code 0.064 %) gives the base 193 of 328 on math and 411 of 538
+  on code, against 164 and 317 for the base and 206 and 401 for the two RL models.
+
 #### The dial on a second model pair and benchmark (amendment 7, work-df5e0a)
 
 Base + the 8 directions per matrix of (Code 3.1 minus base), on HumanEval+ and MBPP+ (538 scored problems), Code cue, T 1.0 /

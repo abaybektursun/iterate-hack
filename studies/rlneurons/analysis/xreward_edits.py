@@ -51,6 +51,13 @@ NEW = {
     "top8x1.5_L0-10_math31": ("abaybektursun-1115-105312-7e19", "--recipe top8 --layers 0-10 --scale 1.5 --other math31"),
     "top8x1.5_L11-21_math31": ("abaybektursun-1115-105324-5f61", "--recipe top8 --layers 11-21 --scale 1.5 --other math31"),
     "top8x1.5_L22-31_math31": ("abaybektursun-1115-105335-a886", "--recipe top8 --layers 22-31 --scale 1.5 --other math31"),
+    "sft_top8x1.5_math31": ("abaybektursun-1115-130242-4696", "--recipe top8 --scale 1.5 --onto think_sft --other math31"),   # amendment 10 A: host Think-SFT
+    "sft_top8x3_math31": ("abaybektursun-1115-130255-5098", "--recipe top8 --scale 3 --onto think_sft --other math31"),
+    "sft_rand8x3_math31": ("abaybektursun-1115-130307-5e33", "--recipe rand8 --scale 3 --onto think_sft --other math31"),
+    # amendment 10 B: the second of two passes; /tmp/theta1 = wsp_edit --recipe top8 --other math31 --scale s (its statistics: runs/<job>/edit1.json)
+    "math1.5_code1.5": ("abaybektursun-1115-130320-3e7b", "--recipe top8 --scale 1.5 --onto /tmp/theta1 --other code31"),
+    "math1_code1": ("abaybektursun-1115-130346-f701", "--recipe top8 --onto /tmp/theta1 --other code31"),
+    "math1.5_rand1.5": ("abaybektursun-1115-130413-750d", "--recipe rand8 --scale 1.5 --onto /tmp/theta1 --other code31"),
     "top8x0.02_think_sft": ("abaybektursun-1115-090252-65bf", "--recipe top8 --scale 0.02 --other think_sft"),
 }
 REFS = {"base_cue_T1": OLD["base_cue_T1"][0], "rl_plain_T1": OLD["rl_plain_T1"][0], "rl_cue_T1": OLD["rl_cue_T1"][0],
@@ -74,7 +81,7 @@ def main():
             c, e = m["config"], json.loads((RUNS / job / "edit.json").read_text())
             assert c["set"] == "hard328" and c["prompt"] == "cue" and c["temperature"] == c["top_p"] == 1.0 and c["seed"] == 3000000, (arm, c)
             ea = e["args"]
-            want = f"--recipe {ea['recipe']}" + "".join(f" --{f} {ea[f]:g}" if isinstance(ea[f], float) else f" --{f} {ea[f]}" for f, dflt in (("k", 8), ("mods", None), ("layers", None), ("scale", 1.0), ("donor", None)) if ea.get(f) not in (None, dflt)) + f" --other {ea['other']}"
+            want = f"--recipe {ea['recipe']}" + "".join(f" --{f} {ea[f]:g}" if isinstance(ea[f], float) else f" --{f} {ea[f]}" for f, dflt in (("k", 8), ("mods", None), ("layers", None), ("scale", 1.0), ("donor", None), ("onto", None)) if ea.get(f) not in (None, dflt)) + f" --other {ea['other']}"
             assert c["model_label"] == arm and want == NEW[arm][1], (arm, c["model_label"], want)
             cells[arm]["edit"] = {"recipe": e["recipe"], "other": ea["other"], "donor": ea.get("donor"), "mods": ea.get("mods"), "scale": ea.get("scale", 1.0), "k": e["k"],
                                   "rounding": e["rounding"], "n_edited": e["n_edited"], **e["totals"]}
