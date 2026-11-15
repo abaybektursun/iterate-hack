@@ -280,8 +280,18 @@ TAP = ("<style>@media (max-width: 900px) { .top a { padding-block: 10px; } } .to
        ".top .status:not(.bad) { font-size: 0 !important; gap: 0 !important; min-width: 0 !important; } "
        ".top .status.bad { display: block; flex: 0 1 auto; min-width: 0 !important; overflow: hidden; text-overflow: ellipsis; } "
        ".top .status.bad::before { display: inline-block; margin: 0 8px 2px 4px; vertical-align: middle; } } "
-       f'@media (max-width: 400px) {{ .top:has(.here) > a[href="{SITE_HOME}"] {{ display: none; }} }}</style>\n</head>')
-ALL_PAGES = f'<a href="{SITE_HOME}">All pages</a>'
+       f'@media (max-width: 400px) {{ .top:has(.here) > a[href="{SITE_HOME}#s-results"] {{ display: none; }} }}</style>\n</head>')
+ALL_PAGES = f'<a href="{SITE_HOME}#s-results">All pages</a>'
+# One header for every page: the same tabs in the order of the home page's sections (Results: Findings, Papers; How we
+# work: Board, Proof), then All pages (the home page's list of every page), then the name of a page that is none of the
+# tabs. Each page module still holds its own copy of the old header; chrome() replaces its links as the page is sent.
+NAV_TABS = (("Findings", "/findings"), ("Papers", "/papers"), ("Board", "/"), ("Proof", "/proof"))
+TAB_LINK = re.compile(r'\n? *<a (?:class="tab" )?href="(?:/|/proof|/findings|/papers|https://invariant\.team/(?:#s-results)?)"[^>]*>(?:Board|Proof|Findings|Papers|All pages)</a>')
+
+
+def nav(path):
+    now = next((n for n, h in NAV_TABS if path == h or (h != "/" and path.startswith(h)) or (h == "/findings" and path.startswith("/finding/"))), None)
+    return "".join(f'\n    <a href="{h}"' + (' aria-current="page"' if n == now else "") + f">{n}</a>" for n, h in NAV_TABS) + "\n    " + ALL_PAGES
 HERE = re.compile(r"<title>Invariant: ([A-Z][^<]*)</title>")  # the 404 page's title starts in lower case: it is no place
 HERE_BY_PATH = {"/exa": "Exa", "/pastdev": "past.dev"}  # pages whose title does not start with "Invariant: "
 # The corner link carries its own color scheme: a page that declares none gets it from the lightness of its
@@ -304,9 +314,11 @@ def chrome(body, path):
     body = body.replace('<span class="name">Invariant</span>', f'<a class="name" href="{SITE_HOME}" style="color:inherit;text-decoration:none">Invariant</a>', 1)  # lab pictures
     if NAME in body or HEADER in body:
         body = NAME_LINK.sub(NAME_LINKED, body.replace(NAME, NAME_LINKED, 1), count=1)
-        if ALL_PAGES not in body:
-            body = FINDINGS_TAB.sub(lambda m: m.group(0) + "\n    " + ALL_PAGES, body, count=1)
-        head, here = body.split("</header>", 1)[0], HERE.search(body)
+        head, rest = body.split("</header>", 1)
+        if not path.startswith("/demo"):  # the deck and its pictures keep their own header (hidden or without tabs)
+            head = TAB_LINK.sub("", head).replace(NAME_LINKED, NAME_LINKED + nav(path.split("?")[0]), 1)
+        body = head + "</header>" + rest
+        here = HERE.search(body)
         here = HERE_BY_PATH.get(path) or (here and here.group(1))
         if here and "aria-current" not in head and 'class="here"' not in head:  # a page that is none of the four tabs: its name, as the current item
             body = body.replace(ALL_PAGES, ALL_PAGES + f'\n    <span class="here" aria-current="page">{here}</span>', 1)

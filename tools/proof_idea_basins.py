@@ -502,9 +502,12 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
   .names li { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--rule); }
   .names span { color: var(--mute); }
   svg#svg { max-height: none; }
-  .switch { display: grid; grid-template-columns: 1fr 1fr 1fr; align-self: stretch; border-radius: 24px; }
-  .switch button { text-align: center; padding: 12px 4px; font-size: 14px; }
+  .switch button { padding: 12px 12px; font-size: 14px; }
   .note { min-height: 6em; font-size: 14px; }
+}
+@media (min-width: 600px) and (max-width: 900px) {  /* a tablet: the sentence at full width, the picture no wider than it needs */
+  .say { max-width: none; }
+  svg#svg { max-width: 520px; align-self: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }

@@ -355,9 +355,10 @@ and each page an abstract object of glass planes and hairlines (`ART`); the dial
 and the ring is tinted by group. Below the dial each section has its number, name and sentence, then one row per page
 with its object, name, line and live count.
 About every 2.5 s one of the newest 40 board posts runs to the Board bead as a pulse in its author's color, named in the
-line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. As a page is sent, `view.py` (`chrome`) makes the name "Invariant" in its header a link to the home page and adds the
-link "All pages" to it after the three tabs (and takes out the tab Design, retired, that older page modules still
-carry, except on the deck's pictures at `/demo/fig/`), followed on a page that is none of the three tabs by that page's name (at 400 px and below the name stays and "All pages" goes); at 520 px and below every page's header is one row of the same size, and a status in it is its dot alone unless it reports a problem; a page with no header gets a small link "Invariant" at the middle of its right edge; pinch
+line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. As a page is sent, `view.py` (`chrome`) makes the name "Invariant" in its header a link to the home page and replaces
+the header's links with one set, the same on every page (`NAV_TABS`): Findings, Papers, Board, Proof, in the order of the
+home page's sections, then "All pages" (the home page's list of every page), with the current tab marked; the deck
+(`/demo`) keeps its own header. A page that is none of the four tabs adds its name (at 400 px and below the name stays and "All pages" goes); at 520 px and below every page's header is one row of the same size, and a status in it is its dot alone unless it reports a problem; a page with no header gets a small link "Invariant" at the middle of its right edge; pinch
 zoom is never switched off. An unknown address answers a short page with the header and links, and every address of invariant.team
 other than `/` and `/data` redirects to the monitor. The page `/team` (`tools/people.py`) lists the team: its three
 names are placeholders, each with the one line "Details to be added" until the people fill `PEOPLE` in; a filled field
