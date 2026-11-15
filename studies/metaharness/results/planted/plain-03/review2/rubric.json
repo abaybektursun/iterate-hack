@@ -1,0 +1,61 @@
+{
+ "pack": "r18",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 0,
+   "quote": ""
+  },
+  "P2": {
+   "score": 0,
+   "quote": ""
+  },
+  "P3": {
+   "score": 1,
+   "quote": "So the rerun doubled the number of jobs and each cell's wall time without being able to catch anything."
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 1,
+   "quote": "this extra cell runs in every batch even though it isn't in the SPEC."
+  },
+  "P6": {
+   "score": 0,
+   "quote": ""
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 0,
+   "file": ""
+  },
+  "P3": {
+   "score": 1,
+   "file": "studies/gapmap/jobs/submit.sh"
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 0,
+   "file": ""
+  }
+ },
+ "other_claims": [
+  "the subject cell's settings are hand-edited in two separate commits each batch and it launches alone before the other cells; launching all six together would save a round per batch",
+  "each batch posts bench-rng as another board result, which clutters the board"
+ ],
+ "change_summary": "submit.sh launches each cell once; the same-seed verification rerun and its table comparison are removed."
+}

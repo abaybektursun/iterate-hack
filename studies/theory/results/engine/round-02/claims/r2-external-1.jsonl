@@ -1,0 +1,5 @@
+{"id": "t37", "value": 410, "low": 397, "high": 422, "why": "A random direction of matched norm has about 1/700 of the RL delta's KL, so at T 1.0 (no loops to break) the edited model behaves as the cued base resampled, about 410."}
+{"id": "t38", "value": 31, "low": 21, "high": 42, "why": "With KL near zero the random cell is a resample of the cued base, so it fixes only the base's own resample rate (about a third) of its 90 wrong problems."}
+{"id": "t47", "value": 3930, "low": 3650, "high": 4250, "why": "A near-zero-KL random edit leaves generation length at the cued base's 3,933 tokens per problem."}
+{"id": "t34", "value": 445, "low": 425, "high": 465, "why": "The RL delta is small and in the quadratic regime, so a = 1.5 adds only about a quarter of RL's KL beyond RL (about 0.2 nats per token from base, far below the ~1 nat per token cliff), keeping accuracy near RL's level."}
+{"id": "t45", "value": 8, "low": 0, "high": 25, "why": "At about 0.2 nats per token from the base, theta1.5 stays below the confusion-trap level, so word-salad tails stay rare."}

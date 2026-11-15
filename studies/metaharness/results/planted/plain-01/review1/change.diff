@@ -1,0 +1,148 @@
+diff --git a/studies/gapmap/README.md b/studies/gapmap/README.md
+index 211b1be..512d920 100644
+--- a/studies/gapmap/README.md
++++ b/studies/gapmap/README.md
+@@ -2,7 +2,7 @@
+ 
+ `DIRECTION.md` point 2: about 11 points remain between the base with the opening cue (T1) and the RL model (T2) at
+ T 1.0. This study maps where that difference sits, from the 500 per-problem rows already stored
+-(`studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json`, grader v3). No model runs: every cell is a paired
++(`studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json`, grader v3, the default of `--data`). No model runs: every cell is a paired
+ bootstrap over problems, run as a job on the CPU class of the team runner (never on a laptop: `specs/SPEC.md`,
+ Requirements). Plan: `specs/SPEC.md`.
+ 
+@@ -16,6 +16,7 @@ Requirements). Plan: `specs/SPEC.md`.
+ | `cells/<batch>.json` | The cells of one batch, one entry per cell with its settings. |
+ | `jobs/submit.sh` | Launches one cell on the runner, waits, copies the output to `runs/<job id>/`. |
+ | `jobs/run_cell.sh` | What the job runs: environment, then `cell.py`. |
++| `jobs/check_cell.py` | Checks a cell's settings and data path; `submit.sh` runs it before launch, `cell.py` before the bootstrap. |
+ | `jobs/cell.py` | The cell: metric, split, paired bootstrap, interval, table. |
+ | `jobs/bench_rng.py` | Speed of numpy's bit generators on the resampler's draw. |
+ | `results/overall-01/` | The overall difference of all four metrics with 95% intervals (`metrics.json`, `run.json`). |
+@@ -27,7 +28,7 @@ One batch at a time, from the repository root:
+ 
+ ```
+ python3 studies/gapmap/prep/make_cells.py <batch>
+-bash studies/gapmap/jobs/submit.sh <batch> <cell> --data studies/rlneurons/results/rln4/per_problem.json
++bash studies/gapmap/jobs/submit.sh <batch> <cell>
+ ```
+ 
+ Commit `cells/<batch>.json` and push before the first launch (a job runs a pushed commit). Then copy each cell's
+diff --git a/studies/gapmap/jobs/cell.py b/studies/gapmap/jobs/cell.py
+index 4002027..04a4caf 100644
+--- a/studies/gapmap/jobs/cell.py
++++ b/studies/gapmap/jobs/cell.py
+@@ -15,7 +15,7 @@ from pathlib import Path
+ 
+ import numpy as np
+ 
+-DATA = "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json"
++from check_cell import DATA, problems
+ 
+ 
+ def stamp(text):
+@@ -107,6 +107,8 @@ def main():
+     parser.add_argument("--cell", required=True)
+     parser.add_argument("--data", default=DATA)
+     args = parser.parse_args()
++    found = problems(args.cells, args.cell, args.data)
++    assert not found, "cell settings: " + "; ".join(found)
+     cell = next(c for c in json.loads(Path(args.cells).read_text()) if c["id"] == args.cell)
+     stamp(f"cell {cell['id']} from {args.cells}")
+     if cell["kind"] == "bench":
+diff --git a/studies/gapmap/jobs/check_cell.py b/studies/gapmap/jobs/check_cell.py
+new file mode 100644
+index 0000000..8dd690b
+--- /dev/null
++++ b/studies/gapmap/jobs/check_cell.py
+@@ -0,0 +1,76 @@
++"""Check one gapmap cell's settings and data path before it runs. Standard library only: submit.sh runs it before
++launching a job (it computes no number), and cell.py runs it again inside the job before the bootstrap.
++
++  python3 studies/gapmap/jobs/check_cell.py --cells studies/gapmap/cells/<batch>.json --cell <id> [--data <path>] [--committed]
++
++--committed also checks that the data file is tracked by git (before launch only: the job image has no git).
++
++Exits 1 with every problem listed. The three failed jobs of the accuracy batch (a data path that does not exist,
++ci 90, fmt "cvs") each fail here.
++"""
++import argparse
++import json
++import subprocess
++import sys
++from pathlib import Path
++
++DATA = "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json"
++METRICS = {"accuracy", "cap_hit", "tokens", "tokens_both_right"}
++SPLITS = {"overall", "subject", "level5", "t2_length_quartile", "t1_length_quartile"}
++FORMATS = {"json", "csv"}  # the keys of cell.WRITERS
++
++
++def problems(cells_path, cell_id, data, committed=False):
++    """Every problem with the cell, as a list of sentences; empty when the cell can run."""
++    cells = json.loads(Path(cells_path).read_text())
++    matches = [c for c in cells if c.get("id") == cell_id]
++    if len(matches) != 1:
++        return [f"{len(matches)} cells with id {cell_id!r} in {cells_path}; ids: {[c.get('id') for c in cells]}"]
++    cell = matches[0]
++    found = []
++    if cell.get("kind") == "bench":
++        return found
++    if cell.get("kind") != "split":
++        return [f"kind {cell.get('kind')!r} is not 'split' or 'bench'"]
++    if cell.get("metric") not in METRICS:
++        found.append(f"metric {cell.get('metric')!r} is not one of {sorted(METRICS)}")
++    if cell.get("split") not in SPLITS:
++        found.append(f"split {cell.get('split')!r} is not one of {sorted(SPLITS)}")
++    ci = cell.get("ci")
++    if not isinstance(ci, float) or not 0 < ci < 1:
++        found.append(f"ci {ci!r} must be a fraction between 0 and 1 (0.9, not 90)")
++    if cell.get("fmt") not in FORMATS:
++        found.append(f"fmt {cell.get('fmt')!r} is not one of {sorted(FORMATS)}")
++    if not isinstance(cell.get("digits"), int) or cell["digits"] < 1:
++        found.append(f"digits {cell.get('digits')!r} must be a positive integer")
++    # SPEC requirement 2: the same resample count and seed in every cell.
++    if cell.get("n_boot") != 1500000:
++        found.append(f"n_boot {cell.get('n_boot')!r} must be 1500000 (specs/SPEC.md, requirement 2)")
++    if cell.get("seed") != 0:
++        found.append(f"seed {cell.get('seed')!r} must be 0 (specs/SPEC.md, requirement 2)")
++    if not Path(data).is_file():
++        found.append(f"data {data} does not exist")
++    elif committed:
++        tracked = subprocess.run(["git", "ls-files", "--error-unmatch", data], capture_output=True).returncode == 0
++        if not tracked:
++            found.append(f"data {data} is not committed, so the job's checkout will not have it")
++    return found
++
++
++def main():
++    parser = argparse.ArgumentParser()
++    parser.add_argument("--cells", required=True)
++    parser.add_argument("--cell", required=True)
++    parser.add_argument("--data", default=DATA)
++    parser.add_argument("--committed", action="store_true")
++    args = parser.parse_args()
++    found = problems(args.cells, args.cell, args.data, args.committed)
++    for line in found:
++        print(f"[check_cell] {args.cell}: {line}", file=sys.stderr)
++    if found:
++        sys.exit(1)
++    print(f"[check_cell] {args.cell}: ok")
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/studies/gapmap/jobs/submit.sh b/studies/gapmap/jobs/submit.sh
+index d46c827..9a26182 100755
+--- a/studies/gapmap/jobs/submit.sh
++++ b/studies/gapmap/jobs/submit.sh
+@@ -8,6 +8,9 @@ cell=$2
+ shift 2
+ command="bash studies/gapmap/jobs/run_cell.sh $batch $cell $*"
+ 
++# Catch bad settings and data paths here, not after a job's environment build and bootstrap.
++python3 studies/gapmap/jobs/check_cell.py --cells "studies/gapmap/cells/$batch.json" --cell "$cell" --committed "$@"
++
+ launch() {
+   local job state
+   job=$(uv run --quiet tools/gpu.py submit cpu --hours 0.5 -- "$command" | head -1)

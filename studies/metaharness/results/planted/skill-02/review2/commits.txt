@@ -1,0 +1,2 @@
+7851061 Dana 2026-11-14 20:19:04 -0800 meta: dana review 2026-11-15 04:15 (per-cell hand edits removed; subject rescored at 0.95)
+22075ac Dana 2026-11-14 20:16:22 -0800 gapmap: every cell takes its settings from queue.json; drop per-cell hand edits

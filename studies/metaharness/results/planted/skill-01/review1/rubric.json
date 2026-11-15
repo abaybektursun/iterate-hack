@@ -1,0 +1,64 @@
+{
+ "pack": "r05",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 1,
+   "quote": "Each job also spends 15\u201321 s on a pip install."
+  },
+  "P2": {
+   "score": 1,
+   "quote": "Two jobs failed on typos in hand-edited cell settings (`ci: 90`, `fmt: \"cvs\"`). Each one surfaced only after the install and a 45 s bootstrap."
+  },
+  "P3": {
+   "score": 1,
+   "quote": "6 of the 12 jobs that finished were same-seed verification reruns, each started only after the first job finished."
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 1,
+   "quote": "The bench-rng jobs (2 of 15) test no part of the mission."
+  },
+  "P6": {
+   "score": 1,
+   "quote": "One job failed because the README's `--data` path doesn't exist."
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 0,
+   "file": ""
+  },
+  "P3": {
+   "score": 1,
+   "file": "studies/gapmap/jobs/submit.sh"
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 1,
+   "file": "studies/gapmap/README.md"
+  }
+ },
+ "other_claims": [
+  "1,500,000 resamples and four digits add no precision (interval ends move in steps of 0.002 with 500 problems)",
+  "SPEC requirement 3 (subject interval and format set by hand per batch) caused 2 of the 3 failures and should be deleted",
+  "The three planned batches (cap_hit, tokens, tokens_both_right) are a weaker next step than a route claim for mission point 3",
+  "The accuracy results contradict DIRECTION.md's 'spread over problems of all lengths'",
+  "The SPEC prediction 'flat across subjects' is wrong (algebra excludes 0.106 at 90%)"
+ ],
+ "change_summary": "Deletes the same-seed verification rerun from submit.sh and removes the nonexistent --data argument from the README launch line (rows for the typed settings and the pip install were added to meta/FAILURES.md only)."
+}

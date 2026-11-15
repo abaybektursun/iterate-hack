@@ -1,0 +1,358 @@
+{
+ "judge": "Claude Code subagents (the agent's own model), fixed rubric rubric.md, one subagent per batch; pass A all 120 items, pass B 30 base + 15 RL + the 30 controls in other batches",
+ "n_items": {
+  "base": 60,
+  "rl": 30,
+  "shuffled": 15,
+  "planted": 15
+ },
+ "controls": {
+  "shuffled": {
+   "n": 15,
+   "want": "mismatch",
+   "passA": 15,
+   "passB": 15,
+   "passA_labels": {
+    "mismatch": 15
+   },
+   "passB_labels": {
+    "mismatch": 15
+   }
+  },
+  "planted": {
+   "n": 15,
+   "want": "slip",
+   "passA": 11,
+   "passB": 13,
+   "passA_labels": {
+    "format": 4,
+    "slip": 11
+   },
+   "passB_labels": {
+    "slip": 13,
+    "format": 2
+   },
+   "quote_within_5pct_of_planted_step": {
+    "passA": 12,
+    "passB": 12
+   }
+  }
+ },
+ "agreement": {
+  "real": {
+   "n_in_both_passes": 45,
+   "same_label": 44,
+   "cohen_kappa": 0.9669360764144012,
+   "slip_or_not_same": 44,
+   "confusion_passA_passB": {
+    "format|format": 4,
+    "misread|misread": 6,
+    "slip|slip": 17,
+    "slip|wrong_plan": 1,
+    "wrong_plan|wrong_plan": 17
+   }
+  },
+  "base": {
+   "n_in_both_passes": 30,
+   "same_label": 29,
+   "cohen_kappa": 0.9494097807757169,
+   "slip_or_not_same": 29,
+   "confusion_passA_passB": {
+    "format|format": 4,
+    "misread|misread": 3,
+    "slip|slip": 14,
+    "slip|wrong_plan": 1,
+    "wrong_plan|wrong_plan": 8
+   }
+  },
+  "rl": {
+   "n_in_both_passes": 15,
+   "same_label": 15,
+   "cohen_kappa": 1.0,
+   "slip_or_not_same": 15,
+   "confusion_passA_passB": {
+    "misread|misread": 3,
+    "slip|slip": 3,
+    "wrong_plan|wrong_plan": 9
+   }
+  }
+ },
+ "labels": {
+  "real": {
+   "passA_all": {
+    "slip": 26,
+    "wrong_plan": 37,
+    "misread": 19,
+    "format": 8,
+    "mismatch": 0,
+    "unclear": 0,
+    "n": 90
+   },
+   "passA_slip_wilson95": [
+    20.542127201943334,
+    38.96404368136764
+   ],
+   "passA_on_pass_B_items": {
+    "slip": 18,
+    "wrong_plan": 17,
+    "misread": 6,
+    "format": 4,
+    "mismatch": 0,
+    "unclear": 0
+   },
+   "passB": {
+    "slip": 17,
+    "wrong_plan": 18,
+    "misread": 6,
+    "format": 4,
+    "mismatch": 0,
+    "unclear": 0,
+    "n": 45
+   },
+   "passB_slip_wilson95": [
+    25.108084586554703,
+    52.37006563263849
+   ],
+   "both_passes_agree": {
+    "slip": 17,
+    "wrong_plan": 17,
+    "misread": 6,
+    "format": 4,
+    "mismatch": 0,
+    "unclear": 0
+   },
+   "passA_with_right_sibling": {
+    "slip": 22,
+    "wrong_plan": 25,
+    "misread": 17,
+    "format": 8,
+    "mismatch": 0,
+    "unclear": 0,
+    "n": 72
+   },
+   "passA_without_right_sibling": {
+    "slip": 4,
+    "wrong_plan": 12,
+    "misread": 2,
+    "format": 0,
+    "mismatch": 0,
+    "unclear": 0,
+    "n": 18
+   }
+  },
+  "base": {
+   "passA_all": {
+    "slip": 21,
+    "wrong_plan": 17,
+    "misread": 14,
+    "format": 8,
+    "mismatch": 0,
+    "unclear": 0,
+    "n": 60
+   },
+   "passA_slip_wilson95": [
+    24.167774331892012,
+    47.637381259134806
+   ],
+   "passA_on_pass_B_items": {
+    "slip": 15,
+    "wrong_plan": 8,
+    "misread": 3,
+    "format": 4,
+    "mismatch": 0,
+    "unclear": 0
+   },
+   "passB": {
+    "slip": 14,
+    "wrong_plan": 9,
+    "misread": 3,
+    "format": 4,
+    "mismatch": 0,
+    "unclear": 0,
+    "n": 30
+   },
+   "passB_slip_wilson95": [
+    30.232388795369435,
+    63.85770050304025
+   ],
+   "both_passes_agree": {
+    "slip": 14,
+    "wrong_plan": 8,
+    "misread": 3,
+    "format": 4,
+    "mismatch": 0,
+    "unclear": 0
+   },
+   "passA_with_right_sibling": {
+    "slip": 18,
+    "wrong_plan": 9,
+    "misread": 13,
+    "format": 8,
+    "mismatch": 0,
+    "unclear": 0,
+    "n": 48
+   },
+   "passA_without_right_sibling": {
+    "slip": 3,
+    "wrong_plan": 8,
+    "misread": 1,
+    "format": 0,
+    "mismatch": 0,
+    "unclear": 0,
+    "n": 12
+   }
+  },
+  "rl": {
+   "passA_all": {
+    "slip": 5,
+    "wrong_plan": 20,
+    "misread": 5,
+    "format": 0,
+    "mismatch": 0,
+    "unclear": 0,
+    "n": 30
+   },
+   "passA_slip_wilson95": [
+    7.336542325431777,
+    33.56435065866503
+   ],
+   "passA_on_pass_B_items": {
+    "slip": 3,
+    "wrong_plan": 9,
+    "misread": 3,
+    "format": 0,
+    "mismatch": 0,
+    "unclear": 0
+   },
+   "passB": {
+    "slip": 3,
+    "wrong_plan": 9,
+    "misread": 3,
+    "format": 0,
+    "mismatch": 0,
+    "unclear": 0,
+    "n": 15
+   },
+   "passB_slip_wilson95": [
+    7.047549291733921,
+    45.18544892405531
+   ],
+   "both_passes_agree": {
+    "slip": 3,
+    "wrong_plan": 9,
+    "misread": 3,
+    "format": 0,
+    "mismatch": 0,
+    "unclear": 0
+   },
+   "passA_with_right_sibling": {
+    "slip": 4,
+    "wrong_plan": 16,
+    "misread": 4,
+    "format": 0,
+    "mismatch": 0,
+    "unclear": 0,
+    "n": 24
+   },
+   "passA_without_right_sibling": {
+    "slip": 1,
+    "wrong_plan": 4,
+    "misread": 1,
+    "format": 0,
+    "mismatch": 0,
+    "unclear": 0,
+    "n": 6
+   }
+  }
+ },
+ "first_wrong_step": {
+  "real": {
+   "passA_quotes_found_in_answer": 82,
+   "of_items_labeled_slip_plan_misread": 82,
+   "median_position": 0.24560556762883964,
+   "quartiles": [
+    0.12173846002792252,
+    0.5287099199003344
+   ],
+   "share_in_first_third": 0.6463414634146342,
+   "share_in_last_third": 0.10975609756097561,
+   "by_label_median_position": {
+    "slip": [
+     0.3066893008596868,
+     26
+    ],
+    "wrong_plan": [
+     0.2681233933161954,
+     37
+    ],
+    "misread": [
+     0.056904161412358135,
+     19
+    ]
+   },
+   "both_passes_found": 41,
+   "passes_within_15pct": 37
+  },
+  "base": {
+   "passA_quotes_found_in_answer": 52,
+   "of_items_labeled_slip_plan_misread": 52,
+   "median_position": 0.19755463187337868,
+   "quartiles": [
+    0.054237533271075035,
+    0.547616205584426
+   ],
+   "share_in_first_third": 0.6346153846153846,
+   "share_in_last_third": 0.11538461538461539,
+   "by_label_median_position": {
+    "slip": [
+     0.25032684010981826,
+     21
+    ],
+    "wrong_plan": [
+     0.2610132158590308,
+     17
+    ],
+    "misread": [
+     0.06344412796816498,
+     14
+    ]
+   },
+   "both_passes_found": 26,
+   "passes_within_15pct": 23
+  },
+  "rl": {
+   "passA_quotes_found_in_answer": 30,
+   "of_items_labeled_slip_plan_misread": 30,
+   "median_position": 0.29136629723581065,
+   "quartiles": [
+    0.19531765821183567,
+    0.48582540173680333
+   ],
+   "share_in_first_third": 0.6666666666666666,
+   "share_in_last_third": 0.1,
+   "by_label_median_position": {
+    "slip": [
+     0.3949873534145781,
+     5
+    ],
+    "wrong_plan": [
+     0.27154621621808894,
+     20
+    ],
+    "misread": [
+     0.028100738496496875,
+     5
+    ]
+   },
+   "both_passes_found": 15,
+   "passes_within_15pct": 14
+  }
+ },
+ "proxy_check_against_passA_quote": {
+  "what": "base items with a right sibling, a proxy position and a located quote; confirmed = the proxy within 0.15 of the judge's first wrong step",
+  "n": 38,
+  "confirmed": 18,
+  "proxy_earlier_by_over_0.15": 11,
+  "proxy_later_by_over_0.15": 9
+ }
+}

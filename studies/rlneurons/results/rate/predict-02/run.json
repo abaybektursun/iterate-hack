@@ -1,0 +1,10 @@
+{
+ "commit": "14e2f4e99f1c10bd663820c14b4652a569f509c6",
+ "command": "uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.rate predict2",
+ "job_id": null,
+ "gpu": "none (laptop, numpy)",
+ "spec": "studies/rlneurons/specs/SPEC_rate.md",
+ "inputs": "studies/rlneurons/results/axis/{math500,hard328}-01/vectors.json and manifest.json; results/day1_3/math500_{base_cue,rl}-01/{rows.jsonl,readout.json}; each arm's metrics.json (tokens)",
+ "pushed_utc": "2026-11-15T04:49:14Z",
+ "note": "two finished cells of result-1dedfe (branch claude/swarm-literature-review-60a281), opened only after this commit was pushed"
+}

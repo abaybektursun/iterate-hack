@@ -1,0 +1,276 @@
+{
+ "judge": "Claude Code subagents (the agent's own model), fixed rubric rubric.md, one subagent per batch, two passes over all 100 items in different batches and orders; no hosted provider key works on this machine",
+ "items": {
+  "base": 40,
+  "rl": 40,
+  "planted_filler": 10,
+  "planted_fix": 10
+ },
+ "controls": {
+  "planted_filler": {
+   "n": 10,
+   "want": "filler",
+   "passA": 10,
+   "passB": 9,
+   "passA_labels": {
+    "filler": 10
+   },
+   "passB_labels": {
+    "filler": 9,
+    "confirm": 1
+   }
+  },
+  "planted_fix": {
+   "n": 10,
+   "want": "fix",
+   "passA": 10,
+   "passB": 10,
+   "passA_labels": {
+    "fix": 10
+   },
+   "passB_labels": {
+    "fix": 10
+   }
+  }
+ },
+ "agreement": {
+  "real": {
+   "n": 80,
+   "same_label": 74,
+   "cohen_kappa": 0.8771750255885364,
+   "fix_or_not_same": 78,
+   "confusion_passA_passB": {
+    "confirm|confirm": 41,
+    "confirm|fix": 1,
+    "filler|confirm": 2,
+    "filler|filler": 22,
+    "filler|switch": 2,
+    "fix|filler": 1,
+    "fix|fix": 4,
+    "switch|switch": 7
+   }
+  },
+  "base": {
+   "n": 40,
+   "same_label": 37,
+   "cohen_kappa": 0.8808341608738829,
+   "fix_or_not_same": 39,
+   "confusion_passA_passB": {
+    "confirm|confirm": 20,
+    "confirm|fix": 1,
+    "filler|confirm": 1,
+    "filler|filler": 10,
+    "filler|switch": 1,
+    "fix|fix": 3,
+    "switch|switch": 4
+   }
+  },
+  "rl": {
+   "n": 40,
+   "same_label": 37,
+   "cohen_kappa": 0.8726114649681529,
+   "fix_or_not_same": 39,
+   "confusion_passA_passB": {
+    "confirm|confirm": 21,
+    "filler|confirm": 1,
+    "filler|filler": 12,
+    "filler|switch": 1,
+    "fix|filler": 1,
+    "fix|fix": 1,
+    "switch|switch": 3
+   }
+  }
+ },
+ "labels": {
+  "real": {
+   "passA": {
+    "fix": 5,
+    "switch": 7,
+    "confirm": 42,
+    "filler": 26
+   },
+   "passB": {
+    "fix": 5,
+    "switch": 9,
+    "confirm": 43,
+    "filler": 23
+   },
+   "both_passes_agree": {
+    "fix": 4,
+    "switch": 7,
+    "confirm": 41,
+    "filler": 22
+   },
+   "passA_fix_wilson95": [
+    2.6989375500007227,
+    13.810148844706394
+   ],
+   "passA_filler_wilson95": [
+    23.244161780248174,
+    43.35947277763468
+   ],
+   "passB_fix_wilson95": [
+    2.6989375500007227,
+    13.810148844706394
+   ],
+   "passB_filler_wilson95": [
+    19.986924232910198,
+    39.46034630166183
+   ]
+  },
+  "base": {
+   "passA": {
+    "fix": 3,
+    "switch": 4,
+    "confirm": 21,
+    "filler": 12
+   },
+   "passB": {
+    "fix": 4,
+    "switch": 5,
+    "confirm": 21,
+    "filler": 10
+   },
+   "both_passes_agree": {
+    "fix": 3,
+    "switch": 4,
+    "confirm": 20,
+    "filler": 10
+   },
+   "passA_fix_wilson95": [
+    2.5836025573262464,
+    19.864233651643165
+   ],
+   "passA_filler_wilson95": [
+    18.074845154920364,
+    45.430018943418176
+   ],
+   "passB_fix_wilson95": [
+    3.9579528407411564,
+    23.051775355935938
+   ],
+   "passB_filler_wilson95": [
+    14.18711857438798,
+    40.19396154853519
+   ]
+  },
+  "rl": {
+   "passA": {
+    "fix": 2,
+    "switch": 3,
+    "confirm": 21,
+    "filler": 14
+   },
+   "passB": {
+    "fix": 1,
+    "switch": 4,
+    "confirm": 22,
+    "filler": 13
+   },
+   "both_passes_agree": {
+    "fix": 1,
+    "switch": 3,
+    "confirm": 21,
+    "filler": 12
+   },
+   "passA_fix_wilson95": [
+    1.382066726155863,
+    16.50387749510587
+   ],
+   "passA_filler_wilson95": [
+    22.134528789169124,
+    50.49411928458477
+   ],
+   "passB_fix_wilson95": [
+    0.4426831453704344,
+    12.881369088183614
+   ],
+   "passB_filler_wilson95": [
+    20.084502152253986,
+    47.98225393379224
+   ]
+  },
+  "passA_fix_share_rl_minus_base": {
+   "difference": -0.024999999999999994,
+   "ci95": [
+    -0.125,
+    0.07500000000000001
+   ]
+  },
+  "passB_fix_share_rl_minus_base": {
+   "difference": -0.07500000000000001,
+   "ci95": [
+    -0.17500000000000002,
+    0.025
+   ]
+  }
+ },
+ "rule_against_passA_fix": {
+  "rule_flagged": 14,
+  "judge_positive": 5,
+  "both": 1,
+  "n": 80
+ },
+ "rule_against_passA_fix_or_switch": {
+  "rule_flagged": 14,
+  "judge_positive": 12,
+  "both": 2,
+  "n": 80
+ },
+ "e_caught_and_made": {
+  "base": {
+   "events_per_1k_tokens_right_samples": 5.612358634641042,
+   "uncaught_slips_per_1k_tokens": 0.013374675090928684,
+   "first_wrong_steps_per_1k_tokens": 0.03821335740265338,
+   "passA": {
+    "fix": 3,
+    "n": 40,
+    "caught_per_1k_tokens": 0.4209268975980782,
+    "caught_per_1k_wilson95_of_share": [
+     0.14500104121090637,
+     1.1148520325532667
+    ],
+    "made_per_1k_tokens (caught + every first wrong step)": 0.4591402550007316,
+    "catch_share": 0.9167719297394378
+   },
+   "passB": {
+    "fix": 4,
+    "n": 40,
+    "caught_per_1k_tokens": 0.5612358634641043,
+    "caught_per_1k_wilson95_of_share": [
+     0.2221345080123567,
+     1.2937483046269265
+    ],
+    "made_per_1k_tokens (caught + every first wrong step)": 0.5994492208667577,
+    "catch_share": 0.9362525530562875
+   }
+  },
+  "rl": {
+   "events_per_1k_tokens_right_samples": 6.754464196182743,
+   "uncaught_slips_per_1k_tokens": 0.002467240693756442,
+   "first_wrong_steps_per_1k_tokens": 0.014803444162538653,
+   "passA": {
+    "fix": 2,
+    "n": 40,
+    "caught_per_1k_tokens": 0.33772320980913717,
+    "caught_per_1k_wilson95_of_share": [
+     0.09335120218555276,
+     1.1147484963887873
+    ],
+    "made_per_1k_tokens (caught + every first wrong step)": 0.3525266539716758,
+    "catch_share": 0.9580075889418335
+   },
+   "passB": {
+    "fix": 1,
+    "n": 40,
+    "caught_per_1k_tokens": 0.16886160490456859,
+    "caught_per_1k_wilson95_of_share": [
+     0.029900874556581594,
+     0.8700674630395138
+    ],
+    "made_per_1k_tokens (caught + every first wrong step)": 0.18366504906710723,
+    "catch_share": 0.9193997756365186
+   }
+  }
+ }
+}

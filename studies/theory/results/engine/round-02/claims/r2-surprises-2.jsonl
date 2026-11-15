@@ -1,0 +1,9 @@
+{"id": "t57", "value": 8, "low": 2, "high": 16, "why": "The RL change acts only through signed weights times the input directions the text excites, so a constant per-layer vector with no input dependence closes little of KL(RL||base) on cued-base text."}
+{"id": "t58", "value": 10, "low": 3, "high": 19, "why": "Same input-gated mechanism on RL text: a constant per-layer shift cannot reproduce a text-dependent change, so it closes only a small share."}
+{"id": "t59", "value": 6, "low": 1, "high": 14, "why": "A constant vector on the MLP output alone carries even less of the input-gated MLP change, so it closes a small share on cued-base text."}
+{"id": "t60", "value": 8, "low": 2, "high": 16, "why": "Same as t59 on RL text: an input-independent MLP offset closes a small share of KL."}
+{"id": "t42", "value": 235, "low": 205, "high": 265, "why": "Code-RL's task lives in its signs, which agree with Math-RL's only at chance on the shared entries, and its effect is gated by code-rollout input directions, so on math text it stays near the plain base's 224."}
+{"id": "t36", "value": 405, "low": 390, "high": 422, "why": "For the same reason Code-RL adds no math gain on top of the cue, leaving the cued Code-RL model near the cued base's 410."}
+{"id": "t37", "value": 408, "low": 396, "high": 420, "why": "A random difference of matched norm has random signs on a random mask, so it carries no task signal and leaves the cued base at its 410."}
+{"id": "t47", "value": 3950, "low": 3750, "high": 4150, "why": "With no task signal in a random-sign difference, the cued base's length behaviour is unchanged from its 3,933 tokens per problem."}
+{"id": "t22", "value": 6, "low": 1, "high": 14, "why": "The RL change is gated by the kind of text (math solution), not by correctness, so peaks of the base-RL difference rarely sit at the first wrong step."}

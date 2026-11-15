@@ -1,0 +1,16 @@
+{
+ "commit": "37391a33fde896ba499a7c31b2cd19045fbd16e2",
+ "command": "/home/abay/Projects/iterate-hack-checks/studies/rlneurons/analysis/checks.py score --base runs/abaybektursun-1114-153825-208b --rl runs/abaybektursun-1114-183640-e828 --work runs/checks_judge --stats studies/rlneurons/results/checks/math500-01/readout.json --out studies/rlneurons/results/checks/judge-01",
+ "source_jobs": {
+  "base_cue": "abaybektursun-1114-153825-208b",
+  "rl": "abaybektursun-1114-183640-e828"
+ },
+ "grader": "v3 (score_v3 as stored by run_cell)",
+ "rows": "attempt 0 of samples 0 to 3",
+ "gpu": null,
+ "judge": "Claude Code subagents (the agent's own model), fixed rubric rubric.md, one subagent per batch, two passes over all 100 items in different batches and orders; no hosted provider key works on this machine",
+ "batches": {
+  "passA": 4,
+  "passB": 4
+ }
+}

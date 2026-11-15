@@ -27,6 +27,10 @@ image = (
     modal.Image.debian_slim(python_version="3.12")
     .pip_install_from_requirements(str(Path(__file__).resolve().parent.parent / "requirements.txt"))
     .env({"HF_HOME": "/hf", "PYTHONUNBUFFERED": "1"})
+    # The rlneurons engine (vLLM in /opt/rln-vllm) is built once here, by the study's own script. A job that runs
+    # the script again finds everything installed and takes about a second.
+    .add_local_file(str(Path(__file__).resolve().parent.parent / "studies/rlneurons/jobs/setup_vllm.sh"), "/setup_vllm.sh", copy=True)
+    .run_commands("bash /setup_vllm.sh")
 )
 runs = modal.Volume.from_name("iterate-runs", create_if_missing=True)
 code = modal.Volume.from_name("iterate-code", create_if_missing=True)

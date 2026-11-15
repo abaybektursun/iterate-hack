@@ -1,0 +1,64 @@
+{
+ "pack": "r03",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 0,
+   "quote": ""
+  },
+  "P2": {
+   "score": 0,
+   "quote": ""
+  },
+  "P3": {
+   "score": 0,
+   "quote": ""
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 0,
+   "quote": ""
+  },
+  "P6": {
+   "score": 0,
+   "quote": ""
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 0,
+   "file": ""
+  },
+  "P3": {
+   "score": 0,
+   "file": ""
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 0,
+   "file": ""
+  }
+ },
+ "other_claims": [
+  "1,500,000 resamples are more than needed: 40-42 s of a 0.7-0.8 min job is the bootstrap, and the fixed seed already makes a rerun repeat",
+  "The 3 remaining descriptive batches (cap_hit, tokens, tokens_both_right; 12 cells) test no part of mission point 3",
+  "The accuracy batch contradicts DIRECTION.md's text that the gap is spread over problems of all lengths",
+  "The flat-subject prediction is refuted only by algebra, by 0.0016 at 95%, which is close to chance with 7 groups",
+  "Dead code: cell.py's kind 'bench' imports a bench_rng module that does not exist"
+ ],
+ "change_summary": "Lowers n_boot in queue.json from 1,500,000 to 20,000 and updates SPEC.md's method line and requirement 2 to match."
+}

@@ -1,0 +1,3079 @@
+{
+ "targets": 61,
+ "exposed_items": [
+  "result-5d032f"
+ ],
+ "theories": {
+  "r1-across-1": {
+   "claims": 13,
+   "wins": 2,
+   "losses": 2,
+   "net": 0,
+   "agree_inside": 5,
+   "agree_outside": 4,
+   "rows": [
+    {
+     "id": "t36",
+     "measured": 450,
+     "value": 418,
+     "low": 410,
+     "high": 426,
+     "nulls": [
+      420,
+      415
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t37",
+     "measured": 417,
+     "value": 407,
+     "low": 399,
+     "high": 415,
+     "nulls": [
+      408,
+      408
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t47",
+     "measured": 3944,
+     "value": 3950,
+     "low": 3750,
+     "high": 4150,
+     "nulls": [
+      3950,
+      3950
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t46",
+     "measured": 4036,
+     "value": 3700,
+     "low": 3450,
+     "high": 3930,
+     "nulls": [
+      4000,
+      4050
+     ],
+     "divergent": true,
+     "inside": false
+    },
+    {
+     "id": "t55",
+     "measured": 34,
+     "value": 40,
+     "low": 25,
+     "high": 60,
+     "nulls": [
+      10,
+      12
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t56",
+     "measured": 58,
+     "value": 62,
+     "low": 45,
+     "high": 80,
+     "nulls": [
+      40,
+      45
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t51",
+     "measured": 404,
+     "value": 392,
+     "low": 378,
+     "high": 404,
+     "nulls": [
+      415,
+      412
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t52",
+     "measured": 412,
+     "value": 404,
+     "low": 394,
+     "high": 414,
+     "nulls": [
+      400,
+      395
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t53",
+     "measured": 409,
+     "value": 402,
+     "low": 394,
+     "high": 410,
+     "nulls": [
+      395,
+      398
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t54",
+     "measured": 460,
+     "value": 462,
+     "low": 455,
+     "high": 469,
+     "nulls": [
+      462,
+      463
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t57",
+     "measured": 23.4,
+     "value": 8,
+     "low": 2,
+     "high": 14,
+     "nulls": [
+      15,
+      12
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t58",
+     "measured": 31.2,
+     "value": 9,
+     "low": 3,
+     "high": 16,
+     "nulls": [
+      20,
+      18
+     ],
+     "divergent": true,
+     "inside": false
+    },
+    {
+     "id": "t59",
+     "measured": 14.0,
+     "value": 5,
+     "low": 0,
+     "high": 11,
+     "nulls": [
+      10,
+      7
+     ],
+     "divergent": false,
+     "inside": false
+    }
+   ],
+   "state": "fails",
+   "reversal": null
+  },
+  "r1-across-2": {
+   "claims": 16,
+   "wins": 1,
+   "losses": 1,
+   "net": 0,
+   "agree_inside": 9,
+   "agree_outside": 5,
+   "rows": [
+    {
+     "id": "t32",
+     "measured": 441,
+     "value": 428,
+     "low": 420,
+     "high": 436,
+     "nulls": [
+      425,
+      422
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t33",
+     "measured": 452,
+     "value": 447,
+     "low": 438,
+     "high": 456,
+     "nulls": [
+      440,
+      440
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t43",
+     "measured": 451,
+     "value": 457,
+     "low": 450,
+     "high": 464,
+     "nulls": [
+      455,
+      453
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t34",
+     "measured": 453,
+     "value": 450,
+     "low": 438,
+     "high": 460,
+     "nulls": [
+      400,
+      380
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t45",
+     "measured": 34,
+     "value": 8,
+     "low": 0,
+     "high": 20,
+     "nulls": [
+      30,
+      40
+     ],
+     "divergent": true,
+     "inside": false
+    },
+    {
+     "id": "t46",
+     "measured": 4036,
+     "value": 4150,
+     "low": 3980,
+     "high": 4350,
+     "nulls": [
+      4000,
+      4050
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t39",
+     "measured": 53,
+     "value": 50,
+     "low": 42,
+     "high": 58,
+     "nulls": [
+      42,
+      40
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t36",
+     "measured": 450,
+     "value": 428,
+     "low": 418,
+     "high": 438,
+     "nulls": [
+      420,
+      415
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t37",
+     "measured": 417,
+     "value": 407,
+     "low": 399,
+     "high": 415,
+     "nulls": [
+      408,
+      408
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t47",
+     "measured": 3944,
+     "value": 3950,
+     "low": 3750,
+     "high": 4150,
+     "nulls": [
+      3950,
+      3950
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t19",
+     "measured": 0.831,
+     "value": 0.81,
+     "low": 0.77,
+     "high": 0.86,
+     "nulls": [
+      0.8,
+      0.8
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t22",
+     "measured": 10,
+     "value": 10,
+     "low": 3,
+     "high": 20,
+     "nulls": [
+      8,
+      6
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t57",
+     "measured": 23.4,
+     "value": 25,
+     "low": 15,
+     "high": 35,
+     "nulls": [
+      15,
+      12
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t58",
+     "measured": 31.2,
+     "value": 30,
+     "low": 20,
+     "high": 42,
+     "nulls": [
+      20,
+      18
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t15",
+     "measured": 5.64,
+     "value": 3.0,
+     "low": 1.5,
+     "high": 5.0,
+     "nulls": [
+      4,
+      3.0
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t16",
+     "measured": 4.56,
+     "value": 1.2,
+     "low": 0.5,
+     "high": 2.0,
+     "nulls": [
+      3,
+      1.5
+     ],
+     "divergent": false,
+     "inside": false
+    }
+   ],
+   "state": "fails",
+   "reversal": null
+  },
+  "r1-all-1": {
+   "claims": 12,
+   "wins": 2,
+   "losses": 1,
+   "net": 1,
+   "agree_inside": 3,
+   "agree_outside": 6,
+   "rows": [
+    {
+     "id": "t19",
+     "measured": 0.831,
+     "value": 0.85,
+     "low": 0.8,
+     "high": 0.91,
+     "nulls": [
+      0.8,
+      0.8
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t25",
+     "measured": 169,
+     "value": 167,
+     "low": 160,
+     "high": 173,
+     "nulls": [
+      172,
+      167
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t27",
+     "measured": 179,
+     "value": 170,
+     "low": 163,
+     "high": 178,
+     "nulls": [
+      180,
+      177
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t28",
+     "measured": 205,
+     "value": 205,
+     "low": 195,
+     "high": 214,
+     "nulls": [
+      225,
+      220
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t51",
+     "measured": 404,
+     "value": 395,
+     "low": 382,
+     "high": 405,
+     "nulls": [
+      415,
+      412
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t53",
+     "measured": 409,
+     "value": 397,
+     "low": 385,
+     "high": 406,
+     "nulls": [
+      395,
+      398
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t55",
+     "measured": 34,
+     "value": 12,
+     "low": 4,
+     "high": 30,
+     "nulls": [
+      10,
+      12
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t56",
+     "measured": 58,
+     "value": 50,
+     "low": 35,
+     "high": 70,
+     "nulls": [
+      40,
+      45
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t57",
+     "measured": 23.4,
+     "value": 8,
+     "low": 2,
+     "high": 15,
+     "nulls": [
+      15,
+      12
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t58",
+     "measured": 31.2,
+     "value": 8,
+     "low": 2,
+     "high": 15,
+     "nulls": [
+      20,
+      18
+     ],
+     "divergent": true,
+     "inside": false
+    },
+    {
+     "id": "t59",
+     "measured": 14.0,
+     "value": 6,
+     "low": 1,
+     "high": 12,
+     "nulls": [
+      10,
+      7
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t60",
+     "measured": 15.1,
+     "value": 6,
+     "low": 1,
+     "high": 12,
+     "nulls": [
+      14,
+      11
+     ],
+     "divergent": false,
+     "inside": false
+    }
+   ],
+   "state": "passes",
+   "reversal": {
+    "claims": 12,
+    "wins": 1,
+    "losses": 6,
+    "net": -5,
+    "agree_inside": 3,
+    "agree_outside": 2,
+    "rows": [
+     {
+      "id": "t19",
+      "measured": 0.831,
+      "value": 0.65,
+      "low": 0.59,
+      "high": 0.71,
+      "nulls": [
+       0.8,
+       0.8
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t25",
+      "measured": 169,
+      "value": 166,
+      "low": 158,
+      "high": 174,
+      "nulls": [
+       172,
+       167
+      ],
+      "divergent": false,
+      "inside": true
+     },
+     {
+      "id": "t27",
+      "measured": 179,
+      "value": 170,
+      "low": 163,
+      "high": 178,
+      "nulls": [
+       180,
+       177
+      ],
+      "divergent": false,
+      "inside": false
+     },
+     {
+      "id": "t28",
+      "measured": 205,
+      "value": 205,
+      "low": 196,
+      "high": 214,
+      "nulls": [
+       225,
+       220
+      ],
+      "divergent": true,
+      "inside": true
+     },
+     {
+      "id": "t51",
+      "measured": 404,
+      "value": 413,
+      "low": 401,
+      "high": 425,
+      "nulls": [
+       415,
+       412
+      ],
+      "divergent": false,
+      "inside": true
+     },
+     {
+      "id": "t53",
+      "measured": 409,
+      "value": 410,
+      "low": 398,
+      "high": 422,
+      "nulls": [
+       395,
+       398
+      ],
+      "divergent": false,
+      "inside": true
+     },
+     {
+      "id": "t55",
+      "measured": 34,
+      "value": 3,
+      "low": 0,
+      "high": 10,
+      "nulls": [
+       10,
+       12
+      ],
+      "divergent": false,
+      "inside": false
+     },
+     {
+      "id": "t56",
+      "measured": 58,
+      "value": 25,
+      "low": 15,
+      "high": 35,
+      "nulls": [
+       40,
+       45
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t57",
+      "measured": 23.4,
+      "value": 45,
+      "low": 35,
+      "high": 55,
+      "nulls": [
+       15,
+       12
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t58",
+      "measured": 31.2,
+      "value": 50,
+      "low": 40,
+      "high": 60,
+      "nulls": [
+       20,
+       18
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t59",
+      "measured": 14.0,
+      "value": 33,
+      "low": 24,
+      "high": 42,
+      "nulls": [
+       10,
+       7
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t60",
+      "measured": 15.1,
+      "value": 40,
+      "low": 30,
+      "high": 50,
+      "nulls": [
+       14,
+       11
+      ],
+      "divergent": true,
+      "inside": false
+     }
+    ]
+   }
+  },
+  "r1-all-2": {
+   "claims": 13,
+   "wins": 3,
+   "losses": 2,
+   "net": 1,
+   "agree_inside": 3,
+   "agree_outside": 5,
+   "rows": [
+    {
+     "id": "t06",
+     "measured": 168,
+     "value": 3,
+     "low": 0,
+     "high": 10,
+     "nulls": [
+      2,
+      2
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t32",
+     "measured": 441,
+     "value": 415,
+     "low": 405,
+     "high": 428,
+     "nulls": [
+      425,
+      422
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t33",
+     "measured": 452,
+     "value": 435,
+     "low": 422,
+     "high": 448,
+     "nulls": [
+      440,
+      440
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t35",
+     "measured": 457,
+     "value": 463,
+     "low": 455,
+     "high": 470,
+     "nulls": [
+      462,
+      461
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t36",
+     "measured": 450,
+     "value": 408,
+     "low": 395,
+     "high": 420,
+     "nulls": [
+      420,
+      415
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t37",
+     "measured": 417,
+     "value": 405,
+     "low": 390,
+     "high": 418,
+     "nulls": [
+      408,
+      408
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t40",
+     "measured": 405,
+     "value": 370,
+     "low": 340,
+     "high": 400,
+     "nulls": [
+      300,
+      290
+     ],
+     "divergent": true,
+     "inside": false
+    },
+    {
+     "id": "t41",
+     "measured": 443,
+     "value": 432,
+     "low": 415,
+     "high": 450,
+     "nulls": [
+      400,
+      380
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t42",
+     "measured": 390,
+     "value": 315,
+     "low": 275,
+     "high": 355,
+     "nulls": [
+      280,
+      290
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t57",
+     "measured": 23.4,
+     "value": 25,
+     "low": 15,
+     "high": 35,
+     "nulls": [
+      15,
+      12
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t58",
+     "measured": 31.2,
+     "value": 35,
+     "low": 25,
+     "high": 45,
+     "nulls": [
+      20,
+      18
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t59",
+     "measured": 14.0,
+     "value": 20,
+     "low": 12,
+     "high": 30,
+     "nulls": [
+      10,
+      7
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t60",
+     "measured": 15.1,
+     "value": 28,
+     "low": 18,
+     "high": 38,
+     "nulls": [
+      14,
+      11
+     ],
+     "divergent": true,
+     "inside": false
+    }
+   ],
+   "state": "passes",
+   "reversal": {
+    "claims": 13,
+    "wins": 0,
+    "losses": 5,
+    "net": -5,
+    "agree_inside": 2,
+    "agree_outside": 6,
+    "rows": [
+     {
+      "id": "t06",
+      "measured": 168,
+      "value": 1,
+      "low": 0,
+      "high": 5,
+      "nulls": [
+       2,
+       2
+      ],
+      "divergent": false,
+      "inside": false
+     },
+     {
+      "id": "t32",
+      "measured": 441,
+      "value": 423,
+      "low": 408,
+      "high": 438,
+      "nulls": [
+       425,
+       422
+      ],
+      "divergent": false,
+      "inside": false
+     },
+     {
+      "id": "t33",
+      "measured": 452,
+      "value": 437,
+      "low": 422,
+      "high": 451,
+      "nulls": [
+       440,
+       440
+      ],
+      "divergent": false,
+      "inside": false
+     },
+     {
+      "id": "t35",
+      "measured": 457,
+      "value": 463,
+      "low": 451,
+      "high": 474,
+      "nulls": [
+       462,
+       461
+      ],
+      "divergent": false,
+      "inside": true
+     },
+     {
+      "id": "t36",
+      "measured": 450,
+      "value": 408,
+      "low": 392,
+      "high": 424,
+      "nulls": [
+       420,
+       415
+      ],
+      "divergent": false,
+      "inside": false
+     },
+     {
+      "id": "t37",
+      "measured": 417,
+      "value": 410,
+      "low": 395,
+      "high": 424,
+      "nulls": [
+       408,
+       408
+      ],
+      "divergent": false,
+      "inside": true
+     },
+     {
+      "id": "t40",
+      "measured": 405,
+      "value": 284,
+      "low": 265,
+      "high": 303,
+      "nulls": [
+       300,
+       290
+      ],
+      "divergent": false,
+      "inside": false
+     },
+     {
+      "id": "t41",
+      "measured": 443,
+      "value": 344,
+      "low": 322,
+      "high": 366,
+      "nulls": [
+       400,
+       380
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t42",
+      "measured": 390,
+      "value": 226,
+      "low": 205,
+      "high": 248,
+      "nulls": [
+       280,
+       290
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t57",
+      "measured": 23.4,
+      "value": 6,
+      "low": 3,
+      "high": 10,
+      "nulls": [
+       15,
+       12
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t58",
+      "measured": 31.2,
+      "value": 8,
+      "low": 4,
+      "high": 13,
+      "nulls": [
+       20,
+       18
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t59",
+      "measured": 14.0,
+      "value": 4,
+      "low": 2,
+      "high": 7,
+      "nulls": [
+       10,
+       7
+      ],
+      "divergent": false,
+      "inside": false
+     },
+     {
+      "id": "t60",
+      "measured": 15.1,
+      "value": 5,
+      "low": 2,
+      "high": 9,
+      "nulls": [
+       14,
+       11
+      ],
+      "divergent": true,
+      "inside": false
+     }
+    ]
+   }
+  },
+  "r1-surprises-1": {
+   "claims": 8,
+   "wins": 0,
+   "losses": 0,
+   "net": 0,
+   "agree_inside": 6,
+   "agree_outside": 2,
+   "rows": [
+    {
+     "id": "t05",
+     "measured": 494,
+     "value": 485,
+     "low": 455,
+     "high": 500,
+     "nulls": [
+      470,
+      465
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t22",
+     "measured": 10,
+     "value": 8,
+     "low": 0,
+     "high": 15,
+     "nulls": [
+      8,
+      6
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t27",
+     "measured": 179,
+     "value": 186,
+     "low": 176,
+     "high": 198,
+     "nulls": [
+      180,
+      177
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t28",
+     "measured": 205,
+     "value": 218,
+     "low": 206,
+     "high": 235,
+     "nulls": [
+      225,
+      220
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t35",
+     "measured": 457,
+     "value": 463,
+     "low": 454,
+     "high": 471,
+     "nulls": [
+      462,
+      461
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t36",
+     "measured": 450,
+     "value": 410,
+     "low": 395,
+     "high": 428,
+     "nulls": [
+      420,
+      415
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t42",
+     "measured": 390,
+     "value": 340,
+     "low": 285,
+     "high": 400,
+     "nulls": [
+      280,
+      290
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t54",
+     "measured": 460,
+     "value": 462,
+     "low": 453,
+     "high": 471,
+     "nulls": [
+      462,
+      463
+     ],
+     "divergent": false,
+     "inside": true
+    }
+   ],
+   "state": "fails",
+   "reversal": null
+  },
+  "r1-surprises-2": {
+   "claims": 19,
+   "wins": 3,
+   "losses": 2,
+   "net": 1,
+   "agree_inside": 11,
+   "agree_outside": 3,
+   "rows": [
+    {
+     "id": "t22",
+     "measured": 10,
+     "value": 6,
+     "low": 0,
+     "high": 14,
+     "nulls": [
+      8,
+      6
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t32",
+     "measured": 441,
+     "value": 430,
+     "low": 419,
+     "high": 442,
+     "nulls": [
+      425,
+      422
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t33",
+     "measured": 452,
+     "value": 446,
+     "low": 436,
+     "high": 456,
+     "nulls": [
+      440,
+      440
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t43",
+     "measured": 451,
+     "value": 456,
+     "low": 447,
+     "high": 466,
+     "nulls": [
+      455,
+      453
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t34",
+     "measured": 453,
+     "value": 450,
+     "low": 432,
+     "high": 466,
+     "nulls": [
+      400,
+      380
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t45",
+     "measured": 34,
+     "value": 4,
+     "low": 0,
+     "high": 15,
+     "nulls": [
+      30,
+      40
+     ],
+     "divergent": true,
+     "inside": false
+    },
+    {
+     "id": "t40",
+     "measured": 405,
+     "value": 310,
+     "low": 270,
+     "high": 350,
+     "nulls": [
+      300,
+      290
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t41",
+     "measured": 443,
+     "value": 398,
+     "low": 370,
+     "high": 425,
+     "nulls": [
+      400,
+      380
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t46",
+     "measured": 4036,
+     "value": 4120,
+     "low": 3950,
+     "high": 4350,
+     "nulls": [
+      4000,
+      4050
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t37",
+     "measured": 417,
+     "value": 410,
+     "low": 398,
+     "high": 422,
+     "nulls": [
+      408,
+      408
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t38",
+     "measured": 42,
+     "value": 25,
+     "low": 16,
+     "high": 34,
+     "nulls": [
+      28,
+      30
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t39",
+     "measured": 53,
+     "value": 50,
+     "low": 40,
+     "high": 61,
+     "nulls": [
+      42,
+      40
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t47",
+     "measured": 3944,
+     "value": 3930,
+     "low": 3700,
+     "high": 4180,
+     "nulls": [
+      3950,
+      3950
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t57",
+     "measured": 23.4,
+     "value": 30,
+     "low": 18,
+     "high": 45,
+     "nulls": [
+      15,
+      12
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t58",
+     "measured": 31.2,
+     "value": 40,
+     "low": 26,
+     "high": 55,
+     "nulls": [
+      20,
+      18
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t59",
+     "measured": 14.0,
+     "value": 20,
+     "low": 10,
+     "high": 32,
+     "nulls": [
+      10,
+      7
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t60",
+     "measured": 15.1,
+     "value": 28,
+     "low": 16,
+     "high": 40,
+     "nulls": [
+      14,
+      11
+     ],
+     "divergent": true,
+     "inside": false
+    },
+    {
+     "id": "t61",
+     "measured": 2.6,
+     "value": 3,
+     "low": 0.5,
+     "high": 7,
+     "nulls": [
+      2.5,
+      4
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t62",
+     "measured": 3.4,
+     "value": 4,
+     "low": 0.5,
+     "high": 9,
+     "nulls": [
+      3.5,
+      5
+     ],
+     "divergent": false,
+     "inside": true
+    }
+   ],
+   "state": "passes",
+   "reversal": {
+    "claims": 19,
+    "wins": 1,
+    "losses": 11,
+    "net": -10,
+    "agree_inside": 3,
+    "agree_outside": 4,
+    "rows": [
+     {
+      "id": "t22",
+      "measured": 10,
+      "value": 45,
+      "low": 35,
+      "high": 55,
+      "nulls": [
+       8,
+       6
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t32",
+      "measured": 441,
+      "value": 423,
+      "low": 412,
+      "high": 434,
+      "nulls": [
+       425,
+       422
+      ],
+      "divergent": false,
+      "inside": false
+     },
+     {
+      "id": "t33",
+      "measured": 452,
+      "value": 436,
+      "low": 425,
+      "high": 447,
+      "nulls": [
+       440,
+       440
+      ],
+      "divergent": false,
+      "inside": false
+     },
+     {
+      "id": "t43",
+      "measured": 451,
+      "value": 449,
+      "low": 439,
+      "high": 459,
+      "nulls": [
+       455,
+       453
+      ],
+      "divergent": false,
+      "inside": true
+     },
+     {
+      "id": "t34",
+      "measured": 453,
+      "value": 478,
+      "low": 466,
+      "high": 490,
+      "nulls": [
+       400,
+       380
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t45",
+      "measured": 34,
+      "value": 3,
+      "low": 0,
+      "high": 8,
+      "nulls": [
+       30,
+       40
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t40",
+      "measured": 405,
+      "value": 284,
+      "low": 262,
+      "high": 306,
+      "nulls": [
+       300,
+       290
+      ],
+      "divergent": false,
+      "inside": false
+     },
+     {
+      "id": "t41",
+      "measured": 443,
+      "value": 344,
+      "low": 322,
+      "high": 366,
+      "nulls": [
+       400,
+       380
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t46",
+      "measured": 4036,
+      "value": 4120,
+      "low": 3950,
+      "high": 4300,
+      "nulls": [
+       4000,
+       4050
+      ],
+      "divergent": false,
+      "inside": true
+     },
+     {
+      "id": "t37",
+      "measured": 417,
+      "value": 432,
+      "low": 418,
+      "high": 446,
+      "nulls": [
+       408,
+       408
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t38",
+      "measured": 42,
+      "value": 40,
+      "low": 32,
+      "high": 48,
+      "nulls": [
+       28,
+       30
+      ],
+      "divergent": true,
+      "inside": true
+     },
+     {
+      "id": "t39",
+      "measured": 53,
+      "value": 41,
+      "low": 33,
+      "high": 49,
+      "nulls": [
+       42,
+       40
+      ],
+      "divergent": false,
+      "inside": false
+     },
+     {
+      "id": "t47",
+      "measured": 3944,
+      "value": 3950,
+      "low": 3750,
+      "high": 4150,
+      "nulls": [
+       3950,
+       3950
+      ],
+      "divergent": false,
+      "inside": true
+     },
+     {
+      "id": "t57",
+      "measured": 23.4,
+      "value": 5,
+      "low": 2,
+      "high": 9,
+      "nulls": [
+       15,
+       12
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t58",
+      "measured": 31.2,
+      "value": 7,
+      "low": 3,
+      "high": 11,
+      "nulls": [
+       20,
+       18
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t59",
+      "measured": 14.0,
+      "value": 3,
+      "low": 1,
+      "high": 6,
+      "nulls": [
+       10,
+       7
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t60",
+      "measured": 15.1,
+      "value": 5,
+      "low": 2,
+      "high": 8,
+      "nulls": [
+       14,
+       11
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t61",
+      "measured": 2.6,
+      "value": 25,
+      "low": 17,
+      "high": 33,
+      "nulls": [
+       2.5,
+       4
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t62",
+      "measured": 3.4,
+      "value": 32,
+      "low": 23,
+      "high": 41,
+      "nulls": [
+       3.5,
+       5
+      ],
+      "divergent": true,
+      "inside": false
+     }
+    ]
+   }
+  },
+  "r2-across-1": {
+   "claims": 6,
+   "wins": 1,
+   "losses": 1,
+   "net": 0,
+   "agree_inside": 4,
+   "agree_outside": 0,
+   "rows": [
+    {
+     "id": "t51",
+     "measured": 404,
+     "value": 398,
+     "low": 383,
+     "high": 410,
+     "nulls": [
+      415,
+      412
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t52",
+     "measured": 412,
+     "value": 370,
+     "low": 340,
+     "high": 392,
+     "nulls": [
+      400,
+      395
+     ],
+     "divergent": true,
+     "inside": false
+    },
+    {
+     "id": "t53",
+     "measured": 409,
+     "value": 400,
+     "low": 389,
+     "high": 409,
+     "nulls": [
+      395,
+      398
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t54",
+     "measured": 460,
+     "value": 463,
+     "low": 454,
+     "high": 471,
+     "nulls": [
+      462,
+      463
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t55",
+     "measured": 34,
+     "value": 20,
+     "low": 8,
+     "high": 45,
+     "nulls": [
+      10,
+      12
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t56",
+     "measured": 58,
+     "value": 50,
+     "low": 35,
+     "high": 75,
+     "nulls": [
+      40,
+      45
+     ],
+     "divergent": false,
+     "inside": true
+    }
+   ],
+   "state": "fails",
+   "reversal": null
+  },
+  "r2-across-2": {
+   "claims": 15,
+   "wins": 3,
+   "losses": 2,
+   "net": 1,
+   "agree_inside": 5,
+   "agree_outside": 5,
+   "rows": [
+    {
+     "id": "t37",
+     "measured": 417,
+     "value": 409,
+     "low": 397,
+     "high": 421,
+     "nulls": [
+      408,
+      408
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t38",
+     "measured": 42,
+     "value": 25,
+     "low": 16,
+     "high": 34,
+     "nulls": [
+      28,
+      30
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t47",
+     "measured": 3944,
+     "value": 3950,
+     "low": 3650,
+     "high": 4250,
+     "nulls": [
+      3950,
+      3950
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t32",
+     "measured": 441,
+     "value": 440,
+     "low": 428,
+     "high": 452,
+     "nulls": [
+      425,
+      422
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t33",
+     "measured": 452,
+     "value": 452,
+     "low": 443,
+     "high": 461,
+     "nulls": [
+      440,
+      440
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t43",
+     "measured": 451,
+     "value": 460,
+     "low": 452,
+     "high": 468,
+     "nulls": [
+      455,
+      453
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t34",
+     "measured": 453,
+     "value": 458,
+     "low": 444,
+     "high": 470,
+     "nulls": [
+      400,
+      380
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t45",
+     "measured": 34,
+     "value": 4,
+     "low": 0,
+     "high": 15,
+     "nulls": [
+      30,
+      40
+     ],
+     "divergent": true,
+     "inside": false
+    },
+    {
+     "id": "t40",
+     "measured": 405,
+     "value": 360,
+     "low": 330,
+     "high": 390,
+     "nulls": [
+      300,
+      290
+     ],
+     "divergent": true,
+     "inside": false
+    },
+    {
+     "id": "t41",
+     "measured": 443,
+     "value": 415,
+     "low": 395,
+     "high": 435,
+     "nulls": [
+      400,
+      380
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t39",
+     "measured": 53,
+     "value": 52,
+     "low": 42,
+     "high": 62,
+     "nulls": [
+      42,
+      40
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t36",
+     "measured": 450,
+     "value": 412,
+     "low": 393,
+     "high": 428,
+     "nulls": [
+      420,
+      415
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t42",
+     "measured": 390,
+     "value": 245,
+     "low": 200,
+     "high": 295,
+     "nulls": [
+      280,
+      290
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t61",
+     "measured": 2.6,
+     "value": 1.0,
+     "low": 0.2,
+     "high": 4.0,
+     "nulls": [
+      2.5,
+      4
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t62",
+     "measured": 3.4,
+     "value": 1.2,
+     "low": 0.2,
+     "high": 4.0,
+     "nulls": [
+      3.5,
+      5
+     ],
+     "divergent": false,
+     "inside": true
+    }
+   ],
+   "state": "passes",
+   "reversal": {
+    "claims": 15,
+    "wins": 6,
+    "losses": 8,
+    "net": -2,
+    "agree_inside": 0,
+    "agree_outside": 1,
+    "rows": [
+     {
+      "id": "t37",
+      "measured": 417,
+      "value": 447,
+      "low": 436,
+      "high": 458,
+      "nulls": [
+       408,
+       408
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t38",
+      "measured": 42,
+      "value": 52,
+      "low": 44,
+      "high": 60,
+      "nulls": [
+       28,
+       30
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t47",
+      "measured": 3944,
+      "value": 4500,
+      "low": 4250,
+      "high": 4750,
+      "nulls": [
+       3950,
+       3950
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t32",
+      "measured": 441,
+      "value": 450,
+      "low": 440,
+      "high": 460,
+      "nulls": [
+       425,
+       422
+      ],
+      "divergent": true,
+      "inside": true
+     },
+     {
+      "id": "t33",
+      "measured": 452,
+      "value": 458,
+      "low": 449,
+      "high": 467,
+      "nulls": [
+       440,
+       440
+      ],
+      "divergent": true,
+      "inside": true
+     },
+     {
+      "id": "t43",
+      "measured": 451,
+      "value": 462,
+      "low": 453,
+      "high": 471,
+      "nulls": [
+       455,
+       453
+      ],
+      "divergent": false,
+      "inside": false
+     },
+     {
+      "id": "t34",
+      "measured": 453,
+      "value": 260,
+      "low": 180,
+      "high": 340,
+      "nulls": [
+       400,
+       380
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t45",
+      "measured": 34,
+      "value": 150,
+      "low": 90,
+      "high": 220,
+      "nulls": [
+       30,
+       40
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t40",
+      "measured": 405,
+      "value": 420,
+      "low": 395,
+      "high": 445,
+      "nulls": [
+       300,
+       290
+      ],
+      "divergent": true,
+      "inside": true
+     },
+     {
+      "id": "t41",
+      "measured": 443,
+      "value": 447,
+      "low": 430,
+      "high": 462,
+      "nulls": [
+       400,
+       380
+      ],
+      "divergent": true,
+      "inside": true
+     },
+     {
+      "id": "t39",
+      "measured": 53,
+      "value": 60,
+      "low": 52,
+      "high": 68,
+      "nulls": [
+       42,
+       40
+      ],
+      "divergent": true,
+      "inside": true
+     },
+     {
+      "id": "t36",
+      "measured": 450,
+      "value": 453,
+      "low": 442,
+      "high": 464,
+      "nulls": [
+       420,
+       415
+      ],
+      "divergent": true,
+      "inside": true
+     },
+     {
+      "id": "t42",
+      "measured": 390,
+      "value": 440,
+      "low": 420,
+      "high": 458,
+      "nulls": [
+       280,
+       290
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t61",
+      "measured": 2.6,
+      "value": 10,
+      "low": 6,
+      "high": 15,
+      "nulls": [
+       2.5,
+       4
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t62",
+      "measured": 3.4,
+      "value": 14,
+      "low": 9,
+      "high": 20,
+      "nulls": [
+       3.5,
+       5
+      ],
+      "divergent": true,
+      "inside": false
+     }
+    ]
+   }
+  },
+  "r2-all-1": {
+   "claims": 5,
+   "wins": 0,
+   "losses": 1,
+   "net": -1,
+   "agree_inside": 2,
+   "agree_outside": 2,
+   "rows": [
+    {
+     "id": "t37",
+     "measured": 417,
+     "value": 409,
+     "low": 399,
+     "high": 419,
+     "nulls": [
+      408,
+      408
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t38",
+     "measured": 42,
+     "value": 30,
+     "low": 21,
+     "high": 40,
+     "nulls": [
+      28,
+      30
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t47",
+     "measured": 3944,
+     "value": 3950,
+     "low": 3700,
+     "high": 4200,
+     "nulls": [
+      3950,
+      3950
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t42",
+     "measured": 390,
+     "value": 230,
+     "low": 205,
+     "high": 255,
+     "nulls": [
+      280,
+      290
+     ],
+     "divergent": true,
+     "inside": false
+    },
+    {
+     "id": "t36",
+     "measured": 450,
+     "value": 408,
+     "low": 394,
+     "high": 420,
+     "nulls": [
+      420,
+      415
+     ],
+     "divergent": false,
+     "inside": false
+    }
+   ],
+   "state": "fails",
+   "reversal": null
+  },
+  "r2-all-2": {
+   "claims": 8,
+   "wins": 2,
+   "losses": 0,
+   "net": 2,
+   "agree_inside": 4,
+   "agree_outside": 2,
+   "rows": [
+    {
+     "id": "t53",
+     "measured": 409,
+     "value": 398,
+     "low": 386,
+     "high": 408,
+     "nulls": [
+      395,
+      398
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t51",
+     "measured": 404,
+     "value": 390,
+     "low": 372,
+     "high": 404,
+     "nulls": [
+      415,
+      412
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t55",
+     "measured": 34,
+     "value": 22,
+     "low": 10,
+     "high": 40,
+     "nulls": [
+      10,
+      12
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t56",
+     "measured": 58,
+     "value": 55,
+     "low": 40,
+     "high": 80,
+     "nulls": [
+      40,
+      45
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t52",
+     "measured": 412,
+     "value": 400,
+     "low": 385,
+     "high": 415,
+     "nulls": [
+      400,
+      395
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t54",
+     "measured": 460,
+     "value": 462,
+     "low": 453,
+     "high": 471,
+     "nulls": [
+      462,
+      463
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t09",
+     "measured": 166,
+     "value": 130,
+     "low": 95,
+     "high": 170,
+     "nulls": [
+      45,
+      60
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t10",
+     "measured": 127,
+     "value": 75,
+     "low": 58,
+     "high": 95,
+     "nulls": [
+      70,
+      85
+     ],
+     "divergent": false,
+     "inside": false
+    }
+   ],
+   "state": "passes",
+   "reversal": {
+    "claims": 8,
+    "wins": 0,
+    "losses": 6,
+    "net": -6,
+    "agree_inside": 0,
+    "agree_outside": 2,
+    "rows": [
+     {
+      "id": "t53",
+      "measured": 409,
+      "value": 421,
+      "low": 412,
+      "high": 431,
+      "nulls": [
+       395,
+       398
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t51",
+      "measured": 404,
+      "value": 423,
+      "low": 413,
+      "high": 433,
+      "nulls": [
+       415,
+       412
+      ],
+      "divergent": false,
+      "inside": false
+     },
+     {
+      "id": "t55",
+      "measured": 34,
+      "value": 0,
+      "low": 0,
+      "high": 2,
+      "nulls": [
+       10,
+       12
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t56",
+      "measured": 58,
+      "value": 15,
+      "low": 8,
+      "high": 23,
+      "nulls": [
+       40,
+       45
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t52",
+      "measured": 412,
+      "value": 448,
+      "low": 436,
+      "high": 460,
+      "nulls": [
+       400,
+       395
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t54",
+      "measured": 460,
+      "value": 471,
+      "low": 464,
+      "high": 478,
+      "nulls": [
+       462,
+       463
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t09",
+      "measured": 166,
+      "value": 30,
+      "low": 22,
+      "high": 38,
+      "nulls": [
+       45,
+       60
+      ],
+      "divergent": true,
+      "inside": false
+     },
+     {
+      "id": "t10",
+      "measured": 127,
+      "value": 75,
+      "low": 65,
+      "high": 85,
+      "nulls": [
+       70,
+       85
+      ],
+      "divergent": false,
+      "inside": false
+     }
+    ]
+   }
+  },
+  "r2-external-1": {
+   "claims": 5,
+   "wins": 1,
+   "losses": 1,
+   "net": 0,
+   "agree_inside": 3,
+   "agree_outside": 0,
+   "rows": [
+    {
+     "id": "t37",
+     "measured": 417,
+     "value": 410,
+     "low": 397,
+     "high": 422,
+     "nulls": [
+      408,
+      408
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t38",
+     "measured": 42,
+     "value": 31,
+     "low": 21,
+     "high": 42,
+     "nulls": [
+      28,
+      30
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t47",
+     "measured": 3944,
+     "value": 3930,
+     "low": 3650,
+     "high": 4250,
+     "nulls": [
+      3950,
+      3950
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t34",
+     "measured": 453,
+     "value": 445,
+     "low": 425,
+     "high": 465,
+     "nulls": [
+      400,
+      380
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t45",
+     "measured": 34,
+     "value": 8,
+     "low": 0,
+     "high": 25,
+     "nulls": [
+      30,
+      40
+     ],
+     "divergent": true,
+     "inside": false
+    }
+   ],
+   "state": "fails",
+   "reversal": null
+  },
+  "r2-external-2": {
+   "claims": 6,
+   "wins": 1,
+   "losses": 2,
+   "net": -1,
+   "agree_inside": 2,
+   "agree_outside": 1,
+   "rows": [
+    {
+     "id": "t51",
+     "measured": 404,
+     "value": 424,
+     "low": 414,
+     "high": 438,
+     "nulls": [
+      415,
+      412
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t52",
+     "measured": 412,
+     "value": 412,
+     "low": 398,
+     "high": 428,
+     "nulls": [
+      400,
+      395
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t53",
+     "measured": 409,
+     "value": 418,
+     "low": 409,
+     "high": 430,
+     "nulls": [
+      395,
+      398
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t54",
+     "measured": 460,
+     "value": 463,
+     "low": 455,
+     "high": 471,
+     "nulls": [
+      462,
+      463
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t55",
+     "measured": 34,
+     "value": 2,
+     "low": 0,
+     "high": 8,
+     "nulls": [
+      10,
+      12
+     ],
+     "divergent": true,
+     "inside": false
+    },
+    {
+     "id": "t56",
+     "measured": 58,
+     "value": 21,
+     "low": 12,
+     "high": 30,
+     "nulls": [
+      40,
+      45
+     ],
+     "divergent": true,
+     "inside": false
+    }
+   ],
+   "state": "fails",
+   "reversal": null
+  },
+  "r2-revise-1": {
+   "claims": 10,
+   "wins": 1,
+   "losses": 0,
+   "net": 1,
+   "agree_inside": 3,
+   "agree_outside": 6,
+   "rows": [
+    {
+     "id": "t32",
+     "measured": 441,
+     "value": 427,
+     "low": 420,
+     "high": 434,
+     "nulls": [
+      425,
+      422
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t33",
+     "measured": 452,
+     "value": 442,
+     "low": 435,
+     "high": 449,
+     "nulls": [
+      440,
+      440
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t43",
+     "measured": 451,
+     "value": 453,
+     "low": 446,
+     "high": 460,
+     "nulls": [
+      455,
+      453
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t34",
+     "measured": 453,
+     "value": 466,
+     "low": 452,
+     "high": 478,
+     "nulls": [
+      400,
+      380
+     ],
+     "divergent": true,
+     "inside": true
+    },
+    {
+     "id": "t40",
+     "measured": 405,
+     "value": 308,
+     "low": 278,
+     "high": 340,
+     "nulls": [
+      300,
+      290
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t41",
+     "measured": 443,
+     "value": 380,
+     "low": 358,
+     "high": 402,
+     "nulls": [
+      400,
+      380
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t36",
+     "measured": 450,
+     "value": 406,
+     "low": 392,
+     "high": 420,
+     "nulls": [
+      420,
+      415
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t42",
+     "measured": 390,
+     "value": 245,
+     "low": 212,
+     "high": 285,
+     "nulls": [
+      280,
+      290
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t37",
+     "measured": 417,
+     "value": 408,
+     "low": 394,
+     "high": 422,
+     "nulls": [
+      408,
+      408
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t47",
+     "measured": 3944,
+     "value": 3930,
+     "low": 3680,
+     "high": 4180,
+     "nulls": [
+      3950,
+      3950
+     ],
+     "divergent": false,
+     "inside": true
+    }
+   ],
+   "state": "fails",
+   "reversal": null
+  },
+  "r2-revise-2": {
+   "claims": 2,
+   "wins": 0,
+   "losses": 0,
+   "net": 0,
+   "agree_inside": 0,
+   "agree_outside": 2,
+   "rows": [
+    {
+     "id": "t27",
+     "measured": 179,
+     "value": 189,
+     "low": 180,
+     "high": 198,
+     "nulls": [
+      180,
+      177
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t28",
+     "measured": 205,
+     "value": 222,
+     "low": 210,
+     "high": 235,
+     "nulls": [
+      225,
+      220
+     ],
+     "divergent": false,
+     "inside": false
+    }
+   ],
+   "state": "fails",
+   "reversal": null
+  },
+  "r2-surprises-1": {
+   "claims": 4,
+   "wins": 0,
+   "losses": 1,
+   "net": -1,
+   "agree_inside": 1,
+   "agree_outside": 2,
+   "rows": [
+    {
+     "id": "t09",
+     "measured": 166,
+     "value": 95,
+     "low": 65,
+     "high": 140,
+     "nulls": [
+      45,
+      60
+     ],
+     "divergent": true,
+     "inside": false
+    },
+    {
+     "id": "t52",
+     "measured": 412,
+     "value": 388,
+     "low": 365,
+     "high": 404,
+     "nulls": [
+      400,
+      395
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t55",
+     "measured": 34,
+     "value": 10,
+     "low": 3,
+     "high": 30,
+     "nulls": [
+      10,
+      12
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t56",
+     "measured": 58,
+     "value": 42,
+     "low": 31,
+     "high": 65,
+     "nulls": [
+      40,
+      45
+     ],
+     "divergent": false,
+     "inside": true
+    }
+   ],
+   "state": "fails",
+   "reversal": null
+  },
+  "r2-surprises-2": {
+   "claims": 9,
+   "wins": 0,
+   "losses": 1,
+   "net": -1,
+   "agree_inside": 5,
+   "agree_outside": 3,
+   "rows": [
+    {
+     "id": "t57",
+     "measured": 23.4,
+     "value": 8,
+     "low": 2,
+     "high": 16,
+     "nulls": [
+      15,
+      12
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t58",
+     "measured": 31.2,
+     "value": 10,
+     "low": 3,
+     "high": 19,
+     "nulls": [
+      20,
+      18
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t59",
+     "measured": 14.0,
+     "value": 6,
+     "low": 1,
+     "high": 14,
+     "nulls": [
+      10,
+      7
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t60",
+     "measured": 15.1,
+     "value": 8,
+     "low": 2,
+     "high": 16,
+     "nulls": [
+      14,
+      11
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t42",
+     "measured": 390,
+     "value": 235,
+     "low": 205,
+     "high": 265,
+     "nulls": [
+      280,
+      290
+     ],
+     "divergent": true,
+     "inside": false
+    },
+    {
+     "id": "t36",
+     "measured": 450,
+     "value": 405,
+     "low": 390,
+     "high": 422,
+     "nulls": [
+      420,
+      415
+     ],
+     "divergent": false,
+     "inside": false
+    },
+    {
+     "id": "t37",
+     "measured": 417,
+     "value": 408,
+     "low": 396,
+     "high": 420,
+     "nulls": [
+      408,
+      408
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t47",
+     "measured": 3944,
+     "value": 3950,
+     "low": 3750,
+     "high": 4150,
+     "nulls": [
+      3950,
+      3950
+     ],
+     "divergent": false,
+     "inside": true
+    },
+    {
+     "id": "t22",
+     "measured": 10,
+     "value": 6,
+     "low": 1,
+     "high": 14,
+     "nulls": [
+      8,
+      6
+     ],
+     "divergent": false,
+     "inside": true
+    }
+   ],
+   "state": "fails",
+   "reversal": null
+  }
+ }
+}

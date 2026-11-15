@@ -1,0 +1,167 @@
+{
+ "filed_utc": "2026-11-15T05:04:57+00:00",
+ "scored": 2,
+ "scored_filed_before_the_observation": 0,
+ "not_finished": 5,
+ "mean_abs_error_problems_all_scored": {
+  "hazard_Hc": 0.55,
+  "hazard_c1": 7.05,
+  "hazard_MH": 29.7,
+  "logit_Lc": 8.35,
+  "point": 3.7
+ },
+ "mean_abs_error_problems_filed_before": null,
+ "cells": [
+  {
+   "cell": "base + cue, vote over 4 after restart",
+   "set": "hard328",
+   "status": "prediction",
+   "hazard_Hc": 184.2,
+   "hazard_interval80": [
+    174.0,
+    195.0
+   ],
+   "hazard_c1": 193.8,
+   "hazard_MH": 225.0,
+   "logit_Lc": 192.3,
+   "logit_interval80": [
+    182.0,
+    202.0
+   ],
+   "point": 187.9,
+   "observed": null
+  },
+  {
+   "cell": "RL plain, vote over 4 after restart",
+   "set": "hard328",
+   "status": "prediction",
+   "hazard_Hc": 218.8,
+   "hazard_interval80": [
+    207.0,
+    232.0
+   ],
+   "hazard_c1": 226.2,
+   "hazard_MH": 246.4,
+   "logit_Lc": 227.1,
+   "logit_interval80": [
+    217.0,
+    239.0
+   ],
+   "point": 215.8,
+   "observed": null
+  },
+  {
+   "cell": "base + cue + 3 RL-written solved problems (shots_rl)",
+   "set": "hard328",
+   "status": "prediction",
+   "hazard_Hc": 174.7,
+   "hazard_interval80": [
+    164.0,
+    185.0
+   ],
+   "hazard_c1": 180.9,
+   "hazard_MH": 203.7,
+   "logit_Lc": 181.4,
+   "logit_interval80": [
+    171.0,
+    192.0
+   ],
+   "point": 179.8,
+   "observed": null
+  },
+  {
+   "cell": "base + top 8 directions, cue",
+   "set": "hard328",
+   "status": "prediction",
+   "hazard_Hc": 171.3,
+   "hazard_interval80": [
+    159.0,
+    183.0
+   ],
+   "hazard_c1": 176.4,
+   "hazard_MH": 186.5,
+   "logit_Lc": 173.1,
+   "logit_interval80": [
+    164.0,
+    193.0
+   ],
+   "point": 172.8,
+   "observed": null
+  },
+  {
+   "cell": "base + cue, vote over 4, no restart (sameraslan's run, result-1dedfe)",
+   "set": "hard328",
+   "status": "computed after the observation",
+   "hazard_Hc": 179.5,
+   "hazard_interval80": [
+    170.0,
+    189.0
+   ],
+   "hazard_c1": 187.4,
+   "hazard_MH": 217.9,
+   "logit_Lc": 188.5,
+   "logit_interval80": [
+    179.0,
+    198.0
+   ],
+   "point": 185.3,
+   "observed": 179,
+   "source": "origin/claude/swarm-literature-review-60a281:studies/rlneurons/results/day1_3/hard328_base_cue_s4r0-01/readout.json rows.vote",
+   "error": {
+    "hazard_Hc": 0.5,
+    "hazard_c1": 8.4,
+    "hazard_MH": 38.9,
+    "logit_Lc": 9.5,
+    "point": 6.3
+   },
+   "inside_hazard_interval80": true
+  },
+  {
+   "cell": "RL plain, vote over 4, no restart, on the 246 problems that finished (result-1dedfe)",
+   "set": "hard328 subset",
+   "status": "computed after the observation",
+   "hazard_Hc": 161.6,
+   "hazard_interval80": [
+    152.0,
+    172.0
+   ],
+   "hazard_c1": 166.7,
+   "hazard_MH": 181.5,
+   "logit_Lc": 168.2,
+   "logit_interval80": [
+    160.0,
+    177.0
+   ],
+   "point": 159.9,
+   "observed": 161,
+   "source": "origin/claude/swarm-literature-review-60a281:studies/rlneurons/results/day1_3/hard328_partial246_rl_plain_s4r0-01/readout.json rows.vote",
+   "error": {
+    "hazard_Hc": 0.6,
+    "hazard_c1": 5.7,
+    "hazard_MH": 20.5,
+    "logit_Lc": 7.2,
+    "point": -1.1
+   },
+   "inside_hazard_interval80": true
+  },
+  {
+   "cell": "Think-SFT cue, vote over 4",
+   "set": "math500",
+   "status": "prediction",
+   "hazard_Hc": 472.1,
+   "hazard_interval80": [
+    464.0,
+    480.0
+   ],
+   "hazard_c1": null,
+   "hazard_MH": 472.8,
+   "logit_Lc": 473.1,
+   "logit_interval80": [
+    466.0,
+    480.0
+   ],
+   "point": 489.5,
+   "observed": null
+  }
+ ]
+}
