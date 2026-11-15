@@ -1,0 +1,47 @@
+## 1. deployed runner (uv run modal app history iterate-runner)
+┏━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━┓
+┃ Version ┃ Time deployed        ┃ Client ┃ Deployed by ┃ Commit   ┃
+┡━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━┩
+│ v3      │ 2026-11-14 15:23 PST │ 1.4.2  │ sameraslan  │ 7be6204* │
+│ v2      │ 2026-11-14 14:53 PST │ 1.4.2  │ sameraslan  │ 56c614e* │
+│ v1      │ 2026-11-14 12:10 PST │ 1.4.2  │ sameraslan  │ cdee066  │
+└─────────┴──────────────────────┴────────┴─────────────┴──────────┘
+* - repo had uncommitted changes
+
+runner commits on origin/main after 7be6204 (git log --no-merges 7be6204..origin/main -- infra/runner.py):
+a76a56a 2026-11-14T20:08:15-08:00 Runner image holds the rlneurons vLLM environment, built once by studies/rlneurons/jobs/setup_vllm.sh
+539d0c6 2026-11-14T18:38:53-08:00 runner: reload iterate-runs at job start, so inputs uploaded after a container started are visible
+955e3a5 2026-11-14T18:37:39-08:00 Runner: H100 max_containers 4 -> 20 (4 ran, 15 waited, reward5's 10 behind 5; after deploy 10 run, 8 wait, likely Mo
+aa9166a 2026-11-14T18:16:01-08:00 Runner: a container restarted by Modal sets the interrupted output aside and runs again (was FileExistsError, 231 co
+runner commits not deployed: 4
+
+## 2. setup_vllm.sh seconds per vLLM job submitted after a76a56a (2026-11-15T04:08:15Z)
+sameraslan-1114-203558-cf30 2026-11-15T04:35:58Z exit 1 setup_s 35
+sameraslan-1114-203816-b34d 2026-11-15T04:38:16Z done setup_s 1
+sameraslan-1114-203946-8e12 2026-11-15T04:39:46Z done setup_s 1
+sameraslan-1114-204845-1055 2026-11-15T04:48:45Z done setup_s 29
+sameraslan-1114-204852-d527 2026-11-15T04:48:52Z done setup_s 26
+sameraslan-1114-205149-0570 2026-11-15T04:51:49Z cancelled setup_s 1
+sameraslan-1114-205156-86f8 2026-11-15T04:51:56Z done setup_s 36
+sameraslan-1114-205203-840e 2026-11-15T04:52:04Z done setup_s 30
+sameraslan-1114-205210-8d88 2026-11-15T04:52:10Z done setup_s 26
+sameraslan-1114-205216-17de 2026-11-15T04:52:17Z done setup_s 27
+sameraslan-1114-214049-ef4f 2026-11-15T05:40:49Z running setup_s 28
+sameraslan-1114-214056-15f9 2026-11-15T05:40:56Z running setup_s 26
+sameraslan-1114-214244-11de 2026-11-15T05:42:44Z exit 1 setup_s 2
+sameraslan-1114-214251-10c3 2026-11-15T05:42:51Z running setup_s 1
+jobs with a setup line: 14; median 26 s; sum 4.5 min
+
+## 3. failures after their runner fix was in git
+sameraslan-1114-153510-57fb fix aa9166a 2026-11-15T02:16:01Z | start record 2026-11-15T02:44:48Z | end - | state died: FileExistsError: [Errno 17] File exists: '/runs/samera | restart
+sameraslan-1114-155020-5a4d fix aa9166a 2026-11-15T02:16:01Z | start record 2026-11-15T02:44:50Z | end - | state died: FileExistsError: [Errno 17] File exists: '/runs/samera | restart
+sameraslan-1114-193229-5442 fix 539d0c6 2026-11-15T02:38:53Z | start record 2026-11-15T03:32:30Z | end 2026-11-15T03:40:19Z | state done | stale Volume view
+writer of the file 5442 read: sameraslan-1114-184603-9d69 end record 2026-11-15T03:26:14Z exit 0
+
+## 4. job end record to board item, study cleanneurons (uv run tools/board.py show <id>)
+result-156f7b posted 2026-11-14T23:22:10Z | last job sameraslan-1114-151017-b683 end 2026-11-14T23:14:03Z | minutes 8.1
+result-904bbf posted 2026-11-14T23:39:24Z | last job sameraslan-1114-153108-a93d end 2026-11-14T23:37:33Z | minutes 1.9
+result-4227c6 posted 2026-11-14T23:59:31Z | last job sameraslan-1114-154532-cdc8 end 2026-11-14T23:46:36Z | minutes 12.9
+result-54f212 posted 2026-11-15T02:53:14Z | last job sameraslan-1114-184552-a899 end 2026-11-15T02:51:55Z | minutes 1.3
+result-6de887 posted 2026-11-15T03:51:02Z | last job sameraslan-1114-190626-cf9f end 2026-11-15T03:48:18Z | minutes 2.7
+result-2048b1 posted 2026-11-15T05:41:19Z | last job sameraslan-1114-195047-4022 end 2026-11-15T04:14:53Z | minutes 86.4

@@ -1,0 +1,3 @@
+same command, 06:05 UTC, after the change:
+  54 jobs, 13 failed or cancelled; median wait 0.1; 948.1 container minutes, 26.0 of them in failed or cancelled jobs
+died jobs print - for run minutes

@@ -21,6 +21,7 @@ closes, ? lists the keys. A click on a person shows only that person.
   GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
   GET /proof           the Proof tab: one tile per experiment that tests the team's method itself (the page of findings.py)
   GET /proof/<slug>    the page of one such experiment (proof_<slug>.py, made like a finding page)
+  GET /favicon.svg     the tab icon of every page; send() writes the link to it into the head of each HTML page
   GET /data            the newest 60 items of each kind and list, the messages on `all` of the last --hours, every score
                        (board.py score), which the hill-climbing charts draw, the first line of each scored result's
                        finding (climb.finding) and the newest comment of each open work item idle over an hour (JSON),
@@ -79,6 +80,21 @@ FINDINGS_PAGE = tiles_page(FINDINGS)
 PROOFS = {os.path.basename(f)[len("proof_"):-3].replace("_", "-"): importlib.import_module(os.path.basename(f)[:-3])
           for f in sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "proof_*.py")))}
 PROOF_PAGE = tiles_page(PROOFS, findings.PROOF)
+
+
+# The tab icon of every page: the lit body of the Design page and one orbit around it, on the dark paper, with the light
+# from the upper left. The orbit is faint behind the body and heavier in front of it.
+FAVICON = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<radialGradient id="b" cx=".34" cy=".3" r=".8"><stop offset="0" stop-color="#f6f9ff"/><stop offset=".45" stop-color="#8fb1ff"/><stop offset="1" stop-color="#2f4fb8"/></radialGradient>
+<rect width="32" height="32" rx="7" fill="#080c11"/>
+<g transform="rotate(-24 16 16)" fill="none" stroke="#8fb1ff" stroke-linecap="round">
+<path d="M2.4 16A13.6 5.6 0 0 1 29.6 16" stroke-width="1.8" opacity=".45"/>
+<circle cx="16" cy="16" r="7.4" fill="url(#b)" stroke="none"/>
+<path d="M2.4 16A13.6 5.6 0 0 0 29.6 16" stroke-width="2.6"/>
+</g>
+</svg>
+"""
+ICON_LINK = '<link rel="icon" href="/favicon.svg" type="image/svg+xml">\n'
 
 
 def newest(listed, n=60):
@@ -156,6 +172,8 @@ class Handler(BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"  # Chrome revalidates with If-None-Match only for HTTP/1.1 responses
 
     def send(self, status, kind, body, headers=()):
+        if kind == "text/html":  # every page gets the tab icon here, so no page module holds it
+            body = body.replace("<title>", ICON_LINK + "<title>", 1)
         data = body.encode()
         tag = f'"{hashlib.blake2b(data, digest_size=16).hexdigest()}"'  # from the content, so an unchanged board answers 304
         if status == 200 and self.headers.get("If-None-Match") == tag:
@@ -189,6 +207,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, "text/html", PROOF_PAGE)
         if path.startswith("/proof/") and path[len("/proof/"):] in PROOFS:
             return self.send(200, "text/html", PROOFS[path[len("/proof/"):]].PAGE)
+        if path == "/favicon.svg":
+            return self.send(200, "image/svg+xml", FAVICON)
         if path != "/data" and not path.startswith("/data/"):
             return self.send(404, "text/plain", f"no page {path}")
         try:  # the page shows the error text; the traceback goes to this terminal

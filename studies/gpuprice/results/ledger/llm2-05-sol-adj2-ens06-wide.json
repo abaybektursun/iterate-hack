@@ -1,0 +1,35 @@
+{
+ "name": "llm2-05-sol-adj2-ens06-wide",
+ "note": "O2: gpt-6.1-sol (effort low, no tools) adjusts ens-06 (candidate 2 on dev), context adds fastgpu_daily within-day maxima and snapshot shares, rule --wide",
+ "utc": "2026-11-15T04:57:38+00:00",
+ "commit": "52fa174",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.353586,
+ "pinball": 0.021683,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.353803,
+ "skill_geomean": 0.405815,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.314426,
+   "in_band": 0.874641
+  },
+  "3": {
+   "skill_pooled": 0.305592,
+   "in_band": 0.805233
+  },
+  "7": {
+   "skill_pooled": 0.39011,
+   "in_band": 0.693798
+  }
+ },
+ "in_band": 0.791573
+}

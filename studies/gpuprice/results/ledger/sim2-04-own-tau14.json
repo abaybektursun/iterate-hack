@@ -1,0 +1,35 @@
+{
+ "name": "sim2-04-own-tau14",
+ "note": "hypothesis: repricing regimes are recent (Verda's daily rise, October level shifts), so window weights exp(-age/14 d) beat uniform (sim2-03); refuted if pooled <= sim2-03 [flags: --tau 14]",
+ "utc": "2026-11-14T23:25:56+00:00",
+ "commit": "db1c99f",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 360,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.230791,
+ "pinball": 0.025802,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.213399,
+ "skill_geomean": 0.326354,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.145989,
+   "in_band": 0.810526
+  },
+  "3": {
+   "skill_pooled": 0.226798,
+   "in_band": 0.734496
+  },
+  "7": {
+   "skill_pooled": 0.255726,
+   "in_band": 0.583333
+  }
+ },
+ "in_band": 0.709875
+}
