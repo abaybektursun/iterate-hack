@@ -617,7 +617,7 @@ search tool. No count of GPU jobs avoided by a search exists.
 
 The page `/exa` (`tools/exa_page.py`; not a header tab, and its look is its own: white paper and one cyan marker) shows
 four searches that changed a decision, and what the agents got from Exa up to Nov 15 15:29 UTC, without the number of
-calls. The four searches are one 3D scene under the first screen: a track with the stations Idea, Exa, GPU run and
+calls. Its first screen is five numbers and one 3D scene of the four searches: a track with the stations Idea, Exa, GPU run and
 Board, a porcelain gate at Exa, and above it one dot for each of the 677 distinct pages Exa returned
 (`distinct_urls_in_search_results`). Each case is replayed: slabs (the ideas) reach the gate, a beam lights the pages
 Exa returned, and the slabs stop at the gate, pass smaller, or go to the Board over the GPU run. The buttons 1 to 4
@@ -670,7 +670,7 @@ memory before it starts an idea.
 - Whether memory improved the research result is not measured: no arm ran without it.
 
 The page `/pastdev` (`tools/pastdev.py`; not a header tab, and its look is its own: white paper and one blue for what
-past.dev returned) shows this in two 3D scenes. The first is the memory as a disc with one dot per stored source (854:
+past.dev returned) shows this on its first screen: four usage numbers and two 3D scenes side by side. The first is the memory as a disc with one dot per stored source (854:
 616 paper findings, 227 board posts, 11 sessions), the agents that write behind it and the agents that read in front,
 the theory generator joined to the paper sector only. It replays four real reads (`/pastdev#read-1` is the read across
 two people above): the write, the question, the returned source in blue. The second draws the pilot: per method, 20

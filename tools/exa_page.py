@@ -2,7 +2,8 @@
 
 Numbers: studies/metaharness/results/exa_count-01/summary.json (studies/metaharness/analysis/exa_count.py).
 Not a header tab, and its look is its own (white paper, one cyan marker), by the person's choice.
-The section "Four searches" is a 3D scene that replays four real cases, and its dot count 677 comes from
+The first screen is the 3D scene plus five numbers, each read from studies/metaharness/results/exa_count-01/summary.json
+or the theory rounds as before. The scene replays four real cases, and its dot count 677 comes from
 summary.json `distinct_urls_in_search_results`.
 """
 PAGE = r"""<!doctype html>
@@ -44,7 +45,7 @@ nav a:hover { text-decoration: underline }
 
 .hero { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 44px 56px; padding-block: 44px 40px }
 .hero .ask p { font: 600 1.5rem/1.2 var(--display); letter-spacing: -0.015em; margin-bottom: 22px; max-width: 26em }
-.hero h1 { text-indent: -0.45em; padding-left: 0.45em; font-size: clamp(1.9rem, 3.5vw, 3.1rem); line-height: 1.04; font-weight: 600; overflow-wrap: anywhere }
+.hero h2 { margin-bottom: 0; max-width: none; text-indent: -0.45em; padding-left: 0.45em; font-size: clamp(1.9rem, 3.5vw, 3.1rem); line-height: 1.04; font-weight: 600; overflow-wrap: anywhere }
 .answer { display: flex; flex-direction: column; gap: 22px; align-self: end }
 .step { border-top: 2px solid var(--rule); padding-top: 12px; display: flex; flex-direction: column; gap: 8px }
 .step .t { font: 600 0.92rem var(--display); font-variant-numeric: tabular-nums }
@@ -58,27 +59,35 @@ nav a:hover { text-decoration: underline }
 section { padding-block: 56px; border-top: 2px solid var(--rule) }
 h2 { font-size: clamp(1.7rem, 3vw, 2.5rem); font-weight: 600; line-height: 1.08; margin-bottom: 28px; max-width: 32ch }
 
-.count { font: 500 clamp(1.35rem, 2.35vw, 2.05rem)/1.3 var(--display); letter-spacing: -0.015em; max-width: 34em }
-.count b { font-weight: 700 }
 .note { margin-top: 22px; max-width: 62ch; font-size: 1rem; color: var(--soft) }
+
+/* The first screen: the claim, five numbers on fine top rules, then the scene. Paddings stay tight so all of it fits 860px. */
+.top { padding-block: 22px 24px }
+.top h1 { font-size: clamp(1.9rem, 3.4vw, 3rem); font-weight: 600; line-height: 1.05; margin-bottom: 18px }
+.nums { list-style: none; margin: 0 0 22px; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0 28px }
+.nums li { border-top: 1px solid var(--rule); padding-top: 9px; display: flex; flex-direction: column; gap: 4px; min-width: 0 }
+.nums b { font: 600 clamp(1.8rem, 3vw, 2.7rem)/1 var(--display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums }
+.nums span { font: 400 0.9rem/1.3 var(--display); color: var(--soft) }
+.top .note { margin-top: 14px; max-width: 70ch; font-size: 0.9rem; line-height: 1.45 }
+.lbl { font: 600 0.84rem var(--display) }
 
 
 /* The replay: one porcelain gate on a floor track, the 677 returned pages as a dot cloud above it. Drawn with our
    own projection; the caption column beside it holds the words. */
 .replay { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 28px 56px; align-items: start }
 .scene-wrap { margin: 0; min-width: 0 }
-.scene { position: relative; height: clamp(420px, 44vw, 560px); touch-action: pan-y }
+.scene { position: relative; height: clamp(340px, 52vh, 520px); touch-action: pan-y }
 .scene canvas, .scene svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block }
 .key { margin-top: 10px; font: 400 0.9rem/1.45 var(--display); color: var(--soft); max-width: 60ch }
-.cases { display: flex; flex-direction: column; gap: 24px; min-width: 0 }
+.cases { display: flex; flex-direction: column; gap: 16px; min-width: 0 }
 .stack { display: grid }
 .case { grid-area: 1 / 1; display: flex; flex-direction: column; min-width: 0; visibility: hidden; opacity: 0; transition: opacity .3s ease, visibility 0s .3s }
 .case.on { visibility: visible; opacity: 1; transition: opacity .45s ease .1s, visibility 0s }
-.case .when { font: 600 0.95rem/1.35 var(--display); font-variant-numeric: tabular-nums; padding-bottom: 14px }
+.case .when { font: 600 0.95rem/1.35 var(--display); font-variant-numeric: tabular-nums; padding-bottom: 10px }
 .case .when span { display: block; font-weight: 400; color: var(--soft) }
-.blk { border-top: 1px solid var(--rule); padding-block: 12px 16px; overflow-wrap: anywhere; font-size: 1rem }
-.blk .cap { font: 600 0.84rem var(--display); margin-bottom: 6px }
-.blk .asked { font: 500 1.34rem/1.25 var(--display); letter-spacing: -0.01em }
+.blk { border-top: 1px solid var(--rule); padding-block: 10px 12px; overflow-wrap: anywhere; font-size: 0.95rem; line-height: 1.45 }
+.blk .cap { font: 600 0.84rem var(--display); margin-bottom: 4px }
+.blk .asked { font: 500 1.1rem/1.25 var(--display); letter-spacing: -0.01em }
 .pick { display: flex; gap: 10px }
 .pick button { appearance: none; min-width: 48px; height: 48px; padding: 0 14px; border: 1px solid var(--ink); border-radius: 0; background: var(--paper); color: var(--ink); font: 600 1rem var(--display); font-variant-numeric: tabular-nums; cursor: pointer }
 .pick button[aria-pressed="true"] { background: var(--ink); color: var(--paper) }
@@ -121,6 +130,8 @@ footer { border-top: 2px solid var(--rule); padding-block: 18px 48px; font: 400 
 @media (max-width: 860px) {
   body { font-size: 18px }
   .hero { grid-template-columns: 1fr; gap: 32px; padding-block: 28px 32px }
+  .top { padding-block: 20px 28px }
+  .nums { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 20px }
   section { padding-block: 40px }
   .replay { grid-template-columns: 1fr; gap: 18px }
   .scene { height: 320px }
@@ -136,28 +147,18 @@ footer { border-top: 2px solid var(--rule); padding-block: 18px 48px; font: 400 
 
 <nav>
   <b>Exa in the Swarm</b>
-  <div><a href="#searches">Four searches</a><a href="#count">What it gave us</a><a href="#asked">How agents asked</a><a href="#wiring">Wiring</a><a href="#limits">Limits</a></div>
+  <div><a href="#searches">Four searches</a><a href="#story">One search</a><a href="#asked">How agents asked</a><a href="#wiring">Wiring</a><a href="#limits">Limits</a></div>
 </nav>
 
-<header class="hero">
-  <div class="ask">
-    <p>Nov 15, 15:28:52 UTC. Our best result is about to go on a slide as new. An agent asks Exa:</p>
-    <h1>“extrapolating the alignment weight difference beyond 1, scaling the RL checkpoint minus base delta by alpha greater than one improves reasoning”</h1>
-  </div>
-  <div class="answer">
-    <div class="step">
-      <p class="big">Exa returns a 2024 paper that gets its gain by <mark>“simply amplifying the parameter change”</mark>.</p>
-      <p class="src">ExPO, arXiv 2404.16792</p>
-    </div>
-    <div class="step">
-      <p>Four minutes later, at 15:32:18 UTC, the team board reads: “Scaling a fine-tuning delta past 1 is published (ExPO, 2404.16792) and so are length/halting directions (ThinkEdit) … New part: RL's top-8 directions set cap hits monotonically while a random edit stays flat.”</p>
-    </div>
-  </div>
-  <p class="thesis">Four minutes from the question to a corrected claim. The search cost $0.007.</p>
-</header>
-
-<section id="searches">
-  <h2>Four searches that changed a decision</h2>
+<header class="top" id="searches">
+  <h1>Our agents ask Exa before they run an experiment.</h1>
+  <ul class="nums">
+    <li><b>61</b><span>agents and subagents searched</span></li>
+    <li><b>261</b><span>arXiv papers surfaced</span></li>
+    <li><b>188</b><span>pages read in full</span></li>
+    <li><b>$1.80</b><span>for the whole hackathon, $0.007 a search</span></li>
+    <li><b>163</b><span>published findings written by the theory engine</span></li>
+  </ul>
   <div class="replay">
     <figure class="scene-wrap">
       <div class="scene" id="scene">
@@ -167,6 +168,7 @@ footer { border-top: 2px solid var(--rule); padding-block: 18px 48px; font: 400 
       <figcaption class="key">Every agent's work cycle passes Exa before a GPU run (AGENTS.md, rule 2). A slab is an idea an agent was about to run.</figcaption>
     </figure>
     <div class="cases">
+      <p class="lbl">Four searches that changed a decision</p>
       <div class="stack">
         <article class="case on" id="case-1">
           <p class="when">Nov 15, 15:28 UTC<span>novelty audit of the top finding</span></p>
@@ -198,12 +200,24 @@ footer { border-top: 2px solid var(--rule); padding-block: 18px 48px; font: 400 
       </div>
     </div>
   </div>
-</section>
-
-<section id="count">
-  <h2>What the agents got from it</h2>
-  <p class="count">One rule sends every agent to Exa before a new measurement, and <b>61 agents</b> and subagents of <b>3 people</b> searched this way through the night. They asked in full sentences, median <b>16 words</b>. Search surfaced <b>261 arXiv papers</b>, and the agents read <b>188 pages</b> in full. A search cost <b>$0.007</b>, and the whole hackathon about <b>$1.80</b>. A headless theory engine, whose only route to the web is Exa, wrote <b>163 published findings</b> into its rounds.</p>
   <p class="note">Read from the session transcripts on this laptop and in the team trace store, Nov 14, 21:37 to Nov 15, 15:29 UTC. $0.62 of the bill is read from the tool's own cost lines; the rest is estimated at $0.007 per search and $0.001 per page. Most of one teammate's sessions and every theory-engine run left no transcript, so the true figures are higher.</p>
+</header>
+
+<section class="hero" id="story">
+  <div class="ask">
+    <p>Nov 15, 15:28:52 UTC. Our best result is about to go on a slide as new. An agent asks Exa:</p>
+    <h2>“extrapolating the alignment weight difference beyond 1, scaling the RL checkpoint minus base delta by alpha greater than one improves reasoning”</h2>
+  </div>
+  <div class="answer">
+    <div class="step">
+      <p class="big">Exa returns a 2024 paper that gets its gain by <mark>“simply amplifying the parameter change”</mark>.</p>
+      <p class="src">ExPO, arXiv 2404.16792</p>
+    </div>
+    <div class="step">
+      <p>Four minutes later, at 15:32:18 UTC, the team board reads: “Scaling a fine-tuning delta past 1 is published (ExPO, 2404.16792) and so are length/halting directions (ThinkEdit) … New part: RL's top-8 directions set cap hits monotonically while a random edit stays flat.”</p>
+    </div>
+  </div>
+  <p class="thesis">Four minutes from the question to a corrected claim. The search cost $0.007.</p>
 </section>
 
 <section id="asked">
@@ -478,7 +492,7 @@ function drawToken(tk, s) {
   put(tk.g, "class", s.hollow > .5 ? "tok hollow" : "tok");
 }
 
-let cur = 0, auto = true, clock = 0, ent = 0, vt = 0, last = 0, raf = 0, onScreen = false, still = RM.matches;
+let cur = 0, auto = true, clock = 0, ent = 0, ent0 = 0, vt = 0, last = 0, raf = 0, onScreen = false, still = RM.matches;
 const lean = { x: 0, y: 0, tx: 0, ty: 0 };
 
 function size() {
@@ -602,7 +616,8 @@ function frame(now) {
   if (still || !onScreen || document.hidden) { last = 0; return; }
   const dt = last ? Math.min(1000, now - last) : 16; last = now;  // real time, so a throttled tab or a slow projector laptop still plays a case in its 9.6 s
   vt += dt;
-  if (ent < 1600) ent += dt; else clock += dt;
+  if (!ent0) ent0 = now;  // the entrance runs on wall-clock time: however few frames arrive, the scene is whole 1.6 s after its first frame
+  if (ent < 1600) ent = Math.min(1600, now - ent0 + 16); else clock += dt;
   if (clock >= T.len) { clock -= T.len; if (auto) setCase((cur + 1) % 4, false); }
   const e = Math.min(1, dt / 450);
   lean.x += (lean.tx - lean.x) * e; lean.y += (lean.ty - lean.y) * e;
@@ -653,7 +668,6 @@ RM.addEventListener("change", () => { still = RM.matches; if (still) drawStill()
 size();
 const h0 = fromHash();
 setCase(h0 >= 0 ? h0 : 0, h0 >= 0);
-if (h0 >= 0) document.getElementById("searches").scrollIntoView();
 if (still) drawStill(); else render(0, 0);
 })();
 </script>
