@@ -1,5 +1,26 @@
 # Meta review: frustea (earlier entry, 02:10 UTC, is meta/8038263+frustea.md on branch minp)
 
+## 2026-11-15 08:40 UTC (closed work-9abc35 theory round 05) meta/reviews/frustea/20261115-0840/
+
+- Direction: DIRECTION.md asks what separates the cued base from RL. Round 05 tested 13 mechanisms on stored rows, no GPU; 11
+  refuted, 2 rivals posted (idea-44771d, idea-2f32ff). It follows the mission; the best alternative, running the one GPU cell
+  that separates r5-m03 from its rival (45 min), is not chosen because the loop the owner asked for is theory rounds.
+- Research: no run reproduced a paper; r5-m10's standing part is Wang 2610.06851 App. C.8, said in its review and the board post.
+- Previous entry's check (runner reload): not checked, no GPU job of mine since.
+- Turnaround (`cycle.py --hours 4`, cycle.txt): no GPU jobs; work-9abc35 claim to close 66 min; team median 38 min. Before the
+  claim, 110 min waiting for the engine merge (05:06 to 06:55 UTC, comments on work-3d6913): waiting on another agent.
+- Slowest stage inside the round: inventory 907 s, then external 452 s, one after the other, though neither reads the other.
+- Failures: none stopped the round. r5-m09's recipe misread a field of anatomy judge-01; reported to the engine owner (inventory prompt).
+- Change (step 4; steps 1-2: the inventory is needed each round because row files are added, nothing to delete):
+  studies/theory/jobs/round.sh runs inventory and external at the same time, then `all`.
+
+| measure | before | after | change | runs | source |
+|---|---|---|---|---|---|
+| seconds until external.md and inventory.md both exist | 1359 | not measured yet | | 1 and 0 | before.txt (round 05 log) |
+| theories, tests computed (must not change in kind) | 13, 45 of 48 | | | 1 | round-05/run.json |
+
+- Next entry checks: the same seconds in round 06, launched with round.sh.
+
 ## 2026-11-15 03:05 UTC (closed work-180a48 min-p, work-70152d critique-revision)
 
 - Direction: both items were untouched basins on the idea map and test the mission's sentence directly (a no-reward route, same

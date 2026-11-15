@@ -1,0 +1,4 @@
+  inventory/inventory (opus): done in 907 s
+  external/external (opus): done in 452 s
+  mechanisms/mechanisms (opus): done in 393 s
+source: round 05 log lines 'done in'; inventory then external ran one after the other: 907 + 452 = 1359 s of a 62 minute round (run.json wall_time)
