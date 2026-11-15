@@ -277,6 +277,10 @@ a click on a person shows only that person. At the top, one hill-climbing chart 
 (`board.py score`) in the order found, the best so far as a step line, and the best RL score as the target, with the
 gap between them. The same page is public at https://monitor.invariant.team (`infra/monitor/`).
 
+To see which finding raised the benchmark: `uv run tools/climb.py [benchmark] [--json]` lists, per benchmark, every
+record step of that chart (a base score strictly above all earlier ones, the same rule), newest first: the gain in
+points, previous best -> new best, the result id, who, the configuration and the first line of the result's text.
+
 The same server has a second page, `/architecture` (`tools/architecture.py`): one picture of the shared work setup for
 a first-time reader. The board is in the centre with one dot per live item, each person's agents are beside it with
 threads to the board (the Claude mark for a Claude Code session, the OpenAI mark for a Codex session), the "Chat"
