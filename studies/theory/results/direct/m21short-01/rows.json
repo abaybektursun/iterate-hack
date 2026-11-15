@@ -1,0 +1,14 @@
+[
+ {"mechanism": "round-14/s4-a",
+  "claim": "Code-RL's top-8 directions push every solution-started sample into Math-like deliberation, so almost no m21 right answer stays plain-short (S 0.0-0.12).",
+  "result": "result-1d64b9",
+  "verdict": "refuted",
+  "measured": "S 0.414 [0.319, 0.510] (65 of 157 m21 right answers at or below the plain base's median right length, 1,069 tokens), n 157, null 0.50; interval wholly above a's range 0.0-0.12",
+  "added": "2026-11-15T22:49:38Z"},
+ {"mechanism": "round-14/s4-b",
+  "claim": "The Code top-8 edit is an all-or-none per-sample lottery (s about 0.47 at 1x), so about 0.36 of m21's right answers are untouched plain-base answers and S is 0.15-0.36.",
+  "result": "result-1d64b9",
+  "verdict": "undecided",
+  "measured": "S 0.414 [0.319, 0.510], n 157, null 0.50; interval crosses b's top 0.36 (range 0.15-0.36); about 500 right rows would decide",
+  "added": "2026-11-15T22:49:38Z"}
+]
