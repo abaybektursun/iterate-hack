@@ -4639,3 +4639,65 @@ Jobs `ih-1115-150237-83a4`, `-155322-598b`, `-155844-4392`, `-155905-0426` (AWS 
   its gain under the vote ((53 - 38) / (57 - 38)); on the 328 the same shares are 101 % and 76 %.
 - The edit uses the RL checkpoint's weights, so it is not a route without reward. Think-SFT + cue (no reward) has 60.0 on
   one sample and 75 under the vote on this set.
+
+## Vote over k samples of the cued base, k = 1 to 12 (MATH-500 n = 500, base + cue, T 1.0, grader v3, board work-60f040)
+
+Question (`specs/SPEC_votek.md`, written before the jobs): where does the plurality vote of the untrained cued base stop
+rising, and does it reach RL's one-sample score (456 to 463) with no training? Answer: it reaches it at 6 samples (456.6 of
+500) and is still rising at 12 (466 of 500, 95 % interval [455, 476]). RL with the same vote over 4 has 474 at 18,747 tokens
+per problem, so at equal tokens RL stays ahead; the base needs about 5 times RL's one-sample tokens to match RL's one sample.
+
+Samples: 0 to 3 are attempt 0 of the stored job `abaybektursun-1114-153825-208b` (seed 41000000); 4 to 11 are new,
+`jobs/run_cell.py --model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41040000 --samples 8`, no
+restarts, cap 16,384, as shards: vast.ai `abaybektursun-1115-082353-a18c` (1/4), `-082400-c790` (2/4), `-064850-01eb` (3/4);
+AWS `ih-1115-161922-9bfd` (4/8) and `ih-1115-201414-43ed` (0/8: 493 rows copied from the cut job `ih-1115-161910-44ea` with
+`--resume`, 11 rows generated). Raw answers: `runs/<job id>/` (not committed; vast.ai jobs in the team store, AWS jobs under
+the bridge's S3 results). Readout `analysis/votek.py`, output `results/votek/math500_base_cue-01/` (`metrics.json`,
+`rows.jsonl` with every sample's extracted answer and score, `examples.json`: problem 0 voted right with 11 of 12 votes,
+problem 9 voted wrong, two answers with 2 votes each and the wrong one drawn first).
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.votek --runs runs/abaybektursun-1114-153825-208b runs/ih-1115-201414-43ed+runs/ih-1115-161922-9bfd+runs/abaybektursun-1115-082353-a18c+runs/abaybektursun-1115-082400-c790+runs/abaybektursun-1115-064850-01eb --out studies/rlneurons/results/votek/math500_base_cue-01
+```
+
+Right of 500, mean over 200 random subsets of k of the 12 samples (bootstrap over problems, 2,000 resamples):
+
+| k | vote right [95 %] | lowest, highest subset | at least one of k right | tokens per problem |
+|---|---|---|---|---|
+| 1 | 410.0 [397.9, 421.6] | 405, 418 | 410.0 | 4,059 |
+| 2 | 418.9 [407.2, 430.4] | 411, 426 | 452.3 | 8,122 |
+| 3 | 440.8 [429.4, 451.8] | 430, 452 | 464.7 | 12,155 |
+| 4 | 449.2 [437.9, 460.0] | 441, 457 | 471.0 | 16,228 |
+| 6 | 456.6 [445.6, 467.1] | 448, 465 | 478.4 | 24,370 |
+| 8 | 460.1 [449.6, 470.2] | 454, 467 | 482.4 | 32,463 |
+| 9 | 461.4 [450.9, 471.6] | 455, 468 | 483.8 | 36,487 |
+| 12 | 466 [455.0, 476.0] | one subset | 487 | 48,680 |
+
+Control: the vote over the 4 stored samples in order reproduces 446. The stored four are a low draw: the mean over subsets of
+4 is 449.2 and subsets of 4 range from 441 to 457.
+
+Vote with an early stop (draw samples until one answer has m votes or all 12 are drawn; mean over 200 random orders; the
+fixed-threshold form of adaptive self-consistency, Aggarwal et al. 2023, arXiv 2305.11860):
+
+| stop at m votes | right of 500 | samples per problem | tokens per problem |
+|---|---|---|---|
+| 2 | 459.0 | 2.71 | 15,882 |
+| 3 | 463.5 | 4.00 | 22,564 |
+| 4 | 465.7 | 5.19 | 27,863 |
+| 6 | 466.6 | 7.32 | 35,807 |
+
+At the tokens of the fixed vote over 4 (16,228) the stop at 2 votes has 459.0 against 449.2: about 10 more problems for the
+same tokens, because easy problems stop after two samples and the split ones get up to 12. No interval was computed for this
+difference.
+
+Predictions:
+- V1 (theory round 06: vote over 9 inside [449, 462]): holds, 461.4.
+- V2 (mine: vote over 12 minus vote over 6 under 3 problems): refuted, 9.4. The vote does not stop at 6.
+- V3 (vote over 12 below 456): refuted, 466.
+
+What is left: of the 34 problems the vote over 12 gets wrong, 13 have no right sample among 12, 11 have one, 7 have two, and
+3 have a wrong answer held by more than 6 samples. At least one of 12 samples is right on 487 problems.
+
+Limits: one seed family; the interval of each k is over problems, and the subsets of one k share samples. RL was not sampled
+12 times, so this section does not say where RL's vote stops. The same cell on the 328 (spec section "The 328") was started
+twice on vast.ai and cut both times when the account balance reached 0; it has no rows.
