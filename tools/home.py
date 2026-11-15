@@ -4,8 +4,11 @@ view.py serves PAGE as the page / of invariant.team (and at /home on monitor.inv
 leads to monitor.invariant.team, where the pages are. The picture is a lit glass body with a ring around it, seen from slightly above, and one
 bead on the ring per page of the site. The bead at the front is the selected page: the body shows its name and,
 where one is counted, its live number. A click on a bead or the arrow keys turn the dial to it (address /#<page>);
-a click on the body or the button opens it. The words column beside the picture holds the pitch line of
-DIRECTION.md (its first sentence, with its two scores) and the same pages as a plain list of links, so that the list alone is enough to get anywhere. What moves
+a click on the body or the button opens it. The words column beside the picture holds one sentence with the two
+live MATH-500 scores of the Board (the best untrained-base score and the best RL score among the `scores` rows of
+/data, computed as `benches` in view.py does; no numbers before the first read), the button, and the same pages as a
+plain list of links in three groups, so that the list alone is enough to get anywhere. A bead's name is drawn outside
+the ring: beside the bead at the sides, below it at the front, above it at the back. On a phone the list comes before the picture. What moves
 is real data: about every 2.5 s one of the newest 40 board posts runs to the Board bead as a pulse in its author's
 color, and the line under the picture says who posted it, when and what. A post that arrived since the last read of
 /data plays next, larger and with a halo. The numbers of findings, proofs and lab pictures are written into the page
@@ -72,20 +75,27 @@ a { color: inherit; }
 .status.read::before { animation: heart 1.1s ease-out; }
 
 /* The words: the sentence, the pages, one button */
-.words { grid-column: 1; grid-row: 2 / 4; min-height: 0; overflow: hidden auto; scrollbar-width: none; padding: clamp(18px, 4.5vh, 52px) 0 0; }
-.cap { margin: 0; font-size: clamp(20px, 1.56vw, 27px); line-height: 1.22; font-weight: 300; font-stretch: 102%; letter-spacing: -.012em; max-width: 25ch; text-wrap: balance; }
-.index { list-style: none; margin: clamp(18px, 3.4vh, 34px) 0 0; padding: 0; border-bottom: 1px solid var(--rule); }
+.words { grid-column: 1; grid-row: 2 / 4; min-height: 0; overflow: hidden auto; scrollbar-width: none; padding: clamp(12px, 3.4vh, 52px) 0 0; }
+.cap { margin: 0; font-size: clamp(20px, 1.56vw, 27px); line-height: 1.22; font-weight: 300; font-stretch: 102%; letter-spacing: -.012em; max-width: 27ch; text-wrap: balance; }
+.index { list-style: none; margin: clamp(14px, 2.6vh, 26px) 0 0; padding: 0; border-bottom: 1px solid var(--rule); line-height: 1.35; }
 .index a {
   display: grid; grid-template-columns: 6.4em minmax(0, 1fr); align-items: baseline; column-gap: 12px;
-  padding: 7.5px 0 7.5px 14px; border-top: 1px solid var(--rule); text-decoration: none; position: relative;
+  padding: clamp(3.5px, 2.1vh - 11.5px, 7.5px) 0 clamp(3.5px, 2.1vh - 11.5px, 7.5px) 14px; border-top: 1px solid var(--rule); text-decoration: none; position: relative;
 }
-.index a::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 2px; border-radius: 2px; background: var(--blue); opacity: 0; transition: opacity .2s ease; }
+.index a::before { content: ""; position: absolute; left: 0; top: 6px; bottom: 6px; width: 2px; border-radius: 2px; background: var(--blue); opacity: 0; transition: opacity .2s ease; }
+/* Three groups: a gap before the second, the label "Also" before the third, which is quieter */
+.index li.g, .index li.also { margin-top: clamp(8px, 1.5vh, 16px); }
+.index li:has(+ li.g) a, .index li:has(+ li.also) a { border-bottom: 1px solid var(--rule); }
+.index li.also { padding: 0 0 3px 14px; font-size: 12.5px; font-weight: 560; color: var(--mute); }
+.index li.q b { font-weight: 480; font-size: 13.5px; color: var(--mute); }
+.index li.q span { font-size: 12.5px; }
+.index li.q a:hover b, .index li.q a.on b { color: var(--ink); }
 .index a.on::before { opacity: 1; }
 .index b { font-weight: 600; font-stretch: 108%; white-space: nowrap; }
 .index span { color: var(--mute); font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .index a:hover span, .index a.on span { color: var(--ink); }
 .go {
-  display: inline-block; margin: 22px 0 8px; padding: 12px 22px; border-radius: 999px; background: var(--btn); color: var(--btn-ink);
+  display: inline-block; margin: clamp(14px, 2.4vh, 22px) 0 0; padding: 11px 22px; border-radius: 999px; background: var(--btn); color: var(--btn-ink);
   font-weight: 620; font-size: 15px; font-stretch: 106%; text-decoration: none;
   box-shadow: inset 0 1px 0 var(--btn-edge), 0 14px 28px -14px var(--btn-drop); transition: transform .18s ease, box-shadow .18s ease;
 }
@@ -144,15 +154,15 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
   .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 16px 16px 36px; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
-  .words { display: contents; }  /* on a phone: the sentence, the picture, what is arriving, then the pages */
+  .words { display: contents; }  /* on a phone: the sentence, the button, the pages, then the picture and what is arriving */
   .cap { order: 1; margin-top: 20px; font-size: 22px; max-width: none; }
-  .stage { order: 2; margin-top: 6px; padding: 0; display: block; }
-  svg { height: auto; }
-  .foot { order: 3; display: block; margin-top: 2px; }
-  .key { display: none; }
-  .index { order: 4; margin-top: 18px; }
+  .go { order: 2; align-self: flex-start; margin-top: 18px; }
+  .index { order: 3; margin-top: 20px; }
   .index a { padding: 11px 0 11px 14px; }
-  .go { order: 5; align-self: flex-start; }
+  .stage { order: 4; margin-top: 22px; padding: 0; display: block; }
+  svg { height: auto; }
+  .foot { order: 5; display: block; margin-top: 2px; }
+  .key { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }
@@ -172,9 +182,9 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
     <span class="status" id="status">Reading the board</span>
   </header>
   <div class="words">
-    <p class="cap">With no training, a three-token opening cue takes the Olmo 3 base model to 82 on MATH-500 at AI2's own sampling setting, against 93 for the RL-trained model.</p>
-    <ul class="index" id="index"></ul>
+    <p class="cap" id="cap">We measure how far the Olmo 3 base model gets on MATH-500 with no training, against the RL-trained model.</p>
     <a class="go" id="go" href="https://monitor.invariant.team/findings">Open Findings</a>
+    <ul class="index" id="index"></ul>
   </div>
   <div class="stage"><svg id="svg" role="group" aria-label="A dial with one bead for each page of the site"></svg></div>
   <div class="foot"><span class="said hue" id="said"></span><span class="key">Each pulse is one post arriving on the board.</span></div>
@@ -183,20 +193,24 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
 const $ = id => document.getElementById(id);
 const COUNTS = __COUNTS__;  // written in by view.py: the numbers of finding pages, proof pages, papers and lab pictures it serves
 const HUES = [325, 150, 65, 195, 105, 45, 175, 350];  // a person's color, the same as on every other page
-/* Every page of the site, in the order of the dial. line is the list's few words; count(m) is the number the body
-   shows under the name, from the counts above or from the newest read of /data, and absent where nothing is counted. */
+/* Every page of the site, in the order of the dial and of the list. g is its group in the list: 0 what a first-time
+   visitor wants, 1 how the team works, 2 the rest, under the label "Also". line is the list's few words; count(m) is
+   the number the body shows under the name, from the counts above or from the newest read of /data, and absent where
+   nothing is counted. */
 const PAGES = [
-  { id: "findings", name: "Findings", href: "/findings", line: "One page for each finding", count: () => COUNTS.findings + " pages" },
-  { id: "board", name: "Board", href: "/", line: "Ideas, open work and results", count: m => m ? `${m.open} open work items` : "" },
-  { id: "proof", name: "Proof", href: "/proof", line: "Tests of the team's own method", count: () => COUNTS.proof + (COUNTS.proof === 1 ? " page" : " pages") },
-  { id: "design", name: "Design", href: "/architecture", line: "How the people and agents work together", count: m => m ? `${m.people} people, ${m.agents} agent sessions` : "" },
-  { id: "talk", name: "Talk", href: "/demo", line: "The talk, as slides" },
-  { id: "papers", name: "Papers", href: "/papers", line: "The paper loop and what it wrote", count: () => COUNTS.papers + " papers" },
-  { id: "lab", name: "Lab", href: "/lab/", line: "3D pictures of the team's work", count: () => COUNTS.lab + " pictures" },
-  { id: "exa", name: "Exa", href: "/exa", line: "How the agents used web search" },
-  { id: "pastdev", name: "past.dev", href: "/pastdev", line: "How the agents used shared memory" },
-  { id: "gpu", name: "GPU prices", href: "https://gpu.invariant.team", line: "Forecasts of GPU rental prices" },
-  { id: "psychosis", name: "Psychosis", href: "/psychosis", line: "A joke about ourselves, as a game" },
+  { id: "findings", g: 0, name: "Findings", href: "/findings", line: "One page for each finding", count: () => COUNTS.findings + " pages" },
+  { id: "papers", g: 0, name: "Papers", href: "/papers", line: "The paper loop and what it wrote", count: () => COUNTS.papers + " papers" },
+  { id: "talk", g: 0, name: "Talk", href: "/demo", line: "The talk, as slides" },
+  { id: "team", g: 0, name: "Team", href: "/team", line: "Who we are" },
+  { id: "board", g: 1, name: "Board", href: "/", line: "Ideas, open work and results", count: m => m ? `${m.open} open work items` : "" },
+  { id: "design", g: 1, name: "Design", href: "/architecture", line: "How the people and agents work together", count: m => m ? `${m.people.length} people, ${m.agents} agent sessions` : "" },
+  { id: "proof", g: 1, name: "Proof", href: "/proof", line: "Tests of the team's own method", count: () => COUNTS.proof + (COUNTS.proof === 1 ? " page" : " pages") },
+  { id: "values", g: 1, name: "Values", href: "/values", line: "The six values the team works by" },
+  { id: "lab", g: 2, name: "Lab", href: "/lab/", line: "3D pictures of the team's work", count: () => COUNTS.lab + " pictures" },
+  { id: "exa", g: 2, name: "Exa", href: "/exa", line: "How the agents used web search" },
+  { id: "pastdev", g: 2, name: "past.dev", href: "/pastdev", line: "How the agents used shared memory" },
+  { id: "gpu", g: 2, name: "GPU prices", href: "https://gpu.invariant.team", line: "Forecasts of GPU rental prices" },
+  { id: "psychosis", g: 2, name: "Psychosis", href: "/psychosis", line: "A joke about ourselves, as a game" },
 ];
 const SITE = /(^|\.)invariant\.team$/.test(location.hostname) ? "https://monitor.invariant.team" : "";  // where the pages are; a local copy links to itself
 PAGES.forEach(p => { if (p.href[0] === "/") p.href = SITE + p.href; });
@@ -209,11 +223,12 @@ const f = n => n.toFixed(1);
 const ago = ns => { const m = Math.max(0, Math.floor((Date.now() * 1e6 - Number(ns)) / 60e9)); return m < 1 ? "now" : m < 60 ? m + " min ago" : m < 2880 ? Math.floor(m / 60) + " h ago" : Math.floor(m / 1440) + " d ago"; };
 
 /* Geometry: the ring lies flat around the body and is seen from above (pitch). R is the ring of beads, the ticks
-   run from rt to rt + 8 (every sixth to rt + 15) inside it on a fine inner ring, rb is the body. fs is the size of a name at the front. */
+   run from rt to rt + 8 (every sixth to rt + 15) inside it on a fine inner ring, rb is the body. fs is the size of a name at the front.
+   The picture is wider than the ring by the longest name on each side. Names with q under far are not drawn. */
 function geo() {
   return narrow.matches
-    ? { w: 720, h: 548, cx: 360, cy: 262, R: 272, rt: 214, rb: 108, D: 1700, pitch: 36, bead: 12, fs: 27, fn: 34, fc: 22, far: .32 }
-    : { w: 980, h: 660, cx: 490, cy: 290, R: 400, rt: 334, rb: 150, D: 2300, pitch: 36, bead: 8, fs: 17, fn: 38, fc: 14.5, far: 0 };
+    ? { w: 720, h: 548, cx: 360, cy: 262, R: 272, rt: 214, rb: 108, D: 1700, pitch: 36, bead: 12, fs: 27, fn: 34, fc: 22, far: .86 }
+    : { w: 1060, h: 660, cx: 530, cy: 290, R: 400, rt: 334, rb: 150, D: 2300, pitch: 36, bead: 8, fs: 17, fn: 38, fc: 14.5, far: 0 };
 }
 let G = geo();
 const V = { cy: 1, sy: 0, cp: 1, sp: 0, yaw: 0 };
@@ -257,7 +272,11 @@ function build() {
     g.innerHTML = `<circle class="pad"/><circle class="b"/><text>${esc(p.name)}</text>`;
     p.el = g; p.front = null;
   });
-  $("index").innerHTML = PAGES.map((p, k) => `<li><a href="${p.href}" data-k="${k}"><b>${esc(p.name)}</b><span>${esc(p.line)}</span></a></li>`).join("");
+  $("index").innerHTML = PAGES.map((p, k) => {
+    const first = k > 0 && p.g !== PAGES[k - 1].g;  // the first page of the second or third group
+    return (first && p.g === 2 ? `<li class="also">Also</li>` : "") +
+      `<li class="${p.g === 2 ? "q" : first ? "g" : ""}"><a href="${p.href}" data-k="${k}"><b>${esc(p.name)}</b><span>${esc(p.line)}</span></a></li>`;
+  }).join("");
   readout();
 }
 
@@ -300,13 +319,19 @@ function draw() {
     const on = k === S.sel, r = (G.bead * (.62 + .58 * q) + (on ? 2.5 : 0)) * s, fs = G.fs * (.7 + .3 * q) * (on ? 1.12 : 1);
     const front = near >= 0;
     if (front !== p.front) { $(front ? "front" : "back").appendChild(p.el); p.front = front; }
-    const side = Math.max(-1, Math.min(1, near * 4)), ty = yy + (side > 0 ? side * (r + 9 + fs * .78) : side * (r + 9));
     const [c0, c1, t] = p.el.children;
+    t.setAttribute("font-size", f(fs));
+    if (!p.w) p.w = t.getComputedTextLength() / fs;  // the name's width at size 1, measured once
+    /* The name lies outside the ring: its box is pushed along the ring's outward normal (nx, ny) until it clears the
+       bead, so it is beside the bead at the sides, below it at the front, above it at the back, and changes smoothly. */
+    let nx = Math.cos((a - y) * RAD) * V.sp, ny = near; const len = Math.hypot(nx, ny); nx /= len; ny /= len;
+    const lim = v => Math.max(-1, Math.min(1, v * 2.5)), d = r + 10;
+    const tx = x + nx * d + lim(nx) * p.w * fs / 2, ty = yy + ny * d + (lim(ny) + 1) * fs * .36;
     c0.setAttribute("cx", f(x)); c0.setAttribute("cy", f(yy)); c0.setAttribute("r", f(r + 26));
     c1.setAttribute("cx", f(x)); c1.setAttribute("cy", f(yy)); c1.setAttribute("r", f(r));
-    t.setAttribute("x", f(x)); t.setAttribute("y", f(ty)); t.setAttribute("font-size", f(fs));
+    t.setAttribute("x", f(tx)); t.setAttribute("y", f(ty));
     p.el.setAttribute("opacity", (.6 + .4 * q).toFixed(2));
-    t.setAttribute("opacity", q < G.far ? 0 : 1);  // on a phone the far names would touch; the list holds them all
+    t.setAttribute("opacity", q < G.far ? 0 : 1);  // on a phone only the three names at the front fit; the list holds them all
     p.at = [x, yy, s, near];
   });
   pulse();
@@ -366,12 +391,19 @@ function frame(now) {
 
 /* The board: what the body counts and what the pulses replay. */
 function model(d) {
+  const best = model => Math.max(...(d.scores || []).filter(s => s.benchmark === "MATH-500" && s.model === model).map(s => 100 * s.right / s.n));
   const items = d.items, posts = items.filter(i => i.listed !== "work-closed").sort((a, b) => Number(b.at_ns) - Number(a.at_ns)).slice(0, 40);
   return {
     people: [...new Set(items.map(i => i.who))].sort(), posts, plain: d.plain || {},
     open: items.filter(i => i.listed === "work").length,
     agents: new Set(items.filter(i => i.session).map(i => i.session)).size,
+    base: best("base"), rl: best("rl"),  // the Board's two numbers (benches in view.py): the best untrained-base score and the best RL score, in percent
   };
+}
+/* The sentence states the two scores of the newest read; with no base score it keeps its words without numbers. */
+function headline() {
+  const m = S.m; if (!m || !isFinite(m.base)) return;
+  $("cap").textContent = `With no training, the Olmo 3 base model reaches ${f(m.base)}\u00a0% on MATH-500` + (isFinite(m.rl) ? `; the RL-trained model reaches ${f(m.rl)}\u00a0%.` : ".");
 }
 async function read() {
   try {
@@ -380,7 +412,7 @@ async function read() {
     const ids = new Set(m.posts.map(p => p.id));
     if (S.seen) S.queue.push(...m.posts.filter(p => !S.seen.has(p.id)).reverse());
     S.seen = ids; S.m = m; S.error = null; S.readAt = Date.now();
-    readout();
+    readout(); headline();
     if (still.matches && m.posts.length) say(m.posts[0], false);
     const st = $("status"); st.classList.remove("read"); void st.offsetWidth; st.classList.add("read");
   } catch (e) { S.error = e; }
@@ -418,6 +450,7 @@ addEventListener("pointermove", e => { if (e.pointerType === "mouse") { S.mx = e
 narrow.addEventListener("change", () => { build(); draw(); });
 $("svg").classList.add("enter");
 draw();
+document.fonts.ready.then(() => { PAGES.forEach(p => { p.w = 0; }); draw(); });  // measure the names again in the loaded typeface
 if (!still.matches) requestAnimationFrame(now => { S.last = now; requestAnimationFrame(frame); });
 read(); setInterval(read, 10000); setInterval(status, 15000);
 </script>

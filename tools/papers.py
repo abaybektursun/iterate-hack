@@ -175,7 +175,7 @@ a { color: inherit; }
 <body>
 <div class="page">
   <header class="top">
-    <h1 class="name"><a href="https://invariant.team/">Invariant</a></h1>
+    <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
     <a href="/architecture">Design</a>
     <a href="/proof">Proof</a>
