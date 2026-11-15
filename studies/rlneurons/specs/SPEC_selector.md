@@ -72,3 +72,12 @@ sameraslan's four-sample rows (work-140e13, result-1dedfe) are in his Modal Volu
 and `n_new` (`results/day1_3/hard328_base_cue_s4r0-01/readout.json`, `results/day1_length_rules/hard328_base-01/
 per_problem.tsv` on branch `claude/swarm-literature-review-60a281`), not the extracted answers or the text. A rule that
 passes step 3 is reported with the command to score it once those `answers.jsonl` are copied; they are not rerun here.
+
+## Result (2026-11-15, commit 622bacb)
+
+Base: `tie_short` 453 of 500 against the vote's 446 (+1.4 points [0.4, 2.4], 7 fixed, 0 broken); `cv_pick` 451 [0.0, 2.0];
+pass@4 467. In the 36 ties: 12 right, against 5 (lowest sample), 5 (longest) and 7.2 (random, expected). RL: `tie_short` 475
+against 474, longest 476; not confirmed. Refuted: `tie_clean`, `tie_restate`, `drop_cap`, `w_invlen`, `short1`, `max_aprob`,
+`max_mlp` (at or below the vote on the base). Not refuted, interval touching 0: `tie_aprob`, `tie_mlp`, `w_aprob`. The two
+controls (random and longest tie-break) were added after the first scoring. The 328 is not scored: the rows are not in git.
+Table in the study's README.

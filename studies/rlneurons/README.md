@@ -259,6 +259,60 @@ job's `$OUT_DIR` in abaybektursun's Modal workspace, not committed.
   45 rows, 5 restarts, single 8 of 10.
 - The harder 328 with this procedure is not run here (board work-140e13).
 
+## Label-free selector over the four stored samples (MATH-500, n = 500, laptop, board work-3095f1, idea-664670)
+
+Question: does a rule that sees no answer key beat the plurality vote on the four samples of Day-1 #3? Answer: one tie-break
+does on the base, by 7 problems, and the rule is not confirmed on RL or on the 328. `analysis/selector.py` scores 11 rules fixed
+in `specs/SPEC_selector.md` before scoring (written after reading the 21 problems the vote misses and pass@4 has, so the
+MATH-500 numbers are optimistic), and `cv_pick`: the best of the 12 on four folds scored on the fifth. All rules use the same
+tokens as the vote (16,034 base, 18,747 RL). Paired bootstrap against the vote, 5,000 resamples, seed 0, in points.
+
+| Rule | Base with cue: right [95 %] | minus vote [95 %], fixed / broken | RL plain: right | minus vote [95 %], fixed / broken |
+|---|---|---|---|---|
+| vote (baseline; a tie goes to the lowest sample) | 446 [86.2, 91.6] | | 474 | |
+| `tie_short`: a tie goes to the group with the shortest finished sample | 453 [87.7, 92.9] | +1.4 [0.4, 2.4], 7 / 0 | 475 | +0.2 [0.0, 0.6], 1 / 0 |
+| `tie_aprob`: a tie goes to the highest stored answer probability | 451 | +1.0 [-0.2, 2.2], 8 / 3 | 475 | +0.2 [-0.4, 1.0], 2 / 1 |
+| `tie_mlp`: a tie goes to the highest mean token log-probability | 450 | +0.8 [-0.4, 2.0], 7 / 3 | 477 | +0.6 [0.0, 1.4], 3 / 0 |
+| `tie_clean`, `drop_cap` | 446, 446 | 0 / 0 | 475, 475 | 1 / 0 |
+| `tie_restate` | 445 | -0.2 [-1.2, 0.8], 3 / 4 | 474 | 1 / 1 |
+| `w_invlen`: votes weighted 1 / tokens | 445 | -0.2 [-1.6, 1.2], 7 / 8 | 474 | 2 / 2 |
+| `w_aprob`: votes weighted by answer probability | 452 | +1.2 [0.0, 2.6], 9 / 3 | 474 | 1 / 1 |
+| `short1`: the shortest finished sample | 434 | -2.4 [-4.4, -0.4], 8 / 20 | 471 | -0.6 [-1.8, 0.6], 3 / 6 |
+| `max_aprob`: the most confident sample | 423 | -4.6 [-7.2, -2.2], 8 / 31 | 464 | -2.0 [-3.6, -0.4], 3 / 13 |
+| `max_mlp`: the most likely sample | 427 | -3.8 [-6.2, -1.4], 9 / 28 | 472 | -0.4 [-1.8, 1.0], 5 / 7 |
+| `cv_pick` (held-out folds) | 451 [87.3, 92.5] | +1.0 [0.0, 2.0], 6 / 1 | 477 | +0.6 [0.0, 1.4], 3 / 0 |
+| pass@4 (oracle) | 467 | | 482 | |
+| control: random tie-break, expected | 448.2 | | 474.3 | |
+| control: a tie goes to the longest finished sample | 446 | | 476 | |
+
+- Base: `tie_short` has 453, 3 below one RL sample (456) and 14 below pass@4. It only changes the 36 ties: 12 right, against 5
+  for the lowest sample, 5 for the longest and 7.2 expected for a random choice. So the gain over a fair tie-break is about 5
+  problems of 36, and all 7 fixed problems (11, 20, 71, 94, 189, 303, 352) were read before the rule was written. `cv_pick`
+  chose `tie_short` on four folds and `w_aprob` on one: 451, interval [0.0, 2.0].
+- RL: the same rule fixes 1 of 16 ties and the longest-sample control fixes 2. Shortness is not confirmed on RL; its `cv_pick`
+  chose `tie_mlp` (477, +3).
+- Choosing one sample by confidence or by length is below the vote on both models (423 to 434 on the base), as in arXiv
+  2507.18122 Table 1. `short1` with the other three samples stopped when the first finishes would cost 9,795 tokens per
+  problem on the base (434) and 14,504 on RL (471).
+- The 21 base problems the vote misses and pass@4 has: 15 ties the lowest sample lost (6 with four different answers, 3 with
+  three, 3 with two after cap hits, 3 ties of 2 against 2) and 6 with a wrong answer in the majority. No rule here touches the 6.
+- The 328: not scored. `tie_short` passes the spec's rule for going to the 328 (`cv_pick` above the vote, its interval above
+  0), but sameraslan's four-sample rows (board result-1dedfe) are in his Modal Volume; git has only per-problem 0/1 vectors and
+  token counts, not the extracted answers. With the joined `answers.jsonl` and `metrics.json` in `runs/<dir>`:
+  `python -m studies.rlneurons.analysis.selector --run runs/<dir> --out studies/rlneurons/results/selector/hard328_base_cue-01`
+  and read the `tie_short` row only (82 ties of 328 there, against 36 of 500 here).
+
+Run folders `results/selector/math500_base_cue-01/` and `results/selector/math500_rl-01/`: `run.json` (commit, command, source
+job), `readout.json` (rows, controls, per-problem 0/1 and chosen sample per rule, the rule chosen per fold), `examples.json` (one
+problem the best rule gets right against the vote, one it gets wrong although a sample is right: 11 and 39 on the base). Inputs:
+`runs/abaybektursun-1114-153825-208b/answers.jsonl` and `runs/abaybektursun-1114-183640-e828/answers.jsonl` (the rules need
+`text`, `answer_prob`, `mean_logprob`, which `rows.jsonl` lacks). Test (planted rows, rules that must fail, a planted oracle):
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.selector_test
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.selector --run runs/abaybektursun-1114-153825-208b --out studies/rlneurons/results/selector/math500_base_cue-01
+```
+
 ## Weight-difference line: base + a (RL - base), Code-RL and a random control (Day-1 #4, board work-d36669)
 
 All from `results/day1_wdiff/readout.json` (`analysis/day1_wdiff.py`, plan `specs/DAY1_wdiff_2026-11-14.md`). MATH-500, T 1.0 /
