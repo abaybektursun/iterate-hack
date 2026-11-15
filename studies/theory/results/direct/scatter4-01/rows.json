@@ -1,3 +1,3 @@
 [
- {"mechanism": "run-08/f2-m05", "claim": "On cued-base MATH-500 problems with 2-10 of 12 samples right, the vote over 4 with the real wrong answers beats the same vote with every finished wrong answer merged into one by at least 0.05 per problem.", "result": "pending", "verdict": "holds", "measured": "D = 0.070 [0.060, 0.081] (V4 0.828 real wrong vs 0.758 merged wrong), n 158 problems, null 0 (merged-wrong vote), threshold 0.05", "added": "2026-11-15T22:42:32Z"}
+ {"mechanism": "run-08/f2-m05", "claim": "On cued-base MATH-500 problems with 2-10 of 12 samples right, the vote over 4 with the real wrong answers beats the same vote with every finished wrong answer merged into one by at least 0.05 per problem.", "result": "result-dd9b25", "verdict": "holds", "measured": "D = 0.070 [0.060, 0.081] (V4 0.828 real wrong vs 0.758 merged wrong), n 158 problems, null 0 (merged-wrong vote), threshold 0.05", "added": "2026-11-15T22:42:32Z"}
 ]
