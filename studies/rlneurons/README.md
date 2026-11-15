@@ -2999,6 +2999,8 @@ v3, one sample, seed 3000000, on vast.ai (RTX PRO 6000). Each cell is scored twi
 right with at most 16,384 generated tokens, so the gain is paired inside one run. Readout `analysis/cap32.py`,
 `results/cap32/readout.json`.
 
+Per-problem rows of both cells (tokens generated, cut off at 32,768 or not, score, extracted answer, last 400 characters): `results/cap32/rows-01/` (`sft_cue.jsonl`, `rl_plain.jsonl`, `run.json`), written by `analysis/cap32_rows.py` from `runs/<job>/answers.jsonl`; its totals are checked against `results/cap32/readout.json` (230 and 207, 195 and 193).
+
 | cell | right at 16,384 (same answers) | right at 32,768 | gain, points [95 %] | answers past 16,384: finished / right | tokens per problem, 16,384 / 32,768 |
 |---|---|---|---|---|---|
 | Think-SFT cue (`results/cap32/sft_cue-01/`) | 207 | 230 | +7.0 [4.3, 9.8] | 93: 91 / 23 | 10,048 / 11,795 |
