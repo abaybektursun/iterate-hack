@@ -4226,6 +4226,33 @@ Which reward writes the finishing directions (8 directions of each model added t
 - The Think-SFT cell is not a test: its top-8 edit is 3.7 % of the weight norm (50 times Math's) and the model writes commas
   until the cap. A norm-matched Think-SFT edit is open.
 
+#### The smallest edit (amendment 8, work-d80b27): one larger direction, and three layer bands
+
+Same settings as the dial (hard328, cue, one sample). `wsp_edit --layers lo-hi` restricts the edit to those layers.
+
+| Cell | Right of 328 | Cap hits | On 251 | No box | Right per finished | Edit, % of weight norm | Run folder (`edits/`), job |
+|---|---|---|---|---|---|---|---|
+| 1 direction per matrix at 1 (second batch) | 181 | 51 | 166 | | 0.65 | 0.048 | `top1_math31-01/` |
+| 1 direction at 2 | 184 | 23 | 169 | 8 | 0.60 | 0.097 | `top1x2_math31-01/`, `abaybektursun-1115-105247-1603` |
+| 1 direction at 3 | 168 | 10 | 157 | 67 | 0.53 | 0.145 | `top1x3_math31-01/`, `abaybektursun-1115-105259-789c` |
+| 8 directions at 1.5, layers 0 to 10 | 184 | 98 | 169 | 2 | 0.80 | 0.107 | `top8x1.5_L0-10_math31-01/`, `abaybektursun-1115-105312-7e19` |
+| 8 directions at 1.5, layers 11 to 21 | 183 | 49 | 168 | 12 | 0.66 | 0.101 | `top8x1.5_L11-21_math31-01/`, `abaybektursun-1115-105324-5f61` |
+| 8 directions at 1.5, layers 22 to 31 | 166 | 57 | 156 | 15 | 0.61 | 0.126 | `top8x1.5_L22-31_math31-01/`, `abaybektursun-1115-105335-a886` |
+| 8 directions at 1.5, all layers | 203 | 25 | 184 | 2 | 0.67 | 0.111 | `top8x1.5_math31-01/` |
+
+- M1 refuted: one larger direction does not reach 187. Making it larger keeps cutting cap hits (51, 23, 10) while right answers
+  stay (181, 184) and then fall (168, with 67 unboxed answers). The first direction carries finishing; the right answers of the
+  8-direction edit (192 to 203) need the other seven.
+- M2 refuted: no band reaches 185 and two bands are above 180. The bands differ in kind, not only in size:
+  layers 0 to 10 add right answers (184; 169 on the 251, +7.9 points above the random edit [3.7, 12.2]) and raise cap hits to 98
+  (base 77), so 0.80 of the finished answers are right, the same profile as RL minus its 8 directions (190 right, 90 cap hits,
+  0.80); layers 11 to 21 add right answers and cut cap hits (183, 49); layers 22 to 31 cut cap hits (57) with no gain in right
+  answers (166, +2.4 above random [-2.4, 7.3]).
+- So finishing and right answers come apart twice: by rank (the first direction finishes, the rest add right answers) and by depth
+  (early layers add right answers without finishing, late layers finish without right answers). No edit smaller than 8
+  directions in all layers reached 190.
+- One sample per cell; differences under about 5 points are not resolved.
+
 #### The dial on a second model pair and benchmark (amendment 7, work-df5e0a)
 
 Base + the 8 directions per matrix of (Code 3.1 minus base), on HumanEval+ and MBPP+ (538 scored problems), Code cue, T 1.0 /
