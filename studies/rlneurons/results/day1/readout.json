@@ -1,0 +1,166 @@
+{
+ "grader": "v3",
+ "rows": {
+  "check_t1_n10-01": {
+   "job_id": "abaybektursun-1114-151028-ec3c",
+   "commit": "9067fd7792bec7a5f49bae6c847f15b636dac06a",
+   "model": "base",
+   "prompt": "cue",
+   "set": "math500",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "seed": 41000000,
+   "n": 10,
+   "right_v3": 8,
+   "percent_v3": 80.0,
+   "wilson95_v3": [
+    49.01624691221323,
+    94.33178490622332
+   ],
+   "right_v1": 6,
+   "nothing_extracted_v3": 1,
+   "cap_hits": 1,
+   "cap_hits_right_v3": 0,
+   "loops_A": 0,
+   "loops_A_among_cap_hits": 0,
+   "mean_generated_tokens": 3012.3,
+   "median_generated_tokens": 2136,
+   "generated_tokens": 30123,
+   "generation_s": 124.55735039710999,
+   "tokens_per_s": 241.7681485997531,
+   "wall_s": 231.08702158927917,
+   "gpu": "NVIDIA H100 80GB HBM3"
+  },
+  "hard328_base_cue_t10-01": {
+   "job_id": "abaybektursun-1114-151534-e72c",
+   "commit": "5e5d9344b7baf660ebb46b3ee35ad524a93d3cc1",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "seed": 3000000,
+   "n": 328,
+   "right_v3": 164,
+   "percent_v3": 50.0,
+   "wilson95_v3": [
+    44.6203654171184,
+    55.3796345828816
+   ],
+   "right_v1": 163,
+   "nothing_extracted_v3": 66,
+   "cap_hits": 77,
+   "cap_hits_right_v3": 3,
+   "loops_A": 1,
+   "loops_A_among_cap_hits": 0,
+   "mean_generated_tokens": 9344.536585365853,
+   "median_generated_tokens": 9521,
+   "generated_tokens": 3065008,
+   "generation_s": 3043.3704228401184,
+   "tokens_per_s": 1007.0272672032881,
+   "wall_s": 3090.100218772888,
+   "gpu": "NVIDIA H100 80GB HBM3"
+  },
+  "hard328_rl_plain_t10-01": {
+   "job_id": "abaybektursun-1114-151540-86ef",
+   "commit": "5e5d9344b7baf660ebb46b3ee35ad524a93d3cc1",
+   "model": "rl",
+   "prompt": "plain",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "seed": 3000000,
+   "n": 328,
+   "right_v3": 206,
+   "percent_v3": 62.80487804878049,
+   "wilson95_v3": [
+    57.45430532660839,
+    67.85898743770767
+   ],
+   "right_v1": 206,
+   "nothing_extracted_v3": 5,
+   "cap_hits": 20,
+   "cap_hits_right_v3": 0,
+   "loops_A": 0,
+   "loops_A_among_cap_hits": 0,
+   "mean_generated_tokens": 9316.387195121952,
+   "median_generated_tokens": 9643,
+   "generated_tokens": 3055775,
+   "generation_s": 2910.6163699626923,
+   "tokens_per_s": 1049.7663077594675,
+   "wall_s": 3053.0983395576477,
+   "gpu": "NVIDIA H100 80GB HBM3"
+  },
+  "math500_base_cue_t06_p10-01": {
+   "job_id": "abaybektursun-1114-151718-d4fa",
+   "commit": "75f0bf41bc9caed9f3c9f699f862cbfdeb9c00b5",
+   "model": "base",
+   "prompt": "cue",
+   "set": "math500",
+   "temperature": 0.6,
+   "top_p": 1.0,
+   "seed": 1000000,
+   "n": 500,
+   "right_v3": 378,
+   "percent_v3": 75.6,
+   "wilson95_v3": [
+    71.64951928186017,
+    79.160114480397
+   ],
+   "right_v1": 367,
+   "nothing_extracted_v3": 94,
+   "cap_hits": 98,
+   "cap_hits_right_v3": 0,
+   "loops_A": 71,
+   "loops_A_among_cap_hits": 70,
+   "mean_generated_tokens": 4690.482,
+   "median_generated_tokens": 1464,
+   "generated_tokens": 2345241,
+   "generation_s": 2237.2541601657867,
+   "tokens_per_s": 1048.0878935213336,
+   "wall_s": 2326.4709453582764,
+   "gpu": "NVIDIA H100 80GB HBM3"
+  }
+ },
+ "differences_v3": {
+  "hard328_rl_plain_t10-01 - hard328_base_cue_t10-01": {
+   "n": 328,
+   "diff_points": 12.804878048780488,
+   "ci95": [
+    8.536585365853655,
+    17.073170731707314
+   ],
+   "both_right": 157,
+   "rl_only": 49,
+   "base_only": 7,
+   "neither": 115,
+   "mcnemar": {
+    "b": 49,
+    "c": 7,
+    "p": 7.455210310203242e-09
+   }
+  },
+  "math500_base_cue_t06_p10-01 - base_opener_0.6": {
+   "n": 500,
+   "other_right_v3": 354,
+   "other_cap_hits": 119,
+   "diff_points": 4.800000000000004,
+   "ci95_unpaired": [
+    -0.6822964428476374,
+    10.282296442847647
+   ],
+   "note": "unpaired: per-problem scores of the other row are not in the repository"
+  },
+  "math500_base_cue_t06_p10-01 - base_opener_1.0": {
+   "n": 500,
+   "other_right_v3": 410,
+   "other_cap_hits": 27,
+   "diff_points": -6.399999999999995,
+   "ci95_unpaired": [
+    -11.450960704576255,
+    -1.3490392954237354
+   ],
+   "note": "unpaired: per-problem scores of the other row are not in the repository"
+  }
+ }
+}

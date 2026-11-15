@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "\\left( 3, \\frac{\\pi}{2} \\right)",
+  "extracted_v3": "(3, \\dfrac{\\pi}{2})",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2092,
+  "prompt_tail": "ng problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nConvert the point $(0,3)$ in rectangular coordinates to polar coordinates.  Enter your answer in the form $(r,\\theta),$ where $r > 0$ and $0 \\le \\theta < 2 \\pi.$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "nal answer would just be the point in polar coordinates.\n\n**Final Answer**\nThe point (0,3) in polar coordinates is \\boxed{(3, \\dfrac{\\pi}{2})}.To convert the point \\((0, 3)\\) from rectangular coordinates to polar coordinates, we use the following formulas:\n\n\\[\nr = \\sqrt{x^2 + y^2}\n\\]\n\\[\n\\theta = \\arctan\\left(\\frac{y}{x}\\right)\n\\]\n\nGiven the point \\((0, 3)\\):\n- The radius \\(r\\) is calculated as:\n  \\[\n  r = \\sqrt{0^2 + 3^2} = \\sqrt{0 + 9} = \\sqrt{9} = 3\n  \\]\n\n- The angle \\(\\theta\\) is determined. Since \\(x = 0\\) and \\(y\\) is positive, the point lies on the positive y-axis. The angle \\(\\theta\\) from the positive x-axis to this point is:\n  \\[\n  \\theta = \\frac{\\pi}{2} \\text{ radians (or 90 degrees)}\n  \\]\n\nThus, the polar coordinates of the point \\((0, 3)\\) are:\n\\[\n\\boxed{(3, \\dfrac{\\pi}{2})}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 10,
+  "gold": "2220",
+  "extracted_v3": "20220",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 5855,
+  "prompt_tail": "Solve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nWhat is the least positive integer multiple of 30 that can be written with only the digits 0 and 2?\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "possible number would be 22200, but it's larger. Therefore, 20220 is the answer.\n\n\nThe least positive integer multiple of 30 that can be written with only the digits 0 and 2 is **20220**. \n\nTo determine this, we need a number divisible by both 3 and 10. Divisibility by 10 requires the number to end in 0. The sum of its digits must be divisible by 3. Using only 2s and 0s, the smallest number meeting these criteria is constructed by arranging three 2s and two 0s such that the number is minimized. \n\n- **20220** is structured as \"20220\", with digits summing to \\(2 + 0 + 2 + 2 + 0 = 6\\), which is divisible by 3, and it ends in 0 for divisibility by 10. Testing smaller combinations (e.g., fewer digits, different arrangements) shows they do not meet the requirements. \n\n**Answer:** $\\boxed{20220}$"
+ }
+}

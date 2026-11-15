@@ -1,0 +1,28 @@
+[
+ {
+  "theory": "all-2",
+  "kind": "close",
+  "id": "t49",
+  "item": "result-4b0d5f",
+  "what": "Weight-interpolated model base + 0.25*(RL - base), plain prompt (no cue), MATH-500 n=500, T 1.0 / top-p 1.0, grader v3, one sample: number right.",
+  "unit": "right of 500",
+  "value": 405,
+  "quote": "Plain: 224/405/443/463 at a=0/0.25/0.5/1",
+  "all-2": 380,
+  "null-1": 300,
+  "null-2": 300
+ },
+ {
+  "theory": "all-2",
+  "kind": "missed",
+  "id": "t48",
+  "item": "result-4b0d5f",
+  "what": "Weight-extrapolated model base + 1.5*(RL - base) with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, grader v3, one sample: number right.",
+  "unit": "right of 500",
+  "value": 453,
+  "quote": "410/441/452/451/457/450/453 (RL plain 463)",
+  "all-2": 400,
+  "null-1": 440,
+  "null-2": 440
+ }
+]

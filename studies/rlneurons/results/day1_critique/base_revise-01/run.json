@@ -1,0 +1,17 @@
+{
+ "job_ids": [
+  "frustea-1114-184334-2498",
+  "frustea-1114-184338-5774",
+  "frustea-1114-184342-5bf5",
+  "frustea-1114-184346-96a7"
+ ],
+ "commit": "c14120cf2f8db7e568208b01146870f8b10c4d52",
+ "command": "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.revise --model base --drafts /runs/inputs/critique/base_cue_T1.jsonl.gz --drafts-sha256 a2a9f38bc2daa18293adcbbd64a46a4a0bae21388aee63a74ac6b58026fe98bc --seed 77000000 --shard <0-3> --shards 4 --commit c14120cf2f8db7e568208b01146870f8b10c4d52",
+ "runner": "uv run tools/gpu.py submit h100 --hours 1.5",
+ "raw_answers": [
+  "runs/frustea-1114-184334-2498/answers.jsonl (uv run tools/gpu.py get frustea-1114-184334-2498)",
+  "runs/frustea-1114-184338-5774/answers.jsonl (uv run tools/gpu.py get frustea-1114-184338-5774)",
+  "runs/frustea-1114-184342-5bf5/answers.jsonl (uv run tools/gpu.py get frustea-1114-184342-5bf5)",
+  "runs/frustea-1114-184346-96a7/answers.jsonl (uv run tools/gpu.py get frustea-1114-184346-96a7)"
+ ]
+}

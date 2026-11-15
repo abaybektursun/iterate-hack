@@ -1,0 +1,25 @@
+{
+ "commit_of_code_before_this_commit": "37f736cb9b6861961ee60bfa59c686744da6a742",
+ "snapshot": "runs/swarm/board-2136.json (42 items, 2026-11-14 21:36 UTC, not committed)",
+ "judge": "gpt-6.1-sol (OpenAI API)",
+ "commands": [
+  "uv run studies/basins/prep/swarm_export.py runs/swarm/board-2136.json",
+  "python3 -m studies.basins.analysis.swarm_judge runs/swarm/board-2136.json runs/swarm/judge-2136 --model gpt-6.1-sol   # directions + nodes (its 31-group partitions were too fine; superseded)",
+  "python3 -m studies.basins.analysis.swarm_judge runs/swarm/board-2136.json runs/swarm/judge-2136-sol --model gpt-6.1-sol --reuse runs/swarm/judge-2136 --steps partitions,triplets",
+  "python3 -m studies.basins.analysis.swarm_judge runs/swarm/board-2136.json runs/swarm/judge-2136-sol --model gpt-6.1-sol --reuse runs/swarm/judge-2136 --steps coverage",
+  "python3 -m studies.basins.analysis.swarm_analyze runs/swarm/judge-2136-sol studies/basins/results/swarm/main-01",
+  "python3 -m studies.basins.analysis.swarm_page studies/basins/results/swarm/main-01 gpt-6.1-sol"
+ ],
+ "page": "https://claude.ai/artifact/AABRqx5XZzFrPzBbgaYeYy (private)",
+ "judge_comparison": {
+  "gpt-6.1-sol": {
+   "triplet_order_consistent": "714/767",
+   "cost_usd_approx": 1.1
+  },
+  "gpt-5.4-mini": {
+   "triplet_order_consistent": "359/767",
+   "cost_usd_approx": 0.32,
+   "partition": "failed: 67 ids returned, 61 distinct, of 64"
+  }
+ }
+}

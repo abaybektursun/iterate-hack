@@ -1,0 +1,136 @@
+[
+ {
+  "theory": "all-2",
+  "experiment": "base + 0.25*(RL - base), plain prompt, T 1.0 / top-p 1.0, cap 16,384, grader v3, MATH-500 one sample",
+  "unit": "right of 500",
+  "predicted": 375,
+  "low": 330,
+  "high": 415,
+  "measured": 405,
+  "targets": [
+   "t49"
+  ],
+  "items": [
+   "result-4b0d5f"
+  ],
+  "inside": true,
+  "null_1": 300,
+  "null_2": 300,
+  "closer_than_both_nulls": true
+ },
+ {
+  "theory": "all-2",
+  "experiment": "base + 0.5*(RL - base), plain prompt, T 1.0 / top-p 1.0, cap 16,384, grader v3, MATH-500 one sample",
+  "unit": "right of 500",
+  "predicted": 432,
+  "low": 415,
+  "high": 450,
+  "measured": 443,
+  "targets": [
+   "t50"
+  ],
+  "items": [
+   "result-4b0d5f"
+  ],
+  "inside": true,
+  "null_1": 430,
+  "null_2": 420,
+  "closer_than_both_nulls": true
+ },
+ {
+  "theory": "all-2",
+  "experiment": "base + 0.5*(RL - base) with the opening cue minus the same model with the plain prompt, T 1.0, MATH-500",
+  "unit": "right of 500 (difference)",
+  "predicted": 3,
+  "low": -10,
+  "high": 15,
+  "measured": 9,
+  "targets": [
+   "t47",
+   "t50"
+  ],
+  "items": [
+   "result-4b0d5f"
+  ],
+  "inside": true,
+  "null_1": 20,
+  "null_2": 25,
+  "closer_than_both_nulls": true
+ },
+ {
+  "theory": "all-2",
+  "experiment": "base + 1.0*(Code-RL - base) (Olmo-3.1-7B-RL-Zero-Code final), plain prompt, T 1.0 / top-p 1.0, grader v3, MATH-500 one sample",
+  "unit": "right of 500",
+  "predicted": 320,
+  "low": 270,
+  "high": 375,
+  "measured": 390,
+  "targets": [
+   "t51"
+  ],
+  "items": [
+   "result-4b0d5f"
+  ],
+  "inside": false,
+  "null_1": 270,
+  "null_2": 300,
+  "closer_than_both_nulls": true
+ },
+ {
+  "theory": "across-2",
+  "experiment": "Base + 0.5*(RL - base), opening cue, T 1.0 / top-p 1.0, MATH-500 n=500, cap 16,384, grader v3: right (with mean tokens per problem expected between the base's 3,933 and RL's 4,694)",
+  "unit": "right of 500",
+  "predicted": 447,
+  "low": 436,
+  "high": 457,
+  "measured": 452,
+  "targets": [
+   "t47"
+  ],
+  "items": [
+   "result-4b0d5f"
+  ],
+  "inside": true,
+  "null_1": 450,
+  "null_2": 445,
+  "closer_than_both_nulls": false
+ },
+ {
+  "theory": "surprises-1",
+  "experiment": "Olmo-3.1-7B-RL-Zero-Code (final checkpoint, = base + Code-RL delta), plain prompt (no cue), MATH-500 n=500, T 1.0 / top-p 1.0, cap 16,384, grader v3",
+  "unit": "right of 500",
+  "predicted": 340,
+  "low": 280,
+  "high": 400,
+  "measured": 390,
+  "targets": [
+   "t51"
+  ],
+  "items": [
+   "result-4b0d5f"
+  ],
+  "inside": true,
+  "null_1": 270,
+  "null_2": 300,
+  "closer_than_both_nulls": true
+ },
+ {
+  "theory": "surprises-1",
+  "experiment": "Olmo-3.1-7B-RL-Zero-Code with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, cap 16,384, grader v3",
+  "unit": "right of 500",
+  "predicted": 410,
+  "low": 390,
+  "high": 432,
+  "measured": 450,
+  "targets": [
+   "t52"
+  ],
+  "items": [
+   "result-4b0d5f"
+  ],
+  "inside": false,
+  "null_1": 400,
+  "null_2": 400,
+  "closer_than_both_nulls": true
+ }
+]

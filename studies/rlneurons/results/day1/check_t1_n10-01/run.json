@@ -1,0 +1,9 @@
+{
+ "job_id": "abaybektursun-1114-151028-ec3c",
+ "commit": "9067fd7792bec7a5f49bae6c847f15b636dac06a",
+ "runner": "tools/gpu.py submit h100",
+ "command": "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41000000 --n 10 --commit 9067fd7792bec7a5f49bae6c847f15b636dac06a",
+ "raw_answers": "runs/abaybektursun-1114-151028-ec3c/answers.jsonl after `uv run tools/gpu.py get abaybektursun-1114-151028-ec3c` (the submitter's Modal workspace)",
+ "started_utc": "2026-11-14T21:11:04Z",
+ "updated_utc": "2026-11-14T21:14:55Z"
+}
