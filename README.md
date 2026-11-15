@@ -206,9 +206,8 @@ with its own quotes, put it in a script in the repository and run that. A job ov
 shell string, so `&&` and pipes work. Install extra packages in the command
 (`'pip install -q einops && python exp/train.py'`), or add them to `requirements.txt` and run
 `uv run tools/gpu.py deploy` again. The limits are the `max_containers` values in `infra/runner.py`. The class
-`short` is an H100 lane kept free for jobs of `--hours 0.5` at most, so a smoke run starts at once instead of waiting
-behind long jobs (p90 wait 20 min, max 39 min for short jobs in the shared queue, 2026-11-15); it reserves GPUs only
-when `ITERATE_MAX_H100` plus `ITERATE_MAX_SHORT` (default 2) is at most your workspace's GPU limit. `submit` refuses
+`short` takes jobs of `--hours 0.5` at most in a queue of their own; it holds no GPUs back by default, since
+2 reserved H100s sat idle while long jobs waited (meta/reviews/abaybektursun/20261115-0702). `submit` refuses
 to run while the runner deployed in your workspace is not the `infra/runner.py` of the commit; `gpu.py deploy` fixes that.
 
 ### vast.ai

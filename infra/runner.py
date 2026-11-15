@@ -110,14 +110,14 @@ def run(job_id):
 
 # One function per GPU class. max_containers is how many of your jobs of that class run at once. The limits are read at deploy
 # time: `ITERATE_MAX_H100=24 ITERATE_MAX_B200=4 uv run tools/gpu.py deploy` changes them for your workspace only.
-@app.function(gpu="H100", max_containers=int(os.environ.get("ITERATE_MAX_H100", 8)), **common)
+@app.function(gpu="H100", max_containers=int(os.environ.get("ITERATE_MAX_H100", 10)), **common)
 def h100(job_id: str):
     run(job_id)
 
 
-# A lane for short jobs (smoke runs, at most 30 min, enforced by gpu.py submit): they start at once instead of queueing
-# behind long jobs. It reserves GPUs only if ITERATE_MAX_H100 + ITERATE_MAX_SHORT is at most the workspace's GPU limit
-# (Modal's usual 10: 8 + 2 by default; a workspace with a higher limit raises both at deploy).
+# A queue of its own for short jobs (at most 30 min, enforced by gpu.py submit). It reserves nothing by default: with
+# ITERATE_MAX_H100 at the workspace's GPU limit (10) both lanes compete for the same GPUs. Holding 2 GPUs back for it
+# (ITERATE_MAX_H100=8) left them idle: 4 GPU-min used in 39 min while 20 long jobs waited (meta/reviews/abaybektursun/20261115-0702).
 @app.function(gpu="H100", max_containers=int(os.environ.get("ITERATE_MAX_SHORT", 2)), **common)
 def short(job_id: str):
     run(job_id)
