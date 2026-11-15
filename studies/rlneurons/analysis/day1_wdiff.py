@@ -77,6 +77,9 @@ HAND = {
     "theta1.5_cue": [],
     "theta0.75_cue": [(97, "\\text{east}", "'\\boxed{E}' after '90 degrees clockwise from north is east'")],
     "rl_cue": [],
+    "theta0.5_plain": [],
+    "theta1.25_cue": [(312, "(5,\\infty)", "'The final answer is (5, ∞).' (Unicode infinity, period)")],
+    "theta0.25_plain": [(190, "\\frac{13}{18}", "'Therefore, the final answer is 13/18.' (v3 keeps the period)")],
     "code_cue": [(313, "12\\pi", "'Final Answer: 12π inches per second.' (v3 keeps the unit)"),
                  (384, "15x - 80", "'**Answer**: \\(15x - 80\\).' (v3 keeps the period)")],
 }
@@ -201,13 +204,17 @@ def main():
         flags = [word_salad(rows[arm][i]["text"]) for i in idx]
         cells[arm]["word_salad_tails"] = sum(flags)
         cells[arm]["word_salad_tails_right_v3"] = sum(f and sc[arm][i]["v3"] for f, i in zip(flags, idx))
-    identical = {f"{x} | {y}": sum(rows[x][i]["text"] == rows[y][i]["text"] for i in idx) for x, y in itertools.combinations(sorted(rows), 2)}
+    # identical non-empty texts would mean a reused seed; an empty answer (stop token first) can match by chance
+    same = {f"{x} | {y}": [i for i in idx if rows[x][i]["text"] == rows[y][i]["text"]] for x, y in itertools.combinations(sorted(rows), 2)}
+    identical = {k: sum(rows[k.split(" | ")[0]][i]["text"] != "" for i in v) for k, v in same.items()}
+    identical_empty = {k: len(v) - identical[k] for k, v in same.items() if len(v) > identical[k]}
     assert not any(identical.values()), {k: v for k, v in identical.items() if v}
     pairs = [(f"theta{x}_cue", y) for x in ("0.25", "0.5", "0.75", "1.25", "1.5") for y in ("T1_base_cue", "T2_rl_plain")]
     row = [c for c in CUE_ROW if c in sc]
     pairs += [(y, x) for x, y in zip(row, row[1:])]
     pairs += [("random_cue", "T1_base_cue"), ("code_plain", "T2_rl_plain"), ("code_plain", "T1_base_cue"), ("code_plain", "T3_base_plain"), ("code_cue", "T1_base_cue"),
-              ("rl_cue", "T2_rl_plain"), ("theta0.25_plain", "T3_base_plain"), ("theta0.5_plain", "T3_base_plain"), ("code0.5_cue", "T1_base_cue")]
+              ("rl_cue", "T2_rl_plain"), ("theta0.25_plain", "T3_base_plain"), ("theta0.5_plain", "T3_base_plain"), ("code0.5_cue", "T1_base_cue"),
+              ("code_cue", "rl_cue"), ("code_cue", "code_plain"), ("theta0.5_plain", "T2_rl_plain")]
     diffs = {f"{x} minus {y}": diff(sc, x, y, idx) for x, y in dict.fromkeys(pairs) if x in sc and y in sc}
 
     def right(arm):
@@ -234,7 +241,7 @@ def main():
 
     res = {"spec": "studies/rlneurons/specs/DAY1_wdiff_2026-11-14.md", "grader": "rln4_lib.grade_v3", "n": 500, "check": chk,
            "cells": cells, "differences": diffs, "bootstrap": "paired, 5,000 resamples, seed 0, 95 % percentile",
-           "identical_texts": identical, "predictions": p, "merge_stats": f"studies/rlneurons/results/{OUT.name}/merge_stats.json"}
+           "identical_texts": identical, "identical_empty_texts": identical_empty, "predictions": p, "merge_stats": f"studies/rlneurons/results/{OUT.name}/merge_stats.json"}
     (OUT / "readout.json").write_text(json.dumps(res, indent=1) + "\n")
     print(json.dumps({k: res[k] for k in ("cells", "differences", "predictions")}, indent=1))
 
