@@ -1,0 +1,3092 @@
+[
+{
+"id": "q6699",
+"kind": "base",
+"model": "base",
+"problem_index": 1,
+"sample": 1,
+"has_right_sibling": true,
+"final": "2(p - q)",
+"gold": "p - q",
+"n_new": 5285,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.7779027059440822,
+"passA": {
+"id": "q6699",
+"label": "slip",
+"quote": "So the double sum becomes \u2211_{m=2}^\u221e 2 \u2211_{j=1}^{m - 1} 1/m^3, since for each m \u2265 2, both j and k are positive integers adding up to m",
+"reason": "The regrouping by m = j + k is the right method, but a spurious factor 2 is added when counting the m - 1 pairs, doubling the result.",
+"quote_position": 0.2922206506364922
+},
+"passB": {
+"id": "q6699",
+"label": "slip",
+"quote": "So the double sum becomes \u2211_{m=2}^\u221e 2 \u2211_{j=1}^{m - 1} 1/m^3",
+"reason": "Grouping by m = j + k is the right method, but the m - 1 pairs are counted twice with a spurious factor 2, turning p - q into 2(p - q).",
+"quote_position": 0.2922206506364922
+}
+},
+{
+"id": "q3914",
+"kind": "base",
+"model": "base",
+"problem_index": 4,
+"sample": 0,
+"has_right_sibling": true,
+"final": "Angela",
+"gold": "\\text{Evelyn}",
+"n_new": 4938,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.3054371002132196,
+"passA": {
+"id": "q3914",
+"label": "misread",
+"quote": "The y-axis probably shows the time taken, and the x-axis the distance.",
+"reason": "It swaps the graph's axes (x is time, y is distance) and consistently computes x/y as speed, which picks Angela instead of Evelyn.",
+"quote_position": 0.035932446999640676
+},
+"passB": null
+},
+{
+"id": "q1163",
+"kind": "base",
+"model": "base",
+"problem_index": 17,
+"sample": 2,
+"has_right_sibling": true,
+"final": "-\\pi",
+"gold": "\\pi",
+"n_new": 7445,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.029229474328563775,
+"passA": {
+"id": "q1163",
+"label": "misread",
+"quote": "So -c/b = \u03c0/3, so c = -\u03c0/3 * b. Here, b = 3, so c = -\u03c0/3 * 3 = -\u03c0. Therefore, in this case, c is -\u03c0.",
+"reason": "It drops the stated condition that c is a positive constant and reports the negative equivalent phase -\u03c0 as the smallest value.",
+"quote_position": 0.21351234300563016
+},
+"passB": null
+},
+{
+"id": "q4776",
+"kind": "base",
+"model": "base",
+"problem_index": 18,
+"sample": 3,
+"has_right_sibling": false,
+"final": "56",
+"gold": "28",
+"n_new": 13036,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q4776",
+"label": "wrong_plan",
+"quote": "The label for angle at A is 124 degrees, which is between AB and AC. The angle x is labeled at B, I think.",
+"reason": "It misplaces both the 124 degree angle and x, never uses alternate interior angles with the isosceles triangle, and finally guesses 56 from arctan(3/2) of the diagram coordinates.",
+"quote_position": 0.010443376068376068
+},
+"passB": null
+},
+{
+"id": "q6993",
+"kind": "base",
+"model": "base",
+"problem_index": 21,
+"sample": 3,
+"has_right_sibling": true,
+"final": "14959",
+"gold": "13535",
+"n_new": 15469,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.0305159877827932,
+"passA": {
+"id": "q6993",
+"label": "slip",
+"quote": "2\u221a7 * 568 - 2*(44\u221a7) = (1136\u221a7 - 88\u221a7) = (1148\u221a7). So I_5 = 1148\u221a7",
+"reason": "The conjugate-sum recurrence is the right method, but 1136 - 88 is computed as 1148 instead of 1048, which gives I_6 = 14960 instead of 13536.",
+"quote_position": 0.18068974552123931
+},
+"passB": {
+"id": "q6993",
+"label": "slip",
+"quote": "2\u221a7 * 568 - 2*(44\u221a7) = (1136\u221a7 - 88\u221a7) = (1148\u221a7). So I_5 = 1148\u221a7.",
+"reason": "The conjugate-sum recurrence is the right method, but 1136 - 88 is computed as 1148 instead of 1048, which turns I_6 = 13536 into 14960.",
+"quote_position": 0.18068974552123931
+}
+},
+{
+"id": "q2155",
+"kind": "base",
+"model": "base",
+"problem_index": 25,
+"sample": 1,
+"has_right_sibling": true,
+"final": "1",
+"gold": "1,-2",
+"n_new": 6773,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q2155",
+"label": "format",
+"quote": "",
+"reason": "The work reaches n = 1 and n = -2, matching gold, but states them in two separate boxes so only 1 was extracted.",
+"quote_position": null
+},
+"passB": {
+"id": "q2155",
+"label": "format",
+"quote": "",
+"reason": "The work derives f(n) = (n^2+3n-2)/2 and both solutions n = 1 and n = -2, but states them in two separate boxes so only one was read as the final answer.",
+"quote_position": null
+}
+},
+{
+"id": "q3347",
+"kind": "base",
+"model": "base",
+"problem_index": 45,
+"sample": 1,
+"has_right_sibling": true,
+"final": "$Answer$",
+"gold": "2",
+"n_new": 1159,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q3347",
+"label": "format",
+"quote": "",
+"reason": "The work reaches tan A = 2 but the final answer line is the unfilled placeholder $Answer$.",
+"quote_position": null
+},
+"passB": null
+},
+{
+"id": "q4407",
+"kind": "base",
+"model": "base",
+"problem_index": 52,
+"sample": 3,
+"has_right_sibling": true,
+"final": "\\dfrac{4}{3}",
+"gold": "12",
+"n_new": 5631,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.17111882661376035,
+"passA": {
+"id": "q4407",
+"label": "slip",
+"quote": "because 2.7 - 2.5 is the same as (2.5 + 0.7 - 2.5) which is 0.7. So the denominator becomes 0.7.",
+"reason": "After correctly getting 2.4/0.2 = 12, it miscomputes the denominator 2.7 - 2.5 as 0.7 and follows with faulty algebra to 4/3.",
+"quote_position": 0.1419366228263748
+},
+"passB": null
+},
+{
+"id": "q1052",
+"kind": "base",
+"model": "base",
+"problem_index": 60,
+"sample": 2,
+"has_right_sibling": true,
+"final": "(-1, 0, 0)",
+"gold": "(6,31,-1)",
+"n_new": 13522,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.12582902501436105,
+"passA": {
+"id": "q1052",
+"label": "slip",
+"quote": "= (-63 -5p +3q) alpha\u00b2 + (190 -11p -4q) alpha + (-54 +4p + q - r)",
+"reason": "The root-reduction method is correct and gives p=6, q=31, but a sign error writes -r instead of +r, giving r=1; the failed check then leads it to abandon the method for (-1,0,0).",
+"quote_position": 0.25032684010981826
+},
+"passB": {
+"id": "q1052",
+"label": "slip",
+"quote": "= (-63 -5p +3q) alpha\u00b2 + (190 -11p -4q) alpha + (-54 +4p + q - r)",
+"reason": "The root-reduction method is right and gives p=6, q=31, but the constant term is collected with -r instead of +r, giving r=1; the failed check then sends the answer to an invalid quotient form x^6+ax^3+b and (-1,0,0).",
+"quote_position": 0.25032684010981826
+}
+},
+{
+"id": "q4355",
+"kind": "base",
+"model": "base",
+"problem_index": 63,
+"sample": 0,
+"has_right_sibling": true,
+"final": "8",
+"gold": "10",
+"n_new": 2897,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q4355",
+"label": "slip",
+"quote": "\\( (x^4 - 1)(x^4 + 4) = (x^2 - 1)(x^2 + 1)(x^2 + 2x + 2)(x^2 - 2x + 2) \\).",
+"reason": "It had already factored x^2 - 1 into (x-1)(x+1) but left x^2 - 1 unsplit in the final factor list, giving 0 instead of 0 + 2.",
+"quote_position": 0.6182863301598707
+},
+"passB": {
+"id": "q4355",
+"label": "slip",
+"quote": "\\( (x^4 - 1)(x^4 + 4) = (x^2 - 1)(x^2 + 1)(x^2 + 2x + 2)(x^2 - 2x + 2) \\).",
+"reason": "It had factored x^2 - 1 into (x - 1)(x + 1) earlier but lists x^2 - 1 as an irreducible factor, losing the 0 + 2 contribution and giving 8 instead of 10.",
+"quote_position": 0.6182863301598707
+}
+},
+{
+"id": "q3018",
+"kind": "base",
+"model": "base",
+"problem_index": 90,
+"sample": 1,
+"has_right_sibling": true,
+"final": "$15$",
+"gold": "\\frac{3}{2}",
+"n_new": 884,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.4397283531409168,
+"passA": {
+"id": "q3018",
+"label": "misread",
+"quote": "So applying the same logic, 10 divided by (2/3) should be 10 \u00d7 (3/2) = 15.",
+"reason": "The work correctly finds the multiplier 3/2 but reports the quotient 15, which is a different quantity than the one asked for.",
+"quote_position": 0.45588235294117646
+},
+"passB": null
+},
+{
+"id": "q1117",
+"kind": "base",
+"model": "base",
+"problem_index": 96,
+"sample": 2,
+"has_right_sibling": false,
+"final": "1, 4",
+"gold": "1 \\pm \\sqrt{19}",
+"n_new": 16172,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q1117",
+"label": "wrong_plan",
+"quote": "Let me find a common denominator for these two terms. The denominators are 5 and 9, so LCM is 45. So common denominator is 5*9=45.",
+"reason": "It combines the fractions over 45 while dropping the polynomial denominators, never finds the x^2-2x substitution, and finally guesses 1 and 4 after admitting they do not satisfy the equation.",
+"quote_position": 0.14840233398166158
+},
+"passB": null
+},
+{
+"id": "q5804",
+"kind": "base",
+"model": "base",
+"problem_index": 101,
+"sample": 2,
+"has_right_sibling": false,
+"final": "5",
+"gold": "850",
+"n_new": 13838,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q5804",
+"label": "wrong_plan",
+"quote": "So, the roots at 18\u00b0 and 198\u00b0 are conjugates because their angles differ by \u03c0.",
+"reason": "After correctly getting 1/|r|^2 = |13e^{i phi} - 1|^2, it pairs conjugates wrongly, never evaluates the sum, abandons the approach and guesses 5.",
+"quote_position": 0.587870222440703
+},
+"passB": {
+"id": "q5804",
+"label": "wrong_plan",
+"quote": "In our case, the polynomial is monic (leading coefficient 1), so the product of all roots is equal to (-1)^{10} times the constant term.",
+"reason": "The answer wrongly treats the polynomial as monic, then mishandles the conjugate pairing of the roots, abandons the derivation and guesses 5 from the number of pairs.",
+"quote_position": 0.26828069313014624
+}
+},
+{
+"id": "q7047",
+"kind": "base",
+"model": "base",
+"problem_index": 104,
+"sample": 3,
+"has_right_sibling": true,
+"final": "4\\sqrt{10}",
+"gold": "40",
+"n_new": 13798,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.029810477896459454,
+"passA": {
+"id": "q7047",
+"label": "wrong_plan",
+"quote": "Hmm, both equations are circles. Let me try to subtract or add them to eliminate some variables.",
+"reason": "It treats the hyperbola as a circle, decides the problem is flawed, never computes the four distances and guesses 4*sqrt(10).",
+"quote_position": 0.013231482744509616
+},
+"passB": null
+},
+{
+"id": "q1403",
+"kind": "base",
+"model": "base",
+"problem_index": 128,
+"sample": 2,
+"has_right_sibling": true,
+"final": "32",
+"gold": "36",
+"n_new": 9852,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.04461067870014234,
+"passA": {
+"id": "q1403",
+"label": "slip",
+"quote": "So the days she walks are days 3, 6, 9, 12, 15, 18, 21, and 24.",
+"reason": "The method (count multiples of 3 in 28 days, times 4) gives 36, but day 27 is left out of the count (it is wrongly said to be beyond the month), giving 8 walks instead of 9.",
+"quote_position": 0.019630528083597686
+},
+"passB": {
+"id": "q1403",
+"label": "slip",
+"quote": "So the days she walks are days 3, 6, 9, 12, 15, 18, 21, and 24. Let me count those.",
+"reason": "Counting multiples of 3 in a 28-day February is the right method, but day 27 is left out of the list, giving 8 walks instead of 9.",
+"quote_position": 0.019630528083597686
+}
+},
+{
+"id": "q4815",
+"kind": "base",
+"model": "base",
+"problem_index": 136,
+"sample": 3,
+"has_right_sibling": true,
+"final": "67",
+"gold": "64",
+"n_new": 8930,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.13325248237701812,
+"passA": {
+"id": "q4815",
+"label": "wrong_plan",
+"quote": "Wait, but this seems like lower bound, but I think the problem is different: since we have three power sums, not just two.",
+"reason": "It derives n >= 64 from Cauchy-Schwarz and then discards it, accepting n=3 from an unchecked claim that a cubic has three positive real roots, giving 3+64=67.",
+"quote_position": 0.1923700922449358
+},
+"passB": {
+"id": "q4815",
+"label": "wrong_plan",
+"quote": "So, n \u226564? Hmm, that seems conflicting with my previous reasoning where n=3 is possible.",
+"reason": "It derives the Cauchy-Schwarz bound n >= 64 but discards it and accepts n=3 as feasible from an unverified claim that the cubic has three positive roots, giving 3+64=67.",
+"quote_position": 0.18893987855189356
+}
+},
+{
+"id": "q3324",
+"kind": "base",
+"model": "base",
+"problem_index": 137,
+"sample": 0,
+"has_right_sibling": true,
+"final": "144",
+"gold": "204_5",
+"n_new": 8791,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.011444921316165951,
+"passA": {
+"id": "q3324",
+"label": "misread",
+"quote": "The dividend is 4135, and the divisor is 25. Wait, but 4135 divided by 25? Let me check the positions.",
+"reason": "It reads the base subscripts as digits, dividing 4135_5 by 25_5 (541/11 = 49 = 144_5) instead of 413_5 by 2_5.",
+"quote_position": 0.010652526989586318
+},
+"passB": {
+"id": "q3324",
+"label": "misread",
+"quote": "The dividend is 4135, and the divisor is 25. Wait, but 4135 divided by 25? Let me check the positions.",
+"reason": "It reads the base subscripts as digits (413_5 as 4135 base 5, 2_5 as 25 base 5), computes 541/11 = 49 = 144_5 for that other problem and reports it.",
+"quote_position": 0.010652526989586318
+}
+},
+{
+"id": "q4063",
+"kind": "base",
+"model": "base",
+"problem_index": 177,
+"sample": 3,
+"has_right_sibling": true,
+"final": "60",
+"gold": "30^\\circ",
+"n_new": 14255,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.08047341601066647,
+"passA": {
+"id": "q4063",
+"label": "wrong_plan",
+"quote": "Since all circles have radius 1 and are tangent to each other, the distance between any two centers should be twice the radius, i.e., 2 units.",
+"reason": "It assumes every pair of the four circles is tangent, so triangle PQS is equilateral with 60 degree angles, and discards the diagram's configuration (sides 2, 2*sqrt(3), 4) that gives 30 degrees.",
+"quote_position": 0.2027391715018216
+},
+"passB": null
+},
+{
+"id": "q8439",
+"kind": "base",
+"model": "base",
+"problem_index": 189,
+"sample": 0,
+"has_right_sibling": true,
+"final": "180",
+"gold": "160",
+"n_new": 12523,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.14440158117826357,
+"passA": {
+"id": "q8439",
+"label": "slip",
+"quote": "Original total rope length was HA + HB + HC + HD = 150 + 130 + 150 + 130 = 580 m.",
+"reason": "The method finds the minimal HP = 120 correctly, but the sum 150+130+150+130 is added as 580 instead of 560, giving 180 instead of 160.",
+"quote_position": 0.9304081508884711
+},
+"passB": null
+},
+{
+"id": "q2841",
+"kind": "base",
+"model": "base",
+"problem_index": 190,
+"sample": 3,
+"has_right_sibling": true,
+"final": "\\dfrac{2}{3}",
+"gold": "\\frac{13}{18}",
+"n_new": 4576,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.11217314875851461,
+"passA": {
+"id": "q2841",
+"label": "misread",
+"quote": "So in such cases, I think the default is without replacement.",
+"reason": "It assumes the two choices are without replacement and consistently solves that problem (20/30), instead of independent choices (26/36).",
+"quote_position": 0.7360953840005329
+},
+"passB": null
+},
+{
+"id": "q8810",
+"kind": "base",
+"model": "base",
+"problem_index": 210,
+"sample": 1,
+"has_right_sibling": false,
+"final": "6",
+"gold": "10",
+"n_new": 8061,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q8810",
+"label": "wrong_plan",
+"quote": "Half of 12 makes sense if the shaded area is two out of four triangles.",
+"reason": "Fails to interpret the figure, never computes the unshaded triangle, and guesses half the rectangle.",
+"quote_position": 0.9575991445441443
+},
+"passB": null
+},
+{
+"id": "q6643",
+"kind": "base",
+"model": "base",
+"problem_index": 217,
+"sample": 1,
+"has_right_sibling": true,
+"final": "111111111000",
+"gold": "11,\\! 111,\\! 111,\\! 100",
+"n_new": 5731,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.08713075337760476,
+"passA": {
+"id": "q6643",
+"label": "slip",
+"quote": "First, 450 factors into 2 \u00d7 3\u00b2 \u00d7 5\u00b3. The prime factors are 2, 3, and 5 with exponents 1, 2, and 3 respectively.",
+"reason": "The divisibility-rule method is right, but 450 is factored as 2*3^2*5^3 instead of 2*3^2*5^2, which forces three trailing zeros instead of two.",
+"quote_position": 0.007512935006024523
+},
+"passB": null
+},
+{
+"id": "q5230",
+"kind": "base",
+"model": "base",
+"problem_index": 219,
+"sample": 2,
+"has_right_sibling": true,
+"final": "\\dfrac{1}{3}",
+"gold": "\\frac{1}{2}",
+"n_new": 12509,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.03130641085151375,
+"passA": {
+"id": "q5230",
+"label": "misread",
+"quote": "Then (3,-1)--(3,0)--(4,0)--(4,-1)--cycle, gray(0.7))",
+"reason": "It reads the figure as a board with only four shaded squares (wrong fill coordinates, two fills dropped) and consistently computes 4/12 for that board instead of the 6 shaded of 12.",
+"quote_position": 0.04623764884722574
+},
+"passB": null
+},
+{
+"id": "q3132",
+"kind": "base",
+"model": "base",
+"problem_index": 222,
+"sample": 0,
+"has_right_sibling": true,
+"final": "18",
+"gold": "54",
+"n_new": 9426,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.4528214309395929,
+"passA": {
+"id": "q3132",
+"label": "wrong_plan",
+"quote": "So DE is a translation of AB. However, DE must start from point D(4,0). So point E would be D plus the vector AB.",
+"reason": "It assumes DE equals AB as a vector instead of using that E lies on line AC (similar triangles with ratio 3), so the height is not scaled and it gets 18 instead of 54.",
+"quote_position": 0.2610132158590308
+},
+"passB": {
+"id": "q3132",
+"label": "wrong_plan",
+"quote": "So DE is a translation of AB. However, DE must start from point D(4,0). So point E would be D plus the vector AB.",
+"reason": "It assumes DE equals AB as a vector instead of using the similar triangles ABC and EDC with ratio 3 (E on line AC), so the area scales by 3 instead of 9.",
+"quote_position": 0.2610132158590308
+}
+},
+{
+"id": "q1457",
+"kind": "base",
+"model": "base",
+"problem_index": 227,
+"sample": 1,
+"has_right_sibling": true,
+"final": "(C) Plane",
+"gold": "\\text{(C)}",
+"n_new": 550,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q1457",
+"label": "format",
+"quote": "",
+"reason": "The work reaches the gold option C (plane); the final answer is stated as '(C) Plane' instead of the bare letter.",
+"quote_position": null
+},
+"passB": {
+"id": "q1457",
+"label": "format",
+"quote": "",
+"reason": "The work reaches option C (plane); the final answer is stated as '(C) Plane' rather than the bare letter.",
+"quote_position": null
+}
+},
+{
+"id": "q4409",
+"kind": "base",
+"model": "base",
+"problem_index": 232,
+"sample": 0,
+"has_right_sibling": true,
+"final": "999",
+"gold": "\\frac{1997}{2}",
+"n_new": 5757,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.46783446798745504,
+"passA": {
+"id": "q4409",
+"label": "slip",
+"quote": "S' = sum_{k=1}^{1997} 1/(1 + \u03c9^k) = sum_{k=0}^{1996} 1/(1 + \u03c9^k) + 1/(1 + \u03c9^1997)",
+"reason": "The pairing method is right and gives 1997/2, but the term 1/2 for the root 1 is counted twice (k=0 and k=1997), giving 999.",
+"quote_position": 0.2345487958216462
+},
+"passB": {
+"id": "q4409",
+"label": "slip",
+"quote": "S' = sum_{k=1}^{1997} 1/(1 + \u03c9^k) = sum_{k=0}^{1996} 1/(1 + \u03c9^k) + 1/(1 + \u03c9^1997)",
+"reason": "The pairing method is correct and reaches 1997/2, but a re-indexing error counts the 1/2 term twice, giving 999.",
+"quote_position": 0.2345487958216462
+}
+},
+{
+"id": "q6934",
+"kind": "base",
+"model": "base",
+"problem_index": 245,
+"sample": 3,
+"has_right_sibling": true,
+"final": "-\\frac{9}{2}x + \\frac{23}{2}",
+"gold": "-13x+3",
+"n_new": 7960,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.20910940679292533,
+"passA": {
+"id": "q6934",
+"label": "slip",
+"quote": "= 1 + 5 + 7 + 4 + 12 - 8 - 1 - 12 - 5 - 5",
+"reason": "The method (evaluate f at 1 and -1) is right and the reasoning even reaches -13x+3, but the final write-up drops a -8 when regrouping and mis-adds to f(1) = 7 instead of -10.",
+"quote_position": 0.9565536083161191
+},
+"passB": null
+},
+{
+"id": "q6488",
+"kind": "base",
+"model": "base",
+"problem_index": 248,
+"sample": 0,
+"has_right_sibling": true,
+"final": "-I",
+"gold": "\\begin{pmatrix} -1 & 0 \\\\ 0 & -1 \\end{pmatrix}",
+"n_new": 6636,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.03883443987775319,
+"passA": {
+"id": "q6488",
+"label": "format",
+"quote": "",
+"reason": "The work reaches the matrix [-1 0; 0 -1], which is the gold value, and states it as -I instead of the explicit matrix.",
+"quote_position": null
+},
+"passB": null
+},
+{
+"id": "q8755",
+"kind": "base",
+"model": "base",
+"problem_index": 253,
+"sample": 1,
+"has_right_sibling": true,
+"final": "\\dfrac{1}{9}",
+"gold": "\\frac{1}{8}",
+"n_new": 487,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.43232438606510565,
+"passA": {
+"id": "q8755",
+"label": "misread",
+"quote": "The problem is asking what fraction of 2 feet 3 inches is equal to 3 inches.",
+"reason": "It reads the whole as 2 feet 3 inches (27 inches) instead of 2 feet and consistently computes 3/27 = 1/9.",
+"quote_position": 0.0135424091233072
+},
+"passB": null
+},
+{
+"id": "q5794",
+"kind": "base",
+"model": "base",
+"problem_index": 264,
+"sample": 0,
+"has_right_sibling": false,
+"final": "4",
+"gold": "1\\frac{4}{5}",
+"n_new": 6248,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q5794",
+"label": "wrong_plan",
+"quote": "If BE is 5, then BH should be equal to BE, right?",
+"reason": "Never sets up the similar triangles; it fails to parse the figure and finally guesses BH=4 from a 3-4-5 triple.",
+"quote_position": 0.0968502508917236
+},
+"passB": null
+},
+{
+"id": "q5855",
+"kind": "base",
+"model": "base",
+"problem_index": 266,
+"sample": 2,
+"has_right_sibling": true,
+"final": "$\\Answer$",
+"gold": "\\dfrac{33}{100}",
+"n_new": 992,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.5430303030303031,
+"passA": {
+"id": "q5855",
+"label": "format",
+"quote": "",
+"reason": "The work reaches 33/100 but the final answer line is the unfilled placeholder $\\Answer$.",
+"quote_position": null
+},
+"passB": {
+"id": "q5855",
+"label": "format",
+"quote": "",
+"reason": "The work reaches 33/100 but the final answer line is the unfilled placeholder $\\Answer$.",
+"quote_position": null
+}
+},
+{
+"id": "q6357",
+"kind": "base",
+"model": "base",
+"problem_index": 274,
+"sample": 2,
+"has_right_sibling": true,
+"final": "$Answer = 18 + 7\\pi$",
+"gold": "18+2\\pi",
+"n_new": 4666,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.5237298202040926,
+"passA": {
+"id": "q6357",
+"label": "wrong_plan",
+"quote": "Therefore, each corner, when rounded with a radius of 1 unit, becomes an arc of 140 degrees.",
+"reason": "It gives each rounded corner the interior angle (140 degrees) instead of the 40 degree exterior angle, a conceptual error that yields 7pi instead of 2pi even when carried out exactly.",
+"quote_position": 0.2972847682119205
+},
+"passB": null
+},
+{
+"id": "q4015",
+"kind": "base",
+"model": "base",
+"problem_index": 279,
+"sample": 0,
+"has_right_sibling": false,
+"final": "4\\pi",
+"gold": "7\\pi",
+"n_new": 8317,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q4015",
+"label": "slip",
+"quote": "So, the largest area is Y with 20\u03c0, and the smallest is X with 16\u03c0. Therefore, the difference is 20\u03c0 - 16\u03c0 = 4\u03c0.",
+"reason": "The three areas 16\u03c0, 20\u03c0, 13\u03c0 are computed correctly, but X (16\u03c0) is taken as the smallest instead of Z (13\u03c0), a comparison error.",
+"quote_position": 0.4723354938404086
+},
+"passB": null
+},
+{
+"id": "q2323",
+"kind": "base",
+"model": "base",
+"problem_index": 306,
+"sample": 0,
+"has_right_sibling": false,
+"final": "3",
+"gold": "6",
+"n_new": 4802,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q2323",
+"label": "wrong_plan",
+"quote": "So, if one root is a fixed point, the other must also be the same fixed point.",
+"reason": "It only allows repeated fixed points or a 2-cycle, missing the pair of distinct fixed points (2,-1) and the cases where a non-fixed root maps to a fixed one (x^2-4, x^2-1).",
+"quote_position": 0.512245079704337
+},
+"passB": {
+"id": "q2323",
+"label": "wrong_plan",
+"quote": "So, if one root is a fixed point, the other must also be the same fixed point.",
+"reason": "The case analysis only allows a repeated fixed point or a 2-cycle, so it misses roots {2,-1}, {2,-2} and {-1,1}, where a non-fixed root maps to a fixed one or both are distinct fixed points.",
+"quote_position": 0.512245079704337
+}
+},
+{
+"id": "q2680",
+"kind": "base",
+"model": "base",
+"problem_index": 313,
+"sample": 0,
+"has_right_sibling": true,
+"final": "\\$37.69909618...\\$ (approximately 12\u03c0 inches per second)",
+"gold": "12\\pi",
+"n_new": 706,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.19606329602470088,
+"passA": {
+"id": "q2680",
+"label": "format",
+"quote": "",
+"reason": "The work reaches 12 pi; the final answer is given as the decimal 37.699... with 12 pi in parentheses.",
+"quote_position": null
+},
+"passB": {
+"id": "q2680",
+"label": "format",
+"quote": "",
+"reason": "The work reaches 12 pi but the final answer is stated as a decimal approximation with 12 pi in a parenthetical.",
+"quote_position": null
+}
+},
+{
+"id": "q9736",
+"kind": "base",
+"model": "base",
+"problem_index": 324,
+"sample": 2,
+"has_right_sibling": false,
+"final": "60^\\circ",
+"gold": "120",
+"n_new": 11430,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q9736",
+"label": "wrong_plan",
+"quote": "For example, the smaller circle plus a sector of the larger circle. Then, the total area would be \u03c0 + (1/2)*2^2*\u03b8 = \u03c0 + 2\u03b8.",
+"reason": "The shaded region is guessed to be the whole small circle plus a full sector of the large circle, instead of the annulus sector plus the small circle minus its sector, so the model gives 60 instead of 120.",
+"quote_position": 0.6281396141100685
+},
+"passB": {
+"id": "q9736",
+"label": "wrong_plan",
+"quote": "Then, the total area would be \u03c0 + (1/2)*2^2*\u03b8 = \u03c0 + 2\u03b8. This total area is supposed to be 5\u03c0/3.",
+"reason": "It never works out the shaded region from the diagram and guesses it is the whole small circle plus a sector of the large circle, a wrong model that gives 60 instead of 120.",
+"quote_position": 0.629873950881105
+}
+},
+{
+"id": "q6042",
+"kind": "base",
+"model": "base",
+"problem_index": 326,
+"sample": 3,
+"has_right_sibling": true,
+"final": "-\\dfrac{9}{100}",
+"gold": "\\frac{9}{100}",
+"n_new": 6253,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.11694481666463638,
+"passA": {
+"id": "q6042",
+"label": "misread",
+"quote": "Therefore, the product sin(A + B) * sin(A - B) would be:",
+"reason": "With A = arcsin 0.4 and B = arcsin 0.5 it evaluates sin(A+B)sin(A-B) instead of the stated sin(A+B)sin(B-A), and solves that reversed-difference problem consistently to get -9/100.",
+"quote_position": 0.06998409452397182
+},
+"passB": null
+},
+{
+"id": "q3562",
+"kind": "base",
+"model": "base",
+"problem_index": 340,
+"sample": 0,
+"has_right_sibling": false,
+"final": "57.6^\\circ",
+"gold": "55^\\circ",
+"n_new": 14779,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q3562",
+"label": "slip",
+"quote": "Right side: (0.87462 - z)^2 = ( -z + 0.87462 )^2 = z\u00b2 - 1.74924 z + 0.761515",
+"reason": "The dot-product setup is correct and would give 55 degrees, but 0.87462^2 is computed as 0.761515 instead of 0.76496, so the quadratic roots are wrong and later arithmetic errors lead to 57.6.",
+"quote_position": 0.1399264867581917
+},
+"passB": {
+"id": "q3562",
+"label": "slip",
+"quote": "Right side: (0.87462 - z)^2 = ( -z + 0.87462 )^2 = z\u00b2 - 1.74924 z + 0.761515",
+"reason": "The dot-product setup is correct and would give 55 degrees, but cos\u00b229\u00b0 is computed as 0.7615/0.7634 instead of 0.76496, so the quadratic roots are off and the angle comes out 57.6.",
+"quote_position": 0.1399264867581917
+}
+},
+{
+"id": "q7170",
+"kind": "base",
+"model": "base",
+"problem_index": 352,
+"sample": 1,
+"has_right_sibling": true,
+"final": "42",
+"gold": "11 \\sqrt{5} + 11",
+"n_new": 14874,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.1000463177396943,
+"passA": {
+"id": "q7170",
+"label": "slip",
+"quote": "But from the previous calculation, angle BDC was arccos(-117/125) \u2248 167.64 degrees.",
+"reason": "The correct setup with k=11/2 gives cos(3\u03b8)=-117/125 exactly, but arccos(-117/125) is misevaluated as 167.64 instead of 159.4 degrees, so the right value is rejected; later expansion errors (204,974 copied as 205,974) lead to a guessed 42.",
+"quote_position": 0.13840973347310906
+},
+"passB": {
+"id": "q7170",
+"label": "slip",
+"quote": "121t\u00b2 - 205,974t + 1,771,561 - t\u00b3 + 1694t\u00b2 -14,641t",
+"reason": "The setup cos(theta) and cos(3 theta) with the triple-angle formula is correct, but 121*1694 = 204,974 is copied as 205,974 in the expansion, so the polynomial has no clean root and the answer 42 is then guessed.",
+"quote_position": 0.3367959592109025
+}
+},
+{
+"id": "q3407",
+"kind": "base",
+"model": "base",
+"problem_index": 369,
+"sample": 2,
+"has_right_sibling": false,
+"final": "189",
+"gold": "21",
+"n_new": 6163,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q3407",
+"label": "misread",
+"quote": "The left side is vertical. The bottom base is 27 cm. The top base is 15 cm. The vertical side is 9 cm.",
+"reason": "It discards the labeled lengths (bases 9 and 5, height 3) and uses the drawing coordinates as centimeters, consistently solving that different trapezoid.",
+"quote_position": 0.5879589566077389
+},
+"passB": null
+},
+{
+"id": "q3051",
+"kind": "base",
+"model": "base",
+"problem_index": 377,
+"sample": 1,
+"has_right_sibling": true,
+"final": "4",
+"gold": "6",
+"n_new": 14739,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.18302991546931516,
+"passA": {
+"id": "q3051",
+"label": "wrong_plan",
+"quote": "But when previous term is 0 mod2, this becomes 24^0 mod2 =1 mod2 (since 24^0=1, mod2 is 1), then 24^ (that) mod2=0 again.",
+"reason": "It reduces the exponent of an even base modulo 2 and treats it as 24^0=1, an invalid modular rule that makes the exponent tower odd when any positive power of 24 is even.",
+"quote_position": 0.534198199965667
+},
+"passB": {
+"id": "q3051",
+"label": "wrong_plan",
+"quote": "Term2: 24^Term1 mod2. Term1 is 0 mod2, so 24^0 mod2=1 mod2? Wait, hold on:",
+"reason": "It finds the parity of the exponent tower by replacing each exponent with its residue mod 2 (24^0 = 1), which is invalid; any positive power of 24 is even, so the exponent is even and the digit is 6, not 4.",
+"quote_position": 0.4993746474728401
+}
+},
+{
+"id": "q4650",
+"kind": "base",
+"model": "base",
+"problem_index": 379,
+"sample": 1,
+"has_right_sibling": true,
+"final": "12th grade",
+"gold": "12",
+"n_new": 1371,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.40333416272704653,
+"passA": {
+"id": "q4650",
+"label": "format",
+"quote": "",
+"reason": "The work reaches the gold value 12 and states it as '12th grade', differing only in form.",
+"quote_position": null
+},
+"passB": null
+},
+{
+"id": "q6175",
+"kind": "base",
+"model": "base",
+"problem_index": 381,
+"sample": 2,
+"has_right_sibling": true,
+"final": "\\dfrac{5}{9}",
+"gold": "\\frac{1}{2}",
+"n_new": 12688,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.18885562584726615,
+"passA": {
+"id": "q6175",
+"label": "slip",
+"quote": "For x >=1: y must be in (x -1, 3) since x +1 >=2 and upper limit remains 3.",
+"reason": "The integration method over the triangle-inequality region is right, but the upper bound y < x+1 is dropped for 1 <= x < 2, giving area 5 instead of 4.5.",
+"quote_position": 0.11637670331234212
+},
+"passB": {
+"id": "q6175",
+"label": "slip",
+"quote": "For x >=1: y must be in (x -1, 3) since x +1 >=2 and upper limit remains 3.",
+"reason": "The area-integration method is right but the upper bound y < x+1 is dropped for 1 <= x < 2, giving area 5 instead of 4.5.",
+"quote_position": 0.11637670331234212
+}
+},
+{
+"id": "q9328",
+"kind": "base",
+"model": "base",
+"problem_index": 389,
+"sample": 0,
+"has_right_sibling": true,
+"final": "1",
+"gold": "\\frac{\\sqrt{21}}{5}",
+"n_new": 5890,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.10490196078431373,
+"passA": {
+"id": "q9328",
+"label": "misread",
+"quote": "That makes triangle RST a right-angled triangle at T.",
+"reason": "It reads the right angle as being at T instead of S and then consistently answers sin 90 degrees = 1.",
+"quote_position": 0.012033462033462033
+},
+"passB": null
+},
+{
+"id": "q4978",
+"kind": "base",
+"model": "base",
+"problem_index": 398,
+"sample": 1,
+"has_right_sibling": true,
+"final": "Ian \\text{ from Botswana}",
+"gold": "\\text{Navin}",
+"n_new": 2743,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.1293757292882147,
+"passA": {
+"id": "q4978",
+"label": "slip",
+"quote": "So Ian is highest at ~39.14, Navin at ~39.45, Luka at ~38.62. So the order is Ian > Navin > Luka.",
+"reason": "The conversions are right (Navin about 39.5, Ian about 39.14) but the comparison is done wrongly, ranking Ian above Navin.",
+"quote_position": 0.64171974522293
+},
+"passB": {
+"id": "q4978",
+"label": "slip",
+"quote": "So ordering them: Ian would be highest at ~$39.14, Navin at ~$39.55, then Luka at ~$38.62.",
+"reason": "The conversions are right (Navin 39.55 > Ian 39.14) but the numbers are compared in the wrong order, naming Ian highest.",
+"quote_position": 0.6001415428167021
+}
+},
+{
+"id": "q4877",
+"kind": "base",
+"model": "base",
+"problem_index": 403,
+"sample": 3,
+"has_right_sibling": true,
+"final": "1",
+"gold": "3",
+"n_new": 4310,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.1110078959591268,
+"passA": {
+"id": "q4877",
+"label": "misread",
+"quote": "Now, let's compare each digit position by position:",
+"reason": "Conversions 1556_7 and 1165_8 are right, but it counts digits matching in the same position instead of digits common to both representations.",
+"quote_position": 0.14733211993485967
+},
+"passB": {
+"id": "q4877",
+"label": "misread",
+"quote": "Now, let's compare each digit position by position:",
+"reason": "Both conversions are correct, but it counts digits matching in the same position instead of digits common to both representations.",
+"quote_position": 0.14733211993485967
+}
+},
+{
+"id": "q4013",
+"kind": "base",
+"model": "base",
+"problem_index": 411,
+"sample": 3,
+"has_right_sibling": true,
+"final": "the answer to the problem.",
+"gold": "60",
+"n_new": 9198,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.03822341074906258,
+"passA": {
+"id": "q4013",
+"label": "wrong_plan",
+"quote": "But wait, the seducers don't shake hands with sorcerers either. Wait, it's not clear if that's true",
+"reason": "The answer starts on the handshake problem, then degenerates into incoherent text and never computes 6*10, so the solution is abandoned.",
+"quote_position": 0.015095967220185465
+},
+"passB": null
+},
+{
+"id": "q5768",
+"kind": "base",
+"model": "base",
+"problem_index": 419,
+"sample": 0,
+"has_right_sibling": true,
+"final": "\\begin{pmatrix} 0 \\\\ 30 \\\\ -30 \\end{pmatrix}",
+"gold": "\\begin{pmatrix} -7 \\\\ 16 \\\\ 5 \\end{pmatrix}",
+"n_new": 9872,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.20837188526943815,
+"passA": {
+"id": "q5768",
+"label": "slip",
+"quote": "j component: - (1* v3 - (-5)* v1) = -v3 + 5v1",
+"reason": "A sign error in the j component of the cross product (should be -v3 - 5v1) turns the dependent system into one with a unique solution (0,30,-30), so the minimization is never done.",
+"quote_position": 0.03811078810083231
+},
+"passB": {
+"id": "q5768",
+"label": "slip",
+"quote": "j component: - (1* v3 - (-5)* v1) = -v3 + 5v1",
+"reason": "A sign error in the j component of the cross product (should be -v3 - 5v1) makes the system look uniquely solvable, so the minimisation over the one-parameter family is never done.",
+"quote_position": 0.03811078810083231
+}
+},
+{
+"id": "q7102",
+"kind": "base",
+"model": "base",
+"problem_index": 425,
+"sample": 1,
+"has_right_sibling": false,
+"final": "\\frac{a^2 + b^2 + c^2 + 9R^2}{3}",
+"gold": "3R^2",
+"n_new": 10294,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q7102",
+"label": "slip",
+"quote": "Wait, in the previous computation, I considered |A - G|\u00b2 = [6R\u00b2 -4(A\u00b7B + A\u00b7C + B\u00b7C)] /9.",
+"reason": "The vector setup with F = (2/3)(A+B+C) is correct, but the expansion of |A-G|\u00b2 is simplified wrongly (should be 6R\u00b2 - 4A\u00b7B - 4A\u00b7C + 2B\u00b7C), which leaves a dot-product term that should cancel to give 3R\u00b2.",
+"quote_position": 0.7655544222643159
+},
+"passB": {
+"id": "q7102",
+"label": "slip",
+"quote": "GA\u00b2 + GB\u00b2 + GC\u00b2 = [6R\u00b2 -4(A\u00b7B + A\u00b7C + B\u00b7C)] /9 + similar for B and C.",
+"reason": "The vector method with O at the origin is sound, but simplifying |A-G|\u00b2 it turns 2(A\u00b7B+A\u00b7C+B\u00b7C) - 6(A\u00b7B+A\u00b7C) into -4(A\u00b7B+A\u00b7C+B\u00b7C), an algebra error that leaves a spurious dot-product term (a misremembered cosAcosBcosC identity follows later).",
+"quote_position": 0.7562776239739667
+}
+},
+{
+"id": "q7877",
+"kind": "base",
+"model": "base",
+"problem_index": 437,
+"sample": 2,
+"has_right_sibling": true,
+"final": "8",
+"gold": "3",
+"n_new": 3128,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.21070359281437126,
+"passA": {
+"id": "q7877",
+"label": "misread",
+"quote": "I need to find the value of \u2661. Let me think about how to approach this.",
+"reason": "It solves for the club symbol (8) instead of the requested square (3), and does so consistently.",
+"quote_position": 0.056904161412358135
+},
+"passB": null
+},
+{
+"id": "q1757",
+"kind": "base",
+"model": "base",
+"problem_index": 438,
+"sample": 0,
+"has_right_sibling": true,
+"final": "7",
+"gold": "4",
+"n_new": 1216,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.20477815699658702,
+"passA": {
+"id": "q1757",
+"label": "slip",
+"quote": "Therefore, the last nonzero digit to the right of the decimal is the second digit, which is 7.",
+"reason": "It finds 0.274 correctly but picks the second digit 7 instead of the last digit 4.",
+"quote_position": 0.4464110127826942
+},
+"passB": {
+"id": "q1757",
+"label": "wrong_plan",
+"quote": "Therefore, the last nonzero digit to the right of the decimal is the second digit, which is 7.",
+"reason": "The decimal 0.274 is found correctly but the last nonzero digit is taken to be the second digit 7 instead of the final digit 4, a conceptual error.",
+"quote_position": 0.4464110127826942
+}
+},
+{
+"id": "q3166",
+"kind": "base",
+"model": "base",
+"problem_index": 444,
+"sample": 0,
+"has_right_sibling": true,
+"final": "\\dfrac{1}{1 + \\dfrac{1}{k}}",
+"gold": "\\frac{1}{2}",
+"n_new": 16173,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.2126252166194683,
+"passA": {
+"id": "q3166",
+"label": "wrong_plan",
+"quote": "Given the time I've spent and the complexity, perhaps there's a pattern or formula that can be generalized.",
+"reason": "After algebra slips make the bisector inequalities look contradictory, the solution abandons the half-plane computation and guesses a formula k/(k+1) that only matches the k=1 case.",
+"quote_position": 0.6546369899311075
+},
+"passB": {
+"id": "q3166",
+"label": "wrong_plan",
+"quote": "1/2 = kx -k\u00b2/4 -1/4 \u21d2kx =1/2 +k\u00b2/4 +1/4= (2 +k\u00b2)/4 \u21d2x= (2 +k\u00b2)/(4k)",
+"reason": "The bisector setup is sound but, after algebra errors starting at this intersection (should be (3+k\u00b2)/4), the area is never computed and the final answer k/(k+1) is an admitted guess.",
+"quote_position": 0.34968203497615263
+}
+},
+{
+"id": "q1336",
+"kind": "base",
+"model": "base",
+"problem_index": 460,
+"sample": 2,
+"has_right_sibling": false,
+"final": "35",
+"gold": "75^\\circ",
+"n_new": 11684,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q1336",
+"label": "wrong_plan",
+"quote": "So, angle at T between TR and ST is equal to angle at Q between TR and QR.",
+"reason": "It applies corresponding angles to the wrong vertex, equating angle STR with angle Q (35) instead of using the co-interior angle with angle R (180 - 105 = 75).",
+"quote_position": 0.4755608331461215
+},
+"passB": null
+},
+{
+"id": "q7452",
+"kind": "base",
+"model": "base",
+"problem_index": 471,
+"sample": 0,
+"has_right_sibling": true,
+"final": "\\dfrac{262}{3}",
+"gold": "84",
+"n_new": 1447,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.15926620804669586,
+"passA": {
+"id": "q7452",
+"label": "slip",
+"quote": "Well, 10 times 90 is 900, so 8 is 800 less. 900-80=820. So that's 820.",
+"reason": "Correct method, but 8*90 is computed as 820 instead of 720, giving a total of 2620 instead of 2520.",
+"quote_position": 0.18179500254971953
+},
+"passB": {
+"id": "q7452",
+"label": "slip",
+"quote": "Well, 10 times 90 is 900, so 8 is 800 less. 900-80=820. So that's 820.",
+"reason": "Correct mean method, but 8*90 is computed as 820 instead of 720, giving a total of 2620 instead of 2520.",
+"quote_position": 0.18179500254971953
+}
+},
+{
+"id": "q2276",
+"kind": "base",
+"model": "base",
+"problem_index": 472,
+"sample": 2,
+"has_right_sibling": true,
+"final": "150 3/4",
+"gold": "137 \\frac{1}{2}",
+"n_new": 104,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q2276",
+"label": "wrong_plan",
+"quote": "Okay, their mission is to quickly round them off and the results have to be correct. Their",
+"reason": "The answer contains no calculation at all, only incoherent text followed by a guessed value 150 3/4.",
+"quote_position": 0.014749262536873156
+},
+"passB": {
+"id": "q2276",
+"label": "wrong_plan",
+"quote": "Okay, their mission is to quickly round them off and the results have to be correct. Their",
+"reason": "The answer contains no calculation, only incoherent text and a guessed value 150 3/4.",
+"quote_position": 0.014749262536873156
+}
+},
+{
+"id": "q2199",
+"kind": "base",
+"model": "base",
+"problem_index": 473,
+"sample": 1,
+"has_right_sibling": true,
+"final": "11",
+"gold": "7",
+"n_new": 13004,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.2765797862366398,
+"passA": {
+"id": "q2199",
+"label": "misread",
+"quote": "The top-left corner is labeled as \"n-3\", the top-right is \"3\", the bottom-left is \"n+1\", and the bottom-right is \"1\".",
+"reason": "It misreads the positions of the labels in the diagram (puts 2n-9 in the left column, drops n+2 and n+1), then equates the bottom row with a column of that wrong grid to get n=11.",
+"quote_position": 0.009498698576885373
+},
+"passB": null
+},
+{
+"id": "q3163",
+"kind": "base",
+"model": "base",
+"problem_index": 484,
+"sample": 3,
+"has_right_sibling": true,
+"final": "$Answer (without quotes)",
+"gold": "10",
+"n_new": 3297,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.6916294088425236,
+"passA": {
+"id": "q3163",
+"label": "format",
+"quote": "",
+"reason": "The work reaches x = 10 and verifies it, but the final answer line is an unfilled placeholder.",
+"quote_position": null
+},
+"passB": null
+},
+{
+"id": "q7885",
+"kind": "base",
+"model": "base",
+"problem_index": 485,
+"sample": 2,
+"has_right_sibling": true,
+"final": "14",
+"gold": "13",
+"n_new": 4677,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.10594475442584556,
+"passA": {
+"id": "q7885",
+"label": "misread",
+"quote": "But the problem statement gives \"AD: 5, BD:6, CD:4, AC:6, BC:5\".",
+"reason": "It takes BD as 6 instead of the labelled 3 and then enumerates all paths consistently with that changed distance, getting 14 instead of 13.",
+"quote_position": 0.14279460689896692
+},
+"passB": {
+"id": "q7885",
+"label": "misread",
+"quote": "But the problem statement gives \"AD: 5, BD:6, CD:4, AC:6, BC:5\".",
+"reason": "It takes BD as 6 instead of the labelled 3 and enumerates all paths consistently with that wrong distance, getting 14.",
+"quote_position": 0.14279460689896692
+}
+},
+{
+"id": "q5905",
+"kind": "base",
+"model": "base",
+"problem_index": 490,
+"sample": 3,
+"has_right_sibling": true,
+"final": "8",
+"gold": "14",
+"n_new": 4329,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.5491347342398022,
+"passA": {
+"id": "q5905",
+"label": "slip",
+"quote": "That's better than 14. Wait, is this allowed? The roots are 1,3,-1,-11. All distinct.",
+"reason": "Correct Vieta method found 14, then it wrongly judged |sum|=8 (giving 16) as smaller than 14 and reported 8.",
+"quote_position": 0.8810252486610558
+},
+"passB": {
+"id": "q5905",
+"label": "slip",
+"quote": "That's better than 14. Wait, is this allowed? The roots are 1,3,-1,-11. All distinct.",
+"reason": "The Vieta method finds the correct minimum 14 from roots 1,3,-11, then wrongly judges |a_{n-1}|=16 (sum -8) to be smaller than 14 and finally reports the sum 8 instead of the coefficient.",
+"quote_position": 0.8810252486610558
+}
+},
+{
+"id": "q7828",
+"kind": "base",
+"model": "base",
+"problem_index": 494,
+"sample": 0,
+"has_right_sibling": true,
+"final": "\\dfrac{3}{4}",
+"gold": "\\frac{1}{4}",
+"n_new": 12306,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": 0.17629979130750387,
+"passA": {
+"id": "q7828",
+"label": "slip",
+"quote": "Therefore, the inequality sqrt(a\u00b2 +4b +8) \u2265 -a +4 reduces to b \u22642 -2a.",
+"reason": "Correct substitution y = x + 1/x and correct condition sqrt(a\u00b2+4b+8) \u2265 4-a, but the inequality direction is flipped when squaring, giving b \u2264 2-2a instead of b \u2265 2-2a, so the complement region (3/4) is reported.",
+"quote_position": 0.6617245415528678
+},
+"passB": null
+},
+{
+"id": "q3331",
+"kind": "rl",
+"model": "rl",
+"problem_index": 11,
+"sample": 0,
+"has_right_sibling": true,
+"final": "\\frac{1}{9}",
+"gold": "\\frac{3}{56}",
+"n_new": 3689,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q3331",
+"label": "wrong_plan",
+"quote": "Therefore, Q(x) = k*(x-2)(x-3)(x-4)(x-5)(x-6)(x-7)",
+"reason": "Q has degree 7 but is set equal to a constant times a degree-6 product, omitting the linear factor (ax+b) and the x=-1 condition, so the method cannot reach 3/56.",
+"quote_position": 0.28661582960820403
+},
+"passB": {
+"id": "q3331",
+"label": "wrong_plan",
+"quote": "Therefore, Q(x) = k*(x-2)(x-3)(x-4)(x-5)(x-6)(x-7)",
+"reason": "Q has degree 7 but is set equal to a constant times a degree-6 product, dropping the linear factor (ax+b) and the x = -1 condition, so the method cannot give 3/56.",
+"quote_position": 0.28661582960820403
+}
+},
+{
+"id": "q7917",
+"kind": "rl",
+"model": "rl",
+"problem_index": 18,
+"sample": 3,
+"has_right_sibling": true,
+"final": "56",
+"gold": "28",
+"n_new": 10575,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q7917",
+"label": "wrong_plan",
+"quote": "So that would be angle BAC, which is 124 degrees.",
+"reason": "It takes the 124 degree mark as the interior angle BAC of the triangle instead of the angle on the line through A, reaches contradictions, and then guesses x = 180 - 124 = 56.",
+"quote_position": 0.2129524698353443
+},
+"passB": null
+},
+{
+"id": "q5882",
+"kind": "rl",
+"model": "rl",
+"problem_index": 24,
+"sample": 1,
+"has_right_sibling": true,
+"final": "5",
+"gold": "10",
+"n_new": 4279,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q5882",
+"label": "wrong_plan",
+"quote": "The first deposit will have been in the account for 3 years, the second deposit for 2 years, and the third deposit for 1 year.",
+"reason": "The model compounds end-of-year deposits for 3, 2 and 1 years instead of 2, 1 and 0, so the equation is wrong and yields 5 instead of 10.",
+"quote_position": 0.13782373017466373
+},
+"passB": {
+"id": "q5882",
+"label": "wrong_plan",
+"quote": "The first deposit will have been in the account for 3 years, the second deposit for 2 years, and the third deposit for 1 year.",
+"reason": "It compounds each end-of-year deposit one year too many, so the model gives a cubic with root 5% instead of the quadratic with root 10%.",
+"quote_position": 0.13782373017466373
+}
+},
+{
+"id": "q6809",
+"kind": "rl",
+"model": "rl",
+"problem_index": 43,
+"sample": 2,
+"has_right_sibling": true,
+"final": "10(2\\sqrt{5} + \\sqrt{34})",
+"gold": "70 \\sqrt{2}",
+"n_new": 11206,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q6809",
+"label": "slip",
+"quote": "The right side: 20(x -40) is negative. So the equation is x(y -50) = -20(x -40)",
+"reason": "The calculus method is sound but the sign is chosen wrongly when taking the square root (both sides are negative, so x(y-50) = 20(x-40)), which sends the critical point to the corner (40,50) instead of (20,30).",
+"quote_position": 0.5093058060554895
+},
+"passB": null
+},
+{
+"id": "q2385",
+"kind": "rl",
+"model": "rl",
+"problem_index": 82,
+"sample": 2,
+"has_right_sibling": true,
+"final": "3",
+"gold": "\\frac{3}{2}",
+"n_new": 15174,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q2385",
+"label": "misread",
+"quote": "Therefore, the other two corners should be (4-1, 2+1)=(3,3) and (5+1, 3-1)=(6,2).",
+"reason": "It treats (4,2) and (5,3) as adjacent vertices of a rotated square instead of opposite corners, then consistently maximizes the slope over that different region to get 3.",
+"quote_position": 0.29611676486341726
+},
+"passB": {
+"id": "q2385",
+"label": "misread",
+"quote": "Therefore, the other two corners should be (4-1, 2+1)=(3,3) and (5+1, 3-1)=(6,2).",
+"reason": "After reaching 3/2 it reinterprets the given opposite corners (4,2),(5,3) as adjacent corners of a rotated square and consistently maximizes the slope over that different region, giving 3.",
+"quote_position": 0.29611676486341726
+}
+},
+{
+"id": "q5064",
+"kind": "rl",
+"model": "rl",
+"problem_index": 96,
+"sample": 3,
+"has_right_sibling": false,
+"final": "1, 7",
+"gold": "1 \\pm \\sqrt{19}",
+"n_new": 11842,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q5064",
+"label": "wrong_plan",
+"quote": "Alternatively, maybe the roots are x= 1 and x=7, since (x+1) and (x-7) terms.",
+"reason": "After reaching the y = x^2-2x substitution it abandons the algebra and guesses the roots 1 and 7, which its own check shows do not satisfy the equation.",
+"quote_position": 0.6630460771253885
+},
+"passB": null
+},
+{
+"id": "q8287",
+"kind": "rl",
+"model": "rl",
+"problem_index": 103,
+"sample": 2,
+"has_right_sibling": false,
+"final": "1 + \\sqrt{5}",
+"gold": "(3,4]",
+"n_new": 14071,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q8287",
+"label": "wrong_plan",
+"quote": "Alternatively, perhaps try to find for which \u03bb the equation has a solution. Maybe assume a particular value of x, like x=1/2.",
+"reason": "It fixes x = 1/2 and reports the single lambda for which that point lies on a 2-cycle, instead of finding all lambda for which some 2-cycle exists (the interval (3,4]).",
+"quote_position": 0.5882682484758609
+},
+"passB": null
+},
+{
+"id": "q7049",
+"kind": "rl",
+"model": "rl",
+"problem_index": 119,
+"sample": 1,
+"has_right_sibling": true,
+"final": "3",
+"gold": "-9",
+"n_new": 10902,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q7049",
+"label": "wrong_plan",
+"quote": "The way the + and - are placed, the -4 is only subtracting 4, not 4+5+6.",
+"reason": "It wrongly decides that the grouping 1+2+3-(4+5+6) is not a valid placement of parentheses, so it rejects the minimum and settles on 3.",
+"quote_position": 0.2749690391199825
+},
+"passB": {
+"id": "q7049",
+"label": "wrong_plan",
+"quote": "The way the + and - are placed, the -4 is only subtracting 4, not 4+5+6.",
+"reason": "It wrongly decides that the grouping 1+2+3-(4+5+6) is not a valid placement of parentheses, so it rejects the minimum -9 and settles on 3.",
+"quote_position": 0.2749690391199825
+}
+},
+{
+"id": "q9670",
+"kind": "rl",
+"model": "rl",
+"problem_index": 126,
+"sample": 2,
+"has_right_sibling": true,
+"final": "i",
+"gold": "1+274i",
+"n_new": 14384,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q9670",
+"label": "wrong_plan",
+"quote": "In our case, F(z) = (z + i)/(z - i). So in terms of the matrix [ a b ; c d ], it would be [1 1; -1 1], right?",
+"reason": "It uses the wrong matrix for F (drops the i entries), derives a false period of 16, cannot simplify z_2, and finally abandons the work and guesses i.",
+"quote_position": 0.16154331560443522
+},
+"passB": {
+"id": "q9670",
+"label": "wrong_plan",
+"quote": "So in terms of the matrix [ a b ; c d ], it would be [1 1; -1 1], right?",
+"reason": "It replaces F by the matrix of (z+1)/(-z+1), dropping the i's, gets a false period of 16 instead of 3, then abandons the computation of z_2 and guesses i.",
+"quote_position": 0.16235463806003786
+}
+},
+{
+"id": "q1947",
+"kind": "rl",
+"model": "rl",
+"problem_index": 166,
+"sample": 0,
+"has_right_sibling": true,
+"final": "\\frac{360}{7}",
+"gold": "\\frac{270}7\\text{ degrees}",
+"n_new": 11498,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q1947",
+"label": "wrong_plan",
+"quote": "Point C: 360*1/7 +90 = (360/7 \u224851.4286) +90 \u2248141.4286 degrees.",
+"reason": "It treats C (a square vertex) as a heptagon vertex and takes angle BAC as the difference of the central angles of B and C, a method that cannot give 900/7 - 90 = 270/7.",
+"quote_position": 0.2146453791832975
+},
+"passB": null
+},
+{
+"id": "q7167",
+"kind": "rl",
+"model": "rl",
+"problem_index": 204,
+"sample": 2,
+"has_right_sibling": false,
+"final": "16",
+"gold": "0",
+"n_new": 15409,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q7167",
+"label": "wrong_plan",
+"quote": "But the problem states that a, b, c, d are distinct and the product is non-zero.",
+"reason": "It treats every configuration giving zero as invalid instead of seeing that the product is always zero, then guesses 16 with no derivation.",
+"quote_position": 0.22563706152041796
+},
+"passB": null
+},
+{
+"id": "q7694",
+"kind": "rl",
+"model": "rl",
+"problem_index": 213,
+"sample": 1,
+"has_right_sibling": true,
+"final": "1",
+"gold": "2",
+"n_new": 14463,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q7694",
+"label": "wrong_plan",
+"quote": "Wait, perhaps the answer is 1. Let me check the partial sums.",
+"reason": "The answer never finds the telescoping 1/F_n - 1/F_{n+2}; it guesses 1 against its own partial sums of about 1.86 and then justifies it with a false identity 1/F_n - 1/F_{n+1}.",
+"quote_position": 0.8041326020214564
+},
+"passB": {
+"id": "q7694",
+"label": "wrong_plan",
+"quote": "Wait, perhaps the answer is 1. Let me check the partial sums. When n=1 term is 1/2, the total after five terms was about 1.8",
+"reason": "The telescoping form 1/F_n - 1/F_{n+2} is never found; the answer 1 is guessed against its own partial sums and then justified with a false identity 1/F_n - 1/F_{n+1}.",
+"quote_position": 0.8041326020214564
+}
+},
+{
+"id": "q1138",
+"kind": "rl",
+"model": "rl",
+"problem_index": 217,
+"sample": 0,
+"has_right_sibling": true,
+"final": "101111111100",
+"gold": "11,\\! 111,\\! 111,\\! 100",
+"n_new": 15946,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q1138",
+"label": "slip",
+"quote": "maybe A is 101111111, which has nine 1's but arranged as 1,0,1,1,1,1,1,1,1.",
+"reason": "The method (nine 1s, ending in 00, smallest arrangement) is right, but it miscounts ones and digits and so judges a 12-digit number smaller than the 11-digit 11111111100.",
+"quote_position": 0.5761410938139121
+},
+"passB": null
+},
+{
+"id": "q7835",
+"kind": "rl",
+"model": "rl",
+"problem_index": 219,
+"sample": 1,
+"has_right_sibling": true,
+"final": "\\frac{1}{3}",
+"gold": "\\frac{1}{2}",
+"n_new": 11018,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q7835",
+"label": "wrong_plan",
+"quote": "So the numbers on the wheel are 1 through 9, each equally likely.",
+"reason": "It takes the wheel to hold 1 through 9 instead of the six numbers shown, cannot parse the shaded squares, and guesses 4 shaded of 12 equally likely squares.",
+"quote_position": 0.09348854128774099
+},
+"passB": null
+},
+{
+"id": "q6253",
+"kind": "rl",
+"model": "rl",
+"problem_index": 222,
+"sample": 0,
+"has_right_sibling": true,
+"final": "9",
+"gold": "54",
+"n_new": 13910,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q6253",
+"label": "wrong_plan",
+"quote": "The problem doesn't specify where exactly E is, except that DE is parallel to AB.",
+"reason": "It never uses that E lies on line AC (similar triangles ABC and EDC), so the scale factor stays undetermined and the final value 9 is guessed.",
+"quote_position": 0.2681233933161954
+},
+"passB": null
+},
+{
+"id": "q8230",
+"kind": "rl",
+"model": "rl",
+"problem_index": 242,
+"sample": 0,
+"has_right_sibling": true,
+"final": "32356",
+"gold": "\\$32,\\!348",
+"n_new": 10067,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q8230",
+"label": "slip",
+"quote": "Then 30\u00d7ln(1.01)=30\u00d70.00995087\u22480.298725. So exponent is 0.298725, so e^0.298725.",
+"reason": "The method 24000*1.01^30 is right, but 30*0.00995 is miscomputed as 0.2987 instead of 0.2985, giving 1.348185 instead of 1.34785 and a final 32356.",
+"quote_position": 0.3949873534145781
+},
+"passB": {
+"id": "q8230",
+"label": "slip",
+"quote": "Then 30\u00d7ln(1.01)=30\u00d70.00995087\u22480.298725. So exponent is 0.298725, so e^0.298725.",
+"reason": "The method 24000\u00b71.01^30 is right, but 30\u00d70.00995 is miscomputed as about 0.2987 instead of 0.2985, giving 1.348185 instead of 1.34785 and 32356 instead of 32348.",
+"quote_position": 0.3949873534145781
+}
+},
+{
+"id": "q4342",
+"kind": "rl",
+"model": "rl",
+"problem_index": 274,
+"sample": 0,
+"has_right_sibling": true,
+"final": "36 + 7\\pi",
+"gold": "18+2\\pi",
+"n_new": 10689,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q4342",
+"label": "wrong_plan",
+"quote": "The two new parallel sides (top and bottom of the buffer along the nonagon) each of length L, so total added length per side: 2L.",
+"reason": "It counts two offset lines per side (one lies inside S) and later uses the 140-degree interior angle instead of the 40-degree exterior angle for the arcs, so the boundary model is wrong.",
+"quote_position": 0.6114265339148084
+},
+"passB": null
+},
+{
+"id": "q7088",
+"kind": "rl",
+"model": "rl",
+"problem_index": 284,
+"sample": 2,
+"has_right_sibling": true,
+"final": "3 + 2\\sqrt{2}, 3 - 2\\sqrt{2}, -3 + 2\\sqrt{2}, -3 - 2\\sqrt{2}",
+"gold": "3 \\pm 2 \\sqrt{2}",
+"n_new": 8377,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q7088",
+"label": "wrong_plan",
+"quote": "The standard arccotangent function typically has a range of (0, \u03c0), so arccot(1/x) is in (0, \u03c0).",
+"reason": "It takes arccot with range (0, \u03c0) instead of arccot(1/x) = arctan(x) for all x, so the x<0 case gives a different equation and two extra roots -3 \u00b1 2\u221a2.",
+"quote_position": 0.18943938767066612
+},
+"passB": {
+"id": "q7088",
+"label": "wrong_plan",
+"quote": "The standard arccotangent function typically has a range of (0, \u03c0), so arccot(1/x) is in (0, \u03c0).",
+"reason": "It takes arccot with range (0, \u03c0) so that arccot(1/x) differs from arctan x for negative x, which adds a second case and two extra solutions -3 \u00b1 2\u221a2 instead of using arccot(1/x) = arctan x for all x.",
+"quote_position": 0.18943938767066612
+}
+},
+{
+"id": "q5805",
+"kind": "rl",
+"model": "rl",
+"problem_index": 295,
+"sample": 3,
+"has_right_sibling": true,
+"final": "4",
+"gold": "11",
+"n_new": 15825,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q5805",
+"label": "wrong_plan",
+"quote": "Given that it is such a long process and I have to give an answer, I might have missed this and the answer is \\boxed{6} but no.",
+"reason": "It never finds the (z+i)^4 = 1+i structure; the factoring and parallelogram attempts fail and the final area 2 is a guess.",
+"quote_position": 0.8912115149162362
+},
+"passB": {
+"id": "q5805",
+"label": "wrong_plan",
+"quote": "Suppose the quartic factors into two quadratics with complex coefficients. Let me suppose:",
+"reason": "It never sees (z+i)^4 = 1+i; it tries factoring into quadratics and Vieta/parallelogram guesses, finds no roots, and ends with a guessed area of 2 giving 4.",
+"quote_position": 0.04706303938841939
+}
+},
+{
+"id": "q8715",
+"kind": "rl",
+"model": "rl",
+"problem_index": 309,
+"sample": 3,
+"has_right_sibling": true,
+"final": "15",
+"gold": "14",
+"n_new": 8601,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q8715",
+"label": "wrong_plan",
+"quote": "Let me try to list possible quadruples (since 84 is the product of four numbers at minimum).",
+"reason": "It wrongly assumes the set needs four elements and so always adds 1 to the triple 3,4,7, never considering the three-number set {3,4,7} with sum 14.",
+"quote_position": 0.15985130111524162
+},
+"passB": {
+"id": "q8715",
+"label": "wrong_plan",
+"quote": "Let me try to list possible quadruples (since 84 is the product of four numbers at minimum).",
+"reason": "It wrongly assumes the set needs four elements and so always adds 1 to the triplet 3,4,7 (sum 14), never considering the three-element set on its own.",
+"quote_position": 0.15985130111524162
+}
+},
+{
+"id": "q2491",
+"kind": "rl",
+"model": "rl",
+"problem_index": 340,
+"sample": 1,
+"has_right_sibling": false,
+"final": "54",
+"gold": "55^\\circ",
+"n_new": 10466,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q2491",
+"label": "slip",
+"quote": "0.8746^2 \u2248 0.7643 (since 0.87^2 =0.7569, plus 0.0046^2 negligible plus cross term 2*0.87*0.0046 \u2248 0.008, so total around 0.7649)",
+"reason": "The dot-product method is valid, but rounding errors in the quadratic coefficients (0.7643 instead of 0.76496, then a rough discriminant) give k=1.225 instead of 1.214 and so 54 instead of 55 degrees.",
+"quote_position": 0.3162638073670102
+},
+"passB": {
+"id": "q2491",
+"label": "slip",
+"quote": "0.8746^2 \u2248 0.7643 (since 0.87^2 =0.7569, plus 0.0046^2 negligible",
+"reason": "The dot-product and law-of-cosines method is valid, but imprecise numerical arithmetic (cos\u00b229\u00b0 taken as 0.7643 instead of 0.7650, in a quadratic with a near-zero discriminant) gives k\u22481.225 instead of 1.214 and so 54\u00b0 instead of 55\u00b0.",
+"quote_position": 0.3162638073670102
+}
+},
+{
+"id": "q4038",
+"kind": "rl",
+"model": "rl",
+"problem_index": 369,
+"sample": 0,
+"has_right_sibling": false,
+"final": "189",
+"gold": "21",
+"n_new": 10015,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q4038",
+"label": "misread",
+"quote": "The y-coordinate is 4.5, which is halfway between 0 and 9, so the height must be 9 cm.",
+"reason": "It takes the Asymptote drawing coordinates (27, 15, 9) as the side lengths instead of the labelled 9 cm, 5 cm, 3 cm, and computes the trapezoid area consistently for those dimensions.",
+"quote_position": 0.028100738496496875
+},
+"passB": null
+},
+{
+"id": "q2779",
+"kind": "rl",
+"model": "rl",
+"problem_index": 392,
+"sample": 3,
+"has_right_sibling": true,
+"final": "50",
+"gold": "\\sqrt{66}",
+"n_new": 15115,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q2779",
+"label": "wrong_plan",
+"quote": "Then, perhaps another pair along y: suppose distances to (0,1,0) and (0,-1,0) are 8 and 9,",
+"reason": "It assigns the distances to opposite-vertex pairs arbitrarily on a unit octahedron instead of matching equal sums of squares, gets an unsolvable quartic, abandons the work and guesses 50.",
+"quote_position": 0.4153841887807448
+},
+"passB": null
+},
+{
+"id": "q5537",
+"kind": "rl",
+"model": "rl",
+"problem_index": 403,
+"sample": 1,
+"has_right_sibling": true,
+"final": "1",
+"gold": "3",
+"n_new": 6561,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q5537",
+"label": "misread",
+"quote": "Now, I need to compare these two numbers digit by digit and count how many positions have the same digit.",
+"reason": "Both conversions (1556_7, 1165_8) are correct, but it counts position-wise matches instead of digits common to both representations, and does so consistently.",
+"quote_position": 0.323582052706289
+},
+"passB": {
+"id": "q5537",
+"label": "misread",
+"quote": "Now, I need to compare these two numbers digit by digit and count how many positions have the same digit.",
+"reason": "Both conversions (1556_7 and 1165_8) are correct, but it counts positions with equal digits instead of the distinct digits common to both representations, and answers that other question consistently.",
+"quote_position": 0.323582052706289
+}
+},
+{
+"id": "q2837",
+"kind": "rl",
+"model": "rl",
+"problem_index": 437,
+"sample": 2,
+"has_right_sibling": true,
+"final": "4",
+"gold": "3",
+"n_new": 6065,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q2837",
+"label": "misread",
+"quote": "2. \u25b3 + \u25b3 = \u2666 + \u2666 + \u2666 + \u2666 + \u2666 + \u2666 + \u2666 + \u2666 + \u2666 + \u2666",
+"reason": "It copies the second equation with ten diamonds instead of five and solves that altered system consistently, getting 4.",
+"quote_position": 0.020180932498260265
+},
+"passB": {
+"id": "q2837",
+"label": "misread",
+"quote": "2. \u25b3 + \u25b3 = \u2666 + \u2666 + \u2666 + \u2666 + \u2666 + \u2666 + \u2666 + \u2666 + \u2666 + \u2666",
+"reason": "It restates the second equation with ten diamonds instead of five and solves that altered system consistently, getting 4.",
+"quote_position": 0.020180932498260265
+}
+},
+{
+"id": "q3521",
+"kind": "rl",
+"model": "rl",
+"problem_index": 444,
+"sample": 1,
+"has_right_sibling": false,
+"final": "\\frac{(k^2 + 1)^2}{8k^2}",
+"gold": "\\frac{1}{2}",
+"n_new": 13559,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q3521",
+"label": "wrong_plan",
+"quote": "Therefore, the favorable area is the sum of the areas in these two regions.",
+"reason": "It takes the whole rhombus cut out by the four perpendicular bisectors as the favorable area without intersecting it with the rectangle, so the area is too large except at k=1.",
+"quote_position": 0.6788702928870293
+},
+"passB": null
+},
+{
+"id": "q8309",
+"kind": "rl",
+"model": "rl",
+"problem_index": 466,
+"sample": 3,
+"has_right_sibling": true,
+"final": "9\\pi",
+"gold": "8 \\pi",
+"n_new": 5370,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q8309",
+"label": "wrong_plan",
+"quote": "Therefore, all roots of the equation are the 9th roots of -1.",
+"reason": "Treats all nine roots of z^9=-1 as roots of the degree-8 polynomial, so theta=pi (z=-1) is not excluded and the sum is 9pi instead of 8pi.",
+"quote_position": 0.24088429514786103
+},
+"passB": null
+},
+{
+"id": "q7533",
+"kind": "rl",
+"model": "rl",
+"problem_index": 473,
+"sample": 0,
+"has_right_sibling": true,
+"final": "10",
+"gold": "7",
+"n_new": 12801,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q7533",
+"label": "misread",
+"quote": "The numbers are positioned as follows (assuming the labels correspond to rows and columns 1 to 4, with the origin at the top left):",
+"reason": "It reads the fully labeled 3x3 magic square as a 4x4 grid with seven unknown cells and solves that different problem, getting n=10.",
+"quote_position": 0.01784313725490196
+},
+"passB": null
+},
+{
+"id": "q4037",
+"kind": "rl",
+"model": "rl",
+"problem_index": 482,
+"sample": 0,
+"has_right_sibling": true,
+"final": "203",
+"gold": "202",
+"n_new": 5735,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q4037",
+"label": "slip",
+"quote": "So for N=2009, which is odd, (2009 +1)/2 =2010/2=1010. So there are 1010 positive odd integers less than 2010.",
+"reason": "Method is right (5 powers of 5 over the count of odd integers), but 2010/2 is computed as 1010 instead of 1005, giving 1/202 instead of 1/201.",
+"quote_position": 0.29711479435236343
+},
+"passB": {
+"id": "q4037",
+"label": "slip",
+"quote": "So for N=2009, which is odd, (2009 +1)/2 =2010/2=1010.",
+"reason": "Correct method (5 powers of 5 over the count of odd integers below 2010), but it computes 2010/2 as 1010 instead of 1005, giving 1/202 instead of 1/201.",
+"quote_position": 0.29711479435236343
+}
+},
+{
+"id": "q7909",
+"kind": "rl",
+"model": "rl",
+"problem_index": 494,
+"sample": 1,
+"has_right_sibling": true,
+"final": "1",
+"gold": "\\frac{1}{4}",
+"n_new": 15024,
+"planted_at": null,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q7909",
+"label": "wrong_plan",
+"quote": "Let's see for which a in [0,1], the expression s\u00b2 -2 s -2 +a s is between 0 and1.",
+"reason": "After the correct substitution b = s\u00b2 - a s - 2 it rewrites the expression wrongly, treats the existence condition as a pair of inequalities it cannot resolve, then abandons the work and guesses 1.",
+"quote_position": 0.2965515192918882
+},
+"passB": {
+"id": "q7909",
+"label": "wrong_plan",
+"quote": "Let's see for which a in [0,1], the expression s\u00b2 -2 s -2 +a s is between 0 and1.",
+"reason": "After the correct substitution b = s\u00b2 - a s - 2 it rewrites the expression wrongly as s\u00b2 - 2s - 2 + a s, gets lost in contradictory inequalities, never derives the region b >= 2 - 2a, and explicitly gives up and guesses 1.",
+"quote_position": 0.2965515192918882
+}
+},
+{
+"id": "q8073",
+"kind": "shuffled",
+"model": "base",
+"problem_index": 30,
+"sample": 2,
+"has_right_sibling": true,
+"final": "5",
+"gold": "52_8",
+"n_new": 2132,
+"planted_at": null,
+"answer_from_problem": 22,
+"proxy_position": null,
+"passA": {
+"id": "q8073",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer solves a dog-walker ratio problem for x, not the base-8 product.",
+"quote_position": null
+},
+"passB": {
+"id": "q8073",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer solves a dog-walker ratio problem, not the base-8 product.",
+"quote_position": null
+}
+},
+{
+"id": "q3862",
+"kind": "shuffled",
+"model": "rl",
+"problem_index": 314,
+"sample": 3,
+"has_right_sibling": true,
+"final": "120",
+"gold": "(2,4)",
+"n_new": 2027,
+"planted_at": null,
+"answer_from_problem": 260,
+"proxy_position": null,
+"passA": {
+"id": "q3862",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer computes angle ABC for three 3D points, a different problem from the reflection problem.",
+"quote_position": null
+},
+"passB": {
+"id": "q3862",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer computes an angle ABC between 3D vectors, not the reflections of (0,0).",
+"quote_position": null
+}
+},
+{
+"id": "q5062",
+"kind": "shuffled",
+"model": "rl",
+"problem_index": 162,
+"sample": 2,
+"has_right_sibling": true,
+"final": "18",
+"gold": "\\dfrac{17}{50}",
+"n_new": 1453,
+"planted_at": null,
+"answer_from_problem": 160,
+"proxy_position": null,
+"passA": {
+"id": "q5062",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer solves a different problem (two consecutive even integers with product 288), not the probability question.",
+"quote_position": null
+},
+"passB": {
+"id": "q5062",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer solves a different problem (two consecutive positive even integers with product 288) and never addresses the probability question.",
+"quote_position": null
+}
+},
+{
+"id": "q8429",
+"kind": "shuffled",
+"model": "rl",
+"problem_index": 81,
+"sample": 3,
+"has_right_sibling": true,
+"final": "\\left[ \\frac{\\pi^2}{8}, \\frac{5\\pi^2}{4} \\right]",
+"gold": "3",
+"n_new": 3976,
+"planted_at": null,
+"answer_from_problem": 431,
+"proxy_position": null,
+"passA": {
+"id": "q8429",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer finds the range of (arccos x)^2 + (arcsin x)^2, a different problem from the treeks and squigs system.",
+"quote_position": null
+},
+"passB": {
+"id": "q8429",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer finds the range of (arccos x)^2 + (arcsin x)^2, not the treeks and squigs weight problem.",
+"quote_position": null
+}
+},
+{
+"id": "q6576",
+"kind": "shuffled",
+"model": "rl",
+"problem_index": 132,
+"sample": 0,
+"has_right_sibling": true,
+"final": "4",
+"gold": "4",
+"n_new": 1470,
+"planted_at": null,
+"answer_from_problem": 325,
+"proxy_position": null,
+"passA": {
+"id": "q6576",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer solves an unrelated problem about cylindrical beakers filling a spherical tank, not the common factors of 14 and 42.",
+"quote_position": null
+},
+"passB": {
+"id": "q6576",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer computes how many cylindrical beakers fill a spherical tank, a different problem from the common factors of 14 and 42; its 4 matches the gold value only by coincidence.",
+"quote_position": null
+}
+},
+{
+"id": "q9574",
+"kind": "shuffled",
+"model": "base",
+"problem_index": 442,
+"sample": 3,
+"has_right_sibling": true,
+"final": "2",
+"gold": "256",
+"n_new": 1112,
+"planted_at": null,
+"answer_from_problem": 479,
+"proxy_position": null,
+"passA": {
+"id": "q9574",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer solves an unrelated problem about primes p for which 8x \u2261 1 mod p has no solution, not the iterated 2^x problem.",
+"quote_position": null
+},
+"passB": {
+"id": "q9574",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer solves a problem about primes for which 8x = 1 mod p has no solution, not the iterated 2^x problem.",
+"quote_position": null
+}
+},
+{
+"id": "q3335",
+"kind": "shuffled",
+"model": "rl",
+"problem_index": 303,
+"sample": 1,
+"has_right_sibling": true,
+"final": "-256",
+"gold": "28",
+"n_new": 2843,
+"planted_at": null,
+"answer_from_problem": 61,
+"proxy_position": null,
+"passA": {
+"id": "q3335",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer solves a cubic-equation Vieta/logarithm problem for a, not the trapezoid area problem.",
+"quote_position": null
+},
+"passB": {
+"id": "q3335",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer solves a cubic with a log-sum condition on its roots for a, a different problem from the trapezoid area.",
+"quote_position": null
+}
+},
+{
+"id": "q6822",
+"kind": "shuffled",
+"model": "rl",
+"problem_index": 194,
+"sample": 0,
+"has_right_sibling": true,
+"final": "1260",
+"gold": "\\frac{1}{4}",
+"n_new": 1647,
+"planted_at": null,
+"answer_from_problem": 115,
+"proxy_position": null,
+"passA": {
+"id": "q6822",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer counts arrangements of the letters of ELLIPSE, a different problem from maximizing (x-y)/(x^4+y^4+6).",
+"quote_position": null
+},
+"passB": {
+"id": "q6822",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer counts arrangements of the letters of ELLIPSE, not the maximum of the given fraction.",
+"quote_position": null
+}
+},
+{
+"id": "q8576",
+"kind": "shuffled",
+"model": "base",
+"problem_index": 416,
+"sample": 3,
+"has_right_sibling": true,
+"final": "\\dfrac{11}{2}",
+"gold": "\\frac{1}{8}",
+"n_new": 2210,
+"planted_at": null,
+"answer_from_problem": 388,
+"proxy_position": null,
+"passA": {
+"id": "q8576",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer solves the domain of sqrt((x-3)^2-(x-8)^2), a different problem from the sin 18 degrees computation.",
+"quote_position": null
+},
+"passB": {
+"id": "q8576",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer finds the smallest x in the domain of sqrt((x-3)^2 - (x-8)^2), not sin^3 18 + sin^2 18.",
+"quote_position": null
+}
+},
+{
+"id": "q2417",
+"kind": "shuffled",
+"model": "base",
+"problem_index": 199,
+"sample": 0,
+"has_right_sibling": true,
+"final": "17",
+"gold": "17",
+"n_new": 1950,
+"planted_at": null,
+"answer_from_problem": 241,
+"proxy_position": null,
+"passA": {
+"id": "q2417",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer solves a minimum-distance-to-parabola problem, not the mean problem; its 17 matches gold only by coincidence.",
+"quote_position": null
+},
+"passB": {
+"id": "q2417",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer solves a minimum-distance problem for y = x^2/2 - 9, not the arithmetic mean problem, and only coincidentally ends at 17.",
+"quote_position": null
+}
+},
+{
+"id": "q8918",
+"kind": "shuffled",
+"model": "rl",
+"problem_index": 390,
+"sample": 1,
+"has_right_sibling": true,
+"final": "9",
+"gold": "12",
+"n_new": 2900,
+"planted_at": null,
+"answer_from_problem": 415,
+"proxy_position": null,
+"passA": {
+"id": "q8918",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer solves a different problem (remainder of 129^34 + 96^38 mod 11), not the distance problem.",
+"quote_position": null
+},
+"passB": {
+"id": "q8918",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer computes the remainder of 129^34 + 96^38 modulo 11, a different problem from the minimum distance to the parabola.",
+"quote_position": null
+}
+},
+{
+"id": "q4336",
+"kind": "shuffled",
+"model": "base",
+"problem_index": 244,
+"sample": 2,
+"has_right_sibling": true,
+"final": "6 + 9i",
+"gold": "8",
+"n_new": 413,
+"planted_at": null,
+"answer_from_problem": 20,
+"proxy_position": null,
+"passA": {
+"id": "q4336",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer evaluates a complex-number expression, not the polygon angle problem.",
+"quote_position": null
+},
+"passB": {
+"id": "q4336",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer evaluates the complex expression (1 + 2i)6 - 3i, not the polygon angle problem.",
+"quote_position": null
+}
+},
+{
+"id": "q5828",
+"kind": "shuffled",
+"model": "rl",
+"problem_index": 334,
+"sample": 2,
+"has_right_sibling": true,
+"final": "3",
+"gold": "-120",
+"n_new": 1158,
+"planted_at": null,
+"answer_from_problem": 243,
+"proxy_position": null,
+"passA": {
+"id": "q5828",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer solves a different problem (integer third side of a triangle with sides 1 and 3), not the system for abc.",
+"quote_position": null
+},
+"passB": {
+"id": "q5828",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer solves a triangle-inequality problem about sides 1 and 3, not the system for abc.",
+"quote_position": null
+}
+},
+{
+"id": "q1030",
+"kind": "shuffled",
+"model": "base",
+"problem_index": 432,
+"sample": 0,
+"has_right_sibling": true,
+"final": "9",
+"gold": "331",
+"n_new": 574,
+"planted_at": null,
+"answer_from_problem": 122,
+"proxy_position": null,
+"passA": {
+"id": "q1030",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer solves a different problem (inverse proportion of television price and customers), not the recurrence sum.",
+"quote_position": null
+},
+"passB": {
+"id": "q1030",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer solves an inverse-proportion television sales problem, not the recurrence sum.",
+"quote_position": null
+}
+},
+{
+"id": "q8357",
+"kind": "shuffled",
+"model": "rl",
+"problem_index": 499,
+"sample": 3,
+"has_right_sibling": true,
+"final": "52",
+"gold": "106^\\circ",
+"n_new": 3601,
+"planted_at": null,
+"answer_from_problem": 30,
+"proxy_position": null,
+"passA": {
+"id": "q8357",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer computes the base-8 product of 6_8 and 7_8, not the angle AHB of the triangle.",
+"quote_position": null
+},
+"passB": {
+"id": "q8357",
+"label": "mismatch",
+"quote": "",
+"reason": "The answer multiplies 6_8 by 7_8 in base 8, a different problem from the orthocenter angle AHB.",
+"quote_position": null
+}
+},
+{
+"id": "q8569",
+"kind": "planted",
+"model": "rl",
+"problem_index": 272,
+"sample": 0,
+"has_right_sibling": true,
+"final": "1032",
+"gold": "1030",
+"n_new": 3530,
+"planted_at": 0.9931932524415508,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q8569",
+"label": "format",
+"quote": "",
+"reason": "The work reaches 121/909 and 1030 several times and boxes 1030, but the final written summary states 121 + 909 = 1032.",
+"quote_position": null
+},
+"passB": {
+"id": "q8569",
+"label": "slip",
+"quote": "   a + b = 121 + 909 = 1032",
+"reason": "The work reaches 121/909 and 1030 several times, but the final summary adds 121 + 909 wrongly as 1032.",
+"quote_position": 0.9931380958215905
+}
+},
+{
+"id": "q1127",
+"kind": "planted",
+"model": "base",
+"problem_index": 209,
+"sample": 0,
+"has_right_sibling": true,
+"final": "26",
+"gold": "16",
+"n_new": 3697,
+"planted_at": 0.9939393939393939,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q1127",
+"label": "slip",
+"quote": "5. Sum the digits \\( A \\) and \\( B \\): \\( 9 + 7 = 26 \\).",
+"reason": "It correctly finds AB = 97 and 9 + 7 = 16 in the reasoning, then writes 9 + 7 = 26 in the final summary.",
+"quote_position": 0.9905157853709238
+},
+"passB": {
+"id": "q1127",
+"label": "slip",
+"quote": "5. Sum the digits \\( A \\) and \\( B \\): \\( 9 + 7 = 26 \\).",
+"reason": "Correctly finds AB = 97, then adds 9 + 7 as 26 in the final write-up.",
+"quote_position": 0.9905157853709238
+}
+},
+{
+"id": "q4583",
+"kind": "planted",
+"model": "rl",
+"problem_index": 354,
+"sample": 3,
+"has_right_sibling": true,
+"final": "80",
+"gold": "81",
+"n_new": 1852,
+"planted_at": 0.9822960394232524,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q4583",
+"label": "slip",
+"quote": "Therefore, the median of the 27 consecutive positive integers is \\(\\boxed{80}\\).",
+"reason": "The method and the reasoning reach 81, but the final write-up computes 68 + 13 = 80, an arithmetic slip that changes the stated answer.",
+"quote_position": 0.9839154411764706
+},
+"passB": {
+"id": "q4583",
+"label": "slip",
+"quote": "Therefore, the median of the 27 consecutive positive integers is \\(\\boxed{80}\\).",
+"reason": "Correct method reaches 81, then the final write-up computes 68 + 13 as 80.",
+"quote_position": 0.9839154411764706
+}
+},
+{
+"id": "q5891",
+"kind": "planted",
+"model": "base",
+"problem_index": 429,
+"sample": 2,
+"has_right_sibling": true,
+"final": "60",
+"gold": "50",
+"n_new": 2189,
+"planted_at": 0.9874143699219372,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q5891",
+"label": "format",
+"quote": "Then \\( b = 5^{1/4} \\) and \\( a = \\sqrt{5} \\), resulting in \\( a^4 + b^8 = 25 + 25 = 60 \\).",
+"reason": "The work reaches 50 several times and boxes 50, but the closing summary garbles 25 + 25 into 60 and boxes that.",
+"quote_position": 0.9764397905759162
+},
+"passB": {
+"id": "q5891",
+"label": "slip",
+"quote": "resulting in \\( a^4 + b^8 = 25 + 25 = 60 \\).",
+"reason": "Correct method reaches 50, then the final write-up adds 25 + 25 as 60.",
+"quote_position": 0.9834877164720097
+}
+},
+{
+"id": "q2875",
+"kind": "planted",
+"model": "rl",
+"problem_index": 27,
+"sample": 2,
+"has_right_sibling": true,
+"final": "80",
+"gold": "78",
+"n_new": 1823,
+"planted_at": 0.9887776766757659,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q2875",
+"label": "slip",
+"quote": "- Profit = Total revenue - Total cost = \\( 93 - 15 = 80 \\) dollars.",
+"reason": "The reasoning correctly gets 93 - 15 = 78 several times, but the final write-up miscomputes 93 - 15 as 80.",
+"quote_position": 0.9822406952578878
+},
+"passB": {
+"id": "q2875",
+"label": "slip",
+"quote": "- Profit = Total revenue - Total cost = \\( 93 - 15 = 80 \\) dollars.",
+"reason": "Correct revenue 93 and method, then the final write-up computes 93 - 15 as 80.",
+"quote_position": 0.9822406952578878
+}
+},
+{
+"id": "q5934",
+"kind": "planted",
+"model": "rl",
+"problem_index": 404,
+"sample": 0,
+"has_right_sibling": true,
+"final": "1",
+"gold": "3",
+"n_new": 831,
+"planted_at": 0.9656283566058003,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q5934",
+"label": "slip",
+"quote": "Thus, the number of boxes that contain neither pens nor pencils is \\(\\boxed{1}\\).",
+"reason": "Correct inclusion-exclusion gives 7, but the final write-up computes 10 - 7 = 1 instead of 3.",
+"quote_position": 0.9684931506849315
+},
+"passB": {
+"id": "q5934",
+"label": "slip",
+"quote": "Thus, the number of boxes that contain neither pens nor pencils is \\(\\boxed{1}\\).",
+"reason": "Inclusion-exclusion is correct and gives 7, but the final write-up computes 10 - 7 = 1 instead of 3.",
+"quote_position": 0.9684931506849315
+}
+},
+{
+"id": "q9932",
+"kind": "planted",
+"model": "rl",
+"problem_index": 50,
+"sample": 1,
+"has_right_sibling": true,
+"final": "205",
+"gold": "203",
+"n_new": 3484,
+"planted_at": 0.9876750700280112,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q9932",
+"label": "slip",
+"quote": "7x = 7 \\times 29 = 205",
+"reason": "The method and the reasoning reach x=29 and 203, but the final write-up miscomputes 7*29 as 205 (the wrong line is shorter than 40 characters; no longer line contains the error).",
+"quote_position": 0.9873060648801129
+},
+"passB": {
+"id": "q9932",
+"label": "slip",
+"quote": "7x = 7 \\times 29 = 205",
+"reason": "The method is correct and the reasoning reached x = 29 and 7*29 = 203, but the final write-up miscomputes 7 times 29 as 205.",
+"quote_position": 0.9873060648801129
+}
+},
+{
+"id": "q3559",
+"kind": "planted",
+"model": "rl",
+"problem_index": 471,
+"sample": 3,
+"has_right_sibling": true,
+"final": "82",
+"gold": "84",
+"n_new": 1806,
+"planted_at": 0.38413051538746756,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q3559",
+"label": "slip",
+"quote": "Therefore, the average is 80 + 4 = 82? Wait, hold on. Wait, no. Wait, that approach might not be right.",
+"reason": "The method is correct and the total 2520 is right, but 80 + 4 is miscomputed as 82 and the final summary states 2520/30 = 82 although the work also reached 84.",
+"quote_position": 0.38430246470447477
+},
+"passB": {
+"id": "q3559",
+"label": "slip",
+"quote": "So 120 divided by 30 is 4. Therefore, the average is 80 + 4 = 82? Wait, hold on.",
+"reason": "The method (2520/30) is right and the work reaches 84 several times, but the arithmetic slip 80 + 4 = 82 is carried into the final division 2520/30 = 82.",
+"quote_position": 0.3795166307729122
+}
+},
+{
+"id": "q7950",
+"kind": "planted",
+"model": "rl",
+"problem_index": 297,
+"sample": 1,
+"has_right_sibling": true,
+"final": "113",
+"gold": "103",
+"n_new": 2378,
+"planted_at": 0.9525,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q7950",
+"label": "slip",
+"quote": "- To find the next solution, add 3 to 100: \\( 100 + 3 = 113 \\).",
+"reason": "The reasoning reaches 103, but the final write-up computes 100 + 3 = 113 and boxes 113, an arithmetic/copying error.",
+"quote_position": 0.9464379485384211
+},
+"passB": {
+"id": "q7950",
+"label": "slip",
+"quote": "- To find the next solution, add 3 to 100: \\( 100 + 3 = 113 \\).",
+"reason": "Correct method reaches 103, then the final write-up computes 100 + 3 as 113.",
+"quote_position": 0.9464379485384211
+}
+},
+{
+"id": "q8723",
+"kind": "planted",
+"model": "base",
+"problem_index": 134,
+"sample": 2,
+"has_right_sibling": true,
+"final": "18",
+"gold": "16",
+"n_new": 1311,
+"planted_at": 0.6788763426053429,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q8723",
+"label": "slip",
+"quote": "   h + k + a + b = (-3) + 2 + 12 + 5 = 18",
+"reason": "h, k, a, b are all correct but the final sum is added wrongly (11 + 5 = 18 instead of 16).",
+"quote_position": 0.9774872912127814
+},
+"passB": {
+"id": "q8723",
+"label": "slip",
+"quote": "   h + k + a + b = (-3) + 2 + 12 + 5 = 18",
+"reason": "h, k, a, b are all correct (-3, 2, 12, 5) but the last addition 11 + 5 is written as 18 instead of 16.",
+"quote_position": 0.9774872912127814
+}
+},
+{
+"id": "q2516",
+"kind": "planted",
+"model": "base",
+"problem_index": 5,
+"sample": 0,
+"has_right_sibling": true,
+"final": "52",
+"gold": "42",
+"n_new": 1168,
+"planted_at": 0.6290225864481311,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q2516",
+"label": "format",
+"quote": "Therefore, the hexagon's side length is 7 inches, so the perimeter is 6*7=52 inches. Therefore, answer should be 42.",
+"reason": "The work reaches 42 repeatedly and says the answer is 42, but the final stated answer is the garbled 52.",
+"quote_position": 0.6133883094833859
+},
+"passB": {
+"id": "q2516",
+"label": "format",
+"quote": "**Answer:** The perimeter of the regular hexagon is $52$ inches.",
+"reason": "The reasoning reaches 42 repeatedly and concludes 'The answer is 42', but the final answer line states 52.",
+"quote_position": 0.9866601988843076
+}
+},
+{
+"id": "q9153",
+"kind": "planted",
+"model": "rl",
+"problem_index": 258,
+"sample": 1,
+"has_right_sibling": true,
+"final": "14",
+"gold": "16",
+"n_new": 1426,
+"planted_at": 0.9789964994165694,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q9153",
+"label": "slip",
+"quote": "Thus, the number of blue marbles before adding more is \\(\\boxed{14}\\).",
+"reason": "The method is correct and the reasoning reaches x=4 and 16, but the final write-up computes 4 x 4 as 14, an arithmetic/copying error.",
+"quote_position": 0.9822327509623927
+},
+"passB": {
+"id": "q9153",
+"label": "slip",
+"quote": "Thus, the number of blue marbles before adding more is \\(\\boxed{14}\\).",
+"reason": "Correct method gives x = 4 and 16, then the final write-up computes 4 times 4 as 14.",
+"quote_position": 0.9822327509623927
+}
+},
+{
+"id": "q4807",
+"kind": "planted",
+"model": "base",
+"problem_index": 276,
+"sample": 0,
+"has_right_sibling": true,
+"final": "12",
+"gold": "11",
+"n_new": 2669,
+"planted_at": 0.7419064748201439,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q4807",
+"label": "slip",
+"quote": "So, x=14400, and then 10 other numbers: 119\u00b2, 118\u00b2, ..., 20\u00b2. So, 1 +10=12 unique values.",
+"reason": "The method correctly identifies 11 distinct n^2 values (one x for n=0 plus 10 others) but adds 1 + 10 as 12.",
+"quote_position": 0.7369779067892276
+},
+"passB": {
+"id": "q4807",
+"label": "slip",
+"quote": "So, 1 +10=12 unique values. Therefore, the answer is 11.",
+"reason": "The method finds 11 distinct values of n^2 and hence of x, but adds 1 + 10 as 12 and boxes 12.",
+"quote_position": 0.7452023867118207
+}
+},
+{
+"id": "q9908",
+"kind": "planted",
+"model": "rl",
+"problem_index": 345,
+"sample": 3,
+"has_right_sibling": true,
+"final": "2",
+"gold": "1",
+"n_new": 1383,
+"planted_at": 0.9840993788819876,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q9908",
+"label": "slip",
+"quote": "t(4) = 3 - 2 = 2",
+"reason": "The method is correct and the reasoning reaches 1 several times, but the final write-up computes 3 - 2 as 2.",
+"quote_position": 0.9834236531718202
+},
+"passB": {
+"id": "q9908",
+"label": "slip",
+"quote": "t(4) = 3 - 2 = 2",
+"reason": "The method is correct and the reasoning reaches 1 several times, but the final write-up computes 3 - 2 as 2 (the wrong line itself is shorter than 40 characters).",
+"quote_position": 0.9834236531718202
+}
+},
+{
+"id": "q7640",
+"kind": "planted",
+"model": "base",
+"problem_index": 449,
+"sample": 3,
+"has_right_sibling": true,
+"final": "46",
+"gold": "47",
+"n_new": 621,
+"planted_at": 0.9333691563675444,
+"answer_from_problem": null,
+"proxy_position": null,
+"passA": {
+"id": "q7640",
+"label": "format",
+"quote": "",
+"reason": "The work reaches 47 twice and states the answer should be 47, but the final answer line says 46.",
+"quote_position": null
+},
+"passB": {
+"id": "q7640",
+"label": "format",
+"quote": "",
+"reason": "The work computes 47 and says the answer should be 47, but the final answer line states 46.",
+"quote_position": null
+}
+}
+]
