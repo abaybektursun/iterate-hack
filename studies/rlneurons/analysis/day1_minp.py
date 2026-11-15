@@ -19,11 +19,14 @@ from studies.rlneurons.lib import n13_score as S
 STUDY = pathlib.Path(__file__).resolve().parents[1]
 RUNS = pathlib.Path("runs")
 OUT = STUDY / "results" / "day1_minp"
-COMMIT = "2188884a3f4ec8467db01ef2beab9b6d3f96c812"
-CMD = ("bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model {m} --prompt cue "
-       "--set math500 --temperature {t} --top-p 1.0 --min-p 0.1 --seed {s} --commit " + COMMIT)
-# arm: (job id, model, T, seed); filled in as the jobs are submitted
-ARMS = {}
+COMMIT = "1994279858d7c47ce0f16c080867bf2273c072a4"
+CMD = ("bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --prompt cue --set math500 "
+       "--model {m} --temperature {t} --top-p {p} --min-p {mp} --seed {s} --commit " + COMMIT)
+# arm: (job id, model, T, top-p, min-p, seed)
+ARMS = {"base_mp0.1_T1": ("frustea-1114-180849-456c", "base", 1.0, 1.0, 0.1, 41000000),
+        "base_mp0.1_T1.5": ("frustea-1114-180853-e383", "base", 1.5, 1.0, 0.1, 41000000),
+        "rl_mp0.1_T1": ("frustea-1114-180857-8f87", "rl", 1.0, 1.0, 0.1, 66000000),
+        "base_p0.95_T1": ("frustea-1114-180900-b614", "base", 1.0, 0.95, 0, 41000000)}
 BASELINES = {"T1_base_cue": (RUNS / "s3" / "r4" / "base_rl-02" / "out" / "T1.jsonl", 410)}   # 410: readout of day1_wdiff
 RL_CUE_MP0 = 457            # results/day1_wdiff/rl_cue-01/metrics.json correct_v3 (raw rows not available here: unpaired)
 
@@ -43,7 +46,7 @@ def main():
         sc[arm] = score(rows[arm], gold)
         cells[arm] = summary(sc[arm])
         assert cells[arm]["right_v3"] == expect, (arm, cells[arm]["right_v3"], expect)
-    for arm, (job, m, t, s) in ARMS.items():
+    for arm, (job, m, t, tp, mp, s) in ARMS.items():
         mt = json.loads((RUNS / job / "metrics.json").read_text())
         assert mt["status"] == "done" and mt["counts"]["n"] == 500, (arm, mt["status"], mt.get("counts"))
         rows[arm] = rows_by_index(RUNS / job / "answers.jsonl", idx)
@@ -52,8 +55,8 @@ def main():
         d = OUT / f"{arm}-01"
         assert not d.exists(), f"{d} exists: a rerun gets the next number"
         d.mkdir(parents=True)
-        (d / "run.json").write_text(json.dumps({"job_id": job, "commit": COMMIT, "command": CMD.format(m=m, t=t, s=s),
-                                                "runner": "uv run tools/gpu.py submit h100 --hours 1.5",
+        (d / "run.json").write_text(json.dumps({"job_id": job, "commit": COMMIT, "command": CMD.format(m=m, t=t, p=tp, mp=mp, s=s),
+                                                "runner": "uv run tools/gpu.py submit h100 --hours 2",
                                                 "raw_answers": f"runs/{job}/answers.jsonl (uv run tools/gpu.py get {job})"}, indent=1) + "\n")
         (d / "metrics.json").write_text(json.dumps(mt, indent=1) + "\n")
         (d / "examples.json").write_text(json.dumps(examples(rows[arm], sc[arm]), indent=1) + "\n")
