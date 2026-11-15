@@ -810,6 +810,125 @@ cannot read, e.g. 135, 165, 447); one is a math fix (372, 75 -> 90). Every break
 156; RL 71, 193, 236). RL fixes none of its 35 wrong finished drafts. Raw rows in frustea's Modal Volume
 `iterate-runs/<job>/answers.jsonl`; drafts in `iterate-runs/inputs/critique/` (`prep/critique_drafts.py`).
 
+## Solved examples in context: no gain that survives a second draw or the 328 (shots1, board work-be7af1)
+
+**Correction (2026-11-15 05:20 UTC).** The first draw below gave +5.6 points for RL-written examples (result-6d422d). A second
+draw of 3 examples (MATH-500 problems 3, 5, 6, same rule, `data/shots1/{base_b,rl_b}.json`) gave none, and the first draw gave
+none on the 328. Counts on the 494 MATH-500 problems that are no example of any arm (`results/shots1b/readout.json`):
+
+| cell | right of 494 | vs no examples (points, 95 %) | cap hits | generated tokens per problem |
+|---|---|---|---|---|
+| base, cue, no examples (T1) | 404 | | 27 | 3,966 |
+| base-written, draw 1 | 411 | +1.4 [-2.0, 4.7] | 17 | 3,395 |
+| base-written, draw 2 | 403 | -0.2 [-3.9, 3.4] | 16 | 3,741 |
+| Code-RL-written, draw 1 | 409 | +1.0 [-2.6, 4.5] | 19 | 3,848 |
+| Math-RL-written, draw 1 | 432 | +5.7 [2.6, 8.7] | 31 | 4,418 |
+| Math-RL-written, draw 2 | 401 | -0.6 [-4.5, 3.2] | 32 | 4,361 |
+
+RL-written draw 1 minus draw 2: +6.3 [2.6, 9.9]. So the gain belongs to those three texts, not to their writer. On the 328
+(`results/shots1b/hard328_rl-01/readout.json`, seed 3000000, paired with the cued base's job -151534-e72c): RL-written draw 1
+164 of 328 against 164, 0.0 [-4.3, 4.3]; 26 problems only with examples, 26 only without; cap hits 107 against 77; generated
+tokens 9,933 against 9,344. Reading: three examples in context do not move the cued base toward RL on hard problems. What
+remains open is why one set of three texts gave 28 more right answers on MATH-500 than another set by the same writer.
+`analysis/shots_hard328.py` makes the 328 readout; `analysis/shots1.py shots1b <arm>=<job> ...` the five-arm table (jobs:
+base e840, rl fd89, code d9d6, base_b abaybektursun-1114-195357-6936, rl_b abaybektursun-1114-195350-bc00).
+
+The loop planned on top of this (specs/SPEC_shots2.md, `jobs/shots_loop.py`, board work-eb10d7) stopped in round 0: on the 36
+hard problems outside the 328, at cap 8,192, 124 of 144 base answers hit the cap, 12 were right, and 1 problem had 3 agreeing
+finished answers (vast.ai job abaybektursun-1114-203934-5e03, rows not committed). No examples could be picked. Not rerun,
+because both hypotheses it rested on (long own answers help; RL-like text helps) lost their support above.
+
+The first readout, as posted:
+
+
+Spec `specs/SPEC_shots1.md`. The cued base on MATH-500 at T 1.0 / top-p 1.0, grader v3, with 3 solved problems (MATH-500
+indices 0, 1, 2) in front of every prompt. The arms hold the same 3 problems and differ only in which model wrote the 3 answers.
+The 3 problems are left out of every count: n = 497. No weight is changed.
+
+| cell | right of 497 | cap hits | generated tokens per problem | example tokens in the prompt |
+|---|---|---|---|---|
+| base, cue, no examples (T1) | 407 | 27 | 3,948 | - |
+| examples written by the cued base | 414 | 17 | 3,380 | 4853 |
+| examples written by Code-RL 3.1 | 412 | 19 | 3,832 | 6638 |
+| examples written by Math-RL 3.1 | 435 | 31 | 4,400 | 8240 |
+| base + 0.25 (RL - base), cue, no examples | 438 | 13 | 4,047 | - |
+| Math-RL 3.1, cue, no examples | 454 | 8 | 4,708 | - |
+
+Paired differences in points, 95 % bootstrap interval over problems: RL-written examples minus no examples +5.6 [2.6, 8.7];
+RL-written minus base-written +4.2 [1.2, 7.4]; base-written minus no examples +1.4 [-2.0, 4.8];
+Code-RL-written minus RL-written -4.6 [-8.1, -1.2]; RL-written minus theta 0.25 -0.6 [-3.4, 2.2];
+RL-written minus RL itself -3.8 [-6.4, -1.2].
+
+Reading: H1 held (three answers written by Math-RL, placed in the base's context, give the gain of a quarter of the weight
+difference), H2 refuted (the base's own right answers give none), H3 refuted (Code-RL's answers give none, although Code-RL 3.1
+itself scores 450 of 500 with the cue).
+
+Limits, not yet controlled: one draw of 3 examples per arm; RL's examples are longer (8,240 against 4,853 and 6,638 tokens);
+seeds differ from T1's (71000000 against 41000000). Cap hits rise with RL's examples (31 against 17 with the base's): the gain
+is in finished answers (433 right of 466 finished against 414 of 480). Hand read of 22 finished wrong answers per arm: all
+truly wrong; two RL-arm answers copy the example answer 14/3 (problems 94 and 270).
+
+Files: `data/shots1/{base,rl,code}.json` (the examples, built by `prep/shots1_build.py`), `jobs/run_cell.py --shots`,
+`analysis/shots1.py`, `results/shots1/readout.json` and run folders `results/shots1/{base,rl,code}-01/` (run.json, metrics.json,
+one right and one wrong example). Raw rows: `runs/<job>/answers.jsonl` after `uv run tools/gpu.py get <job>` (abaybektursun's
+Modal workspace), jobs abaybektursun-1114-183855-e840 (base), -183901-fd89 (rl), -183907-d9d6 (code). Run:
+
+```
+uv run tools/gpu.py submit h100 --hours 2.5 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --shots studies/rlneurons/data/shots1/rl.json --set math500 --temperature 1.0 --top-p 1.0 --seed 71000000 --commit $(git rev-parse HEAD)"
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.shots1 shots1 base=<job> rl=<job> code=<job>
+```
+
+## Closing cue: forcing a long answer to commit loses problems (commit1, board work-3d68e2)
+
+Spec `specs/SPEC_commit1.md`. A stored answer of the cued base (T 1.0 / top-p 1.0, one sample) that ran past N tokens is cut at N
+tokens, a commit line is appended and the base continues: `box` = `Final answer: \boxed{` (64 new tokens at most, the RLN-3 arm C
+that was never scored), `voice` = a sentence in the answer's own voice (1,024 at most). Only the continuation is graded (v3).
+Each row is a policy over the whole set: answers of at most N tokens count as stored.
+
+MATH-500 (n 500, stored rows of job abaybektursun-1114-153825-208b, sample 0):
+
+| configuration | right | vs stored (points, 95 %) | generated tokens per problem | answers cut | still right of those right when left alone | right of stored cap hits |
+|---|---|---|---|---|---|---|
+| stored answers, no cut | 405 | | 3,808 | | | |
+| box, N 4,000 | 387 | -3.6 [-6.2, -1.2] | 2,216 | 145 | 41 of 70 | 4 of 25 |
+| voice, N 4,000 | 381 | -4.8 [-7.4, -2.4] | 2,297 | 145 | 37 of 70 | 2 of 25 |
+| box, N 8,000 | 406 | +0.2 [-1.0, 1.4] | 3,079 | 82 | 19 of 23 | 3 of 25 |
+| voice, N 8,000 | 401 | -0.8 [-2.0, 0.2] | 3,120 | 82 | 17 of 23 | 0 of 25 |
+| box, N 12,000 | 407 | +0.4 [-0.6, 1.4] | 3,546 | 40 | 0 of 2 | 2 of 25 |
+| voice, N 12,000 | 405 | +0.0 [-0.8, 0.8] | 3,571 | 40 | 0 of 2 | 1 of 25 |
+
+The 328 harder problems (stored rows of job abaybektursun-1114-151534-e72c):
+
+| configuration | right | vs stored (points, 95 %) | generated tokens per problem | answers cut | still right of those right when left alone | right of stored cap hits |
+|---|---|---|---|---|---|---|
+| stored answers, no cut | 164 | | 9,344 | | | |
+| box, N 4,000 | 130 | -10.4 [-14.0, -6.7] | 3,478 | 241 | 44 of 83 | 0 of 77 |
+| voice, N 4,000 | 126 | -11.6 [-15.6, -7.9] | 3,686 | 241 | 40 of 83 | 2 of 77 |
+| box, N 8,000 | 152 | -3.7 [-6.4, -1.2] | 6,016 | 184 | 24 of 40 | 1 of 77 |
+| voice, N 8,000 | 151 | -4.0 [-6.7, -1.2] | 6,185 | 184 | 23 of 40 | 2 of 77 |
+| box, N 12,000 | 159 | -1.5 [-4.0, 0.9] | 7,927 | 136 | 4 of 14 | 2 of 77 |
+| voice, N 12,000 | 158 | -1.8 [-3.7, 0.0] | 8,063 | 136 | 6 of 14 | 2 of 77 |
+
+Chosen on MATH-500 by the spec's rule: box_8000. Headline on the 328: 152 of 328 against 164, -3.7 points
+[-6.4, -1.2], at 6,017 generated tokens per problem against 9,344. H1 refuted (no configuration gains on either set), H2 refuted
+(box is at or above voice at every N on both sets), H3 at the edge (at N 8,000 on the 328 the commit keeps 24 of the 40
+answers that end right when left alone).
+
+Reading: the base's long answers on the 328 do not hold an answer that a commit line can release. Of the 77 stored cap hits,
+a forced commit at 12,000 tokens is right on 2; of the 184 answers over 8,000 tokens, 28 are right when forced against 40 when
+left alone. So the cap hits are failures to solve, not failures to stop, and the tokens after 8,000 are productive for 16
+problems. Hand read of 14 forced boxes at N 8,000: 4 right, 10 guesses unrelated to the last line of work. The token saving is
+real: -1.5 points [-4.0, 0.9] for 15 % fewer tokens at N 12,000 (box).
+
+Files: `jobs/commit_cue.py`, `analysis/commit1.py`, `results/commit1/base-01/` (readout.json, run.json, metrics.json,
+examples.json). Raw rows: `runs/abaybektursun-1114-212437-d6d2/rows.jsonl` after `uv run tools/gpu.py get` (1,656 rows, 8 min on
+an H100). Smoke: job abaybektursun-1114-212215-f08c. The RL model was not run: the spec asks for it only if H1 holds. Run:
+
+```
+uv run tools/gpu.py submit h100 --hours 2 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.commit_cue --model base --commit $(git rev-parse HEAD)"
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.commit1 base <job>
+```
+
 ## RLN-5 map: where RL still disagrees once the cue is given
 
 Spec `specs/SPEC5_map.md`; run folder `results/rln5/map-01/` (`run.json`, `metrics.json`, `examples.json`, `checks.json`,

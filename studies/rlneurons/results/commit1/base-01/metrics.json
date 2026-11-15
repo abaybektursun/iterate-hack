@@ -1,0 +1,42 @@
+{
+ "status": "done",
+ "config": {
+  "model": "base",
+  "runs": "/runs",
+  "seed": 91000000,
+  "n": null,
+  "out": "/runs/abaybektursun-1114-212437-d6d2",
+  "dry_run": false,
+  "commit": "9e37523cb362b5dc50b6ca57c9abeb6d65ffc60d",
+  "sources": {
+   "math500": "abaybektursun-1114-153825-208b",
+   "hard328": "abaybektursun-1114-151534-e72c"
+  },
+  "cuts": [
+   4000,
+   8000,
+   12000
+  ],
+  "forms": {
+   "box": [
+    "\n\nFinal answer: \\boxed{",
+    64
+   ],
+   "voice": [
+    "\n\nI have used most of my space, so I will stop exploring here, settle on the most likely answer from my work above, and write it down.\n\n",
+    1024
+   ]
+  },
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "n_requests": 1656
+ },
+ "commit": "9e37523cb362b5dc50b6ca57c9abeb6d65ffc60d",
+ "job_id": "abaybektursun-1114-212437-d6d2",
+ "started_utc": "2026-11-15T05:24:51Z",
+ "n": 1656,
+ "wall_s": 491.7980942726135
+}

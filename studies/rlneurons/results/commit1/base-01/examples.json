@@ -1,0 +1,34 @@
+{
+ "right": {
+  "problem_index": 15,
+  "cut": 8000,
+  "form": "box",
+  "gold": "154",
+  "extracted_v3": "154",
+  "score_v3": 1,
+  "n_new": 2,
+  "stored": {
+   "score_v3": 1,
+   "n_new": 8699,
+   "cap_hit": false
+  },
+  "before_cut_tail": "s arrives, the number of adults becomes \\( A + x \\) and the total number of people becomes \\( (A + C) + 50 \\). The proportion of adults becomes \\( \\frac{11}{25} \\):\n     \\[\n     A + x = \\frac{11}{25}(A + C + 50)\n     \\]\n\n2. **Solving the Equations:**\n   - From the initial equation:\n     \\[\n     12A = 5(A + C) \\implies 7A = 5C \\implies C = \\frac{7}{5}A\n     \\]\n   - Let \\( A = 5k \\) (where \\( A \\) must be a multiple of 5 for \\( C \\) to be an integer) and \\( C = 7k \\).\n\n3. **Substituting \\( A \\) and \\( C \\) into the Second Equation:**\n   - Substitute \\( A = 5k \\) and \\( C =\n\nFinal answer: \\boxed{",
+  "continuation": "154}"
+ },
+ "wrong": {
+  "problem_index": 7,
+  "cut": 8000,
+  "form": "box",
+  "gold": "227",
+  "extracted_v3": "242",
+  "score_v3": 0,
+  "n_new": 64,
+  "stored": {
+   "score_v3": 1,
+   "n_new": 13834,
+   "cap_hit": false
+  },
+  "before_cut_tail": " Original number: abc=217 (base10). Digits are a=2, b=1, c=7.\n\n- Converted to base nine: 261 (base9). Digits are 2,6,1.\n\n- The problem states that the converted number in base nine should be \"b c a\"=2 7 2 in base9. But 272 in base9 is 2*81 +7*9 +2=153. However, 217\u2260153. Therefore, this does not satisfy.\n\nSo in this case, even though the algebraic manipulation gives a solution, it doesn't satisfy the digit condition. Therefore, my approach is missing something. Therefore, perhaps I need to check whether the base9 representation of abc has exactly the digits b, c, a.\n\nWait\n\nFinal answer: \\boxed{",
+  "continuation": "242}\n\nLet's verify:\n\nConvert 242 to base nine:\n\n242 \u00f7 81 = 2, remainder 80 (1*81=81, so remainder 1*9 +9*... wait, 242 -2*81=242-162=80.\n\n80 \u00f79=8,"
+ }
+}

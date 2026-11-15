@@ -1,0 +1,9 @@
+Measure: does `bash studies/rlneurons/jobs/setup_vllm.sh` finish on a vast.ai box with the default image (pytorch/pytorch:2.15.0-cuda13.2-cudnn9-runtime)?
+Before (shots 586d4b5), vast.ai instance 60739579 (A100 SXM4), job abaybektursun-1114-203747-ed0a, command
+  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.shots_loop --rounds 3 --commit <sha>
+Last lines of its log (python3 tools/vast.py logs 60739579 abaybektursun-1114-203747-ed0a 6):
+    See /usr/share/doc/python3.12/README.venv for more information.
+note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packag
+hint: See PEP 668 for the detailed specification.
+exit 1
+1 run. The same command with `export PIP_BREAK_SYSTEM_PACKAGES=1 &&` in front ran (job abaybektursun-1114-203934-5e03: engine up 5.7 min after submit, weights included).

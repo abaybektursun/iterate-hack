@@ -1,0 +1,3 @@
+After (shots, commit "setup_vllm.sh: runs on vast.ai's default image"): the script sets PIP_BREAK_SYSTEM_PACKAGES=1 for its one pip call.
+Not measured: the box (60739579) was destroyed before a job with the plain command ran on it. The env-var form of the same fix ran once (job 5e03).
+Must not change: the four engine versions on Modal (run_cell asserts them at start); Modal jobs f08c and d6d2 started after the change and passed that assert.
