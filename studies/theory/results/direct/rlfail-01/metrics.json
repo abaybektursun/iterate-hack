@@ -1,0 +1,64 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_rlfail.md",
+ "mechanism": "round-15/account-1/c3",
+ "statistic": "E/B: edit right samples / cued base right samples (attempt 0, samples 0-3) on hard328 problems with RL plain 0 of 4 right, grader v3",
+ "value": 2.0,
+ "ci90": [
+  0.8,
+  5.0
+ ],
+ "bootstrap": {
+  "resamples": 10000,
+  "rng": "numpy default_rng(0)",
+  "unit": "problem",
+  "resamples_with_base_right_0_counted_as_infinite": 24
+ },
+ "n_problems": 88,
+ "n_edit_samples": 352,
+ "n_base_samples": 352,
+ "edit_right": 12,
+ "base_right": 6,
+ "rl_right": 0,
+ "problems_edit_any_right": 8,
+ "problems_base_any_right": 6,
+ "problems_both_zero": 75,
+ "edit_cap_hits": 50,
+ "base_cap_hits": 154,
+ "null_value_full_copy": 0.0,
+ "null_value_two_thirds_copy": 0.3333333333333333,
+ "range_account1": [
+  0.75,
+  4.0
+ ],
+ "range_null": [
+  0.0,
+  0.5
+ ],
+ "verdict": "undecided",
+ "interval_vs_null_range": "outside (above)",
+ "descriptive": {
+  "ratio_rl_1to4": [
+   1.2563694267515924,
+   1.205126285889759,
+   1.3132137030995106,
+   0
+  ],
+  "n_problems_rl_1to4": 240,
+  "ratio_all_328": [
+   1.2634069400630914,
+   1.2111094477711244,
+   1.321608040201005,
+   0
+  ],
+  "totals_all_328": {
+   "edit": 801,
+   "base": 634,
+   "rl": 800
+  }
+ },
+ "instrument_checks": {
+  "totals_reproduce_801_634_800": true,
+  "planted_copy_rl_gives_0": true
+ },
+ "n_to_decide": 994
+}

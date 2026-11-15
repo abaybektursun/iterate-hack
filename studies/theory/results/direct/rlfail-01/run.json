@@ -1,0 +1,11 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_rlfail.md",
+ "commit": "acff1696a27825f274882dfdc9316aa276b8a20d",
+ "board": "work-1fde65",
+ "command": "uv run --no-project --with numpy python studies/theory/analysis/direct_rlfail.py --runs ../iterate-hack/runs",
+ "inputs": [
+  "studies/rlneurons/results/day1_3/hard328_top8x1.5_cue_s4-01",
+  "studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01",
+  "studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01"
+ ]
+}
