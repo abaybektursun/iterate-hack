@@ -3136,3 +3136,44 @@ uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rln
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.riskcov --set hard328 --out studies/rlneurons/results/riskcov/hard328-01 --fixed studies/rlneurons/results/riskcov/math500-01/chosen.json --think-run runs/thinkvote_hard328_sft1_cue_s4 --rl-run runs/abaybektursun-1114-200505-5ff2
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.riskcov --set hard328 --read studies/rlneurons/results/riskcov/read-01 --think-run runs/thinkvote_hard328_sft1_cue_s4 --rl-run runs/abaybektursun-1114-200505-5ff2
 ```
+
+## Think-SFT training-data overlap, every shard and every turn (hard328 and MATH-500, laptop, board work-173c5c)
+
+Question: are the test problems in the training data of allenai/Olmo-3-7B-Think-SFT (allenai/Dolci-Think-SFT-7B, revision
+83f618e), in any turn of any row? Answer: the full scan finds no new hard328 problem. The same 6 of 328 match as in the
+first-user-message scan (board result-f6a8bc), and all 6 match in user turns. Without them the headline holds: vote over 4,
+Think-SFT + cue 235 and RL 215 of 322, +6.2 points [3.1, 9.6] (all 328: 241 against 221, +6.1 [3.0, 9.5]). MATH-500: 29 of
+500 match (25 before). The 4 new ones match only in assistant turns, and their raw text shows a phrase from the problem
+inside a reasoning trace about a different problem, not a copy.
+
+Method: `analysis/wsp1_sft_overlap.py --turns all` (the teammate's script from branch
+`claude/weight-space-programming-research-ddd44e`, extended). It scans all 156 shards and 2,268,178 rows, and matches every
+message: 2,368,984 user turns and 2,368,984 assistant turns (the data has no system turns). Each role is matched apart. The
+rule is the one in `analysis/rln3_overlap.py`: lower case, non-alphanumerics to spaces. A problem is exact when it equals a
+message and near when at least half of its word 8-grams occur in one message. Assistant turns reach the matcher only when
+one of their 8-grams hashes to a test 8-gram (245,709 do). The selftest shows this filter changes no match on 3,000 real
+assistant turns. hard328 is the 328 problems with RL-overlap flag none (as in `jobs/run_cell.py`). The vote difference
+reads rows "4 think" and "4 rl" of `results/mixvote/hard328-01/readout.json` (paired bootstrap, 5,000 resamples, seed 0).
+Run folder `results/wsp1/sft_overlap-03/`: `run.json` (commit 385e301, command, shards), `metrics.json` (counts by role,
+vote difference), `flags.json` (per problem: flag, share, best row per role with id, shard and row), `selftest.txt`.
+Wall time 57 min on 10 processes, bound by download speed.
+
+| Set | Flagged (exact + near) | Matched in user turns | Matched in assistant turns | Matched only in assistant turns | Before (first user message, 123 shards) |
+|---|---|---|---|---|---|
+| hard328 | 6 (4 + 2) | 6 | 1 (hard/272, the same row as its user match) | 0 | 6 |
+| MATH-500 | 29 (3 + 26) | 25 | 12 | 4: 289, 406, 438, 439 (share 0.50 to 0.80) | 25 |
+
+| hard328, vote over 4 | n | Think-SFT + cue | RL | Think-SFT minus RL, points [95 % interval] |
+|---|---|---|---|---|
+| All problems | 328 | 241 | 221 | +6.1 [3.0, 9.5] |
+| Without the 6 flagged | 322 | 235 | 215 | +6.2 [3.1, 9.6] |
+
+- Selftest (`selftest.txt`): a planted exact copy in a user turn is flagged exact. A copy with changed whitespace and LaTeX
+  spacing inside a longer user turn is flagged near (share 1.0). A copy inside an assistant turn is flagged near in the
+  assistant role and not in the user role. A 40 % copy is not flagged (share 0.34). A real training row is found exact in
+  its own shard.
+- The 33 shards that the first scan skipped (code rows) add no match. The hard328 matches come from
+  SYNTHETIC-2-SFT (5) and OpenThoughts3 math (1).
+- Caveats: the rule detects copies of the text only. A paraphrase, a translation or a variant with changed numbers is not
+  detected. About 14 of the first 25 MATH-500 flags are template siblings with other numbers (board result-f6a8bc comments).
+  A problem of fewer than 8 words (13 in MATH-500, none in hard328) is flagged only when a whole message equals it.
