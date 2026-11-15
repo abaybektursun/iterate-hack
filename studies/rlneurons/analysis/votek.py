@@ -1,9 +1,10 @@
 """Vote over k samples of one cell, k = 1 to K (specs/SPEC_votek.md).
 
     uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.votek \
-        --runs runs/<stored 4-sample job> runs/<joined 8-sample run> --out studies/rlneurons/results/votek/math500_base_cue-01
+        --runs runs/<stored 4-sample job> runs/<shard>+runs/<shard>+... --out studies/rlneurons/results/votek/math500_base_cue-01
 
-Run from the repository root. Each run is a run_cell folder (answers.jsonl, metrics.json); attempt 0 of every sample is used and
+Run from the repository root. Each --runs entry is one cell: a run_cell folder (answers.jsonl, metrics.json) or its shards joined
+with + (same config, no problem twice). Attempt 0 of every sample is used and
 the samples of the runs are numbered in the order given. The vote is the rule of analysis/day1_vote.vote, computed from one
 table per problem of which answers agree (rln4_lib.agree on norm_v3), so that a subset costs no grader call; the script asserts
 that it equals day1_vote.vote on the first 4 samples of every problem. For each k: the mean over 200 random
@@ -54,15 +55,23 @@ def main():
     out = pathlib.Path(a.out)
     assert not out.exists(), f"{out} exists: a rerun gets the next number"
     per, cfgs, base = {}, [], 0
-    for run in map(pathlib.Path, a.runs):
-        m = json.loads((run / "metrics.json").read_text())
-        assert m["status"] == "done", (run, m["status"])
-        cfgs.append({"run": str(run), "job_id": m.get("job_id"), "job_ids": m.get("job_ids"), **{k: m["config"][k] for k in ("model", "prompt", "set", "temperature", "top_p", "max_tokens", "seed", "samples", "commit")}})
-        for line in open(run / "answers.jsonl"):
-            r = json.loads(line)
-            if r["attempt"] == 0:
-                per.setdefault(r["problem_index"], {})[base + r["sample"]] = r
-        base += m["config"]["samples"]
+    keys = ("model", "prompt", "set", "temperature", "top_p", "max_tokens", "seed", "samples")
+    for group in a.runs:                                                         # one cell; A+B+C = the shards of one cell
+        seen, first = set(), None
+        for run in map(pathlib.Path, group.split("+")):
+            m = json.loads((run / "metrics.json").read_text())
+            assert m["status"] == "done", (run, m["status"])
+            c = {k: m["config"][k] for k in keys}
+            first = first or c
+            assert c == first, f"{run}: the shards of one cell differ in {c} vs {first}"
+            cfgs.append({"run": str(run), "job_id": m.get("job_id"), "shard": m["config"].get("shard"), "commit": m["config"]["commit"], **c})
+            for line in open(run / "answers.jsonl"):
+                r = json.loads(line)
+                if r["attempt"] == 0:
+                    assert (r["problem_index"], r["sample"]) not in seen, f"{run}: problem {r['problem_index']} sample {r['sample']} is in two shards"
+                    seen.add((r["problem_index"], r["sample"]))
+                    per.setdefault(r["problem_index"], {})[base + r["sample"]] = r
+        base += first["samples"]
     K = base
     probs = sorted(per)
     assert all(sorted(per[p]) == list(range(K)) for p in probs), "a problem lacks a sample"
