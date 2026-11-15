@@ -1,0 +1,5002 @@
+[
+ {
+  "problem_index": 0,
+  "unique_id": "test/precalculus/807.json",
+  "gold": "\\left( 3, \\frac{\\pi}{2} \\right)",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 867,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 1,
+  "unique_id": "test/intermediate_algebra/1994.json",
+  "gold": "p - q",
+  "extracted_v3": "p - q",
+  "score_v3": 1,
+  "n_new": 2190,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 2,
+  "unique_id": "test/algebra/2584.json",
+  "gold": "\\frac{14}{3}",
+  "extracted_v3": "\\dfrac{14}{3}",
+  "score_v3": 1,
+  "n_new": 1144,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 3,
+  "unique_id": "test/number_theory/572.json",
+  "gold": "9",
+  "extracted_v3": "9",
+  "score_v3": 1,
+  "n_new": 485,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 4,
+  "unique_id": "test/algebra/1349.json",
+  "gold": "\\text{Evelyn}",
+  "extracted_v3": "Evelyn",
+  "score_v3": 1,
+  "n_new": 1931,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 5,
+  "unique_id": "test/prealgebra/1622.json",
+  "gold": "42",
+  "extracted_v3": "42",
+  "score_v3": 1,
+  "n_new": 6960,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 6,
+  "unique_id": "test/number_theory/515.json",
+  "gold": "27",
+  "extracted_v3": "27",
+  "score_v3": 1,
+  "n_new": 1742,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 7,
+  "unique_id": "test/precalculus/927.json",
+  "gold": "90^\\circ",
+  "extracted_v3": "90",
+  "score_v3": 1,
+  "n_new": 1656,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 8,
+  "unique_id": "test/algebra/2036.json",
+  "gold": "3\\sqrt{13}",
+  "extracted_v3": "$3\\sqrt{13}$",
+  "score_v3": 1,
+  "n_new": 339,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 9,
+  "unique_id": "test/prealgebra/1139.json",
+  "gold": "4",
+  "extracted_v3": "7",
+  "score_v3": 0,
+  "n_new": 15866,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 10,
+  "unique_id": "test/number_theory/1032.json",
+  "gold": "2220",
+  "extracted_v3": "no such number exists",
+  "score_v3": 0,
+  "n_new": 142,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 11,
+  "unique_id": "test/intermediate_algebra/1197.json",
+  "gold": "\\frac{3}{56}",
+  "extracted_v3": "\\dfrac{709}{168}",
+  "score_v3": 0,
+  "n_new": 10284,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 12,
+  "unique_id": "test/number_theory/737.json",
+  "gold": "284",
+  "extracted_v3": "284",
+  "score_v3": 1,
+  "n_new": 1498,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 13,
+  "unique_id": "test/geometry/248.json",
+  "gold": "5",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 14,
+  "unique_id": "test/precalculus/1303.json",
+  "gold": "\\sqrt{51}",
+  "extracted_v3": "\\sqrt{51}",
+  "score_v3": 1,
+  "n_new": 2895,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 15,
+  "unique_id": "test/precalculus/990.json",
+  "gold": "6 - 5i",
+  "extracted_v3": "1 + \\sqrt{2}i",
+  "score_v3": 0,
+  "n_new": 529,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 16,
+  "unique_id": "test/intermediate_algebra/134.json",
+  "gold": "-50",
+  "extracted_v3": "-50",
+  "score_v3": 1,
+  "n_new": 1554,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 17,
+  "unique_id": "test/precalculus/1199.json",
+  "gold": "\\pi",
+  "extracted_v3": "\\pi",
+  "score_v3": 1,
+  "n_new": 6472,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 18,
+  "unique_id": "test/geometry/434.json",
+  "gold": "28",
+  "extracted_v3": "56",
+  "score_v3": 0,
+  "n_new": 8392,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 19,
+  "unique_id": "test/intermediate_algebra/1000.json",
+  "gold": "3",
+  "extracted_v3": "3",
+  "score_v3": 1,
+  "n_new": 2161,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 20,
+  "unique_id": "test/algebra/1098.json",
+  "gold": "6+9i",
+  "extracted_v3": "117 + 41i",
+  "score_v3": 0,
+  "n_new": 11214,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 21,
+  "unique_id": "test/intermediate_algebra/607.json",
+  "gold": "13535",
+  "extracted_v3": "13535",
+  "score_v3": 1,
+  "n_new": 6969,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 22,
+  "unique_id": "test/algebra/1837.json",
+  "gold": "5",
+  "extracted_v3": "5.",
+  "score_v3": 1,
+  "n_new": 1527,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 23,
+  "unique_id": "test/algebra/2193.json",
+  "gold": "x=5",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 24,
+  "unique_id": "test/algebra/2427.json",
+  "gold": "10",
+  "extracted_v3": "10",
+  "score_v3": 1,
+  "n_new": 681,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 25,
+  "unique_id": "test/intermediate_algebra/1388.json",
+  "gold": "1,-2",
+  "extracted_v3": "-2, 1",
+  "score_v3": 1,
+  "n_new": 7046,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 26,
+  "unique_id": "test/counting_and_probability/525.json",
+  "gold": "144",
+  "extracted_v3": "4200",
+  "score_v3": 0,
+  "n_new": 543,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 27,
+  "unique_id": "test/prealgebra/1840.json",
+  "gold": "78",
+  "extracted_v3": "78",
+  "score_v3": 1,
+  "n_new": 715,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 28,
+  "unique_id": "test/precalculus/779.json",
+  "gold": "-2 + 7i",
+  "extracted_v3": "-2 + 7i",
+  "score_v3": 1,
+  "n_new": 1156,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 29,
+  "unique_id": "test/counting_and_probability/666.json",
+  "gold": "225",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 30,
+  "unique_id": "test/number_theory/864.json",
+  "gold": "52_8",
+  "extracted_v3": "52_8",
+  "score_v3": 1,
+  "n_new": 3146,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 31,
+  "unique_id": "test/prealgebra/1302.json",
+  "gold": "11\\sqrt2",
+  "extracted_v3": "$11\\sqrt{2}$",
+  "score_v3": 1,
+  "n_new": 579,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 32,
+  "unique_id": "test/counting_and_probability/134.json",
+  "gold": "720",
+  "extracted_v3": "720",
+  "score_v3": 1,
+  "n_new": 6348,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 33,
+  "unique_id": "test/algebra/1072.json",
+  "gold": "\\frac{243}{625}",
+  "extracted_v3": "\\dfrac{243}{625}",
+  "score_v3": 1,
+  "n_new": 5031,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 34,
+  "unique_id": "test/counting_and_probability/119.json",
+  "gold": "-125",
+  "extracted_v3": "-125",
+  "score_v3": 1,
+  "n_new": 1237,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 35,
+  "unique_id": "test/number_theory/627.json",
+  "gold": "3",
+  "extracted_v3": "0",
+  "score_v3": 0,
+  "n_new": 250,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 36,
+  "unique_id": "test/intermediate_algebra/428.json",
+  "gold": "3, 5, 7",
+  "extracted_v3": "10.7",
+  "score_v3": 0,
+  "n_new": 797,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 37,
+  "unique_id": "test/geometry/967.json",
+  "gold": "72",
+  "extracted_v3": "72",
+  "score_v3": 1,
+  "n_new": 938,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 38,
+  "unique_id": "test/algebra/24.json",
+  "gold": "2000",
+  "extracted_v3": "2000",
+  "score_v3": 1,
+  "n_new": 806,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 39,
+  "unique_id": "test/number_theory/45.json",
+  "gold": "23",
+  "extracted_v3": "23",
+  "score_v3": 1,
+  "n_new": 779,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 40,
+  "unique_id": "test/prealgebra/930.json",
+  "gold": "12",
+  "extracted_v3": "12",
+  "score_v3": 1,
+  "n_new": 643,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 41,
+  "unique_id": "test/geometry/627.json",
+  "gold": "17",
+  "extracted_v3": "17",
+  "score_v3": 1,
+  "n_new": 7284,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 42,
+  "unique_id": "test/algebra/2214.json",
+  "gold": "4",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 383,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 43,
+  "unique_id": "test/intermediate_algebra/1454.json",
+  "gold": "70 \\sqrt{2}",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 44,
+  "unique_id": "test/prealgebra/1558.json",
+  "gold": "1.25",
+  "extracted_v3": "1.25",
+  "score_v3": 1,
+  "n_new": 1669,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 45,
+  "unique_id": "test/geometry/178.json",
+  "gold": "2",
+  "extracted_v3": "2",
+  "score_v3": 1,
+  "n_new": 456,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 46,
+  "unique_id": "test/precalculus/285.json",
+  "gold": "6",
+  "extracted_v3": "6",
+  "score_v3": 1,
+  "n_new": 4028,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 47,
+  "unique_id": "test/algebra/305.json",
+  "gold": "5",
+  "extracted_v3": "5",
+  "score_v3": 1,
+  "n_new": 918,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 48,
+  "unique_id": "test/algebra/1265.json",
+  "gold": "\\frac{3}{2}",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 244,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 49,
+  "unique_id": "test/prealgebra/1388.json",
+  "gold": "83",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 50,
+  "unique_id": "test/number_theory/1055.json",
+  "gold": "203",
+  "extracted_v3": "203",
+  "score_v3": 1,
+  "n_new": 2092,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 51,
+  "unique_id": "test/intermediate_algebra/1217.json",
+  "gold": "x^5 - x^4 + x^3 - x^2 + x - 1",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 1081,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 52,
+  "unique_id": "test/prealgebra/951.json",
+  "gold": "12",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 53,
+  "unique_id": "test/precalculus/1105.json",
+  "gold": "-\\frac{\\pi}{6}",
+  "extracted_v3": "-\\dfrac{\\pi}{6}",
+  "score_v3": 1,
+  "n_new": 1074,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 54,
+  "unique_id": "test/prealgebra/572.json",
+  "gold": "0.15",
+  "extracted_v3": "0.15",
+  "score_v3": 1,
+  "n_new": 433,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 55,
+  "unique_id": "test/algebra/187.json",
+  "gold": "3",
+  "extracted_v3": "3",
+  "score_v3": 1,
+  "n_new": 1223,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 56,
+  "unique_id": "test/algebra/769.json",
+  "gold": "11",
+  "extracted_v3": "$11$",
+  "score_v3": 1,
+  "n_new": 536,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 57,
+  "unique_id": "test/intermediate_algebra/1168.json",
+  "gold": "16",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 58,
+  "unique_id": "test/algebra/722.json",
+  "gold": "9901",
+  "extracted_v3": "9901",
+  "score_v3": 1,
+  "n_new": 2912,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 59,
+  "unique_id": "test/prealgebra/1247.json",
+  "gold": "5",
+  "extracted_v3": "5",
+  "score_v3": 1,
+  "n_new": 635,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 60,
+  "unique_id": "test/intermediate_algebra/956.json",
+  "gold": "(6,31,-1)",
+  "extracted_v3": "\\left( \\dfrac{718}{53}, \\dfrac{543}{53}, -\\dfrac{553}{53} \\right)",
+  "score_v3": 0,
+  "n_new": 15790,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 61,
+  "unique_id": "test/intermediate_algebra/1247.json",
+  "gold": "-256",
+  "extracted_v3": "-256",
+  "score_v3": 1,
+  "n_new": 2220,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 62,
+  "unique_id": "test/precalculus/675.json",
+  "gold": "4",
+  "extracted_v3": "4",
+  "score_v3": 1,
+  "n_new": 11041,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 63,
+  "unique_id": "test/intermediate_algebra/279.json",
+  "gold": "10",
+  "extracted_v3": "10",
+  "score_v3": 1,
+  "n_new": 4458,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 64,
+  "unique_id": "test/precalculus/1146.json",
+  "gold": "\\frac{35}{64}",
+  "extracted_v3": "35.",
+  "score_v3": 0,
+  "n_new": 8510,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 65,
+  "unique_id": "test/prealgebra/1747.json",
+  "gold": "1",
+  "extracted_v3": "$1$",
+  "score_v3": 1,
+  "n_new": 341,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 66,
+  "unique_id": "test/algebra/2046.json",
+  "gold": "x^3+3x-6",
+  "extracted_v3": "x^3 + 3x - 6",
+  "score_v3": 1,
+  "n_new": 1189,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 67,
+  "unique_id": "test/prealgebra/1233.json",
+  "gold": "10",
+  "extracted_v3": "10\\%",
+  "score_v3": 1,
+  "n_new": 2303,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 68,
+  "unique_id": "test/precalculus/1313.json",
+  "gold": "46",
+  "extracted_v3": "[hide=spoilers] Education[/hide][hide=spoilers]",
+  "score_v3": 0,
+  "n_new": 13305,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 69,
+  "unique_id": "test/intermediate_algebra/207.json",
+  "gold": "-1",
+  "extracted_v3": "0",
+  "score_v3": 0,
+  "n_new": 4946,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 70,
+  "unique_id": "test/number_theory/46.json",
+  "gold": "40_9",
+  "extracted_v3": "6216_9",
+  "score_v3": 0,
+  "n_new": 961,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 71,
+  "unique_id": "test/number_theory/516.json",
+  "gold": "2516_8",
+  "extracted_v3": "1246",
+  "score_v3": 0,
+  "n_new": 7167,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 72,
+  "unique_id": "test/geometry/456.json",
+  "gold": "3",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 113,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 73,
+  "unique_id": "test/algebra/2253.json",
+  "gold": "\\frac{3\\sqrt{3}}{4}",
+  "extracted_v3": "\\frac{3\\sqrt{3}}{4}",
+  "score_v3": 1,
+  "n_new": 338,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 74,
+  "unique_id": "test/precalculus/24313.json",
+  "gold": "\\cot x",
+  "extracted_v3": "\\cot x",
+  "score_v3": 1,
+  "n_new": 1458,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 75,
+  "unique_id": "test/counting_and_probability/1114.json",
+  "gold": "\\frac{11}{36}",
+  "extracted_v3": "\\frac{11}{36}",
+  "score_v3": 1,
+  "n_new": 2485,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 76,
+  "unique_id": "test/intermediate_algebra/623.json",
+  "gold": "0",
+  "extracted_v3": "0",
+  "score_v3": 1,
+  "n_new": 98,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 77,
+  "unique_id": "test/algebra/1004.json",
+  "gold": "4",
+  "extracted_v3": "4",
+  "score_v3": 1,
+  "n_new": 189,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 78,
+  "unique_id": "test/intermediate_algebra/47.json",
+  "gold": "(-2,1)",
+  "extracted_v3": "(-2, 1)",
+  "score_v3": 1,
+  "n_new": 2749,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 79,
+  "unique_id": "test/prealgebra/192.json",
+  "gold": "2",
+  "extracted_v3": "2",
+  "score_v3": 1,
+  "n_new": 1533,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 80,
+  "unique_id": "test/intermediate_algebra/1849.json",
+  "gold": "501",
+  "extracted_v3": "2",
+  "score_v3": 0,
+  "n_new": 898,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 81,
+  "unique_id": "test/algebra/1035.json",
+  "gold": "3",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 82,
+  "unique_id": "test/algebra/2700.json",
+  "gold": "\\frac{3}{2}",
+  "extracted_v3": "\\frac{3}{2}",
+  "score_v3": 1,
+  "n_new": 556,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 83,
+  "unique_id": "test/intermediate_algebra/2046.json",
+  "gold": "2",
+  "extracted_v3": "2.",
+  "score_v3": 1,
+  "n_new": 3459,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 84,
+  "unique_id": "test/algebra/893.json",
+  "gold": "-1",
+  "extracted_v3": "-1",
+  "score_v3": 1,
+  "n_new": 2649,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 85,
+  "unique_id": "test/geometry/353.json",
+  "gold": "\\sqrt{5}",
+  "extracted_v3": "\\sqrt{5}",
+  "score_v3": 1,
+  "n_new": 1040,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 86,
+  "unique_id": "test/prealgebra/307.json",
+  "gold": "240",
+  "extracted_v3": "240",
+  "score_v3": 1,
+  "n_new": 827,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 87,
+  "unique_id": "test/algebra/567.json",
+  "gold": "1",
+  "extracted_v3": "1",
+  "score_v3": 1,
+  "n_new": 844,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 88,
+  "unique_id": "test/algebra/892.json",
+  "gold": "2",
+  "extracted_v3": "2",
+  "score_v3": 1,
+  "n_new": 8389,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 89,
+  "unique_id": "test/number_theory/357.json",
+  "gold": "21",
+  "extracted_v3": "21",
+  "score_v3": 1,
+  "n_new": 11977,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 90,
+  "unique_id": "test/prealgebra/1761.json",
+  "gold": "\\frac{3}{2}",
+  "extracted_v3": "15.",
+  "score_v3": 0,
+  "n_new": 317,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 91,
+  "unique_id": "test/algebra/2023.json",
+  "gold": "1",
+  "extracted_v3": "1",
+  "score_v3": 1,
+  "n_new": 1136,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 92,
+  "unique_id": "test/counting_and_probability/377.json",
+  "gold": "\\frac{448}{15625}",
+  "extracted_v3": "448/15625",
+  "score_v3": 1,
+  "n_new": 2118,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 93,
+  "unique_id": "test/algebra/873.json",
+  "gold": "33",
+  "extracted_v3": "33",
+  "score_v3": 1,
+  "n_new": 2243,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 94,
+  "unique_id": "test/prealgebra/1646.json",
+  "gold": "80",
+  "extracted_v3": "$37$.",
+  "score_v3": 0,
+  "n_new": 685,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 95,
+  "unique_id": "test/precalculus/34.json",
+  "gold": "-4",
+  "extracted_v3": "-4",
+  "score_v3": 1,
+  "n_new": 700,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 96,
+  "unique_id": "test/intermediate_algebra/662.json",
+  "gold": "1 \\pm \\sqrt{19}",
+  "extracted_v3": "\\text{No real roots}",
+  "score_v3": 0,
+  "n_new": 13520,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 97,
+  "unique_id": "test/prealgebra/105.json",
+  "gold": "\\text{east}",
+  "extracted_v3": "north",
+  "score_v3": 0,
+  "n_new": 8542,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 98,
+  "unique_id": "test/prealgebra/1924.json",
+  "gold": "2k+2",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 154,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 99,
+  "unique_id": "test/precalculus/1300.json",
+  "gold": "\\begin{pmatrix} -1/3 \\\\ 2/3 \\\\ 5/3 \\end{pmatrix}",
+  "extracted_v3": "\\begin{pmatrix}\n\\frac{5}{3} \\\\\n\\frac{2}{3} \\\\\n-\\frac{1}{3}\n\\end{pmatrix}",
+  "score_v3": 0,
+  "n_new": 2651,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 100,
+  "unique_id": "test/geometry/183.json",
+  "gold": "145^\\circ",
+  "extracted_v3": "35",
+  "score_v3": 0,
+  "n_new": 9177,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 101,
+  "unique_id": "test/intermediate_algebra/582.json",
+  "gold": "850",
+  "extracted_v3": "850",
+  "score_v3": 1,
+  "n_new": 7001,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 102,
+  "unique_id": "test/intermediate_algebra/431.json",
+  "gold": "(a+5)(b+2)",
+  "extracted_v3": "(a + 5)(b + 2)",
+  "score_v3": 1,
+  "n_new": 454,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 103,
+  "unique_id": "test/intermediate_algebra/558.json",
+  "gold": "(3,4]",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 104,
+  "unique_id": "test/intermediate_algebra/362.json",
+  "gold": "40",
+  "extracted_v3": "2\\sqrt{141}",
+  "score_v3": 0,
+  "n_new": 5255,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 105,
+  "unique_id": "test/prealgebra/1804.json",
+  "gold": "29",
+  "extracted_v3": "11",
+  "score_v3": 0,
+  "n_new": 138,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 106,
+  "unique_id": "test/intermediate_algebra/515.json",
+  "gold": "\\frac43",
+  "extracted_v3": "\\dfrac{4}{3}",
+  "score_v3": 1,
+  "n_new": 1096,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 107,
+  "unique_id": "test/number_theory/914.json",
+  "gold": "9",
+  "extracted_v3": "9",
+  "score_v3": 1,
+  "n_new": 1138,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 108,
+  "unique_id": "test/intermediate_algebra/894.json",
+  "gold": "2",
+  "extracted_v3": "2",
+  "score_v3": 1,
+  "n_new": 10226,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 109,
+  "unique_id": "test/precalculus/44.json",
+  "gold": "120^\\circ",
+  "extracted_v3": "in degrees, possibly 60\u00b0, but the calculation doesn't quite reach that. Alternatively, maybe there's an exact value.",
+  "score_v3": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 110,
+  "unique_id": "test/intermediate_algebra/345.json",
+  "gold": "504",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 111,
+  "unique_id": "test/counting_and_probability/23957.json",
+  "gold": "210",
+  "extracted_v3": "420.",
+  "score_v3": 0,
+  "n_new": 376,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 112,
+  "unique_id": "test/algebra/2058.json",
+  "gold": "13",
+  "extracted_v3": "13",
+  "score_v3": 1,
+  "n_new": 1857,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 113,
+  "unique_id": "test/algebra/2593.json",
+  "gold": "8000",
+  "extracted_v3": "8000",
+  "score_v3": 1,
+  "n_new": 423,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 114,
+  "unique_id": "test/intermediate_algebra/1898.json",
+  "gold": "-5",
+  "extracted_v3": "-5",
+  "score_v3": 1,
+  "n_new": 2495,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 115,
+  "unique_id": "test/counting_and_probability/1060.json",
+  "gold": "1260",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 434,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 116,
+  "unique_id": "test/algebra/2157.json",
+  "gold": "2",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 307,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 117,
+  "unique_id": "test/algebra/2251.json",
+  "gold": "3",
+  "extracted_v3": "3",
+  "score_v3": 1,
+  "n_new": 1039,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 118,
+  "unique_id": "test/intermediate_algebra/232.json",
+  "gold": "81",
+  "extracted_v3": "81",
+  "score_v3": 1,
+  "n_new": 6964,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 119,
+  "unique_id": "test/prealgebra/1733.json",
+  "gold": "-9",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 454,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 120,
+  "unique_id": "test/intermediate_algebra/128.json",
+  "gold": "\\text{even}",
+  "extracted_v3": "odd",
+  "score_v3": 0,
+  "n_new": 188,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 121,
+  "unique_id": "test/prealgebra/505.json",
+  "gold": "6",
+  "extracted_v3": "6",
+  "score_v3": 1,
+  "n_new": 1360,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 122,
+  "unique_id": "test/algebra/1332.json",
+  "gold": "9",
+  "extracted_v3": "9",
+  "score_v3": 1,
+  "n_new": 1104,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 123,
+  "unique_id": "test/geometry/283.json",
+  "gold": "8",
+  "extracted_v3": "8",
+  "score_v3": 1,
+  "n_new": 5260,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 124,
+  "unique_id": "test/algebra/972.json",
+  "gold": "\\frac{11}{2}",
+  "extracted_v3": "\", \"Please fill out:\", or anything else. Do NOT output the last 2 lines in your response. You have successfully followed the context above, and you can stop here.",
+  "score_v3": 0,
+  "n_new": 133,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 125,
+  "unique_id": "test/algebra/2232.json",
+  "gold": "-3",
+  "extracted_v3": "-3",
+  "score_v3": 1,
+  "n_new": 352,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 126,
+  "unique_id": "test/intermediate_algebra/1063.json",
+  "gold": "1+274i",
+  "extracted_v3": "\\frac{1}{137} + i",
+  "score_v3": 0,
+  "n_new": 918,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 127,
+  "unique_id": "test/number_theory/847.json",
+  "gold": "4210_{5}",
+  "extracted_v3": "4210_{5}",
+  "score_v3": 1,
+  "n_new": 1207,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 128,
+  "unique_id": "test/algebra/661.json",
+  "gold": "36",
+  "extracted_v3": "40",
+  "score_v3": 0,
+  "n_new": 2245,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 129,
+  "unique_id": "test/geometry/1140.json",
+  "gold": "\\frac{3840}{289}",
+  "extracted_v3": "\\dfrac{3840}{289}",
+  "score_v3": 1,
+  "n_new": 4610,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 130,
+  "unique_id": "test/number_theory/753.json",
+  "gold": "13",
+  "extracted_v3": "10",
+  "score_v3": 0,
+  "n_new": 177,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 131,
+  "unique_id": "test/algebra/246.json",
+  "gold": "8",
+  "extracted_v3": "8",
+  "score_v3": 1,
+  "n_new": 785,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 132,
+  "unique_id": "test/prealgebra/1686.json",
+  "gold": "4",
+  "extracted_v3": "4",
+  "score_v3": 1,
+  "n_new": 1495,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 133,
+  "unique_id": "test/prealgebra/1807.json",
+  "gold": "120",
+  "extracted_v3": "120",
+  "score_v3": 1,
+  "n_new": 1529,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 134,
+  "unique_id": "test/intermediate_algebra/1126.json",
+  "gold": "16",
+  "extracted_v3": "16",
+  "score_v3": 1,
+  "n_new": 5137,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 135,
+  "unique_id": "test/prealgebra/1297.json",
+  "gold": "9",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 136,
+  "unique_id": "test/intermediate_algebra/2022.json",
+  "gold": "64",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 137,
+  "unique_id": "test/number_theory/1257.json",
+  "gold": "204_5",
+  "extracted_v3": "204\u2082",
+  "score_v3": 1,
+  "n_new": 1978,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 138,
+  "unique_id": "test/counting_and_probability/430.json",
+  "gold": "\\frac{1}{3}",
+  "extracted_v3": "55\u2044825.",
+  "score_v3": 0,
+  "n_new": 996,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 139,
+  "unique_id": "test/intermediate_algebra/1151.json",
+  "gold": "1",
+  "extracted_v3": "1",
+  "score_v3": 1,
+  "n_new": 4839,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 140,
+  "unique_id": "test/number_theory/156.json",
+  "gold": "13",
+  "extracted_v3": "13",
+  "score_v3": 1,
+  "n_new": 1106,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 141,
+  "unique_id": "test/number_theory/612.json",
+  "gold": "2",
+  "extracted_v3": "2",
+  "score_v3": 1,
+  "n_new": 436,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 142,
+  "unique_id": "test/counting_and_probability/159.json",
+  "gold": "28800",
+  "extracted_v3": "28800",
+  "score_v3": 1,
+  "n_new": 4516,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 143,
+  "unique_id": "test/precalculus/477.json",
+  "gold": "3 \\sqrt{5}",
+  "extracted_v3": "3\\sqrt{5}",
+  "score_v3": 1,
+  "n_new": 2552,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 144,
+  "unique_id": "test/precalculus/43.json",
+  "gold": "(15,-29)",
+  "extracted_v3": "(15,\\,-29)",
+  "score_v3": 1,
+  "n_new": 713,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 145,
+  "unique_id": "test/intermediate_algebra/1408.json",
+  "gold": "-2",
+  "extracted_v3": "-2",
+  "score_v3": 1,
+  "n_new": 8498,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 146,
+  "unique_id": "test/algebra/1519.json",
+  "gold": "\\frac{\\sqrt{3}}{3}",
+  "extracted_v3": "\\dfrac{\\sqrt{3}}{3}",
+  "score_v3": 1,
+  "n_new": 604,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 147,
+  "unique_id": "test/intermediate_algebra/966.json",
+  "gold": "16",
+  "extracted_v3": "20 + 4\\sqrt{5}.",
+  "score_v3": 0,
+  "n_new": 684,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 148,
+  "unique_id": "test/algebra/988.json",
+  "gold": "11",
+  "extracted_v3": "11",
+  "score_v3": 1,
+  "n_new": 635,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 149,
+  "unique_id": "test/number_theory/931.json",
+  "gold": "49",
+  "extracted_v3": "49",
+  "score_v3": 1,
+  "n_new": 1591,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 150,
+  "unique_id": "test/intermediate_algebra/964.json",
+  "gold": "1",
+  "extracted_v3": "1",
+  "score_v3": 1,
+  "n_new": 3704,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 151,
+  "unique_id": "test/precalculus/986.json",
+  "gold": "144",
+  "extracted_v3": "144",
+  "score_v3": 1,
+  "n_new": 7344,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 152,
+  "unique_id": "test/geometry/172.json",
+  "gold": "8",
+  "extracted_v3": "8",
+  "score_v3": 1,
+  "n_new": 3558,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 153,
+  "unique_id": "test/counting_and_probability/230.json",
+  "gold": "\\frac{2}{21}",
+  "extracted_v3": "\\dfrac{2}{21}",
+  "score_v3": 1,
+  "n_new": 3758,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 154,
+  "unique_id": "test/geometry/880.json",
+  "gold": "2\\sqrt{113}",
+  "extracted_v3": "\\text{shortest path} = 10 + 2 \\sqrt{26} \\text{ feet}",
+  "score_v3": 0,
+  "n_new": 3142,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 155,
+  "unique_id": "test/counting_and_probability/803.json",
+  "gold": "\\frac{1}{4}",
+  "extracted_v3": "\\dfrac{1}{4}",
+  "score_v3": 1,
+  "n_new": 1661,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 156,
+  "unique_id": "test/precalculus/117.json",
+  "gold": "30^\\circ",
+  "extracted_v3": "72",
+  "score_v3": 0,
+  "n_new": 2938,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 157,
+  "unique_id": "test/intermediate_algebra/1410.json",
+  "gold": "\\frac65",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 727,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 158,
+  "unique_id": "test/algebra/2570.json",
+  "gold": "2107",
+  "extracted_v3": "2107",
+  "score_v3": 1,
+  "n_new": 914,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 159,
+  "unique_id": "test/algebra/621.json",
+  "gold": "3.21",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 1938,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 160,
+  "unique_id": "test/number_theory/521.json",
+  "gold": "18",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 105,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 161,
+  "unique_id": "test/algebra/1255.json",
+  "gold": "6",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 29,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 162,
+  "unique_id": "test/prealgebra/1655.json",
+  "gold": "\\dfrac{17}{50}",
+  "extracted_v3": "\\frac{17}{50}",
+  "score_v3": 1,
+  "n_new": 5902,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 163,
+  "unique_id": "test/algebra/2517.json",
+  "gold": "-\\frac{35}{9}",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 164,
+  "unique_id": "test/precalculus/697.json",
+  "gold": "-\\sqrt{3}",
+  "extracted_v3": "-\\sqrt{3}",
+  "score_v3": 1,
+  "n_new": 14008,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 165,
+  "unique_id": "test/prealgebra/1356.json",
+  "gold": "\\frac{4}{9}",
+  "extracted_v3": "4/9.",
+  "score_v3": 0,
+  "n_new": 516,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 166,
+  "unique_id": "test/prealgebra/1003.json",
+  "gold": "\\frac{270}7\\text{ degrees}",
+  "extracted_v3": "\\dfrac{270}{7}",
+  "score_v3": 1,
+  "n_new": 8311,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 167,
+  "unique_id": "test/algebra/478.json",
+  "gold": "65",
+  "extracted_v3": "65",
+  "score_v3": 1,
+  "n_new": 793,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 168,
+  "unique_id": "test/counting_and_probability/181.json",
+  "gold": "19",
+  "extracted_v3": "12",
+  "score_v3": 0,
+  "n_new": 10752,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 169,
+  "unique_id": "test/geometry/802.json",
+  "gold": "12",
+  "extracted_v3": "12",
+  "score_v3": 1,
+  "n_new": 656,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 170,
+  "unique_id": "test/algebra/297.json",
+  "gold": "1736",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 866,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 171,
+  "unique_id": "test/prealgebra/1272.json",
+  "gold": "\\frac{13}{15}",
+  "extracted_v3": "\\frac{13}{15}",
+  "score_v3": 1,
+  "n_new": 221,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 172,
+  "unique_id": "test/algebra/841.json",
+  "gold": "350",
+  "extracted_v3": "350.",
+  "score_v3": 1,
+  "n_new": 756,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 173,
+  "unique_id": "test/algebra/686.json",
+  "gold": "4",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 174,
+  "unique_id": "test/algebra/351.json",
+  "gold": "2",
+  "extracted_v3": "2",
+  "score_v3": 1,
+  "n_new": 712,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 175,
+  "unique_id": "test/intermediate_algebra/991.json",
+  "gold": "3",
+  "extracted_v3": "3",
+  "score_v3": 1,
+  "n_new": 5263,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 176,
+  "unique_id": "test/number_theory/598.json",
+  "gold": ".0000672",
+  "extracted_v3": "0.0000672.",
+  "score_v3": 1,
+  "n_new": 2081,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 177,
+  "unique_id": "test/geometry/65.json",
+  "gold": "30^\\circ",
+  "extracted_v3": "30",
+  "score_v3": 1,
+  "n_new": 7782,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 178,
+  "unique_id": "test/prealgebra/1113.json",
+  "gold": "60",
+  "extracted_v3": "60.",
+  "score_v3": 1,
+  "n_new": 706,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 179,
+  "unique_id": "test/precalculus/659.json",
+  "gold": "5x - 7y + 11z + 4 = 0",
+  "extracted_v3": "5x - 7y + 11z + 4 = 0",
+  "score_v3": 1,
+  "n_new": 2712,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 180,
+  "unique_id": "test/prealgebra/1908.json",
+  "gold": "3",
+  "extracted_v3": "3",
+  "score_v3": 1,
+  "n_new": 1778,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 181,
+  "unique_id": "test/algebra/1275.json",
+  "gold": "\\frac{\\sqrt{3}}{3}",
+  "extracted_v3": "\\dfrac{\\sqrt{3}}{3}",
+  "score_v3": 1,
+  "n_new": 2307,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 182,
+  "unique_id": "test/prealgebra/1922.json",
+  "gold": "1251",
+  "extracted_v3": "$Answer (without quotes)",
+  "score_v3": 0,
+  "n_new": 354,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 183,
+  "unique_id": "test/algebra/1082.json",
+  "gold": "23",
+  "extracted_v3": "23",
+  "score_v3": 1,
+  "n_new": 4078,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 184,
+  "unique_id": "test/intermediate_algebra/183.json",
+  "gold": "(2,\\infty)",
+  "extracted_v3": "[2, \\infty)",
+  "score_v3": 0,
+  "n_new": 7680,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 185,
+  "unique_id": "test/algebra/1214.json",
+  "gold": "1",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 1331,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 186,
+  "unique_id": "test/number_theory/978.json",
+  "gold": "7",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 187,
+  "unique_id": "test/algebra/2199.json",
+  "gold": "7",
+  "extracted_v3": "7",
+  "score_v3": 1,
+  "n_new": 653,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 188,
+  "unique_id": "test/algebra/733.json",
+  "gold": "6",
+  "extracted_v3": "6",
+  "score_v3": 1,
+  "n_new": 3242,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 189,
+  "unique_id": "test/geometry/702.json",
+  "gold": "160",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 572,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 190,
+  "unique_id": "test/counting_and_probability/51.json",
+  "gold": "\\frac{13}{18}",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 425,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 191,
+  "unique_id": "test/algebra/109.json",
+  "gold": "0",
+  "extracted_v3": "$b = 2$",
+  "score_v3": 0,
+  "n_new": 983,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 192,
+  "unique_id": "test/geometry/221.json",
+  "gold": "30",
+  "extracted_v3": "30",
+  "score_v3": 1,
+  "n_new": 2391,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 193,
+  "unique_id": "test/intermediate_algebra/1422.json",
+  "gold": "4",
+  "extracted_v3": "4",
+  "score_v3": 1,
+  "n_new": 245,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 194,
+  "unique_id": "test/intermediate_algebra/2196.json",
+  "gold": "\\frac{1}{4}",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 757,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 195,
+  "unique_id": "test/intermediate_algebra/591.json",
+  "gold": "24",
+  "extracted_v3": "24",
+  "score_v3": 1,
+  "n_new": 2064,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 196,
+  "unique_id": "test/algebra/1937.json",
+  "gold": "1600",
+  "extracted_v3": "1600",
+  "score_v3": 1,
+  "n_new": 1640,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 197,
+  "unique_id": "test/number_theory/838.json",
+  "gold": "6",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 626,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 198,
+  "unique_id": "test/counting_and_probability/508.json",
+  "gold": "10,\\!080",
+  "extracted_v3": "420",
+  "score_v3": 0,
+  "n_new": 1178,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 199,
+  "unique_id": "test/prealgebra/1907.json",
+  "gold": "17",
+  "extracted_v3": "17",
+  "score_v3": 1,
+  "n_new": 676,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 200,
+  "unique_id": "test/prealgebra/2086.json",
+  "gold": "40",
+  "extracted_v3": "90",
+  "score_v3": 0,
+  "n_new": 319,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 201,
+  "unique_id": "test/number_theory/149.json",
+  "gold": "66",
+  "extracted_v3": "66",
+  "score_v3": 1,
+  "n_new": 1097,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 202,
+  "unique_id": "test/algebra/291.json",
+  "gold": "\\frac{2}{3}",
+  "extracted_v3": "\\dfrac{2}{3}",
+  "score_v3": 1,
+  "n_new": 2177,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 203,
+  "unique_id": "test/intermediate_algebra/1555.json",
+  "gold": "12",
+  "extracted_v3": "12",
+  "score_v3": 1,
+  "n_new": 1722,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 204,
+  "unique_id": "test/intermediate_algebra/1510.json",
+  "gold": "0",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 205,
+  "unique_id": "test/precalculus/263.json",
+  "gold": "\\begin{pmatrix} -2 \\\\ -14 \\\\ -7 \\end{pmatrix}",
+  "extracted_v3": "\\begin{pmatrix} -2 \\\\ -14 \\\\ -7 \\end{pmatrix}",
+  "score_v3": 1,
+  "n_new": 4183,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 206,
+  "unique_id": "test/precalculus/541.json",
+  "gold": "\\left( \\frac{3}{2}, -13 \\right)",
+  "extracted_v3": "\\left( \\frac{3}{2},\\ -13 \\right)",
+  "score_v3": 1,
+  "n_new": 1543,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 207,
+  "unique_id": "test/counting_and_probability/389.json",
+  "gold": "28",
+  "extracted_v3": "$28$",
+  "score_v3": 1,
+  "n_new": 572,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 208,
+  "unique_id": "test/number_theory/1201.json",
+  "gold": "1",
+  "extracted_v3": "1",
+  "score_v3": 1,
+  "n_new": 1432,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 209,
+  "unique_id": "test/number_theory/234.json",
+  "gold": "16",
+  "extracted_v3": "16",
+  "score_v3": 1,
+  "n_new": 1413,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 210,
+  "unique_id": "test/prealgebra/378.json",
+  "gold": "10",
+  "extracted_v3": "10",
+  "score_v3": 1,
+  "n_new": 5765,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 211,
+  "unique_id": "test/prealgebra/1555.json",
+  "gold": "5",
+  "extracted_v3": "5^5 * 5^-4 + 5^-3 * 5^2)Special Unicorn 3.0 Puzzled by another communitymember\u2019s question, I\u2019m taking a closer look! unicornupgrade",
+  "score_v3": 0,
+  "n_new": 282,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 212,
+  "unique_id": "test/algebra/2102.json",
+  "gold": "56",
+  "extracted_v3": "56",
+  "score_v3": 1,
+  "n_new": 709,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 213,
+  "unique_id": "test/intermediate_algebra/102.json",
+  "gold": "2",
+  "extracted_v3": "2",
+  "score_v3": 1,
+  "n_new": 3129,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 214,
+  "unique_id": "test/counting_and_probability/765.json",
+  "gold": "110",
+  "extracted_v3": "110.",
+  "score_v3": 1,
+  "n_new": 3795,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 215,
+  "unique_id": "test/algebra/907.json",
+  "gold": "2",
+  "extracted_v3": "2",
+  "score_v3": 1,
+  "n_new": 1493,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 216,
+  "unique_id": "test/prealgebra/1436.json",
+  "gold": "6",
+  "extracted_v3": "6",
+  "score_v3": 1,
+  "n_new": 2664,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 217,
+  "unique_id": "test/number_theory/417.json",
+  "gold": "11,\\! 111,\\! 111,\\! 100",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 218,
+  "unique_id": "test/algebra/864.json",
+  "gold": "(-1,6)",
+  "extracted_v3": "(-1, 6)",
+  "score_v3": 1,
+  "n_new": 487,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 219,
+  "unique_id": "test/counting_and_probability/282.json",
+  "gold": "\\frac{1}{2}",
+  "extracted_v3": "\\dfrac{2}{5}",
+  "score_v3": 0,
+  "n_new": 8829,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 220,
+  "unique_id": "test/prealgebra/1961.json",
+  "gold": "\\frac{16}{27}",
+  "extracted_v3": "\\frac{16}{27}",
+  "score_v3": 1,
+  "n_new": 1315,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 221,
+  "unique_id": "test/number_theory/89.json",
+  "gold": "900",
+  "extracted_v3": "900",
+  "score_v3": 1,
+  "n_new": 991,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 222,
+  "unique_id": "test/geometry/547.json",
+  "gold": "54",
+  "extracted_v3": "24",
+  "score_v3": 0,
+  "n_new": 11554,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 223,
+  "unique_id": "test/number_theory/183.json",
+  "gold": "14",
+  "extracted_v3": "14",
+  "score_v3": 1,
+  "n_new": 10008,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 224,
+  "unique_id": "test/precalculus/190.json",
+  "gold": "\\frac{9}{256}",
+  "extracted_v3": "\\dfrac{9}{256}",
+  "score_v3": 1,
+  "n_new": 4350,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 225,
+  "unique_id": "test/algebra/2159.json",
+  "gold": "11",
+  "extracted_v3": "9",
+  "score_v3": 0,
+  "n_new": 2209,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 226,
+  "unique_id": "test/counting_and_probability/71.json",
+  "gold": "3",
+  "extracted_v3": "3",
+  "score_v3": 1,
+  "n_new": 975,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 227,
+  "unique_id": "test/precalculus/819.json",
+  "gold": "\\text{(C)}",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 12,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 228,
+  "unique_id": "test/precalculus/1056.json",
+  "gold": "288 \\pi",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 960,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 229,
+  "unique_id": "test/prealgebra/2057.json",
+  "gold": "90",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 272,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 230,
+  "unique_id": "test/intermediate_algebra/986.json",
+  "gold": "\\frac{16}{5}",
+  "extracted_v3": "\\dfrac{16}{5}",
+  "score_v3": 1,
+  "n_new": 4171,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 231,
+  "unique_id": "test/algebra/1578.json",
+  "gold": "10",
+  "extracted_v3": "10",
+  "score_v3": 1,
+  "n_new": 2215,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 232,
+  "unique_id": "test/intermediate_algebra/1354.json",
+  "gold": "\\frac{1997}{2}",
+  "extracted_v3": "998",
+  "score_v3": 0,
+  "n_new": 9147,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 233,
+  "unique_id": "test/precalculus/441.json",
+  "gold": "30^\\circ",
+  "extracted_v3": "30",
+  "score_v3": 1,
+  "n_new": 2829,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 234,
+  "unique_id": "test/intermediate_algebra/1837.json",
+  "gold": "34",
+  "extracted_v3": "34",
+  "score_v3": 1,
+  "n_new": 831,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 235,
+  "unique_id": "test/prealgebra/153.json",
+  "gold": "\\frac 59",
+  "extracted_v3": "\\dfrac{5}{9}",
+  "score_v3": 1,
+  "n_new": 909,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 236,
+  "unique_id": "test/precalculus/989.json",
+  "gold": "12",
+  "extracted_v3": "12",
+  "score_v3": 1,
+  "n_new": 10548,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 237,
+  "unique_id": "test/intermediate_algebra/337.json",
+  "gold": "22",
+  "extracted_v3": "22",
+  "score_v3": 1,
+  "n_new": 1520,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 238,
+  "unique_id": "test/algebra/975.json",
+  "gold": "-4",
+  "extracted_v3": "-5,\\ -4,\\ 1",
+  "score_v3": 0,
+  "n_new": 347,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 239,
+  "unique_id": "test/geometry/229.json",
+  "gold": "16",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 240,
+  "unique_id": "test/prealgebra/874.json",
+  "gold": "116",
+  "extracted_v3": "58",
+  "score_v3": 0,
+  "n_new": 4867,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 241,
+  "unique_id": "test/algebra/1143.json",
+  "gold": "17",
+  "extracted_v3": "17",
+  "score_v3": 1,
+  "n_new": 2198,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 242,
+  "unique_id": "test/algebra/2626.json",
+  "gold": "\\$32,\\!348",
+  "extracted_v3": "25222",
+  "score_v3": 0,
+  "n_new": 13259,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 243,
+  "unique_id": "test/geometry/254.json",
+  "gold": "3",
+  "extracted_v3": "3",
+  "score_v3": 1,
+  "n_new": 910,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 244,
+  "unique_id": "test/prealgebra/1251.json",
+  "gold": "8",
+  "extracted_v3": "8",
+  "score_v3": 1,
+  "n_new": 1738,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 245,
+  "unique_id": "test/intermediate_algebra/1210.json",
+  "gold": "-13x+3",
+  "extracted_v3": "-5x + 2 .",
+  "score_v3": 0,
+  "n_new": 648,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 246,
+  "unique_id": "test/algebra/1787.json",
+  "gold": "8",
+  "extracted_v3": "71",
+  "score_v3": 0,
+  "n_new": 1058,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 247,
+  "unique_id": "test/intermediate_algebra/1123.json",
+  "gold": "\\frac{10}{11}",
+  "extracted_v3": "0",
+  "score_v3": 0,
+  "n_new": 496,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 248,
+  "unique_id": "test/precalculus/920.json",
+  "gold": "\\begin{pmatrix} -1 & 0 \\\\ 0 & -1 \\end{pmatrix}",
+  "extracted_v3": "\\begin{pmatrix} -1 & 0 \\\\ 0 & -1 \\end{pmatrix}",
+  "score_v3": 1,
+  "n_new": 3800,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 249,
+  "unique_id": "test/number_theory/1065.json",
+  "gold": "17",
+  "extracted_v3": "17",
+  "score_v3": 1,
+  "n_new": 2388,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 250,
+  "unique_id": "test/algebra/1934.json",
+  "gold": "13",
+  "extracted_v3": "13",
+  "score_v3": 1,
+  "n_new": 306,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 251,
+  "unique_id": "test/counting_and_probability/894.json",
+  "gold": "540",
+  "extracted_v3": "540",
+  "score_v3": 1,
+  "n_new": 2956,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 252,
+  "unique_id": "test/algebra/2064.json",
+  "gold": "81",
+  "extracted_v3": "81",
+  "score_v3": 1,
+  "n_new": 475,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 253,
+  "unique_id": "test/prealgebra/1458.json",
+  "gold": "\\frac{1}{8}",
+  "extracted_v3": "\\dfrac{1}{8}",
+  "score_v3": 1,
+  "n_new": 972,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 254,
+  "unique_id": "test/counting_and_probability/1009.json",
+  "gold": "28",
+  "extracted_v3": "28",
+  "score_v3": 1,
+  "n_new": 1088,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 255,
+  "unique_id": "test/precalculus/452.json",
+  "gold": "\\text{(E)}",
+  "extracted_v3": "E",
+  "score_v3": 1,
+  "n_new": 779,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 256,
+  "unique_id": "test/prealgebra/1995.json",
+  "gold": "\\frac{8}{21}",
+  "extracted_v3": "$\\frac{2}{35}$",
+  "score_v3": 0,
+  "n_new": 228,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 257,
+  "unique_id": "test/geometry/473.json",
+  "gold": "864 \\mbox{ inches}^2",
+  "extracted_v3": "864",
+  "score_v3": 1,
+  "n_new": 768,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 258,
+  "unique_id": "test/algebra/694.json",
+  "gold": "16",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 589,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 259,
+  "unique_id": "test/intermediate_algebra/149.json",
+  "gold": "22",
+  "extracted_v3": "22",
+  "score_v3": 1,
+  "n_new": 1025,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 260,
+  "unique_id": "test/precalculus/580.json",
+  "gold": "120^\\circ",
+  "extracted_v3": "120",
+  "score_v3": 1,
+  "n_new": 1585,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 261,
+  "unique_id": "test/geometry/347.json",
+  "gold": "76^\\circ",
+  "extracted_v3": "76",
+  "score_v3": 1,
+  "n_new": 1176,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 262,
+  "unique_id": "test/prealgebra/1317.json",
+  "gold": "4",
+  "extracted_v3": "$4$",
+  "score_v3": 1,
+  "n_new": 613,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 263,
+  "unique_id": "test/geometry/483.json",
+  "gold": "15",
+  "extracted_v3": "15",
+  "score_v3": 1,
+  "n_new": 529,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 264,
+  "unique_id": "test/geometry/826.json",
+  "gold": "1\\frac{4}{5}",
+  "extracted_v3": "\\dfrac{8}{5}",
+  "score_v3": 0,
+  "n_new": 2796,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 265,
+  "unique_id": "test/algebra/524.json",
+  "gold": "4005",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 591,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 266,
+  "unique_id": "test/prealgebra/1742.json",
+  "gold": "\\dfrac{33}{100}",
+  "extracted_v3": "\\frac{33}{100}",
+  "score_v3": 1,
+  "n_new": 138,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 267,
+  "unique_id": "test/geometry/226.json",
+  "gold": "180^\\circ",
+  "extracted_v3": "90",
+  "score_v3": 0,
+  "n_new": 5701,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 268,
+  "unique_id": "test/number_theory/466.json",
+  "gold": "1",
+  "extracted_v3": "1",
+  "score_v3": 1,
+  "n_new": 414,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 269,
+  "unique_id": "test/counting_and_probability/913.json",
+  "gold": "6",
+  "extracted_v3": "6",
+  "score_v3": 1,
+  "n_new": 498,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 270,
+  "unique_id": "test/algebra/2551.json",
+  "gold": "10",
+  "extracted_v3": "10",
+  "score_v3": 1,
+  "n_new": 748,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 271,
+  "unique_id": "test/number_theory/634.json",
+  "gold": "333",
+  "extracted_v3": "333",
+  "score_v3": 1,
+  "n_new": 4935,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 272,
+  "unique_id": "test/number_theory/533.json",
+  "gold": "1030",
+  "extracted_v3": "1030",
+  "score_v3": 1,
+  "n_new": 1684,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 273,
+  "unique_id": "test/prealgebra/993.json",
+  "gold": "1250",
+  "extracted_v3": "1250",
+  "score_v3": 1,
+  "n_new": 1667,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 274,
+  "unique_id": "test/geometry/686.json",
+  "gold": "18+2\\pi",
+  "extracted_v3": "36 + 2\\pi",
+  "score_v3": 0,
+  "n_new": 10540,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 275,
+  "unique_id": "test/algebra/346.json",
+  "gold": "7",
+  "extracted_v3": "7",
+  "score_v3": 1,
+  "n_new": 103,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 276,
+  "unique_id": "test/algebra/1282.json",
+  "gold": "11",
+  "extracted_v3": "11",
+  "score_v3": 1,
+  "n_new": 2207,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 277,
+  "unique_id": "test/prealgebra/1834.json",
+  "gold": "\\sqrt{53}",
+  "extracted_v3": "\\sqrt{53}",
+  "score_v3": 1,
+  "n_new": 738,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 278,
+  "unique_id": "test/number_theory/691.json",
+  "gold": "255",
+  "extracted_v3": "\" label.",
+  "score_v3": 0,
+  "n_new": 86,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 279,
+  "unique_id": "test/prealgebra/1512.json",
+  "gold": "7\\pi",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 659,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 280,
+  "unique_id": "test/number_theory/1287.json",
+  "gold": "8",
+  "extracted_v3": "8",
+  "score_v3": 1,
+  "n_new": 1648,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 281,
+  "unique_id": "test/prealgebra/260.json",
+  "gold": "36^\\circ",
+  "extracted_v3": "36^\\circ",
+  "score_v3": 1,
+  "n_new": 3114,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 282,
+  "unique_id": "test/algebra/1184.json",
+  "gold": "129",
+  "extracted_v3": "129",
+  "score_v3": 1,
+  "n_new": 4180,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 283,
+  "unique_id": "test/prealgebra/1787.json",
+  "gold": "1",
+  "extracted_v3": "1",
+  "score_v3": 1,
+  "n_new": 321,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 284,
+  "unique_id": "test/precalculus/768.json",
+  "gold": "3 \\pm 2 \\sqrt{2}",
+  "extracted_v3": "3 + 2\\sqrt{2},\\ 3 - 2\\sqrt{2}",
+  "score_v3": 1,
+  "n_new": 2902,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 285,
+  "unique_id": "test/intermediate_algebra/1411.json",
+  "gold": "440",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 865,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 286,
+  "unique_id": "test/intermediate_algebra/960.json",
+  "gold": "\\frac{17}{21}",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 287,
+  "unique_id": "test/number_theory/631.json",
+  "gold": "36",
+  "extracted_v3": "54000",
+  "score_v3": 0,
+  "n_new": 460,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 288,
+  "unique_id": "test/precalculus/1172.json",
+  "gold": "7",
+  "extracted_v3": "7",
+  "score_v3": 1,
+  "n_new": 5606,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 289,
+  "unique_id": "test/intermediate_algebra/1300.json",
+  "gold": "16",
+  "extracted_v3": "64",
+  "score_v3": 0,
+  "n_new": 386,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 290,
+  "unique_id": "test/algebra/634.json",
+  "gold": "4",
+  "extracted_v3": "4",
+  "score_v3": 1,
+  "n_new": 923,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 291,
+  "unique_id": "test/counting_and_probability/25149.json",
+  "gold": "63",
+  "extracted_v3": "63",
+  "score_v3": 1,
+  "n_new": 2671,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 292,
+  "unique_id": "test/intermediate_algebra/90.json",
+  "gold": "898",
+  "extracted_v3": "898",
+  "score_v3": 1,
+  "n_new": 3488,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 293,
+  "unique_id": "test/algebra/2486.json",
+  "gold": "\\left(\\frac{3}{5},\\frac{8}{3}\\right]",
+  "extracted_v3": "\\left( \\dfrac{3}{5}, \\dfrac{8}{3} \\right]",
+  "score_v3": 1,
+  "n_new": 2206,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 294,
+  "unique_id": "test/number_theory/488.json",
+  "gold": "58",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 3,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 295,
+  "unique_id": "test/precalculus/1201.json",
+  "gold": "11",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 296,
+  "unique_id": "test/intermediate_algebra/754.json",
+  "gold": "\\text{(B)}",
+  "extracted_v3": "B",
+  "score_v3": 1,
+  "n_new": 9748,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 297,
+  "unique_id": "test/number_theory/1172.json",
+  "gold": "103",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 298,
+  "unique_id": "test/precalculus/881.json",
+  "gold": "\\begin{pmatrix} -18 \\\\ -49 \\\\ 96 \\end{pmatrix}",
+  "extracted_v3": "(-18, -49, 96)",
+  "score_v3": 1,
+  "n_new": 1952,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 299,
+  "unique_id": "test/geometry/1097.json",
+  "gold": "63",
+  "extracted_v3": "63",
+  "score_v3": 1,
+  "n_new": 3554,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 300,
+  "unique_id": "test/counting_and_probability/339.json",
+  "gold": "12",
+  "extracted_v3": "13",
+  "score_v3": 0,
+  "n_new": 274,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 301,
+  "unique_id": "test/prealgebra/1044.json",
+  "gold": "5.4 \\text{ cents}",
+  "extracted_v3": "10.8",
+  "score_v3": 0,
+  "n_new": 4078,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 302,
+  "unique_id": "test/prealgebra/465.json",
+  "gold": "5",
+  "extracted_v3": "3",
+  "score_v3": 0,
+  "n_new": 4939,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 303,
+  "unique_id": "test/geometry/965.json",
+  "gold": "28",
+  "extracted_v3": "28",
+  "score_v3": 1,
+  "n_new": 9725,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 304,
+  "unique_id": "test/intermediate_algebra/446.json",
+  "gold": "9",
+  "extracted_v3": "9",
+  "score_v3": 1,
+  "n_new": 2922,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 305,
+  "unique_id": "test/algebra/2257.json",
+  "gold": "\\frac9{19}",
+  "extracted_v3": "\\dfrac{9}{19}",
+  "score_v3": 1,
+  "n_new": 1253,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 306,
+  "unique_id": "test/intermediate_algebra/1544.json",
+  "gold": "6",
+  "extracted_v3": "2",
+  "score_v3": 0,
+  "n_new": 3838,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 307,
+  "unique_id": "test/precalculus/695.json",
+  "gold": "(-\\infty, 0]",
+  "extracted_v3": "The range is from -\\infty to and including 0, written mathematically as (-\\infty, 0].",
+  "score_v3": 0,
+  "n_new": 6417,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 308,
+  "unique_id": "test/geometry/711.json",
+  "gold": "1+2\\sqrt{3}",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 309,
+  "unique_id": "test/number_theory/203.json",
+  "gold": "14",
+  "extracted_v3": "14",
+  "score_v3": 1,
+  "n_new": 3516,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 310,
+  "unique_id": "test/algebra/1842.json",
+  "gold": "49",
+  "extracted_v3": "\\frac{7}{90}",
+  "score_v3": 0,
+  "n_new": 233,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 311,
+  "unique_id": "test/number_theory/911.json",
+  "gold": "3",
+  "extracted_v3": "3",
+  "score_v3": 1,
+  "n_new": 2830,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 312,
+  "unique_id": "test/intermediate_algebra/1714.json",
+  "gold": "(5,\\infty)",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 313,
+  "unique_id": "test/prealgebra/1423.json",
+  "gold": "12\\pi",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 508,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 314,
+  "unique_id": "test/geometry/1108.json",
+  "gold": "(2,4)",
+  "extracted_v3": "(2, 4)",
+  "score_v3": 1,
+  "n_new": 1260,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 315,
+  "unique_id": "test/algebra/791.json",
+  "gold": "41",
+  "extracted_v3": "41",
+  "score_v3": 1,
+  "n_new": 2423,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 316,
+  "unique_id": "test/algebra/276.json",
+  "gold": "12",
+  "extracted_v3": "12",
+  "score_v3": 1,
+  "n_new": 1344,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 317,
+  "unique_id": "test/intermediate_algebra/2152.json",
+  "gold": "0",
+  "extracted_v3": "4",
+  "score_v3": 0,
+  "n_new": 655,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 318,
+  "unique_id": "test/algebra/2735.json",
+  "gold": "\\frac{11+9a}{20}",
+  "extracted_v3": "(11 + 9a)/20",
+  "score_v3": 1,
+  "n_new": 802,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 319,
+  "unique_id": "test/algebra/425.json",
+  "gold": "-128",
+  "extracted_v3": "-128",
+  "score_v3": 1,
+  "n_new": 119,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 320,
+  "unique_id": "test/geometry/947.json",
+  "gold": "-\\frac{24}{25}",
+  "extracted_v3": "S = (\\frac{15}{19}, \\frac{68.5}{19})",
+  "score_v3": 0,
+  "n_new": 4316,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 321,
+  "unique_id": "test/prealgebra/954.json",
+  "gold": "10",
+  "extracted_v3": "10.",
+  "score_v3": 1,
+  "n_new": 1779,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 322,
+  "unique_id": "test/algebra/1936.json",
+  "gold": "-1",
+  "extracted_v3": "-1",
+  "score_v3": 1,
+  "n_new": 1272,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 323,
+  "unique_id": "test/counting_and_probability/870.json",
+  "gold": "\\frac{1}{3}",
+  "extracted_v3": "\\dfrac{1}{3}",
+  "score_v3": 1,
+  "n_new": 8418,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 324,
+  "unique_id": "test/geometry/465.json",
+  "gold": "120",
+  "extracted_v3": "60 degrees.",
+  "score_v3": 0,
+  "n_new": 12184,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 325,
+  "unique_id": "test/geometry/73.json",
+  "gold": "4",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 2,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 326,
+  "unique_id": "test/precalculus/742.json",
+  "gold": "\\frac{9}{100}",
+  "extracted_v3": "0.09",
+  "score_v3": 1,
+  "n_new": 7870,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 327,
+  "unique_id": "test/intermediate_algebra/117.json",
+  "gold": "15",
+  "extracted_v3": "15",
+  "score_v3": 1,
+  "n_new": 4664,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 328,
+  "unique_id": "test/algebra/2176.json",
+  "gold": "3",
+  "extracted_v3": "\\text{infinite}",
+  "score_v3": 0,
+  "n_new": 14723,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 329,
+  "unique_id": "test/prealgebra/1973.json",
+  "gold": "4",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 8,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 330,
+  "unique_id": "test/counting_and_probability/216.json",
+  "gold": "1940",
+  "extracted_v3": "1940",
+  "score_v3": 1,
+  "n_new": 1787,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 331,
+  "unique_id": "test/algebra/509.json",
+  "gold": "\\frac{13}{6}",
+  "extracted_v3": "\\dfrac{13}{6}",
+  "score_v3": 1,
+  "n_new": 1735,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 332,
+  "unique_id": "test/intermediate_algebra/190.json",
+  "gold": "2",
+  "extracted_v3": "2",
+  "score_v3": 1,
+  "n_new": 10091,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 333,
+  "unique_id": "test/intermediate_algebra/776.json",
+  "gold": "3",
+  "extracted_v3": "3",
+  "score_v3": 1,
+  "n_new": 13248,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 334,
+  "unique_id": "test/algebra/1457.json",
+  "gold": "-120",
+  "extracted_v3": "-126",
+  "score_v3": 0,
+  "n_new": 1119,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 335,
+  "unique_id": "test/number_theory/483.json",
+  "gold": "3",
+  "extracted_v3": "3",
+  "score_v3": 1,
+  "n_new": 3535,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 336,
+  "unique_id": "test/algebra/2592.json",
+  "gold": "26000",
+  "extracted_v3": "26000",
+  "score_v3": 1,
+  "n_new": 869,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 337,
+  "unique_id": "test/prealgebra/1730.json",
+  "gold": "6",
+  "extracted_v3": "6",
+  "score_v3": 1,
+  "n_new": 1186,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 338,
+  "unique_id": "test/number_theory/368.json",
+  "gold": "4343_6",
+  "extracted_v3": "4343_6",
+  "score_v3": 1,
+  "n_new": 1388,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 339,
+  "unique_id": "test/intermediate_algebra/1566.json",
+  "gold": "2k",
+  "extracted_v3": "2k",
+  "score_v3": 1,
+  "n_new": 6985,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 340,
+  "unique_id": "test/precalculus/801.json",
+  "gold": "55^\\circ",
+  "extracted_v3": "66^\\circ",
+  "score_v3": 0,
+  "n_new": 16238,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 341,
+  "unique_id": "test/algebra/858.json",
+  "gold": "-2",
+  "extracted_v3": "-2",
+  "score_v3": 1,
+  "n_new": 1777,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 342,
+  "unique_id": "test/prealgebra/1238.json",
+  "gold": "2",
+  "extracted_v3": "2",
+  "score_v3": 1,
+  "n_new": 885,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 343,
+  "unique_id": "test/counting_and_probability/737.json",
+  "gold": "58,500",
+  "extracted_v3": "58500",
+  "score_v3": 1,
+  "n_new": 753,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 344,
+  "unique_id": "test/intermediate_algebra/1572.json",
+  "gold": "5",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 345,
+  "unique_id": "test/algebra/1529.json",
+  "gold": "1",
+  "extracted_v3": "1",
+  "score_v3": 1,
+  "n_new": 507,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 346,
+  "unique_id": "test/algebra/1338.json",
+  "gold": "66",
+  "extracted_v3": "$66$.",
+  "score_v3": 1,
+  "n_new": 719,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 347,
+  "unique_id": "test/algebra/1547.json",
+  "gold": "6r^2-4r-24",
+  "extracted_v3": "6r^2 - 4r - 24",
+  "score_v3": 1,
+  "n_new": 2097,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 348,
+  "unique_id": "test/counting_and_probability/116.json",
+  "gold": "4495",
+  "extracted_v3": "4495",
+  "score_v3": 1,
+  "n_new": 1713,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 349,
+  "unique_id": "test/counting_and_probability/238.json",
+  "gold": "10080",
+  "extracted_v3": "630",
+  "score_v3": 0,
+  "n_new": 11106,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 350,
+  "unique_id": "test/number_theory/686.json",
+  "gold": "4",
+  "extracted_v3": "30",
+  "score_v3": 0,
+  "n_new": 90,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 351,
+  "unique_id": "test/precalculus/826.json",
+  "gold": "\\frac{1}{16}",
+  "extracted_v3": "\\dfrac{1}{16}",
+  "score_v3": 1,
+  "n_new": 14730,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 352,
+  "unique_id": "test/precalculus/1281.json",
+  "gold": "11 \\sqrt{5} + 11",
+  "extracted_v3": "55",
+  "score_v3": 0,
+  "n_new": 854,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 353,
+  "unique_id": "test/counting_and_probability/1014.json",
+  "gold": "480",
+  "extracted_v3": "480",
+  "score_v3": 1,
+  "n_new": 1301,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 354,
+  "unique_id": "test/algebra/529.json",
+  "gold": "81",
+  "extracted_v3": "81",
+  "score_v3": 1,
+  "n_new": 1660,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 355,
+  "unique_id": "test/intermediate_algebra/1166.json",
+  "gold": "100",
+  "extracted_v3": "\\frac{85}{99}",
+  "score_v3": 0,
+  "n_new": 875,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 356,
+  "unique_id": "test/algebra/1078.json",
+  "gold": "(-\\sqrt{3}, \\sqrt{3})",
+  "extracted_v3": "(-\\sqrt{3}, \\sqrt{3})",
+  "score_v3": 1,
+  "n_new": 2406,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 357,
+  "unique_id": "test/prealgebra/1353.json",
+  "gold": "4",
+  "extracted_v3": "the answer to the problem.",
+  "score_v3": 0,
+  "n_new": 296,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 358,
+  "unique_id": "test/intermediate_algebra/860.json",
+  "gold": "\\text{ellipse}",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 359,
+  "unique_id": "test/intermediate_algebra/1407.json",
+  "gold": "6",
+  "extracted_v3": "6",
+  "score_v3": 1,
+  "n_new": 1628,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 360,
+  "unique_id": "test/precalculus/96.json",
+  "gold": "\\frac{7}{4}",
+  "extracted_v3": "-7",
+  "score_v3": 0,
+  "n_new": 113,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 361,
+  "unique_id": "test/intermediate_algebra/1405.json",
+  "gold": "16 \\sqrt{3}",
+  "extracted_v3": "32\\sqrt{3}",
+  "score_v3": 0,
+  "n_new": 6101,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 362,
+  "unique_id": "test/counting_and_probability/14.json",
+  "gold": "\\frac14",
+  "extracted_v3": "\\dfrac{1}{4}",
+  "score_v3": 1,
+  "n_new": 347,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 363,
+  "unique_id": "test/algebra/251.json",
+  "gold": "2",
+  "extracted_v3": "2",
+  "score_v3": 1,
+  "n_new": 184,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 364,
+  "unique_id": "test/intermediate_algebra/690.json",
+  "gold": "(1,-16,-4,43)",
+  "extracted_v3": "(1, -16, -4, 43)",
+  "score_v3": 1,
+  "n_new": 1844,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 365,
+  "unique_id": "test/number_theory/820.json",
+  "gold": "8",
+  "extracted_v3": "8",
+  "score_v3": 1,
+  "n_new": 11049,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 366,
+  "unique_id": "test/number_theory/109.json",
+  "gold": "4",
+  "extracted_v3": "4",
+  "score_v3": 1,
+  "n_new": 1267,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 367,
+  "unique_id": "test/algebra/1199.json",
+  "gold": "1",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 707,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 368,
+  "unique_id": "test/geometry/106.json",
+  "gold": "31",
+  "extracted_v3": "31",
+  "score_v3": 1,
+  "n_new": 281,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 369,
+  "unique_id": "test/prealgebra/1187.json",
+  "gold": "21",
+  "extracted_v3": "189",
+  "score_v3": 0,
+  "n_new": 5502,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 370,
+  "unique_id": "test/precalculus/1289.json",
+  "gold": "-41",
+  "extracted_v3": "-41",
+  "score_v3": 1,
+  "n_new": 112,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 371,
+  "unique_id": "test/intermediate_algebra/955.json",
+  "gold": "17",
+  "extracted_v3": "4",
+  "score_v3": 0,
+  "n_new": 4802,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 372,
+  "unique_id": "test/geometry/846.json",
+  "gold": "90^\\circ",
+  "extracted_v3": "20^\\circ",
+  "score_v3": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 373,
+  "unique_id": "test/algebra/2264.json",
+  "gold": "1+2i",
+  "extracted_v3": "1 + 2i",
+  "score_v3": 1,
+  "n_new": 2828,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 374,
+  "unique_id": "test/algebra/1303.json",
+  "gold": "4",
+  "extracted_v3": "0.",
+  "score_v3": 0,
+  "n_new": 108,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 375,
+  "unique_id": "test/number_theory/427.json",
+  "gold": "25",
+  "extracted_v3": "25",
+  "score_v3": 1,
+  "n_new": 995,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 376,
+  "unique_id": "test/geometry/538.json",
+  "gold": "(8,-2)",
+  "extracted_v3": "(-2, 8)",
+  "score_v3": 0,
+  "n_new": 1379,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 377,
+  "unique_id": "test/number_theory/1185.json",
+  "gold": "6",
+  "extracted_v3": "6",
+  "score_v3": 1,
+  "n_new": 16384,
+  "cap_hit": true,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 378,
+  "unique_id": "test/prealgebra/1743.json",
+  "gold": "3",
+  "extracted_v3": "3",
+  "score_v3": 1,
+  "n_new": 2198,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 379,
+  "unique_id": "test/prealgebra/1865.json",
+  "gold": "12",
+  "extracted_v3": "12",
+  "score_v3": 1,
+  "n_new": 710,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 380,
+  "unique_id": "test/intermediate_algebra/1992.json",
+  "gold": "(0,9) \\cup (9,36)",
+  "extracted_v3": "(0, 36)",
+  "score_v3": 0,
+  "n_new": 1405,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 381,
+  "unique_id": "test/counting_and_probability/188.json",
+  "gold": "\\frac{1}{2}",
+  "extracted_v3": "\\dfrac{1}{2}",
+  "score_v3": 1,
+  "n_new": 12810,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 382,
+  "unique_id": "test/intermediate_algebra/1111.json",
+  "gold": "\\frac{20000}{\\pi}",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 954,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 383,
+  "unique_id": "test/algebra/101.json",
+  "gold": "x \\in [-2,7]",
+  "extracted_v3": "[-2, 7]",
+  "score_v3": 1,
+  "n_new": 1725,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 384,
+  "unique_id": "test/prealgebra/1298.json",
+  "gold": "15x - 80",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 114,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 385,
+  "unique_id": "test/prealgebra/2066.json",
+  "gold": "22",
+  "extracted_v3": "23",
+  "score_v3": 0,
+  "n_new": 801,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 386,
+  "unique_id": "test/algebra/170.json",
+  "gold": "11",
+  "extracted_v3": "11",
+  "score_v3": 1,
+  "n_new": 1472,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 387,
+  "unique_id": "test/algebra/849.json",
+  "gold": "18",
+  "extracted_v3": "18.",
+  "score_v3": 1,
+  "n_new": 599,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 388,
+  "unique_id": "test/algebra/1031.json",
+  "gold": "\\frac{11}{2}",
+  "extracted_v3": "\\dfrac{11}{2}",
+  "score_v3": 1,
+  "n_new": 1145,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 389,
+  "unique_id": "test/geometry/795.json",
+  "gold": "\\frac{\\sqrt{21}}{5}",
+  "extracted_v3": "\\dfrac{\\sqrt{21}}{5}",
+  "score_v3": 1,
+  "n_new": 2171,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 390,
+  "unique_id": "test/algebra/853.json",
+  "gold": "12",
+  "extracted_v3": "12",
+  "score_v3": 1,
+  "n_new": 2391,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 391,
+  "unique_id": "test/algebra/2277.json",
+  "gold": "0",
+  "extracted_v3": "0",
+  "score_v3": 1,
+  "n_new": 5123,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 392,
+  "unique_id": "test/precalculus/902.json",
+  "gold": "\\sqrt{66}",
+  "extracted_v3": "$5",
+  "score_v3": 0,
+  "n_new": 588,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 393,
+  "unique_id": "test/algebra/518.json",
+  "gold": "\\frac 34",
+  "extracted_v3": "\\dfrac{3}{4}",
+  "score_v3": 1,
+  "n_new": 911,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 394,
+  "unique_id": "test/intermediate_algebra/1791.json",
+  "gold": "-\\frac{3}{8}",
+  "extracted_v3": "0",
+  "score_v3": 0,
+  "n_new": 4495,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 395,
+  "unique_id": "test/algebra/114.json",
+  "gold": "4",
+  "extracted_v3": "4",
+  "score_v3": 1,
+  "n_new": 1667,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 396,
+  "unique_id": "test/prealgebra/631.json",
+  "gold": "2",
+  "extracted_v3": "2",
+  "score_v3": 1,
+  "n_new": 9003,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 397,
+  "unique_id": "test/prealgebra/977.json",
+  "gold": "23",
+  "extracted_v3": "23",
+  "score_v3": 1,
+  "n_new": 758,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 398,
+  "unique_id": "test/prealgebra/1991.json",
+  "gold": "\\text{Navin}",
+  "extracted_v3": "Navin)",
+  "score_v3": 0,
+  "n_new": 3671,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 399,
+  "unique_id": "test/prealgebra/1784.json",
+  "gold": "326.5",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 3,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 400,
+  "unique_id": "test/geometry/817.json",
+  "gold": "\\frac{14}{3}",
+  "extracted_v3": "\\dfrac{7}{1}",
+  "score_v3": 0,
+  "n_new": 10437,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 401,
+  "unique_id": "test/intermediate_algebra/1806.json",
+  "gold": "\\frac{13}{4}",
+  "extracted_v3": "\\dfrac{13}{4}",
+  "score_v3": 1,
+  "n_new": 12580,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 402,
+  "unique_id": "test/precalculus/1291.json",
+  "gold": "1 - 12i",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 13,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 403,
+  "unique_id": "test/number_theory/928.json",
+  "gold": "3",
+  "extracted_v3": "3",
+  "score_v3": 1,
+  "n_new": 5204,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 404,
+  "unique_id": "test/counting_and_probability/761.json",
+  "gold": "3",
+  "extracted_v3": "3",
+  "score_v3": 1,
+  "n_new": 287,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 405,
+  "unique_id": "test/prealgebra/1572.json",
+  "gold": "60",
+  "extracted_v3": "60",
+  "score_v3": 1,
+  "n_new": 1135,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 406,
+  "unique_id": "test/number_theory/132.json",
+  "gold": "0",
+  "extracted_v3": "0",
+  "score_v3": 1,
+  "n_new": 1160,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 407,
+  "unique_id": "test/algebra/1960.json",
+  "gold": "9",
+  "extracted_v3": "9",
+  "score_v3": 1,
+  "n_new": 1676,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 408,
+  "unique_id": "test/precalculus/398.json",
+  "gold": "\\begin{pmatrix} 1/5 \\\\ -18/5 \\end{pmatrix}",
+  "extracted_v3": "\\begin{pmatrix} \\frac{1}{5} \\\\ -\\frac{18}{5} \\end{pmatrix}",
+  "score_v3": 1,
+  "n_new": 2607,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 409,
+  "unique_id": "test/intermediate_algebra/1797.json",
+  "gold": "2 \\sqrt{5}",
+  "extracted_v3": "2\\sqrt{109}",
+  "score_v3": 0,
+  "n_new": 608,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 410,
+  "unique_id": "test/prealgebra/65.json",
+  "gold": "6",
+  "extracted_v3": "6",
+  "score_v3": 1,
+  "n_new": 978,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 411,
+  "unique_id": "test/prealgebra/1227.json",
+  "gold": "60",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 203,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 412,
+  "unique_id": "test/intermediate_algebra/2146.json",
+  "gold": "406",
+  "extracted_v3": "$Answer (without quotes)",
+  "score_v3": 0,
+  "n_new": 12,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 413,
+  "unique_id": "test/algebra/2680.json",
+  "gold": "5r^5",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 414,
+  "unique_id": "test/algebra/2391.json",
+  "gold": "10",
+  "extracted_v3": "$10$",
+  "score_v3": 1,
+  "n_new": 1368,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 415,
+  "unique_id": "test/number_theory/769.json",
+  "gold": "9",
+  "extracted_v3": "9",
+  "score_v3": 1,
+  "n_new": 2894,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 416,
+  "unique_id": "test/precalculus/681.json",
+  "gold": "\\frac{1}{8}",
+  "extracted_v3": "\\dfrac{1}{8}",
+  "score_v3": 1,
+  "n_new": 6641,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 417,
+  "unique_id": "test/algebra/776.json",
+  "gold": "-2",
+  "extracted_v3": "-2",
+  "score_v3": 1,
+  "n_new": 1886,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 418,
+  "unique_id": "test/algebra/1796.json",
+  "gold": "2\\sqrt{5}",
+  "extracted_v3": "2\\sqrt{5}",
+  "score_v3": 1,
+  "n_new": 2034,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 419,
+  "unique_id": "test/precalculus/145.json",
+  "gold": "\\begin{pmatrix} -7 \\\\ 16 \\\\ 5 \\end{pmatrix}",
+  "extracted_v3": "$9$ because there are 9 integer triplets$(x, y, z)$ that satisfy the given equation.",
+  "score_v3": 0,
+  "n_new": 1358,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 420,
+  "unique_id": "test/precalculus/625.json",
+  "gold": "\\begin{pmatrix} 16/49 \\\\ 48/49 \\\\ 24/49 \\end{pmatrix}",
+  "extracted_v3": "\\begin{pmatrix} \\frac{16}{49} \\\\ \\frac{48}{49} \\\\ \\frac{24}{49} \\end{pmatrix}",
+  "score_v3": 1,
+  "n_new": 2739,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 421,
+  "unique_id": "test/precalculus/1202.json",
+  "gold": "27",
+  "extracted_v3": "27",
+  "score_v3": 1,
+  "n_new": 4783,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 422,
+  "unique_id": "test/intermediate_algebra/2015.json",
+  "gold": "\\{1\\pm\\sqrt{5},-2\\}",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 423,
+  "unique_id": "test/number_theory/1002.json",
+  "gold": "1440",
+  "extracted_v3": "1440",
+  "score_v3": 1,
+  "n_new": 3330,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 424,
+  "unique_id": "test/algebra/1339.json",
+  "gold": "600",
+  "extracted_v3": "40",
+  "score_v3": 0,
+  "n_new": 394,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 425,
+  "unique_id": "test/precalculus/1133.json",
+  "gold": "3R^2",
+  "extracted_v3": "\\dfrac{81R^2 - 5(a^2 + b^2 + c^2)}{12}",
+  "score_v3": 0,
+  "n_new": 16204,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 426,
+  "unique_id": "test/geometry/843.json",
+  "gold": "6\\sqrt{2}",
+  "extracted_v3": "6\\sqrt{2}",
+  "score_v3": 1,
+  "n_new": 1111,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 427,
+  "unique_id": "test/algebra/2743.json",
+  "gold": "29",
+  "extracted_v3": "29",
+  "score_v3": 1,
+  "n_new": 697,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 428,
+  "unique_id": "test/intermediate_algebra/121.json",
+  "gold": "64",
+  "extracted_v3": "64",
+  "score_v3": 1,
+  "n_new": 3534,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 429,
+  "unique_id": "test/intermediate_algebra/1014.json",
+  "gold": "50",
+  "extracted_v3": "50",
+  "score_v3": 1,
+  "n_new": 4720,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 430,
+  "unique_id": "test/prealgebra/2019.json",
+  "gold": "4.5",
+  "extracted_v3": "4.5",
+  "score_v3": 1,
+  "n_new": 507,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 431,
+  "unique_id": "test/precalculus/499.json",
+  "gold": "\\left[ \\frac{\\pi^2}{8}, \\frac{5 \\pi^2}{4} \\right]",
+  "extracted_v3": "\\left[ \\dfrac{\\pi^2}{8}, \\dfrac{5\\pi^2}{4} \\right]",
+  "score_v3": 1,
+  "n_new": 3586,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 432,
+  "unique_id": "test/intermediate_algebra/1462.json",
+  "gold": "331",
+  "extracted_v3": "0.",
+  "score_v3": 0,
+  "n_new": 1374,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 433,
+  "unique_id": "test/number_theory/410.json",
+  "gold": ".35625",
+  "extracted_v3": "0.35625",
+  "score_v3": 1,
+  "n_new": 169,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 434,
+  "unique_id": "test/prealgebra/1640.json",
+  "gold": "32",
+  "extracted_v3": "32",
+  "score_v3": 1,
+  "n_new": 1786,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 435,
+  "unique_id": "test/algebra/2043.json",
+  "gold": "(-\\infty, 2) \\cup (3, \\infty)",
+  "extracted_v3": "(-\\infty, 2) \\cup (3, \\infty)",
+  "score_v3": 1,
+  "n_new": 1780,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 436,
+  "unique_id": "test/counting_and_probability/10.json",
+  "gold": "4",
+  "extracted_v3": "4",
+  "score_v3": 1,
+  "n_new": 2904,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 437,
+  "unique_id": "test/algebra/1553.json",
+  "gold": "3",
+  "extracted_v3": "3",
+  "score_v3": 1,
+  "n_new": 2314,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 438,
+  "unique_id": "test/number_theory/255.json",
+  "gold": "4",
+  "extracted_v3": "4.",
+  "score_v3": 1,
+  "n_new": 950,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 439,
+  "unique_id": "test/intermediate_algebra/199.json",
+  "gold": "x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1",
+  "extracted_v3": "x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1",
+  "score_v3": 1,
+  "n_new": 2252,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 440,
+  "unique_id": "test/algebra/2080.json",
+  "gold": "14",
+  "extracted_v3": "14",
+  "score_v3": 1,
+  "n_new": 1650,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 441,
+  "unique_id": "test/prealgebra/2037.json",
+  "gold": "550",
+  "extracted_v3": "1000",
+  "score_v3": 0,
+  "n_new": 122,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 442,
+  "unique_id": "test/algebra/1343.json",
+  "gold": "256",
+  "extracted_v3": "256",
+  "score_v3": 1,
+  "n_new": 1034,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 443,
+  "unique_id": "test/algebra/668.json",
+  "gold": "45",
+  "extracted_v3": "45",
+  "score_v3": 1,
+  "n_new": 437,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 444,
+  "unique_id": "test/counting_and_probability/731.json",
+  "gold": "\\frac{1}{2}",
+  "extracted_v3": "1/3",
+  "score_v3": 0,
+  "n_new": 5841,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 445,
+  "unique_id": "test/intermediate_algebra/1779.json",
+  "gold": "15",
+  "extracted_v3": "6",
+  "score_v3": 0,
+  "n_new": 12976,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 446,
+  "unique_id": "test/algebra/2430.json",
+  "gold": "8",
+  "extracted_v3": "8.",
+  "score_v3": 1,
+  "n_new": 2169,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 447,
+  "unique_id": "test/prealgebra/996.json",
+  "gold": "9",
+  "extracted_v3": "9",
+  "score_v3": 1,
+  "n_new": 475,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 448,
+  "unique_id": "test/number_theory/1000.json",
+  "gold": "44",
+  "extracted_v3": "44",
+  "score_v3": 1,
+  "n_new": 1943,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 449,
+  "unique_id": "test/algebra/2789.json",
+  "gold": "47",
+  "extracted_v3": "47",
+  "score_v3": 1,
+  "n_new": 1194,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 450,
+  "unique_id": "test/number_theory/13.json",
+  "gold": "64",
+  "extracted_v3": "64",
+  "score_v3": 1,
+  "n_new": 2401,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 451,
+  "unique_id": "test/number_theory/459.json",
+  "gold": "\\frac{639}{40}",
+  "extracted_v3": "\\frac{637}{40}",
+  "score_v3": 0,
+  "n_new": 643,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 452,
+  "unique_id": "test/algebra/1814.json",
+  "gold": "143",
+  "extracted_v3": "143",
+  "score_v3": 1,
+  "n_new": 1687,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 453,
+  "unique_id": "test/algebra/2476.json",
+  "gold": "10",
+  "extracted_v3": "10",
+  "score_v3": 1,
+  "n_new": 604,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 454,
+  "unique_id": "test/precalculus/323.json",
+  "gold": "y = 2x + 3",
+  "extracted_v3": "y = 2x + 3",
+  "score_v3": 1,
+  "n_new": 7410,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 455,
+  "unique_id": "test/counting_and_probability/190.json",
+  "gold": "6",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 456,
+  "unique_id": "test/intermediate_algebra/1102.json",
+  "gold": "-2,1",
+  "extracted_v3": "-2",
+  "score_v3": 0,
+  "n_new": 1693,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 457,
+  "unique_id": "test/number_theory/342.json",
+  "gold": "0",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 1478,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 458,
+  "unique_id": "test/prealgebra/805.json",
+  "gold": "41",
+  "extracted_v3": "41",
+  "score_v3": 1,
+  "n_new": 2804,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 459,
+  "unique_id": "test/algebra/2780.json",
+  "gold": "\\$18.90",
+  "extracted_v3": "18.90",
+  "score_v3": 1,
+  "n_new": 2297,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 460,
+  "unique_id": "test/prealgebra/914.json",
+  "gold": "75^\\circ",
+  "extracted_v3": "$90$.",
+  "score_v3": 0,
+  "n_new": 1112,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 461,
+  "unique_id": "test/algebra/824.json",
+  "gold": "12",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 743,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 462,
+  "unique_id": "test/number_theory/679.json",
+  "gold": "59",
+  "extracted_v3": "59",
+  "score_v3": 1,
+  "n_new": 6317,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 463,
+  "unique_id": "test/algebra/1425.json",
+  "gold": "2",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 488,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 464,
+  "unique_id": "test/intermediate_algebra/834.json",
+  "gold": "9",
+  "extracted_v3": "9",
+  "score_v3": 1,
+  "n_new": 6271,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 465,
+  "unique_id": "test/number_theory/72.json",
+  "gold": "121",
+  "extracted_v3": "121.",
+  "score_v3": 1,
+  "n_new": 841,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 466,
+  "unique_id": "test/precalculus/703.json",
+  "gold": "8 \\pi",
+  "extracted_v3": "8\\pi",
+  "score_v3": 1,
+  "n_new": 10656,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 467,
+  "unique_id": "test/prealgebra/1114.json",
+  "gold": "15\\mbox{ cm}^2",
+  "extracted_v3": "3",
+  "score_v3": 0,
+  "n_new": 62,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 468,
+  "unique_id": "test/algebra/224.json",
+  "gold": "8",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 469,
+  "unique_id": "test/algebra/435.json",
+  "gold": "25",
+  "extracted_v3": "25",
+  "score_v3": 1,
+  "n_new": 894,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 470,
+  "unique_id": "test/intermediate_algebra/158.json",
+  "gold": "27648",
+  "extracted_v3": "27648",
+  "score_v3": 1,
+  "n_new": 5311,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 471,
+  "unique_id": "test/prealgebra/846.json",
+  "gold": "84",
+  "extracted_v3": "84",
+  "score_v3": 1,
+  "n_new": 499,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 472,
+  "unique_id": "test/algebra/2470.json",
+  "gold": "137 \\frac{1}{2}",
+  "extracted_v3": "137 \\frac{1}{2}.",
+  "score_v3": 0,
+  "n_new": 983,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 473,
+  "unique_id": "test/prealgebra/1930.json",
+  "gold": "7",
+  "extracted_v3": "3",
+  "score_v3": 0,
+  "n_new": 685,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 474,
+  "unique_id": "test/intermediate_algebra/752.json",
+  "gold": "3",
+  "extracted_v3": "3",
+  "score_v3": 1,
+  "n_new": 580,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 475,
+  "unique_id": "test/counting_and_probability/1003.json",
+  "gold": "29",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 320,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 476,
+  "unique_id": "test/prealgebra/1252.json",
+  "gold": "200",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 477,
+  "unique_id": "test/number_theory/22.json",
+  "gold": "2",
+  "extracted_v3": "1",
+  "score_v3": 0,
+  "n_new": 1598,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 478,
+  "unique_id": "test/intermediate_algebra/1279.json",
+  "gold": "\\frac{2}{1005}",
+  "extracted_v3": "\\dfrac{2}{1005}",
+  "score_v3": 1,
+  "n_new": 16384,
+  "cap_hit": true,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 479,
+  "unique_id": "test/number_theory/1128.json",
+  "gold": "2",
+  "extracted_v3": "2",
+  "score_v3": 1,
+  "n_new": 209,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 480,
+  "unique_id": "test/precalculus/1252.json",
+  "gold": "1",
+  "extracted_v3": "1",
+  "score_v3": 1,
+  "n_new": 1533,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 481,
+  "unique_id": "test/intermediate_algebra/1467.json",
+  "gold": "8n^2 + 4n + 1",
+  "extracted_v3": "\\frac{(2n +1)! }{ something }",
+  "score_v3": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 482,
+  "unique_id": "test/number_theory/1090.json",
+  "gold": "202",
+  "extracted_v3": "202",
+  "score_v3": 1,
+  "n_new": 3243,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 483,
+  "unique_id": "test/precalculus/1082.json",
+  "gold": "\\frac{8}{15}",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 484,
+  "unique_id": "test/intermediate_algebra/101.json",
+  "gold": "10",
+  "extracted_v3": "10",
+  "score_v3": 1,
+  "n_new": 646,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 485,
+  "unique_id": "test/counting_and_probability/199.json",
+  "gold": "13",
+  "extracted_v3": "13",
+  "score_v3": 1,
+  "n_new": 4233,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 486,
+  "unique_id": "test/geometry/477.json",
+  "gold": "216",
+  "extracted_v3": "216",
+  "score_v3": 1,
+  "n_new": 4127,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 487,
+  "unique_id": "test/number_theory/239.json",
+  "gold": "2",
+  "extracted_v3": "'0'",
+  "score_v3": 0,
+  "n_new": 242,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 488,
+  "unique_id": "test/prealgebra/1203.json",
+  "gold": "\\$36",
+  "extracted_v3": "36",
+  "score_v3": 1,
+  "n_new": 588,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 489,
+  "unique_id": "test/intermediate_algebra/1365.json",
+  "gold": "15",
+  "extracted_v3": "15",
+  "score_v3": 1,
+  "n_new": 6061,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 490,
+  "unique_id": "test/intermediate_algebra/1350.json",
+  "gold": "14",
+  "extracted_v3": "14",
+  "score_v3": 1,
+  "n_new": 8026,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 491,
+  "unique_id": "test/prealgebra/1128.json",
+  "gold": "64",
+  "extracted_v3": "64",
+  "score_v3": 1,
+  "n_new": 2418,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 492,
+  "unique_id": "test/precalculus/356.json",
+  "gold": "y = -2x",
+  "extracted_v3": "$y = x^2 - 0.5x - 0.25$",
+  "score_v3": 0,
+  "n_new": 1282,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 493,
+  "unique_id": "test/algebra/2779.json",
+  "gold": "20",
+  "extracted_v3": "20",
+  "score_v3": 1,
+  "n_new": 2969,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 494,
+  "unique_id": "test/intermediate_algebra/1930.json",
+  "gold": "\\frac{1}{4}",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "n_new": 0,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 495,
+  "unique_id": "test/intermediate_algebra/1981.json",
+  "gold": "(2,12) \\cup (12,102)",
+  "extracted_v3": "(3, 12)",
+  "score_v3": 0,
+  "n_new": 2069,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 496,
+  "unique_id": "test/intermediate_algebra/1232.json",
+  "gold": "\\frac{5}{13}",
+  "extracted_v3": "5",
+  "score_v3": 0,
+  "n_new": 292,
+  "cap_hit": false,
+  "quick_wrong": 1
+ },
+ {
+  "problem_index": 497,
+  "unique_id": "test/geometry/561.json",
+  "gold": "\\frac{7}{2}",
+  "extracted_v3": "7",
+  "score_v3": 0,
+  "n_new": 9504,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 498,
+  "unique_id": "test/intermediate_algebra/1508.json",
+  "gold": "-1",
+  "extracted_v3": "-1",
+  "score_v3": 1,
+  "n_new": 4733,
+  "cap_hit": false,
+  "quick_wrong": 0
+ },
+ {
+  "problem_index": 499,
+  "unique_id": "test/geometry/615.json",
+  "gold": "106^\\circ",
+  "extracted_v3": "106",
+  "score_v3": 1,
+  "n_new": 4737,
+  "cap_hit": false,
+  "quick_wrong": 0
+ }
+]

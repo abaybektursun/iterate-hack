@@ -1,0 +1,64 @@
+{
+ "args": {
+  "recipe": "rand8",
+  "other": "math31",
+  "donor": null,
+  "mods": null,
+  "layers": null,
+  "onto": "think_sft",
+  "scale": 3.0,
+  "alpha": 1.0,
+  "k": null,
+  "rounding": "stochastic",
+  "seed": 0,
+  "dir": "/tmp/theta",
+  "stats": "/runs/abaybektursun-1115-130307-5e33/edit.json",
+  "selftest": false
+ },
+ "models": {
+  "base": {
+   "repo": "allenai/Olmo-3-1025-7B",
+   "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+  },
+  "math31": {
+   "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  }
+ },
+ "json_from": {
+  "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+  "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ },
+ "device": "cuda",
+ "torch": "2.13.0+cu130",
+ "seconds": 88.92186379432678,
+ "recipe": "rand8",
+ "k": 8,
+ "alpha": null,
+ "scale": 3.0,
+ "mods": null,
+ "layers": null,
+ "rounding": "stochastic",
+ "seed": 0,
+ "late_layers": null,
+ "reference": "onto",
+ "n_tensors": 355,
+ "n_edited": 224,
+ "n_unchanged": 131,
+ "unchanged_from": {
+  "base": 0,
+  "other": 0,
+  "onto": 131
+ },
+ "n_zero_delta": 0,
+ "zero_delta": [],
+ "totals": {
+  "add_norm": 3.8076421227225716,
+  "written_norm": 5.135016172590423,
+  "ref_norm": 1768.6136243791682,
+  "add_rel": 0.0021528965231505316,
+  "effective_scale": 0.9999976386678227,
+  "cos_written_add": 0.7415036299085109,
+  "share": null
+ }
+}
