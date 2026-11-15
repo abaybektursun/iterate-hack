@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invariant: why a vote over samples helps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..500&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --paper: #14110f; --ink: #ece5d6; --mute: #a69c8c; --faint: #7d7467; --rule: #322c26;
+  --brass: #c3a36a; --red: #b9523f; --ivory: #e6dcc6; --col: 356px;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; color: var(--ink); background: var(--paper); overflow: hidden;
+  font: 400 14px/1.45 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+:focus-visible { outline: 1px solid var(--brass); outline-offset: 3px; border-radius: 2px; }
+canvas#gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+.shade { position: fixed; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgb(20, 17, 15), rgb(20, 17, 15) 20.5%, rgba(20, 17, 15, 0) 29%),
+              radial-gradient(120% 100% at 60% 45%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, .42) 100%); }
+.grain { position: fixed; inset: 0; pointer-events: none; opacity: .09; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+.col { position: fixed; left: 0; top: 0; bottom: 0; width: var(--col); padding: 22px 0 18px 36px; display: flex; flex-direction: column; pointer-events: none; }
+.col > * { pointer-events: auto; }
+.lab-link { font-size: 12px; color: var(--faint); text-decoration: none; letter-spacing: .04em; align-self: flex-start; }
+.lab-link:hover { color: var(--ink); }
+.kicker { margin-top: 26px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--brass); }
+h1 { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: clamp(21px, 2.75vh, 27px); line-height: 1.2; letter-spacing: -.01em; margin: 10px 0 18px; text-wrap: pretty; }
+h1 b { font-weight: 400; color: var(--ivory); border-bottom: 1px solid var(--brass); }
+h1 i { font-style: normal; color: #d98572; }
+.row { border-top: 1px solid var(--rule); padding: 9px 0 10px; }
+.lab { font-size: 10.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); margin-bottom: 5px; }
+.seg { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.seg button { color: var(--mute); padding: 2px 0; border-bottom: 1px solid transparent; white-space: nowrap; }
+.seg button:hover { color: var(--ink); }
+.seg button[aria-pressed=true] { color: var(--ink); font-weight: 600; border-bottom-color: var(--brass); }
+.list button { display: flex; width: 100%; align-items: baseline; gap: 9px; padding: 3px 0; color: var(--mute); }
+.list button:hover { color: var(--ink); }
+.list button[aria-pressed=true] { color: var(--ink); font-weight: 600; }
+.list button::before { content: ""; width: 6px; height: 6px; border-radius: 50%; border: 1px solid var(--faint); flex: none; transform: translateY(-1px); }
+.list button[aria-pressed=true]::before { background: var(--brass); border-color: var(--brass); }
+.list em { font-style: normal; margin-left: auto; font-weight: 400; color: var(--faint); font-size: 12.5px; }
+.list em b { color: var(--mute); font-weight: 500; }
+.pull { margin-top: 2px; display: flex; gap: 14px; align-items: baseline; }
+.pull button { border: 1px solid #5d5040; color: var(--ink); padding: 6px 14px 6px; border-radius: 2px; font-weight: 600; letter-spacing: .04em; }
+.pull button:hover { border-color: var(--brass); }
+.pull span { color: var(--faint); font-size: 12px; }
+.note { margin-top: auto; font-size: 11.5px; line-height: 1.45; color: var(--faint); padding-top: 10px; }
+@media (max-height: 900px) { .row { padding: 7px 0 8px; } .kicker { margin-top: 16px; } }
+.note code { font: inherit; color: var(--mute); overflow-wrap: anywhere; }
+
+.card { position: fixed; right: 26px; top: 26px; width: 330px; max-height: calc(100% - 52px); overflow: auto; padding: 18px 20px 16px;
+  background: #ebe4d3; color: #26211b; border-radius: 2px; box-shadow: 0 18px 50px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .4) inset;
+  transform: translateX(380px); transition: transform .5s cubic-bezier(.2, .7, .2, 1); font-size: 13px; }
+.card.on { transform: none; }
+.card .id { font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: #7b6f5d; font-weight: 600; display: flex; }
+.card .id button { margin-left: auto; color: #7b6f5d; font-size: 15px; line-height: 1; padding: 0 2px; }
+.card .q { font-family: "Newsreader", Georgia, serif; font-size: 15.5px; line-height: 1.42; margin: 8px 0 10px; overflow-wrap: anywhere; }
+.card .katex { font-size: 1em; }
+.card .gold { border-top: 1px solid #c9bfa9; border-bottom: 1px solid #c9bfa9; padding: 6px 0; display: flex; gap: 10px; }
+.card .gold span, .card th { font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: #7b6f5d; font-weight: 600; }
+.card .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; overflow-wrap: anywhere; }
+.card table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.card th { text-align: left; padding: 2px 0 4px; }
+.card td { padding: 5px 6px 5px 0; border-top: 1px solid #d6cdb8; vertical-align: top; }
+.card td.n { color: #7b6f5d; width: 18px; }
+.card td.t { text-align: right; color: #7b6f5d; white-space: nowrap; padding-right: 0; }
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; transform: translateY(1px); }
+.dot.r { background: #f3ecdb; box-shadow: 0 0 0 1px #9c917c inset; } .dot.w { background: #7a2a23; } .dot.b { background: #8d887c; }
+.card .verdict { margin-top: 10px; font-family: "Newsreader", Georgia, serif; font-size: 16px; line-height: 1.3; }
+.card .verdict b { font-weight: 500; }
+.card .verdict .bad { color: #8f2f25; }
+.card .nav { margin-top: 10px; color: #7b6f5d; font-size: 11.5px; }
+
+.tag { position: fixed; left: 0; top: 0; pointer-events: none; font-family: ui-monospace, Menlo, monospace; font-size: 11px; padding: 2px 6px;
+  background: #ebe4d3; color: #26211b; border-radius: 1px; transform: translate(-12px, 0); white-space: nowrap; max-width: 130px; overflow: hidden; text-overflow: ellipsis; box-shadow: 0 2px 6px rgba(0, 0, 0, .4); display: none; }
+.tag.w { background: #6f2620; color: #f1e6d6; }
+.tip { position: fixed; left: 0; top: 0; pointer-events: none; font-size: 12px; padding: 4px 9px; background: rgba(20, 17, 15, .92); border: 1px solid var(--rule); color: var(--ink); border-radius: 2px; display: none; white-space: nowrap; }
+.err { position: fixed; inset: 0; display: none; place-items: center; padding: 40px; font-family: "Newsreader", serif; font-size: 22px; text-align: center; }
+
+@media (max-width: 760px) {
+  :root { --col: 100%; }
+  .shade { background: linear-gradient(180deg, rgb(20, 17, 15), rgb(20, 17, 15) 17%, rgba(20, 17, 15, 0) 25%, rgba(20, 17, 15, 0) 62%, rgba(20, 17, 15, .94) 74%); }
+  .col { padding: 12px 16px 10px; right: 0; width: auto; }
+  .kicker { margin-top: 8px; font-size: 10px; }
+  h1 { font-size: 17.5px; margin: 5px 0 0; line-height: 1.22; }
+  .ctl { margin-top: auto; }
+  .row { padding: 5px 0 6px; }
+  .lab { display: none; }
+  .seg { gap: 2px 13px; font-size: 13px; }
+  .list { display: flex; flex-wrap: wrap; gap: 2px 13px; font-size: 13px; }
+  .list button { width: auto; } .list button::before, .list em { display: none; }
+  .list button[aria-pressed=true] { border-bottom: 1px solid var(--brass); }
+  .note { display: none; }
+  .pull span, #snd { display: none; }
+  .pull { position: absolute; right: 16px; bottom: 10px; }
+  .pull button { padding: 4px 10px; font-size: 12px; background: rgba(20, 17, 15, .8); }
+  .card { left: 0; right: 0; top: auto; bottom: 0; width: auto; max-height: 46%; transform: translateY(105%); padding: 12px 16px; }
+  .card .q { font-size: 14px; max-height: 5.4em; overflow: auto; }
+}
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div class="shade"></div><div class="grain"></div>
+<div class="col">
+  <a class="lab-link" href="../../">Lab</a>
+  <div class="kicker">Why a vote over samples helps</div>
+  <h1 id="h1">&nbsp;</h1>
+  <div class="ctl">
+    <div class="row"><div class="lab">Problems</div><div class="seg" id="sets"></div></div>
+    <div class="row"><div class="lab">Model <span style="float:right;letter-spacing:.04em;text-transform:none;font-weight:400">first sample, then the vote over 4</span></div><div class="list" id="models"></div></div>
+    <div class="row"><div class="lab">Samples dropped into each chute</div><div class="seg" id="ks"></div>
+      <div class="pull"><button id="pull">Pull the lever</button><span>or drag it; Space</span><button id="snd" style="margin-left:auto;border:0;padding:0;color:var(--faint);font-weight:400;font-size:12px">Sound off</button></div></div>
+    <div class="row"><div class="lab">Light up</div><div class="seg" id="filters"></div></div>
+  </div>
+  <div class="note" id="note"></div>
+</div>
+<div class="card" id="card"></div>
+<div class="tag" id="tag0"></div><div class="tag" id="tag1"></div><div class="tag" id="tag2"></div><div class="tag" id="tag3"></div>
+<div class="tip" id="tip"></div>
+<div class="err" id="err"></div>
+
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import RAPIER from 'https://cdn.jsdelivr.net/npm/@dimforge/rapier2d-compat@0.14.0/rapier.es.js';
+
+const $ = id => document.getElementById(id);
+const fail = m => { $('err').style.display = 'grid'; $('err').textContent = m; throw new Error(m); };
+const STILL = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fmt = n => n.toLocaleString('en-US');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+// ------------------------------------------------------------------ data
+const [DATA] = await Promise.all([fetch('data.json').then(r => r.ok ? r.json() : fail('data.json did not load')), RAPIER.init(),
+  document.fonts.load('600 20px Archivo'), document.fonts.load('400 40px Newsreader')]);
+
+/* The vote over the first k samples of one problem, by the team's rule: plurality over the groups of agreeing answers,
+   a sample without an answer casts no vote, ties go to the group whose first sample is earliest. */
+function voteOf(c, k) {
+  const cnt = [0, 0, 0, 0], first = [-1, -1, -1, -1];
+  for (let s = 0; s < k; s++) { const g = c.g[s]; if (g < 0) continue; if (first[g] < 0) first[g] = s; cnt[g]++; }
+  let top = 0, win = -1, tied = 0;
+  for (let g = 0; g < 4; g++) if (cnt[g] > top) { top = cnt[g]; win = g; }
+  for (let g = 0; g < 4; g++) if (top && cnt[g] === top) tied++;
+  return { win, votes: top, tie: tied > 1, score: win < 0 ? 0 : +c.r[first[win]], ans: win < 0 ? null : c.a[first[win]] };
+}
+function stats(model, k) {
+  const o = { one: 0, vote: 0, rescued: 0, lost: 0, sure: 0, tie: 0, blank: 0 };
+  for (const c of model.cells) {
+    const v = voteOf(c, k);
+    o.one += k ? +c.r[0] : 0; o.vote += v.score; o.tie += v.tie;
+    o.rescued += k && c.r[0] === '0' && v.score === 1; o.lost += k && c.r[0] === '1' && v.score === 0;
+    o.sure += v.votes >= 3 && v.score === 0;
+    for (let s = 0; s < k; s++) o.blank += c.g[s] < 0;
+  }
+  return o;
+}
+for (const set of Object.values(DATA.sets)) for (const m of set.models) {
+  const s = stats(m, 4), st = m.stored;
+  if (s.vote !== st.vote || s.one !== st.each[0] || s.tie !== st.ties || s.blank !== st.blank || m.cells.length !== set.n)
+    fail(`The recount of ${m.name} on ${set.name} differs from the stored readout.`);
+}
+const FILTERS = [['all', 'All'], ['rescued', 'First wrong, vote right'], ['lost', 'First right, vote wrong'], ['sure', 'Three agree, wrong'], ['tie', 'Ties']];
+function inFilter(c, k, f) {
+  if (f === 'all') return true;
+  const v = voteOf(c, k);
+  return f === 'rescued' ? k > 0 && c.r[0] === '0' && v.score === 1 : f === 'lost' ? k > 0 && c.r[0] === '1' && v.score === 0
+    : f === 'sure' ? v.votes >= 3 && v.score === 0 : v.tie;
+}
+
+// ------------------------------------------------------------------ state
+const S = { set: 'hard328', m: 'base', k: 4, p: -1, f: 'all' };
+for (const kv of location.hash.slice(1).split('&')) { const [a, b] = kv.split('='); if (a in S && b !== undefined) S[a] = a === 'k' || a === 'p' ? +b : b; }
+if (!DATA.sets[S.set]) S.set = 'hard328';
+const SET = () => DATA.sets[S.set];
+if (!SET().models.find(m => m.k === S.m)) S.m = 'base';
+if (!(S.k >= 0 && S.k <= 4)) S.k = 4;
+if (!(S.p >= 0 && S.p < SET().n)) S.p = -1;
+if (!FILTERS.find(f => f[0] === S.f)) S.f = 'all';
+const MODEL = () => SET().models.find(m => m.k === S.m);
+const putHash = () => history.replaceState(null, '', '#' + Object.entries(S).filter(([a, b]) => !(a === 'p' && b < 0) && !(a === 'f' && b === 'all')).map(([a, b]) => a + '=' + b).join('&'));
+
+// ------------------------------------------------------------------ renderer, room, materials
+const canvas = $('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0x0f0d0c);
+const camera = new THREE.PerspectiveCamera(22, 1, 1, 3000);
+
+function rnd(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function tex(w, h, draw, rep) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+  if (rep) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep[0], rep[1]); }
+  return t;
+}
+const woodTex = (rep) => tex(1024, 512, (g, w, h) => {
+  const r = rnd(7); g.fillStyle = '#5a3a25'; g.fillRect(0, 0, w, h);
+  for (let i = 0; i < 900; i++) {
+    const y = r() * h, a = .03 + r() * .09, dark = r() < .7;
+    g.strokeStyle = dark ? `rgba(28,15,8,${a})` : `rgba(190,140,90,${a * .6})`; g.lineWidth = .5 + r() * 2.2;
+    g.beginPath(); const ph = r() * 9, am = 2 + r() * 7;
+    for (let x = 0; x <= w; x += 32) g.lineTo(x, y + Math.sin(x / 150 + ph) * am + Math.sin(x / 47 + ph * 2) * am * .25);
+    g.stroke();
+  }
+  for (let i = 0; i < 5000; i++) { g.fillStyle = `rgba(20,10,5,${r() * .12})`; g.fillRect(r() * w, r() * h, 1 + r() * 5, 1); }
+}, rep);
+const noiseTex = (seed, base, amp, streak, rep) => tex(512, 512, (g, w, h) => {
+  const r = rnd(seed); g.fillStyle = `rgb(${base},${base},${base})`; g.fillRect(0, 0, w, h);
+  for (let i = 0; i < 14000; i++) { const v = base + (r() - .5) * amp * 2; g.fillStyle = `rgba(${v},${v},${v},.5)`; g.fillRect(r() * w, r() * h, streak ? 20 + r() * 120 : 1 + r() * 2, 1 + (streak ? 0 : r() * 2)); }
+}, rep);
+{ // a studio to reflect: one large soft box upper left, a dim warm fill right, a dark room
+  const env = new THREE.Scene(), bm = (c, i) => new THREE.MeshBasicMaterial({ color: new THREE.Color(c).multiplyScalar(i), side: THREE.DoubleSide });
+  env.add(new THREE.Mesh(new THREE.SphereGeometry(50, 32, 16), new THREE.MeshBasicMaterial({ color: 0x1a1613, side: THREE.BackSide })));
+  const add = (w, h, x, y, z, c, i) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), bm(c, i)); m.position.set(x, y, z); m.lookAt(0, 0, 0); env.add(m); };
+  add(30, 22, -26, 24, 26, 0xfff1dc, 7); add(12, 30, 34, 4, 18, 0xffd9b0, 1.6); add(40, 6, 0, -20, 30, 0x8a6a4a, 1.2); add(8, 30, -8, 6, 40, 0xdfe6ee, 1.0); add(80, 56, 4, 8, 46, 0xa3978a, .5);
+  const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(env, 0.03).texture; pm.dispose();
+}
+const brushed = noiseTex(3, 150, 60, true, [3, 3]), fine = noiseTex(5, 128, 40, false, [8, 8]);
+brushed.colorSpace = fine.colorSpace = THREE.NoColorSpace;
+const MAT = {
+  wood: new THREE.MeshStandardMaterial({ map: woodTex([1, 1]), roughness: .58, metalness: 0, envMapIntensity: .55 }),
+  woodDark: new THREE.MeshStandardMaterial({ map: woodTex([3, .6]), color: 0xb9a48f, roughness: .5, envMapIntensity: .5 }),
+  brass: new THREE.MeshStandardMaterial({ color: 0xb1905a, metalness: 1, roughness: .42, roughnessMap: brushed, envMapIntensity: .95 }),
+  brassDark: new THREE.MeshStandardMaterial({ color: 0x6d5a3c, metalness: 1, roughness: .55, roughnessMap: brushed, envMapIntensity: .7 }),
+  felt: new THREE.MeshStandardMaterial({ color: 0x201d1a, roughness: .96, bumpMap: fine, bumpScale: .4, envMapIntensity: .15 }),
+  glass: new THREE.MeshStandardMaterial({ color: 0xcfd8d6, roughness: .08, metalness: 0, transparent: true, opacity: .13, envMapIntensity: 1.6, depthWrite: false }),
+  // the room is painted, not lit: a plaster wall with the key light's pool and the case's shadow, and a bench top
+  wall: new THREE.MeshBasicMaterial({ map: tex(1024, 640, (g, w, h) => {
+    g.fillStyle = '#1b1815'; g.fillRect(0, 0, w, h);
+    let gr = g.createRadialGradient(w * .42, h * .38, 0, w * .42, h * .38, w * .45); gr.addColorStop(0, 'rgba(118,104,88,.95)'); gr.addColorStop(.5, 'rgba(70,61,52,.7)'); gr.addColorStop(1, 'rgba(27,24,21,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h);
+    gr = g.createRadialGradient(w * .525, h * .545, w * .07, w * .525, h * .545, w * .2); gr.addColorStop(0, 'rgba(8,6,5,.85)'); gr.addColorStop(1, 'rgba(8,6,5,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h);
+  }) }),
+  bench: new THREE.MeshBasicMaterial({ map: woodTex([5, 1.5]), color: 0x4f4439 }),
+  shade: new THREE.MeshBasicMaterial({ map: tex(8, 64, (g, w, h) => { const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, 'rgba(0,0,0,.62)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); }), transparent: true, depthWrite: false }),
+  plate: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .5, envMapIntensity: .4 }),
+  pip: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .4, metalness: .6, envMapIntensity: 1 }),
+};
+function stamp(bg, ink, tick) {
+  return tex(256, 128, (g, w, h) => {
+    g.fillStyle = bg; g.fillRect(0, 0, w, h);
+    const r = rnd(tick ? 11 : 12); for (let i = 0; i < 500; i++) { g.fillStyle = `rgba(0,0,0,${r() * .05})`; g.fillRect(r() * w, r() * h, 2 + r() * 8, 1); }
+    g.strokeStyle = ink; g.lineWidth = 5; g.lineCap = 'round';
+    for (const cx of [64, 192]) { g.beginPath(); g.ellipse(cx, 64, 15, 22, 0, 0, 7); g.lineWidth = 2; g.stroke(); g.lineWidth = 4.5; g.beginPath();
+      if (tick) { g.moveTo(cx - 7, 64); g.lineTo(cx - 2, 74); g.lineTo(cx + 8, 52); } else { g.moveTo(cx - 6, 54); g.lineTo(cx + 6, 74); g.moveTo(cx + 6, 54); g.lineTo(cx - 6, 74); }
+      g.stroke(); }
+  });
+}
+const BALLMAT = [
+  new THREE.MeshStandardMaterial({ map: stamp('#e9dfc8', 'rgba(70,50,30,.75)', true), roughness: .3, envMapIntensity: .8 }),   // right: bone
+  new THREE.MeshStandardMaterial({ map: stamp('#7c2a22', 'rgba(215,170,110,.8)', false), roughness: .2, envMapIntensity: 1.1 }),  // wrong: oxblood lacquer
+  new THREE.MeshStandardMaterial({ color: 0x77736a, roughness: .62, metalness: .8, envMapIntensity: .6 }),                                         // no answer: lead
+];
+/* A ball is one instance with 4 numbers that change (x, y, turn about z, shown 0/1), a fixed resting orientation and a
+   brightness. Sending 16 bytes a ball each frame instead of a 4 x 4 matrix keeps a slow GPU from falling behind. */
+for (const m of BALLMAT) m.onBeforeCompile = sh => {
+  sh.vertexShader = 'attribute vec4 aPose; attribute vec4 aQ0; attribute float aDim; varying float vDim;\nvec3 qrot(vec4 q, vec3 v) { return v + 2.0 * cross(q.xyz, cross(q.xyz, v) + q.w * v); }\n' + sh.vertexShader
+    .replace('#include <beginnormal_vertex>', 'float ha = aPose.z * .5; vec4 qz = vec4(0., 0., sin(ha), cos(ha)); vec3 objectNormal = qrot(qz, qrot(aQ0, normal)); vDim = aDim;')
+    .replace('#include <begin_vertex>', 'vec3 transformed = qrot(qz, qrot(aQ0, position)) * aPose.w + vec3(aPose.xy, 0.);');
+  sh.fragmentShader = 'varying float vDim;\n' + sh.fragmentShader.replace('#include <color_fragment>', 'diffuseColor.rgb *= vDim;');
+};
+
+const key = new THREE.DirectionalLight(0xfff0dc, 2.7);   // no shadow maps: the few shadows are painted planes (shade())
+const rim = new THREE.DirectionalLight(0xbfd0e0, .5), fill = new THREE.HemisphereLight(0xfff4e6, 0x2a1d12, .32);
+scene.add(key, key.target, rim, fill);
+
+// ------------------------------------------------------------------ the machine
+const BR = .46, SW = 1.06, DV = .06, WL = .1, SH = 1.3, PX = WL + 4 * SW + 3 * DV + WL + SH, PY = 5.3, FL = .5, TH = 6.4, FT = 2.4, PED = 16, PLI = 4.2, G = 70;
+let M = null;          // the machine of the current set
+const dummy = new THREE.Object3D(), q1 = new THREE.Quaternion(), BLANK = new THREE.Color(0x2a1a10);   // BLANK: a plate with no verdict is dark wood
+
+function box(w, h, d, mat, x, y, z, parent, shadow = true) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x, y, z); parent.add(m); return m;
+}
+function inst(geo, mat, n, parent, shadow = true) {
+  const m = new THREE.InstancedMesh(geo, mat, Math.max(n, 1)); m.count = n; m.instanceMatrix.setUsage(THREE.DynamicDrawUsage); m.frustumCulled = false; parent.add(m); return m;
+}
+function plateTex(w, h) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h; const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+  t.draw = fn => { const g = c.getContext('2d'); g.fillStyle = '#b79a66'; g.fillRect(0, 0, w, h);
+    const r = rnd(9); for (let i = 0; i < 1200; i++) { g.fillStyle = `rgba(${r() < .5 ? '255,240,200' : '40,25,10'},${r() * .07})`; g.fillRect(r() * w, r() * h, 30 + r() * 200, 1); }
+    g.fillStyle = '#2b2117'; g.textBaseline = 'middle'; fn(g, w, h); t.needsUpdate = true; };
+  return t;
+}
+const caps = (g, s, x, y, size, align = 'center', sp = 3) => { g.font = `600 ${size}px Archivo`; g.textAlign = align; try { g.letterSpacing = sp + 'px'; } catch (e) {} g.fillText(s.toUpperCase(), x, y); };
+
+function build() {
+  if (M) { scene.remove(M.root); M.root.traverse(o => { if (o.geometry) o.geometry.dispose(); }); M.world.free(); }
+  const set = SET(), n = set.n, W = innerWidth, H = innerHeight, portrait = W < 760;
+  let cols = 4, best = 0;   // the grid that shows the balls largest in the free part of the window
+  const rw = portrait ? region.w : W - 388, rh = portrait ? document.querySelector('.ctl').getBoundingClientRect().top - region.y - 4 : region.h;   // the free part with no card open
+  for (let c = 4; c <= 60; c++) { const r = Math.ceil(n / c), sc = Math.min(rw / (c * PX + 2 * FT + 12), rh / (r * PY + TH + PED + PLI + 9)); if (sc > best * 1.001) { best = sc; cols = c; } }
+  const rows = Math.ceil(n / cols); cols = Math.ceil(n / rows);
+  const Wi = cols * PX + WL, Hi = rows * PY, x0 = -Wi / 2, y0 = -(Hi - TH) / 2 - 1;   // interior origin (bottom-left of the lowest shelf)
+  const root = new THREE.Group(); scene.add(root);
+  const world = new RAPIER.World({ x: 0, y: -G }); world.timestep = 1 / 60; world.integrationParameters.numSolverIterations = 2;
+  const fixed = world.createRigidBody(RAPIER.RigidBodyDesc.fixed());
+  const cub = (hx, hy, x, y, fr = .25, re = .3) => world.createCollider(RAPIER.ColliderDesc.cuboid(hx, hy).setTranslation(x, y).setFriction(fr).setRestitution(re), fixed);
+  const cellX = c => x0 + c * PX, rowY = r => y0 + (rows - 1 - r) * PY, slotX = (c, g) => cellX(c) + WL + SW / 2 + g * (SW + DV), shaftX = c => cellX(c) + 2 * WL + 4 * SW + 3 * DV + SH / 2;
+
+  // case: back, frame, pediment, plinth, glass
+  const Wo = Wi + 2 * FT, top = y0 + Hi + 1.2, bot = y0 - TH;
+  box(Wo, Hi + TH + 3, 1, MAT.felt, 0, (top + bot) / 2, -1.12, root);
+  box(FT, Hi + TH + 1.2, 3.4, MAT.wood, x0 - FT / 2, (top + bot) / 2, .1, root); box(FT, Hi + TH + 1.2, 3.4, MAT.wood, x0 + Wi + FT / 2, (top + bot) / 2, .1, root);
+  box(Wo + 1.6, PED, 3.8, MAT.woodDark, 0, top + PED / 2, .1, root); box(Wo + 3, .7, 4.6, MAT.wood, 0, top + PED + .35, .1, root);
+  box(Wo + 1.6, PLI, 3.8, MAT.woodDark, 0, bot - PLI / 2, .1, root); box(Wo + 3.4, .9, 5, MAT.wood, 0, bot - PLI - .45, .1, root);
+  box(Wi, .5, 1.4, MAT.brassDark, 0, top - .25, 0, root);                               // the feed rail above the top row
+  box(Wi, .12, 1.3, MAT.brassDark, 0, bot + .06, 0, root);                               // floor of the tray
+  for (const sx of [-1, 1]) {   // turned finials
+    const pts = [[0, 0], [.9, 0], [1.0, .3], [.5, .6], [.45, 1.0], [.95, 1.5], [1.05, 2.1], [.7, 2.8], [.25, 3.2], [.3, 3.5], [0, 3.7]].map(p => new THREE.Vector2(p[0], p[1]));
+    const f = new THREE.Mesh(new THREE.LatheGeometry(pts, 28), MAT.wood); f.position.set(sx * (Wo / 2 + .2), top + PED + .7, .1); root.add(f);
+  }
+  const shade = (w, h, x, y, z, rot = 0) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), MAT.shade); m.position.set(x, y, z); m.rotation.z = rot; m.renderOrder = 1; root.add(m); return m; };
+  shade(Wi, 5, 0, top - .5 - 2.5, -.6); shade(Hi + TH, 3.2, x0 + 1.6, (top + bot) / 2, -.6, Math.PI / 2); shade(Wi, 2.6, 0, bot + 1.3, -.6, Math.PI);
+  // physics of the case
+  cub(WL / 2, (Hi + TH + 8) / 2, x0 - WL / 2, bot + (Hi + TH + 8) / 2); cub(WL / 2, (Hi + TH + 8) / 2, x0 + Wi + WL / 2 - WL, bot + (Hi + TH + 8) / 2);
+  const trayFloor = cub(Wi / 2 + 2, 1, 0, bot - 1 + .12, 0, .1);
+  for (let c = 0; c < cols; c++) {
+    const xs = cellX(c), hy = (Hi + 4) / 2, cy = y0 + hy;
+    cub(WL / 2, hy, xs + WL / 2, cy); cub(WL / 2, hy, xs + WL + 4 * SW + 3 * DV + WL / 2, cy);
+    for (let g = 1; g < 4; g++) cub(DV / 2, hy, xs + WL + g * SW + (g - .5) * DV, cy);
+  }
+  // instanced fittings of the cells that hold a problem
+  const shelfGeo = new THREE.BoxGeometry(4 * SW + 3 * DV + 2 * WL, FL, 1.5), shelves = inst(shelfGeo, MAT.wood, n, root);
+  const glassI = inst(new THREE.BoxGeometry(DV, PY - FL - .55, 1.1), MAT.glass, n * 3, root, false); glassI.renderOrder = 3;
+  const wallI = inst(new THREE.BoxGeometry(WL, Hi, 1.3), MAT.brass, cols * 2, root);
+  const pegI = inst(new THREE.CylinderGeometry(.2, .2, 1.3, 14).rotateX(Math.PI / 2), MAT.brass, cols * rows * 2, root);
+  const underI = inst(new THREE.PlaneGeometry(4 * SW + 3 * DV + 2 * WL + .5, 1.5), MAT.shade, n, root); underI.renderOrder = 1;
+  const lipI = inst(new THREE.BoxGeometry(4 * SW + 3 * DV + 2 * WL, .09, .06), MAT.brassDark, n, root, false);
+  const plateI = inst(new THREE.BoxGeometry(1.7, .27, .04), MAT.plate, n, root, false);        // the verdict of each chute: only its colour changes
+  const tieI = inst(new THREE.CylinderGeometry(.14, .14, .05, 12).rotateX(Math.PI / 2), MAT.pip, n, root, false);
+  const floors = [], cw = 4 * SW + 3 * DV + 2 * WL;
+  let pg = 0;
+  for (let c = 0; c < cols; c++) {
+    for (const [j, dx] of [[0, WL / 2], [1, cw - WL / 2]]) { dummy.position.set(cellX(c) + dx, y0 + Hi / 2, 0); dummy.rotation.set(0, 0, 0); dummy.scale.set(1, 1, 1); dummy.updateMatrix(); wallI.setMatrixAt(c * 2 + j, dummy.matrix); }
+    for (let r = 0; r < rows; r++) for (const [side, yy] of [[0, 3.7], [1, 1.25]]) {
+      const px = side ? cellX(c) + PX + (c === cols - 1 ? 0 : 0) : cellX(c) + cw, py = rowY(r) + yy;
+      world.createCollider(RAPIER.ColliderDesc.ball(.2).setTranslation(px, py).setRestitution(.45).setFriction(.1), fixed);
+      dummy.position.set(px, py, 0); dummy.updateMatrix(); pegI.setMatrixAt(pg++, dummy.matrix);
+    }
+  }
+  const cell = [];
+  for (let p = 0; p < n; p++) {
+    const c = p % cols, r = (p / cols) | 0, xs = cellX(c), ys = rowY(r), cx = xs + cw / 2;
+    cell.push({ c, r, xs, ys, cx });
+    floors.push(cub(cw / 2, FL / 2, cx, ys + FL / 2, .3, .32));
+    for (let g = 1; g < 4; g++) { dummy.position.set(xs + WL + g * SW + (g - .5) * DV, ys + FL + (PY - FL - .55) / 2, 0); dummy.updateMatrix(); glassI.setMatrixAt(p * 3 + g - 1, dummy.matrix); }
+    dummy.position.set(cx, ys + FL - .045, .78); dummy.updateMatrix(); lipI.setMatrixAt(p, dummy.matrix);
+    dummy.position.set(cx + .25, ys - .75, -.6); dummy.updateMatrix(); underI.setMatrixAt(p, dummy.matrix);
+    dummy.position.set(cx, ys + FL / 2 - .04, .76); dummy.updateMatrix(); plateI.setMatrixAt(p, dummy.matrix); plateI.setColorAt(p, BLANK);
+    dummy.position.set(cx - 1.25, ys + FL / 2 - .04, .77); dummy.updateMatrix(); tieI.setMatrixAt(p, dummy.matrix); tieI.setColorAt(p, BLANK);
+  }
+  if (cols * rows > n) {   // the unused places of the last row: a closed panel, not chutes
+    const c0 = n % cols, w = (cols - c0) * PX - .1, x = cellX(c0) + w / 2, y = rowY(rows - 1);
+    box(w, PY - .2, .14, MAT.woodDark, x, y + PY / 2, .62, root);
+    const t = plateTex(1024, 128); t.draw((g, tw, th) => caps(g, `${fmt(n)} problems · four samples each`, tw / 2, th / 2 + 2, 44, 'center', 6));
+    const pw = Math.min(w - 2, 16); const pl = new THREE.Mesh(new THREE.PlaneGeometry(pw, pw / 8), new THREE.MeshStandardMaterial({ map: t, metalness: 1, roughness: .45, roughnessMap: brushed })); pl.position.set(x, y + PY / 2, .7); root.add(pl);
+  }
+  // counters on the pediment: two odometers and their engraved plate
+  const drumTex = tex(2048, 256, (g, w, h) => {
+    g.fillStyle = '#e8dfca'; g.fillRect(0, 0, w, h); g.fillStyle = 'rgba(60,40,20,.25)'; for (let d = 0; d <= 10; d++) g.fillRect(d * w / 10 - 1, 0, 2, h);
+    g.fillStyle = '#1f1811'; g.font = '400 190px Newsreader'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    for (let d = 0; d < 10; d++) { g.save(); g.translate((d + .5) * w / 10, h / 2); g.rotate(Math.PI / 2); g.fillText(String(d), 0, 8); g.restore(); }
+  });
+  const drumMat = new THREE.MeshPhysicalMaterial({ map: drumTex, roughness: .38, clearcoat: .3, envMapIntensity: .6 });
+  const DR = 5, DW = 4.5, cy = top + PED / 2 + 2.3, drums = [[], []], win = DR * .36;
+  const sepW = Math.min(Wo * .25, 24);
+  [-1, 1].forEach((sx, k) => {
+    const cx = sx * sepW;
+    for (const [w, h, dx, dy] of [[3 * DW + 2.4, 1.7, 0, win + .85], [3 * DW + 2.4, 1.7, 0, -win - .85], [1.2, 2 * win, -1.5 * DW - .6, 0], [1.2, 2 * win, 1.5 * DW + .6, 0]]) box(w, h, 1.5, MAT.brass, cx + dx, cy + dy, 2.75, root);
+    for (let i = 0; i < 3; i++) {
+      const d = new THREE.Mesh(new THREE.CylinderGeometry(DR, DR, DW - .12, 48, 1, true).rotateZ(Math.PI / 2), drumMat); d.position.set(cx + (1 - i) * DW, cy, 2.95 - DR); root.add(d); drums[k][i] = d;
+    }
+  });
+  const plateW = Math.min(2 * sepW - 1.5, 3 * DW + 10), plateT = [0, 1].map(k => { const t = plateTex(1024, 150);
+    const pl = new THREE.Mesh(new THREE.PlaneGeometry(plateW, plateW * 150 / 1024), new THREE.MeshStandardMaterial({ map: t, metalness: .75, roughness: .5, roughnessMap: brushed, envMapIntensity: 1.5 }));
+    pl.position.set((k ? 1 : -1) * sepW, top + 2.1, 2.02); root.add(pl); return t; });
+  const plate = { material: new THREE.MeshStandardMaterial({ metalness: .75, roughness: .5, roughnessMap: brushed, envMapIntensity: 1.5 }) };
+  const trayW = Math.min(Wo - 6, 34), trayT = plateTex(1024, 80), tray = new THREE.Mesh(new THREE.PlaneGeometry(trayW, trayW * 80 / 1024), plate.material); tray.material.map = trayT;
+  tray.position.set(0, bot - PLI / 2 + .1, 2.02); root.add(tray);
+  // the lever: brass arm, turned wooden knob, on the right side
+  const lever = new THREE.Group(), LX = Wo / 2 + 2.6, LY = (top + bot) / 2 - Hi * .08; lever.position.set(LX, LY, 1.2); root.add(lever);
+  const hub = new THREE.Mesh(new THREE.CylinderGeometry(1.9, 1.9, 2.4, 32).rotateZ(Math.PI / 2), MAT.brass); hub.position.set(LX - .6, LY, 1.2); root.add(hub);
+  const AL = Math.max(10, Math.min(16, Hi * .2));
+  const arm = new THREE.Mesh(new THREE.CylinderGeometry(.42, .55, AL, 18), MAT.brass); arm.position.y = AL / 2; lever.add(arm);
+  const kp = [[0, 0], [.7, 0], [.95, .35], [.65, .8], [1.2, 1.6], [1.7, 2.8], [1.8, 3.9], [1.4, 5.0], [.7, 5.6], [0, 5.75]].map(p => new THREE.Vector2(p[0], p[1]));
+  const knob = new THREE.Mesh(new THREE.LatheGeometry(kp, 32), MAT.wood); knob.position.y = AL - .2; lever.add(knob);
+  const hit = new THREE.Mesh(new THREE.SphereGeometry(3.6, 8, 6), new THREE.MeshBasicMaterial({ visible: false })); hit.position.y = AL + 1.5; lever.add(hit);
+  // the room: a plaster wall and a bench
+  const wall = new THREE.Mesh(new THREE.PlaneGeometry(Wo * 5, Wo * 5 * .625), MAT.wall); wall.position.set(0, (top + bot) / 2, -7); root.add(wall);
+  const bench = new THREE.Mesh(new THREE.PlaneGeometry(1400, 300), MAT.bench); bench.rotation.x = -Math.PI / 2; bench.position.set(0, bot - PLI - .9, 100); root.add(bench);
+  // the cell outline that follows the pointer and the selection
+  const ring = pts => { const l = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: 0xe9dcc0, transparent: true, opacity: .9 })); l.visible = false; l.renderOrder = 9; root.add(l); return l; };
+  const rect = [[-.08, .0], [cw + .08, .0], [cw + .08, PY], [-.08, PY]].map(p => new THREE.Vector3(p[0], p[1], .84));
+  const hover = ring(rect), sel = ring(rect); hover.material.opacity = .45;
+  // balls
+  const ballI = BALLMAT.map(mat => {
+    const pose = new THREE.InstancedBufferAttribute(new Float32Array(16 * n), 4).setUsage(THREE.DynamicDrawUsage), q0 = new THREE.InstancedBufferAttribute(new Float32Array(16 * n), 4), dim = new THREE.InstancedBufferAttribute(new Float32Array(4 * n), 1);
+    const geo = src => { const g = new THREE.InstancedBufferGeometry(); g.index = src.index; for (const a of ['position', 'normal', 'uv']) g.setAttribute(a, src.attributes[a]); g.setAttribute('aPose', pose); g.setAttribute('aQ0', q0); g.setAttribute('aDim', dim); g.instanceCount = 0; return g; };
+    const lo = geo(new THREE.SphereGeometry(BR, 14, 9)), hi = geo(new THREE.SphereGeometry(BR, 20, 12)), m = new THREE.Mesh(lo, mat); m.frustumCulled = false; root.add(m);
+    return Object.assign(m, { pose, q0, dim, lo, hi });
+  });
+  const light = Wo / 2 + 18;
+  key.position.set(-Wo * .55, top + Hi * .55, Hi * 1.1 + 60); key.target.position.set(0, (top + bot) / 2, 0);
+  rim.position.set(Wo, Hi * .3, -30);
+  M = { root, world, fixed, n, cols, rows, Wi, Hi, Wo, x0, y0, top, bot, cell, cw, floors, trayFloor, slotX, shaftX, rowY, cellX, shelves, plateI, tieI, ballI, drums, plateT, trayT,
+    lever, hit, AL, hover, sel, balls: [], cellK: new Uint8Array(n), resK: new Uint8Array(n), one: 0, vote: 0, blank: 0, retract: 0, retractTo: 0,
+    bounds: { x0: -Wo / 2 - 2.5, x1: Wo / 2 + 8, y0: bot - PLI - 1.5, y1: top + PED + 5 } };
+  setShelves(0);
+  loadModel();
+}
+function setShelves(t) {   // t = 1: the shelves are drawn back into the case and the balls fall out
+  for (let p = 0; p < M.n; p++) { const c = M.cell[p]; dummy.position.set(c.cx, c.ys + FL / 2, -.05 - t * 1.25); dummy.rotation.set(0, 0, 0); dummy.scale.set(1, 1, 1); dummy.updateMatrix(); M.shelves.setMatrixAt(p, dummy.matrix); }
+  M.shelves.instanceMatrix.needsUpdate = true;
+}
+
+// ------------------------------------------------------------------ balls, releases, the vote of each chute
+let simT = 0, timeline = [], busyUntil = 0, queue = [], awake = false, lastTick = 0;
+const at = (dt, fn) => { timeline.push({ t: simT + dt, fn }); };
+function loadModel() {   // new balls for the current model; nothing released yet
+  for (const b of M.balls) if (b.body) M.world.removeRigidBody(b.body);
+  const cells = MODEL().cells, cnt = [0, 0, 0], r = rnd(S.set.length * 77 + S.m.length);
+  M.balls = [];
+  for (let p = 0; p < M.n; p++) for (let s = 0; s < 4; s++) {
+    const c = cells[p], kind = c.g[s] < 0 ? 2 : c.r[s] === '1' ? 0 : 1;
+    const i = cnt[kind]++, m = M.ballI[kind]; q1.setFromEuler(eul.set(r() * 6.3, r() * 6.3, r() * 6.3)); m.q0.setXYZW(i, q1.x, q1.y, q1.z, q1.w); m.dim.setX(i, lit(p) ? 1 : DIMF);
+    M.balls.push({ p, s, kind, i, body: null });
+  }
+  M.ballI.forEach((m, k) => { m.pose.array.fill(0); m.lo.instanceCount = m.hi.instanceCount = cnt[k]; m.pose.needsUpdate = m.q0.needsUpdate = m.dim.needsUpdate = true; });
+  M.cellK.fill(0); M.resK.fill(0); M.one = M.vote = M.blank = 0;
+  for (let p = 0; p < M.n; p++) { M.plateI.setColorAt(p, BLANK); M.tieI.setColorAt(p, BLANK); }
+  M.plateI.instanceColor.needsUpdate = M.tieI.instanceColor.needsUpdate = true;
+  timeline = [];
+}
+const lit = p => inFilter(MODEL().cells[p], S.k, S.f);
+const DIMF = .1, DIM = new THREE.Color(.11, .1, .095), IVORY = new THREE.Color(0xe9dfc8), OX = new THREE.Color(0x7a2a22), BRASS = new THREE.Color(0xc9a566), eul = new THREE.Euler();
+function hide(b) {
+  if (b.body) { M.world.removeRigidBody(b.body); b.body = null; }
+  const m = M.ballI[b.kind]; m.pose.array[b.i * 4 + 3] = 0; m.pose.needsUpdate = true;
+}
+function place(b, x, y, ang) {
+  const m = M.ballI[b.kind], a = m.pose.array, o = b.i * 4; a[o] = x; a[o + 1] = y; a[o + 2] = ang; a[o + 3] = 1; m.pose.needsUpdate = true;
+}
+function spawn(p, s, settled) {
+  const b = M.balls[p * 4 + s]; if (b.body) return;
+  const c = M.cell[p], cd = MODEL().cells[p], g = cd.g[s], r = Math.random;
+  let x, y, vx = 0, vy = -3 - r() * 3;
+  if (g < 0) { x = M.shaftX(c.c) + (r() - .5) * .2; y = c.ys + PY - .5 + (settled ? s * 1.1 : 0); vx = (r() - .5) * 2; M.blank++; }
+  else if (settled) { let below = 0; for (let t = 0; t < s; t++) below += cd.g[t] === g; x = M.slotX(c.c, g); y = c.ys + FL + BR + below * 2 * BR; vy = 0; }
+  else { x = M.slotX(c.c, g) + (r() - .5) * .08; y = c.ys + PY - BR - .02; }
+  const d = RAPIER.RigidBodyDesc.dynamic().setTranslation(x, y).setLinvel(vx, vy).setAngvel(settled && g >= 0 ? 0 : (r() - .5) * 14).setCcdEnabled(g < 0);
+  b.body = M.world.createRigidBody(d); b.vy = vy;
+  M.world.createCollider(RAPIER.ColliderDesc.ball(BR).setRestitution(g < 0 ? .3 : .34).setFriction(g < 0 ? 0 : .25).setDensity(1), b.body);
+  if (M.cellK[p] <= s) M.cellK[p] = s + 1;
+  place(b, x, y, 0); awake = true;
+}
+function resolve(p, k) {   // the chute's plate and the counters now read the vote over its first k samples
+  const cd = MODEL().cells[p], old = M.resK[p], v0 = voteOf(cd, old), v = voteOf(cd, k), c = M.cell[p];
+  M.one += (k ? +cd.r[0] : 0) - (old ? +cd.r[0] : 0); M.vote += v.score - v0.score; M.resK[p] = k;
+  c.col = v.win < 0 ? BLANK : v.score ? IVORY : OX; c.tie = v.tie;
+  M.plateI.setColorAt(p, v.win < 0 || lit(p) ? c.col : DIM); M.tieI.setColorAt(p, v.tie && lit(p) ? BRASS : BLANK);
+  M.plateI.instanceColor.needsUpdate = M.tieI.instanceColor.needsUpdate = true;
+}
+function paint() {   // dim the chutes outside the chosen group
+  for (const b of M.balls) M.ballI[b.kind].dim.array[b.i] = lit(b.p) ? 1 : DIMF;
+  for (let p = 0; p < M.n; p++) if (M.resK[p]) { const c = M.cell[p]; M.plateI.setColorAt(p, c.col === BLANK || lit(p) ? c.col : DIM); M.tieI.setColorAt(p, c.tie && lit(p) ? BRASS : BLANK); }
+  M.ballI.forEach(m => m.dim.needsUpdate = true); M.plateI.instanceColor.needsUpdate = M.tieI.instanceColor.needsUpdate = true;
+}
+const delay = p => M.cell[p].c * .03 + M.cell[p].r * .05 + Math.random() * .05;
+function release(j) {   // sample j of every problem, as one wave across the case
+  for (let p = 0; p < M.n; p++) { const d = delay(p); at(d, () => spawn(p, j)); at(d + .55, () => resolve(p, j + 1)); }
+  busyUntil = simT + .5; click(.5, 180);
+}
+function dump() {
+  for (const f of M.floors) f.setEnabled(false); M.trayFloor.setEnabled(false);
+  for (const b of M.balls) if (b.body) b.body.wakeUp();
+  M.resK.fill(0); M.one = M.vote = 0; for (let p = 0; p < M.n; p++) { M.plateI.setColorAt(p, BLANK); M.tieI.setColorAt(p, BLANK); }
+  M.plateI.instanceColor.needsUpdate = M.tieI.instanceColor.needsUpdate = true;
+  M.retractTo = 1; awake = true; timeline = [];
+  at(2.3, () => { for (const b of M.balls) hide(b); M.cellK.fill(0); for (const f of M.floors) f.setEnabled(true); M.trayFloor.setEnabled(true); M.retractTo = 0; });
+  busyUntil = simT + 2.6; click(.9, 90);
+}
+function instant() {   // the state at S.k with nothing in motion: stacks placed at rest, the unanswered balls dropped and settled
+  queue = []; loadModel(); for (const f of M.floors) f.setEnabled(true); M.trayFloor.setEnabled(true); M.retract = M.retractTo = 0; setShelves(0);
+  for (let p = 0; p < M.n; p++) { for (let s = 0; s < S.k; s++) spawn(p, s, true); resolve(p, S.k); }
+  for (let i = 0; i < 1400; i++) { M.world.step(); if (i > 200 && i % 50 === 0 && !M.balls.some(b => b.body && !b.body.isSleeping())) break; }
+  sync(true); busyUntil = simT; wheels.forEach(w => w.v = w.to()); paint();
+}
+function sync(all) {
+  let any = false;
+  for (const b of M.balls) {
+    if (!b.body) continue;
+    if (!all && b.body.isSleeping()) continue;
+    any = true; const t = b.body.translation();
+    if (t.y < M.bot - 3) { hide(b); continue; }
+    if (audio) { const vy = b.body.linvel().y; if (b.vy < -9 && vy > b.vy + 8) click(Math.min(1, -b.vy / 50) * .22, b.kind === 2 ? 2600 : 1700 + Math.random() * 500); b.vy = vy; }
+    place(b, t.x, t.y, b.body.rotation());
+  }
+  awake = any;
+}
+function goTo(k) {   // bring the machine to k samples per chute through the queue of lever actions
+  const have = queue.length ? null : Math.max(0, ...M.cellK);
+  S.k = k; putHash(); ui();
+  if (STILL) { instant(); return; }
+  queue = []; const cur = have === null ? 5 : have;
+  if (cur > k || M.retractTo) { queue.push('dump'); for (let j = 0; j < k; j++) queue.push(j); } else for (let j = cur; j < k; j++) queue.push(j);
+  paint();
+}
+function pull() { leverKick = 1; goTo(S.k >= 4 ? 0 : S.k + 1); }
+
+// ------------------------------------------------------------------ odometers
+const wheels = [{ v: 0, to: () => M.one }, { v: 0, to: () => M.vote }];
+function turnWheels(dt) {
+  wheels.forEach((w, k) => {
+    const to = w.to(); w.v += (to - w.v) * Math.min(1, dt * 5.5); if (Math.abs(to - w.v) < .004) w.v = to;
+    for (let i = 0; i < 3; i++) { const p = 10 ** i, low = w.v % p, d = Math.floor(w.v / p) % 10 + (i ? Math.max(0, low - (p - 1)) : w.v % 1 - 0); M.drums[k][i].rotation.x = DR_OFF + DR_SIGN * (i ? d : (w.v % 10)) * Math.PI / 5; }
+  });
+}
+const DR_OFF = Math.PI * .1, DR_SIGN = 1;
+function plates() {
+  const k = S.k, set = SET();
+  M.plateT[0].draw((g, w, h) => { caps(g, 'first sample alone', w / 2, h * .34, 62, 'center', 5); caps(g, `right, of ${fmt(set.n)} problems`, w / 2, h * .76, 38, 'center', 4); });
+  M.plateT[1].draw((g, w, h) => { caps(g, k === 1 ? 'vote over 1 sample' : `vote over ${k} samples`, w / 2, h * .34, 62, 'center', 5); caps(g, `right, of ${fmt(set.n)} problems`, w / 2, h * .76, 38, 'center', 4); });
+  M.trayT.draw((g, w, h) => caps(g, `no answer: ${fmt(stats(MODEL(), k).blank)} of ${fmt(set.n * k)} samples`, w / 2, h / 2 + 2, 44, 'center', 4));
+}
+
+// ------------------------------------------------------------------ words
+function ui() {
+  const set = SET(), m = MODEL(), k = S.k, st = stats(m, k), n = set.n;
+  const h = $('h1');
+  if (k === 0) h.innerHTML = `The chutes are empty. Pull the lever: each pull drops one sampled answer of <b>${esc(m.name)}</b> into every one of the ${fmt(n)} problems.`;
+  else if (k === 1) h.innerHTML = `One sample of ${esc(m.name)} is right on <b>${st.one}</b> of ${fmt(n)} problems. Pull the lever to drop a second answer on each.`;
+  else h.innerHTML = `One sample of ${esc(m.name)} is right on <b>${st.one}</b> of ${fmt(n)} problems; the answer most of ${k === 4 ? 'four' : k === 3 ? 'three' : 'two'} samples agree on is right on <b>${st.vote}</b>. `
+    + `The vote repairs ${st.rescued} and breaks ${st.lost}` + (st.sure ? `; on <i>${st.sure}</i> it is wrong with three or more samples in agreement.` : '.');
+  $('sets').innerHTML = Object.entries(DATA.sets).map(([key, s]) => `<button data-set="${key}" aria-pressed="${key === S.set}">${esc(s.name)}</button>`).join('');
+  $('models').innerHTML = set.models.map(x => `<button data-m="${x.k}" aria-pressed="${x.k === S.m}">${esc(x.name)}<em>${x.stored.each[0]} <b>${x.stored.vote}</b></em></button>`).join('');
+  $('ks').innerHTML = [0, 1, 2, 3, 4].map(j => `<button data-k="${j}" aria-pressed="${j === k}">${j}</button>`).join('');
+  $('filters').innerHTML = FILTERS.map(([f, name]) => `<button data-f="${f}" aria-pressed="${f === S.f}">${name}${f === 'all' ? '' : ' <span style="color:var(--faint);font-weight:400">' + st[f] + '</span>'}</button>`).join('');
+  $('note').innerHTML = `Bone balls are right answers, oxblood wrong, lead no answer (they fall to the tray). Balls that agree share a slot; the tallest stack is the vote, ties go to the earliest sample. `
+    + `The four single samples are right on ${m.stored.each.join(', ')}; any of the four on ${m.stored.pass4}.` + (k === 2 || k === 3 ? ` The count at ${k} samples is recounted here from the stored rows.` : '')
+    + `<br><code>${esc(m.src)}/</code>`;
+  if (M) plates();
+  card();
+}
+function card() {
+  const el = $('card'), p = S.p; el.classList.toggle('on', p >= 0); if (M) { M.sel.visible = p >= 0; if (p >= 0) M.sel.position.set(M.cell[p].xs, M.cell[p].ys, 0); }
+  if (M) M.ballI.forEach(m => m.geometry = p >= 0 ? m.hi : m.lo);
+  if (p < 0) { for (let g = 0; g < 4; g++) $('tag' + g).style.display = 'none'; return; }
+  const pr = SET().problems[p], c = MODEL().cells[p], k = S.k, v = voteOf(c, k);
+  const rowsH = [0, 1, 2, 3].map(s => { const off = s >= k, bl = c.g[s] < 0;
+    return `<tr style="${off ? 'opacity:.35' : ''}"><td class="n">${s + 1}</td><td><span class="dot ${bl ? 'b' : c.r[s] === '1' ? 'r' : 'w'}"></span><span class="mono">${bl ? '' : esc(c.a[s])}</span>${bl ? 'no answer' + (c.c[s] === '1' ? ' (hit the token cap)' : '') : ''}</td><td class="n">${bl ? '' : 'ABCD'[c.g[s]]}</td><td class="t">${fmt(c.t[s])}</td></tr>`; }).join('');
+  el.innerHTML = `<div class="id"><span>Problem ${p + 1} of ${SET().n} · ${esc(pr.id)}</span><button id="x" aria-label="Close">×</button></div>
+    <div class="q">${esc(pr.q)}</div><div class="gold"><span>Answer</span><b>${esc(/\$/.test(pr.gold) ? pr.gold : '$' + pr.gold + '$')}</b></div>
+    <table><tr><th></th><th>${esc(MODEL().name)}: sample</th><th>Slot</th><th style="text-align:right">Tokens</th></tr>${rowsH}</table>
+    <div class="verdict">${k === 0 ? 'Nothing dropped yet.' : v.win < 0 ? `<span class="bad">No sample gave an answer; the vote has none.</span>` :
+      `The vote: <b class="mono">${esc(v.ans)}</b>, ${v.votes} of ${k}${v.tie ? ', a tie broken by the earliest sample' : ''}. <span class="${v.score ? '' : 'bad'}">${v.score ? 'Right' : 'Wrong'}${k > 1 && +c.r[0] !== v.score ? (v.score ? '; the first sample alone was wrong.' : '; the first sample alone was right.') : '.'}</span>`}</div>
+    <div class="nav">← → next problem${S.f === 'all' ? '' : ' in the lit group'} · Esc closes</div>`;
+  $('x').onclick = () => select(-1);
+  typeset(el.querySelector('.q')); typeset(el.querySelector('.gold b'));
+}
+let katex = null;
+function typeset(el) {   // the statement is LaTeX; KaTeX is fetched when the first card opens
+  if (!katex) katex = new Promise(done => {
+    const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css'; document.head.append(css);
+    const a = document.createElement('script'); a.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js';
+    a.onload = () => { const b = document.createElement('script'); b.src = 'https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js'; b.onload = done; document.head.append(b); };
+    document.head.append(a);
+  });
+  katex.then(() => { if (el.isConnected) renderMathInElement(el, { throwOnError: false, errorColor: '#26211b', delimiters: [{ left: '$$', right: '$$', display: false }, { left: '\\[', right: '\\]', display: false }, { left: '\\(', right: '\\)', display: false }, { left: '$', right: '$', display: false }] }); });
+}
+function select(p, replay = true) {
+  S.p = p; putHash(); card();
+  if (p >= 0 && replay && !STILL && simT >= busyUntil && !queue.length && M.cellK[p]) {   // drop this chute's balls again, one by one
+    const k = M.cellK[p]; resolve(p, 0);
+    for (let s = 0; s < 4; s++) { const b = M.balls[p * 4 + s]; if (b.body && MODEL().cells[p].g[s] >= 0) hide(b); }
+    for (let s = 0; s < k; s++) { at(.55 + s * .42, () => spawn(p, s)); at(.9 + s * .42, () => resolve(p, s + 1)); }
+  }
+}
+function step(dir) {
+  const n = M.n; let p = S.p;
+  for (let i = 0; i < n; i++) { p = (p + dir + n) % n; if (S.p < 0 && dir > 0 && i === 0) p = 0; if (lit(p)) return select(p); }
+}
+function change(f) {   // another set or model: empty the case, then refill to the same number of samples
+  const k = S.k || 4; if (M && !STILL && M.balls.some(b => b.body)) { queue = []; dump(); } f(); S.p = Math.min(S.p, SET().n - 1); putHash();
+  if (STILL || !M || M.set !== S.set) { build(); M.set = S.set; S.k = k; ui(); instant(); layout(); return; }
+  S.k = k; ui(); queue = ['load']; for (let j = 0; j < k; j++) queue.push(j);
+}
+
+// ------------------------------------------------------------------ sound (off until asked for)
+let audio = null;
+function click(gain, freq) {
+  if (!audio) return; const now = audio.currentTime; if (now - lastTick < .012 && gain < .4) return; lastTick = now;
+  const src = audio.createBufferSource(); src.buffer = audio.noise; const f = audio.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = 5;
+  const g = audio.createGain(); g.gain.setValueAtTime(gain * .5, now); g.gain.exponentialRampToValueAtTime(.0005, now + (freq < 300 ? .25 : .05));
+  src.connect(f).connect(g).connect(audio.destination); src.start(now, Math.random() * .4, .3);
+}
+function sound() {
+  if (audio) { audio.close(); audio = null; return; }
+  audio = new AudioContext(); const b = audio.createBuffer(1, audio.sampleRate, audio.sampleRate), d = b.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; audio.noise = b;
+}
+
+// ------------------------------------------------------------------ camera, pointer, keys
+const cam = { yaw: -.2, pitch: .06, vyaw: 0, vpitch: 0, T: new THREE.Vector3(), D: 300, zoom: 0 };
+let region = { x: 0, y: 0, w: 1, h: 1 }, leverA = 0, leverV = 0, leverKick = 0, leverDrag = null, armed = true;
+function layout() {
+  const W = innerWidth, H = innerHeight, portrait = W < 760;
+  renderer.setSize(W, H, false); camera.aspect = W / H;
+  if (portrait) { const a = $('h1').getBoundingClientRect().bottom + 6, b = S.p >= 0 ? H * .54 : document.querySelector('.ctl').getBoundingClientRect().top - 4; region = { x: 4, y: a, w: W - 8, h: Math.max(120, b - a) }; }
+  else region = { x: 372, y: 14, w: W - 372 - 16 - (S.p >= 0 ? 350 : 0), h: H - 28 };
+}
+function frameCamera(dt, snap) {
+  const W = innerWidth, H = innerHeight, b = M.bounds, tf = Math.tan(camera.fov * Math.PI / 360), focus = S.p >= 0;
+  let tx, ty, D;
+  if (focus) { const c = M.cell[S.p]; tx = c.cx; ty = c.ys + PY / 2; D = Math.max(PY / (2 * tf) * H / (region.h * .2), PX / (2 * tf * camera.aspect) * W / (region.w * .22)); }
+  else { tx = (b.x0 + b.x1) / 2; ty = (b.y0 + b.y1) / 2; D = Math.max((b.y1 - b.y0) / (2 * tf) * H / region.h, (b.x1 - b.x0) / (2 * tf * camera.aspect) * W / region.w) * 1.07 + 4; }
+  const e = snap ? 1 : Math.min(1, dt * 3.2);
+  cam.T.x += (tx - cam.T.x) * e; cam.T.y += (ty - cam.T.y) * e; cam.D += (D - cam.D) * e;
+  cam.yaw += cam.vyaw * dt; cam.pitch += cam.vpitch * dt; cam.vyaw *= Math.exp(-dt * 4); cam.vpitch *= Math.exp(-dt * 4);
+  cam.yaw = Math.max(-.6, Math.min(.6, cam.yaw)); cam.pitch = Math.max(-.1, Math.min(.26, cam.pitch));
+  const cp = Math.cos(cam.pitch);
+  camera.position.set(cam.T.x + cam.D * Math.sin(cam.yaw) * cp, cam.T.y + cam.D * Math.sin(cam.pitch), cam.D * Math.cos(cam.yaw) * cp);
+  camera.lookAt(cam.T.x, cam.T.y, 0);
+  camera.setViewOffset(W, H, -(region.x + region.w / 2 - W / 2), -(region.y + region.h / 2 - H / 2), W, H);
+  camera.near = Math.max(1, cam.D * .2); camera.far = cam.D * 3 + 800; camera.updateProjectionMatrix();
+}
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), planeZ = new THREE.Plane(new THREE.Vector3(0, 0, 1), -.4), hitP = new THREE.Vector3();
+function pick(e) {
+  ndc.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); ray.setFromCamera(ndc, camera);
+  if (ray.intersectObject(M.hit).length) return 'lever';
+  if (!ray.ray.intersectPlane(planeZ, hitP)) return -1;
+  const c = Math.floor((hitP.x - M.x0) / PX), r = M.rows - 1 - Math.floor((hitP.y - M.y0) / PY), p = r * M.cols + c;
+  return c >= 0 && c < M.cols && r >= 0 && r < M.rows && p < M.n ? p : -1;
+}
+let down = null;
+canvas.addEventListener('pointerdown', e => {
+  const h = pick(e); canvas.setPointerCapture(e.pointerId);
+  if (h === 'lever') { leverDrag = { y: e.clientY, a: leverA }; return; }
+  down = { x: e.clientX, y: e.clientY, lx: e.clientX, ly: e.clientY, moved: false, h };
+});
+canvas.addEventListener('pointermove', e => {
+  if (leverDrag) { leverA = Math.max(0, Math.min(1.08, leverDrag.a + (e.clientY - leverDrag.y) / Math.min(260, innerHeight * .3))); leverV = 0; return; }
+  if (down) {
+    if (Math.hypot(e.clientX - down.x, e.clientY - down.y) > 6) down.moved = true;
+    if (down.moved) { cam.vyaw = -(e.clientX - down.lx) * .09; cam.vpitch = (e.clientY - down.ly) * .06; down.lx = e.clientX; down.ly = e.clientY; }
+    return;
+  }
+  const h = pick(e), tip = $('tip');
+  canvas.style.cursor = h === 'lever' ? 'grab' : h >= 0 ? 'pointer' : 'default';
+  M.hover.visible = h >= 0 && h !== 'lever';
+  if (h >= 0 && h !== 'lever') {
+    M.hover.position.set(M.cell[h].xs, M.cell[h].ys, 0);
+    const c = MODEL().cells[h], v = voteOf(c, S.k);
+    tip.textContent = `Problem ${h + 1}: ` + (S.k === 0 ? 'empty' : v.win < 0 ? 'no answer' : `${v.votes} of ${S.k} agree, ${v.score ? 'right' : 'wrong'}${v.tie ? ' (tie)' : ''}`);
+    tip.style.display = 'block'; tip.style.transform = `translate(${Math.min(innerWidth - 220, e.clientX + 14)}px, ${e.clientY + 16}px)`;
+  } else tip.style.display = h === 'lever' ? 'block' : 'none';
+  if (h === 'lever') { tip.textContent = S.k >= 4 ? 'Pull: empty the chutes' : `Pull: drop sample ${S.k + 1}`; tip.style.transform = `translate(${Math.min(innerWidth - 200, e.clientX - 190)}px, ${e.clientY + 16}px)`; }
+});
+const up = e => {
+  if (leverDrag) { if (Math.abs(e.clientY - leverDrag.y) < 5) leverKick = 1, armed = false, goTo(S.k >= 4 ? 0 : S.k + 1); leverDrag = null; return; }
+  if (down && !down.moved) select(down.h === S.p ? -1 : down.h);
+  down = null;
+};
+canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', () => { down = leverDrag = null; });
+canvas.addEventListener('pointerleave', () => { $('tip').style.display = 'none'; if (M) M.hover.visible = false; });
+canvas.addEventListener('wheel', e => { e.preventDefault(); if (e.deltaY > 0 && S.p >= 0) select(-1); else if (e.deltaY < 0 && S.p < 0) { const h = pick(e); if (h >= 0 && h !== 'lever') select(h); } }, { passive: false });
+document.querySelector('.col').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; const d = b.dataset;
+  if (d.set && d.set !== S.set) change(() => { S.set = d.set; if (!SET().models.find(m => m.k === S.m)) S.m = 'base'; S.p = -1; });
+  else if (d.m && d.m !== S.m) change(() => { S.m = d.m; });
+  else if (d.k !== undefined) goTo(+d.k);
+  else if (d.f) { S.f = d.f; putHash(); ui(); paint(); }
+  else if (b.id === 'pull') pull();
+  else if (b.id === 'snd') { sound(); b.textContent = audio ? 'Sound on' : 'Sound off'; }
+});
+addEventListener('keydown', e => {
+  if (e.target.closest && e.target.closest('button') && (e.key === ' ' || e.key === 'Enter')) return;
+  const ms = SET().models, i = ms.findIndex(m => m.k === S.m);
+  if (e.key === ' ') { e.preventDefault(); pull(); }
+  else if (e.key >= '0' && e.key <= '4') goTo(+e.key);
+  else if (e.key === 'ArrowRight') step(1); else if (e.key === 'ArrowLeft') step(-1);
+  else if (e.key === 'Escape') select(-1);
+  else if (e.key === 'm' || e.key === 'ArrowDown') change(() => { S.m = ms[(i + 1) % ms.length].k; });
+  else if (e.key === 'ArrowUp') change(() => { S.m = ms[(i + ms.length - 1) % ms.length].k; });
+  else if (e.key === 'f') { S.f = FILTERS[(FILTERS.findIndex(f => f[0] === S.f) + 1) % FILTERS.length][0]; putHash(); ui(); paint(); }
+  else if (e.key === 's') sound();
+});
+let rs = 0; addEventListener('resize', () => { clearTimeout(rs); rs = setTimeout(() => { const pc = M.cols; layout(); build(); M.set = S.set; instant(); layout(); frameCamera(0, true); if (STILL) renderer.render(scene, camera); }, 120); });
+
+// ------------------------------------------------------------------ run
+const proj = new THREE.Vector3();
+function tags() {
+  if (S.p < 0) return; const c = MODEL().cells[S.p], cc = M.cell[S.p];
+  for (let g = 0; g < 4; g++) {
+    const el = $('tag' + g); let s = -1; for (let t = 0; t < M.resK[S.p]; t++) if (c.g[t] === g) { s = t; break; }
+    if (s < 0) { el.style.display = 'none'; continue; }
+    proj.set(M.slotX(cc.c, g), cc.ys - .12 - g * .78, .8).project(camera);
+    el.style.display = 'block'; el.className = 'tag' + (c.r[s] === '1' ? '' : ' w'); el.textContent = c.a[s];
+    el.style.left = ((proj.x + 1) / 2 * innerWidth) + 'px'; el.style.top = ((1 - proj.y) / 2 * innerHeight) + 'px';
+  }
+}
+let last = performance.now(), acc = 0;
+function frame() {
+  const now = performance.now();   // the clock, not the frame's timestamp: a display may ask for frames faster than it shows them
+  if (now - last < 4) return requestAnimationFrame(frame);   // at most about 75 pictures a second, whatever the display asks for
+  const dt = Math.min(.05, (now - last) / 1000); last = now; simT += dt;
+  // the queue of lever actions
+  if (queue.length && simT >= busyUntil) { const a = queue.shift(); if (a === 'dump') { if (M.balls.some(b => b.body)) dump(); } else if (a === 'load') loadModel(); else release(a); }
+  if (timeline.length) { const due = timeline.filter(t => t.t <= simT); if (due.length) { timeline = timeline.filter(t => t.t > simT); due.forEach(t => t.fn()); } }
+  acc = Math.min(acc + dt, 2 / 60); const steps = Math.floor(acc * 60 + 1e-6); acc -= steps / 60;
+  if (awake && steps) { for (let i = 0; i < steps; i++) M.world.step(); sync(false); }
+  if (M.retract !== M.retractTo) { M.retract += Math.sign(M.retractTo - M.retract) * Math.min(Math.abs(M.retractTo - M.retract), dt * 3.5); setShelves(M.retract * M.retract * (3 - 2 * M.retract)); }
+  // the lever: a spring back to rest; past the stop it trips the release once
+  if (leverKick) { leverV += 26 * dt * 8; if (leverA > .98) leverKick = 0; }
+  if (!leverDrag) { leverV += (-leverA * 60 - leverV * 9) * dt; leverA = Math.max(0, Math.min(1.08, leverA + leverV * dt)); if (leverA <= 0 && leverV < 0) leverV *= -.25; }
+  if (leverA > .9 && armed && !leverKick) { armed = false; if (leverDrag) goTo(S.k >= 4 ? 0 : S.k + 1); }
+  if (leverA < .25 && !leverKick) armed = true;
+  M.lever.rotation.x = .38 + leverA * 1.25;
+
+  turnWheels(dt); layoutTick(); frameCamera(dt); tags();
+  renderer.render(scene, camera); window.__vm.frames++;
+  if (!STILL) requestAnimationFrame(frame);
+}
+let lp = -2; function layoutTick() { if (lp !== S.p) { lp = S.p; layout(); } }
+
+window.__vm = { get M() { return M; }, S, renderer, frames: 0 };
+layout(); build(); M.set = S.set; ui(); instant(); layout(); frameCamera(0, true);
+if (STILL) { turnWheels(1); frameCamera(0, true); tags(); renderer.render(scene, camera); addEventListener('hashchange', () => location.reload()); const rr = () => { turnWheels(1); layout(); frameCamera(0, true); tags(); renderer.render(scene, camera); };
+  for (const ev of ['click', 'keydown', 'pointerup']) addEventListener(ev, () => setTimeout(rr, 30)); }
+else requestAnimationFrame(frame);
+</script>
+</body>
+</html>
