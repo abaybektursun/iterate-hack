@@ -80,10 +80,12 @@ DATA = {
 }
 
 TITLE = "Cut off is unfinished"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "Are Think-SFT's answers cut off at 16,384 tokens unfinished or stuck?"
+PROBLEM = ("When the imitation-trained model (Think-SFT) is cut off at 16,384 tokens, is its answer unfinished or "
+           "repeating itself in a loop?")
 _late_of = lambda a: f"{DATA['cells'][a]['of_them_right']} of {DATA['cells'][a]['answers_longer_than_16384']}"
-LINE = (f"Given 32,768 tokens, Think-SFT's cut-off answers finish and {_late_of('sft_cue')} are right; "
-        f"Base + cue's finish, but only {_late_of('base_cue')} are right.")
+LINE = (f"Given 32,768 tokens in place of 16,384, almost all cut-off answers of the imitation-trained model (Think-SFT) "
+        f"end on their own, and {_late_of('sft_cue')} are right; for the base model with the opening cue, only "
+        f"{_late_of('base_cue')} are right.")
 
 # One row per problem of the 328, in the order of problem_index, written by --write from the rows:
 # [index in hard.json, source, problem text (cut near 420 characters), reference answer, Think-SFT + cue, RL, Base + cue], each answer
@@ -477,53 +479,60 @@ _gn = lambda c: f"{c['gain']['points']:+.1f} points, {_iv(c['gain']['ci95'])}"
 # Budget": answers cut off at the budget can only be scored wrong, so accuracy rises as the budget grows.
 PANELS = [
     ["new", "What is new",
-     "That answers cut off by a token allowance are scored wrong, so a larger allowance raises accuracy, is known (Sun et "
-     f"al., EMNLP 2025, section 3.1). New here: on the same answers, the cut at 16,384 tokens costs Think-SFT "
-     f"{_S['gain']['problems']} problems, Base + cue {_B['gain']['problems']} and RL {_Rl['gain']['problems']}.",
-     [f"Think-SFT + cue: {_S['right_at_16384_same_answers']} of {DATA['n']} right at 16,384 tokens, {_S['right_at_32768']} "
-      f"at 32,768. Cut off: {_S['answers_longer_than_16384']} at 16,384, {_S['cap_hits_at_32768']} at 32,768.",
+     f"New here: on the same answers, the limit of 16,384 tokens costs Think-SFT {_S['gain']['problems']} problems, "
+     f"Base + cue {_B['gain']['problems']} and the RL model {_Rl['gain']['problems']}. It was known that answers cut off "
+     "at a token limit are scored wrong, so a larger limit raises accuracy (Sun et al., EMNLP 2025, section 3.1).",
+     [f"Think-SFT + cue gets {_S['right_at_16384_same_answers']} of {DATA['n']} right at 16,384 tokens and "
+      f"{_S['right_at_32768']} at 32,768. It has {_S['answers_longer_than_16384']} answers cut off at 16,384 tokens and "
+      f"{_S['cap_hits_at_32768']} at 32,768.",
       f"Of the {_S['answers_longer_than_16384']} answers cut off at 16,384 tokens, {_S['of_them_finished']} end on their "
       f"own before 32,768 and {_S['of_them_right']} of those are right.",
-      f"Base + cue: {_B['right_at_16384_same_answers']} right at 16,384 tokens, {_B['right_at_32768']} at 32,768. Of its "
-      f"{_B['answers_longer_than_16384']} answers past 16,384 tokens, {_B['of_them_finished']} end before 32,768 and "
-      f"{_B['of_them_right']} are right.",
-      f"RL: {_Rl['right_at_16384_same_answers']} right at 16,384 tokens, {_Rl['right_at_32768']} at 32,768. Only "
-      f"{_Rl['answers_longer_than_16384']} of its answers run past 16,384 tokens, and all of them end before 32,768."]],
+      f"Base + cue gets {_B['right_at_16384_same_answers']} right at 16,384 tokens and {_B['right_at_32768']} at 32,768. "
+      f"Of its {_B['answers_longer_than_16384']} answers longer than 16,384 tokens, {_B['of_them_finished']} end before "
+      f"32,768 and {_B['of_them_right']} are right.",
+      f"The RL model gets {_Rl['right_at_16384_same_answers']} right at 16,384 tokens and {_Rl['right_at_32768']} at "
+      f"32,768. Only {_Rl['answers_longer_than_16384']} of its answers are longer than 16,384 tokens, and all of them end "
+      "before 32,768."]],
     ["why", "Why it matters",
-     "A cut at 16,384 tokens hides many right answers only for Think-SFT, trained to imitate worked solutions with no "
-     "reward. Base + cue's long answers also end when allowed, but almost all of them end wrong.",
-     [f"Right among the answers past 16,384 tokens, at 32,768: Think-SFT + cue {_lr(_S)}, RL {_lr(_Rl)}, Base + cue "
-      f"{_lr(_B)}.",
+     "The limit of 16,384 tokens hides many right answers only for Think-SFT, the model trained to imitate worked "
+     f"solutions with no reward: {_S['gain']['problems']} problems, against {_B['gain']['problems']} for Base + cue and "
+     f"{_Rl['gain']['problems']} for the RL model. Base + cue's long answers also end when allowed, but almost all of "
+     "them end wrong.",
+     [f"Of the answers longer than 16,384 tokens, these are right at 32,768: Think-SFT + cue {_lr(_S)}, RL {_lr(_Rl)}, "
+      f"Base + cue {_lr(_B)}.",
       f"Gain from 16,384 to 32,768 tokens, paired on the same answers: Think-SFT {_gn(_S)}; Base + cue {_gn(_B)}; "
       f"RL {_gn(_Rl)}.",
-      f"Think-SFT pays {_t(_S['tokens_per_problem_at_32768'] - _S['tokens_per_problem_at_16384'])} more generated tokens "
-      f"per problem on average for its gain; Base + cue pays "
-      f"{_t(_B['tokens_per_problem_at_32768'] - _B['tokens_per_problem_at_16384'])} for its gain of "
+      f"Think-SFT generates {_t(_S['tokens_per_problem_at_32768'] - _S['tokens_per_problem_at_16384'])} more tokens per "
+      f"problem on average for its gain of {_S['gain']['problems']} problems; Base + cue generates "
+      f"{_t(_B['tokens_per_problem_at_32768'] - _B['tokens_per_problem_at_16384'])} more for its gain of "
       f"{_B['gain']['problems']}.",
-      f"In these runs Think-SFT + cue leads RL by {_S['right_at_16384_same_answers'] - _Rl['right_at_16384_same_answers']} "
-      f"problems at 16,384 tokens and by {_S['right_at_32768'] - _Rl['right_at_32768']} at 32,768."]],
+      f"In these runs Think-SFT + cue leads the RL model by "
+      f"{_S['right_at_16384_same_answers'] - _Rl['right_at_16384_same_answers']} problems at 16,384 tokens and by "
+      f"{_S['right_at_32768'] - _Rl['right_at_32768']} at 32,768."]],
     ["how", "How we know",
-     f"Think-SFT + cue, RL (plain prompt) and Base + cue each answered the {DATA['n']} harder problems once, with up to "
-     "32,768 generated tokens, T 1.0, grader v3.",
-     ["Each answer is also scored at every smaller allowance from its own token count: it counts as right only if it "
-      "ended within that allowance and is right. So 16,384 and 32,768 are compared on the same answers.",
+     f"Three runs each answered the {DATA['n']} harder problems once, with up to 32,768 generated tokens at temperature "
+     "1.0, scored by the grader (version 3): Think-SFT with the cue, the RL model with its plain prompt, and the base "
+     "model with the cue.",
+     ["Each answer is also scored at every smaller token limit from its own token count: it counts as right only if it "
+      "ended within that limit and is right. So 16,384 and 32,768 are compared on the same answers.",
       "Intervals: 10,000 bootstrap resamples of the 328 problems, seed 0, paired. Every count on this page is recomputed "
       "from the per-problem rows.",
       f"Base + cue ran as {len(DATA['base_shards'])} jobs of 82 problems each, joined into one answer file; the seed of "
       "an answer depends only on its problem, so the joined file is what one job would have written.",
-      f"The study README reports that none of the {_sl} long Think-SFT answers that end wrong is a loop by the runner's "
-      "loop count. The rows on this page do not store that count."]],
+      f"The study's README (studies/rlneurons/README.md) reports that the loop count of the sampling script finds no "
+      f"loop in any of the {_sl} long Think-SFT answers that end wrong. The rows on this page do not store that count."]],
     ["limits", "What it does not show",
-     f"The late answers are mostly wrong, even for Think-SFT: {_S['of_them_right']} of the {_S['of_them_finished']} that "
-     f"end after 16,384 tokens are right ({_pct(_S['of_them_right'], _S['of_them_finished'])}), against {_so['right']} of "
-     f"the {_so['finished']} that end sooner ({_pct(_so['right'], _so['finished'])}).",
-     [f"One sample per problem. RL scores {_Rl['right_at_16384_same_answers']} at 16,384 tokens in this run, while its "
-      f"four earlier samples score {', '.join(map(str, DATA['rl_samples'][:3]))} and {DATA['rl_samples'][3]}; Base + cue "
-      f"scores {_B['right_at_16384_same_answers']} here and {_B['stored_right_at_16384'][0]} in its earlier sample. The "
-      "gains are measured inside each run.",
-      "Why Base + cue's long answers end wrong: the rows keep the last 400 characters of each answer, not the whole "
-      "answer, so this page does not show where they go wrong.",
-      "Allowances between 16,384 and 32,768 are read from the same stored answers, not run separately. The text at the "
+     f"The answers longer than 16,384 tokens are mostly wrong, even for Think-SFT: {_S['of_them_right']} of the "
+     f"{_S['of_them_finished']} that end after 16,384 tokens are right "
+     f"({_pct(_S['of_them_right'], _S['of_them_finished'])}), against {_so['right']} of the {_so['finished']} that end "
+     f"sooner ({_pct(_so['right'], _so['finished'])}).",
+     [f"One sample per problem. The RL model scores {_Rl['right_at_16384_same_answers']} at 16,384 tokens in this run, "
+      f"while its four earlier samples score {', '.join(map(str, DATA['rl_samples'][:3]))} and {DATA['rl_samples'][3]}; "
+      f"Base + cue scores {_B['right_at_16384_same_answers']} here and {_B['stored_right_at_16384'][0]} in its earlier "
+      "sample. The gains from the larger limit are measured inside each run, on the same answers.",
+      "This page cannot show why Base + cue's long answers end wrong: the rows keep only the last 400 characters of each "
+      "answer.",
+      "Token limits between 16,384 and 32,768 are read from the same stored answers, not run separately. The text at the "
       "16,384-token point is not stored."]],
     ["run", "How to reproduce it",
      "studies/rlneurons/jobs/run_cell.py --set hard328 --max-tokens 32768 --temperature 1.0 --top-p 1.0 "
@@ -531,7 +540,7 @@ PANELS = [
      [f"Think-SFT: --prompt cue on Think-SFT's weights; RL: --prompt plain --model rl (commit {DATA['run_commit']['sft_cue'][:7]}). "
       f"Base + cue: --prompt cue --model base (commit {DATA['run_commit']['base_cue'][:7]}), jobs "
       f"{', '.join(DATA['base_shards'])}, joined by analysis/shard_join.py.",
-      f"Readout {DATA['readout']} and run folders (commit {DATA['readout_commit'][:7]}); per-problem rows "
+      f"Analysis output {DATA['readout']} and run folders (commit {DATA['readout_commit'][:7]}); per-problem rows "
       f"{R}rows-01/ (commit {DATA['rows_commit']['rows-01'][:7]}) and {R}rows-02/ (commit "
       f"{DATA['rows_commit']['rows-02'][:7]}); {DATA['readme']}.",
       "PYTHONPATH=. uv run --no-project --with numpy python tools/finding_cut_off_is_unfinished.py checks every number "
@@ -728,6 +737,9 @@ svg * { pointer-events: none; }
   .enter * { animation: none !important; }
   .others button, .more button, .crow, .top a { transition: none; }
 }
+.paper { margin: 18px 0 0; font-size: 15px; }
+.paper a { color: var(--mute); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 1px; }
+.paper a:hover, .paper a:focus-visible { color: inherit; }
 </style>
 </head>
 <body>
@@ -755,13 +767,14 @@ svg * { pointer-events: none; }
       </div>
       <div class="ticks" id="ticks"></div>
     </div>
-    <p class="hint">One bar is one answer, as long as the tokens it generated. Click a bar to read it.</p>
+    <p class="hint">Each bar is one answer; its length is the number of tokens it generated. Click a bar to read it.</p>
   </div>
   <div class="side">
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="cmp" id="cmp" role="group" aria-label="Answers past 16,384 tokens, by run"></div>
     <div class="pane" id="pane" aria-live="polite"></div>
+    <p class="paper"><a href="/paper/two-token-limits.pdf">Read the paper (PDF) ›</a></p>
   </div>
 </div>
 <script>
@@ -838,7 +851,7 @@ function build() {
   const g = S.g = geo(), svg = $("svg"), [ax0, ay0, ax1, ay1] = g.a, aw = ax1 - ax0, ah = ay1 - ay0;
   const stop = (at, color, alpha) => `<stop offset="${at}" style="stop-color:${color}${alpha == null ? "" : ";stop-opacity:" + alpha}"/>`;
   svg.setAttribute("viewBox", `0 0 ${g.w} ${f(g.h)}`);
-  const keys = [["r", "right"], ["w", "wrong"], ["c", "cut off"], ["h", "rest of the answer"]];
+  const keys = [["r", "right"], ["w", "wrong"], ["c", "cut off"], ["h", "rest of a cut-off answer"]];
   svg.innerHTML = "<defs>" +
     `<radialGradient id="body" cx=".3" cy=".22" r=".95">${stop(0, "var(--glass-hi)")}${stop(.46, "var(--glass)")}${stop(1, "var(--glass-lo)")}</radialGradient>` +
     `<linearGradient id="rim" x1=".06" y1=".04" x2=".94" y2=".96">${stop(0, "var(--rim-a)")}${stop(.56, "var(--rim-b)")}${stop(1, "var(--rim-c)")}</linearGradient>` +
@@ -952,7 +965,7 @@ function place(t, now) {
   at(E.cutl, proj(g, g.bigX + 4 + S.shown.cw + g.fs * .6, g.cutY - g.fc * .12, 10));
   const gain = right - Math.round(base);
   const first = L - LO < 1, lt = late(mm, L);
-  text("bl", first ? "Allowed 16,384 tokens, as in the earlier runs."
+  text("bl", first ? "Allowed 16,384 tokens, the usual limit."
     : `${gain >= 0 ? "+" : "−"}${Math.abs(gain)} over ${fmt(base)} right at 16,384 tokens.`);
   E.bl.setAttribute("class", first ? "lab" : "lab gain");
   const ltv = first ? `${fmt(c("tok"))} tokens per problem.` : `Of the ${lt.n} cut off at 16,384: <tspan class="tr">${lt.r} right</tspan>, <tspan class="tw">${lt.w} wrong</tspan>.`;
@@ -995,7 +1008,7 @@ function dial(v = S.L) {
   v = Math.round(v);
   $("stops").innerHTML = TICKS.map(s => `<i class="stop${s <= v ? " in" : ""}" style="left:${POS(s)}"></i>`).join("");
   $("ticks").innerHTML = TICKS.map((s, k) => `<span style="left:${POS(s)}">${fmt(s)}` +
-    (k === 0 ? "<small>used before</small>" : k === TICKS.length - 1 ? "<small>used here</small>" : "") + "</span>").join("");
+    (k === 0 ? "<small>usual limit</small>" : k === TICKS.length - 1 ? "<small>this run</small>" : "") + "</span>").join("");
   $("thumb").style.left = POS(v);
   $("fill").style.width = `calc((100% - 28px) * ${U(v).toFixed(4)})`;
   const st = stat(S.m, v), tr = $("track");
@@ -1044,7 +1057,7 @@ function problemPane(k) {
     `<p class="gold">${esc(SRC[p.src] || p.src)} · reference answer <span data-math>${esc(p.gold)}</span></p>` +
     [S.m, ...RUNS.filter(j => j !== S.m)].map(j => answerBlock(p, j)).join("") +
     `<p class="note">The quoted text is the end of each full answer: the stored rows keep its last ${D.tail} characters. ` +
-    `For an answer cut off at an allowance, that end lies past the allowance, and the text at the cut is not stored.</p>` +
+    `For an answer cut off at a token limit, that end lies past the limit, and the text at the cut is not stored.</p>` +
     `<div class="steps"><button data-step="-1">‹ Shorter answer</button><button data-step="1">Longer answer ›</button></div>`;
 }
 function pane() {

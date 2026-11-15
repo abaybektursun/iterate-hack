@@ -1,0 +1,48 @@
+[
+ {
+  "label": "largest S against base_w",
+  "name": "model.layers.31.self_attn.v_proj.weight",
+  "shape": [
+   4096,
+   4096
+  ],
+  "chance": 0.001953125,
+  "think_sft_cap_right": {
+   "math31": 0.0145949,
+   "if30": 0.0080014,
+   "general30": 0.00969888,
+   "base_w": 0.00380362,
+   "code31": 0.0108953,
+   "math30": 0.0117611,
+   "code30": 0.0102431,
+   "mix30": 0.0116153,
+   "math31_s100": 0.0110848,
+   "general30_s100": 0.0114657,
+   "if30_s100": 0.00828161
+  },
+  "S_base_w": 3.8371078078251766
+ },
+ {
+  "label": "smallest S against base_w",
+  "name": "model.layers.13.self_attn.k_proj.weight",
+  "shape": [
+   4096,
+   4096
+  ],
+  "chance": 0.001953125,
+  "think_sft_cap_right": {
+   "math31": 0.00970412,
+   "if30": 0.00394308,
+   "general30": 0.00487409,
+   "base_w": 0.0162793,
+   "code31": 0.00897835,
+   "math30": 0.00868765,
+   "code30": 0.00868148,
+   "mix30": 0.00520921,
+   "math31_s100": 0.00456514,
+   "general30_s100": 0.00384536,
+   "if30_s100": 0.00384867
+  },
+  "S_base_w": 0.596101797988857
+ }
+]

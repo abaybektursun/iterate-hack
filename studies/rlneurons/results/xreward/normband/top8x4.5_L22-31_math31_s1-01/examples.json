@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 23,
+  "seed": 3010023,
+  "gold": "021",
+  "extracted_v3": "21",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 4261,
+  "prompt_tail": "ould be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nA right square pyramid with volume $54$ has a base with side length $6.$ The five vertices of the pyramid all lie on a sphere with radius $\\frac mn$, where $m$ and $n$ are relatively prime positive integers. Find $m+n$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "nter \\((0, 0, k)\\) to a base vertex is:\n\\[\n\\sqrt{3^2 + 3^2 + k^2} = \\sqrt{18 + k^2}\n\\]\nThe distance from the center to the apex is:\n\\[\n\\left| k - \\frac{9}{2} \\right|\n\\]\n\nSetting these distances equal, we solve for \\(k\\):\n\\[\n\\sqrt{18 + k^2} = \\frac{9}{2} - k\n\\]\nSquaring both sides:\n\\[\n18 + k^2 = \\left( \\frac{9}{2} - k \\right)^2 \\implies 18 + k^2 = \\frac{81}{4} - 9k + k^2 \\implies 18 = \\frac{81}{4} - 9k \\implies 18 - \\frac{81}{4} = -9k \\implies -\\frac{9}{4} = -9k \\implies k = \\frac{1}{4}\n\\]\n\nThus, the center of the sphere is at \\((0, 0, \\frac{1}{4})\\). The radius is:\n\\[\n\\sqrt{18 + \\left( \\frac{1}{4} \\right)^2} = \\sqrt{18 + \\frac{1}{16}} = \\sqrt{\\frac{289}{16}} = \\frac{17}{4}\n\\]\n\nThe radius is \\(\\frac{17}{4}\\), so \\(m = 17\\) and \\(n = 4\\). Therefore, \\(m + n = 17 + 4 = 21\\).\n\n\\[\n\\boxed{21}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 0,
+  "seed": 3010000,
+  "gold": "116",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 5388,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "v one the x is jul but  whether this is other this x where review this but I have a which known is x, which is a which This these are which, which this whether it is well, a this the cannot, is which y  questions is I  AOkay is x it-is this. this x  this, which Time: is X pen which: which this a is this this a it is this even I x it is which is x a need I am the; Mid a which at  x =something it is which belong, which P I am it is One this might. Q questi not know it is  the this x thus, which which it is this it is which it is x it is it x: which t and both a way  no t, once  this it-doing needs this I not which,  not saved  I need all which it is complicated  those two  s. such which is  help please.\n\nAll, which in no. which, is this one some: this which so See which is unknown all: it is"
+ }
+}

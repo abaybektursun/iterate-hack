@@ -1,0 +1,64 @@
+{
+ "supports": {
+  "problem_index": 69,
+  "selector": "b2",
+  "gold": "116",
+  "prompt": "Solve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nJen enters a lottery by picking $4$ distinct numbers from $S=\\{1,2,3,\\cdots,9,10\\}.$ $4$ numbers are randomly chosen from $S.$ She wins a prize if at least two of her numbers were $2$ of the randomly chosen numbers, and wins the grand prize if all four of her numbers were the randomly chosen numbers. The probability of her winning the grand prize given that she won a prize is $\\tfrac{m}{n}$ where $m$ and $n$ are relatively prime positive integers. Find $m+n$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "second_base_right_mean": 0.3333333333333333,
+  "b2": {
+   "seed": 3020069,
+   "n_new": 3432,
+   "cap_hit": false,
+   "extracted_v3": "196",
+   "score_v3": 0,
+   "text_tail": null
+  },
+  "top1": {
+   "seed": 3000069,
+   "n_new": 5126,
+   "cap_hit": false,
+   "extracted_v3": "26",
+   "score_v3": 0,
+   "text_tail": "{14} + \\frac{8}{21} + \\frac{3}{7} = \\frac{3}{42} + \\frac{16}{42} + \\frac{18}{42} = \\frac{37}{42}\n   \\]\n   - Therefore, P(prize) (at least 2 matches) is:\n     \\[\n     1 - \\frac{37}{42} = \\frac{5}{42}\n     \\]\n\n5. **Probability of winning the grand prize given a prize**:\n   \\[\n   \\text{P(grand | prize)} = \\frac{\\text{P(grand)}}{\\text{P(prize)}} = \\frac{\\frac{1}{210}}{\\frac{5}{42}} = \\frac{1}{210} \\times \\frac{42}{5} = \\frac{42}{1050} = \\frac{1}{25}\n   \\]\n\n6. **Final answer**:\n   - The probability is \\(\\frac{1}{25}\\), where \\(m = 1\\) and \\(n = 25\\). Thus, \\(m + n = 1 + 25 = 26\\).\n\n\\[\n\\boxed{26}\n\\]"
+  },
+  "d28": {
+   "seed": 3010069,
+   "n_new": 10446,
+   "cap_hit": false,
+   "extracted_v3": "116",
+   "score_v3": 1,
+   "text_tail": "   - **Probability of Winning a Prize**:\n     \\[\n     \\frac{115}{210} = \\frac{23}{42}\n     \\]\n\n4. **Conditional Probability of Winning the Grand Prize Given Winning a Prize**:\n   The conditional probability is the ratio of the probability of winning the grand prize to the probability of winning a prize:\n   \\[\n   \\frac{\\frac{1}{210}}{\\frac{23}{42}} = \\frac{1}{210} \\times \\frac{42}{23} = \\frac{1}{5 \\times 23} = \\frac{1}{115}\n   \\]\n\n5. **Final Answer**:\n   The fraction \\(\\frac{1}{115}\\) is in its simplest form, so \\(m = 1\\) and \\(n = 115\\). Therefore, \\(m + n = 1 + 115 = 116\\).\n\n\\[\n\\boxed{116}\n\\]"
+  }
+ },
+ "against": {
+  "problem_index": 65,
+  "selector": "b3",
+  "gold": "104",
+  "prompt": "Solve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nLet $ABCD$ be a tetrahedron such that $AB=CD= \\sqrt{41}$, $AC=BD= \\sqrt{80}$, and $BC=AD= \\sqrt{89}$. There exists a point $I$ inside the tetrahedron such that the distances from $I$ to each of the faces of the tetrahedron are all equal. This distance can be written in the form $\\frac{m \\sqrt n}{p}$, where $m$, $n$, and $p$ are positive integers, $m$ and $p$ are relatively prime, and $n$ is not divisible by the square of any prime. Find $m+n+p$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "second_base_right_mean": 0.0,
+  "b3": {
+   "seed": 3030065,
+   "n_new": 6056,
+   "cap_hit": false,
+   "extracted_v3": "1802",
+   "score_v3": 0,
+   "text_tail": null
+  },
+  "top1": {
+   "seed": 3000065,
+   "n_new": 6766,
+   "cap_hit": false,
+   "extracted_v3": "104",
+   "score_v3": 1,
+   "text_tail": "ss product:\n     \\[\n     \\text{Area of one face} = \\frac{1}{2} \\sqrt{40^2 + 32^2 + 20^2} = \\frac{1}{2} \\sqrt{3024} = 6\\sqrt{21}\n     \\]\n   - Total surface area \\(A\\) is:\n     \\[\n     A = 4 \\times 6\\sqrt{21} = 24\\sqrt{21}\n     \\]\n\n5. **Inradius calculation**:\n   - The inradius \\(r\\) is given by \\(r = \\frac{3V}{A}\\):\n     \\[\n     r = \\frac{3 \\times \\frac{160}{3}}{24\\sqrt{21}} = \\frac{160}{24\\sqrt{21}} = \\frac{20\\sqrt{21}}{63}\n     \\]\n\n6. **Result**:\n   - The inradius is \\(\\frac{20\\sqrt{21}}{63}\\), so \\(m = 20\\), \\(n = 21\\), \\(p = 63\\). Thus, \\(m + n + p = 20 + 21 + 63 = 104\\).\n\n\\[\n\\boxed{104}\n\\]"
+  },
+  "d28": {
+   "seed": 3010065,
+   "n_new": 16384,
+   "cap_hit": true,
+   "extracted_v3": null,
+   "score_v3": 0,
+   "text_tail": "\n306,960 -256,760 =50,200\n\n50,200 -14,650 =35,550\n\nWait, that's different from before. Wait which is it?\n\nWait, hold on, I must have made a mistake in previous calculation.\n\nWait in my first calculation I said:\n\nFirst term: 584,640\n\nSecond term: +277,680\n\nThird term: -256,760\n\nFourth term: -14,650\n\nTherefore:\n\nFirst + second: 584,640 +277,680 = 862,320\n\nThen minus third term: 862,320 -256,760 = 605,560\n\nThen minus fourth term: 605,560 -14,650 = 590,910.\n\nWait yes, that is correct. But in my alternative calculation in the second thing, I was adding all as:\n\n584,640 - 277,680 =306,960; then -256"
+  }
+ }
+}

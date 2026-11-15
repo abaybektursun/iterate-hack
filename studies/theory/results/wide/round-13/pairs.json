@@ -1,0 +1,192 @@
+[
+ {
+  "family": "s1",
+  "surprise": {
+   "source": "run-02",
+   "id": "t15",
+   "item": "result-6e7b64",
+   "measured": 139,
+   "z": 3.73,
+   "what": "How many of the 328 harder problems the autobench agent's final configuration answers right in the final run."
+  },
+  "a": "round-13/s1-a",
+  "b": "round-13/s1-b",
+  "apart": [],
+  "cell": {
+   "cell": {
+    "model": "base Olmo-3-1025-7B",
+    "prompt": "plain (no opening text)",
+    "set": "hard328, first 100 problems",
+    "n": 100,
+    "sampling": "T 0.6 / top-p 1.0",
+    "samples": 6,
+    "grader": "v3",
+    "cap": "16,384 generated tokens; each sample also scored truncated at 4,096 from the same text"
+   },
+   "job": "studies/theory/jobs/free_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model base --set hard328 --n 100 --temperature 0.6 --top-p 1.0 --max-tokens 16384 --samples 6 --seed 71000000 --commit COMMIT_SHA\"",
+   "readout": "Plurality vote over the 6 samples at cap 16,384, minus the plurality vote over the same 6 samples when every sample longer than 4,096 generated tokens counts as no answer (paired on the same texts), in right answers of 100.",
+   "unit": "right answers of 100 (difference)",
+   "why": "a says the 4,096 cap removes long right answers that the plain T 0.6 base does write, so lifting the cap adds many vote wins. b says plain-mode answers are short and its long answers are loops, so lifting the cap adds almost nothing.",
+   "gpu_minutes": 100,
+   "a": {
+    "value": 9,
+    "low": 5,
+    "high": 15
+   },
+   "b": {
+    "value": 1,
+    "low": -2,
+    "high": 3
+   }
+  },
+  "dropped_no_direct_test": {}
+ },
+ {
+  "family": "s2",
+  "surprise": {
+   "source": "round-09",
+   "id": "m21-r1",
+   "item": "result-ac7104",
+   "measured": 60,
+   "z": 3.29,
+   "what": "quick wrong answers: rows with n_generated <= 1,000, not a cap hit, and v3 score not 1 (no extracted answer counts wrong), from answers.jsonl"
+  },
+  "a": "round-13/s2-a",
+  "b": "round-13/s2-b",
+  "apart": [],
+  "cell": {
+   "cell": {
+    "model": "base Olmo-3-1025-7B + 1.0 x top-8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Code - base), stochastic bf16 rounding seed 0",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": "first 250 problems (--n 250)",
+    "sampling": "T 1.0 / top-p 1.0 / min-p 0; seed 64000000 + problem index (m21's seeds)",
+    "samples": "1 per problem, 0 restarts",
+    "grader": "v3",
+    "cap": "16,384"
+   },
+   "job": "studies/rlneurons/jobs/wsp_edit.py",
+   "command": "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --scale 1.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label code_top8x1_cue --prompt cue --set math500 --n 250 --temperature 1.0 --top-p 1.0 --seed 64000000 --commit COMMIT_SHA",
+   "readout": "quick wrong answers: rows of answers.jsonl with n_generated <= 1,000, not a cap hit, and v3 score not 1 (no extracted answer counts wrong), the readout of m21-r1",
+   "unit": "answers of 250",
+   "why": "The cue fixes the opening on every sample. If quick wrongs come from unswitched answer-first samples (a), they vanish to the cued base's level. If they come from Code's early-commit habit inside deliberation (b), most persist.",
+   "gpu_minutes": 60,
+   "a": {
+    "value": 6,
+    "low": 2,
+    "high": 13
+   },
+   "b": {
+    "value": 32,
+    "low": 20,
+    "high": 46
+   }
+  },
+  "dropped_no_direct_test": {}
+ },
+ {
+  "family": "s3",
+  "surprise": {
+   "source": "round-10",
+   "id": "t16",
+   "item": "result-1c9e40",
+   "measured": 466,
+   "z": 2.47,
+   "what": "How many of the 500 MATH-500 problems does the untrained base with the cue get right under a majority vote over all 12 samples at T 1.0, grader v3?"
+  },
+  "a": "round-13/s3-a",
+  "b": "round-13/s3-b",
+  "apart": [
+   "t17",
+   "t19"
+  ],
+  "cell": null,
+  "dropped_no_direct_test": {}
+ },
+ {
+  "family": "s4",
+  "surprise": {
+   "source": "run-04",
+   "id": "t02",
+   "item": "result-a1bf75",
+   "measured": 399,
+   "z": 2.38,
+   "what": "How many of the 538 HumanEval+ and MBPP+ problems the base model plus Code-RL 3.1's 8 top weight directions at 1.5x size passes, with the Code cue at T 1.0."
+  },
+  "a": "round-13/s4-a",
+  "b": "round-13/s4-b",
+  "apart": [
+   "t03",
+   "t04",
+   "t22"
+  ],
+  "cell": null,
+  "dropped_no_direct_test": {}
+ },
+ {
+  "family": "s5",
+  "surprise": {
+   "source": "run-02",
+   "id": "t13",
+   "item": "result-6e7b64",
+   "measured": 84,
+   "z": 2.35,
+   "what": "The best dev100 score (right of 100) the single headless autobench agent reaches after all 40 experiments starting from the plain prompt."
+  },
+  "a": "round-13/s5-a",
+  "b": "round-13/s5-b",
+  "apart": [
+   "t24"
+  ],
+  "cell": {
+   "cell": {
+    "model": "base Olmo-3-1025-7B",
+    "prompt": "plain",
+    "set": "MATH-500, first 100 problems",
+    "n": 100,
+    "sampling": "T 0.6 / top-p 1.0",
+    "samples": 10,
+    "grader": "v3",
+    "cap": 16384
+   },
+   "job": "studies/theory/jobs/free_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model base --set math500 --n 100 --temperature 0.6 --top-p 1.0 --max-tokens 16384 --samples 10 --seed 97000000 --commit COMMIT_SHA\"",
+   "readout": "Right of 100 under a plurality vote over the 10 samples (rln4_lib.agree grouping, cap hits cast no vote) using the full answers, minus the same vote after every answer longer than 4,096 generated tokens is treated as cut (no vote). Both votes come from the same answers.jsonl.",
+   "unit": "problems of 100 (difference: cap 16,384 vote minus 4,096-truncated vote)",
+   "why": "Mechanism a says the 4,096 cap costs the plain T 0.6 vote several problems. Mechanism b says the vote has converged to each problem's mode and answers past 4,096 tokens rarely change it.",
+   "gpu_minutes": 95,
+   "a": {
+    "value": 4,
+    "low": 2,
+    "high": 8
+   },
+   "b": {
+    "value": 0,
+    "low": -1,
+    "high": 1
+   }
+  },
+  "dropped_no_direct_test": {}
+ },
+ {
+  "family": "s6",
+  "surprise": {
+   "source": "run-04",
+   "id": "t01",
+   "item": "result-a1bf75",
+   "measured": 386,
+   "z": 2.32,
+   "what": "How many of the 538 HumanEval+ and MBPP+ problems the base model plus Code-RL 3.1's 8 top weight directions at 1x size passes, with the Code cue at T 1.0."
+  },
+  "a": "round-13/s6-a",
+  "b": "round-13/s6-b",
+  "apart": [
+   "t15",
+   "t16",
+   "t22"
+  ],
+  "cell": null,
+  "dropped_no_direct_test": {}
+ }
+]

@@ -1,43 +1,41 @@
 ---
 name: theory
-description: Score the team's fixed forecasts against the results posted since, find the numbers both no-theory readers got wrong, and write theories only about those. One round runs studies/theory/lib/forecast.py round - it scores every outstanding forecast, cell and route of earlier rounds, carries mechanisms with a positive gain on numbers from 3 or more results and buries the losers, lists the surprises (numbers outside both readers' intervals) in surprises.md, has the readers and carried mechanisms forecast the open work, and for each of the top surprises one blind headless job writes two rival mechanisms that must disagree on an open target or a new cell; their cells and one no-reward route per pair are checked against open work (an open item's answer becomes a free target), forecast by everyone and ranked. Use when the user asks for a theory, what the results mean together, which result nobody expected, and after every fifth closed result. Writes studies/theory/results/wide/round-<nn>/ and updates studies/theory/README.md.
+description: Score the team's fixed forecasts, collect the direct facts (offline tests of mechanisms' causes), find the numbers both no-theory readers got wrong, write rival mechanisms only about those, each with its own direct test on stored data, and let only mechanisms that hold a direct test forecast and design cells. One round runs studies/theory/lib/forecast.py round twice: the first run scores (once per number, only forecasts written before the result), writes direct_facts.json, surprises.md, direct_tests.md (plans for the top untested carried mechanisms and for every new rival) and stops; subagents run the tests offline and add rows to results/refuted.json or direct_tested.json; the second run has the holders and two readers forecast the open work and turns pairs whose both rivals hold into blind-forecast cells. Use when the user asks for a theory, what the results mean together, which result nobody expected, and after every fifth closed result. Writes studies/theory/results/wide/round-<nn>/ and updates studies/theory/README.md.
 ---
 
-# Theory round (version 11.2, score first)
+# Theory round (version 13: direct tests before forecasts)
 
-What ten rounds showed: the engine's value is forecasts fixed before results, the score, refutations (run-08/f2-m03 at
--12.27 nats; both readers refuted on result-9ce8ed) and surprises (run-01 t14: a number nobody forecast). Mechanisms
-written from the same board forecast the same numbers: in round 10, 24 of 36 new ones were duplicates and 0 of 39
-designed cells split two families from two others. So a round now scores first and writes theories only where the
-readers were wrong (`specs/SPEC_engine_v11.md`).
+Why this order: in rounds 9 to 12 forecast gain ranked mechanisms whose causes then failed a direct test (5 of the top 6
+failed their own claim, 1 held only against a weak null; README "Direct tests"). So a mechanism now earns the right to
+forecast by holding a direct test of its cause; forecasts, scores, refutations and surprises stay the record.
 
 ## What a round is
 
 1. `standing`: score every outstanding forecast, cell and route of the `--from` folders against the results posted
-   since (each folder once). Carried: total gain above 0 on numbers from 3 or more distinct board items. Graveyard:
-   -2 nats or less on 2 or more items. The rest are dropped.
-2. `surprises`: every scored number outside both readers' 90 % intervals, most surprising first (z: distance from the
-   nearer reader's centre in that reader's sd), marked when it lies outside every forecaster's interval
-   (`surprises.md`, `surprises.json`, with the result id and every forecast).
-3. `targets_open`, `forecast`: the numbers the open work items will report, forecast by the two readers and the
-   carried mechanisms.
-4. `propose` (only with surprises): one blind job per surprise (the 6 most surprising, at once) writes two rival
-   mechanisms, each saying why the readers were wrong (`readers_wrong`), resting on 2 or more board items, holding
-   against the 2 known numbers nearest to contradicting it, and forecasting a third of the open targets or more. The
-   pair must have disjoint intervals on 2 or more targets or on one new cell it names (`pairs.json`). The duplicate
-   judge only reports restatements (`duplicates.json`): a rival may restate an older mechanism; what counts is whether
-   the two differ.
-5. `cells`: the pairs' cells and one no-reward route per pair. One blind job checks each against open work and
-   posted results: one an open item answers becomes a target on that item (its forecasts join `forecasts.json`,
-   scored next round for free); one a posted result answers is dropped. Everyone forecasts the rest blind; a pair's
-   cell is ranked only when the two rivals' own blind intervals do not overlap, else listed as "pair does not differ
-   blind".
-6. `experiments`: lists A (cells by separating readouts per GPU minute), C (routes by margin) and the free targets.
+   since (each folder once). Carried: total gain above 0 on numbers from 3 or more distinct board items, never a
+   mechanism in `graveyard.json` or `refuted.json`. Graveyard: -2 nats or less on 2 or more items.
+2. Direct facts (`direct_facts.json`): every row of `results/refuted.json` and `results/direct_tested.json` (claim,
+   verdict, deciding number, result id). Proposers and planners get them first; every new mechanism must agree with all.
+3. `surprises`: every scored number outside both readers' 90 % intervals, most surprising first (`surprises.md`).
+4. Proposals, each with a direct test: one blind job per top-6 surprise writes two rival mechanisms (why the readers were
+   wrong, forecasts of the open targets, and the pair's differences on targets or one new cell), each with its own
+   direct test on stored data: claim, files, computation, refuting observation, threshold and a null stronger than
+   random where one exists (the base matrix's own top directions, another model's directions). A rival without a
+   runnable test is dropped. The top 5 untested carried mechanisms (none with a forecast a `measured.json` row missed)
+   get a plan too; a planner names the posted result instead when one already decides the claim. All in `direct_tests.md`.
+5. Run the direct tests: one subagent per plan, spec committed first, offline only, then a row
+   `{mechanism, claim, result, verdict: holds|refuted, measured, added}` in `direct_tested.json` (refuted ones also in
+   `refuted.json`). The round command stops here until every plan has a row; `--go` continues with who holds now.
+6. Rerun the same command: only mechanisms that hold a direct test forecast the open targets (beside the two readers);
+   pairs whose both rivals hold get their cell and one no-reward route, checked against open work (an open item's
+   answer becomes a free target), forecast blind (ranked only if the rivals' blind intervals do not overlap); then
+   `experiments.md`.
 
 ## The coordinator's job
 
-Post the `work` item, run the command, commit `targets.json`, `forecasts.json`, `mechanisms.json` and `surprises.md`
-the moment they exist (before any of their numbers post), then the rest. Read `standing.md`, `surprises.md`,
+Post the `work` item, run the command, commit `targets.json`, `surprises.md` and `direct_tests.md` at once, run the
+direct tests, rerun, and commit `forecasts.json` and `mechanisms.json` the moment they exist (before any of their
+numbers post), then the rest. Read `standing.md`, `surprises.md`,
 `pairs.json` and `experiments.md`; post the surprises as one `knowledge` item; run the top entries. Write no mechanism,
 forecast, cell or route, and edit no job output. Work in your own worktree, `git pull origin main` first.
 
@@ -69,9 +67,6 @@ result was posted (written time: the earlier of the time `forecasts.md` or `cell
 of every `measured.json` is scored or listed with its reason. A target matches a result on its cell, not its seed,
 unless the target names a seed.
 
-Forecast gain does not confirm a cause: twice the top mechanism forecast well while a direct check refuted its cause. Give
-each top carried mechanism's distinctive claim one direct test (offline on stored rows first). When one fails, append
-`{mechanism, claim, result, measured, added}` to `studies/theory/results/refuted.json`; `standing` then buries it.
 
 ## Cells, routes and the flag check
 
@@ -87,7 +82,8 @@ each top carried mechanism's distinctive claim one direct test (offline on store
   `studies/theory/jobs/`). Routes run with `studies/theory/jobs/free_cell.py` (`--model base|rl|think_sft`,
   `--prompt-suffix`, `--opening-text`, `--temperature`, `--top-p`, `--min-p`, `--repetition-penalty`, `--max-tokens`,
   `--samples`, `--seed`, `--set`, `--n`, `--shard`) or `run_cell.py`; a vote is computed from the rows. A missing job
-  file, flag or `choices` value is sent back once, then dropped; free-text values are not checked. `free_cell.py` has
+  file, flag or `choices` value is sent back once, then dropped; so is a command that runs git (job machines have no
+  `.git`: write `--commit COMMIT_SHA` and replace it by hand); free-text values are not checked. `free_cell.py` has
   run only on the laptop's dry path: run it for a minute with `--n 4` first.
 
 ## Running a cell or route and writing measured.json

@@ -88,8 +88,9 @@ START = ["rl_cue", "code_cue"]  # the first view: two RL models of one base, tra
 
 TITLE = "One difficulty order"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "Do different ways of improving a model solve different math problems?"
-LINE = (f"Two methods together solve no more than one difficulty order predicts: {DATA['diff']['excess_mean']:+.2f} problems "
-        f"over {DATA['diff']['pairs']} pairs.").replace("-", "−", 1)
+LINE = (f"Two methods together solve no more MATH-500 problems than predicted if both followed one shared order of difficulty "
+        f"(right answers depending only on how hard a problem is): over {DATA['diff']['pairs']} pairs of methods, the measured "
+        f"count minus the predicted count is {DATA['diff']['excess_mean']:+.2f} problems on average.").replace("+-", "−").replace(" -0", " −0")
 
 # Not from our runs: the closest published results. "Where Cross-Question Structure in LLM Errors Comes From" (arXiv
 # 2607.20464), Sec. 3.3, Fig. 2c: 24 models of ten families, 500 MMLU questions; once a question must be right in all four
@@ -101,25 +102,28 @@ _d, _s, _p, _h = DATA["diff"], DATA["same"], DATA["power"], DATA["hard"]
 _m = lambda v, k=2: f"{v:+.{k}f}".replace("-", "−")
 PANELS = [
     ["new", "What is new",
-     "Item response models with one ability per model and one difficulty per question fit LLM benchmarks well: a Rasch "
-     "null leaves little structure on MMLU across 24 models (arXiv 2607.20464, Sec. 3.3).",
-     ["Across 67 different models on MATH-500, more problems are failed by all of them than one shared factor predicts: "
+     "New here: prompts, weight edits, other rewards and RL itself, all applied to one 7B base model, solve problems in the "
+     "same order.",
+     ["Item response models, which give each model one ability score and each question one difficulty score, fit LLM "
+      "benchmarks well: on MMLU across 24 models, this one-factor (Rasch) model leaves little pattern unexplained (arXiv "
+      "2607.20464, Sec. 3.3).",
+      "Across 67 different models on MATH-500, more problems are failed by all of them than one shared factor predicts: "
       "5.2 % against 2.1 % (arXiv 2606.27288, Fig. 2).",
       "Neither paper tests what two methods solve together against a difficulty-matched prediction, or methods applied "
-      "to one base model.",
-      "New here: prompts, weight edits, other rewards and RL itself, all on one 7B base, solve problems in the same order."]],
+      "to one base model."]],
     ["why", "Why it matters",
      "Combining two methods that reach the same score is predicted to gain no more than a second sample of one of them.",
-     [f"The largest excess among the 7 pairs named before the test is +1.86 problems (Base + 50 % of RL's change + cue, with "
-      "RL-Zero-Code 3.1 + cue); its upper bound is 5.1 problems, 1.0 points.",
-      "So a cross-method stack is not worth a GPU run as a bet on complementary problems. A vote inside the most able "
-      "reward-free method is the better use.",
+     [f"Of the 7 pairs named before the test, the one that beats the prediction most (Base + 50 % of RL's change + cue, with "
+      "RL-Zero-Code 3.1 + cue) solves 1.86 problems more than predicted; the top of its 95 % interval is 5.1 problems, 1.0 "
+      "percentage point of the 500.",
+      "So combining two different methods is unlikely to pay off by covering different problems; a vote over several samples "
+      "of the strongest method without a reward is the better use of compute.",
       f"All 29 methods without RL weights or RL output together solve {DATA['all_non_rl']['right']} of 500, so the problems "
-      "are within reach; one sample of a method just stops earlier on the order."]],
+      "are within reach; one sample of one method solves fewer of them, and the ones it misses are the harder ones."]],
     ["how", "How we know",
-     "For every pair of the 36 methods (a method is one model with one prompt, sampled once at T 1.0; the cue is three fixed "
-     "tokens that open the answer), the union was compared with the union expected if one method's right answers were "
-     "shuffled among problems of equal difficulty.",
+     "A method is one model with one prompt, sampled once at temperature 1.0; the cue is three fixed tokens that open the "
+     "answer. For every pair of the 36 methods, we counted the problems either method solves and compared that count with the "
+     "count expected if one method's right answers were shuffled among problems of equal difficulty.",
      ["Difficulty is the share of the other methods that solve a problem. The bias of that null and its spread come from "
       "200 data sets drawn from a fitted Rasch model.",
       f"Different methods, {_d['pairs']} pairs: mean excess {_m(_d['excess_mean'])} problems (z mean {_m(_d['z_mean'])}, sd "
@@ -127,13 +131,14 @@ PANELS = [
       f"A Rasch model plus one second axis predicts held-out cells no better than Rasch: {DATA['item']['rasch']:.4f} nats "
       f"per cell for both, {DATA['item']['shuffled']:.4f} with method labels shuffled."]],
     ["limits", "What it does not show",
-     f"One pair has little power: a planted second axis of {_p['logits']} logits on {_p['share']} % of the problems shows "
-     f"as only {_p['excess']} problems. A small second axis is not excluded.",
+     f"A single pair cannot detect a small effect: in simulated data where a second skill shifts the difficulty of "
+     f"{_p['share']} % of the problems by {_p['logits']} logits, a pair solves only {_p['excess']} problems more than "
+     f"predicted. A small second dimension of difficulty is not ruled out.",
      [f"A later test found Think-SFT's errors spread differently over difficulty than RL's (contrast "
       f"{_m(DATA['profile']['c'])}, one-axis range {_m(DATA['profile']['lo'])} to {_m(DATA['profile']['hi'])}). On the 328 "
       f"harder problems that profile predicted {DATA['profile']['pred']} for one Think-SFT + cue sample at T 1.0; that sample "
-      f"scored {DATA['profile']['hard_sft']} of {DATA['profile']['hard_n']} (board result-d9d6f3), and four later samples "
-      f"average {sum(DATA['profile']['sft4']) / 4:.1f}.",
+      f"scored {DATA['profile']['hard_sft']} of {DATA['profile']['hard_n']}, and four later samples "
+      f"average {sum(DATA['profile']['sft4']) / 4:.1f}. Source: board result-d9d6f3.",
       f"On the 328 harder problems, with 7 methods and one sample each, {_h['only_rl']} problems are solved only by the two RL "
       f"methods; no null was computed for that count (MATH-500: {DATA['floor']['only_rl']}).",
       "Most methods have one sample, and one grader version (v3) is used, so grader errors count as difficulty."]],
@@ -1693,7 +1698,7 @@ function build() {
     `<g id="gr" class="gr">` + T("cap", "sub", g.fs, g.rx, g.ry.cap, "", `Mean of all ${DIFF.length} pairs of methods`) +
     T("big", "big", g.fb, g.rx - 4, g.ry.big, "", sgn(D.diff.excess_mean, 2)) +
     T("unit", "unit", g.fs + 1, g.rx, g.ry.unit, "", "problems: solved together, minus") +
-    T("unit2", "unit", g.fs + 1, g.rx, g.ry.unit2, "", "what one difficulty order predicts") +
+    T("unit2", "unit", g.fs + 1, g.rx, g.ry.unit2, "", "what one shared difficulty order predicts") +
     T("sub", "sub", g.fs, g.rx, g.ry.sub, "", `One method sampled twice: <tspan class="nm">${sgn(D.same.excess_mean, 2)}</tspan>`) + `</g>` +
     // all pairs (z 5)
     `<g id="gh" class="gh">` + T("htitle", "lab", g.fs, g.hx[0], g.htitle, "", `<tspan class="nm">All ${DIFF.length} pairs</tspan> of different methods`) +

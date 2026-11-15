@@ -123,9 +123,9 @@ for (const p of [20, 40, 60, 80]) {
 }
 const w = (X1 - X0) / DATA.length, cx = i => X0 + (i + .5) * w;
 el(svg, "path", { d: `M${cx(0) - 62} 88v-8h124v8`, class: "brace" });
-el(svg, "text", { x: cx(0), y: 70, class: "tuned" }, "Climbed here");
+el(svg, "text", { x: cx(0), y: 70, class: "tuned" }, "Climbed here (validation)");
 el(svg, "path", { d: `M${cx(1) - 62} 88v-8H${cx(DATA.length - 1) + 62}v8`, class: "brace b" });
-el(svg, "text", { x: (cx(1) + cx(DATA.length - 1)) / 2, y: 70, class: "never" }, "Never climbed on these");
+el(svg, "text", { x: (cx(1) + cx(DATA.length - 1)) / 2, y: 70, class: "never" }, "Never climbed (test)");
 DATA.forEach((s, i) => {
   const x = cx(i), lane = el(svg, "g", i ? {} : { class: "quiet" }), mid = (y(s.plain) + y(s.ours)) / 2;
   el(lane, "line", { x1: x, x2: x, y1: y(90), y2: y(10), class: "lane" });

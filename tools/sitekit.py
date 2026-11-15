@@ -233,8 +233,12 @@ CODE, START, END = _lean(JS), "/*math*/", "/*end math*/"
 
 def terms(page=None):
     """The glossary as the kit carries it, [term, spellings, definition]: the terms a spelling of which is in the page."""
-    def found(s):
-        return re.search(r"(?<![\w-])" + re.escape(s) + r"(?![\w-])", page, 0 if re.search("[A-Z]", s) else re.I)
+    low = page.lower() if page else ""
+    def found(s):  # the substring test first: the regex alone, over every page, took 6 s at import and the Lambda start timed out
+        cased = re.search("[A-Z]", s)
+        if (s not in page) if cased else (s.lower() not in low):
+            return None
+        return re.search(r"(?<![\w-])" + re.escape(s) + r"(?![\w-])", page, 0 if cased else re.I)
     return [[t["term"], t["match"], t["definition"]] for t in glossary.TERMS if page is None or any(found(s) for s in t["match"])]
 
 

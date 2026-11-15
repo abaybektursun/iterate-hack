@@ -1,0 +1,13 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_ending.md",
+ "commit": "e39bebd",
+ "command": "uv run --no-project --with numpy python studies/theory/analysis/direct_ending.py --runs ../iterate-hack/runs",
+ "inputs": {
+  "base": "abaybektursun-1114-170304-c03c",
+  "rand15": "abaybektursun-1115-101457-ef2c",
+  "math15": "abaybektursun-1115-101508-33f0",
+  "code1": "abaybektursun-1115-101423-4a7d",
+  "code15": "abaybektursun-1115-101434-4511",
+  "where": "Modal Volume iterate-runs: <job>/answers.jsonl, copied by uv run tools/gpu.py get <job> to runs/<job>/"
+ }
+}

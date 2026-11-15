@@ -1,0 +1,61 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "RL-Code's code gain sits almost entirely in its own top-8 directions, and in early/middle layers it raises the pass rate of finished programs, not just how often a program finishes. At 1.5x it matches RL-Code. Math's directions help code only through the shared finishing channel (fewer cap hits and missing code blocks), passing those recovered answers at the base rate. With Code's directions already finishing nearly everything, adding Math's gives little.",
+  "readers_wrong": "The readers scaled from the math dial (top-8 1x = 192 vs RL 206) and from finishing alone. The base fails only 61 of 538 by cap hit or missing block, so finishing alone caps the gain near 317 + 0.7*61, about 357. The 1.5x edit also lifts the pass rate of finished-with-block answers (399/529 = 75.4 % vs random 331/466 = 71.0 %), which the readers missed. Consistent with result-6e4536 (Math adds no block-less endings) and result-124593 (the edit adds right answers, not just finished ones).",
+  "rests_on": ["result-a1bf75", "result-51ccc6", "result-284db5"],
+  "holds_against": [
+   {"item": "result-a1bf75", "value": 368, "why": "Math's 1.5x edit on code gives +37 over random. That is about the ~56 format failures it removes, passed at random's 71 % finished rate (~40), so it needs no gain in correctness."},
+   {"item": "result-51ccc6", "value": 342, "why": "Code's late-layer band alone adds nothing (342 vs random 331, cap hits 34). The mechanism places the correctness gain in layers 0-21 (372, 366), and no single band reaches 399, as expected when the directions are concentrated but spread over depth."}
+  ],
+  "forecasts": [
+   {"id": "t03", "value": 396, "low": 385, "high": 406, "reason": "Code 1x already finishes ~97 % of answers; Math's finishing channel has <=17 failures left to recover, so this sits at Code 1x/RL-Code level (~390-400); the earlier 411 was a high draw."},
+   {"id": "t04", "value": 396, "low": 385, "high": 406, "reason": "Same cell, other seed: Code-saturated finishing plus Math's small leftover."},
+   {"id": "t05", "value": 399, "low": 385, "high": 412, "reason": "RL-Code reseeded: 401 earlier, seed scatter SD about 8 on 538."},
+   {"id": "t06", "value": 399, "low": 385, "high": 412, "reason": "As t05."},
+   {"id": "t07", "value": 389, "low": 375, "high": 403, "reason": "Code 1x carries most of RL-Code's gain (386 earlier; 1.5x 399); reseed scatter."},
+   {"id": "t08", "value": 389, "low": 375, "high": 403, "reason": "As t07."},
+   {"id": "t13", "value": 182, "low": 170, "high": 194, "reason": "One direction finishes (1x 181/51, 2x 184/23) but the correctness part lies in directions 2-8, so 1.5x stays near 182."},
+   {"id": "t14", "value": 182, "low": 170, "high": 194, "reason": "As t13, other sample."},
+   {"id": "t22", "value": 0.55, "low": 0.40, "high": 0.72, "reason": "Math's top-8 input subspace is math-specific; code text drives it about half as much, and only its shared finishing part carries over."},
+   {"id": "t23", "value": 1.0, "low": 0.85, "high": 1.18, "reason": "A random subspace sees only overall activation energy, about equal on code and math text."}
+  ],
+  "direct_test": {
+   "claim": "Code's 1.5x directions raise the pass rate among finished answers that contain a code block above the random edit's rate, and Math's 1.5x directions do not: Math's gain on code goes through finishing alone.",
+   "files": ["studies/rlneurons/results/xreward/code_dial", "studies/rlneurons/results/code1/base_cue-01"],
+   "computation": "From code_dial/readout.json (or each run folder's metrics.json) take passed, cap hits and no-code-block for the cells random rank-8 1.5x, Code top-8 1.5x and Math top-8 1.5x. For each cell, F = 538 - cap hits - no-block, and r = passed / F. Compute dC = r(Code 1.5x) - r(random 1.5x) and dM = r(Math 1.5x) - r(random 1.5x) in points. Then bootstrap over the 538 problems with per-problem rows if they are stored, else use Wilson intervals on the two rates.",
+   "refuted_if": "dC < 3.0 points, or dM >= 0.5 * dC",
+   "threshold": "dC >= 3.0 points and dM < 0.5 * dC",
+   "null": "The random rank-8 1.5x edit's own pass rate among its finished-with-block answers (331/466 = 71.0 %). The rival b says Math's share of dC is about its share of the total gain over random (37/68 = 0.54)."
+  }
+ },
+ {"id": "b",
+  "statement": "Any reasoning reward's top-8 directions share a generic commit-to-a-complete-answer component, whose input side is excited by code and math text alike. It sharpens the base onto its own most likely complete program, which on code is usually a passing one. The gain is limited by what the base can already write (its pass@k), not by RL-Code's level, so Math's and Code's directions add until that ceiling.",
+  "readers_wrong": "The readers treated the code edit as a weaker copy of Code-RL's direction (Code top-8 gave only 178 on hard328). In fact the shared commit component sharpens the base's own passing programs, and those are plentiful on HumanEval+/MBPP+, so 1.5x reaches 399. Consistent with result-6e4536 (commitment writes the code block, not a boxed answer) and result-124593 (it turns base finished-wrong answers right, as sharpening does).",
+  "rests_on": ["result-a1bf75", "result-284db5", "result-51ccc6"],
+  "holds_against": [
+   {"item": "result-c9b27e", "value": 0.014, "why": "The Math and Code deltas are almost orthogonal over all entries. But the shared part is the top-8 input subspace (Code top-8 driven 6.3-8.9x random by math text, result-a7c052; result-3abd6f shared with Code 3.1), which a full-entry cosine does not see."},
+   {"item": "result-51ccc6", "value": 342, "why": "Code's late layers alone neither finish nor add passes. The commit component is read in the early/middle input subspace (L0-10 cap hits 12, L11-21 cap hits 6), so a late-only band is expected to do little."}
+  ],
+  "forecasts": [
+   {"id": "t03", "value": 416, "low": 407, "high": 427, "reason": "The two commit components add toward the base's pass@k ceiling, above RL-Code; the earlier seed gave 411."},
+   {"id": "t04", "value": 416, "low": 407, "high": 427, "reason": "As t03, other seed."},
+   {"id": "t05", "value": 400, "low": 386, "high": 413, "reason": "RL-Code reseeded: 401 earlier, seed scatter."},
+   {"id": "t06", "value": 400, "low": 386, "high": 413, "reason": "As t05."},
+   {"id": "t07", "value": 385, "low": 371, "high": 399, "reason": "Code 1x: 386 earlier; less sharpening than 1.5x (399)."},
+   {"id": "t08", "value": 385, "low": 371, "high": 399, "reason": "As t07."},
+   {"id": "t13", "value": 186, "low": 174, "high": 198, "reason": "The first direction carries much of the commit component: 1x 181, 2x 184; 1.5x a little above both."},
+   {"id": "t14", "value": 186, "low": 174, "high": 198, "reason": "As t13, other sample."},
+   {"id": "t22", "value": 0.92, "low": 0.78, "high": 1.10, "reason": "The commit subspace is generic reasoning text, so code answers drive Math's top-8 inputs nearly as much as math text does."},
+   {"id": "t23", "value": 1.0, "low": 0.85, "high": 1.18, "reason": "A random subspace has no domain preference."}
+  ],
+  "direct_test": {
+   "claim": "The Code 1.5x edit's passes over the cued base fall on problems the untrained base already passes under another prompt, as often as a random edit's extra passes do: the edit sharpens existing base solutions and adds no new ones.",
+   "files": ["studies/rlneurons/results/code1/base_cue-01", "studies/rlneurons/results/code1/base_plain-01", "studies/rlneurons/results/code1/base_mathcue-01", "studies/rlneurons/results/xreward/code_dial"],
+   "computation": "Join per-problem pass/fail rows of base cue, base plain, base Math cue, Code top-8 1.5x and random rank-8 1.5x on the 538 problem ids. U = problems passed by base plain or base Math cue. G_E = problems Code 1.5x passes and base cue fails; G_R = problems random 1.5x passes and base cue fails. f_E = |G_E within U| / |G_E|, f_R = |G_R within U| / |G_R|. D = f_E - f_R, with a 90 % bootstrap over problems.",
+   "refuted_if": "D < -0.10 (the edit's extra passes land outside the base's own solved set clearly more often than a random edit's)",
+   "threshold": "-0.10",
+   "null": "The random rank-8 1.5x edit's extra passes over the cued base (f_R), which measure how often any extra base-like draw lands in U. The rival a predicts new solutions from code-specific directions, so D clearly below 0."
+  }
+ }
+],
+ "cell": null}

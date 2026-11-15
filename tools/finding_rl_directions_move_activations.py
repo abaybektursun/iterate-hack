@@ -101,8 +101,10 @@ _r = lambda k: _E[k]["rms_shift"]
 _pct = lambda k: f"{100 * _E[k]['add_rel']:.3f} %"
 
 TITLE = "RL directions move activations"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "Do RL's weight directions move the model's activations more than random ones?"
-LINE = f"At equal weight norm, RL's 8 directions shift the activations {round(RATIO)} times more than random directions."
+PROBLEM = ("Do the largest directions of the weight change from reinforcement learning (RL) move the model's activations "
+           "more than random directions of the same size?")
+LINE = (f"At equal weight norm, the 8 largest directions of RL's weight change in each weight matrix shift the activations "
+        f"{round(RATIO)} times more than 8 random directions.")
 
 # The edits in the order of the side column's Previous and Next: [readout key, group, label on the picture, name, what it
 # is]. Groups: rl (RL's 8 directions at a size), rand (the control), sft (Think-SFT), reward (another reward's 8
@@ -173,13 +175,14 @@ PANELS = [
     ["new", "What is new",
      "A weight change moves a layer's output only through the inputs the layer receives: ZO-Act (arXiv 2607.01125, section 3) "
      "notes that changes outside the main input directions have limited effect. New here: RL's own 8 largest directions per "
-     "matrix are directions the base model's activations drive.",
+     "matrix line up with the inputs that the base model's activations supply, so they move the layer's output.",
      [f"At {_pct('top8_math31')} of the weight norm, RL's 8 directions shift the residual stream at layer {DATA['layer']} by "
       f"{_r('top8_math31'):.2f} (RMS over {DATA['positions']:,} positions); 8 random directions of the same norm by "
       f"{_r('rand8_math31'):.3f}, {round(RATIO)} times less. The base's residual stream there has norm {DATA['base_rms']:.1f}.",
-      f"Think-SFT's 8 largest directions, scaled to the same norm, shift it by {_r('top8x0.02_think_sft'):.2f}: "
+      f"The 8 largest directions of the imitation-trained model (Think-SFT), scaled to the same norm, shift it by {_r('top8x0.02_think_sft'):.2f}: "
       f"{_r('top8_math31') / _r('top8x0.02_think_sft'):.1f} times less than RL's.",
-      f"The page The finish dial shows what the same edits do to the answers: RL's 8 directions at size 1.5 bring Base + cue "
+      f"The page \"The finish dial\" shows what the same edits do to the answers: RL's 8 directions at 1.5 times their size "
+      f"bring the base model with the opening cue "
       f"to {_E['top8x1.5_math31']['right_v3']} of {DATA['n']} harder problems right, with {_E['top8x1.5_math31']['cap_hits']} "
       "cut off."],
      [_FIN, "The finish dial: the same edits on the answers ›"]],
@@ -188,14 +191,16 @@ PANELS = [
      "size in a random direction barely moves the model.",
      ["This narrows where a method without reward has to look: among the directions the base's own activations occupy, not "
       "anywhere in weight space.",
-      f"Each reward moves the residual stream its own way: the mean shift of RL-Code's 8 directions has cosine "
-      f"{_c('top8_code31')} with RL's, Math 3.0 {_c('top8_math30')}, General {_c('top8_general30')}, IF {_c('top8_if30')}.",
+      f"Models trained with other rewards move the residual stream each in its own way. The mean shift of the 8 directions "
+      f"of RL-Code (trained on code) has cosine {_c('top8_code31')} with RL's; RL-Zero-Math 3.0 {_c('top8_math30')}, "
+      f"General {_c('top8_general30')}, IF (instruction following) {_c('top8_if30')}.",
       "Still open: which input directions RL's change reads, and whether they can be found from the base's activations "
       "alone."]],
     ["how", "How we know",
-     f"{DATA['inputs']} stored Base + cue answers to the {DATA['n']} harder problems ({DATA['cap_hit_inputs']} cut off, "
-     f"{DATA['inputs'] - DATA['cap_hit_inputs']} finished, the first {DATA['answer_tokens']:,} tokens of each) were run "
-     "through the base and through each of 28 weight edits without generating, and the residual stream was compared.",
+     f"We ran {DATA['inputs']} stored answers of Base + cue to the {DATA['n']} harder problems through the base model and "
+     "through each of 28 weight edits, without generating, and compared the residual stream. Of these answers "
+     f"{DATA['cap_hit_inputs']} were cut off and {DATA['inputs'] - DATA['cap_hit_inputs']} finished; we used the first "
+     f"{DATA['answer_tokens']:,} tokens of each.",
      [f"Shift = edited minus base residual stream at layer {DATA['layer']} (fixed before the run), at every "
       f"{DATA['step']}th answer token: {DATA['positions']:,} positions. Size is the RMS of its norm over positions.",
       f"At sizes 1, 1.5, 2 and 3, RL's shift is {', '.join(str(round(_TIMES[k])) for k in ('top8_math31', 'top8x1.5_math31', 'top8x2_math31'))} "
@@ -203,25 +208,27 @@ PANELS = [
       f"{round(_TIMES['top8xm1_math31'])} times.",
       f"An edit of layers 22 to 31 at size 1.5 shifts layer 24 by {_r('top8x1.5_L22-31_math31'):.2f}, against "
       f"{_r('top8x1.5_math31'):.2f} for all layers: most of the shift builds up in the layers below 24.",
-      "Each edit is the exact addition of a scored cell of The finish dial or its controls; its norm matches that cell's to "
-      f"{DATA['add_rel_match']:.0e} (relative). Cut-off counts come from those cells: Base + cue with the edit, the "
+      "Each edit is exactly the weight change of a model whose answers were scored on the page \"The finish dial\" (or "
+      f"of one of its controls); its norm matches that model's to {DATA['add_rel_match']:.0e} (relative). Cut-off counts "
+      "come from those scored models: Base + cue with the edit, the "
       f"{DATA['n']} harder problems, one answer each, T 1.0, cut off at {DATA['cap']:,} tokens.",
       "Selftests on the real model passed before the run: a zero edit shifts nothing, the weights are restored exactly, and "
       "a planted direction is found with cosine 1.0000."]],
     ["limits", "What it does not show",
-     "The filed prediction failed: one shared direction does not predict cut-off answers better than the plain size of the "
+     "The prediction filed before the run failed: one shared direction does not predict cut-off answers better than the plain size of the "
      "shift.",
      [f"Over the {_P['n_edits']} edits that are not random, the rank correlation of the projection on the shared direction "
-      f"with cut-offs is {_rp} (predicted at most {_m(_P['predicted'])}); the size of the mean shift alone gives {_rn}, "
-      f"within the margin of {_P['margin']} that the plan set.",
+      f"with cut-offs is {_rp}; the plan predicted at most {_m(_P['predicted'])}. The size of the mean shift alone gives "
+      f"{_rn}, within the margin of {_P['margin']} that the plan set, so the shared direction adds nothing.",
       f"The mean direction holds only {100 * min(_frac):.0f} to {100 * max(_frac):.0f} % of the summed squared shift of RL's "
       "directions at sizes −1 to 3: most of the shift differs from one position to the next.",
       f"RL's directions in layers 0 to 10 at size 1.5 shift layer 24 by {_r('top8x1.5_L0-10_math31'):.2f}, as much as all "
       f"layers at size 1, yet leave {_E['top8x1.5_L0-10_math31']['cap_hits']} answers cut off, more than Base + cue's {_B['cut']}.",
       f"The prediction that other rewards share RL's direction failed for IF: cosine {_c('top8_if30')}, predicted above "
       f"{DATA['P3']['predicted_if']}.",
-      "The base ran in float32 with the edit added exactly; the scored cells wrote their weights in BF16 with stochastic "
-      "rounding, so their edits carry rounding noise of about the edit's own size.",
+      "The base model ran in 32-bit floating point with the edit added exactly. The scored models stored their weights in "
+      "16-bit floating point (BF16) with stochastic rounding, so their edits carry rounding noise of about the edit's own "
+      "size.",
       f"{DATA['inputs']} answers and one layer. The answers are Base + cue's own text, not the edited models' answers."]],
     ["run", "How to reproduce it",
      f"One GPU job computes every number: python -m studies.rlneurons.jobs.xshift --commit {DATA['job_commit'][:7]}, then "
