@@ -1,0 +1,380 @@
+<title>Unsticking Research Agents</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column (lab notebook); each finding is a figure with a caption, wide figures scroll inside their own box. */
+:root {
+  --bg: #f5f6f8; --panel: #ffffff; --fg: #12151c; --fg2: #4d5563; --muted: #7a8291; --line: #dde1e8; --grid: #eceff3;
+  --accent: #2b47c9; --accent-soft: #e6eafb; --warn: #9a5b00; --warn-soft: #fdf1dc;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4; --s6: #008300; --s7: #6250d6; --s8: #e34948;
+  --dot: #12151c; --added: #2b47c9; --rect: rgba(43,71,201,.55); --circ: rgba(43,71,201,.16); --circ-line: #2b47c9;
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0f1217; --panel: #171b22; --fg: #e9ecf1; --fg2: #b4bbc7; --muted: #8a93a2; --line: #2a303b; --grid: #20252e;
+  --accent: #8ea2ff; --accent-soft: #1e2546; --warn: #f0b45a; --warn-soft: #2e2413;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #0ca30c; --s7: #9085e9; --s8: #e66767;
+  --dot: #e9ecf1; --added: #8ea2ff; --rect: rgba(142,162,255,.6); --circ: rgba(142,162,255,.18); --circ-line: #8ea2ff;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0f1217; --panel: #171b22; --fg: #e9ecf1; --fg2: #b4bbc7; --muted: #8a93a2; --line: #2a303b; --grid: #20252e;
+  --accent: #8ea2ff; --accent-soft: #1e2546; --warn: #f0b45a; --warn-soft: #2e2413;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #0ca30c; --s7: #9085e9; --s8: #e66767;
+  --dot: #e9ecf1; --added: #8ea2ff; --rect: rgba(142,162,255,.6); --circ: rgba(142,162,255,.18); --circ-line: #8ea2ff;
+  color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.6; }
+.wrap { max-width: 980px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 72px; display: grid; gap: 56px; }
+header { display: grid; gap: 14px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(34px, 6vw, 56px); line-height: 1.02; letter-spacing: -.02em; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--display); font-weight: 700; font-size: clamp(22px, 3.2vw, 30px); line-height: 1.15; margin: 0; letter-spacing: -.01em; text-wrap: balance; }
+h3 { font-family: var(--display); font-weight: 500; font-size: 18px; margin: 0; }
+p { margin: 0; max-width: 68ch; color: var(--fg2); }
+p.lede { font-size: 18px; color: var(--fg); max-width: 62ch; }
+section { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr); }
+.wrap, .figure, header, .task { grid-template-columns: minmax(0, 1fr); }
+.tag { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: .04em; }
+.answer { border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; color: var(--fg); font-size: 16px; max-width: 68ch; }
+.figure { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px; display: grid; gap: 12px; min-width: 0; }
+.cap { font-size: 13px; color: var(--muted); max-width: none; }
+.cap b { color: var(--fg2); font-weight: 600; }
+.scroll { overflow-x: auto; }
+.row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.tile { display: grid; gap: 6px; min-width: 0; }
+.tile svg { width: 100%; height: auto; display: block; }
+.tile .lab { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.tile .val { font-family: var(--display); font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.tile .note { font-size: 12.5px; color: var(--fg2); line-height: 1.45; }
+.tasks { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.task { display: grid; gap: 10px; min-width: 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--fg2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+.swd { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+svg text { font-family: var(--mono); font-size: 11px; fill: var(--muted); }
+.chart { position: relative; }
+.chart svg { width: 100%; height: auto; display: block; }
+.tip { position: absolute; pointer-events: none; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12px; line-height: 1.45; box-shadow: 0 4px 14px rgba(0,0,0,.12); min-width: 170px; max-width: 280px; z-index: 2; }
+.tip .t { font-family: var(--mono); color: var(--muted); margin-bottom: 4px; }
+.tip .r { display: flex; justify-content: space-between; gap: 12px; font-variant-numeric: tabular-nums; color: var(--fg); }
+.tip .r i { font-style: normal; display: inline-flex; align-items: center; gap: 6px; color: var(--fg2); }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-weight: 600; color: var(--fg2); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+td.num, th.num { text-align: right; }
+.arms { display: grid; gap: 10px; }
+.arm { display: grid; grid-template-columns: 150px 1fr; gap: 14px; align-items: center; }
+.arm .nm { display: grid; gap: 2px; }
+.arm .nm b { font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; }
+.arm .nm small { font-size: 12px; color: var(--muted); line-height: 1.35; }
+.arm svg { width: 100%; height: auto; display: block; }
+.pill { display: inline-block; font-family: var(--mono); font-size: 11px; padding: 1px 7px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); }
+.pill.warn { background: var(--warn-soft); color: var(--warn); }
+.stat { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+.stat .figure { gap: 4px; }
+.big { font-family: var(--display); font-weight: 700; font-size: 40px; line-height: 1; font-variant-numeric: tabular-nums; }
+.callout { background: var(--warn-soft); border-radius: 10px; padding: 14px 16px; display: grid; gap: 6px; }
+.callout p { color: var(--fg); }
+ul.plain { margin: 0; padding-left: 18px; color: var(--fg2); max-width: 68ch; display: grid; gap: 6px; }
+footer { font-size: 12.5px; color: var(--muted); display: grid; gap: 6px; }
+code { font-family: var(--mono); font-size: .9em; }
+@media (max-width: 560px) { .arm { grid-template-columns: 1fr; gap: 4px; } .big { font-size: 32px; } }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">explore study · branch ali/explore · private pilot · __SNAP__</div>
+  <h1>Unsticking research agents</h1>
+  <p class="lede">An agent that improves a program by trial and error tends to lock onto its first idea and only tweak it.
+  We test the published fixes for this, Fork-and-Flush and Forgetting, against a plain single run, at the same
+  budget, and add our own: flush an agent only when a judge sees it stuck in one approach.</p>
+  <div class="legend" id="armLegend"></div>
+</header>
+
+<section>
+  <div class="tag">The setup</div>
+  <h2>Two test problems with an automatic score</h2>
+  <p>Each run gives an agent 40 tries. It writes a whole program, the program is scored, the agent sees the score and
+  writes the next version. The two problems are open-ended, so there is always room to do better.</p>
+  <div class="tasks">
+    <div class="figure task">
+      <h3>circles26</h3>
+      <p class="cap">Place 26 circles in a unit square without overlap; maximize the sum of radii. Best published: about 2.636.</p>
+      <div class="row" id="circTiles"></div>
+    </div>
+    <div class="figure task">
+      <h3>AHC014 (RectJoin)</h3>
+      <p class="cap">AtCoder Heuristic Contest 014 via Frontier-CS problem 159, the task both papers report. Each move adds a dot that closes a rectangle; dots far from the center count more. Score: share of a strong reference solution (1.0 = reference).</p>
+      <div class="row" id="ahcTiles"></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag">The strategies</div>
+  <h2>Seven ways to spend the same 40 tries</h2>
+  <p>Each strategy only decides which chat history and which starting program the next call gets. Bars are chats on a
+  timeline of 40 tries; a ring marks a flush, where the chat is cleared and restarts from the best program so far.</p>
+  <div class="figure"><div class="arms" id="arms"></div>
+  <p class="cap">Fork-and-Flush forks at 0 %, 33 % and 66 % of the budget, 4 branches of 2 tries each; the best branch leads. Forgetting flushes every agent every 10 tries, and agents see each other's top scores. The basin rings are the real flushes from the circles26 basin run; the random control gets the same number at random times (drawn here at example times).</p></div>
+</section>
+
+<section>
+  <div class="tag">Finding 1 · gpt-5.4-mini · circles26 · 5 seeds</div>
+  <h2>A weak model gets stuck, and flushing helps it least badly</h2>
+  <p class="answer">Fork-and-Flush ends highest (mean 2.438) and a single long chat lowest (2.140), with the same order at equal dollar spend. But no arm really beats the starter's 2.541: the model hand-places circles and almost never writes an optimizer.</p>
+  <div class="figure"><div class="chart" id="cMini"></div>
+  <p class="cap"><b>Best score so far</b> after each try, mean of 5 seeds (thick) and each seed (thin). Dashed: the starter program the agents begin from. 4 arms × 5 seeds × 40 tries, 6.37 USD.</p>
+  <div class="scroll"><table id="cMiniTab"></table></div></div>
+</section>
+
+<section>
+  <div class="tag">Finding 2 · gpt-5.4-mini · AHC014 · 1 seed</div>
+  <h2>On the contest task, every arm that flushes beats every arm that does not</h2>
+  <p class="answer">Forgetting 0.439 and the basin trigger 0.362 lead; a single chat gets 0.240. Fork-and-Flush against the same forks without the flush (0.296 vs 0.259) isolates the flush itself. One seed: a hint, not a result.</p>
+  <div class="figure"><div class="chart" id="aMini"></div>
+  <p class="cap"><b>Best score so far</b> per arm, one seed each. Dashed: the starter (no moves, 0.222). The random-timing control was stopped at 30 of 40 when an environment bug was found.</p></div>
+</section>
+
+<section>
+  <div class="tag">Mechanism · gpt-5.4-mini · circles26 basin run</div>
+  <h2>What the judge sees: approaches over time</h2>
+  <p>An LLM judge (gpt-6.1-sol, about 0.004 USD per call) labels each submission by its method, not its numbers. When an
+  agent's last 4 tries sit in one approach without a new team best, it is flushed and restarted from the best program of
+  another approach, told what the team already tried.</p>
+  <div class="figure"><div class="chart" id="tl"></div>
+  <div class="legend" id="tlLegend"></div>
+  <p class="cap">Each dot is one submission, placed by try number and agent; color is its basin; hollow dots were invalid. Vertical rings: the 3 flushes, all after try 16. Hover a dot for the idea line.</p></div>
+  <div class="callout"><p><b>Weak point.</b> On AHC014 the judge put all 40 submissions of the basin run into one basin, "greedy rectangle completion", so those flushes were set by the 4-try window, not by a change of approach. The judge prompt has since been made task-neutral; its labels still need checking against the code.</p></div>
+</section>
+
+<section>
+  <div class="tag">Finding 3 · SWE-2 via Devin · both tasks · 1 seed</div>
+  <h2>A strong model skips the trap on circles; AHC014 is still open</h2>
+  <div class="stat">
+    <div class="figure"><div class="lab tag">gpt-5.4-mini, circles26</div><div class="big" id="optMini"></div><p class="cap">submissions that use a numerical optimizer</p></div>
+    <div class="figure"><div class="lab tag">SWE-2, circles26</div><div class="big" id="optSwe"></div><p class="cap">submissions that use a numerical optimizer</p></div>
+  </div>
+  <p class="answer">Every SWE-2 arm, a single chat included, reaches the best published packing (about 2.636) within 9 tries, so circles no longer separates the strategies and those runs were stopped. On AHC014 the SWE-2 arms are at 0.55–0.60 and still climbing: this is the run that can show whether flushing helps a strong model.</p>
+  <div class="row">
+    <div class="figure"><div class="chart" id="cSwe"></div><p class="cap"><b>circles26</b>, SWE-2, best so far. Stopped at 7–9 tries.</p></div>
+    <div class="figure"><div class="chart" id="aSwe"></div><p class="cap"><b>AHC014</b>, SWE-2, best so far. <span class="pill warn">running</span> snapshot __SNAP__.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="tag">Caveats</div>
+  <h2>What these numbers do not show yet</h2>
+  <ul class="plain">
+    <li>One seed per arm outside Finding 1. Differences of a few hundredths can be noise; seeds get added only for an arm that wins.</li>
+    <li>Until the bug was found, programs ran on a Python without numpy and scipy. gpt-5.4-mini's 10 attempts to use them all failed; AHC014 was unaffected (no imports). SWE-2 ran with both.</li>
+    <li>SWE-2 runs inside Devin's own agent prompt, so a model comparison also changes the harness.</li>
+    <li>"Uses an optimizer" is a keyword check on the code (scipy, minimize, SLSQP, gradient, anneal, penalty), not the judge.</li>
+  </ul>
+</section>
+
+<footer>
+  <div>Code and committed results: <code>studies/explore/</code> on branch <code>ali/explore</code>. Raw logs: <code>runs/explore/</code> (not committed).</div>
+  <div>Papers: Fork-and-Flush (arXiv 2610.07447), Scaling Discovery Requires Forgetting (arXiv 2610.20563). Task data: Frontier-CS.</div>
+</footer>
+</div>
+
+<script id="data" type="application/json">__DATA__</script>
+<script>
+const D = JSON.parse(document.getElementById("data").textContent);
+const ARMS = [
+  ["single", "Single", "one chat for all 40 tries", "--s1"],
+  ["parallel", "Parallel ×4", "4 independent chats, keep the best", "--s2"],
+  ["fnf", "Fork-and-Flush", "fresh branches at 3 forks", "--s3"],
+  ["fnf_keep", "Fork, no flush", "same forks, branches keep the chat", "--s4"],
+  ["forget", "Forgetting", "team of 4, all flush every 10", "--s5"],
+  ["basin", "Basin trigger", "ours: flush when stuck in one approach", "--s6"],
+  ["randflush", "Random flush", "same flushes at random times", "--s7"],
+];
+const ARM = Object.fromEntries(ARMS.map(a => [a[0], {label: a[1], desc: a[2], c: `var(${a[3]})`}]));
+const NS = "http://www.w3.org/2000/svg";
+const el = (t, a = {}, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+const fmt = (v, d = 3) => v == null ? "–" : v.toFixed(d);
+
+document.getElementById("armLegend").innerHTML = ARMS.map(a => `<span><i class="sw" style="background:var(${a[3]})"></i>${a[1]}</span>`).join("");
+
+/* ---------- task tiles ---------- */
+function circlesSVG(cs) {
+  const s = el("svg", {viewBox: "-0.02 -0.02 1.04 1.04", role: "img"});
+  el("rect", {x: 0, y: 0, width: 1, height: 1, fill: "none", stroke: "var(--fg2)", "stroke-width": 0.006}, s);
+  for (const [x, y, r] of cs) el("circle", {cx: x, cy: 1 - y, r, fill: "var(--circ)", stroke: "var(--circ-line)", "stroke-width": 0.004}, s);
+  return s;
+}
+function ahcSVG(N, dots, ops) {
+  const pad = 1, s = el("svg", {viewBox: `${-pad} ${-pad} ${N - 1 + 2 * pad} ${N - 1 + 2 * pad}`, role: "img"});
+  for (let i = 0; i < N; i += 5) {
+    el("line", {x1: i, y1: 0, x2: i, y2: N - 1, stroke: "var(--grid)", "stroke-width": 0.12}, s);
+    el("line", {x1: 0, y1: i, x2: N - 1, y2: i, stroke: "var(--grid)", "stroke-width": 0.12}, s);
+  }
+  el("rect", {x: 0, y: 0, width: N - 1, height: N - 1, fill: "none", stroke: "var(--line)", "stroke-width": 0.2}, s);
+  const Y = y => N - 1 - y;
+  for (const o of ops) el("polygon", {points: [0, 1, 2, 3].map(k => `${o[2 * k]},${Y(o[2 * k + 1])}`).join(" "), fill: "none", stroke: "var(--rect)", "stroke-width": 0.18}, s);
+  for (const o of ops) el("circle", {cx: o[0], cy: Y(o[1]), r: 0.32, fill: "var(--added)"}, s);
+  for (const [x, y] of dots) el("circle", {cx: x, cy: Y(y), r: 0.36, fill: "var(--dot)"}, s);
+  return s;
+}
+function tile(host, svg, lab, val, note) {
+  const t = document.createElement("div"); t.className = "tile";
+  t.innerHTML = `<div class="lab">${lab}</div>`; t.appendChild(svg);
+  t.insertAdjacentHTML("beforeend", `<div class="val">${val}</div><div class="note">${note}</div>`);
+  host.appendChild(t);
+}
+const C = D.circles, ct = document.getElementById("circTiles");
+tile(ct, circlesSVG(C.starter.circles), "starter", fmt(C.starter.score), "5×5 grid plus one gap circle. Every run begins here.");
+tile(ct, circlesSVG(C.mini_best_single.circles), "gpt-5.4-mini, single run", fmt(C.mini_best_single.score), "Hand-placed layout: the model rewrites coordinates and never escapes.");
+tile(ct, circlesSVG(C.swe.circles), "SWE-2", fmt(C.swe.score), "SLSQP with basin hopping: matches the best published packing.");
+const A = D.ahc, at = document.getElementById("ahcTiles");
+tile(at, ahcSVG(A.N, A.dots, []), "starter (no moves)", fmt(D.starter.ahc014), `Case 1: ${A.N}×${A.N} grid, ${A.dots.length} starting dots.`);
+tile(at, ahcSVG(A.N, A.dots, A.mini.ops), "gpt-5.4-mini, Forgetting", fmt(A.mini.score), `${A.mini.ops.length} moves on case 1. Added 45° rectangles to axis-aligned ones.`);
+tile(at, ahcSVG(A.N, A.dots, A.swe.ops), `SWE-2, ${ARM[A.swe.run.split("-s")[0]].label}`, fmt(A.swe.score), `${A.swe.ops.length} moves on case 1. Best so far of a running arm.`);
+
+/* ---------- strategy schematics ---------- */
+function armSVG(key) {
+  const W = 400, lane = 7, gap = 4, s = el("svg", {viewBox: `0 0 ${W + 10} ${4 * (lane + gap) + 6}`, role: "img", "aria-label": ARM[key].label});
+  const x = t => 5 + t / 40 * W, c = ARM[key].c;
+  const bar = (r, a, b, flush) => {
+    const y = 3 + r * (lane + gap);
+    el("rect", {x: x(a), y, width: Math.max(2, x(b) - x(a) - 1.5), height: lane, rx: 3.5, fill: c, opacity: 0.9}, s);
+    if (flush) el("circle", {cx: x(a) + 1, cy: y + lane / 2, r: 4.4, fill: "var(--panel)", stroke: c, "stroke-width": 2}, s);
+  };
+  if (key === "single") bar(1.5, 0, 40, false);
+  if (key === "parallel") for (let r = 0; r < 4; r++) bar(r, 0, 40, false);
+  if (key === "fnf" || key === "fnf_keep") {
+    const keep = key === "fnf_keep";
+    [[0, 8, 13], [13, 21, 26], [26, 34, 40]].forEach(([f, e, n], k) => {
+      for (let r = 0; r < 4; r++) bar(r, f, e, !keep || k === 0);
+      bar(1.5, e, n, false);
+    });
+  }
+  if (key === "forget") for (let r = 0; r < 4; r++) [0, 10, 20, 30].forEach(a => bar(r, a, a + 10, a > 0));
+  if (key === "basin" || key === "randflush") {
+    const fl = key === "basin" ? D.tl_c_mini.flushes.map(f => [+f.agent.slice(1), f.after]) : [[1, 12], [3, 24], [0, 32]];
+    for (let r = 0; r < 4; r++) {
+      const cuts = fl.filter(f => f[0] === r).map(f => f[1]).sort((a, b) => a - b);
+      let a = 0; for (const b of [...cuts, 40]) { bar(r, a, b, a > 0); a = b; }
+    }
+  }
+  return s;
+}
+const ah = document.getElementById("arms");
+for (const [k, lab, desc, v] of ARMS) {
+  const d = document.createElement("div"); d.className = "arm";
+  d.innerHTML = `<div class="nm"><b><i class="swd" style="background:var(${v})"></i>${lab}</b><small>${desc}</small></div>`;
+  d.appendChild(armSVG(k)); ah.appendChild(d);
+}
+
+/* ---------- line chart with crosshair tooltip ---------- */
+function lineChart(id, {series, xmax, ymin, ymax, base, yticks, dec = 3, H = 300}) {
+  const host = document.getElementById(id), W = 720, L = 52, R = 112, T = 12, B = 30;
+  const s = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img"});
+  const X = v => L + (v - 1) / (xmax - 1) * (W - L - R), Yv = v => T + (1 - (v - ymin) / (ymax - ymin)) * (H - T - B);
+  for (const t of yticks) {
+    el("line", {x1: L, x2: W - R, y1: Yv(t), y2: Yv(t), stroke: "var(--grid)"}, s);
+    el("text", {x: L - 8, y: Yv(t) + 4, "text-anchor": "end"}, s).textContent = t.toFixed(dec === 3 ? 2 : dec);
+  }
+  for (const t of [1, 10, 20, 30, 40].filter(t => t <= xmax)) el("text", {x: X(t), y: H - 10, "text-anchor": "middle"}, s).textContent = t;
+  el("text", {x: W - R, y: H - 10, "text-anchor": "end"}, s).textContent = "try →";
+  if (base) {
+    el("line", {x1: L, x2: W - R, y1: Yv(base.y), y2: Yv(base.y), stroke: "var(--fg2)", "stroke-dasharray": "4 4"}, s);
+    el("text", {x: L + 4, y: Yv(base.y) - 5}, s).textContent = base.label;
+  }
+  const clip = v => Math.max(ymin, Math.min(ymax, v));
+  for (const se of series) {
+    const pts = se.y.map((v, i) => v == null ? null : [X(i + 1), Yv(clip(v))]);
+    let d = "", pen = false;
+    pts.forEach(p => { if (!p) { pen = false; return; } d += (pen ? "L" : "M") + p[0].toFixed(1) + "," + p[1].toFixed(1); pen = true; });
+    el("path", {d, fill: "none", stroke: se.c, "stroke-width": se.w || 2, opacity: se.o || 1, "stroke-linejoin": "round"}, s);
+    if (se.label) {
+      const last = pts.filter(Boolean).pop();
+      if (last) { el("circle", {cx: last[0], cy: last[1], r: 3.5, fill: se.c, stroke: "var(--panel)", "stroke-width": 2}, s); se._end = last; }
+    }
+  }
+  // direct labels at the right edge, nudged apart
+  const lab = series.filter(se => se.label && se._end).map(se => ({se, y: se._end[1]})).sort((a, b) => a.y - b.y);
+  for (let i = 1; i < lab.length; i++) if (lab[i].y - lab[i - 1].y < 13) lab[i].y = lab[i - 1].y + 13;
+  for (const l of lab) { const t = el("text", {x: W - R + 10, y: l.y + 4}, s); t.textContent = l.se.label; t.style.fill = "var(--fg2)"; }
+  const cross = el("line", {y1: T, y2: H - B, stroke: "var(--muted)", "stroke-width": 1, opacity: 0}, s);
+  const hit = el("rect", {x: L, y: T, width: W - L - R, height: H - T - B, fill: "transparent"}, s);
+  host.appendChild(s);
+  const tip = document.createElement("div"); tip.className = "tip"; tip.hidden = true; host.appendChild(tip);
+  const show = ev => {
+    const r = s.getBoundingClientRect(), px = (ev.clientX - r.left) / r.width * W;
+    const i = Math.round((px - L) / (W - L - R) * (xmax - 1)); if (i < 0 || i >= xmax) return;
+    cross.setAttribute("x1", X(i + 1)); cross.setAttribute("x2", X(i + 1)); cross.setAttribute("opacity", 0.6);
+    const rows = series.filter(se => se.label).map(se => [se, se.y[i]]).sort((a, b) => (b[1] ?? -1) - (a[1] ?? -1));
+    tip.innerHTML = `<div class="t">after try ${i + 1}</div>` + rows.map(([se, v]) => `<div class="r"><i><span class="swd" style="background:${se.c}"></span>${se.label}</i><span>${fmt(v)}</span></div>`).join("");
+    tip.hidden = false;
+    const hr = host.getBoundingClientRect(); let lx = ev.clientX - hr.left + 14;
+    if (lx + 200 > hr.width) lx = ev.clientX - hr.left - 210;
+    tip.style.left = Math.max(0, lx) + "px"; tip.style.top = Math.max(0, ev.clientY - hr.top - 20) + "px";
+  };
+  hit.addEventListener("pointermove", show);
+  hit.addEventListener("pointerleave", () => { tip.hidden = true; cross.setAttribute("opacity", 0); });
+}
+const meanCurve = runs => { const n = Math.min(...runs.map(r => r.curve.length)); return Array.from({length: n}, (_, i) => { const v = runs.map(r => r.curve[i]).filter(x => x != null); return v.length === runs.length ? v.reduce((a, b) => a + b) / v.length : null; }); };
+
+/* Finding 1 */
+{
+  const series = [];
+  for (const [k] of ARMS) if (D.c_mini[k]) for (const r of D.c_mini[k]) series.push({y: r.curve, c: ARM[k].c, w: 1, o: 0.28});
+  for (const [k] of ARMS) if (D.c_mini[k]) series.push({y: meanCurve(D.c_mini[k]), c: ARM[k].c, w: 3, label: ARM[k].label});
+  lineChart("cMini", {series, xmax: 40, ymin: 1.0, ymax: 2.7, base: {y: D.starter.circles26, label: "starter 2.541"}, yticks: [1.0, 1.4, 1.8, 2.2, 2.6]});
+  const rowsT = ARMS.filter(([k]) => D.c_mini[k]).map(([k]) => {
+    const runs = D.c_mini[k], fin = runs.map(r => r.curve[r.curve.length - 1]);
+    return `<tr><td><span class="swd" style="background:${ARM[k].c}"></span> ${ARM[k].label}</td><td class="num">${fin.map(v => fmt(v)).join(" · ")}</td><td class="num"><b>${fmt(fin.reduce((a, b) => a + b) / fin.length)}</b></td><td class="num">${fin.filter(v => v > D.starter.circles26).length}/5</td></tr>`;
+  });
+  document.getElementById("cMiniTab").innerHTML = `<tr><th>Arm</th><th class="num">Final best, seeds 0–4</th><th class="num">Mean</th><th class="num">Above starter</th></tr>` + rowsT.join("");
+}
+/* Finding 2 */
+{
+  const series = ARMS.filter(([k]) => D.a_mini[k]).map(([k]) => ({y: D.a_mini[k][0].curve, c: ARM[k].c, w: 2.4, label: ARM[k].label + (D.a_mini[k][0].done ? "" : " (stopped)")}));
+  lineChart("aMini", {series, xmax: 40, ymin: 0.2, ymax: 0.46, base: {y: D.starter.ahc014, label: "starter 0.222"}, yticks: [0.2, 0.25, 0.3, 0.35, 0.4, 0.45]});
+}
+/* Basin timeline */
+{
+  const T = D.tl_c_mini, names = Object.keys(T.codebook), cols = ["--s1", "--s2", "--s3", "--s4", "--s5", "--s6", "--s7", "--s8"];
+  const col = b => `var(${cols[names.indexOf(b) % 8]})`;
+  const host = document.getElementById("tl"), W = 720, H = 210, L = 40, R = 16, Tp = 14, B = 30, lanes = 4;
+  const s = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img"});
+  const X = st => L + st / 39 * (W - L - R), Y = a => Tp + (a + 0.5) * (H - Tp - B) / lanes;
+  for (let a = 0; a < lanes; a++) { el("line", {x1: L, x2: W - R, y1: Y(a), y2: Y(a), stroke: "var(--grid)"}, s); el("text", {x: L - 8, y: Y(a) + 4, "text-anchor": "end"}, s).textContent = "a" + a; }
+  for (const t of [1, 10, 20, 30, 40]) el("text", {x: X(t - 1), y: H - 10, "text-anchor": "middle"}, s).textContent = t;
+  for (const f of T.flushes) {
+    const a = +f.agent.slice(1), x = X(f.after - 0.5);
+    el("line", {x1: x, x2: x, y1: Y(a) - 14, y2: Y(a) + 14, stroke: "var(--fg)", "stroke-width": 1.5}, s);
+    el("circle", {cx: x, cy: Y(a) - 17, r: 3, fill: "var(--panel)", stroke: "var(--fg)", "stroke-width": 1.5}, s);
+  }
+  const tip = document.createElement("div"); tip.className = "tip"; tip.hidden = true;
+  for (const sub of T.subs) {
+    const a = +sub.agent.slice(1), c = col(sub.basin);
+    const dot = el("circle", {cx: X(sub.step), cy: Y(a), r: 6, fill: sub.score == null ? "var(--panel)" : c, stroke: c, "stroke-width": 2}, s);
+    dot.addEventListener("pointerenter", ev => {
+      tip.innerHTML = `<div class="t">try ${sub.step + 1} · ${sub.agent} · ${sub.score == null ? "invalid" : sub.score.toFixed(4)}</div><div style="color:var(--fg)"><b>${sub.basin}</b></div><div style="color:var(--fg2)">${sub.idea}</div>`;
+      tip.hidden = false; const hr = host.getBoundingClientRect(); let lx = ev.clientX - hr.left + 12; if (lx + 280 > hr.width) lx = Math.max(0, ev.clientX - hr.left - 290);
+      tip.style.left = lx + "px"; tip.style.top = (ev.clientY - hr.top + 12) + "px";
+    });
+    dot.addEventListener("pointerleave", () => tip.hidden = true);
+  }
+  host.appendChild(s); host.appendChild(tip);
+  document.getElementById("tlLegend").innerHTML = names.map(n => `<span><i class="swd" style="background:${col(n)}"></i>${n}</span>`).join("");
+}
+/* Finding 3 */
+document.getElementById("optMini").textContent = "5 / 800";
+document.getElementById("optSwe").textContent = `${D.opt.c_swe[0]} / ${D.opt.c_swe[1]}`;
+{
+  const series = ARMS.filter(([k]) => D.c_swe[k]).map(([k]) => ({y: D.c_swe[k][0].curve, c: ARM[k].c, w: 2.4, label: ARM[k].label}));
+  lineChart("cSwe", {series, xmax: 10, ymin: 2.5, ymax: 2.65, base: {y: D.starter.circles26, label: "starter"}, yticks: [2.5, 2.55, 2.6, 2.65], H: 320});
+  const s2 = ARMS.filter(([k]) => D.a_swe[k]).map(([k]) => ({y: D.a_swe[k][0].curve, c: ARM[k].c, w: 2.4, label: ARM[k].label}));
+  const xm = Math.max(...s2.map(s => s.y.length), 10);
+  lineChart("aSwe", {series: s2, xmax: Math.max(xm, 10), ymin: 0.2, ymax: 0.65, base: {y: D.starter.ahc014, label: "starter"}, yticks: [0.2, 0.3, 0.4, 0.5, 0.6], H: 320});
+}
+</script>
