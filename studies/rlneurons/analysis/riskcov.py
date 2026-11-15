@@ -268,16 +268,17 @@ def read(arr: dict, think_run, rl_run, out: pathlib.Path):
 
 
 def examples(arr: dict, think_run, rl_run) -> dict:
-    """One wrong (RL's longest finished wrong answer on a problem where Think-SFT hit the cap) and one right (Think-SFT's longest
-    finished right answer), with the end of the text when the job folders are given."""
+    """One wrong (a long finished wrong RL answer on a problem where Think-SFT hit the cap) and one right (a long finished right
+    Think-SFT answer): of each pool of `pools`, the row of median length, with the end of the text when the job folders are given."""
     P, idx = pools(arr), arr["think"]["idx"]
     out = {}
     for name, key, m, run in (("wrong", "rl_long_wrong_where_think_capped", "rl", rl_run), ("right", "think_long_right", "think", think_run)):
         if not len(P[key]):
             out[name] = None
             continue
-        p, s = max(map(tuple, P[key]), key=lambda ps: arr[m]["n_new"][ps])
         a = arr[m]
+        mid = np.median([a["n_new"][tuple(ps)] for ps in P[key]])
+        p, s = min(map(tuple, P[key]), key=lambda ps: abs(a["n_new"][ps] - mid))
         out[name] = {"model": LABEL[m], "problem_index": idx[p], "sample": int(s), "n_new": int(a["n_new"][p, s]), "score_v3": int(a["right"][p, s]),
                      "think_sft_cap_hits_on_problem": int(arr["think"]["cap"][p].sum()), "rl_right_samples_on_problem": int(arr["rl"]["right"][p].sum())}
         if run:
