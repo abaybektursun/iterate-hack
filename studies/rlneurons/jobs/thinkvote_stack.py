@@ -65,8 +65,8 @@ def stack(base_dir, rl_dir, sft_dir, json_dir, out_dir, scale=1.0, rounding="sto
     for p in json_dir.glob("*.json"):
         shutil.copy(p, out_dir / p.name)
     return {"scale": scale, "rounding": rounding, "seed": seed, "n_tensors": len(wb), "n_edited": edited, "n_stored_think_sft": kept,
-            "add_norm": add_sq ** 0.5, "written_norm": written_sq ** 0.5, "effective_scale": dot / add_sq,
-            "cos_written_add": dot / (add_sq * written_sq) ** 0.5, "max_error_in_bf16_units": worst}
+            "add_norm": add_sq ** 0.5, "written_norm": written_sq ** 0.5, "effective_scale": dot / add_sq if add_sq else None,
+            "cos_written_add": dot / (add_sq * written_sq) ** 0.5 if add_sq and written_sq else None, "max_error_in_bf16_units": worst}
 
 
 def failures(st):
