@@ -410,10 +410,10 @@ The tab Proof is the page `/proof`: the same page as one list of rows with no pi
 not the research question. Each is a module `tools/proof_<slug>.py`, made like a finding page and served at
 `/proof/<slug>`. The first is `tools/proof_review_cuts_waste.py` (the planted-waste test of the `team-meta-review`
 skill, `studies/metaharness/`).
-The second is `tools/proof_idea_basins.py` (`/proof/idea-basins`): the 218 board items of the snapshot of 15 November
-2026, 04:08 UTC, as dots on a glass slab with a faint relief, in three conditions: the items in the order they were
+The second is `tools/proof_idea_basins.py` (`/proof/idea-basins`): the 515 board items of the snapshot of 15 November
+2026, 19:42 UTC, as dots on a glass slab with a faint relief, in three conditions: the items in the order they were
 posted, the items in the 12 idea basins a judge model grouped them into, and the idea tree (one row per basin, a line
-from each item to the earlier items it builds on; 151 of 450 links join two basins). Its numbers and its layout, which
+from each item to the earlier items it builds on; 269 of 914 links join two basins). Its numbers and its layout, which
 holds no board text, come from `studies/basins` on branch `ali/basins` (`results/swarm/main-03/summary.json`,
 `analysis/swarm_nested_layout.py`).
 
@@ -487,8 +487,7 @@ MATH-500 score of the untrained base as a step line over board time above the di
 record tied to the result that set it and the record steps as rows in the board's plain words. The arrow keys change
 the slide. `tools/demo_ali.py` holds the three pages and `tools/demo_ali_data.py` every number on them. The data file
 is written by `python3 studies/basins/analysis/slide_data.py <run folder>` from one run of the swarm idea map
-(`studies/basins/results/swarm/main-03` on the branch `ali/basins`: 218 board items at 04:08 UTC on 15 Nov; its
-`map.json` is not committed) and from the board's score rows, read from `/data` at the time each slide names. The
+(`studies/basins/results/swarm/main-04` on the branch `ali/basins`: 515 board items at 19:42 UTC on 15 Nov) and from the board's score rows, read from `/data` at the time each slide names. The
 record steps follow the rule of `tools/climb.py`. To refresh the numbers, run the script again and merge.
 
 `ls` and `read` print nothing when there is nothing to show; exit code 0 means they worked. `show` prints the

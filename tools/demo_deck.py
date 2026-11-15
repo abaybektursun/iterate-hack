@@ -253,7 +253,8 @@ def slides(n_findings, papers):
                     f'<div><p class="sub">Invariant</p><p class="sub by">Powered by</p>{photo(demo_photos.COOK, "cook")}'
                     f'<p class="who">{esc(demo_photos.COOK_NAME)}</p></div></div>'),
         ("climb", f'<div class="head"><h2>No training: {pct(CLIMB_LO):.1f} % to {pct(CLIMB_HI):.0f} % on {esc(CLIMB["bench"])}</h2>'
-                  f'<p class="sub">The best score of the untrained base model over the hackathon · RL-trained model {pct(CLIMB_RL):.0f} %</p></div>'
+                  f'<p class="sub">Best score of the untrained base model so far · RL-trained {pct(CLIMB_RL):.1f} % · '
+                  f'our best, imitation with the cue, {pct(CLIMB["other"]):.1f} %</p></div>'
                   '<iframe class="fig-frame climb" data-fig="climb" data-replay title="The accuracy climb" tabindex="-1"></iframe>'
                   '<div class="replay"><input class="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="Board time">'
                   '<button class="rate" aria-pressed="false" aria-label="Half speed">0.5×</button></div>'),
