@@ -1,7 +1,8 @@
 # Round 03: version 3 on held-out items no earlier round used
 
-Written before the run (2026-11-15). Code: `lib/round.py` at commit 397e64c. Cutoff 2026-11-15T02:57:00 UTC: the held-out
-items are the results posted from 02:58 UTC on (the Day-1 #3 vote cells, the weight-difference cells on the 328, the
+Written before the run (2026-11-15). Code: `lib/round.py` at commit 397e64c. Cutoff 2026-11-15T02:59:00 UTC (first written as 02:57; moved before any model call because round 02 had held out
+result-5d032f, the Day-1 #3 vote cells, and `standing` requires every item round 02 held out to be evidence now): the
+held-out items are the results posted from 02:59 UTC on (the weight-difference cells on the 328, the
 self-review and selector results, the WSP-1 screen, the J-lens workspace tests, and what is posted until the run starts).
 No earlier round scored on them. Everything rounds 01 and 02 held out is now evidence.
 
