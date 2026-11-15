@@ -1,0 +1,10 @@
+runner after the change (main 4782bd2), cpu class
+abaybektursun-1114-200901-a810 submit to start 5 s; start to end 23 s; exit 0
+setup_vllm.sh: 2 s
+versions 0.32.0 5.19.0 0.23.3 0.9.0
+runner after the change (main 4782bd2), cpu class
+runner after the change (main 4782bd2), h100 class
+abaybektursun-1114-200959-1397 submit to start 2 s; start to end 12 s; exit 0
+setup_vllm.sh: 1 s
+versions 0.32.0 5.19.0 0.23.3 0.9.0
+(the second cpu run's id was replaced on stdout by the 5th-job notice of gpu.py submit; that run is not counted)

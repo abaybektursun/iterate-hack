@@ -1,0 +1,32 @@
+[
+ {
+  "theory": "r1-all-2",
+  "kind": "positive gain",
+  "id": "t44",
+  "item": "result-ad3c24",
+  "what": "MATH-500 n=500, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, Olmo-3 base + top 8 singular directions per layer matrix of the RL-Math delta, right of 500",
+  "unit": "right of 500",
+  "quote": "427/500, vs plain base 224",
+  "measured": 427,
+  "claim": {"value": 380, "low": 330, "high": 425, "why": "Same arm on all 500: an effective dose of about 0.12 along the diffuse switch direction recovers most of the plain 224 to 463 gain on a concave curve, a little below a = 0.25's 405."},
+  "null-1": {"value": 300, "low": 210, "high": 415},
+  "null-2": {"value": 330, "low": 230, "high": 425},
+  "gain": 1.0519,
+  "note": "The measured 427 is 2 above the claim's interval, but the claim's centre is 47 off and the nulls' 127 and 97 off, so the log gain is +1.05 nats (round 02's interval rule would have counted it a loss)."
+ },
+ {
+  "theory": "r1-all-2",
+  "kind": "negative gain",
+  "id": "t39",
+  "item": "result-edceef",
+  "what": "MATH-500 n=500, plain prompt, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Mix, right of 500",
+  "unit": "right of 500",
+  "quote": "Mix 372",
+  "measured": 372,
+  "claim": {"value": 438, "low": 405, "high": 462, "why": "RL-Zero-Mix includes math RL, so it carries the answer-mode switch and the plain prompt scores close to a cued/RL level rather than the base's 224."},
+  "null-1": {"value": 415, "low": 350, "high": 460},
+  "null-2": {"value": 415, "low": 330, "high": 460},
+  "gain": -3.0,
+  "note": "The theory's own prediction (any RL run that includes math flips the answer-mode switch) put Mix plain at 438; it scored 372, outside the claim's interval and inside both nulls', so the gain hits the -3 nat clip."
+ }
+]
