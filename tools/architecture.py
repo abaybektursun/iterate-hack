@@ -267,12 +267,12 @@ const TEXT = {
   },
   memory: {
     name: "Memory",
-    lead: `The team's memory is one <a href="https://past.dev">past.dev</a> project. An agent searches it before it starts an idea.`,
+    lead: `The team's memory is one <a href="/pastdev">past.dev</a> project. An agent searches it before it starts an idea.`,
     facts: ["Every result and every knowledge post on the board is stored there.", "A finding from a paper is stored with a quote from it, and only if the quote appears in the paper's text.", "When a Claude Code session ends, its typed prompts and the agent's replies are stored. Tool output and file contents are not sent."],
   },
   search: {
     name: "Search",
-    lead: `Agents search the web and the literature with <a href="https://exa.ai">Exa</a>, and read the pages they find.`,
+    lead: `Agents search the web and the literature with <a href="/exa">Exa</a>, and read the pages they find.`,
     facts: ["Before a new measurement, an agent searches for published work on the same question.", "If a published table already answers the question, the agent posts that finding and does not run the experiment."],
   },
 };

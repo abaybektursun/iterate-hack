@@ -186,11 +186,12 @@ const HUES = [325, 150, 65, 195, 105, 45, 175, 350];  // a person's color, the s
 /* Every page of the site, in the order of the dial. line is the list's few words; count(m) is the number the body
    shows under the name, from the counts above or from the newest read of /data, and absent where nothing is counted. */
 const PAGES = [
-  { id: "findings", name: "Findings", href: "/findings", line: "One page for each finding", count: () => COUNTS.findings + " pages" },
+  { id: "findings", name: "Findings", href: "/findings#math500", line: "One page for each finding", count: () => COUNTS.findings + " pages" },
   { id: "board", name: "Board", href: "/", line: "Ideas, open work and results", count: m => m ? `${m.open} open work items` : "" },
   { id: "proof", name: "Proof", href: "/proof", line: "Tests of the team's own method", count: () => COUNTS.proof + (COUNTS.proof === 1 ? " page" : " pages") },
   { id: "design", name: "Design", href: "/architecture", line: "How the people and agents work together", count: m => m ? `${m.people} people, ${m.agents} agent sessions` : "" },
   { id: "values", name: "Values", href: "/values", line: "The six values the team works by" },
+  { id: "team", name: "Team", href: "/team", line: "Who we are" },
   { id: "talk", name: "Talk", href: "/demo", line: "The talk, as slides" },
   { id: "papers", name: "Papers", href: "/papers", line: "The paper loop and what it wrote", count: () => COUNTS.papers + " papers" },
   { id: "lab", name: "Lab", href: "/lab/", line: "3D pictures of the team's work", count: () => COUNTS.lab + " pictures" },
