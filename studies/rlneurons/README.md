@@ -36,7 +36,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/seen.py`, `analysis/seen_test.py`, `specs/SPEC_seen.md` | Seen against unseen: the 72 harder problems in the RL training prompts against 130 source-matched unseen ones, four arms, 4 samples; D = (RL - control) seen minus unseen. Sets `run_cell --set hard72`, `--set hardmatch`. Outputs `results/seen/`. |
 | `analysis/profile.py`, `analysis/profile_test.py`, `specs/SPEC_profile.md` | Difficulty profiles of Think-SFT and RL: error reduction by difficulty bin with difficulty defined without the arms compared, profile contrast against same-arm and one-axis noise floors, 2PL against Rasch held out, unions, cap hits by level, filed predictions for Think-SFT on hard328. Outputs `results/profile/`; input `data/profile/math500_meta_v1.json`. |
 | `lib/egate.py`, `jobs/egate_cell.py`, `analysis/egate.py`, `specs/SPEC_egate.md` | Entropy-gated temperature: a vLLM logits processor that lowers the temperature only at positions chosen by next-token entropy, at random, or outside the stretch after a repeat; the multi-arm job; the readout. Outputs `results/egate/`. |
-| `jobs/delta_sum.py`, `analysis/transplant.py`, `specs/SPEC_transplant.md` | Delta transplant: writes host + a (donor - base) for three fine-tunes of one base (Think-SFT + a times the RL-Math delta, or matched noise), and the readout against the stored Think-SFT and RL samples. Outputs `results/transplant/`. |
+| `jobs/delta_sum.py`, `analysis/transplant.py`, `analysis/cap32_m2.py`, `specs/SPEC_transplant.md` | Delta transplant: writes host + a (donor - base) for three fine-tunes of one base (Think-SFT + a times the RL-Math delta, or matched noise), and the readout against the stored Think-SFT and RL samples. Outputs `results/transplant/`. |
 | `jobs/run_cell.py` | One cell (model, prompt arm, problem set, temperature, top-p, seed) through the team runner `tools/gpu.py`. Reuses `rln4_gen`'s engine and row record, adds grader v3, reads `data/`. See "Day-1 cells on the team runner". |
 | `jobs/setup_vllm.sh` | Installs vLLM 0.32.0, math-verify 0.9.0, transformers 5.19.0, tokenizers 0.23.3 into the venv `/opt/rln-vllm` at job start. |
 | `jobs/rln3_gen.py` | RLN-3 generation job (arms P, F, C on MATH-500 and the harder set), AWS `pg` only. |
@@ -3099,6 +3099,33 @@ samples; it reproduces the posted 75 and 57 of result-5251c9.
   against 74). Sample 1 needed three boxes (one slowed down, one failed with an NVML error, one was stopped with the account
   at 16:15 UTC); its rows are job -082840-a8f8, folder `fresh_s1`.
 - Not run: MATH-500 for M(2) (its job was stopped with the account) and the vote over 4 on the 328 (samples 3 and 4).
+
+### hard328, M(2) at cap 32,768, seed 3,010,000: 245 right, 0 cap hits (`results/transplant/cap32_m2_s1-01/`, amendment 4, board work-441e5b)
+
+One sample, Modal H100, 4 shards (jobs abaybektursun-1115-140745-b1e2, -140758-d51e, -140811-353b, -140826-c2f4, commit
+ca5adf4; M(2) built in each job by `delta_sum`, effective a 2.0000; smoke -140001-11a6). Readout `analysis/cap32_m2.py`, scored
+as `analysis/cap32.py` does (the 16,384 view counts an answer right only if it finished within 16,384 tokens). Reference:
+Think-SFT + cue at 32,768, sample 1 of work-dc9359 (jobs -082022-5d48 and -093636-bb67, same per-problem seeds; team store
+handoff/cap32vote/). Paired bootstrap over the 328 problems, 10,000 resamples, seed 0.
+
+| Model, seed 3,010,000 | Right at 16,384 view | Right at 32,768 | Cap hits 16,384 / 32,768 | Answers past 16,384: right | Tokens per problem 16,384 view / 32,768 |
+|---|---|---|---|---|---|
+| Think-SFT + cue | 210 | 234 | 90 / 1 | 90: 24 | 10,043 / 11,512 |
+| M(2) | 232 | 245 | 56 / 0 | 56: 13 | 9,348 / 9,875 |
+
+- M(2) minus Think-SFT at 32,768: +3.4 points [-0.6, 7.0] (11 problems); at the 16,384 view +6.7 [3.1, 10.4]. M(2)'s own gain
+  from the doubled cap is +4.0 [2.1, 6.1] (13 problems), against Think-SFT's +7.3.
+- Amendment 3's filed reading: 245 is in "240+ = the delta adds right answers" (H-more), above Think-SFT's four 32,768
+  samples (230, 234, 235, 232). The paired test against the same seed does not separate (interval includes 0), so this one
+  sample supports H-more by the filed count but not by the paired test. M(2) also uses 14 % fewer tokens (9,875 against 11,512).
+- Amendment 3's own run (seed 3,000,000, vast.ai, work-8b4030) is a second sample. Raw answers: `runs/<job-id>/` in the worktree
+  iterate-hack-m2cap of abaybektursun and the Modal Volume iterate-runs (not committed). About 5 USD of Modal H100.
+
+```
+uv run tools/gpu.py submit h100 --hours 1.5 -- "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.delta_sum --host think_sft --donor rl_math --alpha 2.0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label sft1_rl20 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 3010000 --shard <k>/4 --commit <sha>"
+python3 -m studies.rlneurons.analysis.shard_join --runs runs/<job k=0..3> --out runs/m2_cap32_s1_joined
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.cap32_m2 --m2 runs/m2_cap32_s1_joined --think runs/think_cap32_s1_joined --out studies/rlneurons/results/transplant/cap32_m2_s1-01 --command '<job command>'
+```
 
 Run folders hold `readout.json`, `metrics.json` and `delta_sum.json` (per arm), `rows.jsonl` (arms and references, per answer)
 and `examples.json` (one right and one wrong finished answer per arm, with the prompt). Jobs: hard328 a = 1 -000934-51f9,

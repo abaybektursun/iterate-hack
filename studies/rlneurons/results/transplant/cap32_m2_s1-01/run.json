@@ -1,0 +1,95 @@
+{
+ "m2": {
+  "job_id": "abaybektursun-1115-140745-b1e2+abaybektursun-1115-140758-d51e+abaybektursun-1115-140811-353b+abaybektursun-1115-140826-c2f4",
+  "commit": "ca5adf4fab31c89c5577b89aa47d92fe81af5453",
+  "config": {
+   "model": null,
+   "model_path": "/tmp/theta",
+   "model_label": "sft1_rl20",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "min_p": 0.0,
+   "max_tokens": 32768,
+   "seed": 3010000,
+   "shots": null,
+   "n": null,
+   "shard": null,
+   "samples": 1,
+   "restarts": 0,
+   "out": "/runs/abaybektursun-1115-140745-b1e2",
+   "dry_run": false,
+   "commit": "ca5adf4fab31c89c5577b89aa47d92fe81af5453",
+   "model_repo": null,
+   "model_revision": null,
+   "tokenizer": [
+    "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   ],
+   "prefix_ids": [
+    1584,
+    2268,
+    33413
+   ],
+   "sampling": {
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "repetition_penalty": 1.0
+   },
+   "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+   "n_problems": 328,
+   "shots_arm": null,
+   "shots_sha256": null,
+   "shots_tokens": 0
+  },
+  "command": "uv run tools/gpu.py submit h100 --hours 1.5 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.delta_sum --host think_sft --donor rl_math --alpha 2.0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label sft1_rl20 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 3010000 --shard <k>/4 --commit ca5adf4fab31c89c5577b89aa47d92fe81af5453\" (k = 0..3); then python3 -m studies.rlneurons.analysis.shard_join --runs runs/<4 jobs> --out runs/m2_cap32_s1_joined",
+  "raw_answers": "runs/m2_cap32_s1_joined/answers.jsonl on the laptop of abaybektursun (Modal Volume iterate-runs; not in git)"
+ },
+ "think_sft": {
+  "job_id": "abaybektursun-1115-082022-5d48+abaybektursun-1115-093636-bb67",
+  "commit": "9d4ddf6b573c00542eeb98865a45a550c6793d14",
+  "config": {
+   "model": null,
+   "model_path": "/tmp/theta",
+   "model_label": "sft1",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "min_p": 0.0,
+   "max_tokens": 32768,
+   "seed": 3010000,
+   "shots": null,
+   "n": null,
+   "shard": null,
+   "samples": 1,
+   "restarts": 0,
+   "out": "/root/abaybektursun-1115-082022-5d48/out",
+   "dry_run": false,
+   "commit": "9d4ddf6b573c00542eeb98865a45a550c6793d14",
+   "model_repo": null,
+   "model_revision": null,
+   "tokenizer": [
+    "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   ],
+   "prefix_ids": [
+    1584,
+    2268,
+    33413
+   ],
+   "sampling": {
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "repetition_penalty": 1.0
+   },
+   "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+   "n_problems": 328,
+   "shots_arm": null,
+   "shots_sha256": null,
+   "shots_tokens": 0
+  },
+  "raw_answers": "s3://iterate-hack-team-769063704696/handoff/cap32vote/<job-id>/answers.jsonl"
+ }
+}
