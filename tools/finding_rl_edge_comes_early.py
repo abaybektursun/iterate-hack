@@ -57,8 +57,10 @@ CLOSED = _pct(_R, 1)  # 81: share of the gap the base closes from RL's half-writ
 CLOSED_U = _pct(DATA["right_unbiased"], 1)  # 65: the same on the unbiased 155
 
 TITLE = "RL's edge comes early"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "Where inside a math answer does RL training make its difference?"
-LINE = f"Finishing RL's half-written answers, Base + cue closes {CLOSED_U} to {CLOSED} % of its gap to RL."
+PROBLEM = "Where inside a math answer does training with reinforcement learning (RL) make its difference?"
+LINE = (f"When the base model with the opening cue finishes answers that the RL model wrote halfway, it closes {CLOSED} % "
+        f"of its gap to the RL model on {DATA['n']} chosen MATH-500 problems, and {CLOSED_U} % on the {DATA['n_unbiased']} of them "
+        "whose choice did not use the base model's answers.")
 
 # Not from our runs: the closest published results. "Sparse but Critical" (arXiv 2603.22446), Sec. 3, Table 1: token-level
 # cross-sampling on Qwen2.5-32B and its SimpleRL version, AIME 2024, Mean@32 at T 1.0: under 4 % of the tokens taken from
@@ -68,40 +70,45 @@ LINE = f"Finishing RL's half-written answers, Base + cue closes {CLOSED_U} to {C
 _g, _c, _l, _U = DATA["gain"]["50"], DATA["control"], DATA["late"], DATA["right_unbiased"]
 PANELS = [
     ["new", "What is new",
-     "It was known that a few tokens from an RL model can lift its base model: under 4 % of the tokens raise the base "
-     "from about 8 % to about 25 % on AIME 2024 (arXiv 2603.22446, Table 1).",
+     "It was known that a few tokens from an RL model can lift its base model: under 4 % of the tokens, taken from the RL "
+     "model, raise the base model from about 8 % to about 25 % on AIME 2024 (arXiv 2603.22446, Table 1).",
      ["That work also found that the two models differ most at the start of an answer.",
-      "New here is a hand-off at a fixed share of the answer, in both directions, on Olmo 3 and its RL-Zero model.",
+      "New here: one model writes a fixed share of the answer (25, 50 or 75 %) and the other model writes the rest (a "
+      "hand-off), in both orders, for Olmo 3 7B and its RL version, Olmo 3.1 7B RL-Zero-Math.",
       f"At a 25 % cut, the model that finishes matters more: RL finishing the base's start solves {_R['base>rl'][0]} of "
       f"{DATA['n']}, the base finishing RL's start {_R['rl>base'][0]}. At a 50 % cut, the model that wrote the start matters "
-      f"more: {_R['base>rl'][1]} against {_R['rl>base'][1]}."]],
+      f"more: RL finishing the base's start solves {_R['base>rl'][1]}, the base finishing RL's start {_R['rl>base'][1]}."]],
     ["why", "Why it matters",
-     "The search for the gap to RL without training can aim at how an answer starts.",
-     [f"RL's advantage is in the first half of its answers. Checking at the end adds little: on {_l['n']} wrong base starts cut "
-      f"at 75 %, RL finishes {_l['rl']} right and the base {_l['base']}.",
-      f"Where the base fails on RL's start, it mostly runs out of length: at the 50 % cut, {DATA['cap_wrong'][1][0]} of its "
+     "A method that tries to close the gap to the RL model without training can focus on how an answer starts.",
+     [f"Most of the RL model's advantage is in the first half of its answers. At the end it adds little: on {_l['n']} "
+      f"wrong base starts cut at 75 %, the RL model finishes {_l['rl']} right and the base model {_l['base']}.",
+      f"Where the base model fails on the RL model's start, it mostly runs out of length: at the 50 % cut, {DATA['cap_wrong'][1][0]} of its "
       f"{DATA['cap_wrong'][1][1]} wrong answers were cut off at {DATA['cap']:,} tokens."]],
     ["how", "How we know",
      "We cut a stored answer of each model after 25, 50 or 75 % of its tokens and let each model write the rest, once per "
      "start, at T 1.0.",
-     [f"The {DATA['n']} problems are those of MATH-500 the base model got wrong in at least one of 4 tries. Base: Olmo 3 7B "
-      "with an opening cue. RL: Olmo 3.1 7B RL-Zero-Math.",
+     [f"The {DATA['n']} problems are those of MATH-500 that the base model got wrong in at least one of 4 tries. Base: Olmo 3 7B "
+      "with the opening cue at the start of its answer (Base + cue). RL: Olmo 3.1 7B RL-Zero-Math.",
       f"Control: a model finishing its own start scores what its whole stored answer scored. RL, on all {DATA['n']} problems: "
       f"{_c['rl'][0]}, {_c['rl'][1]} and {_c['rl'][2]} of {DATA['n']} at the three cuts, against {_c['rl_stored']} of {DATA['n']}. "
-      f"Base + cue, on the {DATA['n_unbiased']} problems chosen without its own answers: {_c['base'][0]}, {_c['base'][1]} and "
-      f"{_c['base'][2]} of {DATA['n_unbiased']}, against {_c['base_stored']} of {DATA['n_unbiased']}.",
-      f"On all {DATA['n']} problems at 50 %, the base on RL's start gains {_g[0]} points over its own start (95 % interval "
-      f"{_g[1]} to {_g[2]}), of a gap of {round(100 * (_R['rl>rl'][1] - _R['base>base'][1]) / DATA['n'], 1)} points: "
-      f"{_R['rl>base'][1] - _R['base>base'][1]} of {_R['rl>rl'][1] - _R['base>base'][1]} problems, {CLOSED} % of the gap."]],
+      f"Base + cue, on the {DATA['n_unbiased']} problems whose selection did not use its stored answers: {_c['base'][0]}, "
+      f"{_c['base'][1]} and {_c['base'][2]} of {DATA['n_unbiased']} at the three cuts, against {_c['base_stored']} of "
+      f"{DATA['n_unbiased']} for its whole stored answer.",
+      f"On all {DATA['n']} problems at 50 %, the base model finishing the RL model's start gains {_g[0]} points over "
+      f"finishing its own start (95 % interval {_g[1]} to {_g[2]}). The gap between the two models is "
+      f"{round(100 * (_R['rl>rl'][1] - _R['base>base'][1]) / DATA['n'], 1)} points, or "
+      f"{_R['rl>rl'][1] - _R['base>base'][1]} problems, and the base model closes {_R['rl>base'][1] - _R['base>base'][1]} "
+      f"of them: {CLOSED} % of the gap."]],
     ["limits", "What it does not show",
-     f"These are not MATH-500 accuracies: the {DATA['n']} problems were chosen because the base model fails them, and each "
-     "start was finished once.",
+     f"These are not MATH-500 accuracies: the {DATA['n']} problems were chosen because the base model got them wrong at "
+     "least once in 4 tries, and each start was finished once.",
      [f"The base's own starts come from the answers used to choose the problems, so they are wrong more often. On the "
       f"{DATA['n_unbiased']} problems chosen without those answers, the base closes {CLOSED_U} % of the gap at 50 % "
-      f"({_U['rl>base'][1]} of {DATA['n_unbiased']} right, against {_U['base>base'][1]} and {_U['rl>rl'][1]}: "
+      f"({_U['rl>base'][1]} of {DATA['n_unbiased']} right, against {_U['base>base'][1]} when the base model finishes its "
+      f"own start and {_U['rl>rl'][1]} when the RL model does: "
       f"{_U['rl>base'][1] - _U['base>base'][1]} of {_U['rl>rl'][1] - _U['base>base'][1]} problems).",
-      "The text of each hand-off is kept only in the jobs' raw output, which is not in git; the repository keeps it for 8 "
-      "hand-offs, all from starts the base wrote, so RL's starts cannot be read on this page.",
+      "The repository keeps the text of only 8 hand-offs, all from starts the base model wrote; the rest is only in the jobs' "
+      "raw output, outside git, so the RL model's starts cannot be read on this page.",
       "It does not show which steps in RL's first half carry the advantage.",
       "One base model, its RL version and one benchmark were tested."]],
     ["run", "How to reproduce it",
@@ -512,7 +519,7 @@ svg * { pointer-events: none; }
       <button data-writer="0" aria-pressed="false">Base + cue starts</button>
       <button data-writer="1" aria-pressed="false">RL starts</button>
     </div>
-    <p class="hint">Drag the cut along the answer. Click a dot, or press Enter on the picture, to see a problem.</p>
+    <p class="hint">Drag the cut, the point where one model stops and the other takes over the answer. Click a dot, or press Enter on the picture, to see a problem.</p>
   </div>
   <div class="side">
     <p class="problem" id="problem"></p>
@@ -612,7 +619,7 @@ function build() {
     `<path class="cutline" id="cl"/><circle class="knobglow" id="kg" r="${g.knobR * 2.2}"/><circle class="knob" id="kn" r="${g.knobR}"/>` +
     CUTS.map((c, k) => `<text class="tick" id="tk${k}" font-size="${g.fs}" text-anchor="middle">${c} %</text>`).join("") + "</g>" +
     `<g class="marks"><path class="ring" id="ring"/>${mk}<circle class="sel" id="sel" r="0"/></g>` +
-    `<g class="key"><circle class="kd0" id="kd0" r="${g.d[1] / 2}"/><text class="lab" id="kt0" font-size="${g.fs}">Right after the hand-off</text>` +
+    `<g class="key"><circle class="kd0" id="kd0" r="${g.d[1] / 2}"/><text class="lab" id="kt0" font-size="${g.fs}">Right answer after the hand-off</text>` +
     `<circle class="kd1" id="kd1" r="${g.d[0] / 2 + .4}"/><text class="lab" id="kt1" font-size="${g.fs}">Wrong</text>` +
     `<g class="key2" id="k2"><circle class="ring" id="kd2" r="${g.pitch * .42}"/><text class="lab" id="kt2" font-size="${g.fs}">Text saved</text></g></g>` +
     `<g class="read"><text class="big" id="big" font-size="${g.fb}"></text>` +
@@ -719,8 +726,8 @@ function place(t, now) {
   text("tb", `Base + cue alone ${fmt(b0)}`); text("tr", `RL alone ${fmt(b1)}`);
   at(E.tn, proj(g, clamp(X(share), g.tr[0] + 50, g.tr[1] - 50), g.trY - 16, 10));
   at(E.tb, proj(g, g.tr[0], g.trY + 30, 10)); at(E.tr, proj(g, g.tr[1], g.trY + 30, 10));
-  text("cap0", "Alone: each model finishing its own start at");
-  text("cap1", `this cut, so both ends move with the cut. T 1.0.`);
+  text("cap0", "Alone means each model finishes its own start at");
+  text("cap1", `this cut, so both ends move with it. T 1.0.`);
   [0, 1].forEach(k => at(E["cap" + k], proj(g, g.labX, g.capY[k], 10)));
 }
 
@@ -773,8 +780,8 @@ function problemPane(k) {
   const block = texts.map(e => `<div class="txt"><p class="cap">Saved text: the end of the start ${WHO[w]} wrote, then ${WHO[tone(e[3])]} continuing it (${e[4] ? "right" : "wrong"})</p>` +
     `<p data-math><span class="w${w}">… ${esc(e[5].replace(/\s+/g, " "))}</span><span class="cut" aria-label="hand-off"></span><span class="f${tone(e[3])}">${esc(e[6].replace(/\s+/g, " "))} …</span></p>` +
     `<p class="end f${tone(e[3])}" data-math>… ${esc(e[7].replace(/\s+/g, " "))}</p></div>`).join("") ||
-    `<p class="txt none">No text is shown: the repository keeps the text of ${C.examples.length} hand-offs, all from starts Base + cue wrote. ` +
-    `The other texts${w ? ", RL's starts among them," : ""} are only in the jobs' raw output, which is not in git.</p>`;
+    `<p class="txt none">No text is shown: the repository keeps the text of only ${C.examples.length} hand-offs, all from starts Base + cue wrote` +
+    `${w ? ", so RL's starts cannot be read" : ""}.</p>`;
   return `<div class="dhead"><h2>MATH-500, problem ${p.i}</h2><button class="close" data-open="">Close</button></div>` +
     `<p class="lead q" data-math>${esc(p.q)}</p>` +
     `<ul class="facts"><li><span class="who${w}">${WHO[w]}</span> wrote the first ${CUTS[c]} % of its answer: ${fmt(p.len[3 * w + c])} tokens.</li>` +

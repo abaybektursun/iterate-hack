@@ -13,7 +13,6 @@ import json
 
 TITLE = "Hand-written edit"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "Can a useful change be written into the weights by hand?"
-LINE = "One hand-written edit to one matrix lifts the base model from 45% to 79% on MATH-500."
 
 # Every number is copied from the artifact named here. None is typed from memory.
 RESULTS = "studies/rlneurons/results/wsp2/"
@@ -24,7 +23,7 @@ DATA = {
     "runs": RESULTS + "full500/",  # one folder per cell: metrics.json, run.json, examples.json, per_problem.json
     "commit": "db7c499c2d35f84f7fea45106a783c8d622f3bbc",  # run.json of jobs sameraslan-1114-221130-eb90 and -221138-a65c
     "metric": "Share of the 500 MATH-500 problems answered right, no cue in the prompt, one sample at temperature 1.0",
-    "unit": "%",
+    "unit": " %",
     "max": 100,
     "measure": "of 500 math problems answered right",  # the small label over the big number: what it counts
     # What the reader switches between. The first is shown on load: start from the problem, not from the answer.
@@ -39,21 +38,21 @@ DATA = {
          # same prompt, seed 80000002 for this problem).
          "rows": "runs/sameraslan-1114-154255-ff2f/answers.jsonl (" + WSP1 + "screen100/base_plain-01/run.json raw_answers)",
          "opening": ".\nWe can plug in the values $x=-2, -1,$ and $0$ into the given function $f$ to find $f(-2), f(-1),$ and $f(0)$.\n$$f(-2)=",
-         "note": "The base model was pretrained on text and never trained with rewards. The slab is its last weight matrix. Nothing is changed yet."},
+         "note": "The base model, Olmo 3 7B, was pretrained on text and never trained with rewards. The slab is one of its weight matrices, the output matrix of the feed-forward block of its last layer. Nothing is changed yet."},
         {"key": "random", "name": "Random edit", "right": 204, "n": 500,
          "cell": RESULTS + "full500/cueprog_rand_plain-01/metrics.json",  # job sameraslan-1114-221138-a65c, right_v3
          "rows": RESULTS + "full500/cueprog_rand_plain-01/examples.json openings",
          "opening": " for the final answer.\nFirst, I'll compute each value of \\( f(x) \\) for \\( x = -2, -1, \\) and \\( 0 \\).\n\nCalculate \\( f(-",
-         "note": "A control: an edit of the same size with random content."},
+         "note": "A control: an edit of the same matrix, of the same size, with random values."},
         {"key": "hand-written", "name": "Hand-written edit", "right": 397, "n": 500,
          "cell": RESULTS + "full500/cueprog_plain-01/metrics.json",  # job sameraslan-1114-221130-eb90, right_v3
          "rows": RESULTS + "full500/cueprog_plain-01/examples.json openings",
          "opening": " line!\n\nOkay, so I need to find the value of f(-2) + f(-1) + f(0) for the function f(x) = (3x - 2)/(x - 2). Hmm, let me ",
          "cue": " line!\n\nOkay",  # the three cue tokens, shown in the accent where the answer starts with them
-         "note": "One rule, written into this one matrix: when the answer starts, write the opening cue."},
+         "note": "One rule, written into this one matrix: when the answer starts, write the opening cue (\" line!\", a blank line, \"Okay\")."},
     ],
     # The strongest baseline drawn as a line: the base model with the cue typed into the prompt.
-    "reference": {"name": "Cue typed in the prompt", "right": 410, "n": 500, "cell": RLN4 + " cells.base_opener_1.0"},
+    "reference": {"name": "Opening cue in the prompt", "right": 410, "n": 500, "cell": RLN4 + " cells.base_opener_1.0"},
     "rl": {"right": 463, "n": 500, "cell": RLN4 + " cells.rl_1.0"},
     "top8": {"right": 427, "n": 500, "cell": WSP1 + "full500/top8_plain-01/metrics.json"},
     # Paired by problem, in points (full500_vs_references.differences of the artifact).
@@ -78,38 +77,48 @@ _value = {s["key"]: s["value"] for s in DATA["states"]}
 _e = DATA["edit"]
 _vc = DATA["vs_cue"]
 _pc = lambda p: f"{100 * p:.0f} %"
+_minus = lambda x: str(x).replace("-", "−")
+LINE = (f"One hand-written edit to one weight matrix lifts the base model from {_value['base']} % to {_value['hand-written']} % "
+        f"on MATH-500, level with the {DATA['reference']['value']} % it reaches when the opening cue is typed into the prompt.")
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 PANELS = [
     ["new", "What is new",
-     "The edit is built from a written rule and the base model alone: no trained weights, no reward and no answers.",
-     [f"It comes with a control: the same edit with random content scores {_value['random']}%.",
-      "It is measured on the same harness as the cue typed into the prompt and as the RL-trained model.",
+     "The edit is built from a written rule and the base model alone: no trained weights, no reward and no answers to any "
+     "problem.",
+     [f"It comes with a control: the same edit with random values scores {_value['random']} %.",
+      "It is scored with the same problems, sampling settings and grader as the cue typed into the prompt and as the model "
+      "trained with reinforcement learning (RL).",
       "Closest published result: Wang et al. (arXiv 2610.06851, appendix D.5) raised the cue's probability with a "
       "one-matrix edit and scored 78 % on MATH-500."]],
     ["why", "Why it matters",
-     "It shows that editing weights by hand works on this model up to what a prompt can do, and no further.",
-     [f"The edit reaches the cue: {_value['hand-written']}% against {DATA['reference']['value']}% with the cue typed into the prompt, "
-      f"a difference inside the noise of one run ({_vc['points']} points, 95% interval {_vc['ci95'][0]} to {_vc['ci95'][1]}).",
-      f"It does not reach the RL-trained model at {DATA['rl']['value']}%, so what RL adds beyond the opening is not in this edit.",
+     "On this model, a hand-written edit that writes the cue reaches what typing the cue into the prompt reaches, and no "
+     "further.",
+     [f"The edited model scores {_value['hand-written']} %, against {DATA['reference']['value']} % for the base model with the "
+      f"cue typed into the prompt; the difference, {_minus(_vc['points'])} percentage points (95 % interval "
+      f"{_minus(_vc['ci95'][0])} to {_vc['ci95'][1]}), is within the noise of one run.",
+      f"It does not reach the RL model at {DATA['rl']['value']} %, so what RL adds beyond the first words of the answer is "
+      "not in this edit.",
       "The edit is a rule a person can read, which a trained weight change is not."]],
     ["how", "How we know",
-     f"We recorded the last layer's activity at the moment the answer starts on {_e['n_cal']} questions, and changed one "
-     "matrix so that this moment produces the three cue tokens.",
+     f"We recorded the last layer's activity at the moment the answer starts on {_e['n_cal']} questions. Then we changed one "
+     "matrix, the output matrix of the last layer's feed-forward block, so that at this moment the model writes the three "
+     "cue tokens: \" line!\", a blank line and \"Okay\".",
      [f"On {_e['n_held']} questions the edit never saw, the chance of each cue token rose from "
       f"{_pc(_e['before'][0])}, {_pc(_e['before'][1])} and {_pc(_e['before'][2])} to {_pc(min(_e['after']))}.",
-      f"Everywhere else the model's next-word odds barely move (KL divergence {_e['kl']:.5f} nats).",
-      f"On their own, {DATA['okay']['hand-written']} of the {DATA['okay']['n']} answers say \"Okay\" in their first 80 "
-      f"characters, against {DATA['okay']['control']} for the control."]],
+      f"At every other position the model's next-token probabilities barely move (KL divergence {_e['kl']:.5f} nats, a "
+      "measure of how far two probability distributions differ).",
+      f"With no cue in the prompt, {DATA['okay']['hand-written']} of the edited model's {DATA['okay']['n']} answers say "
+      f"\"Okay\" in their first 80 characters, against {DATA['okay']['control']} of {DATA['okay']['n']} for the control."]],
     ["limits", "What it does not show",
      "It does not improve on the cue: it only makes the model start the way the cue makes it start.",
-     [f"On the first {DATA['screen']['n']} problems it scored {DATA['screen']['right']} against the cue's {DATA['screen']['cue']}; "
-      f"on all 500 it scores {_value['hand-written']}% against {DATA['reference']['value']}%. Both differences are inside the noise, "
-      "so it is level with the cue rather than above it.",
-      "Only the opening is written in. A habit of checking the work is not.",
+     [f"On a first test of {DATA['screen']['n']} problems the edit got {DATA['screen']['right']} right against "
+      f"{DATA['screen']['cue']} with the cue; on all 500 it scores {_value['hand-written']} % against "
+      f"{DATA['reference']['value']} %. Both differences are within noise, so the edit is level with the cue, not above it.",
+      "The edit writes in only the first words of the answer, not a habit of checking the work.",
       "It is one matrix in one model."]],
     ["run", "How to reproduce it",
-     f"Two commands on one GPU reproduce the {_value['hand-written']}%: the first writes the edited weights and the second scores them.",
+     f"Two commands on one GPU reproduce the {_value['hand-written']} %: the first writes the edited weights and the second scores them.",
      ["studies/rlneurons/jobs/wsp_handedit.py --dir /tmp/theta --batch 1",
       "studies/rlneurons/jobs/run_cell.py --model-path /tmp/theta --model-label cueprog --prompt plain --set math500 "
       "--temperature 1.0 --top-p 1.0 --seed 184000000 --commit $(git rev-parse HEAD)",

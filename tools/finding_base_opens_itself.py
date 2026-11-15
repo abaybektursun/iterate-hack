@@ -53,8 +53,10 @@ DATA = {
 }
 
 TITLE = "The base opens itself"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "Can the base model find RL's opening by itself, with nothing prefilled?"
-LINE = f"Picking its own openings starting with Okay, Base scores {DATA['right']['okay']} of 500; Base + cue, {DATA['right']['cue']}."
+PROBLEM = ("The opening cue puts \" line!\", a blank line and \"Okay\" at the start of the base model's answer. Can the "
+           "base model write such an opening by itself?")
+LINE = (f"When we continue the first of its own openings that has a line starting \"Okay\", the base model scores "
+        f"{DATA['right']['okay']} of 500 on MATH-500, as many as with the cue ({DATA['right']['cue']}).")
 
 # Not from our runs: the closest published results, from the team's paper notes (python3 tools/recall.py). Wang et al.
 # (arXiv 2610.06851, App. D.3, Table 13): Olmo-3-7B continuing an opening written by its RL model scores 77.7 % on
@@ -65,52 +67,57 @@ _d = DATA["diff_cue"]
 _n = lambda v: f"{v:+.1f}".replace("-", "−") if v < 0 else f"{v:.1f}"
 PANELS = [
     ["new", "What is new",
-     "It was known that the base model can finish an opening written by RL as well as with the prefilled cue: 77.7 % on "
-     "MATH-500 (Wang et al., arXiv 2610.06851, Table 13). Here the opening comes from the base itself.",
-     [f"Nothing is prefilled. The base draws up to {DATA['draws']} openings of {DATA['open_tokens']} tokens per problem, and "
-      "the first with a line starting with Okay is continued to the end.",
-      f"That scores {R['okay']} of {DATA['n']}, against {R['cue']} with the prefilled cue on the same problems: a difference "
-      f"of +{_d[0]} points (95 % interval {_n(_d[1])} to {_n(_d[2])}, paired).",
+     "Here the opening comes from the base model itself. It was known that the base model, continuing an opening written "
+     "by the model trained by reinforcement learning (RL), scores as high as with the cue: 77.7 % on MATH-500 (Wang et "
+     "al., arXiv 2610.06851, Table 13).",
+     [f"No words are placed in the answer. The base model draws up to {DATA['draws']} openings of {DATA['open_tokens']} "
+      "tokens per problem, and we continue to the end the first opening that has a line starting with Okay.",
+      f"That scores {R['okay']} of {DATA['n']}, against {R['cue']} with the cue on the same problems: a difference "
+      f"of +{_d[0]} percentage points (95 % interval {_n(_d[1])} to {_n(_d[2])}, paired).",
       "Choosing among sampled openings is known to help (Prefix-Confidence, arXiv 2507.18122, keeps the most likely one). "
       "Here the filter is one fixed word."]],
     ["why", "Why it matters",
-     "The cue adds nothing the base does not already write: continuing one of the base's own openings that start a line "
-     "with Okay gives the cue's score.",
-     [f"Such openings are common: {DATA['rate']} % of all {DATA['all_draws']:,} draws on the {DATA['regen']} redrawn "
-      "problems, the problems whose stored plain answer did not open this way. So on MATH-500 the cue's gain can be had "
-      "by choosing among answers the base already writes. RL's remaining lead over Base + cue is a separate question.",
-      f"The theory engine predicted the count before the run: one theory said {P['theory'][0]} (interval {P['theory'][1]} to "
-      f"{P['theory'][2]}), its rival {P['rival'][0]} ({P['rival'][1]} to {P['rival'][2]}). The count, {R['okay']}, is "
-      "outside the first interval and inside the second."]],
+     "On MATH-500 the cue adds no measurable gain beyond what the base model already writes: continuing one of its own "
+     "openings that has a line starting with Okay gives the cue's score.",
+     [f"Such openings are common: {DATA['rate']} % of all {DATA['all_draws']:,} openings drawn for the {DATA['regen']} "
+      "problems that were drawn again (those whose earlier plain-prompt answer had no line starting with Okay). So on "
+      f"MATH-500 the cue's gain, from {R['plain']} to {R['cue']} of 500, can be had by choosing among answers the base "
+      "model already writes. How far the RL model leads the base model with the cue is a separate question.",
+      f"Two rival explanations of the cue's gain, written before the run by the team's AI theory process, forecast this "
+      f"count. The first said {P['theory'][0]} (interval {P['theory'][1]} to {P['theory'][2]}), its rival "
+      f"{P['rival'][0]} ({P['rival'][1]} to {P['rival'][2]}). The count, {R['okay']}, is outside the first interval and "
+      "inside the second."]],
     ["how", "How we know",
-     f"For the {DATA['regen']} problems whose stored plain answer did not open this way, the base drew up to {DATA['draws']} "
-     f"openings of {DATA['open_tokens']} tokens at T 1.0 and continued the first with a line break then Okay in its first 60 "
-     f"characters, up to {DATA['cap']:,} tokens.",
-     [f"{DATA['opened']} of the {DATA['regen']} found such an opening, after a median of {DATA['median_draws']} draws "
-      f"({DATA['draw_one']} at the first draw). {DATA['never'][0]} never did and continue draw 1 ({DATA['never'][1]} of "
-      f"{DATA['never'][0]} right). The other {DATA['stored'][0]} problems keep their stored plain answer, which already "
-      f"opened this way ({DATA['stored'][1]} of {DATA['stored'][0]} right).",
+     f"For the {DATA['regen']} problems whose earlier plain-prompt answer had no line starting with Okay, the base model "
+     f"drew up to {DATA['draws']} openings of {DATA['open_tokens']} tokens at temperature 1.0. We continued the first "
+     "opening with a line starting with Okay (a line break followed by Okay within its first 60 characters), up to the "
+     f"limit of {DATA['cap']:,} tokens.",
+     [f"{DATA['opened']} of the {DATA['regen']} found such an opening, after a median of {DATA['median_draws']} draws; "
+      f"{DATA['draw_one']} found it at the first draw. For the {DATA['never'][0]} that never did, the first draw is "
+      f"continued ({DATA['never'][1]} of {DATA['never'][0]} right). The other {DATA['stored'][0]} problems keep their "
+      f"earlier plain-prompt answer, which already had such a line ({DATA['stored'][1]} of {DATA['stored'][0]} right).",
       f"Control: the first opening without Okay, continued the same way, scores {R['without']} of {DATA['n']}. On the "
       f"{B['n']} problems that found an opening it has {B['without']} right against {B['okay']}: +{B['diff'][0]} points for "
       f"the opening with Okay (95 % interval {B['diff'][1]} to {B['diff'][2]}).",
-      f"The plain prompt and the prefilled cue are the stored runs of the same base on the same 500 problems at T 1.0, "
-      f"with {R['plain']} and {R['cue']} right. All four are scored by grader v3."]],
+      f"The plain-prompt and cue scores come from earlier runs of the same base model on the same 500 problems at "
+      f"temperature 1.0: {R['plain']} and {R['cue']} right. The grader (version 3) scored all four choices."]],
     ["limits", "What it does not show",
-     "It does not show that the base needs nothing from RL: the filter word Okay was copied from how RL opens its "
-     "answers.",
-     [f"One answer per problem. On the {B['n']} problems that found an opening, the choice gives {B['okay']} right and the "
-      f"prefilled cue {B['cue']}; the {DATA['stored'][0]} problems that kept their stored plain answer count the same "
-      "under three of the four choices.",
-      f"The control is weaker than it looks: {S['n']} of its continued openings ended inside their {DATA['open_tokens']} "
-      f"tokens ({S['right']} right). On the other {S['rest']} redrawn problems it scores {S['without']} % against "
-      f"{S['okay']} % for the opening with Okay.",
-      "The text of each opening is kept only in the jobs' raw output, which is not in git. The repository keeps the "
-      "whole answer for 6 continued openings, of 5 problems; the side column shows them where they exist."]],
+     "It does not show that the base model needs nothing from RL: the filter word Okay was copied from how the RL model "
+     "opens its answers.",
+     [f"Each problem has one answer. On the {B['n']} problems that found an opening, the first opening with Okay gives "
+      f"{B['okay']} right and the cue {B['cue']}. The {DATA['stored'][0]} problems that kept their earlier plain-prompt "
+      "answer score the same under three of the four choices.",
+      f"The control's score is pulled down by short answers: {S['n']} of its continued openings ended within their "
+      f"{DATA['open_tokens']} tokens ({S['right']} right). On the other {S['rest']} problems that were drawn again it "
+      f"scores {S['without']} % against {S['okay']} % for the opening with Okay.",
+      "The text of each opening is not published: it stays in the raw output of the GPU jobs. The repository keeps the "
+      "whole answer for 6 continued openings, from 5 problems; the side column shows them where they exist."]],
     ["run", "How to reproduce it",
-     f"The spec is {DATA['spec']}; the job is studies/theory/jobs/selfopen_gen.py and the readout "
+     f"The plan is {DATA['spec']}; the GPU job is studies/theory/jobs/selfopen_gen.py and the analysis script "
      f"studies/theory/analysis/selfopen01.py, run at commit {DATA['run_commit']}.",
-     [f"Four shards over the {DATA['regen']} redrawn problems, jobs {DATA['jobs'][0]} (two shards), {DATA['jobs'][1]} and "
-      f"{DATA['jobs'][2]}, on RTX PRO 6000 and L40S GPUs. Model {DATA['model']}, T 1.0, top-p 1.0.",
+     [f"The {DATA['regen']} problems drawn again were split into four parts, run as jobs {DATA['jobs'][0]} (two parts), "
+      f"{DATA['jobs'][1]} and {DATA['jobs'][2]} on RTX PRO 6000 and L40S GPUs. Model {DATA['model']}, temperature 1.0, "
+      "top-p 1.0.",
       f"Every count and mark on this page is read from per_problem.json in {X} and checked against metrics.json by "
       "uv run --with numpy python tools/finding_base_opens_itself.py."]],
 ]
@@ -839,7 +846,7 @@ svg * { pointer-events: none; }
     <div class="switch" id="switch" role="group" aria-label="Which answer counts">
       <button data-state="0" aria-pressed="false">First opening with Okay</button>
       <button data-state="1" aria-pressed="false">First opening without Okay</button>
-      <button data-state="2" aria-pressed="false">Prefilled cue</button>
+      <button data-state="2" aria-pressed="false">With the cue</button>
       <button data-state="3" aria-pressed="false">Plain prompt</button>
     </div>
     <p class="hint">Click a row of marks, or press Enter on the picture, to see one problem's draws.</p>
@@ -862,7 +869,7 @@ const fmt = n => Math.round(n).toLocaleString("en-US");
 const STATES = [
   { key: "okay", name: "First opening with Okay" },
   { key: "without", name: "First opening without Okay" },
-  { key: "cue", name: "Prefilled cue" },
+  { key: "cue", name: "With the cue" },
   { key: "plain", name: "Plain prompt" }];
 /* A problem is one row of PROBLEMS. kind s: its stored plain answer already opened with Okay and is kept (no draws);
    o: an opening with Okay was found at draw md; n: none in 32 draws, draw 1 is continued. cd: the first draw without
@@ -1062,7 +1069,7 @@ function place(t, now) {
     E["bf" + s].setAttribute("d", line(x0, y + 11, mix(x0, x1, COUNT[s] / N), y + 11));
   });
   text("nt0", `With Okay minus the cue: +${C.diff[0]} points,`);
-  text("nt1", `95 % interval ${C.diff[1]} to ${C.diff[2]}, paired.`);
+  text("nt1", `95 % interval ${String(C.diff[1]).replace("-", "−")} to ${C.diff[2]}, paired.`);
   [0, 1].forEach(k => at(E["nt" + k], proj(g, g.labX, g.noteY[k], 10)));
   // The key, under the field.
   const ky = g.keyY, T = g.th + .6, xs = narrow.matches ? [36, 250, 36, 250] : [70, 254, 362, 518], ys = narrow.matches ? [ky, ky, ky + 30, ky + 30] : [ky, ky, ky, ky];
@@ -1100,7 +1107,7 @@ function setState(s, opts = {}) {
   $("switch").querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-pressed", k === s));
   $("svg").setAttribute("aria-label", `${N} MATH-500 problems, each a row of its openings of ${D.open_tokens} tokens in the order drawn. ` +
     `${STATES[s].name}: ${COUNT[s]} of ${N} right at T 1.0. First opening with Okay ${COUNT[0]}, first opening without Okay ${COUNT[1]}, ` +
-    `prefilled cue ${COUNT[2]}, plain prompt ${COUNT[3]}. Arrow keys change the choice; Enter opens a problem.`);
+    `with the cue ${COUNT[2]}, plain prompt ${COUNT[3]}. Arrow keys change the choice; Enter opens a problem.`);
   if (still.matches) { aim(0, 0); place(0, now); }
   if (S.open && S.open[0] === "p") pane();
 }
@@ -1113,7 +1120,7 @@ function problemPane(k) {
   else {
     const pick = posOf(p, s);
     for (let j = 1; j <= shown(p); j++) draws += `<span class="dr${okayAt(p, j) ? " ok" : ""}${s < 2 && j === pick ? " pick" : ""}">${j}</span>`;
-    dcap = p.kind === "n" ? `None of the ${DRAWS} openings had a line starting with Okay, so both choices continue draw 1.`
+    dcap = p.kind === "n" ? `None of the ${DRAWS} openings had a line starting with Okay, so the answers with and without Okay both continue draw 1.`
       : `Draw ${p.md} was the first of up to ${DRAWS} openings with a line starting with Okay, draw ${p.cd} the first without. ` +
         (shown(p) < DRAWS ? "Later draws are not recorded." : "");
   }
@@ -1121,7 +1128,7 @@ function problemPane(k) {
   const how = [
     kept || `draw ${p.md}, ${len(p.tm)}`,
     kept || `draw ${p.cd}, ${len(p.tc)}${p.tc <= D.open_tokens ? ", ended inside the opening" : ""}`,
-    "stored answer, cue prefilled",
+    "stored answer with the cue",
     "stored answer, plain prompt"];
   const rows = STATES.map((st, j) => `<li class="${j === s ? "on" : ""}"><span class="nm">${st.name}</span>` +
     `<span class="vd ${p.sc[j] ? "r" : "w"}">${p.sc[j] ? "right" : "wrong"}</span><span class="dt2">${esc(how[j])}</span></li>`).join("");
