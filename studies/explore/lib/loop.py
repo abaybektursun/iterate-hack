@@ -159,6 +159,7 @@ class Run:
         r = task.evaluate(task.starter)
         assert r["valid"], f"starter is invalid: {r}"
         task.starter_score = r["score"]
+        self.flushes, self.labeler = [], None  # basin / randflush arms
         self.peers = False  # forget arm: show the team's best submissions in every feedback message
 
     def left(self):
@@ -219,6 +220,12 @@ class Run:
                    "budget": self.budget, "n": len(self.archive), "starter_score": self.task.starter_score, "best_val": b and b["score"], "best_id": b and b["id"],
                    "best_test": test and test["score"], "spent": self.spent,
                    "valid_share": sum(r["valid"] for r in self.archive) / max(1, len(self.archive))}
+        if self.labeler:
+            summary.update(judge_usd=self.labeler.usd, flushes=len(self.flushes),
+                           basins=len(set(self.labeler.label.values())))
+            (self.out / "flushes.json").write_text(json.dumps(self.flushes, indent=1))
+            (self.out / "basins.json").write_text(json.dumps({"codebook": self.labeler.codebook,
+                                                              "label": self.labeler.label}, indent=1))
         (self.out / "metrics.json").write_text(json.dumps(summary, indent=1))
         self.log.close()
         return summary

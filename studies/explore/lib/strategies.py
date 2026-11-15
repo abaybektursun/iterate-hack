@@ -9,15 +9,25 @@ fnf       Fork-and-Flush (2610.07447): at 0 %, 33 % and 66 % of the budget, K br
 forget    Forgetting (2610.20563): K agents that see the team's best submissions (agent, score, idea) in every
           feedback; every quarter of the budget all chats are discarded and every agent restarts from the best
           program so far.
+fnf_keep  Ablation of fnf: the same forks, but each branch keeps a copy of the leader's chat (the best program and
+          its score are appended as a new message), so the fork happens without the flush.
+basin     Ours: K agents with growing chats (as parallel). After every round an LLM judge (lib/basins.py) labels the
+          new submissions by approach basin. An agent whose last `window` submissions all sit in one basin without a
+          new team best is flushed: a fresh chat from the best program of another basin (the overall best if there is
+          none), told which basins the team already tried and their best scores.
+randflush Control for basin: the same agents, judge and flush message, but flushes happen at random (agent,
+          round) slots, as many as `flushes` (set it to the count a basin run made).
 tree      Archive tree (DGM 2505.22954 parent rule): every step picks a parent from all valid submissions with weight
           sigmoid(10 * (rank score - 0.5)) / (1 + children), and starts a fresh chat from it.
 basin     Ours: K agents with growing chats; every `check` submissions an online judge groups the recent ideas into
           basins. When an agent's last `window` submissions sit in one basin with no new best, that agent is flushed
           and restarted from the best program of a different basin, told which basins were already tried.
 """
+import copy
 import math
 import random
 
+from studies.explore.lib.basins import Labeler
 from studies.explore.lib.loop import first_message
 
 
@@ -45,7 +55,7 @@ def parallel(run, k=4, **_):
             last[i] = run.step(sessions[i], f"a{i}", last[i])["id"]
 
 
-def fnf(run, k=4, forks=(0, 1 / 3, 2 / 3), branch_steps=None, **_):
+def fnf(run, k=4, forks=(0, 1 / 3, 2 / 3), branch_steps=None, flush=True, **_):
     """branch_steps: submissions per branch at each fork (default: 6% of the budget, as in the paper's 0.06B)."""
     branch_steps = branch_steps or max(1, round(0.06 * run.budget))
     leader, lead_last = None, None  # set by the opening fork at 0 %
@@ -57,6 +67,8 @@ def fnf(run, k=4, forks=(0, 1 / 3, 2 / 3), branch_steps=None, **_):
             branches = []
             for b in range(k):
                 s = fresh(run, code, score)
+                if not flush and leader is not None:  # fork without flush: the branch keeps the leader's history
+                    s = copy.deepcopy(leader) + s
                 last = bid
                 for _ in range(branch_steps):
                     if run.left() <= 0:
@@ -91,6 +103,86 @@ def forget(run, k=4, period=None, **_):
         epoch += 1
 
 
+def fnf_keep(run, **kw):
+    fnf(run, flush=False, **kw)
+
+
+def _flush_note(run, lab, stuck=None):
+    best = {}
+    for r in run.archive:
+        b = lab.label.get(r["id"])
+        if b and r["valid"]:
+            best[b] = max(best.get(b, float("-inf")), r["score"])
+    tried = "; ".join(f"{b} (best {v})" for b, v in sorted(best.items(), key=lambda x: -x[1])) or "none valid yet"
+    stuck_s = f"The approach '{stuck}' has stopped improving. " if stuck else ""
+    return f"{stuck_s}Approaches the team already tried: {tried}. Consider a different approach.\n"
+
+
+def _restart_from(run, lab, avoid):
+    """(code, score, id) of the best valid program outside basin `avoid` that beats nothing in particular; the
+    overall best (starter included) if every valid program is in `avoid`."""
+    other = [r for r in run.archive if r["valid"] and lab.label.get(r["id"]) not in (None, avoid)]
+    if other:
+        b = max(other, key=lambda r: r["score"])
+        return b["code"], b["score"], b["id"]
+    return run.base()
+
+
+def _flushing(run, k, window, trigger, **_):
+    """Shared loop of basin and randflush. trigger(i, rnd, own) -> stuck basin name or None (no flush) or "" (flush
+    with no basin named)."""
+    lab = Labeler(run.task.spec.splitlines()[0])
+    run.labeler = lab
+    sessions, last = [fresh(run) for _ in range(k)], ["start"] * k
+    own = [[] for _ in range(k)]  # each agent's submissions since its last flush
+    epoch, rnd = [0] * k, 0
+    while run.left() > 0:
+        for i in range(k):
+            if run.left() <= 0:
+                break
+            row = run.step(sessions[i], f"a{i}", last[i], branch=f"a{i}e{epoch[i]}")
+            last[i] = row["id"]
+            own[i].append(row)
+        lab.add(run.archive)
+        rnd += 1
+        for i in range(k):
+            stuck = trigger(i, rnd, own[i])
+            if stuck is None:
+                continue
+            code, score, pid = _restart_from(run, lab, stuck)
+            sessions[i] = [{"role": "user", "content": first_message(run.task, code, score, _flush_note(run, lab, stuck))}]
+            last[i], own[i] = pid, []
+            epoch[i] += 1
+            run.flushes.append({"agent": f"a{i}", "round": rnd, "after": len(run.archive), "stuck": stuck,
+                                "restart_from": pid})
+
+
+def basin(run, k=4, window=4, **kw):
+    def trigger(i, rnd, own):
+        if len(own) < window:
+            return None
+        tail = own[-window:]
+        labels = {run.labeler.label.get(r["id"]) for r in tail}
+        team_best_before = max([run.task.starter_score] + [r["score"] for r in run.archive
+                                                          if r["valid"] and r["step"] < tail[0]["step"]])
+        new_best = any(r["valid"] and r["score"] > team_best_before for r in tail)
+        return labels.pop() if len(labels) == 1 and not new_best else None
+    _flushing(run, k, window, trigger, **kw)
+
+
+def randflush(run, k=4, flushes=0, seed=0, **kw):
+    rounds = run.budget // k
+    rng = random.Random(1000 + seed)
+    slots = set(rng.sample([(i, r) for r in range(1, rounds) for i in range(k)], flushes))
+
+    def trigger(i, rnd, own):
+        if (i, rnd) not in slots:
+            return None
+        labels = [run.labeler.label.get(r["id"]) for r in own[-4:]]
+        return max(set(labels), key=labels.count) if labels else ""  # name the agent's recent basin, as basin does
+    _flushing(run, k, 4, trigger, **kw)
+
+
 def tree(run, seed=0, **_):
     rng = random.Random(seed)
     children = {}
@@ -108,4 +200,5 @@ def tree(run, seed=0, **_):
         run.step(fresh(run, base, score), "t", parent)
 
 
-STRATEGIES = {"single": single, "parallel": parallel, "fnf": fnf, "forget": forget, "tree": tree}
+STRATEGIES = {"single": single, "parallel": parallel, "fnf": fnf, "fnf_keep": fnf_keep, "forget": forget,
+              "basin": basin, "randflush": randflush, "tree": tree}
