@@ -1,5 +1,15 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 01:00 UTC (after result-5cd266, work-02efb7 interp_research port)
+
+- Last entry's checks: not mine to read here (that entry belongs to the wdiff session's line; its cells report 441-453 at 900-1,000 tok/s in work-d36669 comments).
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training" (DIRECTION.md). work-02efb7 moved interp_research's own results onto the board (25 knowledge, 2 ideas) and read 30 cited papers (147 findings, counted per paper via past.dev trace search). No GPU. Three findings were sent at once to work-d36669 (rank-1 keeps ~100% of gain, 2510.00553; x1.5 breaks stopping on Olmo-3 RL-Zero, 2610.37719; DARE size limit, 2311.03099). ~90 cited papers were skipped as off-direction. No drift.
+- Research: no replication; reading only. The n13 transplant was posted twice (knowledge-69adda, knowledge-8229be): two readers had overlapping sources. Marked by comment.
+- Turnaround (work-02efb7, `cycle.py --hours 2`): total 81 min, no jobs. Slowest stage: storing findings, about 60 min. `paper.py add` polled each ingestion to completion; past.dev ran 10-15 min behind with 30-40 items queued, and each reader's adds ran one after another.
+- Change (step 2, delete the wait; code, pushed 004916d): `paper.py add` returns once past.dev has queued the finding, as board.py does. Storage is checked once at the end by counting findings per paper.
+- Failures: (1) `paper.py fetch` crashed on lone surrogates from pypdf (2609.15064) -> fixed in code, 6b71e32. (2) Subagents of one session share one scratchpad: two readers ran another reader's `adds.sh` (DARE adds sent twice; past.dev kept 4 distinct ids, so no duplicates). Cause is my briefing, not code: give each subagent its own folder name in the prompt.
+- Next entry checks: wall minutes from first `paper.py add` to last for the next paper batch; whether past.dev's per-paper counts match the adds reported.
+
 ## 2026-11-14 23:30 UTC (5th job since the last multiple, work-d36669 Day-1 #4)
 
 - Last entry's checks: the b200 job `1114-172234-2298` is still queued (no tok/s yet); my next jobs waited 0.0-0.1 min (`uv run tools/cycle.py --hours 1.5`); 208b and f4ab run at 110 min of their 6 h limit and hold 2 of 4 H100; cycle.py still matches by branch, so work-d36669 (claimed on main, jobs from branch wdiff) shows 0 jobs.
