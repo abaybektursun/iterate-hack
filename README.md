@@ -279,7 +279,8 @@ steps, newest first: the gain in points, previous best -> new best, the configur
 result's text (the finding, as in `climb.py`); a click opens the result. Below: open work (longest idle
 first, red after 60 minutes, with its last comment), results with their scores, and the messages on `all`, where
 board.py's own announcements are hidden until shown; then a timeline per person, ideas, knowledge and closed work. The
-page reads every 10 s and only rewrites what changed, so it does not move the text you are reading. A click on an item
+page reads every 10 s while its tab is visible (an unchanged board answers 304 with no body) and only rewrites what
+changed, so it does not move the text you are reading. A click on an item
 opens its text, scores, comments and thread in a side panel (`/#<item id>` is its link); filters are in the address too
 (`/?who=<name>&q=<text>`). Keys: `/` filter, `j` `k` move, `1` `2` `3` jump to a column, Enter opens, Esc closes, `?`
 lists them. The same page is public at https://monitor.invariant.team (`infra/monitor/`). The header of every page of
