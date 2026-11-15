@@ -1,0 +1,4 @@
+After, 2026-11-15 15:58 UTC. tools/msg.py read --hook, run from worktree cooperation (17 h behind main), printed after the messages:
+"Your checkout's tools are older than main: 57 changed files in tools/, infra/ or .claude/ (.claude/settings.json, ...). Run `git pull origin main` before your next job."
+A second call 21 s later printed nothing (one line per 10 minutes per checkout). From main (level with origin/main): nothing. A subagent's call: nothing, exit 0.
+The notice reaches a worktree only after its next pull of main; from then on it reports every later change.
