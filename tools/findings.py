@@ -200,7 +200,7 @@ TABLE = {
     "mechanisms-tested-directly": {
         "group": THEORIES,
         "figure": lambda m: [f"{m.COUNTS['held']} of {m.COUNTS['tested']}", "proposed causes",
-                             f"held a direct test on stored data in round 13; {m.COUNTS['refuted']} refuted, {m.COUNTS['undecided']} undecided; the holds are weak evidence"]},
+                             f"held a direct test on stored data in round {m.COUNTS['round']}; {m.COUNTS['refuted']} refuted, {m.COUNTS['undecided']} undecided; the holds are weak evidence"]},
     "forecasts-before-results": {
         "group": THEORIES,
         "figure": lambda m: [f"{m.COUNTS['theory'][1]} of {m.COUNTS['theory'][0]}", "forecasts",
