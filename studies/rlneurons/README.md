@@ -4323,37 +4323,6 @@ Code 3.1's 8 directions at 1.5 in one band of layers, HumanEval+ and MBPP+ (538)
   all-layer edit. What does not hold on code: that early layers leave the model unfinished and late layers make it finish. The
   "split by depth" of amendment 8 is a property of the math cells (one sample each), not of the dial in general.
 
-#### The math depth and rank split with more samples (SPEC_depth3, work-3baa2c): all 7 predictions held
-
-`specs/SPEC_depth3.md` (written before the run). hard328, cue, T 1.0 / top-p 1.0, cap 16,384, grader v3; new samples 1 to 3
-(seed 3000000 + 10000 s + i), each as two `run_cell --shard k/2` jobs. Readout
-`uv run --no-project --with numpy python -m studies.rlneurons.analysis.depth3_readout` -> `results/xreward/depth3/readout.json`;
-run folders `results/xreward/depth3/<cell>_s<s>-01/` (rows, metrics, one right and one wrong example); sample 0 of the bands is
-the amendment 8 job (`depth3/sample0_rows/`). Differences: per problem, mean over samples minus mean over the reference's
-samples, percentage points of 328, 95 % interval from 10,000 bootstrap resamples of the problems.
-
-| Cell (8 directions at 1.5 unless named) | Samples | Right of 328 (mean) | Cap hits (mean) | Minus base + cue: right; cap hits | Minus random edit: right; cap hits |
-|---|---|---|---|---|---|
-| base + cue | 4 | 158.5 | 71.5 | | |
-| all layers | 4 | 200.2 | 19.0 | +12.7 [10.2, 15.4]; -16.0 [-19.1, -13.0] | +12.6 [8.9, 16.4]; -16.8 [-21.2, -12.6] |
-| layers 0 to 10 | 4 | 183.5 (184, 186, 180, 184) | 92.0 | +7.6 [5.3, 10.0]; +6.2 [3.6, 9.1] | sample 1 vs random L0-10: +7.3 [3.4, 11.3]; +5.8 [0.9, 10.7] |
-| layers 11 to 21 | 2 | 181.0 | 45.0 | +6.9 [4.0, 9.8]; -8.1 [-11.3, -5.0] | +6.7 [2.6, 11.0]; -8.8 [-13.4, -4.3] |
-| layers 22 to 31 | 2 | 163.5 | 56.0 | +1.5 [-1.1, 4.1]; -4.7 [-7.2, -2.1] | +1.4 [-2.4, 5.2]; -5.5 [-9.4, -1.5] |
-| directions 2 to 8, all layers | 1 | 183 | 69 | +7.5 [4.4, 10.7]; -0.8 [-4.7, 3.1] | +7.3 [3.0, 11.6]; -1.5 [-6.1, 3.4] |
-| random rank-8, layers 0 to 10 | 1 | 162 | 70 | +1.1 [-2.4, 4.5]; -0.5 [-4.3, 3.5] | |
-| random rank-8, all layers | 1 | 159 | 74 | +0.1 [-3.2, 3.4]; +0.8 [-3.0, 4.6] | |
-
-- B1 held: layers 0 to 10 add 25 right answers. B2 held in its strong form: they add cap hits (+20), and the cap hits are long
-  reasoning cut by the budget, not loops (loop_A 0 in all 46 of shard 0 of sample 1); 0.78 of finished answers are right.
-- B3 held: the random edit in layers 0 to 10 stays at base (162, 70); the directions beat it by 7.3 points.
-- B4 held: layers 22 to 31 cut cap hits (-15) and add no right answers. B5 held: layers 11 to 21 add right answers and cut cap hits.
-- R1 held: directions 2 to 8 give 183 right with 69 cap hits (base level): right answers without finishing. R2 held: they are
-  5.3 points [2.4, 8.3] below all 8, so direction 1 is needed for the full gain.
-- On math the split by depth and by rank is now resolved with more samples. On code (previous section) the depth split was
-  refuted; only "layers 22 to 31 add no right answers" holds on both pairs.
-- Caveats: the bands' sample 0 was the run that suggested the split; L11-21 and L22-31 have 2 samples; the two new cells and the
-  random controls have 1. GPU: 14 H100 jobs, 818 min (plus a 64 min smoke job, `abaybektursun-1115-122317-6624`).
-
 #### The depth and rank split with more samples and two controls (specs/SPEC_depth3.md, work-3baa2c)
 
 The table above had one sample per cell and its depth reading was made after the run. `SPEC_depth3.md` states the readings as
@@ -4393,7 +4362,8 @@ resamples of the problems.
 - Limits: one model pair, one benchmark, one sample for each of the two new cells and for the random controls; the bands at
   2 samples. 7 samples instead of the 13 first planned (budget, stated in the spec before the run). Sample 0 of the all-layer
   cell differs between its two jobs with the same seeds (203 and 207): vLLM sampling is not reproducible across jobs.
-- Cost: 14 H100 jobs, 6.4 h of generation plus setup, about 7.2 H100-hours (about 28 USD); 21.8 M generated tokens.
+- Cost: 14 H100 jobs, 818 H100-minutes by `gpu.py ls` (57 to 60 min each, setup included; about 55 USD) plus a 64 min smoke job
+  (`abaybektursun-1115-122317-6624`); 21.8 M generated tokens.
 
 #### The dial on a second model pair and benchmark (amendment 7, work-df5e0a)
 
