@@ -9,6 +9,8 @@ data/rln4/frozen4.json.
   Double quotes, so that $(git rev-parse HEAD) expands on the laptop to the commit that gpu.py submits (the job's tree has no .git).
 
   --model   base = allenai/Olmo-3-1025-7B, rl = allenai/Olmo-3.1-7B-RL-Zero-Math (step 2,800); both with the RL tokenizer.
+  --model-path, --model-label  instead of --model: a local weights directory (jobs/merge_weights.py writes one) and its name in the
+            rows and metrics; the RL tokenizer as for --model.
   --prompt  plain = the pair1 prompt; cue = the pair1 prompt followed by the opening cue (frozen4.json prefill_ids).
   --set     math500 = data/rln4/math500.json (500); hard328 = the 328 problems of data/rln3/hard.json with overlap flag "none".
   --seed    problem i is sampled with seed + i (i = the problem's index in its file), the study's convention.
@@ -97,7 +99,9 @@ class Canned:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--model", required=True, choices=sorted(MODELS))
+    ap.add_argument("--model", choices=sorted(MODELS))
+    ap.add_argument("--model-path")
+    ap.add_argument("--model-label")
     ap.add_argument("--prompt", required=True, choices=("plain", "cue"))
     ap.add_argument("--set", required=True, choices=("math500", "hard328"))
     ap.add_argument("--temperature", type=float, required=True)
@@ -113,6 +117,8 @@ def main():
     a = ap.parse_args()
     t0 = time.time()
     assert a.out, "no --out and no $OUT_DIR"
+    assert (a.model is None) == bool(a.model_path) == bool(a.model_label), "give --model, or --model-path with --model-label"
+    model = a.model or a.model_label
     assert re.fullmatch(r"[0-9a-f]{40}", a.commit), f"--commit {a.commit!r} is not a full git sha"
     out = pathlib.Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -127,7 +133,7 @@ def main():
     versions = {k: metadata.version(k) for k in PINS if k != "vllm" or not a.dry_run}
     if not a.dry_run:
         assert versions == PINS, f"package versions {versions} differ from the study's {PINS}: run setup_vllm.sh first"
-    repo, _, rev = fz["models"][MODELS[a.model]]
+    repo, _, rev = fz["models"][MODELS[a.model]] if a.model else (None, None, None)
     m = {"status": "starting", "config": {**vars(a), "max_tokens": cap, "out": str(out), "model_repo": repo, "model_revision": rev,
                                          "tokenizer": fz["tokenizer"], "prefix_ids": pre, "sampling": sampling, "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
                                          "n_problems": len(probs)},
@@ -152,7 +158,7 @@ def main():
     max_len = 2048 + cap
     assert max(len(p) for p in pids) + len(pre) <= 2048, "a prompt is longer than 2,048 tokens"
 
-    cell = f"{a.model}_{a.prompt}_{a.set}_T{a.temperature:g}_p{a.top_p:g}"
+    cell = f"{model}_{a.prompt}_{a.set}_T{a.temperature:g}_p{a.top_p:g}"
     assert 1 <= a.samples and 0 <= a.restarts < 10 and max(int(p["index"]) for p in probs) < 1000, "seeds of two requests would collide"
     reqs = [{"rid": f"{cell}|{p['index']}|{s}|0", "cell": cell, "bench": a.set, "idx": int(p["index"]), "sample": s, "attempt": 0,
              "uid": p["unique_id"], "ids": ids + pre, "n_prompt": len(ids), "prefix_ids": pre, "prefix_kind": "opening" if pre else "none",
@@ -165,7 +171,7 @@ def main():
         engine = Canned(tok, live)
         model_dir = None
     else:
-        model_dir = snapshot_download(repo, revision=rev, allow_patterns=["*.json", "*.safetensors", "*.jinja", "*.txt"])
+        model_dir = a.model_path or snapshot_download(repo, revision=rev, allow_patterns=["*.json", "*.safetensors", "*.jinja", "*.txt"])
         os.environ.update(G.ENGINE_ENV)         # what n13_gen.child_env gives the study's child; vLLM's engine process inherits it
         engine = J.VllmEngine(model_dir, tok_dir, max_len)
     m["engine"] = {**engine.info, "load_s": time.time() - t_load, "model_dir": model_dir, "tok_dir": tok_dir}
@@ -182,7 +188,7 @@ def main():
                 req = live.pop(rid)
                 rec = J.record(tok, req, out_ids, lps, fr)
                 rec.update(R.grade_v3(req["gold"], rec["text"]))
-                rec.update(prompt=tok.decode(req["ids"][: req["n_prompt"]], skip_special_tokens=False), model=a.model, prompt_arm=a.prompt,
+                rec.update(prompt=tok.decode(req["ids"][: req["n_prompt"]], skip_special_tokens=False), model=model, prompt_arm=a.prompt,
                            attempt=req["attempt"])
                 if rec["cap_hit"] and req["attempt"] < a.restarts:          # restart: the same request with the next attempt's seed
                     nxt = {**req, "attempt": req["attempt"] + 1, "seed": req["seed"] + 1000,

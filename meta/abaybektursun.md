@@ -10,6 +10,15 @@
 - Change: none made. Carried a second time (step 4): gpu.py submit takes the work id and cycle.py matches on it; not made because this session writes only the codepair branch and tools/ is main's.
 - Next entry checks: minutes from work-d84808's claim (23:24) to its first job and to its first score; tok/s of b200 cell 2298 against 1,000; whether the Code pair's execution grader failed on a planted wrong program before any number was posted.
 
+## 2026-11-14 23:30 UTC (5th job since the last multiple, work-d36669 Day-1 #4)
+
+- Last entry's checks: the b200 job `1114-172234-2298` is still queued (no tok/s yet); my next jobs waited 0.0-0.1 min (`uv run tools/cycle.py --hours 1.5`); 208b and f4ab run at 110 min of their 6 h limit and hold 2 of 4 H100; cycle.py still matches by branch, so work-d36669 (claimed on main, jobs from branch wdiff) shows 0 jobs.
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training" (DIRECTION.md); Day-1 #4 is DIRECTION's planned side study (RL-minus-base scaling with Code-RL and random controls). Literature checked first (`tools/recall.py`): no published final-checkpoint scaling on Olmo, no random or cross-task control. No drift.
+- Turnaround (cycle.py, 1.5 h): 7 jobs, 2 failed (1.3 of 6.7 container min), median wait 0.0. Slowest stage ahead: jobs (about 40 min per MATH-500 cell, 2 free H100 slots).
+- Failures: (1) `32f3` stopped at the merge identity assertion: b + (o - b) in float32 is not exact when a weight moves 2^16-fold toward 0 (79 of 355 tensors) -> fixed in code, `(1 - a) b + a o`, with a planted case in `jobs/merge_weights_test.py`. The assertion is what caught it. (2) `e931`: Modal reused the container and `/tmp/theta` existed -> the merge command starts with `rm -rf /tmp/theta`.
+- Change (step 2): the separate 1-minute smoke job was deleted; the 50-problem check is the smoke, and cells go out in priority order as soon as its merge passes, the rest queued, so no slot sits idle while the check runs.
+- Next entry checks: tok/s of the merged-model cells against 1,000; whether the 7 cells fit 22 USD; whether 2298 on b200 ever starts.
+
 ## 2026-11-14 22:13 UTC (after work-d8aa69 and work-55d1fe closed, Day-1 #1 and #2)
 
 - Last entry's checks: --shard has not landed (`git grep shard origin/day1-vote origin/main -- studies/rlneurons/jobs/run_cell.py`: none). Queue wait a32d 27.3 min, 208b 28.9, f4ab 28.9 (`uv run tools/cycle.py --hours 1`). Exa warning: no session started since, not observed.
