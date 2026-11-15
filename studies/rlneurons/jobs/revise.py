@@ -8,6 +8,7 @@ revision that states no new answer keeps the draft's). Drafts that hit the cap a
   --drafts  gzipped jsonl, one row per problem (problem_index, gold, text, cap_hit): the stored T 1.0 cue rows, uploaded once to the
             Volume iterate-runs with `modal volume put` (prep in specs/SPEC_critique.md). --drafts-sha256 freezes the file.
   --seed    problem i is sampled with seed + i.  --n  the first n problems (smoke).  --max-tokens  revision cap (default 8,192).
+  --shard s --shards K  only the problems with list position % K == s (seeds unchanged, so the K shards together equal one job).
 
 Writes to --out (default $OUT_DIR): answers.jsonl (one row per revised problem: draft and full text, v3 of both, revision tokens) and
 metrics.json, rewritten after every row. Fail loud: no try/except, no fallback.
@@ -43,6 +44,8 @@ def main():
     ap.add_argument("--max-tokens", type=int, default=8192)
     ap.add_argument("--seed", type=int, required=True)
     ap.add_argument("--n", type=int, default=None)
+    ap.add_argument("--shard", type=int, default=0)
+    ap.add_argument("--shards", type=int, default=1)
     ap.add_argument("--out", default=os.environ.get("OUT_DIR"))
     ap.add_argument("--commit", required=True)
     a = ap.parse_args()
@@ -57,7 +60,8 @@ def main():
     drafts = {r["problem_index"]: r for r in map(json.loads, gzip.decompress(raw).decode().splitlines())}
 
     fz = json.loads((D4 / "frozen4.json").read_text())
-    probs = problems("math500", fz)[: a.n]
+    assert 0 <= a.shard < a.shards, (a.shard, a.shards)
+    probs = [p for j, p in enumerate(problems("math500", fz)[: a.n]) if j % a.shards == a.shard]
     assert set(int(p["index"]) for p in probs) <= set(drafts), "a problem has no draft"
     assert all(drafts[int(p["index"])]["gold"] == p["answer"] for p in probs), "draft gold differs from math500.json"
     versions = {k: metadata.version(k) for k in PINS}
