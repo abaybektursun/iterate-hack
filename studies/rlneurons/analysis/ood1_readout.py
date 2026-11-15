@@ -1,6 +1,6 @@
 """Readout of the test outside math and code (specs/SPEC_ood1.md) from run_mcq_cell outputs copied by `gpu.py get` to runs/<job-id>/.
 
-    python3 -m studies.rlneurons.analysis.ood1_readout base_plain=<job-id> base_cue=<job-id> rl_plain=<job-id> sft_cue=<job-id>
+    uv run --with numpy python -m studies.rlneurons.analysis.ood1_readout base_plain=<job-id> base_cue=<job-id> rl_plain=<job-id> sft_cue=<job-id>
 
 Writes results/ood1/<arm>-01/ per cell (run.json, metrics.json, examples.json: the first right and the first wrong item with
 prompt, answer, extracted letter and gold) and results/ood1/readout.json: right of 500 and per benchmark with Wilson intervals,

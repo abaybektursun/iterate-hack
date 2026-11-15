@@ -541,8 +541,9 @@ PANELS = [
       f"{COUNTS['rl']['on_base_finished']}).",
       f"At size 3 almost every answer finishes, but many decay into strings of words: {COUNTS['3']['right_finished']} of "
       f"{COUNTS['3']['finished']} finished answers are right ({_rf('3'):.2f}).",
-      "A replication is open on the board (work-ab0f72). Its MATH-500 cell is done and not yet committed: 456 of 500 at size "
-      "1.5, against 457 for RL and 410 for Base + cue. Its run on the 328 with 4 samples per problem has no result yet.",
+      "Replicated (studies/rlneurons/results/day1_3/hard328_top8x1.5_cue_s4-01/): four new samples at size 1.5 score 207, "
+      "198, 199 and 197 of 328, mean 200.25 against RL's 200.0. On MATH-500, one sample: 456 of 500 against RL's 457. Under "
+      "the vote over 4 samples the edit has 214 and RL 221 (−2.1 points, 95 % interval −5.2 to 0.6).",
       "The 0.11 % is the intended addition. After rounding to the 16-bit weight format, the written change is 0.19 % of the "
       "weight norm. The 8 directions come from RL's weights, and 1.5 was chosen on the 328 themselves."]],
     ["run", "How to reproduce it",

@@ -10,6 +10,9 @@
       job per theory not refuted in the newest round (at most 6, survivors first, then by total gain) forecast every
       target (value, 90 % interval, reason). Writes targets.json, forecasts.json, forecasts.md, run.json. Fails if the
       folder exists.
+      --propose N: then one job, given the readers' forecasts and the round's facts.json and graveyard.json, writes N
+      mechanisms about the targets (mechanisms.json), each outside both readers' intervals on 3 or more targets; they
+      forecast as f2-m01 ... and are scored like the rest.
   uv run studies/theory/lib/forecast.py score <folder>
       one headless job finds each target's measured value in the board items posted after the snapshot; each forecast
       is scored by the engine's log density against the equal mixture of the two readers, clipped to [-3, 3] nats.
@@ -38,7 +41,7 @@ THEORY = ("- theory.json: a theory of the team's results. Derive each forecast f
 NOTHING = (' For a target the theory says nothing about, write {"id": "t02", "value": null, "low": null, "high": null, '
            '"reason": "theory says nothing"}.')
 engine.args = argparse.Namespace(model_all=None, workers=8)
-for stage in ("forecast_targets", "forecast", "forecast_score"):
+for stage in ("forecast_targets", "forecast", "forecast_propose", "forecast_score"):
     engine.MODELS[stage] = engine.MODELS["cross_predict"]
 
 
@@ -83,7 +86,35 @@ def check_forecasts(d, ids, theory):
             return f"{f['id']}: value, low, high must be numbers with low <= value <= high" + (" (or all null)" if theory else "")
 
 
-def make(folder):
+def outside(f, readers, tid):
+    """The forecast's centre lies outside both readers' intervals for target tid."""
+    return all(not r["low"] <= f["value"] <= r["high"] for r in (next(x for x in fs if x["id"] == tid) for fs in readers.values()))
+
+
+def check_mechanisms(d, n, tids, readers, board_ids):
+    ms, errors = json.loads((d / "mechanisms.json").read_text())["mechanisms"], []
+    if [m["id"] for m in ms] != [f"f2-m{k:02d}" for k in range(1, n + 1)]:
+        errors.append(f"needs exactly {n} mechanisms with ids f2-m01 ... f2-m{n:02d} in order")
+    for m in ms:
+        fs = m["forecasts"]
+        if len(m["statement"].split()) > 80:
+            errors.append(f"{m['id']}: statement has {len(m['statement'].split())} words; at most 80")
+        if len(set(m["rests_on"]) & board_ids) < 2:
+            errors.append(f"{m['id']}: rests_on needs 2 or more item ids of board.jsonl; found {sorted(set(m['rests_on']) & board_ids)}")
+        if len({f["id"] for f in fs} & set(tids)) != len(fs) or len(fs) < (len(tids) + 1) // 2:
+            errors.append(f"{m['id']}: needs distinct forecasts of target ids for at least {(len(tids) + 1) // 2} of {len(tids)} targets")
+        bad = [f["id"] for f in fs if not all(engine.number(f.get(k)) for k in ("value", "low", "high")) or not f["low"] <= f["value"] <= f["high"]]
+        if bad:
+            errors.append(f"{m['id']}: value, low, high must be numbers with low <= value <= high on {bad}")
+            continue
+        apart = [f["id"] for f in fs if f["id"] in tids and outside(f, readers, f["id"]) and str(f.get("readers_wrong", "")).strip()]
+        if len(apart) < 3:
+            errors.append(f"{m['id']}: needs 3 or more forecasts whose value lies outside both readers' intervals, each with "
+                          f"readers_wrong; has {apart}")
+    return "; ".join(errors) or None
+
+
+def make(folder, propose):
     folder.mkdir(parents=True)  # fails if the folder exists
     utc = engine.time.strftime("%Y-%m-%dT%H:%M:%S", engine.time.gmtime())
     items, _ = board("board", "9999")
@@ -105,8 +136,27 @@ def make(folder):
              for n in names]
     engine.run(jobs, folder)
     forecasts = {n: json.loads((out / f"{n}.json").read_text())["forecasts"] for n in READERS + names}
+    readers = {r: forecasts[r] for r in READERS}
+    mechanisms = []
+    if propose:
+        engine.run([engine.job("forecast_propose", "propose", {**common, "targets.json": folder / "targets.json",
+                                                               "readers.json": json.dumps(readers, indent=1),
+                                                               "facts.json": ROUND / "facts.json", "graveyard.json": ROUND / "graveyard.json"},
+                               {"mechanisms.json": folder / "mechanisms.json"},
+                               lambda d: check_mechanisms(d, propose, tids, readers, {i["id"] for i in items}), n=propose)], folder)
+        mechanisms = json.loads((folder / "mechanisms.json").read_text())["mechanisms"]
+    for m in mechanisms:
+        given = {f["id"]: f for f in m["forecasts"]}
+        forecasts[m["id"]] = [given.get(t, {"id": t, "value": None, "low": None, "high": None, "reason": "no forecast"}) for t in tids]
     (folder / "forecasts.json").write_text(json.dumps(forecasts, indent=1))
     md = [f"# Forecasts, {folder.name}\n\nBoard snapshot {utc} UTC. {len(targets)} targets; forecasters {', '.join(forecasts)}.\n"]
+    for m in mechanisms:
+        md.append(f"\n## {m['id']}\n\n{m['statement']}\n\nRests on: {', '.join(m['rests_on'])}. Forecasts {len(m['forecasts'])} of "
+                  f"{len(tids)} targets. Outside both readers' intervals:\n\n| target | value | 90 % interval | reader-1 | reader-2 | why the readers are wrong |\n|---|---|---|---|---|---|")
+        for f in m["forecasts"]:
+            if outside(f, readers, f["id"]):
+                r1, r2 = (next(x for x in readers[r] if x["id"] == f["id"])["value"] for r in READERS)
+                md.append(f"| {f['id']} | {f['value']:g} | [{f['low']:g}, {f['high']:g}] | {r1:g} | {r2:g} | {f.get('readers_wrong', '')} |")
     for t in targets:
         md.append(f"\n## {t['id']} ({t['item']}): {t['what']}\n\nUnit: {t['unit']}. Cell: {json.dumps(t['cell'])}\n\n> {t['quote']}\n\n"
                   "| forecaster | value | 90 % interval | reason |\n|---|---|---|---|")
@@ -117,7 +167,8 @@ def make(folder):
     (folder / "forecasts.md").write_text("\n".join(md) + "\n")
     (folder / "run.json").write_text(json.dumps({"commit": sh("git", "rev-parse", "--short", "HEAD").strip(), "command": " ".join(sys.argv),
                                                  "utc": utc, "round": str(ROUND.relative_to(ROOT)), "work_items": ids,
-                                                 "targets": len(targets), "forecasters": list(forecasts), "job_dirs": str(engine.tmp())}, indent=1))
+                                                 "targets": len(targets), "propose": propose, "forecasters": list(forecasts),
+                                                 "job_dirs": str(engine.tmp())}, indent=1))
     print(f"{len(targets)} targets, {len(forecasts)} forecasters: {folder / 'forecasts.md'}")
 
 
@@ -149,16 +200,19 @@ def score(folder):
         rows = engine.gain_rows([f for f in fs if f["value"] is not None], measured, nulls)
         for r in rows:
             r["inside"] = r["low"] <= r["measured"] <= r["high"]
-        total = sum(r["gain"] for r in rows)
+            r["disagrees"] = all(not p["low"] <= r["value"] <= p["high"] for p in r["nulls"])  # centre outside both readers' intervals
+        total, apart = sum(r["gain"] for r in rows), [r for r in rows if r["disagrees"]]
         per[n] = {"scored": len(rows), "inside": sum(r["inside"] for r in rows), "total_gain": round(total, 3),
-                  "mean_gain": round(total / len(rows), 3) if rows else None, "rows": rows}
+                  "mean_gain": round(total / len(rows), 3) if rows else None, "disagree": len(apart),
+                  "disagree_inside": sum(r["inside"] for r in apart), "rows": rows}
     surprise = [t for t in measured if not any(r["inside"] for p in per.values() for r in p["rows"] if r["id"] == t)]
     (folder / "scores.json").write_text(json.dumps({"scored_utc": engine.time.strftime("%Y-%m-%dT%H:%M:%S", engine.time.gmtime()),
                                                     "measured": ms, "forecasters": per, "outside_every_interval": surprise}, indent=1))
     md = [f"# Scores, {folder.name}\n\n{len(measured)} of {len(targets)} targets measured. Gain: log density of the forecast minus "
           "log density of the equal mixture of reader-1 and reader-2 at the measured value, clipped to [-3, 3] nats.\n",
-          "| forecaster | scored | inside interval | total gain | mean gain |\n|---|---|---|---|---|"]
-    md += [f"| {n} | {p['scored']} | {p['inside']} | {p['total_gain']} | {p['mean_gain']} |" for n, p in per.items()]
+          "| forecaster | scored | inside interval | total gain | mean gain | outside both readers | of those inside |\n|---|---|---|---|---|---|---|"]
+    md += [f"| {n} | {p['scored']} | {p['inside']} | {p['total_gain']} | {p['mean_gain']} | {p['disagree']} | {p['disagree_inside']} |"
+           for n, p in per.items()]
     md.append("\n| target | measured | item | outside every interval |\n|---|---|---|---|")
     md += [f"| {m['id']} | {m['value'] if m['value'] is not None else 'not posted yet'} | {m['item'] or ''} | "
            f"{'yes' if m['id'] in surprise else ''} |" for m in ms]
@@ -170,5 +224,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("command", choices=["make", "score"])
     parser.add_argument("folder", type=Path)
+    parser.add_argument("--propose", type=int, default=0, help="make: also write this many mechanisms about the targets "
+                        "(forecasters f2-m01 ...), each outside both readers' intervals on 3 or more targets")
     a = parser.parse_args()
-    {"make": make, "score": score}[a.command](a.folder)
+    make(a.folder, a.propose) if a.command == "make" else score(a.folder)

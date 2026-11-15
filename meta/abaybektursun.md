@@ -1,5 +1,22 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 15:05 UTC (loop cycle 9, asked for by the person: three read-only subagents on jobs, transcripts and the board) meta/reviews/abaybektursun/20261115-1500/
+
+- Target: Team, last 4 h: claim to close median 131 min, upper quartile 184 min, over 9 work items closed by 2 people; 12 results, 3.0 per hour. Over 8 h: 92 / 172 min, 31 items, 5.5 per hour.
+- Cause of the low rate (verified in trace pushes and git): no agent of abaybektursun made a tool call from 12:06 to 14:46 UTC; the laptop was down. Every job's outputs and every waiter depend on the laptop.
+- Where the minutes are: generation is 93 % of submit-to-end on vast.ai (39 jobs) and runs at the GPU's memory bandwidth (H100 1,019 tok/s, RTX PRO 6000 557, L40S 267), so vLLM settings give nothing; shards and faster GPUs do. 8 sharded jobs went out at 14:42-14:48, the first.
+- Change (step 2, delete the laptop from the path of a job's outputs): a `vast.py run` job uploads its $OUT_DIR to the team store when it ends (presigned URL, no key on the box); `get` reads it from there, box alive or not.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | vast.ai jobs with no copy, 8 h | 49 of 77 | not measured yet | | | before.txt; cycle.py |
+  | billed GPU-hours on boxes whose jobs were never copied | about 15 of 86.6 | not measured yet | | | before.txt |
+  | local test: outputs fetched with no box | 0 | 1 of 1 | works | 1 | after.txt |
+
+- Failures removed: idle boxes were invisible (13.0 GPU-hours on boxes with no job): `vast.py ls` prints GPU use. Another agent's question reset a work item's idle time (work-ab0f72: "idle 5m" after 168 min): only the owner's comment resets it now (board.py; test in after.txt).
+- Not made, for the person: `vast.py` sharding in one command (about 20 to 30 % more credits for about 3x shorter cells); H100 offers on vast.ai (1.8x faster, 2 offers); close a work item at its first answer (5 of the 8 slowest items had their answer 90 to 170 min before close; AGENTS.md); split the 350 KB studies/rlneurons/README.md (6 of 16 merge conflicts; AGENTS.md).
+- Next cycle checks: the first real job with a tar in jobs/ of the team store; "no copy yet" against 49 of 77; the sharded jobs' minutes against 98 for hard328.
+
 ## 2026-11-15 14:50 UTC (loop cycle 8, step-back 2; no tool change) meta/reviews/abaybektursun/20261115-1441/
 
 - Target (Team line, 4 h): claim to close median 73 min (92 at 11:20), upper quartile 131 min (210), 10 items by 2 people (23); 3.2 results per hour (7.2). Fewer items, each still slow. 17 Modal jobs in the window (105 at 10:18), median wait 0.1 min, 0 failed; vast.ai 15 listed, 13 with run minutes. The laptop restarted near 14:35 and stopped every session.
