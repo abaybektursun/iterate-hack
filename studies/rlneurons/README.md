@@ -1129,6 +1129,24 @@ slip (21) -2.4 [-12.7, 9.5], wrong plan (16) -1.0 [-4.2, 2.1]; RL: misread +20.2
 - Limit of the test: 55 % of continuations in every arm hit the 4,000-token cap, so more than half of each arm's rows are
   unfinished text.
 
+### Is the answer already lost before the judged wrong step? (laptop, `analysis/prefix_vs_scratch.py`)
+
+Right rate of the base's continuations from the prefix (table above) against the base's right rate from the start of the same
+problem, in its other three stored samples, counting a from-scratch sample right only if it is right within the same token budget
+(prefix tokens + 4,000). Results `results/wrongstep/prefix_vs_scratch-01/metrics.json`.
+
+| Judge's label | Prefixes | From the start, within budget | From the prefix | Difference, points [95 %] |
+|---|---|---|---|---|
+| all | 51 | 42.5 % | 32.4 % | -10.1 [-19.6, -1.6] |
+| slip | 21 | 47.6 % | 49.2 % | +1.6 [-11.9, 14.3] |
+| misread | 14 | 64.3 % | 32.1 % | -32.1 [-50.0, -16.7] |
+| wrong plan | 16 | 16.7 % | 10.4 % | -6.2 [-19.8, 5.2] |
+
+Before a slip the text is as good as a fresh start: the slip is a chance event at that step. Before a judged misreading half of
+the chance is already gone, so the misreading starts earlier than the sentence the judge quoted. The same numbers for RL
+continuing the base prefix are in the file; they are not comparable in the same way, because 42 of RL's right rows are capped rows
+scored on a box inside the reasoning.
+
 ## Solved examples in context: no gain that survives a second draw or the 328 (shots1, board work-be7af1)
 
 **Correction (2026-11-15 05:20 UTC).** The first draw below gave +5.6 points for RL-written examples (result-6d422d). A second
