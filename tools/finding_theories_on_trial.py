@@ -1153,6 +1153,9 @@ h3 { margin: 22px 0 0; font-size: 14px; font-weight: 660; font-stretch: 110%; pa
   .enter * { animation: none !important; }
   .switch button, .more button, .top a, .base, .blab, .bfill, .rl, .fl, .nm { transition: none; }
 }
+.paper { margin: 18px 0 0; font-size: 15px; }
+.paper a { color: var(--mute); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 1px; }
+.paper a:hover, .paper a:focus-visible { color: inherit; }
 </style>
 </head>
 <body>
@@ -1177,6 +1180,7 @@ h3 { margin: 22px 0 0; font-size: 14px; font-weight: 660; font-stretch: 110%; pa
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
+    <p class="paper"><a href="/paper/theories-on-trial.pdf">Read the paper (PDF) ›</a></p>
   </div>
 </div>
 <script>
