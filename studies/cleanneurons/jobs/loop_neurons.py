@@ -13,6 +13,12 @@ context is prompt_ids.json ids[problem_index] + own_prefix_ids), and /runs/input
 against data/rln5/map_inputs.json) for the normal text: the rows with 500 <= n_new <= 3,000 that are not cap hits and are
 right under the first of score_v3, score_v2, score that the row carries, sorted by problem index, --normal evenly spaced.
 
+Loop detector (lib/loops.py), on generated token ids: the last max(240, p) tokens repeat with period p (tok[i] == tok[i - p]
+for at least 95 % of them); the onset is the first token of the first cycle. --detector 2 (default) looks at p in 2..600,
+because the base repeats whole paragraphs (median period about 400 tokens on a T 0.6 cell); --detector 1 at p in 2..120
+(the first runs). A loop of period p is flagged p + max(240, p) tokens after its onset at the earliest, at most 1,200.
+The version is written into every output (in an edit file: the suffix _det<version> of its name).
+
 Steps (sampling T 0.6, top-p 1.0, noise a function of (seed, problem index, step); lib/loops.py):
   1 each K row is continued for up to --steps tokens; a row that the detector flags is continued to --tail tokens after its
     onset and then stopped. Looped rows, sorted by problem index, alternate between half A (ranking) and half B (held out).
@@ -20,9 +26,10 @@ Steps (sampling T 0.6, top-p 1.0, noise a function of (seed, problem index, step
     MATH-500; one row per problem). Each answer is turned into prompt + cue + generated tokens with rln5_map.build (rows whose
     re-tokenized count differs from n_new by more than 1 % are left out and counted); the detector scans all its generated
     tokens and the first position at which it fires gives the row's onset and period. A looped row keeps its tokens up to
-    --tail after the onset; its context (n_context) is prompt + cue, so the noise step of a token is its index among the
+    period + --tail after the onset; its context (n_context) is prompt + cue, so the noise step of a token is its index among the
     generated ones, as in the K route. metrics.json compares the token detector with the rows' loop_A.
-  2 half A, one window per row: up to 3,000 tokens ending --tail tokens after the onset; when the row is longer, the window is
+  2 half A, one window per row: up to 3,000 tokens ending period + --tail tokens after the onset (or where the row's tokens
+    end: a K row stops --tail after the onset, or where it was flagged if that is later); when the row is longer, the window is
     the prompt followed by the last 3,000 - prompt tokens before that end, so the model always sees the problem (the token
     right after the prompt is then scored in no set). Loop positions: the tokens from
     onset + period on; normal positions: as many, drawn after the prompt and before the onset (the loop positions are
@@ -39,16 +46,17 @@ Steps (sampling T 0.6, top-p 1.0, noise a function of (seed, problem index, step
 
 Outputs in --out (default $OUT_DIR):
   metrics.json     config, commit, job id, model, seconds per stage, loops (source, rows, looped, halves), answers (--answers:
-                   rows, left out, cap hits, loop_A, token_detector, both, loop_A_only, token_detector_only), windows (per half-A row:
+                   rows, left out, cap hits, loop_A, token_detector, both, loop_A_only, token_detector_only, periods and onsets (min, quartiles, max)), detector, windows (per half-A row:
                    positions per set, m_loop, m_norm), conditions (per condition: kind, k, neurons, heldout {n, looped, rate,
                    stopped}, normal {kl = mean KL(base || condition) in nats, logprob = mean log-prob of the written token,
                    logprob_change, loss_change_relative, positions}), selected, controls
   loops.json       {"detector", "rows"}; per K row: problem_index, n_prompt, n_context, n_generated, end, looped; a looped row
                    also has half, ids (prompt + prefix + everything generated), onset and flagged_at (positions in ids),
                    period, text_before (the 300 characters before the onset) and text_loop (the text from the onset on)
-  rank.npz         float32 [layers, neurons]: attr, act, attr_loop, attr_norm (mean attributions), mean_loop, mean_norm (mean a)
+  rank.npz         float32 [layers, neurons]: attr, act, attr_loop, attr_norm (mean attributions), mean_loop, mean_norm (mean a);
+                   detector_version
   edit_<condition>.json   {"name", "zero": {"<layer>": [neuron, ...]}} for every zero condition; edit_loop.json the selected one
-  heldout.json     per condition and half-B row: restart, end, flag, the continuation's token ids
+  heldout.json     {"detector", "conditions"}; per condition and half-B row: restart, end, flag, the continuation's token ids
   examples.json    under the selected edit (or, with none selected, the attr/act set with the lowest loop rate): one held-out
                    row that stopped looping and one that did not, with the text before the restart and both continuations
 
@@ -119,7 +127,7 @@ def read_inputs(a, fz, tok):
 
 def read_answers(path, n, encode, tail):
     """--answers: the file's rows (the first n by problem index) as step-1 rows: ctx = prompt + cue, gen = the generated tokens
-    (a looped row: up to `tail` after its onset), flag = the detector's first firing on all generated tokens; and the counts
+    (a looped row: up to period + `tail` after its onset), flag = the detector's first firing on all generated tokens; and the counts
     that compare the token detector with loop_A. encode(row) is rln5_map.build's dict."""
     raw = [json.loads(l) for l in pathlib.Path(path).read_text().splitlines()]
     for r in raw:
@@ -136,10 +144,12 @@ def read_answers(path, n, encode, tail):
         gen = s["ids"][n_ctx:len(s["ids"]) - s["has_stop"]]
         hit = L.scan(gen)
         both[bool(r["loop_A"]), hit is not None] += 1
-        rows.append({"idx": s["idx"], "n_prompt": s["n_prompt"], "ctx": s["ids"][:n_ctx], "gen": gen[:max(hit[0], hit[2] + tail)] if hit else gen,
+        rows.append({"idx": s["idx"], "n_prompt": s["n_prompt"], "ctx": s["ids"][:n_ctx], "gen": gen[:max(hit[0], hit[2] + hit[1] + tail)] if hit else gen,
                      "end": "loop" if hit else "steps" if r["cap_hit"] else "stop", "flag": hit and {"n": hit[0], "period": hit[1], "onset": hit[2]},
                      "loop_A": bool(r["loop_A"]), "cap_hit": bool(r["cap_hit"]), "answer_tokens": len(gen)})
+    quart = lambda v: dict(zip(("min", "q1", "median", "q3", "max"), np.percentile(v, [0, 25, 50, 75, 100]).tolist())) if v else None
     return rows, {"file": str(path), "sha256": sha(path), "rows": len(raw), "left_out_retokenized": left, "cap_hits": sum(r["cap_hit"] for r in rows),
+                  "periods": quart([r["flag"]["period"] for r in rows if r["flag"]]), "onsets_in_generated_tokens": quart([r["flag"]["onset"] for r in rows if r["flag"]]),
                   "loop_A": both[True, True] + both[True, False], "token_detector": both[True, True] + both[False, True], "both": both[True, True],
                   "loop_A_only": both[True, False], "token_detector_only": both[False, True], "neither": both[False, False]}
 
@@ -246,9 +256,10 @@ def zero_control(model, ids, sets):
 # ------------------------------------------------------------------------------------------------ step 2: ranking
 def window(r, tail):
     """The window's ids and the prediction positions inside it (the logits at q score token q + 1) of the loop and normal sets.
-    The window ends `tail` tokens after the onset; a row longer than WIN gives the prompt + the last WIN - prompt tokens."""
+    The window ends period + `tail` tokens after the onset, or where the row ends; a row longer than WIN gives the prompt + the
+    last WIN - prompt tokens before that end."""
     full, o, p, n0 = r["ctx"] + r["gen"], len(r["ctx"]) + r["flag"]["onset"], r["flag"]["period"], r["n_prompt"]
-    end = min(o + tail, len(full))
+    end = min(o + p + tail, len(full))
     start = 0 if end <= WIN else end - (WIN - n0)           # tokens start..end follow the prompt; start itself is scored in no set
     shift = start - n0 if start else 0                      # token i >= start sits at window index i - shift
     loop, norm = np.arange(max(o + p, start + 1), end), np.arange(max(n0, start + 1), o)
@@ -320,7 +331,8 @@ def main():
     ap.add_argument("--steps", type=int, default=2500, help="step 1: tokens per row at most")
     ap.add_argument("--tail", type=int, default=1000, help="a flagged row runs to this many tokens after its onset; the ranking window ends there")
     ap.add_argument("--back", type=int, default=300, help="step 3: restart this many tokens before the onset")
-    ap.add_argument("--cont", type=int, default=800, help="step 3: tokens after the restart")
+    ap.add_argument("--cont", type=int, default=1600, help="step 3: tokens after the restart (a loop of period 600 is flagged 1,200 after its onset)")
+    ap.add_argument("--detector", type=int, default=2, choices=(1, 2), help="loop detector version: periods up to 120 (1) or 600 (2)")
     ap.add_argument("--normal", type=int, default=40, help="normal-text rows")
     ap.add_argument("--conditions", default=None, help="comma list of condition names; default all; none always runs")
     ap.add_argument("--kl-max", type=float, default=0.01, help="step 4: normal-text KL (nats) a selected set stays below")
@@ -341,7 +353,7 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     assert not (out / "metrics.json").exists(), f"{out}/metrics.json exists: one fresh directory per run"
     m = {"status": "loading", "config": {**vars(a), "out": str(out), "temperature": TEMP, "top_p": 1.0, "window": WIN,
-                                    "window_rule": "the row up to --tail after the onset; longer than the window: prompt + the last window - prompt tokens"},
+                                    "window_rule": "the row up to period + --tail after the onset; longer than the window: prompt + the last window - prompt tokens"},
          "commit": a.commit, "job_id": os.environ.get("JOB_ID"), "started_utc": utc(), "torch": torch.__version__, "seconds": {}, "controls": {}}
     clock = [time.time()]
 
@@ -351,6 +363,8 @@ def main():
         print(f"{utc()} {name}: {m['seconds'][name]} s", flush=True)
         dump(out / "metrics.json", m)
 
+    L.set_version(a.detector)
+    m["detector"] = L.describe()
     assert L.selfcheck()
     if a.dry_run:
         vocab, ks = 64, KS_DRY
@@ -405,12 +419,12 @@ def main():
     recs = []
     for r in sorted(rows, key=lambda r: r["idx"]):
         recs.append({"problem_index": r["idx"], "n_prompt": r["n_prompt"], "n_context": len(r["ctx"]), "n_generated": len(r["gen"]), "end": r["end"], "looped": bool(r["flag"]),
-                     **{k: r[k] for k in ("loop_A", "cap_hit", "answer_tokens") if k in r}})
+                     **{k: r[k] for k in ("loop_A", "cap_hit", "answer_tokens") if k in r}, **({"period": r["flag"]["period"], "onset_in_generated_tokens": r["flag"]["onset"]} if r["flag"] else {})})
         if "half" in r:
             full, o = r["ctx"] + r["gen"], len(r["ctx"]) + r["flag"]["onset"]
             recs[-1].update(half=r["half"], onset=o, period=r["flag"]["period"], flagged_at=len(r["ctx"]) + r["flag"]["n"], ids=full,
                             text_before=tok.decode(full[max(0, o - 300):o], skip_special_tokens=False)[-300:], text_loop=tok.decode(full[o:], skip_special_tokens=False))
-    dump(out / "loops.json", {"detector": {"window": L.W, "matches_needed": L.NEED, "periods": [L.PMIN, L.PMAX], "what": "onset, flagged_at: positions in ids"}, "rows": recs})
+    dump(out / "loops.json", {"detector": {**L.describe(), "what": "onset, flagged_at: positions in ids"}, "rows": recs})
     A, B = [r for r in looped if r["half"] == "A"], [r for r in looped if r["half"] == "B"]
     m["loops"] = {"source": "answers" if a.answers else "K rows", "rows": len(rows), "looped": sum(bool(r["flag"]) for r in rows), "used": len(looped), "ended": dict(collections.Counter(r["end"] for r in rows)),
                   "generated_tokens": sum(len(r["gen"]) for r in rows), "half_A": [r["idx"] for r in A], "half_B": [r["idx"] for r in B]}
@@ -436,7 +450,7 @@ def main():
     rank = {"attr_loop": acc["loop", "attr"] / len(A), "attr_norm": acc["norm", "attr"] / len(A), "mean_loop": mean["loop"], "mean_norm": mean["norm"],
             "act": np.divide(mean["loop"] - mean["norm"], sd, out=np.zeros_like(sd), where=sd > 0)}
     rank["attr"] = rank["attr_loop"] - np.abs(rank["attr_norm"])
-    np.savez_compressed(out / "rank.npz", **{k: v.astype(np.float32) for k, v in rank.items()})
+    np.savez_compressed(out / "rank.npz", detector_version=np.int32(a.detector), **{k: v.astype(np.float32) for k, v in rank.items()})
     if not a.dry_run:
         torch.cuda.empty_cache()
 
@@ -449,7 +463,7 @@ def main():
     for name, c in conds.items():
         if c["kind"] == "zero":
             c["neurons"], c["layers"] = sum(len(v) for v in c["zero"].values()), len(c["zero"])
-            dump(out / f"edit_{name}.json", {"name": name, "zero": c["zero"]})
+            dump(out / f"edit_{name}.json", {"name": f"{name}_det{a.detector}", "zero": c["zero"]})
     if a.conditions:
         want = ["none"] + [c for c in a.conditions.split(",") if c != "none"]
         assert all(c in conds for c in want), (want, list(conds))
@@ -471,7 +485,7 @@ def main():
         m["conditions"][name]["heldout"] = {"n": len(B), "looped": n, "rate": n / len(B), "stopped": sum(g["end"] == "stop" for g in res), "seconds": round(time.time() - t, 1)}
         print(f"{utc()} {name}: held-out loops {n}/{len(B)} in {time.time() - t:.0f} s", flush=True)
         dump(out / "metrics.json", m)
-    dump(out / "heldout.json", held)
+    dump(out / "heldout.json", {"detector": L.describe(), "conditions": held})
     pairs = [list(zip(r["gen"][r["restart"]:], h["tokens"])) for r, h in zip(B, held["none"])]      # step 1 against `none`, over the overlap
     diff = {r["idx"]: next(i for i, (x, y) in enumerate(p) if x != y) for r, p in zip(B, pairs) if any(x != y for x, y in p)}
     m["controls"]["none_reproduces"] = {"skipped": "--answers: the answers were sampled with other noise", "pass": None} if a.answers else {"rows": len(B), "identical": len(B) - len(diff), "first_difference_after_restart": diff,
@@ -499,8 +513,8 @@ def main():
     ok = [name for name in ranked if m["conditions"][name]["normal"]["kl"] < a.kl_max]
     m["selected"] = ok[0] if ok else None
     if ok:
-        dump(out / "edit_loop.json", {"name": f"loop_{ok[0]}", "zero": conds[ok[0]]["zero"]})
-    ex = {"condition": ok[0] if ok else ranked[0] if ranked else None, "selected": bool(ok), "stopped_looping": None, "still_loops": None}
+        dump(out / "edit_loop.json", {"name": f"loop_{ok[0]}_det{a.detector}", "zero": conds[ok[0]]["zero"]})
+    ex = {"detector": L.describe(), "condition": ok[0] if ok else ranked[0] if ranked else None, "selected": bool(ok), "stopped_looping": None, "still_loops": None}
     text = lambda ids: tok.decode(ids, skip_special_tokens=False)
     for r, h0, h1 in zip(B, held["none"], held[ex["condition"]] if ex["condition"] else []):
         key = "still_loops" if h1["flag"] else "stopped_looping" if h0["flag"] else None

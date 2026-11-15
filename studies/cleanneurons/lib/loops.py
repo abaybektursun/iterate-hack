@@ -2,7 +2,8 @@
 step) only, and interventions on the MLP neurons of a Hugging Face causal LM laid out like Olmo3ForCausalLM
 (model.model.layers[l].mlp = down_proj(silu(gate_proj(x)) * up_proj(x)); the neuron activation a is the input of down_proj).
 
-Detector     tail_period (the rule, batched), onset, scan (first end position at which the rule fires), selfcheck.
+Detector     tail_period (the rule), Tail (the rule kept up to date for a batch), onset, scan (first end position at which
+             the rule fires), set_version (1: periods 2..120; 2, the default: periods 2..600), selfcheck.
 Sampling     generate (one left-padded batch with a KV cache), generate_rows (batches under a row limit and a KV-memory limit).
              Token = argmax(logits / T + Gumbel noise); the noise of row key at step s comes from a generator seeded with
              (seed, key, s), so a row sees the same noise in every condition, batch and restart. top-p is 1.0 (no truncation).
@@ -25,31 +26,68 @@ import torch
 from transformers.cache_utils import Cache, DynamicCache, DynamicLayer, DynamicSlidingWindowLayer
 
 # ------------------------------------------------------------------------------------------------ loop detector
-W, PMIN, PMAX = 240, 2, 120
-NEED = 228                                            # 95 % of W
+# The rule fires at the end of a token sequence with period p when tok[i] == tok[i - p] for at least 95 % of its last
+# win(p) = max(W, p) tokens (i - p inside the sequence); the smallest such p counts. Version 1 looks at p in 2..120 (the
+# window is then always W), version 2 at p in 2..600: the base repeats whole paragraphs, median period about 400 tokens.
+W, PMIN = 240, 2
+PMAX_OF = {1: 120, 2: 600}
+VERSION, PMAX = 2, PMAX_OF[2]
 
 
-def tail_period(gen):
-    """gen: LongTensor [B, n] of generated ids. Per row the smallest period p in PMIN..PMAX with gen[i] == gen[i - p] for at
-    least NEED of the last W positions (i - p inside gen), or 0 when there is none."""
-    n = gen.shape[1]
-    pm = min(PMAX, n - W)
-    if pm < PMIN:
-        return torch.zeros(gen.shape[0], dtype=torch.long, device=gen.device)
-    back = gen[:, n - W - pm:n - PMIN].unfold(1, W, 1).flip(1)      # [B, pm - PMIN + 1, W]: the tail shifted back by PMIN .. pm
-    ok = (back == gen[:, None, n - W:]).sum(-1) >= NEED
-    return torch.where(ok.any(1), PMIN + ok.int().argmax(1), 0)
+def set_version(v):
+    global VERSION, PMAX
+    VERSION, PMAX = v, PMAX_OF[v]
+
+
+def win(p):
+    return max(W, p)
+
+
+def need(p):
+    return -(-95 * win(p) // 100)
+
+
+def describe():
+    return {"version": VERSION, "periods": [PMIN, PMAX], "window": f"max({W}, period)", "share_of_window_matching": 0.95}
+
+
+def tail_period(tok):
+    """The rule at the end of one sequence, as defined: the smallest period that fires, or 0. scan and Tail agree with it."""
+    t = np.asarray(tok)
+    for p in range(PMIN, PMAX + 1):
+        if len(t) >= win(p) + p and int((t[len(t) - win(p):] == t[len(t) - win(p) - p:len(t) - p]).sum()) >= need(p):
+            return p
+    return 0
+
+
+class Tail:
+    """The rule kept up to date for a batch while tokens arrive: push(column) returns tail_period of each row so far."""
+
+    def __init__(self, rows, steps, dev):
+        self.p = torch.arange(PMIN, PMAX + 1, device=dev)
+        self.w = self.p.clamp_min(W)
+        self.need = (95 * self.w + 99) // 100
+        self.tok = torch.full((rows, PMAX + steps), -1, dtype=torch.long, device=dev)      # PMAX of -1 in front: tok[i - p] exists and never matches
+        self.c = torch.zeros((rows, steps + 1, len(self.p)), dtype=torch.int32, device=dev)  # c[:, n, k]: matches of period p[k] among the first n tokens
+        self.cols, self.n = torch.arange(len(self.p), device=dev), 0
+
+    def push(self, col):
+        n = self.n = self.n + 1
+        self.tok[:, PMAX + n - 1] = col
+        self.c[:, n] = self.c[:, n - 1] + (col[:, None] == self.tok[:, PMAX + n - 1 - self.p])
+        ok = (self.c[:, n] - self.c[:, (n - self.w).clamp_min(0), self.cols] >= self.need) & (n >= self.w + self.p)
+        return torch.where(ok.any(1), self.p[ok.int().argmax(1)], 0)
 
 
 def onset(tok, p):
-    """tok: ids whose tail has period p. The first position from which the rule holds: walk the W-window back while it keeps
-    NEED matches, take its first matching position s (tok[s] == tok[s - p]); the first cycle starts at s - p, the onset."""
-    t = np.asarray(tok)
+    """tok: ids whose tail has period p. The first position from which the rule holds: walk the win(p)-window back while it
+    keeps need(p) matches, take its first matching position s (tok[s] == tok[s - p]); the first cycle starts at s - p, the onset."""
+    t, w = np.asarray(tok), win(p)
     m = np.zeros(len(t), dtype=bool)
     m[p:] = t[p:] == t[:-p]
     c = np.concatenate([[0], np.cumsum(m)])
-    j = len(t) - W
-    while j > p and c[j - 1 + W] - c[j - 1] >= NEED:
+    j = len(t) - w
+    while j > p and c[j - 1 + w] - c[j - 1] >= need(p):
         j -= 1
     return j + int(np.argmax(m[j:])) - p
 
@@ -58,11 +96,14 @@ def scan(tok):
     """The first end position n at which the rule fires on tok[:n] (tail_period(tok[:n]) is not 0), with that period:
     (n, period, onset), or None. One pass per period over the whole sequence."""
     t, best = np.asarray(tok), None
-    for p in range(PMIN, min(PMAX, len(t) - W) + 1):
+    for p in range(PMIN, PMAX + 1):
+        w = win(p)
+        if len(t) < w + p:
+            break
         c = np.concatenate([[0], np.cumsum(t[p:] == t[:-p])])
-        hit = c[W:] - c[:-W] >= NEED                                 # hit[k]: the W positions that end before p + W + k
-        if hit.any() and (best is None or p + W + int(hit.argmax()) < best[0]):
-            best = (p + W + int(hit.argmax()), p)
+        hit = c[w:] - c[:-w] >= need(p)                              # hit[k]: the w positions that end before p + w + k
+        if hit.any() and (best is None or p + w + int(hit.argmax()) < best[0]):
+            best = (p + w + int(hit.argmax()), p)
     return None if best is None else (*best, onset(tok[:best[0]], best[1]))
 
 
@@ -273,7 +314,7 @@ def generate(model, ctx, keys, step0, steps, *, temp, seed, stop_id, pad_id, tai
     ids, mask = left_pad(ctx, pad_id, steps, dev)
     T0 = ids.shape[1]
     kv = new_cache(model, T0 + steps, cache, chunk)
-    gen = torch.zeros((len(ctx), steps), dtype=torch.long, device=dev)
+    gen, tail_of = torch.zeros((len(ctx), steps), dtype=torch.long, device=dev), Tail(len(ctx), steps, dev)
     g = torch.Generator(device=dev)
     out = [{"tokens": None, "end": None, "flag": None} for _ in ctx]
     stop_at = [steps] * len(ctx)
@@ -284,7 +325,7 @@ def generate(model, ctx, keys, step0, steps, *, temp, seed, stop_id, pad_id, tai
         for b in live:
             noise[b] = gumbel(g, seed, keys[b], step0[b] + t, logits.shape[1])
         gen[:, t] = (logits / temp + noise).argmax(-1)
-        new, per = gen[:, t].tolist(), tail_period(gen[:, :t + 1]).tolist()
+        new, per = gen[:, t].tolist(), tail_of.push(gen[:, t]).tolist()
         for b in live:
             o = out[b]
             if new[b] == stop_id:
@@ -326,23 +367,30 @@ def generate_rows(model, rows, steps, *, batch, kv_budget, chunk, **kw):
 
 # ------------------------------------------------------------------------------------------------ selfcheck (no model)
 def selfcheck():
-    g = np.random.default_rng(0)
+    g, version = np.random.default_rng(0), VERSION
     pre, block = g.integers(1000, 2000, 500).tolist(), g.integers(0, 1000, 37).tolist()      # disjoint id ranges: no chance match
-    loop = pre + block * 12
-    assert scan(loop) == (500 + 37 + NEED, 37, 500), scan(loop)                                # a planted loop: onset and period
-    assert scan(pre + [7] * 300) == (500 + 2 + NEED, 2, 500)                                   # one repeated token reads as period 2
+    loop, long = pre + block * 12, pre + g.integers(0, 1000, 400).tolist() * 4
     noisy = list(loop)
     for i in range(560, len(noisy), 60):                                                       # 1 token in 60 replaced: 2 misses in 60, under 5 %
         noisy[i] = 5000 + i
-    assert scan(noisy)[1:] == (37, 500), scan(noisy)
-    assert scan(g.integers(0, 50, 3000).tolist()) is None                                      # non-periodic text over a small vocabulary
-    assert scan(pre + block * 6 + pre) is None and scan(pre + block * 7) is None               # 222 and 259 loop tokens: under NEED + period
-    assert scan(pre[:100]) is None
-    for seq in (loop, noisy, pre + [7] * 300, g.integers(0, 3, 700).tolist(), ([1, 2, 3] * 100 + pre)[:650]):       # scan against the rule at every end
-        first = next((n for n in range(W + PMIN, len(seq) + 1) if int(tail_period(torch.tensor([seq[:n]])))), None)
-        assert (scan(seq) or (None,))[0] == first and (first is None or scan(seq)[1] == int(tail_period(torch.tensor([seq[:first]])))), (scan(seq), first)
-    t = torch.tensor([loop[:900], loop[1:901]])
-    assert tail_period(t).tolist() == [37, 37] and tail_period(t[:, :500]).tolist() == [0, 0]
+    for v in PMAX_OF:
+        set_version(v)
+        assert scan(loop) == (500 + 37 + 228, 37, 500), scan(loop)                             # a planted loop: onset and period
+        assert scan(pre + [7] * 300) == (500 + 2 + 228, 2, 500)                                # one repeated token reads as period 2
+        assert scan(noisy)[1:] == (37, 500), scan(noisy)
+        assert scan(g.integers(0, 50, 3000).tolist()) is None                                  # non-periodic text over a small vocabulary
+        assert scan(pre + block * 6 + pre) is None and scan(pre + block * 7) is None           # 222 and 259 loop tokens: under 228 + period
+        assert scan(pre[:100]) is None
+        assert scan(long) == ((500 + 400 + 380, 400, 500) if v == 2 else None), (v, scan(long))  # period 400: 95 % of 400 tokens, version 2 only
+        seqs = [noisy, g.integers(0, 3, 700).tolist(), ([1, 2, 3] * 100 + pre)[:650], long[300:1500]]
+        for seq in seqs:                                                                       # scan and Tail against the rule at every end
+            ends = [tail_period(seq[:n]) for n in range(1, len(seq) + 1)]
+            first = next((n for n, p in enumerate(ends, 1) if p), None)
+            assert (scan(seq) or (None,))[0] == first and (first is None or scan(seq)[1] == ends[first - 1]), (v, scan(seq), first)
+        n = min(map(len, seqs))
+        tail, cols = Tail(len(seqs), n, torch.device("cpu")), torch.tensor([q[:n] for q in seqs])
+        assert all(tail.push(cols[:, i]).tolist() == [tail_period(q[:i + 1]) for q in seqs] for i in range(n)), v
+    set_version(version)
     gen = torch.Generator()
     a, b = gumbel(gen, 0, 5, 9, 64), gumbel(gen, 0, 5, 10, 64)
     assert torch.equal(a, gumbel(gen, 0, 5, 9, 64)) and not torch.equal(a, b) and not torch.equal(a, gumbel(gen, 0, 6, 9, 64))

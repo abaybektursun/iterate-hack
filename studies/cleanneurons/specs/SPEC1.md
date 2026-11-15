@@ -139,6 +139,16 @@ Controls: the detector must flag a planted loop and must not flag 20 finished T1
 the same noise must reproduce its own continuation token for token; zeroing a neuron in memory and through the
 hook-free weight edit must give the same logits on one window.
 
+### Detector version 2 (2026-11-15, before any Part L number was posted)
+
+Version 1 above (period at most 120 tokens) flags 8 of the 38 cap hits of a base T 0.6 cell (job
+`sameraslan-1114-153510-57fb`, 414 of 500 rows before a billing stop), against 28 with rule A: the base repeats whole
+paragraphs word for word, with periods up to 574 tokens (median 232). Version 2: period p in 2..600; the rule fires when
+`tok[i] == tok[i - p]` for at least 95 % of the last max(240, p) tokens. It flags the same 28 rows as rule A and none of
+376 finished answers. The held-out continuation is 1,600 tokens, since a loop of period p can be flagged only
+p + max(240, p) tokens after its onset. Every Part L and Part I output names the detector version. The K-route count
+"5 of 78 rows looped" (job `sameraslan-1114-153500-bb54`) used version 1 and is not a loop rate.
+
 ## Part I: what the neurons do (job `jobs/describe_neurons.py`, one H100; added 2026-11-14 on Samer's request)
 
 A score change is reported together with its explanation. For every neuron set that Part L or Part T selects (an
