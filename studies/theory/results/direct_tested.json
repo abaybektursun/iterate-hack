@@ -5,7 +5,7 @@
   "result": "result-3abd6f",
   "verdict": "holds",
   "measured": "share of Think-SFT's change in Math 3.1's top-8 input subspace 4.80x chance [4.55, 5.08], n 224 matrices; over IF 2.23x [2.12, 2.34], General 1.99x [1.89, 2.08], base matrix 1.33x [1.28, 1.39]: holds, not distinctive (shared with Code 3.1 and Math 3.0, and predicted by run-05/f2-m03 too)",
-  "added": "2026-11-15T13:19:56"
+  "added": "2026-11-15T21:19:56Z"
  },
  {
   "mechanism": "round-09/grader-m01",

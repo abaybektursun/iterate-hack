@@ -1316,7 +1316,7 @@ and s1-b ran only on proxies, s4-b's test cannot refute it against s4-a, s2-a's 
 9 more plans needed a fix before computing (a shared seed, a double-counted denominator, a wrong field name). R5 (a
 ranked cell from holders): refuted, no cell.
 
-**What the round shows.** The gate works as a filter: 8 of 17 plans refuted, 4 undecided, 6 hold, and the top
+**What the round shows.** The gate works as a filter: 7 of 17 plans refuted, 4 undecided, 6 hold, and the top
 forecast-gain mechanisms no longer forecast. But what holds is weak: the holders forecast nothing on open work that
 the readers do not. The good pair was s3: its two tests count complementary parts of one set, so exactly one could
 hold, and one did. The s4 pair's tests measured different numbers, so both held.

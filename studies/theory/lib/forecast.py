@@ -779,6 +779,18 @@ def direct_facts():
                for r in json.loads(TESTED.read_text())])
 
 
+def add_rows(path):
+    """Append a test's rows (a JSON list of {mechanism, claim, result, verdict, measured}) to direct_tested.json, and the
+    refuted ones to refuted.json, each stamped with `added` in UTC (ISO, ending in Z)."""
+    rows = json.loads(Path(path).read_text())
+    for r in rows:
+        assert r["verdict"] in ("holds", "refuted", "undecided") and all(r.get(k) for k in ("mechanism", "claim", "result", "measured")), r
+        r["added"] = now() + "Z"
+    for f, keep in ((TESTED, rows), (REFUTED, [r for r in rows if r["verdict"] == "refuted"])):
+        f.write_text(json.dumps(json.loads(f.read_text()) + keep, indent=1, ensure_ascii=False) + "\n")
+    print(f"added {len(rows)} rows to {TESTED.name} ({sum(r['verdict'] == 'refuted' for r in rows)} also to {REFUTED.name})")
+
+
 def results_md(items):
     """The board's results as the forecasters see them in short: id, title and score lines."""
     return "\n".join(f"{i['id']}: " + " | ".join(x.strip() for x in i["text"].splitlines() if x.startswith(("title:", "score:")))
@@ -1066,8 +1078,8 @@ def experiments(folder):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("command", choices=["round", "make", "score", "cells"])
-    parser.add_argument("folder", type=Path)
+    parser.add_argument("command", choices=["round", "make", "score", "cells", "add-rows"])
+    parser.add_argument("folder", type=Path, help="add-rows: a direct test's rows.json")
     parser.add_argument("--propose", type=int, default=0, help="make: also write this many mechanisms about the targets "
                         "(forecasters f2-m01 ...); round: mechanisms per lens (default 6)")
     parser.add_argument("--lens", help="make: the family of causes the --propose mechanisms must come from")
@@ -1082,4 +1094,5 @@ if __name__ == "__main__":
     a = parser.parse_args()
     engine.args.model_all = a.model_all
     {"round": lambda: wide_round_v10(a.folder, a.runs, a.propose or 6) if a.propose_wide else round11(a.folder, a.runs, a.surprises, a.go), "make": lambda: make(a.folder, a.propose, a.lens),
-     "score": lambda: score(a.folder, a.rescore), "cells": lambda: cells_run(a.folder, a.runs)}[a.command]()
+     "score": lambda: score(a.folder, a.rescore), "cells": lambda: cells_run(a.folder, a.runs),
+     "add-rows": lambda: add_rows(a.folder)}[a.command]()
