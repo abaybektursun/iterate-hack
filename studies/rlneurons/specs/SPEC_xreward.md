@@ -38,3 +38,22 @@ Hypotheses, each with the observation that refutes it:
 Chosen from the Part 1 table. Scored with the cue on hard328 (base 164, RL 206) and MATH-500, never on plain rows alone (Think-SFT
 scores 91 of 100 plain with a difference orthogonal to RL). Controls: matched random rank-8, Think-SFT top-8, effective scale after
 BF16 rounding.
+
+## Amendment 1 (2026-11-15, after Part 1, before any Part 2 cell): first four cells
+
+Part 1 (job abaybektursun-1114-220151-daaa) refuted "one subspace for every reward": input-side overlap is 0.48 for Math 3.0 with
+Math 3.1, 0.22 to 0.26 for Math with Code, and 0.03 to 0.05 for Math with IF or General (Think-SFT 0.11). Part 2 therefore asks
+first what the 8 directions carry beyond the cue. result-36e8cd has them on plain rows only (427 of 500, against the cued base 410).
+
+Cells: hard328, cue, T 1.0 / top-p 1.0, seed 3000000, one sample (paired with base cue 164, RL plain 206, RL cue 205, theta(0.25)
+182), by `wsp_edit` then `run_cell`:
+
+1. `top8 --other rl_math`: base + the 8 directions of Math 3.1.
+2. `rand8 --other rl_math`: the matched random control.
+3. `top8 --other rl_code`: base + the 8 directions of Code 3.1.
+4. `bulk --other rl_math`: Math 3.1 minus its 8 directions.
+
+P1. If the 8 directions carry the gain on hard problems, cell 1 is at least 182 (theta(0.25)) and cell 2 is within 164 +- 12.
+    Refuted if cell 1 is within 12 of cell 2: then the 8 directions write the cue and the hard-problem gain is in the rest.
+P2. If the gain is in the rest, cell 4 stays within 12 of 205.
+A paired difference on 328 problems resolves about 5 points (16 problems).
