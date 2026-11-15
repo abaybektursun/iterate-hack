@@ -1,0 +1,335 @@
+{
+ "command": "PYTHONPATH=. uv run --no-project --with huggingface_hub --with pyarrow --with numpy python -m studies.rlneurons.analysis.wsp1_sft_overlap --tmp /private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-api-credits-harness-connect-a30905/d635c6c7-f062-4a82-99d0-d7a3a285e372/scratchpad/sft_overlap --minutes 25 --workers 8",
+ "date_utc": "2026-11-15T06:38:28+00:00",
+ "commit": "db7c499c2d35f84f7fea45106a783c8d622f3bbc",
+ "where": "laptop, CPU only",
+ "wall_s": 2773,
+ "versions": {
+  "python": "3.12.9",
+  "pyarrow": "24.0.0",
+  "numpy": "2.2.6",
+  "huggingface_hub": "2.4.0"
+ },
+ "shards": [
+  {
+   "shard": 0,
+   "file": "data/train-00000-of-00156.parquet",
+   "bytes": 102625535,
+   "rows": 14540,
+   "download_s": 72.0,
+   "scan_s": 5.5
+  },
+  {
+   "shard": 1,
+   "file": "data/train-00001-of-00156.parquet",
+   "bytes": 103697225,
+   "rows": 14540,
+   "download_s": 210.8,
+   "scan_s": 9.8
+  },
+  {
+   "shard": 2,
+   "file": "data/train-00002-of-00156.parquet",
+   "bytes": 103740622,
+   "rows": 14540,
+   "download_s": 155.2,
+   "scan_s": 5.0
+  },
+  {
+   "shard": 3,
+   "file": "data/train-00003-of-00156.parquet",
+   "bytes": 103915940,
+   "rows": 14540,
+   "download_s": 168.7,
+   "scan_s": 5.9
+  },
+  {
+   "shard": 4,
+   "file": "data/train-00004-of-00156.parquet",
+   "bytes": 104415393,
+   "rows": 14540,
+   "download_s": 165.3,
+   "scan_s": 6.0
+  },
+  {
+   "shard": 5,
+   "file": "data/train-00005-of-00156.parquet",
+   "bytes": 158653343,
+   "rows": 14540,
+   "download_s": 194.2,
+   "scan_s": 4.8
+  },
+  {
+   "shard": 6,
+   "file": "data/train-00006-of-00156.parquet",
+   "bytes": 294779745,
+   "rows": 14540,
+   "download_s": 230.5,
+   "scan_s": 2.9
+  },
+  {
+   "shard": 7,
+   "file": "data/train-00007-of-00156.parquet",
+   "bytes": 295116325,
+   "rows": 14540,
+   "download_s": 172.8,
+   "scan_s": 1.7
+  },
+  {
+   "shard": 8,
+   "file": "data/train-00008-of-00156.parquet",
+   "bytes": 293357574,
+   "rows": 14540,
+   "download_s": 209.6,
+   "scan_s": 2.4
+  },
+  {
+   "shard": 9,
+   "file": "data/train-00009-of-00156.parquet",
+   "bytes": 294252520,
+   "rows": 14540,
+   "download_s": 138.7,
+   "scan_s": 2.8
+  },
+  {
+   "shard": 10,
+   "file": "data/train-00010-of-00156.parquet",
+   "bytes": 294751224,
+   "rows": 14540,
+   "download_s": 142.5,
+   "scan_s": 2.9
+  },
+  {
+   "shard": 11,
+   "file": "data/train-00011-of-00156.parquet",
+   "bytes": 293530091,
+   "rows": 14540,
+   "download_s": 138.9,
+   "scan_s": 2.2
+  },
+  {
+   "shard": 12,
+   "file": "data/train-00012-of-00156.parquet",
+   "bytes": 294200358,
+   "rows": 14540,
+   "download_s": 407.7,
+   "scan_s": 1.7
+  },
+  {
+   "shard": 13,
+   "file": "data/train-00013-of-00156.parquet",
+   "bytes": 294323459,
+   "rows": 14540,
+   "download_s": 406.0,
+   "scan_s": 2.2
+  },
+  {
+   "shard": 14,
+   "file": "data/train-00014-of-00156.parquet",
+   "bytes": 293886322,
+   "rows": 14540,
+   "download_s": 386.9,
+   "scan_s": 1.9
+  },
+  {
+   "shard": 15,
+   "file": "data/train-00015-of-00156.parquet",
+   "bytes": 294425454,
+   "rows": 14540,
+   "download_s": 328.0,
+   "scan_s": 1.9
+  },
+  {
+   "shard": 16,
+   "file": "data/train-00016-of-00156.parquet",
+   "bytes": 293730575,
+   "rows": 14540,
+   "download_s": 127.4,
+   "scan_s": 1.7
+  },
+  {
+   "shard": 17,
+   "file": "data/train-00017-of-00156.parquet",
+   "bytes": 293765090,
+   "rows": 14540,
+   "download_s": 380.8,
+   "scan_s": 2.2
+  },
+  {
+   "shard": 18,
+   "file": "data/train-00018-of-00156.parquet",
+   "bytes": 294414552,
+   "rows": 14540,
+   "download_s": 135.3,
+   "scan_s": 1.6
+  },
+  {
+   "shard": 19,
+   "file": "data/train-00019-of-00156.parquet",
+   "bytes": 293038634,
+   "rows": 14540,
+   "download_s": 321.9,
+   "scan_s": 2.7
+  },
+  {
+   "shard": 20,
+   "file": "data/train-00020-of-00156.parquet",
+   "bytes": 292889118,
+   "rows": 14540,
+   "download_s": 372.3,
+   "scan_s": 2.7
+  },
+  {
+   "shard": 21,
+   "file": "data/train-00021-of-00156.parquet",
+   "bytes": 293881403,
+   "rows": 14540,
+   "download_s": 100.9,
+   "scan_s": 3.0
+  },
+  {
+   "shard": 22,
+   "file": "data/train-00022-of-00156.parquet",
+   "bytes": 293919302,
+   "rows": 14540,
+   "download_s": 119.4,
+   "scan_s": 2.2
+  },
+  {
+   "shard": 23,
+   "file": "data/train-00023-of-00156.parquet",
+   "bytes": 486654886,
+   "rows": 14540,
+   "download_s": 609.0,
+   "scan_s": 2.8
+  },
+  {
+   "shard": 24,
+   "file": "data/train-00024-of-00156.parquet",
+   "bytes": 495229283,
+   "rows": 14540,
+   "download_s": 565.3,
+   "scan_s": 2.9
+  },
+  {
+   "shard": 25,
+   "file": "data/train-00025-of-00156.parquet",
+   "bytes": 495839007,
+   "rows": 14540,
+   "download_s": 627.2,
+   "scan_s": 4.1
+  },
+  {
+   "shard": 26,
+   "file": "data/train-00026-of-00156.parquet",
+   "bytes": 493869080,
+   "rows": 14540,
+   "download_s": 631.1,
+   "scan_s": 3.0
+  },
+  {
+   "shard": 27,
+   "file": "data/train-00027-of-00156.parquet",
+   "bytes": 493300413,
+   "rows": 14540,
+   "download_s": 584.6,
+   "scan_s": 5.6
+  },
+  {
+   "shard": 28,
+   "file": "data/train-00028-of-00156.parquet",
+   "bytes": 496127099,
+   "rows": 14540,
+   "download_s": 172.1,
+   "scan_s": 2.4
+  },
+  {
+   "shard": 29,
+   "file": "data/train-00029-of-00156.parquet",
+   "bytes": 495154782,
+   "rows": 14540,
+   "download_s": 428.0,
+   "scan_s": 2.9
+  },
+  {
+   "shard": 30,
+   "file": "data/train-00030-of-00156.parquet",
+   "bytes": 493412122,
+   "rows": 14540,
+   "download_s": 516.3,
+   "scan_s": 3.0
+  },
+  {
+   "shard": 31,
+   "file": "data/train-00031-of-00156.parquet",
+   "bytes": 493553129,
+   "rows": 14540,
+   "download_s": 376.2,
+   "scan_s": 7.7
+  },
+  {
+   "shard": 32,
+   "file": "data/train-00032-of-00156.parquet",
+   "bytes": 494751925,
+   "rows": 14540,
+   "download_s": 1556.8,
+   "scan_s": 7.9
+  },
+  {
+   "shard": 33,
+   "file": "data/train-00033-of-00156.parquet",
+   "bytes": 493476307,
+   "rows": 14540,
+   "download_s": 429.8,
+   "scan_s": 7.7
+  },
+  {
+   "shard": 34,
+   "file": "data/train-00034-of-00156.parquet",
+   "bytes": 493558938,
+   "rows": 14540,
+   "download_s": 1442.6,
+   "scan_s": 5.6
+  },
+  {
+   "shard": 35,
+   "file": "data/train-00035-of-00156.parquet",
+   "bytes": 495767023,
+   "rows": 14540,
+   "download_s": 1334.6,
+   "scan_s": 12.2
+  },
+  {
+   "shard": 36,
+   "file": "data/train-00036-of-00156.parquet",
+   "bytes": 495216447,
+   "rows": 14540,
+   "download_s": 1462.0,
+   "scan_s": 4.1
+  },
+  {
+   "shard": 37,
+   "file": "data/train-00037-of-00156.parquet",
+   "bytes": 495143117,
+   "rows": 14540,
+   "download_s": 1420.0,
+   "scan_s": 4.6
+  },
+  {
+   "shard": 38,
+   "file": "data/train-00038-of-00156.parquet",
+   "bytes": 494863176,
+   "rows": 14540,
+   "download_s": 1351.8,
+   "scan_s": 5.2
+  },
+  {
+   "shard": 39,
+   "file": "data/train-00039-of-00156.parquet",
+   "bytes": 494356405,
+   "rows": 14540,
+   "download_s": 1455.4,
+   "scan_s": 4.0
+  }
+ ]
+}

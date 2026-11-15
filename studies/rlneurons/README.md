@@ -14,6 +14,8 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 |---|---|
 | `specs/SPEC3.md` | RLN-3 spec: base, RL steps 100/400/2,800 and the first release; arms P (plain), F (opening cue), C (forced commit); MATH-500 and the 400-problem harder set; training-set overlap (§11). |
 | `specs/SPEC_wsp1.md` | WSP-1 spec: anatomy of the RL-Math, RL-Code and Think-SFT weight deltas, then edited-weight cells. Job `jobs/wsp_delta_anatomy.py`, results `results/wsp1/`. |
+| `specs/SPEC_wsp2.md` | WSP-2 spec: a hand-written key-value edit of layer 31 `mlp.down_proj` that writes the opening cue, built with no RL weights, and its random-value control. Job `jobs/wsp_handedit.py`, results `results/wsp2/`. |
+| `jobs/wsp_handedit.py` | WSP-2 job: computes the edit from the base model's own activations, checks it on held-out prompts, writes the edited model directory for `run_cell.py --model-path` and `handedit.json` (`--control` for random values, `--selftest` for the planted checks). |
 | `specs/SPEC4.md` | RLN-4 spec: T1 (cue, T 1.0), continuation test K, T2 (RL, T 1.0), T3 (plain base, T 1.0), G, R1; Modal deviations; grader v3. |
 | `lib/n13_score.py` | Prompt template (`TEMPLATE["pair1"]` inside the model's chat template), answer extraction and grader v1 (`extract`, `grade`, rule `dollar_both`), `wilson`, `paired_bootstrap`, `selfcheck`. |
 | `lib/rln4_lib.py` | Grader v2 (`extract_v2`, `grade_v2`), grader v3 (`extract_v3`, `norm_v3`, `grade_v3`), loop-onset detectors (rule A `onset_lines`, rule B `onset_period`, `zratio`), `agree`, prefix encoding. |
@@ -1067,7 +1069,7 @@ Think-SFT = `Olmo-3-7B-Think-SFT` `6ff8575` (imitation of reasoning traces, no r
 
 ## WSP-1 edited weights: which part of a weight change carries the gain
 
-Spec `specs/SPEC_wsp1.md` (amendments 1 to 4). `jobs/wsp_edit.py` writes an edited model directory (selftest of 6 planted
+Spec `specs/SPEC_wsp1.md` (amendments 1 to 5). `jobs/wsp_edit.py` writes an edited model directory (selftest of 6 planted
 checks runs first; BF16 by `merge_weights.to_bf16`, stochastic rounding), `jobs/run_cell.py --model-path` scores it,
 `analysis/wsp1_readout.py` writes the run folders and `results/wsp1/readout.json` (run it with
 `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.wsp1_readout`; it reads the
@@ -1107,6 +1109,66 @@ delta) 58. Cue, seed base 81,000,000: base 82, `sft1` 92, `sft05` 88, `sft025` 8
   models that include this pair. New here: the matched-spectrum random control at 8 directions, the removal cells, and the
   comparison with a no-reward delta.
 - Finding page: `tools/finding_eight_directions.py` (`/finding/eight-directions`, a tile on `/findings`).
+
+The 328 harder problems (amendment 5; `results/wsp1/hard328/<cell>-01/`, `readout.json` `hard328_vs_references`). `sft1`
+cells use seed base 3,000,000, the seeds of the cued base and RL plain references. References are the Day-1 #1 cells of
+`results/day1_hard328/readout.json`, paired by problem index through their 0/1 rows in `results/axis/hard328-01/vectors.json`:
+cued base 164 (77 cap hits), RL plain 206 (20), RL cue 205 (25), plain base 76 (35). Mean tokens are the mean of `n_new`
+(RL plain 9,315, cued base 9,344).
+
+| Cell | Right of 328 | Cap hits | Mean tokens | Against (paired, points [95 % bootstrap]) |
+|---|---|---|---|---|
+| `sft1` cue | 219 | 89 | 10,123 | cued base +16.8 [12.5, 21.3]; RL plain +4.0 [0.0, 7.9]; RL cue +4.3 [0.9, 7.6] |
+| `sft1` plain | 203 | 86 | 9,375 | RL plain -0.9 [-5.2, 3.4]; plain base +38.7 [33.2, 44.2] |
+
+- The prediction of amendment 5 holds: `sft1` cue (219) is within 5 points of RL plain (190 to 222 right). Think-SFT
+  is within 5 points of RL on the harder set, with more than 4 times RL's cap hits (89 and 86 against 20).
+- The 328 were screened against the RL training prompts only. Their overlap with the Think-SFT training set is being checked
+  (`analysis/wsp1_sft_overlap.py`, result in `results/wsp1/sft_overlap-01/` when it exists). Until then the `sft1` numbers
+  on the 328 may include problems that Think-SFT saw in training.
+
+## WSP-2 hand-written edit: the cue written into one matrix with no RL weights
+
+Spec `specs/SPEC_wsp2.md` (amendment 1). The edit changes one tensor, layer 31 `mlp.down_proj`, so that the base writes the
+opening cue ` line!\n\nOkay` (3 tokens) when the answer starts. Keys are the mean inputs to that matrix at each cue position
+over 128 calibration prompts (MATH-500 problems 100 to 227); values are the unembedding directions of the cue tokens; the
+edit is the ROME-style key-value update that moves other inputs as little as their second moments allow, scaled by bisection
+until each cue token has mean probability 0.95. It uses no RL weights, no reward and no answers. The control `cueprog_rand`
+has the same keys and scales with random unit vectors as values (seed 0). The job solved the three keys jointly
+(`handedit.json` `solution`: "joint: R K^T = I") and ran with `--batch 1`.
+
+How to run: `bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_handedit --dir
+/tmp/theta --batch 1 [--control] && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta
+--model-label cueprog --prompt plain --set math500 --temperature 1.0 --top-p 1.0 --seed 80000000 --n 100 --commit <commit>`
+(`run.json` of each cell has the exact command). `analysis/wsp1_readout.py` scores the cells (cell table `CELLS2`) and
+writes `results/wsp2/<experiment>/<cell>-01/` and `results/wsp2/readout.json`.
+
+First 100 MATH-500 problems, plain prompt, T 1.0, top-p 1.0, seed base 80,000,000, grader v3
+(`results/wsp2/screen100/<cell>-01/`, `readout.json` `screen100_differences`). References are the WSP-1 cells of
+`results/wsp1/screen100/` on the same problems (the cued base used seed base 81,000,000; pairing is by problem).
+
+| Cell | Right of 100 | Cap hits | Open with `Okay` | Against (paired, points [95 % bootstrap]) |
+|---|---|---|---|---|
+| `cueprog` | 85 | 5 | 96 | `cueprog_rand` +47.0 [36.0, 58.0]; base plain +51.0 [41.0, 61.0]; base cue +3.0 [-4.0, 11.0]; `top8` -3.0 [-10.0, 3.0]; RL -11.0 [-18.0, -5.0] |
+| `cueprog_rand` | 38 | 1 | 19 | base plain +4.0 [-3.0, 11.0] |
+| base plain | 34 | | | |
+| base cue | 82 | | | |
+| `top8` plain | 88 | | | |
+| RL plain | 96 | | | |
+
+- `handedit.json` (in `metrics.json` `handedit`): mean held-out probability of the 3 cue tokens in their contexts (64
+  prompts, problems 228 to 291) 0.000, 0.006, 0.286 before and 0.952, 0.952, 0.952 after; the control leaves them at 0.000,
+  0.004, 0.305. Mean KL(base || edited) on other positions 6.6e-05 nats (control 5.9e-06). The edit is 6.6 % of the
+  tensor's Frobenius norm in both cells.
+- H1 (the edit reproduces the cue) holds on the screen: 85 right and 96 of 100 answers open with `Okay`, and the control
+  is 47 points lower.
+- H2 (the edit goes past the cue) is refuted: 85 is not above 92, and `cueprog` is 3.0 points above the cued base with an
+  interval that includes 0.
+- The 500-problem cells (`cueprog` seed base 184,000,000, `cueprog_rand` 185,000,000; jobs `sameraslan-1114-221130-eb90`
+  and `sameraslan-1114-221138-a65c`) are pending; the readout skips them until their rows are in `runs/`.
+- Closest published result: Wang et al. (arXiv 2610.06851, App. D.5) report a one-matrix edit that raises the cue
+  probability to 0.95 and scores 0.78 on MATH-500.
+
 ## One axis or several? Item-level structure of every arm (MATH-500 n = 500, hard328 n = 328, laptop, board work-1aa34c, idea-1c8b73)
 
 Question: do the partial routes toward the RL model fix the same problems or different ones? Answer: the same. On MATH-500 two
