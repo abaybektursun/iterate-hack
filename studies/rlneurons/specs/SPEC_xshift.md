@@ -98,3 +98,16 @@ same inputs and settings as run-01; read at layer 24, group all: RMS shift, and 
   `rout` at most 5 times the random edit's. Refuted part by part by the opposite inequality.
 - Q2. So a large shift is not enough for the gain: `rin` and `perm` have |cosine| with the full edit's mean shift below 0.3.
   Refuted if either is at or above 0.3 (then direction does not explain why they fail).
+
+## Amendment 2 (2026-11-15, before the computation; work-9d7cfb): do the directions compound through depth?
+
+Offline, on run-01's stored mean shift vectors (`runs/abaybektursun-1115-130144-40a0/shifts.npz`, group all). run-01 holds the full
+1.5 edit (`top8x1.5_math31`) and the same edit restricted to layers 0-10, 11-21 and 22-31. If each layer's edit acted alone, the
+full edit's mean shift at a layer would equal the sum of the band edits' mean shifts there.
+
+- Instrument check: at layers 0 to 10 the full edit's mean shift equals the L0-10 band's (relative difference below 1e-3), and the
+  L11-21 and L22-31 bands' shifts are exactly 0 there.
+- R1. At layer 31 the norm of the full edit's mean shift is at least 1.5 times the norm of the sum of the three bands' mean
+  shifts. Refuted if the ratio is below 1.2: the bands add, and compounding does not explain the 12-fold gap between the paired
+  edit and the input-only edit of amendment 1.
+- Also reported: the same ratio at layers 16, 21, 24; the cosine between the full shift and the sum; RMS shifts of the bands.
