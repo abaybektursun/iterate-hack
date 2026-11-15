@@ -70,6 +70,7 @@ import climb
 import demo
 import findings
 import glossary
+import psychosis
 import sitekit
 import team
 
@@ -251,6 +252,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, "text/html", PROOF_PAGE)
         if path.startswith("/proof/") and path[len("/proof/"):] in PROOFS:
             return self.send(200, "text/html", PROOFS[path[len("/proof/"):]].PAGE)
+        if path == "/psychosis":
+            return self.send(200, "text/html", psychosis.PAGE)
         if path == "/favicon.svg":
             return self.send(200, "image/svg+xml", FAVICON)
         if path != "/data" and not path.startswith("/data/"):
