@@ -4600,6 +4600,29 @@ All numbers at layer 24 (0-based, fixed before the run), `results/xshift/run-01/
   of an edit (`nearest_bf16_effective_scale`), growing with size, which is why the job adds in float32 (spec, choice 1). The scored
   cells had stochastic BF16 rounding; this measures the edit without that noise.
 
+#### xshift run-02 (SPEC_xshift amendment 1, work-08efcc): the partial edits move the residual stream 5 to 28 times less
+
+Branch `sharedsub` only. Job `abaybektursun-1115-163129-1048`, same 48 stored base answers and settings as run-01, float32 base;
+`results/xshift/run-02/readout.json` (`metrics.json`, `run.json` beside it). Layer 24, all positions; the base residual's RMS norm
+is 41.2. All five edits have the same weight norm (0.111 %). Per-problem right and cap-hit rows of the five scored cells:
+`results/xreward/pairing/rows.jsonl`.
+
+| Edit at 1.5 | RMS shift | Times the random edit | Share of the full edit | Cosine of the mean shift with the full edit's | Right of 328 |
+|---|---|---|---|---|---|
+| RL's 8 directions | 9.34 | 98 | 1 | 1 | 203 |
+| both subspaces, pairs shifted (`perm`) | 1.76 | 18 | 0.19 | -0.12 | 160 |
+| RL's inputs, random outputs (`rin`) | 0.81 | 8.5 | 0.09 | -0.03 | 158 |
+| RL's outputs, random inputs (`rout`) | 0.33 | 3.5 | 0.04 | -0.24 | 163 |
+| random directions | 0.095 | 1 | 0.01 | -0.02 | 159 |
+
+- Q1 refuted for size: `rin` and `perm` reach 0.09 and 0.19 of the full edit's shift, not a third. `rout` is within 5 times random (held).
+  The input side alone gives 8.5 times the random shift (as the trace's 8 to 11 times input drive), but the full edit gives 98 times.
+- Q2 held, but it decides little: the partial edits' mean shifts do not point along the full edit's (|cosine| at most 0.24 at
+  layer 24), and they are also small.
+- Not tested: why the paired edit is 12 times the input-only one. One reading to test next: each layer's written direction is
+  read by later layers' input directions, so the shift grows through depth only when the pairs are intact (the full edit grows
+  0.67, 3.7, 9.3, 20.4 at layers 8, 16, 24, 31; `rin` 0.09, 0.35, 0.81, 1.5).
+
 ## Drift: a switch to Chinese marks a cut-off Think-SFT answer but no label-free sign predicts one early (hard328 n = 328, fresh2026 n = 136, MATH-500 n = 500, laptop, board work-76a232, idea-e37da1)
 
 Question: Think-SFT + cue hits the 16,384 cap on 29 % (hard328) and 45.6 % (fresh2026) of its samples, and a quarter of those

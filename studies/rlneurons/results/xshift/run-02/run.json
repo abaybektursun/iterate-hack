@@ -1,0 +1,31 @@
+{
+ "experiment": "xshift",
+ "run": "run-02",
+ "spec": "studies/rlneurons/specs/SPEC_xshift.md amendment 1",
+ "job": {
+  "status": "done",
+  "commit": "6e0a11eb1daef904b204839b44413bd41b9b8c2f",
+  "command": "python -m studies.rlneurons.jobs.xshift --commit 6e0a11eb1daef904b204839b44413bd41b9b8c2f --arms top8x1.5_math31,rand8x1.5_math31,rinx1.5_math31,routx1.5_math31,permx1.5_math31",
+  "job_id": "abaybektursun-1115-163129-1048",
+  "models": {
+   "base": {
+    "repo": "allenai/Olmo-3-1025-7B",
+    "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+   },
+   "rl_math": {
+    "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   }
+  },
+  "answers": "/runs/abaybektursun-1114-151534-e72c/answers.jsonl",
+  "answers_sha256": "4a3cc0bf4596e5f8282b323637daf9cf1ede4837446ef001cea7b7c42d3f421b",
+  "torch": "2.15.0+cu132",
+  "device": "NVIDIA H100 80GB HBM3",
+  "started_utc": "2026-11-15T22:31:34Z",
+  "ended_utc": "2026-11-15T22:36:20Z",
+  "wall_s": 286.18224811553955,
+  "gpu_max_memory_gb": 57.726367473602295,
+  "transformers": "5.22.2"
+ },
+ "raw": "runs/abaybektursun-1115-163129-1048/shifts.npz (uv run tools/gpu.py get abaybektursun-1115-163129-1048), not committed"
+}
