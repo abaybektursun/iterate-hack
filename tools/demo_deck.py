@@ -177,6 +177,7 @@ assert {"memories", "median recall"} <= set(PAST_NUMS), f"the numbers row of pas
 # ---------- the numbers ----------
 
 PEOPLE = demo_facts.FACTS["people"]["v"]
+RL_DAYS = demo_facts.FACTS["rl_training_days"]["v"]  # see the caveat in its note
 RL_GPUS = demo_facts.FACTS["rl_zero_gpus"]["v"]["total"]  # learner + actor GPUs of the RL training, Olmo 3 paper, Table 49
 
 SKILL, PLAIN = proof_review_cuts_waste.SKILL, proof_review_cuts_waste.PLAIN
@@ -277,7 +278,7 @@ def slides(papers):
                   + "<ul>" + "".join(f"<li><b>{esc(bold)}</b>{esc(rest)}</li>" for bold, rest in BUILT) + "</ul>" + '</div></div>'),
         ("gap", '<iframe class="fig-frame gapfig" data-fig="gap" data-replay title="Base model and RL-trained model" tabindex="-1"></iframe>'),
         ("powered", '<div class="versus">'
-                    f'<div><p class="sub">The RL-trained model</p><p class="sub by">Powered by</p><p class="gpus">{RL_GPUS} H100 GPUs</p></div>'
+                    f'<div><p class="sub">The RL-trained model</p><p class="sub by">Powered by</p><p class="gpus">{RL_GPUS} H100 GPUs</p><p class="days">{RL_DAYS} days</p></div>'
                     f'<div><p class="sub">Invariant</p><p class="sub by">Powered by</p>{photo(demo_photos.COOK, "cook")}'
                     + (f'<p class="who">{esc(demo_photos.COOK_NAME)}</p>' if demo_photos.COOK_NAME else "") + '</div></div>'),
         ("climb", f'<div class="head"><h2>No training: {pct(CLIMB_LO):.1f} % to {pct(CLIMB_HI):.0f} % on {esc(CLIMB["bench"])}</h2></div>'
@@ -386,6 +387,7 @@ p, h1, h2, figure { margin: 0; }
 .versus > div + div { border-left: 1px solid var(--rule); }
 .versus .by { color: var(--faint); margin-top: 22px; }
 .versus .gpus { font-weight: 300; font-size: 84px; line-height: 1.1; letter-spacing: -.012em; }
+.versus .days { font-weight: 300; font-size: 56px; line-height: 1.1; color: var(--mute); }
 .versus .who { font-weight: 300; font-size: 44px; line-height: 1.1; }
 .photo.meditate { width: 640px; height: 480px; }
 .photo.empty { border: 1px dashed var(--faint); opacity: .7; display: flex; align-items: center; justify-content: center; }
