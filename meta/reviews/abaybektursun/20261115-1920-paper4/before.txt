@@ -1,0 +1,2 @@
+rev f09cf73 view.py clean: exit 0, lambda code shipped 1 time(s), PDFs in zip 4
+rev f09cf73 view.py broken: exit 0, lambda code shipped 1 time(s), PDFs in zip 4

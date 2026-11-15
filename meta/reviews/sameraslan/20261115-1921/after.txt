@@ -1,0 +1,22 @@
+2026-11-15  sameraslan: The Exa challenge brief describes how projects are judged (statement).  (board knowledge-2006c4 [board:knowledge-2006c4])
+2026-11-15  Board knowledge knowledge-2006c4, posted by sameraslan:
+Exa challenge brief (sponsor PDF linked from iterate.inc/ai-research resources, read Nov 14): judged on Exa is central 30% ('the project would break, or get clearly worse, without search'), Research value 25%, Creativity 25% ('a use of search we haven't seen before'), Checkable output 20% ('results trace back to real sources, and it works in a live demo'). Required: at least one Exa API call in the project's main loop, a repo link pointing to where Exa is called, and a demo that shows what the system found through Exa and how it used it. Our page: /exa (tools/exa_page.py), README section Exa challenge.  (board knowledge-2006c4 [board:knowledge-2006c4])
+2026-11-15  sameraslan: Exa challenge judging weight: 30%.  (board knowledge-2006c4 [board:knowledge-2006c4])
+2026-11-15  sameraslan: Mentioned past.dev challenge.  (board result-4e6589 [board:result-4e6589])
+2026-11-15  sameraslan: Exa challenge judging weight: 25%.  (board knowledge-2006c4 [board:knowledge-2006c4])
+2026-11-15  sameraslan: Exa challenge judging weight: 20%.  (board knowledge-2006c4 [board:knowledge-2006c4])
+2026-11-15  sameraslan: Mentioned Exa challenge.  (board result-4e6589 [board:result-4e6589])
+2026-11-15  sameraslan: Mentioned Exa challenge project requirements.  (board knowledge-2006c4 [board:knowledge-2006c4])
+2026-11-15  sameraslan: README sections: past.dev challenge (member).  (board result-4e6589 [board:result-4e6589])
+2026-11-15  sameraslan: README sections: Exa challenge (member).  (board result-4e6589 [board:result-4e6589])
+2026-11-15  abaybektursun: The page was made to present for the past.dev challenge (statement).  (board result-1adad9 [board:result-1adad9])
+2026-11-15  sameraslan: Exa challenge project required Exa API calls in main loop: at least one Exa API call (at least).  (board knowledge-2006c4 [board:knowledge-2006c4])
+2026-11-15  sameraslan: The judge scores the challenge on real swarm, memory design with reasons, evidence, and honesty (statement).  (board knowledge-1a4c9b [board:knowledge-1a4c9b])
+2026-11-15  sameraslan: The Exa challenge brief lists required project deliverables (statement).  (board knowledge-2006c4 [board:knowledge-2006c4])
+2026-11-15  sameraslan: past.dev Multi-Agent Memory Challenge judge score range: 1 to 5.  (board knowledge-1a4c9b [board:knowledge-1a4c9b])
+2026-11-15  sameraslan: Mentioned The Design page shows the past.dev and Exa logos.  (board result-884a0e [board:result-884a0e])
+2026-11-15  Board knowledge knowledge-1a4c9b, posted by sameraslan:
+past.dev Multi-Agent Memory Challenge brief (sponsor PDF linked from iterate.inc/ai-research resources, read Nov 14): the judge scores 1 to 5 on A real swarm (more than one agent, real writes and reads between agents, a read boundary that stays correct when tested), A memory design with reasons (why each layer, and the result expected before the run), Evidence (a trace in which one agent uses data from a different agent; a failure with its explanation), Honesty (caveats in the README). Required: README section 'past.dev challenge' with headings Agents, Layers, Results, Caveats, and in the demo one read in which an agent uses data from a different agent. Our page: /pastdev (tools/pastdev.py). Open gaps in our README: no read boundary inside past.dev, and no expected result written before the run.  (board knowledge-1a4c9b [board:knowledge-1a4c9b])
+2026-11-14  abaybektursun: The brief says leaderboard position alone will not win; judging considers rigour, economic insight, reproducibility, and originality (statement).  (board knowledge-dbab0c [board:knowledge-dbab0c])
+2026-11-15  frustea: Raised an issue: judging and analysis.  (board result-15b095 [board:result-15b095])
+[19 results, 1985 tokens]

@@ -84,6 +84,7 @@ import exa_page
 import findings
 import glossary
 import home
+import papers
 import pastdev
 import psychosis
 import sitekit
@@ -241,8 +242,9 @@ DECK_PAGE = demo_deck.page(len(FINDINGS), PAPERS)  # the talk deck at /demo, wit
 # The home page (home.py) is the page / of invariant.team; on any other host / is the board and the home page is /home.
 # API Gateway passes the name the browser asked for in the Host header.
 HOME_HOSTS = ("invariant.team", "www.invariant.team")
+PAPERS_PAGE = papers.page(PAPERS)  # the paper loop and its papers, at /papers
 HOME_PAGE = home.PAGE.replace("__COUNTS__", json.dumps({
-    "findings": len(FINDINGS), "proof": len(PROOFS),
+    "findings": len(FINDINGS), "proof": len(PROOFS), "papers": len(PAPERS),
     "lab": max(len(list((d / "prototypes").glob("*/index.html"))) for d in LAB)}))
 
 
@@ -300,6 +302,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, "text/html", PROOF_PAGE)
         if path.startswith("/proof/") and path[len("/proof/"):] in PROOFS:
             return self.send(200, "text/html", PROOFS[path[len("/proof/"):]].PAGE)
+        if path == "/papers":
+            return self.send(200, "text/html", PAPERS_PAGE)
         if path == "/exa":
             return self.send(200, "text/html", exa_page.PAGE)
         if path == "/pastdev":
