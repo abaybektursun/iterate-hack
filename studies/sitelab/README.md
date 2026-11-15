@@ -4,6 +4,10 @@ Question: which pictures of the agents and the work, built only from real data, 
 Twelve prototypes, one idea each. Live at https://monitor.invariant.team/lab/ (`tools/view.py` serves this folder at
 `/lab/`; `infra/monitor/deploy.sh` puts `index.html` and each prototype's `index.html` and `data.json` into the zip).
 
+The Lab page itself (`index.html`) is written by `python3 studies/sitelab/build_index.py`: the site's header, type and
+tokens, one row per picture and one preview plate. Each picture's still, `prototypes/<slug>/shot.webp` (a headless
+screenshot of its opening view), is written into the page as a data URI, so the page is one request.
+
 Local: `python3 studies/sitelab/serve.py` then http://127.0.0.1:8777/ (passes `/data` through to the site).
 
 | Prototype (`prototypes/<slug>/`) | Picture | Data |
