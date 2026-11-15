@@ -11,8 +11,7 @@ studies/basins (results/swarm/main-04/run.json, branch ali/basins).
 """
 import json
 
-TITLE = "Idea basins"  # the name on its tile on /proof, in the browser tab and at the head of the words
-SUB = "The diversity of ideas"
+TITLE = "Idea basins"  # the name on its tile on /proof and in the browser tab
 PROBLEM = "How diverse are the ideas our agents found?"
 LINE = "515 board items fall into 12 idea basins."
 
@@ -385,7 +384,7 @@ PAGE = r"""<!doctype html>
    upper left in both. --wash is how strongly a basin takes the accent. */
 :root {
   color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #8b97a1; --rule: #d3d9de;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
   --blue: #1f43d6; --red: #cf2338;
   --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
   --rim-a: rgba(16, 24, 32, .28); --rim-b: rgba(16, 24, 32, .58); --rim-c: rgba(16, 24, 32, .9);
@@ -393,7 +392,7 @@ PAGE = r"""<!doctype html>
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #5f6c77; --rule: #1c2630;
+    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #788590; --rule: #1c2630;
     --blue: #8fb1ff; --red: #ff6b7c;
     --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
     --rim-a: rgba(255, 255, 255, .92); --rim-b: rgba(255, 255, 255, .1); --rim-c: rgba(143, 177, 255, .45);
@@ -466,14 +465,12 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 /* The words */
 .side {
   min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(16px, 4.5vh, 60px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
 }
-.title { margin: 0; font-size: clamp(30px, 2.9vw, 54px); line-height: 1; font-weight: 700; font-stretch: 116%; letter-spacing: -.012em; }
-.sub { margin: 8px 0 0; font-size: clamp(15px, 1.15vw, 19px); font-weight: 540; font-stretch: 108%; color: var(--blue); }
 .credit { margin: 22px 0 0; font-size: 13px; color: var(--faint); max-width: 40ch; }
 .credit a { color: var(--mute); text-decoration: underline; text-underline-offset: 2px; }
 .credit a:hover { color: var(--blue); }
-.problem { margin: clamp(18px, 3.4vh, 34px) 0 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
+.problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b { font-weight: 620; }
 .pane { margin-top: clamp(22px, 4vh, 44px); }
@@ -483,26 +480,30 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 .more button:hover { color: var(--blue); }
 .dhead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
 .dhead h2 { margin: 0; font-size: 17px; font-weight: 660; font-stretch: 114%; letter-spacing: .008em; }
-.close { font-size: 13px; color: var(--mute); }
+.close { font-size: 13px; color: var(--mute); padding: 12px 0 12px 16px; margin: -12px 0; }
 .close:hover { color: var(--ink); }
 .lead { margin: 18px 0 0; font-size: clamp(17px, 1.3vw, 21px); line-height: 1.36; font-weight: 380; max-width: 30ch; }
 .facts { list-style: none; margin: 18px 0 0; padding: 0; font-size: 14.5px; color: var(--mute); max-width: 40ch; overflow-wrap: anywhere; }
 .facts li { padding: 8px 0; border-top: 1px solid var(--rule); }
+.names { display: none; }
 @media (max-width: 900px) {
   /* On a phone the order is: the problem, the finding, the picture, the depth. */
   .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 16px 16px 40px; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
-  .title { margin-top: 20px; }
-  .problem { order: 1; margin-top: 18px; max-width: none; }
-  .credit { order: 5; }
+  .problem { order: 1; margin-top: 20px; max-width: none; }
+  .credit { order: 6; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 22px; padding: 0; }
-  .pane { order: 4; margin-top: 14px; }
+  .pane { order: 5; margin-top: 14px; }
+  /* The plate carries only the counts; the names of the basins stand under the picture, in the same order. */
+  .names:not([hidden]) { order: 4; display: grid; grid-template-columns: 1fr 1fr; column-gap: 20px; list-style: none; margin: 14px 0 0; padding: 0; font-size: 13px; border-top: 1px solid var(--rule); }
+  .names li { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--rule); }
+  .names span { color: var(--mute); }
   svg#svg { max-height: none; }
   .switch { display: grid; grid-template-columns: 1fr 1fr 1fr; align-self: stretch; border-radius: 24px; }
-  .switch button { text-align: center; padding: 10px 4px; font-size: 14px; }
+  .switch button { text-align: center; padding: 12px 4px; font-size: 14px; }
   .note { min-height: 6em; font-size: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -532,10 +533,9 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
     </div>
   </div>
   <div class="side">
-    <h2 class="title" id="title"></h2>
-    <p class="sub" id="sub"></p>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
+    <ul class="names" id="names" aria-label="The basins and their items" hidden></ul>
     <div class="pane" id="pane" aria-live="polite"></div>
     <p class="credit">After Bespoke Labs: <a href="https://bespokelabs.ai/blog/how-models-explore-ideas">How models explore ideas</a> and <a href="https://benchmarks.bespokelabs.ai/autoresearchexam/">AutoResearchExam</a>.</p>
   </div>
@@ -571,7 +571,7 @@ const SOFT = .32, RIM = SOFT * Math.exp(-.7);  // how far the ground around a ba
 const RAD = Math.PI / 180, TILT = 58, PC = Math.cos(TILT * RAD), PS = Math.sin(TILT * RAD);
 function geo() {
   return narrow.matches
-    ? { w: 720, h: 760, cx: 360, cy: 250, a: 336, th: 20, r: 24, D: 1900, yaw: -4, lw: 1.5, fs: 17, wide: 86, ay: 706, num: 120, fl: 24, dot: 1.4, deep: 32, gx: 48, gy: 24, lab: 196, lane: 46 }
+    ? { w: 720, h: 760, cx: 360, cy: 250, a: 296, th: 20, r: 24, D: 1900, yaw: -4, lw: 1.5, fs: 17, count: 27, wide: 86, ay: 706, num: 120, fl: 27, dot: 1.4, deep: 32, gx: 48, gy: 24, lab: 196, lane: 46 }
     : { w: 1000, h: 752, cx: 500, cy: 258, a: 440, th: 22, r: 32, D: 2500, yaw: -6, lw: 1.05, fs: 14.5, wide: 104, ay: 700, num: 84, fl: 17, dot: 1.22, deep: 42, gx: 76, gy: 30, lab: 204, lane: 62 };
 }
 const V = { c1: 1, s1: 0, c2: 1, s2: 0, px: 0, py: 0, tx: 0, ty: 0 };  // the view: a slow sway, plus a few degrees toward the pointer
@@ -656,7 +656,9 @@ function build() {
     `<g id="dots"><path class="small" id="small"/><path class="hollow" id="hollow" stroke-width="${h(g.lw * 1.4)}"/><path class="solid" id="solid"/></g>` +
     `<g class="bloom"><circle class="halo" id="ph" r="${f(12 * g.dot)}" opacity="0"/></g><circle class="core" id="pc" r="${f(4.4 * g.dot)}" opacity="0"/>` +
     `<path class="rim draw" id="rim" pathLength="1"/>` +
-    L.clusters.map((c, i) => `<text class="cname" id="cn-${i}" font-size="${g.fs}" font-stretch="${g.wide}%" opacity="0">${esc(c.name)}<tspan dx="6">${c.n}</tspan></text>`).join("") +
+    L.clusters.map((c, i) => g.count  // on a phone only the count stands on the plate, and the names are listed under the picture
+      ? `<text class="cname" id="cn-${i}" font-size="${g.count}" opacity="0">${c.n}</text>`
+      : `<text class="cname" id="cn-${i}" font-size="${g.fs}" font-stretch="${g.wide}%" opacity="0">${esc(c.name)}<tspan dx="6">${c.n}</tspan></text>`).join("") +
     L.clusters.map((c, i) => `<text class="lname" id="ln-${i}" font-size="${f(g.fs * (narrow.matches ? .8 : .9))}" font-stretch="${g.wide}%" opacity="0">${esc(c.name)}</text>`).join("") +
     `<g class="scale"><text class="value" id="value" x="${g.cx}" y="${f(g.ay - g.num * .2)}" font-size="${g.num}"></text>` +
     `<text class="cap" id="cap" x="${g.cx}" y="${f(g.ay + g.fl * .7)}" font-size="${g.fl}"></text></g>`;
@@ -733,7 +735,7 @@ function place(t) {
   } else { E.pc.setAttribute("opacity", 0); E.ph.setAttribute("opacity", 0); }
 
   // The names stand upright, each in front of its basin.
-  S.rings.forEach((r, i) => { const p = at(r.u, r.v + r.R, top); set(E.cn[i], { x: f(p[0]), y: f(p[1] + g.fs * 1.12), opacity: h(board) }); });
+  S.rings.forEach((r, i) => { const p = at(r.u, r.v + r.R, top); set(E.cn[i], { x: f(p[0]), y: f(p[1] + (g.count || g.fs) * 1.12), opacity: h(board) }); });
   S.lv.forEach((v, i) => { const p = at(S.tl - 18, v, top); set(E.ln[i], { x: f(p[0]), y: f(p[1] + g.fs * .3), opacity: h(tt) }); });
 
   // Under the slab: the count of what the picture shows now (items, basins, items of the tree that build on two or more).
@@ -771,6 +773,7 @@ function choose(i, instant) {
   $("problem").textContent = st.problem || C.problem;
   $("say").innerHTML = bold(st.line || C.line);
   $("key-link").hidden = st.key !== "tree";
+  $("names").hidden = st.key !== "basins";
   $("switch").querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-pressed", k === i));
   place(S.t);
 }
@@ -829,8 +832,7 @@ stage.addEventListener("pointermove", e => {
 });
 stage.addEventListener("pointerleave", () => { V.tx = V.ty = 0; });
 
-$("title").textContent = C.title;
-$("sub").textContent = C.sub;
+$("names").innerHTML = L.clusters.map(c => `<li>${esc(c.name)}<span>${c.n}</span></li>`).join("");
 $("switch").innerHTML = D.states.map((s, i) => `<button data-state="${i}" aria-pressed="false">${esc(s.name)}</button>`).join("");
 build();
 aim(S.g.yaw, 0);  // the still frame
@@ -843,4 +845,4 @@ if (!still.matches) {
 </script>
 </body>
 </html>
-""".replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({"title": TITLE, "sub": SUB, "problem": PROBLEM, "line": LINE, "data": DATA, "panels": PANELS}))
+""".replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({"problem": PROBLEM, "line": LINE, "data": DATA, "panels": PANELS}))
