@@ -87,7 +87,8 @@ TABLE = {
         "figure": lambda m: [signed(m._best["gap"][0]), "points", f"MATH-500, against one RL sample, at {m._best['multiple']:.1f} times the tokens"]},
     "cue-on-code": {
         "group": NO_REWARD,
-        "figure": lambda m: [points(m.ST[0]["passed"], m.ST[2]["passed"], m.N), "points", f"{m.N} code problems"]},
+        "figure": lambda m: [signed(m.GAINS["general"]), "points",
+                             f"500 general questions, Base + cue over Base; code {signed(m.GAINS['code'])}, math {signed(m.GAINS['math'])}"]},
     "how-much-of-the-gap": {
         "group": NO_REWARD,
         "figure": lambda m: [m._pc(m._one["share"][0]), "of the gap",
