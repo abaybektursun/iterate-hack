@@ -416,7 +416,7 @@ subagents. A guide speaks one line per breath (M mutes). The end screen counts w
 The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): nine 16:9 slides, each one
 figure with a few words, `#hook`, `#question`, `#tea`, `#harness`, `#finding`, `#proof`, `#ideas`, `#papers` and
 `#close` (`/demo#finding` opens that slide, and Back works). The right arrow, Space or PageDown go on, the left arrow or
-PageUp go back, Home and End jump, a click on the right or left third of the window steps, `t` changes the theme
+PageUp go back, Home and End jump, a click on the right or left third of the window steps, `t` or the button at the top right changes the theme
 (`?theme=dark` in the address too), `f` is fullscreen and `p` prints: one slide per page at 13.333 x 7.5 in, in the
 theme on screen, so print to PDF from the dark page for a dark PDF. The hook sentence is the constant `HOOK` in
 `tools/demo_deck.py`. The two photos (tea, meditation) are the strings `TEA` and `MEDITATE` in `tools/demo_photos.py`,
